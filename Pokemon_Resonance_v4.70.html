@@ -7418,7 +7418,7 @@ body.th455-cristal .board{background:radial-gradient(120% 90% at 50% 0%,#3a3478,
 </section>
 
   </div></main>
-  <footer class="foot"><div class="wrap"><span>Pokémon Résonance · fangame non officiel · v4.69</span><span>Pokémon © Nintendo · Creatures Inc. · GAME FREAK · fangame sans affiliation</span></div></footer>
+  <footer class="foot"><div class="wrap"><span>Pokémon Résonance · fangame non officiel · v4.70</span><span>Pokémon © Nintendo · Creatures Inc. · GAME FREAK · fangame sans affiliation</span></div></footer>
  </div>
 
  <nav class="bnav" aria-label="Navigation">
@@ -28493,7 +28493,7 @@ const NEWS416 = [
   ['i-plus', 'Coop, tournoi, potager', 'Jouez à 2 sur le même téléphone (Paramètres), lancez un tournoi entre amis, cultivez des baies au Camp.', 'amis']
 ];
 function newsVue416() {
-  return PREF.news === '469';
+  return PREF.news === '470';
 }
 function renderNews416() {
   const home = document.querySelector('#accueil .v4-home');
@@ -28521,7 +28521,7 @@ document.addEventListener('click', e => {
   if (!b) return;
   const k = b.dataset.news;
   if (k === 'ok') {
-    PREF.news = '469';
+    PREF.news = '470';
     savePref();
     renderNews416();
     return;
@@ -36984,6 +36984,90 @@ renderDex = function () {
 NEWS416.unshift(['i-gem', 'Colporteur, rencontres et missions', 'Un colporteur passe certains jours avec des prix réduits (Boutique). Une rencontre par jour sur la Carte, avec des choix. Dans le Pokédex, des missions à paliers et des spécialistes de la semaine donnent Éclats et Pokédollars.']);
 NEWS416.splice(8);
 
+/* ==== v4.70 : Les Ombres de Résonance (4 épisodes, chef Vaskar) ==== */
+(() => {
+  const KEY = 'res-ombre470';
+  const lire = () => {
+    try {
+      return Object.assign({ etape: 0 }, JSON.parse(localStorage.getItem(KEY)));
+    } catch (e) {
+      return { etape: 0 };
+    }
+  };
+  const ecrire = o => {
+    try {
+      localStorage.setItem(KEY, JSON.stringify(o));
+    } catch (e) {}
+  };
+  const has = v => Array.isArray(v) ? v.length > 0 : !!v;
+  // Chaque épisode remplace la rencontre du jour quand sa condition est remplie.
+  const EPS = [
+    {
+      ok: () => true,
+      t: 'Sabotage au Centre Pokémon',
+      x: 'Les câbles de soins sont coupés et une caisse de Potions a disparu. Une trace de peinture noire mène vers l’est.',
+      c: [
+        { l: 'Affronter les sbires', fight: 1 },
+        { l: 'Suivre la trace', p: 0.7, ok: { g: 2, m: 500 }, okT: 'Vous retrouvez la caisse et un carnet : « Vaskar attend les Ombres ».', ko: { m: -200 }, koT: 'La trace se perd dans les hautes herbes.' },
+        { l: 'Prévenir l’infirmière', ok: { b: { potion: 2 } }, okT: 'Elle vous confie 2 Potions et vous demande de rester vigilant.' },
+        { l: 'Ignorer l’affaire' },
+      ],
+    },
+    {
+      ok: () => has(PROFILE.johto),
+      t: 'Les Ombres à Johto',
+      x: 'Des sbires vêtus de noir démontent le balisage d’un sentier. L’un d’eux vous reconnaît et prend la fuite en laissant un sac.',
+      c: [
+        { l: 'Affronter les sbires', fight: 1 },
+        { l: 'Rattraper le fuyard', p: 0.6, ok: { g: 3, m: 600 }, okT: 'Il lâche son butin : 3 Éclats. Il murmure le nom de Vaskar.', ko: { m: -300 }, koT: 'Il vous distance et disparaît.' },
+        { l: 'Fouiller le sac', ok: { m: 400 }, okT: 'Une carte annotée et de l’argent : leur base est à Hoenn.' },
+        { l: 'Rebalancer le balisage' },
+      ],
+    },
+    {
+      ok: () => has(PROFILE.hoenn),
+      t: 'La base des Ombres',
+      x: 'Une grotte de Hoenn grouille de sbires. Leur plan : détourner l’énergie de Résonance des Pokémon.',
+      c: [
+        { l: 'Affronter les sbires', fight: 1 },
+        { l: 'Couper l’alimentation', p: 0.65, ok: { g: 4, m: 800 }, okT: 'Le dispositif s’éteint. Vous récupérez 4 Éclats.', ko: { m: -400 }, koT: 'Alarme ! Il faut fuir en laissant du matériel.' },
+        { l: 'Observer sans se montrer', ok: { g: 1, m: 300 }, okT: 'Vous notez leurs horaires de garde : un Éclat vous est glissé par un déserteur.' },
+        { l: 'Rebrousser chemin' },
+      ],
+    },
+    {
+      ok: () => true,
+      t: 'Vaskar, chef des Ombres',
+      x: 'Vaskar vous attend, seul, devant le dispositif. « Votre Résonance m’intéresse, dresseur. »',
+      c: [
+        { l: 'Affronter les sbires', fight: 1 },
+        { l: 'Le défier', p: 0.75, ok: { g: 8, m: 3000 }, okT: 'Vaskar s’incline et détruit le dispositif. Les Ombres se dispersent : 8 Éclats et 3 000 ₽.', ko: { m: -500 }, koT: 'Il repart avec son butin. Vous le retrouverez.' },
+        { l: 'Négocier', ok: { g: 2, m: 1000 }, okT: 'Il quitte la région, en vous laissant un dédommagement.' },
+        { l: 'Se retirer' },
+      ],
+    },
+  ];
+  const courant = () => {
+    const e = lire().etape;
+    return e < EPS.length && EPS[e].ok() ? EPS[e] : null;
+  };
+  const avantEv = ev454;
+  ev454 = function () {
+    const r = avantEv.apply(this, arguments);
+    const E = courant();
+    if (E && !r.st.done) return { ...r, E: { ...E, ombre: 1 }, i: -1 };
+    return r;
+  };
+  const avantPick = evPick454;
+  evPick454 = function (j) {
+    const { E, st } = ev454();
+    const etait = E && E.ombre && !st.done;
+    const res = avantPick.apply(this, arguments);
+    if (etait) ecrire({ etape: lire().etape + 1 });
+    return res;
+  };
+  window.__ombre470 = { lire, ecrire, dispo: () => !!courant(), titre: () => (courant() || {}).t, req: () => (lire().etape === 1 ? 'Commencez Johto' : lire().etape === 2 ? 'Commencez Hoenn' : ''), ev: () => ev454(), pick: j => evPick454(j), nb: EPS.length };
+})();
 /* ==== 4.55 : rival qui s’adapte, thèmes de plateau ==== */
 /* ---------- 1. rival qui évolue ---------- */
 function rvSt455() {
@@ -39867,6 +39951,384 @@ NEWS416.unshift(['i-team', 'Arène de défense', 'Cinq vagues d’adversaires at
 })();
 NEWS416.splice(8); // la liste « Nouveau » garde les 8 annonces les plus récentes
 
+/* ==== v4.70 : récompense quand une région est complète au Pokédex ==== */
+(() => {
+  const KEY = 'res-pdx470';
+  // Une seule récompense par région, même si le joueur rouvre le jeu
+  const lire470 = () => {
+    try {
+      return JSON.parse(localStorage.getItem(KEY)) || [];
+    } catch (e) {
+      return [];
+    }
+  };
+  const ecrire470 = a => {
+    try {
+      localStorage.setItem(KEY, JSON.stringify(a));
+    } catch (e) {}
+  };
+  const REGIONS470 = [
+    { g: 1, nom: 'Kanto' },
+    { g: 2, nom: 'Johto' },
+    { g: 3, nom: 'Hoenn' },
+  ];
+  const complete470 = g => {
+    const ms = DEXS.filter(m => m.gen === g);
+    return ms.length > 0 && ms.every(m => ownedFam(m.id));
+  };
+  const verifier470 = () => {
+    if (!PROFILE || !PROFILE.dex) return;
+    const deja = lire470();
+    let change = false;
+    REGIONS470.forEach(r => {
+      if (deja.includes(r.g) || !complete470(r.g)) return;
+      deja.push(r.g);
+      change = true;
+      PROFILE.money += 3000;
+      PROFILE.gems = (PROFILE.gems || 0) + 10;
+      toast(`Pokédex de ${r.nom} complet : 3 000 ₽ et 10 Éclats !`);
+      if (typeof annonce430 === 'function') annonce430('🏆', 'Pokédex complet', `${r.nom} est entièrement capturé.`);
+    });
+    if (change) {
+      ecrire470(deja);
+      if (typeof save === 'function') save();
+    }
+  };
+  const avant470 = renderAll;
+  renderAll = function () {
+    const r = avant470.apply(this, arguments);
+    verifier470();
+    return r;
+  };
+  window.__pdx470 = { verifier: verifier470, lire: lire470, P: () => PROFILE, dex: () => DEXS, ownedFam, renderAll };
+})();
+/* ==== v4.70 : formes régionales (Pokédex) ==== */
+(() => {
+  // Teinte et type propres à une région, affichés dans la fiche du Pokédex.
+  const FR = [
+    { id: 'pikachu', reg: 'Kanto insulaire', plus: 'Vol', hue: 200, g: 1 },
+    { id: 'abra', reg: 'Kanto mystique', plus: 'Fée', hue: 300, g: 1 },
+    { id: 'magicarpe', reg: 'Kanto des rapides', plus: 'Dragon', hue: 20, g: 1 },
+    { id: 'evoli', reg: 'Kanto sylvestre', plus: 'Fée', hue: 320, g: 1 },
+    { id: 'ronflex', reg: 'Kanto montagnard', plus: 'Combat', hue: 10, g: 1 },
+    { id: 'chenipan', reg: 'Kanto toxique', plus: 'Poison', hue: 270, g: 1 },
+    { id: 'kicklee', reg: 'Kanto rocheux', plus: 'Sol', hue: 35, g: 1 },
+    { id: 'germignon', reg: 'Johto des cimes', plus: 'Vol', hue: 60, g: 2 },
+    { id: 'hericendre', reg: 'Johto des dojos', plus: 'Combat', hue: 350, g: 2 },
+    { id: 'kaiminus', reg: 'Johto des lacs', plus: 'Dragon', hue: 230, g: 2 },
+    { id: 'pichu', reg: 'Johto des nuées', plus: 'Vol', hue: 190, g: 2 },
+    { id: 'mentali', reg: 'Johto de l’aube', plus: 'Fée', hue: 310, g: 2 },
+    { id: 'phanpy', reg: 'Johto des marais', plus: 'Eau', hue: 170, g: 2 },
+    { id: 'debugant', reg: 'Johto de la nuit', plus: 'Ténèbres', hue: 260, g: 2 },
+    { id: 'poussifeu', reg: 'Hoenn marin', plus: 'Eau', hue: 190, g: 3 },
+    { id: 'arcko', reg: 'Hoenn draconique', plus: 'Dragon', hue: 280, g: 3 },
+    { id: 'gobou', reg: 'Hoenn des sables', plus: 'Sol', hue: 40, g: 3 },
+    { id: 'absol', reg: 'Hoenn mentale', plus: 'Psy', hue: 300, g: 3 },
+    { id: 'draby', reg: 'Hoenn céleste', plus: 'Vol', hue: 200, g: 3 },
+    { id: 'massko', reg: 'Hoenn des dunes', plus: 'Dragon', hue: 90, g: 3 },
+  ].filter(f => BY[f.id]);
+  const avant = renderDexCard;
+  renderDexCard = function () {
+    const r = avant.apply(this, arguments);
+    const el = $('#dex4Card');
+    const f = el && FR.find(x => x.id === V4.dexSel);
+    if (f && !el.querySelector('.fr470')) {
+      const b = document.createElement('p');
+      b.className = 'fr470';
+      b.style.cssText = 'margin:8px 0;padding:6px 10px;border-radius:10px;background:hsl(' + f.hue + ' 40% 25% / .6);font-size:.85em';
+      b.textContent = 'Forme régionale · ' + f.reg + ' : gagne le type ' + f.plus + ' en combat dans cette région.';
+      el.appendChild(b);
+      const img = el.querySelector('img');
+      if (img) img.style.filter = 'hue-rotate(' + f.hue + 'deg)';
+    }
+    return r;
+  };
+  const regionDe = sc => {
+    const c = SCEN[sc] || {};
+    return c.hoenn != null ? 3 : c.johto != null ? 2 : 1;
+  };
+  CROCHETS.creation.push(S => {
+    const g = regionDe(S.sc);
+    S.units.forEach(u => {
+      if (u.side !== 'a') return;
+      const f = FR.find(x => x.id === u.id && x.g === g);
+      if (f && !u.t.includes(f.plus)) u.t.push(f.plus);
+    });
+  });
+  window.__fr470 = FR;
+  window.__fr470.regionDe = regionDe;
+  window.__fr470.V4 = () => V4;
+  window.__fr470.rend = () => renderDexCard();
+})();
+/* ==== v4.71 : combats des Ombres, spécimens anciens, défi quotidien, prestige ==== */
+(() => {
+  const KEY = 'res-x470';
+  const lireX = () => {
+    try {
+      return Object.assign({ fos: 0, rev: [], dq: { d: '', done: false, streak: 0, best: 0, tot: 0, last: '' }, pre: { n: 0, on: false } }, JSON.parse(localStorage.getItem(KEY)));
+    } catch (e) {
+      return { fos: 0, rev: [], dq: { d: '', done: false, streak: 0, best: 0, tot: 0, last: '' }, pre: { n: 0, on: false } };
+    }
+  };
+  const ecrireX = o => {
+    try {
+      localStorage.setItem(KEY, JSON.stringify(o));
+    } catch (e) {}
+  };
+  const ok = ids => ids.filter(i => BY[i]);
+  const POS = [[6, 1], [6, 3], [7, 2], [7, 4], [6, 5]];
+  const mkFoes = ids => ok(ids).map((id, i) => [id, POS[i % POS.length]]);
+
+  /* ---- 1. Combats des Ombres ---- */
+  const OMB = [
+    { ids: ['racaillou', 'nosferapti'], lv: 12, hb: 2 },
+    { ids: ['malosse', 'nosferapti', 'tenefix'], lv: 20, hb: 3 },
+    { ids: ['malosse', 'absol', 'tenefix', 'noctali'], lv: 28, hb: 4 },
+    { ids: ['absol', 'demolosse', 'tyranocif', 'noctali'], lv: 36, hb: 6 }
+  ];
+  const baseScen = (n, lvl, d, lv, hb, foes) => ({
+    n, lvl, lim: 14, time: 'nuit', bio: 'gue', d, water: [], rock: ['3,0', '3,5'], hb, pb: 0, lv, foes
+  });
+  OMB.forEach((o, i) => {
+    const k = 'omb470_' + (i + 1);
+    SCEN[k] = Object.assign(baseScen(i === 3 ? 'Vaskar, chef des Ombres' : 'Les Ombres · épisode ' + (i + 1), 'Histoire · épisode ' + (i + 1), 'Repoussez les Ombres de Résonance.', o.lv, o.hb, mkFoes(o.ids)), { omb470: i + 1 });
+    try {
+      OBST[k] = { pil: ['4,2'], grass: ['4,4'] };
+    } catch (e) {}
+  });
+
+  /* ---- 5. Défi quotidien ---- */
+  const TYPES = ['Feu', 'Eau', 'Plante', 'Électrik', 'Psy', 'Combat', 'Insecte', 'Sol'];
+  const graine = sel => {
+    let h = 7;
+    for (const ch of today() + sel) h = (h * 33 + ch.charCodeAt(0)) >>> 0;
+    return h;
+  };
+  const dqDef = () => {
+    const pool = ok(DEXS.map(m => m.id));
+    const nb = 3 + (graine('n') % 2);
+    const ids = [];
+    for (let i = 0; i < nb; i++) ids.push(pool[graine('f' + i) % pool.length]);
+    const interdit = TYPES[graine('t') % TYPES.length];
+    const hb = 2 + (graine('h') % 4);
+    return { ids, interdit, hb, lv: 18 + (graine('l') % 10) };
+  };
+  const dqMake = () => {
+    const D = dqDef();
+    SCEN.dq470 = Object.assign(baseScen('Défi quotidien', 'Défi · type interdit : ' + D.interdit, 'Aucun Pokémon de type ' + D.interdit + ' dans votre équipe. Adversaires renforcés.', D.lv, D.hb, mkFoes(D.ids)), { dq470: D.interdit });
+    try {
+      OBST.dq470 = { pil: ['4,2'], grass: ['4,4', '5,1'] };
+    } catch (e) {}
+    return D;
+  };
+  dqMake();
+
+  const groupOfAvant = groupOf;
+  groupOf = function (k) {
+    return /^(omb470_|dq470)/.test(k) ? 'terrains' : groupOfAvant.apply(this, arguments);
+  };
+
+  const dqViol = () => {
+    const D = SCEN.dq470 && SCEN.dq470.dq470;
+    return D ? squad.slice(0, tailleEquipe()).find(id => BY[id] && BY[id].t.includes(D)) : null;
+  };
+  const launchAvant = launch;
+  launch = function () {
+    if (scSel === 'dq470') {
+      const v = dqViol();
+      if (v) return toast(BY[v].n + ' est de type ' + SCEN.dq470.dq470 + ' : retirez-le de l’équipe.');
+    }
+    return launchAvant.apply(this, arguments);
+  };
+
+  /* ---- 7. Prestige ---- */
+  const preOk = () => (isCamp() ? BADGES.length >= 8 || (PROFILE.elite || 0) > 0 : true);
+  CROCHETS.creation.push(S => {
+    const P = lireX().pre;
+    if (!P.on || !P.n || !S || !S.units || /^(omb470_|dq470)/.test(S.sc || '')) return;
+    S.units.forEach(u => {
+      if (u.side === 'e') {
+        u.mhp += 2 * P.n;
+        u.hp += 2 * P.n;
+      }
+    });
+  });
+
+  /* ---- progression commune (victoires) ---- */
+  CROCHETS.progres.unshift((S, rew, win) => {
+    try {
+      if (!win) return null;
+      const X = lireX();
+      let m = 0,
+        g = 0;
+      const k = S.sc || '';
+      if (/^omb470_/.test(k)) {
+        const n = +k.slice(7),
+          O = window.__ombre470;
+        if (O && O.lire().etape === n - 1) {
+          O.ecrire({ etape: n });
+          X.fos += 1;
+          m += 400 * n;
+          g += n;
+          try {
+            const st = ev454().st;
+            LSS454('res-ev454', { d: st.d, done: true, res: 'Les Ombres ont été repoussées.' });
+          } catch (e) {}
+        }
+      } else if (k === 'dq470') {
+        const D = X.dq;
+        if (!(D.d === today() && D.done)) {
+          const hier = new Date(Date.now() - 864e5);
+          const h = hier.getFullYear() + '-' + String(hier.getMonth() + 1).padStart(2, '0') + '-' + String(hier.getDate()).padStart(2, '0');
+          D.streak = D.last === h ? D.streak + 1 : 1;
+          D.best = Math.max(D.best, D.streak);
+          D.tot += 1;
+          D.last = today();
+          D.d = today();
+          D.done = true;
+          X.fos += 1;
+          m += 500 + 100 * Math.min(D.streak, 7);
+          g += 2;
+        }
+      } else if (X.pre.on && X.pre.n) {
+        m += 150 * X.pre.n;
+        g += X.pre.n >= 3 ? 1 : 0;
+      }
+      ecrireX(X);
+      return m || g ? [m, g] : null;
+    } catch (e) {
+      return null;
+    }
+  });
+
+  /* ---- liaison avec les épisodes : bouton « Affronter » ---- */
+  const evPickAvant = evPick454;
+  evPick454 = function (j) {
+    try {
+      const { E, st } = ev454();
+      if (E && E.ombre && !st.done && E.c[j] && E.c[j].fight) {
+        if (!squad.length) return toast('Composez d’abord une équipe.');
+        const k = 'omb470_' + (window.__ombre470.lire().etape + 1);
+        if (!SCEN[k]) return;
+        const o = document.getElementById('evs454');
+        if (o) o.remove();
+        if (B) backToPrep();
+        return goFight(k);
+      }
+    } catch (e) {}
+    return evPickAvant.apply(this, arguments);
+  };
+
+  /* ---- Hub « Défis » : spécimens, quotidien, prestige ---- */
+  const REV = () => ok(['tenefix', 'malosse', 'demolosse', 'tyranocif']);
+  const hub = () => {
+    const X = lireX(),
+      D = X.dq,
+      fait = D.d === today() && D.done,
+      di = dqDef();
+    const libres = REV().filter(id => !PROFILE.box.includes(id) && !(PROFILE.dex || []).includes(id));
+    const o = overlay(
+      'x470o',
+      `<div class="hp452-c" role="dialog" aria-modal="true" aria-labelledby="x470t"><header><h3 id="x470t">Défis</h3><button type="button" class="sh-x" data-x470="close" aria-label="Fermer">×</button></header><div class="hp452-b">
+${(() => { const O = window.__ombre470, e = O.lire().etape; return e >= 4 ? '<p><b>Les Ombres de Résonance</b> · histoire terminée</p>' : `<p><b>Les Ombres de Résonance</b> · épisode ${e + 1}/4</p><button type="button" class="ev454-c" data-x470="omb"${O.dispo() ? '' : ' disabled'}><b>${O.dispo() ? esc(O.titre()) : 'Épisode verrouillé'}</b><small>${O.dispo() ? 'Affronter les Ombres · récompense et suite de l’histoire' : esc(O.req())}</small></button>`; })()}
+<p><b>Défi quotidien</b> · type interdit : <b>${esc(di.interdit)}</b> · série ${D.streak} (record ${D.best}, ${D.tot} réussis)</p>
+<button type="button" class="ev454-c" data-x470="dq"${fait ? ' disabled' : ''}><b>${fait ? 'Défi du jour réussi' : 'Lancer le défi du jour'}</b><small>Récompense : argent, Éclats et un spécimen ancien</small></button>
+<p><b>Laboratoire</b> · spécimens anciens : ${X.fos}</p>
+<button type="button" class="ev454-c" data-x470="rev"${X.fos < 1 || !libres.length ? ' disabled' : ''}><b>Ressusciter un spécimen</b><small>${libres.length ? 'Consomme 1 spécimen · espèce rare au hasard' : 'Toutes les espèces rares sont déjà à vous'}</small></button>
+<p><b>Prestige</b> · niveau ${X.pre.n}${X.pre.on ? ' (actif)' : ''}</p>
+${preOk() ? `<button type="button" class="ev454-c" data-x470="pre+"${X.pre.n >= 5 ? ' disabled' : ''}><b>Monter de niveau</b><small>Adversaires +2 PV par niveau · +150 ₽ par niveau à chaque victoire</small></button><button type="button" class="ev454-c" data-x470="pre"><b>${X.pre.on ? 'Désactiver' : 'Activer'} le prestige</b></button>` : '<p>Débloqué avec 8 badges ou la Ligue.</p>'}
+</div></div>`,
+      'hp452'
+    );
+    o.addEventListener('click', e => {
+      if (e.target === o) o.remove();
+    });
+  };
+  document.addEventListener(
+    'click',
+    e => {
+      const b = e.target.closest && e.target.closest('[data-x470]');
+      if (!b || b.disabled) return;
+      e.stopPropagation();
+      e.preventDefault();
+      const v = b.dataset.x470,
+        X = lireX();
+      if (v === 'open') return hub();
+      const o = document.getElementById('x470o');
+      if (v === 'close') return o && o.remove();
+      if (v === 'omb') {
+        const O = window.__ombre470;
+        if (!O.dispo() || !squad.length) return toast(squad.length ? 'Épisode verrouillé.' : 'Composez d’abord une équipe.');
+        if (o) o.remove();
+        if (B) backToPrep();
+        return goFight('omb470_' + (O.lire().etape + 1));
+      }
+      if (v === 'dq') {
+        if (!squad.length) return toast('Composez d’abord une équipe.');
+        dqMake();
+        if (o) o.remove();
+        if (B) backToPrep();
+        return goFight('dq470');
+      }
+      if (v === 'rev') {
+        const libres = REV().filter(id => !PROFILE.box.includes(id) && !(PROFILE.dex || []).includes(id));
+        if (X.fos < 1 || !libres.length) return;
+        const id = libres[Math.floor(Math.random() * libres.length)];
+        X.fos -= 1;
+        X.rev.push(id);
+        PROFILE.box.push(id);
+        if (!PROFILE.dex.includes(id)) PROFILE.dex.push(id);
+        ecrireX(X);
+        try {
+          save();
+        } catch (e2) {}
+        sfx('win');
+        toast(BY[id].n + ' rejoint votre Boîte !');
+      }
+      if (v === 'pre+' && X.pre.n < 5) {
+        X.pre.n += 1;
+        X.pre.on = true;
+        ecrireX(X);
+      }
+      if (v === 'pre') {
+        X.pre.on = !X.pre.on;
+        ecrireX(X);
+      }
+      if (o) o.remove();
+      hub();
+    },
+    true
+  );
+  const barre = () => {
+    const ref = document.getElementById('df468') || document.getElementById('br466') || document.querySelector('#accueil .v4-hero');
+    if (!ref) return;
+    let b = document.getElementById('x470');
+    if (!b) {
+      b = document.createElement('button');
+      b.type = 'button';
+      b.id = 'x470';
+      b.dataset.x470 = 'open';
+      ref.insertAdjacentElement('afterend', b);
+    }
+    b.className = 'df468';
+    b.innerHTML = '<span class="df468-i">★</span><span class="df468-t"><b>Défis</b><small>Quotidien · Laboratoire · Prestige</small></span>';
+  };
+  const homeAvant = renderHome;
+  renderHome = function () {
+    homeAvant.apply(this, arguments);
+    try {
+      barre();
+    } catch (e) {}
+  };
+  try {
+    barre();
+  } catch (e) {}
+  try {
+    NEWS416.unshift(['i-team', 'Défis et Ombres', 'Combattez les Ombres de Résonance, relevez le défi quotidien, ressuscitez des spécimens anciens et montez en prestige depuis la bannière Défis. 20 formes régionales au Pokédex.']);
+    NEWS416.splice(8);
+  } catch (e) {}
+  window.__x470 = { lire: lireX, ecrire: ecrireX, hub, dqMake, dqViol, ok };
+})();
 /* ==== 99-demarrage.js ==== */
 /* ===================== DÉMARRAGE =====================
    Tout le code est chargé : on restaure la partie, puis on affiche.
