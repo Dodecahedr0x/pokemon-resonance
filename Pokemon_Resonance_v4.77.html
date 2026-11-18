@@ -15374,7 +15374,12 @@ function renderBoard() {
     if (t.mark) {
       const tt = MKT[t.mark.k],
         col = tc(tt);
-      mh += `<polygon points="${HP(x, y, BG.S - 5)}" class="mk-fill" style="fill:${col}"/><polygon points="${HP(x, y, BG.S - 5)}" class="mk-edge" style="stroke:${col}"/><g transform="translate(${(x + 11).toFixed(1)},${(y - 21).toFixed(1)}) scale(.46)"><circle cx="12" cy="12" r="12" fill="${col}" stroke="#0B0D12" stroke-width="2"/><path d="${gp(tt)}" fill="${INK}" fill-rule="evenodd" transform="translate(4.8 4.8) scale(.6)"/></g>${t.mark.lv === 2 ? `<text class="mk-lv" x="${(x - 15).toFixed(1)}" y="${(y - 11).toFixed(1)}">×2</text>` : ''}`;
+      // plateau incliné (v4.77) : la pastille rapetisse au fond et reste dans sa case, au lieu de mordre sur la case de derrière
+      const ms = TILT.on ? tiltS(x, y) : 0,
+        mz = TILT.on ? 0.37 * ms : 0.46,
+        mx = TILT.on ? x + 11.5 * ms - 12 * mz : x + 11,
+        my = TILT.on ? y - 6 * ms - 12 * mz : y - 21;
+      mh += `<polygon points="${HP(x, y, BG.S - 5)}" class="mk-fill" style="fill:${col}"/><polygon points="${HP(x, y, BG.S - 5)}" class="mk-edge" style="stroke:${col}"/><g class="mk-b" transform="translate(${mx.toFixed(1)},${my.toFixed(1)}) scale(${mz.toFixed(3)})"><circle cx="12" cy="12" r="12" fill="${col}" stroke="#0B0D12" stroke-width="2"/><path d="${gp(tt)}" fill="${INK}" fill-rule="evenodd" transform="translate(4.8 4.8) scale(.6)"/></g>${t.mark.lv === 2 ? `<text class="mk-lv" x="${(TILT.on ? x - 14 * ms : x - 15).toFixed(1)}" y="${(TILT.on ? y - 3 * ms : y - 11).toFixed(1)}">×2</text>` : ''}`;
     }
     if (t.rock)
       mh += `<path class="boulder" d="M${(x - 14).toFixed(1)} ${(y + 8).toFixed(1)}q-2-12 8-17q8-5 15 1q7 6 5 16q-14 6-28 0Z"/><path class="boulder-h" d="M${(x - 6).toFixed(1)} ${(y - 6).toFixed(1)}q5-4 11-1"/>`;

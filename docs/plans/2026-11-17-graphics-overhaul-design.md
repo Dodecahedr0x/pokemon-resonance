@@ -143,6 +143,9 @@ rendering layer with a full fallback to the v4.76 look.
 - Ambient motes (`.amb477`, HTML layer, transform/opacity keyframes only):
   pollen or dust by day, fireflies or embers by night, coloured per place.
   Off under reduced motion, "Effets animés" off, or Léger.
+- Ground-mark badges (`g.mk-b` in `renderBoard`) take the depth scale and sit
+  in the upper-right of their own tile when tilted; flat boards keep the old
+  offset (it overlapped the tile behind once projected).
 - Water sheen (`g.eau477`): a repeating light-band gradient on a rect clipped
   to the water tiles, slid one period with a CSS transform, plus thin glints
   that pulse in opacity and width. Resynced after every `renderBoard`, so the

@@ -10,6 +10,7 @@ Ouvrir `Pokemon_Resonance_v4.77.html` dans un navigateur. Les dossiers `audio/` 
 - Décors peints derrière le plateau selon le lieu et l'heure, de jour comme de nuit : prairie, canyon, tour mystique, stade de la Ligue. Les arènes prennent le décor du type du champion (canyon pour Roche, tour pour Spectre…).
 - Textures peintes sur les cases : herbe, pierre, eau, sable, cendre, marbre, runes, et boue ou lave quand une attaque les crée. Boue, lave, zone de déploiement et brouillard restent visibles sur les textures.
 - Repères A–H et 1–6 recalés au bord du plateau incliné.
+- Pastilles de sol (Fissuré, etc.) plus petites au fond du plateau, posées dans leur case au lieu de déborder sur la case de derrière.
 - Pokémon debout sur un anneau couché au sol, aux couleurs de leur camp, avec leur ombre ; ceux du fond passent derrière ceux de devant, et les noms restent toujours lisibles par-dessus.
 - Animations : les Pokémon respirent, sautent quand ils se déplacent et soulèvent de la poussière en retombant ; onde de choc au sol quand un coup porte, nuage de poussière au K.O. ; la caméra se pose sur le plateau au début du combat ; les effets d'attaque partent du corps du Pokémon et rapetissent au fond du plateau.
 - Lumière : brume vers l'horizon, teinte de lune la nuit, ombres de nuages qui glissent sur le plateau de jour ; pollen ou poussière dans l'air le jour, lucioles et braises la nuit ; reflets de lumière qui glissent sur l'eau, avec des éclats qui scintillent (ils suivent la marée de l'Arène Eau).
