@@ -1,0 +1,31 @@
+# Blueprint Render : https://render.com/docs/blueprint-spec
+# Site statique (CDN) construit par Vite à chaque push sur main.
+services:
+  - type: web
+    name: pokemon-resonance
+    runtime: static
+    branch: main
+    autoDeployTrigger: commit
+    buildCommand: npm ci && npm run build
+    staticPublishPath: ./dist
+    pullRequestPreviewsEnabled: false
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+    headers:
+      # Fichiers fingerprintés par Vite : mis en cache longtemps.
+      - path: /assets/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      # Musiques et décors : changent rarement, mais sans empreinte dans le nom.
+      - path: /audio/*
+        name: Cache-Control
+        value: public, max-age=604800
+      - path: /img/*
+        name: Cache-Control
+        value: public, max-age=604800
+    routes:
+      # Navigation par ancres (#accueil…) : toute autre URL renvoie l'application.
+      - type: rewrite
+        source: /*
+        destination: /index.html

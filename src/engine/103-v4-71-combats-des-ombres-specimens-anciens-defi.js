@@ -1,0 +1,271 @@
+/* Section d'origine : v4.71 : combats des Ombres, spécimens anciens, défi quotidien, prestige */
+
+import { BY, SCEN } from './009-03-pokemon.js';
+import { PROFILE, isCamp } from './011-05-etat-de-partie.js';
+import { BADGES } from './013-07-arenes.js';
+import { toast } from './014-08-outils.js';
+import { CROCHETS } from './015-v4-8-00-crochets.js';
+import { save, squad } from './020-13-equipe-cartes.js';
+import { OBST } from './023-16-roles-synergies-obstacles.js';
+import { B, __set_launch, backToPrep, launch, scSel } from './024-17-interface-combat.js';
+import { sfx } from './026-20-campagne-tutoriel-son.js';
+import { overlay } from './030-24-prestige-mise-en-scene.js';
+import { fermer } from '../screens/overlays/tempStore.js';
+import { __set_groupOf, groupOf } from './031-25-v3-parcours-accueil.js';
+import { today } from './032-v4-00-socle.js';
+import { goFight } from './036-v4-04-accueil.js';
+import { DEXS } from './038-v4-06-pokedex.js';
+import { tailleEquipe } from './048-v4-9-01-rejouabilite.js';
+import { NEWS416 } from './056-v4-16-1-01-finitions.js';
+import { LSS454, __set_evPick454, ev454, evPick454 } from './084-4-54-colporteur-rencontres-de-route-missions-de.js';
+
+// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+export function __init() {
+
+(() => {
+  const KEY = 'res-x470';
+  const lireX = () => {
+    try {
+      return Object.assign({ fos: 0, rev: [], dq: { d: '', done: false, streak: 0, best: 0, tot: 0, last: '' }, pre: { n: 0, on: false } }, JSON.parse(localStorage.getItem(KEY)));
+    } catch (e) {
+      return { fos: 0, rev: [], dq: { d: '', done: false, streak: 0, best: 0, tot: 0, last: '' }, pre: { n: 0, on: false } };
+    }
+  };
+  const ecrireX = o => {
+    try {
+      localStorage.setItem(KEY, JSON.stringify(o));
+    } catch (e) {}
+  };
+  const ok = ids => ids.filter(i => BY[i]);
+  const POS = [[6, 1], [6, 3], [7, 2], [7, 4], [6, 5]];
+  const mkFoes = ids => ok(ids).map((id, i) => [id, POS[i % POS.length]]);
+
+  /* ---- 1. Combats des Ombres ---- */
+  const OMB = [
+    { ids: ['racaillou', 'nosferapti'], lv: 12, hb: 2 },
+    { ids: ['malosse', 'nosferapti', 'tenefix'], lv: 20, hb: 3 },
+    { ids: ['malosse', 'absol', 'tenefix', 'noctali'], lv: 28, hb: 4 },
+    { ids: ['absol', 'demolosse', 'tyranocif', 'noctali'], lv: 36, hb: 6 }
+  ];
+  const baseScen = (n, lvl, d, lv, hb, foes) => ({
+    n, lvl, lim: 14, time: 'nuit', bio: 'gue', d, water: [], rock: ['3,0', '3,5'], hb, pb: 0, lv, foes
+  });
+  OMB.forEach((o, i) => {
+    const k = 'omb470_' + (i + 1);
+    SCEN[k] = Object.assign(baseScen(i === 3 ? 'Vaskar, chef des Ombres' : 'Les Ombres · épisode ' + (i + 1), 'Histoire · épisode ' + (i + 1), 'Repoussez les Ombres de Résonance.', o.lv, o.hb, mkFoes(o.ids)), { omb470: i + 1 });
+    try {
+      OBST[k] = { pil: ['4,2'], grass: ['4,4'] };
+    } catch (e) {}
+  });
+
+  /* ---- 5. Défi quotidien ---- */
+  const TYPES = ['Feu', 'Eau', 'Plante', 'Électrik', 'Psy', 'Combat', 'Insecte', 'Sol'];
+  const graine = sel => {
+    let h = 7;
+    for (const ch of today() + sel) h = (h * 33 + ch.charCodeAt(0)) >>> 0;
+    return h;
+  };
+  const dqDef = () => {
+    const pool = ok(DEXS.map(m => m.id));
+    const nb = 3 + (graine('n') % 2);
+    const ids = [];
+    for (let i = 0; i < nb; i++) ids.push(pool[graine('f' + i) % pool.length]);
+    const interdit = TYPES[graine('t') % TYPES.length];
+    const hb = 2 + (graine('h') % 4);
+    return { ids, interdit, hb, lv: 18 + (graine('l') % 10) };
+  };
+  const dqMake = () => {
+    const D = dqDef();
+    SCEN.dq470 = Object.assign(baseScen('Défi quotidien', 'Défi · type interdit : ' + D.interdit, 'Aucun Pokémon de type ' + D.interdit + ' dans votre équipe. Adversaires renforcés.', D.lv, D.hb, mkFoes(D.ids)), { dq470: D.interdit });
+    try {
+      OBST.dq470 = { pil: ['4,2'], grass: ['4,4', '5,1'] };
+    } catch (e) {}
+    return D;
+  };
+  dqMake();
+
+  const groupOfAvant = groupOf;
+  __set_groupOf(function (k) {
+    return /^(omb470_|dq470)/.test(k) ? 'terrains' : groupOfAvant.apply(this, arguments);
+  });
+
+  const dqViol = () => {
+    const D = SCEN.dq470 && SCEN.dq470.dq470;
+    return D ? squad.slice(0, tailleEquipe()).find(id => BY[id] && BY[id].t.includes(D)) : null;
+  };
+  const launchAvant = launch;
+  __set_launch(function () {
+    if (scSel === 'dq470') {
+      const v = dqViol();
+      if (v) return toast(BY[v].n + ' est de type ' + SCEN.dq470.dq470 + ' : retirez-le de l’équipe.');
+    }
+    return launchAvant.apply(this, arguments);
+  });
+
+  /* ---- 7. Prestige ---- */
+  const preOk = () => (isCamp() ? BADGES.length >= 8 || (PROFILE.elite || 0) > 0 : true);
+  CROCHETS.creation.push(S => {
+    const P = lireX().pre;
+    if (!P.on || !P.n || !S || !S.units || /^(omb470_|dq470)/.test(S.sc || '')) return;
+    S.units.forEach(u => {
+      if (u.side === 'e') {
+        u.mhp += 2 * P.n;
+        u.hp += 2 * P.n;
+      }
+    });
+  });
+
+  /* ---- progression commune (victoires) ---- */
+  CROCHETS.progres.unshift((S, rew, win) => {
+    try {
+      if (!win) return null;
+      const X = lireX();
+      let m = 0,
+        g = 0;
+      const k = S.sc || '';
+      if (/^omb470_/.test(k)) {
+        const n = +k.slice(7),
+          O = window.__ombre470;
+        if (O && O.lire().etape === n - 1) {
+          O.ecrire({ etape: n });
+          X.fos += 1;
+          m += 400 * n;
+          g += n;
+          try {
+            const st = ev454().st;
+            LSS454('res-ev454', { d: st.d, done: true, res: 'Les Ombres ont été repoussées.' });
+          } catch (e) {}
+        }
+      } else if (k === 'dq470') {
+        const D = X.dq;
+        if (!(D.d === today() && D.done)) {
+          const hier = new Date(Date.now() - 864e5);
+          const h = hier.getFullYear() + '-' + String(hier.getMonth() + 1).padStart(2, '0') + '-' + String(hier.getDate()).padStart(2, '0');
+          D.streak = D.last === h ? D.streak + 1 : 1;
+          D.best = Math.max(D.best, D.streak);
+          D.tot += 1;
+          D.last = today();
+          D.d = today();
+          D.done = true;
+          X.fos += 1;
+          m += 500 + 100 * Math.min(D.streak, 7);
+          g += 2;
+        }
+      } else if (X.pre.on && X.pre.n) {
+        m += 150 * X.pre.n;
+        g += X.pre.n >= 3 ? 1 : 0;
+      }
+      ecrireX(X);
+      return m || g ? [m, g] : null;
+    } catch (e) {
+      return null;
+    }
+  });
+
+  /* ---- liaison avec les épisodes : bouton « Affronter » ---- */
+  const evPickAvant = evPick454;
+  __set_evPick454(function (j) {
+    try {
+      const { E, st } = ev454();
+      if (E && E.ombre && !st.done && E.c[j] && E.c[j].fight) {
+        if (!squad.length) return toast('Composez d’abord une équipe.');
+        const k = 'omb470_' + (window.__ombre470.lire().etape + 1);
+        if (!SCEN[k]) return;
+        fermer('evs454');
+        if (B) backToPrep();
+        return goFight(k);
+      }
+    } catch (e) {}
+    return evPickAvant.apply(this, arguments);
+  });
+
+  /* ---- Hub « Défis » : spécimens, quotidien, prestige ---- */
+  const REV = () => ok(['tenefix', 'malosse', 'demolosse', 'tyranocif']);
+  const hub = () => {
+    const X = lireX(),
+      D = X.dq,
+      fait = D.d === today() && D.done,
+      di = dqDef();
+    const libres = REV().filter(id => !PROFILE.box.includes(id) && !(PROFILE.dex || []).includes(id));
+    const O = window.__ombre470,
+      e = O.lire().etape,
+      fin = e >= 4;
+    // rendu : src/screens/overlays/temporaires/Fenetres.jsx (X470)
+    const o = overlay('x470o', {
+      omb: fin ? { fin } : { fin, e, dispo: !!O.dispo(), titre: O.dispo() ? O.titre() : '', req: O.dispo() ? '' : O.req() },
+      interdit: di.interdit,
+      streak: D.streak,
+      best: D.best,
+      tot: D.tot,
+      fait: !!fait,
+      fos: X.fos,
+      libres: libres.length,
+      pre: { n: X.pre.n, on: !!X.pre.on },
+      preOk: !!preOk()
+    });
+    o.addEventListener('click', e => {
+      if (e.target === o) fermer('x470o');
+    });
+  };
+  document.addEventListener(
+    'click',
+    e => {
+      const b = e.target.closest && e.target.closest('[data-x470]');
+      if (!b || b.disabled) return;
+      e.stopPropagation();
+      e.preventDefault();
+      const v = b.dataset.x470,
+        X = lireX();
+      if (v === 'open') return hub();
+      if (v === 'close') return fermer('x470o');
+      if (v === 'omb') {
+        const O = window.__ombre470;
+        if (!O.dispo() || !squad.length) return toast(squad.length ? 'Épisode verrouillé.' : 'Composez d’abord une équipe.');
+        fermer('x470o');
+        if (B) backToPrep();
+        return goFight('omb470_' + (O.lire().etape + 1));
+      }
+      if (v === 'dq') {
+        if (!squad.length) return toast('Composez d’abord une équipe.');
+        dqMake();
+        fermer('x470o');
+        if (B) backToPrep();
+        return goFight('dq470');
+      }
+      if (v === 'rev') {
+        const libres = REV().filter(id => !PROFILE.box.includes(id) && !(PROFILE.dex || []).includes(id));
+        if (X.fos < 1 || !libres.length) return;
+        const id = libres[Math.floor(Math.random() * libres.length)];
+        X.fos -= 1;
+        X.rev.push(id);
+        PROFILE.box.push(id);
+        if (!PROFILE.dex.includes(id)) PROFILE.dex.push(id);
+        ecrireX(X);
+        try {
+          save();
+        } catch (e2) {}
+        sfx('win');
+        toast(BY[id].n + ' rejoint votre Boîte !');
+      }
+      if (v === 'pre+' && X.pre.n < 5) {
+        X.pre.n += 1;
+        X.pre.on = true;
+        ecrireX(X);
+      }
+      if (v === 'pre') {
+        X.pre.on = !X.pre.on;
+        ecrireX(X);
+      }
+      fermer('x470o');
+      hub();
+    },
+    true
+  );
+  /* bannière « Défis » de l'Accueil (#x470) : rendue par React (src/screens/accueil/Bannieres.jsx) */
+  try {
+    NEWS416.unshift(['i-team', 'Défis et Ombres', 'Combattez les Ombres de Résonance, relevez le défi quotidien, ressuscitez des spécimens anciens et montez en prestige depuis la bannière Défis. 20 formes régionales au Pokédex.']);
+    NEWS416.splice(8);
+  } catch (e) {}
+  window.__x470 = { lire: lireX, ecrire: ecrireX, hub, dqMake, dqViol, ok };
+})();
+}

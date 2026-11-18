@@ -1,0 +1,183 @@
+/* Section d'origine : 4.59 : quêtes d’objets et trophées */
+
+import { ITEMS2, PROFILE } from './011-05-etat-de-partie.js';
+import { BADGES } from './013-07-arenes.js';
+import { toast } from './014-08-outils.js';
+import { sfx, vibe } from './026-20-campagne-tutoriel-son.js';
+import { SHOP, bagN } from './032-v4-00-socle.js';
+import { renderBag } from './039-v4-07-quetes-boutique.js';
+import { NEWS416 } from './056-v4-16-1-01-finitions.js';
+import { graine417 } from './057-v4-17-01-compagnons-et-resonance.js';
+import { gain454, txt454 } from './084-4-54-colporteur-rencontres-de-route-missions-de.js';
+import { ajout455, cdSt455, ctKeys455, maj455, peutIn455 } from './088-4-57-atelier-recettes-commandes-tirage-vitrine-c.js';
+
+export let nbBadge459;
+let QO459, ctPos459, TROPH459;
+export { QO459, TROPH459 }; // lus par Boutique › Quêtes et Trophées (React, src/screens/sac/Atelier.jsx)
+
+
+export function qoSt459() {
+  let s;
+  try {
+    s = JSON.parse(localStorage.getItem('res-qo459') || '{}');
+  } catch (e) {
+    s = {};
+  }
+  s.done = s.done || {};
+  return s;
+}
+
+
+export function qoIn459(q) {
+  /* besoins : les clés d’objets, et « ct » = une CT du Sac */
+  const o = {};
+  for (const k in q.in) if (k !== 'ct') o[k] = q.in[k];
+  return o;
+}
+
+
+export function qoOk459(q) {
+  return peutIn455(qoIn459(q)) && (!q.in.ct || !!ctPos459());
+}
+
+
+export function qoRewTxt459(r) {
+  const a = [];
+  if (r.m || r.g || r.b) a.push(txt454({ m: r.m, g: r.g, b: r.b }));
+  if (r.item) a.push(ITEMS2[r.item].n + (PROFILE.items.includes(r.item) ? ' (déjà en votre possession : 2 500 ₽)' : ''));
+  if (r.ct) a.push('une CT');
+  return a.filter(Boolean).join(' + ');
+}
+
+
+function vuesCT459() {
+  let seen = {};
+  try {
+    seen = JSON.parse(localStorage.getItem('res-vit455') || '{}');
+  } catch (e) {}
+  const appr = Object.values((PROFILE.ct && PROFILE.ct.apprises) || {});
+  const all = Object.keys(SHOP).filter(k => SHOP[k].cat === 'machines' && !SHOP[k].g === !SHOP[k].g);
+  return all.filter(k => seen[k] || bagN(k) > 0 || appr.includes(SHOP[k].mv)).length;
+}
+
+
+export function tpSt459() {
+  let s;
+  try {
+    s = JSON.parse(localStorage.getItem('res-tp459') || '{}');
+  } catch (e) {
+    s = {};
+  }
+  return s;
+}
+
+
+// Boutique › Quêtes et Trophées : rendus par React (src/screens/sac/Atelier.jsx)
+
+// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+export function __init() {
+
+QO459 = [
+  { id: 'q1', min: 0, qui: 'Infirmière Lise', txt: 'Une randonnée a mal tourné ce matin et la salle de soins est vide. Rapportez-moi de quoi remettre tout le monde sur pied.', in: { potion: 3 }, rew: { m: 800, b: { baiemepo: 1 } } },
+  { id: 'q2', min: 0, qui: 'Pêcheur Marcel', txt: 'Je veux sortir un gros Pokémon de la rivière, mais mes Balls sont trop faibles. Prêtez-moi les vôtres, je vous laisse ma pierre porte-bonheur.', in: { poke: 2, super: 1 }, rew: { item: 'eaumystique' } },
+  { id: 'q3', min: 1, qui: 'Randonneuse Clémence', txt: 'Mon groupe a été piqué et gelé en une seule nuit sur la route. Avec de quoi les soigner, je vous offre une baie qui ne rate jamais.', in: { antidote: 2, antigel: 2 }, rew: { item: 'baielum' } },
+  { id: 'q4', min: 1, qui: 'Prof. Sorbier', txt: 'Pour mes recherches sur la Résonance, il me faut des soins plus solides que de simples Potions. Je vous remercie en Éclats.', in: { superpotion: 3 }, rew: { g: 2 } },
+  { id: 'q5', min: 2, qui: 'Forgeron Armand', txt: 'J’ai besoin d’un disque de CT pour étudier le gravage. Prêtez-m’en un et je vous donne un charbon spécial de ma forge.', in: { ct: 1 }, rew: { item: 'charbon' } },
+  { id: 'q6', min: 2, qui: 'Collectionneuse Opaline', txt: 'Ma vitrine de Balls n’est pas complète. Trois Super Balls et je vous trouve une CT rare dans mes réserves.', in: { super: 3 }, rew: { ct: 1, g: 1 } },
+  { id: 'q7', min: 3, qui: 'Gardien du Phare', txt: 'La tempête a blessé tous mes Pokémon d’un coup. Deux Hyper Potions, et mes Lunettes Filtre sont à vous.', in: { hyperpotion: 2 }, rew: { item: 'filtre' } },
+  { id: 'q8', min: 4, qui: 'Octave, ancien champion', txt: 'À mon époque, on gagnait avec de la Résonance pure. Montrez-moi une Gelée Résonante et un Rappel, je vous passe mon vieux gilet.', in: { gelee: 1, rappel: 1 }, rew: { item: 'cape' } },
+  { id: 'q9', min: 4, qui: 'Aubergiste Solange', txt: 'Pour le grand banquet des dresseurs, il me faut quatre Baies Oran. Je vous offre la bannière de la maison.', in: { baieoran: 4 }, rew: { item: 'banniere' } },
+  { id: 'q10', min: 6, qui: 'Maître Lucien', txt: 'Seuls les plus préparés m’intéressent. Deux Hyper Balls et un Rappel Max, et vous aurez ma Ceinture Noire.', in: { hyper: 2, rappelmax: 1 }, rew: { item: 'ceintnoire', g: 3 } }
+];
+
+
+nbBadge459 = () => (typeof BADGES !== 'undefined' ? BADGES.length : 0);
+
+
+ctPos459 = () => ctKeys455().find(k => bagN(k) > 0);
+
+
+document.addEventListener(
+  'click',
+  e => {
+    const b = e.target.closest && e.target.closest('[data-qo459]');
+    if (!b || b.disabled) return;
+    e.preventDefault();
+    e.stopPropagation();
+    const q = QO459.find(x => x.id === b.dataset.qo459),
+      S = qoSt459();
+    if (!q || S.done[q.id] || nbBadge459() < q.min || !qoOk459(q)) return;
+    const ct = q.in.ct ? ctPos459() : null;
+    ajout455(qoIn459(q), -1);
+    if (ct) ajout455({ [ct]: 1 }, -1);
+    const r = q.rew;
+    gain454({ m: r.m, g: r.g, b: r.b });
+    let extra = '';
+    if (r.item) {
+      if (PROFILE.items.includes(r.item)) PROFILE.money += 2500;
+      else PROFILE.items = [...PROFILE.items, r.item];
+      extra = ITEMS2[r.item].n;
+    }
+    if (r.ct) {
+      const pool = ctKeys455().filter(k => !bagN(k)),
+        all = pool.length ? pool : ctKeys455(),
+        k = all[graine417('qo' + q.id) % all.length];
+      PROFILE.bag[k] = Math.min(99, bagN(k) + 1);
+      extra = (extra ? extra + ' + ' : '') + SHOP[k].n;
+    }
+    S.done[q.id] = 1;
+    localStorage.setItem('res-qo459', JSON.stringify(S));
+    sfx('win');
+    vibe(25);
+    toast(`${q.qui} : merci ! ${extra || txt454({ m: r.m, g: r.g, b: r.b })}`);
+    maj455();
+    renderBag();
+  },
+  true
+);
+
+
+/* ---------- boîte de trophées ---------- */
+TROPH459 = [
+  { id: 't1', t: 'Collection d’objets tenus', n: 5, v: () => PROFILE.items.length, g: 1 },
+  { id: 't2', t: 'Collection d’objets tenus', n: 10, v: () => PROFILE.items.length, g: 2 },
+  { id: 't3', t: 'Collection d’objets tenus', n: 20, v: () => PROFILE.items.length, g: 4 },
+  { id: 't4', t: 'CT et CS vues', n: 10, v: () => vuesCT459(), g: 1 },
+  { id: 't5', t: 'CT et CS vues', n: 25, v: () => vuesCT459(), g: 2 },
+  { id: 't6', t: 'CT et CS vues', n: 40, v: () => vuesCT459(), g: 4 },
+  { id: 't7', t: 'Quêtes d’objets', n: 3, v: () => Object.keys(qoSt459().done).length, g: 1 },
+  { id: 't8', t: 'Quêtes d’objets', n: 6, v: () => Object.keys(qoSt459().done).length, g: 2 },
+  { id: 't9', t: 'Quêtes d’objets', n: 10, v: () => Object.keys(qoSt459().done).length, g: 5 },
+  { id: 't10', t: 'Cadeaux du jour d’affilée', n: 7, v: () => cdSt455().n, g: 3 }
+];
+
+
+document.addEventListener(
+  'click',
+  e => {
+    const b = e.target.closest && e.target.closest('[data-tp459]');
+    if (!b || b.disabled) return;
+    e.preventDefault();
+    e.stopPropagation();
+    const T = TROPH459.find(x => x.id === b.dataset.tp459),
+      S = tpSt459();
+    if (!T || S[T.id] || T.v() < T.n) return;
+    S[T.id] = 1;
+    localStorage.setItem('res-tp459', JSON.stringify(S));
+    gain454({ g: T.g });
+    sfx('win');
+    vibe(25);
+    toast(`Trophée : +${T.g} Éclat${T.g > 1 ? 's' : ''}`);
+    maj455();
+    renderBag();
+  },
+  true
+);
+
+
+/* ---------- onglets ---------- */
+NEWS416.unshift(['i-star', 'Quêtes d’objets et trophées', 'Dix habitants vous confient des quêtes d’objets, avec des objets tenus et des CT en récompense, qui se débloquent avec vos badges. Une boîte de trophées donne des Éclats pour vos collections.']);
+
+
+NEWS416.splice(8);
+}

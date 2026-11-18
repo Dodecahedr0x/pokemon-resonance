@@ -1,0 +1,752 @@
+/* Section d'origine : v4.30-01-camp-et-tactique.js */
+
+import { paintOverlay } from '../screens/overlays/dialogsStore.js';
+import { WEATHER } from './004-01-donnees.js';
+import { BY, SCEN, WXN } from './009-03-pokemon.js';
+import { RECRUIT } from './010-04-evolution-en-combat.js';
+import { PROFILE } from './011-05-etat-de-partie.js';
+import { BADGES, __set_BADGES } from './013-07-arenes.js';
+import { $, RM, medal, toast } from './014-08-outils.js';
+import { tokCl } from '../screens/combat/board/boardStore.js';
+import { bdClass, getHost, hostSet } from '../screens/combat/board/boardStore.js';
+import { CROCHETS } from './015-v4-8-00-crochets.js';
+import { TABS, TNAME, cur, go } from './016-09-navigation.js';
+import { renderSquad, save } from './020-13-equipe-cartes.js';
+import { BH, EMAX, K, P, byUid, uAt } from './021-14-moteur-combat.js';
+import { B, L, finish, log, renderAll, scSel, ui } from './024-17-interface-combat.js';
+import { SLOTS, SV, newGame, openSaves, putSlot, queueSave } from './025-19-sauvegardes.js';
+import { PREF, openStarter, renderCamp, savePref, sfx } from './026-20-campagne-tutoriel-son.js';
+import { AUTO } from './030-24-prestige-mise-en-scene.js';
+import { SHOP, V4, dailyKey, fmt } from './032-v4-00-socle.js';
+import { renderWallet } from './035-v4-03-interface.js';
+import { goFight } from './036-v4-04-accueil.js';
+import { renderMap } from './037-v4-05-carte.js';
+import { renderQuests } from './039-v4-07-quetes-boutique.js';
+import { renderParams } from './040-v4-08-parametres.js';
+import { LEGS } from './043-v4-4-01-aventure-plus.js';
+import { VIV_DESC, VIV_ETAT, VIV_NOM } from './046-v4-7-01-plateau-vivant.js';
+import { NEWS416 } from './056-v4-16-1-01-finitions.js';
+import { ONGLETS429 } from './064-v4-29-01-qualite.js';
+import { refreshPrep } from '../screens/combat/prep/prepStore.js';
+
+export let DOCTRINES430;
+export let createur430;
+let CLE430, CIEL430, CATN430;
+export { CATN430 }; // lu par Quêtes › Journal (React)
+export function __set_jDmg430(v) { return (jDmg430 = v); }
+
+
+/* =====================================================================
+   v4.30 : accès et tactique
+   1. Onglet « Camp » : bâtiments, expéditions, Pension, Potager, Dojo…
+      ouverts en Campagne comme en Libre, plus les sorties (herbes, pêche,
+      Parc Safari, Tour, tournoi).
+   2. Mode de jeu dans les Paramètres : changer de mode demande une
+      confirmation et propose de ranger la partie dans un emplacement.
+   3. Cartes régionales : on peut à nouveau les faire défiler (flèches).
+   4. Code secret : l’Atelier du créateur, réservé au détenteur du code.
+   5. Ciel du combat : un logo permanent (heure, météo) et une annonce
+      quand le temps change.
+   6. Déploiement : avant les grands combats, on place ses Pokémon.
+   7. Doctrines : un bonus contre une contrepartie, choisi avant le combat.
+   8. Journal tactique : rapport de chaque combat et statistiques.
+   ===================================================================== */
+export function V430_0() {
+  return { doc430: '', journal430: null };
+}
+
+
+export function v430Clean(p) {
+  const o = V430_0();
+  if (!p || typeof p !== 'object') return o;
+  if (typeof p.doc430 === 'string' && typeof DOCTRINES430 !== 'undefined' && DOCTRINES430 && DOCTRINES430[p.doc430]) o.doc430 = p.doc430;
+  const J = p.journal430;
+  if (J && typeof J === 'object') {
+    const n = x => (Number.isFinite(x) ? Math.max(0, Math.min(1e9, Math.floor(x))) : 0),
+      map = (m, lim) => {
+        const r = {};
+        if (m && typeof m === 'object') Object.keys(m).slice(0, lim).forEach(k => BY[k] && (r[k] = n(m[k])));
+        return r;
+      },
+      cat = {};
+    if (J.cat && typeof J.cat === 'object') Object.keys(J.cat).forEach(k => Array.isArray(J.cat[k]) && /^[a-z]{3,12}$/.test(k) && (cat[k] = [n(J.cat[k][0]), n(J.cat[k][1])]));
+    o.journal430 = {
+      n: n(J.n),
+      w: n(J.w),
+      serie: n(J.serie),
+      best: n(J.best),
+      dealt: n(J.dealt),
+      taken: n(J.taken),
+      ko: n(J.ko),
+      mvp: map(J.mvp, 200),
+      use: map(J.use, 200),
+      cat,
+      last: Array.isArray(J.last)
+        ? J.last
+            .filter(x => Array.isArray(x) && typeof x[0] === 'string')
+            .slice(-10)
+            .map(x => [String(x[0]).slice(0, 40), x[1] ? 1 : 0, typeof x[2] === 'string' ? x[2].slice(0, 2) : '', n(x[3]), BY[x[4]] ? x[4] : ''])
+        : []
+    };
+  }
+  return o;
+}
+
+
+export function journal0430() {
+  return { n: 0, w: 0, serie: 0, best: 0, dealt: 0, taken: 0, ko: 0, mvp: {}, use: {}, cat: {}, last: [] };
+}
+
+
+/* ---------- 1. l’onglet Camp ---------- */
+/** Le Camp de base est ouvert en Campagne comme en Libre (v4.30). */
+export function campOk430() {
+  return true;
+}
+
+
+// La page Camp (squelette, Camp de base, Sorties) est rendue par React : src/screens/camp.
+
+
+/* ---------- 2. mode de jeu : dans les Paramètres, avec confirmation ---------- */
+export function partieEnCours430() {
+  return (PROFILE.battles || 0) > 0 || BADGES.length > 0;
+}
+
+
+function slotLibre430() {
+  return SLOTS.find(k => !SV.local[k]) || null;
+}
+
+
+/** Une confirmation avant toute nouvelle partie. suite() n’est appelée qu’après accord. */
+export function confirmer430(titre, texte, suite) {
+  if (!partieEnCours430()) return suite();
+  // #conf430 : rendu par React au premier appel (src/screens/overlays/Conf430.jsx) ; hidden reste posé ici
+  paintOverlay('conf430', { titre, texte, combats: PROFILE.battles || 0, badges: BADGES.length, sl: slotLibre430() });
+  const el = document.getElementById('conf430');
+  el.hidden = false;
+  confirmer430.suite = suite;
+  const f = el.querySelector('[data-conf430="non"].b');
+  if (f) f.focus();
+}
+
+
+/* ---------- 3. cartes régionales : défilement ---------- */
+export function fleches430() {
+  const sc = document.getElementById('mapSc');
+  if (!sc) return;
+  // les deux flèches (.mf430) sont rendues par React (src/screens/carte/Carte.jsx) ; leur
+  // attribut hidden reste posé ici, d'après le défilement mesuré
+  const box = sc.parentNode;
+  const max = sc.scrollWidth - sc.clientWidth;
+  box.querySelectorAll('.mf430').forEach(b => {
+    const d = +b.dataset.mf430;
+    b.hidden = max < 8 || (d < 0 ? sc.scrollLeft < 8 : sc.scrollLeft > max - 8);
+  });
+}
+
+
+/* ---------- 4. code secret : l’Atelier du créateur ---------- */
+function h430(str, seed) {
+  let h1 = 0xdeadbeef ^ seed,
+    h2 = 0x41c6ce57 ^ seed;
+  for (let i = 0, ch; i < str.length; i++) {
+    ch = str.charCodeAt(i);
+    h1 = Math.imul(h1 ^ ch, 2654435761);
+    h2 = Math.imul(h2 ^ ch, 1597334677);
+  }
+  h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507);
+  h1 ^= Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+  h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507);
+  h2 ^= Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+  return (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(36);
+}
+
+ // Action Replay (v4.32)
+function codeOk430(v) {
+  const c = String(v || '')
+    .toUpperCase()
+    .replace(/[^A-Z0-9]/g, '');
+  return c.length >= 6 && h430(c, 7) + h430(c, 4301) === CLE430;
+}
+
+
+function triche430(k) {
+  if (!createur430()) return;
+  let m = '';
+  if (k === 'argent') {
+    PROFILE.money = Math.min(999999, (PROFILE.money || 0) + 10000);
+    m = '+10 000 ₽.';
+  } else if (k === 'eclats') {
+    PROFILE.gems = Math.min(99999, (PROFILE.gems || 0) + 100);
+    m = '+100 Éclats.';
+  } else if (k === 'sac') {
+    PROFILE.bag = PROFILE.bag || {};
+    [['poke', 30], ['super', 20], ['hyper', 20], ['master', 3], ['potion', 10]].forEach(([x, q]) => SHOP[x] && (PROFILE.bag[x] = Math.min(99, (PROFILE.bag[x] || 0) + q)));
+    m = 'Sac rempli.';
+  } else if (k === 'box') {
+    RECRUIT.forEach(r => {
+      if (!PROFILE.box.includes(r.id)) PROFILE.box.push(r.id);
+      if (!PROFILE.dex.includes(r.id)) PROFILE.dex.push(r.id);
+    });
+    m = `${RECRUIT.length} familles dans la Box.`;
+  } else if (k === 'badges') {
+    __set_BADGES([0, 1, 2, 3, 4, 5, 6, 7]);
+    Object.assign(PROFILE, { elite: 5, tuto: 1, rival: 4, dissonance: 4, jdis: 4, jchamp: 1, hchamp: 1, johto: [0, 1, 2, 3, 4, 5, 6, 7], hoenn: [0, 1, 2, 3, 4, 5, 6, 7] });
+    PROFILE.riv429 = ['rv5', 'rv6', 'hd429'];
+    m = 'Kanto, Johto et Hoenn débloqués.';
+  } else if (k === 'legendes') {
+    PROFILE.legends = LEGS.map(L => L.id);
+    PROFILE.dipl428 = [1, 2, 3];
+    PROFILE.hchamp = 1;
+    m = 'Quêtes légendaires terminées : Quêtes › Légendes.';
+  } else if (k === 'fatigue') {
+    PROFILE.fatigue = {};
+    m = 'Fatigue effacée.';
+  } else if (k === 'gagner') {
+    if (!B || B.over) return toast('Aucun combat en cours.');
+    B.units.filter(u => u.side === 'e').forEach(u => {
+      u.ko = true;
+      u.hp = 0;
+      u.intent = null;
+    });
+    B.over = 'win';
+    B.dep430 = 0;
+    go('combat');
+    finish();
+    return;
+  } else if (k === 'off') {
+    delete PREF.dev430;
+    savePref();
+    renderParams();
+    return toast('Action Replay désactivé.');
+  }
+  save();
+  renderWallet();
+  try {
+    renderSquad();
+    renderCamp();
+  } catch (e) {}
+  renderParams();
+  toast(m);
+}
+
+
+function cielEtat430(S) {
+  return { ph: S.cyc ? S.cyc.ph : S.time === 'nuit' ? 'nuit' : 'jour', wx: S.wx && S.wx.n > 0 ? S.wx.k : '' };
+}
+
+
+function wxInfo430(k) {
+  const w = WEATHER.find(x => x.n === WXN[k]);
+  return w ? w.d : '';
+}
+
+
+function ciel430() {
+  const bd = document.getElementById('bBoard');
+  if (!bd || !B) return;
+  const E = cielEtat430(B);
+  // #ciel430 : rendu par React (Board.jsx)
+  const [ic, co] = CIEL430[E.ph] || CIEL430.jour,
+    w = E.wx && CIEL430[E.wx];
+  const ciel = {
+    ic,
+    co,
+    ti: VIV_NOM[E.ph] || '',
+    w: w ? [w[0], w[1], WXN[E.wx]] : null,
+    nom: (VIV_NOM[E.ph] || 'Jour') + (w ? ' · ' + WXN[E.wx] + ' ' + B.wx.n : ''),
+    vent: !!B.vent
+  };
+  if (JSON.stringify(ciel) !== JSON.stringify(getHost().ciel)) hostSet({ ciel });
+  // annonce quand l’heure ou la météo change
+  const P = B.ciel430;
+  B.ciel430 = E;
+  if (!P || B.over) return;
+  if (P.ph !== E.ph) annonce430(CIEL430[E.ph], VIV_ETAT[E.ph] || VIV_NOM[E.ph], VIV_DESC[E.ph] || '');
+  else if (P.wx !== E.wx)
+    E.wx ? annonce430(CIEL430[E.wx], `${WXN[E.wx]} · ${B.wx.n} manches`, wxInfo430(E.wx)) : annonce430(['i-sol', '#cfe6ff'], 'Le ciel se dégage', 'La météo est terminée.');
+}
+
+
+export function annonce430(ic, titre, texte) {
+  const bd = document.getElementById('bBoard');
+  if (!bd || !ic) return;
+  // #cielBan430 : rendu par React (Board.jsx) ; la classe « on » est retirée puis reposée pour relancer l'animation
+  const b = { ic: [ic[0], ic[1]], titre, texte, on: false };
+  hostSet({ cielBan: b });
+  void bd.offsetWidth;
+  hostSet({ cielBan: { ...b, on: true } });
+  clearTimeout(annonce430.t);
+  annonce430.t = setTimeout(() => {
+    const c = getHost().cielBan;
+    if (c) hostSet({ cielBan: { ...c, on: false } });
+  }, PREF.fast || ui.turbo428 ? 1300 : 2400);
+}
+
+
+/* ---------- 6. déploiement ---------- */
+function grand430(D) {
+  return (
+    !D.tuto &&
+    !!(D.gym != null || D.elite || D.champ || D.rival || D.rival429 || D.johto != null || D.hoenn != null || D.jfinal || D.hfinal || D.legend || D.cap429 || D.jdis || D.dissonance || D.colosse || D.hebdo429 || D.ami || D.lac || D.tower)
+  );
+}
+
+
+function zone430(S) {
+  const z = [];
+  for (let r = 0; r < BH; r++)
+    for (let c = 0; c <= 1; c++) {
+      const k = K(c, r),
+        t = S.tiles[k];
+      if (!t || t.rock || t.lava > 0) continue;
+      const u = uAt(S, k);
+      if (u && u.side !== 'a') continue;
+      z.push(k);
+    }
+  return z;
+}
+
+
+function deployTap430(k) {
+  if (!B || !B.dep430) return;
+  const z = zone430(B),
+    u = uAt(B, k),
+    sel = ui.dsel430 && byUid(B, ui.dsel430);
+  if (u && u.side === 'a' && (!sel || sel === u)) {
+    ui.dsel430 = sel === u ? null : u.uid;
+  } else if (sel && z.includes(k)) {
+    if (u && u.side === 'a') u.pos = [...sel.pos]; // échange de places
+    sel.pos = P(k);
+    ui.dsel430 = null;
+    sfx('ui');
+  } else if (u && u.side === 'a') ui.dsel430 = u.uid;
+  renderAll();
+}
+
+
+function finDeploiement430() {
+  if (!B || !B.dep430) return;
+  B.dep430 = 0;
+  ui.dsel430 = null;
+  log('Déploiement terminé : à vous de jouer.', 'sys');
+  sfx('ui');
+  renderAll();
+}
+
+
+function deployRender430() {
+  const on = !!(B && B.dep430 && !B.over),
+    z = on ? zone430(B) : [];
+  if (L.t)
+    for (const k in L.t) {
+      L.t[k].classList.toggle('dep430z', on && z.includes(k));
+    }
+  if (L.u)
+    for (const id in L.u) {
+      const T = L.u[id];
+      if (T) tokCl(T, 'dep430s', on && ui.dsel430 === id); // classes du jeton : Units.jsx
+    }
+  bdClass('dep430', on); // classe de #bBoard, rendue par React
+  // « Lancer le combat » et la phase du déploiement : rendus par React (src/screens/combat/battle/Foot.jsx)
+}
+
+
+export function docChoisie430() {
+  const D = SCEN[scSel] || {};
+  if (D.tuto || D.hebdo429 || D.enigme431) return '';
+  return DOCTRINES430[PROFILE.doc430] ? PROFILE.doc430 : '';
+}
+
+
+export function docDmg430(S, u, t, d) {
+  const k = S && S.doc430;
+  if (!k || !(d > 0)) return d;
+  let f = 1;
+  if (u && u.side === 'a') f *= k === 'assaut' ? 1.15 : k === 'mobilite' || k === 'butin' ? 0.9 : 1;
+  if (t && t.side === 'a') f *= k === 'assaut' ? 1.1 : k === 'rempart' ? 0.85 : 1;
+  return f === 1 ? d : Math.max(1, Math.round(d * f));
+}
+
+
+export function docMov430(S, u) {
+  if (!S || !S.doc430 || !u || u.side !== 'a') return 0;
+  return S.doc430 === 'mobilite' ? 1 : S.doc430 === 'rempart' ? -1 : 0;
+}
+
+
+// Bloc « Doctrine » (#doc430) : rendu par React avec la sélection des combats.
+export function docRender430() {
+  refreshPrep();
+}
+
+
+/* ---------- 8. journal tactique ---------- */
+export function jDmg430(S, v, real, o) {
+  if (!S.stats) return;
+  const J = S.stats.j430 || (S.stats.j430 = { d: {}, t: {}, k: {} });
+  J.t[v.uid] = (J.t[v.uid] || 0) + real;
+  const a = S.acteur430 && byUid(S, S.acteur430);
+  if (a && a.side !== v.side && !(o && o.ind)) {
+    J.d[a.uid] = (J.d[a.uid] || 0) + real;
+    if (v.hp <= 0) J.k[a.uid] = (J.k[a.uid] || 0) + 1;
+  }
+}
+
+
+function cat430(sc, D) {
+  if (D.gym != null || D.johto != null || D.hoenn != null) return 'arenes';
+  if (D.elite || D.champ || D.jfinal || D.hfinal) return 'ligue';
+  if (D.rival || D.rival429) return 'rivaux';
+  if (D.dissonance || D.jdis || sc === 'hd429') return 'dissonance';
+  if (D.legend || D.cap429 || D.roam || D.hleg435 || D.cap435) return 'legendes';
+  if (D.hebdo429 || D.tower || D.ami || sc === dailyKey()) return 'defis';
+  if (sc === 'sauvage' || D.wild || D.route) return 'sauvages';
+  return 'entrainement';
+}
+
+
+// Quêtes › Journal : rendu par React (src/screens/quetes/Journal.jsx)
+
+
+/* ---------- après chaque rendu du combat ---------- */
+export function apresRendu430() {
+  if (!B) return;
+  try {
+    ciel430();
+    deployRender430();
+    // pastille de la doctrine (#bWx) : rendue par React (TopBar.jsx)
+  } catch (e) {}
+}
+
+// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+export function __init() {
+
+/* icônes (camp, ciel, météo, doctrine) : dans src/components/SvgSprite.jsx */
+
+
+if (!TABS.includes('camp')) TABS.push('camp');
+
+
+TNAME.camp = 'Camp';
+
+
+// la page #camp et ses liens de navigation (barre latérale, barre du bas) sont rendus par React
+if (typeof ONGLETS429 !== 'undefined' && !ONGLETS429.includes('camp')) ONGLETS429.push('camp');
+
+
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-sortie430]');
+  if (!b) return;
+  const k = b.dataset.sortie430;
+  if (k === 'herbes') {
+    go('carte');
+    const r = $('#route');
+    if (r && r.scrollIntoView) r.scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'center' });
+  } else if (k === 'safari') {
+    V4.region = 'kanto';
+    V4.mapSel = 'safari';
+    go('carte');
+    renderMap();
+  } else if (k === 'tour') goFight('tdr');
+  else if (k === 'amis') {
+    go('accueil');
+    const a = document.getElementById('v4Amis');
+    if (a && a.scrollIntoView) a.scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'start' });
+  } else if (k === 'hebdo') {
+    V4.qTab = 'event';
+    go('quetes');
+    renderQuests();
+  }
+});
+
+
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-conf430]');
+  if (!b) return;
+  const el = document.getElementById('conf430'),
+    a = b.dataset.conf430,
+    suite = confirmer430.suite;
+  if (el) el.hidden = true;
+  confirmer430.suite = null;
+  if (a === 'saves') return openSaves();
+  if (a === 'ranger') {
+    const sl = slotLibre430();
+    if (sl) putSlot(sl);
+  }
+  if ((a === 'ranger' || a === 'oui') && suite) suite();
+});
+
+
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-mode430]');
+  if (!b) return;
+  if (b.dataset.mode430 === 'camp') confirmer430('Commencer une campagne ?', 'Vous choisirez votre partenaire, puis les chapitres s’enchaîneront depuis le premier badge.', openStarter);
+  else
+    confirmer430('Passer en mode Libre ?', 'Tous les combats seront ouverts. Votre Campagne ne sera conservée que si vous la rangez dans un emplacement.', () => {
+      newGame();
+      toast('Nouvelle partie en mode Libre.');
+      renderParams();
+    });
+});
+
+
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-mf430]');
+  if (!b) return;
+  const sc = document.getElementById('mapSc');
+  if (!sc) return;
+  sc.scrollBy({ left: +b.dataset.mf430 * sc.clientWidth * 0.7, behavior: RM ? 'auto' : 'smooth' });
+  setTimeout(fleches430, RM ? 30 : 420);
+});
+
+
+document.addEventListener(
+  'scroll',
+  e => {
+    if (e.target && e.target.id === 'mapSc') {
+      clearTimeout(fleches430.t);
+      fleches430.t = setTimeout(fleches430, 60);
+    }
+  },
+  true
+);
+
+
+window.addEventListener('resize', () => setTimeout(fleches430, 100));
+
+
+document.addEventListener('click', () => {
+  if (cur === 'carte') setTimeout(fleches430, 90);
+});
+
+
+// seule l’empreinte du code est dans le jeu, jamais le code lui-même
+CLE430 = 'agg9t7xer71nts93h0hym';
+
+
+createur430 = () => PREF.dev430 === CLE430;
+
+
+document.addEventListener('click', e => {
+  const v = e.target.closest('[data-code430]');
+  if (v) {
+    const i = document.getElementById('code430');
+    if (codeOk430(i && i.value)) {
+      PREF.dev430 = CLE430;
+      savePref();
+      toast('Action Replay activé sur cet appareil.');
+      renderParams();
+    } else {
+      toast('Code inconnu.');
+      if (i) i.value = '';
+    }
+    return;
+  }
+  const t = e.target.closest('[data-triche430]');
+  if (!t || !createur430()) return;
+  triche430(t.dataset.triche430);
+});
+
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && e.target && e.target.id === 'code430') {
+    e.preventDefault();
+    const b = document.querySelector('[data-code430="ok"]');
+    if (b) b.click();
+  }
+});
+
+
+/* ---------- 5. le ciel du combat : logo et annonces ---------- */
+CIEL430 = {
+  jour: ['i-sol', '#f2c94c'],
+  aube: ['i-aube', '#f0a6a0'],
+  crepuscule: ['i-crep', '#e8774a'],
+  nuit: ['i-lune', '#9aa8ff'],
+  pluie: ['i-pluie', '#5aa9ff'],
+  soleil: ['i-sol', '#ff9a3c'],
+  grele: ['i-grele', '#9fe3ff'],
+  sable: ['i-sable', '#d9b26a']
+};
+
+
+CROCHETS.combat.push((S, opt, D0) => {
+  D0 = D0 || SCEN[S.sc] || {};
+  const pr = PREF.dep430 || 'grands';
+  if (pr === 'jamais' || D0.tuto || D0.enigme431 != null || D0.duel433 || S.coop || S.ordre === 'vitesse') return;
+  if (pr === 'grands' && !grand430(D0)) return;
+  if (AUTO && !window.__dep430) return;
+  S.dep430 = 1;
+});
+
+
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-dep430]');
+  if (!b) return;
+  PREF.dep430 = b.dataset.dep430;
+  savePref();
+  renderParams();
+});
+
+
+$('#bSvg').addEventListener(
+  'click',
+  e => {
+    if (!B || !B.dep430 || B.over) return;
+    e.stopPropagation();
+    const p = e.target.closest('[data-k]');
+    if (p && !ui.busy) deployTap430(p.dataset.k);
+  },
+  true
+);
+
+
+document.addEventListener(
+  'click',
+  e => {
+    if (!B || !B.dep430 || B.over) return;
+    if (e.target.closest('#bEnd')) {
+      e.preventDefault();
+      e.stopPropagation();
+      finDeploiement430();
+    } else if (e.target.closest('#bPanel button,.plate')) {
+      e.preventDefault();
+      e.stopPropagation();
+      toast('Déploiement : placez vos Pokémon, puis « Lancer le combat ».');
+    }
+  },
+  true
+);
+
+
+/* ---------- 7. doctrines ---------- */
+DOCTRINES430 = {
+  assaut: { n: 'Assaut', d: 'Vos Pokémon infligent +15 % de dégâts.', c: 'Ils en subissent +10 %.' },
+  rempart: { n: 'Rempart', d: 'Vos Pokémon subissent −15 % de dégâts.', c: '−1 Mouvement.' },
+  mobilite: { n: 'Mobilité', d: '+1 Mouvement pour vos Pokémon.', c: 'Ils infligent −10 % de dégâts.' },
+  resonance: { n: 'Résonance', d: 'Chaque Pokémon commence avec 1 losange de plus.', c: '−1 Voix maximum (avec 1 seule Voix : PV −10 %).' },
+  commandement: { n: 'Commandement', d: '+1 Voix maximum dès le départ.', c: 'PV maximum −10 %.' },
+  butin: { n: 'Butin', d: '+30 % de Pokédollars en cas de victoire.', c: 'Vos Pokémon infligent −10 % de dégâts.' }
+};
+
+
+CROCHETS.combat.push((S, opt) => {
+  const d = opt && opt.doc430;
+  if (!d || !DOCTRINES430[d]) return;
+  S.doc430 = d;
+  const al = S.units.filter(u => u.side === 'a');
+  if (d === 'resonance') {
+    al.forEach(u => (u.en = Math.min(EMAX, (u.en || 0) + 1)));
+    if (S.vmax > 1) {
+      S.vmax -= 1;
+      S.voix = Math.min(S.voix, S.vmax);
+    } else
+      al.forEach(u => {
+        u.mhp = Math.max(1, Math.round(u.mhp * 0.9));
+        u.hp = Math.min(u.hp, u.mhp);
+      });
+  } else if (d === 'commandement') {
+    S.vmax += 1;
+    S.voix += 1;
+    al.forEach(u => {
+      u.mhp = Math.max(1, Math.round(u.mhp * 0.9));
+      u.hp = Math.min(u.hp, u.mhp);
+    });
+  }
+});
+
+
+CROCHETS.progres.push((S, rew, win) => {
+  if (!S.doc430) return null;
+  rew.doc430 = S.doc430;
+  if (!win || S.doc430 !== 'butin') return null;
+  const m = Math.round(((rew.money || 0) * 0.3) / 10) * 10;
+  rew.butin430 = m;
+  return m ? [m, 0] : null;
+});
+
+
+CROCHETS.resultat.push(r =>
+  r.doc430 && DOCTRINES430[r.doc430] ? `<div class="res-l"><h4>Doctrine</h4><div class="rl"><span>${DOCTRINES430[r.doc430].n}${r.butin430 ? ' : butin de la victoire' : ''}</span><b>${r.butin430 ? '+' + fmt(r.butin430) + ' ₽' : ''}</b></div></div>` : ''
+);
+
+
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-doc430]');
+  if (!b) return;
+  PROFILE.doc430 = b.dataset.doc430;
+  queueSave();
+  docRender430();
+});
+
+
+CATN430 = { arenes: 'Arènes', ligue: 'Ligue', rivaux: 'Rivaux', dissonance: 'Dissonance', legendes: 'Légendes', defis: 'Défis', sauvages: 'Sauvages', entrainement: 'Entraînement' };
+
+
+CROCHETS.progres.push((S, rew, win) => {
+  const D = SCEN[S.sc] || {};
+  if (D.tuto) return null;
+  const J0 = S.stats.j430 || { d: {}, t: {}, k: {} },
+    al = S.units.filter(u => u.side === 'a');
+  const rows = al.map(u => ({ uid: u.uid, id: u.id, sp: u.sp, d: J0.d[u.uid] || 0, t: J0.t[u.uid] || 0, k: J0.k[u.uid] || 0, ko: u.ko ? 1 : 0 }));
+  const sc = r => r.d + r.k * 40 - r.ko * 15,
+    mvp = rows.length ? rows.reduce((a, b) => (sc(b) > sc(a) ? b : a)) : null;
+  rew.j430 = { rows, mvp: mvp && mvp.d > 0 ? mvp.uid : null };
+  // statistiques cumulées
+  const J = (PROFILE.journal430 = PROFILE.journal430 || journal0430());
+  J.n++;
+  if (win) {
+    J.w++;
+    J.serie++;
+    J.best = Math.max(J.best, J.serie);
+  } else J.serie = 0;
+  rows.forEach(r => {
+    J.dealt += r.d;
+    J.taken += r.t;
+    J.ko += r.k;
+    if (BY[r.sp]) J.use[r.sp] = (J.use[r.sp] || 0) + 1;
+  });
+  if (mvp && mvp.d > 0 && BY[mvp.sp]) J.mvp[mvp.sp] = (J.mvp[mvp.sp] || 0) + 1;
+  const c = cat430(S.sc, D);
+  J.cat[c] = J.cat[c] || [0, 0];
+  J.cat[c][win ? 0 : 1]++;
+  J.last.push([(SCEN[S.sc] && SCEN[S.sc].n) || S.sc, win ? 1 : 0, S.rank || '', S.round || 0, mvp && mvp.d > 0 ? mvp.sp : '']);
+  if (J.last.length > 10) J.last = J.last.slice(-10);
+  return null;
+});
+
+
+CROCHETS.resultat.push(r => {
+  const j = r.j430;
+  if (!j || !j.rows.length) return '';
+  const mx = Math.max(1, ...j.rows.map(x => x.d));
+  return `<div class="res-l rap430"><h4>Rapport tactique</h4>${j.rows
+    .map(x => {
+      const m = BY[x.id] || BY[x.sp];
+      return `<div class="rap430-r${j.mvp === x.uid ? ' mvp' : ''}${x.ko ? ' ko' : ''}">${medal(m.t, 'sm')}<span class="rap430-n"><b>${m.n}</b>${j.mvp === x.uid ? '<em>MVP</em>' : ''}</span><span class="rap430-b"><i style="width:${Math.round((x.d / mx) * 100)}%"></i></span><span class="rap430-v" title="Dégâts infligés · subis · K.O.">${x.d} <small>/ ${x.t}${x.k ? ` · ${x.k} K.O.` : ''}</small></span></div>`;
+    })
+    .join('')}<p class="rap430-l">Dégâts infligés / subis. Statistiques complètes : Quêtes › Journal.</p></div>`;
+});
+
+
+/* ---------- nouveautés ---------- */
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-news="camp430"]');
+  if (!b) return;
+  e.stopPropagation();
+  go('camp');
+});
+
+
+NEWS416.unshift(
+  ['i-camp', 'Onglet Camp', 'Bâtiments, expéditions, Pension et Potager réunis dans un onglet, en Campagne comme en Libre. Le mode de jeu passe dans les Paramètres, avec confirmation.', 'camp430'],
+  ['i-fight', 'Déploiement et doctrines', 'Avant les grands combats, placez vos Pokémon. Choisissez une doctrine (Assaut, Rempart, Mobilité…) avant de lancer le combat.', null],
+  ['i-quest', 'Journal tactique', 'Rapport après chaque combat (MVP, dégâts) et vos statistiques dans Quêtes › Journal. Le ciel du combat s’affiche en logo.', null]
+);
+
+
+NEWS416.splice(8);
+}

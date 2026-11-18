@@ -1,0 +1,507 @@
+/* Section d'origine : 13-equipe-cartes.js */
+
+import { CHAINS, EL, MX, ROLES } from './004-01-donnees.js';
+import { MV } from './005-02-capacites.js';
+import { BY, EEVEE, FAMT, MKT, PRESETS, famOf } from './009-03-pokemon.js';
+import { BUDGET, RECRUIT } from './010-04-evolution-en-combat.js';
+import { ITEMS2, PROFILE, inBox, ownedItems } from './011-05-etat-de-partie.js';
+import { RC } from './012-06-recrues-roles-synergies.js';
+import { $, INK, RM, gp, markOf, tc, toast } from './014-08-outils.js';
+import { cur } from './016-09-navigation.js';
+import { openRx } from './018-11-types.js';
+import { BRANCHES } from './021-14-moteur-combat.js';
+import { B } from './024-17-interface-combat.js';
+import { queueSave } from './025-19-sauvegardes.js';
+import { renderPrep } from './026-20-campagne-tutoriel-son.js';
+import { renderHome } from './036-v4-04-accueil.js';
+import { artTag } from './041-v4-1-01-illustrations.js';
+import { defiRefus } from './048-v4-9-01-rejouabilite.js';
+import { expRefus } from './049-v4-10-01-identite.js';
+import { REGN421, lieuCapture421, regFam421 } from './061-v4-21-01-capture-partout.js';
+import { hideSheet, refreshFilters, refreshGrid, refreshTeam, showSheet } from '../screens/equipe/equipeStore.js';
+
+export let STLN, TEAM_MAX, squad, filt, openId, validSquad, cost, vBonus, norm, gen;
+let ftype, q, lastFocus;
+export function __set_squad(v) { return (squad = v); }
+export function __set_filt(v) { return (filt = v); }
+
+
+export function save() {
+  try {
+    localStorage.setItem('res8-squad', JSON.stringify(squad));
+  } catch (e) {}
+  queueSave();
+}
+
+
+export function monMarks(m) {
+  return [...new Set(m.mv.map(id => MV[id].mk).filter(Boolean))];
+}
+
+
+export function monEls(m) {
+  return [
+    ...new Set(
+      m.mv
+        .map(id => MV[id])
+        .filter(x => x.p || x.fix || x.mk)
+        .map(x => FAMT[x.t])
+        .filter(Boolean)
+    )
+  ];
+}
+
+
+export function nextOf(m) {
+  return !m.nx ? [] : m.nx === 'eevee' ? Object.values(EEVEE) : Array.isArray(m.nx) ? m.nx : [m.nx];
+}
+
+
+export function evoDiff(a, b) {
+  const A = BY[a],
+    B2 = BY[b],
+    gain = B2.mv.filter(x => !A.mv.includes(x)),
+    lose = A.mv.filter(x => !B2.mv.includes(x));
+  const tg = B2.t.filter(t => !A.t.includes(t)),
+    tl = A.t.filter(t => !B2.t.includes(t));
+  return {
+    gain,
+    lose,
+    tg,
+    tl,
+    tal: A.tal !== B2.tal ? B2.tal : null,
+    role: A.r !== B2.r ? B2.r : null,
+    hp: (B2.s[0] - A.s[0]) * 8
+  };
+}
+
+
+function rxOf(ms) {
+  const marks = new Map(),
+    els = new Map(),
+    add = (m, k, v) => {
+      if (!m.has(k)) m.set(k, []);
+      m.get(k).push(v);
+    };
+  ms.forEach(m => {
+    monMarks(m).forEach(k => add(marks, k, m.n));
+    monEls(m).forEach(e => add(els, e, m.n));
+  });
+  if (ms.some(m => m.tal === 'adaptabilite')) [...marks.keys()].forEach(k => add(els, MKT[k], 'Évoli'));
+  const rx = new Map();
+  marks.forEach((by, k) =>
+    EL.forEach((e, i) => {
+      const id = MX[k][i];
+      if (!id || id === 'ren' || !els.has(e) || rx.has(id)) return;
+      const tr = els.get(e).find(n => !by.includes(n)) || els.get(e)[0];
+      rx.set(id, { by: by.find(n => n !== tr) || by[0], tr });
+    })
+  );
+  return rx;
+}
+
+
+export function analyze() {
+  const ms = squad.map(id => BY[id]),
+    all = ms.flatMap(m => famOf(m.id));
+  const rx = rxOf(ms),
+    rxp = rxOf(all);
+  const roles = ROLES.map(r =>
+    Math.min(
+      2,
+      ms.reduce((a, m) => a + (m.r === r.n ? 1 : m.r2 === r.n ? 0.5 : 0), 0)
+    )
+  );
+  const chains = CHAINS.filter(c => c.need.every(n => rxp.has(n)) && (!c.mon || all.some(m => m.id === c.mon)));
+  const c = cost(),
+    free = BUDGET - c,
+    bonus = vBonus(),
+    covered = roles.filter(v => v > 0).length;
+  const flips = all.filter(m =>
+    m.mv.some(id => ['turn', 'confuse', 'taunt', 'swap', 'sleep', 'root', 'web'].includes(MV[id].fx))
+  ).length;
+  const evo = ms.filter(m => m.nx).length,
+    stages = ms.reduce((a, m) => a + Math.max(...famOf(m.id).map(x => x.st)) - 1, 0);
+  const score = ms.length
+    ? Math.min(
+        100,
+        rx.size * 5 +
+          (rxp.size - rx.size) * 3 +
+          chains.length * 6 +
+          covered * 5 +
+          bonus * 4 +
+          Math.min(flips, 4) * 3 +
+          stages * 3
+      )
+    : 0;
+  const al = [],
+    has = n => ms.some(m => m.r === n || m.r2 === n);
+  if (!ms.length) al.push(['bad', 'Équipe vide : recrutez jusqu’à 4 Pokémon.']);
+  else {
+    if (!has('Rempart'))
+      al.push(['bad', 'Aucun Rempart au départ : rien ne tient la ligne de front avant les premiers Éveils.']);
+    if (!rx.size) al.push(['bad', 'Aucune réaction au premier stade : l’énergie d’Éveil montera lentement.']);
+    if (!evo) al.push(['warn', 'Aucun Pokémon ne peut s’éveiller : pas de renversement possible en combat.']);
+    else
+      al.push([
+        'ok',
+        `${evo} Pokémon capable${evo > 1 ? 's' : ''} de s’éveiller, ${stages} Éveil${stages > 1 ? 's' : ''} possible${stages > 1 ? 's' : ''} au total.`
+      ]);
+    const lost = ms.filter(m =>
+      nextOf(m).some(n =>
+        evoDiff(m.id, n).lose.some(id => ['web', 'root', 'sleep', 'confuse', 'turn', 'taunt'].includes(MV[id].fx))
+      )
+    );
+    if (lost.length)
+      al.push([
+        'warn',
+        `${lost.map(m => m.n).join(', ')} perd${lost.length > 1 ? 'ent' : ''} un contrôle en évoluant : éveillez au bon moment.`
+      ]);
+    if (rxp.size > rx.size)
+      al.push(['ok', `Les Éveils ouvrent ${rxp.size - rx.size} réaction${rxp.size - rx.size > 1 ? 's' : ''} de plus.`]);
+    if (bonus > 0)
+      al.push([
+        'ok',
+        `${free} point${free > 1 ? 's' : ''} libre${free > 1 ? 's' : ''} : +${bonus} Voix par manche${bonus >= 2 ? ' (plafond)' : ''}. Chaque tranche de 4 PC libres donne 1 Voix.`
+      ]);
+    const vet = ms.filter(m => m.st > 1);
+    if (vet.length)
+      al.push([
+        'ok',
+        `${vet.map(m => m.n).join(', ')} : recrue${vet.length > 1 ? 's' : ''} confirmée${vet.length > 1 ? 's' : ''}, en jeu dès la première manche.`
+      ]);
+    if (ms.some(m => !m.nx))
+      al.push([
+        'ok',
+        `${ms
+          .filter(m => !m.nx)
+          .map(m => m.n)
+          .join(', ')} : stade unique, puissant d’emblée.`
+      ]);
+  }
+  return { ms, rx, rxp, roles, chains, c, free, bonus, covered, score, al, stages };
+}
+
+
+// Familles visibles avec les filtres en cours (lu par la grille React).
+export function visible() {
+  const qq = norm(q);
+  return RECRUIT.filter(m => {
+    const f = famOf(m.id);
+    return (
+      (filt === 'Tous' || f.some(x => x.r === filt || x.r2 === filt)) &&
+      (gen === 'all' || String(m.gen) === gen) &&
+      (!ftype || f.some(x => x.t.includes(ftype))) &&
+      (!qq || f.some(x => norm(x.n).includes(qq) || x.mv.some(id => norm(MV[id].n).includes(qq))))
+    );
+  });
+}
+
+
+// Grille, compteur et encart des recrues : rendus par React (src/screens/equipe/Grille.jsx, DexCall.jsx).
+export function renderGrid() {
+  refreshGrid();
+}
+
+
+// Filtres de rôle et de génération : rendus par React (src/screens/equipe/Equipe.jsx).
+export function renderFilters() {
+  refreshFilters();
+  const r = $('#dexRole');
+  if (r) r.value = filt;
+}
+
+
+// Dock, bandeaux d'équipe et analyse : rendus par React (src/screens/equipe/Dock.jsx, Analyse.jsx).
+function renderTeam() {
+  refreshTeam();
+}
+
+
+export function renderSquad() {
+  renderGrid();
+  renderTeam();
+  if (openId) openSheet(openId, true);
+  if (typeof renderPrep === 'function' && cur === 'combat' && !B) renderPrep();
+  if (cur === 'accueil') renderHome();
+}
+
+
+export function toggle(id, card) {
+  const m = BY[id];
+  if (!m) return;
+  const same = squad.find(x => BY[x].base === m.base);
+  if (same && (same === id || card)) {
+    squad.splice(squad.indexOf(same), 1);
+    toast(`${BY[same].n} quitte l’équipe.`);
+    save();
+    renderSquad();
+    return;
+  }
+  if (!inBox(id)) {
+    toast(`${BY[m.base].n} n’est pas dans votre Box : ${lieuCapture421(id) ? `capturez-en un sur la ${lieuCapture421(id)} (${REGN421[regFam421(id)]})` : 'capturez-en un dans les hautes herbes'}.`);
+    return;
+  }
+  const dr = defiRefus(id) || expRefus(id); // défis de campagne (v4.9), expéditions (v4.10)
+  if (dr) {
+    toast(dr);
+    return;
+  }
+  const rest = same ? cost() - RC(same) : cost();
+  if (!same && squad.length >= TEAM_MAX) {
+    toast(`Équipe complète : ${TEAM_MAX} Pokémon par combat. Retirez-en un d’abord.`);
+    return;
+  }
+  if (rest + RC(id) > BUDGET) {
+    toast(`Budget dépassé : il reste ${BUDGET - rest} PC, ${m.n} en coûte ${RC(id)}.`);
+    return;
+  }
+  if (same) {
+    squad[squad.indexOf(same)] = id;
+    toast(`${m.n} remplace ${BY[same].n}.`);
+  } else {
+    squad.push(id);
+    toast(`${m.n} rejoint l’équipe${m.st > 1 ? ' en recrue confirmée' : ''}.`);
+  }
+  save();
+  renderSquad();
+}
+
+
+export function crestSmall(m) {
+  const a = tc(m.t[0]),
+    Lc = 2 * Math.PI * 84,
+    gid = 'g' + m.id + (crestSmall.n = (crestSmall.n || 0) + 1);
+  let ticks = '';
+  for (let i = 0; i < 48; i++) {
+    const r = (i * 7.5 * Math.PI) / 180,
+      mj = i % 4 === 0,
+      r1 = mj ? 89 : 92;
+    ticks += `<line x1="${(100 + r1 * Math.cos(r)).toFixed(1)}" y1="${(100 + r1 * Math.sin(r)).toFixed(1)}" x2="${(100 + 97 * Math.cos(r)).toFixed(1)}" y2="${(100 + 97 * Math.sin(r)).toFixed(1)}" class="cr-tick${mj ? ' mj' : ''}"/>`;
+  }
+  const svg = `<svg viewBox="0 0 200 200" aria-hidden="true"><defs><radialGradient id="${gid}" cx="38%" cy="30%" r="75%"><stop offset="0" style="stop-color:color-mix(in srgb,${a} 45%,#fff)"/><stop offset=".3" stop-color="${a}"/><stop offset="1" style="stop-color:color-mix(in srgb,${a} 50%,#000)"/></radialGradient><linearGradient id="${gid}r" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F7E1AC"/><stop offset=".4" stop-color="#B68D48"/><stop offset=".65" stop-color="#F0D59C"/><stop offset="1" stop-color="#6B4F22"/></linearGradient></defs>
+  <g class="cr-spin" style="transform-origin:100px 100px">${ticks}</g><circle class="cr-costbg" cx="100" cy="100" r="84"/><circle class="cr-cost" cx="100" cy="100" r="84" transform="rotate(-90 100 100)" stroke-dasharray="${((Lc * m.c) / 4 - 5).toFixed(1)} ${Lc.toFixed(1)}"/>
+  <circle cx="100" cy="100" r="69" fill="url(#${gid}r)"/><circle cx="100" cy="100" r="65" fill="#0B0D12"/><circle cx="100" cy="100" r="62" fill="url(#${gid})"/><circle cx="100" cy="100" r="62" fill="none" stroke="rgba(255,255,255,.28)"/><path d="${gp(m.t[0])}" transform="translate(70 70) scale(2.5)" fill="${INK}" fill-rule="evenodd"/><ellipse cx="86" cy="72" rx="30" ry="13" transform="rotate(-24 86 72)" fill="rgba(255,255,255,.22)"/></svg>`;
+  return `<span class="crest-pk pk">${svg}${artTag(m, 'crest-a')}</span>`; // l’illustration au centre du blason
+}
+
+
+export function branchNote(a, b) {
+  const A = BY[a];
+  if (A.nx === 'eevee') {
+    const k = Object.keys(EEVEE).find(x => EEVEE[x] === b);
+    return 'au choix · harmonie : ' + (k === 'jour' ? 'le jour' : k === 'nuit' ? 'la nuit' : `case ${markOf(k).n}`); // v4.34
+  }
+  const br = (BRANCHES[a] || []).find(x => x.id === b); // v4.13 : condition de la voie
+  if (br) return /^PV/.test(br.why) ? br.why : br.why[0].toLowerCase() + br.why.slice(1);
+  if (Array.isArray(A.nx)) return b === A.nx[1] ? 'appelle la pluie' : 'combattant';
+  return '';
+}
+
+
+// Fiche d'un Pokémon : contenu rendu par React (src/screens/equipe/Fiche.jsx).
+export function openSheet(id, refresh) {
+  const sh = $('#sh'),
+    fermee = $('#sheet').hidden;
+  if (!refresh) lastFocus = document.activeElement;
+  openId = id;
+  showSheet(id);
+  if (fermee) {
+    document.body.style.overflow = 'hidden';
+    sh.scrollTop = 0;
+    setTimeout(() => {
+      const x = sh.querySelector('.sh-x');
+      if (x) x.focus();
+    }, 50);
+  } else if (!refresh) sh.scrollTop = 0;
+}
+
+
+function closeSheet() {
+  hideSheet();
+  document.body.style.overflow = '';
+  openId = null;
+  if (lastFocus && lastFocus.focus) lastFocus.focus();
+}
+
+
+/* v1.0 : objets tenus, fatigue, Liens dans le Pokédex */
+function equip(id, it) {
+  if (it && !ownedItems().includes(it)) return;
+  for (const k in PROFILE.equip) if (PROFILE.equip[k] === it) delete PROFILE.equip[k];
+  if (it) PROFILE.equip[id] = it;
+  else delete PROFILE.equip[id];
+  save();
+  renderSquad();
+  toast(it ? `${BY[id].n} tient ${ITEMS2[it].n}.` : `${BY[id].n} ne tient plus d’objet.`);
+}
+
+
+// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+export function __init() {
+
+/* ===================== POKÉDEX & ÉQUIPE v0.8 : cartes de famille ===================== */
+STLN = ['PV', 'Puissance', 'Garde', 'Vitesse', 'Mouvement', 'Portée'];
+
+
+TEAM_MAX = 4;
+
+
+squad = [],
+  filt = 'Tous',
+  gen = 'all',
+  ftype = '',
+  q = '',
+  lastFocus = null,
+  openId = null;
+
+
+validSquad = s =>
+  Array.isArray(s) &&
+  s.length <= TEAM_MAX &&
+  s.every(id => BY[id]) &&
+  new Set(s.map(id => BY[id].base)).size === s.length &&
+  s.reduce((a, id) => a + RC(id), 0) <= BUDGET;
+
+
+try {
+  const s = JSON.parse(localStorage.getItem('res8-squad') || 'null');
+  if (validSquad(s)) squad = s;
+} catch (e) {}
+
+
+if (!squad.length) squad = [...PRESETS.orage.ids];
+
+
+cost = () => squad.reduce((a, id) => a + RC(id), 0);
+
+
+vBonus = () => Math.min(2, Math.floor((BUDGET - cost()) / 4));
+
+
+norm = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+
+
+$('#sheet').addEventListener('click', e => {
+  if (e.target.closest('[data-close]')) {
+    closeSheet();
+    return;
+  }
+  const o = e.target.closest('[data-open]');
+  if (o) {
+    openSheet(o.dataset.open, true);
+    return;
+  }
+  const r = e.target.closest('[data-rx]');
+  if (r) {
+    closeSheet();
+    openRx(r.dataset.rx);
+    return;
+  }
+  const qq = e.target.closest('[data-qa]');
+  if (qq) {
+    toggle(qq.dataset.qa);
+    return;
+  }
+  const eq = e.target.closest('[data-eq]');
+  if (eq) {
+    equip(eq.dataset.eq, eq.dataset.it || '');
+    return;
+  }
+});
+
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && !$('#sheet').hidden) closeSheet();
+});
+
+
+$('#dexGrid').addEventListener('click', e => {
+  const sg = e.target.closest('[data-stg]');
+  if (sg) {
+    toggle(sg.dataset.stg);
+    return;
+  }
+  const qa = e.target.closest('[data-qa]');
+  if (qa) {
+    toggle(qa.dataset.qa, true);
+    return;
+  }
+  const o = e.target.closest('[data-open]');
+  if (o) openSheet(o.dataset.open);
+});
+
+
+/* reflet holographique et inclinaison */
+if (!RM && window.matchMedia && matchMedia('(hover:hover)').matches) {
+  $('#dexGrid').addEventListener('pointermove', e => {
+    const c = e.target.closest('.fcard');
+    if (!c) return;
+    const r = c.getBoundingClientRect(),
+      x = (e.clientX - r.left) / r.width,
+      y = (e.clientY - r.top) / r.height;
+    c.style.setProperty('--rx', ((0.5 - y) * 10).toFixed(2) + 'deg');
+    c.style.setProperty('--ry', ((x - 0.5) * 12).toFixed(2) + 'deg');
+    c.style.setProperty('--hx', (x * 100).toFixed(1) + '%');
+    c.style.setProperty('--hy', (y * 100).toFixed(1) + '%');
+  });
+  $('#dexGrid').addEventListener('pointerout', e => {
+    const c = e.target.closest('.fcard');
+    if (!c || c.contains(e.relatedTarget)) return;
+    ['--rx', '--ry', '--hx', '--hy'].forEach(p => c.style.removeProperty(p));
+  });
+}
+
+
+$('#filters').addEventListener('click', e => {
+  const b = e.target.closest('[data-f]');
+  if (!b) return;
+  filt = b.dataset.f;
+  renderFilters();
+  renderGrid();
+});
+
+
+$('#genSeg').addEventListener('click', e => {
+  const b = e.target.closest('[data-gen]');
+  if (!b) return;
+  gen = b.dataset.gen;
+  renderFilters();
+  renderGrid();
+});
+
+
+// options de #dexType : rendues par React (Equipe.jsx)
+$('#dexType').addEventListener('change', e => {
+  ftype = e.target.value;
+  renderGrid();
+});
+
+
+$('#dexQ').addEventListener('input', e => {
+  q = e.target.value;
+  renderGrid();
+});
+
+
+$('#ana').addEventListener('click', e => {
+  const p = e.target.closest('[data-p]');
+  if (p) {
+    const pr = p.dataset.p === 'clear' ? [] : [...PRESETS[p.dataset.p].ids],
+      miss = pr.filter(id => !inBox(id));
+    squad = pr.filter(id => inBox(id));
+    save();
+    renderSquad();
+    toast(
+      p.dataset.p === 'clear'
+        ? 'Équipe vidée.'
+        : miss.length
+          ? `Équipe « ${PRESETS[p.dataset.p].n} » chargée sans ${miss.map(id => BY[id].n).join(', ')} : à capturer d’abord.`
+          : `Équipe « ${PRESETS[p.dataset.p].n} » chargée.`
+    );
+    return;
+  }
+  const r = e.target.closest('[data-rx]');
+  if (r) openRx(r.dataset.rx);
+});
+}

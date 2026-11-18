@@ -3,3 +3,6 @@ art/raw/
 .serena/
 art/sheet-*.jpg
 art/gen-*.log
+node_modules/
+dist/
+.impeccable/hook.cache.json

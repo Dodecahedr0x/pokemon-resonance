@@ -1,0 +1,544 @@
+import { Html } from '../../../lib/html.jsx';
+import { RX } from '../../../engine/004-01-donnees.js';
+import { MV, SHAPE, TAL } from '../../../engine/005-02-capacites.js';
+import { BY, SCEN } from '../../../engine/009-03-pokemon.js';
+import { ARR } from '../../../engine/010-04-evolution-en-combat.js';
+import { ROLEFX, rIco } from '../../../engine/012-06-recrues-roles-synergies.js';
+import { veiled } from '../../../engine/013-07-arenes.js';
+import { markOf, medal, rxCat, tb, tc } from '../../../engine/014-08-outils.js';
+import { EMAX, byUid, canEveil, cibleImposee, dmgOf, eveilInfo, evoOpts, foeEvo, hasNx, mvType, targets, uAt } from '../../../engine/021-14-moteur-combat.js';
+import { roleOf } from '../../../engine/023-16-roles-synergies-obstacles.js';
+import { B, enPips, segHp, ui } from '../../../engine/024-17-interface-combat.js';
+import { PREF, catchBlock, duoBlock, tileCard, unitExtras } from '../../../engine/026-20-campagne-tutoriel-son.js';
+import { HEALS, ITM, SHOP, bagN } from '../../../engine/032-v4-00-socle.js';
+import { COMBAT414, SAC_MAX, aXP, bloque414, foeReso414, mrg414, objOk414, rangOf, rgLine414, rgTag, xpBlock414 } from '../../../engine/053-v4-14-01-resonance.js';
+import { resoBlock417 } from '../../../engine/057-v4-17-01-compagnons-et-resonance.js';
+import { etatsCombat420, vigilBtn420 } from '../../../engine/060-v4-20-01-combat-intense.js';
+import { flow478 } from '../../../engine/112-v4-77-graphismes-peints-decors-et-textures-du-do.js';
+import { useBattleVersion } from './battleStore.js';
+import { Hi, sansAstuce } from './frag.jsx';
+
+const NL = '\n  ';
+
+// Panneau de commande (#bPanel) : fiche du Pokémon choisi, d'un adversaire, ou d'une case.
+// La classe « info-off » du conteneur reste posée par le moteur (panelRoleInfo).
+export default function Panel() {
+  const v = useBattleVersion('panel');
+  return (
+    <div className="bp" id="bPanel" aria-live="polite">
+      {v && B ? <Contenu /> : null}
+    </div>
+  );
+}
+
+function Contenu() {
+  if (B.over) return null;
+  if (ui.busy)
+    return (
+      <div className="bp-wait">
+        <span className="spin" />
+        {ui.cine ? 'Évolution en cours…' : 'Les adversaires agissent…'}
+      </div>
+    );
+  const e = ui.selE && byUid(B, ui.selE);
+  if (e && !e.ko) return <FicheAdverse e={e} />;
+  const u = ui.sel && byUid(B, ui.sel);
+  if (!u || u.ko)
+    return (
+      <>
+        <Hi html={tileCard()} />
+        <p className="bp-hint">Touchez un de vos Pokémon pour le commander, ou un adversaire pour voir sa portée.</p>
+      </>
+    );
+  return <FicheAllie u={u} />;
+}
+
+// Rôle et bouton « Détails » sous l'en-tête (v1.2).
+function Role() {
+  const u = (ui.selE && byUid(B, ui.selE)) || (ui.sel && byUid(B, ui.sel));
+  if (!u || u.ko) return null;
+  const r = roleOf(u),
+    R = ROLEFX[r];
+  return (
+    <div className="bp-tr">
+      {R ? (
+        <span className={'tr' + (u.side === 'e' ? ' en' : '')} title={R.d}>
+          <Html html={rIco(r)} />
+          {r} · {R.k}
+        </span>
+      ) : null}
+      <button type="button" className="tr-i" data-info="" aria-pressed={!!PREF.info}>
+        {PREF.info ? 'Moins' : 'Détails'}
+      </button>
+    </div>
+  );
+}
+
+function Entete({ u, sous }) {
+  return (
+    <div className="bp-h">
+      <Html html={medal(u.t)} />
+      <div className="bp-id">
+        <b>
+          {u.n} <Html html={rgTag(rangOf(u))} />
+        </b>
+        <span>{sous}</span>
+      </div>
+      <div className="bp-hp">
+        <span>
+          {u.hp} / {u.mhp}
+        </span>
+        <Html html={segHp(u)} />
+      </div>
+    </div>
+  );
+}
+
+const puiss = m => (m.p ? 'Puiss. ' + m.p : m.fix ? m.fix + ' fixes' : 'Effet');
+
+/* ---------- adversaire ---------- */
+function Intention({ e }) {
+  if (B.jit) {
+    const F = e.force && cibleImposee(B, e);
+    return e.done ? (
+      <p className="bp-hint">Il a déjà joué cette manche.</p>
+    ) : e.badge || e.perdu ? (
+      <p className="bp-int">Neutralisé : il ne jouera pas cette manche.</p>
+    ) : (
+      <p className="bp-int">
+        Il choisira sa cible à son tour, selon vos positions. <b>Zone rouge</b> : tout ce qu’il peut frapper après s’être
+        déplacé.
+        {F ? (
+          <>
+            {' '}
+            Cible imposée : <b>{F.n}</b>.
+          </>
+        ) : null}
+      </p>
+    );
+  }
+  if (e.intent && veiled(B))
+    return <p className="bp-int">Intention voilée par l’Arène Psy. Elle reste fixée : lisez sa position et sa portée.</p>;
+  if (e.intent) {
+    const m = MV[e.intent.mv],
+      v = uAt(B, e.intent.k);
+    const est = v ? dmgOf(B, e, m, v, mvType(B, e, m), 1) : 0;
+    return (
+      <p className="bp-int">
+        Vise <b>{v ? v.n : 'une case vide'}</b> avec <b>{m.n}</b>
+        {v && est ? (
+          <>
+            {' '}
+            · environ <b className="neg">−{est}</b>
+          </>
+        ) : null}
+        . Déplacez la cible, endormez ou détournez l’attaquant pour l’annuler.
+      </p>
+    );
+  }
+  return <p className="bp-hint">Aucune attaque annoncée.</p>;
+}
+
+function FicheAdverse({ e }) {
+  const tl = TAL[e.tal],
+    nx = hasNx(e) ? eveilInfo(B, e) : null,
+    fe = foeEvo(B, e);
+  const role = roleOf(e),
+    RF = ROLEFX[role];
+  return (
+    <>
+      <Entete u={e} sous={`N.${e.lv} · ${e.t.join(' / ')}${tl ? ' · ' + tl[0] : ''}`} />
+      <Role />
+      {NL}
+      {RF ? (
+        <p className="bp-role en">
+          <Html html={rIco(role)} />
+          <span>
+            <b>
+              {role} · {RF.k}.
+            </b>{' '}
+            <Html html={RF.d.replace(/^[^:]+ : /, '')} />
+          </span>
+        </p>
+      ) : null}
+      <Intention e={e} />
+      {nx ? (
+        <div className={'bp-evw' + (fe ? ' on' : '')}>
+          <Html html={medal(nx.t, 'sm')} />
+          <p>
+            {fe ? (
+              <>
+                <b>Évolution imminente.</b> {e.n} est sous 50 % : il deviendra {nx.n} en fin de manche. Achevez-le avant.
+              </>
+            ) : (
+              <>
+                Sous 50 % de PV, {e.n} deviendra <b>{nx.n}</b> en fin de manche.{' '}
+                {ARR[nx.id] ? <Html html={'Arrivée : ' + ARR[nx.id][1]} /> : null}
+              </>
+            )}
+          </p>
+        </div>
+      ) : null}
+      <Hi html={foeReso414(e)} />
+      <Html html={catchBlock(e)} />
+      <div className="bp-mv">
+        {e.mv.map((id, i) => {
+          const m = MV[id];
+          return (
+            <div key={i} className="bm ro" style={{ '--c': tc(m.t) }}>
+              <Html html={tb(m.t)} />
+              <b>
+                {m.n}
+                <Html html={mrg414(m, e)} />
+              </b>
+              <span>
+                {puiss(m)} · portée {m.r}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+      {NL}
+      <button type="button" className="b b-sm" data-fc="1">
+        Fermer
+      </button>
+    </>
+  );
+}
+
+/* ---------- aperçu exact d'une action ---------- */
+function Apercu({ v }) {
+  const ew = v.diff.filter(d => d.evw);
+  return (
+    <div className="bp-pv">
+      <div className="pv-h">
+        <span>Aperçu exact</span>
+        {v.rxs.map((r, i) => (
+          <span key={i} className={`chip cat-${rxCat(r)}`}>
+            <i />
+            {RX[r].n}
+          </span>
+        ))}
+      </div>
+      {v.notes && v.notes.length ? (
+        <div className="pv-notes">
+          {v.notes.map((n, i) => (
+            <span key={i}>
+              <Html html={n} />
+            </span>
+          ))}
+        </div>
+      ) : null}
+      {v.diff.length ? (
+        <ul>
+          {v.diff.map((d, i) => (
+            <li key={i} className={d.side === 'a' ? 'al' : 'fo'}>
+              <span>{d.n}</span>
+              <span>
+                {d.dh < 0 ? <b className="neg">{d.dh}</b> : d.dh > 0 ? <b className="pos">+{d.dh}</b> : null}
+                {d.ko ? (
+                  <>
+                    {' '}
+                    <b className="neg">K.O.</b>
+                  </>
+                ) : null}
+                {d.st ? (
+                  <>
+                    {' '}
+                    <em className="stt">{d.st}</em>
+                  </>
+                ) : null}
+                {d.can ? (
+                  <>
+                    {' '}
+                    <em>attaque annulée</em>
+                  </>
+                ) : null}
+                {d.ret ? (
+                  <>
+                    {' '}
+                    <em>attaque détournée</em>
+                  </>
+                ) : null}
+                {d.mv && !d.dh ? (
+                  <>
+                    {' '}
+                    <em>déplacé</em>
+                  </>
+                ) : null}
+                {d.en > 0 ? (
+                  <>
+                    {' '}
+                    <em className="enx">+{d.en} énergie</em>
+                  </>
+                ) : null}
+                {d.evw ? (
+                  <>
+                    {' '}
+                    <em className="evx">évoluera</em>
+                  </>
+                ) : null}
+              </span>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className="bp-hint">{v.wx ? 'La météo change pour 5 manches.' : 'Pas de dégâts directs : la marque ou l’effet est appliqué.'}</p>
+      )}
+      {v.diff.some(d => d.side === 'a' && d.dh < 0) ? <p className="warn-ff">Attention : un de vos Pokémon est touché.</p> : null}
+      {ew.length ? (
+        <p className="warn-ev">
+          {ew.map(d => d.n).join(', ')} passe{ew.length > 1 ? 'nt' : ''} sous 50 % sans tomber : évolution en fin de manche.
+        </p>
+      ) : null}
+      {v.over === 'win' ? <p className="win-ff">Cette action termine le combat.</p> : null}
+      <div className="pv-act">
+        <button type="button" className="b b-sm" data-pv="no">
+          Annuler
+        </button>
+        <button type="button" className="b b-sm b-gold" data-pv="ok">
+          Confirmer
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/* ---------- énergie d'Éveil ---------- */
+function Eveil({ u, s }) {
+  if (!hasNx(u)) {
+    // une ligne suffit quand le Pokémon n’évolue plus
+    if (aXP(u)) return <Hi html={s(xpBlock414(u) + resoBlock417(u))} />; // losanges (v4.14), Forme Résonante (v4.17)
+    const rb417 = resoBlock417(u, true);
+    if (rb417) return <Hi html={s(rb417)} />;
+    const m = BY[u.id];
+    return (
+      <p className="bp-fin">
+        {u.evo ? 'Stade final atteint en combat.' : m && m.st > 1 ? 'Recrue confirmée · stade final.' : 'Stade unique · puissant dès le départ.'}
+      </p>
+    );
+  }
+  const o = evoOpts(B, u),
+    ce = canEveil(B, u),
+    full = u.en >= EMAX;
+  const why = !full
+    ? `Encore ${EMAX - u.en} : fin de manche, réaction, coup encaissé, allié K.O.`
+    : u.sn
+      ? 'Immobilisé cette manche.'
+      : u.acted
+        ? 'Action déjà utilisée : Relance pour éveiller.'
+        : B.voix < 1
+          ? 'Plus de Voix cette manche.'
+          : 'Prêt. Choix irréversible.';
+  return (
+    <div className={'bp-en' + (full ? ' full' : '')}>
+      <div className="en-h">
+        <span className="lbl-s">Énergie d’Éveil</span>
+        <Html html={enPips(u.en, 'lg')} />
+      </div>
+      {NL}
+      <button type="button" className="evb" data-evo="open" disabled={!ce}>
+        <span className="evb-m">
+          {o.map((id, i) => (
+            <Html key={i} html={medal(BY[id].t, 'sm')} />
+          ))}
+        </span>
+        <span>
+          <b>Éveiller{o.length === 1 ? ' en ' + BY[o[0]].n : ` · ${o.length} voies`}</b>
+          <em>{why}</em>
+        </span>
+        <span className="evb-c">
+          1 Voix
+          <br />+ action
+        </span>
+      </button>
+    </div>
+  );
+}
+
+/* ---------- déroulé guidé (v4.78) : l'étape en cours et son bouton pour passer ---------- */
+function Etape({ u, st }) {
+  const n = flow478.restants(B).length,
+    cur = { deplacer: 0, agir: 1, extra: 2, fini: 3 }[st];
+  let txt = '',
+    bt = null;
+  if (st === 'deplacer') {
+    txt = `Touchez une case bleue pour déplacer ${u.n}, ou attaquez d’ici.`;
+    bt = (
+      <button type="button" className="b b-sm" data-vx="rester478">
+        <b>Rester ici</b>
+      </button>
+    );
+  } else if (st === 'agir') {
+    const cible = u.mv.some(id => targets(B, u, MV[id]).length);
+    txt = cible
+      ? `Choisissez une capacité${canEveil(B, u) ? ', ou éveillez-le' : ''}.`
+      : `Aucune cible à portée${canEveil(B, u) ? ' : éveillez-le, ou passez' : ''}.`;
+    bt = (
+      <button type="button" className="b b-sm" data-vx="passer478">
+        <b>Passer l’action</b>
+      </button>
+    );
+  } else if (st === 'extra') {
+    txt = [flow478.repli(u) ? 'Touchez une case bleue pour vous replier.' : '', flow478.relance(B) ? 'Relance (2 Voix) : il rejoue tout de suite.' : '']
+      .filter(Boolean)
+      .join(' ');
+    bt = (
+      <button type="button" className="b b-sm b-gold" data-vx="fin478">
+        <b>Terminer</b>
+      </button>
+    );
+  } else if (u.sn) {
+    const etat = { GEL: 'est gelé', SOM: 'est endormi', PAR: 'est paralysé' }[u.badge];
+    txt = `${u.n} ${etat || 'ne peut pas agir'} : il passe cette manche.`;
+  } else txt = `${u.n} a fini son tour.`;
+  return (
+    <div className="fl478" data-st={st}>
+      <div className="fl478-h">
+        <ol className="fl478-p">
+          {['Déplacer', 'Agir', 'Terminer'].flatMap((l, i) => [
+            ...(i
+              ? [
+                  <li key={'s' + i} className="sep" aria-hidden="true">
+                    ›
+                  </li>
+                ]
+              : []),
+            <li key={i} className={i < cur ? 'ok' : i === cur ? 'on' : ''}>
+              {l}
+            </li>
+          ])}
+        </ol>
+        <span className="fl478-n">{B.ordre === 'vitesse' ? 'Ordre par Vitesse' : n ? `Encore ${n} à jouer` : 'Manche terminée'}</span>
+      </div>
+      <div className="fl478-r">
+        <p>{txt}</p>
+        {bt}
+      </div>
+    </div>
+  );
+}
+
+/* ---------- Sac : objets utilisables en combat (v4.0, v4.14) ---------- */
+function Sac({ u }) {
+  if ((SCEN[B.sc] || {}).tuto || B.duel433 || ui.selE || u.side !== 'a') return null;
+  const own = [...HEALS, ...COMBAT414].filter(k => bagN(k));
+  if (!own.length) return null;
+  return (
+    <div className="v4-bagbar">
+      <span className="lbl-s">
+        Sac · {B.objN || 0} / {SAC_MAX}
+      </span>
+      {own.map(k => {
+        const it = SHOP[k],
+          info = it.heal ? `+${Math.round(it.heal * 100)} % PV` : it.voix ? `${it.voix} Voix` : 'Action';
+        return (
+          <button key={k} type="button" className="v4-use" data-use={k} title={it.d} disabled={!objOk414(B, u, k)}>
+            <img src={ITM(it.img)} alt="" loading="lazy" />
+            <b>{it.sn || it.n}</b>
+            <span>
+              {info} · ×{bagN(k)}
+            </span>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+/* ---------- Pokémon de votre équipe ---------- */
+function FicheAllie({ u }) {
+  const tl = TAL[u.tal];
+  // déroulé guidé : l'étape remplace les astuces quand aucun mode n'est actif
+  const F = flow478,
+    guide = F.actif() && !ui.busy && !ui.selE && u.side === 'a' && F.aJouer(B).includes(u),
+    st = guide ? F.etape(B, u) : null,
+    sans = guide && !ui.mode,
+    s = h => (sans ? sansAstuce(h) : h);
+  let hint = null;
+  if (ui.mode === 'duo')
+    hint = ui.pv ? <Apercu v={ui.pv} /> : <p className="bp-hint">Technique combinée : touchez une case dorée pour voir le résultat exact.</p>;
+  else if (ui.mode === 'target')
+    hint = ui.pv ? <Apercu v={ui.pv} /> : <p className="bp-hint">Touchez une case dorée : l’aperçu affiche le résultat exact.</p>;
+  else if (sans) hint = null;
+  else if (ui.mode === 'dodge') hint = <p className="bp-hint">Esquive : touchez une case verte voisine.</p>;
+  else if (u.sn)
+    hint = (
+      <p className="bp-hint">
+        {u.n} est {u.badge === 'GEL' ? 'gelé' : u.badge === 'SOM' ? 'endormi' : 'paralysé'} : il ne peut pas agir cette manche.
+      </p>
+    );
+  else if (!u.acted && !u.moved) hint = <p className="bp-hint">Cases bleues : déplacement. Ou choisissez directement une capacité.</p>;
+  else if (!u.acted) hint = <p className="bp-hint">Choisissez une capacité, ou éveillez-le depuis cette case.</p>;
+  else hint = <p className="bp-hint">{u.n} a joué. Esquive et Relance restent possibles.</p>;
+  const relHi = st === 'extra' && F.relance(B);
+  return (
+    <>
+      <Entete u={u} sous={`${u.t.join(' / ')}${tl ? ' · ' + tl[0] : ''}${u.evo ? ` · éveillé ×${u.evo}` : ''}`} />
+      {guide ? <Etape u={u} st={st} /> : null}
+      <Role />
+      {NL}
+      <Hi html={s(tileCard())} />
+      {tl ? (
+        <p className="bp-tal">
+          <b>{tl[0]}.</b> <Html html={tl[1]} />
+        </p>
+      ) : null}
+      <Hi html={s(rgLine414(u) + unitExtras(u) + etatsCombat420(u))} />
+      {NL}
+      <Eveil u={u} s={s} />
+      {NL}
+      <div className="bp-mv">
+        {u.mv.map((id, i) => {
+          const m = MV[id],
+            typ = mvType(B, u, m),
+            n = targets(B, u, m).length;
+          return (
+            <button
+              key={i}
+              type="button"
+              className={'bm' + (ui.mode === 'target' && ui.mi === i ? ' on' : '')}
+              data-mi={i}
+              disabled={!!(u.acted || !n)}
+              style={{ '--c': tc(typ) }}
+            >
+              <Html html={tb(typ)} />
+              <b>
+                {m.n}
+                <Html html={mrg414(m, u)} />
+              </b>
+              <span>
+                {puiss(m)} · {SHAPE[m.sh]}
+                {m.r ? ' ' + m.r : ''}
+                {m.mk ? ' · ' + markOf(m.mk).n : ''}
+              </span>
+              <em>
+                <Html html={n ? m.d : bloque414(B, u, m) || 'Aucune cible à portée.'} />
+              </em>
+            </button>
+          );
+        })}
+      </div>
+      <Hi html={s(duoBlock(u))} />
+      {hint}
+      {NL}
+      <div className="bp-vx">
+        <button type="button" className={'vx' + (ui.mode === 'dodge' ? ' on' : '')} data-vx="dodge" disabled={!!(B.voix < 1 || u.sn)}>
+          <b>Esquive</b>
+          <span>1 Voix · un pas</span>
+        </button>
+        <button
+          type="button"
+          className={'vx' + (relHi ? ' fl478-hi' : '')}
+          data-vx="relance"
+          disabled={!!(!u.acted || u.sn || B.relance || B.voix < 2)}
+        >
+          <b>Relance</b>
+          <span>2 Voix · rejouer</span>
+        </button>
+        <Hi html={s(vigilBtn420(u))} />
+      </div>
+      <Sac u={u} />
+    </>
+  );
+}

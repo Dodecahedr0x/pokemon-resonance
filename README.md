@@ -1,9 +1,29 @@
 # Pokémon Résonance
 
-Fangame français en un seul fichier HTML : combats tactiques en hexagones, jouable sur téléphone.
+Fangame français : combats tactiques en hexagones, jouable sur téléphone. Application React (Vite), déployée sur Render.
 
-## Jouer
-Ouvrir `Pokemon_Resonance_v4.77.html` dans un navigateur. Les dossiers `audio/` (musiques) et `img/` (décors peints) doivent rester à côté du fichier. Sans `img/`, le jeu garde le plateau à plat d'avant.
+## Jouer en local
+```bash
+npm install
+npm run dev
+```
+Puis ouvrir l'adresse affichée (http://localhost:5173). `npm run build` produit le site statique dans `dist/`, `npm run preview` le sert.
+
+## Organisation
+- `index.html`, `src/main.jsx` : point d'entrée React.
+- `src/App.jsx` : monte le shell, puis lance le moteur.
+- `src/components/` : écran de lancement, icônes (`SvgSprite`), shell (`Shell` : navigation latérale et basse, barre du haut, écrans, surcouches) et `Garde`, qui isole chaque bloc : une erreur de rendu est signalée par le message « Petit souci technique » sans vider tout l'écran.
+- `src/screens/` : tous les écrans, un dossier chacun (`accueil`, `equipe`, `dex`, `carte`, `quetes`, `sac`, `camp`, `ligue`, `guide`, `settings`, `saves`, `combat/prep`, `combat/battle`, `combat/board`) et les surcouches (`overlays` : fiche de rencontre, dialogues, toasts, coach, starter, fenêtres temporaires).
+  - Chaque écran a son store (`…Store.js`) : un numéro de version et `useSyncExternalStore`. Les fonctions de rendu du moteur gardent leur nom (`renderParams`, `renderBoard`…) et appellent ce store, qui redessine de façon synchrone (`flushSync`), car le moteur relit souvent le DOM juste après.
+  - La logique reste dans le moteur : ses écouteurs sont délégués sur `document` (`closest('[data-…]')`) et les champs de formulaire sont non contrôlés.
+- `src/lib/html.jsx` : `<Html html="…" />` transforme un fragment HTML du moteur (textes avec `<b>`, médaillons `medal()`, `tb()`, `badgeSvg()`…) en éléments React, sans élément enveloppe.
+- `src/engine/` : moteur du jeu (combat, règles, sauvegardes), un module par section d'origine (`000-…` à `112-…`). Chaque module ne fait que déclarer ; son `__init()` contient le code exécuté au démarrage, et `index.js` appelle les `__init()` dans l'ordre d'origine. Une variable modifiée depuis un autre module passe par son `__set_<nom>()`. Le moteur ne construit plus d'écran ; il garde seulement les effets passagers (voir `docs/plans/2026-11-18-react-migration.md`).
+  - En développement, modifier un module du moteur recharge toute la page (greffon `moteur-sans-hmr` de `vite.config.js`) : le moteur ne s'initialise qu'une fois.
+- `src/styles/` : polices intégrées et feuilles de style.
+- `public/audio/`, `public/img/` : musiques et décors peints, servis tels quels.
+
+## Déploiement (Render)
+`render.yaml` est un Blueprint : un site statique construit par `npm ci && npm run build`, publié depuis `dist/`. Dans Render : New › Blueprint, choisir ce dépôt ; chaque push sur `main` redéploie.
 
 ## Nouveautés v4.78 : tour guidé
 - En combat, le panneau guide chaque Pokémon étape par étape : Déplacer › Agir › Terminer, avec un bouton pour sauter chaque étape (« Rester ici », « Passer l’action », « Terminer »).
@@ -65,7 +85,7 @@ Ces effets se règlent dans Paramètres, rubrique « Habillage Pokémon ».
 
 ## Contribuer
 1. Forkez le dépôt.
-2. Modifiez `Pokemon_Resonance_v4.77.html` dans votre fork.
+2. Modifiez le code dans `src/` de votre fork (`npm run dev` pour tester).
 3. Ouvrez une pull request avec une description claire de vos changements.
 
 Merci de ne pas publier de code secret ni de clé dans les contributions.
