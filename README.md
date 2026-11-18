@@ -5,6 +5,16 @@ Fangame français en un seul fichier HTML : combats tactiques en hexagones, joua
 ## Jouer
 Ouvrir `Pokemon_Resonance_v4.77.html` dans un navigateur. Les dossiers `audio/` (musiques) et `img/` (décors peints) doivent rester à côté du fichier. Sans `img/`, le jeu garde le plateau à plat d'avant.
 
+## Nouveautés v4.78 : tour guidé
+- En combat, le panneau guide chaque Pokémon étape par étape : Déplacer › Agir › Terminer, avec un bouton pour sauter chaque étape (« Rester ici », « Passer l’action », « Terminer »).
+- Plus de « Fin du tour » à presser pendant votre phase : la manche se termine seule quand tous vos Pokémon ont joué. Impossible de finir le tour en oubliant un Pokémon.
+- Quand un Pokémon a fini, le suivant est sélectionné ; touchez n’importe quel autre Pokémon pour le jouer d’abord.
+- Après une attaque, la Relance (2 Voix) et le repli de l’Éclaireur sont proposés avant de passer au suivant.
+- Le déplacement s’annule toujours tant que le Pokémon n’a pas agi ou passé.
+- Ordre par Vitesse, coop et duel : le tour passe seul au Pokémon ou au joueur suivant.
+- Sur téléphone, l’étape en cours s’affiche à la place de « Fin du tour » ; au clavier, Espace passe l’étape.
+- « Passer » reste disponible pendant le tour adverse pour l’accélérer.
+
 ## Nouveautés v4.77 : combats lisibles sur téléphone, plateau peint
 - Plateau incliné en vraie perspective : les cases s'éloignent vers l'horizon, posées sur un socle de terre ; les Pokémon restent debout et rapetissent au fond.
 - Décors peints derrière le plateau selon le lieu et l'heure, de jour comme de nuit : prairie, canyon, tour mystique, stade de la Ligue. Les arènes prennent le décor du type du champion (canyon pour Roche, tour pour Spectre…).

@@ -51,6 +51,14 @@ once every Pokémon is done. Skipping is always an explicit tap.
 
 ## Also
 
+- Auto-end goes through a non-bubbling click on `#bEnd`, so capture handlers
+  (énigme: ending the round = losing) still apply and the document « Passer »
+  listener does not fast-forward the enemy turn.
+- In énigme mode `#bEnd` stays visible: it is the « Abandonner l'énigme » button.
+- Keyboard: Space / E presses the current step's skip button.
+- Phone: the panel is off-screen, so a step label (« Agir Salamèche · encore 2 »)
+  replaces `#bEnd` in the bottom bar.
+
 - Tutorial step « Terminez la manche » rewritten (no more `#bEnd`).
 - `#bPhase` says « Encore N Pokémon à jouer ».
 - README section.

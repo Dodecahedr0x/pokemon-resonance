@@ -7124,6 +7124,24 @@ html body.bt434 #cbBattle .bt-side{padding-bottom:110px}
 /* le plateau garde sa forme mais ne dépasse jamais l’écran : bandeau + équipes + barre du bas ≈ 335 px */
 html body.bt434 #bBoard.vert #bSvg{display:block;width:100%!important;height:auto!important;max-height:max(300px,calc(100dvh - 334px - env(safe-area-inset-bottom,0px)))!important;margin:0 auto}
 </style>
+<style id="resonance-v478">/* v4.78 : déroulé guidé du tour */
+#bPanel .fl478{margin:8px 0;padding:8px 10px;border:1px solid rgba(255,214,102,.35);border-radius:10px;background:rgba(255,214,102,.07)}
+#bPanel .fl478-h{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+#bPanel .fl478-p{display:flex;align-items:center;gap:6px;list-style:none;margin:0;padding:0;font-size:12px;letter-spacing:.02em}
+#bPanel .fl478-p li{color:var(--mut);opacity:.7}
+#bPanel .fl478-p li.ok{opacity:1}
+#bPanel .fl478-p li.ok::before{content:'✓ ';color:var(--gold)}
+#bPanel .fl478-p li.on{opacity:1;color:var(--gold);font-weight:700}
+#bPanel .fl478-p li.sep{opacity:.4}
+#bPanel .fl478-n{margin-left:auto;font-size:12px;color:var(--mut);white-space:nowrap}
+#bPanel .fl478-r{display:flex;align-items:center;gap:10px}
+#bPanel .fl478-r p{margin:0;flex:1;font-size:13px;line-height:1.35}
+#bPanel .fl478-r .b{flex:none}
+#bPanel .vx.fl478-hi{box-shadow:0 0 0 2px var(--gold)}
+#cbBattle .fl478-pied{display:none}
+html body.bt434 #cbBattle .bt-foot .fl478-pied:not([hidden]){display:flex;align-items:center;gap:6px;order:3;margin-left:auto;min-width:0;height:38px;padding:0 12px;border:1px solid rgba(255,214,102,.45);border-radius:12px;background:rgba(255,214,102,.08);font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html body.bt434 #cbBattle .bt-foot .fl478-pied b{color:var(--gold)}
+</style>
 </head>
 <body>
 <div class="ambient" aria-hidden="true"></div>
@@ -45531,6 +45549,249 @@ html body #bBoard.tilt477.entree477 #bSvg{animation:entree477 1s cubic-bezier(.2
     rebatir();
   });
   window.__gfx477 = { TILT, OK, riche, rebatir };
+})();
+
+/* ==== v4.78 : déroulé guidé du tour ====
+   Chaque Pokémon suit Déplacer → Agir → Terminer. Chaque étape se saute d'un toucher
+   explicite (« Rester ici », « Passer l'action », « Terminer ») ; la manche se termine
+   seule quand tous ont fini : plus de « Fin du tour » à presser pendant votre phase.
+   u.rst478 / u.fin478 : numéro de manche où le Pokémon est resté sur place / a fini. */
+(() => {
+  const actif = () => !!(B && !B.over && B.phase === 'player' && !B.dep430 && !ui.cine);
+  // énigme : « Fin du tour » reste visible, c'est le bouton pour abandonner
+  const guide = () => actif() && !ui.busy && B.sc !== 'enigme431';
+  /** Les Pokémon que le joueur actif commande en ce moment. */
+  function aJouer(S) {
+    if (S.ordre === 'vitesse') {
+      const c = acteurCourant(S);
+      return c && c.side === 'a' ? [c] : [];
+    }
+    return S.units.filter(u => u.side === 'a' && !u.ko && (!S.coop || joueur418(u) === S.coop));
+  }
+  const repli = u => !!(u.hr && !u.moved);
+  const relance = S => S.voix >= 2 && !S.relance;
+  /** deplacer | agir | extra | fini */
+  function etape(S, u) {
+    if (!u || u.ko || u.sn || u.fin478 === S.round) return 'fini';
+    if (!u.acted) return u.moved || u.rst478 === S.round ? 'agir' : 'deplacer';
+    return repli(u) || relance(S) ? 'extra' : 'fini';
+  }
+  const restants = S => aJouer(S).filter(u => etape(S, u) !== 'fini');
+
+  /* ---------- panneau : l'étape en cours et son bouton pour passer ---------- */
+  function panneau478() {
+    const p = $('#bPanel');
+    if (!p || !actif() || ui.busy || ui.selE) return;
+    const u = ui.sel && byUid(B, ui.sel);
+    if (!u || u.ko || u.side !== 'a' || !aJouer(B).includes(u)) return;
+    const st = etape(B, u),
+      n = restants(B).length,
+      cur = { deplacer: 0, agir: 1, extra: 2, fini: 3 }[st];
+    const pas = ['Déplacer', 'Agir', 'Terminer']
+      .map((l, i) => `<li class="${i < cur ? 'ok' : i === cur ? 'on' : ''}">${l}</li>`)
+      .join('<li class="sep" aria-hidden="true">›</li>');
+    let txt = '',
+      bt = '';
+    if (st === 'deplacer') {
+      txt = `Touchez une case bleue pour déplacer ${u.n}, ou attaquez d’ici.`;
+      bt = `<button type="button" class="b b-sm" data-vx="rester478"><b>Rester ici</b></button>`;
+    } else if (st === 'agir') {
+      const cible = u.mv.some(id => targets(B, u, MV[id]).length);
+      txt = cible
+        ? `Choisissez une capacité${canEveil(B, u) ? ', ou éveillez-le' : ''}.`
+        : `Aucune cible à portée${canEveil(B, u) ? ' : éveillez-le, ou passez' : ''}.`;
+      bt = `<button type="button" class="b b-sm" data-vx="passer478"><b>Passer l’action</b></button>`;
+    } else if (st === 'extra') {
+      txt = [repli(u) ? 'Touchez une case bleue pour vous replier.' : '', relance(B) ? 'Relance (2 Voix) : il rejoue tout de suite.' : '']
+        .filter(Boolean)
+        .join(' ');
+      bt = `<button type="button" class="b b-sm b-gold" data-vx="fin478"><b>Terminer</b></button>`;
+    } else txt = `${u.n} a fini son tour.`;
+    const html = `<div class="fl478" data-st="${st}"><div class="fl478-h"><ol class="fl478-p">${pas}</ol><span class="fl478-n">${B.ordre === 'vitesse' ? 'Ordre par Vitesse' : n ? `Encore ${n} à jouer` : 'Manche terminée'}</span></div><div class="fl478-r"><p>${txt}</p>${bt}</div></div>`;
+    if (!ui.mode) p.querySelectorAll('.bp-hint').forEach(h => h.remove());
+    const h = p.querySelector('.bp-h');
+    if (h) h.insertAdjacentHTML('afterend', html);
+    else p.insertAdjacentHTML('afterbegin', html);
+    if (st === 'extra' && relance(B)) {
+      const r = p.querySelector('[data-vx="relance"]');
+      if (r) r.classList.add('fl478-hi');
+    }
+  }
+  const rpOld478 = renderPanel;
+  renderPanel = function () {
+    const r = rpOld478.apply(this, arguments);
+    try {
+      panneau478();
+    } catch (e) {}
+    return r;
+  };
+
+  /* ---------- boutons « Rester ici », « Passer l'action », « Terminer » ---------- */
+  $('#bPanel').addEventListener('click', e => {
+    const b = e.target.closest('[data-vx$="478"]');
+    if (!b || !B || ui.busy || B.over) return;
+    const u = ui.sel && byUid(B, ui.sel);
+    if (!u || u.ko) return;
+    if (b.dataset.vx === 'rester478') u.rst478 = B.round;
+    else {
+      u.fin478 = B.round;
+      ui.undo = null; // le choix est fait : on ne revient plus sur le déplacement
+    }
+    clearAim();
+    ui.tile = null;
+    sfx('ui');
+    renderAll();
+  });
+
+  /* ---------- Relance : le Pokémon repart de l'étape Déplacer ---------- */
+  const relOld478 = pRelance;
+  pRelance = function (S, u) {
+    const r = relOld478.apply(this, arguments);
+    if (r && u) u.rst478 = 0;
+    return r;
+  };
+
+  /* ---------- après une attaque : rester sur le Pokémon s'il lui reste un bonus ---------- */
+  const caOld478 = confirmAct;
+  confirmAct = function () {
+    const id = ui.sel,
+      r = caOld478.apply(this, arguments);
+    const u = B && byUid(B, id);
+    if (u && actif() && !ui.busy && B.ordre !== 'vitesse' && etape(B, u) === 'extra' && ui.sel !== id) {
+      ui.sel = id;
+      renderAll();
+    }
+    return r;
+  };
+
+  /* ---------- au suivant : quand le Pokémon suivi a fini, on passe au prochain ---------- */
+  function suivant478() {
+    if (!actif() || ui.busy) {
+      ui.fl478 = null;
+      return;
+    }
+    if (ui.selE || ui.mode) return;
+    const u = ui.sel && byUid(B, ui.sel),
+      rest = restants(B);
+    if (!rest.length) return;
+    if (!u || u.ko || (etape(B, u) === 'fini' && ui.fl478 === u.uid)) {
+      const L = aJouer(B),
+        i = u ? L.indexOf(u) : -1;
+      const nx = rest.find(x => L.indexOf(x) > i) || rest[0];
+      ui.sel = nx.uid;
+      clearAim();
+    }
+    const s = ui.sel && byUid(B, ui.sel);
+    if (s && etape(B, s) !== 'fini') ui.fl478 = s.uid;
+  }
+
+  /* ---------- fin de manche automatique ---------- */
+  let T478 = 0;
+  const cle478 = () =>
+    B ? [B.round, B.coop || 0, B.duel433 ? B.duel433.j : 0, B.ordre === 'vitesse' ? (acteurCourant(B) || {}).uid : ''].join(':') : '';
+  const pret478 = () =>
+    actif() &&
+    !ui.busy &&
+    !ui.mode &&
+    !restants(B).length &&
+    $('#evoPick').hidden &&
+    (B.ordre !== 'vitesse' || ((acteurCourant(B) || {}).side === 'a'));
+  function planifier478() {
+    if (T478 || !pret478()) return;
+    const S = B,
+      k = cle478();
+    T478 = setTimeout(() => {
+      T478 = 0;
+      if (B !== S || cle478() !== k || !pret478()) return;
+      if (!B.coop && !B.duel433 && B.ordre !== 'vitesse' && B.sc !== 'enigme431') toast('Manche terminée : au tour des adversaires.');
+      // par le bouton : les modes qui l'interceptent (énigme…) gardent leur règle. Clic sans
+      // remontée : sinon l'écouteur « Passer » du document accélérerait aussitôt le tour adverse.
+      $('#bEnd').dispatchEvent(new MouseEvent('click', { bubbles: false, cancelable: true }));
+    }, dl428(250, 500, 900));
+  }
+
+  /* ---------- barre du bas : plus de « Fin du tour » pendant votre phase ---------- */
+  function pied478() {
+    const be = $('#bEnd'),
+      ph = $('#bPhase');
+    if (!be) return;
+    const kb = $('.bt-foot .kbd');
+    if (kb && kb.innerHTML.includes('fin du tour')) kb.innerHTML = kb.innerHTML.replace('<i>Espace</i> fin du tour', '<i>Espace</i> étape suivante');
+    const g = guide();
+    be.style.display = g ? 'none' : '';
+    // téléphone : le panneau est hors de l'écran, l'étape s'affiche à la place de « Fin du tour »
+    let pd = document.getElementById('fl478pied');
+    if (!pd) {
+      pd = document.createElement('span');
+      pd.id = 'fl478pied';
+      pd.className = 'fl478-pied';
+      pd.setAttribute('aria-live', 'polite');
+      be.insertAdjacentElement('afterend', pd);
+    }
+    const u = g && ui.sel && byUid(B, ui.sel);
+    if (u && u.side === 'a' && !ui.selE) {
+      const st = etape(B, u),
+        n = restants(B).length;
+      pd.innerHTML = `<b>${{ deplacer: 'Déplacer', agir: 'Agir', extra: 'Terminer', fini: 'Fini' }[st]}</b> ${esc(u.n)}${B.ordre !== 'vitesse' && n ? ` · encore ${n}` : ''}`;
+      pd.hidden = false;
+    } else pd.hidden = true;
+    if (g && ph) {
+      const n = restants(B).length,
+        t = B.ordre === 'vitesse' ? 'À vous : déplacez, puis agissez.' : n ? `Encore ${n} Pokémon à jouer.` : 'Manche terminée.';
+      ph.innerHTML = ph.innerHTML.replace(/(À vous : )?déplacez, puis agissez\./, t).replace(/Tous (vos|ses) Pokémon ont joué\./, t);
+    }
+  }
+
+  /* ---------- clavier : Espace (ou E) passe l'étape au lieu de finir le tour ---------- */
+  window.addEventListener(
+    'keydown',
+    e => {
+      if ((e.key !== ' ' && e.key !== 'e' && e.key !== 'E') || !B || !guide()) return;
+      const cb = document.getElementById('cbBattle'),
+        tg = e.target;
+      if (!cb || cb.hidden || (tg && /^(BUTTON|INPUT|TEXTAREA|SELECT)$/.test(tg.tagName)) || (tg && tg.isContentEditable)) return;
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      const b = document.querySelector('#bPanel .fl478 [data-vx]');
+      if (b) b.click();
+    },
+    true
+  );
+
+  const raOld478 = renderAll;
+  renderAll = function () {
+    try {
+      if (B) suivant478();
+    } catch (e) {}
+    const r = raOld478.apply(this, arguments);
+    try {
+      if (B) {
+        pied478();
+        planifier478();
+      }
+    } catch (e) {}
+    return r;
+  };
+
+  /* ---------- textes du tutoriel et du guide ---------- */
+  try {
+    TUTO.forEach(s => {
+      if (s.sel !== '#bEnd') return;
+      s.t = 'Fin de manche';
+      s.d = 'Chaque Pokémon se déplace (ou « Rester ici »), puis agit (ou « Passer l’action »). Quand tous ont joué, la manche se termine seule : les adversaires se déplacent, puis attaquent.';
+      s.sel = '#bPanel';
+    });
+    const t0 = TUTO433.find(x => x.k === 'tour');
+    if (t0)
+      t0.d = t0.d.replace(
+        'Quand tout le monde a joué, « Fin du tour » : les adversaires agissent à leur tour.',
+        'Le panneau vous guide : chaque Pokémon se déplace (ou « Rester ici »), puis agit (ou « Passer l’action »). Quand tout le monde a joué, la manche se termine seule et les adversaires agissent.'
+      );
+    NEWS416.unshift(['i-play', 'Tour guidé', 'En combat, le panneau vous guide pour chaque Pokémon : déplacer, agir, terminer. La manche se termine seule quand tout le monde a joué.', null]);
+    NEWS416.splice(8);
+  } catch (e) {}
+
+  window.__flow478 = { etape, restants, aJouer, jeu: () => ({ B, ui }) };
 })();
 
 })();
