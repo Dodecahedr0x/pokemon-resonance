@@ -11,8 +11,8 @@ Ouvrir `Pokemon_Resonance_v4.77.html` dans un navigateur. Les dossiers `audio/` 
 - Textures peintes sur les cases : herbe, pierre, eau, sable, cendre, marbre, runes, et boue ou lave quand une attaque les crée. Boue, lave, zone de déploiement et brouillard restent visibles sur les textures.
 - Repères A–H et 1–6 recalés au bord du plateau incliné.
 - Pokémon debout sur un anneau couché au sol, aux couleurs de leur camp, avec leur ombre ; ceux du fond passent derrière ceux de devant, et les noms restent toujours lisibles par-dessus.
-- Animations : les Pokémon respirent, sautent quand ils se déplacent et soulèvent de la poussière en retombant ; onde de choc au sol quand un coup porte, nuage de poussière au K.O. ; la caméra se pose sur le plateau au début du combat ; les effets d'attaque rapetissent au fond du plateau.
-- Lumière : brume vers l'horizon, teinte de lune la nuit, ombres de nuages qui glissent sur le plateau de jour.
+- Animations : les Pokémon respirent, sautent quand ils se déplacent et soulèvent de la poussière en retombant ; onde de choc au sol quand un coup porte, nuage de poussière au K.O. ; la caméra se pose sur le plateau au début du combat ; les effets d'attaque partent du corps du Pokémon et rapetissent au fond du plateau.
+- Lumière : brume vers l'horizon, teinte de lune la nuit, ombres de nuages qui glissent sur le plateau de jour ; pollen ou poussière dans l'air le jour, lucioles et braises la nuit.
 - « Réduire les animations » et « Effets animés » coupent aussi ces animations.
 - Paramètres › Habillage Pokémon › « Graphismes » : Riche (décors et plateau incliné) ou Léger (plateau à plat d'avant).
 - Adversaires en rouge, votre équipe en bleu : anneau plein autour de chaque Pokémon, nom et ombre teintés, cartes d'équipe colorées avec les étiquettes « Adversaires » et « Votre équipe ».

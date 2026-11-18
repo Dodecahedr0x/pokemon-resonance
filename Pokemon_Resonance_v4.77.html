@@ -44957,8 +44957,7 @@ function showSplash(force) {
     bd.classList.toggle('tilt477', TILT.on);
     if (!TILT.on) {
       bd.style.removeProperty('--bg477');
-      const n = bd.querySelector('.cs477');
-      if (n) n.remove();
+      bd.querySelectorAll('.cs477,.amb477').forEach(n => n.remove());
       return;
     }
     bd.style.setProperty('--bg477', fond());
@@ -45035,6 +45034,7 @@ function showSplash(force) {
     if (nuit) el('rect', { class: 'nuit477', x: 0, y: 0, width: W, height: H }, lum);
     el('rect', { x: 0, y: 0, width: W, height: H, fill: 'url(#hz477)' }, lum);
     nuages();
+    ambiance();
   };
   const bbAvant = buildBoard;
   buildBoard = function () {
@@ -45166,6 +45166,38 @@ function showSplash(force) {
     }
   };
 
+  /* vie dans l'air : pollen ou poussière de jour, lucioles la nuit (transform et opacité seulement) */
+  const AMB = {
+    jour: { gue: '#fff1b8', roche: '#f2d7a6', tour: '#e2c8ff', ligue: '#ffe28a' },
+    nuit: { gue: '#d8ff7a', roche: '#ffc27a', tour: '#c79bff', ligue: '#cfe0ff' }
+  };
+  const ambiance = () => {
+    const bd = $('#bBoard');
+    let n = bd.querySelector('.amb477');
+    const h = heureDe(B),
+      l = lieu(),
+      cle = h + '-' + l;
+    if (!TILT.on || !anim429()) {
+      if (n) n.remove();
+      return;
+    }
+    if (n && n.dataset.k === cle) return;
+    if (n) n.remove();
+    n = document.createElement('div');
+    n.className = 'amb477 ' + h;
+    n.dataset.k = cle;
+    n.setAttribute('aria-hidden', 'true');
+    n.style.setProperty('--c', (AMB[h] || AMB.jour)[l] || AMB[h === 'nuit' ? 'nuit' : 'jour'].gue);
+    const N = h === 'nuit' ? 12 : 16;
+    let html = '';
+    for (let i = 0; i < N; i++) {
+      const r = (k => ((Math.sin(i * 127.1 + k * 311.7) * 43758.5453) % 1 + 1) % 1);
+      html += `<i style="left:${(4 + r(1) * 92).toFixed(1)}%;top:${(14 + r(2) * 76).toFixed(1)}%;--dx:${((r(3) - 0.5) * 70).toFixed(0)}px;--dy:${(-18 - r(4) * 40).toFixed(0)}px;--s:${(0.6 + r(5) * 0.9).toFixed(2)};animation-duration:${(7 + r(6) * 8).toFixed(1)}s;animation-delay:-${(r(7) * 15).toFixed(1)}s"></i>`;
+    }
+    n.innerHTML = html;
+    bd.appendChild(n);
+  };
+
   /* les Pokémon du fond passent derrière ceux de devant */
   function trier() {
     if (!TILT.on || !L.units) return;
@@ -45236,17 +45268,22 @@ function showSplash(force) {
     const [x, y] = HC(k);
     return Math.max(0.6, Math.min(1.4, tiltS(x, y)));
   };
-  const avecProf = (k, f) => {
+  const avecProf = (k, f, haut) => {
+    const oy = FXS.oy;
     FXS.zk = prof(k);
+    // les tirs partent du corps du Pokémon debout, pas de l'anneau au sol (positions figées à l'appel)
+    if (TILT.on && haut) FXS.oy = oy - 10 * FXS.zk * FXS.s;
     try {
       return f();
     } finally {
       FXS.zk = 1;
+      FXS.oy = oy;
     }
   };
   const faAvant = fxAttack;
   fxAttack = function (e, dur) {
-    return avecProf(e && (e.k != null ? e.k : e.from), () => faAvant.apply(this, [e, dur]));
+    const sol = !e || e.st || e.sh === 'self' || e.sh === 'area' || e.sh === 'ring' || e.sh === 'cone' || e.from === e.k || FXK[e.t] === 'quake';
+    return avecProf(e && (e.k != null ? e.k : e.from), () => faAvant.apply(this, [e, dur]), !sol);
   };
   const fgAvant = fxGuard;
   fxGuard = function (e, dur) {
@@ -45336,10 +45373,15 @@ html body #bSvg .nmw477.ally .tok-nm{fill:#a9d0ff!important}
 #bBoard .cs477 i{position:absolute;width:70%;height:38%;border-radius:50%;background:radial-gradient(closest-side,rgba(40,48,70,.32),rgba(40,48,70,0));will-change:transform;animation:nuage477 46s linear infinite}
 #bBoard .cs477 i+i{width:55%;height:30%;top:48%;animation-duration:61s;animation-delay:-30s}
 #bBoard .cs477 i:first-child{top:22%}
+#bBoard .amb477{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:2;border-radius:inherit}
+#bBoard .amb477 i{position:absolute;width:4px;height:4px;border-radius:50%;background:var(--c);box-shadow:0 0 6px 1.5px var(--c);opacity:0;will-change:transform,opacity;animation:amb477 10s ease-in-out infinite}
+#bBoard .amb477.nuit i{width:4.5px;height:4.5px;box-shadow:0 0 10px 3px var(--c);animation-name:luciole477}
+@keyframes amb477{0%{opacity:0;transform:translate(0,0) scale(var(--s))}25%{opacity:.9}75%{opacity:.7}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(var(--s))}}
+@keyframes luciole477{0%{opacity:0;transform:translate(0,0) scale(var(--s))}20%{opacity:.95}35%{opacity:.25}50%{opacity:.9;transform:translate(calc(var(--dx)*.6),calc(var(--dy)*-.3)) scale(var(--s))}70%{opacity:.2}85%{opacity:.85}100%{opacity:0;transform:translate(var(--dx),calc(var(--dy)*.4)) scale(var(--s))}}
 @keyframes nuage477{from{transform:translateX(-80%)}to{transform:translateX(190%)}}
 html body #bBoard.tilt477.entree477 #bSvg{animation:entree477 1s cubic-bezier(.2,.7,.2,1) .6s backwards;filter:none!important;will-change:transform,opacity}
 @keyframes entree477{from{transform:perspective(900px) rotateX(24deg) translateY(-18px) scale(.9);opacity:0}to{transform:none;opacity:1}}
-@media (prefers-reduced-motion:reduce){#bBoard.tilt477 #bSvg .tok-st477,#bBoard .cs477 i{animation:none!important}}
+@media (prefers-reduced-motion:reduce){#bBoard.tilt477 #bSvg .tok-st477,#bBoard .cs477 i{animation:none!important}#bBoard .amb477{display:none}}
 #bBoard.tilt477.bio-roche .lip477 polygon{fill:#4a2e18}
 #bBoard.tilt477.bio-ligue .lip477 polygon,#bBoard.tilt477.bio-arene .lip477 polygon{fill:#8c7a5e}
 #bBoard.tilt477.bio-tour .lip477 polygon{fill:#2a2236}

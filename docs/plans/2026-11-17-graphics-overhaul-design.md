@@ -135,6 +135,14 @@ rendering layer with a full fallback to the v4.76 look.
   covers the name behind it.
 - Attack and guard effects take a depth factor (`FXS.zk`, same clamp as the
   tokens) at the target tile, so effects at the back are drawn smaller.
+- Single-target projectiles are lifted ~10 px (× depth) so they leave and
+  hit the standing sprite's body; area, self and ground (`quake`) effects stay
+  on the floor. Positions are fixed when `fxAttack` is called, so the wrapper
+  shifts `FXS.oy` only for that call. All 18 types were drawn frame by frame
+  on the tilted board and checked.
+- Ambient motes (`.amb477`, HTML layer, transform/opacity keyframes only):
+  pollen or dust by day, fireflies or embers by night, coloured per place.
+  Off under reduced motion, "Effets animés" off, or Léger.
 - Perf (in-app browser, capped at 30 fps): full board rebuild ≈ 3.5 ms; idle
   combat holds the cap in both Riche and Léger; the battle-resume dip to
   ~15 fps also happens with the swoop disabled (pre-existing resume work).
