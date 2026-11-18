@@ -146,6 +146,13 @@ rendering layer with a full fallback to the v4.76 look.
 - Ground-mark badges (`g.mk-b` in `renderBoard`) take the depth scale and sit
   in the upper-right of their own tile when tilted; flat boards keep the old
   offset (it overlapped the tile behind once projected).
+- Hour changes mid-battle (the living-board cycle moves every 4 rounds) used
+  to leave the day painting, haze and motes in place until the next board
+  rebuild. The `renderBoard` wrapper now compares `heureDe(B)` with the hour
+  the board was dressed for and calls `changerHeure()`: new backdrop with a
+  1.8 s cross-fade (old image on a `z-index:-1` layer, board isolated), moon
+  tint faded in by opacity, haze stops recoloured, clouds, motes and water
+  sheen rebuilt.
 - Water sheen (`g.eau477`): a repeating light-band gradient on a rect clipped
   to the water tiles, slid one period with a CSS transform, plus thin glints
   that pulse in opacity and width. Resynced after every `renderBoard`, so the

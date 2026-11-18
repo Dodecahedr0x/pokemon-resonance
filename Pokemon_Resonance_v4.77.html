@@ -44956,6 +44956,43 @@ function showSplash(force) {
       h = heureDe(B);
     return `url(img/bg-${bio}-${h}.webp),url(img/bg-${bio}-jour.webp),url(img/bg-gue-${h}.webp)`;
   };
+  // brume de l'horizon et teinte de lune : réglées ici pour pouvoir changer d'heure en plein combat
+  const teinter = nuit => {
+    const svg = $('#bSvg'),
+      lum = svg.querySelector('.lum477'),
+      st = svg.querySelectorAll('#hz477 stop'),
+      c = nuit ? '120,140,200' : '255,236,206';
+    if (lum) lum.classList.toggle('n', nuit);
+    if (st.length === 2) {
+      st[0].setAttribute('stop-color', `rgba(${c},${nuit ? 0.38 : 0.42})`);
+      st[1].setAttribute('stop-color', `rgba(${c},0)`);
+    }
+  };
+  // la nuit tombe (ou le jour se lève) pendant le combat : le décor peint passe en fondu, la lumière suit
+  const changerHeure = () => {
+    const bd = $('#bBoard'),
+      h = heureDe(B);
+    L.h477 = h;
+    const avant = getComputedStyle(bd).backgroundImage;
+    bd.style.setProperty('--bg477', fond());
+    if (anim429() && avant && avant !== 'none') {
+      bd.querySelectorAll('.fondu477').forEach(n => n.remove());
+      const f = document.createElement('div');
+      f.className = 'fondu477';
+      f.setAttribute('aria-hidden', 'true');
+      f.style.backgroundImage = avant;
+      bd.appendChild(f);
+      requestAnimationFrame(() => requestAnimationFrame(() => f.classList.add('va')));
+      setTimeout(() => f.remove(), 2200);
+    }
+    teinter(h === 'nuit');
+    const g = L.eau477;
+    if (g) g.remove();
+    L.eau477 = null; // reflets recolorés (lune ou soleil)
+    nuages();
+    ambiance();
+    eau();
+  };
   const habiller = () => {
     const bd = $('#bBoard'),
       svg = $('#bSvg');
@@ -45027,17 +45064,16 @@ function showSplash(force) {
       gr = el('linearGradient', { id: 'hz477', x1: 0, y1: 0, x2: 0, y2: 1, gradientUnits: 'userSpaceOnUse' }, defs);
     gr.setAttribute('y1', fondY.toFixed(1));
     gr.setAttribute('y2', (fondY + (H - fondY) * 0.55).toFixed(1));
-    [
-      ['0', nuit ? 'rgba(120,140,200,.38)' : 'rgba(255,236,206,.42)'],
-      ['1', nuit ? 'rgba(120,140,200,0)' : 'rgba(255,236,206,0)']
-    ].forEach(([o, c]) => el('stop', { offset: o, 'stop-color': c }, gr));
+    ['0', '1'].forEach(o => el('stop', { offset: o }, gr));
     const cp = el('clipPath', { id: 'cp477' }, defs);
     cp.innerHTML = lip.innerHTML; // socles…
     for (const k in B.tiles) el('polygon', { points: L.t[k].getAttribute('points') }, cp); // …et cases
     const lum = el('g', { class: 'lum477', style: 'pointer-events:none', 'clip-path': 'url(#cp477)' });
     svg.insertBefore(lum, L.ax);
-    if (nuit) el('rect', { class: 'nuit477', x: 0, y: 0, width: W, height: H }, lum);
+    el('rect', { class: 'nuit477', x: 0, y: 0, width: W, height: H }, lum);
     el('rect', { x: 0, y: 0, width: W, height: H, fill: 'url(#hz477)' }, lum);
+    teinter(nuit);
+    L.h477 = heureDe(B);
     L.eau477 = null;
     nuages();
     ambiance();
@@ -45265,6 +45301,7 @@ function showSplash(force) {
   renderBoard = function () {
     const r = rbAvant477.apply(this, arguments);
     try {
+      if (TILT.on && L.h477 && L.h477 !== heureDe(B)) changerHeure();
       eau();
     } catch (e) {}
     return r;
@@ -45432,7 +45469,11 @@ html body #bSvg .nmw477.fog431{opacity:0!important;transition:opacity .3s}
 html body #bSvg .nmw477.enemy .tok-nm{fill:#ff9ba0!important}
 html body #bSvg .nmw477.ally .tok-nm{fill:#a9d0ff!important}
 #bBoard.tilt477 #bSvg .tok .tok-im{filter:drop-shadow(0 1.5px 1.2px rgba(0,0,0,.45))}
-#bBoard.tilt477 .lum477 .nuit477{fill:#2a3a78;mix-blend-mode:multiply;opacity:.55}
+#bBoard.tilt477 .lum477 .nuit477{fill:#2a3a78;mix-blend-mode:multiply;opacity:0;transition:opacity 1.8s ease}
+#bBoard.tilt477 .lum477.n .nuit477{opacity:.55}
+#bBoard.tilt477{isolation:isolate}
+#bBoard.tilt477 .fondu477{position:absolute;inset:0;z-index:-1;pointer-events:none;border-radius:inherit;background-size:cover;background-position:center 34%;background-repeat:no-repeat;transition:opacity 1.8s ease}
+#bBoard.tilt477 .fondu477.va{opacity:0}
 /* animations des Pokémon debout */
 #bBoard.tilt477 #bSvg .tok:not(.lunge429):not(.hurt429):not(.ko) .tok-b{animation:none}
 #bBoard.tilt477 #bSvg .tok-st477{transform-origin:0 11px;animation:vie477 3.4s ease-in-out infinite}
