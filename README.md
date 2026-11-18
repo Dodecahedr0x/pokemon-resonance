@@ -10,6 +10,10 @@ Ouvrir `Pokemon_Resonance_v4.77.html` dans un navigateur. Les dossiers `audio/` 
 - Décors peints derrière le plateau selon le lieu et l'heure, de jour comme de nuit : prairie, canyon, tour mystique, stade de la Ligue. Les arènes prennent le décor du type du champion (canyon pour Roche, tour pour Spectre…).
 - Textures peintes sur les cases : herbe, pierre, eau, sable, cendre, marbre, runes, et boue ou lave quand une attaque les crée. Boue, lave, zone de déploiement et brouillard restent visibles sur les textures.
 - Repères A–H et 1–6 recalés au bord du plateau incliné.
+- Pokémon debout sur un anneau couché au sol, aux couleurs de leur camp, avec leur ombre ; ceux du fond passent derrière ceux de devant.
+- Animations : les Pokémon respirent, sautent quand ils se déplacent et soulèvent de la poussière en retombant ; onde de choc au sol quand un coup porte, nuage de poussière au K.O. ; la caméra se pose sur le plateau au début du combat.
+- Lumière : brume vers l'horizon, teinte de lune la nuit, ombres de nuages qui glissent sur le plateau de jour.
+- « Réduire les animations » et « Effets animés » coupent aussi ces animations.
 - Paramètres › Habillage Pokémon › « Graphismes » : Riche (décors et plateau incliné) ou Léger (plateau à plat d'avant).
 - Adversaires en rouge, votre équipe en bleu : anneau plein autour de chaque Pokémon, nom et ombre teintés, cartes d'équipe colorées avec les étiquettes « Adversaires » et « Votre équipe ».
 - Sur téléphone, tout le combat tient dans l'écran sans défiler : la barre de navigation du bas s'efface pendant le combat, « Fin du tour » partage la ligne des outils, cartes d'équipe plus compactes et plateau ajusté à la hauteur de l'écran.

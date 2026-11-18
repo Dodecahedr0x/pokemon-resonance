@@ -107,3 +107,28 @@ rendering layer with a full fallback to the v4.76 look.
     with `img/` present.
 - **Art review gate:** after the first batch (4 meadow backdrops + 3 textures),
   stop and show contact sheets before generating the rest.
+
+## Implementation notes (v4.77, 2026-11-18)
+
+- **Tilt without two layers.** Every board position goes through `HC(k)` (hex
+  centre) and `HP(x,y,s)` (hex polygon). Both now return perspective-projected
+  points when `TILT.on`, so tiles, highlights, marks, arrows, canvas effects
+  and tokens all tilt together. Taps still resolve through `data-k` on the
+  projected tile polygons (verified: all 48 tile centres hit the right tile).
+  Tokens are only translated to the projected point plus a depth scale, so
+  sprites stay upright.
+- The v4.71 canvas-painted board cannot follow a projection; in Riche mode its
+  image is hidden and the Codex textures fill the existing `tx-*` patterns.
+- Tile states drawn on the tile (`wet`, `mud`, `lava`, `dep430z`, `fog431t`)
+  are mirrored onto the opaque texture polygon by a MutationObserver.
+- Gym backdrops and tile textures follow the gym type (`SCEN.at`).
+- Standing tokens: rings flattened onto the ground with CSS, sprite enlarged
+  through its x/y/width/height attributes (its CSS transform is used by the
+  enemy mirror and the selection bob), wrapped in `.tok-st477` for idle/hop.
+- Animations: hop + landing dust on move, ground shockwave on hit, dust on
+  K.O., depth re-sort of tokens after moves, cloud shadows (composited HTML
+  layer), camera swoop on battle start, horizon haze and night tint (static,
+  clipped to the board).
+- Perf (in-app browser, capped at 30 fps): full board rebuild ≈ 3.5 ms; idle
+  combat holds the cap in both Riche and Léger; the battle-resume dip to
+  ~15 fps also happens with the swoop disabled (pre-existing resume work).
