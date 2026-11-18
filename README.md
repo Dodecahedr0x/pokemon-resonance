@@ -7,7 +7,8 @@ Ouvrir `Pokemon_Resonance_v4.77.html` dans un navigateur. Les dossiers `audio/` 
 
 ## Nouveautés v4.77 : combats lisibles sur téléphone, plateau peint
 - Plateau incliné en vraie perspective : les cases s'éloignent vers l'horizon, posées sur un socle de terre ; les Pokémon restent debout et rapetissent au fond.
-- Décors peints derrière le plateau selon le lieu et l'heure (prairie de jour et de nuit, canyon, stade de la Ligue), textures peintes sur les cases (herbe, pierre, eau).
+- Décors peints derrière le plateau selon le lieu et l'heure, de jour comme de nuit : prairie, canyon, tour mystique, stade de la Ligue. Les arènes prennent le décor du type du champion (canyon pour Roche, tour pour Spectre…).
+- Textures peintes sur les cases : herbe, pierre, eau, sable, cendre, marbre, runes, et boue ou lave quand une attaque les crée. Boue, lave, zone de déploiement et brouillard restent visibles sur les textures.
 - Repères A–H et 1–6 recalés au bord du plateau incliné.
 - Paramètres › Habillage Pokémon › « Graphismes » : Riche (décors et plateau incliné) ou Léger (plateau à plat d'avant).
 - Adversaires en rouge, votre équipe en bleu : anneau plein autour de chaque Pokémon, nom et ombre teintés, cartes d'équipe colorées avec les étiquettes « Adversaires » et « Votre équipe ».

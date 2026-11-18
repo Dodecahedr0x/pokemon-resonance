@@ -44874,7 +44874,8 @@ function showSplash(force) {
 (() => {
   /* Les images viennent du dossier img/ posé à côté du fichier, comme audio/.
      Sans ce dossier, ou en mode « Léger », rien ne change : plateau à plat de la v4.76. */
-  const TEX = ['grass', 'stone', 'water', 'sand', 'ash', 'marble', 'rune'];
+  const TEX = ['grass', 'stone', 'water', 'sand', 'ash', 'marble', 'rune', 'mud', 'lava'];
+  const ETATS = ['wet', 'mud', 'lava', 'dep430z', 'fog431t']; // états d'une case dessinés sur la case : recopiés sur sa texture
   const OK = new Set();
   let artOk = false;
   const riche = () => artOk && PREF.gfx477 !== 'leger';
@@ -44939,8 +44940,14 @@ function showSplash(force) {
   };
 
   /* ---------- habillage du plateau construit ---------- */
+  // arènes : le décor suit le type du champion (canyon pour Roche, tour mystique pour Spectre…), stade sinon
+  const AT = { Roche: 'roche', Sol: 'roche', Combat: 'roche', Acier: 'roche', Spectre: 'tour', Dragon: 'tour', Psy: 'tour', Poison: 'tour', Ténèbres: 'tour' };
+  const lieu = () => {
+    const D = SCEN[B.sc];
+    return D.bio === 'arene' ? AT[D.at] || 'ligue' : D.bio;
+  };
   const fond = () => {
-    const bio = { arene: 'ligue' }[SCEN[B.sc].bio] || SCEN[B.sc].bio,
+    const bio = lieu(),
       h = heureDe(B);
     return `url(img/bg-${bio}-${h}.webp),url(img/bg-${bio}-jour.webp),url(img/bg-gue-${h}.webp)`;
   };
@@ -44953,9 +44960,15 @@ function showSplash(force) {
       return;
     }
     bd.style.setProperty('--bg477', fond());
+    if (SCEN[B.sc].bio === 'arene') {
+      const t = { roche: 'stone', tour: 'rune', ligue: 'marble' }[lieu()];
+      if (OK.has(t)) L.txId = 'tx-' + t; // renderBoard pose ce motif sur chaque case
+    }
     // textures peintes dans les motifs existants (renderBoard les choisit déjà par case)
     TEX.forEach(t => {
-      const p = svg.querySelector('#tx-' + t);
+      bd.classList.toggle('has-' + t + '477', OK.has(t));
+      let p = svg.querySelector('#tx-' + t);
+      if (!p && OK.has(t)) p = el('pattern', { id: 'tx-' + t, patternUnits: 'userSpaceOnUse' }, svg.querySelector('defs'));
       if (!p || !OK.has(t)) return;
       p.setAttribute('width', 72);
       p.setAttribute('height', 72);
@@ -44972,6 +44985,18 @@ function showSplash(force) {
       h += `<polygon points="${HP(x, y + LIP * s, BG.S - 1)}"/>`;
     }
     lip.innerHTML = h;
+    // la texture opaque recouvre la case : ses états (boue, lave, brouillard…) passent sur la texture
+    const copier = k => {
+      const c = ETATS.filter(e => L.t[k].classList.contains(e)).join(' '),
+        v = c ? 'tx ' + c : 'tx';
+      if (L.tx[k].getAttribute('class') !== v) L.tx[k].setAttribute('class', v);
+    };
+    for (const k in L.t) copier(k);
+    if (window.MutationObserver) {
+      if (L.mo477) L.mo477.disconnect();
+      L.mo477 = new MutationObserver(ms => ms.forEach(m => m.target.dataset.k && L.tx[m.target.dataset.k] && copier(m.target.dataset.k)));
+      L.mo477.observe(L.tiles, { subtree: true, attributes: true, attributeFilter: ['class'] });
+    }
     // repères A–H / 1–6 recalés au bord du plateau incliné
     L.ax.innerHTML = '';
     const lab = (txt, x, y) => (el('text', { class: 'axl', x: x.toFixed(1), y: y.toFixed(1) }, L.ax).textContent = txt);
@@ -45034,8 +45059,14 @@ html body #bBoard.tilt477 #bSvg .tx{opacity:1!important}
 html body #bBoard.tilt477 #bSvg .hx{fill:#22301c!important;stroke:rgba(20,14,6,.55)!important;stroke-width:.9!important}
 html body #bBoard.tilt477 #bSvg .hx.wet{fill:#2b5c96!important}
 #bBoard.tilt477 #bSvg .bv{stroke:url(#bev);stroke-width:1.4;opacity:.9}
+html body #bBoard.tilt477 #bSvg .tx.wet{opacity:.5!important}
+html body #bBoard.tilt477 #bSvg .tx.dep430z{opacity:.45!important}
+html body #bBoard.tilt477 #bSvg .tx.mud,html body #bBoard.tilt477 #bSvg .tx.lava{opacity:.35!important}
+html body #bBoard.tilt477.has-mud477 #bSvg .tx.mud{fill:url(#tx-mud);opacity:1!important}
+html body #bBoard.tilt477.has-lava477 #bSvg .tx.lava{fill:url(#tx-lava);opacity:1!important}
+#bBoard.tilt477 #bSvg .tx.fog431t{filter:brightness(.42) saturate(.5)}
 #bBoard.tilt477 #bSvg .gl{stroke:rgba(255,248,220,.10)}
-#bBoard.tilt477 #bSvg .deco471,#bBoard.tilt477 #bSvg .tuft,#bBoard.tilt477 #bSvg .pebble{display:none}
+#bBoard.tilt477 #bSvg .deco471,#bBoard.tilt477 #bSvg .tuft,#bBoard.tilt477 #bSvg .pebble,#bBoard.tilt477 #bSvg .field{display:none}
 #bBoard.tilt477 .lip477 polygon{fill:#2a1d12;stroke:rgba(0,0,0,.35);stroke-width:.6}
 #bBoard.tilt477.bio-roche .lip477 polygon{fill:#4a2e18}
 #bBoard.tilt477.bio-ligue .lip477 polygon,#bBoard.tilt477.bio-arene .lip477 polygon{fill:#8c7a5e}
