@@ -44957,6 +44957,8 @@ function showSplash(force) {
     bd.classList.toggle('tilt477', TILT.on);
     if (!TILT.on) {
       bd.style.removeProperty('--bg477');
+      const n = bd.querySelector('.cs477');
+      if (n) n.remove();
       return;
     }
     bd.style.setProperty('--bg477', fond());
@@ -45013,6 +45015,7 @@ function showSplash(force) {
       if (VERT) lab('ABCDEFGH'[c], x - BG.S * s - 5, y + 2.5);
       else lab('ABCDEFGH'[c], x, y - BG.S * s - 3);
     }
+    nuages();
   };
   const bbAvant = buildBoard;
   buildBoard = function () {
@@ -45032,6 +45035,113 @@ function showSplash(force) {
     return r;
   };
 
+  /* ---------- animations : saut pendant un déplacement, poussière à l'atterrissage ---------- */
+  const tempo = () => (PREF.fast || ui.turbo428 ? 0.6 : 1); // même règle que --tk429 (combat rapide)
+  const sauter = (T, x, y, s) => {
+    if (!anim429()) return;
+    const ms = 850 * tempo();
+    rejouer429(T, 'hop477', ms);
+    if (typeof fxOn !== 'function' || !fxOn() || !fxPrep()) return;
+    const px = FXS.ox + x * FXS.s,
+      py = FXS.oy + (y + 9 * s) * FXS.s,
+      R = 15 * s * FXS.s;
+    fxAdd(
+      420,
+      (c, p) => {
+        const e = 1 - Math.pow(1 - p, 3);
+        c.globalAlpha = 0.45 * (1 - p);
+        c.fillStyle = '#e9dcc0';
+        for (let i = 0; i < 7; i++) {
+          const a = (Math.PI * 2 * i) / 7 + 0.4;
+          c.beginPath();
+          c.ellipse(px + Math.cos(a) * R * (0.6 + e * 0.7), py + Math.sin(a) * R * 0.45 * (0.6 + e * 0.7), R * 0.22 * (1 - p * 0.5), R * 0.12 * (1 - p * 0.5), 0, 0, Math.PI * 2);
+          c.fill();
+        }
+      },
+      ms * 0.82
+    );
+  };
+  /* onde de choc couchée sur le sol sous le Pokémon touché, poussière plus forte au K.O. */
+  const pied = u => {
+    const [x, y] = HC(uk(u)),
+      s = Math.max(0.6, Math.min(1.4, tiltS(x, y)));
+    return [FXS.ox + x * FXS.s, FXS.oy + (y + 9 * s) * FXS.s, s * FXS.s];
+  };
+  const onde = (u, col) => {
+    if (!TILT.on || !anim429() || typeof fxOn !== 'function' || !fxOn() || !fxPrep()) return;
+    const [px, py, k] = pied(u);
+    fxAdd(520, (c, p) => {
+      const e = 1 - Math.pow(1 - p, 3),
+        r = k * (10 + 22 * e);
+      c.globalAlpha = 0.75 * (1 - p);
+      c.strokeStyle = col;
+      c.lineWidth = k * 2.4 * (1 - p) + 0.5;
+      c.beginPath();
+      c.ellipse(px, py, r, r * 0.45, 0, 0, Math.PI * 2);
+      c.stroke();
+      c.globalAlpha = 0.25 * (1 - p);
+      c.fillStyle = col;
+      c.beginPath();
+      c.ellipse(px, py, r * 0.7, r * 0.3, 0, 0, Math.PI * 2);
+      c.fill();
+    });
+  };
+  const hitAvant = hit;
+  hit = function (uid) {
+    const r = hitAvant.apply(this, arguments);
+    try {
+      const u = byUid(B, uid);
+      if (u) onde(u, u.side === 'e' ? '#ff6a5a' : '#7cc0ff');
+    } catch (e) {}
+    return r;
+  };
+  const chute = u => {
+    if (!TILT.on || !anim429() || typeof fxOn !== 'function' || !fxOn() || !fxPrep()) return;
+    const [px, py, k] = pied(u),
+      bits = Array.from({ length: 14 }, (_, i) => [(Math.PI * 2 * i) / 14 + Math.random() * 0.4, 0.6 + Math.random() * 0.6]);
+    fxAdd(
+      700,
+      (c, p) => {
+        const e = 1 - Math.pow(1 - p, 2.4);
+        c.fillStyle = '#d9c9a6';
+        bits.forEach(([a, v]) => {
+          const d = k * 26 * v * e;
+          c.globalAlpha = 0.5 * (1 - p);
+          c.beginPath();
+          c.ellipse(px + Math.cos(a) * d, py + Math.sin(a) * d * 0.45 - k * 6 * Math.sin(p * Math.PI) * v, k * 4 * (1 - p * 0.6), k * 2.4 * (1 - p * 0.6), 0, 0, Math.PI * 2);
+          c.fill();
+        });
+      },
+      250
+    );
+  };
+
+  /* ombres de nuages qui glissent sur le plateau, de jour (calque à part : seule la carte graphique travaille) */
+  const nuages = () => {
+    const bd = $('#bBoard');
+    let n = bd.querySelector('.cs477');
+    if (!TILT.on || RM || heureDe(B) === 'nuit') {
+      if (n) n.remove();
+      return;
+    }
+    if (!n) {
+      n = document.createElement('div');
+      n.className = 'cs477';
+      n.setAttribute('aria-hidden', 'true');
+      n.innerHTML = '<i></i><i></i>';
+      bd.appendChild(n);
+    }
+  };
+
+  /* les Pokémon du fond passent derrière ceux de devant */
+  function trier() {
+    if (!TILT.on || !L.units) return;
+    const toks = [...L.units.children].filter(n => n.__y477 != null),
+      tri = toks.slice().sort((a, b) => a.__y477 - b.__y477);
+    if (tri.every((n, i) => n === toks[i])) return;
+    tri.forEach(n => L.units.appendChild(n));
+  }
+
   /* ---------- jetons : debout, plus petits au fond ---------- */
   const utAvant = updTokCore;
   updTokCore = function (u) {
@@ -45039,9 +45149,17 @@ function showSplash(force) {
     try {
       const T = TILT.on && L.u[u.uid];
       if (T) {
-        const [x, y] = HC(uk(u)),
+        const k = uk(u),
+          [x, y] = HC(k),
           s = Math.max(0.6, Math.min(1.4, tiltS(x, y)));
         T.g.style.transform = `translate(${x}px,${y}px) scale(${s.toFixed(3)})`;
+        if (T.k477 && T.k477 !== k && !u.ko) sauter(T, x, y, s);
+        T.k477 = k;
+        if (u.ko && T.ko477 === false) chute(u);
+        T.ko477 = !!u.ko;
+        T.g.__y477 = y;
+        clearTimeout(trier.t);
+        trier.t = setTimeout(trier, 950 * tempo()); // après le glissement : réinsérer coupe la transition
       }
     } catch (e) {}
     return r;
@@ -45054,6 +45172,15 @@ function showSplash(force) {
     const r = taAvant.apply(this, arguments);
     try {
       const T = L.u && L.u[u.uid];
+      if (T && T.im && !T.st477 && T.b) {
+        // l'illustration seule respire et saute : l'anneau reste posé au sol
+        const st = document.createElementNS(NS, 'g');
+        st.setAttribute('class', 'tok-st477');
+        st.style.animationDelay = T.b.style.animationDelay;
+        T.im.parentNode.insertBefore(st, T.im);
+        st.appendChild(T.im);
+        T.st477 = st;
+      }
       if (T && T.im) {
         const [x, y, w] = GEO[TILT.on ? 'debout' : 'plat'];
         if (T.im.getAttribute('y') !== y) {
@@ -45097,6 +45224,20 @@ html body #bBoard.tilt477.has-lava477 #bSvg .tx.lava{fill:url(#tx-lava);opacity:
 #bBoard.tilt477 #bSvg .tok .bdg-s{transform:translate(0,-40px) rotate(-7deg)}
 #bBoard.tilt477 #bSvg .tok .tok-ew{transform:translate(19px,-28px)}
 #bBoard.tilt477 #bSvg .tok .tok-im{filter:drop-shadow(0 1.5px 1.2px rgba(0,0,0,.45))}
+/* animations des Pokémon debout */
+#bBoard.tilt477 #bSvg .tok:not(.lunge429):not(.hurt429):not(.ko) .tok-b{animation:none}
+#bBoard.tilt477 #bSvg .tok-st477{transform-origin:0 11px;animation:vie477 3.4s ease-in-out infinite}
+@keyframes vie477{0%,100%{transform:translateY(0) scale(1,1)}50%{transform:translateY(-1.4px) scale(.985,1.03)}}
+#bBoard.tilt477 #bSvg .tok.hop477 .tok-st477{animation:hop477 calc(.85s * var(--tk429,1)) cubic-bezier(.3,.6,.4,1) 1}
+@keyframes hop477{0%{transform:translateY(0) scale(1,1)}12%{transform:translateY(1px) scale(1.08,.9)}45%{transform:translateY(-11px) scale(.96,1.06)}82%{transform:translateY(0) scale(1.06,.92)}100%{transform:translateY(0) scale(1,1)}}
+#bBoard.tilt477 #bSvg .tok.ko .tok-st477{animation:none;opacity:.55;transform:translateY(5px) scale(1,.8);transition:transform .6s ease-in,opacity .6s}
+.calme429 #bBoard.tilt477 #bSvg .tok-st477{animation:none!important}
+#bBoard .cs477{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:1;border-radius:inherit;mix-blend-mode:multiply}
+#bBoard .cs477 i{position:absolute;width:70%;height:38%;border-radius:50%;background:radial-gradient(closest-side,rgba(40,48,70,.32),rgba(40,48,70,0));will-change:transform;animation:nuage477 46s linear infinite}
+#bBoard .cs477 i+i{width:55%;height:30%;top:48%;animation-duration:61s;animation-delay:-30s}
+#bBoard .cs477 i:first-child{top:22%}
+@keyframes nuage477{from{transform:translateX(-80%)}to{transform:translateX(190%)}}
+@media (prefers-reduced-motion:reduce){#bBoard.tilt477 #bSvg .tok-st477,#bBoard .cs477 i{animation:none!important}}
 #bBoard.tilt477.bio-roche .lip477 polygon{fill:#4a2e18}
 #bBoard.tilt477.bio-ligue .lip477 polygon,#bBoard.tilt477.bio-arene .lip477 polygon{fill:#8c7a5e}
 #bBoard.tilt477.bio-tour .lip477 polygon{fill:#2a2236}
