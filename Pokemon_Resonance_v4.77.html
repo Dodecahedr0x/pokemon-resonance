@@ -45047,6 +45047,26 @@ function showSplash(force) {
     return r;
   };
 
+  /* illustration plus grande, pieds posés sur l'anneau au sol (attributs : la transformation sert déjà au miroir et au rebond) */
+  const GEO = { plat: ['-17', '-22', '34'], debout: ['-23', '-35', '46'] };
+  const taAvant = tokenArt;
+  tokenArt = function (u) {
+    const r = taAvant.apply(this, arguments);
+    try {
+      const T = L.u && L.u[u.uid];
+      if (T && T.im) {
+        const [x, y, w] = GEO[TILT.on ? 'debout' : 'plat'];
+        if (T.im.getAttribute('y') !== y) {
+          T.im.setAttribute('x', x);
+          T.im.setAttribute('y', y);
+          T.im.setAttribute('width', w);
+          T.im.setAttribute('height', w);
+        }
+      }
+    } catch (e) {}
+    return r;
+  };
+
   /* ---------- styles ---------- */
   const css = document.createElement('style');
   css.id = 'resonance-v477-graphismes';
@@ -45068,6 +45088,15 @@ html body #bBoard.tilt477.has-lava477 #bSvg .tx.lava{fill:url(#tx-lava);opacity:
 #bBoard.tilt477 #bSvg .gl{stroke:rgba(255,248,220,.10)}
 #bBoard.tilt477 #bSvg .deco471,#bBoard.tilt477 #bSvg .tuft,#bBoard.tilt477 #bSvg .pebble,#bBoard.tilt477 #bSvg .field{display:none}
 #bBoard.tilt477 .lip477 polygon{fill:#2a1d12;stroke:rgba(0,0,0,.35);stroke-width:.6}
+/* jetons debout : anneaux couchés sur le sol, l'illustration se tient dessus */
+#bBoard.tilt477 #bSvg .tok .tok-rdy,#bBoard.tilt477 #bSvg .tok .tok-halo,#bBoard.tilt477 #bSvg .tok .hp-bg,#bBoard.tilt477 #bSvg .tok .tok-ring,#bBoard.tilt477 #bSvg .tok .tok-rim{transform:translateY(8px) scale(1.12,.52)}
+#bBoard.tilt477 #bSvg .tok .hp-arc{transform:translateY(8px) scale(1.12,.52) rotate(-90deg)}
+#bBoard.tilt477 #bSvg .tok .tok-ring{fill-opacity:.38}
+#bBoard.tilt477 #bSvg .tok .tok-sh{transform:translateY(-5px) scale(1.25,1.4);opacity:.85}
+#bBoard.tilt477 #bSvg .tok.has-im .tok-gloss,#bBoard.tilt477 #bSvg .tok.has-im .tok-b>path{display:none}
+#bBoard.tilt477 #bSvg .tok .bdg-s{transform:translate(0,-40px) rotate(-7deg)}
+#bBoard.tilt477 #bSvg .tok .tok-ew{transform:translate(19px,-28px)}
+#bBoard.tilt477 #bSvg .tok .tok-im{filter:drop-shadow(0 1.5px 1.2px rgba(0,0,0,.45))}
 #bBoard.tilt477.bio-roche .lip477 polygon{fill:#4a2e18}
 #bBoard.tilt477.bio-ligue .lip477 polygon,#bBoard.tilt477.bio-arene .lip477 polygon{fill:#8c7a5e}
 #bBoard.tilt477.bio-tour .lip477 polygon{fill:#2a2236}
