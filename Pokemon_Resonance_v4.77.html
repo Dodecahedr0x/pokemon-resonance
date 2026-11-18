@@ -45033,8 +45033,10 @@ function showSplash(force) {
     svg.insertBefore(lum, L.ax);
     if (nuit) el('rect', { class: 'nuit477', x: 0, y: 0, width: W, height: H }, lum);
     el('rect', { x: 0, y: 0, width: W, height: H, fill: 'url(#hz477)' }, lum);
+    L.eau477 = null;
     nuages();
     ambiance();
+    eau();
   };
   const bbAvant = buildBoard;
   buildBoard = function () {
@@ -45196,6 +45198,71 @@ function showSplash(force) {
     }
     n.innerHTML = html;
     bd.appendChild(n);
+  };
+
+  /* reflet sur l'eau : une bande de lumière glisse sur les cases d'eau, des éclats scintillent ;
+     suit la marée de l'Arène Eau (resynchronisé à chaque rendu du plateau) */
+  const eau = () => {
+    if (!TILT.on || !L.tiles || !B) return;
+    const svg = $('#bSvg');
+    let g = L.eau477;
+    if (!g || !g.isConnected) {
+      const defs = svg.querySelector('defs'),
+        [W, H] = VB(),
+        nuit = heureDe(B) === 'nuit',
+        c = nuit ? '#cfe0ff' : '#ffffff',
+        dx = W * 0.2,
+        dy = W * 0.06;
+      svg.querySelectorAll('#eau477g,#eau477c').forEach(n => n.remove());
+      const gr = el('linearGradient', { id: 'eau477g', gradientUnits: 'userSpaceOnUse', spreadMethod: 'repeat', x1: 0, y1: 0, x2: dx.toFixed(1), y2: dy.toFixed(1) }, defs);
+      [
+        [0, 0],
+        [0.36, 0],
+        [0.47, nuit ? 0.18 : 0.28],
+        [0.5, nuit ? 0.38 : 0.55],
+        [0.53, nuit ? 0.18 : 0.28],
+        [0.64, 0],
+        [1, 0]
+      ].forEach(([o, a]) => el('stop', { offset: o, 'stop-color': c, 'stop-opacity': a }, gr));
+      el('clipPath', { id: 'eau477c' }, defs);
+      g = L.eau477 = el('g', { class: 'eau477' + (anim429() ? '' : ' fixe'), style: 'pointer-events:none', 'aria-hidden': 'true' });
+      // la bande de lumière : un rectangle à motif répété, découpé aux cases d'eau, qui glisse d'une période (CSS)
+      const cg = el('g', { 'clip-path': 'url(#eau477c)' }, g);
+      el('rect', { class: 'bande477', x: (-dx).toFixed(1), y: (-dy).toFixed(1), width: (W + 2 * dx).toFixed(1), height: (H + 2 * dy).toFixed(1), fill: 'url(#eau477g)', style: `--dx:${dx.toFixed(1)}px;--dy:${dy.toFixed(1)}px` }, cg);
+      L.eau477gl = el('g', {}, g); // éclats
+      const lum = svg.querySelector('.lum477');
+      svg.insertBefore(g, lum || L.ax);
+    }
+    const cles = Object.keys(B.tiles).filter(k => B.tiles[k].w && !B.tiles[k].rock);
+    const id = cles.join(',');
+    if (g.dataset.k === id) return;
+    g.dataset.k = id;
+    let cp = '',
+      gl = '';
+    cles.forEach(k => {
+      const [x, y] = HC(k),
+        s = tiltS(x, y),
+        n = parseInt(k.replace(/\D/g, ''), 10) || 0;
+      cp += `<polygon points="${HP(x, y, BG.S - 1)}"/>`;
+      for (let i = 0; i < 2; i++) {
+        const r = j => ((Math.sin(n * 91.3 + i * 47.7 + j * 13.1) * 43758.5453) % 1 + 1) % 1,
+          gx = x + (r(1) - 0.5) * BG.S * 1.1 * s,
+          gy = y + (r(2) - 0.5) * BG.S * 0.6 * s,
+          rx = (3.6 + r(3) * 2.4) * s;
+        gl += `<ellipse class="gl477" cx="${gx.toFixed(1)}" cy="${gy.toFixed(1)}" rx="${rx.toFixed(1)}" ry="${(rx * 0.2).toFixed(2)}" style="animation-duration:${(2.6 + r(4) * 2.2).toFixed(1)}s;animation-delay:-${(r(5) * 4).toFixed(1)}s"/>`;
+      }
+    });
+    svg.querySelector('#eau477c').innerHTML = cp;
+    L.eau477gl.innerHTML = gl;
+    g.style.display = cles.length ? '' : 'none';
+  };
+  const rbAvant477 = renderBoard;
+  renderBoard = function () {
+    const r = rbAvant477.apply(this, arguments);
+    try {
+      eau();
+    } catch (e) {}
+    return r;
   };
 
   /* les Pokémon du fond passent derrière ceux de devant */
@@ -45373,6 +45440,12 @@ html body #bSvg .nmw477.ally .tok-nm{fill:#a9d0ff!important}
 #bBoard .cs477 i{position:absolute;width:70%;height:38%;border-radius:50%;background:radial-gradient(closest-side,rgba(40,48,70,.32),rgba(40,48,70,0));will-change:transform;animation:nuage477 46s linear infinite}
 #bBoard .cs477 i+i{width:55%;height:30%;top:48%;animation-duration:61s;animation-delay:-30s}
 #bBoard .cs477 i:first-child{top:22%}
+#bBoard.tilt477 .eau477 .bande477{animation:bande477 4.5s linear infinite}
+#bBoard.tilt477 .eau477.fixe .bande477{animation:none}
+@keyframes bande477{to{transform:translate(var(--dx),var(--dy))}}
+#bBoard.tilt477 .eau477 .gl477{fill:#f4fbff;opacity:0;transform-box:fill-box;transform-origin:center;animation:gl477 3s ease-in-out infinite}
+#bBoard.tilt477 .eau477.fixe .gl477{animation:none;opacity:.35}
+@keyframes gl477{0%{opacity:0;transform:scaleX(.3)}50%{opacity:1;transform:scaleX(1)}100%{opacity:0;transform:scaleX(1.25)}}
 #bBoard .amb477{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:2;border-radius:inherit}
 #bBoard .amb477 i{position:absolute;width:4px;height:4px;border-radius:50%;background:var(--c);box-shadow:0 0 6px 1.5px var(--c);opacity:0;will-change:transform,opacity;animation:amb477 10s ease-in-out infinite}
 #bBoard .amb477.nuit i{width:4.5px;height:4.5px;box-shadow:0 0 10px 3px var(--c);animation-name:luciole477}
@@ -45381,7 +45454,7 @@ html body #bSvg .nmw477.ally .tok-nm{fill:#a9d0ff!important}
 @keyframes nuage477{from{transform:translateX(-80%)}to{transform:translateX(190%)}}
 html body #bBoard.tilt477.entree477 #bSvg{animation:entree477 1s cubic-bezier(.2,.7,.2,1) .6s backwards;filter:none!important;will-change:transform,opacity}
 @keyframes entree477{from{transform:perspective(900px) rotateX(24deg) translateY(-18px) scale(.9);opacity:0}to{transform:none;opacity:1}}
-@media (prefers-reduced-motion:reduce){#bBoard.tilt477 #bSvg .tok-st477,#bBoard .cs477 i{animation:none!important}#bBoard .amb477{display:none}}
+@media (prefers-reduced-motion:reduce){#bBoard.tilt477 #bSvg .tok-st477,#bBoard .cs477 i{animation:none!important}#bBoard .amb477{display:none}#bBoard.tilt477 .eau477 .gl477{animation:none;opacity:.35}#bBoard.tilt477 .eau477 .bande477{animation:none}}
 #bBoard.tilt477.bio-roche .lip477 polygon{fill:#4a2e18}
 #bBoard.tilt477.bio-ligue .lip477 polygon,#bBoard.tilt477.bio-arene .lip477 polygon{fill:#8c7a5e}
 #bBoard.tilt477.bio-tour .lip477 polygon{fill:#2a2236}

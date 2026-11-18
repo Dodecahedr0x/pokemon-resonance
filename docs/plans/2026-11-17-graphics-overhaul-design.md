@@ -143,6 +143,12 @@ rendering layer with a full fallback to the v4.76 look.
 - Ambient motes (`.amb477`, HTML layer, transform/opacity keyframes only):
   pollen or dust by day, fireflies or embers by night, coloured per place.
   Off under reduced motion, "Effets animés" off, or Léger.
+- Water sheen (`g.eau477`): a repeating light-band gradient on a rect clipped
+  to the water tiles, slid one period with a CSS transform, plus thin glints
+  that pulse in opacity and width. Resynced after every `renderBoard`, so the
+  Water gym tide is followed. SMIL `animateTransform` was tried first, but the
+  SVG animation clock stayed at 0 in the test browser, so CSS is used instead.
+  Static (faint glints, no motion) under reduced motion or "Effets animés" off.
 - Perf (in-app browser, capped at 30 fps): full board rebuild ≈ 3.5 ms; idle
   combat holds the cap in both Riche and Léger; the battle-resume dip to
   ~15 fps also happens with the swoop disabled (pre-existing resume work).
