@@ -45045,6 +45045,20 @@ function showSplash(force) {
     }
     const r = bbAvant.apply(this, arguments);
     try {
+      // nouveau combat : la caméra se pose sur le plateau pendant que l'écran de transition s'efface
+      if (B !== bbAvant.dernier) {
+        bbAvant.dernier = B;
+        const bd = $('#bBoard');
+        if (TILT.on && anim429()) {
+          bd.classList.remove('entree477');
+          void bd.offsetWidth;
+          bd.classList.add('entree477');
+          clearTimeout(bbAvant.t);
+          bbAvant.t = setTimeout(() => bd.classList.remove('entree477'), 1800);
+        }
+      }
+    } catch (e) {}
+    try {
       habiller();
     } catch (e) {
       try {
@@ -45257,6 +45271,8 @@ html body #bBoard.tilt477.has-lava477 #bSvg .tx.lava{fill:url(#tx-lava);opacity:
 #bBoard .cs477 i+i{width:55%;height:30%;top:48%;animation-duration:61s;animation-delay:-30s}
 #bBoard .cs477 i:first-child{top:22%}
 @keyframes nuage477{from{transform:translateX(-80%)}to{transform:translateX(190%)}}
+html body #bBoard.tilt477.entree477 #bSvg{animation:entree477 1s cubic-bezier(.2,.7,.2,1) .6s backwards;filter:none!important;will-change:transform,opacity}
+@keyframes entree477{from{transform:perspective(900px) rotateX(24deg) translateY(-18px) scale(.9);opacity:0}to{transform:none;opacity:1}}
 @media (prefers-reduced-motion:reduce){#bBoard.tilt477 #bSvg .tok-st477,#bBoard .cs477 i{animation:none!important}}
 #bBoard.tilt477.bio-roche .lip477 polygon{fill:#4a2e18}
 #bBoard.tilt477.bio-ligue .lip477 polygon,#bBoard.tilt477.bio-arene .lip477 polygon{fill:#8c7a5e}
