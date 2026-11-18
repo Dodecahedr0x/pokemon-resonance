@@ -129,6 +129,12 @@ rendering layer with a full fallback to the v4.76 look.
   K.O., depth re-sort of tokens after moves, cloud shadows (composited HTML
   layer), camera swoop on battle start, horizon haze and night tint (static,
   clipped to the board).
+- Names live in their own layer above all tokens (`g.nms477`), each one
+  mirroring its token's transform and hiding classes (`ko`, `hid`, `fog431`,
+  `pk-wait`) through a MutationObserver, so a tall sprite in front never
+  covers the name behind it.
+- Attack and guard effects take a depth factor (`FXS.zk`, same clamp as the
+  tokens) at the target tile, so effects at the back are drawn smaller.
 - Perf (in-app browser, capped at 30 fps): full board rebuild ≈ 3.5 ms; idle
   combat holds the cap in both Riche and Léger; the battle-resume dip to
   ~15 fps also happens with the swoop disabled (pre-existing resume work).

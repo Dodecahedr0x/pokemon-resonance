@@ -18468,7 +18468,7 @@ function shape(c, kind, x, y, s, rot, col, a) {
 }
 /* un effet d’attaque complet : trajectoire, impact, éclats */
 function fxAttack(e, dur) {
-  const z = FXS.s,
+  const z = FXS.s * (FXS.zk || 1), // zk : plus petit au fond du plateau incliné (v4.77)
     pal = FXC[e.t] || FXC.Normal,
     kind0 = FXK[e.t] || 'impact',
     A = fxP(e.from);
@@ -19026,7 +19026,7 @@ function fxGuard(e, dur) {
   if (!g || !v) return;
   const G = fxP(uk(g)),
     V = fxP(uk(v)),
-    z = FXS.s;
+    z = FXS.s * (FXS.zk || 1);
   fxAdd(dur * 0.7, (c, p) => {
     c.globalCompositeOperation = 'lighter';
     const q = eo(p);
@@ -45198,6 +45198,66 @@ function showSplash(force) {
     return r;
   };
 
+  /* noms au-dessus de tous les Pokémon : un grand Pokémon devant ne cache plus le nom de celui de derrière */
+  const nomHaut = T => {
+    if (!L.fl || !T.nm) return;
+    if (!L.nm477 || !L.nm477.isConnected) {
+      L.nm477 = el('g', { class: 'nms477', style: 'pointer-events:none' }, $('#bSvg'));
+      L.fl.parentNode.insertBefore(L.nm477, L.fl);
+    }
+    if (!T.nmw477) {
+      const w = el('g', {}, L.nm477);
+      w.appendChild(T.nm);
+      T.nmw477 = w;
+      const sync = () => {
+        const c = T.g.classList;
+        w.setAttribute('class', 'nmw477' + ['enemy', 'ally', 'ko', 'hid', 'fog431', 'pk-wait'].map(n => (c.contains(n) ? ' ' + n : '')).join(''));
+        w.style.transform = T.g.style.transform;
+        w.style.opacity = T.g.style.opacity;
+        w.style.display = T.g.isConnected ? '' : 'none';
+      };
+      new MutationObserver(sync).observe(T.g, { attributes: true, attributeFilter: ['class', 'style'] });
+      sync();
+    }
+  };
+  const utAvant2 = updTokCore;
+  updTokCore = function (u) {
+    const r = utAvant2.apply(this, arguments);
+    try {
+      const T = TILT.on && L.u[u.uid];
+      if (T) nomHaut(T);
+    } catch (e) {}
+    return r;
+  };
+
+  /* effets d'attaque à l'échelle de la profondeur (cible au fond = effet plus petit) */
+  const prof = k => {
+    if (!TILT.on || k == null) return 1;
+    const [x, y] = HC(k);
+    return Math.max(0.6, Math.min(1.4, tiltS(x, y)));
+  };
+  const avecProf = (k, f) => {
+    FXS.zk = prof(k);
+    try {
+      return f();
+    } finally {
+      FXS.zk = 1;
+    }
+  };
+  const faAvant = fxAttack;
+  fxAttack = function (e, dur) {
+    return avecProf(e && (e.k != null ? e.k : e.from), () => faAvant.apply(this, [e, dur]));
+  };
+  const fgAvant = fxGuard;
+  fxGuard = function (e, dur) {
+    let k = null;
+    try {
+      const g = byUid(B, e.u);
+      if (g) k = uk(g);
+    } catch (x) {}
+    return avecProf(k, () => fgAvant.apply(this, [e, dur]));
+  };
+
   /* illustration plus grande, pieds posés sur l'anneau au sol (attributs : la transformation sert déjà au miroir et au rebond) */
   const GEO = { plat: ['-17', '-22', '34'], debout: ['-23', '-35', '46'] };
   const taAvant = tokenArt;
@@ -45256,6 +45316,12 @@ html body #bBoard.tilt477.has-lava477 #bSvg .tx.lava{fill:url(#tx-lava);opacity:
 #bBoard.tilt477 #bSvg .tok.has-im .tok-gloss,#bBoard.tilt477 #bSvg .tok.has-im .tok-b>path{display:none}
 #bBoard.tilt477 #bSvg .tok .bdg-s{transform:translate(0,-40px) rotate(-7deg)}
 #bBoard.tilt477 #bSvg .tok .tok-ew{transform:translate(19px,-28px)}
+#bSvg .nmw477{transition:transform .85s var(--ease),opacity .6s ease}
+#bSvg .nmw477.ko{opacity:0;transition:opacity .6s ease .3s}
+#bSvg .nmw477.hid,#bSvg .nmw477.pk-wait{opacity:0}
+html body #bSvg .nmw477.fog431{opacity:0!important;transition:opacity .3s}
+html body #bSvg .nmw477.enemy .tok-nm{fill:#ff9ba0!important}
+html body #bSvg .nmw477.ally .tok-nm{fill:#a9d0ff!important}
 #bBoard.tilt477 #bSvg .tok .tok-im{filter:drop-shadow(0 1.5px 1.2px rgba(0,0,0,.45))}
 #bBoard.tilt477 .lum477 .nuit477{fill:#2a3a78;mix-blend-mode:multiply;opacity:.55}
 /* animations des Pokémon debout */
