@@ -45606,6 +45606,9 @@ html body #bBoard.tilt477.entree477 #bSvg{animation:entree477 1s cubic-bezier(.2
         .filter(Boolean)
         .join(' ');
       bt = `<button type="button" class="b b-sm b-gold" data-vx="fin478"><b>Terminer</b></button>`;
+    } else if (u.sn) {
+      const etat = { GEL: 'est gelé', SOM: 'est endormi', PAR: 'est paralysé' }[u.badge];
+      txt = `${u.n} ${etat || 'ne peut pas agir'} : il passe cette manche.`;
     } else txt = `${u.n} a fini son tour.`;
     const html = `<div class="fl478" data-st="${st}"><div class="fl478-h"><ol class="fl478-p">${pas}</ol><span class="fl478-n">${B.ordre === 'vitesse' ? 'Ordre par Vitesse' : n ? `Encore ${n} à jouer` : 'Manche terminée'}</span></div><div class="fl478-r"><p>${txt}</p>${bt}</div></div>`;
     if (!ui.mode) p.querySelectorAll('.bp-hint').forEach(h => h.remove());
