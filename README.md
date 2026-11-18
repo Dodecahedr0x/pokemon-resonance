@@ -3,9 +3,13 @@
 Fangame français en un seul fichier HTML : combats tactiques en hexagones, jouable sur téléphone.
 
 ## Jouer
-Ouvrir `Pokemon_Resonance_v4.77.html` dans un navigateur. Le dossier `audio/` doit rester à côté du fichier pour les musiques.
+Ouvrir `Pokemon_Resonance_v4.77.html` dans un navigateur. Les dossiers `audio/` (musiques) et `img/` (décors peints) doivent rester à côté du fichier. Sans `img/`, le jeu garde le plateau à plat d'avant.
 
-## Nouveautés v4.77 : combats lisibles sur téléphone
+## Nouveautés v4.77 : combats lisibles sur téléphone, plateau peint
+- Plateau incliné en vraie perspective : les cases s'éloignent vers l'horizon, posées sur un socle de terre ; les Pokémon restent debout et rapetissent au fond.
+- Décors peints derrière le plateau selon le lieu et l'heure (prairie de jour et de nuit, canyon, stade de la Ligue), textures peintes sur les cases (herbe, pierre, eau).
+- Repères A–H et 1–6 recalés au bord du plateau incliné.
+- Paramètres › Habillage Pokémon › « Graphismes » : Riche (décors et plateau incliné) ou Léger (plateau à plat d'avant).
 - Adversaires en rouge, votre équipe en bleu : anneau plein autour de chaque Pokémon, nom et ombre teintés, cartes d'équipe colorées avec les étiquettes « Adversaires » et « Votre équipe ».
 - Sur téléphone, tout le combat tient dans l'écran sans défiler : la barre de navigation du bas s'efface pendant le combat, « Fin du tour » partage la ligne des outils, cartes d'équipe plus compactes et plateau ajusté à la hauteur de l'écran.
 

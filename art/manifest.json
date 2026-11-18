@@ -1,0 +1,35 @@
+{
+  "style": "Painterly anime landscape illustration in the same style as the attached reference image: soft visible brushwork, warm cinematic light, rich but not oversaturated colours, high detail. Absolutely no characters, no creatures, no people, no text, no letters, no logos, no UI, no frame.",
+  "kinds": {
+    "backdrop": {
+      "aspect": "16:9 landscape",
+      "size": 2048,
+      "brief": "Low camera, eye level, looking across a wide flat open area toward the horizon. The horizon sits at about 38% from the top. The lower 60% of the image is a broad, flat, uncluttered ground surface (it will be covered by a game board), with interest and scenery only near the horizon and at the far left and right edges."
+    },
+    "texture": {
+      "aspect": "1:1 square",
+      "size": 512,
+      "seamless": true,
+      "brief": "Perfectly top-down orthographic view of a ground surface texture, flat even lighting, no perspective, no horizon, no cast shadows from objects, no large distinct features, uniform density across the whole image so it can tile seamlessly. Painterly, matching the reference's palette."
+    }
+  },
+  "assets": [
+    { "id": "bg-gue-jour",   "kind": "backdrop", "batch": 1, "prompt": "A sunlit meadow clearing at the edge of a forest, tall trees framing both sides, distant blue mountains, golden afternoon light, a few wildflowers." },
+    { "id": "bg-gue-nuit",   "kind": "backdrop", "batch": 1, "prompt": "The same kind of meadow clearing at night: deep blue moonlight, starry sky with a large moon, fireflies near the forest edge, cool blue-teal palette with soft warm glints." },
+    { "id": "bg-roche-jour", "kind": "backdrop", "batch": 1, "prompt": "A rocky canyon floor of warm ochre sandstone, layered cliffs and mesas on both sides, dusty haze, bright late-morning sun." },
+    { "id": "bg-ligue-jour", "kind": "backdrop", "batch": 1, "prompt": "A grand open-air stadium arena floor of pale marble, elegant gold-trimmed stone stands and banners in the distance, a sky of soft clouds, ceremonial and majestic." },
+    { "id": "bg-roche-nuit", "kind": "backdrop", "batch": 2, "prompt": "A rocky canyon floor of sandstone at night, cliffs silhouetted against a starry violet sky, a campfire-orange glow far away, cool shadows." },
+    { "id": "bg-tour-jour",  "kind": "backdrop", "batch": 2, "prompt": "The top floor of an ancient mystical stone tower, open to the sky, purple crystal pillars and floating runes at the edges, misty mountains far below." },
+    { "id": "bg-tour-nuit",  "kind": "backdrop", "batch": 2, "prompt": "The top floor of an ancient mystical stone tower at night, violet and indigo glow from crystal pillars, aurora in a starry sky, eerie but beautiful." },
+    { "id": "bg-ligue-nuit", "kind": "backdrop", "batch": 2, "prompt": "A grand open-air stadium arena floor of dark marble at night, floodlights and gold-trimmed stands glowing in the distance, night sky with stars." },
+    { "id": "tex-grass",     "kind": "texture",  "batch": 1, "prompt": "Short lush meadow grass with tiny clover and a few small flowers." },
+    { "id": "tex-stone",     "kind": "texture",  "batch": 1, "prompt": "Weathered flat sandstone ground with fine cracks and small pebbles, warm ochre." },
+    { "id": "tex-water",     "kind": "texture",  "batch": 1, "prompt": "Clear shallow river water seen from above, gentle ripples, blue-teal with soft light caustics." },
+    { "id": "tex-sand",      "kind": "texture",  "batch": 2, "prompt": "Fine warm beach sand with subtle wind ripples." },
+    { "id": "tex-ash",       "kind": "texture",  "batch": 2, "prompt": "Grey volcanic ash ground with small dark cinders and faint ember glints." },
+    { "id": "tex-marble",    "kind": "texture",  "batch": 2, "prompt": "Polished pale marble floor with soft gold veins." },
+    { "id": "tex-rune",      "kind": "texture",  "batch": 2, "prompt": "Ancient violet-grey stone floor with faint glowing purple rune etchings, evenly scattered." },
+    { "id": "tex-mud",       "kind": "texture",  "batch": 2, "prompt": "Wet brown mud with small puddles reflecting the sky." },
+    { "id": "tex-lava",      "kind": "texture",  "batch": 2, "prompt": "Cooling lava crust, black rock plates with glowing orange cracks." }
+  ]
+}

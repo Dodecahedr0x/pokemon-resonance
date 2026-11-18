@@ -1,0 +1,5 @@
+art/.venv/
+art/raw/
+.serena/
+art/sheet-*.jpg
+art/gen-*.log

@@ -14890,11 +14890,43 @@ const BG = { S: 27, OX: 20, OY: 22 };
 let VERT = false;
 const MQV = window.matchMedia ? matchMedia('(max-width: 700px)') : null;
 const VB = () => (VERT ? [286, 430] : [430, 286]);
-const HC = k => {
+/* v4.77 · plateau incliné : HC et HP renvoient des points vus en perspective quand TILT.on.
+   Sol = coordonnées d'origine du viewBox ; écran = sol incliné de TILT.a puis recadré. */
+const TILT = { on: false };
+function tiltP(x, y) {
+  const T = TILT,
+    d = T.Hb - y,
+    s = T.f / (T.f + d * T.sn);
+  return [T.ox + (T.cx + (x - T.cx) * s) * T.k, T.oy + (T.Hb - d * T.cs * s) * T.k];
+}
+function tiltU(X, Y) {
+  const T = TILT,
+    q = T.Hb - (Y - T.oy) / T.k,
+    d = (q * T.f) / (T.f * T.cs - q * T.sn),
+    s = T.f / (T.f + d * T.sn);
+  return [T.cx + ((X - T.ox) / T.k - T.cx) / s, T.Hb - d];
+}
+/** taille apparente (1 = case à plat) au point écran X,Y */
+function tiltS(X, Y) {
+  const g = tiltU(X, Y);
+  return (TILT.f / (TILT.f + (TILT.Hb - g[1]) * TILT.sn)) * TILT.k;
+}
+function tiltHP(X, Y, s) {
+  const [x, y] = tiltU(X, Y),
+    o = [];
+  for (let i = 0; i < 6; i++) {
+    const a = (Math.PI / 180) * (60 * i - (VERT ? 0 : 30)),
+      q = tiltP(x + s * Math.cos(a), y + s * Math.sin(a));
+    o.push(q[0].toFixed(1) + ',' + q[1].toFixed(1));
+  }
+  return o.join(' ');
+}
+const HC0 = k => {
   const p = P(k),
     q = hc(p[0], p[1], BG.S, BG.OX, BG.OY);
   return VERT ? [q[1], 430 - q[0]] : q;
 };
+const HC = k => (TILT.on ? tiltP(...HC0(k)) : HC0(k));
 function hpf(x, y, s) {
   const o = [];
   for (let i = 0; i < 6; i++) {
@@ -14903,7 +14935,7 @@ function hpf(x, y, s) {
   }
   return o.join(' ');
 }
-const HP = (x, y, s) => (VERT ? hpf(x, y, s) : hp(x, y, s));
+const HP = (x, y, s) => (TILT.on ? tiltHP(x, y, s) : VERT ? hpf(x, y, s) : hp(x, y, s));
 if (MQV) {
   const onMQ = () => {
     if (B && !$('#cbBattle').hidden && VERT !== MQV.matches) {
@@ -44837,6 +44869,205 @@ function showSplash(force) {
     if (b) b.focus();
   }, 60);
 }
+
+/* ==== v4.77 : graphismes peints (décors et textures du dossier img/, plateau incliné en perspective) ==== */
+(() => {
+  /* Les images viennent du dossier img/ posé à côté du fichier, comme audio/.
+     Sans ce dossier, ou en mode « Léger », rien ne change : plateau à plat de la v4.76. */
+  const TEX = ['grass', 'stone', 'water', 'sand', 'ash', 'marble', 'rune'];
+  const OK = new Set();
+  let artOk = false;
+  const riche = () => artOk && PREF.gfx477 !== 'leger';
+  const enCombat = () => B && L.tiles && !$('#cbBattle').hidden;
+  const rebatir = () => {
+    if (enCombat()) {
+      buildBoard();
+      renderAll();
+    }
+  };
+  // une seule sonde : sans dossier img/, une seule requête échoue
+  const charger = (t, ok, ko) => {
+    const im = new Image();
+    im.onload = () => {
+      OK.add(t);
+      if (ok) ok();
+    };
+    if (ko) im.onerror = ko;
+    im.src = 'img/tex-' + t + '.webp';
+  };
+  charger(
+    'grass',
+    () => {
+      artOk = true;
+      document.body.classList.remove('no-art477');
+      TEX.slice(1).forEach(t => charger(t, rebatir)); // sans effet hors combat
+      rebatir();
+    },
+    () => document.body.classList.add('no-art477')
+  );
+
+  /* ---------- perspective : réglée à chaque construction du plateau ---------- */
+  const LIP = 7; // épaisseur de la dalle de terre sous les cases (unités du viewBox, au premier rang)
+  const regler = () => {
+    TILT.on = false;
+    if (!riche() || !B) return;
+    VERT = !!(MQV && MQV.matches);
+    const [W, H] = VB(),
+      S = BG.S,
+      a = ((VERT ? 30 : 40) * Math.PI) / 180,
+      pts = [];
+    for (const k in B.tiles) {
+      const [x, y] = HC0(k);
+      for (let i = 0; i < 6; i++) pts.push([x + S * Math.cos((Math.PI / 3) * i), y + S * Math.sin((Math.PI / 3) * i)]);
+    }
+    Object.assign(TILT, { f: VERT ? 950 : 780, sn: Math.sin(a), cs: Math.cos(a), Hb: Math.max(...pts.map(p => p[1])), cx: W / 2, k: 1, ox: 0, oy: 0 });
+    const pr = pts.map(p => tiltP(p[0], p[1])),
+      xs = pr.map(p => p[0]),
+      ys = pr.map(p => p[1]),
+      x0 = Math.min(...xs),
+      x1 = Math.max(...xs),
+      y0 = Math.min(...ys),
+      y1 = Math.max(...ys),
+      m = 12, // marge des côtés : repères A–H
+      bas = 26, // sous le premier rang : socle + nom des Pokémon
+      ciel = H * (VERT ? 0.1 : 0.14); // bande de décor laissée visible au-dessus du plateau
+    const k = Math.min((W - 2 * m) / (x1 - x0), (H - ciel - bas) / (y1 - y0));
+    TILT.k = k;
+    TILT.ox = (W - (x1 - x0) * k) / 2 - x0 * k;
+    TILT.oy = H - bas - y1 * k;
+    TILT.on = true;
+  };
+
+  /* ---------- habillage du plateau construit ---------- */
+  const fond = () => {
+    const bio = { arene: 'ligue' }[SCEN[B.sc].bio] || SCEN[B.sc].bio,
+      h = heureDe(B);
+    return `url(img/bg-${bio}-${h}.webp),url(img/bg-${bio}-jour.webp),url(img/bg-gue-${h}.webp)`;
+  };
+  const habiller = () => {
+    const bd = $('#bBoard'),
+      svg = $('#bSvg');
+    bd.classList.toggle('tilt477', TILT.on);
+    if (!TILT.on) {
+      bd.style.removeProperty('--bg477');
+      return;
+    }
+    bd.style.setProperty('--bg477', fond());
+    // textures peintes dans les motifs existants (renderBoard les choisit déjà par case)
+    TEX.forEach(t => {
+      const p = svg.querySelector('#tx-' + t);
+      if (!p || !OK.has(t)) return;
+      p.setAttribute('width', 72);
+      p.setAttribute('height', 72);
+      p.setAttribute('patternTransform', 'scale(1 .78)');
+      p.innerHTML = `<image href="img/tex-${t}.webp" width="72" height="72" preserveAspectRatio="none"/>`;
+    });
+    // dalle de terre : chaque case posée sur un socle plus sombre, visible côté joueur
+    const lip = el('g', { class: 'lip477', style: 'pointer-events:none' });
+    svg.insertBefore(lip, L.tiles);
+    let h = '';
+    for (const k in B.tiles) {
+      const [x, y] = HC(k),
+        s = tiltS(x, y);
+      h += `<polygon points="${HP(x, y + LIP * s, BG.S - 1)}"/>`;
+    }
+    lip.innerHTML = h;
+    // repères A–H / 1–6 recalés au bord du plateau incliné
+    L.ax.innerHTML = '';
+    const lab = (txt, x, y) => (el('text', { class: 'axl', x: x.toFixed(1), y: y.toFixed(1) }, L.ax).textContent = txt);
+    for (let r = 0; r < BH; r++) {
+      // en portrait, les rangées se lisent au fond du plateau (au-dessus de la dernière colonne)
+      const [x, y] = HC(K(VERT ? BW - 1 : 0, r)),
+        s = tiltS(x, y);
+      if (VERT) lab(r + 1, x, y - BG.S * s - 3);
+      else lab(r + 1, x - BG.S * s - 5, y + 2.5);
+    }
+    for (let c = 0; c < BW; c++) {
+      const [x, y] = HC(K(c, 0)),
+        s = tiltS(x, y);
+      if (VERT) lab('ABCDEFGH'[c], x - BG.S * s - 5, y + 2.5);
+      else lab('ABCDEFGH'[c], x, y - BG.S * s - 3);
+    }
+  };
+  const bbAvant = buildBoard;
+  buildBoard = function () {
+    try {
+      regler();
+    } catch (e) {
+      TILT.on = false;
+    }
+    const r = bbAvant.apply(this, arguments);
+    try {
+      habiller();
+    } catch (e) {
+      try {
+        console.warn('Plateau v4.77 : habillage impossible.', e);
+      } catch (e2) {}
+    }
+    return r;
+  };
+
+  /* ---------- jetons : debout, plus petits au fond ---------- */
+  const utAvant = updTokCore;
+  updTokCore = function (u) {
+    const r = utAvant.apply(this, arguments);
+    try {
+      const T = TILT.on && L.u[u.uid];
+      if (T) {
+        const [x, y] = HC(uk(u)),
+          s = Math.max(0.6, Math.min(1.4, tiltS(x, y)));
+        T.g.style.transform = `translate(${x}px,${y}px) scale(${s.toFixed(3)})`;
+      }
+    } catch (e) {}
+    return r;
+  };
+
+  /* ---------- styles ---------- */
+  const css = document.createElement('style');
+  css.id = 'resonance-v477-graphismes';
+  css.textContent = `
+html body #combat #bBoard.tilt477{background-color:#0b1520!important;background-image:linear-gradient(180deg,rgba(6,12,20,0) 30%,rgba(6,12,20,.25) 70%,rgba(6,12,20,.55)),var(--bg477),var(--resonance-landscape)!important;background-size:cover!important;background-position:center 34%!important;background-repeat:no-repeat!important}
+#bBoard.tilt477 #bSvg{filter:drop-shadow(0 10px 14px rgba(0,0,0,.45))!important}
+#bBoard.tilt477 #bSvg image.pv471,#bBoard.tilt477 #bSvg .wv471{display:none!important}
+html body #bBoard.tilt477 #bSvg .tex471{display:inline!important}
+html body #bBoard.tilt477 #bSvg .tx{opacity:1!important}
+html body #bBoard.tilt477 #bSvg .hx{fill:#22301c!important;stroke:rgba(20,14,6,.55)!important;stroke-width:.9!important}
+html body #bBoard.tilt477 #bSvg .hx.wet{fill:#2b5c96!important}
+#bBoard.tilt477 #bSvg .bv{stroke:url(#bev);stroke-width:1.4;opacity:.9}
+#bBoard.tilt477 #bSvg .gl{stroke:rgba(255,248,220,.10)}
+#bBoard.tilt477 #bSvg .deco471,#bBoard.tilt477 #bSvg .tuft,#bBoard.tilt477 #bSvg .pebble{display:none}
+#bBoard.tilt477 .lip477 polygon{fill:#2a1d12;stroke:rgba(0,0,0,.35);stroke-width:.6}
+#bBoard.tilt477.bio-roche .lip477 polygon{fill:#4a2e18}
+#bBoard.tilt477.bio-ligue .lip477 polygon,#bBoard.tilt477.bio-arene .lip477 polygon{fill:#8c7a5e}
+#bBoard.tilt477.bio-tour .lip477 polygon{fill:#2a2236}
+`;
+  document.head.appendChild(css);
+
+  /* ---------- Paramètres › Habillage Pokémon : Graphismes Riche / Léger ---------- */
+  const _rp = renderParams;
+  renderParams = function () {
+    const r = _rp.apply(this, arguments);
+    try {
+      const io = $('#params #pk472 .sv-io');
+      if (io && !io.querySelector('[data-pk477]')) {
+        const l = PREF.gfx477 === 'leger';
+        io.insertAdjacentHTML(
+          'beforeend',
+          `<button type="button" class="b b-sm${l ? '' : ' b-gold'}" data-pk477="1">Graphismes : ${l ? 'Léger (plateau à plat)' : 'Riche (décors peints, plateau incliné)'}</button>`
+        );
+      }
+    } catch (e) {}
+    return r;
+  };
+  document.addEventListener('click', e => {
+    if (!(e.target.closest && e.target.closest('[data-pk477]'))) return;
+    PREF.gfx477 = PREF.gfx477 === 'leger' ? 'riche' : 'leger';
+    savePref();
+    renderParams();
+    rebatir();
+  });
+  window.__gfx477 = { TILT, OK, riche, rebatir };
+})();
 
 })();
 </script>
