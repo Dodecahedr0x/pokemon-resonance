@@ -45015,6 +45015,25 @@ function showSplash(force) {
       if (VERT) lab('ABCDEFGH'[c], x - BG.S * s - 5, y + 2.5);
       else lab('ABCDEFGH'[c], x, y - BG.S * s - 3);
     }
+    // lumière d'ensemble : brume vers l'horizon, teinte de lune la nuit (calques fixes, rien ne bouge)
+    const [W, H] = VB(),
+      nuit = heureDe(B) === 'nuit',
+      fondY = HC(VERT ? K(BW - 1, 0) : K(0, 0))[1] - BG.S,
+      defs = svg.querySelector('defs'),
+      gr = el('linearGradient', { id: 'hz477', x1: 0, y1: 0, x2: 0, y2: 1, gradientUnits: 'userSpaceOnUse' }, defs);
+    gr.setAttribute('y1', fondY.toFixed(1));
+    gr.setAttribute('y2', (fondY + (H - fondY) * 0.55).toFixed(1));
+    [
+      ['0', nuit ? 'rgba(120,140,200,.38)' : 'rgba(255,236,206,.42)'],
+      ['1', nuit ? 'rgba(120,140,200,0)' : 'rgba(255,236,206,0)']
+    ].forEach(([o, c]) => el('stop', { offset: o, 'stop-color': c }, gr));
+    const cp = el('clipPath', { id: 'cp477' }, defs);
+    cp.innerHTML = lip.innerHTML; // socles…
+    for (const k in B.tiles) el('polygon', { points: L.t[k].getAttribute('points') }, cp); // …et cases
+    const lum = el('g', { class: 'lum477', style: 'pointer-events:none', 'clip-path': 'url(#cp477)' });
+    svg.insertBefore(lum, L.ax);
+    if (nuit) el('rect', { class: 'nuit477', x: 0, y: 0, width: W, height: H }, lum);
+    el('rect', { x: 0, y: 0, width: W, height: H, fill: 'url(#hz477)' }, lum);
     nuages();
   };
   const bbAvant = buildBoard;
@@ -45224,6 +45243,7 @@ html body #bBoard.tilt477.has-lava477 #bSvg .tx.lava{fill:url(#tx-lava);opacity:
 #bBoard.tilt477 #bSvg .tok .bdg-s{transform:translate(0,-40px) rotate(-7deg)}
 #bBoard.tilt477 #bSvg .tok .tok-ew{transform:translate(19px,-28px)}
 #bBoard.tilt477 #bSvg .tok .tok-im{filter:drop-shadow(0 1.5px 1.2px rgba(0,0,0,.45))}
+#bBoard.tilt477 .lum477 .nuit477{fill:#2a3a78;mix-blend-mode:multiply;opacity:.55}
 /* animations des Pokémon debout */
 #bBoard.tilt477 #bSvg .tok:not(.lunge429):not(.hurt429):not(.ko) .tok-b{animation:none}
 #bBoard.tilt477 #bSvg .tok-st477{transform-origin:0 11px;animation:vie477 3.4s ease-in-out infinite}
