@@ -7088,6 +7088,42 @@ body.th455-cristal .board{background:radial-gradient(120% 90% at 50% 0%,#3a3478,
   #br466 .br466-i,#df468 .df468-i{width:26px;height:26px}
 }
 </style>
+<style id="resonance-v477">/* v4.77 : camps lisibles, combat sur téléphone sans défilement */
+/* --- camps : rouge = adversaires, bleu = votre équipe --- */
+#bSvg .tok.enemy:not(.sel):not(.act):not(.evw) .tok-halo{stroke:#ff4d57;stroke-width:2.6;opacity:1;stroke-dasharray:none}
+#bSvg .tok.ally:not(.sel):not(.act):not(.evw) .tok-halo{stroke:#5aa8ff;stroke-width:2.2;opacity:1;stroke-dasharray:none}
+html body #bSvg .tok.enemy .tok-sh{fill:rgba(255,64,72,.55)}
+html body #bSvg .tok.ally .tok-sh{fill:rgba(80,160,255,.5)}
+html body #bSvg .tok.enemy .tok-nm{fill:#ff9ba0!important}
+html body #bSvg .tok.ally .tok-nm{fill:#a9d0ff!important}
+html body #cbBattle #bPlE .plate{background:linear-gradient(180deg,rgba(120,22,30,.55),rgba(40,10,16,.75))!important;border-color:rgba(255,90,100,.55)!important}
+html body #cbBattle #bPlA .plate{background:linear-gradient(180deg,rgba(20,60,120,.5),rgba(8,22,44,.75))!important;border-color:rgba(100,170,255,.5)!important}
+html body #cbBattle #bPlE .plate.act,html body #cbBattle #bPlA .plate.act{border-color:#ffe08a!important;box-shadow:0 0 0 2px rgba(255,224,138,.35)!important}
+#cbBattle .plates{position:relative}
+#cbBattle #bPlE::before,#cbBattle #bPlA::before{position:absolute;z-index:2;top:-1px;left:12px;transform:translateY(-50%);padding:1px 6px;border-radius:5px;font:700 8.5px/1.3 var(--f-m);letter-spacing:.1em;text-transform:uppercase;pointer-events:none}
+#cbBattle #bPlE::before{content:"Adversaires";background:#c8323c;color:#fff}
+#cbBattle #bPlA::before{content:"Votre équipe";background:#2f6fd0;color:#fff}
+
+/* --- téléphone : tout le combat tient dans l’écran --- */
+html body.bt434{--bn:0px}
+html body.bt434 .bnav{display:none!important}
+html body.bt434 #combat.page.on{padding-bottom:0!important}
+html body.bt434 .content{padding-top:6px!important}
+html body.bt434 #combat .bt{padding:6px!important;border-radius:18px!important}
+html body.bt434 #combat .bt-top{padding:4px 6px 6px!important;min-height:0!important;row-gap:4px!important}
+html body.bt434 #cbBattle .plates{padding:8px 2px 2px!important;margin:0!important}
+html body.bt434 #cbBattle .plates .plate{padding:3px 4px!important;border-radius:9px!important}
+html body.bt434 #cbBattle .plates .plate .medal.pm{display:none!important}
+html body.bt434 #combat .board{margin:4px auto!important;padding:2px!important;min-height:0!important}
+html body.bt434 #cbBattle .bt-side .bt-foot{bottom:calc(6px + env(safe-area-inset-bottom,0px))!important;padding:6px 8px!important;row-gap:6px!important;column-gap:6px!important;flex-wrap:wrap!important}
+html body.bt434 #cbBattle .bt-foot .bt444.in-foot{gap:4px}
+html body.bt434 #cbBattle .bt-foot .bt444.in-foot button{width:36px;height:36px}
+html body.bt434 #cbBattle .bt-foot #bEnd{flex:1 1 auto!important;min-width:0!important;height:38px!important;min-height:38px!important;padding:0 10px!important;white-space:nowrap}
+html body.bt434 #cbBattle .bt-foot .qa443 button{min-height:36px}
+html body.bt434 #cbBattle .bt-side{padding-bottom:110px}
+/* le plateau garde sa forme mais ne dépasse jamais l’écran : bandeau + équipes + barre du bas ≈ 335 px */
+html body.bt434 #bBoard.vert #bSvg{display:block;width:100%!important;height:auto!important;max-height:max(300px,calc(100dvh - 334px - env(safe-area-inset-bottom,0px)))!important;margin:0 auto}
+</style>
 </head>
 <body>
 <div class="ambient" aria-hidden="true"></div>
@@ -7418,7 +7454,7 @@ body.th455-cristal .board{background:radial-gradient(120% 90% at 50% 0%,#3a3478,
 </section>
 
   </div></main>
-  <footer class="foot"><div class="wrap"><span>Pokémon Résonance · fangame non officiel · v4.76</span><span>Pokémon © Nintendo · Creatures Inc. · GAME FREAK · fangame sans affiliation</span></div></footer>
+  <footer class="foot"><div class="wrap"><span>Pokémon Résonance · fangame non officiel · v4.77</span><span>Pokémon © Nintendo · Creatures Inc. · GAME FREAK · fangame sans affiliation</span></div></footer>
  </div>
 
  <nav class="bnav" aria-label="Navigation">
@@ -7921,7 +7957,7 @@ function reportError(e, where) {
     box.style.cssText =
       'position:fixed;left:12px;right:12px;top:calc(12px + env(safe-area-inset-top));max-height:46vh;overflow:auto;z-index:2147483647;padding:12px 14px;border-radius:14px;background:#2a0e14;border:1px solid #ff6b81;color:#ffe3e8;font:13px/1.45 system-ui,sans-serif;box-shadow:0 10px 30px rgba(0,0,0,.5)';
     box.innerHTML =
-      '<b style="display:block;margin-bottom:4px">Petit souci technique</b><span>Faites une capture de ce message pour le signaler (v4.76).</span><ul style="margin:6px 0 8px;padding-left:18px;word-break:break-word"></ul><button type="button" style="font:inherit;font-weight:700;padding:6px 14px;border-radius:999px;border:0;background:#ff6b81;color:#2a0e14">Fermer</button>';
+      '<b style="display:block;margin-bottom:4px">Petit souci technique</b><span>Faites une capture de ce message pour le signaler (v4.77).</span><ul style="margin:6px 0 8px;padding-left:18px;word-break:break-word"></ul><button type="button" style="font:inherit;font-weight:700;padding:6px 14px;border-radius:999px;border:0;background:#ff6b81;color:#2a0e14">Fermer</button>';
     box.querySelector('button').addEventListener('click', () => box.remove());
     document.body.appendChild(box);
   }
