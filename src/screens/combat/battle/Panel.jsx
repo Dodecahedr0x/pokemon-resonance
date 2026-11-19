@@ -1,4 +1,5 @@
 import { Html } from '../../../lib/html.jsx';
+import { puissance } from '../../../lib/puissance.js';
 import { RX } from '../../../engine/004-01-donnees.js';
 import { MV, SHAPE, TAL } from '../../../engine/005-02-capacites.js';
 import { BY, SCEN } from '../../../engine/009-03-pokemon.js';
@@ -15,10 +16,14 @@ import { COMBAT414, SAC_MAX, aXP, bloque414, foeReso414, mrg414, objOk414, rangO
 import { resoBlock417 } from '../../../engine/057-v4-17-01-compagnons-et-resonance.js';
 import { etatsCombat420, vigilBtn420 } from '../../../engine/060-v4-20-01-combat-intense.js';
 import { flow478 } from '../../../engine/112-v4-77-graphismes-peints-decors-et-textures-du-do.js';
+import { tourAdverse428 } from '../../../engine/063-v4-28-01-captures-combat-accueil.js';
 import { useBattleVersion } from './battleStore.js';
-import { Hi, sansAstuce } from './frag.jsx';
+import { ETAPE, Hi, sansAstuce } from './frag.jsx';
 
 const NL = '\n  ';
+
+// Statuts qui font passer la manche (u.sn), d'après le badge du Pokémon.
+const ETAT = { GEL: 'gelé', SOM: 'endormi', PAR: 'paralysé' };
 
 // Panneau de commande (#bPanel) : fiche du Pokémon choisi, d'un adversaire, ou d'une case.
 // La classe « info-off » du conteneur reste posée par le moteur (panelRoleInfo).
@@ -33,6 +38,8 @@ export default function Panel() {
 
 function Contenu() {
   if (B.over) return null;
+  if (B.dep430) return <Placement />;
+  if (ui.busy && !ui.cine && (B.phase === 'enemy' || tourAdverse428())) return <TourAdverse />;
   if (ui.busy)
     return (
       <div className="bp-wait">
@@ -51,6 +58,81 @@ function Contenu() {
       </>
     );
   return <FicheAllie u={u} />;
+}
+
+const caseDe = u => 'ABCDEFGH'[u.pos[0]] + (u.pos[1] + 1);
+
+/* ---------- placement avant le combat (v4.30) : qui est où, qui est choisi ---------- */
+// Les clics du panneau sont bloqués par le moteur pendant le déploiement : la liste se lit, on joue sur le plateau.
+function Placement() {
+  const al = B.units.filter(u => u.side === 'a' && !u.ko),
+    sel = ui.dsel430 && byUid(B, ui.dsel430);
+  return (
+    <div className="dep-p">
+      <div className="dep-h">
+        <span className="dep-ic" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z" />
+            <path d="M12 8v8M8 12h8" />
+          </svg>
+        </span>
+        <div>
+          <b>Placement</b>
+          <span>{sel ? `Touchez une case de départ pour ${sel.n}.` : 'Touchez un Pokémon, puis une case de départ.'}</span>
+        </div>
+      </div>
+      <ul className="dep-l">
+        {al.map(u => (
+          <li key={u.uid} className={sel === u ? 'on' : ''}>
+            <Html html={medal(u.t, 'sm')} />
+            <b>{u.n}</b>
+            <span>{caseDe(u)}</span>
+          </li>
+        ))}
+      </ul>
+      <p className="bp-hint">Les deux premières colonnes sont à vous. Posé sur un allié, un Pokémon échange sa place avec lui.</p>
+    </div>
+  );
+}
+
+/* ---------- tour adverse : qui a agi, qui agit, qui suit ---------- */
+function TourAdverse() {
+  useBattleVersion('top');
+  useBattleVersion('foot');
+  const file = B.ordre === 'vitesse' && B.file ? B.file.map(id => byUid(B, id)) : B.units;
+  const foes = file.filter(u => u && u.side === 'e' && !u.ko && !u.caught),
+    cur = ui.act && byUid(B, ui.act),
+    fait = foes.filter(u => u.done && u !== cur).length,
+    voile = veiled(B);
+  return (
+    <div className="ta-p">
+      <div className="ta-h">
+        <i aria-hidden="true" />
+        <b>Tour adverse</b>
+        <span>
+          {Math.min(fait + (cur ? 1 : 0), foes.length)} / {foes.length}
+        </span>
+      </div>
+      <ol className="ta-l">
+        {foes.map(u => {
+          const st = u === cur ? 'now' : u.done ? 'done' : '';
+          const m = u.intent && !voile ? MV[u.intent.mv] : null,
+            v = m && uAt(B, u.intent.k);
+          return (
+            <li key={u.uid} className={st}>
+              <Html html={medal(u.t, 'sm')} />
+              <span className="ta-t">
+                <b>{u.n}</b>
+                {m ? ` · ${m.n} → ${v ? v.n : 'case vide'}` : B.jit ? ' · choisit sa cible' : voile && u.intent ? ' · intention voilée' : ''}
+              </span>
+              <em>{st === 'now' ? 'en cours' : st === 'done' ? 'a agi' : ''}</em>
+            </li>
+          );
+        })}
+      </ol>
+      <p className="bp-hint">« Passer » joue le reste du tour adverse en accéléré.</p>
+    </div>
+  );
 }
 
 // Rôle et bouton « Détails » sous l'en-tête (v1.2).
@@ -94,7 +176,7 @@ function Entete({ u, sous }) {
   );
 }
 
-const puiss = m => (m.p ? 'Puiss. ' + m.p : m.fix ? m.fix + ' fixes' : 'Effet');
+const puiss = m => puissance(m, 'Puiss.');
 
 /* ---------- adversaire ---------- */
 function Intention({ e }) {
@@ -383,20 +465,23 @@ function Etape({ u, st }) {
     txt = [flow478.repli(u) ? 'Touchez une case bleue pour vous replier.' : '', flow478.relance(B) ? 'Relance (2 Voix) : il rejoue tout de suite.' : '']
       .filter(Boolean)
       .join(' ');
+    const suite = flow478.restants(B).find(x => x !== u);
     bt = (
-      <button type="button" className="b b-sm b-gold" data-vx="fin478">
-        <b>Terminer</b>
-      </button>
+      <>
+        <button type="button" className="b b-sm b-gold" data-vx="fin478">
+          <b>Terminer {u.n}</b>
+        </button>
+        {B.ordre !== 'vitesse' ? <span className="fl478-suite">{suite ? `Ensuite : ${suite.n}` : 'Dernier Pokémon de la manche'}</span> : null}
+      </>
     );
   } else if (u.sn) {
-    const etat = { GEL: 'est gelé', SOM: 'est endormi', PAR: 'est paralysé' }[u.badge];
-    txt = `${u.n} ${etat || 'ne peut pas agir'} : il passe cette manche.`;
+    txt = `${u.n} ${ETAT[u.badge] ? 'est ' + ETAT[u.badge] : 'ne peut pas agir'} : il passe cette manche.`;
   } else txt = `${u.n} a fini son tour.`;
   return (
     <div className="fl478" data-st={st}>
       <div className="fl478-h">
         <ol className="fl478-p">
-          {['Déplacer', 'Agir', 'Terminer'].flatMap((l, i) => [
+          {[ETAPE.deplacer, ETAPE.agir, ETAPE.extra].flatMap((l, i) => [
             ...(i
               ? [
                   <li key={'s' + i} className="sep" aria-hidden="true">
@@ -465,7 +550,7 @@ function FicheAllie({ u }) {
   else if (u.sn)
     hint = (
       <p className="bp-hint">
-        {u.n} est {u.badge === 'GEL' ? 'gelé' : u.badge === 'SOM' ? 'endormi' : 'paralysé'} : il ne peut pas agir cette manche.
+        {u.n} est {ETAT[u.badge] || ETAT.PAR} : il ne peut pas agir cette manche.
       </p>
     );
   else if (!u.acted && !u.moved) hint = <p className="bp-hint">Cases bleues : déplacement. Ou choisissez directement une capacité.</p>;

@@ -7,7 +7,8 @@ import { ARENAS, arenaNext } from '../../../engine/013-07-arenes.js';
 import { medal, tc } from '../../../engine/014-08-outils.js';
 import { badgeSvg } from '../../../engine/019-12-ligue.js';
 import { byUid } from '../../../engine/021-14-moteur-combat.js';
-import { B } from '../../../engine/024-17-interface-combat.js';
+import { B, ui } from '../../../engine/024-17-interface-combat.js';
+import { tourAdverse428 } from '../../../engine/063-v4-28-01-captures-combat-accueil.js';
 import { acteurCourant } from '../../../engine/044-v4-5-01-moteur-tactique.js';
 import { chipHeure } from '../../../engine/046-v4-7-01-plateau-vivant.js';
 import { chipVent } from '../../../engine/047-v4-8-01-tactique.js';
@@ -42,6 +43,7 @@ export function BtTop() {
           </>
         )}
       </span>
+      <Phase />
       <span id="bWx">{on && <Pastilles />}</span>
       <span className="voix" id="bVoix">
         {on && (
@@ -58,6 +60,28 @@ export function BtTop() {
         Abandonner
       </button>
     </div>
+  );
+}
+
+// Pastille de phase (vue compacte) : Placement, À vous, Tour adverse, Éveil. Elle suit la barre du bas
+// (version « foot », réécrite à chaque changement de tour) ; son data-ph teinte la scène (combat-compact.css).
+export function phaseDe(B0) {
+  if (!B0 || B0.over) return null;
+  if (B0.dep430) return 'deploy';
+  if (ui.cine) return 'evo';
+  if (ui.busy) return tourAdverse428() || B0.phase === 'enemy' ? 'enemy' : 'busy';
+  return 'own';
+}
+const PHASE_T = { deploy: 'Placement', own: 'À vous', enemy: 'Tour adverse', evo: 'Éveil', busy: 'Résolution' };
+function Phase() {
+  useBattleVersion('foot');
+  useBattleVersion('top');
+  const ph = phaseDe(B);
+  return (
+    <span className="bt-ph" data-ph={ph || 'none'} hidden={!ph}>
+      <i aria-hidden="true" />
+      {ph ? (B.duel433 && ph === 'own' ? B.duel433.noms[B.duel433.j - 1] : PHASE_T[ph]) : null}
+    </span>
   );
 }
 

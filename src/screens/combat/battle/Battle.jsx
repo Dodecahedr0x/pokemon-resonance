@@ -21,10 +21,13 @@ export default function Battle({ children }) {
           <Synergies />
           <Regle />
           <Frise />
-          <PlaquesE />
-          <Defense />
-          {children}
-          <PlaquesA />
+          {/* scène (vue compacte) : le plateau plein cadre, les plaques posées sur le décor */}
+          <div className="bt-stage">
+            <PlaquesE />
+            <Defense />
+            {children}
+            <PlaquesA />
+          </div>
         </div>
         <aside className="bt-side" aria-label="Commandes">
           <Panel />
