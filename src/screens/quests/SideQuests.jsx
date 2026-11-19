@@ -2,7 +2,7 @@ import { PROFILE } from '../../engine/011-game-state.js';
 import { SQ } from '../../engine/039-quests-shop.js';
 import Rewards from './Rewards.jsx';
 
-// Une quête secondaire (ancien sideRow) ; « Réclamer » : data-claim, géré par le moteur.
+// A side quest (formerly sideRow); "Réclamer" (Claim): data-claim, handled by the engine.
 function Quest({ q }) {
   const v = Math.min(q.v(), q.n),
     done = v >= q.n,

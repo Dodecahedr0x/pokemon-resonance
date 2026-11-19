@@ -1,5 +1,5 @@
 import { version } from '../../lib/store.js';
 
-// Le moteur appelle renderLigue() (choix d'un badge, victoire, chargement) : la page
-// Ligue est reconstruite avec la progression à jour.
+// The engine calls renderLeague() (badge choice, victory, loading): the League
+// page is rebuilt with up-to-date progress.
 export const [refreshLeague, useLeagueVersion] = version();

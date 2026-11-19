@@ -1,4 +1,4 @@
-/* Section d'origine : v4-07-quetes-boutique.js */
+/* Original section: v4-07-quests-shop.js */
 
 import { refreshQuests } from '../screens/quests/questsStore.js';
 import { refreshBag } from '../screens/bag/bagStore.js';
@@ -13,7 +13,7 @@ import { SHOP, V4, bagN, clampI, countS, familyOwned, maxLink } from './032-v4-f
 import { renderWallet } from './035-interface.js';
 import { costOf } from './049-identity.js';
 
-// Page Quêtes : src/screens/quetes ; page Sac et Boutique : src/screens/sac.
+// Quests page: src/screens/quests; Bag and Shop page: src/screens/bag.
 export let SQ;
 
 
@@ -34,20 +34,20 @@ function claim(id) {
 }
 
 
-// La page Quêtes est rendue par React (src/screens/quetes) : redessiner = la reconstruire.
+// The Quests page is rendered by React (src/screens/quests): redrawing = rebuilding it.
 export function renderQuests() {
   if (!$('#quetes')) return;
   refreshQuests();
 }
 
 
-/* ---------- Sac et Boutique ---------- */
-// La page Sac et Boutique est rendue par React (src/screens/sac) : redessiner = la reconstruire.
+/* ---------- Bag and Shop ---------- */
+// The Bag and Shop page is rendered by React (src/screens/bag): redrawing = rebuilding it.
 export function renderBag() {
   const pg = $('#sac');
   if (!pg) return;
   if (V4.sacV === 'sac' && V4.sacC === 'rares') V4.sacC = 'held';
-  // habillage Boutique ou Sac (v4.73) : classes de la section, qui reste montée
+  // Shop or Bag styling (v4.73): classes of the section, which stays mounted
   const shop = V4.sacV !== 'sac';
   pg.classList.toggle('pk-mart', shop);
   pg.classList.toggle('pk-bag', !shop);
@@ -59,7 +59,7 @@ export function buy(k) {
   const it = SHOP[k],
     q = V4.qty[k] || 1;
   if (!it) return;
-  const price = it.g ? it.g * q : costOf(k) * q; // Atelier (v4.10)
+  const price = it.g ? it.g * q : costOf(k) * q; // Workshop (v4.10)
   if (bagN(k) + q > 99 || ((it.cs || it.cle) && bagN(k))) return;
   const previous = PROFILE.money + ':' + PROFILE.gems;
   if (it.g) {
@@ -83,10 +83,10 @@ export function buy(k) {
 
 export const MAINQ = () => ['tuto', ...ARENAS.map(a => a.k), ...ELITE, 'champ'];
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Statements run at startup, in the original order (see index.js).
 export function __init() {
 
-/* ---------- Quêtes : principales, secondaires, événement ---------- */
+/* ---------- Quests: main, side, event ---------- */
 SQ = [
   { id: 'win3', t: 'Premiers pas', d: 'Gagnez 3 combats.', v: () => PROFILE.wins, n: 3, r: { money: 400 } },
   {

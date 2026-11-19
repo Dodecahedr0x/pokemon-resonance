@@ -1,10 +1,10 @@
-/* Section d'origine : v4.44 : plein écran, loupe des cases, plateau contrasté */
+/* Original section: v4.44: fullscreen, cell magnifier, high-contrast board */
 
 import { EL, MX, RX } from './004-data.js';
 import { MV } from './005-moves.js';
 import { arenaNext, veiled } from './013-gyms.js';
 import { rxCat, toast } from './014-utils.js';
-import { CROCHETS } from './015-hooks.js';
+import { HOOKS } from './015-hooks.js';
 import { P, affected, byUid, markAt, reach, targets, uAt } from './021-combat-engine.js';
 import { B, STC, clearAim, hpc, renderAll, ui } from './024-combat-ui.js';
 import { PREF, savePref, tileTip } from './026-campaign-tutorial-sound.js';
@@ -15,13 +15,13 @@ import { trapTip } from './047-tactics.js';
 import { gauge434 } from './069-calibration-eevee.js';
 import { frame443 } from './076-large-phone-board.js';
 import { boardSet, getBoard, getHost, hostSet } from '../screens/combat/board/boardStore.js';
-import { sheet444 as FICHE444, footCls, refreshBattle } from '../screens/combat/battle/battleStore.js';
+import { sheet444 as SHEET444, footCls, refreshBattle } from '../screens/combat/battle/battleStore.js';
 
-let INSP444, LOUPE444, SUP444, FSVU444, TER444;
+let INSP444, MAGNIFIER444, SUP444, FS_SEEN444, TER444;
 
- // horodatage : ignorer le « click » qui suit un appui long
+ // timestamp: ignore the « click » that follows a long press
 
-/* ---------- 1. plein écran ---------- */
+/* ---------- 1. fullscreen ---------- */
 function fsNav444() {
   return !!(document.fullscreenElement || document.webkitFullscreenElement);
 }
@@ -53,19 +53,19 @@ function fsSet444(on, viaButton) {
 }
 
 
-// barre d'outils #bt444 : rendue par React (src/screens/combat/board/Outils444.jsx), dans le plateau
-// ou dans la barre du bas (Foot.jsx) ; la classe f444 de la barre du bas suit le même état
+// #bt444 toolbar: rendered by React (src/screens/combat/board/Tools444.jsx), inside the board
+// or in the bottom bar (Foot.jsx); the bottom bar's f444 class follows the same state
 function bar444() {
   const bd = document.getElementById('bBoard'),
     ft = document.querySelector('#cbBattle .bt-foot');
   if (!bd) return;
-  // téléphone : dans la barre du bas, sous le pouce ; grand écran : coin du plateau
+  // phone: in the bottom bar, under the thumb; large screen: corner of the board
   const foot = !!(document.body.classList.contains('bt434') && ft);
-  const b = { foot, fs: document.body.classList.contains('fs444'), lp: !!LOUPE444, ct: !!PREF.ct444 },
+  const b = { foot, fs: document.body.classList.contains('fs444'), lp: !!MAGNIFIER444, ct: !!PREF.ct444 },
     o = getHost().bt444;
   if (!o || o.foot !== b.foot || o.fs !== b.fs || o.lp !== b.lp || o.ct !== b.ct) hostSet({ bt444: b });
   const chg = ft ? footCls('f444', foot) : false;
-  // la barre du bas suit : classe f444 (déplacement) ou contenu des boutons
+  // the bottom bar follows: f444 class (move) or button contents
   if (chg || (foot && o && (o.fs !== b.fs || o.lp !== b.lp || o.ct !== b.ct))) refreshBattle('foot');
 }
 
@@ -123,7 +123,7 @@ function context444(k) {
 }
 
 
-// Pokémon présent sur la case : données de la fiche (Fiche444.jsx)
+// Pokémon on the cell: data for the sheet (Sheet444.jsx)
 function pokemon444(v) {
   const it =
     v.side === 'e'
@@ -139,13 +139,13 @@ function pokemon444(v) {
         : v.acted
           ? 'A joué'
           : 'Prêt';
-  const pv = Math.max(0, Math.round((v.hp / v.mhp) * 100));
+  const hp = Math.max(0, Math.round((v.hp / v.mhp) * 100));
   const canDo = !v.ko && B.phase === 'player' && !B.over && !B.dep430 && (v.side === 'e' || canSelect(v));
   return {
     e: v.side === 'e',
     n: v.n,
     hpc: hpc(v),
-    pv,
+    pv: hp,
     ko: !!v.ko,
     hp: v.hp,
     mhp: v.mhp,
@@ -159,7 +159,7 @@ function pokemon444(v) {
 }
 
 
-// légende des terrains de ce combat : [couleur, nom, règle]
+// legend of this battle's terrains: [color, name, rule]
 function legend444() {
   const seenSet = TER444.filter(x => Object.keys(B.tiles).some(k => x[3](B.tiles[k])));
   if (!seenSet.length) return null;
@@ -177,16 +177,16 @@ function legend444() {
 function activeTile444() {
   if (!B || B.over) return null;
   if (INSP444 != null && B.tiles[INSP444]) return INSP444;
-  if (document.body.classList.contains('bt434') && ui.tile != null && B.tiles[ui.tile]) return ui.tile; // case touchée : sa fiche était tout en bas
+  if (document.body.classList.contains('bt434') && ui.tile != null && B.tiles[ui.tile]) return ui.tile; // touched cell: its sheet was all the way at the bottom
   return null;
 }
 
 
-// fiche #ti444 : rendue par React (src/screens/combat/battle/Fiche444.jsx) depuis ce relevé,
-// pris à l'ouverture comme l'ancien innerHTML (place444 ne fait que la déplacer)
+// #ti444 sheet: rendered by React (src/screens/combat/battle/Sheet444.jsx) from this snapshot,
+// taken on opening like the old innerHTML (place444 only moves it)
 function sheet444() {
   const cb = document.getElementById('cbBattle'),
-    F = FICHE444;
+    F = SHEET444;
   const k = activeTile444();
   if (!cb || k == null) {
     if (F.made && !F.hidden) {
@@ -218,7 +218,7 @@ function sheet444() {
     cx: context444(k),
     u: v ? pokemon444(v) : null,
     leg: legend444(),
-    loupe: !!LOUPE444
+    loupe: !!MAGNIFIER444
   };
   F.n = (F.n || 0) + 1;
   F.made = true;
@@ -230,14 +230,14 @@ function sheet444() {
 
 
 function place444(withoutRender) {
-  const F = FICHE444;
+  const F = SHEET444;
   if (!F.made || F.hidden) return;
   const ft = document.querySelector('#cbBattle .bt-foot'),
     isFixed = ft && getComputedStyle(ft).position === 'fixed',
     bottomEdge = isFixed ? ft.getBoundingClientRect().top : innerHeight,
     k = activeTile444(),
     hx = k != null && document.querySelector(`#bSvg [data-k="${k}"]`);
-  // la fiche se met du côté opposé à la case, pour ne pas la cacher
+  // the sheet goes on the side opposite the cell, so as not to hide it
   let atTop = false;
   if (hx) {
     const r = hx.getBoundingClientRect(),
@@ -254,7 +254,7 @@ function place444(withoutRender) {
 }
 
 
-// calque #insp444 du plateau (React) : créé au premier usage, vidé ensuite
+// board's #insp444 layer (React): created on first use, emptied afterwards
 function mark444(k) {
   if (k == null) {
     if (getBoard().insp != null) boardSet({ insp: null }, 'insp');
@@ -271,43 +271,43 @@ function shut444() {
   if (B) renderAll();
 }
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Startup statements, run in their original order (see index.js).
 export function __init() {
 
-/* 1. Plein écran : bouton sur le plateau (et dans Paramètres). Le navigateur passe en plein écran quand il l’autorise ;
-      en combat sur téléphone, la barre de navigation du bas disparaît pour laisser la place au plateau.
-   2. Loupe : un appui long sur une case (ou la loupe, puis un toucher) ouvre sa fiche : terrain et ses règles,
-      marque élémentaire et réactions, Pokémon présent, dangers annoncés (attaque adverse, règle d’arène, feu),
-      accessibilité pour le Pokémon choisi. La légende du plateau liste les terrains de ce combat.
-   3. Plateau contrasté (option) : contours de cases nets et terrains plus colorés. */
+/* 1. Fullscreen: button on the board (and in Settings). The browser goes fullscreen when it allows it;
+      in battle on phone, the bottom navigation bar disappears to leave room for the board.
+   2. Magnifier: a long press on a cell (or the magnifier, then a tap) opens its sheet: terrain and its rules,
+      elemental mark and reactions, Pokémon present, announced dangers (opponent attack, gym rule, fire),
+      reachability for the selected Pokémon. The board legend lists this battle's terrains.
+   3. High-contrast board (option): sharp cell outlines and more colorful terrains. */
 
-INSP444 = null, // case affichée dans la fiche
-  LOUPE444 = false, // un toucher ouvre la fiche au lieu d’agir
+INSP444 = null, // cell shown in the sheet
+  MAGNIFIER444 = false, // a tap opens the sheet instead of acting
   SUP444 = 0;
 
 
-// sortie par le geste « retour » d’Android ou la touche Échap : on quitte aussi le mode immersif
+// exit via Android's « back » gesture or the Esc key: immersive mode is exited too
 ['fullscreenchange', 'webkitfullscreenchange'].forEach(ev =>
   document.addEventListener(ev, () => {
-    if (!fsNav444() && document.body.classList.contains('fs444') && FSVU444) {
-      FSVU444 = false;
+    if (!fsNav444() && document.body.classList.contains('fs444') && FS_SEEN444) {
+      FS_SEEN444 = false;
       document.body.classList.remove('fs444');
       PREF.fs444 = 0;
       savePref();
       bar444();
       gauge434();
     }
-    if (fsNav444()) FSVU444 = true;
+    if (fsNav444()) FS_SEEN444 = true;
   })
 );
 
 
-FSVU444 = false;
+FS_SEEN444 = false;
 
- // le navigateur a bien accepté le plein écran
+ // the browser did accept fullscreen
 
-/* ---------- 2. barre d’outils du plateau ---------- */
-// icônes de la barre : dans Outils444.jsx
+/* ---------- 2. board toolbar ---------- */
+// toolbar icons: in Tools444.jsx
 
 
 document.addEventListener('click', e => {
@@ -316,9 +316,9 @@ document.addEventListener('click', e => {
   const a = b.dataset.b444;
   if (a === 'fs') fsSet444(!document.body.classList.contains('fs444'), true);
   else if (a === 'lp') {
-    LOUPE444 = !LOUPE444;
-    if (!LOUPE444) INSP444 = null;
-    toast(LOUPE444 ? 'Loupe : touchez une case pour lire son détail.' : 'Loupe rangée.');
+    MAGNIFIER444 = !MAGNIFIER444;
+    if (!MAGNIFIER444) INSP444 = null;
+    toast(MAGNIFIER444 ? 'Loupe : touchez une case pour lire son détail.' : 'Loupe rangée.');
     bar444();
     sheet444();
   } else if (a === 'ct') {
@@ -338,7 +338,7 @@ document.addEventListener('click', e => {
 });
 
 
-/* ---------- 3. fiche de case ---------- */
+/* ---------- 3. cell sheet ---------- */
 TER444 = [
   ['pil', 'Pilier', '#5b5f6b', t => t.pil],
   ['rock', 'Rocher', '#8b8f98', t => t.rock && !t.pil],
@@ -377,7 +377,7 @@ document.addEventListener('keydown', e => {
 });
 
 
-/* appui long (et loupe) sur le plateau */
+/* long press (and magnifier) on the board */
 (function () {
   const svg = document.getElementById('bSvg');
   if (!svg) return;
@@ -414,7 +414,7 @@ document.addEventListener('keydown', e => {
   svg.addEventListener('contextmenu', e => {
     if (e.target.closest && e.target.closest('[data-k]')) e.preventDefault();
   });
-  // phase de capture : passe avant le gestionnaire du plateau
+  // capture phase: runs before the board's handler
   svg.addEventListener(
     'click',
     e => {
@@ -426,45 +426,45 @@ document.addEventListener('keydown', e => {
         e.preventDefault();
         return;
       }
-      if (LOUPE444) {
+      if (MAGNIFIER444) {
         e.stopImmediatePropagation();
         e.preventDefault();
         INSP444 = p.dataset.k;
         sheet444();
         return;
       }
-      if (INSP444 != null) INSP444 = null; // un toucher normal referme la fiche ouverte par appui long
+      if (INSP444 != null) INSP444 = null; // a normal tap closes the sheet opened by a long press
     },
     true
   );
 })();
 
 
-/* ---------- 4. branchements ---------- */
+/* ---------- 4. wiring ---------- */
 const rangerLens444 = () => {
   INSP444 = null;
-  LOUPE444 = false;
+  MAGNIFIER444 = false;
 };
 
 
-CROCHETS.rendu.push(() => {
+HOOKS.rendu.push(() => {
   bar444();
   sheet444();
 });
 
 
-CROCHETS.avantLancement.push(rangerLens444);
+HOOKS.avantLancement.push(rangerLens444);
 
 
-CROCHETS.lancement.push(isNew => {
-  if (isNew && PREF.fs444) fsSet444(true, false); // toucher « Lancer » autorise le plein écran
+HOOKS.lancement.push(isNew => {
+  if (isNew && PREF.fs444) fsSet444(true, false); // tapping « Lancer » (Start) allows fullscreen
 });
 
 
-CROCHETS.avantFinCombat.push(rangerLens444);
+HOOKS.avantFinCombat.push(rangerLens444);
 
 
-CROCHETS.finCombat.push(sheet444);
+HOOKS.finCombat.push(sheet444);
 
 
 addEventListener('resize', () => setTimeout(place444, 60));
@@ -473,15 +473,15 @@ addEventListener('resize', () => setTimeout(place444, 60));
 addEventListener('scroll', () => place444(), { passive: true });
 
 
-// panneau « Affichage du combat » : rendu par React (src/screens/settings/panels/AffichageCombat.jsx)
+// « Affichage du combat » (Battle display) panel: rendered by React (src/screens/settings/panels/CombatDisplay.jsx)
 
 
 if (PREF.fs444) document.body.classList.add('fs444');
 
- // le mode immersif revient ; le plein écran du navigateur attend un toucher
+ // immersive mode comes back; browser fullscreen waits for a tap
 if (PREF.ct444 === undefined) PREF.ct444 = 1;
 
- // v4.45 : plateau contrasté activé par défaut (désactivable)
+ // v4.45: high-contrast board enabled by default (can be disabled)
 contrast444();
 
 }

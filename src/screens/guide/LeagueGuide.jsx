@@ -11,7 +11,7 @@ function sourceObject(k) {
   return i < 0 ? '' : `Badge ${GYMS[i].t} · Arène ${i + 1}`;
 }
 
-// Objets tenus : obtenus (campagne), disponibles (mode Libre) ou récompense d'arène à venir.
+// Held items: obtained (campaign), available (Free mode) or upcoming gym reward.
 export function Items() {
   useGuide();
   const own = ownedItems();
@@ -26,7 +26,7 @@ export function Items() {
   });
 }
 
-// Techniques combinées : progression du Lien de chaque duo (relue à chaque affichage du Guide).
+// Combined techniques: progression of each duo's Bond (re-read on every display of the Guide).
 export function Duos() {
   useGuide();
   return Object.entries(duoList416()).map(([k, d]) => {
@@ -45,7 +45,7 @@ export function Duos() {
   });
 }
 
-// Onglet « Ligue » : liens, capture, fatigue, objets, techniques combinées, Champion.
+// « Ligue » (League) tab: links, capture, fatigue, items, combined techniques, Champion.
 export default function League() {
   return (
     <>

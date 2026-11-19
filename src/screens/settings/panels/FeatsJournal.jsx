@@ -1,6 +1,6 @@
 import { jxSt467 } from '../../../engine/098-feats-journal-gimmick-boards.js';
 
-// Journal des exploits (v4.67) : records et derniers combats.
+// Feats Journal (v4.67): records and latest battles.
 export default function FeatsJournal() {
   const st = jxSt467();
   const h8 = st.h.slice(0, 8);

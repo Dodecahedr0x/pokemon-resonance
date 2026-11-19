@@ -1,9 +1,9 @@
-/* Section d'origine : v4.15-01-johto.js */
+/* Original section: v4.15-01-johto.js */
 
 import { SCEN } from './009-pokemon.js';
 import { ITEMS2, PROFILE, isCamp } from './011-game-state.js';
 import { medal } from './014-utils.js';
-import { CROCHETS } from './015-hooks.js';
+import { HOOKS } from './015-hooks.js';
 import { TOD, setTod } from './017-home-route.js';
 import { setRoute } from '../screens/home/homeStore.js';
 import { badgeSvg } from './019-league.js';
@@ -12,9 +12,9 @@ import { scenLock } from './022-items-bonds-ai.js';
 import { wonOf } from './031-home-journey.js';
 import { HELD_IMG, ICO414, ITM, SHOP, V4 } from './032-v4-foundation.js';
 import { PL, PLACES, renderMap } from './037-map.js';
-import { FOURNISSEURS_DEGATS } from './044-tactical-engine.js';
+import { DAMAGE_PROVIDERS } from './044-tactical-engine.js';
 import { hourOf } from './046-living-board.js';
-import { CIBLE412, SOI412, empoisonner } from './051-epic-tms.js';
+import { TARGET412, SELF412, applyPoison } from './051-epic-tms.js';
 import { rune413 } from './052-technical-roster.js';
 import { hasXp } from './053-resonance.js';
 import { chapJ416, extraLine416, jdSetup416, jdTick416, leadJ416, lockJ416, roamPlaces416 } from './055-living-johto.js';
@@ -22,7 +22,7 @@ import { PLACES_H, chapH419, hRewardLine419, hoennOpen, leadH419, regionH419 } f
 
 export let PLACES_J, JMAP_SVG;
 
- // v4.46 : Mode Libre compris
+ // v4.46: Free mode included
 export function regionJ415() {
   try {
     return V4.region === 'johto' && johtoOpen();
@@ -39,7 +39,7 @@ export function routeName() {
 
 export function lockJ415(k, D) {
   if (PROFILE.elite < 5) return 'Johto s’ouvre après votre victoire sur la Championne Auriane Vale.';
-  const l16 = lockJ416(k, D); // histoire, bêtes errantes (v4.16)
+  const l16 = lockJ416(k, D); // story, roaming beasts (v4.16)
   if (l16 !== undefined) return l16;
   if (D.johto > 0 && !(PROFILE.johto || []).includes(D.johto - 1)) return `Gagnez d’abord le badge ${JGYMS[D.johto - 1]} de Johto.`;
   if (D.jfinal && (PROFILE.johto || []).length < 8) return 'Il faut les 8 badges de Johto.';
@@ -83,7 +83,7 @@ export function jRewardLine415(k) {
 }
 
 
-/* ---------- règles des arènes de Johto ---------- */
+/* ---------- Johto gym rules ---------- */
 export function jSetup415(S, r, ev) {
   if (!r || r[0] !== 'j') return;
   const es = S.units.filter(u => u.side === 'e');
@@ -111,7 +111,7 @@ export function jSetup415(S, r, ev) {
     say(ev, 'Arène Glace : la Grêle tombe, le fond du camp adverse est Givré.');
   }
   if (r === 'jdragon') say(ev, 'Arène Dragon : le souffle ancestral nourrit la Résonance adverse.');
-  jdSetup416(S, r, ev); // histoire, bêtes, Dominants (v4.16)
+  jdSetup416(S, r, ev); // story, beasts, Dominants (v4.16)
 }
 
 
@@ -138,7 +138,7 @@ export function jTick415(S, r, ev) {
     });
   if (r === 'jspectre')
     es.forEach(e => {
-      if (!e.ko || S.revenant || e.caught || e.seg) return; // un seul revenant par combat
+      if (!e.ko || S.revenant || e.caught || e.seg) return; // only one revenant per battle
       const x = uAt(S, uk(e)) ? nbrK(uk(e)).find(y => S.tiles[y] && !S.tiles[y].rock && !uAt(S, y)) : uk(e);
       if (!x) return;
       e.revenu = 1;
@@ -161,10 +161,10 @@ export function jTick415(S, r, ev) {
     es.forEach(e => {
       if (!e.ko && hasXp(e)) e.en = Math.min(EMAX, (e.en || 0) + 1);
     });
-  jdTick416(S, r, ev); // histoire, Dominants (v4.16)
+  jdTick416(S, r, ev); // story, Dominants (v4.16)
 }
 
- // + bêtes errantes (v4.16), Hoenn (v4.19)
+ // + roaming beasts (v4.16), Hoenn (v4.19)
 export function placeStateJ(p, gk) {
   if (p.id === 'jwild') return johtoOpen() ? 'open' : 'lock';
   if (p.id === 'hwild') return hoennOpen() ? 'open' : 'lock'; // v4.19
@@ -175,22 +175,22 @@ export function placeStateJ(p, gk) {
 }
 
 
-// Région de la carte, onglets, titre, familles capturées (v4.28) : rendus par React
-// (src/screens/carte/). Reste le panneau de la Route 29 (#route, rendue dans l'accueil).
+// Map region, tabs, title, captured families (v4.28): rendered by React
+// (src/screens/map/). Only the Route 29 panel remains (#route, rendered in the home page).
 export function regionUi415() {
-  setRoute({ sign: routeName() }); // nom affiché sur la route (Route.jsx)
+  setRoute({ sign: routeName() }); // name displayed on the route (Route.jsx)
 }
 
 /* =====================================================================
-   v4.15 : Johto
-   - 20 Pokémon de Johto (Route 32, après la Championne en Campagne).
-   - Le chapitre Johto : huit arènes à règles propres, le Lac Colère et
-     le Maître de Johto, sur une seconde carte (dessin original).
-   - Chromatiques : vos Pokémon chromatiques le restent en combat ;
-     Charme Chroma chez le marchand rare.
+   v4.15: Johto
+   - 20 Johto Pokémon (Route 32, after the Champion in Campaign).
+   - The Johto chapter: eight gyms with their own rules, Lake of Rage and
+     the Johto Master, on a second map (original artwork).
+   - Shinies: your shiny Pokémon stay shiny in battle;
+     Shiny Charm at the rare merchant.
    ===================================================================== */
 
-/* ---------- Johto : arènes, maîtres, récompenses ---------- */
+/* ---------- Johto: gyms, masters, rewards ---------- */
 export const JGYMS = ['Vol', 'Insecte', 'Normal', 'Spectre', 'Combat', 'Acier', 'Glace', 'Dragon'];
 
 
@@ -432,13 +432,13 @@ export const JCHAIN = ['jwild', 'j1', 'j2', 'j3', 'j4', 'j5', 'j6', 'j7', 'j8', 
 
 export const placesR = () => (V4.region === 'hoenn' ? PLACES_H : V4.region === 'johto' ? [...PLACES_J, ...roamPlaces416()] : PLACES);
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Startup statements, run in their original order (see index.js).
 export function __init() {
 
-/* ---------- capacités et talents des nouvelles familles ---------- */
-Object.assign(CIBLE412, {
+/* ---------- moves and abilities of the new families ---------- */
+Object.assign(TARGET412, {
   toxweb(S, u, v, x, mk, ev) {
-    empoisonner(S, v, ev);
+    applyPoison(S, v, ev);
     if (v.tal === 'regardvif' || rune413(S, v)) return;
     v.web = Math.max(v.web, 2);
     say(ev, `${v.n} est englué.`);
@@ -454,7 +454,7 @@ Object.assign(CIBLE412, {
 });
 
 
-Object.assign(SOI412, {
+Object.assign(SELF412, {
   carapace(S, u, ev) {
     u.guard = Math.max(u.guard, 3);
     nbrK(uk(u)).forEach(x => {
@@ -465,13 +465,13 @@ Object.assign(SOI412, {
 });
 
 
-FOURNISSEURS_DEGATS.push(
+DAMAGE_PROVIDERS.push(
   { id: 'nocturne', fournir: (c, { S, u }) => u.tal === 'nocturne' && S && hourOf(S) === 'nuit' && { mul: 1.25, libelle: 'Nocturne' } },
   { id: 'forcepure', fournir: (c, { u, m }) => u.tal === 'forcepure' && m.r === 1 && m.p > 0 && { mul: 1.3, libelle: 'Force Pure' } }
 );
 
 
-/* ---------- chromatiques ---------- */
+/* ---------- shinies ---------- */
 Object.assign(ICO414, {
   'shiny-charm':
     'data:image/svg+xml;charset=utf-8,' +
@@ -543,7 +543,7 @@ SCEN.jlac = {
 };
 
 
-CROCHETS.progres.push((S, rew, win) => {
+HOOKS.progres.push((S, rew, win) => {
   const D = SCEN[S.sc] || {};
   if (!win || !isCamp()) return null;
   if (D.lac) PROFILE.lac = 1;
@@ -570,7 +570,7 @@ CROCHETS.progres.push((S, rew, win) => {
 });
 
 
-CROCHETS.resultat.push(r => {
+HOOKS.resultat.push(r => {
   const j = r.jbadge;
   if (!j) return '';
   const it = j.item ? ` · ${ITEMS2[j.item].n} rejoint votre Sac` : '';
@@ -580,7 +580,7 @@ CROCHETS.resultat.push(r => {
 });
 
 
-/* ---------- la carte de Johto (dessin original) ---------- */
+/* ---------- the Johto map (original artwork) ---------- */
 PLACES_J = [
   { id: 'jwild', x: 610, y: 470, n: 'Route 32', s: 'Hautes herbes · Pokémon de Johto', grp: 'route', j: 1 },
   { id: 'j1', x: 730, y: 405, s: 'Arène 1 · ' + JLEAD[0].n, grp: 'aventure', j: 1 },

@@ -1,15 +1,15 @@
-/* Section d'origine : 4.63 : formations d’équipe */
+/* Original section: 4.63: team formations */
 
 import { BY, SCEN } from './009-pokemon.js';
-import { CROCHETS } from './015-hooks.js';
+import { HOOKS } from './015-hooks.js';
 import { renderSquad, squad } from './020-team-cards.js';
 import { heal, say } from './021-combat-engine.js';
 import { PREF, savePref, sfx, vibe } from './026-campaign-tutorial-sound.js';
-import { FOURNISSEURS_DEGATS } from './044-tactical-engine.js';
+import { DAMAGE_PROVIDERS } from './044-tactical-engine.js';
 import { teamSize } from './048-replayability.js';
 
 export let FORM463;
-let DEF463, OFF463, ECL463, SOU463;
+let DEF463, OFF463, SCOUT463, SUPPORT463;
 
 const hasT463 = (m, L) => !!m && m.t.some(t => L.includes(t));
 
@@ -34,13 +34,13 @@ const formS463 = S => {
   return { k, al };
 };
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Statements run at startup, in the original order (see index.js).
 export function __init() {
 
 DEF463 = ['Roche', 'Acier', 'Sol', 'Combat', 'Eau', 'Normal'],
   OFF463 = ['Feu', 'Combat', 'Dragon', 'Électrik', 'Spectre', 'Ténèbres', 'Roche', 'Sol'],
-  ECL463 = ['Vol', 'Insecte', 'Électrik', 'Psy', 'Spectre'],
-  SOU463 = ['Plante', 'Fée', 'Eau', 'Normal', 'Psy'];
+  SCOUT463 = ['Vol', 'Insecte', 'Électrik', 'Psy', 'Spectre'],
+  SUPPORT463 = ['Plante', 'Fée', 'Eau', 'Normal', 'Psy'];
 
 
 FORM463 = {
@@ -61,18 +61,18 @@ FORM463 = {
     n: 'Éclaireurs',
     d: 'Le dernier Pokémon commence avec 2 losanges, les autres avec 1.',
     need: 'Un Pokémon au moins de type Vol, Insecte, Électrik, Psy ou Spectre.',
-    cond: ms => ms.some(m => hasT463(m, ECL463))
+    cond: ms => ms.some(m => hasT463(m, SCOUT463))
   },
   soutien: {
     n: 'Soutien',
     d: 'À chaque fin de manche, l’allié le plus blessé récupère 8 % de ses PV max.',
     need: 'Un Pokémon au moins de type Plante, Fée, Eau, Normal ou Psy.',
-    cond: ms => ms.some(m => hasT463(m, SOU463))
+    cond: ms => ms.some(m => hasT463(m, SUPPORT463))
   }
 };
 
 
-CROCHETS.combat.push(S => {
+HOOKS.combat.push(S => {
   const f = formS463(S);
   if (!f) return;
   S.form463 = f.k;
@@ -84,7 +84,7 @@ CROCHETS.combat.push(S => {
 });
 
 
-CROCHETS.avantFinManche.push((S, ev) => {
+HOOKS.avantFinManche.push((S, ev) => {
   if (!S.form463) return;
   const al = S.units.filter(u => u.side === 'a' && !u.ko);
   if (S.form463 === 'phalange' && al[0] && S.units.filter(u => u.side === 'a')[0] === al[0]) al[0].guard = Math.max(al[0].guard || 0, 1);
@@ -98,10 +98,10 @@ CROCHETS.avantFinManche.push((S, ev) => {
 });
 
 
-FOURNISSEURS_DEGATS.push({ id: 'assaut463', fournir: (c, { S, u }) => !!u && u.side === 'a' && !!S && S.form463 === 'assaut' && { mul: 1.08, libelle: 'Formation Assaut' } });
+DAMAGE_PROVIDERS.push({ id: 'assaut463', fournir: (c, { S, u }) => !!u && u.side === 'a' && !!S && S.form463 === 'assaut' && { mul: 1.08, libelle: 'Formation Assaut' } });
 
 
-// carte « Formation » de l'analyse d'équipe : rendue par React (src/screens/equipe/Analyse.jsx)
+// "Formation" card of the team analysis: rendered by React (src/screens/team/Analysis.jsx)
 
 
 document.addEventListener(

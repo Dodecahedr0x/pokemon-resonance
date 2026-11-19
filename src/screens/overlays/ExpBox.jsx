@@ -5,8 +5,8 @@ import { medal } from '../../engine/014-utils.js';
 import { DESTINATIONS } from '../../engine/049-identity.js';
 import { lock461 } from '../../engine/092-companion-eggs-expeditions.js';
 
-// Fenêtre d'expédition du Camp (#expBox) : choix du lieu, puis du Pokémon.
-// Clics (data-exp-*) et attribut hidden : moteur (049).
+// Camp expedition window (#expBox): choice of location, then of Pokémon.
+// Clicks (data-exp-*) and hidden attribute: engine (049).
 export default function ExpBox() {
   return <Box nom="exp" className="result exp-box" id="expBox" Carte={MapScreen} />;
 }
@@ -19,7 +19,7 @@ function MapScreen({ dest, dispo: available }) {
       {!dest ? (
         <div className="exp-list">
           {Object.entries(DESTINATIONS).map(([k, D]) => {
-            // lieu verrouillé avant N badges (v4.61)
+            // location locked until N badges (v4.61)
             const lk = !!lock461 && lock461(D);
             return (
               <button key={k} type="button" className="exp-d" data-exp-d={k} disabled={lk}>

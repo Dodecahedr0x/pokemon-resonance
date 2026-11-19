@@ -1,9 +1,9 @@
 import { Html } from '../../lib/html.jsx';
 import { useOverlay } from './dialogsStore.js';
 
-// Confirmation avant une nouvelle partie (#conf430). Comme avant, la fenêtre n'existe
-// qu'à partir du premier appel de confirmer430 (065) ; le moteur garde ensuite son attribut
-// hidden (React ne le rend pas), les clics (data-conf430) et le focus sur « Annuler ».
+// Confirmation before a new game (#conf430). As before, the window only exists
+// from the first call of confirm430 (065); the engine then keeps its hidden attribute
+// (React doesn't render it), the clicks (data-conf430) and the focus on "Annuler" (Cancel).
 export default function Conf430() {
   const s = useOverlay('conf430');
   if (!s) return null;

@@ -4,7 +4,7 @@ import { PIX, ownedFam } from '../../../engine/032-v4-foundation.js';
 import { DEXS } from '../../../engine/038-pokedex.js';
 import { jr448 } from '../../../engine/079-immersion-sound-haptics.js';
 
-// Paramètres › Journal de dresseur (v4.48) : statistiques enregistrées sur cet appareil.
+// Settings › Trainer Journal (v4.48): statistics recorded on this device.
 const Cell = ({ n, l }) => <div className="j448-c"><b>{n}</b><span>{l}</span></div>;
 
 export default function TrainerJournal() {

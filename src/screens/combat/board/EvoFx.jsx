@@ -2,7 +2,7 @@ import { medal, tc } from '../../../engine/014-utils.js';
 import { Html } from '../../../lib/html.jsx';
 import { useEvo } from './boardStore.js';
 
-// #evoFx : cinématique d'évolution (cine), au-dessus du plateau.
+// #evoFx: evolution cinematic (cine), above the board.
 export default function EvoFx() {
   const E = useEvo(),
     f = E.fx;

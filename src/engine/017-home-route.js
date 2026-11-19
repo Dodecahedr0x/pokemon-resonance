@@ -1,4 +1,4 @@
-/* Section d'origine : 10-accueil-route.js */
+/* Original section: 10-home-route.js */
 
 import { BY } from './009-pokemon.js';
 import { PROFILE, isCamp } from './011-game-state.js';
@@ -14,7 +14,7 @@ import { renderPrep } from './026-campaign-tutorial-sound.js';
 import { SHINY_RATE, __set_wildShiny, wildShiny } from './043-adventure-plus.js';
 import { multChroma, seasonWeight } from './050-world.js';
 import { routeName } from './054-johto.js';
-import { __set_wildDom416, domTirage416, wildDom416 } from './055-living-johto.js';
+import { __set_wildDom416, domDraw416, wildDom416 } from './055-living-johto.js';
 import { domDay417 } from './057-companions-resonance.js';
 import { poolRegion421 } from './061-catch-anywhere.js';
 import { chromaArt425 } from './062-art-direction.js';
@@ -26,7 +26,7 @@ let dlgT, wildId;
 export function __set_wildId(v) { return (wildId = v); }
 
 
-/* ===================== ACCUEIL v0.8 : blason, route, anatomie ===================== */
+/* ===================== HOME v0.8: crest, route, anatomy ===================== */
 export function evoPath(id) {
   const m = BY[id],
     n = nextOf(m);
@@ -47,7 +47,7 @@ function nowTod() {
 }
 
 
-/* le décor de la route (ancien buildRoute) est rendu par React : src/screens/accueil/Route.jsx */
+/* the route backdrop (old buildRoute) is rendered by React: src/screens/home/Route.jsx */
 function typeDlg(s) {
   const p = $('#dlgTxt');
   if (!p) return;
@@ -68,7 +68,7 @@ function typeDlg(s) {
 
 export function setTod(t) {
   TOD = t;
-  setRoute({ tod: t, pressed: true }); // data-time de #route, bouton pressé (Route.jsx)
+  setRoute({ tod: t, pressed: true }); // data-time of #route, pressed button (Route.jsx)
   typeDlg(TODTXT[t].replace('Route 29', routeName()));
   hook('heure', t);
 }
@@ -76,14 +76,14 @@ export function setTod(t) {
 
 export function encounter() {
   if (!nzEncounter450()) return;
-  const pool = poolRegion421(); // chaque famille dans sa région : Route 29, Route 32, Route 104 (v4.21)
+  const pool = poolRegion421(); // each family in its region: Route 29, Route 32, Route 104 (v4.21)
   const w = pool.map(
     m =>
       (m.t.some(t => WILDW[TOD].includes(t)) ? 4 : 1) *
       (!PROFILE.box.includes(m.id) ? 3 : 1) *
-      seasonWeight(m) * rareW450(m) * // v4.50 : rencontres rares (heure, météo)
-      // événement de saison (v4.11)
-      (m.id === domDay417() ? 2 : 1) // Dominant signalé au Pokématos (v4.17)
+      seasonWeight(m) * rareW450(m) * // v4.50: rare encounters (time, weather)
+      // seasonal event (v4.11)
+      (m.id === domDay417() ? 2 : 1) // Dominant flagged on the Pokématos (v4.17)
   );
   let r = Math.random() * w.reduce((a, b) => a + b, 0),
     pick = pool[0];
@@ -96,15 +96,15 @@ export function encounter() {
   }
   if (pick.id === wildId && pool.length > 1) pick = pool[(pool.indexOf(pick) + 3) % pool.length];
   wildId = pick.id;
-  __set_wildDom416(domTirage416(pick.id)); // Pokémon Dominant (v4.16)
-  __set_wildShiny(Math.random() < SHINY_RATE * multChroma()); // rare : un Pokémon chromatique (×2 le Week-end chromatique, v4.11)
+  __set_wildDom416(domDraw416(pick.id)); // Dominant Pokémon (v4.16)
+  __set_wildShiny(Math.random() < SHINY_RATE * multChroma()); // rare: a shiny Pokémon (×2 on Shiny Weekend, v4.11)
   const path = evoPath(pick.id);
   $('#route').classList.remove('shake');
   void $('#route').offsetWidth;
   $('#route').classList.add('shake');
   setTimeout(
     () => {
-      // fiche de rencontre (#enc) : rendue par React (src/screens/overlays/Enc.jsx)
+      // encounter sheet (#enc): rendered by React (src/screens/overlays/Enc.jsx)
       showEnc({ pick, shiny: wildShiny, dom: wildDom416, route: routeName(), tod: TOD, inBox: PROFILE.box.includes(pick.id), camp: isCamp(), path });
       if (wildShiny) chromaArt425($('#enc .enc-cr img'), pick.no); // v4.25
       const f = $('#enc [data-enc="take"]');
@@ -139,14 +139,14 @@ const TODTXT = {
   nuit: 'La nuit tombe sur la Route 29. Spectres et Pokémon Ténèbres rôdent dans les herbes.'
 };
 
-/* rencontres sauvages */
+/* wild encounters */
 const WILDW = {
   matin: ['Plante', 'Insecte', 'Vol', 'Fée'],
   jour: ['Eau', 'Feu', 'Électrik', 'Normal', 'Combat', 'Roche'],
   nuit: ['Spectre', 'Ténèbres', 'Poison', 'Psy']
 };
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Startup statements, run in their original order (see index.js).
 export function __init() {
 
 TOD = nowTod();
@@ -155,7 +155,7 @@ TOD = nowTod();
 dlgT = null;
 
 
-// La route est rendue par React (dans la page Carte) : écouteurs délégués.
+// The route is rendered by React (inside the Map page): delegated listeners.
 document.addEventListener('click', e => {
   const b = e.target.closest('#todBtns [data-tod]');
   if (b) setTod(b.dataset.tod);
@@ -173,7 +173,7 @@ document.addEventListener('click', e => {
 });
 
 
-// ResizeObserver sur #route : posé par Route.jsx au montage.
+// ResizeObserver on #route: set by Route.jsx on mount.
 if (!window.ResizeObserver) window.addEventListener('resize', placeAlert);
 
 
@@ -227,5 +227,5 @@ document.addEventListener('keydown', e => {
 });
 
 
-/* anatomie d’un Éveil, chiffres, piliers et règles : rendus par le Guide React (Bases.jsx, Projet.jsx) */
+/* anatomy of an Awakening, digits, pillars and rules: rendered by the React Guide (Basics.jsx, Project.jsx) */
 }

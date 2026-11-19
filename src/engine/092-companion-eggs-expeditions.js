@@ -1,9 +1,9 @@
-/* Section d'origine : 4.61 : compagnon, œufs d’élevage, expéditions */
+/* Original section: 4.61: companion, breeding eggs, expeditions */
 
 import { BY, MON, SCEN } from './009-pokemon.js';
 import { ITEMS2, PROFILE } from './011-game-state.js';
 import { writeLS, readLS, medal, toast } from './014-utils.js';
-import { CROCHETS } from './015-hooks.js';
+import { HOOKS } from './015-hooks.js';
 import { sfx, vibe } from './026-campaign-tutorial-sound.js';
 import { overlay } from './030-prestige-staging.js';
 import { shut } from '../screens/overlays/tempStore.js';
@@ -13,14 +13,14 @@ import { DESTINATIONS, renderCampBase } from './049-identity.js';
 import { hearts417, companionGain417, companionId417 } from './057-companions-resonance.js';
 import { refreshHome } from '../screens/home/homeStore.js';
 import { reward454, can454, rng454, txt454 } from './084-peddler-route-missions.js';
-import { ctKeys455 } from './088-workshop-recipes.js';
+import { tmKeys455 } from './088-workshop-recipes.js';
 import { badgeCount459 } from './090-item-quests-trophies.js';
 
 let SCN461;
-export { OEUF461, egSt461, egPool461 }; // lus par Boutique › Œufs (React, src/screens/sac/Atelier.jsx)
+export { EGG461, egSt461, egPool461 }; // read by Shop › Eggs (React, src/screens/bag/Workshop.jsx)
 
 
-/** Boutons Baie, Cadeau et Souvenirs du compagnon (.cp461 dans #v4Comp, rendu : src/screens/accueil/Compagnon.jsx). */
+/** Companion's Berry, Gift and Memories buttons (.cp461 in #v4Comp, rendering: src/screens/home/Companion.jsx). */
 export function cp461Data() {
   const id = companionId417();
   if (!id) return null;
@@ -38,7 +38,7 @@ function keepsakeOpen461() {
     st = cpSt461();
   st.seen[id] = h;
   cpSave461(st);
-  // un souvenir par cœur (null : pas encore débloqué) ; rendu : temporaires/Fenetres.jsx (Souv461)
+  // one memory per heart (null: not unlocked yet); rendering: transients/Windows.jsx (Souv461)
   const rows = [1, 2, 3, 4, 5].map(i => (i <= h ? scene461(m, i) : null));
   const o = overlay('souv461', { n: m.n, rows });
   o.addEventListener('click', e => {
@@ -49,7 +49,7 @@ function keepsakeOpen461() {
 
 
 function egBuy461(k) {
-  const O = OEUF461[k],
+  const O = EGG461[k],
     s = egSt461();
   if (!O || s.list.length >= 3 || !can454(O.cost) || !egPool461().length) return;
   reward454(O.cost);
@@ -68,7 +68,7 @@ function egBuy461(k) {
 function egHatch461(e) {
   const pool = egPool461();
   if (!pool.length) return null;
-  const O = OEUF461[e.k],
+  const O = EGG461[e.k],
     m = pool[Math.floor(Math.random() * pool.length)];
   PROFILE.box.push(m.id);
   if (!PROFILE.dex.includes(m.id)) PROFILE.dex.push(m.id);
@@ -81,9 +81,9 @@ function egHatch461(e) {
 }
 
 
-// Boutique › Œufs : rendu par React (src/screens/sac/Atelier.jsx)
+// Shop › Eggs: rendered by React (src/screens/bag/Workshop.jsx)
 
-/** Retour de l’expédition x (déjà encaissée par recuperer) : petit récit, et parfois une trouvaille rare. */
+/** Return of expedition x (already cashed in by retrieve): a short tale, and sometimes a rare find. */
 export function story461(x) {
   const D = DESTINATIONS[x.dest],
     h = HIST461[x.dest] || [],
@@ -106,8 +106,8 @@ export function story461(x) {
         rare = '1 500 ₽';
       }
     } else {
-      const pool = ctKeys455().filter(k => !bagN(k)),
-        all = pool.length ? pool : ctKeys455();
+      const pool = tmKeys455().filter(k => !bagN(k)),
+        all = pool.length ? pool : tmKeys455();
       if (all.length) {
         const k = all[Math.floor(Math.random() * all.length)];
         PROFILE.bag[k] = Math.min(99, bagN(k) + 1);
@@ -132,7 +132,7 @@ const jd461 = () => {
 };
 
 
-/* ---------- 1. Compagnon : souvenirs, baie, cadeau ---------- */
+/* ---------- 1. Companion: memories, berry, gift ---------- */
 const ACT461 = {
   Normal: ['se roule dans l’herbe à vos pieds', 'veille sur votre sac sans jamais le quitter des yeux'],
   Feu: ['fait danser une petite flamme au bout de sa queue', 'réchauffe vos mains par une nuit froide'],
@@ -186,8 +186,8 @@ const cpGift461 = (h, m) => {
 };
 
 
-/* ---------- 2. Œufs d’élevage ---------- */
-const OEUF461 = {
+/* ---------- 2. Breeding eggs ---------- */
+const EGG461 = {
   mys: { n: 'Œuf mystère', cost: { m: -1500 }, prix: '1 500 ₽', batt: 5, sh: 0, d: 'Une famille que vous n’avez pas encore. Éclot après 5 combats.' },
   rare: { n: 'Œuf rare', cost: { g: -6 }, prix: '6 Éclats', batt: 8, sh: 0.15, d: 'Une famille inconnue, avec 15 % de chance d’un Pokémon chromatique. Éclot après 8 combats.' }
 };
@@ -216,7 +216,7 @@ const HIST461 = {
 
 export const lock461 = D => (D.min || 0) > badgeCount459();
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Instructions run at startup, in the original order (see index.js).
 export function __init() {
 
 SCN461 = [
@@ -270,7 +270,7 @@ document.addEventListener(
 );
 
 
-CROCHETS.progres.unshift((S, rew) => {
+HOOKS.progres.unshift((S, rew) => {
   try {
     const D = SCEN[S.sc] || {};
     if (D.tuto) return null;
@@ -284,7 +284,7 @@ CROCHETS.progres.unshift((S, rew) => {
         const r = egHatch461(e);
         if (r) out.push(r);
         else {
-          const O = OEUF461[e.k];
+          const O = EGG461[e.k];
           reward454({ m: O.cost.m ? -O.cost.m : 0, g: O.cost.g ? -O.cost.g : 0 });
         }
       } else keep.push(e);
@@ -298,7 +298,7 @@ CROCHETS.progres.unshift((S, rew) => {
 });
 
 
-CROCHETS.resultat.unshift(r => {
+HOOKS.resultat.unshift(r => {
   if (!r.eg461) return '';
   return r.eg461
     .map(x => `<div class="res-l"><h4>Élevage</h4><div class="rl">${medal(BY[x.id].t)}<span>Un œuf a éclos : ${BY[x.id].n}${x.sh ? ' chromatique !' : ''} rejoint votre Box !</span><b>🥚</b></div></div>`)
@@ -321,7 +321,7 @@ document.addEventListener(
 
 
 
-/* ---------- 3. Expéditions : nouveaux lieux et trouvailles rares ---------- */
+/* ---------- 3. Expeditions: new places and rare finds ---------- */
 Object.assign(DESTINATIONS, {
   plage: { n: 'Plage des Marées', types: ['Eau', 'Vol', 'Normal', 'Roche'], duree: 4, m: [250, 450], g: [1, 3], obj: ['superpotion', 'super'], min: 1 },
   mont: { n: 'Mont Silence', types: ['Combat', 'Roche', 'Glace', 'Acier'], duree: 7, m: [500, 900], g: [3, 6], obj: ['hyper', 'superpotion'], min: 3 },
@@ -329,7 +329,7 @@ Object.assign(DESTINATIONS, {
 });
 
 
-// lieux verrouillés de la fenêtre d’expédition : rendus par React (src/screens/overlays/ExpBox.jsx, lock461)
+// locked places in the expedition window: rendered by React (src/screens/overlays/ExpBox.jsx, lock461)
 
 
 }

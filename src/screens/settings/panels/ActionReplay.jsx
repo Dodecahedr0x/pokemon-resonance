@@ -1,6 +1,6 @@
-import { createur430 } from '../../../engine/065-camp-tactics.js';
+import { creator430 } from '../../../engine/065-camp-tactics.js';
 
-const TRICHES = [
+const CHEATS = [
   ['argent', '+10 000 ₽'],
   ['eclats', '+100 Éclats'],
   ['sac', 'Sac rempli'],
@@ -11,10 +11,10 @@ const TRICHES = [
   ['gagner', 'Gagner le combat en cours']
 ];
 
-// Action Replay (atelierHtml430) : saisie du code, puis raccourcis de test.
-// Le moteur gère data-code430, Entrée dans #code430 et data-triche430.
+// Action Replay (workshopHtml430): code entry, then test shortcuts.
+// The engine handles data-code430, Enter in #code430 and data-triche430.
 export default function ActionReplay() {
-  if (!createur430())
+  if (!creator430())
     return (
       <section className="v4-panel v4-ps code430">
         <header className="v4-ph"><svg><use href="#i-lock" /></svg><b>Action Replay</b></header>
@@ -29,7 +29,7 @@ export default function ActionReplay() {
       <header className="v4-ph"><svg><use href="#i-star" /></svg><b>Action Replay</b><span className="v4-cnt">actif sur cet appareil</span></header>
       <p className="v4-ps-n">Raccourcis de test. Ils modifient la partie en cours : rangez-la d’abord dans un emplacement si besoin.</p>
       <div className="code430-g">
-        {TRICHES.map(([k, t]) => <button key={k} type="button" className="b b-sm" data-triche430={k}>{t}</button>)}
+        {CHEATS.map(([k, t]) => <button key={k} type="button" className="b b-sm" data-triche430={k}>{t}</button>)}
       </div>
       <button type="button" className="b b-sm b-ghost" data-triche430="off">Désactiver Action Replay sur cet appareil</button>
     </section>

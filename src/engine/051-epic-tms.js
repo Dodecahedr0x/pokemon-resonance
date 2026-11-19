@@ -1,21 +1,21 @@
-/* Section d'origine : v4.12-01-ct-epiques.js */
+/* Original section: v4.12-01-epic-tms.js */
 
 import { MV } from './005-moves.js';
-import { CROCHETS } from './015-hooks.js';
+import { HOOKS } from './015-hooks.js';
 import { byUid, damage, endStep, hdist, heal, nbrK, net, say, stun, teff, uAt } from './021-combat-engine.js';
 import { poly } from './024-combat-ui.js';
 import { SHOP } from './032-v4-foundation.js';
-import { FOURNISSEURS_DEGATS, FOURNISSEURS_VITESSE } from './044-tactical-engine.js';
+import { DAMAGE_PROVIDERS, SPEED_PROVIDERS } from './044-tactical-engine.js';
 import { MACHINES } from './045-tms-hms.js';
 import { de } from './047-tactics.js';
 import { bonusMove413, durations413, rune413 } from './052-technical-roster.js';
 import { bonusMove414 } from './053-resonance.js';
 
-export let SOI412, CIBLE412;
+export let SELF412, TARGET412;
 
 
-/* ---------- effets sur chaque cible touchée ---------- */
-export function empoisonner(S, v, ev) {
+/* ---------- effects on each target hit ---------- */
+export function applyPoison(S, v, ev) {
   if (!v || v.ko) return false;
   if (v.t.includes('Poison') || v.t.includes('Acier')) {
     say(ev, `${v.n} ne craint pas le poison.`);
@@ -35,7 +35,7 @@ export function bonusMove412(S, u) {
   let b = 0;
   if (S.arriere && S.arriere[u.side] > 0) b += 2;
   if (S.distorsion > 0 && u.s[3] <= 2) b += 1;
-  b += bonusMove413(S, u) + bonusMove414(S, u); // Mouchoir Choix (v4.14)
+  b += bonusMove413(S, u) + bonusMove414(S, u); // Choice Scarf (v4.14)
   return b;
 }
 
@@ -49,7 +49,7 @@ export function durations412(S, ev) {
 }
 
 
-/* ---------- Prescience ---------- */
+/* ---------- Future Sight ---------- */
 export function placeForesight(S, u, m, k, ev) {
   S.presc = S.presc || [];
   S.presc.push({ k, by: u.uid, side: u.side, at: S.round + 1, p: m.pp || 14 });
@@ -89,7 +89,7 @@ export function foresightOnBoard(S) {
 }
 
 
-/* ---------- bandeau du combat ---------- */
+/* ---------- battle banner ---------- */
 export function chips412(S) {
   if (!S) return '';
   let h = '';
@@ -104,25 +104,25 @@ export function chips412(S) {
   return h;
 }
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Instructions run at startup, in the original order (see index.js).
 export function __init() {
 
 /* =====================================================================
-   v4.12 : CT épiques
+   v4.12: epic TMs
    ---------------------------------------------------------------------
-   Onze machines dont l’attaque n’appartient à aucun Pokémon. Chacune
-   ouvre une construction d’équipe :
-     Tempête      Onde de Choc    + Danse Pluie / Crachin / cases Trempées
-     Forge        Déflagration    + Zénith / cases Enracinées (Embrasement)
-     Toxines      Bombe Beurk     + eau reliée / synergie Toxines
-     Hypnose      Dévorêve        + Hypnose / Berceuse / Poudre Dodo
-     Banquise     Vent Glace      + Bris / Banquise
-     Orage-Dragon Draco-Souffle   + Cage-Éclair / Statik
-     Soutien      Coup d’Main     + un Frappeur qui n’a pas joué
-     Assaut       Vent Arrière    + Frappeurs au contact
-     Colosses     Distorsion      + Pokémon lents (Ronflex, Donphan, Steelix…)
-     Oracle       Prescience      + Racines / Toile / Regard Noir
-     Infirmerie   Glas de Soin    + contre Psy, Poison et Spectre
+   Eleven machines whose attack belongs to no Pokémon. Each
+   opens up a team build:
+     Storm        Shock Wave      + Rain Dance / Drizzle / Soaked cells
+     Forge        Fire Blast      + Zenith / Rooted cells (Blaze)
+     Toxins       Sludge Bomb     + connected water / Toxins synergy
+     Hypnosis     Dream Eater     + Hypnosis / Lullaby / Sleep Powder
+     Ice Field    Icy Wind        + Break / Ice Field
+     Dragon-Storm Dragon Breath   + Charge Cage / Static
+     Support      Helping Hand    + a Striker that has not played
+     Assault      Tailwind        + melee Strikers
+     Colossi      Trick Room      + slow Pokémon (Snorlax, Donphan, Steelix…)
+     Oracle       Future Sight    + Roots / Web / Mean Look
+     Infirmary    Heal Bell       + against Psychic, Poison and Ghost
    ===================================================================== */
 Object.assign(MV, {
   ondedechoc: {
@@ -258,8 +258,8 @@ Object.assign(MV, {
 });
 
 
-/* ---------- effets sur soi ---------- */
-SOI412 = {
+/* ---------- effects on oneself ---------- */
+SELF412 = {
   arriere(S, u, ev) {
     S.arriere = Object.assign({}, S.arriere, { [u.side]: 3 });
     say(ev, `Vent Arrière : ${u.side === 'a' ? 'votre équipe' : 'l’équipe adverse'} gagne +2 Mouvement pendant 3 manches.`);
@@ -273,7 +273,7 @@ SOI412 = {
     healed.forEach(o => {
       const had = !!(o.badge || o.skip || o.bru || o.psn || o.web || o.root);
       if (o.sn && o !== u && o.side === 'a' && S.phase === 'player') {
-        o.sn = false; // réveillé : il peut encore jouer cette manche
+        o.sn = false; // woken up: it can still play this round
         o.acted = false;
         o.moved = false;
       }
@@ -291,7 +291,7 @@ SOI412 = {
 };
 
 
-CIBLE412 = {
+TARGET412 = {
   ventglace(S, u, v, k, mk, ev) {
     if (v.tal === 'regardvif' || rune413(S, v)) say(ev, `${v.n} ignore l’entrave.`);
     else {
@@ -303,7 +303,7 @@ CIBLE412 = {
     if (mk === 'charge') stun(S, v, 'PAR', ev);
   },
   toxik(S, u, v, k, mk, ev) {
-    empoisonner(S, v, ev);
+    applyPoison(S, v, ev);
     if (mk !== 'trempe') return;
     const N = net(S, k, 'trempe');
     const others = Object.keys(N.seen)
@@ -312,26 +312,26 @@ CIBLE412 = {
     if (others.length) {
       ev.push({ e: 'chain', edges: N.edges, c: 'tox' });
       say(ev, `Contamination : le poison court dans l’eau reliée.`);
-      others.forEach(o => empoisonner(S, o, ev));
+      others.forEach(o => applyPoison(S, o, ev));
     }
   }
 };
 
 
-/* ---------- Coup d’Main et Distorsion dans les dégâts ---------- */
-FOURNISSEURS_DEGATS.push(
+/* ---------- Helping Hand and Trick Room in damage ---------- */
+DAMAGE_PROVIDERS.push(
   { id: 'aide', fournir: (c, { u }) => u.aide > 0 && { mul: 1.5, libelle: 'Coup d’Main' } },
   { id: 'distorsion', fournir: (c, { S, u }) => S.distorsion > 0 && u.s[3] <= 2 && { mul: 1.3, libelle: 'Distorsion' } }
 );
 
 
-FOURNISSEURS_VITESSE.push({
+SPEED_PROVIDERS.push({
   id: 'arriere',
   fournir: (c, { S, u }) => S.arriere && S.arriere[u.side] > 0 && { mul: 1.5, libelle: 'Vent Arrière' }
 });
 
 
-CROCHETS.avantFinManche.push((S, ev) => {
+HOOKS.avantFinManche.push((S, ev) => {
   if (!S.presc || !S.presc.length || S.over) return;
   const isReady = S.presc.filter(x => x.at <= S.round);
   S.presc = S.presc.filter(x => x.at > S.round);

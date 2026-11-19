@@ -1,4 +1,4 @@
-/* Section d'origine : v4.31-01-defis-tactiques.js */
+/* Original section: v4.31-01-tactical-challenges.js */
 import { bdClass } from '../screens/combat/board/boardStore.js';
 
 import { GYMS } from './004-data.js';
@@ -7,7 +7,7 @@ import { PROFILE } from './011-game-state.js';
 import { ARENAS, TERR } from './013-gyms.js';
 import { $, toast } from './014-utils.js';
 import { tokCl } from '../screens/combat/board/boardStore.js';
-import { CROCHETS } from './015-hooks.js';
+import { HOOKS } from './015-hooks.js';
 import { go } from './016-navigation.js';
 import { squad } from './020-team-cards.js';
 import { EMAX, P, hdist, uAt, uk } from './021-combat-engine.js';
@@ -20,17 +20,17 @@ import { renderWallet } from './035-interface.js';
 import { RIVAL_POS } from './043-adventure-plus.js';
 import { hourOf, seesAtNight } from './046-living-board.js';
 import { hash416 } from './055-living-johto.js';
-import { PROGRES429, rand429 } from './064-quality.js';
-import { PANTH432, engrave432 } from './067-individuals-comfort.js';
+import { PROGRESS429, rand429 } from './064-quality.js';
+import { PANTHEON432, engrave432 } from './067-individuals-comfort.js';
 import { duelEnd433, duelOpts433 } from './068-duel-tutorial.js';
 import { refreshCampPage } from '../screens/camp/campStore.js';
 
-let ENIG_CUR431, ARN_ED431;
-// lus par les onglets du Camp (src/screens/camp/tabs)
-export { MAIT431, RELIQUES431, NOEUDS431, EVENTS431, ARN_ED431, enigEtat431, enigDuJour431, masterChoice431, relRandom431, REGLES431, TERRAINS431, gymCode431 };
+let PUZZLE_CUR431, ARN_ED431;
+// read by the Camp tabs (src/screens/camp/tabs)
+export { MASTERY431, RELICS431, NODES431, EVENTS431, ARN_ED431, puzzleState431, puzzleOfDay431, masterChoice431, relRandom431, RULES431, TERRAINS431, gymCode431 };
 
 
-function enigScen431(P) {
+function puzzleScen431(P) {
   const b = SCEN[P.b] || SCEN.gue;
   return {
     n: `Énigme · ${P.t}`,
@@ -53,29 +53,29 @@ function enigScen431(P) {
 }
 
 
-function enigOpts431() {
+function puzzleOpts431() {
   return { diff: 'normal', items: {}, fatigue: {}, links: {}, ordre: 'equipe', vivant: false, tactique: true, mut: null, doc430: '', defis: [], caracteres: false, desob: false, dojo: 0, apprises: {} };
 }
 
 
-function enigPrepare431(P) {
-  ENIG_CUR431 = P;
-  SCEN.enigme431 = enigScen431(P);
+function puzzlePrepare431(P) {
+  PUZZLE_CUR431 = P;
+  SCEN.enigme431 = puzzleScen431(P);
   OBST.enigme431 = {};
 }
 
 
 /* =====================================================================
-   v4.31 : défis tactiques
-   1. Brouillard de guerre (réglage) : on ne voit que ce que voient ses
-      Pokémon. +25 % de Pokédollars en victoire.
-   2. Énigmes tactiques : positions figées, tout mettre K.O. en une manche.
-      Chaque énigme a été construite et vérifiée avec le moteur du jeu.
-   3. Maîtrise des familles : après 10 combats, un bonus au choix sur deux.
-   4. Écho profond : expédition de 8 étages à embranchements, PV conservés,
-      une seule vie, reliques, marchand et événements.
-   5. Arènes personnalisées : créer un combat, le partager par un code.
-   Tout se trouve dans l’onglet Camp (sous-onglets).
+   v4.31: tactical challenges
+   1. Fog of war (setting): you only see what your Pokémon see.
+      +25% Pokédollars on victory.
+   2. Tactical riddles: frozen positions, KO everything in one round.
+      Each riddle was built and verified with the game engine.
+   3. Family mastery: after 10 battles, a bonus of your choice out of two.
+   4. Deep Echo: 8-floor branching expedition, HP carried over,
+      a single life, relics, merchant and events.
+   5. Custom arenas: create a battle, share it through a code.
+   Everything is in the Camp tab (sub-tabs).
    ===================================================================== */
 export function V431_0() {
   return { enig431: null, mait431: {}, echo431: null, arenes431: [], arj431: null };
@@ -127,15 +127,15 @@ export function v431Clean(p) {
 }
 
 
-/** Une victoire « sans progression » (énigme, arène perso, Écho profond) : ni compteurs ni récompenses ordinaires. */
+/** A « no progression » victory (riddle, custom arena, Deep Echo): neither counters nor ordinary rewards. */
 export function fixedProgress431(S) {
   const D = SCEN[S.sc] || {},
     win = S.over === 'win',
     rew = { links: [], caught: [], items: [], gifts: [], tired: [], forms: [], badgeNew: false };
   let r = [0, 0];
   try {
-    if (D.duel433) r = duelEnd433(S, rew); // duel local (v4.33)
-    else if (D.enigme431 != null) r = enigApres431(S, rew, win);
+    if (D.duel433) r = duelEnd433(S, rew); // local duel (v4.33)
+    else if (D.enigme431 != null) r = puzzleAfter431(S, rew, win);
     else if (D.perso431) r = gymAfter431(S, rew, win);
     else if (D.echo431) r = echoAfter431(S, rew, win);
   } catch (e) {}
@@ -144,17 +144,17 @@ export function fixedProgress431(S) {
     PROFILE.money = Math.min(999999, (PROFILE.money || 0) + m);
     PROFILE.gems = Math.min(99999, (PROFILE.gems || 0) + g);
   }
-  rew.money = D.duel433 ? null : m; // duel : pas de gains (v4.33)
+  rew.money = D.duel433 ? null : m; // duel: no gains (v4.33)
   rew.gems = g;
   queueSave();
   return rew;
 }
 
 
-/** Équipe imposée : énigme (équipe de l’énigme) ou Écho profond (l’équipe de l’expédition). */
+/** Imposed team: riddle (the riddle's team) or Deep Echo (the expedition's team). */
 export function fixedTeam431() {
-  if (scSel === 'duel433' && SCEN.duel433 && SCEN.duel433.t1) return { team: SCEN.duel433.t1.slice(), voix: 0, opts: duelOpts433() }; // duel local (v4.33)
-  if (scSel === 'enigme431' && ENIG_CUR431) return { team: ENIG_CUR431.a.map(x => x[0]), voix: 0, opts: enigOpts431() };
+  if (scSel === 'duel433' && SCEN.duel433 && SCEN.duel433.t1) return { team: SCEN.duel433.t1.slice(), voix: 0, opts: duelOpts433() }; // local duel (v4.33)
+  if (scSel === 'enigme431' && PUZZLE_CUR431) return { team: PUZZLE_CUR431.a.map(x => x[0]), voix: 0, opts: puzzleOpts431() };
   if (scSel === 'echo431') {
     const R = echoRun431();
     if (!R) return null;
@@ -166,7 +166,7 @@ export function fixedTeam431() {
 }
 
 
-/* ---------- 1. brouillard de guerre ---------- */
+/* ---------- 1. fog of war ---------- */
 export function fogChosen431() {
   const D = SCEN[scSel] || {};
   return !!PREF.fog431 && !D.tuto && !D.hebdo429 && D.enigme431 == null && !D.pret429;
@@ -190,7 +190,7 @@ export function cache431(S, e, vu) {
   if (!S.fog431 || e.side !== 'e' || e.ko) return false;
   const k = uk(e);
   if (!vu.has(k)) return true;
-  // dans les hautes herbes : il faut être au contact
+  // in tall grass: you have to be in contact
   return !!(S.tiles[k] && S.tiles[k].grass && !S.units.some(a => a.side === 'a' && !a.ko && hdist(a.pos, e.pos) <= 1));
 }
 
@@ -198,30 +198,30 @@ export function cache431(S, e, vu) {
 function fogRender431() {
   const on = !!(B && B.fog431 && !B.over),
     vu = on ? vision431(B) : null;
-  bdClass('fog431', on); // classe de #bBoard, rendue par React
+  bdClass('fog431', on); // class of #bBoard, rendered by React
   if (L.t) for (const k in L.t) L.t[k].classList.toggle('fog431t', on && !vu.has(k));
   if (!B) return;
-  // les plaques voilées (#bPlE) : rendues par React (Plates.jsx)
+  // the veiled plates (#bPlE): rendered by React (Plates.jsx)
   B.units
     .filter(u => u.side === 'e')
     .forEach(u => {
       const c = on && cache431(B, u, vu),
         T = L.u && L.u[u.uid];
-      if (T) tokCl(T, 'fog431', c); // classes du jeton : Units.jsx
+      if (T) tokCl(T, 'fog431', c); // token classes: Units.jsx
     });
 }
 
 
-/* ---------- 2. énigmes tactiques ---------- */
-function enigEtat431() {
+/* ---------- 2. tactical riddles ---------- */
+function puzzleState431() {
   return (PROFILE.enig431 = PROFILE.enig431 || { s: {}, n: {}, j: '', jd: [], cur: 0 });
 }
 
 
-function enigDuJour431() {
+function puzzleOfDay431() {
   const d = today(),
     r = rand429('enig-' + d),
-    L = ENIGMES431.map((x, i) => i);
+    L = PUZZLES431.map((x, i) => i);
   for (let i = L.length - 1; i > 0; i--) {
     const j = Math.floor(r() * (i + 1));
     [L[i], L[j]] = [L[j], L[i]];
@@ -230,26 +230,26 @@ function enigDuJour431() {
 }
 
 
-function enigDef431(i) {
-  const x = ENIGMES431[i];
+function puzzleDef431(i) {
+  const x = PUZZLES431[i];
   if (!x) return null;
   return { id: i, t: `n° ${i + 1}`, b: x[0], a: x[1], f: x[2] };
 }
 
 
-function enigLancer431(i) {
-  const P = enigDef431(i);
+function puzzleLaunch431(i) {
+  const P = puzzleDef431(i);
   if (!P) return;
-  const E = enigEtat431();
+  const E = puzzleState431();
   E.cur = i;
-  enigPrepare431(P);
+  puzzlePrepare431(P);
   chooseBattle('enigme431');
   launch();
 }
 
 
-function enigApres431(S, rew, win) {
-  const E = enigEtat431(),
+function puzzleAfter431(S, rew, win) {
+  const E = puzzleState431(),
     i = SCEN[S.sc].enigme431,
     k = String(i);
   E.n[k] = (E.n[k] || 0) + 1;
@@ -266,7 +266,7 @@ function enigApres431(S, rew, win) {
     E.j = today();
     E.jd = [];
   }
-  if (enigDuJour431().includes(i) && !E.jd.includes(i)) {
+  if (puzzleOfDay431().includes(i) && !E.jd.includes(i)) {
     E.jd.push(i);
     g += 3;
     rew.enig431.jour = 1;
@@ -276,15 +276,15 @@ function enigApres431(S, rew, win) {
 
 
 function hint431() {
-  const P = ENIG_CUR431,
-    x = P && ENIGMES431[P.id];
+  const P = PUZZLE_CUR431,
+    x = P && PUZZLES431[P.id];
   if (!x) return '';
   return `Indice : commencez par ${BY[P.a[x[3]][0]].n}.`;
 }
 
 
 function masterChoice431(b) {
-  const K = Object.keys(MAIT431);
+  const K = Object.keys(MASTERY431);
   let h = 0;
   for (let i = 0; i < b.length; i++) h = (h * 31 + b.charCodeAt(i)) >>> 0;
   const a = h % K.length;
@@ -361,7 +361,7 @@ function echoScene431(R, type) {
     el = type === 'elite',
     D = Object.assign({}, b, {
       n: `Écho profond · étage ${R.f + 1}`,
-      lvl: `${NOEUDS431[type][0]} · étage ${R.f + 1} / 8`,
+      lvl: `${NODES431[type][0]} · étage ${R.f + 1} / 8`,
       d: `${el ? 'Adversaires renforcés : une relique à la clé. ' : type === 'boss' ? 'Le gardien de l’Écho profond. ' : ''}Vos PV sont conservés d’un combat à l’autre ; un Pokémon K.O. quitte l’expédition.`,
       catch: false,
       echo431: type,
@@ -369,7 +369,7 @@ function echoScene431(R, type) {
       hb: Math.round((b.hb || 20) * (el ? 1.3 : 1)),
       pb: (b.pb || 3) + (el ? 1 : 0)
     });
-  PROGRES429.forEach(x => delete D[x]);
+  PROGRESS429.forEach(x => delete D[x]);
   SCEN.echo431 = D;
   OBST.echo431 = OBST[bk] || {};
 }
@@ -412,7 +412,7 @@ function echoAdvance431(R) {
 
 
 function relRandom431(R, n) {
-  const L = Object.keys(RELIQUES431).filter(k => !R.rel.includes(k)),
+  const L = Object.keys(RELICS431).filter(k => !R.rel.includes(k)),
     r = rand429('rel' + R.seed + R.f + R.rel.length);
   for (let i = L.length - 1; i > 0; i--) {
     const j = Math.floor(r() * (i + 1));
@@ -443,7 +443,7 @@ function echoAfter431(S, rew, win) {
   al.forEach((u, i) => {
     const t = alive[i];
     if (!t) return;
-    t[0] = BY[u.id] ? u.id : t[0]; // une évolution en combat reste acquise pendant l’expédition
+    t[0] = BY[u.id] ? u.id : t[0]; // an evolution in battle stays in effect during the expedition
     t[1] = u.ko ? 0 : Math.max(0.01, u.hp / u.mhp);
   });
   rew.echo431 = { type, f: R.f + 1, win };
@@ -460,7 +460,7 @@ function echoAfter431(S, rew, win) {
     R.path.push(R.cur);
     const [m, g] = echoEnd431(R, true);
     rew.echo431.fin = { f: 8, m, g, gagne: 1 };
-    engrave432('echo', PANTH432.echo, S.units.filter(u => u.side === 'a').map(u => u.id), S); // Panthéon (v4.32)
+    engrave432('echo', PANTHEON432.echo, S.units.filter(u => u.side === 'a').map(u => u.id), S); // Pantheon (v4.32)
     return [m, g];
   }
   if (type === 'elite') R.ev = 'relique';
@@ -478,13 +478,13 @@ function echoAfter431(S, rew, win) {
 function echoChoice431(k) {
   const R = echoRun431();
   if (!R) return;
-  const pv = f => R.team.forEach(t => t[1] > 0 && (t[1] = Math.max(0.05, Math.min(1, t[1] + f))));
+  const hp = f => R.team.forEach(t => t[1] > 0 && (t[1] = Math.max(0.05, Math.min(1, t[1] + f))));
   if (k === 'autel-ok') {
-    pv(-0.2);
+    hp(-0.2);
     const x = relRandom431(R, 1)[0];
     if (x) R.rel.push(x);
-    toast(x ? `Relique : ${RELIQUES431[x][0]}.` : 'L’autel est vide.');
-  } else if (k === 'source-pv') pv(0.3);
+    toast(x ? `Relique : ${RELICS431[x][0]}.` : 'L’autel est vide.');
+  } else if (k === 'source-pv') hp(0.3);
   else if (k === 'source-ech') R.ech += 25;
   else if (k === 'passe-pv') R.pv = Math.min(0.5, (R.pv || 0) + 0.1);
   else if (k === 'passe-ech') R.ech += 30;
@@ -493,12 +493,12 @@ function echoChoice431(k) {
       R.ech += 60;
       toast('Pile : +60 Échos !');
     } else {
-      pv(-0.2);
+      hp(-0.2);
       toast('Face : chaque Pokémon perd 20 % de PV.');
     }
   } else if (k.startsWith('rel-')) {
     const x = k.slice(4);
-    if (RELIQUES431[x] && !R.rel.includes(x)) R.rel.push(x);
+    if (RELICS431[x] && !R.rel.includes(x)) R.rel.push(x);
     R.ev = '';
     queueSave();
     return renderCampPage431();
@@ -508,11 +508,11 @@ function echoChoice431(k) {
     if (!P || R.ech < P) return toast('Pas assez d’Échos.');
     if (a === 'rappel' && !R.team.some(t => t[1] <= 0)) return toast('Aucun Pokémon à rappeler.');
     R.ech -= P;
-    if (a === 'potion') pv(0.3);
+    if (a === 'potion') hp(0.3);
     else if (a === 'relique') {
       const x = relRandom431(R, 1)[0];
       if (x) R.rel.push(x);
-      toast(x ? `Relique : ${RELIQUES431[x][0]}.` : 'Plus de relique à vendre.');
+      toast(x ? `Relique : ${RELICS431[x][0]}.` : 'Plus de relique à vendre.');
     } else if (a === 'rappel') {
       const t = R.team.find(y => y[1] <= 0);
       t[1] = 0.3;
@@ -526,7 +526,7 @@ function echoChoice431(k) {
 }
 
 
-/* ---------- 5. arènes personnalisées ---------- */
+/* ---------- 5. custom arenas ---------- */
 function gymClean431(a) {
   if (!a || typeof a !== 'object') return null;
   const f = Array.isArray(a.f) ? a.f.filter(id => typeof id === 'string' && BY[id] && !BY[id].leg).slice(0, 5) : [];
@@ -536,7 +536,7 @@ function gymClean431(a) {
     n: String(a.n || 'Arène').replace(/[<>&"]/g, '').slice(0, 22) || 'Arène',
     au: String(a.au || '').replace(/[<>&"]/g, '').slice(0, 14),
     t: a.t,
-    r: typeof a.r === 'string' && REGLES431().some(x => x[0] === a.r) ? a.r : '',
+    r: typeof a.r === 'string' && RULES431().some(x => x[0] === a.r) ? a.r : '',
     h: a.h === 'nuit' ? 'nuit' : 'jour',
     lim: [6, 8, 10, 12].includes(a.lim) ? a.lim : 10,
     hb: [0, 10, 20, 30].includes(a.hb) ? a.hb : 10,
@@ -545,7 +545,7 @@ function gymClean431(a) {
 }
 
 
-function REGLES431() {
+function RULES431() {
   const L = [['', 'Aucune']];
   ARENAS.forEach((A, i) => A.rule && GYMS[i] && L.push([A.rule, `Arène ${GYMS[i].t}`]));
   return L;
@@ -618,37 +618,37 @@ function readGym431(txt) {
 }
 
 
-// La page Camp est rendue par React (src/screens/camp) : sous-onglets, Camp de base, Sorties,
-// onglet ouvert. Ici, on valide l'onglet puis on reconstruit la page.
+// The Camp page is rendered by React (src/screens/camp): sub-tabs, Base camp, Outings,
+// open tab. Here, we validate the tab then rebuild the page.
 export function renderCampPage431() {
-  const t = CAMPT431.some(x => x[0] === V4.campTab) ? V4.campTab : 'base';
+  const t = CAMP_TABS431.some(x => x[0] === V4.campTab) ? V4.campTab : 'base';
   V4.campTab = t;
   refreshCampPage(t === 'base');
 }
 
 
-/* ---------- après chaque rendu du combat ---------- */
+/* ---------- after each battle render ---------- */
 export function afterRender431() {
   if (!B) return;
   try {
     fogRender431();
-    // pastilles reliques et brouillard, bouton et phase de l'énigme : rendus par React (src/screens/combat/battle)
+    // relic and fog badges, riddle button and phase: rendered by React (src/screens/combat/battle)
   } catch (e) {}
 }
 
 
-/** Énigme : texte de la barre du bas (lu par src/screens/combat/battle/Foot.jsx). */
+/** Riddle: bottom bar text (read by src/screens/combat/battle/Foot.jsx). */
 export function riddlePhase431() {
-  const E = enigEtat431(),
-    ess = ENIG_CUR431 ? E.n[String(ENIG_CUR431.id)] || 0 : 0;
+  const E = puzzleState431(),
+    ess = PUZZLE_CUR431 ? E.n[String(PUZZLE_CUR431.id)] || 0 : 0;
   return `Énigme : tout mettre K.O. en une manche.${ess ? ' ' + hint431() : ''}`;
 }
 
 
-/* ---------- au démarrage : les combats spéciaux existent (reprise d’un combat sauvegardé) ---------- */
+/* ---------- at startup: special battles exist (resuming a saved battle) ---------- */
 export function challenges431Boot() {
   const E = PROFILE.enig431;
-  enigPrepare431(enigDef431(E && ENIGMES431[E.cur] ? E.cur : 0));
+  puzzlePrepare431(puzzleDef431(E && PUZZLES431[E.cur] ? E.cur : 0));
   const R = echoRun431();
   if (R && R.cur >= 0 && R.map[R.f]) echoScene431(R, R.map[R.f][R.cur]);
   else if (!SCEN.echo431) echoScene431({ seed: 1, f: 0, path: [] }, 'combat');
@@ -656,15 +656,15 @@ export function challenges431Boot() {
   gymScene431(A[0] || { id: 'demo', n: 'Arène', au: '', t: 'gue', r: '', h: 'jour', lim: 10, hb: 10, f: ['onix'] });
 }
 
-/* énigmes construites et vérifiées hors ligne avec le moteur (gen_enig431.js) : [terrain, alliés [id, colonne, rangée, losanges], adversaires [id, colonne, rangée, PV], premier allié de la solution] */
-export const ENIGMES431 = [["gue",[["aquali",1,0,0],["drackhaus",3,4,0],["cochignon",2,2,1]],[["marcacrin",4,3,12],["xatu",2,1,19],["maraiste",3,2,19]],1],["gue",[["cotovol",2,4,1],["reptincel",1,3,3],["magneton",0,2,1]],[["gardevoir",2,2,15],["lainergie",5,2,20]],1],["gue",[["noctali",1,1,1],["gardevoir",2,2,3],["floravol",1,0,1]],[["demolosse",5,2,20],["galifeu",3,2,35]],0],["tour",[["feurisson",1,3,1],["nosferalto",1,1,3],["flagadoss",3,3,0]],[["cotovol",3,5,18],["melodelfe",4,1,25]],2],["roche",[["flobio",3,0,3],["pikachu",2,4,3],["drackhaus",1,1,0]],[["porygon2",5,2,11],["papilusion",5,3,17]],0],["gue",[["maraiste",2,3,0],["xatu",3,1,0],["kadabra",3,3,1]],[["pharamp",4,5,17],["typhlosion",5,3,22]],2],["tour",[["spectrum",3,3,3],["carabaffe",0,5,0],["magneton",1,1,0]],[["fantominus",4,4,25],["foretress",5,2,16]],1],["gue",[["papilusion",2,1,1],["nostenfer",0,3,1],["pikachu",3,5,3]],[["mackogneur",2,3,14],["noctali",2,2,51]],0],["roche",[["carabaffe",1,4,3],["cochignon",2,4,1],["galeking",3,5,1]],[["pharamp",5,3,42],["marcacrin",3,2,21]],1],["tour",[["kirlia",1,4,0],["herbizarre",2,2,3],["raichu",2,0,0]],[["aligatueur",3,1,37],["carabaffe",3,3,25]],0],["tour",[["papilusion",1,4,0],["tetarte",2,1,0],["kadabra",2,0,3]],[["kokiyas",5,4,20],["gardevoir",2,3,26]],0],["tour",[["flobio",1,1,3],["lanturn",1,4,0],["macronium",1,5,0]],[["absol",2,1,20],["feurisson",3,5,33]],0],["gue",[["spectrum",1,5,3],["porygon2",1,1,0],["tygnon",3,2,0]],[["drattak",5,2,45],["salameche",4,0,21]],2],["roche",[["galegon",1,0,0],["tortank",2,5,1],["kadabra",2,0,3]],[["axoloto",3,0,27],["laggron",3,4,21]],1],["tour",[["xatu",3,5,1],["azumarill",0,5,1],["flobio",2,2,3]],[["cochignon",4,1,35],["arcko",5,4,18]],2],["tour",[["kirlia",0,0,3],["cizayox",0,5,3],["volcaropod",0,1,1]],[["flagadoss",5,2,12],["mackogneur",3,5,20]],1],["gue",[["flagadoss",2,3,1],["draco",3,5,1],["flobio",3,1,3]],[["pyroli",4,2,34],["migalos",3,2,38]],1],["tour",[["raichu",1,4,3],["kirlia",1,5,3],["mentali",2,4,3]],[["kaiminus",5,1,26],["kadabra",4,0,23],["voltali",2,0,21]],2],["roche",[["leviator",2,2,0],["drattak",0,3,3],["pikachu",1,2,1]],[["embrylex",3,5,37],["cizayox",5,0,24]],1],["gue",[["flobio",2,4,3],["volcaropod",0,4,3],["noctali",3,4,3]],[["machopeur",5,2,16],["kirlia",2,2,34]],0],["gue",[["spectrum",1,5,3],["galegon",0,2,1],["nostenfer",2,2,0]],[["tarsal",4,4,21],["drackhaus",3,1,36]],0],["tour",[["reptincel",2,4,3],["kirlia",1,1,3],["galegon",3,2,3]],[["hericendre",5,3,10],["flagadoss",5,0,31]],0],["roche",[["ymphect",2,2,3],["reptincel",1,5,3],["melodelfe",3,4,0]],[["minidraco",5,5,9],["magicarpe",4,1,19]],1],["roche",[["reptincel",0,1,3],["aquali",2,4,1],["flobio",3,2,1]],[["voltali",2,5,16],["debugant",4,1,26]],1],["gue",[["meganium",3,4,3],["drattak",0,1,1],["tortank",0,3,1]],[["arcko",3,0,42],["alakazam",5,5,21]],0],["roche",[["demolosse",1,3,1],["cochignon",1,0,1],["spectrum",0,1,0]],[["reptincel",4,5,21],["crustabri",4,1,20]],0],["tour",[["drackhaus",2,5,0],["gardevoir",1,1,0],["jungko",0,3,0]],[["scarhino",2,3,31],["pyroli",4,1,22]],0],["gue",[["leviator",2,3,0],["draco",3,5,3],["papilusion",0,5,1]],[["jungko",3,2,15],["evoli",2,1,16],["tetarte",2,4,28]],2],["tour",[["leviator",2,5,3],["gardevoir",0,1,1],["reptincel",3,3,3]],[["wattouat",5,1,14],["germignon",5,2,30],["mackogneur",4,3,16]],0],["roche",[["noarfang",0,0,3],["gardevoir",0,3,3],["drackhaus",1,4,3]],[["spectrum",2,2,37],["cotovol",5,1,14]],1],["tour",[["foretress",3,2,3],["flobio",0,2,0],["herbizarre",0,1,3]],[["aquali",2,2,44],["pichu",4,0,13]],2],["roche",[["migalos",2,1,3],["porygon2",0,5,0],["draco",3,0,3]],[["scarhino",5,1,14],["wattouat",3,2,18],["evoli",3,4,21]],1],["roche",[["drackhaus",1,0,1],["lanturn",2,0,0],["tortank",3,0,1]],[["absol",2,3,20],["macronium",5,2,9],["raichu",2,1,15]],0],["tour",[["leviator",0,1,3],["reptincel",1,4,3],["alakazam",3,2,0]],[["tenefix",4,0,14],["crocrodil",2,1,39]],1],["tour",[["raichu",2,3,3],["pyroli",1,1,1],["ectoplasma",1,2,0]],[["tarpaud",2,1,23],["raichu",3,2,23],["galekid",3,3,40]],1],["tour",[["draco",3,5,0],["florizarre",0,0,0],["kadabra",1,4,1]],[["natu",2,1,12],["malosse",4,1,19]],1],["tour",[["feurisson",0,1,3],["aquali",2,1,0],["galegon",1,1,1]],[["noctali",2,0,15],["melodelfe",4,4,35]],1],["gue",[["cochignon",1,5,1],["xatu",0,5,3],["floravol",2,2,3]],[["tenefix",3,5,28],["mackogneur",3,0,28]],0],["gue",[["lanturn",1,5,1],["feurisson",3,5,0],["draco",2,4,1]],[["galeking",4,0,8],["galeking",5,4,67]],2],["roche",[["pikachu",0,2,1],["feurisson",3,0,3],["cizayox",2,2,1]],[["tenefix",5,2,43],["galekid",3,4,21]],1],["roche",[["tarpaud",2,4,0],["draco",0,0,3],["crocrodil",3,5,3]],[["kirlia",2,5,14],["meganium",2,2,25]],0],["roche",[["drackhaus",2,3,1],["kicklee",1,1,0],["tetarte",1,4,1]],[["galifeu",3,4,12],["roucarnage",5,0,25]],0],["roche",[["raichu",1,1,0],["tartard",2,0,3],["drattak",2,1,3]],[["chenipan",3,2,36],["porygon2",4,3,27]],0],["gue",[["mentali",0,1,0],["crocrodil",0,2,3],["ymphect",1,0,1]],[["volcaropod",3,1,31],["natu",2,2,17],["evoli",4,4,26]],1],["roche",[["kapoera",0,1,0],["nostenfer",2,1,0],["migalos",0,5,0]],[["mentali",3,4,23],["absol",3,2,41]],2],["roche",[["alakazam",1,5,0],["ectoplasma",1,1,1],["dracaufeu",2,4,0]],[["lanturn",4,5,31],["galeking",2,2,19]],0],["gue",[["raichu",2,1,1],["brasegali",1,2,1],["kicklee",1,0,1]],[["arcanin",4,2,35],["granivol",3,0,22]],0],["roche",[["flobio",3,4,3],["floravol",2,4,1],["meganium",1,4,3]],[["phanpy",4,0,10],["roucoups",2,0,17]],1],["roche",[["leviator",1,1,1],["voltali",1,3,0],["massko",0,1,3]],[["kapoera",2,1,25],["pyroli",2,4,35]],1],["roche",[["feurisson",1,0,3],["flobio",1,1,3],["noarfang",3,5,1]],[["nosferapti",3,2,10],["brasegali",3,4,35]],2],["roche",[["spectrum",0,1,3],["nosferalto",2,0,3],["tortank",2,3,3]],[["tarsal",2,2,17],["phanpy",5,2,20]],1],["roche",[["feurisson",3,4,3],["noctali",2,4,3],["draco",2,2,0]],[["aquali",3,5,24],["insecateur",5,3,15]],1],["gue",[["aquali",1,3,1],["carabaffe",0,0,1],["floravol",1,4,3]],[["demolosse",3,3,33],["insecateur",5,5,20],["nosferapti",3,2,18]],2],["tour",[["reptincel",0,5,1],["typhlosion",0,1,3],["herbizarre",2,3,3]],[["limagma",3,2,10],["pikachu",2,2,29],["leviator",2,4,18]],1],["gue",[["dracaufeu",2,3,0],["nosferalto",1,1,1],["tetarte",3,0,1]],[["drackhaus",5,1,28],["voltali",5,0,23]],1],["gue",[["melodelfe",2,2,1],["nosferalto",0,2,3],["kapoera",3,2,1]],[["laggron",4,0,38],["mentali",5,2,19]],0],["gue",[["tyranocif",3,4,0],["aquali",3,2,1],["feurisson",0,3,0]],[["tarsal",4,3,21],["drattak",2,4,20]],1],["tour",[["floravol",0,0,0],["herbizarre",2,5,3],["roigada",2,2,1]],[["magneti",2,0,8],["machopeur",5,3,21]],0],["tour",[["draco",2,3,3],["florizarre",1,2,3],["steelix",2,0,0]],[["kicklee",5,3,24],["tarpaud",3,1,24]],0],["tour",[["aligatueur",1,5,0],["feurisson",3,3,3],["kirlia",0,0,0]],[["roucarnage",4,1,15],["jungko",4,4,22],["crustabri",2,0,16]],0]];
+/* riddles built and verified offline with the engine (gen_enig431.js): [terrain, allies [id, column, row, diamonds], opponents [id, column, row, HP], first ally of the solution] */
+export const PUZZLES431 = [["gue",[["aquali",1,0,0],["drackhaus",3,4,0],["cochignon",2,2,1]],[["marcacrin",4,3,12],["xatu",2,1,19],["maraiste",3,2,19]],1],["gue",[["cotovol",2,4,1],["reptincel",1,3,3],["magneton",0,2,1]],[["gardevoir",2,2,15],["lainergie",5,2,20]],1],["gue",[["noctali",1,1,1],["gardevoir",2,2,3],["floravol",1,0,1]],[["demolosse",5,2,20],["galifeu",3,2,35]],0],["tour",[["feurisson",1,3,1],["nosferalto",1,1,3],["flagadoss",3,3,0]],[["cotovol",3,5,18],["melodelfe",4,1,25]],2],["roche",[["flobio",3,0,3],["pikachu",2,4,3],["drackhaus",1,1,0]],[["porygon2",5,2,11],["papilusion",5,3,17]],0],["gue",[["maraiste",2,3,0],["xatu",3,1,0],["kadabra",3,3,1]],[["pharamp",4,5,17],["typhlosion",5,3,22]],2],["tour",[["spectrum",3,3,3],["carabaffe",0,5,0],["magneton",1,1,0]],[["fantominus",4,4,25],["foretress",5,2,16]],1],["gue",[["papilusion",2,1,1],["nostenfer",0,3,1],["pikachu",3,5,3]],[["mackogneur",2,3,14],["noctali",2,2,51]],0],["roche",[["carabaffe",1,4,3],["cochignon",2,4,1],["galeking",3,5,1]],[["pharamp",5,3,42],["marcacrin",3,2,21]],1],["tour",[["kirlia",1,4,0],["herbizarre",2,2,3],["raichu",2,0,0]],[["aligatueur",3,1,37],["carabaffe",3,3,25]],0],["tour",[["papilusion",1,4,0],["tetarte",2,1,0],["kadabra",2,0,3]],[["kokiyas",5,4,20],["gardevoir",2,3,26]],0],["tour",[["flobio",1,1,3],["lanturn",1,4,0],["macronium",1,5,0]],[["absol",2,1,20],["feurisson",3,5,33]],0],["gue",[["spectrum",1,5,3],["porygon2",1,1,0],["tygnon",3,2,0]],[["drattak",5,2,45],["salameche",4,0,21]],2],["roche",[["galegon",1,0,0],["tortank",2,5,1],["kadabra",2,0,3]],[["axoloto",3,0,27],["laggron",3,4,21]],1],["tour",[["xatu",3,5,1],["azumarill",0,5,1],["flobio",2,2,3]],[["cochignon",4,1,35],["arcko",5,4,18]],2],["tour",[["kirlia",0,0,3],["cizayox",0,5,3],["volcaropod",0,1,1]],[["flagadoss",5,2,12],["mackogneur",3,5,20]],1],["gue",[["flagadoss",2,3,1],["draco",3,5,1],["flobio",3,1,3]],[["pyroli",4,2,34],["migalos",3,2,38]],1],["tour",[["raichu",1,4,3],["kirlia",1,5,3],["mentali",2,4,3]],[["kaiminus",5,1,26],["kadabra",4,0,23],["voltali",2,0,21]],2],["roche",[["leviator",2,2,0],["drattak",0,3,3],["pikachu",1,2,1]],[["embrylex",3,5,37],["cizayox",5,0,24]],1],["gue",[["flobio",2,4,3],["volcaropod",0,4,3],["noctali",3,4,3]],[["machopeur",5,2,16],["kirlia",2,2,34]],0],["gue",[["spectrum",1,5,3],["galegon",0,2,1],["nostenfer",2,2,0]],[["tarsal",4,4,21],["drackhaus",3,1,36]],0],["tour",[["reptincel",2,4,3],["kirlia",1,1,3],["galegon",3,2,3]],[["hericendre",5,3,10],["flagadoss",5,0,31]],0],["roche",[["ymphect",2,2,3],["reptincel",1,5,3],["melodelfe",3,4,0]],[["minidraco",5,5,9],["magicarpe",4,1,19]],1],["roche",[["reptincel",0,1,3],["aquali",2,4,1],["flobio",3,2,1]],[["voltali",2,5,16],["debugant",4,1,26]],1],["gue",[["meganium",3,4,3],["drattak",0,1,1],["tortank",0,3,1]],[["arcko",3,0,42],["alakazam",5,5,21]],0],["roche",[["demolosse",1,3,1],["cochignon",1,0,1],["spectrum",0,1,0]],[["reptincel",4,5,21],["crustabri",4,1,20]],0],["tour",[["drackhaus",2,5,0],["gardevoir",1,1,0],["jungko",0,3,0]],[["scarhino",2,3,31],["pyroli",4,1,22]],0],["gue",[["leviator",2,3,0],["draco",3,5,3],["papilusion",0,5,1]],[["jungko",3,2,15],["evoli",2,1,16],["tetarte",2,4,28]],2],["tour",[["leviator",2,5,3],["gardevoir",0,1,1],["reptincel",3,3,3]],[["wattouat",5,1,14],["germignon",5,2,30],["mackogneur",4,3,16]],0],["roche",[["noarfang",0,0,3],["gardevoir",0,3,3],["drackhaus",1,4,3]],[["spectrum",2,2,37],["cotovol",5,1,14]],1],["tour",[["foretress",3,2,3],["flobio",0,2,0],["herbizarre",0,1,3]],[["aquali",2,2,44],["pichu",4,0,13]],2],["roche",[["migalos",2,1,3],["porygon2",0,5,0],["draco",3,0,3]],[["scarhino",5,1,14],["wattouat",3,2,18],["evoli",3,4,21]],1],["roche",[["drackhaus",1,0,1],["lanturn",2,0,0],["tortank",3,0,1]],[["absol",2,3,20],["macronium",5,2,9],["raichu",2,1,15]],0],["tour",[["leviator",0,1,3],["reptincel",1,4,3],["alakazam",3,2,0]],[["tenefix",4,0,14],["crocrodil",2,1,39]],1],["tour",[["raichu",2,3,3],["pyroli",1,1,1],["ectoplasma",1,2,0]],[["tarpaud",2,1,23],["raichu",3,2,23],["galekid",3,3,40]],1],["tour",[["draco",3,5,0],["florizarre",0,0,0],["kadabra",1,4,1]],[["natu",2,1,12],["malosse",4,1,19]],1],["tour",[["feurisson",0,1,3],["aquali",2,1,0],["galegon",1,1,1]],[["noctali",2,0,15],["melodelfe",4,4,35]],1],["gue",[["cochignon",1,5,1],["xatu",0,5,3],["floravol",2,2,3]],[["tenefix",3,5,28],["mackogneur",3,0,28]],0],["gue",[["lanturn",1,5,1],["feurisson",3,5,0],["draco",2,4,1]],[["galeking",4,0,8],["galeking",5,4,67]],2],["roche",[["pikachu",0,2,1],["feurisson",3,0,3],["cizayox",2,2,1]],[["tenefix",5,2,43],["galekid",3,4,21]],1],["roche",[["tarpaud",2,4,0],["draco",0,0,3],["crocrodil",3,5,3]],[["kirlia",2,5,14],["meganium",2,2,25]],0],["roche",[["drackhaus",2,3,1],["kicklee",1,1,0],["tetarte",1,4,1]],[["galifeu",3,4,12],["roucarnage",5,0,25]],0],["roche",[["raichu",1,1,0],["tartard",2,0,3],["drattak",2,1,3]],[["chenipan",3,2,36],["porygon2",4,3,27]],0],["gue",[["mentali",0,1,0],["crocrodil",0,2,3],["ymphect",1,0,1]],[["volcaropod",3,1,31],["natu",2,2,17],["evoli",4,4,26]],1],["roche",[["kapoera",0,1,0],["nostenfer",2,1,0],["migalos",0,5,0]],[["mentali",3,4,23],["absol",3,2,41]],2],["roche",[["alakazam",1,5,0],["ectoplasma",1,1,1],["dracaufeu",2,4,0]],[["lanturn",4,5,31],["galeking",2,2,19]],0],["gue",[["raichu",2,1,1],["brasegali",1,2,1],["kicklee",1,0,1]],[["arcanin",4,2,35],["granivol",3,0,22]],0],["roche",[["flobio",3,4,3],["floravol",2,4,1],["meganium",1,4,3]],[["phanpy",4,0,10],["roucoups",2,0,17]],1],["roche",[["leviator",1,1,1],["voltali",1,3,0],["massko",0,1,3]],[["kapoera",2,1,25],["pyroli",2,4,35]],1],["roche",[["feurisson",1,0,3],["flobio",1,1,3],["noarfang",3,5,1]],[["nosferapti",3,2,10],["brasegali",3,4,35]],2],["roche",[["spectrum",0,1,3],["nosferalto",2,0,3],["tortank",2,3,3]],[["tarsal",2,2,17],["phanpy",5,2,20]],1],["roche",[["feurisson",3,4,3],["noctali",2,4,3],["draco",2,2,0]],[["aquali",3,5,24],["insecateur",5,3,15]],1],["gue",[["aquali",1,3,1],["carabaffe",0,0,1],["floravol",1,4,3]],[["demolosse",3,3,33],["insecateur",5,5,20],["nosferapti",3,2,18]],2],["tour",[["reptincel",0,5,1],["typhlosion",0,1,3],["herbizarre",2,3,3]],[["limagma",3,2,10],["pikachu",2,2,29],["leviator",2,4,18]],1],["gue",[["dracaufeu",2,3,0],["nosferalto",1,1,1],["tetarte",3,0,1]],[["drackhaus",5,1,28],["voltali",5,0,23]],1],["gue",[["melodelfe",2,2,1],["nosferalto",0,2,3],["kapoera",3,2,1]],[["laggron",4,0,38],["mentali",5,2,19]],0],["gue",[["tyranocif",3,4,0],["aquali",3,2,1],["feurisson",0,3,0]],[["tarsal",4,3,21],["drattak",2,4,20]],1],["tour",[["floravol",0,0,0],["herbizarre",2,5,3],["roigada",2,2,1]],[["magneti",2,0,8],["machopeur",5,3,21]],0],["tour",[["draco",2,3,3],["florizarre",1,2,3],["steelix",2,0,0]],[["kicklee",5,3,24],["tarpaud",3,1,24]],0],["tour",[["aligatueur",1,5,0],["feurisson",3,3,3],["kirlia",0,0,0]],[["roucarnage",4,1,15],["jungko",4,4,22],["crustabri",2,0,16]],0]];
 
 
 const n431 = (x, lo, hi) => (Number.isFinite(x) ? Math.max(lo, Math.min(hi, Math.floor(x))) : lo);
 
 
-/* ---------- 3. maîtrise des familles ---------- */
-const MAIT431 = {
+/* ---------- 3. family mastery ---------- */
+const MASTERY431 = {
   puissance: ['Puissance', '+8 % de dégâts infligés'],
   robuste: ['Robustesse', '+10 % de PV maximum'],
   vif: ['Vivacité', '+1 Mouvement'],
@@ -673,11 +673,11 @@ const MAIT431 = {
 };
 
 
-export const MAIT_SEUIL431 = 10;
+export const MASTERY_THRESHOLD431 = 10;
 
 
-/* ---------- 4. Écho profond ---------- */
-const RELIQUES431 = {
+/* ---------- 4. Deep Echo ---------- */
+const RELICS431 = {
   plume: ['Plume vive', '+1 Mouvement pour toute l’équipe.'],
   braise: ['Cœur ardent', '+10 % de dégâts infligés.'],
   ecaille: ['Écaille', '−10 % de dégâts subis.'],
@@ -701,7 +701,7 @@ const ECHO_POOL431 = [
 ];
 
 
-const NOEUDS431 = { combat: ['Combat', 'i-fight'], elite: ['Élite', 'i-star'], soin: ['Source', 'i-heal'], marchand: ['Marchand', 'i-shop'], evenement: ['Événement', 'i-quest'], boss: ['Gardien', 'i-trophy'] };
+const NODES431 = { combat: ['Combat', 'i-fight'], elite: ['Élite', 'i-star'], soin: ['Source', 'i-heal'], marchand: ['Marchand', 'i-shop'], evenement: ['Événement', 'i-quest'], boss: ['Gardien', 'i-trophy'] };
 
 
 const EVENTS431 = {
@@ -712,8 +712,8 @@ const EVENTS431 = {
 };
 
 
-/* ---------- l’onglet Camp, en sous-onglets ---------- */
-export const CAMPT431 = [
+/* ---------- the Camp tab, in sub-tabs ---------- */
+export const CAMP_TABS431 = [
   ['base', 'Base'],
   ['enigmes', 'Énigmes'],
   ['echo', 'Écho profond'],
@@ -721,21 +721,21 @@ export const CAMPT431 = [
   ['maitrise', 'Maîtrise']
 ];
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Statements run at startup, in the original order (see index.js).
 export function __init() {
 
-/* ---------- énigmes tactiques : construction (partagée avec le générateur) ---------- */
-// Une énigme : P = { id, t, b (terrain), a: [[id, c, r, losanges]], f: [[id, c, r, PV]] }
-ENIG_CUR431 = null;
+/* ---------- tactical riddles: construction (shared with the generator) ---------- */
+// A riddle: P = { id, t, b (terrain), a: [[id, c, r, diamonds]], f: [[id, c, r, HP]] }
+PUZZLE_CUR431 = null;
 
 
-CROCHETS.creation.push((S, opt, D0) => {
-  if (D0 && (D0.sansProgres431 || D0.hebdo429)) S.fixe431 = 1; // ni compagnon ni Pension
+HOOKS.creation.push((S, opt, D0) => {
+  if (D0 && (D0.sansProgres431 || D0.hebdo429)) S.fixe431 = 1; // no companion nor Daycare
 });
 
 
-CROCHETS.combat.push(S => {
-  const P = ENIG_CUR431;
+HOOKS.combat.push(S => {
+  const P = PUZZLE_CUR431;
   if (S.sc !== 'enigme431' || !P) return;
   const al = S.units.filter(u => u.side === 'a'),
     fo = S.units.filter(u => u.side === 'e');
@@ -748,19 +748,19 @@ CROCHETS.combat.push(S => {
   P.f.forEach(([, c, r, hp], i) => {
     const u = fo[i];
     if (!u) return;
-    u.pos = [c, r]; // la position de l’énigme, pas celle choisie par l’IA
+    u.pos = [c, r]; // the riddle's position, not the one chosen by the AI
     if (hp) u.hp = Math.max(1, Math.min(u.mhp, hp));
   });
   S.lim = 1;
 });
 
 
-CROCHETS.combat.push((S, opt) => {
+HOOKS.combat.push((S, opt) => {
   if (opt && opt.fog431) S.fog431 = 1;
 });
 
 
-// une case cachée : pas d’information sur l’adversaire qui s’y trouve (on peut toujours viser à l’aveugle)
+// a hidden tile: no information about the opponent standing there (you can still aim blindly)
 $('#bSvg').addEventListener(
   'click',
   e => {
@@ -777,7 +777,7 @@ $('#bSvg').addEventListener(
 );
 
 
-CROCHETS.progres.push((S, rew, win) => {
+HOOKS.progres.push((S, rew, win) => {
   if (!S.fog431) return null;
   rew.fog431 = 1;
   if (!win) return null;
@@ -787,10 +787,10 @@ CROCHETS.progres.push((S, rew, win) => {
 });
 
 
-CROCHETS.resultat.push(r => (r.fog431 ? `<div class="res-l"><h4>Brouillard de guerre</h4><div class="rl"><span>${r.fogm431 ? 'Victoire à l’aveugle' : 'Combat dans le brouillard'}</span><b>${r.fogm431 ? '+' + fmt(r.fogm431) + ' ₽' : ''}</b></div></div>` : ''));
+HOOKS.resultat.push(r => (r.fog431 ? `<div class="res-l"><h4>Brouillard de guerre</h4><div class="rl"><span>${r.fogm431 ? 'Victoire à l’aveugle' : 'Combat dans le brouillard'}</span><b>${r.fogm431 ? '+' + fmt(r.fogm431) + ' ₽' : ''}</b></div></div>` : ''));
 
 
-CROCHETS.resultat.push(r => {
+HOOKS.resultat.push(r => {
   const e = r.enig431;
   if (!e) return '';
   const et = n => '★'.repeat(n) + '☆'.repeat(3 - n);
@@ -798,7 +798,7 @@ CROCHETS.resultat.push(r => {
 });
 
 
-// en énigme, finir son tour sans avoir gagné, c’est perdre (les adversaires ne jouent pas)
+// in a riddle, ending your turn without having won means losing (opponents do not play)
 document.addEventListener(
   'click',
   e => {
@@ -816,11 +816,11 @@ document.addEventListener(
 document.addEventListener('click', e => {
   const b = e.target.closest('[data-enig431]');
   if (!b) return;
-  enigLancer431(+b.dataset.enig431);
+  puzzleLaunch431(+b.dataset.enig431);
 });
 
 
-CROCHETS.progres.push((S, rew) => {
+HOOKS.progres.push((S, rew) => {
   const D = SCEN[S.sc] || {};
   if (D.tuto || D.pret429) return null;
   const M = (PROFILE.mait431 = PROFILE.mait431 || {}),
@@ -830,24 +830,24 @@ CROCHETS.progres.push((S, rew) => {
     .forEach(u => {
       const x = (M[u.sp] = M[u.sp] || { n: 0, p: '' });
       x.n++;
-      if (x.n === MAIT_SEUIL431 && !x.p) readyList.push(u.sp);
+      if (x.n === MASTERY_THRESHOLD431 && !x.p) readyList.push(u.sp);
     });
   if (readyList.length) rew.mait431 = readyList;
   return null;
 });
 
 
-CROCHETS.resultat.push(r => (r.mait431 ? `<div class="res-l"><h4>Maîtrise</h4><div class="rl"><span>${r.mait431.map(b => BY[b].n).join(', ')} : un bonus de maîtrise est à choisir (Camp › Maîtrise).</span><b>★</b></div></div>` : ''));
+HOOKS.resultat.push(r => (r.mait431 ? `<div class="res-l"><h4>Maîtrise</h4><div class="rl"><span>${r.mait431.map(b => BY[b].n).join(', ')} : un bonus de maîtrise est à choisir (Camp › Maîtrise).</span><b>★</b></div></div>` : ''));
 
 
-CROCHETS.combat.push(S => {
+HOOKS.combat.push(S => {
   if (S.fixe431 && S.sc !== 'echo431') return;
   const M = PROFILE.mait431 || {};
   S.units
     .filter(u => u.side === 'a')
     .forEach(u => {
       const p = M[u.sp] && M[u.sp].p;
-      if (!p || !MAIT431[p]) return;
+      if (!p || !MASTERY431[p]) return;
       u.m431 = p;
       if (p === 'robuste') {
         u.mhp = Math.round(u.mhp * 1.1);
@@ -864,20 +864,20 @@ document.addEventListener('click', e => {
     k = b.dataset.k,
     M = (PROFILE.mait431 = PROFILE.mait431 || {}),
     x = M[base];
-  if (!x || x.n < MAIT_SEUIL431 || !MAIT431[k] || !masterChoice431(base).includes(k)) return;
+  if (!x || x.n < MASTERY_THRESHOLD431 || !MASTERY431[k] || !masterChoice431(base).includes(k)) return;
   if (x.p && x.p !== k) {
     if ((PROFILE.money || 0) < 500) return toast('Il faut 500 ₽ pour changer de maîtrise.');
     PROFILE.money -= 500;
   }
   x.p = k;
-  toast(`${BY[base].n} : ${MAIT431[k][0]}.`);
+  toast(`${BY[base].n} : ${MASTERY431[k][0]}.`);
   queueSave();
   renderWallet();
   renderCampPage431();
 });
 
 
-CROCHETS.combat.push(S => {
+HOOKS.combat.push(S => {
   if (S.sc !== 'echo431') return;
   const R = echoRun431();
   if (!R) return;
@@ -900,7 +900,7 @@ CROCHETS.combat.push(S => {
 });
 
 
-CROCHETS.resultat.push(r => {
+HOOKS.resultat.push(r => {
   const e = r.echo431;
   if (!e) return '';
   if (e.fin)
@@ -909,7 +909,7 @@ CROCHETS.resultat.push(r => {
 });
 
 
-// après un combat de l’Écho profond : retour à la carte de l’expédition (pas de « Rejouer »)
+// after a Deep Echo battle: back to the expedition map (no « Rejouer » (Replay))
 document.addEventListener(
   'click',
   e => {
@@ -951,7 +951,7 @@ document.addEventListener('click', e => {
 });
 
 
-CROCHETS.resultat.push(r => (r.perso431 ? `<div class="res-l"><h4>Arène personnalisée</h4><div class="rl"><span>${r.perso431.win ? (r.perso431.m ? 'Victoire récompensée' : 'Victoire (déjà 3 récompenses aujourd’hui)') : 'Défaite'}</span><b>${r.perso431.m ? '+200 ₽' : ''}</b></div></div>` : ''));
+HOOKS.resultat.push(r => (r.perso431 ? `<div class="res-l"><h4>Arène personnalisée</h4><div class="rl"><span>${r.perso431.win ? (r.perso431.m ? 'Victoire récompensée' : 'Victoire (déjà 3 récompenses aujourd’hui)') : 'Défaite'}</span><b>${r.perso431.m ? '+200 ₽' : ''}</b></div></div>` : ''));
 
 
 ARN_ED431 = null;

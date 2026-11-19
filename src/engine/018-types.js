@@ -1,6 +1,6 @@
-/* Section d'origine : 11-types.js
-   La page « Types » du Guide est rendue par React (src/screens/guide/Reactions.jsx).
-   Il reste ici l'entrée utilisée par le reste du jeu : ouvrir une réaction précise. */
+/* Original section: 11-types.js
+   The Guide's "Types" page is rendered by React (src/screens/guide/Reactions.jsx).
+   What remains here is the entry point used by the rest of the game: opening a specific reaction. */
 
 import { MK, MX } from './004-data.js';
 import { go } from './016-navigation.js';

@@ -1,21 +1,21 @@
-/* Section d'origine : v4.71 : carte vivante (refonte profonde de la carte) */
+/* Original section: v4.71: living map (deep overhaul of the map) */
 
 import { GYMS } from './004-data.js';
 import { SCEN } from './009-pokemon.js';
 import { ARENAS } from './013-gyms.js';
 import { RM, hash2, mulberry32, tc } from './014-utils.js';
-import { CROCHETS } from './015-hooks.js';
+import { HOOKS } from './015-hooks.js';
 import { V4 } from './032-v4-foundation.js';
 import { CHAIN, MAP_SVG, curvePath, placeState } from './037-map.js';
 import { JCHAIN, JMAP_SVG, placesR } from './054-johto.js';
 import { HCHAIN, HMAP_SVG } from './059-hoenn.js';
 import { refreshMap } from '../screens/map/mapStore.js';
 
-// Peinture de la carte, calques et brouillard (v4.71), lus par React (src/screens/carte/Stage.jsx) :
-// { PAINT: {région: {state, url, lights, sparks, smoke}}, REG, fxSvg, fxHtml, fogSvg }.
-export let CARTE471;
+// Map painting, layers and fog (v4.71), read by React (src/screens/map/Stage.jsx):
+// { PAINT: {region: {state, url, lights, sparks, smoke}}, REG, fxSvg, fxHtml, fogSvg }.
+export let MAP471;
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Instructions run at startup, in the original order (see index.js).
 export function __init() {
 
 (() => {
@@ -33,7 +33,7 @@ export function __init() {
       return false;
     }
   };
-  /* ---------- hasard et bruit (déterministes) : mulberry32 et hash2 (014) ---------- */
+  /* ---------- randomness and noise (deterministic): mulberry32 and hash2 (014) ---------- */
   const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
   const sstep = (a, b, v) => {
     const t = clamp((v - a) / (b - a), 0, 1);
@@ -122,7 +122,7 @@ export function __init() {
     c.height = h;
     return c;
   };
-  /* masque : [{d, fill:true} | {d, w}] -> Float32 (0..1) */
+  /* mask: [{d, fill:true} | {d, w}] -> Float32 (0..1) */
   const maskOf = items => {
     const c = mkCanvas(GW, GH),
       x = c.getContext('2d');
@@ -147,7 +147,7 @@ export function __init() {
   };
   const tick = () => new Promise(r => setTimeout(r, 0));
 
-  /* ---------- données de chaque région ---------- */
+  /* ---------- data for each region ---------- */
   const landOf = svg => {
     const out = [],
       re = /<path d="([^"]+)"[^>]*?fill="(url\(#[mjh]Land\)|#5c8a43)"/g;
@@ -292,7 +292,7 @@ export function __init() {
     return out;
   };
 
-  /* ---------- petits dessins (unités du viewBox, ctx déjà à l’échelle) ---------- */
+  /* ---------- small drawings (viewBox units, ctx already scaled) ---------- */
   const circ = (c, x, y, r) => {
     c.beginPath();
     c.arc(x, y, r, 0, 6.2832);
@@ -864,7 +864,7 @@ export function __init() {
     c.stroke();
   };
 
-  /* ---------- génération d’une région ---------- */
+  /* ---------- generating a region ---------- */
   const generate = async reg => {
     const R = REG[reg],
       rnd = mulberry32((R.seed * 7919) | 0),
@@ -892,7 +892,7 @@ export function __init() {
     await tick();
     const RM2 = maskOf(roads.map(d => ({ d, w: 12 })));
     await tick();
-    // relief : montagnes + forêts
+    // terrain: mountains + forests
     const MT = new Float32Array(GW * GH),
       SN = new Float32Array(GW * GH),
       FF = new Float32Array(GW * GH);
@@ -1084,7 +1084,7 @@ export function __init() {
     }
     sx.putImageData(img, 0, 0);
     await tick();
-    /* ---- couche vectorielle en haute définition ---- */
+    /* ---- high-definition vector layer ---- */
     const big = mkCanvas(VW * SC, VH * SC),
       c = big.getContext('2d');
     c.imageSmoothingEnabled = true;
@@ -1094,7 +1094,7 @@ export function __init() {
     c.scale(SC, SC);
     c.lineJoin = 'round';
     c.lineCap = 'round';
-    // liseré du rivage
+    // shoreline edge
     lands.forEach(d => {
       const p = new Path2D(d);
       c.strokeStyle = 'rgba(255,250,230,.55)';
@@ -1104,7 +1104,7 @@ export function __init() {
       c.lineWidth = 5;
       c.stroke(p);
     });
-    // chemins de terre
+    // dirt paths
     roads.forEach(d => {
       const p = new Path2D(d);
       c.strokeStyle = 'rgba(96,70,40,.32)';
@@ -1119,7 +1119,7 @@ export function __init() {
       c.stroke(p);
       c.setLineDash([]);
     });
-    // vagues dessinées au large
+    // waves drawn offshore
     c.strokeStyle = 'rgba(214,240,255,.22)';
     c.lineWidth = 0.9;
     for (let t = 0, n = 0; t < 1500 && n < 80; t++) {
@@ -1134,7 +1134,7 @@ export function __init() {
       c.quadraticCurveTo(x + 3.5, y - 3, x + 7, y);
       c.stroke();
     }
-    // lacs
+    // lakes
     R.lakes.forEach(d => {
       const p = new Path2D(d);
       c.strokeStyle = '#e6d6a6';
@@ -1149,7 +1149,7 @@ export function __init() {
       c.stroke(p);
       c.restore();
     });
-    // rivières
+    // rivers
     R.rivers.forEach(d => {
       const p = new Path2D(d);
       c.strokeStyle = 'rgba(30,70,60,.4)';
@@ -1165,7 +1165,7 @@ export function __init() {
       c.setLineDash([]);
     });
     await tick();
-    // champs cultivés autour des hameaux
+    // cultivated fields around hamlets
     const FCOL = [['#d8c070', '#c2a650'], ['#86b45a', '#6f9c46'], ['#a87a4e', '#8e643c'], ['#b8cc6a', '#9fb456']];
     P.filter(p => p.grp === 'aventure' && p.t && !/^rv/.test(p.id)).forEach(p => {
       const r4 = mulberry32((((p.x * 53) ^ (p.y * 29)) + seed * 3) | 0);
@@ -1205,7 +1205,7 @@ export function __init() {
         c.restore();
       }
     });
-    // clairières sous chaque lieu
+    // clearings beneath each location
     P.forEach(p => {
       const g = c.createRadialGradient(p.x, p.y, 2, p.x, p.y, 34);
       g.addColorStop(0, 'rgba(226,206,154,.8)');
@@ -1214,7 +1214,7 @@ export function __init() {
       c.fillStyle = g;
       ell(c, p.x, p.y, 34, 26);
     });
-    // éléments triés par profondeur
+    // elements sorted by depth
     const land = (x, y) => {
       const i = gi(x, y);
       return M[i] > 0.95 && B12[i] > 0.8;
@@ -1226,7 +1226,7 @@ export function __init() {
         const dx = x - p.x,
           dy = (y - p.y) * 1.25;
         if (dx * dx + dy * dy < rp * rp) return false;
-        if (y > p.y + 14 && y < p.y + 62 && Math.abs(x - p.x) < 62) return false; // place de l’étiquette
+        if (y > p.y + 14 && y < p.y + 62 && Math.abs(x - p.x) < 62) return false; // label placement
       }
       return true;
     };
@@ -1253,7 +1253,7 @@ export function __init() {
       });
       add(y + 14 * s, () => mountain(c, x, y, s, sn, r2));
     });
-    // forêts
+    // forests
     R.forests.forEach(([k, fx, fy, n, sp]) => {
       const rad = sp * Math.sqrt(n) * 1.15;
       let put = 0;
@@ -1271,7 +1271,7 @@ export function __init() {
         else add(y, () => broadleaf(c, x, y, s, pal));
       }
     });
-    // végétation éparse selon le biome
+    // sparse vegetation depending on the biome
     for (let t = 0; t < 520; t++) {
       const x = 20 + rnd() * (VW - 40),
         y = 20 + rnd() * (VH - 40),
@@ -1302,7 +1302,7 @@ export function __init() {
         else if (r < 0.3) add(y, () => bush(c, x, y, 0.8 + rnd() * 0.4));
       }
     }
-    // palmiers des plages (Hoenn)
+    // beach palm trees (Hoenn)
     (R.palms || []).forEach(([x, y]) => isFree(x, y, 26) && add(y, () => palm(c, x, y, 1)));
     if (R.reef)
       for (let t = 0; t < 260; t++) {
@@ -1311,7 +1311,7 @@ export function __init() {
           i = gi(x, y);
         if (M[i] > 0.95 && B12[i] < 0.84 && B12[i] > 0.7 && isFree(x, y, 40) && rnd() < 0.5) add(y, () => palm(c, x, y, 0.75 + rnd() * 0.25));
       }
-    // hameaux, arènes et décors propres à chaque type
+    // hamlets, gyms and scenery specific to each type
     const angles = [205, 335, 168, 12, 250, 290, 145, 35];
     P.forEach(p => {
       const r3 = mulberry32((((p.x * 131) ^ (p.y * 71)) + seed) | 0);
@@ -1380,7 +1380,7 @@ export function __init() {
       if (k === 'lighthouse') lights.push([x, y - 28]);
       if (k === 'tower' || k === 'pagoda') lights.push([x, y - 14]);
     });
-    // touffes et fleurs
+    // tufts and flowers
     for (let t = 0; t < 900; t++) {
       const x = rnd() * VW,
         y = rnd() * VH,
@@ -1410,7 +1410,7 @@ export function __init() {
         });
       }
     }
-    // mer : rochers, voiliers, tourbillons
+    // sea: rocks, sailboats, whirlpools
     const seaSpots = [],
       sparks = [];
     for (let t = 0; t < 4000 && (seaSpots.length < 14 || sparks.length < 18); t++) {
@@ -1431,7 +1431,7 @@ export function __init() {
       items[k][1]();
       if (k % 150 === 149) await tick();
     }
-    // lumière chaude et vignettage
+    // warm light and vignetting
     const gl = c.createRadialGradient(VW * 0.22, VH * 0.08, 10, VW * 0.22, VH * 0.08, VW * 0.85);
     gl.addColorStop(0, 'rgba(255,236,190,.16)');
     gl.addColorStop(1, 'rgba(255,236,190,0)');
@@ -1453,7 +1453,7 @@ export function __init() {
     return { url, lights, sparks, smoke };
   };
 
-  /* ---------- couche animée : nuages, oiseaux, reflets, fumée, nuit ---------- */
+  /* ---------- animated layer: clouds, birds, reflections, smoke, night ---------- */
   const fxSvg = F =>
     `<svg class="fx471" viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><radialGradient id="fx471lum"><stop offset="0" stop-color="#fff2b8" stop-opacity="1"/><stop offset=".3" stop-color="#ffc35a" stop-opacity=".55"/><stop offset="1" stop-color="#ffb040" stop-opacity="0"/></radialGradient></defs><g class="fx-lums">${F.lights.map(([x, y]) => `<circle cx="${x.toFixed(0)}" cy="${y.toFixed(0)}" r="10" fill="url(#fx471lum)"/>`).join('')}</g></svg>`;
   const fxHtml = F => {
@@ -1463,11 +1463,11 @@ export function __init() {
     [[4, 20, 150, 0], [80, 24, 190, -120], [34, 15, 170, -50]].forEach(([t, w, d, l]) => (h += `<i class="fa-cl" style="top:${t}%;width:${w}%;--to:${Math.round(10000 / w + 100)}%;animation-duration:${d}s;animation-delay:${l}s"></i>`));
     F.sparks.forEach(([x, y], i) => (h += `<i class="fa-sp" style="${pc(x, y)};animation-delay:${(-i * 0.61).toFixed(2)}s"></i>`));
     F.smoke.forEach(([x, y]) => [0, 1, 2].forEach(k => (h += `<i class="fa-pf" style="${pc(x, y)};animation-delay:${-k * 2}s"></i>`)));
-    const oiseaux = c => `<svg viewBox="-16 -8 50 22"><path d="M0 0q4-5 8 0q4-5 8 0M20 8q3-4 6 0q3-4 6 0M-14 10q3-4 6 0q3-4 6 0" fill="none" stroke="${c}" stroke-width="1.6" stroke-linecap="round"/></svg>`;
-    h += `<i class="fa-bd b1" style="top:20%;--to:2700%">${oiseaux('#1e2a30')}</i><i class="fa-bd b2" style="top:58%;--to:-2700%">${oiseaux('#ffffff')}</i>`;
+    const birds = c => `<svg viewBox="-16 -8 50 22"><path d="M0 0q4-5 8 0q4-5 8 0M20 8q3-4 6 0q3-4 6 0M-14 10q3-4 6 0q3-4 6 0" fill="none" stroke="${c}" stroke-width="1.6" stroke-linecap="round"/></svg>`;
+    h += `<i class="fa-bd b1" style="top:20%;--to:2700%">${birds('#1e2a30')}</i><i class="fa-bd b2" style="top:58%;--to:-2700%">${birds('#ffffff')}</i>`;
     return h;
   };
-  /* ---------- brouillard des zones inexplorées ---------- */
+  /* ---------- fog over unexplored areas ---------- */
   const fogSvg = reg => {
     let puffs = '';
     try {
@@ -1491,11 +1491,11 @@ export function __init() {
     return `<svg class="fog471" viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><radialGradient id="fg471"><stop offset="0" stop-color="#eef2f6" stop-opacity=".62"/><stop offset=".55" stop-color="#dfe6ee" stop-opacity=".34"/><stop offset="1" stop-color="#dfe6ee" stop-opacity="0"/></radialGradient></defs><g class="fog-g">${puffs}</g></svg>`;
   };
 
-  /* ---------- intégration à la carte ---------- */
-  // Peinture, calques animés, brouillard, titre et data-tod / data-wx de #mapSt : rendus par
-  // React (src/screens/carte/Stage.jsx), qui lit CARTE471. Ici, le dessin (asynchrone) seulement.
+  /* ---------- integration into the map ---------- */
+  // Painting, animated layers, fog, title and data-tod / data-wx of #mapSt: rendered by
+  // React (src/screens/map/Stage.jsx), which reads CARTE471. Only the (asynchronous) drawing is here.
   const PAINT = {};
-  CARTE471 = { PAINT, REG, fxSvg, fxHtml, fogSvg };
+  MAP471 = { PAINT, REG, fxSvg, fxHtml, fogSvg };
   const apply = () => refreshMap();
   const CVER = 'v471-2';
   const idb = () =>
@@ -1559,11 +1559,11 @@ export function __init() {
         });
     }, 30);
   };
-  CROCHETS.carte.push(() => {
+  HOOKS.carte.push(() => {
     if (document.getElementById('mapSt')) ensure(V4.region === 'hoenn' ? 'hoenn' : V4.region === 'johto' ? 'johto' : 'kanto');
   });
-  CROCHETS.heure.push(t => {
-    // posé directement, sans redessiner la carte ; Stage.jsx rend la même valeur (TOD)
+  HOOKS.heure.push(t => {
+    // set directly, without redrawing the map; Stage.jsx renders the same value (TOD)
     const st = document.getElementById('mapSt');
     if (st) st.dataset.tod = t;
   });

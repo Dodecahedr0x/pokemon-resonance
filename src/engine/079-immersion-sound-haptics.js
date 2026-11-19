@@ -1,10 +1,10 @@
-/* Section d'origine : v4.48 : immersion — sons par type, cris, vibrations, entrée en combat, effets, météo animée, holo, victoire, journal */
+/* Original section: v4.48: immersion — type sounds, cries, vibrations, battle entrance, effects, animated weather, holo, victory, log */
 
 import { clearOverlay, paintOverlay } from '../screens/overlays/dialogsStore.js';
 import { bdClass, getHost, hostSet } from '../screens/combat/board/boardStore.js';
 import { BY, SCEN } from './009-pokemon.js';
 import { $, RM, after2images, writeLS, el, tc } from './014-utils.js';
-import { CROCHETS } from './015-hooks.js';
+import { HOOKS } from './015-hooks.js';
 import { byUid } from './021-combat-engine.js';
 import { B, HC, L } from './024-combat-ui.js';
 import { PREF, SFX, noise, savePref, tone, vibe } from './026-campaign-tutorial-sound.js';
@@ -16,7 +16,7 @@ import { BGM434 } from './070-theme-music-player.js';
 let TSND448, tipI448, ori448;
 
 
-/** Immersion active et animations non réduites (même test que IM448() && !RM, hissé pour 082 et 083). */
+/** Immersion on and animations not reduced (same test as IM448() && !RM, hoisted for 082 and 083). */
 export function FX448() {
   return PREF.im448 !== 0 && !RM;
 }
@@ -38,7 +38,7 @@ function step448() {
 }
 
 
-/** Cri de synthèse : la hauteur dépend du numéro national, chaque espèce a donc le sien. */
+/** Synthesized cry: the pitch depends on the national number, so each species has its own. */
 function cry448(u, ko) {
   if (!PREF.sound || RM || !IM448() || !u) return;
   try {
@@ -64,20 +64,20 @@ function alarm448() {
 }
 
 
-/* ---------- 2. musique de combat : plus vive quand un allié est presque K.O. ---------- */
+/* ---------- 2. battle music: livelier when an ally is nearly KO ---------- */
 function tempo448() {
   try {
     Object.keys(BGM434.el).forEach(k => {
       const a = BGM434.el[k];
       if (!a) return;
-      const want = 1; // v4.49 : la piste « PV bas » remplace l’accélération
+      const want = 1; // v4.49: the « low HP » track replaces the speed-up
       if (a.playbackRate !== want) a.playbackRate = want;
     });
   } catch (e) {}
 }
 
 
-/* ---------- 3. effets sur le plateau : particules, tremblement, vibrations ---------- */
+/* ---------- 3. board effects: particles, shake, vibrations ---------- */
 function part448(k, ty) {
   if (!FX448() || !L.fx) return;
   const [x, y] = HC(k),
@@ -121,7 +121,7 @@ function shake448(big) {
 
 function trans448() {
   if (!FX448() || !B) return;
-  // #tr448 : rendu par React (src/screens/overlays/Effets.jsx) le temps de la transition
+  // #tr448: rendered by React (src/screens/overlays/Effects.jsx) for the duration of the transition
   paintOverlay('tr448', {});
   try {
     [330, 440, 554, 740].forEach((f, i) => tone(f, i * 0.07, 0.16, 'square', 0.03, f * 1.3));
@@ -135,15 +135,15 @@ function trans448() {
 }
 
 
-/* ---------- 6. météo animée sur le plateau ---------- */
+/* ---------- 6. animated weather on the board ---------- */
 function wx448() {
-  // #wx448 : rendu par React (Board.jsx)
+  // #wx448: rendered by React (Board.jsx)
   const k = FX448() && B && !B.over && B.wx && B.wx.k ? B.wx.k : null;
   if (getHost().wx448 !== k) hostSet({ wx448: k });
 }
 
 
-/* ---------- 7. cartes holographiques et Pokédex vivant ---------- */
+/* ---------- 7. holographic cards and living Pokédex ---------- */
 function tilt448(art, px, py) {
   const r = art.getBoundingClientRect();
   if (!r.width) return;
@@ -165,7 +165,7 @@ function seen448() {
 }
 
 
-/* ---------- 9. journal de dresseur (sur cet appareil) ---------- */
+/* ---------- 9. trainer journal (on this device) ---------- */
 export function jr448() {
   try {
     return Object.assign({ streak: 0, best: 0, use: {} }, JSON.parse(localStorage.getItem('res-j448') || '{}'));
@@ -180,12 +180,12 @@ function jrSave448(j) {
 }
 
 
-/** Astuce suivante sous la présentation « VS » (texte), ou null si l'immersion est coupée. */
+/** Next tip under the « VS » presentation (text), or null if immersion is off. */
 export function tipVs448() {
-  return IM448() ? ASTUCES448[tipI448++ % ASTUCES448.length] : null;
+  return IM448() ? TIPS448[tipI448++ % TIPS448.length] : null;
 }
 
-/** Fiche du Pokédex redessinée : balayage, et petite fanfare la première fois qu’on ouvre une famille possédée. */
+/** Redrawn Pokédex entry: sweep, and a little fanfare the first time an owned family is opened. */
 export function scanDex448() {
   try {
     const el = $('#dex4Card');
@@ -212,8 +212,8 @@ export function scanDex448() {
 
 export const IM448 = () => PREF.im448 !== 0;
 
-/* ---------- 5. entrée en combat : éclair, iris, cri, astuce ---------- */
-const ASTUCES448 = [
+/* ---------- 5. battle entrance: flash, iris, cry, tip ---------- */
+const TIPS448 = [
   'Les Piliers bloquent les tirs directs ; derrière un Rocher, la couverture réduit les dégâts à distance de 40 %.',
   'L’Eau compte comme Trempé : parfait pour une réaction avec l’Électrik.',
   'Dans les hautes herbes, un Pokémon caché ne peut être visé qu’à 2 cases ou moins. Le Feu les embrase.',
@@ -228,11 +228,11 @@ const ASTUCES448 = [
   'Une Roche Météo prolonge la météo déclenchée par son porteur de 3 manches.'
 ];
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Statements run at startup, in the original order (see index.js).
 export function __init() {
 
 
-/* ---------- 1. sons par type d’attaque (synthétisés, aucun fichier) ---------- */
+/* ---------- 1. sounds by attack type (synthesized, no file) ---------- */
 TSND448 = {
   Normal: () => {
     noise(0, 0.1, 0.12, 1400);
@@ -301,7 +301,7 @@ setInterval(() => {
 }, 1500);
 
 
-CROCHETS.journal.push(ev => {
+HOOKS.journal.push(ev => {
   let steps = 0,
     boom = false,
     kos = 0,
@@ -338,22 +338,22 @@ CROCHETS.journal.push(ev => {
 });
 
 
-/* ---------- 4. l’espèce de l’attaque dans le journal (pour le son et les particules) ---------- */
-/* (resolveMove ajoute « ty » à l’événement « use » : voir le correctif de source) */
+/* ---------- 4. the attack's type in the log (for sound and particles) ---------- */
+/* (resolveMove adds « ty » to the « use » event: see the source patch) */
 
 
-tipI448 = Math.floor(Math.random() * ASTUCES448.length);
+tipI448 = Math.floor(Math.random() * TIPS448.length);
 
 
-CROCHETS.lancement.push(() => {
+HOOKS.lancement.push(() => {
   if (B && !AUTO) trans448();
 });
 
 
-/* l’astuce s’affiche sous la présentation « VS » : astuceVs448(), rendue dans Vs.jsx */
+/* the tip is shown under the « VS » presentation: tipVs448(), rendered in Vs.jsx */
 
 
-CROCHETS.rendu.push(wx448);
+HOOKS.rendu.push(wx448);
 
 
 document.addEventListener(
@@ -390,8 +390,8 @@ addEventListener(
 
 
 
-/* ---------- 8. victoire : éclat, badge qui apparaît, vibration ---------- */
-// classes fx448 / gold448 et badge .rbadge448 : rendus par React (Result.jsx) ; ici, vibration et carillon
+/* ---------- 8. victory: burst, badge appearing, vibration ---------- */
+// fx448 / gold448 classes and .rbadge448 badge: rendered by React (Result.jsx); here, vibration and chime
 new MutationObserver(() => {
   const r = $('#cbResult'),
     c = r && r.querySelector('.res-card.fx448');
@@ -404,7 +404,7 @@ new MutationObserver(() => {
 }).observe($('#cbResult'), { childList: true, attributes: true, attributeFilter: ['hidden'] });
 
 
-CROCHETS.finCombat.push(() => {
+HOOKS.finCombat.push(() => {
   if (B && B.over && !B._j448 && !(SCEN[B.sc] || {}).sansProgres431) {
     B._j448 = 1;
     const j = jr448(),
@@ -420,7 +420,7 @@ CROCHETS.finCombat.push(() => {
 });
 
 
-// panneaux « Immersion » et « Journal de dresseur » : rendus par React (src/screens/settings/panels/Immersion.jsx, JournalDresseur.jsx)
+// « Immersion » and « Trainer journal » panels: rendered by React (src/screens/settings/panels/Immersion.jsx, TrainerJournal.jsx)
 
 
 document.addEventListener('click', e => {

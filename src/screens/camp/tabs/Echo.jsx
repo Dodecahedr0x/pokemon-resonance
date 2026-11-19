@@ -2,7 +2,7 @@ import { BY } from '../../../engine/009-pokemon.js';
 import { PROFILE } from '../../../engine/011-game-state.js';
 import { medal } from '../../../engine/014-utils.js';
 import { squad } from '../../../engine/020-team-cards.js';
-import { EVENTS431, NOEUDS431, RELIQUES431, relRandom431 } from '../../../engine/066-tactical-challenges.js';
+import { EVENTS431, NODES431, RELICS431, relRandom431 } from '../../../engine/066-tactical-challenges.js';
 import { Html } from '../../../lib/html.jsx';
 
 function Head({ X }) {
@@ -11,13 +11,13 @@ function Head({ X }) {
   );
 }
 
-// L'événement en cours : choix d'une relique, marchand ou événement (data-echo431).
+// The current event: choice of a relic, merchant or event (data-echo431).
 function Event({ R }) {
   if (R.ev === 'relique')
     return (
       <div className="ec431-ev">
         <h3>Choisissez une relique</h3>
-        {relRandom431(R, 3).map(k => <button key={k} type="button" className="b" data-echo431={`rel-${k}`}><b>{RELIQUES431[k][0]}</b><em>{RELIQUES431[k][1]}</em></button>)}
+        {relRandom431(R, 3).map(k => <button key={k} type="button" className="b" data-echo431={`rel-${k}`}><b>{RELICS431[k][0]}</b><em>{RELICS431[k][1]}</em></button>)}
       </div>
     );
   if (R.ev === 'marchand')
@@ -43,7 +43,7 @@ function Event({ R }) {
   return null;
 }
 
-// La carte de l'expédition, du gardien (en haut) au premier étage.
+// The expedition map, from the guardian (top) to the first floor.
 function MapScreen({ R }) {
   return (
     <div className="ec431-c">
@@ -57,8 +57,8 @@ function MapScreen({ R }) {
               {L.map((t, i) => {
                 const takenSet = doneFlag && R.path[f] === i;
                 return (
-                  <button key={i} type="button" className={`ec431-n t-${t}${takenSet ? ' pris' : ''}`} data-echo431={hereNow ? `n${i}` : undefined} disabled={!hereNow} aria-label={`${NOEUDS431[t][0]}, étage ${f + 1}`}>
-                    <svg><use href={`#${NOEUDS431[t][1]}`} /></svg><span>{NOEUDS431[t][0]}</span>
+                  <button key={i} type="button" className={`ec431-n t-${t}${takenSet ? ' pris' : ''}`} data-echo431={hereNow ? `n${i}` : undefined} disabled={!hereNow} aria-label={`${NODES431[t][0]}, étage ${f + 1}`}>
+                    <svg><use href={`#${NODES431[t][1]}`} /></svg><span>{NODES431[t][0]}</span>
                   </button>
                 );
               })}
@@ -70,7 +70,7 @@ function MapScreen({ R }) {
   );
 }
 
-// Camp › Écho profond (v4.31) : 8 étages, une seule vie, des reliques.
+// Camp › Deep Echo (v4.31): 8 floors, a single life, relics.
 export default function Echo() {
   const X = PROFILE.echo431 || { best: 0, wins: 0 },
     R = X.run;
@@ -105,7 +105,7 @@ export default function Echo() {
         ))}
       </div>
       <div className="ec431-rl">
-        {R.rel.length ? R.rel.map(k => <span key={k} className="ec431-r" title={RELIQUES431[k][1]}>{RELIQUES431[k][0]}</span>) : <em>Aucune relique.</em>}
+        {R.rel.length ? R.rel.map(k => <span key={k} className="ec431-r" title={RELICS431[k][1]}>{RELICS431[k][0]}</span>) : <em>Aucune relique.</em>}
       </div>
       <Event R={R} />
       <MapScreen R={R} />

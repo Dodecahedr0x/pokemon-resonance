@@ -1,5 +1,5 @@
-// Interrupteur et curseur des Paramètres : même balisage que SW() et SL() du moteur.
-// Champs non contrôlés : le moteur écoute data-pref / data-vol au niveau du document.
+// Switch and slider of the Settings: same markup as the engine's SW() and SL().
+// Uncontrolled fields: the engine listens to data-pref / data-vol at the document level.
 
 // SW(k, on, lab, sub)
 export function Switch({ k, on, lab, sub }) {
@@ -12,7 +12,7 @@ export function Switch({ k, on, lab, sub }) {
   );
 }
 
-// SL(k, v, lab) : volume de 0 à 1, affiché en pourcentage.
+// SL(k, v, lab): volume from 0 to 1, displayed as a percentage.
 export function Slider({ k, v, lab }) {
   const n = Math.round(v * 100);
   return (

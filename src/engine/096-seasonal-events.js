@@ -1,24 +1,24 @@
-/* Section d'origine : 4.65 : événements saisonniers mensuels */
+/* Original section: 4.65: monthly seasonal events */
 
 import { BY, SCEN } from './009-pokemon.js';
 import { ARENAS } from './013-gyms.js';
 import { writeLS, toast } from './014-utils.js';
-import { CROCHETS } from './015-hooks.js';
+import { HOOKS } from './015-hooks.js';
 import { esc } from './025-saves.js';
 import { sfx, vibe } from './026-campaign-tutorial-sound.js';
 import { overlay } from './030-prestige-staging.js';
 import { shut } from '../screens/overlays/tempStore.js';
 import { savePurse, today } from './032-v4-foundation.js';
 import { refreshHome } from '../screens/home/homeStore.js';
-import { FOURNISSEURS_DEGATS } from './044-tactical-engine.js';
+import { DAMAGE_PROVIDERS } from './044-tactical-engine.js';
 import { reward454, txt454 } from './084-peddler-route-missions.js';
 import { battleCount464 } from './095-trainer-talent-tree.js';
 
 
 
-/** Bannière de saison de l'Accueil (#sa465, rendu : src/screens/accueil/Bannieres.jsx). */
+/** Season banner on the Home page (#sa465, rendering: src/screens/home/Banners.jsx). */
 export function saData465() {
-  const S0 = sai465(),
+  const S0 = season465(),
     s = saSt465(),
     top = PAL465[PAL465.length - 1][0],
     pc = Math.min(100, Math.round((s.pts / top) * 100));
@@ -27,19 +27,19 @@ export function saData465() {
 
 
 function saOpen465() {
-  const S0 = sai465(),
+  const S0 = season465(),
     s = saSt465(),
     vd = featured465();
   const tiers = PAL465.map(([p, n, R], i) => ({ p, n, txt: txt454(R), ok: s.pts >= p, got: !!s.got[i] }));
   const gym = SCEN[vd] ? SCEN[vd].n : vd;
-  // rendu : src/screens/overlays/temporaires/Fenetres.jsx (Sa465)
+  // rendering: src/screens/overlays/transients/Windows.jsx (Sa465)
   const o = overlay('sa465o', { n: S0.n, d: S0.d, t: S0.t, arene: gym, tiers, won: s.won || 0 });
   o.addEventListener('click', e => {
     if (e.target === o) shut('sa465o');
   });
 }
 
-const SAI465 = [
+const SEASON465 = [
   { n: 'Grand Froid', t: 'Glace', d: 'L’hiver s’installe : les Pokémon Glace sont à l’honneur.' },
   { n: 'Cœur de Fée', t: 'Fée', d: 'Un mois de douceur et de magie pour les Pokémon Fée.' },
   { n: 'Éveil de la Sève', t: 'Plante', d: 'Le printemps réveille les Pokémon Plante.' },
@@ -70,7 +70,7 @@ const monthKey465 = () => today().slice(0, 7);
 const monthIdx465 = () => Math.max(0, Math.min(11, (parseInt(today().slice(5, 7), 10) || 1) - 1));
 
 
-const sai465 = () => SAI465[monthIdx465()];
+const season465 = () => SEASON465[monthIdx465()];
 
 
 const featured465 = () => ARENAS[(monthIdx465() * 3 + (parseInt(today().slice(0, 4), 10) || 0)) % ARENAS.length].k;
@@ -97,21 +97,21 @@ const saSave465 = s => {
   writeLS('res-sa465', s);
 };
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Startup statements, run in their original order (see index.js).
 export function __init() {
 
-CROCHETS.combat.push(S => {
-  if (battleCount464(S)) S.sa465 = sai465().t;
+HOOKS.combat.push(S => {
+  if (battleCount464(S)) S.sa465 = season465().t;
 });
 
 
-FOURNISSEURS_DEGATS.push({ id: 'saison465', fournir: (c, { S, u }) => !!u && u.side === 'a' && !!S && !!S.sa465 && BY[u.id] && BY[u.id].t.includes(S.sa465) && { mul: 1.05, libelle: 'Saison : ' + S.sa465 } });
+DAMAGE_PROVIDERS.push({ id: 'saison465', fournir: (c, { S, u }) => !!u && u.side === 'a' && !!S && !!S.sa465 && BY[u.id] && BY[u.id].t.includes(S.sa465) && { mul: 1.05, libelle: 'Saison : ' + S.sa465 } });
 
 
-CROCHETS.progres.unshift((S, rew, win) => {
+HOOKS.progres.unshift((S, rew, win) => {
   try {
     if (!win || !battleCount464(S)) return null;
-    const t = sai465().t,
+    const t = season465().t,
       s = saSt465();
     let n = 1;
     if (S.units.some(u => u.side === 'a' && BY[u.id] && BY[u.id].t.includes(t))) n += 1;
@@ -124,7 +124,7 @@ CROCHETS.progres.unshift((S, rew, win) => {
 });
 
 
-CROCHETS.resultat.unshift(r => (r.sa465 ? `<div class="res-l"><h4>${esc(sai465().n)}</h4><div class="rl"><span>Points de saison : +${r.sa465.n}</span><b>${r.sa465.tot}</b></div></div>` : ''));
+HOOKS.resultat.unshift(r => (r.sa465 ? `<div class="res-l"><h4>${esc(season465().n)}</h4><div class="rl"><span>Points de saison : +${r.sa465.n}</span><b>${r.sa465.tot}</b></div></div>` : ''));
 
 
 document.addEventListener(
@@ -151,7 +151,7 @@ document.addEventListener(
     toast('Récompense de saison : ' + txt454(T[2]) + '.');
     savePurse();
     saOpen465();
-    refreshHome(); // bannière #sa465
+    refreshHome(); // #sa465 banner
   },
   true
 );

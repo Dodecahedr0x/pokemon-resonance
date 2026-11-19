@@ -6,22 +6,22 @@ import { HELD_IMG, ITM, SHOP, V4, bagN, fmt } from '../../engine/032-v4-foundati
 import { costOf } from '../../engine/049-identity.js';
 import { HELD_SHOP, offer414 } from '../../engine/053-resonance.js';
 
-// Disque de CT / CS : initiales sur la couleur du type de la capacité.
+// TM / HM disc: initials on the color of the move's type.
 export const Disc = ({ it }) => (
   <span className="v4-it-im ct-disc" style={{ '--c': tc(MV[it.mv].t) }}><b>{it.sn.slice(0, 2)}</b></span>
 );
 
-// Pastille de prix en Éclats.
+// Price chip in Shards.
 export const Shards = () => <span className="v4-gemi"><svg><use href="#i-gem" /></svg></span>;
 
-// Un objet de la Boutique ou du Sac (ancien itemRow) : quantité data-qk, achat data-buy,
-// CT à apprendre data-apprendre, tous gérés par le moteur.
+// A Shop or Bag item (old itemRow): quantity data-qk, purchase data-buy,
+// TM to learn data-apprendre, all handled by the engine.
 export function Article({ k, mode }) {
   const it = SHOP[k],
-    cs = it.cs, // une CS s'achète une fois et se garde
+    cs = it.cs, // an HM is bought once and kept
     q = cs ? 1 : V4.qty[k] || 1,
     n = bagN(k),
-    price = it.g ? it.g * q : costOf(k) * q, // Atelier (v4.10)
+    price = it.g ? it.g * q : costOf(k) * q, // Workshop (v4.10)
     can = it.g ? PROFILE.gems >= price : PROFILE.money >= price,
     full = cs ? n > 0 : n + q > 99;
   return (
@@ -52,7 +52,7 @@ export function Article({ k, mode }) {
   );
 }
 
-// Un objet tenu dans le Sac (ancien heldRow) : qui le tient, ou où le trouver.
+// A held item in the Bag (old heldRow): who holds it, or where to find it.
 export function Outfit({ k }) {
   const it = ITEMS2[k],
     own = ownedItems().includes(k),

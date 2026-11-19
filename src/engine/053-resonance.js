@@ -1,11 +1,11 @@
-/* Section d'origine : v4.14-01-resonance.js */
+/* Original section: v4.14-01-resonance.js */
 
 import { MV } from './005-moves.js';
 import { BY, SCEN } from './009-pokemon.js';
 import { ITEMS2, PROFILE, isCamp } from './011-game-state.js';
 import { RC } from './012-recruits-roles-synergies.js';
 import { toast } from './014-utils.js';
-import { CROCHETS } from './015-hooks.js';
+import { HOOKS } from './015-hooks.js';
 import { EMAX, P, byUid, damage, endStep, rewardIn, hasNx, hdist, heal, nbrK, retarget, say, setMark, shove, stun, teff, uAt, uk } from './021-combat-engine.js';
 import { noteAdd } from './023-roles-synergies-obstacles.js';
 import { B, enPips } from './024-combat-ui.js';
@@ -15,16 +15,16 @@ import { HEALS, HELD_IMG, SHOP, V4, bagN, today } from './032-v4-foundation.js';
 import { renderWallet } from './035-interface.js';
 import { renderBag } from './039-quests-shop.js';
 import { LEGS } from './043-adventure-plus.js';
-import { FOURNISSEURS_DEGATS } from './044-tactical-engine.js';
+import { DAMAGE_PROVIDERS } from './044-tactical-engine.js';
 import { de } from './047-tactics.js';
-import { empoisonner } from './051-epic-tms.js';
+import { applyPoison } from './051-epic-tms.js';
 import { rune413 } from './052-technical-roster.js';
 import { surrounded420 } from './060-intense-combat.js';
 import { OKX455, USE455 } from './087-balls-held-items.js';
 import { resoBoss460 } from './091-phase-bosses-secret-places.js';
 
 export let COMBAT414;
-let LEG414, OFFRES414;
+let LEG414, OFFERS414;
 
 
 export function rankId(id) {
@@ -80,7 +80,7 @@ function momentum414(S, u, ev) {
 
 
 function echo414(S, u, v, typ, x, ev) {
-  if (ev.some(e => e.e === 'rx' && e.k === x)) return ''; // la réaction du terrain a déjà résonné
+  if (ev.some(e => e.e === 'rx' && e.k === x)) return ''; // the terrain's reaction has already resonated
   const prot = rune413(S, v),
     isFree = v.tal === 'regardvif' || prot;
   switch (typ) {
@@ -130,7 +130,7 @@ function echo414(S, u, v, typ, x, ev) {
       v.affaibli = Math.max(v.affaibli || 0, 2);
       return `${v.n} est intimidé`;
     case 'Poison':
-      return empoisonner(S, v, ev) ? `${v.n} est empoisonné` : '';
+      return applyPoison(S, v, ev) ? `${v.n} est empoisonné` : '';
     case 'Dragon':
       damage(S, v, 6, ev, { ind: true, reflet: true });
       return 'l’écho draconique frappe encore';
@@ -152,7 +152,7 @@ function echo414(S, u, v, typ, x, ev) {
 }
 
 
-/** Après chaque cible touchée : la note, puis la Résonance à la troisième. */
+/** After each target hit: the note, then Resonance on the third. */
 export function afterHit414(S, u, m, v, x, typ, ev) {
   if (!v || v === u || v.side === u.side || v.seg || !(m.p || m.fix) || !resoOn(S, u)) return;
   if (teff(typ, v.t) === 0 && !(v.cloue && typ === 'Sol')) return;
@@ -176,7 +176,7 @@ export function afterHit414(S, u, m, v, x, typ, ev) {
 }
 
 
-/* fin de capacité : Orbe Vie */
+/* end of ability: Life Orb */
 export function end414(S, u, m, dealt, ev) {
   if (u.item === 'orbevie' && dealt > 0 && !u.ko) {
     say(ev, `Orbe Vie : ${u.n} paie sa puissance.`);
@@ -185,7 +185,7 @@ export function end414(S, u, m, dealt, ev) {
 }
 
 
-/* après des dégâts subis : Casque Brut, Baie Sitrus */
+/* after damage taken: Rocky Helmet, Sitrus Berry */
 export function afterDamage414(S, v, real, o, ev) {
   if (!o.ind && !o.reflet && v.item === 'casquebrut') {
     const a = S.lastAtk && byUid(S, S.lastAtk);
@@ -202,7 +202,7 @@ export function afterDamage414(S, v, real, o, ev) {
 }
 
 
-/* ---------- affichage ---------- */
+/* ---------- display ---------- */
 export function plateRank414(u) {
   const n = notesOf(B, u);
   return `<span class="pl-rg rg-${rankOfValue(u)}">${stars(rankOfValue(u))}</span>${n && !u.ko ? `<span class="pl-nt" title="${n} note${n > 1 ? 's' : ''} de Résonance">${'♪'.repeat(n)}</span>` : ''}`;
@@ -219,12 +219,12 @@ export function foeReso414(e) {
 }
 
 
-// Rangs de l’équipe et Harmonie : carte rendue par React (src/screens/equipe/Analyse.jsx).
+// Team ranks and Harmony: card rendered by React (src/screens/team/Analysis.jsx).
 
 
 export function objOk414(S, u, k) {
   const it = SHOP[k];
-  if (!it || !u || u.ko || u.side !== 'a' || S.phase !== 'player' || (S.objN || 0) >= SAC_MAX || S.duel433 || bagN(k) < 1) return false;
+  if (!it || !u || u.ko || u.side !== 'a' || S.phase !== 'player' || (S.objN || 0) >= BAG_MAX || S.duel433 || bagN(k) < 1) return false;
   if (HEALS.includes(k)) return !u.acted && !u.sn && u.hp < u.mhp;
   if (it.voix && S.voix < it.voix) return false;
   if (OKX455[k]) return !!OKX455[k](S, u);
@@ -309,7 +309,7 @@ export function pUse414(S, u, k) {
 
 export function dailyOffers() {
   const d = today();
-  if (OFFRES414.d === d) return OFFRES414.k;
+  if (OFFERS414.d === d) return OFFERS414.k;
   let h = 7;
   for (const c of d) h = (h * 31 + c.charCodeAt(0)) >>> 0;
   const rnd = () => (h = (Math.imul(h, 1103515245) + 12345) >>> 0) / 4294967296;
@@ -318,12 +318,12 @@ export function dailyOffers() {
     Object.keys(HELD_SHOP).filter(k => HELD_SHOP[k].p),
     Object.keys(SHOP).filter(k => ['balls', 'machines'].includes(SHOP[k].cat) && SHOP[k].p && !SHOP[k].cs)
   ];
-  OFFRES414 = { d, k: pools.map(L => L[Math.floor(rnd() * L.length)]).filter(Boolean) };
-  return OFFRES414.k;
+  OFFERS414 = { d, k: pools.map(L => L[Math.floor(rnd() * L.length)]).filter(Boolean) };
+  return OFFERS414.k;
 }
 
 
-// Boutique : offres du jour et objets tenus en vente, rendus par React (src/screens/sac/Offres.jsx, Tenus.jsx)
+// Shop: daily offers and held items for sale, rendered by React (src/screens/bag/Offers.jsx, HeldItems.jsx)
 
 
 function buyHeld414(k) {
@@ -347,22 +347,22 @@ function buyHeld414(k) {
 }
 
 /* =====================================================================
-   v4.14 : la Résonance au cœur du combat
-   1. Rangs Faible, Moyen, Fort, Expert (d'après le coût en PC de la forme).
-      Chaque rang a son avantage ; trois rangs différents = Harmonie.
-   2. Attaques classées. Les signatures offensives deviennent Expertes et se
-      paient en losanges de Résonance : les formes finales en accumulent.
-   3. Notes de Résonance : chaque Pokémon différent qui frappe une cible dans
-      la manche y pose une note. À 3 notes : « Résonance ! », ×1,5 et l'écho
-      du type.
-   4. Boutique : objets tenus, objets de combat, offres du jour, marchand
-      rare, Sac de combat limité à 4 objets.
-   Champions, rival, Conseil, Maître, légendaires et colosses en profitent
-   aussi ; les terrains et la Tour, non.
+   v4.14: Resonance at the heart of combat
+   1. Ranks Weak, Medium, Strong, Expert (from the form's CP cost).
+      Each rank has its own advantage; three different ranks = Harmony.
+   2. Ranked attacks. Offensive signatures become Expert and are paid
+      for in Resonance diamonds: final forms accumulate them.
+   3. Resonance notes: each different Pokémon that hits a target during
+      the round leaves a note on it. At 3 notes: "Résonance !", ×1.5 and the
+      type echo.
+   4. Shop: held items, battle items, daily offers, rare
+      merchant, battle Bag limited to 4 items.
+   Champions, rival, Council, Master, legendaries and colossi benefit
+   too; terrains and the Tower do not.
    ===================================================================== */
 
-/* ---------- 1. rangs ---------- */
-export const RANGS = {
+/* ---------- 1. ranks ---------- */
+export const RANKS = {
   faible: { n: 'Faible', i: 1, k: 'Élan', d: 'Quand il pose la première note de Résonance sur une cible, il gagne 1 losange.' },
   moyen: { n: 'Moyen', i: 2, k: 'Relance', d: 'Ses coups comptent pour 2 notes de Résonance.' },
   fort: { n: 'Fort', i: 3, k: 'Impact', d: '+25 % de dégâts sur une cible qui porte déjà une note de Résonance.' },
@@ -373,16 +373,16 @@ export const RANGS = {
 export const rankOfValue = u => rankId(u.id);
 
 
-export const stars = r => '★'.repeat(RANGS[r].i);
+export const stars = r => '★'.repeat(RANKS[r].i);
 
 
-export const rankTag = r => `<span class="rg rg-${r}" title="Rang ${RANGS[r].n} · ${RANGS[r].k} : ${RANGS[r].d}">${stars(r)}</span>`;
+export const rankTag = r => `<span class="rg rg-${r}" title="Rang ${RANKS[r].n} · ${RANKS[r].k} : ${RANKS[r].d}">${stars(r)}</span>`;
 
 
-/* ---------- 2. attaques classées, attaques Expertes ---------- */
+/* ---------- 2. ranked attacks, Expert attacks ---------- */
 const XP_LEG = ['fatalfoudre', 'feusacre', 'frappepsy', 'aeroblast'];
 
- // les attaques des légendaires
+ // legendaries' attacks
 
 
 const MRG = { soutien: 'Soutien', faible: 'Faible', moyen: 'Moyenne', fort: 'Forte', expert: 'Experte' };
@@ -399,11 +399,11 @@ const resoOn = (S, u) => !!u && (u.side === 'a' || bossScene(S));
 
 export const rankLine414 = u => {
   const r = rankOfValue(u);
-  return `<p class="bp-tal bp-rg"><b>${RANGS[r].n} · ${RANGS[r].k}.</b> ${RANGS[r].d}</p>`;
+  return `<p class="bp-tal bp-rg"><b>${RANKS[r].n} · ${RANKS[r].k}.</b> ${RANKS[r].d}</p>`;
 };
 
 
-/* ---------- 3. notes de Résonance et échos de type ---------- */
+/* ---------- 3. Resonance notes and type echoes ---------- */
 export const notesOf = (S, v) => (S && v && v.notes && v.notes.r === S.round ? v.notes.n : 0);
 
 
@@ -433,10 +433,10 @@ export const ECHOS = {
 
 export const bonusMove414 = (S, u) => (u.item === 'mouchoir' ? 2 : 0) + (u.item === 'crinorage' ? 1 : 0) + (u.reso > 0 ? 1 : 0) - (surrounded420(S, u) ? 1 : 0);
 
- // Crin d’Orage (v4.16), Forme Résonante (v4.17), Encerclement (v4.20)
+ // Crin d’Orage (v4.16), Resonant Form (v4.17), Encirclement (v4.20)
 
-/* ---------- 4. Boutique ---------- */
-export const SAC_MAX = 4;
+/* ---------- 4. Shop ---------- */
+export const BAG_MAX = 4;
 
 export const HELD_SHOP = {
   sitrus: { p: 2500 },
@@ -460,7 +460,7 @@ export const discount414 = (k, p) => (p && offer414(k) ? Math.round((p * 0.7) / 
 
 export const costHeld414 = k => discount414(k, HELD_SHOP[k].p);
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Statements executed at startup, in the original order (see index.js).
 export function __init() {
 LEG414 = new Set(LEGS.map(l => l.id));
 
@@ -474,7 +474,7 @@ for (const k in MV) {
 }
 
 
-FOURNISSEURS_DEGATS.push(
+DAMAGE_PROVIDERS.push(
   {
     id: 'resonance',
     fournir: (c, { S, u, m, t }) => {
@@ -492,8 +492,8 @@ FOURNISSEURS_DEGATS.push(
 );
 
 
-/* ---------- combat : départ, fin de manche, Harmonie ---------- */
-CROCHETS.combat.push(S => {
+/* ---------- combat: start, end of round, Harmony ---------- */
+HOOKS.combat.push(S => {
   const al = S.units.filter(u => u.side === 'a');
   if (al.length >= 3 && new Set(al.map(rankOfValue)).size >= 3) {
     S.harmonie = true;
@@ -508,7 +508,7 @@ CROCHETS.combat.push(S => {
 });
 
 
-CROCHETS.avantFinManche.push(S => {
+HOOKS.avantFinManche.push(S => {
   if (!bossScene(S)) return;
   S.units.forEach(e => {
     if (e.side === 'e' && !e.ko && hasXp(e)) e.en = Math.min(EMAX, (e.en || 0) + 1);
@@ -516,12 +516,12 @@ CROCHETS.avantFinManche.push(S => {
 });
 
 
-CROCHETS.progres.push((S, rew) => {
+HOOKS.progres.push((S, rew) => {
   if (S.stats && S.stats.reso) rew.reso = S.stats.reso;
 });
 
 
-CROCHETS.resultat.push(r =>
+HOOKS.resultat.push(r =>
   r.reso
     ? `<div class="res-l"><h4>Résonance</h4><div class="rl"><span>Résonances déclenchées par votre équipe</span><b>${r.reso}</b></div></div>`
     : ''
@@ -595,8 +595,8 @@ Object.assign(SHOP, {
 COMBAT414 = Object.keys(SHOP).filter(k => SHOP[k].cat === 'combat');
 
 
-/* offres du jour : trois articles à −30 %, les mêmes pour toute la journée */
-OFFRES414 = { d: '', k: [] };
+/* daily offers: three items at −30%, the same for the whole day */
+OFFERS414 = { d: '', k: [] };
 
 
 document.addEventListener('click', e => {
@@ -614,5 +614,5 @@ document.addEventListener('click', e => {
 });
 
 
-/* ---------- le Guide : rangs, attaques Expertes, notes et échos, rendus par React (Tactique.jsx) ---------- */
+/* ---------- the Guide: ranks, Expert attacks, notes and echoes, rendered by React (Tactics.jsx) ---------- */
 }

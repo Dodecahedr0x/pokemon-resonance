@@ -3,9 +3,9 @@ import { GYMS } from '../../../engine/004-data.js';
 import { medal } from '../../../engine/014-utils.js';
 import { badgeSvg } from '../../../engine/019-league.js';
 
-// Présentation « VS » avant un combat (#vs, ouverte par vsIntro, 030). Le moteur garde le
-// clic qui la ferme ; `out` (fermeture animée) vient du store.
-// Ajouts des versions : emblème du dresseur avant le nom (v4.50, `av`), astuce en bas (v4.48, `tip`).
+// "VS" presentation before a battle (#vs, opened by vsIntro, 030). The engine keeps the
+// click that closes it; `out` (animated close) comes from the store.
+// Version additions: trainer emblem before the name (v4.50, `av`), tip at the bottom (v4.48, `tip`).
 export default function Vs({ d }) {
   return (
     <div id="vs" className={'vs' + d.cls + (d.out ? ' out' : '')} style={{ '--d': d.dur + 'ms' }}>

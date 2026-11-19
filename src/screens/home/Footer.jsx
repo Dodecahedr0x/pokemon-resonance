@@ -8,8 +8,8 @@ import { seasonData } from '../../engine/050-world.js';
 import { radio417 } from '../../engine/057-companions-resonance.js';
 import { weeklyBuild429 } from '../../engine/064-quality.js';
 
-// Bas de l'Accueil (.v4-bottom) : saison (#v4Saison, v4.11), Pokématos (#v4Radio, v4.17),
-// défi du jour (#v4Event), compteurs (#v4Stats), défi de la semaine (#v4Hebdo, v4.29).
+// Bottom of the Home page (.v4-bottom): season (#v4Saison, v4.11), Pokématos (#v4Radio, v4.17),
+// daily challenge (#v4Event), counters (#v4Stats), weekly challenge (#v4Hebdo, v4.29).
 export default function Bottom({ on }) {
   return (
     <div className="v4-bottom">

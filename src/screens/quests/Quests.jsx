@@ -16,11 +16,11 @@ import Achievement from './Achievements.jsx';
 
 const NL = '\n ';
 
-// Contenu de l'onglet choisi (V4.qTab) ; tout autre valeur affiche l'onglet Événement.
+// Content of the chosen tab (V4.qTab); any other value shows the Event tab.
 function Tab() {
   if (V4.qTab === 'main') return <Main />;
   if (V4.qTab === 'side') return <Secondary />;
-  if (V4.qTab === 'succes') return <Achievement />; // succès et titres (v4.9)
+  if (V4.qTab === 'succes') return <Achievement />; // achievements and titles (v4.9)
   if (V4.qTab === 'leg') return <Legends />; // v4.29
   if (V4.qTab === 'journal') return <Journal />; // v4.30
   return <Event />;
@@ -32,8 +32,8 @@ function Content() {
     ['main', 'Principale'],
     ['side', <>Secondaires{ready ? <> <i className="v4-dot">{ready}</i></> : null}</>],
     ['event', 'Événement'],
-    ['leg', 'Légendes'], // quêtes légendaires (v4.29)
-    ['journal', 'Journal'], // journal tactique (v4.30)
+    ['leg', 'Légendes'], // legendary quests (v4.29)
+    ['journal', 'Journal'], // tactical journal (v4.30)
     ['succes', 'Succès'] // v4.9
   ];
   return (
@@ -64,8 +64,8 @@ function Content() {
   );
 }
 
-// Page Quêtes (#quetes). Rien n'est rendu avant le premier renderQuests() du moteur ; chaque
-// renderQuests() reconstruit le contenu (gestionnaires délégués dans le moteur : data-qtab,
+// Quests page (#quetes). Nothing is rendered before the engine's first renderQuests(); each
+// renderQuests() rebuilds the content (delegated handlers in the engine: data-qtab,
 // data-claim, data-v4fight, data-titre…).
 export default function Quests() {
   const ready = useEngineReady();

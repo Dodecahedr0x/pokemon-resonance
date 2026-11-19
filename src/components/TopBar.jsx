@@ -5,13 +5,13 @@ import { fmt, tLevel } from '../engine/032-v4-foundation.js';
 import { displayedTitle } from '../engine/048-replayability.js';
 import { AVT450 } from '../engine/080-trainer-avatar-rare-encounters.js';
 
-// Titre de la page affichée (show()).
+// Title of the displayed page (show()).
 export function TbSec() {
   const { sec } = useShell();
   return <span className="tb-sec" id="tbSec">{sec}</span>;
 }
 
-// Bouton Sauvegardes : voyant « en cours » et « compte » (svIndicator).
+// Saves button: "in progress" indicator and "account" (svIndicator).
 export function TbSave() {
   const { svBusy, svCloud } = useShell();
   return (
@@ -19,7 +19,7 @@ export function TbSave() {
   );
 }
 
-// Emblème du dresseur : initiale, ou pastille du type choisi (v4.50).
+// Trainer emblem: initial, or chip of the chosen type (v4.50).
 function Avatar() {
   const ini = (PROFILE.name || 'D').trim().charAt(0).toUpperCase() || 'D';
   const a = AVT450();
@@ -36,10 +36,10 @@ function Avatar() {
   );
 }
 
-// Barre du haut (v4-03) : dresseur, Pokédollars, Éclats, réglages. Redessinée par renderWallet().
+// Top bar (v4-03): trainer, Pokédollars, Shards, settings. Redrawn by renderWallet().
 export function TopTrainer() {
   const { wallet } = useShell();
-  const on = wallet > 0; // avant le premier renderWallet : gabarit vide, comme l'ancien moteur
+  const on = wallet > 0; // before the first renderWallet: empty template, like the old engine
   return (
     <div className="v4-tb">
       <a className="v4-trainer" data-t="params" href="#params" aria-label="Profil du dresseur">{on ? <Avatar /> : <span className="v4-av" id="v4Av" />}<span className="v4-tr-t"><b id="v4Name">{on ? PROFILE.name || 'Dresseur' : null}</b><em id="v4Lvl">{on ? `${displayedTitle() || (isCamp() ? 'Campagne' : 'Mode Libre')} · Nv. ${tLevel()}` : null}</em></span></a>

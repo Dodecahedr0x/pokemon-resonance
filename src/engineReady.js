@@ -1,7 +1,7 @@
 import { useSyncExternalStore } from 'react';
 
-// Les données du moteur (listes, tables, état de partie) n'existent qu'après son démarrage :
-// les écrans React attendent ce signal avant de les lire.
+// The engine's data (lists, tables, game state) only exists after it has started:
+// the React screens wait for this signal before reading it.
 let ready = false;
 const listeners = new Set();
 

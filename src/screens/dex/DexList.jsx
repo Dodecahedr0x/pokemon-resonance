@@ -4,10 +4,10 @@ import { tc } from '../../engine/014-utils.js';
 import { PIX, V4, ownedFam } from '../../engine/032-v4-foundation.js';
 import { DEXS, dexList } from '../../engine/038-pokedex.js';
 import { SPARK, isShinyOwned, shinyHue } from '../../engine/043-adventure-plus.js';
-import { REGN421 } from '../../engine/061-catch-anywhere.js';
+import { REGION_NAMES421 } from '../../engine/061-catch-anywhere.js';
 import { familyCapt428 } from '../../engine/063-combat-catches-home.js';
 
-// Compteur de la barre (#dex4Cnt) : obtenus, chromatiques, puis par région (v4.28).
+// Bar counter (#dex4Cnt): obtained, shiny, then per region (v4.28).
 export function DexCount() {
   const n = PROFILE.shiny.length;
   return (
@@ -27,7 +27,7 @@ export function DexCount() {
             ok = (PROFILE.dipl428 || []).includes(r);
           return (
             <span className={ok ? 'ok' : ''} key={r}>
-              {`${REGN421[r]} `}
+              {`${REGION_NAMES421[r]} `}
               <b>{c.n}</b>
               {`/${c.t}${ok ? ' ✓' : ''}`}
             </span>
@@ -38,7 +38,7 @@ export function DexCount() {
   );
 }
 
-// Liste du Pokédex (#dex4List). Les vignettes chromatiques (v4.25) sont posées par le moteur.
+// Pokédex list (#dex4List). Shiny thumbnails (v4.25) are added by the engine.
 export function DexList() {
   const L = dexList();
   return (

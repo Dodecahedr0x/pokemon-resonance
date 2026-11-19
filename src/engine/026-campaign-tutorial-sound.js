@@ -1,4 +1,4 @@
-/* Section d'origine : 20-campagne-tutoriel-son.js */
+/* Original section: 20-campaign-tutorial-sound.js */
 import { bdClass } from '../screens/combat/board/boardStore.js';
 
 import { EL, GYMS, MX, RX } from './004-data.js';
@@ -29,13 +29,13 @@ import { jNext416 } from './055-living-johto.js';
 import { hNext419 } from './059-hoenn.js';
 import { confirm430 } from './065-camp-tactics.js';
 
-export let PREF, SFX, PREPG, TUTO;
+export let PREF, SFX, PREPG, TUTORIAL_STEPS;
 let AC, tutorialI;
 export function __set_PREPG(v) { return (PREPG = v); }
 export function __set_tutorialI(v) { return (tutorialI = v); }
 
-// Animations réduites façon Pokémon (v4.72) : préférence système, réglage d'accessibilité ou
-// animations du thème coupées. Même test que les copies locales des modules 108 et 109.
+// Pokémon-style reduced animations (v4.72): system preference, accessibility setting or
+// theme animations turned off. Same test as the local copies in modules 108 and 109.
 export const calm472 = () => !!RM || document.documentElement.classList.contains('a11y-rm') || PREF.pk472a === 0;
 
 
@@ -64,7 +64,7 @@ function ac() {
 
 export function tone(f, t0, dur, type, flying, f2) {
   const a = ac(),
-    v = (flying || 0.08) * PREF.sfxVol; // volume des effets réglable (0 = muet)
+    v = (flying || 0.08) * PREF.sfxVol; // adjustable effects volume (0 = muted)
   if (!a || !(v > 0)) return;
   const o = a.createOscillator(),
     g = a.createGain(),
@@ -152,7 +152,7 @@ export function sfxEv(ev) {
 }
 
 
-/* ---- infos de case, objets, fatigue, Liens, capture, duos dans le panneau ---- */
+/* ---- cell info, items, fatigue, Bonds, capture, duos in the panel ---- */
 export function tileTip(k) {
   const t = B.tiles[k],
     o = [];
@@ -173,7 +173,7 @@ export function tileTip(k) {
   if (t.lava > 0) o.push(`Lave : brûle ce qui s’y arrête, ${t.lava} manche${t.lava > 1 ? 's' : ''}`);
   if (t.fog > 0)
     o.push(t.fog > 2 ? 'Brume toxique : on ne vise pas à distance' : 'Brouillard : on ne vise pas à distance');
-  if (t.trap) o.push(trapTip(t.trap)); // pièges (v4.8)
+  if (t.trap) o.push(trapTip(t.trap)); // traps (v4.8)
   if (t.grass) o.push('Hautes herbes : un Pokémon caché ne peut être visé qu’à 2 cases ou moins. Le Feu les embrase');
   if (t.sand && !t.w)
     o.push('Sable : 2 Mouvements pour y entrer, sauf Sol, Roche, Acier et volants, qui y subissent −2 dégâts');
@@ -250,7 +250,7 @@ export function duoBlock(u) {
 
 export function catchBlock(e) {
   if (B.noCatch) return '';
-  __set_CAP_K(ballFor(e)); // la Ball proposée d’office
+  __set_CAP_K(ballFor(e)); // the Ball offered by default
   const al = ui.sel && byUid(B, ui.sel),
     req = captureReq(B, al, e),
     ok = al && canCapture(B, al, e);
@@ -263,7 +263,7 @@ export function catchBlock(e) {
 }
 
 
-/* ---- progression de fin de combat ---- */
+/* ---- end-of-battle progression ---- */
 export function applyProgress(S) {
   const e0 = PROFILE.elite,
     forms0 = [...(PROFILE.forms || [])],
@@ -272,7 +272,7 @@ export function applyProgress(S) {
     rew = { links: [], caught: [], items: [], gifts: [], tired: [], badgeNew: false };
   if (D.tuto) PROFILE.tuto = 1;
   const al = S.units.filter(u => u.side === 'a');
-  Object.entries(D.pret429 ? {} : S.stats.pairs || {}).forEach(([k, v]) => { // équipe de location : pas de Liens (v4.29)
+  Object.entries(D.pret429 ? {} : S.stats.pairs || {}).forEach(([k, v]) => { // rental team: no Bonds (v4.29)
     const [a, b] = k.split('|'),
       ua = al.find(u => u.sp === a),
       ub = al.find(u => u.sp === b),
@@ -286,7 +286,7 @@ export function applyProgress(S) {
     const base = BY[id].base;
     PROFILE.caught++;
     if (!PROFILE.dex.includes(base)) PROFILE.dex.push(base);
-    const nw = !PROFILE.box.includes(base); // Libre aussi (v4.21)
+    const nw = !PROFILE.box.includes(base); // Free mode too (v4.21)
     if (nw) PROFILE.box.push(base);
     rew.caught.push({ id, base, nw });
   });
@@ -342,7 +342,7 @@ export function applyProgress(S) {
     renderLeague();
     renderHome();
   }, 0);
-  // campagne : les formes atteintes en combat deviennent des recrues
+  // campaign: forms reached in battle become recruits
   rew.forms = [];
   if (isCamp() && !D.pret429) {
     PROFILE.forms = PROFILE.forms || [];
@@ -353,7 +353,7 @@ export function applyProgress(S) {
       }
     });
   }
-  // gains de fin de combat : Pokédollars et Éclats
+  // end-of-battle gains: Pokédollars and Shards
   try {
     const lv = D.lv || 10,
       mul = { facile: 0.8, normal: 1, expert: 1.3 }[S.diff || PROFILE.diff] || 1;
@@ -388,7 +388,7 @@ export function applyProgress(S) {
     Object.assign(rew, { money: m, gems: g, daily });
     setTimeout(renderWallet, 0);
   } catch (e) {}
-  aplusProgress(S, rew); // chromatiques, rival, légendes, Tour (v4.4)
+  aplusProgress(S, rew); // shinies, rival, legends, Tower (v4.4)
   return rew;
 }
 
@@ -424,12 +424,12 @@ export function rewHtml(r) {
   if (r.money != null)
     h =
       `<div class="res-l v4-gain"><h4>Gains</h4><div class="rl"><span class="v4-coin" aria-hidden="true">₽</span><span>${r.daily ? 'Défi du jour relevé : gains doublés' : 'Prime de combat'}</span><b>+${fmt(r.money)} ₽</b></div>${r.gems ? `<div class="rl"><span class="v4-gemi" aria-hidden="true"><svg><use href="#i-gem"/></svg></span><span>Éclats de Résonance</span><b>+${r.gems}</b></div>` : ''}</div>` +
-      h; // gains de fin de combat
-  return itemize(h); // objets illustrés
+      h; // end-of-battle gains
+  return itemize(h); // illustrated items
 }
 
 
-// Combats : la sélection est rendue par React (src/screens/combat/prep), via renderSelection().
+// Battles: the selection is rendered by React (src/screens/combat/prep), via renderSelection().
 export function renderPrep() {
   rivalBuild();
   if (scSel === 'sauvage' && !SCEN.sauvage) __set_scSel(nextGoal()[0]);
@@ -437,24 +437,24 @@ export function renderPrep() {
   renderSummary();
   renderSelection();
   try {
-    // illustrations de l’équipe et des adversaires préchargées
+    // team and opponent illustrations preloaded
     const S = SCEN[scSel];
     preload([...squad, ...(S && S.foes ? S.foes.map(f => f[0]) : [])]);
   } catch (e) {}
 }
 
 
-/* ---- Ligue : Conseil 4 et Champion, rendus par React (src/screens/ligue/EliteCase.jsx) ---- */
+/* ---- League: Elite Four and Champion, rendered by React (src/screens/league/EliteCell.jsx) ---- */
 
 
-/* ---- accueil : parcours ---- */
+/* ---- home: path ---- */
 export function nextGoal() {
   if (PROFILE.tuto === 0 && PROFILE.battles === 0) return ['tuto', 'Premier combat guidé'];
   for (let i = 0; i < 8; i++) {
-    // le rival revient après les badges 2, 4 et 6 (Campagne)
+    // the rival returns after badges 2, 4 and 6 (Campaign)
     if (isCamp() && i && i % 2 === 0 && BADGES.length >= i && PROFILE.rival < i / 2)
       return [RIVAL_KEYS[i / 2 - 1], 'Rival : ' + RIVAL.n];
-    // la Team Dissonance frappe après les badges 1, 3, 5 et 7 (Campagne, v4.11)
+    // Team Dissonance strikes after badges 1, 3, 5 and 7 (Campaign, v4.11)
     if (isCamp() && i % 2 === 1 && BADGES.length >= i && (PROFILE.dissonance || 0) < (i + 1) / 2)
       return ['td' + (i + 1) / 2, 'Team Dissonance'];
     if (!BADGES.includes(i)) return [ARENAS[i].k, GYMS[i].n];
@@ -462,30 +462,30 @@ export function nextGoal() {
   if (isCamp() && PROFILE.rival < 4) return ['rv4', 'Rival : ' + RIVAL.n];
   for (let i = 0; i < 4; i++) if (PROFILE.elite < i + 1) return [ELITE[i], SCEN[ELITE[i]].n];
   if (PROFILE.elite >= 5) {
-    const jn = jNext416(); // Johto après Kanto (v4.15), avec son histoire (v4.16)
+    const jn = jNext416(); // Johto after Kanto (v4.15), with its story (v4.16)
     if (jn) return jn;
-    const hn = hNext419(); // Hoenn après Johto (v4.19)
+    const hn = hNext419(); // Hoenn after Johto (v4.19)
     if (hn) return hn;
   }
   return ['champ', PROFILE.elite >= 5 ? 'Champion (revanche)' : 'Champion de la Ligue'];
 }
 
 
-/* ---- nouvelle campagne : choix du starter ---- */
-// #starter est rendu par React (src/screens/overlays/Starter.jsx)
+/* ---- new campaign: starter choice ---- */
+// #starter is rendered by React (src/screens/overlays/Starter.jsx)
 export function openStarter() {
   openStarterBox();
 }
 
 
 function tutorialOn() {
-  return B && SCEN[B.sc] && SCEN[B.sc].tuto && tutorialI >= 0 && tutorialI < TUTO.length;
+  return B && SCEN[B.sc] && SCEN[B.sc].tuto && tutorialI >= 0 && tutorialI < TUTORIAL_STEPS.length;
 }
 
 
-// Coach du combat guidé : #coach est rendu par React (src/screens/overlays/Coach.jsx,
-// avec le portrait de la Professeure). Ici, le choix de l'étape et la case mise en avant.
-// #bBoard est rendu par React : sa classe passe par l'état « host » (boardStore.js)
+// Guided-battle coach: #coach is rendered by React (src/screens/overlays/Coach.jsx,
+// with the Professor's portrait). Here, the choice of step and the highlighted cell.
+// #bBoard is rendered by React: its class goes through the "host" state (boardStore.js)
 function withoutHl() {
   bdClass('coach-hl', false);
   $$('.coach-hl').forEach(x => x.classList.remove('coach-hl'));
@@ -494,7 +494,7 @@ function withoutHl() {
 
 export function renderCoach() {
   if (!B || B.over) {
-    // le coach disparaît à la fin du combat ou à l’abandon
+    // the coach disappears at the end of the battle or on abandon
     hideCoach();
     withoutHl();
     return;
@@ -504,8 +504,8 @@ export function renderCoach() {
     hideCoach();
     return;
   }
-  const s = TUTO[tutorialI];
-  if (s.done() && tutorialI < TUTO.length - 1) {
+  const s = TUTORIAL_STEPS[tutorialI];
+  if (s.done() && tutorialI < TUTORIAL_STEPS.length - 1) {
     tutorialI++;
     return renderCoach();
   }
@@ -514,18 +514,18 @@ export function renderCoach() {
   else if (t) t.classList.add('coach-hl');
   const c = getCoach();
   if (c.k === String(tutorialI) && !c.hidden) return;
-  showCoach(String(tutorialI), { n: tutorialI + 1, total: TUTO.length, t: s.t, d: s.d, last: tutorialI === TUTO.length - 1 });
+  showCoach(String(tutorialI), { n: tutorialI + 1, total: TUTORIAL_STEPS.length, t: s.t, d: s.d, last: tutorialI === TUTORIAL_STEPS.length - 1 });
 }
 
 
-/* ---- Ligue : objets tenus et techniques combinées (v1.0) ---- */
-// objets tenus (#items) et techniques combinées (#duos) : rendus par le Guide React (Ligue.jsx)
+/* ---- League: held items and combined techniques (v1.0) ---- */
+// held items (#items) and combined techniques (#duos): rendered by the React Guide (League.jsx)
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Instructions run at startup, in the original order (see index.js).
 export function __init() {
 
-/* ===================== v1.0 : progression, campagne, tutoriel, confort, son ===================== */
-/* ---- préférences de cet appareil ---- */
+/* ===================== v1.0: progression, campaign, tutorial, comfort, sound ===================== */
+/* ---- preferences for this device ---- */
 PREF = (() => {
   let p = { sound: false, vibe: false, fast: false };
   try {
@@ -535,7 +535,7 @@ PREF = (() => {
 })();
 
 
-/* ---- son synthétisé (aucun fichier) et vibrations ---- */
+/* ---- synthesized sound (no files) and vibrations ---- */
 AC = null;
 
 
@@ -568,7 +568,7 @@ SFX = {
 };
 
 
-/* ---- préparation : terrains, arènes, Ligue ---- */
+/* ---- preparation: terrains, gyms, League ---- */
 PREPG = null;
 
 
@@ -599,7 +599,7 @@ $('#starter').addEventListener('click', e => {
   const d = e.target.closest('[data-sd]');
   if (d) {
     PROFILE.diff = d.dataset.sd;
-    refreshStarter(); // boutons de difficulté (aria-pressed)
+    refreshStarter(); // difficulty buttons (aria-pressed)
     return;
   }
   const b = e.target.closest('[data-st]');
@@ -634,8 +634,8 @@ $('#starter').addEventListener('click', e => {
 });
 
 
-/* ---- tutoriel : premier combat guidé ---- */
-TUTO = [
+/* ---- tutorial: first guided battle ---- */
+TUTORIAL_STEPS = [
   {
     t: 'Lisez la menace',
     d: 'Touchez un adversaire : la zone rouge montre tout ce qu’il peut frapper après s’être déplacé. Il choisit sa cible à son tour.',
@@ -687,7 +687,7 @@ $('#coach').addEventListener('click', e => {
     queueSave();
   } else {
     tutorialI++;
-    if (tutorialI >= TUTO.length) {
+    if (tutorialI >= TUTORIAL_STEPS.length) {
       tutorialI = -1;
       PROFILE.tuto = 1;
       queueSave();

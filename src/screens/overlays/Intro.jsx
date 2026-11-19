@@ -7,8 +7,8 @@ import { medal, tc } from '../../engine/014-utils.js';
 import { reportError } from '../../engine/002-errors.js';
 import { INTRO, PROF_AV } from '../../engine/031-home-journey.js';
 
-// Accueil de la Professeure (#intro) : showIntro() (031) l'ouvre, renderIntro() redessine
-// l'étape (INTRO.i), closeIntro() le retire. Clics et Entrée : écouteurs du moteur sur #intro.
+// The Professor's welcome (#intro): showIntro() (031) opens it, renderIntro() redraws
+// the step (INTRO.i), closeIntro() removes it. Clicks and Enter: engine listeners on #intro.
 export default function Intro() {
   const { open, v } = useIntro();
   if (!open) return null;
@@ -19,8 +19,8 @@ export default function Intro() {
   );
 }
 
-// Jamais un voile vide devant le jeu : si la carte ne peut pas se dessiner, rien n'est
-// affiché et le souci est signalé (ancien try/catch de showIntro).
+// Never an empty veil in front of the game: if the card cannot be drawn, nothing is
+// shown and the problem is reported (former try/catch of showIntro).
 class Guard extends Component {
   state = { err: false };
   static getDerivedStateFromError() {

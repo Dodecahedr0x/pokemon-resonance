@@ -3,7 +3,7 @@ import { Html } from '../lib/html.jsx';
 import { useTip } from './tipStore.js';
 import { PROF_AV, TIPS } from '../engine/031-home-journey.js';
 
-// Conseil de la Professeure (.tip), juste après l'en-tête .ph de l'écran `t` (pokedex, combat, types).
+// Professor's tip (.tip), right after the .ph header of the `t` screen (pokedex, battle, types).
 function Tip({ t }) {
   const on = useTip(t);
   if (!on) return null;

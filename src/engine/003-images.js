@@ -1,4 +1,4 @@
-/* Section d'origine : 00-images.js */
+/* Original section: 00-images.js */
 
 import { RES_IMAGES } from './000-embedded-images.js';
 
@@ -31,10 +31,10 @@ export const ITA = k =>
     ? b64url('i' + k, ITIMG[k])
     : 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/dream-world/' + k + '.png';
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Statements run at startup, in the original order (see index.js).
 export function __init() {
 
-/* images intégrées (000-images-integrees.js) : le jeu n'a pas besoin d'Internet */
+/* embedded images (000-embedded-images.js): the game does not need the Internet */
 PKIMG = RES_IMAGES.pk;
 
 
@@ -45,7 +45,7 @@ IMGU = {},
   IMGB = {};
 
 
-/* si un lecteur refuse les URL blob, on bascule sur l'image intégrée en data URI */
+/* if a reader refuses blob URLs, we fall back to the embedded image as a data URI */
 document.addEventListener(
   'error',
   e => {

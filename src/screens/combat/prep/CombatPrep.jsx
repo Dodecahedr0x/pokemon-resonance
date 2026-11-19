@@ -10,11 +10,11 @@ import { scSel } from '../../../engine/024-combat-ui.js';
 import { PREPG, nextGoal } from '../../../engine/026-campaign-tutorial-sound.js';
 import { groupOf } from '../../../engine/031-home-journey.js';
 
-// Combats : choix du combat (#cbPrep). Le moteur garde la logique (renderPrep, écouteurs
-// sur #selTabs, #scenList, #bLaunch, data-…) et masque #cbPrep pendant un combat
-// (attribut hidden posé par le moteur : React ne le rend pas, l'élément reste monté).
-// Chaque renderSelection() incrémente la version : les contenus sont reconstruits
-// (clé = version), comme l'ancien innerHTML.
+// Battles: battle choice (#cbPrep). The engine keeps the logic (renderPrep, listeners
+// on #selTabs, #scenList, #bLaunch, data-…) and hides #cbPrep during a battle
+// (hidden attribute set by the engine: React does not render it, the element stays mounted).
+// Each renderSelection() increments the version: contents are rebuilt
+// (key = version), like the old innerHTML.
 function BattlePrep() {
   const v = usePrepVersion();
   const on = v > 0 && !!SCEN[scSel];

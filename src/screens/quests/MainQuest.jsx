@@ -9,7 +9,7 @@ import { emblem, wonOf } from '../../engine/031-home-journey.js';
 import { STATE_N, rewardLine } from '../../engine/037-map.js';
 import { MAINQ } from '../../engine/039-quests-shop.js';
 
-// Un chapitre de la quête principale (ancien mainRow).
+// A chapter of the main quest (formerly mainRow).
 function Chapter({ k, gk }) {
   const C = CHAP(k) || { c: '', t: '' },
     L = leaderOf(k),
@@ -35,7 +35,7 @@ function Chapter({ k, gk }) {
   );
 }
 
-// Onglet « Principale » : les chapitres de la Campagne, dans l'ordre.
+// « Principale » (Main) tab: the Campaign chapters, in order.
 export default function Main() {
   const gk = nextGoal()[0];
   return (

@@ -1,4 +1,4 @@
-/* Section d'origine : v4-04-accueil.js */
+/* Original section: v4-04-accueil.js */
 
 import { $, RM } from './014-utils.js';
 import { go } from './016-navigation.js';
@@ -11,21 +11,21 @@ import { refreshHome } from '../screens/home/homeStore.js';
 
 
 
-// L'Accueil est rendu par React (src/screens/accueil) : héros, compagnon, bannières, équipe,
-// quête, nouveautés, raccourcis, bas de page, carte de dresseur, amis et objectif latéral.
-// Redessiner = relire l'état du moteur. Restent ici le porte-monnaie et le Camp de base.
+// The Home screen is rendered by React (src/screens/home): hero, companion, banners, team,
+// quest, news, shortcuts, footer, trainer card, friends and side objective.
+// Redrawing = rereading the engine's state. What remains here is the wallet and the Base Camp.
 export function renderHome() {
-  seasonRoute(); // data-saison de la route (v4.11)
+  seasonRoute(); // data-saison (season) of the route (v4.11)
   refreshHome();
   renderWallet();
-  renderCampBase(); // camp et expéditions (v4.10)
+  renderCampBase(); // camp and expeditions (v4.10)
 }
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Statements run at startup, in the original order (see index.js).
 export function __init() {
 
-/* ---------- Accueil : hub d’aventure ---------- */
-/* la grille v4 de l'Accueil (.v4-home) et ses raccourcis sont rendus par React (Accueil.jsx, Tuiles.jsx) */
+/* ---------- Home: adventure hub ---------- */
+/* the v4 Home grid (.v4-home) and its shortcuts are rendered by React (Home.jsx, Tiles.jsx) */
 document.addEventListener('click', e => {
   const f = e.target.closest('[data-v4fight]');
   if (f) {

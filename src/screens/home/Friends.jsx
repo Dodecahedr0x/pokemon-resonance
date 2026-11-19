@@ -7,8 +7,8 @@ import { shinyStyle } from '../../engine/043-adventure-plus.js';
 import { friendsData416 } from '../../engine/055-living-johto.js';
 import { tournamentHtml417 } from '../../engine/057-companions-resonance.js';
 
-// Défis entre amis (#v4Amis, v4.16), sous les raccourcis masqués de l'Accueil.
-// Boutons data-ami, data-ami-fight, data-ami-del et tournoi : gérés par le moteur.
+// Friend challenges (#v4Amis, v4.16), under the hidden Home shortcuts.
+// data-ami, data-ami-fight, data-ami-del and tournoi buttons: handled by the engine.
 export default function Friends({ on }) {
   return (
     <section className="v4-amis v4-panel" id="v4Amis" aria-label="Défis entre amis">

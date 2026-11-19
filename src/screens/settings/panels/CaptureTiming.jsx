@@ -1,6 +1,6 @@
 import { PREF } from '../../../engine/026-campaign-tutorial-sound.js';
 
-// Paramètres › Capture avec timing (v4.53) : bouton data-b453 géré par le moteur (module 083).
+// Settings › Timed capture (v4.53): data-b453 button handled by the engine (module 083).
 export default function CaptureTiming() {
   const on = PREF.capT453 !== 0;
   return (

@@ -1,9 +1,9 @@
-/* Section d'origine : v4.25-01-direction-artistique.js */
+/* Original section: v4.25-01-art-direction.js */
 
 import { AUTO } from './030-prestige-staging.js';
 
 
- // n° → true (chargée) / false (indisponible)
+ // no. → true (loaded) / false (unavailable)
 export function chromaArt425(img, no) {
   if (!img || !no || AUTO) return;
   const applyIt = () => {
@@ -25,10 +25,10 @@ export function chromaArt425(img, no) {
 }
 
 /* =====================================================================
-   v4.25 : la direction artistique de ChatGPT (couches v4.21 → v4.24)
-   appliquée pour de bon. Ici, la partie script : les vraies illustrations
-   chromatiques (Pokédex, liste, rencontre, pêche). Elles remplacent la
-   teinte du jeu seulement une fois chargées ; hors ligne, rien ne change.
+   v4.25: ChatGPT's art direction (layers v4.21 → v4.24)
+   applied for good. Here, the script part: the real shiny
+   illustrations (Pokédex, list, encounter, fishing). They replace the
+   game's tint only once loaded; offline, nothing changes.
    ===================================================================== */
 const SHART425 = no => 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/' + no + '.png';
 

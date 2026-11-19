@@ -1,17 +1,17 @@
-/* Section d'origine : 04-evolution-en-combat.js */
+/* Original section: 04-evolution-en-combat.js */
 
 import { MON, NOTES } from './009-pokemon.js';
 
 export let RECRUIT;
 
 
-/* ===================== v0.8 : l’évolution se décide en combat ===================== */
+/* ===================== v0.8: evolution is decided in battle ===================== */
 export const BUDGET = 12;
 
 
 const BASECOST = {
   bulbizarre: 1,
-  salameche: 1, // v4.12 : même coût que les autres starters
+  salameche: 1, // v4.12: same cost as the other starters
   carapuce: 1,
   chenipan: 1,
   roucool: 1,
@@ -27,18 +27,18 @@ const BASECOST = {
   magneti: 2,
   kokiyas: 1,
   fantominus: 2,
-  onix: 3, // v4.12 : le meilleur Rempart du jeu, 3 PC
+  onix: 3, // v4.12: the best Rampart in the game, 3 PC
   insecateur: 3,
   magicarpe: 1,
-  lokhlass: 5, // v4.12 : Blizzard en zone + Absorb Eau, sans évolution à attendre
+  lokhlass: 5, // v4.12: Blizzard as an area attack + Water Absorb, no evolution to wait for
   evoli: 2,
   ronflex: 4,
-  minidraco: 2, // v4.12 : la lignée des Dragons coûtait trop cher au départ
+  minidraco: 2, // v4.12: the Dragon line cost too much at the start
   germignon: 1,
   hericendre: 1,
   kaiminus: 1,
   wattouat: 1,
-  malosse: 2, // v4.12 : Démolosse au bout, 2 PC
+  malosse: 2, // v4.12: Démolosse (Houndoom) at the end, 2 PC
   embrylex: 2,
   // v4.13
   ramoloss: 2,
@@ -179,7 +179,7 @@ export const ARR = {
   tyranocif: [[{ k: 'roar', v: 1 }], 'il rugit et lève une tempête de sable.']
 };
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Statements run at startup, in the original order (see index.js).
 export function __init() {
 
 MON.forEach(m => {
@@ -188,7 +188,7 @@ MON.forEach(m => {
 
 
 RECRUIT = MON.filter(m => m.st === 1 && !m.ennemi);
- // v4.13 : sans les familles devenues adversaires
+ // v4.13: without the families that became opponents
 
 Object.assign(NOTES, {
   magicarpe: 'Recrutez-le pour 1 point. Gardez-le en vie trois manches : son Éveil en Léviator renverse le combat.',

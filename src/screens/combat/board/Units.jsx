@@ -4,10 +4,10 @@ import { tokArtErr, tokArtOk } from '../../../engine/041-illustrations.js';
 import { useBoard } from './boardStore.js';
 import { PE, lref } from './shared.js';
 
-// Jetons des Pokémon (calque L.units) : un <g class="tok"> par unité, lu dans le modèle que le
-// moteur tient à jour (L.u[uid], voir mkTok / updTokCore). L'ordre suit L.uo (trier() du plateau
-// incliné v4.77 : ceux du fond d'abord). Les noms du plateau incliné passent dans le calque .nms477.
-// Références gardées par le moteur : T.g (jeton), T.b (groupe animé), T.ring, T.im.
+// Pokémon tokens (L.units layer): one <g class="tok"> per unit, read from the model the
+// engine keeps up to date (L.u[uid], see mkTok / updTokCore). Order follows L.uo (sort() of the
+// tilted board v4.77: back ones first). Names on the tilted board go through the .nms477 layer.
+// References kept by the engine: T.g (token), T.b (animated group), T.ring, T.im.
 
 const XL = 'http://www.w3.org/1999/xlink';
 const REFS = new WeakMap();
@@ -26,7 +26,7 @@ function refs(T) {
   return r;
 }
 
-/** illustration du Pokémon (tokenArt) ; xlink:href posé comme avant (setAttributeNS sans préfixe) */
+/** Pokémon artwork (tokenArt); xlink:href set as before (setAttributeNS without prefix) */
 function Art({ T, r }) {
   const im = useRef(null),
     [x, y, w] = T.geo;
@@ -52,7 +52,7 @@ function Art({ T, r }) {
   );
 }
 
-/* v4.53 : bulles, éclair, glaçons, « z » des statuts */
+/* v4.53: bubbles, lightning, ice cubes, status "z" */
 function St453() {
   return (
     <g className="st453" aria-hidden="true">
@@ -69,11 +69,11 @@ function St453() {
   );
 }
 
-const cls = c => (c == null ? undefined : c); // null : pas d'attribut class ; '' : class="" (classList vidé)
+const cls = c => (c == null ? undefined : c); // null: no class attribute; '': class="" (classList emptied)
 
 function Token({ T }) {
   const r = refs(T);
-  // style du jeton : teinte chromatique posée à la création, puis la position
+  // token style: shiny tint set at creation, then the position
   let sty;
   if (T.sh != null || T.tr != null) {
     sty = {};
@@ -142,7 +142,7 @@ export function Units() {
   );
 }
 
-/* v4.77 : noms au-dessus de tous les Pokémon (plateau incliné), dans l'ordre où ils y sont passés */
+/* v4.77: names above all Pokémon (tilted board), in the order they were passed in */
 const NMW = ['enemy', 'ally', 'ko', 'hid', 'fog431', 'pk-wait'];
 export function NamesHigh() {
   useBoard('units');

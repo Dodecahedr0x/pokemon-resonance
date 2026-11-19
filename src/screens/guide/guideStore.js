@@ -1,7 +1,7 @@
 import { channel } from '../../lib/store.js';
 
-// État du Guide, partagé entre React (<Guide>) et le moteur (setGuide, openRx, jump…).
-// Le moteur n'écrit plus dans le DOM du Guide : il passe par ces fonctions.
+// Guide state, shared between React (<Guide>) and the engine (setGuide, openRx, jump…).
+// The engine no longer writes into the Guide's DOM: it goes through these functions.
 
 export const GUIDE_TABS = ['tuto433', 'debuter', 'bases', 'reactions', 'tactique', 'ligue', 'univers', 'projet'];
 const STORE_KEY = 'res-gtab';
@@ -16,10 +16,10 @@ function initialTab() {
 
 let state = {
   tab: initialTab(),
-  rx: { m: 'trempe', e: 1 }, // case sélectionnée dans la matrice des réactions
-  openRules: new Set(['S-08']), // règles dépliées
-  focusRule: null, // { code, n } : règle à faire défiler jusqu'à l'écran
-  shown: 0, // incrémenté à chaque affichage de l'écran Guide : relit l'état de partie
+  rx: { m: 'trempe', e: 1 }, // selected cell in the reactions matrix
+  openRules: new Set(['S-08']), // expanded rules
+  focusRule: null, // { code, n }: rule to scroll into view
+  shown: 0, // incremented on every display of the Guide screen: re-reads the game state
 };
 const { notify, use } = channel();
 const emit = patch => {

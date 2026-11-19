@@ -2,18 +2,18 @@ import { Html } from '../../lib/html.jsx';
 import { PKA } from '../../engine/003-images.js';
 import { dexNo } from '../../engine/004-data.js';
 import { MV } from '../../engine/005-moves.js';
-import { REGN } from '../../engine/008-hoenn-data.js';
+import { REGION_NAMES } from '../../engine/008-hoenn-data.js';
 import { BY, familyOf } from '../../engine/009-pokemon.js';
 import { BUDGET } from '../../engine/010-in-battle-evolution.js';
 import { ITEMS2, PROFILE, inBox, isCamp, ownedItems } from '../../engine/011-game-state.js';
 import { RC, ROLEFX } from '../../engine/012-recruits-roles-synergies.js';
 import { INK, gp, medal, tb, tc } from '../../engine/014-utils.js';
 import { TEAM_MAX, cost, squad } from '../../engine/020-team-cards.js';
-import { RANGS, stars, rankId } from '../../engine/053-resonance.js';
+import { RANKS, stars, rankId } from '../../engine/053-resonance.js';
 import { captureSite421 } from '../../engine/061-catch-anywhere.js';
 
-// Grille des familles (#dexGrid), v : familles visibles (visible() du moteur). Clics (data-stg, data-qa, data-open) et reflet au survol :
-// écouteurs du moteur sur #dexGrid, qui reste monté.
+// Family grid (#dexGrid), v: visible families (engine's visible()). Clicks (data-stg, data-qa, data-open) and hover reflection:
+// engine listeners on #dexGrid, which stays mounted.
 export default function Grid({ v }) {
   return (
     <div className="dex-grid fam-grid" id="dexGrid">
@@ -22,12 +22,12 @@ export default function Grid({ v }) {
   );
 }
 
-// Coût en PC : quatre pastilles.
+// PC cost: four chips.
 function Pips({ c }) {
   return [1, 2, 3, 4].map(i => <i key={i} className={i <= c ? 'on' : ''} />);
 }
 
-// Orbe de type derrière l'illustration.
+// Type orb behind the illustration.
 function Orb({ m }) {
   return (
     <span className="orb " style={{ '--c': tc(m.t[0]), '--c2': tc(m.t[1] || m.t[0]) }}>
@@ -40,14 +40,14 @@ function Orb({ m }) {
   );
 }
 
-// Illustration absente : la carte garde son orbe.
+// Missing illustration: the card keeps its orb.
 function onArtError(e) {
   const im = e.currentTarget;
   im.style.display = 'none';
   im.parentElement.classList.add('sprite-fallback');
 }
 
-// Carte d'une famille (ancien famCard).
+// Family card (formerly famCard).
 function FamCard({ m }) {
   const family = familyOf(m.id),
     later = family.filter(x => x.st > 1),
@@ -60,7 +60,7 @@ function FamCard({ m }) {
     maxSt = Math.max(...family.map(x => x.st)),
     rg = rankId(m.id),
     placeLabel = lock && !PROFILE.dex.includes(m.id) ? captureSite421(m.id) : '',
-    // chromatique capturé (habillage v4.73)
+    // captured shiny (v4.73 styling)
     shiny = ((PROFILE && PROFILE.shiny) || []).includes(m.id);
   const cls =
     'fcard' +
@@ -75,8 +75,8 @@ function FamCard({ m }) {
       <div className="fc-in">
         <div className="fc-top">
           <span className="fc-no">{dexNo(m.no)}</span>
-          <span className="fc-gen">{REGN[m.gen] || 'Johto'}</span>
-          <span className={`fc-rg rg-${rg}`} title={`Rang ${RANGS[rg].n} · ${RANGS[rg].k}`}>
+          <span className="fc-gen">{REGION_NAMES[m.gen] || 'Johto'}</span>
+          <span className={`fc-rg rg-${rg}`} title={`Rang ${RANKS[rg].n} · ${RANKS[rg].k}`}>
             {stars(rg)}
           </span>
           <span className="pc" title={`${m.c} PC`}>

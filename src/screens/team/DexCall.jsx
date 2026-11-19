@@ -7,11 +7,11 @@ import { medal } from '../../engine/014-utils.js';
 import { squad } from '../../engine/020-team-cards.js';
 import { STARS } from '../../engine/027-gym-on-screen.js';
 import { LEGS } from '../../engine/043-adventure-plus.js';
-import { EQ_NOM432 } from '../../engine/067-individuals-comfort.js';
+import { EQ_NAME432 } from '../../engine/067-individuals-comfort.js';
 
-// Encart au-dessus de la grille (#dexCall, ancien renderDexCall) : recrues confirmées,
-// légendes capturées (v4.29), équipes enregistrées (v4.32), formations.
-// Clics : écouteurs du moteur (#dexCall [data-stg], data-pf, data-eq432, data-lp429).
+// Panel above the grid (#dexCall, old renderDexCall): confirmed recruits,
+// captured legends (v4.29), saved teams (v4.32), formations.
+// Clicks: engine listeners (#dexCall [data-stg], data-pf, data-eq432, data-lp429).
 export default function DexCall({ v }) {
   const [isOpen, setOpen] = useState(() => !(typeof matchMedia === 'function' && matchMedia('(max-width:700px)').matches));
   return (
@@ -43,10 +43,10 @@ export default function DexCall({ v }) {
         </div>
       </div>
       <Legends />
-      {/* Équipes enregistrées et formations : repliées sur téléphone, où elles poussaient la grille sous l'écran */}
+      {/* Saved teams and formations: collapsed on phone, where they pushed the grid below the screen */}
       <details className="dc-more" open={isOpen} onToggle={e => setOpen(e.currentTarget.open)}>
         <summary>Équipes enregistrées et formations</summary>
-        {/* reconstruit à chaque rendu, comme l'ancien innerHTML : « Sûr ? » est écrit par le moteur */}
+        {/* rebuilt on every render, like the old innerHTML: « Sûr ? » (Sure?) is written by the engine */}
         <Squads432 key={v} />
         <div className="dc-row">
           <span className="lbl-s">Formations</span>
@@ -63,7 +63,7 @@ export default function DexCall({ v }) {
   );
 }
 
-// Légendes capturées (ancien legRow429).
+// Captured legends (old legRow429).
 function Legends() {
   const L = LEGS.filter(x => PROFILE.box.includes(x.id));
   if (!L.length) return null;
@@ -97,7 +97,7 @@ function Legends() {
   );
 }
 
-// Équipes enregistrées (ancien equipesHtml432). Champ #eqNom432 non contrôlé, relu par le moteur.
+// Saved teams (old equipesHtml432). Uncontrolled #eqNom432 field, re-read by the engine.
 function Squads432() {
   const T = PROFILE.teams432 || [];
   return (
@@ -114,7 +114,7 @@ function Squads432() {
             </button>
           </span>
         ))}
-        {EQ_NOM432 ? (
+        {EQ_NAME432 ? (
           <span className="eq432-n">
             <input type="text" id="eqNom432" maxLength={20} placeholder="Nom de l’équipe" aria-label="Nom de l’équipe" />
             <button type="button" className="b b-sm b-gold" data-eq432="ok">

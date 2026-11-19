@@ -5,11 +5,11 @@ import { ARR } from '../../../engine/010-in-battle-evolution.js';
 import { medal, tb, tc } from '../../../engine/014-utils.js';
 import { BRANCHES, branchWhy, evoOpts, mhpOf } from '../../../engine/021-combat-engine.js';
 import { B } from '../../../engine/024-combat-ui.js';
-import { evoliWhy434 } from '../../../engine/069-calibration-eevee.js';
+import { eeveeWhy434 } from '../../../engine/069-calibration-eevee.js';
 import { evoState, useBattleVersion } from './battleStore.js';
 
-// Choix d'évolution (#evoPick). Ouvert et fermé par le moteur (attribut hidden) ;
-// le contenu est celui du Pokémon passé à openEvoPick et reste en place une fois fermé.
+// Evolution choice (#evoPick). Opened and closed by the engine (hidden attribute);
+// the content is that of the Pokémon passed to openEvoPick and stays in place once closed.
 export default function EvoPick() {
   const v = useBattleVersion('evo');
   const u = evoState.u;
@@ -23,13 +23,13 @@ export default function EvoPick() {
 function Path({ u, A, id }) {
   const E = BY[id],
     payout = E.mv.filter(x => !u.mv.includes(x)),
-    lose = u.mv.filter(x => !E.mv.includes(x) && x !== u.ctm), // la capacité apprise reste
+    lose = u.mv.filter(x => !E.mv.includes(x) && x !== u.ctm), // the learned move is kept
     tg = E.t.filter(t => !u.t.includes(t)),
     nm = mhpOf(E.s) + (u.hb || 0),
     why = BRANCHES[A.id]
       ? branchWhy(B, u, id)
       : A.nx === 'eevee'
-        ? evoliWhy434(B, u, id)
+        ? eeveeWhy434(B, u, id)
         : Array.isArray(A.nx)
           ? id === A.nx[1]
             ? 'Appelle la pluie'

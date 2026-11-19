@@ -5,7 +5,7 @@ import { costHeld414 } from '../../engine/053-resonance.js';
 import { peddler454 } from '../../engine/084-peddler-route-missions.js';
 import { Disc } from './Items.jsx';
 
-// Boutique › Colporteur (v4.54) : stock limité du jour, data-am454 (moteur).
+// Shop › Peddler (v4.54): limited stock of the day, data-am454 (engine).
 export default function Peddler() {
   const A = peddler454();
   if (!A.present) return <p className="v4-note">Le colporteur n’est pas passé aujourd’hui. Il revient certains jours, avec des prix réduits.</p>;

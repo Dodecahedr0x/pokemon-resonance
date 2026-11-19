@@ -1,7 +1,7 @@
 import { NZ450, nzConf450, nzSt450 } from '../../../engine/081-nuzlocke-mode.js';
 
-// Paramètres › Mode Nuzlocke (v4.51) : boutons data-b451 gérés par le moteur (module 081),
-// qui bascule nzConf450 (confirmation) puis appelle renderParams().
+// Settings › Nuzlocke Mode (v4.51): data-b451 buttons handled by the engine (module 081),
+// which toggles nzConf450 (confirmation) then calls renderParams().
 export default function Nuzlocke() {
   const s = nzSt450(),
     on = NZ450();

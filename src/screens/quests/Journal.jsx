@@ -8,7 +8,7 @@ import { CATN430, log0430 } from '../../engine/065-camp-tactics.js';
 const NL = '\n  ';
 const Tile = ({ v, t }) => <div className="jt430"><b>{v}</b><span>{t}</span></div>;
 
-// Onglet « Journal » (v4.30) : statistiques, combats par type, MVP, derniers combats.
+// « Journal » tab (v4.30): statistics, battles by type, MVP, latest battles.
 export default function Journal() {
   const J = PROFILE.journal430 || log0430(),
     pct = (a, b) => (b ? Math.round((a / b) * 100) + ' %' : '—'),

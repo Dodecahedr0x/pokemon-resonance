@@ -1,23 +1,23 @@
-/* Section d'origine : 4.64 : arbre de talents du dresseur */
+/* Original section: 4.64: trainer talent tree */
 
 import { SCEN } from './009-pokemon.js';
 import { PROFILE } from './011-game-state.js';
 import { writeLS, toast } from './014-utils.js';
-import { CROCHETS } from './015-hooks.js';
+import { HOOKS } from './015-hooks.js';
 import { heal, say } from './021-combat-engine.js';
 import { esc, queueSave } from './025-saves.js';
 import { sfx, vibe } from './026-campaign-tutorial-sound.js';
 import { bagN, tLevel } from './032-v4-foundation.js';
 import { renderWallet } from './035-interface.js';
 import { renderBag } from './039-quests-shop.js';
-import { FOURNISSEURS_DEGATS } from './044-tactical-engine.js';
+import { DAMAGE_PROVIDERS } from './044-tactical-engine.js';
 
 let TAL464, TALMAX464, TALRESET464;
-// lus par Boutique › Talents (React, src/screens/sac/Atelier.jsx)
+// read by Shop › Talents (React, src/screens/bag/Workshop.jsx)
 export { TAL464, TALMAX464, TALRESET464, talSt464, talSpent464, talPts464 };
 
 
-/** Le combat compte pour les talents et la saison (4.65) : ni équipe figée, ni tutoriel. */
+/** The battle counts for talents and the season (4.65): neither frozen team nor tutorial. */
 export function battleCount464(S) {
   return S && !S.fixe431 && !(SCEN[S.sc] && SCEN[S.sc].tuto);
 }
@@ -49,7 +49,7 @@ const talPts464 = () => Math.max(0, tLevel() - 1 - talSpent464());
 
 const tal464 = id => talSt464()[id] || 0;
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Statements run at startup, in the original order (see index.js).
 export function __init() {
 
 TAL464 = [
@@ -75,7 +75,7 @@ TALMAX464 = 3,
   TALRESET464 = 500;
 
 
-CROCHETS.combat.push(S => {
+HOOKS.combat.push(S => {
   if (!battleCount464(S)) return;
   const al = S.units.filter(u => u.side === 'a'),
     a2 = tal464('a2'),
@@ -88,7 +88,7 @@ CROCHETS.combat.push(S => {
 });
 
 
-CROCHETS.avantFinManche.push((S, ev) => {
+HOOKS.avantFinManche.push((S, ev) => {
   if (!S.tal464) return;
   const al = S.units.filter(u => u.side === 'a' && !u.ko),
     s1 = tal464('s1'),
@@ -105,7 +105,7 @@ CROCHETS.avantFinManche.push((S, ev) => {
 });
 
 
-FOURNISSEURS_DEGATS.push({
+DAMAGE_PROVIDERS.push({
   id: 'talents464',
   fournir: (c, { S, u, t }) => {
     if (!S || !S.tal464 || !u || u.side !== 'a') return false;
@@ -117,7 +117,7 @@ FOURNISSEURS_DEGATS.push({
 });
 
 
-CROCHETS.progres.unshift((S, rew, win) => {
+HOOKS.progres.unshift((S, rew, win) => {
   try {
     if (!win || !battleCount464(S)) return null;
     const e1 = tal464('e1'),
@@ -142,7 +142,7 @@ CROCHETS.progres.unshift((S, rew, win) => {
 });
 
 
-CROCHETS.resultat.unshift(r => (r.tal464 ? `<div class="res-l"><h4>Talents</h4><div class="rl"><span>Bonus de talents : ${esc(r.tal464.join(', '))}</span></div></div>` : ''));
+HOOKS.resultat.unshift(r => (r.tal464 ? `<div class="res-l"><h4>Talents</h4><div class="rl"><span>Bonus de talents : ${esc(r.tal464.join(', '))}</span></div></div>` : ''));
 
 
 document.addEventListener(

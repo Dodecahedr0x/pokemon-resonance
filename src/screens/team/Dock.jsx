@@ -10,7 +10,7 @@ import { analysis } from './analysis.js';
 
 const N = () => Array.from({ length: TEAM_MAX }, (_, i) => i);
 
-// Bandeau de l'équipe en tête de l'écran (#dock) : emplacements, budget, Voix, Éveils, Indice.
+// Team banner at the top of the screen (#dock): slots, budget, Voice, Awakenings, Hint.
 export function Dock({ A }) {
   return (
     <div className="dock" id="dock" aria-live="polite">
@@ -55,7 +55,7 @@ export function Dock({ A }) {
               Combattre
             </button>
           </div>
-          {/* réinitialiser, rétablir, tirage (v1.1) : générateur partagé avec la préparation */}
+          {/* reset, restore, draw (v1.1): generator shared with the preparation */}
           <Html html={teamBtns()} />
         </>
       )}
@@ -63,7 +63,7 @@ export function Dock({ A }) {
   );
 }
 
-// Équipe dans la barre latérale (#sideTeam).
+// Team in the sidebar (#sideTeam).
 export function SideTeam() {
   const A = useTeam();
   return (
@@ -93,7 +93,7 @@ export function SideTeam() {
   );
 }
 
-// Équipe dans la barre du haut (#tbTeam).
+// Team in the top bar (#tbTeam).
 export function TbTeam() {
   const A = useTeam();
   return (
@@ -112,7 +112,7 @@ export function TbTeam() {
   );
 }
 
-// Analyse relue à chaque renderTeam ; rien avant le premier (comme l'ancien DOM vide).
+// Analysis re-read on every renderTeam; nothing before the first one (like the old empty DOM).
 function useTeam() {
   const ready = useEngineReady(),
     v = useRosterKey('team');

@@ -1,6 +1,6 @@
 import { analyze } from '../../engine/020-team-cards.js';
 
-// analyze() du moteur, calculé une fois par renderTeam (#dock, #sideTeam, #tbTeam, #ana le lisent).
+// the engine's analyze(), computed once per renderTeam (#dock, #sideTeam, #tbTeam, #ana read it).
 let vu = -1,
   A = null;
 export function analysis(v) {

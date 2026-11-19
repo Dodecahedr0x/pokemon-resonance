@@ -1,4 +1,4 @@
-/* Section d'origine : 4.57 : atelier, recettes, commandes, tirage, vitrine, cadeau du jour */
+/* Original section: 4.57: workshop, recipes, orders, draw, showcase, daily gift */
 
 import { ITEMS2, PROFILE } from './011-game-state.js';
 import { writeLS, toast } from './014-utils.js';
@@ -8,13 +8,13 @@ import { refreshHome } from '../screens/home/homeStore.js';
 import { renderBag } from './039-quests-shop.js';
 import { reward454, rng454, txt454 } from './084-peddler-route-missions.js';
 
-export { LJ455, RECETTES455, COUT455 }; // lus par Boutique › Atelier et Tirage (React, src/screens/sac/Atelier.jsx)
+export { LJ455, RECIPES455, COST455 }; // read by Shop › Workshop and Draw (React, src/screens/bag/Workshop.jsx)
 
 
-/* ---------- fusion de CT ---------- */
+/* ---------- TM fusion ---------- */
 export function donors455(target) {
   const d = [];
-  ctKeys455()
+  tmKeys455()
     .filter(k => k !== target && bagN(k) > 0)
     .sort((a, b) => SHOP[a].p - SHOP[b].p)
     .forEach(k => {
@@ -26,14 +26,14 @@ export function donors455(target) {
 
 export function fusionTargets455() {
   const r = rng454('fusion455'),
-    pool = ctKeys455().filter(k => !bagN(k)),
+    pool = tmKeys455().filter(k => !bagN(k)),
     out = [];
   while (out.length < 4 && pool.length) out.push(pool.splice(Math.floor(r() * pool.length), 1)[0]);
   return out;
 }
 
 
-/* ---------- commandes du jour ---------- */
+/* ---------- daily orders ---------- */
 export function commands455() {
   const r = rng454('cmd455'),
     pool = ['potion', 'poke', 'super', 'antidote', 'antigel', 'baieoran', 'superpotion'],
@@ -51,8 +51,8 @@ function spin455() {
   const st = LJ455('res-at455', { d: today(), cmd: {}, spin: 0 });
   if (st.spin >= 4) return;
   if (st.spin > 0) {
-    if (PROFILE.money < COUT455) return;
-    PROFILE.money -= COUT455;
+    if (PROFILE.money < COST455) return;
+    PROFILE.money -= COST455;
   }
   const r = rng454('spin455' + st.spin)();
   let tot = LOTS455.reduce((a, l) => a + l.w, 0),
@@ -66,7 +66,7 @@ function spin455() {
   }
   let t = lot.t;
   if (lot.ct) {
-    const cts = ctKeys455(),
+    const cts = tmKeys455(),
       k = cts[Math.floor(rng454('spinct455' + st.spin)() * cts.length)];
     PROFILE.bag[k] = Math.min(99, bagN(k) + 1);
     t = SHOP[k].n;
@@ -81,8 +81,8 @@ function spin455() {
 }
 
 
-/* ---------- vitrine (affichée par React : src/screens/sac/Atelier.jsx) ---------- */
-// Marque comme vues les CT / CS du Sac ou déjà apprises, puis renvoie l'état de la vitrine.
+/* ---------- showcase (displayed by React: src/screens/bag/Workshop.jsx) ---------- */
+// Marks the TMs / HMs in the Bag or already learned as seen, then returns the showcase state.
 export function showcase455() {
   let seen;
   try {
@@ -91,7 +91,7 @@ export function showcase455() {
     seen = {};
   }
   const learned = Object.values((PROFILE.ct && PROFILE.ct.apprises) || {});
-  const cts = ctKeys455(),
+  const cts = tmKeys455(),
     cs = Object.keys(SHOP).filter(k => SHOP[k].cs);
   [...cts, ...cs].forEach(k => {
     if (bagN(k) > 0 || learned.includes(SHOP[k].mv)) seen[k] = 1;
@@ -101,7 +101,7 @@ export function showcase455() {
 }
 
 
-/* ---------- onglets de la Boutique (Atelier, Tirage…) : rendus par React (src/screens/sac/Atelier.jsx) ---------- */
+/* ---------- Shop tabs (Workshop, Draw…): rendered by React (src/screens/bag/Workshop.jsx) ---------- */
 
 
 function yesterday455() {
@@ -124,12 +124,12 @@ export function cdSt455() {
 }
 
 
-/** Bouton « Cadeau du jour » de l'Accueil (#cd455, rendu : src/screens/accueil/Bannieres.jsx). */
+/** "Cadeau du jour" (Daily gift) button on the Home screen (#cd455, rendered by src/screens/home/Banners.jsx). */
 export function cdData455() {
   const s = cdSt455(),
     doneFlag = s.last === today(),
     j = doneFlag ? Math.max(0, s.n - 1) % 7 : s.n % 7,
-    R = CADEAU455[j],
+    R = GIFT455[j],
     txt = [txt454(R), R.ct ? '1 CT' : ''].filter(Boolean).join(' + ');
   return { fait: doneFlag, j, txt };
 }
@@ -148,7 +148,7 @@ const LJ455 = (k, d) => {
 const nameIt455 = k => (SHOP[k] ? SHOP[k].n : (ITEMS2[k] || {}).n || k);
 
 
-export const ctKeys455 = () => Object.keys(SHOP).filter(k => SHOP[k].cat === 'machines' && !SHOP[k].cs && !SHOP[k].g);
+export const tmKeys455 = () => Object.keys(SHOP).filter(k => SHOP[k].cat === 'machines' && !SHOP[k].cs && !SHOP[k].g);
 
 
 export const txtIn455 = o => Object.keys(o).map(k => `${o[k]} × ${nameIt455(k)}`).join(' + ');
@@ -165,8 +165,8 @@ export const add455 = (o, direction) => {
 export const canIn455 = o => Object.keys(o).every(k => bagN(k) >= o[k]);
 
 
-/* ---------- livre de recettes ---------- */
-const RECETTES455 = [
+/* ---------- recipe book ---------- */
+const RECIPES455 = [
   { id: 'r1', in: { potion: 3 }, out: { superpotion: 1 }, m: 0 },
   { id: 'r2', in: { superpotion: 3 }, out: { hyperpotion: 1 }, m: 200 },
   { id: 'r3', in: { poke: 3 }, out: { super: 1 }, m: 200 },
@@ -178,7 +178,7 @@ const RECETTES455 = [
 ];
 
 
-/* ---------- tirage du colporteur ---------- */
+/* ---------- peddler's draw ---------- */
 const LOTS455 = [
   { w: 25, t: 'Poké Ball × 3', o: { b: { poke: 3 } } },
   { w: 22, t: 'Potion × 2', o: { b: { potion: 2 } } },
@@ -192,11 +192,11 @@ const LOTS455 = [
 ];
 
 
-const COUT455 = 900;
+const COST455 = 900;
 
 
-/* ---------- cadeau du jour ---------- */
-const CADEAU455 = [
+/* ---------- daily gift ---------- */
+const GIFT455 = [
   { m: 300, b: { potion: 1 } },
   { b: { poke: 2 } },
   { m: 800 },
@@ -206,7 +206,7 @@ const CADEAU455 = [
   { g: 3, ct: 1 }
 ];
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Instructions run at startup, in the original order (see index.js).
 export function __init() {
 
 document.addEventListener(
@@ -218,7 +218,7 @@ document.addEventListener(
     e.stopPropagation();
     const [a, k] = b.dataset.at455.split(':');
     if (a === 'rec') {
-      const r = RECETTES455.find(x => x.id === k);
+      const r = RECIPES455.find(x => x.id === k);
       if (!r || !canIn455(r.in) || PROFILE.money < r.m) return;
       add455(r.in, -1);
       PROFILE.money -= r.m;
@@ -226,7 +226,7 @@ document.addEventListener(
       toast('Préparé : ' + txtIn455(r.out));
     } else if (a === 'fus') {
       const d = donors455(k);
-      if (!ctKeys455().includes(k) || bagN(k) || !d || PROFILE.money < 1000) return;
+      if (!tmKeys455().includes(k) || bagN(k) || !d || PROFILE.money < 1000) return;
       d.forEach(x => add455({ [x]: 1 }, -1));
       PROFILE.money -= 1000;
       PROFILE.bag[k] = 1;
@@ -259,11 +259,11 @@ document.addEventListener('click', e => {
   if (!b) return;
   const s = cdSt455();
   if (s.last === today()) return;
-  const R = CADEAU455[s.n % 7];
+  const R = GIFT455[s.n % 7];
   reward454(R);
   let extra = '';
   if (R.ct) {
-    const cts = ctKeys455(),
+    const cts = tmKeys455(),
       k = cts[Math.floor(rng454('cdct455')() * cts.length)];
     PROFILE.bag[k] = Math.min(99, bagN(k) + 1);
     extra = ' + ' + SHOP[k].n;
@@ -275,7 +275,7 @@ document.addEventListener('click', e => {
   vibe(25);
   toast('Cadeau du jour : ' + txt454(R) + extra);
   savePurse();
-  refreshHome(); // bouton #cd455
+  refreshHome(); // #cd455 button
 });
 
 }

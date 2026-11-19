@@ -1,7 +1,7 @@
 import { PREF } from '../../../engine/026-campaign-tutorial-sound.js';
 import { Slider, Switch } from '../controls.jsx';
 
-// Son : musique et effets, chacun avec son volume.
+// Sound: music and effects, each with its own volume.
 export default function Sound() {
   return (
     <section className="v4-panel v4-ps">

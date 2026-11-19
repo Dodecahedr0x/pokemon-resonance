@@ -2,19 +2,19 @@ import { Html } from '../../../lib/html.jsx';
 import { MV } from '../../../engine/005-moves.js';
 import { veiled } from '../../../engine/013-gyms.js';
 import { medal } from '../../../engine/014-utils.js';
-import { EMAX, eveilInfo, foeEvo, hasNx } from '../../../engine/021-combat-engine.js';
+import { EMAX, awakeningInfo, foeEvo, hasNx } from '../../../engine/021-combat-engine.js';
 import { B, STC, enPips, segHp, ui } from '../../../engine/024-combat-ui.js';
 import { hasXp, bossScene, plateRank414 } from '../../../engine/053-resonance.js';
 import { cache431, vision431 } from '../../../engine/066-tactical-challenges.js';
 import { useBattleVersion } from './battleStore.js';
 
-// Les plaques des deux équipes, au-dessus (#bPlE) et au-dessous (#bPlA) du plateau.
+// The plates of the two teams, above (#bPlE) and below (#bPlA) the board.
 export function PlatesE() {
   const v = useBattleVersion('top');
   if (!v || !B) return <div className="plates" id="bPlE" />;
   const foes = B.units.filter(u => u.side === 'e'),
     D = B.duel433;
-  // brouillard (v4.31) : les adversaires hors de vue sont voilés
+  // fog (v4.31): opponents out of sight are veiled
   const fog = !!(B.fog431 && !B.over),
     vu = fog ? vision431(B) : null;
   return (
@@ -45,7 +45,7 @@ export function PlatesA() {
   );
 }
 
-// Ce qu'annonce la plaque : intention adverse, fatigue, Éveil prêt…
+// What the plate announces: enemy intent, fatigue, Awakening ready…
 function state(u, fe, nx) {
   if (u.side === 'e')
     return u.caught ? (
@@ -92,7 +92,7 @@ function state(u, fe, nx) {
 
 function Plate({ u, fog }) {
   const fe = foeEvo(B, u),
-    nx = hasNx(u) ? eveilInfo(B, u) : null;
+    nx = hasNx(u) ? awakeningInfo(B, u) : null;
   const cls =
     `plate ${u.side === 'e' ? 'pe' : 'pa'}${u.ko ? ' ko' : ''}${ui.sel === u.uid || ui.selE === u.uid ? ' act' : ''}` +
     `${ui.act === u.uid ? ' now' : ''}${fe ? ' fev' : ''}${u.side === 'a' && u.en >= EMAX && nx && !u.ko ? ' rd' : ''}${fog ? ' fog431' : ''}`;

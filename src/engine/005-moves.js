@@ -1,6 +1,6 @@
-/* Section d'origine : 02-capacites.js */
+/* Original section: 02-capacites.js */
 
-/* ===================== CAPACITÉS v0.7 ===================== */
+/* ===================== MOVES v0.7 ===================== */
 export const MV = {
   trempette: { n: 'Trempette', t: 'Eau', p: 0, r: 1, sh: 'cone', mk: 'trempe', d: 'Trempe 3 cases en cône.' },
   charge: { n: 'Charge', t: 'Normal', p: 5, r: 1, sh: 'one', d: 'Au contact.' },
@@ -328,7 +328,7 @@ export const TAL = {
   regardvif: ['Regard Vif', 'Insensible aux Toiles et aux entraves.']
 };
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Statements run at startup, in the original order (see index.js).
 export function __init() {
 delete MV.trempe0;
 }

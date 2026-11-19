@@ -2,10 +2,10 @@ import { Html } from '../../lib/html.jsx';
 import { useCoach } from './shellOverlays.js';
 import { PROF_AV } from '../../engine/031-home-journey.js';
 
-// Coach du combat guidé (#coach) : la Professeure donne la consigne de l'étape.
-// renderCoach() (026) choisit l'étape ; les boutons (data-co) restent gérés par le moteur.
-// Un nouveau bloc par étape (key) : le texte lettre par lettre (v4.73) remplace les
-// nœuds texte du paragraphe, React ne doit donc jamais le mettre à jour sur place.
+// Guided battle coach (#coach): the Professor gives the step's instruction.
+// renderCoach() (026) picks the step; the buttons (data-co) are still handled by the engine.
+// A new block per step (key): the letter-by-letter text (v4.73) replaces the
+// paragraph's text nodes, so React must never update it in place.
 export default function Coach() {
   const { hidden, k, step, v } = useCoach();
   return (

@@ -1,6 +1,6 @@
 import { IM448 } from '../../../engine/079-immersion-sound-haptics.js';
 
-// Paramètres › Immersion (v4.48) : bouton data-b448 géré par le moteur (module 079).
+// Settings › Immersion (v4.48): data-b448 button handled by the engine (module 079).
 export default function Immersion() {
   const on = IM448();
   return (

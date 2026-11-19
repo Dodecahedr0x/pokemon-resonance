@@ -1,10 +1,10 @@
-/* Section d'origine : 4.66 : Boss Rush et reliques de run */
+/* Original section: 4.66: Boss Rush and run relics */
 
 import { BY, SCEN } from './009-pokemon.js';
 import { isCamp } from './011-game-state.js';
 import { ARENAS, BADGES } from './013-gyms.js';
 import { $, writeLS, readLS, toast } from './014-utils.js';
-import { CROCHETS } from './015-hooks.js';
+import { HOOKS } from './015-hooks.js';
 import { squad } from './020-team-cards.js';
 import { heal } from './021-combat-engine.js';
 import { B, backToPrep, goFight, launch } from './024-combat-ui.js';
@@ -13,7 +13,7 @@ import { sfx, vibe } from './026-campaign-tutorial-sound.js';
 import { overlay } from './030-prestige-staging.js';
 import { shut } from '../screens/overlays/tempStore.js';
 import { refreshHome } from '../screens/home/homeStore.js';
-import { FOURNISSEURS_DEGATS } from './044-tactical-engine.js';
+import { DAMAGE_PROVIDERS } from './044-tactical-engine.js';
 import { teamSize } from './048-replayability.js';
 
 
@@ -48,7 +48,7 @@ function brHub466() {
       boss: run.pend ? null : brName466(run.boss[run.i])
     };
   }
-  // rendu : src/screens/overlays/temporaires/Fenetres.jsx (Br466)
+  // rendering: src/screens/overlays/transients/Windows.jsx (Br466)
   const o = overlay('br466o', d);
   o.addEventListener('click', e => {
     if (e.target === o) shut('br466o');
@@ -65,12 +65,12 @@ function brGo466() {
   if (B) backToPrep();
   goFight(run.boss[run.i]);
   try {
-    launch(); // l’équipe du run est figée : on entre directement en combat
+    launch(); // the run's team is locked: we go straight into battle
   } catch (e) {}
 }
 
 
-/** Bannière Boss Rush de l'Accueil (#br466, rendu : src/screens/accueil/Bannieres.jsx). */
+/** Boss Rush banner on the Home screen (#br466, rendered by src/screens/home/Banners.jsx). */
 export function brData466() {
   const run = brRun466();
   return {
@@ -80,14 +80,14 @@ export function brData466() {
 }
 
 
-/** Boss Rush armé : le run en cours, sinon null. Le moteur s’en sert pour ouvrir le boss du moment,
-    passer les défis de campagne et figer l’équipe (scenLock, defiLancement, tournoiTeam417). */
+/** Boss Rush armed: the current run, otherwise null. The engine uses it to open the current boss,
+    skip campaign challenges and lock the team (scenLock, challengeLaunch, tournamentTeam417). */
 export function brWeapon466() {
   return (BR466 && BR466.armed && brRun466()) || null;
 }
 
 
-/** Le scénario k est-il le boss à affronter maintenant dans le Boss Rush armé ? */
+/** Is scenario k the boss to face right now in the armed Boss Rush? */
 export function brBoss466(k) {
   const run = brWeapon466();
   return !!run && k === run.boss[run.i];
@@ -122,7 +122,7 @@ const brRun466 = () => brSt466().run;
 
 
 const brBosses466 = () => {
-  const L = isCamp() ? ARENAS.filter((a, i) => BADGES.includes(i) || BADGES.includes(a.k)) : ARENAS; // BADGES : numéros d’arène (0 à 7)
+  const L = isCamp() ? ARENAS.filter((a, i) => BADGES.includes(i) || BADGES.includes(a.k)) : ARENAS; // BADGES: gym numbers (0 to 7)
   return L.slice(-5).map(a => a.k);
 };
 
@@ -135,10 +135,10 @@ const brRelics466 = run => (run && run.rel ? run.rel : []);
 
 const brName466 = k => (SCEN[k] ? SCEN[k].n : k);
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Instructions run at startup, in the original order (see index.js).
 export function __init() {
 
-CROCHETS.combat.push(S => {
+HOOKS.combat.push(S => {
   const run = brRun466();
   if (!BR466.armed || !run || S.sc !== run.boss[run.i]) return;
   S.br466 = true;
@@ -160,13 +160,13 @@ CROCHETS.combat.push(S => {
 });
 
 
-CROCHETS.avantFinManche.push((S, ev) => {
+HOOKS.avantFinManche.push((S, ev) => {
   if (!S.br466 || !brRelics466(brRun466()).includes('petale')) return;
   S.units.filter(u => u.side === 'a' && !u.ko).forEach(u => heal(S, u, Math.max(1, Math.round(u.mhp * 0.05)), ev));
 });
 
 
-FOURNISSEURS_DEGATS.push({
+DAMAGE_PROVIDERS.push({
   id: 'reliques466',
   fournir: (c, { S, u, t }) => {
     if (!S || !S.br466 || !u || u.side !== 'a') return false;
@@ -179,7 +179,7 @@ FOURNISSEURS_DEGATS.push({
 });
 
 
-CROCHETS.progres.unshift((S, rew, win) => {
+HOOKS.progres.unshift((S, rew, win) => {
   try {
     const st = brSt466(),
       run = st.run;
@@ -222,7 +222,7 @@ CROCHETS.progres.unshift((S, rew, win) => {
 });
 
 
-CROCHETS.resultat.unshift(r => {
+HOOKS.resultat.unshift(r => {
   const t = r.br466;
   if (!t) return '';
   if (t.gagne) return `<div class="res-l"><h4>Boss Rush</h4><div class="rl"><span><b>Boss Rush terminé !</b> ${t.n} boss battus à la suite : +10 Éclats.</span><b>🏆</b></div></div>`;

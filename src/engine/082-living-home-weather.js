@@ -1,4 +1,4 @@
-/* Section d'origine : v4.52 : accueil vivant (saison, météo du jour) · aide contextuelle en combat */
+/* Original section: v4.52: living home (season, weather of the day) · contextual help in battle */
 
 import { RX, WEATHER } from './004-data.js';
 import { TAL } from './005-moves.js';
@@ -14,25 +14,25 @@ import { FX448 } from './079-immersion-sound-haptics.js';
 
 
 
-/* ---------- 1. accueil vivant ---------- */
+/* ---------- 1. living home ---------- */
 function season450() {
   const m = new Date().getMonth();
   return m >= 2 && m <= 4 ? 'printemps' : m >= 5 && m <= 7 ? 'ete' : m >= 8 && m <= 10 ? 'automne' : 'hiver';
 }
 
 
-/** Saison et météo du jour sur le héros de l'Accueil (rendu : src/screens/accueil/Heros.jsx). */
+/** Season and weather of the day on the Home hero (rendering: src/screens/home/Hero.jsx). */
 export function alive450() {
   const wx = FX448() ? weatherDay417() : null,
     se = FX448() ? season450() : '';
   if (!se) return null;
-  return { se, wx, txt: SNOM450[se] + (wx ? ' · ' + CIEL450[wx] : '') };
+  return { se, wx, txt: SNOM450[se] + (wx ? ' · ' + SKY450[wx] : '') };
 }
 
 
-/* ---------- 2. aide contextuelle en combat ---------- */
-// données de l'aide (rendu : src/screens/overlays/temporaires/Fenetres.jsx, Aide452)
-function aide452() {
+/* ---------- 2. contextual help in battle ---------- */
+// help data (rendering: src/screens/overlays/transients/Windows.jsx, Help452)
+function help452() {
   const u = ui.sel != null ? byUid(B, ui.sel) : null,
     out = { sel: null, terr: [], wx: null, rx: [] };
   if (u && BY[u.id]) {
@@ -60,7 +60,7 @@ function aide452() {
 
 function openHelp452() {
   if (!B) return;
-  const o = overlay('hp452', aide452());
+  const o = overlay('hp452', help452());
   o.addEventListener('click', e => {
     if (e.target === o) shut('hp452');
   });
@@ -69,9 +69,9 @@ function openHelp452() {
 const SNOM450 = { printemps: 'Printemps', ete: 'Été', automne: 'Automne', hiver: 'Hiver' };
 
 
-const CIEL450 = { pluie: 'pluie', soleil: 'soleil', grele: 'grêle', sable: 'sable' };
+const SKY450 = { pluie: 'pluie', soleil: 'soleil', grele: 'grêle', sable: 'sable' };
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Instructions run at startup, in the original order (see index.js).
 export function __init() {
 
 document.addEventListener('click', e => {

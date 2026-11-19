@@ -1,7 +1,7 @@
-/* Section d'origine : 4.69 : écran de résultat défilable */
+/* Original section: 4.69: scrollable result screen */
 
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Statements run at startup, in the original order (see index.js).
 export function __init() {
 
 (() => {

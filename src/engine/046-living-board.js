@@ -1,54 +1,54 @@
-/* Section d'origine : v4.7-01-plateau-vivant.js */
+/* Original section: v4.7-01-plateau-vivant.js */
 import { getHost, hostSet } from '../screens/combat/board/boardStore.js';
 
 import { SCEN } from './009-pokemon.js';
 import { flies, mDur, nbrK, say, uAt } from './021-combat-engine.js';
 import { scSel } from './024-combat-ui.js';
 import { PREF } from './026-campaign-tutorial-sound.js';
-import { FOURNISSEURS_DEGATS } from './044-tactical-engine.js';
+import { DAMAGE_PROVIDERS } from './044-tactical-engine.js';
 import { noWind } from './047-tactics.js';
 
 
 
-/** Le réglage du joueur. Le combat guidé du prologue reste toujours classique. */
+/** The player's setting. The guided prologue battle always stays classic. */
 export function chosenAlive() {
   return PREF.vivant !== false && !(SCEN[scSel] && SCEN[scSel].tuto);
 }
 
 
-/** Au début d'un combat : l'heure du scénario devient la première heure du cycle. */
+/** At the start of a battle: the scenario's time becomes the first time of the cycle. */
 export function aliveInit(S, opt) {
   if (!opt || !opt.vivant) return;
   S.vivant = true;
   S.cyc = { ph: S.time === 'nuit' ? 'nuit' : 'jour', n: 0 };
-  // vent (v4.8) : deux combats sur trois, dans une des 6 directions
+  // wind (v4.8): two battles out of three, in one of the 6 directions
   S.vent = Math.random() < 0.67 ? { d: Math.floor(Math.random() * 6) } : null;
 }
 
 
-/** « jour » ou « nuit » : ce que voit le jeu pour Évoli. Sans plateau vivant, l'heure du scénario. */
+/** "day" or "night": what the game sees for Eevee. Without the living board, the scenario's time. */
 export function hourOf(S) {
   return S.cyc ? (S.cyc.ph === 'nuit' ? 'nuit' : 'jour') : S.time === 'nuit' ? 'nuit' : 'jour';
 }
 
 
-/** Portée en moins la nuit (appelée par effR). */
+/** Range reduced at night (called by effR). */
 export function nightRange(S, u, m) {
   return S && S.cyc && S.cyc.ph === 'nuit' && m.r >= 3 && !seesAtNight(u) ? 1 : 0;
 }
 
 
-/** Une haute herbe qui prendrait feu à la prochaine fin de manche ? (aussi utilisé pour l'avertir à l'écran) */
+/** Would a tall grass catch fire at the next end of round? (also used to warn on screen) */
 export function fireHazard(S, k) {
   const t = S.tiles[k];
   if (!S.vivant || !t || !t.grass || t.rock || t.w) return false;
   if (S.wx && S.wx.k === 'pluie') return false;
-  if (t.mark && t.mark.k === 'trempe') return false; // herbe détrempée
+  if (t.mark && t.mark.k === 'trempe') return false; // soaked grass
   return nbrK(k).some(n => onFire(S, n));
 }
 
 
-/** Une haute herbe qui peut brûler (sans regarder les voisines). */
+/** A tall grass that can burn (without looking at its neighbors). */
 function dryGrass(S, k) {
   const t = S.tiles[k];
   return !!(S.vivant && t && t.grass && !t.rock && !t.w && !(t.mark && t.mark.k === 'trempe'));
@@ -59,7 +59,7 @@ export function aliveRound(S, ev) {
   if (!S.vivant) return;
   const W = S.wx && S.wx.k;
   let rebuild = false;
-  // la pluie éteint, la grêle gèle
+  // rain puts it out, hail freezes
   if (W === 'pluie') {
     let n = 0;
     for (const k in S.tiles)
@@ -86,10 +86,10 @@ export function aliveRound(S, ev) {
       rebuild = true;
     }
   }
-  // le feu court dans les hautes herbes : on photographie d'abord, on applique ensuite
+  // fire spreads through tall grass: take a snapshot first, then apply
   const hasWon = [];
   for (const k in S.tiles) if (fireHazard(S, k)) hasWon.push([k, nbrK(k).find(n => onFire(S, n))]);
-  // sous le vent (v4.8), le feu saute une case de plus dans les hautes herbes
+  // downwind (v4.8), the fire jumps one more cell in the tall grass
   if (S.vent && W !== 'pluie')
     for (const b in S.tiles) {
       if (!onFire(S, b)) continue;
@@ -108,7 +108,7 @@ export function aliveRound(S, ev) {
     });
     ev.push({ e: 'chain', edges: edges, c: 'fire' });
     say(ev, `Le feu court dans les hautes herbes (${hasWon.length} case${hasWon.length > 1 ? 's' : ''}).`);
-    S.stats.feu = (S.stats.feu || 0) + hasWon.length; // succès Pyromane (v4.9)
+    S.stats.feu = (S.stats.feu || 0) + hasWon.length; // Pyromane (Pyromaniac) achievement (v4.9)
     hasWon.forEach(([k]) => {
       const w = uAt(S, k);
       if (!w || flies(w) || w.t.includes('Feu') || w.tal === 'torche') return;
@@ -117,7 +117,7 @@ export function aliveRound(S, ev) {
     });
     rebuild = true;
   }
-  // le vent pousse le brouillard d'une case (calculé sur la photo de la manche)
+  // the wind pushes the fog one cell (computed from the round's snapshot)
   if (S.vent) {
     const nf = {};
     let n = 0;
@@ -135,84 +135,84 @@ export function aliveRound(S, ev) {
     }
   }
   if (rebuild) ev.push({ e: 'terrain' });
-  // l'heure avance
-  if (!S.cyc.fige) S.cyc.n++; // Nuit éternelle : l'heure ne passe pas (v4.9)
-  if (S.cyc.n >= VIV_PAS) {
-    S.cyc = { ph: VIV_ORDRE[(VIV_ORDRE.indexOf(S.cyc.ph) + 1) % VIV_ORDRE.length], n: 0 };
-    say(ev, VIV_ANNONCE[S.cyc.ph]);
+  // time advances
+  if (!S.cyc.fige) S.cyc.n++; // Eternal Night: time does not pass (v4.9)
+  if (S.cyc.n >= LIVING_STEP) {
+    S.cyc = { ph: LIVING_ORDER[(LIVING_ORDER.indexOf(S.cyc.ph) + 1) % LIVING_ORDER.length], n: 0 };
+    say(ev, LIVING_ANNOUNCE[S.cyc.ph]);
     ev.push({ e: 'heure', ph: S.cyc.ph });
     if (S.vent) {
-      S.vent.d = (S.vent.d + 1) % 6; // le vent tourne avec l'heure
+      S.vent.d = (S.vent.d + 1) % 6; // the wind turns with the time
       say(ev, 'Le vent tourne.');
     }
   }
 }
 
 
-/** La pastille de l'heure, à côté de celle de la météo. */
+/** The time-of-day chip, next to the weather one. */
 export function chipTime(S) {
   if (!S || !S.cyc) return '';
-  if (S.cyc.fige) return `<span class="chip chip-heure" title="${VIV_DESC.nuit}"><i style="background:${VIV_COUL.nuit}"></i>Nuit éternelle</span>`;
+  if (S.cyc.fige) return `<span class="chip chip-heure" title="${LIVING_DESC.nuit}"><i style="background:${LIVING_COLOR.nuit}"></i>Nuit éternelle</span>`;
   const p = S.cyc.ph,
-    remainder = VIV_PAS - S.cyc.n,
-    following = VIV_ORDRE[(VIV_ORDRE.indexOf(p) + 1) % VIV_ORDRE.length];
-  return `<span class="chip chip-heure" title="${VIV_DESC[p]}"><i style="background:${VIV_COUL[p]}"></i>${VIV_NOM[p]} · ${VIV_NOM[following].toLowerCase()} ${remainder > 1 ? 'dans ' + remainder + ' manches' : 'après cette manche'}</span>`;
+    remainder = LIVING_STEP - S.cyc.n,
+    following = LIVING_ORDER[(LIVING_ORDER.indexOf(p) + 1) % LIVING_ORDER.length];
+  return `<span class="chip chip-heure" title="${LIVING_DESC[p]}"><i style="background:${LIVING_COLOR[p]}"></i>${LIVING_NAME[p]} · ${LIVING_NAME[following].toLowerCase()} ${remainder > 1 ? 'dans ' + remainder + ' manches' : 'après cette manche'}</span>`;
 }
 
 
-/** Teinte du plateau selon l'heure (l'attribut survit à la reconstruction du plateau). */
+/** Board tint according to the time (the attribute survives the board being rebuilt). */
 export function hourTint(S) {
-  // data-ph de #bBoard : rendu par React (Board.jsx)
+  // data-ph of #bBoard: rendered by React (Board.jsx)
   const ph = S && S.cyc ? S.cyc.ph : undefined;
   if (getHost().ph !== ph) hostSet({ ph });
 }
 
 /* =====================================================================
-   v4.7 : Plateau vivant
+   v4.7: Living Board
    ---------------------------------------------------------------------
-   Le jeu avait déjà ses réactions (Court-circuit, Embrasement, Vapeur…)
-   et chaque scénario était marqué « jour » ou « nuit » sans que cela
-   change quoi que ce soit en combat. Cette version fait vivre le plateau.
+   The game already had its reactions (Short Circuit, Blaze, Steam…)
+   and each scenario was marked "day" or "night" without that changing
+   anything in battle. This version brings the board to life.
 
-   1. Le temps qui passe (jour, crépuscule, nuit, aube)
-      Le combat commence à l'heure du scénario ; toutes les 4 manches,
-      l'heure avance d'un cran. Effets :
-        - Jour      : Plante et Vol ×1,2
-        - Aube      : Plante et Vol ×1,1
-        - Crépuscule: Spectre et Ténèbres ×1,1
-        - Nuit      : Spectre et Ténèbres ×1,2 ; les attaques de 3 cases de
-                      portée ou plus perdent 1 de portée, sauf pour les
-                      Spectre, les Ténèbres, Regard Vif et Écholocation.
-      Les multiplicateurs passent par le pipeline du moteur tactique
-      (fournisseur « heure »), comme la météo.
-   2. Le feu court dans les hautes herbes
-      À chaque fin de manche, les hautes herbes voisines d'une case
-      Brûlante s'embrasent (une case par manche, calculé sur la photo de la
-      manche : le feu ne traverse pas tout le plateau d'un coup). Un Pokémon
-      terrestre pris dans les flammes est Brûlé. Les herbes détrempées ne
-      brûlent pas, et une case fauchée (Coupe) arrête le feu : un pare-feu.
-   3. La météo agit sur le plateau
-      Pluie : éteint les cases Brûlantes et empêche le feu de courir.
-      Grêle : gèle les cases Trempées (elles deviennent Givrées).
-      (Le Soleil séchait déjà les cases Trempées et prolonge les flammes.)
+   1. The passing of time (day, dusk, night, dawn)
+      The battle starts at the scenario's time; every 4 rounds, the
+      time advances one step. Effects:
+        - Day       : Grass and Flying ×1.2
+        - Dawn      : Grass and Flying ×1.1
+        - Dusk      : Ghost and Dark ×1.1
+        - Night     : Ghost and Dark ×1.2; attacks with a range of 3 cells
+                      or more lose 1 range, except for Ghost, Dark,
+                      Regard Vif (Keen Eye) and Écholocation (Echolocation).
+      The multipliers go through the tactical engine's pipeline
+      ("time" provider), like the weather.
+   2. Fire spreads through tall grass
+      At each end of round, tall grass next to a Burning cell
+      catches fire (one cell per round, computed from the round's
+      snapshot: fire does not cross the whole board at once). A land
+      Pokémon caught in the flames is Burned. Soaked grass does not
+      burn, and a mown cell (Cut) stops the fire: a firebreak.
+   3. Weather acts on the board
+      Rain: puts out Burning cells and stops fire from spreading.
+      Hail: freezes Soaked cells (they become Frosted).
+      (Sun already dried Soaked cells and prolongs flames.)
 
-   Tout cela est un seul réglage, « Plateau vivant » (Paramètres, activé par
-   défaut). Sans lui (ou pour les tests moteur), le combat est celui d'avant.
+   All of this is a single setting, "Plateau vivant" (Living Board; Settings,
+   enabled by default). Without it (or for engine tests), the battle is as before.
    ===================================================================== */
 
-const VIV_PAS = 4;
+const LIVING_STEP = 4;
 
- // manches par heure de la journée
-const VIV_ORDRE = ['jour', 'crepuscule', 'nuit', 'aube'];
-
-
-export const VIV_NOM = { aube: 'Aube', jour: 'Jour', crepuscule: 'Crépuscule', nuit: 'Nuit' };
+ // rounds per time of day
+const LIVING_ORDER = ['jour', 'crepuscule', 'nuit', 'aube'];
 
 
-const VIV_COUL = { aube: '#f0a6a0', jour: '#f2c94c', crepuscule: '#e8774a', nuit: '#6b7bd6' };
+export const LIVING_NAME = { aube: 'Aube', jour: 'Jour', crepuscule: 'Crépuscule', nuit: 'Nuit' };
 
 
-export const VIV_DESC = {
+const LIVING_COLOR = { aube: '#f0a6a0', jour: '#f2c94c', crepuscule: '#e8774a', nuit: '#6b7bd6' };
+
+
+export const LIVING_DESC = {
   jour: 'Plante et Vol ×1,2.',
   aube: 'Plante et Vol ×1,1.',
   crepuscule: 'Spectre et Ténèbres ×1,1.',
@@ -220,10 +220,10 @@ export const VIV_DESC = {
 };
 
 
-export const VIV_ETAT = { jour: 'Il fait jour', aube: 'C’est l’aube', crepuscule: 'Le crépuscule tombe', nuit: 'Il fait nuit' };
+export const LIVING_STATE = { jour: 'Il fait jour', aube: 'C’est l’aube', crepuscule: 'Le crépuscule tombe', nuit: 'Il fait nuit' };
 
 
-const VIV_ANNONCE = {
+const LIVING_ANNOUNCE = {
   crepuscule: 'Le crépuscule tombe : les Spectres et les Ténèbres se renforcent (×1,1).',
   nuit: 'La nuit tombe : Spectre et Ténèbres ×1,2. Les attaques de 3 cases ou plus perdent 1 de portée.',
   aube: 'L’aube se lève : les Plantes et les Vols se réveillent (×1,1).',
@@ -231,17 +231,17 @@ const VIV_ANNONCE = {
 };
 
 
-/** Voit-on bien dans le noir ? */
+/** Can one see well in the dark? */
 export const seesAtNight = u => u.t.includes('Spectre') || u.t.includes('Ténèbres') || u.tal === 'regardvif' || u.tal === 'echolocation';
 
-/* ---------- 2. Fin de manche : le temps, la météo et le feu ---------- */
+/* ---------- 2. End of round: time, weather and fire ---------- */
 const onFire = (S, k) => !!(S.tiles[k] && S.tiles[k].mark && S.tiles[k].mark.k === 'brulant');
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Statements run at startup, in the original order (see index.js).
 export function __init() {
 
-/* ---------- 1. L'heure, fournisseur de modificateurs de dégâts ---------- */
-FOURNISSEURS_DEGATS.push({
+/* ---------- 1. The time, a damage modifier provider ---------- */
+DAMAGE_PROVIDERS.push({
   id: 'heure',
   fournir: (c, { S, typ }) => {
     const ph = S.cyc && S.cyc.ph;
@@ -257,6 +257,6 @@ FOURNISSEURS_DEGATS.push({
 });
 
 
-/* ---------- 3. À l'écran ---------- */
-// le ciel du plateau (.b-ciel) est rendu par <Board> (src/screens/combat/board/)
+/* ---------- 3. On screen ---------- */
+// the board's sky (.b-ciel) is rendered by <Board> (src/screens/combat/board/)
 }

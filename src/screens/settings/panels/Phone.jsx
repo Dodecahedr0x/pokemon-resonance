@@ -1,7 +1,7 @@
 import { PREF } from '../../../engine/026-campaign-tutorial-sound.js';
 import { Switch } from '../controls.jsx';
 
-// Téléphone : vibrations, gestes, aides. Le moteur gère data-hm, data-guide et data-v4reset.
+// Phone: vibrations, gestures, aids. The engine handles data-hm, data-guide and data-v4reset.
 export default function Phone() {
   return (
     <section className="v4-panel v4-ps">

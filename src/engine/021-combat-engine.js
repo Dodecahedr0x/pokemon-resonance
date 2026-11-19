@@ -1,4 +1,4 @@
-/* Section d'origine : 14-moteur-combat.js */
+/* Original section: 14-combat-engine.js */
 
 import { MT } from './001-tactical-engine-turn-core.js';
 import { EL, MK, MX } from './004-data.js';
@@ -6,17 +6,17 @@ import { MV } from './005-moves.js';
 import { BY, DEPLOY, EEVEE, FAMT, MKT, PKT, SCEN, TCH, WXN } from './009-pokemon.js';
 import { ARR } from './010-in-battle-evolution.js';
 import { ITEMS2, pairKey } from './011-game-state.js';
-import { CROCHETS } from './015-hooks.js';
+import { HOOKS } from './015-hooks.js';
 import { DIFF, aiFallback, dmgItemsLinks, threatAt } from './022-items-bonds-ai.js';
 import { NOTE, SANDOK, __set_NOTE, applyObst, dmgRolesField, foeRetreat, hasSyn, ignObst, losBlocked, resolve, ricoTgt, roleOf, roundSupport } from './023-roles-synergies-obstacles.js';
 import { aiStyleBonus, isShinyOwned } from './043-adventure-plus.js';
-import { FOURNISSEURS_DEGATS, JIT_BOSS, JIT_BOSS_HB, JIT_DMG, JIT_PB, JIT_PBM, enemyOrder, hpOrder } from './044-tactical-engine.js';
+import { DAMAGE_PROVIDERS, JIT_BOSS, JIT_BOSS_HB, JIT_DMG, JIT_PB, JIT_PBM, enemyOrder, hpOrder } from './044-tactical-engine.js';
 import { addLearned, withLearned } from './045-tms-hms.js';
 import { hourOf, nightRange, aliveInit, aliveRound } from './046-living-board.js';
 import { forceStop, deferredCharge, colossusKO, outOfReach, launchCharge, trapArrival, hostileTrap, trapPlan, placeTrap } from './047-tactics.js';
 import { chordAfter, disobeys } from './049-identity.js';
-import { REDIFF, noteMoment } from './050-world.js';
-import { CIBLE412, SOI412, bonusMove412, durations412, placeForesight } from './051-epic-tms.js';
+import { REPLAYS, noteMoment } from './050-world.js';
+import { TARGET412, SELF412, bonusMove412, durations412, placeForesight } from './051-epic-tms.js';
 import { PRE413, afterHit413, end413, reflections413, rune413, aiSupport413 } from './052-technical-roster.js';
 import { hasXp, afterHit414, afterDamage414, xpCost, end414, canXP } from './053-resonance.js';
 import { fleeMsg416 } from './055-living-johto.js';
@@ -27,7 +27,7 @@ import { docDmg430, docMov430, jDmg430 } from './065-camp-tactics.js';
 import { bonusDmg431, bonusMove431 } from './066-tactical-challenges.js';
 import { talDmg432, talMov432 } from './067-individuals-comfort.js';
 import { duelPlan433, vigilDuel433 } from './068-duel-tutorial.js';
-import { evoliHarmonie434 } from './069-calibration-eevee.js';
+import { eeveeHarmony434 } from './069-calibration-eevee.js';
 
 export let BW, BH, BRANCHES;
 
@@ -81,7 +81,7 @@ export function mkUnit(id, side, pos, uid, D) {
     mhp = mhpOf(sp.s) + hb;
   const u = {
     uid,
-    // les alliés gardent leur identité de famille (Liens, objets, fatigue, duos) même recrutés évolués
+    // allies keep their family identity (Bonds, items, fatigue, duos) even when recruited already evolved
     sp: side === 'a' && BY[id] ? BY[id].base : id,
     id,
     side,
@@ -116,7 +116,7 @@ export function mkUnit(id, side, pos, uid, D) {
     en: 0,
     ko: false
   };
-  PKT.set(u.t, u.id); // types → espèce : le médaillon affiche la bonne illustration
+  PKT.set(u.t, u.id); // types → species: the medallion shows the right illustration
   return u;
 }
 
@@ -127,7 +127,7 @@ export function markAt(S, k) {
   return t.mark ? t.mark.k : t.w ? 'trempe' : null;
 }
 
- // cloué au sol : Gravité (v4.9)
+ // grounded: Gravity (v4.9)
 function entryWx(S, u, ev) {
   if (u.tal === 'crachin') {
     S.wx = { k: 'pluie', n: 5 };
@@ -140,14 +140,14 @@ function entryWx(S, u, ev) {
 }
 
 
-// Voix par manche au début d'un combat : 3, plus le bonus de l'équipe (vBonus, PC libres).
+// Voices per round at the start of a battle: 3, plus the team bonus (vBonus, free PC).
 export const startVoice = bonus => 3 + bonus;
 
 export function newBattle(sc, team, bonus, opt) {
   opt = opt || {};
   const D0 = SCEN[sc],
     df = DIFF[opt.diff] || DIFF.normal,
-    // difficulté : PV et puissance des adversaires, nombre de manches
+    // difficulty: opponents' HP and power, number of rounds
     D = Object.assign({}, D0, {
       hb: Math.max(0, Math.round((D0.hb || 0) * df.hb * hpOrder(opt) + (df.hbAdd || 0))),
       pb: Math.max(0, Math.round(((D0.pb || 0) + df.pb) * JIT_PBM) + JIT_PB),
@@ -170,7 +170,7 @@ export function newBattle(sc, team, bonus, opt) {
       lastAtk: null,
       stats: { rx: 0, ko: 0, voix: 0, evo: 0, pairs: {} },
       rxg: {},
-      jit: true // v4.12 : intentions cachées, les adversaires décident à leur tour
+      jit: true // v4.12: hidden intentions, opponents decide on their own turn
     };
   for (let r = 0; r < BH; r++)
     for (let c = 0; c < BW; c++) S.tiles[K(c, r)] = { w: false, rock: false, mark: null, mud: 0, lava: 0, fog: 0 };
@@ -183,11 +183,11 @@ export function newBattle(sc, team, bonus, opt) {
     }
   team.slice(0, 4).forEach((id, i) => {
     const u = mkUnit(id, 'a', DEPLOY[i], 'a' + i, D);
-    if (BY[id] && isShinyOwned(BY[id].base)) u.shiny = true; // vos chromatiques le restent en combat (v4.15)
+    if (BY[id] && isShinyOwned(BY[id].base)) u.shiny = true; // your shinies stay shiny in battle (v4.15)
     S.units.push(u);
   });
   D.foes.forEach(([id, p, x], i) => {
-    // x : réglages d’un adversaire précis (boss légendaire, chromatique) ; ses PV suivent aussi la difficulté
+    // x: settings for a specific opponent (legendary boss, shiny); its HP also follow the difficulty
     const Dx = x
         ? Object.assign(
             {},
@@ -203,13 +203,13 @@ export function newBattle(sc, team, bonus, opt) {
     S.units.push(u);
   });
   S.units.forEach(u => entryWx(S, u, null));
-  aliveInit(S, opt); // plateau vivant : l'heure du scénario lance le cycle (v4.7-01)
-  CROCHETS.creation.forEach(h => h(S, opt, D0)); // colosses, Tactique avancée… (v4.8)
+  aliveInit(S, opt); // living board: the scenario's time of day starts the cycle (v4.7-01)
+  HOOKS.creation.forEach(h => h(S, opt, D0)); // colossi, Advanced Tactics… (v4.8)
   plan(S, []);
-  // difficulté, Liens, objets tenus et fatigue (posés après les premières intentions adverses)
+  // difficulty, Bonds, held items and fatigue (applied after the opponents' first intentions)
   S.diff = DIFF[opt.diff] ? opt.diff : 'normal';
-  if (opt.ordre === 'vitesse') S.ordre = 'vitesse'; // ordre des tours par Vitesse (v4.5-01)
-  addLearned(S, opt.apprises); // CT et CS apprises (v4.6-01)
+  if (opt.ordre === 'vitesse') S.ordre = 'vitesse'; // turn order by Speed (v4.5-01)
+  addLearned(S, opt.apprises); // learned TMs and HMs (v4.6-01)
   S.links = {};
   S.noCatch = !D0.catch;
   S.stats.caught = [];
@@ -232,13 +232,13 @@ export function newBattle(sc, team, bonus, opt) {
     }
     if (((opt.fatigue || {})[u.sp] || 0) >= 70) u.fat = true;
   });
-  CROCHETS.combat.forEach(h => h(S, opt, D0));
+  HOOKS.combat.forEach(h => h(S, opt, D0));
   return S;
 }
 
- // colosse : +2 portée (v4.8) // la nuit : −1 de portée (v4.7-01) // Onde de Choc sous la Pluie (v4.12)
+ // colossus: +2 range (v4.8) // at night: −1 range (v4.7-01) // Shock Wave in the Rain (v4.12)
 export function movPts(S, u) {
-  if (u.colosse || u.seg) return 0; // les colosses ne bougent pas (v4.8)
+  if (u.colosse || u.seg) return 0; // colossi do not move (v4.8)
   const fr = u.tal === 'regardvif';
   if (u.root > 0 && !fr) return 0;
   let m = u.s[4];
@@ -247,10 +247,10 @@ export function movPts(S, u) {
   if (u.web > 0 && !fr) m -= 3;
   m = Math.max(0, m);
   m = Math.max(0, m + (u.item === 'grelot' ? 1 : 0) - (u.fat ? 1 : 0)); // Grelot Vif +1, fatigue −1
-  if (hasSyn(S, u, 'escadrille') && (u.t.includes('Vol') || u.t.includes('Insecte'))) m++; // synergie Escadrille
-  if (S.mutMov) m = Math.max(0, m + S.mutMov); // mutateurs Gravité, Frénésie (v4.9)
-  if (u.car === 'vif') m++; // caractère Vif (v4.10)
-  m = Math.max(0, m + bonusMove412(S, u) + docMov430(S, u) + bonusMove431(S, u) + talMov432(S, u)); // doctrine (v4.30) ; Vent Arrière, Distorsion (v4.12), Gravité, Marque Ombre… (v4.13)
+  if (hasSyn(S, u, 'escadrille') && (u.t.includes('Vol') || u.t.includes('Insecte'))) m++; // Squadron synergy
+  if (S.mutMov) m = Math.max(0, m + S.mutMov); // Gravity, Frenzy mutators (v4.9)
+  if (u.car === 'vif') m++; // Quick nature (v4.10)
+  m = Math.max(0, m + bonusMove412(S, u) + docMov430(S, u) + bonusMove431(S, u) + talMov432(S, u)); // doctrine (v4.30); Tailwind, Trick Room (v4.12), Gravity, Shadow Mark… (v4.13)
   return m;
 }
 
@@ -261,7 +261,7 @@ export function reach(S, u) {
     best = { [st]: 0 },
     q = [[st, 0]],
     fl = flies(u),
-    ok = SANDOK(u); // le sable coûte 2 Mouvements, sauf aux types Sol, Roche, Acier et aux volants
+    ok = SANDOK(u); // sand costs 2 Movement, except for Ground, Rock and Steel types and flyers
   while (q.length) {
     const [k, c0] = q.shift();
     for (const nk of nbrK(k)) {
@@ -270,7 +270,7 @@ export function reach(S, u) {
       const c = c0 + (t.mud > 0 && !fl ? 3 : t.sand && !t.w && !ok ? 2 : 1);
       if (c <= m && (best[nk] === undefined || c < best[nk])) {
         best[nk] = c;
-        if (!forceStop(S, u, nk)) q.push([nk, c]); // piège adverse, zone de contrôle : on s'y arrête (v4.8)
+        if (!forceStop(S, u, nk)) q.push([nk, c]); // enemy trap, control zone: movement stops there (v4.8)
       }
     }
   }
@@ -304,8 +304,8 @@ function canSee(S, u, k) {
   const v = uAt(S, k);
   if (!v || u.tal === 'echolocation') return true;
   const d = hdist(u.pos, P(k));
-  if (S.tiles[k].fog > 0 && d > 1) return false; // brouillard
-  return !(v.side !== u.side && S.tiles[k].grass && d > 2); // hautes herbes : cachées au-delà de 2 cases
+  if (S.tiles[k].fog > 0 && d > 1) return false; // fog
+  return !(v.side !== u.side && S.tiles[k].grass && d > 2); // tall grass: hidden beyond 2 cells
 }
 
 
@@ -313,12 +313,12 @@ export function targets(S, u, m) {
   if (m && ((m.xp && !canXP(S, u, m)) || (u.item === 'mouchoir' && u.choix && MV[u.choix] && MV[u.choix] !== m))) return []; // v4.14
   const R = effR(u, m, S);
   if (m.sh === 'self' || m.sh === 'ring') return [uk(u)];
-  const ign = ignObst(S, u, mvType(S, u, m)); // synergie Esprit : Psy et Spectre ignorent les obstacles
+  const ign = ignObst(S, u, mvType(S, u, m)); // Spirit synergy: Psychic and Ghost ignore obstacles
   if (m.sh === 'line') {
     const o = [];
     CDIR.forEach(d => {
       for (const k of lineK(u.pos, d, R)) {
-        if (S.tiles[k].pil && !ign) break; // un pilier arrête la ligne
+        if (S.tiles[k].pil && !ign) break; // a pillar stops the line
         if (!S.tiles[k].rock) o.push(k);
       }
     });
@@ -335,15 +335,15 @@ export function targets(S, u, m) {
       continue;
     }
     if (NEEDU.includes(m.fx) && !v) continue;
-    if (m.fx === 'piege' && (v || S.tiles[k].w || S.tiles[k].trap)) continue; // un piège se pose sur une case libre (v4.8)
+    if (m.fx === 'piege' && (v || S.tiles[k].w || S.tiles[k].trap)) continue; // a trap is placed on a free cell (v4.8)
     if (v && v.side === u.side && (m.p || m.fix || HOSTILE.includes(m.fx))) continue;
     if (!canSee(S, u, k)) continue;
     o.push(k);
   }
   if (m.sh === 'one') {
-    // un pilier bloque les tirs à distance
+    // a pillar blocks ranged shots
     if (!ign) o = o.filter(k => hdist(u.pos, P(k)) < 2 || !losBlocked(S, u.pos, P(k)));
-    // ricochet : viser un rocher pour toucher l’ennemi le plus proche derrière
+    // ricochet: aim at a rock to hit the nearest enemy behind it
     if (m.p && R >= 2 && u.side === 'a')
       for (const k in S.tiles) {
         const t = S.tiles[k];
@@ -363,7 +363,7 @@ export function affected(S, u, m, k) {
   const R = effR(u, m, S),
     t = S.tiles[k];
   if (m.sh === 'one' && t && t.rock && !t.pil) {
-    // ricochet sur un rocher
+    // ricochet off a rock
     const r = ricoTgt(S, u, k);
     return r ? [r] : [];
   }
@@ -377,7 +377,7 @@ export function affected(S, u, m, k) {
       if (L.includes(k)) {
         a = [];
         for (const x of L) {
-          if (stop && S.tiles[x].pil) break; // un pilier arrête la ligne
+          if (stop && S.tiles[x].pil) break; // a pillar stops the line
           a.push(x);
         }
         break;
@@ -390,7 +390,7 @@ export function affected(S, u, m, k) {
     a = [k, ...n1.filter(x => n2.includes(x))];
   } else if (m.sh === 'area') a = [k, ...nbrK(k)];
   else a = [k];
-  if (m.pluie && m.sh === 'one' && S.wx && S.wx.k === 'pluie') a = [k, ...nbrK(k)]; // Onde de Choc sous la Pluie (v4.12)
+  if (m.pluie && m.sh === 'one' && S.wx && S.wx.k === 'pluie') a = [k, ...nbrK(k)]; // Shock Wave in the Rain (v4.12)
   return a.filter(x => S.tiles[x] && !S.tiles[x].rock);
 }
 
@@ -403,12 +403,12 @@ export function inReach(S, u, m, k) {
   if (m.sh === 'line') {
     const L = CDIR.map(dd => lineK(u.pos, dd, R)).find(L => L.includes(k));
     if (!L) return false;
-    if (!ign && L.slice(0, L.indexOf(k)).some(x => S.tiles[x].pil)) return false; // pilier sur la ligne
+    if (!ign && L.slice(0, L.indexOf(k)).some(x => S.tiles[x].pil)) return false; // pillar on the line
   } else {
     if (d < 1 || d > R) return false;
-    if (!ign && m.sh === 'one' && d >= 2 && losBlocked(S, u.pos, P(k))) return false; // pilier entre les deux
+    if (!ign && m.sh === 'one' && d >= 2 && losBlocked(S, u.pos, P(k))) return false; // pillar in between
   }
-  // hautes herbes : une cible à plus de 2 cases est invisible
+  // tall grass: a target more than 2 cells away is invisible
   const v = uAt(S, k);
   return !(v && v.side !== u.side && S.tiles[k].grass && d > 2 && u.tal !== 'echolocation');
 }
@@ -419,34 +419,34 @@ function intimidate(S, u) {
 }
 
 
-/* dégâts d’une capacité : formule de base, puis objets et Liens, puis rôles, synergies et terrain */
+/* damage of a move: base formula, then items and Bonds, then roles, synergies and terrain */
 export function dmgOf(S, u, m, t, typ, mult) {
   let d = dmgBase(S, u, m, t, typ, mult);
   if (d <= 0 || m.fix) return d;
   d = dmgItemsLinks(S, u, t, d, mult);
-  return talDmg432(S, u, t, bonusDmg431(S, u, t, docDmg430(S, u, t, dmgRolesField(S, u, m, t, typ, d)))); // doctrine (v4.30), maîtrise et reliques (v4.31), talent (v4.32)
+  return talDmg432(S, u, t, bonusDmg431(S, u, t, docDmg430(S, u, t, dmgRolesField(S, u, m, t, typ, d)))); // doctrine (v4.30), mastery and relics (v4.31), ability (v4.32)
 }
 
 
 function dmgBase(S, u, m, t, typ, mult) {
   let e = teff(typ, t.t);
-  if (e === 0 && typ === 'Sol' && t.cloue && t.t.includes('Vol')) e = t.t.length > 1 ? teff(typ, t.t.filter(z => z !== 'Vol')) || 1 : 1; // Gravité : le Sol touche les Vol (v4.13)
+  if (e === 0 && typ === 'Sol' && t.cloue && t.t.includes('Vol')) e = t.t.length > 1 ? teff(typ, t.t.filter(z => z !== 'Vol')) || 1 : 1; // Gravity: Ground hits Flying (v4.13)
   if (e === 0) return 0;
   if (typ === 'Sol' && t.tal === 'levitation' && !t.cloue) return 0;
   if (m.fix) return m.fix;
   if (!m.p) return 0;
-  if (m.fx === 'devoreve' && t.badge !== 'SOM') return 0; // Dévorêve (v4.12)
-  // multiplicateurs (météo, talents, état, même type) : fournis au pipeline du moteur tactique (v4.5-01)
+  if (m.fx === 'devoreve' && t.badge !== 'SOM') return 0; // Dream Eater (v4.12)
+  // multipliers (weather, abilities, status, same type): supplied to the tactical engine's pipeline (v4.5-01)
   const x = MT.combinerModificateurs(
     e * mult,
-    MT.collecter(FOURNISSEURS_DEGATS, 'degats', { S, u, m, t, typ }, 'attaquant')
+    MT.collecter(DAMAGE_PROVIDERS, 'degats', { S, u, m, t, typ }, 'attaquant')
   ).valeur;
   let d = Math.round((m.p + u.s[1] * 2 + (u.pb || 0)) * x);
   if (u.tal !== 'annulegarde' && m.fx !== 'percegarde')
     d -= t.s[2] + (u.tal === 'inconscient' ? 0 : (t.guard > 0 ? 2 : 0) + (t.anchor > 0 ? 2 : 0) + (t.tal === 'coque' ? 2 : 0));
   if (intimidate(S, u)) d -= 3;
-  if (u.affaibli > 0) d -= 3; // Feu Follet (v4.13)
-  // v4.12 : sans intentions, chaque attaque adverse porte ; elle frappe un peu moins fort (après la Garde)
+  if (u.affaibli > 0) d -= 3; // Will-O-Wisp (v4.13)
+  // v4.12: without intentions, every enemy attack lands; it hits a little softer (after Guard)
   if (S.jit && u.side === 'e' && !S.duel433 && JIT_DMG !== 1) d = Math.round(d * JIT_DMG * (u.boss || u.colosse ? JIT_BOSS : 1));
   return Math.max(1, d);
 }
@@ -465,7 +465,7 @@ export function damage(S, v, d, ev, o) {
     say(ev, `${v.n} se protège avec Abri.`);
     return 0;
   }
-  // Ceinture Force : un coup fatal laisse 1 PV (une fois)
+  // Focus Sash: a fatal hit leaves 1 HP (once)
   const belt = v.belt && !v.ferm && d >= v.hp;
   if (belt) {
     v.belt = false;
@@ -484,8 +484,8 @@ export function damage(S, v, d, ev, o) {
   const real = v.hp - Math.max(0, nh);
   v.hp = Math.max(0, nh);
   ev.push({ e: 'dmg', u: v.uid, v: real });
-  jDmg430(S, v, real, o); // journal tactique (v4.30)
-  if ((v.side === 'a' || S.duel433) && v.hp > 0 && real >= v.mhp * 0.3) rewardIn(S, v, 1, ev); // duel : les deux joueurs (v4.33)
+  jDmg430(S, v, real, o); // tactical log (v4.30)
+  if ((v.side === 'a' || S.duel433) && v.hp > 0 && real >= v.mhp * 0.3) rewardIn(S, v, 1, ev); // duel: both players (v4.33)
   if (v.hp <= 0) {
     v.ko = true;
     v.intent = null;
@@ -496,21 +496,21 @@ export function damage(S, v, d, ev, o) {
       S.units.forEach(o => {
         if (o.side === v.side && !o.ko && o !== v) rewardIn(S, o, 1, ev);
       });
-    if (v.seg || v.colosse) colossusKO(S, v, ev); // colosses (v4.8)
+    if (v.seg || v.colosse) colossusKO(S, v, ev); // colossi (v4.8)
   }
   if (real > 0 && !o.ind) {
-    v.touche = true; // Mitra-Poing (v4.13)
-    if (!o.reflet) reflections413(S, v, real, ev); // Riposte, Voile Miroir, Prélèvem. Destin (v4.13)
+    v.touche = true; // Mach Punch (v4.13)
+    if (!o.reflet) reflections413(S, v, real, ev); // Counter, Mirror Coat, Destiny Bond (v4.13)
   }
-  if (real > 0) afterDamage414(S, v, real, o, ev); // Casque Brut, Baie Sitrus (v4.14)
+  if (real > 0) afterDamage414(S, v, real, o, ev); // Rocky Helmet, Sitrus Berry (v4.14)
   if (belt) say(ev, `${v.n} tient bon grâce à la Ceinture Force !`);
   return real;
 }
 
 
 export function heal(S, v, a, ev) {
-  if (v && v.side === 'a' && S.syn && S.syn.includes('benediction')) a = Math.round(a * 1.5); // synergie Bénédiction
-  if (v && v.item === 'grosseracine') a = Math.round(a * 1.5); // Grosse Racine (v4.14)
+  if (v && v.side === 'a' && S.syn && S.syn.includes('benediction')) a = Math.round(a * 1.5); // Blessing synergy
+  if (v && v.item === 'grosseracine') a = Math.round(a * 1.5); // Big Root (v4.14)
   if (!v || v.ko || a <= 0) return;
   const r = Math.min(a, v.mhp - v.hp);
   if (r <= 0) return;
@@ -519,10 +519,10 @@ export function heal(S, v, a, ev) {
 }
 
 
-export function stun(S, v, lab, ev, nos) {
+export function stun(S, v, lab, ev, noSync) {
   if (!v || v.ko) return;
   if (v.item === 'baielum' && !v.lum455) {
-    // objet tenu (v4.58) : annule le premier état subi
+    // held item (v4.58): cancels the first status inflicted
     v.lum455 = 1;
     say(ev, `Baie Lum : ${v.n} annule l’état ${lab}.`);
     return;
@@ -554,7 +554,7 @@ export function stun(S, v, lab, ev, nos) {
     v.sn = true;
   } else v.skip = 1;
   ev.push({ e: 'st', u: v.uid, s: lab });
-  if (!nos && v.tal === 'synchro' && S.lastAtk) {
+  if (!noSync && v.tal === 'synchro' && S.lastAtk) {
     const a = byUid(S, S.lastAtk);
     if (a && a.side !== v.side && !a.ko) {
       say(ev, `Synchro : ${a.n} subit le même sort.`);
@@ -582,7 +582,7 @@ export function mDur(S, mk) {
 export function setMark(S, k, mk, by) {
   const t = S.tiles[k];
   if (t && !t.rock) t.mark = { k: mk, d: mDur(S, mk), lv: 1, by };
-  // Amorce : les marques d’un Déclencheur durent une manche de plus
+  // Primer: a Trigger's marks last one more round
   if (t && t.mark && by) {
     const b = byUid(S, by);
     if (b && roleOf(b) === 'Déclencheur') t.mark.d += 1;
@@ -624,13 +624,13 @@ function linkRef(S, a, b) {
 
 export function landed(S, v, ev) {
   if (!v || v.ko) return;
-  v.mvR = S.round; // Poursuite (v4.13)
+  v.mvR = S.round; // Pursuit (v4.13)
   const t = S.tiles[uk(v)];
   if (t.lava > 0 && !flies(v)) {
     say(ev, `${v.n} se brûle sur la lave.`);
     damage(S, v, v.tal === 'isograisse' ? 3 : 6, ev, { ind: true });
   }
-  trapArrival(S, v, ev); // pièges (v4.8)
+  trapArrival(S, v, ev); // traps (v4.8)
 }
 
 
@@ -686,7 +686,7 @@ function react(S, rx, k, u, v, base, ev) {
     by = t.mark ? t.mark.by : null;
   if (u.side === 'a') {
     S.stats.rx++;
-    const R = (S.stats.rxk = S.stats.rxk || {}); // réactions préférées (étudiées par le Champion)
+    const R = (S.stats.rxk = S.stats.rxk || {}); // preferred reactions (studied by the Champion)
     R[rx] = (R[rx] || 0) + 1;
   }
   linkRef(S, by, u.uid);
@@ -829,7 +829,7 @@ function react(S, rx, k, u, v, base, ev) {
 
 
 export function endStep(S, ev) {
-  CROCHETS.avantVerdict.forEach(h => h(S, ev));
+  HOOKS.avantVerdict.forEach(h => h(S, ev));
   if (!S.over) {
     const a = S.units.some(x => x.side === 'a' && !x.ko),
       e = S.units.some(x => x.side === 'e' && !x.ko);
@@ -892,10 +892,10 @@ export function resolveMove(S, u, m, k) {
   S.lastAtk = u.uid;
   S.rxg = {};
   ev.push({ e: 'use', u: u.uid, k, ty: typ });
-  S.acteur430 = u.uid; // journal tactique (v4.30)
+  S.acteur430 = u.uid; // tactical log (v4.30)
   say(ev, `${u.n} utilise ${m.n} !`);
   if (m.wx) {
-    S.wx = { k: m.wx, n: u.item === 'rochemeteo' ? 8 : 5 }; // Roche Météo (v4.14)
+    S.wx = { k: m.wx, n: u.item === 'rochemeteo' ? 8 : 5 }; // Weather Rock (v4.14)
     say(ev, `Météo ${WXN[m.wx]} pendant ${S.wx.n} manches.`);
     return endStep(S, ev);
   }
@@ -920,18 +920,18 @@ export function resolveMove(S, u, m, k) {
         if (!o.ko && o.side === u.side && hdist(o.pos, u.pos) <= 1) o.guard = 2;
       });
       say(ev, `Protection : ${u.n} et ses voisins gagnent +2 Garde.`);
-    } else if (SOI412[m.fx]) SOI412[m.fx](S, u, ev); // v4.12
+    } else if (SELF412[m.fx]) SELF412[m.fx](S, u, ev); // v4.12
     return endStep(S, ev);
   }
   if (m.fx === 'piege') {
-    placeTrap(S, u, m, k, ev); // pièges (v4.8)
+    placeTrap(S, u, m, k, ev); // traps (v4.8)
     return endStep(S, ev);
   }
   if (m.fx === 'presc') {
-    placeForesight(S, u, m, k, ev); // Prescience (v4.12)
+    placeForesight(S, u, m, k, ev); // Future Sight (v4.12)
     return endStep(S, ev);
   }
-  const v0 = outOfReach(S, uAt(S, k), u, null), // dans les airs : intouchable (v4.8)
+  const v0 = outOfReach(S, uAt(S, k), u, null), // airborne: untouchable (v4.8)
     mk0 = markAt(S, k);
   if (m.fx === 'swap' && v0 && !v0.colosse && !v0.seg) {
     const a = u.pos;
@@ -956,7 +956,7 @@ export function resolveMove(S, u, m, k) {
     return endStep(S, ev);
   }
   if (m.fx === 'aide' && v0) {
-    v0.aide = 1; // Coup d’Main (v4.12)
+    v0.aide = 1; // Helping Hand (v4.12)
     ev.push({ e: 'st', u: v0.uid, s: 'AIDE' });
     say(ev, `Coup d’Main : la prochaine attaque de ${v0.n} cette manche frappera ×1,5.`);
     return endStep(S, ev);
@@ -966,7 +966,7 @@ export function resolveMove(S, u, m, k) {
     return endStep(S, ev);
   }
   if (PRE413[m.fx] && v0) {
-    PRE413[m.fx](S, u, m, v0, ev); // Malédiction, Feu Follet, Vantardise, Morphing (v4.13)
+    PRE413[m.fx](S, u, m, v0, ev); // Curse, Will-O-Wisp, Swagger, Transform (v4.13)
     return endStep(S, ev);
   }
   if (['taunt', 'turn', 'confuse'].includes(m.fx) && v0) {
@@ -1022,7 +1022,7 @@ export function resolveMove(S, u, m, k) {
           say(ev, `Torche : ${v.n} absorbe les flammes et renforce ses attaques.`);
           v.boost = 2;
         } else {
-          const e = teff(typ, v.t) || 1; // 0 seulement sous Gravité (v4.13)
+          const e = teff(typ, v.t) || 1; // 0 only under Gravity (v4.13)
           dealt += damage(S, v, dmg, ev, {});
           if (e > 1) say(ev, 'C’est super efficace !');
           else if (e < 1) say(ev, 'Ce n’est pas très efficace.');
@@ -1030,15 +1030,15 @@ export function resolveMove(S, u, m, k) {
       } else if (teff(typ, v.t) === 0 || (typ === 'Sol' && v.tal === 'levitation')) say(ev, `Ça n’affecte pas ${v.n}.`);
       else if (m.fx === 'devoreve') say(ev, `${v.n} ne dort pas : Dévorêve échoue.`); // v4.12
     }
-    if (v && !v.ko && v.side !== u.side && CIBLE412[m.fx]) CIBLE412[m.fx](S, u, v, x, mk, ev); // Vent Glace, Draco-Souffle, Bombe Beurk (v4.12)
-    if (v) afterHit413(S, u, m, v, x, mk, typ, ev); // Triple Pied, Vague Psy, Corps Maudit, Conversion 2 (v4.13)
-    if (v) afterHit414(S, u, m, v, x, typ, ev); // notes de Résonance (v4.14)
+    if (v && !v.ko && v.side !== u.side && TARGET412[m.fx]) TARGET412[m.fx](S, u, v, x, mk, ev); // Icy Wind, Dragon Breath, Sludge Bomb (v4.12)
+    if (v) afterHit413(S, u, m, v, x, mk, typ, ev); // Triple Kick, Psywave, Cursed Body, Conversion 2 (v4.13)
+    if (v) afterHit414(S, u, m, v, x, typ, ev); // Resonance notes (v4.14)
     if (rx) react(S, rx, x, u, v && !v.ko ? v : null, base, ev);
     else if (m.mk && !ren) setMark(S, x, m.mk, u.uid);
   }
   if (m.fx === 'smoke') say(ev, 'Un brouillard épais se lève.');
   if (m.fx === 'cut' && S.tiles[k] && S.tiles[k].grass) {
-    S.tiles[k].grass = false; // CS01 Coupe
+    S.tiles[k].grass = false; // HM01 Cut
     say(ev, 'Coupe : les hautes herbes sont fauchées.');
     ev.push({ e: 'terrain', k });
   }
@@ -1067,10 +1067,10 @@ export function resolveMove(S, u, m, k) {
     }
   }
   if (m.fx === 'drain' && dealt > 0) heal(S, u, Math.ceil(dealt / 2), ev);
-  if (m.fx === 'devoreve' && dealt > 0) heal(S, u, Math.ceil(dealt / 2), ev); // Dévorêve (v4.12)
-  if (u.aide && (m.p || m.fix)) u.aide = 0; // Coup d’Main consommé (v4.12)
+  if (m.fx === 'devoreve' && dealt > 0) heal(S, u, Math.ceil(dealt / 2), ev); // Dream Eater (v4.12)
+  if (u.aide && (m.p || m.fix)) u.aide = 0; // Helping Hand consumed (v4.12)
   end413(S, u, m, k, v0, v1, dealt, ev); // signatures (v4.13)
-  end414(S, u, m, dealt, ev); // Orbe Vie (v4.14)
+  end414(S, u, m, dealt, ev); // Life Orb (v4.14)
   if (m.fx === 'recoil' && dealt > 0) {
     say(ev, `${u.n} subit le contrecoup.`);
     damage(S, u, Math.max(1, Math.round(dealt * 0.25)), ev, { ind: true });
@@ -1087,9 +1087,9 @@ export function resolveMove(S, u, m, k) {
 }
 
 
-/* actions du joueur */
+/* player actions */
 export function pMove(S, u, k) {
-  const retreat = !!(u && u.hr && u.acted && !u.moved); // un Éclaireur qui a frappé peut encore se replier
+  const retreat = !!(u && u.hr && u.acted && !u.moved); // a Scout that has struck can still fall back
   if (retreat) u.acted = false;
   let ev = null;
   try {
@@ -1100,7 +1100,7 @@ export function pMove(S, u, k) {
     u.moved = true;
     ev.push({ e: 'mv', u: u.uid });
     landed(S, u, ev);
-    if (S.duel433) vigilDuel433(S, u, ev); // duel : la Vigilance adverse (v4.33)
+    if (S.duel433) vigilDuel433(S, u, ev); // duel: the opponent's Vigilance (v4.33)
     ev = endStep(S, ev);
   } finally {
     if (retreat) u.acted = true;
@@ -1117,32 +1117,32 @@ export function pAct(S, u, mi, k) {
   if (S.phase !== 'player' || u.acted || u.ko) return null;
   const m = MV[u.mv[mi]];
   if (!m || !targets(S, u, m).includes(k)) return null;
-  const dso = disobeys(S, u); // désobéissance (v4.10)
+  const dso = disobeys(S, u); // disobedience (v4.10)
   if (dso) {
     u.acted = true;
     u.moved = true;
     return dso;
   }
-  const previous = REDIFF.has(S) ? JSON.stringify(S) : null; // rediffusion du meilleur coup (v4.11)
+  const previous = REPLAYS.has(S) ? JSON.stringify(S) : null; // best-move replay (v4.11)
   const xpC = m.xp ? xpCost(u) : 0,
-    tch0 = u.touche; // attaque Experte (v4.14)
+    tch0 = u.touche; // Expert attack (v4.14)
   const mv0 = u.moved,
-    ev = deferredCharge(S, u, m) ? launchCharge(S, u, mi, k) : resolve(S, u, m, k); // attaques chargées (v4.8)
+    ev = deferredCharge(S, u, m) ? launchCharge(S, u, mi, k) : resolve(S, u, m, k); // charged attacks (v4.8)
   if (xpC && !(m.fx === 'mitra' && tch0)) {
     u.en = Math.max(0, u.en - xpC);
     say(ev, `Attaque Experte : ${u.n} libère ${xpC} losange${xpC > 1 ? 's' : ''} de Résonance.`);
   }
-  if (u.item === 'mouchoir' && !u.choix) u.choix = u.mv[mi]; // Mouchoir Choix (v4.14)
+  if (u.item === 'mouchoir' && !u.choix) u.choix = u.mv[mi]; // Choice Scarf (v4.14)
   u.acted = true;
   u.moved = true;
-  chordAfter(S, u, m, ev); // Accords de Résonance (v4.10)
-  // Éclaireur : frappe d’abord, se déplace ensuite
-  if (!u.ko && !mv0 && u.side === 'a' && (roleOf(u) === 'Éclaireur' || m.fx === 'frappefuite') && !S.over && !u.chg) { // Aqua-Jet, Pisto-Poing (v4.13)
+  chordAfter(S, u, m, ev); // Resonance Chords (v4.10)
+  // Scout: strikes first, moves afterwards
+  if (!u.ko && !mv0 && u.side === 'a' && (roleOf(u) === 'Éclaireur' || m.fx === 'frappefuite') && !S.over && !u.chg) { // Aqua Jet, Bullet Punch (v4.13)
     u.moved = false;
     u.hr = 1;
   }
   if (m.fx === 'morphing' && u.morph && !u.ko && !S.over && u.side === 'a') {
-    u.acted = false; // Morphing : il frappe aussitôt avec ce qu’il a copié (v4.13)
+    u.acted = false; // Transform: it immediately strikes with what it copied (v4.13)
     say(ev, `${u.n} peut encore utiliser une capacité copiée.`);
   }
   if (previous) noteMoment(S, u, m.n, ev, previous);
@@ -1151,7 +1151,7 @@ export function pAct(S, u, mi, k) {
 
 
 export function rewardIn(S, u, n, ev) {
-  if (!u || u.ko || (u.side !== 'a' && !(S && S.duel433)) || !(hasNx(u) || hasXp(u) || resoCand417(S, u))) return; // v4.14 : attaques Expertes ; v4.17 : Forme Résonante
+  if (!u || u.ko || (u.side !== 'a' && !(S && S.duel433)) || !(hasNx(u) || hasXp(u) || resoCand417(S, u))) return; // v4.14: Expert attacks; v4.17: Resonant Form
   const b = u.en;
   u.en = Math.min(EMAX, u.en + n);
   if (u.en > b && ev) {
@@ -1173,10 +1173,10 @@ export function evoOpts(S, u) {
       mk = markAt(S, uk(u));
     if (mk && EEVEE[mk]) o.push(EEVEE[mk]);
     o.push(EEVEE[hourOf(S)]);
-    if (u.side === 'a') Object.values(EEVEE).forEach(x => o.includes(x) || o.push(x)); // v4.34 : vos Évoli choisissent librement
+    if (u.side === 'a') Object.values(EEVEE).forEach(x => o.includes(x) || o.push(x)); // v4.34: your Eevee choose freely
     return o;
   }
-  if (BRANCHES[u.id]) return branchOpts(S, u); // v4.13 : la voie dépend de la situation
+  if (BRANCHES[u.id]) return branchOpts(S, u); // v4.13: the path depends on the situation
   return Array.isArray(m.nx) ? [...m.nx] : [m.nx];
 }
 
@@ -1206,7 +1206,7 @@ export function nextId(S, u) {
 }
 
 
-export function eveilInfo(S, u) {
+export function awakeningInfo(S, u) {
   const id = nextId(S, u);
   return id ? BY[id] : null;
 }
@@ -1214,7 +1214,7 @@ export function eveilInfo(S, u) {
 
 export function canAwaken(S, u) {
   return (
-    !S.sansEveil && // défi Sans Éveil (v4.9)
+    !S.sansEveil && // No Awakening challenge (v4.9)
     u.side === 'a' &&
     !u.ko &&
     S.phase === 'player' &&
@@ -1242,7 +1242,7 @@ function arrive(S, u, ev) {
   A[0].forEach(f => {
     if (f.k === 'ring') nbrK(uk(u)).forEach(x => setMark(S, x, f.mk, u.uid));
     else if (f.k === 'wx') {
-      S.wx = { k: f.w, n: u.item === 'rochemeteo' ? 8 : 5 }; // Roche Météo (v4.14)
+      S.wx = { k: f.w, n: u.item === 'rochemeteo' ? 8 : 5 }; // Weather Rock (v4.14)
       say(ev, `Météo ${WXN[f.w]} pendant 5 manches.`);
     } else if (f.k === 'roar') foes(1).forEach(o => shove(S, o, u.pos, f.v, ev, false));
     else if (f.k === 'heal') mates(f.r).forEach(o => heal(S, o, Math.round(o.mhp * f.p), ev));
@@ -1253,7 +1253,7 @@ function arrive(S, u, ev) {
     else if (f.k === 'sleep') foes(1).forEach(o => stun(S, o, 'SOM', ev, true));
     else if (f.k === 'confuse')
       foes(1).forEach(o => {
-        if ((o.intent || S.jit) && !o.done) retarget(S, o, u, 'confuse', ev); // v4.13 : aussi sans intentions
+        if ((o.intent || S.jit) && !o.done) retarget(S, o, u, 'confuse', ev); // v4.13: also without intentions
         else if (o.tal !== 'regardvif') {
           o.web = Math.max(o.web, 2);
           say(ev, `${o.n} est désorienté et ralenti.`);
@@ -1286,7 +1286,7 @@ export function transform(S, u, id, ev) {
   u.n = E.n;
   u.t = [...E.t];
   u.s = [...E.s];
-  u.mv = withLearned(u, E.mv); // la capacité apprise par CT ou CS reste (v4.6-01)
+  u.mv = withLearned(u, E.mv); // the move learned by TM or HM is kept (v4.6-01)
   u.tal = E.tal;
   u.ferm = E.tal === 'fermete';
   const nm = mhpOf(E.s) + (u.hb || 0);
@@ -1310,7 +1310,7 @@ export function transform(S, u, id, ev) {
     u.fat = false;
     say(ev, `L’Éveil efface la fatigue de ${u.n}.`);
   }
-  // types → espèce, pour les illustrations de l’évolution
+  // types → species, for the evolution illustrations
   PKT.set(u.t, u.id);
   PKT.set(ot, oid);
   PKT.set(tt, id);
@@ -1323,9 +1323,9 @@ export function pAwaken(S, u, id) {
   if (!id) id = nextId(S, u);
   if (!o.includes(id)) return null;
   const ev = [],
-    previous = REDIFF.has(S) ? JSON.stringify(S) : null, // rediffusion (v4.11)
+    previous = REPLAYS.has(S) ? JSON.stringify(S) : null, // replay (v4.11)
     displayName = u.n,
-    harm434 = BY[u.id].nx === 'eevee' && evoliHarmonie434(S, u).includes(id); // Évoli en harmonie (v4.34)
+    harm434 = BY[u.id].nx === 'eevee' && eeveeHarmony434(S, u).includes(id); // Eevee in harmony (v4.34)
   S.lastAtk = u.uid;
   S.voix -= 1;
   S.stats.voix += 1;
@@ -1362,7 +1362,7 @@ export function pReroll(S, u) {
   if (S.phase !== 'player' || S.voix < 2 || S.relance || !u.acted || u.ko || u.sn) return null;
   u.acted = false;
   u.moved = false;
-  u.rst478 = 0; // tour guidé : le Pokémon repart de l’étape Déplacer
+  u.rst478 = 0; // guided turn: the Pokémon restarts from the Move step
   S.relance = true;
   S.voix -= 2;
   S.stats.voix += 2;
@@ -1370,7 +1370,7 @@ export function pReroll(S, u) {
 }
 
 
-/* phase adverse */
+/* opponent phase */
 function aiScore(S, e, m, k, pos) {
   const sim = Object.assign({}, e, { pos });
   let sc = 0,
@@ -1386,8 +1386,8 @@ function aiScore(S, e, m, k, pos) {
   }
   if (!hitA) return -1;
   sc += m.mk ? 1 : 0;
-  sc += aiStyleBonus(S, e, m, k, sim); // chaque maître d’arène a son style (v4.4)
-  // selon la difficulté : vise les Pokémon fragiles ou immobiles, met à l’abri ceux qui vont évoluer
+  sc += aiStyleBonus(S, e, m, k, sim); // each gym leader has their own style (v4.4)
+  // depending on difficulty: targets fragile or immobile Pokémon, shelters those about to evolve
   const lv = (DIFF[S.diff] || DIFF.normal).ai;
   if (sc <= 0 || !lv) return sc;
   for (const x of affected(S, sim, m, k)) {
@@ -1402,23 +1402,23 @@ function aiScore(S, e, m, k, pos) {
     const th = threatAt(S, e, pos);
     sc -= th >= e.hp ? (lv > 1 ? 45 : 26) : th * (lv > 1 ? 0.5 : 0.3);
   } else if (lv > 1 && threatAt(S, e, pos) >= e.hp) sc -= 12;
-  if (lv > 1) sc += expert429(S, e, m, k, pos, sim); // Expert : attaques coordonnées (v4.29)
+  if (lv > 1) sc += expert429(S, e, m, k, pos, sim); // Expert: coordinated attacks (v4.29)
   return sc;
 }
 
 
 export function plan(S, ev) {
-  if (!S._obs && S.round === 1) applyObst(S); // obstacles posés avant les premières intentions
-  if (S.duel433) return duelPlan433(S, ev); // duel : deux joueurs, pas d’IA (v4.33)
+  if (!S._obs && S.round === 1) applyObst(S); // obstacles placed before the first intentions
+  if (S.duel433) return duelPlan433(S, ev); // duel: two players, no AI (v4.33)
   S.units
     .filter(e => e.side === 'e' && !e.ko)
     .sort((a, b) => b.s[3] - a.s[3])
     .forEach(e => {
       e.done = false;
       e.intent = null;
-      e.perdu = 0; // v4.12 : action perdue cette manche (Éclipse…)
-      e.force = null; // v4.12 : cible imposée (Charme, Onde Folie, Ultrason)
-      e.prep = false; // v4.12 : déplacement de la manche déjà fait
+      e.perdu = 0; // v4.12: action lost this round (Eclipse…)
+      e.force = null; // v4.12: forced target (Charm, Confuse Ray, Supersonic)
+      e.prep = false; // v4.12: this round's movement already done
       if (e.skip > 0) {
         e.skip = 0;
         say(
@@ -1428,27 +1428,27 @@ export function plan(S, ev) {
         return;
       }
       e.badge = null;
-      chooseAction(S, e, ev); // il se place (et, dans l’ancien mode, annonce sa cible)
-      if (S.jit) e.intent = null; // v4.12 : rien n’est annoncé, la cible se choisit à son tour
+      chooseAction(S, e, ev); // it positions itself (and, in the old mode, announces its target)
+      if (S.jit) e.intent = null; // v4.12: nothing is announced, the target is chosen on its turn
     });
   return ev;
 }
 
 
 /* =====================================================================
-   v4.12 : intentions cachées
+   v4.12: hidden intentions
    ---------------------------------------------------------------------
-   Plus aucune flèche ni case rouge. En début de manche, chaque
-   adversaire s’avance sous vos yeux (comme avant) ; au moment d’agir, il
-   frappe depuis sa case la meilleure cible à sa portée, selon les
-   positions du moment. On ne peut plus « sortir de la case annoncée » :
-   il faut sortir de sa portée, se couvrir, protéger les fragiles.
-   Les effets qui agissaient sur une intention agissent sur l’action :
-   - endormir, geler, paralyser avant son tour : il ne joue pas ;
-   - Charme, Onde Folie, Ultrason : sa cible lui est imposée (force) ;
-   - Éclipse : il perd son action (perdu).
+   No more arrows or red cells. At the start of the round, each
+   opponent advances in front of you (as before); when it acts, it
+   strikes the best target within range from its own cell, based on the
+   positions at that moment. You can no longer "step out of the announced
+   cell": you have to get out of its range, take cover, protect the fragile.
+   Effects that used to act on an intention now act on the action:
+   - put to sleep, frozen, paralyzed before its turn: it does not play;
+   - Charm, Confuse Ray, Supersonic: its target is imposed on it (force);
+   - Eclipse: it loses its action (lost).
    ===================================================================== */
-/** La cible imposée à un adversaire, ou null (cible disparue : il joue normalement). */
+/** The target imposed on an opponent, or null (target gone: it plays normally). */
 export function forcedTarget(S, e) {
   const f = e.force;
   if (!f) return null;
@@ -1462,7 +1462,7 @@ export function forcedTarget(S, e) {
 }
 
 
-/** Score d’une attaque contre la cible imposée : seuls comptent les dégâts sur elle. */
+/** Score of an attack against the imposed target: only the damage dealt to it counts. */
 function targetScore(S, e, m, k, pos, F) {
   const sim = Object.assign({}, e, { pos });
   let sc = 0;
@@ -1474,7 +1474,7 @@ function targetScore(S, e, m, k, pos, F) {
 }
 
 
-/** Hors de portée de sa cible imposée : il s’en rapproche. */
+/** Out of range of its imposed target: it moves closer. */
 function approach(S, e, opts, F, here) {
   let bk = here,
     bd = hdist(e.pos, F.pos);
@@ -1489,7 +1489,7 @@ function approach(S, e, opts, F, here) {
 }
 
 
-/** La décision d’un adversaire : se placer, puis viser (appelée à son tour en mode caché). */
+/** An opponent's decision: position itself, then aim (called on its turn in hidden mode). */
 function chooseAction(S, e, ev, inPlace) {
   const F = S.jit && inPlace ? forcedTarget(S, e) : null;
   const al = S.units.filter(a => a.side === 'a' && !a.ko);
@@ -1525,25 +1525,25 @@ function chooseAction(S, e, ev, inPlace) {
       });
     });
   }
-  if (!best && !F) best = aiSupport413(S, e, opts, al, here); // capacités de soutien des nouvelles familles (v4.13)
-  const pg = F ? null : trapPlan(S, e, best, al); // poser un piège (v4.8)
+  if (!best && !F) best = aiSupport413(S, e, opts, al, here); // support moves of the new families (v4.13)
+  const pg = F ? null : trapPlan(S, e, best, al); // place a trap (v4.8)
   if (pg) e.intent = pg;
   else if (best) {
     if (best.pk !== here) {
       e.pos = P(best.pk);
-      e.mvR = S.round; // Poursuite (v4.13)
+      e.mvR = S.round; // Pursuit (v4.13)
       ev.push({ e: 'mv', u: e.uid });
       trapArrival(S, e, ev);
     }
     e.intent = { mv: best.mid, k: best.k };
   } else if (inPlace) {
-    if (F) say(ev, `${e.n} ne peut pas atteindre ${F.n}.`); // sans cible imposée : il attend, sans bruit
+    if (F) say(ev, `${e.n} ne peut pas atteindre ${F.n}.`); // no imposed target: it waits, quietly
   }
   else if (!e.seg) {
     const [bk, lab] = F ? approach(S, e, opts, F, here) : aiFallback(S, e, opts, al, here);
     if (bk !== here) {
       e.pos = P(bk);
-      e.mvR = S.round; // Poursuite (v4.13)
+      e.mvR = S.round; // Pursuit (v4.13)
       ev.push({ e: 'mv', u: e.uid });
       trapArrival(S, e, ev);
     }
@@ -1552,7 +1552,7 @@ function chooseAction(S, e, ev, inPlace) {
 }
 
 
-/** Mode caché : l’adversaire se place pour son action (séparé de l’attaque, pour que l’œil suive). */
+/** Hidden mode: the opponent positions itself for its action (separate from the attack, so the eye can follow). */
 export function prepareEnemy(S, uid) {
   const e = byUid(S, uid),
     ev = [];
@@ -1562,14 +1562,14 @@ export function prepareEnemy(S, uid) {
   const F = forcedTarget(S, e);
   if (F && e.force) say(ev, e.force.fx === 'taunt' ? `${e.n} ne voit plus que ${F.n}.` : e.force.fx === 'turn' ? `${e.n}, troublé, se retourne contre ${F.n} !` : `${e.n}, désorienté, s’en prend à ${F.n}.`);
   chooseAction(S, e, ev, true);
-  vigilance420(S, e, ev); // Vigilance : interception avant l’attaque (v4.20)
+  vigilance420(S, e, ev); // Vigilance: interception before the attack (v4.20)
   return endStep(S, ev);
 }
 
 
 export function threatZone(S, e) {
   const key = S.round + '|' + e.uid + '|' + S.units.map(u => (u.ko ? 'x' : uk(u))).join(';') + '|' + (S.wx ? S.wx.k : '');
-  if (MENACE.k === key) return MENACE.z;
+  if (THREAT.k === key) return THREAT.z;
   const z = new Set(),
     opts = Object.assign({ [uk(e)]: 0 }, e.badge || e.perdu ? {} : reach(S, e));
   if (!(e.badge || e.perdu))
@@ -1588,15 +1588,15 @@ export function threatZone(S, e) {
         }
       });
     }
-  MENACE.k = key;
-  MENACE.z = [...z];
-  return MENACE.z;
+  THREAT.k = key;
+  THREAT.z = [...z];
+  return THREAT.z;
 }
 
 
 export function startEnemy(S) {
   S.phase = 'enemy';
-  return enemyOrder(S); // stratégie OrdreParPhases du moteur tactique (v4.5-01)
+  return enemyOrder(S); // OrderByPhases strategy of the tactical engine (v4.5-01)
 }
 
 
@@ -1611,7 +1611,7 @@ export function execFoe(S, uid) {
       say(ev, `${e.n} ne peut pas agir.`);
       return ev;
     }
-    if (!e.prep) prepareEnemy(S, uid).forEach(x => ev.push(x)); // robots de test, appels directs
+    if (!e.prep) prepareEnemy(S, uid).forEach(x => ev.push(x)); // test robots, direct calls
     e.done = true;
     if (e.ko || S.over) return endStep(S, ev);
   } else e.done = true;
@@ -1626,7 +1626,7 @@ export function execFoe(S, uid) {
   if (!inReach(S, e, m, k)) say(ev, `${e.n} utilise ${m.n}, mais la cible est hors de portée !`);
   else {
     const tgt = m.sh === 'one' ? uAt(S, k) : null;
-    if (m.xp) e.en = Math.max(0, (e.en || 0) - xpCost(e)); // attaque Experte (v4.14)
+    if (m.xp) e.en = Math.max(0, (e.en || 0) - xpCost(e)); // Expert attack (v4.14)
     r = resolve(S, e, m, k);
     if (m.sh === 'one' && !tgt) r.push({ e: 'msg', s: 'La case visée est vide : l’attaque se perd.' });
     if (tgt && !tgt.ko && tgt.tal === 'statik' && !e.ko && hdist(e.pos, tgt.pos) === 1) {
@@ -1639,11 +1639,11 @@ export function execFoe(S, uid) {
 }
 
 
-/* fin de manche : soutien des rôles, effets de la manche, puis Restes */
+/* end of round: role support, round effects, then Leftovers */
 export function endRound(S) {
-  S.acteur430 = null; // les effets de fin de manche n’ont pas d’auteur (v4.30)
+  S.acteur430 = null; // end-of-round effects have no author (v4.30)
   const ch = [];
-  CROCHETS.avantFinManche.forEach(h => h(S, ch)); // attaques chargées, usure des pièges (v4.8)
+  HOOKS.avantFinManche.forEach(h => h(S, ch)); // charged attacks, trap wear (v4.8)
   if (S.over) return ch;
   const pre = ch.concat(roundSupport(S)),
     ev = roundEffects(S);
@@ -1655,7 +1655,7 @@ export function endRound(S) {
 }
 
 
-/** Effets de fin de manche d’un Pokémon : brûlure, poison, météo, lave, durées (v4.33 : fonction à part pour le duel). */
+/** End-of-round effects of a Pokémon: burn, poison, weather, lava, durations (v4.33: separate function for the duel). */
 export function unitEffects433(S, u, ev) {
   if (u.ko) return;
     if (u.bru > 0) {
@@ -1664,7 +1664,7 @@ export function unitEffects433(S, u, ev) {
       u.bru--;
     }
     if (u.psn > 0 && !u.ko) {
-      say(ev, `${u.n} souffre du poison.`); // Bombe Beurk (v4.12)
+      say(ev, `${u.n} souffre du poison.`); // Sludge Bomb (v4.12)
       damage(S, u, 3, ev, { ind: true });
       u.psn--;
     }
@@ -1692,7 +1692,7 @@ function roundEffects(S) {
   const ev = [];
   if (S.over) return ev;
   S.units.forEach(u => {
-    if (u.ko || (S.duel433 && u.j433 === 2)) return; // duel : ceux du Joueur 2 au début de son tour (v4.33)
+    if (u.ko || (S.duel433 && u.j433 === 2)) return; // duel: Player 2's at the start of their turn (v4.33)
     unitEffects433(S, u, ev);
   });
   for (const k in S.tiles) {
@@ -1705,8 +1705,8 @@ function roundEffects(S) {
       if (t[f] > 0) t[f]--;
     });
   }
-  aliveRound(S, ev); // plateau vivant : feu, pluie, grêle et heure (v4.7-01)
-  durations412(S, ev); // Vent Arrière, Distorsion (v4.12)
+  aliveRound(S, ev); // living board: fire, rain, hail and time of day (v4.7-01)
+  durations412(S, ev); // Tailwind, Trick Room (v4.12)
   if (S.wx) {
     S.wx.n--;
     if (S.wx.n <= 0) {
@@ -1725,7 +1725,7 @@ function roundEffects(S) {
   if (S.round >= S.lim) {
     S.over = 'lose';
     S.timeout = true;
-    if ((SCEN[S.sc] || {}).roam) S.fuite416 = true; // bête errante (v4.16)
+    if ((SCEN[S.sc] || {}).roam) S.fuite416 = true; // wandering beast (v4.16)
     say(ev, S.duel433 ? 'Temps écoulé : les PV restants départagent les joueurs.' : S.fuite416 ? fleeMsg416(S) : 'Temps écoulé : l’adversaire tient la position.');
     ev.push({ e: 'over' });
     return ev;
@@ -1736,7 +1736,7 @@ function roundEffects(S) {
   S.phase = 'player';
   S.lastAtk = null;
   S.units.forEach(u => {
-    if (u.side === 'a' && !u.ko && !S.duel433) rewardIn(S, u, 1, ev); // duel : au début du tour de chacun (v4.33)
+    if (u.side === 'a' && !u.ko && !S.duel433) rewardIn(S, u, 1, ev); // duel: at the start of each player's turn (v4.33)
   });
   S.units.forEach(u => {
     if (u.ko) return;
@@ -1761,7 +1761,7 @@ function roundEffects(S) {
 
 
 export function preview(S, uid, mi, k) {
-  __set_NOTE([]); // notes de couverture, ricochet, gardiennage
+  __set_NOTE([]); // coverage, ricochet and guarding notes
   try {
     return previewCore(S, uid, mi, k);
   } finally {
@@ -1801,7 +1801,7 @@ function previewCore(S, uid, mi, k) {
   };
 }
 
-/* ===================== MOTEUR DE COMBAT v0.8 ===================== */
+/* ===================== BATTLE ENGINE v0.8 ===================== */
 export const K = (c, r) => c + ',' + r;
 
 
@@ -1858,14 +1858,14 @@ export const EMAX = 3;
 export const hasNx = u => !!(BY[u.id] && BY[u.id].nx);
 
 
-/* v4.13 · Éveils à embranchement : chaque voie a sa condition ; la voie « par défaut » reste toujours ouverte */
+/* v4.13 · Branching Awakenings: each path has its own condition; the "default" path always stays open */
 const onContact = (S, u, camp) => S.units.filter(o => !o.ko && o !== u && (camp === 'allie' ? o.side === u.side : o.side !== u.side) && hdist(o.pos, u.pos) === 1).length;
 
 
-/** v4.12 : toutes les cases qu'un adversaire peut atteindre ce tour-ci (déplacement + portée de ses attaques). */
-const MENACE = { k: '', z: [] };
+/** v4.12: every cell an opponent can reach this turn (movement + range of its attacks). */
+const THREAT = { k: '', z: [] };
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Instructions run at startup, in the original order (see index.js).
 export function __init() {
 
 BW = 8,

@@ -1,6 +1,6 @@
 import { routeName } from '../../engine/054-johto.js';
 
-// Une sortie (data-sortie430, gérée par le moteur).
+// An outing (data-sortie430, handled by the engine).
 function Outing({ k, ic, b, d }) {
   return (
     <button type="button" className="so430" data-sortie430={k}>
@@ -11,7 +11,7 @@ function Outing({ k, ic, b, d }) {
   );
 }
 
-// Contenu de #sort430 (v4.30) : raccourcis vers les herbes, le Safari, la Tour, les amis, le défi hebdo.
+// Contents of #sort430 (v4.30): shortcuts to the tall grass, the Safari, the Tower, friends, the weekly challenge.
 export default function Outings() {
   return (
     <>

@@ -2,15 +2,15 @@ import { memo, useEffect } from 'react';
 import { placeAlert } from '../../engine/017-home-route.js';
 import { useRoute } from './homeStore.js';
 
-// Route 29 (#route), montée sous la carte (page Carte, .v4-route-slot) : décor des hautes herbes, alerte « ! », moment de la journée.
-// Le décor est fixe (ancien buildRoute) : ses animations (herbes, nuages, étoiles,
-// lucioles) sont en CSS, rien n'est redessiné image par image. Le moteur garde :
-// - les écouteurs délégués (#rustle, #rtAlert, #todBtns) ;
-// - placeAlert(), qui place #rtAlert (style left/top, classe « on ») ;
-// - la classe « shake » de #route à chaque rencontre ;
-// - le texte qui s'écrit lettre à lettre dans #dlgTxt (jamais rendu avec des enfants ici) ;
-// Le reste (data-time, data-saison, boutons pressés, bandeau #rr450, nom de la route)
-// est poussé par le moteur dans le store (setRoute).
+// Route 29 (#route), mounted under the map (Map page, .v4-route-slot): tall grass backdrop, « ! » alert, time of day.
+// The backdrop is fixed (formerly buildRoute): its animations (grass, clouds, stars,
+// fireflies) are in CSS, nothing is redrawn frame by frame. The engine keeps:
+// - the delegated listeners (#rustle, #rtAlert, #todBtns);
+// - placeAlert(), which places #rtAlert (style left/top, « on » class);
+// - the « shake » class of #route on each encounter;
+// - the text written letter by letter in #dlgTxt (never rendered with children here);
+// The rest (data-time, data-saison, pressed buttons, #rr450 banner, route name)
+// is pushed by the engine into the store (setRoute).
 
 const W = 1200;
 const TODB = [
@@ -66,7 +66,7 @@ const RUSTLE = [
 
 const FIRE = Array.from({ length: 16 }, (_, i) => ({ cx: (i * 71) % W, cy: 150 + ((i * 37) % 60), d: `${(i % 7) * 0.7}s` }));
 
-// Décor fixe : jamais redessiné (le moteur a branché ses écouteurs sur #rustle).
+// Fixed backdrop: never redrawn (the engine has attached its listeners to #rustle).
 const RouteSvg = memo(function RouteSvg() {
   return (
     <svg id="routeSvg" viewBox="0 0 1200 220" preserveAspectRatio="xMidYMax slice" role="img" aria-label="Route 29 : hautes herbes au pied des collines">
@@ -147,7 +147,7 @@ const RouteSvg = memo(function RouteSvg() {
 
 export default function Route() {
   const { tod, pressed, saison: season, sign, rr } = useRoute();
-  // replace l'alerte « ! » quand la route change de taille
+  // repositions the « ! » alert when the route changes size
   useEffect(() => {
     const r = document.getElementById('route');
     if (!r || !window.ResizeObserver) return;

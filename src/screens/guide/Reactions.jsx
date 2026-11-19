@@ -4,7 +4,7 @@ import { markOf, medal, mini, tb, tc } from '../../engine/014-utils.js';
 import { Html } from '../../lib/html.jsx';
 import { selectReaction, useGuide } from './guideStore.js';
 
-// Matrice marque × élément : chaque case ouvre le détail de la réaction.
+// Mark × element matrix: each cell opens the reaction details.
 export function Matrix() {
   const { rx } = useGuide();
   return (
@@ -61,14 +61,14 @@ export function TypeTable() {
   ));
 }
 
-const CHAINE = [
+const CHAIN_STEPS = [
   { w: 'magneti', a: 'Cage-Éclair', p: 'Magnéti charge la case d’un ennemi, à 3 cases de distance.', res: 'Pose Chargé', k: 'ter' },
   { w: 'magneti', a: 'Aimant', p: 'Au tour suivant, Aimant tire l’ennemi Chargé de deux cases, jusque dans la rivière.', res: 'Ennemi Trempé', k: 'ctl' },
   { w: 'pikachu', a: 'Éclair', p: 'Pikachu frappe l’eau : le Court-circuit parcourt tout le réseau et paralyse ce qui s’y trouve.', res: 'Court-circuit', k: 'ctl' },
 ];
 
 export function Chain() {
-  return CHAINE.map((s, i) => {
+  return CHAIN_STEPS.map((s, i) => {
     const m = BY[s.w];
     return (
       <div key={i} className="cs"><span className="k">{i + 1}</span><span className="who"><Html html={medal(m.t)} />{m.n}</span><p><b style={{ color: 'var(--tx)' }}>{s.a}.</b> {s.p}</p><span className={`chip cat-${s.k}`} style={{ justifySelf: 'start' }}><i />{s.res}</span></div>
@@ -96,7 +96,7 @@ export function Positions() {
   ));
 }
 
-// Onglet « Types » : matrice des réactions, table des types, météos, familles.
+// "Types" tab: reaction matrix, type table, weathers, families.
 export default function Reactions() {
   return (
     <>

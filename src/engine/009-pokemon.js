@@ -1,4 +1,4 @@
-/* Section d'origine : 03-pokemon.js */
+/* Original section: 03-pokemon.js */
 
 import { PKA } from './003-images.js';
 
@@ -8,37 +8,37 @@ export let MON, BY, FAMS30, PKT;
 export function familyOf(id) {
   const b = BY[id].base;
   const f = MON.filter(m => m.base === b);
-  return f.length ? f : [BY[b] || BY[id]]; // une légende est sa propre famille (v4.29)
+  return f.length ? f : [BY[b] || BY[id]]; // a legend is its own family (v4.29)
 }
 
 /* =====================================================================
-   v4.12 · rééquilibrage (robot de test : 5 600 combats, 30 familles)
-   Sans intentions annoncées, les Pokémon fragiles au contact souffraient
-   et quelques familles à 1 PC étaient trop rentables. Retouches légères :
-   chaque famille garde son rôle, les « faibles » restent utiles.
+   v4.12 · rebalancing (test bot: 5,600 battles, 30 families)
+   Without announced intents, Pokémon fragile in melee suffered
+   and a few 1-CP families were too profitable. Light tweaks:
+   each family keeps its role, the "weak" ones remain useful.
    ===================================================================== */
-const EQUILIBRAGE = {
-  salameche: { s: [2, 3, 2, 4, 3, 2] }, // starter Feu : un peu moins fragile (et 1 PC, voir BASECOST)
-  hericendre: { s: [2, 3, 1, 4, 4, 2] }, // starter Feu de Johto : +1 Puissance
-  aligatueur: { s: [5, 5, 3, 3, 3, 2] }, // trop solide pour une famille à 1 PC : −1 Garde
-  onix: { s: [3, 2, 5, 3, 3, 1] }, // fidèle aux jeux : peu de PV, beaucoup de Garde
-  nosferapti: { s: [3, 2, 1, 5, 4, 2] }, // tenait trop peu pour un Verrou
+const BALANCING = {
+  salameche: { s: [2, 3, 2, 4, 3, 2] }, // Fire starter: a bit less fragile (and 1 CP, see BASECOST)
+  hericendre: { s: [2, 3, 1, 4, 4, 2] }, // Johto Fire starter: +1 Power
+  aligatueur: { s: [5, 5, 3, 3, 3, 2] }, // too sturdy for a 1-CP family: −1 Guard
+  onix: { s: [3, 2, 5, 3, 3, 1] }, // true to the games: low HP, high Guard
+  nosferapti: { s: [3, 2, 1, 5, 4, 2] }, // lasted too little for a Lock
   nostenfer: { s: [4, 5, 3, 5, 5, 3] },
   roucool: { s: [3, 2, 1, 4, 4, 2] },
   roucarnage: { s: [4, 4, 3, 5, 5, 3] },
   chenipan: { s: [3, 2, 2, 2, 2, 2] },
   melo: { s: [3, 1, 2, 2, 2, 2] },
   kadabra: { s: [3, 4, 1, 5, 3, 4] },
-  insecateur: { s: [3, 5, 2, 5, 4, 1] }, // Frappeur au contact : +1 Puissance
-  ronflex: { s: [5, 4, 4, 1, 2, 1] }, // ne rattrapait jamais personne : +1 Mouvement
+  insecateur: { s: [3, 5, 2, 5, 4, 1] }, // Melee Striker: +1 Power
+  ronflex: { s: [5, 4, 4, 1, 2, 1] }, // never caught up with anyone: +1 Movement
   nosferalto: { s: [3, 4, 2, 5, 5, 2] },
-  papilusion: { s: [3, 4, 2, 4, 4, 3] }, // reste sans contrôle (leçon de l’Anatomie d’un Éveil), mais frappe plus fort
+  papilusion: { s: [3, 4, 2, 4, 4, 3] }, // still has no control (lesson of the Anatomy of an Awakening), but hits harder
   draco: { s: [4, 4, 3, 3, 3, 3] },
-  wattouat: { mv: ['cageeclair', 'eclair'] }, // Éclair à la place de Charge : il pose et frappe à distance
-  crocrodil: { s: [4, 3, 2, 3, 3, 2] } // la famille Kaiminus restait la plus rentable à 1 PC
+  wattouat: { mv: ['cageeclair', 'eclair'] }, // Thunder Shock instead of Tackle: it places and strikes from a distance
+  crocrodil: { s: [4, 3, 2, 3, 3, 2] } // the Kaiminus family was still the most profitable at 1 CP
 };
 
-/* v4.13 · kits techniques : talent propre à chaque stade, rôle tranché, signature à la forme finale */
+/* v4.13 · technical kits: own ability for each stage, sharp role, signature at the final form */
 const KITS413 = {
   herbizarre: { tal: 'ecranpoudre' },
   florizarre: { mv: ['lancesoleil', 'synthese', 'vegeattak'] },
@@ -83,8 +83,8 @@ const KITS413 = {
   tyranocif: { mv: ['machouille', 'seisme', 'lamederoc'] }
 };
 
-/* v4.13 · familles qui ne se recrutent plus : elles restent des adversaires */
-const ADVERSAIRES413 = ['roucool', 'roucoups', 'roucarnage', 'psykokwak', 'akwakwak', 'machoc', 'machopeur', 'mackogneur', 'racaillou', 'gravalanch', 'grolem', 'kokiyas', 'crustabri', 'wattouat', 'lainergie', 'pharamp', 'caninos', 'arcanin'];
+/* v4.13 · families that can no longer be recruited: they remain opponents */
+const OPPONENTS413 = ['roucool', 'roucoups', 'roucarnage', 'psykokwak', 'akwakwak', 'machoc', 'machopeur', 'mackogneur', 'racaillou', 'gravalanch', 'grolem', 'kokiyas', 'crustabri', 'wattouat', 'lainergie', 'pharamp', 'caninos', 'arcanin'];
 
 export const EEVEE = { trempe: 'aquali', charge: 'voltali', brulant: 'pyroli', jour: 'mentali', nuit: 'noctali' };
 
@@ -185,7 +185,7 @@ export const SCEN = {
     catch: true
   },
   roche: {
-    // terrain d'entraînement : il ne doit pas porter le nom d'une arène
+    // training ground: it must not bear the name of a gym
     n: 'Carrière de Roche',
     lvl: 'Confirmé',
     lim: 10,
@@ -457,10 +457,10 @@ export const SYS3 = [
   }
 ];
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Statements executed at startup, in the original order (see index.js).
 export function __init() {
 
-/* ===================== POKÉDEX v0.7 : Kanto + Johto ===================== */
+/* ===================== POKÉDEX v0.7: Kanto + Johto ===================== */
 MON = [
   [
     'bulbizarre',
@@ -1516,7 +1516,7 @@ MON = [
     null,
     248
   ],
-  // v4.13 : familles techniques
+  // v4.13: technical families
   ['ramoloss', 'Ramoloss', ['Eau', 'Psy'], 2, 'Verrou', 'Rempart', [4, 2, 3, 1, 2, 2], ['chocmental', 'pistolet'], 'moiteur', ['flagadoss', 'roigada'], 79],
   ['flagadoss', 'Flagadoss', ['Eau', 'Psy'], 4, 'Rempart', 'Frappeur', [5, 4, 5, 1, 2, 2], ['vibraqua', 'chocmental', 'paresse'], 'regeforce', null, 80],
   ['roigada', 'Roigada', ['Eau', 'Psy'], 4, 'Relais', 'Verrou', [5, 3, 4, 2, 2, 3], ['psyko', 'surf', 'vantardise'], 'attention', null, 199],
@@ -1532,7 +1532,7 @@ MON = [
   ['foretress', 'Foretress', ['Insecte', 'Acier'], 4, 'Rempart', 'Déclencheur', [4, 4, 5, 1, 1, 2], ['piegederoc', 'tourrapide', 'explosion'], 'coque', null, 205],
   ['metamorph', 'Métamorph', ['Normal'], 1, 'Relais', 'Éclaireur', [3, 2, 2, 3, 3, 2], ['morphing'], 'souplesse', null, 132],
   ['qulbutoke', 'Qulbutoké', ['Psy'], 3, 'Rempart', 'Verrou', [5, 1, 3, 2, 2, 1], ['riposte', 'voilemiroir', 'destin'], 'marqueombre', null, 202],
-  // v4.15 : Johto
+  // v4.15: Johto
   ['hoothoot', 'Hoothoot', ['Normal', 'Vol'], 1, 'Éclaireur', 'Verrou', [3, 2, 2, 3, 4, 2], ['tornade', 'hypnose'], 'echolocation', 'noarfang', 163],
   ['noarfang', 'Noarfang', ['Normal', 'Vol'], 4, 'Verrou', 'Éclaireur', [4, 3, 3, 3, 4, 3], ['hypnose', 'volcs', 'extrasenseur'], 'nocturne', null, 164],
   ['mimigal', 'Mimigal', ['Insecte', 'Poison'], 1, 'Déclencheur', 'Verrou', [3, 2, 2, 2, 3, 2], ['secretion', 'vampirisme'], 'essaim', 'migalos', 167],
@@ -1553,7 +1553,7 @@ MON = [
   ['volcaropod', 'Volcaropod', ['Feu', 'Roche'], 4, 'Rempart', 'Déclencheur', [4, 3, 5, 1, 2, 2], ['lanceflammes', 'eboulement', 'carapaceardente'], 'torche', null, 219],
   ['marcacrin', 'Marcacrin', ['Glace', 'Sol'], 1, 'Frappeur', 'Rempart', [3, 2, 2, 2, 3, 1], ['poudreneige', 'coudboue'], 'regardvif', 'cochignon', 220],
   ['cochignon', 'Cochignon', ['Glace', 'Sol'], 4, 'Frappeur', 'Rempart', [5, 4, 3, 2, 3, 1], ['seisme', 'ondeboreale', 'avalanche'], 'isograisse', null, 221],
-  // v4.19 : Hoenn
+  // v4.19: Hoenn
   ['arcko', 'Arcko', ['Plante'], 1, 'Éclaireur', 'Frappeur', [3, 2, 2, 4, 4, 2], ['fouet', 'viveatt'], 'engrais', 'massko', 252],
   ['massko', 'Massko', ['Plante'], 2, 'Éclaireur', 'Frappeur', [3, 3, 2, 5, 5, 2], ['fouet', 'tranchherbe', 'viveatt'], 'souplesse', 'jungko', 253],
   ['jungko', 'Jungko', ['Plante'], 3, 'Frappeur', 'Éclaireur', [4, 4, 3, 5, 5, 2], ['tranchherbe', 'volvie', 'lamefeuille'], 'regardvif', null, 254],
@@ -1592,18 +1592,18 @@ MON = [
 BY = Object.fromEntries(MON.map(m => [m.id, m]));
 
 
-for (const id in EQUILIBRAGE) if (BY[id]) Object.assign(BY[id], EQUILIBRAGE[id]);
+for (const id in BALANCING) if (BY[id]) Object.assign(BY[id], BALANCING[id]);
 
 
 for (const id in KITS413) if (BY[id]) Object.assign(BY[id], KITS413[id]);
 
 
-ADVERSAIRES413.forEach(id => {
+OPPONENTS413.forEach(id => {
   if (BY[id]) BY[id].ennemi = true;
 });
 
 
-/* familles, stades, générations */
+/* families, stages, generations */
 (function () {
   const prev = {};
   MON.forEach(m => {
@@ -1627,8 +1627,8 @@ ADVERSAIRES413.forEach(id => {
 
 FAMS30 = [...new Set(MON.filter(m => !m.ennemi).map(m => m.base))];
 
- // v4.13 : familles jouables
-/* v4.1 · illustrations des Pokémon dans les médaillons, dès le premier affichage */
+ // v4.13: playable families
+/* v4.1 · Pokémon illustrations in the medallions, from the first display */
 PKT = new WeakMap();
 
 

@@ -29,13 +29,13 @@ import Transients from '../screens/overlays/Transients.jsx';
 import { PkBackground } from '../screens/overlays/Effects.jsx';
 import Guard from './Guard.jsx';
 
-// Logo (barre latérale, en-tête) ; `children` : ajouts après le nom (voyants de l'en-tête).
+// Logo (sidebar, header); `children`: additions after the name (header indicators).
 function Logo({ taille: size, children }) {
   return <a className="logo" href="#accueil"><span className="lg-ic"><svg width={size} height={size}><use href="#i-logo" /></svg></span><span><small>Pokémon</small><b>Résonance</b></span>{children}</a>;
 }
 
-// Coquille de l’application : navigation, conteneurs des écrans et surcouches.
-// Chaque écran est un composant de src/screens ; le moteur (src/engine) garde la logique.
+// Application shell: navigation, screen containers and overlays.
+// Each screen is a component of src/screens; the engine (src/engine) keeps the logic.
 export default function Shell() {
   return (
     <>
@@ -58,11 +58,11 @@ export default function Shell() {
               <Guard><TopTrainer /></Guard>
             </div></header>
           <main className="content"><div className="wrap">
-              {/* ================= ACCUEIL ================= */}
+              {/* ================= HOME ================= */}
               <Guard><Home /></Guard>
               {/* ================= POKÉDEX ================= */}
               <Guard><Team /></Guard>
-              {/* ================= COMBAT ================= */}
+              {/* ================= BATTLE ================= */}
               <section className="page" id="combat" aria-labelledby="h-cb">
                 <Guard><BattlePrep /></Guard>
                 <Guard><Battle>
@@ -78,7 +78,7 @@ export default function Shell() {
               <Guard><Bag /></Guard>
               <Guard><Settings /></Guard>
               <Guard><Camp /></Guard>
-              {/* ================= LIGUE ================= */}
+              {/* ================= LEAGUE ================= */}
               <Guard><League /></Guard>
             </div></main>
           <footer className="foot"><div className="wrap"><span>Pokémon Résonance · fangame non officiel · v4.77</span><span>Pokémon © Nintendo · Creatures Inc. · GAME FREAK · fangame sans affiliation</span></div></footer>
@@ -91,7 +91,7 @@ export default function Shell() {
       <Guard><Starter /></Guard>
       <Guard><Coach /></Guard>
       <Guard><Toast /></Guard>
-      {/* surcouches ajoutées à la fin de <body> par le moteur, dans leur ordre d'apparition */}
+      {/* overlays added at the end of <body> by the engine, in their order of appearance */}
       <Guard><V4Menu /></Guard>
       <Guard><Intro /></Guard>
       <Guard><Tip429 /></Guard>

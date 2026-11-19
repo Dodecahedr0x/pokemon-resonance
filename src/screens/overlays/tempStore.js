@@ -1,31 +1,31 @@
 import { channel } from '../../lib/store.js';
 
-// Fenêtres temporaires que le moteur ajoutait à la fin de <body> (ancien overlay() : #vs,
-// #hp452, #evs454, #ct453…). Liste dans l'ordre d'ouverture : {id, data, v}.
-// Rouvrir un id le retire puis l'ajoute à la fin, avec un nouveau `v` (rendu avec key={id+v} :
-// nœud neuf, comme l'ancien remove() + appendChild).
-// Rendu synchrone (flushSync) : juste après, le moteur relit le DOM ($('#hp452'), focus,
-// querySelector) et y pose ses écouteurs.
+// Transient windows that the engine used to add at the end of <body> (old overlay(): #vs,
+// #hp452, #evs454, #ct453…). List in opening order: {id, data, v}.
+// Reopening an id removes it then appends it at the end, with a new `v` (rendered with key={id+v}:
+// fresh node, like the old remove() + appendChild).
+// Synchronous render (flushSync): right after, the engine rereads the DOM ($('#hp452'), focus,
+// querySelector) and attaches its listeners there.
 let listItems = [];
 let n = 0;
 const { emit, use } = channel();
 
-// Ouvre (ou rouvre) la fenêtre `id` ; renvoie son nœud.
+// Opens (or reopens) window `id`; returns its node.
 export function openOverlay(id, data = {}) {
   listItems = listItems.filter(x => x.id !== id).concat({ id, data, v: ++n });
   emit();
   return document.getElementById(id);
 }
 
-// Modifie les données de la fenêtre ouverte `id` (sans recréer le nœud).
+// Updates the data of the open window `id` (without recreating the node).
 export function updateTemp(id, patch) {
   if (!listItems.some(x => x.id === id)) return;
   listItems = listItems.map(x => (x.id === id ? { ...x, data: { ...x.data, ...patch } } : x));
   emit();
 }
 
-// Ferme la fenêtre `id` (ancien `.remove()`). Avec un nœud : seulement s'il est encore
-// affiché (une fenêtre rouverte depuis a un nouveau nœud).
+// Closes window `id` (old `.remove()`). With a node: only if it is still
+// displayed (a window reopened since has a new node).
 export function shut(target) {
   const id = typeof target === 'string' ? target : target && target.isConnected ? target.id : null;
   if (!id || !listItems.some(x => x.id === id)) return;

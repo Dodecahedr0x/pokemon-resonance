@@ -11,10 +11,10 @@ import Grid from './Grid.jsx';
 import Analysis from './Analysis.jsx';
 import Tip from '../../components/Tip.jsx';
 
-// Écran « Mon équipe » (#pokedex). La logique reste dans le moteur (020-13-equipe-cartes.js) :
-// renderGrid, renderFilters, renderTeam incrémentent les versions de equipeStore.js.
-// Les champs #dexQ, #dexType, #dexRole sont non contrôlés : le moteur les écoute et les relit,
-// ils ne sont jamais remontés (le focus reste dans la recherche pendant la saisie).
+// "My team" screen (#pokedex). The logic stays in the engine (020-team-cards.js):
+// renderGrid, renderFilters, renderTeam increment the versions of teamStore.js.
+// The #dexQ, #dexType, #dexRole fields are uncontrolled: the engine listens to them and re-reads them,
+// they are never remounted (focus stays in the search while typing).
 export default function Team() {
   const ready = useEngineReady();
   const vGrid = useRosterKey('grid'),
@@ -69,7 +69,7 @@ export default function Team() {
             </>
           )}
         </select>
-        {/* valeur posée par renderFilters (r.value = filt) */}
+        {/* value set by renderFilters (r.value = filt) */}
         <select id="dexRole" aria-label="Filtrer par rôle">
           {ready && (
             <>

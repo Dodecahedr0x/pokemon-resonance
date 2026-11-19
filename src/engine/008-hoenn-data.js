@@ -1,11 +1,11 @@
-/* Section d'origine : v4.19-00-hoenn-donnees.js */
+/* Original section: v4.19-00-hoenn-donnees.js */
 
 import { MV } from './005-moves.js';
 
-/* v4.19 : capacités signatures des Pokémon de Hoenn, nom des régions */
-export const REGN = ['', 'Kanto', 'Johto', 'Hoenn'];
+/* v4.19: signature moves of the Hoenn Pokémon, region names */
+export const REGION_NAMES = ['', 'Kanto', 'Johto', 'Hoenn'];
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Statements run at startup, in the original order (see index.js).
 export function __init() {
 
 Object.assign(MV, {

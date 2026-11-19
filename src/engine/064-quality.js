@@ -1,4 +1,4 @@
-/* Section d'origine : v4.29-01-qualite.js */
+/* Original section: v4.29-01-qualite.js */
 import { bdClass } from '../screens/combat/board/boardStore.js';
 
 import { MV } from './005-moves.js';
@@ -7,7 +7,7 @@ import { RECRUIT } from './010-in-battle-evolution.js';
 import { PROFILE, isCamp } from './011-game-state.js';
 import { $, RM, after2images, mulberry32, toast } from './014-utils.js';
 import { tokCl, tokHas } from '../screens/combat/board/boardStore.js';
-import { CROCHETS } from './015-hooks.js';
+import { HOOKS } from './015-hooks.js';
 import { go } from './016-navigation.js';
 import { openSheet } from './020-team-cards.js';
 import { EMAX, affected, byUid, canAwaken, hdist, mvType, teff, uAt, uk } from './021-combat-engine.js';
@@ -27,30 +27,30 @@ import { PLACES_J } from './054-johto.js';
 import { SCENES, SCN, __set_SCN, renderScene417, resoCand417 } from './057-companions-resonance.js';
 import { PLACES_H } from './059-hoenn.js';
 import { bossPhases420, surrounded420 } from './060-intense-combat.js';
-import { REGN421 } from './061-catch-anywhere.js';
+import { REGION_NAMES421 } from './061-catch-anywhere.js';
 import { familyCapt428 } from './063-combat-catches-home.js';
 
-let HEB429;
+let WEEK429;
 
 
 /* =====================================================================
-   v4.29 : qualité de jeu
-   1. Pokémon expressifs : souffle au repos, bond vers la cible, recul sous
-      les coups, chute au K.O. (réglage « Pokémon animés »).
-   2. Gestes tactiles : appui long sur un Pokémon = sa fiche ; glisser pour
-      changer d'onglet ; vibration sur les coups forts.
-   3. Astuces au bon moment : le Prof. Sorbier explique une mécanique la
-      première fois qu'elle apparaît en combat.
-   4. Difficulté Expert : les adversaires se coordonnent (achèvent le plus
-      entamé, enchaînent les types efficaces, protègent leur chef).
-   5. Histoire et rival : Kael revient à Johto et à Hoenn, les Échos de la
-      Dissonance à Hoenn ; scènes avant et après les grands combats.
-   6. Légendaires capturables : une quête par légende, puis un combat de
-      capture ; les légendes rejoignent la Box (8 PC).
-   7. Défi de la semaine : même règle et même équipe pour tous, meilleur
-      score gardé, récompense une fois par semaine, classement entre amis.
-   Les tables lues par des fonctions appelées ailleurs sont en « var » :
-   jamais d'erreur d'ordre de chargement.
+   v4.29: gameplay quality
+   1. Expressive Pokémon: idle breathing, lunge toward the target, recoil
+      under hits, fall on K.O. ("Pokémon animés" setting).
+   2. Touch gestures: long press on a Pokémon = its sheet; swipe to
+      change tab; vibration on strong hits.
+   3. Tips at the right time: Prof. Sorbier explains a mechanic the
+      first time it appears in battle.
+   4. Expert difficulty: opponents coordinate (finish off the most
+      damaged one, chain effective types, protect their leader).
+   5. Story and rival: Kael returns in Johto and Hoenn, the Echoes of
+      Dissonance in Hoenn; scenes before and after the big battles.
+   6. Capturable legendaries: one quest per legend, then a capture
+      battle; legends join the Box (8 PC).
+   7. Challenge of the week: same rule and same team for everyone, best
+      score kept, reward once a week, ranking among friends.
+   Tables read by functions called elsewhere are declared with "var":
+   never a load-order error.
    ===================================================================== */
 export function V429_0() {
   return { tips429: {}, riv429: [], hebdo429: null };
@@ -75,26 +75,26 @@ export function v429Clean(p) {
 }
 
 
-/** Score de la semaine sur la carte de dresseur. */
+/** This week's score on the trainer card. */
 export function wkClean429(x) {
   return x && typeof x === 'object' && typeof x.w === 'string' && /^\d{4}-S\d\d$/.test(x.w) && Number.isFinite(x.s) ? { w: x.w, s: Math.max(0, Math.min(99999, Math.floor(x.s))) } : null;
 }
 
 
-/** Box affichée : les légendes capturées ne comptent pas dans « Box x / 151 ». */
+/** Displayed Box: captured legends don't count in "Box x / 151". */
 export function boxN429() {
   return PROFILE.box.filter(id => !(BY[id] && BY[id].leg)).length;
 }
 
 
-/* ---------- 1. Pokémon expressifs ---------- */
+/* ---------- 1. expressive Pokémon ---------- */
 export function anim429() {
   return !RM && PREF.anim429 !== false;
 }
 
 
-/** Toutes les pièces du jeton sont dans un groupe intérieur .tok-b (Units.jsx) : il bouge sans
-    déplacer la case. Chaque jeton respire avec un décalage différent. */
+/** All the token's parts sit in an inner .tok-b group (Units.jsx): it moves without
+    shifting the tile. Each token breathes with a different offset. */
 export function liveTok429(T) {
   liveTok429.n = (liveTok429.n || 0) + 1;
   T.dl = (-((liveTok429.n * 0.77) % 3.4)).toFixed(2) + 's';
@@ -102,8 +102,8 @@ export function liveTok429(T) {
 }
 
 
-/* Relance une petite animation de jeton. Si elle joue déjà, on la relance deux images plus tard
-   (plutôt que de forcer la mise en page de toute la page). */
+/* Restarts a small token animation. If it is already playing, restart it two frames later
+   (rather than forcing a layout of the whole page). */
 export function replay429(T, cl, ms) {
   const g = T && T.g;
   if (!g) return;
@@ -141,7 +141,7 @@ function bond429(uid, k) {
 }
 
 
-export function aie429(uid) {
+export function ouch429(uid) {
   const T = L.u && L.u[uid];
   if (anim429() && T && T.b) replay429(T, 'hurt429', 480);
 }
@@ -154,7 +154,7 @@ export function liveEv429(ev) {
   ev.forEach(x => {
     if (x.e === 'use' && x.u && x.k) bond429(x.u, x.k);
   });
-  // vibration : un de vos Pokémon encaisse un gros coup, ou un Pokémon tombe K.O.
+  // vibration: one of your Pokémon takes a big hit, or a Pokémon is knocked out
   const ko = ev.some(x => x.e === 'ko'),
     strongSpot = ev.some(x => {
       if (x.e !== 'dmg') return false;
@@ -166,7 +166,7 @@ export function liveEv429(ev) {
 
 
 function calm429() {
-  bdClass('calme429', !anim429()); // classe de #bBoard, rendue par React
+  bdClass('calme429', !anim429()); // class of #bBoard, rendered by React
 }
 
 
@@ -201,7 +201,7 @@ function actionLp429(t) {
 }
 
 
-/** La fiche d'un Pokémon ; pour une légende ou un adversaire sans fiche, un résumé. */
+/** A Pokémon's sheet; for a legend or an opponent with no sheet, a summary. */
 function sheet429(id) {
   const m = BY[id];
   if (!m) return;
@@ -245,8 +245,8 @@ function tips429(force) {
   if (!k) return;
   seenSet[k] = 1;
   queueSave();
-  const [t, d] = ASTUCES429[k];
-  showTip429(t, d); // #tip429 : src/screens/overlays/Tip429.jsx
+  const [t, d] = TIPS429[k];
+  showTip429(t, d); // #tip429: src/screens/overlays/Tip429.jsx
 }
 
 
@@ -255,7 +255,7 @@ function endTip429() {
 }
 
 
-/** Après chaque rendu du combat : animations selon le réglage, astuce éventuelle. */
+/** After each battle render: animations according to the setting, tip if any. */
 export function liveRender429() {
   calm429();
   endTip429();
@@ -264,20 +264,20 @@ export function liveRender429() {
 }
 
 
-/* ---------- 4. difficulté Expert : des adversaires qui se coordonnent ---------- */
+/* ---------- 4. Expert difficulty: opponents that coordinate ---------- */
 export function expert429(S, e, m, k, pos, sim) {
   let b = 0;
   const typ = mvType(S, sim, m);
   for (const x of affected(S, sim, m, k)) {
     const v = uAt(S, x);
     if (!v || v.side !== 'a' || v.ko) continue;
-    b += (1 - v.hp / v.mhp) * 20; // on achève le plus entamé
-    if (teff(typ, v.t) > 1) b += 10; // on enchaîne les types efficaces
-    if (notesOf(S, v) > 0) b += 6; // on profite des coups déjà portés dans la manche
+    b += (1 - v.hp / v.mhp) * 20; // finish off the most damaged one
+    if (teff(typ, v.t) > 1) b += 10; // chain effective types
+    if (notesOf(S, v) > 0) b += 6; // take advantage of hits already landed this round
   }
   if (!e.boss) {
     const leader = S.units.find(o => o.side === 'e' && !o.ko && o.boss && o !== e);
-    if (leader && leader.hp < leader.mhp * 0.7 && hdist(pos, leader.pos) === 1) b += 12; // on protège le chef
+    if (leader && leader.hp < leader.mhp * 0.7 && hdist(pos, leader.pos) === 1) b += 12; // protect the leader
   }
   return b;
 }
@@ -297,7 +297,7 @@ export function rivBuild429() {
       team = (dis ? R.team : [rivAce429(), ...R.team]).filter(id => BY[id]);
     SCEN[k] = {
       n: R.n,
-      lvl: dis ? 'Hoenn · Dissonance' : `Rival · ${REGN421[R.reg]}`,
+      lvl: dis ? 'Hoenn · Dissonance' : `Rival · ${REGION_NAMES421[R.reg]}`,
       lim: 11,
       time: dis ? 'nuit' : 'jour',
       bio: dis ? 'roche' : b.bio,
@@ -312,7 +312,7 @@ export function rivBuild429() {
       rival429: k,
       d: dis
         ? 'Une cellule oubliée de la Dissonance brouille Hoenn : en fin de manche, votre Pokémon le plus chargé perd 1 losange. Éveillez vite vos Pokémon !'
-        : `Kael revient avec ${BY[team[0]].n} et une équipe de ${REGN421[R.reg]}. Il a progressé autant que vous.`,
+        : `Kael revient avec ${BY[team[0]].n} et une équipe de ${REGION_NAMES421[R.reg]}. Il a progressé autant que vous.`,
       foes: team.map((id, j) => [id, RIVAL_POS[j]])
     };
     OBST[k] = R.obst;
@@ -325,7 +325,7 @@ export function lockRival429(D) {
   const R = RIV429[D.rival429];
   if (!R) return null;
   const n = (R.reg === 2 ? PROFILE.johto : PROFILE.hoenn) || [];
-  if (n.length < R.after) return `${D.rival429 === 'hd429' ? 'Les Échos se montreront' : 'Kael vous attend'} après ${R.after} badges de ${REGN421[R.reg]}.`;
+  if (n.length < R.after) return `${D.rival429 === 'hd429' ? 'Les Échos se montreront' : 'Kael vous attend'} après ${R.after} badges de ${REGION_NAMES421[R.reg]}.`;
   return null;
 }
 
@@ -355,10 +355,10 @@ export function who429(who) {
 }
 
 
-/** Scène d'après-combat : une seule fois, après une victoire. */
+/** Post-battle scene: only once, after a victory. */
 export function after429(sc, win, force) {
   const c = 'apres-' + sc,
-    Lg = APRES429[sc];
+    Lg = AFTER429[sc];
   if (!win || !Lg || (AUTO && !force) || (PROFILE.scenes && PROFILE.scenes[c]) || (SCN && SCN.c === c)) return;
   if (sc === 'champ' && !isCamp()) return;
   after429.vu = after429.vu || {};
@@ -383,7 +383,7 @@ export function stepsLeg429(L) {
     c = familyCapt428(r);
   return [
     { ok: (PROFILE.legends || []).includes(L.id), t: `Vaincre ${L.n} (Combats › Après-jeu)` },
-    { ok: (PROFILE.dipl428 || []).includes(r), t: `Compléter le Pokédex de ${REGN421[r]} (${c.n} / ${c.t})` },
+    { ok: (PROFILE.dipl428 || []).includes(r), t: `Compléter le Pokédex de ${REGION_NAMES421[r]} (${c.n} / ${c.t})` },
     ...(isCamp() ? [{ ok: !!PROFILE.hchamp, t: 'Devenir Maître de Hoenn' }] : [])
   ];
 }
@@ -398,13 +398,13 @@ export function lockLegendary429(k) {
 }
 
 
-// rangée « Légendes » de l'écran Équipe : rendue par React (src/screens/equipe/DexCall.jsx)
+// "Legends" row of the Team screen: rendered by React (src/screens/team/DexCall.jsx)
 
 
-// Quêtes › Légendes : rendu par React (src/screens/quetes/Legendes.jsx)
+// Quests › Legends: rendered by React (src/screens/quests/Legends.jsx)
 
 
-/* ---------- 7. défi de la semaine ---------- */
+/* ---------- 7. challenge of the week ---------- */
 function week429(d) {
   d = d || new Date();
   const t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate())),
@@ -419,17 +419,17 @@ function week429(d) {
 export function rand429(w) {
   let a = 0;
   for (let i = 0; i < w.length; i++) a = (Math.imul(a ^ w.charCodeAt(i), 2654435761) + 0x9e3779b9) | 0;
-  // sans « || 1 » (contrairement à rng454 / rngS460) : une empreinte nulle donne toujours la même suite qu'avant
+  // without "|| 1" (unlike rng454 / rngS460): a zero fingerprint always gives the same sequence as before
   return mulberry32(a);
 }
 
 
 export function weeklyBuild429() {
   const w = week429();
-  if (HEB429 && HEB429.w === w && SCEN.hebdo429) return HEB429;
+  if (WEEK429 && WEEK429.w === w && SCEN.hebdo429) return WEEK429;
   const r = rand429(w),
     pick = L0 => L0[Math.floor(r() * L0.length)],
-    R = Object.assign({}, HEBDO429[Math.floor(r() * HEBDO429.length)]),
+    R = Object.assign({}, WEEKLY429[Math.floor(r() * WEEKLY429.length)]),
     bases = ['a4', 'a5', 'a6', 'a7', 'a8', 'j3', 'j5', 'j6', 'j7', 'h3', 'h5', 'h6'].filter(k => SCEN[k] && SCEN[k].foes),
     bk = pick(bases),
     family = RECRUIT.map(m => familyOf(m.id)).filter(f => f.length),
@@ -462,15 +462,15 @@ export function weeklyBuild429() {
       lim: R.k === 'chrono' ? 6 : b.lim || 10,
       catch: false
     });
-  PROGRES429.forEach(x => delete D[x]);
+  PROGRESS429.forEach(x => delete D[x]);
   SCEN.hebdo429 = D;
   OBST.hebdo429 = OBST[bk] || {};
-  HEB429 = { w, R, bk, team };
-  return HEB429;
+  WEEK429 = { w, R, bk, team };
+  return WEEK429;
 }
 
 
-/** L’équipe de location du défi, avec des réglages identiques pour tout le monde. */
+/** The challenge's rental team, with identical settings for everyone. */
 export function weeklyTeam429() {
   const D = SCEN[scSel];
   if (scSel !== 'hebdo429' || !D || !D.pret429) return null;
@@ -491,30 +491,30 @@ export function monWeekly429() {
 function weeklyScore429(S, win) {
   const al = S.units.filter(u => u.side === 'a'),
     livingUnits = al.filter(u => !u.ko).length,
-    pv = al.reduce((a, u) => a + (u.ko ? 0 : u.hp / u.mhp), 0) / Math.max(1, al.length),
+    hp = al.reduce((a, u) => a + (u.ko ? 0 : u.hp / u.mhp), 0) / Math.max(1, al.length),
     lim = (SCEN[S.sc] || {}).lim || 10,
     ko = S.units.filter(u => u.side === 'e' && u.ko).length;
-  return win ? 1000 + Math.max(0, lim - S.round) * 60 + Math.round(pv * 400) + livingUnits * 50 : Math.min(900, ko * 120 + S.round * 10);
+  return win ? 1000 + Math.max(0, lim - S.round) * 60 + Math.round(hp * 400) + livingUnits * 50 : Math.min(900, ko * 120 + S.round * 10);
 }
 
 
-// Quêtes › Événement : défi de la semaine rendu par React (src/screens/quetes/Evenement.jsx)
+// Quests › Event: challenge of the week rendered by React (src/screens/quests/Event.jsx)
 
 
-/* le bouton #v4Hebdo de l'Accueil est rendu par React (src/screens/accueil/Bas.jsx) */
+/* the Home screen #v4Hebdo button is rendered by React (src/screens/home/Footer.jsx) */
 
-/* ---------- 2. gestes tactiles ---------- */
+/* ---------- 2. touch gestures ---------- */
 const LP429 = { t: 0, x: 0, y: 0, fait: 0 };
 
 const endLp429 = () => clearTimeout(LP429.t);
 
-/* glisser pour changer d'onglet */
-export const ONGLETS429 = ['accueil', 'pokedex', 'combat', 'carte'];
+/* swipe to change tab */
+export const TAB_LIST429 = ['accueil', 'pokedex', 'combat', 'carte'];
 
 const SW429 = { x: 0, y: 0, t: 0, ok: false };
 
-/* ---------- 3. astuces au bon moment ---------- */
-const ASTUCES429 = {
+/* ---------- 3. tips at the right time ---------- */
+const TIPS429 = {
   capture: ['Capturer un Pokémon', 'Affaiblissez-le sous 25 % de ses PV et immobilisez-le (Sommeil, Paralysie, Gel, Racines ou Toile). Sélectionnez ensuite un allié à son contact, puis touchez l’adversaire : le panneau « Capture » lance la Ball pour 2 Voix.'],
   reso: ['Notes de Résonance', 'Chaque allié qui frappe la même cible dans la manche y pose une note. À 3 notes, Résonance : dégâts ×1,5 et un écho selon le type. Frappez ensemble !'],
   eveil: ['L’Éveil', 'Un de vos Pokémon a ses losanges pleins : sélectionnez-le, puis « Éveiller ». Il évolue en plein combat et devient plus fort tout de suite.'],
@@ -525,7 +525,7 @@ const ASTUCES429 = {
   vigil: ['Vigilance', 'Au lieu d’attaquer, un Pokémon peut surveiller : il frappe le premier adversaire qui entre à sa portée, avant que celui-ci n’attaque.']
 };
 
-/* ---------- 5. histoire et rival ---------- */
+/* ---------- 5. story and rival ---------- */
 export const RIV429 = {
   rv5: {
     reg: 2,
@@ -579,7 +579,7 @@ export const RIV429 = {
   }
 };
 
-const APRES429 = {
+const AFTER429 = {
   champ: [['prof', 'Championne vaincue ! Kanto vous appartient… et Johto vous attend, au bout de la Route 29.']],
   jchamp: [['prof', 'Maître de Johto ! Kael vient de m’appeler : il est parti pour Hoenn. Vous devriez le suivre.']],
   rv5: [
@@ -600,24 +600,24 @@ const APRES429 = {
   ]
 };
 
-const HEBDO429 = [
+const WEEKLY429 = [
   { k: 'location', n: 'Équipe de location', d: 'Tout le monde joue la même équipe, tirée au sort pour la semaine.' },
   { k: 'mono', n: 'Monotype', d: 'Une équipe de location d’un seul type.' },
   { k: 'debut', n: 'Premiers pas', d: 'Quatre Pokémon au premier stade : à vous de les éveiller en combat.' },
   { k: 'chrono', n: 'Contre-la-montre', d: 'Une équipe de location, et seulement 6 manches pour gagner.' }
 ];
 
-// le défi reprend les adversaires d’un combat sans ses récompenses de progression
-export const PROGRES429 = ['gym', 'elite', 'champ', 'johto', 'hoenn', 'hfinal', 'jfinal', 'jdis', 'roam', 'legend', 'rival', 'dissonance', 'colosse', 'lac', 'tower', 'tuto', 'ami', 'rival429', 'cap429', 'dom', 'jafter', 'after', 'daily', 'tdr'];
+// the challenge reuses a battle's opponents without its progression rewards
+export const PROGRESS429 = ['gym', 'elite', 'champ', 'johto', 'hoenn', 'hfinal', 'jfinal', 'jdis', 'roam', 'legend', 'rival', 'dissonance', 'colosse', 'lac', 'tower', 'tuto', 'ami', 'rival429', 'cap429', 'dom', 'jafter', 'after', 'daily', 'tdr'];
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Statements run at startup, in the original order (see index.js).
 export function __init() {
 
 document.addEventListener(
   'pointerdown',
   e => {
     clearTimeout(LP429.t);
-    LP429.fait = 0; // un nouveau geste : l’appui long précédent est oublié
+    LP429.fait = 0; // a new gesture: the previous long press is forgotten
     if (e.pointerType === 'mouse' && e.button !== 0) return;
     const a = actionLp429(e.target);
     if (!a) return;
@@ -648,7 +648,7 @@ document.addEventListener(
 );
 
 
-// le relâché qui suit un appui long ne déclenche pas aussi le clic
+// the release following a long press doesn't also trigger the click
 document.addEventListener(
   'click',
   e => {
@@ -691,10 +691,10 @@ document.addEventListener(
       dy = p.clientY - SW429.y;
     if (Date.now() - SW429.t > 650 || Math.abs(dx) < 80 || Math.abs(dy) > Math.abs(dx) * 0.5) return;
     const pg = document.querySelector('.page.on'),
-      i = ONGLETS429.indexOf(pg && pg.id),
+      i = TAB_LIST429.indexOf(pg && pg.id),
       j = i + (dx < 0 ? 1 : -1);
-    if (i < 0 || j < 0 || j >= ONGLETS429.length) return;
-    go(ONGLETS429[j]);
+    if (i < 0 || j < 0 || j >= TAB_LIST429.length) return;
+    go(TAB_LIST429[j]);
     try {
       window.scrollTo(0, 0);
     } catch (er) {}
@@ -731,7 +731,7 @@ PLACES_H.push({ id: 'hd429', x: RIV429.hd429.x, y: RIV429.hd429.y, n: 'Grotte de
 [...PLACES_J, ...PLACES_H].forEach(p => (PL[p.id] = p));
 
 
-CROCHETS.progres.push((S, rew, win) => {
+HOOKS.progres.push((S, rew, win) => {
   const D = SCEN[S.sc] || {};
   if (!win || !D.rival429 || (PROFILE.riv429 || []).includes(D.rival429)) return null;
   PROFILE.riv429 = [...(PROFILE.riv429 || []), D.rival429];
@@ -740,9 +740,9 @@ CROCHETS.progres.push((S, rew, win) => {
 });
 
 
-CROCHETS.resultat.push(r =>
+HOOKS.resultat.push(r =>
   r.riv429
-    ? `<div class="res-l"><h4>${r.riv429 === 'hd429' ? 'Dissonance' : 'Rival'}</h4><div class="rl"><span>${r.riv429 === 'hd429' ? 'Les Échos de la Dissonance sont réduits au silence.' : `Kael est battu à ${REGN421[RIV429[r.riv429].reg]}.`}</span><b>+${fmt(RIV429[r.riv429].rew[0])} ₽ · +${RIV429[r.riv429].rew[1]} Éclats</b></div></div>`
+    ? `<div class="res-l"><h4>${r.riv429 === 'hd429' ? 'Dissonance' : 'Rival'}</h4><div class="rl"><span>${r.riv429 === 'hd429' ? 'Les Échos de la Dissonance sont réduits au silence.' : `Kael est battu à ${REGION_NAMES421[RIV429[r.riv429].reg]}.`}</span><b>+${fmt(RIV429[r.riv429].rew[0])} ₽ · +${RIV429[r.riv429].rew[1]} Éclats</b></div></div>`
     : ''
 );
 
@@ -780,9 +780,9 @@ if (!SCENES.hchamp)
   ];
 
 
-/* ---------- 6. légendaires capturables ---------- */
+/* ---------- 6. capturable legendaries ---------- */
 LEGS.forEach(L => {
-  BY[L.id].c = 8; // une légende dans l’équipe coûte 8 PC
+  BY[L.id].c = 8; // a legend on the team costs 8 PC
   const lk = legKey(L.id);
   if (SCEN[lk]) SCEN[lk].d = SCEN[lk].d.replace(/Il ne peut pas être capturé[^.]*\.[^.]*\./, 'Vaincu, il pourra être capturé une fois sa quête terminée (Quêtes › Légendes).');
 });
@@ -803,10 +803,10 @@ LEGS.forEach(L => {
 });
 
 
-HEB429 = null;
+WEEK429 = null;
 
 
-CROCHETS.progres.push((S, rew, win) => {
+HOOKS.progres.push((S, rew, win) => {
   const D = SCEN[S.sc] || {};
   if (!D.hebdo429) return null;
   const w = D.hebdo429,
@@ -827,7 +827,7 @@ CROCHETS.progres.push((S, rew, win) => {
 });
 
 
-CROCHETS.resultat.push(r =>
+HOOKS.resultat.push(r =>
   r.hebdo429
     ? `<div class="res-l"><h4>Défi de la semaine</h4><div class="rl"><span>Score ${fmt(r.hebdo429.sc)}${r.hebdo429.record ? ' · nouveau record !' : ` · record ${fmt(r.hebdo429.best)}`}${r.hebdo429.prime ? ' · première victoire de la semaine : +2 500 ₽ · +25 Éclats' : ''}</span><b>${r.hebdo429.record ? '★' : ''}</b></div><p class="v4-note">Partagez votre carte de dresseur (Amis) : vos amis verront ce score.</p></div>`
     : ''

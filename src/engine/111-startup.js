@@ -1,4 +1,4 @@
-/* Section d'origine : 99-demarrage.js */
+/* Original section: 99-startup.js */
 
 import { reportError } from './002-errors.js';
 import { BY } from './009-pokemon.js';
@@ -20,15 +20,15 @@ import { ecoClean } from './032-v4-foundation.js';
 import { renderWallet } from './035-interface.js';
 import { buildMap } from './037-map.js';
 import { fixTree } from './042-polish.js';
-import { rivalBuild, tdrRestore } from './043-adventure-plus.js';
+import { rivalBuild, towerRestore } from './043-adventure-plus.js';
 import { free421 } from './061-catch-anywhere.js';
 import { diplomaOut428 } from './063-combat-catches-home.js';
 import { weeklyBuild429 } from './064-quality.js';
 import { challenges431Boot } from './066-tactical-challenges.js';
 
-/* ===================== DÉMARRAGE =====================
-   Tout le code est chargé : on restaure la partie, puis on affiche.
-   Chaque étape est protégée : si l’une casse, les autres continuent (et le souci s’affiche). */
+/* ===================== STARTUP =====================
+   All the code is loaded: we restore the game, then display.
+   Each step is protected: if one breaks, the others carry on (and the problem is shown). */
 const bootStep = (name, f) => {
   try {
     f();
@@ -37,20 +37,20 @@ const bootStep = (name, f) => {
   }
 };
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Instructions run at startup, in the original order (see index.js).
 export function __init() {
 
 bootStep('Champion', champBuild);
 
- // le Champion existe dès le départ (la restauration de la partie l’affiche)…
+ // the Champion exists from the start (restoring the game displays them)…
 bootStep('sauvegarde', () => {
-  bootSaves(); // sauvegarde de l’appareil (le compte Claude suit en arrière-plan)
+  bootSaves(); // device save (the Claude account follows in the background)
   Object.assign(PROFILE, ecoClean(SV.local.auto && SV.local.auto.profile));
 });
 
 
 bootStep('captures Libre', () => {
-  // v4.21 : la Box remplace le « tout est ouvert » du mode Libre
+  // v4.21: the Box replaces Free mode's "everything is open"
   if (!free421(squad, BADGES)) return;
   __set_squad(squad.filter(id => inBox(id)));
   if (!squad.length) __set_squad(PROFILE.box.slice(0, 4).filter((id, i, a) => a.slice(0, i + 1).reduce((t, x) => t + BY[x].c, 0) <= BUDGET));
@@ -60,13 +60,13 @@ bootStep('captures Libre', () => {
 
 bootStep('diplômes régionaux', () => setTimeout(diplomaOut428, 1500));
 
- // v4.28 : régions déjà complètes
+ // v4.28: regions already complete
 bootStep('Champion', champBuild);
 
- // … puis il étudie vos derniers combats
+ // … then they study your latest battles
 bootStep('rival et Tour', () => {
   rivalBuild();
-  tdrRestore();
+  towerRestore();
 });
 
 
@@ -75,14 +75,14 @@ bootStep('défi de la semaine', weeklyBuild429);
  // v4.29
 bootStep('défis tactiques', challenges431Boot);
 
- // énigme, expédition et arène en cours (v4.31)
-// l'ancien écran titre (#splash) a disparu : l'écran de lancement React le remplace
-// (il n'était créé qu'en son absence, quand res-splash était déjà posé, donc jamais affiché).
+ // riddle, expedition and gym in progress (v4.31)
+// the old title screen (#splash) is gone: the React launch screen replaces it
+// (it was only created in its absence, when res-splash was already set, so never displayed).
 
 
-// filet de sécurité : si l’écran de lancement n’a pas pu s’installer, le jeu s’affiche quand même
+// safety net: if the launch screen could not be installed, the game is shown anyway
 bootStep('guide', () => {
-  // premier lancement : le guide s’ouvre sur « Débuter »
+  // first launch: the guide opens on "Débuter" (Getting started)
   let f = null;
   try {
     f = localStorage.getItem('res-v3');
@@ -103,7 +103,7 @@ bootStep('filtres', renderFilters);
 
 bootStep('équipe', renderSquad);
 
- // dessine aussi le Pokédex et l’analyse (v4.76 : plus de second rendu identique)
+ // also draws the Pokédex and the analysis (v4.76: no second identical render)
 bootStep('Ligue', renderLeague);
 
 
@@ -128,7 +128,7 @@ bootStep('porte-monnaie', renderWallet);
 
 
 bootStep('onglet', () => {
-  // onglet : celui de l’adresse, sinon le dernier ouvert
+  // tab: the one from the address, otherwise the last one opened
   let t = location.hash.slice(1);
   if (!TABS.includes(t)) {
     try {
@@ -141,12 +141,12 @@ bootStep('onglet', () => {
 });
 
 
-// v4.76 : l’accueil est déjà dessiné par show() juste au-dessus (plus de second rendu identique)
+// v4.76: home is already drawn by show() just above (no second identical render)
 bootStep('typographie', () => fixTree(document.body));
 
 
 bootStep('intro', () => {
-  // la Professeure arrive quand l’écran de lancement se referme
+  // the Professor arrives when the launch screen closes
   const sel = '#resonance-launch';
   if (document.querySelector(sel))
     new MutationObserver((m, ob) => {
@@ -154,7 +154,7 @@ bootStep('intro', () => {
         ob.disconnect();
         showIntro();
       }
-    }).observe(document.body, { childList: true, subtree: true }); // l'écran de lancement React est dans #root, pas enfant direct de <body>
+    }).observe(document.body, { childList: true, subtree: true }); // the React launch screen is in #root, not a direct child of <body>
   else showIntro();
 });
 

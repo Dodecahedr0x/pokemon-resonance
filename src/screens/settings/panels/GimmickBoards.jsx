@@ -1,7 +1,7 @@
 import { GIM467, gimKey467 } from '../../../engine/098-feats-journal-gimmick-boards.js';
 
-// Plateaux à gimmick (v4.67) : une règle de terrain ajoutée aux combats.
-// Boutons gérés par le moteur (clic délégué sur data-gim467).
+// Gimmick boards (v4.67): a terrain rule added to battles.
+// Buttons handled by the engine (delegated click on data-gim467).
 export default function BoardGimmicks() {
   const c = gimKey467();
   const btn = (k, l) => (

@@ -1,13 +1,13 @@
 import { makeStore } from '../../lib/store.js';
 
-// État de la fenêtre « Sauvegardes », partagé entre React (<Saves>) et le moteur
-// (openSaves, closeSaves, renderSaves). Le moteur n'écrit plus dans #saves ; il relit le
-// DOM juste après chaque appel ($('#svCode').focus(), $('#saves').hidden…).
+// State of the "Saves" window, shared between React (<Saves>) and the engine
+// (openSaves, closeSaves, renderSaves). The engine no longer writes into #saves; it re-reads the
+// DOM right after each call ($('#svCode').focus(), $('#saves').hidden…).
 const saves = makeStore({ open: false, version: 0 });
 
 export const useSaves = saves.use;
 
-// Ouvre la fenêtre, contenu relu depuis l'état du moteur.
+// Opens the window, content re-read from the engine's state.
 export function showSaves() {
   saves.set(s => ({ open: true, version: s.version + 1 }));
 }
@@ -16,7 +16,7 @@ export function hideSaves() {
   if (saves.get().open) saves.set({ open: false });
 }
 
-// Redessine la carte (état du moteur changé).
+// Redraws the card (engine state changed).
 export function refreshSaves() {
   saves.set(s => ({ version: s.version + 1 }));
 }

@@ -6,7 +6,7 @@ function launchSeen() {
   try { return !!sessionStorage.getItem('res-launch'); } catch { return false; }
 }
 
-// Retient que l'écran de lancement a été vu pendant cette session.
+// Remembers that the launch screen has been seen during this session.
 function closeSplash() {
   try {
     sessionStorage.setItem('res-launch', '1');
@@ -14,7 +14,7 @@ function closeSplash() {
   } catch {}
 }
 
-// Écran de lancement cinématique : une seule fois par session.
+// Cinematic launch screen: only once per session.
 export default function LaunchScreen({ engineReady }) {
   const [seen] = useState(launchSeen);
   const [phase, setPhase] = useState(seen ? 'gone' : 'shown'); // shown → leaving → gone

@@ -2,8 +2,8 @@ import { Html } from '../../../lib/html.jsx';
 import { LOG } from '../../../engine/024-combat-ui.js';
 import { useBattleVersion } from './battleStore.js';
 
-// Journal du combat, replié : la dernière ligne dans le résumé, la liste à la demande.
-// L'état ouvert/fermé du <details> reste celui du joueur (React n'y touche pas).
+// Battle log, collapsed: the last line in the summary, the list on demand.
+// The open/closed state of the <details> stays the player's (React does not touch it).
 export default function Log() {
   const v = useBattleVersion('log');
   const L = v && LOG ? LOG : [];

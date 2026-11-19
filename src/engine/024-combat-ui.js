@@ -1,4 +1,4 @@
-/* Section d'origine : 17-interface-combat.js */
+/* Original section: 17-combat-interface.js */
 
 import { RX } from './004-data.js';
 import { MV } from './005-moves.js';
@@ -6,7 +6,7 @@ import { BY, SCEN, WXN } from './009-pokemon.js';
 import { ITEMS2, PROFILE, isCamp, ownedItems } from './011-game-state.js';
 import { arenaSetup, arenaTick } from './013-gyms.js';
 import { $, RM, wait, el, gp, hc, hp, tc, toast, zig } from './014-utils.js';
-import { CROCHETS, hook } from './015-hooks.js';
+import { HOOKS, hook } from './015-hooks.js';
 import { go } from './016-navigation.js';
 import { renderLeague } from './019-league.js';
 import { squad, vBonus } from './020-team-cards.js';
@@ -20,13 +20,13 @@ import { panelRoleInfo } from './029-streamlined-guide.js';
 import { AUTO, HPM, RK, rankOf, turnBanner, turnBanners, vsIntro } from './030-prestige-staging.js';
 import { renderWallet } from './035-interface.js';
 import { tagUnits, tokenArt } from './041-illustrations.js';
-import { rivalBuild, rivalIdx, shinyHue, tdrDraft, tdrRun, tdrTeam } from './043-adventure-plus.js';
+import { rivalBuild, rivalIdx, shinyHue, towerDraft, towerRun, towerTeam } from './043-adventure-plus.js';
 import { currentActor, unrollSpeed, endTurnSpeed, chosenOrder, canSelect } from './044-tactical-engine.js';
-import { VIV_DESC, VIV_ETAT, hourTint, chosenAlive } from './046-living-board.js';
+import { LIVING_DESC, LIVING_STATE, hourTint, chosenAlive } from './046-living-board.js';
 import { chosenTactic } from './047-tactics.js';
 import { challengeLaunch, activeChallenges, mutTraining, mutInfo, teamSize } from './048-replayability.js';
 import { charactersChosen, disobedienceChosen, level } from './049-identity.js';
-import { REDIFF } from './050-world.js';
+import { REPLAYS } from './050-world.js';
 import { refreshBattle, evoState } from '../screens/combat/battle/battleStore.js';
 import { boardBuild, boardRender, evoSet, tokCl, unitsBatch, unitsDirty } from '../screens/combat/board/boardStore.js';
 import { bdClass, bdReplay, bdReset, hostSet } from '../screens/combat/board/boardStore.js';
@@ -35,7 +35,7 @@ import { resoCand417, scene417, tournamentTeam417 } from './057-companions-reson
 import { coopPass418, player418 } from './058-fishing-safari-coop.js';
 import { surrounded420 } from './060-intense-combat.js';
 import { dl428, quick428 } from './063-combat-catches-home.js';
-import { RIV429, aie429, after429, weeklyBuild429, weeklyTeam429, lockLegendary429, liveRender429, liveTok429 } from './064-quality.js';
+import { RIV429, ouch429, after429, weeklyBuild429, weeklyTeam429, lockLegendary429, liveRender429, liveTok429 } from './064-quality.js';
 import { afterRender430, campOk430, docChosen430 } from './065-camp-tactics.js';
 import { afterRender431, fogChosen431, fixedProgress431, fixedTeam431 } from './066-tactical-challenges.js';
 import { afterRender433, duelPass433 } from './068-duel-tutorial.js';
@@ -66,7 +66,7 @@ function tiltU(X, Y) {
 }
 
 
-/** taille apparente (1 = case à plat) au point écran X,Y */
+/** apparent size (1 = flat tile) at screen point X,Y */
 export function tiltS(X, Y) {
   const g = tiltU(X, Y);
   return (TILT.f / (TILT.f + (TILT.Hb - g[1]) * TILT.sn)) * TILT.k;
@@ -95,10 +95,10 @@ function hpf(x, y, s) {
 }
 
 
-/** Choisit le scénario k (à son propre onglet) et passe à l’écran Combats, pour un launch() qui suit.
- *  Si un combat est encore en cours, la liste des combats n’est pas redessinée (ouvrirCombat le fait).
- *  Les rencontres sauvages, le duel et l’objectif de l’Accueil gardent l’onglet choisi à la main :
- *  ils posent scSel eux-mêmes. */
+/** Picks scenario k (on its own tab) and switches to the Battles screen, for a launch() that follows.
+ *  If a battle is still running, the battle list is not redrawn (openBattle does it).
+ *  Wild encounters, the duel and the Home objective keep the manually chosen tab:
+ *  they set scSel themselves. */
 export function chooseBattle(k) {
   scSel = k;
   __set_PREPG(null);
@@ -106,14 +106,14 @@ export function chooseBattle(k) {
 }
 
 
-/** Le joueur demande le combat k : écran Combats sur ce scénario, à l’onglet du scénario. Ne lance pas le combat. */
+/** The player requests battle k: Battles screen on that scenario, at the scenario's tab. Does not start the battle. */
 export function openBattle(k) {
   chooseBattle(k);
   renderPrep();
 }
 
 
-/** Comme ouvrirCombat, pour une clé venue de l’interface : sans effet si le scénario n’existe pas (encore). */
+/** Like openBattle, for a key coming from the interface: no effect if the scenario does not exist (yet). */
 export function goFight(k) {
   if (SCEN[k]) openBattle(k);
 }
@@ -132,7 +132,7 @@ export function challenge(k) {
 export function battleOpts() {
   const items = {};
   squad.slice(0, 4).forEach(id => {
-    const b = BY[id].base, // les objets sont tenus par la famille, quel que soit le stade
+    const b = BY[id].base, // held items belong to the family, whatever the stage
       it = PROFILE.equip[b];
     if (it && ownedItems().includes(it)) items[b] = it;
   });
@@ -142,13 +142,13 @@ export function battleOpts() {
     fatigue: isCamp() ? PROFILE.fatigue : {},
     links: PROFILE.links,
     ordre: chosenOrder(),
-    vivant: chosenAlive(), // plateau vivant (v4.7-01)
-    tactique: chosenTactic(), // Tactique avancée (v4.8-01)
-    mut: mutTraining(), // mutateur en Entraînement (v4.9-01)
+    vivant: chosenAlive(), // living board (v4.7-01)
+    tactique: chosenTactic(), // Advanced Tactics (v4.8-01)
+    mut: mutTraining(), // mutator in Training (v4.9-01)
     doc430: docChosen430(), // doctrine (v4.30)
-    fog431: fogChosen431(), // brouillard de guerre (v4.31)
-    defis: activeChallenges(), // défis de campagne (v4.9-01)
-    caracteres: charactersChosen(), // caractères (v4.10-01)
+    fog431: fogChosen431(), // fog of war (v4.31)
+    defis: activeChallenges(), // campaign challenges (v4.9-01)
+    caracteres: charactersChosen(), // characters (v4.10-01)
     desob: disobedienceChosen(),
     dojo: campOk430() ? level('dojo') : 0,
     apprises: PROFILE.apprises // CT et CS (v4.6-01)
@@ -157,20 +157,20 @@ export function battleOpts() {
 
 
 export function launch() {
-  for (const f of CROCHETS.refusLancement) {
+  for (const f of HOOKS.refusLancement) {
     const refusal = f();
     if (refusal) return toast(refusal);
   }
   hook('avantLancement');
   const previous = B;
-  // scènes d’histoire (v4.17) : la scène remplace le combat
+  // story scenes (v4.17): the scene replaces the battle
   if (!scene417(scSel)) {
     __set_tutorialI(SCEN[scSel] && SCEN[scSel].tuto ? 0 : -1);
     launchCore();
     if (B && !AUTO)
-      vsIntro(); // présentation des adversaires
+      vsIntro(); // opponent introduction
     else if (B) turnBanner();
-    // ordre par Vitesse : si un adversaire est plus rapide, il ouvre la manche (après la présentation)
+    // Speed order: if an opponent is faster, it opens the round (after the introduction)
     if (B && B.ordre === 'vitesse') setTimeout(unrollSpeed, AUTO || RM ? 950 : PREF.fast ? 1500 : 2400);
   }
   hook('lancement', !!B && B !== previous);
@@ -179,8 +179,8 @@ export function launch() {
 
 function launchCore() {
   if (!squad.length && !fixedTeam431()) return;
-  if (scSel === 'hebdo429') weeklyBuild429(); // la semaine a pu changer (v4.29)
-  const lk = scenLock(scSel) || lockLegendary429(scSel) || (scSel === 'hebdo429' || (SCEN[scSel] || {}).sansProgres431 ? null : challengeLaunch()); // défis de campagne (v4.9-01), quêtes légendaires (v4.29)
+  if (scSel === 'hebdo429') weeklyBuild429(); // the week may have changed (v4.29)
+  const lk = scenLock(scSel) || lockLegendary429(scSel) || (scSel === 'hebdo429' || (SCEN[scSel] || {}).sansProgres431 ? null : challengeLaunch()); // campaign challenges (v4.9-01), legendary quests (v4.29)
   if (lk) {
     toast(lk);
     renderPrep();
@@ -188,15 +188,15 @@ function launchCore() {
   }
   if (scSel === 'champ') champBuild();
   if (rivalIdx(scSel) >= 0 || RIV429[scSel]) rivalBuild();
-  if (scSel === 'tdr' && !tdrRun()) {
-    tdrDraft(); // pas encore d’ascension : on choisit d’abord son équipe
+  if (scSel === 'tdr' && !towerRun()) {
+    towerDraft(); // no ascent yet: choose your team first
     return;
   }
-  const T = scSel === 'tdr' ? tdrTeam() : weeklyTeam429() || fixedTeam431() || tournamentTeam417(); // défi de la semaine (v4.29), énigme et Écho profond (v4.31) // Tour de Résonance, tournoi entre amis (v4.17) : l’équipe figée
+  const T = scSel === 'tdr' ? towerTeam() : weeklyTeam429() || fixedTeam431() || tournamentTeam417(); // weekly challenge (v4.29), riddle and Deep Echo (v4.31) // Resonance Tower, tournament between friends (v4.17): the team is frozen
   B = T
-    ? newBattle(scSel, T.team, T.voix, T.opts) // la Tour ignore le budget : seules comptent les Voix gagnées
-    : newBattle(scSel, squad.slice(0, teamSize()), vBonus(), battleOpts()); // Équipe de 3 (v4.9-01)
-  REDIFF.set(B, { best: null }); // rediffusion du meilleur coup (v4.11-01)
+    ? newBattle(scSel, T.team, T.voix, T.opts) // the Tower ignores the budget: only the Voices earned count
+    : newBattle(scSel, squad.slice(0, teamSize()), vBonus(), battleOpts()); // Team of 3 (v4.9-01)
+  REPLAYS.set(B, { best: null }); // best-move replay (v4.11-01)
   LOG = [];
   Object.assign(ui, {
     sel: null,
@@ -238,7 +238,7 @@ function launchCore() {
     );
   if (B.units.some(u => u.colosse)) log('Colosse : brisez ses parties pour faire tomber sa carapace. Chacune le fait vaciller.', 'sys');
   if (B.vivant)
-    log(`Plateau vivant : ${VIV_ETAT[B.cyc.ph]} (${VIV_DESC[B.cyc.ph]}) Le feu court dans les hautes herbes ; la pluie l’éteint.`, 'sys');
+    log(`Plateau vivant : ${LIVING_STATE[B.cyc.ph]} (${LIVING_DESC[B.cyc.ph]}) Le feu court dans les hautes herbes ; la pluie l’éteint.`, 'sys');
   autoSel();
   renderAll();
   window.scrollTo({ top: 0 });
@@ -246,7 +246,7 @@ function launchCore() {
 
 
 export function backToPrep() {
-  if (scSel === 'sauvage') scSel = 'gue'; // une rencontre sauvage ne se relance pas depuis la liste
+  if (scSel === 'sauvage') scSel = 'gue'; // a wild encounter cannot be relaunched from the list
   B = null;
   $('#cbBattle').hidden = true;
   $('#cbResult').hidden = true;
@@ -261,36 +261,36 @@ export function backToPrep() {
 }
 
 
-/* plateau */
-// Le SVG est rendu par React (src/screens/combat/board/) : buildBoard remonte tous les calques ;
-// L.tiles, L.t[k], L.tx[k], L.units, L.fx, L.fl… sont des références posées par le rendu.
+/* board */
+// The SVG is rendered by React (src/screens/combat/board/): buildBoard remounts all the layers;
+// L.tiles, L.t[k], L.tx[k], L.units, L.fx, L.fl… are references set by the render.
 export function buildBoard() {
   hook('avantPlateau');
   VERT = !!(MQV && MQV.matches);
   const D = SCEN[B.sc],
     bio = D.bio,
-    st = ['arene', 'ligue', 'roche'].includes(D.bio) || D.gym != null || !!D.elite || !!D.champ; // terrain des stades (v1.1)
-  // classes du conteneur : remises à zéro ici, puis basculées par les versions suivantes
-  // (#bBoard est rendu par React : classes et variables dans l'état « host » de boardStore.js)
+    st = ['arene', 'ligue', 'roche'].includes(D.bio) || D.gym != null || !!D.elite || !!D.champ; // stadium terrain (v1.1)
+  // container classes: reset here, then toggled by later versions
+  // (#bBoard is rendered by React: classes and variables live in the « host » state of boardStore.js)
   bdReset(['board', 'bio-' + bio, ...(VERT ? ['vert'] : [])]);
   hostSet({ ac: D.at ? tc(D.at) : '' });
   L.t = {};
   L.tx = {};
   L.u = {};
-  L.uo = []; // ordre des jetons dans le calque (trier() du plateau incliné le change)
-  L.txId = { gue: 'tx-grass', roche: 'tx-stone', tour: 'tx-ash', ligue: 'tx-marble', arene: 'tx-rune' }[bio]; // motif des cases
+  L.uo = []; // token order in the layer (the tilted board's sort() changes it)
+  L.txId = { gue: 'tx-grass', roche: 'tx-stone', tour: 'tx-ash', ligue: 'tx-marble', arene: 'tx-rune' }[bio]; // tile pattern
   B.units.forEach(u => {
     L.u[u.uid] = mkTok(u);
     L.uo.push(u.uid);
   });
-  boardBuild({ vb: VB(), bio, stadium: st, tilt: TILT.on }); // les jetons (Units.jsx) sont montés avec le plateau
+  boardBuild({ vb: VB(), bio, stadium: st, tilt: TILT.on }); // the tokens (Units.jsx) are mounted with the board
   bdClass('stadium', st);
   fxReset();
   hook('plateau');
 }
 
 
-/** Modèle d'un jeton (rendu par Units.jsx) : ce que l'ancien DOM portait, dans le même ordre. */
+/** Token model (rendered by Units.jsx): what the old DOM carried, in the same order. */
 function mkTok(u) {
   const c = ['tok', u.side === 'e' ? 'enemy' : 'ally'];
   if (u.shiny) c.push('shiny');
@@ -300,18 +300,18 @@ function mkTok(u) {
   if (u.colosse) c.push('colosse');
   return liveTok429({
     uid: u.uid,
-    c, // classes du jeton (ordre de classList)
+    c, // token classes (classList order)
     sh: u.shiny ? shinyHue(u.sp) + 'deg' : null, // --sh
-    tr: null, // transform (glissement : transition CSS)
-    pc: [null, null, null], // losanges : classe de chaque losange (null : pas d'attribut)
-    nc: [null, null, null], // notes de Résonance (v4.14)
+    tr: null, // transform (sliding: CSS transition)
+    pc: [null, null, null], // diamonds: class of each diamond (null: no attribute)
+    nc: [null, null, null], // Resonance notes (v4.14)
     bdc: 'bdg-s',
     bt: '',
     n: ''
-  }); // groupe animé (v4.29)
+  }); // animated group (v4.29)
 }
 
-// classe « on » seule d'un élément (classList.toggle('on', v)) : null → pas d'attribut, '' → classe vidée
+// lone « on » class of an element (classList.toggle('on', v)): null → no attribute, '' → emptied class
 const on1 = (cur, v) => (v ? 'on' : cur === 'on' ? '' : cur);
 
 
@@ -347,26 +347,26 @@ function updTokCore(u) {
   cl('sel', ui.sel === u.uid || ui.selE === u.uid);
   cl('done', u.side === 'a' && u.acted && !u.ko && B.phase === 'player');
   cl('act', ui.act === u.uid);
-  cl('has-en', !u.ko && (u.side === 'a' || B.duel433 ? nx || hasXp(u) || resoCand417(B, u) : bossScene(B) && hasXp(u))); // v4.14 : losanges des attaques Expertes
+  cl('has-en', !u.ko && (u.side === 'a' || B.duel433 ? nx || hasXp(u) || resoCand417(B, u) : bossScene(B) && hasXp(u))); // v4.14: diamonds of Expert attacks
   cl('ready', u.side === 'a' && (nx || resoCand417(B, u)) && u.en >= EMAX && !u.ko);
-  cl('fres', u.reso > 0 && !u.ko); // Forme Résonante (v4.17)
-  cl('cj1', !!B.coop && u.side === 'a' && player418(u) === 1); // coop (v4.18)
+  cl('fres', u.reso > 0 && !u.ko); // Resonant Form (v4.17)
+  cl('cj1', !!B.coop && u.side === 'a' && player418(u) === 1); // co-op (v4.18)
   cl('cj2', !!B.coop && u.side === 'a' && player418(u) === 2);
   cl('cjoff', !!B.coop && u.side === 'a' && player418(u) !== B.coop && B.phase === 'player');
   cl('vigil420', !!u.vigil && !u.ko); // v4.20
   cl('enc420', surrounded420(B, u));
   cl('ph2', u.phase420 === 2 && !u.ko);
   cl('ph3', u.phase420 === 3 && !u.ko);
-  cl('dg420', !u.ko && !!(B.danger420 && B.danger420.k.includes(uk(u)))); // dans une zone annoncée
+  cl('dg420', !u.ko && !!(B.danger420 && B.danger420.k.includes(uk(u)))); // inside an announced zone
   cl('evw', foeEvo(B, u));
   cl('evolved', !!u.evo);
-  const nN = notesOf(B, u); // notes de Résonance (v4.14)
+  const nN = notesOf(B, u); // Resonance notes (v4.14)
   T.nc = T.nc.map((p, i) => on1(p, i < nN));
   cl('has-nt', nN > 0 && !u.ko);
   cl('reso', nN >= 3 && !u.ko);
   const b =
     u.badge ||
-    (u.vole ? 'VOL' : u.chg ? 'CHARGE' : null) || // attaques chargées (v4.8)
+    (u.vole ? 'VOL' : u.chg ? 'CHARGE' : null) || // charged attacks (v4.8)
     (u.bru > 0 ? 'BRÛ' : u.psn > 0 ? 'PSN' : u.maudit > 0 ? 'MAUD' : u.requiem > 0 ? 'REQ' : u.root > 0 ? 'RAC' : u.web > 0 ? 'TOILE' : u.aide ? 'AIDE' : u.riposte ? 'RIPO' : u.miroir ? 'MIR' : u.cogno > 0 ? 'x2' : null);
   T.bdc = 'bdg-s' + (b && !u.ko ? ' on st-' + (STC[b] || 'x') : '');
   T.bt = b || '';
@@ -375,24 +375,24 @@ function updTokCore(u) {
 
 
 export function renderBoard() {
-  boardRender(); // cases, marques, surbrillances, intentions, obstacles (calques React)
+  boardRender(); // tiles, marks, highlights, intents, obstacles (React layers)
   unitsBatch(() => {
-    B.units.forEach(updTok); // jetons (Units.jsx) : redessinés une fois à la fin du lot
+    B.units.forEach(updTok); // tokens (Units.jsx): redrawn once at the end of the batch
     drawObstacles();
   });
   hook('plateauRendu');
 }
 
 
-/* bandeaux */
+/* banners */
 export function segHp(u) {
-  return CROCHETS.barrePv.reduce((h, f) => f(h, u), segHpBase(u));
+  return HOOKS.barrePv.reduce((h, f) => f(h, u), segHpBase(u));
 }
 
 
 function segHpBase(u) {
   const h =`<span class="hp hseg"><i class="${hpc(u)}" style="width:${((u.hp / u.mhp) * 100).toFixed(0)}%"></i></span>`;
-  // traînée des dégâts récents
+  // trail of recent damage
   if (!B) return h;
   const r = Math.max(0, (u.hp / u.mhp) * 100),
     now = performance.now(),
@@ -418,27 +418,27 @@ function segHpBase(u) {
 }
 
 
-// Bandeau, synergies, règle d'arène, frise, plaques, barre du bas : rendus par React
-// (src/screens/combat/battle). Ici, les effets de bord du rendu, puis la mise à jour.
+// Banner, synergies, arena rule, timeline, plates, bottom bar: rendered by React
+// (src/screens/combat/battle). Here, the render's side effects, then the update.
 function renderTop() {
   hourTint(B);
-  quick428(); // « Passer » pendant le tour adverse (v4.28) : l'accélération retombe hors du tour adverse
-  liveRender429(); // animations, astuces (v4.29)
+  quick428(); // « Passer » (Skip) during the opponent's turn (v4.28): the speed-up ends outside the opponent's turn
+  liveRender429(); // animations, tips (v4.29)
   refreshBattle('top', 'foot');
   turnBanners();
 }
 
 
-/* panneau */
-// Panneau de commande (#bPanel) : rendu par React (src/screens/combat/battle/Panel.jsx).
-// Le moteur garde la classe « info-off » du conteneur (panelRoleInfo).
+/* panel */
+// Command panel (#bPanel): rendered by React (src/screens/combat/battle/Panel.jsx).
+// The engine keeps the container's « info-off » class (panelRoleInfo).
 export function renderPanel() {
   panelRoleInfo();
   refreshBattle('panel');
 }
 
 
-/* choix d’évolution : rendu par React (EvoPick.jsx) */
+/* evolution choice: rendered by React (EvoPick.jsx) */
 function openEvoPick(u) {
   if (!evoOpts(B, u).length) return;
   evoState.u = u;
@@ -449,9 +449,9 @@ function openEvoPick(u) {
 }
 
 
-/* cinématique d’évolution */
+/* evolution cutscene */
 export function cinematic(fromN, fromT, toN, toT, side, uid) {
-  const o = {}; // #evoFx (React) : l'effet part du Pokémon qui évolue
+  const o = {}; // #evoFx (React): the effect starts from the evolving Pokémon
   if (uid && L.u[uid]) {
     const [x, y] = HC(uk(byUid(B, uid)));
     o.ox = ((x / VB()[0]) * 100).toFixed(1) + '%';
@@ -469,7 +469,7 @@ export function cinematic(fromN, fromT, toN, toT, side, uid) {
 }
 
 
-/* journal */
+/* log */
 export function log(s, c) {
   LOG.unshift({ s, c: c || '', r: B ? B.round : 1 });
   if (LOG.length > 70) LOG.length = 70;
@@ -477,7 +477,7 @@ export function log(s, c) {
 }
 
 
-// Journal (#bLog, #bLogLast) : rendu par React (Log.jsx)
+// Log (#bLog, #bLogLast): rendered by React (Log.jsx)
 function renderLog() {
   refreshBattle('log');
 }
@@ -485,27 +485,27 @@ function renderLog() {
 
 export function renderAll() {
   hook('avantRendu');
-  tagUnits(B); // types → espèce, pour les illustrations
+  tagUnits(B); // types → species, for the illustrations
   renderAllCore();
   queueSave();
   renderCoach();
-  afterRender430(); // ciel, déploiement, doctrine (v4.30)
-  afterRender431(); // brouillard, énigme (v4.31)
-  afterRender433(); // duel local (v4.33)
-  gauge434(); // combat sur téléphone (v4.34)
+  afterRender430(); // sky, deployment, doctrine (v4.30)
+  afterRender431(); // fog, riddle (v4.31)
+  afterRender433(); // local duel (v4.33)
+  gauge434(); // battle on phone (v4.34)
   hook('rendu');
 }
 
 
 function renderAllCore() {
   if (!B) return;
-  renderTop(); // avec la frise de l'ordre par Vitesse (v4.5-01)
+  renderTop(); // with the Speed-order timeline (v4.5-01)
   renderBoard();
   renderPanel();
 }
 
 
-/* effets */
+/* effects */
 export function floatAt(k, txt, cls) {
   const [x, y] = HC(k);
   const t = el('text', { class: 'fl ' + cls, x: x.toFixed(1), y: (y - 16).toFixed(1) }, L.fl);
@@ -569,13 +569,13 @@ function arrFx(uid) {
 function hit(uid) {
   const T = L.u[uid];
   if (T) {
-    T.hit = true; // anneau qui clignote (classe « hit » de .tok-ring, Units.jsx)
+    T.hit = true; // blinking ring (« hit » class of .tok-ring, Units.jsx)
     unitsDirty();
     setTimeout(() => {
       T.hit = false;
       unitsDirty();
     }, 450);
-    aie429(uid); // le Pokémon recule sous le coup (v4.29)
+    ouch429(uid); // the Pokémon recoils from the blow (v4.29)
   }
   hook('touche', uid);
 }
@@ -599,7 +599,7 @@ export function playLog(ev) {
     } else if (e.e === 'chain') drawChain(e);
     else if (e.e === 'evo') burst(e.u);
     else if (e.e === 'arena') {
-      bdReplay('shock'); // reste posée jusqu'à la prochaine construction
+      bdReplay('shock'); // stays in place until the next build
       bdClass('shock', true);
     } else if (e.e === 'arr') arrFx(e.u);
     else if (e.e === 'ready') {
@@ -617,7 +617,7 @@ export function playLog(ev) {
     } else if (e.e === 'duo') {
       [e.a, e.b].forEach(arrFx);
     } else if (e.e === 'note') {
-      const u = byUid(B, e.u); // notes de Résonance (v4.14)
+      const u = byUid(B, e.u); // Resonance notes (v4.14)
       if (u && !u.ko) floatAt(uk(u), '♪'.repeat(e.n), 'f-note');
     } else if (e.e === 'reso') {
       const u = byUid(B, e.u);
@@ -634,7 +634,7 @@ export function playLog(ev) {
 
 /* interactions */
 export function autoSel() {
-  const cur = B.ordre === 'vitesse' ? currentActor(B) : null, // ordre par Vitesse : l'allié dont c'est le tour
+  const cur = B.ordre === 'vitesse' ? currentActor(B) : null, // Speed order: the ally whose turn it is
     nx =
       B.ordre === 'vitesse'
         ? cur && cur.side === 'a'
@@ -662,7 +662,7 @@ export function confirmAct() {
   confirmActCore();
   const u = B && byUid(B, id);
   if (u && u.hr && !u.ko && !B.over) {
-    // l’Éclaireur reste sélectionné : il peut encore se replier
+    // the Scout stays selected: it can still fall back
     ui.sel = id;
     renderAll();
   }
@@ -688,7 +688,7 @@ function confirmActCore() {
     return;
   }
   if (B.ordre === 'vitesse') {
-    // ordre par Vitesse : l'allié garde la main (Relance, Esquive, repli de l'Éclaireur) jusqu'à « Terminer »
+    // Speed order: the ally keeps control (Reroll, Dodge, Scout fallback) until « Terminer » (End)
     renderAll();
     return;
   }
@@ -704,7 +704,7 @@ function tapTile(k) {
   const u = ui.sel && byUid(B, ui.sel),
     v = uAt(B, k);
   if (u && u.hr && u.acted && !u.moved && !ui.mode && !v && reach(B, u)[k] !== undefined) {
-    // Éclaireur : après avoir frappé, une case bleue sert à se replier
+    // Scout: after striking, a blue tile is used to fall back
     const ev = pMove(B, u, k);
     clearAim();
     ui.tile = null;
@@ -786,10 +786,10 @@ function tapTile(k) {
 
 
 function endTurn() {
-  if (B && B.ordre === 'vitesse') return endTurnSpeed(); // ordre par Vitesse : seul l'allié courant a fini (v4.5-01)
+  if (B && B.ordre === 'vitesse') return endTurnSpeed(); // Speed order: only the current ally has finished (v4.5-01)
   if (!B || ui.busy || B.over || B.phase !== 'player') return;
-  if (coopPass418()) return; // coop : le Joueur 1 passe la main au Joueur 2 (v4.18)
-  if (duelPass433()) return; // duel local : chacun son tour (v4.33)
+  if (coopPass418()) return; // co-op: Player 1 hands over to Player 2 (v4.18)
+  if (duelPass433()) return; // local duel: each takes a turn (v4.33)
   ui.busy = true;
   ui.turbo428 = false;
   ui.undo = null;
@@ -818,7 +818,7 @@ function endTurn() {
       return;
     }
     ui.act = uid;
-    if (await placeEnemy(S0, uid)) return; // v4.12 : il se place d'abord, sous vos yeux
+    if (await placeEnemy(S0, uid)) return; // v4.12: it positions itself first, before your eyes
     const ev = execFoe(B, uid);
     renderAll();
     playEv(ev);
@@ -828,7 +828,7 @@ function endTurn() {
 }
 
 
-/** v4.12 : déplacement de l'adversaire avant son attaque. Renvoie true si le combat a changé entre-temps. */
+/** v4.12: opponent's move before its attack. Returns true if the battle changed in the meantime. */
 export async function placeEnemy(S0, uid) {
   if (!B || !B.jit) return false;
   const pre = prepareEnemy(B, uid);
@@ -840,8 +840,8 @@ export async function placeEnemy(S0, uid) {
 }
 
 
-/** Fin de manche (les deux modes) : effets de manche, règle d'arène, évolutions adverses, nouvelles annonces.
-    Renvoie true si le combat continue. */
+/** End of round (both modes): round effects, arena rule, opponent evolutions, new announcements.
+    Returns true if the battle continues. */
 export async function endOfRound(S0) {
   ui.act = null;
   const ev = endRound(B);
@@ -867,7 +867,7 @@ export async function endOfRound(S0) {
 
 export function finish() {
   hook('avantFinCombat');
-  // rang du combat
+  // battle rank
   if (B && B.over && !B._rk) {
     B._rk = 1;
     const r = rankOf(B);
@@ -880,17 +880,17 @@ export function finish() {
       queueSave();
     }
   }
-  // statistiques et progression
+  // statistics and progression
   if (B && B.over && !B._counted) {
     B._counted = true;
     if ((SCEN[B.sc] || {}).sansProgres431) {
-      // énigme, arène personnalisée, Écho profond : ni compteurs ni progression ordinaire (v4.31)
+      // riddle, custom arena, Deep Echo: neither counters nor ordinary progression (v4.31)
       SV.lastBattle = null;
       B.rew = fixedProgress431(B);
     } else {
       PROFILE.battles++;
       if (B.over === 'win') PROFILE.wins++;
-      else if (!B.fuite416) PROFILE.losses++; // une bête qui s’enfuit n’est pas une défaite (v4.16)
+      else if (!B.fuite416) PROFILE.losses++; // a beast that runs away is not a defeat (v4.16)
       PROFILE.evos += B.stats.evo || 0;
       PROFILE.rx += B.stats.rx || 0;
       PROFILE.kos += B.stats.ko || 0;
@@ -907,9 +907,9 @@ export function finish() {
       const win = B.over === 'win';
       if (SCEN[B.sc].gym != null) renderLeague();
       sfx(win ? 'win' : 'lose');
-      refreshBattle('result'); // fiche de résultat, rang et citation (v2.4), Nuzlocke, victoire : Result.jsx
+      refreshBattle('result'); // result sheet, rank and quote (v2.4), Nuzlocke, victory: Result.jsx
       $('#cbResult').hidden = false;
-      after429(B.sc, win); // scène d’après-combat (v4.29)
+      after429(B.sc, win); // post-battle scene (v4.29)
       const f = $('#cbResult [data-res="again"]');
       if (f) f.focus();
     },
@@ -919,15 +919,15 @@ export function finish() {
   hook('finCombat');
 }
 
-/* ===================== INTERFACE DE COMBAT v0.8 ===================== */
+/* ===================== BATTLE INTERFACE v0.8 ===================== */
 export const BG = { S: 27, OX: 20, OY: 22 };
 
 
 export const VB = () => (VERT ? [286, 430] : [430, 286]);
 
 
-/* v4.77 · plateau incliné : HC et HP renvoient des points vus en perspective quand TILT.on.
-   Sol = coordonnées d'origine du viewBox ; écran = sol incliné de TILT.a puis recadré. */
+/* v4.77 · tilted board: HC and HP return perspective-view points when TILT.on.
+   Ground = original viewBox coordinates; screen = ground tilted by TILT.a then reframed. */
 export const TILT = { on: false };
 
 
@@ -972,7 +972,7 @@ export const poly = (k, c) => {
   return `<polygon points="${pt}" class="${c} gw"/><polygon points="${pt}" class="${c}"/>`;
 };
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Statements run at startup, in the original order (see index.js).
 export function __init() {
 
 VERT = false;

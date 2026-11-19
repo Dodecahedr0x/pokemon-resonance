@@ -1,11 +1,11 @@
-/* Section d'origine : v4.74–v4.75 : fluidité (animations sur la carte graphique, sans repeindre en boucle ni forcer la mise en page) */
+/* Original section: v4.74–v4.75: fluidity (animations on the graphics card, without endless repainting or forced layout) */
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Statements executed at startup, in the original order (see index.js).
 export function __init() {
 
 (() => {
-  /* v4.76 : tant que l'écran de lancement (opaque) couvre le jeu, les animations du jeu
-     en dessous sont en pause : rien à dessiner qu'on ne voit pas. Elles repartent au toucher. */
+  /* v4.76: while the (opaque) launch screen covers the game, the game's animations
+     underneath are paused: nothing to draw that cannot be seen. They resume on touch. */
   try {
     const L = document.getElementById('resonance-launch');
     if (L && !document.documentElement.classList.contains('rl-seen')) {
@@ -25,7 +25,7 @@ export function __init() {
         });
         pausedList = [];
       };
-      // après le premier rendu (les animations du jeu existent alors)
+      // after the first render (the game's animations exist by then)
       requestAnimationFrame(() => requestAnimationFrame(() => document.getElementById('resonance-launch') && freezeUnit()));
       document.addEventListener(
         'click',

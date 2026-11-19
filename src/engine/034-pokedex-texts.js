@@ -1,4 +1,4 @@
-/* Section d'origine : v4-02-textes-pokedex.js */
+/* Original section: v4-02-pokedex-texts.js */
 
 export const LORE = {
   // v4.19

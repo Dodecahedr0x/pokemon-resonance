@@ -1,4 +1,4 @@
-/* Section d'origine : v4.1-01-illustrations.js */
+/* Original section: v4.1-01-illustrations.js */
 
 import { BY, PKT } from './009-pokemon.js';
 import { ITEMS2 } from './011-game-state.js';
@@ -20,14 +20,14 @@ export function itemize(h) {
 }
 
 
-// Illustration du jeton (image .tok-im avant le badge, dans le groupe animé v4.29) : rendue par
-// Units.jsx d'après le modèle du jeton (imOn, geo, href).
+// Token illustration (.tok-im image before the badge, in the v4.29 animated group): rendered by
+// Units.jsx from the token template (imOn, geo, href).
 export function tokenArt(u) {
   const T = L.u && L.u[u.uid];
   if (!T) return;
   if (!T.imOn) {
     T.imOn = true;
-    T.geo = ['-17', '-22', '34']; // x, y, largeur = hauteur
+    T.geo = ['-17', '-22', '34']; // x, y, width = height
     unitsDirty();
   }
   if (T.imOn && T.imId !== u.id && BY[u.id]) {
@@ -38,12 +38,12 @@ export function tokenArt(u) {
   }
 }
 
-/** l'image du jeton est chargée */
+/** the token image is loaded */
 export function tokArtOk(T) {
   tokCl(T, 'has-im', true);
 }
 
-/** l'image du jeton manque : retirée ; la suivante (sans adresse) se pose hors de son groupe v4.77 */
+/** the token image is missing: removed; the next one (without a URL) sits outside its v4.77 group */
 export function tokArtErr(T) {
   tokCl(T, 'has-im', false);
   T.imOn = false;
@@ -66,16 +66,16 @@ export function preload(ids) {
 }
 
 /* =====================================================================
-   v4.1 · les vrais Pokémon partout
-   Chaque médaillon de type qui représente un Pokémon affiche désormais
-   son illustration ; le plateau, les fiches, les rencontres, les
-   évolutions et les résultats aussi. Les objets tenus ont leur image.
-   Hors ligne, le médaillon de type d'origine reste affiché.
+   v4.1 · the real Pokémon everywhere
+   Every type medallion that represents a Pokémon now shows
+   its illustration; the board, sheets, encounters,
+   evolutions and results too. Held items have their image.
+   Offline, the original type medallion stays displayed.
    ===================================================================== */
 export const tagUnits = S => {
   if (S && Array.isArray(S.units))
     S.units.forEach(u => {
-      if (u && Array.isArray(u.t) && BY[u.id]) PKT.set(u.t, u.id); // types → espèce
+      if (u && Array.isArray(u.t) && BY[u.id]) PKT.set(u.t, u.id); // types → species
     });
 };
 
@@ -87,17 +87,17 @@ export const artTag = (m, cls) =>
   `<img class="${cls}" src="${ART(m.no)}" alt="" loading="lazy" decoding="async" draggable="false" onerror="${IMG_ERR}">`;
 
 
-/* préchargement discret des illustrations de l'équipe et des adversaires du combat choisi */
+/* discreet preloading of the illustrations of the team and of the chosen battle's opponents */
 const pre = new Set();
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Startup statements, run in their original order (see index.js).
 export function __init() {
 
-/* objets tenus : vraie image à la place du pictogramme */
+/* held items: real image in place of the pictogram */
 ITEM_SVG = Object.fromEntries(
   Object.keys(ITEMS2).map(k => [k, `<svg viewBox="0 0 24 24"><path d="${ITEMS2[k].i}"/></svg>`])
 );
 
 
-/* plateau : le Pokémon debout sur son jeton (tokenArt, Units.jsx) */
+/* board: the Pokémon standing on its token (tokenArt, Units.jsx) */
 }

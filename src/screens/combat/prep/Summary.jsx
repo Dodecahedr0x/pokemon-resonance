@@ -6,10 +6,10 @@ import { badgeSvg } from '../../../engine/019-league.js';
 import { B } from '../../../engine/024-combat-ui.js';
 import { SV, battleLine, validBattle } from '../../../engine/025-saves.js';
 
-// Carte « Combat en cours » (ancien renderResume), partagée par #resumePrep (Combats) et
-// #resumeHome (Accueil). Les boutons data-resume / data-drop restent gérés par le moteur.
-// Comme avec l'ancien innerHTML, une carte masquée garde son dernier contenu : on retient
-// le dernier combat affiché pour chaque conteneur.
+// "Combat en cours" (Battle in progress) card (formerly renderResume), shared by #resumePrep (Battles) and
+// #resumeHome (Home). The data-resume / data-drop buttons are still handled by the engine.
+// As with the old innerHTML, a hidden card keeps its last content: we remember
+// the last battle displayed for each container.
 const last = {};
 
 export function SummaryCard({ id, c }) {
@@ -36,7 +36,7 @@ export function SummaryCard({ id, c }) {
   );
 }
 
-// <ResumeBox id="resumePrep" /> : le conteneur et sa carte, redessinés à chaque renderResume().
+// <SummaryBox id="resumePrep" />: the container and its card, redrawn on every renderSummary().
 export default function SummaryBox({ id }) {
   const v = useResumeVersion();
   const b = v && !B && validBattle(SV.lastBattle) ? SV.lastBattle : null;

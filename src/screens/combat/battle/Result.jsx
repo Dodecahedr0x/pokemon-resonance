@@ -9,19 +9,19 @@ import { badgeSvg } from '../../../engine/019-league.js';
 import { B } from '../../../engine/024-combat-ui.js';
 import { calm472, nextGoal, rewHtml } from '../../../engine/026-campaign-tutorial-sound.js';
 import { leaderOf } from '../../../engine/030-prestige-staging.js';
-import { tdrRun } from '../../../engine/043-adventure-plus.js';
+import { towerRun } from '../../../engine/043-adventure-plus.js';
 import { duelUnder433, duelTitle433 } from '../../../engine/068-duel-tutorial.js';
 import { IM448 } from '../../../engine/079-immersion-sound-haptics.js';
 import { useBattleVersion } from './battleStore.js';
 
 const NL = '\n  ';
 
-// Fiche de fin de combat (#cbResult), affichée par finish() via l'attribut hidden.
+// End-of-battle sheet (#cbResult), shown by finish() via the hidden attribute.
 export default function Result() {
   const v = useBattleVersion('result');
-  const S = useMemo(() => B, [v]); // le combat terminé, figé pour cette fiche
+  const S = useMemo(() => B, [v]); // the finished battle, frozen for this sheet
   const card = useRef(null);
-  // bord holographique, sceau et gerbe (v4.72) : posés à l'image suivante, une fois la fiche visible
+  // holographic edge, seal and burst (v4.72): applied on the next frame, once the sheet is visible
   const [deco, setDeco] = useState(null);
   useLayoutEffect(() => {
     if (!v || !S) return;
@@ -49,7 +49,7 @@ function Sheet({ S, cardRef, deco }) {
     nb = !!(S.rew && S.rew.badgeNew),
     du = !!S.duel433;
   const L = leaderOf(S.sc);
-  // victoire (v4.48) : éclat, badge qui apparaît, or pour un Champion
+  // victory (v4.48): flash, badge appearing, gold for a Champion
   const fx = win && IM448(),
     ia = ARENAS.findIndex(a => a.k === S.sc),
     nz = S._nzdead450; // Nuzlocke (v4.51)
@@ -58,10 +58,10 @@ function Sheet({ S, cardRef, deco }) {
     (fx ? ' fx448' : '') +
     (fx && /^(champ|jchamp|hchamp)$/.test(S.sc) ? ' gold448' : '') +
     (nz ? ' nz450d' : '');
-  // Tour de Résonance : on monte ou on recommence ; ailleurs, la suite de la campagne
-  const tdr = S.sc === 'tdr',
-    run = tdr && tdrRun();
-  const [gk, gn] = !tdr && isCamp() && win ? nextGoal() : [];
+  // Resonance Tower: go up or start over; elsewhere, the rest of the campaign
+  const tower = S.sc === 'tdr',
+    run = tower && towerRun();
+  const [gk, gn] = !tower && isCamp() && win ? nextGoal() : [];
   return (
     <div
       ref={cardRef}
@@ -177,7 +177,7 @@ function Sheet({ S, cardRef, deco }) {
         </div>
       ) : null}
       <div className="res-a">
-        {tdr ? (
+        {tower ? (
           run && run.reward ? (
             <button className="b b-gold" type="button" data-tdrn="reward">
               Récompense · étage {run.floor}
@@ -209,7 +209,7 @@ function Sheet({ S, cardRef, deco }) {
             Voir les arènes
           </button>
         ) : null}
-        {tdr ? null : (
+        {tower ? null : (
           <button className="b b-gold" data-res="again" type="button">
             {du ? 'Revanche' : 'Rejouer'}
           </button>

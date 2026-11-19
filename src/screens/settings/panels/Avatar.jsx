@@ -2,7 +2,7 @@ import { TYPES } from '../../../engine/004-data.js';
 import { gp, tc } from '../../../engine/014-utils.js';
 import { AVT450, IM450 } from '../../../engine/080-trainer-avatar-rare-encounters.js';
 
-// Paramètres › Avatar de dresseur et Rencontres rares (v4.50) : boutons data-b450 gérés par le moteur (module 080).
+// Settings › Trainer avatar and Rare encounters (v4.50): data-b450 buttons handled by the engine (module 080).
 export default function Avatar() {
   const a = AVT450(),
     types = Object.keys(TYPES),

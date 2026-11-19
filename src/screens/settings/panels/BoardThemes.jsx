@@ -2,8 +2,8 @@ import { PROFILE } from '../../../engine/011-game-state.js';
 import { PREF } from '../../../engine/026-campaign-tutorial-sound.js';
 import { TH455, rvSt455, thOk455, typeDom455 } from '../../../engine/086-adaptive-rival-board-themes.js';
 
-// Thèmes de plateau (v4.55), achetés avec des Éclats, puis bilan du rival Kael.
-// Boutons gérés par le moteur (clic délégué sur data-b455).
+// Board themes (v4.55), bought with Shards, then the rival Kael's report.
+// Buttons handled by the engine (delegated click on data-b455).
 export default function BoardThemes() {
   const cur = TH455[PREF.th455] ? PREF.th455 : 'classique';
   const rv = rvSt455();

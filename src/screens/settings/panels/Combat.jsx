@@ -1,23 +1,23 @@
 import { PREF } from '../../../engine/026-campaign-tutorial-sound.js';
 import { Switch } from '../controls.jsx';
 
-const DEPLOIEMENTS = [
+const DEPLOYMENTS = [
   ['grands', 'Grands combats'],
   ['tous', 'Tous'],
   ['jamais', 'Jamais']
 ];
 
-// Déploiement avant le combat (depHtml430). Le moteur gère data-dep430.
+// Deployment before the battle (depHtml430). The engine handles data-dep430.
 function Deployment() {
   const v = PREF.dep430 || 'grands';
   return (
     <div className="v4-fld dep430f"><span>Déploiement avant le combat</span><div className="v4-seg" role="group" aria-label="Déploiement">
-      {DEPLOIEMENTS.map(([k, n]) => <button key={k} type="button" data-dep430={k} aria-pressed={v === k}>{n}</button>)}
+      {DEPLOYMENTS.map(([k, n]) => <button key={k} type="button" data-dep430={k} aria-pressed={v === k}>{n}</button>)}
     </div></div>
   );
 }
 
-// Combat : règles et confort du plateau.
+// Battle: board rules and comfort.
 export default function Combat() {
   return (
     <section className="v4-panel v4-ps">

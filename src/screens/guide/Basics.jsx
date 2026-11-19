@@ -6,7 +6,7 @@ import { RM, medal } from '../../engine/014-utils.js';
 import { Html } from '../../lib/html.jsx';
 import { setRuleOpen, useGuide } from './guideStore.js';
 
-// Losanges d'énergie d'Éveil.
+// Awakening energy diamonds.
 function Diamonds({ n }) {
   return (
     <span className="enp lg">
@@ -27,7 +27,7 @@ function Stadium({ mon, lost = [] }) {
   );
 }
 
-// Anatomie d'un Éveil : cinq cartes, de Chenipan à Papilusion.
+// Anatomy of an Awakening: five cards, from Caterpie to Butterfree.
 export function Anatomy() {
   const C = BY.chenipan, Y = BY.chrysacier, Pp = BY.papilusion, T = BY.tetarte;
   return (
@@ -43,7 +43,7 @@ export function Anatomy() {
   );
 }
 
-// Les huit systèmes de règles. Un code (« S-03 ») ailleurs dans le jeu déplie la règle et y fait défiler.
+// The eight rule systems. A code (« S-03 ») elsewhere in the game expands the rule and scrolls to it.
 export function Rules() {
   const { openRules, focusRule } = useGuide();
   const refs = useRef({});
@@ -69,7 +69,7 @@ export function Rules() {
   ));
 }
 
-// Onglet « Combat » : un tour en quatre temps, anatomie d’un Éveil, règles.
+// « Combat » (Battle) tab: a four-beat turn, anatomy of an Awakening, rules.
 export default function Bases() {
   return (
     <>

@@ -3,7 +3,7 @@ import { GYMS } from '../../engine/004-data.js';
 import { BADGES } from '../../engine/013-gyms.js';
 import { badgeSvg, gymSel } from '../../engine/019-league.js';
 
-// Les huit badges (#badges) : le choisi est « on », les gagnés « won ».
+// The eight badges (#badges): the chosen one is "on", the won ones "won".
 export default function Badges() {
   return GYMS.map((g, i) => {
     const won = BADGES.includes(i);

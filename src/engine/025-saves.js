@@ -1,9 +1,9 @@
-/* Section d'origine : 19-sauvegardes.js */
+/* Original section: 19-saves.js */
 
 import { RX, TYPES } from './004-data.js';
 import { BY, PRESETS, SCEN } from './009-pokemon.js';
 import { BUDGET } from './010-in-battle-evolution.js';
-import { CAMP_START, DIFFS, ITEMS2, PROFILE, SECTIONS_PROFIL, __set_PROFILE, defProfile, inBox } from './011-game-state.js';
+import { CAMP_START, DIFFS, ITEMS2, PROFILE, PROFILE_SECTIONS, __set_PROFILE, defProfile, inBox } from './011-game-state.js';
 import { BADGES, __set_BADGES } from './013-gyms.js';
 import { RC } from './012-recruits-roles-synergies.js';
 import { $, wait, writeLS, toast } from './014-utils.js';
@@ -19,7 +19,7 @@ import { PREF, openStarter, renderPrep, savePref, sfx, vibe } from './026-campai
 import { renderWallet } from './035-interface.js';
 import { renderHome } from './036-home.js';
 import { v4After } from './040-settings.js';
-import { rivalBuild, tdrRestore } from './043-adventure-plus.js';
+import { rivalBuild, towerRestore } from './043-adventure-plus.js';
 import { unrollSpeed } from './044-tactical-engine.js';
 import { free421 } from './061-catch-anywhere.js';
 import { hideSaves, refreshSaves, showSaves } from '../screens/saves/savesStore.js';
@@ -56,9 +56,9 @@ function ensureScen(b) {
       const f = b.state.units.find(u => u.side === 'e');
       if (f && BY[f.sp]) wildScen(f.sp, b.state.time, !!f.shiny, !!f.dom);
     }
-    if (b && b.sc === 'tdr') tdrRestore();
+    if (b && b.sc === 'tdr') towerRestore();
     if (b && b.sc === 'duel433' && b.state && b.state.duel433 && b.state.duel433.D) {
-      SCEN.duel433 = b.state.duel433.D; // duel en cours : son terrain et ses équipes (v4.33)
+      SCEN.duel433 = b.state.duel433.D; // duel in progress: its terrain and teams (v4.33)
       OBST.duel433 = b.state.duel433.O || {};
     }
   } catch (e) {}
@@ -102,7 +102,7 @@ function validSave(s) {
 
 export function cleanProfile(p) {
   const o = defProfile();
-  const sections = () => SECTIONS_PROFIL.map(([, tidy]) => tidy(p));
+  const sections = () => PROFILE_SECTIONS.map(([, tidy]) => tidy(p));
   if (!p || typeof p !== 'object') return Object.assign(o, ...sections());
   if (typeof p.name === 'string') o.name = p.name.slice(0, 24);
   ['battles', 'wins', 'losses', 'evos', 'rx', 'kos', 'caught'].forEach(k => {
@@ -246,13 +246,13 @@ async function delRemote(k) {
 }
 
 
-/* ---- application d’une sauvegarde ---- */
+/* ---- applying a save ---- */
 export function applySave(s, opt) {
   opt = opt || {};
   __set_PROFILE(cleanProfile(s.profile));
   rivalBuild();
-  tdrRestore();
-  free421(s.squad, s.badges); // Libre : la Box se remplit une seule fois (v4.21)
+  towerRestore();
+  free421(s.squad, s.badges); // Free: the Box fills only once (v4.21)
   __set_squad(s.squad.filter(id => inBox(id)));
   if (!squad.length)
     __set_squad(PROFILE.box.slice(0, 4).filter((id, i, a) => a.slice(0, i + 1).reduce((t, x) => t + BY[x].c, 0) <= BUDGET));
@@ -291,7 +291,7 @@ function resumeBattle() {
   B.links = B.links || {};
   B.diff = B.diff || 'normal';
   if (!B.jit) {
-    // combat commencé avant la v4.12 : on passe aux intentions cachées
+    // battle started before v4.12: switch to hidden intentions
     B.jit = true;
     B.units.forEach(u => {
       if (u.side === 'e') {
@@ -326,7 +326,7 @@ function resumeBattle() {
   autoSel();
   renderAll();
   window.scrollTo({ top: 0 });
-  if (B.ordre === 'vitesse') unrollSpeed(); // ordre par Vitesse : la file reprend où elle en était
+  if (B.ordre === 'vitesse') unrollSpeed(); // speed order: the queue resumes where it was
 }
 
 
@@ -340,15 +340,15 @@ export function battleLine(b) {
 
 
 function svIndicator() {
-  // #sideSaveK et #tbSave : src/components (Nav.jsx, TopBar.jsx)
+  // #sideSaveK and #tbSave: src/components (Nav.jsx, TopBar.jsx)
   setSaveIndicator(Object.values(SV.busy).some(Boolean), !!SV.cloud);
 }
 
 
-// Carte « Combat en cours » : #resumePrep est rendu par React (src/screens/combat/prep/Resume.jsx,
-// réutilisable pour #resumeHome).
+// "Battle in progress" card: #resumePrep is rendered by React (src/screens/combat/prep/Summary.jsx,
+// reusable for #resumeHome).
 export function renderSummary() {
-  refreshSummary(); // #resumePrep et #resumeHome : <ResumeBox> (src/screens/combat/prep/Resume.jsx)
+  refreshSummary(); // #resumePrep and #resumeHome: <ResumeBox> (src/screens/combat/prep/Summary.jsx)
 }
 
 
@@ -359,7 +359,7 @@ function readCode(t) {
 }
 
 
-// La fenêtre est rendue par React (<Saves>, src/screens/saves) : on demande un nouveau rendu.
+// The window is rendered by React (<Saves>, src/screens/saves): we request a new render.
 export function renderSaves() {
   refreshSaves();
 }
@@ -369,7 +369,7 @@ export function openSaves() {
   SV.confirm = null;
   SV.code = null;
   autoSave();
-  showSaves(); // React relit l'état et met le focus sur « Fermer »
+  showSaves(); // React rereads the state and puts focus on "Fermer" (Close)
 }
 
 
@@ -484,7 +484,7 @@ async function importSave(file) {
 }
 
 
-/* L’import répare ce qui peut l’être (équipe hors budget ou espèce inconnue filtrées, enveloppe {auto: …}, autre version). */
+/* The import repairs what can be repaired (over-budget team or unknown species filtered out, {auto: …} envelope, other version). */
 function normSave(s) {
   if (!s || typeof s !== 'object') return null;
   for (const k of ['auto', 'save', 'data', 'snapshot'])
@@ -529,7 +529,7 @@ function importData(s) {
 }
 
 
-/* ---- démarrage : appareil d’abord, puis compte Claude ---- */
+/* ---- startup: device first, then Claude account ---- */
 export function bootSaves() {
   SLOTS.forEach(k => {
     const s = lsGet(k);
@@ -568,7 +568,7 @@ export const SV = {
 const sigOf = s => JSON.stringify([s.squad, s.badges, s.profile, s.battle]);
 
 
-/* ---- affichage ---- */
+/* ---- display ---- */
 export const fmtD = iso => {
   try {
     return new Date(iso).toLocaleString('fr-FR', {
@@ -586,7 +586,7 @@ export const fmtD = iso => {
 export const esc = t => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
 
 
-/* sauvegarde en texte : se copie et se colle partout, même là où l’on ne peut ni télécharger ni choisir un fichier */
+/* text save: can be copied and pasted anywhere, even where you can neither download nor pick a file */
 const saveCode = s => 'RES1.' + btoa(unescape(encodeURIComponent(JSON.stringify(s))));
 
 
@@ -600,19 +600,19 @@ const readText = f =>
         fr.readAsText(f);
       });
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Instructions run at startup, in the original order (see index.js).
 export function __init() {
 
-/* ===================== SAUVEGARDES ===================== */
-/* Sauvegarde automatique + 3 emplacements, combat en cours compris.
-   Toujours sur l’appareil (localStorage) ; synchronisées avec le compte Claude
-   quand la page y a accès (db, sous-arbre privé de chaque joueur). */
+/* ===================== SAVES ===================== */
+/* Automatic save + 3 slots, including the battle in progress.
+   Always on the device (localStorage); synced with the Claude account
+   when the page has access to it (db, private subtree of each player). */
 SAVE_V = 1,
   SLOTS = ['s1', 's2', 's3'],
   LSK = k => 'res-save-' + k;
 
 
-/* ---- écriture : appareil tout de suite, compte avec une écriture à la fois par emplacement ---- */
+/* ---- writing: device immediately, account with one write at a time per slot ---- */
 svT = null;
 
 
@@ -774,7 +774,7 @@ $('#saves').addEventListener('change', e => {
 });
 
 
-/* Dans certaines applis le sélecteur de fichiers ne s’ouvre pas. Le bouton le détecte et ouvre la zone « Coller un code » (le texte du fichier .json y marche aussi). */
+/* In some apps the file picker does not open. The button detects this and opens the "Paste a code" area (the .json file's text works there too). */
 document.addEventListener('click', e => {
   const b = e.target.closest('[data-sv="importfile"]');
   if (!b) return;

@@ -7,7 +7,7 @@ import { hoennOpen } from '../../engine/059-hoenn.js';
 import { stepsLeg429 } from '../../engine/064-quality.js';
 import { HLEG435, steps435, inBox435 } from '../../engine/071-hoenn-legendaries.js';
 
-// Carte d'une légende : étapes de sa quête, puis capture (data-v4fight lc… / hc…).
+// Card of a legend: steps of its quest, then capture (data-v4fight lc… / hc…).
 function Legend({ L, et, pris: takenSet, fight, cond }) {
   const m = BY[L.id],
     isReady = !takenSet && et.every(x => x.ok);
@@ -30,7 +30,7 @@ function Legend({ L, et, pris: takenSet, fight, cond }) {
   );
 }
 
-// Onglet « Légendes » (v4.29) ; les légendes de Hoenn suivent, seulement quand Hoenn est ouverte (v4.38).
+// "Legends" tab (v4.29); Hoenn's legends follow, only when Hoenn is open (v4.38).
 export default function Legends() {
   return (
     <>

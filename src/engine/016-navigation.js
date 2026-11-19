@@ -1,4 +1,4 @@
-/* Section d'origine : 09-navigation.js */
+/* Original section: 09-navigation.js */
 
 import { guideShown } from '../screens/guide/guideStore.js';
 import { setShellPage } from '../components/shellStore.js';
@@ -17,14 +17,14 @@ export let cur;
 export function show(t, scroll) {
   const previous = cur;
   if (t === 'ligue') {
-    // la Ligue est intégrée aux Combats (onglets Arènes et Ligue)
+    // the League is integrated into Battles (Gyms and League tabs)
     __set_PREPG({ g: 'arenes', sc: scSel });
     t = 'combat';
   }
   if (!TABS.includes(t)) t = 'accueil';
   cur = t;
   $$('.page').forEach(p => p.classList.toggle('on', p.id === t));
-  setShellPage(t, TNAME[t]); // liens marqués (aria-current) et titre #tbSec : src/components
+  setShellPage(t, TNAME[t]); // marked links (aria-current) and #tbSec title: src/components
   if (scroll) window.scrollTo({ top: 0, behavior: 'auto' });
   try {
     localStorage.setItem('res8-tab', t);
@@ -33,7 +33,7 @@ export function show(t, scroll) {
   if (t === 'types') guideShown();
   afterShow(t);
   v4After(cur);
-  gauge434(); // combat sur téléphone (v4.34)
+  gauge434(); // battle on phone (v4.34)
   hook('page', previous);
 }
 
@@ -48,7 +48,7 @@ export function go(t) {
 /* ===================== NAVIGATION ===================== */
 export const TABS = ['accueil', 'pokedex', 'combat', 'types', 'ligue', 'carte', 'dex', 'quetes', 'sac', 'params', 'camp'];
 
-// titres des pages (barre du haut) ; « ligue » s'ouvre dans les Combats (voir show())
+// page titles (top bar); « ligue » opens inside Battles (see show())
 export const TNAME = {
   accueil: 'Accueil',
   pokedex: 'Équipe',
@@ -63,7 +63,7 @@ export const TNAME = {
   camp: 'Camp'
 };
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Statements run at startup, in the original order (see index.js).
 export function __init() {
 
 cur = 'accueil';

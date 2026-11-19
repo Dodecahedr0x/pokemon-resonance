@@ -1,4 +1,4 @@
-/* Section d'origine : 06-recrues-roles-synergies.js */
+/* Original section: 06-recruits-roles-synergies.js */
 
 import { BY, PRESETS } from './009-pokemon.js';
 
@@ -9,7 +9,7 @@ export function synOf(ids) {
   return SYN.filter(s => T.some((a, i) => a.includes(s.t[0]) && T.some((b, j) => j !== i && b.includes(s.t[1]))));
 }
 
-/* ===================== v1.1 : recrues confirmées, rôles, synergies ===================== */
+/* ===================== v1.1: confirmed recruits, roles, synergies ===================== */
 export const RC = id => {
   const m = BY[id];
   return m.st === 1 ? m.c : m.c + m.st - 1;
@@ -77,7 +77,7 @@ export const rIco = r => {
   return `<svg class="ri ri-${s}" viewBox="0 0 24 24" aria-hidden="true"><path d="${RICON[s]}"/></svg>`;
 };
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Statements run at startup, in the original order (see index.js).
 export function __init() {
 Object.assign(PRESETS, {
   escorte: { n: 'Escorte du dragon', ids: ['dracaufeu', 'ymphect', 'germignon', 'melo'], f: 1 },

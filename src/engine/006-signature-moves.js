@@ -1,15 +1,15 @@
-/* Section d'origine : v4.13-00-capacites-signature.js */
+/* Original section: v4.13-00-signature-moves.js */
 
 import { MV, TAL } from './005-moves.js';
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Startup statements, run in their original order (see index.js).
 export function __init() {
 
 /* =====================================================================
-   v4.13 : roster technique
-   Chaque forme finale gagne une capacité signature (3e capacité), les
-   talents changent à chaque stade, les rôles se tranchent, et les Éveils
-   à embranchement se multiplient (Têtarte, Ramoloss, Debugant).
+   v4.13: technical roster
+   Every final form gains a signature move (3rd move), abilities
+   change at each stage, roles are settled, and branching
+   Awakenings multiply (Politoed, Slowking, Debugant).
    ===================================================================== */
 Object.assign(MV, {
   vegeattak: { n: 'Végé-Attak', t: 'Plante', p: 14, r: 3, sh: 'line', mk: 'enracine', fx: 'recharge', sig: 1, d: 'Signature. Ligne de 3, Enraciné, puis une manche de repos.' },

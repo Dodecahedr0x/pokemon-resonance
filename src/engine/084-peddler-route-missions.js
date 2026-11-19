@@ -1,8 +1,8 @@
-/* Section d'origine : 4.54 : colporteur, rencontres de route, missions de Pokédex */
+/* Original section: 4.54: peddler, route encounters, Pokédex missions */
 
 import { ITEMS2, PROFILE } from './011-game-state.js';
 import { writeLS, mulberry32, toast } from './014-utils.js';
-import { CROCHETS, hook } from './015-hooks.js';
+import { HOOKS, hook } from './015-hooks.js';
 import { sfx, vibe } from './026-campaign-tutorial-sound.js';
 import { overlay } from './030-prestige-staging.js';
 import { shut, updateTemp } from '../screens/overlays/tempStore.js';
@@ -29,18 +29,18 @@ export function peddler454() {
   const held = Object.keys(HELD_SHOP).filter(k => !HELD_SHOP[k].g && !PROFILE.items.includes(k));
   const th = held.length ? held[Math.floor(r() * held.length)] : null;
   const st = LS454('res-am454', d) || { d, got: {} };
-  return { present, nom: NOMS454[seed417('ambunom') % NOMS454.length], pick, th, st };
+  return { present, nom: NAMES454[seed417('ambunom') % NAMES454.length], pick, th, st };
 }
 
 
-// Boutique › Colporteur : rendu par React (src/screens/sac/Colporteur.jsx)
+// Shop › Peddler: rendered by React (src/screens/bag/Peddler.jsx)
 
 
 export function ev454() {
   const d = today(),
     i = seed417('ev454') % EV454.length,
     st = LS454('res-ev454', d) || { d, done: false };
-  return CROCHETS.rencontreRoute.reduce((r, f) => f(r), { E: EV454[i], i, st });
+  return HOOKS.rencontreRoute.reduce((r, f) => f(r), { E: EV454[i], i, st });
 }
 
 
@@ -51,7 +51,7 @@ function evOpen454() {
     const eff = [c.cost ? 'Coût : ' + txt454(c.cost) : '', c.p && c.p < 1 ? `${Math.round(c.p * 100)} % de réussite` : ''].filter(Boolean).join(' · ');
     return { l: c.l, ok: can454(c.cost), eff: eff || null };
   });
-  // rendu : src/screens/overlays/temporaires/Fenetres.jsx (Ev454)
+  // rendered by src/screens/overlays/transients/Windows.jsx (Ev454)
   const o = overlay('evs454', { t: E.t, x: E.x, c, res: null });
   o.addEventListener('click', e => {
     if (e.target === o) shut('evs454');
@@ -60,7 +60,7 @@ function evOpen454() {
 
 
 export function evPick454(j) {
-  for (const f of CROCHETS.avantChoixRoute) if (f(j)) return;
+  for (const f of HOOKS.avantChoixRoute) if (f(j)) return;
   solve454(j);
   hook('choixRoute', j);
 }
@@ -82,11 +82,11 @@ function solve454(j) {
   vibe(issue === 'ok' ? 20 : 40);
   savePurse();
   updateTemp('evs454', { res: { ok: issue === 'ok', txt: res } });
-  refreshMap(); // bandeau « Rencontre sur la route » (#ev454, src/screens/carte/EvBar.jsx)
+  refreshMap(); // "Rencontre sur la route" (Route encounter) banner (#ev454, src/screens/map/EvBar.jsx)
 }
 
 
-export function sem454() {
+export function week454() {
   const t = new Date(today() + 'T00:00:00Z'),
     j = Math.floor(t.getTime() / 86400000 + 3);
   return 'w' + Math.floor(j / 7);
@@ -118,7 +118,7 @@ export function typesMs454() {
   const ts = Object.keys(cnt)
     .filter(t => cnt[t].tot >= 4)
     .sort();
-  const w = sem454();
+  const w = week454();
   let h = 7;
   for (const ch of w) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
   const a = ts[h % ts.length],
@@ -143,7 +143,7 @@ export const rng454 = sel => mulberry32(seed417(sel) || 1);
 
 
 export const reward454 = (o, t) => {
-  /* applique un gain/coût {m,g,b:{k:n}} */
+  /* applies a gain/cost {m,g,b:{k:n}} */
   if (!o) return;
   if (o.m) PROFILE.money = Math.max(0, PROFILE.money + o.m);
   if (o.g) PROFILE.gems = Math.max(0, PROFILE.gems + o.g);
@@ -170,11 +170,11 @@ export const txt454 = o => {
 };
 
 
-/* ---------- 1. colporteur ---------- */
-const NOMS454 = ['Basile', 'Maëlle', 'Hugo', 'Iris', 'Gaspard', 'Solène', 'Théo'];
+/* ---------- 1. peddler ---------- */
+const NAMES454 = ['Basile', 'Maëlle', 'Hugo', 'Iris', 'Gaspard', 'Solène', 'Théo'];
 
 
-/* ---------- 2. rencontres sur la route ---------- */
+/* ---------- 2. route encounters ---------- */
 const EV454 = [
   {
     t: 'Un vieux pêcheur',
@@ -245,7 +245,7 @@ const EV454 = [
 ];
 
 
-/* ---------- 3. missions de Pokédex ---------- */
+/* ---------- 3. Pokédex missions ---------- */
 export const PAL454 = [
   [5, { m: 500 }],
   [10, { g: 1 }],
@@ -257,7 +257,7 @@ export const PAL454 = [
   [119, { g: 5 }]
 ];
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Statements run at startup, in the original order (see index.js).
 export function __init() {
 
 document.addEventListener(
@@ -321,8 +321,8 @@ document.addEventListener('click', e => {
     toast('Mission accomplie : ' + txt454(p[1]));
   } else {
     const t = typesMs454().find(x => x.t === v);
-    if (!t || t.own < t.n || S.ty[sem454() + v]) return;
-    S.ty[sem454() + v] = 1;
+    if (!t || t.own < t.n || S.ty[week454() + v]) return;
+    S.ty[week454() + v] = 1;
     reward454({ g: 1 });
     toast('Spécialiste ' + v + ' : +1 Éclat');
   }
@@ -330,7 +330,7 @@ document.addEventListener('click', e => {
   sfx('ui');
   vibe(20);
   savePurse();
-  refreshDex(); // missions (#ms454) rendues par React : src/screens/dex/Missions.jsx
+  refreshDex(); // missions (#ms454) rendered by React: src/screens/dex/Missions.jsx
 });
 
 }

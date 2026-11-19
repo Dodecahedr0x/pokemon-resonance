@@ -1,4 +1,4 @@
-/* Section d'origine : 22-effets-attaque.js */
+/* Original section: 22-effets-attaque.js */
 import { bdClass, bdReplay, getHost, hostSet } from '../screens/combat/board/boardStore.js';
 
 import { $, RM } from './014-utils.js';
@@ -37,7 +37,7 @@ export function fxPrep() {
   const bd = $('#bBoard'),
     svg = $('#bSvg');
   if (!bd || !svg) return false;
-  // toile canvas.fxc : rendue par React (Board.jsx) au premier effet ; taille et dessin ici
+  // canvas.fxc canvas: rendered by React (Board.jsx) on the first effect; size and drawing here
   if (!getHost().fxc) hostSet({ fxc: true });
   const cv = bd.querySelector('canvas.fxc');
   if (!cv) return false;
@@ -216,8 +216,8 @@ function shape(c, kind, x, y, s, rot, col, a) {
 }
 
 
-/* un effet d’attaque complet : trajectoire, impact, éclats */
-/* Effets à l'échelle de la profondeur du plateau incliné (cible au fond = effet plus petit). */
+/* a complete attack effect: trajectory, impact, shards */
+/* Effects scaled to the depth of the tilted board (target at the back = smaller effect). */
 function depth(k) {
   if (!TILT.on || k == null) return 1;
   const [x, y] = HC(k);
@@ -228,7 +228,7 @@ function depth(k) {
 function withDepth(k, f, topEdge) {
   const oy = FXS.oy;
   FXS.zk = depth(k);
-  // les tirs partent du corps du Pokémon debout, pas de l'anneau au sol (positions figées à l'appel)
+  // shots leave from the standing Pokémon's body, not from the ground ring (positions frozen at call time)
   if (TILT.on && topEdge) FXS.oy = oy - 10 * FXS.zk * FXS.s;
   try {
     return f();
@@ -287,7 +287,7 @@ function fxAttackPlat(e, dur) {
     return dur * 0.3;
   }
   const path = t => (rock ? [A, rock, t] : [A, t]);
-  /* trajectoire */
+  /* trajectory */
   if (kind === 'bolt') {
     T.forEach(t =>
       fxAdd(dur * (ti + 0.28), (c, p) => {
@@ -368,7 +368,7 @@ function fxAttackPlat(e, dur) {
       })
     );
   } else if (kind === 'slash' || kind === 'quake') {
-    /* au contact ou au sol : l’effet naît à l’impact */
+    /* on contact or on the ground: the effect is born at the impact */
   }
   if (kind === 'flame') {
     T.forEach(t =>
@@ -392,7 +392,7 @@ function fxAttackPlat(e, dur) {
       })
     );
   } else {
-    /* projectiles et particules */
+    /* projectiles and particles */
     const N =
       kind === 'flame'
         ? 40
@@ -506,7 +506,7 @@ function fxAttackPlat(e, dur) {
       });
     });
   }
-  /* ricochet : étincelle sur le rocher */
+  /* ricochet: spark on the rock */
   if (rock)
     fxAdd(
       dur * 0.3,
@@ -529,7 +529,7 @@ function fxAttackPlat(e, dur) {
       },
       dur * ti * 0.5
     );
-  /* impact sur chaque case touchée */
+  /* impact on each tile hit */
   T.forEach((t, i) => {
     const delay = dur * ti * (e.sh === 'line' ? 0.65 + (0.35 * i) / Math.max(1, T.length - 1) : 1);
     fxAdd(
@@ -750,7 +750,7 @@ function fxAttackPlat(e, dur) {
             c.stroke();
           }
         } else {
-          /* impact : Combat, Normal */ glowDot(c, x, y, (22 - 6 * p) * z, pal[0], (1 - p) * 0.8);
+          /* impact: Fighting, Normal */ glowDot(c, x, y, (22 - 6 * p) * z, pal[0], (1 - p) * 0.8);
           for (let j = 0; j < 8; j++) {
             const an = (j / 8) * 6.283 + 0.2;
             strokePts(
@@ -770,7 +770,7 @@ function fxAttackPlat(e, dur) {
       delay
     );
   });
-  /* image d’impact et secousse sur les gros coups */
+  /* impact image and shake on big hits */
   const hitAt = dur * ti;
   if (e.big) {
     fxAdd(
@@ -818,10 +818,10 @@ function fxGuardPlat(e, dur) {
 }
 
 
-/* branchement sur la lecture des événements */
+/* hook into event playback */
 export function playEv(ev) {
-  liveEv429(ev); // bond vers la cible, vibrations (v4.29)
-  // le plateau a changé (herbes fauchées) : on le redessine après l'animation
+  liveEv429(ev); // lunge toward the target, vibrations (v4.29)
+  // the board changed (grass cut down): redraw it after the animation
   if (ev.some(x => x.e === 'terrain'))
     setTimeout(
       () => {
@@ -853,7 +853,7 @@ export function playEv(ev) {
   impactWords(ev);
 }
 
-/* ===================== v1.1 : effets d’attaque par type (calque canvas éphémère, aucune boucle au repos) ===================== */
+/* ===================== v1.1: per-type attack effects (ephemeral canvas layer, no idle loop) ===================== */
 export const FXS = { cv: null, ctx: null, items: [], raf: 0, s: 1, ox: 0, oy: 0, on: null };
 
 
@@ -909,9 +909,9 @@ const fxP = k => {
 
 const lp = (a, b, t) => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Statements run at startup, in the original order (see index.js).
 export function __init() {
-/* outils */
+/* tools */
 R0 = Math.random,
   cl01 = v => (v < 0 ? 0 : v > 1 ? 1 : v),
   eo = t => 1 - Math.pow(1 - t, 3);

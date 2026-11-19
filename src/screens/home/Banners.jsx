@@ -5,11 +5,11 @@ import { saData465 } from '../../engine/096-seasonal-events.js';
 import { brData466 } from '../../engine/097-boss-rush-relics.js';
 import { dfTxt468 } from '../../engine/099-defense-gym.js';
 
-// Bannières sous le héros, dans l'ordre de l'ancien DOM (chacune était insérée juste après
-// le héros ou après la précédente) : saison (v4.65), Boss Rush (v4.66), Arène de défense
-// (v4.68), Défis (v4.71), Plus de défis (v4.71), cadeau du jour (v4.57).
-// Regroupées dans .act470 (une grille d'activités au même dessin).
-// Les clics (data-sa465, data-br466, data-df468, data-x470, data-x2470, data-cd455) restent au moteur.
+// Banners under the hero, in the old DOM's order (each was inserted right after
+// the hero or after the previous one): season (v4.65), Boss Rush (v4.66), Defense Gym
+// (v4.68), Challenges (v4.71), More challenges (v4.71), daily gift (v4.57).
+// Grouped in .act470 (a grid of activities with the same design).
+// Clicks (data-sa465, data-br466, data-df468, data-x470, data-x2470, data-cd455) stay with the engine.
 export default function Banners() {
   const sa = saData465(),
     br = brData466(),

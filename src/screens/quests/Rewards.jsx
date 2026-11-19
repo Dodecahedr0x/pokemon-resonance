@@ -1,6 +1,6 @@
 import { ITM, SHOP, fmt } from '../../engine/032-v4-foundation.js';
 
-// Récompenses d'une quête : Pokédollars, Éclats, objets (ancien rewTxt).
+// Rewards of a quest: Pokédollars, Shards, items (formerly rewTxt).
 export default function Rewards({ r }) {
   const o = [];
   if (r.money) o.push(<span key="m"><span className="v4-coin" aria-hidden="true">₽</span>{fmt(r.money)}</span>);

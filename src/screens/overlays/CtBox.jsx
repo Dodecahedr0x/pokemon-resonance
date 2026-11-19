@@ -4,8 +4,8 @@ import { MV } from '../../engine/005-moves.js';
 import { BY } from '../../engine/009-pokemon.js';
 import { medal, tb, tc } from '../../engine/014-utils.js';
 
-// Apprendre une CT ou une CS (#ctBox, ouverte depuis le Sac). Le moteur (045) calcule
-// la liste des familles et garde les clics (data-ct, data-ctf) et l'attribut hidden.
+// Learn a TM or HM (#ctBox, opened from the Bag). The engine (045) computes
+// the list of families and keeps the clicks (data-ct, data-ctf) and the hidden attribute.
 export default function TmBox() {
   return <Box nom="ct" className="result ct-box" id="ctBox" Carte={MapScreen} />;
 }

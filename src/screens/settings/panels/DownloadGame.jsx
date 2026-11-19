@@ -1,4 +1,4 @@
-// Paramètres › « Télécharger le jeu » (v4.41) : le clic sur #dl441b est géré par le moteur (module 074).
+// Settings › « Télécharger le jeu » (Download the game) (v4.41): the click on #dl441b is handled by the engine (module 074).
 export default function DownloadGame() {
   return (
     <section className="v4-panel" id="dl441">

@@ -1,14 +1,14 @@
-/* Section d'origine : v4.20-01-combat-intense.js */
+/* Original section: v4.20-01-intense-combat.js */
 
 import { MV } from './005-moves.js';
 import { SCEN } from './009-pokemon.js';
 import { toast } from './014-utils.js';
-import { CROCHETS } from './015-hooks.js';
+import { HOOKS } from './015-hooks.js';
 import { EMAX, P, byUid, damage, endStep, hdist, heal, inReach, nbrK, say, setMark, uAt, uk } from './021-combat-engine.js';
 import { resolve } from './023-roles-synergies-obstacles.js';
 import { B, autoSel, clearAim, log, renderAll, ui } from './024-combat-ui.js';
-import { FOURNISSEURS_DEGATS } from './044-tactical-engine.js';
-import { SUCCES } from './048-replayability.js';
+import { DAMAGE_PROVIDERS } from './044-tactical-engine.js';
+import { ACHIEVEMENTS } from './048-replayability.js';
 import { hasXp, bossScene } from './053-resonance.js';
 import { MARK_T416 } from './055-living-johto.js';
 import { rage460, repl460 } from './091-phase-bosses-secret-places.js';
@@ -16,21 +16,21 @@ import { rage460, repl460 } from './091-phase-bosses-secret-places.js';
 
 
 /* =====================================================================
-   v4.20 : des combats plus intenses
-   1. Vigilance : un Pokémon renonce à son attaque pour surveiller ; il
-      frappe le premier adversaire qui arrive à sa portée pendant le tour
-      ennemi, avant que celui-ci n’attaque.
-   2. Encerclement : une cible au contact de 2 Pokémon adverses ou plus
-      subit +20 % de dégâts et perd 1 Mouvement. Valable des deux côtés.
-   3. Boss à phases : Championne, Maîtres, Conseil 4, légendes et Cobalt
-      changent de tactique à 66 % puis à 33 % de leurs PV.
-   4. Dangers annoncés : dans les grands combats, une zone est annoncée une
-      manche à l’avance (éboulement, foudre, vague, flammes, onde) ; tout
-      Pokémon qui y reste, allié ou adversaire, est touché.
+   v4.20: more intense battles
+   1. Vigilance: a Pokémon gives up its attack to keep watch; it
+      strikes the first opponent that comes within its reach during the
+      enemy turn, before that opponent attacks.
+   2. Encirclement: a target in contact with 2 or more opposing Pokémon
+      takes +20% damage and loses 1 Movement. Applies to both sides.
+   3. Phase bosses: Champion, Masters, Elite Four, legends and Cobalt
+      change tactics at 66% then at 33% of their HP.
+   4. Announced hazards: in big battles, a zone is announced one
+      round in advance (rockslide, lightning, wave, flames, shockwave); any
+      Pokémon that stays there, ally or opponent, is hit.
    ===================================================================== */
 
 /* ---------- 1. Vigilance ---------- */
-/** La meilleure attaque de surveillance : la plus puissante qui touche la case. */
+/** The best watch attack: the most powerful one that hits the tile. */
 export function vigilHit420(S, u, k) {
   return u.mv
     .map(id => MV[id])
@@ -49,7 +49,7 @@ function pVigil420(S, u) {
 }
 
 
-/** Après le déplacement d’un adversaire : les vigilants frappent avant son attaque. */
+/** After an opponent moves: the watchers strike before its attack. */
 export function vigilance420(S, e, ev) {
   if (!e || e.ko || S.over || e.side !== 'e') return;
   const k = uk(e);
@@ -67,7 +67,7 @@ export function vigilance420(S, e, ev) {
 }
 
 
-/* ---------- 3. Boss à phases ---------- */
+/* ---------- 3. Phase bosses ---------- */
 export function bossPhases420(S) {
   const D = SCEN[S.sc] || {};
   return !!(D.champ || D.jfinal || D.hfinal || D.elite || D.legend || D.hleg435 || D.cap435 || D.jdis === 4);
@@ -87,7 +87,7 @@ function phaseBoss420(S, ev) {
     previous = b ? b.phase420 || 1 : 0;
   rage460(S, ev);
   changePhase420(S, ev);
-  if (b && bossPhases420(S) && (b.phase420 || 1) > previous && !b.ko) say(ev, repl460(b, b.phase420 === 3 ? 1 : 0)); // réplique du boss (v4.60)
+  if (b && bossPhases420(S) && (b.phase420 || 1) > previous && !b.ko) say(ev, repl460(b, b.phase420 === 3 ? 1 : 0)); // boss line (v4.60)
 }
 
 
@@ -101,9 +101,9 @@ function changePhase420(S, ev) {
     b.phase420 = 2;
     b.boost = Math.max(b.boost || 0, 2);
     b.guard = Math.max(b.guard || 0, 2);
-    const t = b.t.find(x => METEO_T420[x]),
+    const t = b.t.find(x => WEATHER_T420[x]),
       mk = b.t.map(x => MARK_T416[x]).find(Boolean);
-    if (t) S.wx = { k: METEO_T420[t], n: 4 };
+    if (t) S.wx = { k: WEATHER_T420[t], n: 4 };
     else if (mk) nbrK(uk(b)).forEach(x => S.tiles[x] && !S.tiles[x].rock && setMark(S, x, mk, b.uid));
     say(ev, `${b.n} entre en phase 2 : la rage ! Renforcé, blindé${t ? ', et la météo change' : mk ? ', et le terrain se transforme' : ''}.`);
     ev.push({ e: 'arena', r: 'phase2' });
@@ -149,7 +149,7 @@ function activeDangers420(S) {
 function dangerTurn420(S, ev) {
   if (!activeDangers420(S) || S.over) return;
   const Z = S.danger420;
-  // résolution de la zone annoncée la manche précédente
+  // resolution of the zone announced the previous round
   if (Z && S.round >= Z.r) {
     const T = DANGERS[Z.t];
     let n = 0;
@@ -166,7 +166,7 @@ function dangerTurn420(S, ev) {
     S.danger420 = null;
     endStep(S, ev);
   }
-  // une nouvelle zone, annoncée pour la fin de la manche suivante (une manche sur deux)
+  // a new zone, announced for the end of the next round (every other round)
   if (!S.danger420 && !S.over && S.round % 2 === 1) {
     const al = S.units.filter(u => u.side === 'a' && !u.ko);
     if (!al.length) return;
@@ -187,7 +187,7 @@ export function danger420Svg(S, k, x, y) {
 }
 
 
-/* ---------- l’aide du panneau ---------- */
+/* ---------- panel help ---------- */
 export function vigilBtn420(u) {
   if (!B || u.side !== 'a') return '';
   const ok = canVigil420(B, u);
@@ -206,14 +206,14 @@ export function battleStates420(u) {
 
 const canVigil420 = (S, u) => !!(S && u && u.side === 'a' && !u.ko && !u.acted && !u.sn && S.phase === 'player' && u.mv.some(id => MV[id] && MV[id].p > 0));
 
-/* ---------- 2. Encerclement ---------- */
+/* ---------- 2. Encirclement ---------- */
 const around420 = (S, t, side) => S.units.filter(o => !o.ko && o.side === side && !o.seg && hdist(o.pos, t.pos) === 1).length;
 
 export const surrounded420 = (S, u) => !!(S && u && !u.ko && !u.seg && !u.colosse && around420(S, u, u.side === 'a' ? 'e' : 'a') >= 2);
 
-const METEO_T420 = { Feu: 'soleil', Eau: 'pluie', Glace: 'grele', Roche: 'sable', Sol: 'sable' };
+const WEATHER_T420 = { Feu: 'soleil', Eau: 'pluie', Glace: 'grele', Roche: 'sable', Sol: 'sable' };
 
-/* ---------- 4. Dangers annoncés ---------- */
+/* ---------- 4. Announced hazards ---------- */
 const DANGERS = {
   eboulement: { n: 'Éboulement', d: 9, mk: 'fissure' },
   foudre: { n: 'Foudre', d: 8, mk: 'charge' },
@@ -222,13 +222,13 @@ const DANGERS = {
   onde: { n: 'Onde', d: 8, mk: null }
 };
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Statements run at startup, in the original order (see index.js).
 export function __init() {
 
 
-CROCHETS.avantFinManche.push(S => S.units.forEach(u => (!S.duel433 || u.j433 !== 2) && (u.vigil = 0)));
+HOOKS.avantFinManche.push(S => S.units.forEach(u => (!S.duel433 || u.j433 !== 2) && (u.vigil = 0)));
 
- // duel : la Vigilance du J2 tient pendant le tour du J1 (v4.33)
+ // duel: P2's Vigilance holds during P1's turn (v4.33)
 document.addEventListener('click', e => {
   const b = e.target.closest('[data-vigil420]');
   if (!b || !B || ui.busy) return;
@@ -244,16 +244,16 @@ document.addEventListener('click', e => {
 });
 
 
-FOURNISSEURS_DEGATS.push({ id: 'encerclement', fournir: (c, { S, u, t }) => S && t && u && t.side !== u.side && !t.seg && around420(S, t, u.side) >= 2 && { mul: 1.2, libelle: 'Encerclement' } });
+DAMAGE_PROVIDERS.push({ id: 'encerclement', fournir: (c, { S, u, t }) => S && t && u && t.side !== u.side && !t.seg && around420(S, t, u.side) >= 2 && { mul: 1.2, libelle: 'Encerclement' } });
 
 
-CROCHETS.avantFinManche.push((S, ev) => {
+HOOKS.avantFinManche.push((S, ev) => {
   phaseBoss420(S, ev);
   dangerTurn420(S, ev);
 });
 
 
-SUCCES.push(
+ACHIEVEMENTS.push(
   { id: 'vigil', n: 'Sentinelle', d: 'Intercepter un adversaire avec la Vigilance.', ok: c => (c.S.stats.vigil || 0) > 0 },
   { id: 'phases', n: 'Jusqu’au bout', d: 'Battre un Maître ou une légende après sa phase 3.', t: 'Inébranlable', ok: c => c.win && c.S.units.some(u => u.phase420 === 3) }
 );

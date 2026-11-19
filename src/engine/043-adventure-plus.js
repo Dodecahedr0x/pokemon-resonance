@@ -1,4 +1,4 @@
-/* Section d'origine : v4.4-01-aventure-plus.js */
+/* Original section: v4.4-01-aventure-plus.js */
 
 import { GYMS } from './004-data.js';
 import { MV } from './005-moves.js';
@@ -7,7 +7,7 @@ import { ITEMS2, PROFILE } from './011-game-state.js';
 import { ARENAS } from './013-gyms.js';
 import { paintOverlay } from '../screens/overlays/dialogsStore.js';
 import { $, medal, mulberry32 } from './014-utils.js';
-import { CROCHETS } from './015-hooks.js';
+import { HOOKS } from './015-hooks.js';
 import { EMAX, affected, dmgOf, hasNx, markAt, mvType, uAt, uk } from './021-combat-engine.js';
 import { OBST } from './023-roles-synergies-obstacles.js';
 import { B, __set_scSel, backToPrep, chooseBattle, launch } from './024-combat-ui.js';
@@ -26,13 +26,13 @@ export function __set_wildShiny(v) { return (wildShiny = v); }
 
 
 /* =====================================================================
-   v4.4 · Aventure+
-   Des maîtres d’arène qui jouent chacun à leur façon, un rival, des
-   Pokémon chromatiques à collectionner, six boss légendaires et la
-   Tour de Résonance (après-jeu rejouable à l’infini).
+   v4.4 · Adventure+
+   Gym leaders who each play in their own way, a rival, shiny
+   Pokémon to collect, six legendary bosses and the
+   Resonance Tower (endlessly replayable post-game).
    ===================================================================== */
 
-/* ---------- profil : nouveaux champs (tous optionnels dans les anciennes sauvegardes) ---------- */
+/* ---------- profile: new fields (all optional in old saves) ---------- */
 export function APLUS0() {
   return { shiny: [], rival: 0, legends: [], tdr: { best: 0, run: null }, johto: [], jchamp: 0, lac: 0 };
 }
@@ -76,13 +76,13 @@ export function aplusClean(p) {
 }
 
 
-/* ---------- hasard reproductible (Tour : un étage se reconstruit à l’identique après une sauvegarde) ---------- */
+/* ---------- reproducible randomness (Tower: a floor is rebuilt identically after a save) ---------- */
 function rng(seed) {
   return mulberry32(seed >>> 0 || 1);
 }
 
 
-/* bonus de l’IA selon le style du maître (s’ajoute au score d’une attaque qui touche vos Pokémon) */
+/* AI bonus according to the leader's style (added to the score of an attack that hits your Pokémon) */
 export function aiStyleBonus(S, e, m, k, sim) {
   const sty = (SCEN[S.sc] || {}).style;
   if (!sty) return 0;
@@ -104,7 +104,7 @@ export function aiStyleBonus(S, e, m, k, sim) {
     });
     if (m.mk === 'charge' || m.mk === 'trempe') b += 2;
   } else if (sty === 'ronces') {
-    if (IMMO.includes(m.fx) || m.mk === 'enracine') b += 6;
+    if (IMMOBILE.includes(m.fx) || m.mk === 'enracine') b += 6;
     hit.forEach(v => {
       if (v.root > 0 || v.web > 0 || v.badge === 'SOM') b += 3;
     });
@@ -120,7 +120,7 @@ export function aiStyleBonus(S, e, m, k, sim) {
   } else if (sty === 'seisme') {
     b += (hit.length - 1) * 4;
   } else if (sty === 'piege') {
-    if (IMMO.includes(m.fx)) b += 6;
+    if (IMMOBILE.includes(m.fx)) b += 6;
     hit.forEach(v => {
       if (hasNx(v) && v.en >= EMAX - 1) b += 6;
     });
@@ -144,7 +144,7 @@ export function rivalStarter() {
 
 
 export function rivalBuild() {
-  if (RIV429) rivBuild429(); // Kael à Johto et à Hoenn suit votre partenaire (v4.29)
+  if (RIV429) rivBuild429(); // Kael in Johto and Hoenn follows your partner (v4.29)
   const line = RIVAL_LINE[rivalStarter()];
   RIVAL_STEPS.forEach((R, i) => {
     const ace = line[R.st],
@@ -169,12 +169,12 @@ export function rivalBuild() {
     OBST[k] = i < 2 ? { grass: ['2,2', '2,3'] } : { pil: ['4,2'], sand: ['2,1', '2,4'] };
   });
   try {
-    rivAdapt455(); // Kael s’adapte à votre équipe (v4.55)
+    rivAdapt455(); // Kael adapts to your team (v4.55)
   } catch (e) {}
 }
 
 
-function tdrIdle() {
+function towerIdle() {
   SCEN.tdr = {
     n: 'Tour de Résonance',
     lvl: 'Après-jeu · ascension',
@@ -194,10 +194,10 @@ function tdrIdle() {
 }
 
 
-function tdrBuild(run) {
+function towerBuild(run) {
   const f = run.floor,
     r = rng(run.seed * 31 + f * 977),
-    map = pickOf(r, TDR_MAPS),
+    map = pickOf(r, TOWER_MAPS),
     boss = f % 5 === 0;
   let foes,
     rule = null,
@@ -213,7 +213,7 @@ function tdrBuild(run) {
     at = L.t[0];
   } else {
     const cap = f < 3 ? 1 : f < 7 ? 2 : 3,
-      pool = tdrPool().filter(m => m.st <= cap && (f < 7 || m.st >= cap - 1)),
+      pool = towerPool().filter(m => m.st <= cap && (f < 7 || m.st >= cap - 1)),
       n = Math.min(5, 2 + Math.floor((f + 1) / 3)),
       families = new Set();
     foes = [];
@@ -221,12 +221,12 @@ function tdrBuild(run) {
       const m = pickOf(r, pool);
       if (families.has(m.base)) continue;
       families.add(m.base);
-      foes.push([m.id, RIVAL_POS[foes.length]]); // mêmes places que le rival
+      foes.push([m.id, RIVAL_POS[foes.length]]); // same slots as the rival
     }
-    if (f % 3 === 0) rule = pickOf(r, TDR_RULES);
+    if (f % 3 === 0) rule = pickOf(r, TOWER_RULES);
     at = BY[foes[0][0]].t[0];
   }
-  OBST.tdr = pickOf(r, TDR_OBST);
+  OBST.tdr = pickOf(r, TOWER_OBST);
   SCEN.tdr = {
     n: `Tour · étage ${f}`,
     lvl: `Tour de Résonance · étage ${f}${boss ? ' · légende' : ''}`,
@@ -235,7 +235,7 @@ function tdrBuild(run) {
     bio: pickOf(r, ['gue', 'roche', 'arene', 'ligue', 'tour']),
     water: map.water,
     rock: map.rock,
-    // la difficulté monte vite jusqu’à l’étage 15, puis continue de monter sans fin, plus lentement
+    // difficulty climbs fast up to floor 15, then keeps climbing endlessly, more slowly
     hb: 2 + Math.min(f, 15) * 3 + Math.max(0, f - 15) * 5,
     pb: Math.min(8, Math.floor(f / 2)) + Math.floor(Math.max(0, f - 15) / 5),
     lv: Math.min(100, 8 + f * 4),
@@ -243,23 +243,23 @@ function tdrBuild(run) {
     style: boss ? 'boss' : null,
     tower: true,
     at,
-    mut: mutOfTurn(run, f), // un mutateur par étage (v4.9)
-    d: `${mutOfTurn(run, f) ? `Mutateur · ${mutInfo(mutOfTurn(run, f))[0]} : ${mutInfo(mutOfTurn(run, f))[1]} ` : ''}${boss ? `Étage de légende : ${BY[foes[0][0]].n} garde le passage.` : `${foes.length} adversaires.`}${rule ? ` Règle du plateau : ${GYMS[TDR_RULES.indexOf(rule)].r}` : ''} Votre équipe : ${run.team.map(id => BY[id].n).join(', ')}${run.voix ? ` · +${run.voix} Voix` : ''}.`,
+    mut: mutOfTurn(run, f), // one mutator per floor (v4.9)
+    d: `${mutOfTurn(run, f) ? `Mutateur · ${mutInfo(mutOfTurn(run, f))[0]} : ${mutInfo(mutOfTurn(run, f))[1]} ` : ''}${boss ? `Étage de légende : ${BY[foes[0][0]].n} garde le passage.` : `${foes.length} adversaires.`}${rule ? ` Règle du plateau : ${GYMS[TOWER_RULES.indexOf(rule)].r}` : ''} Votre équipe : ${run.team.map(id => BY[id].n).join(', ')}${run.voix ? ` · +${run.voix} Voix` : ''}.`,
     foes
   };
   return SCEN.tdr;
 }
 
 
-export function tdrRestore() {
-  const run = tdrRun();
-  return run ? tdrBuild(run) : tdrIdle();
+export function towerRestore() {
+  const run = towerRun();
+  return run ? towerBuild(run) : towerIdle();
 }
 
 
-/* équipe et options de combat de l’ascension en cours */
-export function tdrTeam() {
-  const run = tdrRun();
+/* team and battle options of the current ascent */
+export function towerTeam() {
+  const run = towerRun();
   if (!run) return null;
   const items = {};
   run.team.forEach(id => {
@@ -274,10 +274,10 @@ export function tdrTeam() {
 }
 
 
-export function tdrDraft() {
+export function towerDraft() {
   const seed = Math.floor(Math.random() * 1e9),
     r = rng(seed),
-    pool = tdrPool().filter(m => m.st <= 2 && !m.ennemi),
+    pool = towerPool().filter(m => m.st <= 2 && !m.ennemi),
     families = new Set(),
     c = [];
   for (let i = 0; c.length < 8 && i < 200; i++) {
@@ -286,19 +286,19 @@ export function tdrDraft() {
     families.add(m.base);
     c.push(m.id);
   }
-  Object.assign(TDR, { seed, cands: c, pick: [] });
+  Object.assign(TOWER, { seed, cands: c, pick: [] });
   renderDraft();
   $('#tdrBox').hidden = false;
 }
 
 
-/* rendu : src/screens/overlays/TdrBox.jsx */
+/* rendered by src/screens/overlays/TdrBox.jsx */
 function renderDraft() {
-  paintOverlay('tdr', { mode: 'draft', cands: [...TDR.cands], pick: [...TDR.pick] });
+  paintOverlay('tdr', { mode: 'draft', cands: [...TOWER.cands], pick: [...TOWER.pick] });
 }
 
 
-function tdrOffer(run) {
+function towerOffer(run) {
   const r = rng(run.seed * 7 + run.floor * 131),
     o = [];
   if (run.voix < 2) o.push({ k: 'voix', t: '+1 Voix', d: 'Pour tout le reste de l’ascension.' });
@@ -315,7 +315,7 @@ function tdrOffer(run) {
       to = pickOf(r, nx);
     o.push({ k: 'evo', id, to, t: `${BY[id].n} devient ${BY[to].n}`, d: 'Éveil définitif pour toute l’ascension.' });
   } else {
-    const pool = tdrPool().filter(m => m.st >= 2 && !m.ennemi && !run.team.some(x => BY[x].base === m.base)),
+    const pool = towerPool().filter(m => m.st >= 2 && !m.ennemi && !run.team.some(x => BY[x].base === m.base)),
       nw = pickOf(r, pool),
       out = run.team.reduce((a, b) => (BY[a].s.reduce((x, y) => x + y) <= BY[b].s.reduce((x, y) => x + y) ? a : b));
     o.push({
@@ -330,24 +330,24 @@ function tdrOffer(run) {
 }
 
 
-function tdrReward() {
-  const run = tdrRun();
+function towerReward() {
+  const run = towerRun();
   if (!run) return;
-  TDR.offer = tdrOffer(run);
-  paintOverlay('tdr', { mode: 'reward', floor: run.floor, offer: TDR.offer });
+  TOWER.offer = towerOffer(run);
+  paintOverlay('tdr', { mode: 'reward', floor: run.floor, offer: TOWER.offer });
   $('#tdrBox').hidden = false;
 }
 
 
-/* monter à l’étage courant */
-function tdrClimb() {
-  const run = tdrRun();
+/* climb to the current floor */
+function towerClimb() {
+  const run = towerRun();
   if (!run) return;
   if (run.reward) {
-    tdrReward();
+    towerReward();
     return;
   }
-  tdrBuild(run);
+  towerBuild(run);
   queueSave();
   if (B) backToPrep();
   chooseBattle('tdr');
@@ -356,14 +356,14 @@ function tdrClimb() {
 
 
 /* =====================================================================
-   Progression : récompenses des nouveaux combats (appelé par applyProgress)
+   Progression: rewards for the new battles (called by applyProgress)
    ===================================================================== */
 export function aplusProgress(S, rew) {
   const D = SCEN[S.sc] || {},
     win = S.over === 'win';
   let m = 0,
     g = 0;
-  /* chromatiques capturés */
+  /* shinies captured */
   (S.stats.shiny || []).forEach(id => {
     const b = BY[id] ? BY[id].id : null;
     if (!b) return;
@@ -383,7 +383,7 @@ export function aplusProgress(S, rew) {
     rew.legend = D.legend;
   }
   if (S.sc === 'tdr' && D.tower) {
-    const run = tdrRun();
+    const run = towerRun();
     if (run) {
       const f = run.floor;
       if (win) {
@@ -397,12 +397,12 @@ export function aplusProgress(S, rew) {
         PROFILE.tdr.best = Math.max(PROFILE.tdr.best, f - 1);
         PROFILE.tdr.run = null;
         rew.tdr = { cleared: f - 1, end: true, best: PROFILE.tdr.best };
-        tdrIdle();
+        towerIdle();
       }
     }
   }
-  CROCHETS.progres.forEach(h => {
-    const r = h(S, rew, win); // colosses, succès… (v4.8+)
+  HOOKS.progres.forEach(h => {
+    const r = h(S, rew, win); // colossi, achievements... (v4.8+)
     if (r) {
       m += r[0] || 0;
       g += r[1] || 0;
@@ -417,7 +417,7 @@ export function aplusProgress(S, rew) {
 }
 
 
-/* lignes ajoutées à l’écran de résultat */
+/* lines added to the result screen */
 export function aplusRewHtml(r) {
   const o = [];
   if (r.shiny && r.shiny.length)
@@ -436,23 +436,23 @@ export function aplusRewHtml(r) {
     o.push(
       `<div class="res-l"><h4>Tour de Résonance</h4><div class="rl"><span>${r.tdr.end ? `Ascension terminée à l’étage ${r.tdr.cleared}.` : `Étage ${r.tdr.cleared} franchi. Une récompense vous attend avant l’étage ${r.tdr.next}.`} Record : étage ${r.tdr.best}.</span><b>${r.tdr.cleared}</b></div></div>`
     );
-  CROCHETS.resultat.forEach(h => o.push(h(r) || '')); // v4.8+
+  HOOKS.resultat.forEach(h => o.push(h(r) || '')); // v4.8+
   return o.join('');
 }
 
 
-/* boutons de l’écran de résultat de la Tour : rendus par React (src/screens/combat/battle/Result.jsx) */
+/* Tower result screen buttons: rendered by React (src/screens/combat/battle/Result.jsx) */
 
 const pickOf = (r, a) => a[Math.floor(r() * a.length)];
 
 
 /* =====================================================================
-   1. Pokémon chromatiques
+   1. Shiny Pokémon
    ===================================================================== */
 export const SHINY_RATE = 1 / 25;
 
 
-/* teinte propre à chaque espèce : un même Pokémon chromatique a toujours la même couleur */
+/* hue specific to each species: a given shiny Pokémon always has the same color */
 export const shinyHue = id => 40 + ((((BY[id] && BY[id].no) || 0) * 53) % 260);
 
 
@@ -467,7 +467,7 @@ export const SPARK =
 
 
 /* =====================================================================
-   2. Maîtres d’arène : chacun son style de jeu
+   2. Gym leaders: each with their own play style
    ===================================================================== */
 const STYLES = {
   rempart: { n: 'Rempart', d: 'Il s’ancre, se protège et frappe en zone.' },
@@ -484,7 +484,7 @@ const STYLES = {
 };
 
 
-const IMMO = ['root', 'web', 'sleep'];
+const IMMOBILE = ['root', 'web', 'sleep'];
 
 
 const CTRL = ['push', 'pull', 'confuse', 'turn', 'taunt', 'swap'];
@@ -494,12 +494,12 @@ export const styleOf = k => STYLES[(SCEN[k] || {}).style] || null;
 
 
 /* =====================================================================
-   3. Le rival : Kael Ferrand
+   3. The rival: Kael Ferrand
    ===================================================================== */
 export const RIVAL = { n: 'Kael Ferrand', t: 'votre rival' };
 
 
-/* son partenaire a l’avantage sur le vôtre, comme dans les jeux */
+/* his partner has the advantage over yours, as in the games */
 export const RIVAL_LINE = {
   bulbizarre: ['salameche', 'reptincel', 'dracaufeu'],
   salameche: ['carapuce', 'carabaffe', 'tortank'],
@@ -574,7 +574,7 @@ export const rivalIdx = k => RIVAL_KEYS.indexOf(k);
 
 
 /* =====================================================================
-   4. Boss légendaires (après-jeu, jamais recrutables)
+   4. Legendary bosses (post-game, never recruitable)
    ===================================================================== */
 export const LEGS = [
   {
@@ -701,12 +701,12 @@ export const legOf = k => LEGS.find(L => legKey(L.id) === k) || null;
 
 
 /* =====================================================================
-   5. Tour de Résonance
+   5. Resonance Tower
    ===================================================================== */
-const TDR_RULES = ['roche', 'eau', 'elec', 'plante', 'poison', 'psy', 'feu', 'sol'];
+const TOWER_RULES = ['roche', 'eau', 'elec', 'plante', 'poison', 'psy', 'feu', 'sol'];
 
 
-const TDR_MAPS = [
+const TOWER_MAPS = [
   { water: ['4,2', '4,3'], rock: ['3,0', '3,5'] },
   { water: ['5,0', '5,1'], rock: ['3,4'] },
   { water: [], rock: ['3,1', '4,4'] },
@@ -715,7 +715,7 @@ const TDR_MAPS = [
 ];
 
 
-const TDR_OBST = [
+const TOWER_OBST = [
   { grass: ['2,2', '2,3'] },
   { pil: ['4,2'] },
   { sand: ['2,1', '2,4', '5,2'] },
@@ -724,18 +724,18 @@ const TDR_OBST = [
 ];
 
 
-export const tdrRun = () => (PROFILE.tdr && PROFILE.tdr.run) || null;
+export const towerRun = () => (PROFILE.tdr && PROFILE.tdr.run) || null;
 
 
-const tdrPool = () => MON.filter(m => !m.leg && m.id !== 'eevee');
+const towerPool = () => MON.filter(m => !m.leg && m.id !== 'eevee');
 
 
-/* fenêtre de la Tour : choix de l’équipe et récompenses (#tdrBox rendu par React, src/screens/overlays/TdrBox.jsx) */
+/* Tower window: team choice and rewards (#tdrBox rendered by React, src/screens/overlays/TdrBox.jsx) */
 
 
-const TDR = { pick: [], cands: [], offer: [] };
+const TOWER = { pick: [], cands: [], offer: [] };
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Statements run at startup, in the original order (see index.js).
 export function __init() {
 
 wildShiny = false;
@@ -800,12 +800,12 @@ LEGS.forEach(L => {
     at: L.t[0],
     water: L.water,
     rock: L.rock,
-    hb: 34, // l’escorte
+    hb: 34, // the escort
     pb: 5,
     lv: 55,
     d: `${L.n}, ${L.title}, vous attend sur un plateau à sa mesure. Il ne peut pas être capturé : on l’affronte pour l’honneur… et pour les Éclats.`,
     foes: [
-      [L.id, [6, 2], { boss: true, hb: 130, pb: 7 }], // réglé pour être un peu plus dur que la Championne
+      [L.id, [6, 2], { boss: true, hb: 130, pb: 7 }], // tuned to be a bit harder than the Champion
       [L.minions[0], [7, 1]],
       [L.minions[1], [7, 4]]
     ]
@@ -818,16 +818,16 @@ $('#tdrBox').addEventListener('click', e => {
   const p = e.target.closest('[data-tdrp]');
   if (p) {
     const id = p.dataset.tdrp,
-      i = TDR.pick.indexOf(id);
-    if (i >= 0) TDR.pick.splice(i, 1);
-    else if (TDR.pick.length < 4) TDR.pick.push(id);
+      i = TOWER.pick.indexOf(id);
+    if (i >= 0) TOWER.pick.splice(i, 1);
+    else if (TOWER.pick.length < 4) TOWER.pick.push(id);
     renderDraft();
     return;
   }
   const rw = e.target.closest('[data-tdrr]');
   if (rw) {
-    const run = tdrRun(),
-      x = TDR.offer[+rw.dataset.tdrr];
+    const run = towerRun(),
+      x = TOWER.offer[+rw.dataset.tdrr];
     if (!run || !x) return;
     if (x.k === 'voix') run.voix = Math.min(2, run.voix + 1);
     if (x.k === 'item') run.items[x.id] = x.it;
@@ -841,20 +841,20 @@ $('#tdrBox').addEventListener('click', e => {
     }
     run.reward = false;
     $('#tdrBox').hidden = true;
-    tdrClimb();
+    towerClimb();
     return;
   }
   const b = e.target.closest('[data-tdr]');
   if (!b && e.target.id !== 'tdrBox') return;
   const a = b ? b.dataset.tdr : 'x';
   if (a === 'x') {
-    if (!tdrRun() || !tdrRun().reward) $('#tdrBox').hidden = true;
+    if (!towerRun() || !towerRun().reward) $('#tdrBox').hidden = true;
     return;
   }
-  if (a === 'go' && TDR.pick.length === 4) {
-    PROFILE.tdr.run = { seed: TDR.seed, floor: 1, team: [...TDR.pick], voix: 0, items: {}, reward: false };
+  if (a === 'go' && TOWER.pick.length === 4) {
+    PROFILE.tdr.run = { seed: TOWER.seed, floor: 1, team: [...TOWER.pick], voix: 0, items: {}, reward: false };
     $('#tdrBox').hidden = true;
-    tdrClimb();
+    towerClimb();
   }
 });
 
@@ -869,8 +869,8 @@ $('#cbResult').addEventListener(
     __set_scSel('tdr');
     __set_PREPG({ g: 'apres', sc: 'tdr' });
     renderPrep();
-    if (b.dataset.tdrn === 'reward') tdrReward();
-    else tdrDraft();
+    if (b.dataset.tdrn === 'reward') towerReward();
+    else towerDraft();
   },
   true
 );

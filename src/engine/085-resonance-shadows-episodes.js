@@ -1,11 +1,11 @@
-/* Section d'origine : v4.70 : Les Ombres de Résonance (4 épisodes, chef Vaskar) */
+/* Original section: v4.70: The Resonance Shadows (4 episodes, boss Vaskar) */
 
 import { PROFILE } from './011-game-state.js';
 import { writeLS } from './014-utils.js';
-import { CROCHETS } from './015-hooks.js';
+import { HOOKS } from './015-hooks.js';
 import { ev454, evPick454 } from './084-peddler-route-missions.js';
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Statements run at startup, in the original order (see index.js).
 export function __init() {
 
 (() => {
@@ -21,7 +21,7 @@ export function __init() {
     writeLS(KEY, o);
   };
   const has = v => Array.isArray(v) ? v.length > 0 : !!v;
-  // Chaque épisode remplace la rencontre du jour quand sa condition est remplie.
+  // Each episode replaces the day's encounter when its condition is met.
   const EPS = [
     {
       ok: () => true,
@@ -72,17 +72,17 @@ export function __init() {
     const e = readValue().etape;
     return e < EPS.length && EPS[e].ok() ? EPS[e] : null;
   };
-  // l'épisode en cours remplace la rencontre du jour ; le choisir fait avancer l'histoire
-  CROCHETS.rencontreRoute.push(r => {
+  // the current episode replaces the day's encounter; choosing it advances the story
+  HOOKS.rencontreRoute.push(r => {
     const E = current();
     return E && !r.st.done ? { ...r, E: { ...E, ombre: 1 }, i: -1 } : r;
   });
   let wasEpisode = false;
-  CROCHETS.avantChoixRoute.push(() => {
+  HOOKS.avantChoixRoute.push(() => {
     const { E, st } = ev454();
     wasEpisode = !!(E && E.ombre && !st.done);
   });
-  CROCHETS.choixRoute.push(() => {
+  HOOKS.choixRoute.push(() => {
     if (wasEpisode) write({ etape: readValue().etape + 1 });
   });
   window.__ombre470 = { lire: readValue, ecrire: write, dispo: () => !!current(), titre: () => (current() || {}).t, req: () => (readValue().etape === 1 ? 'Commencez Johto' : readValue().etape === 2 ? 'Commencez Hoenn' : ''), ev: () => ev454(), pick: j => evPick454(j), nb: EPS.length };

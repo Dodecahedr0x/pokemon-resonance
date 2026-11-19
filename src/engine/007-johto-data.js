@@ -1,11 +1,11 @@
-/* Section d'origine : v4.15-00-johto-donnees.js */
+/* Original section: v4.15-00-johto-donnees.js */
 
 import { MV, TAL } from './005-moves.js';
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Statements run at startup, in the original order (see index.js).
 export function __init() {
 
-/* v4.15 : vingt Pokémon de Johto (dix familles), leurs capacités signature et trois talents. */
+/* v4.15: twenty Johto Pokémon (ten families), their signature moves and three abilities. */
 Object.assign(MV, {
   extrasenseur: { n: 'Extrasenseur', t: 'Psy', p: 11, r: 3, sh: 'one', fx: 'confond', sig: 1, d: 'Signature. Portée 3. La cible est désorientée : elle frappera ailleurs.' },
   toilefatale: { n: 'Toile Fatale', t: 'Insecte', p: 9, r: 3, sh: 'one', fx: 'toxweb', sig: 1, d: 'Signature. Portée 3. La cible est empoisonnée et engluée (−3 Mouvement).' },

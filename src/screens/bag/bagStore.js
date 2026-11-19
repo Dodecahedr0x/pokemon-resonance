@@ -1,11 +1,11 @@
 import { version } from '../../lib/store.js';
 
-// Le moteur appelle renderBag() pour redessiner le Sac et la Boutique (affichage,
-// onglet, achat…) : la page React est alors reconstruite avec les données à jour.
+// The engine calls renderBag() to redraw the Bag and the Shop (display,
+// tab, purchase…): the React page is then rebuilt with up-to-date data.
 const [refresh, useVersion] = version();
 export const useBagVersion = useVersion;
 
-// « Merci pour votre achat ! » (v4.73) : posé après un achat, affiché au rendu suivant puis oublié.
+// "Thank you for your purchase!" (v4.73): set after a purchase, displayed on the next render then forgotten.
 let thanksMsg = false,
   thanksSeen = false;
 export function markPurchase() {
@@ -13,7 +13,7 @@ export function markPurchase() {
 }
 export const thanksShown = () => thanksSeen;
 
-// `boutique` : le comptoir est affiché, le remerciement y est consommé.
+// `shop`: the counter is displayed, the thank-you is consumed there.
 export function refreshBag(shop) {
   thanksSeen = shop && thanksMsg;
   if (shop) thanksMsg = false;

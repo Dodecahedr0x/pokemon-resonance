@@ -2,7 +2,7 @@ import { useEngineReady } from '../../engineReady.js';
 import { useBagVersion } from './bagStore.js';
 import { ITEMS2, PROFILE } from '../../engine/011-game-state.js';
 import { SHOP, V4, bagN, fmt } from '../../engine/032-v4-foundation.js';
-import { ctJour456 } from '../../engine/089-extra-held-items-tms.js';
+import { tmDay456 } from '../../engine/089-extra-held-items-tms.js';
 import { Article, Outfit } from './Items.jsx';
 import Offers from './Offers.jsx';
 import Outfits from './HeldItems.jsx';
@@ -11,13 +11,13 @@ import WorkshopTab from './Workshop.jsx';
 import Counter from './Counter.jsx';
 
 const NL = '\n ';
-const ATELIER = ['ate', 'jeux', 'quetes', 'trophees', 'oeufs', 'talents'];
+const WORKSHOP = ['ate', 'jeux', 'quetes', 'trophees', 'oeufs', 'talents'];
 
-// Liste de la catégorie choisie (V4.sacC), en Boutique ou dans le Sac.
+// List of the chosen category (V4.sacC), in the Shop or the Bag.
 function List({ v, keys }) {
   const c = V4.sacC;
   if (v === 'boutique' && c === 'ambu') return <Peddler />; // v4.54
-  if (v === 'boutique' && ATELIER.includes(c)) return <WorkshopTab c={c} />; // v4.57 et suivantes
+  if (v === 'boutique' && WORKSHOP.includes(c)) return <WorkshopTab c={c} />; // v4.57 and later
   if (v === 'boutique' && (c === 'held' || c === 'rares')) return <Outfits cat={c} />; // v4.14
   if (c === 'held') return keys.map(k => <Outfit key={k} k={k} />);
   if (v === 'sac') {
@@ -27,9 +27,9 @@ function List({ v, keys }) {
   return keys.map(k => <Article key={k} k={k} mode="boutique" />);
 }
 
-// Vendeur de CT du jour (v4.58) : −20 % sur deux CT, en Boutique › CT et CS.
+// TM vendor of the day (v4.58): −20% on two TMs, in Shop › TMs and HMs.
 function TmVendor() {
-  const J = ctJour456();
+  const J = tmDay456();
   return (
     <p id="ctj456" className="v4-note"><b>Vendeur de CT de {J.reg}</b> : −20 % aujourd’hui sur {J.o.map(k => SHOP[k].n).join(' et ')}.</p>
   );
@@ -44,9 +44,9 @@ function Content() {
     ['held', 'Objets tenus', 'i-star'],
     ['machines', 'CT et CS', 'i-bolt'],
     ...(v === 'boutique' ? [['rares', 'Marchand rare', 'i-gem'], ['ambu', 'Colporteur', 'i-shop'], ['ate', 'Atelier', 'i-bolt'], ['jeux', 'Tirage', 'i-star'], ['quetes', 'Quêtes', 'i-medal'], ['trophees', 'Trophées', 'i-star'], ['oeufs', 'Œufs', 'i-star'], ['talents', 'Talents', 'i-medal']] : [])
-  ]; // v4.14 : objets de combat, objets tenus en vente, marchand rare
+  ]; // v4.14: battle items, held items for sale, rare merchant
   const keys = V4.sacC === 'held' ? Object.keys(ITEMS2) : Object.keys(SHOP).filter(k => SHOP[k].cat === V4.sacC);
-  // objets de la poche ouverte, pour le bandeau du Sac
+  // items of the open pocket, for the Bag banner
   const n = v === 'sac' ? (V4.sacC === 'held' ? keys.length : keys.filter(k => bagN(k)).length) : 0;
   return (
     <>
@@ -78,10 +78,10 @@ function Content() {
   );
 }
 
-// Page Sac et Boutique (#sac). Rien n'est rendu avant le premier renderBag() du moteur ; chaque
-// renderBag() reconstruit le contenu (gestionnaires délégués dans le moteur : data-sacv,
-// data-sacc, data-qk, data-buy, data-buyh, data-offre, data-am454, data-at455…). Les classes
-// pk-mart / pk-bag de la section sont posées par le moteur (renderBag).
+// Bag and Shop page (#sac). Nothing is rendered before the engine's first renderBag(); each
+// renderBag() rebuilds the content (delegated handlers in the engine: data-sacv,
+// data-sacc, data-qk, data-buy, data-buyh, data-offre, data-am454, data-at455…). The
+// pk-mart / pk-bag classes of the section are set by the engine (renderBag).
 export default function Bag() {
   const ready = useEngineReady();
   const version = useBagVersion();

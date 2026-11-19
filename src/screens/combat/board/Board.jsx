@@ -8,10 +8,10 @@ import Defs from './Defs.jsx';
 import EvoFx from './EvoFx.jsx';
 import { Units } from './Units.jsx';
 
-// Plateau de combat (#bBoard) : le SVG des cases et des Pokémon, la cinématique d'évolution.
-// Les calques sont remontés à chaque construction (buildBoard), comme l'ancien svg.innerHTML = ''.
-// Les jetons des Pokémon sont rendus par Units.jsx ; les calques vides (effets, nombres
-// flottants) reçoivent les effets ponctuels du moteur, que React ne redessine jamais.
+// Battle board (#bBoard): the SVG of tiles and Pokémon, the evolution cutscene.
+// The layers are remounted on each build (buildBoard), like the old svg.innerHTML = ''.
+// The Pokémon tokens are rendered by Units.jsx; the empty layers (effects, floating
+// numbers) receive the engine's one-off effects, which React never redraws.
 
 function Layers() {
   return (
@@ -41,7 +41,7 @@ function Layers() {
   );
 }
 
-// memo : un rendu du conteneur (classes, enfants) ne redessine pas le plateau
+// memo: a render of the container (classes, children) does not redraw the board
 const GameBoard = memo(function GameBoard() {
   const S = useBoard('svg');
   return (
@@ -52,9 +52,9 @@ const GameBoard = memo(function GameBoard() {
 });
 const Evo = memo(EvoFx);
 
-// Conteneur #bBoard : classes, variables et data-ph suivent l'état « host » (boardStore.js).
-// Les enfants hors du SVG sont dans l'ordre d'un début de combat normal (création au premier usage).
-// La largeur (style.width, calibre434) reste posée par le moteur : React ne gère pas cette propriété.
+// #bBoard container: classes, variables and data-ph follow the « host » state (boardStore.js).
+// Children outside the SVG are in the order of a normal battle start (created on first use).
+// The width (style.width, gauge434) is still set by the engine: React does not manage this property.
 function Board() {
   const H = useHost();
   return (
@@ -90,7 +90,7 @@ function Board() {
           ))}
         </div>
       )}
-      {/* toile des effets d'attaque : dessinée et placée par le moteur (028, fxPrep) */}
+      {/* attack effects canvas: drawn and placed by the engine (028, fxPrep) */}
       {H.fxc && <canvas className="fxc" aria-hidden="true" />}
       {H.cielBan && <SkyBanner b={H.cielBan} />}
       {H.tbn && (
@@ -104,7 +104,7 @@ function Board() {
   );
 }
 
-// Ciel du combat (v4.30) : heure, météo, vent.
+// Battle sky (v4.30): time, weather, wind.
 function Sky({ c }) {
   return (
     <div id="ciel430" className="ciel430" aria-live="polite">
@@ -132,7 +132,7 @@ function Sky({ c }) {
   );
 }
 
-// Annonce du ciel (v4.30) : l'heure ou la météo change.
+// Sky announcement (v4.30): the time or weather changes.
 function SkyBanner({ b }) {
   return (
     <div id="cielBan430" className={'cielban430' + (b.on ? ' on' : '')}>

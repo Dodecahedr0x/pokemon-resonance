@@ -1,10 +1,10 @@
-/* Section d'origine : v4.32-01-individus-et-confort.js */
+/* Original section: v4.32-01-individus-et-confort.js */
 
 import { BY, PRESETS, familyOf } from './009-pokemon.js';
 import { DIFFS, ITEMS2, PROFILE, inBox, isCamp, ownedItems } from './011-game-state.js';
 import { synOf } from './012-recruits-roles-synergies.js';
 import { fnv, toast } from './014-utils.js';
-import { CROCHETS } from './015-hooks.js';
+import { HOOKS } from './015-hooks.js';
 import { __set_squad, renderSquad, save, squad, validSquad } from './020-team-cards.js';
 import { EMAX, say } from './021-combat-engine.js';
 import { queueSave } from './025-saves.js';
@@ -12,21 +12,21 @@ import { PREF, renderPrep, savePref } from './026-campaign-tutorial-sound.js';
 import { __set_TEAM_BAK } from './027-gym-on-screen.js';
 import { today } from './032-v4-foundation.js';
 import { renderParams } from './040-settings.js';
-import { CARACTERES, onExpedition } from './049-identity.js';
-import { CAMPT431 } from './066-tactical-challenges.js';
+import { CHARACTERS, onExpedition } from './049-identity.js';
+import { CAMP_TABS431 } from './066-tactical-challenges.js';
 
-export let EQ_NOM432;
+export let EQ_NAME432;
 
 
 /* =====================================================================
    v4.32
-   1. Nature et talent individuels : chaque Pokémon capturé reçoit une
-      nature (parmi les caractères qui conviennent à sa famille) et un
-      talent (lié à ses types), gardés à travers ses évolutions.
-   2. Équipes enregistrées : vos équipes (Pokémon et objets tenus).
-   3. Formations en synergie : huit nouvelles équipes conseillées.
-   4. Accessibilité : texte, contraste, daltonisme, gaucher, animations.
-   5. Panthéon : les équipes qui ont battu un Maître ou le gardien.
+   1. Individual nature and ability: each captured Pokémon receives a
+      nature (among the characters that suit its family) and an
+      ability (tied to its types), kept through its evolutions.
+   2. Saved teams: your teams (Pokémon and held items).
+   3. Synergy formations: eight new recommended teams.
+   4. Accessibility: text, contrast, color blindness, left-handed, animations.
+   5. Pantheon: the teams that beat a Master or the guardian.
    ===================================================================== */
 export function V432_0() {
   return { indiv432: {}, indiv432Init: 0, teams432: [], panth432: [] };
@@ -39,7 +39,7 @@ export function v432Clean(p) {
   if (p.indiv432 && typeof p.indiv432 === 'object')
     Object.keys(p.indiv432).forEach(b => {
       const x = p.indiv432[b];
-      if (BY[b] && x && typeof x === 'object' && CARACTERES[x.car] && TALENTS432[x.tal]) o.indiv432[b] = { car: x.car, tal: x.tal };
+      if (BY[b] && x && typeof x === 'object' && CHARACTERS[x.car] && TALENTS432[x.tal]) o.indiv432[b] = { car: x.car, tal: x.tal };
     });
   o.indiv432Init = p.indiv432Init ? 1 : 0;
   if (Array.isArray(p.teams432))
@@ -70,7 +70,7 @@ export function v432Clean(p) {
 }
 
 
-/** Les trois talents possibles d’une famille : ceux de ses types, de la forme de base à la dernière évolution. */
+/** A family's three possible abilities: those of its types, from the base form to the last evolution. */
 function familyTalents432(b) {
   const types = new Set(familyOf(b).flatMap(m => m.t)),
     h = fnv(b),
@@ -82,7 +82,7 @@ function familyTalents432(b) {
 }
 
 
-/** Les trois natures qui conviennent à une famille : d’après la dernière évolution. */
+/** The three natures that suit a family: based on the last evolution. */
 function naturesFamily432(b) {
   const f = familyOf(b),
     m = f.slice().sort((x, y) => y.st - x.st)[0] || BY[b],
@@ -102,20 +102,20 @@ function naturesFamily432(b) {
 
 
 function characterHash432(b) {
-  const ks = Object.keys(CARACTERES);
+  const ks = Object.keys(CHARACTERS);
   let h = 7;
   for (const c of String(b)) h = (h * 31 + c.charCodeAt(0)) % 9973;
   return ks[h % ks.length];
 }
 
 
-/** Nature et talent d’une famille de votre Box (tirés à sa première apparition). */
+/** Nature and ability of a family in your Box (rolled on its first appearance). */
 export function individualOf432(id) {
   const b = BY[id] ? BY[id].base : id;
   if (!BY[b] || !PROFILE.box.includes(b)) return null;
   const I = (PROFILE.indiv432 = PROFILE.indiv432 || {});
   if (!PROFILE.indiv432Init) {
-    // les familles déjà présentes gardent leur caractère d’avant la v4.32
+    // families already present keep their pre-v4.32 character
     PROFILE.box.forEach(x => {
       if (!I[x] && BY[x]) I[x] = { car: characterHash432(x), tal: familyTalents432(x)[fnv(x) % 3] };
     });
@@ -157,7 +157,7 @@ export function individualHtml432(id) {
 }
 
 
-// rangée « Mes équipes » de l'écran Équipe : rendue par React (src/screens/equipe/DexCall.jsx)
+// "Mes équipes" (My teams) row of the Team screen: rendered by React (src/screens/team/DexCall.jsx)
 
 
 function loadTeam432(i) {
@@ -185,11 +185,11 @@ function loadTeam432(i) {
 }
 
 
-/* dans Combats : les équipes enregistrées (#eqPrep432) sont rendues par React
+/* in Battles: the saved teams (#eqPrep432) are rendered by React
    (src/screens/combat/prep/Team.jsx) */
 
 
-/* ---------- 4. accessibilité ---------- */
+/* ---------- 4. accessibility ---------- */
 function a11y432() {
   const h = document.documentElement,
     t = PREF.txt432 || 'normal';
@@ -209,9 +209,9 @@ export function engrave432(k, n, team, S) {
 }
 
 
-// l’onglet Camp › Panthéon est rendu par React : src/screens/camp/tabs/Pantheon.jsx
+// the Camp › Pantheon tab is rendered by React: src/screens/camp/tabs/Pantheon.jsx
 
-/* ---------- 1. nature et talent individuels ---------- */
+/* ---------- 1. individual nature and ability ---------- */
 const TALENTS432 = {
   fermete: ['Fermeté', 'Survit une fois par combat à un coup fatal (1 PV).', ['Roche', 'Sol', 'Acier', 'Combat', 'Normal']],
   regen: ['Régénération', 'Récupère 8 % de ses PV à chaque fin de manche.', ['Eau', 'Plante', 'Normal', 'Fée', 'Poison']],
@@ -225,14 +225,14 @@ const TALENTS432 = {
 };
 
 
-/* ---------- 5. Panthéon ---------- */
-export const PANTH432 = { champ: 'Champion de Kanto', jchamp: 'Maître de Johto', hchamp: 'Maître de Hoenn', echo: 'Gardien de l’Écho profond' };
+/* ---------- 5. Pantheon ---------- */
+export const PANTHEON432 = { champ: 'Champion de Kanto', jchamp: 'Maître de Johto', hchamp: 'Maître de Hoenn', echo: 'Gardien de l’Écho profond' };
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Statements run at startup, in the original order (see index.js).
 export function __init() {
 
-CROCHETS.combat.push(S => {
-  if ((S.fixe431 && S.sc !== 'echo431') || !S.car) return; // réglage « Natures et talents »
+HOOKS.combat.push(S => {
+  if ((S.fixe431 && S.sc !== 'echo431') || !S.car) return; // "Natures et talents" (Natures and abilities) setting
   S.units
     .filter(u => u.side === 'a')
     .forEach(u => {
@@ -249,7 +249,7 @@ CROCHETS.combat.push(S => {
 });
 
 
-CROCHETS.avantFinManche.push((S, ev) => {
+HOOKS.avantFinManche.push((S, ev) => {
   S.units.forEach(u => {
     if (u.tal432 !== 'regen' || u.ko || u.hp >= u.mhp || u.side !== 'a') return;
     const g = Math.max(1, Math.round(u.mhp * 0.08));
@@ -259,8 +259,8 @@ CROCHETS.avantFinManche.push((S, ev) => {
 });
 
 
-/* ---------- 2. équipes enregistrées ---------- */
-EQ_NOM432 = false;
+/* ---------- 2. saved teams ---------- */
+EQ_NAME432 = false;
 
 
 document.addEventListener('click', e => {
@@ -269,7 +269,7 @@ document.addEventListener('click', e => {
   const a = b.dataset.eq432,
     T = (PROFILE.teams432 = PROFILE.teams432 || []);
   if (a === 'nouv') {
-    EQ_NOM432 = true;
+    EQ_NAME432 = true;
     renderSquad();
     const i = document.getElementById('eqNom432');
     if (i) i.focus();
@@ -283,7 +283,7 @@ document.addEventListener('click', e => {
       if (PROFILE.equip[bb]) it[bb] = PROFILE.equip[bb];
     });
     if (squad.length && T.length < 8) T.push({ n: v, ids: [...squad], it });
-    EQ_NOM432 = false;
+    EQ_NAME432 = false;
     save();
     toast(`Équipe « ${v} » enregistrée.`);
   } else if (a === 'charger') return loadTeam432(+b.dataset.i);
@@ -312,7 +312,7 @@ document.addEventListener('keydown', e => {
 });
 
 
-/* ---------- 3. formations en synergie ---------- */
+/* ---------- 3. synergy formations ---------- */
 Object.assign(PRESETS, {
   grandorage: { n: 'Grand orage', ids: ['scarhino', 'ramoloss', 'hoothoot', 'loupio'], s432: 'Tempête, Escadrille, Dojo' },
   cieldraco: { n: 'Ciel draconique', ids: ['evoli', 'scarhino', 'hoothoot', 'minidraco'], s432: 'Escadrille, Dojo, Ciel draconique' },
@@ -355,22 +355,22 @@ document.addEventListener('change', e => {
 });
 
 
-CROCHETS.progres.push((S, rew, win) => {
-  if (!win || !PANTH432[S.sc]) return null;
+HOOKS.progres.push((S, rew, win) => {
+  if (!win || !PANTHEON432[S.sc]) return null;
   engrave432(
     S.sc,
-    PANTH432[S.sc],
+    PANTHEON432[S.sc],
     S.units.filter(u => u.side === 'a').map(u => u.id),
     S
   );
-  rew.panth432 = PANTH432[S.sc];
+  rew.panth432 = PANTHEON432[S.sc];
   return null;
 });
 
 
-CROCHETS.resultat.push(r => (r.panth432 ? `<div class="res-l"><h4>Panthéon</h4><div class="rl"><span>Votre équipe est gravée au Panthéon : ${r.panth432}.</span><b>★</b></div></div>` : ''));
+HOOKS.resultat.push(r => (r.panth432 ? `<div class="res-l"><h4>Panthéon</h4><div class="rl"><span>Votre équipe est gravée au Panthéon : ${r.panth432}.</span><b>★</b></div></div>` : ''));
 
 
-if (!CAMPT431.some(x => x[0] === 'pantheon')) CAMPT431.push(['pantheon', 'Panthéon']);
+if (!CAMP_TABS431.some(x => x[0] === 'pantheon')) CAMP_TABS431.push(['pantheon', 'Panthéon']);
 
 }

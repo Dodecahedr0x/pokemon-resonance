@@ -8,15 +8,15 @@ import Side from './Side.jsx';
 import WhatsNew from './News.jsx';
 import Tiles from './Tiles.jsx';
 import Bottom from './Footer.jsx';
-import CarteDresseur from './TrainerCard.jsx';
+import TrainerCard from './TrainerCard.jsx';
 import Friends from './Friends.jsx';
 
-// Page Accueil (#accueil), dans la disposition finale de l'ancien DOM : la grille v4
-// (.v4-home, autrefois construite au démarrage autour du héros), puis l'ancien en-tête et les
-// raccourcis, masqués (.v4-off), les Défis entre amis et l'ancienne fiche « stage » cachée.
-// Le contenu est relu dans le moteur à chaque renderHome() (store) ; avant le premier rendu
-// et tant que le moteur n'est pas prêt, seuls les conteneurs existent.
-// La Route 29 (#route) n'est pas ici : elle vit dans la page Carte (Route.jsx).
+// Home page (#accueil), in the final layout of the old DOM: the v4 grid
+// (.v4-home, formerly built at startup around the hero), then the old header and the
+// shortcuts, hidden (.v4-off), the Friend Challenges and the old hidden "stage" sheet.
+// The content is reread from the engine on every renderHome() (store); before the first render
+// and while the engine is not ready, only the containers exist.
+// Route 29 (#route) is not here: it lives in the Map page (Route.jsx).
 export default function Home() {
   const ready = useEngineReady(),
     v = useHomeVersion(),
@@ -39,7 +39,7 @@ export default function Home() {
         <Bottom on={on} />
       </div>
       <div className="hm-top v4-off">
-        <div className="tcard" id="campBox">{on && <CarteDresseur />}</div>
+        <div className="tcard" id="campBox">{on && <TrainerCard />}</div>
       </div>
       <div className="hm-quick v4-off">
         <button type="button" className="qk qk-grass" data-hm="wild"><span className="qk-ic"><svg><use href="#i-grass" /></svg></span><span><b>Hautes herbes</b><em>Rencontrer et capturer des Pokémon</em></span></button>

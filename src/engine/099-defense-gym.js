@@ -1,10 +1,10 @@
-/* Section d'origine : 4.68 : Arène de défense */
+/* Original section: 4.68: Defense Gym */
 
 import { MON, SCEN } from './009-pokemon.js';
 import { isCamp } from './011-game-state.js';
 import { BADGES } from './013-gyms.js';
 import { writeLS, toast } from './014-utils.js';
-import { CROCHETS } from './015-hooks.js';
+import { HOOKS } from './015-hooks.js';
 import { squad } from './020-team-cards.js';
 import { K, mkUnit, plan, say, uAt } from './021-combat-engine.js';
 import { OBST } from './023-roles-synergies-obstacles.js';
@@ -12,12 +12,12 @@ import { B, backToPrep, goFight } from './024-combat-ui.js';
 import { overlay } from './030-prestige-staging.js';
 import { shut } from '../screens/overlays/tempStore.js';
 
-export let DEF_VAGUES, DEF_VIES;
+export let DEF_WAVES, DEF_LIVES;
 
 
 function dfVague468(S, ev) {
   const D = S.def468;
-  if (!D || D.w >= DEF_VAGUES) return false;
+  if (!D || D.w >= DEF_WAVES) return false;
   D.w++;
   const nb = Math.min(6 - S.units.filter(u => u.side === 'e' && !u.ko).length, 2 + Math.floor(D.w / 2));
   const pool = dfPool468(),
@@ -35,7 +35,7 @@ function dfVague468(S, ev) {
     made++;
   }
   if (made) {
-    say(ev, `Vague ${D.w} sur ${DEF_VAGUES} : ${made} adversaire${made > 1 ? 's' : ''} arrive${made > 1 ? 'nt' : ''} !`);
+    say(ev, `Vague ${D.w} sur ${DEF_WAVES} : ${made} adversaire${made > 1 ? 's' : ''} arrive${made > 1 ? 'nt' : ''} !`);
     ev.push({ e: 'terrain' });
     try {
       plan(S, ev);
@@ -47,7 +47,7 @@ function dfVague468(S, ev) {
 
 function dfOpen468() {
   const st = dfSt468();
-  // rendu : src/screens/overlays/temporaires/Fenetres.jsx (Df468)
+  // render: src/screens/overlays/transients/Windows.jsx (Df468)
   const o = overlay('df468o', { d: SCEN.def468.d, best: st.best, won: st.won, ok: !!dfOk468() });
   o.addEventListener('click', e => {
     if (e.target === o) shut('df468o');
@@ -55,7 +55,7 @@ function dfOpen468() {
 }
 
 
-/** Bannière de l'Arène de défense sur l'Accueil (#df468, rendu : src/screens/accueil/Bannieres.jsx). */
+/** Defense Gym banner on Home (#df468, render: src/screens/home/Banners.jsx). */
 export function dfTxt468() {
   return dfOk468() ? `5 vagues · record ${dfSt468().best}` : 'Débloquée avec 3 badges';
 }
@@ -76,7 +76,7 @@ const dfOk468 = () => (isCamp() ? BADGES.length >= 3 : true);
 
 const dfPool468 = () => MON.filter(m => m.st === 1 && !m.leg && !m.ennemi && m.base === m.id);
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Statements run at startup, in the original order (see index.js).
 export function __init() {
 
 SCEN.def468 = {
@@ -102,18 +102,18 @@ SCEN.def468 = {
 OBST.def468 = { pil: ['4,2'], grass: ['4,4', '5,1'] };
 
 
-DEF_VAGUES = 5,
-  DEF_VIES = 3;
+DEF_WAVES = 5,
+  DEF_LIVES = 3;
 
 
 
-CROCHETS.creation.push((S, opt, D0) => {
+HOOKS.creation.push((S, opt, D0) => {
   if (!D0 || !D0.def468) return;
-  S.def468 = { w: 1, vies: DEF_VIES, n: 0 };
+  S.def468 = { w: 1, vies: DEF_LIVES, n: 0 };
 });
 
 
-CROCHETS.avantFinManche.unshift((S, ev) => {
+HOOKS.avantFinManche.unshift((S, ev) => {
   const D = S.def468;
   if (!D || S.over) return;
   S.units
@@ -122,7 +122,7 @@ CROCHETS.avantFinManche.unshift((S, ev) => {
       u.ko = true;
       u.hp = 0;
       D.vies--;
-      say(ev, `Brèche ! ${u.n} a atteint la ligne de défense. Vies restantes : ${Math.max(0, D.vies)} / ${DEF_VIES}.`);
+      say(ev, `Brèche ! ${u.n} a atteint la ligne de défense. Vies restantes : ${Math.max(0, D.vies)} / ${DEF_LIVES}.`);
     });
   if (D.vies <= 0) {
     S.over = 'lose';
@@ -133,18 +133,18 @@ CROCHETS.avantFinManche.unshift((S, ev) => {
 });
 
 
-// plus d’adversaire debout : la vague suivante arrive avant que le combat ne soit jugé gagné
-CROCHETS.avantVerdict.push((S, ev) => {
-  if (S.def468 && !S.over && !S.units.some(x => x.side === 'e' && !x.ko) && S.def468.w < DEF_VAGUES && S.units.some(x => x.side === 'a' && !x.ko)) dfVague468(S, ev);
+// no opponent left standing: the next wave arrives before the battle is judged won
+HOOKS.avantVerdict.push((S, ev) => {
+  if (S.def468 && !S.over && !S.units.some(x => x.side === 'e' && !x.ko) && S.def468.w < DEF_WAVES && S.units.some(x => x.side === 'a' && !x.ko)) dfVague468(S, ev);
 });
 
 
-CROCHETS.progres.unshift((S, rew, win) => {
+HOOKS.progres.unshift((S, rew, win) => {
   try {
     const D = S.def468;
     if (!D) return null;
     const st = dfSt468();
-    st.best = Math.max(st.best, win ? DEF_VAGUES : D.w - 1);
+    st.best = Math.max(st.best, win ? DEF_WAVES : D.w - 1);
     if (win) st.won++;
     dfSave468(st);
     rew.df468 = { win, w: D.w, vies: D.vies };
@@ -155,14 +155,14 @@ CROCHETS.progres.unshift((S, rew, win) => {
 });
 
 
-CROCHETS.resultat.unshift(r => {
+HOOKS.resultat.unshift(r => {
   const t = r.df468;
   if (!t) return '';
-  return `<div class="res-l"><h4>Arène de défense</h4><div class="rl"><span>${t.win ? `<b>Défense tenue !</b> ${DEF_VAGUES} vagues repoussées, ${t.vies} vie${t.vies > 1 ? 's' : ''} restante${t.vies > 1 ? 's' : ''}.` : `Vous avez tenu jusqu’à la vague ${t.w} sur ${DEF_VAGUES}.`}</span></div></div>`;
+  return `<div class="res-l"><h4>Arène de défense</h4><div class="rl"><span>${t.win ? `<b>Défense tenue !</b> ${DEF_WAVES} vagues repoussées, ${t.vies} vie${t.vies > 1 ? 's' : ''} restante${t.vies > 1 ? 's' : ''}.` : `Vous avez tenu jusqu’à la vague ${t.w} sur ${DEF_WAVES}.`}</span></div></div>`;
 });
 
 
-// bandeau des vagues (#df468hud) : rendu par React (src/screens/combat/battle/Battle.jsx)
+// wave banner (#df468hud): rendered by React (src/screens/combat/battle/Battle.jsx)
 
 
 document.addEventListener(

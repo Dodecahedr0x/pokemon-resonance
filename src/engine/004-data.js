@@ -1,7 +1,7 @@
-/* Section d'origine : 01-donnees.js */
+/* Original section: 01-donnees.js */
 
 
-/* ===================== DONNÉES ===================== */
+/* ===================== DATA ===================== */
 export const TYPES = {
   Normal: ['#A8A77A', 'M12 3.5a8.5 8.5 0 1 0 0 17a8.5 8.5 0 1 0 0-17Zm0 4.5a4 4 0 1 1 0 8a4 4 0 1 1 0-8Z'],
   Feu: [
@@ -323,7 +323,7 @@ export const BSHAPE = [
 
 export const dexNo = n => '#' + String(n).padStart(4, '0');
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Statements run at startup, in the original order (see index.js).
 export function __init() {
 
 RX.cc.tip =

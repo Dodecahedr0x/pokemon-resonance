@@ -9,8 +9,8 @@ import { CHAP, leaderOf } from '../../../engine/030-prestige-staging.js';
 import { emblem, goalChips, groupOf, wonOf } from '../../../engine/031-home-journey.js';
 import { styleOf } from '../../../engine/043-adventure-plus.js';
 
-// L'ancien gabarit séparait ses blocs par « \n  » : on garde ces nœuds texte,
-// fusionnés quand un bloc conditionnel est vide (comme l'ancien innerHTML).
+// The old template separated its blocks with « \n  »: we keep these text nodes,
+// merged when a conditional block is empty (like the old innerHTML).
 const SEP = '\n  ';
 function joinBlocks(blocks) {
   const out = [];
@@ -26,7 +26,7 @@ function joinBlocks(blocks) {
   return out;
 }
 
-// Fiche du combat sélectionné (#selDet).
+// Selected battle's sheet (#selDet).
 export default function Detail({ k }) {
   const s = SCEN[k],
     lk = scenLock(k),

@@ -1,27 +1,27 @@
-/* Section d'origine : 4.58 : objets tenus en plus, CT à gagner */
+/* Original section: 4.58: extra held items, TMs to win */
 
 import { ITEMS2, PROFILE } from './011-game-state.js';
-import { CROCHETS } from './015-hooks.js';
+import { HOOKS } from './015-hooks.js';
 import { esc } from './025-saves.js';
 import { HELD_IMG, ICO414, SHOP, bagN, today } from './032-v4-foundation.js';
-import { FOURNISSEURS_DEGATS } from './044-tactical-engine.js';
+import { DAMAGE_PROVIDERS } from './044-tactical-engine.js';
 import { HELD_SHOP } from './053-resonance.js';
 import { seed417 } from './057-companions-resonance.js';
 import { rng454 } from './084-peddler-route-missions.js';
 import { berry455, orb455, svg455 } from './087-balls-held-items.js';
-import { ctKeys455 } from './088-workshop-recipes.js';
+import { tmKeys455 } from './088-workshop-recipes.js';
 
 
 
-export function ctJour456() {
+export function tmDay456() {
   const r = rng454('ctjour456'),
-    pool = ctKeys455().slice(),
+    pool = tmKeys455().slice(),
     o = [];
   while (o.length < 2 && pool.length) o.push(pool.splice(Math.floor(r() * pool.length), 1)[0]);
   return { o, reg: ['Kanto', 'Johto', 'Hoenn'][seed417('ctreg456') % 3] };
 }
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Statements run at startup, in the original order (see index.js).
 export function __init() {
 
 Object.assign(ICO414, {
@@ -31,7 +31,7 @@ Object.assign(ICO414, {
 });
 
 
-/* ---------- objets tenus en plus ---------- */
+/* ---------- extra held items ---------- */
 Object.assign(ITEMS2, {
   baielum: { n: 'Baie Lum', d: 'Annule le premier Sommeil, la première Paralysie ou le premier Gel subi dans le combat.', i: 'M12 8c-4 0-6 3-6 6s2.5 6 6 6 6-2.6 6-6-2-6-6-6Zm0 0c0-2 1-3.6 3-4.5' },
   orbeflamme: { n: 'Orbe Flamme', d: 'Commence le combat Brûlé (3 manches). +25 % de dégâts tant qu’il brûle.', i: 'M12 3c3 3 6 6 4 11-1 3-6 3-7 0-2-5 0-8 3-11Z' },
@@ -47,13 +47,13 @@ Object.assign(HELD_SHOP, { baielum: { p: 3000 }, orbeflamme: { p: 3000 }, orbeto
 
 
 
-FOURNISSEURS_DEGATS.push({
+DAMAGE_PROVIDERS.push({
   id: 'orbes456',
   fournir: (c, { u, m }) => !!u && ((u.item === 'orbeflamme' && u.bru > 0) || (u.item === 'orbetoxik' && u.psn > 0)) && (m.p > 0 || m.fix > 0) && { mul: 1.25, libelle: ITEMS2[u.item].n }
 });
 
 
-CROCHETS.combat.push(S => {
+HOOKS.combat.push(S => {
   S.units.forEach(u => {
     if (u.side !== 'a' || u.ko) return;
     if (u.item === 'orbeflamme') u.bru = Math.max(u.bru || 0, 3);
@@ -62,12 +62,12 @@ CROCHETS.combat.push(S => {
 });
 
 
-/* ---------- CT à gagner : rang S, vendeur du jour ---------- */
-CROCHETS.progres.unshift((S, rew) => {
+/* ---------- TMs to win: rank S, vendor of the day ---------- */
+HOOKS.progres.unshift((S, rew) => {
   try {
     if (S && S.rank === 'S' && S.rankNew && S.sc !== 'sauvage' && S.sc !== 'tuto') {
-      const cts = ctKeys455().filter(k => !bagN(k)),
-        pool = cts.length ? cts : ctKeys455();
+      const cts = tmKeys455().filter(k => !bagN(k)),
+        pool = cts.length ? cts : tmKeys455();
       let h = 5;
       for (const ch of S.sc + today()) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
       const k = pool[h % pool.length];
@@ -78,11 +78,11 @@ CROCHETS.progres.unshift((S, rew) => {
 });
 
 
-CROCHETS.resultat.unshift(r => (r.ct456 ? `<div class="res-l"><h4>Récompense de rang S</h4><div class="rl"><span>${esc(SHOP[r.ct456].n)} ajoutée au Sac</span><b>CT</b></div></div>` : ''));
+HOOKS.resultat.unshift(r => (r.ct456 ? `<div class="res-l"><h4>Récompense de rang S</h4><div class="rl"><span>${esc(SHOP[r.ct456].n)} ajoutée au Sac</span><b>CT</b></div></div>` : ''));
 
 
 
 
-// vendeur de CT du jour (#ctj456, Boutique › CT et CS) : rendu par React (src/screens/sac/Sac.jsx)
+// TM vendor of the day (#ctj456, Shop › TMs and HMs): rendered by React (src/screens/bag/Bag.jsx)
 
 }

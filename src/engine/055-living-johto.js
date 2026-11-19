@@ -1,4 +1,4 @@
-/* Section d'origine : v4.16-01-johto-vivant.js */
+/* Original section: v4.16-01-johto-vivant.js */
 
 import { EL, MX } from './004-data.js';
 import { MV } from './005-moves.js';
@@ -8,7 +8,7 @@ import { ITEMS2, PROFILE, isCamp, lvlOfPts, ownedItems, pairKey } from './011-ga
 import { BADGES } from './013-gyms.js';
 import { paintOverlay } from '../screens/overlays/dialogsStore.js';
 import { $, fnv, medal, toast } from './014-utils.js';
-import { CROCHETS } from './015-hooks.js';
+import { HOOKS } from './015-hooks.js';
 import { TOD } from './017-home-route.js';
 import { __set_squad, renderSquad, save, squad } from './020-team-cards.js';
 import { P, hasNx, heal, nextId, say, setMark, transform } from './021-combat-engine.js';
@@ -19,9 +19,9 @@ import { esc, queueSave } from './025-saves.js';
 import { HELD_IMG, ICO414, ITM, SHOP, bagN, familyOwned, fmt, today } from './032-v4-foundation.js';
 import { PL, placeName } from './037-map.js';
 import { LEGS, isShinyOwned, shinyStyle } from './043-adventure-plus.js';
-import { FOURNISSEURS_DEGATS } from './044-tactical-engine.js';
+import { DAMAGE_PROVIDERS } from './044-tactical-engine.js';
 import { MACHINES } from './045-tms-hms.js';
-import { SUCCES, isFallen } from './048-replayability.js';
+import { ACHIEVEMENTS, isFallen } from './048-replayability.js';
 import { onExpedition, renderCampBase } from './049-identity.js';
 import { multChroma } from './050-world.js';
 import { HELD_SHOP, hasXp } from './053-resonance.js';
@@ -35,31 +35,31 @@ import { monWeekly429, wkClean429 } from './064-quality.js';
 import { campOk430 } from './065-camp-tactics.js';
 
 export let wildDom416;
-let JDIS, PENS_SEL, AMI_DEL, AMI_MODE;
+let JDIS, PENS_SEL, FRIEND_DEL, FRIEND_MODE;
 export function __set_wildDom416(v) { return (wildDom416 = v); }
-export { pair416, parents416, heritable416 }; // lus par la Pension du Camp (src/screens/camp)
+export { pair416, parents416, heritable416 }; // read by the Camp's Daycare (src/screens/camp)
 
 
 /* =====================================================================
-   v4.16 : Johto vivant
-   1. L’histoire de Johto : la Néo-Dissonance de l’Admin Cobalt (4 combats,
-      après les badges 2, 4, 6 et 8 de Johto ; le dernier ouvre le Plateau).
-   2. Les bêtes errantes : Raikou, Entei et Suicune, réveillées à la Tour
-      Cendrée, changent de lieu après chaque combat. Elles fuient au bout de
-      4 manches et gardent leurs blessures : usez-les, puis apaisez-les.
-      Chacune laisse un talisman (objet tenu unique). Elles restent, comme
-      toutes les légendes, impossibles à recruter.
-   3. Les Pokémon Dominants : rares, plus grands, plus forts, escortés.
-      Battus ou capturés, ils laissent un trésor (CT, objet tenu, Éclats).
-   4. La Pension, en couple : deux Pokémon déposés donnent un œuf de leur
-      famille, avec une attaque héritée et plus de chances de chromatique.
-   5. Les Liens : chaque duo au palier Duo a désormais sa technique
-      combinée (selon ses types) ; 4 nouvelles techniques de Johto.
-   6. Défis entre amis : une carte de dresseur à partager (un code texte),
-      les équipes des amis à affronter, un classement commun.
+   v4.16: Living Johto
+   1. The Johto story: Admin Cobalt's Neo-Dissonance (4 battles,
+      after Johto badges 2, 4, 6 and 8; the last one opens the Plateau).
+   2. Roaming beasts: Raikou, Entei and Suicune, awakened at the Burned
+      Tower, change location after every battle. They flee after
+      4 rounds and keep their wounds: wear them down, then calm them.
+      Each one leaves a talisman (a unique held item). Like all
+      legendaries, they cannot be recruited.
+   3. Dominant Pokémon: rare, bigger, stronger, escorted.
+      Defeated or captured, they leave a treasure (TM, held item, Shards).
+   4. The Daycare, as a pair: two deposited Pokémon yield an egg of their
+      family, with an inherited move and a better chance of being shiny.
+   5. Bonds: each duo at the Duo tier now has its own combined
+      technique (based on its types); 4 new Johto techniques.
+   6. Friend challenges: a trainer card to share (a text code),
+      friends' teams to fight, a shared leaderboard.
    ===================================================================== */
 
-/* ---------- profil (fonctions déclarées : appelées dès le chargement) ---------- */
+/* ---------- profile (declared functions: called as soon as the file loads) ---------- */
 export function V416_0() {
   return { jdis: 0, roam: {}, herit: {}, couple: [], tid: '', amis: [], jour: null, dom: 0, oeufs: 0 };
 }
@@ -117,7 +117,7 @@ export function v416Clean(p) {
 }
 
 
-/** La prochaine étape de Johto : arènes et histoire mêlées. */
+/** The next step in Johto: gyms and story intermixed. */
 export function jNext416() {
   const J = PROFILE.johto || [],
     d = PROFILE.jdis || 0,
@@ -141,7 +141,7 @@ export function lockJ416(k, D) {
   }
   if (D.roam) return roamActive416() ? null : 'Les bêtes légendaires dorment encore sous la Tour Cendrée.';
   if (D.jfinal && J >= 8 && (PROFILE.jdis || 0) < 4 && !PROFILE.jchamp) return 'Arrêtez d’abord Cobalt au Relais du Plateau.';
-  return undefined; // les règles de la v4.15 s’appliquent
+  return undefined; // the v4.15 rules apply
 }
 
 
@@ -160,12 +160,12 @@ export function chapJ416(k) {
 }
 
 
-/** Sous la description d’un lieu : récompenses de l’histoire, état d’une bête errante. */
+/** Under a location's description: story rewards, state of a roaming beast. */
 export function extraLine416(k) {
   const D = SCEN[k];
   if (D.jdis) {
     const T = JDIS[D.jdis - 1];
-    if ((PROFILE.jdis || 0) >= D.jdis) return ''; // déjà vaincu : pas de seconde prime
+    if ((PROFILE.jdis || 0) >= D.jdis) return ''; // already defeated: no second bounty
     return `<div class="v4-rew"><span><span class="v4-coin" aria-hidden="true">₽</span>+${fmt(T.rew[0])}</span><span><span class="v4-gemi"><svg><use href="#i-gem"/></svg></span>+${T.rew[1]}</span></div>`;
   }
   if (D.roam) {
@@ -186,14 +186,14 @@ export function leadJ416(sc) {
 }
 
 
-/* ---------- règles des combats de l’histoire ---------- */
+/* ---------- story battle rules ---------- */
 export function jdSetup416(S, r, ev) {
   if (r === 'jbrouille') say(ev, 'Brouilleur : en fin de manche, votre Pokémon le plus chargé perd 1 losange.');
   if (r === 'jcendre') say(ev, 'Tour Cendrée : chaque manche, deux cases prennent feu.');
   if (r === 'jonde') say(ev, 'Antenne Rouge : à la fin des manches 1 et 3, les Pokémon de Cobalt évoluent de force.');
   if (r === 'jmauvaise') say(ev, 'Relais de Mauvaise Onde : les notes de Résonance s’effacent en fin de manche.');
   if (r === 'jroam') roamSetup416(S, ev);
-  hSetup419(S, r, ev); // arènes de Hoenn (v4.19)
+  hSetup419(S, r, ev); // Hoenn gyms (v4.19)
   if (r === 'jdom') domSetup416(S, ev);
 }
 
@@ -244,7 +244,7 @@ export function jdTick416(S, r, ev) {
     if (n) say(ev, `Mauvaise Onde : ${n} note${n > 1 ? 's' : ''} de Résonance effacée${n > 1 ? 's' : ''}.`);
   }
   if (r === 'jdom') domTick416(S, ev);
-  hTick419(S, r, ev); // arènes de Hoenn (v4.19)
+  hTick419(S, r, ev); // Hoenn gyms (v4.19)
 }
 
 
@@ -272,7 +272,7 @@ export function roamPlaces416() {
   return ROAM.filter(id => !roamOk416(id)).map(id => {
     const h = PL[roamState416(id).at] || PL.j1,
       L = roamLeg416(id),
-      [x, y] = roamPos416(h, takenSet), // v4.16.1 : la place la plus dégagée
+      [x, y] = roamPos416(h, takenSet), // v4.16.1: the clearest spot
       p = {
         id: 'r' + id,
         x,
@@ -296,21 +296,21 @@ function roamSetup416(S, ev) {
   S.lim = D.fuite || 4;
   if (!u) return;
   const r = roamState416(D.roam);
-  if (r.ok) return void say(ev, `${u.n} accepte un combat amical. Il s’enfuira au bout de ${S.lim} manches.`); // déjà apaisé : une revanche, sans prime
+  if (r.ok) return void say(ev, `${u.n} accepte un combat amical. Il s’enfuira au bout de ${S.lim} manches.`); // already calmed: a rematch, no bounty
   u.hp = Math.max(1, Math.round(u.mhp * (r.hp || 1)));
   say(ev, r.hp < 1 ? `${u.n} porte encore les traces de votre dernière rencontre (${Math.round(r.hp * 100)} % de ses PV).` : `${u.n} vous a repéré. Il s’enfuira au bout de ${S.lim} manches.`);
 }
 
 
-export function domTirage416(id) {
+export function domDraw416(id) {
   if (isCamp() && BADGES.length < 2 && !regionJ415()) return false;
-  return Math.random() < (TOD === 'nuit' ? 0.1 : 0.07) * (id && id === domDay417() ? 3 : 1); // Dominant signalé (v4.17)
+  return Math.random() < (TOD === 'nuit' ? 0.1 : 0.07) * (id && id === domDay417() ? 3 : 1); // Dominant flagged (v4.17)
 }
 
 
 export function dom416(D, id, shiny) {
   const m = BY[id],
-    neighbors = RECRUIT.filter(x => x.id !== id && x.t.some(t => m.t.includes(t)) && regFam421(x.id) === regionNo421()), // escorte de la région (v4.21)
+    neighbors = RECRUIT.filter(x => x.id !== id && x.t.some(t => m.t.includes(t)) && regFam421(x.id) === regionNo421()), // region escort (v4.21)
     nearby = RECRUIT.filter(x => x.id !== id && regFam421(x.id) === regionNo421()),
     pool = neighbors.length ? neighbors : nearby.length ? nearby : RECRUIT.filter(x => x.id !== id),
     a = pool[Math.floor(Math.random() * pool.length)];
@@ -379,7 +379,7 @@ function compatible416List(a, b) {
 }
 
 
-/** La mère donne la famille ; avec Métamorph, c’est l’autre parent. */
+/** The mother gives the family; with Ditto, it is the other parent. */
 function parents416() {
   const c = pair416();
   if (c.length < 2 || !compatible416List(c[0], c[1])) return null;
@@ -401,7 +401,7 @@ function heritable416(motherRef, father) {
 }
 
 
-/** Un œuf du couple : renvoie vrai s’il a éclos. */
+/** An egg from the pair: returns true if it hatched. */
 export function daycare416(rew) {
   const P2 = parents416();
   if (!P2) return false;
@@ -427,10 +427,10 @@ export function inheritance416(b) {
 }
 
 
-// la Pension du Camp de base est rendue par React : src/screens/camp/CampBase.jsx
+// the base Camp's Daycare is rendered by React: src/screens/camp/CampBase.jsx
 
 
-/* choix du couple de la Pension : rendu par React (src/screens/overlays/PensBox.jsx) */
+/* Daycare pair selection: rendered by React (src/screens/overlays/DaycareBox.jsx) */
 function renderDaycareBox() {
   const available = PROFILE.box.filter(id => BY[id] && !squad.some(s => BY[s].base === id) && !onExpedition(id) && !isFallen(id));
   const ok = PENS_SEL.length === 2 && compatible416List(PENS_SEL[0], PENS_SEL[1]);
@@ -450,7 +450,7 @@ function duoGen416(x, y) {
   const a = BY[x],
     b = BY[y];
   if (!a || !b || x === y) return null;
-  // on cherche d’abord un vrai enchaînement : une marque, puis le type qui la fait réagir
+  // first look for a real chain: a mark, then the type that makes it react
   const reacts = (mk, t) => {
     const i = EL.indexOf(t),
       id = MX[mk] && i >= 0 ? MX[mk][i] : null;
@@ -474,7 +474,7 @@ function duoGen416(x, y) {
     tB = Bm.t.find(t => t !== tA) || Bm.t[0];
   }
   const m = MARK_T416[tA] || null,
-    n = tA === tB ? `Double ${DUO_N416[tA] || 'Assaut'}` : `${DUO_N416[tA] || 'Assaut'} ${DUO_DE416[tB] || 'combiné'}`;
+    n = tA === tB ? `Double ${DUO_N416[tA] || 'Assaut'}` : `${DUO_N416[tA] || 'Assaut'} ${DUO_OF416[tB] || 'combiné'}`;
   return (DUOG416[k] = {
     n,
     first: A.id,
@@ -494,7 +494,7 @@ export function duoFor416(k) {
 }
 
 
-/** Le Guide : les techniques fixes, puis celles de vos duos les plus avancés. */
+/** The Guide: the fixed techniques, then those of your most advanced duos. */
 export function duoList416() {
   const o = Object.assign({}, DUOT);
   try {
@@ -506,7 +506,7 @@ export function duoList416() {
       const D = duoFor416(k);
       if (D) o[k] = D;
     });
-  } catch (e) {} // appelé dès le chargement, avant ce module
+  } catch (e) {} // called at load time, before this module
   return o;
 }
 
@@ -546,7 +546,7 @@ function mapCode416() {
     s: monState416(),
     jr: PROFILE.jour && PROFILE.jour.d === today() ? PROFILE.jour : null,
     dt: today(),
-    wk: monWeekly429() // défi de la semaine (v4.29)
+    wk: monWeekly429() // weekly challenge (v4.29)
   };
   const b64 = btoa(unescape(encodeURIComponent(JSON.stringify(o))))
     .replace(/\+/g, '-')
@@ -613,7 +613,7 @@ export function friendBuild416(i) {
     pb: Math.min(5, Math.floor(pw / 5)),
     lv: Math.min(64, 18 + pw * 2),
     d: `L’équipe de ${A.n}, telle qu’elle était sur sa carte${A.dt ? ' du ' + A.dt.split('-').reverse().join('/') : ''}. L’ordinateur la joue comme un vrai dresseur : capacités apprises, objets tenus, Résonance et attaques Expertes compris.`,
-    foes: A.t.map((x, j) => (x[3] ? [x[0], AMI_POS[j], { shiny: true }] : [x[0], AMI_POS[j]]))
+    foes: A.t.map((x, j) => (x[3] ? [x[0], FRIEND_POS[j], { shiny: true }] : [x[0], FRIEND_POS[j]]))
   };
   OBST.ami = {};
   return true;
@@ -627,19 +627,19 @@ function friendFight416(i) {
 }
 
 
-/** Défis entre amis de l'Accueil (#v4Amis, rendu : src/screens/accueil/Amis.jsx). */
+/** Friend challenges on the Home screen (#v4Amis, rendered by src/screens/home/Friends.jsx). */
 export function friendsData416() {
   const L = PROFILE.amis || [],
     selfRef = { n: PROFILE.name || 'Vous', s: monState416(), jr: PROFILE.jour && PROFILE.jour.d === today() ? PROFILE.jour : null, me: true },
     rows = [selfRef, ...L].map(a => Object.assign({ sc: scoreOf416(a.s) }, a)).sort((a, b) => b.sc - a.sc);
   const dayKey = a => (a.jr && a.jr.d === today() ? `✓${a.jr.r ? ' ' + a.jr.r : ''}${a.jr.m ? ' · ' + a.jr.m + ' m.' : ''}` : '—');
-  return { L, rows, jour: dayKey, del: AMI_DEL };
+  return { L, rows, jour: dayKey, del: FRIEND_DEL };
 }
 
 
-/* carte de dresseur / ajout d’un ami : rendu par React (src/screens/overlays/AmiBox.jsx) */
+/* trainer card / add a friend: rendered by React (src/screens/overlays/FriendBox.jsx) */
 function renderFriendBox() {
-  if (AMI_MODE === 'carte')
+  if (FRIEND_MODE === 'carte')
     paintOverlay('ami', {
       mode: 'carte',
       nom: PROFILE.name || '',
@@ -647,7 +647,7 @@ function renderFriendBox() {
       equipe: squad.slice(0, 4).map(id => BY[id].n),
       partage: !!navigator.share
     });
-  else if (AMI_MODE === 'ajout') paintOverlay('ami', { mode: 'ajout' });
+  else if (FRIEND_MODE === 'ajout') paintOverlay('ami', { mode: 'ajout' });
 }
 
 
@@ -672,7 +672,7 @@ async function copy416() {
   toast('Le code est sélectionné : appuyez longuement dessus pour le copier.');
 }
 
-/* ---------- icônes originales ---------- */
+/* ---------- original icons ---------- */
 const SVGI416 = s => 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">' + s + '</svg>');
 
 
@@ -680,7 +680,7 @@ export const CROWN416 = '<svg class="dom-cr" viewBox="0 0 24 24" aria-hidden="tr
 
 
 /* =====================================================================
-   2. Les bêtes errantes
+   2. Roaming beasts
    ===================================================================== */
 export const ROAM = ['raikou', 'entei', 'suicune'];
 
@@ -714,7 +714,7 @@ export const fleeMsg416 = S => {
 
 
 /* =====================================================================
-   4. La Pension, en couple
+   4. The Daycare, as a pair
    ===================================================================== */
 const pair416 = () => (campOk430() ? (PROFILE.couple || []).filter(id => PROFILE.box.includes(id)) : []);
 
@@ -750,7 +750,7 @@ const DUO_N416 = {
 };
 
 
-const DUO_DE416 = {
+const DUO_OF416 = {
   Eau: 'd’écume',
   Feu: 'de feu',
   Plante: 'de lianes',
@@ -776,19 +776,19 @@ const DUOG416 = {};
 
 
 /* =====================================================================
-   6. Défis entre amis
+   6. Friend challenges
    ===================================================================== */
 export const scoreOf416 = s => s.b * 100 + s.j * 120 + s.e * 60 + s.c * 400 + s.d * 10 + s.tb * 25 + s.sh * 15;
 
 
-const AMI_POS = [
+const FRIEND_POS = [
   [6, 1],
   [6, 3],
   [6, 5],
   [7, 2]
 ];
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Instructions run at startup, in the original order (see index.js).
 export function __init() {
 
 
@@ -809,7 +809,7 @@ Object.assign(ICO414, {
 
 
 /* =====================================================================
-   1. L’histoire de Johto : la Néo-Dissonance
+   1. The Johto story: Neo-Dissonance
    ===================================================================== */
 JDIS = [
   {
@@ -1019,11 +1019,11 @@ ROAM.forEach(id => {
 });
 
 
-/* effets des talismans */
-FOURNISSEURS_DEGATS.push({ id: 'braisesacree', fournir: (c, { u }) => u.item === 'braisesacree' && u.hp > u.mhp / 2 && { mul: 1.2, libelle: 'Braise Sacrée' } });
+/* talisman effects */
+DAMAGE_PROVIDERS.push({ id: 'braisesacree', fournir: (c, { u }) => u.item === 'braisesacree' && u.hp > u.mhp / 2 && { mul: 1.2, libelle: 'Braise Sacrée' } });
 
 
-CROCHETS.avantFinManche.push((S, ev) => {
+HOOKS.avantFinManche.push((S, ev) => {
   S.units.forEach(u => {
     if (u.ko || u.item !== 'cristalboreal') return;
     if (u.bru) u.bru = 0;
@@ -1033,19 +1033,19 @@ CROCHETS.avantFinManche.push((S, ev) => {
 
 
 /* =====================================================================
-   3. Les Pokémon Dominants
+   3. Dominant Pokémon
    ===================================================================== */
 wildDom416 = false;
 
 
-// #pensBox : rendu par React (src/screens/overlays/PensBox.jsx)
+// #pensBox: rendered by React (src/screens/overlays/DaycareBox.jsx)
 
 
 PENS_SEL = [];
 
 
 /* =====================================================================
-   5. Les Liens : une technique combinée pour chaque duo
+   5. Bonds: a combined technique for each duo
    ===================================================================== */
 Object.assign(DUOT, {
   'loupio|marill': {
@@ -1083,15 +1083,15 @@ Object.assign(DUOT, {
 });
 
 
-// une valeur sûre tant qu’aucun défi n’est lancé
+// a safe value as long as no challenge is running
 SCEN.ami = Object.assign({}, SCEN.gue, { n: 'Défi entre amis', ami: 0 });
 
 
-/* ---------- branchements : création des combats ---------- */
-CROCHETS.combat.push((S, opt, D0) => {
-  if (S.fixe431) return; // combats à règles fixes (v4.31)
+/* ---------- hooks: battle creation ---------- */
+HOOKS.combat.push((S, opt, D0) => {
+  if (S.fixe431) return; // fixed-rule battles (v4.31)
   D0 = D0 || SCEN[S.sc] || {};
-  // capacité héritée (Pension)
+  // inherited move (Daycare)
   S.units.forEach(u => {
     if (u.side !== 'a') return;
     const k = (PROFILE.herit || {})[u.sp];
@@ -1100,11 +1100,11 @@ CROCHETS.combat.push((S, opt, D0) => {
       if (!u.mv.includes(k)) u.mv.push(k);
     }
   });
-  // talismans des bêtes errantes
+  // roaming beast talismans
   S.units.forEach(u => {
     if (u.item === 'crinorage') u.pb = (u.pb || 0) + 1;
   });
-  // l’équipe d’un ami : ses capacités apprises et ses objets
+  // a friend's team: its learned moves and its items
   if (D0.ami) {
     const A = (PROFILE.amis || [])[D0.ami - 1];
     if (A)
@@ -1127,13 +1127,13 @@ CROCHETS.combat.push((S, opt, D0) => {
 });
 
 
-/* ---------- branchements : après le combat ---------- */
-CROCHETS.progres.push((S, rew, win) => {
+/* ---------- hooks: after the battle ---------- */
+HOOKS.progres.push((S, rew, win) => {
   const D = SCEN[S.sc] || {},
     o = [0, 0];
-  // Défi du jour : votre résultat, pour le classement entre amis
+  // Daily challenge: your result, for the friends leaderboard
   if (rew.daily) PROFILE.jour = { d: today(), r: S.rank || '', m: S.round };
-  // Néo-Dissonance
+  // Neo-Dissonance
   if (win && D.jdis && (PROFILE.jdis || 0) < D.jdis) {
     PROFILE.jdis = D.jdis;
     const T = JDIS[D.jdis - 1];
@@ -1141,13 +1141,13 @@ CROCHETS.progres.push((S, rew, win) => {
     o[1] += T.rew[1];
     rew.jdis = D.jdis;
   }
-  // bête errante
+  // roaming beast
   if (D.roam) {
     const r = roamState416(D.roam),
       u = S.units.find(e => e.side === 'e' && e.id === D.roam);
     r.vu = (r.vu || 0) + 1;
     if (r.ok) {
-      // déjà apaisé : une revanche amicale, sans prime
+      // already calmed: a friendly rematch, no bounty
     } else if (u && u.ko) {
       r.ok = 1;
       r.hp = 0.05;
@@ -1169,11 +1169,11 @@ CROCHETS.progres.push((S, rew, win) => {
       o[0] += x[0];
       o[1] += x[1];
     }
-    // un Dominant ne se rejoue pas : « Rejouer » relance une rencontre ordinaire
+    // a Dominant is not replayed: "Rejouer" (Replay) restarts an ordinary encounter
     const f = D.foes[0];
     wildScen(f[0], S.time, !!(f[2] && f[2].shiny), false);
   }
-  // défi entre amis
+  // friend challenge
   if (D.ami) {
     const A = (PROFILE.amis || [])[D.ami - 1];
     if (A) {
@@ -1191,7 +1191,7 @@ CROCHETS.progres.push((S, rew, win) => {
 });
 
 
-CROCHETS.resultat.push(r => {
+HOOKS.resultat.push(r => {
   const o = [];
   if (r.jdis) {
     const T = JDIS[r.jdis - 1];
@@ -1229,8 +1229,8 @@ CROCHETS.resultat.push(r => {
 });
 
 
-/* ---------- succès ---------- */
-SUCCES.push(
+/* ---------- achievements ---------- */
+ACHIEVEMENTS.push(
   { id: 'neodis', n: 'Onde coupée', d: 'Vaincre la Néo-Dissonance à Johto.', t: 'Briseur d’ondes', ok: () => (PROFILE.jdis || 0) >= 4, p: () => [PROFILE.jdis || 0, 4] },
   { id: 'betes', n: 'Trois bêtes', d: 'Apaiser Raikou, Entei et Suicune.', t: 'Ami des bêtes', ok: () => ROAM.every(roamOk416), p: () => [ROAM.filter(roamOk416).length, 3] },
   { id: 'dominant', n: 'Chasseur de Dominants', d: 'Vaincre 3 Pokémon Dominants.', t: 'Chasseur', ok: () => (PROFILE.dom || 0) >= 3, p: () => [Math.min(3, PROFILE.dom || 0), 3] },
@@ -1240,16 +1240,16 @@ SUCCES.push(
 
 
 /* =====================================================================
-   L’Accueil : Défis entre amis
+   The Home screen: Friend challenges
    ===================================================================== */
-// #v4Amis : rendu par React après .hm-quick (src/screens/accueil/Amis.jsx)
-// #amiBox : rendu par React (src/screens/overlays/AmiBox.jsx)
+// #v4Amis: rendered by React after .hm-quick (src/screens/home/Friends.jsx)
+// #amiBox: rendered by React (src/screens/overlays/FriendBox.jsx)
 
 
-AMI_DEL = -1;
+FRIEND_DEL = -1;
 
 
-AMI_MODE = null;
+FRIEND_MODE = null;
 
 
 document.addEventListener('click', e => {
@@ -1257,7 +1257,7 @@ document.addEventListener('click', e => {
   if (a) {
     const k = a.dataset.ami;
     if (k === 'carte' || k === 'ajout') {
-      AMI_MODE = k;
+      FRIEND_MODE = k;
       renderFriendBox();
       $('#amiBox').hidden = false;
       queueSave();
@@ -1296,24 +1296,24 @@ document.addEventListener('click', e => {
   }
   const f = e.target.closest('[data-ami-fight]');
   if (f) {
-    AMI_DEL = -1;
+    FRIEND_DEL = -1;
     if (!squad.length) return void toast('Composez d’abord une équipe.');
     return void friendFight416(+f.dataset.amiFight);
   }
   const d = e.target.closest('[data-ami-del]');
   if (d) {
     const i = +d.dataset.amiDel;
-    if (AMI_DEL === i) {
+    if (FRIEND_DEL === i) {
       const A = PROFILE.amis[i];
       PROFILE.amis.splice(i, 1);
-      AMI_DEL = -1;
+      FRIEND_DEL = -1;
       queueSave();
       if (A) toast(`${A.n} est retiré de vos défis.`);
-    } else AMI_DEL = i;
+    } else FRIEND_DEL = i;
     refreshHome();
     return;
   }
-  // Pension
+  // Daycare
   const p = e.target.closest('[data-pens]');
   if (p) {
     const k = p.dataset.pens;

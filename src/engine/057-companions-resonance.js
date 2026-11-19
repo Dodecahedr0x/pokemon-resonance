@@ -1,11 +1,11 @@
-/* Section d'origine : v4.17-01-compagnons-et-resonance.js */
+/* Original section: v4.17-01-compagnons-et-resonance.js */
 
 import { BY, MON, SCEN } from './009-pokemon.js';
 import { BUDGET } from './010-in-battle-evolution.js';
 import { PROFILE, isCamp } from './011-game-state.js';
 import { RC } from './012-recruits-roles-synergies.js';
 import { $, medal, toast } from './014-utils.js';
-import { CROCHETS } from './015-hooks.js';
+import { HOOKS } from './015-hooks.js';
 import { squad, vBonus } from './020-team-cards.js';
 import { brWeapon466, brBoss466 } from './097-boss-rush-relics.js';
 import { EMAX, byUid, endStep, hasNx, heal, say } from './021-combat-engine.js';
@@ -19,9 +19,9 @@ import { SHOP, bagN, today } from './032-v4-foundation.js';
 import { renderWallet } from './035-interface.js';
 import { PL, placeName } from './037-map.js';
 import { isShinyOwned } from './043-adventure-plus.js';
-import { FOURNISSEURS_DEGATS } from './044-tactical-engine.js';
+import { DAMAGE_PROVIDERS } from './044-tactical-engine.js';
 import { MACHINES } from './045-tms-hms.js';
-import { SUCCES, teamSize } from './048-replayability.js';
+import { ACHIEVEMENTS, teamSize } from './048-replayability.js';
 import { renderCampBase } from './049-identity.js';
 import { hasXp } from './053-resonance.js';
 import { regionJ415, routeName } from './054-johto.js';
@@ -35,27 +35,27 @@ import { paintOverlay } from '../screens/overlays/dialogsStore.js';
 
 export let SCN;
 let POT_I;
-export { POTAGER, sprout417, POT_I }; // lus par le Potager du Camp (src/screens/camp)
+export { POTAGER, sprout417, POT_I }; // read by the Camp Garden (src/screens/camp)
 export function __set_SCN(v) { return (SCN = v); }
 
 
 /* =====================================================================
-   v4.17 : compagnons et Résonance
-   1. Forme Résonante : une fois par combat, un Pokémon au stade final dont
-      la jauge est pleine entre en résonance pendant 3 manches (+2 Puissance,
-      +1 Mouvement, +20 % de dégâts, statuts dissipés en fin de manche).
-      Les Maîtres (Championne, Maître de Johto) et les équipes de vos amis
-      peuvent aussi y recourir.
-   2. Pokémon compagnon : il vous attend sur l’Accueil, son affection grandit
-      avec vos combats et lui donne des bonus.
-   3. Pokématos : la radio du jour (bêtes errantes, Dominant signalé, météo,
-      astuce) ; ses annonces changent vraiment le jeu du jour.
-      Scènes d’histoire : des dialogues avant les grands combats de Johto.
-   4. Potager : trois parcelles de baies au Camp (Campagne).
-   5. Tournoi entre amis : les équipes de vos amis à la suite, sans soin.
+   v4.17: companions and Resonance
+   1. Resonant Form: once per battle, a final-stage Pokémon whose gauge
+      is full enters resonance for 3 rounds (+2 Power, +1 Movement,
+      +20 % damage, statuses cleared at the end of the round).
+      Masters (Champion, Johto Master) and your friends' teams
+      can use it too.
+   2. Companion Pokémon: it waits for you on the Home screen, its affection
+      grows with your battles and grants bonuses.
+   3. Pokégear: the daily radio (roaming beasts, Dominant sighted, weather,
+      tip); its announcements really change the day's gameplay.
+      Story scenes: dialogues before the big Johto battles.
+   4. Garden: three berry plots at the Camp (Campaign).
+   5. Friends tournament: your friends' teams back to back, no healing.
    ===================================================================== */
 
-/* ---------- profil (fonctions déclarées : appelées dès le chargement) ---------- */
+/* ---------- profile (declared functions: called as soon as the file loads) ---------- */
 export function V417_0() {
   return { comp: { id: '', aff: 0, j: '' }, scenes: {}, potager: [null, null, null], arrose: '', tournoi: { run: null, best: 0, gagnes: 0 } };
 }
@@ -96,7 +96,7 @@ export function v417Clean(p) {
 }
 
 
-/** Un allié peut-il viser la Forme Résonante (stade final, pas de légende, pas encore utilisée) ? */
+/** Can an ally aim for the Resonant Form (final stage, not a legend, not yet used)? */
 export function resoCand417(S, u) {
   return !!(S && u && u.side === 'a' && !u.ko && !hasNx(u) && !(BY[u.id] && (BY[u.id].leg || BY[u.id].ennemi)) && !u.seg && !u.colosse && !S.reso417);
 }
@@ -108,7 +108,7 @@ function canResonance417(S, u) {
 
 
 function enterResonance417(S, u, ev, strongSpot) {
-  u.reso = RESO_TOURS;
+  u.reso = RESO_TURNS;
   u.pb = (u.pb || 0) + (strongSpot ? 2 : 1);
   u.resoPb = strongSpot ? 2 : 1;
   const h = Math.max(1, Math.round(u.mhp * (strongSpot ? 0.2 : 0.1)));
@@ -123,7 +123,7 @@ function enterResonance417(S, u, ev, strongSpot) {
 }
 
 
-/** Le joueur déclenche la Forme Résonante : 1 Voix et toute la jauge ; l’action reste libre. */
+/** The player triggers the Resonant Form: 1 Voice and the whole gauge; the action stays free. */
 function pReso417(S, u) {
   if (!canResonance417(S, u)) return null;
   const ev = [];
@@ -137,7 +137,7 @@ function pReso417(S, u) {
 }
 
 
-/** Les Maîtres et les équipes de vos amis y recourent aussi, une fois, quand leur meilleur Pokémon faiblit. */
+/** Masters and your friends' teams use it too, once, when their best Pokémon starts to fade. */
 function resoOpponent417(S, ev) {
   const D = SCEN[S.sc] || {};
   if (S.reso417e || !(D.champ || D.jfinal || D.hfinal || D.ami)) return;
@@ -150,14 +150,14 @@ function resoOpponent417(S, ev) {
 }
 
 
-/** Le bloc du panneau de combat. */
-export function resoBlock417(u, jauge) {
+/** The battle panel block. */
+export function resoBlock417(u, gauge) {
   if (!B || u.side !== 'a' || hasNx(u)) return '';
   if (u.reso > 0) return `<div class="bp-en bp-fres full"><div class="en-h"><span class="lbl-s">Forme Résonante</span><b class="fres-n">${u.reso} manche${u.reso > 1 ? 's' : ''}</b></div><p class="bp-hint">+2 Puissance, +1 Mouvement, +20 % de dégâts, entraves dissipées en fin de manche.</p></div>`;
   if (!resoCand417(B, u)) return '';
   const ok = canResonance417(B, u),
     why = u.en < EMAX ? `Encore ${EMAX - u.en} losange${EMAX - u.en > 1 ? 's' : ''}` : u.sn ? 'Immobilisé cette manche' : B.voix < 1 ? 'Plus de Voix' : 'Prêt · une fois par combat';
-  return `${jauge ? `<div class="bp-en${u.en >= EMAX ? ' full' : ''}"><div class="en-h"><span class="lbl-s">Résonance</span>${enPips(u.en, 'lg')}</div></div>` : ''}<button type="button" class="evb fres-b" data-reso417 ${ok ? '' : 'disabled'}><span class="evb-m fres-m"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.6 6.4L21 9l-5 4.4 1.6 6.6L12 16.6 6.4 20 8 13.4 3 9l6.4-.6Z" fill="currentColor"/></svg></span><span><b>Forme Résonante</b><em>${why}</em></span><span class="evb-c">1 Voix<br>+ jauge</span></button>`;
+  return `${gauge ? `<div class="bp-en${u.en >= EMAX ? ' full' : ''}"><div class="en-h"><span class="lbl-s">Résonance</span>${enPips(u.en, 'lg')}</div></div>` : ''}<button type="button" class="evb fres-b" data-reso417 ${ok ? '' : 'disabled'}><span class="evb-m fres-m"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.6 6.4L21 9l-5 4.4 1.6 6.6L12 16.6 6.4 20 8 13.4 3 9l6.4-.6Z" fill="currentColor"/></svg></span><span><b>Forme Résonante</b><em>${why}</em></span><span class="evb-c">1 Voix<br>+ jauge</span></button>`;
 }
 
 
@@ -170,7 +170,7 @@ export function companionGain417(n) {
 }
 
 
-/** Le compagnon de l'Accueil (#v4Comp, rendu : src/screens/accueil/Compagnon.jsx). */
+/** The Home screen companion (#v4Comp, rendered by src/screens/home/Companion.jsx). */
 export function companionData417() {
   const id = companionId417();
   if (!id) return null;
@@ -182,14 +182,14 @@ export function companionData417() {
     h,
     pr: h >= 5 ? 100 : Math.round(((a - (AFF_T[h - 1] || 0)) / (AFF_T[h] - (AFF_T[h - 1] || 0))) * 100),
     caresse: PROFILE.comp.j === today(),
-    hum: COMP_HUMEUR[h].replace('{n}', m.n),
+    hum: COMP_MOOD[h].replace('{n}', m.n),
     sh: isShinyOwned(m.base),
     bonus: h >= 2 ? COMP_BONUS.filter(([n]) => h >= n).map(([, t]) => t).join(' · ') : ''
   };
 }
 
 
-/* choix du compagnon : rendu par React (src/screens/overlays/CompBox.jsx) */
+/* companion choice: rendered by React (src/screens/overlays/CompBox.jsx) */
 export function renderCompBox417() {
   const L = MON.filter(m => !m.ennemi && !m.leg && PROFILE.box.includes(m.base) && (m.st === 1 || (isCamp() && (PROFILE.forms || []).includes(m.id)))).slice(0, 80);
   paintOverlay('comp', { L: L.map(m => m.id), cur: companionId417(), bonus: COMP_BONUS });
@@ -197,7 +197,7 @@ export function renderCompBox417() {
 
 
 /* =====================================================================
-   3. Pokématos (radio du jour) et scènes d’histoire
+   3. Pokégear (daily radio) and story scenes
    ===================================================================== */
 export function seed417(sel) {
   let h = 11;
@@ -206,14 +206,14 @@ export function seed417(sel) {
 }
 
 
-/** L’espèce Dominante signalée aujourd’hui (selon la région affichée). */
+/** The Dominant species sighted today (depending on the displayed region). */
 export function domDay417() {
-  const pool = poolRegion421(); // le Dominant signalé vit dans la région affichée (v4.21)
+  const pool = poolRegion421(); // the sighted Dominant lives in the displayed region (v4.21)
   return pool.length ? pool[seed417('dom' + (regionH419() ? 'h' : regionJ415() ? 'j' : 'k')) % pool.length].id : null;
 }
 
 
-/** « près de l’Arène Vol », « près de la Route 32 », « près du Lac Colère ». */
+/** "près de l’Arène Vol" (near the Flying Gym), "près de la Route 32" (near Route 32), "près du Lac Colère" (near Lake of Rage). */
 export function ofPlace417(n) {
   if (/^(Lac|Plateau|Puits|Relais)\b/.test(n)) return 'du ' + n;
   if (/^(Route|Tour|Antenne)\b/.test(n)) return 'de la ' + n;
@@ -222,7 +222,7 @@ export function ofPlace417(n) {
 }
 
 
-/** Les lignes du Pokématos (#v4Radio de l'Accueil, rendu : src/screens/accueil/Bas.jsx). */
+/** The Pokégear lines (#v4Radio on the Home screen, rendered by src/screens/home/Footer.jsx). */
 export function radio417() {
   const L = [],
     d = domDay417(),
@@ -252,7 +252,7 @@ function whoScene417(who, k) {
 export function scene417(k, force) {
   const c = sceneKey417(k),
     L = SCENES[c];
-  if (!L || (PROFILE.scenes && PROFILE.scenes[c]) || (!force && AUTO)) return false; // pas de scène pendant les tests automatiques
+  if (!L || (PROFILE.scenes && PROFILE.scenes[c]) || (!force && AUTO)) return false; // no scene during automated tests
   SCN = { k, c, i: 0, L };
   renderScene417();
   $('#scene417').hidden = false;
@@ -265,7 +265,7 @@ export function renderScene417() {
   const [who, txt] = SCN.L[SCN.i],
     q = whoScene417(who, SCN.k),
     last = SCN.i === SCN.L.length - 1;
-  // rendu : src/screens/overlays/Scene417.jsx
+  // rendered by src/screens/overlays/Scene417.jsx
   paintOverlay('scene', { av: q.av, n: q.n, txt, i: SCN.i, nb: SCN.L.length, suite: last ? (SCN.apres ? 'Continuer' : 'Au combat !') : 'Suite' });
 }
 
@@ -278,7 +278,7 @@ function endScene417() {
   SCN = null;
   $('#scene417').hidden = true;
   queueSave();
-  if (!ap) launch(); // une scène d’après-combat ne relance rien (v4.29)
+  if (!ap) launch(); // a post-battle scene triggers nothing else (v4.29)
 }
 
 
@@ -355,7 +355,7 @@ function water417() {
 }
 
 
-// le Potager du Camp de base est rendu par React : src/screens/camp/CampBase.jsx
+// the base Camp Garden is rendered by React: src/screens/camp/CampBase.jsx
 
 
 function tournamentOrder417() {
@@ -392,9 +392,9 @@ function tournamentBattle417() {
 }
 
 
-/** L’équipe figée du tournoi (lue par le lancement des combats). */
+/** The frozen tournament team (read when battles are launched). */
 export function tournamentTeam417() {
-  if (brBoss466(scSel)) return { team: brWeapon466().team, voix: vBonus(), opts: battleOpts() }; // Boss Rush : équipe figée
+  if (brBoss466(scSel)) return { team: brWeapon466().team, voix: vBonus(), opts: battleOpts() }; // Boss Rush: frozen team
   const run = tournamentRun417(),
     D = SCEN.ami || {};
   if (scSel !== 'ami' || !run || D.tournoi !== run.ordre[run.i]) return null;
@@ -416,13 +416,13 @@ export function tournamentHtml417() {
 }
 
 /* =====================================================================
-   1. Forme Résonante
+   1. Resonant Form
    ===================================================================== */
-const RESO_TOURS = 3;
+const RESO_TURNS = 3;
 
 
 /* =====================================================================
-   2. Pokémon compagnon
+   2. Companion Pokémon
    ===================================================================== */
 const AFF_T = [10, 30, 60, 100, 150];
 
@@ -432,11 +432,11 @@ export const hearts417 = a => AFF_T.filter(t => a >= t).length;
 
 export const companionId417 = () => {
   const c = PROFILE.comp;
-  return c && BY[c.id] && PROFILE.box.includes(BY[c.id].base) ? c.id : ''; // Libre aussi (v4.21)
+  return c && BY[c.id] && PROFILE.box.includes(BY[c.id].base) ? c.id : ''; // Free mode too (v4.21)
 };
 
 
-const COMP_HUMEUR = [
+const COMP_MOOD = [
   '{n} vous observe avec curiosité.',
   '{n} trottine à vos côtés.',
   '{n} se blottit contre vous.',
@@ -454,13 +454,13 @@ const COMP_BONUS = [
 ];
 
 
-const METEO_J = [null, 'pluie', 'soleil', null, 'sable', 'grele', null];
+const WEATHER_J = [null, 'pluie', 'soleil', null, 'sable', 'grele', null];
 
 
-export const weatherDay417 = () => METEO_J[seed417('wx') % METEO_J.length];
+export const weatherDay417 = () => WEATHER_J[seed417('wx') % WEATHER_J.length];
 
 
-const ASTUCES = [
+const TIPS = [
   'Une case Trempée et une attaque Électrik : Court-circuit. Sortez vos Pokémon de l’eau avant de frapper !',
   'Deux coups sur la même cible dans la même manche déclenchent la Résonance : ×1,5 sur le second.',
   'Trois rangs différents dans l’équipe (Faible, Moyen, Fort…) : l’Harmonie offre 1 losange à chacun.',
@@ -474,13 +474,13 @@ const ASTUCES = [
 ];
 
 
-const tip417 = () => ASTUCES[seed417('tip') % ASTUCES.length];
+const tip417 = () => TIPS[seed417('tip') % TIPS.length];
 
 
 const WXN417 = { pluie: 'Pluie', soleil: 'Grand soleil', sable: 'Tempête de sable', grele: 'Grêle' };
 
 
-/* ---------- scènes d’histoire ---------- */
+/* ---------- story scenes ---------- */
 export const SCENES = {
   j1: [
     ['prof', 'Bienvenue à Johto ! Huit nouvelles arènes, et des Pokémon que vous n’avez jamais vus.'],
@@ -523,7 +523,7 @@ const sceneKey417 = k => (SCEN[k] && SCEN[k].roam ? 'roam' : k);
 
 
 /* =====================================================================
-   4. Le Potager du Camp
+   4. The Camp Garden
    ===================================================================== */
 const POTAGER = {
   oran: { n: 'Baie Oran', p: 200, duree: 3, d: '3 Baies Oran (soin en combat)' },
@@ -536,18 +536,18 @@ const sprout417 = x => (x ? Math.max(0, x.fin - PROFILE.battles) : 0);
 
 
 /* =====================================================================
-   5. Tournoi entre amis
+   5. Friends tournament
    ===================================================================== */
 const tournamentRun417 = () => (PROFILE.tournoi && PROFILE.tournoi.run) || null;
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Statements run at startup, in the original order (see index.js).
 export function __init() {
 
 
-FOURNISSEURS_DEGATS.push({ id: 'formeresonante', fournir: (c, { u }) => u.reso > 0 && { mul: u.side === 'a' ? 1.2 : 1.1, libelle: 'Forme Résonante' } });
+DAMAGE_PROVIDERS.push({ id: 'formeresonante', fournir: (c, { u }) => u.reso > 0 && { mul: u.side === 'a' ? 1.2 : 1.1, libelle: 'Forme Résonante' } });
 
 
-CROCHETS.avantFinManche.push((S, ev) => {
+HOOKS.avantFinManche.push((S, ev) => {
   S.units.forEach(u => {
     if (u.ko || !(u.reso > 0)) return;
     if (u.badge || u.bru || u.web || u.root) {
@@ -587,13 +587,13 @@ document.addEventListener('click', async e => {
   if (!ev) return;
   playEv(ev);
   if (B.over) return void finish();
-  toast(`${u.n} résonne pour ${RESO_TOURS} manches : son action reste libre.`);
+  toast(`${u.n} résonne pour ${RESO_TURNS} manches : son action reste libre.`);
   renderAll();
 });
 
 
-CROCHETS.combat.push(S => {
-  if (S.fixe431) return; // combats à règles fixes : pas de bonus de compagnon (v4.31)
+HOOKS.combat.push(S => {
+  if (S.fixe431) return; // fixed-rule battles: no companion bonus (v4.31)
   const id = companionId417();
   if (!id) return;
   const u = S.units.find(x => x.side === 'a' && x.sp === BY[id].base);
@@ -605,10 +605,10 @@ CROCHETS.combat.push(S => {
 });
 
 
-FOURNISSEURS_DEGATS.push({ id: 'complicite', fournir: (c, { u }) => u.comp >= 4 && { mul: 1.1, libelle: 'Complicité' } });
+DAMAGE_PROVIDERS.push({ id: 'complicite', fournir: (c, { u }) => u.comp >= 4 && { mul: 1.1, libelle: 'Complicité' } });
 
 
-CROCHETS.avantFinManche.push((S, ev) => {
+HOOKS.avantFinManche.push((S, ev) => {
   S.units.forEach(u => {
     if (u.ko || !(u.comp >= 5) || !(u.badge || u.bru || u.web || u.root)) return;
     u.badge = null;
@@ -621,7 +621,7 @@ CROCHETS.avantFinManche.push((S, ev) => {
 });
 
 
-CROCHETS.progres.push((S, rew, win) => {
+HOOKS.progres.push((S, rew, win) => {
   const id = companionId417(),
     D = SCEN[S.sc] || {};
   if (!id || D.tuto) return null;
@@ -634,7 +634,7 @@ CROCHETS.progres.push((S, rew, win) => {
 });
 
 
-CROCHETS.resultat.push(r => {
+HOOKS.resultat.push(r => {
   const c = r.comp417;
   if (!c) return '';
   const h = hearts417(PROFILE.comp.aff || 0),
@@ -643,7 +643,7 @@ CROCHETS.resultat.push(r => {
 });
 
 
-// #compBox : rendu par React (src/screens/overlays/CompBox.jsx)
+// #compBox: rendered by React (src/screens/overlays/CompBox.jsx)
 
 
 document.addEventListener('click', e => {
@@ -679,15 +679,15 @@ document.addEventListener('click', e => {
 });
 
 
-// la météo du jour s’invite dans les combats sauvages (si la saison n’en impose pas déjà une)
-CROCHETS.creation.push(S => {
+// today's weather spills into wild battles (unless the season already imposes one)
+HOOKS.creation.push(S => {
   if (S.sc !== 'sauvage' || S.wx) return;
   const w = weatherDay417();
   if (w) S.wx = { k: w, n: 5 };
 });
 
 
-// #scene417 : rendu par React (src/screens/overlays/Scene417.jsx)
+// #scene417: rendered by React (src/screens/overlays/Scene417.jsx)
 
 
 SCN = null;
@@ -733,7 +733,7 @@ document.addEventListener('click', e => {
 });
 
 
-CROCHETS.combat.push((S, opt, D0) => {
+HOOKS.combat.push((S, opt, D0) => {
   const run = tournamentRun417();
   if (!D0 || !D0.tournoi || !run || D0.tournoi !== run.ordre[run.i]) return;
   S.tournoi417 = D0.tournoi;
@@ -748,10 +748,10 @@ CROCHETS.combat.push((S, opt, D0) => {
 });
 
 
-CROCHETS.progres.push((S, rew, win) => {
+HOOKS.progres.push((S, rew, win) => {
   const run = tournamentRun417();
   if (!S.tournoi417 || !run || S.tournoi417 !== run.ordre[run.i]) return null;
-  if (SCEN.ami) SCEN.ami.tournoi = null; // « Rejouer » : un défi amical ordinaire
+  if (SCEN.ami) SCEN.ami.tournoi = null; // "Rejouer" (Replay): an ordinary friendly challenge
   const T = PROFILE.tournoi;
   if (!win) {
     T.best = Math.max(T.best, run.i);
@@ -774,7 +774,7 @@ CROCHETS.progres.push((S, rew, win) => {
 });
 
 
-CROCHETS.resultat.push(r => {
+HOOKS.resultat.push(r => {
   const t = r.tournoi;
   if (!t) return '';
   if (t.gagne)
@@ -803,8 +803,8 @@ document.addEventListener('click', e => {
 });
 
 
-/* ---------- succès ---------- */
-SUCCES.push(
+/* ---------- achievements ---------- */
+ACHIEVEMENTS.push(
   { id: 'resonant', n: 'Forme Résonante', d: 'Déclencher la Forme Résonante.', ok: c => (c.S.stats.reso || 0) > 0 },
   { id: 'complice', n: 'Inséparables', d: 'Atteindre 5 cœurs avec votre compagnon.', t: 'Inséparables', ok: () => hearts417((PROFILE.comp || {}).aff || 0) >= 5 },
   { id: 'tournoi', n: 'Roi du tournoi', d: 'Remporter un tournoi entre amis.', t: 'Roi du tournoi', ok: () => ((PROFILE.tournoi || {}).gagnes || 0) > 0 }

@@ -2,9 +2,9 @@ import { Html } from '../../lib/html.jsx';
 import { useTip429 } from './shellOverlays.js';
 import { PROF_AV } from '../../engine/031-home-journey.js';
 
-// Astuce du Prof. Sorbier pendant un combat (#tip429, v4.29) : posée par astuces429(),
-// retirée par finTip429() ou le bouton (data-tip429, géré par le moteur).
-// Un nouveau bloc par astuce (key) : le texte est ensuite écrit lettre par lettre (v4.73).
+// Tip from Prof. Sorbier during a battle (#tip429, v4.29): set by tips429(),
+// removed by endTip429() or the button (data-tip429, handled by the engine).
+// A new block per tip (key): the text is then written letter by letter (v4.73).
 export default function Tip429() {
   const { tip, v } = useTip429();
   if (!tip) return null;

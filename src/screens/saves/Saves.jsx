@@ -13,13 +13,13 @@ import { PREF } from '../../engine/026-campaign-tutorial-sound.js';
 import { freeBox421 } from '../../engine/061-catch-anywhere.js';
 import { boxN429 } from '../../engine/064-quality.js';
 
-// Fenêtre « Sauvegardes » (#saves). Les clics, la saisie et l'import restent gérés par
-// le moteur (écouteurs sur #saves, data-sv, data-resume) : ici, seulement l'affichage.
+// "Sauvegardes" (Saves) window (#saves). Clicks, input and import are still handled by
+// the engine (listeners on #saves, data-sv, data-resume): here, display only.
 export default function Saves() {
   const ready = useEngineReady();
   const { open, version } = useSaves();
   const x = useRef(null);
-  // À l'ouverture, le focus va sur le bouton Fermer (ancien openSaves).
+  // On opening, focus goes to the Close button (old openSaves).
   useLayoutEffect(() => {
     if (open) x.current?.focus();
   }, [open]);
@@ -31,7 +31,7 @@ export default function Saves() {
   );
 }
 
-// Résumé d'une sauvegarde : équipe, badges, victoires, combat en cours.
+// Summary of a save: team, badges, victories, battle in progress.
 function Summary({ s }) {
   const P = cleanProfile(s.profile);
   return (
@@ -50,7 +50,7 @@ function Summary({ s }) {
   );
 }
 
-// Un emplacement (s1, s2, s3), vide ou rempli, avec sa question de confirmation.
+// A slot (s1, s2, s3), empty or filled, with its confirmation question.
 function Slot({ k }) {
   const s = SV.local[k],
     n = k.slice(1),
@@ -110,7 +110,7 @@ function Slot({ k }) {
   );
 }
 
-// Zone « code de sauvegarde » : à copier, ou à coller.
+// "Save code" area: to copy, or to paste.
 function Code() {
   if (!SV.code) return null;
   const copy = SV.code.mode === 'copy';
@@ -156,7 +156,7 @@ function Code() {
   );
 }
 
-// La carte, recréée à chaque version (comme l'ancien innerHTML) : les champs relisent l'état.
+// The card, recreated at each version (like the old innerHTML): the fields re-read the state.
 function MapScreen({ xRef }) {
   const a = SV.local.auto || snapshot(),
     P = PROFILE,

@@ -1,20 +1,20 @@
-/* Section d'origine : v4.70 : récompense quand une région est complète au Pokédex */
+/* Original section: v4.70: reward when a region is complete in the Pokédex */
 
 import { PROFILE } from './011-game-state.js';
 import { writeLS, toast } from './014-utils.js';
-import { CROCHETS } from './015-hooks.js';
+import { HOOKS } from './015-hooks.js';
 import { save } from './020-team-cards.js';
 import { renderAll } from './024-combat-ui.js';
 import { ownedFam } from './032-v4-foundation.js';
 import { DEXS } from './038-pokedex.js';
 import { announce430 } from './065-camp-tactics.js';
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Instructions run at startup, in the original order (see index.js).
 export function __init() {
 
 (() => {
   const KEY = 'res-pdx470';
-  // Une seule récompense par région, même si le joueur rouvre le jeu
+  // Only one reward per region, even if the player reopens the game
   const read470 = () => {
     try {
       return JSON.parse(localStorage.getItem(KEY)) || [];
@@ -52,7 +52,7 @@ export function __init() {
       save();
     }
   };
-  CROCHETS.rendu.push(verify470);
+  HOOKS.rendu.push(verify470);
   window.__pdx470 = { verifier: verify470, lire: read470, P: () => PROFILE, dex: () => DEXS, ownedFam, renderAll };
 })();
 }

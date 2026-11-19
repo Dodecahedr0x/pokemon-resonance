@@ -1,11 +1,11 @@
-/* Section d'origine : v4.9-01-rejouabilite.js */
+/* Original section: v4.9-01-rejouabilite.js */
 
 import { TYPES } from './004-data.js';
 import { BY, SCEN } from './009-pokemon.js';
 import { PROFILE, isCamp } from './011-game-state.js';
 import { BADGES } from './013-gyms.js';
 import { medal, tc, toast } from './014-utils.js';
-import { CROCHETS } from './015-hooks.js';
+import { HOOKS } from './015-hooks.js';
 import { __set_squad, renderSquad, save, squad } from './020-team-cards.js';
 import { P, hasNx, uAt } from './021-combat-engine.js';
 import { scSel } from './024-combat-ui.js';
@@ -15,28 +15,28 @@ import { PREF } from './026-campaign-tutorial-sound.js';
 import { renderWallet } from './035-interface.js';
 import { renderQuests } from './039-quests-shop.js';
 import { renderParams } from './040-settings.js';
-import { FOURNISSEURS_ROLES } from './044-tactical-engine.js';
+import { ROLE_PROVIDERS } from './044-tactical-engine.js';
 
-export let SUCCES;
-export let DEFI_CONF;
+export let ACHIEVEMENTS;
+export let CHALLENGE_CONF;
 
 
 /* =====================================================================
-   v4.9 : rejouabilité
+   v4.9: replayability
    ---------------------------------------------------------------------
-   1. Mutateurs : une règle tirée au hasard change tout le combat
+   1. Mutators: a randomly drawn rule changes the whole battle
       (Déluge, Nuit éternelle, Gravité, Canons de verre, Champ de pièges…).
-      Chaque étage de la Tour en a un (sauf les étages de légende) ; en
-      option, les combats d'Entraînement aussi (+50 % de Pokédollars).
-   2. Défis de campagne (Paramètres) : Mono-type, Équipe de 3, Sans Éveil,
-      Nuzlocke (un Pokémon K.O. ne combat plus). Chaque défi actif
-      rapporte des Éclats en plus.
-   3. Succès et titres : 25 succès (dans Quêtes), dont 18 donnent un titre
-      à porter à côté de votre nom.
+      Each Tower floor has one (except legend floors); optionally,
+      Training battles too (+50% Pokédollars).
+   2. Campaign challenges (Settings): Mono-type, Team of 3, No Awakening,
+      Nuzlocke (a K.O.'d Pokémon no longer fights). Each active challenge
+      earns extra Shards.
+   3. Achievements and titles: 25 achievements (in Quests), 18 of which
+      grant a title to wear next to your name.
    ===================================================================== */
 
-/* ---------- profil (fonctions déclarées : appelées dès le chargement) ---------- */
-export function REJ0() {
+/* ---------- profile (declared functions: called as soon as the game loads) ---------- */
+export function REPLAY0() {
   return {
     succes: {},
     titre: '',
@@ -47,8 +47,8 @@ export function REJ0() {
 }
 
 
-export function rejClean(p) {
-  const o = REJ0();
+export function replayClean(p) {
+  const o = REPLAY0();
   if (!p || typeof p !== 'object') return o;
   if (p.succes && typeof p.succes === 'object')
     for (const k in p.succes) if (/^[a-z0-9]{2,16}$/.test(k) && Number.isFinite(p.succes[k])) o.succes[k] = p.succes[k];
@@ -66,9 +66,9 @@ export function rejClean(p) {
 
 
 /* =====================================================================
-   1. Mutateurs
+   1. Mutators
    ===================================================================== */
-/** Noms et descriptions (fonction déclarée : la Tour en a besoin dès le chargement). */
+/** Names and descriptions (declared function: the Tower needs it as soon as the game loads). */
 export function mutInfo(id) {
   return (
     {
@@ -89,7 +89,7 @@ export function mutInfo(id) {
 }
 
 
-/** Le mutateur d'un étage de la Tour : à partir de l'étage 2, sauf les étages de légende. */
+/** A Tower floor's mutator: from floor 2 on, except legend floors. */
 export function mutOfTurn(run, f) {
   if (!run || f < 2 || f % 5 === 0) return null;
   const ids = ['deluge', 'canicule', 'blizzard', 'simoun', 'eclipse', 'gravite', 'frenesie', 'verre', 'remparts', 'echo', 'champ', 'eveil'];
@@ -97,7 +97,7 @@ export function mutOfTurn(run, f) {
 }
 
 
-/** En option : un mutateur au hasard pour les combats d'Entraînement. */
+/** Optional: a random mutator for Training battles. */
 export function mutTraining() {
   const D = SCEN[scSel];
   if (!PREF.mutEntr || !D || D.tuto || D.tower || D.rule || D.elite || D.champ || D.legend || D.hleg435 || D.cap435 || D.rival || D.rival429 || D.hebdo429) return null;
@@ -108,7 +108,7 @@ export function mutTraining() {
 function applyMutator(S, id) {
   if (!mutInfo(id)) return;
   S.mut = id;
-  if (METEO_MUT[id]) S.wx = { k: METEO_MUT[id], n: 99 };
+  if (WEATHER_MUT[id]) S.wx = { k: WEATHER_MUT[id], n: 99 };
   if (id === 'eclipse') {
     S.time = 'nuit';
     S.cyc = { ph: 'nuit', n: 0, fige: true };
@@ -148,7 +148,7 @@ export function chipMut(S) {
 
 export function activeChallenges() {
   if (!isCamp() || !PROFILE.defis) return [];
-  return Object.keys(DEFIS).filter(k => PROFILE.defis[k]);
+  return Object.keys(CHALLENGES).filter(k => PROFILE.defis[k]);
 }
 
 
@@ -157,7 +157,7 @@ export function isFallen(id) {
 }
 
 
-/** Ce Pokémon peut-il rejoindre l'équipe ? (null : oui ; sinon la raison) */
+/** Can this Pokémon join the team? (null: yes; otherwise the reason) */
 export function challengeRefusal(id) {
   if (!isCamp() || !PROFILE.defis) return null;
   const m = BY[id],
@@ -170,7 +170,7 @@ export function challengeRefusal(id) {
 }
 
 
-/** Avant de lancer un combat de campagne. */
+/** Before starting a campaign battle. */
 export function challengeLaunch() {
   if (brWeapon466()) return null;
   const D = SCEN[scSel];
@@ -187,11 +187,11 @@ export function challengeLaunch() {
 }
 
 
-/** Vérifie les succès ; renvoie ceux qui viennent d'être débloqués. */
+/** Checks achievements; returns those just unlocked. */
 function verifySuccess(c) {
   PROFILE.succes = PROFILE.succes || {};
   const freshList = [];
-  SUCCES.forEach(s => {
+  ACHIEVEMENTS.forEach(s => {
     if (PROFILE.succes[s.id]) return;
     let ok = false;
     try {
@@ -211,7 +211,7 @@ export function displayedTitle() {
 }
 
 
-/* ---------- Quêtes : l'onglet Succès, rendu par React (src/screens/quetes/Succes.jsx) ---------- */
+/* ---------- Quests: the Achievements tab, rendered by React (src/screens/quests/Achievements.jsx) ---------- */
 
 
 function updateChallenges() {
@@ -223,13 +223,13 @@ function updateChallenges() {
 const MUT_IDS = ['deluge', 'canicule', 'blizzard', 'simoun', 'eclipse', 'gravite', 'frenesie', 'verre', 'remparts', 'echo', 'champ', 'eveil'];
 
 
-const METEO_MUT = { deluge: 'pluie', canicule: 'soleil', blizzard: 'grele', simoun: 'sable' };
+const WEATHER_MUT = { deluge: 'pluie', canicule: 'soleil', blizzard: 'grele', simoun: 'sable' };
 
 
 /* =====================================================================
-   2. Défis de campagne
+   2. Campaign challenges
    ===================================================================== */
-export const DEFIS = {
+export const CHALLENGES = {
   mono: ['Mono-type', 'Seuls les Pokémon du type choisi peuvent combattre.'],
   trio: ['Équipe de 3', 'Trois Pokémon par combat au lieu de quatre.'],
   sansEveil: ['Sans Éveil', 'Vos Pokémon ne s’éveillent pas en combat.'],
@@ -241,24 +241,24 @@ export const teamSize = () => (isCamp() && PROFILE.defis && PROFILE.defis.trio ?
 
 
 /* =====================================================================
-   3. Succès et titres
+   3. Achievements and titles
    ===================================================================== */
 const cumulative = k => (PROFILE.cumul && PROFILE.cumul[k]) || 0;
 
 
-const titleOf = id => (SUCCES.find(s => s.id === id) || {}).t || '';
+const titleOf = id => (ACHIEVEMENTS.find(s => s.id === id) || {}).t || '';
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Statements run at startup, in the original order (see index.js).
 export function __init() {
 
-FOURNISSEURS_ROLES.push({
+ROLE_PROVIDERS.push({
   id: 'mutateur',
   fournir: (c, { S }) =>
     S.mut === 'verre' ? { mul: 1.5, libelle: 'Canons de verre' } : S.mut === 'remparts' ? { mul: 0.7, libelle: 'Remparts' } : null
 });
 
 
-SUCCES = [
+ACHIEVEMENTS = [
   { id: 'victoire', n: 'Première victoire', d: 'Gagner un combat.', ok: c => c.win },
   { id: 'eclair', n: 'Éclair', d: 'Gagner en 3 manches ou moins.', t: 'Éclair', ok: c => c.win && c.S.round <= 3 },
   { id: 'intact', n: 'Intouchable', d: 'Gagner sans perdre un seul Pokémon.', t: 'Intouchable', ok: c => c.win && c.S.units.every(u => u.side !== 'a' || !u.ko) },
@@ -288,37 +288,37 @@ SUCCES = [
 
 
 /* =====================================================================
-   Branchements
+   Hooks
    ===================================================================== */
-CROCHETS.creation.push((S, opt, D0) => {
+HOOKS.creation.push((S, opt, D0) => {
   const m = (opt && opt.mut) || D0.mut;
   if (m) applyMutator(S, m);
   if (opt && Array.isArray(opt.defis) && opt.defis.includes('sansEveil') && !D0.tuto) S.sansEveil = true;
 });
 
 
-// les mutateurs de météo tiennent tout le combat
-CROCHETS.avantFinManche.push(S => {
-  if (S.mut && METEO_MUT[S.mut]) S.wx = { k: METEO_MUT[S.mut], n: 99 };
+// weather mutators last the whole battle
+HOOKS.avantFinManche.push(S => {
+  if (S.mut && WEATHER_MUT[S.mut]) S.wx = { k: WEATHER_MUT[S.mut], n: 99 };
 });
 
 
-CROCHETS.progres.push((S, rew, win) => {
+HOOKS.progres.push((S, rew, win) => {
   const D = SCEN[S.sc] || {};
   let m = 0,
     g = 0;
-  // compteurs cumulés
+  // cumulative counters
   PROFILE.cumul = PROFILE.cumul || {};
   ['feu', 'pieges', 'vols', 'parts'].forEach(k => {
     if (S.stats[k]) PROFILE.cumul[k] = cumulative(k) + S.stats[k];
   });
   if (win && S.mut) PROFILE.cumul.mutants = cumulative('mutants') + 1;
-  // mutateur en Entraînement : +50 % de Pokédollars
+  // mutator in Training: +50% Pokédollars
   if (win && S.mut && !D.tower) {
     m += Math.round(((rew.money || 0) * 0.5) / 10) * 10;
     rew.mut = S.mut;
   }
-  // défis de campagne
+  // campaign challenges
   const df = D.tuto || D.tower ? [] : activeChallenges();
   if (df.length) {
     rew.defis = df;
@@ -347,20 +347,20 @@ CROCHETS.progres.push((S, rew, win) => {
       }
     }
   }
-  // succès
+  // achievements
   const freshList = verifySuccess({ S, win, rew });
   if (freshList.length) rew.succes = freshList;
   return m || g ? [m, g] : null;
 });
 
 
-CROCHETS.resultat.push(r => {
+HOOKS.resultat.push(r => {
   const o = [];
   if (r.mut)
     o.push(`<div class="res-l"><h4>Mutateur</h4><div class="rl"><span>${mutInfo(r.mut)[0]} : +50 % de Pokédollars</span><b>×1,5</b></div></div>`);
   if (r.defis)
     o.push(
-      `<div class="res-l"><h4>Défis</h4><div class="rl"><span>${r.defis.map(k => DEFIS[k][0]).join(', ')}${r.defiBonus ? ` : +${r.defiBonus} Éclats` : ''}</span><b>${r.defis.length}</b></div>${(r.tombes || [])
+      `<div class="res-l"><h4>Défis</h4><div class="rl"><span>${r.defis.map(k => CHALLENGES[k][0]).join(', ')}${r.defiBonus ? ` : +${r.defiBonus} Éclats` : ''}</span><b>${r.defis.length}</b></div>${(r.tombes || [])
         .map(b => `<div class="rl tombe">${medal(BY[b].t)}<span>${BY[b].n} est tombé au combat.</span><b>✝</b></div>`)
         .join('')}</div>`
     );
@@ -368,7 +368,7 @@ CROCHETS.resultat.push(r => {
     o.push(
       `<div class="res-l"><h4>Succès</h4>${r.succes
         .map(id => {
-          const s = SUCCES.find(x => x.id === id);
+          const s = ACHIEVEMENTS.find(x => x.id === id);
           return `<div class="rl succ"><span><b>${s.n}</b> · ${s.d}${s.t ? ` Titre gagné : « ${s.t} ».` : ''}</span><b>★</b></div>`;
         })
         .join('')}</div>`
@@ -377,14 +377,14 @@ CROCHETS.resultat.push(r => {
 });
 
 
-/* ---------- Paramètres : les défis ---------- */
-DEFI_CONF = false;
+/* ---------- Settings: the challenges ---------- */
+CHALLENGE_CONF = false;
 
 
 document.addEventListener('change', e => {
   const x = e.target.closest('[data-defi]');
   if (!x || !isCamp()) return;
-  PROFILE.defis = PROFILE.defis || REJ0().defis;
+  PROFILE.defis = PROFILE.defis || REPLAY0().defis;
   const k = x.dataset.defi;
   PROFILE.defis[k] = k === 'mono' ? x.value : x.checked;
   if (k === 'mono' && x.value) toast(`Défi Mono-type ${x.value} : seuls les Pokémon de ce type combattront.`);
@@ -396,11 +396,11 @@ document.addEventListener('click', e => {
   const n = e.target.closest('[data-nz]');
   if (n && isCamp()) {
     const a = n.dataset.nz;
-    PROFILE.defis = PROFILE.defis || REJ0().defis;
-    if (a === 'on') DEFI_CONF = true;
-    else if (a === 'non') DEFI_CONF = false;
+    PROFILE.defis = PROFILE.defis || REPLAY0().defis;
+    if (a === 'on') CHALLENGE_CONF = true;
+    else if (a === 'non') CHALLENGE_CONF = false;
     else if (a === 'ok') {
-      DEFI_CONF = false;
+      CHALLENGE_CONF = false;
       PROFILE.defis.nuzlocke = true;
       PROFILE.tombes = [];
       toast('Nuzlocke : chaque K.O. compte désormais.');

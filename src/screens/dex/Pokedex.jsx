@@ -5,10 +5,10 @@ import DexCard from './DexCard.jsx';
 import { DexCount, DexList } from './DexList.jsx';
 import Missions from './Missions.jsx';
 
-// Page « Pokédex » (#dex, v4). Vide jusqu'au premier affichage (renderDex du moteur),
-// puis redessinée à chaque renderDex / renderDexCard / renderDexList.
-// La recherche, la région et le tri sont des champs non contrôlés : le moteur les écoute
-// (écouteurs délégués input / change) et relit V4.dexQ, V4.dexGen, V4.dexSort.
+// "Pokédex" page (#dex, v4). Empty until the first display (the engine's renderDex),
+// then redrawn on every renderDex / renderDexCard / renderDexList.
+// Search, region and sort are uncontrolled fields: the engine listens to them
+// (delegated input / change listeners) and re-reads V4.dexQ, V4.dexGen, V4.dexSort.
 export default function Pokedex() {
   const ready = useEngineReady();
   useDexVersion();

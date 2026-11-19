@@ -14,12 +14,12 @@ import { SvgHtml } from './svgHtml.jsx';
 import { NamesHigh } from './Units.jsx';
 import { PE, lref } from './shared.js';
 
-// Calques redessinés à chaque renderBoard : marques élémentaires, rochers, brouillard, pièges,
-// obstacles (piliers, hautes herbes), surbrillances, couvertures, ricochets, intentions adverses.
+// Layers redrawn on every renderBoard: elemental marks, rocks, fog, traps,
+// obstacles (pillars, tall grass), highlights, covers, ricochets, enemy intents.
 
 const f1 = v => v.toFixed(1);
 
-/** poly(k, c) du moteur : contour épais puis case colorée. */
+/** The engine's poly(k, c): thick outline then colored tile. */
 export function Poly({ k, c }) {
   const [x, y] = HC(k),
     pt = HP(x, y, BG.S - 3);
@@ -30,11 +30,11 @@ export function Poly({ k, c }) {
     </>
   );
 }
-// cases à surligner : [case, classe] (les clés React sont posées à la fin, une case pouvant revenir)
+// tiles to highlight: [tile, class] (React keys are added at the end, since a tile may come back)
 const polys = (ks, c, on) => ks.map(k => [k, on ? c + (k === ui.pk ? ' on' : '') : c]);
 const toPolys = (l, p) => l.map(([k, c], i) => <Poly key={p + i} k={k} c={c} />);
 
-/* marques, rochers, brouillard, pièges, risque de feu ; liens des colosses (v4.8) */
+/* marks, rocks, fog, traps, fire risk; colossus links (v4.8) */
 export function Markers() {
   useBoard('marks');
   const o = [];
@@ -45,7 +45,7 @@ export function Markers() {
       if (t.mark) {
         const tt = MKT[t.mark.k],
           col = tc(tt);
-        // plateau incliné (v4.77) : la pastille rapetisse au fond et reste dans sa case, au lieu de mordre sur la case de derrière
+        // tilted board (v4.77): the badge shrinks toward the back and stays within its tile, instead of biting into the tile behind
         const ms = TILT.on ? tiltS(x, y) : 0,
           mz = TILT.on ? 0.37 * ms : 0.46,
           mx = TILT.on ? x + 11.5 * ms - 12 * mz : x + 11,
@@ -66,15 +66,15 @@ export function Markers() {
             </text>
           );
       }
-      // rocher (sous un pilier, le pilier le remplace : drawObstacles)
+      // rock (under a pillar, the pillar replaces it: drawObstacles)
       if (t.rock && !t.pil)
         o.push(
           <path key={k + 'bo'} className="boulder" d={`M${(x - 14).toFixed(1)} ${(y + 8).toFixed(1)}q-2-12 8-17q8-5 15 1q7 6 5 16q-14 6-28 0Z`} />,
           <path key={k + 'bh'} className="boulder-h" d={`M${(x - 6).toFixed(1)} ${(y - 6).toFixed(1)}q5-4 11-1`} />
         );
       if (t.fog > 0) o.push(<polygon key={k + 'fg'} points={HP(x, y, BG.S - 1)} className={'fogc2' + (t.fog > 2 ? ' tox' : '')} />);
-      o.push(<SvgHtml key={k + 'dt'} html={tacticalDrawing(B, k, x, y)} />); // pièges (v4.8)
-      if (B.vivant && fireHazard(B, k)) o.push(<polygon key={k + 'fr'} points={HP(x, y, BG.S - 4)} className="fire-risk" />); // l'herbe qui va brûler (v4.7-01)
+      o.push(<SvgHtml key={k + 'dt'} html={tacticalDrawing(B, k, x, y)} />); // traps (v4.8)
+      if (B.vivant && fireHazard(B, k)) o.push(<polygon key={k + 'fr'} points={HP(x, y, BG.S - 4)} className="fire-risk" />); // the grass about to burn (v4.7-01)
     }
   return (
     <g style={PE} ref={lref('marks')}>
@@ -84,7 +84,7 @@ export function Markers() {
   );
 }
 
-/* obstacles : piliers et hautes herbes (arrière, puis avant des Pokémon) */
+/* obstacles: pillars and tall grass (behind, then in front of the Pokémon) */
 function Pillar({ x, y }) {
   return (
     <g className="pil">
@@ -138,7 +138,7 @@ export function Obstacles({ front }) {
   );
 }
 
-// couverture derrière un rocher ou un pilier (drawObstacles)
+// cover behind a rock or a pillar (drawObstacles)
 function Shield({ k, cls }) {
   const [x, y] = HC(k);
   return (
@@ -148,7 +148,7 @@ function Shield({ k, cls }) {
   );
 }
 
-// couvertures, ricochets, rappel de déplacement après coup (drawObstacles)
+// covers, ricochets, post-hit movement reminder (drawObstacles)
 function extras() {
   const ex = [];
   const u = ui.sel && byUid(B, ui.sel),
@@ -188,7 +188,7 @@ function extras() {
   return ex;
 }
 
-/* surbrillances : règle d'arène, dangers, menace, cibles, aperçu, esquive, déplacement */
+/* highlights: gym rule, dangers, threat, targets, preview, dodge, movement */
 export function Highlights() {
   useBoard('hl');
   const hl = [];
@@ -200,7 +200,7 @@ export function Highlights() {
     B.units.forEach(e => {
       if (!vl && e.side === 'e' && !e.ko && e.intent) hl.push(...polys(affected(B, e, MV[e.intent.mv], e.intent.k), 'h-danger'));
     });
-    // v4.12 : l'adversaire touché montre sa zone de menace (tout ce qu'il peut frapper après s'être déplacé)
+    // v4.12: the hit opponent shows its threat zone (everything it can strike after moving)
     const eSel = B.jit && ui.selE && byUid(B, ui.selE);
     if (eSel && !eSel.ko && eSel.side === 'e' && !eSel.done && !B.over) hl.push(...polys(threatZone(B, eSel), 'h-menace'));
     if (u && !u.ko && B.phase === 'player' && !ui.busy && !B.over) {
@@ -224,7 +224,7 @@ export function Highlights() {
   );
 }
 
-/* intentions adverses : flèches courbes vers la case visée */
+/* enemy intents: curved arrows toward the targeted tile */
 export function Intentions() {
   useBoard('hl');
   const o = [];
@@ -260,7 +260,7 @@ export function Intentions() {
   );
 }
 
-/* v4.44 : case montrée par la loupe (calque créé au premier usage) */
+/* v4.44: tile shown by the magnifier (layer created on first use) */
 export function Magnifier() {
   const S = useBoard('insp');
   if (S.insp === undefined) return null;
@@ -271,13 +271,13 @@ export function Magnifier() {
   );
 }
 
-/* v4.73 : Poké Balls d'entrée et de retour (effets ponctuels posés par le moteur) */
+/* v4.73: entry and recall Poké Balls (one-off effects placed by the engine) */
 export function PkLayer() {
   const S = useBoard('pk');
   return S.pk ? <g className="pk73fx" ref={lref('pk73')} /> : null;
 }
 
-/* v4.77 : noms des Pokémon au-dessus de tous les jetons (NomsHauts, Units.jsx) */
+/* v4.77: Pokémon names above all tokens (NamesHigh, Units.jsx) */
 export function Names() {
   const S = useBoard('svg');
   return S.tilt ? (

@@ -1,4 +1,4 @@
-/* Section d'origine : v4.18-01-peche-safari-coop.js */
+/* Original section: v4.18-01-peche-safari-coop.js */
 
 import { BY } from './009-pokemon.js';
 import { RECRUIT } from './010-in-battle-evolution.js';
@@ -7,7 +7,7 @@ import { RC } from './012-recruits-roles-synergies.js';
 import { BADGES } from './013-gyms.js';
 import { paintOverlay } from '../screens/overlays/dialogsStore.js';
 import { $, toast } from './014-utils.js';
-import { CROCHETS } from './015-hooks.js';
+import { HOOKS } from './015-hooks.js';
 import { go } from './016-navigation.js';
 import { TOD, __set_wildId } from './017-home-route.js';
 import { squad, toggle } from './020-team-cards.js';
@@ -25,20 +25,20 @@ import { poolRegion421, regFam421, regionNo421 } from './061-catch-anywhere.js';
 import { chromaArt425 } from './062-art-direction.js';
 import { diplomaOut428 } from './063-combat-catches-home.js';
 
-export let SAFARI_PRIX, SAFARI_PAS, SAFARI_BALLS;
-let PECHE, SAF_MSG;
+export let SAFARI_PRICE, SAFARI_STEPS, SAFARI_BALLS;
+let FISHING, SAF_MSG;
 
 
 /* =====================================================================
-   v4.18 : pêche, Parc Safari et coop
-   1. Pêche : depuis les hautes herbes (Route 29, Route 32), lancez la
-      ligne, ferrez au bon moment, puis combattez la prise (capture en
-      Campagne). Parfois un gros poisson Dominant.
-   2. Parc Safari (Kanto, après 2 badges en Campagne) : 500 ₽ l’entrée,
-      12 pas et 20 Safari Balls. On capture sans combattre, avec appâts et
-      cailloux. Les Pokémon rares y sont plus fréquents.
-   3. Coop à 2 joueurs (Paramètres) : sur le même téléphone, le Joueur 1
-      dirige les 2 premiers Pokémon, le Joueur 2 les autres.
+   v4.18: fishing, Safari Park and co-op
+   1. Fishing: from the tall grass (Route 29, Route 32), cast the
+      line, hook at the right moment, then fight the catch (capture in
+      Campaign). Sometimes a big Dominant fish.
+   2. Safari Park (Kanto, after 2 badges in Campaign): ₽500 entry,
+      12 steps and 20 Safari Balls. You capture without fighting, with bait and
+      rocks. Rare Pokémon are more frequent there.
+   3. 2-player co-op (Settings): on the same phone, Player 1
+      controls the first 2 Pokémon, Player 2 the others.
    ===================================================================== */
 export function V418_0() {
   return { safari: null, peches: 0, safariPris: 0 };
@@ -59,24 +59,24 @@ export function v418Clean(p) {
 }
 
 
-/** Capture hors combat (Safari) : Box, Pokédex, chromatique. */
+/** Out-of-battle capture (Safari): Box, Pokédex, shiny. */
 function take418(id, sh) {
   const b = BY[id].base;
   PROFILE.caught++;
   if (!PROFILE.dex.includes(b)) PROFILE.dex.push(b);
-  const nw = !PROFILE.box.includes(b); // Libre aussi (v4.21)
+  const nw = !PROFILE.box.includes(b); // Free mode too (v4.21)
   if (nw) PROFILE.box.push(b);
   if (sh && !PROFILE.shiny.includes(b)) PROFILE.shiny.push(b);
-  if (nw) setTimeout(diplomaOut428, 0); // diplôme régional (v4.28)
+  if (nw) setTimeout(diplomaOut428, 0); // regional diploma (v4.28)
   return nw;
 }
 
 
 /* =====================================================================
-   1. Pêche
+   1. Fishing
    ===================================================================== */
 function poolFishing418() {
-  return RECRUIT.filter(m => m.t.includes('Eau') && (regFam421(m.id) === regionNo421() || m.id === 'magicarpe')); // les poissons de la région, Magicarpe mord partout (v4.21)
+  return RECRUIT.filter(m => m.t.includes('Eau') && (regFam421(m.id) === regionNo421() || m.id === 'magicarpe')); // the region's fish, Magikarp bites everywhere (v4.21)
 }
 
 
@@ -89,19 +89,19 @@ function fishingDraw418() {
 
 
 function fishingCast418() {
-  clearTimeout(PECHE && PECHE.t);
-  PECHE = { etat: 'attente' };
+  clearTimeout(FISHING && FISHING.t);
+  FISHING = { etat: 'attente' };
   renderFishing418();
   $('#peche418').hidden = false;
-  PECHE.t = setTimeout(() => {
-    if (!PECHE || PECHE.etat !== 'attente') return;
-    PECHE.etat = 'mord';
+  FISHING.t = setTimeout(() => {
+    if (!FISHING || FISHING.etat !== 'attente') return;
+    FISHING.etat = 'mord';
     vibe(60);
     sfx('ui');
     renderFishing418();
-    PECHE.t = setTimeout(() => {
-      if (!PECHE || PECHE.etat !== 'mord') return;
-      PECHE.etat = 'rate';
+    FISHING.t = setTimeout(() => {
+      if (!FISHING || FISHING.etat !== 'mord') return;
+      FISHING.etat = 'rate';
       renderFishing418();
     }, PREF.fast ? 1400 : 1150);
   }, 1200 + Math.random() * 2200);
@@ -109,22 +109,22 @@ function fishingCast418() {
 
 
 function fishingHookSet418() {
-  if (!PECHE || PECHE.etat !== 'mord') return;
-  clearTimeout(PECHE.t);
+  if (!FISHING || FISHING.etat !== 'mord') return;
+  clearTimeout(FISHING.t);
   const id = fishingDraw418();
   if (!id) return;
-  PECHE = { etat: 'prise', id, sh: Math.random() < SHINY_RATE * multChroma(), dom: Math.random() < 0.05 };
+  FISHING = { etat: 'prise', id, sh: Math.random() < SHINY_RATE * multChroma(), dom: Math.random() < 0.05 };
   PROFILE.peches = (PROFILE.peches || 0) + 1;
   queueSave();
   renderFishing418();
 }
 
 
-/* fenêtre de pêche : rendu par React (src/screens/overlays/Peche418.jsx) */
+/* fishing window: rendered by React (src/screens/overlays/Fishing418.jsx) */
 function renderFishing418() {
   const el = $('#peche418'),
-    P2 = PECHE || {};
-  // l'illustration chromatique est recolorée après le rendu (v4.25)
+    P2 = FISHING || {};
+  // the shiny artwork is recolored after rendering (v4.25)
   setTimeout(() => P2.etat === 'prise' && P2.sh && chromaArt425(el.querySelector('.pe-prise img'), BY[P2.id].no), 0);
   paintOverlay('peche', {
     etat: P2.etat,
@@ -139,14 +139,14 @@ function renderFishing418() {
 
 
 function fishingBattle418() {
-  const P2 = PECHE;
+  const P2 = FISHING;
   if (!P2 || P2.etat !== 'prise') return;
   $('#peche418').hidden = true;
   __set_wildId(P2.id);
   const D = wildScen(P2.id, TOD, P2.sh, P2.dom);
   Object.assign(D, { water: ['4,0', '5,0', '6,0', '5,1', '6,1', '7,1', '6,3', '7,3', '5,4', '6,4', '7,5'], lvl: D.lvl.replace(/rencontre|Dominant/, P2.dom ? 'pêche · Dominant' : 'pêche') });
   D.foes = D.foes.map(f => [f[0], f[0] === P2.id ? [6, 2] : [7, 4], f[2]]);
-  PECHE = null;
+  FISHING = null;
   __set_scSel('sauvage');
   go('combat');
   if (!squad.length) {
@@ -158,7 +158,7 @@ function fishingBattle418() {
 
 
 function poolSafari418() {
-  return poolRegion421(1); // le Parc Safari est à Kanto : les familles de Kanto (v4.21)
+  return poolRegion421(1); // the Safari Park is in Kanto: the Kanto families (v4.21)
 }
 
 
@@ -173,9 +173,9 @@ function safariEncounter418() {
 function safariEnter418() {
   if (safariLock418()) return void toast(safariLock418());
   if (!PROFILE.safari) {
-    if (PROFILE.money < SAFARI_PRIX) return void toast('Il faut 500 ₽ pour entrer.');
-    PROFILE.money -= SAFARI_PRIX;
-    PROFILE.safari = { pas: SAFARI_PAS, balls: SAFARI_BALLS, pris: [], enc: null };
+    if (PROFILE.money < SAFARI_PRICE) return void toast('Il faut 500 ₽ pour entrer.');
+    PROFILE.money -= SAFARI_PRICE;
+    PROFILE.safari = { pas: SAFARI_STEPS, balls: SAFARI_BALLS, pris: [], enc: null };
     renderWallet();
     queueSave();
   }
@@ -185,7 +185,7 @@ function safariEnter418() {
 }
 
 
-/** Une action dans le Parc ; renvoie le message (testable sans affichage). */
+/** An action in the Park; returns the message (testable without display). */
 function safariAction418(a) {
   const S2 = PROFILE.safari;
   if (!S2) return '';
@@ -219,7 +219,7 @@ function safariAction418(a) {
     S2.enc = null;
     msg = 'Vous laissez le Pokémon tranquille.';
   }
-  // le Pokémon peut s’enfuir après une action
+  // the Pokémon may flee after an action
   if (S2.enc && x && a !== 'marcher' && a !== 'fuir') {
     if (Math.random() < flee418(x)) {
       msg += ` ${BY[x.id].n} s’enfuit !`;
@@ -246,7 +246,7 @@ function renderSafari418() {
     return;
   }
   const x = S2.enc;
-  // rendu : src/screens/overlays/Safari418.jsx
+  // rendered by src/screens/overlays/Safari418.jsx
   paintOverlay('safari', {
     pas: S2.pas,
     balls: S2.balls,
@@ -261,10 +261,10 @@ function renderSafari418() {
 }
 
 
-// Panneau du Parc Safari sur la carte : src/screens/carte/MapInfo.jsx (SafariInfo).
+// Safari Park panel on the map: src/screens/map/MapInfo.jsx (SafariInfo).
 
 
-/** Fin du tour en coop : le Joueur 1 passe la main au Joueur 2. Renvoie vrai si la main est passée. */
+/** End of the co-op turn: Player 1 hands over to Player 2. Returns true if control was handed over. */
 export function coopPass418() {
   if (!B || !B.coop || B.coop !== 1 || ui.busy || B.over || B.phase !== 'player' || !coopAlive418(B, 2)) return false;
   B.coop = 2;
@@ -307,22 +307,22 @@ const flee418 = x => {
 
 
 /* =====================================================================
-   3. Coop à 2 joueurs
+   3. 2-player co-op
    ===================================================================== */
-/** Joueur 1 : les 2 premiers Pokémon de l’équipe ; Joueur 2 : les autres. */
+/** Player 1: the first 2 Pokémon of the team; Player 2: the others. */
 export const player418 = u => (+String(u.uid).slice(1) < 2 ? 1 : 2);
 
 
 export const coopAlive418 = (S, j) => S.units.some(u => u.side === 'a' && !u.ko && player418(u) === j);
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Statements run at startup, in the original order (see index.js).
 export function __init() {
 
 
-PECHE = null;
+FISHING = null;
 
 
-// #peche418 : rendu par React (src/screens/overlays/Peche418.jsx)
+// #peche418: rendered by React (src/screens/overlays/Fishing418.jsx)
 
 
 document.addEventListener('click', e => {
@@ -330,8 +330,8 @@ document.addEventListener('click', e => {
   const b = e.target.closest('[data-peche418]');
   if (!b) {
     if (e.target.id === 'peche418') {
-      clearTimeout(PECHE && PECHE.t);
-      PECHE = null;
+      clearTimeout(FISHING && FISHING.t);
+      FISHING = null;
       $('#peche418').hidden = true;
     }
     return;
@@ -340,25 +340,25 @@ document.addEventListener('click', e => {
   if (k === 'ferrer') fishingHookSet418();
   else if (k === 'lancer') fishingCast418();
   else if (k === 'combat') fishingBattle418();
-  else if (k === 'recruter' && PECHE && !squad.includes(PECHE.id)) {
-    toggle(PECHE.id);
+  else if (k === 'recruter' && FISHING && !squad.includes(FISHING.id)) {
+    toggle(FISHING.id);
     $('#peche418').hidden = true;
   } else if (k === 'relacher') {
     toast('Il retourne à l’eau.');
     fishingCast418();
   } else if (k === 'x') {
-    clearTimeout(PECHE && PECHE.t);
-    PECHE = null;
+    clearTimeout(FISHING && FISHING.t);
+    FISHING = null;
     $('#peche418').hidden = true;
   }
 });
 
 
 /* =====================================================================
-   2. Parc Safari
+   2. Safari Park
    ===================================================================== */
-SAFARI_PRIX = 500,
-  SAFARI_PAS = 12,
+SAFARI_PRICE = 500,
+  SAFARI_STEPS = 12,
   SAFARI_BALLS = 20;
 
 
@@ -371,7 +371,7 @@ PL.safari = PLACES[PLACES.length - 1];
 SAF_MSG = '';
 
 
-// #safari418 : rendu par React (src/screens/overlays/Safari418.jsx)
+// #safari418: rendered by React (src/screens/overlays/Safari418.jsx)
 
 
 document.addEventListener('click', e => {
@@ -390,7 +390,7 @@ document.addEventListener('click', e => {
     $('#safari418').hidden = true;
     toast(`Merci de votre visite ! ${n} capture${n > 1 ? 's' : ''}.`);
     try {
-      refreshMap(); // panneau du lieu choisi (src/screens/carte/MapInfo.jsx)
+      refreshMap(); // panel of the selected location (src/screens/map/MapInfo.jsx)
     } catch (er) {}
     return;
   }
@@ -403,14 +403,14 @@ document.addEventListener('click', e => {
 });
 
 
-CROCHETS.combat.push((S, opt, D0) => {
+HOOKS.combat.push((S, opt, D0) => {
   if (!PREF.coop || S.ordre === 'vitesse' || (D0 && (D0.tuto || D0.duel433))) return;
   if (S.units.filter(u => u.side === 'a').length < 2 || !opt || opt.robot) return;
   S.coop = coopAlive418(S, 1) ? 1 : 2;
 });
 
 
-CROCHETS.avantFinManche.push(S => {
+HOOKS.avantFinManche.push(S => {
   if (S.coop) S.coop = coopAlive418(S, 1) ? 1 : 2;
 });
 }

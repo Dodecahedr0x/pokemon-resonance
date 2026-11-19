@@ -5,9 +5,9 @@ import { BY } from '../../engine/009-pokemon.js';
 import { medal, tc } from '../../engine/014-utils.js';
 import { HELD_IMG, ITM } from '../../engine/032-v4-foundation.js';
 
-// Tour de Résonance (#tdrBox) : choix de l'équipe, puis récompense entre deux étages.
-// Le moteur (043) garde les clics (écouteur sur #tdrBox) et l'attribut hidden : React ne
-// rend `hidden` qu'au montage et ne le modifie plus.
+// Resonance Tower (#tdrBox): team choice, then reward between two floors.
+// The engine (043) keeps the clicks (listener on #tdrBox) and the hidden attribute: React only
+// renders `hidden` at mount and no longer changes it.
 export default function TdrBox() {
   const s = useOverlay('tdr');
   return (
@@ -17,7 +17,7 @@ export default function TdrBox() {
   );
 }
 
-// Choix des 4 Pokémon de l'ascension.
+// Choice of the 4 Pokémon for the ascent.
 function Choice({ cands, pick }) {
   const n = pick.length;
   return (
@@ -45,7 +45,7 @@ function Choice({ cands, pick }) {
   );
 }
 
-// Récompense après un étage franchi.
+// Reward after a floor is cleared.
 function Reward({ floor, offer }) {
   return (
     <Dialogue className="sv-card st-card tdr-card" titre="tdrT">

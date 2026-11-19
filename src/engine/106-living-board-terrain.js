@@ -1,21 +1,21 @@
-/* Section d'origine : v4.71 : plateau vivant (refonte du terrain de combat) */
+/* Original section: v4.71: living board (overhaul of the battlefield) */
 
 import { SCEN } from './009-pokemon.js';
 import { fnv, hash2, mulberry32 } from './014-utils.js';
-import { CROCHETS } from './015-hooks.js';
+import { HOOKS } from './015-hooks.js';
 import { nbrK } from './021-combat-engine.js';
 import { B, BG, HC, HP, L, VB, VERT } from './024-combat-ui.js';
 import { bdClass, boardSet, getBoard, getHost, hostSet } from '../screens/combat/board/boardStore.js';
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Instructions run at startup, in the original order (see index.js).
 export function __init() {
 
 (() => {
-  const RS = 3; // pixels par unité du viewBox
-  const TS = 256; // taille des textures
-  // hasard et bruit déterministes : mulberry32, hash2 et fnv (014)
+  const RS = 3; // pixels per viewBox unit
+  const TS = 256; // texture size
+  // deterministic randomness and noise: mulberry32, hash2 and fnv (014)
   const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
-  /* bruit périodique : les textures se raccordent sans couture */
+  /* periodic noise: textures tile seamlessly */
   const pn = (x, y, per, s) => {
     const xi = Math.floor(x),
       yi = Math.floor(y),
@@ -51,7 +51,7 @@ export function __init() {
   };
   const rgb = c => `rgb(${c[0] | 0},${c[1] | 0},${c[2] | 0})`;
 
-  /* ---------- les sols ---------- */
+  /* ---------- the floors ---------- */
   const KIND = {
     prairie: { tex: 'grass', c: [[56, 110, 50], [84, 144, 62], [124, 178, 84]], side: '#3b2a1a', around: 'nature', deco: ['fleur', 'touffe', 'caillou', 'touffe'], part: 'feuille', water: 'riviere' },
     jardin: { tex: 'grass', c: [[46, 118, 56], [76, 156, 68], [130, 198, 98]], side: '#36281a', around: 'nature', deco: ['fleur', 'fleur', 'touffe', 'buisson'], part: 'petale', water: 'riviere' },
@@ -92,7 +92,7 @@ export function __init() {
     return D.bio === 'arene' ? 'stade' : 'prairie';
   };
 
-  /* ---------- textures (calculées une fois par sol) ---------- */
+  /* ---------- textures (computed once per floor) ---------- */
   const TEX = {};
   const texture = (name, cols, seed) => {
     const key = name + cols.map(rgb).join('');
@@ -314,7 +314,7 @@ export function __init() {
     poison: { deep: '#3a2a52', mid: '#5c3e7c', light: '#9c76c4', foam: 'rgba(220,190,255,.6)' }
   };
 
-  /* ---------- géométrie ---------- */
+  /* ---------- geometry ---------- */
   const pts = (x, y, s) =>
     HP(x, y, s)
       .split(' ')
@@ -335,7 +335,7 @@ export function __init() {
     c.fill();
   };
 
-  /* ---------- petits décors ---------- */
+  /* ---------- small decorations ---------- */
   const rock = (c, x, y, s, K, r) => {
     c.fillStyle = 'rgba(0,0,0,.32)';
     ell(c, x + 2 * s, y + 3 * s, 11 * s, 3.6 * s);
@@ -536,7 +536,7 @@ export function __init() {
       ell(c, x, y, 5, 1.6);
     }
   };
-  /* décors du pourtour */
+  /* border decorations */
   const AROUND = {
     nature: (c, x, y, r, K) => {
       const k = r();
@@ -599,7 +599,7 @@ export function __init() {
     }
   };
 
-  /* ---------- peinture du plateau ---------- */
+  /* ---------- board painting ---------- */
   const terrainSig = () => {
     let s = kindOf() + '|' + (VERT ? 1 : 0) + '|' + B.sc + '|';
     for (const k in B.tiles) {
@@ -635,7 +635,7 @@ export function __init() {
       PS = pat(sandT),
       PG = pat(grassT);
     const r = mulberry32(seed | 0);
-    // 1. le pourtour
+    // 1. the border
     if (K.around === 'stade') {
       c.fillStyle = '#16181f';
       c.fillRect(0, 0, VW, VH);
@@ -660,7 +660,7 @@ export function __init() {
     const keys = Object.keys(B.tiles);
     const C = {};
     keys.forEach(k => (C[k] = HC(k)));
-    // ombre portée du plateau sur son pourtour
+    // drop shadow of the board onto its border
     c.save();
     c.shadowColor = 'rgba(0,0,0,.55)';
     c.shadowBlur = 14;
@@ -671,7 +671,7 @@ export function __init() {
       c.fill();
     });
     c.restore();
-    // décors du pourtour, hors des cases
+    // border decorations, outside the cells
     const inside = (x, y) => keys.some(k => (C[k][0] - x) ** 2 + (C[k][1] - y) ** 2 < (S * 1.08) ** 2);
     const deco = AROUND[K.around];
     const spots = [];
@@ -682,13 +682,13 @@ export function __init() {
       spots.push([x, y]);
     }
     spots.sort((a, b) => a[1] - b[1]).forEach(([x, y]) => deco(c, x, y, r, K));
-    // 2. joints sombres entre les cases
+    // 2. dark joints between cells
     c.fillStyle = K.side;
     keys.forEach(k => {
       path(c, pts(C[k][0], C[k][1], S + 0.3));
       c.fill();
     });
-    // 3. les cases, de haut en bas
+    // 3. the cells, top to bottom
     const order = keys.slice().sort((a, b) => C[a][1] - C[b][1]);
     const W = WATER[K.water] || WATER.riviere;
     const waterNeighbors = k => {
@@ -704,7 +704,7 @@ export function __init() {
         r2 = mulberry32((seed + fnv(k)) | 0);
       if (t.w) return;
       const top = pts(x, y, S - 1.1);
-      // épaisseur de la dalle
+      // slab thickness
       c.fillStyle = K.side;
       path(c, pts(x, y + 2.6, S - 1.1));
       c.fill();
@@ -722,7 +722,7 @@ export function __init() {
       g.addColorStop(1, 'rgba(0,0,0,.22)');
       c.fillStyle = g;
       c.fillRect(x - S, y - S, S * 2, S * 2);
-      // petits décors
+      // small decorations
       if (!t.rock && !t.pil && !t.grass) {
         const L2 = K.deco;
         const n = L2.length ? 1 + ((r2() * 3) | 0) : 0;
@@ -738,7 +738,7 @@ export function __init() {
         c.fillRect(x - S, y - S, S * 2, S * 2);
       }
       c.restore();
-      // liseré lumineux en haut, ombre en bas
+      // bright edge at the top, shadow at the bottom
       c.lineWidth = 0.9;
       c.strokeStyle = 'rgba(255,255,240,.28)';
       c.beginPath();
@@ -752,7 +752,7 @@ export function __init() {
         if (r2() < 0.6) rock(c, x - 11, y + 9, 0.38, K, r2);
       }
     });
-    // 4. l'eau, creusée dans le plateau
+    // 4. the water, carved into the board
     const water = order.filter(k => B.tiles[k].w);
     water.forEach(k => {
       const [x, y] = C[k];
@@ -789,7 +789,7 @@ export function __init() {
       }
       c.globalAlpha = 1;
       c.restore();
-      // écume le long des berges
+      // foam along the banks
       const tp = pts(x, y + 1, S - 0.4);
       const nb = waterNeighbors(k);
       for (let i = 0; i < 6; i++) {
@@ -818,7 +818,7 @@ export function __init() {
         c.stroke();
       }
     });
-    // 5. lumière d’ensemble et vignettage
+    // 5. overall light and vignetting
     const gl = c.createRadialGradient(VW * 0.25, VH * 0.1, 10, VW * 0.25, VH * 0.1, Math.max(VW, VH));
     gl.addColorStop(0, 'rgba(255,240,200,.12)');
     gl.addColorStop(1, 'rgba(255,240,200,0)');
@@ -832,19 +832,19 @@ export function __init() {
     return { can, eau: water.map(k => C[k]), kind };
   };
 
-  /* ---------- intégration ---------- */
+  /* ---------- integration ---------- */
   const CACHE = new Map();
   let cur = '',
     busy = 0;
   const board = () => document.getElementById('bBoard');
-  // image peinte, vagues, classes tex471/deco471 : rendus par les calques React du plateau
+  // painted image, waves, tex471/deco471 classes: rendered by the board's React layers
   const ensureLayers = () => {
     const svg = document.getElementById('bSvg');
     if (!svg || !L.tiles) return null;
     if (!getBoard().pv) boardSet({ pv: true }, 'pv', 'paint');
     return svg.querySelector('image.pv471');
   };
-  // particules .amb471 : rendues par React (Board.jsx), [classe, style] par particule
+  // .amb471 particles: rendered by React (Board.jsx), [class, style] per particle
   const particles = kind => {
     if (!board()) return;
     const a = getHost().amb471;
@@ -869,10 +869,10 @@ export function __init() {
     if (!B || terrainSig() !== sig) return;
     const im = ensureLayers();
     if (!im) return;
-    const ok = () => bdClass('pv471', true); // classe de #bBoard, rendue par React
+    const ok = () => bdClass('pv471', true); // class of #bBoard, rendered by React
     if (im.getAttribute('href') === res.url) ok();
     else im.onload = ok;
-    boardSet({ pvHref: res.url, waves: res.eau }, 'paint'); // image peinte et vagues
+    boardSet({ pvHref: res.url, waves: res.eau }, 'paint'); // painted image and waves
 
     particles(res.kind);
   };
@@ -922,12 +922,12 @@ export function __init() {
       }
     }, 0);
   };
-  CROCHETS.plateau.push(() => {
+  HOOKS.plateau.push(() => {
     cur = '';
     bdClass('pv471', false);
     launchMove();
   });
-  CROCHETS.plateauRendu.push(launchMove);
+  HOOKS.plateauRendu.push(launchMove);
   window.__plateau471 = { paint, kindOf, KIND, CACHE, lancer: launchMove, terrainSig };
 })();
 }

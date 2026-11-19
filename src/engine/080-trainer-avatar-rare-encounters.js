@@ -1,9 +1,9 @@
-/* Section d'origine : v4.50 : avatar de dresseur · rencontres rares (heure, météo) · trouvailles cachées sur la carte */
+/* Original section: v4.50: trainer avatar · rare encounters (time, weather) · hidden finds on the map */
 
 import { TYPES } from './004-data.js';
 import { ITEMS2, PROFILE } from './011-game-state.js';
 import { writeLS, toast } from './014-utils.js';
-import { CROCHETS } from './015-hooks.js';
+import { HOOKS } from './015-hooks.js';
 import { TOD } from './017-home-route.js';
 import { queueSave } from './025-saves.js';
 import { PREF, savePref, sfx, vibe } from './026-campaign-tutorial-sound.js';
@@ -26,7 +26,7 @@ function av450(cls) {
 }
 
 
-/** Emblème du dresseur sur l'écran « VS » (HTML), ou null sans avatar choisi. */
+/** Trainer emblem on the "VS" screen (HTML), or null if no avatar is chosen. */
 export function vsAv450() {
   return AVT450() ? av450('sm') : null;
 }
@@ -45,12 +45,12 @@ export function rareInfo450(id) {
 }
 
 
-/* bandeau sur la route : qui sort en ce moment */
+/* banner on the route: who is out right now */
 function route450() {
   const wx = weatherDay417(),
     pool = poolRegion421().filter(m => rareInfo450(m.id).m > 1);
   const sky = { pluie: 'pluie', soleil: 'grand soleil', grele: 'grêle', sable: 'tempête de sable' }[wx] || 'ciel dégagé';
-  // bandeau #rr450 en tête de #route (Route.jsx)
+  // #rr450 banner at the top of #route (Route.jsx)
   setRoute({
     rr: {
       head: `${TOD === 'nuit' ? 'Nuit' : TOD === 'matin' ? 'Matin' : 'Jour'} · ${sky}`,
@@ -144,14 +144,14 @@ function trHarvest450(sp) {
   renderMap();
 }
 
-/* ---------- 1. avatar de dresseur ---------- */
+/* ---------- 1. trainer avatar ---------- */
 export const AVT450 = () => (PREF.av450 && TYPES[PREF.av450.e] ? PREF.av450 : null);
 
 export const rareW450 = mon => (IM450() ? rareInfo450(mon.id).m : 1);
 
 export const IM450 = () => PREF.rare450 !== 0;
 
-/* ---------- 3. trouvailles cachées sur la carte ---------- */
+/* ---------- 3. hidden finds on the map ---------- */
 export const TH450 = {
   nuit: 'Éclat lunaire',
   matin: 'Rosée du matin',
@@ -162,17 +162,17 @@ export const TH450 = {
   jour: 'Éclat de lumière'
 };
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Instructions run at startup, in the original order (see index.js).
 export function __init() {
 
 
-// emblème du dresseur dans la barre du haut (#v4Av) : rendu par React (src/components/TopBar.jsx)
+// trainer emblem in the top bar (#v4Av): rendered by React (src/components/TopBar.jsx)
 
 
-/* l’avatar précède le nom sur l’écran « VS » : vsAv450(), rendu dans Vs.jsx */
+/* the avatar precedes the name on the "VS" screen: vsAv450(), rendered in Vs.jsx */
 
 
-/* ---------- 2. rencontres rares selon l’heure et la météo ---------- */
+/* ---------- 2. rare encounters by time and weather ---------- */
 RARE450 = [
   { c: () => TOD === 'nuit', m: 4, w: 'nuit', ids: ['nosferapti', 'fantominus', 'hoothoot', 'absol', 'tenefix', 'malosse', 'abra'] },
   { c: () => TOD === 'matin', m: 3, w: 'matin', ids: ['natu', 'tarsal', 'melo', 'granivol', 'mimigal', 'chenipan'] },
@@ -183,10 +183,10 @@ RARE450 = [
 ];
 
 
-/* la fiche de rencontre signale une apparition rare : rendu par React (src/screens/overlays/Enc.jsx) */
+/* the encounter sheet flags a rare appearance: rendered by React (src/screens/overlays/Enc.jsx) */
 
 
-CROCHETS.heure.push(route450);
+HOOKS.heure.push(route450);
 
 
 try {
@@ -194,7 +194,7 @@ try {
 } catch (e) {}
 
 
-// trouvailles cachées sur la carte (.sp450) : rendues par React (src/screens/carte/Marks.jsx)
+// hidden finds on the map (.sp450): rendered by React (src/screens/map/Marks.jsx)
 
 
 document.addEventListener(
@@ -211,8 +211,8 @@ document.addEventListener(
 );
 
 
-/* ---------- 4. Paramètres : avatar et rencontres rares ---------- */
-// panneau « Avatar de dresseur » : rendu par React (src/screens/settings/panels/Avatar.jsx)
+/* ---------- 4. Settings: avatar and rare encounters ---------- */
+// "Avatar de dresseur" (Trainer avatar) panel: rendered by React (src/screens/settings/panels/Avatar.jsx)
 
 
 document.addEventListener('click', e => {

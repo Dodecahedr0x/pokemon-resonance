@@ -1,4 +1,4 @@
-/* Section d'origine : 21-arene-a-lecran.js */
+/* Original section: 21-arene-a-lecran.js */
 
 import { BY, MON, PRESETS } from './009-pokemon.js';
 import { BUDGET } from './010-in-battle-evolution.js';
@@ -9,7 +9,7 @@ import { tokCl } from '../screens/combat/board/boardStore.js';
 import { TEAM_MAX, __set_squad, renderSquad, save, squad, toggle } from './020-team-cards.js';
 import { BH, BW, uk } from './021-combat-engine.js';
 import { B, BG, L, VERT } from './024-combat-ui.js';
-import { TUTO, renderPrep } from './026-campaign-tutorial-sound.js';
+import { TUTORIAL_STEPS, renderPrep } from './026-campaign-tutorial-sound.js';
 
 export let TEAM_BAK;
 export function __set_TEAM_BAK(v) { return (TEAM_BAK = v); }
@@ -65,8 +65,8 @@ export function fieldSvg() {
 }
 
 
-/** Piliers, hautes herbes, sable, couvertures et ricochets sont dessinés par les calques React
-    (src/screens/combat/board/) ; reste ici le Pokémon caché dans les hautes herbes (jeton du moteur). */
+/** Pillars, tall grass, sand, covers and ricochets are drawn by the React layers
+    (src/screens/combat/board/); what remains here is the Pokémon hidden in the tall grass (engine token). */
 export function drawObstacles() {
   if (!L.units || !B) return;
   B.units.forEach(u => {
@@ -76,7 +76,7 @@ export function drawObstacles() {
 }
 
 
-// synergies du combat (#bSyn) : rendues par React (src/screens/combat/battle/TopBar.jsx)
+// battle synergies (#bSyn): rendered by React (src/screens/combat/battle/TopBar.jsx)
 
 
 function randomTeam() {
@@ -134,10 +134,10 @@ function teamAct(a) {
 }
 
 
-/* --- Pokédex : synergies d'équipe (src/screens/equipe/Analyse.jsx) et formations --- */
+/* --- Pokédex: team synergies (src/screens/team/Analysis.jsx) and formations --- */
 
 
-/* --- codex tactique : rendu par le Guide React (Tactique.jsx) --- */
+/* --- tactical codex: rendered by the React Guide (Tactics.jsx) --- */
 
 
 function loadPreset(k) {
@@ -156,8 +156,8 @@ function loadPreset(k) {
   );
 }
 
-/* ===================== v1.1 : arène, obstacles, rôles et synergies à l’écran ===================== */
-/* --- plateau : lignes d’arène et obstacles --- */
+/* ===================== v1.1: gym, obstacles, roles and synergies on screen ===================== */
+/* --- board: gym lines and obstacles --- */
 const MPT = (x, y) => (VERT ? [y, 430 - x] : [x, y]);
 
 
@@ -165,13 +165,13 @@ export const teamBtns = () =>
   `<div class="team-x"><button type="button" class="b b-sm" data-team="reset" ${squad.length ? '' : 'disabled'}>Réinitialiser l’équipe</button>${TEAM_BAK ? '<button type="button" class="b b-sm" data-team="undo">Rétablir</button>' : ''}<button type="button" class="b b-sm" data-team="rand">Tirage synergique</button></div>`;
 
 
-/* --- Pokédex : encart des recrues confirmées --- */
+/* --- Pokédex: box of confirmed recruits --- */
 export const STARS = ['dracaufeu', 'leviator', 'alakazam', 'tyranocif', 'cizayox', 'dracolosse', 'ectoplasma', 'florizarre'];
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Statements run at startup, in the original order (see index.js).
 export function __init() {
 
-/* --- équipe : réinitialiser, rétablir, tirage --- */
+/* --- team: reset, restore, draw --- */
 TEAM_BAK = null;
 
 
@@ -181,8 +181,8 @@ document.addEventListener('click', e => {
 });
 
 
-/* --- tutoriel : une étape sur les obstacles --- */
-TUTO.splice(3, 0, {
+/* --- tutorial: a step on obstacles --- */
+TUTORIAL_STEPS.splice(3, 0, {
   t: 'Lisez le terrain',
   d: 'Derrière un rocher, on prend 40 % de dégâts en moins à distance. Les piliers bloquent les tirs directs, les hautes herbes cachent au-delà de 2 cases. Touchez une case vide pour lire son terrain.',
   sel: '#bBoard',

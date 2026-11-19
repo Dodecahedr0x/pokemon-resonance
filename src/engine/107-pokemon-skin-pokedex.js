@@ -1,12 +1,12 @@
-/* Section d'origine : v4.72 : habillage Pokémon (Pokédex, onglets Poké Ball, cartes de dresseur) */
+/* Original section: v4.72: Pokémon skin (Pokédex, Poké Ball tabs, trainer cards) */
 
 import { $, $$ } from './014-utils.js';
-import { CROCHETS } from './015-hooks.js';
+import { HOOKS } from './015-hooks.js';
 import { cur } from './016-navigation.js';
 import { PREF, calm472, savePref } from './026-campaign-tutorial-sound.js';
 import { renderParams } from './040-settings.js';
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Statements executed at startup, in the original order (see index.js).
 export function __init() {
 
 (() => {
@@ -14,13 +14,13 @@ export function __init() {
   const on = k => PREF[k] !== 0;
   const doApply = () => H.classList.toggle('pk-calme', !on('pk472a'));
 
-  /* ---------- éléments ajoutés : #pk-fond et #pk-iris sont rendus par React
-     (src/screens/overlays/Effets.jsx) ; la classe .go de l’iris reste posée ici ---------- */
+  /* ---------- added elements: #pk-fond and #pk-iris are rendered by React
+     (src/screens/overlays/Effects.jsx); the iris's .go class is still set here ---------- */
   const iris = document.getElementById('pk-iris');
 
-  // voyants du logo de la barre du haut (.pk-leds) : rendus par React (src/components/Shell.jsx)
+  // top-bar logo lights (.pk-leds): rendered by React (src/components/Shell.jsx)
 
-  /* ---------- ouverture en Poké Ball (barre du bas et menu) ---------- */
+  /* ---------- Poké Ball opening (bottom bar and menu) ---------- */
   let tIris = 0;
   const openOverlay = () => {
     if (calm472() || !on('pk472t')) return;
@@ -42,10 +42,10 @@ export function __init() {
     true
   );
 
-  /* ---------- entrée des écrans : montée et balayage du scanner ---------- */
+  /* ---------- screen entry: rise and scanner sweep ---------- */
   const CAND = '.v4-panel,.v4-hero,.case,.sel-card,.gd-p,.gd-intro,.v4-it,.v4-qm,.cb-b,.v4-stats,.v4d-sec,.tip';
   let tEntry = 0;
-  const entree = () => {
+  const entrance = () => {
     if (calm472()) return;
     const pg = $('.page.on');
     if (!pg) return;
@@ -65,11 +65,11 @@ export function __init() {
     });
     tEntry = setTimeout(() => $$('.pk-rise,.pk-fade,.pk-scan').forEach(x => x.classList.remove('pk-rise', 'pk-fade', 'pk-scan')), 1900);
   };
-  CROCHETS.page.push(previous => {
-    if (cur !== previous) requestAnimationFrame(entree);
+  HOOKS.page.push(previous => {
+    if (cur !== previous) requestAnimationFrame(entrance);
   });
 
-  /* ---------- onde au toucher sur les boutons dorés ---------- */
+  /* ---------- touch ripple on the gold buttons ---------- */
   document.addEventListener(
     'pointerdown',
     e => {
@@ -88,10 +88,10 @@ export function __init() {
     { passive: true }
   );
 
-  /* ---------- carte de résultat : bord holographique, sceau, gerbe : rendus par React (Result.jsx) ---------- */
+  /* ---------- result card: holographic edge, seal, burst: rendered by React (Result.jsx) ---------- */
 
-  /* ---------- Paramètres : réglages de l'habillage ---------- */
-  // panneau « Habillage Pokémon » : rendu par React (src/screens/settings/panels/HabillagePokemon.jsx)
+  /* ---------- Settings: skin options ---------- */
+  // "Habillage Pokémon" (Pokémon skin) panel: rendered by React (src/screens/settings/panels/PokemonSkin.jsx)
   document.addEventListener('click', e => {
     const b = e.target.closest && e.target.closest('[data-pk472]');
     if (!b) return;
@@ -103,6 +103,6 @@ export function __init() {
   });
   doApply();
 
-  window.__habillage472 = { ouvrir: openOverlay, entree };
+  window.__habillage472 = { ouvrir: openOverlay, entree: entrance };
 })();
 }

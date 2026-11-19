@@ -2,7 +2,7 @@ import { BY } from '../../../engine/009-pokemon.js';
 import { DIFFS, PROFILE } from '../../../engine/011-game-state.js';
 import { ART } from '../../../engine/032-v4-foundation.js';
 
-// Camp › Panthéon (v4.32) : les équipes gravées après un Champion, un Maître ou le gardien de l'Écho.
+// Camp › Pantheon (v4.32): teams engraved after a Champion, a Master or the Echo guardian.
 export default function Pantheon() {
   const L = PROFILE.panth432 || [];
   return (

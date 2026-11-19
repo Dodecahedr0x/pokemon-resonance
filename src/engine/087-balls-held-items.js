@@ -1,21 +1,21 @@
-/* Section d'origine : 4.56 : Balls, soins, objets de combat, objets tenus et CT en plus */
+/* Original section: 4.56: Balls, healing, battle items, held items and extra TMs */
 
 import { MV } from './005-moves.js';
 import { SCEN } from './009-pokemon.js';
 import { ITEMS2 } from './011-game-state.js';
-import { CROCHETS } from './015-hooks.js';
+import { HOOKS } from './015-hooks.js';
 import { TOD } from './017-home-route.js';
 import { EMAX, P, rewardIn, hasNx, heal, say, teff } from './021-combat-engine.js';
 import { immobilize } from './022-items-bonds-ai.js';
 import { BALLS, HEALS, HELD_IMG, ICO414, SHOP } from './032-v4-foundation.js';
-import { FOURNISSEURS_DEGATS } from './044-tactical-engine.js';
+import { DAMAGE_PROVIDERS } from './044-tactical-engine.js';
 import { MACHINES } from './045-tms-hms.js';
 import { COMBAT414, HELD_SHOP, hasXp, freeTile414, koAlly414 } from './053-resonance.js';
 
 export let BALL455, OKX455, USE455;
 let ICO455;
 
-/* ---------- icônes ---------- */
+/* ---------- icons ---------- */
 const ST455 = '#1b1b22';
 
 
@@ -48,10 +48,10 @@ const waterBug455 = e => e.t.includes('Eau') || e.t.includes('Insecte');
 export const BALLX455 = {};
 
 
-/* ---------- objets tenus ---------- */
+/* ---------- held items ---------- */
 const TYPEIT455 = { charbon: 'Feu', eaumystique: 'Eau', graine: 'Plante', aimantelec: 'Électrik', glaceeternelle: 'Glace', ceintnoire: 'Combat', cuiller: 'Psy' };
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Statements executed at startup, in the original order (see index.js).
 export function __init() {
 
 ICO455 = {
@@ -203,7 +203,7 @@ Object.assign(HELD_SHOP, {
 });
 
 
-FOURNISSEURS_DEGATS.push(
+DAMAGE_PROVIDERS.push(
   {
     id: 'typeitem455',
     fournir: (c, { u, m, typ }) => !!u && TYPEIT455[u.item] && TYPEIT455[u.item] === typ && (m.p > 0 || m.fix > 0) && { mul: 1.2, libelle: ITEMS2[u.item].n }
@@ -219,7 +219,7 @@ FOURNISSEURS_DEGATS.push(
 );
 
 
-CROCHETS.combat.push(S => {
+HOOKS.combat.push(S => {
   S.units.forEach(u => {
     if (u.side !== 'a' || u.ko) return;
     if (u.item === 'banniere') u.boost = Math.max(u.boost || 0, 1);
@@ -228,7 +228,7 @@ CROCHETS.combat.push(S => {
 });
 
 
-/* ---------- CT supplémentaires ---------- */
+/* ---------- extra TMs ---------- */
 [
   ['ct25', { num: 'CT25', mv: 'tonnerre', p: 3500, types: ['Électrik', 'Normal', 'Eau', 'Vol', 'Acier', 'Dragon'] }],
   ['ct35', { num: 'CT35', mv: 'lanceflammes', p: 3500, types: ['Feu', 'Dragon', 'Normal', 'Combat', 'Sol'] }],

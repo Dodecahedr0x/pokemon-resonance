@@ -1,8 +1,8 @@
 /* <style id="resonance-styles"> */
 
-/* ===== couche resonance-base ===== */
-/* App sombre premium, choisie volontairement en thème unique.
-   Barre latérale (bureau) / barre d'onglets basse (mobile). La teinte d'ambiance suit le type du Pokémon en vedette ; l'or marque la Ligue et le Lien. */
+/* ===== resonance-base layer ===== */
+/* Premium dark app, deliberately chosen as the single theme.
+   Sidebar (desktop) / bottom tab bar (mobile). The ambient tint follows the featured Pokémon's type; gold marks the League and the Bond. */
 @property --tint{syntax:'<color>';inherits:true;initial-value:#6390F0}
 :root{
   color-scheme:dark;
@@ -40,7 +40,7 @@ h1,h2,h3,h4,p{margin:0}
 .mono{font-family:var(--f-m)}
 .num{font-variant-numeric:tabular-nums}
 
-/* ---------- coquille d'application ---------- */
+/* ---------- app shell ---------- */
 .app{position:relative;z-index:1;display:grid;grid-template-columns:252px minmax(0,1fr);min-height:100vh}
 .side{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:26px;padding:24px 16px 18px max(16px,env(safe-area-inset-left,0px));border-right:1px solid var(--line);background:linear-gradient(180deg,rgba(14,17,23,.86),rgba(9,11,15,.86));-webkit-backdrop-filter:blur(22px);backdrop-filter:blur(22px);overflow-y:auto}
 .logo{display:flex;align-items:center;gap:11px;text-decoration:none;padding:0 6px}
@@ -109,7 +109,7 @@ h1,h2,h3,h4,p{margin:0}
 .sec-h > div{display:grid;gap:10px;max-width:640px}
 .sec-h p.d{color:var(--mut);font-size:14.5px;max-width:60ch}
 
-/* ---------- boutons, puces, badges ---------- */
+/* ---------- buttons, chips, badges ---------- */
 .b{display:inline-flex;align-items:center;justify-content:center;gap:9px;height:46px;padding:0 20px;border-radius:999px;font-weight:600;font-size:14.5px;text-decoration:none;border:1px solid var(--line2);background:var(--s2);color:var(--tx);cursor:pointer;transition:transform .25s var(--ease),background .2s,border-color .2s,box-shadow .25s;white-space:nowrap}
 .b:hover{border-color:var(--line3);transform:translateY(-1px)}
 .b:active{transform:translateY(0) scale(.98)}
@@ -143,7 +143,7 @@ button.chip:hover{border-color:var(--line3);color:var(--tx)}
 .toast.on{opacity:1;transform:translate(-50%,0)}
 @media (max-width:999px){.toast{bottom:calc(var(--bn) + 18px + env(safe-area-inset-bottom,0px))}}
 
-/* ---------- accueil : scène vedette ---------- */
+/* ---------- home: featured scene ---------- */
 .hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:36px;align-items:center}
 @media (max-width:880px){.hero{grid-template-columns:1fr;gap:30px}}
 .hero h1{font-family:var(--f-d);font-stretch:125%;font-weight:850;text-transform:uppercase;font-size:clamp(40px,9.2vw,112px);line-height:.86;letter-spacing:-.02em;margin-top:18px}
@@ -188,7 +188,7 @@ button.chip:hover{border-color:var(--line3);color:var(--tx)}
 .kpi span{display:block;font-size:12.5px;color:var(--mut);margin-top:8px}
 @media (max-width:860px){.kpis{grid-template-columns:repeat(3,minmax(0,1fr))}.kpi:nth-child(3){border-right:0}.kpi:nth-child(-n+3){border-bottom:1px solid var(--line)}}
 
-/* optimisations */
+/* optimizations */
 .opt-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
 @media (max-width:980px){.opt-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:600px){.opt-grid{grid-template-columns:1fr}}
@@ -199,7 +199,7 @@ button.chip:hover{border-color:var(--line3);color:var(--tx)}
 .opt p{color:var(--tx2);font-size:14px}
 .new{position:absolute;top:20px;right:20px;font-family:var(--f-m);font-size:9.5px;font-weight:600;letter-spacing:.14em;color:#17120A;background:var(--gold);padding:3px 7px;border-radius:5px}
 
-/* boucle */
+/* loop */
 
 
 
@@ -209,7 +209,7 @@ button.chip:hover{border-color:var(--line3);color:var(--tx)}
 
 
 
-/* règles en accordéon */
+/* accordion rules */
 .rules{display:grid;gap:8px}
 .rule{border:1px solid var(--line);border-radius:var(--r);background:var(--s1);transition:border-color .25s,background .25s}
 .rule[open]{background:linear-gradient(180deg,var(--s2),var(--s1));border-color:var(--line2)}
@@ -281,7 +281,7 @@ button.chip:hover{border-color:var(--line3);color:var(--tx)}
 
 @media (max-width:540px){.dex{padding:14px;min-height:198px}.dex .medal{width:40px;height:40px}}
 
-/* fiche détaillée */
+/* detail sheet */
 .sheet{position:fixed;inset:0;z-index:80}
 .sheet[hidden]{display:none!important}
 .scrim{position:absolute;inset:0;background:rgba(3,4,7,.62);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);animation:fade .3s ease both}
@@ -327,7 +327,7 @@ button.chip:hover{border-color:var(--line3);color:var(--tx)}
 .sh-act{position:sticky;bottom:0;display:flex;gap:10px;padding:16px 22px calc(16px + env(safe-area-inset-bottom,0px));background:linear-gradient(180deg,rgba(15,18,24,0),var(--s1) 34%)}
 .sh-act .b{flex:1}
 
-/* analyse d'équipe */
+/* team analysis */
 .ana-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
 @media (max-width:1100px){.ana-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:640px){.ana-grid{grid-template-columns:1fr}}
@@ -361,7 +361,7 @@ button.chip:hover{border-color:var(--line3);color:var(--tx)}
 .alerts li.ok{--k:var(--ok)} .alerts li.bad{--k:var(--bad)} .alerts li.warn{--k:var(--warn)}
 .presets{display:flex;flex-wrap:wrap;gap:8px}
 
-/* ---------- plateau hexagonal ---------- */
+/* ---------- hexagonal board ---------- */
 .hx{fill:var(--tile);stroke:var(--tile-l);stroke-width:1;transition:fill .6s ease}
 .hx.river{fill:var(--river)}
 .hx.wet{fill:var(--wet)}
@@ -398,7 +398,7 @@ button.chip:hover{border-color:var(--line3);color:var(--tx)}
 
 
 
-/* ---------- combat ---------- */
+/* ---------- battle ---------- */
 .battle{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:16px;align-items:start}
 @media (max-width:1120px){.battle{grid-template-columns:1fr}}
 .bt{border-radius:var(--rl);overflow:hidden;border:1px solid var(--line2);background:linear-gradient(180deg,var(--s1),var(--s0));box-shadow:var(--sh);min-width:0}
@@ -461,7 +461,7 @@ button.chip:hover{border-color:var(--line3);color:var(--tx)}
 .an .lab{font-family:var(--f-m);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
 .an p{font-size:14px;color:var(--tx2)}
 
-/* ---------- types & réactions ---------- */
+/* ---------- types & reactions ---------- */
 .mx-wrap{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:16px;align-items:start}
 @media (max-width:940px){.mx-wrap{grid-template-columns:1fr}}
 .mx{display:grid;grid-template-columns:auto repeat(6,minmax(0,1fr));gap:6px;padding:18px}
@@ -516,7 +516,7 @@ button.chip:hover{border-color:var(--line3);color:var(--tx)}
 .ef b{margin-left:auto;font-family:var(--f-d);font-stretch:125%;font-weight:850;font-size:22px;color:var(--tx)}
 .ef .ar{color:var(--fnt);font-family:var(--f-m)}
 
-/* ---------- ligue ---------- */
+/* ---------- league ---------- */
 .case{position:relative;padding:clamp(18px,3vw,30px);border-radius:28px;border:1px solid rgba(227,192,122,.28);background:radial-gradient(90% 70% at 50% 0%,rgba(227,192,122,.10),transparent 70%),linear-gradient(180deg,#121722,#0B0E14);box-shadow:inset 0 1px 0 rgba(255,255,255,.06),inset 0 0 0 6px rgba(0,0,0,.25),var(--sh)}
 .case-h{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:20px;font-family:var(--f-m);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}
 .case-h span:last-child{color:var(--mut)}
@@ -614,7 +614,7 @@ footer.foot .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:
   .chainglow{opacity:.15!important}
 }
 
-/* ===================== v0.6 : combat jouable & finitions ===================== */
+/* ===================== v0.6: playable battle & finishing touches ===================== */
 .h1{font-stretch:118%;font-weight:780}
 .h2{font-stretch:114%;font-weight:720}
 
@@ -625,7 +625,7 @@ footer.foot .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:
 .b-ghost{background:transparent}
 .lbl-s{font-family:var(--f-m);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--mut);margin-bottom:12px}
 
-/* préparation */
+/* preparation */
 .prep{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:16px;align-items:start}
 @media (max-width:940px){.prep{grid-template-columns:1fr}}
 
@@ -660,7 +660,7 @@ footer.foot .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:
 .howto b{font-family:var(--f-d);font-stretch:112%;font-weight:720;text-transform:uppercase;font-size:14px}
 .howto p{font-size:13px;color:var(--tx2)}
 
-/* combat */
+/* battle */
 @media (min-width:1121px){.battle{grid-template-columns:minmax(0,1fr) 320px}}
 .bt-top .voix span{margin-right:2px}
 .bt-top #bWx:empty{display:none}
@@ -786,7 +786,7 @@ footer.foot .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:
 .res-a{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
 @media (max-width:540px){.bp-h{grid-template-columns:auto minmax(0,1fr)}.bp-h .bp-hp{grid-column:1/-1;text-align:left}.bp-vx{grid-template-columns:1fr 1fr}.bp-vx .ev{grid-column:1/-1}}
 
-/* ===================== v0.7 : monde vivant ===================== */
+/* ===================== v0.7: living world ===================== */
 .scene{--sk1:#4C8FE6;--sk2:#8EC1F2;--sk3:#DCEFFB;--sun:#FFF3C4;--m1:#7E95BA;--m2:#6886A8;--snow:#F4F7FB;--haze:#DCEBF7;--h1:#5A9852;--tree:#3E7C44;--treeh:#5FA25C;--trunk:#5B4330;--lk1:#7DBDF0;--lk2:#3D80C6;--field:#6CAA4C;--path:#E3CD9C;--g1:#5A9E3E;--g2:#468839;--pag:#5A4A6A;
  position:relative;overflow:hidden;border-radius:28px;height:clamp(520px,74vh,680px);border:1px solid var(--line2);box-shadow:var(--sh);isolation:isolate;margin-bottom:22px}
 .scene[data-time="matin"]{--sk1:#F2A77F;--sk2:#F7CFA6;--sk3:#D6E6F0;--sun:#FFD48A;--m1:#9A8FB3;--m2:#7D86A6;--snow:#FBEFE6;--haze:#F6D8C4;--h1:#4E7C55;--tree:#3D6A47;--treeh:#5A8C5E;--lk1:#F2C3A2;--lk2:#8DA7CF;--field:#5E8F4A;--path:#DCC59C;--g1:#4F8A3C;--g2:#3F7531;--pag:#6B4F5E}
@@ -853,7 +853,7 @@ footer.foot .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:
 .dlg p{font-size:15px;line-height:1.45;color:#F4F6FB;min-height:2.9em}
 .dlg::after{content:"";position:absolute;right:16px;bottom:12px;border:5px solid transparent;border-top-color:var(--gold);border-bottom:0;animation:blink 1.1s steps(2,start) infinite}
 @media (max-width:640px){.scene{height:clamp(560px,86vh,700px);border-radius:22px}.dlg p{font-size:14px}}
-/* rencontre */
+/* encounter */
 .enc .enc-card{width:min(440px,100%);max-height:92vh;overflow-y:auto;display:grid;gap:12px;justify-items:center;text-align:center;padding:26px 24px;border-radius:26px;border:1px solid var(--line2);background:radial-gradient(90% 70% at 50% 0%,color-mix(in srgb,var(--c) 34%,transparent),transparent 70%),linear-gradient(180deg,var(--s2),var(--s1));box-shadow:var(--sh);animation:encIn .6s var(--ease) both}
 @keyframes encIn{0%{transform:scale(.6);opacity:0}60%{transform:scale(1.04)}100%{transform:none;opacity:1}}
 .enc-t{font-family:var(--f-d);font-stretch:112%;font-weight:750;font-size:18px}
@@ -895,14 +895,14 @@ footer.foot .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:
 .evd li span{display:inline-block;min-width:62px;font-family:var(--f-m);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--mut)}
 .evd li.gain{color:var(--ok)} .evd li.lose{color:#FF8A8A}
 .sm-slots.four{grid-template-columns:repeat(4,1fr)}
-/* préparation */
+/* preparation */
 .ptm{cursor:default}
 .ptm .pcs{font-family:var(--f-m);font-size:11px;color:var(--gold)}
 .pt > .b{justify-self:start}
 .scn{overflow:hidden}
 .scn::after{content:"";position:absolute;right:-30px;top:-30px;width:120px;height:120px;border-radius:50%;opacity:.35;filter:blur(20px);background:var(--bc,#4F8A3C);pointer-events:none}
 .scn.bio-gue{--bc:#3E8F4A} .scn.bio-roche{--bc:#B6853E} .scn.bio-tour{--bc:#7B5CC4} .scn.bio-ligue{--bc:#E3C07A}
-/* plateaux par biome */
+/* boards by biome */
 .board{transition:background .6s}
 .board.bio-gue{background:radial-gradient(120% 90% at 50% 0%,#1F3A22,#0E1A12)}
 .board.bio-roche{background:radial-gradient(120% 90% at 50% 0%,#3A2D1F,#16110B)}
@@ -921,7 +921,7 @@ footer.foot .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:
 .ember{fill:#B48CFF;opacity:.7;animation:tw 2.6s ease-in-out infinite}
 .axl{fill:rgba(255,255,255,.35)}
 
-/* ===================== v0.8 : matière, relief, évolution ===================== */
+/* ===================== v0.8: material, relief, evolution ===================== */
 :root{
   --gold-grad:linear-gradient(135deg,#F7E1AC 0%,#C9A15A 30%,#F3DBA6 50%,#9C7737 78%,#E3C07A 100%);
   --bevel:linear-gradient(165deg,rgba(255,255,255,.17),rgba(255,255,255,.035) 34%,rgba(255,255,255,.02) 66%,rgba(227,192,122,.2));
@@ -934,12 +934,12 @@ body{background-color:var(--bg);background-image:url("data:image/svg+xml;utf8,<s
    radial-gradient(760px 520px at -12% 112%,rgba(227,192,122,.07),transparent 70%),
    radial-gradient(140% 100% at 50% 40%,transparent 55%,rgba(0,0,0,.55) 100%)}
 .ambient::after{opacity:.75}
-/* titres gravés */
+/* engraved titles */
 .h1,.h2,.hero h1,.sh-name,.st-name{background:linear-gradient(180deg,#FFFFFF 20%,#D9DDE6 62%,#9EA6B6);-webkit-background-clip:text;background-clip:text;color:transparent}
 .hero h1 span{-webkit-text-fill-color:var(--tx2)}
 .kick::before{width:26px;height:1px;background:linear-gradient(90deg,transparent,currentColor)}
 .kick::after{content:"";width:5px;height:5px;transform:rotate(45deg);background:currentColor;margin-left:-6px;flex:none;order:-1;display:none}
-/* surfaces biseautées */
+/* beveled surfaces */
 .panel,.ac,.opt,.rule,.scn,.an,.kpis,.howto>div,.evd,.mvc,.ptm,.stab,.bm,.vx,.plate,.res-card,.ep-card,.enc .enc-card,.dock{
   border:1px solid transparent;
   background:var(--hatch) padding-box,var(--surf) padding-box,var(--bevel) border-box;
@@ -949,12 +949,12 @@ body{background-color:var(--bg);background-image:url("data:image/svg+xml;utf8,<s
 .scn.on,.ptm.on,.stab.on,.bm.on,.vx.on,.plate.act{background:linear-gradient(180deg,rgba(227,192,122,.12),rgba(227,192,122,.03)) padding-box,var(--surf) padding-box,var(--gold-grad) border-box}
 .opt{background:radial-gradient(120% 80% at 100% 0%,color-mix(in srgb,var(--c) 16%,transparent),transparent 60%) padding-box,var(--hatch) padding-box,var(--surf) padding-box,var(--bevel) border-box}
 .opt .ico{background:linear-gradient(160deg,color-mix(in srgb,var(--c) 30%,transparent),color-mix(in srgb,var(--c) 8%,transparent));box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 6px 14px -8px var(--c)}
-/* ornements d’angle */
+/* corner ornaments */
 .orn{position:relative}
 .orn::before,.orn::after{content:"";position:absolute;width:16px;height:16px;pointer-events:none;border:0 solid rgba(227,192,122,.6);z-index:2}
 .orn::before{top:8px;left:8px;border-width:1.5px 0 0 1.5px;border-top-left-radius:5px}
 .orn::after{bottom:8px;right:8px;border-width:0 1.5px 1.5px 0;border-bottom-right-radius:5px}
-/* boutons en relief */
+/* embossed buttons */
 .b{border:1px solid transparent;background:linear-gradient(180deg,#222937,#151A23) padding-box,linear-gradient(180deg,rgba(255,255,255,.24),rgba(255,255,255,.05) 60%,rgba(0,0,0,.3)) border-box;box-shadow:inset 0 1px 0 rgba(255,255,255,.09),inset 0 -2px 0 rgba(0,0,0,.25),0 8px 18px -12px #000}
 .b:hover{border-color:transparent;background:linear-gradient(180deg,#283041,#181E28) padding-box,linear-gradient(180deg,rgba(255,255,255,.34),rgba(255,255,255,.08) 60%,rgba(0,0,0,.3)) border-box}
 .b[aria-pressed="true"]{background:linear-gradient(180deg,rgba(227,192,122,.2),rgba(227,192,122,.06)) padding-box,var(--gold-grad) border-box;color:var(--gold-l)}
@@ -967,7 +967,7 @@ body{background-color:var(--bg);background-image:url("data:image/svg+xml;utf8,<s
 .b-ghost{background:transparent padding-box,linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,.03)) border-box;box-shadow:none}
 
 .b-lg{height:52px;padding:0 26px;font-size:15px}
-/* médailles à cerclage métallique */
+/* medals with metallic rims */
 .medal{box-shadow:0 0 0 1.5px #090B10,0 0 0 3px rgba(227,192,122,.42),inset 0 1px 0 rgba(255,255,255,.5),inset 0 -6px 14px rgba(0,0,0,.32),0 8px 22px -10px var(--glow,rgba(0,0,0,.6))}
 .medal.xs{width:18px;height:18px;box-shadow:0 0 0 1px #090B10,0 0 0 2px rgba(227,192,122,.35)}
 .medal.sm{width:28px;height:28px}
@@ -975,17 +975,17 @@ body{background-color:var(--bg);background-image:url("data:image/svg+xml;utf8,<s
 .medal.lg{width:66px;height:66px}
 .medal.xl{width:104px;height:104px;box-shadow:0 0 0 3px #090B10,0 0 0 6px #D9B470,0 0 0 7px #6B4F22,inset 0 2px 0 rgba(255,255,255,.55),inset 0 -14px 28px rgba(0,0,0,.35),0 20px 50px -16px var(--glow)}
 .medal::after{content:"";position:absolute;inset:0;border-radius:50%;background:radial-gradient(60% 34% at 40% 22%,rgba(255,255,255,.35),transparent 70%);pointer-events:none}
-/* barres de PV segmentées */
+/* segmented HP bars */
 .hp{position:relative;overflow:hidden}
 .hp.hseg{height:9px;border-radius:3px;background:#07090D;box-shadow:inset 0 1px 3px rgba(0,0,0,.9),0 0 0 1px rgba(255,255,255,.09)}
 .hp.hseg i{border-radius:2px;background-image:linear-gradient(180deg,rgba(255,255,255,.4),rgba(255,255,255,0) 55%,rgba(0,0,0,.2))}
 .hp.hseg::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 calc(10% - 1.5px),rgba(7,9,13,.9) calc(10% - 1.5px) 10%);pointer-events:none}
-/* énergie d’Éveil */
+/* Awakening energy */
 .enp{display:inline-flex;gap:5px;align-items:center;padding:0 2px}
 .enp i{width:8px;height:8px;transform:rotate(45deg);border-radius:1.5px;background:#141922;box-shadow:inset 0 0 0 1px rgba(255,255,255,.22);transition:background .4s,box-shadow .4s}
 .enp i.on{background:linear-gradient(135deg,#FFF3CF,#E3C07A 45%,#A9843F);box-shadow:0 0 0 1px rgba(255,241,199,.6),0 0 9px rgba(227,192,122,.75)}
 .enp.lg{gap:8px}.enp.lg i{width:12px;height:12px;border-radius:2px}
-/* ---------- ACCUEIL ---------- */
+/* ---------- HOME ---------- */
 .hero{padding:clamp(22px,3.4vw,44px);border-radius:30px;border:1px solid transparent;background:radial-gradient(90% 120% at 100% 0%,color-mix(in srgb,var(--tint) 16%,transparent),transparent 60%) padding-box,var(--hatch) padding-box,linear-gradient(180deg,rgba(23,27,36,.85),rgba(11,13,18,.85)) padding-box,var(--bevel) border-box;box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 40px 80px -50px #000}
 .hero h1{font-size:clamp(38px,5.1vw,84px)}
 @media (max-width:880px){.hero h1{font-size:clamp(38px,11.4vw,84px)}}
@@ -1035,7 +1035,7 @@ body{background-color:var(--bg);background-image:url("data:image/svg+xml;utf8,<s
 /* kpis */
 .kpis{background:var(--hatch) padding-box,var(--surf) padding-box,var(--bevel) border-box}
 .kpi b{background:linear-gradient(180deg,#FFF 30%,var(--gold-l));-webkit-background-clip:text;background-clip:text;color:transparent}
-/* anatomie */
+/* anatomy */
 .anat{grid-template-columns:repeat(6,minmax(0,1fr))}
 .an{grid-column:span 2;position:relative;overflow:hidden;padding:22px}
 .an.wide{grid-column:span 4}
@@ -1063,7 +1063,7 @@ body{background-color:var(--bg);background-image:url("data:image/svg+xml;utf8,<s
 .an-foe{display:flex;align-items:center;gap:10px}.an-foe .hp{flex:1}.an-foe em{font-style:normal;font-family:var(--f-m);font-size:12px;color:var(--warn)}
 @media (max-width:1000px){.anat{grid-template-columns:repeat(2,minmax(0,1fr))}.an,.an.wide{grid-column:span 1}.an.wide{grid-column:1/-1}}
 @media (max-width:560px){.anat{grid-template-columns:1fr}.an.wide{grid-column:auto}}
-/* ---------- POKÉDEX : cartes de famille ---------- */
+/* ---------- POKÉDEX: family cards ---------- */
 .fam-grid{grid-template-columns:repeat(auto-fill,minmax(222px,1fr));gap:16px;perspective:1100px}
 .fcard{--rx:0deg;--ry:0deg;--hx:50%;--hy:30%;position:relative;min-width:0;border-radius:20px;transform:rotateX(var(--rx)) rotateY(var(--ry));transform-style:preserve-3d;transition:transform .5s var(--ease),filter .3s,opacity .3s}
 .fcard:hover{transition:transform .12s linear,filter .3s}
@@ -1108,7 +1108,7 @@ body{background-color:var(--bg);background-image:url("data:image/svg+xml;utf8,<s
 .gauge i.on{background:linear-gradient(180deg,#FBE7B8,#C9A05A);box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 0 8px rgba(227,192,122,.4)}
 .dk{gap:16px}
 @media (max-width:540px){.fam-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.fc-art{height:104px}.orb{width:70px;height:70px}.fc-mv{font-size:11px}.fc-role{display:none}.fc-chain em{font-size:10px}.fcard .qa{width:30px;height:30px;top:46px;right:16px}}
-/* fiche : onglets de stade */
+/* sheet: stage tabs */
 .stabs{display:flex;gap:6px;flex-wrap:wrap}
 .stab{display:flex;align-items:center;gap:8px;padding:7px 12px 7px 7px;border-radius:14px;cursor:pointer;color:inherit;font:inherit;text-align:left}
 .stab b{display:block;font-size:13px}.stab em{display:block;font-style:normal;font-family:var(--f-m);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut)}
@@ -1119,7 +1119,7 @@ body{background-color:var(--bg);background-image:url("data:image/svg+xml;utf8,<s
 .evd li.arr{color:var(--gold-l)}
 .sh-hero{background:radial-gradient(110% 95% at 50% 0%,color-mix(in srgb,var(--c) 42%,transparent),transparent 72%),var(--hatch)}
 .rxl li.lat{opacity:.72}
-/* ---------- COMBAT : préparation ---------- */
+/* ---------- BATTLE: preparation ---------- */
 .scn-art{display:block;height:58px;margin:-18px -20px 4px;border-bottom:1px solid rgba(0,0,0,.6);box-shadow:inset 0 -1px 0 rgba(255,255,255,.06)}
 .scn.bio-gue .scn-art{background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='58'><path d='M0 46q10-6 20 0t20 0' fill='none' stroke='%23A8D4FF' stroke-opacity='.35'/><path d='M6 58l3-14 2 14M26 58l2-10 2 10' stroke='%2389C66B' stroke-opacity='.5' fill='none'/></svg>"),linear-gradient(180deg,#2E5E3A,#1A3324 60%,#1D4F79)}
 .scn.bio-roche .scn-art{background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='60' height='58'><path d='M0 30 20 12l14 12 12-8 14 14V58H0Z' fill='%23000' fill-opacity='.25'/><path d='M0 40h22l6 4h32M10 50h14l4-4h18' stroke='%23000' stroke-opacity='.35' fill='none'/></svg>"),linear-gradient(180deg,#7A5A34,#4A3A28)}
@@ -1131,7 +1131,7 @@ body{background-color:var(--bg);background-image:url("data:image/svg+xml;utf8,<s
 .ptm em.ch{color:var(--gold-l)} .ptm em.st{color:var(--mut)}
 .pt-h b{font-variant-numeric:tabular-nums}
 .howto .hn{background:linear-gradient(180deg,#F6DDA4,#C9A05A);color:#1A1307;border:0;font-weight:600;box-shadow:inset 0 1px 0 rgba(255,255,255,.6)}
-/* ---------- COMBAT : arène ---------- */
+/* ---------- BATTLE: arena ---------- */
 .bt{border:1px solid transparent;background:var(--hatch) padding-box,linear-gradient(180deg,#12161E,#0A0C11) padding-box,var(--bevel) border-box}
 .bt-top{background:linear-gradient(180deg,rgba(255,255,255,.035),transparent);border-bottom:1px solid rgba(0,0,0,.6);box-shadow:0 1px 0 rgba(255,255,255,.04)}
 #bRound b{color:var(--gold-l);font-family:var(--f-d);font-stretch:118%;font-size:15px}
@@ -1178,7 +1178,7 @@ body{background-color:var(--bg);background-image:url("data:image/svg+xml;utf8,<s
 .f-ready{fill:#F0D59C;font-family:var(--f-d);font-weight:800;font-size:10px;letter-spacing:.04em;paint-order:stroke;stroke:#0B0D12;stroke-width:3px}
 .arrfx polygon{fill:none;stroke:var(--c);stroke-width:2;opacity:0;transform-box:fill-box;transform-origin:center;animation:arrw 1.2s ease-out forwards}
 @keyframes arrw{0%{opacity:.95;transform:scale(.35)}100%{opacity:0;transform:scale(1)}}
-/* bandeaux */
+/* banners */
 .plate{grid-template-columns:auto minmax(0,1fr);gap:9px;align-items:center;padding:8px 10px;border-radius:14px}
 .plate .pl-b{display:grid;gap:5px;min-width:0}
 .plate .pl-h{align-items:center;justify-content:space-between;gap:6px}
@@ -1192,7 +1192,7 @@ body{background-color:var(--bg);background-image:url("data:image/svg+xml;utf8,<s
 .plate .it .rdy{color:var(--gold-l);font-weight:600}
 .plate .enp{gap:4px}.plate .enp i{width:6px;height:6px}
 @media (max-width:640px){.plate{grid-template-columns:1fr;padding:7px 8px}.plate .medal.pm{display:none}.plate .enp{display:none}}
-/* panneau */
+/* panel */
 .bp-en{display:grid;gap:9px;padding:12px;border-radius:14px;border:1px solid transparent;background:var(--hatch) padding-box,linear-gradient(180deg,#141822,#0E1117) padding-box,var(--bevel) border-box}
 .bp-en.full{background:radial-gradient(100% 120% at 0% 0%,rgba(227,192,122,.16),transparent 60%) padding-box,linear-gradient(180deg,#171A22,#0F1218) padding-box,var(--gold-grad) border-box}
 .bp-en.fin p{font-size:13px;color:var(--mut)}
@@ -1211,7 +1211,7 @@ body{background-color:var(--bg);background-image:url("data:image/svg+xml;utf8,<s
 .warn-ev{font-size:12.5px;color:#FF9A8A}
 .bp-pv em.enx{color:var(--gold-l)} .bp-pv em.evx{color:#FF9A8A;font-weight:600}
 .blog li.evo{color:var(--gold-l)}
-/* choix d’évolution */
+/* evolution choice */
 .evopick{position:fixed;inset:0;z-index:86;display:grid;place-items:center;padding:20px max(16px,env(safe-area-inset-right,0px)) 20px max(16px,env(safe-area-inset-left,0px));background:radial-gradient(60% 50% at 50% 40%,rgba(227,192,122,.12),transparent 70%),rgba(3,4,7,.8);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
 .evopick[hidden]{display:none!important}
 .ep-card{width:min(760px,100%);max-height:92vh;overflow-y:auto;display:grid;gap:14px;padding:26px;border-radius:26px;animation:encIn .5s var(--ease) both}
@@ -1232,7 +1232,7 @@ body{background-color:var(--bg);background-image:url("data:image/svg+xml;utf8,<s
 .eo li.gain{color:var(--ok)} .eo li.lose{color:#FF8A8A} .eo li.lose i{font-style:normal;font-size:11px;opacity:.8} .eo li.arr{color:var(--gold-l)}
 .eo-go{justify-self:stretch;text-align:center;padding:10px;border-radius:999px;font-weight:700;font-size:14px;color:#1A1307;background:linear-gradient(180deg,#FBE7B8,#E8C682 42%,#C9A05A 58%,#DDB672);box-shadow:inset 0 1px 0 rgba(255,255,255,.7),inset 0 -2px 0 rgba(110,80,30,.4)}
 .ep-a{display:flex;justify-content:center}
-/* cinématique d’évolution */
+/* evolution cutscene */
 .evofx{position:absolute;inset:0;z-index:5;border-radius:16px;overflow:hidden;pointer-events:none}
 .evofx[hidden]{display:none}
 .efx{position:absolute;inset:0;display:grid;place-items:center;align-content:center;gap:10px;background:radial-gradient(circle at 50% 46%,color-mix(in srgb,var(--c0) 30%,#05060A),#030407 70%);animation:efxIn 2.5s ease both}
@@ -1258,16 +1258,16 @@ body{background-color:var(--bg);background-image:url("data:image/svg+xml;utf8,<s
 @keyframes fl8{0%,52%{opacity:0}56%{opacity:.95}70%,100%{opacity:0}}
 .efx-orb .medal.xl{width:100px;height:100px}
 .efx-orb{}@media (max-width:540px){.efx-orb{width:84px;height:84px;left:calc(50% - 42px);top:calc(44% - 42px)}.efx-orb .medal.xl{width:78px;height:78px}.efx-t2{top:calc(44% + 60px)}.efx-t1{top:calc(44% - 112px)}}
-/* résultat */
+/* result */
 .res-card{background:radial-gradient(90% 60% at 50% 0%,rgba(227,192,122,.16),transparent 70%) padding-box,var(--hatch) padding-box,var(--surf) padding-box,var(--gold-grad) border-box}
 .res-card.lose{background:radial-gradient(90% 60% at 50% 0%,rgba(255,103,103,.14),transparent 70%) padding-box,var(--hatch) padding-box,var(--surf) padding-box,var(--bevel) border-box}
 @media (prefers-reduced-motion:reduce){.efx,.efx *{animation:none!important}.efx-a,.efx-t1,.efx-rays,.efx-ring,.efx-flash{opacity:0}.efx-b,.efx-t2{opacity:1}.fcard{transform:none!important}}
 
 
 /* =====================================================================
-   v0.9 · « Légende & Prestige : l’Héritage des Maîtres »
-   Obsidienne, dalles runiques polies, laiton et argent brossés, verre fumé,
-   lueurs d’énergie contrôlées. Couche purement visuelle.
+   v0.9 · "Legend & Prestige: the Legacy of the Masters"
+   Obsidian, polished runic slabs, brushed brass and silver, smoked glass,
+   controlled energy glows. Purely visual layer.
    ===================================================================== */
 @property --tint{syntax:'<color>';inherits:true;initial-value:#4F8CFF}
 :root{
@@ -1298,7 +1298,7 @@ body{background-image:var(--veins),url("data:image/svg+xml;utf8,<svg xmlns='http
 ::selection{background:var(--gold);color:#140F06}
 :focus-visible{outline:1.5px solid var(--gold-l);outline-offset:3px}
 
-/* ---------- typographie ---------- */
+/* ---------- typography ---------- */
 .h1,.h2,.h3,.hero h1,.sh-name,.st-name,.scn b,.howto b,.mvc b,.evd-h b,.eo-n b,.fc-name h3,.al b,.evb b,.bp-id b,.res-card .h1,.rxd h3,.cs .who,.log b,.efx-t1,.efx-t2{font-family:var(--f-d);font-stretch:normal}
 .h1{font-weight:700;letter-spacing:.06em;font-size:clamp(30px,4.6vw,54px);line-height:1.02}
 .h2{font-weight:700;letter-spacing:.07em;font-size:clamp(22px,2.8vw,32px);line-height:1.08}
@@ -1319,7 +1319,7 @@ body{background-image:var(--veins),url("data:image/svg+xml;utf8,<svg xmlns='http
 .an-k{font-weight:800;-webkit-text-stroke:1px rgba(212,175,106,.35)}
 .lbl-s,.ac h4,.sh-sec h4,.bp-en .lbl-s,.case-h,.scn .lvl,.bdg span,.arena dt{font-family:var(--f-m);letter-spacing:.24em}
 
-/* ---------- surfaces : dalles runiques ---------- */
+/* ---------- surfaces: runic slabs ---------- */
 .panel,.ac,.opt,.rule,.scn,.an,.kpis,.howto>div,.evd,.mvc,.ptm,.stab,.bm,.vx,.plate,.res-card,.ep-card,.enc .enc-card,.dock,.bp-en,.st-evo,.st-line,.qc,.duo,.wx,.case,.arena,.cs,.mx-wrap .rxd,.rxd,.it,.rp,.champ,.note,.sh{
   border:1px solid transparent;
   background:var(--veins) padding-box,var(--slab) padding-box,var(--edge) border-box;
@@ -1335,13 +1335,13 @@ body{background-image:var(--veins),url("data:image/svg+xml;utf8,<svg xmlns='http
 .opt .ico{border-radius:4px;transform:rotate(45deg);width:34px;height:34px;margin:4px;background:linear-gradient(135deg,color-mix(in srgb,var(--c) 34%,#0A0A0C),#0A0A0C);border:1px solid color-mix(in srgb,var(--c) 55%,transparent);box-shadow:0 0 14px -4px var(--c),inset 0 1px 0 rgba(255,255,255,.15)}
 .opt .ico svg{transform:rotate(-45deg)}
 .opt .tg{letter-spacing:.24em}
-/* ornements d’angle : glyphes */
+/* corner ornaments: glyphs */
 .orn::before,.orn::after{width:20px;height:20px;border-color:rgba(212,175,106,.55);border-radius:0}
 .orn::before{top:9px;left:9px;border-width:1px 0 0 1px;background:radial-gradient(circle at 0 0,rgba(212,175,106,.9) 0 1.6px,transparent 2.2px)}
 .orn::after{bottom:9px;right:9px;border-width:0 1px 1px 0;background:radial-gradient(circle at 100% 100%,rgba(212,175,106,.9) 0 1.6px,transparent 2.2px)}
 .sec-h{position:relative;padding-bottom:16px;border-bottom:1px solid transparent;border-image:linear-gradient(90deg,rgba(212,175,106,.4),rgba(212,175,106,.05) 60%,transparent) 1}
 
-/* ---------- boutons : laiton brossé, verre fumé, angles taillés ---------- */
+/* ---------- buttons: brushed brass, smoked glass, cut corners ---------- */
 .b{height:44px;padding:0 20px;border-radius:3px;font-family:var(--f-b);font-weight:600;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;
   clip-path:polygon(9px 0,100% 0,100% calc(100% - 9px),calc(100% - 9px) 100%,0 100%,0 9px);
   border:1px solid transparent;background:linear-gradient(180deg,rgba(28,30,36,.92),rgba(14,15,19,.92)) padding-box,linear-gradient(180deg,rgba(201,206,214,.5),rgba(201,206,214,.08) 55%,rgba(212,175,106,.35)) border-box;
@@ -1368,12 +1368,12 @@ body{background-image:var(--veins),url("data:image/svg+xml;utf8,<svg xmlns='http
 .fcard.in .qa svg,.dex.in .qa svg{transform:rotate(0deg)}
 .qa:hover{transform:rotate(45deg) scale(1.08)}
 
-/* ---------- sceaux de type ---------- */
+/* ---------- type seals ---------- */
 .tb{height:22px;padding:0 9px 0 3px;gap:7px;border-radius:2px;background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(0,0,0,.25)),#0E0F12;border:1px solid color-mix(in srgb,var(--c) 55%,transparent);color:color-mix(in srgb,var(--c) 62%,#FFF);font-family:var(--f-m);font-weight:600;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;box-shadow:inset 0 0 12px -6px var(--c)}
 .tb-s{display:grid;place-items:center;flex:none;width:13px;height:13px;margin:0 1px 0 2px;transform:rotate(45deg);background:var(--c);box-shadow:0 0 0 1px #0A0A0C,0 0 0 2px color-mix(in srgb,var(--c) 70%,transparent),0 0 9px color-mix(in srgb,var(--c) 60%,transparent)}
 .tb-s svg{width:9px;height:9px;transform:rotate(-45deg)}
 .tb>svg{display:none}
-/* médailles : sceau à couronne de glyphes */
+/* medals: seal with a crown of glyphs */
 .medal{box-shadow:0 0 0 1.5px #08080A,0 0 0 2.5px rgba(212,175,106,.55),0 0 0 4px #08080A,inset 0 1px 0 rgba(255,255,255,.45),inset 0 -7px 14px rgba(0,0,0,.4),0 8px 22px -10px var(--glow,rgba(0,0,0,.6))}
 .medal:not(.xs):not(.sm)::before{content:"";position:absolute;inset:-8px;border-radius:50%;pointer-events:none;background:repeating-conic-gradient(from 0deg,rgba(212,175,106,.55) 0 1.4deg,transparent 1.4deg 10deg);-webkit-mask:radial-gradient(circle,transparent calc(50% - 3px),#000 calc(50% - 2.5px),#000 calc(50% - .5px),transparent 50%);mask:radial-gradient(circle,transparent calc(50% - 3px),#000 calc(50% - 2.5px),#000 calc(50% - .5px),transparent 50%)}
 .medal.xs{box-shadow:0 0 0 1px #08080A,0 0 0 1.8px rgba(212,175,106,.5)}
@@ -1382,7 +1382,7 @@ body{background-image:var(--veins),url("data:image/svg+xml;utf8,<svg xmlns='http
 .medal.xl::before{inset:-18px}
 .mini{box-shadow:0 0 0 1px #08080A,0 0 0 2px rgba(212,175,106,.5)}
 
-/* ---------- jauges d’énergie lumineuses ---------- */
+/* ---------- glowing energy gauges ---------- */
 .hp.hseg{--g:#4DB8FF;height:8px;border-radius:1px;background:linear-gradient(180deg,#050607,#0D0F12);box-shadow:inset 0 1px 2px rgba(0,0,0,1),0 0 0 1px rgba(212,175,106,.22),0 0 12px -3px color-mix(in srgb,var(--g) 70%,transparent)}
 .hp.hseg:has(i.mid){--g:#E8C26A}.hp.hseg:has(i.lo){--g:#FF7A3D}
 .hp.hseg i{position:relative;border-radius:0;background:linear-gradient(180deg,rgba(255,255,255,.55) 0,rgba(255,255,255,0) 45%,rgba(0,0,0,.25) 100%),linear-gradient(90deg,color-mix(in srgb,var(--g) 45%,#000),var(--g) 70%,color-mix(in srgb,var(--g) 55%,#fff))!important;box-shadow:0 0 10px var(--g)}
@@ -1401,7 +1401,7 @@ body{background-image:var(--veins),url("data:image/svg+xml;utf8,<svg xmlns='http
 .sbar{border-radius:0;background:#0A0B0E;box-shadow:inset 0 0 0 1px rgba(212,175,106,.18)}
 .sbar i{border-radius:0;background:linear-gradient(90deg,#4F3A16,#D4AF6A 70%,#FFF0C8);box-shadow:0 0 8px rgba(212,175,106,.5)}
 
-/* ---------- statuts : tampons et runes scellées ---------- */
+/* ---------- statuses: stamps and sealed runes ---------- */
 .stt{display:inline-block;padding:1px 6px;border-radius:1px;border:1.5px solid currentColor;outline:1px solid currentColor;outline-offset:1.5px;transform:rotate(-4deg);font-family:var(--f-m);font-weight:700;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#FF8A80;background:rgba(229,72,77,.08)}
 .stt.st-par{color:#F2D45C;background:rgba(242,212,92,.08)}.stt.st-gel{color:#9CE0FF;background:rgba(156,224,255,.08)}.stt.st-som{color:#C7A6FF;background:rgba(199,166,255,.08)}.stt.st-rec{color:#C9CED6;background:rgba(201,206,214,.07)}
 .bdg-s rect{fill:#1A0A0B;stroke:#E5484D;stroke-width:.9}
@@ -1410,7 +1410,7 @@ body{background-image:var(--veins),url("data:image/svg+xml;utf8,<svg xmlns='http
 .bdg-s.st-par rect{stroke:#F2D45C}.bdg-s.st-par text{fill:#F2D45C}.bdg-s.st-gel rect{stroke:#9CE0FF}.bdg-s.st-gel text{fill:#9CE0FF}.bdg-s.st-som rect{stroke:#C7A6FF}.bdg-s.st-som text{fill:#C7A6FF}.bdg-s.st-rac rect,.bdg-s.st-toile rect{stroke:#8FD18A}.bdg-s.st-rac text,.bdg-s.st-toile text{fill:#8FD18A}
 .bdg-s.st-par rect.in{stroke:rgba(242,212,92,.5)}.bdg-s.st-gel rect.in{stroke:rgba(156,224,255,.5)}.bdg-s.st-som rect.in{stroke:rgba(199,166,255,.5)}
 
-/* ---------- coquille ---------- */
+/* ---------- shell ---------- */
 .side{background:var(--veins),linear-gradient(180deg,rgba(14,14,17,.94),rgba(8,8,10,.96));background-size:560px 560px,auto;border-right:1px solid transparent;border-image:linear-gradient(180deg,rgba(212,175,106,.35),rgba(212,175,106,.04) 50%,rgba(212,175,106,.25)) 1}
 .logo b{font-family:var(--f-d);font-weight:800;letter-spacing:.2em;font-size:16px}
 .logo small{font-family:var(--f-m);letter-spacing:.12em;font-size:9.5px;text-transform:uppercase}
@@ -1425,7 +1425,7 @@ body{background-image:var(--veins),url("data:image/svg+xml;utf8,<svg xmlns='http
 .kpis{border-radius:var(--rl)}
 .kpi{border-color:rgba(212,175,106,.1)}
 
-/* ---------- accueil ---------- */
+/* ---------- home ---------- */
 .hero{border-radius:14px;background:radial-gradient(80% 110% at 100% 0%,color-mix(in srgb,var(--tint) 12%,transparent),transparent 62%) padding-box,var(--veins) padding-box,linear-gradient(180deg,rgba(22,23,28,.92),rgba(10,10,12,.94)) padding-box,var(--brass) border-box;background-size:auto,560px 560px,auto,auto;box-shadow:var(--engrave),0 50px 90px -60px #000}
 .cr-tick{stroke:rgba(212,175,106,.22)}.cr-tick.mj{stroke:rgba(242,221,168,.6)}
 
@@ -1448,7 +1448,7 @@ body{background-image:var(--veins),url("data:image/svg+xml;utf8,<svg xmlns='http
 .rule summary .cd,.cd{font-family:var(--f-m);letter-spacing:.14em;color:var(--gold)}
 .rule .nm{font-family:var(--f-d);font-weight:700;letter-spacing:.08em;text-transform:uppercase}
 
-/* ---------- Pokédex : tablettes de collection ---------- */
+/* ---------- Pokédex: collection tablets ---------- */
 .fcard{border-radius:12px}
 .fc-in{border-radius:12px;border:1.5px solid transparent;
   background:radial-gradient(130% 60% at 50% 0%,color-mix(in srgb,var(--c) 16%,transparent),transparent 62%) padding-box,var(--veins) padding-box,linear-gradient(180deg,#16171C,#0C0D10) padding-box,var(--steel) border-box;
@@ -1477,7 +1477,7 @@ body{background-image:var(--veins),url("data:image/svg+xml;utf8,<svg xmlns='http
 .mvc b{font-weight:700;letter-spacing:.08em;font-size:14.5px}
 .evd li span,.eo li span{letter-spacing:.16em}
 
-/* ---------- combat : préparation ---------- */
+/* ---------- battle: preparation ---------- */
 .scn{border-radius:var(--rl)}
 .scn b{font-weight:700;letter-spacing:.08em;font-size:18px}
 .scn-art{height:60px;filter:saturate(.55) brightness(.6) contrast(1.1);border-bottom:1px solid rgba(212,175,106,.3)}
@@ -1502,7 +1502,7 @@ body{background-image:var(--veins),url("data:image/svg+xml;utf8,<svg xmlns='http
 .howto .hn{font-family:var(--f-n);font-stretch:72%}
 .ptm em.ch{font-family:var(--f-m);font-size:10.5px;letter-spacing:.04em}
 
-/* ---------- combat : arène / sanctuaire ---------- */
+/* ---------- battle: arena / sanctuary ---------- */
 .bt{border-radius:var(--rl);background:var(--veins) padding-box,linear-gradient(180deg,#121317,#08080A) padding-box,var(--edge) border-box;background-size:560px 560px,auto,auto}
 .bt-top{background:repeating-linear-gradient(0deg,rgba(255,255,255,.012) 0 1px,transparent 1px 3px),linear-gradient(180deg,rgba(212,175,106,.06),transparent);border-bottom:1px solid rgba(212,175,106,.18)}
 .bt-top b#bScen{font-family:var(--f-d);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:13px;color:var(--gold-l)}
@@ -1524,7 +1524,7 @@ body{background-image:var(--veins),url("data:image/svg+xml;utf8,<svg xmlns='http
 .board::after{bottom:4px;right:4px;border-width:0 1.5px 1.5px 0;background:radial-gradient(circle at 100% 100%,#F2DDA8 0 2px,transparent 2.6px)}
 .board.shock{animation:shock .55s ease}
 @keyframes shock{20%{transform:translateX(-3px)}40%{transform:translateX(3px)}60%{transform:translateX(-2px)}80%{transform:translateX(1px)}}
-/* dalles */
+/* slabs */
 #bSvg .hx{stroke:rgba(110,160,255,.26);stroke-width:.9}
 .bio-gue .hx{fill:#141B17}.bio-gue .hx.alt{fill:#17201A}
 .bio-roche .hx{fill:#1B1712}.bio-roche .hx.alt{fill:#201B14}
@@ -1546,7 +1546,7 @@ body{background-image:var(--veins),url("data:image/svg+xml;utf8,<svg xmlns='http
 .tuft{fill:#2D5A33;opacity:.45}.pebble{fill:#4A3D2C;opacity:.6}.ember{fill:#9B7BFF}.glint{fill:rgba(242,221,168,.45)}
 .axl{font-family:var(--f-m);fill:rgba(212,175,106,.5);letter-spacing:.1em}
 .boulder{fill:url(#rockG);stroke:#000}
-/* lueurs de portée */
+/* range glows */
 .h-reach{fill:rgba(91,155,255,.07);stroke:#7FB2FF;stroke-width:1.1;filter:drop-shadow(0 0 3px rgba(91,155,255,.9))}
 .h-tgt{fill:rgba(212,175,106,.1);stroke:#E9C97E;stroke-width:1.1;filter:drop-shadow(0 0 3px rgba(240,200,110,.85))}
 .h-tgt.on{fill:rgba(242,221,168,.28);stroke:#FFF0C8;stroke-width:1.8}
@@ -1561,7 +1561,7 @@ body{background-image:var(--veins),url("data:image/svg+xml;utf8,<svg xmlns='http
 .arr-h{fill:#FF6B6F}
 .mk-fill{opacity:.2}
 .mk-edge{stroke-width:1;stroke-dasharray:2 2.5;filter:drop-shadow(0 0 2px currentColor)}
-/* jetons */
+/* tokens */
 .tok-ring{stroke-width:1.4}
 .tok-rim{stroke:rgba(212,175,106,.55)}
 .hp-arc{filter:drop-shadow(0 0 1.6px rgba(120,190,255,.9))}
@@ -1574,7 +1574,7 @@ body{background-image:var(--veins),url("data:image/svg+xml;utf8,<svg xmlns='http
 .f-dmg{fill:#FF7A6E;font-weight:700}.f-heal{fill:#7FD8FF;font-weight:700}
 .f-rx{font-family:var(--f-d);font-weight:700;letter-spacing:.08em;fill:#F2DDA8}
 .f-ready{font-family:var(--f-d);letter-spacing:.1em}
-/* bandeaux et panneau */
+/* banners and panel */
 .plate{border-radius:6px}
 .plate .pl-h .n{font-family:var(--f-d);font-weight:700;letter-spacing:.06em;font-size:12px}
 .plate .lv{font-family:var(--f-m);letter-spacing:.1em;color:var(--gold)}
@@ -1597,7 +1597,7 @@ body{background-image:var(--veins),url("data:image/svg+xml;utf8,<svg xmlns='http
 .blog li.arn{color:#F0B860}
 .bt-foot{border-top:1px solid rgba(212,175,106,.15);background:linear-gradient(0deg,rgba(212,175,106,.04),transparent)}
 .bt-foot .phase{font-family:var(--f-m);font-size:11px;letter-spacing:.06em}
-/* choix d’évolution, cinématique, résultat */
+/* evolution choice, cutscene, result */
 .evopick{background:radial-gradient(60% 50% at 50% 40%,rgba(212,175,106,.1),transparent 70%),rgba(4,4,5,.86)}
 .eo{border-radius:10px;background:radial-gradient(100% 70% at 50% 0%,color-mix(in srgb,var(--c) 24%,transparent),transparent 70%) padding-box,var(--veins) padding-box,var(--slab) padding-box,var(--steel) border-box}
 .eo:hover,.eo:focus-visible{background:radial-gradient(100% 70% at 50% 0%,color-mix(in srgb,var(--c) 30%,transparent),transparent 70%) padding-box,var(--veins) padding-box,var(--slab) padding-box,var(--brass) border-box}
@@ -1614,7 +1614,7 @@ body{background-image:var(--veins),url("data:image/svg+xml;utf8,<svg xmlns='http
 @keyframes bdgIn{0%{transform:scale(.3) rotate(-30deg);opacity:0;filter:brightness(3)}60%{transform:scale(1.12) rotate(4deg);opacity:1}100%{transform:none;filter:drop-shadow(0 0 18px rgba(242,221,168,.7))}}
 .res-bdg b{display:block;font-family:var(--f-d);font-weight:800;letter-spacing:.12em;text-transform:uppercase;font-size:17px;color:var(--gold-l)}
 .res-bdg em{display:block;font-style:normal;font-family:var(--f-m);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--mut);margin-top:3px}
-/* ---------- Ligue : boîte à badges ---------- */
+/* ---------- League: badge box ---------- */
 .case{background:radial-gradient(80% 70% at 50% 0%,rgba(212,175,106,.1),transparent 70%) padding-box,var(--veins) padding-box,linear-gradient(180deg,#141519,#0A0A0C) padding-box,var(--brass) border-box}
 .bdg{border-radius:6px;position:relative}
 .bdg svg{filter:grayscale(.75) brightness(.55) drop-shadow(0 10px 14px rgba(0,0,0,.6));transition:filter .4s,transform .4s var(--ease)}
@@ -1634,7 +1634,7 @@ body{background-image:var(--veins),url("data:image/svg+xml;utf8,<svg xmlns='http
 .ar-go{padding-top:4px}
 .ar-go .b{width:100%}
 @media (max-width:820px){.arena{grid-template-columns:1fr}.ar-b{width:76px}}
-/* ---------- divers ---------- */
+/* ---------- miscellaneous ---------- */
 .cell{border-radius:4px}
 .wx{border-radius:var(--r)}
 .foot{border-top:1px solid rgba(212,175,106,.15)}
@@ -1644,8 +1644,8 @@ body{background-image:var(--veins),url("data:image/svg+xml;utf8,<svg xmlns='http
 
 
 /* =====================================================================
-   v0.9.1 · fluidité : textures pré-calculées, plus de flou d’arrière-plan,
-   plus d’animation permanente dans les SVG, plateau vertical sur téléphone.
+   v0.9.1 · fluidity: precomputed textures, no more background blur,
+   no more permanent animation inside SVGs, vertical board on phones.
    ===================================================================== */
 :root{--veins:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAjAAAAIwBAMAAABq30xcAAAAMFBMVEXUr2rUr2rUr2oAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACEkw+MAAAAEHRSTlMALUAAAAAAAAAAAAAAAAAAK1uEuAAAEotJREFUeNrtXcmW4kiyvebFORXRi5QZq+63qBT6/2/KE90fUO7kpogN/hYQIAhNgOSD3GyVRWZFCJPNwzUgUSLu+lSC/X6TKl9+uq5PwSibaNf9cTiJ2STKGNutSL5wgUGnwEhIPTLZ8KomOBRP34xJ0yhTvquNUa60OLOli/SwsuOWN6I8UFJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlLC+hrrktEwBMKNgTC8qVU+vnGsGZgRLEFfuj8WeHf7B1UlADDuwg6nNqZFFbnS50e7GeN/XP+o5rbFLdLhndxnOZNwVcoDUOWuqw5WleZCP7/45XXm+C7AM9zahNFx0o5tIVEbc2tkcLUyRepTj2P2v685NpyOZl+pli+JIlGv1KL/+nZhRhlzZcbvotnSzxj/88yWUgsym751IXs2MRri3SjSjktfFfqj89NPOAJAFdFBCwxt2hMABhWaQfYyhjxABHb+e5W8kNJVt/H1YMDtq3vLK14cACnAIlPv59W3bfm7tEmKdFg0DVlBGk2j2DSd1oW57PKuDNQ4yZcqLQIarliVqFAMEI8icRAVaYanxC4l1m2mxXTr4sxmitWdRusKa8absQ7w0zImv6YpI5rSR7GTf5hX84K4MHWxVYlQPfLTbFMkIhK0HnNjepUxHQKjg2ZzpkCmqZV1fTHwugugBB1XU4/2iPF97Zu51XolKnn4c8GJ3ryzbfMwbPd0qmj1E4pPl4qVVlciX1KVVuuVdg7l6tIfQ3/56mzM59thjRLzuk9hL+qU1malTGC0+DUk0PO06lc4DjuTHqwPO38uA0G6cFpKs4HUCAcIXFlFpgCZmdc0kAZ43eRZGdNNTtT2IvsyhFk6Jbih/RoYs0RmfJQ1SIwu/QV0rrS6q3vKmGXdRz7xb2DQpZ3NmzFLjZiJzR3ubSmH5PNmzGLF/T1lzpjFBMarr+55D6x8Wd8ZVSE9MBueL6d2ColsSUgon5SI2Abe5j5SBsENRVm833Lq6kV1rN+85QJask9bZSrPSSdk+jMulCTFmrQgPUjncdN+ohQRYESHV9JNGRPly07lJcWwShQPvEePjNPllfw6YPFAwXQTv9fEJF6ENbHiGUr8/Msx2hRW6ndxvI30hH+8pb5s5WP4h089atT7O3UBosf45jB9G+XEXhZA8kSauqT0+nZZYBVLeJNPqFwe+3bhe5bbTM5MB498/xZF0ehOCWz6ZsYDxBH6gpLFYm8wxuR1XNWHG/tsJyLsclkHt2ElRhTKKHfsDgkrMZ70unLuuyHLp04mz0n/0HiV+ViZsBKDfDCl9hy4oJeLyJhas+w4umQyxeAVqPWNk+OZTOFvvA5wRorwTJ5lCAreDstihNPEyF3SN78G2yin9CTxXi2jjlQFoDrhii9HvTnbcc65uIYb9Zhgm1gMTBUlAfRjKLnd3sD+0vTNd6XmnapE8jiSpuzNgl6V4bNOn58otoJLaH/QyxhTnZjRelU2ZvXFpXKL1sOTwJ9flHd54QUtJzGmujSaWloUGuAgYveY+rJX6YRlIoYtWmJMBViA+N7qEscwwxH2c0xvgUxONQh3P9u/D1+ZiDGMTH1Rg+M+RyTBnXeMha4euDfs614HbW2595XI/vgA9r1jklTwfiINLNhKWDMTpdxq+jeo+oNNG/YdsgLCJQQ9YZ7rdoV81jg4lCZ96c4KhzKoeBPnIzFu9euiz7ZkHatfSuBhpc4qaA73tLQFCmTNhMhWchuyllfz7FPFp/EjDT6qXJm3AccQbMOjAJvXD8S/plBNU58KYzw42+FKQxy6ltcFgOWVHaJ54XroVRWZIN0qU6NA/PX7/5VE7mIkboq8ItPBUwaJyAnqgokNioTsHwhi2AgXi+Ii6zturLRkmLf6i8+yOr7EDPAaHD9UYHLDgNrE42UBdyifMb0GSll6IxOluUzp775v4tYa1i0xRh40ozlkQHMw5vj3gwKzPxaypqtwj/Pg02Wx3G1KgS7Oou1GrMfUVza1+Rj9XCMW4R9zoBA/isd+QClnHx6jpi5DlZrq0YDwowjD+WhhRfKow5AWqBZizJTVruaXJLBXGbbsML7YRbw/wkbbAUs3T8r0qODm1bx6rBSX6+qtWRT0kk1tNc/5ivRsziOFWGAeWq78ERGmYi+Wtg0vra49v5mpoClrc8U0TxBLelexsw4neterZ+yOVseZzQvdxKv+CFSVSitovzquoLOXuV0DCXqCT9lyml+/3iJkoJRhbeosPckFrIsYzvOeiY8fAgDOF9ZFvJQfvYNYCAC/vy1bDibL5q+P/JXjt7/7ikQw99McXJb7bojF3ALAMDVSemDTXL5E03ypUv3feYrUa8kjzxBcJNbMArdB+WYFd6/0DKnMGvPxsnPIokH8qoxvgMcWnahaTbrTBBHzzHSJzGDF22R82ee1kM4fBx/ZFCoy/De0fJUwZH3pXolVXrLmjChjtHegFMxDmNIO46FSRdIV86RnQtQhRccQzyiaUC3KudYVXKxr9Q0Z8yW8c6ih2UrWfAksMEajl6zjl+ASoyOtK0jlWCNeRQFZpznUbYLyYrzs2mu1Rr1qekNdT1Bf/XqVaV3roQKeSwV4bYaBdeLjDr6PGA0gxLOkDbIGxgiABiBBU4OF+FZuqNgIm+TsqgQGRHRSqC9+CBE9vLW2kv4aXVTK4LzJx3w+2ywM0MOaISve+CRu43mwZp8dgC+PykBZOfzUb0uQnVa2O1Rwy9qE7up07krMkcfAtqiKcLAxDYO8LSB4eXJXpf++Z/FNJOadltm7absrBDEdD2KG/2PevsGA80EFpisQLs7wmqmWVlEze9ppohLTyQjSNOBMdlt23NJ7yYLcv28uTry/q1u6RHQ3leHCxqfMwH45O779b1UlADD/vL/f+Oh3vB1UYoCjsZC2N3KqSqcQ79hYiKKudmWNDZjbIZ8m2Jcu5k11RkhV6eKKqmSAUDidES7T4EZiIkYyJCc/wKnkbJxIEa+5xb9MrNUUjTH362mmjjtieAZXRIK3TJhsSs3JSCIjyXklvnNDaZ3xkGiMIb+lFIDLen6ri+ckTRL1zX4FXjJ+GFSlI1KQGN/LGL+g0Izcon37z41Z+YyTtPWXOz7lfaFayMjtk9/31tglY2JOf2cjHYU5UgLdJUvshp1ThKCGdhy/txSjDUoPLFPEOw06cgiNeP4Ya3S8zF98IlU2VoBnf9cJ4sKeUjiKW6YaDlnijBwQCTPFbp40NBQBxoEO48RXDRfJbc2r52bDhTNMChnwiMyIcPFYCt0y08TIldKSmPc/O/IiOSwyh7HJSWJ8V/xp9WBDZ1weojDevmXACU6Cd4Vxpg7Y7hJDwnV6cKvcCTAhoXwhidmxGEoNcLVTMMxiU5PmunHTNCeIQaqd88cqNXmpqLP4WtVL9yIaAE0NbJsdA+DEhu76GrPN4nalPvXxm+acenBKjCFmDtth+opjnDcAcLRAZc8Z0mBFMTRnBi6aLjL2tbmkaB+Xe3cJjoOznVjeWwC9hU17QT2prJUHEusbb0UyW/h1jXzdj+Zb0O0kEbs7IAetCQxhD3Hz8KaVRH76/zvgLh/7TGB/i98GK0KtB/x8c/R2AObIKlu5kt+7b8GL30v8oQbnpieZ/iTo8z5157iqZAX2LcvUxbtjBc4JVZXnqovTKFIZccyBoUdCKfIA2BHPPuNkeoRZcgHN54vuy6wqJSP4X8hikZNE5jY0PflIrPrDE/2i+R61rT01uW4zFCud9A/XsBwtwRjTN5wTR2RkwlTx/StbZvisofxacGfOcDm42lMrq7QQY8yU3L6J4l9c8jeTJX1EconSifQx2BJ7PH8zHn5LYhU7FHxnLAF4aTMhjfZJz3Dx8ozZc7c/THsT3S3DmjZjuuNp75NG9qeFRuHMaIAXIRz204qZfLJGtMgz0piTTGcPstNf2imT40tEVVmgmSl4YcDBcDNUTOQmE8w+FyytZYCJOZNrqhzGM4qrCPujaqiS0kp8jcRsEFPi/mY0cjPHQpFQR9v0BrqMg1Qq0qnaHmknL1T0+cFz+1zk1JcWYRDDEFCnt/MQA8FL5CvVFSZGLTA1KWPuDDPBqLj0nDBsoBdOv5dgmABVpA7OEMvZKit3bqtTQgwDRg1RhfqSFxKBQICaYEA89wXeTAPqE063Zcv4n+dj7fdHjYAvoR5ueynzygxlulUM6cBfagDg+FEyY3qbXQ3wq+QrxP0dNlP/MvUMcrPJVJN6X+jxFwD8QqeuYZ2gFy0x/xyCBfR7thDg/f397VBcHDOYPdav43BStjVPCyUl5HAUJuPyeCuseXq6J8dcqXrg230UlEQ+4i+OOibUlyBwMRLzyHjtEeRMKYzhieO1p2ow469ibIx75Mt584EyL572mxeGAXEDZUxLUJoGAtRFNbZpMv8alNSOm541N4Vl1xOmrNCca7+sx6i7XjZxgVOLhQ8nTjU7tsfC/CqaMV3VPHm5wLeKmcfvSYLzeBFEdQWM8d+9lHiA4V6Zn96sQGBchwjtGZbYl218u3tyVO39dTkQhU7jdXxAIH5hJ5DWkSP0BcORrlIhTRzxWRYmKX8tsnqXoHOo1erucQee7aR7MMVNjwtNiuCkwNs5PE3duKzlt4lfWLikuXFh4smCQMV4JRLA7yc3mLiUwqUIP/RlyyhxPnGXkVCCmeks+PKYXDAXOa1Jp5Ro6DrKw+qUm/H1fZDDw6G/fdg1mfVMmQ324fzKt+Dq3uQgyaPZsflyimxGvrms2WvzK8Etlz4BgsLq/q8GsLRakXnVeso6G24ycnSW/AgMcAIYwXGkZcwvyQpbtDL1Xw3dKfTri3wF3rrJnofn8dUmCx/tJpSuHKy1J3QDngEOOYd9pc9/xpn39nZ4OwAH4PD+J73dnreTt881bo2OdsxI7v4JMZ8wMV5ooFDOy+dfbZTOc6wC78g/ffwhhzhZ7HNH3q5zEGJXyZgB2HKqxo3qRXTW2IvtudNYT8ynn0izsqjg2QostKUt0SUXNBAa2UWSCzj0WhkDBzj/w1cgAjMx0HhxdmQV1G7lHBge98Dq20qNiKCZ0pFuO/GmjG6+maIbN8HNw8qUX1lr4qoNVds2uI7A64pOR7z7+MKKWXEh9KI9ppFKBeVa2/q6oStaOr+z0fbSoAVUlS5RzAnGC94qNlGUHcHyGnRKSkpKSkpKSkpKSkrIZlu4yDxLPCVTmk2GMQ2A497v+WXWEM+xi03x0SkYBMippE8egpdYI1M2C5D6YZdO0/ICIo5pzrUpybdGJQtM9DZN69wb53mwYXhihZ6zUr/aI5r0GggeJcgWPIHsd4/gRZyhmZnSR36sCV9//5GUn5mR+feNFzicHqGvZGfm388+xaR14sfYicAv4mxhwDp+SuZkaucKTBLl6bUUU7+oShT6YtSjnHlKT3IbE6InYBmIm3MPumt3gnvGXzNz1U9uNcpJruU73l/n16dtdpOIZt6Fiz63xVJ4ja9HACk/dz3HI7sxfaQdsjs8Nc+7PMhpTUsOPdtZsyxtBZUYzzPlFEJM/S55Fv5vcqwwWwL53gjHlz37xesavWOU1Z1KKwMhyi+79kFeZpYYZqRjrNFwDLPFXNopY3qo1lH2CFaAMsd1W0jeVwGdTqSxXaCIQ1bTPnGzapSsCcFhxjqkaYp0UJQNyuhcWjDxC1E+g2LM89hOmmhYefhfzisxm5dExrkZbnfSpEHNsfMMnTcRZ/NK52Gbafj2O3y4ORbgvbX7iRbYS5QQph1MM43dxhBhEZrFqRBDZGTQR0gE/BXZEu7RAOcOeWmg405+sKdO7FCRnXMA+mOQee6KVXWCK/N8QajquqK5qJMZfBHMQqHiVhJpSScBVAtY6rPszN7G34xChw1IzdxgYQPwZfAOrb/1AANbD4DJLjH3cWGMpx7LODQw62ceLhtEV+Wb18AAXIX/eWD7Y7/kaT9OIGN9QDFpW5PhL7XifIZMF64asJhlY2Ez6V0FS0Omvnre+7/C9GIpjfry1NqVbGusAuF9bo2uk8kpJbkMdm0iMYNn4hDzDF8TVYeRKSQOBy0tY7/q/V/yJx0SkRhORm1p24QYgDGX6D6dGzx24DUQSWWtD6jRQ3lK+APsvWUnBgfequgvrESZP+/5neG63pck0km/ebGRtpXsd0NnwzvH7hJCzKVLuTlbx3uwjRE1fGcMebGpNGmseIIL2Gnc9Jc2iVMYmfUWAliCi/U49/kbSSrpSOQxhvvqrpCONnWpkoJsd2dvRKwcKfd49uM2jhQLt1NUJD2+cPyyUHpndwSWOLAz2HSDUvi0bggdrfd7XumRpOd40s6ySdTwnWd16nhD3/8PbVh/tqK1L0UAAAAASUVORK5CYII=")}
 .ambient::after{display:none}
@@ -1655,13 +1655,13 @@ body{background-image:var(--veins),url("data:image/svg+xml;utf8,<svg xmlns='http
 .scrim{background:rgba(3,3,4,.82)}
 .result,.evopick{background:rgba(4,4,5,.9)}
 
-/* aucune animation permanente qui force à repeindre un SVG entier */
+/* no permanent animation that forces a whole SVG to repaint */
 .cr-spin,.sc-stars circle,.sc-cloud,.sway,.sc-fire circle,.route[data-time="nuit"] .sc-fire circle,.ember,.fc-burst,.mk-edge,.hx.lava,.tok.act .tok-halo,.tok.sel .tok-halo,.tok.ready .tok-rdy,.tok.evw .tok-halo,.h-danger,.h-arena,.hp.hseg i::after,.enp i.on,.plate.fev,.evb:not(:disabled),.vx.ev:not(:disabled){animation:none!important}
 .sc-rustle .rs{animation:none}
 .sc-rustle:hover .rs,.sc-rustle:focus-visible .rs{animation:rustle .8s ease-in-out infinite}
 .hp.hseg i::after{display:none}
 .sc-alert{display:none}
-/* plus de filtres dans le plateau : halos dessinés par un contour large */
+/* no more filters in the board: halos drawn with a wide stroke */
 #bSvg *{filter:none!important}
 .gw{fill:none!important;stroke-width:4.5!important;stroke-opacity:.22!important;stroke-dasharray:none!important}
 .h-reach.gw{stroke:#5B9BFF}.h-tgt.gw{stroke:#F0C86E}.h-danger.gw{stroke:#E5484D;stroke-opacity:.3!important}.h-dodge.gw{stroke:#4DD6B4}.h-arena.gw{stroke:#F0A43A}.h-aff.gw{stroke:#F2DDA8;stroke-opacity:.15!important}
@@ -1676,14 +1676,14 @@ body{background-image:var(--veins),url("data:image/svg+xml;utf8,<svg xmlns='http
 .page .sec{content-visibility:auto;contain-intrinsic-size:auto 900px}
 .enp i.on{box-shadow:0 0 0 1px rgba(255,241,199,.7),0 0 9px rgba(240,190,90,.9)}
 .plate.fev{box-shadow:inset 2px 0 0 var(--crim),0 0 0 2px rgba(229,72,77,.35),var(--engrave)}
-/* bulle « ! » de la route : élément HTML animé par le compositeur */
+/* route "!" bubble: HTML element animated by the compositor */
 .rt-alert{position:absolute;z-index:3;left:72%;top:58%;width:34px;height:38px;margin:0;padding:0;border:0;background:none;cursor:pointer;transform:translate(-50%,-100%);opacity:0;transition:opacity .3s}
 .rt-alert.on{opacity:1}
 .rt-alert span{display:grid;place-items:center;width:100%;height:100%;border-radius:6px;font-family:var(--f-d);font-weight:900;font-size:22px;line-height:1;color:#FFF3D0;background:linear-gradient(180deg,#1A1B20,#0B0B0E);border:1.5px solid #E9C97E;box-shadow:0 0 14px rgba(240,200,110,.55),0 8px 16px -6px #000;animation:rtb 1.4s ease-in-out infinite;will-change:transform}
 .rt-alert::after{content:"";position:absolute;left:-30px;right:-30px;top:-8px;bottom:-60px}
 .rt-alert:focus-visible span{outline:2px solid #FFF3D0;outline-offset:2px}
 @keyframes rtb{50%{transform:translateY(-6px)}}
-/* ---------- combat sur téléphone ---------- */
+/* ---------- battle on phone ---------- */
 @media (max-width:700px){
  .board.vert{margin:0 4px;padding:5px}
  .board.vert::before,.board.vert::after{width:18px;height:18px}
@@ -1711,7 +1711,7 @@ html,body{margin:0}
 @media (max-width:700px){.wrap{padding-inline:0}}
 
 
-/* ===================== v0.9.2 · sauvegardes ===================== */
+/* ===================== v0.9.2 · saves ===================== */
 button.nv{width:100%;border:0;background:none;font:inherit;text-align:left;cursor:pointer}
 .nv-save{margin-top:6px;border-top:1px solid rgba(212,175,106,.12)!important;padding-top:13px!important}
 .nv-save .k{color:var(--gold)}
@@ -1724,7 +1724,7 @@ button.nv{width:100%;border:0;background:none;font:inherit;text-align:left;curso
  .tb-save.busy i{background:var(--gold)}
  .topbar .tb-team{margin-left:8px}
 }
-/* reprise d’un combat */
+/* resuming a battle */
 .resume{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;margin-top:18px;padding:12px 14px;border-radius:var(--r);border:1px solid transparent;background:radial-gradient(90% 140% at 0% 50%,rgba(212,175,106,.16),transparent 70%) padding-box,linear-gradient(#0D0E11,#0D0E11) padding-box,var(--brass) border-box;box-shadow:var(--engrave)}
 .resume[hidden]{display:none}
 .rs-ic{width:38px;display:grid;place-items:center}.rs-ic svg{width:100%;height:auto;display:block}
@@ -1733,7 +1733,7 @@ button.nv{width:100%;border:0;background:none;font:inherit;text-align:left;curso
 .rs-a{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
 #cbPrep .resume{margin:0 0 18px}
 @media (max-width:560px){.resume{grid-template-columns:auto minmax(0,1fr)}.rs-a{grid-column:1/-1;justify-content:stretch}.rs-a .b{flex:1}}
-/* fenêtre des sauvegardes */
+/* saves window */
 .saves{z-index:88}
 .sv-card{position:relative;width:min(640px,100%);max-height:92vh;overflow-y:auto;overscroll-behavior:contain;display:grid;gap:14px;padding:26px;border-radius:var(--rl);border:1px solid transparent;background:var(--veins) padding-box,var(--slab) padding-box,var(--brass) border-box;background-size:560px 560px,auto,auto;box-shadow:var(--engrave);animation:encIn .45s var(--ease) both}
 .sv-card .sh-x{position:absolute;top:14px;right:14px}
@@ -1773,8 +1773,8 @@ button.nv{width:100%;border:0;background:none;font:inherit;text-align:left;curso
 @media (max-width:560px){.sv-k{gap:6px}.sv-meds{flex-wrap:wrap}.rs-tx b{font-size:12.5px}}
 
 
-/* ===================== v1.0 · campagne, systèmes, confort ===================== */
-/* parcours (accueil) */
+/* ===================== v1.0 · campaign, systems, comfort ===================== */
+/* journey (home) */
 .camp{margin-top:18px;padding:20px 22px;border-radius:var(--rl);border:1px solid transparent;background:radial-gradient(80% 120% at 100% 0%,rgba(212,175,106,.12),transparent 60%) padding-box,var(--veins) padding-box,var(--slab) padding-box,var(--brass) border-box;background-size:auto,560px 560px,auto,auto;box-shadow:var(--engrave);display:grid;gap:16px}
 .cp-h{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
 .cp-h>div:first-child{display:grid;gap:8px;max-width:620px}.cp-h .d{color:var(--tx2);font-size:14px}
@@ -1790,7 +1790,7 @@ button.nv{width:100%;border:0;background:none;font:inherit;text-align:left;curso
 .cp-k{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid rgba(212,175,106,.14);padding-top:12px}
 .cp-k div{display:grid;gap:2px}.cp-k b{font-family:var(--f-n);font-stretch:72%;font-weight:700;font-size:22px;color:var(--gold-l);font-variant-numeric:tabular-nums}.cp-k span{font-family:var(--f-m);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--mut)}
 @media (max-width:560px){.cp-k{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.cp-a .b{flex:1}}
-/* départ de campagne */
+/* campaign start */
 .starter{z-index:89}
 .st-card{width:min(720px,100%)}
 .st-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
@@ -1799,14 +1799,14 @@ button.nv{width:100%;border:0;background:none;font:inherit;text-align:left;curso
 .st-o b{font-family:var(--f-d);letter-spacing:.08em;text-transform:uppercase;font-size:15px}.st-o em{font-style:normal;font-family:var(--f-m);font-size:10px;letter-spacing:.12em;color:var(--mut)}.st-o span{font-size:11.5px;color:var(--gold-l)}
 .st-diff{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.st-diff>span{font-family:var(--f-m);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--mut);margin-right:4px}
 @media (max-width:560px){.st-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-/* réglages */
+/* settings */
 .sv-set{display:grid;gap:8px;padding:12px 14px;border-radius:var(--r);background:rgba(0,0,0,.25);box-shadow:inset 0 0 0 1px rgba(212,175,106,.14)}
 .ss-row{display:grid;grid-template-columns:96px minmax(0,1fr);gap:10px;align-items:center}
 .ss-row>span:first-child{font-family:var(--f-m);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--mut)}
 .ss-row>b{font-weight:600;font-size:13.5px}
 .ss-seg{display:flex;gap:6px;flex-wrap:wrap}
 @media (max-width:560px){.ss-row{grid-template-columns:1fr}}
-/* préparation */
+/* preparation */
 .scn.locked{opacity:.55;filter:saturate(.4)}
 .scn .lk{color:var(--gold-l)}
 .scn.elite .scn-art{filter:none;background:radial-gradient(70% 140% at 20% 50%,color-mix(in srgb,var(--ac) 30%,transparent),transparent 70%),repeating-linear-gradient(90deg,rgba(212,175,106,.06) 0 1px,transparent 1px 22px),linear-gradient(180deg,#141519,#0B0B0E)}
@@ -1816,7 +1816,7 @@ button.nv{width:100%;border:0;background:none;font:inherit;text-align:left;curso
 .it-tag{padding:1px 6px;border:1px solid rgba(212,175,106,.4);color:var(--gold-l);border-radius:2px}
 .fat-b{position:relative;display:inline-block;width:46px;height:4px;background:#0A0B0E;box-shadow:inset 0 0 0 1px rgba(212,175,106,.2)}.fat-b i{position:absolute;inset:0 auto 0 0;background:linear-gradient(90deg,#4DB8FF,#E8C26A)}.fat-b.hi i{background:linear-gradient(90deg,#E8C26A,#FF7A3D)}
 .pt-links{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}.pt-links span{font-family:var(--f-m);font-size:10px;letter-spacing:.04em;color:var(--gold-l);padding:2px 7px;border:1px solid rgba(212,175,106,.3);border-radius:2px}
-/* Ligue : Conseil 4 */
+/* League: Elite Four */
 .elite-case{margin-top:16px}
 .el-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
 .el-c{display:grid;gap:8px;justify-items:start;padding:14px;border-radius:var(--r);border:1px solid transparent;background:radial-gradient(90% 90% at 0% 0%,color-mix(in srgb,var(--ac) 18%,transparent),transparent 70%) padding-box,var(--slab) padding-box,var(--edge) border-box;box-shadow:var(--engrave)}
@@ -1841,7 +1841,7 @@ button.nv{width:100%;border:0;background:none;font:inherit;text-align:left;curso
 .lk-bar{position:relative;height:4px;background:#0A0B0E;box-shadow:inset 0 0 0 1px rgba(212,175,106,.2)}.lk-bar i{position:absolute;inset:0 auto 0 0;background:linear-gradient(90deg,#8E6A2C,#F2DDA8);box-shadow:0 0 6px rgba(212,175,106,.6)}
 .lk-l{list-style:none;margin:0;padding:0;display:grid;gap:8px}.lk-l li{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:center}.lk-l b{display:block;font-size:13px}.lk-l em{display:block;font-style:normal;font-size:11.5px;color:var(--mut)}
 .lk-m{display:inline-flex}.lk-m .medal+.medal{margin-left:-6px}
-/* combat */
+/* battle */
 .tile-i{display:grid;gap:8px;padding:10px 12px;border-radius:var(--r);background:rgba(0,0,0,.3);box-shadow:inset 0 0 0 1px rgba(212,175,106,.2)}
 .ti-h{display:flex;justify-content:space-between;align-items:center}.ti-h b{font-family:var(--f-d);letter-spacing:.1em;text-transform:uppercase;font-size:13px;color:var(--gold-l)}
 .tile-i p{font-size:13px;color:var(--tx2)}.ti-rx{display:flex;flex-wrap:wrap;gap:5px}
@@ -1863,7 +1863,7 @@ button.nv{width:100%;border:0;background:none;font:inherit;text-align:left;curso
 .evofx.fast .efx,.evofx.fast .efx *{animation-duration:1.3s!important}
 .res-l.champ{box-shadow:inset 0 0 0 1px rgba(212,175,106,.5)}
 .res-l .it-ic{width:30px;height:30px}
-/* tutoriel */
+/* tutorial */
 .coach{position:fixed;z-index:70;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);width:min(560px,calc(100% - 24px))}
 .coach[hidden]{display:none}
 .co-in{display:grid;gap:8px;padding:16px 18px;border-radius:var(--rl);border:1px solid transparent;background:radial-gradient(90% 120% at 0% 0%,rgba(212,175,106,.18),transparent 60%) padding-box,linear-gradient(#0E0F12,#0E0F12) padding-box,var(--brass) border-box;box-shadow:0 24px 60px -20px #000,0 0 0 1px #000;animation:encIn .4s var(--ease) both}
@@ -1873,7 +1873,7 @@ button.nv{width:100%;border:0;background:none;font:inherit;text-align:left;curso
 @media (max-width:999px){.coach{bottom:calc(var(--bn) + 78px + env(safe-area-inset-bottom,0px))}}
 
 .fc-it svg,.it-ic svg,.ux svg{fill:none;stroke:currentColor;stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
-/* Ligue : objets, duos */
+/* League: items, duos */
 .items .it.off{opacity:.6}
 .it-src{display:block;font-style:normal;margin-top:3px;font-family:var(--f-m);font-size:10px;letter-spacing:.06em;color:var(--gold)}
 .items .it.off .it-src{color:var(--mut)}
@@ -1893,8 +1893,8 @@ body:not(:has(#combat.on)) .coach{display:none}
 }
 
 
-/* ===================== v1.1 · arène, obstacles, rôles, synergies, effets ===================== */
-/* arène : lignes du terrain */
+/* ===================== v1.1 · arena, obstacles, roles, synergies, effects ===================== */
+/* arena: field lines */
 .board.stadium{box-shadow:inset 0 0 0 1px rgba(0,0,0,.9),inset 0 0 0 5px #0E0F12,inset 0 0 0 6px rgba(212,175,106,.28),inset 0 0 70px rgba(0,0,0,.8),0 30px 60px -30px #000}
 .board.stadium.bio-arene,.board.stadium.bio-ligue,.board.stadium.bio-roche{background-image:radial-gradient(60% 40% at 50% 0%,rgba(242,221,168,.08),transparent 70%),radial-gradient(40% 30% at 0% 100%,rgba(242,221,168,.06),transparent 70%),radial-gradient(40% 30% at 100% 100%,rgba(242,221,168,.06),transparent 70%)}
 .fd-out{fill:none;stroke:rgba(242,221,168,.42);stroke-width:1.3}
@@ -1906,7 +1906,7 @@ body:not(:has(#combat.on)) .coach{display:none}
 .fd-ring{fill:none;stroke:rgba(242,221,168,.3);stroke-width:1.2}
 .fd-ring2{fill:rgba(242,221,168,.35)}
 .fd-pyl{fill:#F2DDA8;stroke:#0B0B0E;stroke-width:1}
-/* piliers */
+/* pillars */
 #bSvg .hx.pillar{fill:#09090B!important}
 .pil-sh{fill:rgba(0,0,0,.6)}
 .pil-ba{fill:#3A3B41;stroke:#0B0B0E;stroke-width:.8}
@@ -1915,28 +1915,28 @@ body:not(:has(#combat.on)) .coach{display:none}
 .pil-rn{fill:#D4AF6A;opacity:.85}
 .pil-ca{fill:#55565D;stroke:#0B0B0E;stroke-width:.8}
 .pil-tp{fill:#8D8E95;stroke:#0B0B0E;stroke-width:.6}
-/* hautes herbes */
+/* tall grass */
 #bSvg .hx.grass{fill:#132A18}
 .gb{fill:#2B6431}.gb.g2{fill:#3D8642}
 .gf{fill:#245A2A}.gf.g2{fill:#4A9A4E}
 .grf{opacity:.92}
 .tok.hid .tok-ring{stroke-dasharray:3 2}
 .tok.hid .tok-nm{fill:#9FD8A4}
-/* sable */
+/* sand */
 #bSvg .hx.sand{fill:#2C251A}
 .sd-bg{fill:#3A3122}.sd-rp{fill:none;stroke:rgba(240,215,160,.32);stroke-width:.8}.sd-dt{fill:rgba(240,215,160,.5)}
-/* couverture et ricochet */
+/* cover and ricochet */
 .cov path{fill:#E9C97E;stroke:#0B0B0E;stroke-width:1}
 .cov.al path{fill:#9CC4FF}
 .rico{fill:none;stroke:#F2DDA8;stroke-width:1.2;stroke-dasharray:3 3;opacity:.65}
 .rico.on{opacity:1;stroke-width:1.8}
 .rico-p{fill:#FFF0C8}
-/* effets visuels */
+/* visual effects */
 .fxc{position:absolute;pointer-events:none;z-index:2}
 .board.impact{animation:impact .32s cubic-bezier(.3,.7,.4,1)}
 @keyframes impact{0%{transform:none}15%{transform:translate(-4px,2px)}30%{transform:translate(4px,-2px)}45%{transform:translate(-3px,-1px)}60%{transform:translate(2px,2px)}80%{transform:translate(-1px,0)}100%{transform:none}}
 @media (prefers-reduced-motion:reduce){.board.impact{animation:none}}
-/* rôles */
+/* roles */
 .ri{width:18px;height:18px;flex:none;fill:none;stroke:var(--gold-l);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .bp-role{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:start;font-size:12.5px;line-height:1.45;color:var(--tx2);padding:8px 10px;border-left:2px solid var(--gold);background:linear-gradient(90deg,rgba(212,175,106,.08),transparent)}
 .bp-role b{color:var(--gold-l);font-weight:600}
@@ -1965,7 +1965,7 @@ body:not(:has(#combat.on)) .coach{display:none}
 .team-x{display:flex;gap:6px;flex-wrap:wrap}
 .pt-x{display:flex;flex-direction:column;gap:8px;align-items:stretch}
 .pcs .pt-role{display:inline-flex;vertical-align:-3px;margin-right:5px}.pcs .pt-role .ri{width:14px;height:14px}
-/* codex tactique */
+/* tactical codex */
 .codex{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:18px}
 .cx-c{padding:16px;border-radius:var(--r);border:1px solid transparent;background:var(--slab) padding-box,var(--edge) border-box;box-shadow:var(--engrave)}
 .cx-c h4{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin:0 0 8px;font-family:var(--f-d);letter-spacing:.14em;text-transform:uppercase;font-size:12.5px;color:var(--gold-l)}
@@ -1982,7 +1982,7 @@ body:not(:has(#combat.on)) .coach{display:none}
 @media (max-width:1100px){.codex{grid-template-columns:1fr}}
 @media (max-width:560px){.dock .bud{grid-column:1/-1}.dock .dk{grid-column:1/-1;justify-content:space-between}}
 @media (max-width:560px){.dock .team-x .b{flex:1;padding-inline:8px;font-size:10px;letter-spacing:.08em}}
-/* v1.1.1 · stades recrutables sous chaque carte et encart des recrues confirmées */
+/* v1.1.1 · recruitable stages under each card and inset of confirmed recruits */
 .fc-stg{position:absolute;left:12px;right:12px;bottom:12px;z-index:4;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}
 .fc-sp{height:58px;flex:none}.fc-sp.two{height:112px}
 .stg{display:grid;justify-items:center;gap:2px;min-width:0;padding:6px 3px 5px;border-radius:3px;border:1px solid rgba(212,175,106,.22);background:linear-gradient(180deg,#15161A,#0C0D10);color:var(--tx2);font:inherit;cursor:pointer;transition:border-color .2s,background .2s}
@@ -2010,8 +2010,8 @@ body:not(:has(#combat.on)) .coach{display:none}
 @media (max-width:560px){.dex-call{padding:14px}.stg b{font-size:9.5px}}
 
 
-/* ===================== v1.2 · épure ===================== */
-/* navigation : sans compteurs ni équipe dans la barre latérale */
+/* ===================== v1.2 · clean-up ===================== */
+/* navigation: no counters or team in the sidebar */
 .side .steam{display:none}
 .nv .k:not(#sideSaveK){display:none}
 .lnk{display:inline;padding:0;border:0;background:none;font:inherit;color:var(--gold-l);text-decoration:underline;text-decoration-color:rgba(212,175,106,.45);text-underline-offset:3px;cursor:pointer}
@@ -2028,7 +2028,7 @@ body:not(:has(#combat.on)) .coach{display:none}
 .gd-p .sec{margin-top:52px}
 .gd-p .howto{margin-top:0}
 @media (max-width:999px){.gd-tabs{top:calc(56px + env(safe-area-inset-top,0px));margin-inline:-2px}.gd-t{padding:0 12px;font-size:11.5px}}
-/* Équipe */
+/* Team */
 #filters{display:none}
 .dexbar select#dexRole{min-width:0}
 .ana-d{margin-top:28px;border-radius:var(--rl);border:1px solid transparent;background:var(--slab) padding-box,var(--edge) border-box}
@@ -2050,7 +2050,7 @@ body:not(:has(#combat.on)) .coach{display:none}
 .dex-call .dc-f{display:flex;gap:6px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:thin;padding-bottom:2px}
 .dex-call .dc-f .b{flex:none}
 @media (max-width:700px){.dc-row{flex-direction:column;align-items:stretch;gap:6px}.dc-row>.lbl-s{width:auto}}
-/* Préparation */
+/* Preparation */
 .scn-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-bottom:12px}
 .scn-tabs button{display:grid;gap:2px;justify-items:start;padding:10px 12px;border-radius:var(--r);border:1px solid transparent;background:var(--slab) padding-box,var(--edge) border-box;color:var(--tx2);font:inherit;text-align:left;cursor:pointer}
 .scn-tabs button b{font-family:var(--f-d);letter-spacing:.14em;text-transform:uppercase;font-size:13px;color:var(--tx)}
@@ -2065,7 +2065,7 @@ body:not(:has(#combat.on)) .coach{display:none}
 .scn .lvl{font-size:9.5px}
 .pt-syn{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding-top:8px;border-top:1px solid rgba(212,175,106,.12)}
 .pt-syn .lnk{font-size:11.5px;margin-left:auto}
-/* Combat : plateau et commandes côte à côte */
+/* Battle: board and controls side by side */
 .battle{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;align-items:start}
 .bt-side{display:flex;flex-direction:column;gap:10px;min-width:0}
 .bt-side .bp{padding:12px 14px 14px;border-radius:var(--rl);border:1px solid transparent;background:var(--veins) padding-box,linear-gradient(180deg,#121317,#08080A) padding-box,var(--edge) border-box;background-size:560px 560px,auto,auto}
@@ -2087,7 +2087,7 @@ body:not(:has(#combat.on)) .coach{display:none}
  .bt-side .bt-foot{position:fixed;left:8px;right:8px;bottom:calc(var(--bn) + 6px + env(safe-area-inset-bottom,0px));z-index:40;box-shadow:0 -10px 30px -10px #000}
  .bt-side .blog{order:3}
 }
-/* panneau : rôle en une pastille, détails à la demande */
+/* panel: role in a single badge, details on demand */
 .bp.info-off .bp-tal,.bp.info-off .bp-role{display:none}
 .bp-tr{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
 .bp-tr .tr{display:inline-flex;align-items:center;gap:6px;font-family:var(--f-m);font-size:10.5px;letter-spacing:.04em;padding:3px 9px 3px 6px;border-radius:2px;border:1px solid rgba(212,175,106,.4);color:var(--gold-l);background:rgba(212,175,106,.06)}
@@ -2096,7 +2096,7 @@ body:not(:has(#combat.on)) .coach{display:none}
 .tr-i{margin-left:auto;padding:3px 8px;border:0;background:none;color:var(--mut);font-family:var(--f-m);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
 .tr-i:hover{color:var(--gold-l)}
 .bt-syn{padding:6px 12px}
-/* les pages ne gardent pas de transformation : les éléments fixes restent fixes */
+/* pages keep no transform: fixed elements stay fixed */
 .page.on{animation-fill-mode:backwards}
 #dexRole{height:40px;padding:0 12px;border-radius:4px;border:1px solid var(--line2);background:linear-gradient(180deg,#121317,#0D0E11);color:var(--tx);font:inherit;font-size:13px}
 .bp-fin{font-family:var(--f-m);font-size:10.5px;letter-spacing:.06em;color:var(--mut);padding:2px 0}
@@ -2108,7 +2108,7 @@ body:not(:has(#combat.on)) .coach{display:none}
 .b:focus-visible,.nv:focus-visible,.bn:focus-visible,.gd-t:focus-visible{outline-offset:3px;box-shadow:0 0 0 5px rgba(212,175,106,.14)}
 :focus:not(:focus-visible){outline:none}
 
-/* --- écran d’ouverture --- */
+/* --- opening screen --- */
 .splash{position:fixed;inset:0;z-index:200;display:grid;place-items:center;padding:24px;cursor:pointer;color:var(--tx);
  background:radial-gradient(60% 50% at 50% 42%,rgba(212,175,106,.16),transparent 70%),radial-gradient(120% 90% at 50% 120%,rgba(91,155,255,.08),transparent 60%),repeating-linear-gradient(0deg,rgba(255,255,255,.012) 0 1px,transparent 1px 3px),#060608;
  animation:spIn .7s ease-out both}
@@ -2137,7 +2137,7 @@ body:not(:has(#combat.on)) .coach{display:none}
 @keyframes spUp{from{opacity:0;transform:translateY(10px)}}
 @keyframes spTitle{from{opacity:0;letter-spacing:.5em;filter:blur(8px)}}
 @keyframes spPulse{50%{box-shadow:0 0 0 8px rgba(212,175,106,.08);border-color:#F2DDA8}}
-/* --- présentation du combat --- */
+/* --- battle intro --- */
 .vs{position:fixed;inset:0;z-index:190;display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;cursor:pointer;overflow:hidden;background:#050506;color:var(--tx)}
 .vs::after{content:"";position:absolute;left:0;bottom:0;height:3px;width:100%;transform-origin:left;background:linear-gradient(90deg,#8E6A2C,#F2DDA8,#8E6A2C);animation:vsBar var(--d,2.3s) linear both}
 .vs-l,.vs-r{position:relative;height:100%;display:grid;align-content:center;gap:10px;padding:40px clamp(18px,5vw,64px)}
@@ -2171,7 +2171,7 @@ body:not(:has(#combat.on)) .coach{display:none}
 }
 @keyframes vsT{from{transform:translateY(-60%);opacity:0}}
 @keyframes vsB{from{transform:translateY(60%);opacity:0}}
-/* --- bannière de manche --- */
+/* --- round banner --- */
 .board{position:relative}
 .tbn{position:absolute;left:0;right:0;top:38%;z-index:6;display:grid;justify-items:center;gap:2px;padding:12px 0;pointer-events:none;
  background:linear-gradient(90deg,transparent,rgba(6,6,8,.88) 22%,rgba(6,6,8,.88) 78%,transparent);border-block:1px solid transparent;border-image:linear-gradient(90deg,transparent,rgba(212,175,106,.7),transparent) 1;animation:tbn 1.3s cubic-bezier(.2,.8,.2,1) forwards}
@@ -2179,18 +2179,18 @@ body:not(:has(#combat.on)) .coach{display:none}
 .tbn span{font-family:var(--f-m);font-size:10.5px;letter-spacing:.32em;text-transform:uppercase;color:#9CC4FF}
 .tbn.en span{color:#FF9C9C}.tbn.en{border-image:linear-gradient(90deg,transparent,rgba(229,72,77,.7),transparent) 1}
 @keyframes tbn{0%{opacity:0;transform:scaleX(.4)}14%{opacity:1;transform:none}78%{opacity:1}100%{opacity:0;transform:translateY(-8px)}}
-/* --- barres de vie : traînée de dégâts --- */
+/* --- health bars: damage trail --- */
 .hp .lag{position:absolute;left:0;top:0;bottom:0;width:var(--b);background:linear-gradient(180deg,#FFF0D0,#E8A86A);animation:lag .8s linear both}
 .hp.hseg i{position:relative;z-index:1}
 @keyframes lag{0%,30%{width:var(--a);opacity:1}100%{width:var(--b);opacity:.6}}
 .hp-arc{transition:stroke-dasharray .45s cubic-bezier(.2,.8,.2,1),stroke .3s}
-/* --- mots d’impact --- */
+/* --- impact words --- */
 .fl.f-dmg{font-size:15px}
 .fl.f-se,.fl.f-ko{transform-box:fill-box;transform-origin:center;animation:flStamp 1.4s cubic-bezier(.2,.8,.2,1) forwards}
 .fl.f-se{font-family:var(--f-d);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;fill:#FFE29A;stroke-width:3.4px}
 .fl.f-ko{font-family:var(--f-d);font-size:17px;font-weight:900;letter-spacing:.06em;fill:#FF5A55;stroke-width:4px}
 @keyframes flStamp{0%{opacity:0;transform:translateY(-14px) scale(1.9)}16%{opacity:1;transform:translateY(-14px) scale(1)}78%{opacity:1;transform:translateY(-18px)}100%{opacity:0;transform:translateY(-26px)}}
-/* --- résultat : rang et réplique --- */
+/* --- result: rank and quip --- */
 .res-card{position:relative}
 .rk-st{position:absolute;top:18px;right:20px;display:grid;justify-items:center;gap:2px;transform:rotate(-8deg);animation:rkIn .7s .25s cubic-bezier(.2,1.5,.4,1) both;pointer-events:none}
 .rk-st b{display:grid;place-items:center;width:64px;height:64px;border-radius:50%;font-family:var(--f-d);font-weight:900;font-size:38px;line-height:1;color:#1A1205;box-shadow:inset 0 0 0 2px rgba(255,255,255,.35),inset 0 -6px 12px rgba(0,0,0,.25),0 0 0 3px rgba(5,5,6,.9),0 0 0 4px rgba(212,175,106,.55),0 10px 26px rgba(0,0,0,.6)}
@@ -2203,25 +2203,25 @@ body:not(:has(#combat.on)) .coach{display:none}
 .res-q q{display:block;font-family:var(--f-d);font-style:italic;font-size:15px;line-height:1.45;color:var(--tx);quotes:"« " " »"}
 .res-q cite{display:block;margin-top:4px;font-style:normal;font-family:var(--f-m);font-size:10.5px;letter-spacing:.1em;color:var(--mut)}
 .res-card .h1{padding-right:84px}
-/* rangs sur les cartes */
+/* ranks on cards */
 .rk-t{position:absolute;top:8px;right:10px;z-index:2;display:grid;place-items:center;width:24px;height:24px;border-radius:50%;font-family:var(--f-d);font-weight:900;font-size:13px;color:#1A1205;box-shadow:0 0 0 2px rgba(5,5,6,.85),0 0 0 3px rgba(212,175,106,.45)}
 .rk-t.rk-S{background:radial-gradient(circle at 35% 30%,#FFF8DE,#C9A35E 70%)}.rk-t.rk-A{background:radial-gradient(circle at 35% 30%,#FFF,#A7B0BC 70%)}.rk-t.rk-B{background:radial-gradient(circle at 35% 30%,#FFE2C4,#A86E43 70%)}
 .el-c{position:relative}
-/* --- visages de la Ligue --- */
+/* --- League faces --- */
 .ld{display:grid;gap:6px;margin:10px 0 12px;padding:10px 14px;border-left:2px solid var(--gold);background:linear-gradient(90deg,rgba(212,175,106,.08),transparent 80%)}
 .ld-n{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px}
 .ld-n b{font-family:var(--f-d);font-weight:700;font-size:16px;letter-spacing:.04em;color:var(--gold-l)}
 .ld-n em{font-style:italic;font-family:var(--f-d);font-size:13px;color:var(--tx2)}
 .ld q{font-family:var(--f-d);font-style:italic;font-size:14px;line-height:1.5;color:var(--tx);quotes:"« " " »"}
 .el-ld{font-family:var(--f-d);font-style:italic;font-size:12.5px;color:var(--gold-l);margin-top:-4px}
-/* campagne : le chapitre en cours */
+/* campaign: the current chapter */
 .cp-ch{display:grid;grid-template-columns:auto minmax(0,1fr);gap:16px;align-items:center;margin:16px 0 4px;padding:14px 16px;border-radius:var(--r);border:1px solid transparent;background:radial-gradient(70% 140% at 0% 50%,rgba(212,175,106,.14),transparent 70%) padding-box,linear-gradient(180deg,#121317,#0B0B0E) padding-box,var(--edge) border-box}
 .cp-chn{writing-mode:vertical-rl;transform:rotate(180deg);font-family:var(--f-m);font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);padding:2px 0;border-right:1px solid rgba(212,175,106,.35);padding-right:10px}
 .cp-ch div{display:grid;gap:3px;min-width:0}
 .cp-ch b{font-family:var(--f-d);font-weight:700;font-size:18px;letter-spacing:.04em}
 .cp-ch em{font-style:normal;font-family:var(--f-m);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--mut)}
 .cp-ch q{margin-top:4px;font-family:var(--f-d);font-style:italic;font-size:14px;line-height:1.45;color:var(--tx2);quotes:"« " " »"}
-/* --- Guide : l’univers --- */
+/* --- Guide: the universe --- */
 .uv-lore{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
 .uv-c{padding:18px;border-radius:var(--rl);border:1px solid transparent;background:radial-gradient(80% 60% at 0% 0%,rgba(212,175,106,.1),transparent 70%) padding-box,var(--slab) padding-box,var(--edge) border-box}
 .uv-c .h3{font-family:var(--f-d);font-weight:700;letter-spacing:.06em;color:var(--gold-l);margin-bottom:8px}
@@ -2242,16 +2242,16 @@ body:not(:has(#combat.on)) .coach{display:none}
 .uv-chap span{font-family:var(--f-m);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
 .uv-chap b{font-family:var(--f-d);font-weight:700;font-size:14px}
 .uv-chap em{font-style:normal;font-size:12px;color:var(--mut)}
-/* --- raccourcis clavier --- */
+/* --- keyboard shortcuts --- */
 .kbd{display:none}
 @media (min-width:1000px) and (hover:hover) and (pointer:fine){
  .bt-foot{flex-wrap:wrap}
  .kbd{display:block;flex-basis:100%;order:3;font-family:var(--f-m);font-size:10px;letter-spacing:.04em;color:var(--mut);line-height:1.9}
  .kbd i{display:inline-grid;place-items:center;min-width:18px;height:17px;padding:0 4px;margin-right:2px;border-radius:3px;font-style:normal;font-size:9.5px;color:var(--tx2);border:1px solid rgba(212,175,106,.3);background:#0E0F12}
 }
-/* --- mouvement réduit --- */
+/* --- reduced motion --- */
 @media (prefers-reduced-motion:reduce){.tbn,.rk-st,.fl.f-se,.fl.f-ko,.hp .lag{animation-duration:1ms!important;animation-delay:0s!important}.hp-arc{transition:none}}
-/* correctif : la classe générique .new ne doit pas déplacer la carte de badge */
+/* fix: the generic .new class must not shift the badge card */
 .res-bdg.new{position:static;font-family:inherit;font-size:inherit;font-weight:inherit;letter-spacing:normal;color:inherit}
 .sp-go:focus-visible{outline:none;box-shadow:0 0 0 4px rgba(212,175,106,.16)}
 @media (max-width:560px){.rk-st{top:14px;right:14px}.rk-st b{width:50px;height:50px;font-size:29px}.rk-st span{display:none}.res-card .h1{padding-right:58px}}
@@ -2259,13 +2259,13 @@ body:not(:has(#combat.on)) .coach{display:none}
 
 
 /* =====================================================================
-   v3.1 · « Prestige Pokémon » — la structure v3 (4 onglets, cadre de sélection,
-   accueil de la Professeure) dans le langage obsidienne et laiton de la v2.0.
-   Médaillons gravés, écran de chapitre cinématique, animations brèves (jamais en boucle).
+   v3.1 · "Prestige Pokémon" — the v3 structure (4 tabs, selection frame,
+   the Professor's welcome) in the obsidian-and-brass language of v2.0.
+   Engraved medallions, cinematic chapter screen, brief animations (never looping).
    ===================================================================== */
 :root{--glass:linear-gradient(180deg,rgba(23,24,29,.94),rgba(11,12,15,.94));--rise:cubic-bezier(.2,.8,.2,1)}
 .vh{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-/* ---------- logo et navigation ---------- */
+/* ---------- logo and navigation ---------- */
 .logo{gap:12px}
 .logo .lg-ic{display:grid;place-items:center;width:40px;height:40px;flex:none;border-radius:50%;border:1.5px solid transparent;color:var(--gold-l);background:radial-gradient(circle at 50% 30%,#24262D,#0A0B0E 72%) padding-box,var(--brass) border-box;box-shadow:0 0 0 4px rgba(10,10,12,.9),0 0 0 5px rgba(212,175,106,.16),0 10px 22px -10px #000}
 .logo .lg-ic svg{width:24px;height:24px}
@@ -2283,7 +2283,7 @@ body:not(:has(#combat.on)) .coach{display:none}
 .sg-b em{font-style:normal;font-size:12px;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .sg-b:hover b{color:var(--gold-l)}
 @media (max-width:999px){.bnav{grid-template-columns:repeat(4,minmax(0,1fr))!important}}
-/* ---------- médaillons gravés (Professeure, maîtres, emblèmes) ---------- */
+/* ---------- engraved medallions (Professor, masters, emblems) ---------- */
 .av,.pav{position:relative;display:grid;place-items:center;flex:none;width:48px;height:48px;border-radius:50%;border:1.5px solid transparent;
  background:radial-gradient(circle at 50% 30%,color-mix(in srgb,var(--c,#D4AF6A) 38%,#14151A),#08090B 74%) padding-box,var(--brass) border-box;
  box-shadow:0 0 0 4px rgba(10,10,12,.92),0 0 0 5px rgba(212,175,106,.2),0 16px 30px -14px #000,0 0 30px -10px color-mix(in srgb,var(--c,#D4AF6A) 70%,transparent)}
@@ -2310,18 +2310,18 @@ body:not(:has(#combat.on)) .coach{display:none}
 .emb.ter.sm{width:38px;height:38px}.emb.ter.sm svg{width:18px;height:18px}
 .emb.ter.xs{width:30px;height:30px}.emb.ter.xs svg{width:14px;height:14px}
 .emb.ter.bio-gue{--tc:#1E4A5C}.emb.ter.bio-roche{--tc:#5A4524}.emb.ter.bio-tour{--tc:#3B2E63}.emb.ter.bio-ligue{--tc:#1E3866}.emb.ter.bio-arene{--tc:#5C2B1A}
-/* ---------- boîtes de dialogue ---------- */
+/* ---------- dialog boxes ---------- */
 .dlgbox{position:relative;display:block;padding:14px 18px 15px;border-radius:10px;border:1px solid transparent;background:var(--glass) padding-box,var(--edge) border-box;color:var(--tx);font-size:15px;line-height:1.6;box-shadow:0 22px 44px -26px #000}
 .dlgbox p{margin:0}.dlgbox p+p{margin-top:8px}
 .dlgbox b,.dlgbox strong{color:var(--gold-l);font-weight:600}
 .dlgbox.sm{padding:11px 15px 12px;font-size:14px}
 .dlgbox.lg{padding:20px 24px 22px;font-size:16.5px}
 .dlg-who{display:block;margin-bottom:6px;font-family:var(--f-m);font-size:9.5px;font-style:normal;letter-spacing:.3em;text-transform:uppercase;color:var(--gold)}
-/* conseils de première visite */
+/* first-visit tips */
 .tip{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:16px;align-items:center;margin:0 0 22px;padding:14px 16px;border-radius:var(--rl);border:1px solid transparent;background:radial-gradient(100% 140% at 0% 50%,rgba(91,155,255,.1),transparent 60%) padding-box,var(--slab) padding-box,var(--edge) border-box;animation:qUp .5s var(--rise) both}
 .tip .dlgbox{background:none;border:0;padding:0;box-shadow:none}
 @media (max-width:640px){.tip{grid-template-columns:auto minmax(0,1fr)}.tip .b{grid-column:1/-1;justify-self:end}}
-/* ---------- Aventure : écran de chapitre ---------- */
+/* ---------- Adventure: chapter screen ---------- */
 .hm-top{display:grid;gap:16px;grid-template-columns:minmax(0,1fr)}
 @media (min-width:1000px){
  #accueil.page.on{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:16px;align-items:stretch}
@@ -2367,7 +2367,7 @@ body:not(:has(#combat.on)) .coach{display:none}
  
  
 }
-/* carte de dresseur */
+/* trainer card */
 .tcard{display:grid;gap:14px;align-content:start;padding:20px;border-radius:var(--rl);border:1px solid transparent;background:radial-gradient(90% 60% at 100% 0%,rgba(212,175,106,.08),transparent 60%) padding-box,var(--veins) padding-box,var(--slab) padding-box,var(--edge) border-box;background-size:auto,560px 560px,auto,auto;box-shadow:0 30px 60px -36px #000}
 .tc-h .b{grid-column:1/-1;justify-self:stretch}
 .tc-h{display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;align-items:center;padding-bottom:14px;border-bottom:1px solid rgba(212,175,106,.14)}
@@ -2397,7 +2397,7 @@ body:not(:has(#combat.on)) .coach{display:none}
 .tc-team>span:last-child{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tc-m{display:flex;gap:5px}.tc-m>i{width:28px;height:28px;border-radius:50%;border:1px dashed rgba(212,175,106,.3)}
 @media (max-width:640px){.tc-h{grid-template-columns:auto minmax(0,1fr)}.tc-h .b{grid-column:1/-1;justify-self:stretch}}
-/* raccourcis */
+/* shortcuts */
 .hm-quick{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:16px 0}
 .qk{display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;align-items:center;padding:16px;border-radius:var(--rl);border:1px solid transparent;background:var(--slab) padding-box,var(--edge) border-box;color:var(--tx);font:inherit;text-align:left;cursor:pointer;transition:transform .25s var(--rise),box-shadow .25s}
 .qk:hover{transform:translateY(-2px);box-shadow:0 20px 40px -24px #000,0 0 0 1px rgba(212,175,106,.3)}
@@ -2407,7 +2407,7 @@ body:not(:has(#combat.on)) .coach{display:none}
 .qk b{font-family:var(--f-d);font-weight:700;font-size:13.5px;letter-spacing:.12em;text-transform:uppercase}
 .qk em{font-style:normal;font-size:12.5px;color:var(--mut)}
 @media (max-width:760px){.hm-quick{grid-template-columns:minmax(0,1fr);gap:8px}.qk{padding:12px 14px}}
-/* ---------- Combats : un cadre de sélection ---------- */
+/* ---------- Battles: a selection frame ---------- */
 .ph-sm{margin-bottom:18px}
 .sel{position:relative;overflow:hidden;border-radius:var(--rl);border:1px solid transparent;background:var(--veins) padding-box,var(--slab) padding-box,var(--brass) border-box;background-size:560px 560px,auto,auto;box-shadow:0 40px 80px -44px #000}
 .sel-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;padding:6px;border-bottom:1px solid rgba(212,175,106,.14);background:linear-gradient(180deg,rgba(6,6,8,.6),rgba(6,6,8,.2))}
@@ -2455,7 +2455,7 @@ body:not(:has(#combat.on)) .coach{display:none}
 .sx-f em{font-style:normal;font-size:13px;color:var(--tx)}
 .sx-lock{display:flex;align-items:center;gap:8px;margin:0;padding:10px 14px;border:1px solid rgba(229,72,77,.35);border-radius:var(--r);background:rgba(229,72,77,.07);color:#FFB3B3;font-size:13.5px}
 .sx-lock svg{width:16px;height:16px;flex:none}
-/* équipe du combat */
+/* battle team */
 #ptBox.pt{display:grid;gap:12px;padding:14px;border-radius:var(--r);border:1px solid rgba(212,175,106,.16);background:rgba(6,6,8,.45);box-shadow:none}
 #ptBox .pt-h{display:flex;align-items:center;gap:12px}
 #ptBox .pt-h b{margin-left:auto;font-family:var(--f-m);font-size:11px;letter-spacing:.06em;color:var(--tx2)}
@@ -2480,7 +2480,7 @@ body:not(:has(#combat.on)) .coach{display:none}
  #cbPrep{padding-bottom:86px}
  .sel-tabs button{flex-direction:column;gap:5px;min-height:64px;text-align:center}.sel-tabs button span{justify-items:center}.sel-tabs b{font-size:11.5px;letter-spacing:.1em}.sel-tabs em{font-size:9.5px}
 }
-/* ---------- Équipe : un bouton explicite pour recruter ---------- */
+/* ---------- Team: an explicit button to recruit ---------- */
 .qa{display:inline-flex!important;align-items:center;gap:6px;width:auto!important;height:28px!important;padding:0 11px 0 9px!important;border-radius:2px!important;border:0!important;transform:none!important;clip-path:none!important;color:#1A1205!important;background:linear-gradient(135deg,#F6E6BC,#C9A15E 55%,#9C7735)!important;box-shadow:0 8px 18px -8px rgba(0,0,0,.8)!important;font-family:var(--f-m);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase}
 .qa::before{display:none!important}
 .qa::after{content:"Recruter";display:inline!important;position:static!important;inset:auto!important;width:auto!important;height:auto!important;background:none!important;border:0!important;transform:none!important}
@@ -2489,7 +2489,7 @@ body:not(:has(#combat.on)) .coach{display:none}
 .qa[aria-pressed="true"] svg{color:var(--gold-l)!important;transform:rotate(45deg)!important}
 .qa[aria-pressed="true"]::after{content:"Retirer"}
 @media (max-width:540px){.qa::after,.qa[aria-pressed="true"]::after{content:""}.qa{padding:0 8px!important}}
-/* ---------- Guide : débuter ---------- */
+/* ---------- Guide: getting started ---------- */
 .s5{display:grid;gap:10px;list-style:none;margin:0 0 22px;padding:0}
 .s5 li{display:grid;grid-template-columns:auto minmax(0,1fr);gap:18px;align-items:start;padding:18px;border-radius:var(--rl);border:1px solid transparent;background:radial-gradient(80% 120% at 0% 0%,color-mix(in srgb,var(--c) 10%,transparent),transparent 60%) padding-box,var(--slab) padding-box,var(--edge) border-box}
 .s5-n{display:grid;place-items:center;width:38px;height:38px;margin:4px;transform:rotate(45deg);border:1px solid transparent;background:linear-gradient(135deg,#1A1B20,#0B0C0F) padding-box,var(--brass) border-box;font-size:0}
@@ -2504,11 +2504,11 @@ body:not(:has(#combat.on)) .coach{display:none}
 .lex dl div{padding:12px 14px;background:#0D0E11}
 .lex dt{font-family:var(--f-m);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
 .lex dd{margin:4px 0 0;color:var(--tx2);font-size:13.5px}
-/* ---------- tutoriel : la Professeure en coach ---------- */
+/* ---------- tutorial: the Professor as coach ---------- */
 .coach .co-in{display:grid!important;grid-template-columns:auto minmax(0,1fr);gap:4px 14px;align-items:start}
 .coach .co-in>.pav{grid-row:1/span 4;width:48px;height:48px;margin-top:2px}.coach .co-in>.pav b{font-size:14px}
 .coach .co-in>*:not(.pav){grid-column:2}
-/* ---------- accueil de la Professeure (premier lancement) ---------- */
+/* ---------- the Professor's welcome (first launch) ---------- */
 .intro{position:fixed;inset:0;z-index:195;display:grid;place-items:center;padding:24px 16px;overflow-y:auto;color:var(--tx);
  background:radial-gradient(60% 45% at 50% 22%,rgba(91,155,255,.14),transparent 70%),radial-gradient(70% 60% at 50% 100%,rgba(212,175,106,.08),transparent 70%),var(--veins),#060608;background-size:auto,auto,560px 560px,auto;animation:qFade .6s ease-out both}
 .intro::before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(75% 75% at 50% 50%,transparent 55%,rgba(0,0,0,.75))}
@@ -2543,19 +2543,19 @@ body:not(:has(#combat.on)) .coach{display:none}
 .it-diff{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:14px}
 .it-diff span{font-family:var(--f-m);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--mut);margin-right:6px}
 @media (max-width:560px){.it-prof .pav{width:64px;height:64px}.it-prof .pav b{font-size:20px}.it-st{grid-template-columns:repeat(2,minmax(0,1fr))}.it-name input{font-size:22px}}
-/* ---------- animations brèves ---------- */
+/* ---------- brief animations ---------- */
 @keyframes qUp{from{opacity:0;transform:translateY(12px)}}
 @keyframes qIn{from{opacity:0;transform:scale(.82)}}
 @keyframes qFade{from{opacity:0}}
 @keyframes qDraw{to{stroke-dashoffset:0}}
 @keyframes qSpin{from{transform:rotate(-30deg);opacity:0}}
 @media (prefers-reduced-motion:reduce){.hm-hero *,.sel-card,.tip,.intro,.it-card,.intro .dlgbox,.tcb.on svg{animation:none!important}}
-/* combat : noms lisibles, capacités marquées de leur type */
+/* battle: readable names, moves marked with their type */
 .pl-h .n{letter-spacing:.04em!important}
 .bt-side .bm{position:relative}
 .bt-side .bm:not(.ro)::after{content:"";position:absolute;left:-1px;top:12px;bottom:12px;width:2px;background:var(--c,transparent);box-shadow:0 0 12px var(--c,transparent);pointer-events:none}
 .bt-side .bm:disabled::after{opacity:.35}
-/* raccourcis : une lueur par destination */
+/* shortcuts: one glow per destination */
 .qk{position:relative;overflow:hidden}
 .qk::after{content:"";position:absolute;right:-30%;top:-40%;width:70%;aspect-ratio:1;border-radius:50%;pointer-events:none;opacity:.5;background:radial-gradient(circle,var(--qg),transparent 65%)}
 .qk-grass{--qg:rgba(120,200,80,.16)}.qk-team{--qg:rgba(229,72,77,.14)}.qk-guide{--qg:rgba(91,155,255,.16)}
@@ -2721,8 +2721,8 @@ body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opa
 #accueil .route #routeSvg{opacity:.1!important}
 #accueil .route .dlg{background:rgba(3,18,28,.68)!important;border:1px solid rgba(133,219,255,.28)!important;backdrop-filter:blur(12px)!important;box-shadow:0 12px 28px rgba(0,0,0,.22)!important}
 #accueil .route .dlg p{color:#e8f5fc!important;text-shadow:0 2px 8px rgba(0,0,0,.5)}
-/* ===== couche resonance-art-direction-final ===== */
-/* === POKÉMON RÉSONANCE — DIRECTION ARTISTIQUE CINÉMATIQUE INTÉGRÉE === */
+/* ===== resonance-art-direction-final layer ===== */
+/* === POKÉMON RÉSONANCE — INTEGRATED CINEMATIC ART DIRECTION === */
 :root{
  --bg:#04101d!important;--s0:#071827!important;--s1:#0a2033!important;--s2:#0e2b43!important;--s3:#133750!important;--s4:#1d4962!important;
  --line:rgba(120,220,255,.16)!important;--line2:rgba(120,220,255,.27)!important;--line3:rgba(153,228,255,.42)!important;
@@ -2749,7 +2749,7 @@ body{background:radial-gradient(ellipse at 50% -15%,rgba(23,107,150,.24),transpa
 .panel,.ac,.opt,.rule,.scn,.an,.kpis,.howto>div,.evd,.mvc,.ptm,.stab,.bm,.vx,.plate,.res-card,.ep-card,.enc .enc-card,.dock,.bp-en,.st-evo,.st-line,.qc,.duo,.wx,.case,.arena,.cs,.mx-wrap .rxd,.rxd,.it,.rp,.champ,.note,.sh,.tcard,.qk,.sel-card,.pt,.battle,.dex,.fcard .fc-in,.gd-p,.gd-intro{
  background:linear-gradient(145deg,rgba(13,43,65,.96),rgba(5,22,37,.97))!important;border-color:rgba(98,207,241,.24)!important;box-shadow:0 18px 38px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.055)!important
 }
-/* Accueil : scène panoramique intégrée, widgets alignés comme un vrai hub de jeu */
+/* Home: integrated panoramic scene, widgets aligned like a real game hub */
 #accueil.page.on{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:18px!important}
 #accueil .hm-top{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(260px,31%)!important;gap:16px!important;align-items:stretch!important}
 #accueil .hm-hero{grid-column:1!important;min-height:clamp(370px,36vw,510px)!important;border-radius:24px!important;border:1px solid rgba(109,222,255,.5)!important;background:linear-gradient(90deg,rgba(3,17,30,.78),rgba(3,17,30,.24) 57%,rgba(3,17,30,.03)),linear-gradient(0deg,rgba(3,14,25,.86),transparent 66%),var(--resonance-landscape) center 48%/cover no-repeat!important;box-shadow:0 24px 64px rgba(0,0,0,.4),inset 0 0 0 1px rgba(255,255,255,.06)!important}
@@ -2768,7 +2768,7 @@ body{background:radial-gradient(ellipse at 50% -15%,rgba(23,107,150,.24),transpa
 #accueil .rt-ui{z-index:2!important}
 #accueil .rt-sign{background:linear-gradient(180deg,#ffe778,#f0b52a)!important;color:#10263a!important;border:0!important;box-shadow:0 6px 20px rgba(0,0,0,.22)!important}
 #accueil .dlg{background:rgba(3,18,31,.83)!important;border:1px solid rgba(104,216,248,.3)!important;backdrop-filter:blur(10px)!important;border-radius:14px!important}
-/* Sélection Pokémon : vitrines illustrées, contours lumineux et états actifs lisibles */
+/* Pokémon selection: illustrated showcases, glowing outlines and readable active states */
 #pokedex .dock{border:1px solid rgba(104,216,248,.3)!important;border-radius:18px!important}
 #pokedex .dexbar{padding:14px!important;background:rgba(7,29,46,.82)!important;border:1px solid rgba(104,216,248,.22)!important;border-radius:16px!important;backdrop-filter:blur(12px)!important}
 #pokedex .fam-grid{grid-template-columns:repeat(auto-fill,minmax(225px,1fr))!important;gap:16px!important}
@@ -2779,7 +2779,7 @@ body{background:radial-gradient(ellipse at 50% -15%,rgba(23,107,150,.24),transpa
 #pokedex .fc-art .pokemon-art-sprite{width:clamp(145px,14vw,190px)!important;height:clamp(145px,14vw,190px)!important;object-fit:contain!important;filter:drop-shadow(0 12px 16px rgba(0,0,0,.42))!important}
 #pokedex .fcard .qa{border:1px solid rgba(121,221,255,.35)!important;background:rgba(4,22,38,.8)!important;color:#e7f8ff!important}
 #pokedex .fcard.in .qa{background:linear-gradient(180deg,#ffe778,#efb32a)!important;color:#10263a!important}
-/* Combat : plateau immersif, arène et panneaux cohérents */
+/* Battle: immersive board, consistent arena and panels */
 #combat .sel{border-radius:22px!important;overflow:hidden!important;border:1px solid rgba(104,216,248,.25)!important;background:linear-gradient(145deg,rgba(9,35,55,.98),rgba(4,18,31,.99))!important;box-shadow:0 22px 48px rgba(0,0,0,.28)!important}
 #combat .sel-tabs{background:rgba(3,17,29,.8)!important;border-bottom:1px solid rgba(108,216,248,.18)!important}
 #combat .sel-tabs [aria-selected="true"],#combat .gd-t[aria-selected="true"]{background:linear-gradient(180deg,#ffe778,#f2b72e)!important;color:#10263a!important;border-color:rgba(255,243,174,.8)!important;box-shadow:0 6px 20px rgba(255,196,46,.16)!important}
@@ -2792,14 +2792,14 @@ body{background:radial-gradient(ellipse at 50% -15%,rgba(23,107,150,.24),transpa
 #combat #bSvg{position:relative;z-index:1;filter:drop-shadow(0 8px 12px rgba(0,0,0,.28))}
 #combat .bt-arena{border-color:rgba(109,221,255,.28)!important;background:linear-gradient(100deg,rgba(14,58,79,.88),rgba(5,24,40,.9))!important}
 #combat .pt{border:1px solid rgba(108,216,248,.24)!important;border-radius:18px!important}
-/* Guide, types et ligue : même univers graphique sur tous les écrans */
+/* Guide, types and league: same graphic universe on all screens */
 #types .gd-tabs{padding:6px!important;gap:6px!important;background:rgba(3,18,31,.75)!important;border:1px solid rgba(108,216,248,.2)!important;border-radius:16px!important}
 #types .gd-t{border-radius:11px!important}
 #types .gd-p{border-radius:22px!important;border:1px solid rgba(108,216,248,.28)!important;padding:clamp(18px,3vw,32px)!important}
 #types .s5 li{background:linear-gradient(120deg,rgba(15,52,73,.96),rgba(5,23,39,.98))!important;border:1px solid rgba(108,216,248,.19)!important;border-radius:15px!important}
 #ligue .case,#ligue .arena,#ligue .elite-case{border-radius:22px!important;border:1px solid rgba(108,216,248,.28)!important;background:linear-gradient(145deg,rgba(11,43,64,.97),rgba(4,19,33,.99))!important}
 #ligue .badges button{border:1px solid rgba(108,216,248,.23)!important;background:linear-gradient(145deg,rgba(15,52,73,.95),rgba(5,23,39,.98))!important}
-/* Mouvement doux : aucune interaction ne change de fonction */
+/* Soft motion: no interaction changes function */
 @keyframes resonanceGlow{0%,100%{box-shadow:0 0 0 rgba(83,202,255,0)}50%{box-shadow:0 0 26px rgba(83,202,255,.11)}}
 #accueil .tcard,#accueil .route{animation:resonanceGlow 7s ease-in-out infinite}
 
@@ -2824,8 +2824,8 @@ body{background:radial-gradient(ellipse at 50% -15%,rgba(23,107,150,.24),transpa
  #types .gd-tabs{overflow-x:auto!important;flex-wrap:nowrap!important}
 }
 @media(prefers-reduced-motion:reduce){#accueil .tcard,#accueil .route{animation:none!important}}
-/* === FIN DE LA DIRECTION ARTISTIQUE === */
-/* ===== couche resonance-home-layout-correction ===== */
+/* === END OF ART DIRECTION === */
+/* ===== resonance-home-layout-correction layer ===== */
 #accueil.page.on{display:block!important;grid-template-columns:none!important;gap:0!important}
 #accueil .hm-top{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(270px,31%)!important;gap:16px!important;align-items:stretch!important}
 #accueil .hm-hero{width:100%!important;min-width:0!important;min-height:clamp(370px,36vw,510px)!important;grid-column:auto!important}
@@ -2833,7 +2833,7 @@ body{background:radial-gradient(ellipse at 50% -15%,rgba(23,107,150,.24),transpa
 #accueil .hm-quick,#accueil .route{width:100%!important;margin-top:18px!important}
 #accueil .hm-quick{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important}
 @media(max-width:999px){#accueil .hm-top{grid-template-columns:minmax(0,1fr)!important}#accueil .hm-hero,#accueil #campBox{grid-column:auto!important}#accueil .hm-quick{grid-template-columns:1fr!important}}
-/* ===== couche resonance-deep-art-direction-v2 ===== */
+/* ===== resonance-deep-art-direction-v2 layer ===== */
 /* FINAL PASS — integrated cinematic Pokémon UI, not a static mockup */
 :root{--bg:#06111b;--s0:#081722;--s1:#0a2030;--s2:#0d2b40;--s3:#12384f;--gold:#ffd45b;--gold2:#f2ad32;--tx:#f3f8ff;--tx2:#bdd4e2;--mut:#85a5b8;--line:rgba(113,218,255,.19);--line2:rgba(113,218,255,.32)}
 body{background:radial-gradient(ellipse at 70% -12%,rgba(24,108,151,.28),transparent 50%),linear-gradient(135deg,#06111b,#071a28 55%,#08131e)!important;color:#f3f8ff!important}
@@ -2889,21 +2889,21 @@ input,select,textarea{background:rgba(3,22,36,.9)!important;border:1px solid rgb
 #accueil .qk-grass{background-image:linear-gradient(0deg,rgba(3,18,29,.98),rgba(4,28,43,.42)),var(--resonance-landscape)!important;background-position:center,32% 60%!important}
 #accueil .qk-team{background-image:linear-gradient(0deg,rgba(3,18,29,.98),rgba(4,28,43,.4)),var(--resonance-landscape)!important;background-position:center,65% 42%!important}
 #accueil .qk-guide{background-image:linear-gradient(0deg,rgba(3,18,29,.98),rgba(4,28,43,.4)),var(--resonance-landscape)!important;background-position:center,88% 55%!important}
-/* ===== couche resonance-v32-lisibilite ===== */
+/* ===== resonance-v32-readability layer ===== */
 /* =====================================================================
-   COUCHE « LISIBILITÉ & PERFORMANCE » — v3.2
-   Ne change ni les couleurs, ni les matières, ni les polices de la
-   direction artistique cinématique. Corrige seulement :
-   1. les deux étiquettes posées sur des pseudo-éléments « plein cadre »
-   2. les textes trop petits sur téléphone et tablette
-   3. les collisions de l'accueil sur téléphone
-   4. les deux animations en boucle qui faisaient tourner le processeur
+   "READABILITY & PERFORMANCE" LAYER — v3.2
+   Changes neither the colors, nor the materials, nor the fonts of the
+   cinematic art direction. Only fixes:
+   1. the two labels placed on "full-frame" pseudo-elements
+   2. text that is too small on phone and tablet
+   3. home collisions on phone
+   4. the two looping animations that were hogging the CPU
    ===================================================================== */
 
-/* ---------- 1. Étiquettes décoratives : elles gardent leur place ----------
-   Les anciens pseudo-éléments couvraient toute la carte (inset:0, z-index:-1,
-   masque). Le texte ajouté par-dessus héritait de ces réglages : étiquette
-   coupée sur l'accueil, voile sombre et flou sur toute la Route 29. */
+/* ---------- 1. Decorative labels: they keep their place ----------
+   The old pseudo-elements covered the whole card (inset:0, z-index:-1,
+   mask). The text added on top inherited those settings: label clipped
+   on the home page, dark veil and blur over the whole Route 29. */
 html body #accueil .hm-hero::after{
   left:auto!important;bottom:auto!important;width:auto!important;height:auto!important;
   z-index:3!important;white-space:nowrap!important;line-height:1.2!important;
@@ -2918,29 +2918,29 @@ html body #accueil .route::before{
   backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
   background:rgba(4,22,32,.86)!important;font-size:11px!important
 }
-/* le panneau « Route 29 » d'origine faisait doublon sous la nouvelle étiquette */
+/* the original "Route 29" panel duplicated the new label */
 html body #accueil .route .rt-sign{visibility:hidden!important}
 
-/* ---------- 2. État choisi visible (difficulté du premier lancement) ---------- */
+/* ---------- 2. Visible selected state (first-launch difficulty) ---------- */
 html body .it-diff .b[aria-pressed="true"]{
   background:linear-gradient(180deg,#ffe778,#f2b72e)!important;color:#10263a!important;
   border-color:rgba(255,243,174,.8)!important;box-shadow:0 6px 20px rgba(255,196,46,.16)!important
 }
 
-/* ---------- 2 bis. Contrastes ----------
-   pictogrammes des raccourcis : bleu clair sur or devenait invisible,
-   on reprend le bleu nuit utilisé sur tous les autres boutons dorés */
+/* ---------- 2 bis. Contrast ----------
+   shortcut icons: light blue on gold became invisible,
+   we reuse the midnight blue used on all the other gold buttons */
 html body #accueil .qk-ic{color:#0b2236!important}
-/* cartes d'équipe : « À capturer » ne passe plus sous le bouton rapide */
+/* team cards: "À capturer" (To capture) no longer slides under the quick button */
 html body .fc-art .fc-lock{right:auto!important;left:8px!important}
 
-/* ---------- 3. Bureau : plus aucun texte sous 10 px ---------- */
+/* ---------- 3. Desktop: no more text under 10 px ---------- */
 html body .hh-chips span,html body #accueil .hh-chips span{font-size:10px!important}
 html body #resonance-launch .rl-meta,html body #resonance-launch .rl-meta strong{font-size:10.5px!important}
 
-/* ---------- 4. Téléphone et tablette : taille plancher des textes ---------- */
+/* ---------- 4. Phone and tablet: minimum text size ---------- */
 @media (max-width:999px){
-  /* étiquettes en capitales espacées */
+  /* spaced capital labels */
   html body .kick,html body .lbl-s,html body .dlg-who,html body .dlg-n,html body .case-h,
   html body #accueil .hh-chips span,html body .hh-chips span,html body .srw-lv,html body .pill,
   html body #ptVoix span,html body .ptc-m em,html body .tod button,html body #todBtns button,
@@ -2952,14 +2952,14 @@ html body #resonance-launch .rl-meta,html body #resonance-launch .rl-meta strong
   html body #accueil .kick{font-size:11px!important}
   html body #resonance-launch .rl-meta,html body #resonance-launch .rl-meta strong{font-size:11px!important}
   html body .logo small{font-size:10px!important}
-  /* textes d'information */
+  /* informational text */
   html body #accueil .qk em,html body #qkTeam,html body .pl-s span,html body .tr,html body .tr-i,
   html body .bm span,html body .vx span,html body #bPhase,html body .syn-c,html body #genSeg button,html body .seg button
   {font-size:11.5px!important}
   html body #accueil .qk em{line-height:1.35!important}
-  /* barre de navigation basse */
+  /* bottom navigation bar */
   html body .bnav .bn{font-size:11.5px!important}
-  /* cartes de l'équipe : denses, on gagne un point sans casser la grille */
+  /* team cards: dense, we gain a point without breaking the grid */
   html body #pokedex .fc-role,html body .fc-role,
   html body #pokedex .fc-gen,html body #pokedex .fc-st,html body #pokedex .fc-lock,html body #pokedex .types .tb,
   html body .fc-gen,html body .fc-st,html body .fc-lock,html body .types .tb,
@@ -2967,62 +2967,62 @@ html body #resonance-launch .rl-meta,html body #resonance-launch .rl-meta strong
   {font-size:10.5px!important}
 }
 
-/* ---------- 5. Accueil sur téléphone : plus de chevauchement ---------- */
+/* ---------- 5. Home on phone: no more overlap ---------- */
 @media (max-width:640px){
-  /* l'étiquette se centre en haut, en version courte */
+  /* the label centers at the top, in short form */
   html body #accueil .hm-hero::after{
     content:'KANTO  /  JOHTO  •  TON AVENTURE'!important;
     top:14px!important;right:auto!important;left:50%!important;transform:translateX(-50%)!important;
     font-size:10px!important;letter-spacing:.16em!important;padding:7px 12px!important
   }
-  /* le médaillon passe au-dessus du titre au lieu de le recouvrir */
+  /* the medallion goes above the title instead of covering it */
   
   
   
-  /* Route 29 : l'étiquette ne cache plus les boutons Matin / Jour / Nuit */
+  /* Route 29: the label no longer hides the Morning / Day / Night buttons */
   html body #accueil .rt-top{margin-top:44px!important}
-  /* Combats : « Prochaine étape » devient un onglet posé sur la carte,
-     le nom du combat retrouve toute la ligne */
+  /* Battles: "Prochaine étape" (Next step) becomes a tab placed on the card,
+     the battle name gets the whole line back */
   html body #combat .srw .pill.nx{position:absolute!important;top:-9px!important;right:12px!important;z-index:2!important;padding:3px 9px!important;letter-spacing:.12em!important}
   html body #combat .srw:has(.pill.nx){margin-top:8px!important}
-  /* plateau : noms des Pokémon et repères lisibles */
+  /* board: readable Pokémon names and markers */
   html body #bSvg .tok-nm{font-size:8px!important;letter-spacing:.06em!important}
   html body #bSvg .axl{font-size:8.5px!important}
 }
 
-/* ---------- 6. Performance : mêmes effets, sans repeindre en boucle ---------- */
-/* « resonanceGlow » animait l'ombre de la carte de dresseur et de la Route 29,
-   mais une ombre fixe marquée !important l'emporte sur toute animation :
-   la lueur n'apparaissait jamais (0 pixel de différence, vérifié) tout en
-   repeignant ces deux grandes cartes 60 fois par seconde. On l'arrête. */
+/* ---------- 6. Performance: same effects, without looping repaints ---------- */
+/* "resonanceGlow" animated the shadow of the trainer card and Route 29,
+   but a fixed shadow marked !important overrides any animation:
+   the glow never appeared (0 pixels of difference, verified) while
+   repainting these two large cards 60 times per second. We stop it. */
 html body #accueil .tcard,html body #accueil .route{animation:none!important}
-/* même cas sur l'écran de lancement : « launchDrift » est écrasé par
-   transform:scale(1.005)!important, le paysage ne bouge pas (0 pixel)
-   mais l'animation coûtait ~93 % du processeur sur téléphone. */
+/* same case on the launch screen: "launchDrift" is overridden by
+   transform:scale(1.005)!important, the landscape does not move
+   (0 pixels) but the animation cost ~93 % of the CPU on phone. */
 html body #resonance-launch .rl-scene{animation:none!important;will-change:auto!important}
 @media (prefers-reduced-motion:no-preference){
-  /* le curseur du dialogue clignote toujours, mais sur sa propre couche */
+  /* the dialog cursor still blinks, but on its own layer */
   html body .dlg::after{animation:resBlink 1.1s step-end infinite!important;will-change:opacity}
 }
 @keyframes resBlink{50%{opacity:0}}
 
-/* ---------- 6 bis. Barres fixes du téléphone ----------
-   L'entrée de page « resPageIn » gardait une transformation après coup
-   (remplissage « both ») : les barres « Commencer » et « Fin du tour »
-   défilaient avec la page au lieu de rester en bas de l'écran.
-   Même mouvement d'entrée, mais rien n'est conservé à la fin. */
+/* ---------- 6 bis. Fixed bars on phone ----------
+   The "resPageIn" page entry kept a transform afterwards
+   (fill mode "both"): the "Commencer" (Start) and "Fin du tour" (End turn) bars
+   scrolled with the page instead of staying at the bottom of the screen.
+   Same entry motion, but nothing is kept at the end. */
 html body .page.on{animation-fill-mode:backwards!important}
 
-/* ---------- 7. Écran de lancement : une fois par session ---------- */
+/* ---------- 7. Launch screen: once per session ---------- */
 .rl-seen #resonance-launch{display:none!important}
 
-/* ---------- 8. Combats sur téléphone : le pied de page passe au-dessus de la barre fixe ---------- */
+/* ---------- 8. Battles on phone: the footer goes above the fixed bar ---------- */
 @media (max-width:999px){html body #combat.page.on{padding-bottom:84px!important}}
-/* ===== couche resonance-v4-aventure ===== */
+/* ===== resonance-v4-adventure layer ===== */
 /* =====================================================================
-   v4.0 « AVENTURE » — direction artistique d'après la maquette :
-   bleu nuit profond, panneaux vitrés cernés de cyan, or brillant,
-   grandes illustrations, titres en Archivo, logo en Cinzel.
+   v4.0 "ADVENTURE" — art direction based on the mockup:
+   deep midnight blue, glass panels ringed in cyan, bright gold,
+   large illustrations, titles in Archivo, logo in Cinzel.
    ===================================================================== */
 :root{
  --f-d:"Archivo","Arial Black","Helvetica Neue",Arial,sans-serif;
@@ -3043,7 +3043,7 @@ html body .sub{color:var(--v4-tx2)!important}
 html body .logo b{font-family:var(--f-logo)!important;letter-spacing:.14em!important}
 html body #accueil .v4-off,.v4-off{display:none!important}
 
-/* ---------- composants ---------- */
+/* ---------- components ---------- */
 .v4-panel{position:relative;background:linear-gradient(180deg,var(--v4-p1),var(--v4-p2));border:1px solid var(--v4-ln);border-radius:var(--v4-r);box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 0 0 1px rgba(0,0,0,.25),0 16px 36px -18px rgba(0,0,0,.8)}
 .v4-ph{display:flex;align-items:center;gap:9px;padding:0 0 10px;margin-bottom:10px;border-bottom:1px solid rgba(120,200,255,.14)}
 .v4-ph>svg{width:20px;height:20px;color:#ffd75e;flex:none}.v4-ph b{font-family:var(--f-d);font-weight:800;font-size:15px;color:#fff}
@@ -3074,7 +3074,7 @@ html body .b-gold[disabled]{filter:saturate(.25) brightness(.7)!important;box-sh
 .v4-rew .v4-rew-b svg{width:20px;height:20px}
 .v4-rew{margin:10px 0 2px}
 
-/* ---------- coquille : barre latérale, barre du haut, navigation basse ---------- */
+/* ---------- shell: sidebar, top bar, bottom navigation ---------- */
 html body .side{background:linear-gradient(180deg,#0a1f3d,#071630 60%,#06122a)!important;border-right:1px solid rgba(88,186,255,.25)!important}
 html body .side-nav{gap:3px!important}
 html body .nv{min-height:44px!important;border-radius:10px!important;font:700 14px/1 var(--f-d)!important;color:#d6e6f7!important;border:1px solid transparent!important;padding:0 12px!important;gap:12px!important}
@@ -3109,7 +3109,7 @@ html body .bn[aria-current="page"] .ic{background:linear-gradient(180deg,rgba(25
 .v4-mi-ic{display:grid;place-items:center;width:40px;height:40px;border-radius:11px;background:linear-gradient(180deg,var(--v4-gold1),var(--v4-gold2));color:var(--v4-ink);flex:none}.v4-mi-ic svg{width:21px;height:21px}
 .v4-mi b{display:block;font:800 14px/1.15 var(--f-d)}.v4-mi em{display:block;font:500 12px/1.3 var(--f-b);font-style:normal;color:var(--v4-tx2)}
 
-/* ---------- Accueil ---------- */
+/* ---------- Home ---------- */
 .v4-home{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,34%);gap:14px;align-items:stretch}
 .v4-hero-slot{grid-column:1;min-width:0}.v4-aside{grid-column:2;display:flex;flex-direction:column;gap:12px;min-width:0}
 .v4-resume-slot,.v4-tiles,.v4-bottom{grid-column:1/-1}
@@ -3168,7 +3168,7 @@ html body .v4h-cta .b-ghost{min-height:46px;border-radius:999px!important;backgr
 .v4-st svg{width:26px;height:26px;color:#ffd75e;flex:none}.v4-st span{display:grid;min-width:0}.v4-st small{font:700 11px/1.2 var(--f-d);color:var(--v4-tx2);text-transform:uppercase;letter-spacing:.06em}.v4-st b{font:850 17px/1.15 var(--f-d)}
 html body #resumeHome{margin:0!important}
 
-/* ---------- Carte ---------- */
+/* ---------- Map ---------- */
 .v4-map-wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,32%);gap:14px;align-items:start}
 .v4-map{padding:8px;overflow:hidden}
 .v4-map-sc{position:relative;overflow:auto hidden;border-radius:10px;scrollbar-width:thin}
@@ -3254,7 +3254,7 @@ html body .v4-dexbar select{min-height:42px;padding:0 10px;border-radius:10px!im
 .v4d-f.on{border-color:#ffe17b;background:rgba(255,215,94,.1)}.v4d-to{width:16px;height:16px;color:var(--v4-mut);flex:none}
 .v4d-act{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px;margin-top:14px}.v4d-act .b{min-height:46px}
 
-/* ---------- Quêtes ---------- */
+/* ---------- Quests ---------- */
 .v4-trophy{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;margin-bottom:12px}
 .v4-tr-b{display:flex;gap:6px;flex-wrap:wrap}.v4-tbg{display:grid;place-items:center;width:38px;height:38px;border-radius:10px;background:rgba(0,0,0,.3);border:1px solid rgba(120,200,255,.18);filter:grayscale(1) brightness(.5)}.v4-tbg svg{width:28px;height:28px}.v4-tbg.on{filter:none;border-color:rgba(255,215,94,.5);box-shadow:0 0 14px -4px rgba(255,215,94,.7)}
 .v4-tr-k{display:flex;gap:16px}.v4-tr-k div{display:grid;text-align:center}.v4-tr-k b{font:850 20px/1 var(--f-d);color:#ffd75e}.v4-tr-k span{font:600 11.5px/1.3 var(--f-b);color:var(--v4-tx2)}
@@ -3271,7 +3271,7 @@ html body .v4-dexbar select{min-height:42px;padding:0 10px;border-radius:10px!im
 .v4-daily>.v4t-scene{position:relative;inset:auto;z-index:0;width:120px;height:86px;border-radius:10px;flex:none;background-size:300% auto;border:1px solid rgba(255,255,255,.2)}
 .v4-daily-t{display:grid;gap:4px;flex:1;min-width:0}.v4-daily-t small{font:800 11px/1.2 var(--f-d);letter-spacing:.1em;text-transform:uppercase;color:#ffb3e6}.v4-daily-t b{font:850 20px/1.1 var(--f-d)}.v4-daily-t em{font-size:13px;font-style:normal;color:var(--v4-tx2)}
 
-/* ---------- Sac et Boutique ---------- */
+/* ---------- Bag and Shop ---------- */
 .v4-walbig{display:flex;flex-wrap:wrap;gap:12px 28px;padding:14px 16px;margin-bottom:12px}
 .v4-walbig>div{display:flex;align-items:center;gap:12px}.v4-walbig span:last-child{display:grid}.v4-walbig small{font:700 12px/1.2 var(--f-d);color:var(--v4-tx2)}.v4-walbig b{font:850 26px/1.05 var(--f-d);font-variant-numeric:tabular-nums}
 .v4-sac{display:grid;grid-template-columns:200px minmax(0,1fr);gap:12px;align-items:start}
@@ -3289,7 +3289,7 @@ html body .v4-dexbar select{min-height:42px;padding:0 10px;border-radius:10px!im
 .v4-qty button{width:36px;height:40px;border:0;background:none;color:#fff;font:800 18px/1 var(--f-d);cursor:pointer}.v4-qty button[disabled]{opacity:.3}
 .v4-qty b{min-width:26px;text-align:center;font:850 15px/1 var(--f-d)}
 
-/* ---------- Paramètres ---------- */
+/* ---------- Settings ---------- */
 .v4-params{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 .v4-ps{padding:14px;display:grid;gap:10px;align-content:start}
 .v4-fld{display:grid;gap:6px}.v4-fld>span{font:700 12.5px/1 var(--f-d);color:var(--v4-tx2)}
@@ -3308,7 +3308,7 @@ html body .v4-fld input{min-height:44px;padding:0 12px;border-radius:10px!import
 .v4-sl input{width:100%;accent-color:#3fd4a0;height:28px}
 .v4-reset{justify-self:start;margin-top:4px}
 
-/* ---------- Équipe : cartes de collection ---------- */
+/* ---------- Team: collection cards ---------- */
 html body #pokedex .fcard{border-radius:16px!important;border:1px solid color-mix(in srgb,var(--c) 55%,#9fd8ff 25%)!important;background:linear-gradient(170deg,color-mix(in srgb,var(--c2) 30%,#0c2244),#081a36 55%)!important}
 html body #pokedex .fcard .fc-in{background:transparent!important;border:0!important}
 html body #pokedex .fc-art{background:radial-gradient(70% 60% at 50% 60%,color-mix(in srgb,var(--c) 65%,transparent),transparent 72%),linear-gradient(165deg,color-mix(in srgb,var(--c) 40%,#123158),color-mix(in srgb,var(--c2) 30%,#0a1d3a))!important;border-bottom:0!important;border-radius:12px!important;margin:0 8px!important}
@@ -3320,7 +3320,7 @@ html body .tb{background:var(--c)!important;color:var(--fg)!important;border:0!i
 html body .tb .tb-s{background:rgba(0,0,0,.18)!important;border-radius:50%!important}
 html body #pokedex .fcard.in{border-color:#ffe17b!important;box-shadow:0 0 0 2px rgba(255,215,94,.45),0 16px 30px -14px rgba(255,190,40,.5)!important}
 
-/* ---------- Combat ---------- */
+/* ---------- Battle ---------- */
 html body #combat .sel,html body #combat .bt,html body #combat .battle,html body #combat .pt,html body #combat .sel-card{background:linear-gradient(180deg,var(--v4-p1),var(--v4-p2))!important;border-color:var(--v4-ln)!important}
 html body #combat .sel-tabs [aria-selected="true"]{background:linear-gradient(180deg,var(--v4-gold1),var(--v4-gold2))!important;color:var(--v4-ink)!important}
 html body #bPanel .bm{border-radius:12px!important;border:1px solid color-mix(in srgb,var(--c,#5aa0ff) 45%,transparent)!important;background:linear-gradient(90deg,color-mix(in srgb,var(--c,#5aa0ff) 22%,#0b1f3d),#0a1830 70%)!important}
@@ -3337,7 +3337,7 @@ html body #bPanel .vx{border-radius:12px!important}
 .v4-use img{width:34px;height:34px;object-fit:contain}.v4-use b{font:800 13.5px/1.1 var(--f-d)}.v4-use span{margin-left:auto;font:700 11.5px/1.2 var(--f-b);color:#bff5d4}.v4-use[disabled]{opacity:.4;cursor:default}
 .v4-gain .rl b{color:#ffe17b}.v4-gain .v4-coin,.v4-gain .v4-gemi{margin-right:2px}
 
-/* ---------- téléphone et tablette ---------- */
+/* ---------- phone and tablet ---------- */
 @media (min-width:1000px){html body .topbar .logo{display:none!important}html body .topbar-in{padding:8px 22px!important}}
 @media (max-width:999px){
  .v4-home{grid-template-columns:minmax(0,1fr)}.v4-aside{grid-column:1}
@@ -3379,7 +3379,7 @@ html body #bPanel .vx{border-radius:12px!important}
 @media (max-width:360px){.v4-wal.gem{display:none}}
 @media (prefers-reduced-motion:reduce){.mk-pulse{animation:none;opacity:.6}.v4-ms{animation:none}.v4-tile{transition:none}}
 
-/* ---------- écran de lancement ---------- */
+/* ---------- launch screen ---------- */
 html body #resonance-launch .rl-shade{background:linear-gradient(0deg,rgba(3,12,26,.92) 0%,rgba(3,14,30,.45) 38%,transparent 62%),linear-gradient(90deg,rgba(3,14,30,.55),transparent 55%)!important}
 html body #resonance-launch .rl-logo{display:grid!important;justify-items:start;gap:2px;margin:6px 0 12px!important;font-size:inherit!important;line-height:1!important;text-shadow:none!important;color:inherit!important}
 html body #resonance-launch .rl-logo .v4-rl-pk{display:block!important;margin:0!important;font:italic 900 clamp(50px,8.5vw,108px)/.92 var(--f-d)!important;letter-spacing:-.03em!important;text-transform:none!important;background:linear-gradient(180deg,#ffffff 10%,#fff3c4 55%,#ffd35a)!important;-webkit-background-clip:text!important;background-clip:text!important;color:transparent!important;filter:drop-shadow(0 3px 0 #0b2347) drop-shadow(0 10px 22px rgba(0,8,24,.7))!important;white-space:nowrap!important}
@@ -3392,15 +3392,15 @@ html body #resonance-launch .rl-enter{display:inline-flex!important;align-items:
 html body #resonance-launch .rl-kicker{font-family:var(--f-d)!important}
 @media (max-width:640px){html body #resonance-launch .rl-enter{width:100%!important;justify-content:flex-start!important;font-size:14px!important;letter-spacing:.06em!important;white-space:nowrap!important}html body #resonance-launch .rl-enter>span:not(.v4-rl-ic){white-space:nowrap}.v4-rl-ch{margin-left:auto}}
 
-/* ---------- performance : les illustrations ne flottent qu'au survol ----------
-   L'animation « artHover » tournait en boucle sur les 30 cartes et repeignait
-   la page 30 fois par seconde (≈ 27 % du processeur). */
+/* ---------- performance: illustrations float only on hover ----------
+   The "artHover" animation looped on all 30 cards and repainted
+   the page 30 times per second (≈ 27 % of the CPU). */
 html body #pokedex .fc-art img.pokemon-art-sprite{animation:none!important}
 @media (hover:hover) and (prefers-reduced-motion:no-preference){html body #pokedex .fcard:hover .fc-art img.pokemon-art-sprite{animation:artHover 2.4s ease-in-out infinite!important}}
 html body #pokedex .fcard .qa{color:#ffd75e!important;border-color:rgba(255,215,94,.5)!important}
 
 /* =====================================================================
-   v4.1 — illustrations des Pokémon partout, objets en image
+   v4.1 — Pokémon illustrations everywhere, items as images
    ===================================================================== */
 html body .medal.pk{overflow:visible!important}
 html body .medal.pk>svg{opacity:0!important}
@@ -3412,21 +3412,21 @@ html body .crest-pk{position:relative;display:block;width:100%;height:100%}
 html body .crest-pk>svg{width:100%;height:100%;display:block}
 html body .crest-pk.pk>svg>path{opacity:0}
 html body .crest-pk .crest-a{position:absolute;left:50%;top:50%;width:70%;height:70%;transform:translate(-50%,-52%);object-fit:contain;filter:drop-shadow(0 6px 10px rgba(0,0,0,.55));pointer-events:none}
-/* plateau */
+/* board */
 html body #bSvg .tok-im{pointer-events:none}
 html body #bSvg .tok.has-im>path{opacity:0}
 html body #bSvg .tok.has-im .tok-gloss{opacity:0}
 html body #bSvg .tok.ko .tok-im{opacity:.35}
 html body #bSvg .tok.enemy .tok-im{transform:scaleX(-1)}
-/* objets tenus */
+/* held items */
 html body .it-img{width:24px;height:24px;object-fit:contain;vertical-align:middle;flex:none}
 html body .it-ic .it-img{width:100%;height:100%}
 html body .ux.it .it-img{width:18px;height:18px;margin-right:4px}
 html body .rl .it-ic{display:grid;place-items:center;width:30px;height:30px}
-/* toasts : en haut sur téléphone, pour ne plus passer sous la barre « Fin du tour » */
+/* toasts: at the top on phone, so they no longer pass under the "Fin du tour" (End turn) bar */
 @media (max-width:999px){html body .toast{top:calc(64px + env(safe-area-inset-top,0px))!important;bottom:auto!important}}
 html body .toast{background:linear-gradient(180deg,#123462,#0a1f40)!important;border:1px solid rgba(120,210,255,.45)!important;border-radius:12px!important;color:#fff!important;box-shadow:0 12px 30px rgba(0,0,0,.45)!important}
-/* présentation du combat aux couleurs de la v4 */
+/* battle intro in v4 colors */
 html body .vs{background:#061327!important}
 html body .vs-l{background:radial-gradient(80% 70% at 100% 50%,rgba(70,160,255,.3),transparent 70%),linear-gradient(90deg,#071a33,#0d2c55)!important}
 html body .vs-r{background:radial-gradient(80% 70% at 0% 50%,color-mix(in srgb,var(--ac) 40%,transparent),transparent 70%),linear-gradient(270deg,#071a33,#14254a)!important}
@@ -3442,10 +3442,10 @@ html body .v4-dl img,html body .v4d-f img{image-rendering:auto!important;object-
 
 /* ==== 20-v4.4-aventure-plus.css ==== */
 /* =====================================================================
-   v4.4 : chromatiques, rival, boss légendaires, Tour de Résonance
+   v4.4: shinies, rival, legendary bosses, Resonance Tower
    ===================================================================== */
 
-/* --- Pokémon chromatiques : la teinte (--sh) est propre à chaque espèce --- */
+/* --- shiny Pokémon: the tint (--sh) is specific to each species --- */
 .shn-ic {
   width: 1em;
   height: 1em;
@@ -3509,7 +3509,7 @@ html body #bSvg .tok.shiny .tok-halo {
   color: #ffe9a3;
 }
 
-/* --- boss légendaire : liseré doré sur son jeton --- */
+/* --- legendary boss: golden edging on its token --- */
 html body #bSvg .tok.boss .tok-halo {
   stroke: #ffd75e;
   stroke-width: 2.4;
@@ -3522,7 +3522,7 @@ html body #bSvg .tok.boss .tok-rim {
   filter: drop-shadow(0 0 6px rgba(255, 215, 94, 0.55));
 }
 
-/* --- Tour de Résonance --- */
+/* --- Resonance Tower --- */
 .tdr-box {
   z-index: 92;
 }
@@ -3555,11 +3555,11 @@ html body #bSvg .tok.boss .tok-rim {
   color: #ffe17b;
 }
 .tdr-a {
-  /* le bouton reste visible pendant qu’on fait défiler les 8 Pokémon */
+  /* the button stays visible while the 8 Pokémon are scrolled */
   position: sticky;
-  bottom: -26px; /* jusqu’au bord de la carte (sa marge intérieure fait 26 px) */
+  bottom: -26px; /* up to the edge of the card (its inner margin is 26 px) */
   margin-bottom: -26px;
-  z-index: 9; /* au-dessus des illustrations qui débordent de leur médaillon */
+  z-index: 9; /* above the illustrations that overflow their medallion */
   display: flex;
   justify-content: center;
   margin-top: 14px;
@@ -3629,12 +3629,12 @@ html body #bSvg .tok.boss .tok-rim {
   }
 }
 
-/* --- onglets du choix de combat : un quatrième, « Après-jeu » --- */
+/* --- battle choice tabs: a fourth, "Après-jeu" (Postgame) --- */
 .sel-tabs {
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 @media (max-width: 560px) {
-  /* deux rangées de deux sur téléphone : les libellés restent lisibles */
+  /* two rows of two on phone: labels stay readable */
   .sel-tabs {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -3652,7 +3652,7 @@ html body #bSvg .tok.boss .tok-rim {
 
 /* ==== 21-v4.5-ordre-vitesse.css ==== */
 /* =====================================================================
-   v4.5 : frise de l'ordre par Vitesse (qui joue, dans quel ordre, cette manche)
+   v4.5: Speed order timeline (who plays, in what order, this round)
    ===================================================================== */
 html body #bOrdre[hidden] {
   display: none;
@@ -3732,8 +3732,8 @@ html body #bOrdre .bo em {
 
 /* ==== 22-v4.6-ct-cs.css ==== */
 /* =====================================================================
-   v4.6 : CT et CS (disques de la Boutique, fenêtre « Apprendre »),
-   choix du mode Libre dans l'accueil, rappel du mode Libre en rencontre
+   v4.6: TMs and HMs (Shop discs, "Apprendre" (Learn) window),
+   Free mode choice on the home page, Free mode reminder in encounters
    ===================================================================== */
 .ct-disc {
   display: grid;
@@ -3834,7 +3834,7 @@ html body #bOrdre .bo em {
 
 /* ==== 23-v4.7-plateau-vivant.css ==== */
 /* =====================================================================
-   v4.7 : Plateau vivant (teinte de l'heure, pastille, herbe qui va brûler)
+   v4.7: Living board (time-of-day tint, badge, grass about to burn)
    ===================================================================== */
 html body #bBoard .b-ciel {
   position: absolute;
@@ -3892,9 +3892,9 @@ html body #bBoard svg .fire-risk {
 
 /* ==== 24-v4.8-tactique.css ==== */
 /* =====================================================================
-   v4.8 : tactique (pièges, attaques chargées, vent, colosses)
+   v4.8: tactics (traps, charged attacks, wind, colossi)
    ===================================================================== */
-/* --- pièges : petite icône au bas de la case, couleur du camp qui l'a posé --- */
+/* --- traps: small icon at the bottom of the cell, color of the side that set it --- */
 html body #bSvg .trap path,
 html body #bSvg .trap circle {
   fill: none;
@@ -3914,7 +3914,7 @@ html body #bSvg .trap.web path {
 html body #bSvg .trap.web circle {
   stroke-width: 1;
 }
-/* --- attaques chargées : les cases visées, en doré pointillé --- */
+/* --- charged attacks: targeted cells, in dotted gold --- */
 html body #bSvg .h-charge {
   fill: rgba(255, 215, 94, 0.14);
   stroke: #ffd75e;
@@ -3933,7 +3933,7 @@ html body #bSvg .h-charge.gw {
 .bdg-s.st-vol text {
   fill: #ffd75e;
 }
-/* --- vent --- */
+/* --- wind --- */
 html body .chip-vent {
   white-space: nowrap;
 }
@@ -3949,7 +3949,7 @@ html body .chip-vent .vent-fl {
   stroke-linecap: round;
   stroke-linejoin: round;
 }
-/* --- colosses : le corps relie les parties ; les parties ont un liseré de pierre --- */
+/* --- colossi: the body links the parts; the parts have a stone edging --- */
 html body #bSvg .col-lien {
   stroke: rgba(201, 163, 90, 0.75);
   stroke-width: 11;
@@ -3968,13 +3968,13 @@ html body #bSvg .tok.colosse .tok-halo {
 
 /* ==== 25-v4.9-rejouabilite.css ==== */
 /* =====================================================================
-   v4.9 : mutateurs, défis de campagne, succès et titres
+   v4.9: mutators, campaign challenges, achievements and titles
    ===================================================================== */
 html body .chip-mut {
   white-space: nowrap;
   border-color: rgba(240, 164, 58, 0.55);
 }
-/* --- Paramètres : défis --- */
+/* --- Settings: challenges --- */
 html body .v4-fld select {
   min-height: 44px;
   padding: 0 12px;
@@ -3994,7 +3994,7 @@ html body .v4-sw.nz .nz-c {
 html body .nz-w {
   color: #ffb37a;
 }
-/* --- Quêtes : succès --- */
+/* --- Quests: achievements --- */
 html body .su-row {
   display: flex;
   align-items: center;
@@ -4067,14 +4067,14 @@ html body .su-ok {
   color: #ffd75e;
   font-weight: 800;
 }
-/* --- résultat --- */
+/* --- result --- */
 html body .res-l .rl.tombe {
   opacity: 0.8;
 }
 html body .res-l .rl.succ b:last-child {
   color: #ffd75e;
 }
-/* --- Quêtes : 4 onglets qui tiennent sur un téléphone --- */
+/* --- Quests: 4 tabs that fit on a phone --- */
 html body #quetes .v4-tabs {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -4092,9 +4092,9 @@ html body #quetes .v4-tabs button {
 
 /* ==== 26-v4.10-identite.css ==== */
 /* =====================================================================
-   v4.10 : Accords de Résonance, caractère, camp de base, expéditions
+   v4.10: Resonance Chords, character, base camp, expeditions
    ===================================================================== */
-/* --- pastille des accords --- */
+/* --- chord badge --- */
 html body .chip-acc {
   white-space: nowrap;
   max-width: 100%;
@@ -4112,7 +4112,7 @@ html body .chip-acc.fait {
   background: rgba(255, 215, 94, 0.16);
   color: #ffe17b;
 }
-/* --- Guide : la liste des accords --- */
+/* --- Guide: the chord list --- */
 html body .acc-codex {
   margin-top: 18px;
   display: grid;
@@ -4144,12 +4144,12 @@ html body .acc-t i {
   height: 12px;
   border-radius: 50%;
 }
-/* --- fiche : caractère --- */
+/* --- sheet: character --- */
 html body .car-mvc .chip {
   background: rgba(150, 200, 255, 0.16);
   color: #a9d4ff;
 }
-/* --- Accueil : camp de base --- */
+/* --- Home: base camp --- */
 html body .camp4 {
   margin: 16px 0;
   padding: 14px;
@@ -4229,7 +4229,7 @@ html body .cb-x small {
   font-size: 12px;
   color: var(--mut, #9fb0c4);
 }
-/* --- fenêtre d'expédition --- */
+/* --- expedition window --- */
 html body .exp-box {
   z-index: 92;
 }
@@ -4272,7 +4272,7 @@ html body .exp-d em {
 
 /* ==== 27-v4.11-monde.css ==== */
 /* =====================================================================
-   v4.11 : saisons, rediffusion, Team Dissonance
+   v4.11: seasons, rebroadcast, Team Dissonance
    ===================================================================== */
 html body .v4-saison[hidden] {
   display: none;
@@ -4334,7 +4334,7 @@ html body .sa-ok {
     flex-wrap: wrap;
   }
 }
-/* la route prend les couleurs de la saison */
+/* the route takes on the colors of the season */
 html body #route[data-saison='halloween'] {
   box-shadow: inset 0 0 140px rgba(120, 60, 200, 0.45);
 }
@@ -4347,7 +4347,7 @@ html body #route[data-saison='printemps'] {
 html body #route[data-saison='ete'] {
   box-shadow: inset 0 0 140px rgba(255, 170, 60, 0.3);
 }
-/* résultat : le meilleur coup */
+/* result: the best move */
 html body .res-l .rl.rd {
   align-items: center;
 }
@@ -4357,11 +4357,11 @@ html body .res-l .rl.rd span {
 html body .res-l .rl > b:last-child {
   white-space: nowrap;
 }
-/* ===== couche resonance-v421 ===== */
-/* ==== v4.21 : capture partout ==== */
+/* ===== resonance-v421 layer ===== */
+/* ==== v4.21: capture everywhere ==== */
 html body .fc-art .fc-lock i{display:block;font-style:normal;font-size:8px;letter-spacing:.12em;opacity:.8;margin-top:1px}
-/* ===== couche resonance-v420 ===== */
-/* ==== v4.20 : combats plus intenses ==== */
+/* ===== resonance-v420 layer ===== */
+/* ==== v4.20: more intense battles ==== */
 html body #bSvg .danger420 circle {
   fill: rgba(239, 68, 68, 0.22);
   stroke: #ef4444;
@@ -4440,12 +4440,12 @@ html body #bSvg .tok.dg420 .tok-rim {
     animation: none;
   }
 }
-/* ===== couche resonance-v419 ===== */
-/* ==== v4.19 : Hoenn ==== */
+/* ===== resonance-v419 layer ===== */
+/* ==== v4.19: Hoenn ==== */
 .v4-map-st:not([data-reg="hoenn"]) .map-svg.map-h{display:none}
 .v4-map-st[data-reg="hoenn"] .map-svg:not(.map-h){display:none}
-/* ===== couche resonance-v418 ===== */
-/* ==== v4.18 : pêche, Parc Safari, coop ==== */
+/* ===== resonance-v418 layer ===== */
+/* ==== v4.18: fishing, Safari Park, co-op ==== */
 html body .pe-card,
 html body .sf-card {
   text-align: center;
@@ -4579,7 +4579,7 @@ html body .sf-msg {
   margin: 8px 0 0;
   font-size: 14px;
 }
-/* coop : les jetons des deux joueurs */
+/* co-op: the tokens of both players */
 html body #bSvg .tok.cj1 .tok-rim {
   stroke: #5fb8ff;
   stroke-width: 2.6;
@@ -4591,9 +4591,9 @@ html body #bSvg .tok.cj2 .tok-rim {
 html body #bSvg .tok.cjoff {
   opacity: 0.55;
 }
-/* ===== couche resonance-v417 ===== */
-/* ==== v4.17 : compagnons et Résonance ==== */
-/* --- Forme Résonante --- */
+/* ===== resonance-v417 layer ===== */
+/* ==== v4.17: companions and Resonance ==== */
+/* --- Resonant Form --- */
 html body .fres-b {
   margin-top: 8px;
   border-color: rgba(201, 166, 255, 0.55) !important;
@@ -4648,7 +4648,7 @@ html body #bSvg .tok.fres .tok-rim {
   }
 }
 
-/* --- compagnon --- */
+/* --- companion --- */
 html body .v4-comp {
   margin: 14px 0;
   padding: 12px 14px;
@@ -4782,7 +4782,7 @@ html body .cp-bl span {
   color: var(--v4-tx2, #9fb0c4);
 }
 
-/* --- Pokématos --- */
+/* --- Pokégear --- */
 html body .v4-radio {
   margin: 14px 0;
   padding: 12px 14px;
@@ -4826,7 +4826,7 @@ html body .rd-i em {
   line-height: 1.4;
 }
 
-/* --- scènes d’histoire --- */
+/* --- story scenes --- */
 html body .scene417 {
   position: fixed;
   inset: 0;
@@ -4881,7 +4881,7 @@ html body .sc-a .sc-n {
   color: var(--v4-tx2, #9fb0c4);
 }
 
-/* --- Potager --- */
+/* --- Garden --- */
 html body .pt-g {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -4988,7 +4988,7 @@ html body .pt-pl.s4::after {
     #6cc24a;
 }
 
-/* --- tournoi entre amis --- */
+/* --- tournament between friends --- */
 html body .tn-c {
   display: flex;
   align-items: center;
@@ -5018,8 +5018,8 @@ html body .cp-t .cp-h {
   gap: 3px;
   justify-content: flex-start;
 }
-/* ===== couche resonance-v4161 ===== */
-/* ==== v4.16.1 : carte « Nouveau » de l’Accueil ==== */
+/* ===== resonance-v4161 layer ===== */
+/* ==== v4.16.1: "Nouveau" (New) card on the Home page ==== */
 html body .v4-news {
   margin: 14px 0;
   padding: 12px 14px;
@@ -5092,9 +5092,9 @@ html body .nw-go {
   height: 16px;
   opacity: 0.7;
 }
-/* ===== couche resonance-v416 ===== */
-/* ==== v4.16 : Johto vivant ==== */
-/* --- Accueil : défis entre amis --- */
+/* ===== resonance-v416 layer ===== */
+/* ==== v4.16: living Johto ==== */
+/* --- Home: challenges between friends --- */
 html body .v4-amis {
   margin: 16px 0;
   padding: 14px;
@@ -5252,7 +5252,7 @@ html body .am-err {
   color: #ffb4a8;
 }
 
-/* --- Pension : le couple --- */
+/* --- Day Care: the couple --- */
 html body .pe-row {
   display: flex;
   align-items: center;
@@ -5309,7 +5309,7 @@ html body .res-egg {
   vertical-align: middle;
 }
 
-/* --- Pokémon Dominants --- */
+/* --- Dominant Pokémon --- */
 html body .dom-cr {
   width: 1.1em;
   height: 1.1em;
@@ -5345,7 +5345,7 @@ html body #bSvg .tok.dom .tok-rim {
   stroke-width: 2.6;
 }
 
-/* --- carte : bêtes errantes --- */
+/* --- map: roaming beasts --- */
 html body .mk[data-place='rraikou'] .mk-ic,
 html body .mk[data-place='rentei'] .mk-ic,
 html body .mk[data-place='rsuicune'] .mk-ic {
@@ -5389,7 +5389,7 @@ html body .v4-rew .rm-hp i {
   z-index: -1;
 }
 
-/* médaillon de légende dans un petit emblème (carte, fiche de lieu) */
+/* legend medallion in a small emblem (map, location sheet) */
 html body .emb.lgd.xs .medal,
 html body .mk-ic .emb.lgd .medal {
   width: 100% !important;
@@ -5398,15 +5398,15 @@ html body .mk-ic .emb.lgd .medal {
 html body .emb.lgd.xs {
   overflow: visible;
 }
-/* ===== couche resonance-v415 ===== */
-/* v4.15 : Johto */
+/* ===== resonance-v415 layer ===== */
+/* v4.15: Johto */
 .v4-reg{display:inline-flex;gap:4px;margin-top:12px;padding:4px;border-radius:999px;background:rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.1)}
 .v4-reg button{font:inherit;font-size:13px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:7px 16px;border-radius:999px;border:0;background:transparent;color:var(--tx2);cursor:pointer}
 .v4-reg button[aria-selected="true"]{background:linear-gradient(180deg,#F3D27E,#D9A945);color:#1a1405}
 .v4-map-st:not([data-reg="johto"]) .map-svg.map-j{display:none}
 .v4-map-st[data-reg="johto"] .map-svg:not(.map-j){display:none}
-/* ===== couche resonance-v414 ===== */
-/* v4.14 : rangs, attaques Expertes, notes de Résonance, boutique */
+/* ===== resonance-v414 layer ===== */
+/* v4.14: ranks, Expert attacks, Resonance notes, shop */
 .rg{display:inline-block;font-size:.72em;letter-spacing:-.02em;line-height:1;vertical-align:.12em;font-weight:800;white-space:nowrap}
 .rg-faible{color:#9FD8A0}.rg-moyen{color:#7EC4FF}.rg-fort{color:#FFB25E}.rg-expert{color:#DDB0FF;text-shadow:0 0 6px rgba(200,140,255,.55)}
 .bp-id b .rg{margin-left:3px}
@@ -5445,13 +5445,13 @@ html body .emb.lgd.xs {
 .v4-it.own{opacity:.75}
 .reso-codex .acc-t.rg{font-size:13px;min-width:4.2em}
 .bp-reso{font-size:13px;color:#E6D2FF;padding:8px 12px;margin:8px 0;border-left:2px solid #B48CFF;background:linear-gradient(90deg,rgba(180,140,255,.12),transparent)}
-/* ===== couche resonance-v412 ===== */
+/* ===== resonance-v412 layer ===== */
 /* =====================================================================
    v4.12
-   1. Zone de menace : la portée d'un adversaire touché (pas une annonce).
-   2. Fenêtres : le cadre défile toujours sur téléphone ; la rencontre
-      sauvage garde ses boutons visibles et son médaillon s'adapte à la
-      hauteur de l'écran (avant : boutons coupés, impossible de descendre).
+   1. Threat zone: the range of a struck opponent (not an announcement).
+   2. Windows: the frame always scrolls on phone; the wild encounter
+      keeps its buttons visible and its medallion adapts to the
+      screen height (before: buttons cut off, impossible to scroll down).
    ===================================================================== */
 .h-presc{fill:rgba(249,85,135,.1);stroke:rgba(249,85,135,.75);stroke-width:1.1;stroke-dasharray:2 2.5;pointer-events:none}
 .h-presc.now{fill:rgba(249,85,135,.2)}
@@ -5468,14 +5468,14 @@ html body .emb.lgd.xs {
 .enc .enc-card{margin:auto 0;max-height:none;overflow:visible;flex:none}
 .enc .enc-cr{width:min(100%,max(130px,calc(100vh - 470px)));width:min(100%,max(130px,calc(100dvh - 470px)))}
 .enc .enc-a{position:sticky;bottom:-20px;z-index:2;width:calc(100% + 24px);margin:4px -12px -14px;padding:12px 12px 14px;border-radius:0 0 22px 22px;background:linear-gradient(180deg,rgba(6,24,38,0),rgba(6,24,38,.94) 26%,rgba(5,20,33,.98))}
-/* ===== couche resonance-demarrage ===== */
-/* Rechargement dans la même session : pas d'écran titre, et l'accueil n'apparaît
-   qu'une fois construit (sinon on voyait l'ancienne mise en page quelques instants). */
+/* ===== resonance-startup layer ===== */
+/* Reload within the same session: no title screen, and the home page only appears
+   once built (otherwise the old layout was visible for a moment). */
 .rl-seen:not(.rl-pret) .app{visibility:hidden}
-/* ===== couche resonance-v421-premium ===== */
+/* ===== resonance-v421-premium layer ===== */
 /* ==========================================================
-   POKÉMON RÉSONANCE v4.21 — couche DA uniquement
-   Aucun état, règle, calcul, événement ou mécanisme de jeu modifié.
+   POKÉMON RÉSONANCE v4.21 — art direction layer only.
+   No state, rule, calculation, event or game mechanism modified.
    ========================================================== */
 :root{
   --pr-ink:#07121d;--pr-deep:#091b2b;--pr-panel:rgba(11,31,48,.88);
@@ -5541,7 +5541,7 @@ html body a:focus-visible{
   outline:2px solid var(--pr-cyan)!important;outline-offset:3px;
   box-shadow:0 0 0 5px rgba(115,217,244,.15)!important;
 }
-/* Accueil : sensation de tableau de bord d'aventure */
+/* Home: adventure dashboard feel */
 html body #accueil .hm-hero{
   position:relative;overflow:hidden;
   border:1px solid rgba(151,210,236,.25)!important;
@@ -5563,7 +5563,7 @@ html body #accueil .qk{
 html body #accueil .qk-ic{
   filter:drop-shadow(0 5px 12px rgba(0,0,0,.38));
 }
-/* Exploration : scène plus profonde, l'illustration SVG du jeu reste intacte */
+/* Exploration: deeper scene, the game's SVG illustration stays intact */
 html body #route{
   overflow:hidden;border-radius:22px!important;
   border:1px solid rgba(145,205,230,.28)!important;
@@ -5582,7 +5582,7 @@ html body #route .rt-sign{
   border:1px solid rgba(255,255,255,.25);
   backdrop-filter:blur(8px);
 }
-/* Arènes : chaque environnement garde ses couleurs et ses règles propres */
+/* Gyms: each environment keeps its own colors and rules */
 html body #bArena{
   position:relative;overflow:hidden;isolation:isolate;
   border:1px solid rgba(244,204,112,.35)!important;border-radius:15px!important;
@@ -5605,7 +5605,7 @@ html body .badges>*{
   transition:transform .2s var(--pr-ease),filter .2s var(--pr-ease);
 }
 html body .badges>*:hover{transform:translateY(-3px);filter:brightness(1.12)}
-/* Plateau de combat : scène, sol et profondeur sans toucher au SVG tactique */
+/* Battle board: scene, floor and depth without touching the tactical SVG */
 html body .bt{
   border-radius:22px!important;
   background:linear-gradient(145deg,rgba(12,34,51,.97),rgba(4,15,25,.99))!important;
@@ -5632,7 +5632,7 @@ html body .evofx{
   backdrop-filter:blur(8px);
   background:radial-gradient(ellipse,rgba(255,246,190,.2),rgba(4,14,24,.88))!important;
 }
-/* Pokédex : galerie de collection, artwork mis en valeur */
+/* Pokédex: collection gallery, artwork showcased */
 html body #dex4Card{
   border:1px solid color-mix(in srgb,var(--c,#73d9f4) 38%,transparent)!important;
   border-radius:22px!important;overflow:hidden;
@@ -5672,7 +5672,7 @@ html body .v4d-f{
   border-radius:13px!important;
 }
 html body .v4d-f.on{border-color:var(--pr-gold)!important;box-shadow:0 0 20px rgba(244,204,112,.14)}
-/* Fiches, listes, panneaux : lisibilité et relief */
+/* Sheets, lists, panels: readability and relief */
 html body .v4-ph,html body .case-h,html body .v4d-sec h3{
   border-color:rgba(150,205,228,.16)!important;
 }
@@ -5684,7 +5684,7 @@ html body .v4d-m{transition:background .2s ease,border-color .2s ease}
 html body .v4d-m:hover{background:rgba(25,62,83,.7)!important;border-color:rgba(115,217,244,.3)!important}
 
 
-/* États chromatiques : véritables artworks shiny, aura plus discrète */
+/* Shiny states: real shiny artworks, subtler aura */
 html body #dex4Card.shiny .v4d-art{
   background:
    radial-gradient(ellipse at 50% 55%,rgba(255,221,128,.28),transparent 58%),
@@ -5702,7 +5702,7 @@ html body .v4d-shn{
   background:rgba(47,36,15,.86)!important;
   box-shadow:0 0 18px rgba(255,214,112,.18);
 }
-/* Navigation et petites touches de finition */
+/* Navigation and small finishing touches */
 html body .bnav,html body .side,html body .topbar{
   backdrop-filter:blur(18px) saturate(1.25);
 }
@@ -5728,8 +5728,8 @@ html body .shn-ic{animation:prGlow 2.8s ease-in-out infinite}
  html body #bBoard{border-radius:13px!important}
  html body #dex4Card .v4d-art{min-height:210px}
 }
-/* ===== couche resonance-v422-director-cut ===== */
-/* RESONANCE 4.22 — direction artistique par écran : aucun changement aux règles ou aux données */
+/* ===== resonance-v422-director-cut layer ===== */
+/* RESONANCE 4.22 — per-screen art direction: no change to rules or data */
 :root{--r22-ink:#07121d;--r22-deep:#091b2a;--r22-panel:#102638;--r22-line:rgba(153,211,231,.19);--r22-cyan:#71e4ed;--r22-gold:#f3c66d;--r22-white:#f2f7fa}
 body{background:radial-gradient(ellipse at 50% -18%,rgba(47,112,145,.22),transparent 55%),linear-gradient(180deg,#07131f 0%,#080e18 55%,#060b12 100%)!important;color:var(--r22-white)}
 .page{position:relative}
@@ -5740,7 +5740,7 @@ body{background:radial-gradient(ellipse at 50% -18%,rgba(47,112,145,.22),transpa
 .page .kick,.v4-kick{letter-spacing:.2em!important;text-transform:uppercase!important;color:var(--r22-cyan)!important;font-weight:800!important;font-size:10px!important}
 .page .h1{font-size:clamp(30px,4vw,48px)!important;line-height:1.02!important;letter-spacing:-.012em!important;text-shadow:0 8px 30px #000}
 .page .sub{color:#a9bfcb!important;max-width:720px;font-size:14px!important;line-height:1.7!important}
-/* ACCUEIL — tableau de bord d'aventure, lumière de région */
+/* HOME — adventure dashboard, regional lighting */
 #accueil{isolation:isolate}
 #accueil:before{content:"";position:absolute;z-index:-1;inset:-30px -5vw 35%;pointer-events:none;background:radial-gradient(ellipse at 16% 12%,rgba(48,147,167,.22),transparent 42%),radial-gradient(ellipse at 82% 20%,rgba(227,166,76,.13),transparent 36%),linear-gradient(135deg,transparent 40%,rgba(105,183,197,.035) 40.2%,transparent 40.5%);mask-image:linear-gradient(#000,transparent)}
 #accueil .v4-home{gap:22px!important}
@@ -5763,7 +5763,7 @@ body{background:radial-gradient(ellipse at 50% -18%,rgba(47,112,145,.22),transpa
 #accueil .v4-tile:hover{transform:translateY(-5px) scale(1.012);border-color:rgba(113,228,237,.6)!important;filter:saturate(1.15)}
 #accueil .v4t-tx b{text-shadow:0 3px 16px #000}
 #accueil .v4-bottom{gap:16px!important}
-/* CARTE — atlas de région, panneau cartographique */
+/* MAP — regional atlas, cartographic panel */
 #carte .v4-ph-page{max-width:850px}
 #carte .v4-reg{display:flex;gap:8px;margin:18px 0 24px;padding:6px;width:max-content;max-width:100%;border:1px solid rgba(125,206,220,.2);border-radius:15px;background:rgba(5,18,29,.78);box-shadow:inset 0 1px rgba(255,255,255,.05)}
 #carte .v4-reg button{border-radius:10px!important;padding:11px 22px!important;color:#9bb4c1!important;letter-spacing:.1em;text-transform:uppercase;font-size:10px;font-weight:900}
@@ -5778,7 +5778,7 @@ body{background:radial-gradient(ellipse at 50% -18%,rgba(47,112,145,.22),transpa
 #carte .v4-map-side .v4-panel{border:1px solid rgba(123,208,222,.22)!important;border-radius:20px!important;background:linear-gradient(155deg,#132e3d,#0a1925)!important;box-shadow:0 18px 42px rgba(0,0,0,.27)!important}
 #carte .v4-wild{margin-top:24px;padding:18px;border-radius:22px;border:1px solid rgba(123,208,222,.18);background:linear-gradient(110deg,rgba(20,59,55,.45),rgba(8,25,32,.8))}
 #carte .v4-sec-h{color:#c7e8df!important}
-/* EQUIPE / POKÉDEX — écran de sélection façon Pokédex de collection */
+/* TEAM / POKÉDEX — collector's-Pokédex-style selection screen */
 #pokedex .v4-dex{gap:18px!important;align-items:stretch}
 #pokedex .v4-dexcard{border:1px solid rgba(139,214,227,.3)!important;border-radius:26px!important;background:radial-gradient(ellipse at 28% 12%,color-mix(in srgb,var(--c,#69d5d5) 18%,transparent),transparent 48%),linear-gradient(155deg,#142e3d,#091923 78%)!important;box-shadow:0 28px 65px rgba(0,0,0,.36),inset 0 1px rgba(255,255,255,.1)!important;overflow:hidden}
 #pokedex .v4d-top{padding:clamp(20px,3vw,34px)!important;position:relative}
@@ -5795,7 +5795,7 @@ body{background:radial-gradient(ellipse at 50% -18%,rgba(47,112,145,.22),transpa
 #pokedex .v4-dl{border-bottom:1px solid rgba(139,214,227,.1)!important;transition:background .2s}
 #pokedex .v4-dl:hover,#pokedex .v4-dl.on{background:linear-gradient(90deg,rgba(72,164,181,.2),transparent)!important}
 #pokedex .dock{border:1px solid rgba(139,214,227,.2)!important;background:linear-gradient(120deg,#122e3e,#0a1b28)!important;border-radius:20px!important}
-/* COMBAT — salle tactique, plateau mis en scène */
+/* BATTLE — tactical room, staged board */
 #combat .ph-sm{max-width:900px}
 #combat .sel{border:1px solid rgba(130,213,225,.23)!important;border-radius:24px!important;background:linear-gradient(145deg,rgba(16,43,59,.96),rgba(7,19,29,.98))!important;box-shadow:0 28px 65px rgba(0,0,0,.34)!important;overflow:hidden}
 #combat .sel-tabs{padding:12px!important;background:rgba(3,13,21,.48)!important;border-bottom:1px solid rgba(130,213,225,.15)}
@@ -5814,7 +5814,7 @@ body{background:radial-gradient(ellipse at 50% -18%,rgba(47,112,145,.22),transpa
 #combat .blog{border:1px solid rgba(130,213,225,.16)!important;border-radius:16px!important;background:rgba(7,22,32,.92)!important}
 #combat .plates{filter:drop-shadow(0 8px 8px rgba(0,0,0,.3))}
 #combat .evopick,#combat .result{border:1px solid rgba(242,198,109,.38)!important;border-radius:22px!important;background:radial-gradient(ellipse at 50% 0%,rgba(242,198,109,.13),transparent 65%),linear-gradient(145deg,#172e3a,#091923)!important;box-shadow:0 30px 80px rgba(0,0,0,.5)!important}
-/* GUIDE & LIGUE — atlas de stratégie et salle des badges */
+/* GUIDE & LEAGUE — strategy atlas and badge room */
 #types .gd-tabs{padding:7px;border:1px solid rgba(130,213,225,.18);border-radius:16px;background:rgba(5,19,29,.78)}
 #types .gd-t{border-radius:11px!important}
 #types .gd-t[aria-selected=true]{background:linear-gradient(135deg,#24596c,#142e40)!important;color:#e8fbff!important}
@@ -5824,7 +5824,7 @@ body{background:radial-gradient(ellipse at 50% -18%,rgba(47,112,145,.22),transpa
 #ligue .badges>*{transition:transform .22s,filter .22s}
 #ligue .badges>*:hover{transform:translateY(-5px);filter:drop-shadow(0 9px 12px rgba(242,198,109,.24))}
 #ligue .arena,#ligue .elite-case{border:1px solid rgba(242,198,109,.22)!important;border-radius:20px!important;background:linear-gradient(145deg,#152c39,#091923)!important}
-/* Cohérence globale, focus et adaptation mobile */
+/* Global consistency, focus and mobile adaptation */
 button,a,.v4-panel,.panel,.tcard{transition-timing-function:cubic-bezier(.2,.75,.2,1)}
 button:focus-visible,a:focus-visible{outline:2px solid var(--r22-cyan)!important;outline-offset:3px}
 @media(max-width:760px){
@@ -5841,7 +5841,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--r22-cyan)!important
  #pokedex .v4d-art{min-height:220px!important}
 }
 @media(prefers-reduced-motion:reduce){.page.on,#accueil .v4-hero:after{animation:none!important}*{scroll-behavior:auto!important;transition-duration:.01ms!important}}
-/* ===== couche resonance-v423-full-art-direction ===== */
+/* ===== resonance-v423-full-art-direction layer ===== */
 /* POKEMON RESONANCE 4.23 — full-screen art direction. Visual layer only. */
 :root{
  --rx-bg:#06111c;--rx-panel:#0d2232;--rx-panel2:#132e40;--rx-edge:rgba(126,211,224,.24);
@@ -5986,13 +5986,13 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--rx-cyan)!important;
  .page.on,#accueil .hm-hero:after{animation:none!important}
  *,*:before,*:after{scroll-behavior:auto!important;transition-duration:.01ms!important}
 }
-/* ===== couche resonance-v424-selector-repair ===== */
+/* ===== resonance-v424-selector-repair layer ===== */
 /*
-  v4.24 — CORRECTION D'APPLICATION
-  La v4.23 ciblait encore .hm-hero/.hm-quick après que le script v4
-  a déplacé ces éléments et leur a donné les classes .v4-hero/.v4-tiles.
-  Cette feuille vise les classes réellement présentes après initialisation.
-  Présentation uniquement : aucune donnée, règle ou interaction modifiée.
+  v4.24 — APPLICATION FIX
+  v4.23 still targeted .hm-hero/.hm-quick after the v4 script
+  moved those elements and gave them the .v4-hero/.v4-tiles classes.
+  This stylesheet targets the classes actually present after initialization.
+  Presentation only: no data, rule or interaction modified.
 */
 :root{
  --r24-bg:#06111c;--r24-panel:#102b3d;--r24-edge:rgba(128,221,230,.34);
@@ -6017,7 +6017,7 @@ body{
 .page .ph .kick{color:var(--r24-cyan)!important;letter-spacing:.22em!important;font-weight:900!important}
 .page .ph .sub{color:#b4cbd6!important;line-height:1.7!important}
 
-/* ACCUEIL — vrai conteneur après déplacement JS : .v4-hero */
+/* HOME — real container after JS move: .v4-hero */
 #accueil .v4-home{gap:20px!important}
 #accueil .v4-hero{
  position:relative!important;isolation:isolate!important;overflow:hidden!important;
@@ -6067,7 +6067,7 @@ body{
 #accueil .v4-st{padding:15px!important;border-radius:14px!important;transition:background .2s,transform .2s!important}
 #accueil .v4-st:hover{background:rgba(131,240,239,.09)!important;transform:translateY(-2px)!important}
 
-/* ÉQUIPE / DEX — cartes de collection avec cadre et profondeur */
+/* TEAM / DEX — collection cards with frame and depth */
 #pokedex .fam-grid{gap:18px!important}
 #pokedex .fcard{
  position:relative!important;overflow:hidden!important;border:1px solid rgba(131,220,230,.32)!important;border-radius:22px!important;
@@ -6081,7 +6081,7 @@ body{
 #pokedex .fcard .fc-name{font-weight:900!important;letter-spacing:.01em!important}
 #pokedex .fcard .fc-stg{border-top:1px solid rgba(131,240,239,.2)!important;background:linear-gradient(180deg,rgba(6,21,32,.88),#06131e)!important}
 
-/* CARTE — route réellement déplacée dans #carte par buildMap() */
+/* MAP — route actually moved into #carte by buildMap() */
 #carte .v4-map-wrap{gap:20px!important}
 #carte .v4-map{border:1px solid rgba(131,226,232,.42)!important;border-radius:28px!important;padding:13px!important;background:linear-gradient(145deg,#1b4253,#071824)!important;box-shadow:0 32px 82px rgba(0,0,0,.48),inset 0 1px rgba(255,255,255,.12)!important}
 #carte .v4-map-sc{overflow:hidden!important;border-radius:19px!important}
@@ -6093,7 +6093,7 @@ body{
 #carte .route{border:1px solid rgba(131,221,230,.32)!important;border-radius:24px!important;box-shadow:0 28px 65px rgba(0,0,0,.42)!important;overflow:hidden!important}
 #carte .route .rt-ui{filter:drop-shadow(0 5px 12px rgba(0,0,0,.4))}
 
-/* COMBAT — les deux états : préparation et plateau en cours */
+/* BATTLE — both states: preparation and board in progress */
 #combat .sel{border:1px solid rgba(131,226,232,.4)!important;border-radius:27px!important;background:radial-gradient(ellipse at 10% 0%,rgba(67,157,177,.15),transparent 50%),linear-gradient(145deg,#173b4e,#071722)!important;box-shadow:0 32px 78px rgba(0,0,0,.48),inset 0 1px rgba(255,255,255,.1)!important}
 #combat .scn{border:1px solid rgba(131,221,230,.2)!important;border-radius:17px!important;background:linear-gradient(150deg,#15374a,#091b28)!important;box-shadow:0 10px 24px rgba(0,0,0,.22)!important;transition:transform .2s,border-color .2s,box-shadow .2s!important}
 #combat .scn:hover{transform:translateY(-3px)!important;border-color:rgba(131,240,239,.55)!important}
@@ -6114,22 +6114,22 @@ body{
 @media(prefers-reduced-motion:reduce){
  #accueil .v4-hero:after{animation:none!important}
 }
-/* ===== couche resonance-v425 ===== */
+/* ===== resonance-v425 layer ===== */
 /* ==========================================================
-   v4.25 — mise en application de la DA de ChatGPT (couches
-   v4.21 premium → v4.24 selector repair, juste au-dessus).
-   Leur code est repris tel quel ; cette feuille ne fait que :
-   1. imposer ce que les règles du jeu bloquaient encore,
-   2. garder ce qui fait l'identité du jeu (couleur des types,
-      décor de chaque arène, états « dans l'équipe »),
-   3. alléger le mobile.
+   v4.25 — applying ChatGPT's art direction (layers
+   v4.21 premium → v4.24 selector repair, just above).
+   Their code is taken as is; this stylesheet only:
+   1. enforces what the game rules were still blocking,
+   2. keeps what makes the game's identity (type colors,
+      each gym's decor, "in the team" states),
+   3. lightens mobile.
    ========================================================== */
 
-/* 1. cartes de collection : le grand arrondi et le cadre intérieur
-      voulus par la v4.24 (le fond garde la couleur du type) */
+/* 1. collection cards: the large rounding and inner frame
+      wanted by v4.24 (the background keeps the type color) */
 html:is(:root,#r9) body #pokedex .fcard{border-radius:22px!important;overflow:hidden!important}
 
-/* 2. chromatiques : vraie illustration shiny (chargée par le jeu), sans la teinte artificielle */
+/* 2. shinies: real shiny artwork (loaded by the game), without the artificial tint */
 html:is(:root,#r9) body #dex4Card.shiny .v4d-art img.art-sh,
 html:is(:root,#r9) body .v4-dl.shiny img.art-sh,
 html:is(:root,#r9) body .enc-card.shiny .enc-cr img.art-sh,
@@ -6137,34 +6137,34 @@ html:is(:root,#r9) body .pe-prise.shiny img.art-sh{
   filter:drop-shadow(0 0 12px rgba(255,224,139,.52)) drop-shadow(0 10px 12px rgba(0,0,0,.35))!important;
 }
 
-/*    hors ligne ou en attendant le chargement : la teinte chromatique du jeu reste visible
-      (les couches v4.23 posaient une ombre seule sur ces images et effaçaient la teinte) */
+/*    offline or while loading: the game's shiny tint stays visible
+      (the v4.23 layers put a lone shadow on these images and erased the tint) */
 html:is(:root,#r9) body #dex4Card.shiny .v4d-art img:not(.art-sh),
 html:is(:root,#r9) body .v4-dl.shiny img:not(.art-sh),
 html:is(:root,#r9) body .enc-card.shiny .enc-cr img:not(.art-sh){
   filter:hue-rotate(var(--sh,120deg)) saturate(1.25) drop-shadow(0 0 8px rgba(255,233,160,.55)) drop-shadow(0 10px 12px rgba(0,0,0,.35))!important;
 }
 
-/*    accueil : le halo de la v4.22 débordait de 5 % à droite (la page glissait de côté sur téléphone) */
+/*    home: the v4.22 halo overflowed by 5 % on the right (the page slid sideways on phone) */
 html:is(:root,#r9) body #accueil:before{left:0!important;right:0!important}
 
-/* 4. Accueil : chaque illustration entière dans sa carte (plus de Pokémon coupé au bord) */
+/* 4. Home: each illustration whole inside its card (no more Pokémon cut off at the edge) */
 html:is(:root,#r9) body #accueil .v4-mon{min-height:124px}
 html:is(:root,#r9) body #accueil .v4-mon img{right:4px;top:4px;width:78px;height:78px}
 html:is(:root,#r9) body #accueil .v4t-art{right:6px;top:6px;width:min(58%,132px)}
 html:is(:root,#r9) body #accueil .v4t-item.i2{right:12px;top:14px}
 
-/* 3. mobile : en-têtes plus compacts, le filet cyan reste */
+/* 3. mobile: more compact headers, the cyan rule stays */
 @media(max-width:700px){
  html body .page .ph:after{margin-top:12px;width:84px}
  html body #carte .v4-reg{margin:12px 0 16px}
 }
-/* ===== couche resonance-v427 ===== */
+/* ===== resonance-v427 layer ===== */
 html body .v4-dl{position:relative}html body .v4-dl b{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}@media(max-width:480px){html body #dex .v4-dl{gap:5px;padding-right:6px}html body #dex .v4-dl img{width:42px!important;height:42px!important}html body #dex .v4-dl b{font-size:13px;letter-spacing:-.01em}html body #dex .v4-dl-no{font-size:11px}}html body .v4-dl img{flex:none}html body .v4-dl-lk{position:absolute;right:7px;top:7px;width:11px!important;height:11px!important;opacity:.85}
-/* ===== couche resonance-v428 ===== */
-/* ==== v4.28 : suivi des captures, combat rapide, Accueil vivant ==== */
+/* ===== resonance-v428 layer ===== */
+/* ==== v4.28: capture tracking, quick battle, living Home ==== */
 
-/* --- Accueil vivant : la scène (région + moment de la journée) et le compagnon --- */
+/* --- living Home: the scene (region + time of day) and the companion --- */
 html:is(:root,#r9) body #accueil .v4-hero.hv428on{background:#081a2a!important}
 html body #accueil .v4-hero .hv428{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;border-radius:inherit}
 html body #accueil .v4-hero .hv428>span{position:absolute;inset:0}
@@ -6203,7 +6203,7 @@ html body #accueil .v4-hero .hv428-comp.pop:after{content:"♥";position:absolut
  html body #accueil .v4-hero .hv428-comp img,html body #accueil .v4-hero .hv428-sol,html body #accueil .v4-hero[data-tod=nuit] .hv428-tod:after{animation:none}
 }
 
-/* --- suivi des captures (Carte) --- */
+/* --- capture tracking (Map) --- */
 html body #carte .cp428{margin-top:14px;padding:14px;border-radius:18px;border:1px solid rgba(103,211,160,.3);background:linear-gradient(150deg,rgba(18,64,52,.5),rgba(6,22,29,.92))}
 html body .cp428-h{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 12px}
 html body .cp428-h b{font:800 14px/1.25 var(--f-d);color:#effcff}
@@ -6216,17 +6216,17 @@ html body .cp428-m img{display:block;width:100%;height:100%;object-fit:contain;f
 html body .cp428-m.on{border-color:rgba(255,225,123,.38);background:radial-gradient(circle at 50% 60%,rgba(255,225,123,.15),rgba(4,18,28,.6) 70%)}
 html body .cp428-m.on img{filter:drop-shadow(0 3px 4px rgba(0,0,0,.45))}
 
-/* --- Pokédex : compteurs par région --- */
+/* --- Pokédex: counters per region --- */
 html body .cnt428{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:2px 10px;width:100%;margin-top:4px;font:600 11.5px/1.3 var(--f-b);color:#a9c1ce}
 html body .cnt428 b{color:#ffe17b}
 html body .cnt428 .ok{color:#9fe7c4}
 
-/* --- combat rapide --- */
+/* --- quick battle --- */
 html body #bFast{min-width:40px;font-weight:900}
 html body #bFast[aria-pressed=true]{background:linear-gradient(135deg,#ffe6a0,#c38a3b)!important;color:#1a2025!important;border-color:rgba(255,233,177,.8)!important}
 
 /* <style id="resonance-v429"> */
-/* v4.29 · Pokémon expressifs : le groupe intérieur du jeton bouge, la case reste en place */
+/* v4.29 · Expressive Pokémon: the token's inner group moves, the cell stays in place */
 #bSvg .tok-b{animation:souffle429 3.4s ease-in-out infinite}
 @keyframes souffle429{0%,100%{transform:translateY(0)}50%{transform:translateY(-1.3px)}}
 #bSvg .tok.lunge429 .tok-b{animation:bond429 calc(.52s * var(--tk429,1)) cubic-bezier(.3,.7,.4,1) 1}
@@ -6239,7 +6239,7 @@ html body #bFast[aria-pressed=true]{background:linear-gradient(135deg,#ffe6a0,#c
 .calme429 #bSvg .tok-b,.calme429 #bSvg .tok-im{animation:none!important}
 @media (prefers-reduced-motion:reduce){#bSvg .tok-b,#bSvg .tok-im{animation:none!important;transition:none!important}}
 
-/* astuces du Prof. Sorbier */
+/* Prof. Sorbier's tips */
 .tip429{position:fixed;left:50%;top:calc(12px + env(safe-area-inset-top,0px));transform:translateX(-50%);z-index:80;display:flex;gap:11px;align-items:flex-start;width:min(440px,calc(100vw - 24px));padding:12px 14px;border-radius:16px;background:linear-gradient(145deg,#173a50,#0a1d2b);border:1px solid rgba(255,215,94,.5);box-shadow:0 18px 40px rgba(0,0,0,.5);color:#EAF2F8;animation:tip429 .32s cubic-bezier(.2,.8,.3,1)}
 @keyframes tip429{from{opacity:0;transform:translate(-50%,-12px)}to{opacity:1;transform:translate(-50%,0)}}
 .tip429-av{flex:none;display:flex}
@@ -6249,7 +6249,7 @@ html body #bFast[aria-pressed=true]{background:linear-gradient(135deg,#ffe6a0,#c
 .tip429-a{display:flex;flex-wrap:wrap;gap:8px;margin-top:9px}
 @media (prefers-reduced-motion:reduce){.tip429{animation:none}}
 
-/* quêtes légendaires */
+/* legendary quests */
 .lq429{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,260px),1fr));gap:12px}
 .lq429-c{position:relative;display:flex;gap:12px;align-items:flex-start;padding:12px;border-radius:16px;overflow:hidden;border:1px solid color-mix(in srgb,var(--c) 45%,transparent)!important}
 .lq429-c:before{content:"";position:absolute;inset:0;background:radial-gradient(120% 90% at 0 0,color-mix(in srgb,var(--c) 28%,transparent),transparent 60%);pointer-events:none}
@@ -6263,7 +6263,7 @@ html body #bFast[aria-pressed=true]{background:linear-gradient(135deg,#ffe6a0,#c
 .lq429-c.pret{box-shadow:0 0 0 1px rgba(255,215,94,.55),0 10px 30px rgba(255,200,60,.15)!important}
 .lq429-ok{display:inline-block;font-size:13px;font-weight:700;color:#8fe3a8}
 
-/* défi de la semaine */
+/* challenge of the week */
 .hb429{padding:14px;margin-bottom:14px}
 .hb429-r{margin:0 0 10px;font-size:13.5px;line-height:1.45;color:#CFE0EA}
 .hb429-t{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:10px}
@@ -6290,17 +6290,17 @@ html body #bFast[aria-pressed=true]{background:linear-gradient(135deg,#ffe6a0,#c
 .hb429-go{flex:none;width:18px;height:18px;opacity:.7}
 
 /* <style id="resonance-v430"> */
-/* v4.30 · cartes régionales : on peut de nouveau faire défiler */
+/* v4.30 · regional maps: scrolling works again */
 html body #carte .v4-map-sc{overflow-x:auto!important;overflow-y:hidden!important;-webkit-overflow-scrolling:touch;touch-action:pan-x pan-y;overscroll-behavior-x:contain;scrollbar-width:none}
 html body #carte .v4-map-sc::-webkit-scrollbar{display:none}
 html body #carte .v4-map{position:relative}
 .mf430{position:absolute;bottom:12px;z-index:6;width:38px;height:38px;opacity:.92;border-radius:50%;display:grid;place-items:center;background:rgba(6,20,30,.86);border:1px solid rgba(120,220,255,.55);color:#dff6ff;box-shadow:0 6px 16px rgba(0,0,0,.4);cursor:pointer}
 .mf430.g{left:10px}.mf430.d{right:10px}.mf430[hidden]{display:none}.mf430 svg{width:18px;height:18px}
 
-/* barre du bas : 6 onglets */
+/* bottom bar: 6 tabs */
 @media (max-width:999px){html body .bnav.n6430{grid-template-columns:repeat(6,minmax(0,1fr))!important}html body .bnav.n6430 .bn{font-size:10.5px;letter-spacing:0}}
 
-/* onglet Camp */
+/* Camp tab */
 .camp430{display:grid;gap:16px}
 #camp .camp4{margin:0}
 .sort430{padding:14px}
@@ -6313,7 +6313,7 @@ html body #carte .v4-map{position:relative}
 .so430 em{font-style:normal;font-size:12px;color:#9fb3c2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .so430-go{flex:none;width:16px;height:16px;opacity:.6}
 
-/* confirmation avant une nouvelle partie */
+/* confirmation before a new game */
 .conf430{position:fixed;inset:0;z-index:400;display:grid;place-items:center;padding:16px}
 .conf430[hidden]{display:none}
 .conf430-s{position:absolute;inset:0;background:rgba(2,6,10,.72)}
@@ -6323,13 +6323,13 @@ html body #carte .v4-map{position:relative}
 .conf430-a{display:grid;gap:8px;margin-top:14px}
 .mode430-w{color:#ffd9a0!important}
 
-/* code secret et Atelier du créateur */
+/* secret code and Creator's Workshop */
 .code430-f{display:flex;gap:8px}
 .code430-f input{flex:1;min-width:0;height:38px;border-radius:10px;border:1px solid rgba(255,255,255,.18);background:rgba(0,0,0,.3);color:inherit;padding:0 12px;font:inherit;letter-spacing:.08em}
 .code430-g{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 10px}
 .code430.on{border-color:rgba(255,215,94,.5)!important}
 
-/* ciel du combat */
+/* battle sky */
 #bBoard{position:relative}
 #bBoard .ciel430{position:absolute;top:8px;right:8px;z-index:4;display:flex;align-items:center;gap:4px;padding:3px 10px 3px 4px;border-radius:999px;background:rgba(6,14,22,.74);border:1px solid rgba(255,255,255,.16);font-size:11.5px;color:#eef5fb;pointer-events:none}
 .ci430{display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:color-mix(in srgb,var(--c) 24%,transparent);color:var(--c)}
@@ -6344,7 +6344,7 @@ html body #carte .v4-map{position:relative}
 #bBoard .cielban430 em{font-style:normal;font-size:12.5px;line-height:1.4;color:#c9d6e0}
 @media (prefers-reduced-motion:reduce){#bBoard .cielban430{transition:none;transform:translate(-50%,-50%)}}
 
-/* déploiement */
+/* deployment */
 html body #bSvg .hx.dep430z{fill:rgba(90,190,255,.4)!important;stroke:#b5ecff!important;stroke-width:2.2!important;stroke-dasharray:5 3!important}
 html body #bSvg .tok.dep430s .tok-halo{stroke:#7fd0ff!important;stroke-width:2.8!important;opacity:1!important;stroke-dasharray:none!important}
 .board.dep430 #bSvg .tok.ally{cursor:pointer}
@@ -6362,7 +6362,7 @@ html body #bSvg .tok.dep430s .tok-halo{stroke:#7fd0ff!important;stroke-width:2.8
 .doc430-d b{color:#eaf2f8;font-weight:600}
 .chip-doc430 svg{width:12px;height:12px;margin-right:4px;vertical-align:-2px}
 
-/* rapport tactique */
+/* tactical report */
 .rap430-r{display:grid;grid-template-columns:auto minmax(0,1fr) 64px auto;gap:8px;align-items:center;padding:5px 0}
 .rap430-n{display:flex;flex-direction:column;align-items:flex-start;min-width:0}
 .rap430-n b{font-size:13px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -6394,7 +6394,7 @@ html body #bSvg .tok.dep430s .tok-halo{stroke:#7fd0ff!important;stroke-width:2.8
 .jl430 em{grid-column:2;font-style:normal;color:#FFD45B;font-size:11.5px}
 
 /* <style id="resonance-v431"> */
-/* v4.31 · sous-onglets du Camp */
+/* v4.31 · Camp sub-tabs */
 .ct431{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 4px;padding:6px}
 .ct431::-webkit-scrollbar{display:none}
 .ct431 button{flex:none;height:36px;padding:0 14px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(0,0,0,.25);color:inherit;font:inherit;font-size:13px;font-weight:600;cursor:pointer}
@@ -6402,13 +6402,13 @@ html body #bSvg .tok.dep430s .tok-halo{stroke:#7fd0ff!important;stroke-width:2.8
 #campTab431>section{padding:14px}
 #campTab431 h3{font-size:14px;margin:14px 0 8px}
 
-/* brouillard de guerre */
+/* fog of war */
 html body #bSvg .tok.fog431{opacity:0!important;transition:opacity .3s}
 html body #bSvg .hx.fog431t{filter:brightness(.42) saturate(.5)}
 #bPlE .plate.fog431 .pl-b{filter:blur(4px);opacity:.5}
 #bPlE .plate.fog431 .medal,#bPlE .plate.fog431 svg{filter:grayscale(1) brightness(.4)}
 
-/* énigmes */
+/* riddles */
 .eg431-h{display:flex;align-items:baseline;gap:8px}
 .eg431-h em{font-style:normal;font-size:11.5px;color:#FFD45B;font-weight:500}
 .eg431-j{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
@@ -6424,7 +6424,7 @@ html body #bSvg .hx.fog431t{filter:brightness(.42) saturate(.5)}
 .eg431-b .eg431-st{font-size:9.5px;letter-spacing:0}
 .eg431-b.ok{border-color:rgba(255,215,94,.45)}
 
-/* maîtrise */
+/* mastery */
 .mt431-l{display:grid;gap:6px}
 .mt431-r{display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 10px;align-items:center;padding:8px 0;border-top:1px solid rgba(255,255,255,.06)}
 .mt431-t{display:flex;flex-direction:column;gap:3px;min-width:0}
@@ -6437,7 +6437,7 @@ html body #bSvg .hx.fog431t{filter:brightness(.42) saturate(.5)}
 .mt431-c .b{height:auto;min-height:44px;padding:6px 10px;display:flex;flex-direction:column;align-items:flex-start;text-align:left;white-space:normal}
 .mt431-c .b em{font-style:normal;font-size:11px;font-weight:500;opacity:.85}
 
-/* Écho profond */
+/* Deep Echo */
 .ec431-k{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:#b9cad6;margin-bottom:8px}
 .ec431-k b{color:#FFD45B}
 .ec431-t{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin:6px 0 10px}
@@ -6466,7 +6466,7 @@ html body #bSvg .hx.fog431t{filter:brightness(.42) saturate(.5)}
 .ec431-f.fait .ec431-n.pris{opacity:1;border-color:rgba(110,220,140,.5);color:#8fe3a8}
 .ec431-n.t-boss{border-color:rgba(255,120,120,.45)}
 
-/* arènes personnalisées */
+/* custom gyms */
 .ar431-a{margin-bottom:8px}
 .ar431-i{display:flex;gap:8px;margin-bottom:10px}
 .ar431-i input{flex:1;min-width:0;height:36px;border-radius:10px;border:1px solid rgba(255,255,255,.18);background:rgba(0,0,0,.3);color:inherit;padding:0 10px;font:inherit;font-size:13px}
@@ -6486,7 +6486,7 @@ html body #bSvg .hx.fog431t{filter:brightness(.42) saturate(.5)}
 .mt431-c .b.b-gold[disabled]{opacity:1;background:linear-gradient(145deg,#FFD45B,#E59A1F);color:#241500;border-color:transparent}
 
 /* <style id="resonance-v432"> */
-/* v4.32 · accessibilité */
+/* v4.32 · accessibility */
 html.a11y-t1 main.content,html.a11y-t1 #sheet,html.a11y-t1 #cbResult{zoom:1.1}
 html.a11y-t2 main.content,html.a11y-t2 #sheet,html.a11y-t2 #cbResult{zoom:1.22}
 html.a11y-hc{--tx2:#eef2f7!important;--mut:#d3d9e2!important;--fnt:#aeb6c4!important;--line2:rgba(255,255,255,.32)!important}
@@ -6502,10 +6502,10 @@ html.a11y-lh .bt-foot{flex-direction:row-reverse}
 html.a11y-rm *,html.a11y-rm *::before,html.a11y-rm *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
 .a11y432 .v4-seg button{min-width:0}
 
-/* nature et talent */
+/* nature and ability */
 .tal432 .chip{background:rgba(79,195,255,.18)!important;color:#bfe9ff!important}
 
-/* équipes enregistrées */
+/* saved teams */
 .eq432 .dc-f{flex-wrap:wrap}
 .eq432-c{display:inline-flex;align-items:center;gap:2px}
 .eq432-x{width:26px;height:26px;border-radius:50%;border:1px solid rgba(255,255,255,.18);background:rgba(0,0,0,.3);color:inherit;font:inherit;line-height:1;cursor:pointer;flex:none}
@@ -6514,7 +6514,7 @@ html.a11y-rm *,html.a11y-rm *::before,html.a11y-rm *::after{animation:none!impor
 .eqp432{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:6px 0 4px}
 .eqp432[hidden]{display:none}
 
-/* Panthéon */
+/* Pantheon */
 .pa432-l{display:grid;gap:10px}
 .pa432-c{padding:12px;border-radius:14px;background:linear-gradient(145deg,rgba(255,215,94,.1),rgba(255,255,255,.02));border:1px solid rgba(255,215,94,.35)}
 .pa432-h b{display:block;font-size:15px;color:#FFD45B}
@@ -6525,7 +6525,7 @@ html.a11y-rm *,html.a11y-rm *::before,html.a11y-rm *::after{animation:none!impor
 .pa432-m em{font-style:normal;font-size:11px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
 /* <style id="resonance-v433"> */
-/* v4.33 · duel local */
+/* v4.33 · local duel */
 :root{--dj1:#5fb8ff;--dj2:#ff9a5f}
 .dj1{--dj:var(--dj1)}.dj2{--dj:var(--dj2)}
 b.dj1,b.dj2{color:var(--dj)}
@@ -6536,7 +6536,7 @@ html body #bSvg .tok.dj1{--dj:var(--dj1)}html body #bSvg .tok.dj2{--dj:var(--dj2
 #cbBattle .plates[data-dj433="2"] .plate{box-shadow:inset 3px 0 0 var(--dj2)}
 #bPhase b.dj1,#bPhase b.dj2,#bScen b.dj1,#bScen b.dj2{font-weight:800}
 
-/* écran de passage */
+/* handover screen */
 .dr433{position:fixed;inset:0;z-index:9000;display:grid;place-items:center;padding:16px;background:rgba(6,10,18,.86);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);animation:dr433in .25s ease-out}
 @keyframes dr433in{from{opacity:0}to{opacity:1}}
 .dr433-c{width:min(420px,100%);padding:22px 18px;border-radius:18px;text-align:center;background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.02));border:2px solid var(--dj);box-shadow:0 0 40px -10px var(--dj)}
@@ -6604,7 +6604,7 @@ html body #bSvg .tok.dj1{--dj:var(--dj1)}html body #bSvg .tok.dj2{--dj:var(--dj2
 .du433-hl span.g{color:#ffd45b;font-weight:800}
 .du433-hl em{font-style:normal;font-size:11px;color:var(--mut,#b9c3d0)}
 .du433-hl small{grid-column:1/-1;font-size:11px;color:var(--mut,#b9c3d0);text-align:center}
-/* rapport du duel */
+/* duel report */
 .du433-rg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .du433-rc{padding:8px;border-radius:12px;border:1px solid var(--dj);background:rgba(0,0,0,.2);min-width:0}
 .du433-rc.g{box-shadow:0 0 18px -6px var(--dj)}
@@ -6616,7 +6616,7 @@ html body #bSvg .tok.dj1{--dj:var(--dj1)}html body #bSvg .tok.dj2{--dj:var(--dj2
 .du433-rl small{grid-column:1/-1;font-size:10.5px;color:var(--mut,#b9c3d0)}
 .du433-rl.ko span{text-decoration:line-through;opacity:.6}
 
-/* tutoriel complet */
+/* full tutorial */
 .tu433-p{display:grid;grid-template-columns:1fr auto;gap:6px 10px;align-items:center;margin:8px 0 12px;font-size:13px}
 .tu433-p i{grid-column:1/-1;display:block;height:6px;border-radius:3px;background:linear-gradient(90deg,#ffd45b var(--w),rgba(255,255,255,.1) var(--w))}
 .tu433-g{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:#ffd45b;margin:16px 0 6px}
@@ -6633,7 +6633,7 @@ html body #bSvg .tok.dj1{--dj:var(--dj1)}html body #bSvg .tok.dj2{--dj:var(--dj2
 .tu433-a{display:flex;flex-wrap:wrap;gap:6px;padding:0 12px 12px}
 
 /* <style id="resonance-v434"> */
-/* v4.34 · combat sur téléphone : tout tient à l’écran */
+/* v4.34 · battle on phone: everything fits on screen */
 @media (max-width:700px){
  html body.bt434 header.topbar{display:none!important}
  html body.bt434 main.content{padding-top:6px!important}
@@ -6659,7 +6659,7 @@ html body #bSvg .tok.dj1{--dj:var(--dj1)}html body #bSvg .tok.dj2{--dj:var(--dj2
  html body.bt434 .bt-arena:not(.open434)>span:not(.ba-b){display:block;flex:1 1 0}
  html body.bt434 .bt-arena:not(.open434)>span:not(.ba-b) em{display:none}
  html body.bt434 .bt-arena .ba-b,html body.bt434 .bt-arena .ba-b svg{width:24px!important;height:24px!important}
- /* les équipes : tous les Pokémon visibles d’un coup, sans défilement de côté */
+ /* teams: all Pokémon visible at once, without sideways scrolling */
  html body.bt434 #cbBattle .plates{display:grid!important;grid-template-columns:repeat(var(--n,4),minmax(0,1fr));gap:4px!important;padding:4px 6px!important;overflow:visible!important}
  html body.bt434 #cbBattle .plates .plate{min-width:0!important;min-height:0!important;grid-template-columns:1fr!important;justify-items:center;gap:1px!important;padding:4px 3px!important;text-align:center}
  html body.bt434 #cbBattle .plates .plate .medal.pm{display:grid!important;width:24px!important;height:24px!important;margin:0!important;overflow:hidden}
@@ -6676,7 +6676,7 @@ html body #bSvg .tok.dj1{--dj:var(--dj1)}html body #bSvg .tok.dj2{--dj:var(--dj2
  html body.bt434 #cbBattle .plate .pl-s .stt{font-size:8.5px;padding:0 3px}
  html body.bt434 #bBoard.vert{margin-inline:auto!important}
 }
-/* choix d’Éveil sur téléphone : des cartes plus compactes (5 voies pour Évoli) */
+/* Awakening choice on phone: more compact cards (5 paths for Eevee) */
 @media (max-width:700px){
  html body #evoPick .ep-card{padding:16px 14px!important;gap:10px!important}
  html body #evoPick .ep-opts{gap:8px!important}
@@ -6688,7 +6688,7 @@ html body #bSvg .tok.dj1{--dj:var(--dj1)}html body #bSvg .tok.dj2{--dj:var(--dj2
 }
 
 /* <style id="resonance-v437"> */
-/* v4.37 : fiche du combat choisi, jamais plus large que l'écran (doctrines, équipe, adversaires visibles) */
+/* v4.37: chosen battle sheet, never wider than the screen (doctrines, team, opponents visible) */
 .sel-det,.sel-card{grid-template-columns:minmax(0,1fr)!important;min-width:0;max-width:100%}
 .sel-det>*,.sel-card>*,.sel-card .hh-chips,.sel-card .sx-foes{min-width:0;max-width:100%}
 .sel-card .dlgbox,.sel-card .sx-d,.sel-card p{overflow-wrap:anywhere}
@@ -6701,7 +6701,7 @@ html body #bSvg .tok.dj1{--dj:var(--dj1)}html body #bSvg .tok.dj2{--dj:var(--dj2
 
 /* <style id="resonance-v443"> */
 
-/* v4.43 : capacités à portée de pouce (téléphone) */
+/* v4.43: moves within thumb reach (phone) */
 .qa443{display:none}
 html body.bt434 #cbBattle .bt-foot.qa-on{flex-wrap:wrap!important;row-gap:7px!important}
 html body.bt434 #cbBattle .bt-foot.qa-on .phase{display:none!important}
@@ -6722,7 +6722,7 @@ html body.bt434 .qa443:not([hidden]){display:flex;flex:0 0 100%;order:-1;align-i
 
 /* <style id="resonance-v444"> */
 
-/* v4.44 : barre du plateau, fiche de case, plein écran, contraste */
+/* v4.44: board bar, cell sheet, full screen, contrast */
 .bt444{position:absolute;top:10px;left:10px;z-index:6;display:flex;gap:6px}
 .bt444 button{width:36px;height:36px;display:grid;place-items:center;border-radius:50%;border:1px solid rgba(212,175,106,.45);background:rgba(8,10,14,.78);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:#f2e6c8;cursor:pointer;padding:0;touch-action:manipulation;-webkit-tap-highlight-color:transparent;box-shadow:0 4px 14px -6px #000}
 .bt444 button svg{width:19px;height:19px}
@@ -6731,7 +6731,7 @@ html body.bt434 .qa443:not([hidden]){display:flex;flex:0 0 100%;order:-1;align-i
 html body.bt434 #cbBattle .bt-foot .phase,html body.bt434 #cbBattle .bt-foot .qa443-n{order:2}
 html body.bt434 #cbBattle .bt-foot #bEnd{order:3}
 html body.bt434 #cbBattle .bt-foot .qa443{order:-1}
-/* téléphone : 1re rangée = capacités (ou l’état du tour), 2e rangée = outils + « Fin du tour » */
+/* phone: 1st row = moves (or the turn state), 2nd row = tools + "Fin du tour" (End turn) */
 html body.bt434 #cbBattle .bt-foot:has(.bt444.in-foot),html body.bt434 #cbBattle .bt-foot.f444{flex-wrap:wrap!important;row-gap:7px!important;column-gap:8px!important;padding:7px 10px!important}
 html body.bt434 #cbBattle .bt-foot.f444 .phase{order:-1!important;flex:0 0 100%!important;min-width:0}
 html body.bt434 #cbBattle .bt-foot.f444 .qa443-n{display:none!important}
@@ -6781,12 +6781,12 @@ html body.bt434 #cbBattle .bt-foot.f444 #bEnd{margin-left:auto;height:40px!impor
 .ti444-leg .lg-danger{background:transparent;box-shadow:inset 0 0 0 2px #ff9f1a}
 .ti444-hint{margin:0;font-size:11.5px;color:#8fa1b6}
 
-/* plein écran : en combat sur téléphone, la navigation du bas s’efface */
+/* full screen: in battle on phone, the bottom navigation disappears */
 html body.fs444.bt434{--bn:0px}
 html body.fs444.bt434 .bnav{display:none!important}
 html body.fs444.bt434 #cbBattle .bt-side .bt-foot{bottom:calc(6px + env(safe-area-inset-bottom,0px))!important}
 
-/* plateau contrasté */
+/* contrasted board */
 body.ct444 #bSvg .hx{stroke:rgba(214,230,255,.62)!important;stroke-width:1.6!important}
 body.ct444 #bSvg .tx{opacity:.5}
 body.ct444 #bSvg .hx.grass{fill:#1f6a30!important}
@@ -6798,7 +6798,7 @@ body.ct444 #bSvg .hx.rock{fill:#3b3f47!important}
 body.ct444 #bSvg .axl{fill:#f2e6c8!important;font-weight:700}
 
 /* <style id="resonance-v448"> */
-/* v4.48 : immersion */
+/* v4.48: immersion */
 .p448{opacity:0;transform-box:fill-box;transform-origin:center;animation:p448 .75s cubic-bezier(.15,.7,.3,1) forwards;pointer-events:none}
 @keyframes p448{0%{opacity:.95;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(.2)}}
 .shake448{animation:sk448 .34s linear}
@@ -6813,7 +6813,7 @@ body.ct444 #bSvg .axl{fill:#f2e6c8!important;font-weight:700}
 .tip448{position:absolute;left:50%;top:calc(2.5% + env(safe-area-inset-top,0px));transform:translateX(-50%);width:min(520px,calc(100vw - 32px));margin:0;padding:10px 14px;border-radius:14px;background:rgba(5,12,22,.72);border:1px solid rgba(255,215,94,.35);color:#D8E6F0;font-size:13px;line-height:1.45;text-align:center;pointer-events:none;animation:tipf448 .5s .35s both}
 .tip448 b{color:#FFD45B;font-size:11px;letter-spacing:.08em;text-transform:uppercase;margin-right:6px}
 @keyframes tipf448{from{opacity:0;transform:translate(-50%,-8px)}to{opacity:1;transform:translate(-50%,0)}}
-/* météo */
+/* weather */
 .wx448{position:absolute;inset:0;pointer-events:none;z-index:4;border-radius:inherit;overflow:hidden}
 .wx448 i{position:absolute;inset:-25%}
 .wx448-pluie i:nth-child(1){background:repeating-linear-gradient(90deg,rgba(175,205,255,.55) 0 1.5px,transparent 1.5px 13px);-webkit-mask-image:repeating-linear-gradient(to bottom,#000 0 14px,transparent 14px 38px);mask-image:repeating-linear-gradient(to bottom,#000 0 14px,transparent 14px 38px);transform:rotate(9deg);animation:rn448 .5s linear infinite;opacity:.85}
@@ -6831,7 +6831,7 @@ body.ct444 #bSvg .axl{fill:#f2e6c8!important;font-weight:700}
 .wx448-sable i:nth-child(2){background:repeating-linear-gradient(0deg,rgba(222,186,116,.3) 0 1px,transparent 1px 13px);-webkit-mask-image:repeating-linear-gradient(90deg,#000 0 14px,transparent 14px 52px);mask-image:repeating-linear-gradient(90deg,#000 0 14px,transparent 14px 52px);animation:sd448 1.4s linear infinite;opacity:.45}
 .wx448-sable::after{content:"";position:absolute;inset:0;background:rgba(214,170,100,.14)}
 @keyframes sd448{to{-webkit-mask-position:-70px 0;mask-position:-70px 0}}
-/* cartes holographiques */
+/* holographic cards */
 #dex4Card .v4d-art{--hx:50%;--hy:50%;transform:perspective(700px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .15s ease-out}
 #dex4Card.own448 .v4d-art::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(115deg,transparent 16%,rgba(255,255,255,.3) 34%,rgba(120,255,225,.24) 45%,rgba(255,130,225,.24) 56%,rgba(255,230,120,.22) 66%,transparent 84%) var(--hx) var(--hy)/260% 260%;mix-blend-mode:color-dodge;opacity:.42;transition:opacity .3s}
 #dex4Card.own448.shiny .v4d-art::after{opacity:.9}
@@ -6839,7 +6839,7 @@ body.ct444 #bSvg .axl{fill:#f2e6c8!important;font-weight:700}
 @keyframes sc448{from{transform:translateY(-100%);opacity:1}to{transform:translateY(520%);opacity:0}}
 #dex4Card.new448 .v4d-art{animation:nw448 1.2s ease-out}
 @keyframes nw448{0%{box-shadow:0 0 0 0 rgba(255,215,94,.9)}100%{box-shadow:0 0 0 26px rgba(255,215,94,0)}}
-/* victoire */
+/* victory */
 .res-card.fx448{position:relative;overflow:hidden}
 .res-card.fx448::before{content:"";position:absolute;inset:-40%;pointer-events:none;background:conic-gradient(from 0deg,transparent,rgba(255,215,94,.16),transparent 30%,rgba(255,215,94,.12),transparent 60%);animation:vr448 9s linear infinite}
 .res-card.fx448::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle,rgba(255,235,160,.9) 0 1.5px,transparent 2px) 0 0/46px 52px,radial-gradient(circle,rgba(255,255,255,.8) 0 1px,transparent 1.6px) 21px 17px/61px 43px;animation:sp448 2.6s ease-in-out infinite;opacity:.35}
@@ -7056,7 +7056,7 @@ body.th455-cristal .board{background:radial-gradient(120% 90% at 50% 0%,#3a3478,
 #df468hud span{color:#FF8A9A;letter-spacing:2px}#df468hud small{flex-basis:100%;color:#b8d8c8;font-size:11px}
 
 /* <style id="resonance-v469"> */
-/* v4.69 : écran de résultat défilable au doigt (victoire comprise) */
+/* v4.69: result screen scrollable by finger (victory included) */
 #cbResult{place-items:start center;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y}
 #cbResult>.res-card{margin-block:auto;max-height:none;overflow:visible}
 #cbResult>.res-card.fx448{overflow:hidden;overflow:clip}
@@ -7068,7 +7068,7 @@ body.th455-cristal .board{background:radial-gradient(120% 90% at 50% 0%,#3a3478,
   #cbResult .res-card>.res-a{bottom:-16px}
   #cbResult .res-card>.res-a .b{min-height:44px;padding:8px 10px;font-size:13px;line-height:1.2;white-space:normal}
 }
-/* Accueil : Boss Rush et Arène de défense côte à côte */
+/* Home: Boss Rush and Defense Arena side by side */
 @media (min-width:340px){
   #br466,#df468{display:inline-flex;width:calc(50% - 5px);vertical-align:top;margin:0 0 10px;padding:10px 11px;gap:9px}
   #br466{margin-right:10px}
@@ -7078,8 +7078,8 @@ body.th455-cristal .board{background:radial-gradient(120% 90% at 50% 0%,#3a3478,
 }
 
 /* <style id="resonance-v477"> */
-/* v4.77 : camps lisibles, combat sur téléphone sans défilement */
-/* --- camps : rouge = adversaires, bleu = votre équipe --- */
+/* v4.77: readable sides, battle on phone without scrolling */
+/* --- sides: red = opponents, blue = your team --- */
 #bSvg .tok.enemy:not(.sel):not(.act):not(.evw) .tok-halo{stroke:#ff4d57;stroke-width:2.6;opacity:1;stroke-dasharray:none}
 #bSvg .tok.ally:not(.sel):not(.act):not(.evw) .tok-halo{stroke:#5aa8ff;stroke-width:2.2;opacity:1;stroke-dasharray:none}
 html body #bSvg .tok.enemy .tok-sh{fill:rgba(255,64,72,.55)}
@@ -7094,7 +7094,7 @@ html body #cbBattle #bPlE .plate.act,html body #cbBattle #bPlA .plate.act{border
 #cbBattle #bPlE::before{content:"Adversaires";background:#c8323c;color:#fff}
 #cbBattle #bPlA::before{content:"Votre équipe";background:#2f6fd0;color:#fff}
 
-/* --- téléphone : tout le combat tient dans l’écran --- */
+/* --- phone: the whole battle fits on screen --- */
 html body.bt434{--bn:0px}
 html body.bt434 .bnav{display:none!important}
 html body.bt434 #combat.page.on{padding-bottom:0!important}
@@ -7111,11 +7111,11 @@ html body.bt434 #cbBattle .bt-foot .bt444.in-foot button{width:36px;height:36px}
 html body.bt434 #cbBattle .bt-foot #bEnd{flex:1 1 auto!important;min-width:0!important;height:38px!important;min-height:38px!important;padding:0 10px!important;white-space:nowrap}
 html body.bt434 #cbBattle .bt-foot .qa443 button{min-height:36px}
 html body.bt434 #cbBattle .bt-side{padding-bottom:110px}
-/* le plateau garde sa forme mais ne dépasse jamais l’écran : bandeau + équipes + barre du bas ≈ 335 px */
+/* the board keeps its shape but never exceeds the screen: banner + teams + bottom bar ≈ 335 px */
 html body.bt434 #bBoard.vert #bSvg{display:block;width:100%!important;height:auto!important;max-height:max(300px,calc(100dvh - 334px - env(safe-area-inset-bottom,0px)))!important;margin:0 auto}
 
 /* <style id="resonance-v478"> */
-/* v4.78 : déroulé guidé du tour */
+/* v4.78 : guided turn flow */
 #bPanel .fl478{margin:8px 0;padding:8px 10px;border:1px solid rgba(255,214,102,.35);border-radius:10px;background:rgba(255,214,102,.07)}
 #bPanel .fl478-h{display:flex;align-items:center;gap:8px;margin-bottom:6px}
 #bPanel .fl478-p{display:flex;align-items:center;gap:6px;list-style:none;margin:0;padding:0;font-size:12px;letter-spacing:.02em}
@@ -7134,8 +7134,8 @@ html body.bt434 #cbBattle .bt-foot .fl478-pied:not([hidden]){display:flex;align-
 html body.bt434 #cbBattle .bt-foot .fl478-pied b{color:var(--gold)}
 
 
-/* ---------- en-têtes d'écran : une seule consigne à la fois ----------
-   Quand le conseil du Prof. Sorbier (.tip) suit l'en-tête, il dit déjà ce qu'il faut faire :
-   le sous-titre revient une fois le conseil fermé. Sur téléphone, le surtitre répète la barre de navigation. */
+/* ---------- screen headers: one instruction at a time ----------
+   When Prof. Sorbier's tip (.tip) follows the header, it already says what to do:
+   the subtitle returns once the tip is closed. On phone, the overline repeats the navigation bar. */
 .ph:has(+ .tip) .sub{display:none!important}
 @media (max-width:700px){.page .ph>.kick{display:none!important}}

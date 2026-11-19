@@ -1,4 +1,4 @@
-/* Section d'origine : v4-05-carte.js */
+/* Original section: v4-05-map.js */
 
 import { GYMS } from './004-data.js';
 import { SCEN } from './009-pokemon.js';
@@ -17,12 +17,12 @@ import { safariLock418 } from './058-fishing-safari-coop.js';
 import { arrows430 } from './065-camp-tactics.js';
 import { builtMap, refreshMap } from '../screens/map/mapStore.js';
 
-// Page Carte rendue par React (src/screens/carte/) : gabarit, tracés, marqueurs, panneaux.
+// Map page rendered by React (src/screens/map/): template, routes, markers, panels.
 export let PL, MAP_SVG;
 let mapBuilt;
 
 
-/** Nom du combat final sur la carte et dans la liste des combats (Selection.jsx). */
+/** Name of the final battle on the map and in the battle list (Selection.jsx). */
 export const FINALE_N = 'Finale · Championne';
 
 
@@ -46,7 +46,7 @@ export function placeSub(p) {
 export function placeState(p) {
   const gk = nextGoal()[0];
   if (p.j) return placeStateJ(p, gk); // Johto (v4.15)
-  if (p.id === 'safari') return safariLock418() ? 'lock' : 'open'; // Parc Safari (v4.18)
+  if (p.id === 'safari') return safariLock418() ? 'lock' : 'open'; // Safari Park (v4.18)
   if (p.id === 'wild') return 'open';
   if (p.id === 'elite') {
     if (PROFILE.elite >= 4) return 'done';
@@ -81,7 +81,7 @@ export function curvePath(a, b, i) {
 }
 
 
-// Le gabarit est rendu par React, Route 29 (#route) comprise, sous la carte.
+// The template is rendered by React, Route 29 (#route) included, below the map.
 export function buildMap() {
   const pg = $('#carte');
   if (!pg || mapBuilt) return;
@@ -94,7 +94,7 @@ export function renderMap() {
   if (!V4.region) V4.region = /^h/.test(nextGoal()[0]) ? 'hoenn' : /^j/.test(nextGoal()[0]) ? 'johto' : 'kanto'; // v4.15, v4.19
   buildMap();
   if (mapBuilt) {
-    // les marqueurs étaient dessinés avant le choix du lieu par défaut : on garde l'ancienne sélection pour eux
+    // markers were drawn before the default place was chosen: we keep the old selection for them
     const marksSel = V4.mapSel;
     if (!V4.mapSel || !placesR().some(p => p.id === V4.mapSel)) V4.mapSel = (placesR().find(p => placeState(p) === 'next') || placesR()[0]).id;
     regionUi415(); // v4.15
@@ -116,10 +116,10 @@ export function centerMap() {
   const sc = $('#mapSc'),
     mk = $(`#mapMarks [data-place="${V4.mapSel}"]`);
   if (sc && mk && sc.scrollWidth > sc.clientWidth) sc.scrollLeft = Math.max(0, mk.offsetLeft - sc.clientWidth / 2);
-  arrows430(); // flèches de défilement (v4.30)
+  arrows430(); // scroll arrows (v4.30)
 }
 
-/* ---------- Carte de la région (dessin original) ---------- */
+/* ---------- Region map (original drawing) ---------- */
 export const PLACES = [
   { id: 'tuto', x: 115, y: 522, n: 'Laboratoire Sorbier', s: 'Prologue', grp: 'aventure' },
   { id: 'wild', x: 205, y: 462, n: 'Route 29', s: 'Hautes herbes · captures', grp: 'route' },
@@ -145,7 +145,7 @@ export const CHAIN = ['tuto', 'wild', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 
 
 export const STATE_N = { next: 'En cours', done: 'Terminé', lock: 'Verrouillé', open: 'Disponible' };
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Instructions run at startup, in the original order (see index.js).
 export function __init() {
 
 PL = Object.fromEntries(PLACES.map(p => [p.id, p]));

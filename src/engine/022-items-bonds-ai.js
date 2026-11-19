@@ -1,4 +1,4 @@
-/* Section d'origine : 15-systemes-objets-liens-ia.js */
+/* Original section: 15-systemes-objets-liens-ia.js */
 
 import { GYMS, RX } from './004-data.js';
 import { MV } from './005-moves.js';
@@ -28,7 +28,7 @@ export function linkLvl(S, a, b) {
 }
 
 
-/* --- dégâts : Évoluroc, Lien Soutien (−1), Lien Synchro (+25 % sur les réactions du duo) --- */
+/* --- damage: Évoluroc (Eviolite), Support Bond (−1), Sync Bond (+25% on the duo's reactions) --- */
 export function dmgItemsLinks(S, u, t, d, mult) {
   if (t.side === 'a') {
     let red = 0;
@@ -63,10 +63,10 @@ export function captureReq(S, u, e) {
   ];
   if ((SCEN[S.sc] || {}).cap429) r.push({ ok: e.sp === SCEN[S.sc].cap429, t: 'la légende elle-même, pas son escorte' }); // v4.29
   if ((SCEN[S.sc] || {}).cap435) {
-    const L = HLEG435.find(x => x.id === SCEN[S.sc].cap435); // légendes de Hoenn (v4.38)
+    const L = HLEG435.find(x => x.id === SCEN[S.sc].cap435); // Hoenn legends (v4.38)
     r.push({ ok: e.sp === L.id, t: 'la légende elle-même, pas son escorte' }, { ok: !!L.cap.f(S, L, e), t: L.cap.t });
   }
-  // la Ball choisie change les conditions
+  // the chosen Ball changes the conditions
   const k = CAP_K,
     h = e.hp / e.mhp;
   if (k === 'super' || k === 'hyper') r[1] = { ok: h <= 0.4, t: 'PV sous 40 %' };
@@ -75,7 +75,7 @@ export function captureReq(S, u, e) {
     r[1] = { ok: true, t: 'Master Ball : PV indifférents' };
     r[2] = { ok: true, t: 'Master Ball : pas besoin d’immobiliser' };
   }
-  const special = BALL455 && BALL455[k]; // Balls spéciales (v4.56)
+  const special = BALL455 && BALL455[k]; // special Balls (v4.56)
   if (special) {
     r[1] = { ok: special.pv(S, e), t: special.tpv };
     r[2] = { ok: special.im(S, e), t: special.tim };
@@ -115,7 +115,7 @@ export function pCapture(S, u, e) {
   say(ev, `${e.n} est capturé !`);
   endStep(S, ev);
   if (S === B) {
-    // une Ball du Sac est consommée
+    // a Ball from the Bag is consumed
     PROFILE.bag[k] = Math.max(0, bagN(k) - 1);
     if (!PROFILE.bag[k]) delete PROFILE.bag[k];
     __set_BALL_SEL(null);
@@ -128,7 +128,7 @@ export function pCapture(S, u, e) {
 
 export function duoOf(S, u, p) {
   if (!u || !p || u === p || u.side !== 'a' || p.side !== 'a') return null;
-  const D = duoFor416(pairKey(u.sp, p.sp)); // chaque duo a sa technique (v4.16)
+  const D = duoFor416(pairKey(u.sp, p.sp)); // each duo has its own technique (v4.16)
   return D && linkLvl(S, u.sp, p.sp) >= 3 ? D : null;
 }
 
@@ -188,7 +188,7 @@ export function pDuo(S, u, p, k) {
 }
 
 
-/* --- aperçu générique (mêmes règles que l’aperçu des capacités) --- */
+/* --- generic preview (same rules as the move preview) --- */
 export function previewRun(S, run, shown) {
   const C = JSON.parse(JSON.stringify(S)),
     ev = run(C) || [],
@@ -219,7 +219,7 @@ export function previewRun(S, run, shown) {
 }
 
 
-/* --- IA : vise les Pokémon fragiles ou immobiles, met à l’abri ceux qui vont évoluer --- */
+/* --- AI: targets fragile or immobile Pokémon, shelters those about to evolve --- */
 export function threatAt(S, e, pos) {
   let t = 0;
   S.units.forEach(a => {
@@ -284,7 +284,7 @@ export function wildScen(id, tod, shiny, dom) {
     d: 'Affaiblissez-le sous 25 % de ses PV, immobilisez-le (Gel, Paralysie, Sommeil, Racines, Toile), puis capturez-le au contact pour 2 Voix. K.O., il s’enfuit.',
     foes: [shiny ? [id, [6, 2], { shiny: true }] : [id, [6, 2]]]
   };
-  if (dom) dom416(SCEN.sauvage, id, shiny); // Pokémon Dominant (v4.16)
+  if (dom) dom416(SCEN.sauvage, id, shiny); // Dominant Pokémon (v4.16)
   return SCEN.sauvage;
 }
 
@@ -373,21 +373,21 @@ export function champBuild() {
 }
 
 
-/* --- disponibilité d’un combat selon le mode --- */
-/** Pourquoi le scénario k est fermé (texte), ou null s’il est ouvert. */
+/* --- availability of a battle depending on the mode --- */
+/** Why scenario k is closed (text), or null if it is open. */
 export function scenLock(k) {
-  if (brBoss466(k)) return null; // Boss Rush : le boss du moment est toujours ouvert
+  if (brBoss466(k)) return null; // Boss Rush: the current boss is always open
   const l = lockCampaign(k);
   if (l || isCamp()) return l;
-  return lockRegion446(k); // Mode Libre : les régions s’ouvrent dans l’ordre
+  return lockRegion446(k); // Free Mode: regions open in order
 }
 
 
 function lockCampaign(k) {
   const D = SCEN[k];
-  if (D && (D.hleg435 || D.cap435)) return lock435(k, D); // Légendaires de Hoenn (v4.38)
+  if (D && (D.hleg435 || D.cap435)) return lock435(k, D); // Hoenn Legendaries (v4.38)
   if (!D || !isCamp()) return null;
-  if (D.rival429) return lockRival429(D); // Kael, les Échos (v4.29)
+  if (D.rival429) return lockRival429(D); // Kael, the Echoes (v4.29)
   if (D.hebdo429 && BADGES.length < 2) return 'Le défi de la semaine s’ouvre après 2 badges.';
   if (D.hoenn != null || D.hfinal) return lockH419(k, D); // Hoenn (v4.19)
   if (D.johto != null || D.jfinal || D.lac || D.jdis || D.roam) return lockJ415(k, D); // Johto (v4.15, v4.16)
@@ -403,12 +403,12 @@ function lockCampaign(k) {
   if (D.dissonance && BADGES.length < D.after) return `La Team Dissonance frappera après le badge n° ${D.after}.`; // v4.11
   if (D.dissonance && (PROFILE.dissonance || 0) < D.dissonance - 1) return 'Battez d’abord le combat précédent de la Dissonance.';
   if (D.colosse && BADGES.length < D.badges) return `Il faut ${D.badges} badges pour affronter ce colosse.`; // v4.8
-  // l’exhibition de la Ligue (niveau 40) n’est pas ouverte dès le premier jour
+  // the League exhibition (level 40) is not open from day one
   if (k === 'ligue' && BADGES.length < 4) return 'Exhibition réservée aux dresseurs qui ont 4 badges.';
   return null;
 }
 
-/* ===================== SYSTÈMES v1.0 : objets, Liens, duos, capture, fatigue, difficulté, IA ===================== */
+/* ===================== SYSTEMS v1.0: items, Bonds, duos, capture, fatigue, difficulty, AI ===================== */
 export const DIFF = {
   facile: { hb: 0.4, pb: -1, lim: 2, ai: 0 },
   normal: { hb: 1, pb: 0, lim: 0, ai: 1 },
@@ -420,7 +420,7 @@ export const DIFF = {
 export const immobilize = e => ['GEL', 'PAR', 'SOM'].includes(e.badge) || e.root > 0 || e.web > 0;
 
 
-/* --- techniques combinées (palier 3 de Lien) --- */
+/* --- combined techniques (Bond tier 3) --- */
 export const DUOT = {
   'magicarpe|pichu': {
     n: 'Pluie d’Orage',
@@ -492,7 +492,7 @@ export const DUOT = {
 export const ELITE = ['c1', 'c2', 'c3', 'c4'];
 
 
-/* --- le Champion lit vos 10 derniers combats --- */
+/* --- the Champion reads your last 10 battles --- */
 const RX_COUNTER = {
   cc: { t: ['Sol'], why: 'insensible aux Courts-circuits' },
   sur: { tal: ['moiteur'], why: 'Moiteur empêche vos Surtensions' },
@@ -507,10 +507,10 @@ const RX_COUNTER = {
   anc: { tal: ['regardvif'], why: 'Regard Vif ignore les entraves' }
 };
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Statements run at startup, in the original order (see index.js).
 export function __init() {
 
-/* --- Conseil 4, combat guidé, rencontres sauvages --- */
+/* --- Council 4, guided battle, wild encounters --- */
 Object.assign(SCEN, {
   tuto: {
     n: 'Combat guidé',

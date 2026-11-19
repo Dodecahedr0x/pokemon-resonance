@@ -9,7 +9,7 @@ import { leaderOf } from '../../../engine/030-prestige-staging.js';
 import { SELG, emblem, selItems, wonOf } from '../../../engine/031-home-journey.js';
 import { FINALE_N } from '../../../engine/037-map.js';
 
-// Onglets (#selTabs) : Entraînement, Arènes, Ligue, Après-jeu. Clics : moteur (data-pg).
+// Tabs (#selTabs): Training, Gyms, League, Postgame. Clicks: engine (data-pg).
 export function SelTabs({ G }) {
   const nA = BADGES.length,
     nL = Math.min(4, PROFILE.elite);
@@ -32,7 +32,7 @@ export function SelTabs({ G }) {
   ));
 }
 
-// Une ligne de la liste (#scenList) : emblème, nom, et à droite verrou, étape, rang ou niveau.
+// A row of the list (#scenList): emblem, name, and on the right lock, step, rank or level.
 function Row({ k, gk }) {
   const s = SCEN[k],
     lk = scenLock(k),

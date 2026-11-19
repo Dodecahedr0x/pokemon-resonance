@@ -1,6 +1,6 @@
-// Barre d'outils du plateau (v4.44) : plein écran, loupe, plateau contrasté, aide.
-// Grand écran : coin du plateau (#bBoard) ; téléphone : dans la barre du bas (.bt-foot).
-// État posé par barre444 (moteur, 077) dans getHost().bt444 ; clics délégués du moteur.
+// Board toolbar (v4.44): fullscreen, magnifier, high-contrast board, help.
+// Large screen: corner of the board (#bBoard); phone: in the bottom bar (.bt-foot).
+// State set by bar444 (engine, 077) in getHost().bt444; delegated engine clicks.
 
 const IC = {
   fs: 'M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5',

@@ -1,4 +1,4 @@
-/* Section d'origine : v4.46 : en Mode Libre aussi, les régions s’ouvrent dans l’ordre */
+/* Original section: v4.46: in Free Mode too, regions open in order */
 
 import { SCEN } from './009-pokemon.js';
 import { PROFILE } from './011-game-state.js';
@@ -17,9 +17,9 @@ function region446(k) {
 }
 
 
-/* Kanto d’abord. Johto s’ouvre après la victoire sur la Championne de Kanto (Auriane Vale),
-   Hoenn après le titre de Maître de Johto — comme en Campagne. Dans une région ouverte,
-   le Mode Libre garde tous ses combats ouverts (pas d’ordre des badges). Appelé par scenLock(). */
+/* Kanto first. Johto opens after beating the Kanto Champion (Auriane Vale),
+   Hoenn after the Johto Master title — as in Campaign. In an open region,
+   Free Mode keeps all its battles open (no badge order). Called by scenLock(). */
 export function lockRegion446(k) {
   const r = region446(k);
   if (r === 'johto' && !johtoOpen()) return 'Johto s’ouvre après votre victoire sur la Championne Auriane Vale (Kanto).';

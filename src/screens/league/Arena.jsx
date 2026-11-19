@@ -6,7 +6,7 @@ import { medal } from '../../engine/014-utils.js';
 import { badgeSvg, gymSel } from '../../engine/019-league.js';
 import { LEAD } from '../../engine/030-prestige-staging.js';
 
-// Fiche de l'arène choisie (#arena), avec la réplique de son Champion d'arène (v4.24).
+// Sheet of the chosen gym (#arena), with its gym Champion's line (v4.24).
 export default function Arena() {
   const g = GYMS[gymSel],
     a = ARENAS[gymSel],

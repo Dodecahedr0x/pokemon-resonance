@@ -3,8 +3,8 @@ import { Box, Dialogue } from './Window.jsx';
 import { BY } from '../../engine/009-pokemon.js';
 import { medal } from '../../engine/014-utils.js';
 
-// Pension du Camp (#pensBox) : choix d'un couple. Le moteur (055) calcule la liste et
-// la compatibilité, et garde les clics (data-pens, data-pens-p) et l'attribut hidden.
+// Camp Daycare (#pensBox): choice of a pair. The engine (055) computes the list and
+// the compatibility, and keeps the clicks (data-pens, data-pens-p) and the hidden attribute.
 export default function DaycareBox() {
   return <Box nom="pens" className="result exp-box" id="pensBox" Carte={MapScreen} />;
 }

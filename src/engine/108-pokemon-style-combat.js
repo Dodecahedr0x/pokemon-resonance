@@ -1,11 +1,11 @@
-/* Section d'origine : v4.73 : combat façon Pokémon (entrée, Poké Balls, barres de PV, évolution, cérémonie du badge) */
+/* Original section: v4.73: Pokémon-style battle (entry, Poké Balls, HP bars, evolution, badge ceremony) */
 
 import { clearOverlay, paintOverlay } from '../screens/overlays/dialogsStore.js';
 import { GYMS } from './004-data.js';
 import { SCEN } from './009-pokemon.js';
 import { ARENAS, BADGES } from './013-gyms.js';
 import { $, RM, el } from './014-utils.js';
-import { CROCHETS } from './015-hooks.js';
+import { HOOKS } from './015-hooks.js';
 import { badgeSvg } from './019-league.js';
 import { uk } from './021-combat-engine.js';
 import { B, HC, L } from './024-combat-ui.js';
@@ -13,7 +13,7 @@ import { PREF, calm472, noise, tone, vibe } from './026-campaign-tutorial-sound.
 import { AUTO, leaderOf } from './030-prestige-staging.js';
 import { boardSet, getBoard, tokCl, tokHas, unitsBatch } from '../screens/combat/board/boardStore.js';
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Statements run at startup, in the original order (see index.js).
 export function __init() {
 
 (() => {
@@ -27,8 +27,8 @@ export function __init() {
     }
   };
 
-  /* ---------- sons maison (synthétisés, aucun son officiel) ---------- */
-  const SONS = {
+  /* ---------- home-made sounds (synthesized, no official sound) ---------- */
+  const SOUNDS = {
     whoosh: () => noise(0, 0.32, 0.05, 1600),
     envoi: () => {
       noise(0, 0.04, 0.05, 4200);
@@ -39,12 +39,12 @@ export function __init() {
   const playSound = k => {
     try {
       if (!PREF.sound || RM || PREF.pk473s === 0) return;
-      SONS[k] && SONS[k]();
+      SOUNDS[k] && SOUNDS[k]();
     } catch (e) {}
   };
   window.__son473 = playSound;
 
-  /* ---------- dessins : Poké Ball en SVG ---------- */
+  /* ---------- drawings: SVG Poké Ball ---------- */
   const ballSvg = r =>
     `<path class="pk-sbt" d="M${-r} 0A${r} ${r} 0 0 1 ${r} 0Z"/><path class="pk-sbb" d="M${-r} 0A${r} ${r} 0 0 0 ${r} 0Z"/><circle class="pk-sbn" r="${(r * 0.32).toFixed(2)}"/>`;
   const sparks = (n, cls) => {
@@ -53,9 +53,9 @@ export function __init() {
     return h;
   };
 
-  /* ---------- 1. entrée en combat ---------- */
-  // #pk-btr est rendu par React (src/screens/overlays/Effets.jsx) : ses bandes sont
-  // posées par le store (paintOverlay('btr')), sa classe (go, boss, sauvage, vite) ici.
+  /* ---------- 1. battle entry ---------- */
+  // #pk-btr is rendered by React (src/screens/overlays/Effects.jsx): its bands are
+  // set by the store (paintOverlay('btr')), its class (go, boss, wildMon, isFast) here.
   const btr = document.getElementById('pk-btr');
   let tBtr = 0;
   const genre = b => {
@@ -81,9 +81,9 @@ export function __init() {
     }, isFast() ? 700 : 1500);
   };
 
-  /* ---------- 2. envoi des Pokémon et retour au K.O. ---------- */
-  const ENTREE = new WeakMap();
-  // calque des effets (React, dernier du plateau), créé au premier usage
+  /* ---------- 2. sending out Pokémon and returning on K.O. ---------- */
+  const ENTRANCES = new WeakMap();
+  // effects layer (React, last on the board), created on first use
   const layer = () => {
     if (!getBoard().pk) boardSet({ pk: true }, 'pk');
     return L.pk73 && L.pk73.isConnected ? L.pk73 : null;
@@ -91,19 +91,19 @@ export function __init() {
   const showIt = b => {
     try {
       if (!L || !L.u) return;
-      unitsBatch(() => Object.values(L.u).forEach(T => tokCl(T, 'pk-wait', false))); // classes du jeton : Units.jsx
+      unitsBatch(() => Object.values(L.u).forEach(T => tokCl(T, 'pk-wait', false))); // token classes: Units.jsx
     } catch (e) {}
   };
   const prepare = b => {
     if (!b || calm472() || auto() || !L || !L.u) return;
-    ENTREE.set(b, 1);
+    ENTRANCES.set(b, 1);
     b.units.forEach(u => {
       const T = L.u[u.uid];
       if (T && !u.ko) tokCl(T, 'pk-wait', true);
     });
     setTimeout(() => {
-      if (ENTREE.get(b) === 1) {
-        ENTREE.set(b, 2);
+      if (ENTRANCES.get(b) === 1) {
+        ENTRANCES.set(b, 2);
         showIt(b);
       }
     }, 9000);
@@ -161,35 +161,35 @@ export function __init() {
     setTimeout(() => w.remove(), 1300);
   };
 
-  CROCHETS.avantPresentation.push(() => {
+  HOOKS.avantPresentation.push(() => {
     if (B && !B.over) {
       prepare(B);
       transition(B);
     }
   });
-  CROCHETS.avantBandeau.push(() => {
+  HOOKS.avantBandeau.push(() => {
     try {
-      if (B && ENTREE.get(B) === 1) {
-        ENTREE.set(B, 2);
+      if (B && ENTRANCES.get(B) === 1) {
+        ENTRANCES.set(B, 2);
         send(B);
       }
     } catch (e) {
       showIt(B);
     }
   });
-  // un Pokémon qui vient de tomber K.O. retourne dans sa Poké Ball
+  // a Pokémon that has just been knocked out returns to its Poké Ball
   let wasKo = null;
-  CROCHETS.avantJeton.push(u => {
+  HOOKS.avantJeton.push(u => {
     wasKo = null;
     const T = L.u && L.u[u.uid];
     wasKo = T ? tokHas(T, 'ko') : null;
   });
-  CROCHETS.apresJeton.push(u => {
+  HOOKS.apresJeton.push(u => {
     if (wasKo === false && u.ko && !u.caught && !calm472() && !auto()) recall(u);
   });
 
-  /* ---------- 3. les PV descendent progressivement ---------- */
-  CROCHETS.barrePv.push(h => {
+  /* ---------- 3. HP drops gradually ---------- */
+  HOOKS.barrePv.push(h => {
     try {
       if (calm472()) return h;
       const m = /--a:([\d.]+)%;--b:([\d.]+)%;animation-delay:-(\d+)ms/.exec(h);
@@ -200,9 +200,9 @@ export function __init() {
     }
   });
 
-  /* ---------- 7. cérémonie du badge ---------- */
-  const FETE = new WeakSet();
-  // #pk-badge est rendu par React (src/screens/overlays/Effets.jsx) ; hidden et .out restent posés ici
+  /* ---------- 7. badge ceremony ---------- */
+  const CELEBRATED = new WeakSet();
+  // #pk-badge is rendered by React (src/screens/overlays/Effects.jsx); hidden and .out stay set here
   const bc = document.getElementById('pk-badge');
   let tBc = 0;
   const closeBadge = () => {
@@ -220,12 +220,12 @@ export function __init() {
     if (!bc.hidden && (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ')) closeBadge();
   });
   const celebrateBadge = () => {
-    if (!B || !B.rew || !B.rew.badgeNew || FETE.has(B) || calm472() || auto()) return;
+    if (!B || !B.rew || !B.rew.badgeNew || CELEBRATED.has(B) || calm472() || auto()) return;
     const D = SCEN[B.sc] || {};
     let i = typeof D.gym === 'number' ? D.gym : -1;
     if (i < 0) i = ARENAS.findIndex(a => a.k === B.sc);
     if (i < 0) return;
-    FETE.add(B);
+    CELEBRATED.add(B);
     let leader = '';
     try {
       const Lc = leaderOf(B.sc);
@@ -248,6 +248,6 @@ export function __init() {
       } catch (e) {}
     }).observe(res, { childList: true });
 
-  window.__combat473 = { transition, envoyer: send, retour: recall, feterBadge: celebrateBadge, ENTREE, genre };
+  window.__combat473 = { transition, envoyer: send, retour: recall, feterBadge: celebrateBadge, ENTREE: ENTRANCES, genre };
 })();
 }

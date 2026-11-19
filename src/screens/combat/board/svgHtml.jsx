@@ -1,10 +1,10 @@
 import { createElement, Fragment } from 'react';
 import { parseStyle } from '../../../lib/html.jsx';
 
-// <SvgHtml html="…" /> : fragment SVG produit par une fonction du moteur (pièges, colosses,
-// attaques chargées, terrain des stades…), analysé dans un <svg> pour garder l'espace de
-// noms SVG, puis converti en éléments React sans enveloppe.
-// Pas Html (lib/html.jsx) : celui-ci analyse hors <svg> et convertit les attributs autrement (« : », booléens, onerror).
+// <SvgHtml html="…" />: SVG fragment produced by an engine function (traps, colossi,
+// charged attacks, stadium terrain…), parsed inside an <svg> to keep the SVG
+// namespace, then converted into React elements with no wrapper.
+// Not Html (lib/html.jsx): that one parses outside <svg> and converts attributes differently (« : », booleans, onerror).
 
 const camel = s => s.replace(/[-:]([a-z])/g, (_, c) => c.toUpperCase());
 

@@ -1,4 +1,4 @@
-/* Section d'origine : v4.6-01-ct-cs.js */
+/* Original section: v4.6-01-tms-hms.js */
 
 import { MV } from './005-moves.js';
 import { BY, familyOf } from './009-pokemon.js';
@@ -12,18 +12,18 @@ import { SHOP, bagN } from './032-v4-foundation.js';
 import { renderBag } from './039-quests-shop.js';
 import { inheritance416 } from './055-living-johto.js';
 
-let CT_K;
+let TM_K;
 
 
-/* ---------- état de la partie ---------- */
-/** famille (forme de base) → capacité apprise. Fonction déclarée : defProfile l'appelle dès le chargement. */
-export function CT0() {
+/* ---------- game state ---------- */
+/** family (base form) → learned move. Declared function: defProfile calls it as soon as it loads. */
+export function TM0() {
   return { apprises: {} };
 }
 
 
-export function ctClean(p) {
-  const o = CT0(),
+export function tmClean(p) {
+  const o = TM0(),
     a = p && p.apprises;
   if (a && typeof a === 'object') for (const b in a) if (BY[b] && MV[a[b]]) o.apprises[b] = a[b];
   return o;
@@ -39,7 +39,7 @@ function compatible(k, base) {
 }
 
 
-/* ---------- en combat : la capacité apprise s'ajoute aux deux capacités de la forme ---------- */
+/* ---------- in battle: the learned move is added to the form's two moves ---------- */
 export function addLearned(S, learned) {
   if (!learned) return;
   S.units.forEach(u => {
@@ -52,18 +52,18 @@ export function addLearned(S, learned) {
 
 
 function openLearning(k) {
-  CT_K = k;
+  TM_K = k;
   renderLearning();
   $('#ctBox').hidden = false;
 }
 
 
 function renderLearning() {
-  const k = CT_K,
+  const k = TM_K,
     M = MACHINES[k],
     m = MV[M.mv],
     families = raisedFamilies().sort((a, b) => compatible(k, b) - compatible(k, a));
-  // rendu : src/screens/overlays/CtBox.jsx
+  // rendering: src/screens/overlays/TmBox.jsx
   paintOverlay('ct', { M, m, fams: families.map(b => ({ b, ok: compatible(k, b), deja: PROFILE.apprises[b] })) });
 }
 
@@ -94,29 +94,29 @@ function forgetTM(b) {
 }
 
 
-/** Dans la fiche d'un Pokémon : sa capacité apprise. */
+/** In a Pokémon's sheet: its learned move. */
 export function moveLearned(id) {
   const b = BY[id] && BY[id].base,
     a = b && PROFILE.apprises[b];
-  if (!a) return inheritance416(b); // capacité héritée (v4.16)
+  if (!a) return inheritance416(b); // inherited move (v4.16)
   const M = Object.values(MACHINES).find(x => x.mv === a);
   return `<div class="mvc ct-mvc"><div class="t"><b>${MV[a].n}</b><span class="chip">${M ? M.num : 'Apprise'}</span></div><p>${MV[a].d}</p><button type="button" class="b b-sm b-ghost" data-ctoubli="${b}">Oublier</button></div>` + inheritance416(b);
 }
 
 /* =====================================================================
-   v4.6 : CT et CS
+   v4.6: TMs and HMs
    ---------------------------------------------------------------------
-   La Boutique vend des CT (Pokédollars, usage unique, comme en 2e
-   génération) et des CS (Éclats, réutilisables). Depuis le Sac, une
-   machine s'apprend à une famille compatible : la capacité devient sa
-   3e capacité, gardée à tous les stades, Éveil compris.
-   Une famille a un seul emplacement de capacité apprise : en apprendre
-   une autre la remplace.
-   Compatibilité : selon les types de la famille (tous stades confondus),
-   plus quelques familles connues pour l'apprendre dans les jeux.
+   The Shop sells TMs (Pokédollars, single use, as in generation 2)
+   and HMs (Shards, reusable). From the Bag, a machine is taught to a
+   compatible family: the move becomes its 3rd move, kept at all stages,
+   Awakening included.
+   A family has a single learned-move slot: learning another one
+   replaces it.
+   Compatibility: by the family's types (all stages combined),
+   plus a few families known to learn it in the games.
    ===================================================================== */
 
-/* ---------- les machines (numéros de Johto) ---------- */
+/* ---------- the machines (Johto numbers) ---------- */
 export const MACHINES = {
   ct01: { num: 'CT01', mv: 'dynamopoing', p: 3000, types: ['Combat', 'Psy', 'Roche', 'Normal'] },
   ct11: { num: 'CT11', mv: 'zenith', p: 2000, tous: true },
@@ -160,27 +160,27 @@ export const MACHINES = {
 };
 
 
-/* ---------- compatibilité ---------- */
+/* ---------- compatibility ---------- */
 const familyTypes = base => [...new Set(familyOf(base).flatMap(m => m.t))];
 
 
-/** Les familles à qui l'on peut apprendre : en Campagne celles du Box, en Libre toutes. */
+/** The families that can be taught: in Campaign those in the Box, in Free mode all of them. */
 const raisedFamilies = () => [
-  ...new Set(PROFILE.box.map(id => BY[id] && BY[id].base).filter(Boolean)) // Libre aussi : les familles capturées (v4.21)
+  ...new Set(PROFILE.box.map(id => BY[id] && BY[id].base).filter(Boolean)) // Free mode too: the captured families (v4.21)
 ];
 
 
-/** Après un Éveil, les capacités de la nouvelle forme, plus la capacité apprise. */
+/** After an Awakening, the new form's moves, plus the learned move. */
 export const withLearned = (u, mv) => {
   const o = u.ctm && !mv.includes(u.ctm) ? [...mv, u.ctm] : [...mv];
-  if (u.hm && MV[u.hm] && !o.includes(u.hm)) o.push(u.hm); // capacité héritée (v4.16)
+  if (u.hm && MV[u.hm] && !o.includes(u.hm)) o.push(u.hm); // inherited move (v4.16)
   return o;
 };
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Startup statements, run in their original order (see index.js).
 export function __init() {
 
-/* ---------- capacités des CS qui n'existaient pas encore ---------- */
+/* ---------- HM moves that did not exist yet ---------- */
 Object.assign(MV, {
   coupe: {
     n: 'Coupe',
@@ -196,7 +196,7 @@ Object.assign(MV, {
 });
 
 
-// elles se rangent dans la Boutique et le Sac comme les autres objets
+// they are stored in the Shop and the Bag like the other items
 for (const k in MACHINES) {
   const M = MACHINES[k],
     m = MV[M.mv];
@@ -212,18 +212,18 @@ for (const k in MACHINES) {
 }
 
 
-/* ---------- Sac : apprendre ---------- */
-// #ctBox : rendu par React (src/screens/overlays/CtBox.jsx)
+/* ---------- Bag: learning ---------- */
+// #ctBox: rendered by React (src/screens/overlays/TmBox.jsx)
 
 
-CT_K = null;
+TM_K = null;
 
 
 document.addEventListener('click', e => {
   const ap = e.target.closest('[data-apprendre]');
   if (ap) return openLearning(ap.dataset.apprendre);
   const f = e.target.closest('[data-ctf]');
-  if (f && CT_K) return learnTm(CT_K, f.dataset.ctf);
+  if (f && TM_K) return learnTm(TM_K, f.dataset.ctf);
   const x = e.target.closest('[data-ct]');
   if (x || e.target.id === 'ctBox') {
     $('#ctBox').hidden = true;
@@ -232,7 +232,7 @@ document.addEventListener('click', e => {
   const o = e.target.closest('[data-ctoubli]');
   if (o) {
     forgetTM(o.dataset.ctoubli);
-    if (openId) openSheet(openId, true); // la fiche ouverte se met à jour
+    if (openId) openSheet(openId, true); // the open sheet is updated
   }
 });
 }

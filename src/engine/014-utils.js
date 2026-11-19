@@ -1,4 +1,4 @@
-/* Section d'origine : 08-outils.js */
+/* Original section: 08-outils.js */
 
 import { MK, RX, TYPES } from './004-data.js';
 import { BY, PKT, PK_ART } from './009-pokemon.js';
@@ -19,7 +19,7 @@ export function medal(types, cls = '') {
   const shine = 'radial-gradient(circle at 34% 26%,rgba(255,255,255,.42),rgba(255,255,255,0) 52%)';
   const bg = types[1] ? `${shine},conic-gradient(from 225deg,${a} 0 50%,${b} 50% 100%)` : `${shine},${a}`;
   const h = `<span class="medal ${cls}" style="background:${bg};--glow:${a}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="${gp(types[0])}" fill="${INK}" fill-rule="evenodd"/></svg></span>`;
-  // l’illustration du Pokémon dans son médaillon de type
+  // the Pokémon's artwork in its type medallion
   const id = PKT.get(types);
   if (!id || !BY[id]) return h;
   return h
@@ -48,8 +48,8 @@ export function ico(d) {
 }
 
 
-// #toast est rendu par React (src/screens/overlays/Toast.jsx) ; mise à jour différée, sans
-// flushSync, car toast() peut être appelé pendant le rendu d'un autre composant.
+// #toast is rendered by React (src/screens/overlays/Toast.jsx); deferred update, without
+// flushSync, since toast() may be called while another component is rendering.
 export function toast(msg) {
   showToast(msg);
 }
@@ -100,13 +100,13 @@ export function after2images(f) {
 }
 
 
-/** Promesse résolue après ms millisecondes. */
+/** Promise resolved after ms milliseconds. */
 export function wait(ms) {
   return new Promise(r => setTimeout(r, ms));
 }
 
 
-/** Valeur JSON rangée sous k dans localStorage ; d si elle manque, est fausse ou illisible. */
+/** JSON value stored under k in localStorage; d if it is missing, falsy or unreadable. */
 export function readLS(k, d) {
   try {
     const v = JSON.parse(localStorage.getItem(k) || 'null');
@@ -117,7 +117,7 @@ export function readLS(k, d) {
 }
 
 
-/** Range v en JSON sous k ; un stockage plein ou interdit est ignoré. */
+/** Stores v as JSON under k; full or forbidden storage is ignored. */
 export function writeLS(k, v) {
   try {
     localStorage.setItem(k, JSON.stringify(v));
@@ -125,7 +125,7 @@ export function writeLS(k, v) {
 }
 
 
-/** Générateur mulberry32 partant de l'état a (la graine est préparée par l'appelant : la même graine rejoue la même suite). */
+/** mulberry32 generator starting from state a (the seed is prepared by the caller: the same seed replays the same sequence). */
 export function mulberry32(a) {
   return () => {
     a = (a + 0x6d2b79f5) >>> 0;
@@ -137,7 +137,7 @@ export function mulberry32(a) {
 }
 
 
-/** Bruit de valeur : nombre dans [0, 1[ fixé par la case (x, y) et la graine s. */
+/** Value noise: number in [0, 1[ fixed by tile (x, y) and seed s. */
 export function hash2(x, y, s) {
   let h = (Math.imul(x, 374761393) + Math.imul(y, 668265263) + Math.imul(s, 1274126177)) | 0;
   h = Math.imul(h ^ (h >>> 13), 1274126177);
@@ -145,14 +145,14 @@ export function hash2(x, y, s) {
 }
 
 
-/** Empreinte FNV-1a 32 bits d'une chaîne (entier non signé). */
+/** 32-bit FNV-1a fingerprint of a string (unsigned integer). */
 export function fnv(s) {
   let h = 2166136261;
   for (let i = 0; i < s.length; i++) h = Math.imul(h ^ s.charCodeAt(i), 16777619);
   return h >>> 0;
 }
 
-/* ===================== OUTILS ===================== */
+/* ===================== TOOLS ===================== */
 export const $ = (s, r = document) => r.querySelector(s);
 
 
@@ -176,7 +176,7 @@ export const markOf = id => MK.find(m => m.id === id);
 
 export const rxCat = id => (RX[id] ? RX[id].k : 'ter');
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Statements run at startup, in the original order (see index.js).
 export function __init() {
 
 RM = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);

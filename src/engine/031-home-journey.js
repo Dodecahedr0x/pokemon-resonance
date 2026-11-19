@@ -1,4 +1,4 @@
-/* Section d'origine : 25-v3-parcours-accueil.js */
+/* Original section: 25-v3-parcours-accueil.js */
 
 import { GYMS } from './004-data.js';
 import { BY, SCEN } from './009-pokemon.js';
@@ -12,11 +12,11 @@ import { save, squad } from './020-team-cards.js';
 import { ELITE, scenLock } from './022-items-bonds-ai.js';
 import { __set_scSel, launch, openBattle, scSel } from './024-combat-ui.js';
 import { SAVE_V, applySave, autoSave, esc } from './025-saves.js';
-import { TUTO, __set_PREPG, nextGoal, renderPrep } from './026-campaign-tutorial-sound.js';
+import { TUTORIAL_STEPS, __set_PREPG, nextGoal, renderPrep } from './026-campaign-tutorial-sound.js';
 import { AUTO, CHAP, leaderOf } from './030-prestige-staging.js';
 import { renderHome } from './036-home.js';
 import { LEGS, RIVAL, RIVAL_KEYS, legKey, legOf, rivalIdx, styleOf } from './043-adventure-plus.js';
-import { COLOSSES } from './047-tactics.js';
+import { COLOSSI } from './047-tactics.js';
 import { dissonanceAfter } from './050-world.js';
 import { roamOk416 } from './055-living-johto.js';
 import { hProf419, hoennOpen } from './059-hoenn.js';
@@ -30,7 +30,7 @@ import { hideTip, showTip } from '../components/tipStore.js';
 let TIPSEEN;
 
 
-/* --- portraits : initiales sur la couleur du type (personnages originaux) --- */
+/* --- portraits: initials on the type color (original characters) --- */
 export function avatar(name, type, cls = '') {
   const ini = String(name)
     .replace(/^(Prof\.|Professeure)\s+/, '')
@@ -43,13 +43,13 @@ export function avatar(name, type, cls = '') {
 }
 
 
-/* --- prochaine étape --- */
+/* --- next step --- */
 export function wonOf(k) {
   const s = SCEN[k];
   if (!s) return false;
   if (s.hoenn != null) return (PROFILE.hoenn || []).includes(s.hoenn); // Hoenn (v4.19)
   if (s.hfinal) return !!PROFILE.hchamp;
-  if (s.jdis) return (PROFILE.jdis || 0) >= s.jdis; // Néo-Dissonance (v4.16)
+  if (s.jdis) return (PROFILE.jdis || 0) >= s.jdis; // Neo-Dissonance (v4.16)
   if (s.roam) return roamOk416(s.roam);
   if (s.ami != null) return false;
   if (s.johto != null) return (PROFILE.johto || []).includes(s.johto); // Johto (v4.15)
@@ -129,13 +129,13 @@ export function selItems(g) {
       ...(isCamp() && i % 2 ? [a.k, RIVAL_KEYS[(i - 1) / 2]] : [a.k]),
       ...dissonanceAfter(i + 1) // Team Dissonance (v4.11)
     ]);
-  // les Légendaires de Hoenn (v4.38) restent masqués tant que Hoenn est fermée
+  // the Hoenn Legendaries (v4.38) stay hidden while Hoenn is closed
   if (g === 'apres') return ['tdr', ...LEGS.map(L => legKey(L.id)), ...(hoennOpen() ? HLEG435.map(L => 'hl' + L.id) : [])];
   if (g === 'ligue') return [...ELITE, 'champ'];
   return [
     'tuto',
     ...TERR.filter(k => !['tuto', 'sauvage', 'champ'].includes(k) && !SCEN[k].elite),
-    ...COLOSSES.map(C => C.k) // colosses (v4.8)
+    ...COLOSSI.map(C => C.k) // colossi (v4.8)
   ];
 }
 
@@ -156,16 +156,16 @@ function pickIn(g) {
 }
 
 
-/* cadre de sélection : onglets, liste, fiche du combat, équipe, doctrine (v4.30) et
-   équipes enregistrées (v4.32) : rendu par React (src/screens/combat/prep) */
+/* selection frame: tabs, list, battle sheet, team, doctrine (v4.30) and
+   saved teams (v4.32): rendered by React (src/screens/combat/prep) */
 export function renderSelection() {
   if (!$('#scenList') || !SCEN[scSel]) return;
   refreshPrep();
-  refreshHome(); // objectif de la barre latérale (#sideGoal, src/screens/accueil/ObjectifLateral.jsx)
+  refreshHome(); // sidebar objective (#sideGoal, src/screens/home/SideObjective.jsx)
 }
 
 
-// conseil rendu par React (src/components/Tip.jsx) après l'en-tête de l'écran
+// tip rendered by React (src/components/Tip.jsx) after the screen header
 function tipFor(t) {
   if (!TIPS[t] || TIPSEEN[t]) return;
   showTip(t);
@@ -178,8 +178,8 @@ export function afterShow(t) {
 }
 
 
-// Accueil de la Professeure (#intro) : la carte de l'étape INTRO.i est rendue par React
-// (src/screens/overlays/Intro.jsx), reconstruite de façon synchrone à chaque appel.
+// Professor's welcome (#intro): the card for step INTRO.i is rendered by React
+// (src/screens/overlays/Intro.jsx), rebuilt synchronously on every call.
 function renderIntro() {
   if (!document.getElementById('intro')) return;
   refreshIntro();
@@ -211,11 +211,11 @@ export function showIntro(force) {
   }
   Object.assign(INTRO, { i: 0, name: PROFILE.name || '', diff: PROFILE.diff || 'normal', st: null });
   openIntro();
-  // carte impossible à dessiner : Intro.jsx n'affiche rien (jamais un voile vide) et signale le souci
+  // card cannot be drawn: Intro.jsx renders nothing (never an empty veil) and reports the problem
   const o = document.getElementById('intro');
   if (!o) return;
   focusIntro(o);
-  if (o._introL) return; // déjà ouvert : écouteurs en place
+  if (o._introL) return; // already open: listeners in place
   o._introL = 1;
   o.addEventListener('click', e => {
     const s = e.target.closest('[data-in-st]');
@@ -243,7 +243,7 @@ export function showIntro(force) {
       renderIntro();
     } else if (a === 'start' && INTRO.st) {
       if (gameInProgress430() && !INTRO.ok430) {
-        // revoir l’accueil ne doit pas effacer une partie sans prévenir (v4.30)
+        // revisiting the welcome must not erase a save without warning (v4.30)
         confirm430('Recommencer l’aventure ?', 'Choisir un partenaire ici lance une nouvelle campagne.', () => {
           INTRO.ok430 = 1;
           b.click();
@@ -259,12 +259,12 @@ export function showIntro(force) {
       openBattle('tuto');
       launch();
     } else if (a === 'skip' && INTRO.i < 3) {
-      // passer la présentation mène au choix du partenaire : la Campagne (et ses captures) commence toujours
+      // skipping the introduction leads to the partner choice: the Campaign (and its captures) always starts
       INTRO.i = 3;
       renderIntro();
     } else if (a === 'later' || a === 'skip' || a === 'libre') {
       if (a === 'libre' && INTRO.st && !isCamp() && !PROFILE.box.includes(INTRO.st)) {
-        PROFILE.box.push(INTRO.st); // le partenaire choisi suit aussi en Libre (v4.21)
+        PROFILE.box.push(INTRO.st); // the chosen partner also follows in Free mode (v4.21)
         save();
       }
       closeIntro();
@@ -307,8 +307,8 @@ export const PROF_AV = `<span class="pav" aria-hidden="true"><b>MS</b><i><svg vi
 export const S2n = g => (g.gi >= 0 ? `Arène ${g.gi + 1} · ${GYMS[g.gi].t}` : g.S.n || g.n);
 
 
-/* --- Combats : un seul cadre (onglet → liste → fiche) --- */
-// SELG et k2n : lus par la sélection des combats (React)
+/* --- Battles: a single frame (tab → list → sheet) --- */
+// SELG and k2n: read by the battle selection (React)
 export const SELG = [
   ['terrains', 'Entraînement', 'i-fight'],
   ['arenes', 'Arènes', 'i-league'],
@@ -320,8 +320,8 @@ export const SELG = [
 export const k2n = k => (k === 'champ' ? 'Finale' : k === 'tuto' ? 'Combat guidé' : (SCEN[k] || {}).n || '');
 
 
-/* --- première visite d’un écran : un conseil de la Professeure --- */
-// lu par src/components/Tip.jsx
+/* --- first visit to a screen: a tip from the Professor --- */
+// read by src/components/Tip.jsx
 export const TIPS = {
   pokedex:
     'Touchez <b>Recruter</b> sous un Pokémon pour l’ajouter. Quatre Pokémon et 12 PC au maximum : la jauge en haut vous guide.',
@@ -330,17 +330,17 @@ export const TIPS = {
 };
 
 
-/* --- accueil de la Professeure (premier lancement) --- */
-// étape de l'accueil de la Professeure, lue par Intro.jsx
+/* --- Professor's welcome (first launch) --- */
+// welcome step of the Professor, read by Intro.jsx
 export const INTRO ={ i: 0, name: '', diff: 'normal', st: null };
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Instructions run at startup, in the original order (see index.js).
 export function __init() {
 
-/* ===================== v3.0 « Pokémon » : un chemin clair, un cadre de sélection, un accueil qui guide ===================== */
+/* ===================== v3.0 "Pokémon": a clear path, a selection frame, a welcome that guides ===================== */
 
 
-/* --- raccourcis de l’accueil et du guide --- */
+/* --- Home and guide shortcuts --- */
 document.addEventListener('click', e => {
   const b = e.target.closest('[data-hm]');
   if (!b) return;
@@ -368,7 +368,7 @@ $('#selTabs').addEventListener('click', e => {
 });
 
 
-/* --- tutoriel : des consignes plus simples, la Professeure en coach --- */
+/* --- tutorial: simpler instructions, the Professor as coach --- */
 {
   const T2 = {
     'Lisez la menace': [
@@ -392,7 +392,7 @@ $('#selTabs').addEventListener('click', e => {
       'Quand vos Pokémon ont joué, touchez « Fin du tour ». Les adversaires se déplacent et attaquent à leur tour.'
     ]
   };
-  TUTO.forEach(s => {
+  TUTORIAL_STEPS.forEach(s => {
     const n = T2[s.t];
     if (n) {
       s.t = n[0];
@@ -419,5 +419,5 @@ document.addEventListener('click', e => {
 });
 
 
-/* résultat : la boîte à badges vit désormais dans l’onglet Arènes (« Voir les arènes », Result.jsx) */
+/* result: the badge box now lives in the Gyms tab ("Voir les arènes" (See the gyms), Result.jsx) */
 }

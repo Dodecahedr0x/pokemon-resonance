@@ -1,5 +1,5 @@
 
-/* ---------- 4. boîtes de dialogue classiques ---------- */
+/* ---------- 4. classic dialog boxes ---------- */
 html:not(#pkz) body:not(#pkz) .pk-dlg{position:relative!important;background:linear-gradient(180deg,#ffffff,#edf1f7)!important;color:#273142!important;border:0!important;border-radius:12px!important;box-shadow:0 0 0 2.5px #f8fafc,0 0 0 5.5px #3a72c4,0 0 0 7px #0d1f3c,0 16px 30px -14px rgba(0,0,0,.85)!important;text-shadow:none!important;backdrop-filter:none!important}
 html:not(#pkz) body:not(#pkz) .pk-dlg :is(p,em,q,small,span:not(.pav):not(.dlg-who):not(.tb):not(.pk-c):not(.pk-tw)):not(.pav *):not(.tb *):not(button *):not(.it-cards *){color:#273142!important;text-shadow:none!important}
 html:not(#pkz) body:not(#pkz) .pk-dlg :is(b,strong):not(.pav *):not(button *):not(.it-cards *){color:#cf2f2b!important;text-shadow:none!important}
@@ -12,40 +12,40 @@ html:not(#pkz) body:not(#pkz) .pk-typing .pk-c{visibility:hidden}
 html:not(#pkz) body:not(#pkz) .pk-typing .pk-c.v{visibility:visible}
 @keyframes pkFleche{0%,100%{transform:translateY(0)}50%{transform:translateY(3px)}}
 
-/* Prof. Sorbier sur l'Accueil */
+/* Prof. Sorbier on Home */
 html:not(#pkz) body:not(#pkz) .v4h-prof{align-items:center!important;background:transparent!important;border:0!important;padding:10px 4px 4px!important}
 html:not(#pkz) body:not(#pkz) .v4h-prof>p.pk-dlg{flex:1;margin:8px 0 0!important;padding:14px 16px 13px!important;font-size:13.5px!important;line-height:1.5!important}
-/* conseils du Professeur */
+/* Professor's advice */
 html:not(#pkz) body:not(#pkz) .tip .dlgbox.pk-dlg{padding:15px 30px 13px 14px!important;margin-top:8px}
-/* scènes d'histoire */
+/* story scenes */
 html:not(#pkz) body:not(#pkz) #scene417 .sc-card.pk-dlg{padding:16px 16px 14px!important;animation:pkDlgIn .32s cubic-bezier(.2,1,.4,1) both!important}
 html:not(#pkz) body:not(#pkz) #scene417 .sc-card.pk-dlg .sc-who>b{color:#1d4ea8!important;font-family:var(--f-d)!important;letter-spacing:.04em}
 html:not(#pkz) body:not(#pkz) #scene417 .sc-card.pk-dlg .sc-tx{font-size:16.5px!important;line-height:1.55!important;font-weight:500;color:#1f2836!important}
 html:not(#pkz) body:not(#pkz) #scene417 .sc-card.pk-dlg .sc-n{color:#6a7688!important}
 html:not(#pkz) body:not(#pkz) .pk-dlg .b-ghost{color:#2c5fae!important;background:transparent!important;border:1.5px solid rgba(44,95,174,.45)!important;box-shadow:none!important}
-/* coach du tutoriel */
+/* tutorial coach */
 html:not(#pkz) body:not(#pkz) #coach .co-in.pk-dlg{padding:12px 14px!important}
 html:not(#pkz) body:not(#pkz) #coach .co-in.pk-dlg>b{color:#1d4ea8!important}
 html:not(#pkz) body:not(#pkz) #coach .co-in.pk-dlg .co-n{color:#6a7688!important}
 html:not(#pkz) body:not(#pkz) #coach .co-in.pk-dlg p{color:#273142!important}
-/* astuces en combat */
+/* tips in battle */
 html:not(#pkz) body:not(#pkz) #tip429.pk-dlg{padding:12px 14px!important}
 html:not(#pkz) body:not(#pkz) #tip429.pk-dlg small{color:#2c5fae!important;font-weight:800;letter-spacing:.06em}
 html:not(#pkz) body:not(#pkz) #tip429.pk-dlg>div>b{color:#1d4ea8!important}
-/* réplique du champion avant le combat */
+/* the champion's line before the battle */
 html:not(#pkz) body:not(#pkz) .sel-card .dlgbox.pk-dlg{padding:12px 30px 13px 14px!important;margin:6px 2px}
 /* introduction */
 html:not(#pkz) body:not(#pkz) .intro .dlgbox.pk-dlg{padding:20px 22px 22px!important;margin-top:10px}
 @keyframes pkDlgIn{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}
 
-/* ---------- 5. silhouettes des Pokémon pas encore capturés ---------- */
+/* ---------- 5. silhouettes of Pokémon not yet caught ---------- */
 html:not(#pkz) body:not(#pkz) .v4-dl.unk img{filter:brightness(0) drop-shadow(0 0 1.5px rgba(150,205,255,.85))!important;opacity:1!important}
 html:not(#pkz) body:not(#pkz) .v4-dl.unk::before{content:"?";position:absolute;left:34px;top:5px;z-index:2;width:16px;height:16px;border-radius:50%;display:grid;place-items:center;background:#e3262f;color:#fff;font:900 11px/1 var(--f-d);box-shadow:0 0 0 1.5px #151a22;pointer-events:none}
 html:not(#pkz) body:not(#pkz) #dex4Card:not(.own448) .v4d-art img{filter:brightness(0) drop-shadow(0 0 2px rgba(150,205,255,.85)) drop-shadow(0 0 16px rgba(111,220,255,.3))!important}
 html:not(#pkz) body:not(#pkz) #dex4Card:not(.own448) .v4d-art::after{content:"?"!important;position:absolute!important;display:grid!important;place-items:center;inset:auto 12px 12px auto!important;width:38px!important;height:38px!important;border-radius:50%!important;background:#e3262f!important;color:#fff!important;font:900 24px/1 var(--f-d)!important;box-shadow:0 0 0 2.5px #151a22,0 6px 14px rgba(0,0,0,.5)!important;opacity:1!important;animation:none!important;z-index:4}
 html:not(#pkz) body:not(#pkz) .fcard.locked .pokemon-art-sprite{filter:brightness(0) drop-shadow(0 0 2px rgba(150,205,255,.8))!important}
 
-/* ---------- 6. cartes à collectionner ---------- */
+/* ---------- 6. collectible cards ---------- */
 html:not(#pkz) body:not(#pkz) #pokedex .fcard{--pk-cadre:linear-gradient(145deg,#f6d2ae,#a8642e 28%,#ffe2c2 52%,#7a4320 78%,#e0a874)}
 html:not(#pkz) body:not(#pkz) #pokedex .fcard:has(.fc-rg.rg-moyen){--pk-cadre:linear-gradient(145deg,#ffffff,#97a3b2 28%,#f2f6fa 52%,#66727f 78%,#dfe6ee)}
 html:not(#pkz) body:not(#pkz) #pokedex .fcard:has(.fc-rg.rg-fort){--pk-cadre:linear-gradient(145deg,#fff4b8,#c8901c 28%,#fff0a5 52%,#8e6c31 78%,#f0d59c)}
@@ -56,7 +56,7 @@ html:not(#pkz) body:not(#pkz) #pokedex .fcard:is(.pk-shiny,:has(.fc-rg.rg-expert
 html:not(#pkz) body:not(#pkz) #pokedex .fcard .pk-shn{position:absolute;right:8px;top:30px;z-index:6;padding:2px 7px;border-radius:999px;background:linear-gradient(90deg,#ffd35a,#ff9ad5,#8fe3ff);color:#2a1630;font:800 9px/1.4 var(--f-d);letter-spacing:.06em;box-shadow:0 0 0 1px rgba(0,0,0,.4),0 0 12px rgba(255,180,230,.6);pointer-events:none}
 @keyframes pkHoloFoil{to{background-position:250% 250%}}
 
-/* ---------- 7. boîte à badges en velours ---------- */
+/* ---------- 7. velvet badge case ---------- */
 html:not(#pkz) body:not(#pkz) :is(.tc-bdg,.v4-tr-b){position:relative;padding:12px!important;border-radius:14px!important;border:0!important;background:radial-gradient(120% 90% at 50% 0%,rgba(255,255,255,.07),transparent 60%),repeating-linear-gradient(45deg,rgba(255,255,255,.02) 0 2px,transparent 2px 4px),linear-gradient(180deg,#43111f,#22070f)!important;box-shadow:inset 0 3px 10px rgba(0,0,0,.8),0 0 0 2px #120408,0 0 0 4px rgba(200,160,80,.55),0 10px 24px -12px rgba(0,0,0,.85)!important;outline:1.5px dashed rgba(255,215,140,.38);outline-offset:-7px;gap:8px!important}
 html:not(#pkz) body:not(#pkz) :is(.tcb,.v4-tbg){position:relative;border:0!important;border-radius:50%!important;background:radial-gradient(circle at 50% 42%,#14060b,#2b0c16 72%)!important;box-shadow:inset 0 3px 6px rgba(0,0,0,.9),0 1px 0 rgba(255,220,180,.12)!important;filter:none!important;overflow:visible}
 html:not(#pkz) body:not(#pkz) :is(.tcb,.v4-tbg):not(.on) svg{opacity:.18;filter:grayscale(1) brightness(.6)}
@@ -65,7 +65,7 @@ html:not(#pkz) body:not(#pkz) :is(.tcb,.v4-tbg).on::after{content:"";position:ab
 html:not(#pkz) body:not(#pkz) :is(.tcb,.v4-tbg).on:nth-child(2)::after{animation-delay:.12s}html:not(#pkz) body:not(#pkz) :is(.tcb,.v4-tbg).on:nth-child(3)::after{animation-delay:.24s}html:not(#pkz) body:not(#pkz) :is(.tcb,.v4-tbg).on:nth-child(4)::after{animation-delay:.36s}html:not(#pkz) body:not(#pkz) :is(.tcb,.v4-tbg).on:nth-child(5)::after{animation-delay:.48s}html:not(#pkz) body:not(#pkz) :is(.tcb,.v4-tbg).on:nth-child(6)::after{animation-delay:.6s}html:not(#pkz) body:not(#pkz) :is(.tcb,.v4-tbg).on:nth-child(7)::after{animation-delay:.72s}html:not(#pkz) body:not(#pkz) :is(.tcb,.v4-tbg).on:nth-child(n+8)::after{animation-delay:.84s}
 @keyframes pkLueur{from{background-position:170% 0}to{background-position:-70% 0}}
 
-/* ---------- 9. Boutique : comptoir, vendeur, étagères ---------- */
+/* ---------- 9. Shop: counter, vendor, shelves ---------- */
 html:not(#pkz) body:not(#pkz) .pk-mart-ban{position:relative;margin:2px 0 18px;display:grid;gap:14px}
 html:not(#pkz) body:not(#pkz) .pk-front{position:relative;height:172px;border-radius:18px;overflow:hidden;background:linear-gradient(180deg,#e9f1fb 0 38%,#d3e1f2 38% 100%);box-shadow:0 0 0 2px #0d1f3c,0 0 0 4px rgba(120,180,255,.35),0 18px 34px -16px rgba(0,0,0,.85)}
 html:not(#pkz) body:not(#pkz) .pk-front .pk-aw{position:absolute;left:0;right:0;top:0;height:30px;z-index:3;background:repeating-linear-gradient(90deg,#2f6fd6 0 24px,#f4f7fc 24px 48px);-webkit-mask:radial-gradient(12px 10px at 12px 20px,#000 98%,transparent) 0 0/24px 30px repeat-x,linear-gradient(#000 0 0) 0 0/100% 20px no-repeat;mask:radial-gradient(12px 10px at 12px 20px,#000 98%,transparent) 0 0/24px 30px repeat-x,linear-gradient(#000 0 0) 0 0/100% 20px no-repeat;filter:drop-shadow(0 3px 2px rgba(0,0,0,.25))}
@@ -86,7 +86,7 @@ html:not(#pkz) body:not(#pkz) #sac.pk-mart .v4-items .v4-it .v4-it-im{background
 html:not(#pkz) body:not(#pkz) #sac.pk-mart .v4-items [data-buy]{position:relative;clip-path:polygon(12px 0,100% 0,100% 100%,12px 100%,0 50%);padding-left:18px!important;border-radius:4px!important;background:linear-gradient(180deg,#ffe877,#f5b82a)!important;color:#3a2600!important;box-shadow:none!important}
 html:not(#pkz) body:not(#pkz) #sac.pk-mart .v4-items [data-buy]::before{content:"";position:absolute;left:8px;top:50%;width:5px;height:5px;margin-top:-2.5px;border-radius:50%;background:#7a5200}
 
-/* ---------- 9. Sac : sac à dos et poches ---------- */
+/* ---------- 9. Bag: backpack and pockets ---------- */
 html:not(#pkz) body:not(#pkz) .pk-bag-ban{display:flex;align-items:center;gap:14px;margin:2px 0 16px;padding:12px 16px;border-radius:18px;background:radial-gradient(120% 100% at 0% 50%,rgba(240,167,58,.22),transparent 60%),linear-gradient(160deg,#3a2414,#1d120a)!important;box-shadow:0 0 0 2px #120a05,0 0 0 4px rgba(214,150,70,.45),0 16px 30px -16px rgba(0,0,0,.85)}
 html:not(#pkz) body:not(#pkz) .pk-bag-ban .pk-bagi{width:76px;height:76px;flex:none;filter:drop-shadow(0 6px 6px rgba(0,0,0,.45));transform-origin:50% 90%;animation:pkSac .6s cubic-bezier(.3,1.5,.5,1) both}
 html:not(#pkz) body:not(#pkz) .pk-bag-ban b{display:block;font:800 17px/1.2 var(--f-d);color:#ffe2b0}

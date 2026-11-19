@@ -1,10 +1,10 @@
-/* Section d'origine : 16-roles-synergies-obstacles.js */
+/* Original section: 16-roles-synergies-obstacles.js */
 
 import { MT } from './001-tactical-engine-turn-core.js';
 import { BY } from './009-pokemon.js';
 import { synOf } from './012-recruits-roles-synergies.js';
 import { K, P, affected, byUid, damage, flies, fromCube, hdist, heal, landed, mvType, nbr, reach, resolveMove, say, toCube, uAt, uk } from './021-combat-engine.js';
-import { FOURNISSEURS_ROLES } from './044-tactical-engine.js';
+import { ROLE_PROVIDERS } from './044-tactical-engine.js';
 
 export let ACT, NOTE;
 export function __set_NOTE(v) { return (NOTE = v); }
@@ -37,7 +37,7 @@ export function applyObst(S) {
 }
 
 
-/* --- ligne de vue (piliers) et couverture (rochers et piliers) --- */
+/* --- line of sight (pillars) and cover (rocks and pillars) --- */
 function cubeRound(x, y, z) {
   let rx = Math.round(x),
     ry = Math.round(y),
@@ -96,15 +96,15 @@ export function ricoTgt(S, u, k) {
 }
 
 
-/* --- dégâts : rôles, synergies, couverture, ricochet, sable --- */
+/* --- damage: roles, synergies, cover, ricochet, sand --- */
 export function dmgRolesField(S, u, m, t, typ, d) {
-  // rôles, synergies, sable, interception, couvert : fournis au pipeline du moteur tactique (v4.5-01)
-  const r = MT.combinerModificateurs(0, MT.collecter(FOURNISSEURS_ROLES, 'degats', { S, u, m, t, typ }, 'attaquant'));
+  // roles, synergies, sand, interception, cover: supplied to the tactical engine pipeline (v4.5-01)
+  const r = MT.combinerModificateurs(0, MT.collecter(ROLE_PROVIDERS, 'degats', { S, u, m, t, typ }, 'attaquant'));
   return Math.max(1, Math.round(d * r.mul) + r.add);
 }
 
 
-/* --- Gardiennage : le Rempart s’interpose (attaques à cible unique) --- */
+/* --- Guarding: the Bulwark steps in (single-target attacks) --- */
 function guardOf(S, v) {
   return (
     S.units
@@ -115,7 +115,7 @@ function guardOf(S, v) {
           x.side === v.side &&
           !x.seg &&
           !x.colosse &&
-          !v.seg && // un colosse et ses parties ne s'interposent pas (v4.8)
+          !v.seg && // a colossus and its parts do not step in (v4.8)
           roleOf(x) === 'Rempart' &&
           !x.gdu &&
           !['SOM', 'GEL', 'PAR'].includes(x.badge) &&
@@ -126,7 +126,7 @@ function guardOf(S, v) {
 }
 
 
-/* --- résolution : contexte, herbes qui brûlent, signal d’effet visuel --- */
+/* --- resolution: context, burning grass, visual effect signal --- */
 export function resolve(S, u, m, k) {
   const typ = mvType(S, u, m),
     t0 = S.tiles[k],
@@ -154,7 +154,7 @@ export function resolve(S, u, m, k) {
   let ev;
   try {
     ev = resolveMove(S, u, m, k);
-    u.touche = false; // il a agi : Mitra-Poing se recharge (v4.13)
+    u.touche = false; // it has acted: Mitra-Poing recharges (v4.13)
   } finally {
     ACT = prev;
   }
@@ -206,7 +206,7 @@ export function resolve(S, u, m, k) {
 }
 
 
-/* --- repli des Éclaireurs adverses après leur attaque --- */
+/* --- retreat of enemy Scouts after their attack --- */
 export function foeRetreat(S, e, ev) {
   const al = S.units.filter(a => a.side === 'a' && !a.ko);
   if (!al.length) return;
@@ -230,7 +230,7 @@ export function foeRetreat(S, e, ev) {
 }
 
 
-/* --- fin de manche : Relais, Toxines, remise à zéro --- */
+/* --- end of round: Relay, Toxins, reset --- */
 export function roundSupport(S) {
   const pre = [];
   if (!S.over) {
@@ -257,8 +257,8 @@ export function roundSupport(S) {
   return pre;
 }
 
-/* ===================== v1.1 : rôles, synergies, obstacles (module additif, sans DOM) ===================== */
-/* --- obstacles par terrain : piliers (bloquent les tirs directs), hautes herbes (cachent au-delà de 2 cases), sable (2 Mouvements) --- */
+/* ===================== v1.1: roles, synergies, obstacles (additive module, no DOM) ===================== */
+/* --- obstacles per terrain: pillars (block direct shots), tall grass (hides beyond 2 cells), sand (2 Movement) --- */
 export const OBST = {
   tuto: { grass: ['2,4', '3,4', '3,5'] },
   gue: { grass: ['2,2', '2,3', '3,2'], sand: ['5,0', '5,4'] },
@@ -301,7 +301,7 @@ export const hasSyn = (S, u, k) => !!(u && u.side === 'a' && S.syn && S.syn.incl
 
 export const ignObst = (S, u, typ) => hasSyn(S, u, 'esprit') && (typ === 'Psy' || typ === 'Spectre');
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Instructions run at startup, in the original order (see index.js).
 export function __init() {
 ACT = null,
   NOTE = null;

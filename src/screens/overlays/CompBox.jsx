@@ -3,7 +3,7 @@ import { Box, Dialogue } from './Window.jsx';
 import { BY } from '../../engine/009-pokemon.js';
 import { medal } from '../../engine/014-utils.js';
 
-// Choix du compagnon (#compBox). Clics (data-comp, data-comp-p) et hidden : moteur (057).
+// Companion choice (#compBox). Clicks (data-comp, data-comp-p) and hidden: engine (057).
 export default function CompanionBox() {
   return <Box nom="comp" className="result exp-box" id="compBox" Carte={MapScreen} />;
 }

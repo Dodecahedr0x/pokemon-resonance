@@ -4,7 +4,7 @@ import { costOf0 } from '../../engine/049-identity.js';
 import { HELD_SHOP, dailyOffers, discount414 } from '../../engine/053-resonance.js';
 import { Disc } from './Items.jsx';
 
-// Offres du jour (v4.14) : −30 % jusqu'à minuit ; data-offre ouvre la catégorie (moteur).
+// Daily offers (v4.14): −30% until midnight; data-offre opens the category (engine).
 export default function Offers() {
   return (
     <section className="v4-offres v4-panel" aria-label="Offres du jour">

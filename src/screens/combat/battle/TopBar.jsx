@@ -17,10 +17,10 @@ import { chipChord } from '../../../engine/049-identity.js';
 import { chips412 } from '../../../engine/051-epic-tms.js';
 import { PREF } from '../../../engine/026-campaign-tutorial-sound.js';
 import { DOCTRINES430 } from '../../../engine/065-camp-tactics.js';
-import { RELIQUES431 } from '../../../engine/066-tactical-challenges.js';
+import { RELICS431 } from '../../../engine/066-tactical-challenges.js';
 import { useBattleVersion } from './battleStore.js';
 
-// Bandeau du haut : nom du combat, manche, pastilles (météo, heure, vent…), Voix, ×2, Abandonner.
+// Top banner: battle name, round, chips (weather, time, wind…), Voice, ×2, Abandon.
 export function BtTop() {
   const v = useBattleVersion('top');
   const on = v > 0 && B;
@@ -63,8 +63,8 @@ export function BtTop() {
   );
 }
 
-// Pastille de phase (vue compacte) : Placement, À vous, Tour adverse, Éveil. Elle suit la barre du bas
-// (version « foot », réécrite à chaque changement de tour) ; son data-ph teinte la scène (combat-compact.css).
+// Phase chip (compact view): Placement, Your turn, Opponent turn, Awakening. It follows the bottom bar
+// ("foot" version, rewritten on every turn change); its data-ph tints the scene (combat-compact.css).
 export function phaseOf(B0) {
   if (!B0 || B0.over) return null;
   if (B0.dep430) return 'deploy';
@@ -85,7 +85,7 @@ function Phase() {
   );
 }
 
-// Bouton « ×2 » : son état suit le réglage (rapide428).
+// "×2" button: its state follows the setting (quick428).
 function Quick() {
   const v = useBattleVersion('fast');
   return (
@@ -101,8 +101,8 @@ function Quick() {
   );
 }
 
-// Pastilles : météo, heure, vent, mutateur, accord, CT (fonctions du moteur), puis doctrine (v4.30),
-// reliques et brouillard (v4.31).
+// Chips: weather, time, wind, mutator, chord, TM (engine functions), then doctrine (v4.30),
+// relics and fog (v4.31).
 function Chips() {
   const doc = B.doc430 && DOCTRINES430[B.doc430];
   return (
@@ -123,7 +123,7 @@ function Chips() {
         </span>
       )}
       {B.sc === 'echo431' && B.rel431 && B.rel431.length > 0 && (
-        <span className="chip chip-rel431" title={B.rel431.map(k => RELIQUES431[k][0]).join(', ')}>
+        <span className="chip chip-rel431" title={B.rel431.map(k => RELICS431[k][0]).join(', ')}>
           {B.rel431.length} relique{B.rel431.length > 1 ? 's' : ''}
         </span>
       )}
@@ -132,7 +132,7 @@ function Chips() {
   );
 }
 
-// Synergies actives de l'équipe (#bSyn), créées au premier rendu du combat.
+// Active team synergies (#bSyn), created on the first render of the battle.
 export function Synergies() {
   const v = useBattleVersion('top');
   if (!v) return null;
@@ -156,8 +156,8 @@ export function Synergies() {
   );
 }
 
-// Règle de plateau : celle de l'arène, ou la même règle reprise par une légende ou un étage de la Tour.
-// Masquée, elle garde son dernier contenu, comme l'ancien DOM.
+// Board rule: the arena's, or the same rule picked up by a legend or a Tower floor.
+// Hidden, it keeps its last content, like the old DOM.
 let lastRule = null;
 export function Rule() {
   const v = useBattleVersion('top');
@@ -193,7 +193,7 @@ export function Rule() {
   );
 }
 
-// Frise de l'ordre par Vitesse (v4.5) : qui joue, dans quel ordre, cette manche.
+// Speed-order timeline (v4.5): who plays, in what order, this round.
 let lastFrieze = null;
 export function Timeline() {
   const v = useBattleVersion('top');

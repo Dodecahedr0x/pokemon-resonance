@@ -1,8 +1,8 @@
 import { createElement, Fragment } from 'react';
 
-// Convertit un fragment HTML de confiance (textes du jeu avec <b>, icônes produites par
-// le moteur : medal(), tb(), badgeSvg()…) en vrais éléments React, sans élément
-// enveloppe : la structure du DOM reste celle du moteur, donc le CSS s'applique pareil.
+// Converts a trusted HTML fragment (game texts with <b>, icons produced by
+// the engine: medal(), tb(), badgeSvg()…) into real React elements, with no wrapper
+// element: the DOM structure stays the engine's, so the CSS applies the same.
 
 const RENAME = {
   class: 'className',
@@ -36,7 +36,7 @@ export function parseStyle(css) {
   return out;
 }
 
-// Image du médaillon (medal) : sans illustration, le médaillon garde son pictogramme de type.
+// Medal image (medal): without an illustration, the medal keeps its type pictogram.
 function onImgError(e) {
   const img = e.currentTarget;
   img.parentNode?.classList.remove('pk');
@@ -79,7 +79,7 @@ export function htmlToReact(html) {
   return out;
 }
 
-// <Html html="…" /> : le fragment, sans enveloppe.
+// <Html html="…" />: the fragment, with no wrapper.
 export function Html({ html }) {
   return createElement(Fragment, null, htmlToReact(html));
 }

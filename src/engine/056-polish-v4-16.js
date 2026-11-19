@@ -1,4 +1,4 @@
-/* Section d'origine : v4.16.1-01-finitions.js */
+/* Original section: v4.16.1-01-polish.js */
 
 import { $, RM } from './014-utils.js';
 import { go } from './016-navigation.js';
@@ -10,13 +10,13 @@ import { refreshHome } from '../screens/home/homeStore.js';
 
 
 /* =====================================================================
-   v4.16.1 : finitions
-   - Bêtes errantes : leur repère se pose là où il gêne le moins les autres.
-   - Trophées : les badges de Johto et le titre de Maître comptent (22).
-   - Accueil : une carte « Nouveau » présente les ajouts de la v4.16
-     (une fois par appareil).
+   v4.16.1: polish
+   - Wandering beasts: their marker is placed where it bothers the others least.
+   - Trophies: the Johto badges and the Master title count (22).
+   - Home: a « Nouveau » (New) card presents the v4.16 additions
+     (once per device).
    ===================================================================== */
-/** Une place libre à côté du lieu où rôde la bête : son repère et son nom ne recouvrent aucun autre lieu. */
+/** A free spot next to where the beast roams: its marker and name cover no other place. */
 export function roamPos416(h, takenSet) {
   const C = [
       [110, 0],
@@ -30,7 +30,7 @@ export function roamPos416(h, takenSet) {
       [150, 0],
       [-150, 0]
     ],
-    labelBox = (x, y) => [x - 62, y - 28, x + 62, y + 52], // le rond et l’étiquette du nom
+    labelBox = (x, y) => [x - 62, y - 28, x + 62, y + 52], // the circle and the name label
     inter = (a, b) => Math.max(0, Math.min(a[2], b[2]) - Math.max(a[0], b[0])) * Math.max(0, Math.min(a[3], b[3]) - Math.max(a[1], b[1])),
     others = [...PLACES_J, ...takenSet].map(p => labelBox(p.x, p.y));
   let best = [h.x + 110, h.y],
@@ -49,14 +49,14 @@ export function roamPos416(h, takenSet) {
 }
 
 
-/** Le panneau « Nouveau » de l'Accueil (#v4News, src/screens/accueil/Nouveautes.jsx) a été lu. */
+/** The « Nouveau » (New) panel of Home (#v4News, src/screens/home/News.jsx) has been read. */
 export function newsView416() {
   return PREF.news === '471';
 }
 
-/* ---------- Accueil : quoi de neuf ---------- */
-// Les 8 dernières nouveautés, la plus récente en tête. Le démarrage (111) affiche déjà le
-// panneau : la v4.78 ajoute la sienne ensuite (112), en gardant 8 entrées.
+/* ---------- Home: what's new ---------- */
+// The 8 latest news items, most recent first. Startup (111) already shows the
+// panel: v4.78 then adds its own (112), keeping 8 entries.
 export const NEWS416 = [
   ['i-star', 'Le monde Pokémon', 'Entrée en combat qui brise l’écran, Pokémon qui sortent de leur Poké Ball et y retournent au K.O., barres de PV comme dans les jeux, dialogues lettre par lettre, silhouettes des Pokémon à capturer, cartes à collectionner, boîte à badges en velours avec sa cérémonie, Boutique avec son vendeur, Sac à poches et sons d’interface.'],
   ['i-star', 'Habillage Pokémon', 'Onglets en capsules Poké Ball, barre du bas en Poké Balls, menu avec une Ball par rubrique, tête de Pokédex avec ses voyants, ouverture en Poké Ball entre les onglets et carte de résultat holographique. Réglable dans Paramètres.'],
@@ -68,7 +68,7 @@ export const NEWS416 = [
   ['i-star', 'Événements saisonniers', 'Chaque mois a son thème : un type à l’honneur (+5 % de dégâts), un combat vedette et cinq paliers de récompenses. Touchez la bannière sur l’Accueil.']
 ];
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Statements run at startup, in the original order (see index.js).
 export function __init() {
 
 document.addEventListener('click', e => {

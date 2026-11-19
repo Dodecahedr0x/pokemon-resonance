@@ -1,6 +1,6 @@
 import { useEngineReady } from '../../engineReady.js';
 import { V4 } from '../../engine/032-v4-foundation.js';
-import { CAMPT431, echoRun431 } from '../../engine/066-tactical-challenges.js';
+import { CAMP_TABS431, echoRun431 } from '../../engine/066-tactical-challenges.js';
 import { seenExits, useCampBase, useCampPage } from './campStore.js';
 import CampBase from './CampBase.jsx';
 import Outings from './Outings.jsx';
@@ -11,30 +11,30 @@ import Mastery from './tabs/Mastery.jsx';
 import Pantheon from './tabs/Pantheon.jsx';
 import Duel from './tabs/Duel.jsx';
 
-const ONGLETS = { enigmes: Riddles, echo: Echo, arenes: Gyms, pantheon: Pantheon, duel: Duel, maitrise: Mastery };
+const TAB_LIST = { enigmes: Riddles, echo: Echo, arenes: Gyms, pantheon: Pantheon, duel: Duel, maitrise: Mastery };
 
-// Sous-onglets du Camp (v4.31) : la barre, puis le contenu de l'onglet ouvert (hors « Base »).
+// Camp sub-tabs (v4.31): the bar, then the content of the open tab (except « Base »).
 function Tabs({ t }) {
   const R = echoRun431();
   return (
     <nav className="v4-tabs ct431" id="campTabs431" role="tablist" aria-label="Camp">
-      {CAMPT431.map(([k, n]) => (
+      {CAMP_TABS431.map(([k, n]) => (
         <button key={k} type="button" role="tab" aria-selected={t === k} data-ct431={k}>{n + (k === 'echo' && R ? ' •' : '')}</button>
       ))}
     </nav>
   );
 }
 
-// #v4Camp seul se reconstruit à chaque renderCampBase() ; le reste de la page n'est pas touché.
+// #v4Camp alone is rebuilt on each renderCampBase(); the rest of the page is untouched.
 function CampBaseHost() {
   const base = useCampBase();
   return <CampBase key={base} rempli={base > 0} />;
 }
 
-// #camp430 : avant le premier renderCampPage431(), seulement le Camp de base et les Sorties (vides).
+// #camp430: before the first renderCampPage431(), only the Base camp and the Outings (empty).
 function Content({ page }) {
-  const t = V4.campTab; // déjà validé par renderCampPage431()
-  const Tab = page > 0 && t !== 'base' ? ONGLETS[t] : null;
+  const t = V4.campTab; // already validated by renderCampPage431()
+  const Tab = page > 0 && t !== 'base' ? TAB_LIST[t] : null;
   const cache = page > 0 ? t !== 'base' : undefined;
   return (
     <div className="camp430" id="camp430">
@@ -50,8 +50,8 @@ function Content({ page }) {
   );
 }
 
-// Page Camp (#camp). Chaque renderCampPage431() du moteur la reconstruit (champs non contrôlés,
-// gestionnaires délégués dans le moteur) ; renderCampBase() ne reconstruit que #v4Camp.
+// Camp page (#camp). Each renderCampPage431() of the engine rebuilds it (uncontrolled fields,
+// delegated handlers in the engine); renderCampBase() only rebuilds #v4Camp.
 export default function Camp() {
   const ready = useEngineReady();
   const page = useCampPage();

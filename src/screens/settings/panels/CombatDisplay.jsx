@@ -1,6 +1,6 @@
 import { PREF } from '../../../engine/026-campaign-tutorial-sound.js';
 
-// Paramètres › Affichage du combat (v4.44) : boutons data-b444 gérés par le moteur (module 077).
+// Settings › Battle display (v4.44): data-b444 buttons handled by the engine (module 077).
 export default function BattleDisplay() {
   const fs = document.body.classList.contains('fs444');
   return (

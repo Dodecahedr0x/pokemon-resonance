@@ -6,7 +6,7 @@ import { squad } from '../../engine/020-team-cards.js';
 import { goalInfo } from '../../engine/031-home-journey.js';
 import { ART, ITM } from '../../engine/032-v4-foundation.js';
 
-// Raccourcis illustrés de l'Accueil (#v4Tiles, ancien renderTiles).
+// Illustrated shortcuts on the Home page (#v4Tiles, old renderTiles).
 const TILES = [
   ['carte', 'Explorer', 'Parcourez la région et ses hautes herbes', 'i-map', 't-exp'],
   ['combat', 'Combats', 'Affrontez dresseurs et maîtres d’arène', 'i-fight', 't-cb'],

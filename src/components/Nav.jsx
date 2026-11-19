@@ -1,19 +1,19 @@
 import { TNAME } from '../engine/016-navigation.js';
 import { useShell } from './shellStore.js';
 
-// Navigation (v4-03) : 9 destinations sur ordinateur, 5 et un menu sur téléphone.
-// Les clics restent gérés par le moteur (délégation sur [data-t], #bnMenu, [data-menux]) ;
-// la page marquée (aria-current) vient de show() via shellStore.
+// Navigation (v4-03): 9 destinations on desktop, 5 and a menu on phone.
+// Clicks are still handled by the engine (delegation on [data-t], #bnMenu, [data-menux]);
+// the marked page (aria-current) comes from show() via shellStore.
 
-// Pages, dans l'ordre de la barre latérale, avec leur titre pris dans TNAME. Avec une
-// description : rangée dans le menu du téléphone ; sans : dans la barre du bas (même ordre).
+// Pages, in sidebar order, with their title taken from TNAME. With a
+// description: put in the phone menu; without: in the bottom bar (same order).
 const PAGES = [
   ['accueil', 'i-home'],
   ['pokedex', 'i-team'],
   ['dex', 'i-dex', '82 Pokémon de Kanto et Johto'],
   ['combat', 'i-fight'],
   ['carte', 'i-map'],
-  ['camp', 'i-camp'], // v4.30 : juste après « Carte », juste avant le bouton Menu
+  ['camp', 'i-camp'], // v4.30: right after « Carte » (Map), right before the Menu button
   ['quetes', 'i-quest', 'Chapitres, défis et récompenses'],
   ['sac', 'i-bag', 'Poké Balls, Potions, objets'],
   ['types', 'i-book', 'Règles, types et réactions'],
@@ -22,7 +22,7 @@ const PAGES = [
 const BOTTOM = PAGES.filter(p => !p[3]);
 const MENU = PAGES.filter(p => p[3]);
 
-// page rangée dans le menu du téléphone : le bouton Menu est alors marqué
+// page put in the phone menu: the Menu button is then marked
 const IN_MENU = MENU.map(p => p[0]);
 
 const cur = (page, k) => (page === k ? 'page' : undefined);
@@ -51,7 +51,7 @@ export function BottomNav() {
   );
 }
 
-// Menu du téléphone (#v4Menu) : ouvert et fermé par menu() du moteur.
+// Phone menu (#v4Menu): opened and closed by the engine's menu().
 export function V4Menu() {
   const { menu } = useShell();
   return (

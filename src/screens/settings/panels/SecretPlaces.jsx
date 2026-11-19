@@ -1,7 +1,7 @@
 import { SECRETS460, scSt460 } from '../../../engine/091-phase-bosses-secret-places.js';
 import { badgeCount459 } from '../../../engine/090-item-quests-trophies.js';
 
-// Lieux secrets (v4.60) : ceux déjà découverts, et un indice pour les autres.
+// Secret places (v4.60): those already discovered, and a hint for the others.
 export default function SecretPlaces() {
   const st = scSt460();
   const n = SECRETS460.filter(s => st.found[s.id]).length;

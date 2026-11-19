@@ -1,7 +1,7 @@
 import { NEWS416, newsView416 } from '../../engine/056-polish-v4-16.js';
 
-// Panneau « Nouveau » de l'Accueil (#v4News, v4.16.1), avant les raccourcis.
-// Retiré quand le joueur a touché « Compris » (data-news="ok", géré par le moteur).
+// "Nouveau" (New) panel on the Home page (#v4News, v4.16.1), before the shortcuts.
+// Removed once the player has tapped "Compris" (Understood) (data-news="ok", handled by the engine).
 export default function WhatsNew() {
   if (newsView416()) return null;
   return (

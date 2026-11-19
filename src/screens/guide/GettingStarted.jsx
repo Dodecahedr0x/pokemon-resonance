@@ -1,4 +1,4 @@
-// Onglet « Débuter » : cinq étapes et un lexique (contenu fixe).
+// « Débuter » (Getting started) tab: five steps and a glossary (fixed content).
 export default function GettingStarted() {
   return (
     <>

@@ -1,4 +1,4 @@
-/* Section d'origine : v4-01-donnees-pokedex.js */
+/* Original section: v4-01-pokedex-data.js */
 
 export const DEXM = {
   // v4.19

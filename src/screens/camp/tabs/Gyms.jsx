@@ -1,12 +1,12 @@
 import { BY, MON, SCEN } from '../../../engine/009-pokemon.js';
 import { PROFILE } from '../../../engine/011-game-state.js';
 import { medal } from '../../../engine/014-utils.js';
-import { ARN_ED431, REGLES431, TERRAINS431, gymCode431 } from '../../../engine/066-tactical-challenges.js';
+import { ARN_ED431, RULES431, TERRAINS431, gymCode431 } from '../../../engine/066-tactical-challenges.js';
 import { Html } from '../../../lib/html.jsx';
 
 const Options = ({ L }) => L.map(([k, n]) => <option key={k} value={k}>{n}</option>);
 
-// L'éditeur d'arène : champs non contrôlés, relus par le moteur (change / input sur [data-ar]).
+// The gym editor: uncontrolled fields, reread by the engine (change / input on [data-ar]).
 function Editor() {
   const E = ARN_ED431.a;
   if (!E) return null;
@@ -19,7 +19,7 @@ function Editor() {
       <h3>{ARN_ED431.i >= 0 ? 'Modifier l’arène' : 'Nouvelle arène'}</h3>
       <label className="v4-fld"><span>Nom</span><input type="text" data-ar="n" maxLength={22} defaultValue={E.n} /></label>
       <label className="v4-fld"><span>Terrain</span><select data-ar="t" defaultValue={E.t}><Options L={TERRAINS431()} /></select></label>
-      <label className="v4-fld"><span>Règle</span><select data-ar="r" defaultValue={E.r}><Options L={REGLES431()} /></select></label>
+      <label className="v4-fld"><span>Règle</span><select data-ar="r" defaultValue={E.r}><Options L={RULES431()} /></select></label>
       <div className="ar431-row">
         <label className="v4-fld"><span>Heure</span><select data-ar="h" defaultValue={E.h}><Options L={[['jour', 'Jour'], ['nuit', 'Nuit']]} /></select></label>
         <label className="v4-fld"><span>Manches</span><select data-ar="lim" defaultValue={String(E.lim)}><Options L={[6, 8, 10, 12].map(x => [String(x), String(x)])} /></select></label>
@@ -33,9 +33,9 @@ function Editor() {
   );
 }
 
-// Une arène enregistrée : jouer, partager (code), modifier, supprimer (data-arn431).
+// A saved gym: play, share (code), edit, delete (data-arn431).
 function Gym({ a, i }) {
-  const ruleDef = a.r ? ' · règle ' + (REGLES431().find(x => x[0] === a.r) || ['', ''])[1] : '';
+  const ruleDef = a.r ? ' · règle ' + (RULES431().find(x => x[0] === a.r) || ['', ''])[1] : '';
   return (
     <article className="ar431-c">
       <div className="ar431-h"><b>{a.n}</b><em>{`${(SCEN[a.t] || {}).n || a.t}${ruleDef} · ${a.h === 'nuit' ? 'nuit' : 'jour'} · ${a.lim} manches${a.au ? ' · par ' + a.au : ''}`}</em></div>
@@ -53,7 +53,7 @@ function Gym({ a, i }) {
   );
 }
 
-// Camp › Arènes (v4.31) : créer, importer et partager des arènes personnalisées.
+// Camp › Gyms (v4.31): create, import and share custom gyms.
 export default function Gyms() {
   const A = PROFILE.arenes431 || [];
   return (

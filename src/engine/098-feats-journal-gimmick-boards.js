@@ -1,8 +1,8 @@
-/* Section d'origine : 4.67 : journal des exploits et plateaux à gimmick */
+/* Original section: 4.67: feats journal and gimmick boards */
 
 import { SCEN } from './009-pokemon.js';
 import { writeLS } from './014-utils.js';
-import { CROCHETS } from './015-hooks.js';
+import { HOOKS } from './015-hooks.js';
 import { byUid, setMark, uAt } from './021-combat-engine.js';
 import { esc } from './025-saves.js';
 import { PREF, savePref, sfx } from './026-campaign-tutorial-sound.js';
@@ -11,7 +11,7 @@ import { renderParams } from './040-settings.js';
 import { bossScene } from './053-resonance.js';
 
 
-/** Annonce du gimmick de plateau au début du combat (liste d’événements, vide sans gimmick). */
+/** Announcement of the board gimmick at the start of the battle (event list, empty without a gimmick). */
 export function announceGim467(S) {
   const g = GIM467[S.gim467];
   return g ? [{ e: 'msg', s: `Plateau « ${g.n} » : ${g.d}` }] : [];
@@ -63,7 +63,7 @@ const jxSave467 = s => {
   writeLS('res-jx467', s);
 };
 
-/* ---------- Plateaux à gimmick ---------- */
+/* ---------- Gimmick boards ---------- */
 export const GIM467 = {
   marais: { n: 'Marais', d: 'Des cases Trempées apparaissent sur le plateau.', mk: 'trempe', ini: 4, ch: 0 },
   fournaise: { n: 'Fournaise', d: 'Des cases Brûlantes, et une de plus toutes les 2 manches.', mk: 'brulant', ini: 3, ch: 2 },
@@ -74,10 +74,10 @@ export const GIM467 = {
 
 export const gimKey467 = () => (PREF.gim467 === 'rand' || GIM467[PREF.gim467] ? PREF.gim467 : 'off');
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Statements run at startup, in the original order (see index.js).
 export function __init() {
 
-CROCHETS.degats.push((S, v, real, o) => {
+HOOKS.degats.push((S, v, real, o) => {
   const a = S.acteur430 && byUid(S, S.acteur430);
   if (a && a.side === 'a' && v.side === 'e' && !(o && o.ind) && real > 0) {
     const X = S.stats.x467 || (S.stats.x467 = { best: null });
@@ -86,7 +86,7 @@ CROCHETS.degats.push((S, v, real, o) => {
 });
 
 
-CROCHETS.progres.unshift((S, rew, win) => {
+HOOKS.progres.unshift((S, rew, win) => {
   try {
     if (!S.stats || (SCEN[S.sc] && SCEN[S.sc].tuto)) return null;
     const b = jxBilan467(S, win),
@@ -103,7 +103,7 @@ CROCHETS.progres.unshift((S, rew, win) => {
 });
 
 
-CROCHETS.resultat.unshift(r => {
+HOOKS.resultat.unshift(r => {
   const b = r.jx467;
   if (!b || (!b.mvp && !b.ex.length)) return '';
   const l = [];
@@ -114,7 +114,7 @@ CROCHETS.resultat.unshift(r => {
 });
 
 
-CROCHETS.combat.push(S => {
+HOOKS.combat.push(S => {
   const c = gimKey467();
   if (c === 'off' || !S || S.fixe431 || S.br466 || bossScene(S) || (SCEN[S.sc] && SCEN[S.sc].tuto)) return;
   S.gim467 = c === 'rand' ? Object.keys(GIM467)[Math.floor(Math.random() * Object.keys(GIM467).length)] : c;
@@ -122,7 +122,7 @@ CROCHETS.combat.push(S => {
 });
 
 
-CROCHETS.avantFinManche.push((S, ev) => {
+HOOKS.avantFinManche.push((S, ev) => {
   const g = S.gim467 && GIM467[S.gim467];
   if (!g || !g.ch || S.round % g.ch) return;
   gimPlace467(S, 1, ev);
@@ -149,6 +149,6 @@ document.addEventListener(
 );
 
 
-// panneaux « Plateaux à gimmick » et « Journal des exploits » : rendus par React (src/screens/settings/panels/)
+// "Gimmick Boards" and "Feats Journal" panels: rendered by React (src/screens/settings/panels/)
 
 }

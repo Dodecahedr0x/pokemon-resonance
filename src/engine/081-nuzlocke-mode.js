@@ -1,10 +1,10 @@
-/* Section d'origine : v4.51 : mode Nuzlocke (option) */
+/* Original section: v4.51: Nuzlocke mode (option) */
 
 import { BY, SCEN } from './009-pokemon.js';
 import { BUDGET } from './010-in-battle-evolution.js';
 import { PROFILE } from './011-game-state.js';
 import { writeLS, toast } from './014-utils.js';
-import { CROCHETS } from './015-hooks.js';
+import { HOOKS } from './015-hooks.js';
 import { __set_squad, squad } from './020-team-cards.js';
 import { B } from './024-combat-ui.js';
 import { queueSave } from './025-saves.js';
@@ -32,7 +32,7 @@ function nzSave450(s) {
   writeLS('res-nz450', s);
 }
 
-/** Règle 1 : une seule rencontre par région et par jour. Renvoie false si la rencontre est refusée. */
+/** Rule 1: a single encounter per region per day. Returns false if the encounter is refused. */
 export function nzEncounter450() {
   if (!NZ450()) return true;
   const s = nzSt450(),
@@ -48,12 +48,12 @@ export function nzEncounter450() {
 
 export const NZ450 = () => !!PREF.nuz450;
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Instructions run at startup, in the original order (see index.js).
 export function __init() {
 
 
-/** Règle 2 : un Pokémon K.O. à la fin d’un combat est perdu pour de bon. */
-CROCHETS.finCombat.push(() => {
+/** Rule 2: a Pokémon KO'd at the end of a battle is lost for good. */
+HOOKS.finCombat.push(() => {
   if (!NZ450() || !B || !B.over || B._nz450) return;
   B._nz450 = 1;
   const D = SCEN[B.sc] || {};
@@ -67,7 +67,7 @@ CROCHETS.finCombat.push(() => {
     });
   if (!bases.length) return;
   let spared = null;
-  if (PROFILE.box.length - bases.length < 1) spared = bases.pop(); // le dernier compagnon est épargné
+  if (PROFILE.box.length - bases.length < 1) spared = bases.pop(); // the last companion is spared
   const s = nzSt450(),
     displayNames = [];
   bases.forEach(b => {
@@ -87,14 +87,14 @@ CROCHETS.finCombat.push(() => {
 });
 
 
-// les disparus sur la fiche de résultat (.nz450) : rendus par React (src/screens/combat/battle/Result.jsx)
+// the fallen on the result sheet (.nz450): rendered by React (src/screens/combat/battle/Result.jsx)
 
 
-/** Paramètres : activation à confirmer et liste des disparus. */
+/** Settings: activation to confirm and list of the fallen. */
 nzConf450 = false;
 
 
-// panneau « Mode Nuzlocke » : rendu par React (src/screens/settings/panels/Nuzlocke.jsx)
+// "Mode Nuzlocke" (Nuzlocke mode) panel: rendered by React (src/screens/settings/panels/Nuzlocke.jsx)
 
 
 document.addEventListener('click', e => {

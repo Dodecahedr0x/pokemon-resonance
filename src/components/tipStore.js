@@ -1,7 +1,7 @@
 import { channel } from '../lib/store.js';
 
-// Conseil de la Professeure à la première visite d'un écran (.tip après l'en-tête .ph) :
-// pages où il est affiché. Le moteur (tipFor, 031) l'ouvre, le bouton « Compris » le ferme.
+// The Professor's tip on a screen's first visit (.tip after the .ph header):
+// pages where it is displayed. The engine (tipFor, 031) opens it, the "Compris" (Got it) button closes it.
 let openItems = new Set();
 const { emit, use } = channel();
 

@@ -1,11 +1,11 @@
-/* Section d'origine : v4.11-01-monde.js */
+/* Original section: v4.11-01-monde.js */
 
 import { MV } from './005-moves.js';
 import { BY, SCEN } from './009-pokemon.js';
 import { PROFILE, isCamp } from './011-game-state.js';
 import { $, RM, wait, toast } from './014-utils.js';
 import { refreshHome, setRoute } from '../screens/home/homeStore.js';
-import { CROCHETS } from './015-hooks.js';
+import { HOOKS } from './015-hooks.js';
 import { byUid } from './021-combat-engine.js';
 import { OBST } from './023-roles-synergies-obstacles.js';
 import { B, __set_B, buildBoard, log, renderAll, ui } from './024-combat-ui.js';
@@ -15,30 +15,30 @@ import { playEv } from './028-move-effects.js';
 import { AUTO } from './030-prestige-staging.js';
 import { SHOP, bagN } from './032-v4-foundation.js';
 
-export let REDIFF;
-let REDIFF_EN_COURS, DISSONANCE;
+export let REPLAYS;
+let REPLAY_IN_PROGRESS, DISSONANCE;
 
 
 /* =====================================================================
-   v4.11 : le monde
+   v4.11: the world
    ---------------------------------------------------------------------
-   1. Événements du calendrier (date de l'appareil, fonctionne hors ligne) :
-      Nuit des Spectres (20 oct. – 5 nov.), Givre de décembre (15 déc. –
-      5 janv.), Floraison de printemps (20 mars – 30 avril), Canicule d'été
-      (juillet – août), et le Week-end chromatique le reste de l'année.
-      Les types de la saison sortent plus souvent des hautes herbes, leurs
-      captures rapportent 1 Éclat, la météo s'invite dans les combats
-      sauvages, et un cadeau attend sur l'Accueil (une fois par saison).
-   2. Rediffusion du meilleur coup : pendant le combat, chaque action de
-      vos Pokémon est notée (dégâts, K.O., réactions, accords, Éveils).
-      L'écran de résultat propose de revoir la meilleure.
-   3. La Team Dissonance : une organisation qui veut faire taire la
-      Résonance. 4 combats d'histoire dans la Campagne, après les badges
-      1, 3, 5 et 7 : des Sbires, l'Admin Vesper, l'Admin Cobalt, puis leur
-      chef, Orphée Valcourt. Chacun avec sa règle (mutateur, pièges).
+   1. Calendar events (device date, works offline):
+      Night of Specters (Oct 20 – Nov 5), December Frost (Dec 15 –
+      Jan 5), Spring Bloom (Mar 20 – Apr 30), Summer Heatwave
+      (July – August), and the Shiny Weekend the rest of the year.
+      The season's types appear more often in tall grass, capturing them
+      yields 1 Shard, weather shows up in wild battles, and a gift
+      awaits on the Home screen (once per season).
+   2. Best-move replay: during battle, each action of your Pokémon is
+      scored (damage, KOs, reactions, chords, Awakenings). The result
+      screen offers to rewatch the best one.
+   3. Team Dissonance: an organization that wants to silence
+      Resonance. 4 story battles in the Campaign, after badges
+      1, 3, 5 and 7: Grunts, Admin Vesper, Admin Cobalt, then their
+      leader, Orphée Valcourt. Each with its own rule (mutator, traps).
    ===================================================================== */
 
-/* ---------- profil (fonctions déclarées : appelées dès le chargement) ---------- */
+/* ---------- profile (declared functions: called as soon as the file loads) ---------- */
 export function MON0() {
   return { dissonance: 0, cadeaux: {} };
 }
@@ -54,7 +54,7 @@ export function monClean(p) {
 }
 
 
-/** La saison du jour (fonction déclarée : le tirage des rencontres en a besoin). */
+/** Today's season (declared function: encounter rolls need it). */
 function seasonOf(d) {
   d = d || new Date();
   const md = (d.getMonth() + 1) * 100 + d.getDate();
@@ -67,17 +67,17 @@ function seasonOf(d) {
 }
 
 
-/** Poids d'une espèce dans les hautes herbes, selon la saison. */
+/** A species' weight in tall grass, depending on the season. */
 export function seasonWeight(m) {
   const s = season();
   return s && s.types.length && m.t.some(t => s.types.includes(t)) ? 3 : 1;
 }
 
 
-/** Chance de chromatique, selon la saison. */
+/** Shiny chance, depending on the season. */
 export function multChroma() {
   const s = season();
-  return ((s && s.shiny) || 1) * (bagN('charme') ? 3 : 1); // Charme Chroma (v4.15)
+  return ((s && s.shiny) || 1) * (bagN('charme') ? 3 : 1); // Shiny Charm (v4.15)
 }
 
 
@@ -105,13 +105,13 @@ function takeGift() {
 }
 
 
-/** Saison du jour sur la route (data-saison de #route). */
+/** Today's season on the route (data-saison of #route). */
 export function seasonRoute() {
   setRoute({ saison: season() ? seasonOf() : '' });
 }
 
 
-/** Bloc #v4Saison de l'Accueil (src/screens/accueil/Bas.jsx) : la saison et son cadeau. */
+/** #v4Saison block of the Home screen (src/screens/home/Footer.jsx): the season and its gift. */
 export function seasonData() {
   const s = season();
   return s ? { s, pris: giftTaken() } : null;
@@ -124,7 +124,7 @@ export function renderSeason() {
 }
 
 
-/** Le score d'une action, d'après ses événements. */
+/** An action's score, based on its events. */
 function currentScore(S, ev) {
   let d = 0,
     ko = 0,
@@ -143,9 +143,9 @@ function currentScore(S, ev) {
 }
 
 
-/** Appelée par pAct et pEveil : garde la meilleure action du combat. */
+/** Called by pAct and pAwaken: keeps the battle's best action. */
 export function noteMoment(S, u, displayName, ev, previous, heading) {
-  const R = REDIFF.get(S);
+  const R = REPLAYS.get(S);
   if (!R || !ev || !previous) return;
   const sc = currentScore(S, ev);
   if (sc.s <= 0 || (R.best && R.best.score >= sc.s)) return;
@@ -168,9 +168,9 @@ export function noteMoment(S, u, displayName, ev, previous, heading) {
 
 
 async function rebroadcast() {
-  const R = B && REDIFF.get(B);
-  if (!R || !R.best || REDIFF_EN_COURS) return;
-  REDIFF_EN_COURS = true;
+  const R = B && REPLAYS.get(B);
+  if (!R || !R.best || REPLAY_IN_PROGRESS) return;
+  REPLAY_IN_PROGRESS = true;
   const endStep = B,
     res = $('#cbResult'),
     isSlow = RM || AUTO ? 0.2 : 1;
@@ -192,21 +192,21 @@ async function rebroadcast() {
     buildBoard();
     renderAll();
     res.hidden = false;
-    REDIFF_EN_COURS = false;
+    REPLAY_IN_PROGRESS = false;
   }
 }
 
 
-/** Les combats de la Dissonance à placer après le badge n (fonction déclarée, sans constante : sûre au chargement). */
+/** The Dissonance battles to place after badge n (declared function, no constant: safe at load time). */
 export function dissonanceAfter(n) {
   if (!isCamp()) return [];
   return { 1: ['td1'], 3: ['td2'], 5: ['td3'], 7: ['td4'] }[n] || [];
 }
 
 /* =====================================================================
-   1. Événements du calendrier
+   1. Calendar events
    ===================================================================== */
-const SAISONS = {
+const SEASONS = {
   halloween: {
     n: 'Nuit des Spectres',
     d: 'Les Pokémon Spectre, Ténèbres et Poison sortent des hautes herbes, la nuit tombe sur les combats sauvages, et chaque capture de ces types rapporte 1 Éclat.',
@@ -248,14 +248,14 @@ const SAISONS = {
 };
 
 
-const season = () => SAISONS[seasonOf()] || null;
+const season = () => SEASONS[seasonOf()] || null;
 
 
 const giftKey = () => `${seasonOf()}-${new Date().getFullYear()}`;
 
 export const dissonanceOf = k => DISSONANCE.find(T => T.k === k) || null;
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Instructions run at startup, in the original order (see index.js).
 export function __init() {
 
 document.addEventListener('click', e => {
@@ -264,12 +264,12 @@ document.addEventListener('click', e => {
 
 
 /* =====================================================================
-   2. Rediffusion du meilleur coup
+   2. Best-move replay
    ===================================================================== */
-REDIFF = new WeakMap();
+REPLAYS = new WeakMap();
 
 
-REDIFF_EN_COURS = false;
+REPLAY_IN_PROGRESS = false;
 
 
 document.addEventListener('click', e => {
@@ -278,7 +278,7 @@ document.addEventListener('click', e => {
 
 
 /* =====================================================================
-   3. La Team Dissonance
+   3. Team Dissonance
    ===================================================================== */
 DISSONANCE = [
   {
@@ -417,10 +417,10 @@ DISSONANCE.forEach((T, i) => {
 });
 
 
-CROCHETS.progres.push((S, rew, win) => {
+HOOKS.progres.push((S, rew, win) => {
   const D = SCEN[S.sc] || {},
     o = [0, 0];
-  // saison : les captures des types de la saison
+  // season: captures of the season's types
   const s = season();
   if (s && s.types.length && rew.caught && rew.caught.length) {
     const n = rew.caught.filter(c => BY[c.id] && BY[c.id].t.some(t => s.types.includes(t))).length;
@@ -429,7 +429,7 @@ CROCHETS.progres.push((S, rew, win) => {
       rew.saison = n;
     }
   }
-  // la Dissonance
+  // the Dissonance
   if (win && D.dissonance && (PROFILE.dissonance || 0) < D.dissonance) {
     PROFILE.dissonance = D.dissonance;
     const T = DISSONANCE[D.dissonance - 1];
@@ -441,7 +441,7 @@ CROCHETS.progres.push((S, rew, win) => {
 });
 
 
-CROCHETS.resultat.push(r => {
+HOOKS.resultat.push(r => {
   const o = [];
   if (r.saison)
     o.push(`<div class="res-l"><h4>${season() ? season().n : 'Saison'}</h4><div class="rl"><span>Capture de saison : +${r.saison} Éclat${r.saison > 1 ? 's' : ''}</span><b>✦</b></div></div>`);
@@ -451,7 +451,7 @@ CROCHETS.resultat.push(r => {
       `<div class="res-l"><h4>Team Dissonance</h4><div class="rl"><span>${T.who} ${T.pl ? 'sont battus' : 'est battu'} (${r.dissonance} / 4). « ${T.w} »${r.dissonance === 4 ? ' La Team Dissonance est dissoute.' : ''}</span><b>${r.dissonance} / 4</b></div></div>`
     );
   }
-  const R = B && REDIFF.get(B);
+  const R = B && REPLAYS.get(B);
   if (R && R.best)
     o.push(
       `<div class="res-l"><h4>Meilleur coup</h4><div class="rl rd"><span><b>${R.best.label}</b>${R.best.det ? ` · ${R.best.det}` : ''}</span><button type="button" class="b b-sm" data-rediff>Revoir</button></div></div>`
@@ -460,8 +460,8 @@ CROCHETS.resultat.push(r => {
 });
 
 
-// la saison s'invite dans les combats sauvages
-CROCHETS.creation.push(S => {
+// the season shows up in wild battles
+HOOKS.creation.push(S => {
   const s = season();
   if (!s || S.sc !== 'sauvage') return;
   if (s.wx && !S.wx) S.wx = { k: s.wx, n: 5 };

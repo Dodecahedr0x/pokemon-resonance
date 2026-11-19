@@ -1,14 +1,14 @@
 import { ownedFam } from '../../engine/032-v4-foundation.js';
 import { DEXS } from '../../engine/038-pokedex.js';
-import { PAL454, msSt454, sem454, txt454, typesMs454 } from '../../engine/084-peddler-route-missions.js';
+import { PAL454, msSt454, week454, txt454, typesMs454 } from '../../engine/084-peddler-route-missions.js';
 
-// Missions du Pokédex (#ms454, v4.54) : paliers d'espèces et spécialistes de la semaine.
-// La réclamation (data-ms454) reste gérée par le moteur.
+// Pokédex missions (#ms454, v4.54): species tiers and specialists of the week.
+// Claiming (data-ms454) is still handled by the engine.
 export default function Missions() {
   const S = msSt454(),
     n = DEXS.filter(m => ownedFam(m.id)).length;
   const pals = PAL454.filter(p => !S.pal[p[0]]).slice(0, 2);
-  const w = sem454();
+  const w = week454();
   return (
     <section id="ms454" className="ms454 v4-panel">
       <h3>Missions du Pokédex</h3>

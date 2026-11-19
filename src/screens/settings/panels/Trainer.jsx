@@ -3,7 +3,7 @@ import { BADGES } from '../../../engine/013-gyms.js';
 import { tLevel } from '../../../engine/032-v4-foundation.js';
 import { freeBox421 } from '../../../engine/061-catch-anywhere.js';
 
-// Dresseur : prénom, difficulté, état de la partie. Le moteur gère #v4Nm, data-diff et data-v4saves.
+// Trainer: first name, difficulty, game state. The engine handles #v4Nm, data-diff and data-v4saves.
 export default function Trainer() {
   return (
     <section className="v4-panel v4-ps">

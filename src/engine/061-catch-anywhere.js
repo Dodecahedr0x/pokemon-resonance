@@ -1,4 +1,4 @@
-/* Section d'origine : v4.21-01-capture-partout.js */
+/* Original section: v4.21-01-catch-anywhere.js */
 
 import { BY, PRESETS, familyOf } from './009-pokemon.js';
 import { RECRUIT } from './010-in-battle-evolution.js';
@@ -8,15 +8,15 @@ import { regionH419 } from './059-hoenn.js';
 import { boxN429 } from './064-quality.js';
 
 /* =====================================================================
-   v4.21 : capture partout
-   1. Libre aussi : les Pokémon ne se choisissent plus librement, ils se
-      capturent. Les combats (arènes, Ligue, Johto, Hoenn) restent ouverts.
-   2. Chaque famille se capture dans sa région : Kanto sur la Route 29 et
-      au Parc Safari, Johto sur la Route 32, Hoenn sur la Route 104, pêche
-      comprise (Magicarpe mord partout). Une famille appartient à la
-      région de son premier membre connu : Pichu → Pikachu est de Kanto.
-   3. Les joueurs Libre gardent leur équipe, leurs captures, leur
-      compagnon et les cadeaux de leurs badges (migration unique, lib421).
+   v4.21: catch anywhere
+   1. Free mode too: Pokémon are no longer freely chosen, they are
+      caught. Battles (gyms, League, Johto, Hoenn) remain open.
+   2. Each family is caught in its own region: Kanto on Route 29 and
+      at the Safari Park, Johto on Route 32, Hoenn on Route 104, fishing
+      included (Magikarp bites everywhere). A family belongs to the
+      region of its first known member: Pichu → Pikachu is Kanto.
+   3. Free-mode players keep their team, their catches, their
+      companion and their badge gifts (one-time migration, lib421).
    ===================================================================== */
 export function V421_0() {
   return { lib421: 0 };
@@ -28,7 +28,7 @@ export function v421Clean(p) {
 }
 
 
-/** Région d'une famille : 1 Kanto, 2 Johto, 3 Hoenn (premier membre connu). */
+/** Region of a family: 1 Kanto, 2 Johto, 3 Hoenn (first known member). */
 export function regFam421(id) {
   const m = BY[id];
   if (!m) return 1;
@@ -39,9 +39,9 @@ export function regFam421(id) {
 
 
 /**
- * Libre : la Box remplace le « tout est ouvert ». Une seule fois par profil,
- * on y range l'équipe, les captures déjà faites, le compagnon et les cadeaux
- * des badges déjà gagnés. Une Box vide reçoit l'équipe de départ.
+ * Free mode: the Box replaces "everything is open". Once per profile,
+ * the team, catches already made, the companion and the gifts
+ * from badges already won are put into it. An empty Box receives the starter team.
  */
 export function free421(sq, badges) {
   if (isCamp()) return false;
@@ -80,19 +80,19 @@ export const regionNo421 = () => (regionH419() ? 3 : regionJ415() ? 2 : 1);
 export const ROUTE421 = ['', 'Route 29', 'Route 32', 'Route 104'];
 
 
-export const REGN421 = ['', 'Kanto', 'Johto', 'Hoenn'];
+export const REGION_NAMES421 = ['', 'Kanto', 'Johto', 'Hoenn'];
 
 
 const isRecruit421 = id => !!BY[id] && RECRUIT.some(x => x.id === BY[id].base);
 
 
-/** Où capturer une famille (vide pour les légendes, jamais recrutables). */
+/** Where to catch a family (empty for legends, never recruitable). */
 export const captureSite421 = id => (isRecruit421(id) ? ROUTE421[regFam421(id)] : '');
 
 
-/** Les familles sauvages de la région affichée. */
+/** The wild families of the displayed region. */
 export const poolRegion421 = (r = regionNo421()) => RECRUIT.filter(m => regFam421(m.id) === r);
 
 
-/** Texte court pour les écrans Libre. */
+/** Short text for the Free-mode screens. */
 export const freeBox421 = () => `Box ${boxN429()} / ${RECRUIT.length}`;

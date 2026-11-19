@@ -1,7 +1,7 @@
 import { ev454 } from '../../engine/084-peddler-route-missions.js';
 
-// Bandeau « Rencontre sur la route » (v4.54), en tête du panneau de la carte. Le clic
-// (data-ev454) ouvre la rencontre : géré par le moteur.
+// "Rencontre sur la route" (Encounter on the route) banner (v4.54), at the top of the map panel. The click
+// (data-ev454) opens the encounter: handled by the engine.
 export default function EvBar() {
   let ev;
   try {

@@ -5,8 +5,8 @@ import { tc } from '../../engine/014-utils.js';
 import { squad } from '../../engine/020-team-cards.js';
 import { S2n, emblem, goalInfo } from '../../engine/031-home-journey.js';
 
-// « Prochaine étape » de la barre latérale (#sideGoal, ancien renderSideGoal) : reflète
-// l'objectif de l'Accueil. Le clic (data-goal / data-go) reste géré par le moteur.
+// "Prochaine étape" (Next step) in the sidebar (#sideGoal, formerly renderSideGoal): mirrors
+// the Home objective. The click (data-goal / data-go) is still handled by the engine.
 export default function SideObjective() {
   const ready = useEngineReady(),
     v = useHomeVersion();

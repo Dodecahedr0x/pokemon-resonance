@@ -1,20 +1,20 @@
 import { TYPES } from '../../../engine/004-data.js';
 import { BY } from '../../../engine/009-pokemon.js';
 import { PROFILE, isCamp } from '../../../engine/011-game-state.js';
-import { DEFIS, DEFI_CONF } from '../../../engine/048-replayability.js';
+import { CHALLENGES, CHALLENGE_CONF } from '../../../engine/048-replayability.js';
 
-// Interrupteur d'un défi (data-defi, géré par le moteur).
+// Challenge switch (data-defi, handled by the engine).
 function Challenge({ k, on }) {
   return (
     <label className="v4-sw">
-      <span><b>{DEFIS[k][0]}</b><em>{DEFIS[k][1]}</em></span>
+      <span><b>{CHALLENGES[k][0]}</b><em>{CHALLENGES[k][1]}</em></span>
       <input type="checkbox" data-defi={k} defaultChecked={!!on} />
       <i aria-hidden="true" />
     </label>
   );
 }
 
-// Défis de campagne (defisHtml) : mono-type, équipe de 3, sans Éveil, Nuzlocke.
+// Campaign challenges (defisHtml): mono-type, team of 3, no Awakening, Nuzlocke.
 export default function CampaignChallenges() {
   if (!isCamp())
     return (
@@ -35,14 +35,14 @@ export default function CampaignChallenges() {
       </select></label>
       <Challenge k="trio" on={d.trio} />
       <Challenge k="sansEveil" on={d.sansEveil} />
-      <div className="v4-sw nz"><span><b>Nuzlocke</b><em>{DEFIS.nuzlocke[1]}</em></span>{
+      <div className="v4-sw nz"><span><b>Nuzlocke</b><em>{CHALLENGES.nuzlocke[1]}</em></span>{
         d.nuzlocke
           ? <button type="button" className="b b-sm b-ghost" data-nz="stop">Abandonner</button>
-          : DEFI_CONF
+          : CHALLENGE_CONF
             ? <span className="nz-c"><button type="button" className="b b-sm b-gold" data-nz="ok">Confirmer</button><button type="button" className="b b-sm b-ghost" data-nz="non">Annuler</button></span>
             : <button type="button" className="b b-sm" data-nz="on">Activer</button>
       }</div>
-      {DEFI_CONF && !d.nuzlocke ? <p className="v4-ps-n nz-w">Attention : chaque Pokémon mis K.O. ne pourra plus combattre de toute la campagne. Confirmez pour commencer.</p> : null}
+      {CHALLENGE_CONF && !d.nuzlocke ? <p className="v4-ps-n nz-w">Attention : chaque Pokémon mis K.O. ne pourra plus combattre de toute la campagne. Confirmez pour commencer.</p> : null}
       {tomb.length ? <p className="v4-ps-n">Tombés au combat : {tomb.map(b => BY[b].n).join(', ')}{d.nuzlocke ? '' : ' (le Nuzlocke est abandonné : ils peuvent revenir)'}.</p> : null}
     </section>
   );

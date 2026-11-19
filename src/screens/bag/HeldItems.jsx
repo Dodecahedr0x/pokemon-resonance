@@ -4,7 +4,7 @@ import { HELD_IMG, ITM, SHOP, fmt } from '../../engine/032-v4-foundation.js';
 import { HELD_SHOP, offer414, costHeld414 } from '../../engine/053-resonance.js';
 import { Article, Shards } from './Items.jsx';
 
-// Objet tenu en vente (v4.14) : achat unique, data-buyh (moteur).
+// Held item for sale (v4.14): one-time purchase, data-buyh (engine).
 function OutfitForSale({ k }) {
   const it = ITEMS2[k],
     H = HELD_SHOP[k],
@@ -26,7 +26,7 @@ function OutfitForSale({ k }) {
   );
 }
 
-// Boutique › Objets tenus, ou › Marchand rare (contre des Éclats, après le 2e badge).
+// Shop › Held items, or › Rare merchant (for Shards, after the 2nd badge).
 export default function Outfits({ cat }) {
   if (cat === 'rares' && isCamp() && BADGES.length < 2)
     return <p className="v4-empty">Le marchand rare s’installe après votre 2e badge. Il ne vend que contre des Éclats de Résonance.</p>;

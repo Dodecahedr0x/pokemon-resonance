@@ -1,10 +1,10 @@
-/* Section d'origine : v4.71 : combats des Ombres, spécimens anciens, défi quotidien, prestige */
+/* Original section: v4.71: Shadow battles, ancient specimens, daily challenge, prestige */
 
 import { BY, SCEN } from './009-pokemon.js';
 import { PROFILE, isCamp } from './011-game-state.js';
 import { BADGES } from './013-gyms.js';
 import { writeLS, toast } from './014-utils.js';
-import { CROCHETS } from './015-hooks.js';
+import { HOOKS } from './015-hooks.js';
 import { save, squad } from './020-team-cards.js';
 import { OBST } from './023-roles-synergies-obstacles.js';
 import { B, backToPrep, goFight, scSel } from './024-combat-ui.js';
@@ -16,7 +16,7 @@ import { DEXS } from './038-pokedex.js';
 import { teamSize } from './048-replayability.js';
 import { ev454 } from './084-peddler-route-missions.js';
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Startup statements, run in their original order (see index.js).
 export function __init() {
 
 (() => {
@@ -35,8 +35,8 @@ export function __init() {
   const POS = [[6, 1], [6, 3], [7, 2], [7, 4], [6, 5]];
   const mkFoes = ids => ok(ids).map((id, i) => [id, POS[i % POS.length]]);
 
-  /* ---- 1. Combats des Ombres ---- */
-  const OMB = [
+  /* ---- 1. Shadow battles ---- */
+  const SHADOWS = [
     { ids: ['racaillou', 'nosferapti'], lv: 12, hb: 2 },
     { ids: ['malosse', 'nosferapti', 'tenefix'], lv: 20, hb: 3 },
     { ids: ['malosse', 'absol', 'tenefix', 'noctali'], lv: 28, hb: 4 },
@@ -45,7 +45,7 @@ export function __init() {
   const baseScene = (n, lvl, d, lv, hb, foes) => ({
     n, lvl, lim: 14, time: 'nuit', bio: 'gue', d, water: [], rock: ['3,0', '3,5'], hb, pb: 0, lv, foes
   });
-  OMB.forEach((o, i) => {
+  SHADOWS.forEach((o, i) => {
     const k = 'omb470_' + (i + 1);
     SCEN[k] = Object.assign(baseScene(i === 3 ? 'Vaskar, chef des Ombres' : 'Les Ombres · épisode ' + (i + 1), 'Histoire · épisode ' + (i + 1), 'Repoussez les Ombres de Résonance.', o.lv, o.hb, mkFoes(o.ids)), { omb470: i + 1 });
     try {
@@ -53,7 +53,7 @@ export function __init() {
     } catch (e) {}
   });
 
-  /* ---- 5. Défi quotidien ---- */
+  /* ---- 5. Daily challenge ---- */
   const TYPES = ['Feu', 'Eau', 'Plante', 'Électrik', 'Psy', 'Combat', 'Insecte', 'Sol'];
   const seedValue = sel => {
     let h = 7;
@@ -83,14 +83,14 @@ export function __init() {
     const D = SCEN.dq470 && SCEN.dq470.dq470;
     return D ? squad.slice(0, teamSize()).find(id => BY[id] && BY[id].t.includes(D)) : null;
   };
-  CROCHETS.refusLancement.push(() => {
+  HOOKS.refusLancement.push(() => {
     const v = scSel === 'dq470' && dqViol();
     return v ? BY[v].n + ' est de type ' + SCEN.dq470.dq470 + ' : retirez-le de l’équipe.' : null;
   });
 
   /* ---- 7. Prestige ---- */
   const preOk = () => (isCamp() ? BADGES.length >= 8 || (PROFILE.elite || 0) > 0 : true);
-  CROCHETS.creation.push(S => {
+  HOOKS.creation.push(S => {
     const P = readX().pre;
     if (!P.on || !P.n || !S || !S.units || /^(omb470_|dq470)/.test(S.sc || '')) return;
     S.units.forEach(u => {
@@ -101,8 +101,8 @@ export function __init() {
     });
   });
 
-  /* ---- progression commune (victoires) ---- */
-  CROCHETS.progres.unshift((S, rew, win) => {
+  /* ---- shared progression (victories) ---- */
+  HOOKS.progres.unshift((S, rew, win) => {
     try {
       if (!win) return null;
       const X = readX();
@@ -148,9 +148,9 @@ export function __init() {
     }
   });
 
-  /* ---- liaison avec les épisodes : bouton « Affronter » ---- */
-  // renvoie true : le choix « Affronter » mène au combat au lieu de résoudre la rencontre
-  CROCHETS.avantChoixRoute.push(j => {
+  /* ---- link with the episodes: « Affronter » (Face) button ---- */
+  // returns true: the « Affronter » choice leads to battle instead of resolving the encounter
+  HOOKS.avantChoixRoute.push(j => {
     try {
       const { E, st } = ev454();
       if (E && E.ombre && !st.done && E.c[j] && E.c[j].fight) {
@@ -169,7 +169,7 @@ export function __init() {
     return false;
   });
 
-  /* ---- Hub « Défis » : spécimens, quotidien, prestige ---- */
+  /* ---- « Défis » hub: specimens, daily, prestige ---- */
   const REV = () => ok(['tenefix', 'malosse', 'demolosse', 'tyranocif']);
   const hub = () => {
     const X = readX(),
@@ -180,7 +180,7 @@ export function __init() {
     const O = window.__ombre470,
       e = O.lire().etape,
       endStep = e >= 4;
-    // rendu : src/screens/overlays/temporaires/Fenetres.jsx (X470)
+    // rendering: src/screens/overlays/transients/Windows.jsx (X470)
     const o = overlay('x470o', {
       omb: endStep ? { fin: endStep } : { fin: endStep, e, dispo: !!O.dispo(), titre: O.dispo() ? O.titre() : '', req: O.dispo() ? '' : O.req() },
       interdit: di.interdit,
@@ -251,7 +251,7 @@ export function __init() {
     },
     true
   );
-  /* bannière « Défis » de l'Accueil (#x470) : rendue par React (src/screens/accueil/Bannieres.jsx) */
+  /* « Défis » (Challenges) banner on the Home page (#x470): rendered by React (src/screens/home/Banners.jsx) */
   window.__x470 = { lire: readX, ecrire: writeX, hub, dqMake, dqViol, ok };
 })();
 }

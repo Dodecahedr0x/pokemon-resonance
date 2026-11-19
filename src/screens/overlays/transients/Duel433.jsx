@@ -1,5 +1,5 @@
-// Duel local (#duel433r, v4.33 · 068) : écran de relais entre les deux joueurs, ou
-// confirmation d'abandon. Les clics (data-dr433) restent dans le moteur.
+// Local duel (#duel433r, v4.33 · 068): relay screen between the two players, or
+// abandon confirmation. The clicks (data-dr433) stay in the engine.
 export default function Duel433({ d }) {
   return (
     <div id="duel433r" className="dr433">

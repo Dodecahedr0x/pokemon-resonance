@@ -13,11 +13,11 @@ import { teamBtns } from '../../../engine/027-gym-on-screen.js';
 import { k2n } from '../../../engine/031-home-journey.js';
 import { DOCTRINES430 } from '../../../engine/065-camp-tactics.js';
 
-// Comme avec l'ancien innerHTML, un bloc masqué garde son dernier contenu.
-let champWhy = null, // raisons du Champion affichées en dernier
-  docVu = false; // la doctrine a déjà été dessinée une fois
+// As with the old innerHTML, a hidden block keeps its last content.
+let champWhy = null, // Champion's reasons shown last
+  docSeen = false; // the doctrine has already been drawn once
 
-// Les quatre places de l'équipe, puis les synergies actives (#ptList).
+// The four team slots, then the active synergies (#ptList).
 function Places() {
   const S = synOf(squad);
   return (
@@ -62,16 +62,16 @@ function Places() {
   );
 }
 
-// Doctrine (v4.30) : #doc430, avant le bouton Lancer.
+// Doctrine (v4.30): #doc430, before the Start button.
 function Doctrine() {
   const D = SCEN[scSel] || {},
     hidden = !!(D.tuto || D.hebdo429 || D.enigme431);
-  if (!hidden) docVu = true;
+  if (!hidden) docSeen = true;
   const k = DOCTRINES430[PROFILE.doc430] ? PROFILE.doc430 : '',
     X = DOCTRINES430[k];
   return (
     <div className="doc430" id="doc430" hidden={hidden}>
-      {docVu && (
+      {docSeen && (
         <>
           <div className="doc430-h">
             <svg>
@@ -104,7 +104,7 @@ function Doctrine() {
   );
 }
 
-// Équipes enregistrées (v4.32) : #eqPrep432, sous l'en-tête.
+// Saved teams (v4.32): #eqPrep432, under the header.
 function Squads() {
   const T = PROFILE.teams432 || [];
   return (
@@ -123,7 +123,7 @@ function Squads() {
   );
 }
 
-// Encadré de l'équipe (#ptBox). v = 0 : gabarit de départ, avant le premier renderPrep().
+// Team box (#ptBox). v = 0: starting template, before the first renderPrep().
 export default function Team({ v }) {
   const on = v > 0;
   const lk = on && scenLock(scSel);

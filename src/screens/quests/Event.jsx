@@ -6,7 +6,7 @@ import Rewards from './Rewards.jsx';
 
 const NL = '\n ';
 
-// Défi de la semaine (v4.29) : même équipe de location pour tous, classement entre amis.
+// Challenge of the week (v4.29): same rental team for everyone, ranking among friends.
 function Weekly() {
   const H = weeklyBuild429(),
     D = SCEN.hebdo429,
@@ -43,7 +43,7 @@ function Weekly() {
   );
 }
 
-// Onglet « Événement » : défi de la semaine en tête (v4.29), puis défi du jour.
+// "Événement" (Event) tab: challenge of the week first (v4.29), then the daily challenge.
 export default function Event() {
   const dk = dailyKey(),
     S = dk && SCEN[dk],

@@ -4,25 +4,25 @@ import { tc } from '../../engine/014-utils.js';
 import { MV } from '../../engine/005-moves.js';
 import { SHOP, fmt, tLevel, today } from '../../engine/032-v4-foundation.js';
 import { can454, txt454 } from '../../engine/084-peddler-route-missions.js';
-import { COUT455, LJ455, RECETTES455, fusionTargets455, commands455, donors455, canIn455, txtIn455, showcase455 } from '../../engine/088-workshop-recipes.js';
+import { COST455, LJ455, RECIPES455, fusionTargets455, commands455, donors455, canIn455, txtIn455, showcase455 } from '../../engine/088-workshop-recipes.js';
 import { QO459, TROPH459, badgeCount459, qoIn459, qoOk459, qoRewTxt459, qoSt459, tpSt459 } from '../../engine/090-item-quests-trophies.js';
-import { OEUF461, egPool461, egSt461 } from '../../engine/092-companion-eggs-expeditions.js';
+import { EGG461, egPool461, egSt461 } from '../../engine/092-companion-eggs-expeditions.js';
 import { TAL464, TALMAX464, TALRESET464, talPts464, talSpent464, talSt464 } from '../../engine/095-trainer-talent-tree.js';
 import { Disc } from './Items.jsx';
 
-// Ligne d'atelier : texte à gauche, bouton du moteur à droite (data-at455, data-qo459…).
+// Workshop row: text on the left, engine button on the right (data-at455, data-qo459…).
 const Line = ({ cls = '', avant: previous = null, children, bouton: button }) => (
   <article className={'v4-it ' + cls}>{previous}<div className="v4-it-t">{children}</div><div className="v4-buy">{button}</div></article>
 );
 
-/* ---------- Atelier (v4.57) : recettes, fusion de CT, commandes du jour ---------- */
+/* ---------- Workshop (v4.57): recipes, TM fusion, daily orders ---------- */
 function Workshop() {
   const fusionTargets = fusionTargets455();
   return (
     <>
       <p className="v4-note">L’atelier du colporteur transforme vos objets. Les recettes, la fusion de CT et les commandes du jour s’y trouvent.</p>
       <h3 className="h3">Livre de recettes</h3>
-      {RECETTES455.map(r => (
+      {RECIPES455.map(r => (
         <Line key={r.id} cls="at455-r" bouton={<button type="button" className="v4-btn" data-at455={'rec:' + r.id} disabled={!(canIn455(r.in) && PROFILE.money >= r.m)}>Préparer</button>}>
           <b>{txtIn455(r.out)}</b><p>Avec : {txtIn455(r.in)}{r.m ? ` + ${fmt(r.m)} ₽` : ''}</p>
         </Line>
@@ -51,7 +51,7 @@ function Workshop() {
   );
 }
 
-/* ---------- Tirage du colporteur (v4.57) ---------- */
+/* ---------- Peddler's draw (v4.57) ---------- */
 function Draw() {
   const st = LJ455('res-at455', { d: today(), cmd: {}, spin: 0 }),
     freeOfCharge = st.spin === 0,
@@ -59,17 +59,17 @@ function Draw() {
   return (
     <>
       <h3 className="h3">Tirage du colporteur</h3>
-      <p className="v4-note">Un tirage gratuit par jour. Ensuite, {fmt(COUT455)} ₽ le tirage (4 par jour au maximum). Le résultat est fixé à l’avance : inutile de recharger la page.</p>
+      <p className="v4-note">Un tirage gratuit par jour. Ensuite, {fmt(COST455)} ₽ le tirage (4 par jour au maximum). Le résultat est fixé à l’avance : inutile de recharger la page.</p>
       {st.last ? <p className="v4-note tir455">Dernier lot : <b>{st.last}</b></p> : null}
       <div className="tir455">
-        <button type="button" className="v4-btn" data-at455="spin" disabled={!(remainder > 0 && (freeOfCharge || PROFILE.money >= COUT455))}>{remainder <= 0 ? 'Revenez demain' : freeOfCharge ? 'Tirage gratuit' : `Tirer · ${fmt(COUT455)} ₽`}</button>
+        <button type="button" className="v4-btn" data-at455="spin" disabled={!(remainder > 0 && (freeOfCharge || PROFILE.money >= COST455))}>{remainder <= 0 ? 'Revenez demain' : freeOfCharge ? 'Tirage gratuit' : `Tirer · ${fmt(COST455)} ₽`}</button>
         <small>Tirages restants aujourd’hui : {remainder}</small>
       </div>
     </>
   );
 }
 
-/* ---------- Vitrine des trouvailles (v4.57) ---------- */
+/* ---------- Finds showcase (v4.57) ---------- */
 function Showcase() {
   const { seen, cts, cs } = showcase455(),
     held = Object.keys(ITEMS2),
@@ -99,7 +99,7 @@ function Showcase() {
   );
 }
 
-/* ---------- Quêtes d'objets (v4.59) ---------- */
+/* ---------- Item quests (v4.59) ---------- */
 function QuestItems() {
   const S = qoSt459(),
     nb = badgeCount459(),
@@ -124,7 +124,7 @@ function QuestItems() {
   );
 }
 
-/* ---------- Boîte de trophées (v4.59) ---------- */
+/* ---------- Trophy case (v4.59) ---------- */
 function Trophies() {
   const S = tpSt459();
   return (
@@ -147,7 +147,7 @@ function Trophies() {
   );
 }
 
-/* ---------- Œufs d'élevage (v4.61) ---------- */
+/* ---------- Breeding eggs (v4.61) ---------- */
 function Eggs() {
   const s = egSt461(),
     isFree = egPool461().length;
@@ -159,7 +159,7 @@ function Eggs() {
         <>
           <h4 className="h3">En incubation ({s.list.length} / 3)</h4>
           {s.list.map((e, i) => {
-            const O = OEUF461[e.k],
+            const O = EGG461[e.k],
               p = Math.round(((e.tot - e.left) / e.tot) * 100);
             return (
               <article key={i} className="v4-it eg461">
@@ -170,8 +170,8 @@ function Eggs() {
         </>
       ) : null}
       <h4 className="h3">Acheter un œuf</h4>
-      {Object.keys(OEUF461).map(k => {
-        const O = OEUF461[k],
+      {Object.keys(EGG461).map(k => {
+        const O = EGG461[k],
           ok = s.list.length < 3 && can454(O.cost) && isFree;
         return (
           <Line key={k} cls="eg461" bouton={<button type="button" className="v4-btn" data-eg461={k} disabled={!ok}>{O.prix}</button>}>
@@ -183,7 +183,7 @@ function Eggs() {
   );
 }
 
-/* ---------- Talents du dresseur (v4.64) ---------- */
+/* ---------- Trainer abilities (v4.64) ---------- */
 function Talents() {
   const st = talSt464(),
     pts = talPts464(),
@@ -211,7 +211,7 @@ function Talents() {
   );
 }
 
-// Onglets « boutique » de l'atelier, dans l'ordre final des versions (v4.57, v4.59, v4.61, v4.64).
+// Workshop "shop" tabs, in the final order of the versions (v4.57, v4.59, v4.61, v4.64).
 export default function WorkshopTab({ c }) {
   if (c === 'talents') return <Talents />;
   if (c === 'oeufs') return <Eggs />;

@@ -1,11 +1,11 @@
-/* Combat — vue compacte (maquettes « Compact battle view », novembre 2026).
-   Tout tient dans l'écran : la navigation se replie en rail, une seule ligne de HUD, les plaques
-   sont posées sur le décor autour du plateau, le panneau de commandes ne fait plus défiler la page.
-   Sur téléphone, le panneau devient un tiroir en bas de l'écran.
-   Chargée en dernier : les règles visent l'application seulement pendant un combat (#cbBattle visible)
-   et passent devant les couches précédentes de game.css (mêmes propriétés, souvent en !important). */
+/* Battle — compact view (« Compact battle view » mockups, November 2026).
+   Everything fits on screen: navigation collapses into a rail, a single HUD line, the plates
+   sit on the backdrop around the board, the command panel no longer scrolls the page.
+   On phone, the panel becomes a drawer at the bottom of the screen.
+   Loaded last: the rules target the app only during a battle (#cbBattle visible)
+   and take precedence over the previous layers of game.css (same properties, often with !important). */
 
-/* ---------- pastille de phase (toutes tailles) ---------- */
+/* ---------- phase badge (all sizes) ---------- */
 .bt-ph{display:inline-flex;align-items:center;gap:6px;flex:none;height:24px;padding:0 10px;border-radius:999px;font:600 10.5px/1 var(--f-m,ui-monospace,monospace);letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;color:#F0D59C;background:rgba(227,192,122,.1);border:1px solid rgba(227,192,122,.4)}
 .bt-ph[hidden]{display:none!important}
 .bt-ph i{width:7px;height:7px;border-radius:50%;background:currentColor;box-shadow:0 0 8px currentColor}
@@ -16,15 +16,15 @@
 @media (prefers-reduced-motion:no-preference){.bt-ph[data-ph=enemy] i{animation:btPh 1.2s ease-in-out infinite}}
 @keyframes btPh{50%{opacity:.35}}
 
-/* teinte de la scène selon la phase */
+/* scene tint according to the phase */
 .bt-stage{position:relative}
 .bt-stage::after{content:"";position:absolute;inset:0;z-index:6;pointer-events:none;border-radius:inherit;transition:background .4s,box-shadow .4s}
 #cbBattle:has(.bt-ph[data-ph=enemy]) .bt-stage::after{background:linear-gradient(180deg,rgba(255,60,60,.14),rgba(255,60,60,.03) 55%,transparent);box-shadow:inset 0 0 0 2px rgba(255,103,103,.4)}
 #cbBattle:has(.bt-ph[data-ph=deploy]) .bt-stage::after{background:radial-gradient(80% 45% at 50% 100%,rgba(79,214,156,.14),transparent 70%);box-shadow:inset 0 0 0 2px rgba(79,214,156,.35)}
 
-/* ================= ordinateur ================= */
+/* ================= desktop ================= */
 @media (min-width:1121px){
-  /* navigation repliée en rail d'icônes */
+  /* navigation collapsed into an icon rail */
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) .app{grid-template-columns:64px minmax(0,1fr)!important}
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) .side{padding:14px 10px!important;gap:16px!important;align-items:center;overflow:hidden!important}
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) .side>:not(.logo):not(.side-nav){display:none!important}
@@ -38,10 +38,10 @@
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) .content{padding:12px!important}
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) .wrap{max-width:none!important;padding-inline:0!important}
 
-  /* deux colonnes à hauteur d'écran : scène, panneau */
+  /* two screen-height columns: scene, panel */
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .battle{display:grid!important;grid-template-columns:minmax(0,1fr) 336px!important;gap:12px!important;height:calc(100dvh - 24px);min-height:600px;align-items:stretch!important;padding:0!important;border:0!important;border-radius:0!important;background:none!important;box-shadow:none!important;overflow:visible!important}
 
-  /* colonne de jeu : HUD d'une ligne, puis la scène qui prend toute la hauteur */
+  /* game column: one-line HUD, then the scene taking the full height */
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt{display:grid!important;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto auto auto minmax(0,1fr);min-height:0;padding:0!important;border-radius:18px!important;overflow:hidden!important}
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-top{grid-row:1;grid-column:1;display:flex!important;flex-wrap:nowrap!important;align-items:center;gap:10px!important;height:48px;min-height:0!important;padding:0 14px!important;overflow:hidden;white-space:nowrap}
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-top #bScen{flex:none;font-size:12.5px!important}
@@ -56,7 +56,7 @@
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bArena{grid-row:2;grid-column:1/-1;margin:0!important}
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bOrdre{grid-row:3;grid-column:1/-1;margin:0!important}
 
-  /* la scène : plateau plein cadre, plaques en cartes posées en haut et en bas */
+  /* the scene: full-frame board, plates as cards placed at the top and bottom */
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-stage{grid-row:4;grid-column:1/-1;display:flex;flex-direction:column;min-height:0;overflow:hidden}
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bBoard{flex:1 1 auto;min-height:0!important;height:auto;margin:0!important;padding:66px 12px 72px!important;border:0!important;border-radius:0!important;box-shadow:none!important;display:flex;align-items:center;justify-content:center}
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bSvg{width:100%!important;height:100%!important;max-height:100%}
@@ -68,12 +68,12 @@
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bPlE .plate{background:rgba(40,10,16,.66)!important;border-color:rgba(255,103,103,.4)!important}
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bPlA .plate{background:rgba(8,22,44,.66)!important;border-color:rgba(99,164,255,.4)!important}
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bPlE .plate.act,html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bPlA .plate.act{border-color:#E3C07A!important;box-shadow:0 0 0 1px #E3C07A,0 0 18px -4px rgba(227,192,122,.7)!important}
-  /* outils du plateau et pastille d'heure : juste sous les cartes adverses */
+  /* board tools and time badge: just below the opponent cards */
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bBoard>.bt444{top:66px!important;left:12px!important}
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bBoard>.ciel430{top:66px!important;right:12px!important}
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #df468hud{position:absolute;left:50%;top:70px;transform:translateX(-50%);z-index:7;margin:0!important}
 
-  /* panneau de commandes : il remplit la colonne, seul son contenu défile si besoin */
+  /* command panel: it fills the column, only its content scrolls if needed */
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side{position:static!important;top:auto!important;height:100%;max-height:none!important;min-height:0;display:flex!important;flex-direction:column;gap:10px!important;padding:0!important;overflow:hidden!important}
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side #bPanel{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin}
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .bt-foot{flex:none;position:static!important;order:2}
@@ -82,16 +82,16 @@
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .blog #bLog{max-height:150px;overflow-y:auto}
 }
 
-/* ================= téléphone ================= */
+/* ================= phone ================= */
 @media (max-width:700px){
-  /* pas de barre de navigation pendant le combat : le tiroir de commandes prend le bas de l'écran */
+  /* no navigation bar during battle: the command drawer takes the bottom of the screen */
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) .bnav{display:none!important}
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) .topbar{display:none!important}
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) .content{padding:0!important}
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) .wrap{padding-inline:0!important}
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])){--dock:36dvh}
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .battle{display:block!important;padding:0!important;border:0!important;border-radius:0!important;background:none!important;box-shadow:none!important;overflow:visible!important}
-  /* colonne de jeu à hauteur d'écran, au-dessus du tiroir : HUD, puis la scène qui prend le reste */
+  /* screen-height game column, above the drawer: HUD, then the scene taking the rest */
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt{display:flex!important;flex-direction:column;height:calc(100dvh - var(--dock));box-sizing:border-box;padding:6px 6px 10px!important;gap:6px;border:0!important;border-radius:0!important;box-shadow:none!important;overflow:hidden!important}
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt>*{flex:none}
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-top{padding:6px 8px!important;border-radius:13px;border:1px solid rgba(255,255,255,.1)!important;background:rgba(9,11,16,.72)!important}
@@ -99,7 +99,7 @@
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-stage{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;overflow:hidden;border-radius:14px}
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bBoard{flex:1 1 auto;min-height:0!important;width:auto!important;height:auto!important;margin:0!important;padding:0!important;border-radius:14px 14px 0 0!important;display:flex;align-items:center;justify-content:center}
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bSvg{width:100%!important;height:100%!important}
-  /* adversaires posés sur le ciel du plateau (marge haute du dessin), équipe juste dessous */
+  /* opponents placed on the board's sky (top margin of the drawing), team just below */
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .plates{margin:0!important;filter:none!important}
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bPlE{position:absolute!important;left:6px;right:6px;z-index:7;padding:0!important}
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bPlA{flex:none;padding:6px!important;background:rgba(9,11,16,.6);border-radius:0 0 14px 14px}
@@ -110,13 +110,13 @@
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bPlA .plate{background:rgba(8,22,44,.7)!important}
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bBoard>.ciel430{top:66px!important}
 
-  /* tiroir de commandes */
+  /* command drawer */
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side{position:fixed!important;left:0!important;right:0!important;bottom:0!important;top:auto!important;z-index:40;max-height:var(--dock);height:var(--dock);display:flex!important;flex-direction:column;gap:8px!important;padding:10px 10px 0!important;overflow:hidden!important;border-radius:22px 22px 0 0;border:1px solid transparent;border-bottom:0;background:repeating-linear-gradient(135deg,rgba(255,255,255,.014) 0 1px,transparent 1px 6px) padding-box,linear-gradient(180deg,#171B24,#0F1219) padding-box,linear-gradient(165deg,rgba(255,255,255,.17),rgba(255,255,255,.035) 34%,rgba(255,255,255,.02) 66%,rgba(227,192,122,.2)) border-box;box-shadow:0 -20px 40px -20px #000}
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle:has(.bt-ph[data-ph=enemy]) .bt-side{border-top-color:rgba(255,103,103,.6)}
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle:has(.bt-ph[data-ph=deploy]) .bt-side{border-top-color:rgba(79,214,156,.55)}
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side #bPanel{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:2px 2px 8px!important;border:0!important;background:none!important;box-shadow:none!important}
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .bt-foot{position:static!important;left:auto!important;right:auto!important;bottom:auto!important;flex:none;margin:0 -10px!important;padding:8px 10px calc(10px + env(safe-area-inset-bottom,0px))!important;border-radius:0!important;border:0!important;border-top:1px solid rgba(255,255,255,.07)!important;background:rgba(10,12,16,.9)!important;box-shadow:none!important}
-  /* en-tête du Pokémon sur une ligne : médaille, nom, PV */
+  /* Pokémon header on one line: medal, name, HP */
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bPanel .bp-h{grid-template-columns:40px minmax(0,1fr) 112px!important;align-items:center;gap:10px!important;flex:none!important}
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bPanel .bp-h .bp-hp{grid-column:3!important;grid-row:1!important;margin:0!important}
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bPanel .bp-id b{font-size:16px!important;line-height:1.1!important}
@@ -125,7 +125,7 @@
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .bt-foot .kbd{display:none!important}
 }
 
-/* ================= phases : contenu du panneau ================= */
+/* ================= phases: panel content ================= */
 /* placement (v4.30) */
 #bPanel .dep-p,#bPanel .ta-p{display:flex;flex-direction:column;gap:10px}
 #bPanel .dep-h{display:flex;align-items:center;gap:10px}
@@ -140,7 +140,7 @@
 #bPanel .dep-l li b{flex:1;min-width:0;font-size:13px;font-weight:600;color:#F2F3F6}
 #bPanel .dep-l li span{font-family:var(--f-m,ui-monospace,monospace);font-size:11.5px;color:#6BE3AE}
 
-/* tour adverse : la file des actions */
+/* opponent turn: the action queue */
 #bPanel .ta-h{display:flex;align-items:center;gap:8px}
 #bPanel .ta-h i{width:8px;height:8px;border-radius:50%;background:#FF6767;box-shadow:0 0 8px #FF6767}
 #bPanel .ta-h b{font-family:var(--f-d,Archivo,sans-serif);font-weight:800;font-size:14px;letter-spacing:.04em;text-transform:uppercase;color:#FFB0B0}
@@ -156,13 +156,13 @@
 @media (prefers-reduced-motion:no-preference){#bPanel .ta-l li.now{animation:taNow 1.4s ease-in-out infinite}}
 @keyframes taNow{50%{border-color:rgba(255,103,103,.2)}}
 
-/* étape « Terminer » : le bouton prend la largeur, la suite est annoncée dessous */
+/* « Terminer » (End) step: the button takes the full width, what follows is announced below */
 #bPanel .fl478[data-st=extra] .fl478-r{flex-wrap:wrap}
 #bPanel .fl478[data-st=extra] .fl478-r>p{flex:1 1 100%}
 #bPanel .fl478[data-st=extra] .fl478-r>[data-vx=fin478]{flex:1 1 100%;height:44px;font-size:14px}
 #bPanel .fl478-suite{flex:1 1 100%;text-align:center;font-size:11.5px;color:#868EA0}
 
-/* ================= bandeau de manche ================= */
+/* ================= round banner ================= */
 html body #bBoard .tbn{top:calc(50% - 52px);padding:20px 0;gap:8px;border-image:none;background:linear-gradient(90deg,transparent,rgba(9,11,16,.9) 16%,rgba(9,11,16,.9) 84%,transparent);border:0;box-shadow:none}
 html body #bBoard .tbn::before,html body #bBoard .tbn::after{content:"";position:absolute;left:10%;right:10%;height:1px;background:linear-gradient(90deg,transparent,#E3C07A,transparent)}
 html body #bBoard .tbn::before{top:0}html body #bBoard .tbn::after{bottom:0}
@@ -170,7 +170,7 @@ html body #bBoard .tbn.en::before,html body #bBoard .tbn.en::after{background:li
 html body #bBoard .tbn b{font-size:clamp(26px,3.6vw,44px);font-weight:900;letter-spacing:.06em;line-height:1;background:linear-gradient(180deg,#FFFFFF 20%,#F0D59C 62%,#B08E4E);-webkit-background-clip:text;background-clip:text}
 html body #bBoard .tbn span{font-size:11px;letter-spacing:.24em}
 
-/* ================= Éveil, capture, fin de combat ================= */
+/* ================= Awakening, capture, end of battle ================= */
 html body #evoPick .ep-card{width:min(640px,100%);padding:20px!important;gap:12px!important;border-radius:20px!important;border:1px solid transparent!important;background:radial-gradient(120% 60% at 50% 0%,rgba(99,144,240,.16),transparent 60%) padding-box,linear-gradient(180deg,#171B24,#0F1219) padding-box,linear-gradient(135deg,#F7E1AC 0%,#C9A15A 30%,#F3DBA6 50%,#9C7737 78%,#E3C07A 100%) border-box!important;box-shadow:0 40px 80px -30px #000!important}
 html body #evoPick .ep-card .h2{font-size:22px;letter-spacing:.03em}
 html body #ct453 .ct453-c{gap:12px;padding:16px 18px 14px;border-radius:20px;background:rgba(11,13,18,.92)!important;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid rgba(227,192,122,.45);box-shadow:0 30px 60px -24px #000}
@@ -181,7 +181,7 @@ html body #ct453 .ct453-s{color:#E3C07A;text-decoration:none}
 html body #cbResult>.res-card{width:min(640px,100%);padding:22px;gap:14px;border-radius:22px}
 
 @media (max-width:700px){
-  /* Éveil : feuille qui monte du bas, boutons sous le pouce */
+  /* Awakening: sheet rising from the bottom, buttons under the thumb */
   html body #evoPick{place-items:end center;padding:0!important}
   html body #evoPick .ep-card{width:100%;max-height:88dvh;border-radius:22px 22px 0 0!important;padding:14px 14px calc(16px + env(safe-area-inset-bottom,0px))!important;animation:epUp .35s cubic-bezier(.22,1,.36,1) both}
   html body #evoPick .ep-card .h2{font-size:18px}
@@ -193,14 +193,14 @@ html body #cbResult>.res-card{width:min(640px,100%);padding:22px;gap:14px;border
 @keyframes epUp{from{transform:translateY(40px);opacity:0}}
 @media (prefers-reduced-motion:reduce){html body #evoPick .ep-card{animation:none}}
 
-/* ================= astuce du Prof. pendant le combat =================
-   .pk-dlg impose position:relative : l'astuce tombait dans le flux, sous le tiroir de commandes,
-   et allongeait la page d'un grand vide. Elle reste flottante, en haut, au-dessus du plateau. */
+/* ================= Prof.'s tip during battle =================
+   .pk-dlg forces position:relative: the tip fell into the flow, under the command drawer,
+   and stretched the page with a big empty gap. It stays floating, at the top, above the board. */
 html:not(#pkz) body:not(#pkz) #tip429.pk-dlg{position:fixed!important}
 
-/* ================= téléphone : HUD et tiroir désencombrés ================= */
+/* ================= phone: decluttered HUD and drawer ================= */
 @media (max-width:700px){
-  /* HUD sur deux lignes nettes : phase · adversaire · Voix / manche · conditions · réglages */
+  /* HUD on two clean lines: phase · opponent · Voices / round · conditions · settings */
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-top{display:flex!important;flex-wrap:wrap!important;align-items:center;gap:6px 8px!important;height:auto!important}
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-top .bt-ph{order:1}
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-top #bScen{order:2;flex:1 1 0;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px!important}
@@ -211,13 +211,13 @@ html:not(#pkz) body:not(#pkz) #tip429.pk-dlg{position:fixed!important}
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-top #bWx{order:6;flex:1 1 0;min-width:0;display:flex!important;flex-wrap:nowrap!important;gap:5px;overflow-x:auto;scrollbar-width:none;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 18px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 18px),transparent)}
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-top #bWx::-webkit-scrollbar{display:none}
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-top #bWx .chip{flex:none;white-space:nowrap;font-size:11px!important}
-  /* soleil et heure sont déjà sur le plateau (pastille du ciel) */
+  /* sun and time are already on the board (sky badge) */
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])):has(#bBoard>.ciel430) #cbBattle .bt-top #bWx .chip:not(.chip-vent):not(.chip-acc){display:none!important}
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-top #bFast{order:7;flex:none;min-width:40px;height:36px!important}
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-top #bQuit{order:8;flex:none;height:36px!important}
 
-  /* pied du tiroir sur une seule ligne : actions rapides (défilent), puis outils du plateau.
-     La pastille de phase du pied répète l'en-tête du panneau (Déplacer · Agir · Terminer). */
+  /* drawer footer on a single line: quick actions (scroll), then board tools.
+     The footer's phase badge repeats the panel header (Move · Act · End). */
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .bt-foot{display:flex!important;flex-wrap:nowrap!important;align-items:center;gap:8px!important}
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .bt-foot .fl478-pied{display:none!important}
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .bt-foot #qa443{order:1;flex:1 1 auto;min-width:0;margin:0!important;overflow-x:auto;scrollbar-width:none;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 20px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 20px),transparent)}

@@ -16,7 +16,7 @@ function Master({ className, style, mark, kicker, who }) {
   );
 }
 
-// Onglet « Univers » : la Ligue, les maîtres d'arène, le Conseil 4 et les chapitres.
+// "Univers" (Universe) tab: the League, gym leaders, the Elite 4 and chapters.
 export default function Universe() {
   return (
     <>

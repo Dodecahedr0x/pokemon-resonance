@@ -1,6 +1,6 @@
-// Jauge de capture avec timing (#ct453, v4.53 · timing453 dans 083). Le moteur anime
-// l'anneau (.ct453-g, style.transform à chaque image) et pose ses écouteurs sur le nœud ;
-// `q` (résultat) change le texte et la classe.
+// Capture gauge with timing (#ct453, v4.53 · timing453 in 083). The engine animates
+// the ring (.ct453-g, style.transform at each frame) and attaches its listeners to the node;
+// `q` (result) changes the text and the class.
 const TXT = { perfect: 'Parfait !', ok: 'Bien joué !', skip: 'Lancer direct', miss: 'Trop tôt ou trop tard…' };
 
 export default function Tm453({ d }) {

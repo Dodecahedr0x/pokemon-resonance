@@ -1,7 +1,7 @@
 import { OFF462, offOk462, tracks462 } from '../../../engine/093-chronicles-chapters.js';
 
-// Mode hors ligne (v4.62) : musique mise en cache sur l'appareil.
-// Boutons gérés par le moteur (clic délégué sur data-off462).
+// Offline mode (v4.62): music cached on the device.
+// Buttons handled by the engine (delegated click on data-off462).
 export default function Offline() {
   const ok = offOk462(),
     n = OFF462.n,

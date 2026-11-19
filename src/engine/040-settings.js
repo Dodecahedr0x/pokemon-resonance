@@ -1,4 +1,4 @@
-/* Section d'origine : v4-08-parametres.js */
+/* Original section: v4-08-parametres.js */
 
 import { refreshSettings } from '../screens/settings/settingsStore.js';
 import { DIFFS, PROFILE } from './011-game-state.js';
@@ -15,7 +15,7 @@ import { renderDex } from './038-pokedex.js';
 import { renderBag, renderQuests } from './039-quests-shop.js';
 import { renderCampPage431 } from './066-tactical-challenges.js';
 
-// La page Paramètres est rendue par React (src/screens/settings) : redessiner = la reconstruire.
+// The Settings page is rendered by React (src/screens/settings): redrawing = rebuilding it.
 export function renderParams() {
   refreshSettings();
 }
@@ -23,7 +23,7 @@ export function renderParams() {
 
 export function v4After(t) {
   document.documentElement.dataset.page = t;
-  // bouton Menu marqué pour les pages du menu : src/components/Nav.jsx (BottomNav)
+  // Menu button marked for the menu pages: src/components/Nav.jsx (BottomNav)
   if (t === 'carte') {
     renderMap();
     requestAnimationFrame(() => {
@@ -36,14 +36,14 @@ export function v4After(t) {
   else if (t === 'quetes') renderQuests();
   else if (t === 'sac') renderBag();
   else if (t === 'params') renderParams();
-  else if (t === 'camp') renderCampPage431(); // sous-onglets (v4.31)
+  else if (t === 'camp') renderCampPage431(); // sub-tabs (v4.31)
   renderWallet();
 }
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Statements run at startup, in the original order (see index.js).
 export function __init() {
 
-/* ---------- Paramètres : son, vibrations, partie ---------- */
+/* ---------- Settings: sound, vibrations, game ---------- */
 if (PREF.musVol === undefined) PREF.musVol = 0.7;
 
 
@@ -112,8 +112,8 @@ document.addEventListener('click', e => {
 });
 
 
-/* ---------- branchements ---------- */
+/* ---------- hookups ---------- */
 
 
-// Les pages v4 (carte, dex, quêtes, sac, paramètres) sont rendues par React (src/screens).
+// The v4 pages (map, dex, quests, bag, settings) are rendered by React (src/screens).
 }

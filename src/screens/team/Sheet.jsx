@@ -5,7 +5,7 @@ import { useEngineReady } from '../../engineReady.js';
 import { useRoster } from './teamStore.js';
 import { EL, MK, MX, RX, dexNo } from '../../engine/004-data.js';
 import { MV, SHAPE, TAL } from '../../engine/005-moves.js';
-import { REGN } from '../../engine/008-hoenn-data.js';
+import { REGION_NAMES } from '../../engine/008-hoenn-data.js';
 import { BY, NOTES, familyOf } from '../../engine/009-pokemon.js';
 import { ARR } from '../../engine/010-in-battle-evolution.js';
 import { ITEMS2, LINK_N, LINK_T, PROFILE, inBox, isCamp, lvlOfPts, ownedItems } from '../../engine/011-game-state.js';
@@ -16,13 +16,13 @@ import { STLN, branchNote, crestSmall, evoDiff, monEls, monMarks, nextOf, squad 
 import { HELD_IMG, ITM } from '../../engine/032-v4-foundation.js';
 import { moveLearned } from '../../engine/045-tms-hms.js';
 import { characterHtml } from '../../engine/049-identity.js';
-import { RANGS, stars, rankId } from '../../engine/053-resonance.js';
+import { RANKS, stars, rankId } from '../../engine/053-resonance.js';
 import { duoFor416 } from '../../engine/055-living-johto.js';
 import { captureSite421 } from '../../engine/061-catch-anywhere.js';
 
-// Fiche d'un Pokémon (#sheet / #sh). Ouverture, fermeture, focus et défilement : openSheet /
-// closeSheet du moteur ; clics (data-close, data-open, data-rx, data-qa, data-eq) : écouteur du
-// moteur sur #sheet, qui reste monté. Fermée, la fiche garde son dernier contenu (ancien DOM).
+// Pokémon sheet (#sheet / #sh). Opening, closing, focus and scrolling: the engine's openSheet /
+// closeSheet; clicks (data-close, data-open, data-rx, data-qa, data-eq): the engine's
+// listener on #sheet, which stays mounted. When closed, the sheet keeps its last content (old DOM).
 export default function Sheet() {
   const ready = useEngineReady();
   const { open, id, sheet } = useRoster();
@@ -85,7 +85,7 @@ function Content({ id }) {
           </svg>
         </button>
         <span className="sh-no">
-          {dexNo(m.no)} · {REGN[m.gen] || 'Johto'} · stade {m.st}
+          {dexNo(m.no)} · {REGION_NAMES[m.gen] || 'Johto'} · stade {m.st}
         </span>
         <div className="sh-crest">{T(crestSmall(m))}</div>
         <h2 className="sh-name" id="shName">
@@ -98,9 +98,9 @@ function Content({ id }) {
           <span className={`rg-ic rg rg-${rg}`}>{stars(rg)}</span>
           <span>
             <b>
-              Rang {RANGS[rg].n} · {RANGS[rg].k}
+              Rang {RANKS[rg].n} · {RANKS[rg].k}
             </b>{' '}
-            · {T(RANGS[rg].d)}
+            · {T(RANKS[rg].d)}
           </span>
         </p>
         {ROLEFX[m.r] ? (
@@ -228,7 +228,7 @@ function Content({ id }) {
   );
 }
 
-// Recruter, remplacer ou retirer ce stade.
+// Recruit, replace or remove this stage.
 function Action({ m, base, id }) {
   const cur = squad.find(x => BY[x].base === base.id),
     onM = cur === id,
@@ -246,7 +246,7 @@ function Action({ m, base, id }) {
   );
 }
 
-// Carte d'une capacité (ancien mvCard).
+// Move card (old mvCard).
 function MvCard({ id }) {
   const m = MV[id];
   const sp = [strength(m), SHAPE[m.sh] + (m.r ? ' ' + m.r : ''), m.mk ? markOf(m.mk).n : null]
@@ -264,7 +264,7 @@ function MvCard({ id }) {
   );
 }
 
-// Ce que change un Éveil (ancien diffHtml). `from` : l'Éveil qui a mené à ce stade, en encart.
+// What an Awakening changes (old diffHtml). `from`: the Awakening that led to this stage, as an inset.
 function Evd({ a, b, from }) {
   const D = evoDiff(a, b),
     B2 = BY[b],
@@ -325,13 +325,13 @@ function Evd({ a, b, from }) {
   );
 }
 
-// Icône d'objet illustrée (ancien itemizeDom sur la fiche) ; sans image, on la masque.
+// Illustrated item icon (old itemizeDom on the sheet); without an image, it is hidden.
 function ItemImg({ k }) {
   const k2 = Object.keys(ITEMS2).find(x => ITEMS2[x].i === ITEMS2[k].i) || k;
   return <img className="it-img" src={ITM(HELD_IMG[k2])} alt="" loading="lazy" onError={e => (e.currentTarget.style.display = 'none')} />;
 }
 
-// Objet tenu, fatigue et liens (ancien sheetExtras, v1.0).
+// Held item, fatigue and links (old sheetExtras, v1.0).
 function Extras({ base }) {
   const own = inBox(base.id),
     its = ownedItems(),

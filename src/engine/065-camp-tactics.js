@@ -1,4 +1,4 @@
-/* Section d'origine : v4.30-01-camp-et-tactique.js */
+/* Original section: v4.30-01-camp-and-tactics.js */
 
 import { paintOverlay } from '../screens/overlays/dialogsStore.js';
 import { WEATHER } from './004-data.js';
@@ -9,7 +9,7 @@ import { BADGES, __set_BADGES } from './013-gyms.js';
 import { $, RM, medal, toast } from './014-utils.js';
 import { tokCl } from '../screens/combat/board/boardStore.js';
 import { bdClass, getHost, hostSet } from '../screens/combat/board/boardStore.js';
-import { CROCHETS, hook } from './015-hooks.js';
+import { HOOKS, hook } from './015-hooks.js';
 import { cur, go } from './016-navigation.js';
 import { renderSquad, save } from './020-team-cards.js';
 import { BH, EMAX, K, P, byUid, uAt } from './021-combat-engine.js';
@@ -24,27 +24,27 @@ import { renderMap } from './037-map.js';
 import { renderQuests } from './039-quests-shop.js';
 import { renderParams } from './040-settings.js';
 import { LEGS } from './043-adventure-plus.js';
-import { VIV_DESC, VIV_ETAT, VIV_NOM } from './046-living-board.js';
-import { ONGLETS429 } from './064-quality.js';
+import { LIVING_DESC, LIVING_STATE, LIVING_NAME } from './046-living-board.js';
+import { TAB_LIST429 } from './064-quality.js';
 import { refreshPrep } from '../screens/combat/prep/prepStore.js';
 
-export { CATN430 }; // lu par Quêtes › Journal (React)
+export { CATN430 }; // read by Quests › Journal (React)
 
 
 /* =====================================================================
-   v4.30 : accès et tactique
-   1. Onglet « Camp » : bâtiments, expéditions, Pension, Potager, Dojo…
-      ouverts en Campagne comme en Libre, plus les sorties (herbes, pêche,
-      Parc Safari, Tour, tournoi).
-   2. Mode de jeu dans les Paramètres : changer de mode demande une
-      confirmation et propose de ranger la partie dans un emplacement.
-   3. Cartes régionales : on peut à nouveau les faire défiler (flèches).
-   4. Code secret : l’Atelier du créateur, réservé au détenteur du code.
-   5. Ciel du combat : un logo permanent (heure, météo) et une annonce
-      quand le temps change.
-   6. Déploiement : avant les grands combats, on place ses Pokémon.
-   7. Doctrines : un bonus contre une contrepartie, choisi avant le combat.
-   8. Journal tactique : rapport de chaque combat et statistiques.
+   v4.30: access and tactics
+   1. « Camp » tab: buildings, expeditions, Daycare, Garden, Dojo…
+      open in Campaign as in Free mode, plus the outings (grass, fishing,
+      Safari Park, Tower, tournament).
+   2. Game mode in Settings: changing mode asks for a
+      confirmation and offers to put the game away in a slot.
+   3. Regional maps: they can be scrolled again (arrows).
+   4. Secret code: the Creator's Workshop, reserved for the code holder.
+   5. Battle sky: a permanent logo (time, weather) and an
+      announcement when the weather changes.
+   6. Deployment: before big battles, you place your Pokémon.
+   7. Doctrines: a bonus against a drawback, chosen before the battle.
+   8. Tactical journal: report of each battle and statistics.
    ===================================================================== */
 export function V430_0() {
   return { doc430: '', journal430: null };
@@ -93,32 +93,32 @@ export function log0430() {
 }
 
 
-/* ---------- 1. l’onglet Camp ---------- */
-/** Le Camp de base est ouvert en Campagne comme en Libre (v4.30). */
+/* ---------- 1. the Camp tab ---------- */
+/** The base Camp is open in Campaign as in Free mode (v4.30). */
 export function campOk430() {
   return true;
 }
 
 
-// La page Camp (squelette, Camp de base, Sorties) est rendue par React : src/screens/camp.
+// The Camp page (skeleton, base Camp, Outings) is rendered by React: src/screens/camp.
 
 
-/* ---------- 2. mode de jeu : dans les Paramètres, avec confirmation ---------- */
+/* ---------- 2. game mode: in Settings, with confirmation ---------- */
 export function gameInProgress430() {
   return (PROFILE.battles || 0) > 0 || BADGES.length > 0;
 }
 
 
-function slotLibre430() {
+function freeSlot430() {
   return SLOTS.find(k => !SV.local[k]) || null;
 }
 
 
-/** Une confirmation avant toute nouvelle partie. suite() n’est appelée qu’après accord. */
+/** A confirmation before any new game. suite() is only called once the player agrees. */
 export function confirm430(heading, text, next) {
   if (!gameInProgress430()) return next();
-  // #conf430 : rendu par React au premier appel (src/screens/overlays/Conf430.jsx) ; hidden reste posé ici
-  paintOverlay('conf430', { titre: heading, texte: text, combats: PROFILE.battles || 0, badges: BADGES.length, sl: slotLibre430() });
+  // #conf430: rendered by React on first call (src/screens/overlays/Conf430.jsx); hidden stays set here
+  paintOverlay('conf430', { titre: heading, texte: text, combats: PROFILE.battles || 0, badges: BADGES.length, sl: freeSlot430() });
   const el = document.getElementById('conf430');
   el.hidden = false;
   confirm430.suite = next;
@@ -127,12 +127,12 @@ export function confirm430(heading, text, next) {
 }
 
 
-/* ---------- 3. cartes régionales : défilement ---------- */
+/* ---------- 3. regional maps: scrolling ---------- */
 export function arrows430() {
   const sc = document.getElementById('mapSc');
   if (!sc) return;
-  // les deux flèches (.mf430) sont rendues par React (src/screens/carte/Carte.jsx) ; leur
-  // attribut hidden reste posé ici, d'après le défilement mesuré
+  // the two arrows (.mf430) are rendered by React (src/screens/map/MapScreen.jsx); their
+  // hidden attribute stays set here, based on the measured scroll
   const box = sc.parentNode;
   const max = sc.scrollWidth - sc.clientWidth;
   box.querySelectorAll('.mf430').forEach(b => {
@@ -142,7 +142,7 @@ export function arrows430() {
 }
 
 
-/* ---------- 4. code secret : l’Atelier du créateur ---------- */
+/* ---------- 4. secret code: the Creator's Workshop ---------- */
 function h430(str, seed) {
   let h1 = 0xdeadbeef ^ seed,
     h2 = 0x41c6ce57 ^ seed;
@@ -163,12 +163,12 @@ function codeOk430(v) {
   const c = String(v || '')
     .toUpperCase()
     .replace(/[^A-Z0-9]/g, '');
-  return c.length >= 6 && h430(c, 7) + h430(c, 4301) === CLE430;
+  return c.length >= 6 && h430(c, 7) + h430(c, 4301) === KEY430;
 }
 
 
 function cheat430(k) {
-  if (!createur430()) return;
+  if (!creator430()) return;
   let m = '';
   if (k === 'argent') {
     PROFILE.money = Math.min(999999, (PROFILE.money || 0) + 10000);
@@ -243,32 +243,32 @@ function sky430() {
   const bd = document.getElementById('bBoard');
   if (!bd || !B) return;
   const E = skyState430(B);
-  // #ciel430 : rendu par React (Board.jsx)
-  const [ic, co] = CIEL430[E.ph] || CIEL430.jour,
-    w = E.wx && CIEL430[E.wx];
+  // #ciel430: rendered by React (Board.jsx)
+  const [ic, co] = SKY430[E.ph] || SKY430.jour,
+    w = E.wx && SKY430[E.wx];
   const sky = {
     ic,
     co,
-    ti: VIV_NOM[E.ph] || '',
+    ti: LIVING_NAME[E.ph] || '',
     w: w ? [w[0], w[1], WXN[E.wx]] : null,
-    nom: (VIV_NOM[E.ph] || 'Jour') + (w ? ' · ' + WXN[E.wx] + ' ' + B.wx.n : ''),
+    nom: (LIVING_NAME[E.ph] || 'Jour') + (w ? ' · ' + WXN[E.wx] + ' ' + B.wx.n : ''),
     vent: !!B.vent
   };
   if (JSON.stringify(sky) !== JSON.stringify(getHost().ciel)) hostSet({ ciel: sky });
-  // annonce quand l’heure ou la météo change
+  // announcement when the time or weather changes
   const P = B.ciel430;
   B.ciel430 = E;
   if (!P || B.over) return;
-  if (P.ph !== E.ph) announce430(CIEL430[E.ph], VIV_ETAT[E.ph] || VIV_NOM[E.ph], VIV_DESC[E.ph] || '');
+  if (P.ph !== E.ph) announce430(SKY430[E.ph], LIVING_STATE[E.ph] || LIVING_NAME[E.ph], LIVING_DESC[E.ph] || '');
   else if (P.wx !== E.wx)
-    E.wx ? announce430(CIEL430[E.wx], `${WXN[E.wx]} · ${B.wx.n} manches`, wxInfo430(E.wx)) : announce430(['i-sol', '#cfe6ff'], 'Le ciel se dégage', 'La météo est terminée.');
+    E.wx ? announce430(SKY430[E.wx], `${WXN[E.wx]} · ${B.wx.n} manches`, wxInfo430(E.wx)) : announce430(['i-sol', '#cfe6ff'], 'Le ciel se dégage', 'La météo est terminée.');
 }
 
 
 export function announce430(ic, heading, text) {
   const bd = document.getElementById('bBoard');
   if (!bd || !ic) return;
-  // #cielBan430 : rendu par React (Board.jsx) ; la classe « on » est retirée puis reposée pour relancer l'animation
+  // #cielBan430: rendered by React (Board.jsx); the « on » class is removed then set again to restart the animation
   const b = { ic: [ic[0], ic[1]], titre: heading, texte: text, on: false };
   hostSet({ cielBan: b });
   void bd.offsetWidth;
@@ -281,7 +281,7 @@ export function announce430(ic, heading, text) {
 }
 
 
-/* ---------- 6. déploiement ---------- */
+/* ---------- 6. deployment ---------- */
 function large430(D) {
   return (
     !D.tuto &&
@@ -313,7 +313,7 @@ function deployTap430(k) {
   if (u && u.side === 'a' && (!sel || sel === u)) {
     ui.dsel430 = sel === u ? null : u.uid;
   } else if (sel && z.includes(k)) {
-    if (u && u.side === 'a') u.pos = [...sel.pos]; // échange de places
+    if (u && u.side === 'a') u.pos = [...sel.pos]; // swap places
     sel.pos = P(k);
     ui.dsel430 = null;
     sfx('ui');
@@ -342,10 +342,10 @@ function deployRender430() {
   if (L.u)
     for (const id in L.u) {
       const T = L.u[id];
-      if (T) tokCl(T, 'dep430s', on && ui.dsel430 === id); // classes du jeton : Units.jsx
+      if (T) tokCl(T, 'dep430s', on && ui.dsel430 === id); // token classes: Units.jsx
     }
-  bdClass('dep430', on); // classe de #bBoard, rendue par React
-  // « Lancer le combat » et la phase du déploiement : rendus par React (src/screens/combat/battle/Foot.jsx)
+  bdClass('dep430', on); // #bBoard class, rendered by React
+  // « Lancer le combat » (Start battle) and the deployment phase: rendered by React (src/screens/combat/battle/Foot.jsx)
 }
 
 
@@ -372,13 +372,13 @@ export function docMov430(S, u) {
 }
 
 
-// Bloc « Doctrine » (#doc430) : rendu par React avec la sélection des combats.
+// « Doctrine » block (#doc430): rendered by React along with the battle selection.
 export function docRender430() {
   refreshPrep();
 }
 
 
-/* ---------- 8. journal tactique ---------- */
+/* ---------- 8. tactical journal ---------- */
 export function jDmg430(S, v, real, o) {
   if (!S.stats) return;
   const J = S.stats.j430 || (S.stats.j430 = { d: {}, t: {}, k: {} });
@@ -404,26 +404,26 @@ function cat430(sc, D) {
 }
 
 
-// Quêtes › Journal : rendu par React (src/screens/quetes/Journal.jsx)
+// Quests › Journal: rendered by React (src/screens/quests/Journal.jsx)
 
 
-/* ---------- après chaque rendu du combat ---------- */
+/* ---------- after each battle render ---------- */
 export function afterRender430() {
   if (!B) return;
   try {
     sky430();
     deployRender430();
-    // pastille de la doctrine (#bWx) : rendue par React (TopBar.jsx)
+    // doctrine chip (#bWx): rendered by React (TopBar.jsx)
   } catch (e) {}
 }
 
-// seule l’empreinte du code est dans le jeu, jamais le code lui-même
-const CLE430 = 'agg9t7xer71nts93h0hym';
+// only the code's fingerprint is in the game, never the code itself
+const KEY430 = 'agg9t7xer71nts93h0hym';
 
-export const createur430 = () => PREF.dev430 === CLE430;
+export const creator430 = () => PREF.dev430 === KEY430;
 
-/* ---------- 5. le ciel du combat : logo et annonces ---------- */
-const CIEL430 = {
+/* ---------- 5. battle sky: logo and announcements ---------- */
+const SKY430 = {
   jour: ['i-sol', '#f2c94c'],
   aube: ['i-aube', '#f0a6a0'],
   crepuscule: ['i-crep', '#e8774a'],
@@ -446,14 +446,14 @@ export const DOCTRINES430 = {
 
 const CATN430 = { arenes: 'Arènes', ligue: 'Ligue', rivaux: 'Rivaux', dissonance: 'Dissonance', legendes: 'Légendes', defis: 'Défis', sauvages: 'Sauvages', entrainement: 'Entraînement' };
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Startup statements, run in their original order (see index.js).
 export function __init() {
 
-/* icônes (camp, ciel, météo, doctrine) : dans src/components/SvgSprite.jsx */
+/* icons (camp, sky, weather, doctrine): in src/components/SvgSprite.jsx */
 
 
-// la page #camp et ses liens de navigation (barre latérale, barre du bas) sont rendus par React
-if (!ONGLETS429.includes('camp')) ONGLETS429.push('camp');
+// the #camp page and its navigation links (sidebar, bottom bar) are rendered by React
+if (!TAB_LIST429.includes('camp')) TAB_LIST429.push('camp');
 
 
 document.addEventListener('click', e => {
@@ -492,7 +492,7 @@ document.addEventListener('click', e => {
   confirm430.suite = null;
   if (a === 'saves') return openSaves();
   if (a === 'ranger') {
-    const sl = slotLibre430();
+    const sl = freeSlot430();
     if (sl) putSlot(sl);
   }
   if ((a === 'ranger' || a === 'oui') && next) next();
@@ -547,7 +547,7 @@ document.addEventListener('click', e => {
   if (v) {
     const i = document.getElementById('code430');
     if (codeOk430(i && i.value)) {
-      PREF.dev430 = CLE430;
+      PREF.dev430 = KEY430;
       savePref();
       toast('Action Replay activé sur cet appareil.');
       renderParams();
@@ -558,7 +558,7 @@ document.addEventListener('click', e => {
     return;
   }
   const t = e.target.closest('[data-triche430]');
-  if (!t || !createur430()) return;
+  if (!t || !creator430()) return;
   cheat430(t.dataset.triche430);
 });
 
@@ -572,7 +572,7 @@ document.addEventListener('keydown', e => {
 });
 
 
-CROCHETS.combat.push((S, opt, D0) => {
+HOOKS.combat.push((S, opt, D0) => {
   D0 = D0 || SCEN[S.sc] || {};
   const pr = PREF.dep430 || 'grands';
   if (pr === 'jamais' || D0.tuto || D0.enigme431 != null || D0.duel433 || S.coop || S.ordre === 'vitesse') return;
@@ -621,7 +621,7 @@ document.addEventListener(
 );
 
 
-CROCHETS.combat.push((S, opt) => {
+HOOKS.combat.push((S, opt) => {
   const d = opt && opt.doc430;
   if (!d || !DOCTRINES430[d]) return;
   S.doc430 = d;
@@ -647,7 +647,7 @@ CROCHETS.combat.push((S, opt) => {
 });
 
 
-CROCHETS.progres.push((S, rew, win) => {
+HOOKS.progres.push((S, rew, win) => {
   if (!S.doc430) return null;
   rew.doc430 = S.doc430;
   if (!win || S.doc430 !== 'butin') return null;
@@ -657,7 +657,7 @@ CROCHETS.progres.push((S, rew, win) => {
 });
 
 
-CROCHETS.resultat.push(r =>
+HOOKS.resultat.push(r =>
   r.doc430 && DOCTRINES430[r.doc430] ? `<div class="res-l"><h4>Doctrine</h4><div class="rl"><span>${DOCTRINES430[r.doc430].n}${r.butin430 ? ' : butin de la victoire' : ''}</span><b>${r.butin430 ? '+' + fmt(r.butin430) + ' ₽' : ''}</b></div></div>` : ''
 );
 
@@ -671,7 +671,7 @@ document.addEventListener('click', e => {
 });
 
 
-CROCHETS.progres.push((S, rew, win) => {
+HOOKS.progres.push((S, rew, win) => {
   const D = SCEN[S.sc] || {};
   if (D.tuto) return null;
   const J0 = S.stats.j430 || { d: {}, t: {}, k: {} },
@@ -680,7 +680,7 @@ CROCHETS.progres.push((S, rew, win) => {
   const sc = r => r.d + r.k * 40 - r.ko * 15,
     mvp = rows.length ? rows.reduce((a, b) => (sc(b) > sc(a) ? b : a)) : null;
   rew.j430 = { rows, mvp: mvp && mvp.d > 0 ? mvp.uid : null };
-  // statistiques cumulées
+  // cumulative statistics
   const J = (PROFILE.journal430 = PROFILE.journal430 || log0430());
   J.n++;
   if (win) {
@@ -704,7 +704,7 @@ CROCHETS.progres.push((S, rew, win) => {
 });
 
 
-CROCHETS.resultat.push(r => {
+HOOKS.resultat.push(r => {
   const j = r.j430;
   if (!j || !j.rows.length) return '';
   const mx = Math.max(1, ...j.rows.map(x => x.d));
@@ -717,7 +717,7 @@ CROCHETS.resultat.push(r => {
 });
 
 
-/* ---------- nouveautés ---------- */
+/* ---------- what's new ---------- */
 document.addEventListener('click', e => {
   const b = e.target.closest('[data-news="camp430"]');
   if (!b) return;

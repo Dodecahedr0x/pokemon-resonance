@@ -1,4 +1,4 @@
-/* Section d'origine : v4-06-pokedex.js */
+/* Original section: v4-06-pokedex.js */
 
 import { BY, MON } from './009-pokemon.js';
 import { $, $$, RM } from './014-utils.js';
@@ -10,7 +10,7 @@ import { scanDex448 } from './079-immersion-sound-haptics.js';
 import { refreshDex } from '../screens/dex/dexStore.js';
 
 export let DEXS;
-// vrai dès le premier affichage de la page : avant, #dex reste vide (ancien buildDex)
+// true from the page's first display: before that, #dex stays empty (old buildDex)
 export let dexBuilt;
 
  // v4.13
@@ -27,7 +27,7 @@ export function dexList() {
 }
 
 
-// La page « Pokédex » (#dex) est rendue par React (src/screens/dex) : dessiner = rafraîchir le store.
+// The "Pokédex" page (#dex) is rendered by React (src/screens/dex): drawing = refreshing the store.
 function renderDexList() {
   if (!dexBuilt) return;
   refreshDex();
@@ -53,10 +53,10 @@ export function renderDex() {
   renderDexList();
 }
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Statements executed at startup, in the original order (see index.js).
 export function __init() {
 
-/* ---------- Pokédex détaillé ---------- */
+/* ---------- Detailed Pokédex ---------- */
 DEXS = MON.filter(m => !m.ennemi).sort((a, b) => a.no - b.no);
 
 
@@ -67,7 +67,7 @@ document.addEventListener('click', e => {
   const d = e.target.closest('[data-dex]');
   if (d && $('#dex') && $('#dex').contains(d)) {
     V4.dexSel = d.dataset.dex;
-    renderDexCard(); // redessine aussi la liste (élément choisi)
+    renderDexCard(); // also redraws the list (selected item)
     if (d.closest('#dex4List') && innerWidth < 1000) {
       const c = $('#dex4Card');
       if (c) c.scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'start' });
@@ -79,7 +79,7 @@ document.addEventListener('click', e => {
 });
 
 
-// recherche, région et tri (champs rendus par React, src/screens/dex)
+// search, region and sort (fields rendered by React, src/screens/dex)
 document.addEventListener('input', e => {
   if (e.target.id !== 'dex4Q') return;
   V4.dexQ = e.target.value;

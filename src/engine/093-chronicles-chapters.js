@@ -1,4 +1,4 @@
-/* Section d'origine : 4.62 : chroniques (histoire en chapitres) et mode hors ligne */
+/* Original section: 4.62: chronicles (story in chapters) and offline mode */
 
 import { $, writeLS, readLS, toast } from './014-utils.js';
 import { PREF, savePref } from './026-campaign-tutorial-sound.js';
@@ -10,7 +10,7 @@ import { reward454 } from './084-peddler-route-missions.js';
 import { badgeCount459 } from './090-item-quests-trophies.js';
 
 
-/** Mode hors ligne : pistes de musique gardées en cache (urls = adresses blob: par piste). */
+/** Offline mode: music tracks kept in cache (urls = blob: addresses per track). */
 export const OFF462 = { cache: 'res-audio-462', urls: {}, etat: '', n: 0 };
 
 
@@ -142,7 +142,7 @@ async function offSave462() {
   }
 }
 
-/* ---------- 1. Chroniques ---------- */
+/* ---------- 1. Chronicles ---------- */
 export const CHAP462 = [
   { t: 'Chapitre 1 · Le premier écho', min: 0, L: [['prof', 'Chaque Pokémon porte une note. Quand deux notes s’accordent, la Résonance naît. Voilà ce que je cherche à comprendre depuis vingt ans.'], ['prof', 'Votre partenaire a répondu à votre voix dès le premier jour. C’est rare, et c’est précieux.'], ['kael', 'Alors c’est toi, la nouvelle recrue du Prof. Je m’appelle Kael. On verra bientôt qui entend le mieux.']] },
   { t: 'Chapitre 2 · Une note qui manque', min: 1, L: [['prof', 'Votre premier badge vibre dans la Résonance. Mais écoutez : il manque une note dans l’enregistrement de la région.'], ['prof', 'Quelque chose efface les notes au fil des routes. Je l’appelle la Dissonance.'], ['kael', 'Une Dissonance ? Ça ressemble à un prétexte pour me ralentir. Mais je viens avec toi, juste pour voir.']] },
@@ -155,13 +155,13 @@ export const CHAP462 = [
 ];
 
 
-export const NOMSC462 = { j1: 'Arrivée à Johto', jd1: 'La Team Dissonance', jd2: 'La tour en flammes', jd3: 'L’Antenne Rouge', jd4: 'Le Relais', jchamp: 'Le Champion de Johto', roam: 'La bête errante', rv5: 'Kael à Johto', h1: 'Arrivée à Hoenn', hchamp: 'Le Champion de Hoenn' };
+export const NAMES_C462 = { j1: 'Arrivée à Johto', jd1: 'La Team Dissonance', jd2: 'La tour en flammes', jd3: 'L’Antenne Rouge', jd4: 'Le Relais', jchamp: 'Le Champion de Johto', roam: 'La bête errante', rv5: 'Kael à Johto', h1: 'Arrivée à Hoenn', hchamp: 'Le Champion de Hoenn' };
 
 
 export const chSt462 = () => readLS('res-ch462', { read: {} });
 
 
-/* ---------- 2. Mode hors ligne (musique en cache) ---------- */
+/* ---------- 2. Offline mode (music in cache) ---------- */
 export const offOk462 = () => {
   try {
     return typeof caches !== 'undefined' && typeof fetch === 'function' && typeof URL !== 'undefined' && !!URL.createObjectURL;
@@ -173,7 +173,7 @@ export const offOk462 = () => {
 
 export const tracks462 = () => Object.entries(BGM434.src);
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Startup statements, run in their original order (see index.js).
 export function __init() {
 
 document.addEventListener(
@@ -209,7 +209,7 @@ document.addEventListener(
 );
 
 
-// panneaux « Chroniques » et « Mode hors ligne » : rendus par React (src/screens/settings/panels/)
+// « Chroniques » (Chronicles) and « Mode hors ligne » (Offline mode) panels: rendered by React (src/screens/settings/panels/)
 
 
 window.addEventListener('offline', () => toast('Vous êtes hors ligne : le jeu continue de fonctionner.'));

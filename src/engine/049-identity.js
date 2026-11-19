@@ -1,10 +1,10 @@
-/* Section d'origine : v4.10-01-identite.js */
+/* Original section: v4.10-01-identite.js */
 
 import { BY, MON, SCEN } from './009-pokemon.js';
 import { PROFILE, inBox, isCamp } from './011-game-state.js';
 import { BADGES } from './013-gyms.js';
 import { $, medal, tc, toast } from './014-utils.js';
-import { CROCHETS } from './015-hooks.js';
+import { HOOKS } from './015-hooks.js';
 import { __set_squad, renderSquad, save, squad } from './020-team-cards.js';
 import { damage, endStep, flies, hasNx, hdist, heal, mDur, markAt, mvType, nbrK, say, setMark, stun, uAt, uk } from './021-combat-engine.js';
 import { scSel } from './024-combat-ui.js';
@@ -12,39 +12,39 @@ import { queueSave } from './025-saves.js';
 import { PREF, sfx, vibe } from './026-campaign-tutorial-sound.js';
 import { SHOP, bagN, fmt } from './032-v4-foundation.js';
 import { renderWallet } from './035-interface.js';
-import { FOURNISSEURS_ROLES } from './044-tactical-engine.js';
+import { ROLE_PROVIDERS } from './044-tactical-engine.js';
 import { isFallen } from './048-replayability.js';
 import { discount414 } from './053-resonance.js';
 import { inDaycare416, daycare416 } from './055-living-johto.js';
 import { campOk430 } from './065-camp-tactics.js';
 import { individualOf432, individualHtml432 } from './067-individuals-comfort.js';
-import { ctJour456 } from './089-extra-held-items-tms.js';
+import { tmDay456 } from './089-extra-held-items-tms.js';
 import { lock461, story461 } from './092-companion-eggs-expeditions.js';
 import { refreshCampBase } from '../screens/camp/campStore.js';
 import { paintOverlay } from '../screens/overlays/dialogsStore.js';
 
-let BATIMENTS, EXP_DEST;
-export { BATIMENTS, placesExp, buildingBlocked }; // lus par le Camp de base (src/screens/camp)
+let BUILDINGS, EXP_DEST;
+export { BUILDINGS, placesExp, buildingBlocked }; // read by the base Camp (src/screens/camp)
 
 
 /* =====================================================================
-   v4.10 : identité et progression
+   v4.10: identity and progression
    ---------------------------------------------------------------------
-   1. Accords de Résonance (Tactique avancée) : dans une même manche, trois
-      attaques de vos Pokémon dont les types forment un accord déclenchent un
-      effet d'équipe (Orage = Eau + Électrik + Vol, Forge = Feu + Roche +
-      Acier…). Un accord par manche. Une pastille suit les types joués.
-   2. Camp de base (Accueil, en Campagne) : 5 bâtiments à 3 niveaux, payés
-      en Pokédollars et en Éclats, débloqués par les badges.
-   3. Expéditions : un Pokémon du Box part quelques combats et revient avec
-      des Pokédollars, des Éclats et des objets (double si ses types
-      correspondent au lieu). Pendant ce temps, il ne combat pas.
-   4. Caractère : chaque famille a un caractère (Brave, Prudent, Vif,
-      Fougueux, Docile, Têtu) qui modifie un peu ses combats. En option, la
-      désobéissance : un Pokémon fatigué ou têtu peut ignorer un ordre.
+   1. Resonance Chords (Advanced Tactics): within a single round, three
+      attacks from your Pokémon whose types form a chord trigger a team
+      effect (Storm = Water + Electric + Flying, Forge = Fire + Rock +
+      Steel…). One chord per round. A chip tracks the types played.
+   2. Base Camp (Home, in Campaign): 5 buildings with 3 levels, paid
+      in Pokédollars and Shards, unlocked by badges.
+   3. Expeditions: a Pokémon from the Box leaves for a few battles and
+      comes back with Pokédollars, Shards and items (doubled if its types
+      match the location). While away, it does not fight.
+   4. Character: each family has a character (Brave, Prudent, Quick,
+      Hasty, Docile, Stubborn) that slightly changes its battles. Optional
+      disobedience: a tired or stubborn Pokémon may ignore an order.
    ===================================================================== */
 
-/* ---------- profil (fonctions déclarées : appelées dès le chargement) ---------- */
+/* ---------- profile (declared functions: called as soon as the file loads) ---------- */
 export function IDP0() {
   return { camp: { inf: 0, ate: 0, dojo: 0, guet: 0, pens: 0, oeuf: 0 }, exp: [] };
 }
@@ -64,14 +64,14 @@ export function idpClean(p) {
 }
 
 
-/** Après une action d'un allié : le type compte pour l'accord de la manche. */
+/** After an ally's action: the type counts toward the round's chord. */
 export function chordAfter(S, u, m, ev) {
   if (!S.tac || u.side !== 'a' || S.over || !m || !(m.p || m.fix || m.mk)) return;
   if (!S.acc || S.acc.r !== S.round) S.acc = { r: S.round, t: [], fait: null };
   const typ = mvType(S, u, m);
   if (!S.acc.t.includes(typ)) S.acc.t.push(typ);
   if (S.acc.fait) return;
-  const A = ACCORDS.find(a => a.t.every(t => S.acc.t.includes(t)));
+  const A = CHORDS.find(a => a.t.every(t => S.acc.t.includes(t)));
   if (!A) return;
   S.acc.fait = A.id;
   S.stats.accords = (S.stats.accords || 0) + 1;
@@ -149,17 +149,17 @@ function playChord(S, id, u, ev) {
 }
 
 
-/** La pastille des accords : les types joués cette manche, et l'accord le plus proche. */
+/** The chord chip: the types played this round, and the closest chord. */
 export function chipChord(S) {
   if (!S || !S.tac || S.over) return '';
   const t = S.acc && S.acc.r === S.round ? S.acc.t : [];
   if (S.acc && S.acc.r === S.round && S.acc.fait) {
-    const A = ACCORDS.find(a => a.id === S.acc.fait);
+    const A = CHORDS.find(a => a.id === S.acc.fait);
     return `<span class="chip chip-acc fait" title="${A.d}">Accord joué · ${A.n}</span>`;
   }
   let best = null,
     bn = 0;
-  ACCORDS.forEach(a => {
+  CHORDS.forEach(a => {
     const n = a.t.filter(x => t.includes(x)).length;
     if (n > bn) {
       bn = n;
@@ -168,23 +168,23 @@ export function chipChord(S) {
   });
   const dots = t.map(x => `<i style="background:${tc(x)}" title="${x}"></i>`).join('');
   const hint = best ? `${best.n} : il manque ${best.t.filter(x => !t.includes(x)).join(' et ')}` : 'enchaînez 3 types';
-  return `<span class="chip chip-acc" title="${ACCORDS.map(a => `${a.n} = ${a.t.join(' + ')}`).join(' · ')}">${dots}Accord · ${hint}</span>`;
+  return `<span class="chip chip-acc" title="${CHORDS.map(a => `${a.n} = ${a.t.join(' + ')}`).join(' · ')}">${dots}Accord · ${hint}</span>`;
 }
 
 
-/** Le caractère d'une famille : toujours le même pour une même famille. */
+/** A family's character: always the same for a given family. */
 function characterOf(id) {
-  const I432 = individualOf432(id); // nature individuelle de votre Pokémon (v4.32)
-  if (I432 && CARACTERES[I432.car]) return I432.car;
+  const I432 = individualOf432(id); // individual nature of your Pokémon (v4.32)
+  if (I432 && CHARACTERS[I432.car]) return I432.car;
   const b = BY[id] ? BY[id].base : id,
-    ks = Object.keys(CARACTERES);
+    ks = Object.keys(CHARACTERS);
   let h = 7;
   for (const c of String(b)) h = (h * 31 + c.charCodeAt(0)) % 9973;
   return ks[h % ks.length];
 }
 
 
-/** Avant un ordre : le Pokémon obéit-il ? (null : oui ; sinon les événements) */
+/** Before an order: does the Pokémon obey? (null: yes; otherwise the events) */
 export function disobeys(S, u) {
   if (!S.desob || u.side !== 'a' || u.car === 'docile') return null;
   const p = (u.car === 'tetu' ? 0.12 : 0.04) + (u.fat ? 0.12 : 0);
@@ -198,12 +198,12 @@ export function disobeys(S, u) {
 
 export function characterHtml(id) {
   const k = characterOf(id);
-  return `<div class="mvc car-mvc"><div class="t"><b>${CARACTERES[k][0]}</b><span class="chip">Nature</span></div><p>${CARACTERES[k][1]}</p></div>` + individualHtml432(id); // talent (v4.32)
+  return `<div class="mvc car-mvc"><div class="t"><b>${CHARACTERS[k][0]}</b><span class="chip">Nature</span></div><p>${CHARACTERS[k][1]}</p></div>` + individualHtml432(id); // ability (v4.32)
 }
 
 
 function buildingBlocked(k) {
-  const B2 = BATIMENTS[k],
+  const B2 = BUILDINGS[k],
     n = level(k);
   if (n >= 3) return 'Niveau maximal';
   const b = B2.badges[n];
@@ -213,7 +213,7 @@ function buildingBlocked(k) {
 
 function build(k) {
   if (!campOk430() || buildingBlocked(k)) return;
-  const [m, g] = BATIMENTS[k].cout[level(k)];
+  const [m, g] = BUILDINGS[k].cout[level(k)];
   if (PROFILE.money < m || PROFILE.gems < g) {
     toast('Pas assez de Pokédollars ou d’Éclats.');
     return;
@@ -224,17 +224,17 @@ function build(k) {
   PROFILE.camp[k] = level(k) + 1;
   sfx('ui');
   vibe(20);
-  toast(`${BATIMENTS[k].n} niveau ${level(k)} : ${BATIMENTS[k].d(level(k))}`);
+  toast(`${BUILDINGS[k].n} niveau ${level(k)} : ${BUILDINGS[k].d(level(k))}`);
   queueSave();
   renderWallet();
   renderCampBase();
 }
 
 
-/** Atelier : le prix d'un objet en Boutique (Pokédollars). */
+/** Workshop: an item's price in the Shop (Pokédollars). */
 export function costOf(k) {
-  const p = discount414(k, costOf0(k)); // offres du jour (v4.14)
-  return ctJour456().o.includes(k) ? Math.max(50, Math.round((p * 0.8) / 50) * 50) : p; // CT du jour : −20 % (v4.58)
+  const p = discount414(k, costOf0(k)); // daily offers (v4.14)
+  return tmDay456().o.includes(k) ? Math.max(50, Math.round((p * 0.8) / 50) * 50) : p; // daily TM: −20% (v4.58)
 }
 
 
@@ -244,7 +244,7 @@ export function costOf0(k) {
   return it.mv && !it.cs && campOk430() ? Math.round((it.p * (1 - 0.1 * level('ate'))) / 50) * 50 : it.p;
 }
 
- // ou à la Pension (v4.16)
+ // or at the Daycare (v4.16)
 export function expRefusal(id) {
   if (inDaycare416(id)) return `${BY[BY[id].base].n} est à la Pension : reprenez le couple au Camp pour le faire combattre.`; // v4.16
   return onExpedition(id) ? `${BY[BY[id].base].n} est en expédition : il reviendra bientôt.` : null;
@@ -293,27 +293,27 @@ export function retrieve(i) {
   renderWallet();
   renderCampBase();
   try {
-    story461(x); // récit et trouvaille rare (v4.61)
+    story461(x); // story and rare find (v4.61)
   } catch (e) {}
 }
 
 
-// Le panneau « Camp de base » (#v4Camp, page Camp) est rendu par React : src/screens/camp/CampBase.jsx.
+// The "Camp de base" (Base Camp) panel (#v4Camp, Camp page) is rendered by React: src/screens/camp/CampBase.jsx.
 export function renderCampBase() {
   refreshCampBase();
 }
 
 
-/* fenêtre d’expédition : rendu par React (src/screens/overlays/ExpBox.jsx) */
+/* expedition window: rendered by React (src/screens/overlays/ExpBox.jsx) */
 export function renderExpBox() {
   const available = PROFILE.box.filter(id => BY[id] && !squad.some(s => BY[s].base === id) && !onExpedition(id) && !isFallen(id));
   paintOverlay('exp', { dest: EXP_DEST, dispo: available });
 }
 
 /* =====================================================================
-   1. Accords de Résonance
+   1. Resonance Chords
    ===================================================================== */
-export const ACCORDS = [
+export const CHORDS = [
   { id: 'orage', n: 'Orage', t: ['Eau', 'Électrik', 'Vol'], d: 'Tout adversaire sur une case Trempée ou dans l’eau est paralysé et subit 6 dégâts.' },
   { id: 'forge', n: 'Forge', t: ['Feu', 'Roche', 'Acier'], d: 'Vos Pokémon gagnent +2 Garde ; tout adversaire au contact d’une case Brûlante subit 5 dégâts.' },
   { id: 'seisme', n: 'Grand Séisme', t: ['Sol', 'Roche', 'Combat'], d: 'Tout adversaire au sol subit 6 dégâts et sa case devient Fissurée.' },
@@ -328,9 +328,9 @@ export const ACCORDS = [
 
 
 /* =====================================================================
-   2. Caractère et désobéissance
+   2. Character and disobedience
    ===================================================================== */
-export const CARACTERES = {
+export const CHARACTERS = {
   brave: ['Brave', '+2 dégâts infligés, +1 dégât subi.'],
   prudent: ['Prudent', '−2 dégâts subis, −1 dégât infligé.'],
   vif: ['Vif', '+1 Mouvement, −1 dégât infligé.'],
@@ -350,7 +350,7 @@ export const level = k => (PROFILE.camp && PROFILE.camp[k]) || 0;
 
 
 /* =====================================================================
-   4. Expéditions
+   4. Expeditions
    ===================================================================== */
 export const DESTINATIONS = {
   foret: { n: 'Forêt de Jade', types: ['Plante', 'Insecte', 'Vol'], duree: 3, m: [150, 300], g: [0, 1], obj: ['potion', 'poke'] },
@@ -365,26 +365,26 @@ export const onExpedition = id => !!(campOk430() && PROFILE.exp && BY[id] && PRO
 
 const placesExp = () => level('guet');
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Instructions run at startup, in the original order (see index.js).
 export function __init() {
 
-FOURNISSEURS_ROLES.push({
+ROLE_PROVIDERS.push({
   id: 'caractere',
   fournir: (c, { u, t }) => {
     const o = [],
       a = { brave: 2, prudent: -1, vif: -1, tetu: 3 }[u.car],
       d = { brave: 1, prudent: -2, fougueux: 1 }[t.car];
-    if (a) o.push({ add: a, libelle: CARACTERES[u.car][0] });
-    if (d) o.push({ add: d, libelle: CARACTERES[t.car][0] });
+    if (a) o.push({ add: a, libelle: CHARACTERS[u.car][0] });
+    if (d) o.push({ add: d, libelle: CHARACTERS[t.car][0] });
     return o;
   }
 });
 
 
 /* =====================================================================
-   3. Camp de base
+   3. Base Camp
    ===================================================================== */
-BATIMENTS = {
+BUILDINGS = {
   guet: {
     n: 'Tour de guet',
     d: n => `${n} expédition${n > 1 ? 's' : ''} à la fois.`,
@@ -411,15 +411,15 @@ BATIMENTS = {
   },
   pens: {
     n: 'Pension',
-    d: n => `Un œuf tous les ${[8, 6, 4][n - 1]} combats : une famille que vous n’avez pas encore, ou celle du couple que vous y déposez.`, // couple (v4.16)
+    d: n => `Un œuf tous les ${[8, 6, 4][n - 1]} combats : une famille que vous n’avez pas encore, ou celle du couple que vous y déposez.`, // pair (v4.16)
     cout: [[1200, 0], [3000, 8], [6000, 16]],
     badges: [2, 4, 6]
   }
 };
 
 
-/* ---------- camp et expéditions : le panneau #v4Camp est rendu par React (page Camp) ---------- */
-// #expBox : rendu par React (src/screens/overlays/ExpBox.jsx)
+/* ---------- camp and expeditions: the #v4Camp panel is rendered by React (Camp page) ---------- */
+// #expBox: rendered by React (src/screens/overlays/ExpBox.jsx)
 
 
 EXP_DEST = null;
@@ -453,9 +453,9 @@ document.addEventListener('click', e => {
 
 
 /* =====================================================================
-   Branchements
+   Hooks
    ===================================================================== */
-CROCHETS.creation.push((S, opt) => {
+HOOKS.creation.push((S, opt) => {
   if (!opt) return;
   const al = S.units.filter(u => u.side === 'a');
   if (opt.caracteres) {
@@ -470,10 +470,10 @@ CROCHETS.creation.push((S, opt) => {
 });
 
 
-CROCHETS.progres.push((S, rew) => {
+HOOKS.progres.push((S, rew) => {
   const D = SCEN[S.sc] || {};
   if (!campOk430() || D.tuto || D.tower) return null;
-  // Infirmerie : les Pokémon au repos récupèrent plus vite
+  // Infirmary: resting Pokémon recover faster
   const inf = level('inf');
   if (inf) {
     const used = S.units.filter(u => u.side === 'a').map(u => u.sp);
@@ -483,12 +483,12 @@ CROCHETS.progres.push((S, rew) => {
       if (!PROFILE.fatigue[id]) delete PROFILE.fatigue[id];
     }
   }
-  // Pension : un œuf
+  // Daycare: an egg
   const pe = level('pens');
   if (pe) {
     PROFILE.camp.oeuf = (PROFILE.camp.oeuf || 0) + 1;
     if (PROFILE.camp.oeuf >= [8, 6, 4][pe - 1] && !daycare416(rew)) {
-      // sans couple : une famille inconnue (v4.10) ; avec un couple : leur œuf (v4.16)
+      // without a pair: an unknown family (v4.10); with a pair: their egg (v4.16)
       const pool = MON.filter(m => m.st === 1 && !m.leg && !m.ennemi && m.base === m.id && !PROFILE.box.includes(m.id));
       if (pool.length) {
         const m = pool[Math.floor(Math.random() * pool.length)];
@@ -499,14 +499,14 @@ CROCHETS.progres.push((S, rew) => {
       }
     }
   }
-  // expéditions revenues
+  // expeditions returned
   const rev = (PROFILE.exp || []).filter(x => PROFILE.battles >= x.fin).length;
   if (rev) rew.exp = rev;
   return null;
 });
 
 
-CROCHETS.resultat.push(r => {
+HOOKS.resultat.push(r => {
   const o = [];
   if (r.oeuf)
     o.push(`<div class="res-l"><h4>Pension</h4><div class="rl">${medal(BY[r.oeuf].t)}<span>Un œuf a éclos : ${BY[r.oeuf].n} rejoint votre Box !</span><b>🥚</b></div></div>`);
@@ -516,5 +516,5 @@ CROCHETS.resultat.push(r => {
 });
 
 
-/* ---------- le Guide : la liste des accords, rendue par React (Tactique.jsx) ---------- */
+/* ---------- the Guide: the list of chords, rendered by React (Tactics.jsx) ---------- */
 }

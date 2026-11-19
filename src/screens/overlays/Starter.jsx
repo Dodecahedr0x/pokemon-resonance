@@ -7,9 +7,9 @@ import { DIFFS, PROFILE, STARTERS } from '../../engine/011-game-state.js';
 import { medal, tc } from '../../engine/014-utils.js';
 import { evoPath } from '../../engine/017-home-route.js';
 
-// Nouvelle campagne : choix du partenaire (#starter). openStarter() (026) l'ouvre ;
-// les clics (data-st, data-sd) et la fermeture restent gérés par le moteur.
-// Le contenu reste dans le DOM une fois la fenêtre refermée, comme l'ancien innerHTML.
+// New campaign: partner choice (#starter). openStarter() (026) opens it;
+// clicks (data-st, data-sd) and closing are still handled by the engine.
+// The content stays in the DOM once the window is closed, like the old innerHTML.
 export default function Starter() {
   const ready = useEngineReady();
   const { open, v } = useStarter();

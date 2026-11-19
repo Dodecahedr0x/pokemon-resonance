@@ -1,19 +1,19 @@
-/* Section d'origine : v4.70 : formes régionales (Pokédex) */
+/* Original section: v4.70: regional forms (Pokédex) */
 
 import { BY, SCEN } from './009-pokemon.js';
-import { CROCHETS } from './015-hooks.js';
+import { HOOKS } from './015-hooks.js';
 import { V4 } from './032-v4-foundation.js';
 import { renderDexCard } from './038-pokedex.js';
 
-// Formes régionales : lues par la fiche du Pokédex (src/screens/dex/DexCard.jsx).
-export let FR470 = [];
+// Regional forms: read by the Pokédex sheet (src/screens/dex/DexCard.jsx).
+export let REGIONAL_FORMS470 = [];
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Statements executed at startup, in the original order (see index.js).
 export function __init() {
 
 (() => {
-  // Teinte et type propres à une région, affichés dans la fiche du Pokédex.
-  const FR = [
+  // Tint and type specific to a region, shown in the Pokédex sheet.
+  const REGIONAL_FORMS = [
     { id: 'pikachu', reg: 'Kanto insulaire', plus: 'Vol', hue: 200, g: 1 },
     { id: 'abra', reg: 'Kanto mystique', plus: 'Fée', hue: 300, g: 1 },
     { id: 'magicarpe', reg: 'Kanto des rapides', plus: 'Dragon', hue: 20, g: 1 },
@@ -35,20 +35,20 @@ export function __init() {
     { id: 'draby', reg: 'Hoenn céleste', plus: 'Vol', hue: 200, g: 3 },
     { id: 'massko', reg: 'Hoenn des dunes', plus: 'Dragon', hue: 90, g: 3 },
   ].filter(f => BY[f.id]);
-  FR470 = FR; // bandeau .fr470 et teinte de l'illustration : rendus par React
+  REGIONAL_FORMS470 = REGIONAL_FORMS; // .fr470 banner and illustration tint: rendered by React
   const regionOf = sc => {
     const c = SCEN[sc] || {};
     return c.hoenn != null ? 3 : c.johto != null ? 2 : 1;
   };
-  CROCHETS.creation.push(S => {
+  HOOKS.creation.push(S => {
     const g = regionOf(S.sc);
     S.units.forEach(u => {
       if (u.side !== 'a') return;
-      const f = FR.find(x => x.id === u.id && x.g === g);
+      const f = REGIONAL_FORMS.find(x => x.id === u.id && x.g === g);
       if (f && !u.t.includes(f.plus)) u.t.push(f.plus);
     });
   });
-  window.__fr470 = FR;
+  window.__fr470 = REGIONAL_FORMS;
   window.__fr470.regionDe = regionOf;
   window.__fr470.V4 = () => V4;
   window.__fr470.rend = () => renderDexCard();

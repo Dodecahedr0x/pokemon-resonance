@@ -6,9 +6,9 @@ import { crestSmall } from '../../engine/020-team-cards.js';
 import { SPARK, shinyStyle } from '../../engine/043-adventure-plus.js';
 import { CROWN416 } from '../../engine/055-living-johto.js';
 
-// Pêche (#peche418) : attente, touche, prise. Le moteur (058) garde les minuteries,
-// les clics (data-peche418) et l'attribut hidden ; après une prise chromatique, il
-// recolore l'illustration (.pe-prise img, chromaArt425) juste après le rendu.
+// Fishing (#peche418): waiting, bite, catch. The engine (058) keeps the timers,
+// the clicks (data-peche418) and the hidden attribute; after a shiny catch, it
+// recolors the illustration (.pe-prise img, chromaArt425) right after rendering.
 export default function Fishing418() {
   return <Box nom="peche" className="result exp-box pe418" id="peche418" Carte={MapScreen} />;
 }

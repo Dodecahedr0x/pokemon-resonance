@@ -2,16 +2,16 @@ import { BY } from '../../engine/009-pokemon.js';
 import { PROFILE } from '../../engine/011-game-state.js';
 import { medal } from '../../engine/014-utils.js';
 import { ITM, fmt, today } from '../../engine/032-v4-foundation.js';
-import { BATIMENTS, DESTINATIONS, buildingBlocked, level, placesExp } from '../../engine/049-identity.js';
+import { BUILDINGS, DESTINATIONS, buildingBlocked, level, placesExp } from '../../engine/049-identity.js';
 import { pair416, heritable416, parents416 } from '../../engine/055-living-johto.js';
 import { POTAGER, POT_I, sprout417 } from '../../engine/057-companions-resonance.js';
 import { Html } from '../../lib/html.jsx';
 
 const pl = (n, token) => `${n} ${token}${n > 1 ? 's' : ''}`;
 
-// Un bâtiment : niveau, effet, bouton Construire / Améliorer (data-camp-b).
+// A building: level, effect, Build / Upgrade button (data-camp-b).
 function Building({ k }) {
-  const B2 = BATIMENTS[k],
+  const B2 = BUILDINGS[k],
     n = level(k),
     lk = buildingBlocked(k),
     c = n < 3 ? B2.cout[n] : null;
@@ -28,7 +28,7 @@ function Building({ k }) {
   );
 }
 
-// Une expédition en cours (data-exp-r pour récupérer).
+// An expedition in progress (data-exp-r to collect).
 function Expedition({ x, i }) {
   const remainder = x.fin - PROFILE.battles,
     m = BY[x.id];
@@ -41,7 +41,7 @@ function Expedition({ x, i }) {
   );
 }
 
-// Pension · couple (v4.16), visible dès la Pension construite.
+// Daycare · couple (v4.16), visible as soon as the Daycare is built.
 function Daycare() {
   const pe = level('pens');
   if (!pe) return null;
@@ -70,7 +70,7 @@ function Daycare() {
   );
 }
 
-// Une parcelle du Potager (v4.17) : vide, choix de la graine, en pousse ou mûre.
+// A Vegetable garden plot (v4.17): empty, seed choice, growing or ripe.
 function Plot({ x, i }) {
   if (!x)
     return POT_I === i ? (
@@ -104,8 +104,8 @@ function Garden() {
   );
 }
 
-// Panneau « Camp de base » (#v4Camp, v4.10) : bâtiments, expéditions, Pension, Potager.
-// Rempli au premier renderCampBase() du moteur, reconstruit à chaque appel.
+// « Base camp » panel (#v4Camp, v4.10): buildings, expeditions, Daycare, Vegetable garden.
+// Filled on the engine's first renderCampBase(), rebuilt on each call.
 export default function CampBase({ rempli: filled }) {
   const exp = PROFILE.exp || [],
     places = filled ? placesExp() : 0;
@@ -114,7 +114,7 @@ export default function CampBase({ rempli: filled }) {
       {filled && (
         <>
           <header className="v4-ph"><svg><use href="#i-map" /></svg><b>Camp de base</b></header>
-          <div className="cb-grid">{Object.keys(BATIMENTS).map(k => <Building key={k} k={k} />)}</div>
+          <div className="cb-grid">{Object.keys(BUILDINGS).map(k => <Building key={k} k={k} />)}</div>
           <h3 className="cb-st">{'Expéditions' + (places ? ` · ${exp.length} / ${places}` : '')}</h3>
           {places ? (
             <>

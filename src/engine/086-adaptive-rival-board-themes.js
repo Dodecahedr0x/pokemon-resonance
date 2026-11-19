@@ -1,9 +1,9 @@
-/* Section d'origine : 4.55 : rival qui s’adapte, thèmes de plateau */
+/* Original section: 4.55: adaptive rival, board themes */
 
 import { BY, SCEN } from './009-pokemon.js';
 import { PROFILE } from './011-game-state.js';
 import { toast } from './014-utils.js';
-import { CROCHETS } from './015-hooks.js';
+import { HOOKS } from './015-hooks.js';
 import { squad } from './020-team-cards.js';
 import { teff } from './021-combat-engine.js';
 import { B } from './024-combat-ui.js';
@@ -16,7 +16,7 @@ import { RIV429 } from './064-quality.js';
 
 
 
-/* ---------- 1. rival qui évolue ---------- */
+/* ---------- 1. evolving rival ---------- */
 export function rvSt455() {
   let s;
   try {
@@ -94,7 +94,7 @@ function thApply455() {
   Object.keys(TH455).forEach(x => document.body.classList.toggle('th455-' + x, x === k && k !== 'classique'));
 }
 
-/* ---------- 2. thèmes de plateau ---------- */
+/* ---------- 2. board themes ---------- */
 export const TH455 = {
   classique: { n: 'Classique', p: 0, c: ['#4A3A28', '#2C4A27'] },
   crepuscule: { n: 'Crépuscule', p: 3, c: ['#3A2F4F', '#41355A'] },
@@ -107,10 +107,10 @@ export const TH455 = {
 
 export const thOk455 = k => !TH455[k].p || (PREF.thU455 || []).includes(k);
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Instructions run at startup, in the original order (see index.js).
 export function __init() {
 
-CROCHETS.finCombat.push(() => {
+HOOKS.finCombat.push(() => {
   if (B && B.over && !B._rv455 && SCEN[B.sc] && (rivalIdx(B.sc) >= 0 || SCEN[B.sc].rival429)) {
     B._rv455 = 1;
     const s = rvSt455();
@@ -121,7 +121,7 @@ CROCHETS.finCombat.push(() => {
 });
 
 
-// panneau « Thèmes de plateau » : rendu par React (src/screens/settings/panels/ThemesPlateau.jsx)
+// "Thèmes de plateau" (Board themes) panel: rendered by React (src/screens/settings/panels/BoardThemes.jsx)
 
 
 document.addEventListener('click', e => {

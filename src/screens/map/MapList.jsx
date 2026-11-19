@@ -10,7 +10,7 @@ const G = [
   ['entrainement', 'Entraînement']
 ];
 
-// Liste des lieux de la région (#mapList), par groupe.
+// List of the region's locations (#mapList), by group.
 export default function MapList() {
   const P = placesR();
   return (

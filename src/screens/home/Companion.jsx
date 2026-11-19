@@ -5,8 +5,8 @@ import { shinyStyle } from '../../engine/043-adventure-plus.js';
 import { companionData417 } from '../../engine/057-companions-resonance.js';
 import { cp461Data } from '../../engine/092-companion-eggs-expeditions.js';
 
-// Compagnon (#v4Comp, v4.17) et ses boutons Baie, Cadeau et Souvenirs (.cp461, v4.61).
-// Les clics (data-comp, data-cp461) restent gérés par le moteur.
+// Companion (#v4Comp, v4.17) and its Berry, Gift and Memories buttons (.cp461, v4.61).
+// Clicks (data-comp, data-cp461) are still handled by the engine.
 export default function Companion() {
   const d = companionData417();
   return (
@@ -30,7 +30,7 @@ function Empty() {
 }
 
 function Sheet({ d }) {
-  const { m, h, pr, caresse, hum, sh, bonus } = d,
+  const { m, h, pr, caresse: petting, hum, sh, bonus } = d,
     x = cp461Data();
   return (
     <>
@@ -50,7 +50,7 @@ function Sheet({ d }) {
         <em className="cp-bn">{bonus || '2 cœurs : premier bonus en combat'}</em>
       </div>
       <div className="cp-a">
-        <button type="button" className={`b b-sm ${caresse ? 'b-ghost' : 'b-gold'}`} data-comp="caresser" disabled={caresse}>{caresse ? 'Câliné ✓' : 'Câliner'}</button>
+        <button type="button" className={`b b-sm ${petting ? 'b-ghost' : 'b-gold'}`} data-comp="caresser" disabled={petting}>{petting ? 'Câliné ✓' : 'Câliner'}</button>
         <button type="button" className="b b-sm b-ghost" data-comp="choisir">Changer</button>
       </div>
       {x && (

@@ -1,4 +1,4 @@
-/* Section d'origine : 4.60 : boss à phases, lieux secrets, PNJ itinérants */
+/* Original section: 4.60: phased bosses, secret places, wandering NPCs */
 
 import { TOD } from './017-home-route.js';
 import { say } from './021-combat-engine.js';
@@ -18,7 +18,7 @@ import { badgeCount459 } from './090-item-quests-trophies.js';
 export let SECRETS460;
 
 
-/** Un Champion d’arène (boss sans phases) se déchaîne sous 50 % de PV. */
+/** A gym Champion (boss without phases) goes berserk below 50% HP. */
 export function rage460(S, ev) {
   const b = bossOf420(S);
   if (b && !b.ko && !S.over && !bossPhases420(S) && !b.gym460 && leaderOf(S.sc) && b.hp / b.mhp <= 0.5) {
@@ -31,7 +31,7 @@ export function rage460(S, ev) {
 }
 
 
-/** Ligne de la fiche adverse : phase du boss, ou rage du Champion. */
+/** Row of the opponent sheet: boss phase, or the Champion's rage. */
 export function resoBoss460(e) {
   if (!B || e.ko || e !== bossOf420(B)) return '';
   if (bossPhases420(B)) {
@@ -45,7 +45,7 @@ export function resoBoss460(e) {
 
 export function repl460(b, i) {
   const t = (b.t && b.t[0]) || 'Normal',
-    a = REPL460[t] || REPL460.Normal;
+    a = LINES460[t] || LINES460.Normal;
   return a[i] || a[0];
 }
 
@@ -90,7 +90,7 @@ function scOpen460(id) {
     sfx('win');
     vibe([30, 40, 30]);
   }
-  // rendu : src/screens/overlays/temporaires/Fenetres.jsx (Sc460)
+  // rendering: src/screens/overlays/transients/Windows.jsx (Sc460)
   const o = overlay('sc460', { n: s.n, lore: s.lore, msg: first ? 'Vous trouvez : ' + txt454(s.rew) + '.' : 'Vous avez déjà exploré ce lieu.' });
   o.addEventListener('click', e => {
     if (e.target === o) shut('sc460');
@@ -99,7 +99,7 @@ function scOpen460(id) {
 }
 
 
-export function pnSt460() {
+export function npcSt460() {
   const d = today(),
     reg = V4.region || 'kanto',
     all = readLS('res-pn460', {});
@@ -111,12 +111,12 @@ export function pnSt460() {
     writeLS('res-pn460', all);
   }
   const r = rngS460('pn' + d + reg);
-  s.i = Math.floor(r() * PNJ460.length);
+  s.i = Math.floor(r() * NPC460.length);
   return { s, all, k };
 }
 
 
-export function pnPos460() {
+export function npcPos460() {
   const d = today(),
     reg = V4.region || 'kanto',
     sc = Object.values(scPos460());
@@ -124,14 +124,14 @@ export function pnPos460() {
 }
 
 
-function pnOpen460() {
-  const { s } = pnSt460(),
-    N = PNJ460[s.i];
+function npcOpen460() {
+  const { s } = npcSt460(),
+    N = NPC460[s.i];
   const c = N.c.map(c => {
     const eff = c.cost ? 'Coût : ' + txt454(c.cost) : '';
     return { l: c.l, ok: can454(c.cost), eff: eff || null };
   });
-  // rendu : src/screens/overlays/temporaires/Fenetres.jsx (Pn460)
+  // rendering: src/screens/overlays/transients/Windows.jsx (Pn460)
   const o = overlay('pn460', { n: N.n, x: N.x, c, res: null });
   o.addEventListener('click', e => {
     if (e.target === o) shut('pn460');
@@ -139,9 +139,9 @@ function pnOpen460() {
 }
 
 
-function pnPick460(j) {
-  const { s, all, k } = pnSt460(),
-    N = PNJ460[s.i],
+function npcPick460(j) {
+  const { s, all, k } = npcSt460(),
+    N = NPC460[s.i],
     c = N.c[j];
   if (!c || s.done || !can454(c.cost)) return;
   if (c.cost) reward454(c.cost);
@@ -156,10 +156,10 @@ function pnPick460(j) {
 }
 
 
-/* ---------- 5. Marqueurs (src/screens/carte/Marks.jsx), clics, Journal ---------- */
+/* ---------- 5. Markers (src/screens/map/Marks.jsx), clicks, Journal ---------- */
 
-/* ---------- 1. Boss : répliques et phase de Champion d’arène ---------- */
-const REPL460 = {
+/* ---------- 1. Bosses: lines and gym Champion phase ---------- */
+const LINES460 = {
   Feu: ['« Mes flammes ne s’éteignent jamais ! »', '« Brûlez avec moi ! »'],
   Eau: ['« La marée monte, tenez bon si vous le pouvez ! »', '« Le déluge ne s’arrête pas ! »'],
   Plante: ['« Mes racines tiennent ce terrain ! »', '« La forêt ne recule pas ! »'],
@@ -181,7 +181,7 @@ const REPL460 = {
 };
 
 
-/* ---------- 2. Outils de carte ---------- */
+/* ---------- 2. Map tools ---------- */
 const hash460 = s => {
   let h = 7;
   for (const ch of s) h = (Math.imul(h, 31) + ch.charCodeAt(0)) >>> 0;
@@ -192,7 +192,7 @@ const hash460 = s => {
 const rngS460 = s => mulberry32(hash460(s) || 1);
 
 
-/* ---------- 3. Lieux secrets ---------- */
+/* ---------- 3. Secret places ---------- */
 const weatherS460 = () => {
   try {
     return weatherDay417();
@@ -208,8 +208,8 @@ export const scSt460 = () => readLS('res-sc460', { found: {} });
 export const scVis460 = () => SECRETS460.filter(s => badgeCount459() >= s.min && s.ok());
 
 
-/* ---------- 4. PNJ itinérants ---------- */
-export const PNJ460 = [
+/* ---------- 4. Wandering NPCs ---------- */
+export const NPC460 = [
   { n: 'Marchand de passage', x: 'Il ouvre sa malle : « Pour 300 ₽, je vous cède un morceau de roche brillante. »', c: [{ l: 'Acheter (300 ₽)', cost: { m: -300 }, ok: { g: 1 }, t: 'Vous repartez avec un éclat.' }, { l: 'Refuser poliment', t: 'Il hausse les épaules et reprend sa route.' }] },
   { n: 'Vieux randonneur', x: 'Il vous raconte une légende sur la Résonance autour d’un thé tiède.', c: [{ l: 'Écouter jusqu’au bout', ok: { m: 250 }, t: 'En remerciement, il vous glisse quelques pièces.' }, { l: 'Poursuivre', t: 'Vous le saluez et repartez.' }] },
   { n: 'Jeune dresseuse', x: 'Elle cherche un partenaire d’entraînement : « Une Potion pour moi, et je partage mes trouvailles ! »', c: [{ l: 'Donner une Potion', cost: { b: { potion: -1 } }, ok: { g: 2 }, t: 'Elle vous confie deux éclats trouvés sur la route.' }, { l: 'Plus tard', t: 'Elle vous souhaite bonne chance.' }] },
@@ -220,7 +220,7 @@ export const PNJ460 = [
   { n: 'Archiviste curieuse', x: 'Elle collectionne les légendes des routes : « Parlez-moi de votre aventure, je vous offre un souvenir. »', c: [{ l: 'Raconter', ok: { g: 3 }, t: 'Elle note tout et vous offre trois éclats.' }, { l: 'Pas aujourd’hui', t: 'Elle range son carnet.' }] }
 ];
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Instructions run at startup, in the original order (see index.js).
 export function __init() {
 
 SECRETS460 = [
@@ -233,8 +233,8 @@ SECRETS460 = [
 ];
 
 
-// lieux secrets (.sc460) et personnage de passage (.pn460) sur la carte : rendus par React
-// (src/screens/carte/Marks.jsx)
+// secret places (.sc460) and passing character (.pn460) on the map: rendered by React
+// (src/screens/map/Marks.jsx)
 
 
 document.addEventListener(
@@ -251,14 +251,14 @@ document.addEventListener(
     } else {
       const v = t.dataset.pn460;
       if (v === 'close') shut('pn460');
-      else if (v === 'o') pnOpen460();
-      else pnPick460(+v);
+      else if (v === 'o') npcOpen460();
+      else npcPick460(+v);
     }
   },
   true
 );
 
 
-// panneau « Lieux secrets » : rendu par React (src/screens/settings/panels/LieuxSecrets.jsx)
+// "Secret places" panel: rendered by React (src/screens/settings/panels/SecretPlaces.jsx)
 
 }

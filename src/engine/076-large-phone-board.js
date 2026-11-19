@@ -1,14 +1,14 @@
-/* Section d'origine : v4.43 : plateau en grand sur téléphone, attaques à portée de pouce, faux messages d’erreur filtrés */
+/* Original section: v4.43: large board on phone, attacks within thumb reach, bogus error messages filtered */
 
 import { MV } from './005-moves.js';
 import { tc } from './014-utils.js';
-import { CROCHETS } from './015-hooks.js';
+import { HOOKS } from './015-hooks.js';
 import { byUid, mvType } from './021-combat-engine.js';
 import { B, ui } from './024-combat-ui.js';
 import { footCls, footPos, refreshBattle } from '../screens/combat/battle/battleStore.js';
 
 
-/** Cale la page : le bas du plateau (votre camp) juste au-dessus de « Fin du tour », sans couper son haut. */
+/** Aligns the page: the bottom of the board (your side) just above "Fin du tour" (End turn), without cutting off its top. */
 export function frame443() {
   try {
     if (!document.body.classList.contains('bt434') || !B || B.over) return;
@@ -17,7 +17,7 @@ export function frame443() {
     if (!bd || !ft) return;
     const r = bd.getBoundingClientRect(),
       fb = getComputedStyle(ft).position === 'fixed' ? ft.getBoundingClientRect().top : innerHeight;
-    // priorité à votre camp (en bas du plateau) ; le haut peut passer de peu sous le bord de l’écran
+    // priority to your side (bottom of the board); the top may slip slightly under the screen edge
     let y = scrollY + r.bottom - (fb - 8);
     y = Math.max(0, Math.min(y, scrollY + r.top + 40));
     if (Math.abs(y - scrollY) > 4) window.scrollTo(0, y);
@@ -55,7 +55,7 @@ function qa443() {
     const on = !!(document.body.classList.contains('bt434') && B && !B.over && !B.dep430 && B.phase === 'player' && !ui.busy && u && u.side === 'a' && !u.ko);
     const bs = on ? [...P.querySelectorAll(QA443)].filter(b => b.dataset.mi != null || b.dataset.pv || !b.disabled) : [];
     const useful = bs.some(b => !b.disabled);
-    // #qa443 et .qa443-n : rendus par React (src/screens/combat/battle/Foot.jsx) depuis pied.qa
+    // #qa443 and .qa443-n: rendered by React (src/screens/combat/battle/Foot.jsx) from footPos.qa
     const Q = footPos.qa;
     if (!useful) {
       const chg = footCls('qa-on', false);
@@ -63,10 +63,10 @@ function qa443() {
       if (chg || footPos.qa !== Q) refreshBattle('foot');
       return;
     }
-    // l’aperçu d’abord (Annuler / Confirmer), puis les capacités, puis le reste
+    // preview first (Cancel / Confirm), then the moves, then the rest
     const rankNo = b => (b.dataset.pv ? (b.dataset.pv === 'ok' ? 0 : 1) : b.dataset.mi != null ? 2 : 3);
     bs.sort((a, b) => rankNo(a) - rankNo(b));
-    // repère sur les boutons du panneau (#bPanel, rendu par React) : le clic d'un raccourci les vise
+    // marker on the panel buttons (#bPanel, rendered by React): a shortcut's click targets them
     P.querySelectorAll('[data-qa443-src]').forEach(b => b.removeAttribute('data-qa443-src'));
     const items = bs.map((b, i) => {
       const L = qaLabel443(b, u);
@@ -79,22 +79,22 @@ function qa443() {
   } catch (e) {}
 }
 
-/* ---------- 2. capacités à portée de pouce ---------- */
+/* ---------- 2. moves within thumb reach ---------- */
 const QA443 = '[data-pv],[data-mi],[data-evo="open"],[data-undo],[data-duo],[data-vx],[data-cap]';
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Statements run at startup, in the original order (see index.js).
 export function __init() {
 
-/* 1. Plateau : depuis la v4.34 il rétrécissait pour tenir sous l’équipe adverse ; sur un écran bas (barre du navigateur,
-      application Claude) il tombait à 220 px et votre camp passait sous la barre « Fin du tour ».
-      Il reprend toute la largeur ; au début du combat, la page se cale sur le plateau.
-   2. Attaques : touchez votre Pokémon, ses capacités s’affichent au-dessus de « Fin du tour » (plus besoin de descendre
-      jusqu’à la fiche). Touchez une capacité, puis la cible (2 fois, ou « Confirmer »).
-   3. Les avertissements sans gravité du navigateur (ResizeObserver, « Script error. » venu d’un autre site, lecture
-      audio interrompue) n’ouvrent plus la boîte « Petit souci technique ». */
+/* 1. Board: since v4.34 it shrank to fit under the opposing team; on a short screen (browser bar,
+      Claude app) it fell to 220 px and your side slipped under the "Fin du tour" (End turn) bar.
+      It now takes the full width; at the start of the battle, the page aligns itself on the board.
+   2. Attacks: tap your Pokémon, its moves appear above "Fin du tour" (no need to scroll down
+      to the sheet). Tap a move, then the target (2 times, or "Confirmer" (Confirm)).
+   3. Harmless browser warnings (ResizeObserver, "Script error." from another site, interrupted
+      audio playback) no longer open the "Petit souci technique" (Minor technical glitch) box. */
 
-/* ---------- 1. plateau ---------- */
-CROCHETS.lancement.push(isNew => {
+/* ---------- 1. board ---------- */
+HOOKS.lancement.push(isNew => {
   if (isNew && !B.over) setTimeout(frame443, 80);
 });
 
@@ -107,6 +107,6 @@ document.addEventListener('click', e => {
 });
 
 
-CROCHETS.rendu.push(qa443);
+HOOKS.rendu.push(qa443);
 
 }

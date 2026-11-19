@@ -22,7 +22,7 @@ export function Digits() {
   ].map(([n, l]) => <div key={l} className="kpi"><b>{n}</b><span>{l}</span></div>);
 }
 
-// Panneau « Projet » (sans onglet : ouvert seulement par lien) : piliers, chiffres, studio.
+// "Project" panel (no tab: opened only by link): pillars, figures, studio.
 export default function Projet() {
   return (
     <>

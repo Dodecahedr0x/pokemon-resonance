@@ -1,4 +1,4 @@
-/* Section d'origine : 12-ligue.js */
+/* Original section: 12-ligue.js */
 
 import { BSHAPE } from './004-data.js';
 import { $, gp, tc } from './014-utils.js';
@@ -8,7 +8,7 @@ import { refreshLeague } from '../screens/league/leagueStore.js';
 export let gymSel;
 
 
-/* ===================== LIGUE ===================== */
+/* ===================== LEAGUE ===================== */
 export function badgeSvg(i, t, id) {
   const c = tc(t),
     s = BSHAPE[i];
@@ -20,12 +20,12 @@ export function badgeSvg(i, t, id) {
 }
 
 
-// Page Ligue rendue par React (src/screens/ligue/) : badges, arène choisie, Conseil 4.
+// League page rendered by React (src/screens/league/): badges, chosen gym, Elite 4.
 export function renderLeague() {
   refreshLeague();
 }
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Instructions run at startup, in the original order (see index.js).
 export function __init() {
 
 gymSel = 0;

@@ -1,4 +1,4 @@
-/* Section d'origine : v4-00-socle.js */
+/* Original section: v4-00-socle.js */
 
 import { ITA, PKA } from './003-images.js';
 import { BY, SCEN } from './009-pokemon.js';
@@ -10,7 +10,7 @@ import { B, finish, renderAll, ui } from './024-combat-ui.js';
 import { queueSave } from './025-saves.js';
 import { playEv } from './028-move-effects.js';
 import { renderWallet } from './035-interface.js';
-import { SAC_MAX, pUse414 } from './053-resonance.js';
+import { BAG_MAX, pUse414 } from './053-resonance.js';
 import { BALLX455 } from './087-balls-held-items.js';
 
 export let ICO414, BALLS, HEALS, CAP_K;
@@ -19,7 +19,7 @@ export function __set_CAP_K(v) { return (CAP_K = v); }
 export function __set_BALL_SEL(v) { return (BALL_SEL = v); }
 
 
-/* ---------- profil : Pokédollars, Éclats, Sac, quêtes ---------- */
+/* ---------- profile: Pokédollars, Shards, Bag, quests ---------- */
 export function ECO0() {
   return { money: 500, gems: 0, bag: { poke: 5, potion: 2 }, qc: {}, daily: { d: '', w: 0 } };
 }
@@ -42,7 +42,7 @@ export function ecoClean(p) {
 
  // + Johto (v4.16.1), Hoenn (v4.19)
 
-/* ---------- défi du jour ---------- */
+/* ---------- daily challenge ---------- */
 function dailyPool() {
   return [
     ...TERR.filter(k => !['tuto', 'sauvage', 'champ'].includes(k) && !SCEN[k].elite),
@@ -78,7 +78,7 @@ export function ballFor(e) {
 }
 
 
-/** Après un achat ou une récompense : sauvegarde différée et porte-monnaie redessiné (une erreur d'affichage est ignorée). */
+/** After a purchase or a reward: deferred save and wallet redrawn (a display error is ignored). */
 export function savePurse() {
   try {
     queueSave();
@@ -87,30 +87,30 @@ export function savePurse() {
 }
 
 
-/* ---------- Potions en combat : soin contre l’action du Pokémon ---------- */
+/* ---------- Potions in battle: healing in exchange for the Pokémon's action ---------- */
 function pUse(S, u, k) {
   const it = SHOP[k];
-  if (!it || !it.heal || S.phase !== 'player' || !u || u.ko || u.sn || u.acted || bagN(k) < 1 || u.hp >= u.mhp || (S.objN || 0) >= SAC_MAX || S.duel433)
+  if (!it || !it.heal || S.phase !== 'player' || !u || u.ko || u.sn || u.acted || bagN(k) < 1 || u.hp >= u.mhp || (S.objN || 0) >= BAG_MAX || S.duel433)
     return null;
   const ev = [];
   heal(S, u, Math.ceil(u.mhp * it.heal), ev);
   say(ev, `${it.n} : ${u.n} reprend des forces.`);
   u.acted = true;
   u.moved = true;
-  S.objN = (S.objN || 0) + 1; // Sac de combat (v4.14)
+  S.objN = (S.objN || 0) + 1; // Battle Bag (v4.14)
   PROFILE.bag[k] = bagN(k) - 1;
   if (!PROFILE.bag[k]) delete PROFILE.bag[k];
   return endStep(S, ev);
 }
 
 
-// barre du Sac en combat (.v4-bagbar) : rendue par React (src/screens/combat/battle/Panel.jsx)
+// Bag bar in battle (.v4-bagbar): rendered by React (src/screens/combat/battle/Panel.jsx)
 
 /* =====================================================================
-   v4.0 · « Aventure » — nouvelle direction artistique et cinq écrans :
-   Carte, Pokédex, Quêtes, Sac et Boutique, Paramètres.
-   Module additif : il enveloppe le moteur sans réécrire la gestion des
-   tours. Les règles de combat restent celles de la v3.
+   v4.0 · "Aventure" — new art direction and five screens:
+   Map, Pokédex, Quests, Bag and Shop, Settings.
+   Additive module: it wraps the engine without rewriting turn
+   handling. Battle rules remain those of v3.
    ===================================================================== */
 
 export const V4 = {
@@ -135,7 +135,7 @@ export const PIX = no => PKA(no);
 
 export const ITM = k => ICO414[k] || ITA(k);
 
- // v4.14 : icônes dessinées pour les nouveaux objets
+ // v4.14: icons drawn for the new items
 export const fmt = n => Math.round(n).toLocaleString('fr-FR');
 
 
@@ -148,7 +148,7 @@ export const today = () => {
 };
 
 
-/* ---------- objets de la Boutique ---------- */
+/* ---------- Shop items ---------- */
 export const SHOP = {
   poke: {
     n: 'Poké Ball',
@@ -224,10 +224,10 @@ export const tLevel = () => {
 
 export const familyOwned = () => new Set([...PROFILE.box, ...PROFILE.dex]).size;
 
- // Libre aussi (v4.21)
+ // Free mode too (v4.21)
 export const ownedFam = id => PROFILE.box.includes(BY[id].base) || PROFILE.dex.includes(BY[id].base);
 
- // Libre aussi (v4.21)
+ // Free mode too (v4.21)
 export const countS = () => Object.values(PROFILE.ranks || {}).filter(r => r === 'S').length;
 
 
@@ -250,14 +250,14 @@ const ballReqOk = (k, e) => {
 };
 
 
-/* choix de la Ball dans le panneau de capture */
+/* Ball choice in the capture panel */
 export const ballChips = () =>
   `<div class="v4-balls" role="group" aria-label="Choisir une Ball">${BALLS.map(k => `<button type="button" class="v4-ball${k === CAP_K ? ' on' : ''}" data-ball="${k}" aria-pressed="${k === CAP_K}" ${bagN(k) ? '' : 'disabled'}><img src="${ITM(SHOP[k].img)}" alt="" loading="lazy"><b>${SHOP[k].sn}</b><em>×${bagN(k)}</em></button>`).join('')}</div>${BALLS.some(k => bagN(k)) ? '' : '<p class="bp-hint">Plus aucune Ball : passez à la Boutique.</p>'}`;
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Instructions run at startup, in the original order (see index.js).
 export function __init() {
 
-/* icônes originales des nouveaux objets (v4.14) : dessins simples, aucune illustration officielle */
+/* original icons for the new items (v4.14): simple drawings, no official artwork */
 ICO414 = (() => {
   const g = (id, a, b) => `<radialGradient id="${id}" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></radialGradient>`;
   const S = {
@@ -288,7 +288,7 @@ BALLS = ['poke', 'super', 'hyper', 'master'],
   HEALS = ['potion', 'superpotion'];
 
 
-/* ---------- capture : la Ball choisie fixe les conditions ---------- */
+/* ---------- capture: the chosen Ball sets the conditions ---------- */
 CAP_K = 'poke',
   BALL_SEL = null;
 
@@ -312,7 +312,7 @@ document.addEventListener('click', e => {
       finish();
       return;
     }
-    const nx = u && !u.ko && !u.acted ? u : B.units.find(x => x.side === 'a' && !x.ko && !x.acted); // il garde la main s’il n’a pas agi
+    const nx = u && !u.ko && !u.acted ? u : B.units.find(x => x.side === 'a' && !x.ko && !x.acted); // it keeps its turn if it has not acted
     if (nx) ui.sel = nx.uid;
     renderAll();
     renderWallet();

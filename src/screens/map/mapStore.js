@@ -1,11 +1,11 @@
 import { makeStore } from '../../lib/store.js';
 
-// Le moteur appelle buildMap() au démarrage (gabarit de la page), puis renderMap() /
-// renderMapInfo() : la page Carte est reconstruite. Le moteur la relit juste après
-// (centerMap, scrollIntoView, flèches).
-// - built : le gabarit existe (cartes dessinées, emplacement de la Route 29) ;
-// - drawn : renderMap() a tourné au moins une fois (tracés, marqueurs, panneaux…) ;
-// - marksSel : le lieu choisi au moment où les marqueurs ont été dessinés (avant le choix par défaut).
+// The engine calls buildMap() at startup (page template), then renderMap() /
+// renderMapInfo(): the Map page is rebuilt. The engine reads it back right after
+// (centerMap, scrollIntoView, arrows).
+// - built: the template exists (maps drawn, Route 29 slot);
+// - drawn: renderMap() has run at least once (paths, markers, panels…);
+// - marksSel: the location selected when the markers were drawn (before the default choice).
 const worldMap = makeStore({ version: 0, built: false, drawn: false, marksSel: null });
 const redraw = patch => worldMap.set(s => ({ ...patch, version: s.version + 1 }));
 

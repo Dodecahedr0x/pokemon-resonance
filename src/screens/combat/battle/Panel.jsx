@@ -7,26 +7,26 @@ import { ARR } from '../../../engine/010-in-battle-evolution.js';
 import { ROLEFX, rIco } from '../../../engine/012-recruits-roles-synergies.js';
 import { veiled } from '../../../engine/013-gyms.js';
 import { markOf, medal, rxCat, tb, tc } from '../../../engine/014-utils.js';
-import { EMAX, byUid, canAwaken, forcedTarget, dmgOf, eveilInfo, evoOpts, foeEvo, hasNx, mvType, targets, uAt } from '../../../engine/021-combat-engine.js';
+import { EMAX, byUid, canAwaken, forcedTarget, dmgOf, awakeningInfo, evoOpts, foeEvo, hasNx, mvType, targets, uAt } from '../../../engine/021-combat-engine.js';
 import { roleOf } from '../../../engine/023-roles-synergies-obstacles.js';
 import { B, enPips, segHp, ui } from '../../../engine/024-combat-ui.js';
 import { PREF, catchBlock, duoBlock, tileCard, unitExtras } from '../../../engine/026-campaign-tutorial-sound.js';
 import { HEALS, ITM, SHOP, bagN } from '../../../engine/032-v4-foundation.js';
-import { COMBAT414, SAC_MAX, hasXp, blocked414, foeReso414, mrg414, objOk414, rankOfValue, rankLine414, rankTag, xpBlock414 } from '../../../engine/053-resonance.js';
+import { COMBAT414, BAG_MAX, hasXp, blocked414, foeReso414, mrg414, objOk414, rankOfValue, rankLine414, rankTag, xpBlock414 } from '../../../engine/053-resonance.js';
 import { resoBlock417 } from '../../../engine/057-companions-resonance.js';
 import { battleStates420, vigilBtn420 } from '../../../engine/060-intense-combat.js';
 import { flow478 } from '../../../engine/112-painted-graphics.js';
 import { enemyTurn428 } from '../../../engine/063-combat-catches-home.js';
 import { useBattleVersion } from './battleStore.js';
-import { ETAPE, Hi, withoutTip } from './frag.jsx';
+import { STEP, Hi, withoutTip } from './frag.jsx';
 
 const NL = '\n  ';
 
-// Statuts qui font passer la manche (u.sn), d'après le badge du Pokémon.
-const ETAT = { GEL: 'gelé', SOM: 'endormi', PAR: 'paralysé' };
+// Statuses that make the round pass (u.sn), based on the Pokémon's badge.
+const STATE = { GEL: 'gelé', SOM: 'endormi', PAR: 'paralysé' };
 
-// Panneau de commande (#bPanel) : fiche du Pokémon choisi, d'un adversaire, ou d'une case.
-// La classe « info-off » du conteneur reste posée par le moteur (panelRoleInfo).
+// Command panel (#bPanel): sheet of the chosen Pokémon, an opponent, or a tile.
+// The container's « info-off » class is still set by the engine (panelRoleInfo).
 export default function Panel() {
   const v = useBattleVersion('panel');
   return (
@@ -62,8 +62,8 @@ function Content() {
 
 const tileOf = u => 'ABCDEFGH'[u.pos[0]] + (u.pos[1] + 1);
 
-/* ---------- placement avant le combat (v4.30) : qui est où, qui est choisi ---------- */
-// Les clics du panneau sont bloqués par le moteur pendant le déploiement : la liste se lit, on joue sur le plateau.
+/* ---------- placement before the battle (v4.30): who is where, who is chosen ---------- */
+// Panel clicks are blocked by the engine during deployment: the list is read-only, you play on the board.
 function Placement() {
   const al = B.units.filter(u => u.side === 'a' && !u.ko),
     sel = ui.dsel430 && byUid(B, ui.dsel430);
@@ -95,7 +95,7 @@ function Placement() {
   );
 }
 
-/* ---------- tour adverse : qui a agi, qui agit, qui suit ---------- */
+/* ---------- opponent turn: who acted, who is acting, who follows ---------- */
 function OpponentTurn() {
   useBattleVersion('top');
   useBattleVersion('foot');
@@ -135,7 +135,7 @@ function OpponentTurn() {
   );
 }
 
-// Rôle et bouton « Détails » sous l'en-tête (v1.2).
+// Role and « Détails » (Details) button under the header (v1.2).
 function Role() {
   const u = (ui.selE && byUid(B, ui.selE)) || (ui.sel && byUid(B, ui.sel));
   if (!u || u.ko) return null;
@@ -178,7 +178,7 @@ function Header({ u, sous: under }) {
 
 const powerLabel = m => strength(m, 'Puiss.');
 
-/* ---------- adversaire ---------- */
+/* ---------- opponent ---------- */
 function Intention({ e }) {
   if (B.jit) {
     const F = e.force && forcedTarget(B, e);
@@ -223,7 +223,7 @@ function Intention({ e }) {
 
 function OpponentSheet({ e }) {
   const tl = TAL[e.tal],
-    nx = hasNx(e) ? eveilInfo(B, e) : null,
+    nx = hasNx(e) ? awakeningInfo(B, e) : null,
     fe = foeEvo(B, e);
   const role = roleOf(e),
     RF = ROLEFX[role];
@@ -288,7 +288,7 @@ function OpponentSheet({ e }) {
   );
 }
 
-/* ---------- aperçu exact d'une action ---------- */
+/* ---------- exact preview of an action ---------- */
 function Preview({ v }) {
   const ew = v.diff.filter(d => d.evw);
   return (
@@ -386,11 +386,11 @@ function Preview({ v }) {
   );
 }
 
-/* ---------- énergie d'Éveil ---------- */
+/* ---------- Awakening energy ---------- */
 function Awakening({ u, s }) {
   if (!hasNx(u)) {
-    // une ligne suffit quand le Pokémon n’évolue plus
-    if (hasXp(u)) return <Hi html={s(xpBlock414(u) + resoBlock417(u))} />; // losanges (v4.14), Forme Résonante (v4.17)
+    // one line is enough when the Pokémon no longer evolves
+    if (hasXp(u)) return <Hi html={s(xpBlock414(u) + resoBlock417(u))} />; // diamonds (v4.14), Resonant Form (v4.17)
     const rb417 = resoBlock417(u, true);
     if (rb417) return <Hi html={s(rb417)} />;
     const m = BY[u.id];
@@ -438,7 +438,7 @@ function Awakening({ u, s }) {
   );
 }
 
-/* ---------- déroulé guidé (v4.78) : l'étape en cours et son bouton pour passer ---------- */
+/* ---------- guided walkthrough (v4.78): the current step and its skip button ---------- */
 function Step({ u, st }) {
   const n = flow478.restants(B).length,
     cur = { deplacer: 0, agir: 1, extra: 2, fini: 3 }[st];
@@ -475,13 +475,13 @@ function Step({ u, st }) {
       </>
     );
   } else if (u.sn) {
-    txt = `${u.n} ${ETAT[u.badge] ? 'est ' + ETAT[u.badge] : 'ne peut pas agir'} : il passe cette manche.`;
+    txt = `${u.n} ${STATE[u.badge] ? 'est ' + STATE[u.badge] : 'ne peut pas agir'} : il passe cette manche.`;
   } else txt = `${u.n} a fini son tour.`;
   return (
     <div className="fl478" data-st={st}>
       <div className="fl478-h">
         <ol className="fl478-p">
-          {[ETAPE.deplacer, ETAPE.agir, ETAPE.extra].flatMap((l, i) => [
+          {[STEP.deplacer, STEP.agir, STEP.extra].flatMap((l, i) => [
             ...(i
               ? [
                   <li key={'s' + i} className="sep" aria-hidden="true">
@@ -504,7 +504,7 @@ function Step({ u, st }) {
   );
 }
 
-/* ---------- Sac : objets utilisables en combat (v4.0, v4.14) ---------- */
+/* ---------- Bag: items usable in battle (v4.0, v4.14) ---------- */
 function Bag({ u }) {
   if ((SCEN[B.sc] || {}).tuto || B.duel433 || ui.selE || u.side !== 'a') return null;
   const own = [...HEALS, ...COMBAT414].filter(k => bagN(k));
@@ -512,7 +512,7 @@ function Bag({ u }) {
   return (
     <div className="v4-bagbar">
       <span className="lbl-s">
-        Sac · {B.objN || 0} / {SAC_MAX}
+        Sac · {B.objN || 0} / {BAG_MAX}
       </span>
       {own.map(k => {
         const it = SHOP[k],
@@ -531,10 +531,10 @@ function Bag({ u }) {
   );
 }
 
-/* ---------- Pokémon de votre équipe ---------- */
+/* ---------- Pokémon of your team ---------- */
 function AllySheet({ u }) {
   const tl = TAL[u.tal];
-  // déroulé guidé : l'étape remplace les astuces quand aucun mode n'est actif
+  // guided walkthrough: the step replaces the tips when no mode is active
   const F = flow478,
     guide = F.actif() && !ui.busy && !ui.selE && u.side === 'a' && F.aJouer(B).includes(u),
     st = guide ? F.etape(B, u) : null,
@@ -550,7 +550,7 @@ function AllySheet({ u }) {
   else if (u.sn)
     hint = (
       <p className="bp-hint">
-        {u.n} est {ETAT[u.badge] || ETAT.PAR} : il ne peut pas agir cette manche.
+        {u.n} est {STATE[u.badge] || STATE.PAR} : il ne peut pas agir cette manche.
       </p>
     );
   else if (!u.acted && !u.moved) hint = <p className="bp-hint">Cases bleues : déplacement. Ou choisissez directement une capacité.</p>;

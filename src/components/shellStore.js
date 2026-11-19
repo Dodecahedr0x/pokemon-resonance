@@ -1,16 +1,16 @@
 import { makeStore } from '../lib/store.js';
 
-// État du shell poussé par le moteur : page affichée (show), titre de la barre du haut,
-// menu du téléphone, voyant de sauvegarde, porte-monnaie et dresseur (renderWallet).
-// Rendu synchrone : le moteur relit la barre de navigation et le menu juste après
-// (calibre434 mesure .bnav, menu() met le focus sur le premier lien).
+// Shell state pushed by the engine: displayed page (show), top bar title,
+// phone menu, save indicator, wallet and trainer (renderWallet).
+// Synchronous render: the engine re-reads the navigation bar and the menu right after
+// (gauge434 measures .bnav, menu() focuses the first link).
 const shell = makeStore({
-  page: null, // aucune page marquée avant le premier show()
+  page: null, // no page marked before the first show()
   sec: 'Accueil',
   menu: false,
   svBusy: false,
   svCloud: false,
-  wallet: 0, // 0 : porte-monnaie pas encore dessiné par le moteur
+  wallet: 0, // 0: wallet not yet drawn by the engine
 });
 
 export const useShell = shell.use;

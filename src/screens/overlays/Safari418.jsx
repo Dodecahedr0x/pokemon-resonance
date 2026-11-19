@@ -5,13 +5,13 @@ import { tb } from '../../engine/014-utils.js';
 import { crestSmall } from '../../engine/020-team-cards.js';
 import { shinyStyle } from '../../engine/043-adventure-plus.js';
 
-// Parc Safari (#safari418). Le moteur (058) calcule l'état de la visite (chances de
-// capture et de fuite, message) et garde les clics (data-safari418) et l'attribut hidden.
+// Safari Park (#safari418). The engine (058) computes the visit state (catch and
+// flee chances, message) and keeps the clicks (data-safari418) and the hidden attribute.
 export default function Safari418() {
   return <Box nom="safari" className="result exp-box" id="safari418" Carte={MapScreen} />;
 }
 
-// Jauge en pourcentage (capture, fuite).
+// Percentage gauge (catch, flee).
 function Gauge({ v, c }) {
   const p = Math.round(v * 100);
   return <span className="sf-j" style={{ background: `linear-gradient(90deg,${c} 0 ${p}%,rgba(255,255,255,.12) ${p}% 100%)` }} role="img" aria-label={`${p} %`} />;

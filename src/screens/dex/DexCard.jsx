@@ -1,7 +1,7 @@
 import { Html } from '../../lib/html.jsx';
 import { strength } from '../../lib/power.js';
 import { MV, SHAPE, TAL } from '../../engine/005-moves.js';
-import { REGN } from '../../engine/008-hoenn-data.js';
+import { REGION_NAMES } from '../../engine/008-hoenn-data.js';
 import { BY, NOTES, familyOf } from '../../engine/009-pokemon.js';
 import { RC, ROLEFX } from '../../engine/012-recruits-roles-synergies.js';
 import { tb, tc } from '../../engine/014-utils.js';
@@ -13,12 +13,12 @@ import { DEXS } from '../../engine/038-pokedex.js';
 import { SPARK, isShinyOwned, shinyHue } from '../../engine/043-adventure-plus.js';
 import { mrg414 } from '../../engine/053-resonance.js';
 import { captureSite421 } from '../../engine/061-catch-anywhere.js';
-import { FR470 } from '../../engine/102-regional-forms.js';
+import { REGIONAL_FORMS470 } from '../../engine/102-regional-forms.js';
 
 const no3 = n => String(n).padStart(3, '0');
 
-// Fiche du Pokémon choisi (#dex4Card). Les classes passagères scan448 / new448
-// (balayage, première découverte) restent posées par le moteur (v4.48).
+// Sheet of the selected Pokémon (#dex4Card). The transient classes scan448 / new448
+// (sweep, first discovery) are still set by the engine (v4.48).
 export default function DexCard() {
   const m = BY[V4.dexSel] || DEXS[0];
   const dm = DEXM[m.no] || [0, 0, ''],
@@ -31,7 +31,7 @@ export default function DexCard() {
     next = DEXS[(i + 1) % DEXS.length],
     note = NOTES[m.id],
     placeLabel = captureSite421(m.id),
-    fr = FR470.find(x => x.id === m.id); // forme régionale (v4.70)
+    fr = REGIONAL_FORMS470.find(x => x.id === m.id); // regional form (v4.70)
   const roles = [m.r, m.r2].filter((r, k, a) => r && a.indexOf(r) === k);
   const style = { '--c': tc(m.t[0]), '--c2': tc(m.t[1] || m.t[0]) };
   if (sh) style['--sh'] = shinyHue(m.id) + 'deg';
@@ -45,7 +45,7 @@ export default function DexCard() {
       <div className="v4d-top">
         <div className="v4d-art">
           <span className="v4d-glow" aria-hidden="true" />
-          {/* une image par Pokémon : l'illustration chromatique (v4.25) est posée par le moteur */}
+          {/* one image per Pokémon: the shiny illustration (v4.25) is set by the engine */}
           <img key={m.id} src={ART(m.no)} alt={m.n} decoding="async" style={fr ? { filter: 'hue-rotate(' + fr.hue + 'deg)' } : undefined} />
           <span className="v4d-no">{`N° ${no3(m.no)}`}</span>
           {sh && (
@@ -58,7 +58,7 @@ export default function DexCard() {
         </div>
         {'\n  '}
         <div className="v4d-info">
-          <p className="v4d-cat">{`Pokémon ${dm[2]} · ${REGN[m.gen] || 'Johto'}`}</p>
+          <p className="v4d-cat">{`Pokémon ${dm[2]} · ${REGION_NAMES[m.gen] || 'Johto'}`}</p>
           <h2 className="v4d-n">{m.n}</h2>
           <div className="v4d-types">
             {m.t.map((t, k) => (

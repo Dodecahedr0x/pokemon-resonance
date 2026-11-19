@@ -6,12 +6,12 @@ import { SYN, synOf } from '../../engine/012-recruits-roles-synergies.js';
 import { medal, tc } from '../../engine/014-utils.js';
 import { squad } from '../../engine/020-team-cards.js';
 import { startVoice } from '../../engine/021-combat-engine.js';
-import { RANGS, rankId, rankTag } from '../../engine/053-resonance.js';
+import { RANKS, rankId, rankTag } from '../../engine/053-resonance.js';
 import { duoFor416 } from '../../engine/055-living-johto.js';
 import { FORM463, formKey463, formMs463, formOn463 } from '../../engine/094-team-formations.js';
 
-// Analyse repliée (#anaD) : résumé (#anaSum) et cartes (#ana). Clics (data-p, data-rx,
-// data-fm463) : écouteurs du moteur sur #ana et sur le document.
+// Collapsed analysis (#anaD): summary (#anaSum) and cards (#ana). Clicks (data-p, data-rx,
+// data-fm463): engine listeners on #ana and on the document.
 export default function Analysis({ A }) {
   return (
     <details className="ana-d" id="anaD">
@@ -82,14 +82,14 @@ export default function Analysis({ A }) {
   );
 }
 
-// Résumé replié (ancien teamSummary).
+// Collapsed summary (formerly teamSummary).
 function recap(A) {
   const n = synOf(squad).length,
     bad = A.al.filter(a => a[0] === 'bad').length;
   return squad.length ? `Indice ${A.score} · ${n} synergie${n > 1 ? 's' : ''}${bad ? ` · ${bad} alerte${bad > 1 ? 's' : ''}` : ''}` : 'Équipe vide';
 }
 
-// Indice de Résonance : jauge circulaire et détail.
+// Resonance Index: circular gauge and details.
 function Hint({ A }) {
   const L = 2 * Math.PI * 50;
   return (
@@ -139,7 +139,7 @@ function Hint({ A }) {
   );
 }
 
-// Couverture des six rôles (ancien radar).
+// Coverage of the six roles (formerly radar).
 function Radar({ v }) {
   const cx = 150,
     cy = 104,
@@ -173,7 +173,7 @@ function Radar({ v }) {
   );
 }
 
-// Formation d'équipe (v4.63).
+// Team formation (v4.63).
 function Formation() {
   try {
     const ms = formMs463(),
@@ -205,7 +205,7 @@ function Formation() {
   }
 }
 
-// Rangs de l'équipe et Harmonie (v4.14).
+// Team ranks and Harmony (v4.14).
 function Ranks() {
   const ms = squad.map(id => BY[id]).filter(Boolean),
     n = new Set(ms.map(m => rankId(m.id))).size,
@@ -223,7 +223,7 @@ function Ranks() {
               <li key={m.id}>
                 <Html html={rankTag(r)} />
                 <span>
-                  <b>{m.n}</b> · {RANGS[r].n} · {RANGS[r].k}
+                  <b>{m.n}</b> · {RANKS[r].n} · {RANKS[r].k}
                 </span>
               </li>
             );
@@ -239,7 +239,7 @@ function Ranks() {
   );
 }
 
-// Synergies d'équipe (ancien synCard, v1.1).
+// Team synergies (formerly synCard, v1.1).
 function Synergies() {
   const act = synOf(squad).map(s => s.k),
     ms = squad.map(id => BY[id]),
@@ -293,7 +293,7 @@ function Synergies() {
   );
 }
 
-// Réactions au départ, puis celles qu'ouvrent les Éveils.
+// Starting reactions, then those opened by Awakenings.
 function Reactions({ A }) {
   const row = ([id, v], later) => (
     <li key={(later ? 'l' : 'd') + id} className={later ? 'lat' : undefined}>
@@ -321,7 +321,7 @@ function Reactions({ A }) {
   );
 }
 
-// Liens de l'équipe (ancien linksCard, v1.0).
+// Team Bonds (formerly linksCard, v1.0).
 function Links() {
   const T = squad.map(id => BY[BY[id].base]),
     rows = [];

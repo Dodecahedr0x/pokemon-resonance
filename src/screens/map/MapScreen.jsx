@@ -16,12 +16,12 @@ const REGIONS = [
 
 export const regionMap = () => (V4.region === 'hoenn' ? 'hoenn' : V4.region === 'johto' ? 'johto' : 'kanto');
 
-// Page « carte » (#carte). Rien avant buildMap() (démarrage du moteur) ; le contenu qui dépend
-// de la partie (tracés, marqueurs, panneaux…) après le premier renderMap(), comme l'ancien DOM.
-// Les clics restent gérés par le moteur (data-place, data-reg, data-mf430, data-v4fight…).
-// Restent posés par le moteur sur des éléments rendus ici :
-// - hidden des flèches .mf430 (fleches430, d'après le défilement de #mapSc) ;
-// - data-tod de #mapSt quand l'heure change (setTod, même valeur que celle rendue).
+// "Map" page (#carte). Nothing before buildMap() (engine startup); content that depends
+// on the game (routes, markers, panels…) after the first renderMap(), like the old DOM.
+// Clicks are still handled by the engine (data-place, data-reg, data-mf430, data-v4fight…).
+// Still set by the engine on elements rendered here:
+// - hidden on the .mf430 arrows (arrows430, based on the scroll of #mapSc);
+// - data-tod of #mapSt when the time changes (setTod, same value as the one rendered).
 export default function MapScreen() {
   const { built, drawn, marksSel } = useMap();
   return (

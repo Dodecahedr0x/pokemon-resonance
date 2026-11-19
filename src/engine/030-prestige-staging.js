@@ -1,4 +1,4 @@
-/* Section d'origine : 24-prestige-mise-en-scene.js */
+/* Original section: 24-prestige-mise-en-scene.js */
 import { getHost, hostSet } from '../screens/combat/board/boardStore.js';
 
 import { GYMS } from './004-data.js';
@@ -29,7 +29,7 @@ let LASTPH;
 export function leaderOf(sc) {
   const jl = leadJ415(sc); // Johto (v4.15)
   if (jl) return jl;
-  const l429 = leader429(sc); // Kael, Sirène, légendes à capturer (v4.29)
+  const l429 = leader429(sc); // Kael, Sirène, legends to capture (v4.29)
   if (l429) return l429;
   const i = ARENAS.findIndex(a => a.k === sc);
   if (i >= 0) return LEAD[i];
@@ -48,11 +48,11 @@ export function leaderOf(sc) {
 
 
 
-/* --- Guide : l’univers, rendu par React (Univers.jsx) --- */
+/* --- Guide: the universe, rendered by React (Universe.jsx) --- */
 
 
-// Fenêtre temporaire (#vs, #hp452, #evs454…) : rendue par React (src/screens/overlays/Temporaires.jsx),
-// à la fin du shell, dans l'ordre d'ouverture. Renvoie le nœud ; fermer(id) la retire.
+// Transient window (#vs, #hp452, #evs454…): rendered by React (src/screens/overlays/Transients.jsx),
+// at the end of the shell, in opening order. Returns the node; close(id) removes it.
 export function overlay(id, data) {
   return openOverlay(id, data);
 }
@@ -86,15 +86,15 @@ export function vsIntro() {
                   : D.duel433
                   ? 'Duel local'
                   : 'Terrain d’entraînement';
-  const ri = i >= 0 ? i : ARENAS.findIndex(a => a.rule === D.rule); // règle de plateau reprise (légendes, Tour)
+  const ri = i >= 0 ? i : ARENAS.findIndex(a => a.rule === D.rule); // board rule carried over (legends, Tower)
   const dur = RM ? 900 : PREF.fast ? 1400 : 2300;
-  // rendu : src/screens/overlays/temporaires/Vs.jsx
+  // rendered: src/screens/overlays/transients/Vs.jsx
   const o = overlay('vs', {
     cls: (RM ? ' rm' : '') + (PREF.fast ? ' fast' : ''),
     dur,
     k1: B.duel433 ? 'Joueur 1' : 'Votre équipe',
     al: al.map(u => u.t),
-    av: vsAv450(), // emblème du dresseur (v4.50)
+    av: vsAv450(), // trainer emblem (v4.50)
     nom1: B.duel433 ? B.duel433.noms[0] : PROFILE.name || 'Dresseur',
     em1: al.map(u => u.n).join(' · '),
     ac: D.at ? tc(D.at) : 'var(--gold)',
@@ -105,7 +105,7 @@ export function vsIntro() {
     em2: B.duel433 ? 'Joueur 2' : L ? L.t : D.lvl || '',
     q: L ? L.q : null,
     rule: `${D.rule && GYMS[ri] ? GYMS[ri].r : D.n}${styleOf(B.sc) ? ` · Style : ${styleOf(B.sc).n}` : ''} · ${B.lim} manches`,
-    tip: tipVs448() // astuce sous la présentation (v4.48)
+    tip: tipVs448() // tip under the presentation (v4.48)
   });
   let done = false;
   const close = () => {
@@ -130,7 +130,7 @@ export function turnBanner(txt, sub) {
   if (!B || RM) return;
   const bd = $('#bBoard');
   if (!bd) return;
-  // bandeau .tbn : rendu par React (Board.jsx) ; un nouveau bandeau remplace l'ancien
+  // .tbn banner: rendered by React (Board.jsx); a new banner replaces the old one
   const n = ((getHost().tbn || {}).n || 0) + 1;
   hostSet({
     tbn: {
@@ -162,7 +162,7 @@ export function turnBanners() {
 }
 
 
-/* --- Mots d’impact : super efficace, K.O. --- */
+/* --- Impact words: super effective, K.O. --- */
 export function impactWords(ev) {
   if (!B || RM) return;
   let last = null;
@@ -195,8 +195,8 @@ export function rankOf(S) {
 }
 
 
-// Fiche de résultat : rang, citation du dresseur, boutons de la Tour et « Suite » sont rendus
-// par React (src/screens/combat/battle/Result.jsx) ; la scène d’après-combat part de finish().
+// Result sheet: rank, trainer quote, Tower buttons and "Suite" (Continue) are rendered
+// by React (src/screens/combat/battle/Result.jsx); the post-battle scene starts from finish().
 
 
 function musNote(m) {
@@ -238,7 +238,7 @@ function musTick() {
 }
 
 
-/* Nappe d’ambiance synthétisée : repli du lecteur de pistes (070) quand les fichiers audio manquent. */
+/* Synthesized ambient pad: fallback of the track player (070) when the audio files are missing. */
 export function musStartCore() {
   if (MUS.on) return;
   try {
@@ -291,8 +291,8 @@ export function musPadLevel() {
   } catch (e) {}
 }
 
-/* ===================== v2.0 PRESTIGE : univers, mise en scène, finitions ===================== */
-/* --- Univers : la Ligue de la Résonance et ses maîtres (personnages originaux) --- */
+/* ===================== v2.0 PRESTIGE: universe, staging, finishing touches ===================== */
+/* --- Universe: the Resonance League and its masters (original characters) --- */
 export const LEAD = [
   {
     n: 'Bastien Grès',
@@ -435,15 +435,15 @@ export const CHAP = k => {
 };
 
 
-/* --- Barres de vie : la perte reste visible un instant --- */
+/* --- Health bars: the loss stays visible for a moment --- */
 export const HPM = {};
 
 
-/* --- Rang de fin de combat et meilleur rang par terrain --- */
+/* --- End-of-battle rank and best rank per terrain --- */
 export const RK = ['B', 'A', 'S'];
 
 
-/* --- Musique d’ambiance générative (option « Musique ») --- */
+/* --- Generative ambient music ("Musique" option) --- */
 export const MUS = { ac: null, out: null, on: false, timer: 0, step: 0 };
 
 
@@ -454,13 +454,13 @@ const MPROG = [
   [55, 62, 67, 71]
 ];
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Statements run at startup, in the original order (see index.js).
 export function __init() {
 
-/* --- Ligue, Conseil, parcours : les visages de la Ligue (réplique d'arène : src/screens/ligue/Arena.jsx) --- */
+/* --- League, Council, journey: the League's faces (gym line: src/screens/league/Arena.jsx) --- */
 
 
-/* --- Superposition : ouverture (une fois par session), présentation de combat, bannières --- */
+/* --- Overlay: opening (once per session), battle presentation, banners --- */
 AUTO = !!navigator.webdriver || /jsdom/i.test(navigator.userAgent || '');
 
 
@@ -484,7 +484,7 @@ $('#cbResult').addEventListener(
 );
 
 
-/* --- Clavier : jouer sans souris --- */
+/* --- Keyboard: playing without a mouse --- */
 document.addEventListener('keydown', e => {
   if (cur !== 'combat' || !B || B.over || ui.busy || e.altKey || e.ctrlKey || e.metaKey) return;
   const tg = e.target;

@@ -7,8 +7,8 @@ import { shinyStyle } from '../../engine/043-adventure-plus.js';
 import { hero428 } from '../../engine/063-combat-catches-home.js';
 import { alive450 } from '../../engine/082-living-home-weather.js';
 
-// Héros de l'Accueil (#hmHero) : prochaine étape (ancien renderHome), décor vivant selon la
-// région et l'heure avec le compagnon (v4.28), saison et météo du jour (v4.52).
+// Home hero (#hmHero): next step (old renderHome), living backdrop depending on the
+// region and time with the companion (v4.28), season and weather of the day (v4.52).
 export default function Hero({ on }) {
   if (!on) return <div className="v4-hero" id="hmHero" />;
   const g = goalInfo(),

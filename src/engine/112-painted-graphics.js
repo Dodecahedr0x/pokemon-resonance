@@ -1,11 +1,11 @@
-/* Section d'origine : v4.77 : graphismes peints (décors et textures du dossier img/, plateau incliné en perspective) */
+/* Original section: v4.77: painted graphics (backgrounds and textures from the img/ folder, tilted board in perspective) */
 
 import { SCEN } from './009-pokemon.js';
 import { $, RM, toast } from './014-utils.js';
-import { CROCHETS } from './015-hooks.js';
+import { HOOKS } from './015-hooks.js';
 import { BH, BW, K, byUid, uk } from './021-combat-engine.js';
 import { B, BG, HC, HC0, HP, L, MQV, TILT, VB, VERT, __set_GREEN, buildBoard, clearAim, renderAll, tiltP, tiltS, ui } from './024-combat-ui.js';
-import { PREF, TUTO, savePref, sfx } from './026-campaign-tutorial-sound.js';
+import { PREF, TUTORIAL_STEPS, savePref, sfx } from './026-campaign-tutorial-sound.js';
 import { FXS, fxAdd, fxOn, fxPrep } from './028-move-effects.js';
 import { renderParams } from './040-settings.js';
 import { currentActor } from './044-tactical-engine.js';
@@ -14,22 +14,22 @@ import { NEWS416 } from './056-polish-v4-16.js';
 import { player418 } from './058-fishing-safari-coop.js';
 import { dl428 } from './063-combat-catches-home.js';
 import { anim429, replay429 } from './064-quality.js';
-import { TUTO433 } from './068-duel-tutorial.js';
+import { TUTORIAL_STEPS433 } from './068-duel-tutorial.js';
 import { refreshBattle } from '../screens/combat/battle/battleStore.js';
 import { bdClass, bdReplay, getHost, hostSet } from '../screens/combat/board/boardStore.js';
 import { boardSet, getBoard, unitsDirty } from '../screens/combat/board/boardStore.js';
 
-// Déroulé guidé du tour (v4.78) : étapes lues par le panneau et la barre du bas (src/screens/combat/battle).
+// Guided turn flow (v4.78): steps read by the panel and the bottom bar (src/screens/combat/battle).
 export let flow478;
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Startup statements, run in their original order (see index.js).
 export function __init() {
 
 (() => {
-  /* Les images viennent du dossier img/ posé à côté du fichier, comme audio/.
-     Sans ce dossier, ou en mode « Léger », rien ne change : plateau à plat de la v4.76. */
+  /* Images come from the img/ folder placed next to the file, like audio/.
+     Without that folder, or in « Léger » (Light) mode, nothing changes: flat board from v4.76. */
   const TEX = ['grass', 'stone', 'water', 'sand', 'ash', 'marble', 'rune', 'mud', 'lava'];
-  const ETATS = ['wet', 'mud', 'lava', 'dep430z', 'fog431t']; // états d'une case dessinés sur la case : recopiés sur sa texture
+  const STATES = ['wet', 'mud', 'lava', 'dep430z', 'fog431t']; // cell states drawn on the cell: copied onto its texture
   const OK = new Set();
   let artOk = false;
   const richText = () => artOk && PREF.gfx477 !== 'leger';
@@ -40,7 +40,7 @@ export function __init() {
       renderAll();
     }
   };
-  // une seule sonde : sans dossier img/, une seule requête échoue
+  // a single probe: without the img/ folder, only one request fails
   const load = (t, ok, ko) => {
     const im = new Image();
     im.onload = () => {
@@ -55,14 +55,14 @@ export function __init() {
     () => {
       artOk = true;
       document.body.classList.remove('no-art477');
-      TEX.slice(1).forEach(t => load(t, rebuildAll)); // sans effet hors combat
+      TEX.slice(1).forEach(t => load(t, rebuildAll)); // no effect outside battle
       rebuildAll();
     },
     () => document.body.classList.add('no-art477')
   );
 
-  /* ---------- perspective : réglée à chaque construction du plateau ---------- */
-  const LIP = 7; // épaisseur de la dalle de terre sous les cases (unités du viewBox, au premier rang)
+  /* ---------- perspective: set on every board build ---------- */
+  const LIP = 7; // thickness of the earth slab under the cells (viewBox units, at the front row)
   const tune = () => {
     TILT.on = false;
     if (!richText() || !B) return;
@@ -83,9 +83,9 @@ export function __init() {
       x1 = Math.max(...xs),
       y0 = Math.min(...ys),
       y1 = Math.max(...ys),
-      m = 12, // marge des côtés : repères A–H
-      bottomEdge = 26, // sous le premier rang : socle + nom des Pokémon
-      sky = H * (VERT ? 0.1 : 0.14); // bande de décor laissée visible au-dessus du plateau
+      m = 12, // side margin: A–H landmarks
+      bottomEdge = 26, // below the front row: pedestal + Pokémon names
+      sky = H * (VERT ? 0.1 : 0.14); // strip of backdrop left visible above the board
     const k = Math.min((W - 2 * m) / (x1 - x0), (H - sky - bottomEdge) / (y1 - y0));
     TILT.k = k;
     TILT.ox = (W - (x1 - x0) * k) / 2 - x0 * k;
@@ -93,8 +93,8 @@ export function __init() {
     TILT.on = true;
   };
 
-  /* ---------- habillage du plateau construit ---------- */
-  // arènes : le décor suit le type du champion (canyon pour Roche, tour mystique pour Spectre…), stade sinon
+  /* ---------- dressing of the built board ---------- */
+  // gyms: the backdrop follows the champion's type (canyon for Rock, mystic tower for Ghost…), stadium otherwise
   const AT = { Roche: 'roche', Sol: 'roche', Combat: 'roche', Acier: 'roche', Spectre: 'tour', Dragon: 'tour', Psy: 'tour', Poison: 'tour', Ténèbres: 'tour' };
   const placeLabel = () => {
     const D = SCEN[B.sc];
@@ -103,22 +103,22 @@ export function __init() {
   const bgFill = () => {
     const bio = placeLabel(),
       h = hourOf(B);
-    // Adresses complètes : dans une variable CSS, une url() relative se résout par rapport à la
-    // feuille qui lit la variable (assets/ une fois le jeu compilé), pas par rapport à la page.
+    // Full URLs: in a CSS variable, a relative url() resolves against the
+    // stylesheet that reads the variable (assets/ once the game is built), not against the page.
     const img = f => `url(${new URL('img/' + f, document.baseURI).href})`;
     return [`bg-${bio}-${h}.webp`, `bg-${bio}-jour.webp`, `bg-gue-${h}.webp`].map(img).join(',');
   };
-  // brume de l'horizon et teinte de lune : réglées ici pour pouvoir changer d'heure en plein combat
-  // (calques React : .lum477.n et les arrêts de #hz477 suivent l'état « night »)
+  // horizon haze and moon tint: set here so the time of day can change mid-battle
+  // (React layers: .lum477.n and the #hz477 stops follow the « night » state)
   const tint = isNight => boardSet({ night: isNight }, 'defs', 'tilt');
-  // la nuit tombe (ou le jour se lève) pendant le combat : le décor peint passe en fondu, la lumière suit
+  // night falls (or day breaks) during the battle: the painted backdrop cross-fades, the light follows
   const changeTime = () => {
     const bd = $('#bBoard'),
       h = hourOf(B);
     L.h477 = h;
     const previous = getComputedStyle(bd).backgroundImage;
     hostSet({ bg477: bgFill() });
-    // .fondu477 (ancien décor qui s'efface) : rendu par React (Board.jsx)
+    // .fondu477 (old backdrop fading out): rendered by React (Board.jsx)
     if (anim429() && previous && previous !== 'none') {
       const n = ((getHost().fondu || {}).n || 0) + 1,
         fd = { n, bg: previous, va: false };
@@ -136,10 +136,10 @@ export function __init() {
     tint(h === 'nuit');
     cloudList();
     ambiance();
-    water(true); // reflets recolorés (lune ou soleil)
+    water(true); // recolored highlights (moon or sun)
   };
   const dress = () => {
-    // classes, --bg477, nuages et poussière de #bBoard : rendus par React (état « host » de boardStore.js)
+    // classes, --bg477, clouds and dust of #bBoard: rendered by React (« host » state of boardStore.js)
     bdClass('tilt477', TILT.on);
     if (!TILT.on) {
       hostSet({ bg477: undefined, cs477: false, amb477: null });
@@ -148,21 +148,21 @@ export function __init() {
     hostSet({ bg477: bgFill() });
     if (SCEN[B.sc].bio === 'arene') {
       const t = { roche: 'stone', tour: 'rune', ligue: 'marble' }[placeLabel()];
-      if (OK.has(t)) L.txId = 'tx-' + t; // renderBoard pose ce motif sur chaque case
+      if (OK.has(t)) L.txId = 'tx-' + t; // renderBoard applies this pattern to each cell
     }
-    // textures peintes dans les motifs existants (renderBoard les choisit déjà par case)
+    // painted textures inside the existing patterns (renderBoard already picks them per cell)
     TEX.forEach(t => bdClass('has-' + t + '477', OK.has(t)));
-    const tex477 = TEX.filter(t => OK.has(t)); // motifs remplacés par l'image (calque React <defs>)
-    // dalle de terre : chaque case posée sur un socle plus sombre, visible côté joueur
+    const tex477 = TEX.filter(t => OK.has(t)); // patterns replaced by the image (React <defs> layer)
+    // earth slab: each cell sits on a darker pedestal, visible on the player's side
     const lip = [];
     for (const k in B.tiles) {
       const [x, y] = HC(k),
         s = tiltS(x, y);
       lip.push(HP(x, y + LIP * s, BG.S - 1));
     }
-    // la texture opaque recouvre la case : ses états (boue, lave, brouillard…) passent sur la texture
+    // the opaque texture covers the cell: its states (mud, lava, fog…) go over the texture
     const copyText = k => {
-      const c = ETATS.filter(e => L.t[k].classList.contains(e)).join(' '),
+      const c = STATES.filter(e => L.t[k].classList.contains(e)).join(' '),
         v = c ? 'tx ' + c : 'tx';
       if (L.tx[k].getAttribute('class') !== v) L.tx[k].setAttribute('class', v);
     };
@@ -172,11 +172,11 @@ export function __init() {
       L.mo477 = new MutationObserver(ms => ms.forEach(m => m.target.dataset.k && L.tx[m.target.dataset.k] && copyText(m.target.dataset.k)));
       L.mo477.observe(L.tiles, { subtree: true, attributes: true, attributeFilter: ['class'] });
     }
-    // repères A–H / 1–6 recalés au bord du plateau incliné
+    // A–H / 1–6 landmarks re-aligned to the edge of the tilted board
     const ax = [],
       lab = (txt, x, y) => ax.push([txt, x.toFixed(1), y.toFixed(1)]);
     for (let r = 0; r < BH; r++) {
-      // en portrait, les rangées se lisent au fond du plateau (au-dessus de la dernière colonne)
+      // in portrait, rows are read at the far end of the board (above the last column)
       const [x, y] = HC(K(VERT ? BW - 1 : 0, r)),
         s = tiltS(x, y);
       if (VERT) lab(r + 1, x, y - BG.S * s - 3);
@@ -188,8 +188,8 @@ export function __init() {
       if (VERT) lab('ABCDEFGH'[c], x - BG.S * s - 5, y + 2.5);
       else lab('ABCDEFGH'[c], x, y - BG.S * s - 3);
     }
-    // lumière d'ensemble : brume vers l'horizon, teinte de lune la nuit (calques fixes, rien ne bouge)
-    // découpe #cp477 : socles et cases ; tout est dessiné par les calques React du plateau
+    // overall light: haze toward the horizon, moon tint at night (fixed layers, nothing moves)
+    // #cp477 clip: pedestals and cells; everything is drawn by the board's React layers
     const H = VB()[1],
       isNight = hourOf(B) === 'nuit',
       backgroundY = HC(VERT ? K(BW - 1, 0) : K(0, 0))[1] - BG.S;
@@ -199,17 +199,17 @@ export function __init() {
     ambiance();
     water();
   };
-  CROCHETS.avantPlateau.push(() => {
+  HOOKS.avantPlateau.push(() => {
     try {
       tune();
     } catch (e) {
       TILT.on = false;
     }
   });
-  // nouveau combat : la caméra se pose sur le plateau pendant que l'écran de transition s'efface
+  // new battle: the camera settles on the board while the transition screen fades out
   let lastFight = null,
     endEntry = 0;
-  CROCHETS.plateau.push(() => {
+  HOOKS.plateau.push(() => {
     if (B !== lastFight) {
       lastFight = B;
       if (TILT.on && anim429()) {
@@ -220,10 +220,10 @@ export function __init() {
       }
     }
   });
-  CROCHETS.plateau.push(dress);
+  HOOKS.plateau.push(dress);
 
-  /* ---------- animations : saut pendant un déplacement, poussière à l'atterrissage ---------- */
-  const tempo = () => (PREF.fast || ui.turbo428 ? 0.6 : 1); // même règle que --tk429 (combat rapide)
+  /* ---------- animations: jump while moving, dust on landing ---------- */
+  const tempo = () => (PREF.fast || ui.turbo428 ? 0.6 : 1); // same rule as --tk429 (quick battle)
   const skip = (T, x, y, s) => {
     if (!anim429()) return;
     const ms = 850 * tempo();
@@ -248,7 +248,7 @@ export function __init() {
       ms * 0.82
     );
   };
-  /* onde de choc couchée sur le sol sous le Pokémon touché, poussière plus forte au K.O. */
+  /* shockwave lying on the ground under the hit Pokémon, stronger dust on a KO */
   const footPos = u => {
     const [x, y] = HC(uk(u)),
       s = Math.max(0.6, Math.min(1.4, tiltS(x, y)));
@@ -273,11 +273,11 @@ export function __init() {
       c.fill();
     });
   };
-  CROCHETS.touche.push(uid => {
+  HOOKS.touche.push(uid => {
     const u = byUid(B, uid);
     if (u) ripple(u, u.side === 'e' ? '#ff6a5a' : '#7cc0ff');
   });
-  const chute = u => {
+  const fall = u => {
     if (!TILT.on || !anim429() || !fxOn() || !fxPrep()) return;
     const [px, py, k] = footPos(u),
       bits = Array.from({ length: 14 }, (_, i) => [(Math.PI * 2 * i) / 14 + Math.random() * 0.4, 0.6 + Math.random() * 0.6]);
@@ -298,19 +298,19 @@ export function __init() {
     );
   };
 
-  /* ombres de nuages qui glissent sur le plateau, de jour (calque à part : seule la carte graphique travaille) */
-  // .cs477 : rendu par React (Board.jsx)
+  /* cloud shadows drifting across the board by day (separate layer: only the graphics card works) */
+  // .cs477: rendered by React (Board.jsx)
   const cloudList = () => {
     const on = !(!TILT.on || RM || hourOf(B) === 'nuit');
     if (getHost().cs477 !== on) hostSet({ cs477: on });
   };
 
-  /* vie dans l'air : pollen ou poussière de jour, lucioles la nuit (transform et opacité seulement) */
+  /* life in the air: pollen or dust by day, fireflies at night (transform and opacity only) */
   const AMB = {
     jour: { gue: '#fff1b8', roche: '#f2d7a6', tour: '#e2c8ff', ligue: '#ffe28a' },
     nuit: { gue: '#d8ff7a', roche: '#ffc27a', tour: '#c79bff', ligue: '#cfe0ff' }
   };
-  // .amb477 : rendu par React (Board.jsx), recréé quand l'heure ou le lieu change (clé)
+  // .amb477: rendered by React (Board.jsx), recreated when the time or place changes (key)
   const ambiance = () => {
     const n = getHost().amb477;
     const h = hourOf(B),
@@ -338,10 +338,10 @@ export function __init() {
     hostSet({ amb477: { k: key, h, c: (AMB[h] || AMB.jour)[l] || AMB[h === 'nuit' ? 'nuit' : 'jour'].gue, items } });
   };
 
-  /* reflet sur l'eau : une bande de lumière glisse sur les cases d'eau, des éclats scintillent ;
-     suit la marée de l'Arène Eau (resynchronisé à chaque rendu du plateau) */
-  // calque .eau477, dégradé #eau477g et découpe #eau477c : dessinés par React (état « eau ») ;
-  // couleur (lune ou soleil) et animation fixées à la création, recréés au changement d'heure (neuf)
+  /* water reflection: a band of light slides over the water cells, sparkles glint;
+     follows the tide of the Water Gym (resynchronized on every board render) */
+  // .eau477 layer, #eau477g gradient and #eau477c clip: drawn by React (« eau » (water) state);
+  // color (moon or sun) and animation fixed at creation, recreated when the time changes (fresh)
   const water = freshNode => {
     if (!TILT.on || !L.tiles || !B) return;
     const E = getBoard().eau,
@@ -353,13 +353,13 @@ export function __init() {
     }
     boardSet({ eau: { id, cles: keys, nuit: hourOf(B) === 'nuit', fixe: !anim429() } }, 'defs', 'eau');
   };
-  CROCHETS.plateauRendu.push(() => {
+  HOOKS.plateauRendu.push(() => {
     if (TILT.on && L.h477 && L.h477 !== hourOf(B)) changeTime();
     water();
   });
 
-  /* les Pokémon du fond passent derrière ceux de devant */
-  // ordre des jetons : L.uo, rendu par Units.jsx (les jetons triés passent à la fin, comme appendChild)
+  /* background Pokémon pass behind the ones in front */
+  // token order: L.uo, rendered by Units.jsx (sorted tokens go to the end, like appendChild)
   function sort() {
     if (!TILT.on || !L.units || !L.uo) return;
     const y = id => L.u[id] && L.u[id].y477,
@@ -370,47 +370,47 @@ export function __init() {
     unitsDirty();
   }
 
-  /* ---------- jetons : debout, plus petits au fond ---------- */
-  CROCHETS.jeton.push(u => {
+  /* ---------- tokens: standing, smaller toward the back ---------- */
+  HOOKS.jeton.push(u => {
     const T = TILT.on && L.u[u.uid];
     if (T) {
       const k = uk(u),
         [x, y] = HC(k),
         s = Math.max(0.6, Math.min(1.4, tiltS(x, y)));
-      T.tr = `translate(${x}px,${y}px) scale(${s.toFixed(3)})`; // jeton : Units.jsx (glissement : transition CSS)
+      T.tr = `translate(${x}px,${y}px) scale(${s.toFixed(3)})`; // token: Units.jsx (sliding: CSS transition)
       unitsDirty();
       if (T.k477 && T.k477 !== k && !u.ko) skip(T, x, y, s);
       T.k477 = k;
-      if (u.ko && T.ko477 === false) chute(u);
+      if (u.ko && T.ko477 === false) fall(u);
       T.ko477 = !!u.ko;
       T.y477 = y;
       clearTimeout(sort.t);
-      sort.t = setTimeout(sort, 950 * tempo()); // après le glissement : réinsérer coupe la transition
+      sort.t = setTimeout(sort, 950 * tempo()); // after the slide: re-inserting cuts the transition
     }
   });
 
-  /* noms au-dessus de tous les Pokémon : un grand Pokémon devant ne cache plus le nom de celui de derrière */
+  /* names above all Pokémon: a large Pokémon in front no longer hides the name of the one behind */
   const topName = T => {
-    // calque .nms477 (React) : le nom passe dans son enveloppe .nmw477, qui suit les classes et la
-    // position du jeton (NomsHauts, Units.jsx) ; nmO : ordre de passage
+    // .nms477 layer (React): the name goes into its .nmw477 wrapper, which follows the classes and
+    // the token's position (NamesHigh, Units.jsx); nmO: draw order
     if (!L.fl || !L.nm477 || !L.nm477.isConnected) return;
     if (!T.nmO) {
       T.nmO = topName.n = (topName.n || 0) + 1;
       unitsDirty();
     }
   };
-  CROCHETS.jeton.push(u => {
+  HOOKS.jeton.push(u => {
     const T = TILT.on && L.u[u.uid];
     if (T) topName(T);
   });
 
-  /* illustration plus grande, pieds posés sur l'anneau au sol (attributs : la transformation sert déjà au miroir et au rebond) */
+  /* larger illustration, feet resting on the ring on the ground (attributes: the transform is already used for the mirror and the bounce) */
   const GEO = { plat: ['-17', '-22', '34'], debout: ['-23', '-35', '46'] };
-  CROCHETS.illustration.push(u => {
+  HOOKS.illustration.push(u => {
     const T = L.u && L.u[u.uid];
-    // modèle du jeton, rendu par Units.jsx
+    // token template, rendered by Units.jsx
     if (T && T.imOn && !T.w477 && T.b) {
-      // l'illustration seule respire et saute (groupe .tok-st477) : l'anneau reste posé au sol
+      // only the illustration breathes and jumps (.tok-st477 group): the ring stays on the ground
       T.w477 = true;
       unitsDirty();
     }
@@ -423,8 +423,8 @@ export function __init() {
     }
   });
 
-  /* ---------- Paramètres › Habillage Pokémon : Graphismes Riche / Léger ---------- */
-  // bouton « Graphismes » de « Habillage Pokémon » : rendu par React (src/screens/settings/panels/HabillagePokemon.jsx)
+  /* ---------- Settings › Pokémon Skin: Rich / Light graphics ---------- */
+  // « Graphismes » (Graphics) button of « Habillage Pokémon » (Pokémon Skin): rendered by React (src/screens/settings/panels/PokemonSkin.jsx)
   document.addEventListener('click', e => {
     if (!(e.target.closest && e.target.closest('[data-pk477]'))) return;
     PREF.gfx477 = PREF.gfx477 === 'leger' ? 'riche' : 'leger';
@@ -436,16 +436,16 @@ export function __init() {
 })();
 
 
-/* ==== v4.78 : déroulé guidé du tour ====
-   Chaque Pokémon suit Déplacer → Agir → Terminer. Chaque étape se saute d'un toucher
-   explicite (« Rester ici », « Passer l'action », « Terminer ») ; la manche se termine
-   seule quand tous ont fini : plus de « Fin du tour » à presser pendant votre phase.
-   u.rst478 / u.fin478 : numéro de manche où le Pokémon est resté sur place / a fini. */
+/* ==== v4.78: guided turn flow ====
+   Each Pokémon follows Move → Act → End. Each step is skipped with an
+   explicit tap (« Rester ici » (Stay here), « Passer l'action » (Skip action), « Terminer » (Finish)); the round ends
+   by itself once everyone is done: no more « Fin du tour » (End turn) to press during your phase.
+   u.rst478 / u.fin478: round number in which the Pokémon stayed in place / finished. */
 (() => {
   const active = () => !!(B && !B.over && B.phase === 'player' && !B.dep430 && !ui.cine);
-  // énigme : « Fin du tour » reste visible, c'est le bouton pour abandonner
+  // riddle: « Fin du tour » (End turn) stays visible, it is the button to give up
   const guide = () => active() && !ui.busy && B.sc !== 'enigme431';
-  /** Les Pokémon que le joueur actif commande en ce moment. */
+  /** The Pokémon the active player is currently commanding. */
   function toPlay(S) {
     if (S.ordre === 'vitesse') {
       const c = currentActor(S);
@@ -462,10 +462,10 @@ export function __init() {
     return hitAndRun(u) || retrigger(S) ? 'extra' : 'fini';
   }
   const remaining = S => toPlay(S).filter(u => step(S, u) !== 'fini');
-  // panneau (étape en cours et bouton pour passer) et barre du bas : rendus par React (Panel.jsx, Foot.jsx)
+  // panel (current step and skip button) and bottom bar: rendered by React (Panel.jsx, Foot.jsx)
   flow478 = { actif: active, guide, aJouer: toPlay, repli: hitAndRun, relance: retrigger, etape: step, restants: remaining };
 
-  /* ---------- boutons « Rester ici », « Passer l'action », « Terminer » ---------- */
+  /* ---------- « Rester ici », « Passer l'action », « Terminer » buttons ---------- */
   $('#bPanel').addEventListener('click', e => {
     const b = e.target.closest('[data-vx$="478"]');
     if (!b || !B || ui.busy || B.over) return;
@@ -474,7 +474,7 @@ export function __init() {
     if (b.dataset.vx === 'rester478') u.rst478 = B.round;
     else {
       u.fin478 = B.round;
-      ui.undo = null; // le choix est fait : on ne revient plus sur le déplacement
+      ui.undo = null; // the choice is made: no going back on the move
     }
     clearAim();
     ui.tile = null;
@@ -482,8 +482,8 @@ export function __init() {
     renderAll();
   });
 
-  /* ---------- après une attaque : rester sur le Pokémon s'il lui reste un bonus ---------- */
-  CROCHETS.action.push(id => {
+  /* ---------- after an attack: stay on the Pokémon if it has a bonus left ---------- */
+  HOOKS.action.push(id => {
     const u = B && byUid(B, id);
     if (u && active() && !ui.busy && B.ordre !== 'vitesse' && step(B, u) === 'extra' && ui.sel !== id) {
       ui.sel = id;
@@ -491,7 +491,7 @@ export function __init() {
     }
   });
 
-  /* ---------- au suivant : quand le Pokémon suivi a fini, on passe au prochain ---------- */
+  /* ---------- on to the next: when the tracked Pokémon is done, move to the next one ---------- */
   function following478() {
     if (!active() || ui.busy) {
       ui.fl478 = null;
@@ -512,7 +512,7 @@ export function __init() {
     if (s && step(B, s) !== 'fini') ui.fl478 = s.uid;
   }
 
-  /* ---------- fin de manche automatique ---------- */
+  /* ---------- automatic end of round ---------- */
   let T478 = 0;
   const key478 = () =>
     B ? [B.round, B.coop || 0, B.duel433 ? B.duel433.j : 0, B.ordre === 'vitesse' ? (currentActor(B) || {}).uid : ''].join(':') : '';
@@ -531,17 +531,17 @@ export function __init() {
       T478 = 0;
       if (B !== S || key478() !== k || !isReady478()) return;
       if (!B.coop && !B.duel433 && B.ordre !== 'vitesse' && B.sc !== 'enigme431') toast('Manche terminée : au tour des adversaires.');
-      // par le bouton : les modes qui l'interceptent (énigme…) gardent leur règle. Clic sans
-      // remontée : sinon l'écouteur « Passer » du document accélérerait aussitôt le tour adverse.
+      // via the button: modes that intercept it (riddle…) keep their own rule. Click without
+      // bubbling: otherwise the document's « Passer » (Skip) listener would immediately speed up the opponent's turn.
       $('#bEnd').dispatchEvent(new MouseEvent('click', { bubbles: false, cancelable: true }));
     }, dl428(250, 500, 900));
   }
 
-  /* ---------- barre du bas : plus de « Fin du tour » pendant votre phase ---------- */
-  // la barre (bouton masqué, étape du Pokémon sur téléphone, phase) est calculée par Foot.jsx
+  /* ---------- bottom bar: no more « Fin du tour » during your phase ---------- */
+  // the bar (hidden button, the Pokémon's step on phone, phase) is computed by Foot.jsx
   const footPos478 = () => refreshBattle('foot');
 
-  /* ---------- clavier : Espace (ou E) passe l'étape au lieu de finir le tour ---------- */
+  /* ---------- keyboard: Space (or E) skips the step instead of ending the turn ---------- */
   window.addEventListener(
     'keydown',
     e => {
@@ -557,25 +557,25 @@ export function __init() {
     true
   );
 
-  CROCHETS.avantRendu.push(() => {
+  HOOKS.avantRendu.push(() => {
     if (B) following478();
   });
-  CROCHETS.rendu.push(() => {
+  HOOKS.rendu.push(() => {
     if (B) {
       footPos478();
       schedule478();
     }
   });
 
-  /* ---------- textes du tutoriel et du guide ---------- */
+  /* ---------- tutorial and guide texts ---------- */
   try {
-    TUTO.forEach(s => {
+    TUTORIAL_STEPS.forEach(s => {
       if (s.sel !== '#bEnd') return;
       s.t = 'Fin de manche';
       s.d = 'Chaque Pokémon se déplace (ou « Rester ici »), puis agit (ou « Passer l’action »). Quand tous ont joué, la manche se termine seule : les adversaires se déplacent, puis attaquent.';
       s.sel = '#bPanel';
     });
-    const t0 = TUTO433.find(x => x.k === 'tour');
+    const t0 = TUTORIAL_STEPS433.find(x => x.k === 'tour');
     if (t0)
       t0.d = t0.d.replace(
         'Quand tout le monde a joué, « Fin du tour » : les adversaires agissent à leur tour.',

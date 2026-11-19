@@ -1,10 +1,10 @@
 import { B, BG, HC, HP } from '../../../engine/024-combat-ui.js';
 import { useBoard } from './boardStore.js';
 
-// <defs> du plateau : motifs des terrains (texDefs), dégradés, flèche des intentions ;
-// v4.77 : textures peintes à la place des motifs, brume de l'horizon, découpes (socles, eau).
+// board <defs>: terrain patterns (texDefs), gradients, intent arrow;
+// v4.77: painted textures instead of patterns, horizon haze, cutouts (pedestals, water).
 
-// motif d'un terrain ; texture peinte chargée (v4.77) : l'image remplace le dessin
+// terrain pattern; painted texture loaded (v4.77): the image replaces the drawing
 function Pat({ id, t, w, h, tr, on, children }) {
   return (
     <pattern id={id} width={on ? 72 : w} height={on ? 72 : h} patternUnits="userSpaceOnUse" patternTransform={on ? 'scale(1 .78)' : tr}>
@@ -13,7 +13,7 @@ function Pat({ id, t, w, h, tr, on, children }) {
   );
 }
 
-// textures peintes sans motif d'origine (boue, lave) : créées au bout des <defs>
+// painted textures with no original pattern (mud, lava): created at the end of the <defs>
 function NewPat({ t }) {
   return (
     <pattern id={'tx-' + t} patternUnits="userSpaceOnUse" width="72" height="72" patternTransform="scale(1 .78)">
@@ -24,7 +24,7 @@ function NewPat({ t }) {
 
 const BASE = ['grass', 'stone', 'water', 'sand', 'ash', 'marble', 'rune'];
 
-// reflet de l'eau : dégradé de la bande de lumière et découpe aux cases d'eau
+// water reflection: gradient of the light band and cutout at the water cells
 function WaterDefs({ E, vb }) {
   const [W] = vb,
     c = E.nuit ? '#cfe0ff' : '#ffffff',
@@ -102,7 +102,7 @@ export default function Defs() {
         <path d="M27 4l6 6-6 6-6-6Z M27 9v12 M21 30h12 M24 34l3 4 3-4" className="tx-rn" />
         <circle cx="6" cy="40" r=".8" className="tx-sd" />
       </Pat>
-      {/* v1.1 · sable et piliers */}
+      {/* v1.1 · sand and pillars */}
       <Pat id="tx-sand" t="sand" w="18" h="12" on={on('sand')}>
         <rect width="18" height="12" className="sd-bg" />
         <path d="M0 8q4.5-3 9 0t9 0" className="sd-rp" />
@@ -116,7 +116,7 @@ export default function Defs() {
         <stop offset=".78" stopColor="#45464D" />
         <stop offset="1" stopColor="#17181C" />
       </linearGradient>
-      {/* v4.77 · plateau incliné */}
+      {/* v4.77 · tilted board */}
       {S.tex477
         .filter(t => !BASE.includes(t))
         .map(t => (

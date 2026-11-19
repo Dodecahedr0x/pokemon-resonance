@@ -7,16 +7,16 @@ import { useBoard } from './boardStore.js';
 import { SvgHtml } from './svgHtml.jsx';
 import { PE, lref } from './shared.js';
 
-// Sol du plateau : peinture v4.71, socles v4.77, cases, textures, terrain des stades, décor,
-// reflets de l'eau, lumière, repères A–H / 1–6.
+// Board floor: v4.71 painting, v4.77 bases, cells, textures, stadium terrain, scenery,
+// water reflections, light, A–H / 1–6 markers.
 
-// références de cases gardées par le moteur (L.t[k], L.tx[k]) : fonctions stables
+// cell references kept by the engine (L.t[k], L.tx[k]): stable functions
 const tRefs = {},
   txRefs = {};
 const tRef = k => tRefs[k] || (tRefs[k] = n => n && (L.t[k] = n));
 const txRef = k => txRefs[k] || (txRefs[k] = n => n && (L.tx[k] = n));
 
-/* v4.71 : image peinte du terrain et vagues (avant les cases) */
+/* v4.71: painted terrain image and waves (before the cells) */
 export function Painting() {
   const S = useBoard('paint');
   if (!S.pv) return null;
@@ -36,7 +36,7 @@ export function Painting() {
   );
 }
 
-/* v4.77 : dalle de terre sous chaque case */
+/* v4.77: earth slab under each cell */
 export function Pedestals() {
   const S = useBoard('tilt');
   if (!S.lip) return null;
@@ -49,7 +49,7 @@ export function Pedestals() {
   );
 }
 
-// classe d'une case (renderBoard), avec les obstacles (drawObstacles : pilier, herbes, sable)
+// class of a cell (renderBoard), with obstacles (drawObstacles: pillar, grass, sand)
 function tileClass(k) {
   const t = B.tiles[k],
     pp = P(k);
@@ -81,14 +81,14 @@ export function Cells() {
   );
 }
 
-// texture d'une case : eau, sable (drawObstacles) ou terrain du lieu
+// texture of a cell: water, sand (drawObstacles) or the location's terrain
 function texFill(k) {
   const t = B.tiles[k];
   if (t.sand && !t.w && !t.rock) return 'url(#tx-sand)';
   return `url(#${t.w ? 'tx-water' : L.txId})`;
 }
 
-/* textures (la classe tx est recopiée des états de la case par le moteur, v4.77) */
+/* textures (the tx class is copied from the cell's states by the engine, v4.77) */
 export function Textures() {
   useBoard('tiles');
   const S = useBoard('pv');
@@ -109,7 +109,7 @@ export function Textures() {
   );
 }
 
-/* terrain des stades (arènes, Ligue, canyon) */
+/* stadium terrain (gyms, League, canyon) */
 export function Terrain() {
   const S = useBoard('svg');
   const h = useMemo(() => (S.stadium ? fieldSvg() : ''), [S.n]);
@@ -120,7 +120,7 @@ export function Terrain() {
   );
 }
 
-/* touffes, braises, cailloux, éclats : posés une fois par plateau */
+/* tufts, embers, pebbles, shards: placed once per board */
 export function Decor() {
   const S = useBoard('pv');
   const items = useMemo(() => {
@@ -147,7 +147,7 @@ export function Decor() {
   );
 }
 
-/* v4.77 : reflet sur l'eau (bande de lumière découpée aux cases d'eau, éclats) */
+/* v4.77: water reflection (light band cut out at the water cells, glints) */
 export function Water() {
   const S = useBoard('eau');
   const E = S.eau;
@@ -196,7 +196,7 @@ export function Water() {
   );
 }
 
-/* v4.77 : brume de l'horizon et teinte de lune, découpées au plateau */
+/* v4.77: horizon haze and moon tint, cut out to the board */
 export function Light() {
   const S = useBoard('tilt');
   if (!S.hz) return null;
@@ -209,7 +209,7 @@ export function Light() {
   );
 }
 
-/* repères A–H / 1–6 ; plateau incliné : recalés au bord (v4.77) */
+/* A–H / 1–6 markers; tilted board: realigned to the edge (v4.77) */
 export function Landmarks() {
   const S = useBoard('tilt');
   const base = useMemo(() => {

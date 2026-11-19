@@ -10,7 +10,7 @@ import { avatar, goalChips } from '../../engine/031-home-journey.js';
 import { ITM, V4, bagN, dailyKey } from '../../engine/032-v4-foundation.js';
 import { PL, STATE_N, placeIcon, placeName, placeState, rewardLine } from '../../engine/037-map.js';
 import { johtoOpen, routeName } from '../../engine/054-johto.js';
-import { SAFARI_BALLS, SAFARI_PAS, SAFARI_PRIX, safariLock418 } from '../../engine/058-fishing-safari-coop.js';
+import { SAFARI_BALLS, SAFARI_STEPS, SAFARI_PRICE, safariLock418 } from '../../engine/058-fishing-safari-coop.js';
 import { hoennOpen } from '../../engine/059-hoenn.js';
 import { regionNo421 } from '../../engine/061-catch-anywhere.js';
 import { familyCapt428 } from '../../engine/063-combat-catches-home.js';
@@ -21,7 +21,7 @@ const Lock = ({ children }) => (
 
 const Arrow = () => <svg><use href="#i-arrow" /></svg>;
 
-// Panneau du lieu choisi (#mapInfo).
+// Panel of the selected location (#mapInfo).
 export default function MapInfo() {
   const p = PL[V4.mapSel] || PL.tuto,
     st = placeState(p);
@@ -122,7 +122,7 @@ export default function MapInfo() {
   );
 }
 
-// Parc Safari (v4.18).
+// Safari Park (v4.18).
 function SafariInfo({ p }) {
   const lk = safariLock418(),
     S2 = PROFILE.safari,
@@ -132,7 +132,7 @@ function SafariInfo({ p }) {
       <header className="v4-mi-h"><Html html={placeIcon(p)} /><span><small>Kanto · détente</small><b>Parc Safari</b></span><em className={`v4-pill s-${lk ? 'lock' : 'open'}`}>{STATE_N[lk ? 'lock' : 'open']}</em></header>
       <p className="v4-mi-d">Ici, pas de combat : on avance dans les herbes, on lance des Safari Balls, des appâts (il reste plus longtemps) et des cailloux (plus facile à attraper, mais il s’agace). Les Pokémon rares y sont plus fréquents, et les chromatiques deux fois plus.</p>
       <div className="v4-mi-k">
-        <span>{`${SAFARI_PAS} pas`}</span>
+        <span>{`${SAFARI_STEPS} pas`}</span>
         <span>{`${SAFARI_BALLS} Safari Balls`}</span>
         <span>{`${takenSet} capture${takenSet > 1 ? 's' : ''} au Parc`}</span>
       </div>
@@ -140,7 +140,7 @@ function SafariInfo({ p }) {
         {lk ? (
           <Lock><Html html={lk} /></Lock>
         ) : (
-          <button type="button" className="b b-gold" data-safari418-entrer="">{S2 ? 'Reprendre la visite' : `Entrer · ${SAFARI_PRIX} ₽`}<Arrow /></button>
+          <button type="button" className="b b-gold" data-safari418-entrer="">{S2 ? 'Reprendre la visite' : `Entrer · ${SAFARI_PRICE} ₽`}<Arrow /></button>
         )}
       </div>
     </>

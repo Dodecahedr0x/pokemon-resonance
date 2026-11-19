@@ -8,9 +8,9 @@ import { cost, squad } from '../../engine/020-team-cards.js';
 import { emblem, goalInfo } from '../../engine/031-home-journey.js';
 import { ART } from '../../engine/032-v4-foundation.js';
 import { routeName } from '../../engine/054-johto.js';
-import { REGN421, freeBox421, regionNo421 } from '../../engine/061-catch-anywhere.js';
+import { REGION_NAMES421, freeBox421, regionNo421 } from '../../engine/061-catch-anywhere.js';
 
-// Colonne de l'Accueil (.v4-aside) : équipe (#v4Team) et quête principale (#v4Quest).
+// Home column (.v4-aside): team (#v4Team) and main quest (#v4Quest).
 export default function Side({ on }) {
   return (
     <aside className="v4-aside">
@@ -70,7 +70,7 @@ function Quest() {
         <span className="v4q-t">
           <small>Mode Libre · {freeBox421()}</small>
           <b>Combats ouverts</b>
-          <em>Capturez vos Pokémon sur la {routeName()} ({REGN421[regionNo421()]}).</em>
+          <em>Capturez vos Pokémon sur la {routeName()} ({REGION_NAMES421[regionNo421()]}).</em>
         </span>
       </>
     );

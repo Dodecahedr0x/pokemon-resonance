@@ -1,4 +1,4 @@
-/* Section d'origine : 07-arenes.js */
+/* Original section: 07-gyms.js */
 
 import { GYMS } from './004-data.js';
 import { SCEN } from './009-pokemon.js';
@@ -52,7 +52,7 @@ export function arenaSetup(S) {
     rootWall(S, ev, true);
   }
   if (r === 'psy') say(ev, 'Arène Psy : une manche sur deux, un Écran Psy protège les adversaires (+2 Garde).');
-  jSetup415(S, r, ev); // arènes de Johto (v4.15)
+  jSetup415(S, r, ev); // Johto gyms (v4.15)
   return ev;
 }
 
@@ -125,7 +125,7 @@ export function arenaTick(S) {
   if (r === 'psy') {
     if (S.jit && R % 2 === 0)
       S.units.forEach(o => {
-        if (o.side === 'e' && !o.ko) o.guard = Math.max(o.guard, 1); // dure jusqu'à la fin de la manche
+        if (o.side === 'e' && !o.ko) o.guard = Math.max(o.guard, 1); // lasts until the end of the round
       });
     say(
       ev,
@@ -173,12 +173,12 @@ export function arenaTick(S) {
     );
     ev.push({ e: 'arena', r });
   }
-  jTick415(S, r, ev); // arènes de Johto (v4.15)
+  jTick415(S, r, ev); // Johto gyms (v4.15)
   return ev;
 }
 
 
-/* ce que l’arène prépare pour la fin de la manche en cours (affiché sur le plateau) */
+/* what the gym is preparing for the end of the current round (shown on the board) */
 export function arenaNext(S) {
   const r = arenaOf(S);
   if (!r) return null;
@@ -257,7 +257,7 @@ export function winBadge(i) {
   return true;
 }
 
-/* ===================== ARÈNES : huit badges jouables (module additif, le moteur n’est pas modifié) ===================== */
+/* ===================== GYMS: eight playable badges (additive module, the engine is not modified) ===================== */
 export const ARENAS = [
   {
     k: 'a1',
@@ -416,7 +416,7 @@ const LAVAW = [
 
 export const veiled = S => !!(S && S.jit) || (arenaOf(S) === 'psy' && S.round % 2 === 0);
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Startup statements, run in their original order (see index.js).
 export function __init() {
 
 ARENAS.forEach((a, i) => {
@@ -427,9 +427,9 @@ ARENAS.forEach((a, i) => {
 
 TERR = Object.keys(SCEN).filter(k => !SCEN[k].rule);
 
- // terrains d’entraînement (sans règle d’arène)
+ // training grounds (no gym rule)
 
- // v4.12 : intentions cachées
+ // v4.12: hidden intents
 BADGES = [];
 
 

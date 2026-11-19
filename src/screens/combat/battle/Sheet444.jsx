@@ -2,8 +2,8 @@ import { tb } from '../../../engine/014-utils.js';
 import { Html } from '../../../lib/html.jsx';
 import { sheet444, useBattleVersion } from './battleStore.js';
 
-// Fiche de case (#ti444, v4.44) : appui long ou loupe sur une case. Relevé pris par fiche444 (077),
-// position (haut / bas) par place444. Créée à la première ouverture, puis masquée (attribut hidden).
+// Cell sheet (#ti444, v4.44): long press or magnifier on a cell. Reading taken by sheet444 (077),
+// position (top / bottom) by place444. Created on first opening, then hidden (hidden attribute).
 export default function Sheet444() {
   useBattleVersion('ti444');
   const F = sheet444,
@@ -54,7 +54,7 @@ export default function Sheet444() {
         )}
         {c.u && <Pokemon v={c.u} />}
         {c.leg && (
-          // nouvelle fiche : la légende repart repliée, comme l'ancien innerHTML
+          // new sheet: the legend restarts collapsed, like the old innerHTML
           <details key={F.n} className="ti444-leg">
             <summary>Légende du plateau</summary>
             <ul>
@@ -88,7 +88,7 @@ export default function Sheet444() {
   );
 }
 
-// Pokémon présent sur la case.
+// Pokémon present on the cell.
 function Pokemon({ v }) {
   return (
     <div className={'ti444-u ' + (v.e ? 'pe' : 'pa')}>

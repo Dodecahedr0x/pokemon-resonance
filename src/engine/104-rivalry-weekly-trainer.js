@@ -1,8 +1,8 @@
-/* Section d'origine : v4.71 : rivalité, météo du défi, dresseur de la semaine, vitrine de reliques, Ombres revanche, entraînement de Ball */
+/* Original section: v4.71: rivalry, challenge weather, trainer of the week, relic showcase, Shadows rematch, Ball training */
 
 import { BY, SCEN } from './009-pokemon.js';
 import { writeLS, toast } from './014-utils.js';
-import { CROCHETS } from './015-hooks.js';
+import { HOOKS } from './015-hooks.js';
 import { save, squad } from './020-team-cards.js';
 import { OBST } from './023-roles-synergies-obstacles.js';
 import { B, backToPrep, goFight } from './024-combat-ui.js';
@@ -15,7 +15,7 @@ import { timing453 } from './083-timed-catch-status.js';
 import { reward454 } from './084-peddler-route-missions.js';
 import { RELIC466 } from './097-boss-rush-relics.js';
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Statements run at startup, in the original order (see index.js).
 export function __init() {
 
 (() => {
@@ -41,17 +41,17 @@ export function __init() {
   const ok = ids => ids.filter(i => BY[i]);
   const POS = [[6, 1], [6, 3], [7, 2], [7, 4]];
   const mkFoes = ids => ok(ids).map((id, i) => [id, POS[i % POS.length]]);
-  const METEO_NOM = { pluie: 'Pluie', soleil: 'Soleil', sable: 'Sable', grele: 'Grêle' };
+  const WEATHER_NAME = { pluie: 'Pluie', soleil: 'Soleil', sable: 'Sable', grele: 'Grêle' };
   const weatherKind = () => { try { return weatherDay417(); } catch (e) { return null; } };
 
-  /* ---- 3. Dresseur de la semaine ---- */
-  const NOMS = ['Léa Ferrand', 'Marc Dalbert', 'Inès Montarbre', 'Tom Lacrête', 'Sana Verdier', 'Hugo Brisemare'];
+  /* ---- 3. Trainer of the week ---- */
+  const NAMES = ['Léa Ferrand', 'Marc Dalbert', 'Inès Montarbre', 'Tom Lacrête', 'Sana Verdier', 'Hugo Brisemare'];
   const pool = () => ok(DEXS.map(m => m.id)).filter(id => BY[id] && !BY[id].ennemi);
   const weekDef = () => {
     const h = hash(week());
     const p = pool();
     const ids = [0, 1, 2].map(i => p[(h + i * 977) % p.length]);
-    return { n: NOMS[h % NOMS.length], ids, lv: 24 + (h % 6) };
+    return { n: NAMES[h % NAMES.length], ids, lv: 24 + (h % 6) };
   };
   const wkMake = () => {
     const D = weekDef();
@@ -63,34 +63,34 @@ export function __init() {
   };
   wkMake();
 
-  /* ---- 5. Ombres inversées : revanche de Vaskar, plus dure ---- */
+  /* ---- 5. Inverted Shadows: Vaskar's rematch, harder ---- */
   SCEN.inv470 = Object.assign({ n: 'Ombres inversées', lvl: 'Revanche · Vaskar', lim: 14, time: 'nuit', bio: 'gue', d: 'Vaskar revient avec les Ombres renforcées. Une revanche sans répit, qui ne se refuse pas.', water: [], rock: ['3,0', '3,5'], hb: 8, pb: 2, lv: 44, foes: mkFoes(['absol', 'demolosse', 'tyranocif', 'noctali']) }, {});
   try {
     OBST.inv470 = { pil: ['4,2'], grass: ['4,4', '5,1'] };
   } catch (e) {}
 
 
-  /* ---- Récompenses et suivi (progression) ---- */
-  CROCHETS.progres.unshift((S, rew, win) => {
+  /* ---- Rewards and tracking (progression) ---- */
+  HOOKS.progres.unshift((S, rew, win) => {
     try {
       const k = S.sc || '';
       const X = readValue();
       let m = 0,
         g = 0;
-      // 1. Rivalité : Kael réagit aux combats des Ombres
+      // 1. Rivalry: Kael reacts to the Shadows battles
       if (win && /^omb470_/.test(k)) {
         const n = +k.slice(7);
         X.rival.push(n < 4 ? 'Kael : « Les Ombres reculent. Vaskar ne tardera pas à réagir. »' : 'Kael : « Vaskar est tombé. Je n’oublierai pas ce combat. »');
         X.rival = X.rival.slice(-3);
       }
-      // 2. Météo : bonus du défi quotidien
+      // 2. Weather: daily challenge bonus
       if (win && k === 'dq470') {
         const w = weatherKind();
         if (w === 'pluie') g += 1;
         if (w === 'soleil') m += 200;
         if (w === 'sable' || w === 'grele') g += 1;
       }
-      // 3. Dresseur de la semaine : une seule victoire par semaine
+      // 3. Trainer of the week: only one victory per week
       if (win && k === 'wk470') {
         if (X.wk.k !== week() || !X.wk.done) {
           X.wk = { k: week(), done: true, best: Math.max(X.wk.best || 0, 1) };
@@ -98,13 +98,13 @@ export function __init() {
           g += 5;
         }
       }
-      // 5. Revanche de Vaskar : une fois par jour
+      // 5. Vaskar's rematch: once a day
       if (win && k === 'inv470' && X.inv.d !== dateDay()) {
         X.inv = { d: dateDay(), done: true };
         m += 1500;
         g += 2;
       }
-      // 4. Vitrine : trois reliques ou plus donnent un Éclat par victoire
+      // 4. Showcase: three or more relics give a Shard per victory
       if (X.rel.length >= 3 && win) g += 1;
       write(X);
       return m || g ? [m, g] : null;
@@ -113,7 +113,7 @@ export function __init() {
     }
   });
 
-  /* ---- 4. Vitrine de reliques : chaque relique choisie est gardée ---- */
+  /* ---- 4. Relic showcase: each chosen relic is kept ---- */
   document.addEventListener(
     'click',
     e => {
@@ -129,7 +129,7 @@ export function __init() {
     true
   );
 
-  /* ---- 6. Entraînement de Ball : cinq lancers, score personnel ---- */
+  /* ---- 6. Ball training: five throws, personal score ---- */
   const trainingSession = () => {
     const X = readValue();
     if (X.ct.d !== dateDay()) X.ct = { d: dateDay(), n: 0, best: X.ct.best || 0 };
@@ -158,7 +158,7 @@ export function __init() {
     launchMove();
   };
 
-  /* ---- Fenêtre « Plus de défis » ---- */
+  /* ---- "Plus de défis" (More challenges) window ---- */
   const hub = () => {
     const X = readValue(),
       W = weekDef(),
@@ -168,10 +168,10 @@ export function __init() {
       storyFinished = (window.__ombre470 && window.__ombre470.lire().etape >= 4),
       showcase = RELIC466.map(r => ({ r, on: X.rel.includes(r.id) })),
       nb = showcase.filter(v => v.on).length;
-    // rendu : src/screens/overlays/temporaires/Fenetres.jsx (X2470)
+    // rendered: src/screens/overlays/transients/Windows.jsx (X2470)
     const o = overlay('x2470o', {
       lignes: (X.rival.length ? X.rival : ['Kael : « Je reviendrai, dresseur. »']).slice(-2),
-      meteo: METEO_NOM[w] || 'Temps calme',
+      meteo: WEATHER_NAME[w] || 'Temps calme',
       bonus: w === 'pluie' || w === 'sable' || w === 'grele' ? 'le défi quotidien rapporte +1 Éclat' : w === 'soleil' ? 'le défi quotidien rapporte +200 ₽' : 'aucun bonus aujourd’hui',
       fini: !!isFinished,
       wn: W.n,
@@ -216,8 +216,8 @@ export function __init() {
     true
   );
 
-  /* bouton « Plus de défis » sous la barre Défis de l’Accueil */
-  /* le bouton #x2470 est rendu par React (src/screens/accueil/Bannieres.jsx) */
+  /* "Plus de défis" (More challenges) button under the Challenges bar on the Home screen */
+  /* the #x2470 button is rendered by React (src/screens/home/Banners.jsx) */
   window.__x2470 = { lire: readValue, ecrire: write, hub, semaineDef: weekDef, wkMake };
 })();
 }

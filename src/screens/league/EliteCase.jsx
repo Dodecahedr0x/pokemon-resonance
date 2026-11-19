@@ -6,7 +6,7 @@ import { ELITE, scenLock } from '../../engine/022-items-bonds-ai.js';
 import { CHAMP_L, ELITE_L } from '../../engine/030-prestige-staging.js';
 import { wonOf } from '../../engine/031-home-journey.js';
 
-// Conseil 4 et Champion (#eliteCase) : nom du dresseur (v4.20) et meilleur rang (v4.24).
+// Elite 4 and Champion (#eliteCase): trainer name (v4.20) and best rank (v4.24).
 export default function EliteCell() {
   return (
     <>

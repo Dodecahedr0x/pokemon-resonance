@@ -2,16 +2,16 @@ import { useTemporaries } from './tempStore.js';
 import Vs from './transients/Vs.jsx';
 import Duel433 from './transients/Duel433.jsx';
 import Tm453 from './transients/Ct453.jsx';
-import { Help452, Br466, Df468, Ev454, Pn460, Sa465, Sc460, Souv461, X2470, X470 } from './transients/Windows.jsx';
+import { Help452, Br466, Df468, Ev454, Npc460, Sa465, Sc460, Souv461, X2470, X470 } from './transients/Windows.jsx';
 
-// Fenêtres temporaires du moteur (ancien overlay() sur <body>), dans l'ordre d'ouverture,
-// à la fin du shell. Clé = id + version : chaque ouverture repart d'un nœud neuf.
+// Engine temporary windows (formerly overlay() on <body>), in opening order,
+// at the end of the shell. Key = id + version: each opening starts from a fresh node.
 const PAR_ID = {
   vs: Vs,
   hp452: Help452,
   evs454: Ev454,
   sc460: Sc460,
-  pn460: Pn460,
+  pn460: Npc460,
   souv461: Souv461,
   sa465o: Sa465,
   br466o: Br466,

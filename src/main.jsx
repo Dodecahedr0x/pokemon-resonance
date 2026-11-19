@@ -12,5 +12,5 @@ import './styles/combat-compact.css';
 import './styles/phone.css';
 import App from './App.jsx';
 
-// Pas de <StrictMode> : le moteur manipule le DOM directement et ne doit démarrer qu'une fois.
+// No <StrictMode>: the engine manipulates the DOM directly and must only start once.
 createRoot(document.getElementById('root')).render(<App />);

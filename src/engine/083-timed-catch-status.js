@@ -1,8 +1,8 @@
-/* Section d'origine : v4.53 : capture avec timing · statuts visibles · Pokémon qui réagit */
+/* Original section: v4.53: timed capture · visible statuses · reacting Pokémon */
 
 import { PROFILE } from './011-game-state.js';
 import { RM, toast } from './014-utils.js';
-import { CROCHETS } from './015-hooks.js';
+import { HOOKS } from './015-hooks.js';
 import { tokCl, unitsDirty } from '../screens/combat/board/boardStore.js';
 import { byUid } from './021-combat-engine.js';
 import { canCapture } from './022-items-bonds-ai.js';
@@ -18,7 +18,7 @@ import { FX448 } from './079-immersion-sound-haptics.js';
 let CAPOK453;
 
 
-/* ---------- 1. statuts visibles et réactions sur les jetons ---------- */
+/* ---------- 1. visible statuses and reactions on tokens ---------- */
 function stKey453(u) {
   if (u.ko) return '';
   if (u.badge === 'GEL') return 'gel';
@@ -31,11 +31,11 @@ function stKey453(u) {
 }
 
 
-// le groupe .st453 (bulles, éclair, glaçons, « z ») est rendu par Units.jsx (St453)
+// the .st453 group (bubbles, lightning, ice cubes, "z") is rendered by Units.jsx (St453)
 
 
 export function timing453(cb) {
-  // jauge rendue par React (src/screens/overlays/temporaires/Ct453.jsx) ; l'anneau est animé ici
+  // gauge rendered by React (src/screens/overlays/transients/Ct453.jsx); the ring is animated here
   const o = openOverlay('ct453', { q: null });
   const g = o.querySelector('.ct453-g');
   const T0 = performance.now(),
@@ -59,7 +59,7 @@ export function timing453(cb) {
     done = true;
     cancelAnimationFrame(raf);
     q = q || 'miss';
-    if (o.isConnected) updateTemp('ct453', { q }); // texte et classe res-…
+    if (o.isConnected) updateTemp('ct453', { q }); // text and res-… class
     sfx(q === 'miss' ? 'lose' : 'rx');
     vibe(q === 'perfect' ? [30, 40, 60] : q === 'miss' ? [60] : 25);
     setTimeout(
@@ -84,20 +84,20 @@ export function timing453(cb) {
 
 const CAPT453 = () => PREF.capT453 !== 0 && !RM && !AUTO;
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Instructions run at startup, in the original order (see index.js).
 export function __init() {
 
-CROCHETS.jeton.push(u => {
+HOOKS.jeton.push(u => {
   const T = L.u[u.uid];
   if (!T) return;
-  T.st = true; // groupe .st453 du jeton (Units.jsx)
+  T.st = true; // token's .st453 group (Units.jsx)
   T.s453 = FX448() ? stKey453(u) : ''; // data-s453
   tokCl(T, 'low453', FX448() &&!u.ko && u.hp / u.mhp <= 0.25);
   unitsDirty();
 });
 
 
-/* ---------- 2. capture avec timing ---------- */
+/* ---------- 2. timed capture ---------- */
 CAPOK453 = false;
 
 
@@ -108,13 +108,13 @@ document.addEventListener(
     if (!b || CAPOK453 || !CAPT453() || !B || document.getElementById('ct453')) return;
     const al = byUid(B, ui.sel),
       en = byUid(B, b.dataset.cap);
-    if (!canCapture(B, al, en)) return; // les règles habituelles s’appliquent d’abord
+    if (!canCapture(B, al, en)) return; // the usual rules apply first
     e.preventDefault();
     e.stopPropagation();
     e.stopImmediatePropagation();
     timing453(q => {
       if (q === 'miss') {
-        // la Ball rebondit : elle est perdue, mais l’allié n’a pas agi et les Voix sont gardées
+        // the Ball bounces off: it is lost, but the ally did not act and the Voices are kept
         const k = CAP_K;
         PROFILE.bag[k] = Math.max(0, bagN(k) - 1);
         if (!PROFILE.bag[k]) delete PROFILE.bag[k];
@@ -130,7 +130,7 @@ document.addEventListener(
       } catch (er) {}
       CAPOK453 = false;
       if (q === 'perfect') {
-        PROFILE.bag[k] = bagN(k) + 1; // Ball rendue
+        PROFILE.bag[k] = bagN(k) + 1; // Ball returned
         renderWallet();
         toast('Lancer parfait : la Ball vous est rendue.');
       }
@@ -140,8 +140,8 @@ document.addEventListener(
 );
 
 
-/* ---------- 3. réglages ---------- */
-// panneau « Capture avec timing » : rendu par React (src/screens/settings/panels/CaptureTiming.jsx)
+/* ---------- 3. settings ---------- */
+// "Timed capture" panel: rendered by React (src/screens/settings/panels/CaptureTiming.jsx)
 
 
 document.addEventListener('click', e => {

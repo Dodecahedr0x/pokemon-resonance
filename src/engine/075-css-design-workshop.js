@@ -1,12 +1,12 @@
-/* Section d'origine : v4.42 : Atelier design (CSS personnalisé, brief pour ChatGPT) */
+/* Original section: v4.42: Design Workshop (custom CSS, brief for ChatGPT) */
 
 import { $, toast } from './014-utils.js';
 import { TABS, TNAME } from './016-navigation.js';
 import { PREF, savePref } from './026-campaign-tutorial-sound.js';
 
 
-/* Paramètres › Atelier design : on colle un bloc CSS (ex. écrit par ChatGPT), il s’applique tout de suite sur cet appareil.
-   Le brief donne à ChatGPT les variables, les pages et les composants du jeu sans lui faire lire les 3,7 Mo du fichier. */
+/* Settings › Design Workshop: paste a CSS block (e.g. written by ChatGPT), it applies immediately on this device.
+   The brief gives ChatGPT the game's variables, pages and components without making it read the file's 3.7 MB. */
 export function css442() {
   return String(PREF.css442 || '');
 }
@@ -33,7 +33,7 @@ function applyCss442() {
     el.id = 'css442';
   }
   el.textContent = t;
-  document.head.appendChild(el); // toujours en dernier : il l’emporte sur les autres feuilles
+  document.head.appendChild(el); // always last: it overrides the other stylesheets
 }
 
 
@@ -85,10 +85,10 @@ COMPOSANTS CLÉS
 Après ton CSS, propose-moi 3 variantes de palette que je peux tester en changeant seulement le bloc « :root ».`;
 }
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Instructions run at startup, in the original order (see index.js).
 export function __init() {
 
-// panneau « Atelier design » : rendu par React (src/screens/settings/panels/AtelierDesign.jsx)
+// "Atelier design" (Design Workshop) panel: rendered by React (src/screens/settings/panels/DesignWorkshop.jsx)
 
 
 document.addEventListener('click', e => {

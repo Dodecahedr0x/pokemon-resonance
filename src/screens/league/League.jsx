@@ -5,12 +5,12 @@ import Badges from './Badges.jsx';
 import Arena from './Arena.jsx';
 import EliteCell from './EliteCase.jsx';
 
-// Page « Ligue » (#ligue) : boîte à badges, fiche de l'arène choisie, Conseil 4 et Champion.
-// Les clics restent gérés par le moteur (écouteurs sur #badges, #arena, data-chal).
+// "League" page (#ligue): badge case, chosen gym's sheet, Elite Four and Champion.
+// Clicks are still handled by the engine (listeners on #badges, #arena, data-chal).
 export default function League() {
   const ready = useEngineReady();
   const v = useLeagueVersion();
-  // v > 0 : renderLigue() a été appelé au moins une fois (étape « Ligue » du démarrage)
+  // v > 0: renderLeague() has been called at least once ("League" startup step)
   const on = ready && v > 0;
   return (
     <section className="page" id="ligue" aria-labelledby="h-lg">

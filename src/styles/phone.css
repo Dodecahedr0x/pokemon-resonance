@@ -1,7 +1,7 @@
-/* Passe téléphone (novembre 2026).
-   Chargée en dernier. Un seul jeu de valeurs pour tous les écrans hors combat :
-   texte 11 / 12.5 / 14 / 16 px, rayons 10 / 14 / 999 px, cibles tactiles de 44 px.
-   Les règles des couches précédentes sont souvent en !important : on les reprend ici. */
+/* Phone pass (November 2026).
+   Loaded last. A single set of values for all out-of-battle screens:
+   text 11 / 12.5 / 14 / 16 px, radii 10 / 14 / 999 px, 44 px touch targets.
+   The rules of the previous layers are often !important: we take them up again here. */
 
 :root{
   --t-xs:11px; --t-s:12.5px; --t-m:14px; --t-l:16px;
@@ -11,9 +11,9 @@
   --act-line:rgba(255,255,255,.1);
 }
 
-/* ================= Accueil : activités (toutes tailles) =================
-   Six bannières de six dessins différents deviennent une grille au même dessin ;
-   seule la pastille garde la couleur de l'activité. */
+/* ================= Home: activities (all sizes) =================
+   Six banners with six different designs become a grid with one design;
+   only the badge keeps the activity's color. */
 .act470{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0}
 html body .act470>button{display:flex!important;align-items:center;gap:10px!important;width:auto!important;min-width:0;min-height:60px;margin:0!important;padding:10px 12px!important;border-radius:var(--r-m)!important;border:1px solid var(--act-line)!important;background:var(--act-bg)!important;box-shadow:none!important;color:#EAF2F8;text-align:left;vertical-align:top}
 html body .act470>button>span:not([class$="-i"]){min-width:0;flex:1}
@@ -21,14 +21,14 @@ html body .act470>button b{display:block;font-size:var(--t-m)!important;line-hei
 html body .act470>button small{display:block;font-size:var(--t-xs)!important;line-height:1.35;color:#AFC2D2!important;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
 html body .act470 :is(.br466-i,.df468-i,.cd455-i){width:30px!important;height:30px!important;flex:none;font-size:13px}
 html body .act470 .sa465-i{flex:none}
-/* la saison (barre de progression) et le cadeau du jour prennent toute la largeur */
+/* the season (progress bar) and the daily gift take the full width */
 html body .act470>#sa465,html body .act470>#cd455{grid-column:1/-1}
 html body .act470>#cd455:not(.done){border-color:rgba(255,212,91,.55)!important;background:linear-gradient(135deg,rgba(255,212,91,.14),rgba(11,17,26,.92))!important}
 html body .act470>#br466 .br466-i{background:#FF8A7A}
 html body .act470>#x470 .df468-i{background:#7BE0A0}
 html body .act470>#x2470 .df468-i{background:#8FBFFF;color:#06142a}
 
-/* ================= Équipe : équipes enregistrées et formations repliables ================= */
+/* ================= Team: saved teams and collapsible formations ================= */
 .dex-call .dc-more{display:grid;gap:10px;min-width:0}
 .dex-call .dc-more>summary{display:flex;align-items:center;gap:8px;min-height:var(--tap);cursor:pointer;list-style:none;font-size:var(--t-s);font-weight:600;color:#C9D6E2;border-top:1px solid var(--act-line);padding-top:4px}
 .dex-call .dc-more>summary::-webkit-details-marker{display:none}
@@ -36,16 +36,16 @@ html body .act470>#x2470 .df468-i{background:#8FBFFF;color:#06142a}
 .dex-call .dc-more[open]>summary::after{transform:rotate(-135deg) translateY(-2px)}
 
 @media (max-width:700px){
-  /* ---------- Combats : la barre « Lancer » tient sur une ligne ---------- */
+  /* ---------- Battles: the "Launch" bar fits on one line ---------- */
   html body #cbPrep .pt-go{flex-wrap:nowrap!important;gap:10px!important;padding:8px 8px 8px 14px!important}
   html body #cbPrep .pt-go #ptVoix{flex:1;min-width:0}
   html body #cbPrep .pt-go #ptVoix b{font-size:var(--t-s)!important;letter-spacing:.06em!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   html body #cbPrep .pt-go #ptVoix span{font-size:var(--t-xs)!important}
   html body #cbPrep .pt-go #bLaunch{flex:none;height:var(--tap)!important;padding:0 16px!important}
-  /* « Prochaine étape » : posée dans la colonne de droite au lieu de chevaucher le titre */
+  /* "Next step": placed in the right column instead of overlapping the title */
   html body #cbPrep .srw .pill.nx{position:static!important;transform:none!important;white-space:normal;text-align:center;line-height:1.15;max-width:72px;font-size:10px!important;padding:3px 7px!important}
 
-  /* ---------- Équipe : barre de recherche ordonnée ---------- */
+  /* ---------- Team: tidy search bar ---------- */
   html body #pokedex .dexbar{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px!important;padding:10px!important}
   html body #pokedex .dexbar .srch,html body #pokedex .dexbar #genSeg{grid-column:1/-1}
   html body #pokedex .dexbar #genSeg{display:grid!important;grid-template-columns:repeat(4,1fr);width:auto!important}
@@ -53,17 +53,17 @@ html body .act470>#x2470 .df468-i{background:#8FBFFF;color:#06142a}
   html body #pokedex .dexbar select{width:100%!important;min-width:0!important;height:var(--tap);font-size:var(--t-s)!important;border-radius:var(--r-s)!important}
   html body #pokedex .dexbar .cnt{display:none!important}
 
-  /* ---------- Camp : sous-onglets sur une ligne qui défile ---------- */
+  /* ---------- Camp: sub-tabs on a single scrolling line ---------- */
   html body .ct431{flex-wrap:nowrap!important;overflow-x:auto;scrollbar-width:none;margin-inline:-16px!important;padding:6px 16px!important;-webkit-mask-image:linear-gradient(90deg,transparent,#000 16px,#000 calc(100% - 24px),transparent);mask-image:linear-gradient(90deg,transparent,#000 16px,#000 calc(100% - 24px),transparent)}
   html body .ct431 button{flex:none!important;height:40px!important;padding:0 16px!important;border-radius:var(--r-p)!important;font-size:var(--t-s)!important;white-space:nowrap}
   html body .ct431 button:last-child{margin-right:16px}
   html:not(#pkz) body:not(#pkz) .ct431 button[aria-selected="false"]{background:rgba(255,255,255,.06)!important;border:1px solid rgba(255,255,255,.12)!important;color:#D5DEE8!important}
 
-  /* ---------- en-têtes d'écran : même rythme partout ---------- */
+  /* ---------- screen headers: same rhythm everywhere ---------- */
   html body .page .ph{gap:6px!important;margin-bottom:16px!important}
   html body .page .ph .sub{font-size:var(--t-s)!important;line-height:1.5!important}
 
-  /* ---------- planchers communs : boutons et petits textes ---------- */
+  /* ---------- shared floors: buttons and small text ---------- */
   html body .page :is(.b-sm,.b.b-sm){min-height:40px}
   html body .page .lbl-s{font-size:var(--t-xs)!important}
   html body #pokedex :is(.stg b,.stg em,.types .tb,.fc-gen,.fc-st,.dc-s em){font-size:var(--t-xs)!important}

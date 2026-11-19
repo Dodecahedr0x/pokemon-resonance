@@ -7,9 +7,9 @@ import { medal, tc } from '../../engine/014-utils.js';
 import { badgeSvg } from '../../engine/019-league.js';
 import { squad } from '../../engine/020-team-cards.js';
 
-// Carte de dresseur (#campBox, ancien trainerCard). Masquée depuis la v4 (.hm-top.v4-off),
-// mais toujours tenue à jour.
-export default function CarteDresseur() {
+// Trainer card (#campBox, formerly trainerCard). Hidden since v4 (.hm-top.v4-off),
+// but still kept up to date.
+export default function TrainerCard() {
   const c = isCamp(),
     nm = PROFILE.name || 'Dresseur';
   return (

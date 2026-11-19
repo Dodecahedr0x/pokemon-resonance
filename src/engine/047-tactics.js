@@ -1,59 +1,60 @@
-/* Section d'origine : v4.8-01-tactique.js */
+/* Original section: v4.8-01-tactique.js */
 
 import { MV } from './005-moves.js';
 import { BY, SCEN } from './009-pokemon.js';
 import { PROFILE } from './011-game-state.js';
 import { medal } from './014-utils.js';
-import { CROCHETS } from './015-hooks.js';
+import { HOOKS } from './015-hooks.js';
 import { CDIR, K, P, affected, byUid, damage, flies, fromCube, hdist, inB, landed, mkUnit, nbrK, say, stun, targets, teff, toCube, uAt, uk } from './021-combat-engine.js';
 import { OBST, resolve, roleOf } from './023-roles-synergies-obstacles.js';
 import { HC, poly, scSel } from './024-combat-ui.js';
 import { PREF } from './026-campaign-tutorial-sound.js';
 import { SHOP } from './032-v4-foundation.js';
-import { FOURNISSEURS_DEGATS, FOURNISSEURS_ROLES } from './044-tactical-engine.js';
+import { DAMAGE_PROVIDERS, ROLE_PROVIDERS } from './044-tactical-engine.js';
 import { MACHINES } from './045-tms-hms.js';
 import { rune413 } from './052-technical-roster.js';
 import { danger420Svg } from './060-intense-combat.js';
 import { duelLoad433 } from './068-duel-tutorial.js';
 
-export let COLOSSES;
+export let COLOSSI;
 
 
 /* =====================================================================
-   v4.8 : tactique
+   v4.8: tactics
    ---------------------------------------------------------------------
-   1. Pièges posés sur les cases : Picots, Piège de Roc, Toile Gluante.
-      Un piège ne touche que le camp adverse. Il se déclenche quand un
-      adversaire s'arrête dessus (déplacement, poussée, Force, Tornade) ;
-      on ne peut pas le traverser sans s'y arrêter (sauf les volants).
-      Il dure 6 manches. L'IA évite les pièges et sait en poser.
-   2. Attaques chargées (« Tactique avancée ») : Lance-Soleil et Vol (CS02)
-      partent en fin de manche, après les adversaires.
-        - Lance-Soleil ×1,3, tout de suite sous le Soleil ; interrompu si
-          le lanceur est K.O., endormi, gelé ou paralysé entre-temps.
-        - Vol : le Pokémon est dans les airs pendant le tour adverse
-          (les attaques passent sous lui), puis fond sur sa cible.
-   3. Zones de contrôle (« Tactique avancée ») : entrer au contact d'un
-      adversaire arrête le déplacement. Exemptés : volants, Spectre,
-      Éclaireurs. Partir du contact reste libre.
-   4. Vent (avec le « Plateau vivant ») : voir v4.7-01. Le brouillard
-      dérive, le feu court 2 cases sous le vent, les attaques Vol font
-      ×1,2 dans le sens du vent et ×0,85 contre.
-   5. Colosses : Onix, Steelix et Léviator géants, sur 3 ou 4 cases.
-      Immobiles, mais leurs attaques portent 2 cases plus loin.
-      Le corps et la queue sont des cases à part entière : ils bloquent,
-      se visent, balaient les cases voisines. Chaque partie intacte donne
-      −3 dégâts au colosse (Carapace) ; briser une partie le blesse et le
-      fait vaciller (son attaque annoncée est annulée).
+   1. Traps placed on cells: Picots (Spikes), Piège de Roc (Stealth Rock),
+      Toile Gluante (Sticky Web). A trap only affects the opposing side.
+      It triggers when an opponent stops on it (movement, push, Force,
+      Tornade); it cannot be crossed without stopping on it (except by
+      flyers). It lasts 6 rounds. The AI avoids traps and knows how to
+      lay them.
+   2. Charged attacks ("Tactique avancée", Advanced Tactics): Lance-Soleil
+      and Vol (HM02) fire at the end of the round, after the opponents.
+        - Lance-Soleil ×1.3, instant under Sun; interrupted if the user
+          is K.O.'d, asleep, frozen or paralyzed in the meantime.
+        - Vol: the Pokémon is in the air during the opponent's turn
+          (attacks pass under it), then dives onto its target.
+   3. Control zones ("Tactique avancée"): moving into contact with an
+      opponent stops movement. Exempt: flyers, Ghost, Scouts. Leaving
+      contact stays free.
+   4. Wind (with the "Plateau vivant", Living Board): see v4.7-01. Fog
+      drifts, fire spreads 2 cells downwind, Flying attacks deal ×1.2
+      with the wind and ×0.85 against it.
+   5. Colossi: giant Onix, Steelix and Gyarados, spanning 3 or 4 cells.
+      Immobile, but their attacks reach 2 cells further.
+      The body and tail are full cells: they block, can be targeted, and
+      sweep the neighboring cells. Each intact part gives the colossus
+      −3 damage (Carapace); breaking a part hurts it and makes it
+      stagger (its announced attack is cancelled).
    ===================================================================== */
 
-/** Réglage « Tactique avancée » (Paramètres). Le combat guidé du prologue reste classique. */
+/** "Tactique avancée" setting (Settings). The guided prologue battle stays classic. */
 export function chosenTactic() {
   return PREF.tactique !== false && !(SCEN[scSel] && SCEN[scSel].tuto);
 }
 
 
-/** Profil : colosses vaincus. Fonctions déclarées : appelées dès le chargement de la partie. */
+/** Profile: defeated colossi. Declared functions: called as soon as the game loads. */
 export function TAC0() {
   return { colosses: [] };
 }
@@ -72,26 +73,26 @@ export function placeTrap(S, u, m, k, ev) {
     say(ev, 'Le piège ne tient pas ici.');
     return;
   }
-  t.trap = { k: m.piege, side: u.side, by: u.uid, d: PIEGE_DUREE };
-  say(ev, `${u.n} pose ${PIEGES[m.piege].n}.`);
+  t.trap = { k: m.piege, side: u.side, by: u.uid, d: TRAP_DURATION };
+  say(ev, `${u.n} pose ${TRAPS[m.piege].n}.`);
   ev.push({ e: 'terrain', k });
 }
 
 
-/** Un Pokémon s'arrête sur une case : piège adverse ? */
+/** A Pokémon stops on a cell: enemy trap? */
 export function trapArrival(S, v, ev) {
   if (!v || v.ko || v.seg) return;
   const k = uk(v),
     t = S.tiles[k],
     p = t && t.trap;
   if (!p || p.side === v.side) return;
-  const n = PIEGES[p.k].n;
+  const n = TRAPS[p.k].n;
   if (p.k === 'roc') {
     say(ev, `${n} : des pierres s’abattent sur ${v.n}.`);
     damage(S, v, Math.max(1, Math.round(4 * teff('Roche', v.t))), ev, { ind: true });
   } else if (flies(v)) {
     say(ev, `${v.n} survole ${n}.`);
-    return; // le piège reste
+    return; // the trap stays
   } else if (p.k === 'picots') {
     say(ev, `${n} : ${v.n} marche sur les pointes.`);
     damage(S, v, 5, ev, { ind: true });
@@ -100,13 +101,13 @@ export function trapArrival(S, v, ev) {
     v.web = Math.max(v.web, 2);
     say(ev, `${n} : ${v.n} est englué.`);
   }
-  if (p.side === 'a') S.stats.pieges = (S.stats.pieges || 0) + 1; // succès (v4.9)
+  if (p.side === 'a') S.stats.pieges = (S.stats.pieges || 0) + 1; // achievement (v4.9)
   t.trap = null;
   ev.push({ e: 'terrain', k });
 }
 
 
-/** L'IA : poser un piège quand elle n'a rien de mieux, ou dès le début du combat. */
+/** The AI: lay a trap when it has nothing better, or right at the start of the battle. */
 export function trapPlan(S, e, best, al) {
   const id = e.mv.find(x => MV[x] && MV[x].fx === 'piege');
   if (!id || e.seg || (best && !(S.round <= 2 && best.sc < 12))) return null;
@@ -126,7 +127,7 @@ export function trapPlan(S, e, best, al) {
 }
 
 
-/* ---------- 2. Attaques chargées ---------- */
+/* ---------- 2. Charged attacks ---------- */
 export function deferredCharge(S, u, m) {
   if (!S.tac || u.side !== 'a' || !m.charge) return false;
   return !(m.charge === 'soleil' && S.wx && S.wx.k === 'soleil');
@@ -146,7 +147,7 @@ export function launchCharge(S, u, mi, k) {
 }
 
 
-/** Une cible dans les airs : les attaques adverses passent sous elle. */
+/** A target in the air: enemy attacks pass under it. */
 export function outOfReach(S, v, u, ev) {
   if (v && v.vole && v.side !== u.side) {
     if (ev) say(ev, `${v.n} est dans les airs : l’attaque passe sous lui.`);
@@ -156,9 +157,9 @@ export function outOfReach(S, v, u, ev) {
 }
 
 
-export function dechargerCharges(S, ev) {
+export function unloadCharges(S, ev) {
   S.units
-    .filter(u => u.chg && duelLoad433(S, u)) // duel : après le tour adverse (v4.33)
+    .filter(u => u.chg && duelLoad433(S, u)) // duel: after the opponent's turn (v4.33)
     .forEach(u => {
       const c = u.chg,
         m = MV[c.mv],
@@ -171,7 +172,7 @@ export function dechargerCharges(S, ev) {
         return;
       }
       if (flying) {
-        // il fond sur sa cible et se pose sur une case libre voisine, la plus proche de son départ
+        // it dives onto its target and lands on a free neighboring cell, the closest to where it started
         const freeOnes = nbrK(c.k)
           .filter(x => S.tiles[x] && !S.tiles[x].rock && (!uAt(S, x) || uAt(S, x) === u))
           .sort((a, b) => hdist(P(a), u.pos) - hdist(P(b), u.pos));
@@ -181,14 +182,14 @@ export function dechargerCharges(S, ev) {
         }
         say(ev, `${u.n} fond sur sa cible !`);
         resolve(S, u, m, c.k).forEach(x => ev.push(x));
-        S.stats.vols = (S.stats.vols || 0) + 1; // succès (v4.9)
+        S.stats.vols = (S.stats.vols || 0) + 1; // achievement (v4.9)
         landed(S, u, ev);
       } else resolve(S, u, Object.assign({}, m, { p: Math.round(m.p * 1.3) }), c.k).forEach(x => ev.push(x));
     });
 }
 
 
-/* ---------- 3. Zones de contrôle et arrêts forcés (appelé par reach) ---------- */
+/* ---------- 3. Control zones and forced stops (called by reach) ---------- */
 function controlZone(S, u, k) {
   if (!S.tac || flies(u) || u.t.includes('Spectre') || roleOf(u) === 'Éclaireur' || u.colosse || u.seg) return false;
   const p = P(k);
@@ -196,14 +197,14 @@ function controlZone(S, u, k) {
 }
 
 
-/** Le déplacement s'arrête sur cette case (on peut y aller, pas la traverser). */
+/** Movement stops on this cell (you can go there, but not through it). */
 export function forceStop(S, u, k) {
   return (hostileTrap(S, u, k) && !flies(u)) || controlZone(S, u, k);
 }
 
 
-/* ---------- 4. Vent : outils (l'effet sur le plateau est dans v4.7-01) ---------- */
-/** La case voisine dans une direction (0 à 5), ou null au bord. */
+/* ---------- 4. Wind: tools (its effect on the board is in v4.7-01) ---------- */
+/** The neighboring cell in a direction (0 to 5), or null at the edge. */
 export function noWind(k, d) {
   const p = P(k),
     c = toCube(p[0], p[1]),
@@ -213,7 +214,7 @@ export function noWind(k, d) {
 }
 
 
-/** La direction (0 à 5) qui va le plus de a vers b. */
+/** The direction (0 to 5) that gets closest from a to b. */
 function dirToward(a, b) {
   const A = toCube(a[0], a[1]),
     B2 = toCube(b[0], b[1]),
@@ -242,7 +243,7 @@ export function chipWind(S) {
 }
 
 
-/** Dresse le colosse et ses parties à côté de lui (vers le fond du plateau). */
+/** Sets up the colossus and its parts next to it (toward the back of the board). */
 function makeColossus(S, u, x, D) {
   u.colosse = true;
   u.boss = true;
@@ -260,14 +261,14 @@ function makeColossus(S, u, x, D) {
 }
 
 
-/** Une partie brisée, ou le colosse à terre (appelé par damage). */
+/** A part is broken, or the colossus is down (called by damage). */
 export function colossusKO(S, v, ev) {
   if (v.seg) {
     S.stats.ko--;
     const b = byUid(S, v.of);
     if (!b || b.ko) return;
     say(ev, `${v.n} est brisé ! ${b.n} vacille.`);
-    S.stats.parts = (S.stats.parts || 0) + 1; // succès (v4.9)
+    S.stats.parts = (S.stats.parts || 0) + 1; // achievement (v4.9)
     damage(S, b, Math.round(b.mhp * 0.12), ev, { ind: true });
     if (!b.ko) stun(S, b, 'PAR', ev, true);
   } else if (v.colosse)
@@ -282,8 +283,8 @@ export function colossusKO(S, v, ev) {
 }
 
 
-/* ---------- à l'écran ---------- */
-/** Pièges, chargements et liens des colosses, dessinés avec les marques. */
+/* ---------- on screen ---------- */
+/** Traps, charges and colossus links, drawn with the markers. */
 export function tacticalDrawing(S, k, x, y) {
   const t = S.tiles[k];
   let h = '';
@@ -298,7 +299,7 @@ export function tacticalDrawing(S, k, x, y) {
     else
       h += `<g class="trap web" transform="translate(${X},${Y})" style="--c:${c}"><path d="M-10 0h20M0-8v16M-7-6l14 12M7-6l-14 12"/><circle r="4"/><circle r="7.5"/></g>`;
   }
-  h += danger420Svg(S, k, x, y); // dangers annoncés (v4.20)
+  h += danger420Svg(S, k, x, y); // announced dangers (v4.20)
   return h;
 }
 
@@ -317,7 +318,7 @@ export function linksColossi(S) {
 }
 
 
-/** Les cases que vise une attaque chargée d'un allié. */
+/** The cells targeted by an ally's charged attack. */
 export function chargesOnBoard(S) {
   let h = '';
   S.units.forEach(u => {
@@ -332,18 +333,18 @@ export function chargesOnBoard(S) {
 
 
 export function trapTip(p) {
-  return `${PIEGES[p.k].n} (${p.side === 'a' ? 'à vous' : 'adverse'}) : ${PIEGES[p.k].d}, encore ${p.d} manche${p.d > 1 ? 's' : ''}. On ne le traverse pas sans s’y arrêter`;
+  return `${TRAPS[p.k].n} (${p.side === 'a' ? 'à vous' : 'adverse'}) : ${TRAPS[p.k].d}, encore ${p.d} manche${p.d > 1 ? 's' : ''}. On ne le traverse pas sans s’y arrêter`;
 }
 
-/* ---------- 1. Pièges ---------- */
-const PIEGES = {
+/* ---------- 1. Traps ---------- */
+const TRAPS = {
   picots: { n: 'Picots', d: '5 dégâts au premier adversaire qui s’y arrête, sauf volants' },
   roc: { n: 'Piège de Roc', d: 'dégâts selon la faiblesse à la Roche, volants compris' },
   toile: { n: 'Toile Gluante', d: 'englue le premier adversaire qui s’y arrête (−3 Mouvement), sauf volants' }
 };
 
 
-const PIEGE_DUREE = 6;
+const TRAP_DURATION = 6;
 
 
 export const hostileTrap = (S, u, k) => {
@@ -352,19 +353,19 @@ export const hostileTrap = (S, u, k) => {
 };
 
 
-/* ---------- 5. Colosses ---------- */
+/* ---------- 5. Colossi ---------- */
 export const de = n => (/^[AEIOUYÉÈÊ]/i.test(n) ? 'd’' : 'de ') + n;
 
 
-const colossusOf = k => COLOSSES.find(C => C.k === k) || null;
+const colossusOf = k => COLOSSI.find(C => C.k === k) || null;
 
 
 const intactGames = (S, b) => S.units.filter(s => s.seg && s.of === b.uid && !s.ko).length;
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Statements run at startup, in the original order (see index.js).
 export function __init() {
 
-/* ---------- capacités ---------- */
+/* ---------- moves ---------- */
 Object.assign(MV, {
   picots: {
     n: 'Picots',
@@ -415,9 +416,9 @@ MV.lancesoleil.charge = 'soleil';
 MV.lancesoleil.d = 'Ligne de 3. ×1,5 sous le Soleil. Tactique avancée : part en fin de manche (×1,3), tout de suite sous le Soleil.';
 
 
-CROCHETS.avantFinManche.push((S, ev) => {
-  dechargerCharges(S, ev);
-  // usure des pièges
+HOOKS.avantFinManche.push((S, ev) => {
+  unloadCharges(S, ev);
+  // trap wear
   for (const k in S.tiles) {
     const t = S.tiles[k];
     if (t.trap && --t.trap.d <= 0) {
@@ -428,7 +429,7 @@ CROCHETS.avantFinManche.push((S, ev) => {
 });
 
 
-FOURNISSEURS_DEGATS.push({
+DAMAGE_PROVIDERS.push({
   id: 'vent',
   fournir: (c, { S, u, t, typ }) => {
     if (!S.vent || typ !== 'Vol' || !u.pos || !t.pos) return null;
@@ -440,7 +441,7 @@ FOURNISSEURS_DEGATS.push({
 });
 
 
-COLOSSES = [
+COLOSSI = [
   {
     k: 'co1',
     id: 'onix',
@@ -519,8 +520,8 @@ COLOSSES = [
 ].filter(C => BY[C.id] && C.escort.every(([e]) => BY[e]));
 
 
-COLOSSES.forEach(C => {
-  C.escort.forEach(([, , x]) => x && x.mv && (x.mv = x.mv.filter(m => MV[m]))); // capacités absentes : ignorées
+COLOSSI.forEach(C => {
+  C.escort.forEach(([, , x]) => x && x.mv && (x.mv = x.mv.filter(m => MV[m]))); // missing moves: ignored
   SCEN[C.k] = {
     n: C.n,
     lvl: `Colosse · ${C.title}`,
@@ -533,7 +534,7 @@ COLOSSES.forEach(C => {
     at: C.at,
     water: C.water,
     rock: C.rock,
-    hb: Math.round(C.hb / 4), // l'escorte
+    hb: Math.round(C.hb / 4), // the escort
     pb: Math.max(0, C.pb - 2),
     lv: C.lv,
     d: C.d,
@@ -543,7 +544,7 @@ COLOSSES.forEach(C => {
 });
 
 
-FOURNISSEURS_ROLES.push({
+ROLE_PROVIDERS.push({
   id: 'carapace',
   fournir: (c, { S, t }) => {
     if (!t.colosse) return null;
@@ -553,8 +554,8 @@ FOURNISSEURS_ROLES.push({
 });
 
 
-/* ---------- branchements sur le combat ---------- */
-CROCHETS.creation.push((S, opt, D0) => {
+/* ---------- hooks into the battle ---------- */
+HOOKS.creation.push((S, opt, D0) => {
   if (opt && opt.tactique) S.tac = true;
   (D0.foes || []).forEach(([, , x], i) => {
     const u = byUid(S, 'e' + i);
@@ -565,7 +566,7 @@ CROCHETS.creation.push((S, opt, D0) => {
 });
 
 
-CROCHETS.progres.push((S, rew, win) => {
+HOOKS.progres.push((S, rew, win) => {
   const C = colossusOf(S.sc);
   if (!C || !win) return null;
   PROFILE.colosses = PROFILE.colosses || [];
@@ -576,14 +577,14 @@ CROCHETS.progres.push((S, rew, win) => {
 });
 
 
-CROCHETS.resultat.push(r => {
+HOOKS.resultat.push(r => {
   if (!r.colosse) return '';
   const C = colossusOf(r.colosse);
-  return `<div class="res-l"><h4>Colosse</h4><div class="rl">${medal(BY[C.id].t)}<span>${C.n} terrassé · ${PROFILE.colosses.length} / ${COLOSSES.length} colosses</span><b>★</b></div></div>`;
+  return `<div class="res-l"><h4>Colosse</h4><div class="rl">${medal(BY[C.id].t)}<span>${C.n} terrassé · ${PROFILE.colosses.length} / ${COLOSSI.length} colosses</span><b>★</b></div></div>`;
 });
 
 
-/* ---------- CT, DT et CS en Boutique ---------- */
+/* ---------- TMs, DTs and HMs in the Shop ---------- */
 [
   ['ct76', { num: 'CT76', mv: 'piegederoc', p: 2500, types: ['Roche', 'Sol', 'Acier'] }],
   ['dt01', { num: 'DT01', mv: 'picots', p: 2000, types: ['Sol', 'Insecte', 'Poison', 'Acier'] }],

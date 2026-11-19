@@ -1,7 +1,7 @@
 import { PROFILE } from '../../engine/011-game-state.js';
-import { SUCCES } from '../../engine/048-replayability.js';
+import { ACHIEVEMENTS } from '../../engine/048-replayability.js';
 
-// Onglet « Succès » (v4.9) : un succès qui donne un titre peut être porté (data-titre, moteur).
+// « Succès » (Achievements) tab (v4.9): an achievement that grants a title can be worn (data-titre, engine).
 function Achievement1({ s }) {
   const ok = !!(PROFILE.succes && PROFILE.succes[s.id]),
     pr = !ok && s.p ? s.p() : null,
@@ -29,11 +29,11 @@ function Achievement1({ s }) {
 }
 
 export default function Achievement() {
-  const n = SUCCES.filter(s => PROFILE.succes && PROFILE.succes[s.id]).length;
+  const n = ACHIEVEMENTS.filter(s => PROFILE.succes && PROFILE.succes[s.id]).length;
   return (
     <>
-      <p className="v4-note">{n} / {SUCCES.length} succès. Ceux qui donnent un titre peuvent être portés : il s’affiche à côté de votre nom.</p>
-      {SUCCES.map(s => <Achievement1 key={s.id} s={s} />)}
+      <p className="v4-note">{n} / {ACHIEVEMENTS.length} succès. Ceux qui donnent un titre peuvent être portés : il s’affiche à côté de votre nom.</p>
+      {ACHIEVEMENTS.map(s => <Achievement1 key={s.id} s={s} />)}
     </>
   );
 }

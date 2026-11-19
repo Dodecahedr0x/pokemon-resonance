@@ -1,4 +1,4 @@
-/* Section d'origine : 4.59 : quêtes d’objets et trophées */
+/* Original section: 4.59: item quests and trophies */
 
 import { ITEMS2, PROFILE } from './011-game-state.js';
 import { BADGES } from './013-gyms.js';
@@ -8,10 +8,10 @@ import { SHOP, bagN, savePurse } from './032-v4-foundation.js';
 import { renderBag } from './039-quests-shop.js';
 import { seed417 } from './057-companions-resonance.js';
 import { reward454, txt454 } from './084-peddler-route-missions.js';
-import { add455, cdSt455, ctKeys455, canIn455 } from './088-workshop-recipes.js';
+import { add455, cdSt455, tmKeys455, canIn455 } from './088-workshop-recipes.js';
 
 let TROPH459;
-export { QO459, TROPH459 }; // lus par Boutique › Quêtes et Trophées (React, src/screens/sac/Atelier.jsx)
+export { QO459, TROPH459 }; // read by Shop › Quests and Trophies (React, src/screens/bag/Workshop.jsx)
 
 
 export function qoSt459() {
@@ -27,7 +27,7 @@ export function qoSt459() {
 
 
 export function qoIn459(q) {
-  /* besoins : les clés d’objets, et « ct » = une CT du Sac */
+  /* needs: the item keys, and "ct" = a TM from the Bag */
   const o = {};
   for (const k in q.in) if (k !== 'ct') o[k] = q.in[k];
   return o;
@@ -35,7 +35,7 @@ export function qoIn459(q) {
 
 
 export function qoOk459(q) {
-  return canIn455(qoIn459(q)) && (!q.in.ct || !!ctPos459());
+  return canIn455(qoIn459(q)) && (!q.in.ct || !!tmPos459());
 }
 
 
@@ -70,7 +70,7 @@ export function tpSt459() {
 }
 
 
-// Boutique › Quêtes et Trophées : rendus par React (src/screens/sac/Atelier.jsx)
+// Shop › Quests and Trophies: rendered by React (src/screens/bag/Workshop.jsx)
 
 const QO459 = [
   { id: 'q1', min: 0, qui: 'Infirmière Lise', txt: 'Une randonnée a mal tourné ce matin et la salle de soins est vide. Rapportez-moi de quoi remettre tout le monde sur pied.', in: { potion: 3 }, rew: { m: 800, b: { baiemepo: 1 } } },
@@ -89,9 +89,9 @@ const QO459 = [
 export const badgeCount459 = () => BADGES.length;
 
 
-const ctPos459 = () => ctKeys455().find(k => bagN(k) > 0);
+const tmPos459 = () => tmKeys455().find(k => bagN(k) > 0);
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Statements run at startup, in the original order (see index.js).
 export function __init() {
 
 document.addEventListener(
@@ -104,9 +104,9 @@ document.addEventListener(
     const q = QO459.find(x => x.id === b.dataset.qo459),
       S = qoSt459();
     if (!q || S.done[q.id] || badgeCount459() < q.min || !qoOk459(q)) return;
-    const ct = q.in.ct ? ctPos459() : null;
+    const tm = q.in.ct ? tmPos459() : null;
     add455(qoIn459(q), -1);
-    if (ct) add455({ [ct]: 1 }, -1);
+    if (tm) add455({ [tm]: 1 }, -1);
     const r = q.rew;
     reward454({ m: r.m, g: r.g, b: r.b });
     let extra = '';
@@ -116,8 +116,8 @@ document.addEventListener(
       extra = ITEMS2[r.item].n;
     }
     if (r.ct) {
-      const pool = ctKeys455().filter(k => !bagN(k)),
-        all = pool.length ? pool : ctKeys455(),
+      const pool = tmKeys455().filter(k => !bagN(k)),
+        all = pool.length ? pool : tmKeys455(),
         k = all[seed417('qo' + q.id) % all.length];
       PROFILE.bag[k] = Math.min(99, bagN(k) + 1);
       extra = (extra ? extra + ' + ' : '') + SHOP[k].n;
@@ -134,7 +134,7 @@ document.addEventListener(
 );
 
 
-/* ---------- boîte de trophées ---------- */
+/* ---------- trophy box ---------- */
 TROPH459 = [
   { id: 't1', t: 'Collection d’objets tenus', n: 5, v: () => PROFILE.items.length, g: 1 },
   { id: 't2', t: 'Collection d’objets tenus', n: 10, v: () => PROFILE.items.length, g: 2 },

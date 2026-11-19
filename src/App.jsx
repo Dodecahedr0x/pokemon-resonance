@@ -4,8 +4,8 @@ import LaunchScreen from './components/LaunchScreen.jsx';
 import Shell from './components/Shell.jsx';
 import { setEngineReady as signalEngineReady } from './engineReady.js';
 
-// Le moteur est chargé après le premier rendu ; les écrans relisent son état et se
-// redessinent par leurs stores (useEngineReady, …Store.js), pas par l'état d'App.
+// The engine is loaded after the first render; screens re-read its state and
+// redraw through their stores (useEngineReady, …Store.js), not through App's state.
 export default function App() {
   const [engineReady, setEngineReady] = useState(false);
 

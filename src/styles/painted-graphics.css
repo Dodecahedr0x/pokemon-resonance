@@ -16,7 +16,7 @@ html body #bBoard.tilt477.has-lava477 #bSvg .tx.lava{fill:url(#tx-lava);opacity:
 #bBoard.tilt477 #bSvg .gl{stroke:rgba(255,248,220,.10)}
 #bBoard.tilt477 #bSvg .deco471,#bBoard.tilt477 #bSvg .tuft,#bBoard.tilt477 #bSvg .pebble,#bBoard.tilt477 #bSvg .field{display:none}
 #bBoard.tilt477 .lip477 polygon{fill:#2a1d12;stroke:rgba(0,0,0,.35);stroke-width:.6}
-/* jetons debout : anneaux couchés sur le sol, l'illustration se tient dessus */
+/* standing tokens: rings lying on the ground, the illustration stands on them */
 #bBoard.tilt477 #bSvg .tok .tok-rdy,#bBoard.tilt477 #bSvg .tok .tok-halo,#bBoard.tilt477 #bSvg .tok .hp-bg,#bBoard.tilt477 #bSvg .tok .tok-ring,#bBoard.tilt477 #bSvg .tok .tok-rim{transform:translateY(8px) scale(1.12,.52)}
 #bBoard.tilt477 #bSvg .tok .hp-arc{transform:translateY(8px) scale(1.12,.52) rotate(-90deg)}
 #bBoard.tilt477 #bSvg .tok .tok-ring{fill-opacity:.38}
@@ -36,7 +36,7 @@ html body #bSvg .nmw477.ally .tok-nm{fill:#a9d0ff!important}
 #bBoard.tilt477{isolation:isolate}
 #bBoard.tilt477 .fondu477{position:absolute;inset:0;z-index:-1;pointer-events:none;border-radius:inherit;background-size:cover;background-position:center 34%;background-repeat:no-repeat;transition:opacity 1.8s ease}
 #bBoard.tilt477 .fondu477.va{opacity:0}
-/* animations des Pokémon debout */
+/* animations of the standing Pokémon */
 #bBoard.tilt477 #bSvg .tok:not(.lunge429):not(.hurt429):not(.ko) .tok-b{animation:none}
 #bBoard.tilt477 #bSvg .tok-st477{transform-origin:0 11px;animation:vie477 3.4s ease-in-out infinite}
 @keyframes vie477{0%,100%{transform:translateY(0) scale(1,1)}50%{transform:translateY(-1.4px) scale(.985,1.03)}}

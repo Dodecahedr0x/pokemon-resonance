@@ -1,6 +1,6 @@
 import { isCamp } from '../../../engine/011-game-state.js';
 
-// Mode de jeu (modeHtml430). Le moteur gère data-mode430 (avec confirmation) et data-v4saves.
+// Game mode (modeHtml430). The engine handles data-mode430 (with confirmation) and data-v4saves.
 export default function GameMode() {
   const c = isCamp();
   return (

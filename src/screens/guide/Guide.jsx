@@ -11,8 +11,8 @@ import Tutorial from './Tutorial.jsx';
 import Universe from './Universe.jsx';
 import Tip from '../../components/Tip.jsx';
 
-// Onglets visibles, dans l'ordre de la barre (« Projet » n'a pas d'onglet : on l'ouvre par lien).
-const ONGLETS = [
+// Visible tabs, in bar order ("Projet" (Project) has no tab: it is opened via a link).
+const TAB_LIST = [
   ['debuter', 'Débuter'],
   ['tuto433', 'Tutoriel'],
   ['bases', 'Combat'],
@@ -22,8 +22,8 @@ const ONGLETS = [
   ['univers', 'Univers'],
 ];
 
-// Panneaux, dans l'ordre du DOM. `lazy` : rendu seulement une fois l'onglet ouvert.
-const PANNEAUX = [
+// Panels, in DOM order. `lazy`: rendered only once the tab is opened.
+const PANELS = [
   { k: 'tuto433', C: Tutorial, lazy: true },
   { k: 'debuter', C: GettingStarted },
   { k: 'bases', C: Bases },
@@ -34,7 +34,7 @@ const PANNEAUX = [
   { k: 'projet', C: Projet },
 ];
 
-// Écran Guide (#types). La classe « on » de la section est posée par la navigation du moteur.
+// Guide screen (#types). The section's "on" class is set by the engine's navigation.
 export default function Guide() {
   const ready = useEngineReady();
   const { tab } = useGuide();
@@ -52,13 +52,13 @@ export default function Guide() {
       </div>
       <Tip t="types" />
       <div className="gd-tabs" role="tablist" aria-label="Rubriques du guide">
-        {ONGLETS.map(([k, label]) => (
+        {TAB_LIST.map(([k, label]) => (
           <button key={k} type="button" role="tab" className="gd-t" aria-selected={String(tab === k)} onClick={() => setGuideTab(k)}>
             {label}
           </button>
         ))}
       </div>
-      {PANNEAUX.map(({ k, C, lazy }) => (
+      {PANELS.map(({ k, C, lazy }) => (
         <div key={k} className="gd-p" data-gp={k} role="tabpanel" hidden={tab !== k}>
           {ready && (!lazy || openItems.has(k) || tab === k) && <C />}
         </div>

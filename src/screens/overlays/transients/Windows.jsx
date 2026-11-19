@@ -1,8 +1,8 @@
-// Petites fenêtres « hp452 » (cadre commun : titre, bouton ×, corps .hp452-b).
-// Les clics restent dans le moteur (écouteurs délégués data-b452, data-ev454…) ; le clic
-// sur le fond est posé par le moteur sur le nœud renvoyé par overlay().
+// Small « hp452 » windows (shared frame: title, × button, .hp452-b body).
+// Clicks stay in the engine (delegated listeners data-b452, data-ev454…); the click
+// on the backdrop is set by the engine on the node returned by overlay().
 
-// Cadre commun. `k` : nom de l'attribut data-… du bouton de fermeture.
+// Shared frame. `k`: name of the close button's data-… attribute.
 export function Window({ id, tid, k, titre: heading, children }) {
   return (
     <div id={id} className="hp452">
@@ -17,7 +17,7 @@ export function Window({ id, tid, k, titre: heading, children }) {
   );
 }
 
-// Bouton de choix (.ev454-c) : libellé, détail (<small>) si `eff` n'est pas null.
+// Choice button (.ev454-c): label, detail (<small>) if `eff` is not null.
 function Choice({ k, v, ok = true, l, eff = null }) {
   return (
     <button type="button" className="ev454-c" {...{ ['data-' + k]: v }} disabled={!ok}>
@@ -27,7 +27,7 @@ function Choice({ k, v, ok = true, l, eff = null }) {
   );
 }
 
-// Aide du combat (#hp452, v4.52 · aide452 dans 082).
+// Battle help (#hp452, v4.52 · Help452 in 082).
 export function Help452({ d }) {
   return (
     <Window id="hp452" tid="hp452t" k="b452" titre="Aide du combat">
@@ -68,7 +68,7 @@ export function Help452({ d }) {
   );
 }
 
-// Rencontre sur la route (#evs454, v4.54) ; `res` : issue après un choix (evPick454).
+// Encounter on the route (#evs454, v4.54); `res`: outcome after a choice (evPick454).
 export function Ev454({ d }) {
   return (
     <Window id="evs454" tid="evt454" k="ev454" titre={d.t}>
@@ -88,7 +88,7 @@ export function Ev454({ d }) {
   );
 }
 
-// Lieu secret de la carte (#sc460, v4.60).
+// Secret place on the map (#sc460, v4.60).
 export function Sc460({ d }) {
   return (
     <Window id="sc460" tid="sct460" k="sc460" titre={d.n}>
@@ -99,8 +99,8 @@ export function Sc460({ d }) {
   );
 }
 
-// Personnage de passage (#pn460, v4.60) ; `res` : réponse après un choix (pnPick460).
-export function Pn460({ d }) {
+// Passing character (#pn460, v4.60); `res`: reply after a choice (pnPick460).
+export function Npc460({ d }) {
   return (
     <Window id="pn460" tid="pnt460" k="pn460" titre={d.n}>
       {d.res != null ? (
@@ -118,7 +118,7 @@ export function Pn460({ d }) {
   );
 }
 
-// Souvenirs du compagnon (#souv461, v4.61) : un souvenir par cœur.
+// Companion keepsakes (#souv461, v4.61): one keepsake per heart.
 export function Souv461({ d }) {
   return (
     <Window id="souv461" tid="souvt461" k="cp461" titre={'Souvenirs de ' + d.n}>
@@ -135,7 +135,7 @@ export function Souv461({ d }) {
   );
 }
 
-// Événement saisonnier du mois (#sa465o, v4.65).
+// Monthly seasonal event (#sa465o, v4.65).
 export function Sa465({ d }) {
   return (
     <Window id="sa465o" tid="sat465" k="sa465" titre={d.n}>
@@ -155,7 +155,7 @@ export function Sa465({ d }) {
   );
 }
 
-// Boss Rush (#br466o, v4.66) : verrouillé, avant un run, ou run en cours.
+// Boss Rush (#br466o, v4.66): locked, before a run, or run in progress.
 export function Br466({ d }) {
   return (
     <Window id="br466o" tid="brt466" k="br466" titre="Boss Rush">
@@ -185,7 +185,7 @@ export function Br466({ d }) {
   );
 }
 
-// Arène de défense (#df468o, v4.68).
+// Defense gym (#df468o, v4.68).
 export function Df468({ d }) {
   return (
     <Window id="df468o" tid="dft468" k="df468" titre="Arène de défense">
@@ -196,7 +196,7 @@ export function Df468({ d }) {
   );
 }
 
-// Hub « Défis » (#x470o, v4.71 · 103). Les retours à la ligne du gabarit d'origine sont gardés.
+// « Défis » (Challenges) hub (#x470o, v4.71 · 103). The original template's line breaks are kept.
 export function X470({ d }) {
   const nl = '\n';
   return (
@@ -234,7 +234,7 @@ export function X470({ d }) {
   );
 }
 
-// Hub « Plus de défis » (#x2470o, v4.71 · 104). Retours à la ligne du gabarit d'origine gardés.
+// « Plus de défis » (More challenges) hub (#x2470o, v4.71 · 104). Original template's line breaks kept.
 export function X2470({ d }) {
   const nl = '\n';
   return (

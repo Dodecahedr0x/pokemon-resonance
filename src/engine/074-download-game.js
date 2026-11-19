@@ -1,13 +1,13 @@
-/* Section d'origine : v4.41 : télécharger le jeu (pour le modifier avec un autre outil) */
+/* Original section: v4.41: download the game (to edit it with another tool) */
 
 import { toast } from './014-utils.js';
 import { SV } from './025-saves.js';
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Instructions run at startup, in the original order (see index.js).
 export function __init() {
 
-/* Paramètres › « Télécharger le jeu » : le fichier HTML complet, servi à côté de la page. */
-// panneau « Télécharger le jeu » : rendu par React (src/screens/settings/panels/TelechargerJeu.jsx)
+/* Settings › "Download the game": the complete HTML file, served next to the page. */
+// "Download the game" panel: rendered by React (src/screens/settings/panels/DownloadGame.jsx)
 
 
 document.addEventListener('click', async e => {

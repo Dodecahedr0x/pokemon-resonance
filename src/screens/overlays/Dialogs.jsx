@@ -10,8 +10,8 @@ import Safari418 from './Safari418.jsx';
 import Conf430 from './Conf430.jsx';
 import { PkBadge, PkBtr, PkIris, Tr448 } from './Effects.jsx';
 
-// Fenêtres et couches d'effet que le moteur ajoutait à la fin de <body>, dans l'ordre
-// d'origine. #conf430 et #tr448 n'existaient qu'une fois créés (premier appel), donc après.
+// Windows and effect layers that the engine appended to the end of <body>, in the original
+// order. #conf430 and #tr448 only existed once created (first call), hence after.
 export default function Dialogs() {
   return (
     <>

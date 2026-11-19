@@ -1,11 +1,11 @@
-/* Section d'origine : 05-etat-de-partie.js */
+/* Original section: 05-game-state.js */
 
 import { BY } from './009-pokemon.js';
 import { ECO0, ecoClean } from './032-v4-foundation.js';
 import { APLUS0, aplusClean } from './043-adventure-plus.js';
-import { CT0, ctClean } from './045-tms-hms.js';
+import { TM0, tmClean } from './045-tms-hms.js';
 import { TAC0, tacClean } from './047-tactics.js';
-import { REJ0, rejClean } from './048-replayability.js';
+import { REPLAY0, replayClean } from './048-replayability.js';
 import { IDP0, idpClean } from './049-identity.js';
 import { MON0, monClean } from './050-world.js';
 import { V416_0, v416Clean } from './055-living-johto.js';
@@ -24,29 +24,29 @@ import { V435_0, v435Clean } from './071-hoenn-legendaries.js';
 export let LINK_T, LINK_N, PROFILE;
 export function __set_PROFILE(v) { return (PROFILE = v); }
 
-/* Sections du profil ajoutées par les versions : [valeurs par défaut, nettoyage d'une
-   sauvegarde]. L'ordre fixe celui des clés dans la sauvegarde : n'ajouter qu'à la fin.
-   (fonctions hoistées : la table peut être construite avant l'évaluation de leurs modules) */
-export const SECTIONS_PROFIL = [
-  [ECO0, ecoClean], // porte-monnaie, Sac, quêtes
-  [APLUS0, aplusClean], // chromatiques, rival, légendes, Tour (v4.4)
-  [CT0, ctClean], // capacités apprises par CT et CS (v4.6)
-  [TAC0, tacClean], // colosses vaincus (v4.8)
-  [REJ0, rejClean], // succès, titre, défis (v4.9)
-  [IDP0, idpClean], // camp et expéditions (v4.10)
-  [MON0, monClean], // Team Dissonance, cadeaux de saison (v4.11)
-  [V416_0, v416Clean], // Johto vivant : histoire, bêtes, Pension, amis (v4.16)
-  [V417_0, v417Clean], // compagnon, scènes, potager, tournoi (v4.17)
-  [V418_0, v418Clean], // pêche, Parc Safari (v4.18)
+/* Profile sections added by the versions: [default values, save
+   cleanup]. The order fixes the key order in the save: only append at the end.
+   (hoisted functions: the table can be built before their modules are evaluated) */
+export const PROFILE_SECTIONS = [
+  [ECO0, ecoClean], // wallet, Bag, quests
+  [APLUS0, aplusClean], // shinies, rival, legends, Tower (v4.4)
+  [TM0, tmClean], // moves learned through TM and HM (v4.6)
+  [TAC0, tacClean], // colossi defeated (v4.8)
+  [REPLAY0, replayClean], // achievements, title, challenges (v4.9)
+  [IDP0, idpClean], // camp and expeditions (v4.10)
+  [MON0, monClean], // Team Dissonance, seasonal gifts (v4.11)
+  [V416_0, v416Clean], // living Johto: story, beasts, Daycare, friends (v4.16)
+  [V417_0, v417Clean], // companion, scenes, vegetable garden, tournament (v4.17)
+  [V418_0, v418Clean], // fishing, Safari Park (v4.18)
   [V419_0, v419Clean], // Hoenn (v4.19)
-  [V421_0, v421Clean], // capture partout (v4.21)
-  [V428_0, v428Clean], // diplômes régionaux (v4.28)
-  [V429_0, v429Clean], // astuces, rival, défi de la semaine (v4.29)
-  [V430_0, v430Clean], // doctrine, journal tactique (v4.30)
-  [V431_0, v431Clean], // énigmes, maîtrise, Écho profond, arènes (v4.31)
-  [V432_0, v432Clean], // nature et talent, équipes, Panthéon (v4.32)
-  [V433_0, v433Clean], // duel et tutoriel (v4.33)
-  [V435_0, v435Clean] // légendes de Hoenn (v4.38)
+  [V421_0, v421Clean], // catching everywhere (v4.21)
+  [V428_0, v428Clean], // regional diplomas (v4.28)
+  [V429_0, v429Clean], // tips, rival, weekly challenge (v4.29)
+  [V430_0, v430Clean], // doctrine, tactical log (v4.30)
+  [V431_0, v431Clean], // riddles, mastery, Deep Echo, arenas (v4.31)
+  [V432_0, v432Clean], // nature and ability, squads, Pantheon (v4.32)
+  [V433_0, v433Clean], // duel and tutorial (v4.33)
+  [V435_0, v435Clean] // Hoenn legends (v4.38)
 ];
 
 export function defProfile() {
@@ -74,11 +74,11 @@ export function defProfile() {
       forms: [],
       ranks: {}
     },
-    ...SECTIONS_PROFIL.map(([defaultValue]) => defaultValue())
+    ...PROFILE_SECTIONS.map(([defaultValue]) => defaultValue())
   );
 }
 
-/* ===================== ÉTAT DE PARTIE (v1.0) ===================== */
+/* ===================== GAME STATE (v1.0) ===================== */
 export const ITEMS2 = {
   ceinture: { n: 'Ceinture Force', d: 'Survit une fois à un coup fatal avec 1 PV.', i: 'M3 10h18v4H3ZM10 8.5h4v7h-4Z' },
   restes: {
@@ -122,7 +122,7 @@ export const STARTERS = ['bulbizarre', 'salameche', 'carapuce', 'germignon', 'he
 
 export const CAMP_START = ['magicarpe', 'metamorph', 'chenipan'];
 
- // v4.13 : Métamorph remplace Roucool
+ // v4.13: Ditto replaces Pidgey
 
 
 export const DIFFS = { facile: 'Facile', normal: 'Normal', expert: 'Expert' };
@@ -134,7 +134,7 @@ export const isCamp = () => PROFILE.mode === 'campagne';
 export const inBox = id => {
   const m = BY[id];
   if (!m) return false;
-  return PROFILE.box.includes(m.base); // Libre aussi : on capture (v4.21)
+  return PROFILE.box.includes(m.base); // Also free: we catch (v4.21)
 };
 
 
@@ -149,7 +149,7 @@ export const linkPts = (a, b) => PROFILE.links[pairKey(a, b)] || 0;
 
 export const lvlOfPts = v => (v >= LINK_T[2] ? 3 : v >= LINK_T[1] ? 2 : v >= LINK_T[0] ? 1 : 0);
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Statements run at startup, in the original order (see index.js).
 export function __init() {
 
 LINK_T = [2, 5, 9],

@@ -1,4 +1,4 @@
-/* Section d'origine : v4.1-03-finitions.js */
+/* Original section: v4.1-03-finitions.js */
 
 let RX_P, RX_G;
 
@@ -23,12 +23,12 @@ export function fixTree(root) {
   while ((n = w.nextNode())) fixText(n);
 }
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Statements run at startup, in the original order (see index.js).
 export function __init() {
 
 /* =====================================================================
-   v4.1 · finitions : typographie française (pas de « ! » ou « ? »
-   orphelin en début de ligne) sur tout ce qui s'affiche.
+   v4.1 · finishing touches: French typography (no orphan "!" or "?"
+   at the start of a line) on everything that is displayed.
    ===================================================================== */
 RX_P = /(\S) ([!?:;»%])/g,
   RX_G = /« /g;
@@ -40,7 +40,7 @@ RX_P = /(\S) ([!?:;»%])/g,
   new MutationObserver(ms => {
     for (const m of ms) {
       if (m.type === 'characterData') q.add(m.target);
-      // v4.76 : les lettres du texte qui s’écrit (déjà corrigé) ne sont pas repassées une à une
+      // v4.76: the letters of the typed-out text (already fixed) are not reprocessed one by one
       else m.addedNodes.forEach(x => {
         if (x.nodeType === 1 && x.classList && x.classList.contains('pk-tw')) return;
         q.add(x);
@@ -57,7 +57,7 @@ RX_P = /(\S) ([!?:;»%])/g,
 }
 
 
-/* hors ligne : une image qui ne charge pas disparaît proprement (pas d'icône cassée) */
+/* offline: an image that fails to load disappears cleanly (no broken icon) */
 document.addEventListener(
   'error',
   e => {

@@ -24,9 +24,9 @@ import ActionReplay from './panels/ActionReplay.jsx';
 import DownloadGame from './panels/DownloadGame.jsx';
 import WorkshopDesign from './panels/DesignWorkshop.jsx';
 
-// Panneaux, dans l'ordre où l'ancien jeu les affichait : d'abord ceux ajoutés par les versions
-// successives (insérés en tête), puis les réglages de base, puis les outils.
-const PANNEAUX = [
+// Panels, in the order the old game displayed them: first those added by the
+// successive versions (inserted at the top), then the base settings, then the tools.
+const PANELS = [
   BattleDisplay, Immersion, PokemonSkin, TrainerJournal, Avatar, SecretPlaces,
   BoardGimmicks, FeatsJournal, Chronicles, Offline, Nuzlocke, BoardThemes, CaptureTiming,
   Trainer, GameMode, Sound, Combat, CampaignChallenges, Phone, Accessibility, ActionReplay,
@@ -38,15 +38,15 @@ function Content() {
     <>
       <div className="ph v4-ph-page"><p className="kick">Réglages</p><h1 className="h1" id="h-params">Paramètres</h1><p className="sub">Réglages de cet appareil et de votre partie.</p></div>
       <div className="v4-params">
-        {PANNEAUX.map((P, i) => <P key={i} />)}
+        {PANELS.map((P, i) => <P key={i} />)}
       </div>
     </>
   );
 }
 
-// Page Paramètres (#params). Rien n'est rendu avant le premier renderParams() du moteur
-// (premier affichage de la page). Ensuite, chaque renderParams() reconstruit le contenu :
-// les champs sont non contrôlés et les gestionnaires restent dans le moteur (délégation).
+// Settings page (#params). Nothing is rendered before the engine's first renderParams()
+// (first display of the page). After that, each renderParams() rebuilds the content:
+// the fields are uncontrolled and the handlers stay in the engine (delegation).
 export default function Settings() {
   const ready = useEngineReady();
   const version = useSettingsVersion();

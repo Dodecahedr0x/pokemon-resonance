@@ -1,4 +1,4 @@
-/* Section d'origine : 13-equipe-cartes.js */
+/* Original section: 13-equipe-cartes.js */
 
 import { CHAINS, EL, MX, ROLES } from './004-data.js';
 import { MV } from './005-moves.js';
@@ -17,7 +17,7 @@ import { renderHome } from './036-home.js';
 import { artTag } from './041-illustrations.js';
 import { challengeRefusal } from './048-replayability.js';
 import { expRefusal } from './049-identity.js';
-import { REGN421, captureSite421, regFam421 } from './061-catch-anywhere.js';
+import { REGION_NAMES421, captureSite421, regFam421 } from './061-catch-anywhere.js';
 import { hideSheet, refreshFilters, refreshGrid, refreshTeam, showSheet } from '../screens/team/teamStore.js';
 
 export let squad, filt, openId, gen;
@@ -181,7 +181,7 @@ export function analyze() {
 }
 
 
-// Familles visibles avec les filtres en cours (lu par la grille React).
+// Families visible with the current filters (read by the React grid).
 export function visible() {
   const qq = norm(q);
   return RECRUIT.filter(m => {
@@ -196,13 +196,13 @@ export function visible() {
 }
 
 
-// Grille, compteur et encart des recrues : rendus par React (src/screens/equipe/Grille.jsx, DexCall.jsx).
+// Grid, counter and recruit inset: rendered by React (src/screens/team/Grid.jsx, DexCall.jsx).
 export function renderGrid() {
   refreshGrid();
 }
 
 
-// Filtres de rôle et de génération : rendus par React (src/screens/equipe/Equipe.jsx).
+// Role and generation filters: rendered by React (src/screens/team/Team.jsx).
 export function renderFilters() {
   refreshFilters();
   const r = $('#dexRole');
@@ -210,7 +210,7 @@ export function renderFilters() {
 }
 
 
-// Dock, bandeaux d'équipe et analyse : rendus par React (src/screens/equipe/Dock.jsx, Analyse.jsx).
+// Dock, team banners and analysis: rendered by React (src/screens/team/Dock.jsx, Analysis.jsx).
 function renderTeam() {
   refreshTeam();
 }
@@ -237,10 +237,10 @@ export function toggle(id, card) {
     return;
   }
   if (!inBox(id)) {
-    toast(`${BY[m.base].n} n’est pas dans votre Box : ${captureSite421(id) ? `capturez-en un sur la ${captureSite421(id)} (${REGN421[regFam421(id)]})` : 'capturez-en un dans les hautes herbes'}.`);
+    toast(`${BY[m.base].n} n’est pas dans votre Box : ${captureSite421(id) ? `capturez-en un sur la ${captureSite421(id)} (${REGION_NAMES421[regFam421(id)]})` : 'capturez-en un dans les hautes herbes'}.`);
     return;
   }
-  const dr = challengeRefusal(id) || expRefusal(id); // défis de campagne (v4.9), expéditions (v4.10)
+  const dr = challengeRefusal(id) || expRefusal(id); // campaign challenges (v4.9), expeditions (v4.10)
   if (dr) {
     toast(dr);
     return;
@@ -280,7 +280,7 @@ export function crestSmall(m) {
   const svg = `<svg viewBox="0 0 200 200" aria-hidden="true"><defs><radialGradient id="${gid}" cx="38%" cy="30%" r="75%"><stop offset="0" style="stop-color:color-mix(in srgb,${a} 45%,#fff)"/><stop offset=".3" stop-color="${a}"/><stop offset="1" style="stop-color:color-mix(in srgb,${a} 50%,#000)"/></radialGradient><linearGradient id="${gid}r" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F7E1AC"/><stop offset=".4" stop-color="#B68D48"/><stop offset=".65" stop-color="#F0D59C"/><stop offset="1" stop-color="#6B4F22"/></linearGradient></defs>
   <g class="cr-spin" style="transform-origin:100px 100px">${ticks}</g><circle class="cr-costbg" cx="100" cy="100" r="84"/><circle class="cr-cost" cx="100" cy="100" r="84" transform="rotate(-90 100 100)" stroke-dasharray="${((Lc * m.c) / 4 - 5).toFixed(1)} ${Lc.toFixed(1)}"/>
   <circle cx="100" cy="100" r="69" fill="url(#${gid}r)"/><circle cx="100" cy="100" r="65" fill="#0B0D12"/><circle cx="100" cy="100" r="62" fill="url(#${gid})"/><circle cx="100" cy="100" r="62" fill="none" stroke="rgba(255,255,255,.28)"/><path d="${gp(m.t[0])}" transform="translate(70 70) scale(2.5)" fill="${INK}" fill-rule="evenodd"/><ellipse cx="86" cy="72" rx="30" ry="13" transform="rotate(-24 86 72)" fill="rgba(255,255,255,.22)"/></svg>`;
-  return `<span class="crest-pk pk">${svg}${artTag(m, 'crest-a')}</span>`; // l’illustration au centre du blason
+  return `<span class="crest-pk pk">${svg}${artTag(m, 'crest-a')}</span>`; // the illustration at the center of the crest
 }
 
 
@@ -290,14 +290,14 @@ export function branchNote(a, b) {
     const k = Object.keys(EEVEE).find(x => EEVEE[x] === b);
     return 'au choix · harmonie : ' + (k === 'jour' ? 'le jour' : k === 'nuit' ? 'la nuit' : `case ${markOf(k).n}`); // v4.34
   }
-  const br = (BRANCHES[a] || []).find(x => x.id === b); // v4.13 : condition de la voie
+  const br = (BRANCHES[a] || []).find(x => x.id === b); // v4.13: path condition
   if (br) return /^PV/.test(br.why) ? br.why : br.why[0].toLowerCase() + br.why.slice(1);
   if (Array.isArray(A.nx)) return b === A.nx[1] ? 'appelle la pluie' : 'combattant';
   return '';
 }
 
 
-// Fiche d'un Pokémon : contenu rendu par React (src/screens/equipe/Fiche.jsx).
+// A Pokémon's sheet: content rendered by React (src/screens/team/Sheet.jsx).
 export function openSheet(id, refresh) {
   const sh = $('#sh'),
     closed = $('#sheet').hidden;
@@ -323,7 +323,7 @@ function closeSheet() {
 }
 
 
-/* v1.0 : objets tenus, fatigue, Liens dans le Pokédex */
+/* v1.0: held items, fatigue, Bonds in the Pokédex */
 function equip(id, it) {
   if (it && !ownedItems().includes(it)) return;
   for (const k in PROFILE.equip) if (PROFILE.equip[k] === it) delete PROFILE.equip[k];
@@ -335,7 +335,7 @@ function equip(id, it) {
 }
 
 
-/* ===================== POKÉDEX & ÉQUIPE v0.8 : cartes de famille ===================== */
+/* ===================== POKÉDEX & TEAM v0.8: family cards ===================== */
 export const STLN = ['PV', 'Puissance', 'Garde', 'Vitesse', 'Mouvement', 'Portée'];
 
 
@@ -358,7 +358,7 @@ export const vBonus = () => Math.min(2, Math.floor((BUDGET - cost()) / 4));
 
 export const norm = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Instructions run at startup, in the original order (see index.js).
 export function __init() {
 
 squad = [],
@@ -429,7 +429,7 @@ $('#dexGrid').addEventListener('click', e => {
 });
 
 
-/* reflet holographique et inclinaison */
+/* holographic shine and tilt */
 if (!RM && window.matchMedia && matchMedia('(hover:hover)').matches) {
   $('#dexGrid').addEventListener('pointermove', e => {
     const c = e.target.closest('.fcard');
@@ -468,7 +468,7 @@ $('#genSeg').addEventListener('click', e => {
 });
 
 
-// options de #dexType : rendues par React (Equipe.jsx)
+// #dexType options: rendered by React (Team.jsx)
 $('#dexType').addEventListener('change', e => {
   ftype = e.target.value;
   renderGrid();

@@ -1,11 +1,11 @@
-/* Section d'origine : v4.33-01-duel-et-tutoriel.js */
+/* Original section: v4.33-01-duel-et-tutoriel.js */
 
 import { BY, DEPLOY, MON, SCEN, familyOf } from './009-pokemon.js';
 import { PROFILE } from './011-game-state.js';
 import { synOf } from './012-recruits-roles-synergies.js';
 import { $, RM, medal } from './014-utils.js';
 import { tokCl } from '../screens/combat/board/boardStore.js';
-import { CROCHETS } from './015-hooks.js';
+import { HOOKS } from './015-hooks.js';
 import { go } from './016-navigation.js';
 import { BH, BW, K, P, byUid, damage, unitEffects433, endStep, rewardIn, hasNx, mkUnit, say, uk } from './021-combat-engine.js';
 import { OBST, resolve } from './023-roles-synergies-obstacles.js';
@@ -17,29 +17,29 @@ import { openGuide } from './029-streamlined-guide.js';
 import { AUTO, overlay, turnBanner } from './030-prestige-staging.js';
 import { shut } from '../screens/overlays/tempStore.js';
 import { V4 } from './032-v4-foundation.js';
-import { dechargerCharges } from './047-tactics.js';
+import { unloadCharges } from './047-tactics.js';
 import { hasXp, rankOfValue } from './053-resonance.js';
 import { vigilHit420 } from './060-intense-combat.js';
 import { dl428 } from './063-combat-catches-home.js';
 import { DOCTRINES430 } from './065-camp-tactics.js';
-import { CAMPT431, ENIGMES431, MAIT_SEUIL431, renderCampPage431 } from './066-tactical-challenges.js';
+import { CAMP_TABS431, PUZZLES431, MASTERY_THRESHOLD431, renderCampPage431 } from './066-tactical-challenges.js';
 
-export let TUTO433;
+export let TUTORIAL_STEPS433;
 let DUEL433, DUELCUR433, STMAX433;
-export { TERR433, DUEL433, STMAX433, duelOrder433, duelNew433, duelStep433 }; // lus par Camp › Duel (src/screens/camp)
+export { TERR433, DUEL433, STMAX433, duelOrder433, duelNew433, duelStep433 }; // read by Camp › Duel (src/screens/camp)
 
 
 /* =====================================================================
    v4.33
-   1. Duel local à 2 joueurs (Camp › Duel) : tirage de 10 à 12 Pokémon,
-      un bannissement chacun, choix en serpent, puis un combat sur le même
-      téléphone. Chacun dirige son équipe à son tour, avec exactement les
-      mêmes règles : ni objets, ni natures, ni doctrines, terrain symétrique.
-      Chaque joueur a ses Voix, ses synergies, son accord de manche et sa
-      Forme Résonante ; brûlures, durées et Vigilance suivent le tour de
-      leur propriétaire, pour qu’aucun des deux ne soit avantagé.
-   2. Tutoriel complet (Guide › Tutoriel) : un chapitre par mécanique, des
-      bases au duel, avec un bouton pour essayer et la progression gardée.
+   1. Local 2-player duel (Camp › Duel): a draw of 10 to 12 Pokémon,
+      one ban each, snake-draft picks, then a battle on the same
+      phone. Each player directs their team in turn, with exactly the
+      same rules: no items, natures or doctrines, symmetrical terrain.
+      Each player has their own Voices, synergies, round chord and
+      Resonant Form; burns, durations and Vigilance follow the turn of
+      their owner, so that neither is advantaged.
+   2. Full tutorial (Guide › Tutorial): one chapter per mechanic, from
+      the basics to the duel, with a button to try it and progress saved.
    ===================================================================== */
 export function V433_0() {
   return { duel433: { n: 0, h: [], noms: ['', ''] }, tuto433: [] };
@@ -66,11 +66,11 @@ export function v433Clean(p) {
           t: x.t.map(L => (Array.isArray(L) ? L : []).filter(id => typeof id === 'string' && BY[id]).slice(0, 4))
         }));
   }
-  if (Array.isArray(p.tuto433)) o.tuto433 = [...new Set(p.tuto433.filter(k => typeof k === 'string' && TUTO433.some(c => c.k === k)))];
+  if (Array.isArray(p.tuto433)) o.tuto433 = [...new Set(p.tuto433.filter(k => typeof k === 'string' && TUTORIAL_STEPS433.some(c => c.k === k)))];
   return o;
 }
 
- // les réglages du dernier duel lancé (revanche)
+ // the settings of the last duel started (rematch)
 
 function duelOrder433(n) {
   const o = [
@@ -119,7 +119,7 @@ function shuffle433(L) {
 }
 
 
-/** Le tirage : des familles toutes différentes, en forme de base ou finale. */
+/** The draw: entirely different families, in base or final form. */
 function duelDraw433(C) {
   const bases = MON.filter(m => m.base === m.id && !m.leg && BY[m.id] && !BY[m.id].ennemi).map(m => m.id),
     n = C.taille * 2 + 4;
@@ -165,7 +165,7 @@ function duelCancel433(C) {
 }
 
 
-/* ---------- duel : le combat ---------- */
+/* ---------- duel: the battle ---------- */
 export function duelOpts433() {
   return { diff: 'normal', items: {}, fatigue: {}, links: {}, ordre: 'equipe', vivant: false, tactique: true, mut: null, doc430: '', fog431: false, defis: [], caracteres: false, desob: false, dojo: 0, apprises: {} };
 }
@@ -216,18 +216,18 @@ function launchDuel433(C) {
 }
 
 
-/** Hors duel : on revient à la liste des combats, sur l’ancien choix. */
+/** Outside a duel: go back to the battle list, on the previous choice. */
 function leaveDuel433() {
-  const pv = launchDuel433.prev;
+  const hp = launchDuel433.prev;
   __set_B(null);
-  __set_scSel(pv && SCEN[pv] && !SCEN[pv].sansProgres431 ? pv : 'gue');
+  __set_scSel(hp && SCEN[hp] && !SCEN[hp].sansProgres431 ? hp : 'gue');
   backToPrep();
   V4.campTab = 'duel';
   go('camp');
 }
 
 
-/** Change le joueur actif : ses Pokémon passent du côté « allié ». */
+/** Changes the active player: their Pokémon move to the "ally" side. */
 function toggle433(S, j) {
   const D = S && S.duel433;
   if (!D || D.j === j) return;
@@ -253,11 +253,11 @@ function toggle433(S, j) {
 }
 
 
-/** Début de la partie de manche du joueur j (ses Pokémon sont « alliés »). */
-function debutTour433(S, j, ev) {
+/** Start of player j's round phase (their Pokémon are "allies"). */
+function turnStart433(S, j, ev) {
   if (!S || !S.duel433 || S.over) return;
   if (j === 2) {
-    // brûlure, poison, durées du Joueur 2 : après le tour du Joueur 1, comme celles du Joueur 1 après le sien
+    // Player 2's burn, poison and durations: after Player 1's turn, like Player 1's after their own
     S.units.forEach(u => {
       if (!u.ko && u.j433 === 2) unitEffects433(S, u, ev);
     });
@@ -306,11 +306,11 @@ function debutTour433(S, j, ev) {
 
 
 export function duelPlan433(S, ev) {
-  if (S.duel433.pret && S.round > 1) debutTour433(S, 1, ev);
+  if (S.duel433.pret && S.round > 1) turnStart433(S, 1, ev);
 }
 
 
-/** La Vigilance dans un duel : les vigilants du joueur qui attend frappent le Pokémon qui arrive. */
+/** Vigilance in a duel: the waiting player's sentinels strike the Pokémon that arrives. */
 export function vigilDuel433(S, e, ev) {
   if (!e || e.ko || S.over || e.side !== 'a') return;
   const k = uk(e);
@@ -328,7 +328,7 @@ export function vigilDuel433(S, e, ev) {
 }
 
 
-/** « Fin du tour » dans un duel : le Joueur 1 passe la main, le Joueur 2 clôt la manche. */
+/** "End of turn" in a duel: Player 1 hands over, Player 2 closes the round. */
 export function duelPass433() {
   if (!B || !B.duel433) return false;
   if (ui.busy || B.over || B.phase !== 'player') return true;
@@ -340,11 +340,11 @@ export function duelPass433() {
     const ev = [];
     log(`${D.noms[0]} termine son tour.`, 'sys');
     D.dech = 2;
-    dechargerCharges(S, ev); // les attaques chargées du Joueur 2 partent après le tour du Joueur 1
+    unloadCharges(S, ev); // Player 2's charged attacks fire after Player 1's turn
     endStep(S, ev);
     if (!S.over) {
       toggle433(S, 2);
-      debutTour433(S, 2, ev);
+      turnStart433(S, 2, ev);
       endStep(S, ev);
     }
     renderAll();
@@ -373,7 +373,7 @@ export function duelPass433() {
 }
 
 
-/** Écran de passage : le téléphone change de mains. */
+/** Pass-over screen: the phone changes hands. */
 function relay433(j, force) {
   const D = B && B.duel433;
   if (!D) return;
@@ -381,7 +381,7 @@ function relay433(j, force) {
     turnBanner('Manche ' + B.round, D.noms[j - 1]);
     return;
   }
-  // rendu : src/screens/overlays/temporaires/Duel433.jsx
+  // rendered: src/screens/overlays/transients/Duel433.jsx
   const o = overlay('duel433r', {
     mode: 'relais',
     j,
@@ -396,7 +396,7 @@ function relay433(j, force) {
 }
 
 
-/** Part des PV restants d’un joueur, en %. */
+/** Share of a player's remaining HP, in %. */
 function duelHp433(S, j) {
   const L = S.units.filter(u => u.j433 === j),
     m = L.reduce((s, u) => s + u.mhp, 0);
@@ -452,21 +452,21 @@ export function duelUnder433(S) {
 }
 
 
-/* rendu : couleurs des joueurs, bouton de fin de tour, phase */
+/* rendering: player colors, end-of-turn button, phase */
 export function afterRender433() {
   if (!B || !B.duel433) return;
   for (const id in L.u) {
     const T = L.u[id],
       u = byUid(B, id);
     if (!T || !u) continue;
-    tokCl(T, 'dj1', u.j433 === 1); // classes du jeton : Units.jsx
+    tokCl(T, 'dj1', u.j433 === 1); // token classes: Units.jsx
     tokCl(T, 'dj2', u.j433 === 2);
   }
-  // plaques (data-dj433), bouton de fin de tour, phase et nom du joueur : rendus par React (src/screens/combat/battle)
+  // plates (data-dj433), end-of-turn button, phase and player name: rendered by React (src/screens/combat/battle)
 }
 
 
-// l’onglet Camp › Duel (réglages, tirage, équipes, historique) est rendu par React : src/screens/camp/tabs/Duel.jsx
+// the Camp › Duel tab (settings, draw, teams, history) is rendered by React: src/screens/camp/tabs/Duel.jsx
 
 
 function duelRender433() {
@@ -474,7 +474,7 @@ function duelRender433() {
 }
 
 
-// le tutoriel complet est rendu par le Guide React (Tutoriel.jsx)
+// the full tutorial is rendered by the React Guide (Tutorial.jsx)
 
 const duelName433 = x =>
   String(x == null ? '' : x)
@@ -484,8 +484,8 @@ const duelName433 = x =>
     .slice(0, 14);
 
 
-/* ---------- 1. duel : terrains symétriques ---------- */
-// demi-plateau décrit, l’autre moitié en miroir (rotation d’un demi-tour : la grille hexagonale y est symétrique)
+/* ---------- 1. duel: symmetrical terrains ---------- */
+// half board described, the other half mirrored (half-turn rotation: the hex grid is symmetrical under it)
 const TERR433 = {
   arene: { n: 'Arène', bio: 'arene', pil: ['3,1'], sand: ['2,3'] },
   gue: { n: 'Gué', bio: 'gue', water: ['3,0', '3,3', '3,4'], grass: ['1,0'] },
@@ -521,16 +521,16 @@ export const duelTitle433 = S => {
   return D && D.g ? `Victoire de ${esc(D.noms[D.g - 1])}` : 'Match nul';
 };
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Statements run at startup, in the original order (see index.js).
 export function __init() {
 
 DUEL433 = null;
 
- // le tirage en cours (en mémoire)
+ // the current draw (in memory)
 DUELCUR433 = null;
 
 
-CROCHETS.creation.push((S, opt, D0) => {
+HOOKS.creation.push((S, opt, D0) => {
   if (!D0 || !D0.duel433) return;
   S.duel433 = { j: 1, noms: (D0.noms || ['Joueur 1', 'Joueur 2']).slice(0, 2), etat: [{}, {}], dech: 1, pret: 0, D: JSON.parse(JSON.stringify(D0)), O: JSON.parse(JSON.stringify(OBST.duel433 || {})) };
   S.units.forEach(u => (u.j433 = u.side === 'a' ? 1 : 2));
@@ -540,10 +540,10 @@ CROCHETS.creation.push((S, opt, D0) => {
 });
 
 
-CROCHETS.combat.push((S, opt, D0) => {
+HOOKS.combat.push((S, opt, D0) => {
   if (!S.duel433) return;
   const D = S.duel433;
-  // le Joueur 2 est construit exactement comme le Joueur 1 : ni bonus de PV ni de Puissance
+  // Player 2 is built exactly like Player 1: no HP or Power bonus
   S.units.forEach(u => {
     if (u.j433 !== 2) return;
     const n = mkUnit(u.id, 'a', u.pos, u.uid, D0);
@@ -590,7 +590,7 @@ document.addEventListener('click', e => {
 });
 
 
-// Abandonner : l’adversaire gagne
+// Forfeit: the opponent wins
 document.addEventListener(
   'click',
   e => {
@@ -606,7 +606,7 @@ document.addEventListener(
 );
 
 
-CROCHETS.resultat.push(r => {
+HOOKS.resultat.push(r => {
   const X = r && r.duel433;
   if (!X) return '';
   const mx = Math.max(1, ...X.rows.flat().map(x => x.d));
@@ -623,7 +623,7 @@ CROCHETS.resultat.push(r => {
 });
 
 
-// Rejouer → revanche (l’autre joueur commence) ; Changer d’équipe → nouveau duel
+// Play again → rematch (the other player starts); Change team → new duel
 document.addEventListener(
   'click',
   e => {
@@ -658,7 +658,7 @@ document.addEventListener('click', e => {
 });
 
 
-/* ---------- duel : l’écran du Camp ---------- */
+/* ---------- duel: the Camp screen ---------- */
 STMAX433 = 5;
 
 
@@ -718,10 +718,10 @@ document.addEventListener('change', e => {
 });
 
 
-if (!CAMPT431.some(x => x[0] === 'duel')) CAMPT431.push(['duel', 'Duel']);
+if (!CAMP_TABS431.some(x => x[0] === 'duel')) CAMP_TABS431.push(['duel', 'Duel']);
 
 
-// au démarrage : un duel de démonstration, pour qu’un duel en cours se reprenne après un rechargement
+// at startup: a demo duel, so that a duel in progress resumes after a reload
 (() => {
   try {
     const C = duelNew433();
@@ -737,9 +737,9 @@ if (!CAMPT431.some(x => x[0] === 'duel')) CAMPT431.push(['duel', 'Duel']);
 })();
 
 
-/* ---------- 2. tutoriel complet ---------- */
-// chaque chapitre : clé, groupe, icône, titre, texte, actions [libellé, attribut]
-TUTO433 = [
+/* ---------- 2. full tutorial ---------- */
+// each chapter: key, group, icon, title, text, actions [label, attribute]
+TUTORIAL_STEPS433 = [
   { k: 'tour', g: 'Les bases', ic: 'i-play', t: 'Un tour de jeu', d: 'Touchez votre Pokémon : les <b>cases bleues</b> montrent où il peut aller. Touchez ensuite une capacité et une <b>case dorée</b> : l’aperçu affiche le résultat exact avant de confirmer. Quand tout le monde a joué, « Fin du tour » : les adversaires agissent à leur tour. Touchez un adversaire pour voir sa <b>zone rouge</b>, tout ce qu’il peut frapper après s’être déplacé.', a: [['Jouer le combat guidé', 'data-hm="tuto"']] },
   { k: 'voix', g: 'Les bases', ic: 'i-bolt', t: 'Voix, marques et réactions', d: 'Chaque manche vous donne des <b>Voix</b> : elles servent à Esquiver, Relancer, Éveiller, capturer ou lancer une technique combinée. Certaines capacités laissent une <b>marque</b> de leur type sur une case pendant deux manches ; un autre élément la fait réagir (eau + électricité, feu + herbes…). Préparez avec un Pokémon, déclenchez avec un autre.', a: [['Voir les réactions', 'data-guide="reactions"']] },
   { k: 'eveil', g: 'Les bases', ic: 'i-star', t: 'Éveil, attaques Expertes, Forme Résonante', d: 'Les <b>losanges</b> se remplissent en combat. À trois, l’<b>Éveil</b> fait évoluer votre Pokémon sur-le-champ : c’est définitif, gardez-le pour le moment décisif. Au stade final, les losanges servent aux <b>attaques Expertes</b> (2 losanges, 1 pour un Pokémon Expert) et, une fois par combat, à la <b>Forme Résonante</b> : 1 Voix pour 3 manches à +2 Puissance, +1 Mouvement et +20 % de dégâts. Trois rangs différents dans l’équipe : <b>Harmonie</b>, chacun commence avec 1 losange. <b>Évoli</b> choisit librement parmi ses 5 évolutions ; celle en harmonie avec sa case ou l’heure lui laisse 1 losange.', a: [] },
@@ -754,10 +754,10 @@ TUTO433 = [
   { k: 'brouillard', g: 'Avant le combat', ic: 'i-lune', t: 'Brouillard de guerre', d: 'Réglage facultatif : vous ne voyez que ce que voient vos Pokémon, à 2 cases (3 pour les Vol et Psy, 1 de moins la nuit). Un adversaire caché dans les hautes herbes n’apparaît qu’au contact. En échange : +25 % de Pokédollars en cas de victoire.', a: [['Paramètres', 'data-t433="params"']] },
   { k: 'journal', g: 'Après le combat', ic: 'i-book', t: 'Journal tactique', d: 'Après chaque combat, le <b>rapport tactique</b> montre les dégâts infligés et subis par Pokémon, et désigne le MVP. Toutes vos statistiques (victoires par catégorie, Pokémon les plus utilisés, séries) sont dans Quêtes › Journal.', a: [['Ouvrir le Journal', 'data-t433="journal"']] },
   { k: 'camp', g: 'Le Camp', ic: 'i-camp', t: 'Le Camp', d: 'L’onglet <b>Camp</b> réunit les bâtiments (Dojo…), les expéditions, la Pension et le Potager, en Campagne comme en Libre. Ses sous-onglets ouvrent les modes de jeu des chapitres suivants.', a: [['Ouvrir le Camp', 'data-t433="camp:base"']] },
-  { k: 'enigmes', g: 'Le Camp', ic: 'i-quest', t: 'Énigmes tactiques', d: () => `${ENIGMES431.length} énigmes : positions figées, PV au plus juste, mettez tous les adversaires K.O. <b>en une seule manche</b>. Trois étoiles par énigme selon vos essais ; un indice apparaît après un échec. Une énigme du jour change chaque jour.`, a: [['Jouer une énigme', 'data-t433="camp:enigmes"']] },
+  { k: 'enigmes', g: 'Le Camp', ic: 'i-quest', t: 'Énigmes tactiques', d: () => `${PUZZLES431.length} énigmes : positions figées, PV au plus juste, mettez tous les adversaires K.O. <b>en une seule manche</b>. Trois étoiles par énigme selon vos essais ; un indice apparaît après un échec. Une énigme du jour change chaque jour.`, a: [['Jouer une énigme', 'data-t433="camp:enigmes"']] },
   { k: 'echo', g: 'Le Camp', ic: 'i-star', t: 'Écho profond', d: 'Une expédition de <b>8 étages</b> avec une seule vie : les PV restent d’un combat à l’autre. À chaque étage, choisissez votre chemin : combat, élite (une relique à la clé), source, marchand ou événement. Le gardien vous attend au dernier étage.', a: [['Partir en expédition', 'data-t433="camp:echo"']] },
   { k: 'arenes', g: 'Le Camp', ic: 'i-league', t: 'Arènes personnalisées', d: 'Composez votre combat : terrain, règle, heure, nombre de manches, robustesse et jusqu’à 5 adversaires. Testez-le, puis envoyez son <b>code</b> (ARN-…) à un ami : il l’importe et relève le défi. Jusqu’à 12 arènes.', a: [['Créer une arène', 'data-t433="camp:arenes"']] },
-  { k: 'maitrise', g: 'Le Camp', ic: 'i-trophy', t: 'Maîtrise des familles', d: () => `Après ${MAIT_SEUIL431} combats dans votre équipe, une famille débloque un <b>bonus permanent</b>, à choisir entre deux (Puissance, Garde, Mouvement, PV, losange de départ…). Vous pouvez en changer contre des Pokédollars.`, a: [['Voir les maîtrises', 'data-t433="camp:maitrise"']] },
+  { k: 'maitrise', g: 'Le Camp', ic: 'i-trophy', t: 'Maîtrise des familles', d: () => `Après ${MASTERY_THRESHOLD431} combats dans votre équipe, une famille débloque un <b>bonus permanent</b>, à choisir entre deux (Puissance, Garde, Mouvement, PV, losange de départ…). Vous pouvez en changer contre des Pokédollars.`, a: [['Voir les maîtrises', 'data-t433="camp:maitrise"']] },
   { k: 'pantheon', g: 'Le Camp', ic: 'i-trophy', t: 'Panthéon', d: 'Chaque équipe qui bat un Champion, un Maître ou le gardien de l’Écho profond y est gravée, avec la date, la difficulté et le nombre de manches.', a: [['Voir le Panthéon', 'data-t433="camp:pantheon"']] },
   { k: 'natures', g: 'Votre équipe', ic: 'i-star', t: 'Natures et talents', d: 'Chaque Pokémon capturé a sa propre <b>nature</b> (Brave, Prudent, Vif…) et son propre <b>talent</b>, logiques avec sa famille et gardés à travers ses évolutions. Deux Salamèche ne se jouent pas forcément pareil : consultez la fiche du Pokémon.', a: [['Voir mon équipe', 'data-t433="pokedex"']] },
   { k: 'equipes', g: 'Votre équipe', ic: 'i-team', t: 'Équipes et formations', d: 'Dans la préparation d’un combat, <b>enregistrez</b> jusqu’à 8 équipes et rappelez-les d’un geste. Les <b>formations</b> proposent des équipes toutes faites, pensées pour leurs synergies de types.', a: [['Préparer un combat', 'data-t433="combat"']] },
@@ -768,7 +768,7 @@ TUTO433 = [
 ];
 
 
-// chapitres marqués « lu » : géré par Tutoriel.jsx
+// chapters marked "read": handled by Tutorial.jsx
 
 
 document.addEventListener('click', e => {

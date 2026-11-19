@@ -12,7 +12,7 @@ function Types({ T }) {
   return T.map((t, i) => <i key={i} className="du433-ty" style={{ '--c': tc(t) }}>{t}</i>);
 }
 
-// Boutons à bascule des réglages (data-du433s).
+// Toggle buttons for the settings (data-du433s).
 function Seg({ k, L, v }) {
   return (
     <div className="v4-seg" role="group">
@@ -21,7 +21,7 @@ function Seg({ k, L, v }) {
   );
 }
 
-// Réglages du duel : noms (input relu par le moteur), formes, taille, terrain, heure, manches.
+// Duel settings: names (input reread by the engine), forms, size, terrain, time of day, rounds.
 function Preferences({ C }) {
   return (
     <div className="du433-cfg">
@@ -42,7 +42,7 @@ function Preferences({ C }) {
   );
 }
 
-// Une carte du tirage (data-du433p) : bannie, prise ou sélectionnée.
+// A draw card (data-du433p): banned, taken or selected.
 function MapScreen({ C, id }) {
   const m = BY[id],
     ban = C.bans[0].includes(id) ? 1 : C.bans[1].includes(id) ? 2 : 0,
@@ -65,7 +65,7 @@ function MapScreen({ C, id }) {
   );
 }
 
-// Le Pokémon sélectionné : capacités, statistiques, lignée.
+// The selected Pokémon: moves, stats, lineage.
 function Detail({ C }) {
   const id = C.sel;
   if (!id || !BY[id]) return <p className="du433-h">Touchez un Pokémon pour voir ses capacités.</p>;
@@ -90,7 +90,7 @@ function Detail({ C }) {
   );
 }
 
-// L'équipe d'un joueur : ses choix et ses bannissements.
+// A player's team: their picks and their bans.
 function Team({ C, j }) {
   const L = C.picks[j],
     B0 = C.bans[j];
@@ -105,7 +105,7 @@ function Team({ C, j }) {
   );
 }
 
-// Le tirage : ordre, étape, équipes, réserve, actions.
+// The draw: order, step, teams, pool, actions.
 function Draw({ C }) {
   const st = duelStep433(C),
     ord = duelOrder433(C.taille);
@@ -142,7 +142,7 @@ function Draw({ C }) {
   );
 }
 
-// Camp › Duel (v4.33) : duel local à deux joueurs sur un téléphone.
+// Camp › Duel (v4.33): local two-player duel on one phone.
 export default function Duel() {
   const C = DUEL433 || duelNew433(),
     P0 = PROFILE.duel433 || V433_0().duel433,

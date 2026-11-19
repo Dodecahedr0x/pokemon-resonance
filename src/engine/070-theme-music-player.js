@@ -1,4 +1,4 @@
-/* Section d'origine : v4.35 : musiques par thème (lecteur de pistes) */
+/* Original section: v4.35: music per theme (track player) */
 
 import { $ } from './014-utils.js';
 import { cur } from './016-navigation.js';
@@ -29,7 +29,7 @@ function bgmEl434(k) {
     a.addEventListener('error', () => {
       BGM434.failed++;
       if (BGM434.failed >= 2 && BGM434.on) {
-        // pistes introuvables : retour à la nappe d’ambiance
+        // tracks not found: back to the ambient pad
         BGM434.on = false;
         try {
           MUS.on = false;
@@ -77,11 +77,11 @@ function bgmPlay434(a) {
 }
 
 
-/* Combats : arène → medley des Champions d’arène · Conseil / Maîtres → combat de Champion · adversaires nommés et duels → combat de dresseur · le reste → combat sauvage */
+/* Battles: gym → Gym Leaders medley · Council / Masters → Champion battle · named opponents and duels → trainer battle · the rest → wild battle */
 function bgmCombat434(sc) {
   sc = String(sc || '');
   if (/^(a|j|h)[1-8]$/.test(sc)) return 'arene';
-  if (/^(c[1-4]|champ)$/.test(sc)) return 'rouge'; // v4.49 : Ligue Indigo = Combat contre Rouge
+  if (/^(c[1-4]|champ)$/.test(sc)) return 'rouge'; // v4.49: Indigo League = Battle against Red
   if (/^(jchamp|hchamp)$/.test(sc)) return 'champion';
   if (/^(duel433|ligue|tdr|ami|tuto|td\d|jd\d|hd\d+|rv\d|enig.*)$/.test(sc)) return 'dresseur';
   return 'combat';
@@ -92,16 +92,16 @@ function bgmScene434() {
   if (B && !$('#cbBattle').hidden) {
     const c = bgmCombat434(B.sc);
     if (c === 'rouge' || c === 'champion' || B.over) return c;
-    // v4.49 : un allié presque K.O. (≤ 25 %) fait passer à la piste « PV bas » ; retour quand tous remontent au-dessus de 35 %
+    // v4.49: an almost K.O.'d ally (≤ 25%) switches to the "low HP" track; returns when all go back above 35%
     const al = B.units.filter(u => u.side === 'a' && !u.ko);
     if (al.some(u => u.hp / u.mhp <= 0.25)) B._pv449 = 1;
     else if (!al.some(u => u.hp / u.mhp <= 0.35)) B._pv449 = 0;
     return B._pv449 && IM448() ? 'pvbas' : c;
   }
   if (cur === 'accueil') return 'accueil';
-  if (cur === 'combat') return 'combats'; // v4.47 : menu Combats = Cyclisme
+  if (cur === 'combat') return 'combats'; // v4.47: Battles menu = Cycling
   if (cur === 'carte') return 'carte'; // Route 1
-  if (cur === 'types') return 'guide'; // Laboratoire du Prof. Chen
+  if (cur === 'types') return 'guide'; // Prof. Chen's Laboratory
   if (cur === 'sac' && V4.sacV === 'boutique') return 'boutique';
   if (cur === 'pokedex' || cur === 'dex') return 'centre';
   if (cur === 'camp') {
@@ -148,7 +148,7 @@ export function musStart() {
     return;
   }
   BGM434.on = true;
-  MUS.on = true; // empêche la nappe de démarrer en plus
+  MUS.on = true; // keeps the pad from also starting
   clearInterval(BGM434.tmr);
   BGM434.tmr = setInterval(bgmSync434, 800);
   bgmSync434();
@@ -175,7 +175,7 @@ function bgmStop434() {
 }
 
 
-/* jingle (victoire, badge, évolution) par-dessus la musique du moment. max = durée en secondes (0 = en entier), suite = jingle enchaîné */
+/* jingle (victory, badge, evolution) over the current music. max = duration in seconds (0 = in full), suite = chained jingle */
 function jingle434(max, k, next) {
   k = k || 'victoire';
   if (!PREF.music || !BGM434.on || !bgmOk434() || BGM434.jingle) return;
@@ -205,7 +205,7 @@ function jingle434(max, k, next) {
       if (BGM434.jingle) return;
     }
     if (k === 'victoire' || k === 'badge') {
-      if (BGMC434.includes(bgmScene434()) && B && B.over) BGM434.silent = true; // le résultat reste au calme
+      if (BGMC434.includes(bgmScene434()) && B && B.over) BGM434.silent = true; // the result stays calm
     }
     setTimeout(bgmSync434, 600);
   };
@@ -214,7 +214,7 @@ function jingle434(max, k, next) {
 }
 
 
-/* Interrupteur Musique, curseur de volume et reprise au toucher passent par ces trois fonctions. */
+/* The Music switch, volume slider and resume-on-touch go through these three functions. */
 export function musStop() {
   if (BGM434.on) bgmStop434();
   else musPadStop();
@@ -229,7 +229,7 @@ export function musLevel() {
 }
 
 
-/* jingle associé à un effet sonore (appelé par sfx) */
+/* jingle associated with a sound effect (called by sfx) */
 export function sfxJingle(n) {
   if (n === 'win' && !(B && B.over)) jingle434(7);
   else if (n === 'evo') jingle434(10, 'evolution');
@@ -237,11 +237,11 @@ export function sfxJingle(n) {
 
 const BGMC434 = ['combat', 'arene', 'champion', 'dresseur', 'rouge', 'pvbas'];
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Statements run at startup, in the original order (see index.js).
 export function __init() {
 
-/* Accueil : générique S1 · Camp, potager et le reste : Route 201 · Combat : combat sauvage · Boutique : Pokémart · Victoire : jingle RSE.
-   Les pistes sont des fichiers à côté de la page (audio/…). Si elles sont introuvables (fichier hors ligne), la nappe d’ambiance reste utilisée. */
+/* Home: S1 theme · Camp, garden and the rest: Route 201 · Battle: wild battle · Shop: Pokémart · Victory: RSE jingle.
+   The tracks are files next to the page (audio/…). If they cannot be found (offline file), the ambient pad is still used. */
 BGM434 = {
   src: Object.fromEntries(['accueil', 'camp', 'combat', 'boutique', 'victoire', 'arene', 'champion', 'dresseur', 'ruines', 'centre', 'gloire', 'badge', 'evolution', 'combats', 'carte', 'guide', 'rouge', 'pvbas'].map(k => [k, 'audio/' + k + '.mp3'])),
   el: {},
@@ -249,7 +249,7 @@ BGM434 = {
   on: false,
   failed: 0,
   jingle: false,
-  silent: false, // après une victoire : on laisse l’écran de résultat au calme
+  silent: false, // after a victory: leave the result screen calm
   tmr: 0,
   vis: true
 };
@@ -257,8 +257,8 @@ BGM434 = {
 
 if (PREF.music === undefined) PREF.music = false;
 
- // nouvelle installation : musique coupée (réglable dans Paramètres)
-/* victoire : fiche de résultat gagnée, capture réussie, récompense de quête */
+ // fresh install: music off (adjustable in Settings)
+/* victory: result sheet won, capture succeeded, quest reward */
 (function () {
   const r = document.getElementById('cbResult');
   if (r && window.MutationObserver)

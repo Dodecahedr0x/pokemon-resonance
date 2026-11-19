@@ -9,10 +9,10 @@ import { flow478 } from '../../../engine/112-painted-graphics.js';
 import { getHost } from '../board/boardStore.js';
 import Tools444 from '../board/Tools444.jsx';
 import { footPos as barBottom, useBattleVersion } from './battleStore.js';
-import { ETAPE } from './frag.jsx';
+import { STEP } from './frag.jsx';
 
-// Bouton de fin de tour, phase et étape : renderTop, puis les versions qui les réécrivaient
-// (déploiement v4.30, énigme v4.31, duel v4.33, tour guidé v4.78), dans le même ordre.
+// End-of-turn button, phase and step: renderTop, then the versions that rewrote them
+// (deployment v4.30, riddle v4.31, duel v4.33, guided tour v4.78), in the same order.
 function bar() {
   const foes = B.units.filter(u => u.side === 'e'),
     al = B.units.filter(u => u.side === 'a');
@@ -67,20 +67,20 @@ function bar() {
           : ready
             ? 'À vous : déplacez, puis agissez.'
             : 'Tous vos Pokémon ont joué.';
-  if (B.coop && !ui.busy && !ui.cine) phase = `Joueur ${B.coop} · ` + phase; // coop (v4.18)
+  if (B.coop && !ui.busy && !ui.cine) phase = `Joueur ${B.coop} · ` + phase; // co-op (v4.18)
   let playerRef = null;
-  // déploiement (v4.30)
+  // deployment (v4.30)
   if (B.dep430 && !B.over) {
     disabled = false;
     button = 'Lancer le combat';
     phase = ui.dsel430 ? 'Touchez une case bleue.' : 'Placez vos Pokémon sur les cases bleues.';
   }
-  // énigme (v4.31)
+  // riddle (v4.31)
   if (B.sc === 'enigme431' && !B.over && !B.dep430) {
     button = 'Abandonner l’énigme';
     phase = riddlePhase431();
   }
-  // duel local (v4.33)
+  // local duel (v4.33)
   const D = B.duel433;
   if (D && !B.over && !ui.cine) {
     if (ui.busy) button = 'Fin de manche…';
@@ -103,7 +103,7 @@ function bar() {
       phase = phase.replace('À vous : ', '').replace('Tous vos Pokémon', 'Tous ses Pokémon');
     }
   }
-  // tour guidé (v4.78) : plus de « Fin du tour » pendant votre phase
+  // guided tour (v4.78): no more "Fin du tour" (End of turn) during your phase
   const g = flow478.guide();
   let step = null;
   if (g) {
@@ -114,7 +114,7 @@ function bar() {
     if (u && u.side === 'a' && !ui.selE)
       step = (
         <>
-          <b>{ETAPE[flow478.etape(B, u)]}</b> {u.n}
+          <b>{STEP[flow478.etape(B, u)]}</b> {u.n}
           {B.ordre !== 'vitesse' && n ? ` · encore ${n}` : ''}
         </>
       );
@@ -126,13 +126,13 @@ export default function Footer() {
   const v = useBattleVersion('foot');
   const footPos = useRef(null);
   const x = v && B ? bar() : null;
-  // l'étape masquée garde son dernier texte, comme l'ancien DOM
+  // the hidden step keeps its last text, like the old DOM
   if (x && x.etape) footPos.current = x.etape;
   const Q = barBottom.qa,
     tools = getHost().bt444;
   return (
     <div className={barBottom.cls.join(' ')}>
-      {/* attaques à portée de pouce (téléphone, v4.43) : créées au premier usage, puis masquées */}
+      {/* thumb-reach attacks (phone, v4.43): created on first use, then hidden */}
       {Q && (
         <div id="qa443" className="qa443" role="toolbar" aria-label="Actions du Pokémon choisi" hidden={Q.hidden}>
           {Q.items.map((b, i) => (
@@ -168,7 +168,7 @@ export default function Footer() {
           <i>→</i> Pokémon · <i>Espace</i> étape suivante
         </span>
       )}
-      {/* barre d'outils du plateau, sous le pouce sur téléphone (v4.44) */}
+      {/* board toolbar, under the thumb on phones (v4.44) */}
       {tools && tools.foot && <Tools444 b={tools} />}
     </div>
   );

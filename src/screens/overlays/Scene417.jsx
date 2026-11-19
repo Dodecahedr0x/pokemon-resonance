@@ -1,10 +1,10 @@
 import { Html } from '../../lib/html.jsx';
 import { useOverlay } from './dialogsStore.js';
 
-// Scène d'histoire (#scene417) : une réplique à la fois. Clics (data-scene) et hidden :
-// moteur (057, 064, 093). Le texte est ensuite tapé lettre par lettre par le moteur
-// (v4.73, 109) qui pose .pk-dlg, .pk-fl et des <span> dans la carte : chaque réplique
-// est un nouveau rendu (key), donc ces ajouts ne gênent pas React.
+// Story scene (#scene417): one line at a time. Clicks (data-scene) and hidden:
+// engine (057, 064, 093). The text is then typed letter by letter by the engine
+// (v4.73, 109), which adds .pk-dlg, .pk-fl and <span>s in the card: each line
+// is a new render (key), so these additions do not bother React.
 export default function Scene417() {
   const s = useOverlay('scene');
   return (

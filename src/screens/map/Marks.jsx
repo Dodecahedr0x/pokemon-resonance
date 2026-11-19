@@ -3,11 +3,11 @@ import { dailyDone, dailyKey } from '../../engine/032-v4-foundation.js';
 import { STATE_N, placeIcon, placeName, placeState } from '../../engine/037-map.js';
 import { placesR } from '../../engine/054-johto.js';
 import { TH450, trSpots450, trSt450 } from '../../engine/080-trainer-avatar-rare-encounters.js';
-import { PNJ460, pnPos460, pnSt460, scPos460, scSt460, scVis460 } from '../../engine/091-phase-bosses-secret-places.js';
+import { NPC460, npcPos460, npcSt460, scPos460, scSt460, scVis460 } from '../../engine/091-phase-bosses-secret-places.js';
 
-// Marqueurs de la carte (#mapMarks) : les lieux, puis les trouvailles cachées (v4.50), les lieux
-// secrets et le personnage de passage (v4.60), dans l'ordre où les versions les ajoutaient.
-// marksSel : lieu choisi au moment du dessin (avant le choix par défaut de renderMap).
+// Map markers (#mapMarks): places, then hidden finds (v4.50), secret places
+// and the passing character (v4.60), in the order the versions added them.
+// marksSel: place chosen at drawing time (before renderMap's default choice).
 export default function Marks({ marksSel }) {
   const dk = dailyKey();
   return (
@@ -41,7 +41,7 @@ export default function Marks({ marksSel }) {
   );
 }
 
-// v4.50 : trouvailles cachées du jour, pas encore ramassées.
+// v4.50: today's hidden finds, not yet picked up.
 function Finds() {
   let spots = [];
   try {
@@ -55,7 +55,7 @@ function Finds() {
   ));
 }
 
-// v4.60 : lieux secrets visibles et personnage de passage.
+// v4.60: visible secret places and passing character.
 function Secrets() {
   let sc = [],
     pn = null;
@@ -63,8 +63,8 @@ function Secrets() {
     const st = scSt460(),
       pos = scPos460();
     sc = scVis460().map(s => ({ s, p: pos[s.id], f: !!st.found[s.id] }));
-    const { s } = pnSt460();
-    if (!s.done) pn = { p: pnPos460(), n: PNJ460[s.i].n };
+    const { s } = npcSt460();
+    if (!s.done) pn = { p: npcPos460(), n: NPC460[s.i].n };
   } catch (e) {}
   return (
     <>

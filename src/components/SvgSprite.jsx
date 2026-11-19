@@ -1,10 +1,10 @@
-// Icônes partagées : les écrans y font référence via <use href="#i-…">.
+// Shared icons: screens reference them via <use href="#i-…">.
 export default function SvgSprite() {
   return (
     <svg width={0} height={0} style={{position: 'absolute'}} aria-hidden="true">
       <defs>
         <linearGradient id="gGold" x1={0} y1={0} x2={1} y2={1}><stop offset={0} stopColor="#F0D59C" /><stop offset={1} stopColor="#B8924A" /></linearGradient>
-        {/* v4.30 : camp, ciel, météo, doctrine (insérés avant i-home) */}
+        {/* v4.30: camp, sky, weather, doctrine (inserted before i-home) */}
         <symbol id="i-camp" viewBox="0 0 24 24"><path d="M2.8 19.5 12 4.5l9.2 15Z" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" /><path d="M12 4.5v15M9 19.5l3-5.5 3 5.5" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" /></symbol>
         <symbol id="i-sol" viewBox="0 0 24 24"><circle cx={12} cy={12} r="4.2" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" /><path d="M12 2.8v2.4M12 18.8v2.4M2.8 12h2.4M18.8 12h2.4M5.5 5.5l1.7 1.7M16.8 16.8l1.7 1.7M5.5 18.5l1.7-1.7M16.8 7.2l1.7-1.7" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" /></symbol>
         <symbol id="i-lune" viewBox="0 0 24 24"><path d="M15.8 3.6a8.6 8.6 0 1 0 4.6 14.8 7.1 7.1 0 0 1-4.6-14.8Z" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" /><path d="M18.5 6.5v2M17.5 7.5h2" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" /></symbol>
@@ -33,7 +33,7 @@ export default function SvgSprite() {
         <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 16.8 6.6 19.7l1.1-6.1L3.2 9.4l6.1-.8Z" fill="currentColor" /></symbol>
         <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13l10.5-6.5Z" fill="currentColor" /></symbol>
         <symbol id="i-logo" viewBox="0 0 32 32"><path d="M16 2.5 27.7 9.25v13.5L16 29.5 4.3 22.75V9.25Z" fill="none" stroke="currentColor" strokeWidth="1.8" /><path stroke="currentColor" d="M8.5 16.5h4l2.2-5.5 2.6 10 2.1-4.5h4.1" fill="none" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round" /></symbol>
-        {/* ajoutées par l’interface v4 (anciennement insérées par le moteur, v4-03) */}
+        {/* added by the v4 interface (formerly inserted by the engine, v4-03) */}
         <symbol id="i-map" viewBox="0 0 24 24"><path d="M3.5 6.5 9 4l6 2.5L20.5 4v13.5L15 20l-6-2.5-5.5 2.5Z" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinejoin="round" /><path d="M9 4v13.5M15 6.5V20" stroke="currentColor" strokeWidth="1.7" /></symbol>
         <symbol id="i-quest" viewBox="0 0 24 24"><path d="M6 3.5h9.5L19 7v13.5H6Z" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinejoin="round" /><path d="M9 10h7M9 13.5h7M9 17h4" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" /></symbol>
         <symbol id="i-bag" viewBox="0 0 24 24"><path d="M5 8.5h14l-1 12H6Z" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinejoin="round" /><path d="M9 8.5V7a3 3 0 0 1 6 0v1.5M9.5 13h5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" /></symbol>

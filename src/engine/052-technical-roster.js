@@ -1,21 +1,21 @@
-/* Section d'origine : v4.13-01-roster-technique.js */
+/* Original section: v4.13-01-roster-technique.js */
 
 import { TYPES } from './004-data.js';
 import { MV } from './005-moves.js';
 import { MKT, PKT } from './009-pokemon.js';
-import { CROCHETS } from './015-hooks.js';
+import { HOOKS } from './015-hooks.js';
 import { HOSTILE, NEEDU, P, byUid, damage, dmgOf, flies, rewardIn, hdist, heal, inReach, landed, markAt, nbrK, retarget, say, setMark, shove, stun, teff, uk } from './021-combat-engine.js';
-import { FOURNISSEURS_DEGATS, FOURNISSEURS_ROLES } from './044-tactical-engine.js';
+import { DAMAGE_PROVIDERS, ROLE_PROVIDERS } from './044-tactical-engine.js';
 import { hourOf } from './046-living-board.js';
-import { SOI412 } from './051-epic-tms.js';
+import { SELF412 } from './051-epic-tms.js';
 
 export let PRE413;
 
 
-/* ---------- après chaque cible touchée ---------- */
+/* ---------- after each target hit ---------- */
 export function afterHit413(S, u, m, v, x, mk, typ, ev) {
   if (!(m.p || m.fix) || v === u) return;
-  v.dtype = typ; // pour Conversion 2
+  v.dtype = typ; // for Conversion 2
   if (m.fx === 'onde' && v.side !== u.side) (S._ondes = S._ondes || []).push({ uid: v.uid, x });
   if (m.fx === 'triple' && !v.ko && v.side !== u.side) {
     let n = 1;
@@ -36,14 +36,14 @@ export function afterHit413(S, u, m, v, x, mk, typ, ev) {
 }
 
 
-/* ---------- fin de la capacité ---------- */
+/* ---------- end of the move ---------- */
 export function end413(S, u, m, k, v0, v1, dealt, ev) {
   if (S._ondes) {
     const L = S._ondes;
     S._ondes = null;
     L.forEach(o => {
       const w = byUid(S, o.uid);
-      if (w && !w.ko) shove(S, w, o.x === k ? u.pos : P(k), 1, ev, false); // depuis le centre de la vague
+      if (w && !w.ko) shove(S, w, o.x === k ? u.pos : P(k), 1, ev, false); // from the center of the wave
     });
   }
   if (m.fx === 'gboost' && dealt > 0 && !u.ko) {
@@ -112,7 +112,7 @@ export function end413(S, u, m, k, v0, v1, dealt, ev) {
 }
 
 
-/* ---------- Riposte, Voile Miroir, Prélèvement Destin ---------- */
+/* ---------- Riposte, Mirror Veil, Destiny Draw ---------- */
 export function reflections413(S, v, real, ev) {
   const a = S.lastAtk && byUid(S, S.lastAtk);
   if (!a || a === v || a.ko || a.side === v.side) return;
@@ -129,7 +129,7 @@ export function reflections413(S, v, real, ev) {
 }
 
 
-/* ---------- Mouvement ---------- */
+/* ---------- Movement ---------- */
 export function bonusMove413(S, u) {
   let b = 0;
   if (S.gravite > 0) b -= 1;
@@ -140,7 +140,7 @@ export function bonusMove413(S, u) {
 }
 
 
-/* ---------- fin de manche ---------- */
+/* ---------- end of round ---------- */
 export function durations413(S, ev) {
   S.units.forEach(u => {
     if (u.ko) return;
@@ -170,7 +170,7 @@ export function durations413(S, ev) {
     u.riposte = 0;
     u.miroir = 0;
     u.destin = 0;
-    u.touche = false; // Mitra-Poing : nouvelle manche
+    u.touche = false; // Mitra-Poing: new round
   });
   if (S.champ) for (const c in S.champ) if (S.champ[c] > 0 && --S.champ[c] === 0) say(ev, 'Le Champ Herbu se dissipe.');
   if (S.rune) for (const c in S.rune) if (S.rune[c] > 0 && --S.rune[c] === 0) say(ev, 'Rune Protect se dissipe.');
@@ -181,14 +181,14 @@ export function durations413(S, ev) {
 }
 
 
-/* IA adverse : quand aucune attaque ne porte, un Pokémon de soutien (Qulbutoké, Métamorph…)
-   joue sa capacité plutôt que d’attendre. Ne change rien aux adversaires qui ont une attaque à portée. */
+/* Enemy AI: when no attack reaches, a support Pokémon (Qulbutoké, Métamorph…)
+   plays its move rather than waiting. Changes nothing for opponents that have an attack in range. */
 export function aiSupport413(S, e, opts, al, here) {
   let best = null;
   const prend = (sc, pk, mid, k) => {
     if (sc > 0 && (!best || sc > best.sc)) best = { sc, pk, mid, k };
   };
-  const pv = e.hp / e.mhp,
+  const hp = e.hp / e.mhp,
     contact = al.filter(a => hdist(a.pos, e.pos) === 1).length,
     nearby = al.filter(a => hdist(a.pos, e.pos) <= 3).length;
   e.mv.forEach(mid => {
@@ -199,12 +199,12 @@ export function aiSupport413(S, e, opts, al, here) {
         {
           riposte: contact ? 6 : 0,
           miroir: nearby > contact ? 5 : 0,
-          destin: pv < 0.4 && nearby ? 7 : 0,
-          cognobidon: pv > 0.6 && !(e.cogno > 0) && nearby ? 5 : 0,
-          paresse: pv < 0.6 ? 6 : 0,
-          clairdelune: pv < 0.6 ? 6 : 0,
+          destin: hp < 0.4 && nearby ? 7 : 0,
+          cognobidon: hp > 0.6 && !(e.cogno > 0) && nearby ? 5 : 0,
+          paresse: hp < 0.6 ? 6 : 0,
+          clairdelune: hp < 0.6 ? 6 : 0,
           dansedraco: !(e.agile > 0) ? 3 : 0,
-          anneauhydro: !(e.anneau > 0) && pv < 0.8 ? 4 : 0,
+          anneauhydro: !(e.anneau > 0) && hp < 0.8 ? 4 : 0,
           runeprotect: !(S.rune && S.rune[e.side] > 0) ? 3 : 0,
           champherbu: !(S.champ && S.champ[e.side] > 0) ? 3 : 0,
           gravite: !(S.gravite > 0) && al.some(flies) ? 4 : 0,
@@ -220,7 +220,7 @@ export function aiSupport413(S, e, opts, al, here) {
       al.forEach(a => {
         if (!inReach(S, sim, m, uk(a)) || a.colosse || a.seg) return;
         if (m.fx === 'feufollet' && (a.bru > 0 || a.t.includes('Feu') || a.tal === 'torche')) return;
-        if (m.fx === 'malediction' && (a.maudit > 0 || pv < 0.4)) return;
+        if (m.fx === 'malediction' && (a.maudit > 0 || hp < 0.4)) return;
         prend((m.fx === 'morphing' ? 8 + a.s[1] : 5) - (pk === here ? 0 : 0.5), pk, mid, uk(a));
       });
     }
@@ -228,12 +228,12 @@ export function aiSupport413(S, e, opts, al, here) {
   return best;
 }
 
-/* Mécaniques des capacités signature et des nouveaux talents. Tout passe par des
-   tables (SOI412 / PRE413 / CIBLE412 / apresCoup413 / fin413) et par les fournisseurs
-   de dégâts : les règles existantes ne changent pas. */
+/* Mechanics of the signature moves and the new abilities. Everything goes through
+   tables (SOI412 / PRE413 / CIBLE412 / afterHit413 / end413) and through the damage
+   providers: existing rules do not change. */
 export const rune413 = (S, v) => !!(v && S && S.rune && S.rune[v.side] > 0);
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Statements run at startup, in the original order (see index.js).
 export function __init() {
 
 NEEDU.push('morphing', 'malediction', 'feufollet', 'vantardise');
@@ -242,8 +242,8 @@ NEEDU.push('morphing', 'malediction', 'feufollet', 'vantardise');
 HOSTILE.push('malediction', 'feufollet');
 
 
-/* ---------- capacités sur soi ---------- */
-Object.assign(SOI412, {
+/* ---------- self-targeted moves ---------- */
+Object.assign(SELF412, {
   champherbu(S, u, ev) {
     nbrK(uk(u)).forEach(x => setMark(S, x, 'enracine', u.uid));
     S.champ = Object.assign({}, S.champ, { [u.side]: 3 });
@@ -343,7 +343,7 @@ Object.assign(SOI412, {
 });
 
 
-/* ---------- capacités sur une cible, sans dégâts ---------- */
+/* ---------- moves on a target, without damage ---------- */
 PRE413 = {
   malediction(S, u, m, v, ev) {
     if (v.side === u.side) return;
@@ -383,15 +383,15 @@ PRE413 = {
     if (u.ctm && !u.mv.includes(u.ctm)) u.mv.push(u.ctm);
     u.tal = v.tal;
     u.morph = v.id;
-    PKT.set(u.t, v.id); // il prend aussi son apparence
+    PKT.set(u.t, v.id); // it also takes on its appearance
     ev.push({ e: 'st', u: u.uid, s: 'MORPH' });
     say(ev, `Morphing : ${u.n} prend l’apparence de ${v.n} !`);
   }
 };
 
 
-/* ---------- dégâts : signatures et talents ---------- */
-FOURNISSEURS_DEGATS.push(
+/* ---------- damage: signatures and abilities ---------- */
+DAMAGE_PROVIDERS.push(
   { id: 'eruption', fournir: (c, { u, m }) => m.fx === 'eruption' && { mul: 0.6 + 0.8 * (u.hp / u.mhp), libelle: 'Éruption' } },
   {
     id: 'gyro',
@@ -408,15 +408,15 @@ FOURNISSEURS_DEGATS.push(
 );
 
 
-FOURNISSEURS_ROLES.push({
+ROLE_PROVIDERS.push({
   id: 'gardeami',
   fournir: (c, { S, t }) =>
     S.units.some(o => !o.ko && o !== t && o.side === t.side && o.tal === 'gardeami' && hdist(o.pos, t.pos) === 1) && { add: -2, libelle: 'Garde-Ami' }
 });
 
 
-/* Téléchargement : entre en combat avec +2 Garde */
-CROCHETS.creation.push(S => {
+/* Download (Téléchargement): enters battle with +2 Guard */
+HOOKS.creation.push(S => {
   S.units.forEach(u => {
     if (u.tal === 'telechargement') u.guard = Math.max(u.guard, 2);
   });

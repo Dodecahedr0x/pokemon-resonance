@@ -1,16 +1,16 @@
-/* Section d'origine : v4.19-01-hoenn.js */
+/* Original section: v4.19-01-hoenn.js */
 
 import { BY, SCEN } from './009-pokemon.js';
 import { PROFILE, isCamp } from './011-game-state.js';
 import { medal } from './014-utils.js';
-import { CROCHETS } from './015-hooks.js';
+import { HOOKS } from './015-hooks.js';
 import { go } from './016-navigation.js';
 import { badgeSvg } from './019-league.js';
 import { nbrK, say, setMark, uk } from './021-combat-engine.js';
 import { V4, fmt } from './032-v4-foundation.js';
 import { PL, renderMap } from './037-map.js';
-import { FOURNISSEURS_DEGATS } from './044-tactical-engine.js';
-import { SUCCES } from './048-replayability.js';
+import { DAMAGE_PROVIDERS } from './044-tactical-engine.js';
+import { ACHIEVEMENTS } from './048-replayability.js';
 import { SCENES } from './057-companions-resonance.js';
 
 export let PLACES_H, HCHAIN, HMAP_SVG;
@@ -18,12 +18,12 @@ let HARENAS;
 
 
 /* =====================================================================
-   v4.19 : Hoenn
-   - Troisième région, après le titre de Maître de Johto (Campagne) ;
-     ouverte d’emblée en mode Libre.
-   - 20 Pokémon de Hoenn (Route 104), chacun avec sa signature finale.
-   - 8 arènes à règles (sable, ring, courant, volcan, coup bas, vents,
-     distorsion, déluge) et le Maître de Hoenn, sur une carte originale.
+   v4.19: Hoenn
+   - Third region, after the Johto Master title (Campaign);
+     open from the start in Free mode.
+   - 20 Hoenn Pokémon (Route 104), each with its final signature.
+   - 8 gyms with rules (sand, ring, current, volcano, low blow, winds,
+     warp, deluge) and the Hoenn Master, on an original map.
    ===================================================================== */
 export function V419_0() {
   return { hoenn: [], hchamp: 0 };
@@ -38,7 +38,7 @@ export function v419Clean(p) {
   return o;
 }
 
- // v4.46 : Mode Libre compris
+ // v4.46: Free mode included
 export function regionH419() {
   try {
     return V4.region === 'hoenn' && hoennOpen();
@@ -141,7 +141,7 @@ export function hTick419(S, r, ev) {
 export const hoennOpen = () => !!PROFILE.jchamp;
 
 
-/* ---------- arènes et maîtres ---------- */
+/* ---------- gyms and masters ---------- */
 const HGYMS = ['Roche', 'Combat', 'Électrik', 'Feu', 'Normal', 'Vol', 'Psy', 'Eau'];
 
 
@@ -163,10 +163,10 @@ const HCHAMP_L = { n: 'Silas Météore', t: 'Maître de Hoenn', q: 'Kanto, Johto
 const HREW = [4, 4, 5, 5, 6, 6, 7, 8];
 
 
-/* ---------- règles des arènes de Hoenn ---------- */
+/* ---------- Hoenn gym rules ---------- */
 const ruleH419 = S => (S && SCEN[S.sc] && SCEN[S.sc].rule) || '';
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Startup statements, run in their original order (see index.js).
 export function __init() {
 
 HARENAS = [
@@ -210,7 +210,7 @@ SCEN.hchamp = {
 };
 
 
-CROCHETS.progres.push((S, rew, win) => {
+HOOKS.progres.push((S, rew, win) => {
   const D = SCEN[S.sc] || {};
   if (!win || !isCamp()) return null;
   if (D.hoenn != null && !(PROFILE.hoenn || []).includes(D.hoenn)) {
@@ -227,7 +227,7 @@ CROCHETS.progres.push((S, rew, win) => {
 });
 
 
-CROCHETS.resultat.push(r => {
+HOOKS.resultat.push(r => {
   const h = r.hbadge;
   if (!h) return '';
   return h.final
@@ -236,19 +236,19 @@ CROCHETS.resultat.push(r => {
 });
 
 
-SUCCES.push(
+ACHIEVEMENTS.push(
   { id: 'hoenn8', n: 'Huit badges de Hoenn', d: 'Gagner les 8 badges de Hoenn.', ok: () => (PROFILE.hoenn || []).length >= 8, p: () => [(PROFILE.hoenn || []).length, 8] },
   { id: 'hoenn', n: 'Triple couronne', d: 'Devenir Maître de Hoenn.', t: 'Triple couronne', ok: () => !!PROFILE.hchamp }
 );
 
 
-FOURNISSEURS_DEGATS.push(
+DAMAGE_PROVIDERS.push(
   { id: 'ringdojo', fournir: (c, { S, m }) => ruleH419(S) === 'jh2' && m && m.p > 0 && (m.r <= 1 ? { mul: 1.25, libelle: 'Ring du Dojo' } : { mul: 0.75, libelle: 'Ring du Dojo' }) },
   { id: 'coupbas', fournir: (c, { S, u, t }) => ruleH419(S) === 'jh5' && u.side === 'e' && t && t.side === 'a' && t.hp <= t.mhp / 2 && { mul: 1.3, libelle: 'Coup bas' } }
 );
 
 
-/* ---------- scènes et nouveautés ---------- */
+/* ---------- scenes and novelties ---------- */
 Object.assign(SCENES, {
   h1: [
     ['prof', 'Hoenn ! Des îles, un volcan, une mer immense… et vingt Pokémon que vous n’avez encore jamais vus.'],
@@ -272,7 +272,7 @@ document.addEventListener('click', e => {
 });
 
 
-/* ---------- la carte de Hoenn (dessin original) ---------- */
+/* ---------- the Hoenn map (original artwork) ---------- */
 PLACES_H = [
   { id: 'hwild', x: 215, y: 480, n: 'Route 104', s: 'Hautes herbes · Pokémon de Hoenn', grp: 'route', j: 1 },
   { id: 'h1', x: 140, y: 370, s: 'Arène 1 · ' + HLEAD[0].n, grp: 'aventure', j: 1 },

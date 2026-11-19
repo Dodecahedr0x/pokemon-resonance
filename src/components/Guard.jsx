@@ -2,9 +2,9 @@ import { Component } from 'react';
 import { reportError } from '../engine/002-errors.js';
 import { useShell } from './shellStore.js';
 
-// Une erreur de rendu ne doit casser que son bloc, pas toute l'application (comme l'ancien
-// innerHTML, qui n'abîmait que son conteneur). L'erreur s'affiche dans la boîte du moteur ;
-// le bloc réessaie au prochain changement de page.
+// A render error must break only its block, not the whole app (like the old
+// innerHTML, which only damaged its container). The error is shown in the engine's box;
+// the block retries on the next page change.
 class Limit extends Component {
   state = { err: null, cle: this.props.cle };
   static getDerivedStateFromError(err) {

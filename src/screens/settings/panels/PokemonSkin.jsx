@@ -1,8 +1,8 @@
 import { PREF } from '../../../engine/026-campaign-tutorial-sound.js';
 
-// Habillage Pokémon (v4.72), complété par v4.73 (texte, sons) et v4.77 (graphismes).
-// Boutons gérés par le moteur (clics délégués sur data-pk472, data-pk473, data-pk477).
-const on = k => PREF[k] !== 0; // même règle que on() dans les modules 107 et 109
+// Pokémon Skin (v4.72), completed by v4.73 (text, sounds) and v4.77 (graphics).
+// Buttons handled by the engine (delegated clicks on data-pk472, data-pk473, data-pk477).
+const on = k => PREF[k] !== 0; // same rule as on() in modules 107 and 109
 
 export default function PokemonSkin() {
   const t = on('pk472t'),

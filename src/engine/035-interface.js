@@ -1,4 +1,4 @@
-/* Section d'origine : v4-03-interface.js */
+/* Original section: v4-03-interface.js */
 
 import { PROFILE } from './011-game-state.js';
 import { $, $$ } from './014-utils.js';
@@ -9,7 +9,7 @@ import { refreshWallet, setMenuOpen } from '../components/shellStore.js';
 
 function menu(open) {
   V4.menu = open;
-  setMenuOpen(open); // #v4Menu et #bnMenu (aria-expanded) : src/components/Nav.jsx
+  setMenuOpen(open); // #v4Menu and #bnMenu (aria-expanded): src/components/Nav.jsx
   if (open) {
     const f = $('#v4Menu .v4-mi');
     if (f) f.focus();
@@ -17,7 +17,7 @@ function menu(open) {
 }
 
 
-// Dresseur, Pokédollars et Éclats de la barre du haut : redessinés par React (TopBar.jsx).
+// Trainer, Pokédollars and Shards of the top bar: redrawn by React (TopBar.jsx).
 export function renderWallet() {
   refreshWallet();
   $$('[data-wallet]').forEach(el => {
@@ -25,14 +25,14 @@ export function renderWallet() {
   });
 }
 
-/* pictogrammes supplémentaires : dans src/components/SvgSprite.jsx */
+/* extra pictograms: in src/components/SvgSprite.jsx */
 
 
-/* ---------- navigation : 9 destinations sur ordinateur, 5 sur téléphone ---------- */
-// pages et titres : TABS et TNAME (016) ; barre latérale, barre du bas et menu du
-// téléphone (#v4Menu) : src/components/Nav.jsx
+/* ---------- navigation: 9 destinations on desktop, 5 on phone ---------- */
+// pages and titles: TABS and TNAME (016); sidebar, bottom bar and phone
+// menu (#v4Menu): src/components/Nav.jsx
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+// Statements run at startup, in the original order (see index.js).
 export function __init() {
 
 
@@ -58,6 +58,6 @@ document.addEventListener('keydown', e => {
 });
 
 
-// barre du haut (dresseur, Pokédollars, Éclats, réglages) : src/components/TopBar.jsx
-// écran de lancement (titre et bouton) : src/components/LaunchScreen.jsx
+// top bar (trainer, Pokédollars, Shards, settings): src/components/TopBar.jsx
+// launch screen (title and button): src/components/LaunchScreen.jsx
 }
