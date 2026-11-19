@@ -1,4 +1,5 @@
-import { Fragment, useMemo } from 'react';
+import { Fragment } from 'react';
+import { useKeyed } from '../../../lib/useKeyed.js';
 import { BH, BW, K, P } from '../../../engine/021-combat-engine.js';
 import { B, BG, HC, HP, L, VERT, tiltS } from '../../../engine/024-combat-ui.js';
 import { tileTip } from '../../../engine/026-campaign-tutorial-sound.js';
@@ -112,7 +113,7 @@ export function Textures() {
 /* stadium terrain (gyms, League, canyon) */
 export function Terrain() {
   const S = useBoard('svg');
-  const h = useMemo(() => (S.stadium ? fieldSvg() : ''), [S.n]);
+  const h = useKeyed(() => (S.stadium ? fieldSvg() : ''), [S.n]);
   return (
     <g className="field" style={PE}>
       <SvgHtml html={h} />
@@ -123,7 +124,7 @@ export function Terrain() {
 /* tufts, embers, pebbles, shards: placed once per board */
 export function Decor() {
   const S = useBoard('pv');
-  const items = useMemo(() => {
+  const items = useKeyed(() => {
     const o = [];
     if (!B) return o;
     for (const k in B.tiles) {
@@ -131,11 +132,13 @@ export function Decor() {
         [c, r] = P(k),
         [x, y] = HC(k);
       if (t.rock || t.w || (c * 7 + r * 13) % 5) continue;
-      if (S.bio === 'gue')
-        {o.push(<path key={k} className="tuft" d={`M${(x - 7).toFixed(1)} ${(y + 14).toFixed(1)} l3 -9 l2 9 l3 -12 l3 12 l2 -8 l2 8Z`} />);}
+      if (S.bio === 'gue') {
+        o.push(<path key={k} className="tuft" d={`M${(x - 7).toFixed(1)} ${(y + 14).toFixed(1)} l3 -9 l2 9 l3 -12 l3 12 l2 -8 l2 8Z`} />);
+      }
       else if (S.bio === 'tour') o.push(<circle key={k} className="ember" cx={(x + 8).toFixed(1)} cy={(y + 10).toFixed(1)} r="1.6" />);
-      else if (S.bio === 'roche')
-        {o.push(<path key={k} className="pebble" d={`M${(x - 8).toFixed(1)} ${(y + 13).toFixed(1)} q3 -4 6 0 q3 -3 5 0Z`} />);}
+      else if (S.bio === 'roche') {
+        o.push(<path key={k} className="pebble" d={`M${(x - 8).toFixed(1)} ${(y + 13).toFixed(1)} q3 -4 6 0 q3 -3 5 0Z`} />);
+      }
       else o.push(<path key={k} className="glint" d={`M${(x + 9).toFixed(1)} ${(y - 12).toFixed(1)}l1 3 3 1-3 1-1 3-1-3-3-1 3-1Z`} />);
     }
     return o;
@@ -212,7 +215,7 @@ export function Light() {
 /* A–H / 1–6 markers; tilted board: realigned to the edge (v4.77) */
 export function Landmarks() {
   const S = useBoard('tilt');
-  const base = useMemo(() => {
+  const base = useKeyed(() => {
     const o = [];
     if (VERT) {
       for (let r = 0; r < BH; r++) o.push([r + 1, HC(K(0, r))[0], 8]);

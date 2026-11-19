@@ -123,10 +123,11 @@ export function arenaTick(S) {
     ev.push({ e: 'arena', r });
   }
   if (r === 'psy') {
-    if (S.jit && R % 2 === 0)
-      {S.units.forEach(o => {
+    if (S.jit && R % 2 === 0) {
+      S.units.forEach(o => {
         if (o.side === 'e' && !o.ko) o.guard = Math.max(o.guard, 1); // lasts until the end of the round
-      });}
+      });
+    }
     say(
       ev,
       S.jit
@@ -185,18 +186,19 @@ export function arenaNext(S) {
   const R = S.round;
   if (r === 'eau' && R % 2 === 0) {
     const row = tideRow(S);
-    if (row >= BH - 3 && row < BH)
-      {return {
+    if (row >= BH - 3 && row < BH) {
+      return {
         tiles: Array.from({ length: BW }, (_, c) => K(c, row)).filter(k => !S.tiles[k].rock && !S.tiles[k].w),
         txt: `La marée monte en fin de manche (rangée ${row + 1}).`
-      };}
+      };
+    }
   }
   if (r === 'feu' && R % 3 === 0) {
     const w = LAVAW[(R / 3 - 1) % 3];
     return { tiles: w.filter(k => !S.tiles[k].rock), txt: 'Coulées de lave en fin de manche sur les cases allumées.' };
   }
-  if (r === 'elec')
-    {return {
+  if (r === 'elec') {
+    return {
       tiles: S.ar.runners.map(([c, rw]) => {
         let n = c - 1;
         if (n < 0) n = BW - 1;
@@ -204,9 +206,10 @@ export function arenaNext(S) {
         return K(n, rw);
       }),
       txt: 'Les fronts de Charge avanceront sur les cases allumées.'
-    };}
-  if (r === 'sol')
-    {return {
+    };
+  }
+  if (r === 'sol') {
+    return {
       tiles: Object.keys(S.tiles)
         .filter(k => S.tiles[k].rock)
         .map(k => {
@@ -215,7 +218,8 @@ export function arenaNext(S) {
         })
         .filter(k => !S.tiles[k].rock && !S.tiles[k].w),
       txt: 'Séisme en fin de manche : les rochers glisseront vers les cases allumées.'
-    };}
+    };
+  }
   if (r === 'plante') {
     const c = (R + 1) % 2 ? 3 : 4;
     return {
@@ -225,8 +229,8 @@ export function arenaNext(S) {
       txt: `Les racines se déplaceront en colonne ${'ABCDEFGH'[c]}.`
     };
   }
-  if (r === 'psy')
-    {return {
+  if (r === 'psy') {
+    return {
       tiles: [],
       txt: S.jit
         ? R % 2 === 0
@@ -235,15 +239,17 @@ export function arenaNext(S) {
         : R % 2 === 0
           ? 'Intentions voilées cette manche : lisez les placements.'
           : 'Intentions visibles. La manche suivante sera voilée.'
-    };}
-  if (r === 'poison')
-    {return {
+    };
+  }
+  if (r === 'poison') {
+    return {
       tiles: [],
       txt:
         S.ar.thr < BW
           ? 'Brume toxique : les Pokémon dans la brume ne peuvent être visés que de près.'
           : 'La brume s’est dissipée.'
-    };}
+    };
+  }
   if (r === 'roche') return { tiles: [], txt: 'Sol Fissuré partout : Eau = Boue, Feu = Coulée, Sol = Onde sismique.' };
   return null;
 }

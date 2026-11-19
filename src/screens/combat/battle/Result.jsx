@@ -1,4 +1,5 @@
-import { useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
+import { useKeyed } from '../../../lib/useKeyed.js';
 import { Html } from '../../../lib/html.jsx';
 import { GYMS } from '../../../engine/004-data.js';
 import { BY, SCEN } from '../../../engine/009-pokemon.js';
@@ -19,7 +20,7 @@ const NL = '\n  ';
 // End-of-battle sheet (#cbResult), shown by finish() via the hidden attribute.
 export default function Result() {
   const v = useBattleVersion('result');
-  const S = useMemo(() => B, [v]); // the finished battle, frozen for this sheet
+  const S = useKeyed(() => B, [v]); // the finished battle, frozen for this sheet
   const card = useRef(null);
   // holographic edge, seal and burst (v4.72): applied on the next frame, once the sheet is visible
   const [deco, setDeco] = useState(null);

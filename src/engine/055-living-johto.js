@@ -94,8 +94,8 @@ export function v416Clean(p) {
   const o = V416_0();
   if (!p || typeof p !== 'object') return o;
   if (Number.isFinite(p.jdis)) o.jdis = Math.max(0, Math.min(4, Math.floor(p.jdis)));
-  if (p.roam && typeof p.roam === 'object')
-    {['raikou', 'entei', 'suicune'].forEach(id => {
+  if (p.roam && typeof p.roam === 'object') {
+    ['raikou', 'entei', 'suicune'].forEach(id => {
       const r = p.roam[id];
       if (!r || typeof r !== 'object') return;
       o.roam[id] = {
@@ -104,13 +104,15 @@ export function v416Clean(p) {
         ok: r.ok ? 1 : 0,
         vu: Number.isFinite(r.vu) ? Math.max(0, Math.min(999, Math.floor(r.vu))) : 0
       };
-    });}
+    });
+  }
   if (p.herit && typeof p.herit === 'object') for (const b in p.herit) if (BY[b] && MV[p.herit[b]]) o.herit[b] = p.herit[b];
   if (Array.isArray(p.couple)) o.couple = [...new Set(p.couple.filter(id => BY[id]))].slice(0, 2);
   if (typeof p.tid === 'string' && /^[a-z0-9]{6,12}$/.test(p.tid)) o.tid = p.tid;
   if (Array.isArray(p.amis)) o.amis = p.amis.map(friendClean416).filter(Boolean).slice(0, 12);
-  if (p.jour && typeof p.jour.d === 'string' && /^\d{4}-\d\d-\d\d$/.test(p.jour.d))
-    {o.jour = { d: p.jour.d, r: ['S', 'A', 'B'].includes(p.jour.r) ? p.jour.r : '', m: Number.isFinite(p.jour.m) ? Math.max(0, Math.min(99, Math.floor(p.jour.m))) : 0 };}
+  if (p.jour && typeof p.jour.d === 'string' && /^\d{4}-\d\d-\d\d$/.test(p.jour.d)) {
+    o.jour = { d: p.jour.d, r: ['S', 'A', 'B'].includes(p.jour.r) ? p.jour.r : '', m: Number.isFinite(p.jour.m) ? Math.max(0, Math.min(99, Math.floor(p.jour.m))) : 0 };
+  }
   if (Number.isFinite(p.dom)) o.dom = Math.max(0, Math.min(9999, Math.floor(p.dom)));
   if (Number.isFinite(p.oeufs)) o.oeufs = Math.max(0, Math.min(9999, Math.floor(p.oeufs)));
   return o;
@@ -463,10 +465,13 @@ function duoGen416(x, y) {
   for (const [X, Y] of [
     [a, b],
     [b, a]
-  ])
-    {for (const tx of X.t)
-      {for (const ty of Y.t)
-        {if (!A && MARK_T416[tx] && reacts(MARK_T416[tx], ty)) [A, Bm, tA, tB] = [X, Y, tx, ty];}}}
+  ]) {
+    for (const tx of X.t) {
+      for (const ty of Y.t) {
+        if (!A && MARK_T416[tx] && reacts(MARK_T416[tx], ty)) [A, Bm, tA, tB] = [X, Y, tx, ty];
+      }
+    }
+  }
   if (!A) {
     const mk = m => m.t.find(t => MARK_T416[t]);
     [A, Bm] = !mk(a) && mk(b) ? [b, a] : [a, b];
@@ -639,14 +644,15 @@ export function friendsData416() {
 
 /* trainer card / add a friend: rendered by React (src/screens/overlays/FriendBox.jsx) */
 function renderFriendBox() {
-  if (FRIEND_MODE === 'carte')
-    {paintOverlay('ami', {
+  if (FRIEND_MODE === 'carte') {
+    paintOverlay('ami', {
       mode: 'carte',
       nom: PROFILE.name || '',
       code: squad.length ? mapCode416() : '',
       equipe: squad.slice(0, 4).map(id => BY[id].n),
       partage: !!navigator.share
-    });}
+    });
+  }
   else if (FRIEND_MODE === 'ajout') paintOverlay('ami', { mode: 'ajout' });
 }
 
@@ -1107,8 +1113,8 @@ HOOKS.combat.push((S, opt, D0) => {
   // a friend's team: its learned moves and its items
   if (D0.ami) {
     const A = (PROFILE.amis || [])[D0.ami - 1];
-    if (A)
-      {A.t.forEach((x, j) => {
+    if (A) {
+      A.t.forEach((x, j) => {
         const u = S.units.find(e => e.uid === 'e' + j);
         if (!u) return;
         [x[1], x[4]].forEach(k => k && MV[k] && !u.mv.includes(k) && u.mv.push(k));
@@ -1122,7 +1128,8 @@ HOOKS.combat.push((S, opt, D0) => {
           if (it === 'crinorage') u.pb = (u.pb || 0) + 1;
           if (it === 'lentille' && (hasNx(u) || hasXp(u))) u.en = 1;
         }
-      });}
+      });
+    }
   }
 });
 
@@ -1221,10 +1228,11 @@ HOOKS.resultat.push(r => {
       `<div class="res-l"><h4>Pension</h4><div class="rl${x.sh ? ' shn' : ''}"${x.sh ? ` style="${shinyStyle(x.id)}"` : ''}>${medal(BY[x.id].t)}<span>Un œuf a éclos : un ${BY[x.id].n}${x.sh ? ' <b>chromatique</b>' : ''} !${x.mv ? ` Il hérite de <b>${MV[x.mv].n}</b> grâce à ${BY[x.pere].n}.` : ''}</span><b><img class="res-egg" src="${ITM('oeuf')}" alt=""></b></div></div>`
     );
   }
-  if (r.ami)
-    {o.push(
+  if (r.ami) {
+    o.push(
       `<div class="res-l"><h4>Défi entre amis</h4><div class="rl"><span>${r.ami.win ? 'Victoire' : 'Défaite'} contre l’équipe de ${esc(r.ami.n)} · ${r.ami.w} victoire${r.ami.w > 1 ? 's' : ''}, ${r.ami.l} défaite${r.ami.l > 1 ? 's' : ''}${r.ami.prem ? ' · première victoire du jour : +3 Éclats' : ''}.</span><b>${r.ami.w}–${r.ami.l}</b></div></div>`
-    );}
+    );
+  }
   return o.join('');
 });
 
@@ -1271,8 +1279,9 @@ document.addEventListener('click', e => {
     if (k === 'copier') return void copy416();
     if (k === 'partager') {
       const ta = $('#amiCode');
-      if (ta && navigator.share)
-        {navigator.share({ text: `Affronte mon équipe dans Pokémon Résonance ! Colle ce code dans « Défis entre amis » : ${ta.value}` }).catch(() => copy416());}
+      if (ta && navigator.share) {
+        navigator.share({ text: `Affronte mon équipe dans Pokémon Résonance ! Colle ce code dans « Défis entre amis » : ${ta.value}` }).catch(() => copy416());
+      }
       return;
     }
     if (k === 'valider') {

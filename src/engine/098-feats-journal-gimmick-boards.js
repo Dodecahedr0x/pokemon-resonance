@@ -40,7 +40,7 @@ function jxBilan467(S, win) {
 }
 
 
-function gimPlace467(S, n, ev) {
+function gimPlace467(S, n, _ev) {
   const g = GIM467[S.gim467];
   if (!g) return;
   const freeOnes = Object.keys(S.tiles).filter(k => S.tiles[k] && !S.tiles[k].rock && !S.tiles[k].mark && !uAt(S, k));

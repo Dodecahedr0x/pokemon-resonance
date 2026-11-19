@@ -115,30 +115,38 @@ export function cleanProfile(p) {
   o.dex = ids(p.dex);
   o.forms = Array.isArray(p.forms) ? [...new Set(p.forms.filter(id => BY[id] && BY[id].st > 1))] : [];
   o.ranks = {};
-  if (p.ranks && typeof p.ranks === 'object')
-    {for (const [k, v] of Object.entries(p.ranks))
-      {if (/^[a-z0-9_-]{1,24}$/i.test(k) && ['S', 'A', 'B'].includes(v)) o.ranks[k] = v;}}
+  if (p.ranks && typeof p.ranks === 'object') {
+    for (const [k, v] of Object.entries(p.ranks)) {
+      if (/^[a-z0-9_-]{1,24}$/i.test(k) && ['S', 'A', 'B'].includes(v)) o.ranks[k] = v;
+    }
+  }
   o.items = Array.isArray(p.items) ? [...new Set(p.items.filter(k => ITEMS2[k]))] : [];
-  if (p.equip && typeof p.equip === 'object')
-    {for (const k in p.equip) if (BY[k] && ITEMS2[p.equip[k]]) o.equip[k] = p.equip[k];}
-  if (p.fatigue && typeof p.fatigue === 'object')
-    {for (const k in p.fatigue)
-      {if (BY[k] && Number.isFinite(p.fatigue[k])) o.fatigue[k] = Math.max(0, Math.min(100, Math.round(p.fatigue[k])));}}
-  if (p.links && typeof p.links === 'object')
-    {for (const k in p.links) {
+  if (p.equip && typeof p.equip === 'object') {
+    for (const k in p.equip) if (BY[k] && ITEMS2[p.equip[k]]) o.equip[k] = p.equip[k];
+  }
+  if (p.fatigue && typeof p.fatigue === 'object') {
+    for (const k in p.fatigue) {
+      if (BY[k] && Number.isFinite(p.fatigue[k])) o.fatigue[k] = Math.max(0, Math.min(100, Math.round(p.fatigue[k])));
+    }
+  }
+  if (p.links && typeof p.links === 'object') {
+    for (const k in p.links) {
       const [a, b] = k.split('|');
-      if (BY[a] && BY[b] && Number.isFinite(p.links[k]) && p.links[k] > 0)
-        {o.links[k] = Math.min(999, Math.floor(p.links[k]));}
-    }}
-  if (Array.isArray(p.hist))
-    {o.hist = p.hist
+      if (BY[a] && BY[b] && Number.isFinite(p.links[k]) && p.links[k] > 0) {
+        o.links[k] = Math.min(999, Math.floor(p.links[k]));
+      }
+    }
+  }
+  if (Array.isArray(p.hist)) {
+    o.hist = p.hist
       .slice(-10)
       .filter(h => h && typeof h === 'object')
       .map(h => ({
         atk: Array.isArray(h.atk) ? h.atk.filter(t => TYPES[t]) : [],
         def: Array.isArray(h.def) ? h.def.filter(t => TYPES[t]) : [],
         rx: Object.fromEntries(Object.entries(h.rx || {}).filter(([k, v]) => RX[k] && Number.isFinite(v)))
-      }));}
+      }));
+  }
   if (Number.isFinite(p.elite)) o.elite = Math.max(0, Math.min(5, Math.floor(p.elite)));
   if (p.tuto) o.tuto = 1;
   if (o.mode === 'campagne' && !o.box.length) o.box = [...CAMP_START];
@@ -218,8 +226,9 @@ async function pushRemote(k, s, now) {
             await wait(800 + Math.random() * 700);
             continue;
           }
-          if (c === 'quota_exceeded')
-            {toast('Espace de sauvegarde du compte plein : la partie reste enregistrée sur cet appareil.');}
+          if (c === 'quota_exceeded') {
+            toast('Espace de sauvegarde du compte plein : la partie reste enregistrée sur cet appareil.');
+          }
           else if (c !== 'resource_exhausted') {
             SV.db = null;
             SV.cloud = false;
@@ -254,8 +263,9 @@ export function applySave(s, opt) {
   towerRestore();
   free421(s.squad, s.badges); // Free: the Box fills only once (v4.21)
   __set_squad(s.squad.filter(id => inBox(id)));
-  if (!squad.length)
-    {__set_squad(PROFILE.box.slice(0, 4).filter((id, i, a) => a.slice(0, i + 1).reduce((t, x) => t + BY[x].c, 0) <= BUDGET));}
+  if (!squad.length) {
+    __set_squad(PROFILE.box.slice(0, 4).filter((id, i, a) => a.slice(0, i + 1).reduce((t, x) => t + BY[x].c, 0) <= BUDGET));
+  }
   save();
   __set_BADGES(s.badges
     .filter(i => Number.isInteger(i) && i >= 0 && i < 8)
@@ -487,8 +497,9 @@ async function importSave(file) {
 /* The import repairs what can be repaired (over-budget team or unknown species filtered out, {auto: …} envelope, other version). */
 function normSave(s) {
   if (!s || typeof s !== 'object') return null;
-  for (const k of ['auto', 'save', 'data', 'snapshot'])
-    {if (!s.squad && !s.profile && s[k] && typeof s[k] === 'object') s = s[k];}
+  for (const k of ['auto', 'save', 'data', 'snapshot']) {
+    if (!s.squad && !s.profile && s[k] && typeof s[k] === 'object') s = s[k];
+  }
   if (!s || typeof s !== 'object' || (!Array.isArray(s.squad) && !s.profile)) return null;
   const o = Object.assign({}, s);
   o.v = SAVE_V;

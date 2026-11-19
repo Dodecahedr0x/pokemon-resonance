@@ -68,8 +68,9 @@ export function aplusClean(p) {
         items: {},
         reward: !!r.reward
       };
-      if (r.items && typeof r.items === 'object')
-        {for (const k in r.items) if (BY[k] && ITEMS2[r.items[k]]) o.tdr.run.items[k] = r.items[k];}
+      if (r.items && typeof r.items === 'object') {
+        for (const k in r.items) if (BY[k] && ITEMS2[r.items[k]]) o.tdr.run.items[k] = r.items[k];
+      }
     }
   }
   return o;
@@ -420,22 +421,26 @@ export function aplusProgress(S, rew) {
 /* lines added to the result screen */
 export function aplusRewHtml(r) {
   const o = [];
-  if (r.shiny && r.shiny.length)
-    {o.push(
+  if (r.shiny && r.shiny.length) {
+    o.push(
       `<div class="res-l"><h4>Chromatique</h4>${r.shiny.map(id => `<div class="rl shn" style="${shinyStyle(id)}">${medal(BY[id].t)}<span>${BY[id].n} chromatique rejoint votre collection</span><b>${SPARK}</b></div>`).join('')}</div>`
-    );}
-  if (r.rival)
-    {o.push(
+    );
+  }
+  if (r.rival) {
+    o.push(
       `<div class="res-l"><h4>Rival</h4><div class="rl"><span>${r.rival < 4 ? `Kael est battu (${r.rival} / 4). Il reviendra plus fort.` : 'Kael est battu pour de bon. La Ligue vous attend.'}</span><b>${r.rival} / 4</b></div></div>`
-    );}
-  if (r.legend)
-    {o.push(
+    );
+  }
+  if (r.legend) {
+    o.push(
       `<div class="res-l"><h4>Légende</h4><div class="rl">${medal(BY[r.legend].t)}<span>${BY[r.legend].n} vaincu · ${PROFILE.legends.length} / 6 légendes</span><b>★</b></div></div>`
-    );}
-  if (r.tdr)
-    {o.push(
+    );
+  }
+  if (r.tdr) {
+    o.push(
       `<div class="res-l"><h4>Tour de Résonance</h4><div class="rl"><span>${r.tdr.end ? `Ascension terminée à l’étage ${r.tdr.cleared}.` : `Étage ${r.tdr.cleared} franchi. Une récompense vous attend avant l’étage ${r.tdr.next}.`} Record : étage ${r.tdr.best}.</span><b>${r.tdr.cleared}</b></div></div>`
-    );}
+    );
+  }
   HOOKS.resultat.forEach(h => o.push(h(r) || '')); // v4.8+
   return o.join('');
 }

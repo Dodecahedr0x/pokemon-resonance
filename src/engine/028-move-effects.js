@@ -415,8 +415,9 @@ function fxAttackPlat(e, dur) {
                         : 1;
     const ps = [];
     T.forEach((t, ti2) => {
-      for (let i = 0; i < Math.max(1, Math.round(N / T.length)); i++)
-        {ps.push({ t, b: R0() * 0.22, j: R0() - 0.5, r: 0.6 + R0() * 0.7, rot: R0() * 6.28, ti: ti2 });}
+      for (let i = 0; i < Math.max(1, Math.round(N / T.length)); i++) {
+        ps.push({ t, b: R0() * 0.22, j: R0() - 0.5, r: 0.6 + R0() * 0.7, rot: R0() * 6.28, ti: ti2 });
+      }
     });
     fxAdd(dur * (ti + 0.12), (c, p) => {
       c.globalCompositeOperation = kind === 'rock' || kind === 'slash' ? 'source-over' : 'lighter';
@@ -479,13 +480,13 @@ function fxAttackPlat(e, dur) {
             glowDot(c, q2[0], q2[1], s * (2.4 - k2 * 0.5), pal[3], 0.35);
           }
         } else if (kind === 'bubble') {
-          ringAt(c, x, y, s, pal[0], 0.85, 1 * z);
+          ringAt(c, x, y, s, pal[0], 0.85, Number(z));
           glowDot(c, x, y, s, pal[2], 0.5);
         } else if (kind === 'impact') {
           glowDot(c, x, y, s * 3, pal[1], 0.5);
           shape(c, 'dot', x, y, s, 0, pal[0], 0.95);
-        } else
-          {shape(
+        } else {
+          shape(
             c,
             kind === 'leaf'
               ? 'leaf'
@@ -502,13 +503,14 @@ function fxAttackPlat(e, dur) {
             kind === 'ice' || kind === 'metal' ? Math.atan2(dy, dx) : o.rot + u * 6,
             kind === 'rock' ? pal[1] : pal[0],
             0.95
-          );}
+          );
+        }
       });
     });
   }
   /* ricochet: spark on the rock */
-  if (rock)
-    {fxAdd(
+  if (rock) {
+    fxAdd(
       dur * 0.3,
       (c, p) => {
         c.globalCompositeOperation = 'lighter';
@@ -528,7 +530,8 @@ function fxAttackPlat(e, dur) {
         }
       },
       dur * ti * 0.5
-    );}
+    );
+  }
   /* impact on each tile hit */
   T.forEach((t, i) => {
     const delay = dur * ti * (e.sh === 'line' ? 0.65 + (0.35 * i) / Math.max(1, T.length - 1) : 1);
@@ -641,8 +644,8 @@ function fxAttackPlat(e, dur) {
                 1 - p
               );
             }
-          } else
-            {for (let j = 0; j < 5; j++) {
+          } else {
+            for (let j = 0; j < 5; j++) {
               const an = (j / 5) * 6.283;
               shape(
                 c,
@@ -654,7 +657,8 @@ function fxAttackPlat(e, dur) {
                 pal[1],
                 1 - p
               );
-            }}
+            }
+          }
         } else if (kind === 'ice') {
           c.globalAlpha = 1 - p;
           c.strokeStyle = pal[0];
@@ -682,7 +686,7 @@ function fxAttackPlat(e, dur) {
               a2 = [x - 19 * z + o2 + 38 * z * d, y - 19 * z + 38 * z * d];
             strokePts(c, [a1, a2], '#0A0505', 7 * z, (1 - p) * 0.9);
             strokePts(c, [a1, a2], pal[1], 3 * z, 1 - p);
-            strokePts(c, [a1, a2], '#FFE5E5', 1 * z, 1 - p);
+            strokePts(c, [a1, a2], '#FFE5E5', Number(z), 1 - p);
           }
         } else if (kind === 'metal') {
           for (let j = 0; j < 8; j++) {
@@ -822,8 +826,8 @@ function fxGuardPlat(e, dur) {
 export function playEv(ev) {
   liveEv429(ev); // lunge toward the target, vibrations (v4.29)
   // the board changed (grass cut down): redraw it after the animation
-  if (ev.some(x => x.e === 'terrain'))
-    {setTimeout(
+  if (ev.some(x => x.e === 'terrain')) {
+    setTimeout(
       () => {
         if (B) {
           buildBoard();
@@ -831,7 +835,8 @@ export function playEv(ev) {
         }
       },
       PREF.fast || ui.turbo428 ? 500 : 900
-    );}
+    );
+  }
   const fx = ev.filter(x => x.e === 'fx');
   if (!fx.length || !B || !fxOn() || !fxPrep()) {
     playLog(ev.filter(x => x.e !== 'fx'));

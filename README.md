@@ -1,35 +1,39 @@
 # Pokémon Résonance
 
-Fangame français : combats tactiques en hexagones, jouable sur téléphone. Application React (Vite), déployée sur Render.
+French fan game: tactical hex-grid battles, playable on phones. React app (Vite), deployed on Render. The game text is in French; all code and comments are in English.
 
-## Jouer en local
+## Run locally
 ```bash
 npm install
 npm run dev
 ```
-Puis ouvrir l'adresse affichée (http://localhost:5173). `npm run build` produit le site statique dans `dist/`, `npm run preview` le sert.
+Then open the printed address (http://localhost:5173). `npm run build` produces the static site in `dist/`, `npm run preview` serves it. `npm run lint` runs ESLint (strict config in `eslint.config.js`); it must report zero problems.
 
-## Organisation
-- `index.html`, `src/main.jsx` : point d'entrée React.
-- `src/App.jsx` : monte le shell, puis lance le moteur.
-- `src/components/` : écran de lancement, icônes (`SvgSprite`), shell (`Shell` : navigation latérale et basse, barre du haut, écrans, surcouches) et `Garde`, qui isole chaque bloc : une erreur de rendu est signalée par le message « Petit souci technique » sans vider tout l'écran.
-- `src/screens/` : tous les écrans, un dossier chacun (`accueil`, `equipe`, `dex`, `carte`, `quetes`, `sac`, `camp`, `ligue`, `guide`, `settings`, `saves`, `combat/prep`, `combat/battle`, `combat/board`) et les surcouches (`overlays` : fiche de rencontre, dialogues, toasts, coach, starter, fenêtres temporaires).
-  - Chaque écran a son store (`…Store.js`), construit avec les trois briques de `src/lib/store.js` : `version()` (un compteur : le bloc se redessine et relit l'état du moteur), `makeStore()` (un objet d'état) et `canal()` (l'abonnement lui-même). Les fonctions de rendu du moteur gardent leur nom (`renderParams`, `renderBoard`…) et appellent ce store, qui redessine de façon synchrone (`flushSync`), car le moteur relit souvent le DOM juste après.
-  - La logique reste dans le moteur : ses écouteurs sont délégués sur `document` (`closest('[data-…]')`) et les champs de formulaire sont non contrôlés.
-- `src/lib/html.jsx` : `<Html html="…" />` transforme un fragment HTML du moteur (textes avec `<b>`, médaillons `medal()`, `tb()`, `badgeSvg()`…) en éléments React, sans élément enveloppe.
-- `src/engine/` : moteur du jeu (combat, règles, sauvegardes), un module par section d'origine (`000-…` à `112-…`). Le moteur ne construit plus d'écran ; il garde seulement les effets passagers (voir `docs/plans/2026-11-18-react-migration.md`).
-  - Le corps d'un module ne fait que déclarer : constantes, tables et fonctions. Ce qui doit s'exécuter au démarrage (écouteurs, abonnements, état de départ, valeurs calculées à partir d'un autre module) est dans son `__init()`, et `index.js` appelle les `__init()` dans l'ordre des numéros. Les imports circulaires sont donc sans danger.
-  - Une fonction n'est jamais remplacée après coup. Une section de version qui veut agir « avant » ou « après » une fonction du socle s'abonne à un événement nommé de `015-…-crochets.js` (`CROCHETS.finCombat.push(…)`, liste et arguments en tête du fichier) ; la fonction du socle l'émet avec `crochet('finCombat')`. Une règle qui change un résultat (verrou d'un scénario, prix, conditions de capture…) est écrite dans la fonction elle-même, qui appelle au besoin une fonction exportée par la section concernée.
-  - Une variable d'état modifiée depuis un autre module (`squad`, `B`, `scSel`…) passe par son `__set_<nom>()`, car un import ES est en lecture seule. Pour ouvrir l'écran Combats sur un scénario : `ouvrirCombat(k)` (ou `choisirCombat(k)` juste avant un `launch()`), dans `024-17-interface-combat.js`.
-  - Outils partagés : `014-08-outils.js` (`$`, `toast`, `lireLS` / `ecrireLS` pour `localStorage`, `attendre`, `mulberry32`…) et `032-v4-00-socle.js` (`sauverBourse`…).
-  - En développement, modifier un module du moteur recharge toute la page (greffon `moteur-sans-hmr` de `vite.config.js`) : le moteur ne s'initialise qu'une fois.
-- `src/styles/` : polices intégrées et feuilles de style, importées par `src/main.jsx` dans l'ordre de la cascade : `game.css`, puis les habillages des versions 4.71 à 4.77 (`carte-vivante`, `plateau-vivant`, `habillage`, `combat-pokemon`, `monde-pokemon`, `graphismes-peints`) et `fluidite.css`, qui doit rester la dernière. Le moteur n'injecte plus de `<style>`, sauf le CSS personnalisé de l'Atelier (toujours placé après tout le reste).
-- `public/audio/`, `public/img/` : musiques et décors peints, servis tels quels.
+## Layout
+- `index.html`, `src/main.jsx`: React entry point.
+- `src/App.jsx`: mounts the shell, then starts the engine.
+- `src/components/`: launch screen, icons (`SvgSprite`), shell (`Shell`: side and bottom navigation, top bar, screens, overlays) and `Guard`, which isolates each block: a render error is reported with the « Petit souci technique » message without blanking the whole screen.
+- `src/screens/`: every screen, one folder each (`home`, `team`, `dex`, `map`, `quests`, `bag`, `camp`, `league`, `guide`, `settings`, `saves`, `combat/prep`, `combat/battle`, `combat/board`) plus the overlays (`overlays`: encounter card, dialogs, toasts, coach, starter, transient windows).
+  - Each screen has its store (`…Store.js`), built from the three pieces of `src/lib/store.js`: `version()` (a counter: the block redraws and re-reads engine state), `makeStore()` (a state object) and `channel()` (the subscription itself). Engine render functions keep their names (`renderParams`, `renderBoard`…) and call that store, which redraws synchronously (`flushSync`) because the engine often reads the DOM right after.
+  - `src/lib/useKeyed.js`: `useKeyed(compute, keys)` keeps a value computed from engine state until one of its version keys changes (used instead of `useMemo` when the inputs live in engine modules).
+  - Logic stays in the engine: its listeners are delegated on `document` (`closest('[data-…]')`) and form fields are uncontrolled.
+- `src/lib/html.jsx`: `<Html html="…" />` turns an engine HTML fragment (text with `<b>`, `medal()`, `tb()`, `badgeSvg()` medallions…) into React elements, without a wrapper element.
+- `src/engine/`: game engine (combat, rules, saves), one module per original section (`000-…` to `112-…`). The engine no longer builds screens; it only keeps transient effects (see `docs/plans/2026-11-18-react-migration.md`).
+  - A module body only declares: constants, tables and functions. Whatever must run at startup (listeners, subscriptions, initial state, values computed from another module) lives in its `__init()`, and `index.js` calls the `__init()` functions in numeric order. Circular imports are therefore safe.
+  - A function is never replaced after the fact. A version section that wants to act "before" or "after" a core function subscribes to a named event in `015-hooks.js` (`HOOKS.finCombat.push(…)`, list and arguments at the top of the file); the core function emits it with `hook('finCombat')`. A rule that changes a result (scenario lock, price, capture conditions…) is written in the function itself, which calls a function exported by the relevant section when needed.
+  - A state variable modified from another module (`squad`, `B`, `scSel`…) goes through its `__set_<name>()`, because an ES import is read-only. To open the Battles screen on a scenario: `openBattle(k)` (or `chooseBattle(k)` right before a `launch()`), in `024-combat-ui.js`.
+  - Shared helpers: `014-utils.js` (`$`, `toast`, `readLS` / `writeLS` for `localStorage`, `wait`, `mulberry32`…) and `032-v4-foundation.js` (`savePurse`…).
+  - Object property names that are persisted (save data in `PROFILE`, battle state `B`, share codes) and hook event names are kept as they are, some in French, so existing saves keep loading.
+  - In development, editing an engine module reloads the whole page (`engine-no-hmr` plugin in `vite.config.js`): the engine initializes only once.
+- `src/styles/`: embedded fonts and stylesheets, imported by `src/main.jsx` in cascade order: `game.css`, then the skins of versions 4.71 to 4.77 (`living-map`, `living-board`, `skin`, `pokemon-combat`, `pokemon-world`, `painted-graphics`), `fluidity.css`, `combat-compact.css` and `phone.css`. The engine no longer injects `<style>`, except the Workshop's custom CSS (always placed after everything else).
+- `public/audio/`, `public/img/`: music and painted backdrops, served as-is.
 
-## Déploiement (Render)
-`render.yaml` est un Blueprint : un site statique construit par `npm ci && npm run build`, publié depuis `dist/`. Dans Render : New › Blueprint, choisir ce dépôt ; chaque push sur `main` redéploie.
+## Deployment (Render)
+`render.yaml` is a Blueprint: a static site built by `npm ci && npm run build`, published from `dist/`. In Render: New › Blueprint, pick this repository; every push to `main` redeploys.
 
-## Nouveautés v4.78 : tour guidé
+## Release notes (in French, as shown to players)
+
+### Nouveautés v4.78 : tour guidé
 - En combat, le panneau guide chaque Pokémon étape par étape : Déplacer › Agir › Terminer, avec un bouton pour sauter chaque étape (« Rester ici », « Passer l’action », « Terminer »).
 - Plus de « Fin du tour » à presser pendant votre phase : la manche se termine seule quand tous vos Pokémon ont joué. Impossible de finir le tour en oubliant un Pokémon.
 - Quand un Pokémon a fini, le suivant est sélectionné ; touchez n’importe quel autre Pokémon pour le jouer d’abord.
@@ -39,7 +43,7 @@ Puis ouvrir l'adresse affichée (http://localhost:5173). `npm run build` produit
 - Sur téléphone, l’étape en cours s’affiche à la place de « Fin du tour » ; au clavier, Espace passe l’étape.
 - « Passer » reste disponible pendant le tour adverse pour l’accélérer.
 
-## Nouveautés v4.77 : combats lisibles sur téléphone, plateau peint
+### Nouveautés v4.77 : combats lisibles sur téléphone, plateau peint
 - Plateau incliné en vraie perspective : les cases s'éloignent vers l'horizon, posées sur un socle de terre ; les Pokémon restent debout et rapetissent au fond.
 - Décors peints derrière le plateau selon le lieu et l'heure, de jour comme de nuit : prairie, canyon, tour mystique, stade de la Ligue. Les arènes prennent le décor du type du champion (canyon pour Roche, tour pour Spectre…).
 - Textures peintes sur les cases : herbe, pierre, eau, sable, cendre, marbre, runes, et boue ou lave quand une attaque les crée. Boue, lave, zone de déploiement et brouillard restent visibles sur les textures.
@@ -54,7 +58,7 @@ Puis ouvrir l'adresse affichée (http://localhost:5173). `npm run build` produit
 - Adversaires en rouge, votre équipe en bleu : anneau plein autour de chaque Pokémon, nom et ombre teintés, cartes d'équipe colorées avec les étiquettes « Adversaires » et « Votre équipe ».
 - Sur téléphone, tout le combat tient dans l'écran sans défiler : la barre de navigation du bas s'efface pendant le combat, « Fin du tour » partage la ligne des outils, cartes d'équipe plus compactes et plateau ajusté à la hauteur de l'écran.
 
-## Nouveautés v4.76 : nettoyage des surcouches
+### Nouveautés v4.76 : nettoyage des surcouches
 - L'ancien écran titre n'est plus créé (puis refermé aussitôt) sous l'écran de lancement.
 - Pendant l'écran de lancement, les animations du jeu caché dessous sont en pause.
 - Démarrage : le Pokédex, l'analyse d'équipe et l'accueil ne sont plus dessinés deux fois.
@@ -62,18 +66,18 @@ Puis ouvrir l'adresse affichée (http://localhost:5173). `npm run build` produit
 - 7 règles CSS qui ne pouvaient jamais s'appliquer retirées.
 - Rendu vérifié identique, élément par élément, sur 9 écrans.
 
-## Nouveautés v4.75 : dialogues fluides
+### Nouveautés v4.75 : dialogues fluides
 - Texte lettre par lettre plus léger : les lettres cachées ne créent plus chacune un calque, et l'écran se met à jour environ 22 fois par seconde au lieu de 60.
 - Les mots en rouge restent rouges pendant que le texte s'écrit.
 - Combat : la largeur du plateau n'est plus relue à chaque rendu, et le bond des jetons et la secousse du plateau ne forcent plus la mise en page de toute la page.
 
-## Nouveautés v4.74 : fluidité
+### Nouveautés v4.74 : fluidité
 - Écran titre : la tour et la Poké Ball géante retirées du paysage (aussi sur le bandeau d'accueil).
 - Accueil plus fluide : météo et saisons animées par la carte graphique, sans repeindre le bandeau à chaque image.
 - Carte plus fluide : le halo de « Rencontre sur la route » ne relance plus le calcul de toute la page.
 - Message « Petit souci technique » affiché en haut de l'écran, avec le numéro de version.
 
-## Nouveautés v4.73 : le monde Pokémon
+### Nouveautés v4.73 : le monde Pokémon
 - Entrée en combat qui brise l'écran en bandes (flashs pour un Pokémon sauvage, bandes dorées pour une Arène ou la Ligue).
 - Les Pokémon sortent de leur Poké Ball au début du combat et y retournent au K.O.
 - Barres de PV comme dans les jeux, qui descendent progressivement.
@@ -87,9 +91,9 @@ Puis ouvrir l'adresse affichée (http://localhost:5173). `npm run build` produit
 
 Ces effets se règlent dans Paramètres, rubrique « Habillage Pokémon ».
 
-## Contribuer
-1. Forkez le dépôt.
-2. Modifiez le code dans `src/` de votre fork (`npm run dev` pour tester).
-3. Ouvrez une pull request avec une description claire de vos changements.
+## Contributing
+1. Fork the repository.
+2. Change the code in `src/` of your fork (`npm run dev` to test, `npm run lint` must pass).
+3. Open a pull request with a clear description of your changes.
 
-Merci de ne pas publier de code secret ni de clé dans les contributions.
+Please do not publish secret code or keys in contributions.

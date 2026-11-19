@@ -208,11 +208,12 @@ $('#enc').addEventListener('click', e => {
       return;
     }
     launch();
-    if (B && !B.noCatch)
-      {log(
+    if (B && !B.noCatch) {
+      log(
         `Capture : touchez ${BY[wildId].n} pour voir les conditions (PV bas, immobilisé, un allié au contact, 2 Voix, une Ball).`,
         'sys'
-      );}
+      );
+    }
   }
   if (a === 'dex' && wildId) {
     go('pokedex');

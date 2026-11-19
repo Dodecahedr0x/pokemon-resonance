@@ -55,8 +55,8 @@ function spin455() {
     PROFILE.money -= COST455;
   }
   const r = rng454('spin455' + st.spin)();
-  let tot = LOTS455.reduce((a, l) => a + l.w, 0),
-    x = r * tot,
+  const tot = LOTS455.reduce((a, l) => a + l.w, 0);
+  let x = r * tot,
     lot = LOTS455[0];
   for (const l of LOTS455) {
     if ((x -= l.w) < 0) {

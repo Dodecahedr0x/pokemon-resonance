@@ -7,6 +7,19 @@ import { useGuide } from './guideStore.js';
 
 // « Tutoriel » (Tutorial) tab: grouped chapters, marked « read » on first open (saved).
 // The « try » buttons keep their data-t433 attributes: the engine handles them.
+// PROFILE is engine state: it is changed here, outside the component.
+function markTutorialRead(k) {
+  const L = (PROFILE.tuto433 = PROFILE.tuto433 || []);
+  if (L.includes(k)) return false;
+  L.push(k);
+  queueSave();
+  return true;
+}
+function resetTutorial() {
+  PROFILE.tuto433 = [];
+  queueSave();
+}
+
 export default function Tutorial() {
   useGuide();
   const [, rerender] = useReducer(x => x + 1, 0);
@@ -15,15 +28,10 @@ export default function Tutorial() {
   const groupList = [...new Set(TUTORIAL_STEPS433.map(c => c.g))];
 
   const markRead = k => {
-    const L = (PROFILE.tuto433 = PROFILE.tuto433 || []);
-    if (L.includes(k)) return;
-    L.push(k);
-    queueSave();
-    rerender();
+    if (markTutorialRead(k)) rerender();
   };
   const resetToZero = () => {
-    PROFILE.tuto433 = [];
-    queueSave();
+    resetTutorial();
     rerender();
   };
 

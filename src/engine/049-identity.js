@@ -54,12 +54,14 @@ export function idpClean(p) {
   const o = IDP0();
   if (!p || typeof p !== 'object') return o;
   const c = p.camp;
-  if (c && typeof c === 'object')
-    {for (const k in o.camp) if (Number.isFinite(c[k])) o.camp[k] = Math.max(0, Math.min(k === 'oeuf' ? 99 : 3, Math.floor(c[k])));}
-  if (Array.isArray(p.exp))
-    {o.exp = p.exp
+  if (c && typeof c === 'object') {
+    for (const k in o.camp) if (Number.isFinite(c[k])) o.camp[k] = Math.max(0, Math.min(k === 'oeuf' ? 99 : 3, Math.floor(c[k])));
+  }
+  if (Array.isArray(p.exp)) {
+    o.exp = p.exp
       .filter(x => x && BY[x.id] && typeof x.dest === 'string' && Number.isFinite(x.fin) && x.gain && typeof x.gain === 'object')
-      .slice(0, 3);}
+      .slice(0, 3);
+  }
   return o;
 }
 
@@ -87,39 +89,43 @@ function playChord(S, id, u, ev) {
   const foes = S.units.filter(o => o.side === 'e' && !o.ko),
     mates = S.units.filter(o => o.side === 'a' && !o.ko),
     onGround = o => !flies(o);
-  if (id === 'orage')
-    {foes.forEach(o => {
+  if (id === 'orage') {
+    foes.forEach(o => {
       if (markAt(S, uk(o)) !== 'trempe') return;
       damage(S, o, 6, ev, { ind: true });
       if (!o.ko) stun(S, o, 'PAR', ev, true);
-    });}
+    });
+  }
   else if (id === 'forge') {
     mates.forEach(o => (o.guard = 2));
     foes.forEach(o => {
       if ([uk(o), ...nbrK(uk(o))].some(k => S.tiles[k].mark && S.tiles[k].mark.k === 'brulant')) damage(S, o, 5, ev, { ind: true });
     });
-  } else if (id === 'seisme')
-    {foes.filter(onGround).forEach(o => {
+  } else if (id === 'seisme') {
+    foes.filter(onGround).forEach(o => {
       damage(S, o, 6, ev, { ind: true });
       setMark(S, uk(o), 'fissure', u.uid);
-    });}
-  else if (id === 'floraison')
-    {mates.forEach(o => {
+    });
+  }
+  else if (id === 'floraison') {
+    mates.forEach(o => {
       heal(S, o, Math.round(o.mhp * 0.25), ev);
       o.bru = 0;
       o.web = 0;
       o.root = 0;
-    });}
-  else if (id === 'banquise')
-    {for (const k in S.tiles) {
+    });
+  }
+  else if (id === 'banquise') {
+    for (const k in S.tiles) {
       const t = S.tiles[k];
       if (!(t.mark && t.mark.k === 'trempe') && !t.w) continue;
       if (t.mark && t.mark.k === 'trempe') t.mark = { k: 'givre', d: mDur(S, 'givre'), lv: 1, by: u.uid };
       const o = uAt(S, k);
       if (o && o.side === 'e' && !o.t.includes('Glace')) stun(S, o, 'GEL', ev, true);
-    }}
-  else if (id === 'eclipse')
-    {foes
+    }
+  }
+  else if (id === 'eclipse') {
+    foes
       .filter(o => (S.jit ? !o.perdu && !o.badge : o.intent) && !o.done)
       .sort((a, b) => hdist(a.pos, u.pos) - hdist(b.pos, u.pos))
       .slice(0, 2)
@@ -127,25 +133,28 @@ function playChord(S, id, u, ev) {
         o.intent = null;
         if (S.jit) o.perdu = 1;
         say(ev, S.jit ? `${o.n} se perd dans l’ombre : il ne jouera pas cette manche.` : `L’attaque de ${o.n} se perd dans l’ombre.`);
-      });}
-  else if (id === 'incendie')
-    {for (const k in S.tiles) {
+      });
+  }
+  else if (id === 'incendie') {
+    for (const k in S.tiles) {
       const t = S.tiles[k];
       if (!t.grass || t.rock) continue;
       t.grass = false;
       t.mark = { k: 'brulant', d: mDur(S, 'brulant'), lv: 1, by: u.uid };
       const o = uAt(S, k);
       if (o && o.side === 'e' && onGround(o) && !o.t.includes('Feu')) o.bru = Math.max(o.bru, 2);
-    }}
+    }
+  }
   else if (id === 'voltige') S.voix = Math.min(S.vmax + 2, S.voix + 2);
   else if (id === 'draco') foes.forEach(o => damage(S, o, 8, ev, { ind: true }));
-  else if (id === 'venin')
-    {foes
+  else if (id === 'venin') {
+    foes
       .filter(o => mates.some(a => hdist(a.pos, o.pos) <= 2))
       .forEach(o => {
         damage(S, o, 4, ev, { ind: true });
         if (!o.ko && o.tal !== 'regardvif') o.web = Math.max(o.web, 2);
-      });}
+      });
+  }
 }
 
 
@@ -508,10 +517,12 @@ HOOKS.progres.push((S, rew) => {
 
 HOOKS.resultat.push(r => {
   const o = [];
-  if (r.oeuf)
-    {o.push(`<div class="res-l"><h4>Pension</h4><div class="rl">${medal(BY[r.oeuf].t)}<span>Un œuf a éclos : ${BY[r.oeuf].n} rejoint votre Box !</span><b>🥚</b></div></div>`);}
-  if (r.exp)
-    {o.push(`<div class="res-l"><h4>Expéditions</h4><div class="rl"><span>${r.exp} Pokémon ${r.exp > 1 ? 'sont revenus' : 'est revenu'} d’expédition : récupérez leurs trouvailles au Camp (Accueil).</span><b>${r.exp}</b></div></div>`);}
+  if (r.oeuf) {
+    o.push(`<div class="res-l"><h4>Pension</h4><div class="rl">${medal(BY[r.oeuf].t)}<span>Un œuf a éclos : ${BY[r.oeuf].n} rejoint votre Box !</span><b>🥚</b></div></div>`);
+  }
+  if (r.exp) {
+    o.push(`<div class="res-l"><h4>Expéditions</h4><div class="rl"><span>${r.exp} Pokémon ${r.exp > 1 ? 'sont revenus' : 'est revenu'} d’expédition : récupérez leurs trouvailles au Camp (Accueil).</span><b>${r.exp}</b></div></div>`);
+  }
   return o.join('');
 });
 

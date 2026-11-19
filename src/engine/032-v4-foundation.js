@@ -35,8 +35,9 @@ export function ecoClean(p) {
     for (const k in SHOP) if (Number.isFinite(p.bag[k]) && p.bag[k] > 0) o.bag[k] = clampI(p.bag[k], 0, 99);
   }
   if (p.qc && typeof p.qc === 'object') for (const k in p.qc) if (/^[a-z0-9]{1,16}$/i.test(k) && p.qc[k]) o.qc[k] = 1;
-  if (p.daily && typeof p.daily.d === 'string' && /^\d{4}-\d\d-\d\d$/.test(p.daily.d))
-    {o.daily = { d: p.daily.d, w: p.daily.w ? 1 : 0 };}
+  if (p.daily && typeof p.daily.d === 'string' && /^\d{4}-\d\d-\d\d$/.test(p.daily.d)) {
+    o.daily = { d: p.daily.d, w: p.daily.w ? 1 : 0 };
+  }
   return o;
 }
 
@@ -90,8 +91,9 @@ export function savePurse() {
 /* ---------- Potions in battle: healing in exchange for the Pokémon's action ---------- */
 function pUse(S, u, k) {
   const it = SHOP[k];
-  if (!it || !it.heal || S.phase !== 'player' || !u || u.ko || u.sn || u.acted || bagN(k) < 1 || u.hp >= u.mhp || (S.objN || 0) >= BAG_MAX || S.duel433)
-    {return null;}
+  if (!it || !it.heal || S.phase !== 'player' || !u || u.ko || u.sn || u.acted || bagN(k) < 1 || u.hp >= u.mhp || (S.objN || 0) >= BAG_MAX || S.duel433) {
+    return null;
+  }
   const ev = [];
   heal(S, u, Math.ceil(u.mhp * it.heal), ev);
   say(ev, `${it.n} : ${u.n} reprend des forces.`);

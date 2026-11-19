@@ -44,13 +44,13 @@ export function timing453(cb) {
     raf = 0;
   const frame = () => {
     const p = Math.min(1, (performance.now() - T0) / DUR);
-    g.style.transform = `translate(-50%,-50%) scale(${(1.15 - p * 1.0).toFixed(3)})`;
+    g.style.transform = `translate(-50%,-50%) scale(${(1.15 - Number(p)).toFixed(3)})`;
     if (p >= 1) return endStep(null);
     raf = requestAnimationFrame(frame);
   };
   const quality = () => {
     const p = Math.min(1, (performance.now() - T0) / DUR),
-      s = 1.15 - p * 1.0,
+      s = 1.15 - Number(p),
       d = Math.abs(s - 0.5);
     return d <= 0.07 ? 'perfect' : d <= 0.2 ? 'ok' : 'miss';
   };

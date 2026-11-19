@@ -43,7 +43,7 @@ function Preferences({ C }) {
 }
 
 // A draw card (data-du433p): banned, taken or selected.
-function MapScreen({ C, id }) {
+function Card({ C, id }) {
   const m = BY[id],
     ban = C.bans[0].includes(id) ? 1 : C.bans[1].includes(id) ? 2 : 0,
     pk = C.picks[0].includes(id) ? 1 : C.picks[1].includes(id) ? 2 : 0,
@@ -124,7 +124,7 @@ function Draw({ C }) {
       <div className="du433-eqs"><Team C={C} j={0} /><Team C={C} j={1} /></div>
       {st ? (
         <>
-          <div className="du433-pool">{C.pool.map(id => <MapScreen key={id} C={C} id={id} />)}</div>
+          <div className="du433-pool">{C.pool.map(id => <Card key={id} C={C} id={id} />)}</div>
           <Detail C={C} />
         </>
       ) : null}

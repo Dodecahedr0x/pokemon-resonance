@@ -15,7 +15,7 @@ export default function EvoPick() {
   const u = evoState.u;
   return (
     <div className="evopick" id="evoPick" hidden>
-      {v && u && B ? <MapScreen u={u} /> : null}
+      {v && u && B ? <Card u={u} /> : null}
     </div>
   );
 }
@@ -96,7 +96,7 @@ function Path({ u, A, id }) {
   );
 }
 
-function MapScreen({ u }) {
+function Card({ u }) {
   const o = evoOpts(B, u);
   if (!o.length) return null;
   const A = BY[u.id];

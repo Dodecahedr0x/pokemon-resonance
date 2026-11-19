@@ -127,9 +127,9 @@ export function npcPos460() {
 function npcOpen460() {
   const { s } = npcSt460(),
     N = NPC460[s.i];
-  const c = N.c.map(c => {
-    const eff = c.cost ? 'Coût : ' + txt454(c.cost) : '';
-    return { l: c.l, ok: can454(c.cost), eff: eff || null };
+  const c = N.c.map(choice => {
+    const eff = choice.cost ? 'Coût : ' + txt454(choice.cost) : '';
+    return { l: choice.l, ok: can454(choice.cost), eff: eff || null };
   });
   // rendering: src/screens/overlays/transients/Windows.jsx (Pn460)
   const o = overlay('pn460', { n: N.n, x: N.x, c, res: null });

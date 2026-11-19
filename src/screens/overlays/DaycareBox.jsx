@@ -6,10 +6,10 @@ import { medal } from '../../engine/014-utils.js';
 // Camp Daycare (#pensBox): choice of a pair. The engine (055) computes the list and
 // the compatibility, and keeps the clicks (data-pens, data-pens-p) and the hidden attribute.
 export default function DaycareBox() {
-  return <Box nom="pens" className="result exp-box" id="pensBox" Carte={MapScreen} />;
+  return <Box nom="pens" className="result exp-box" id="pensBox" Carte={Card} />;
 }
 
-function MapScreen({ L, ok }) {
+function Card({ L, ok }) {
   return (
     <Dialogue className="sv-card exp-card" titre="pensT" fermer={{ 'data-pens': 'x' }}>
       <p className="kick">Pension</p>

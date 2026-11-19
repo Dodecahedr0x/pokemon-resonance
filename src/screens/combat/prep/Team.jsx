@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
 import { Html } from '../../../lib/html.jsx';
 import { BY, SCEN } from '../../../engine/009-pokemon.js';
 import { BUDGET } from '../../../engine/010-in-battle-evolution.js';
@@ -13,9 +13,6 @@ import { teamBtns } from '../../../engine/027-gym-on-screen.js';
 import { k2n } from '../../../engine/031-home-journey.js';
 import { DOCTRINES430 } from '../../../engine/065-camp-tactics.js';
 
-// As with the old innerHTML, a hidden block keeps its last content.
-let champWhy = null, // Champion's reasons shown last
-  docSeen = false; // the doctrine has already been drawn once
 
 // The four team slots, then the active synergies (#ptList).
 function Places() {
@@ -25,13 +22,14 @@ function Places() {
       <div className="ptc">
         {Array.from({ length: 4 }, (_, i) => {
           const id = squad[i];
-          if (!id)
-            {return (
+          if (!id) {
+            return (
               <button key={i} type="button" className="ptc-m add" data-go="pokedex" aria-label="Ajouter un Pokémon">
                 <i>+</i>
                 <em>Libre</em>
               </button>
-            );}
+            );
+          }
           const m = BY[id];
           return (
             <div key={i} className="ptc-m">
@@ -63,10 +61,14 @@ function Places() {
 }
 
 // Doctrine (v4.30): #doc430, before the Start button.
-function Doctrine() {
-  const D = SCEN[scSel] || {},
-    hidden = !!(D.tuto || D.hebdo429 || D.enigme431);
-  if (!hidden) docSeen = true;
+const doctrineHidden = () => {
+  const D = SCEN[scSel] || {};
+  return !!(D.tuto || D.hebdo429 || D.enigme431);
+};
+
+// docSeen: the doctrine has already been drawn once (a hidden block keeps its last content).
+function Doctrine({ docSeen }) {
+  const hidden = doctrineHidden();
   const k = DOCTRINES430[PROFILE.doc430] ? PROFILE.doc430 : '',
     X = DOCTRINES430[k];
   return (
@@ -128,7 +130,13 @@ export default function Team({ v }) {
   const on = v > 0;
   const lk = on && scenLock(scSel);
   const champ = on && scSel === 'champ';
-  if (champ) champWhy = SCEN.champ.why.slice();
+  // As with the old innerHTML, a hidden block keeps its last content.
+  const [champWhy, setChampWhy] = useState(null);
+  const why = champ ? SCEN.champ.why : null;
+  if (why && (!champWhy || champWhy.join('\n') !== why.join('\n'))) setChampWhy(why.slice());
+  const [docSeen, setDocSeen] = useState(false);
+  const docShown = on && !doctrineHidden();
+  if (docShown && !docSeen) setDocSeen(true);
   return (
     <div className="pt" id="ptBox">
       <div className="pt-h">
@@ -157,7 +165,7 @@ export default function Team({ v }) {
       <div className="pt-x" hidden>
         <div id="ptTeamX">{on && <Html key={v} html={teamBtns()} />}</div>
       </div>
-      {on && <Doctrine key={'d' + v} />}
+      {on && <Doctrine key={'d' + v} docSeen={docSeen || docShown} />}
       <div className="pt-go">
         <span id="ptVoix">
           {on && (

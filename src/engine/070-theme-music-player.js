@@ -261,15 +261,16 @@ if (PREF.music === undefined) PREF.music = false;
 /* victory: result sheet won, capture succeeded, quest reward */
 (function () {
   const r = document.getElementById('cbResult');
-  if (r && window.MutationObserver)
-    {new MutationObserver(() => {
+  if (r && window.MutationObserver) {
+    new MutationObserver(() => {
       if (!r.hidden && r.querySelector('.res-card.win')) {
         if (!r._j434) {
           r._j434 = true;
           jingle434(0, 'victoire', B && B.rew && B.rew.badgeNew ? 'badge' : '');
         }
       } else r._j434 = false;
-    }).observe(r, { attributes: true, attributeFilter: ['hidden'], childList: true });}
+    }).observe(r, { attributes: true, attributeFilter: ['hidden'], childList: true });
+  }
 })();
 
 

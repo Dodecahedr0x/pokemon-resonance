@@ -242,13 +242,14 @@ export function roundSupport(S) {
         m.forEach(o => heal(S, o, 3, pre));
       }
     });
-    if (S.syn && S.syn.includes('toxines'))
-      {S.units.forEach(e => {
+    if (S.syn && S.syn.includes('toxines')) {
+      S.units.forEach(e => {
         if (!e.ko && e.side === 'e' && (e.root > 0 || e.web > 0 || e.badge === 'SOM')) {
           say(pre, `Toxines : ${e.n} s’affaiblit.`);
           damage(S, e, 3, pre, { ind: true });
         }
-      });}
+      });
+    }
     S.units.forEach(u => {
       u.gdu = 0;
       u.hr = 0;

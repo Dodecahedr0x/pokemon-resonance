@@ -40,23 +40,25 @@ function Content() {
   if (B.over) return null;
   if (B.dep430) return <Placement />;
   if (ui.busy && !ui.cine && (B.phase === 'enemy' || enemyTurn428())) return <OpponentTurn />;
-  if (ui.busy)
-    {return (
+  if (ui.busy) {
+    return (
       <div className="bp-wait">
         <span className="spin" />
         {ui.cine ? 'Évolution en cours…' : 'Les adversaires agissent…'}
       </div>
-    );}
+    );
+  }
   const e = ui.selE && byUid(B, ui.selE);
   if (e && !e.ko) return <OpponentSheet e={e} />;
   const u = ui.sel && byUid(B, ui.sel);
-  if (!u || u.ko)
-    {return (
+  if (!u || u.ko) {
+    return (
       <>
         <Hi html={tileCard()} />
         <p className="bp-hint">Touchez un de vos Pokémon pour le commander, ou un adversaire pour voir sa portée.</p>
       </>
-    );}
+    );
+  }
   return <AllySheet u={u} />;
 }
 
@@ -199,8 +201,9 @@ function Intention({ e }) {
       </p>
     );
   }
-  if (e.intent && veiled(B))
-    {return <p className="bp-int">Intention voilée par l’Arène Psy. Elle reste fixée : lisez sa position et sa portée.</p>;}
+  if (e.intent && veiled(B)) {
+    return <p className="bp-int">Intention voilée par l’Arène Psy. Elle reste fixée : lisez sa position et sa portée.</p>;
+  }
   if (e.intent) {
     const m = MV[e.intent.mv],
       v = uAt(B, e.intent.k);
@@ -541,18 +544,21 @@ function AllySheet({ u }) {
     without = guide && !ui.mode,
     s = h => (without ? withoutTip(h) : h);
   let hint = null;
-  if (ui.mode === 'duo')
-    {hint = ui.pv ? <Preview v={ui.pv} /> : <p className="bp-hint">Technique combinée : touchez une case dorée pour voir le résultat exact.</p>;}
-  else if (ui.mode === 'target')
-    {hint = ui.pv ? <Preview v={ui.pv} /> : <p className="bp-hint">Touchez une case dorée : l’aperçu affiche le résultat exact.</p>;}
+  if (ui.mode === 'duo') {
+    hint = ui.pv ? <Preview v={ui.pv} /> : <p className="bp-hint">Technique combinée : touchez une case dorée pour voir le résultat exact.</p>;
+  }
+  else if (ui.mode === 'target') {
+    hint = ui.pv ? <Preview v={ui.pv} /> : <p className="bp-hint">Touchez une case dorée : l’aperçu affiche le résultat exact.</p>;
+  }
   else if (without) hint = null;
   else if (ui.mode === 'dodge') hint = <p className="bp-hint">Esquive : touchez une case verte voisine.</p>;
-  else if (u.sn)
-    {hint = (
+  else if (u.sn) {
+    hint = (
       <p className="bp-hint">
         {u.n} est {STATE[u.badge] || STATE.PAR} : il ne peut pas agir cette manche.
       </p>
-    );}
+    );
+  }
   else if (!u.acted && !u.moved) hint = <p className="bp-hint">Cases bleues : déplacement. Ou choisissez directement une capacité.</p>;
   else if (!u.acted) hint = <p className="bp-hint">Choisissez une capacité, ou éveillez-le depuis cette case.</p>;
   else hint = <p className="bp-hint">{u.n} a joué. Esquive et Relance restent possibles.</p>;

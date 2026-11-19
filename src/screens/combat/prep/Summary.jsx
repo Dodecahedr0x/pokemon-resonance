@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Html } from '../../../lib/html.jsx';
 import { useResumeVersion } from './prepStore.js';
 import { SCEN } from '../../../engine/009-pokemon.js';
@@ -8,9 +9,6 @@ import { SV, battleLine, validBattle } from '../../../engine/025-saves.js';
 
 // "Combat en cours" (Battle in progress) card (formerly renderResume), shared by #resumePrep (Battles) and
 // #resumeHome (Home). The data-resume / data-drop buttons are still handled by the engine.
-// As with the old innerHTML, a hidden card keeps its last content: we remember
-// the last battle displayed for each container.
-const last = {};
 
 export function SummaryCard({ id, c }) {
   return (
@@ -40,11 +38,15 @@ export function SummaryCard({ id, c }) {
 export default function SummaryBox({ id }) {
   const v = useResumeVersion();
   const b = v && !B && validBattle(SV.lastBattle) ? SV.lastBattle : null;
+  // As with the old innerHTML, a hidden card keeps its last content.
+  const [last, setLast] = useState(null);
+  let cur = null;
   if (b) {
     const D = SCEN[b.sc];
-    last[id] = { gym: D.gym, at: D.at, line: battleLine(b), v };
+    cur = { gym: D.gym, at: D.at, line: battleLine(b), v };
   }
-  const c = last[id];
+  if (cur && (!last || last.v !== cur.v)) setLast(cur);
+  const c = cur || last;
   return (
     <div className="resume" id={id} hidden={!b}>
       {c && <SummaryCard key={c.v} id={id} c={c} />}

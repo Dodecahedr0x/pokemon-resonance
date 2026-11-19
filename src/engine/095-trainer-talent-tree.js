@@ -94,14 +94,15 @@ HOOKS.avantFinManche.push((S, ev) => {
     s1 = tal464('s1'),
     s3 = tal464('s3');
   if (s1) al.forEach(u => heal(S, u, Math.max(1, Math.round((u.mhp * s1 * 2) / 100)), ev));
-  if (s3)
-    {al.forEach(u => {
+  if (s3) {
+    al.forEach(u => {
       if (u.hp / u.mhp < 0.3 && !S.tal464.used[u.uid]) {
         S.tal464.used[u.uid] = 1;
         heal(S, u, Math.max(1, Math.round((u.mhp * s3 * 10) / 100)), ev);
         say(ev, `Second souffle : ${u.n} se relève.`);
       }
-    });}
+    });
+  }
 });
 
 

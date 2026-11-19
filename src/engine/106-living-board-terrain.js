@@ -102,8 +102,8 @@ export function __init() {
       img = x.createImageData(TS, TS),
       D = img.data;
     const [c1, c2, c3] = cols;
-    for (let j = 0; j < TS; j++)
-      {for (let i = 0; i < TS; i++) {
+    for (let j = 0; j < TS; j++) {
+      for (let i = 0; i < TS; i++) {
         let v = pf(i / 32, j / 32, 8, seed, 4);
         const g = (hash2(i, j, seed) - 0.5) * 0.12;
         if (name === 'sand') v = v * 0.6 + (Math.sin((j + pf(i / 64, j / 64, 4, seed + 5, 2) * 60) * 0.25) * 0.5 + 0.5) * 0.4;
@@ -119,7 +119,8 @@ export function __init() {
         D[o + 1] = c1[1] + (c2[1] - c1[1]) * t1 + (c3[1] - c2[1]) * t2;
         D[o + 2] = c1[2] + (c2[2] - c1[2]) * t1 + (c3[2] - c2[2]) * t2;
         D[o + 3] = 255;
-      }}
+      }
+    }
     x.putImageData(img, 0, 0);
     const r = mulberry32((seed * 13 + 7) | 0);
     const wrap = (f, px, py) => {
@@ -146,8 +147,8 @@ export function __init() {
           py
         );
       }
-      if (name === 'leaves')
-        {for (let k = 0; k < 90; k++) {
+      if (name === 'leaves') {
+        for (let k = 0; k < 90; k++) {
           const px = r() * TS,
             py = r() * TS,
             a = r() * 6.28,
@@ -162,9 +163,10 @@ export function __init() {
             px,
             py
           );
-        }}
-      if (name === 'marsh')
-        {for (let k = 0; k < 14; k++) {
+        }
+      }
+      if (name === 'marsh') {
+        for (let k = 0; k < 14; k++) {
           const px = r() * TS,
             py = r() * TS,
             rx = 8 + r() * 14;
@@ -178,10 +180,11 @@ export function __init() {
             px,
             py
           );
-        }}
+        }
+      }
     }
-    if (name === 'dirt' || name === 'sand' || name === 'basalt')
-      {for (let k = 0; k < (name === 'sand' ? 60 : 160); k++) {
+    if (name === 'dirt' || name === 'sand' || name === 'basalt') {
+      for (let k = 0; k < (name === 'sand' ? 60 : 160); k++) {
         const px = r() * TS,
           py = r() * TS,
           s = 1 + r() * (name === 'sand' ? 1.2 : 3);
@@ -199,9 +202,10 @@ export function __init() {
           px,
           py
         );
-      }}
-    if (name === 'basalt')
-      {for (let k = 0; k < 10; k++) {
+      }
+    }
+    if (name === 'basalt') {
+      for (let k = 0; k < 10; k++) {
         let px = r() * TS,
           py = r() * TS;
         const pts = [[px, py]];
@@ -223,7 +227,8 @@ export function __init() {
           pts[0][0],
           pts[0][1]
         );
-      }}
+      }
+    }
     if (name === 'slab' || name === 'tiles') {
       const n = name === 'tiles' ? 4 : 3,
         w = TS / n;
@@ -264,8 +269,8 @@ export function __init() {
         x.fill();
       });
     }
-    if (name === 'wet')
-      {for (let k = 0; k < 10; k++) {
+    if (name === 'wet') {
+      for (let k = 0; k < 10; k++) {
         const px = r() * TS,
           py = r() * TS,
           rx = 10 + r() * 18;
@@ -282,7 +287,8 @@ export function __init() {
           px,
           py
         );
-      }}
+      }
+    }
     if (name === 'clay') {
       x.strokeStyle = 'rgba(255,240,220,.12)';
       x.lineWidth = 1;
@@ -294,13 +300,14 @@ export function __init() {
         x.stroke();
       }
     }
-    if (name === 'snow')
-      {for (let k = 0; k < 140; k++) {
+    if (name === 'snow') {
+      for (let k = 0; k < 140; k++) {
         const px = r() * TS,
           py = r() * TS;
         x.fillStyle = `rgba(255,255,255,${0.4 + r() * 0.5})`;
         x.fillRect(px, py, 1.4, 1.4);
-      }}
+      }
+    }
     TEX[key] = c;
     return c;
   };
@@ -336,7 +343,7 @@ export function __init() {
   };
 
   /* ---------- small decorations ---------- */
-  const rock = (c, x, y, s, K, r) => {
+  const rock = (c, x, y, s, K, _r) => {
     c.fillStyle = 'rgba(0,0,0,.32)';
     ell(c, x + 2 * s, y + 3 * s, 11 * s, 3.6 * s);
     const base = K.tex === 'basalt' ? ['#2a2222', '#4a3c38', '#6a5a52'] : K.tex === 'snow' ? ['#5d6c7c', '#8494a6', '#b4c2d0'] : K.tex === 'sand' ? ['#7a5e40', '#a08060', '#c8a882'] : ['#4c4c52', '#76767e', '#a2a2aa'];
@@ -345,10 +352,10 @@ export function __init() {
     path(c, P);
     c.fill();
     c.fillStyle = base[1];
-    path(c, [P[0], P[1], P[2], P[3], [x + 2 * s, y - 1 * s], [x - 4 * s, y + 3 * s]]);
+    path(c, [P[0], P[1], P[2], P[3], [x + 2 * s, y - Number(s)], [x - 4 * s, y + 3 * s]]);
     c.fill();
     c.fillStyle = base[2];
-    path(c, [P[1], P[2], P[3], [x - 1 * s, y - 4 * s]]);
+    path(c, [P[1], P[2], P[3], [x - Number(s), y - 4 * s]]);
     c.fill();
     if (K.around === 'nature' || K.tex === 'leaves') {
       c.fillStyle = 'rgba(96,150,60,.75)';
@@ -364,7 +371,7 @@ export function __init() {
       c.lineWidth = 0.8;
       c.beginPath();
       c.moveTo(x - 4 * s, y - 6 * s);
-      c.lineTo(x, y - 1 * s);
+      c.lineTo(x, y - Number(s));
       c.lineTo(x + 5 * s, y - 4 * s);
       c.stroke();
     }
@@ -566,7 +573,7 @@ export function __init() {
         c.fillRect(x + 1, y - 5.2, 2.8, 1.2);
       } else rock(c, x, y, 0.4, K, r);
     },
-    neige: (c, x, y, r) => {
+    neige: (c, x, y, _r) => {
       c.fillStyle = 'rgba(0,0,0,.22)';
       ell(c, x + 2, y + 1, 5, 1.6);
       for (let k = 0; k < 3; k++) {
@@ -857,12 +864,13 @@ export function __init() {
         y = ((i * 53 + 29) % 91) + 3;
       items.push(['p ' + p, { left: x + '%', top: y + '%', animationDelay: (-i * 1.7).toFixed(1) + 's', animationDuration: (9 + (i % 5) * 2.2).toFixed(1) + 's' }]);
     }
-    if (night)
-      {for (let i = 0; i < 6; i++) {
+    if (night) {
+      for (let i = 0; i < 6; i++) {
         const x = ((i * 41 + 7) % 95) + 2,
           y = ((i * 29 + 17) % 88) + 6;
         items.push(['p luciole n', { left: x + '%', top: y + '%', animationDelay: (-i * 1.3).toFixed(1) + 's', animationDuration: (6 + (i % 4) * 1.6).toFixed(1) + 's' }]);
-      }}
+      }
+    }
     hostSet({ amb471: { k: kind, items } });
   };
   const doApply = (sig, res) => {

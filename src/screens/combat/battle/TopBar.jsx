@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Html } from '../../../lib/html.jsx';
 import { GYMS } from '../../../engine/004-data.js';
 import { MV } from '../../../engine/005-moves.js';
@@ -158,74 +159,83 @@ export function Synergies() {
 
 // Board rule: the arena's, or the same rule picked up by a legend or a Tower floor.
 // Hidden, it keeps its last content, like the old DOM.
-let lastRule = null;
 export function Rule() {
   const v = useBattleVersion('top');
-  let cache = true;
+  const [last, setLast] = useState(null);
+  let cur = null;
   if (v && B) {
     const D = SCEN[B.sc],
       an = arenaNext(B),
       gi = D.gym != null ? D.gym : ARENAS.findIndex(a => a.rule === D.rule);
-    cache = !D.rule || gi < 0;
-    if (!cache)
-      {lastRule = (
+    if (D.rule && gi >= 0) cur = { gi, next: an ? an.txt : null };
+  }
+  if (cur && (!last || last.gi !== cur.gi || last.next !== cur.next)) setLast(cur);
+  const R = cur || last;
+  return (
+    <div className="bt-arena" id="bArena" hidden={!cur}>
+      {v && R ? (
         <>
           <span className="ba-b">
-            <Html html={badgeSvg(gi, GYMS[gi].t, 'ba' + gi)} />
+            <Html html={badgeSvg(R.gi, GYMS[R.gi].t, 'ba' + R.gi)} />
           </span>
           <span>
             <b>
-              <Html html={GYMS[gi].r} />
+              <Html html={GYMS[R.gi].r} />
             </b>
-            {an ? (
+            {R.next ? (
               <em>
-                <Html html={an.txt} />
+                <Html html={R.next} />
               </em>
             ) : null}
           </span>
         </>
-      );}
-  }
-  return (
-    <div className="bt-arena" id="bArena" hidden={cache}>
-      {v ? lastRule : null}
+      ) : null}
     </div>
   );
 }
 
 // Speed-order timeline (v4.5): who plays, in what order, this round.
-let lastFrieze = null;
+// Hidden, it keeps its last content, like the old DOM.
 export function Timeline() {
   const v = useBattleVersion('top');
   const vis = !!(v && B && B.ordre === 'vitesse' && B.file && !B.over);
+  const [last, setLast] = useState(null);
+  let cur = null;
   if (vis) {
-    const cur = currentActor(B);
-    lastFrieze = (
-      <>
-        <span className="bo-k">Ordre · manche {B.round}</span>
-        {B.file.map((id, i) => {
-          const u = byUid(B, id);
-          if (!u) return null;
-          const doneFlag = i < B.ifile || u.ko,
-            prio = u.side === 'e' && u.intent && MV[u.intent.mv].prio;
-          return (
-            <span
-              key={i}
-              className={`bo ${u.side === 'a' ? 'al' : 'en'}${u === cur ? ' now' : ''}${doneFlag ? ' fait' : ''}${u.ko ? ' ko' : ''}`}
-              title={'Vitesse ' + String(B.vfile[i]).replace('.', ',')}
-            >
-              <Html html={medal(u.t, 'sm')} />
-              <b>{u.n}</b>
-              {prio ? <em>{prio > 0 ? 'Priorité' : 'En dernier'}</em> : null}
-            </span>
-          );
-        })}
-      </>
-    );
+    const now = currentActor(B);
+    const rows = [];
+    B.file.forEach((id, i) => {
+      const u = byUid(B, id);
+      if (!u) return;
+      const doneFlag = i < B.ifile || u.ko,
+        prio = u.side === 'e' && u.intent && MV[u.intent.mv].prio;
+      rows.push({
+        i,
+        cls: `bo ${u.side === 'a' ? 'al' : 'en'}${u === now ? ' now' : ''}${doneFlag ? ' fait' : ''}${u.ko ? ' ko' : ''}`,
+        title: 'Vitesse ' + String(B.vfile[i]).replace('.', ','),
+        t: u.t,
+        n: u.n,
+        prio: prio || 0,
+      });
+    });
+    cur = { round: B.round, rows };
   }
+  if (cur && JSON.stringify(cur) !== JSON.stringify(last)) setLast(cur);
+  const F = cur || last;
   return (
     <div className="b-ordre" id="bOrdre" hidden={!vis} aria-label="Ordre de jeu de la manche">
-      {v ? lastFrieze : null}
+      {v && F ? (
+        <>
+          <span className="bo-k">Ordre · manche {F.round}</span>
+          {F.rows.map(r => (
+            <span key={r.i} className={r.cls} title={r.title}>
+              <Html html={medal(r.t, 'sm')} />
+              <b>{r.n}</b>
+              {r.prio ? <em>{r.prio > 0 ? 'Priorité' : 'En dernier'}</em> : null}
+            </span>
+          ))}
+        </>
+      ) : null}
     </div>
   );
 }

@@ -77,10 +77,11 @@ HOOKS.combat.push(S => {
   if (!f) return;
   S.form463 = f.k;
   if (f.k === 'phalange') f.al[0].guard = Math.max(f.al[0].guard || 0, 2);
-  if (f.k === 'eclaireurs')
-    {f.al.forEach((u, i) => {
+  if (f.k === 'eclaireurs') {
+    f.al.forEach((u, i) => {
       u.en = Math.max(u.en || 0, i === f.al.length - 1 ? 2 : 1);
-    });}
+    });
+  }
 });
 
 

@@ -21,7 +21,8 @@ export default [
       ...react.configs['jsx-runtime'].rules,
       ...reactHooks.configs.recommended.rules,
       'react/prop-types': 'off',
-      'react/no-unknown-property': ['error', { ignore: ['class'] }],
+      // React wires load/error listeners on SVG <image> too; the rule only knows HTML tags.
+      'react/no-unknown-property': ['error', { ignore: ['class', 'onLoad', 'onError'] }],
 
       // Strictness on top of the recommended sets.
       eqeqeq: ['error', 'always', { null: 'ignore' }],
@@ -43,7 +44,7 @@ export default [
       'no-duplicate-imports': 'error',
       'prefer-template': 'off',
       'object-shorthand': 'error',
-      'prefer-arrow-callback': 'error',
+      'prefer-arrow-callback': ['error', { allowNamedFunctions: true }],
       'no-console': ['error', { allow: ['warn', 'error'] }],
       curly: ['error', 'multi-line'],
     },

@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useKeyed } from '../../lib/useKeyed.js';
 import { Html } from '../../lib/html.jsx';
 import { strength } from '../../lib/power.js';
 import { useEngineReady } from '../../engineReady.js';
@@ -26,7 +26,7 @@ import { captureSite421 } from '../../engine/061-catch-anywhere.js';
 export default function Sheet() {
   const ready = useEngineReady();
   const { open, id, sheet } = useRoster();
-  const content = useMemo(() => (ready && id ? <Content id={id} /> : null), [ready, id, sheet]);
+  const content = useKeyed(() => (ready && id ? <Content id={id} /> : null), [ready, id, sheet]);
   return (
     <div className="sheet" id="sheet" hidden={!open}>
       <div className="scrim" data-close="" />

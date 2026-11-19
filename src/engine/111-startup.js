@@ -148,13 +148,14 @@ bootStep('typographie', () => fixTree(document.body));
 bootStep('intro', () => {
   // the Professor arrives when the launch screen closes
   const sel = '#resonance-launch';
-  if (document.querySelector(sel))
-    {new MutationObserver((m, ob) => {
+  if (document.querySelector(sel)) {
+    new MutationObserver((m, ob) => {
       if (!document.querySelector(sel)) {
         ob.disconnect();
         showIntro();
       }
-    }).observe(document.body, { childList: true, subtree: true });} // the React launch screen is in #root, not a direct child of <body>
+    }).observe(document.body, { childList: true, subtree: true });
+  } // the React launch screen is in #root, not a direct child of <body>
   else showIntro();
 });
 

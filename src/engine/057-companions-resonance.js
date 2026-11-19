@@ -71,11 +71,12 @@ export function v417Clean(p) {
     if (typeof c.j === 'string' && /^\d{4}-\d\d-\d\d$/.test(c.j)) o.comp.j = c.j;
   }
   if (p.scenes && typeof p.scenes === 'object') for (const k in p.scenes) if (/^[a-z0-9]{1,12}$/.test(k) && p.scenes[k]) o.scenes[k] = 1;
-  if (Array.isArray(p.potager))
-    {o.potager = [0, 1, 2].map(i => {
+  if (Array.isArray(p.potager)) {
+    o.potager = [0, 1, 2].map(i => {
       const x = p.potager[i];
       return x && POTAGER[x.g] && Number.isFinite(x.fin) ? { g: x.g, fin: Math.max(0, Math.floor(x.fin)) } : null;
-    });}
+    });
+  }
   if (typeof p.arrose === 'string' && /^\d{4}-\d\d-\d\d$/.test(p.arrose)) o.arrose = p.arrose;
   const t = p.tournoi;
   if (t && typeof t === 'object') {
@@ -777,8 +778,9 @@ HOOKS.progres.push((S, rew, win) => {
 HOOKS.resultat.push(r => {
   const t = r.tournoi;
   if (!t) return '';
-  if (t.gagne)
-    {return `<div class="res-l"><h4>Tournoi entre amis</h4><div class="rl"><span><b>Tournoi remporté !</b> ${t.n} équipes battues à la suite : +10 Éclats.</span><b>🏆</b></div></div>`;}
+  if (t.gagne) {
+    return `<div class="res-l"><h4>Tournoi entre amis</h4><div class="rl"><span><b>Tournoi remporté !</b> ${t.n} équipes battues à la suite : +10 Éclats.</span><b>🏆</b></div></div>`;
+  }
   if (t.fin) return `<div class="res-l"><h4>Tournoi entre amis</h4><div class="rl"><span>Le tournoi s’arrête au combat ${t.i + 1} sur ${t.n}. Record : ${PROFILE.tournoi.best} victoire${PROFILE.tournoi.best > 1 ? 's' : ''}.</span><b>${t.i} / ${t.n}</b></div></div>`;
   return `<div class="res-l"><h4>Tournoi entre amis</h4><div class="rl"><span>Victoire ${t.i} sur ${t.n}. Prochain adversaire : ${esc(t.nom)}. Vos PV restent tels quels.</span><button type="button" class="b b-sm b-gold" data-tournoi="suite">Combat suivant</button></div></div>`;
 });

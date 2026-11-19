@@ -53,8 +53,8 @@ export function v433Clean(p) {
   if (d && typeof d === 'object') {
     o.duel433.n = Math.max(0, Math.min(99999, Math.floor(+d.n || 0)));
     if (Array.isArray(d.noms)) o.duel433.noms = [duelName433(d.noms[0]), duelName433(d.noms[1])];
-    if (Array.isArray(d.h))
-      {o.duel433.h = d.h
+    if (Array.isArray(d.h)) {
+      o.duel433.h = d.h
         .filter(x => x && typeof x === 'object' && Array.isArray(x.t) && x.t.length === 2)
         .slice(-12)
         .map(x => ({
@@ -63,8 +63,9 @@ export function v433Clean(p) {
           g: [0, 1, 2].includes(x.g) ? x.g : 0,
           r: Math.max(0, Math.min(30, Math.floor(+x.r || 0))),
           w: x.w === 'temps' || x.w === 'forfait' ? x.w : 'ko',
-          t: x.t.map(L => (Array.isArray(L) ? L : []).filter(id => typeof id === 'string' && BY[id]).slice(0, 4))
-        }));}
+          t: x.t.map(team => (Array.isArray(team) ? team : []).filter(id => typeof id === 'string' && BY[id]).slice(0, 4))
+        }));
+    }
   }
   if (Array.isArray(p.tuto433)) o.tuto433 = [...new Set(p.tuto433.filter(k => typeof k === 'string' && TUTORIAL_STEPS433.some(c => c.k === k)))];
   return o;
@@ -109,8 +110,8 @@ function duelNew433() {
 }
 
 
-function shuffle433(L) {
-  const a = L.slice();
+function shuffle433(list) {
+  const a = list.slice();
   for (let i = a.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [a[i], a[j]] = [a[j], a[i]];
@@ -261,20 +262,22 @@ function turnStart433(S, j, ev) {
     S.units.forEach(u => {
       if (!u.ko && u.j433 === 2) unitEffects433(S, u, ev);
     });
-    if (S.syn && S.syn.includes('toxines'))
-      {S.units.forEach(e => {
+    if (S.syn && S.syn.includes('toxines')) {
+      S.units.forEach(e => {
         if (!e.ko && e.side === 'e' && (e.root > 0 || e.web > 0 || e.badge === 'SOM')) {
           say(ev, `Toxines : ${e.n} s’affaiblit.`);
           damage(S, e, 3, ev, { ind: true });
         }
-      });}
+      });
+    }
     endStep(S, ev);
     if (S.over) return;
   }
-  if (S.round > 1)
-    {S.units.forEach(u => {
+  if (S.round > 1) {
+    S.units.forEach(u => {
       if (u.j433 === j && !u.ko) rewardIn(S, u, 1, ev);
-    });}
+    });
+  }
   S.units.forEach(u => {
     if (u.ko || u.j433 !== j) return;
     u.done = false;
@@ -398,9 +401,9 @@ function relay433(j, force) {
 
 /** Share of a player's remaining HP, in %. */
 function duelHp433(S, j) {
-  const L = S.units.filter(u => u.j433 === j),
-    m = L.reduce((s, u) => s + u.mhp, 0);
-  return m ? Math.round((L.reduce((s, u) => s + (u.ko ? 0 : Math.max(0, u.hp)), 0) / m) * 100) : 0;
+  const units = S.units.filter(u => u.j433 === j),
+    m = units.reduce((s, u) => s + u.mhp, 0);
+  return m ? Math.round((units.reduce((s, u) => s + (u.ko ? 0 : Math.max(0, u.hp)), 0) / m) * 100) : 0;
 }
 
 
@@ -501,7 +504,7 @@ const mirror433 = k => {
 };
 
 
-const two433 = L => [...new Set([...(L || []), ...(L || []).map(mirror433)])];
+const two433 = keys => [...new Set([...(keys || []), ...(keys || []).map(mirror433)])];
 
 
 const posJ2433 = i => [BW - 1 - DEPLOY[i][0], BH - 1 - DEPLOY[i][1]];
@@ -728,7 +731,7 @@ if (!CAMP_TABS431.some(x => x[0] === 'duel')) CAMP_TABS431.push(['duel', 'Duel']
     C.picks = [
       ['salameche', 'carapuce', 'bulbizarre', 'pichu'],
       ['germignon', 'hericendre', 'kaiminus', 'wattouat']
-    ].map(L => L.filter(id => BY[id]));
+    ].map(team => team.filter(id => BY[id]));
     const X = duelScene433(C);
     SCEN.duel433 = X.D;
     OBST.duel433 = X.O;

@@ -37,13 +37,14 @@ function Team() {
       <div className="v4-team-g">
         {[0, 1, 2, 3].map(i => {
           const id = squad[i];
-          if (!id)
-            {return (
+          if (!id) {
+            return (
               <a key={i} className="v4-mon empty" data-t="pokedex" href="#pokedex">
                 <span className="v4-plus"><svg><use href="#i-plus" /></svg></span>
                 <span className="v4-mon-n">Recruter</span>
               </a>
-            );}
+            );
+          }
           const m = BY[id],
             fat = isCamp() ? PROFILE.fatigue[m.base] || 0 : 0;
           return (
@@ -63,8 +64,8 @@ function Team() {
 function Quest() {
   const g = goalInfo(),
     C = g.C || { c: 'Aventure', t: g.n };
-  if (!isCamp())
-    {return (
+  if (!isCamp()) {
+    return (
       <>
         <span className="v4q-ic"><svg><use href="#i-quest" /></svg></span>
         <span className="v4q-t">
@@ -73,7 +74,8 @@ function Quest() {
           <em>Capturez vos Pokémon sur la {routeName()} ({REGION_NAMES421[regionNo421()]}).</em>
         </span>
       </>
-    );}
+    );
+  }
   return (
     <>
       <span className="v4q-ic"><Html html={emblem(g.k, 'xs')} /></span>

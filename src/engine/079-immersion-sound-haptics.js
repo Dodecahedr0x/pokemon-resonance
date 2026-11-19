@@ -188,20 +188,20 @@ export function tipVs448() {
 /** Redrawn Pokédex entry: sweep, and a little fanfare the first time an owned family is opened. */
 export function scanDex448() {
   try {
-    const el = $('#dex4Card');
-    if (!el) return;
+    const card = $('#dex4Card');
+    if (!card) return;
     const own = !!ownedFam(V4.dexSel);
-    el.classList.remove('scan448');
-    void el.offsetWidth;
-    if (IM448() && !RM) el.classList.add('scan448');
+    card.classList.remove('scan448');
+    void card.offsetWidth;
+    if (IM448() && !RM) card.classList.add('scan448');
     if (own && IM448() && !RM) {
       const s = seen448(),
         id = V4.dexSel;
       if (!s[id]) {
         s[id] = 1;
         writeLS('res-seen448', s);
-        el.classList.add('new448');
-        setTimeout(() => el.classList.remove('new448'), 1800);
+        card.classList.add('new448');
+        setTimeout(() => card.classList.remove('new448'), 1800);
         try {
           [784, 988, 1318].forEach((f, i) => tone(f, i * 0.09, 0.22, 'triangle', 0.045));
         } catch { /* Best effort: failure here is non-fatal. */ }

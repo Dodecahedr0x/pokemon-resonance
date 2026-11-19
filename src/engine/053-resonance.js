@@ -212,8 +212,9 @@ export function plateRank414(u) {
 export function foeReso414(e) {
   const n = notesOf(B, e),
     o = [];
-  if (n && !e.ko)
-    {o.push(n >= 3 ? 'Résonance déjà déclenchée sur lui cette manche.' : `Résonance : ${n} note${n > 1 ? 's' : ''} sur 3. Encore ${3 - n} pour la déclencher.`);}
+  if (n && !e.ko) {
+    o.push(n >= 3 ? 'Résonance déjà déclenchée sur lui cette manche.' : `Résonance : ${n} note${n > 1 ? 's' : ''} sur 3. Encore ${3 - n} pour la déclencher.`);
+  }
   if (bossScene(B) && hasXp(e)) o.push(`Il accumule la Résonance : ${e.en || 0} / ${EMAX} losanges, ${xpCost(e)} pour son attaque Experte.`);
   return (o.length ? `<p class="bp-reso">${o.join(' ')}</p>` : '') + resoBoss460(e);
 }
@@ -501,10 +502,11 @@ HOOKS.combat.push(S => {
       if (hasNx(u) || hasXp(u)) u.en = Math.max(u.en || 0, 1);
     });
   }
-  if (bossScene(S))
-    {S.units.forEach(e => {
+  if (bossScene(S)) {
+    S.units.forEach(e => {
       if (e.side === 'e' && hasXp(e)) e.en = Math.max(e.en || 0, 1);
-    });}
+    });
+  }
 });
 
 

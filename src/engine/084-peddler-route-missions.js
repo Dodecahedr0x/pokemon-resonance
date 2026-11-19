@@ -47,9 +47,9 @@ export function ev454() {
 function evOpen454() {
   const { E, st } = ev454();
   if (st.done) return;
-  const c = E.c.map(c => {
-    const eff = [c.cost ? 'Coût : ' + txt454(c.cost) : '', c.p && c.p < 1 ? `${Math.round(c.p * 100)} % de réussite` : ''].filter(Boolean).join(' · ');
-    return { l: c.l, ok: can454(c.cost), eff: eff || null };
+  const c = E.c.map(choice => {
+    const eff = [choice.cost ? 'Coût : ' + txt454(choice.cost) : '', choice.p && choice.p < 1 ? `${Math.round(choice.p * 100)} % de réussite` : ''].filter(Boolean).join(' · ');
+    return { l: choice.l, ok: can454(choice.cost), eff: eff || null };
   });
   // rendered by src/screens/overlays/transients/Windows.jsx (Ev454)
   const o = overlay('evs454', { t: E.t, x: E.x, c, res: null });
@@ -142,7 +142,7 @@ const LS454 = (k, d) => {
 export const rng454 = sel => mulberry32(seed417(sel) || 1);
 
 
-export const reward454 = (o, t) => {
+export const reward454 = (o, _t) => {
   /* applies a gain/cost {m,g,b:{k:n}} */
   if (!o) return;
   if (o.m) PROFILE.money = Math.max(0, PROFILE.money + o.m);

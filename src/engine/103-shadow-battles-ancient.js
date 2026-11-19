@@ -193,8 +193,8 @@ export function __init() {
       pre: { n: X.pre.n, on: !!X.pre.on },
       preOk: !!preOk()
     });
-    o.addEventListener('click', e => {
-      if (e.target === o) shut('x470o');
+    o.addEventListener('click', evt => {
+      if (evt.target === o) shut('x470o');
     });
   };
   document.addEventListener(

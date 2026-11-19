@@ -3,7 +3,7 @@
 import { GYMS } from './004-data.js';
 import { SCEN } from './009-pokemon.js';
 import { ARENAS } from './013-gyms.js';
-import { RM, hash2, mulberry32, tc } from './014-utils.js';
+import { hash2, mulberry32, tc } from './014-utils.js';
 import { HOOKS } from './015-hooks.js';
 import { V4 } from './032-v4-foundation.js';
 import { CHAIN, MAP_SVG, curvePath, placeState } from './037-map.js';
@@ -26,13 +26,6 @@ export function __init() {
     GW = VW / Q,
     GH = VH / Q;
   const gi = (x, y) => clamp((y / Q) | 0, 0, GH - 1) * GW + clamp((x / Q) | 0, 0, GW - 1);
-  const shrunk = () => {
-    try {
-      return !!RM;
-    } catch (e) {
-      return false;
-    }
-  };
   /* ---------- randomness and noise (deterministic): mulberry32 and hash2 (014) ---------- */
   const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
   const sstep = (a, b, v) => {
@@ -260,8 +253,8 @@ export function __init() {
         const S = SCEN[p.id] || {};
         let t = S.at || '';
         try {
-          const gi = ARENAS.findIndex(a => a.k === p.id);
-          if (gi >= 0) t = GYMS[gi].t;
+          const arenaIdx = ARENAS.findIndex(a => a.k === p.id);
+          if (arenaIdx >= 0) t = GYMS[arenaIdx].t;
         } catch { /* Best effort: failure here is non-fatal. */ }
         return { id: p.id, x: p.x, y: p.y, grp: p.grp, t };
       });
@@ -360,7 +353,7 @@ export function __init() {
     c.lineCap = 'round';
     c.beginPath();
     c.moveTo(x, y);
-    c.quadraticCurveTo(x + 2 * s, y - 9 * s, x + 1 * s, y - 17 * s);
+    c.quadraticCurveTo(x + 2 * s, y - 9 * s, x + Number(s), y - 17 * s);
     c.stroke();
     c.strokeStyle = '#2b8448';
     c.lineWidth = 2.2 * s;
@@ -411,18 +404,18 @@ export function __init() {
   const boulder = (c, x, y, s, dark) => {
     shadow(c, x, y, 5 * s, 1.6 * s);
     c.fillStyle = dark ? '#3d3436' : '#7d7570';
-    poly(c, [[x - 5 * s, y], [x - 4 * s, y - 4 * s], [x - 1 * s, y - 6 * s], [x + 3 * s, y - 5 * s], [x + 5 * s, y - 1 * s], [x + 3 * s, y + 0.6 * s]]);
+    poly(c, [[x - 5 * s, y], [x - 4 * s, y - 4 * s], [x - Number(s), y - 6 * s], [x + 3 * s, y - 5 * s], [x + 5 * s, y - Number(s)], [x + 3 * s, y + 0.6 * s]]);
     c.fillStyle = dark ? '#5a4e4e' : '#a8a09a';
-    poly(c, [[x - 4 * s, y - 4 * s], [x - 1 * s, y - 6 * s], [x + 1 * s, y - 4 * s], [x - 2 * s, y - 2 * s]]);
+    poly(c, [[x - 4 * s, y - 4 * s], [x - Number(s), y - 6 * s], [x + Number(s), y - 4 * s], [x - 2 * s, y - 2 * s]]);
   };
   const house = (c, x, y, s, roof) => {
-    shadow(c, x + 1 * s, y, 8 * s, 2.4 * s);
+    shadow(c, x + Number(s), y, 8 * s, 2.4 * s);
     c.fillStyle = '#f3ead6';
     c.fillRect(x - 5 * s, y - 7 * s, 10 * s, 7 * s);
     c.fillStyle = 'rgba(80,60,40,.16)';
     c.fillRect(x + 1.5 * s, y - 7 * s, 3.5 * s, 7 * s);
     c.fillStyle = '#6b4a2e';
-    c.fillRect(x - 1 * s, y - 3.8 * s, 2 * s, 3.8 * s);
+    c.fillRect(x - Number(s), y - 3.8 * s, 2 * s, 3.8 * s);
     c.fillStyle = '#9fd0ee';
     c.fillRect(x + 2 * s, y - 5.6 * s, 2 * s, 1.8 * s);
     c.fillRect(x - 4 * s, y - 5.6 * s, 2 * s, 1.8 * s);
@@ -679,7 +672,7 @@ export function __init() {
     if (snow) {
       const sy = base - h * 0.62;
       c.fillStyle = '#d7e3ef';
-      poly(c, [[x - w * 0.32, sy], [px, base - h], [x + w * 0.28, base - h * 0.66], [x + w * 0.16, sy + 4 * s], [px + 3 * s, sy - 1 * s], [px - 2 * s, sy + 5 * s]]);
+      poly(c, [[x - w * 0.32, sy], [px, base - h], [x + w * 0.28, base - h * 0.66], [x + w * 0.16, sy + 4 * s], [px + 3 * s, sy - Number(s)], [px - 2 * s, sy + 5 * s]]);
       c.fillStyle = '#f7fbff';
       poly(c, [[x - w * 0.32, sy], [px, base - h], [px + 1.6 * s, sy + 2 * s], [px - 2 * s, sy + 5 * s], [x - w * 0.18, sy + 2 * s]]);
     }
@@ -905,18 +898,19 @@ export function __init() {
         x1 = Math.min(GW - 1, (cx + sx * 3) | 0),
         y0 = Math.max(0, (cy - sy * 3) | 0),
         y1 = Math.min(GH - 1, (cy + sy * 3) | 0);
-      for (let y = y0; y <= y1; y++)
-        {for (let x = x0; x <= x1; x++) {
+      for (let y = y0; y <= y1; y++) {
+        for (let x = x0; x <= x1; x++) {
           const dx = (x - cx) / sx,
             dy = (y - cy) / sy;
           arr[y * GW + x] += amp * Math.exp(-(dx * dx + dy * dy) * 0.5);
-        }}
+        }
+      }
     };
     R.mounts.forEach(([x, y, s, sn]) => {
       addG(MT, x, y + 4, 34 * s, 26 * s, 0.9);
       if (sn) addG(SN, x, y - 6 * s, 16 * s, 12 * s, 1);
     });
-    R.forests.forEach(([k, x, y, n, sp]) => addG(FF, x, y, sp * Math.sqrt(n) * 0.75, sp * Math.sqrt(n) * 0.55, 0.9));
+    R.forests.forEach(([, x, y, n, sp]) => addG(FF, x, y, sp * Math.sqrt(n) * 0.75, sp * Math.sqrt(n) * 0.55, 0.9));
     const HT = new Float32Array(GW * GH);
     for (let i = 0; i < HT.length; i++) HT[i] = BI[i] * 0.5 + (N1[i] - 0.5) * 0.32 + MT[i] * 1.25 + N3[i] * 0.04;
     await tick();
@@ -1304,13 +1298,14 @@ export function __init() {
     }
     // beach palm trees (Hoenn)
     (R.palms || []).forEach(([x, y]) => isFree(x, y, 26) && add(y, () => palm(c, x, y, 1)));
-    if (R.reef)
-      {for (let t = 0; t < 260; t++) {
+    if (R.reef) {
+      for (let t = 0; t < 260; t++) {
         const x = rnd() * VW,
           y = rnd() * VH,
           i = gi(x, y);
         if (M[i] > 0.95 && B12[i] < 0.84 && B12[i] > 0.7 && isFree(x, y, 40) && rnd() < 0.5) add(y, () => palm(c, x, y, 0.75 + rnd() * 0.25));
-      }}
+      }
+    }
     // hamlets, gyms and scenery specific to each type
     const angles = [205, 335, 168, 12, 250, 290, 145, 35];
     P.forEach(p => {

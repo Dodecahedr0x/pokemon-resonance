@@ -1,12 +1,11 @@
 /* Original section: v4.31-01-tactical-challenges.js */
-import { bdClass } from '../screens/combat/board/boardStore.js';
+import { bdClass, tokCl } from '../screens/combat/board/boardStore.js';
 
 import { GYMS } from './004-data.js';
 import { BY, SCEN } from './009-pokemon.js';
 import { PROFILE } from './011-game-state.js';
 import { ARENAS, TERR } from './013-gyms.js';
 import { $, toast } from './014-utils.js';
-import { tokCl } from '../screens/combat/board/boardStore.js';
 import { HOOKS } from './015-hooks.js';
 import { go } from './016-navigation.js';
 import { squad } from './020-team-cards.js';
@@ -30,10 +29,10 @@ let PUZZLE_CUR431, ARN_ED431;
 export { MASTERY431, RELICS431, NODES431, EVENTS431, ARN_ED431, puzzleState431, puzzleOfDay431, masterChoice431, relRandom431, RULES431, TERRAINS431, gymCode431 };
 
 
-function puzzleScen431(P) {
-  const b = SCEN[P.b] || SCEN.gue;
+function puzzleScen431(puzzle) {
+  const b = SCEN[puzzle.b] || SCEN.gue;
   return {
-    n: `Énigme · ${P.t}`,
+    n: `Énigme · ${puzzle.t}`,
     lvl: 'Énigme tactique',
     lim: 1,
     time: 'jour',
@@ -43,10 +42,10 @@ function puzzleScen431(P) {
     hb: 0,
     pb: 0,
     lv: 30,
-    at: BY[P.f[0][0]].t[0],
-    foes: P.f.map(([id, c, r]) => [id, [c, r]]),
+    at: BY[puzzle.f[0][0]].t[0],
+    foes: puzzle.f.map(([id, c, r]) => [id, [c, r]]),
     catch: false,
-    enigme431: P.id,
+    enigme431: puzzle.id,
     sansProgres431: 1,
     d: 'Mettez K.O. tous les adversaires en une seule manche. Les adversaires ne jouent pas : tout se décide pendant votre tour.'
   };
@@ -58,9 +57,9 @@ function puzzleOpts431() {
 }
 
 
-function puzzlePrepare431(P) {
-  PUZZLE_CUR431 = P;
-  SCEN.enigme431 = puzzleScen431(P);
+function puzzlePrepare431(puzzle) {
+  PUZZLE_CUR431 = puzzle;
+  SCEN.enigme431 = puzzleScen431(puzzle);
   OBST.enigme431 = {};
 }
 
@@ -93,11 +92,12 @@ export function v431Clean(p) {
     if (E.n && typeof E.n === 'object') Object.keys(E.n).forEach(k => /^\d{1,3}$/.test(k) && (n[k] = n431(E.n[k], 0, 999)));
     o.enig431 = { s, n, j: typeof E.j === 'string' && /^\d{4}-\d\d-\d\d$/.test(E.j) ? E.j : '', jd: Array.isArray(E.jd) ? E.jd.filter(x => Number.isInteger(x) && x >= 0 && x < 999).slice(0, 3) : [], cur: Number.isInteger(E.cur) ? n431(E.cur, 0, 998) : 0 };
   }
-  if (p.mait431 && typeof p.mait431 === 'object')
-    {Object.keys(p.mait431).forEach(k => {
+  if (p.mait431 && typeof p.mait431 === 'object') {
+    Object.keys(p.mait431).forEach(k => {
       const m = p.mait431[k];
       if (BY[k] && m && typeof m === 'object') o.mait431[k] = { n: n431(m.n, 0, 99999), p: typeof m.p === 'string' && /^[a-z]{3,10}$/.test(m.p) ? m.p : '' };
-    });}
+    });
+  }
   const X = p.echo431;
   if (X && typeof X === 'object') {
     o.echo431 = { best: n431(X.best, 0, 8), wins: n431(X.wins, 0, 9999), run: null };
@@ -105,8 +105,8 @@ export function v431Clean(p) {
     if (R && typeof R === 'object' && Array.isArray(R.team) && Array.isArray(R.map)) {
       const team = R.team.filter(t => Array.isArray(t) && BY[t[0]]).slice(0, 4).map(t => [t[0], Math.max(0, Math.min(1, +t[1] || 0))]);
       const map = R.map.filter(Array.isArray).slice(0, 8).map(f => f.filter(x => typeof x === 'string' && /^[a-z]{2,10}$/.test(x)).slice(0, 3));
-      if (team.length && map.length === 8)
-        {o.echo431.run = {
+      if (team.length && map.length === 8) {
+        o.echo431.run = {
           seed: n431(R.seed, 0, 2147483647),
           f: n431(R.f, 0, 8),
           team,
@@ -117,7 +117,8 @@ export function v431Clean(p) {
           cur: Number.isInteger(R.cur) ? n431(R.cur, -1, 2) : -1,
           pv: Number.isFinite(R.pv) ? Math.max(0, Math.min(0.5, R.pv)) : 0,
           ev: typeof R.ev === 'string' && /^[a-z]{2,12}$/.test(R.ev) ? R.ev : ''
-        };}
+        };
+      }
     }
   }
   if (Array.isArray(p.arenes431)) o.arenes431 = p.arenes431.map(gymClean431).filter(Boolean).slice(0, 12);
@@ -221,12 +222,12 @@ function puzzleState431() {
 function puzzleOfDay431() {
   const d = today(),
     r = rand429('enig-' + d),
-    L = PUZZLES431.map((x, i) => i);
-  for (let i = L.length - 1; i > 0; i--) {
+    order = PUZZLES431.map((x, i) => i);
+  for (let i = order.length - 1; i > 0; i--) {
     const j = Math.floor(r() * (i + 1));
-    [L[i], L[j]] = [L[j], L[i]];
+    [order[i], order[j]] = [order[j], order[i]];
   }
-  return L.slice(0, 3);
+  return order.slice(0, 3);
 }
 
 
@@ -238,11 +239,11 @@ function puzzleDef431(i) {
 
 
 function puzzleLaunch431(i) {
-  const P = puzzleDef431(i);
-  if (!P) return;
+  const puzzle = puzzleDef431(i);
+  if (!puzzle) return;
   const E = puzzleState431();
   E.cur = i;
-  puzzlePrepare431(P);
+  puzzlePrepare431(puzzle);
   chooseBattle('enigme431');
   launch();
 }
@@ -276,10 +277,10 @@ function puzzleAfter431(S, rew, win) {
 
 
 function hint431() {
-  const P = PUZZLE_CUR431,
-    x = P && PUZZLES431[P.id];
+  const puzzle = PUZZLE_CUR431,
+    x = puzzle && PUZZLES431[puzzle.id];
   if (!x) return '';
-  return `Indice : commencez par ${BY[P.a[x[3]][0]].n}.`;
+  return `Indice : commencez par ${BY[puzzle.a[x[3]][0]].n}.`;
 }
 
 
@@ -328,13 +329,13 @@ function echoMap431(seed) {
     else if (f === 0) map.push(['combat', 'combat']);
     else {
       const n = r() < 0.5 ? 2 : 3,
-        L = [];
-      while (L.length < n) {
+        nodes = [];
+      while (nodes.length < n) {
         const t = T[Math.floor(r() * T.length)];
-        if (L.filter(x => x === t).length < (t === 'combat' ? 2 : 1)) L.push(t);
+        if (nodes.filter(x => x === t).length < (t === 'combat' ? 2 : 1)) nodes.push(t);
       }
-      if (!L.includes('combat') && !L.includes('elite')) L[0] = 'combat';
-      map.push(L);
+      if (!nodes.includes('combat') && !nodes.includes('elite')) nodes[0] = 'combat';
+      map.push(nodes);
     }
   }
   return map;
@@ -378,8 +379,8 @@ function echoScene431(R, type) {
 function echoNode431(i) {
   const R = echoRun431();
   if (!R || R.ev) return;
-  const L = R.map[R.f],
-    t = L && L[i];
+  const floor = R.map[R.f],
+    t = floor && floor[i];
   if (!t) return;
   R.cur = i;
   if (t === 'combat' || t === 'elite' || t === 'boss') {
@@ -412,13 +413,13 @@ function echoAdvance431(R) {
 
 
 function relRandom431(R, n) {
-  const L = Object.keys(RELICS431).filter(k => !R.rel.includes(k)),
+  const relics = Object.keys(RELICS431).filter(k => !R.rel.includes(k)),
     r = rand429('rel' + R.seed + R.f + R.rel.length);
-  for (let i = L.length - 1; i > 0; i--) {
+  for (let i = relics.length - 1; i > 0; i--) {
     const j = Math.floor(r() * (i + 1));
-    [L[i], L[j]] = [L[j], L[i]];
+    [relics[i], relics[j]] = [relics[j], relics[i]];
   }
-  return L.slice(0, n);
+  return relics.slice(0, n);
 }
 
 
@@ -504,10 +505,10 @@ function echoChoice431(k) {
     return renderCampPage431();
   } else if (k.startsWith('achat-')) {
     const a = k.slice(6),
-      P = { potion: 20, relique: 45, rappel: 60 }[a];
-    if (!P || R.ech < P) return toast('Pas assez d’Échos.');
+      price = { potion: 20, relique: 45, rappel: 60 }[a];
+    if (!price || R.ech < price) return toast('Pas assez d’Échos.');
     if (a === 'rappel' && !R.team.some(t => t[1] <= 0)) return toast('Aucun Pokémon à rappeler.');
-    R.ech -= P;
+    R.ech -= price;
     if (a === 'potion') hp(0.3);
     else if (a === 'relique') {
       const x = relRandom431(R, 1)[0];
@@ -546,9 +547,9 @@ function gymClean431(a) {
 
 
 function RULES431() {
-  const L = [['', 'Aucune']];
-  ARENAS.forEach((A, i) => A.rule && GYMS[i] && L.push([A.rule, `Arène ${GYMS[i].t}`]));
-  return L;
+  const rules = [['', 'Aucune']];
+  ARENAS.forEach((A, i) => A.rule && GYMS[i] && rules.push([A.rule, `Arène ${GYMS[i].t}`]));
+  return rules;
 }
 
 
@@ -735,17 +736,17 @@ HOOKS.creation.push((S, opt, D0) => {
 
 
 HOOKS.combat.push(S => {
-  const P = PUZZLE_CUR431;
-  if (S.sc !== 'enigme431' || !P) return;
+  const puzzle = PUZZLE_CUR431;
+  if (S.sc !== 'enigme431' || !puzzle) return;
   const al = S.units.filter(u => u.side === 'a'),
     fo = S.units.filter(u => u.side === 'e');
-  P.a.forEach(([, c, r, en], i) => {
+  puzzle.a.forEach(([, c, r, en], i) => {
     const u = al[i];
     if (!u) return;
     u.pos = [c, r];
     u.en = Math.max(0, Math.min(EMAX, en || 0));
   });
-  P.f.forEach(([, c, r, hp], i) => {
+  puzzle.f.forEach(([, c, r, hp], i) => {
     const u = fo[i];
     if (!u) return;
     u.pos = [c, r]; // the riddle's position, not the one chosen by the AI
@@ -903,8 +904,9 @@ HOOKS.combat.push(S => {
 HOOKS.resultat.push(r => {
   const e = r.echo431;
   if (!e) return '';
-  if (e.fin)
-    {return `<div class="res-l"><h4>Écho profond</h4><div class="rl"><span>${e.fin.gagne ? 'Le gardien est vaincu : expédition réussie !' : `Expédition terminée à l’étage ${e.fin.f + (e.fin.gagne ? 0 : 1)}.`} Récompense : ${fmt(e.fin.m)} ₽ · ${e.fin.g} Éclats.</span><b>${e.fin.gagne ? '★' : ''}</b></div></div>`;}
+  if (e.fin) {
+    return `<div class="res-l"><h4>Écho profond</h4><div class="rl"><span>${e.fin.gagne ? 'Le gardien est vaincu : expédition réussie !' : `Expédition terminée à l’étage ${e.fin.f + (e.fin.gagne ? 0 : 1)}.`} Récompense : ${fmt(e.fin.m)} ₽ · ${e.fin.g} Éclats.</span><b>${e.fin.gagne ? '★' : ''}</b></div></div>`;
+  }
   return `<div class="res-l"><h4>Écho profond</h4><div class="rl"><span>Étage ${e.f} franchi${e.ech ? ` · +${e.ech} Échos` : ''}${e.type === 'elite' ? ' · une relique vous attend au Camp' : ''}. Vos PV sont conservés.</span><b>${e.f} / 8</b></div></div>`;
 });
 

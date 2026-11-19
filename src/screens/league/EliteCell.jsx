@@ -13,14 +13,14 @@ export default function EliteCell() {
       <div className="case-h"><span>Conseil 4 et Champion</span><span>{`${Math.min(PROFILE.elite, 4)} / 4 · ${PROFILE.elite >= 5 ? 'Champion battu' : 'Champion à défier'}`}</span></div>
       <div className="el-grid">
         {[...ELITE, 'champ'].map((k, i) => (
-          <MapScreen key={k} k={k} L={i < 4 ? ELITE_L[i] : CHAMP_L} />
+          <Card key={k} k={k} L={i < 4 ? ELITE_L[i] : CHAMP_L} />
         ))}
       </div>
     </>
   );
 }
 
-function MapScreen({ k, L }) {
+function Card({ k, L }) {
   const s = SCEN[k],
     lk = scenLock(k),
     won = wonOf(k),

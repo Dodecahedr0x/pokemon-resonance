@@ -495,8 +495,9 @@ document.addEventListener('keydown', e => {
     !$('#cbResult').hidden ||
     !$('#saves').hidden ||
     !$('#sheet').hidden
-  )
-    {return;}
+  ) {
+    return;
+  }
   const P = $('#bPanel'),
     k = e.key;
   if (k >= '1' && k <= '4') {

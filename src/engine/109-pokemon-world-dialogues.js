@@ -204,8 +204,9 @@ export function __init() {
           const id = b && b.dataset.open;
           return c.classList.contains('pk-shiny') !== !!(id && sh.includes(id));
         })
-      )
-        {refreshGrid();}
+      ) {
+        refreshGrid();
+      }
     } catch { /* Best effort: failure here is non-fatal. */ }
   }
   if (window.MutationObserver) new MutationObserver(schedule).observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['hidden'] });

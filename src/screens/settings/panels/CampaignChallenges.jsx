@@ -16,13 +16,14 @@ function Challenge({ k, on }) {
 
 // Campaign challenges (defisHtml): mono-type, team of 3, no Awakening, Nuzlocke.
 export default function CampaignChallenges() {
-  if (!isCamp())
-    {return (
+  if (!isCamp()) {
+    return (
       <section className="v4-panel v4-ps">
         <header className="v4-ph"><svg><use href="#i-trophy" /></svg><b>Défis de campagne</b></header>
         <p className="v4-ps-n">Les défis se jouent en Campagne.</p>
       </section>
-    );}
+    );
+  }
   const d = PROFILE.defis || {},
     tomb = (PROFILE.tombes || []).filter(b => BY[b]);
   return (

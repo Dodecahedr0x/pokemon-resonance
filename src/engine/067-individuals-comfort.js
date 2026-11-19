@@ -36,14 +36,15 @@ export function V432_0() {
 export function v432Clean(p) {
   const o = V432_0();
   if (!p || typeof p !== 'object') return o;
-  if (p.indiv432 && typeof p.indiv432 === 'object')
-    {Object.keys(p.indiv432).forEach(b => {
+  if (p.indiv432 && typeof p.indiv432 === 'object') {
+    Object.keys(p.indiv432).forEach(b => {
       const x = p.indiv432[b];
       if (BY[b] && x && typeof x === 'object' && CHARACTERS[x.car] && TALENTS432[x.tal]) o.indiv432[b] = { car: x.car, tal: x.tal };
-    });}
+    });
+  }
   o.indiv432Init = p.indiv432Init ? 1 : 0;
-  if (Array.isArray(p.teams432))
-    {o.teams432 = p.teams432
+  if (Array.isArray(p.teams432)) {
+    o.teams432 = p.teams432
       .filter(t => t && typeof t === 'object' && Array.isArray(t.ids))
       .slice(0, 8)
       .map(t => {
@@ -51,9 +52,10 @@ export function v432Clean(p) {
         if (t.it && typeof t.it === 'object') Object.keys(t.it).forEach(b => BY[b] && typeof t.it[b] === 'string' && ITEMS2[t.it[b]] && (it[b] = t.it[b]));
         return { n: String(t.n || 'Équipe').replace(/[<>&"]/g, '').slice(0, 20) || 'Équipe', ids: t.ids.filter(id => BY[id]).slice(0, 4), it };
       })
-      .filter(t => t.ids.length);}
-  if (Array.isArray(p.panth432))
-    {o.panth432 = p.panth432
+      .filter(t => t.ids.length);
+  }
+  if (Array.isArray(p.panth432)) {
+    o.panth432 = p.panth432
       .filter(x => x && typeof x === 'object' && typeof x.k === 'string' && Array.isArray(x.t))
       .slice(0, 40)
       .map(x => ({
@@ -65,7 +67,8 @@ export function v432Clean(p) {
         rk: typeof x.rk === 'string' ? x.rk.slice(0, 2) : '',
         df: DIFFS[x.df] ? x.df : 'normal',
         md: typeof x.md === 'string' ? x.md.slice(0, 10) : ''
-      }));}
+      }));
+  }
   return o;
 }
 

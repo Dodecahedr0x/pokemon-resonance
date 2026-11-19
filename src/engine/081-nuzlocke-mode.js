@@ -80,8 +80,9 @@ HOOKS.finCombat.push(() => {
   s.mort = s.mort.slice(-60);
   nzSave450(s);
   B._nzdead450 = { noms: displayNames, epargne: spared ? BY[spared].n : '' };
-  if (!squad.length)
-    {__set_squad(PROFILE.box.filter((id, i, a) => a.slice(0, i + 1).reduce((t, x) => t + BY[x].c, 0) <= BUDGET).slice(0, 4));}
+  if (!squad.length) {
+    __set_squad(PROFILE.box.filter((id, i, a) => a.slice(0, i + 1).reduce((t, x) => t + BY[x].c, 0) <= BUDGET).slice(0, 4));
+  }
   writeLS('res8-squad', squad);
   queueSave();
 });

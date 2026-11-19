@@ -35,10 +35,11 @@ function fsSet444(on, viaButton) {
   try {
     if (on && !fsNav444()) {
       const r = el.requestFullscreen ? el.requestFullscreen({ navigationUI: 'hide' }) : el.webkitRequestFullscreen ? el.webkitRequestFullscreen() : null;
-      if (r && r.catch)
-        {r.catch(() => {
+      if (r && r.catch) {
+        r.catch(() => {
           if (viaButton) toast('Plein écran du navigateur refusé ici : le combat garde quand même toute la hauteur.');
-        });}
+        });
+      }
     } else if (!on && fsNav444()) {
       const r = document.exitFullscreen ? document.exitFullscreen() : document.webkitExitFullscreen ? document.webkitExitFullscreen() : null;
       if (r && r.catch) r.catch(() => {});
@@ -92,12 +93,13 @@ function dangers444(k) {
   try {
     if (veiled(B)) {
       if (B.units.some(e => e.side === 'e' && !e.ko && e.intent)) o.push('Intentions adverses voilées : impossible de savoir qui vise cette case.');
-    } else
-      {B.units.forEach(e => {
+    } else {
+      B.units.forEach(e => {
         if (e.side !== 'e' || e.ko || !e.intent) return;
         const m = MV[e.intent.mv];
         if (m && affected(B, e, m, e.intent.k).includes(k)) o.push(`${e.n} vise cette case avec ${m.n}.`);
-      });}
+      });
+    }
     const an = arenaNext(B);
     if (an && an.tiles.includes(k)) o.push(an.txt);
     if (B.vivant && fireHazard(B, k)) o.push('L’herbe peut s’embraser ici.');

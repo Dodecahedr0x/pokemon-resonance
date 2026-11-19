@@ -33,12 +33,12 @@ let S = fresh(0);
 let EVO = { on: false, fast: false, ox: null, oy: null, fx: null };
 
 const versions = {}; // one version per layer
-const c = channel();
+const chan = channel();
 function emit(names) {
   names.forEach(n => (versions[n] = (versions[n] || 0) + 1));
-  c.emit();
+  chan.emit();
 }
-const follow = name => c.use(() => versions[name] || 0);
+const follow = name => chan.use(() => versions[name] || 0);
 
 export const getBoard = () => S;
 export function useBoard(name) {

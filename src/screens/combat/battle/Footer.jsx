@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useState } from 'react';
 import { byUid, canAwaken, foeEvo } from '../../../engine/021-combat-engine.js';
 import { B, ui } from '../../../engine/024-combat-ui.js';
 import { currentActor } from '../../../engine/044-tactical-engine.js';
@@ -111,23 +111,25 @@ function bar() {
       t = B.ordre === 'vitesse' ? 'À vous : déplacez, puis agissez.' : n ? `Encore ${n} Pokémon à jouer.` : 'Manche terminée.';
     phase = phase.replace(/(À vous : )?déplacez, puis agissez\./, t).replace(/Tous (vos|ses) Pokémon ont joué\./, t);
     const u = ui.sel && byUid(B, ui.sel);
-    if (u && u.side === 'a' && !ui.selE)
-      {step = (
+    if (u && u.side === 'a' && !ui.selE) {
+      step = (
         <>
           <b>{STEP[flow478.etape(B, u)]}</b> {u.n}
           {B.ordre !== 'vitesse' && n ? ` · encore ${n}` : ''}
         </>
-      );}
+      );
+    }
   }
   return { disabled, bouton: button, phase, joueur: playerRef, g, etape: step };
 }
 
 export default function Footer() {
   const v = useBattleVersion('foot');
-  const footPos = useRef(null);
+  const [lastStep, setLastStep] = useState(null);
   const x = v && B ? bar() : null;
   // the hidden step keeps its last text, like the old DOM
-  if (x && x.etape) footPos.current = x.etape;
+  // (keyed by version: the step element is rebuilt on every render)
+  if (x && x.etape && (!lastStep || lastStep.v !== v)) setLastStep({ v, el: x.etape });
   const Q = barBottom.qa,
     tools = getHost().bt444;
   return (
@@ -158,7 +160,7 @@ export default function Footer() {
       </button>
       {v > 0 && (
         <span id="fl478pied" className="fl478-pied" aria-live="polite" hidden={!(x && x.etape)}>
-          {footPos.current}
+          {(x && x.etape) || (lastStep && lastStep.el)}
         </span>
       )}
       {v > 0 && (

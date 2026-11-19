@@ -9,12 +9,12 @@ export default function Scene417() {
   const s = useOverlay('scene');
   return (
     <div className="scene417" id="scene417" hidden>
-      {s && <MapScreen key={s.v} {...s} />}
+      {s && <Card key={s.v} {...s} />}
     </div>
   );
 }
 
-function MapScreen({ av, n, txt, i, nb, suite: next }) {
+function Card({ av, n, txt, i, nb, suite: next }) {
   return (
     <div className="sc-card" role="dialog" aria-modal="true" aria-label="Scène">
       <div className="sc-who"><Html html={av} /><b><Html html={n} /></b></div>

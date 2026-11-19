@@ -11,11 +11,13 @@ let ITEM_SVG;
 
 export function itemize(h) {
   if (typeof h !== 'string') return h;
-  for (const k in ITEM_SVG)
-    {if (h.includes(ITEM_SVG[k]))
-      {h = h
+  for (const k in ITEM_SVG) {
+    if (h.includes(ITEM_SVG[k])) {
+      h = h
         .split(ITEM_SVG[k])
-        .join(`<img class="it-img" src="${ITM(HELD_IMG[k])}" alt="" loading="lazy" onerror="this.remove()">`);}}
+        .join(`<img class="it-img" src="${ITM(HELD_IMG[k])}" alt="" loading="lazy" onerror="this.remove()">`);
+    }
+  }
   return h;
 }
 
@@ -73,10 +75,11 @@ export function preload(ids) {
    Offline, the original type medallion stays displayed.
    ===================================================================== */
 export const tagUnits = S => {
-  if (S && Array.isArray(S.units))
-    {S.units.forEach(u => {
+  if (S && Array.isArray(S.units)) {
+    S.units.forEach(u => {
       if (u && Array.isArray(u.t) && BY[u.id]) PKT.set(u.t, u.id); // types → species
-    });}
+    });
+  }
 };
 
 

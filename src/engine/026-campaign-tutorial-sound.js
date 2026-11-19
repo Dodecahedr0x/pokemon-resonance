@@ -156,12 +156,14 @@ export function sfxEv(ev) {
 export function tileTip(k) {
   const t = B.tiles[k],
     o = [];
-  if (t.pil)
-    {return 'Pilier : infranchissable, bloque les tirs directs (cible unique et ligne). Couverture −40 % pour qui se tient derrière.';}
-  if (t.rock)
-    {o.push(
+  if (t.pil) {
+    return 'Pilier : infranchissable, bloque les tirs directs (cible unique et ligne). Couverture −40 % pour qui se tient derrière.';
+  }
+  if (t.rock) {
+    o.push(
       'Rocher : infranchissable, couverture −40 % contre les tirs à distance, une capacité à cible unique peut y ricocher'
-    );}
+    );
+  }
   if (t.w) o.push('Eau : compte comme Trempé');
   if (t.mark) {
     const m = markOf(t.mark.k);
@@ -171,12 +173,14 @@ export function tileTip(k) {
   }
   if (t.mud > 0) o.push(`Boue : déplacement ×3, ${t.mud} manche${t.mud > 1 ? 's' : ''}`);
   if (t.lava > 0) o.push(`Lave : brûle ce qui s’y arrête, ${t.lava} manche${t.lava > 1 ? 's' : ''}`);
-  if (t.fog > 0)
-    {o.push(t.fog > 2 ? 'Brume toxique : on ne vise pas à distance' : 'Brouillard : on ne vise pas à distance');}
+  if (t.fog > 0) {
+    o.push(t.fog > 2 ? 'Brume toxique : on ne vise pas à distance' : 'Brouillard : on ne vise pas à distance');
+  }
   if (t.trap) o.push(trapTip(t.trap)); // traps (v4.8)
   if (t.grass) o.push('Hautes herbes : un Pokémon caché ne peut être visé qu’à 2 cases ou moins. Le Feu les embrase');
-  if (t.sand && !t.w)
-    {o.push('Sable : 2 Mouvements pour y entrer, sauf Sol, Roche, Acier et volants, qui y subissent −2 dégâts');}
+  if (t.sand && !t.w) {
+    o.push('Sable : 2 Mouvements pour y entrer, sauf Sol, Roche, Acier et volants, qui y subissent −2 dégâts');
+  }
   return o.length ? o.join(' · ') : 'Case libre';
 }
 
@@ -201,12 +205,14 @@ export function tileCard() {
 
 export function unitExtras(u) {
   const o = [];
-  if (ui.undo && ui.undo.uid === u.uid && u.moved && !u.acted)
-    {o.push(`<button type="button" class="b b-sm" data-undo="1">Annuler le déplacement</button>`);}
-  if (u.item)
-    {o.push(
+  if (ui.undo && ui.undo.uid === u.uid && u.moved && !u.acted) {
+    o.push(`<button type="button" class="b b-sm" data-undo="1">Annuler le déplacement</button>`);
+  }
+  if (u.item) {
+    o.push(
       `<span class="ux it" title="${ITEMS2[u.item].d}"><svg viewBox="0 0 24 24"><path d="${ITEMS2[u.item].i}"/></svg>${ITEMS2[u.item].n}${u.item === 'ceinture' && !u.belt ? ' · utilisée' : ''}</span>`
-    );}
+    );
+  }
   if (u.fat) o.push(`<span class="ux fa">Fatigué · −1 Mouvement</span>`);
   const mates = B.units.filter(x => x !== u && !x.ko && x.side === 'a' && linkLvl(B, u.sp, x.sp) > 0);
   mates.forEach(x => {
@@ -396,35 +402,42 @@ export function applyProgress(S) {
 export function rewHtml(r) {
   if (!r) return '';
   const o = [];
-  if (r.caught.length)
-    {o.push(
+  if (r.caught.length) {
+    o.push(
       `<div class="res-l"><h4>Capturés</h4>${r.caught.map(c => `<div class="rl">${medal(BY[c.id].t)}<span>${BY[c.id].n}${c.nw ? ` · ${BY[c.base].n} rejoint votre Box` : ''}</span><b>${c.nw ? 'Nouveau' : '✓'}</b></div>`).join('')}</div>`
-    );}
-  if (r.items.length || r.gifts.length)
-    {o.push(
+    );
+  }
+  if (r.items.length || r.gifts.length) {
+    o.push(
       `<div class="res-l"><h4>Récompenses d’arène</h4>${r.items.map(k => `<div class="rl"><span class="it-ic"><svg viewBox="0 0 24 24"><path d="${ITEMS2[k].i}"/></svg></span><span>${ITEMS2[k].n} · ${ITEMS2[k].d}</span><b>Objet</b></div>`).join('')}${r.gifts.map(id => `<div class="rl">${medal(BY[id].t)}<span>${BY[id].n} rejoint votre Box</span><b>Recrue</b></div>`).join('')}</div>`
-    );}
-  if (r.elite)
-    {o.push(
+    );
+  }
+  if (r.elite) {
+    o.push(
       `<div class="res-l"><h4>Conseil 4</h4><div class="rl"><span>${r.elite < 4 ? `${r.elite} membre${r.elite > 1 ? 's' : ''} sur 4 vaincu${r.elite > 1 ? 's' : ''}.` : 'Le Conseil 4 est vaincu. Le Champion vous attend.'}</span><b>${r.elite} / 4</b></div></div>`
-    );}
-  if (r.champ)
-    {o.push(
+    );
+  }
+  if (r.champ) {
+    o.push(
       `<div class="res-l champ"><h4>Maître de la Ligue</h4><div class="rl"><span>Vous avez battu un Champion qui avait étudié vos combats.</span><b>★</b></div></div>`
-    );}
-  if (r.links.length)
-    {o.push(
+    );
+  }
+  if (r.links.length) {
+    o.push(
       `<div class="res-l"><h4>Liens gagnés</h4>${r.links.map(l => `<div class="rl">${medal(BY[l.a].t)}${medal(BY[l.b].t)}<span>${BY[l.a].n} et ${BY[l.b].n}${l.x2 ? ' · ×2 sans évoluer' : ''}${l.to > l.from ? ` · palier ${LINK_N[l.to]} atteint` : ''}</span><b>+${l.pts}</b></div>`).join('')}</div>`
-    );}
-  if (r.tired.length)
-    {o.push(
+    );
+  }
+  if (r.tired.length) {
+    o.push(
       `<p class="empty">Fatigués : ${r.tired.map(id => BY[id].n).join(', ')}. Ils perdront 1 Mouvement au prochain combat : faites tourner votre Box.</p>`
-    );}
+    );
+  }
   let h = o.join('') + aplusRewHtml(r);
-  if (r.money != null)
-    {h =
+  if (r.money != null) {
+    h =
       `<div class="res-l v4-gain"><h4>Gains</h4><div class="rl"><span class="v4-coin" aria-hidden="true">₽</span><span>${r.daily ? 'Défi du jour relevé : gains doublés' : 'Prime de combat'}</span><b>+${fmt(r.money)} ₽</b></div>${r.gems ? `<div class="rl"><span class="v4-gemi" aria-hidden="true"><svg><use href="#i-gem"/></svg></span><span>Éclats de Résonance</span><b>+${r.gems}</b></div>` : ''}</div>` +
-      h;} // end-of-battle gains
+      h;
+  } // end-of-battle gains
   return itemize(h); // illustrated items
 }
 
@@ -452,11 +465,13 @@ export function nextGoal() {
   if (PROFILE.tuto === 0 && PROFILE.battles === 0) return ['tuto', 'Premier combat guidé'];
   for (let i = 0; i < 8; i++) {
     // the rival returns after badges 2, 4 and 6 (Campaign)
-    if (isCamp() && i && i % 2 === 0 && BADGES.length >= i && PROFILE.rival < i / 2)
-      {return [RIVAL_KEYS[i / 2 - 1], 'Rival : ' + RIVAL.n];}
+    if (isCamp() && i && i % 2 === 0 && BADGES.length >= i && PROFILE.rival < i / 2) {
+      return [RIVAL_KEYS[i / 2 - 1], 'Rival : ' + RIVAL.n];
+    }
     // Team Dissonance strikes after badges 1, 3, 5 and 7 (Campaign, v4.11)
-    if (isCamp() && i % 2 === 1 && BADGES.length >= i && (PROFILE.dissonance || 0) < (i + 1) / 2)
-      {return ['td' + (i + 1) / 2, 'Team Dissonance'];}
+    if (isCamp() && i % 2 === 1 && BADGES.length >= i && (PROFILE.dissonance || 0) < (i + 1) / 2) {
+      return ['td' + (i + 1) / 2, 'Team Dissonance'];
+    }
     if (!BADGES.includes(i)) return [ARENAS[i].k, GYMS[i].n];
   }
   if (isCamp() && PROFILE.rival < 4) return ['rv4', 'Rival : ' + RIVAL.n];

@@ -10,34 +10,37 @@ import { CROWN416 } from '../../engine/055-living-johto.js';
 // the clicks (data-peche418) and the hidden attribute; after a shiny catch, it
 // recolors the illustration (.pe-prise img, chromaArt425) right after rendering.
 export default function Fishing418() {
-  return <Box nom="peche" className="result exp-box pe418" id="peche418" Carte={MapScreen} />;
+  return <Box nom="peche" className="result exp-box pe418" id="peche418" Carte={Card} />;
 }
 
 function Body({ etat: state, id, sh, dom, connu: known }) {
-  if (state === 'attente')
-    {return (
+  if (state === 'attente') {
+    return (
       <>
         <div className="pe-eau"><span className="pe-bouchon" /></div>
         <p className="d">La ligne est à l’eau… Attendez que ça morde, puis ferrez vite !</p>
         <button type="button" className="b b-lg" disabled>Ça ne mord pas encore…</button>
       </>
-    );}
-  if (state === 'mord')
-    {return (
+    );
+  }
+  if (state === 'mord') {
+    return (
       <>
         <div className="pe-eau mord"><span className="pe-bouchon" /></div>
         <p className="pe-alerte">Ça mord !</p>
         <button type="button" className="b b-gold b-lg" data-peche418="ferrer">Ferrer !</button>
       </>
-    );}
-  if (state === 'rate')
-    {return (
+    );
+  }
+  if (state === 'rate') {
+    return (
       <>
         <div className="pe-eau" />
         <p className="d">Trop tard : il s’est échappé.</p>
         <button type="button" className="b b-gold" data-peche418="lancer">Relancer la ligne</button>
       </>
-    );}
+    );
+  }
   if (state !== 'prise') return null;
   const m = BY[id];
   return (
@@ -61,7 +64,7 @@ function Body({ etat: state, id, sh, dom, connu: known }) {
   );
 }
 
-function MapScreen({ route, peches: catches, ...p }) {
+function Card({ route, peches: catches, ...p }) {
   return (
     <Dialogue className="sv-card exp-card pe-card" titre="peT" fermer={{ 'data-peche418': 'x' }}>
       <p className="kick">{route} · pêche</p>

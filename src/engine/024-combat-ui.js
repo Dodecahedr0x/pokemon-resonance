@@ -28,8 +28,7 @@ import { challengeLaunch, activeChallenges, mutTraining, mutInfo, teamSize } fro
 import { charactersChosen, disobedienceChosen, level } from './049-identity.js';
 import { REPLAYS } from './050-world.js';
 import { refreshBattle, evoState } from '../screens/combat/battle/battleStore.js';
-import { boardBuild, boardRender, evoSet, tokCl, unitsBatch, unitsDirty } from '../screens/combat/board/boardStore.js';
-import { bdClass, bdReplay, bdReset, hostSet } from '../screens/combat/board/boardStore.js';
+import { bdClass, bdReplay, bdReset, boardBuild, boardRender, evoSet, hostSet, tokCl, unitsBatch, unitsDirty } from '../screens/combat/board/boardStore.js';
 import { hasXp, bossScene, notesOf } from './053-resonance.js';
 import { resoCand417, scene417, tournamentTeam417 } from './057-companions-resonance.js';
 import { coopPass418, player418 } from './058-fishing-safari-coop.js';
@@ -167,8 +166,9 @@ export function launch() {
   if (!scene417(scSel)) {
     __set_tutorialI(SCEN[scSel] && SCEN[scSel].tuto ? 0 : -1);
     launchCore();
-    if (B && !AUTO)
-      {vsIntro();} // opponent introduction
+    if (B && !AUTO) {
+      vsIntro();
+    } // opponent introduction
     else if (B) turnBanner();
     // Speed order: if an opponent is faster, it opens the round (after the introduction)
     if (B && B.ordre === 'vitesse') setTimeout(unrollSpeed, AUTO || RM ? 950 : PREF.fast ? 1500 : 2400);
@@ -231,14 +231,16 @@ function launchCore() {
   if (B.desob) log('Désobéissance : un Pokémon épuisé ou têtu peut ignorer un ordre.', 'sys');
   if (B.mut) log(`Mutateur · ${mutInfo(B.mut)[0]} : ${mutInfo(B.mut)[1]}`, 'arn');
   if (B.sansEveil) log('Défi Sans Éveil : vos Pokémon ne s’éveilleront pas.', 'sys');
-  if (B.tac)
-    {log(
+  if (B.tac) {
+    log(
       'Tactique avancée : entrer au contact d’un adversaire arrête le déplacement (sauf volants, Spectre, Éclaireurs). Lance-Soleil et Vol partent en fin de manche.',
       'sys'
-    );}
+    );
+  }
   if (B.units.some(u => u.colosse)) log('Colosse : brisez ses parties pour faire tomber sa carapace. Chacune le fait vaciller.', 'sys');
-  if (B.vivant)
-    {log(`Plateau vivant : ${LIVING_STATE[B.cyc.ph]} (${LIVING_DESC[B.cyc.ph]}) Le feu court dans les hautes herbes ; la pluie l’éteint.`, 'sys');}
+  if (B.vivant) {
+    log(`Plateau vivant : ${LIVING_STATE[B.cyc.ph]} (${LIVING_DESC[B.cyc.ph]}) Le feu court dans les hautes herbes ; la pluie l’éteint.`, 'sys');
+  }
   autoSel();
   renderAll();
   window.scrollTo({ top: 0 });
@@ -583,8 +585,9 @@ function hit(uid) {
 
 export function playLog(ev) {
   ev.forEach(e => {
-    if (e.e === 'msg')
-      {log(e.s, /^Arène /.test(e.s) ? 'arn' : /^(Arrivée|.* évolue en|.* puise)/.test(e.s) ? 'evo' : '');}
+    if (e.e === 'msg') {
+      log(e.s, /^Arène /.test(e.s) ? 'arn' : /^(Arrivée|.* évolue en|.* puise)/.test(e.s) ? 'evo' : '');
+    }
     else if (e.e === 'dmg') {
       const u = byUid(B, e.u);
       if (u) {
@@ -846,7 +849,7 @@ export async function endOfRound(S0) {
   ui.act = null;
   const ev = endRound(B);
   if (!B.over) arenaTick(B).forEach(x => ev.push(x));
-  for (const x of ev.filter(x => x.e === 'evo')) {
+  for (const x of ev.filter(evt => evt.e === 'evo')) {
     renderAll();
     await cinematic(x.from, x.ft, x.to, x.tt, x.side, x.u);
     if (B !== S0) return false;
@@ -1083,8 +1086,8 @@ $('#bPanel').addEventListener('click', e => {
   }
   if (b.dataset.cap) {
     const al = byUid(B, ui.sel),
-      e = byUid(B, b.dataset.cap);
-    const ev = pCapture(B, al, e);
+      target = byUid(B, b.dataset.cap);
+    const ev = pCapture(B, al, target);
     if (ev) {
       ui.undo = null;
       ui.selE = null;

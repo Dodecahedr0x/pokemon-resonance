@@ -13,8 +13,8 @@ const XL = 'http://www.w3.org/1999/xlink';
 const REFS = new WeakMap();
 function refs(T) {
   let r = REFS.get(T);
-  if (!r)
-    {REFS.set(
+  if (!r) {
+    REFS.set(
       T,
       (r = {
         g: n => n && (T.g = n),
@@ -22,7 +22,8 @@ function refs(T) {
         ring: n => n && (T.ring = n),
         im: n => (T.im = n)
       })
-    );}
+    );
+  }
   return r;
 }
 
@@ -73,6 +74,7 @@ const cls = c => (c == null ? undefined : c); // null: no class attribute; '': c
 
 function Token({ T }) {
   const r = refs(T);
+  const { g: setG, b: setB, ring: setRing } = r;
   // token style: shiny tint set at creation, then the position
   let sty;
   if (T.sh != null || T.tr != null) {
@@ -82,14 +84,14 @@ function Token({ T }) {
   }
   const art = T.imOn && <Art T={T} r={r} />;
   return (
-    <g ref={r.g} className={T.c.join(' ')} style={sty} data-s453={T.s453 || undefined}>
-      <g ref={r.b} className="tok-b" style={{ animationDelay: T.dl }}>
+    <g ref={setG} className={T.c.join(' ')} style={sty} data-s453={T.s453 || undefined}>
+      <g ref={setB} className="tok-b" style={{ animationDelay: T.dl }}>
         <ellipse className="tok-sh" cx="0" cy="14" rx="12" ry="3.6" />
         <circle className="tok-rdy" r="21" />
         <circle className="tok-halo" r="19" />
         <circle className="hp-bg" r="16" />
         <circle className="hp-arc" r="16" transform="rotate(-90)" style={T.ad != null ? { strokeDasharray: T.ad, stroke: T.as } : undefined} />
-        <circle ref={r.ring} className={'tok-ring' + (T.hit ? ' hit' : '')} r="12.5" style={T.rs != null ? { stroke: T.rs, fill: T.rf } : undefined} />
+        <circle ref={setRing} className={'tok-ring' + (T.hit ? ' hit' : '')} r="12.5" style={T.rs != null ? { stroke: T.rs, fill: T.rf } : undefined} />
         <circle className="tok-rim" r="12.5" />
         <path transform="translate(-7,-7) scale(.5833)" fillRule="evenodd" d={T.gd} style={T.gf != null ? { fill: T.gf } : undefined} />
         <ellipse className="tok-gloss" cx="-3.5" cy="-6" rx="6" ry="3.2" />

@@ -15,7 +15,7 @@ function closeSplash() {
 }
 
 // Cinematic launch screen: only once per session.
-export default function LaunchScreen({ engineReady }) {
+export default function LaunchScreen() {
   const [seen] = useState(launchSeen);
   const [phase, setPhase] = useState(seen ? 'gone' : 'shown'); // shown → leaving → gone
   const rootRef = useRef(null);

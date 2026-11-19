@@ -57,10 +57,11 @@ document.addEventListener('change', e => {
   savePref();
   if (p.dataset.pref === 'vibe' && p.checked) vibe(40);
   if (p.dataset.pref === 'sound' && p.checked) setTimeout(() => sfx('ui'), 30);
-  if (B)
-    {try {
+  if (B) {
+    try {
       renderAll();
-    } catch { /* Best effort: failure here is non-fatal. */ }}
+    } catch { /* Best effort: failure here is non-fatal. */ }
+  }
 });
 
 

@@ -5,10 +5,10 @@ import { medal } from '../../engine/014-utils.js';
 
 // Companion choice (#compBox). Clicks (data-comp, data-comp-p) and hidden: engine (057).
 export default function CompanionBox() {
-  return <Box nom="comp" className="result exp-box" id="compBox" Carte={MapScreen} />;
+  return <Box nom="comp" className="result exp-box" id="compBox" Carte={Card} />;
 }
 
-function MapScreen({ L, cur, bonus }) {
+function Card({ L, cur, bonus }) {
   return (
     <Dialogue className="sv-card exp-card" titre="compT" fermer={{ 'data-comp': 'x' }}>
       <p className="kick">Compagnon</p>

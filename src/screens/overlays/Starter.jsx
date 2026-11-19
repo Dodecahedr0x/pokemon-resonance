@@ -15,12 +15,12 @@ export default function Starter() {
   const { open, v } = useStarter();
   return (
     <div className="result starter" id="starter" hidden={!open}>
-      {ready && v > 0 && <MapScreen />}
+      {ready && v > 0 && <Card />}
     </div>
   );
 }
 
-function MapScreen() {
+function Card() {
   return (
     <Dialogue className="sv-card st-card" titre="stT" fermer={{ 'data-st': 'x' }}>
       <p className="kick">Nouvelle campagne</p>

@@ -38,8 +38,8 @@ const toPolys = (l, p) => l.map(([k, c], i) => <Poly key={p + i} k={k} c={c} />)
 export function Markers() {
   useBoard('marks');
   const o = [];
-  if (B)
-    {for (const k in B.tiles) {
+  if (B) {
+    for (const k in B.tiles) {
       const t = B.tiles[k],
         [x, y] = HC(k);
       if (t.mark) {
@@ -59,23 +59,26 @@ export function Markers() {
             <path d={gp(tt)} fill={INK} fillRule="evenodd" transform="translate(4.8 4.8) scale(.6)" />
           </g>
         );
-        if (t.mark.lv === 2)
-          {o.push(
+        if (t.mark.lv === 2) {
+          o.push(
             <text key={k + 'ml'} className="mk-lv" x={(TILT.on ? x - 14 * ms : x - 15).toFixed(1)} y={(TILT.on ? y - 3 * ms : y - 11).toFixed(1)}>
               ×2
             </text>
-          );}
+          );
+        }
       }
       // rock (under a pillar, the pillar replaces it: drawObstacles)
-      if (t.rock && !t.pil)
-        {o.push(
+      if (t.rock && !t.pil) {
+        o.push(
           <path key={k + 'bo'} className="boulder" d={`M${(x - 14).toFixed(1)} ${(y + 8).toFixed(1)}q-2-12 8-17q8-5 15 1q7 6 5 16q-14 6-28 0Z`} />,
           <path key={k + 'bh'} className="boulder-h" d={`M${(x - 6).toFixed(1)} ${(y - 6).toFixed(1)}q5-4 11-1`} />
-        );}
+        );
+      }
       if (t.fog > 0) o.push(<polygon key={k + 'fg'} points={HP(x, y, BG.S - 1)} className={'fogc2' + (t.fog > 2 ? ' tox' : '')} />);
       o.push(<SvgHtml key={k + 'dt'} html={tacticalDrawing(B, k, x, y)} />); // traps (v4.8)
       if (B.vivant && fireHazard(B, k)) o.push(<polygon key={k + 'fr'} points={HP(x, y, BG.S - 4)} className="fire-risk" />); // the grass about to burn (v4.7-01)
-    }}
+    }
+  }
   return (
     <g style={PE} ref={lref('marks')}>
       {B && <SvgHtml html={linksColossi(B)} />}
@@ -122,15 +125,16 @@ function FrontGrass({ x, y }) {
 export function Obstacles({ front }) {
   useBoard('obs');
   const o = [];
-  if (B)
-    {for (const k in B.tiles) {
+  if (B) {
+    for (const k in B.tiles) {
       const t = B.tiles[k];
       if (!t.pil && !(t.grass && !t.rock)) continue;
       const [x, y] = HC(k);
       if (front) {
         if (!t.pil) o.push(<FrontGrass key={k} x={x} y={y} />);
       } else o.push(t.pil ? <Pillar key={k} x={x} y={y} /> : <BackGrass key={k} x={x} y={y} />);
-    }}
+    }
+  }
   return (
     <g style={PE} ref={lref(front ? 'obsF' : 'obs')}>
       {o}
@@ -159,8 +163,8 @@ function extras() {
     });
     if (ui.mode === 'target') {
       const m = MV[u.mv[ui.mi]];
-      if (m.sh === 'one')
-        {targets(B, u, m).forEach(k => {
+      if (m.sh === 'one') {
+        targets(B, u, m).forEach(k => {
           if (!B.tiles[k].rock) return;
           const r = ricoTgt(B, u, k);
           if (!r) return;
@@ -171,12 +175,13 @@ function extras() {
             <polyline key={'ri' + k} className={'rico' + (ui.pk === k ? ' on' : '')} points={`${f1(A[0])},${f1(A[1])} ${f1(R[0])},${f1(R[1])} ${f1(T[0])},${f1(T[1])}`} />,
             <circle key={'rp' + k} className="rico-p" cx={f1(R[0])} cy={f1(R[1] - 4)} r="2.6" />
           );
-        });}
+        });
+      }
     }
     if (u.hr && u.acted && !u.moved && !ui.mode) ex.push(...toPolys(polys(Object.keys(reach(B, u)), 'h-reach'), 'hr'));
   }
-  if (!vl)
-    {B.units.forEach(e => {
+  if (!vl) {
+    B.units.forEach(e => {
       if (e.side !== 'e' || e.ko || !e.intent) return;
       const m = MV[e.intent.mv];
       if (m.sh !== 'one' && m.sh !== 'line') return;
@@ -184,7 +189,8 @@ function extras() {
         const v = uAt(B, k);
         if (v && v.side === 'a' && coverOf(B, e.pos, v.pos)) ex.push(<Shield key={'ca' + e.uid + k} k={k} cls="al" />);
       });
-    });}
+    });
+  }
   return ex;
 }
 
@@ -210,8 +216,9 @@ export function Highlights() {
       } else if (ui.mode === 'target') {
         hl.push(...polys(targets(B, u, MV[u.mv[ui.mi]]), 'h-tgt', true));
         if (ui.pv) hl.push(...polys(ui.pv.aff, 'h-aff'));
-      } else if (ui.mode === 'dodge')
-        {hl.push(...polys(nbrK(uk(u)).filter(k => !B.tiles[k].rock && !uAt(B, k)), 'h-dodge'));}
+      } else if (ui.mode === 'dodge') {
+        hl.push(...polys(nbrK(uk(u)).filter(k => !B.tiles[k].rock && !uAt(B, k)), 'h-dodge'));
+      }
       else if (!u.moved && !u.acted) hl.push(...polys(Object.keys(reach(B, u)), 'h-reach'));
     }
   }
@@ -228,8 +235,8 @@ export function Highlights() {
 export function Intentions() {
   useBoard('hl');
   const o = [];
-  if (B && !veiled(B))
-    {B.units.forEach(e => {
+  if (B && !veiled(B)) {
+    B.units.forEach(e => {
       if (e.side !== 'e' || e.ko || !e.intent) return;
       const a = HC(uk(e)),
         b = HC(e.intent.k),
@@ -252,7 +259,8 @@ export function Intentions() {
           markerEnd="url(#iArr)"
         />
       );
-    });}
+    });
+  }
   return (
     <g style={PE} ref={lref('int')}>
       {o}

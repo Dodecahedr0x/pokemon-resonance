@@ -47,8 +47,8 @@ export function PlatesA() {
 
 // What the plate announces: enemy intent, fatigue, Awakening ready…
 function state(u, fe, nx) {
-  if (u.side === 'e')
-    {return u.caught ? (
+  if (u.side === 'e') {
+    return u.caught ? (
       <span className="rdy">Capturé</span>
     ) : u.ko ? (
       ''
@@ -74,7 +74,8 @@ function state(u, fe, nx) {
       'A agi'
     ) : (
       'Approche'
-    );}
+    );
+  }
   return u.ko ? (
     ''
   ) : u.fat && !u.acted ? (

@@ -8,10 +8,10 @@ import { lock461 } from '../../engine/092-companion-eggs-expeditions.js';
 // Camp expedition window (#expBox): choice of location, then of Pokémon.
 // Clicks (data-exp-*) and hidden attribute: engine (049).
 export default function ExpBox() {
-  return <Box nom="exp" className="result exp-box" id="expBox" Carte={MapScreen} />;
+  return <Box nom="exp" className="result exp-box" id="expBox" Carte={Card} />;
 }
 
-function MapScreen({ dest, dispo: available }) {
+function Card({ dest, dispo: available }) {
   return (
     <Dialogue className="sv-card exp-card" titre="expT" fermer={{ 'data-exp-x': '' }}>
       <p className="kick">Expédition</p>

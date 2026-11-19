@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useEngineReady } from '../../engineReady.js';
 import { setGuideTab, useGuide } from './guideStore.js';
 import Basics from './Basics.jsx';
@@ -39,9 +39,8 @@ export default function Guide() {
   const ready = useEngineReady();
   const { tab } = useGuide();
   const [openItems, setOpened] = useState(() => new Set([tab]));
-  useEffect(() => {
-    setOpened(s => (s.has(tab) ? s : new Set(s).add(tab)));
-  }, [tab]);
+  // a tab, once opened, stays mounted (adjusting state while rendering, not in an effect)
+  if (!openItems.has(tab)) setOpened(new Set(openItems).add(tab));
 
   return (
     <section className="page" id="types" aria-labelledby="h-ty">

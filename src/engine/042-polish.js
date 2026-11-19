@@ -46,13 +46,14 @@ RX_P = /(\S) ([!?:;»%])/g,
         q.add(x);
       });}
     }
-    if (!raf)
-      {raf = requestAnimationFrame(() => {
+    if (!raf) {
+      raf = requestAnimationFrame(() => {
         raf = 0;
         const a = [...q];
         q.clear();
         a.forEach(fixTree);
-      });}
+      });
+    }
   }).observe(document.body, { childList: true, subtree: true, characterData: true });
 }
 

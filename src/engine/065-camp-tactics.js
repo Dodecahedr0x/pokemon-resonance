@@ -7,8 +7,7 @@ import { RECRUIT } from './010-in-battle-evolution.js';
 import { PROFILE } from './011-game-state.js';
 import { BADGES, __set_BADGES } from './013-gyms.js';
 import { $, RM, medal, toast } from './014-utils.js';
-import { tokCl } from '../screens/combat/board/boardStore.js';
-import { bdClass, getHost, hostSet } from '../screens/combat/board/boardStore.js';
+import { bdClass, getHost, hostSet, tokCl } from '../screens/combat/board/boardStore.js';
 import { HOOKS, hook } from './015-hooks.js';
 import { cur, go } from './016-navigation.js';
 import { renderSquad, save } from './020-team-cards.js';
@@ -192,7 +191,7 @@ function cheat430(k) {
     PROFILE.riv429 = ['rv5', 'rv6', 'hd429'];
     m = 'Kanto, Johto et Hoenn débloqués.';
   } else if (k === 'legendes') {
-    PROFILE.legends = LEGS.map(L => L.id);
+    PROFILE.legends = LEGS.map(leg => leg.id);
     PROFILE.dipl428 = [1, 2, 3];
     PROFILE.hchamp = 1;
     m = 'Quêtes légendaires terminées : Quêtes › Légendes.';
@@ -256,12 +255,13 @@ function sky430() {
   };
   if (JSON.stringify(sky) !== JSON.stringify(getHost().ciel)) hostSet({ ciel: sky });
   // announcement when the time or weather changes
-  const P = B.ciel430;
+  const prevSky = B.ciel430;
   B.ciel430 = E;
-  if (!P || B.over) return;
-  if (P.ph !== E.ph) announce430(SKY430[E.ph], LIVING_STATE[E.ph] || LIVING_NAME[E.ph], LIVING_DESC[E.ph] || '');
-  else if (P.wx !== E.wx)
-    {E.wx ? announce430(SKY430[E.wx], `${WXN[E.wx]} · ${B.wx.n} manches`, wxInfo430(E.wx)) : announce430(['i-sol', '#cfe6ff'], 'Le ciel se dégage', 'La météo est terminée.');}
+  if (!prevSky || B.over) return;
+  if (prevSky.ph !== E.ph) announce430(SKY430[E.ph], LIVING_STATE[E.ph] || LIVING_NAME[E.ph], LIVING_DESC[E.ph] || '');
+  else if (prevSky.wx !== E.wx) {
+    E.wx ? announce430(SKY430[E.wx], `${WXN[E.wx]} · ${B.wx.n} manches`, wxInfo430(E.wx)) : announce430(['i-sol', '#cfe6ff'], 'Le ciel se dégage', 'La météo est terminée.');
+  }
 }
 
 
@@ -292,15 +292,16 @@ function large430(D) {
 
 function zone430(S) {
   const z = [];
-  for (let r = 0; r < BH; r++)
-    {for (let c = 0; c <= 1; c++) {
+  for (let r = 0; r < BH; r++) {
+    for (let c = 0; c <= 1; c++) {
       const k = K(c, r),
         t = S.tiles[k];
       if (!t || t.rock || t.lava > 0) continue;
       const u = uAt(S, k);
       if (u && u.side !== 'a') continue;
       z.push(k);
-    }}
+    }
+  }
   return z;
 }
 
@@ -335,15 +336,17 @@ function endDeployment430() {
 function deployRender430() {
   const on = !!(B && B.dep430 && !B.over),
     z = on ? zone430(B) : [];
-  if (L.t)
-    {for (const k in L.t) {
+  if (L.t) {
+    for (const k in L.t) {
       L.t[k].classList.toggle('dep430z', on && z.includes(k));
-    }}
-  if (L.u)
-    {for (const id in L.u) {
+    }
+  }
+  if (L.u) {
+    for (const id in L.u) {
       const T = L.u[id];
       if (T) tokCl(T, 'dep430s', on && ui.dsel430 === id); // token classes: Units.jsx
-    }}
+    }
+  }
   bdClass('dep430', on); // #bBoard class, rendered by React
   // « Lancer le combat » (Start battle) and the deployment phase: rendered by React (src/screens/combat/battle/Foot.jsx)
 }
@@ -503,12 +506,13 @@ document.addEventListener('click', e => {
   const b = e.target.closest('[data-mode430]');
   if (!b) return;
   if (b.dataset.mode430 === 'camp') confirm430('Commencer une campagne ?', 'Vous choisirez votre partenaire, puis les chapitres s’enchaîneront depuis le premier badge.', openStarter);
-  else
-    {confirm430('Passer en mode Libre ?', 'Tous les combats seront ouverts. Votre Campagne ne sera conservée que si vous la rangez dans un emplacement.', () => {
+  else {
+    confirm430('Passer en mode Libre ?', 'Tous les combats seront ouverts. Votre Campagne ne sera conservée que si vous la rangez dans un emplacement.', () => {
       newGame();
       toast('Nouvelle partie en mode Libre.');
       renderParams();
-    });}
+    });
+  }
 });
 
 
@@ -631,11 +635,12 @@ HOOKS.combat.push((S, opt) => {
     if (S.vmax > 1) {
       S.vmax -= 1;
       S.voix = Math.min(S.voix, S.vmax);
-    } else
-      {al.forEach(u => {
+    } else {
+      al.forEach(u => {
         u.mhp = Math.max(1, Math.round(u.mhp * 0.9));
         u.hp = Math.min(u.hp, u.mhp);
-      });}
+      });
+    }
   } else if (d === 'commandement') {
     S.vmax += 1;
     S.voix += 1;

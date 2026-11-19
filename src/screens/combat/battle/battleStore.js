@@ -11,14 +11,14 @@ import { channel } from '../../../lib/store.js';
 //   result : end-of-battle sheet (finish)
 //   ti444  : cell sheet (v4.44, sheet444 and place444)
 const versions = { top: 0, foot: 0, fast: 0, panel: 0, log: 0, evo: 0, result: 0, ti444: 0 };
-const c = channel();
+const chan = channel();
 
 export function refreshBattle(...parts) {
   parts.forEach(k => versions[k]++);
-  c.emit();
+  chan.emit();
 }
 
-export const useBattleVersion = k => c.use(() => versions[k]);
+export const useBattleVersion = k => chan.use(() => versions[k]);
 
 // Evolution choice open: the Pokémon that is evolving.
 export const evoState = { u: null };

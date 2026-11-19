@@ -16,8 +16,7 @@ import { dl428 } from './063-combat-catches-home.js';
 import { anim429, replay429 } from './064-quality.js';
 import { TUTORIAL_STEPS433 } from './068-duel-tutorial.js';
 import { refreshBattle } from '../screens/combat/battle/battleStore.js';
-import { bdClass, bdReplay, getHost, hostSet } from '../screens/combat/board/boardStore.js';
-import { boardSet, getBoard, unitsDirty } from '../screens/combat/board/boardStore.js';
+import { bdClass, bdReplay, boardSet, getBoard, getHost, hostSet, unitsDirty } from '../screens/combat/board/boardStore.js';
 
 // Guided turn flow (v4.78): steps read by the panel and the bottom bar (src/screens/combat/battle).
 export let flow478;
@@ -502,9 +501,9 @@ export function __init() {
       rest = remaining(B);
     if (!rest.length) return;
     if (!u || u.ko || (step(B, u) === 'fini' && ui.fl478 === u.uid)) {
-      const L = toPlay(B),
-        i = u ? L.indexOf(u) : -1;
-      const nx = rest.find(x => L.indexOf(x) > i) || rest[0];
+      const order = toPlay(B),
+        i = u ? order.indexOf(u) : -1;
+      const nx = rest.find(x => order.indexOf(x) > i) || rest[0];
       ui.sel = nx.uid;
       clearAim();
     }
@@ -576,11 +575,12 @@ export function __init() {
       s.sel = '#bPanel';
     });
     const t0 = TUTORIAL_STEPS433.find(x => x.k === 'tour');
-    if (t0)
-      {t0.d = t0.d.replace(
+    if (t0) {
+      t0.d = t0.d.replace(
         'Quand tout le monde a joué, « Fin du tour » : les adversaires agissent à leur tour.',
         'Le panneau vous guide : chaque Pokémon se déplace (ou « Rester ici »), puis agit (ou « Passer l’action »). Quand tout le monde a joué, la manche se termine seule et les adversaires agissent.'
-      );}
+      );
+    }
     NEWS416.unshift(['i-play', 'Tour guidé', 'En combat, le panneau vous guide pour chaque Pokémon : déplacer, agir, terminer. La manche se termine seule quand tout le monde a joué.', null]);
     NEWS416.splice(8);
   } catch { /* Best effort: failure here is non-fatal. */ }

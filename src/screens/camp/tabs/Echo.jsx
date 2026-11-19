@@ -13,15 +13,16 @@ function Head({ X }) {
 
 // The current event: choice of a relic, merchant or event (data-echo431).
 function Event({ R }) {
-  if (R.ev === 'relique')
-    {return (
+  if (R.ev === 'relique') {
+    return (
       <div className="ec431-ev">
         <h3>Choisissez une relique</h3>
         {relRandom431(R, 3).map(k => <button key={k} type="button" className="b" data-echo431={`rel-${k}`}><b>{RELICS431[k][0]}</b><em>{RELICS431[k][1]}</em></button>)}
       </div>
-    );}
-  if (R.ev === 'marchand')
-    {return (
+    );
+  }
+  if (R.ev === 'marchand') {
+    return (
       <div className="ec431-ev">
         <h3>Le Marchand <em>{`${R.ech} Échos`}</em></h3>
         <button type="button" className="b" data-echo431="achat-potion"><b>Potion d’équipe · 20</b><em>+30 % de PV pour tous.</em></button>
@@ -29,7 +30,8 @@ function Event({ R }) {
         <button type="button" className="b" data-echo431="achat-rappel"><b>Rappel · 60</b><em>Un Pokémon K.O. revient à 30 % de PV.</em></button>
         <button type="button" className="b b-gold" data-echo431="passer">Reprendre la route</button>
       </div>
-    );}
+    );
+  }
   if (EVENTS431[R.ev]) {
     const [t, d, C] = EVENTS431[R.ev];
     return (
@@ -44,7 +46,7 @@ function Event({ R }) {
 }
 
 // The expedition map, from the guardian (top) to the first floor.
-function MapScreen({ R }) {
+function Card({ R }) {
   return (
     <div className="ec431-c">
       {R.map
@@ -74,8 +76,8 @@ function MapScreen({ R }) {
 export default function Echo() {
   const X = PROFILE.echo431 || { best: 0, wins: 0 },
     R = X.run;
-  if (!R)
-    {return (
+  if (!R) {
+    return (
       <section className="v4-panel ec431">
         <Head X={X} />
         <p className="v4-ps-n">Une expédition de 8 étages. À chaque étage, choisissez votre chemin : combat, élite (une relique à la clé), source, marchand ou événement. <b>Les PV sont conservés d’un combat à l’autre et un Pokémon K.O. quitte l’expédition.</b> Au bout : le gardien.</p>
@@ -85,7 +87,8 @@ export default function Echo() {
         <p className="v4-ps-n">Récompense : 300 ₽ et 2 Éclats par étage franchi, 2 500 ₽ et 20 Éclats de plus si le gardien tombe.</p>
         <button type="button" className="b b-gold" data-echo431="partir">Partir avec cette équipe</button>
       </section>
-    );}
+    );
+  }
   return (
     <section className="v4-panel ec431">
       <Head X={X} />
@@ -108,7 +111,7 @@ export default function Echo() {
         {R.rel.length ? R.rel.map(k => <span key={k} className="ec431-r" title={RELICS431[k][1]}>{RELICS431[k][0]}</span>) : <em>Aucune relique.</em>}
       </div>
       <Event R={R} />
-      <MapScreen R={R} />
+      <Card R={R} />
       <button type="button" className="b b-sm b-ghost" data-echo431="abandon">Abandonner l’expédition</button>
     </section>
   );

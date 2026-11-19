@@ -128,7 +128,7 @@ async function offClear462() {
 async function offSave462() {
   try {
     const r = await fetch(location.href);
-    if (!r.ok) throw 0;
+    if (!r.ok) throw new Error('Fetch failed');
     const bl = await r.blob(),
       a = document.createElement('a');
     a.href = URL.createObjectURL(bl);

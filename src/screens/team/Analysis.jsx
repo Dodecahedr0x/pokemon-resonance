@@ -175,34 +175,36 @@ function Radar({ v }) {
 
 // Team formation (v4.63).
 function Formation() {
+  let ms, k, F, ok;
   try {
-    const ms = formMs463(),
-      k = formKey463(),
-      F = FORM463[k],
-      ok = formOn463();
-    return (
-      <div className="ac ac-fm463">
-        <h4>
-          Formation<span>{F.n}</span>
-        </h4>
-        <div className="fm463-g">
-          {Object.keys(FORM463).map(x => (
-            <button key={x} type="button" className={`fm463${x === k ? ' on' : ''}`} data-fm463={x} aria-pressed={x === k}>
-              <b>{FORM463[x].n}</b>
-            </button>
-          ))}
-        </div>
-        <p className="fm463-d">
-          {k === 'libre'
-            ? 'Choisissez une formation : un seul bonus, mais il faut composer l’équipe qui va avec. L’ordre de l’équipe compte : le 1er est l’avant-garde, le dernier l’éclaireur.'
-            : F.d}
-        </p>
-        {ms.length && k !== 'libre' ? ok ? <p className="harm on">Formation active : {F.d}</p> : <p className="harm">Formation inactive. {F.need}</p> : null}
-      </div>
-    );
+    ms = formMs463();
+    k = formKey463();
+    F = FORM463[k];
+    ok = formOn463();
   } catch {
     return null;
   }
+  if (!F) return null;
+  return (
+    <div className="ac ac-fm463">
+      <h4>
+        Formation<span>{F.n}</span>
+      </h4>
+      <div className="fm463-g">
+        {Object.keys(FORM463).map(x => (
+          <button key={x} type="button" className={`fm463${x === k ? ' on' : ''}`} data-fm463={x} aria-pressed={x === k}>
+            <b>{FORM463[x].n}</b>
+          </button>
+        ))}
+      </div>
+      <p className="fm463-d">
+        {k === 'libre'
+          ? 'Choisissez une formation : un seul bonus, mais il faut composer l’équipe qui va avec. L’ordre de l’équipe compte : le 1er est l’avant-garde, le dernier l’éclaireur.'
+          : F.d}
+      </p>
+      {ms.length && k !== 'libre' ? ok ? <p className="harm on">Formation active : {F.d}</p> : <p className="harm">Formation inactive. {F.need}</p> : null}
+    </div>
+  );
 }
 
 // Team ranks and Harmony (v4.14).
@@ -248,8 +250,9 @@ function Synergies() {
   const combos = [];
   const F = has('Frappeur'),
     Rm = has('Rempart');
-  if (F.length && Rm.length)
-    {combos.push(`Escorte : ${displayNames(F)} gagne${F.length > 1 ? 'nt' : ''} +25 % au contact de ${Rm.map(m => m.n).join(' ou ')}.`);}
+  if (F.length && Rm.length) {
+    combos.push(`Escorte : ${displayNames(F)} gagne${F.length > 1 ? 'nt' : ''} +25 % au contact de ${Rm.map(m => m.n).join(' ou ')}.`);
+  }
   else if (F.length) combos.push(`${displayNames(F)} n’a aucun Rempart pour l’escorter.`);
   if (has('Verrou').length) combos.push(`Prise : ${displayNames(has('Verrou'))} rend vos attaques +25 % sur les cibles altérées.`);
   if (has('Relais').length) combos.push(`Soutien : ${displayNames(has('Relais'))} soigne ses voisins en fin de manche.`);
@@ -325,12 +328,13 @@ function Reactions({ A }) {
 function Links() {
   const T = squad.map(id => BY[BY[id].base]),
     rows = [];
-  for (let i = 0; i < T.length; i++)
-    {for (let j = i + 1; j < T.length; j++) {
+  for (let i = 0; i < T.length; i++) {
+    for (let j = i + 1; j < T.length; j++) {
       const k = pairKey(T[i].id, T[j].id),
         v = PROFILE.links[k] || 0;
       rows.push({ a: T[i], b: T[j], v, l: lvlOfPts(v), D: duoFor416(k) });
-    }}
+    }
+  }
   rows.sort((x, y) => y.v - x.v || (y.D ? 1 : 0) - (x.D ? 1 : 0));
   const act = rows.filter(r => r.l).length;
   return (

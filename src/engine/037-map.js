@@ -63,10 +63,12 @@ export function placeState(p) {
 
 export function placeIcon(p) {
   if (p.id === 'safari') return `<span class="emb ter bio-roche xs"><svg viewBox="0 0 24 24"><use href="#i-grass"/></svg></span>`; // v4.18
-  if (p.id === 'wild' || p.id === 'jwild' || p.id === 'hwild')
-    {return `<span class="emb ter bio-gue xs"><svg viewBox="0 0 24 24"><use href="#i-grass"/></svg></span>`;}
-  if (p.id === 'elite')
-    {return avatar(ELITE_L[Math.min(3, PROFILE.elite)].n, SCEN[ELITE[Math.min(3, PROFILE.elite)]].at || 'Dragon', 'xs');}
+  if (p.id === 'wild' || p.id === 'jwild' || p.id === 'hwild') {
+    return `<span class="emb ter bio-gue xs"><svg viewBox="0 0 24 24"><use href="#i-grass"/></svg></span>`;
+  }
+  if (p.id === 'elite') {
+    return avatar(ELITE_L[Math.min(3, PROFILE.elite)].n, SCEN[ELITE[Math.min(3, PROFILE.elite)]].at || 'Dragon', 'xs');
+  }
   return emblem(p.id, 'xs');
 }
 
@@ -223,8 +225,9 @@ document.addEventListener('click', e => {
   if (b.closest('#mapList')) {
     const mk = $(`#mapMarks [data-place="${V4.mapSel}"]`),
       sc = $('#mapSc');
-    if (mk && sc && sc.scrollWidth > sc.clientWidth)
-      {sc.scrollTo({ left: mk.offsetLeft - sc.clientWidth / 2, behavior: RM ? 'auto' : 'smooth' });}
+    if (mk && sc && sc.scrollWidth > sc.clientWidth) {
+      sc.scrollTo({ left: mk.offsetLeft - sc.clientWidth / 2, behavior: RM ? 'auto' : 'smooth' });
+    }
   }
   if (innerWidth < 1000) {
     const i = $('#mapInfo');

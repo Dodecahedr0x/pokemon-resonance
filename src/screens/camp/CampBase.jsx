@@ -72,8 +72,8 @@ function Daycare() {
 
 // A Vegetable garden plot (v4.17): empty, seed choice, growing or ripe.
 function Plot({ x, i }) {
-  if (!x)
-    {return POT_I === i ? (
+  if (!x) {
+    return POT_I === i ? (
       <div className="pt-p choix">
         {Object.entries(POTAGER).map(([g, G]) => (
           <button key={g} type="button" className="b b-sm" data-pot-g={g} disabled={!(PROFILE.money >= G.p)}>{`${G.n} · ${fmt(G.p)} ₽`}<em>{`${G.duree} combats : ${G.d}`}</em></button>
@@ -82,7 +82,8 @@ function Plot({ x, i }) {
       </div>
     ) : (
       <button type="button" className="pt-p vide" data-pot-i={i}><svg><use href="#i-plus" /></svg><b>Planter</b></button>
-    );}
+    );
+  }
   const r = sprout417(x),
     G = POTAGER[x.g];
   return r ? (

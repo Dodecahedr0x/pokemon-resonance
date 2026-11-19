@@ -7,10 +7,10 @@ import { medal, tb, tc } from '../../engine/014-utils.js';
 // Learn a TM or HM (#ctBox, opened from the Bag). The engine (045) computes
 // the list of families and keeps the clicks (data-ct, data-ctf) and the hidden attribute.
 export default function TmBox() {
-  return <Box nom="ct" className="result ct-box" id="ctBox" Carte={MapScreen} />;
+  return <Box nom="ct" className="result ct-box" id="ctBox" Carte={Card} />;
 }
 
-function MapScreen({ M, m, fams: families }) {
+function Card({ M, m, fams: families }) {
   return (
     <Dialogue className="sv-card ct-card" titre="ctT" fermer={{ 'data-ct': 'x' }}>
       <p className="kick">{M.cs ? 'CS · réutilisable' : 'CT · usage unique'}</p>

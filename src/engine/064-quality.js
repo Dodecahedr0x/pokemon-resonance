@@ -1,12 +1,11 @@
 /* Original section: v4.29-01-qualite.js */
-import { bdClass } from '../screens/combat/board/boardStore.js';
+import { bdClass, tokCl, tokHas } from '../screens/combat/board/boardStore.js';
 
 import { MV } from './005-moves.js';
 import { BY, MON, SCEN, familyOf } from './009-pokemon.js';
 import { RECRUIT } from './010-in-battle-evolution.js';
 import { PROFILE, isCamp } from './011-game-state.js';
 import { $, RM, after2images, mulberry32, toast } from './014-utils.js';
-import { tokCl, tokHas } from '../screens/combat/board/boardStore.js';
 import { HOOKS } from './015-hooks.js';
 import { go } from './016-navigation.js';
 import { openSheet } from './020-team-cards.js';
@@ -63,14 +62,15 @@ export function v429Clean(p) {
   if (p.tips429 && typeof p.tips429 === 'object') Object.keys(p.tips429).forEach(k => /^[a-z]{2,12}$/.test(k) && (o.tips429[k] = 1));
   if (Array.isArray(p.riv429)) o.riv429 = [...new Set(p.riv429.filter(x => ['rv5', 'rv6', 'hd429'].includes(x)))];
   const h = p.hebdo429;
-  if (h && typeof h === 'object' && typeof h.w === 'string' && /^\d{4}-S\d\d$/.test(h.w))
-    {o.hebdo429 = {
+  if (h && typeof h === 'object' && typeof h.w === 'string' && /^\d{4}-S\d\d$/.test(h.w)) {
+    o.hebdo429 = {
       w: h.w,
       best: Number.isFinite(h.best) ? Math.max(0, Math.min(99999, Math.floor(h.best))) : 0,
       n: Number.isFinite(h.n) ? Math.max(0, Math.min(999, Math.floor(h.n))) : 0,
       rec: h.rec ? 1 : 0,
       win: h.win ? 1 : 0
-    };}
+    };
+  }
   return o;
 }
 
@@ -179,21 +179,23 @@ function actionLp429(t) {
   }
   const tok = t.closest('#bSvg .tok');
   if (tok && B && L.u) {
-    for (const id in L.u)
-      {if (L.u[id].g === tok) {
+    for (const id in L.u) {
+      if (L.u[id].g === tok) {
         const u = byUid(B, id);
         return u ? () => sheet429(u.sp) : null;
-      }}
+      }
+    }
     return null;
   }
   const mk = t.closest('#mapMarks [data-place]');
-  if (mk)
-    {return () => {
+  if (mk) {
+    return () => {
       V4.mapSel = mk.dataset.place;
       renderMap();
       const i = document.getElementById('mapInfo');
       if (i && i.scrollIntoView) i.scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'center' });
-    };}
+    };
+  }
   const c = t.closest('[data-open],.v4-dl[data-dex],[data-lp429]');
   if (!c) return null;
   const id = c.dataset.open || c.dataset.dex || c.dataset.lp429;
@@ -378,11 +380,11 @@ function regLeg429(id) {
 }
 
 
-export function stepsLeg429(L) {
-  const r = regLeg429(L.id),
+export function stepsLeg429(leg) {
+  const r = regLeg429(leg.id),
     c = familyCapt428(r);
   return [
-    { ok: (PROFILE.legends || []).includes(L.id), t: `Vaincre ${L.n} (Combats › Après-jeu)` },
+    { ok: (PROFILE.legends || []).includes(leg.id), t: `Vaincre ${leg.n} (Combats › Après-jeu)` },
     { ok: (PROFILE.dipl428 || []).includes(r), t: `Compléter le Pokédex de ${REGION_NAMES421[r]} (${c.n} / ${c.t})` },
     ...(isCamp() ? [{ ok: !!PROFILE.hchamp, t: 'Devenir Maître de Hoenn' }] : [])
   ];
@@ -393,7 +395,7 @@ export function lockLegendary429(k) {
   const D = SCEN[k];
   if (!D || !D.cap429) return null;
   if (PROFILE.box.includes(D.cap429)) return `${BY[D.cap429].n} est déjà dans votre Box.`;
-  const e = stepsLeg429(LEGS.find(L => L.id === D.cap429)).find(x => !x.ok);
+  const e = stepsLeg429(LEGS.find(leg => leg.id === D.cap429)).find(x => !x.ok);
   return e ? `Quête légendaire : ${e.t.replace(/ \(.*\)$/, '')} d’abord.` : null;
 }
 
@@ -766,40 +768,42 @@ Object.assign(SCENES, {
 });
 
 
-if (!SCENES.h1)
-  {SCENES.h1 = [
+if (!SCENES.h1) {
+  SCENES.h1 = [
     ['prof', 'Hoenn ! Des volcans, des forêts tropicales et la mer à perte de vue.'],
     ['prof', 'Huit arènes, chacune avec sa règle, et un Maître au Plateau. Lisez bien la règle avant de lancer le combat.']
-  ];}
+  ];
+}
 
 
-if (!SCENES.hchamp)
-  {SCENES.hchamp = [
+if (!SCENES.hchamp) {
+  SCENES.hchamp = [
     ['prof', 'Le Plateau de Hoenn… Huit badges, et Kael qui vous suit de près.'],
     ['prof', 'Le Maître change de tactique à chaque phase. Gardez des Voix et des soins pour la fin.']
-  ];}
+  ];
+}
 
 
 /* ---------- 6. capturable legendaries ---------- */
-LEGS.forEach(L => {
-  BY[L.id].c = 8; // a legend on the team costs 8 PC
-  const lk = legKey(L.id);
+LEGS.forEach(leg => {
+  BY[leg.id].c = 8; // a legend on the team costs 8 PC
+  const lk = legKey(leg.id);
   if (SCEN[lk]) SCEN[lk].d = SCEN[lk].d.replace(/Il ne peut pas être capturé[^.]*\.[^.]*\./, 'Vaincu, il pourra être capturé une fois sa quête terminée (Quêtes › Légendes).');
 });
 
 
-LEGS.forEach(L => {
-  const k = 'lc' + L.id,
-    src = SCEN[legKey(L.id)];
+LEGS.forEach(leg => {
+  const k = 'lc' + leg.id,
+    src = SCEN[legKey(leg.id)];
   if (!src) return;
   SCEN[k] = Object.assign({}, src, {
-    n: `${L.n} · capture`,
-    lvl: `Légende · ${L.title}`,
+    n: `${leg.n} · capture`,
+    lvl: `Légende · ${leg.title}`,
     catch: true,
-    cap429: L.id,
-    d: `${L.n} ne fuit plus. Affaiblissez-le sous 25 %, immobilisez-le, puis capturez-le avec un allié à son contact. Son escorte ne se capture pas.`
+    cap429: leg.id,
+    d: `${leg.n} ne fuit plus. Affaiblissez-le sous 25 %, immobilisez-le, puis capturez-le avec un allié à son contact. Son escorte ne se capture pas.`
   });
-  OBST[k] = OBST[legKey(L.id)] || {};
+  OBST[k] = OBST[legKey(leg.id)] || {};
 });
 
 

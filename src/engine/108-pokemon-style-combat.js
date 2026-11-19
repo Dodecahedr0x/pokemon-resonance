@@ -17,7 +17,6 @@ import { boardSet, getBoard, tokCl, tokHas, unitsBatch } from '../screens/combat
 export function __init() {
 
 (() => {
-  const H = document.documentElement;
   const auto = () => !!AUTO;
   const isFast = () => {
     try {
@@ -88,7 +87,7 @@ export function __init() {
     if (!getBoard().pk) boardSet({ pk: true }, 'pk');
     return L.pk73 && L.pk73.isConnected ? L.pk73 : null;
   };
-  const showIt = b => {
+  const showIt = _b => {
     try {
       if (!L || !L.u) return;
       unitsBatch(() => Object.values(L.u).forEach(T => tokCl(T, 'pk-wait', false))); // token classes: Units.jsx
@@ -241,12 +240,13 @@ export function __init() {
     tBc = setTimeout(closeBadge, isFast() ? 2400 : 4200);
   };
   const res = $('#cbResult');
-  if (res && window.MutationObserver)
-    {new MutationObserver(() => {
+  if (res && window.MutationObserver) {
+    new MutationObserver(() => {
       try {
         if (!res.hidden && res.querySelector('.res-card')) setTimeout(celebrateBadge, 250);
       } catch { /* Best effort: failure here is non-fatal. */ }
-    }).observe(res, { childList: true });}
+    }).observe(res, { childList: true });
+  }
 
   window.__combat473 = { transition, envoyer: send, retour: recall, feterBadge: celebrateBadge, ENTREE: ENTRANCES, genre };
 })();

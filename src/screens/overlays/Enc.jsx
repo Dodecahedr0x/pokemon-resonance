@@ -16,13 +16,13 @@ export default function Enc() {
   const { open, v, snap } = useEnc();
   return (
     <div className="result enc" id="enc" hidden={!open}>
-      {snap && <MapScreen key={v} {...snap} />}
+      {snap && <Card key={v} {...snap} />}
     </div>
   );
 }
 
 // memo: closing does not redraw the sheet (crestSmall numbers its gradients on every call).
-const MapScreen = memo(({ pick, shiny, dom, route, tod, inBox, camp, path }) => {
+const Card = memo(function Card({ pick, shiny, dom, route, tod, inBox, camp, path }) {
   const style = { '--c': tc(pick.t[0]), ...(shiny ? parseStyle(shinyStyle(pick.id)) : {}) };
   const r = rareInfo450(pick.id); // v4.50: rare appearance depending on time and weather
   return (

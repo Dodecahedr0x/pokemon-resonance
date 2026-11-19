@@ -14,8 +14,8 @@ const CHEATS = [
 // Action Replay (workshopHtml430): code entry, then test shortcuts.
 // The engine handles data-code430, Enter in #code430 and data-triche430.
 export default function ActionReplay() {
-  if (!creator430())
-    {return (
+  if (!creator430()) {
+    return (
       <section className="v4-panel v4-ps code430">
         <header className="v4-ph"><svg><use href="#i-lock" /></svg><b>Action Replay</b></header>
         <div className="code430-f">
@@ -23,7 +23,8 @@ export default function ActionReplay() {
           <button type="button" className="b b-sm" data-code430="ok">Valider</button>
         </div>
       </section>
-    );}
+    );
+  }
   return (
     <section className="v4-panel v4-ps code430 on">
       <header className="v4-ph"><svg><use href="#i-star" /></svg><b>Action Replay</b><span className="v4-cnt">actif sur cet appareil</span></header>

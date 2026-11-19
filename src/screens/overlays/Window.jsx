@@ -2,11 +2,11 @@ import { useOverlay } from './dialogsStore.js';
 
 // Window painted by paintOverlay(name, state): a new block per state (key). The engine keeps
 // the clicks and the hidden attribute: React renders `hidden` only on mount and no longer changes it.
-export function Box({ nom: displayName, className, id, Carte: MapScreen }) {
+export function Box({ nom: displayName, className, id, Carte: Card }) {
   const s = useOverlay(displayName);
   return (
     <div className={className} id={id} hidden>
-      {s && <MapScreen key={s.v} {...s} />}
+      {s && <Card key={s.v} {...s} />}
     </div>
   );
 }

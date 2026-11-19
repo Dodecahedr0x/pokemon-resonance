@@ -26,7 +26,7 @@ export default function Saves() {
 
   return (
     <div className="result saves" id="saves" hidden={!open}>
-      {open && ready && <MapScreen key={version} xRef={x} />}
+      {open && ready && <Card key={version} xRef={x} />}
     </div>
   );
 }
@@ -55,8 +55,8 @@ function Slot({ k }) {
   const s = SV.local[k],
     n = k.slice(1),
     cf = SV.confirm && SV.confirm.k === k ? SV.confirm.a : null;
-  if (!s)
-    {return (
+  if (!s) {
+    return (
       <article className="sv-slot empty">
         <header>
           <b>Emplacement {n}</b>
@@ -68,7 +68,8 @@ function Slot({ k }) {
           </button>
         </div>
       </article>
-    );}
+    );
+  }
   return (
     <article className="sv-slot">
       <header>
@@ -157,7 +158,7 @@ function Code() {
 }
 
 // The card, recreated at each version (like the old innerHTML): the fields re-read the state.
-function MapScreen({ xRef }) {
+function Card({ xRef }) {
   const a = SV.local.auto || snapshot(),
     P = PROFILE,
     busy = Object.values(SV.busy).some(Boolean),
