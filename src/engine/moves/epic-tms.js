@@ -9,8 +9,6 @@ import { de } from '../combat/tactics.js';
 import { statusMoveBonus, tickTechnicalEffects, hasRune } from './technical-roster.js';
 import { heldMoveBonus } from '../combat/resonance.js';
 
-export let SELF_MOVE_EFFECTS, TARGET_MOVE_EFFECTS;
-
 /* ---------- effects on each target hit ---------- */
 export function applyPoison(S, v, ev) {
   if (!v || v.ko) {
@@ -130,6 +128,74 @@ export function fieldEffectChips(S) {
   } // v4.14
   return h;
 }
+
+/* ---------- effects on oneself ---------- */
+export const SELF_MOVE_EFFECTS = {
+  arriere(S, u, ev) {
+    S.arriere = Object.assign({}, S.arriere, { [u.side]: 3 });
+    say(
+      ev,
+      `Vent Arrière : ${u.side === 'a' ? 'votre équipe' : 'l’équipe adverse'} gagne +2 Mouvement pendant 3 manches.`
+    );
+  },
+  distorsion(S, u, ev) {
+    S.distorsion = 4;
+    say(ev, 'Distorsion : pendant 4 manches, les Pokémon lents frappent ×1,3 et gagnent +1 Mouvement.');
+  },
+  glas(S, u, ev) {
+    const healed = S.units.filter(o => !o.ko && o.side === u.side && hdist(o.pos, u.pos) <= 2);
+    healed.forEach(o => {
+      const had = !!(o.badge || o.skip || o.burn || o.poisoned || o.web || o.root);
+      if (o.sn && o !== u && o.side === 'a' && S.phase === 'player') {
+        o.sn = false; // woken up: it can still play this round
+        o.acted = false;
+        o.moved = false;
+      }
+      o.badge = null;
+      o.skip = 0;
+      o.burn = 0;
+      o.poisoned = 0;
+      o.web = 0;
+      o.root = 0;
+      heal(S, o, Math.round(o.mhp * 0.1), ev);
+      if (had) {
+        ev.push({ e: 'st', u: o.uid, s: 'SOIN' });
+      }
+    });
+    say(ev, `Glas de Soin : ${healed.map(o => o.n).join(', ')} ${healed.length > 1 ? 'sont guéris' : 'est guéri'}.`);
+  },
+};
+
+export const TARGET_MOVE_EFFECTS = {
+  ventglace(S, u, v, k, mk, ev) {
+    if (v.ability === 'regardvif' || hasRune(S, v)) {
+      say(ev, `${v.n} ignore l’entrave.`);
+    } else {
+      v.web = Math.max(v.web, 2);
+      say(ev, `${v.n} est ralenti par le froid.`);
+    }
+  },
+  dracosouffle(S, u, v, k, mk, ev) {
+    if (mk === 'charge') {
+      stun(S, v, 'PAR', ev);
+    }
+  },
+  toxik(S, u, v, k, mk, ev) {
+    applyPoison(S, v, ev);
+    if (mk !== 'trempe') {
+      return;
+    }
+    const N = net(S, k, 'trempe');
+    const others = Object.keys(N.seen)
+      .map(x => uAt(S, x))
+      .filter(o => o && o !== v && !o.ko && o.side !== u.side && !(o.poisoned > 0));
+    if (others.length) {
+      ev.push({ e: 'chain', edges: N.edges, c: 'tox' });
+      say(ev, `Contamination : le poison court dans l’eau reliée.`);
+      others.forEach(o => applyPoison(S, o, ev));
+    }
+  },
+};
 
 // Instructions run at startup, in the original order (see index.js).
 export function init() {
@@ -255,7 +321,6 @@ export function init() {
       d: 'Vos Pokémon à 2 cases, lui compris, sont guéris (sommeil, paralysie, gel, brûlure, poison, entraves) et récupèrent 10 % de leurs PV.',
     },
   });
-
   [
     ['ct34', { num: 'CT34', mv: 'ondedechoc', p: 4500, types: ['Électrik', 'Eau', 'Dragon'] }],
     ['ct38', { num: 'CT38', mv: 'deflagration', p: 4500, types: ['Feu', 'Dragon'], familles: ['ronflex', 'embrylex'] }],
@@ -299,75 +364,6 @@ export function init() {
       p: M.p,
     };
   });
-
-  /* ---------- effects on oneself ---------- */
-  SELF_MOVE_EFFECTS = {
-    arriere(S, u, ev) {
-      S.arriere = Object.assign({}, S.arriere, { [u.side]: 3 });
-      say(
-        ev,
-        `Vent Arrière : ${u.side === 'a' ? 'votre équipe' : 'l’équipe adverse'} gagne +2 Mouvement pendant 3 manches.`
-      );
-    },
-    distorsion(S, u, ev) {
-      S.distorsion = 4;
-      say(ev, 'Distorsion : pendant 4 manches, les Pokémon lents frappent ×1,3 et gagnent +1 Mouvement.');
-    },
-    glas(S, u, ev) {
-      const healed = S.units.filter(o => !o.ko && o.side === u.side && hdist(o.pos, u.pos) <= 2);
-      healed.forEach(o => {
-        const had = !!(o.badge || o.skip || o.burn || o.poisoned || o.web || o.root);
-        if (o.sn && o !== u && o.side === 'a' && S.phase === 'player') {
-          o.sn = false; // woken up: it can still play this round
-          o.acted = false;
-          o.moved = false;
-        }
-        o.badge = null;
-        o.skip = 0;
-        o.burn = 0;
-        o.poisoned = 0;
-        o.web = 0;
-        o.root = 0;
-        heal(S, o, Math.round(o.mhp * 0.1), ev);
-        if (had) {
-          ev.push({ e: 'st', u: o.uid, s: 'SOIN' });
-        }
-      });
-      say(ev, `Glas de Soin : ${healed.map(o => o.n).join(', ')} ${healed.length > 1 ? 'sont guéris' : 'est guéri'}.`);
-    },
-  };
-
-  TARGET_MOVE_EFFECTS = {
-    ventglace(S, u, v, k, mk, ev) {
-      if (v.ability === 'regardvif' || hasRune(S, v)) {
-        say(ev, `${v.n} ignore l’entrave.`);
-      } else {
-        v.web = Math.max(v.web, 2);
-        say(ev, `${v.n} est ralenti par le froid.`);
-      }
-    },
-    dracosouffle(S, u, v, k, mk, ev) {
-      if (mk === 'charge') {
-        stun(S, v, 'PAR', ev);
-      }
-    },
-    toxik(S, u, v, k, mk, ev) {
-      applyPoison(S, v, ev);
-      if (mk !== 'trempe') {
-        return;
-      }
-      const N = net(S, k, 'trempe');
-      const others = Object.keys(N.seen)
-        .map(x => uAt(S, x))
-        .filter(o => o && o !== v && !o.ko && o.side !== u.side && !(o.poisoned > 0));
-      if (others.length) {
-        ev.push({ e: 'chain', edges: N.edges, c: 'tox' });
-        say(ev, `Contamination : le poison court dans l’eau reliée.`);
-        others.forEach(o => applyPoison(S, o, ev));
-      }
-    },
-  };
-
   /* ---------- Helping Hand and Trick Room in damage ---------- */
   DAMAGE_PROVIDERS.push(
     { id: 'aide', provide: (c, { u }) => u.aide > 0 && { mul: 1.5, labelText: 'Coup d’Main' } },
@@ -376,12 +372,10 @@ export function init() {
       provide: (c, { S, u }) => S.distorsion > 0 && u.s[3] <= 2 && { mul: 1.3, labelText: 'Distorsion' },
     }
   );
-
   SPEED_PROVIDERS.push({
     id: 'arriere',
     provide: (c, { S, u }) => S.arriere && S.arriere[u.side] > 0 && { mul: 1.5, labelText: 'Vent Arrière' },
   });
-
   HOOKS.beforeRoundEnd.push((S, ev) => {
     if (!S.presc || !S.presc.length || S.over) {
       return;

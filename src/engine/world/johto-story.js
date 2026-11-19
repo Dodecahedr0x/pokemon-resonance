@@ -26,8 +26,6 @@ import {
 } from './roaming-beasts.js';
 import { dominantSetup, dominantTick } from './dominant-pokemon.js';
 
-let JDIS;
-
 /** The next step in Johto: gyms and story intermixed. */
 export function nextJohtoStep() {
   const J = PROFILE.johto || [],
@@ -203,133 +201,133 @@ export function johtoTick(S, r, ev) {
   hoennTick(S, r, ev); // Hoenn gyms (v4.19)
 }
 
+const JDIS = [
+  {
+    k: 'jd1',
+    jafter: 2,
+    lieu: 'Puits aux Ondes',
+    x: 300,
+    y: 455,
+    n: 'Sbires de la Néo-Dissonance',
+    who: 'Les Sbires',
+    pl: true,
+    t: 'la Néo-Dissonance, aux ordres de Cobalt',
+    rule: 'jbrouille',
+    lv: 49,
+    hb: 26,
+    pb: 4,
+    time: 'nuit',
+    bio: 'gue',
+    at: 'Ténèbres',
+    water: ['4,0', '5,0'],
+    rock: ['3,3'],
+    foes: [
+      ['nosferalto', [6, 1]],
+      ['demolosse', [6, 3]],
+      ['migalos', [6, 5]],
+      ['noctali', [7, 2]],
+    ],
+    rew: [1800, 6],
+    q: 'La Dissonance, dissoute ? Elle a juste changé de chef. Cobalt nous a promis une Résonance qui obéit.',
+    w: 'Les balises sont grillées… Cobalt va devoir tout recommencer.',
+    l: 'Bzzz. Plus de losanges, plus de Résonance. Simple.',
+    d: 'Des Sbires en uniforme gris et rouge plantent des balises dans les herbes. Leur brouilleur aspire la Résonance : en fin de manche, votre Pokémon le plus chargé perd 1 losange.',
+  },
+  {
+    k: 'jd2',
+    jafter: 4,
+    lieu: 'Tour Cendrée',
+    x: 300,
+    y: 190,
+    n: 'Admin Vesper',
+    who: 'Vesper',
+    t: 'Admin de la Néo-Dissonance, la voix de l’ombre',
+    rule: 'jcendre',
+    mut: 'eclipse',
+    lv: 53,
+    hb: 30,
+    pb: 5,
+    time: 'nuit',
+    bio: 'tour',
+    at: 'Spectre',
+    water: [],
+    rock: ['3,1', '3,4'],
+    foes: [
+      ['ectoplasma', [6, 2]],
+      ['demolosse', [7, 1]],
+      ['noctali', [6, 4]],
+      ['nostenfer', [7, 3]],
+    ],
+    rew: [2600, 8],
+    q: 'Orphée nous avait dissous. Cobalt m’a rappelée. Je ne sais plus qui a raison… mais je sais encore me battre.',
+    w: 'Les flammes… Trois ombres se sont réveillées sous la tour, et elles fuient à travers Johto. Ce n’est pas ce que je voulais.',
+    l: 'Le feu et la nuit. Rien d’autre.',
+    d: 'Vesper a mis le feu à la vieille tour pour couvrir la fuite de la Néo-Dissonance. Éclipse : Spectre et Ténèbres frappent plus fort, vos tirs portent moins loin. Chaque manche, deux cases prennent feu.',
+  },
+  {
+    k: 'jd3',
+    jafter: 6,
+    lieu: 'Antenne Rouge',
+    x: 515,
+    y: 160,
+    n: 'Admin Cobalt',
+    who: 'Cobalt',
+    t: 'l’ingénieur, chef de la Néo-Dissonance',
+    rule: 'jonde',
+    lv: 55,
+    hb: 22,
+    pb: 4,
+    time: 'jour',
+    bio: 'ligue',
+    at: 'Électrik',
+    water: ['5,0', '5,5'],
+    rock: ['3,2'],
+    foes: [
+      ['magneti', [6, 1]],
+      ['embrylex', [6, 3]],
+      ['minidraco', [6, 5]],
+      ['loupio', [7, 2]],
+    ],
+    rew: [3200, 10],
+    q: 'L’Éveil ? Un caprice. Avec mon antenne, plus besoin de lien : ils évoluent quand JE le décide.',
+    w: 'L’antenne grésille… Qu’importe. Le Relais est prêt. Rendez-vous au pied du Plateau.',
+    l: 'Voilà ce qu’est une évolution maîtrisée.',
+    d: 'L’Antenne Rouge force les Pokémon de Cobalt à évoluer : à la fin des manches 1 et 3, tous ceux qui le peuvent évoluent d’un coup. Frappez avant qu’ils ne grandissent.',
+  },
+  {
+    k: 'jd4',
+    jafter: 8,
+    lieu: 'Relais du Plateau',
+    x: 770,
+    y: 290,
+    n: 'Cobalt, le Relais',
+    who: 'Cobalt',
+    t: 'chef de la Néo-Dissonance',
+    rule: 'jmauvaise',
+    lv: 60,
+    hb: 46,
+    pb: 8,
+    time: 'nuit',
+    bio: 'arene',
+    at: 'Acier',
+    water: ['4,0', '4,5'],
+    rock: ['3,2', '3,3'],
+    foes: [
+      ['steelix', [6, 2], { boss: true, hb: 80, pb: 8 }],
+      ['magneton', [7, 1]],
+      ['scarhino', [6, 4]],
+      ['migalos', [7, 3]],
+    ],
+    rew: [4500, 16],
+    q: 'Orphée a choisi le silence. Moi, je choisis le contrôle. Ta Résonance s’arrête ici, dans mon brouillage.',
+    w: 'Orphée Valcourt surgit et coupe le Relais : « C’est fini, Cobalt. » La Néo-Dissonance se tait pour de bon.',
+    l: 'Plus de notes, plus de Résonance. Juste du bruit.',
+    d: 'Le Relais brouille la Résonance : en fin de manche, toutes les notes posées sur les adversaires s’effacent. Enchaînez vos coups dans la même manche.',
+  },
+].filter(T => T.foes.every(([id]) => BY[id]));
+
 // Instructions run at startup, in the original order (see index.js).
 export function init() {
-  JDIS = [
-    {
-      k: 'jd1',
-      jafter: 2,
-      lieu: 'Puits aux Ondes',
-      x: 300,
-      y: 455,
-      n: 'Sbires de la Néo-Dissonance',
-      who: 'Les Sbires',
-      pl: true,
-      t: 'la Néo-Dissonance, aux ordres de Cobalt',
-      rule: 'jbrouille',
-      lv: 49,
-      hb: 26,
-      pb: 4,
-      time: 'nuit',
-      bio: 'gue',
-      at: 'Ténèbres',
-      water: ['4,0', '5,0'],
-      rock: ['3,3'],
-      foes: [
-        ['nosferalto', [6, 1]],
-        ['demolosse', [6, 3]],
-        ['migalos', [6, 5]],
-        ['noctali', [7, 2]],
-      ],
-      rew: [1800, 6],
-      q: 'La Dissonance, dissoute ? Elle a juste changé de chef. Cobalt nous a promis une Résonance qui obéit.',
-      w: 'Les balises sont grillées… Cobalt va devoir tout recommencer.',
-      l: 'Bzzz. Plus de losanges, plus de Résonance. Simple.',
-      d: 'Des Sbires en uniforme gris et rouge plantent des balises dans les herbes. Leur brouilleur aspire la Résonance : en fin de manche, votre Pokémon le plus chargé perd 1 losange.',
-    },
-    {
-      k: 'jd2',
-      jafter: 4,
-      lieu: 'Tour Cendrée',
-      x: 300,
-      y: 190,
-      n: 'Admin Vesper',
-      who: 'Vesper',
-      t: 'Admin de la Néo-Dissonance, la voix de l’ombre',
-      rule: 'jcendre',
-      mut: 'eclipse',
-      lv: 53,
-      hb: 30,
-      pb: 5,
-      time: 'nuit',
-      bio: 'tour',
-      at: 'Spectre',
-      water: [],
-      rock: ['3,1', '3,4'],
-      foes: [
-        ['ectoplasma', [6, 2]],
-        ['demolosse', [7, 1]],
-        ['noctali', [6, 4]],
-        ['nostenfer', [7, 3]],
-      ],
-      rew: [2600, 8],
-      q: 'Orphée nous avait dissous. Cobalt m’a rappelée. Je ne sais plus qui a raison… mais je sais encore me battre.',
-      w: 'Les flammes… Trois ombres se sont réveillées sous la tour, et elles fuient à travers Johto. Ce n’est pas ce que je voulais.',
-      l: 'Le feu et la nuit. Rien d’autre.',
-      d: 'Vesper a mis le feu à la vieille tour pour couvrir la fuite de la Néo-Dissonance. Éclipse : Spectre et Ténèbres frappent plus fort, vos tirs portent moins loin. Chaque manche, deux cases prennent feu.',
-    },
-    {
-      k: 'jd3',
-      jafter: 6,
-      lieu: 'Antenne Rouge',
-      x: 515,
-      y: 160,
-      n: 'Admin Cobalt',
-      who: 'Cobalt',
-      t: 'l’ingénieur, chef de la Néo-Dissonance',
-      rule: 'jonde',
-      lv: 55,
-      hb: 22,
-      pb: 4,
-      time: 'jour',
-      bio: 'ligue',
-      at: 'Électrik',
-      water: ['5,0', '5,5'],
-      rock: ['3,2'],
-      foes: [
-        ['magneti', [6, 1]],
-        ['embrylex', [6, 3]],
-        ['minidraco', [6, 5]],
-        ['loupio', [7, 2]],
-      ],
-      rew: [3200, 10],
-      q: 'L’Éveil ? Un caprice. Avec mon antenne, plus besoin de lien : ils évoluent quand JE le décide.',
-      w: 'L’antenne grésille… Qu’importe. Le Relais est prêt. Rendez-vous au pied du Plateau.',
-      l: 'Voilà ce qu’est une évolution maîtrisée.',
-      d: 'L’Antenne Rouge force les Pokémon de Cobalt à évoluer : à la fin des manches 1 et 3, tous ceux qui le peuvent évoluent d’un coup. Frappez avant qu’ils ne grandissent.',
-    },
-    {
-      k: 'jd4',
-      jafter: 8,
-      lieu: 'Relais du Plateau',
-      x: 770,
-      y: 290,
-      n: 'Cobalt, le Relais',
-      who: 'Cobalt',
-      t: 'chef de la Néo-Dissonance',
-      rule: 'jmauvaise',
-      lv: 60,
-      hb: 46,
-      pb: 8,
-      time: 'nuit',
-      bio: 'arene',
-      at: 'Acier',
-      water: ['4,0', '4,5'],
-      rock: ['3,2', '3,3'],
-      foes: [
-        ['steelix', [6, 2], { boss: true, hb: 80, pb: 8 }],
-        ['magneton', [7, 1]],
-        ['scarhino', [6, 4]],
-        ['migalos', [7, 3]],
-      ],
-      rew: [4500, 16],
-      q: 'Orphée a choisi le silence. Moi, je choisis le contrôle. Ta Résonance s’arrête ici, dans mon brouillage.',
-      w: 'Orphée Valcourt surgit et coupe le Relais : « C’est fini, Cobalt. » La Néo-Dissonance se tait pour de bon.',
-      l: 'Plus de notes, plus de Résonance. Juste du bruit.',
-      d: 'Le Relais brouille la Résonance : en fin de manche, toutes les notes posées sur les adversaires s’effacent. Enchaînez vos coups dans la même manche.',
-    },
-  ].filter(T => T.foes.every(([id]) => BY[id]));
-
   JDIS.forEach((T, i) => {
     T.L = { n: T.who, t: T.t, q: T.q, w: T.w, l: T.l };
     SCEN[T.k] = {
@@ -355,17 +353,11 @@ export function init() {
     OBST[T.k] = i === 0 ? { grass: ['2,2', '3,2', '2,3'] } : {};
     PLACES_J.push({ id: T.k, x: T.x, y: T.y, n: T.lieu, s: `Néo-Dissonance · ${T.who}`, grp: 'aventure', j: 1 });
   });
-
   JCHAIN.splice(JCHAIN.indexOf('j3'), 0, 'jd1');
-
   JCHAIN.splice(JCHAIN.indexOf('j5'), 0, 'jd2');
-
   JCHAIN.splice(JCHAIN.indexOf('j7'), 0, 'jd3');
-
   JCHAIN.splice(JCHAIN.indexOf('jchamp'), 0, 'jd4');
-
   PLACES_J.forEach(p => (PL[p.id] = p));
-
   /* ---------- hooks: after the battle ---------- */
   HOOKS.progress.push((S, rew, win) => {
     const D = SCEN[S.sc] || {},
@@ -379,7 +371,6 @@ export function init() {
     }
     return o[0] || o[1] ? o : null;
   });
-
   HOOKS.battleResult.push(r => {
     if (!r.jdis) {
       return '';
@@ -387,7 +378,6 @@ export function init() {
     const T = JDIS[r.jdis - 1];
     return `<div class="res-l"><h4>Néo-Dissonance</h4><div class="rl"><span>${T.who} ${T.pl ? 'sont battus' : 'est battu'} (${r.jdis} / 4). « ${T.w} »${r.jdis === 2 ? ' <b>Raikou, Entei et Suicune errent désormais sur la carte de Johto.</b>' : ''}${r.jdis === 4 ? ' <b>Le Plateau de Johto vous est ouvert.</b>' : ''}</span><b>${r.jdis} / 4</b></div></div>`;
   });
-
   /* ---------- achievements ---------- */
   ACHIEVEMENTS.push({
     id: 'neodis',

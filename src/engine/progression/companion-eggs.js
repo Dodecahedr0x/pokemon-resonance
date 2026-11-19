@@ -17,7 +17,6 @@ import { applyReward, canAfford, seededRng, rewardText } from '../world/route-ev
 import { tmKeys } from '../items/workshop.js';
 import { badgeTotal } from './item-quests.js';
 
-let KEEPSAKE_SCENES;
 export { EGG_SHOP, eggState, eggPool }; // read by Shop › Eggs (React, src/screens/bag/Workshop.jsx)
 
 /** Companion's Berry, Gift and Memories buttons (.buddy in #v4Comp, rendering: src/screens/home/Companion.jsx). */
@@ -246,18 +245,17 @@ const DESTINATION_HISTORY = {
 
 export const lockedByBadges = D => (D.min || 0) > badgeTotal();
 
+const KEEPSAKE_SCENES = [
+  (n, a) => `${n} reste près de vous et ${a[0]}. C’est sa façon de vous dire bonjour.`,
+  (n, a) => `Un soir, ${n} ${a[1]}. Vous comprenez qu’il commence à vous faire confiance.`,
+  (n, a) => `Au détour d’un chemin, ${n} s’arrête et vous regarde. Puis il ${a[0]}, comme pour vous dire qu’il est là.`,
+  (n, a) => `Pendant une longue marche, ${n} ${a[1]}. Il ne cherche plus à se cacher : il vous a choisi.`,
+  (n, a) =>
+    `Après tous ces combats, ${n} ${a[0]}, puis se blottit contre vous. Vous n’avez plus besoin de mots : vous formez un duo inséparable.`,
+];
+
 // Instructions run at startup, in the original order (see index.js).
 export function init() {
-  KEEPSAKE_SCENES = [
-    (n, a) => `${n} reste près de vous et ${a[0]}. C’est sa façon de vous dire bonjour.`,
-    (n, a) => `Un soir, ${n} ${a[1]}. Vous comprenez qu’il commence à vous faire confiance.`,
-    (n, a) =>
-      `Au détour d’un chemin, ${n} s’arrête et vous regarde. Puis il ${a[0]}, comme pour vous dire qu’il est là.`,
-    (n, a) => `Pendant une longue marche, ${n} ${a[1]}. Il ne cherche plus à se cacher : il vous a choisi.`,
-    (n, a) =>
-      `Après tous ces combats, ${n} ${a[0]}, puis se blottit contre vous. Vous n’avez plus besoin de mots : vous formez un duo inséparable.`,
-  ];
-
   document.addEventListener(
     'click',
     e => {
@@ -312,7 +310,6 @@ export function init() {
     },
     true
   );
-
   HOOKS.progress.unshift((S, rew) => {
     try {
       const D = SCEN[S.sc] || {};
@@ -350,7 +347,6 @@ export function init() {
     }
     return null;
   });
-
   HOOKS.battleResult.unshift(r => {
     if (!r.eggShop) {
       return '';
@@ -362,7 +358,6 @@ export function init() {
       )
       .join('');
   });
-
   document.addEventListener(
     'click',
     e => {
@@ -376,7 +371,6 @@ export function init() {
     },
     true
   );
-
   /* ---------- 3. Expeditions: new places and rare finds ---------- */
   Object.assign(DESTINATIONS, {
     plage: {
@@ -407,6 +401,4 @@ export function init() {
       min: 5,
     },
   });
-
-  // locked places in the expedition window: rendered by React (src/screens/overlays/ExpBox.jsx, lockedByBadges)
 }

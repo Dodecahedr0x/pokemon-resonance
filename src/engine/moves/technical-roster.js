@@ -29,8 +29,6 @@ import { DAMAGE_PROVIDERS, ROLE_PROVIDERS } from '../combat/tactical-engine.js';
 import { hourOf } from '../combat/living-board.js';
 import { SELF_MOVE_EFFECTS } from './epic-tms.js';
 
-export let PRE_MOVE_EFFECTS;
-
 /* ---------- after each target hit ---------- */
 export function afterHitSignatures(S, u, m, v, x, mk, typ, ev) {
   if (!(m.p || m.fix) || v === u) {
@@ -316,12 +314,66 @@ export function aiSupportMove(S, e, opts, al, here) {
    providers: existing rules do not change. */
 export const hasRune = (S, v) => !!(v && S && S.rune && S.rune[v.side] > 0);
 
+/* ---------- moves on a target, without damage ---------- */
+export const PRE_MOVE_EFFECTS = {
+  malediction(S, u, m, v, ev) {
+    if (v.side === u.side) {
+      return;
+    }
+    damage(S, u, Math.max(1, Math.round(u.mhp * 0.25)), ev, { ind: true, reflect: true });
+    if (u.ko) {
+      return;
+    }
+    v.maudit = 4;
+    say(ev, `Malédiction : ${v.n} est maudit et s’affaiblira pendant 4 manches.`);
+  },
+  feufollet(S, u, m, v, ev) {
+    if (v.side === u.side) {
+      return;
+    }
+    if (v.t.includes('Feu') || v.ability === 'torche') {
+      say(ev, `${v.n} ne craint pas les flammes.`);
+      return;
+    }
+    if (hasRune(S, v)) {
+      say(ev, `Rune Protect : ${v.n} est protégé.`);
+      return;
+    }
+    v.burn = Math.max(v.burn, 3);
+    v.weakened = 3;
+    ev.push({ e: 'st', u: v.uid, s: 'BRÛ' });
+    say(ev, `${v.n} est brûlé : il frappera moins fort.`);
+  },
+  vantardise(S, u, m, v, ev) {
+    if (v.side !== u.side) {
+      retarget(S, v, u, 'confuse', ev);
+    }
+    v.boost = Math.max(v.boost, 2);
+    say(ev, `${v.n} se gonfle d’orgueil : Renforcé pendant 2 manches.`);
+  },
+  morphing(S, u, m, v, ev) {
+    if (v === u || v.colossus || v.seg) {
+      say(ev, 'Morphing échoue.');
+      return;
+    }
+    u.t = [...v.t];
+    u.s = [u.s[0], ...v.s.slice(1)];
+    u.mv = v.mv.filter(x => x !== 'morphing' && MV[x]);
+    if (u.ctm && !u.mv.includes(u.ctm)) {
+      u.mv.push(u.ctm);
+    }
+    u.ability = v.ability;
+    u.morph = v.id;
+    PKT.set(u.t, v.id); // it also takes on its appearance
+    ev.push({ e: 'st', u: u.uid, s: 'MORPH' });
+    say(ev, `Morphing : ${u.n} prend l’apparence de ${v.n} !`);
+  },
+};
+
 // Statements run at startup, in the original order (see index.js).
 export function init() {
   NEEDU.push('morphing', 'malediction', 'feufollet', 'vantardise');
-
   HOSTILE.push('malediction', 'feufollet');
-
   /* ---------- self-targeted moves ---------- */
   Object.assign(SELF_MOVE_EFFECTS, {
     champherbu(S, u, ev) {
@@ -421,63 +473,6 @@ export function init() {
       say(ev, `${u.n} lie son destin à celui de son prochain agresseur.`);
     },
   });
-
-  /* ---------- moves on a target, without damage ---------- */
-  PRE_MOVE_EFFECTS = {
-    malediction(S, u, m, v, ev) {
-      if (v.side === u.side) {
-        return;
-      }
-      damage(S, u, Math.max(1, Math.round(u.mhp * 0.25)), ev, { ind: true, reflect: true });
-      if (u.ko) {
-        return;
-      }
-      v.maudit = 4;
-      say(ev, `Malédiction : ${v.n} est maudit et s’affaiblira pendant 4 manches.`);
-    },
-    feufollet(S, u, m, v, ev) {
-      if (v.side === u.side) {
-        return;
-      }
-      if (v.t.includes('Feu') || v.ability === 'torche') {
-        say(ev, `${v.n} ne craint pas les flammes.`);
-        return;
-      }
-      if (hasRune(S, v)) {
-        say(ev, `Rune Protect : ${v.n} est protégé.`);
-        return;
-      }
-      v.burn = Math.max(v.burn, 3);
-      v.weakened = 3;
-      ev.push({ e: 'st', u: v.uid, s: 'BRÛ' });
-      say(ev, `${v.n} est brûlé : il frappera moins fort.`);
-    },
-    vantardise(S, u, m, v, ev) {
-      if (v.side !== u.side) {
-        retarget(S, v, u, 'confuse', ev);
-      }
-      v.boost = Math.max(v.boost, 2);
-      say(ev, `${v.n} se gonfle d’orgueil : Renforcé pendant 2 manches.`);
-    },
-    morphing(S, u, m, v, ev) {
-      if (v === u || v.colossus || v.seg) {
-        say(ev, 'Morphing échoue.');
-        return;
-      }
-      u.t = [...v.t];
-      u.s = [u.s[0], ...v.s.slice(1)];
-      u.mv = v.mv.filter(x => x !== 'morphing' && MV[x]);
-      if (u.ctm && !u.mv.includes(u.ctm)) {
-        u.mv.push(u.ctm);
-      }
-      u.ability = v.ability;
-      u.morph = v.id;
-      PKT.set(u.t, v.id); // it also takes on its appearance
-      ev.push({ e: 'st', u: u.uid, s: 'MORPH' });
-      say(ev, `Morphing : ${u.n} prend l’apparence de ${v.n} !`);
-    },
-  };
-
   /* ---------- damage: signatures and abilities ---------- */
   DAMAGE_PROVIDERS.push(
     {
@@ -532,7 +527,6 @@ export function init() {
       provide: (c, { S, m, t }) => m.fx === 'poursuite' && t.mvR === S.round && { mul: 1.5, labelText: 'Poursuite' },
     }
   );
-
   ROLE_PROVIDERS.push({
     id: 'gardeami',
     provide: (c, { S, t }) =>
@@ -540,7 +534,6 @@ export function init() {
         o => !o.ko && o !== t && o.side === t.side && o.ability === 'gardeami' && hdist(o.pos, t.pos) === 1
       ) && { add: -2, labelText: 'Garde-Ami' },
   });
-
   /* Download (Téléchargement): enters battle with +2 Guard */
   HOOKS.creation.push(S => {
     S.units.forEach(u => {

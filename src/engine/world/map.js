@@ -18,7 +18,7 @@ import { updateScrollArrows } from './map-scroll.js';
 import { builtMap, refreshMap } from '../../screens/map/mapStore.js';
 
 // Map page rendered by React (src/screens/map/): template, routes, markers, panels.
-export let PL, MAP_SVG;
+export let MAP_SVG;
 let mapBuilt;
 
 /** Name of the final battle on the map and in the battle list (Selection.jsx). */
@@ -173,38 +173,42 @@ export const CHAIN = ['tuto', 'wild', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 
 
 export const STATE_N = { next: 'En cours', done: 'Terminé', lock: 'Verrouillé', open: 'Disponible' };
 
+const tree = (x, y, s = 1) =>
+  `<g transform="translate(${x} ${y}) scale(${s})"><circle r="9" cy="-4" fill="#1d5a32"/><circle r="7" cx="-6" cy="2" fill="#226b3a"/><circle r="7" cx="6" cy="2" fill="#1f6236"/><circle r="4" cx="-2" cy="-8" fill="#3d9152" opacity=".8"/></g>`;
+
+let forest;
+
+const mount = (x, y, s) =>
+  `<g transform="translate(${x} ${y}) scale(${s})"><path d="M-30 18 -4 -26 6 -12 14 -22 34 18Z" fill="url(#mRock)"/><path d="M-4 -26 6 -12 1 -8-4-14-9-6-14-10Z" fill="#f4f8ff"/><path d="M14 -22 22 -8 17-5 13-12 9-7Z" fill="#e7eefb"/><path d="M-4 -26 -30 18h20Z" fill="#000" opacity=".12"/></g>`;
+
+const town = (x, y) =>
+  `<g transform="translate(${x} ${y})" class="mp-town"><rect x="-13" y="-4" width="9" height="8" fill="#f2e7d0"/><path d="M-14-4-8.5-10-3-4Z" fill="#d2523f"/><rect x="-1" y="-7" width="10" height="11" fill="#eef1f6"/><path d="M-2-7 4-13 10-7Z" fill="#3f78c8"/><rect x="11" y="-2" width="7" height="6" fill="#f2e7d0"/><path d="M10-2 14.5-7 19-2Z" fill="#d2523f"/></g>`;
+
+const grass = (x, y) =>
+  `<path d="M${x} ${y}l3-9 2 9 3-11 2 11 3-8 1 8" fill="none" stroke="#7fd36b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".9"/>`;
+
+const LAND =
+  'M60 250C50 170 110 95 200 82C280 70 330 96 400 80C470 64 560 58 650 70C740 82 830 92 900 130C960 165 968 240 948 300C930 360 956 410 920 450C880 490 820 470 770 495C720 520 700 575 650 590C600 605 565 560 560 500C556 450 540 420 520 430C500 440 495 480 480 530C465 580 400 600 330 598C260 596 190 612 130 580C80 552 50 500 58 440C64 380 90 330 70 290C64 275 60 262 60 250Z';
+
+const ISLE =
+  'M800 548C800 515 838 500 870 504C905 508 928 530 922 556C916 584 880 596 848 590C818 585 800 572 800 548Z';
+
+const ISLE2 = 'M120 640C110 620 150 612 170 622C186 630 170 640 120 640Z';
+
+export const PL = Object.fromEntries(PLACES.map(p => [p.id, p]));
+
 // Instructions run at startup, in the original order (see index.js).
 export function init() {
-  PL = Object.fromEntries(PLACES.map(p => [p.id, p]));
-
-  MAP_SVG = (() => {
-    const tree = (x, y, s = 1) =>
-      `<g transform="translate(${x} ${y}) scale(${s})"><circle r="9" cy="-4" fill="#1d5a32"/><circle r="7" cx="-6" cy="2" fill="#226b3a"/><circle r="7" cx="6" cy="2" fill="#1f6236"/><circle r="4" cx="-2" cy="-8" fill="#3d9152" opacity=".8"/></g>`;
-    const forest = (cx, cy, n, sp) => {
-      let o = '';
-      for (let i = 0; i < n; i++) {
-        const a = i * 2.399,
-          r = Math.sqrt(i) * sp;
-        o += tree(
-          (cx + Math.cos(a) * r).toFixed(0),
-          (cy + Math.sin(a) * r * 0.7).toFixed(0),
-          0.8 + ((i * 37) % 5) / 12
-        );
-      }
-      return o;
-    };
-    const mount = (x, y, s) =>
-      `<g transform="translate(${x} ${y}) scale(${s})"><path d="M-30 18 -4 -26 6 -12 14 -22 34 18Z" fill="url(#mRock)"/><path d="M-4 -26 6 -12 1 -8-4-14-9-6-14-10Z" fill="#f4f8ff"/><path d="M14 -22 22 -8 17-5 13-12 9-7Z" fill="#e7eefb"/><path d="M-4 -26 -30 18h20Z" fill="#000" opacity=".12"/></g>`;
-    const town = (x, y) =>
-      `<g transform="translate(${x} ${y})" class="mp-town"><rect x="-13" y="-4" width="9" height="8" fill="#f2e7d0"/><path d="M-14-4-8.5-10-3-4Z" fill="#d2523f"/><rect x="-1" y="-7" width="10" height="11" fill="#eef1f6"/><path d="M-2-7 4-13 10-7Z" fill="#3f78c8"/><rect x="11" y="-2" width="7" height="6" fill="#f2e7d0"/><path d="M10-2 14.5-7 19-2Z" fill="#d2523f"/></g>`;
-    const grass = (x, y) =>
-      `<path d="M${x} ${y}l3-9 2 9 3-11 2 11 3-8 1 8" fill="none" stroke="#7fd36b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".9"/>`;
-    const LAND =
-      'M60 250C50 170 110 95 200 82C280 70 330 96 400 80C470 64 560 58 650 70C740 82 830 92 900 130C960 165 968 240 948 300C930 360 956 410 920 450C880 490 820 470 770 495C720 520 700 575 650 590C600 605 565 560 560 500C556 450 540 420 520 430C500 440 495 480 480 530C465 580 400 600 330 598C260 596 190 612 130 580C80 552 50 500 58 440C64 380 90 330 70 290C64 275 60 262 60 250Z';
-    const ISLE =
-      'M800 548C800 515 838 500 870 504C905 508 928 530 922 556C916 584 880 596 848 590C818 585 800 572 800 548Z';
-    const ISLE2 = 'M120 640C110 620 150 612 170 622C186 630 170 640 120 640Z';
-    return `<svg class="map-svg" viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+  forest = (cx, cy, n, sp) => {
+    let o = '';
+    for (let i = 0; i < n; i++) {
+      const a = i * 2.399,
+        r = Math.sqrt(i) * sp;
+      o += tree((cx + Math.cos(a) * r).toFixed(0), (cy + Math.sin(a) * r * 0.7).toFixed(0), 0.8 + ((i * 37) % 5) / 12);
+    }
+    return o;
+  };
+  MAP_SVG = `<svg class="map-svg" viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
  <defs>
   <radialGradient id="mSea" cx="50%" cy="45%" r="75%"><stop offset="0" stop-color="#2a8fd0"/><stop offset=".55" stop-color="#1a62a6"/><stop offset="1" stop-color="#0c2e5e"/></radialGradient>
   <linearGradient id="mLand" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5fae55"/><stop offset=".55" stop-color="#4f9d4b"/><stop offset="1" stop-color="#3f8a44"/></linearGradient>
@@ -239,10 +243,7 @@ export function init() {
  <g transform="translate(518 104)"><path d="M-30 6h60l-8-14h-44Z" fill="#e9eef7" stroke="#a4adbf" stroke-width="2"/><path d="M-10-8v-14h20v14" fill="#f6d36b" stroke="#b08a2e" stroke-width="2"/></g>
  <rect width="1000" height="640" fill="url(#mLight)"/>
  </svg>`;
-  })();
-
   mapBuilt = false;
-
   document.addEventListener('click', e => {
     const b = e.target.closest('[data-place]');
     if (!b) {

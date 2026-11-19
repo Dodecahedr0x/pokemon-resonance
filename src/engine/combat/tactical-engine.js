@@ -10,7 +10,7 @@ import { playEv } from './move-effects.js';
 import { coopPlayer } from '../modes/coop.js';
 import { battleDelay } from './quick-battle.js';
 
-export let SPEED_PROVIDERS, JIT_PBM, JIT_PB, JIT_DMG, JIT_BOSS, JIT_BOSS_HB, DAMAGE_PROVIDERS, ROLE_PROVIDERS;
+export let JIT_PBM, JIT_PB, JIT_DMG, JIT_BOSS, JIT_BOSS_HB;
 let JIT_HB;
 
 /* =====================================================================
@@ -236,36 +236,186 @@ export const hpOrder = opt => (opt && opt.order === 'vitesse' ? HP_ORDER_SPEED :
    digit, verified by the engine test). To add an effect: one line here.        */
 const lowHp = (u, s) => u.hp / u.mhp <= s;
 
+export const SPEED_PROVIDERS = [
+  { id: 'paralysie', provide: (c, { u }) => u.badge === 'PAR' && { mul: 0.5, labelText: 'Paralysie' } },
+  {
+    id: 'boue',
+    provide: (c, { S, u }) =>
+      S.tiles[uk(u)].mud > 0 &&
+      solid(u) &&
+      !u.t.some(t => t === 'Sol' || t === 'Eau') && { mul: 0.5, labelText: 'Boue' },
+  },
+  {
+    id: 'givre',
+    provide: (c, { S, u }) =>
+      markAt(S, uk(u)) === 'givre' && solid(u) && { mul: u.t.includes('Glace') ? 1.25 : 0.75, labelText: 'Givre' },
+  },
+  {
+    id: 'glissade',
+    provide: (c, { S, u }) =>
+      u.ability === 'glissade' &&
+      ((S.wx && S.wx.k === 'pluie') || markAt(S, uk(u)) === 'trempe') && { mul: 2, labelText: 'Glissade' },
+  },
+  {
+    id: 'chlorophylle',
+    provide: (c, { S, u }) =>
+      u.ability === 'chlorophylle' && S.wx && S.wx.k === 'soleil' && { mul: 2, labelText: 'Chlorophylle' },
+  },
+  { id: 'eclaireur', provide: (c, { u }) => roleOf(u) === 'Éclaireur' && { add: 1, labelText: 'Éclaireur' } },
+];
+
+// boss: bonus HP (shorter battles: every opponent hit counts)
+
+export const DAMAGE_PROVIDERS = [
+  // weather
+  {
+    id: 'meteo',
+    provide: (c, { S, m, typ }) => {
+      const W = S.wx && S.wx.k,
+        out = [];
+      if (W === 'pluie') {
+        if (typ === 'Eau') {
+          out.push({ mul: 1.5, labelText: 'Pluie' });
+        }
+        if (typ === 'Feu') {
+          out.push({ mul: 0.5, labelText: 'Pluie' });
+        }
+      }
+      if (W === 'soleil') {
+        if (typ === 'Feu') {
+          out.push({ mul: 1.5, labelText: 'Soleil' });
+        }
+        if (typ === 'Eau') {
+          out.push({ mul: 0.5, labelText: 'Soleil' });
+        }
+        if (m.sun) {
+          out.push({ mul: 1.5, labelText: 'Soleil' });
+        }
+      }
+      return out;
+    },
+  },
+  // attacker's abilities
+  {
+    id: 'talent',
+    provide: (c, { u, typ }) => {
+      if (
+        (u.ability === 'brasier' && typ === 'Feu' && lowHp(u, 0.34)) ||
+        (u.ability === 'torrent' && typ === 'Eau' && lowHp(u, 0.34)) ||
+        (u.ability === 'essaim' && typ === 'Insecte' && lowHp(u, 0.34)) ||
+        (u.ability === 'engrais' && typ === 'Plante' && lowHp(u, 0.5))
+      ) {
+        return { mul: 1.5, labelText: TAL[u.ability].n };
+      }
+    },
+  },
+  {
+    id: 'cran',
+    provide: (c, { u }) => u.ability === 'cran' && (u.burn > 0 || u.badge) && { mul: 1.5, labelText: 'Cran' },
+  },
+  { id: 'boost', provide: (c, { u }) => u.boost > 0 && { mul: 1.5, labelText: 'Renforcé' } },
+  // target's ability
+  {
+    id: 'isograisse',
+    provide: (c, { t, typ }) =>
+      t.ability === 'isograisse' && (typ === 'Feu' || typ === 'Glace') && { mul: 0.5, labelText: 'Isograisse' },
+  },
+  // same type as the attacker
+  { id: 'stab', provide: (c, { u, typ }) => u.t.includes(typ) && { mul: 1.2, labelText: 'Même type' } },
+];
+
+/* roles, synergies and terrain: applied after the base formula (multipliers then flat bonuses) */
+export const ROLE_PROVIDERS = [
+  {
+    id: 'frappeur',
+    provide: (c, { S, u }) =>
+      roleOf(u) === 'Frappeur' &&
+      S.units.some(
+        o => !o.ko && o.side === u.side && o.uid !== u.uid && roleOf(o) === 'Rempart' && hdist(o.pos, u.pos) === 1
+      ) && {
+        mul: 1.25,
+        labelText: 'Frappeur couvert par un Rempart',
+      },
+  },
+  {
+    id: 'verrou',
+    provide: (c, { S, u, t }) =>
+      t.side !== u.side &&
+      STATUSED(t) &&
+      S.units.some(o => !o.ko && o.side === u.side && roleOf(o) === 'Verrou') && { mul: 1.25, labelText: 'Verrou' },
+  },
+  {
+    id: 'synergies',
+    provide: (c, { S, u, t, typ }) => {
+      if (u.side !== 'a' || !S.syn) {
+        return null;
+      }
+      const s = S.syn,
+        out = [];
+      if (s.includes('forge') && (typ === 'Feu' || typ === 'Roche')) {
+        out.push({ add: 2, labelText: 'Forge' });
+      }
+      if (s.includes('tempete') && typ === 'Électrik' && markAt(S, uk(t)) === 'trempe') {
+        out.push({ mul: 1.25, labelText: 'Tempête' });
+      }
+      if (s.includes('dojo') && hdist(u.pos, t.pos) === 1) {
+        out.push({ add: 2, labelText: 'Dojo' });
+      }
+      if (s.includes('banquise') && typ === 'Glace') {
+        out.push({ add: 3, labelText: 'Banquise' });
+      }
+      if (s.includes('draco') && (typ === 'Dragon' || typ === 'Vol')) {
+        out.push({ add: 2, labelText: 'Draco' });
+      }
+      return out;
+    },
+  },
+  {
+    id: 'acier',
+    provide: (c, { S, t }) =>
+      t.side === 'a' &&
+      S.syn &&
+      S.syn.includes('acier') &&
+      t.t.some(z => z === 'Ténèbres' || z === 'Acier') && { add: -2, labelText: 'Acier' },
+  },
+  {
+    id: 'sable',
+    provide: (c, { S, t }) => {
+      const tt = S.tiles[uk(t)];
+      return (
+        tt &&
+        tt.sand &&
+        !tt.w &&
+        t.t.some(z => z === 'Sol' || z === 'Roche' || z === 'Acier') && { add: -2, labelText: 'Sable' }
+      );
+    },
+  },
+  {
+    id: 'garde',
+    provide: (c, { u }) => ACT && ACT.guard && ACT.u.uid === u.uid && { mul: 0.75, labelText: 'Interception' },
+  },
+  {
+    id: 'couvert',
+    provide: (c, { S, u, m, t, typ }) => {
+      if (ACT && ACT.rico && ACT.u.uid === u.uid) {
+        noteAdd(`Ricochet sur ${t.n} : −25 %`);
+        return { mul: 0.75, labelText: 'Ricochet' };
+      }
+      if (
+        !(ACT && ACT.guard) &&
+        (m.sh === 'one' || m.sh === 'line') &&
+        !ignObst(S, u, typ) &&
+        coverOf(S, u.pos, t.pos)
+      ) {
+        noteAdd(`${t.n} est à couvert : −40 %`);
+        return { mul: 0.6, labelText: 'À couvert' };
+      }
+    },
+  },
+];
+
 // Statements executed at startup, in the original order (see index.js).
 export function init() {
-  SPEED_PROVIDERS = [
-    { id: 'paralysie', provide: (c, { u }) => u.badge === 'PAR' && { mul: 0.5, labelText: 'Paralysie' } },
-    {
-      id: 'boue',
-      provide: (c, { S, u }) =>
-        S.tiles[uk(u)].mud > 0 &&
-        solid(u) &&
-        !u.t.some(t => t === 'Sol' || t === 'Eau') && { mul: 0.5, labelText: 'Boue' },
-    },
-    {
-      id: 'givre',
-      provide: (c, { S, u }) =>
-        markAt(S, uk(u)) === 'givre' && solid(u) && { mul: u.t.includes('Glace') ? 1.25 : 0.75, labelText: 'Givre' },
-    },
-    {
-      id: 'glissade',
-      provide: (c, { S, u }) =>
-        u.ability === 'glissade' &&
-        ((S.wx && S.wx.k === 'pluie') || markAt(S, uk(u)) === 'trempe') && { mul: 2, labelText: 'Glissade' },
-    },
-    {
-      id: 'chlorophylle',
-      provide: (c, { S, u }) =>
-        u.ability === 'chlorophylle' && S.wx && S.wx.k === 'soleil' && { mul: 2, labelText: 'Chlorophylle' },
-    },
-    { id: 'eclaireur', provide: (c, { u }) => roleOf(u) === 'Éclaireur' && { add: 1, labelText: 'Éclaireur' } },
-  ];
-
   /* v4.12: without announced intents, the opponent always hits the best target within its reach.
    In exchange, its bonus HP and bonus power go down (tuned with the test bot: same win
    rates as in v4.11 for a player who positions well). */
@@ -275,156 +425,4 @@ export function init() {
     (JIT_DMG = 0.75),
     (JIT_BOSS = 0.8), // boss (legendaries, colossi, Tower): damage
     (JIT_BOSS_HB = 0.6));
-
-  // boss: bonus HP (shorter battles: every opponent hit counts)
-
-  DAMAGE_PROVIDERS = [
-    // weather
-    {
-      id: 'meteo',
-      provide: (c, { S, m, typ }) => {
-        const W = S.wx && S.wx.k,
-          out = [];
-        if (W === 'pluie') {
-          if (typ === 'Eau') {
-            out.push({ mul: 1.5, labelText: 'Pluie' });
-          }
-          if (typ === 'Feu') {
-            out.push({ mul: 0.5, labelText: 'Pluie' });
-          }
-        }
-        if (W === 'soleil') {
-          if (typ === 'Feu') {
-            out.push({ mul: 1.5, labelText: 'Soleil' });
-          }
-          if (typ === 'Eau') {
-            out.push({ mul: 0.5, labelText: 'Soleil' });
-          }
-          if (m.sun) {
-            out.push({ mul: 1.5, labelText: 'Soleil' });
-          }
-        }
-        return out;
-      },
-    },
-    // attacker's abilities
-    {
-      id: 'talent',
-      provide: (c, { u, typ }) => {
-        if (
-          (u.ability === 'brasier' && typ === 'Feu' && lowHp(u, 0.34)) ||
-          (u.ability === 'torrent' && typ === 'Eau' && lowHp(u, 0.34)) ||
-          (u.ability === 'essaim' && typ === 'Insecte' && lowHp(u, 0.34)) ||
-          (u.ability === 'engrais' && typ === 'Plante' && lowHp(u, 0.5))
-        ) {
-          return { mul: 1.5, labelText: TAL[u.ability].n };
-        }
-      },
-    },
-    {
-      id: 'cran',
-      provide: (c, { u }) => u.ability === 'cran' && (u.burn > 0 || u.badge) && { mul: 1.5, labelText: 'Cran' },
-    },
-    { id: 'boost', provide: (c, { u }) => u.boost > 0 && { mul: 1.5, labelText: 'Renforcé' } },
-    // target's ability
-    {
-      id: 'isograisse',
-      provide: (c, { t, typ }) =>
-        t.ability === 'isograisse' && (typ === 'Feu' || typ === 'Glace') && { mul: 0.5, labelText: 'Isograisse' },
-    },
-    // same type as the attacker
-    { id: 'stab', provide: (c, { u, typ }) => u.t.includes(typ) && { mul: 1.2, labelText: 'Même type' } },
-  ];
-
-  /* roles, synergies and terrain: applied after the base formula (multipliers then flat bonuses) */
-  ROLE_PROVIDERS = [
-    {
-      id: 'frappeur',
-      provide: (c, { S, u }) =>
-        roleOf(u) === 'Frappeur' &&
-        S.units.some(
-          o => !o.ko && o.side === u.side && o.uid !== u.uid && roleOf(o) === 'Rempart' && hdist(o.pos, u.pos) === 1
-        ) && {
-          mul: 1.25,
-          labelText: 'Frappeur couvert par un Rempart',
-        },
-    },
-    {
-      id: 'verrou',
-      provide: (c, { S, u, t }) =>
-        t.side !== u.side &&
-        STATUSED(t) &&
-        S.units.some(o => !o.ko && o.side === u.side && roleOf(o) === 'Verrou') && { mul: 1.25, labelText: 'Verrou' },
-    },
-    {
-      id: 'synergies',
-      provide: (c, { S, u, t, typ }) => {
-        if (u.side !== 'a' || !S.syn) {
-          return null;
-        }
-        const s = S.syn,
-          out = [];
-        if (s.includes('forge') && (typ === 'Feu' || typ === 'Roche')) {
-          out.push({ add: 2, labelText: 'Forge' });
-        }
-        if (s.includes('tempete') && typ === 'Électrik' && markAt(S, uk(t)) === 'trempe') {
-          out.push({ mul: 1.25, labelText: 'Tempête' });
-        }
-        if (s.includes('dojo') && hdist(u.pos, t.pos) === 1) {
-          out.push({ add: 2, labelText: 'Dojo' });
-        }
-        if (s.includes('banquise') && typ === 'Glace') {
-          out.push({ add: 3, labelText: 'Banquise' });
-        }
-        if (s.includes('draco') && (typ === 'Dragon' || typ === 'Vol')) {
-          out.push({ add: 2, labelText: 'Draco' });
-        }
-        return out;
-      },
-    },
-    {
-      id: 'acier',
-      provide: (c, { S, t }) =>
-        t.side === 'a' &&
-        S.syn &&
-        S.syn.includes('acier') &&
-        t.t.some(z => z === 'Ténèbres' || z === 'Acier') && { add: -2, labelText: 'Acier' },
-    },
-    {
-      id: 'sable',
-      provide: (c, { S, t }) => {
-        const tt = S.tiles[uk(t)];
-        return (
-          tt &&
-          tt.sand &&
-          !tt.w &&
-          t.t.some(z => z === 'Sol' || z === 'Roche' || z === 'Acier') && { add: -2, labelText: 'Sable' }
-        );
-      },
-    },
-    {
-      id: 'garde',
-      provide: (c, { u }) => ACT && ACT.guard && ACT.u.uid === u.uid && { mul: 0.75, labelText: 'Interception' },
-    },
-    {
-      id: 'couvert',
-      provide: (c, { S, u, m, t, typ }) => {
-        if (ACT && ACT.rico && ACT.u.uid === u.uid) {
-          noteAdd(`Ricochet sur ${t.n} : −25 %`);
-          return { mul: 0.75, labelText: 'Ricochet' };
-        }
-        if (
-          !(ACT && ACT.guard) &&
-          (m.sh === 'one' || m.sh === 'line') &&
-          !ignObst(S, u, typ) &&
-          coverOf(S, u.pos, t.pos)
-        ) {
-          noteAdd(`${t.n} est à couvert : −40 %`);
-          return { mul: 0.6, labelText: 'À couvert' };
-        }
-      },
-    },
-  ];
-
-  // #bOrdre, after the arena rule: rendered by React (TopBar.jsx)
 }

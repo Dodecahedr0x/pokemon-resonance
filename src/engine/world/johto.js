@@ -21,7 +21,7 @@ import { johtoChapterLive, johtoExtraLine, johtoSetup, johtoTick, johtoLead, joh
 import { roamingPlaces } from './roaming-beasts.js';
 import { PLACES_H, hoennChapter, hoennRewardLine, hoennOpen, hoennLead, isHoennRegion } from './hoenn.js';
 
-export let PLACES_J, JMAP_SVG;
+export let JMAP_SVG;
 
 // v4.46: Free mode included
 export function isJohtoRegion() {
@@ -512,6 +512,40 @@ export const JCHAIN = ['jwild', 'j1', 'j2', 'j3', 'j4', 'j5', 'j6', 'j7', 'j8', 
 export const placesR = () =>
   V4.region === 'hoenn' ? PLACES_H : V4.region === 'johto' ? [...PLACES_J, ...roamingPlaces()] : PLACES;
 
+const tree = (x, y, s = 1) =>
+  `<g transform="translate(${x} ${y}) scale(${s})"><circle r="9" cy="-4" fill="#1d5a3a"/><circle r="7" cx="-6" cy="2" fill="#246b42"/><circle r="7" cx="6" cy="2" fill="#20623d"/><circle r="4" cx="-2" cy="-8" fill="#3f9458" opacity=".8"/></g>`;
+
+let forest;
+
+const mount = (x, y, s, snow) =>
+  `<g transform="translate(${x} ${y}) scale(${s})"><path d="M-30 18 -4 -26 6 -12 14 -22 34 18Z" fill="url(#jRock)"/>${snow ? '<path d="M-4 -26 6 -12 1 -8-4-14-9-6-14-10Z" fill="#f4f8ff"/><path d="M14 -22 22 -8 17-5 13-12 9-7Z" fill="#e7eefb"/>' : ''}</g>`;
+
+const town = (x, y) =>
+  `<g transform="translate(${x} ${y})"><rect x="-13" y="-4" width="9" height="8" fill="#f2e7d0"/><path d="M-14-4-8.5-10-3-4Z" fill="#3f6fb5"/><rect x="-1" y="-7" width="10" height="11" fill="#eef1f6"/><path d="M-2-7 4-13 10-7Z" fill="#b5523f"/></g>`;
+
+const LAND =
+  'M70 300C58 225 115 158 205 136C292 115 372 146 462 122C552 98 640 66 752 78C858 90 940 140 952 230C962 318 932 382 902 432C862 494 784 504 724 540C652 585 560 592 478 572C398 552 356 600 276 590C196 580 150 522 110 472C82 432 76 362 70 300Z';
+
+const ISLE = 'M40 470C34 440 70 422 104 432C134 441 140 470 120 488C98 506 50 500 40 470Z';
+
+const WHIRL = (x, y) =>
+  `<g transform="translate(${x} ${y})" fill="none" stroke="#bfe9ff" stroke-width="2" opacity=".5"><circle r="12"/><circle r="6"/></g>`;
+
+/* ---------- the Johto map (original artwork) ---------- */
+export const PLACES_J = [
+  { id: 'jwild', x: 610, y: 470, n: 'Route 32', s: 'Hautes herbes · Pokémon de Johto', grp: 'route', j: 1 },
+  { id: 'j1', x: 730, y: 405, s: 'Arène 1 · ' + JLEAD[0].n, grp: 'aventure', j: 1 },
+  { id: 'j2', x: 520, y: 520, s: 'Arène 2 · ' + JLEAD[1].n, grp: 'aventure', j: 1 },
+  { id: 'j3', x: 420, y: 380, s: 'Arène 3 · ' + JLEAD[2].n, grp: 'aventure', j: 1 },
+  { id: 'j4', x: 420, y: 215, s: 'Arène 4 · ' + JLEAD[3].n, grp: 'aventure', j: 1 },
+  { id: 'j5', x: 150, y: 430, s: 'Arène 5 · ' + JLEAD[4].n, grp: 'aventure', j: 1 },
+  { id: 'j6', x: 175, y: 250, s: 'Arène 6 · ' + JLEAD[5].n, grp: 'aventure', j: 1 },
+  { id: 'j7', x: 640, y: 215, s: 'Arène 7 · ' + JLEAD[6].n, grp: 'aventure', j: 1 },
+  { id: 'jlac', x: 600, y: 95, n: 'Lac Colère', s: 'Événement · Léviator rouge', grp: 'entrainement', j: 1 },
+  { id: 'j8', x: 845, y: 165, s: 'Arène 8 · ' + JLEAD[7].n, grp: 'aventure', j: 1 },
+  { id: 'jchamp', x: 895, y: 360, n: 'Plateau de Johto', s: 'Final · ' + JCHAMP_L.n, grp: 'aventure', j: 1 },
+];
+
 // Startup statements, run in their original order (see index.js).
 export function init() {
   /* ---------- moves and abilities of the new families ---------- */
@@ -535,7 +569,6 @@ export function init() {
       v.web = Math.max(v.web, 2);
     },
   });
-
   Object.assign(SELF_MOVE_EFFECTS, {
     carapace(S, u, ev) {
       u.guard = Math.max(u.guard, 3);
@@ -547,7 +580,6 @@ export function init() {
       say(ev, `${u.n} durcit sa carapace : +2 Garde, cases voisines Brûlantes.`);
     },
   });
-
   DAMAGE_PROVIDERS.push(
     {
       id: 'nocturne',
@@ -560,7 +592,6 @@ export function init() {
         u.ability === 'forcepure' && m.r === 1 && m.p > 0 && { mul: 1.3, labelText: 'Force Pure' },
     }
   );
-
   /* ---------- shinies ---------- */
   Object.assign(ITEM_ICONS, {
     'shiny-charm':
@@ -569,7 +600,6 @@ export function init() {
         '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path d="M24 4l4 12 12 4-12 4-4 12-4-12-12-4 12-4z" fill="#ffd75e" stroke="#8a6a12" stroke-width="2" stroke-linejoin="round"/><path d="M37 30l2 5 5 2-5 2-2 5-2-5-5-2 5-2z" fill="#9be7ff" stroke="#2a6f8a" stroke-width="1.5" stroke-linejoin="round"/><path d="M11 30l1.5 3.5L16 35l-3.5 1.5L11 40l-1.5-3.5L6 35l3.5-1.5z" fill="#ffb3e0" stroke="#7b2d58" stroke-width="1.5" stroke-linejoin="round"/></svg>'
       ),
   });
-
   SHOP.charme = {
     n: 'Charme Chroma',
     sn: 'Charme',
@@ -579,7 +609,6 @@ export function init() {
     img: 'shiny-charm',
     keyItem: 1,
   };
-
   JARENAS.forEach((a, i) => {
     SCEN[a.k] = Object.assign(
       {
@@ -592,7 +621,6 @@ export function init() {
       a
     );
   });
-
   SCEN.jchamp = {
     n: 'Maître de Johto',
     lvl: 'Johto · Final',
@@ -614,7 +642,6 @@ export function init() {
     ],
     d: 'Pas de règle d’arène : un adversaire complet, qui se sert des notes de Résonance et des attaques Expertes.',
   };
-
   SCEN.jlac = {
     n: 'Lac Colère',
     lvl: 'Johto · Léviator rouge',
@@ -636,7 +663,6 @@ export function init() {
     ],
     d: 'Un Léviator rouge sème la panique sur le lac. Affaiblissez-le sous 25 % de ses PV, immobilisez-le, puis capturez-le au contact : il rejoindra votre Box en chromatique.',
   };
-
   HOOKS.progress.push((S, rew, win) => {
     const D = SCEN[S.sc] || {};
     if (!win || !isCamp()) {
@@ -666,7 +692,6 @@ export function init() {
     }
     return null;
   });
-
   HOOKS.battleResult.push(r => {
     const j = r.jbadge;
     if (!j) {
@@ -677,24 +702,7 @@ export function init() {
       ? `<div class="res-l"><h4>Johto</h4><div class="rl"><span>Vous êtes Maître de Johto${it}.</span><b>★</b></div></div>`
       : `<div class="res-l"><h4>Johto</h4><div class="rl"><span>Badge ${JGYMS[j.i]} de Johto obtenu${it}.</span><b>${(PROFILE.johto || []).length} / 8</b></div></div>`;
   });
-
-  /* ---------- the Johto map (original artwork) ---------- */
-  PLACES_J = [
-    { id: 'jwild', x: 610, y: 470, n: 'Route 32', s: 'Hautes herbes · Pokémon de Johto', grp: 'route', j: 1 },
-    { id: 'j1', x: 730, y: 405, s: 'Arène 1 · ' + JLEAD[0].n, grp: 'aventure', j: 1 },
-    { id: 'j2', x: 520, y: 520, s: 'Arène 2 · ' + JLEAD[1].n, grp: 'aventure', j: 1 },
-    { id: 'j3', x: 420, y: 380, s: 'Arène 3 · ' + JLEAD[2].n, grp: 'aventure', j: 1 },
-    { id: 'j4', x: 420, y: 215, s: 'Arène 4 · ' + JLEAD[3].n, grp: 'aventure', j: 1 },
-    { id: 'j5', x: 150, y: 430, s: 'Arène 5 · ' + JLEAD[4].n, grp: 'aventure', j: 1 },
-    { id: 'j6', x: 175, y: 250, s: 'Arène 6 · ' + JLEAD[5].n, grp: 'aventure', j: 1 },
-    { id: 'j7', x: 640, y: 215, s: 'Arène 7 · ' + JLEAD[6].n, grp: 'aventure', j: 1 },
-    { id: 'jlac', x: 600, y: 95, n: 'Lac Colère', s: 'Événement · Léviator rouge', grp: 'entrainement', j: 1 },
-    { id: 'j8', x: 845, y: 165, s: 'Arène 8 · ' + JLEAD[7].n, grp: 'aventure', j: 1 },
-    { id: 'jchamp', x: 895, y: 360, n: 'Plateau de Johto', s: 'Final · ' + JCHAMP_L.n, grp: 'aventure', j: 1 },
-  ];
-
   PLACES_J.forEach(p => (PL[p.id] = p));
-
   document.addEventListener('click', e => {
     const b = e.target.closest('.v4-reg [data-reg]');
     if (!b) {
@@ -705,33 +713,16 @@ export function init() {
     renderMap();
     setTod(TOD);
   });
-
-  JMAP_SVG = (() => {
-    const tree = (x, y, s = 1) =>
-      `<g transform="translate(${x} ${y}) scale(${s})"><circle r="9" cy="-4" fill="#1d5a3a"/><circle r="7" cx="-6" cy="2" fill="#246b42"/><circle r="7" cx="6" cy="2" fill="#20623d"/><circle r="4" cx="-2" cy="-8" fill="#3f9458" opacity=".8"/></g>`;
-    const forest = (cx, cy, n, sp) => {
-      let o = '';
-      for (let i = 0; i < n; i++) {
-        const a = i * 2.399,
-          r = Math.sqrt(i) * sp;
-        o += tree(
-          (cx + Math.cos(a) * r).toFixed(0),
-          (cy + Math.sin(a) * r * 0.7).toFixed(0),
-          0.8 + ((i * 37) % 5) / 12
-        );
-      }
-      return o;
-    };
-    const mount = (x, y, s, snow) =>
-      `<g transform="translate(${x} ${y}) scale(${s})"><path d="M-30 18 -4 -26 6 -12 14 -22 34 18Z" fill="url(#jRock)"/>${snow ? '<path d="M-4 -26 6 -12 1 -8-4-14-9-6-14-10Z" fill="#f4f8ff"/><path d="M14 -22 22 -8 17-5 13-12 9-7Z" fill="#e7eefb"/>' : ''}</g>`;
-    const town = (x, y) =>
-      `<g transform="translate(${x} ${y})"><rect x="-13" y="-4" width="9" height="8" fill="#f2e7d0"/><path d="M-14-4-8.5-10-3-4Z" fill="#3f6fb5"/><rect x="-1" y="-7" width="10" height="11" fill="#eef1f6"/><path d="M-2-7 4-13 10-7Z" fill="#b5523f"/></g>`;
-    const LAND =
-      'M70 300C58 225 115 158 205 136C292 115 372 146 462 122C552 98 640 66 752 78C858 90 940 140 952 230C962 318 932 382 902 432C862 494 784 504 724 540C652 585 560 592 478 572C398 552 356 600 276 590C196 580 150 522 110 472C82 432 76 362 70 300Z';
-    const ISLE = 'M40 470C34 440 70 422 104 432C134 441 140 470 120 488C98 506 50 500 40 470Z';
-    const WHIRL = (x, y) =>
-      `<g transform="translate(${x} ${y})" fill="none" stroke="#bfe9ff" stroke-width="2" opacity=".5"><circle r="12"/><circle r="6"/></g>`;
-    return `<svg class="map-svg map-j" viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+  forest = (cx, cy, n, sp) => {
+    let o = '';
+    for (let i = 0; i < n; i++) {
+      const a = i * 2.399,
+        r = Math.sqrt(i) * sp;
+      o += tree((cx + Math.cos(a) * r).toFixed(0), (cy + Math.sin(a) * r * 0.7).toFixed(0), 0.8 + ((i * 37) % 5) / 12);
+    }
+    return o;
+  };
+  JMAP_SVG = `<svg class="map-svg map-j" viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
  <defs>
   <radialGradient id="jSea" cx="50%" cy="45%" r="75%"><stop offset="0" stop-color="#2d84c4"/><stop offset=".55" stop-color="#1b5c9c"/><stop offset="1" stop-color="#0b2a57"/></radialGradient>
   <linearGradient id="jLand" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6aa95a"/><stop offset=".55" stop-color="#58994e"/><stop offset="1" stop-color="#477f44"/></linearGradient>
@@ -761,5 +752,4 @@ export function init() {
  ${town(730, 420)}${town(520, 535)}${town(420, 395)}${town(420, 232)}${town(110, 455)}${town(175, 268)}${town(640, 232)}${town(845, 182)}${town(610, 488)}
  <rect width="1000" height="640" fill="url(#jLight)"/>
  </svg>`;
-  })();
 }

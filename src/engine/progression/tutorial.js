@@ -9,7 +9,6 @@ import { getCoach, hideCoach, showCoach } from '../../screens/overlays/shellOver
 import { B } from '../combat/ui.js';
 import { queueSave } from '../state/saves.js';
 
-export let TUTORIAL_STEPS;
 let tutorialI;
 export function __set_tutorialI(v) {
   return (tutorialI = v);
@@ -63,50 +62,49 @@ export function renderCoach() {
   });
 }
 
+/* ---- tutorial: first guided battle ---- */
+export const TUTORIAL_STEPS = [
+  {
+    t: 'Lisez la menace',
+    d: 'Touchez un adversaire : la zone rouge montre tout ce qu’il peut frapper après s’être déplacé. Il choisit sa cible à son tour.',
+    sel: '#bBoard',
+    done: () => false,
+  },
+  {
+    t: 'Déplacez-vous',
+    d: 'Touchez un de vos Pokémon, puis une case bleue. Approchez pour frapper, ou reculez hors de la zone rouge.',
+    sel: '#bBoard',
+    done: () => B.units.some(u => u.side === 'a' && u.moved),
+  },
+  {
+    t: 'Attaquez',
+    d: 'Choisissez une capacité, touchez une case dorée : l’aperçu donne le résultat exact. Touchez « Confirmer ».',
+    sel: '#bPanel',
+    done: () => B.units.some(u => u.side === 'a' && u.acted && !u.sn),
+  },
+  {
+    t: 'Énergie d’Éveil',
+    d: 'Les trois losanges se remplissent en fin de manche, en réagissant et en encaissant. Pleins, le bouton Éveil fait évoluer le Pokémon : c’est irréversible.',
+    sel: '#bPanel',
+    done: () => false,
+  },
+  {
+    t: 'Terminez la manche',
+    d: 'Quand vos Pokémon ont joué, touchez « Fin du tour » : les adversaires se déplacent, puis attaquent.',
+    sel: '#bEnd',
+    done: () => B.round > 1,
+  },
+  {
+    t: 'Les Voix et la capture',
+    d: 'Esquive (1 Voix) et Relance (2 Voix) sauvent une manche. Sous 25 % de PV et immobilisé, un Pokémon sauvage peut être capturé au contact.',
+    sel: '#bPanel',
+    done: () => false,
+  },
+];
+
 // Instructions run at startup, in the original order (see index.js).
 export function init() {
-  /* ---- tutorial: first guided battle ---- */
-  TUTORIAL_STEPS = [
-    {
-      t: 'Lisez la menace',
-      d: 'Touchez un adversaire : la zone rouge montre tout ce qu’il peut frapper après s’être déplacé. Il choisit sa cible à son tour.',
-      sel: '#bBoard',
-      done: () => false,
-    },
-    {
-      t: 'Déplacez-vous',
-      d: 'Touchez un de vos Pokémon, puis une case bleue. Approchez pour frapper, ou reculez hors de la zone rouge.',
-      sel: '#bBoard',
-      done: () => B.units.some(u => u.side === 'a' && u.moved),
-    },
-    {
-      t: 'Attaquez',
-      d: 'Choisissez une capacité, touchez une case dorée : l’aperçu donne le résultat exact. Touchez « Confirmer ».',
-      sel: '#bPanel',
-      done: () => B.units.some(u => u.side === 'a' && u.acted && !u.sn),
-    },
-    {
-      t: 'Énergie d’Éveil',
-      d: 'Les trois losanges se remplissent en fin de manche, en réagissant et en encaissant. Pleins, le bouton Éveil fait évoluer le Pokémon : c’est irréversible.',
-      sel: '#bPanel',
-      done: () => false,
-    },
-    {
-      t: 'Terminez la manche',
-      d: 'Quand vos Pokémon ont joué, touchez « Fin du tour » : les adversaires se déplacent, puis attaquent.',
-      sel: '#bEnd',
-      done: () => B.round > 1,
-    },
-    {
-      t: 'Les Voix et la capture',
-      d: 'Esquive (1 Voix) et Relance (2 Voix) sauvent une manche. Sous 25 % de PV et immobilisé, un Pokémon sauvage peut être capturé au contact.',
-      sel: '#bPanel',
-      done: () => false,
-    },
-  ];
-
   tutorialI = -1;
-
   $('#coach').addEventListener('click', e => {
     const b = e.target.closest('[data-co]');
     if (!b) {

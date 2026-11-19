@@ -9,8 +9,6 @@ import { V4 } from '../ui/screen-state.js';
 import { IMMERSION_ON } from './immersion.js';
 import { OFFLINE_STATE } from '../progression/chronicles.js';
 
-export let BGM;
-
 function bgmOk() {
   return !/jsdom/i.test(navigator.userAgent || '') && typeof Audio !== 'undefined' && BGM.failed < 2;
 }
@@ -330,65 +328,63 @@ export function sfxJingle(n) {
 
 const BGM_COMBAT = ['combat', 'arene', 'champion', 'dresseur', 'rouge', 'pvbas'];
 
+let r;
+
+/* Home: S1 theme · Camp, garden and the rest: Route 201 · Battle: wild battle · Shop: Pokémart · Victory: RSE jingle.
+   The tracks are files next to the page (audio/…). If they cannot be found (offline file), the ambient pad is still used. */
+export const BGM = {
+  src: Object.fromEntries(
+    [
+      'accueil',
+      'camp',
+      'combat',
+      'boutique',
+      'victoire',
+      'arene',
+      'champion',
+      'dresseur',
+      'ruines',
+      'centre',
+      'gloire',
+      'badge',
+      'evolution',
+      'combats',
+      'carte',
+      'guide',
+      'rouge',
+      'pvbas',
+    ].map(k => [k, 'audio/' + k + '.mp3'])
+  ),
+  el: {},
+  scene: '',
+  on: false,
+  failed: 0,
+  jingle: false,
+  silent: false, // after a victory: leave the result screen calm
+  tmr: 0,
+  vis: true,
+};
+
 // Statements run at startup, in the original order (see index.js).
 export function init() {
-  /* Home: S1 theme · Camp, garden and the rest: Route 201 · Battle: wild battle · Shop: Pokémart · Victory: RSE jingle.
-   The tracks are files next to the page (audio/…). If they cannot be found (offline file), the ambient pad is still used. */
-  BGM = {
-    src: Object.fromEntries(
-      [
-        'accueil',
-        'camp',
-        'combat',
-        'boutique',
-        'victoire',
-        'arene',
-        'champion',
-        'dresseur',
-        'ruines',
-        'centre',
-        'gloire',
-        'badge',
-        'evolution',
-        'combats',
-        'carte',
-        'guide',
-        'rouge',
-        'pvbas',
-      ].map(k => [k, 'audio/' + k + '.mp3'])
-    ),
-    el: {},
-    scene: '',
-    on: false,
-    failed: 0,
-    jingle: false,
-    silent: false, // after a victory: leave the result screen calm
-    tmr: 0,
-    vis: true,
-  };
-
   if (PREF.music === undefined) {
     PREF.music = false;
   }
-
   // fresh install: music off (adjustable in Settings)
   /* victory: result sheet won, capture succeeded, quest reward */
-  (function () {
-    const r = document.getElementById('cbResult');
-    if (r && window.MutationObserver) {
-      new MutationObserver(() => {
-        if (!r.hidden && r.querySelector('.res-card.win')) {
-          if (!r._jinglePlayed) {
-            r._jinglePlayed = true;
-            playJingle(0, 'victoire', B && B.rew && B.rew.badgeNew ? 'badge' : '');
-          }
-        } else {
-          r._jinglePlayed = false;
+  r = document.getElementById('cbResult');
+  if (r && window.MutationObserver) {
+    new MutationObserver(() => {
+      if (!r.hidden && r.querySelector('.res-card.win')) {
+        if (!r._jinglePlayed) {
+          r._jinglePlayed = true;
+          playJingle(0, 'victoire', B && B.rew && B.rew.badgeNew ? 'badge' : '');
         }
-      }).observe(r, { attributes: true, attributeFilter: ['hidden'], childList: true });
-    }
-  })();
-
+      } else {
+        r._jinglePlayed = false;
+      }
+    }).observe(r, { attributes: true, attributeFilter: ['hidden'], childList: true });
+  }
   document.addEventListener('visibilitychange', () => {
     BGM.vis = !document.hidden;
     if (!BGM.on) {

@@ -14,7 +14,6 @@ import { campOpen } from './camp.js';
 import { dailyTm } from '../items/extra-held-items.js';
 import { refreshCampBase } from '../../screens/camp/campStore.js';
 
-let BUILDINGS;
 export { BUILDINGS, buildingBlocked }; // read by the base Camp (src/screens/camp)
 
 /* =====================================================================
@@ -110,63 +109,63 @@ export function renderCampBase() {
 
 export const level = k => (PROFILE.camp && PROFILE.camp[k]) || 0;
 
+const BUILDINGS = {
+  guet: {
+    n: 'Tour de guet',
+    d: n => `${n} expédition${n > 1 ? 's' : ''} à la fois.`,
+    upgradeCost: [
+      [500, 0],
+      [1500, 5],
+      [3500, 10],
+    ],
+    badges: [0, 2, 4],
+  },
+  inf: {
+    n: 'Infirmerie',
+    d: n => `Les Pokémon au repos récupèrent ${n * 10} points de fatigue de plus après chaque combat.`,
+    upgradeCost: [
+      [800, 0],
+      [2000, 5],
+      [4000, 12],
+    ],
+    badges: [1, 3, 5],
+  },
+  ate: {
+    n: 'Atelier',
+    d: n => `CT et DT ${n * 10} % moins chères en Boutique.`,
+    upgradeCost: [
+      [600, 0],
+      [1500, 4],
+      [3000, 10],
+    ],
+    badges: [1, 3, 5],
+  },
+  dojo: {
+    n: 'Dojo',
+    d: n =>
+      `${n === 1 ? 'Le premier Pokémon' : `Les ${n} premiers Pokémon`} de l’équipe commence${n > 1 ? 'nt' : ''} chaque combat avec 1 point d’Éveil.`,
+    upgradeCost: [
+      [1000, 0],
+      [2500, 6],
+      [5000, 14],
+    ],
+    badges: [2, 4, 6],
+  },
+  pens: {
+    n: 'Pension',
+    d: n =>
+      `Un œuf tous les ${[8, 6, 4][n - 1]} combats : une famille que vous n’avez pas encore, ou celle du couple que vous y déposez.`, // pair (v4.16)
+    upgradeCost: [
+      [1200, 0],
+      [3000, 8],
+      [6000, 16],
+    ],
+    badges: [2, 4, 6],
+  },
+};
+
 // Startup statements, run in their original order (see index.js).
 export function init() {
-  BUILDINGS = {
-    guet: {
-      n: 'Tour de guet',
-      d: n => `${n} expédition${n > 1 ? 's' : ''} à la fois.`,
-      upgradeCost: [
-        [500, 0],
-        [1500, 5],
-        [3500, 10],
-      ],
-      badges: [0, 2, 4],
-    },
-    inf: {
-      n: 'Infirmerie',
-      d: n => `Les Pokémon au repos récupèrent ${n * 10} points de fatigue de plus après chaque combat.`,
-      upgradeCost: [
-        [800, 0],
-        [2000, 5],
-        [4000, 12],
-      ],
-      badges: [1, 3, 5],
-    },
-    ate: {
-      n: 'Atelier',
-      d: n => `CT et DT ${n * 10} % moins chères en Boutique.`,
-      upgradeCost: [
-        [600, 0],
-        [1500, 4],
-        [3000, 10],
-      ],
-      badges: [1, 3, 5],
-    },
-    dojo: {
-      n: 'Dojo',
-      d: n =>
-        `${n === 1 ? 'Le premier Pokémon' : `Les ${n} premiers Pokémon`} de l’équipe commence${n > 1 ? 'nt' : ''} chaque combat avec 1 point d’Éveil.`,
-      upgradeCost: [
-        [1000, 0],
-        [2500, 6],
-        [5000, 14],
-      ],
-      badges: [2, 4, 6],
-    },
-    pens: {
-      n: 'Pension',
-      d: n =>
-        `Un œuf tous les ${[8, 6, 4][n - 1]} combats : une famille que vous n’avez pas encore, ou celle du couple que vous y déposez.`, // pair (v4.16)
-      upgradeCost: [
-        [1200, 0],
-        [3000, 8],
-        [6000, 16],
-      ],
-      badges: [2, 4, 6],
-    },
-  };
-
   /* ---------- the #v4Camp panel is rendered by React (Camp page) ---------- */
   document.addEventListener('click', e => {
     const b = e.target.closest('[data-camp-b]');
@@ -174,7 +173,6 @@ export function init() {
       return build(b.dataset.campB);
     }
   });
-
   // Dojo: the first Pokémon of the team start with 1 Awakening point
   HOOKS.creation.push((S, opt) => {
     if (!opt) {
@@ -187,7 +185,6 @@ export function init() {
         .forEach(u => hasNx(u) && (u.en = Math.max(u.en, 1)));
     }
   });
-
   HOOKS.progress.push((S, rew) => {
     const D = SCEN[S.sc] || {};
     if (!campOpen() || D.tuto || D.tower) {
@@ -229,7 +226,6 @@ export function init() {
     }
     return null;
   });
-
   HOOKS.battleResult.push(r =>
     r.oeuf
       ? `<div class="res-l"><h4>Pension</h4><div class="rl">${medal(BY[r.oeuf].t)}<span>Un œuf a éclos : ${BY[r.oeuf].n} rejoint votre Box !</span><b>🥚</b></div></div>`

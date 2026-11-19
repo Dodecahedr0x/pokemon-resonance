@@ -9,60 +9,68 @@ import { ownedFam } from './trainer-stats.js';
 import { DEXS } from './pokedex.js';
 import { announceSky } from '../combat/battle-sky.js';
 
+const KEY = 'res-dex-reward';
+
+// Only one reward per region, even if the player reopens the game
+let readClaimed;
+
+let writeClaimed;
+
+const REGION_REWARDS = [
+  { g: 1, displayName: 'Kanto' },
+  { g: 2, displayName: 'Johto' },
+  { g: 3, displayName: 'Hoenn' },
+];
+
+let regionComplete;
+
+let verifyRewards;
+
 // Instructions run at startup, in the original order (see index.js).
 export function init() {
-  (() => {
-    const KEY = 'res-dex-reward';
-    // Only one reward per region, even if the player reopens the game
-    const readClaimed = () => {
-      try {
-        return JSON.parse(localStorage.getItem(KEY)) || [];
-      } catch (e) {
-        return [];
-      }
-    };
-    const writeClaimed = a => {
-      writeLS(KEY, a);
-    };
-    const REGION_REWARDS = [
-      { g: 1, displayName: 'Kanto' },
-      { g: 2, displayName: 'Johto' },
-      { g: 3, displayName: 'Hoenn' },
-    ];
-    const regionComplete = g => {
-      const ms = DEXS.filter(m => m.gen === g);
-      return ms.length > 0 && ms.every(m => ownedFam(m.id));
-    };
-    const verifyRewards = () => {
-      if (!PROFILE || !PROFILE.dex) {
+  readClaimed = () => {
+    try {
+      return JSON.parse(localStorage.getItem(KEY)) || [];
+    } catch (e) {
+      return [];
+    }
+  };
+  writeClaimed = a => {
+    writeLS(KEY, a);
+  };
+  regionComplete = g => {
+    const ms = DEXS.filter(m => m.gen === g);
+    return ms.length > 0 && ms.every(m => ownedFam(m.id));
+  };
+  verifyRewards = () => {
+    if (!PROFILE || !PROFILE.dex) {
+      return;
+    }
+    const already = readClaimed();
+    let change = false;
+    REGION_REWARDS.forEach(r => {
+      if (already.includes(r.g) || !regionComplete(r.g)) {
         return;
       }
-      const already = readClaimed();
-      let change = false;
-      REGION_REWARDS.forEach(r => {
-        if (already.includes(r.g) || !regionComplete(r.g)) {
-          return;
-        }
-        already.push(r.g);
-        change = true;
-        PROFILE.money += 3000;
-        PROFILE.gems = (PROFILE.gems || 0) + 10;
-        toast(`Pokédex de ${r.displayName} complet : 3 000 ₽ et 10 Éclats !`);
-        announceSky('🏆', 'Pokédex complet', `${r.displayName} est entièrement capturé.`);
-      });
-      if (change) {
-        writeClaimed(already);
-        save();
-      }
-    };
-    HOOKS.rendered.push(verifyRewards);
-    window.__dexReward = {
-      verify: verifyRewards,
-      readValue: readClaimed,
-      P: () => PROFILE,
-      dex: () => DEXS,
-      ownedFam,
-      renderAll,
-    };
-  })();
+      already.push(r.g);
+      change = true;
+      PROFILE.money += 3000;
+      PROFILE.gems = (PROFILE.gems || 0) + 10;
+      toast(`Pokédex de ${r.displayName} complet : 3 000 ₽ et 10 Éclats !`);
+      announceSky('🏆', 'Pokédex complet', `${r.displayName} est entièrement capturé.`);
+    });
+    if (change) {
+      writeClaimed(already);
+      save();
+    }
+  };
+  HOOKS.rendered.push(verifyRewards);
+  window.__dexReward = {
+    verify: verifyRewards,
+    readValue: readClaimed,
+    P: () => PROFILE,
+    dex: () => DEXS,
+    ownedFam,
+    renderAll,
+  };
 }

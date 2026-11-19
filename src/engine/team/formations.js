@@ -9,7 +9,6 @@ import { sfx, vibe } from '../audio/sound-effects.js';
 import { DAMAGE_PROVIDERS } from '../combat/tactical-engine.js';
 import { teamSize } from '../progression/campaign-challenges.js';
 
-export let FORMATIONS;
 let DEFENSIVE_TYPES, OFFENSIVE_TYPES, SCOUT_TYPES, SUPPORT_TYPES;
 
 const hasAnyType = (m, L) => !!m && m.t.some(t => L.includes(t));
@@ -39,41 +38,40 @@ const formationBonus = S => {
   return { k, al };
 };
 
+export const FORMATIONS = {
+  libre: { n: 'Libre', d: 'Aucune contrainte, aucun bonus.', condition: () => true, need: '' },
+  phalange: {
+    n: 'Phalange',
+    d: 'L’avant-garde garde sa Garde : elle est renouvelée à chaque manche.',
+    need: 'Le 1er Pokémon doit être de type Roche, Acier, Sol, Combat, Eau ou Normal.',
+    condition: ms => hasAnyType(ms[0], DEFENSIVE_TYPES),
+  },
+  assaut: {
+    n: 'Assaut',
+    d: '+8 % de dégâts pour toute l’équipe.',
+    need: 'Deux Pokémon au moins de type Feu, Combat, Dragon, Électrik, Spectre, Ténèbres, Roche ou Sol.',
+    condition: ms => ms.filter(m => hasAnyType(m, OFFENSIVE_TYPES)).length >= 2,
+  },
+  eclaireurs: {
+    n: 'Éclaireurs',
+    d: 'Le dernier Pokémon commence avec 2 losanges, les autres avec 1.',
+    need: 'Un Pokémon au moins de type Vol, Insecte, Électrik, Psy ou Spectre.',
+    condition: ms => ms.some(m => hasAnyType(m, SCOUT_TYPES)),
+  },
+  soutien: {
+    n: 'Soutien',
+    d: 'À chaque fin de manche, l’allié le plus blessé récupère 8 % de ses PV max.',
+    need: 'Un Pokémon au moins de type Plante, Fée, Eau, Normal ou Psy.',
+    condition: ms => ms.some(m => hasAnyType(m, SUPPORT_TYPES)),
+  },
+};
+
 // Statements run at startup, in the original order (see index.js).
 export function init() {
   ((DEFENSIVE_TYPES = ['Roche', 'Acier', 'Sol', 'Combat', 'Eau', 'Normal']),
     (OFFENSIVE_TYPES = ['Feu', 'Combat', 'Dragon', 'Électrik', 'Spectre', 'Ténèbres', 'Roche', 'Sol']),
     (SCOUT_TYPES = ['Vol', 'Insecte', 'Électrik', 'Psy', 'Spectre']),
     (SUPPORT_TYPES = ['Plante', 'Fée', 'Eau', 'Normal', 'Psy']));
-
-  FORMATIONS = {
-    libre: { n: 'Libre', d: 'Aucune contrainte, aucun bonus.', condition: () => true, need: '' },
-    phalange: {
-      n: 'Phalange',
-      d: 'L’avant-garde garde sa Garde : elle est renouvelée à chaque manche.',
-      need: 'Le 1er Pokémon doit être de type Roche, Acier, Sol, Combat, Eau ou Normal.',
-      condition: ms => hasAnyType(ms[0], DEFENSIVE_TYPES),
-    },
-    assaut: {
-      n: 'Assaut',
-      d: '+8 % de dégâts pour toute l’équipe.',
-      need: 'Deux Pokémon au moins de type Feu, Combat, Dragon, Électrik, Spectre, Ténèbres, Roche ou Sol.',
-      condition: ms => ms.filter(m => hasAnyType(m, OFFENSIVE_TYPES)).length >= 2,
-    },
-    eclaireurs: {
-      n: 'Éclaireurs',
-      d: 'Le dernier Pokémon commence avec 2 losanges, les autres avec 1.',
-      need: 'Un Pokémon au moins de type Vol, Insecte, Électrik, Psy ou Spectre.',
-      condition: ms => ms.some(m => hasAnyType(m, SCOUT_TYPES)),
-    },
-    soutien: {
-      n: 'Soutien',
-      d: 'À chaque fin de manche, l’allié le plus blessé récupère 8 % de ses PV max.',
-      need: 'Un Pokémon au moins de type Plante, Fée, Eau, Normal ou Psy.',
-      condition: ms => ms.some(m => hasAnyType(m, SUPPORT_TYPES)),
-    },
-  };
-
   HOOKS.combat.push(S => {
     const f = formationBonus(S);
     if (!f) {
@@ -89,7 +87,6 @@ export function init() {
       });
     }
   });
-
   HOOKS.beforeRoundEnd.push((S, ev) => {
     if (!S.activeFormation) {
       return;
@@ -106,13 +103,11 @@ export function init() {
       }
     }
   });
-
   DAMAGE_PROVIDERS.push({
     id: 'assault-bonus',
     provide: (c, { S, u }) =>
       !!u && u.side === 'a' && !!S && S.activeFormation === 'assaut' && { mul: 1.08, labelText: 'Formation Assaut' },
   });
-
   // "Formation" card of the team analysis: rendered by React (src/screens/team/Analysis.jsx)
 
   document.addEventListener(

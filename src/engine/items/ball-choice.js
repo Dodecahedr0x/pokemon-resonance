@@ -6,7 +6,7 @@ import { SHOP, bagN } from '../state/economy.js';
 import { ITM } from '../assets/item-icons.js';
 import { BALL_CAPTURE_CHECKS } from './balls-held-items.js';
 
-export let BALLS, CAP_K;
+export let CAP_K;
 let BALL_SEL;
 export function __set_CAP_K(v) {
   return (CAP_K = v);
@@ -44,13 +44,12 @@ const ballReqOk = (k, e) => {
 export const ballChips = () =>
   `<div class="v4-balls" role="group" aria-label="Choisir une Ball">${BALLS.map(k => `<button type="button" class="v4-ball${k === CAP_K ? ' on' : ''}" data-ball="${k}" aria-pressed="${k === CAP_K}" ${bagN(k) ? '' : 'disabled'}><img src="${ITM(SHOP[k].img)}" alt="" loading="lazy"><b>${SHOP[k].sn}</b><em>×${bagN(k)}</em></button>`).join('')}</div>${BALLS.some(k => bagN(k)) ? '' : '<p class="bp-hint">Plus aucune Ball : passez à la Boutique.</p>'}`;
 
+export const BALLS = ['poke', 'super', 'hyper', 'master'];
+
 // Instructions run at startup, in the original order (see index.js).
 export function init() {
-  BALLS = ['poke', 'super', 'hyper', 'master'];
-
   /* ---------- capture: the chosen Ball sets the conditions ---------- */
   ((CAP_K = 'poke'), (BALL_SEL = null));
-
   document.addEventListener('click', e => {
     const bl = e.target.closest('[data-ball]');
     if (bl && B) {

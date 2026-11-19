@@ -3,8 +3,6 @@
 import { RM, writeLS } from '../core/utils.js';
 import { musStart, musStop } from '../audio/music.js';
 
-export let PREF;
-
 // Pokémon-style reduced animations (v4.72): system preference, accessibility setting or
 // theme animations turned off. Same test as the local copies in engine/combat/battle-staging.js and 109.
 export const calmMotion = () =>
@@ -19,16 +17,16 @@ export function savePref() {
   }
 }
 
+const p = { sound: false, vibe: false, fast: false };
+
+export const PREF = p;
+
 // Instructions run at startup, in the original order (see index.js).
 export function init() {
   /* ---- preferences for this device ---- */
-  PREF = (() => {
-    const p = { sound: false, vibe: false, fast: false };
-    try {
-      Object.assign(p, JSON.parse(localStorage.getItem('res-pref') || '{}'));
-    } catch {
-      /* Best effort: failure here is non-fatal. */
-    }
-    return p;
-  })();
+  try {
+    Object.assign(p, JSON.parse(localStorage.getItem('res-pref') || '{}'));
+  } catch {
+    /* Best effort: failure here is non-fatal. */
+  }
 }

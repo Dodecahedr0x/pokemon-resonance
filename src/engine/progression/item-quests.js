@@ -10,7 +10,6 @@ import { dailySeed } from '../world/pokegear.js';
 import { applyReward, rewardText } from '../world/route-events.js';
 import { addItems, dailyGiftState, tmKeys, hasIngredients } from '../items/workshop.js';
 
-let TROPHIES;
 export { QUESTS, TROPHIES }; // read by Shop › Quests and Trophies (React, src/screens/bag/Workshop.jsx)
 
 export function questState() {
@@ -164,6 +163,20 @@ export const badgeTotal = () => BADGES.length;
 
 const ownedTmKey = () => tmKeys().find(k => bagN(k) > 0);
 
+/* ---------- trophy box ---------- */
+const TROPHIES = [
+  { id: 't1', t: 'Collection d’objets tenus', n: 5, v: () => PROFILE.items.length, g: 1 },
+  { id: 't2', t: 'Collection d’objets tenus', n: 10, v: () => PROFILE.items.length, g: 2 },
+  { id: 't3', t: 'Collection d’objets tenus', n: 20, v: () => PROFILE.items.length, g: 4 },
+  { id: 't4', t: 'CT et CS vues', n: 10, v: () => tmSeenCount(), g: 1 },
+  { id: 't5', t: 'CT et CS vues', n: 25, v: () => tmSeenCount(), g: 2 },
+  { id: 't6', t: 'CT et CS vues', n: 40, v: () => tmSeenCount(), g: 4 },
+  { id: 't7', t: 'Quêtes d’objets', n: 3, v: () => Object.keys(questState().done).length, g: 1 },
+  { id: 't8', t: 'Quêtes d’objets', n: 6, v: () => Object.keys(questState().done).length, g: 2 },
+  { id: 't9', t: 'Quêtes d’objets', n: 10, v: () => Object.keys(questState().done).length, g: 5 },
+  { id: 't10', t: 'Cadeaux du jour d’affilée', n: 7, v: () => dailyGiftState().n, g: 3 },
+];
+
 // Statements run at startup, in the original order (see index.js).
 export function init() {
   document.addEventListener(
@@ -213,21 +226,6 @@ export function init() {
     },
     true
   );
-
-  /* ---------- trophy box ---------- */
-  TROPHIES = [
-    { id: 't1', t: 'Collection d’objets tenus', n: 5, v: () => PROFILE.items.length, g: 1 },
-    { id: 't2', t: 'Collection d’objets tenus', n: 10, v: () => PROFILE.items.length, g: 2 },
-    { id: 't3', t: 'Collection d’objets tenus', n: 20, v: () => PROFILE.items.length, g: 4 },
-    { id: 't4', t: 'CT et CS vues', n: 10, v: () => tmSeenCount(), g: 1 },
-    { id: 't5', t: 'CT et CS vues', n: 25, v: () => tmSeenCount(), g: 2 },
-    { id: 't6', t: 'CT et CS vues', n: 40, v: () => tmSeenCount(), g: 4 },
-    { id: 't7', t: 'Quêtes d’objets', n: 3, v: () => Object.keys(questState().done).length, g: 1 },
-    { id: 't8', t: 'Quêtes d’objets', n: 6, v: () => Object.keys(questState().done).length, g: 2 },
-    { id: 't9', t: 'Quêtes d’objets', n: 10, v: () => Object.keys(questState().done).length, g: 5 },
-    { id: 't10', t: 'Cadeaux du jour d’affilée', n: 7, v: () => dailyGiftState().n, g: 3 },
-  ];
-
   document.addEventListener(
     'click',
     e => {

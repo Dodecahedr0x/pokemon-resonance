@@ -12,9 +12,6 @@ import { DAMAGE_PROVIDERS } from '../combat/tactical-engine.js';
 import { ACHIEVEMENTS } from '../progression/achievements.js';
 import { SCENES } from '../progression/story-dialogues.js';
 
-export let PLACES_H, HCHAIN, HMAP_SVG;
-let HARENAS;
-
 /* =====================================================================
    v4.19: Hoenn
    - Third region, after the Johto Master title (Campaign);
@@ -252,147 +249,201 @@ const HREW = [4, 4, 5, 5, 6, 6, 7, 8];
 /* ---------- Hoenn gym rules ---------- */
 const sceneRule = S => (S && SCEN[S.sc] && SCEN[S.sc].rule) || '';
 
+const HARENAS = [
+  {
+    k: 'h1',
+    rule: 'jh1',
+    time: 'jour',
+    rock: ['3,1', '4,4'],
+    water: [],
+    hb: 22,
+    pb: 5,
+    lv: 64,
+    foes: [
+      ['galegon', [6, 1]],
+      ['onix', [6, 3]],
+      ['gravalanch', [6, 5]],
+      ['galekid', [7, 2]],
+    ],
+    d: 'Une tempête de sable souffle pendant tout le combat : elle use chaque manche les Pokémon qui ne sont ni Roche, ni Sol, ni Acier.',
+  },
+  {
+    k: 'h2',
+    rule: 'jh2',
+    time: 'jour',
+    rock: ['3,2'],
+    water: ['4,5'],
+    hb: 26,
+    pb: 5,
+    lv: 65,
+    foes: [
+      ['galifeu', [6, 1]],
+      ['mackogneur', [6, 3]],
+      ['kapoera', [6, 5]],
+      ['tygnon', [7, 2]],
+    ],
+    d: 'Le ring du Dojo : les attaques au contact font +25 %, celles à distance −25 %. Pour tout le monde.',
+  },
+  {
+    k: 'h3',
+    rule: 'jh3',
+    time: 'nuit',
+    rock: ['3,0', '4,5'],
+    water: [],
+    hb: 26,
+    pb: 6,
+    lv: 66,
+    foes: [
+      ['magneton', [6, 1]],
+      ['lanturn', [6, 3]],
+      ['raichu', [6, 5]],
+      ['pharamp', [7, 2]],
+    ],
+    d: 'À chaque fin de manche, trois cases du plateau deviennent Chargées. Gare aux Courts-circuits.',
+  },
+  {
+    k: 'h4',
+    rule: 'jh4',
+    time: 'jour',
+    rock: ['3,3'],
+    water: [],
+    hb: 28,
+    pb: 6,
+    lv: 67,
+    foes: [
+      ['brasegali', [6, 2]],
+      ['volcaropod', [6, 4]],
+      ['arcanin', [7, 1]],
+      ['typhlosion', [7, 3]],
+    ],
+    d: 'Grand soleil permanent, et le sol brûle autour des adversaires. L’Eau est affaiblie, le Feu renforcé.',
+  },
+  {
+    k: 'h5',
+    rule: 'jh5',
+    time: 'jour',
+    rock: ['3,1'],
+    water: [],
+    hb: 30,
+    pb: 6,
+    lv: 68,
+    foes: [
+      ['ronflex', [6, 2]],
+      ['noarfang', [6, 4]],
+      ['porygon2', [7, 1]],
+      ['roucarnage', [7, 3]],
+    ],
+    d: 'Coup bas : les adversaires font +30 % de dégâts aux Pokémon sous la moitié de leurs PV. Protégez vos blessés.',
+  },
+  {
+    k: 'h6',
+    rule: 'jh6',
+    time: 'jour',
+    rock: [],
+    water: ['3,2'],
+    hb: 20,
+    pb: 5,
+    lv: 69,
+    foes: [
+      ['drattak', [6, 2]],
+      ['cotovol', [6, 4]],
+      ['roucarnage', [7, 1]],
+      ['xatu', [7, 3]],
+    ],
+    d: 'Vent arrière permanent pour les adversaires : +2 Mouvement. Ils viennent vite, et de loin.',
+  },
+  {
+    k: 'h7',
+    rule: 'jh7',
+    time: 'nuit',
+    rock: ['3,1', '3,4'],
+    water: [],
+    hb: 30,
+    pb: 7,
+    lv: 70,
+    foes: [
+      ['gardevoir', [6, 2]],
+      ['alakazam', [6, 4]],
+      ['xatu', [7, 1]],
+      ['mentali', [7, 3]],
+    ],
+    d: 'Distorsion permanente : les Pokémon lents gagnent du Mouvement. Les Remparts passent à l’attaque.',
+  },
+  {
+    k: 'h8',
+    rule: 'jh8',
+    time: 'nuit',
+    rock: ['3,2'],
+    water: ['4,0', '5,0', '4,5', '5,5'],
+    hb: 18,
+    pb: 5,
+    lv: 72,
+    foes: [
+      ['laggron', [6, 2]],
+      ['flobio', [6, 4]],
+      ['azumarill', [7, 1]],
+      ['gobou', [7, 3]],
+    ],
+    d: 'Déluge : la pluie tombe pendant tout le combat et l’eau couvre une bonne partie du plateau.',
+  },
+].filter(a => a.foes.every(([id]) => BY[id]));
+
+const palm = (x, y, s = 1) =>
+  `<g transform="translate(${x} ${y}) scale(${s})"><path d="M0 0q2-10 0-20" stroke="#7a5a32" stroke-width="2.5" fill="none"/><path d="M0-20q-9-4-14 2M0-20q9-4 14 2M0-20q-4-9-11-9M0-20q4-9 11-9" stroke="#2f8a4a" stroke-width="3" fill="none" stroke-linecap="round"/></g>`;
+
+const isle = (d, f) =>
+  `<path d="${d}" fill="${f || 'url(#hLand)'}" stroke="#f1dfa6" stroke-width="6" stroke-linejoin="round"/>`;
+
+const MAIN =
+  'M70 420C60 340 120 280 210 270C280 262 300 210 380 190C460 170 520 120 610 130C700 140 760 200 820 230C890 262 940 320 930 390C920 450 860 470 800 460C740 450 700 480 640 500C560 528 470 520 400 500C330 480 270 520 200 520C130 520 80 480 70 420Z';
+
+const ISLE1 = 'M270 560C268 535 300 522 335 528C370 535 380 560 362 578C340 596 285 590 270 560Z';
+
+const ISLE2 = 'M780 470C778 446 812 432 846 440C880 448 888 476 866 494C842 512 790 500 780 470Z';
+
+const ISLE3 = 'M835 260C832 238 862 226 892 232C922 238 930 262 912 278C890 296 842 286 835 260Z';
+
+/* ---------- the Hoenn map (original artwork) ---------- */
+export const PLACES_H = [
+  { id: 'hwild', x: 215, y: 480, n: 'Route 104', s: 'Hautes herbes · Pokémon de Hoenn', grp: 'route', j: 1 },
+  { id: 'h1', x: 140, y: 370, s: 'Arène 1 · ' + HLEAD[0].n, grp: 'aventure', j: 1 },
+  { id: 'h2', x: 330, y: 560, s: 'Arène 2 · ' + HLEAD[1].n, grp: 'aventure', j: 1 },
+  { id: 'h3', x: 360, y: 330, s: 'Arène 3 · ' + HLEAD[2].n, grp: 'aventure', j: 1 },
+  { id: 'h4', x: 500, y: 215, s: 'Arène 4 · ' + HLEAD[3].n, grp: 'aventure', j: 1 },
+  { id: 'h5', x: 545, y: 430, s: 'Arène 5 · ' + HLEAD[4].n, grp: 'aventure', j: 1 },
+  { id: 'h6', x: 690, y: 320, s: 'Arène 6 · ' + HLEAD[5].n, grp: 'aventure', j: 1 },
+  { id: 'h7', x: 830, y: 480, s: 'Arène 7 · ' + HLEAD[6].n, grp: 'aventure', j: 1 },
+  { id: 'h8', x: 870, y: 260, s: 'Arène 8 · ' + HLEAD[7].n, grp: 'aventure', j: 1 },
+  { id: 'hchamp', x: 760, y: 120, n: 'Plateau de Hoenn', s: 'Final · ' + HCHAMP_L.n, grp: 'aventure', j: 1 },
+].filter(p => SCEN[p.id] || p.id === 'hwild');
+
+export const HCHAIN = PLACES_H.map(p => p.id);
+
+export const HMAP_SVG = `<svg class="map-svg map-h" viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+ <defs>
+  <radialGradient id="hSea" cx="50%" cy="50%" r="80%"><stop offset="0" stop-color="#2fa3d6"/><stop offset=".6" stop-color="#1873b0"/><stop offset="1" stop-color="#0b3466"/></radialGradient>
+  <linearGradient id="hLand" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#78b85c"/><stop offset="1" stop-color="#4f8f45"/></linearGradient>
+  <radialGradient id="hDesert"><stop offset="0" stop-color="#ecd28a"/><stop offset="1" stop-color="#d8b866" stop-opacity="0"/></radialGradient>
+  <radialGradient id="hAsh"><stop offset="0" stop-color="#8d8a96"/><stop offset="1" stop-color="#8d8a96" stop-opacity="0"/></radialGradient>
+  <pattern id="hWave" width="64" height="26" patternUnits="userSpaceOnUse"><path d="M4 15q8-7 16 0t16 0" fill="none" stroke="#c7f0ff" stroke-width="1.2" opacity=".2"/></pattern>
+  <clipPath id="hClip"><path d="${MAIN}"/></clipPath>
+ </defs>
+ <rect width="1000" height="640" fill="url(#hSea)"/><rect width="1000" height="640" fill="url(#hWave)"/>
+ <g fill="none" stroke="#a6ecff" opacity=".22"><path d="${MAIN}" stroke-width="28"/><path d="${ISLE1}" stroke-width="20"/><path d="${ISLE2}" stroke-width="20"/><path d="${ISLE3}" stroke-width="20"/></g>
+ ${isle(MAIN)}${isle(ISLE1)}${isle(ISLE2)}${isle(ISLE3)}
+ <g clip-path="url(#hClip)">
+  <ellipse cx="650" cy="250" rx="120" ry="70" fill="url(#hDesert)" opacity=".8"/>
+  <ellipse cx="480" cy="200" rx="110" ry="70" fill="url(#hAsh)" opacity=".55"/>
+  <ellipse cx="220" cy="400" rx="140" ry="90" fill="#2e7a3c" opacity=".35"/>
+ </g>
+ <g transform="translate(470 175)"><path d="M-60 40 -18-34h36L60 40Z" fill="#6d5a52" stroke="#3b2f2b" stroke-width="2"/><path d="M-18-34 0-40 18-34 10-22-10-22Z" fill="#e8622c"/><path d="M-6-40q-10-24 6-40q-4 16 8 24" fill="#9aa0a8" opacity=".7"/></g>
+ ${palm(330, 548)}${palm(350, 556, 0.8)}${palm(815, 458)}${palm(860, 470, 0.9)}${palm(880, 250, 0.8)}${palm(160, 470, 0.9)}${palm(110, 430)}
+ <g transform="translate(760 108)"><path d="M-30 6h60l-8-14h-44Z" fill="#eef2f8" stroke="#a4adbf" stroke-width="2"/><path d="M-10-8v-14h20v14" fill="#8fd3ff" stroke="#2c6d9a" stroke-width="2"/></g>
+ <g fill="none" stroke="#e8f8ff" stroke-width="2" opacity=".45"><circle cx="600" cy="590" r="14"/><circle cx="600" cy="590" r="7"/><circle cx="960" cy="560" r="12"/><circle cx="40" cy="200" r="12"/></g>
+ </svg>`;
+
 // Startup statements, run in their original order (see index.js).
 export function init() {
-  HARENAS = [
-    {
-      k: 'h1',
-      rule: 'jh1',
-      time: 'jour',
-      rock: ['3,1', '4,4'],
-      water: [],
-      hb: 22,
-      pb: 5,
-      lv: 64,
-      foes: [
-        ['galegon', [6, 1]],
-        ['onix', [6, 3]],
-        ['gravalanch', [6, 5]],
-        ['galekid', [7, 2]],
-      ],
-      d: 'Une tempête de sable souffle pendant tout le combat : elle use chaque manche les Pokémon qui ne sont ni Roche, ni Sol, ni Acier.',
-    },
-    {
-      k: 'h2',
-      rule: 'jh2',
-      time: 'jour',
-      rock: ['3,2'],
-      water: ['4,5'],
-      hb: 26,
-      pb: 5,
-      lv: 65,
-      foes: [
-        ['galifeu', [6, 1]],
-        ['mackogneur', [6, 3]],
-        ['kapoera', [6, 5]],
-        ['tygnon', [7, 2]],
-      ],
-      d: 'Le ring du Dojo : les attaques au contact font +25 %, celles à distance −25 %. Pour tout le monde.',
-    },
-    {
-      k: 'h3',
-      rule: 'jh3',
-      time: 'nuit',
-      rock: ['3,0', '4,5'],
-      water: [],
-      hb: 26,
-      pb: 6,
-      lv: 66,
-      foes: [
-        ['magneton', [6, 1]],
-        ['lanturn', [6, 3]],
-        ['raichu', [6, 5]],
-        ['pharamp', [7, 2]],
-      ],
-      d: 'À chaque fin de manche, trois cases du plateau deviennent Chargées. Gare aux Courts-circuits.',
-    },
-    {
-      k: 'h4',
-      rule: 'jh4',
-      time: 'jour',
-      rock: ['3,3'],
-      water: [],
-      hb: 28,
-      pb: 6,
-      lv: 67,
-      foes: [
-        ['brasegali', [6, 2]],
-        ['volcaropod', [6, 4]],
-        ['arcanin', [7, 1]],
-        ['typhlosion', [7, 3]],
-      ],
-      d: 'Grand soleil permanent, et le sol brûle autour des adversaires. L’Eau est affaiblie, le Feu renforcé.',
-    },
-    {
-      k: 'h5',
-      rule: 'jh5',
-      time: 'jour',
-      rock: ['3,1'],
-      water: [],
-      hb: 30,
-      pb: 6,
-      lv: 68,
-      foes: [
-        ['ronflex', [6, 2]],
-        ['noarfang', [6, 4]],
-        ['porygon2', [7, 1]],
-        ['roucarnage', [7, 3]],
-      ],
-      d: 'Coup bas : les adversaires font +30 % de dégâts aux Pokémon sous la moitié de leurs PV. Protégez vos blessés.',
-    },
-    {
-      k: 'h6',
-      rule: 'jh6',
-      time: 'jour',
-      rock: [],
-      water: ['3,2'],
-      hb: 20,
-      pb: 5,
-      lv: 69,
-      foes: [
-        ['drattak', [6, 2]],
-        ['cotovol', [6, 4]],
-        ['roucarnage', [7, 1]],
-        ['xatu', [7, 3]],
-      ],
-      d: 'Vent arrière permanent pour les adversaires : +2 Mouvement. Ils viennent vite, et de loin.',
-    },
-    {
-      k: 'h7',
-      rule: 'jh7',
-      time: 'nuit',
-      rock: ['3,1', '3,4'],
-      water: [],
-      hb: 30,
-      pb: 7,
-      lv: 70,
-      foes: [
-        ['gardevoir', [6, 2]],
-        ['alakazam', [6, 4]],
-        ['xatu', [7, 1]],
-        ['mentali', [7, 3]],
-      ],
-      d: 'Distorsion permanente : les Pokémon lents gagnent du Mouvement. Les Remparts passent à l’attaque.',
-    },
-    {
-      k: 'h8',
-      rule: 'jh8',
-      time: 'nuit',
-      rock: ['3,2'],
-      water: ['4,0', '5,0', '4,5', '5,5'],
-      hb: 18,
-      pb: 5,
-      lv: 72,
-      foes: [
-        ['laggron', [6, 2]],
-        ['flobio', [6, 4]],
-        ['azumarill', [7, 1]],
-        ['gobou', [7, 3]],
-      ],
-      d: 'Déluge : la pluie tombe pendant tout le combat et l’eau couvre une bonne partie du plateau.',
-    },
-  ].filter(a => a.foes.every(([id]) => BY[id]));
-
   HARENAS.forEach((a, i) => {
     SCEN[a.k] = Object.assign(
       {
@@ -406,7 +457,6 @@ export function init() {
       a
     );
   });
-
   SCEN.hchamp = {
     n: 'Maître de Hoenn',
     lvl: 'Hoenn · Final',
@@ -429,7 +479,6 @@ export function init() {
     ],
     d: 'Pas de règle d’arène : un adversaire complet, qui se sert de la Résonance, des attaques Expertes et de la Forme Résonante.',
   };
-
   HOOKS.progress.push((S, rew, win) => {
     const D = SCEN[S.sc] || {};
     if (!win || !isCamp()) {
@@ -447,7 +496,6 @@ export function init() {
     }
     return null;
   });
-
   HOOKS.battleResult.push(r => {
     const h = r.hbadge;
     if (!h) {
@@ -457,7 +505,6 @@ export function init() {
       ? '<div class="res-l"><h4>Hoenn</h4><div class="rl"><span>Vous êtes Maître de Hoenn : trois régions conquises.</span><b>★</b></div></div>'
       : `<div class="res-l"><h4>Hoenn</h4><div class="rl"><span>Badge ${HGYMS[h.i]} de Hoenn obtenu.</span><b>${(PROFILE.hoenn || []).length} / 8</b></div></div>`;
   });
-
   ACHIEVEMENTS.push(
     {
       id: 'hoenn8',
@@ -474,7 +521,6 @@ export function init() {
       ok: () => !!PROFILE.hchamp,
     }
   );
-
   DAMAGE_PROVIDERS.push(
     {
       id: 'ringdojo',
@@ -494,7 +540,6 @@ export function init() {
         t.hp <= t.mhp / 2 && { mul: 1.3, labelText: 'Coup bas' },
     }
   );
-
   /* ---------- scenes and novelties ---------- */
   Object.assign(SCENES, {
     h1: [
@@ -510,7 +555,6 @@ export function init() {
       ['hchamp', 'Kanto, Johto… Et maintenant Hoenn. Montrez-moi jusqu’où va votre Résonance.'],
     ],
   });
-
   document.addEventListener('click', e => {
     const b = e.target.closest('[data-news="hoenn"]');
     if (!b) {
@@ -521,56 +565,5 @@ export function init() {
     go('carte');
     renderMap();
   });
-
-  /* ---------- the Hoenn map (original artwork) ---------- */
-  PLACES_H = [
-    { id: 'hwild', x: 215, y: 480, n: 'Route 104', s: 'Hautes herbes · Pokémon de Hoenn', grp: 'route', j: 1 },
-    { id: 'h1', x: 140, y: 370, s: 'Arène 1 · ' + HLEAD[0].n, grp: 'aventure', j: 1 },
-    { id: 'h2', x: 330, y: 560, s: 'Arène 2 · ' + HLEAD[1].n, grp: 'aventure', j: 1 },
-    { id: 'h3', x: 360, y: 330, s: 'Arène 3 · ' + HLEAD[2].n, grp: 'aventure', j: 1 },
-    { id: 'h4', x: 500, y: 215, s: 'Arène 4 · ' + HLEAD[3].n, grp: 'aventure', j: 1 },
-    { id: 'h5', x: 545, y: 430, s: 'Arène 5 · ' + HLEAD[4].n, grp: 'aventure', j: 1 },
-    { id: 'h6', x: 690, y: 320, s: 'Arène 6 · ' + HLEAD[5].n, grp: 'aventure', j: 1 },
-    { id: 'h7', x: 830, y: 480, s: 'Arène 7 · ' + HLEAD[6].n, grp: 'aventure', j: 1 },
-    { id: 'h8', x: 870, y: 260, s: 'Arène 8 · ' + HLEAD[7].n, grp: 'aventure', j: 1 },
-    { id: 'hchamp', x: 760, y: 120, n: 'Plateau de Hoenn', s: 'Final · ' + HCHAMP_L.n, grp: 'aventure', j: 1 },
-  ].filter(p => SCEN[p.id] || p.id === 'hwild');
-
   PLACES_H.forEach(p => (PL[p.id] = p));
-
-  HCHAIN = PLACES_H.map(p => p.id);
-
-  HMAP_SVG = (() => {
-    const palm = (x, y, s = 1) =>
-      `<g transform="translate(${x} ${y}) scale(${s})"><path d="M0 0q2-10 0-20" stroke="#7a5a32" stroke-width="2.5" fill="none"/><path d="M0-20q-9-4-14 2M0-20q9-4 14 2M0-20q-4-9-11-9M0-20q4-9 11-9" stroke="#2f8a4a" stroke-width="3" fill="none" stroke-linecap="round"/></g>`;
-    const isle = (d, f) =>
-      `<path d="${d}" fill="${f || 'url(#hLand)'}" stroke="#f1dfa6" stroke-width="6" stroke-linejoin="round"/>`;
-    const MAIN =
-      'M70 420C60 340 120 280 210 270C280 262 300 210 380 190C460 170 520 120 610 130C700 140 760 200 820 230C890 262 940 320 930 390C920 450 860 470 800 460C740 450 700 480 640 500C560 528 470 520 400 500C330 480 270 520 200 520C130 520 80 480 70 420Z';
-    const ISLE1 = 'M270 560C268 535 300 522 335 528C370 535 380 560 362 578C340 596 285 590 270 560Z';
-    const ISLE2 = 'M780 470C778 446 812 432 846 440C880 448 888 476 866 494C842 512 790 500 780 470Z';
-    const ISLE3 = 'M835 260C832 238 862 226 892 232C922 238 930 262 912 278C890 296 842 286 835 260Z';
-    return `<svg class="map-svg map-h" viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
- <defs>
-  <radialGradient id="hSea" cx="50%" cy="50%" r="80%"><stop offset="0" stop-color="#2fa3d6"/><stop offset=".6" stop-color="#1873b0"/><stop offset="1" stop-color="#0b3466"/></radialGradient>
-  <linearGradient id="hLand" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#78b85c"/><stop offset="1" stop-color="#4f8f45"/></linearGradient>
-  <radialGradient id="hDesert"><stop offset="0" stop-color="#ecd28a"/><stop offset="1" stop-color="#d8b866" stop-opacity="0"/></radialGradient>
-  <radialGradient id="hAsh"><stop offset="0" stop-color="#8d8a96"/><stop offset="1" stop-color="#8d8a96" stop-opacity="0"/></radialGradient>
-  <pattern id="hWave" width="64" height="26" patternUnits="userSpaceOnUse"><path d="M4 15q8-7 16 0t16 0" fill="none" stroke="#c7f0ff" stroke-width="1.2" opacity=".2"/></pattern>
-  <clipPath id="hClip"><path d="${MAIN}"/></clipPath>
- </defs>
- <rect width="1000" height="640" fill="url(#hSea)"/><rect width="1000" height="640" fill="url(#hWave)"/>
- <g fill="none" stroke="#a6ecff" opacity=".22"><path d="${MAIN}" stroke-width="28"/><path d="${ISLE1}" stroke-width="20"/><path d="${ISLE2}" stroke-width="20"/><path d="${ISLE3}" stroke-width="20"/></g>
- ${isle(MAIN)}${isle(ISLE1)}${isle(ISLE2)}${isle(ISLE3)}
- <g clip-path="url(#hClip)">
-  <ellipse cx="650" cy="250" rx="120" ry="70" fill="url(#hDesert)" opacity=".8"/>
-  <ellipse cx="480" cy="200" rx="110" ry="70" fill="url(#hAsh)" opacity=".55"/>
-  <ellipse cx="220" cy="400" rx="140" ry="90" fill="#2e7a3c" opacity=".35"/>
- </g>
- <g transform="translate(470 175)"><path d="M-60 40 -18-34h36L60 40Z" fill="#6d5a52" stroke="#3b2f2b" stroke-width="2"/><path d="M-18-34 0-40 18-34 10-22-10-22Z" fill="#e8622c"/><path d="M-6-40q-10-24 6-40q-4 16 8 24" fill="#9aa0a8" opacity=".7"/></g>
- ${palm(330, 548)}${palm(350, 556, 0.8)}${palm(815, 458)}${palm(860, 470, 0.9)}${palm(880, 250, 0.8)}${palm(160, 470, 0.9)}${palm(110, 430)}
- <g transform="translate(760 108)"><path d="M-30 6h60l-8-14h-44Z" fill="#eef2f8" stroke="#a4adbf" stroke-width="2"/><path d="M-10-8v-14h20v14" fill="#8fd3ff" stroke="#2c6d9a" stroke-width="2"/></g>
- <g fill="none" stroke="#e8f8ff" stroke-width="2" opacity=".45"><circle cx="600" cy="590" r="14"/><circle cx="600" cy="590" r="7"/><circle cx="960" cy="560" r="12"/><circle cx="40" cy="200" r="12"/></g>
- </svg>`;
-  })();
 }

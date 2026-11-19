@@ -76,7 +76,7 @@ import { talentDamage, talentMove } from '../team/individuals.js';
 import { duelAiPlan, duelVigilance } from '../modes/duel.js';
 import { eeveeHarmony } from '../pokemon/eevee.js';
 
-export let BW, BH, BRANCHES;
+export let BW, BH;
 
 export function toCube(c, r) {
   const x = c - (r - (r & 1)) / 2;
@@ -2328,27 +2328,27 @@ const onContact = (S, u, camp) =>
 /** v4.12: every cell an opponent can reach this turn (movement + range of its attacks). */
 const THREAT = { k: '', z: [] };
 
+export const BRANCHES = {
+  tetarte: [
+    {
+      id: 'tarpaud',
+      why: 'Case Trempée ou Pluie',
+      ok: (S, u) => markAt(S, uk(u)) === 'trempe' || !!(S.wx && S.wx.k === 'pluie'),
+    },
+    { id: 'tartard', why: 'Un adversaire au contact', ok: (S, u) => onContact(S, u) > 0, def: 1 },
+  ],
+  ramoloss: [
+    { id: 'roigada', why: 'Un allié au contact', ok: (S, u) => onContact(S, u, 'allie') > 0 },
+    { id: 'flagadoss', why: 'Case Trempée', ok: (S, u) => markAt(S, uk(u)) === 'trempe', def: 1 },
+  ],
+  debugant: [
+    { id: 'kapoera', why: '2 adversaires au contact', ok: (S, u) => onContact(S, u) >= 2 },
+    { id: 'kicklee', why: 'PV au-dessus de 50 %', ok: (S, u) => u.hp > u.mhp / 2 },
+    { id: 'tygnon', why: 'PV à 50 % ou moins', ok: (S, u) => u.hp <= u.mhp / 2 },
+  ],
+};
+
 // Instructions run at startup, in the original order (see index.js).
 export function init() {
   ((BW = 8), (BH = 6));
-
-  BRANCHES = {
-    tetarte: [
-      {
-        id: 'tarpaud',
-        why: 'Case Trempée ou Pluie',
-        ok: (S, u) => markAt(S, uk(u)) === 'trempe' || !!(S.wx && S.wx.k === 'pluie'),
-      },
-      { id: 'tartard', why: 'Un adversaire au contact', ok: (S, u) => onContact(S, u) > 0, def: 1 },
-    ],
-    ramoloss: [
-      { id: 'roigada', why: 'Un allié au contact', ok: (S, u) => onContact(S, u, 'allie') > 0 },
-      { id: 'flagadoss', why: 'Case Trempée', ok: (S, u) => markAt(S, uk(u)) === 'trempe', def: 1 },
-    ],
-    debugant: [
-      { id: 'kapoera', why: '2 adversaires au contact', ok: (S, u) => onContact(S, u) >= 2 },
-      { id: 'kicklee', why: 'PV au-dessus de 50 %', ok: (S, u) => u.hp > u.mhp / 2 },
-      { id: 'tygnon', why: 'PV à 50 % ou moins', ok: (S, u) => u.hp <= u.mhp / 2 },
-    ],
-  };
 }

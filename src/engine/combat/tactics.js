@@ -35,8 +35,6 @@ import { hasRune } from '../moves/technical-roster.js';
 import { dangerZoneSvg } from './intensity.js';
 import { duelCanCharge } from '../modes/duel.js';
 
-export let COLOSSI;
-
 /* =====================================================================
    v4.8: tactics
    ---------------------------------------------------------------------
@@ -413,6 +411,84 @@ const colossusOf = k => COLOSSI.find(C => C.k === k) || null;
 
 const intactGames = (S, b) => S.units.filter(s => s.seg && s.of === b.uid && !s.ko).length;
 
+export const COLOSSI = [
+  {
+    k: 'co1',
+    id: 'onix',
+    n: 'Onix géant',
+    title: 'le Serpent de roc',
+    badges: 2,
+    lv: 18,
+    lim: 11,
+    time: 'jour',
+    bio: 'roche',
+    at: 'Roche',
+    hb: 140,
+    pb: 6,
+    shb: 30,
+    mv: ['eboulement', 'jetpierres'],
+    parts: ['Corps', 'Queue'],
+    water: [],
+    rock: ['3,0', '3,5'],
+    escort: [
+      ['racaillou', [6, 0], { mv: ['piegederoc', 'jetpierres'] }],
+      ['racaillou', [6, 5], { mv: ['picots', 'jetpierres'] }],
+    ],
+    rew: [800, 8],
+    d: 'Un Onix trois fois plus grand que les autres barre le col. Son corps et sa queue occupent leurs propres cases : brisez-les pour faire tomber sa carapace. Ses Racaillou posent des pièges.',
+  },
+  {
+    k: 'co2',
+    id: 'steelix',
+    n: 'Steelix colossal',
+    title: 'l’Anneau d’acier',
+    badges: 5,
+    lv: 32,
+    lim: 12,
+    time: 'nuit',
+    bio: 'ligue',
+    at: 'Acier',
+    hb: 185,
+    pb: 8,
+    shb: 36,
+    mv: ['eboulement', 'seisme'],
+    parts: ['Anneaux', 'Corps', 'Queue'],
+    water: [],
+    rock: ['2,2'],
+    escort: [
+      ['grolem', [7, 0], { mv: ['piegederoc', 'eboulement'] }],
+      ['magneton', [7, 5]],
+    ],
+    rew: [1400, 12],
+    d: 'Steelix s’est enroulé sur quatre cases. Chaque anneau intact le protège ; chaque anneau brisé le fait vaciller. Restez loin de sa queue : elle balaie tout autour.',
+  },
+  {
+    k: 'co3',
+    id: 'leviator',
+    n: 'Léviator des abysses',
+    title: 'la Colère des flots',
+    badges: 7,
+    lv: 42,
+    lim: 12,
+    time: 'nuit',
+    bio: 'gue',
+    at: 'Eau',
+    hb: 180,
+    pb: 8,
+    shb: 36,
+    mv: ['hydrocanon', 'ouragan'],
+    parts: ['Corps', 'Nageoires', 'Queue'],
+    water: ['5,1', '5,2', '5,3', '6,1', '6,4'],
+    rock: [],
+    escort: [
+      ['crustabri', [7, 0], { mv: ['picots', 'blizzard'] }],
+      ['lokhlass', [7, 5]],
+    ],
+    rew: [2000, 16],
+    d: 'Léviator surgit du lac, le corps déroulé sur quatre cases. Ses nageoires et sa queue frappent tout ce qui s’approche ; Crustabri sème des Picots sur la rive.',
+  },
+].filter(C => BY[C.id] && C.escort.every(([e]) => BY[e]));
+
 // Statements run at startup, in the original order (see index.js).
 export function init() {
   /* ---------- moves ---------- */
@@ -458,12 +534,9 @@ export function init() {
     },
     coupdequeue: { n: 'Coup de Queue', t: 'Normal', p: 7, r: 0, sh: 'ring', d: 'Balaie les 6 cases autour.' },
   });
-
   MV.lancesoleil.charge = 'soleil';
-
   MV.lancesoleil.d =
     'Ligne de 3. ×1,5 sous le Soleil. Tactique avancée : part en fin de manche (×1,3), tout de suite sous le Soleil.';
-
   HOOKS.beforeRoundEnd.push((S, ev) => {
     unloadCharges(S, ev);
     // trap wear
@@ -475,7 +548,6 @@ export function init() {
       }
     }
   });
-
   DAMAGE_PROVIDERS.push({
     id: 'vent',
     provide: (c, { S, u, t, typ }) => {
@@ -492,85 +564,6 @@ export function init() {
       return null;
     },
   });
-
-  COLOSSI = [
-    {
-      k: 'co1',
-      id: 'onix',
-      n: 'Onix géant',
-      title: 'le Serpent de roc',
-      badges: 2,
-      lv: 18,
-      lim: 11,
-      time: 'jour',
-      bio: 'roche',
-      at: 'Roche',
-      hb: 140,
-      pb: 6,
-      shb: 30,
-      mv: ['eboulement', 'jetpierres'],
-      parts: ['Corps', 'Queue'],
-      water: [],
-      rock: ['3,0', '3,5'],
-      escort: [
-        ['racaillou', [6, 0], { mv: ['piegederoc', 'jetpierres'] }],
-        ['racaillou', [6, 5], { mv: ['picots', 'jetpierres'] }],
-      ],
-      rew: [800, 8],
-      d: 'Un Onix trois fois plus grand que les autres barre le col. Son corps et sa queue occupent leurs propres cases : brisez-les pour faire tomber sa carapace. Ses Racaillou posent des pièges.',
-    },
-    {
-      k: 'co2',
-      id: 'steelix',
-      n: 'Steelix colossal',
-      title: 'l’Anneau d’acier',
-      badges: 5,
-      lv: 32,
-      lim: 12,
-      time: 'nuit',
-      bio: 'ligue',
-      at: 'Acier',
-      hb: 185,
-      pb: 8,
-      shb: 36,
-      mv: ['eboulement', 'seisme'],
-      parts: ['Anneaux', 'Corps', 'Queue'],
-      water: [],
-      rock: ['2,2'],
-      escort: [
-        ['grolem', [7, 0], { mv: ['piegederoc', 'eboulement'] }],
-        ['magneton', [7, 5]],
-      ],
-      rew: [1400, 12],
-      d: 'Steelix s’est enroulé sur quatre cases. Chaque anneau intact le protège ; chaque anneau brisé le fait vaciller. Restez loin de sa queue : elle balaie tout autour.',
-    },
-    {
-      k: 'co3',
-      id: 'leviator',
-      n: 'Léviator des abysses',
-      title: 'la Colère des flots',
-      badges: 7,
-      lv: 42,
-      lim: 12,
-      time: 'nuit',
-      bio: 'gue',
-      at: 'Eau',
-      hb: 180,
-      pb: 8,
-      shb: 36,
-      mv: ['hydrocanon', 'ouragan'],
-      parts: ['Corps', 'Nageoires', 'Queue'],
-      water: ['5,1', '5,2', '5,3', '6,1', '6,4'],
-      rock: [],
-      escort: [
-        ['crustabri', [7, 0], { mv: ['picots', 'blizzard'] }],
-        ['lokhlass', [7, 5]],
-      ],
-      rew: [2000, 16],
-      d: 'Léviator surgit du lac, le corps déroulé sur quatre cases. Ses nageoires et sa queue frappent tout ce qui s’approche ; Crustabri sème des Picots sur la rive.',
-    },
-  ].filter(C => BY[C.id] && C.escort.every(([e]) => BY[e]));
-
   COLOSSI.forEach(C => {
     C.escort.forEach(([, , x]) => x && x.mv && (x.mv = x.mv.filter(m => MV[m]))); // missing moves: ignored
     SCEN[C.k] = {
@@ -596,7 +589,6 @@ export function init() {
     };
     OBST[C.k] = {};
   });
-
   ROLE_PROVIDERS.push({
     id: 'carapace',
     provide: (c, { S, t }) => {
@@ -607,7 +599,6 @@ export function init() {
       return n ? { add: -3 * n, labelText: 'Carapace' } : null;
     },
   });
-
   /* ---------- hooks into the battle ---------- */
   HOOKS.creation.push((S, opt, D0) => {
     if (opt && opt.tactics) {
@@ -626,7 +617,6 @@ export function init() {
       }
     });
   });
-
   HOOKS.progress.push((S, rew, win) => {
     const C = colossusOf(S.sc);
     if (!C || !win) {
@@ -640,7 +630,6 @@ export function init() {
     rew.colossus = C.k;
     return C.rew;
   });
-
   HOOKS.battleResult.push(r => {
     if (!r.colossus) {
       return '';
@@ -648,7 +637,6 @@ export function init() {
     const C = colossusOf(r.colossus);
     return `<div class="res-l"><h4>Colosse</h4><div class="rl">${medal(BY[C.id].t)}<span>${C.n} terrassé · ${PROFILE.colossi.length} / ${COLOSSI.length} colosses</span><b>★</b></div></div>`;
   });
-
   /* ---------- TMs, DTs and HMs in the Shop ---------- */
   [
     ['ct76', { num: 'CT76', mv: 'piegederoc', p: 2500, types: ['Roche', 'Sol', 'Acier'] }],

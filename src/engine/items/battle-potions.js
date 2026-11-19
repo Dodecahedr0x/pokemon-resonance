@@ -8,8 +8,6 @@ import { renderWallet } from '../ui/wallet.js';
 import { BAG_MAX, useCombatItem } from '../combat/resonance.js';
 import { SHOP, bagN } from '../state/economy.js';
 
-export let HEALS;
-
 function pUse(S, u, k) {
   const it = SHOP[k];
   if (
@@ -40,12 +38,12 @@ function pUse(S, u, k) {
   return endStep(S, ev);
 }
 
+export const HEALS = ['potion', 'superpotion'];
+
 // Bag bar in battle (.v4-bagbar): rendered by React (src/screens/combat/battle/Panel.jsx)
 
 // Instructions run at startup, in the original order (see index.js).
 export function init() {
-  HEALS = ['potion', 'superpotion'];
-
   document.addEventListener('click', e => {
     if (e.target.closest('[data-ball]') && B) {
       return; // handled by the Ball choice (items/ball-choice.js)

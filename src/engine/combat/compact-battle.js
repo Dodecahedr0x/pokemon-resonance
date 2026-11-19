@@ -47,11 +47,14 @@ export function fitPhoneBattle() {
   }
 }
 
+let viewWidth;
+
+let forgetWidth;
+
 // Startup statements, run in their original order (see index.js).
 export function init() {
   COMPACT_MQ = window.matchMedia ? matchMedia('(max-width: 700px)') : null;
-
-  let viewWidth = -1;
+  viewWidth = -1;
   resizeFrame = window.ResizeObserver
     ? new ResizeObserver(es => {
         // only if the frame's WIDTH changes (the height moves on every render)
@@ -65,7 +68,7 @@ export function init() {
         fitPhoneBattle();
       })
     : null;
-  const forgetWidth = () => {
+  forgetWidth = () => {
     boardWidth = 0;
   };
   // on capture: the width is forgotten before the listeners below recalibrate
@@ -74,9 +77,7 @@ export function init() {
   if (window.visualViewport) {
     visualViewport.addEventListener('resize', forgetWidth, true);
   }
-
   window.addEventListener('resize', () => fitPhoneBattle());
-
   // the gym rule fits on one line; we touch it to read it in full
   document.addEventListener('click', e => {
     const a = e.target.closest('#bArena');
@@ -84,11 +85,9 @@ export function init() {
       a.classList.toggle('arena-open');
     }
   });
-
   if (window.visualViewport) {
     visualViewport.addEventListener('resize', () => fitPhoneBattle());
   }
-
   try {
     const cb = document.getElementById('cbBattle');
     if (cb && window.MutationObserver) {

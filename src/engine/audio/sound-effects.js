@@ -6,7 +6,6 @@ import { B } from '../combat/ui.js';
 import { sfxJingle } from './music.js';
 import { PREF } from '../ui/preferences.js';
 
-export let SFX;
 let AC;
 
 function ac() {
@@ -145,36 +144,36 @@ export function sfxEv(ev) {
   }
 }
 
+export const SFX = {
+  ui: () => tone(880, 0, 0.06, 'triangle', 0.04),
+  hit: () => {
+    noise(0, 0.14, 0.14, 700);
+    tone(140, 0, 0.12, 'sine', 0.08, 70);
+  },
+  rx: () => [1046, 1318, 1568].forEach((f, i) => tone(f, i * 0.05, 0.18, 'triangle', 0.05)),
+  ko: () => {
+    tone(392, 0, 0.18, 'square', 0.04, 196);
+    tone(196, 0.16, 0.3, 'square', 0.035, 98);
+  },
+  evo: () => {
+    [523, 659, 784, 1046, 1318].forEach((f, i) => tone(f, i * 0.11, 0.4, 'triangle', 0.05));
+    noise(0.55, 0.5, 0.05, 4000);
+  },
+  catch: () => {
+    tone(660, 0, 0.08, 'square', 0.04);
+    tone(660, 0.18, 0.08, 'square', 0.04);
+    tone(990, 0.36, 0.3, 'triangle', 0.06);
+  },
+  win: () => [523, 659, 784, 1046].forEach((f, i) => tone(f, i * 0.13, i === 3 ? 0.6 : 0.16, 'triangle', 0.06)),
+  lose: () => [392, 349, 311, 262].forEach((f, i) => tone(f, i * 0.18, 0.3, 'sine', 0.05)),
+  duo: () => {
+    [392, 523, 659, 784, 1046].forEach((f, i) => tone(f, i * 0.06, 0.25, 'sawtooth', 0.03));
+    noise(0.3, 0.4, 0.06, 2500);
+  },
+};
+
 // Instructions run at startup, in the original order (see index.js).
 export function init() {
   /* ---- synthesized sound (no files) and vibrations ---- */
   AC = null;
-
-  SFX = {
-    ui: () => tone(880, 0, 0.06, 'triangle', 0.04),
-    hit: () => {
-      noise(0, 0.14, 0.14, 700);
-      tone(140, 0, 0.12, 'sine', 0.08, 70);
-    },
-    rx: () => [1046, 1318, 1568].forEach((f, i) => tone(f, i * 0.05, 0.18, 'triangle', 0.05)),
-    ko: () => {
-      tone(392, 0, 0.18, 'square', 0.04, 196);
-      tone(196, 0.16, 0.3, 'square', 0.035, 98);
-    },
-    evo: () => {
-      [523, 659, 784, 1046, 1318].forEach((f, i) => tone(f, i * 0.11, 0.4, 'triangle', 0.05));
-      noise(0.55, 0.5, 0.05, 4000);
-    },
-    catch: () => {
-      tone(660, 0, 0.08, 'square', 0.04);
-      tone(660, 0.18, 0.08, 'square', 0.04);
-      tone(990, 0.36, 0.3, 'triangle', 0.06);
-    },
-    win: () => [523, 659, 784, 1046].forEach((f, i) => tone(f, i * 0.13, i === 3 ? 0.6 : 0.16, 'triangle', 0.06)),
-    lose: () => [392, 349, 311, 262].forEach((f, i) => tone(f, i * 0.18, 0.3, 'sine', 0.05)),
-    duo: () => {
-      [392, 523, 659, 784, 1046].forEach((f, i) => tone(f, i * 0.06, 0.25, 'sawtooth', 0.03));
-      noise(0.3, 0.4, 0.06, 2500);
-    },
-  };
 }
