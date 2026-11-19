@@ -33,6 +33,7 @@ import { hSetup419, hTick419 } from './059-hoenn.js';
 import { regFam421, regionNo421 } from './061-catch-anywhere.js';
 import { monWeekly429, wkClean429 } from './064-quality.js';
 import { campOk430 } from './065-camp-tactics.js';
+import { migrateKeys } from '../lib/saveMigration.js';
 
 export let wildDom416;
 let JDIS, PENS_SEL, FRIEND_DEL, FRIEND_MODE;
@@ -61,14 +62,14 @@ export { pair416, parents416, heritable416 }; // read by the Camp's Daycare (src
 
 /* ---------- profile (declared functions: called as soon as the file loads) ---------- */
 export function V416_0() {
-  return { jdis: 0, roam: {}, herit: {}, couple: [], tid: '', amis: [], jour: null, dom: 0, oeufs: 0 };
+  return { jdis: 0, roam: {}, inherited: {}, pair: [], tid: '', friends: [], jour: null, dom: 0, oeufs: 0 };
 }
 
 
 function friendClean416(a) {
   if (!a || typeof a !== 'object' || typeof a.id !== 'string' || !/^[a-z0-9]{6,12}$/.test(a.id)) return null;
   const t = (Array.isArray(a.t) ? a.t : [])
-    .filter(x => Array.isArray(x) && BY[x[0]] && !BY[x[0]].ennemi)
+    .filter(x => Array.isArray(x) && BY[x[0]] && !BY[x[0]].isEnemy)
     .slice(0, 4)
     .map(x => [x[0], MV[x[1]] ? x[1] : 0, ITEMS2[x[2]] ? x[2] : 0, x[3] ? 1 : 0, MV[x[4]] ? x[4] : 0]);
   if (!t.length) return null;
@@ -102,14 +103,14 @@ export function v416Clean(p) {
         at: typeof r.at === 'string' && /^j[a-z0-9]{1,6}$/.test(r.at) ? r.at : 'j1',
         hp: Number.isFinite(r.hp) ? Math.max(0.05, Math.min(1, r.hp)) : 1,
         ok: r.ok ? 1 : 0,
-        vu: Number.isFinite(r.vu) ? Math.max(0, Math.min(999, Math.floor(r.vu))) : 0
+        seenFlags: Number.isFinite(r.seenFlags) ? Math.max(0, Math.min(999, Math.floor(r.seenFlags))) : 0
       };
     });
   }
-  if (p.herit && typeof p.herit === 'object') for (const b in p.herit) if (BY[b] && MV[p.herit[b]]) o.herit[b] = p.herit[b];
-  if (Array.isArray(p.couple)) o.couple = [...new Set(p.couple.filter(id => BY[id]))].slice(0, 2);
+  if (p.inherited && typeof p.inherited === 'object') for (const b in p.inherited) if (BY[b] && MV[p.inherited[b]]) o.inherited[b] = p.inherited[b];
+  if (Array.isArray(p.pair)) o.pair = [...new Set(p.pair.filter(id => BY[id]))].slice(0, 2);
   if (typeof p.tid === 'string' && /^[a-z0-9]{6,12}$/.test(p.tid)) o.tid = p.tid;
-  if (Array.isArray(p.amis)) o.amis = p.amis.map(friendClean416).filter(Boolean).slice(0, 12);
+  if (Array.isArray(p.friends)) o.friends = p.friends.map(friendClean416).filter(Boolean).slice(0, 12);
   if (p.jour && typeof p.jour.d === 'string' && /^\d{4}-\d\d-\d\d$/.test(p.jour.d)) {
     o.jour = { d: p.jour.d, r: ['S', 'A', 'B'].includes(p.jour.r) ? p.jour.r : '', m: Number.isFinite(p.jour.m) ? Math.max(0, Math.min(99, Math.floor(p.jour.m))) : 0 };
   }
@@ -173,7 +174,7 @@ export function extraLine416(k) {
   if (D.roam) {
     const r = roamState416(D.roam),
       it = TALIS[D.roam];
-    return `<div class="v4-rew"><span class="v4-rew-b rm-hp"><i style="width:${Math.round((r.hp || 1) * 100)}%"></i>PV ${Math.round((r.hp || 1) * 100)} %${r.vu ? ` · vu ${r.vu} fois` : ''}</span><span><img src="${ITM(HELD_IMG[it])}" alt="" loading="lazy">${ITEMS2[it].n}</span><span><span class="v4-gemi"><svg><use href="#i-gem"/></svg></span>+12</span></div>`;
+    return `<div class="v4-rew"><span class="v4-rew-b rm-hp"><i style="width:${Math.round((r.hp || 1) * 100)}%"></i>PV ${Math.round((r.hp || 1) * 100)} %${r.seenFlags ? ` · vu ${r.seenFlags} fois` : ''}</span><span><img src="${ITM(HELD_IMG[it])}" alt="" loading="lazy">${ITEMS2[it].n}</span><span><span class="v4-gemi"><svg><use href="#i-gem"/></svg></span>+12</span></div>`;
   }
   return '';
 }
@@ -232,7 +233,7 @@ export function jdTick416(S, r, ev) {
   if (r === 'jonde' && (R === 2 || R === 4)) {
     let n = 0;
     es.forEach(e => {
-      if (e.seg || e.colosse || !hasNx(e)) return;
+      if (e.seg || e.colossus || !hasNx(e)) return;
       const id = nextId(S, e);
       if (!id) return;
       transform(S, e, id, ev);
@@ -252,7 +253,7 @@ export function jdTick416(S, r, ev) {
 
 export function roamState416(id) {
   PROFILE.roam = PROFILE.roam || {};
-  if (!PROFILE.roam[id]) PROFILE.roam[id] = { at: ROAM_H[(ROAM.indexOf(id) * 3 + 2) % ROAM_H.length], hp: 1, ok: 0, vu: 0 };
+  if (!PROFILE.roam[id]) PROFILE.roam[id] = { at: ROAM_H[(ROAM.indexOf(id) * 3 + 2) % ROAM_H.length], hp: 1, ok: 0, seenFlags: 0 };
   return PROFILE.roam[id];
 }
 
@@ -295,7 +296,7 @@ export function roamPlaces416() {
 function roamSetup416(S, ev) {
   const D = SCEN[S.sc] || {},
     u = S.units.find(e => e.side === 'e' && e.id === D.roam);
-  S.lim = D.fuite || 4;
+  S.lim = D.flee || 4;
   if (!u) return;
   const r = roamState416(D.roam);
   if (r.ok) return void say(ev, `${u.n} accepte un combat amical. Il s’enfuira au bout de ${S.lim} manches.`); // already calmed: a rematch, no bounty
@@ -387,7 +388,7 @@ function parents416() {
   if (c.length < 2 || !compatible416List(c[0], c[1])) return null;
   const motherRef = c[0] === 'metamorph' ? c[1] : c[0],
     father = motherRef === c[0] ? c[1] : c[0];
-  return { mere: motherRef, pere: father, meta: c.includes('metamorph') };
+  return { mother: motherRef, father, meta: c.includes('metamorph') };
 }
 
 
@@ -407,23 +408,23 @@ function heritable416(motherRef, father) {
 export function daycare416(rew) {
   const P2 = parents416();
   if (!P2) return false;
-  const { mere: motherRef, pere: father, meta } = P2,
+  const { mother: motherRef, father: father, meta } = P2,
     L = heritable416(motherRef, father),
     mv = L.length ? L[Math.floor(Math.random() * L.length)] : null,
     ch = Math.min(0.75, (1 / 16) * multChroma() * (meta ? 2 : 1)),
     sh = Math.random() < ch;
-  if (mv) PROFILE.herit[motherRef] = mv;
+  if (mv) PROFILE.inherited[motherRef] = mv;
   if (sh && !PROFILE.shiny.includes(motherRef)) PROFILE.shiny.push(motherRef);
   if (!PROFILE.dex.includes(motherRef)) PROFILE.dex.push(motherRef);
   PROFILE.camp.oeuf = 0;
   PROFILE.oeufs = (PROFILE.oeufs || 0) + 1;
-  rew.oeuf416 = { id: motherRef, pere: father, mv, sh };
+  rew.egg416 = { id: motherRef, father, mv, sh };
   return true;
 }
 
 
 export function inheritance416(b) {
-  const k = b && PROFILE.herit && PROFILE.herit[b];
+  const k = b && PROFILE.inherited && PROFILE.inherited[b];
   if (!k || !MV[k]) return '';
   return `<div class="mvc ct-mvc her-mvc"><div class="t"><b>${MV[k].n}</b><span class="chip">Héritée</span></div><p>${MV[k].t} · ${MV[k].p ? 'Puissance ' + MV[k].p + ' · ' : ''}${MV[k].d || ''} Capacité transmise à la Pension.</p></div>`;
 }
@@ -540,8 +541,8 @@ function mapCode416() {
   if (!PROFILE.tid) PROFILE.tid = (Math.random().toString(36).slice(2) + Date.now().toString(36)).replace(/[^a-z0-9]/g, '').slice(0, 10);
   const T = squad.slice(0, 4).map(id => {
     const b = BY[id].base,
-      it = PROFILE.equip[b];
-    return [id, PROFILE.apprises[b] || 0, it && ownedItems().includes(it) ? it : 0, isShinyOwned(b) ? 1 : 0, (PROFILE.herit || {})[b] || 0];
+      it = PROFILE.equipment[b];
+    return [id, PROFILE.learnedTms[b] || 0, it && ownedItems().includes(it) ? it : 0, isShinyOwned(b) ? 1 : 0, (PROFILE.inherited || {})[b] || 0];
   });
   const o = {
     v: 1,
@@ -569,7 +570,7 @@ function readCode416(txt) {
   if (hash416(m[1]) !== m[2]) return { err: 'Ce code est incomplet ou abîmé. Demandez à votre ami de le renvoyer.' };
   try {
     const b = m[1].replace(/-/g, '+').replace(/_/g, '/'),
-      o = JSON.parse(decodeURIComponent(escape(atob(b + '==='.slice((b.length + 3) % 4)))));
+      o = migrateKeys(JSON.parse(decodeURIComponent(escape(atob(b + '==='.slice((b.length + 3) % 4))))));
     const a = friendClean416(o);
     if (!a) return { err: 'Ce code ne contient pas d’équipe utilisable.' };
     return { a };
@@ -584,23 +585,23 @@ function addFriend416(txt) {
   if (r.err) return r.err;
   const a = r.a;
   if (a.id === PROFILE.tid) return 'C’est votre propre carte : partagez-la plutôt à vos amis !';
-  PROFILE.amis = PROFILE.amis || [];
-  const i = PROFILE.amis.findIndex(x => x.id === a.id);
+  PROFILE.friends = PROFILE.friends || [];
+  const i = PROFILE.friends.findIndex(x => x.id === a.id);
   if (i >= 0) {
-    const o = PROFILE.amis[i];
-    PROFILE.amis[i] = Object.assign(a, { w: o.w, l: o.l, dw: o.dw });
+    const o = PROFILE.friends[i];
+    PROFILE.friends[i] = Object.assign(a, { w: o.w, l: o.l, dw: o.dw });
     queueSave();
     return `Carte de ${a.n} mise à jour.`;
   }
-  if (PROFILE.amis.length >= 12) return 'Votre carnet est plein (12 amis). Retirez-en un d’abord.';
-  PROFILE.amis.push(a);
+  if (PROFILE.friends.length >= 12) return 'Votre carnet est plein (12 amis). Retirez-en un d’abord.';
+  PROFILE.friends.push(a);
   queueSave();
   return `${a.n} rejoint vos défis entre amis !`;
 }
 
 
 export function friendBuild416(i) {
-  const A = (PROFILE.amis || [])[i];
+  const A = (PROFILE.friends || [])[i];
   if (!A) return false;
   const s = A.s,
     pw = s.b + s.j + s.e + (s.c ? 2 : 0);
@@ -634,7 +635,7 @@ function friendFight416(i) {
 
 /** Friend challenges on the Home screen (#v4Amis, rendered by src/screens/home/Friends.jsx). */
 export function friendsData416() {
-  const L = PROFILE.amis || [],
+  const L = PROFILE.friends || [],
     selfRef = { n: PROFILE.name || 'Vous', s: monState416(), jr: PROFILE.jour && PROFILE.jour.d === today() ? PROFILE.jour : null, me: true },
     rows = [selfRef, ...L].map(a => Object.assign({ sc: scoreOf416(a.s) }, a)).sort((a, b) => b.sc - a.sc);
   const dayKey = a => (a.jr && a.jr.d === today() ? `✓${a.jr.r ? ' ' + a.jr.r : ''}${a.jr.m ? ' · ' + a.jr.m + ' m.' : ''}` : '—');
@@ -647,10 +648,10 @@ function renderFriendBox() {
   if (FRIEND_MODE === 'carte') {
     paintOverlay('ami', {
       mode: 'carte',
-      nom: PROFILE.name || '',
+      displayName: PROFILE.name || '',
       code: squad.length ? mapCode416() : '',
-      equipe: squad.slice(0, 4).map(id => BY[id].n),
-      partage: !!navigator.share
+      teamNames: squad.slice(0, 4).map(id => BY[id].n),
+      canShare: !!navigator.share
     });
   }
   else if (FRIEND_MODE === 'ajout') paintOverlay('ami', { mode: 'ajout' });
@@ -722,7 +723,7 @@ export const fleeMsg416 = S => {
 /* =====================================================================
    4. The Daycare, as a pair
    ===================================================================== */
-const pair416 = () => (campOk430() ? (PROFILE.couple || []).filter(id => PROFILE.box.includes(id)) : []);
+const pair416 = () => (campOk430() ? (PROFILE.pair || []).filter(id => PROFILE.box.includes(id)) : []);
 
 
 export const inDaycare416 = id => !!(campOk430() && BY[id] && pair416().includes(BY[id].base));
@@ -1006,7 +1007,7 @@ ROAM.forEach(id => {
     n: `${L.n} errant`,
     lvl: `Johto · ${L.title}`,
     lim: 10,
-    fuite: 4,
+    flee: 4,
     time: L.time,
     bio: L.bio,
     at: L.t[0],
@@ -1026,13 +1027,13 @@ ROAM.forEach(id => {
 
 
 /* talisman effects */
-DAMAGE_PROVIDERS.push({ id: 'braisesacree', fournir: (c, { u }) => u.item === 'braisesacree' && u.hp > u.mhp / 2 && { mul: 1.2, libelle: 'Braise Sacrée' } });
+DAMAGE_PROVIDERS.push({ id: 'braisesacree', provide: (c, { u }) => u.item === 'braisesacree' && u.hp > u.mhp / 2 && { mul: 1.2, labelText: 'Braise Sacrée' } });
 
 
-HOOKS.avantFinManche.push((S, ev) => {
+HOOKS.beforeRoundEnd.push((S, ev) => {
   S.units.forEach(u => {
     if (u.ko || u.item !== 'cristalboreal') return;
-    if (u.bru) u.bru = 0;
+    if (u.burn) u.burn = 0;
     if (u.hp < u.mhp) heal(S, u, Math.max(1, Math.round(u.mhp * 0.08)), ev);
   });
 });
@@ -1095,12 +1096,12 @@ SCEN.ami = Object.assign({}, SCEN.gue, { n: 'Défi entre amis', ami: 0 });
 
 /* ---------- hooks: battle creation ---------- */
 HOOKS.combat.push((S, opt, D0) => {
-  if (S.fixe431) return; // fixed-rule battles (v4.31)
+  if (S.fixed431) return; // fixed-rule battles (v4.31)
   D0 = D0 || SCEN[S.sc] || {};
   // inherited move (Daycare)
   S.units.forEach(u => {
     if (u.side !== 'a') return;
-    const k = (PROFILE.herit || {})[u.sp];
+    const k = (PROFILE.inherited || {})[u.sp];
     if (k && MV[k]) {
       u.hm = k;
       if (!u.mv.includes(k)) u.mv.push(k);
@@ -1112,7 +1113,7 @@ HOOKS.combat.push((S, opt, D0) => {
   });
   // a friend's team: its learned moves and its items
   if (D0.ami) {
-    const A = (PROFILE.amis || [])[D0.ami - 1];
+    const A = (PROFILE.friends || [])[D0.ami - 1];
     if (A) {
       A.t.forEach((x, j) => {
         const u = S.units.find(e => e.uid === 'e' + j);
@@ -1135,7 +1136,7 @@ HOOKS.combat.push((S, opt, D0) => {
 
 
 /* ---------- hooks: after the battle ---------- */
-HOOKS.progres.push((S, rew, win) => {
+HOOKS.progress.push((S, rew, win) => {
   const D = SCEN[S.sc] || {},
     o = [0, 0];
   // Daily challenge: your result, for the friends leaderboard
@@ -1152,7 +1153,7 @@ HOOKS.progres.push((S, rew, win) => {
   if (D.roam) {
     const r = roamState416(D.roam),
       u = S.units.find(e => e.side === 'e' && e.id === D.roam);
-    r.vu = (r.vu || 0) + 1;
+    r.seenFlags = (r.seenFlags || 0) + 1;
     if (r.ok) {
       // already calmed: a friendly rematch, no bounty
     } else if (u && u.ko) {
@@ -1182,7 +1183,7 @@ HOOKS.progres.push((S, rew, win) => {
   }
   // friend challenge
   if (D.ami) {
-    const A = (PROFILE.amis || [])[D.ami - 1];
+    const A = (PROFILE.friends || [])[D.ami - 1];
     if (A) {
       if (win) A.w = (A.w || 0) + 1;
       else A.l = (A.l || 0) + 1;
@@ -1198,7 +1199,7 @@ HOOKS.progres.push((S, rew, win) => {
 });
 
 
-HOOKS.resultat.push(r => {
+HOOKS.battleResult.push(r => {
   const o = [];
   if (r.jdis) {
     const T = JDIS[r.jdis - 1];
@@ -1222,10 +1223,10 @@ HOOKS.resultat.push(r => {
       }</span><b>${CROWN416}</b></div></div>`
     );
   }
-  if (r.oeuf416) {
-    const x = r.oeuf416;
+  if (r.egg416) {
+    const x = r.egg416;
     o.push(
-      `<div class="res-l"><h4>Pension</h4><div class="rl${x.sh ? ' shn' : ''}"${x.sh ? ` style="${shinyStyle(x.id)}"` : ''}>${medal(BY[x.id].t)}<span>Un œuf a éclos : un ${BY[x.id].n}${x.sh ? ' <b>chromatique</b>' : ''} !${x.mv ? ` Il hérite de <b>${MV[x.mv].n}</b> grâce à ${BY[x.pere].n}.` : ''}</span><b><img class="res-egg" src="${ITM('oeuf')}" alt=""></b></div></div>`
+      `<div class="res-l"><h4>Pension</h4><div class="rl${x.sh ? ' shn' : ''}"${x.sh ? ` style="${shinyStyle(x.id)}"` : ''}>${medal(BY[x.id].t)}<span>Un œuf a éclos : un ${BY[x.id].n}${x.sh ? ' <b>chromatique</b>' : ''} !${x.mv ? ` Il hérite de <b>${MV[x.mv].n}</b> grâce à ${BY[x.father].n}.` : ''}</span><b><img class="res-egg" src="${ITM('oeuf')}" alt=""></b></div></div>`
     );
   }
   if (r.ami) {
@@ -1243,7 +1244,7 @@ ACHIEVEMENTS.push(
   { id: 'betes', n: 'Trois bêtes', d: 'Apaiser Raikou, Entei et Suicune.', t: 'Ami des bêtes', ok: () => ROAM.every(roamOk416), p: () => [ROAM.filter(roamOk416).length, 3] },
   { id: 'dominant', n: 'Chasseur de Dominants', d: 'Vaincre 3 Pokémon Dominants.', t: 'Chasseur', ok: () => (PROFILE.dom || 0) >= 3, p: () => [Math.min(3, PROFILE.dom || 0), 3] },
   { id: 'eleveur', n: 'Éleveur', d: 'Faire éclore un œuf de couple à la Pension.', t: 'Éleveur', ok: () => (PROFILE.oeufs || 0) >= 1 },
-  { id: 'amis', n: 'Entre amis', d: 'Battre l’équipe d’un ami.', ok: () => (PROFILE.amis || []).some(a => a.w > 0) }
+  { id: 'amis', n: 'Entre amis', d: 'Battre l’équipe d’un ami.', ok: () => (PROFILE.friends || []).some(a => a.w > 0) }
 );
 
 
@@ -1313,8 +1314,8 @@ document.addEventListener('click', e => {
   if (d) {
     const i = +d.dataset.amiDel;
     if (FRIEND_DEL === i) {
-      const A = PROFILE.amis[i];
-      PROFILE.amis.splice(i, 1);
+      const A = PROFILE.friends[i];
+      PROFILE.friends.splice(i, 1);
       FRIEND_DEL = -1;
       queueSave();
       if (A) toast(`${A.n} est retiré de vos défis.`);
@@ -1332,12 +1333,12 @@ document.addEventListener('click', e => {
       $('#pensBox').hidden = false;
     } else if (k === 'x') $('#pensBox').hidden = true;
     else if (k === 'rendre') {
-      PROFILE.couple = [];
+      PROFILE.pair = [];
       toast('Le couple revient au camp.');
       queueSave();
       renderCampBase();
     } else if (k === 'ok' && PENS_SEL.length === 2 && compatible416List(PENS_SEL[0], PENS_SEL[1])) {
-      PROFILE.couple = [...PENS_SEL];
+      PROFILE.pair = [...PENS_SEL];
       __set_squad(squad.filter(s => !PENS_SEL.includes(BY[s].base)));
       $('#pensBox').hidden = true;
       toast(`${BY[PENS_SEL[0]].n} et ${BY[PENS_SEL[1]].n} s’installent à la Pension.`);

@@ -59,7 +59,7 @@ export function idpClean(p) {
   }
   if (Array.isArray(p.exp)) {
     o.exp = p.exp
-      .filter(x => x && BY[x.id] && typeof x.dest === 'string' && Number.isFinite(x.fin) && x.gain && typeof x.gain === 'object')
+      .filter(x => x && BY[x.id] && typeof x.destinationId === 'string' && Number.isFinite(x.fin) && x.gain && typeof x.gain === 'object')
       .slice(0, 3);
   }
   return o;
@@ -110,7 +110,7 @@ function playChord(S, id, u, ev) {
   else if (id === 'floraison') {
     mates.forEach(o => {
       heal(S, o, Math.round(o.mhp * 0.25), ev);
-      o.bru = 0;
+      o.burn = 0;
       o.web = 0;
       o.root = 0;
     });
@@ -126,12 +126,12 @@ function playChord(S, id, u, ev) {
   }
   else if (id === 'eclipse') {
     foes
-      .filter(o => (S.jit ? !o.perdu && !o.badge : o.intent) && !o.done)
+      .filter(o => (S.jit ? !o.isLost && !o.badge : o.intent) && !o.done)
       .sort((a, b) => hdist(a.pos, u.pos) - hdist(b.pos, u.pos))
       .slice(0, 2)
       .forEach(o => {
         o.intent = null;
-        if (S.jit) o.perdu = 1;
+        if (S.jit) o.isLost = 1;
         say(ev, S.jit ? `${o.n} se perd dans l’ombre : il ne jouera pas cette manche.` : `L’attaque de ${o.n} se perd dans l’ombre.`);
       });
   }
@@ -142,17 +142,17 @@ function playChord(S, id, u, ev) {
       t.grass = false;
       t.mark = { k: 'brulant', d: mDur(S, 'brulant'), lv: 1, by: u.uid };
       const o = uAt(S, k);
-      if (o && o.side === 'e' && onGround(o) && !o.t.includes('Feu')) o.bru = Math.max(o.bru, 2);
+      if (o && o.side === 'e' && onGround(o) && !o.t.includes('Feu')) o.burn = Math.max(o.burn, 2);
     }
   }
-  else if (id === 'voltige') S.voix = Math.min(S.vmax + 2, S.voix + 2);
+  else if (id === 'voltige') S.voice = Math.min(S.vmax + 2, S.voice + 2);
   else if (id === 'draco') foes.forEach(o => damage(S, o, 8, ev, { ind: true }));
   else if (id === 'venin') {
     foes
       .filter(o => mates.some(a => hdist(a.pos, o.pos) <= 2))
       .forEach(o => {
         damage(S, o, 4, ev, { ind: true });
-        if (!o.ko && o.tal !== 'regardvif') o.web = Math.max(o.web, 2);
+        if (!o.ko && o.ability !== 'regardvif') o.web = Math.max(o.web, 2);
       });
   }
 }
@@ -184,7 +184,7 @@ export function chipChord(S) {
 /** A family's character: always the same for a given family. */
 function characterOf(id) {
   const I432 = individualOf432(id); // individual nature of your Pokémon (v4.32)
-  if (I432 && CHARACTERS[I432.car]) return I432.car;
+  if (I432 && CHARACTERS[I432.temperament]) return I432.temperament;
   const b = BY[id] ? BY[id].base : id,
     ks = Object.keys(CHARACTERS);
   let h = 7;
@@ -195,11 +195,11 @@ function characterOf(id) {
 
 /** Before an order: does the Pokémon obey? (null: yes; otherwise the events) */
 export function disobeys(S, u) {
-  if (!S.desob || u.side !== 'a' || u.car === 'docile') return null;
-  const p = (u.car === 'tetu' ? 0.12 : 0.04) + (u.fat ? 0.12 : 0);
+  if (!S.disobedience || u.side !== 'a' || u.temperament === 'docile') return null;
+  const p = (u.temperament === 'tetu' ? 0.12 : 0.04) + (u.fat ? 0.12 : 0);
   if (Math.random() >= p) return null;
   const ev = [];
-  say(ev, `${u.n} fait la sourde oreille${u.fat ? ' : il est épuisé' : u.car === 'tetu' ? ' : il est têtu' : ''}.`);
+  say(ev, `${u.n} fait la sourde oreille${u.fat ? ' : il est épuisé' : u.temperament === 'tetu' ? ' : il est têtu' : ''}.`);
   ev.push({ e: 'desob', u: u.uid });
   return ev;
 }
@@ -222,7 +222,7 @@ function buildingBlocked(k) {
 
 function build(k) {
   if (!campOk430() || buildingBlocked(k)) return;
-  const [m, g] = BUILDINGS[k].cout[level(k)];
+  const [m, g] = BUILDINGS[k].upgradeCost[level(k)];
   if (PROFILE.money < m || PROFILE.gems < g) {
     toast('Pas assez de Pokédollars ou d’Éclats.');
     return;
@@ -275,9 +275,9 @@ export function send(id, dest) {
     o: obj.length ? obj[Math.floor(r() * obj.length)] : null,
     q: x
   };
-  PROFILE.exp.push({ id, dest, fin: PROFILE.battles + D.duree, gain: payout, bon });
+  PROFILE.exp.push({ id, destinationId: dest, fin: PROFILE.battles + D.duration, gain: payout, ideal: bon });
   __set_squad(squad.filter(s => BY[s].base !== BY[id].base));
-  toast(`${BY[id].n} part pour ${D.n}${bon ? ' : un terrain qui lui convient' : ''}. Retour dans ${D.duree} combats.`);
+  toast(`${BY[id].n} part pour ${D.n}${bon ? ' : un terrain qui lui convient' : ''}. Retour dans ${D.duration} combats.`);
   save();
   queueSave();
   renderCampBase();
@@ -296,7 +296,7 @@ export function retrieve(i) {
   PROFILE.exp.splice(i, 1);
   sfx('ui');
   toast(
-    `${BY[x.id].n} revient de ${DESTINATIONS[x.dest].n} : ${fmt(x.gain.m)} ₽${x.gain.g ? `, ${x.gain.g} Éclats` : ''}${x.gain.o ? `, ${x.gain.q} × ${SHOP[x.gain.o].n}` : ''}.`
+    `${BY[x.id].n} revient de ${DESTINATIONS[x.destinationId].n} : ${fmt(x.gain.m)} ₽${x.gain.g ? `, ${x.gain.g} Éclats` : ''}${x.gain.o ? `, ${x.gain.q} × ${SHOP[x.gain.o].n}` : ''}.`
   );
   queueSave();
   renderWallet();
@@ -316,7 +316,7 @@ export function renderCampBase() {
 /* expedition window: rendered by React (src/screens/overlays/ExpBox.jsx) */
 export function renderExpBox() {
   const available = PROFILE.box.filter(id => BY[id] && !squad.some(s => BY[s].base === id) && !onExpedition(id) && !isFallen(id));
-  paintOverlay('exp', { dest: EXP_DEST, dispo: available });
+  paintOverlay('exp', { destinationId: EXP_DEST, available });
 }
 
 /* =====================================================================
@@ -349,10 +349,10 @@ export const CHARACTERS = {
 };
 
 
-export const charactersChosen = () => PREF.caracteres !== false && !(SCEN[scSel] && SCEN[scSel].tuto);
+export const charactersChosen = () => PREF.characters !== false && !(SCEN[scSel] && SCEN[scSel].tuto);
 
 
-export const disobedienceChosen = () => !!PREF.desob && isCamp() && !(SCEN[scSel] && SCEN[scSel].tuto);
+export const disobedienceChosen = () => !!PREF.disobedience && isCamp() && !(SCEN[scSel] && SCEN[scSel].tuto);
 
 
 export const level = k => (PROFILE.camp && PROFILE.camp[k]) || 0;
@@ -362,10 +362,10 @@ export const level = k => (PROFILE.camp && PROFILE.camp[k]) || 0;
    4. Expeditions
    ===================================================================== */
 export const DESTINATIONS = {
-  foret: { n: 'Forêt de Jade', types: ['Plante', 'Insecte', 'Vol'], duree: 3, m: [150, 300], g: [0, 1], obj: ['potion', 'poke'] },
-  lac: { n: 'Lac Colère', types: ['Eau', 'Glace', 'Normal'], duree: 4, m: [200, 400], g: [1, 2], obj: ['superpotion', 'super'] },
-  grotte: { n: 'Grotte Sombre', types: ['Roche', 'Sol', 'Acier', 'Combat'], duree: 5, m: [300, 600], g: [2, 4], obj: ['hyper', 'superpotion'] },
-  tour: { n: 'Tour Cendrée', types: ['Feu', 'Spectre', 'Psy', 'Ténèbres', 'Dragon', 'Électrik', 'Poison', 'Fée'], duree: 6, m: [400, 800], g: [3, 6], obj: ['hyper'] }
+  foret: { n: 'Forêt de Jade', types: ['Plante', 'Insecte', 'Vol'], duration: 3, m: [150, 300], g: [0, 1], obj: ['potion', 'poke'] },
+  lac: { n: 'Lac Colère', types: ['Eau', 'Glace', 'Normal'], duration: 4, m: [200, 400], g: [1, 2], obj: ['superpotion', 'super'] },
+  grotte: { n: 'Grotte Sombre', types: ['Roche', 'Sol', 'Acier', 'Combat'], duration: 5, m: [300, 600], g: [2, 4], obj: ['hyper', 'superpotion'] },
+  tour: { n: 'Tour Cendrée', types: ['Feu', 'Spectre', 'Psy', 'Ténèbres', 'Dragon', 'Électrik', 'Poison', 'Fée'], duration: 6, m: [400, 800], g: [3, 6], obj: ['hyper'] }
 };
 
 
@@ -379,12 +379,12 @@ export function __init() {
 
 ROLE_PROVIDERS.push({
   id: 'caractere',
-  fournir: (c, { u, t }) => {
+  provide: (c, { u, t }) => {
     const o = [],
-      a = { brave: 2, prudent: -1, vif: -1, tetu: 3 }[u.car],
-      d = { brave: 1, prudent: -2, fougueux: 1 }[t.car];
-    if (a) o.push({ add: a, libelle: CHARACTERS[u.car][0] });
-    if (d) o.push({ add: d, libelle: CHARACTERS[t.car][0] });
+      a = { brave: 2, prudent: -1, vif: -1, tetu: 3 }[u.temperament],
+      d = { brave: 1, prudent: -2, fougueux: 1 }[t.temperament];
+    if (a) o.push({ add: a, labelText: CHARACTERS[u.temperament][0] });
+    if (d) o.push({ add: d, labelText: CHARACTERS[t.temperament][0] });
     return o;
   }
 });
@@ -397,31 +397,31 @@ BUILDINGS = {
   guet: {
     n: 'Tour de guet',
     d: n => `${n} expédition${n > 1 ? 's' : ''} à la fois.`,
-    cout: [[500, 0], [1500, 5], [3500, 10]],
+    upgradeCost: [[500, 0], [1500, 5], [3500, 10]],
     badges: [0, 2, 4]
   },
   inf: {
     n: 'Infirmerie',
     d: n => `Les Pokémon au repos récupèrent ${n * 10} points de fatigue de plus après chaque combat.`,
-    cout: [[800, 0], [2000, 5], [4000, 12]],
+    upgradeCost: [[800, 0], [2000, 5], [4000, 12]],
     badges: [1, 3, 5]
   },
   ate: {
     n: 'Atelier',
     d: n => `CT et DT ${n * 10} % moins chères en Boutique.`,
-    cout: [[600, 0], [1500, 4], [3000, 10]],
+    upgradeCost: [[600, 0], [1500, 4], [3000, 10]],
     badges: [1, 3, 5]
   },
   dojo: {
     n: 'Dojo',
     d: n => `${n === 1 ? 'Le premier Pokémon' : `Les ${n} premiers Pokémon`} de l’équipe commence${n > 1 ? 'nt' : ''} chaque combat avec 1 point d’Éveil.`,
-    cout: [[1000, 0], [2500, 6], [5000, 14]],
+    upgradeCost: [[1000, 0], [2500, 6], [5000, 14]],
     badges: [2, 4, 6]
   },
   pens: {
     n: 'Pension',
     d: n => `Un œuf tous les ${[8, 6, 4][n - 1]} combats : une famille que vous n’avez pas encore, ou celle du couple que vous y déposez.`, // pair (v4.16)
-    cout: [[1200, 0], [3000, 8], [6000, 16]],
+    upgradeCost: [[1200, 0], [3000, 8], [6000, 16]],
     badges: [2, 4, 6]
   }
 };
@@ -467,19 +467,19 @@ document.addEventListener('click', e => {
 HOOKS.creation.push((S, opt) => {
   if (!opt) return;
   const al = S.units.filter(u => u.side === 'a');
-  if (opt.caracteres) {
-    S.car = true;
+  if (opt.characters) {
+    S.temperament = true;
     al.forEach(u => {
-      u.car = characterOf(u.sp);
-      if (u.car === 'fougueux' && hasNx(u)) u.en = Math.max(u.en, 1);
+      u.temperament = characterOf(u.sp);
+      if (u.temperament === 'fougueux' && hasNx(u)) u.en = Math.max(u.en, 1);
     });
   }
-  if (opt.desob) S.desob = true;
+  if (opt.disobedience) S.disobedience = true;
   if (opt.dojo) al.slice(0, opt.dojo).forEach(u => hasNx(u) && (u.en = Math.max(u.en, 1)));
 });
 
 
-HOOKS.progres.push((S, rew) => {
+HOOKS.progress.push((S, rew) => {
   const D = SCEN[S.sc] || {};
   if (!campOk430() || D.tuto || D.tower) return null;
   // Infirmary: resting Pokémon recover faster
@@ -498,7 +498,7 @@ HOOKS.progres.push((S, rew) => {
     PROFILE.camp.oeuf = (PROFILE.camp.oeuf || 0) + 1;
     if (PROFILE.camp.oeuf >= [8, 6, 4][pe - 1] && !daycare416(rew)) {
       // without a pair: an unknown family (v4.10); with a pair: their egg (v4.16)
-      const pool = MON.filter(m => m.st === 1 && !m.leg && !m.ennemi && m.base === m.id && !PROFILE.box.includes(m.id));
+      const pool = MON.filter(m => m.st === 1 && !m.leg && !m.isEnemy && m.base === m.id && !PROFILE.box.includes(m.id));
       if (pool.length) {
         const m = pool[Math.floor(Math.random() * pool.length)];
         PROFILE.box.push(m.id);
@@ -515,7 +515,7 @@ HOOKS.progres.push((S, rew) => {
 });
 
 
-HOOKS.resultat.push(r => {
+HOOKS.battleResult.push(r => {
   const o = [];
   if (r.oeuf) {
     o.push(`<div class="res-l"><h4>Pension</h4><div class="rl">${medal(BY[r.oeuf].t)}<span>Un œuf a éclos : ${BY[r.oeuf].n} rejoint votre Box !</span><b>🥚</b></div></div>`);

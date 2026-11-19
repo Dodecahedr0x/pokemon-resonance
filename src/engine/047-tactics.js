@@ -50,19 +50,19 @@ export let COLOSSI;
 
 /** "Tactique avancée" setting (Settings). The guided prologue battle stays classic. */
 export function chosenTactic() {
-  return PREF.tactique !== false && !(SCEN[scSel] && SCEN[scSel].tuto);
+  return PREF.tactics !== false && !(SCEN[scSel] && SCEN[scSel].tuto);
 }
 
 
 /** Profile: defeated colossi. Declared functions: called as soon as the game loads. */
 export function TAC0() {
-  return { colosses: [] };
+  return { colossi: [] };
 }
 
 
 export function tacClean(p) {
   const o = TAC0();
-  if (p && Array.isArray(p.colosses)) o.colosses = [...new Set(p.colosses.filter(k => /^co\d$/.test(k)))];
+  if (p && Array.isArray(p.colossi)) o.colossi = [...new Set(p.colossi.filter(k => /^co\d$/.test(k)))];
   return o;
 }
 
@@ -96,7 +96,7 @@ export function trapArrival(S, v, ev) {
   } else if (p.k === 'picots') {
     say(ev, `${n} : ${v.n} marche sur les pointes.`);
     damage(S, v, 5, ev, { ind: true });
-  } else if (v.tal === 'regardvif' || rune413(S, v)) say(ev, `${v.n} ignore la toile.`);
+  } else if (v.ability === 'regardvif' || rune413(S, v)) say(ev, `${v.n} ignore la toile.`);
   else {
     v.web = Math.max(v.web, 2);
     say(ev, `${n} : ${v.n} est englué.`);
@@ -191,7 +191,7 @@ export function unloadCharges(S, ev) {
 
 /* ---------- 3. Control zones and forced stops (called by reach) ---------- */
 function controlZone(S, u, k) {
-  if (!S.tac || flies(u) || u.t.includes('Spectre') || roleOf(u) === 'Éclaireur' || u.colosse || u.seg) return false;
+  if (!S.tac || flies(u) || u.t.includes('Spectre') || roleOf(u) === 'Éclaireur' || u.colossus || u.seg) return false;
   const p = P(k);
   return S.units.some(o => !o.ko && o.side !== u.side && hdist(o.pos, p) === 1);
 }
@@ -234,7 +234,7 @@ function dirToward(a, b) {
 
 
 export function chipWind(S) {
-  if (!S || !S.vivant) return '';
+  if (!S || !S.livingBoard) return '';
   if (!S.vent) return '<span class="chip chip-vent" title="Pas de vent.">Vent calme</span>';
   const a = HC('3,2'),
     b = HC(noWind('3,2', S.vent.d) || '3,2'),
@@ -245,7 +245,7 @@ export function chipWind(S) {
 
 /** Sets up the colossus and its parts next to it (toward the back of the board). */
 function makeColossus(S, u, x, D) {
-  u.colosse = true;
+  u.colossus = true;
   u.boss = true;
   let cur = uk(u);
   x.parts.forEach((displayName, i) => {
@@ -254,7 +254,7 @@ function makeColossus(S, u, x, D) {
       .sort((a, b) => P(b)[0] - P(a)[0] || Math.abs(P(a)[1] - u.pos[1]) - Math.abs(P(b)[1] - u.pos[1]))[0];
     if (!k) return;
     const s = mkUnit(u.id, 'e', P(k), u.uid + 's' + i, Object.assign({}, D, { hb: x.shb, pb: Math.max(0, (x.pb || 0) - 2) }));
-    Object.assign(s, { seg: true, of: u.uid, n: `${displayName} ${de(u.n)}`, mv: ['coupdequeue'], tal: null, ferm: false });
+    Object.assign(s, { seg: true, of: u.uid, n: `${displayName} ${de(u.n)}`, mv: ['coupdequeue'], ability: null, sturdy: false });
     S.units.push(s);
     cur = k;
   });
@@ -271,7 +271,7 @@ export function colossusKO(S, v, ev) {
     S.stats.parts = (S.stats.parts || 0) + 1; // achievement (v4.9)
     damage(S, b, Math.round(b.mhp * 0.12), ev, { ind: true });
     if (!b.ko) stun(S, b, 'PAR', ev, true);
-  } else if (v.colosse) {
+  } else if (v.colossus) {
     S.units.forEach(s => {
       if (s.seg && s.of === v.uid && !s.ko) {
         s.hp = 0;
@@ -420,7 +420,7 @@ MV.lancesoleil.charge = 'soleil';
 MV.lancesoleil.d = 'Ligne de 3. ×1,5 sous le Soleil. Tactique avancée : part en fin de manche (×1,3), tout de suite sous le Soleil.';
 
 
-HOOKS.avantFinManche.push((S, ev) => {
+HOOKS.beforeRoundEnd.push((S, ev) => {
   unloadCharges(S, ev);
   // trap wear
   for (const k in S.tiles) {
@@ -435,11 +435,11 @@ HOOKS.avantFinManche.push((S, ev) => {
 
 DAMAGE_PROVIDERS.push({
   id: 'vent',
-  fournir: (c, { S, u, t, typ }) => {
+  provide: (c, { S, u, t, typ }) => {
     if (!S.vent || typ !== 'Vol' || !u.pos || !t.pos) return null;
     const d = dirToward(u.pos, t.pos);
-    if (d === S.vent.d) return { mul: 1.2, libelle: 'Vent arrière' };
-    if (d === (S.vent.d + 3) % 6) return { mul: 0.85, libelle: 'Vent de face' };
+    if (d === S.vent.d) return { mul: 1.2, labelText: 'Vent arrière' };
+    if (d === (S.vent.d + 3) % 6) return { mul: 0.85, labelText: 'Vent de face' };
     return null;
   }
 });
@@ -532,7 +532,7 @@ COLOSSI.forEach(C => {
     lim: C.lim,
     time: C.time,
     bio: C.bio,
-    colosse: C.id,
+    colossus: C.id,
     badges: C.badges,
     style: 'boss',
     at: C.at,
@@ -542,7 +542,7 @@ COLOSSI.forEach(C => {
     pb: Math.max(0, C.pb - 2),
     lv: C.lv,
     d: C.d,
-    foes: [[C.id, [5, 2], { boss: true, colosse: true, hb: C.hb, pb: C.pb, mv: C.mv, parts: C.parts, shb: C.shb }], ...C.escort]
+    foes: [[C.id, [5, 2], { boss: true, colossus: true, hb: C.hb, pb: C.pb, mv: C.mv, parts: C.parts, shb: C.shb }], ...C.escort]
   };
   OBST[C.k] = {};
 });
@@ -550,41 +550,41 @@ COLOSSI.forEach(C => {
 
 ROLE_PROVIDERS.push({
   id: 'carapace',
-  fournir: (c, { S, t }) => {
-    if (!t.colosse) return null;
+  provide: (c, { S, t }) => {
+    if (!t.colossus) return null;
     const n = intactGames(S, t);
-    return n ? { add: -3 * n, libelle: 'Carapace' } : null;
+    return n ? { add: -3 * n, labelText: 'Carapace' } : null;
   }
 });
 
 
 /* ---------- hooks into the battle ---------- */
 HOOKS.creation.push((S, opt, D0) => {
-  if (opt && opt.tactique) S.tac = true;
+  if (opt && opt.tactics) S.tac = true;
   (D0.foes || []).forEach(([, , x], i) => {
     const u = byUid(S, 'e' + i);
     if (!u || !x) return;
     if (x.mv) u.mv = x.mv.filter(m => MV[m]);
-    if (x.colosse) makeColossus(S, u, x, D0);
+    if (x.colossus) makeColossus(S, u, x, D0);
   });
 });
 
 
-HOOKS.progres.push((S, rew, win) => {
+HOOKS.progress.push((S, rew, win) => {
   const C = colossusOf(S.sc);
   if (!C || !win) return null;
-  PROFILE.colosses = PROFILE.colosses || [];
-  if (PROFILE.colosses.includes(C.k)) return null;
-  PROFILE.colosses.push(C.k);
-  rew.colosse = C.k;
+  PROFILE.colossi = PROFILE.colossi || [];
+  if (PROFILE.colossi.includes(C.k)) return null;
+  PROFILE.colossi.push(C.k);
+  rew.colossus = C.k;
   return C.rew;
 });
 
 
-HOOKS.resultat.push(r => {
-  if (!r.colosse) return '';
-  const C = colossusOf(r.colosse);
-  return `<div class="res-l"><h4>Colosse</h4><div class="rl">${medal(BY[C.id].t)}<span>${C.n} terrassé · ${PROFILE.colosses.length} / ${COLOSSI.length} colosses</span><b>★</b></div></div>`;
+HOOKS.battleResult.push(r => {
+  if (!r.colossus) return '';
+  const C = colossusOf(r.colossus);
+  return `<div class="res-l"><h4>Colosse</h4><div class="rl">${medal(BY[C.id].t)}<span>${C.n} terrassé · ${PROFILE.colossi.length} / ${COLOSSI.length} colosses</span><b>★</b></div></div>`;
 });
 
 
@@ -601,7 +601,7 @@ HOOKS.resultat.push(r => {
     n: `${M.num} · ${m.n}`,
     sn: M.num,
     d: `${m.t} · ${m.p ? 'Puissance ' + m.p + ' · ' : ''}${m.d}${M.cs ? ' Réutilisable.' : ' Usage unique.'}`,
-    cat: 'machines',
+    category: 'machines',
     mv: M.mv,
     cs: !!M.cs,
     ...(M.g ? { g: M.g } : { p: M.p })

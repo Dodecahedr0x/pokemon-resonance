@@ -99,7 +99,7 @@ export function ricoTgt(S, u, k) {
 /* --- damage: roles, synergies, cover, ricochet, sand --- */
 export function dmgRolesField(S, u, m, t, typ, d) {
   // roles, synergies, sand, interception, cover: supplied to the tactical engine pipeline (v4.5-01)
-  const r = MT.combinerModificateurs(0, MT.collecter(ROLE_PROVIDERS, 'degats', { S, u, m, t, typ }, 'attaquant'));
+  const r = MT.combineModifiers(0, MT.collect(ROLE_PROVIDERS, 'degats', { S, u, m, t, typ }, 'attaquant'));
   return Math.max(1, Math.round(d * r.mul) + r.add);
 }
 
@@ -114,7 +114,7 @@ function guardOf(S, v) {
           x !== v &&
           x.side === v.side &&
           !x.seg &&
-          !x.colosse &&
+          !x.colossus &&
           !v.seg && // a colossus and its parts do not step in (v4.8)
           roleOf(x) === 'Rempart' &&
           !x.gdu &&
@@ -286,7 +286,7 @@ export const OBST = {
 export const roleOf = u => (BY[u.id] || {}).r;
 
 
-export const STATUSED = t => ['PAR', 'GEL', 'SOM'].includes(t.badge) || t.root > 0 || t.web > 0 || t.bru > 0;
+export const STATUSED = t => ['PAR', 'GEL', 'SOM'].includes(t.badge) || t.root > 0 || t.web > 0 || t.burn > 0;
 
 
 export const SANDOK = u => flies(u) || u.t.some(t => t === 'Sol' || t === 'Roche' || t === 'Acier');

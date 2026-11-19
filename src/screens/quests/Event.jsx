@@ -11,7 +11,7 @@ function Weekly() {
   const H = weeklyBuild429(),
     D = SCEN.hebdo429,
     h = PROFILE.hebdo429 && PROFILE.hebdo429.w === H.w ? PROFILE.hebdo429 : null,
-    friends = (PROFILE.amis || []).filter(a => a.wk && a.wk.w === H.w).map(a => ({ n: a.n, s: a.wk.s })),
+    friends = (PROFILE.friends || []).filter(a => a.wk && a.wk.w === H.w).map(a => ({ n: a.n, s: a.wk.s })),
     rows = [...(h ? [{ n: (PROFILE.name || 'Vous') + ' (vous)', s: h.best, me: 1 }] : []), ...friends].sort((a, b) => b.s - a.s);
   return (
     <article className="hb429 v4-panel">

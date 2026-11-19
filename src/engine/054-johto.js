@@ -97,7 +97,7 @@ export function jSetup415(S, r, ev) {
   }
   if (r === 'jnormal') say(ev, 'Arène Normal : le troupeau récupère 6 % de ses PV en fin de manche.');
   if (r === 'jspectre') {
-    S.cyc = { ph: 'nuit', n: 0, fige: true };
+    S.cycle = { ph: 'nuit', n: 0, frozen: true };
     say(ev, 'Arène Spectre : nuit éternelle. Le premier adversaire vaincu reviendra.');
   }
   if (r === 'jcombat') say(ev, 'Arène Combat : au contact, les adversaires deviennent Renforcés.');
@@ -142,7 +142,7 @@ export function jTick415(S, r, ev) {
       if (!e.ko || S.revenant || e.caught || e.seg) return; // only one revenant per battle
       const x = uAt(S, uk(e)) ? nbrK(uk(e)).find(y => S.tiles[y] && !S.tiles[y].rock && !uAt(S, y)) : uk(e);
       if (!x) return;
-      e.revenu = 1;
+      e.returned = 1;
       S.revenant = e.uid;
       Object.assign(e, { ko: false, hp: Math.max(1, Math.round(e.mhp * 0.3)), pos: P(x), badge: null, skip: 0, notes: null, intent: null });
       ev.push({ e: 'mv', u: e.uid }, { e: 'heal', u: e.uid, v: e.hp });
@@ -443,16 +443,16 @@ export function __init() {
 Object.assign(TARGET412, {
   toxweb(S, u, v, x, mk, ev) {
     applyPoison(S, v, ev);
-    if (v.tal === 'regardvif' || rune413(S, v)) return;
+    if (v.ability === 'regardvif' || rune413(S, v)) return;
     v.web = Math.max(v.web, 2);
     say(ev, `${v.n} est englué.`);
   },
   affaiblit(S, u, v, x, mk, ev) {
-    v.affaibli = Math.max(v.affaibli || 0, 2);
+    v.weakened = Math.max(v.weakened || 0, 2);
     say(ev, `${v.n} est intimidé : −3 dégâts pendant 2 manches.`);
   },
   bourbier(S, u, v, _x, _mk, _ev) {
-    if (v.tal === 'regardvif' || rune413(S, v)) return;
+    if (v.ability === 'regardvif' || rune413(S, v)) return;
     v.web = Math.max(v.web, 2);
   }
 });
@@ -470,8 +470,8 @@ Object.assign(SELF412, {
 
 
 DAMAGE_PROVIDERS.push(
-  { id: 'nocturne', fournir: (c, { S, u }) => u.tal === 'nocturne' && S && hourOf(S) === 'nuit' && { mul: 1.25, libelle: 'Nocturne' } },
-  { id: 'forcepure', fournir: (c, { u, m }) => u.tal === 'forcepure' && m.r === 1 && m.p > 0 && { mul: 1.3, libelle: 'Force Pure' } }
+  { id: 'nocturne', provide: (c, { S, u }) => u.ability === 'nocturne' && S && hourOf(S) === 'nuit' && { mul: 1.25, labelText: 'Nocturne' } },
+  { id: 'forcepure', provide: (c, { u, m }) => u.ability === 'forcepure' && m.r === 1 && m.p > 0 && { mul: 1.3, labelText: 'Force Pure' } }
 );
 
 
@@ -490,9 +490,9 @@ SHOP.charme = {
   sn: 'Charme',
   d: 'Objet clé : dans les hautes herbes, les Pokémon chromatiques apparaissent trois fois plus souvent. Un seul suffit.',
   g: 25,
-  cat: 'rares',
+  category: 'rares',
   img: 'shiny-charm',
-  cle: 1
+  keyItem: 1
 };
 
 
@@ -547,7 +547,7 @@ SCEN.jlac = {
 };
 
 
-HOOKS.progres.push((S, rew, win) => {
+HOOKS.progress.push((S, rew, win) => {
   const D = SCEN[S.sc] || {};
   if (!win || !isCamp()) return null;
   if (D.lac) PROFILE.lac = 1;
@@ -574,7 +574,7 @@ HOOKS.progres.push((S, rew, win) => {
 });
 
 
-HOOKS.resultat.push(r => {
+HOOKS.battleResult.push(r => {
   const j = r.jbadge;
   if (!j) return '';
   const it = j.item ? ` · ${ITEMS2[j.item].n} rejoint votre Sac` : '';

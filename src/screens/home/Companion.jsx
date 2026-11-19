@@ -30,7 +30,7 @@ function Empty() {
 }
 
 function Sheet({ d }) {
-  const { m, h, pr, caresse: petting, hum, sh, bonus } = d,
+  const { m, h, pr, petting: petting, mood: hum, sh, bonus } = d,
     x = cp461Data();
   return (
     <>
@@ -57,7 +57,7 @@ function Sheet({ d }) {
         <div className="cp461">
           <button type="button" className="b b-sm" data-cp461="baie" disabled={!!(x.feed || !x.baie)}>{x.feed ? 'Baie offerte ✓' : x.baie ? 'Offrir une Baie' : 'Pas de Baie'}</button>
           <button type="button" className={'b b-sm' + (x.h >= 3 && !x.gift ? ' b-gold' : ' b-ghost')} data-cp461="cadeau" disabled={!(x.h >= 3 && !x.gift)}>{x.h < 3 ? 'Cadeau à 3 ♥' : x.gift ? 'Cadeau reçu ✓' : 'Cadeau du jour'}</button>
-          <button type="button" className={'b b-sm' + (x.nouv ? ' b-gold' : ' b-ghost')} data-cp461="souv" disabled={!x.h}>Souvenirs{x.nouv ? ' · nouveau' : ''}</button>
+          <button type="button" className={'b b-sm' + (x.isNew ? ' b-gold' : ' b-ghost')} data-cp461="souv" disabled={!x.h}>Souvenirs{x.isNew ? ' · nouveau' : ''}</button>
         </div>
       )}
     </>

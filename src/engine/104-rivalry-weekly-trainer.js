@@ -20,7 +20,7 @@ export function __init() {
 
 (() => {
   const KEY = 'res-x2470';
-  const DEF = () => ({ rival: [], wk: { k: '', done: false, best: 0 }, rel: [], inv: { d: '', done: false }, ct: { d: '', n: 0, best: 0 } });
+  const DEF = () => ({ rival: [], wk: { k: '', done: false, best: 0 }, relics: [], inv: { d: '', done: false }, ct: { d: '', n: 0, best: 0 } });
   const readValue = () => {
     try {
       return Object.assign(DEF(), JSON.parse(localStorage.getItem(KEY)));
@@ -46,7 +46,7 @@ export function __init() {
 
   /* ---- 3. Trainer of the week ---- */
   const NAMES = ['Léa Ferrand', 'Marc Dalbert', 'Inès Montarbre', 'Tom Lacrête', 'Sana Verdier', 'Hugo Brisemare'];
-  const pool = () => ok(DEXS.map(m => m.id)).filter(id => BY[id] && !BY[id].ennemi);
+  const pool = () => ok(DEXS.map(m => m.id)).filter(id => BY[id] && !BY[id].isEnemy);
   const weekDef = () => {
     const h = hash(week());
     const p = pool();
@@ -71,7 +71,7 @@ export function __init() {
 
 
   /* ---- Rewards and tracking (progression) ---- */
-  HOOKS.progres.unshift((S, rew, win) => {
+  HOOKS.progress.unshift((S, rew, win) => {
     try {
       const k = S.sc || '';
       const X = readValue();
@@ -105,7 +105,7 @@ export function __init() {
         g += 2;
       }
       // 4. Showcase: three or more relics give a Shard per victory
-      if (X.rel.length >= 3 && win) g += 1;
+      if (X.relics.length >= 3 && win) g += 1;
       write(X);
       return m || g ? [m, g] : null;
     } catch (e) {
@@ -121,8 +121,8 @@ export function __init() {
       if (!b) return;
       const id = b.dataset.br466.slice(4);
       const X = readValue();
-      if (!X.rel.includes(id)) {
-        X.rel.push(id);
+      if (!X.relics.includes(id)) {
+        X.relics.push(id);
         write(X);
       }
     },
@@ -165,20 +165,20 @@ export function __init() {
       w = weatherKind(),
       isFinished = X.wk.k === week() && X.wk.done,
       dayInv = X.inv.d === dateDay() && X.inv.done,
-      storyFinished = (window.__ombre470 && window.__ombre470.lire().etape >= 4),
-      showcase = RELIC466.map(r => ({ r, on: X.rel.includes(r.id) })),
+      storyFinished = (window.__shadow470 && window.__shadow470.readValue().stepOf >= 4),
+      showcase = RELIC466.map(r => ({ r, on: X.relics.includes(r.id) })),
       nb = showcase.filter(v => v.on).length;
     // rendered: src/screens/overlays/transients/Windows.jsx (X2470)
     const o = overlay('x2470o', {
-      lignes: (X.rival.length ? X.rival : ['Kael : « Je reviendrai, dresseur. »']).slice(-2),
+      lines: (X.rival.length ? X.rival : ['Kael : « Je reviendrai, dresseur. »']).slice(-2),
       meteo: WEATHER_NAME[w] || 'Temps calme',
       bonus: w === 'pluie' || w === 'sable' || w === 'grele' ? 'le défi quotidien rapporte +1 Éclat' : w === 'soleil' ? 'le défi quotidien rapporte +200 ₽' : 'aucun bonus aujourd’hui',
       fini: !!isFinished,
       wn: W.n,
       nb,
-      vitrine: showcase.map(v => ({ on: v.on, n: v.r.n, d: v.r.d })),
-      histoireFinie: !!storyFinished,
-      jourInv: !!dayInv,
+      showcase: showcase.map(v => ({ on: v.on, n: v.r.n, d: v.r.d })),
+      storyDone: !!storyFinished,
+      dayInv: !!dayInv,
       ctBest: X.ct.best,
       ctRest: 3 - (X.ct.d === dateDay() ? X.ct.n : 0)
     });
@@ -218,6 +218,6 @@ export function __init() {
 
   /* "Plus de défis" (More challenges) button under the Challenges bar on the Home screen */
   /* the #x2470 button is rendered by React (src/screens/home/Banners.jsx) */
-  window.__x2470 = { lire: readValue, ecrire: write, hub, semaineDef: weekDef, wkMake };
+  window.__x2470 = { readValue, write, hub, weekDef, wkMake };
 })();
 }

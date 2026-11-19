@@ -21,7 +21,7 @@ export default function TdrBox() {
 function Choice({ cands, pick }) {
   const n = pick.length;
   return (
-    <Dialogue className="sv-card st-card tdr-card" titre="tdrT" fermer={{ 'data-tdr': 'x' }}>
+    <Dialogue className="sv-card st-card tdr-card" titre="tdrT" closeAttrs={{ 'data-tdr': 'x' }}>
       <p className="kick">Après-jeu</p>
       <h2 className="h2" id="tdrT">Tour de Résonance</h2>
       <p className="d">Choisissez 4 Pokémon pour cette ascension. Pas de budget ici : à vous de trouver les bonnes synergies.</p>

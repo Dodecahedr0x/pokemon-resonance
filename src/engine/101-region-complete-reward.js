@@ -26,9 +26,9 @@ export function __init() {
     writeLS(KEY, a);
   };
   const REGIONS470 = [
-    { g: 1, nom: 'Kanto' },
-    { g: 2, nom: 'Johto' },
-    { g: 3, nom: 'Hoenn' },
+    { g: 1, displayName: 'Kanto' },
+    { g: 2, displayName: 'Johto' },
+    { g: 3, displayName: 'Hoenn' },
   ];
   const complete470 = g => {
     const ms = DEXS.filter(m => m.gen === g);
@@ -44,15 +44,15 @@ export function __init() {
       change = true;
       PROFILE.money += 3000;
       PROFILE.gems = (PROFILE.gems || 0) + 10;
-      toast(`Pokédex de ${r.nom} complet : 3 000 ₽ et 10 Éclats !`);
-      announce430('🏆', 'Pokédex complet', `${r.nom} est entièrement capturé.`);
+      toast(`Pokédex de ${r.displayName} complet : 3 000 ₽ et 10 Éclats !`);
+      announce430('🏆', 'Pokédex complet', `${r.displayName} est entièrement capturé.`);
     });
     if (change) {
       write470(already);
       save();
     }
   };
-  HOOKS.rendu.push(verify470);
-  window.__pdx470 = { verifier: verify470, lire: read470, P: () => PROFILE, dex: () => DEXS, ownedFam, renderAll };
+  HOOKS.rendered.push(verify470);
+  window.__pdx470 = { verify: verify470, readValue: read470, P: () => PROFILE, dex: () => DEXS, ownedFam, renderAll };
 })();
 }

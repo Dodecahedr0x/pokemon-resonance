@@ -51,7 +51,7 @@ export default function Hero({ on }) {
         >
           <span className="hv428-sol" />
           <img src={ART(m.no)} alt="" decoding="async" />
-          <span className="hv428-n">{V.comp ? `${m.n} ${'♥'.repeat(Math.max(1, V.coeurs))}` : 'Un compagnon ?'}</span>
+          <span className="hv428-n">{V.comp ? `${m.n} ${'♥'.repeat(Math.max(1, V.hearts))}` : 'Un compagnon ?'}</span>
         </button>
       )}
       <div className="v4h-body">

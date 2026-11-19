@@ -30,7 +30,7 @@ import { PkBackground } from '../screens/overlays/Effects.jsx';
 import Guard from './Guard.jsx';
 
 // Logo (sidebar, header); `children`: additions after the name (header indicators).
-function Logo({ taille: size, children }) {
+function Logo({ sizeValue: size, children }) {
   return <a className="logo" href="#accueil"><span className="lg-ic"><svg width={size} height={size}><use href="#i-logo" /></svg></span><span><small>Pokémon</small><b>Résonance</b></span>{children}</a>;
 }
 
@@ -43,7 +43,7 @@ export default function Shell() {
       <div className="ambient" aria-hidden="true" />
       <div className="app">
         <aside className="side" aria-label="Navigation principale">
-          <Logo taille={30} />
+          <Logo sizeValue={30} />
           <Guard><SideNav /></Guard>
           <Guard><SideObjective /></Guard>
           <Guard><SideTeam /></Guard>
@@ -51,7 +51,7 @@ export default function Shell() {
         </aside>
         <div className="main">
           <header className="topbar"><div className="topbar-in">
-              <Logo taille={24}><span className="pk-leds" aria-hidden="true"><i /><i /><i /></span></Logo>
+              <Logo sizeValue={24}><span className="pk-leds" aria-hidden="true"><i /><i /><i /></span></Logo>
               <Guard><TbSec /></Guard>
               <Guard><TbSave /></Guard>
               <Guard><TbTeam /></Guard>

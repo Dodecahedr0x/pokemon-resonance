@@ -53,28 +53,28 @@ export function __init() {
 
   /* ---------- the floors ---------- */
   const KIND = {
-    prairie: { tex: 'grass', c: [[56, 110, 50], [84, 144, 62], [124, 178, 84]], side: '#3b2a1a', around: 'nature', deco: ['fleur', 'touffe', 'caillou', 'touffe'], part: 'feuille', water: 'riviere' },
-    jardin: { tex: 'grass', c: [[46, 118, 56], [76, 156, 68], [130, 198, 98]], side: '#36281a', around: 'nature', deco: ['fleur', 'fleur', 'touffe', 'buisson'], part: 'petale', water: 'riviere' },
-    foret: { tex: 'leaves', c: [[66, 78, 38], [96, 108, 50], [140, 126, 64]], side: '#2c2214', around: 'nature', deco: ['feuille', 'champi', 'touffe'], part: 'feuille', water: 'riviere' },
-    fee: { tex: 'grass', c: [[104, 146, 92], [146, 182, 120], [210, 172, 204]], side: '#48304a', around: 'nature', deco: ['fleur', 'fleur', 'champi'], part: 'petale', water: 'riviere' },
-    crepuscule: { tex: 'grass', c: [[56, 58, 90], [80, 80, 118], [118, 108, 150]], side: '#221a30', around: 'nature', deco: ['touffe', 'fleur'], part: 'luciole', water: 'nuit' },
-    carriere: { tex: 'dirt', c: [[104, 80, 56], [138, 108, 74], [176, 146, 104]], side: '#352616', around: 'roc', deco: ['caillou', 'caillou', 'fissure'], part: 'poussiere', water: 'boue' },
-    desert: { tex: 'sand', c: [[186, 148, 94], [212, 180, 122], [236, 212, 160]], side: '#6a4a28', around: 'desert', deco: ['caillou', 'os'], part: 'poussiere', water: 'oasis' },
-    neige: { tex: 'snow', c: [[172, 196, 218], [208, 224, 238], [244, 250, 255]], side: '#55697f', around: 'neige', deco: ['givre', 'cristal'], part: 'neige', water: 'glace' },
-    braise: { tex: 'basalt', c: [[38, 28, 28], [62, 44, 40], [92, 66, 56]], side: '#120a08', around: 'volcan', deco: ['braise', 'fissure'], part: 'braise', water: 'nuit' },
-    tour: { tex: 'slab', c: [[52, 48, 64], [72, 66, 86], [100, 94, 116]], side: '#18141f', around: 'ruine', deco: ['mousse', 'fissure', 'bougie'], part: 'ame', water: 'nuit' },
-    dragon: { tex: 'slab', c: [[64, 58, 56], [90, 82, 76], [124, 114, 104]], side: '#201a18', around: 'ruine', deco: ['fissure', 'mousse'], part: 'poussiere', water: 'riviere' },
-    tenebres: { tex: 'slab', c: [[32, 30, 38], [48, 44, 56], [70, 64, 80]], side: '#0d0b11', around: 'ruine', deco: ['fissure'], part: 'ame', water: 'nuit' },
-    ligue: { tex: 'marble', c: [[178, 174, 166], [206, 202, 194], [234, 232, 226]], side: '#4e4636', around: 'stade', deco: ['dore'], part: 'paillette', water: 'bassin' },
-    stade: { tex: 'clay', c: [[160, 104, 68], [186, 126, 86], [208, 150, 106]], side: '#552f1c', around: 'stade', deco: [], part: 'poussiere', water: 'bassin' },
-    acier: { tex: 'metal', c: [[92, 104, 120], [120, 132, 148], [156, 168, 182]], side: '#283038', around: 'stade', deco: ['rivet'], part: 'etincelle', water: 'bassin' },
-    electrik: { tex: 'metal', c: [[66, 72, 86], [92, 98, 112], [128, 134, 146]], side: '#20242c', around: 'stade', deco: ['rivet', 'danger'], part: 'etincelle', water: 'bassin' },
-    eau: { tex: 'wet', c: [[82, 96, 104], [110, 124, 130], [148, 160, 164]], side: '#26343c', around: 'stade', deco: ['flaque'], part: 'bulle', water: 'bassin' },
-    marais: { tex: 'marsh', c: [[50, 60, 50], [72, 78, 64], [100, 96, 88]], side: '#1a1a16', around: 'nature', deco: ['flaquePsn', 'touffe'], part: 'bullePsn', water: 'poison' },
-    psy: { tex: 'tiles', c: [[88, 68, 116], [114, 92, 146], [148, 126, 182]], side: '#2a1e3e', around: 'stade', deco: ['rune'], part: 'paillette', water: 'bassin' },
-    cristal: { tex: 'tiles', c: [[76, 70, 126], [104, 96, 160], [148, 138, 204]], side: '#201c3e', around: 'stade', deco: ['cristal'], part: 'paillette', water: 'bassin' },
-    dojo: { tex: 'wood', c: [[132, 90, 52], [162, 118, 72], [194, 148, 98]], side: '#3c2612', around: 'stade', deco: [], part: 'poussiere', water: 'bassin' },
-    ciel: { tex: 'marble', c: [[184, 200, 216], [210, 222, 236], [240, 246, 252]], side: '#62748a', around: 'ciel', deco: ['nuage'], part: 'plume', water: 'riviere' }
+    prairie: { tex: 'grass', c: [[56, 110, 50], [84, 144, 62], [124, 178, 84]], side: '#3b2a1a', around: 'nature', decor: ['fleur', 'touffe', 'caillou', 'touffe'], part: 'feuille', water: 'riviere' },
+    jardin: { tex: 'grass', c: [[46, 118, 56], [76, 156, 68], [130, 198, 98]], side: '#36281a', around: 'nature', decor: ['fleur', 'fleur', 'touffe', 'buisson'], part: 'petale', water: 'riviere' },
+    foret: { tex: 'leaves', c: [[66, 78, 38], [96, 108, 50], [140, 126, 64]], side: '#2c2214', around: 'nature', decor: ['feuille', 'champi', 'touffe'], part: 'feuille', water: 'riviere' },
+    fee: { tex: 'grass', c: [[104, 146, 92], [146, 182, 120], [210, 172, 204]], side: '#48304a', around: 'nature', decor: ['fleur', 'fleur', 'champi'], part: 'petale', water: 'riviere' },
+    crepuscule: { tex: 'grass', c: [[56, 58, 90], [80, 80, 118], [118, 108, 150]], side: '#221a30', around: 'nature', decor: ['touffe', 'fleur'], part: 'luciole', water: 'nuit' },
+    carriere: { tex: 'dirt', c: [[104, 80, 56], [138, 108, 74], [176, 146, 104]], side: '#352616', around: 'roc', decor: ['caillou', 'caillou', 'fissure'], part: 'poussiere', water: 'boue' },
+    desert: { tex: 'sand', c: [[186, 148, 94], [212, 180, 122], [236, 212, 160]], side: '#6a4a28', around: 'desert', decor: ['caillou', 'os'], part: 'poussiere', water: 'oasis' },
+    neige: { tex: 'snow', c: [[172, 196, 218], [208, 224, 238], [244, 250, 255]], side: '#55697f', around: 'neige', decor: ['givre', 'cristal'], part: 'neige', water: 'glace' },
+    braise: { tex: 'basalt', c: [[38, 28, 28], [62, 44, 40], [92, 66, 56]], side: '#120a08', around: 'volcan', decor: ['braise', 'fissure'], part: 'braise', water: 'nuit' },
+    tour: { tex: 'slab', c: [[52, 48, 64], [72, 66, 86], [100, 94, 116]], side: '#18141f', around: 'ruine', decor: ['mousse', 'fissure', 'bougie'], part: 'ame', water: 'nuit' },
+    dragon: { tex: 'slab', c: [[64, 58, 56], [90, 82, 76], [124, 114, 104]], side: '#201a18', around: 'ruine', decor: ['fissure', 'mousse'], part: 'poussiere', water: 'riviere' },
+    tenebres: { tex: 'slab', c: [[32, 30, 38], [48, 44, 56], [70, 64, 80]], side: '#0d0b11', around: 'ruine', decor: ['fissure'], part: 'ame', water: 'nuit' },
+    ligue: { tex: 'marble', c: [[178, 174, 166], [206, 202, 194], [234, 232, 226]], side: '#4e4636', around: 'stade', decor: ['dore'], part: 'paillette', water: 'bassin' },
+    stade: { tex: 'clay', c: [[160, 104, 68], [186, 126, 86], [208, 150, 106]], side: '#552f1c', around: 'stade', decor: [], part: 'poussiere', water: 'bassin' },
+    acier: { tex: 'metal', c: [[92, 104, 120], [120, 132, 148], [156, 168, 182]], side: '#283038', around: 'stade', decor: ['rivet'], part: 'etincelle', water: 'bassin' },
+    electrik: { tex: 'metal', c: [[66, 72, 86], [92, 98, 112], [128, 134, 146]], side: '#20242c', around: 'stade', decor: ['rivet', 'danger'], part: 'etincelle', water: 'bassin' },
+    eau: { tex: 'wet', c: [[82, 96, 104], [110, 124, 130], [148, 160, 164]], side: '#26343c', around: 'stade', decor: ['flaque'], part: 'bulle', water: 'bassin' },
+    marais: { tex: 'marsh', c: [[50, 60, 50], [72, 78, 64], [100, 96, 88]], side: '#1a1a16', around: 'nature', decor: ['flaquePsn', 'touffe'], part: 'bullePsn', water: 'poison' },
+    psy: { tex: 'tiles', c: [[88, 68, 116], [114, 92, 146], [148, 126, 182]], side: '#2a1e3e', around: 'stade', decor: ['rune'], part: 'paillette', water: 'bassin' },
+    cristal: { tex: 'tiles', c: [[76, 70, 126], [104, 96, 160], [148, 138, 204]], side: '#201c3e', around: 'stade', decor: ['cristal'], part: 'paillette', water: 'bassin' },
+    dojo: { tex: 'wood', c: [[132, 90, 52], [162, 118, 72], [194, 148, 98]], side: '#3c2612', around: 'stade', decor: [], part: 'poussiere', water: 'bassin' },
+    ciel: { tex: 'marble', c: [[184, 200, 216], [210, 222, 236], [240, 246, 252]], side: '#62748a', around: 'ciel', decor: ['nuage'], part: 'plume', water: 'riviere' }
   };
   const TYPE_KIND = { Roche: 'carriere', Eau: 'eau', Électrik: 'electrik', Plante: 'jardin', Poison: 'marais', Psy: 'psy', Feu: 'braise', Sol: 'desert', Spectre: 'tour', Combat: 'dojo', Dragon: 'dragon', Ténèbres: 'tenebres', Acier: 'acier', Vol: 'ciel', Insecte: 'foret', Normal: 'stade', Glace: 'neige', Fée: 'fee' };
   const THEME_KIND = { jardin: 'jardin', givre: 'neige', braise: 'braise', cristal: 'cristal', crepuscule: 'crepuscule' };
@@ -731,7 +731,7 @@ export function __init() {
       c.fillRect(x - S, y - S, S * 2, S * 2);
       // small decorations
       if (!t.rock && !t.pil && !t.grass) {
-        const L2 = K.deco;
+        const L2 = K.decor;
         const n = L2.length ? 1 + ((r2() * 3) | 0) : 0;
         for (let d = 0; d < n; d++) {
           const a = r2() * 6.28,
@@ -935,7 +935,7 @@ export function __init() {
     bdClass('pv471', false);
     launchMove();
   });
-  HOOKS.plateauRendu.push(launchMove);
-  window.__plateau471 = { paint, kindOf, KIND, CACHE, lancer: launchMove, terrainSig };
+  HOOKS.boardRendered.push(launchMove);
+  window.__board471 = { paint, kindOf, KIND, CACHE, lancer: launchMove, terrainSig };
 })();
 }

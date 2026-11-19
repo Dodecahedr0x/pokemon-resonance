@@ -3,7 +3,7 @@ import { ACHIEVEMENTS } from '../../engine/048-replayability.js';
 
 // « Succès » (Achievements) tab (v4.9): an achievement that grants a title can be worn (data-titre, engine).
 function AchievementRow({ s }) {
-  const ok = !!(PROFILE.succes && PROFILE.succes[s.id]),
+  const ok = !!(PROFILE.achievements && PROFILE.achievements[s.id]),
     pr = !ok && s.p ? s.p() : null,
     equipped = ok && PROFILE.titre === s.id;
   return (
@@ -29,7 +29,7 @@ function AchievementRow({ s }) {
 }
 
 export default function Achievements() {
-  const n = ACHIEVEMENTS.filter(s => PROFILE.succes && PROFILE.succes[s.id]).length;
+  const n = ACHIEVEMENTS.filter(s => PROFILE.achievements && PROFILE.achievements[s.id]).length;
   return (
     <>
       <p className="v4-note">{n} / {ACHIEVEMENTS.length} succès. Ceux qui donnent un titre peuvent être portés : il s’affiche à côté de votre nom.</p>

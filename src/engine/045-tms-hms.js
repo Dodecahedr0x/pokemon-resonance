@@ -18,14 +18,14 @@ let TM_K;
 /* ---------- game state ---------- */
 /** family (base form) → learned move. Declared function: defProfile calls it as soon as it loads. */
 export function TM0() {
-  return { apprises: {} };
+  return { learnedTms: {} };
 }
 
 
 export function tmClean(p) {
   const o = TM0(),
-    a = p && p.apprises;
-  if (a && typeof a === 'object') for (const b in a) if (BY[b] && MV[a[b]]) o.apprises[b] = a[b];
+    a = p && p.learnedTms;
+  if (a && typeof a === 'object') for (const b in a) if (BY[b] && MV[a[b]]) o.learnedTms[b] = a[b];
   return o;
 }
 
@@ -33,7 +33,7 @@ export function tmClean(p) {
 function compatible(k, base) {
   const M = MACHINES[k];
   if (!M || !BY[base]) return false;
-  if (M.tous) return true;
+  if (M.forAll) return true;
   if ((M.familles || []).some(f => BY[f] && BY[f].base === base)) return true;
   return familyTypes(base).some(t => M.types.includes(t));
 }
@@ -64,15 +64,15 @@ function renderLearning() {
     m = MV[M.mv],
     families = raisedFamilies().sort((a, b) => compatible(k, b) - compatible(k, a));
   // rendering: src/screens/overlays/TmBox.jsx
-  paintOverlay('ct', { M, m, fams: families.map(b => ({ b, ok: compatible(k, b), deja: PROFILE.apprises[b] })) });
+  paintOverlay('ct', { M, m, families: families.map(b => ({ b, ok: compatible(k, b), already: PROFILE.learnedTms[b] })) });
 }
 
 
 function learnTm(k, b) {
   const M = MACHINES[k];
   if (!M || !compatible(k, b) || !bagN(k)) return;
-  const previous = PROFILE.apprises[b];
-  PROFILE.apprises[b] = M.mv;
+  const previous = PROFILE.learnedTms[b];
+  PROFILE.learnedTms[b] = M.mv;
   if (!M.cs) {
     PROFILE.bag[k] = bagN(k) - 1;
     if (!PROFILE.bag[k]) delete PROFILE.bag[k];
@@ -87,9 +87,9 @@ function learnTm(k, b) {
 
 
 function forgetTM(b) {
-  if (!PROFILE.apprises[b]) return;
-  toast(`${BY[b].n} oublie ${MV[PROFILE.apprises[b]].n}.`);
-  delete PROFILE.apprises[b];
+  if (!PROFILE.learnedTms[b]) return;
+  toast(`${BY[b].n} oublie ${MV[PROFILE.learnedTms[b]].n}.`);
+  delete PROFILE.learnedTms[b];
   queueSave();
 }
 
@@ -97,7 +97,7 @@ function forgetTM(b) {
 /** In a Pokémon's sheet: its learned move. */
 export function moveLearned(id) {
   const b = BY[id] && BY[id].base,
-    a = b && PROFILE.apprises[b];
+    a = b && PROFILE.learnedTms[b];
   if (!a) return inheritance416(b); // inherited move (v4.16)
   const M = Object.values(MACHINES).find(x => x.mv === a);
   return `<div class="mvc ct-mvc"><div class="t"><b>${MV[a].n}</b><span class="chip">${M ? M.num : 'Apprise'}</span></div><p>${MV[a].d}</p><button type="button" class="b b-sm b-ghost" data-ctoubli="${b}">Oublier</button></div>` + inheritance416(b);
@@ -119,9 +119,9 @@ export function moveLearned(id) {
 /* ---------- the machines (Johto numbers) ---------- */
 export const MACHINES = {
   ct01: { num: 'CT01', mv: 'dynamopoing', p: 3000, types: ['Combat', 'Psy', 'Roche', 'Normal'] },
-  ct11: { num: 'CT11', mv: 'zenith', p: 2000, tous: true },
+  ct11: { num: 'CT11', mv: 'zenith', p: 2000, forAll: true },
   ct14: { num: 'CT14', mv: 'blizzard', p: 4000, types: ['Glace', 'Eau'] },
-  ct18: { num: 'CT18', mv: 'dansepluie', p: 2000, tous: true },
+  ct18: { num: 'CT18', mv: 'dansepluie', p: 2000, forAll: true },
   ct22: { num: 'CT22', mv: 'lancesoleil', p: 3500, types: ['Plante'] },
   ct23: { num: 'CT23', mv: 'queuedefer', p: 3000, types: ['Acier', 'Électrik', 'Dragon', 'Roche', 'Sol'] },
   ct26: { num: 'CT26', mv: 'seisme', p: 4000, types: ['Sol', 'Roche', 'Combat', 'Dragon', 'Normal'] },
@@ -204,7 +204,7 @@ for (const k in MACHINES) {
     n: `${M.num} · ${m.n}`,
     sn: M.num,
     d: `${m.t} · ${m.p ? 'Puissance ' + m.p + ' · ' : ''}${m.d}${M.cs ? ' Réutilisable.' : ' Usage unique.'}`,
-    cat: 'machines',
+    category: 'machines',
     mv: M.mv,
     cs: !!M.cs,
     ...(M.g ? { g: M.g } : { p: M.p })

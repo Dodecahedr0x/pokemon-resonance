@@ -11,7 +11,7 @@ import { TAL464, TALMAX464, TALRESET464, talPts464, talSpent464, talSt464 } from
 import { Disc } from './Items.jsx';
 
 // Workshop row: text on the left, engine button on the right (data-at455, data-qo459…).
-const Line = ({ cls = '', avant: previous = null, children, bouton: button }) => (
+const Line = ({ cls = '', before: previous = null, children, actionButton: button }) => (
   <article className={'v4-it ' + cls}>{previous}<div className="v4-it-t">{children}</div><div className="v4-buy">{button}</div></article>
 );
 
@@ -23,7 +23,7 @@ function Workshop() {
       <p className="v4-note">L’atelier du colporteur transforme vos objets. Les recettes, la fusion de CT et les commandes du jour s’y trouvent.</p>
       <h3 className="h3">Livre de recettes</h3>
       {RECIPES455.map(r => (
-        <Line key={r.id} cls="at455-r" bouton={<button type="button" className="v4-btn" data-at455={'rec:' + r.id} disabled={!(canIn455(r.in) && PROFILE.money >= r.m)}>Préparer</button>}>
+        <Line key={r.id} cls="at455-r" actionButton={<button type="button" className="v4-btn" data-at455={'rec:' + r.id} disabled={!(canIn455(r.in) && PROFILE.money >= r.m)}>Préparer</button>}>
           <b>{txtIn455(r.out)}</b><p>Avec : {txtIn455(r.in)}{r.m ? ` + ${fmt(r.m)} ₽` : ''}</p>
         </Line>
       ))}
@@ -33,7 +33,7 @@ function Workshop() {
           const d = donors455(k),
             ok = d && PROFILE.money >= 1000;
           return (
-            <Line key={k} cls="at455-r" avant={<Disc it={SHOP[k]} />} bouton={<button type="button" className="v4-btn" data-at455={'fus:' + k} disabled={!ok}>Fusionner</button>}>
+            <Line key={k} cls="at455-r" before={<Disc it={SHOP[k]} />} actionButton={<button type="button" className="v4-btn" data-at455={'fus:' + k} disabled={!ok}>Fusionner</button>}>
               <b>{SHOP[k].n}</b><p>{d ? 'Donne : ' + d.map(x => SHOP[x].sn).join(' et ') + ' + 1 000 ₽' : 'Il faut 2 autres CT dans le Sac.'}</p>
             </Line>
           );
@@ -43,7 +43,7 @@ function Workshop() {
       )}
       <h3 className="h3" style={{ marginTop: '14px' }}>Commandes du jour</h3>
       {commands455().map(c => (
-        <Line key={c.id} cls={'at455-r' + (c.done ? ' own' : '')} bouton={<button type="button" className="v4-btn" data-at455={'cmd:' + c.id} disabled={!(!c.done && canIn455(c.in))}>{c.done ? 'Livrée' : 'Livrer'}</button>}>
+        <Line key={c.id} cls={'at455-r' + (c.done ? ' own' : '')} actionButton={<button type="button" className="v4-btn" data-at455={'cmd:' + c.id} disabled={!(!c.done && canIn455(c.in))}>{c.done ? 'Livrée' : 'Livrer'}</button>}>
           <b>Commande : {txtIn455(c.in)}</b><p>Récompense : {txt454(c.rew)}{c.done ? ' · livrée' : ''}</p>
         </Line>
       ))}
@@ -71,7 +71,7 @@ function Draw() {
 
 /* ---------- Finds showcase (v4.57) ---------- */
 function Showcase() {
-  const { seen, cts, cs } = showcase455(),
+  const { seen, tms: cts, cs } = showcase455(),
     held = Object.keys(ITEMS2),
     nh = held.filter(k => PROFILE.items.includes(k)).length,
     all = [...cts, ...cs],
@@ -113,8 +113,8 @@ function QuestItems() {
           lock = nb < q.min,
           need = [txtIn455(qoIn459(q)), q.in.ct ? '1 CT de votre Sac' : ''].filter(Boolean).join(' + ');
         return (
-          <Line key={q.id} cls={'qo459' + (done ? ' own' : '') + (lock ? ' lock' : '')} bouton={<button type="button" className="v4-btn" data-qo459={q.id} disabled={!!(done || lock || !qoOk459(q))}>{done ? 'Terminée' : lock ? 'Verrouillée' : 'Livrer'}</button>}>
-            <b>{q.qui}</b>
+          <Line key={q.id} cls={'qo459' + (done ? ' own' : '') + (lock ? ' lock' : '')} actionButton={<button type="button" className="v4-btn" data-qo459={q.id} disabled={!!(done || lock || !qoOk459(q))}>{done ? 'Terminée' : lock ? 'Verrouillée' : 'Livrer'}</button>}>
+            <b>{q.giver}</b>
             <p>{lock ? `Se présentera après ${q.min} badge${q.min > 1 ? 's' : ''}.` : q.txt}</p>
             {lock ? null : <em>Il faut : {need} · Récompense : {qoRewTxt459(q.rew)}</em>}
           </Line>
@@ -135,7 +135,7 @@ function Trophies() {
           ok = T.v() >= T.n,
           done = S[T.id];
         return (
-          <Line key={T.id} cls={'tp459' + (done ? ' own' : '')} bouton={<button type="button" className="v4-btn" data-tp459={T.id} disabled={!(ok && !done)}>{done ? 'Récupéré' : ok ? 'Réclamer' : '—'}</button>}>
+          <Line key={T.id} cls={'tp459' + (done ? ' own' : '')} actionButton={<button type="button" className="v4-btn" data-tp459={T.id} disabled={!(ok && !done)}>{done ? 'Récupéré' : ok ? 'Réclamer' : '—'}</button>}>
             <b>{T.t} · {T.n}</b>
             <i className="tp459-b"><u style={{ width: `${Math.round((v / T.n) * 100)}%` }} /></i>
             <p>{v} / {T.n} · +{T.g} Éclat{T.g > 1 ? 's' : ''}</p>
@@ -174,7 +174,7 @@ function Eggs() {
         const O = EGG461[k],
           ok = s.list.length < 3 && can454(O.cost) && isFree;
         return (
-          <Line key={k} cls="eg461" bouton={<button type="button" className="v4-btn" data-eg461={k} disabled={!ok}>{O.prix}</button>}>
+          <Line key={k} cls="eg461" actionButton={<button type="button" className="v4-btn" data-eg461={k} disabled={!ok}>{O.price}</button>}>
             <b>{O.n}</b><p>{O.d}</p>
           </Line>
         );
@@ -198,7 +198,7 @@ function Talents() {
         {B.t.map(t => {
           const r = st[t.id];
           return (
-            <Line key={t.id} cls="tal464" bouton={<button type="button" className="v4-btn" data-tal464={t.id} disabled={r >= TALMAX464 || !pts}>{r >= TALMAX464 ? 'Max' : '+1'}</button>}>
+            <Line key={t.id} cls="tal464" actionButton={<button type="button" className="v4-btn" data-tal464={t.id} disabled={r >= TALMAX464 || !pts}>{r >= TALMAX464 ? 'Max' : '+1'}</button>}>
               <b>{t.n} <span className="tal464-p">{[1, 2, 3].map(i => <i key={i} className={i <= r ? 'on' : ''} />)}</span></b>
               <p>{r ? t.d(r) : t.d(1)}{r < TALMAX464 && r ? <> <em>Rang suivant : {t.d(r + 1)}</em></> : null}</p>
             </Line>

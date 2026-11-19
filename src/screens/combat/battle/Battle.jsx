@@ -52,8 +52,8 @@ function Defense() {
         Vague {D.w} / {DEF_WAVES}
       </b>
       <span>
-        {'♥'.repeat(Math.max(0, D.vies))}
-        {'♡'.repeat(Math.max(0, DEF_LIVES - D.vies))}
+        {'♥'.repeat(Math.max(0, D.lives))}
+        {'♡'.repeat(Math.max(0, DEF_LIVES - D.lives))}
       </span>
       <small>En fin de manche, aucun adversaire ne doit se trouver sur les lignes A ou B.</small>
     </div>

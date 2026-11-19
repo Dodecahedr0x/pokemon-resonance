@@ -14,7 +14,7 @@ export function Pillars() {
 export function Digits() {
   return [
     [FAMS30.length, 'Familles à recruter'],
-    [MON.filter(m => !m.ennemi).length, 'Pokémon en combat'],
+    [MON.filter(m => !m.isEnemy).length, 'Pokémon en combat'],
     [Object.keys(ARR).length, 'Arrivées uniques'],
     [Object.keys(MV).length, 'Capacités'],
     [Object.keys(RX).length - 1, 'Réactions'],

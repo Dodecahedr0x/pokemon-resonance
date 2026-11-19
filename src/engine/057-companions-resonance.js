@@ -57,7 +57,7 @@ export function __set_SCN(v) { return (SCN = v); }
 
 /* ---------- profile (declared functions: called as soon as the file loads) ---------- */
 export function V417_0() {
-  return { comp: { id: '', aff: 0, j: '' }, scenes: {}, potager: [null, null, null], arrose: '', tournoi: { run: null, best: 0, gagnes: 0 } };
+  return { comp: { id: '', aff: 0, j: '' }, scenes: {}, garden: [null, null, null], watered: '', tournoi: { run: null, best: 0, winCount: 0 } };
 }
 
 
@@ -71,25 +71,25 @@ export function v417Clean(p) {
     if (typeof c.j === 'string' && /^\d{4}-\d\d-\d\d$/.test(c.j)) o.comp.j = c.j;
   }
   if (p.scenes && typeof p.scenes === 'object') for (const k in p.scenes) if (/^[a-z0-9]{1,12}$/.test(k) && p.scenes[k]) o.scenes[k] = 1;
-  if (Array.isArray(p.potager)) {
-    o.potager = [0, 1, 2].map(i => {
-      const x = p.potager[i];
+  if (Array.isArray(p.garden)) {
+    o.garden = [0, 1, 2].map(i => {
+      const x = p.garden[i];
       return x && POTAGER[x.g] && Number.isFinite(x.fin) ? { g: x.g, fin: Math.max(0, Math.floor(x.fin)) } : null;
     });
   }
-  if (typeof p.arrose === 'string' && /^\d{4}-\d\d-\d\d$/.test(p.arrose)) o.arrose = p.arrose;
+  if (typeof p.watered === 'string' && /^\d{4}-\d\d-\d\d$/.test(p.watered)) o.watered = p.watered;
   const t = p.tournoi;
   if (t && typeof t === 'object') {
     if (Number.isFinite(t.best)) o.tournoi.best = Math.max(0, Math.min(12, Math.floor(t.best)));
-    if (Number.isFinite(t.gagnes)) o.tournoi.gagnes = Math.max(0, Math.min(999, Math.floor(t.gagnes)));
+    if (Number.isFinite(t.winCount)) o.tournoi.winCount = Math.max(0, Math.min(999, Math.floor(t.winCount)));
     const r = t.run;
-    if (r && Array.isArray(r.ordre) && Array.isArray(r.team) && Number.isFinite(r.i)) {
+    if (r && Array.isArray(r.order) && Array.isArray(r.team) && Number.isFinite(r.i)) {
       const team = r.team.filter(id => BY[id]).slice(0, 4),
-        ordering = r.ordre.filter(id => typeof id === 'string' && /^[a-z0-9]{6,12}$/.test(id)).slice(0, 5);
+        ordering = r.order.filter(id => typeof id === 'string' && /^[a-z0-9]{6,12}$/.test(id)).slice(0, 5);
       if (team.length && ordering.length && r.i >= 0 && r.i < ordering.length) {
         const hp = {};
         if (r.hp && typeof r.hp === 'object') for (const k in r.hp) if (BY[k] && Number.isFinite(r.hp[k])) hp[k] = Math.max(0, Math.min(1, r.hp[k]));
-        o.tournoi.run = { team, ordre: ordering, i: Math.floor(r.i), hp };
+        o.tournoi.run = { team, order: ordering, i: Math.floor(r.i), hp };
       }
     }
   }
@@ -99,24 +99,24 @@ export function v417Clean(p) {
 
 /** Can an ally aim for the Resonant Form (final stage, not a legend, not yet used)? */
 export function resoCand417(S, u) {
-  return !!(S && u && u.side === 'a' && !u.ko && !hasNx(u) && !(BY[u.id] && (BY[u.id].leg || BY[u.id].ennemi)) && !u.seg && !u.colosse && !S.reso417);
+  return !!(S && u && u.side === 'a' && !u.ko && !hasNx(u) && !(BY[u.id] && (BY[u.id].leg || BY[u.id].isEnemy)) && !u.seg && !u.colossus && !S.resonance417);
 }
 
 
 function canResonance417(S, u) {
-  return !!(resoCand417(S, u) && S.phase === 'player' && !u.sn && u.en >= EMAX && S.voix >= 1);
+  return !!(resoCand417(S, u) && S.phase === 'player' && !u.sn && u.en >= EMAX && S.voice >= 1);
 }
 
 
 function enterResonance417(S, u, ev, strongSpot) {
-  u.reso = RESO_TURNS;
+  u.resonant = RESO_TURNS;
   u.pb = (u.pb || 0) + (strongSpot ? 2 : 1);
-  u.resoPb = strongSpot ? 2 : 1;
+  u.resonancePb = strongSpot ? 2 : 1;
   const h = Math.max(1, Math.round(u.mhp * (strongSpot ? 0.2 : 0.1)));
   heal(S, u, h, ev);
   u.badge = null;
   u.skip = 0;
-  u.bru = 0;
+  u.burn = 0;
   u.web = 0;
   u.root = 0;
   ev.push({ e: 'reso417', u: u.uid });
@@ -128,10 +128,10 @@ function enterResonance417(S, u, ev, strongSpot) {
 function pReso417(S, u) {
   if (!canResonance417(S, u)) return null;
   const ev = [];
-  S.voix -= 1;
-  S.stats.voix += 1;
-  S.reso417 = u.uid;
-  S.stats.reso = (S.stats.reso || 0) + 1;
+  S.voice -= 1;
+  S.stats.voice += 1;
+  S.resonance417 = u.uid;
+  S.stats.resonant = (S.stats.resonant || 0) + 1;
   u.en = 0;
   enterResonance417(S, u, ev, true);
   return endStep(S, ev);
@@ -141,12 +141,12 @@ function pReso417(S, u) {
 /** Masters and your friends' teams use it too, once, when their best Pokémon starts to fade. */
 function resoOpponent417(S, ev) {
   const D = SCEN[S.sc] || {};
-  if (S.reso417e || !(D.champ || D.jfinal || D.hfinal || D.ami)) return;
+  if (S.resonance417e || !(D.champ || D.jfinal || D.hfinal || D.ami)) return;
   const e = S.units
     .filter(x => x.side === 'e' && !x.ko && !x.seg && !hasNx(x) && x.hp <= x.mhp * 0.5)
     .sort((a, b) => b.mhp - a.mhp)[0];
   if (!e) return;
-  S.reso417e = e.uid;
+  S.resonance417e = e.uid;
   enterResonance417(S, e, ev, false);
 }
 
@@ -154,10 +154,10 @@ function resoOpponent417(S, ev) {
 /** The battle panel block. */
 export function resoBlock417(u, gauge) {
   if (!B || u.side !== 'a' || hasNx(u)) return '';
-  if (u.reso > 0) return `<div class="bp-en bp-fres full"><div class="en-h"><span class="lbl-s">Forme Résonante</span><b class="fres-n">${u.reso} manche${u.reso > 1 ? 's' : ''}</b></div><p class="bp-hint">+2 Puissance, +1 Mouvement, +20 % de dégâts, entraves dissipées en fin de manche.</p></div>`;
+  if (u.resonant > 0) return `<div class="bp-en bp-fres full"><div class="en-h"><span class="lbl-s">Forme Résonante</span><b class="fres-n">${u.resonant} manche${u.resonant > 1 ? 's' : ''}</b></div><p class="bp-hint">+2 Puissance, +1 Mouvement, +20 % de dégâts, entraves dissipées en fin de manche.</p></div>`;
   if (!resoCand417(B, u)) return '';
   const ok = canResonance417(B, u),
-    why = u.en < EMAX ? `Encore ${EMAX - u.en} losange${EMAX - u.en > 1 ? 's' : ''}` : u.sn ? 'Immobilisé cette manche' : B.voix < 1 ? 'Plus de Voix' : 'Prêt · une fois par combat';
+    why = u.en < EMAX ? `Encore ${EMAX - u.en} losange${EMAX - u.en > 1 ? 's' : ''}` : u.sn ? 'Immobilisé cette manche' : B.voice < 1 ? 'Plus de Voix' : 'Prêt · une fois par combat';
   return `${gauge ? `<div class="bp-en${u.en >= EMAX ? ' full' : ''}"><div class="en-h"><span class="lbl-s">Résonance</span>${enPips(u.en, 'lg')}</div></div>` : ''}<button type="button" class="evb fres-b" data-reso417 ${ok ? '' : 'disabled'}><span class="evb-m fres-m"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.6 6.4L21 9l-5 4.4 1.6 6.6L12 16.6 6.4 20 8 13.4 3 9l6.4-.6Z" fill="currentColor"/></svg></span><span><b>Forme Résonante</b><em>${why}</em></span><span class="evb-c">1 Voix<br>+ jauge</span></button>`;
 }
 
@@ -182,8 +182,8 @@ export function companionData417() {
     m,
     h,
     pr: h >= 5 ? 100 : Math.round(((a - (AFF_T[h - 1] || 0)) / (AFF_T[h] - (AFF_T[h - 1] || 0))) * 100),
-    caresse: PROFILE.comp.j === today(),
-    hum: COMP_MOOD[h].replace('{n}', m.n),
+    petting: PROFILE.comp.j === today(),
+    mood: COMP_MOOD[h].replace('{n}', m.n),
     sh: isShinyOwned(m.base),
     bonus: h >= 2 ? COMP_BONUS.filter(([n]) => h >= n).map(([, t]) => t).join(' · ') : ''
   };
@@ -192,7 +192,7 @@ export function companionData417() {
 
 /* companion choice: rendered by React (src/screens/overlays/CompBox.jsx) */
 export function renderCompBox417() {
-  const L = MON.filter(m => !m.ennemi && !m.leg && PROFILE.box.includes(m.base) && (m.st === 1 || (isCamp() && (PROFILE.forms || []).includes(m.id)))).slice(0, 80);
+  const L = MON.filter(m => !m.isEnemy && !m.leg && PROFILE.box.includes(m.base) && (m.st === 1 || (isCamp() && (PROFILE.forms || []).includes(m.id)))).slice(0, 80);
   paintOverlay('comp', { L: L.map(m => m.id), cur: companionId417(), bonus: COMP_BONUS });
 }
 
@@ -285,12 +285,12 @@ function endScene417() {
 
 function plant417(i, g) {
   const G = POTAGER[g];
-  if (!campOk430() || !G || PROFILE.potager[i]) return;
+  if (!campOk430() || !G || PROFILE.garden[i]) return;
   if (PROFILE.money < G.p) return void toast('Pas assez de Pokédollars.');
   PROFILE.money -= G.p;
-  PROFILE.potager[i] = { g, fin: PROFILE.battles + G.duree };
+  PROFILE.garden[i] = { g, fin: PROFILE.battles + G.duration };
   sfx('ui');
-  toast(`${G.n} plantée : récolte dans ${G.duree} combats.`);
+  toast(`${G.n} plantée : récolte dans ${G.duration} combats.`);
   queueSave();
   renderWallet();
   renderCampBase();
@@ -298,7 +298,7 @@ function plant417(i, g) {
 
 
 function harvest417(i) {
-  const x = PROFILE.potager[i];
+  const x = PROFILE.garden[i];
   if (!x || sprout417(x) > 0) return;
   const add = (k, n) => SHOP[k] && (PROFILE.bag[k] = Math.min(99, bagN(k) + n));
   let txt = '';
@@ -330,7 +330,7 @@ function harvest417(i) {
       txt = `${g} Éclats`;
     }
   }
-  PROFILE.potager[i] = null;
+  PROFILE.garden[i] = null;
   sfx('ui');
   vibe(20);
   toast(`Récolte : ${txt} !`);
@@ -341,10 +341,10 @@ function harvest417(i) {
 
 
 function water417() {
-  if (!campOk430() || PROFILE.arrose === today()) return;
-  PROFILE.arrose = today();
+  if (!campOk430() || PROFILE.watered === today()) return;
+  PROFILE.watered = today();
   let n = 0;
-  PROFILE.potager.forEach(x => {
+  PROFILE.garden.forEach(x => {
     if (x && sprout417(x) > 0) {
       x.fin--;
       n++;
@@ -360,7 +360,7 @@ function water417() {
 
 
 function tournamentOrder417() {
-  return [...(PROFILE.amis || [])]
+  return [...(PROFILE.friends || [])]
     .sort((a, b) => scoreOf416(a.s) - scoreOf416(b.s))
     .slice(0, 5)
     .map(a => a.id);
@@ -371,7 +371,7 @@ function tournamentLaunch417() {
   const ordering = tournamentOrder417();
   if (ordering.length < 2) return void toast('Il faut au moins 2 amis pour un tournoi.');
   if (!squad.length) return void toast('Composez d’abord une équipe.');
-  PROFILE.tournoi.run = { team: squad.slice(0, teamSize()), ordre: ordering, i: 0, hp: {} };
+  PROFILE.tournoi.run = { team: squad.slice(0, teamSize()), order: ordering, i: 0, hp: {} };
   queueSave();
   tournamentBattle417();
 }
@@ -380,14 +380,14 @@ function tournamentLaunch417() {
 function tournamentBattle417() {
   const run = tournamentRun417();
   if (!run) return;
-  const i = (PROFILE.amis || []).findIndex(a => a.id === run.ordre[run.i]);
+  const i = (PROFILE.friends || []).findIndex(a => a.id === run.order[run.i]);
   if (i < 0) {
     PROFILE.tournoi.run = null;
     return void toast('Un ami a quitté le carnet : le tournoi s’arrête.');
   }
   friendBuild416(i);
-  Object.assign(SCEN.ami, { tournoi: run.ordre[run.i], n: `Tournoi · ${PROFILE.amis[i].n}`, lvl: `Tournoi entre amis · combat ${run.i + 1} sur ${run.ordre.length}` });
-  SCEN.ami.d = `Combat ${run.i + 1} sur ${run.ordre.length}. Vos Pokémon gardent leurs PV d’un combat à l’autre, et ceux qui tombent ne reviennent pas. ` + SCEN.ami.d;
+  Object.assign(SCEN.ami, { tournoi: run.order[run.i], n: `Tournoi · ${PROFILE.friends[i].n}`, lvl: `Tournoi entre amis · combat ${run.i + 1} sur ${run.order.length}` });
+  SCEN.ami.d = `Combat ${run.i + 1} sur ${run.order.length}. Vos Pokémon gardent leurs PV d’un combat à l’autre, et ceux qui tombent ne reviennent pas. ` + SCEN.ami.d;
   if (B) backToPrep();
   goFight('ami');
 }
@@ -395,25 +395,25 @@ function tournamentBattle417() {
 
 /** The frozen tournament team (read when battles are launched). */
 export function tournamentTeam417() {
-  if (brBoss466(scSel)) return { team: brWeapon466().team, voix: vBonus(), opts: battleOpts() }; // Boss Rush: frozen team
+  if (brBoss466(scSel)) return { team: brWeapon466().team, voice: vBonus(), opts: battleOpts() }; // Boss Rush: frozen team
   const run = tournamentRun417(),
     D = SCEN.ami || {};
-  if (scSel !== 'ami' || !run || D.tournoi !== run.ordre[run.i]) return null;
+  if (scSel !== 'ami' || !run || D.tournoi !== run.order[run.i]) return null;
   const c = run.team.reduce((t, id) => t + RC(id), 0);
-  return { team: run.team, voix: Math.min(2, Math.floor((BUDGET - c) / 4)), opts: battleOpts() };
+  return { team: run.team, voice: Math.min(2, Math.floor((BUDGET - c) / 4)), opts: battleOpts() };
 }
 
 
 export function tournamentHtml417() {
-  const L = PROFILE.amis || [],
+  const L = PROFILE.friends || [],
     run = tournamentRun417(),
     T = PROFILE.tournoi || {};
   if (L.length < 2) return '';
   if (run) {
-    const A = L.find(a => a.id === run.ordre[run.i]);
-    return `<div class="tn-c on"><span><b>Tournoi en cours · ${run.i} / ${run.ordre.length}</b><em>Prochain : ${A ? esc(A.n) : '?'} · votre équipe : ${run.team.map(id => BY[id].n).join(', ')}</em></span><span class="am-b"><button type="button" class="b b-sm b-gold" data-tournoi="suite">Continuer</button><button type="button" class="b b-sm b-ghost" data-tournoi="abandon">Abandonner</button></span></div>`;
+    const A = L.find(a => a.id === run.order[run.i]);
+    return `<div class="tn-c on"><span><b>Tournoi en cours · ${run.i} / ${run.order.length}</b><em>Prochain : ${A ? esc(A.n) : '?'} · votre équipe : ${run.team.map(id => BY[id].n).join(', ')}</em></span><span class="am-b"><button type="button" class="b b-sm b-gold" data-tournoi="suite">Continuer</button><button type="button" class="b b-sm b-ghost" data-tournoi="abandon">Abandonner</button></span></div>`;
   }
-  return `<div class="tn-c"><span><b>Tournoi entre amis</b><em>${Math.min(5, L.length)} équipes à la suite, sans soin entre les combats. Record : ${T.best || 0}${T.gagnes ? ` · remporté ${T.gagnes} fois` : ''}.</em></span><button type="button" class="b b-sm b-gold" data-tournoi="lancer">Lancer</button></div>`;
+  return `<div class="tn-c"><span><b>Tournoi entre amis</b><em>${Math.min(5, L.length)} équipes à la suite, sans soin entre les combats. Record : ${T.best || 0}${T.winCount ? ` · remporté ${T.winCount} fois` : ''}.</em></span><button type="button" class="b b-sm b-gold" data-tournoi="lancer">Lancer</button></div>`;
 }
 
 /* =====================================================================
@@ -527,9 +527,9 @@ const sceneKey417 = k => (SCEN[k] && SCEN[k].roam ? 'roam' : k);
    4. The Camp Garden
    ===================================================================== */
 const POTAGER = {
-  oran: { n: 'Baie Oran', p: 200, duree: 3, d: '3 Baies Oran (soin en combat)' },
-  sitrus: { n: 'Baie Sitrus', p: 600, duree: 5, d: 'une Baie Sitrus (objet tenu), sinon 3 Baies Oran et 2 Éclats' },
-  mystere: { n: 'Graine mystère', p: 400, duree: 6, d: 'une surprise : Éclats, Balls ou une CT' }
+  oran: { n: 'Baie Oran', p: 200, duration: 3, d: '3 Baies Oran (soin en combat)' },
+  sitrus: { n: 'Baie Sitrus', p: 600, duration: 5, d: 'une Baie Sitrus (objet tenu), sinon 3 Baies Oran et 2 Éclats' },
+  mystere: { n: 'Graine mystère', p: 400, duration: 6, d: 'une surprise : Éclats, Balls ou une CT' }
 };
 
 
@@ -545,24 +545,24 @@ const tournamentRun417 = () => (PROFILE.tournoi && PROFILE.tournoi.run) || null;
 export function __init() {
 
 
-DAMAGE_PROVIDERS.push({ id: 'formeresonante', fournir: (c, { u }) => u.reso > 0 && { mul: u.side === 'a' ? 1.2 : 1.1, libelle: 'Forme Résonante' } });
+DAMAGE_PROVIDERS.push({ id: 'formeresonante', provide: (c, { u }) => u.resonant > 0 && { mul: u.side === 'a' ? 1.2 : 1.1, labelText: 'Forme Résonante' } });
 
 
-HOOKS.avantFinManche.push((S, ev) => {
+HOOKS.beforeRoundEnd.push((S, ev) => {
   S.units.forEach(u => {
-    if (u.ko || !(u.reso > 0)) return;
-    if (u.badge || u.bru || u.web || u.root) {
+    if (u.ko || !(u.resonant > 0)) return;
+    if (u.badge || u.burn || u.web || u.root) {
       u.badge = null;
       u.skip = 0;
-      u.bru = 0;
+      u.burn = 0;
       u.web = 0;
       u.root = 0;
       say(ev, `La résonance de ${u.n} dissipe ses entraves.`);
     }
-    u.reso--;
-    if (u.reso <= 0) {
-      u.pb = Math.max(0, (u.pb || 0) - (u.resoPb || 0));
-      u.resoPb = 0;
+    u.resonant--;
+    if (u.resonant <= 0) {
+      u.pb = Math.max(0, (u.pb || 0) - (u.resonancePb || 0));
+      u.resonancePb = 0;
       say(ev, `La Forme Résonante de ${u.n} s’estompe.`);
     }
   });
@@ -594,7 +594,7 @@ document.addEventListener('click', async e => {
 
 
 HOOKS.combat.push(S => {
-  if (S.fixe431) return; // fixed-rule battles: no companion bonus (v4.31)
+  if (S.fixed431) return; // fixed-rule battles: no companion bonus (v4.31)
   const id = companionId417();
   if (!id) return;
   const u = S.units.find(x => x.side === 'a' && x.sp === BY[id].base);
@@ -606,15 +606,15 @@ HOOKS.combat.push(S => {
 });
 
 
-DAMAGE_PROVIDERS.push({ id: 'complicite', fournir: (c, { u }) => u.comp >= 4 && { mul: 1.1, libelle: 'Complicité' } });
+DAMAGE_PROVIDERS.push({ id: 'complicite', provide: (c, { u }) => u.comp >= 4 && { mul: 1.1, labelText: 'Complicité' } });
 
 
-HOOKS.avantFinManche.push((S, ev) => {
+HOOKS.beforeRoundEnd.push((S, ev) => {
   S.units.forEach(u => {
-    if (u.ko || !(u.comp >= 5) || !(u.badge || u.bru || u.web || u.root)) return;
+    if (u.ko || !(u.comp >= 5) || !(u.badge || u.burn || u.web || u.root)) return;
     u.badge = null;
     u.skip = 0;
-    u.bru = 0;
+    u.burn = 0;
     u.web = 0;
     u.root = 0;
     say(ev, `${u.n} se secoue pour vous : statuts dissipés.`);
@@ -622,7 +622,7 @@ HOOKS.avantFinManche.push((S, ev) => {
 });
 
 
-HOOKS.progres.push((S, rew, win) => {
+HOOKS.progress.push((S, rew, win) => {
   const id = companionId417(),
     D = SCEN[S.sc] || {};
   if (!id || D.tuto) return null;
@@ -630,13 +630,13 @@ HOOKS.progres.push((S, rew, win) => {
   if (!u) return null;
   const n = win ? 3 : 2,
     up = companionGain417(n);
-  rew.comp417 = { id, n, up };
+  rew.companion417 = { id, n, up };
   return null;
 });
 
 
-HOOKS.resultat.push(r => {
-  const c = r.comp417;
+HOOKS.battleResult.push(r => {
+  const c = r.companion417;
   if (!c) return '';
   const h = hearts417(PROFILE.comp.aff || 0),
     B2 = COMP_BONUS.find(([n]) => n === c.up);
@@ -736,8 +736,8 @@ document.addEventListener('click', e => {
 
 HOOKS.combat.push((S, opt, D0) => {
   const run = tournamentRun417();
-  if (!D0 || !D0.tournoi || !run || D0.tournoi !== run.ordre[run.i]) return;
-  S.tournoi417 = D0.tournoi;
+  if (!D0 || !D0.tournoi || !run || D0.tournoi !== run.order[run.i]) return;
+  S.tournament417 = D0.tournoi;
   S.units.forEach(u => {
     if (u.side !== 'a' || run.hp[u.sp] == null) return;
     const r = run.hp[u.sp];
@@ -749,40 +749,40 @@ HOOKS.combat.push((S, opt, D0) => {
 });
 
 
-HOOKS.progres.push((S, rew, win) => {
+HOOKS.progress.push((S, rew, win) => {
   const run = tournamentRun417();
-  if (!S.tournoi417 || !run || S.tournoi417 !== run.ordre[run.i]) return null;
+  if (!S.tournament417 || !run || S.tournament417 !== run.order[run.i]) return null;
   if (SCEN.ami) SCEN.ami.tournoi = null; // "Rejouer" (Replay): an ordinary friendly challenge
   const T = PROFILE.tournoi;
   if (!win) {
     T.best = Math.max(T.best, run.i);
     T.run = null;
-    rew.tournoi = { fin: true, i: run.i, n: run.ordre.length };
+    rew.tournoi = { fin: true, i: run.i, n: run.order.length };
     return null;
   }
   S.units.filter(u => u.side === 'a').forEach(u => (run.hp[u.sp] = u.ko ? 0 : u.hp / u.mhp));
   run.i++;
-  if (run.i >= run.ordre.length) {
-    T.best = Math.max(T.best, run.ordre.length);
-    T.gagnes = (T.gagnes || 0) + 1;
+  if (run.i >= run.order.length) {
+    T.best = Math.max(T.best, run.order.length);
+    T.winCount = (T.winCount || 0) + 1;
     T.run = null;
-    rew.tournoi = { gagne: true, n: run.ordre.length };
+    rew.tournoi = { gagne: true, n: run.order.length };
     return [2000, 10];
   }
-  const A = (PROFILE.amis || []).find(a => a.id === run.ordre[run.i]);
-  rew.tournoi = { suite: true, i: run.i, n: run.ordre.length, nom: A ? A.n : '' };
+  const A = (PROFILE.friends || []).find(a => a.id === run.order[run.i]);
+  rew.tournoi = { suite: true, i: run.i, n: run.order.length, displayName: A ? A.n : '' };
   return null;
 });
 
 
-HOOKS.resultat.push(r => {
+HOOKS.battleResult.push(r => {
   const t = r.tournoi;
   if (!t) return '';
   if (t.gagne) {
     return `<div class="res-l"><h4>Tournoi entre amis</h4><div class="rl"><span><b>Tournoi remporté !</b> ${t.n} équipes battues à la suite : +10 Éclats.</span><b>🏆</b></div></div>`;
   }
   if (t.fin) return `<div class="res-l"><h4>Tournoi entre amis</h4><div class="rl"><span>Le tournoi s’arrête au combat ${t.i + 1} sur ${t.n}. Record : ${PROFILE.tournoi.best} victoire${PROFILE.tournoi.best > 1 ? 's' : ''}.</span><b>${t.i} / ${t.n}</b></div></div>`;
-  return `<div class="res-l"><h4>Tournoi entre amis</h4><div class="rl"><span>Victoire ${t.i} sur ${t.n}. Prochain adversaire : ${esc(t.nom)}. Vos PV restent tels quels.</span><button type="button" class="b b-sm b-gold" data-tournoi="suite">Combat suivant</button></div></div>`;
+  return `<div class="res-l"><h4>Tournoi entre amis</h4><div class="rl"><span>Victoire ${t.i} sur ${t.n}. Prochain adversaire : ${esc(t.displayName)}. Vos PV restent tels quels.</span><button type="button" class="b b-sm b-gold" data-tournoi="suite">Combat suivant</button></div></div>`;
 });
 
 
@@ -807,8 +807,8 @@ document.addEventListener('click', e => {
 
 /* ---------- achievements ---------- */
 ACHIEVEMENTS.push(
-  { id: 'resonant', n: 'Forme Résonante', d: 'Déclencher la Forme Résonante.', ok: c => (c.S.stats.reso || 0) > 0 },
+  { id: 'resonant', n: 'Forme Résonante', d: 'Déclencher la Forme Résonante.', ok: c => (c.S.stats.resonant || 0) > 0 },
   { id: 'complice', n: 'Inséparables', d: 'Atteindre 5 cœurs avec votre compagnon.', t: 'Inséparables', ok: () => hearts417((PROFILE.comp || {}).aff || 0) >= 5 },
-  { id: 'tournoi', n: 'Roi du tournoi', d: 'Remporter un tournoi entre amis.', t: 'Roi du tournoi', ok: () => ((PROFILE.tournoi || {}).gagnes || 0) > 0 }
+  { id: 'tournoi', n: 'Roi du tournoi', d: 'Remporter un tournoi entre amis.', t: 'Roi du tournoi', ok: () => ((PROFILE.tournoi || {}).winCount || 0) > 0 }
 );
 }

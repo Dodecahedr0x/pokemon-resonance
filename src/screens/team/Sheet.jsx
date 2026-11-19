@@ -70,7 +70,7 @@ function Content({ id }) {
         {RX[r].n}
       </button>
     ));
-  const tl = TAL[m.tal],
+  const tl = TAL[m.ability],
     family = familyOf(id),
     nx = nextOf(m),
     rg = rankId(m.id);
@@ -297,10 +297,10 @@ function Evd({ a, b, from }) {
             {D.tl.length ? (D.tg.length ? ' · ' : '') + '−' + D.tl.join(', ') : ''}
           </li>
         ) : null}
-        {D.tal ? (
+        {D.ability ? (
           <li>
             <span>Talent</span>
-            {TAL[D.tal][0]}
+            {TAL[D.ability][0]}
           </li>
         ) : null}
         {D.role ? (
@@ -335,7 +335,7 @@ function ItemImg({ k }) {
 function Extras({ base }) {
   const own = inBox(base.id),
     its = ownedItems(),
-    cur = PROFILE.equip[base.id],
+    cur = PROFILE.equipment[base.id],
     fat = isCamp() ? PROFILE.fatigue[base.id] || 0 : 0;
   const mates = Object.entries(PROFILE.links)
     .filter(([k]) => k.split('|').includes(base.id))
@@ -354,7 +354,7 @@ function Extras({ base }) {
           its.length ? (
             <div className="eq-l">
               {its.map(k => {
-                const holder = Object.keys(PROFILE.equip).find(x => PROFILE.equip[x] === k && x !== base.id);
+                const holder = Object.keys(PROFILE.equipment).find(x => PROFILE.equipment[x] === k && x !== base.id);
                 return (
                   <button key={k} type="button" className={`eq${cur === k ? ' on' : ''}`} data-eq={base.id} data-it={cur === k ? '' : k}>
                     <span className="it-ic">

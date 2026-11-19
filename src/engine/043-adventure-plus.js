@@ -64,7 +64,7 @@ export function aplusClean(p) {
         seed: Math.floor(r.seed) % 1e9,
         floor: Math.max(1, Math.min(999, Math.floor(r.floor))),
         team: [...r.team],
-        voix: Number.isFinite(r.voix) ? Math.max(0, Math.min(2, Math.floor(r.voix))) : 0,
+        voice: Number.isFinite(r.voice) ? Math.max(0, Math.min(2, Math.floor(r.voice))) : 0,
         items: {},
         reward: !!r.reward
       };
@@ -112,7 +112,7 @@ export function aiStyleBonus(S, e, m, k, sim) {
   } else if (sty === 'usure') {
     if (!m.p && !m.fix) b += 4;
     hit.forEach(v => {
-      if (v.badge || v.bru > 0) b += 3;
+      if (v.badge || v.burn > 0) b += 3;
     });
   } else if (sty === 'controle') {
     if (CTRL.includes(m.fx)) b += 6;
@@ -245,7 +245,7 @@ function towerBuild(run) {
     tower: true,
     at,
     mut: mutOfTurn(run, f), // one mutator per floor (v4.9)
-    d: `${mutOfTurn(run, f) ? `Mutateur · ${mutInfo(mutOfTurn(run, f))[0]} : ${mutInfo(mutOfTurn(run, f))[1]} ` : ''}${boss ? `Étage de légende : ${BY[foes[0][0]].n} garde le passage.` : `${foes.length} adversaires.`}${rule ? ` Règle du plateau : ${GYMS[TOWER_RULES.indexOf(rule)].r}` : ''} Votre équipe : ${run.team.map(id => BY[id].n).join(', ')}${run.voix ? ` · +${run.voix} Voix` : ''}.`,
+    d: `${mutOfTurn(run, f) ? `Mutateur · ${mutInfo(mutOfTurn(run, f))[0]} : ${mutInfo(mutOfTurn(run, f))[1]} ` : ''}${boss ? `Étage de légende : ${BY[foes[0][0]].n} garde le passage.` : `${foes.length} adversaires.`}${rule ? ` Règle du plateau : ${GYMS[TOWER_RULES.indexOf(rule)].r}` : ''} Votre équipe : ${run.team.map(id => BY[id].n).join(', ')}${run.voice ? ` · +${run.voice} Voix` : ''}.`,
     foes
   };
   return SCEN.tdr;
@@ -269,8 +269,8 @@ export function towerTeam() {
   });
   return {
     team: run.team.slice(0, 4),
-    voix: run.voix,
-    opts: { diff: PROFILE.diff, items, fatigue: {}, links: {}, ordre: chosenOrder(), vivant: chosenAlive(), tactique: chosenTactic(), caracteres: charactersChosen() }
+    voice: run.voice,
+    opts: { diff: PROFILE.diff, items, fatigue: {}, links: {}, order: chosenOrder(), livingBoard: chosenAlive(), tactics: chosenTactic(), characters: charactersChosen() }
   };
 }
 
@@ -278,7 +278,7 @@ export function towerTeam() {
 export function towerDraft() {
   const seed = Math.floor(Math.random() * 1e9),
     r = rng(seed),
-    pool = towerPool().filter(m => m.st <= 2 && !m.ennemi),
+    pool = towerPool().filter(m => m.st <= 2 && !m.isEnemy),
     families = new Set(),
     c = [];
   for (let i = 0; c.length < 8 && i < 200; i++) {
@@ -302,7 +302,7 @@ function renderDraft() {
 function towerOffer(run) {
   const r = rng(run.seed * 7 + run.floor * 131),
     o = [];
-  if (run.voix < 2) o.push({ k: 'voix', t: '+1 Voix', d: 'Pour tout le reste de l’ascension.' });
+  if (run.voice < 2) o.push({ k: 'voix', t: '+1 Voix', d: 'Pour tout le reste de l’ascension.' });
   const free = run.team.filter(id => !run.items[id]);
   if (free.length) {
     const id = pickOf(r, free),
@@ -316,7 +316,7 @@ function towerOffer(run) {
       to = pickOf(r, nx);
     o.push({ k: 'evo', id, to, t: `${BY[id].n} devient ${BY[to].n}`, d: 'Éveil définitif pour toute l’ascension.' });
   } else {
-    const pool = towerPool().filter(m => m.st >= 2 && !m.ennemi && !run.team.some(x => BY[x].base === m.base)),
+    const pool = towerPool().filter(m => m.st >= 2 && !m.isEnemy && !run.team.some(x => BY[x].base === m.base)),
       nw = pickOf(r, pool),
       out = run.team.reduce((a, b) => (BY[a].s.reduce((x, y) => x + y) <= BY[b].s.reduce((x, y) => x + y) ? a : b));
     o.push({
@@ -402,7 +402,7 @@ export function aplusProgress(S, rew) {
       }
     }
   }
-  HOOKS.progres.forEach(h => {
+  HOOKS.progress.forEach(h => {
     const r = h(S, rew, win); // colossi, achievements... (v4.8+)
     if (r) {
       m += r[0] || 0;
@@ -441,7 +441,7 @@ export function aplusRewHtml(r) {
       `<div class="res-l"><h4>Tour de Résonance</h4><div class="rl"><span>${r.tdr.end ? `Ascension terminée à l’étage ${r.tdr.cleared}.` : `Étage ${r.tdr.cleared} franchi. Une récompense vous attend avant l’étage ${r.tdr.next}.`} Record : étage ${r.tdr.best}.</span><b>${r.tdr.cleared}</b></div></div>`
     );
   }
-  HOOKS.resultat.forEach(h => o.push(h(r) || '')); // v4.8+
+  HOOKS.battleResult.forEach(h => o.push(h(r) || '')); // v4.8+
   return o.join('');
 }
 
@@ -589,7 +589,7 @@ export const LEGS = [
     no: 243,
     s: [6, 5, 4, 6, 3, 2],
     mv: ['fatalfoudre', 'tonnerre'],
-    tal: 'statik',
+    ability: 'statik',
     rule: 'elec',
     time: 'nuit',
     bio: 'ligue',
@@ -608,7 +608,7 @@ export const LEGS = [
     no: 244,
     s: [7, 6, 4, 4, 2, 2],
     mv: ['feusacre', 'lanceflammes'],
-    tal: 'brasier',
+    ability: 'brasier',
     rule: 'feu',
     time: 'jour',
     bio: 'roche',
@@ -627,7 +627,7 @@ export const LEGS = [
     no: 245,
     s: [7, 4, 6, 4, 3, 2],
     mv: ['surf', 'blizzard'],
-    tal: 'crachin',
+    ability: 'crachin',
     rule: 'eau',
     time: 'nuit',
     bio: 'gue',
@@ -646,7 +646,7 @@ export const LEGS = [
     no: 150,
     s: [6, 6, 4, 6, 2, 3],
     mv: ['frappepsy', 'psyko'],
-    tal: 'synchro',
+    ability: 'synchro',
     rule: 'psy',
     time: 'nuit',
     bio: 'tour',
@@ -665,7 +665,7 @@ export const LEGS = [
     no: 249,
     s: [8, 5, 6, 4, 3, 2],
     mv: ['aeroblast', 'psyko'],
-    tal: 'crachin',
+    ability: 'crachin',
     rule: 'eau',
     time: 'nuit',
     bio: 'gue',
@@ -684,7 +684,7 @@ export const LEGS = [
     no: 250,
     s: [8, 6, 5, 4, 3, 2],
     mv: ['feusacre', 'criailes'],
-    tal: 'brasier',
+    ability: 'brasier',
     rule: 'feu',
     time: 'jour',
     bio: 'ligue',
@@ -777,7 +777,7 @@ LEGS.forEach(L => {
     r2: 'Rempart',
     s: L.s,
     mv: L.mv,
-    tal: L.tal,
+    ability: L.ability,
     nx: null,
     no: L.no,
     base: L.id,
@@ -834,7 +834,7 @@ $('#tdrBox').addEventListener('click', e => {
     const run = towerRun(),
       x = TOWER.offer[+rw.dataset.tdrr];
     if (!run || !x) return;
-    if (x.k === 'voix') run.voix = Math.min(2, run.voix + 1);
+    if (x.k === 'voix') run.voice = Math.min(2, run.voice + 1);
     if (x.k === 'item') run.items[x.id] = x.it;
     if (x.k === 'evo' || x.k === 'swap') {
       const i = run.team.indexOf(x.id);
@@ -857,7 +857,7 @@ $('#tdrBox').addEventListener('click', e => {
     return;
   }
   if (a === 'go' && TOWER.pick.length === 4) {
-    PROFILE.tdr.run = { seed: TOWER.seed, floor: 1, team: [...TOWER.pick], voix: 0, items: {}, reward: false };
+    PROFILE.tdr.run = { seed: TOWER.seed, floor: 1, team: [...TOWER.pick], voice: 0, items: {}, reward: false };
     $('#tdrBox').hidden = true;
     towerClimb();
   }

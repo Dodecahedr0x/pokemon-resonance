@@ -56,7 +56,7 @@ export function Article({ k, mode }) {
 export function HeldItem({ k }) {
   const it = ITEMS2[k],
     own = ownedItems().includes(k),
-    holder = Object.keys(PROFILE.equip).find(id => PROFILE.equip[id] === k);
+    holder = Object.keys(PROFILE.equipment).find(id => PROFILE.equipment[id] === k);
   return (
     <article className={'v4-it' + (own ? '' : ' off')}>
       <span className="v4-it-im"><img src={ITM(HELD_IMG[k])} alt="" loading="lazy" /></span>

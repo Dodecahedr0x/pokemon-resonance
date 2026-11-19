@@ -24,6 +24,7 @@ import { unrollSpeed } from './044-tactical-engine.js';
 import { free421 } from './061-catch-anywhere.js';
 import { hideSaves, refreshSaves, showSaves } from '../screens/saves/savesStore.js';
 import { refreshSummary } from '../screens/combat/prep/prepStore.js';
+import { migrateKeys } from '../lib/saveMigration.js';
 
 export let SAVE_V, SLOTS;
 let LSK, svT;
@@ -105,7 +106,7 @@ export function cleanProfile(p) {
   const sections = () => PROFILE_SECTIONS.map(([, tidy]) => tidy(p));
   if (!p || typeof p !== 'object') return Object.assign(o, ...sections());
   if (typeof p.name === 'string') o.name = p.name.slice(0, 24);
-  ['battles', 'wins', 'losses', 'evos', 'rx', 'kos', 'caught'].forEach(k => {
+  ['battles', 'wins', 'losses', 'awakenings', 'rx', 'kos', 'caught'].forEach(k => {
     if (Number.isFinite(p[k]) && p[k] >= 0) o[k] = Math.floor(p[k]);
   });
   if (p.mode === 'campagne') o.mode = 'campagne';
@@ -121,8 +122,8 @@ export function cleanProfile(p) {
     }
   }
   o.items = Array.isArray(p.items) ? [...new Set(p.items.filter(k => ITEMS2[k]))] : [];
-  if (p.equip && typeof p.equip === 'object') {
-    for (const k in p.equip) if (BY[k] && ITEMS2[p.equip[k]]) o.equip[k] = p.equip[k];
+  if (p.equipment && typeof p.equipment === 'object') {
+    for (const k in p.equipment) if (BY[k] && ITEMS2[p.equipment[k]]) o.equipment[k] = p.equipment[k];
   }
   if (p.fatigue && typeof p.fatigue === 'object') {
     for (const k in p.fatigue) {
@@ -137,8 +138,8 @@ export function cleanProfile(p) {
       }
     }
   }
-  if (Array.isArray(p.hist)) {
-    o.hist = p.hist
+  if (Array.isArray(p.history)) {
+    o.history = p.history
       .slice(-10)
       .filter(h => h && typeof h === 'object')
       .map(h => ({
@@ -307,7 +308,7 @@ function resumeBattle() {
       if (u.side === 'e') {
         u.intent = null;
         u.prep = false;
-        u.perdu = 0;
+        u.isLost = 0;
         u.force = null;
       }
     });
@@ -324,7 +325,7 @@ function resumeBattle() {
     pv: null,
     busy: false,
     act: null,
-    cine: false
+    cutscene: false
   });
   go('combat');
   $('#cbPrep').hidden = true;
@@ -336,7 +337,7 @@ function resumeBattle() {
   autoSel();
   renderAll();
   window.scrollTo({ top: 0 });
-  if (B.ordre === 'vitesse') unrollSpeed(); // speed order: the queue resumes where it was
+  if (B.order === 'vitesse') unrollSpeed(); // speed order: the queue resumes where it was
 }
 
 
@@ -364,8 +365,8 @@ export function renderSummary() {
 
 function readCode(t) {
   t = String(t || '').trim();
-  if (t.startsWith('{')) return JSON.parse(t);
-  return JSON.parse(decodeURIComponent(escape(atob(t.replace(/^RES1\./, '').replace(/\s+/g, '')))));
+  if (t.startsWith('{')) return migrateKeys(JSON.parse(t));
+  return migrateKeys(JSON.parse(decodeURIComponent(escape(atob(t.replace(/^RES1\./, '').replace(/\s+/g, ''))))));
 }
 
 
@@ -868,7 +869,7 @@ document.addEventListener('click', e => {
     try {
       const sn = await ref(k).get();
       if (sn.exists) {
-        const d = JSON.parse(JSON.stringify(sn.data()));
+        const d = migrateKeys(JSON.parse(JSON.stringify(sn.data())));
         if (validSave(d)) SV.remote[k] = d;
       }
     } catch (e) {

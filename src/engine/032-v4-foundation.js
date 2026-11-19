@@ -91,7 +91,7 @@ export function savePurse() {
 /* ---------- Potions in battle: healing in exchange for the Pokémon's action ---------- */
 function pUse(S, u, k) {
   const it = SHOP[k];
-  if (!it || !it.heal || S.phase !== 'player' || !u || u.ko || u.sn || u.acted || bagN(k) < 1 || u.hp >= u.mhp || (S.objN || 0) >= BAG_MAX || S.duel433) {
+  if (!it || !it.heal || S.phase !== 'player' || !u || u.ko || u.sn || u.acted || bagN(k) < 1 || u.hp >= u.mhp || (S.itemsUsed || 0) >= BAG_MAX || S.duel433) {
     return null;
   }
   const ev = [];
@@ -99,7 +99,7 @@ function pUse(S, u, k) {
   say(ev, `${it.n} : ${u.n} reprend des forces.`);
   u.acted = true;
   u.moved = true;
-  S.objN = (S.objN || 0) + 1; // Battle Bag (v4.14)
+  S.itemsUsed = (S.itemsUsed || 0) + 1; // Battle Bag (v4.14)
   PROFILE.bag[k] = bagN(k) - 1;
   if (!PROFILE.bag[k]) delete PROFILE.bag[k];
   return endStep(S, ev);
@@ -120,10 +120,10 @@ export const V4 = {
   dexQ: '',
   dexGen: 'all',
   dexSort: 'no',
-  sacV: 'boutique',
-  sacC: 'balls',
+  bagView: 'boutique',
+  bagCategory: 'balls',
   qty: {},
-  qTab: 'main',
+  questTab: 'main',
   mapSel: null,
   menu: false
 };
@@ -157,7 +157,7 @@ export const SHOP = {
     sn: 'Poké',
     d: 'La Ball classique : PV sous 25 % et cible immobilisée.',
     p: 200,
-    cat: 'balls',
+    category: 'balls',
     img: 'poke-ball'
   },
   super: {
@@ -165,7 +165,7 @@ export const SHOP = {
     sn: 'Super',
     d: 'Capture dès 40 % de PV restants.',
     p: 600,
-    cat: 'balls',
+    category: 'balls',
     img: 'great-ball'
   },
   hyper: {
@@ -173,7 +173,7 @@ export const SHOP = {
     sn: 'Hyper',
     d: 'Dès 40 % de PV, et nul besoin d’immobiliser la cible.',
     p: 1200,
-    cat: 'balls',
+    category: 'balls',
     img: 'ultra-ball'
   },
   master: {
@@ -181,7 +181,7 @@ export const SHOP = {
     sn: 'Master',
     d: 'Ni seuil de PV, ni immobilisation : il suffit d’être au contact.',
     g: 30,
-    cat: 'balls',
+    category: 'balls',
     img: 'master-ball'
   },
   potion: {
@@ -189,7 +189,7 @@ export const SHOP = {
     sn: 'Potion',
     d: 'En combat : rend 30 % des PV à un allié. Utilise son action.',
     p: 300,
-    cat: 'soins',
+    category: 'soins',
     img: 'potion',
     heal: 0.3
   },
@@ -198,7 +198,7 @@ export const SHOP = {
     sn: 'Super Potion',
     d: 'En combat : rend 60 % des PV à un allié. Utilise son action.',
     p: 700,
-    cat: 'soins',
+    category: 'soins',
     img: 'super-potion',
     heal: 0.6
   }
@@ -219,7 +219,7 @@ export const bagN = k => (PROFILE.bag && PROFILE.bag[k]) || 0;
 
 
 export const tLevel = () => {
-  const xp = PROFILE.wins * 40 + PROFILE.caught * 30 + BADGES.length * 150 + PROFILE.elite * 200 + PROFILE.evos * 5;
+  const xp = PROFILE.wins * 40 + PROFILE.caught * 30 + BADGES.length * 150 + PROFILE.elite * 200 + PROFILE.awakenings * 5;
   return Math.min(50, 1 + Math.floor(Math.sqrt(xp / 30)));
 };
 
@@ -305,7 +305,7 @@ document.addEventListener('click', e => {
   const us = e.target.closest('[data-use]');
   if (us && B) {
     const u = byUid(B, ui.sel);
-    const ev = (SHOP[us.dataset.use] || {}).cat === 'combat' ? pUse414(B, u, us.dataset.use) : pUse(B, u, us.dataset.use); // v4.14
+    const ev = (SHOP[us.dataset.use] || {}).category === 'combat' ? pUse414(B, u, us.dataset.use) : pUse(B, u, us.dataset.use); // v4.14
     if (!ev) return;
     ui.undo = null;
     renderAll();

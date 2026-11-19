@@ -49,21 +49,21 @@ Object.assign(HELD_SHOP, { baielum: { p: 3000 }, orbeflamme: { p: 3000 }, orbeto
 
 DAMAGE_PROVIDERS.push({
   id: 'orbes456',
-  fournir: (c, { u, m }) => !!u && ((u.item === 'orbeflamme' && u.bru > 0) || (u.item === 'orbetoxik' && u.psn > 0)) && (m.p > 0 || m.fix > 0) && { mul: 1.25, libelle: ITEMS2[u.item].n }
+  provide: (c, { u, m }) => !!u && ((u.item === 'orbeflamme' && u.burn > 0) || (u.item === 'orbetoxik' && u.poisoned > 0)) && (m.p > 0 || m.fix > 0) && { mul: 1.25, labelText: ITEMS2[u.item].n }
 });
 
 
 HOOKS.combat.push(S => {
   S.units.forEach(u => {
     if (u.side !== 'a' || u.ko) return;
-    if (u.item === 'orbeflamme') u.bru = Math.max(u.bru || 0, 3);
-    if (u.item === 'orbetoxik') u.psn = Math.max(u.psn || 0, 3);
+    if (u.item === 'orbeflamme') u.burn = Math.max(u.burn || 0, 3);
+    if (u.item === 'orbetoxik') u.poisoned = Math.max(u.poisoned || 0, 3);
   });
 });
 
 
 /* ---------- TMs to win: rank S, vendor of the day ---------- */
-HOOKS.progres.unshift((S, rew) => {
+HOOKS.progress.unshift((S, rew) => {
   try {
     if (S && S.rank === 'S' && S.rankNew && S.sc !== 'sauvage' && S.sc !== 'tuto') {
       const cts = tmKeys455().filter(k => !bagN(k)),
@@ -78,7 +78,7 @@ HOOKS.progres.unshift((S, rew) => {
 });
 
 
-HOOKS.resultat.unshift(r => (r.ct456 ? `<div class="res-l"><h4>Récompense de rang S</h4><div class="rl"><span>${esc(SHOP[r.ct456].n)} ajoutée au Sac</span><b>CT</b></div></div>` : ''));
+HOOKS.battleResult.unshift(r => (r.ct456 ? `<div class="res-l"><h4>Récompense de rang S</h4><div class="rl"><span>${esc(SHOP[r.ct456].n)} ajoutée au Sac</span><b>CT</b></div></div>` : ''));
 
 
 

@@ -15,10 +15,10 @@ const WORKSHOP = ['ate', 'jeux', 'quetes', 'trophees', 'oeufs', 'talents'];
 
 // List of the chosen category (V4.sacC), in the Shop or the Bag.
 function List({ v, keys }) {
-  const c = V4.sacC;
+  const c = V4.bagCategory;
   if (v === 'boutique' && c === 'ambu') return <Peddler />; // v4.54
   if (v === 'boutique' && WORKSHOP.includes(c)) return <WorkshopTab c={c} />; // v4.57 and later
-  if (v === 'boutique' && (c === 'held' || c === 'rares')) return <HeldItems cat={c} />; // v4.14
+  if (v === 'boutique' && (c === 'held' || c === 'rares')) return <HeldItems category={c} />; // v4.14
   if (c === 'held') return keys.map(k => <HeldItem key={k} k={k} />);
   if (v === 'sac') {
     const L = keys.filter(k => bagN(k));
@@ -36,7 +36,7 @@ function TmVendor() {
 }
 
 function Content() {
-  const v = V4.sacV;
+  const v = V4.bagView;
   const cats = [
     ['balls', 'Poké Balls', 'i-fight'],
     ['soins', 'Soins', 'i-heal'],
@@ -45,9 +45,9 @@ function Content() {
     ['machines', 'CT et CS', 'i-bolt'],
     ...(v === 'boutique' ? [['rares', 'Marchand rare', 'i-gem'], ['ambu', 'Colporteur', 'i-shop'], ['ate', 'Atelier', 'i-bolt'], ['jeux', 'Tirage', 'i-star'], ['quetes', 'Quêtes', 'i-medal'], ['trophees', 'Trophées', 'i-star'], ['oeufs', 'Œufs', 'i-star'], ['talents', 'Talents', 'i-medal']] : [])
   ]; // v4.14: battle items, held items for sale, rare merchant
-  const keys = V4.sacC === 'held' ? Object.keys(ITEMS2) : Object.keys(SHOP).filter(k => SHOP[k].cat === V4.sacC);
+  const keys = V4.bagCategory === 'held' ? Object.keys(ITEMS2) : Object.keys(SHOP).filter(k => SHOP[k].category === V4.bagCategory);
   // items of the open pocket, for the Bag banner
-  const n = v === 'sac' ? (V4.sacC === 'held' ? keys.length : keys.filter(k => bagN(k)).length) : 0;
+  const n = v === 'sac' ? (V4.bagCategory === 'held' ? keys.length : keys.filter(k => bagN(k)).length) : 0;
   return (
     <>
       <div className="ph v4-ph-page"><p className="kick">Objets</p><h1 className="h1" id="h-sac">Sac et Boutique</h1><p className="sub">Les Pokédollars se gagnent en combat, les Éclats avec les rangs S, les badges et les quêtes.</p></div>
@@ -66,10 +66,10 @@ function Content() {
       {v === 'boutique' ? <Offers /> : null}
       {NL}
       <div className="v4-sac">
-        {v === 'boutique' && V4.sacC === 'machines' ? <TmVendor /> : null}
+        {v === 'boutique' && V4.bagCategory === 'machines' ? <TmVendor /> : null}
         <nav className="v4-cats" aria-label="Catégories">
           {cats.map(([k, displayName, i]) => (
-            <button key={k} type="button" data-sacc={k} aria-pressed={V4.sacC === k}><svg><use href={'#' + i} /></svg>{displayName}</button>
+            <button key={k} type="button" data-sacc={k} aria-pressed={V4.bagCategory === k}><svg><use href={'#' + i} /></svg>{displayName}</button>
           ))}
         </nav>
         <div className="v4-items"><List v={v} keys={keys} /></div>

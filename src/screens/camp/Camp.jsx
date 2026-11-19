@@ -28,7 +28,7 @@ function Tabs({ t }) {
 // #v4Camp alone is rebuilt on each renderCampBase(); the rest of the page is untouched.
 function CampBaseHost() {
   const base = useCampBase();
-  return <CampBase key={base} rempli={base > 0} />;
+  return <CampBase key={base} filled={base > 0} />;
 }
 
 // #camp430: before the first renderCampPage431(), only the Base camp and the Outings (empty).

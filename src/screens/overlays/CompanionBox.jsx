@@ -5,12 +5,12 @@ import { medal } from '../../engine/014-utils.js';
 
 // Companion choice (#compBox). Clicks (data-comp, data-comp-p) and hidden: engine (057).
 export default function CompanionBox() {
-  return <Box nom="comp" className="result exp-box" id="compBox" Carte={Card} />;
+  return <Box displayName="comp" className="result exp-box" id="compBox" cardComponent={Card} />;
 }
 
 function Card({ L, cur, bonus }) {
   return (
-    <Dialogue className="sv-card exp-card" titre="compT" fermer={{ 'data-comp': 'x' }}>
+    <Dialogue className="sv-card exp-card" titre="compT" closeAttrs={{ 'data-comp': 'x' }}>
       <p className="kick">Compagnon</p>
       <h2 className="h2" id="compT">Qui vous accompagne ?</h2>
       <p className="d">Son affection grandit quand il combat avec vous (+2, +1 de plus en cas de victoire) et quand vous le câlinez (une fois par jour). En changer remet l’affection à zéro.</p>

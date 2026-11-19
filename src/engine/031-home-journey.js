@@ -58,7 +58,7 @@ export function wonOf(k) {
   if (s.gym != null) return BADGES.includes(s.gym);
   if (s.elite) return PROFILE.elite >= s.elite;
   if (k === 'champ') return PROFILE.elite >= 5;
-  if (s.rival429) return (PROFILE.riv429 || []).includes(s.rival429); // v4.29
+  if (s.rival429) return (PROFILE.rivals429 || []).includes(s.rival429); // v4.29
   if (s.rival) return PROFILE.rival >= s.rival;
   if (s.dissonance) return (PROFILE.dissonance || 0) >= s.dissonance;
   if (s.legend) return PROFILE.legends.includes(s.legend);
@@ -79,7 +79,7 @@ export function emblem(k, cls = '') {
   const s = SCEN[k] || {},
     gi = ARENAS.findIndex(a => a.k === k),
     L = leaderOf(k),
-    legendInfo = s.hleg435 || s.cap435 || s.legend || s.colosse || s.roam;
+    legendInfo = s.hleg435 || s.cap435 || s.legend || s.colossus || s.roam;
   if (legendInfo) return `<span class="emb lgd ${cls}" style="--ac:${tc(s.at)}">${medal(BY[legendInfo].t, 'lg')}</span>`;
   if (s.johto != null) return `<span class="emb bdg ${cls}" style="--ac:${tc(s.at)}">${badgeSvg(s.johto, s.at, 'ej' + cls + s.johto)}</span>`; // v4.15
   if (s.hoenn != null) return `<span class="emb bdg ${cls}" style="--ac:${tc(s.at)}">${badgeSvg(s.hoenn, s.at, 'eh' + cls + s.hoenn)}</span>`; // v4.19

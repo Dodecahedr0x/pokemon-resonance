@@ -42,8 +42,8 @@ function Summary({ s }) {
         ))}
       </span>
       <span className="sv-facts">
-        <b>{s.badges.length} / 8</b> badges · <b>{P.wins}</b> victoire{P.wins > 1 ? 's' : ''} · <b>{P.evos}</b> Éveil
-        {P.evos > 1 ? 's' : ''}
+        <b>{s.badges.length} / 8</b> badges · <b>{P.wins}</b> victoire{P.wins > 1 ? 's' : ''} · <b>{P.awakenings}</b> Éveil
+        {P.awakenings > 1 ? 's' : ''}
       </span>
       {validBattle(s.battle) && <span className="sv-bt">Combat en cours : {battleLine(s.battle)}</span>}
     </div>

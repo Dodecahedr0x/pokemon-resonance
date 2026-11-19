@@ -8,8 +8,8 @@ const shell = makeStore({
   page: null, // no page marked before the first show()
   sec: 'Accueil',
   menu: false,
-  svBusy: false,
-  svCloud: false,
+  saveBusy: false,
+  saveCloud: false,
   wallet: 0, // 0: wallet not yet drawn by the engine
 });
 
@@ -25,7 +25,7 @@ export function setMenuOpen(menu) {
 
 export function setSaveIndicator(svBusy, svCloud) {
   const s = shell.get();
-  if (s.svBusy !== svBusy || s.svCloud !== svCloud) shell.set({ svBusy, svCloud });
+  if (s.saveBusy !== svBusy || s.saveCloud !== svCloud) shell.set({ saveBusy: svBusy, saveCloud: svCloud });
 }
 
 export function refreshWallet() {

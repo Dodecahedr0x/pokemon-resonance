@@ -22,15 +22,15 @@ export const formMs463 = () => squad.slice(0, teamSize()).map(id => BY[id]).filt
 
 export const formOn463 = () => {
   const k = formKey463();
-  return k !== 'libre' && FORM463[k].cond(formMs463());
+  return k !== 'libre' && FORM463[k].condition(formMs463());
 };
 
 
 const formS463 = S => {
-  if (!S || S.fixe431 || (SCEN[S.sc] && SCEN[S.sc].tuto)) return null;
+  if (!S || S.fixed431 || (SCEN[S.sc] && SCEN[S.sc].tuto)) return null;
   const al = S.units.filter(u => u.side === 'a'),
     k = formKey463();
-  if (k === 'libre' || !al.length || !FORM463[k].cond(al.map(u => BY[u.id]).filter(Boolean))) return null;
+  if (k === 'libre' || !al.length || !FORM463[k].condition(al.map(u => BY[u.id]).filter(Boolean))) return null;
   return { k, al };
 };
 
@@ -44,30 +44,30 @@ DEF463 = ['Roche', 'Acier', 'Sol', 'Combat', 'Eau', 'Normal'],
 
 
 FORM463 = {
-  libre: { n: 'Libre', d: 'Aucune contrainte, aucun bonus.', cond: () => true, need: '' },
+  libre: { n: 'Libre', d: 'Aucune contrainte, aucun bonus.', condition: () => true, need: '' },
   phalange: {
     n: 'Phalange',
     d: 'L’avant-garde garde sa Garde : elle est renouvelée à chaque manche.',
     need: 'Le 1er Pokémon doit être de type Roche, Acier, Sol, Combat, Eau ou Normal.',
-    cond: ms => hasT463(ms[0], DEF463)
+    condition: ms => hasT463(ms[0], DEF463)
   },
   assaut: {
     n: 'Assaut',
     d: '+8 % de dégâts pour toute l’équipe.',
     need: 'Deux Pokémon au moins de type Feu, Combat, Dragon, Électrik, Spectre, Ténèbres, Roche ou Sol.',
-    cond: ms => ms.filter(m => hasT463(m, OFF463)).length >= 2
+    condition: ms => ms.filter(m => hasT463(m, OFF463)).length >= 2
   },
   eclaireurs: {
     n: 'Éclaireurs',
     d: 'Le dernier Pokémon commence avec 2 losanges, les autres avec 1.',
     need: 'Un Pokémon au moins de type Vol, Insecte, Électrik, Psy ou Spectre.',
-    cond: ms => ms.some(m => hasT463(m, SCOUT463))
+    condition: ms => ms.some(m => hasT463(m, SCOUT463))
   },
   soutien: {
     n: 'Soutien',
     d: 'À chaque fin de manche, l’allié le plus blessé récupère 8 % de ses PV max.',
     need: 'Un Pokémon au moins de type Plante, Fée, Eau, Normal ou Psy.',
-    cond: ms => ms.some(m => hasT463(m, SUPPORT463))
+    condition: ms => ms.some(m => hasT463(m, SUPPORT463))
   }
 };
 
@@ -85,7 +85,7 @@ HOOKS.combat.push(S => {
 });
 
 
-HOOKS.avantFinManche.push((S, ev) => {
+HOOKS.beforeRoundEnd.push((S, ev) => {
   if (!S.form463) return;
   const al = S.units.filter(u => u.side === 'a' && !u.ko);
   if (S.form463 === 'phalange' && al[0] && S.units.filter(u => u.side === 'a')[0] === al[0]) al[0].guard = Math.max(al[0].guard || 0, 1);
@@ -99,7 +99,7 @@ HOOKS.avantFinManche.push((S, ev) => {
 });
 
 
-DAMAGE_PROVIDERS.push({ id: 'assaut463', fournir: (c, { S, u }) => !!u && u.side === 'a' && !!S && S.form463 === 'assaut' && { mul: 1.08, libelle: 'Formation Assaut' } });
+DAMAGE_PROVIDERS.push({ id: 'assaut463', provide: (c, { S, u }) => !!u && u.side === 'a' && !!S && S.form463 === 'assaut' && { mul: 1.08, labelText: 'Formation Assaut' } });
 
 
 // "Formation" card of the team analysis: rendered by React (src/screens/team/Analysis.jsx)

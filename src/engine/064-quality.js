@@ -52,7 +52,7 @@ let WEEK429;
    never a load-order error.
    ===================================================================== */
 export function V429_0() {
-  return { tips429: {}, riv429: [], hebdo429: null };
+  return { tips429: {}, rivals429: [], hebdo429: null };
 }
 
 
@@ -60,7 +60,7 @@ export function v429Clean(p) {
   const o = V429_0();
   if (!p || typeof p !== 'object') return o;
   if (p.tips429 && typeof p.tips429 === 'object') Object.keys(p.tips429).forEach(k => /^[a-z]{2,12}$/.test(k) && (o.tips429[k] = 1));
-  if (Array.isArray(p.riv429)) o.riv429 = [...new Set(p.riv429.filter(x => ['rv5', 'rv6', 'hd429'].includes(x)))];
+  if (Array.isArray(p.rivals429)) o.rivals429 = [...new Set(p.rivals429.filter(x => ['rv5', 'rv6', 'hd429'].includes(x)))];
   const h = p.hebdo429;
   if (h && typeof h === 'object' && typeof h.w === 'string' && /^\d{4}-S\d\d$/.test(h.w)) {
     o.hebdo429 = {
@@ -207,7 +207,7 @@ function actionLp429(t) {
 function sheet429(id) {
   const m = BY[id];
   if (!m) return;
-  if (m.leg || m.ennemi || !MON.includes(m)) {
+  if (m.leg || m.isEnemy || !MON.includes(m)) {
     toast(`${m.n} · ${m.t.join(' / ')}${m.leg ? ' · légende' : ''} : ${m.mv.map(x => (MV[x] ? MV[x].n : x)).join(', ')}.`);
     return;
   }
@@ -229,7 +229,7 @@ function slideOk429(t) {
 
 
 function tips429(force) {
-  if (!B || B.over || ui.busy || ui.cine || B.phase !== 'player' || (AUTO && !force) || PREF.tips429 === false) return;
+  if (!B || B.over || ui.busy || ui.cutscene || B.phase !== 'player' || (AUTO && !force) || PREF.tips429 === false) return;
   if ((SCEN[B.sc] || {}).tuto || document.getElementById('tip429')) return;
   const seenSet = (PROFILE.tips429 = PROFILE.tips429 || {}),
     al = B.units.filter(u => u.side === 'a' && !u.ko),
@@ -317,7 +317,7 @@ export function rivBuild429() {
         : `Kael revient avec ${BY[team[0]].n} et une équipe de ${REGION_NAMES421[R.reg]}. Il a progressé autant que vous.`,
       foes: team.map((id, j) => [id, RIVAL_POS[j]])
     };
-    OBST[k] = R.obst;
+    OBST[k] = R.obstacles;
   });
 }
 
@@ -363,9 +363,9 @@ export function after429(sc, win, force) {
     Lg = AFTER429[sc];
   if (!win || !Lg || (AUTO && !force) || (PROFILE.scenes && PROFILE.scenes[c]) || (SCN && SCN.c === c)) return;
   if (sc === 'champ' && !isCamp()) return;
-  after429.vu = after429.vu || {};
-  if (after429.vu[c]) return;
-  after429.vu[c] = 1;
+  after429.seenFlags = after429.seenFlags || {};
+  if (after429.seenFlags[c]) return;
+  after429.seenFlags[c] = 1;
   setTimeout(() => {
     if ((B && !B.over) || SCN) return;
     __set_SCN({ k: sc, c, i: 0, L: Lg, apres: true });
@@ -385,7 +385,7 @@ export function stepsLeg429(leg) {
     c = familyCapt428(r);
   return [
     { ok: (PROFILE.legends || []).includes(leg.id), t: `Vaincre ${leg.n} (Combats › Après-jeu)` },
-    { ok: (PROFILE.dipl428 || []).includes(r), t: `Compléter le Pokédex de ${REGION_NAMES421[r]} (${c.n} / ${c.t})` },
+    { ok: (PROFILE.diplomas428 || []).includes(r), t: `Compléter le Pokédex de ${REGION_NAMES421[r]} (${c.n} / ${c.t})` },
     ...(isCamp() ? [{ ok: !!PROFILE.hchamp, t: 'Devenir Maître de Hoenn' }] : [])
   ];
 }
@@ -459,8 +459,8 @@ export function weeklyBuild429() {
       lvl: `Semaine ${w.slice(-2)} · ${R.n}`,
       d: `${R.d} Terrain et adversaires : « ${b.n} ». Le meilleur score est gardé ; récompense à la première victoire de la semaine.`,
       hebdo429: w,
-      regle429: R.k,
-      pret429: team,
+      rule429: R.k,
+      ready429: team,
       lim: R.k === 'chrono' ? 6 : b.lim || 10,
       catch: false
     });
@@ -475,11 +475,11 @@ export function weeklyBuild429() {
 /** The challenge's rental team, with identical settings for everyone. */
 export function weeklyTeam429() {
   const D = SCEN[scSel];
-  if (scSel !== 'hebdo429' || !D || !D.pret429) return null;
+  if (scSel !== 'hebdo429' || !D || !D.ready429) return null;
   return {
-    team: D.pret429.slice(),
-    voix: 0,
-    opts: Object.assign(battleOpts(), { diff: 'normal', items: {}, fatigue: {}, links: {}, mut: null, defis: [], dojo: 0, apprises: {}, desob: false, caracteres: false })
+    team: D.ready429.slice(),
+    voice: 0,
+    opts: Object.assign(battleOpts(), { diff: 'normal', items: {}, fatigue: {}, links: {}, mut: null, challenges: [], dojo: 0, learnedTms: {}, disobedience: false, characters: false })
   };
 }
 
@@ -518,13 +518,13 @@ const SW429 = { x: 0, y: 0, t: 0, ok: false };
 /* ---------- 3. tips at the right time ---------- */
 const TIPS429 = {
   capture: ['Capturer un Pokémon', 'Affaiblissez-le sous 25 % de ses PV et immobilisez-le (Sommeil, Paralysie, Gel, Racines ou Toile). Sélectionnez ensuite un allié à son contact, puis touchez l’adversaire : le panneau « Capture » lance la Ball pour 2 Voix.'],
-  reso: ['Notes de Résonance', 'Chaque allié qui frappe la même cible dans la manche y pose une note. À 3 notes, Résonance : dégâts ×1,5 et un écho selon le type. Frappez ensemble !'],
+  resonant: ['Notes de Résonance', 'Chaque allié qui frappe la même cible dans la manche y pose une note. À 3 notes, Résonance : dégâts ×1,5 et un écho selon le type. Frappez ensemble !'],
   eveil: ['L’Éveil', 'Un de vos Pokémon a ses losanges pleins : sélectionnez-le, puis « Éveiller ». Il évolue en plein combat et devient plus fort tout de suite.'],
   forme: ['Forme Résonante', 'Un Pokémon au stade final, losanges pleins, peut prendre sa Forme Résonante pour 3 manches. Une seule fois par combat : gardez-la pour le moment clé.'],
   encercle: ['Encerclement', 'Un Pokémon au contact de 2 adversaires ou plus subit +20 % de dégâts et perd 1 Mouvement. Ça marche aussi contre eux : entourez les cibles !'],
   phase: ['Boss à phases', 'Ce boss change de tactique à 66 % puis à 33 % de ses PV. Gardez des Voix et des soins pour sa dernière phase.'],
   danger: ['Dangers annoncés', 'Une zone est annoncée une manche à l’avance : tout Pokémon qui y reste à la fin de la manche est touché, allié comme adversaire.'],
-  vigil: ['Vigilance', 'Au lieu d’attaquer, un Pokémon peut surveiller : il frappe le premier adversaire qui entre à sa portée, avant que celui-ci n’attaque.']
+  vigilance: ['Vigilance', 'Au lieu d’attaquer, un Pokémon peut surveiller : il frappe le premier adversaire qui entre à sa portée, avant que celui-ci n’attaque.']
 };
 
 /* ---------- 5. story and rival ---------- */
@@ -537,7 +537,7 @@ export const RIV429 = {
     team: ['noarfang', 'azumarill', 'demolosse'],
     water: ['5,0'],
     rock: ['3,1', '4,4'],
-    obst: { pil: ['4,2'], sand: ['2,1', '2,4'] },
+    obstacles: { pil: ['4,2'], sand: ['2,1', '2,4'] },
     x: 560,
     y: 330,
     rew: [5000, 25],
@@ -553,7 +553,7 @@ export const RIV429 = {
     team: ['galeking', 'drattak', 'noarfang'],
     water: ['4,0', '5,5'],
     rock: ['3,2'],
-    obst: { pil: ['4,3'], grass: ['2,2', '2,3'] },
+    obstacles: { pil: ['4,3'], grass: ['2,2', '2,3'] },
     x: 440,
     y: 470,
     rew: [6500, 30],
@@ -569,7 +569,7 @@ export const RIV429 = {
     team: ['absol', 'tenefix', 'nostenfer', 'demolosse'],
     water: [],
     rock: ['3,1', '3,4'],
-    obst: { pil: ['4,2'], grass: ['2,1', '2,4'] },
+    obstacles: { pil: ['4,2'], grass: ['2,1', '2,4'] },
     x: 715,
     y: 445,
     rew: [7000, 35],
@@ -610,7 +610,7 @@ const WEEKLY429 = [
 ];
 
 // the challenge reuses a battle's opponents without its progression rewards
-export const PROGRESS429 = ['gym', 'elite', 'champ', 'johto', 'hoenn', 'hfinal', 'jfinal', 'jdis', 'roam', 'legend', 'rival', 'dissonance', 'colosse', 'lac', 'tower', 'tuto', 'ami', 'rival429', 'cap429', 'dom', 'jafter', 'after', 'daily', 'tdr'];
+export const PROGRESS429 = ['gym', 'elite', 'champ', 'johto', 'hoenn', 'hfinal', 'jfinal', 'jdis', 'roam', 'legend', 'rival', 'dissonance', 'colossus', 'lac', 'tower', 'tuto', 'ami', 'rival429', 'cap429', 'dom', 'jafter', 'after', 'daily', 'tdr'];
 
 // Statements run at startup, in the original order (see index.js).
 export function __init() {
@@ -733,18 +733,18 @@ PLACES_H.push({ id: 'hd429', x: RIV429.hd429.x, y: RIV429.hd429.y, n: 'Grotte de
 [...PLACES_J, ...PLACES_H].forEach(p => (PL[p.id] = p));
 
 
-HOOKS.progres.push((S, rew, win) => {
+HOOKS.progress.push((S, rew, win) => {
   const D = SCEN[S.sc] || {};
-  if (!win || !D.rival429 || (PROFILE.riv429 || []).includes(D.rival429)) return null;
-  PROFILE.riv429 = [...(PROFILE.riv429 || []), D.rival429];
-  rew.riv429 = D.rival429;
+  if (!win || !D.rival429 || (PROFILE.rivals429 || []).includes(D.rival429)) return null;
+  PROFILE.rivals429 = [...(PROFILE.rivals429 || []), D.rival429];
+  rew.rivals429 = D.rival429;
   return RIV429[D.rival429].rew;
 });
 
 
-HOOKS.resultat.push(r =>
-  r.riv429
-    ? `<div class="res-l"><h4>${r.riv429 === 'hd429' ? 'Dissonance' : 'Rival'}</h4><div class="rl"><span>${r.riv429 === 'hd429' ? 'Les Échos de la Dissonance sont réduits au silence.' : `Kael est battu à ${REGION_NAMES421[RIV429[r.riv429].reg]}.`}</span><b>+${fmt(RIV429[r.riv429].rew[0])} ₽ · +${RIV429[r.riv429].rew[1]} Éclats</b></div></div>`
+HOOKS.battleResult.push(r =>
+  r.rivals429
+    ? `<div class="res-l"><h4>${r.rivals429 === 'hd429' ? 'Dissonance' : 'Rival'}</h4><div class="rl"><span>${r.rivals429 === 'hd429' ? 'Les Échos de la Dissonance sont réduits au silence.' : `Kael est battu à ${REGION_NAMES421[RIV429[r.rivals429].reg]}.`}</span><b>+${fmt(RIV429[r.rivals429].rew[0])} ₽ · +${RIV429[r.rivals429].rew[1]} Éclats</b></div></div>`
     : ''
 );
 
@@ -810,7 +810,7 @@ LEGS.forEach(leg => {
 WEEK429 = null;
 
 
-HOOKS.progres.push((S, rew, win) => {
+HOOKS.progress.push((S, rew, win) => {
   const D = SCEN[S.sc] || {};
   if (!D.hebdo429) return null;
   const w = D.hebdo429,
@@ -831,7 +831,7 @@ HOOKS.progres.push((S, rew, win) => {
 });
 
 
-HOOKS.resultat.push(r =>
+HOOKS.battleResult.push(r =>
   r.hebdo429
     ? `<div class="res-l"><h4>Défi de la semaine</h4><div class="rl"><span>Score ${fmt(r.hebdo429.sc)}${r.hebdo429.record ? ' · nouveau record !' : ` · record ${fmt(r.hebdo429.best)}`}${r.hebdo429.prime ? ' · première victoire de la semaine : +2 500 ₽ · +25 Éclats' : ''}</span><b>${r.hebdo429.record ? '★' : ''}</b></div><p class="v4-note">Partagez votre carte de dresseur (Amis) : vos amis verront ce score.</p></div>`
     : ''
@@ -841,7 +841,7 @@ HOOKS.resultat.push(r =>
 document.addEventListener('click', e => {
   if (!e.target.closest('[data-hebdo429],[data-news="hebdo429"]')) return;
   e.stopPropagation();
-  V4.qTab = 'event';
+  V4.questTab = 'event';
   go('quetes');
   renderQuests();
 });
@@ -850,7 +850,7 @@ document.addEventListener('click', e => {
 document.addEventListener('click', e => {
   if (!e.target.closest('[data-news="leg429"]')) return;
   e.stopPropagation();
-  V4.qTab = 'leg';
+  V4.questTab = 'leg';
   go('quetes');
   renderQuests();
 });

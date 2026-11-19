@@ -345,7 +345,7 @@ HOOKS.journal.push(ev => {
 tipI448 = Math.floor(Math.random() * TIPS448.length);
 
 
-HOOKS.lancement.push(() => {
+HOOKS.launch.push(() => {
   if (B && !AUTO) trans448();
 });
 
@@ -353,7 +353,7 @@ HOOKS.lancement.push(() => {
 /* the tip is shown under the « VS » presentation: tipVs448(), rendered in Vs.jsx */
 
 
-HOOKS.rendu.push(wx448);
+HOOKS.rendered.push(wx448);
 
 
 document.addEventListener(
@@ -404,8 +404,8 @@ new MutationObserver(() => {
 }).observe($('#cbResult'), { childList: true, attributes: true, attributeFilter: ['hidden'] });
 
 
-HOOKS.finCombat.push(() => {
-  if (B && B.over && !B._j448 && !(SCEN[B.sc] || {}).sansProgres431) {
+HOOKS.battleEnd.push(() => {
+  if (B && B.over && !B._j448 && !(SCEN[B.sc] || {}).noProgress431) {
     B._j448 = 1;
     const j = jr448(),
       win = B.over === 'win';

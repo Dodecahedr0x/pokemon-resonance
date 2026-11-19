@@ -48,9 +48,9 @@ export function __init() {
       if (f && !u.t.includes(f.plus)) u.t.push(f.plus);
     });
   });
-  window.__fr470 = REGIONAL_FORMS;
-  window.__fr470.regionDe = regionOf;
-  window.__fr470.V4 = () => V4;
-  window.__fr470.rend = () => renderDexCard();
+  window.__regional470 = REGIONAL_FORMS;
+  window.__regional470.regionOf = regionOf;
+  window.__regional470.V4 = () => V4;
+  window.__regional470.renderCard = () => renderDexCard();
 })();
 }

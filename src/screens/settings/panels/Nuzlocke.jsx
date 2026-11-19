@@ -22,8 +22,8 @@ export default function Nuzlocke() {
           <button type="button" className="b b-sm" data-b451="ask">Nuzlocke : désactivé</button>
         )}
       </div>
-      {s.mort.length > 0 && (
-        <p className="v4-note" style={{ marginTop: '10px' }}><b>Tombés au combat ({s.mort.length})</b> : {s.mort.slice(-12).map(m => m.n).join(', ')}.</p>
+      {s.fallen.length > 0 && (
+        <p className="v4-note" style={{ marginTop: '10px' }}><b>Tombés au combat ({s.fallen.length})</b> : {s.fallen.slice(-12).map(m => m.n).join(', ')}.</p>
       )}
     </section>
   );

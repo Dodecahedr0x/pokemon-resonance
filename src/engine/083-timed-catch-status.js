@@ -24,8 +24,8 @@ function stKey453(u) {
   if (u.badge === 'GEL') return 'gel';
   if (u.badge === 'PAR') return 'par';
   if (u.badge === 'SOM') return 'som';
-  if (u.bru > 0) return 'bru';
-  if (u.psn > 0) return 'psn';
+  if (u.burn > 0) return 'bru';
+  if (u.poisoned > 0) return 'psn';
   if (u.root > 0 || u.web > 0) return 'rac';
   return '';
 }
@@ -87,7 +87,7 @@ const CAPT453 = () => PREF.capT453 !== 0 && !RM && !AUTO;
 // Instructions run at startup, in the original order (see index.js).
 export function __init() {
 
-HOOKS.jeton.push(u => {
+HOOKS.token.push(u => {
   const T = L.u[u.uid];
   if (!T) return;
   T.st = true; // token's .st453 group (Units.jsx)

@@ -42,7 +42,7 @@ export { TERR433, DUEL433, STMAX433, duelOrder433, duelNew433, duelStep433 }; //
       the basics to the duel, with a button to try it and progress saved.
    ===================================================================== */
 export function V433_0() {
-  return { duel433: { n: 0, h: [], noms: ['', ''] }, tuto433: [] };
+  return { duel433: { n: 0, h: [], names: ['', ''] }, tuto433: [] };
 }
 
 
@@ -52,7 +52,7 @@ export function v433Clean(p) {
   const d = p.duel433;
   if (d && typeof d === 'object') {
     o.duel433.n = Math.max(0, Math.min(99999, Math.floor(+d.n || 0)));
-    if (Array.isArray(d.noms)) o.duel433.noms = [duelName433(d.noms[0]), duelName433(d.noms[1])];
+    if (Array.isArray(d.names)) o.duel433.names = [duelName433(d.names[0]), duelName433(d.names[1])];
     if (Array.isArray(d.h)) {
       o.duel433.h = d.h
         .filter(x => x && typeof x === 'object' && Array.isArray(x.t) && x.t.length === 2)
@@ -85,7 +85,7 @@ function duelOrder433(n) {
 
 
 function duelNames433() {
-  const N = (PROFILE.duel433 && PROFILE.duel433.noms) || ['', ''];
+  const N = (PROFILE.duel433 && PROFILE.duel433.names) || ['', ''];
   return [N[0] || duelName433(PROFILE.name) || 'Joueur 1', N[1] || 'Joueur 2'];
 }
 
@@ -94,14 +94,14 @@ function duelNew433() {
   const prev = DUEL433 || {};
   DUEL433 = {
     e: 'reglages',
-    noms: prev.noms || duelNames433(),
+    names: prev.names || duelNames433(),
     mode: prev.mode || 'base',
-    taille: prev.taille || 4,
+    sizeValue: prev.sizeValue || 4,
     terrain: prev.terrain || 'arene',
-    heure: prev.heure || 'jour',
+    timeOfDay: prev.timeOfDay || 'jour',
     lim: prev.lim || 10,
     pool: [],
-    pas: 0,
+    stepCount: 0,
     bans: [[], []],
     picks: [[], []],
     sel: null
@@ -122,8 +122,8 @@ function shuffle433(list) {
 
 /** The draw: entirely different families, in base or final form. */
 function duelDraw433(C) {
-  const bases = MON.filter(m => m.base === m.id && !m.leg && BY[m.id] && !BY[m.id].ennemi).map(m => m.id),
-    n = C.taille * 2 + 4;
+  const bases = MON.filter(m => m.base === m.id && !m.leg && BY[m.id] && !BY[m.id].isEnemy).map(m => m.id),
+    n = C.sizeValue * 2 + 4;
   C.pool = shuffle433(bases)
     .slice(0, n)
     .map(b => {
@@ -132,7 +132,7 @@ function duelDraw433(C) {
       return endsList.length ? endsList[Math.floor(Math.random() * endsList.length)].id : b;
     });
   C.e = 'draft';
-  C.pas = 0;
+  C.stepCount = 0;
   C.bans = [[], []];
   C.picks = [[], []];
   C.sel = null;
@@ -140,7 +140,7 @@ function duelDraw433(C) {
 
 
 function duelStep433(C) {
-  return duelOrder433(C.taille)[C.pas] || null;
+  return duelOrder433(C.sizeValue)[C.stepCount] || null;
 }
 
 
@@ -148,7 +148,7 @@ function duelTake433(C, id) {
   const st = duelStep433(C);
   if (!st || !C.pool.includes(id) || C.bans.flat().includes(id) || C.picks.flat().includes(id)) return false;
   (st.a === 'ban' ? C.bans : C.picks)[st.j].push(id);
-  C.pas++;
+  C.stepCount++;
   C.sel = null;
   if (!duelStep433(C)) C.e = 'pret';
   return true;
@@ -156,9 +156,9 @@ function duelTake433(C, id) {
 
 
 function duelCancel433(C) {
-  if (!C.pas) return false;
-  C.pas--;
-  const st = duelOrder433(C.taille)[C.pas];
+  if (!C.stepCount) return false;
+  C.stepCount--;
+  const st = duelOrder433(C.sizeValue)[C.stepCount];
   (st.a === 'ban' ? C.bans : C.picks)[st.j].pop();
   C.e = 'draft';
   C.sel = null;
@@ -168,19 +168,19 @@ function duelCancel433(C) {
 
 /* ---------- duel: the battle ---------- */
 export function duelOpts433() {
-  return { diff: 'normal', items: {}, fatigue: {}, links: {}, ordre: 'equipe', vivant: false, tactique: true, mut: null, doc430: '', fog431: false, defis: [], caracteres: false, desob: false, dojo: 0, apprises: {} };
+  return { diff: 'normal', items: {}, fatigue: {}, links: {}, order: 'equipe', livingBoard: false, tactics: true, mut: null, doc430: '', fog431: false, challenges: [], characters: false, disobedience: false, dojo: 0, learnedTms: {} };
 }
 
 
 function duelScene433(C) {
   const T = TERR433[C.terrain] || TERR433.arene,
-    t2 = C.picks[1].slice(0, C.taille);
+    t2 = C.picks[1].slice(0, C.sizeValue);
   return {
     D: {
       n: 'Duel local',
-      lvl: `${C.noms[0]} contre ${C.noms[1]}`,
+      lvl: `${C.names[0]} contre ${C.names[1]}`,
       lim: C.lim,
-      time: C.heure === 'nuit' ? 'nuit' : 'jour',
+      time: C.timeOfDay === 'nuit' ? 'nuit' : 'jour',
       bio: T.bio,
       water: two433(T.water),
       rock: two433(T.rock),
@@ -189,11 +189,11 @@ function duelScene433(C) {
       lv: 50,
       at: BY[t2[0]] ? BY[t2[0]].t[0] : 'Normal',
       catch: false,
-      sansProgres431: 1,
+      noProgress431: 1,
       duel433: 1,
       d: `Duel local · ${T.n}`,
-      t1: C.picks[0].slice(0, C.taille),
-      noms: C.noms.slice(),
+      t1: C.picks[0].slice(0, C.sizeValue),
+      names: C.names.slice(),
       foes: t2.map((id, i) => [id, posJ2433(i)])
     },
     O: { pil: two433(T.pil), grass: two433(T.grass), sand: two433(T.sand) }
@@ -202,13 +202,13 @@ function duelScene433(C) {
 
 
 function launchDuel433(C) {
-  if (!C || C.picks[0].length < C.taille || C.picks[1].length < C.taille) return;
+  if (!C || C.picks[0].length < C.sizeValue || C.picks[1].length < C.sizeValue) return;
   const X = duelScene433(C);
   SCEN.duel433 = X.D;
   OBST.duel433 = X.O;
   DUELCUR433 = JSON.parse(JSON.stringify(C));
   const P0 = (PROFILE.duel433 = PROFILE.duel433 || V433_0().duel433);
-  P0.noms = C.noms.map(duelName433);
+  P0.names = C.names.map(duelName433);
   queueSave();
   if (scSel !== 'duel433') launchDuel433.prev = scSel;
   __set_scSel('duel433');
@@ -221,7 +221,7 @@ function launchDuel433(C) {
 function leaveDuel433() {
   const hp = launchDuel433.prev;
   __set_B(null);
-  __set_scSel(hp && SCEN[hp] && !SCEN[hp].sansProgres431 ? hp : 'gue');
+  __set_scSel(hp && SCEN[hp] && !SCEN[hp].noProgress431 ? hp : 'gue');
   backToPrep();
   V4.campTab = 'duel';
   go('camp');
@@ -236,8 +236,8 @@ function toggle433(S, j) {
     b = j - 1,
     sw = s => (s === 'a' ? 'e' : s === 'e' ? 'a' : s);
   PERSO433.forEach(k => {
-    D.etat[a][k] = S[k] === undefined ? null : S[k];
-    S[k] = D.etat[b][k] === undefined ? null : D.etat[b][k];
+    D.status[a][k] = S[k] === undefined ? null : S[k];
+    S[k] = D.status[b][k] === undefined ? null : D.status[b][k];
   });
   D.j = j;
   S.units.forEach(u => (u.side = u.j433 === j ? 'a' : 'e'));
@@ -249,7 +249,7 @@ function toggle433(S, j) {
   ['arriere', 'rune'].forEach(k => {
     if (S[k] && typeof S[k] === 'object') S[k] = { a: S[k].e || 0, e: S[k].a || 0 };
   });
-  S.voix = S.vmax;
+  S.voice = S.vmax;
   S.phase = 'player';
 }
 
@@ -282,21 +282,21 @@ function turnStart433(S, j, ev) {
     if (u.ko || u.j433 !== j) return;
     u.done = false;
     u.sn = false;
-    u.vigil = 0;
-    const st = STUN433.includes(u.badge) && !u.bdgVu433;
-    if (u.skip > 0 || st || u.perdu) {
-      if (st || u.perdu) say(ev, `${u.n} ne peut pas agir ce tour.`);
+    u.vigilance = 0;
+    const st = STUN433.includes(u.badge) && !u.badgeSeen433;
+    if (u.skip > 0 || st || u.isLost) {
+      if (st || u.isLost) say(ev, `${u.n} ne peut pas agir ce tour.`);
       u.skip = 0;
-      u.perdu = 0;
+      u.isLost = 0;
       u.acted = true;
       u.moved = true;
       u.sn = true;
-      u.bdgVu433 = st ? 1 : 0;
+      u.badgeSeen433 = st ? 1 : 0;
     } else {
       u.acted = false;
       u.moved = false;
       u.badge = null;
-      u.bdgVu433 = 0;
+      u.badgeSeen433 = 0;
       if (u.force) {
         u.moved = true;
         say(ev, `${u.n} est troublé : il ne peut pas se déplacer ce tour.`);
@@ -309,7 +309,7 @@ function turnStart433(S, j, ev) {
 
 
 export function duelPlan433(S, ev) {
-  if (S.duel433.pret && S.round > 1) turnStart433(S, 1, ev);
+  if (S.duel433.ready && S.round > 1) turnStart433(S, 1, ev);
 }
 
 
@@ -318,11 +318,11 @@ export function vigilDuel433(S, e, ev) {
   if (!e || e.ko || S.over || e.side !== 'a') return;
   const k = uk(e);
   for (const u of S.units) {
-    if (u.side !== 'e' || u.ko || !u.vigil || STUN433.includes(u.badge)) continue;
+    if (u.side !== 'e' || u.ko || !u.vigilance || STUN433.includes(u.badge)) continue;
     const m = vigilHit420(S, u, k);
     if (!m) continue;
-    u.vigil = 0;
-    S.stats.vigil = (S.stats.vigil || 0) + 1;
+    u.vigilance = 0;
+    S.stats.vigilance = (S.stats.vigilance || 0) + 1;
     say(ev, `Vigilance : ${u.n} intercepte ${e.n} avec ${m.n} !`);
     ev.push({ e: 'vigil420', u: u.uid, t: e.uid });
     resolve(S, u, m, k).forEach(x => ev.push(x));
@@ -341,8 +341,8 @@ export function duelPass433() {
   clearAim();
   if (D.j === 1) {
     const ev = [];
-    log(`${D.noms[0]} termine son tour.`, 'sys');
-    D.dech = 2;
+    log(`${D.names[0]} termine son tour.`, 'sys');
+    D.discard = 2;
     unloadCharges(S, ev); // Player 2's charged attacks fire after Player 1's turn
     endStep(S, ev);
     if (!S.over) {
@@ -361,9 +361,9 @@ export function duelPass433() {
     relay433(2);
     return true;
   }
-  log(`${D.noms[1]} termine son tour.`, 'sys');
+  log(`${D.names[1]} termine son tour.`, 'sys');
   toggle433(S, 1);
-  D.dech = 1;
+  D.discard = 1;
   ui.busy = true;
   renderAll();
   setTimeout(() => {
@@ -380,8 +380,8 @@ export function duelPass433() {
 function relay433(j, force) {
   const D = B && B.duel433;
   if (!D) return;
-  if ((AUTO && !force) || PREF.relais433 === false) {
-    turnBanner('Manche ' + B.round, D.noms[j - 1]);
+  if ((AUTO && !force) || PREF.relay433 === false) {
+    turnBanner('Manche ' + B.round, D.names[j - 1]);
     return;
   }
   // rendered: src/screens/overlays/transients/Duel433.jsx
@@ -390,9 +390,9 @@ function relay433(j, force) {
     j,
     round: B.round,
     lim: B.lim,
-    nom: D.noms[j - 1],
+    displayName: D.names[j - 1],
     sub: B.round === 1 ? `Passez le téléphone. Vos Pokémon sont cerclés ${j === 1 ? 'de bleu' : 'd’orange'}.` : 'Passez le téléphone, puis touchez le bouton.',
-    s: [1, 2].map(x => ({ j: x, nom: D.noms[x - 1], pv: duelHp433(B, x), n: B.units.filter(u => u.j433 === x && !u.ko).length }))
+    s: [1, 2].map(x => ({ j: x, displayName: D.names[x - 1], pv: duelHp433(B, x), n: B.units.filter(u => u.j433 === x && !u.ko).length }))
   });
   const b = o.querySelector('[data-dr433="go"]');
   if (b) b.focus();
@@ -408,7 +408,7 @@ function duelHp433(S, j) {
 
 
 function duelWinner433(S) {
-  if (S.forfait433) return 3 - S.forfait433;
+  if (S.forfeit433) return 3 - S.forfeit433;
   const v1 = S.units.some(u => u.j433 === 1 && !u.ko),
     v2 = S.units.some(u => u.j433 === 2 && !u.ko);
   if (v1 && !v2) return 1;
@@ -423,7 +423,7 @@ function duelWinner433(S) {
 export function duelEnd433(S, rew) {
   const D = S.duel433,
     g = duelWinner433(S),
-    w = S.forfait433 ? 'forfait' : S.units.some(u => u.j433 === 1 && !u.ko) && S.units.some(u => u.j433 === 2 && !u.ko) ? 'temps' : 'ko';
+    w = S.forfeit433 ? 'forfait' : S.units.some(u => u.j433 === 1 && !u.ko) && S.units.some(u => u.j433 === 2 && !u.ko) ? 'temps' : 'ko';
   D.g = g;
   D.w = w;
   S.over = 'win';
@@ -431,7 +431,7 @@ export function duelEnd433(S, rew) {
   rew.duel433 = {
     g,
     w,
-    noms: D.noms.slice(),
+    names: D.names.slice(),
     pv: [duelHp433(S, 1), duelHp433(S, 2)],
     rows: [1, 2].map(j =>
       S.units
@@ -441,7 +441,7 @@ export function duelEnd433(S, rew) {
   };
   const P0 = (PROFILE.duel433 = PROFILE.duel433 || V433_0().duel433);
   P0.n = (P0.n || 0) + 1;
-  P0.h = (P0.h || []).concat([{ d: new Date().toISOString().slice(0, 10), n: D.noms.slice(), g, r: S.round, w, t: [1, 2].map(j => S.units.filter(u => u.j433 === j).map(u => u.id)) }]).slice(-12);
+  P0.h = (P0.h || []).concat([{ d: new Date().toISOString().slice(0, 10), n: D.names.slice(), g, r: S.round, w, t: [1, 2].map(j => S.units.filter(u => u.j433 === j).map(u => u.id)) }]).slice(-12);
   return [0, 0];
 }
 
@@ -449,9 +449,9 @@ export function duelEnd433(S, rew) {
 export function duelUnder433(S) {
   const D = S.duel433;
   if (!D) return '';
-  if (D.w === 'forfait') return `${esc(D.noms[(S.forfait433 || 1) - 1])} a déclaré forfait.`;
-  if (D.w === 'temps') return `Temps écoulé : ${esc(D.noms[0])} garde ${duelHp433(S, 1)} % de ses PV, ${esc(D.noms[1])} ${duelHp433(S, 2)} %.`;
-  return D.g ? `Toute l’équipe de ${esc(D.noms[2 - D.g])} est K.O. en ${S.round} manche${S.round > 1 ? 's' : ''}.` : 'Les deux équipes tombent ensemble.';
+  if (D.w === 'forfait') return `${esc(D.names[(S.forfeit433 || 1) - 1])} a déclaré forfait.`;
+  if (D.w === 'temps') return `Temps écoulé : ${esc(D.names[0])} garde ${duelHp433(S, 1)} % de ses PV, ${esc(D.names[1])} ${duelHp433(S, 2)} %.`;
+  return D.g ? `Toute l’équipe de ${esc(D.names[2 - D.g])} est K.O. en ${S.round} manche${S.round > 1 ? 's' : ''}.` : 'Les deux équipes tombent ensemble.';
 }
 
 
@@ -510,18 +510,18 @@ const two433 = keys => [...new Set([...(keys || []), ...(keys || []).map(mirror4
 const posJ2433 = i => [BW - 1 - DEPLOY[i][0], BH - 1 - DEPLOY[i][1]];
 
 
-const PERSO433 = ['syn', 'harmonie', 'reso417', 'acc', 'relance', 'lastAtk'];
+const PERSO433 = ['syn', 'harmonie', 'resonance417', 'acc', 'retrigger', 'lastAtk'];
 
 
 const STUN433 = ['SOM', 'GEL', 'PAR'];
 
 
-export const duelLoad433 = (S, u) => !S.duel433 || u.j433 === S.duel433.dech;
+export const duelLoad433 = (S, u) => !S.duel433 || u.j433 === S.duel433.discard;
 
 
 export const duelTitle433 = S => {
   const D = S.duel433;
-  return D && D.g ? `Victoire de ${esc(D.noms[D.g - 1])}` : 'Match nul';
+  return D && D.g ? `Victoire de ${esc(D.names[D.g - 1])}` : 'Match nul';
 };
 
 // Statements run at startup, in the original order (see index.js).
@@ -535,7 +535,7 @@ DUELCUR433 = null;
 
 HOOKS.creation.push((S, opt, D0) => {
   if (!D0 || !D0.duel433) return;
-  S.duel433 = { j: 1, noms: (D0.noms || ['Joueur 1', 'Joueur 2']).slice(0, 2), etat: [{}, {}], dech: 1, pret: 0, D: JSON.parse(JSON.stringify(D0)), O: JSON.parse(JSON.stringify(OBST.duel433 || {})) };
+  S.duel433 = { j: 1, names: (D0.names || ['Joueur 1', 'Joueur 2']).slice(0, 2), status: [{}, {}], discard: 1, ready: 0, D: JSON.parse(JSON.stringify(D0)), O: JSON.parse(JSON.stringify(OBST.duel433 || {})) };
   S.units.forEach(u => (u.j433 = u.side === 'a' ? 1 : 2));
   S.jit = true;
   S.coop = 0;
@@ -561,10 +561,10 @@ HOOKS.combat.push((S, opt, D0) => {
       if (hasNx(u) || hasXp(u)) u.en = Math.max(u.en || 0, 1);
     });
   }
-  D.etat[0] = { syn: S.syn || [], harmonie: S.harmonie || null, reso417: null, acc: null, relance: false, lastAtk: null };
-  D.etat[1] = { syn: synOf(p2.map(u => u.id)).map(s => s.k), harmonie: h2, reso417: null, acc: null, relance: false, lastAtk: null };
+  D.status[0] = { syn: S.syn || [], harmonie: S.harmonie || null, resonance417: null, acc: null, retrigger: false, lastAtk: null };
+  D.status[1] = { syn: synOf(p2.map(u => u.id)).map(s => s.k), harmonie: h2, resonance417: null, acc: null, retrigger: false, lastAtk: null };
   S.noCatch = true;
-  D.pret = 1;
+  D.ready = 1;
 });
 
 
@@ -574,7 +574,7 @@ document.addEventListener('click', e => {
   if (b.dataset.dr433 === 'go') {
     shut('duel433r');
     if (B && B.duel433) {
-      turnBanner('Manche ' + B.round, B.duel433.noms[B.duel433.j - 1]);
+      turnBanner('Manche ' + B.round, B.duel433.names[B.duel433.j - 1]);
       renderAll();
     }
     return;
@@ -585,9 +585,9 @@ document.addEventListener('click', e => {
   }
   if (b.dataset.dr433 === 'forfait' && B && B.duel433 && !B.over) {
     shut('duel433r');
-    B.forfait433 = B.duel433.j;
+    B.forfeit433 = B.duel433.j;
     B.over = 'win';
-    log(`${B.duel433.noms[B.duel433.j - 1]} déclare forfait.`, 'sys');
+    log(`${B.duel433.names[B.duel433.j - 1]} déclare forfait.`, 'sys');
     finish();
   }
 });
@@ -603,19 +603,19 @@ document.addEventListener(
     if (B.over) return leaveDuel433();
     const D = B.duel433,
       j = D.j;
-    overlay('duel433r', { mode: 'abandon', j, nom: D.noms[j - 1], autre: D.noms[2 - j] });
+    overlay('duel433r', { mode: 'abandon', j, displayName: D.names[j - 1], other: D.names[2 - j] });
   },
   true
 );
 
 
-HOOKS.resultat.push(r => {
+HOOKS.battleResult.push(r => {
   const X = r && r.duel433;
   if (!X) return '';
   const mx = Math.max(1, ...X.rows.flat().map(x => x.d));
   return `<div class="res-l du433-r"><h4>Rapport du duel</h4><div class="du433-rg">${[0, 1]
     .map(
-      i => `<div class="du433-rc dj${i + 1}${X.g === i + 1 ? ' g' : ''}"><b>${esc(X.noms[i])}</b><em>${X.pv[i]} % PV restants</em>${X.rows[i]
+      i => `<div class="du433-rc dj${i + 1}${X.g === i + 1 ? ' g' : ''}"><b>${esc(X.names[i])}</b><em>${X.pv[i]} % PV restants</em>${X.rows[i]
         .map(x => {
           const m = BY[x.id];
           return `<div class="du433-rl${x.ko ? ' ko' : ''}">${medal(m.t, 'xs')}<span>${m.n}</span><i style="--w:${Math.round((x.d / mx) * 100)}%"></i><small>${x.d}${x.k ? ` · ${x.k} K.O.` : ''}</small></div>`;
@@ -636,7 +636,7 @@ document.addEventListener(
     $('#cbResult').hidden = true;
     if (b.dataset.res === 'again' && DUELCUR433) {
       const C = JSON.parse(JSON.stringify(DUELCUR433));
-      C.noms.reverse();
+      C.names.reverse();
       C.picks.reverse();
       C.bans.reverse();
       DUEL433 = C;
@@ -675,7 +675,7 @@ document.addEventListener('click', e => {
   if (s && DUEL433) {
     const k = s.dataset.du433s,
       v = s.dataset.v;
-    DUEL433[k] = k === 'taille' ? (v === '3' ? 3 : 4) : v === 'final' ? 'final' : 'base';
+    DUEL433[k] = k === 'sizeValue' ? (v === '3' ? 3 : 4) : v === 'final' ? 'final' : 'base';
     duelRender433();
     return;
   }
@@ -691,8 +691,8 @@ document.addEventListener('click', e => {
   const C = DUEL433 || duelNew433(),
     a = b.dataset.du433;
   if (a === 'tirer') {
-    C.noms = C.noms.map((x, i) => duelName433(x) || 'Joueur ' + (i + 1));
-    if (C.noms[0] === C.noms[1]) C.noms[1] += ' 2';
+    C.names = C.names.map((x, i) => duelName433(x) || 'Joueur ' + (i + 1));
+    if (C.names[0] === C.names[1]) C.names[1] += ' 2';
     duelDraw433(C);
   } else if (a === 'ok' && C.sel) duelTake433(C, C.sel);
   else if (a === 'annuler') duelCancel433(C);
@@ -707,7 +707,7 @@ document.addEventListener('click', e => {
 document.addEventListener('input', e => {
   const x = e.target.closest('[data-du433n]');
   if (!x || !DUEL433) return;
-  DUEL433.noms[+x.dataset.du433n] = x.value.slice(0, 14);
+  DUEL433.names[+x.dataset.du433n] = x.value.slice(0, 14);
 });
 
 
@@ -716,7 +716,7 @@ document.addEventListener('change', e => {
   if (!x || !DUEL433) return;
   const k = x.dataset.du433c;
   if (k === 'lim') DUEL433.lim = [8, 10, 12].includes(+x.value) ? +x.value : 10;
-  else if (k === 'heure') DUEL433.heure = x.value === 'nuit' ? 'nuit' : 'jour';
+  else if (k === 'heure') DUEL433.timeOfDay = x.value === 'nuit' ? 'nuit' : 'jour';
   else if (k === 'terrain' && TERR433[x.value]) DUEL433.terrain = x.value;
 });
 
@@ -782,7 +782,7 @@ document.addEventListener('click', e => {
     V4.campTab = a.slice(5);
     go('camp');
   } else if (a === 'journal') {
-    V4.qTab = 'journal';
+    V4.questTab = 'journal';
     go('quetes');
   } else go(a);
 });

@@ -59,7 +59,7 @@ function qa443() {
     const Q = footPos.qa;
     if (!useful) {
       const chg = footCls('qa-on', false);
-      if (Q && !Q.hidden) footPos.qa = { ...Q, hidden: true, nom: null };
+      if (Q && !Q.hidden) footPos.qa = { ...Q, hidden: true, displayName: null };
       if (chg || footPos.qa !== Q) refreshBattle('foot');
       return;
     }
@@ -73,7 +73,7 @@ function qa443() {
       b.setAttribute('data-qa443-src', i);
       return { t: L.t || '', c: L.c || '', col: L.col || '', on: b.classList.contains('on'), disabled: !!b.disabled };
     });
-    footPos.qa = { hidden: false, nom: u.n + ' · à vous', items };
+    footPos.qa = { hidden: false, displayName: u.n + ' · à vous', items };
     footCls('qa-on', true);
     refreshBattle('foot');
   } catch { /* Best effort: failure here is non-fatal. */ }
@@ -94,7 +94,7 @@ export function __init() {
       audio playback) no longer open the "Petit souci technique" (Minor technical glitch) box. */
 
 /* ---------- 1. board ---------- */
-HOOKS.lancement.push(isNew => {
+HOOKS.launch.push(isNew => {
   if (isNew && !B.over) setTimeout(frame443, 80);
 });
 
@@ -107,6 +107,6 @@ document.addEventListener('click', e => {
 });
 
 
-HOOKS.rendu.push(qa443);
+HOOKS.rendered.push(qa443);
 
 }

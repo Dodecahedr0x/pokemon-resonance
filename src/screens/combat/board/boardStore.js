@@ -81,9 +81,9 @@ let H = {
   wx448: null, // animated weather: key
   amb471: null, // { k, items }
   fxc: false,
-  cielBan: null, // { ic, heading, text, on }
+  skyBanner: null, // { ic, heading, text, on }
   tbn: null, // { n, en, fast, txt, sub }
-  fondu: null // { n, bg, va }
+  fade: null // { n, bg, va }
 };
 
 export const getHost = () => H;

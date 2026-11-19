@@ -26,17 +26,17 @@ function Preferences({ C }) {
   return (
     <div className="du433-cfg">
       <div className="du433-row">
-        <label className="v4-fld du433-n dj1"><span>Joueur 1 · commence</span><input type="text" data-du433n="0" maxLength={14} defaultValue={C.noms[0]} autoComplete="off" /></label>
-        <label className="v4-fld du433-n dj2"><span>Joueur 2</span><input type="text" data-du433n="1" maxLength={14} defaultValue={C.noms[1]} autoComplete="off" /></label>
+        <label className="v4-fld du433-n dj1"><span>Joueur 1 · commence</span><input type="text" data-du433n="0" maxLength={14} defaultValue={C.names[0]} autoComplete="off" /></label>
+        <label className="v4-fld du433-n dj2"><span>Joueur 2</span><input type="text" data-du433n="1" maxLength={14} defaultValue={C.names[1]} autoComplete="off" /></label>
       </div>
       <div className="v4-fld"><span>Formes</span><Seg k="mode" L={[['base', 'De base · Éveils en combat'], ['final', 'Évoluées']]} v={C.mode} /></div>
-      <div className="v4-fld"><span>Pokémon par joueur</span><Seg k="taille" L={[[3, '3'], [4, '4']]} v={C.taille} /></div>
+      <div className="v4-fld"><span>Pokémon par joueur</span><Seg k="sizeValue" L={[[3, '3'], [4, '4']]} v={C.sizeValue} /></div>
       <div className="du433-row">
         <label className="v4-fld"><span>Terrain</span><select data-du433c="terrain" defaultValue={String(C.terrain)}><Options L={Object.entries(TERR433).map(([k, t]) => [k, t.n])} /></select></label>
-        <label className="v4-fld"><span>Heure</span><select data-du433c="heure" defaultValue={String(C.heure)}><Options L={[['jour', 'Jour'], ['nuit', 'Nuit']]} /></select></label>
+        <label className="v4-fld"><span>Heure</span><select data-du433c="heure" defaultValue={String(C.timeOfDay)}><Options L={[['jour', 'Jour'], ['nuit', 'Nuit']]} /></select></label>
         <label className="v4-fld"><span>Manches</span><select data-du433c="lim" defaultValue={String(C.lim)}><Options L={[8, 10, 12].map(x => [x, String(x)])} /></select></label>
       </div>
-      <p className="du433-h">{`${C.taille * 2 + 4} Pokémon tirés au hasard, un bannissement chacun, puis le choix en serpent : ${C.taille === 3 ? 'J1, J2, J2, J1, J1, J2' : 'J1, J2, J2, J1, J1, J2, J2, J1'}. Le Joueur 2 joue en second : il choisit deux fois d’affilée en premier.`}</p>
+      <p className="du433-h">{`${C.sizeValue * 2 + 4} Pokémon tirés au hasard, un bannissement chacun, puis le choix en serpent : ${C.sizeValue === 3 ? 'J1, J2, J2, J1, J1, J2' : 'J1, J2, J2, J1, J1, J2, J2, J1'}. Le Joueur 2 joue en second : il choisit deux fois d’affilée en premier.`}</p>
       <div className="du433-a"><button type="button" className="b b-gold" data-du433="tirer">Tirer les Pokémon</button></div>
     </div>
   );
@@ -96,9 +96,9 @@ function Team({ C, j }) {
     B0 = C.bans[j];
   return (
     <div className={`du433-eq dj${j + 1}`}>
-      <b>{C.noms[j]}</b>
+      <b>{C.names[j]}</b>
       <div className="du433-eqm">
-        {Array.from({ length: C.taille }, (_, i) => (L[i] ? <span key={i} title={BY[L[i]].n}><img src={ART(BY[L[i]].no)} alt={BY[L[i]].n} /></span> : <span key={i} className="v" />))}
+        {Array.from({ length: C.sizeValue }, (_, i) => (L[i] ? <span key={i} title={BY[L[i]].n}><img src={ART(BY[L[i]].no)} alt={BY[L[i]].n} /></span> : <span key={i} className="v" />))}
       </div>
       {B0.length ? <em>{`Banni : ${B0.map(x => BY[x].n).join(', ')}`}</em> : null}
     </div>
@@ -108,16 +108,16 @@ function Team({ C, j }) {
 // The draw: order, step, teams, pool, actions.
 function Draw({ C }) {
   const st = duelStep433(C),
-    ord = duelOrder433(C.taille);
+    ord = duelOrder433(C.sizeValue);
   return (
     <>
       <div className="du433-o" aria-label="Ordre du tirage">
         {ord.map((x, i) => (
-          <span key={i} className={`dj${x.j + 1}${i < C.pas ? ' fait' : i === C.pas ? ' now' : ''}${x.a === 'ban' ? ' bn' : ''}`}>{`${x.a === 'ban' ? '✕' : ''}J${x.j + 1}`}</span>
+          <span key={i} className={`dj${x.j + 1}${i < C.stepCount ? ' fait' : i === C.stepCount ? ' now' : ''}${x.a === 'ban' ? ' bn' : ''}`}>{`${x.a === 'ban' ? '✕' : ''}J${x.j + 1}`}</span>
         ))}
       </div>
       {st ? (
-        <p className="du433-st"><b className={`dj${st.j + 1}`}>{C.noms[st.j]}</b>{' ' + (st.a === 'ban' ? 'bannit un Pokémon : personne ne pourra le prendre.' : 'choisit un Pokémon.')}</p>
+        <p className="du433-st"><b className={`dj${st.j + 1}`}>{C.names[st.j]}</b>{' ' + (st.a === 'ban' ? 'bannit un Pokémon : personne ne pourra le prendre.' : 'choisit un Pokémon.')}</p>
       ) : (
         <p className="du433-st">Les équipes sont prêtes.</p>
       )}
@@ -134,7 +134,7 @@ function Draw({ C }) {
         ) : (
           <button type="button" className="b b-gold b-lg" data-du433="lancer">Lancer le duel</button>
         )}
-        {C.pas ? <button type="button" className="b" data-du433="annuler">Annuler le dernier choix</button> : null}
+        {C.stepCount ? <button type="button" className="b" data-du433="annuler">Annuler le dernier choix</button> : null}
         <button type="button" className="b b-ghost" data-du433="tirer">Nouveau tirage</button>
         <button type="button" className="b b-ghost" data-du433="reglages">Réglages</button>
       </div>

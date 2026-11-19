@@ -25,7 +25,7 @@ export default function DexCard() {
     own = ownedFam(m.id),
     sh = isShinyOwned(m.id),
     family = familyOf(m.id),
-    tl = TAL[m.tal],
+    tl = TAL[m.ability],
     i = DEXS.indexOf(m),
     prev = DEXS[(i - 1 + DEXS.length) % DEXS.length],
     next = DEXS[(i + 1) % DEXS.length],

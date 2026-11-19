@@ -103,6 +103,6 @@ export function __init() {
   });
   doApply();
 
-  window.__habillage472 = { ouvrir: openOverlay, entree: entrance };
+  window.__styling472 = { openOverlay, entrance };
 })();
 }

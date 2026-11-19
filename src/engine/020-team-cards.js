@@ -67,7 +67,7 @@ export function evoDiff(a, b) {
     lose,
     tg,
     tl,
-    tal: A.tal !== B2.tal ? B2.tal : null,
+    ability: A.ability !== B2.ability ? B2.ability : null,
     role: A.r !== B2.r ? B2.r : null,
     hp: (B2.s[0] - A.s[0]) * 8
   };
@@ -85,7 +85,7 @@ function rxOf(ms) {
     monMarks(m).forEach(k => add(marks, k, m.n));
     monEls(m).forEach(e => add(els, e, m.n));
   });
-  if (ms.some(m => m.tal === 'adaptabilite')) [...marks.keys()].forEach(k => add(els, MKT[k], 'Évoli'));
+  if (ms.some(m => m.ability === 'adaptabilite')) [...marks.keys()].forEach(k => add(els, MKT[k], 'Évoli'));
   const rx = new Map();
   marks.forEach((by, k) =>
     EL.forEach((e, i) => {
@@ -333,9 +333,9 @@ function closeSheet() {
 /* v1.0: held items, fatigue, Bonds in the Pokédex */
 function equip(id, it) {
   if (it && !ownedItems().includes(it)) return;
-  for (const k in PROFILE.equip) if (PROFILE.equip[k] === it) delete PROFILE.equip[k];
-  if (it) PROFILE.equip[id] = it;
-  else delete PROFILE.equip[id];
+  for (const k in PROFILE.equipment) if (PROFILE.equipment[k] === it) delete PROFILE.equipment[k];
+  if (it) PROFILE.equipment[id] = it;
+  else delete PROFILE.equipment[id];
   save();
   renderSquad();
   toast(it ? `${BY[id].n} tient ${ITEMS2[it].n}.` : `${BY[id].n} ne tient plus d’objet.`);

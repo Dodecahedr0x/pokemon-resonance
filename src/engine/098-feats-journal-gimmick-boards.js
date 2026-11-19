@@ -32,7 +32,7 @@ function jxBilan467(S, win) {
     ex = [];
   if (win && !kos) ex.push('Sans aucun KO');
   if (win && S.round <= 4) ex.push('Victoire éclair');
-  if (win && S.stats && S.stats.reso >= 3) ex.push(`${S.stats.reso} Résonances déclenchées`);
+  if (win && S.stats && S.stats.resonant >= 3) ex.push(`${S.stats.resonant} Résonances déclenchées`);
   if (win && mvp && tot && mvp.d / tot >= 0.7 && al.length > 1) ex.push(`${mvp.n} a porté l’équipe`);
   if (X.best && X.best.d >= 20) ex.push(`Coup d’éclat : ${X.best.d} dégâts`);
   if (S.stats && S.stats.rx >= 3) ex.push(`${S.stats.rx} réactions en chaîne`);
@@ -77,8 +77,8 @@ export const gimKey467 = () => (PREF.gim467 === 'rand' || GIM467[PREF.gim467] ? 
 // Statements run at startup, in the original order (see index.js).
 export function __init() {
 
-HOOKS.degats.push((S, v, real, o) => {
-  const a = S.acteur430 && byUid(S, S.acteur430);
+HOOKS.damage.push((S, v, real, o) => {
+  const a = S.actor430 && byUid(S, S.actor430);
   if (a && a.side === 'a' && v.side === 'e' && !(o && o.ind) && real > 0) {
     const X = S.stats.x467 || (S.stats.x467 = { best: null });
     if (!X.best || real > X.best.d) X.best = { d: real, by: a.n, on: v.n, r: S.round };
@@ -86,7 +86,7 @@ HOOKS.degats.push((S, v, real, o) => {
 });
 
 
-HOOKS.progres.unshift((S, rew, win) => {
+HOOKS.progress.unshift((S, rew, win) => {
   try {
     if (!S.stats || (SCEN[S.sc] && SCEN[S.sc].tuto)) return null;
     const b = jxBilan467(S, win),
@@ -103,7 +103,7 @@ HOOKS.progres.unshift((S, rew, win) => {
 });
 
 
-HOOKS.resultat.unshift(r => {
+HOOKS.battleResult.unshift(r => {
   const b = r.jx467;
   if (!b || (!b.mvp && !b.ex.length)) return '';
   const l = [];
@@ -116,13 +116,13 @@ HOOKS.resultat.unshift(r => {
 
 HOOKS.combat.push(S => {
   const c = gimKey467();
-  if (c === 'off' || !S || S.fixe431 || S.br466 || bossScene(S) || (SCEN[S.sc] && SCEN[S.sc].tuto)) return;
+  if (c === 'off' || !S || S.fixed431 || S.br466 || bossScene(S) || (SCEN[S.sc] && SCEN[S.sc].tuto)) return;
   S.gim467 = c === 'rand' ? Object.keys(GIM467)[Math.floor(Math.random() * Object.keys(GIM467).length)] : c;
   gimPlace467(S, GIM467[S.gim467].ini);
 });
 
 
-HOOKS.avantFinManche.push((S, ev) => {
+HOOKS.beforeRoundEnd.push((S, ev) => {
   const g = S.gim467 && GIM467[S.gim467];
   if (!g || !g.ch || S.round % g.ch) return;
   gimPlace467(S, 1, ev);

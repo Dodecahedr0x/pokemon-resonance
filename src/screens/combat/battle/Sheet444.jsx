@@ -10,10 +10,10 @@ export default function Sheet444() {
     c = F.c;
   if (!F.made || !c) return null;
   return (
-    <aside id="ti444" className={'ti444' + (F.haut ? ' haut' : '')} role="dialog" aria-label="Détail de la case" hidden={F.hidden} style={{ top: F.top, bottom: F.bottom }}>
+    <aside id="ti444" className={'ti444' + (F.isTop ? ' haut' : '')} role="dialog" aria-label="Détail de la case" hidden={F.hidden} style={{ top: F.top, bottom: F.bottom }}>
       <header className="ti444-h">
         <i className="ti444-sw" style={{ background: c.sw }} />
-        <b>Case {c.nom}</b>
+        <b>Case {c.displayName}</b>
         <span>{c.terrain}</span>
         <button type="button" className="ti444-x" data-ti444="x" aria-label="Fermer">
           ×
@@ -78,7 +78,7 @@ export default function Sheet444() {
             </ul>
           </details>
         )}
-        {c.loupe ? (
+        {c.magnifier ? (
           <p className="ti444-hint">Loupe active : touchez une autre case. Rangez-la avec la loupe du plateau.</p>
         ) : (
           <p className="ti444-hint">Astuce : un appui long sur n’importe quelle case ouvre sa fiche.</p>
@@ -105,7 +105,7 @@ function Pokemon({ v }) {
         {v.badge && <span className={'stt st-' + v.stc}>{v.badge}</span>}
         {v.it ? <em>{v.it}</em> : null}
       </div>
-      {v.peut && (
+      {v.canAct && (
         <button type="button" className="b b-sm" data-ti444="u" data-uid={v.uid}>
           {v.e ? 'Voir sa portée' : 'Le commander'}
         </button>

@@ -18,11 +18,11 @@ const NL = '\n ';
 
 // Content of the chosen tab (V4.qTab); any other value shows the Event tab.
 function Tab() {
-  if (V4.qTab === 'main') return <MainQuest />;
-  if (V4.qTab === 'side') return <SideQuests />;
-  if (V4.qTab === 'succes') return <Achievements />; // achievements and titles (v4.9)
-  if (V4.qTab === 'leg') return <Legends />; // v4.29
-  if (V4.qTab === 'journal') return <Journal />; // v4.30
+  if (V4.questTab === 'main') return <MainQuest />;
+  if (V4.questTab === 'side') return <SideQuests />;
+  if (V4.questTab === 'succes') return <Achievements />; // achievements and titles (v4.9)
+  if (V4.questTab === 'leg') return <Legends />; // v4.29
+  if (V4.questTab === 'journal') return <Journal />; // v4.30
   return <Event />;
 }
 
@@ -55,7 +55,7 @@ function Content() {
       {NL}
       <div className="v4-tabs" role="tablist">
         {tabs.map(([k, n]) => (
-          <button key={k} type="button" role="tab" data-qtab={k} aria-selected={V4.qTab === k}>{n}</button>
+          <button key={k} type="button" role="tab" data-qtab={k} aria-selected={V4.questTab === k}>{n}</button>
         ))}
       </div>
       {NL}

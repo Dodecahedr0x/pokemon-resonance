@@ -19,7 +19,7 @@ export { TAL464, TALMAX464, TALRESET464, talSt464, talSpent464, talPts464 };
 
 /** The battle counts for talents and the season (4.65): neither frozen team nor tutorial. */
 export function battleCount464(S) {
-  return S && !S.fixe431 && !(SCEN[S.sc] && SCEN[S.sc].tuto);
+  return S && !S.fixed431 && !(SCEN[S.sc] && SCEN[S.sc].tuto);
 }
 
 const talSt464 = () => {
@@ -88,7 +88,7 @@ HOOKS.combat.push(S => {
 });
 
 
-HOOKS.avantFinManche.push((S, ev) => {
+HOOKS.beforeRoundEnd.push((S, ev) => {
   if (!S.tal464) return;
   const al = S.units.filter(u => u.side === 'a' && !u.ko),
     s1 = tal464('s1'),
@@ -108,17 +108,17 @@ HOOKS.avantFinManche.push((S, ev) => {
 
 DAMAGE_PROVIDERS.push({
   id: 'talents464',
-  fournir: (c, { S, u, t }) => {
+  provide: (c, { S, u, t }) => {
     if (!S || !S.tal464 || !u || u.side !== 'a') return false;
     const a1 = tal464('a1'),
       a3 = t && t.hp / t.mhp < 0.5 ? tal464('a3') : 0,
       pc = a1 * 2 + a3 * 4;
-    return pc > 0 && { mul: 1 + pc / 100, libelle: 'Talents' };
+    return pc > 0 && { mul: 1 + pc / 100, labelText: 'Talents' };
   }
 });
 
 
-HOOKS.progres.unshift((S, rew, win) => {
+HOOKS.progress.unshift((S, rew, win) => {
   try {
     if (!win || !battleCount464(S)) return null;
     const e1 = tal464('e1'),
@@ -143,7 +143,7 @@ HOOKS.progres.unshift((S, rew, win) => {
 });
 
 
-HOOKS.resultat.unshift(r => (r.tal464 ? `<div class="res-l"><h4>Talents</h4><div class="rl"><span>Bonus de talents : ${esc(r.tal464.join(', '))}</span></div></div>` : ''));
+HOOKS.battleResult.unshift(r => (r.tal464 ? `<div class="res-l"><h4>Talents</h4><div class="rl"><span>Bonus de talents : ${esc(r.tal464.join(', '))}</span></div></div>` : ''));
 
 
 document.addEventListener(

@@ -38,7 +38,7 @@ function Gym({ a, i }) {
   const ruleDef = a.r ? ' · règle ' + (RULES431().find(x => x[0] === a.r) || ['', ''])[1] : '';
   return (
     <article className="ar431-c">
-      <div className="ar431-h"><b>{a.n}</b><em>{`${(SCEN[a.t] || {}).n || a.t}${ruleDef} · ${a.h === 'nuit' ? 'nuit' : 'jour'} · ${a.lim} manches${a.au ? ' · par ' + a.au : ''}`}</em></div>
+      <div className="ar431-h"><b>{a.n}</b><em>{`${(SCEN[a.t] || {}).n || a.t}${ruleDef} · ${a.h === 'nuit' ? 'nuit' : 'jour'} · ${a.lim} manches${a.author ? ' · par ' + a.author : ''}`}</em></div>
       <div className="ar431-f">{a.f.map((id, j) => <span key={j} title={BY[id].n}><Html html={medal(BY[id].t, 'xs')} />{BY[id].n}</span>)}</div>
       <div className="ar431-b">
         <button type="button" className="b b-sm b-gold" data-arn431="jouer" data-i={i}>Jouer</button>
@@ -55,7 +55,7 @@ function Gym({ a, i }) {
 
 // Camp › Gyms (v4.31): create, import and share custom gyms.
 export default function Gyms() {
-  const A = PROFILE.arenes431 || [];
+  const A = PROFILE.gyms431 || [];
   return (
     <section className="v4-panel ar431">
       <header className="v4-ph"><svg><use href="#i-league" /></svg><b>Arènes personnalisées</b><span className="v4-cnt">{`${A.length} / 12`}</span></header>

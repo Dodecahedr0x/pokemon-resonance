@@ -90,14 +90,14 @@ export function showcase455() {
   } catch (e) {
     seen = {};
   }
-  const learned = Object.values((PROFILE.ct && PROFILE.ct.apprises) || {});
+  const learned = Object.values((PROFILE.ct && PROFILE.ct.learnedTms) || {});
   const cts = tmKeys455(),
     cs = Object.keys(SHOP).filter(k => SHOP[k].cs);
   [...cts, ...cs].forEach(k => {
     if (bagN(k) > 0 || learned.includes(SHOP[k].mv)) seen[k] = 1;
   });
   writeLS('res-vit455', seen);
-  return { seen, cts, cs };
+  return { seen, tms: cts, cs };
 }
 
 
@@ -148,7 +148,7 @@ const LJ455 = (k, d) => {
 const nameIt455 = k => (SHOP[k] ? SHOP[k].n : (ITEMS2[k] || {}).n || k);
 
 
-export const tmKeys455 = () => Object.keys(SHOP).filter(k => SHOP[k].cat === 'machines' && !SHOP[k].cs && !SHOP[k].g);
+export const tmKeys455 = () => Object.keys(SHOP).filter(k => SHOP[k].category === 'machines' && !SHOP[k].cs && !SHOP[k].g);
 
 
 export const txtIn455 = o => Object.keys(o).map(k => `${o[k]} × ${nameIt455(k)}`).join(' + ');

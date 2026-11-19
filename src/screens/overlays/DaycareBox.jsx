@@ -6,12 +6,12 @@ import { medal } from '../../engine/014-utils.js';
 // Camp Daycare (#pensBox): choice of a pair. The engine (055) computes the list and
 // the compatibility, and keeps the clicks (data-pens, data-pens-p) and the hidden attribute.
 export default function DaycareBox() {
-  return <Box nom="pens" className="result exp-box" id="pensBox" Carte={Card} />;
+  return <Box displayName="pens" className="result exp-box" id="pensBox" cardComponent={Card} />;
 }
 
 function Card({ L, ok }) {
   return (
-    <Dialogue className="sv-card exp-card" titre="pensT" fermer={{ 'data-pens': 'x' }}>
+    <Dialogue className="sv-card exp-card" titre="pensT" closeAttrs={{ 'data-pens': 'x' }}>
       <p className="kick">Pension</p>
       <h2 className="h2" id="pensT">Choisissez un couple</h2>
       <p className="d">Deux Pokémon qui partagent un type, ou Métamorph avec n’importe qui. Le premier choisi donne la famille de l’œuf, le second lui transmet une attaque. Les membres de l’équipe restent au camp.</p>

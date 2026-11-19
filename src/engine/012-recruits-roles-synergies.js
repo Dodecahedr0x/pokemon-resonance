@@ -68,7 +68,7 @@ const RICON = {
   ecl: 'M4 12h11M11 6l6 6-6 6M19 5v14',
   ver: 'M7 11V8a5 5 0 0 1 10 0v3M6 11h12v9H6Z',
   dec: 'M12 3v5M12 16v5M3 12h5M16 12h5M12 12m-3 0a3 3 0 1 0 6 0 3 3 0 1 0-6 0',
-  rel: 'M12 5v14M5 12h14'
+  relics: 'M12 5v14M5 12h14'
 };
 
 

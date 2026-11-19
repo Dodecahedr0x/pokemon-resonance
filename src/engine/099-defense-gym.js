@@ -74,7 +74,7 @@ const dfSave468 = s => {
 
 const dfOk468 = () => (isCamp() ? BADGES.length >= 3 : true);
 
-const dfPool468 = () => MON.filter(m => m.st === 1 && !m.leg && !m.ennemi && m.base === m.id);
+const dfPool468 = () => MON.filter(m => m.st === 1 && !m.leg && !m.isEnemy && m.base === m.id);
 
 // Statements run at startup, in the original order (see index.js).
 export function __init() {
@@ -109,11 +109,11 @@ DEF_WAVES = 5,
 
 HOOKS.creation.push((S, opt, D0) => {
   if (!D0 || !D0.def468) return;
-  S.def468 = { w: 1, vies: DEF_LIVES, n: 0 };
+  S.def468 = { w: 1, lives: DEF_LIVES, n: 0 };
 });
 
 
-HOOKS.avantFinManche.unshift((S, ev) => {
+HOOKS.beforeRoundEnd.unshift((S, ev) => {
   const D = S.def468;
   if (!D || S.over) return;
   S.units
@@ -121,10 +121,10 @@ HOOKS.avantFinManche.unshift((S, ev) => {
     .forEach(u => {
       u.ko = true;
       u.hp = 0;
-      D.vies--;
-      say(ev, `Brèche ! ${u.n} a atteint la ligne de défense. Vies restantes : ${Math.max(0, D.vies)} / ${DEF_LIVES}.`);
+      D.lives--;
+      say(ev, `Brèche ! ${u.n} a atteint la ligne de défense. Vies restantes : ${Math.max(0, D.lives)} / ${DEF_LIVES}.`);
     });
-  if (D.vies <= 0) {
+  if (D.lives <= 0) {
     S.over = 'lose';
     ev.push({ e: 'over' });
     return;
@@ -134,12 +134,12 @@ HOOKS.avantFinManche.unshift((S, ev) => {
 
 
 // no opponent left standing: the next wave arrives before the battle is judged won
-HOOKS.avantVerdict.push((S, ev) => {
+HOOKS.beforeVerdict.push((S, ev) => {
   if (S.def468 && !S.over && !S.units.some(x => x.side === 'e' && !x.ko) && S.def468.w < DEF_WAVES && S.units.some(x => x.side === 'a' && !x.ko)) dfVague468(S, ev);
 });
 
 
-HOOKS.progres.unshift((S, rew, win) => {
+HOOKS.progress.unshift((S, rew, win) => {
   try {
     const D = S.def468;
     if (!D) return null;
@@ -147,18 +147,18 @@ HOOKS.progres.unshift((S, rew, win) => {
     st.best = Math.max(st.best, win ? DEF_WAVES : D.w - 1);
     if (win) st.won++;
     dfSave468(st);
-    rew.df468 = { win, w: D.w, vies: D.vies };
-    return win ? [600 + 300 * D.vies, D.vies >= 3 ? 4 : D.vies >= 2 ? 2 : 1] : D.w > 1 ? [100 * (D.w - 1), 0] : null;
+    rew.df468 = { win, w: D.w, lives: D.lives };
+    return win ? [600 + 300 * D.lives, D.lives >= 3 ? 4 : D.lives >= 2 ? 2 : 1] : D.w > 1 ? [100 * (D.w - 1), 0] : null;
   } catch (e) {
     return null;
   }
 });
 
 
-HOOKS.resultat.unshift(r => {
+HOOKS.battleResult.unshift(r => {
   const t = r.df468;
   if (!t) return '';
-  return `<div class="res-l"><h4>Arène de défense</h4><div class="rl"><span>${t.win ? `<b>Défense tenue !</b> ${DEF_WAVES} vagues repoussées, ${t.vies} vie${t.vies > 1 ? 's' : ''} restante${t.vies > 1 ? 's' : ''}.` : `Vous avez tenu jusqu’à la vague ${t.w} sur ${DEF_WAVES}.`}</span></div></div>`;
+  return `<div class="res-l"><h4>Arène de défense</h4><div class="rl"><span>${t.win ? `<b>Défense tenue !</b> ${DEF_WAVES} vagues repoussées, ${t.lives} vie${t.lives > 1 ? 's' : ''} restante${t.lives > 1 ? 's' : ''}.` : `Vous avez tenu jusqu’à la vague ${t.w} sur ${DEF_WAVES}.`}</span></div></div>`;
 });
 
 

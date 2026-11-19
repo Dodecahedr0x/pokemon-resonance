@@ -32,7 +32,7 @@ export function steps435(L) {
   return [
     { ok: hlOk435(L.id), t: `Vaincre ${L.n} (Combats › Après-jeu)` },
     ...(isCamp() ? [{ ok: L.pre ? L.pre() : hoennBadgeCount435() >= L.badges, t: L.preT || `Obtenir ${L.badges} badges de Hoenn` }] : []),
-    ...(isCamp() ? L.quete.map(([f, t]) => ({ ok: !!f(), t })) : [])
+    ...(isCamp() ? L.questSteps.map(([f, t]) => ({ ok: !!f(), t })) : [])
   ];
 }
 
@@ -81,84 +81,84 @@ export function __init() {
 
 HLEG435 = [
   {
-    id: 'regirock', n: 'Regirock', t: ['Roche'], no: 377, s: [7, 5, 7, 1, 2, 1], mv: ['eboulement', 'lamederoc'], tal: 'fermete',
+    id: 'regirock', n: 'Regirock', t: ['Roche'], no: 377, s: [7, 5, 7, 1, 2, 1], mv: ['eboulement', 'lamederoc'], ability: 'fermete',
     rule: 'roche', time: 'jour', bio: 'roche', water: [], rock: ['3,1', '3,4'], minions: ['galegon', 'galeking'],
     title: 'le Colosse de roche', badges: 3,
     q: 'Les pierres du Plateau se mettent à bouger toutes seules. Regirock se lève, sans un bruit.',
     w: 'Regirock se fige de nouveau. Il n’était qu’un tas de pierres… et il vous a reconnu.',
     l: 'Il ne s’est même pas retourné.',
-    quete: [[() => inBox435('galeking'), 'Avoir Galeking dans la Box']],
+    questSteps: [[() => inBox435('galeking'), 'Avoir Galeking dans la Box']],
     cap: { t: 'son escorte est K.O.', f: (S, L) => escortKO435(S, L) }
   },
   {
-    id: 'regice', n: 'Regice', t: ['Glace'], no: 378, s: [7, 4, 6, 2, 4, 1], mv: ['blizzard', 'laserglace'], tal: 'coque',
+    id: 'regice', n: 'Regice', t: ['Glace'], no: 378, s: [7, 4, 6, 2, 4, 1], mv: ['blizzard', 'laserglace'], ability: 'coque',
     rule: 'eau', time: 'nuit', bio: 'tour', water: ['4,2', '4,3'], rock: ['3,0'], minions: ['lokhlass', 'crustabri'],
     title: 'le Colosse de glace', badges: 5,
     q: 'Le froid tombe d’un coup. Regice s’avance, et l’air se couvre de givre.',
     w: 'La glace fond lentement. Regice vous laisse le passage.',
     l: 'Vous êtes restés figés sur place.',
-    quete: [[() => inBox435('regirock'), 'Avoir capturé Regirock']],
+    questSteps: [[() => inBox435('regirock'), 'Avoir capturé Regirock']],
     cap: { t: 'Super Ball ou mieux', f: () => ballOk435('super', 'hyper', 'master') }
   },
   {
-    id: 'registeel', n: 'Registeel', t: ['Acier'], no: 379, s: [7, 4, 8, 2, 2, 1], mv: ['gyroballe', 'tetedefer'], tal: 'poingdefer',
+    id: 'registeel', n: 'Registeel', t: ['Acier'], no: 379, s: [7, 4, 8, 2, 2, 1], mv: ['gyroballe', 'tetedefer'], ability: 'poingdefer',
     rule: 'elec', time: 'jour', bio: 'ligue', water: [], rock: ['3,2'], minions: ['magneton', 'galeking'],
     title: 'le Colosse d’acier', badges: 7,
     q: 'Un cliquetis de métal résonne dans la salle. Registeel ne parle pas : il attend.',
     w: 'Le métal se tait. Registeel s’incline, à sa façon.',
     l: 'Aucune attaque n’a laissé de trace sur lui.',
-    quete: [[() => inBox435('regice'), 'Avoir capturé Regice']],
-    cap: { t: '4 Voix ou plus', f: S => S.voix >= 4 }
+    questSteps: [[() => inBox435('regice'), 'Avoir capturé Regice']],
+    cap: { t: '4 Voix ou plus', f: S => S.voice >= 4 }
   },
   {
-    id: 'latias', n: 'Latias', t: ['Dragon', 'Psy'], no: 380, s: [6, 4, 5, 6, 3, 3], mv: ['extrasenseur', 'dracosouffle'], tal: 'levitation',
+    id: 'latias', n: 'Latias', t: ['Dragon', 'Psy'], no: 380, s: [6, 4, 5, 6, 3, 3], mv: ['extrasenseur', 'dracosouffle'], ability: 'levitation',
     rule: 'psy', time: 'jour', bio: 'gue', water: ['5,0'], rock: [], minions: ['gardevoir', 'kirlia'],
     title: 'l’Éon rouge', badges: 4,
     q: 'Une silhouette rouge file au-dessus du gué, trop vite pour l’œil. Latias joue avec vous.',
     w: 'Latias fait une dernière boucle autour de vous, puis disparaît dans le ciel.',
     l: 'Elle était déjà ailleurs.',
-    quete: [[() => inBox435('gardevoir'), 'Avoir Gardevoir dans la Box']],
+    questSteps: [[() => inBox435('gardevoir'), 'Avoir Gardevoir dans la Box']],
     cap: { t: 'avant la manche 7', f: S => S.round <= 6 }
   },
   {
-    id: 'latios', n: 'Latios', t: ['Dragon', 'Psy'], no: 381, s: [6, 6, 4, 6, 3, 2], mv: ['dracosouffle', 'psyko'], tal: 'levitation',
+    id: 'latios', n: 'Latios', t: ['Dragon', 'Psy'], no: 381, s: [6, 6, 4, 6, 3, 2], mv: ['dracosouffle', 'psyko'], ability: 'levitation',
     rule: 'psy', time: 'nuit', bio: 'gue', water: ['5,5'], rock: ['3,3'], minions: ['drattak', 'mentali'],
     title: 'l’Éon bleu', badges: 5,
     q: 'Un éclair bleu fend la nuit. Latios plane au-dessus de vous, en équilibre sur le vent.',
     w: 'Latios s’éloigne en silence. Il a mesuré votre force.',
     l: 'Il est reparti avant que vous ayez compris.',
-    quete: [[() => inBox435('drattak'), 'Avoir Drattak dans la Box']],
+    questSteps: [[() => inBox435('drattak'), 'Avoir Drattak dans la Box']],
     cap: { t: 'avant la manche 6', f: S => S.round <= 5 }
   },
   {
-    id: 'kyogre', n: 'Kyogre', t: ['Eau'], no: 382, s: [8, 6, 5, 4, 3, 2], mv: ['hydroblast', 'surf'], tal: 'crachin',
+    id: 'kyogre', n: 'Kyogre', t: ['Eau'], no: 382, s: [8, 6, 5, 4, 3, 2], mv: ['hydroblast', 'surf'], ability: 'crachin',
     rule: 'eau', time: 'nuit', bio: 'gue', water: ['4,1', '4,4', '5,2'], rock: [], minions: ['leviator', 'laggron'],
     title: 'le Maître des océans', badges: 6,
     q: 'La pluie tombe, la mer monte. Kyogre émerge des flots, et tout Hoenn retient son souffle.',
     w: 'La mer se retire. Kyogre plonge, et le ciel s’éclaircit.',
     l: 'L’océan a tout englouti.',
-    quete: [[() => inBox435('laggron'), 'Avoir Laggron dans la Box']],
+    questSteps: [[() => inBox435('laggron'), 'Avoir Laggron dans la Box']],
     cap: { t: 'sur une case Trempée', f: (S, L, e) => tileMark435(S, e, 'trempe') }
   },
   {
-    id: 'groudon', n: 'Groudon', t: ['Sol'], no: 383, s: [8, 6, 6, 3, 2, 2], mv: ['seisme', 'eruption'], tal: 'armuremagma',
+    id: 'groudon', n: 'Groudon', t: ['Sol'], no: 383, s: [8, 6, 6, 3, 2, 2], mv: ['seisme', 'eruption'], ability: 'armuremagma',
     rule: 'sol', time: 'jour', bio: 'roche', water: [], rock: ['3,1', '3,4', '4,2'], minions: ['brasegali', 'arcanin'],
     title: 'le Maître des continents', badges: 6,
     q: 'Le sol se fend, la chaleur monte. Groudon se dresse, et la terre tremble avec lui.',
     w: 'Le magma retombe. Groudon s’enfonce dans la terre, en paix.',
     l: 'La roche a tout recouvert.',
-    quete: [[() => inBox435('brasegali'), 'Avoir Braségali dans la Box']],
+    questSteps: [[() => inBox435('brasegali'), 'Avoir Braségali dans la Box']],
     cap: { t: 'sur une case Brûlante', f: (S, L, e) => tileMark435(S, e, 'brulant') }
   },
   {
-    id: 'rayquaza', n: 'Rayquaza', t: ['Dragon', 'Vol'], no: 384, s: [8, 7, 5, 5, 3, 2], mv: ['piquedraco', 'ouragan'], tal: 'intimidation',
+    id: 'rayquaza', n: 'Rayquaza', t: ['Dragon', 'Vol'], no: 384, s: [8, 7, 5, 5, 3, 2], mv: ['piquedraco', 'ouragan'], ability: 'intimidation',
     rule: 'psy', time: 'nuit', bio: 'ligue', water: [], rock: ['3,2'], minions: ['drattak', 'dracaufeu'],
     title: 'le Gardien du ciel', badges: 8, pre: () => hlOk435('kyogre') && hlOk435('groudon') && !!PROFILE.hchamp,
     preT: 'Devenir Maître de Hoenn, puis vaincre Kyogre et Groudon',
     q: 'Le ciel se déchire. Rayquaza descend de la couche d’ozone et le monde se calme d’un coup.',
     w: 'Rayquaza remonte dans les nuages. Il a vu ce qu’il voulait voir.',
     l: 'Le ciel s’est refermé sur vous.',
-    quete: [[() => inBox435('kyogre') && inBox435('groudon'), 'Avoir capturé Kyogre et Groudon'], [() => (PROFILE.dipl428 || []).includes(3), 'Compléter le Pokédex de Hoenn']],
+    questSteps: [[() => inBox435('kyogre') && inBox435('groudon'), 'Avoir capturé Kyogre et Groudon'], [() => (PROFILE.diplomas428 || []).includes(3), 'Compléter le Pokédex de Hoenn']],
     cap: { t: 'Hyper Ball ou Master Ball, avant la manche 9', f: S => ballOk435('hyper', 'master') && S.round <= 8 }
   }
 ];
@@ -169,7 +169,7 @@ Object.assign(PKIMG, {"377": "UklGRu48AABXRUJQVlA4WAoAAAAQAAAA7gAA7gAAQUxQSEYUAA
 
 
 HLEG435.forEach(L => {
-  BY[L.id] = { id: L.id, n: L.n, t: L.t, c: 8, r: 'Frappeur', r2: 'Rempart', s: L.s, mv: L.mv, tal: L.tal, nx: null, no: L.no, base: L.id, st: 1, prev: null, gen: 3, leg: true };
+  BY[L.id] = { id: L.id, n: L.n, t: L.t, c: 8, r: 'Frappeur', r2: 'Rempart', s: L.s, mv: L.mv, ability: L.ability, nx: null, no: L.no, base: L.id, st: 1, prev: null, gen: 3, leg: true };
   PKT.set(BY[L.id].t, L.id);
   const k = 'hl' + L.id;
   SCEN[k] = {
@@ -211,7 +211,7 @@ HLEG435.forEach(L => {
 
 
 /* victory: the battle is graded, rewards the first time */
-HOOKS.progres.push((S, rew, win) => {
+HOOKS.progress.push((S, rew, win) => {
   const D = SCEN[S.sc] || {};
   if (!win || !D.hleg435 || hlOk435(D.hleg435)) return null;
   PROFILE.hleg = [...(PROFILE.hleg || []), D.hleg435];
@@ -220,7 +220,7 @@ HOOKS.progres.push((S, rew, win) => {
 });
 
 
-HOOKS.resultat.push(r =>
+HOOKS.battleResult.push(r =>
   r.hleg435
     ? `<div class="res-l"><h4>Légende de Hoenn</h4><div class="rl">${medal(BY[r.hleg435].t)}<span>${BY[r.hleg435].n} vaincu · ${(PROFILE.hleg || []).length} / ${HLEG435.length} légendes de Hoenn. Sa capture est ouverte dans Quêtes › Légendes dès que sa quête est terminée.</span><b>★</b></div></div>`
     : ''

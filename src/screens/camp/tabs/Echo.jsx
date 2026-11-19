@@ -24,7 +24,7 @@ function Event({ R }) {
   if (R.ev === 'marchand') {
     return (
       <div className="ec431-ev">
-        <h3>Le Marchand <em>{`${R.ech} Échos`}</em></h3>
+        <h3>Le Marchand <em>{`${R.echoes} Échos`}</em></h3>
         <button type="button" className="b" data-echo431="achat-potion"><b>Potion d’équipe · 20</b><em>+30 % de PV pour tous.</em></button>
         <button type="button" className="b" data-echo431="achat-relique"><b>Relique · 45</b><em>Une relique au hasard.</em></button>
         <button type="button" className="b" data-echo431="achat-rappel"><b>Rappel · 60</b><em>Un Pokémon K.O. revient à 30 % de PV.</em></button>
@@ -94,7 +94,7 @@ export default function Echo() {
       <Head X={X} />
       <div className="ec431-k">
         <span>Étage <b>{`${Math.min(8, R.f + 1)} / 8`}</b></span>
-        <span><b>{R.ech}</b> Échos</span>
+        <span><b>{R.echoes}</b> Échos</span>
         {R.pv ? <span>{`PV max +${Math.round(R.pv * 100)} %`}</span> : null}
       </div>
       <div className="ec431-t">
@@ -108,7 +108,7 @@ export default function Echo() {
         ))}
       </div>
       <div className="ec431-rl">
-        {R.rel.length ? R.rel.map(k => <span key={k} className="ec431-r" title={RELICS431[k][1]}>{RELICS431[k][0]}</span>) : <em>Aucune relique.</em>}
+        {R.relics.length ? R.relics.map(k => <span key={k} className="ec431-r" title={RELICS431[k][1]}>{RELICS431[k][0]}</span>) : <em>Aucune relique.</em>}
       </div>
       <Event R={R} />
       <Card R={R} />

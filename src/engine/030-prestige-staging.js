@@ -59,7 +59,7 @@ export function overlay(id, data) {
 
 
 export function vsIntro() {
-  hook('avantPresentation');
+  hook('beforePresentation');
   if (!B) return;
   const D = SCEN[B.sc],
     L = leaderOf(B.sc),
@@ -95,13 +95,13 @@ export function vsIntro() {
     k1: B.duel433 ? 'Joueur 1' : 'Votre équipe',
     al: al.map(u => u.t),
     av: vsAv450(), // trainer emblem (v4.50)
-    nom1: B.duel433 ? B.duel433.noms[0] : PROFILE.name || 'Dresseur',
+    name1: B.duel433 ? B.duel433.names[0] : PROFILE.name || 'Dresseur',
     em1: al.map(u => u.n).join(' · '),
     ac: D.at ? tc(D.at) : 'var(--gold)',
     kick,
     badge: i >= 0 ? i : null,
     foes: fo.slice(0, 5).map(u => u.t),
-    nom2: B.duel433 ? B.duel433.noms[1] : L ? L.n : D.n,
+    name2: B.duel433 ? B.duel433.names[1] : L ? L.n : D.n,
     em2: B.duel433 ? 'Joueur 2' : L ? L.t : D.lvl || '',
     q: L ? L.q : null,
     rule: `${D.rule && GYMS[ri] ? GYMS[ri].r : D.n}${styleOf(B.sc) ? ` · Style : ${styleOf(B.sc).n}` : ''} · ${B.lim} manches`,
@@ -126,7 +126,7 @@ export function vsIntro() {
 
 
 export function turnBanner(txt, sub) {
-  hook('avantBandeau');
+  hook('beforeBanner');
   if (!B || RM) return;
   const bd = $('#bBoard');
   if (!bd) return;
@@ -138,7 +138,7 @@ export function turnBanner(txt, sub) {
       en: B.phase === 'enemy',
       fast: !!PREF.fast,
       txt: txt || 'Manche ' + B.round,
-      sub: sub || (B.duel433 ? B.duel433.noms[B.duel433.j - 1] : B.phase === 'enemy' ? 'Tour adverse' : 'À vous')
+      sub: sub || (B.duel433 ? B.duel433.names[B.duel433.j - 1] : B.phase === 'enemy' ? 'Tour adverse' : 'À vous')
     }
   });
   setTimeout(

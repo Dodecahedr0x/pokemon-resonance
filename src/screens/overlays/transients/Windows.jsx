@@ -37,20 +37,20 @@ export function Help452({ d }) {
           {d.sel.roles.map(([r, fx], i) => (
             <p key={i}><b>{r}</b>{fx ? ` (${fx[0]}) : ${fx[1]}` : ''}</p>
           ))}
-          {d.sel.tal && <p><b>Talent · {d.sel.tal[0]}.</b> {d.sel.tal[1]}</p>}
+          {d.sel.ability && <p><b>Talent · {d.sel.ability[0]}.</b> {d.sel.ability[1]}</p>}
         </section>
       )}
-      {d.terr.length > 0 && (
+      {d.terrainList.length > 0 && (
         <section>
           <h4>Sur ce plateau</h4>
-          {d.terr.map(([n, t], i) => (
+          {d.terrainList.map(([n, t], i) => (
             <p key={i}><b>{n}.</b> {t}</p>
           ))}
         </section>
       )}
       {d.wx && (
         <section>
-          <h4>Météo · {d.wx.n} ({d.wx.tours} manches)</h4>
+          <h4>Météo · {d.wx.n} ({d.wx.roundCount} manches)</h4>
           <p>{d.wx.d}</p>
         </section>
       )}
@@ -164,12 +164,12 @@ export function Br466({ d }) {
       ) : d.mode === 'new' ? (
         <>
           <p>Enchaînez <b>5 boss</b> d’arène à la suite avec la même équipe. Vos PV ne se régénèrent pas entre les combats, et un Pokémon tombé ne revient pas. Après chaque boss, choisissez <b>une relique</b> parmi trois. Record : <b>{d.best}</b> · terminés : <b>{d.won}</b>.</p>
-          <Choice k="br466" v="start" l="Commencer un run" eff={'Équipe actuelle · ' + d.equipe} />
+          <Choice k="br466" v="start" l="Commencer un run" eff={'Équipe actuelle · ' + d.teamNames} />
         </>
       ) : (
         <>
           <p>Boss <b>{d.i + 1} / {d.total}</b> · {d.eq}</p>
-          {d.rel.length > 0 && <p><b>Reliques :</b> {d.rel.join(', ')}</p>}
+          {d.relics.length > 0 && <p><b>Reliques :</b> {d.relics.join(', ')}</p>}
           {d.pend ? (
             <>
               <p><b>Choisissez une relique :</b></p>
@@ -202,22 +202,22 @@ export function X470({ d }) {
   return (
     <Window id="x470o" tid="x470t" k="x470" titre="Défis du jour">
       {nl}
-      {d.omb.fin ? (
+      {d.shadowState.fin ? (
         <p><b>Les Ombres de Résonance</b> · histoire terminée</p>
       ) : (
         <>
-          <p><b>Les Ombres de Résonance</b> · épisode {d.omb.e + 1}/4</p>
-          <Choice k="x470" v="omb" ok={d.omb.dispo} l={d.omb.dispo ? d.omb.titre : 'Épisode verrouillé'} eff={d.omb.dispo ? 'Affronter les Ombres · récompense et suite de l’histoire' : d.omb.req} />
+          <p><b>Les Ombres de Résonance</b> · épisode {d.shadowState.e + 1}/4</p>
+          <Choice k="x470" v="omb" ok={d.shadowState.available} l={d.shadowState.available ? d.shadowState.titre : 'Épisode verrouillé'} eff={d.shadowState.available ? 'Affronter les Ombres · récompense et suite de l’histoire' : d.shadowState.req} />
         </>
       )}
       {nl}
-      <p><b>Défi quotidien</b> · type interdit : <b>{d.interdit}</b> · série {d.streak} (record {d.best}, {d.tot} réussis)</p>
+      <p><b>Défi quotidien</b> · type interdit : <b>{d.forbidden}</b> · série {d.streak} (record {d.best}, {d.tot} réussis)</p>
       {nl}
       <Choice k="x470" v="dq" ok={!d.fait} l={d.fait ? 'Défi du jour réussi' : 'Lancer le défi du jour'} eff="Récompense : argent, Éclats et un spécimen ancien" />
       {nl}
-      <p><b>Laboratoire</b> · spécimens anciens : {d.fos}</p>
+      <p><b>Laboratoire</b> · spécimens anciens : {d.fossils}</p>
       {nl}
-      <Choice k="x470" v="rev" ok={!(d.fos < 1 || !d.libres)} l="Ressusciter un spécimen" eff={d.libres ? 'Consomme 1 spécimen · espèce rare au hasard' : 'Toutes les espèces rares sont déjà à vous'} />
+      <Choice k="x470" v="rev" ok={!(d.fossils < 1 || !d.freeSlots)} l="Ressusciter un spécimen" eff={d.freeSlots ? 'Consomme 1 spécimen · espèce rare au hasard' : 'Toutes les espèces rares sont déjà à vous'} />
       {nl}
       <p><b>Prestige</b> · niveau {d.pre.n}{d.pre.on ? ' (actif)' : ''}</p>
       {nl}
@@ -241,22 +241,22 @@ export function X2470({ d }) {
     <Window id="x2470o" tid="x2470t" k="x2470" titre="Défis de dresseur">
       {nl}
       <p><b>Rivalité</b></p>
-      {d.lignes.map((t, i) => <p key={i} className="x2470-r">{t}</p>)}
+      {d.lines.map((t, i) => <p key={i} className="x2470-r">{t}</p>)}
       {nl}
       <p><b>Météo du jour</b> · {d.meteo} · {d.bonus}</p>
       {nl}
       <Choice k="x2470" v="wk" ok={!d.fini} l={d.fini ? 'Dresseur de la semaine vaincu' : d.wn + ' · Dresseur de la semaine'} eff="Équipe de la semaine · récompense unique · 2 000 ₽ et 5 Éclats" />
       {nl}
-      <p><b>Vitrine de reliques</b> · {d.nb}/{d.vitrine.length}{d.nb >= 3 ? ' · +1 Éclat par victoire' : ''}</p>
+      <p><b>Vitrine de reliques</b> · {d.nb}/{d.showcase.length}{d.nb >= 3 ? ' · +1 Éclat par victoire' : ''}</p>
       {nl}
       <div className="x2470-v">
-        {d.vitrine.map((v, i) => (
+        {d.showcase.map((v, i) => (
           <span key={i} className={'x2470-c' + (v.on ? ' on' : '')} title={v.on ? v.d : 'À trouver en Boss Rush'}>{v.on ? v.n : '???'}</span>
         ))}
       </div>
       {nl}
-      {d.histoireFinie ? (
-        <Choice k="x2470" v="inv" ok={!d.jourInv} l={d.jourInv ? 'Revanche faite aujourd’hui' : 'Ombres inversées · revanche de Vaskar'} eff="Plus dure : niveau 44 · 1 500 ₽ et 2 Éclats" />
+      {d.storyDone ? (
+        <Choice k="x2470" v="inv" ok={!d.dayInv} l={d.dayInv ? 'Revanche faite aujourd’hui' : 'Ombres inversées · revanche de Vaskar'} eff="Plus dure : niveau 44 · 1 500 ₽ et 2 Éclats" />
       ) : (
         <p>La revanche de Vaskar se débloque après la fin de l’histoire des Ombres.</p>
       )}

@@ -12,15 +12,15 @@ import { noWind } from './047-tactics.js';
 
 /** The player's setting. The guided prologue battle always stays classic. */
 export function chosenAlive() {
-  return PREF.vivant !== false && !(SCEN[scSel] && SCEN[scSel].tuto);
+  return PREF.livingBoard !== false && !(SCEN[scSel] && SCEN[scSel].tuto);
 }
 
 
 /** At the start of a battle: the scenario's time becomes the first time of the cycle. */
 export function aliveInit(S, opt) {
-  if (!opt || !opt.vivant) return;
-  S.vivant = true;
-  S.cyc = { ph: S.time === 'nuit' ? 'nuit' : 'jour', n: 0 };
+  if (!opt || !opt.livingBoard) return;
+  S.livingBoard = true;
+  S.cycle = { ph: S.time === 'nuit' ? 'nuit' : 'jour', n: 0 };
   // wind (v4.8): two battles out of three, in one of the 6 directions
   S.vent = Math.random() < 0.67 ? { d: Math.floor(Math.random() * 6) } : null;
 }
@@ -28,20 +28,20 @@ export function aliveInit(S, opt) {
 
 /** "day" or "night": what the game sees for Eevee. Without the living board, the scenario's time. */
 export function hourOf(S) {
-  return S.cyc ? (S.cyc.ph === 'nuit' ? 'nuit' : 'jour') : S.time === 'nuit' ? 'nuit' : 'jour';
+  return S.cycle ? (S.cycle.ph === 'nuit' ? 'nuit' : 'jour') : S.time === 'nuit' ? 'nuit' : 'jour';
 }
 
 
 /** Range reduced at night (called by effR). */
 export function nightRange(S, u, m) {
-  return S && S.cyc && S.cyc.ph === 'nuit' && m.r >= 3 && !seesAtNight(u) ? 1 : 0;
+  return S && S.cycle && S.cycle.ph === 'nuit' && m.r >= 3 && !seesAtNight(u) ? 1 : 0;
 }
 
 
 /** Would a tall grass catch fire at the next end of round? (also used to warn on screen) */
 export function fireHazard(S, k) {
   const t = S.tiles[k];
-  if (!S.vivant || !t || !t.grass || t.rock || t.w) return false;
+  if (!S.livingBoard || !t || !t.grass || t.rock || t.w) return false;
   if (S.wx && S.wx.k === 'pluie') return false;
   if (t.mark && t.mark.k === 'trempe') return false; // soaked grass
   return nbrK(k).some(n => onFire(S, n));
@@ -51,12 +51,12 @@ export function fireHazard(S, k) {
 /** A tall grass that can burn (without looking at its neighbors). */
 function dryGrass(S, k) {
   const t = S.tiles[k];
-  return !!(S.vivant && t && t.grass && !t.rock && !t.w && !(t.mark && t.mark.k === 'trempe'));
+  return !!(S.livingBoard && t && t.grass && !t.rock && !t.w && !(t.mark && t.mark.k === 'trempe'));
 }
 
 
 export function aliveRound(S, ev) {
-  if (!S.vivant) return;
+  if (!S.livingBoard) return;
   const W = S.wx && S.wx.k;
   let rebuild = false;
   // rain puts it out, hail freezes
@@ -114,8 +114,8 @@ export function aliveRound(S, ev) {
     S.stats.feu = (S.stats.feu || 0) + hasWon.length; // Pyromane (Pyromaniac) achievement (v4.9)
     hasWon.forEach(([k]) => {
       const w = uAt(S, k);
-      if (!w || flies(w) || w.t.includes('Feu') || w.tal === 'torche') return;
-      w.bru = Math.max(w.bru, 2);
+      if (!w || flies(w) || w.t.includes('Feu') || w.ability === 'torche') return;
+      w.burn = Math.max(w.burn, 2);
       say(ev, `${w.n} est pris dans l’incendie !`);
     });
     rebuild = true;
@@ -139,11 +139,11 @@ export function aliveRound(S, ev) {
   }
   if (rebuild) ev.push({ e: 'terrain' });
   // time advances
-  if (!S.cyc.fige) S.cyc.n++; // Eternal Night: time does not pass (v4.9)
-  if (S.cyc.n >= LIVING_STEP) {
-    S.cyc = { ph: LIVING_ORDER[(LIVING_ORDER.indexOf(S.cyc.ph) + 1) % LIVING_ORDER.length], n: 0 };
-    say(ev, LIVING_ANNOUNCE[S.cyc.ph]);
-    ev.push({ e: 'heure', ph: S.cyc.ph });
+  if (!S.cycle.frozen) S.cycle.n++; // Eternal Night: time does not pass (v4.9)
+  if (S.cycle.n >= LIVING_STEP) {
+    S.cycle = { ph: LIVING_ORDER[(LIVING_ORDER.indexOf(S.cycle.ph) + 1) % LIVING_ORDER.length], n: 0 };
+    say(ev, LIVING_ANNOUNCE[S.cycle.ph]);
+    ev.push({ e: 'heure', ph: S.cycle.ph });
     if (S.vent) {
       S.vent.d = (S.vent.d + 1) % 6; // the wind turns with the time
       say(ev, 'Le vent tourne.');
@@ -154,10 +154,10 @@ export function aliveRound(S, ev) {
 
 /** The time-of-day chip, next to the weather one. */
 export function chipTime(S) {
-  if (!S || !S.cyc) return '';
-  if (S.cyc.fige) return `<span class="chip chip-heure" title="${LIVING_DESC.nuit}"><i style="background:${LIVING_COLOR.nuit}"></i>Nuit éternelle</span>`;
-  const p = S.cyc.ph,
-    remainder = LIVING_STEP - S.cyc.n,
+  if (!S || !S.cycle) return '';
+  if (S.cycle.frozen) return `<span class="chip chip-heure" title="${LIVING_DESC.nuit}"><i style="background:${LIVING_COLOR.nuit}"></i>Nuit éternelle</span>`;
+  const p = S.cycle.ph,
+    remainder = LIVING_STEP - S.cycle.n,
     following = LIVING_ORDER[(LIVING_ORDER.indexOf(p) + 1) % LIVING_ORDER.length];
   return `<span class="chip chip-heure" title="${LIVING_DESC[p]}"><i style="background:${LIVING_COLOR[p]}"></i>${LIVING_NAME[p]} · ${LIVING_NAME[following].toLowerCase()} ${remainder > 1 ? 'dans ' + remainder + ' manches' : 'après cette manche'}</span>`;
 }
@@ -166,7 +166,7 @@ export function chipTime(S) {
 /** Board tint according to the time (the attribute survives the board being rebuilt). */
 export function hourTint(S) {
   // data-ph of #bBoard: rendered by React (Board.jsx)
-  const ph = S && S.cyc ? S.cyc.ph : undefined;
+  const ph = S && S.cycle ? S.cycle.ph : undefined;
   if (getHost().ph !== ph) hostSet({ ph });
 }
 
@@ -235,7 +235,7 @@ const LIVING_ANNOUNCE = {
 
 
 /** Can one see well in the dark? */
-export const seesAtNight = u => u.t.includes('Spectre') || u.t.includes('Ténèbres') || u.tal === 'regardvif' || u.tal === 'echolocation';
+export const seesAtNight = u => u.t.includes('Spectre') || u.t.includes('Ténèbres') || u.ability === 'regardvif' || u.ability === 'echolocation';
 
 /* ---------- 2. End of round: time, weather and fire ---------- */
 const onFire = (S, k) => !!(S.tiles[k] && S.tiles[k].mark && S.tiles[k].mark.k === 'brulant');
@@ -246,15 +246,15 @@ export function __init() {
 /* ---------- 1. The time, a damage modifier provider ---------- */
 DAMAGE_PROVIDERS.push({
   id: 'heure',
-  fournir: (c, { S, typ }) => {
-    const ph = S.cyc && S.cyc.ph;
+  provide: (c, { S, typ }) => {
+    const ph = S.cycle && S.cycle.ph;
     if (!ph) return null;
     const nocturnal = typ === 'Spectre' || typ === 'Ténèbres',
       diurnal = typ === 'Plante' || typ === 'Vol';
-    if (nocturnal && ph === 'nuit') return { mul: 1.2, libelle: 'Nuit' };
-    if (nocturnal && ph === 'crepuscule') return { mul: 1.1, libelle: 'Crépuscule' };
-    if (diurnal && ph === 'jour') return { mul: 1.2, libelle: 'Jour' };
-    if (diurnal && ph === 'aube') return { mul: 1.1, libelle: 'Aube' };
+    if (nocturnal && ph === 'nuit') return { mul: 1.2, labelText: 'Nuit' };
+    if (nocturnal && ph === 'crepuscule') return { mul: 1.1, labelText: 'Crépuscule' };
+    if (diurnal && ph === 'jour') return { mul: 1.2, labelText: 'Jour' };
+    if (diurnal && ph === 'aube') return { mul: 1.1, labelText: 'Aube' };
     return null;
   }
 });

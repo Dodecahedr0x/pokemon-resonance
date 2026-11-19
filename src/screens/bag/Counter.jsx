@@ -31,8 +31,8 @@ const LINES_BY_ROLE = {
 
 // `n`: number of items displayed in the pocket (Bag).
 export default function Counter({ n }) {
-  if (V4.sacV !== 'sac') {
-    const rowLine = thanksShown() ? 'Merci pour votre achat ! Autre chose ?' : LINES_BY_ROLE[V4.sacC] || 'Bienvenue ! Que puis-je pour vous ?';
+  if (V4.bagView !== 'sac') {
+    const rowLine = thanksShown() ? 'Merci pour votre achat ! Autre chose ?' : LINES_BY_ROLE[V4.bagCategory] || 'Bienvenue ! Que puis-je pour vous ?';
     return (
       <section className="pk-mart-ban" aria-label="Comptoir de la Boutique">
         <div className="pk-front" aria-hidden="true"><i className="pk-aw" /><span className="pk-sign"><i />BOUTIQUE</span><i className="pk-sh s1" /><i className="pk-sh s2" /><Vendor /><i className="pk-cnt" /></div>
@@ -40,7 +40,7 @@ export default function Counter({ n }) {
       </section>
     );
   }
-  const pocket = POCKETS[V4.sacC] || 'Objets';
+  const pocket = POCKETS[V4.bagCategory] || 'Objets';
   return (
     <section className="pk-bag-ban" aria-label="Sac">
       <Backpack />

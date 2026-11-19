@@ -14,7 +14,7 @@ function Building({ k }) {
   const B2 = BUILDINGS[k],
     n = level(k),
     lk = buildingBlocked(k),
-    c = n < 3 ? B2.cout[n] : null;
+    c = n < 3 ? B2.upgradeCost[n] : null;
   return (
     <article className={`cb-b${n ? ' on' : ''}`}>
       <div className="cb-h"><b>{B2.n}</b><span className="cb-lv" aria-label={`Niveau ${n} sur 3`}>{[1, 2, 3].map(i => <i key={i} className={i <= n ? 'on' : ''} />)}</span></div>
@@ -35,7 +35,7 @@ function Expedition({ x, i }) {
   return (
     <div className="cb-x">
       <Html html={medal(m.t, 'sm')} />
-      <span><b>{m.n}</b><em>{DESTINATIONS[x.dest].n + (x.bon ? ' · terrain idéal' : '')}</em></span>
+      <span><b>{m.n}</b><em>{DESTINATIONS[x.destinationId].n + (x.ideal ? ' · terrain idéal' : '')}</em></span>
       {remainder <= 0 ? <button type="button" className="b b-sm b-gold" data-exp-r={i}>Récupérer</button> : <small>{`Retour dans ${pl(remainder, 'combat')}`}</small>}
     </div>
   );
@@ -56,8 +56,8 @@ function Daycare() {
       );
   let txt;
   if (P2) {
-    const L = heritable416(P2.mere, P2.pere);
-    txt = `Prochain œuf dans ${pl(remainder, 'combat')} : un ${BY[P2.mere].n}${L.length ? `, qui héritera d’une attaque de ${BY[P2.pere].n}` : ''}${P2.meta ? ' (Métamorph : deux fois plus de chances de chromatique)' : ''}.`;
+    const L = heritable416(P2.mother, P2.father);
+    txt = `Prochain œuf dans ${pl(remainder, 'combat')} : un ${BY[P2.mother].n}${L.length ? `, qui héritera d’une attaque de ${BY[P2.father].n}` : ''}${P2.meta ? ' (Métamorph : deux fois plus de chances de chromatique)' : ''}.`;
   } else if (c.length === 2) txt = 'Ces deux-là ne s’entendent pas : il faut un type en commun, ou Métamorph.';
   else txt = `Sans couple, la Pension trouve un œuf d’une famille inconnue (prochain dans ${pl(remainder, 'combat')}). Déposez deux Pokémon qui partagent un type, ou Métamorph : l’œuf sera de leur famille, avec une attaque héritée et plus de chances d’être chromatique.`;
   return (
@@ -76,7 +76,7 @@ function Plot({ x, i }) {
     return POT_I === i ? (
       <div className="pt-p choix">
         {Object.entries(POTAGER).map(([g, G]) => (
-          <button key={g} type="button" className="b b-sm" data-pot-g={g} disabled={!(PROFILE.money >= G.p)}>{`${G.n} · ${fmt(G.p)} ₽`}<em>{`${G.duree} combats : ${G.d}`}</em></button>
+          <button key={g} type="button" className="b b-sm" data-pot-g={g} disabled={!(PROFILE.money >= G.p)}>{`${G.n} · ${fmt(G.p)} ₽`}<em>{`${G.duration} combats : ${G.d}`}</em></button>
         ))}
         <button type="button" className="b b-sm b-ghost" data-pot-x="">Annuler</button>
       </div>
@@ -87,15 +87,15 @@ function Plot({ x, i }) {
   const r = sprout417(x),
     G = POTAGER[x.g];
   return r ? (
-    <div className="pt-p pousse"><span className={`pt-pl s${Math.min(3, 1 + Math.floor(((G.duree - r) / G.duree) * 3))}`} aria-hidden="true" /><b>{G.n}</b><em>{`Encore ${pl(r, 'combat')}`}</em></div>
+    <div className="pt-p pousse"><span className={`pt-pl s${Math.min(3, 1 + Math.floor(((G.duration - r) / G.duration) * 3))}`} aria-hidden="true" /><b>{G.n}</b><em>{`Encore ${pl(r, 'combat')}`}</em></div>
   ) : (
     <button type="button" className="pt-p mur" data-pot-r={i}><span className="pt-pl s4" aria-hidden="true" /><b>{G.n}</b><em>Récolter !</em></button>
   );
 }
 
 function Garden() {
-  const P2 = PROFILE.potager || [null, null, null],
-    watered = PROFILE.arrose === today();
+  const P2 = PROFILE.garden || [null, null, null],
+    watered = PROFILE.watered === today();
   return (
     <>
       <h3 className="cb-st">Potager</h3>
@@ -107,7 +107,7 @@ function Garden() {
 
 // « Base camp » panel (#v4Camp, v4.10): buildings, expeditions, Daycare, Vegetable garden.
 // Filled on the engine's first renderCampBase(), rebuilt on each call.
-export default function CampBase({ rempli: filled }) {
+export default function CampBase({ filled: filled }) {
   const exp = PROFILE.exp || [],
     places = filled ? placesExp() : 0;
   return (

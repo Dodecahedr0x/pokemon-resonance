@@ -57,7 +57,7 @@ export function renderDex() {
 export function __init() {
 
 /* ---------- Detailed Pokédex ---------- */
-DEXS = MON.filter(m => !m.ennemi).sort((a, b) => a.no - b.no);
+DEXS = MON.filter(m => !m.isEnemy).sort((a, b) => a.no - b.no);
 
 
 dexBuilt = false;

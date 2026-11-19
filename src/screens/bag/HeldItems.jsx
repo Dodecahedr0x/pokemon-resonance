@@ -27,7 +27,7 @@ function OutfitForSale({ k }) {
 }
 
 // Shop › Held items, or › Rare merchant (for Shards, after the 2nd badge).
-export default function HeldItems({ cat }) {
+export default function HeldItems({ category: cat }) {
   if (cat === 'rares' && isCamp() && BADGES.length < 2) {
     return <p className="v4-empty">Le marchand rare s’installe après votre 2e badge. Il ne vend que contre des Éclats de Résonance.</p>;
   }

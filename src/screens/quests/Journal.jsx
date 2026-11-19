@@ -25,7 +25,7 @@ export default function Journal() {
       <div className="jt430-g">
         <Tile v={J.n} t="Combats suivis" />
         <Tile v={pct(J.w, J.n)} t="Victoires" />
-        <Tile v={J.serie} t="Série en cours" />
+        <Tile v={J.runStreak} t="Série en cours" />
         <Tile v={J.best} t="Meilleure série" />
         <Tile v={fmt(J.dealt)} t="Dégâts infligés" />
         <Tile v={J.ko} t="K.O. infligés" />
@@ -33,7 +33,7 @@ export default function Journal() {
       {NL}
       <section className="v4-panel jr430-s">
         <h3>Par type de combat</h3>
-        {Object.entries(J.cat)
+        {Object.entries(J.category)
           .sort((a, b) => b[1][0] + b[1][1] - (a[1][0] + a[1][1]))
           .map(([k, [w, l]]) => (
             <div key={k} className="jc430"><span>{CATN430[k] || k}</span><span className="jc430-b"><i style={{ width: `${Math.round((w / Math.max(1, w + l)) * 100)}%` }} /></span><b>{w} / {w + l}</b></div>

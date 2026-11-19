@@ -25,7 +25,7 @@ export default function Footer({ on }) {
 function Season() {
   const d = seasonData();
   if (!d) return <div className="v4-saison" id="v4Saison" hidden />;
-  const { s, pris: takenSet } = d;
+  const { s, isTaken: takenSet } = d;
   return (
     <div className="v4-saison" id="v4Saison" style={{ '--c': s.c }}>
       <div className="v4-panel sa-card">
@@ -40,7 +40,7 @@ function Season() {
             </span>
           ) : null}
         </span>
-        {s.cadeau ? takenSet ? <span className="sa-ok">Cadeau reçu ✓</span> : <button type="button" className="b b-gold b-sm" data-cadeau="">Ouvrir le cadeau</button> : null}
+        {s.giftFlag ? takenSet ? <span className="sa-ok">Cadeau reçu ✓</span> : <button type="button" className="b b-gold b-sm" data-cadeau="">Ouvrir le cadeau</button> : null}
       </div>
     </div>
   );
@@ -95,7 +95,7 @@ function Stats() {
     <>
       <a className="v4-st" data-t="dex" href="#dex">
         <svg><use href="#i-dex" /></svg>
-        <span><small>Pokédex</small><b>{familyOwned()} / {MON.filter(m => m.st === 1 && !m.ennemi && m.base === m.id).length}</b></span>
+        <span><small>Pokédex</small><b>{familyOwned()} / {MON.filter(m => m.st === 1 && !m.isEnemy && m.base === m.id).length}</b></span>
       </a>
       <a className="v4-st" data-t="quetes" href="#quetes">
         <svg><use href="#i-trophy" /></svg>

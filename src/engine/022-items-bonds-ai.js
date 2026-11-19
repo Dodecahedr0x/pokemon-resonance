@@ -60,7 +60,7 @@ export function captureReq(S, u, e) {
     { ok: immobilize(e), t: 'immobilisé : Gel, Paralysie, Sommeil, Racines ou Toile' },
     { ok: !!u && !u.ko && hdist(u.pos, e.pos) === 1, t: 'un allié au contact' },
     { ok: !!u && !u.acted && !u.sn, t: 'cet allié n’a pas encore agi' },
-    { ok: S.voix >= 2, t: '2 Voix' }
+    { ok: S.voice >= 2, t: '2 Voix' }
   ];
   if ((SCEN[S.sc] || {}).cap429) r.push({ ok: e.sp === SCEN[S.sc].cap429, t: 'la légende elle-même, pas son escorte' }); // v4.29
   if ((SCEN[S.sc] || {}).cap435) {
@@ -78,7 +78,7 @@ export function captureReq(S, u, e) {
   }
   const special = BALL455 && BALL455[k]; // special Balls (v4.56)
   if (special) {
-    r[1] = { ok: special.pv(S, e), t: special.tpv };
+    r[1] = { ok: special.pv(S, e), t: special.hpText };
     r[2] = { ok: special.im(S, e), t: special.tim };
   }
   r.push({ ok: bagN(k) > 0, t: `une ${SHOP[k].n} dans le Sac` });
@@ -103,8 +103,8 @@ export function pCapture(S, u, e) {
   if (!canCapture(S, u, e)) return null;
   const k = CAP_K;
   const ev = [];
-  S.voix -= 2;
-  S.stats.voix += 2;
+  S.voice -= 2;
+  S.stats.voice += 2;
   e.ko = true;
   e.caught = true;
   e.intent = null;
@@ -152,7 +152,7 @@ export function canDuo(S, u, p) {
     !p.acted &&
     !u.sn &&
     !p.sn &&
-    S.voix >= 2 &&
+    S.voice >= 2 &&
     hdist(u.pos, p.pos) <= 2
   );
 }
@@ -177,8 +177,8 @@ export function pDuo(S, u, p, k) {
   if (!canDuo(S, u, p) || !duoTargets(S, u, p).includes(k)) return null;
   const { D, A, Bu } = duoParts(S, u, p),
     ev = [];
-  S.voix -= 2;
-  S.stats.voix += 2;
+  S.voice -= 2;
+  S.stats.voice += 2;
   S.stats.duo++;
   say(ev, `Technique combinée : ${D.n} !`);
   ev.push({ e: 'duo', a: A.uid, b: Bu.uid });
@@ -198,7 +198,7 @@ export function previewRun(S, run, shown) {
     const o = byUid(S, x.uid),
       dh = x.hp - o.hp,
       st = x.badge && x.badge !== o.badge ? x.badge : null,
-      can = !!(o.intent && !x.intent && !x.ko) || !!(S.jit && x.side === 'e' && !x.ko && !o.done && x.perdu && !o.perdu),
+      can = !!(o.intent && !x.intent && !x.ko) || !!(S.jit && x.side === 'e' && !x.ko && !o.done && x.isLost && !o.isLost),
       ret = !!(o.intent && x.intent && o.intent.k !== x.intent.k) || !!(S.jit && x.force && !o.force),
       mv = o.pos[0] !== x.pos[0] || o.pos[1] !== x.pos[1],
       ko = x.ko && !o.ko && !x.caught,
@@ -292,7 +292,7 @@ export function wildScen(id, tod, shiny, dom) {
 
 
 export function champBuild() {
-  const H = (PROFILE.hist || []).slice(-10),
+  const H = (PROFILE.history || []).slice(-10),
     atk = {},
     def = {},
     rx = {};
@@ -313,7 +313,7 @@ export function champBuild() {
     for (const t in def) {
       if (m.mv.some(id => MV[id].p && teff(MV[id].t, [t]) > 1)) s += def[t] * 0.8;
     }
-    if (cnt && ((cnt.t || []).some(t => m.t.includes(t)) || (cnt.tal || []).includes(m.tal))) {
+    if (cnt && ((cnt.t || []).some(t => m.t.includes(t)) || (cnt.ability || []).includes(m.ability))) {
       s += 4 + (topRx[1] || 0) * 0.6;
     }
     return s;
@@ -345,7 +345,7 @@ export function champBuild() {
       why.push(`Vos attaques favorites : ${topAtk.join(' et ')}. Il aligne des Pokémon qui les encaissent.`);
     }
     if (cnt) {
-      const c = pick.find(m => (cnt.t || []).some(t => m.t.includes(t)) || (cnt.tal || []).includes(m.tal));
+      const c = pick.find(m => (cnt.t || []).some(t => m.t.includes(t)) || (cnt.ability || []).includes(m.ability));
       why.push(`Votre réaction préférée : ${RX[topRx[0]].n}.${c ? ` ${c.n} est là : ${cnt.why}.` : ''}`);
     }
   }
@@ -407,7 +407,7 @@ function lockCampaign(k) {
   if ((D.legend || D.tower) && PROFILE.elite < 5) return 'Après-jeu : battez d’abord la Championne.';
   if (D.dissonance && BADGES.length < D.after) return `La Team Dissonance frappera après le badge n° ${D.after}.`; // v4.11
   if (D.dissonance && (PROFILE.dissonance || 0) < D.dissonance - 1) return 'Battez d’abord le combat précédent de la Dissonance.';
-  if (D.colosse && BADGES.length < D.badges) return `Il faut ${D.badges} badges pour affronter ce colosse.`; // v4.8
+  if (D.colossus && BADGES.length < D.badges) return `Il faut ${D.badges} badges pour affronter ce colosse.`; // v4.8
   // the League exhibition (level 40) is not open from day one
   if (k === 'ligue' && BADGES.length < 4) return 'Exhibition réservée aux dresseurs qui ont 4 badges.';
   return null;
@@ -500,16 +500,16 @@ export const ELITE = ['c1', 'c2', 'c3', 'c4'];
 /* --- the Champion reads your last 10 battles --- */
 const RX_COUNTER = {
   cc: { t: ['Sol'], why: 'insensible aux Courts-circuits' },
-  sur: { tal: ['moiteur'], why: 'Moiteur empêche vos Surtensions' },
-  emb: { tal: ['torche'], t: ['Feu'], why: 'les flammes ne le brûlent pas' },
+  sur: { ability: ['moiteur'], why: 'Moiteur empêche vos Surtensions' },
+  emb: { ability: ['torche'], t: ['Feu'], why: 'les flammes ne le brûlent pas' },
   gel: { t: ['Feu', 'Glace'], why: 'le Gel ne le retient pas' },
   ban: { t: ['Feu', 'Glace'], why: 'la Banquise ne le retient pas' },
-  bou: { t: ['Vol'], tal: ['levitation'], why: 'la Boue ne le ralentit pas' },
-  sei: { t: ['Vol'], tal: ['levitation'], why: 'il survole vos ondes sismiques' },
-  cou: { t: ['Vol'], tal: ['isograisse'], why: 'la lave ne le gêne pas' },
-  vap: { tal: ['echolocation'], why: 'il voit à travers la vapeur' },
+  bou: { t: ['Vol'], ability: ['levitation'], why: 'la Boue ne le ralentit pas' },
+  sei: { t: ['Vol'], ability: ['levitation'], why: 'il survole vos ondes sismiques' },
+  cou: { t: ['Vol'], ability: ['isograisse'], why: 'la lave ne le gêne pas' },
+  vap: { ability: ['echolocation'], why: 'il voit à travers la vapeur' },
   flo: { t: ['Feu'], why: 'il brûle vos Floraisons' },
-  anc: { tal: ['regardvif'], why: 'Regard Vif ignore les entraves' }
+  anc: { ability: ['regardvif'], why: 'Regard Vif ignore les entraves' }
 };
 
 // Statements run at startup, in the original order (see index.js).

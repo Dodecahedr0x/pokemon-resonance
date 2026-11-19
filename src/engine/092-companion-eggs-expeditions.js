@@ -26,7 +26,7 @@ export function cp461Data() {
   if (!id) return null;
   const h = hearts417((PROFILE.comp && PROFILE.comp.aff) || 0),
     st = cpSt461();
-  return { h, feed: st.feed, gift: st.gift, baie: bagN('baiemepo') > 0, nouv: h > (st.seen[id] || 0) };
+  return { h, feed: st.feed, gift: st.gift, baie: bagN('baiemepo') > 0, isNew: h > (st.seen[id] || 0) };
 }
 
 
@@ -85,12 +85,12 @@ function egHatch461(e) {
 
 /** Return of expedition x (already cashed in by retrieve): a short tale, and sometimes a rare find. */
 export function story461(x) {
-  const D = DESTINATIONS[x.dest],
-    h = HIST461[x.dest] || [],
+  const D = DESTINATIONS[x.destinationId],
+    h = HIST461[x.destinationId] || [],
     m = BY[x.id],
     hist = h.length ? `${m.n} ${h[Math.floor(Math.random() * h.length)]}.` : '';
   let rare = '';
-  if (Math.random() < (x.bon ? 0.35 : 0.12)) {
+  if (Math.random() < (x.ideal ? 0.35 : 0.12)) {
     const v = Math.random();
     if (v < 0.4) {
       PROFILE.gems += 3;
@@ -188,8 +188,8 @@ const cpGift461 = (h, m) => {
 
 /* ---------- 2. Breeding eggs ---------- */
 const EGG461 = {
-  mys: { n: 'Œuf mystère', cost: { m: -1500 }, prix: '1 500 ₽', batt: 5, sh: 0, d: 'Une famille que vous n’avez pas encore. Éclot après 5 combats.' },
-  rare: { n: 'Œuf rare', cost: { g: -6 }, prix: '6 Éclats', batt: 8, sh: 0.15, d: 'Une famille inconnue, avec 15 % de chance d’un Pokémon chromatique. Éclot après 8 combats.' }
+  mys: { n: 'Œuf mystère', cost: { m: -1500 }, price: '1 500 ₽', batt: 5, sh: 0, d: 'Une famille que vous n’avez pas encore. Éclot après 5 combats.' },
+  rare: { n: 'Œuf rare', cost: { g: -6 }, price: '6 Éclats', batt: 8, sh: 0.15, d: 'Une famille inconnue, avec 15 % de chance d’un Pokémon chromatique. Éclot après 8 combats.' }
 };
 
 
@@ -200,7 +200,7 @@ const egSt461 = () => {
 };
 
 
-const egPool461 = () => MON.filter(m => m.st === 1 && !m.leg && !m.ennemi && m.base === m.id && !PROFILE.box.includes(m.id));
+const egPool461 = () => MON.filter(m => m.st === 1 && !m.leg && !m.isEnemy && m.base === m.id && !PROFILE.box.includes(m.id));
 
 
 const HIST461 = {
@@ -270,7 +270,7 @@ document.addEventListener(
 );
 
 
-HOOKS.progres.unshift((S, rew) => {
+HOOKS.progress.unshift((S, rew) => {
   try {
     const D = SCEN[S.sc] || {};
     if (D.tuto) return null;
@@ -298,7 +298,7 @@ HOOKS.progres.unshift((S, rew) => {
 });
 
 
-HOOKS.resultat.unshift(r => {
+HOOKS.battleResult.unshift(r => {
   if (!r.eg461) return '';
   return r.eg461
     .map(x => `<div class="res-l"><h4>Élevage</h4><div class="rl">${medal(BY[x.id].t)}<span>Un œuf a éclos : ${BY[x.id].n}${x.sh ? ' chromatique !' : ''} rejoint votre Box !</span><b>🥚</b></div></div>`)
@@ -323,9 +323,9 @@ document.addEventListener(
 
 /* ---------- 3. Expeditions: new places and rare finds ---------- */
 Object.assign(DESTINATIONS, {
-  plage: { n: 'Plage des Marées', types: ['Eau', 'Vol', 'Normal', 'Roche'], duree: 4, m: [250, 450], g: [1, 3], obj: ['superpotion', 'super'], min: 1 },
-  mont: { n: 'Mont Silence', types: ['Combat', 'Roche', 'Glace', 'Acier'], duree: 7, m: [500, 900], g: [3, 6], obj: ['hyper', 'superpotion'], min: 3 },
-  ruines: { n: 'Ruines Anciennes', types: ['Psy', 'Spectre', 'Dragon', 'Fée'], duree: 8, m: [600, 1000], g: [4, 8], obj: ['hyper'], min: 5 }
+  plage: { n: 'Plage des Marées', types: ['Eau', 'Vol', 'Normal', 'Roche'], duration: 4, m: [250, 450], g: [1, 3], obj: ['superpotion', 'super'], min: 1 },
+  mont: { n: 'Mont Silence', types: ['Combat', 'Roche', 'Glace', 'Acier'], duration: 7, m: [500, 900], g: [3, 6], obj: ['hyper', 'superpotion'], min: 3 },
+  ruines: { n: 'Ruines Anciennes', types: ['Psy', 'Spectre', 'Dragon', 'Fée'], duration: 8, m: [600, 1000], g: [4, 8], obj: ['hyper'], min: 5 }
 });
 
 

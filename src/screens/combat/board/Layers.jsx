@@ -76,7 +76,7 @@ export function Markers() {
       }
       if (t.fog > 0) o.push(<polygon key={k + 'fg'} points={HP(x, y, BG.S - 1)} className={'fogc2' + (t.fog > 2 ? ' tox' : '')} />);
       o.push(<SvgHtml key={k + 'dt'} html={tacticalDrawing(B, k, x, y)} />); // traps (v4.8)
-      if (B.vivant && fireHazard(B, k)) o.push(<polygon key={k + 'fr'} points={HP(x, y, BG.S - 4)} className="fire-risk" />); // the grass about to burn (v4.7-01)
+      if (B.livingBoard && fireHazard(B, k)) o.push(<polygon key={k + 'fr'} points={HP(x, y, BG.S - 4)} className="fire-risk" />); // the grass about to burn (v4.7-01)
     }
   }
   return (

@@ -20,16 +20,16 @@ export function peddler454() {
   const d = today(),
     r = rng454('ambu'),
     present = seed417('ambu7') % 7 < 4;
-  const keyList = Object.keys(SHOP).filter(k => !SHOP[k].g && !SHOP[k].cs && !SHOP[k].cle && k !== 'master' && ['balls', 'soins', 'combat'].includes(SHOP[k].cat));
+  const keyList = Object.keys(SHOP).filter(k => !SHOP[k].g && !SHOP[k].cs && !SHOP[k].keyItem && k !== 'master' && ['balls', 'soins', 'combat'].includes(SHOP[k].category));
   const pick = [];
   const pool = keyList.slice();
   while (pick.length < 3 && pool.length) pick.push(pool.splice(Math.floor(r() * pool.length), 1)[0]);
-  const cts = Object.keys(SHOP).filter(k => SHOP[k].cat === 'machines' && !SHOP[k].cs && !SHOP[k].g);
+  const cts = Object.keys(SHOP).filter(k => SHOP[k].category === 'machines' && !SHOP[k].cs && !SHOP[k].g);
   if (cts.length) pick.push(cts[Math.floor(r() * cts.length)]);
   const held = Object.keys(HELD_SHOP).filter(k => !HELD_SHOP[k].g && !PROFILE.items.includes(k));
   const th = held.length ? held[Math.floor(r() * held.length)] : null;
   const st = LS454('res-am454', d) || { d, got: {} };
-  return { present, nom: NAMES454[seed417('ambunom') % NAMES454.length], pick, th, st };
+  return { present, displayName: NAMES454[seed417('ambunom') % NAMES454.length], pick, th, st };
 }
 
 
@@ -40,7 +40,7 @@ export function ev454() {
   const d = today(),
     i = seed417('ev454') % EV454.length,
     st = LS454('res-ev454', d) || { d, done: false };
-  return HOOKS.rencontreRoute.reduce((r, f) => f(r), { E: EV454[i], i, st });
+  return HOOKS.routeEncounter.reduce((r, f) => f(r), { E: EV454[i], i, st });
 }
 
 
@@ -60,9 +60,9 @@ function evOpen454() {
 
 
 export function evPick454(j) {
-  for (const f of HOOKS.avantChoixRoute) if (f(j)) return;
+  for (const f of HOOKS.beforeRouteChoice) if (f(j)) return;
   solve454(j);
-  hook('choixRoute', j);
+  hook('routeChoice', j);
 }
 
 
@@ -74,7 +74,7 @@ function solve454(j) {
   let issue = 'ok';
   if (c.p && c.p < 1) issue = rng454('ev454r' + j)() < c.p ? 'ok' : 'ko';
   const g = issue === 'ok' ? c.ok : c.ko,
-    t = (issue === 'ok' ? c.okT : c.koT) || (c.cost ? 'Affaire conclue.' : 'Vous poursuivez votre route.');
+    t = (issue === 'ok' ? c.successText : c.failText) || (c.cost ? 'Affaire conclue.' : 'Vous poursuivez votre route.');
   if (g) reward454(g);
   const res = t + (g && txt454(g) ? ' (' + txt454(g) + ')' : '');
   writeLS('res-ev454', { d: st.d, done: true, res });
@@ -180,8 +180,8 @@ const EV454 = [
     t: 'Un vieux pêcheur',
     x: 'Un pêcheur peine à remonter ses filets sur la rive.',
     c: [
-      { l: 'L’aider à tirer', p: 0.75, ok: { m: 400 }, okT: 'Belle prise ! Il partage ses gains.', ko: {}, koT: 'Rien que des algues, mais il vous remercie.' },
-      { l: 'Acheter ses prises', cost: { m: -300 }, ok: { b: { potion: 2 } }, okT: 'Il vous glisse 2 Potions dans un panier.' },
+      { l: 'L’aider à tirer', p: 0.75, ok: { m: 400 }, successText: 'Belle prise ! Il partage ses gains.', ko: {}, failText: 'Rien que des algues, mais il vous remercie.' },
+      { l: 'Acheter ses prises', cost: { m: -300 }, ok: { b: { potion: 2 } }, successText: 'Il vous glisse 2 Potions dans un panier.' },
       { l: 'Passer son chemin' }
     ]
   },
@@ -189,7 +189,7 @@ const EV454 = [
     t: 'Une pierre qui brille',
     x: 'Un éclat de lumière sort d’un rocher fissuré.',
     c: [
-      { l: 'Creuser', p: 0.5, ok: { g: 2 }, okT: 'Deux Éclats de Résonance sortent de la roche !', ko: { m: -200 }, koT: 'Votre pioche improvisée casse. Il faut la remplacer.' },
+      { l: 'Creuser', p: 0.5, ok: { g: 2 }, successText: 'Deux Éclats de Résonance sortent de la roche !', ko: { m: -200 }, failText: 'Votre pioche improvisée casse. Il faut la remplacer.' },
       { l: 'Laisser en place' }
     ]
   },
@@ -197,7 +197,7 @@ const EV454 = [
     t: 'Un dresseur épuisé',
     x: 'Son Pokémon n’a plus de forces et il n’a rien pour le soigner.',
     c: [
-      { l: 'Donner une Potion', cost: { b: { potion: -1 } }, ok: { g: 1, m: 300 }, okT: 'Il vous remercie avec un Éclat et un peu d’argent.' },
+      { l: 'Donner une Potion', cost: { b: { potion: -1 } }, ok: { g: 1, m: 300 }, successText: 'Il vous remercie avec un Éclat et un peu d’argent.' },
       { l: 'Lui souhaiter bon courage' }
     ]
   },
@@ -205,7 +205,7 @@ const EV454 = [
     t: 'Un troc',
     x: 'Un randonneur échange volontiers des Balls, si vous êtes d’accord.',
     c: [
-      { l: 'Poké Ball contre Super Ball', cost: { b: { poke: -1 } }, ok: { b: { super: 1 } }, okT: 'L’échange est conclu.' },
+      { l: 'Poké Ball contre Super Ball', cost: { b: { poke: -1 } }, ok: { b: { super: 1 } }, successText: 'L’échange est conclu.' },
       { l: 'Refuser poliment' }
     ]
   },
@@ -213,7 +213,7 @@ const EV454 = [
     t: 'Un orage approche',
     x: 'Le ciel noircit. Un abri est tout près, mais un éclat luit dans le champ.',
     c: [
-      { l: 'Courir jusqu’à l’éclat', p: 0.6, ok: { g: 3 }, okT: 'Vous l’attrapez juste avant l’averse : 3 Éclats !', ko: { m: -300 }, koT: 'Glissade dans la boue : une poche est déchirée.' },
+      { l: 'Courir jusqu’à l’éclat', p: 0.6, ok: { g: 3 }, successText: 'Vous l’attrapez juste avant l’averse : 3 Éclats !', ko: { m: -300 }, failText: 'Glissade dans la boue : une poche est déchirée.' },
       { l: 'S’abriter' }
     ]
   },
@@ -221,8 +221,8 @@ const EV454 = [
     t: 'Un voyageur mystérieux',
     x: 'Il sort une pièce d’un air amusé : pile ou face ?',
     c: [
-      { l: 'Jouer 200 ₽', cost: { m: -200 }, p: 0.5, ok: { m: 400 }, okT: 'Gagné ! Il double la mise.', ko: {}, koT: 'Perdu. Il rit et s’éloigne.' },
-      { l: 'Écouter son histoire', ok: { g: 1 }, okT: 'Il vous laisse un Éclat pour votre patience.' },
+      { l: 'Jouer 200 ₽', cost: { m: -200 }, p: 0.5, ok: { m: 400 }, successText: 'Gagné ! Il double la mise.', ko: {}, failText: 'Perdu. Il rit et s’éloigne.' },
+      { l: 'Écouter son histoire', ok: { g: 1 }, successText: 'Il vous laisse un Éclat pour votre patience.' },
       { l: 'Refuser' }
     ]
   },
@@ -230,16 +230,16 @@ const EV454 = [
     t: 'Un nid abandonné',
     x: 'Un nid vide contient des baies et quelques objets.',
     c: [
-      { l: 'Fouiller le nid', ok: { b: { poke: 3 } }, okT: 'Trois Poké Balls oubliées par un dresseur !' },
-      { l: 'Laisser en paix', ok: { g: 1 }, okT: 'Un Pokémon vous observe, puis dépose un Éclat à vos pieds.' }
+      { l: 'Fouiller le nid', ok: { b: { poke: 3 } }, successText: 'Trois Poké Balls oubliées par un dresseur !' },
+      { l: 'Laisser en paix', ok: { g: 1 }, successText: 'Un Pokémon vous observe, puis dépose un Éclat à vos pieds.' }
     ]
   },
   {
     t: 'Un pique-nique',
     x: 'Un couple de promeneurs vous invite à partager leur repas.',
     c: [
-      { l: 'Offrir une Potion', cost: { b: { potion: -1 } }, ok: { m: 600 }, okT: 'Ils insistent pour vous dédommager.' },
-      { l: 'Partager un moment', ok: { m: 100 }, okT: 'Une bonne pause, et une petite pièce en cadeau.' }
+      { l: 'Offrir une Potion', cost: { b: { potion: -1 } }, ok: { m: 600 }, successText: 'Ils insistent pour vous dédommager.' },
+      { l: 'Partager un moment', ok: { m: 100 }, successText: 'Une bonne pause, et une petite pièce en cadeau.' }
     ]
   }
 ];

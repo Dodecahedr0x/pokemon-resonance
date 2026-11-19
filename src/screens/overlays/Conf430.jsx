@@ -7,7 +7,7 @@ import { useOverlay } from './dialogsStore.js';
 export default function Conf430() {
   const s = useOverlay('conf430');
   if (!s) return null;
-  const { titre: heading, texte: text, combats: battles, badges, sl } = s;
+  const { titre: heading, bodyText: text, combats: battles, badges, sl } = s;
   return (
     <div id="conf430" className="conf430">
       <div className="conf430-s" data-conf430="non" key={'s' + s.v} />

@@ -210,7 +210,7 @@ SCEN.hchamp = {
 };
 
 
-HOOKS.progres.push((S, rew, win) => {
+HOOKS.progress.push((S, rew, win) => {
   const D = SCEN[S.sc] || {};
   if (!win || !isCamp()) return null;
   if (D.hoenn != null && !(PROFILE.hoenn || []).includes(D.hoenn)) {
@@ -227,7 +227,7 @@ HOOKS.progres.push((S, rew, win) => {
 });
 
 
-HOOKS.resultat.push(r => {
+HOOKS.battleResult.push(r => {
   const h = r.hbadge;
   if (!h) return '';
   return h.final
@@ -243,8 +243,8 @@ ACHIEVEMENTS.push(
 
 
 DAMAGE_PROVIDERS.push(
-  { id: 'ringdojo', fournir: (c, { S, m }) => ruleH419(S) === 'jh2' && m && m.p > 0 && (m.r <= 1 ? { mul: 1.25, libelle: 'Ring du Dojo' } : { mul: 0.75, libelle: 'Ring du Dojo' }) },
-  { id: 'coupbas', fournir: (c, { S, u, t }) => ruleH419(S) === 'jh5' && u.side === 'e' && t && t.side === 'a' && t.hp <= t.mhp / 2 && { mul: 1.3, libelle: 'Coup bas' } }
+  { id: 'ringdojo', provide: (c, { S, m }) => ruleH419(S) === 'jh2' && m && m.p > 0 && (m.r <= 1 ? { mul: 1.25, labelText: 'Ring du Dojo' } : { mul: 0.75, labelText: 'Ring du Dojo' }) },
+  { id: 'coupbas', provide: (c, { S, u, t }) => ruleH419(S) === 'jh5' && u.side === 'e' && t && t.side === 'a' && t.hp <= t.mhp / 2 && { mul: 1.3, labelText: 'Coup bas' } }
 );
 
 

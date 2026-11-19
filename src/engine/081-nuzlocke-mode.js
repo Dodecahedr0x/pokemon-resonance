@@ -22,7 +22,7 @@ export function nzSt450() {
   } catch (e) {
     s = {};
   }
-  s.mort = Array.isArray(s.mort) ? s.mort : [];
+  s.fallen = Array.isArray(s.fallen) ? s.fallen : [];
   if (!s.enc || s.enc.d !== today()) s.enc = { d: today(), r: {} };
   return s;
 }
@@ -53,11 +53,11 @@ export function __init() {
 
 
 /** Rule 2: a Pokémon KO'd at the end of a battle is lost for good. */
-HOOKS.finCombat.push(() => {
+HOOKS.battleEnd.push(() => {
   if (!NZ450() || !B || !B.over || B._nz450) return;
   B._nz450 = 1;
   const D = SCEN[B.sc] || {};
-  if (D.sansProgres431 || B.duel433 || D.tuto || D.duel433 || SCEN.ami === D) return;
+  if (D.noProgress431 || B.duel433 || D.tuto || D.duel433 || SCEN.ami === D) return;
   const bases = [];
   B.units
     .filter(u => u.side === 'a' && u.ko)
@@ -75,11 +75,11 @@ HOOKS.finCombat.push(() => {
     PROFILE.forms = (PROFILE.forms || []).filter(x => !BY[x] || BY[x].base !== b);
     __set_squad(squad.filter(x => !BY[x] || BY[x].base !== b));
     displayNames.push(BY[b].n);
-    s.mort.push({ id: b, n: BY[b].n, d: today(), sc: B.sc });
+    s.fallen.push({ id: b, n: BY[b].n, d: today(), sc: B.sc });
   });
-  s.mort = s.mort.slice(-60);
+  s.fallen = s.fallen.slice(-60);
   nzSave450(s);
-  B._nzdead450 = { noms: displayNames, epargne: spared ? BY[spared].n : '' };
+  B._nzdead450 = { names: displayNames, spared: spared ? BY[spared].n : '' };
   if (!squad.length) {
     __set_squad(PROFILE.box.filter((id, i, a) => a.slice(0, i + 1).reduce((t, x) => t + BY[x].c, 0) <= BUDGET).slice(0, 4));
   }

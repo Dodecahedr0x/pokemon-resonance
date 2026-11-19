@@ -8,7 +8,7 @@ import { shinyStyle } from '../../engine/043-adventure-plus.js';
 // Safari Park (#safari418). The engine (058) computes the visit state (catch and
 // flee chances, message) and keeps the clicks (data-safari418) and the hidden attribute.
 export default function Safari418() {
-  return <Box nom="safari" className="result exp-box" id="safari418" Carte={Card} />;
+  return <Box displayName="safari" className="result exp-box" id="safari418" cardComponent={Card} />;
 }
 
 // Percentage gauge (catch, flee).
@@ -17,10 +17,10 @@ function Gauge({ v, c }) {
   return <span className="sf-j" style={{ background: `linear-gradient(90deg,${c} 0 ${p}%,rgba(255,255,255,.12) ${p}% 100%)` }} role="img" aria-label={`${p} %`} />;
 }
 
-function Card({ pas: stepSize, balls, pris: takenSet, fini: isFinished, x, hum, capt, fuite: flee, msg }) {
+function Card({ stepCount: stepSize, balls, isTaken: takenSet, fini: isFinished, x, mood: hum, caughtCount: capt, flee: flee, msg }) {
   const m = x && BY[x.id];
   return (
-    <Dialogue className="sv-card exp-card sf-card" titre="sfT" fermer={{ 'data-safari418': 'x' }}>
+    <Dialogue className="sv-card exp-card sf-card" titre="sfT" closeAttrs={{ 'data-safari418': 'x' }}>
       <p className="kick">Parc Safari</p>
       <h2 className="h2" id="sfT">{x ? m.n : 'Les herbes du Parc'}</h2>
       <div className="sf-k">

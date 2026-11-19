@@ -57,7 +57,7 @@ function state(u, fe, nx) {
     ) : B.jit ? (
       u.done ? (
         'A agi'
-      ) : u.badge || u.perdu ? (
+      ) : u.badge || u.isLost ? (
         'Neutralisé'
       ) : u.force ? (
         { taunt: 'Provoqué', turn: 'Troublé', confuse: 'Confus' }[u.force.fx] || 'En garde'

@@ -73,10 +73,10 @@ function Path({ u, A, id }) {
               <span>Type</span>+ {tg.join(', ')}
             </li>
           ) : null}
-          {E.tal !== u.tal && TAL[E.tal] ? (
+          {E.ability !== u.ability && TAL[E.ability] ? (
             <li>
               <span>Talent</span>
-              {TAL[E.tal][0]}
+              {TAL[E.ability][0]}
             </li>
           ) : null}
           <li>

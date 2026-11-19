@@ -15,7 +15,7 @@ export default function Offers() {
             it = h ? ITEMS2[k] : SHOP[k],
             p0 = h ? HELD_SHOP[k].p : costOf0(k);
           return (
-            <button key={i} type="button" className="v4-off-i" data-offre={h ? 'held' : it.cat}>
+            <button key={i} type="button" className="v4-off-i" data-offre={h ? 'held' : it.category}>
               {!h && it.mv ? <Disc it={it} /> : <img src={ITM(h ? HELD_IMG[k] : it.img)} alt="" loading="lazy" />}
               <b>{it.n}</b>
               <span><s>{fmt(p0)} ₽</s>{fmt(discount414(k, p0))} ₽</span>

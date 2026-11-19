@@ -58,7 +58,7 @@ export function PkBadge() {
               {SPRAY.map(a => <i key={a} style={{ '--a': a + 'deg' }} />)}
             </span>
           </div>
-          <p className="pk-bc-t">{s.chef ? s.chef + ' vous remet le' : 'Vous obtenez le'}<b>Badge {s.nom}</b></p>
+          <p className="pk-bc-t">{s.leader ? s.leader + ' vous remet le' : 'Vous obtenez le'}<b>Badge {s.displayName}</b></p>
           <p className="pk-bc-s">{s.n} / 8 badges dans la boîte</p>
           <p className="pk-bc-k">Touchez pour continuer</p>
         </div>

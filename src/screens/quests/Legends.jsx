@@ -8,7 +8,7 @@ import { stepsLeg429 } from '../../engine/064-quality.js';
 import { HLEG435, steps435, inBox435 } from '../../engine/071-hoenn-legendaries.js';
 
 // Card of a legend: steps of its quest, then capture (data-v4fight lc… / hc…).
-function Legend({ L, et, pris: takenSet, fight, cond }) {
+function Legend({ L, et, isTaken: takenSet, fight, condition: cond }) {
   const m = BY[L.id],
     isReady = !takenSet && et.every(x => x.ok);
   return (
@@ -36,13 +36,13 @@ export default function Legends() {
     <>
       <p className="v4-note">Une légende vaincue peut être capturée une fois sa quête terminée. Elle rejoint votre Box et coûte 8 PC dans l’équipe.</p>
       <div className="lq429">
-        {LEGS.map(L => <Legend key={L.id} L={L} et={stepsLeg429(L)} pris={PROFILE.box.includes(L.id)} fight={'lc' + L.id} />)}
+        {LEGS.map(L => <Legend key={L.id} L={L} et={stepsLeg429(L)} isTaken={PROFILE.box.includes(L.id)} fight={'lc' + L.id} />)}
       </div>
       {hoennOpen() ? (
         <>
           <p className="v4-note">Légendes de Hoenn : vainquez-les d’abord (Combats › Après-jeu), puis remplissez leur quête. Chacune a une condition de capture propre.</p>
           <div className="lq429">
-            {HLEG435.map(L => <Legend key={L.id} L={L} et={steps435(L)} pris={inBox435(L.id)} fight={'hc' + L.id} cond={L.cap.t} />)}
+            {HLEG435.map(L => <Legend key={L.id} L={L} et={steps435(L)} isTaken={inBox435(L.id)} fight={'hc' + L.id} condition={L.cap.t} />)}
           </div>
         </>
       ) : null}

@@ -10,10 +10,10 @@ import { CROWN416 } from '../../engine/055-living-johto.js';
 // the clicks (data-peche418) and the hidden attribute; after a shiny catch, it
 // recolors the illustration (.pe-prise img, chromaArt425) right after rendering.
 export default function Fishing418() {
-  return <Box nom="peche" className="result exp-box pe418" id="peche418" Carte={Card} />;
+  return <Box displayName="peche" className="result exp-box pe418" id="peche418" cardComponent={Card} />;
 }
 
-function Body({ etat: state, id, sh, dom, connu: known }) {
+function Body({ status: state, id, sh, dom, known: known }) {
   if (state === 'attente') {
     return (
       <>
@@ -64,9 +64,9 @@ function Body({ etat: state, id, sh, dom, connu: known }) {
   );
 }
 
-function Card({ route, peches: catches, ...p }) {
+function Card({ route, catches: catches, ...p }) {
   return (
-    <Dialogue className="sv-card exp-card pe-card" titre="peT" fermer={{ 'data-peche418': 'x' }}>
+    <Dialogue className="sv-card exp-card pe-card" titre="peT" closeAttrs={{ 'data-peche418': 'x' }}>
       <p className="kick">{route} · pêche</p>
       <h2 className="h2" id="peT">Pêche</h2>
       <Body {...p} />

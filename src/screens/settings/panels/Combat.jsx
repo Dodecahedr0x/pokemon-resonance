@@ -22,11 +22,11 @@ export default function Combat() {
   return (
     <section className="v4-panel v4-ps">
       <header className="v4-ph"><svg><use href="#i-bolt" /></svg><b>Combat</b></header>
-      <Switch k="vivant" on={PREF.vivant !== false} lab="Plateau vivant" sub="Le jour et la nuit passent pendant le combat, le feu court dans les hautes herbes, la pluie l’éteint et la grêle gèle les flaques. Pour les combats suivants." />
-      <Switch k="tactique" on={PREF.tactique !== false} lab="Tactique avancée" sub="Entrer au contact d’un adversaire arrête le déplacement (sauf volants, Spectre, Éclaireurs). Lance-Soleil et Vol partent en fin de manche. Pour les combats suivants." />
-      <Switch k="caracteres" on={PREF.caracteres !== false} lab="Natures et talents" sub="Chaque Pokémon capturé a sa nature (Brave, Prudent, Vif…) et son talent, gardés à travers ses évolutions. Voir la fiche du Pokémon." />
-      <Switch k="desob" on={PREF.desob} lab="Désobéissance" sub="En Campagne, un Pokémon épuisé ou têtu peut ignorer un ordre." />
-      <Switch k="mutEntr" on={PREF.mutEntr} lab="Mutateurs en Entraînement" sub="Chaque combat d’entraînement tire une règle au hasard (Déluge, Gravité…). +50 % de Pokédollars." />
+      <Switch k="livingBoard" on={PREF.livingBoard !== false} lab="Plateau vivant" sub="Le jour et la nuit passent pendant le combat, le feu court dans les hautes herbes, la pluie l’éteint et la grêle gèle les flaques. Pour les combats suivants." />
+      <Switch k="tactics" on={PREF.tactics !== false} lab="Tactique avancée" sub="Entrer au contact d’un adversaire arrête le déplacement (sauf volants, Spectre, Éclaireurs). Lance-Soleil et Vol partent en fin de manche. Pour les combats suivants." />
+      <Switch k="characters" on={PREF.characters !== false} lab="Natures et talents" sub="Chaque Pokémon capturé a sa nature (Brave, Prudent, Vif…) et son talent, gardés à travers ses évolutions. Voir la fiche du Pokémon." />
+      <Switch k="disobedience" on={PREF.disobedience} lab="Désobéissance" sub="En Campagne, un Pokémon épuisé ou têtu peut ignorer un ordre." />
+      <Switch k="trainingMutators" on={PREF.trainingMutators} lab="Mutateurs en Entraînement" sub="Chaque combat d’entraînement tire une règle au hasard (Déluge, Gravité…). +50 % de Pokédollars." />
       <Switch k="vitesse" on={PREF.vitesse} lab="Ordre par Vitesse" sub="Alliés et adversaires jouent chacun leur tour, du plus rapide au plus lent. Pour les combats suivants." />
       <Switch k="coop" on={PREF.coop} lab="Coop à 2 joueurs" sub="Sur le même téléphone : le Joueur 1 dirige les 2 premiers Pokémon de l’équipe, le Joueur 2 les autres. Le Joueur 1 passe la main, puis les adversaires jouent. Sans effet avec l’Ordre par Vitesse." />
       <Switch k="fast" on={PREF.fast} lab="Combat rapide" sub="Animations et présentations plus courtes" />

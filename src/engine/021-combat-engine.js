@@ -71,7 +71,7 @@ export function teff(at, def) {
 
 function specOf(id) {
   const m = BY[id];
-  return { id, n: m.n, t: m.t, s: m.s, mv: m.mv, tal: m.tal };
+  return { id, n: m.n, t: m.t, s: m.s, mv: m.mv, ability: m.ability };
 }
 
 
@@ -89,7 +89,7 @@ export function mkUnit(id, side, pos, uid, D) {
     t: [...sp.t],
     s: [...sp.s],
     mv: [...sp.mv],
-    tal: sp.tal,
+    ability: sp.ability,
     lv: side === 'e' ? D.lv : null,
     pb: side === 'e' ? D.pb || 0 : 0,
     hb,
@@ -101,14 +101,14 @@ export function mkUnit(id, side, pos, uid, D) {
     sn: false,
     skip: 0,
     badge: null,
-    bru: 0,
+    burn: 0,
     web: 0,
     guard: 0,
     anchor: 0,
     root: 0,
     prot: 0,
     boost: 0,
-    ferm: sp.tal === 'fermete',
+    sturdy: sp.ability === 'fermete',
     intent: null,
     done: false,
     evolved: false,
@@ -129,11 +129,11 @@ export function markAt(S, k) {
 
  // grounded: Gravity (v4.9)
 function entryWx(S, u, ev) {
-  if (u.tal === 'crachin') {
+  if (u.ability === 'crachin') {
     S.wx = { k: 'pluie', n: 5 };
     ev && say(ev, `Crachin : ${u.n} fait tomber la pluie.`);
   }
-  if (u.tal === 'sablevolant') {
+  if (u.ability === 'sablevolant') {
     S.wx = { k: 'sable', n: 5 };
     ev && say(ev, `Sable Volant : ${u.n} lève une tempête de sable.`);
   }
@@ -162,13 +162,13 @@ export function newBattle(sc, team, bonus, opt) {
       tiles: {},
       units: [],
       wx: null,
-      voix: startVoice(bonus),
+      voice: startVoice(bonus),
       vmax: startVoice(bonus),
       eveil: false,
-      relance: false,
+      retrigger: false,
       over: null,
       lastAtk: null,
-      stats: { rx: 0, ko: 0, voix: 0, evo: 0, pairs: {} },
+      stats: { rx: 0, ko: 0, voice: 0, evo: 0, pairs: {} },
       rxg: {},
       jit: true // v4.12: hidden intentions, opponents decide on their own turn
     };
@@ -195,7 +195,7 @@ export function newBattle(sc, team, bonus, opt) {
             {},
             D,
             x,
-            x.hb != null ? { hb: Math.max(0, Math.round(x.hb * df.hb * hpOrder(opt) * (x.boss || x.colosse ? JIT_BOSS_HB : 1) + (df.hbAdd || 0))) } : {},
+            x.hb != null ? { hb: Math.max(0, Math.round(x.hb * df.hb * hpOrder(opt) * (x.boss || x.colossus ? JIT_BOSS_HB : 1) + (df.hbAdd || 0))) } : {},
             x.pb != null ? { pb: Math.max(0, Math.round(x.pb * JIT_PBM) + JIT_PB) } : {}
           )
         : D,
@@ -210,8 +210,8 @@ export function newBattle(sc, team, bonus, opt) {
   plan(S, []);
   // difficulty, Bonds, held items and fatigue (applied after the opponents' first intentions)
   S.diff = DIFF[opt.diff] ? opt.diff : 'normal';
-  if (opt.ordre === 'vitesse') S.ordre = 'vitesse'; // turn order by Speed (v4.5-01)
-  addLearned(S, opt.apprises); // learned TMs and HMs (v4.6-01)
+  if (opt.order === 'vitesse') S.order = 'vitesse'; // turn order by Speed (v4.5-01)
+  addLearned(S, opt.learnedTms); // learned TMs and HMs (v4.6-01)
   S.links = {};
   S.noCatch = !D0.catch;
   S.stats.caught = [];
@@ -241,18 +241,18 @@ export function newBattle(sc, team, bonus, opt) {
 
  // colossus: +2 range (v4.8) // at night: −1 range (v4.7-01) // Shock Wave in the Rain (v4.12)
 export function movPts(S, u) {
-  if (u.colosse || u.seg) return 0; // colossi do not move (v4.8)
-  const fr = u.tal === 'regardvif';
+  if (u.colossus || u.seg) return 0; // colossi do not move (v4.8)
+  const fr = u.ability === 'regardvif';
   if (u.root > 0 && !fr) return 0;
   let m = u.s[4];
-  if (u.tal === 'glissade' && markAt(S, uk(u)) === 'trempe') m += 2;
-  if (u.tal === 'chlorophylle' && S.wx && S.wx.k === 'soleil') m += 2;
+  if (u.ability === 'glissade' && markAt(S, uk(u)) === 'trempe') m += 2;
+  if (u.ability === 'chlorophylle' && S.wx && S.wx.k === 'soleil') m += 2;
   if (u.web > 0 && !fr) m -= 3;
   m = Math.max(0, m);
   m = Math.max(0, m + (u.item === 'grelot' ? 1 : 0) - (u.fat ? 1 : 0)); // Grelot Vif +1, fatigue −1
   if (hasSyn(S, u, 'escadrille') && (u.t.includes('Vol') || u.t.includes('Insecte'))) m++; // Squadron synergy
-  if (S.mutMov) m = Math.max(0, m + S.mutMov); // Gravity, Frenzy mutators (v4.9)
-  if (u.car === 'vif') m++; // Quick nature (v4.10)
+  if (S.mutatorMove) m = Math.max(0, m + S.mutatorMove); // Gravity, Frenzy mutators (v4.9)
+  if (u.temperament === 'vif') m++; // Quick nature (v4.10)
   m = Math.max(0, m + bonusMove412(S, u) + docMov430(S, u) + bonusMove431(S, u) + talMov432(S, u)); // doctrine (v4.30); Tailwind, Trick Room (v4.12), Gravity, Shadow Mark… (v4.13)
   return m;
 }
@@ -283,7 +283,7 @@ export function reach(S, u) {
 
 
 export function mvType(S, u, m) {
-  if (u.tal === 'adaptabilite' && m.t === 'Normal') {
+  if (u.ability === 'adaptabilite' && m.t === 'Normal') {
     const k = markAt(S, uk(u));
     if (k) return MKT[k];
   }
@@ -305,7 +305,7 @@ function lineK(from, d, n) {
 
 function canSee(S, u, k) {
   const v = uAt(S, k);
-  if (!v || u.tal === 'echolocation') return true;
+  if (!v || u.ability === 'echolocation') return true;
   const d = hdist(u.pos, P(k));
   if (S.tiles[k].fog > 0 && d > 1) return false; // fog
   return !(v.side !== u.side && S.tiles[k].grass && d > 2); // tall grass: hidden beyond 2 cells
@@ -313,7 +313,7 @@ function canSee(S, u, k) {
 
 
 export function targets(S, u, m) {
-  if (m && ((m.xp && !canXP(S, u, m)) || (u.item === 'mouchoir' && u.choix && MV[u.choix] && MV[u.choix] !== m))) return []; // v4.14
+  if (m && ((m.xp && !canXP(S, u, m)) || (u.item === 'mouchoir' && u.choice && MV[u.choice] && MV[u.choice] !== m))) return []; // v4.14
   const R = effR(u, m, S);
   if (m.sh === 'self' || m.sh === 'ring') return [uk(u)];
   const ign = ignObst(S, u, mvType(S, u, m)); // Spirit synergy: Psychic and Ghost ignore obstacles
@@ -414,12 +414,12 @@ export function inReach(S, u, m, k) {
   }
   // tall grass: a target more than 2 cells away is invisible
   const v = uAt(S, k);
-  return !(v && v.side !== u.side && S.tiles[k].grass && d > 2 && u.tal !== 'echolocation');
+  return !(v && v.side !== u.side && S.tiles[k].grass && d > 2 && u.ability !== 'echolocation');
 }
 
 
 function intimidate(S, u) {
-  return S.units.some(o => !o.ko && o.side !== u.side && o.tal === 'intimidation' && hdist(o.pos, u.pos) === 1);
+  return S.units.some(o => !o.ko && o.side !== u.side && o.ability === 'intimidation' && hdist(o.pos, u.pos) === 1);
 }
 
 
@@ -434,25 +434,25 @@ export function dmgOf(S, u, m, t, typ, mult) {
 
 function dmgBase(S, u, m, t, typ, mult) {
   let e = teff(typ, t.t);
-  if (e === 0 && typ === 'Sol' && t.cloue && t.t.includes('Vol')) e = t.t.length > 1 ? teff(typ, t.t.filter(z => z !== 'Vol')) || 1 : 1; // Gravity: Ground hits Flying (v4.13)
+  if (e === 0 && typ === 'Sol' && t.pinned && t.t.includes('Vol')) e = t.t.length > 1 ? teff(typ, t.t.filter(z => z !== 'Vol')) || 1 : 1; // Gravity: Ground hits Flying (v4.13)
   if (e === 0) return 0;
-  if (typ === 'Sol' && t.tal === 'levitation' && !t.cloue) return 0;
+  if (typ === 'Sol' && t.ability === 'levitation' && !t.pinned) return 0;
   if (m.fix) return m.fix;
   if (!m.p) return 0;
   if (m.fx === 'devoreve' && t.badge !== 'SOM') return 0; // Dream Eater (v4.12)
   // multipliers (weather, abilities, status, same type): supplied to the tactical engine's pipeline (v4.5-01)
-  const x = MT.combinerModificateurs(
+  const x = MT.combineModifiers(
     e * mult,
-    MT.collecter(DAMAGE_PROVIDERS, 'degats', { S, u, m, t, typ }, 'attaquant')
-  ).valeur;
+    MT.collect(DAMAGE_PROVIDERS, 'degats', { S, u, m, t, typ }, 'attaquant')
+  ).amountValue;
   let d = Math.round((m.p + u.s[1] * 2 + (u.pb || 0)) * x);
-  if (u.tal !== 'annulegarde' && m.fx !== 'percegarde') {
-    d -= t.s[2] + (u.tal === 'inconscient' ? 0 : (t.guard > 0 ? 2 : 0) + (t.anchor > 0 ? 2 : 0) + (t.tal === 'coque' ? 2 : 0));
+  if (u.ability !== 'annulegarde' && m.fx !== 'percegarde') {
+    d -= t.s[2] + (u.ability === 'inconscient' ? 0 : (t.guard > 0 ? 2 : 0) + (t.anchor > 0 ? 2 : 0) + (t.ability === 'coque' ? 2 : 0));
   }
   if (intimidate(S, u)) d -= 3;
-  if (u.affaibli > 0) d -= 3; // Will-O-Wisp (v4.13)
+  if (u.weakened > 0) d -= 3; // Will-O-Wisp (v4.13)
   // v4.12: without intentions, every enemy attack lands; it hits a little softer (after Guard)
-  if (S.jit && u.side === 'e' && !S.duel433 && JIT_DMG !== 1) d = Math.round(d * JIT_DMG * (u.boss || u.colosse ? JIT_BOSS : 1));
+  if (S.jit && u.side === 'e' && !S.duel433 && JIT_DMG !== 1) d = Math.round(d * JIT_DMG * (u.boss || u.colossus ? JIT_BOSS : 1));
   return Math.max(1, d);
 }
 
@@ -465,13 +465,13 @@ export function say(ev, s) {
 export function damage(S, v, d, ev, o) {
   o = o || {};
   if (!v || v.ko || d <= 0) return 0;
-  if (o.ind && v.tal === 'gardemagik') return 0;
+  if (o.ind && v.ability === 'gardemagik') return 0;
   if (v.prot > 0 && !o.ind) {
     say(ev, `${v.n} se protège avec Abri.`);
     return 0;
   }
   // Focus Sash: a fatal hit leaves 1 HP (once)
-  const belt = v.belt && !v.ferm && d >= v.hp;
+  const belt = v.belt && !v.sturdy && d >= v.hp;
   if (belt) {
     v.belt = false;
     d = v.hp - 1;
@@ -481,9 +481,9 @@ export function damage(S, v, d, ev, o) {
     }
   }
   let nh = v.hp - d;
-  if (nh <= 0 && v.ferm) {
+  if (nh <= 0 && v.sturdy) {
     nh = 1;
-    v.ferm = false;
+    v.sturdy = false;
     say(ev, `${v.n} tient bon grâce à Fermeté !`);
   }
   const real = v.hp - Math.max(0, nh);
@@ -502,11 +502,11 @@ export function damage(S, v, d, ev, o) {
         if (ally.side === v.side && !ally.ko && ally !== v) rewardIn(S, ally, 1, ev);
       });
     }
-    if (v.seg || v.colosse) colossusKO(S, v, ev); // colossi (v4.8)
+    if (v.seg || v.colossus) colossusKO(S, v, ev); // colossi (v4.8)
   }
   if (real > 0 && !o.ind) {
     v.touche = true; // Mach Punch (v4.13)
-    if (!o.reflet) reflections413(S, v, real, ev); // Counter, Mirror Coat, Destiny Bond (v4.13)
+    if (!o.reflect) reflections413(S, v, real, ev); // Counter, Mirror Coat, Destiny Bond (v4.13)
   }
   if (real > 0) afterDamage414(S, v, real, o, ev); // Rocky Helmet, Sitrus Berry (v4.14)
   if (belt) say(ev, `${v.n} tient bon grâce à la Ceinture Force !`);
@@ -533,15 +533,15 @@ export function stun(S, v, lab, ev, noSync) {
     say(ev, `Baie Lum : ${v.n} annule l’état ${lab}.`);
     return;
   }
-  if (v.tal === 'attention') {
+  if (v.ability === 'attention') {
     say(ev, `${v.n} reste concentré.`);
     return;
   }
-  if (v.tal === 'armuremagma' && lab === 'GEL') {
+  if (v.ability === 'armuremagma' && lab === 'GEL') {
     say(ev, `Armumagma : ${v.n} ne gèle pas.`); // v4.15
     return;
   }
-  if (v.tal === 'souplesse' && lab === 'PAR') {
+  if (v.ability === 'souplesse' && lab === 'PAR') {
     say(ev, `${v.n} est trop souple pour être paralysé.`); // v4.13
     return;
   }
@@ -550,7 +550,7 @@ export function stun(S, v, lab, ev, noSync) {
     return;
   }
   v.badge = lab;
-  v.bdgVu433 = 0;
+  v.badgeSeen433 = 0;
   if (v.side === 'e' && !v.done && (v.intent || S.jit)) {
     v.intent = null;
     say(ev, S.duel433 ? `${v.n} perdra son prochain tour.` : S.jit ? `${v.n} ne pourra pas agir cette manche.` : `L’attaque de ${v.n} est annulée.`);
@@ -560,7 +560,7 @@ export function stun(S, v, lab, ev, noSync) {
     v.sn = true;
   } else v.skip = 1;
   ev.push({ e: 'st', u: v.uid, s: lab });
-  if (!noSync && v.tal === 'synchro' && S.lastAtk) {
+  if (!noSync && v.ability === 'synchro' && S.lastAtk) {
     const a = byUid(S, S.lastAtk);
     if (a && a.side !== v.side && !a.ko) {
       say(ev, `Synchro : ${a.n} subit le même sort.`);
@@ -581,7 +581,7 @@ export function mDur(S, mk) {
     return 3;
   }
   if (w === 'soleil' && mk === 'trempe') return 1;
-  if (S.vivant && w === 'pluie' && mk === 'brulant') return 1;
+  if (S.livingBoard && w === 'pluie' && mk === 'brulant') return 1;
   return 2;
 }
 
@@ -615,7 +615,7 @@ export function net(S, k, mk) {
 
 
 function moist(S, k) {
-  return S.units.some(o => !o.ko && o.tal === 'moiteur' && hdist(o.pos, P(k)) <= 2);
+  return S.units.some(o => !o.ko && o.ability === 'moiteur' && hdist(o.pos, P(k)) <= 2);
 }
 
 
@@ -635,7 +635,7 @@ export function landed(S, v, ev) {
   const t = S.tiles[uk(v)];
   if (t.lava > 0 && !flies(v)) {
     say(ev, `${v.n} se brûle sur la lave.`);
-    damage(S, v, v.tal === 'isograisse' ? 3 : 6, ev, { ind: true });
+    damage(S, v, v.ability === 'isograisse' ? 3 : 6, ev, { ind: true });
   }
   trapArrival(S, v, ev); // traps (v4.8)
 }
@@ -643,7 +643,7 @@ export function landed(S, v, ev) {
 
 export function shove(S, v, from, n, ev, pull) {
   if (!v || v.ko || n <= 0) return;
-  if (v.anchor > 0 || v.colosse || v.seg) {
+  if (v.anchor > 0 || v.colossus || v.seg) {
     say(ev, `${v.n} est ancré et ne bouge pas.`);
     return;
   }
@@ -723,12 +723,12 @@ function react(S, rx, k, u, v, base, ev) {
           say(ev, `${w.n} est insensible au courant.`);
           continue;
         }
-        if (w.tal === 'absorbvolt') {
+        if (w.ability === 'absorbvolt') {
           say(ev, `${w.n} absorbe le courant.`);
           heal(S, w, 8, ev);
           continue;
         }
-        if (x !== k && w.tal !== 'ecranpoudre') {
+        if (x !== k && w.ability !== 'ecranpoudre') {
           damage(S, w, Math.max(2, Math.round(base * 0.5 * Math.pow(0.85, d))), ev, { ind: true });
         }
         if (!w.ko) {
@@ -768,7 +768,7 @@ function react(S, rx, k, u, v, base, ev) {
       t.mark = null;
       nbrK(k).forEach(x => {
         const w = uAt(S, x);
-        if (w && w.tal !== 'ecranpoudre') damage(S, w, Math.max(2, Math.round(base * 0.5)), ev, { ind: true });
+        if (w && w.ability !== 'ecranpoudre') damage(S, w, Math.max(2, Math.round(base * 0.5)), ev, { ind: true });
       });
       say(ev, 'Surtension : explosion !');
       break;
@@ -783,10 +783,10 @@ function react(S, rx, k, u, v, base, ev) {
       for (const x in N.seen) {
         setMark(S, x, 'brulant', u.uid);
         const w = uAt(S, x);
-        if (w && x !== k && w.tal !== 'ecranpoudre' && w.tal !== 'torche') {
-          damage(S, w, w.tal === 'isograisse' ? 3 : 6, ev, { ind: true });
+        if (w && x !== k && w.ability !== 'ecranpoudre' && w.ability !== 'torche') {
+          damage(S, w, w.ability === 'isograisse' ? 3 : 6, ev, { ind: true });
         }
-        if (w && !w.ko && w.tal !== 'torche') w.bru = 3;
+        if (w && !w.ko && w.ability !== 'torche') w.burn = 3;
       }
       say(ev, 'Embrasement : le feu se propage.');
       break;
@@ -838,7 +838,7 @@ function react(S, rx, k, u, v, base, ev) {
 
 
 export function endStep(S, ev) {
-  HOOKS.avantVerdict.forEach(h => h(S, ev));
+  HOOKS.beforeVerdict.forEach(h => h(S, ev));
   if (!S.over) {
     const a = S.units.some(x => x.side === 'a' && !x.ko),
       e = S.units.some(x => x.side === 'e' && !x.ko);
@@ -901,7 +901,7 @@ export function resolveMove(S, u, m, k) {
   S.lastAtk = u.uid;
   S.rxg = {};
   ev.push({ e: 'use', u: u.uid, k, ty: typ });
-  S.acteur430 = u.uid; // tactical log (v4.30)
+  S.actor430 = u.uid; // tactical log (v4.30)
   say(ev, `${u.n} utilise ${m.n} !`);
   if (m.wx) {
     S.wx = { k: m.wx, n: u.item === 'rochemeteo' ? 8 : 5 }; // Weather Rock (v4.14)
@@ -942,7 +942,7 @@ export function resolveMove(S, u, m, k) {
   }
   const v0 = outOfReach(S, uAt(S, k), u, null), // airborne: untouchable (v4.8)
     mk0 = markAt(S, k);
-  if (m.fx === 'swap' && v0 && !v0.colosse && !v0.seg) {
+  if (m.fx === 'swap' && v0 && !v0.colossus && !v0.seg) {
     const a = u.pos;
     u.pos = v0.pos;
     v0.pos = a;
@@ -1018,16 +1018,16 @@ export function resolveMove(S, u, m, k) {
         b0 = dmgOf(S, u, m, v, typ, 1);
       if (b0 > 0) base = b0;
       if (dmg > 0) {
-        if (typ === 'Eau' && v.tal === 'absorbeau') {
+        if (typ === 'Eau' && v.ability === 'absorbeau') {
           say(ev, `${v.n} absorbe l’eau.`);
           heal(S, v, dmg, ev);
-        } else if (typ === 'Électrik' && v.tal === 'absorbvolt') {
+        } else if (typ === 'Électrik' && v.ability === 'absorbvolt') {
           say(ev, `${v.n} absorbe le courant.`);
           heal(S, v, dmg, ev);
-        } else if (typ === 'Électrik' && v.tal === 'paratonnerre') {
+        } else if (typ === 'Électrik' && v.ability === 'paratonnerre') {
           say(ev, `Paratonnerre : ${v.n} attire la foudre et se renforce.`); // v4.13
           v.boost = Math.max(v.boost, 2);
-        } else if (typ === 'Feu' && v.tal === 'torche') {
+        } else if (typ === 'Feu' && v.ability === 'torche') {
           say(ev, `Torche : ${v.n} absorbe les flammes et renforce ses attaques.`);
           v.boost = 2;
         } else {
@@ -1036,7 +1036,7 @@ export function resolveMove(S, u, m, k) {
           if (e > 1) say(ev, 'C’est super efficace !');
           else if (e < 1) say(ev, 'Ce n’est pas très efficace.');
         }
-      } else if (teff(typ, v.t) === 0 || (typ === 'Sol' && v.tal === 'levitation')) say(ev, `Ça n’affecte pas ${v.n}.`);
+      } else if (teff(typ, v.t) === 0 || (typ === 'Sol' && v.ability === 'levitation')) say(ev, `Ça n’affecte pas ${v.n}.`);
       else if (m.fx === 'devoreve') say(ev, `${v.n} ne dort pas : Dévorêve échoue.`); // v4.12
     }
     if (v && !v.ko && v.side !== u.side && TARGET412[m.fx]) TARGET412[m.fx](S, u, v, x, mk, ev); // Icy Wind, Dragon Breath, Sludge Bomb (v4.12)
@@ -1055,20 +1055,20 @@ export function resolveMove(S, u, m, k) {
   if (v1 && v1.side !== u.side) {
     if (m.fx === 'push') shove(S, v1, u.pos, m.v, ev, false);
     if (m.fx === 'pull') {
-      if (mk0 === 'charge' || (u.tal === 'magnepiege' && v1.t.includes('Acier'))) shove(S, v1, u.pos, m.v, ev, true);
+      if (mk0 === 'charge' || (u.ability === 'magnepiege' && v1.t.includes('Acier'))) shove(S, v1, u.pos, m.v, ev, true);
       else say(ev, 'Aimant : la cible n’est pas Chargée.');
     }
     if (m.fx === 'parc' && mk0 === 'charge') stun(S, v1, 'PAR', ev);
     if (m.fx === 'sleep') stun(S, v1, 'SOM', ev);
     if (m.fx === 'web') {
-      if (v1.tal === 'regardvif' || rune413(S, v1)) say(ev, `${v1.n} ignore l’entrave.`);
+      if (v1.ability === 'regardvif' || rune413(S, v1)) say(ev, `${v1.n} ignore l’entrave.`);
       else {
         v1.web = 2;
         say(ev, `${v1.n} est ralenti.`);
       }
     }
     if (m.fx === 'root') {
-      if (v1.tal === 'regardvif' || rune413(S, v1)) say(ev, `${v1.n} ignore l’entrave.`);
+      if (v1.ability === 'regardvif' || rune413(S, v1)) say(ev, `${v1.n} ignore l’entrave.`);
       else {
         v1.root = Math.max(v1.root, m.v || 2);
         say(ev, `${v1.n} ne peut plus bouger.`);
@@ -1141,7 +1141,7 @@ export function pAct(S, u, mi, k) {
     u.en = Math.max(0, u.en - xpC);
     say(ev, `Attaque Experte : ${u.n} libère ${xpC} losange${xpC > 1 ? 's' : ''} de Résonance.`);
   }
-  if (u.item === 'mouchoir' && !u.choix) u.choix = u.mv[mi]; // Choice Scarf (v4.14)
+  if (u.item === 'mouchoir' && !u.choice) u.choice = u.mv[mi]; // Choice Scarf (v4.14)
   u.acted = true;
   u.moved = true;
   chordAfter(S, u, m, ev); // Resonance Chords (v4.10)
@@ -1166,8 +1166,8 @@ export function rewardIn(S, u, n, ev) {
   if (u.en > b && ev) {
     ev.push({ e: 'en', u: u.uid, v: u.en - b });
     if (u.en === EMAX && hasNx(u)) ev.push({ e: 'ready', u: u.uid }, { e: 'msg', s: `${u.n} est prêt à s’éveiller.` });
-    else if (u.en === EMAX && !u.resoMsg && resoCand417(S, u)) {
-      u.resoMsg = 1;
+    else if (u.en === EMAX && !u.resonanceMsg && resoCand417(S, u)) {
+      u.resonanceMsg = 1;
       ev.push({ e: 'ready', u: u.uid }, { e: 'msg', s: `${u.n} peut entrer en Forme Résonante.` });
     }
   }
@@ -1230,14 +1230,14 @@ export function canAwaken(S, u) {
     !u.acted &&
     !u.sn &&
     u.en >= EMAX &&
-    S.voix >= 1 &&
+    S.voice >= 1 &&
     evoOpts(S, u).length > 0
   );
 }
 
 
 export function foeEvo(S, e) {
-  return e.side === 'e' && !S.duel433 && !e.ko && !e.seg && !e.colosse && e.hp <= e.mhp * 0.5 && hasNx(e);
+  return e.side === 'e' && !S.duel433 && !e.ko && !e.seg && !e.colossus && e.hp <= e.mhp * 0.5 && hasNx(e);
 }
 
 
@@ -1264,7 +1264,7 @@ function arrive(S, u, ev) {
     else if (f.k === 'confuse') {
       foes(1).forEach(o => {
         if ((o.intent || S.jit) && !o.done) retarget(S, o, u, 'confuse', ev); // v4.13: also without intentions
-        else if (o.tal !== 'regardvif') {
+        else if (o.ability !== 'regardvif') {
           o.web = Math.max(o.web, 2);
           say(ev, `${o.n} est désorienté et ralenti.`);
         }
@@ -1272,7 +1272,7 @@ function arrive(S, u, ev) {
     }
     else if (f.k === 'root') {
       foes(1).forEach(o => {
-        if (o.tal === 'regardvif') return;
+        if (o.ability === 'regardvif') return;
         o.root = Math.max(o.root, f.v || 2);
         say(ev, `${o.n} ne peut plus bouger.`);
       });
@@ -1300,12 +1300,12 @@ export function transform(S, u, id, ev) {
   u.t = [...E.t];
   u.s = [...E.s];
   u.mv = withLearned(u, E.mv); // the move learned by TM or HM is kept (v4.6-01)
-  u.tal = E.tal;
-  u.ferm = E.tal === 'fermete';
+  u.ability = E.ability;
+  u.sturdy = E.ability === 'fermete';
   const nm = mhpOf(E.s) + (u.hb || 0);
   u.mhp = nm;
   u.hp = Math.min(nm, u.hp + Math.max(0, nm - om) + Math.round(nm * 0.3));
-  u.bru = 0;
+  u.burn = 0;
   u.web = 0;
   u.root = 0;
   u.badge = null;
@@ -1340,8 +1340,8 @@ export function pAwaken(S, u, id) {
     displayName = u.n,
     harm434 = BY[u.id].nx === 'eevee' && eeveeHarmony434(S, u).includes(id); // Eevee in harmony (v4.34)
   S.lastAtk = u.uid;
-  S.voix -= 1;
-  S.stats.voix += 1;
+  S.voice -= 1;
+  S.stats.voice += 1;
   S.stats.evo++;
   S.eveil = true;
   transform(S, u, id, ev);
@@ -1358,12 +1358,12 @@ export function pAwaken(S, u, id) {
 
 
 export function pDodge(S, u, k) {
-  if (S.phase !== 'player' || S.voix < 1 || u.ko || u.sn) return null;
+  if (S.phase !== 'player' || S.voice < 1 || u.ko || u.sn) return null;
   if (!nbrK(uk(u)).includes(k) || S.tiles[k].rock || uAt(S, k)) return null;
   const ev = [];
   u.pos = P(k);
-  S.voix--;
-  S.stats.voix++;
+  S.voice--;
+  S.stats.voice++;
   ev.push({ e: 'mv', u: u.uid });
   say(ev, `Esquive : ${u.n} se décale.`);
   landed(S, u, ev);
@@ -1372,13 +1372,13 @@ export function pDodge(S, u, k) {
 
 
 export function pReroll(S, u) {
-  if (S.phase !== 'player' || S.voix < 2 || S.relance || !u.acted || u.ko || u.sn) return null;
+  if (S.phase !== 'player' || S.voice < 2 || S.retrigger || !u.acted || u.ko || u.sn) return null;
   u.acted = false;
   u.moved = false;
-  u.rst478 = 0; // guided turn: the Pokémon restarts from the Move step
-  S.relance = true;
-  S.voix -= 2;
-  S.stats.voix += 2;
+  u.restart478 = 0; // guided turn: the Pokémon restarts from the Move step
+  S.retrigger = true;
+  S.voice -= 2;
+  S.stats.voice += 2;
   return [{ e: 'msg', s: `Relance : ${u.n} peut rejouer.` }];
 }
 
@@ -1429,7 +1429,7 @@ export function plan(S, ev) {
     .forEach(e => {
       e.done = false;
       e.intent = null;
-      e.perdu = 0; // v4.12: action lost this round (Eclipse…)
+      e.isLost = 0; // v4.12: action lost this round (Eclipse…)
       e.force = null; // v4.12: forced target (Charm, Confuse Ray, Supersonic)
       e.prep = false; // v4.12: this round's movement already done
       if (e.skip > 0) {
@@ -1572,7 +1572,7 @@ export function prepareEnemy(S, uid) {
     ev = [];
   if (!S.jit || !e || e.ko || S.over || e.done || e.prep) return ev;
   e.prep = true;
-  if (e.badge || e.perdu) return ev;
+  if (e.badge || e.isLost) return ev;
   const F = forcedTarget(S, e);
   if (F && e.force) say(ev, e.force.fx === 'taunt' ? `${e.n} ne voit plus que ${F.n}.` : e.force.fx === 'turn' ? `${e.n}, troublé, se retourne contre ${F.n} !` : `${e.n}, désorienté, s’en prend à ${F.n}.`);
   chooseAction(S, e, ev, true);
@@ -1585,8 +1585,8 @@ export function threatZone(S, e) {
   const key = S.round + '|' + e.uid + '|' + S.units.map(u => (u.ko ? 'x' : uk(u))).join(';') + '|' + (S.wx ? S.wx.k : '');
   if (THREAT.k === key) return THREAT.z;
   const z = new Set(),
-    opts = Object.assign({ [uk(e)]: 0 }, e.badge || e.perdu ? {} : reach(S, e));
-  if (!(e.badge || e.perdu)) {
+    opts = Object.assign({ [uk(e)]: 0 }, e.badge || e.isLost ? {} : reach(S, e));
+  if (!(e.badge || e.isLost)) {
     for (const pk in opts) {
       const sim = Object.assign({}, e, { pos: P(pk) });
       e.mv.forEach(mid => {
@@ -1621,7 +1621,7 @@ export function execFoe(S, uid) {
   if (!e || e.ko || S.over) return ev;
   if (S.jit) {
     if (e.done) return ev;
-    if (e.badge || e.perdu) {
+    if (e.badge || e.isLost) {
       e.done = true;
       say(ev, `${e.n} ne peut pas agir.`);
       return ev;
@@ -1644,7 +1644,7 @@ export function execFoe(S, uid) {
     if (m.xp) e.en = Math.max(0, (e.en || 0) - xpCost(e)); // Expert attack (v4.14)
     r = resolve(S, e, m, k);
     if (m.sh === 'one' && !tgt) r.push({ e: 'msg', s: 'La case visée est vide : l’attaque se perd.' });
-    if (tgt && !tgt.ko && tgt.tal === 'statik' && !e.ko && hdist(e.pos, tgt.pos) === 1) {
+    if (tgt && !tgt.ko && tgt.ability === 'statik' && !e.ko && hdist(e.pos, tgt.pos) === 1) {
       setMark(S, uk(e), 'charge', tgt.uid);
       r.push({ e: 'msg', s: `Statik : ${e.n} est Chargé.` });
     }
@@ -1656,9 +1656,9 @@ export function execFoe(S, uid) {
 
 /* end of round: role support, round effects, then Leftovers */
 export function endRound(S) {
-  S.acteur430 = null; // end-of-round effects have no author (v4.30)
+  S.actor430 = null; // end-of-round effects have no author (v4.30)
   const ch = [];
-  HOOKS.avantFinManche.forEach(h => h(S, ch)); // charged attacks, trap wear (v4.8)
+  HOOKS.beforeRoundEnd.forEach(h => h(S, ch)); // charged attacks, trap wear (v4.8)
   if (S.over) return ch;
   const pre = ch.concat(roundSupport(S)),
     ev = roundEffects(S);
@@ -1674,15 +1674,15 @@ export function endRound(S) {
 /** End-of-round effects of a Pokémon: burn, poison, weather, lava, durations (v4.33: separate function for the duel). */
 export function unitEffects433(S, u, ev) {
   if (u.ko) return;
-    if (u.bru > 0) {
+    if (u.burn > 0) {
       say(ev, `${u.n} souffre de sa brûlure.`);
-      damage(S, u, u.tal === 'isograisse' ? 1 : 3, ev, { ind: true });
-      u.bru--;
+      damage(S, u, u.ability === 'isograisse' ? 1 : 3, ev, { ind: true });
+      u.burn--;
     }
-    if (u.psn > 0 && !u.ko) {
+    if (u.poisoned > 0 && !u.ko) {
       say(ev, `${u.n} souffre du poison.`); // Sludge Bomb (v4.12)
       damage(S, u, 3, ev, { ind: true });
-      u.psn--;
+      u.poisoned--;
     }
     u.aide = 0;
     if (S.wx && !u.ko) {
@@ -1691,14 +1691,14 @@ export function unitEffects433(S, u, ev) {
         damage(S, u, 2, ev, { ind: true });
       }
     }
-    if (!u.ko && S.tiles[uk(u)].lava > 0 && !flies(u)) damage(S, u, u.tal === 'isograisse' ? 2 : 4, ev, { ind: true });
+    if (!u.ko && S.tiles[uk(u)].lava > 0 && !flies(u)) damage(S, u, u.ability === 'isograisse' ? 2 : 4, ev, { ind: true });
     ['web', 'guard', 'anchor', 'root', 'boost'].forEach(f => {
       if (u[f] > 0) u[f]--;
     });
     u.prot = 0;
-    if (u.tal === 'mue') {
-      u.bru = 0;
-      u.psn = 0;
+    if (u.ability === 'mue') {
+      u.burn = 0;
+      u.poisoned = 0;
       u.web = 0;
       u.root = 0;
     }
@@ -1742,14 +1742,14 @@ function roundEffects(S) {
   if (S.round >= S.lim) {
     S.over = 'lose';
     S.timeout = true;
-    if ((SCEN[S.sc] || {}).roam) S.fuite416 = true; // wandering beast (v4.16)
-    say(ev, S.duel433 ? 'Temps écoulé : les PV restants départagent les joueurs.' : S.fuite416 ? fleeMsg416(S) : 'Temps écoulé : l’adversaire tient la position.');
+    if ((SCEN[S.sc] || {}).roam) S.flee416 = true; // wandering beast (v4.16)
+    say(ev, S.duel433 ? 'Temps écoulé : les PV restants départagent les joueurs.' : S.flee416 ? fleeMsg416(S) : 'Temps écoulé : l’adversaire tient la position.');
     ev.push({ e: 'over' });
     return ev;
   }
   S.round++;
-  S.relance = false;
-  S.voix = S.vmax;
+  S.retrigger = false;
+  S.voice = S.vmax;
   S.phase = 'player';
   S.lastAtk = null;
   S.units.forEach(u => {
@@ -1796,7 +1796,7 @@ function previewCore(S, uid, mi, k) {
     const o = byUid(S, x.uid),
       dh = x.hp - o.hp,
       st = x.badge && x.badge !== o.badge ? x.badge : null,
-      can = !!(o.intent && !x.intent && !x.ko) || !!(S.jit && x.side === 'e' && !x.ko && !o.done && x.perdu && !o.perdu),
+      can = !!(o.intent && !x.intent && !x.ko) || !!(S.jit && x.side === 'e' && !x.ko && !o.done && x.isLost && !o.isLost),
       ret = !!(o.intent && x.intent && o.intent.k !== x.intent.k) || !!(S.jit && x.force && !o.force),
       mv = o.pos[0] !== x.pos[0] || o.pos[1] !== x.pos[1],
       ko = x.ko && !o.ko,
@@ -1854,11 +1854,11 @@ export const uAt = (S, k) => S.units.find(u => !u.ko && uk(u) === k);
 export const byUid = (S, id) => S.units.find(u => u.uid === id);
 
 
-export const flies = u => !u.cloue && (u.t.includes('Vol') || u.tal === 'levitation');
+export const flies = u => !u.pinned && (u.t.includes('Vol') || u.ability === 'levitation');
 
 
 export const effR = (u, m, S) =>
-  m.r + (u.tal === 'oeilcompose' && m.r > 0 ? 1 : 0) + (u.colosse && m.r > 0 ? 2 : 0) - nightRange(S, u, m) + (m.pluie && S && S.wx && S.wx.k === 'pluie' ? 2 : 0) + (u.item === 'lentillezoom' && m.r >= 2 ? 1 : 0);
+  m.r + (u.ability === 'oeilcompose' && m.r > 0 ? 1 : 0) + (u.colossus && m.r > 0 ? 2 : 0) - nightRange(S, u, m) + (m.pluie && S && S.wx && S.wx.k === 'pluie' ? 2 : 0) + (u.item === 'lentillezoom' && m.r >= 2 ? 1 : 0);
 
 
 export const NEEDU = ['swap', 'swapally', 'push', 'pull', 'web', 'confuse', 'turn', 'taunt', 'heal', 'parc', 'sleep', 'root'];

@@ -214,7 +214,7 @@ export function __init() {
 
   /* ---------- 9. Shop and Bag ---------- */
   // counter, pocket bag and pk-mart / pk-bag classes: React (src/screens/bag) and renderBag()
-  HOOKS.achat.push(() => {
+  HOOKS.purchase.push(() => {
     markPurchase();
     playSound('caisse');
     if (cur === 'sac') renderBag();
@@ -233,6 +233,6 @@ export function __init() {
   });
 
   schedule();
-  window.__monde473 = { scan, ecrire: write, finir: finishUp, JOBS, VU: SEEN, son: playSound };
+  window.__world473 = { scan, write, finishUp, JOBS, VU: SEEN, son: playSound };
 })();
 }

@@ -31,18 +31,18 @@ export default function Result() {
       if (!c) return;
       const cs = getComputedStyle(c);
       const scrolls = /(auto|scroll)/.test(cs.overflowY) && c.scrollHeight > c.clientHeight + 2;
-      setDeco({ v, rel: cs.position === 'static', holo: !scrolls, gerbe: c.classList.contains('win') && !calm472() });
+      setDeco({ v, relics: cs.position === 'static', holo: !scrolls, confetti: c.classList.contains('win') && !calm472() });
     });
     return () => cancelAnimationFrame(id);
   }, [v, S]);
   return (
     <div className="result" id="cbResult" hidden>
-      {v && S ? <Sheet S={S} cardRef={card} deco={deco && deco.v === v ? deco : null} /> : null}
+      {v && S ? <Sheet S={S} cardRef={card} decor={deco && deco.v === v ? deco : null} /> : null}
     </div>
   );
 }
 
-function Sheet({ S, cardRef, deco }) {
+function Sheet({ S, cardRef, decor: deco }) {
   const win = S.over === 'win',
     evl = S.stats.evl || [],
     D = SCEN[S.sc],
@@ -70,7 +70,7 @@ function Sheet({ S, cardRef, deco }) {
       role="dialog"
       aria-modal="true"
       aria-labelledby="resT"
-      style={deco && deco.rel ? { position: 'relative' } : undefined}
+      style={deco && deco.relics ? { position: 'relative' } : undefined}
     >
       {fx && S.rew && S.rew.badgeNew && ia >= 0 ? (
         <div className="rbadge448">
@@ -88,7 +88,7 @@ function Sheet({ S, cardRef, deco }) {
       ) : null}
       <p className="kick">{SCEN[S.sc].n}</p>
       <h2 className="h1" id="resT">
-        {du ? <Html html={duelTitle433(S)} /> : win ? 'Victoire' : S.fuite416 ? 'Il s’est enfui' : 'Défaite'}
+        {du ? <Html html={duelTitle433(S)} /> : win ? 'Victoire' : S.flee416 ? 'Il s’est enfui' : 'Défaite'}
       </h2>
       {L ? (
         <blockquote className="res-q">
@@ -118,7 +118,7 @@ function Sheet({ S, cardRef, deco }) {
           ) : (
             'Le plan a tenu.'
           )
-        ) : S.fuite416 ? (
+        ) : S.flee416 ? (
           'Ses blessures restent : retrouvez-le sur la carte de Johto et finissez le travail.'
         ) : S.timeout ? (
           'Temps écoulé : l’adversaire a tenu sa position.'
@@ -169,12 +169,12 @@ function Sheet({ S, cardRef, deco }) {
       {nz ? (
         <div className="nz450">
           <h4>Nuzlocke</h4>
-          {nz.noms.length ? (
+          {nz.names.length ? (
             <p>
-              Tombé{nz.noms.length > 1 ? 's' : ''} au combat, définitivement : <b>{nz.noms.join(', ')}</b>.
+              Tombé{nz.names.length > 1 ? 's' : ''} au combat, définitivement : <b>{nz.names.join(', ')}</b>.
             </p>
           ) : null}
-          {nz.epargne ? <p>{nz.epargne} est votre dernier compagnon : il est épargné.</p> : null}
+          {nz.spared ? <p>{nz.spared} est votre dernier compagnon : il est épargné.</p> : null}
         </div>
       ) : null}
       <div className="res-a">
@@ -218,7 +218,7 @@ function Sheet({ S, cardRef, deco }) {
       </div>
       {deco && deco.holo ? <i className="pk-holo" aria-hidden="true" /> : null}
       {deco ? <i className="pk-sceau" aria-hidden="true" /> : null}
-      {deco && deco.gerbe ? (
+      {deco && deco.confetti ? (
         <span className="pk-gerbe" aria-hidden="true">
           {Array.from({ length: 16 }, (_, i) => (
             <i

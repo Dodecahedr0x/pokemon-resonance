@@ -105,10 +105,10 @@ HOOKS.combat.push(S => {
 });
 
 
-DAMAGE_PROVIDERS.push({ id: 'saison465', fournir: (c, { S, u }) => !!u && u.side === 'a' && !!S && !!S.sa465 && BY[u.id] && BY[u.id].t.includes(S.sa465) && { mul: 1.05, libelle: 'Saison : ' + S.sa465 } });
+DAMAGE_PROVIDERS.push({ id: 'saison465', provide: (c, { S, u }) => !!u && u.side === 'a' && !!S && !!S.sa465 && BY[u.id] && BY[u.id].t.includes(S.sa465) && { mul: 1.05, labelText: 'Saison : ' + S.sa465 } });
 
 
-HOOKS.progres.unshift((S, rew, win) => {
+HOOKS.progress.unshift((S, rew, win) => {
   try {
     if (!win || !battleCount464(S)) return null;
     const t = season465().t,
@@ -124,7 +124,7 @@ HOOKS.progres.unshift((S, rew, win) => {
 });
 
 
-HOOKS.resultat.unshift(r => (r.sa465 ? `<div class="res-l"><h4>${esc(season465().n)}</h4><div class="rl"><span>Points de saison : +${r.sa465.n}</span><b>${r.sa465.tot}</b></div></div>` : ''));
+HOOKS.battleResult.unshift(r => (r.sa465 ? `<div class="res-l"><h4>${esc(season465().n)}</h4><div class="rl"><span>Points de saison : +${r.sa465.n}</span><b>${r.sa465.tot}</b></div></div>` : ''));
 
 
 document.addEventListener(

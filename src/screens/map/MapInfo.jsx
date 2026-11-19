@@ -129,7 +129,7 @@ export default function MapInfo() {
 function SafariInfo({ p }) {
   const lk = safariLock418(),
     S2 = PROFILE.safari,
-    takenSet = PROFILE.safariPris || 0;
+    takenSet = PROFILE.safariTaken || 0;
   return (
     <>
       <header className="v4-mi-h"><Html html={placeIcon(p)} /><span><small>Kanto · détente</small><b>Parc Safari</b></span><em className={`v4-pill s-${lk ? 'lock' : 'open'}`}>{STATE_N[lk ? 'lock' : 'open']}</em></header>

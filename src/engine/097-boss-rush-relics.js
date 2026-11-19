@@ -19,7 +19,7 @@ import { teamSize } from './048-replayability.js';
 
 
 function brOffer466(run) {
-  const freeOnes = RELIC466.filter(r => !run.rel.includes(r.id)).map(r => r.id);
+  const freeOnes = RELIC466.filter(r => !run.relics.includes(r.id)).map(r => r.id);
   const out = [];
   while (out.length < 3 && freeOnes.length) out.push(freeOnes.splice(Math.floor(Math.random() * freeOnes.length), 1)[0]);
   return out;
@@ -32,7 +32,7 @@ function brHub466() {
   let d;
   if (!brOk466()) d = { mode: 'lock' };
   else if (!run) {
-    d = { mode: 'new', best: st.best, won: st.won || 0, equipe: squad.length ? squad.slice(0, teamSize()).map(id => BY[id].n).join(', ') : 'aucun Pokémon' };
+    d = { mode: 'new', best: st.best, won: st.won || 0, teamNames: squad.length ? squad.slice(0, teamSize()).map(id => BY[id].n).join(', ') : 'aucun Pokémon' };
   }
   else {
     const rl = brRelics466(run)
@@ -44,7 +44,7 @@ function brHub466() {
       i: run.i,
       total: run.boss.length,
       eq,
-      rel: rl.map(r => r.n),
+      relics: rl.map(r => r.n),
       pend: run.pend ? run.pend.map(id => RELIC466.find(r => r.id === id)).map(r => ({ id: r.id, n: r.n, d: r.d })) : null,
       boss: run.pend ? null : brName466(run.boss[run.i])
     };
@@ -131,7 +131,7 @@ const brBosses466 = () => {
 const brOk466 = () => (isCamp() ? BADGES.length >= 5 : true);
 
 
-const brRelics466 = run => (run && run.rel ? run.rel : []);
+const brRelics466 = run => (run && run.relics ? run.relics : []);
 
 
 const brName466 = k => (SCEN[k] ? SCEN[k].n : k);
@@ -161,7 +161,7 @@ HOOKS.combat.push(S => {
 });
 
 
-HOOKS.avantFinManche.push((S, ev) => {
+HOOKS.beforeRoundEnd.push((S, ev) => {
   if (!S.br466 || !brRelics466(brRun466()).includes('petale')) return;
   S.units.filter(u => u.side === 'a' && !u.ko).forEach(u => heal(S, u, Math.max(1, Math.round(u.mhp * 0.05)), ev));
 });
@@ -169,18 +169,18 @@ HOOKS.avantFinManche.push((S, ev) => {
 
 DAMAGE_PROVIDERS.push({
   id: 'reliques466',
-  fournir: (c, { S, u, t }) => {
+  provide: (c, { S, u, t }) => {
     if (!S || !S.br466 || !u || u.side !== 'a') return false;
     const R = brRelics466(brRun466());
     let pc = 0;
     if (R.includes('ecaille')) pc += 10;
     if (R.includes('lentille') && t && t.hp / t.mhp < 0.5) pc += 15;
-    return pc > 0 && { mul: 1 + pc / 100, libelle: 'Reliques' };
+    return pc > 0 && { mul: 1 + pc / 100, labelText: 'Reliques' };
   }
 });
 
 
-HOOKS.progres.unshift((S, rew, win) => {
+HOOKS.progress.unshift((S, rew, win) => {
   try {
     const st = brSt466(),
       run = st.run;
@@ -204,8 +204,8 @@ HOOKS.progres.unshift((S, rew, win) => {
       rew.br466 = { gagne: true, n };
       return [3000, 10];
     }
-    if (run.rel.includes('tonique')) Object.keys(run.hp).forEach(k => run.hp[k] > 0 && (run.hp[k] = Math.min(1, run.hp[k] + 0.25)));
-    if (run.rel.includes('coeur') && !run.coeur) {
+    if (run.relics.includes('tonique')) Object.keys(run.hp).forEach(k => run.hp[k] > 0 && (run.hp[k] = Math.min(1, run.hp[k] + 0.25)));
+    if (run.relics.includes('coeur') && !run.coeur) {
       const k = Object.keys(run.hp).find(x => run.hp[x] <= 0);
       if (k) {
         run.hp[k] = 0.3;
@@ -215,7 +215,7 @@ HOOKS.progres.unshift((S, rew, win) => {
     run.pend = brOffer466(run);
     st.best = Math.max(st.best, run.i);
     brSave466(st);
-    rew.br466 = { suite: true, i: run.i, n, nom: brName466(run.boss[run.i]) };
+    rew.br466 = { suite: true, i: run.i, n, displayName: brName466(run.boss[run.i]) };
     return [150 * run.i, run.i >= 3 ? 1 : 0];
   } catch (e) {
     return null;
@@ -223,12 +223,12 @@ HOOKS.progres.unshift((S, rew, win) => {
 });
 
 
-HOOKS.resultat.unshift(r => {
+HOOKS.battleResult.unshift(r => {
   const t = r.br466;
   if (!t) return '';
   if (t.gagne) return `<div class="res-l"><h4>Boss Rush</h4><div class="rl"><span><b>Boss Rush terminé !</b> ${t.n} boss battus à la suite : +10 Éclats.</span><b>🏆</b></div></div>`;
   if (t.fin) return `<div class="res-l"><h4>Boss Rush</h4><div class="rl"><span>Le run s’arrête au boss ${t.i + 1} sur ${t.n}. Record : ${brSt466().best}.</span></div></div>`;
-  return `<div class="res-l"><h4>Boss Rush</h4><div class="rl"><span>Boss ${t.i} sur ${t.n}. Prochain : ${esc(t.nom)}. Vos PV ne se régénèrent pas.</span><button type="button" class="b b-sm b-gold" data-br466="suite">Étape suivante</button></div></div>`;
+  return `<div class="res-l"><h4>Boss Rush</h4><div class="rl"><span>Boss ${t.i} sur ${t.n}. Prochain : ${esc(t.displayName)}. Vos PV ne se régénèrent pas.</span><button type="button" class="b b-sm b-gold" data-br466="suite">Étape suivante</button></div></div>`;
 });
 
 
@@ -245,7 +245,7 @@ document.addEventListener(
     if (v === 'close') return shut('br466o');
     if (v === 'start') {
       if (!brOk466() || !squad.length || st.run) return;
-      st.run = { team: squad.slice(0, teamSize()), boss: brBosses466(), i: 0, hp: {}, rel: [], pend: null };
+      st.run = { team: squad.slice(0, teamSize()), boss: brBosses466(), i: 0, hp: {}, relics: [], pend: null };
       brSave466(st);
       return brGo466();
     }
@@ -266,7 +266,7 @@ document.addEventListener(
     if (v.startsWith('rel:') && st.run && st.run.pend) {
       const id = v.slice(4);
       if (!st.run.pend.includes(id)) return;
-      st.run.rel.push(id);
+      st.run.relics.push(id);
       st.run.pend = null;
       brSave466(st);
       sfx('win');

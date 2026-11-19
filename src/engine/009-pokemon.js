@@ -40,29 +40,29 @@ const BALANCING = {
 
 /* v4.13 · technical kits: own ability for each stage, sharp role, signature at the final form */
 const KITS413 = {
-  herbizarre: { tal: 'ecranpoudre' },
+  herbizarre: { ability: 'ecranpoudre' },
   florizarre: { mv: ['lancesoleil', 'synthese', 'vegeattak'] },
-  reptincel: { tal: 'cran', r: 'Verrou', r2: 'Frappeur' },
-  dracaufeu: { mv: ['lanceflammes', 'criailes', 'rafalefeu'], tal: 'forcesoleil' },
-  carabaffe: { tal: 'coque', r: 'Frappeur', r2: 'Rempart' },
-  tortank: { mv: ['hydrocanon', 'abri', 'hydroblast'], tal: 'cuvette' },
+  reptincel: { ability: 'cran', r: 'Verrou', r2: 'Frappeur' },
+  dracaufeu: { mv: ['lanceflammes', 'criailes', 'rafalefeu'], ability: 'forcesoleil' },
+  carabaffe: { ability: 'coque', r: 'Frappeur', r2: 'Rempart' },
+  tortank: { mv: ['hydrocanon', 'abri', 'hydroblast'], ability: 'cuvette' },
   papilusion: { mv: ['rayonsignal', 'volvie', 'ventargente'] },
-  pikachu: { tal: 'paratonnerre' },
-  raichu: { mv: ['tonnerre', 'viveatt', 'electacle'], tal: 'surfcaudal' },
-  melo: { tal: 'gardeami' },
-  melodelfe: { mv: ['pouvoirlunaire', 'voeu', 'gravite'], tal: 'inconscient' },
-  nosferalto: { tal: 'regardvif' },
+  pikachu: { ability: 'paratonnerre' },
+  raichu: { mv: ['tonnerre', 'viveatt', 'electacle'], ability: 'surfcaudal' },
+  melo: { ability: 'gardeami' },
+  melodelfe: { mv: ['pouvoirlunaire', 'voeu', 'gravite'], ability: 'inconscient' },
+  nosferalto: { ability: 'regardvif' },
   nostenfer: { mv: ['ondefolie', 'criailes', 'poisoncroix'] },
-  ptitard: { tal: 'glissade' },
-  tartard: { mv: ['sacrifice', 'hydroqueue', 'poingdynamique'], tal: 'poingdefer' },
+  ptitard: { ability: 'glissade' },
+  tartard: { mv: ['sacrifice', 'hydroqueue', 'poingdynamique'], ability: 'poingdefer' },
   tarpaud: { mv: ['dansepluie', 'vibraqua', 'requiem'] },
-  abra: { tal: 'synchro' },
-  alakazam: { mv: ['psyko', 'chocmental', 'vaguepsy'], tal: 'gardemagik' },
-  magneton: { mv: ['tonnerre', 'aimant', 'elecanon'], tal: 'fermete' },
+  abra: { ability: 'synchro' },
+  alakazam: { mv: ['psyko', 'chocmental', 'vaguepsy'], ability: 'gardemagik' },
+  magneton: { mv: ['tonnerre', 'aimant', 'elecanon'], ability: 'fermete' },
   spectrum: { r: 'Éclaireur', r2: 'Verrou' },
-  ectoplasma: { mv: ['ballombre', 'hypnose', 'malediction'], tal: 'corpsmaudit' },
+  ectoplasma: { mv: ['ballombre', 'hypnose', 'malediction'], ability: 'corpsmaudit' },
   steelix: { mv: ['queuedefer', 'seisme', 'gyroballe'], r: 'Frappeur', r2: 'Rempart' },
-  cizayox: { mv: ['griffeacier', 'danselames', 'pistopoing'], tal: 'technicien', r2: 'Éclaireur' },
+  cizayox: { mv: ['griffeacier', 'danselames', 'pistopoing'], ability: 'technicien', r2: 'Éclaireur' },
   leviator: { mv: ['hydrocanon', 'ouragan', 'dracoqueue'] },
   lokhlass: { mv: ['blizzard', 'grele', 'laserglace'] },
   aquali: { mv: ['surf', 'acidarmure', 'anneauhydro'] },
@@ -71,15 +71,15 @@ const KITS413 = {
   mentali: { mv: ['psyko', 'aurore', 'runeprotect'] },
   noctali: { mv: ['feinte', 'regardnoir', 'clairdelune'] },
   ronflex: { mv: ['plaquage', 'repos', 'cognobidon'] },
-  draco: { tal: 'cran' },
+  draco: { ability: 'cran' },
   dracolosse: { mv: ['ultralaser', 'criailes', 'dansedraco'] },
-  macronium: { tal: 'gardeami', r: 'Déclencheur', r2: 'Rempart' },
-  meganium: { mv: ['dansefleur', 'protection', 'champherbu'], tal: 'regeforce', r: 'Relais', r2: 'Rempart' },
-  feurisson: { tal: 'torche' },
-  typhlosion: { mv: ['lanceflammes', 'meteores', 'eruption'], tal: 'gardemagik' },
-  crocrodil: { tal: 'regardvif' },
-  aligatueur: { mv: ['hydrocanon', 'machouille', 'aquajet'], tal: 'glissade', r: 'Éclaireur', r2: 'Frappeur' },
-  demolosse: { mv: ['machouille', 'lanceflammes', 'poursuite'], tal: 'chasseur' },
+  macronium: { ability: 'gardeami', r: 'Déclencheur', r2: 'Rempart' },
+  meganium: { mv: ['dansefleur', 'protection', 'champherbu'], ability: 'regeforce', r: 'Relais', r2: 'Rempart' },
+  feurisson: { ability: 'torche' },
+  typhlosion: { mv: ['lanceflammes', 'meteores', 'eruption'], ability: 'gardemagik' },
+  crocrodil: { ability: 'regardvif' },
+  aligatueur: { mv: ['hydrocanon', 'machouille', 'aquajet'], ability: 'glissade', r: 'Éclaireur', r2: 'Frappeur' },
+  demolosse: { mv: ['machouille', 'lanceflammes', 'poursuite'], ability: 'chasseur' },
   tyranocif: { mv: ['machouille', 'seisme', 'lamederoc'] }
 };
 
@@ -1583,7 +1583,7 @@ MON = [
   r2: a[5],
   s: a[6],
   mv: a[7],
-  tal: a[8],
+  ability: a[8],
   nx: a[9],
   no: a[10]
 }));
@@ -1599,7 +1599,7 @@ for (const id in KITS413) if (BY[id]) Object.assign(BY[id], KITS413[id]);
 
 
 OPPONENTS413.forEach(id => {
-  if (BY[id]) BY[id].ennemi = true;
+  if (BY[id]) BY[id].isEnemy = true;
 });
 
 
@@ -1625,7 +1625,7 @@ OPPONENTS413.forEach(id => {
 })();
 
 
-FAMS30 = [...new Set(MON.filter(m => !m.ennemi).map(m => m.base))];
+FAMS30 = [...new Set(MON.filter(m => !m.isEnemy).map(m => m.base))];
 
  // v4.13: playable families
 /* v4.1 · Pokémon illustrations in the medallions, from the first display */

@@ -28,7 +28,7 @@ const IN_MENU = MENU.map(p => p[0]);
 const cur = (page, k) => (page === k ? 'page' : undefined);
 
 export function SideNav() {
-  const { page, svBusy, svCloud } = useShell();
+  const { page, saveBusy: svBusy, saveCloud: svCloud } = useShell();
   return (
     <nav className="side-nav">
       {PAGES.map(([k, i, n]) => (

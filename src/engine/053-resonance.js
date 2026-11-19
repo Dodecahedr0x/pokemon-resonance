@@ -39,7 +39,7 @@ export function rankId(id) {
 export function bossScene(S) {
   if (!S) return false;
   const D = SCEN[S.sc] || {};
-  return D.gym != null || D.johto != null || !!D.jfinal || !!D.jdis || !!D.roam || !!D.ami || D.hoenn != null || !!D.hfinal || !!D.elite || !!D.champ || !!D.rival || !!D.colosse || /^lg/.test(S.sc || '');
+  return D.gym != null || D.johto != null || !!D.jfinal || !!D.jdis || !!D.roam || !!D.ami || D.hoenn != null || !!D.hfinal || !!D.elite || !!D.champ || !!D.rival || !!D.colossus || /^lg/.test(S.sc || '');
 }
 
 
@@ -57,7 +57,7 @@ export function mrg414(m, u) {
 
 
 export function blocked414(S, u, m) {
-  if (u && u.item === 'mouchoir' && u.choix && MV[u.choix] && MV[u.choix] !== m) return `Mouchoir Choix : il ne peut plus lancer que ${MV[u.choix].n}.`;
+  if (u && u.item === 'mouchoir' && u.choice && MV[u.choice] && MV[u.choice] !== m) return `Mouchoir Choix : il ne peut plus lancer que ${MV[u.choice].n}.`;
   if (m && m.xp && !canXP(S, u, m)) {
     const c = xpCost(u);
     return `Attaque Experte : il faut ${c} losange${c > 1 ? 's' : ''} de Résonance (${u.en || 0} / ${c}).`;
@@ -82,11 +82,11 @@ function momentum414(S, u, ev) {
 function echo414(S, u, v, typ, x, ev) {
   if (ev.some(e => e.e === 'rx' && e.k === x)) return ''; // the terrain's reaction has already resonated
   const prot = rune413(S, v),
-    isFree = v.tal === 'regardvif' || prot;
+    isFree = v.ability === 'regardvif' || prot;
   switch (typ) {
     case 'Feu':
-      if (v.t.includes('Feu') || v.tal === 'torche' || prot) return '';
-      v.bru = Math.max(v.bru, 2);
+      if (v.t.includes('Feu') || v.ability === 'torche' || prot) return '';
+      v.burn = Math.max(v.burn, 2);
       ev.push({ e: 'st', u: v.uid, s: 'BRÛ' });
       return `${v.n} est brûlé`;
     case 'Eau':
@@ -127,12 +127,12 @@ function echo414(S, u, v, typ, x, ev) {
       v.maudit = Math.max(v.maudit || 0, 2);
       return `${v.n} est hanté`;
     case 'Ténèbres':
-      v.affaibli = Math.max(v.affaibli || 0, 2);
+      v.weakened = Math.max(v.weakened || 0, 2);
       return `${v.n} est intimidé`;
     case 'Poison':
       return applyPoison(S, v, ev) ? `${v.n} est empoisonné` : '';
     case 'Dragon':
-      damage(S, v, 6, ev, { ind: true, reflet: true });
+      damage(S, v, 6, ev, { ind: true, reflect: true });
       return 'l’écho draconique frappe encore';
     case 'Fée': {
       const a = S.units
@@ -155,7 +155,7 @@ function echo414(S, u, v, typ, x, ev) {
 /** After each target hit: the note, then Resonance on the third. */
 export function afterHit414(S, u, m, v, x, typ, ev) {
   if (!v || v === u || v.side === u.side || v.seg || !(m.p || m.fix) || !resoOn(S, u)) return;
-  if (teff(typ, v.t) === 0 && !(v.cloue && typ === 'Sol')) return;
+  if (teff(typ, v.t) === 0 && !(v.pinned && typ === 'Sol')) return;
   if (!v.notes || v.notes.r !== S.round) v.notes = { r: S.round, n: 0, by: [] };
   const N = v.notes;
   if (N.n >= 3 || N.by.includes(u.uid)) return;
@@ -168,7 +168,7 @@ export function afterHit414(S, u, m, v, x, typ, ev) {
     noteAdd(`${v.n} : ${N.n} note${N.n > 1 ? 's' : ''} de Résonance sur 3`);
     return;
   }
-  if (u.side === 'a') S.stats.reso = (S.stats.reso || 0) + 1;
+  if (u.side === 'a') S.stats.resonant = (S.stats.resonant || 0) + 1;
   ev.push({ e: 'reso', u: v.uid });
   noteAdd(`Résonance sur ${v.n} : ×${u.item === 'ceinturepro' ? '1,8' : '1,5'} et écho ${typ}`);
   const r = v.ko ? '' : echo414(S, u, v, typ, x, ev);
@@ -180,18 +180,18 @@ export function afterHit414(S, u, m, v, x, typ, ev) {
 export function end414(S, u, m, dealt, ev) {
   if (u.item === 'orbevie' && dealt > 0 && !u.ko) {
     say(ev, `Orbe Vie : ${u.n} paie sa puissance.`);
-    damage(S, u, Math.max(1, Math.round(u.mhp * 0.1)), ev, { ind: true, reflet: true });
+    damage(S, u, Math.max(1, Math.round(u.mhp * 0.1)), ev, { ind: true, reflect: true });
   }
 }
 
 
 /* after damage taken: Rocky Helmet, Sitrus Berry */
 export function afterDamage414(S, v, real, o, ev) {
-  if (!o.ind && !o.reflet && v.item === 'casquebrut') {
+  if (!o.ind && !o.reflect && v.item === 'casquebrut') {
     const a = S.lastAtk && byUid(S, S.lastAtk);
     if (a && a !== v && !a.ko && a.side !== v.side && hdist(a.pos, v.pos) === 1) {
       say(ev, `Casque Brut : ${a.n} se blesse sur ${v.n}.`);
-      damage(S, a, Math.max(1, Math.round(a.mhp * 0.1)), ev, { ind: true, reflet: true });
+      damage(S, a, Math.max(1, Math.round(a.mhp * 0.1)), ev, { ind: true, reflect: true });
     }
   }
   if (v.item === 'sitrus' && !v.sitrus && !v.ko && v.hp <= v.mhp / 2) {
@@ -225,9 +225,9 @@ export function foeReso414(e) {
 
 export function objOk414(S, u, k) {
   const it = SHOP[k];
-  if (!it || !u || u.ko || u.side !== 'a' || S.phase !== 'player' || (S.objN || 0) >= BAG_MAX || S.duel433 || bagN(k) < 1) return false;
+  if (!it || !u || u.ko || u.side !== 'a' || S.phase !== 'player' || (S.itemsUsed || 0) >= BAG_MAX || S.duel433 || bagN(k) < 1) return false;
   if (HEALS.includes(k)) return !u.acted && !u.sn && u.hp < u.mhp;
-  if (it.voix && S.voix < it.voix) return false;
+  if (it.voice && S.voice < it.voice) return false;
   if (OKX455[k]) return !!OKX455[k](S, u);
   switch (k) {
     case 'rappel':
@@ -235,7 +235,7 @@ export function objOk414(S, u, k) {
     case 'baieoran':
       return u.hp < u.mhp;
     case 'totalsoin':
-      return !!(u.badge || u.skip || u.bru > 0 || u.psn > 0 || u.web > 0 || u.root > 0 || u.maudit > 0 || u.affaibli > 0);
+      return !!(u.badge || u.skip || u.burn > 0 || u.poisoned > 0 || u.web > 0 || u.root > 0 || u.maudit > 0 || u.weakened > 0);
     case 'cristal':
       return (hasNx(u) || hasXp(u)) && u.en < EMAX;
     default:
@@ -246,13 +246,13 @@ export function objOk414(S, u, k) {
 
 export function pUse414(S, u, k) {
   const it = SHOP[k];
-  if (!it || it.cat !== 'combat' || !objOk414(S, u, k)) return null;
+  if (!it || it.category !== 'combat' || !objOk414(S, u, k)) return null;
   const ev = [];
   if (k === 'baieoran') {
     heal(S, u, 12, ev);
     say(ev, `Baie Oran : ${u.n} reprend des forces.`);
   } else if (k === 'totalsoin') {
-    Object.assign(u, { badge: null, skip: 0, bru: 0, psn: 0, web: 0, root: 0, maudit: 0, affaibli: 0 });
+    Object.assign(u, { badge: null, skip: 0, burn: 0, poisoned: 0, web: 0, root: 0, maudit: 0, weakened: 0 });
     say(ev, `Total Soin : ${u.n} est libéré de ses statuts.`);
   } else if (k === 'attaqueplus') {
     u.boost = Math.max(u.boost, 2);
@@ -280,13 +280,13 @@ export function pUse414(S, u, k) {
       sn: false,
       skip: 0,
       badge: null,
-      bru: 0,
-      psn: 0,
+      burn: 0,
+      poisoned: 0,
       web: 0,
       root: 0,
       maudit: 0,
       requiem: 0,
-      affaibli: 0,
+      weakened: 0,
       en: 0,
       intent: null,
       notes: null
@@ -294,14 +294,14 @@ export function pUse414(S, u, k) {
     ev.push({ e: 'mv', u: o.uid }, { e: 'heal', u: o.uid, v: o.hp });
     say(ev, `Rappel : ${o.n} revient au combat avec ${o.hp} PV. Il jouera à la prochaine manche.`);
   }
-  if (it.voix) {
-    S.voix -= it.voix;
-    S.stats.voix = (S.stats.voix || 0) + it.voix;
+  if (it.voice) {
+    S.voice -= it.voice;
+    S.stats.voice = (S.stats.voice || 0) + it.voice;
   } else {
     u.acted = true;
     u.moved = true;
   }
-  S.objN = (S.objN || 0) + 1;
+  S.itemsUsed = (S.itemsUsed || 0) + 1;
   PROFILE.bag[k] = bagN(k) - 1;
   if (!PROFILE.bag[k]) delete PROFILE.bag[k];
   return endStep(S, ev);
@@ -315,9 +315,9 @@ export function dailyOffers() {
   for (const c of d) h = (h * 31 + c.charCodeAt(0)) >>> 0;
   const rnd = () => (h = (Math.imul(h, 1103515245) + 12345) >>> 0) / 4294967296;
   const pools = [
-    Object.keys(SHOP).filter(k => ['soins', 'combat'].includes(SHOP[k].cat) && SHOP[k].p),
+    Object.keys(SHOP).filter(k => ['soins', 'combat'].includes(SHOP[k].category) && SHOP[k].p),
     Object.keys(HELD_SHOP).filter(k => HELD_SHOP[k].p),
-    Object.keys(SHOP).filter(k => ['balls', 'machines'].includes(SHOP[k].cat) && SHOP[k].p && !SHOP[k].cs)
+    Object.keys(SHOP).filter(k => ['balls', 'machines'].includes(SHOP[k].category) && SHOP[k].p && !SHOP[k].cs)
   ];
   OFFERS414 = { d, k: pools.map(L => L[Math.floor(rnd() * L.length)]).filter(Boolean) };
   return OFFERS414.k;
@@ -432,7 +432,7 @@ export const ECHOS = {
   Normal: 'L’attaquant gagne 1 losange.'
 };
 
-export const bonusMove414 = (S, u) => (u.item === 'mouchoir' ? 2 : 0) + (u.item === 'crinorage' ? 1 : 0) + (u.reso > 0 ? 1 : 0) - (surrounded420(S, u) ? 1 : 0);
+export const bonusMove414 = (S, u) => (u.item === 'mouchoir' ? 2 : 0) + (u.item === 'crinorage' ? 1 : 0) + (u.resonant > 0 ? 1 : 0) - (surrounded420(S, u) ? 1 : 0);
 
  // Crin d’Orage (v4.16), Resonant Form (v4.17), Encirclement (v4.20)
 
@@ -478,18 +478,18 @@ for (const k in MV) {
 DAMAGE_PROVIDERS.push(
   {
     id: 'resonance',
-    fournir: (c, { S, u, m, t }) => {
+    provide: (c, { S, u, m, t }) => {
       if (!S || !t || !u || t.side === u.side || !(m.p || m.fix) || !resoOn(S, u) || t.seg) return false;
       const n = notesOf(S, t);
       if (n >= 3 || (n && t.notes.by.includes(u.uid)) || n + weightNote(u) < 3) return false;
-      return { mul: u.item === 'ceinturepro' ? 1.8 : 1.5, libelle: 'Résonance' };
+      return { mul: u.item === 'ceinturepro' ? 1.8 : 1.5, labelText: 'Résonance' };
     }
   },
   {
     id: 'impact',
-    fournir: (c, { S, u, t }) => !!t && t.side !== u.side && rankOfValue(u) === 'fort' && resoOn(S, u) && notesOf(S, t) > 0 && { mul: 1.25, libelle: 'Impact' }
+    provide: (c, { S, u, t }) => !!t && t.side !== u.side && rankOfValue(u) === 'fort' && resoOn(S, u) && notesOf(S, t) > 0 && { mul: 1.25, labelText: 'Impact' }
   },
-  { id: 'orbevie', fournir: (c, { u, m }) => u.item === 'orbevie' && (m.p > 0 || m.fix > 0) && { mul: 1.3, libelle: 'Orbe Vie' } }
+  { id: 'orbevie', provide: (c, { u, m }) => u.item === 'orbevie' && (m.p > 0 || m.fix > 0) && { mul: 1.3, labelText: 'Orbe Vie' } }
 );
 
 
@@ -510,7 +510,7 @@ HOOKS.combat.push(S => {
 });
 
 
-HOOKS.avantFinManche.push(S => {
+HOOKS.beforeRoundEnd.push(S => {
   if (!bossScene(S)) return;
   S.units.forEach(e => {
     if (e.side === 'e' && !e.ko && hasXp(e)) e.en = Math.min(EMAX, (e.en || 0) + 1);
@@ -518,14 +518,14 @@ HOOKS.avantFinManche.push(S => {
 });
 
 
-HOOKS.progres.push((S, rew) => {
-  if (S.stats && S.stats.reso) rew.reso = S.stats.reso;
+HOOKS.progress.push((S, rew) => {
+  if (S.stats && S.stats.resonant) rew.resonant = S.stats.resonant;
 });
 
 
-HOOKS.resultat.push(r =>
-  r.reso
-    ? `<div class="res-l"><h4>Résonance</h4><div class="rl"><span>Résonances déclenchées par votre équipe</span><b>${r.reso}</b></div></div>`
+HOOKS.battleResult.push(r =>
+  r.resonant
+    ? `<div class="res-l"><h4>Résonance</h4><div class="rl"><span>Résonances déclenchées par votre équipe</span><b>${r.resonant}</b></div></div>`
     : ''
 );
 
@@ -569,32 +569,32 @@ Object.assign(HELD_IMG, {
 
 
 Object.assign(SHOP, {
-  baieoran: { n: 'Baie Oran', sn: 'Oran', d: 'Rend 12 PV. Coûte 1 Voix, l’action reste libre.', p: 250, cat: 'combat', img: 'oran-berry', voix: 1 },
+  baieoran: { n: 'Baie Oran', sn: 'Oran', d: 'Rend 12 PV. Coûte 1 Voix, l’action reste libre.', p: 250, category: 'combat', img: 'oran-berry', voice: 1 },
   totalsoin: {
     n: 'Total Soin',
     sn: 'Total Soin',
     d: 'Libère de tous les statuts et entraves (paralysie, gel, sommeil, brûlure, poison, toile, racines, malédiction). Une manche déjà perdue le reste. Coûte 1 Voix.',
     p: 600,
-    cat: 'combat',
+    category: 'combat',
     img: 'full-heal',
-    voix: 1
+    voice: 1
   },
-  attaqueplus: { n: 'Attaque +', sn: 'Attaque +', d: 'Renforcé pendant 2 manches. Coûte 1 Voix, l’action reste libre.', p: 800, cat: 'combat', img: 'x-attack', voix: 1 },
-  defenseplus: { n: 'Défense +', sn: 'Défense +', d: '+2 Garde pendant 2 manches. Coûte 1 Voix, l’action reste libre.', p: 800, cat: 'combat', img: 'x-defense', voix: 1 },
-  vitesseplus: { n: 'Vitesse +', sn: 'Vitesse +', d: '+1 Mouvement pendant 2 manches. Coûte 1 Voix, l’action reste libre.', p: 700, cat: 'combat', img: 'x-speed', voix: 1 },
-  cristal: { n: 'Cristal Résonant', sn: 'Cristal', d: '+1 losange de Résonance (Éveil ou attaque Experte). Coûte 1 Voix.', p: 1200, cat: 'combat', img: 'star-piece', voix: 1 },
+  attaqueplus: { n: 'Attaque +', sn: 'Attaque +', d: 'Renforcé pendant 2 manches. Coûte 1 Voix, l’action reste libre.', p: 800, category: 'combat', img: 'x-attack', voice: 1 },
+  defenseplus: { n: 'Défense +', sn: 'Défense +', d: '+2 Garde pendant 2 manches. Coûte 1 Voix, l’action reste libre.', p: 800, category: 'combat', img: 'x-defense', voice: 1 },
+  vitesseplus: { n: 'Vitesse +', sn: 'Vitesse +', d: '+1 Mouvement pendant 2 manches. Coûte 1 Voix, l’action reste libre.', p: 700, category: 'combat', img: 'x-speed', voice: 1 },
+  cristal: { n: 'Cristal Résonant', sn: 'Cristal', d: '+1 losange de Résonance (Éveil ou attaque Experte). Coûte 1 Voix.', p: 1200, category: 'combat', img: 'star-piece', voice: 1 },
   rappel: {
     n: 'Rappel',
     sn: 'Rappel',
     d: 'Relève votre Pokémon K.O. le plus coûteux en PC, sur une case voisine, avec 40 % de ses PV. Utilise l’action.',
     p: 1500,
-    cat: 'combat',
+    category: 'combat',
     img: 'revive'
   }
 });
 
 
-COMBAT414 = Object.keys(SHOP).filter(k => SHOP[k].cat === 'combat');
+COMBAT414 = Object.keys(SHOP).filter(k => SHOP[k].category === 'combat');
 
 
 /* daily offers: three items at −30%, the same for the whole day */
@@ -609,8 +609,8 @@ document.addEventListener('click', e => {
   }
   const o = e.target.closest('[data-offre]');
   if (o) {
-    V4.sacV = 'boutique';
-    V4.sacC = o.dataset.offre;
+    V4.bagView = 'boutique';
+    V4.bagCategory = o.dataset.offre;
     renderBag();
   }
 });

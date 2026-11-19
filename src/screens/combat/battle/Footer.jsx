@@ -17,9 +17,9 @@ function bar() {
   const foes = B.units.filter(u => u.side === 'e'),
     al = B.units.filter(u => u.side === 'a');
   const ready = al.filter(u => !u.ko && !u.acted).length,
-    cur = B.ordre === 'vitesse' ? currentActor(B) : null;
+    cur = B.order === 'vitesse' ? currentActor(B) : null;
   let disabled = (ui.busy && !enemyTurn428()) || !!B.over || !!ui.turbo428;
-  let button = ui.cine ? (
+  let button = ui.cutscene ? (
     'Éveil…'
   ) : ui.busy ? (
     enemyTurn428() ? (
@@ -56,7 +56,7 @@ function bar() {
   );
   const rdy = al.filter(u => !u.ko && canAwaken(B, u)).length,
     warn = foes.filter(u => foeEvo(B, u)).length;
-  let phase = ui.cine
+  let phase = ui.cutscene
     ? 'Un Pokémon évolue.'
     : ui.busy
       ? 'Les adversaires exécutent leurs attaques.'
@@ -67,7 +67,7 @@ function bar() {
           : ready
             ? 'À vous : déplacez, puis agissez.'
             : 'Tous vos Pokémon ont joué.';
-  if (B.coop && !ui.busy && !ui.cine) phase = `Joueur ${B.coop} · ` + phase; // co-op (v4.18)
+  if (B.coop && !ui.busy && !ui.cutscene) phase = `Joueur ${B.coop} · ` + phase; // co-op (v4.18)
   let playerRef = null;
   // deployment (v4.30)
   if (B.dep430 && !B.over) {
@@ -82,13 +82,13 @@ function bar() {
   }
   // local duel (v4.33)
   const D = B.duel433;
-  if (D && !B.over && !ui.cine) {
+  if (D && !B.over && !ui.cutscene) {
     if (ui.busy) button = 'Fin de manche…';
     else {
       const r = B.units.filter(u => u.side === 'a' && !u.ko && !u.acted).length;
       button = (
         <>
-          {D.j === 1 ? `Passer à ${D.noms[1]}` : 'Fin de la manche'}
+          {D.j === 1 ? `Passer à ${D.names[1]}` : 'Fin de la manche'}
           {r ? (
             <>
               {' '}
@@ -99,7 +99,7 @@ function bar() {
           ) : null}
         </>
       );
-      playerRef = <b className={'dj' + D.j}>{D.noms[D.j - 1]}</b>;
+      playerRef = <b className={'dj' + D.j}>{D.names[D.j - 1]}</b>;
       phase = phase.replace('À vous : ', '').replace('Tous vos Pokémon', 'Tous ses Pokémon');
     }
   }
@@ -107,20 +107,20 @@ function bar() {
   const g = flow478.guide();
   let step = null;
   if (g) {
-    const n = flow478.restants(B).length,
-      t = B.ordre === 'vitesse' ? 'À vous : déplacez, puis agissez.' : n ? `Encore ${n} Pokémon à jouer.` : 'Manche terminée.';
+    const n = flow478.remaining(B).length,
+      t = B.order === 'vitesse' ? 'À vous : déplacez, puis agissez.' : n ? `Encore ${n} Pokémon à jouer.` : 'Manche terminée.';
     phase = phase.replace(/(À vous : )?déplacez, puis agissez\./, t).replace(/Tous (vos|ses) Pokémon ont joué\./, t);
     const u = ui.sel && byUid(B, ui.sel);
     if (u && u.side === 'a' && !ui.selE) {
       step = (
         <>
-          <b>{STEP[flow478.etape(B, u)]}</b> {u.n}
-          {B.ordre !== 'vitesse' && n ? ` · encore ${n}` : ''}
+          <b>{STEP[flow478.stepOf(B, u)]}</b> {u.n}
+          {B.order !== 'vitesse' && n ? ` · encore ${n}` : ''}
         </>
       );
     }
   }
-  return { disabled, bouton: button, phase, joueur: playerRef, g, etape: step };
+  return { disabled, actionButton: button, phase, player: playerRef, g, stepOf: step };
 }
 
 export default function Footer() {
@@ -129,7 +129,7 @@ export default function Footer() {
   const x = v && B ? bar() : null;
   // the hidden step keeps its last text, like the old DOM
   // (keyed by version: the step element is rebuilt on every render)
-  if (x && x.etape && (!lastStep || lastStep.v !== v)) setLastStep({ v, el: x.etape });
+  if (x && x.stepOf && (!lastStep || lastStep.v !== v)) setLastStep({ v, el: x.stepOf });
   const Q = barBottom.qa,
     tools = getHost().bt444;
   return (
@@ -146,21 +146,21 @@ export default function Footer() {
         </div>
       )}
       <span className="phase" id="bPhase">
-        {x && x.joueur ? (
+        {x && x.player ? (
           <>
-            {x.joueur} · {x.phase}
+            {x.player} · {x.phase}
           </>
         ) : (
           x && x.phase
         )}
       </span>
-      {Q && Q.nom ? <span className="qa443-n">{Q.nom}</span> : null}
+      {Q && Q.displayName ? <span className="qa443-n">{Q.displayName}</span> : null}
       <button className="b b-gold" id="bEnd" type="button" disabled={x ? x.disabled : undefined} style={x ? { display: x.g ? 'none' : '' } : undefined}>
-        {x ? x.bouton : 'Fin du tour'}
+        {x ? x.actionButton : 'Fin du tour'}
       </button>
       {v > 0 && (
-        <span id="fl478pied" className="fl478-pied" aria-live="polite" hidden={!(x && x.etape)}>
-          {(x && x.etape) || (lastStep && lastStep.el)}
+        <span id="fl478pied" className="fl478-pied" aria-live="polite" hidden={!(x && x.stepOf)}>
+          {(x && x.stepOf) || (lastStep && lastStep.el)}
         </span>
       )}
       {v > 0 && (

@@ -47,7 +47,7 @@ function WaterDefs({ E, vb }) {
         ))}
       </linearGradient>
       <clipPath id="eau477c">
-        {E.cles.map(k => {
+        {E.keyList.map(k => {
           const [x, y] = HC(k);
           return <polygon key={k} points={HP(x, y, BG.S - 1)} />;
         })}

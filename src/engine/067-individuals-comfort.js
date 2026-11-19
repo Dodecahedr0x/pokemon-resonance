@@ -39,7 +39,7 @@ export function v432Clean(p) {
   if (p.indiv432 && typeof p.indiv432 === 'object') {
     Object.keys(p.indiv432).forEach(b => {
       const x = p.indiv432[b];
-      if (BY[b] && x && typeof x === 'object' && CHARACTERS[x.car] && TALENTS432[x.tal]) o.indiv432[b] = { car: x.car, tal: x.tal };
+      if (BY[b] && x && typeof x === 'object' && CHARACTERS[x.temperament] && TALENTS432[x.ability]) o.indiv432[b] = { temperament: x.temperament, ability: x.ability };
     });
   }
   o.indiv432Init = p.indiv432Init ? 1 : 0;
@@ -120,7 +120,7 @@ export function individualOf432(id) {
   if (!PROFILE.indiv432Init) {
     // families already present keep their pre-v4.32 character
     PROFILE.box.forEach(x => {
-      if (!I[x] && BY[x]) I[x] = { car: characterHash432(x), tal: familyTalents432(x)[fnv(x) % 3] };
+      if (!I[x] && BY[x]) I[x] = { temperament: characterHash432(x), ability: familyTalents432(x)[fnv(x) % 3] };
     });
     PROFILE.indiv432Init = 1;
     queueSave();
@@ -128,7 +128,7 @@ export function individualOf432(id) {
   if (!I[b]) {
     const N = naturesFamily432(b),
       T = familyTalents432(b);
-    I[b] = { car: N[Math.floor(Math.random() * N.length)], tal: T[Math.floor(Math.random() * T.length)] };
+    I[b] = { temperament: N[Math.floor(Math.random() * N.length)], ability: T[Math.floor(Math.random() * T.length)] };
     queueSave();
   }
   return I[b];
@@ -139,23 +139,23 @@ export function talDmg432(S, u, t, d) {
   if (!(d > 0)) return d;
   let f = 1;
   if (u && u.side === 'a') {
-    if (u.tal432 === 'rage' && u.hp < u.mhp / 2) f *= 1.15;
-    if (u.tal432 === 'opportun' && t && t.hp < t.mhp / 2) f *= 1.15;
+    if (u.ability432 === 'rage' && u.hp < u.mhp / 2) f *= 1.15;
+    if (u.ability432 === 'opportun' && t && t.hp < t.mhp / 2) f *= 1.15;
   }
-  if (t && t.side === 'a' && t.tal432 === 'carapace') f *= 0.9;
+  if (t && t.side === 'a' && t.ability432 === 'carapace') f *= 0.9;
   return f === 1 ? d : Math.max(1, Math.round(d * f));
 }
 
 
 export function talMov432(S, u) {
-  return u && u.side === 'a' && u.tal432 === 'elan' && S && S.round === 1 ? 1 : 0;
+  return u && u.side === 'a' && u.ability432 === 'elan' && S && S.round === 1 ? 1 : 0;
 }
 
 
 export function individualHtml432(id) {
   const I = individualOf432(id);
   if (!I) return '';
-  const T = TALENTS432[I.tal];
+  const T = TALENTS432[I.ability];
   return `<div class="mvc car-mvc tal432"><div class="t"><b>${T[0]}</b><span class="chip">Talent perso</span></div><p>${T[1]}</p></div>`;
 }
 
@@ -176,8 +176,8 @@ function loadTeam432(i) {
   __set_squad(s);
   Object.entries(t.it || {}).forEach(([b, it]) => {
     if (!ownedItems().includes(it) || !BY[b]) return;
-    for (const k in PROFILE.equip) if (PROFILE.equip[k] === it) delete PROFILE.equip[k];
-    PROFILE.equip[b] = it;
+    for (const k in PROFILE.equipment) if (PROFILE.equipment[k] === it) delete PROFILE.equipment[k];
+    PROFILE.equipment[b] = it;
   });
   save();
   renderSquad();
@@ -235,26 +235,26 @@ export const PANTHEON432 = { champ: 'Champion de Kanto', jchamp: 'Maître de Joh
 export function __init() {
 
 HOOKS.combat.push(S => {
-  if ((S.fixe431 && S.sc !== 'echo431') || !S.car) return; // "Natures et talents" (Natures and abilities) setting
+  if ((S.fixed431 && S.sc !== 'echo431') || !S.temperament) return; // "Natures et talents" (Natures and abilities) setting
   S.units
     .filter(u => u.side === 'a')
     .forEach(u => {
       const I = individualOf432(u.sp);
       if (!I) return;
-      u.tal432 = I.tal;
-      if (I.tal === 'fermete') u.ferm = true;
-      else if (I.tal === 'focus') u.en = Math.min(EMAX, (u.en || 0) + 1);
-      else if (I.tal === 'robuste') {
+      u.ability432 = I.ability;
+      if (I.ability === 'fermete') u.sturdy = true;
+      else if (I.ability === 'focus') u.en = Math.min(EMAX, (u.en || 0) + 1);
+      else if (I.ability === 'robuste') {
         u.mhp = Math.round(u.mhp * 1.1);
         u.hp = Math.min(u.mhp, Math.round(u.hp * 1.1));
-      } else if (I.tal === 'garde') u.guard = Math.max(u.guard || 0, 2);
+      } else if (I.ability === 'garde') u.guard = Math.max(u.guard || 0, 2);
     });
 });
 
 
-HOOKS.avantFinManche.push((S, ev) => {
+HOOKS.beforeRoundEnd.push((S, ev) => {
   S.units.forEach(u => {
-    if (u.tal432 !== 'regen' || u.ko || u.hp >= u.mhp || u.side !== 'a') return;
+    if (u.ability432 !== 'regen' || u.ko || u.hp >= u.mhp || u.side !== 'a') return;
     const g = Math.max(1, Math.round(u.mhp * 0.08));
     u.hp = Math.min(u.mhp, u.hp + g);
     if (Array.isArray(ev)) say(ev, `Régénération : ${u.n} récupère ${g} PV.`);
@@ -283,7 +283,7 @@ document.addEventListener('click', e => {
       it = {};
     squad.forEach(id => {
       const bb = BY[id].base;
-      if (PROFILE.equip[bb]) it[bb] = PROFILE.equip[bb];
+      if (PROFILE.equipment[bb]) it[bb] = PROFILE.equipment[bb];
     });
     if (squad.length && T.length < 8) T.push({ n: v, ids: [...squad], it });
     EQ_NAME432 = false;
@@ -358,7 +358,7 @@ document.addEventListener('change', e => {
 });
 
 
-HOOKS.progres.push((S, rew, win) => {
+HOOKS.progress.push((S, rew, win) => {
   if (!win || !PANTHEON432[S.sc]) return null;
   engrave432(
     S.sc,
@@ -371,7 +371,7 @@ HOOKS.progres.push((S, rew, win) => {
 });
 
 
-HOOKS.resultat.push(r => (r.panth432 ? `<div class="res-l"><h4>Panthéon</h4><div class="rl"><span>Votre équipe est gravée au Panthéon : ${r.panth432}.</span><b>★</b></div></div>` : ''));
+HOOKS.battleResult.push(r => (r.panth432 ? `<div class="res-l"><h4>Panthéon</h4><div class="rl"><span>Votre équipe est gravée au Panthéon : ${r.panth432}.</span><b>★</b></div></div>` : ''));
 
 
 if (!CAMP_TABS431.some(x => x[0] === 'pantheon')) CAMP_TABS431.push(['pantheon', 'Panthéon']);

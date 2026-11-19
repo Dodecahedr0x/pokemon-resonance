@@ -132,7 +132,7 @@ export function battleOpts() {
   const items = {};
   squad.slice(0, 4).forEach(id => {
     const b = BY[id].base, // held items belong to the family, whatever the stage
-      it = PROFILE.equip[b];
+      it = PROFILE.equipment[b];
     if (it && ownedItems().includes(it)) items[b] = it;
   });
   return {
@@ -140,27 +140,27 @@ export function battleOpts() {
     items,
     fatigue: isCamp() ? PROFILE.fatigue : {},
     links: PROFILE.links,
-    ordre: chosenOrder(),
-    vivant: chosenAlive(), // living board (v4.7-01)
-    tactique: chosenTactic(), // Advanced Tactics (v4.8-01)
+    order: chosenOrder(),
+    livingBoard: chosenAlive(), // living board (v4.7-01)
+    tactics: chosenTactic(), // Advanced Tactics (v4.8-01)
     mut: mutTraining(), // mutator in Training (v4.9-01)
     doc430: docChosen430(), // doctrine (v4.30)
     fog431: fogChosen431(), // fog of war (v4.31)
-    defis: activeChallenges(), // campaign challenges (v4.9-01)
-    caracteres: charactersChosen(), // characters (v4.10-01)
-    desob: disobedienceChosen(),
+    challenges: activeChallenges(), // campaign challenges (v4.9-01)
+    characters: charactersChosen(), // characters (v4.10-01)
+    disobedience: disobedienceChosen(),
     dojo: campOk430() ? level('dojo') : 0,
-    apprises: PROFILE.apprises // CT et CS (v4.6-01)
+    learnedTms: PROFILE.learnedTms // CT et CS (v4.6-01)
   };
 }
 
 
 export function launch() {
-  for (const f of HOOKS.refusLancement) {
+  for (const f of HOOKS.launchRefusal) {
     const refusal = f();
     if (refusal) return toast(refusal);
   }
-  hook('avantLancement');
+  hook('beforeLaunch');
   const previous = B;
   // story scenes (v4.17): the scene replaces the battle
   if (!scene417(scSel)) {
@@ -171,16 +171,16 @@ export function launch() {
     } // opponent introduction
     else if (B) turnBanner();
     // Speed order: if an opponent is faster, it opens the round (after the introduction)
-    if (B && B.ordre === 'vitesse') setTimeout(unrollSpeed, AUTO || RM ? 950 : PREF.fast ? 1500 : 2400);
+    if (B && B.order === 'vitesse') setTimeout(unrollSpeed, AUTO || RM ? 950 : PREF.fast ? 1500 : 2400);
   }
-  hook('lancement', !!B && B !== previous);
+  hook('launch', !!B && B !== previous);
 }
 
 
 function launchCore() {
   if (!squad.length && !fixedTeam431()) return;
   if (scSel === 'hebdo429') weeklyBuild429(); // the week may have changed (v4.29)
-  const lk = scenLock(scSel) || lockLegendary429(scSel) || (scSel === 'hebdo429' || (SCEN[scSel] || {}).sansProgres431 ? null : challengeLaunch()); // campaign challenges (v4.9-01), legendary quests (v4.29)
+  const lk = scenLock(scSel) || lockLegendary429(scSel) || (scSel === 'hebdo429' || (SCEN[scSel] || {}).noProgress431 ? null : challengeLaunch()); // campaign challenges (v4.9-01), legendary quests (v4.29)
   if (lk) {
     toast(lk);
     renderPrep();
@@ -194,7 +194,7 @@ function launchCore() {
   }
   const T = scSel === 'tdr' ? towerTeam() : weeklyTeam429() || fixedTeam431() || tournamentTeam417(); // weekly challenge (v4.29), riddle and Deep Echo (v4.31) // Resonance Tower, tournament between friends (v4.17): the team is frozen
   B = T
-    ? newBattle(scSel, T.team, T.voix, T.opts) // the Tower ignores the budget: only the Voices earned count
+    ? newBattle(scSel, T.team, T.voice, T.opts) // the Tower ignores the budget: only the Voices earned count
     : newBattle(scSel, squad.slice(0, teamSize()), vBonus(), battleOpts()); // Team of 3 (v4.9-01)
   REPLAYS.set(B, { best: null }); // best-move replay (v4.11-01)
   LOG = [];
@@ -228,7 +228,7 @@ function launchCore() {
   if (B.harmonie) log('Harmonie : trois rangs différents dans l’équipe, chaque Pokémon commence avec 1 losange.', 'sys'); // v4.14
   if (bossScene(B)) log('Combat de prestige : vos adversaires accumulent eux aussi la Résonance (notes, attaques Expertes).', 'arn');
   if (B.wx) log(`Météo ${WXN[B.wx.k]} dès le début du combat.`, 'sys');
-  if (B.desob) log('Désobéissance : un Pokémon épuisé ou têtu peut ignorer un ordre.', 'sys');
+  if (B.disobedience) log('Désobéissance : un Pokémon épuisé ou têtu peut ignorer un ordre.', 'sys');
   if (B.mut) log(`Mutateur · ${mutInfo(B.mut)[0]} : ${mutInfo(B.mut)[1]}`, 'arn');
   if (B.sansEveil) log('Défi Sans Éveil : vos Pokémon ne s’éveilleront pas.', 'sys');
   if (B.tac) {
@@ -237,9 +237,9 @@ function launchCore() {
       'sys'
     );
   }
-  if (B.units.some(u => u.colosse)) log('Colosse : brisez ses parties pour faire tomber sa carapace. Chacune le fait vaciller.', 'sys');
-  if (B.vivant) {
-    log(`Plateau vivant : ${LIVING_STATE[B.cyc.ph]} (${LIVING_DESC[B.cyc.ph]}) Le feu court dans les hautes herbes ; la pluie l’éteint.`, 'sys');
+  if (B.units.some(u => u.colossus)) log('Colosse : brisez ses parties pour faire tomber sa carapace. Chacune le fait vaciller.', 'sys');
+  if (B.livingBoard) {
+    log(`Plateau vivant : ${LIVING_STATE[B.cycle.ph]} (${LIVING_DESC[B.cycle.ph]}) Le feu court dans les hautes herbes ; la pluie l’éteint.`, 'sys');
   }
   autoSel();
   renderAll();
@@ -267,7 +267,7 @@ export function backToPrep() {
 // The SVG is rendered by React (src/screens/combat/board/): buildBoard remounts all the layers;
 // L.tiles, L.t[k], L.tx[k], L.units, L.fx, L.fl… are references set by the render.
 export function buildBoard() {
-  hook('avantPlateau');
+  hook('beforeBoard');
   VERT = !!(MQV && MQV.matches);
   const D = SCEN[B.sc],
     bio = D.bio,
@@ -299,7 +299,7 @@ function mkTok(u) {
   if (u.boss) c.push('boss');
   if (u.dom) c.push('dom');
   if (u.seg) c.push('seg');
-  if (u.colosse) c.push('colosse');
+  if (u.colossus) c.push('colosse');
   return liveTok429({
     uid: u.uid,
     c, // token classes (classList order)
@@ -318,12 +318,12 @@ const on1 = (cur, v) => (v ? 'on' : cur === 'on' ? '' : cur);
 
 
 export function updTok(u) {
-  hook('avantJeton', u);
+  hook('beforeToken', u);
   updTokCore(u);
-  hook('jeton', u);
+  hook('token', u);
   tokenArt(u);
   hook('illustration', u);
-  hook('apresJeton', u);
+  hook('afterToken', u);
 }
 
 
@@ -351,11 +351,11 @@ function updTokCore(u) {
   cl('act', ui.act === u.uid);
   cl('has-en', !u.ko && (u.side === 'a' || B.duel433 ? nx || hasXp(u) || resoCand417(B, u) : bossScene(B) && hasXp(u))); // v4.14: diamonds of Expert attacks
   cl('ready', u.side === 'a' && (nx || resoCand417(B, u)) && u.en >= EMAX && !u.ko);
-  cl('fres', u.reso > 0 && !u.ko); // Resonant Form (v4.17)
+  cl('fres', u.resonant > 0 && !u.ko); // Resonant Form (v4.17)
   cl('cj1', !!B.coop && u.side === 'a' && player418(u) === 1); // co-op (v4.18)
   cl('cj2', !!B.coop && u.side === 'a' && player418(u) === 2);
   cl('cjoff', !!B.coop && u.side === 'a' && player418(u) !== B.coop && B.phase === 'player');
-  cl('vigil420', !!u.vigil && !u.ko); // v4.20
+  cl('vigil420', !!u.vigilance && !u.ko); // v4.20
   cl('enc420', surrounded420(B, u));
   cl('ph2', u.phase420 === 2 && !u.ko);
   cl('ph3', u.phase420 === 3 && !u.ko);
@@ -369,7 +369,7 @@ function updTokCore(u) {
   const b =
     u.badge ||
     (u.vole ? 'VOL' : u.chg ? 'CHARGE' : null) || // charged attacks (v4.8)
-    (u.bru > 0 ? 'BRÛ' : u.psn > 0 ? 'PSN' : u.maudit > 0 ? 'MAUD' : u.requiem > 0 ? 'REQ' : u.root > 0 ? 'RAC' : u.web > 0 ? 'TOILE' : u.aide ? 'AIDE' : u.riposte ? 'RIPO' : u.miroir ? 'MIR' : u.cogno > 0 ? 'x2' : null);
+    (u.burn > 0 ? 'BRÛ' : u.poisoned > 0 ? 'PSN' : u.maudit > 0 ? 'MAUD' : u.requiem > 0 ? 'REQ' : u.root > 0 ? 'RAC' : u.web > 0 ? 'TOILE' : u.aide ? 'AIDE' : u.riposte ? 'RIPO' : u.miroir ? 'MIR' : u.cogno > 0 ? 'x2' : null);
   T.bdc = 'bdg-s' + (b && !u.ko ? ' on st-' + (STC[b] || 'x') : '');
   T.bt = b || '';
   unitsDirty();
@@ -382,13 +382,13 @@ export function renderBoard() {
     B.units.forEach(updTok); // tokens (Units.jsx): redrawn once at the end of the batch
     drawObstacles();
   });
-  hook('plateauRendu');
+  hook('boardRendered');
 }
 
 
 /* banners */
 export function segHp(u) {
-  return HOOKS.barrePv.reduce((h, f) => f(h, u), segHpBase(u));
+  return HOOKS.hpBar.reduce((h, f) => f(h, u), segHpBase(u));
 }
 
 
@@ -460,13 +460,13 @@ export function cinematic(fromN, fromT, toN, toT, side, uid) {
     o.oy = ((y / VB()[1]) * 100).toFixed(1) + '%';
   }
   evoSet({ ...o, on: true, fx: { fromN, fromT, toN, toT, side }, fast: !!(PREF.fast || ui.turbo428) });
-  ui.cine = true;
+  ui.cutscene = true;
   if (B) renderAll();
   sfx('evo');
   vibe([15, 25, 15, 25, 70]);
   return wait(dl428(650, 1300, 2500)).then(() => {
     evoSet({ on: false, fx: null });
-    ui.cine = false;
+    ui.cutscene = false;
   });
 }
 
@@ -486,7 +486,7 @@ function renderLog() {
 
 
 export function renderAll() {
-  hook('avantRendu');
+  hook('beforeRender');
   tagUnits(B); // types → species, for the illustrations
   renderAllCore();
   queueSave();
@@ -495,7 +495,7 @@ export function renderAll() {
   afterRender431(); // fog, riddle (v4.31)
   afterRender433(); // local duel (v4.33)
   gauge434(); // battle on phone (v4.34)
-  hook('rendu');
+  hook('rendered');
 }
 
 
@@ -637,9 +637,9 @@ export function playLog(ev) {
 
 /* interactions */
 export function autoSel() {
-  const cur = B.ordre === 'vitesse' ? currentActor(B) : null, // Speed order: the ally whose turn it is
+  const cur = B.order === 'vitesse' ? currentActor(B) : null, // Speed order: the ally whose turn it is
     nx =
-      B.ordre === 'vitesse'
+      B.order === 'vitesse'
         ? cur && cur.side === 'a'
           ? cur
           : null
@@ -690,7 +690,7 @@ function confirmActCore() {
     finish();
     return;
   }
-  if (B.ordre === 'vitesse') {
+  if (B.order === 'vitesse') {
     // Speed order: the ally keeps control (Reroll, Dodge, Scout fallback) until « Terminer » (End)
     renderAll();
     return;
@@ -789,7 +789,7 @@ function tapTile(k) {
 
 
 function endTurn() {
-  if (B && B.ordre === 'vitesse') return endTurnSpeed(); // Speed order: only the current ally has finished (v4.5-01)
+  if (B && B.order === 'vitesse') return endTurnSpeed(); // Speed order: only the current ally has finished (v4.5-01)
   if (!B || ui.busy || B.over || B.phase !== 'player') return;
   if (coopPass418()) return; // co-op: Player 1 hands over to Player 2 (v4.18)
   if (duelPass433()) return; // local duel: each takes a turn (v4.33)
@@ -869,13 +869,13 @@ export async function endOfRound(S0) {
 
 
 export function finish() {
-  hook('avantFinCombat');
+  hook('beforeBattleEnd');
   // battle rank
   if (B && B.over && !B._rk) {
     B._rk = 1;
     const r = rankOf(B);
     B.rank = r;
-    if (r && SCEN[B.sc] && B.sc !== 'sauvage' && !SCEN[B.sc].sansProgres431) {
+    if (r && SCEN[B.sc] && B.sc !== 'sauvage' && !SCEN[B.sc].noProgress431) {
       PROFILE.ranks = PROFILE.ranks || {};
       const o = PROFILE.ranks[B.sc];
       B.rankNew = !o || RK.indexOf(r) > RK.indexOf(o);
@@ -886,15 +886,15 @@ export function finish() {
   // statistics and progression
   if (B && B.over && !B._counted) {
     B._counted = true;
-    if ((SCEN[B.sc] || {}).sansProgres431) {
+    if ((SCEN[B.sc] || {}).noProgress431) {
       // riddle, custom arena, Deep Echo: neither counters nor ordinary progression (v4.31)
       SV.lastBattle = null;
       B.rew = fixedProgress431(B);
     } else {
       PROFILE.battles++;
       if (B.over === 'win') PROFILE.wins++;
-      else if (!B.fuite416) PROFILE.losses++; // a beast that runs away is not a defeat (v4.16)
-      PROFILE.evos += B.stats.evo || 0;
+      else if (!B.flee416) PROFILE.losses++; // a beast that runs away is not a defeat (v4.16)
+      PROFILE.awakenings += B.stats.evo || 0;
       PROFILE.rx += B.stats.rx || 0;
       PROFILE.kos += B.stats.ko || 0;
       SV.lastBattle = null;
@@ -919,7 +919,7 @@ export function finish() {
     RM ? 0 : 900
   );
   setTimeout(() => autoSave(true), RM ? 50 : 1200);
-  hook('finCombat');
+  hook('battleEnd');
 }
 
 /* ===================== BATTLE INTERFACE v0.8 ===================== */
@@ -947,7 +947,7 @@ export const HC = k => (TILT.on ? tiltP(...HC0(k)) : HC0(k));
 export const HP = (x, y, s) => (TILT.on ? tiltHP(x, y, s) : VERT ? hpf(x, y, s) : hp(x, y, s));
 
 
-export const ui = { sel: null, selE: null, mode: null, mi: null, pk: null, pv: null, busy: false, act: null, cine: false };
+export const ui = { sel: null, selE: null, mode: null, mi: null, pk: null, pv: null, busy: false, act: null, cutscene: false };
 
 
 export const L = {};
@@ -1040,7 +1040,7 @@ $('#evoPick').addEventListener('click', async e => {
     return;
   }
   toast(
-    `${E.n} entre en jeu. ${B.voix >= 2 && !B.relance ? 'Relance (2 Voix) pour utiliser ses capacités tout de suite.' : ''}`
+    `${E.n} entre en jeu. ${B.voice >= 2 && !B.retrigger ? 'Relance (2 Voix) pour utiliser ses capacités tout de suite.' : ''}`
   );
   renderAll();
 });

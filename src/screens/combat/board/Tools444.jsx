@@ -9,7 +9,7 @@ const IC = {
   ct: 'M12 3a9 9 0 1 0 0 18zM12 3a9 9 0 0 1 0 18'
 };
 
-function Ico({ d, plein: fullAmount }) {
+function Ico({ d, full: fullAmount }) {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true">
       <path d={d} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -29,7 +29,7 @@ export default function Tools444({ b }) {
         <Ico d={IC.lp} />
       </button>
       <button type="button" data-b444="ct" className={b.ct ? 'on' : ''} aria-pressed={b.ct} aria-label="Plateau contrasté" title="Plateau contrasté">
-        <Ico d={IC.ct} plein />
+        <Ico d={IC.ct} full />
       </button>
       <button type="button" data-b452="help" aria-label="Aide du combat" title="Aide : ce qui compte maintenant" style={{ font: '800 17px/1 var(--f-d)' }}>
         ?

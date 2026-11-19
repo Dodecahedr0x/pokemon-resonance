@@ -110,7 +110,7 @@ export const thOk455 = k => !TH455[k].p || (PREF.thU455 || []).includes(k);
 // Instructions run at startup, in the original order (see index.js).
 export function __init() {
 
-HOOKS.finCombat.push(() => {
+HOOKS.battleEnd.push(() => {
   if (B && B.over && !B._rv455 && SCEN[B.sc] && (rivalIdx(B.sc) >= 0 || SCEN[B.sc].rival429)) {
     B._rv455 = 1;
     const s = rvSt455();

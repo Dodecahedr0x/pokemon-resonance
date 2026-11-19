@@ -31,7 +31,7 @@ export function BtTop() {
       <b id="bScen">
         {!on ? null : D && !B.over ? (
           <>
-            Duel · <b className={'dj' + D.j}>{D.noms[D.j - 1]}</b>
+            Duel · <b className={'dj' + D.j}>{D.names[D.j - 1]}</b>
           </>
         ) : (
           SCEN[B.sc].n
@@ -51,7 +51,7 @@ export function BtTop() {
           <>
             <span>Voix</span>
             {Array.from({ length: B.vmax }, (_, i) => (
-              <i key={i} className={i < B.voix ? 'on' : ''} />
+              <i key={i} className={i < B.voice ? 'on' : ''} />
             ))}
           </>
         )}
@@ -69,7 +69,7 @@ export function BtTop() {
 export function phaseOf(B0) {
   if (!B0 || B0.over) return null;
   if (B0.dep430) return 'deploy';
-  if (ui.cine) return 'evo';
+  if (ui.cutscene) return 'evo';
   if (ui.busy) return enemyTurn428() || B0.phase === 'enemy' ? 'enemy' : 'busy';
   return 'own';
 }
@@ -81,7 +81,7 @@ function Phase() {
   return (
     <span className="bt-ph" data-ph={ph || 'none'} hidden={!ph}>
       <i aria-hidden="true" />
-      {ph ? (B.duel433 && ph === 'own' ? B.duel433.noms[B.duel433.j - 1] : PHASE_T[ph]) : null}
+      {ph ? (B.duel433 && ph === 'own' ? B.duel433.names[B.duel433.j - 1] : PHASE_T[ph]) : null}
     </span>
   );
 }
@@ -123,9 +123,9 @@ function Chips() {
           {doc.n}
         </span>
       )}
-      {B.sc === 'echo431' && B.rel431 && B.rel431.length > 0 && (
-        <span className="chip chip-rel431" title={B.rel431.map(k => RELICS431[k][0]).join(', ')}>
-          {B.rel431.length} relique{B.rel431.length > 1 ? 's' : ''}
+      {B.sc === 'echo431' && B.relics431 && B.relics431.length > 0 && (
+        <span className="chip chip-rel431" title={B.relics431.map(k => RELICS431[k][0]).join(', ')}>
+          {B.relics431.length} relique{B.relics431.length > 1 ? 's' : ''}
         </span>
       )}
       {B.fog431 && <span className="chip chip-fog431">Brouillard</span>}
@@ -198,21 +198,21 @@ export function Rule() {
 // Hidden, it keeps its last content, like the old DOM.
 export function Timeline() {
   const v = useBattleVersion('top');
-  const vis = !!(v && B && B.ordre === 'vitesse' && B.file && !B.over);
+  const vis = !!(v && B && B.order === 'vitesse' && B.turnQueue && !B.over);
   const [last, setLast] = useState(null);
   let cur = null;
   if (vis) {
     const now = currentActor(B);
     const rows = [];
-    B.file.forEach((id, i) => {
+    B.turnQueue.forEach((id, i) => {
       const u = byUid(B, id);
       if (!u) return;
-      const doneFlag = i < B.ifile || u.ko,
+      const doneFlag = i < B.queueIndex || u.ko,
         prio = u.side === 'e' && u.intent && MV[u.intent.mv].prio;
       rows.push({
         i,
         cls: `bo ${u.side === 'a' ? 'al' : 'en'}${u === now ? ' now' : ''}${doneFlag ? ' fait' : ''}${u.ko ? ' ko' : ''}`,
-        title: 'Vitesse ' + String(B.vfile[i]).replace('.', ','),
+        title: 'Vitesse ' + String(B.queueSpeeds[i]).replace('.', ','),
         t: u.t,
         n: u.n,
         prio: prio || 0,

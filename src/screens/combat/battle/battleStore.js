@@ -37,4 +37,4 @@ export function footCls(displayName, on) {
 }
 
 // Cell sheet (#ti444, v4.44): created on first opening, then hidden.
-export const sheet444 = { made: false, hidden: true, k: null, haut: false, top: undefined, bottom: undefined };
+export const sheet444 = { made: false, hidden: true, k: null, isTop: false, top: undefined, bottom: undefined };

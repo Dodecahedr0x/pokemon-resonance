@@ -23,9 +23,9 @@ export function __init() {
   const KEY = 'res-x470';
   const readX = () => {
     try {
-      return Object.assign({ fos: 0, rev: [], dq: { d: '', done: false, streak: 0, best: 0, tot: 0, last: '' }, pre: { n: 0, on: false } }, JSON.parse(localStorage.getItem(KEY)));
+      return Object.assign({ fossils: 0, rev: [], dq: { d: '', done: false, streak: 0, best: 0, tot: 0, last: '' }, pre: { n: 0, on: false } }, JSON.parse(localStorage.getItem(KEY)));
     } catch (e) {
-      return { fos: 0, rev: [], dq: { d: '', done: false, streak: 0, best: 0, tot: 0, last: '' }, pre: { n: 0, on: false } };
+      return { fossils: 0, rev: [], dq: { d: '', done: false, streak: 0, best: 0, tot: 0, last: '' }, pre: { n: 0, on: false } };
     }
   };
   const writeX = o => {
@@ -47,7 +47,7 @@ export function __init() {
   });
   SHADOWS.forEach((o, i) => {
     const k = 'omb470_' + (i + 1);
-    SCEN[k] = Object.assign(baseScene(i === 3 ? 'Vaskar, chef des Ombres' : 'Les Ombres · épisode ' + (i + 1), 'Histoire · épisode ' + (i + 1), 'Repoussez les Ombres de Résonance.', o.lv, o.hb, mkFoes(o.ids)), { omb470: i + 1 });
+    SCEN[k] = Object.assign(baseScene(i === 3 ? 'Vaskar, chef des Ombres' : 'Les Ombres · épisode ' + (i + 1), 'Histoire · épisode ' + (i + 1), 'Repoussez les Ombres de Résonance.', o.lv, o.hb, mkFoes(o.ids)), { shadow470: i + 1 });
     try {
       OBST[k] = { pil: ['4,2'], grass: ['4,4'] };
     } catch { /* Best effort: failure here is non-fatal. */ }
@@ -67,11 +67,11 @@ export function __init() {
     for (let i = 0; i < nb; i++) ids.push(pool[seedValue('f' + i) % pool.length]);
     const forbiddenSet = TYPES[seedValue('t') % TYPES.length];
     const hb = 2 + (seedValue('h') % 4);
-    return { ids, interdit: forbiddenSet, hb, lv: 18 + (seedValue('l') % 10) };
+    return { ids, forbidden: forbiddenSet, hb, lv: 18 + (seedValue('l') % 10) };
   };
   const dqMake = () => {
     const D = dqDef();
-    SCEN.dq470 = Object.assign(baseScene('Défi quotidien', 'Défi · type interdit : ' + D.interdit, 'Aucun Pokémon de type ' + D.interdit + ' dans votre équipe. Adversaires renforcés.', D.lv, D.hb, mkFoes(D.ids)), { dq470: D.interdit });
+    SCEN.dq470 = Object.assign(baseScene('Défi quotidien', 'Défi · type interdit : ' + D.forbidden, 'Aucun Pokémon de type ' + D.forbidden + ' dans votre équipe. Adversaires renforcés.', D.lv, D.hb, mkFoes(D.ids)), { dq470: D.forbidden });
     try {
       OBST.dq470 = { pil: ['4,2'], grass: ['4,4', '5,1'] };
     } catch { /* Best effort: failure here is non-fatal. */ }
@@ -83,7 +83,7 @@ export function __init() {
     const D = SCEN.dq470 && SCEN.dq470.dq470;
     return D ? squad.slice(0, teamSize()).find(id => BY[id] && BY[id].t.includes(D)) : null;
   };
-  HOOKS.refusLancement.push(() => {
+  HOOKS.launchRefusal.push(() => {
     const v = scSel === 'dq470' && dqViol();
     return v ? BY[v].n + ' est de type ' + SCEN.dq470.dq470 + ' : retirez-le de l’équipe.' : null;
   });
@@ -102,7 +102,7 @@ export function __init() {
   });
 
   /* ---- shared progression (victories) ---- */
-  HOOKS.progres.unshift((S, rew, win) => {
+  HOOKS.progress.unshift((S, rew, win) => {
     try {
       if (!win) return null;
       const X = readX();
@@ -111,10 +111,10 @@ export function __init() {
       const k = S.sc || '';
       if (/^omb470_/.test(k)) {
         const n = +k.slice(7),
-          O = window.__ombre470;
-        if (O && O.lire().etape === n - 1) {
-          O.ecrire({ etape: n });
-          X.fos += 1;
+          O = window.__shadow470;
+        if (O && O.readValue().stepOf === n - 1) {
+          O.write({ stepOf: n });
+          X.fossils += 1;
           m += 400 * n;
           g += n;
           try {
@@ -133,7 +133,7 @@ export function __init() {
           D.last = today();
           D.d = today();
           D.done = true;
-          X.fos += 1;
+          X.fossils += 1;
           m += 500 + 100 * Math.min(D.streak, 7);
           g += 2;
         }
@@ -150,7 +150,7 @@ export function __init() {
 
   /* ---- link with the episodes: « Affronter » (Face) button ---- */
   // returns true: the « Affronter » choice leads to battle instead of resolving the encounter
-  HOOKS.avantChoixRoute.push(j => {
+  HOOKS.beforeRouteChoice.push(j => {
     try {
       const { E, st } = ev454();
       if (E && E.ombre && !st.done && E.c[j] && E.c[j].fight) {
@@ -158,7 +158,7 @@ export function __init() {
           toast('Composez d’abord une équipe.');
           return true;
         }
-        const k = 'omb470_' + (window.__ombre470.lire().etape + 1);
+        const k = 'omb470_' + (window.__shadow470.readValue().stepOf + 1);
         if (!SCEN[k]) return true;
         shut('evs454');
         if (B) backToPrep();
@@ -177,19 +177,19 @@ export function __init() {
       doneFlag = D.d === today() && D.done,
       di = dqDef();
     const freeOnes = REV().filter(id => !PROFILE.box.includes(id) && !(PROFILE.dex || []).includes(id));
-    const O = window.__ombre470,
-      e = O.lire().etape,
+    const O = window.__shadow470,
+      e = O.readValue().stepOf,
       endStep = e >= 4;
     // rendering: src/screens/overlays/transients/Windows.jsx (X470)
     const o = overlay('x470o', {
-      omb: endStep ? { fin: endStep } : { fin: endStep, e, dispo: !!O.dispo(), titre: O.dispo() ? O.titre() : '', req: O.dispo() ? '' : O.req() },
-      interdit: di.interdit,
+      shadowState: endStep ? { fin: endStep } : { fin: endStep, e, available: !!O.available(), titre: O.available() ? O.titre() : '', req: O.available() ? '' : O.req() },
+      forbidden: di.forbidden,
       streak: D.streak,
       best: D.best,
       tot: D.tot,
       fait: !!doneFlag,
-      fos: X.fos,
-      libres: freeOnes.length,
+      fossils: X.fossils,
+      freeSlots: freeOnes.length,
       pre: { n: X.pre.n, on: !!X.pre.on },
       preOk: !!preOk()
     });
@@ -209,11 +209,11 @@ export function __init() {
       if (v === 'open') return hub();
       if (v === 'close') return shut('x470o');
       if (v === 'omb') {
-        const O = window.__ombre470;
-        if (!O.dispo() || !squad.length) return toast(squad.length ? 'Épisode verrouillé.' : 'Composez d’abord une équipe.');
+        const O = window.__shadow470;
+        if (!O.available() || !squad.length) return toast(squad.length ? 'Épisode verrouillé.' : 'Composez d’abord une équipe.');
         shut('x470o');
         if (B) backToPrep();
-        return goFight('omb470_' + (O.lire().etape + 1));
+        return goFight('omb470_' + (O.readValue().stepOf + 1));
       }
       if (v === 'dq') {
         if (!squad.length) return toast('Composez d’abord une équipe.');
@@ -224,9 +224,9 @@ export function __init() {
       }
       if (v === 'rev') {
         const freeOnes = REV().filter(id => !PROFILE.box.includes(id) && !(PROFILE.dex || []).includes(id));
-        if (X.fos < 1 || !freeOnes.length) return;
+        if (X.fossils < 1 || !freeOnes.length) return;
         const id = freeOnes[Math.floor(Math.random() * freeOnes.length)];
-        X.fos -= 1;
+        X.fossils -= 1;
         X.rev.push(id);
         PROFILE.box.push(id);
         if (!PROFILE.dex.includes(id)) PROFILE.dex.push(id);
@@ -252,6 +252,6 @@ export function __init() {
     true
   );
   /* « Défis » (Challenges) banner on the Home page (#x470): rendered by React (src/screens/home/Banners.jsx) */
-  window.__x470 = { lire: readX, ecrire: writeX, hub, dqMake, dqViol, ok };
+  window.__x470 = { readValue: readX, write: writeX, hub, makeDailyChallenge: dqMake, dailyViolation: dqViol, ok };
 })();
 }

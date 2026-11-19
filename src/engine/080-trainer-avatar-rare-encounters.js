@@ -186,7 +186,7 @@ RARE450 = [
 /* the encounter sheet flags a rare appearance: rendered by React (src/screens/overlays/Enc.jsx) */
 
 
-HOOKS.heure.push(route450);
+HOOKS.timeOfDay.push(route450);
 
 
 try {

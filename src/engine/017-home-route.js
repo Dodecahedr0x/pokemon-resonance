@@ -70,7 +70,7 @@ export function setTod(t) {
   TOD = t;
   setRoute({ tod: t, pressed: true }); // data-time of #route, pressed button (Route.jsx)
   typeDlg(TODTXT[t].replace('Route 29', routeName()));
-  hook('heure', t);
+  hook('timeOfDay', t);
 }
 
 

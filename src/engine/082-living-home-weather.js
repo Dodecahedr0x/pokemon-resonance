@@ -34,12 +34,12 @@ export function alive450() {
 // help data (rendering: src/screens/overlays/transients/Windows.jsx, Help452)
 function help452() {
   const u = ui.sel != null ? byUid(B, ui.sel) : null,
-    out = { sel: null, terr: [], wx: null, rx: [] };
+    out = { sel: null, terrainList: [], wx: null, rx: [] };
   if (u && BY[u.id]) {
     const m = BY[u.id],
       roles = [m.r, m.r2].filter((r, k, a) => r && a.indexOf(r) === k),
-      tl = TAL[u.tal];
-    out.sel = { n: u.n, roles: roles.map(r => [r, ROLEFX[r] ? [ROLEFX[r].k, ROLEFX[r].d] : null]), tal: tl ? [tl[0], tl[1]] : null };
+      tl = TAL[u.ability];
+    out.sel = { n: u.n, roles: roles.map(r => [r, ROLEFX[r] ? [ROLEFX[r].k, ROLEFX[r].d] : null]), ability: tl ? [tl[0], tl[1]] : null };
   }
   const seen = [];
   Object.keys(B.tiles || {}).forEach(k => {
@@ -48,10 +48,10 @@ function help452() {
     if (kind && !seen.some(x => x[0] === kind)) seen.push([kind, k]);
   });
   const displayName = { pil: 'Pilier', rock: 'Rocher', w: 'Eau', lava: 'Lave', mud: 'Boue', fog: 'Brouillard', grass: 'Hautes herbes', sand: 'Sable', trap: 'Piège', mark: 'Marque' };
-  out.terr = seen.map(([kd, k]) => [displayName[kd], tileTip(k)]);
+  out.terrainList = seen.map(([kd, k]) => [displayName[kd], tileTip(k)]);
   if (B.wx && B.wx.k) {
     const W = WEATHER.find(x => (WXN[B.wx.k] || '').toLowerCase().startsWith(x.n.toLowerCase().slice(0, 4)));
-    if (W) out.wx = { n: W.n, tours: B.wx.n, d: W.d };
+    if (W) out.wx = { n: W.n, roundCount: B.wx.n, d: W.d };
   }
   out.rx = Object.keys(RX).map(k => [RX[k].n, RX[k].d]);
   return out;

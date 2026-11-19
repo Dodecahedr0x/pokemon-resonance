@@ -1557,11 +1557,11 @@ export function __init() {
   HOOKS.carte.push(() => {
     if (document.getElementById('mapSt')) ensure(V4.region === 'hoenn' ? 'hoenn' : V4.region === 'johto' ? 'johto' : 'kanto');
   });
-  HOOKS.heure.push(t => {
+  HOOKS.timeOfDay.push(t => {
     // set directly, without redrawing the map; Stage.jsx renders the same value (TOD)
     const st = document.getElementById('mapSt');
     if (st) st.dataset.tod = t;
   });
-  window.__carte471 = { generate, PAINT, apply, ensure, REG };
+  window.__map471 = { generate, PAINT, apply, ensure, REG };
 })();
 }

@@ -41,7 +41,7 @@ export function __init() {
       SOUNDS[k] && SOUNDS[k]();
     } catch { /* Best effort: failure here is non-fatal. */ }
   };
-  window.__son473 = playSound;
+  window.__sound473 = playSound;
 
   /* ---------- drawings: SVG Poké Ball ---------- */
   const ballSvg = r =>
@@ -160,13 +160,13 @@ export function __init() {
     setTimeout(() => w.remove(), 1300);
   };
 
-  HOOKS.avantPresentation.push(() => {
+  HOOKS.beforePresentation.push(() => {
     if (B && !B.over) {
       prepare(B);
       transition(B);
     }
   });
-  HOOKS.avantBandeau.push(() => {
+  HOOKS.beforeBanner.push(() => {
     try {
       if (B && ENTRANCES.get(B) === 1) {
         ENTRANCES.set(B, 2);
@@ -178,17 +178,17 @@ export function __init() {
   });
   // a Pokémon that has just been knocked out returns to its Poké Ball
   let wasKo = null;
-  HOOKS.avantJeton.push(u => {
+  HOOKS.beforeToken.push(u => {
     wasKo = null;
     const T = L.u && L.u[u.uid];
     wasKo = T ? tokHas(T, 'ko') : null;
   });
-  HOOKS.apresJeton.push(u => {
+  HOOKS.afterToken.push(u => {
     if (wasKo === false && u.ko && !u.caught && !calm472() && !auto()) recall(u);
   });
 
   /* ---------- 3. HP drops gradually ---------- */
-  HOOKS.barrePv.push(h => {
+  HOOKS.hpBar.push(h => {
     try {
       if (calm472()) return h;
       const m = /--a:([\d.]+)%;--b:([\d.]+)%;animation-delay:-(\d+)ms/.exec(h);
@@ -231,7 +231,7 @@ export function __init() {
       if (Lc && Lc.n) leader = Lc.n;
     } catch { /* Best effort: failure here is non-fatal. */ }
     const displayName = (GYMS[i] && GYMS[i].t) || D.at || '';
-    paintOverlay('badge', { svg: badgeSvg(i, (GYMS[i] && GYMS[i].t) || displayName, 'pkbc' + i), chef: leader, nom: displayName, n: BADGES.length });
+    paintOverlay('badge', { svg: badgeSvg(i, (GYMS[i] && GYMS[i].t) || displayName, 'pkbc' + i), leader, displayName, n: BADGES.length });
     bc.hidden = false;
     try {
       vibe([20, 40, 20, 40, 90]);
@@ -248,6 +248,6 @@ export function __init() {
     }).observe(res, { childList: true });
   }
 
-  window.__combat473 = { transition, envoyer: send, retour: recall, feterBadge: celebrateBadge, ENTREE: ENTRANCES, genre };
+  window.__battle473 = { transition, send, retour: recall, celebrateBadge, ENTREE: ENTRANCES, genre };
 })();
 }

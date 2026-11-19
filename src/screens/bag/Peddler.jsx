@@ -35,7 +35,7 @@ export default function Peddler() {
   }
   return (
     <>
-      <p className="v4-note am454"><b>{A.nom}, le colporteur</b> a posé sa carriole aujourd’hui. Stock limité, il repart à minuit.</p>
+      <p className="v4-note am454"><b>{A.displayName}, le colporteur</b> a posé sa carriole aujourd’hui. Stock limité, il repart à minuit.</p>
       {A.pick.map(row)}
       {th}
     </>

@@ -41,7 +41,7 @@ let FISHING, SAF_MSG;
       controls the first 2 Pokémon, Player 2 the others.
    ===================================================================== */
 export function V418_0() {
-  return { safari: null, peches: 0, safariPris: 0 };
+  return { safari: null, catches: 0, safariTaken: 0 };
 }
 
 
@@ -49,12 +49,12 @@ export function v418Clean(p) {
   const o = V418_0();
   if (!p || typeof p !== 'object') return o;
   const s = p.safari;
-  if (s && typeof s === 'object' && Number.isFinite(s.pas) && Number.isFinite(s.balls)) {
-    o.safari = { pas: Math.max(0, Math.min(12, Math.floor(s.pas))), balls: Math.max(0, Math.min(20, Math.floor(s.balls))), pris: Array.isArray(s.pris) ? s.pris.filter(id => BY[id]).slice(0, 20) : [], enc: null };
-    if (!o.safari.pas && !o.safari.balls) o.safari = null;
+  if (s && typeof s === 'object' && Number.isFinite(s.stepCount) && Number.isFinite(s.balls)) {
+    o.safari = { stepCount: Math.max(0, Math.min(12, Math.floor(s.stepCount))), balls: Math.max(0, Math.min(20, Math.floor(s.balls))), isTaken: Array.isArray(s.isTaken) ? s.isTaken.filter(id => BY[id]).slice(0, 20) : [], enc: null };
+    if (!o.safari.stepCount && !o.safari.balls) o.safari = null;
   }
-  if (Number.isFinite(p.peches)) o.peches = Math.max(0, Math.min(99999, Math.floor(p.peches)));
-  if (Number.isFinite(p.safariPris)) o.safariPris = Math.max(0, Math.min(99999, Math.floor(p.safariPris)));
+  if (Number.isFinite(p.catches)) o.catches = Math.max(0, Math.min(99999, Math.floor(p.catches)));
+  if (Number.isFinite(p.safariTaken)) o.safariTaken = Math.max(0, Math.min(99999, Math.floor(p.safariTaken)));
   return o;
 }
 
@@ -90,18 +90,18 @@ function fishingDraw418() {
 
 function fishingCast418() {
   clearTimeout(FISHING && FISHING.t);
-  FISHING = { etat: 'attente' };
+  FISHING = { status: 'attente' };
   renderFishing418();
   $('#peche418').hidden = false;
   FISHING.t = setTimeout(() => {
-    if (!FISHING || FISHING.etat !== 'attente') return;
-    FISHING.etat = 'mord';
+    if (!FISHING || FISHING.status !== 'attente') return;
+    FISHING.status = 'mord';
     vibe(60);
     sfx('ui');
     renderFishing418();
     FISHING.t = setTimeout(() => {
-      if (!FISHING || FISHING.etat !== 'mord') return;
-      FISHING.etat = 'rate';
+      if (!FISHING || FISHING.status !== 'mord') return;
+      FISHING.status = 'rate';
       renderFishing418();
     }, PREF.fast ? 1400 : 1150);
   }, 1200 + Math.random() * 2200);
@@ -109,12 +109,12 @@ function fishingCast418() {
 
 
 function fishingHookSet418() {
-  if (!FISHING || FISHING.etat !== 'mord') return;
+  if (!FISHING || FISHING.status !== 'mord') return;
   clearTimeout(FISHING.t);
   const id = fishingDraw418();
   if (!id) return;
-  FISHING = { etat: 'prise', id, sh: Math.random() < SHINY_RATE * multChroma(), dom: Math.random() < 0.05 };
-  PROFILE.peches = (PROFILE.peches || 0) + 1;
+  FISHING = { status: 'prise', id, sh: Math.random() < SHINY_RATE * multChroma(), dom: Math.random() < 0.05 };
+  PROFILE.catches = (PROFILE.catches || 0) + 1;
   queueSave();
   renderFishing418();
 }
@@ -125,22 +125,22 @@ function renderFishing418() {
   const el = $('#peche418'),
     P2 = FISHING || {};
   // the shiny artwork is recolored after rendering (v4.25)
-  setTimeout(() => P2.etat === 'prise' && P2.sh && chromaArt425(el.querySelector('.pe-prise img'), BY[P2.id].no), 0);
+  setTimeout(() => P2.status === 'prise' && P2.sh && chromaArt425(el.querySelector('.pe-prise img'), BY[P2.id].no), 0);
   paintOverlay('peche', {
-    etat: P2.etat,
+    status: P2.status,
     id: P2.id,
     sh: P2.sh,
     dom: P2.dom,
-    connu: !!P2.id && PROFILE.box.includes(P2.id),
+    known: !!P2.id && PROFILE.box.includes(P2.id),
     route: routeName(),
-    peches: PROFILE.peches || 0
+    catches: PROFILE.catches || 0
   });
 }
 
 
 function fishingBattle418() {
   const P2 = FISHING;
-  if (!P2 || P2.etat !== 'prise') return;
+  if (!P2 || P2.status !== 'prise') return;
   $('#peche418').hidden = true;
   __set_wildId(P2.id);
   const D = wildScen(P2.id, TOD, P2.sh, P2.dom);
@@ -166,7 +166,7 @@ function safariEncounter418() {
   const L = poolSafari418(),
     w = L.map(m => (1 + RC(m.id)) * (!PROFILE.box.includes(m.id) ? 2 : 1)),
     m = draw418(L, w);
-  return { id: m.id, sh: Math.random() < SHINY_RATE * multChroma() * 2, appat: 0, caillou: 0 };
+  return { id: m.id, sh: Math.random() < SHINY_RATE * multChroma() * 2, bait: 0, caillou: 0 };
 }
 
 
@@ -175,7 +175,7 @@ function safariEnter418() {
   if (!PROFILE.safari) {
     if (PROFILE.money < SAFARI_PRICE) return void toast('Il faut 500 ₽ pour entrer.');
     PROFILE.money -= SAFARI_PRICE;
-    PROFILE.safari = { pas: SAFARI_STEPS, balls: SAFARI_BALLS, pris: [], enc: null };
+    PROFILE.safari = { stepCount: SAFARI_STEPS, balls: SAFARI_BALLS, isTaken: [], enc: null };
     renderWallet();
     queueSave();
   }
@@ -192,8 +192,8 @@ function safariAction418(a) {
   const x = S2.enc;
   let msg = '';
   if (a === 'marcher') {
-    if (x || S2.pas <= 0) return '';
-    S2.pas--;
+    if (x || S2.stepCount <= 0) return '';
+    S2.stepCount--;
     S2.enc = safariEncounter418();
     const m = BY[S2.enc.id];
     msg = S2.enc.sh ? `${SPARK} Un ${m.n} chromatique sort des herbes !` : `Un ${m.n} sauvage apparaît !`;
@@ -202,18 +202,18 @@ function safariAction418(a) {
     S2.balls--;
     if (Math.random() < capt418(x)) {
       const nw = take418(x.id, x.sh);
-      S2.pris.push(x.id);
-      PROFILE.safariPris = (PROFILE.safariPris || 0) + 1;
+      S2.isTaken.push(x.id);
+      PROFILE.safariTaken = (PROFILE.safariTaken || 0) + 1;
       msg = `Gotcha ! ${BY[x.id].n} est capturé${nw ? ' et rejoint votre Box' : ''}.`;
       S2.enc = null;
     } else msg = `Raté ! ${BY[x.id].n} s’est libéré.`;
   } else if (x && a === 'appat') {
-    x.appat = 2;
+    x.bait = 2;
     x.caillou = 0;
     msg = `${BY[x.id].n} grignote l’appât : il est moins pressé de partir.`;
   } else if (x && a === 'caillou') {
     x.caillou = 2;
-    x.appat = 0;
+    x.bait = 0;
     msg = `${BY[x.id].n} est sonné : plus facile à attraper, mais il s’agace.`;
   } else if (x && a === 'fuir') {
     S2.enc = null;
@@ -225,12 +225,12 @@ function safariAction418(a) {
       msg += ` ${BY[x.id].n} s’enfuit !`;
       S2.enc = null;
     } else {
-      if (x.appat > 0 && a !== 'appat') x.appat--;
+      if (x.bait > 0 && a !== 'appat') x.bait--;
       if (x.caillou > 0 && a !== 'caillou') x.caillou--;
     }
   }
-  if (!S2.enc && (S2.pas <= 0 || S2.balls <= 0)) {
-    msg += ` La visite est terminée : ${S2.pris.length} capture${S2.pris.length > 1 ? 's' : ''}.`;
+  if (!S2.enc && (S2.stepCount <= 0 || S2.balls <= 0)) {
+    msg += ` La visite est terminée : ${S2.isTaken.length} capture${S2.isTaken.length > 1 ? 's' : ''}.`;
     S2.fini = true;
   }
   queueSave();
@@ -248,14 +248,14 @@ function renderSafari418() {
   const x = S2.enc;
   // rendered by src/screens/overlays/Safari418.jsx
   paintOverlay('safari', {
-    pas: S2.pas,
+    stepCount: S2.stepCount,
     balls: S2.balls,
-    pris: S2.pris.length,
+    isTaken: S2.isTaken.length,
     fini: !!S2.fini,
     x: x ? { id: x.id, sh: x.sh } : null,
-    hum: x ? (x.appat ? 'Il mange l’appât' : x.caillou ? 'Il est agacé' : flee418(x) > 0.25 ? 'Il est méfiant' : 'Il vous observe') : '',
-    capt: x ? capt418(x) : 0,
-    fuite: x ? flee418(x) : 0,
+    mood: x ? (x.bait ? 'Il mange l’appât' : x.caillou ? 'Il est agacé' : flee418(x) > 0.25 ? 'Il est méfiant' : 'Il vous observe') : '',
+    caughtCount: x ? capt418(x) : 0,
+    flee: x ? flee418(x) : 0,
     msg: SAF_MSG
   });
 }
@@ -296,13 +296,13 @@ export const safariLock418 = () => (isCamp() && BADGES.length < 2 ? 'Le Parc Saf
 
 const capt418 = x => {
   const base = Math.max(0.08, Math.min(0.45, 0.5 - 0.06 * RC(x.id)));
-  return Math.min(0.9, base * (x.caillou ? 1.6 : 1) * (x.appat ? 0.8 : 1));
+  return Math.min(0.9, base * (x.caillou ? 1.6 : 1) * (x.bait ? 0.8 : 1));
 };
 
 
 const flee418 = x => {
   const base = Math.max(0.08, Math.min(0.35, 0.06 + 0.04 * BY[x.id].s[3]));
-  return Math.min(0.85, base * (x.appat ? 0.5 : 1) * (x.caillou ? 1.6 : 1));
+  return Math.min(0.85, base * (x.bait ? 0.5 : 1) * (x.caillou ? 1.6 : 1));
 };
 
 
@@ -384,7 +384,7 @@ document.addEventListener('click', e => {
   const k = b.dataset.safari418;
   if (k === 'x') return void ($('#safari418').hidden = true);
   if (k === 'sortir') {
-    const n = PROFILE.safari ? PROFILE.safari.pris.length : 0;
+    const n = PROFILE.safari ? PROFILE.safari.isTaken.length : 0;
     PROFILE.safari = null;
     queueSave();
     $('#safari418').hidden = true;
@@ -404,13 +404,13 @@ document.addEventListener('click', e => {
 
 
 HOOKS.combat.push((S, opt, D0) => {
-  if (!PREF.coop || S.ordre === 'vitesse' || (D0 && (D0.tuto || D0.duel433))) return;
+  if (!PREF.coop || S.order === 'vitesse' || (D0 && (D0.tuto || D0.duel433))) return;
   if (S.units.filter(u => u.side === 'a').length < 2 || !opt || opt.robot) return;
   S.coop = coopAlive418(S, 1) ? 1 : 2;
 });
 
 
-HOOKS.avantFinManche.push(S => {
+HOOKS.beforeRoundEnd.push(S => {
   if (S.coop) S.coop = coopAlive418(S, 1) ? 1 : 2;
 });
 }

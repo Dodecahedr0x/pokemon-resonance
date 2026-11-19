@@ -25,7 +25,7 @@ export function applyPoison(S, v, ev) {
     say(ev, `Rune Protect : ${v.n} est protégé.`);
     return false;
   }
-  v.psn = 3;
+  v.poisoned = 3;
   say(ev, `${v.n} est empoisonné.`);
   return true;
 }
@@ -240,7 +240,7 @@ Object.assign(MV, {
   ['ct42', { num: 'CT42', mv: 'devoreve', p: 4000, types: ['Psy', 'Spectre'], familles: ['melo', 'ronflex'] }],
   ['ct16', { num: 'CT16', mv: 'ventglace', p: 3000, types: ['Glace', 'Eau', 'Vol'] }],
   ['ct24', { num: 'CT24', mv: 'dracosouffle', p: 3500, types: ['Dragon'], familles: ['salameche', 'magicarpe', 'wattouat', 'onix', 'embrylex'] }],
-  ['ct51', { num: 'CT51', mv: 'coupdmain', p: 3000, tous: true }],
+  ['ct51', { num: 'CT51', mv: 'coupdmain', p: 3000, forAll: true }],
   ['ct52', { num: 'CT52', mv: 'ventarriere', p: 3500, types: ['Vol'] }],
   ['ct53', { num: 'CT53', mv: 'distorsion', p: 4000, types: ['Psy'], familles: ['ramoloss', 'ronflex', 'melo', 'fantominus', 'phanpy', 'pomdepik'] }],
   ['ct54', { num: 'CT54', mv: 'prescience', p: 4000, types: ['Psy'], familles: ['melo', 'ramoloss', 'evoli'] }],
@@ -252,7 +252,7 @@ Object.assign(MV, {
     n: `${M.num} · ${m.n}`,
     sn: M.num,
     d: `${m.t} · ${m.p ? 'Puissance ' + m.p + ' · ' : m.pp ? 'Puissance ' + m.pp + ' · ' : ''}${m.d} Usage unique.`,
-    cat: 'machines',
+    category: 'machines',
     mv: M.mv,
     cs: false,
     p: M.p
@@ -273,7 +273,7 @@ SELF412 = {
   glas(S, u, ev) {
     const healed = S.units.filter(o => !o.ko && o.side === u.side && hdist(o.pos, u.pos) <= 2);
     healed.forEach(o => {
-      const had = !!(o.badge || o.skip || o.bru || o.psn || o.web || o.root);
+      const had = !!(o.badge || o.skip || o.burn || o.poisoned || o.web || o.root);
       if (o.sn && o !== u && o.side === 'a' && S.phase === 'player') {
         o.sn = false; // woken up: it can still play this round
         o.acted = false;
@@ -281,8 +281,8 @@ SELF412 = {
       }
       o.badge = null;
       o.skip = 0;
-      o.bru = 0;
-      o.psn = 0;
+      o.burn = 0;
+      o.poisoned = 0;
       o.web = 0;
       o.root = 0;
       heal(S, o, Math.round(o.mhp * 0.1), ev);
@@ -295,7 +295,7 @@ SELF412 = {
 
 TARGET412 = {
   ventglace(S, u, v, k, mk, ev) {
-    if (v.tal === 'regardvif' || rune413(S, v)) say(ev, `${v.n} ignore l’entrave.`);
+    if (v.ability === 'regardvif' || rune413(S, v)) say(ev, `${v.n} ignore l’entrave.`);
     else {
       v.web = Math.max(v.web, 2);
       say(ev, `${v.n} est ralenti par le froid.`);
@@ -310,7 +310,7 @@ TARGET412 = {
     const N = net(S, k, 'trempe');
     const others = Object.keys(N.seen)
       .map(x => uAt(S, x))
-      .filter(o => o && o !== v && !o.ko && o.side !== u.side && !(o.psn > 0));
+      .filter(o => o && o !== v && !o.ko && o.side !== u.side && !(o.poisoned > 0));
     if (others.length) {
       ev.push({ e: 'chain', edges: N.edges, c: 'tox' });
       say(ev, `Contamination : le poison court dans l’eau reliée.`);
@@ -322,18 +322,18 @@ TARGET412 = {
 
 /* ---------- Helping Hand and Trick Room in damage ---------- */
 DAMAGE_PROVIDERS.push(
-  { id: 'aide', fournir: (c, { u }) => u.aide > 0 && { mul: 1.5, libelle: 'Coup d’Main' } },
-  { id: 'distorsion', fournir: (c, { S, u }) => S.distorsion > 0 && u.s[3] <= 2 && { mul: 1.3, libelle: 'Distorsion' } }
+  { id: 'aide', provide: (c, { u }) => u.aide > 0 && { mul: 1.5, labelText: 'Coup d’Main' } },
+  { id: 'distorsion', provide: (c, { S, u }) => S.distorsion > 0 && u.s[3] <= 2 && { mul: 1.3, labelText: 'Distorsion' } }
 );
 
 
 SPEED_PROVIDERS.push({
   id: 'arriere',
-  fournir: (c, { S, u }) => S.arriere && S.arriere[u.side] > 0 && { mul: 1.5, libelle: 'Vent Arrière' }
+  provide: (c, { S, u }) => S.arriere && S.arriere[u.side] > 0 && { mul: 1.5, labelText: 'Vent Arrière' }
 });
 
 
-HOOKS.avantFinManche.push((S, ev) => {
+HOOKS.beforeRoundEnd.push((S, ev) => {
   if (!S.presc || !S.presc.length || S.over) return;
   const isReady = S.presc.filter(x => x.at <= S.round);
   S.presc = S.presc.filter(x => x.at > S.round);

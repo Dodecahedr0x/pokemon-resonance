@@ -23,6 +23,7 @@ import { PROGRESS429, rand429 } from './064-quality.js';
 import { PANTHEON432, engrave432 } from './067-individuals-comfort.js';
 import { duelEnd433, duelOpts433 } from './068-duel-tutorial.js';
 import { refreshCampPage } from '../screens/camp/campStore.js';
+import { migrateKeys } from '../lib/saveMigration.js';
 
 let PUZZLE_CUR431, ARN_ED431;
 // read by the Camp tabs (src/screens/camp/tabs)
@@ -46,14 +47,14 @@ function puzzleScen431(puzzle) {
     foes: puzzle.f.map(([id, c, r]) => [id, [c, r]]),
     catch: false,
     enigme431: puzzle.id,
-    sansProgres431: 1,
+    noProgress431: 1,
     d: 'Mettez K.O. tous les adversaires en une seule manche. Les adversaires ne jouent pas : tout se décide pendant votre tour.'
   };
 }
 
 
 function puzzleOpts431() {
-  return { diff: 'normal', items: {}, fatigue: {}, links: {}, ordre: 'equipe', vivant: false, tactique: true, mut: null, doc430: '', defis: [], caracteres: false, desob: false, dojo: 0, apprises: {} };
+  return { diff: 'normal', items: {}, fatigue: {}, links: {}, order: 'equipe', livingBoard: false, tactics: true, mut: null, doc430: '', challenges: [], characters: false, disobedience: false, dojo: 0, learnedTms: {} };
 }
 
 
@@ -77,7 +78,7 @@ function puzzlePrepare431(puzzle) {
    Everything is in the Camp tab (sub-tabs).
    ===================================================================== */
 export function V431_0() {
-  return { enig431: null, mait431: {}, echo431: null, arenes431: [], arj431: null };
+  return { enig431: null, mait431: {}, echo431: null, gyms431: [], arj431: null };
 }
 
 
@@ -110,8 +111,8 @@ export function v431Clean(p) {
           seed: n431(R.seed, 0, 2147483647),
           f: n431(R.f, 0, 8),
           team,
-          rel: Array.isArray(R.rel) ? R.rel.filter(x => typeof x === 'string' && /^[a-z]{3,10}$/.test(x)).slice(0, 12) : [],
-          ech: n431(R.ech, 0, 9999),
+          relics: Array.isArray(R.relics) ? R.relics.filter(x => typeof x === 'string' && /^[a-z]{3,10}$/.test(x)).slice(0, 12) : [],
+          echoes: n431(R.echoes, 0, 9999),
           map,
           path: Array.isArray(R.path) ? R.path.filter(Number.isInteger).slice(0, 8) : [],
           cur: Number.isInteger(R.cur) ? n431(R.cur, -1, 2) : -1,
@@ -121,7 +122,7 @@ export function v431Clean(p) {
       }
     }
   }
-  if (Array.isArray(p.arenes431)) o.arenes431 = p.arenes431.map(gymClean431).filter(Boolean).slice(0, 12);
+  if (Array.isArray(p.gyms431)) o.gyms431 = p.gyms431.map(gymClean431).filter(Boolean).slice(0, 12);
   const J = p.arj431;
   if (J && typeof J === 'object' && typeof J.d === 'string') o.arj431 = { d: J.d.slice(0, 10), n: n431(J.n, 0, 99) };
   return o;
@@ -154,14 +155,14 @@ export function fixedProgress431(S) {
 
 /** Imposed team: riddle (the riddle's team) or Deep Echo (the expedition's team). */
 export function fixedTeam431() {
-  if (scSel === 'duel433' && SCEN.duel433 && SCEN.duel433.t1) return { team: SCEN.duel433.t1.slice(), voix: 0, opts: duelOpts433() }; // local duel (v4.33)
-  if (scSel === 'enigme431' && PUZZLE_CUR431) return { team: PUZZLE_CUR431.a.map(x => x[0]), voix: 0, opts: puzzleOpts431() };
+  if (scSel === 'duel433' && SCEN.duel433 && SCEN.duel433.t1) return { team: SCEN.duel433.t1.slice(), voice: 0, opts: duelOpts433() }; // local duel (v4.33)
+  if (scSel === 'enigme431' && PUZZLE_CUR431) return { team: PUZZLE_CUR431.a.map(x => x[0]), voice: 0, opts: puzzleOpts431() };
   if (scSel === 'echo431') {
     const R = echoRun431();
     if (!R) return null;
     const team = R.team.filter(t => t[1] > 0).map(t => t[0]);
     if (!team.length) return null;
-    return { team, voix: 0, opts: Object.assign(battleOpts(), { mut: null, defis: [], fatigue: {}, fog431: fogChosen431() }) };
+    return { team, voice: 0, opts: Object.assign(battleOpts(), { mut: null, challenges: [], fatigue: {}, fog431: fogChosen431() }) };
   }
   return null;
 }
@@ -170,7 +171,7 @@ export function fixedTeam431() {
 /* ---------- 1. fog of war ---------- */
 export function fogChosen431() {
   const D = SCEN[scSel] || {};
-  return !!PREF.fog431 && !D.tuto && !D.hebdo429 && D.enigme431 == null && !D.pret429;
+  return !!PREF.fog431 && !D.tuto && !D.hebdo429 && D.enigme431 == null && !D.ready429;
 }
 
 
@@ -254,9 +255,9 @@ function puzzleAfter431(S, rew, win) {
     i = SCEN[S.sc].enigme431,
     k = String(i);
   E.n[k] = (E.n[k] || 0) + 1;
-  rew.enig431 = { i, win, essai: E.n[k] };
+  rew.enig431 = { i, win, attempt: E.n[k] };
   if (!win) return [0, 0];
-  const st = 1 + ((S.stats.voix || 0) === 0 ? 1 : 0) + (E.n[k] === 1 ? 1 : 0),
+  const st = 1 + ((S.stats.voice || 0) === 0 ? 1 : 0) + (E.n[k] === 1 ? 1 : 0),
     previous = E.s[k] || 0;
   E.s[k] = Math.max(previous, st);
   rew.enig431.st = st;
@@ -296,7 +297,7 @@ function masterChoice431(b) {
 export function bonusDmg431(S, u, t, d) {
   if (!(d > 0) || !S) return d;
   let f = 1;
-  const R = S.rel431 || [];
+  const R = S.relics431 || [];
   if (u && u.side === 'a') {
     if (u.m431 === 'puissance') f *= 1.08;
     if (R.includes('braise')) f *= 1.1;
@@ -311,7 +312,7 @@ export function bonusDmg431(S, u, t, d) {
 
 export function bonusMove431(S, u) {
   if (!S || !u || u.side !== 'a') return 0;
-  return (u.m431 === 'vif' ? 1 : 0) + ((S.rel431 || []).includes('plume') ? 1 : 0);
+  return (u.m431 === 'vif' ? 1 : 0) + ((S.relics431 || []).includes('plume') ? 1 : 0);
 }
 
 
@@ -347,7 +348,7 @@ function echoLeave431() {
   if (team.length < 2) return toast('Il faut au moins 2 Pokémon dans l’équipe.');
   const X = (PROFILE.echo431 = PROFILE.echo431 || { best: 0, wins: 0, run: null }),
     seed = Math.floor(Math.random() * 2147483647);
-  X.run = { seed, f: 0, team: team.map(id => [id, 1]), rel: [], ech: 20, map: echoMap431(seed), path: [], cur: -1, pv: 0, ev: '' };
+  X.run = { seed, f: 0, team: team.map(id => [id, 1]), relics: [], echoes: 20, map: echoMap431(seed), path: [], cur: -1, pv: 0, ev: '' };
   queueSave();
   toast('L’Écho profond s’ouvre : 8 étages, une seule vie.');
   renderCampPage431();
@@ -366,7 +367,7 @@ function echoScene431(R, type) {
       d: `${el ? 'Adversaires renforcés : une relique à la clé. ' : type === 'boss' ? 'Le gardien de l’Écho profond. ' : ''}Vos PV sont conservés d’un combat à l’autre ; un Pokémon K.O. quitte l’expédition.`,
       catch: false,
       echo431: type,
-      sansProgres431: 1,
+      noProgress431: 1,
       hb: Math.round((b.hb || 20) * (el ? 1.3 : 1)),
       pb: (b.pb || 3) + (el ? 1 : 0)
     });
@@ -413,8 +414,8 @@ function echoAdvance431(R) {
 
 
 function relRandom431(R, n) {
-  const relics = Object.keys(RELICS431).filter(k => !R.rel.includes(k)),
-    r = rand429('rel' + R.seed + R.f + R.rel.length);
+  const relics = Object.keys(RELICS431).filter(k => !R.relics.includes(k)),
+    r = rand429('rel' + R.seed + R.f + R.relics.length);
   for (let i = relics.length - 1; i > 0; i--) {
     const j = Math.floor(r() * (i + 1));
     [relics[i], relics[j]] = [relics[j], relics[i]];
@@ -453,10 +454,10 @@ function echoAfter431(S, rew, win) {
     rew.echo431.fin = { f, m, g };
     return [m, g];
   }
-  if (R.rel.includes('baie')) R.team.forEach(t => t[1] > 0 && (t[1] = Math.min(1, t[1] + 0.15)));
-  const payout = Math.round((type === 'elite' ? 35 : type === 'boss' ? 0 : 15 + R.f * 3) * (R.rel.includes('aimant') ? 1.5 : 1));
-  R.ech += payout;
-  rew.echo431.ech = payout;
+  if (R.relics.includes('baie')) R.team.forEach(t => t[1] > 0 && (t[1] = Math.min(1, t[1] + 0.15)));
+  const payout = Math.round((type === 'elite' ? 35 : type === 'boss' ? 0 : 15 + R.f * 3) * (R.relics.includes('aimant') ? 1.5 : 1));
+  R.echoes += payout;
+  rew.echo431.echoes = payout;
   if (type === 'boss') {
     R.path.push(R.cur);
     const [m, g] = echoEnd431(R, true);
@@ -483,15 +484,15 @@ function echoChoice431(k) {
   if (k === 'autel-ok') {
     hp(-0.2);
     const x = relRandom431(R, 1)[0];
-    if (x) R.rel.push(x);
+    if (x) R.relics.push(x);
     toast(x ? `Relique : ${RELICS431[x][0]}.` : 'L’autel est vide.');
   } else if (k === 'source-pv') hp(0.3);
-  else if (k === 'source-ech') R.ech += 25;
+  else if (k === 'source-ech') R.echoes += 25;
   else if (k === 'passe-pv') R.pv = Math.min(0.5, (R.pv || 0) + 0.1);
-  else if (k === 'passe-ech') R.ech += 30;
+  else if (k === 'passe-ech') R.echoes += 30;
   else if (k === 'pari-ok') {
     if (rand429('pari' + R.seed + R.f)() < 0.5) {
-      R.ech += 60;
+      R.echoes += 60;
       toast('Pile : +60 Échos !');
     } else {
       hp(-0.2);
@@ -499,20 +500,20 @@ function echoChoice431(k) {
     }
   } else if (k.startsWith('rel-')) {
     const x = k.slice(4);
-    if (RELICS431[x] && !R.rel.includes(x)) R.rel.push(x);
+    if (RELICS431[x] && !R.relics.includes(x)) R.relics.push(x);
     R.ev = '';
     queueSave();
     return renderCampPage431();
   } else if (k.startsWith('achat-')) {
     const a = k.slice(6),
       price = { potion: 20, relique: 45, rappel: 60 }[a];
-    if (!price || R.ech < price) return toast('Pas assez d’Échos.');
+    if (!price || R.echoes < price) return toast('Pas assez d’Échos.');
     if (a === 'rappel' && !R.team.some(t => t[1] <= 0)) return toast('Aucun Pokémon à rappeler.');
-    R.ech -= price;
+    R.echoes -= price;
     if (a === 'potion') hp(0.3);
     else if (a === 'relique') {
       const x = relRandom431(R, 1)[0];
-      if (x) R.rel.push(x);
+      if (x) R.relics.push(x);
       toast(x ? `Relique : ${RELICS431[x][0]}.` : 'Plus de relique à vendre.');
     } else if (a === 'rappel') {
       const t = R.team.find(y => y[1] <= 0);
@@ -535,7 +536,7 @@ function gymClean431(a) {
   return {
     id: typeof a.id === 'string' && /^[a-z0-9]{4,12}$/.test(a.id) ? a.id : Math.random().toString(36).slice(2, 10),
     n: String(a.n || 'Arène').replace(/[<>&"]/g, '').slice(0, 22) || 'Arène',
-    au: String(a.au || '').replace(/[<>&"]/g, '').slice(0, 14),
+    author: String(a.author || '').replace(/[<>&"]/g, '').slice(0, 14),
     t: a.t,
     r: typeof a.r === 'string' && RULES431().some(x => x[0] === a.r) ? a.r : '',
     h: a.h === 'nuit' ? 'nuit' : 'jour',
@@ -562,7 +563,7 @@ function gymScene431(a) {
   const b = SCEN[a.t];
   SCEN.perso431 = {
     n: a.n,
-    lvl: `Arène personnalisée${a.au ? ' · ' + a.au : ''}`,
+    lvl: `Arène personnalisée${a.author ? ' · ' + a.author : ''}`,
     lim: a.lim,
     time: a.h,
     bio: b.bio,
@@ -576,8 +577,8 @@ function gymScene431(a) {
     foes: a.f.map((id, i) => [id, RIVAL_POS[i]]),
     catch: false,
     perso431: a.id,
-    sansProgres431: 1,
-    d: `Arène créée${a.au ? ' par ' + a.au : ''}. Ni progression ni capture : 200 ₽ par victoire (3 par jour).`
+    noProgress431: 1,
+    d: `Arène créée${a.author ? ' par ' + a.author : ''}. Ni progression ni capture : 200 ₽ par victoire (3 par jour).`
   };
   OBST.perso431 = OBST[a.t] || {};
 }
@@ -595,7 +596,7 @@ function gymAfter431(S, rew, win) {
 
 
 function gymCode431(a) {
-  const o = { n: a.n, au: PROFILE.name || a.au || '', t: a.t, r: a.r, h: a.h, lim: a.lim, hb: a.hb, f: a.f };
+  const o = { n: a.n, author: PROFILE.name || a.author || '', t: a.t, r: a.r, h: a.h, lim: a.lim, hb: a.hb, f: a.f };
   const b64 = btoa(unescape(encodeURIComponent(JSON.stringify(o))))
     .replace(/\+/g, '-')
     .replace(/\//g, '_')
@@ -612,7 +613,7 @@ function readGym431(txt) {
   if (hash416(m[1]) !== m[2]) return null;
   try {
     const b = m[1].replace(/-/g, '+').replace(/_/g, '/');
-    return gymClean431(JSON.parse(decodeURIComponent(escape(atob(b + '==='.slice((b.length + 3) % 4))))));
+    return gymClean431(migrateKeys(JSON.parse(decodeURIComponent(escape(atob(b + '==='.slice((b.length + 3) % 4)))))));
   } catch (e) {
     return null;
   }
@@ -653,8 +654,8 @@ export function challenges431Boot() {
   const R = echoRun431();
   if (R && R.cur >= 0 && R.map[R.f]) echoScene431(R, R.map[R.f][R.cur]);
   else if (!SCEN.echo431) echoScene431({ seed: 1, f: 0, path: [] }, 'combat');
-  const A = PROFILE.arenes431 || [];
-  gymScene431(A[0] || { id: 'demo', n: 'Arène', au: '', t: 'gue', r: '', h: 'jour', lim: 10, hb: 10, f: ['onix'] });
+  const A = PROFILE.gyms431 || [];
+  gymScene431(A[0] || { id: 'demo', n: 'Arène', author: '', t: 'gue', r: '', h: 'jour', lim: 10, hb: 10, f: ['onix'] });
 }
 
 /* riddles built and verified offline with the engine (gen_enig431.js): [terrain, allies [id, column, row, diamonds], opponents [id, column, row, HP], first ally of the solution] */
@@ -731,7 +732,7 @@ PUZZLE_CUR431 = null;
 
 
 HOOKS.creation.push((S, opt, D0) => {
-  if (D0 && (D0.sansProgres431 || D0.hebdo429)) S.fixe431 = 1; // no companion nor Daycare
+  if (D0 && (D0.noProgress431 || D0.hebdo429)) S.fixed431 = 1; // no companion nor Daycare
 });
 
 
@@ -778,7 +779,7 @@ $('#bSvg').addEventListener(
 );
 
 
-HOOKS.progres.push((S, rew, win) => {
+HOOKS.progress.push((S, rew, win) => {
   if (!S.fog431) return null;
   rew.fog431 = 1;
   if (!win) return null;
@@ -788,14 +789,14 @@ HOOKS.progres.push((S, rew, win) => {
 });
 
 
-HOOKS.resultat.push(r => (r.fog431 ? `<div class="res-l"><h4>Brouillard de guerre</h4><div class="rl"><span>${r.fogm431 ? 'Victoire à l’aveugle' : 'Combat dans le brouillard'}</span><b>${r.fogm431 ? '+' + fmt(r.fogm431) + ' ₽' : ''}</b></div></div>` : ''));
+HOOKS.battleResult.push(r => (r.fog431 ? `<div class="res-l"><h4>Brouillard de guerre</h4><div class="rl"><span>${r.fogm431 ? 'Victoire à l’aveugle' : 'Combat dans le brouillard'}</span><b>${r.fogm431 ? '+' + fmt(r.fogm431) + ' ₽' : ''}</b></div></div>` : ''));
 
 
-HOOKS.resultat.push(r => {
+HOOKS.battleResult.push(r => {
   const e = r.enig431;
   if (!e) return '';
   const et = n => '★'.repeat(n) + '☆'.repeat(3 - n);
-  return `<div class="res-l"><h4>Énigme n° ${e.i + 1}</h4><div class="rl"><span>${e.win ? `Résolue ${et(e.st)} · ${e.st === 3 ? 'du premier coup, sans Voix' : e.st === 2 ? (e.essai === 1 ? 'du premier coup' : 'sans dépenser de Voix') : 'réussie'}${e.jour ? ' · énigme du jour : +3 Éclats' : ''}` : `Ratée (essai ${e.essai}). Changez l’ordre de vos Pokémon et visez les mêmes cibles.`}</span><b>${e.win ? et(e.st) : ''}</b></div></div>`;
+  return `<div class="res-l"><h4>Énigme n° ${e.i + 1}</h4><div class="rl"><span>${e.win ? `Résolue ${et(e.st)} · ${e.st === 3 ? 'du premier coup, sans Voix' : e.st === 2 ? (e.attempt === 1 ? 'du premier coup' : 'sans dépenser de Voix') : 'réussie'}${e.jour ? ' · énigme du jour : +3 Éclats' : ''}` : `Ratée (essai ${e.attempt}). Changez l’ordre de vos Pokémon et visez les mêmes cibles.`}</span><b>${e.win ? et(e.st) : ''}</b></div></div>`;
 });
 
 
@@ -821,9 +822,9 @@ document.addEventListener('click', e => {
 });
 
 
-HOOKS.progres.push((S, rew) => {
+HOOKS.progress.push((S, rew) => {
   const D = SCEN[S.sc] || {};
-  if (D.tuto || D.pret429) return null;
+  if (D.tuto || D.ready429) return null;
   const M = (PROFILE.mait431 = PROFILE.mait431 || {}),
     readyList = [];
   S.units
@@ -838,11 +839,11 @@ HOOKS.progres.push((S, rew) => {
 });
 
 
-HOOKS.resultat.push(r => (r.mait431 ? `<div class="res-l"><h4>Maîtrise</h4><div class="rl"><span>${r.mait431.map(b => BY[b].n).join(', ')} : un bonus de maîtrise est à choisir (Camp › Maîtrise).</span><b>★</b></div></div>` : ''));
+HOOKS.battleResult.push(r => (r.mait431 ? `<div class="res-l"><h4>Maîtrise</h4><div class="rl"><span>${r.mait431.map(b => BY[b].n).join(', ')} : un bonus de maîtrise est à choisir (Camp › Maîtrise).</span><b>★</b></div></div>` : ''));
 
 
 HOOKS.combat.push(S => {
-  if (S.fixe431 && S.sc !== 'echo431') return;
+  if (S.fixed431 && S.sc !== 'echo431') return;
   const M = PROFILE.mait431 || {};
   S.units
     .filter(u => u.side === 'a')
@@ -883,7 +884,7 @@ HOOKS.combat.push(S => {
   const R = echoRun431();
   if (!R) return;
   S.echo431 = 1;
-  S.rel431 = R.rel.slice();
+  S.relics431 = R.relics.slice();
   const alive = R.team.filter(t => t[1] > 0),
     al = S.units.filter(u => u.side === 'a');
   al.forEach((u, i) => {
@@ -891,23 +892,23 @@ HOOKS.combat.push(S => {
     if (!t) return;
     if (R.pv) u.mhp = Math.round(u.mhp * (1 + R.pv));
     u.hp = Math.max(1, Math.round(u.mhp * t[1]));
-    if (S.rel431.includes('diapason')) u.en = Math.min(EMAX, (u.en || 0) + 1);
-    if (S.rel431.includes('talisman')) u.ferm = true;
+    if (S.relics431.includes('diapason')) u.en = Math.min(EMAX, (u.en || 0) + 1);
+    if (S.relics431.includes('talisman')) u.sturdy = true;
   });
-  if (S.rel431.includes('cloche')) {
+  if (S.relics431.includes('cloche')) {
     S.vmax += 1;
-    S.voix += 1;
+    S.voice += 1;
   }
 });
 
 
-HOOKS.resultat.push(r => {
+HOOKS.battleResult.push(r => {
   const e = r.echo431;
   if (!e) return '';
   if (e.fin) {
     return `<div class="res-l"><h4>Écho profond</h4><div class="rl"><span>${e.fin.gagne ? 'Le gardien est vaincu : expédition réussie !' : `Expédition terminée à l’étage ${e.fin.f + (e.fin.gagne ? 0 : 1)}.`} Récompense : ${fmt(e.fin.m)} ₽ · ${e.fin.g} Éclats.</span><b>${e.fin.gagne ? '★' : ''}</b></div></div>`;
   }
-  return `<div class="res-l"><h4>Écho profond</h4><div class="rl"><span>Étage ${e.f} franchi${e.ech ? ` · +${e.ech} Échos` : ''}${e.type === 'elite' ? ' · une relique vous attend au Camp' : ''}. Vos PV sont conservés.</span><b>${e.f} / 8</b></div></div>`;
+  return `<div class="res-l"><h4>Écho profond</h4><div class="rl"><span>Étage ${e.f} franchi${e.echoes ? ` · +${e.echoes} Échos` : ''}${e.type === 'elite' ? ' · une relique vous attend au Camp' : ''}. Vos PV sont conservés.</span><b>${e.f} / 8</b></div></div>`;
 });
 
 
@@ -953,7 +954,7 @@ document.addEventListener('click', e => {
 });
 
 
-HOOKS.resultat.push(r => (r.perso431 ? `<div class="res-l"><h4>Arène personnalisée</h4><div class="rl"><span>${r.perso431.win ? (r.perso431.m ? 'Victoire récompensée' : 'Victoire (déjà 3 récompenses aujourd’hui)') : 'Défaite'}</span><b>${r.perso431.m ? '+200 ₽' : ''}</b></div></div>` : ''));
+HOOKS.battleResult.push(r => (r.perso431 ? `<div class="res-l"><h4>Arène personnalisée</h4><div class="rl"><span>${r.perso431.win ? (r.perso431.m ? 'Victoire récompensée' : 'Victoire (déjà 3 récompenses aujourd’hui)') : 'Défaite'}</span><b>${r.perso431.m ? '+200 ₽' : ''}</b></div></div>` : ''));
 
 
 ARN_ED431 = null;
@@ -982,14 +983,14 @@ document.addEventListener('click', e => {
   if (!b) return;
   const a = b.dataset.arn431,
     i = +b.dataset.i,
-    A = (PROFILE.arenes431 = PROFILE.arenes431 || []);
+    A = (PROFILE.gyms431 = PROFILE.gyms431 || []);
   if (a === 'new') {
     if (A.length >= 12) return toast('12 arènes au plus : supprimez-en une.');
     ARN_ED431 = { i: -1, a: { n: 'Mon arène', t: 'gue', r: '', h: 'jour', lim: 10, hb: 10, f: ['onix', 'racaillou', '', '', ''] } };
   } else if (a === 'edit' && A[i]) ARN_ED431 = { i, a: Object.assign({}, A[i], { f: [...A[i].f, '', '', '', '', ''].slice(0, 5) }) };
   else if (a === 'annuler') ARN_ED431 = null;
   else if (a === 'save' && ARN_ED431) {
-    const c = gymClean431(Object.assign({}, ARN_ED431.a, { f: ARN_ED431.a.f.filter(Boolean), au: PROFILE.name || '' }));
+    const c = gymClean431(Object.assign({}, ARN_ED431.a, { f: ARN_ED431.a.f.filter(Boolean), author: PROFILE.name || '' }));
     if (!c) return toast('Choisissez au moins un adversaire.');
     if (ARN_ED431.i >= 0) A[ARN_ED431.i] = Object.assign(c, { id: A[ARN_ED431.i].id });
     else A.unshift(c);

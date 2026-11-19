@@ -119,17 +119,17 @@ export function __init() {
     hostSet({ bg477: bgFill() });
     // .fondu477 (old backdrop fading out): rendered by React (Board.jsx)
     if (anim429() && previous && previous !== 'none') {
-      const n = ((getHost().fondu || {}).n || 0) + 1,
+      const n = ((getHost().fade || {}).n || 0) + 1,
         fd = { n, bg: previous, va: false };
-      hostSet({ fondu: fd });
+      hostSet({ fade: fd });
       requestAnimationFrame(() =>
         requestAnimationFrame(() => {
-          if (getHost().fondu === fd) hostSet({ fondu: { ...fd, va: true } });
+          if (getHost().fade === fd) hostSet({ fade: { ...fd, va: true } });
         })
       );
       setTimeout(() => {
-        const f = getHost().fondu;
-        if (f && f.n === n) hostSet({ fondu: null });
+        const f = getHost().fade;
+        if (f && f.n === n) hostSet({ fade: null });
       }, 2200);
     }
     tint(h === 'nuit');
@@ -198,7 +198,7 @@ export function __init() {
     ambiance();
     water();
   };
-  HOOKS.avantPlateau.push(() => {
+  HOOKS.beforeBoard.push(() => {
     try {
       tune();
     } catch (e) {
@@ -347,12 +347,12 @@ export function __init() {
       keys = Object.keys(B.tiles).filter(k => B.tiles[k].w && !B.tiles[k].rock),
       id = keys.join(',');
     if (E && !freshNode) {
-      if (E.id !== id) boardSet({ eau: { ...E, id, cles: keys } }, 'defs', 'eau');
+      if (E.id !== id) boardSet({ eau: { ...E, id, keyList: keys } }, 'defs', 'eau');
       return;
     }
-    boardSet({ eau: { id, cles: keys, nuit: hourOf(B) === 'nuit', fixe: !anim429() } }, 'defs', 'eau');
+    boardSet({ eau: { id, keyList: keys, nuit: hourOf(B) === 'nuit', fixed: !anim429() } }, 'defs', 'eau');
   };
-  HOOKS.plateauRendu.push(() => {
+  HOOKS.boardRendered.push(() => {
     if (TILT.on && L.h477 && L.h477 !== hourOf(B)) changeTime();
     water();
   });
@@ -370,7 +370,7 @@ export function __init() {
   }
 
   /* ---------- tokens: standing, smaller toward the back ---------- */
-  HOOKS.jeton.push(u => {
+  HOOKS.token.push(u => {
     const T = TILT.on && L.u[u.uid];
     if (T) {
       const k = uk(u),
@@ -398,7 +398,7 @@ export function __init() {
       unitsDirty();
     }
   };
-  HOOKS.jeton.push(u => {
+  HOOKS.token.push(u => {
     const T = TILT.on && L.u[u.uid];
     if (T) topName(T);
   });
@@ -431,7 +431,7 @@ export function __init() {
     renderParams();
     rebuildAll();
   });
-  window.__gfx477 = { TILT, OK, riche: richText, rebatir: rebuildAll };
+  window.__gfx477 = { TILT, OK, riche: richText, rebuild: rebuildAll };
 })();
 
 
@@ -441,28 +441,28 @@ export function __init() {
    by itself once everyone is done: no more « Fin du tour » (End turn) to press during your phase.
    u.rst478 / u.fin478: round number in which the Pokémon stayed in place / finished. */
 (() => {
-  const active = () => !!(B && !B.over && B.phase === 'player' && !B.dep430 && !ui.cine);
+  const active = () => !!(B && !B.over && B.phase === 'player' && !B.dep430 && !ui.cutscene);
   // riddle: « Fin du tour » (End turn) stays visible, it is the button to give up
   const guide = () => active() && !ui.busy && B.sc !== 'enigme431';
   /** The Pokémon the active player is currently commanding. */
   function toPlay(S) {
-    if (S.ordre === 'vitesse') {
+    if (S.order === 'vitesse') {
       const c = currentActor(S);
       return c && c.side === 'a' ? [c] : [];
     }
     return S.units.filter(u => u.side === 'a' && !u.ko && (!S.coop || player418(u) === S.coop));
   }
   const hitAndRun = u => !!(u.hr && !u.moved);
-  const retrigger = S => S.voix >= 2 && !S.relance;
+  const retrigger = S => S.voice >= 2 && !S.retrigger;
   /** deplacer | agir | extra | fini */
   function step(S, u) {
     if (!u || u.ko || u.sn || u.fin478 === S.round) return 'fini';
-    if (!u.acted) return u.moved || u.rst478 === S.round ? 'agir' : 'deplacer';
+    if (!u.acted) return u.moved || u.restart478 === S.round ? 'agir' : 'deplacer';
     return hitAndRun(u) || retrigger(S) ? 'extra' : 'fini';
   }
   const remaining = S => toPlay(S).filter(u => step(S, u) !== 'fini');
   // panel (current step and skip button) and bottom bar: rendered by React (Panel.jsx, Foot.jsx)
-  flow478 = { actif: active, guide, aJouer: toPlay, repli: hitAndRun, relance: retrigger, etape: step, restants: remaining };
+  flow478 = { active, guide, toPlay, repli: hitAndRun, retrigger, stepOf: step, remaining };
 
   /* ---------- « Rester ici », « Passer l'action », « Terminer » buttons ---------- */
   $('#bPanel').addEventListener('click', e => {
@@ -470,7 +470,7 @@ export function __init() {
     if (!b || !B || ui.busy || B.over) return;
     const u = ui.sel && byUid(B, ui.sel);
     if (!u || u.ko) return;
-    if (b.dataset.vx === 'rester478') u.rst478 = B.round;
+    if (b.dataset.vx === 'rester478') u.restart478 = B.round;
     else {
       u.fin478 = B.round;
       ui.undo = null; // the choice is made: no going back on the move
@@ -484,7 +484,7 @@ export function __init() {
   /* ---------- after an attack: stay on the Pokémon if it has a bonus left ---------- */
   HOOKS.action.push(id => {
     const u = B && byUid(B, id);
-    if (u && active() && !ui.busy && B.ordre !== 'vitesse' && step(B, u) === 'extra' && ui.sel !== id) {
+    if (u && active() && !ui.busy && B.order !== 'vitesse' && step(B, u) === 'extra' && ui.sel !== id) {
       ui.sel = id;
       renderAll();
     }
@@ -514,14 +514,14 @@ export function __init() {
   /* ---------- automatic end of round ---------- */
   let T478 = 0;
   const key478 = () =>
-    B ? [B.round, B.coop || 0, B.duel433 ? B.duel433.j : 0, B.ordre === 'vitesse' ? (currentActor(B) || {}).uid : ''].join(':') : '';
+    B ? [B.round, B.coop || 0, B.duel433 ? B.duel433.j : 0, B.order === 'vitesse' ? (currentActor(B) || {}).uid : ''].join(':') : '';
   const isReady478 = () =>
     active() &&
     !ui.busy &&
     !ui.mode &&
     !remaining(B).length &&
     $('#evoPick').hidden &&
-    (B.ordre !== 'vitesse' || ((currentActor(B) || {}).side === 'a'));
+    (B.order !== 'vitesse' || ((currentActor(B) || {}).side === 'a'));
   function schedule478() {
     if (T478 || !isReady478()) return;
     const S = B,
@@ -529,7 +529,7 @@ export function __init() {
     T478 = setTimeout(() => {
       T478 = 0;
       if (B !== S || key478() !== k || !isReady478()) return;
-      if (!B.coop && !B.duel433 && B.ordre !== 'vitesse' && B.sc !== 'enigme431') toast('Manche terminée : au tour des adversaires.');
+      if (!B.coop && !B.duel433 && B.order !== 'vitesse' && B.sc !== 'enigme431') toast('Manche terminée : au tour des adversaires.');
       // via the button: modes that intercept it (riddle…) keep their own rule. Click without
       // bubbling: otherwise the document's « Passer » (Skip) listener would immediately speed up the opponent's turn.
       $('#bEnd').dispatchEvent(new MouseEvent('click', { bubbles: false, cancelable: true }));
@@ -556,10 +556,10 @@ export function __init() {
     true
   );
 
-  HOOKS.avantRendu.push(() => {
+  HOOKS.beforeRender.push(() => {
     if (B) following478();
   });
-  HOOKS.rendu.push(() => {
+  HOOKS.rendered.push(() => {
     if (B) {
       footPos478();
       schedule478();
@@ -585,6 +585,6 @@ export function __init() {
     NEWS416.splice(8);
   } catch { /* Best effort: failure here is non-fatal. */ }
 
-  window.__flow478 = { etape: step, restants: remaining, aJouer: toPlay, jeu: () => ({ B, ui }) };
+  window.__flow478 = { stepOf: step, remaining, toPlay, jeu: () => ({ B, ui }) };
 })();
 }

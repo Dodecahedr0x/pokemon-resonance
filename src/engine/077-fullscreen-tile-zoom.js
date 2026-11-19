@@ -102,7 +102,7 @@ function dangers444(k) {
     }
     const an = arenaNext(B);
     if (an && an.tiles.includes(k)) o.push(an.txt);
-    if (B.vivant && fireHazard(B, k)) o.push('L’herbe peut s’embraser ici.');
+    if (B.livingBoard && fireHazard(B, k)) o.push('L’herbe peut s’embraser ici.');
   } catch { /* Best effort: failure here is non-fatal. */ }
   return o;
 }
@@ -155,7 +155,7 @@ function pokemon444(v) {
     badge: v.badge && !v.ko ? v.badge : null,
     stc: STC[v.badge] || 'x',
     it,
-    peut: canDo,
+    canAct: canDo,
     uid: v.uid
   };
 }
@@ -212,7 +212,7 @@ function sheet444() {
   } catch { /* Best effort: failure here is non-fatal. */ }
   F.c = {
     sw: (TER444.find(x => x[0] !== 'fog' && x[0] !== 'trap' && x[0] !== 'mark' && x[3](t)) || [0, 0, '#3a4a5a'])[2],
-    nom: tileName444(k),
+    displayName: tileName444(k),
     terrain: terrainName444(t),
     seg,
     rx,
@@ -220,7 +220,7 @@ function sheet444() {
     cx: context444(k),
     u: v ? pokemon444(v) : null,
     leg: legend444(),
-    loupe: !!MAGNIFIER444
+    magnifier: !!MAGNIFIER444
   };
   F.n = (F.n || 0) + 1;
   F.made = true;
@@ -248,8 +248,8 @@ function place444(withoutRender) {
   }
   const top = atTop ? 'calc(8px + env(safe-area-inset-top, 0px))' : 'auto',
     bottom = atTop ? 'auto' : (isFixed ? Math.max(8, innerHeight - bottomEdge + 8) : 18) + 'px';
-  if (F.haut === atTop && F.top === top && F.bottom === bottom) return;
-  F.haut = atTop;
+  if (F.isTop === atTop && F.top === top && F.bottom === bottom) return;
+  F.isTop = atTop;
   F.top = top;
   F.bottom = bottom;
   if (!withoutRender) refreshBattle('ti444');
@@ -449,24 +449,24 @@ const rangerLens444 = () => {
 };
 
 
-HOOKS.rendu.push(() => {
+HOOKS.rendered.push(() => {
   bar444();
   sheet444();
 });
 
 
-HOOKS.avantLancement.push(rangerLens444);
+HOOKS.beforeLaunch.push(rangerLens444);
 
 
-HOOKS.lancement.push(isNew => {
+HOOKS.launch.push(isNew => {
   if (isNew && PREF.fs444) fsSet444(true, false); // tapping « Lancer » (Start) allows fullscreen
 });
 
 
-HOOKS.avantFinCombat.push(rangerLens444);
+HOOKS.beforeBattleEnd.push(rangerLens444);
 
 
-HOOKS.finCombat.push(sheet444);
+HOOKS.battleEnd.push(sheet444);
 
 
 addEventListener('resize', () => setTimeout(place444, 60));

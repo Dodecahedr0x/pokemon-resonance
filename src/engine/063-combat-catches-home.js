@@ -36,23 +36,23 @@ import { refreshBattle } from '../screens/combat/battle/battleStore.js';
       time of day; the companion waits there, a hug with one gesture.
    ===================================================================== */
 export function V428_0() {
-  return { dipl428: [] };
+  return { diplomas428: [] };
 }
 
 
 export function v428Clean(p) {
-  const d = p && Array.isArray(p.dipl428) ? p.dipl428.filter(r => [1, 2, 3].includes(r)) : [];
-  return { dipl428: [...new Set(d)] };
+  const d = p && Array.isArray(p.diplomas428) ? p.diplomas428.filter(r => [1, 2, 3].includes(r)) : [];
+  return { diplomas428: [...new Set(d)] };
 }
 
  // ₽, Shards
 function diploma428() {
-  PROFILE.dipl428 = PROFILE.dipl428 || [];
+  PROFILE.diplomas428 = PROFILE.diplomas428 || [];
   const nv = [];
   [1, 2, 3].forEach(r => {
     const c = familyCapt428(r);
-    if (c.t && c.n >= c.t && !PROFILE.dipl428.includes(r)) {
-      PROFILE.dipl428.push(r);
+    if (c.t && c.n >= c.t && !PROFILE.diplomas428.includes(r)) {
+      PROFILE.diplomas428.push(r);
       nv.push(r);
     }
   });
@@ -110,7 +110,7 @@ export function hero428(g) {
     m,
     comp,
     sh: comp && isShinyOwned(m.base),
-    coeurs: comp ? hearts417(PROFILE.comp.aff || 0) : 0
+    hearts: comp ? hearts417(PROFILE.comp.aff || 0) : 0
   };
 }
 
@@ -132,7 +132,7 @@ export const dl428 = (rm, fast, slow) => (RM || ui.turbo428 ? rm : PREF.fast ? f
 
 
 export const enemyTurn428 = () =>
-  !!(B && !B.over && ui.busy && !ui.cine && (B.phase === 'enemy' || (B.ordre === 'vitesse' && ui.act && (byUid(B, ui.act) || {}).side === 'e')));
+  !!(B && !B.over && ui.busy && !ui.cutscene && (B.phase === 'enemy' || (B.order === 'vitesse' && ui.act && (byUid(B, ui.act) || {}).side === 'e')));
 
 
 /* ---------- 3. living home ---------- */
@@ -142,17 +142,17 @@ const TODN428 = { matin: 'Matin', jour: 'Jour', nuit: 'Nuit' };
 export function __init() {
 
 
-HOOKS.progres.push((S, rew) => {
+HOOKS.progress.push((S, rew) => {
   const nv = diploma428();
   if (!nv.length) return null;
-  rew.dipl428 = nv;
+  rew.diplomas428 = nv;
   return rewardDiploma428(nv);
 });
 
 
-HOOKS.resultat.push(r =>
-  r.dipl428
-    ? `<div class="res-l"><h4>Pokédex régional</h4>${r.dipl428
+HOOKS.battleResult.push(r =>
+  r.diplomas428
+    ? `<div class="res-l"><h4>Pokédex régional</h4>${r.diplomas428
         .map(x => `<div class="rl"><span>${REGION_NAMES421[x]} : les ${familyCapt428(x).t} familles sont capturées !</span><b>+${DIPL428[x][0]} ₽ · +${DIPL428[x][1]} Éclats</b></div>`)
         .join('')}</div>`
     : ''

@@ -24,7 +24,7 @@ export function DexCount() {
       <span className="cnt428">
         {[1, 2, 3].map(r => {
           const c = familyCapt428(r),
-            ok = (PROFILE.dipl428 || []).includes(r);
+            ok = (PROFILE.diplomas428 || []).includes(r);
           return (
             <span className={ok ? 'ok' : ''} key={r}>
               {`${REGION_NAMES421[r]} `}

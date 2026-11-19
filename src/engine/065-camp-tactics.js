@@ -63,18 +63,18 @@ export function v430Clean(p) {
         return r;
       },
       cat = {};
-    if (J.cat && typeof J.cat === 'object') Object.keys(J.cat).forEach(k => Array.isArray(J.cat[k]) && /^[a-z]{3,12}$/.test(k) && (cat[k] = [n(J.cat[k][0]), n(J.cat[k][1])]));
+    if (J.category && typeof J.category === 'object') Object.keys(J.category).forEach(k => Array.isArray(J.category[k]) && /^[a-z]{3,12}$/.test(k) && (cat[k] = [n(J.category[k][0]), n(J.category[k][1])]));
     o.journal430 = {
       n: n(J.n),
       w: n(J.w),
-      serie: n(J.serie),
+      runStreak: n(J.runStreak),
       best: n(J.best),
       dealt: n(J.dealt),
       taken: n(J.taken),
       ko: n(J.ko),
       mvp: map(J.mvp, 200),
       use: map(J.use, 200),
-      cat,
+      category: cat,
       last: Array.isArray(J.last)
         ? J.last
             .filter(x => Array.isArray(x) && typeof x[0] === 'string')
@@ -88,7 +88,7 @@ export function v430Clean(p) {
 
 
 export function log0430() {
-  return { n: 0, w: 0, serie: 0, best: 0, dealt: 0, taken: 0, ko: 0, mvp: {}, use: {}, cat: {}, last: [] };
+  return { n: 0, w: 0, runStreak: 0, best: 0, dealt: 0, taken: 0, ko: 0, mvp: {}, use: {}, category: {}, last: [] };
 }
 
 
@@ -117,7 +117,7 @@ function freeSlot430() {
 export function confirm430(heading, text, next) {
   if (!gameInProgress430()) return next();
   // #conf430: rendered by React on first call (src/screens/overlays/Conf430.jsx); hidden stays set here
-  paintOverlay('conf430', { titre: heading, texte: text, combats: PROFILE.battles || 0, badges: BADGES.length, sl: freeSlot430() });
+  paintOverlay('conf430', { titre: heading, bodyText: text, combats: PROFILE.battles || 0, badges: BADGES.length, sl: freeSlot430() });
   const el = document.getElementById('conf430');
   el.hidden = false;
   confirm430.suite = next;
@@ -188,11 +188,11 @@ function cheat430(k) {
   } else if (k === 'badges') {
     __set_BADGES([0, 1, 2, 3, 4, 5, 6, 7]);
     Object.assign(PROFILE, { elite: 5, tuto: 1, rival: 4, dissonance: 4, jdis: 4, jchamp: 1, hchamp: 1, johto: [0, 1, 2, 3, 4, 5, 6, 7], hoenn: [0, 1, 2, 3, 4, 5, 6, 7] });
-    PROFILE.riv429 = ['rv5', 'rv6', 'hd429'];
+    PROFILE.rivals429 = ['rv5', 'rv6', 'hd429'];
     m = 'Kanto, Johto et Hoenn débloqués.';
   } else if (k === 'legendes') {
     PROFILE.legends = LEGS.map(leg => leg.id);
-    PROFILE.dipl428 = [1, 2, 3];
+    PROFILE.diplomas428 = [1, 2, 3];
     PROFILE.hchamp = 1;
     m = 'Quêtes légendaires terminées : Quêtes › Légendes.';
   } else if (k === 'fatigue') {
@@ -228,7 +228,7 @@ function cheat430(k) {
 
 
 function skyState430(S) {
-  return { ph: S.cyc ? S.cyc.ph : S.time === 'nuit' ? 'nuit' : 'jour', wx: S.wx && S.wx.n > 0 ? S.wx.k : '' };
+  return { ph: S.cycle ? S.cycle.ph : S.time === 'nuit' ? 'nuit' : 'jour', wx: S.wx && S.wx.n > 0 ? S.wx.k : '' };
 }
 
 
@@ -250,7 +250,7 @@ function sky430() {
     co,
     ti: LIVING_NAME[E.ph] || '',
     w: w ? [w[0], w[1], WXN[E.wx]] : null,
-    nom: (LIVING_NAME[E.ph] || 'Jour') + (w ? ' · ' + WXN[E.wx] + ' ' + B.wx.n : ''),
+    displayName: (LIVING_NAME[E.ph] || 'Jour') + (w ? ' · ' + WXN[E.wx] + ' ' + B.wx.n : ''),
     vent: !!B.vent
   };
   if (JSON.stringify(sky) !== JSON.stringify(getHost().ciel)) hostSet({ ciel: sky });
@@ -269,14 +269,14 @@ export function announce430(ic, heading, text) {
   const bd = document.getElementById('bBoard');
   if (!bd || !ic) return;
   // #cielBan430: rendered by React (Board.jsx); the « on » class is removed then set again to restart the animation
-  const b = { ic: [ic[0], ic[1]], titre: heading, texte: text, on: false };
-  hostSet({ cielBan: b });
+  const b = { ic: [ic[0], ic[1]], titre: heading, bodyText: text, on: false };
+  hostSet({ skyBanner: b });
   void bd.offsetWidth;
-  hostSet({ cielBan: { ...b, on: true } });
+  hostSet({ skyBanner: { ...b, on: true } });
   clearTimeout(announce430.t);
   announce430.t = setTimeout(() => {
-    const c = getHost().cielBan;
-    if (c) hostSet({ cielBan: { ...c, on: false } });
+    const c = getHost().skyBanner;
+    if (c) hostSet({ skyBanner: { ...c, on: false } });
   }, PREF.fast || ui.turbo428 ? 1300 : 2400);
 }
 
@@ -285,7 +285,7 @@ export function announce430(ic, heading, text) {
 function large430(D) {
   return (
     !D.tuto &&
-    !!(D.gym != null || D.elite || D.champ || D.rival || D.rival429 || D.johto != null || D.hoenn != null || D.jfinal || D.hfinal || D.legend || D.cap429 || D.jdis || D.dissonance || D.colosse || D.hebdo429 || D.ami || D.lac || D.tower)
+    !!(D.gym != null || D.elite || D.champ || D.rival || D.rival429 || D.johto != null || D.hoenn != null || D.jfinal || D.hfinal || D.legend || D.cap429 || D.jdis || D.dissonance || D.colossus || D.hebdo429 || D.ami || D.lac || D.tower)
   );
 }
 
@@ -386,12 +386,12 @@ export function jDmg430(S, v, real, o) {
   if (!S.stats) return;
   const J = S.stats.j430 || (S.stats.j430 = { d: {}, t: {}, k: {} });
   J.t[v.uid] = (J.t[v.uid] || 0) + real;
-  const a = S.acteur430 && byUid(S, S.acteur430);
+  const a = S.actor430 && byUid(S, S.actor430);
   if (a && a.side !== v.side && !(o && o.ind)) {
     J.d[a.uid] = (J.d[a.uid] || 0) + real;
     if (v.hp <= 0) J.k[a.uid] = (J.k[a.uid] || 0) + 1;
   }
-  hook('degats', S, v, real, o);
+  hook('damage', S, v, real, o);
 }
 
 
@@ -447,7 +447,7 @@ export const DOCTRINES430 = {
   butin: { n: 'Butin', d: '+30 % de Pokédollars en cas de victoire.', c: 'Vos Pokémon infligent −10 % de dégâts.' }
 };
 
-const CATN430 = { arenes: 'Arènes', ligue: 'Ligue', rivaux: 'Rivaux', dissonance: 'Dissonance', legendes: 'Légendes', defis: 'Défis', sauvages: 'Sauvages', entrainement: 'Entraînement' };
+const CATN430 = { arenes: 'Arènes', ligue: 'Ligue', rivaux: 'Rivaux', dissonance: 'Dissonance', legendes: 'Légendes', challenges: 'Défis', sauvages: 'Sauvages', entrainement: 'Entraînement' };
 
 // Startup statements, run in their original order (see index.js).
 export function __init() {
@@ -478,7 +478,7 @@ document.addEventListener('click', e => {
     const a = document.getElementById('v4Amis');
     if (a && a.scrollIntoView) a.scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'start' });
   } else if (k === 'hebdo') {
-    V4.qTab = 'event';
+    V4.questTab = 'event';
     go('quetes');
     renderQuests();
   }
@@ -579,7 +579,7 @@ document.addEventListener('keydown', e => {
 HOOKS.combat.push((S, opt, D0) => {
   D0 = D0 || SCEN[S.sc] || {};
   const pr = PREF.dep430 || 'grands';
-  if (pr === 'jamais' || D0.tuto || D0.enigme431 != null || D0.duel433 || S.coop || S.ordre === 'vitesse') return;
+  if (pr === 'jamais' || D0.tuto || D0.enigme431 != null || D0.duel433 || S.coop || S.order === 'vitesse') return;
   if (pr === 'grands' && !large430(D0)) return;
   if (AUTO && !window.__dep430) return;
   S.dep430 = 1;
@@ -634,7 +634,7 @@ HOOKS.combat.push((S, opt) => {
     al.forEach(u => (u.en = Math.min(EMAX, (u.en || 0) + 1)));
     if (S.vmax > 1) {
       S.vmax -= 1;
-      S.voix = Math.min(S.voix, S.vmax);
+      S.voice = Math.min(S.voice, S.vmax);
     } else {
       al.forEach(u => {
         u.mhp = Math.max(1, Math.round(u.mhp * 0.9));
@@ -643,7 +643,7 @@ HOOKS.combat.push((S, opt) => {
     }
   } else if (d === 'commandement') {
     S.vmax += 1;
-    S.voix += 1;
+    S.voice += 1;
     al.forEach(u => {
       u.mhp = Math.max(1, Math.round(u.mhp * 0.9));
       u.hp = Math.min(u.hp, u.mhp);
@@ -652,18 +652,18 @@ HOOKS.combat.push((S, opt) => {
 });
 
 
-HOOKS.progres.push((S, rew, win) => {
+HOOKS.progress.push((S, rew, win) => {
   if (!S.doc430) return null;
   rew.doc430 = S.doc430;
   if (!win || S.doc430 !== 'butin') return null;
   const m = Math.round(((rew.money || 0) * 0.3) / 10) * 10;
-  rew.butin430 = m;
+  rew.loot430 = m;
   return m ? [m, 0] : null;
 });
 
 
-HOOKS.resultat.push(r =>
-  r.doc430 && DOCTRINES430[r.doc430] ? `<div class="res-l"><h4>Doctrine</h4><div class="rl"><span>${DOCTRINES430[r.doc430].n}${r.butin430 ? ' : butin de la victoire' : ''}</span><b>${r.butin430 ? '+' + fmt(r.butin430) + ' ₽' : ''}</b></div></div>` : ''
+HOOKS.battleResult.push(r =>
+  r.doc430 && DOCTRINES430[r.doc430] ? `<div class="res-l"><h4>Doctrine</h4><div class="rl"><span>${DOCTRINES430[r.doc430].n}${r.loot430 ? ' : butin de la victoire' : ''}</span><b>${r.loot430 ? '+' + fmt(r.loot430) + ' ₽' : ''}</b></div></div>` : ''
 );
 
 
@@ -676,7 +676,7 @@ document.addEventListener('click', e => {
 });
 
 
-HOOKS.progres.push((S, rew, win) => {
+HOOKS.progress.push((S, rew, win) => {
   const D = SCEN[S.sc] || {};
   if (D.tuto) return null;
   const J0 = S.stats.j430 || { d: {}, t: {}, k: {} },
@@ -690,9 +690,9 @@ HOOKS.progres.push((S, rew, win) => {
   J.n++;
   if (win) {
     J.w++;
-    J.serie++;
-    J.best = Math.max(J.best, J.serie);
-  } else J.serie = 0;
+    J.runStreak++;
+    J.best = Math.max(J.best, J.runStreak);
+  } else J.runStreak = 0;
   rows.forEach(r => {
     J.dealt += r.d;
     J.taken += r.t;
@@ -701,15 +701,15 @@ HOOKS.progres.push((S, rew, win) => {
   });
   if (mvp && mvp.d > 0 && BY[mvp.sp]) J.mvp[mvp.sp] = (J.mvp[mvp.sp] || 0) + 1;
   const c = cat430(S.sc, D);
-  J.cat[c] = J.cat[c] || [0, 0];
-  J.cat[c][win ? 0 : 1]++;
+  J.category[c] = J.category[c] || [0, 0];
+  J.category[c][win ? 0 : 1]++;
   J.last.push([(SCEN[S.sc] && SCEN[S.sc].n) || S.sc, win ? 1 : 0, S.rank || '', S.round || 0, mvp && mvp.d > 0 ? mvp.sp : '']);
   if (J.last.length > 10) J.last = J.last.slice(-10);
   return null;
 });
 
 
-HOOKS.resultat.push(r => {
+HOOKS.battleResult.push(r => {
   const j = r.j430;
   if (!j || !j.rows.length) return '';
   const mx = Math.max(1, ...j.rows.map(x => x.d));

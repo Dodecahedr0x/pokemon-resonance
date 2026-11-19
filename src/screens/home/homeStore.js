@@ -7,7 +7,7 @@ export const [refreshHome, useHomeVersion] = version();
 
 // Route (#route): state pushed by the engine (time of day, season, rare-encounter
 // banner, route name). Rendered from the start: the engine attaches its listeners there.
-const route = makeStore({ tod: 'jour', pressed: false, saison: null, sign: 'Route 29', rr: null });
+const route = makeStore({ tod: 'jour', pressed: false, season: null, sign: 'Route 29', rr: null });
 
 export const setRoute = route.set;
 export const useRoute = route.use;

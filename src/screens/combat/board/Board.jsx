@@ -92,14 +92,14 @@ function Board() {
       )}
       {/* attack effects canvas: drawn and placed by the engine (028, fxPrep) */}
       {H.fxc && <canvas className="fxc" aria-hidden="true" />}
-      {H.cielBan && <SkyBanner b={H.cielBan} />}
+      {H.skyBanner && <SkyBanner b={H.skyBanner} />}
       {H.tbn && (
         <div key={H.tbn.n} className={'tbn' + (H.tbn.en ? ' en' : '')} style={H.tbn.fast ? { animationDuration: '.8s' } : undefined}>
           <b>{H.tbn.txt}</b>
           <span>{H.tbn.sub}</span>
         </div>
       )}
-      {H.fondu && <div key={H.fondu.n} className={'fondu477' + (H.fondu.va ? ' va' : '')} aria-hidden="true" style={{ backgroundImage: H.fondu.bg }} />}
+      {H.fade && <div key={H.fade.n} className={'fondu477' + (H.fade.va ? ' va' : '')} aria-hidden="true" style={{ backgroundImage: H.fade.bg }} />}
     </div>
   );
 }
@@ -120,7 +120,7 @@ function Sky({ c }) {
           </svg>
         </span>
       )}
-      <b>{c.nom}</b>
+      <b>{c.displayName}</b>
       {c.vent && (
         <span className="ci430 v" style={{ '--c': '#cfe6ff' }} title="Vent">
           <svg>
@@ -142,7 +142,7 @@ function SkyBanner({ b }) {
         </svg>
       </span>
       <b>{b.titre}</b>
-      {b.texte ? <em>{b.texte}</em> : null}
+      {b.bodyText ? <em>{b.bodyText}</em> : null}
     </div>
   );
 }

@@ -11,7 +11,7 @@ import { badgeCount459 } from './090-item-quests-trophies.js';
 
 
 /** Offline mode: music tracks kept in cache (urls = blob: addresses per track). */
-export const OFF462 = { cache: 'res-audio-462', urls: {}, etat: '', n: 0 };
+export const OFF462 = { cache: 'res-audio-462', urls: {}, status: '', n: 0 };
 
 
 function chPlay462(L, c) {
@@ -56,7 +56,7 @@ async function offLoad462() {
       }
     }
     OFF462.n = n;
-    OFF462.etat = n ? 'prêt' : '';
+    OFF462.status = n ? 'prêt' : '';
     Object.keys(BGM434.el).forEach(k => {
       const a = BGM434.el[k];
       if (a && OFF462.urls[k] && a.paused && a.src !== OFF462.urls[k]) a.src = OFF462.urls[k];
@@ -67,7 +67,7 @@ async function offLoad462() {
 
 async function offDownload462() {
   if (!offOk462()) return toast('Le stockage hors ligne n’est pas disponible ici.');
-  OFF462.etat = 'chargement';
+  OFF462.status = 'chargement';
   let ok = 0,
     ko = 0;
   try {
@@ -90,11 +90,11 @@ async function offDownload462() {
       } catch { /* Best effort: failure here is non-fatal. */ }
     }
   } catch (e) {
-    OFF462.etat = 'erreur';
+    OFF462.status = 'erreur';
     return toast('Le stockage hors ligne a été refusé par l’appareil.');
   }
   await offLoad462();
-  OFF462.etat = ok ? 'prêt' : 'erreur';
+  OFF462.status = ok ? 'prêt' : 'erreur';
   PREF.off462 = ok ? 1 : 0;
   savePref();
   toast(ok ? `Musique hors ligne : ${ok} pistes enregistrées${ko ? `, ${ko} introuvables` : ''}.` : 'Aucune piste n’a pu être enregistrée.');
@@ -115,7 +115,7 @@ async function offClear462() {
   });
   OFF462.urls = {};
   OFF462.n = 0;
-  OFF462.etat = '';
+  OFF462.status = '';
   PREF.off462 = 0;
   savePref();
   toast('Musique hors ligne supprimée.');

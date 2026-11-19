@@ -24,8 +24,8 @@ export default function CampaignChallenges() {
       </section>
     );
   }
-  const d = PROFILE.defis || {},
-    tomb = (PROFILE.tombes || []).filter(b => BY[b]);
+  const d = PROFILE.challenges || {},
+    tomb = (PROFILE.graves || []).filter(b => BY[b]);
   return (
     <section className="v4-panel v4-ps">
       <header className="v4-ph"><svg><use href="#i-trophy" /></svg><b>Défis de campagne</b></header>

@@ -13,7 +13,7 @@ export function TbSec() {
 
 // Saves button: "in progress" indicator and "account" (svIndicator).
 export function TbSave() {
-  const { svBusy, svCloud } = useShell();
+  const { saveBusy: svBusy, saveCloud: svCloud } = useShell();
   return (
     <button type="button" className={'tb-save' + (svBusy ? ' busy' : '') + (svCloud ? ' cloud' : '')} id="tbSave" aria-label="Sauvegardes"><svg><use href="#i-save" /></svg><i /></button>
   );

@@ -6,12 +6,12 @@ import { useShell } from './shellStore.js';
 // innerHTML, which only damaged its container). The error is shown in the engine's box;
 // the block retries on the next page change.
 class Limit extends Component {
-  state = { err: null, cle: this.props.cle };
+  state = { err: null, resetKey: this.props.resetKey };
   static getDerivedStateFromError(err) {
     return { err };
   }
   static getDerivedStateFromProps(p, s) {
-    return p.cle !== s.cle ? { err: null, cle: p.cle } : null;
+    return p.resetKey !== s.resetKey ? { err: null, resetKey: p.resetKey } : null;
   }
   componentDidCatch(err) {
     try {
@@ -25,5 +25,5 @@ class Limit extends Component {
 
 export default function Guard({ children }) {
   const { page } = useShell();
-  return <Limit cle={page}>{children}</Limit>;
+  return <Limit resetKey={page}>{children}</Limit>;
 }

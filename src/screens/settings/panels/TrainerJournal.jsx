@@ -25,7 +25,7 @@ export default function TrainerJournal() {
         <Cell n={j.best} l="Meilleure série" />
         <Cell n={P.kos} l="K.O. infligés" />
         <Cell n={P.caught} l="Captures" />
-        <Cell n={P.evos} l="Éveils" />
+        <Cell n={P.awakenings} l="Éveils" />
         <Cell n={P.rx} l="Réactions" />
         <Cell n={own + ' / ' + DEXS.length} l="Pokédex" />
       </div>

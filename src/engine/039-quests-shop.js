@@ -46,9 +46,9 @@ export function renderQuests() {
 export function renderBag() {
   const pg = $('#sac');
   if (!pg) return;
-  if (V4.sacV === 'sac' && V4.sacC === 'rares') V4.sacC = 'held';
+  if (V4.bagView === 'sac' && V4.bagCategory === 'rares') V4.bagCategory = 'held';
   // Shop or Bag styling (v4.73): classes of the section, which stays mounted
-  const shop = V4.sacV !== 'sac';
+  const shop = V4.bagView !== 'sac';
   pg.classList.toggle('pk-mart', shop);
   pg.classList.toggle('pk-bag', !shop);
   refreshBag(shop);
@@ -60,7 +60,7 @@ export function buy(k) {
     q = V4.qty[k] || 1;
   if (!it) return;
   const price = it.g ? it.g * q : costOf(k) * q; // Workshop (v4.10)
-  if (bagN(k) + q > 99 || ((it.cs || it.cle) && bagN(k))) return;
+  if (bagN(k) + q > 99 || ((it.cs || it.keyItem) && bagN(k))) return;
   const previous = PROFILE.money + ':' + PROFILE.gems;
   if (it.g) {
     if (PROFILE.gems < price) return;
@@ -77,7 +77,7 @@ export function buy(k) {
   queueSave();
   renderWallet();
   renderBag();
-  if (PROFILE.money + ':' + PROFILE.gems !== previous) hook('achat');
+  if (PROFILE.money + ':' + PROFILE.gems !== previous) hook('purchase');
 }
 
 
@@ -101,7 +101,7 @@ SQ = [
     id: 'evo5',
     t: 'Première Résonance',
     d: 'Éveillez 5 Pokémon en plein combat.',
-    v: () => PROFILE.evos,
+    v: () => PROFILE.awakenings,
     n: 5,
     r: { bag: { potion: 2 } }
   },
@@ -150,7 +150,7 @@ SQ = [
 document.addEventListener('click', e => {
   const t = e.target.closest('[data-qtab]');
   if (t) {
-    V4.qTab = t.dataset.qtab;
+    V4.questTab = t.dataset.qtab;
     renderQuests();
     return;
   }
@@ -162,13 +162,13 @@ document.addEventListener('click', e => {
 document.addEventListener('click', e => {
   const a = e.target.closest('[data-sacv]');
   if (a) {
-    V4.sacV = a.dataset.sacv;
+    V4.bagView = a.dataset.sacv;
     renderBag();
     return;
   }
   const c = e.target.closest('[data-sacc]');
   if (c) {
-    V4.sacC = c.dataset.sacc;
+    V4.bagCategory = c.dataset.sacc;
     renderBag();
     return;
   }

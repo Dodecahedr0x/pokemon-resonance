@@ -52,61 +52,61 @@ function turnAdapter(S, mode) {
     return views.get(u);
   };
   return {
-    etat: { tours: { joues: [], charges: [] } },
+    status: { roundCount: { played: [], charges: [] } },
     bus: { emit() {} },
-    unitesVivantes: () => S.units.filter(u => !u.ko).map(view),
-    unite: id => view(byUid(S, id)),
+    aliveUnits: () => S.units.filter(u => !u.ko).map(view),
+    unitRef: id => view(byUid(S, id)),
     // classic: raw Speed, as before; by Speed: effective Speed
-    stat: (v, displayName) => (displayName !== 'vit' ? 0 : speedMode ? (S.distorsion > 0 ? 20 - effSpeed(S, v.ref).valeur : effSpeed(S, v.ref).valeur) : v.ref.s[3]), // Distortion: slowest first (v4.12)
-    priorite: v => (speedMode && v.ref.side === 'e' && v.ref.intent ? MV[v.ref.intent.mv].prio || 0 : 0),
+    stat: (v, displayName) => (displayName !== 'vit' ? 0 : speedMode ? (S.distorsion > 0 ? 20 - effSpeed(S, v.ref).amountValue : effSpeed(S, v.ref).amountValue) : v.ref.s[3]), // Distortion: slowest first (v4.12)
+    priority: v => (speedMode && v.ref.side === 'e' && v.ref.intent ? MV[v.ref.intent.mv].prio || 0 : 0),
     // on equal Speed: arrival order (classic); by Speed, your Pokémon first, then the round's draw
-    rang: v => (speedMode && S.tirage ? (v.camp === 'a' ? 0 : 1) + (S.tirage[v.id] || 0) : S.units.indexOf(v.ref))
+    rankIndex: v => (speedMode && S.tiebreak ? (v.camp === 'a' ? 0 : 1) + (S.tiebreak[v.id] || 0) : S.units.indexOf(v.ref))
   };
 }
 
 
 /** Order in which opponents carry out their attacks (classic mode). */
 export function enemyOrder(S) {
-  return new MT.OrdreParPhases(turnAdapter(S, 'equipe')).ordrePhase('e').map(v => v.id);
+  return new MT.OrderByPhases(turnAdapter(S, 'equipe')).phaseOrder('e').map(v => v.id);
 }
 
 
 function effSpeed(S, u) {
-  return MT.combinerModificateurs(u.s[3], MT.collecter(SPEED_PROVIDERS, 'vit', { S, u }, 'unite'));
+  return MT.combineModifiers(u.s[3], MT.collect(SPEED_PROVIDERS, 'vit', { S, u }, 'unite'));
 }
 
 
 /** The queue is computed once per round, after the opponents' announcements (as the games compute the order at the start of a turn). */
 function prepareRound(S) {
-  S.tirage = {};
-  S.units.forEach(u => (S.tirage[u.uid] = Math.random()));
-  S.file = new MT.OrdreParVitesse(turnAdapter(S, 'vitesse')).ordreDuTour().map(v => v.id);
-  S.vfile = S.file.map(id => Math.round(effSpeed(S, byUid(S, id)).valeur * 10) / 10);
-  S.fileManche = S.round;
-  S.ifile = -1;
+  S.tiebreak = {};
+  S.units.forEach(u => (S.tiebreak[u.uid] = Math.random()));
+  S.turnQueue = new MT.OrderBySpeed(turnAdapter(S, 'vitesse')).turnOrder().map(v => v.id);
+  S.queueSpeeds = S.turnQueue.map(id => Math.round(effSpeed(S, byUid(S, id)).amountValue * 10) / 10);
+  S.queueRound = S.round;
+  S.queueIndex = -1;
   advanceQueue(S);
 }
 
 
 /** Advance to the next one: skip KO'd units and allies that can no longer act (asleep, or already committed to a Duo). */
 function advanceQueue(S) {
-  S.ifile += 1;
-  while (S.ifile < S.file.length) {
-    const u = byUid(S, S.file[S.ifile]);
+  S.queueIndex += 1;
+  while (S.queueIndex < S.turnQueue.length) {
+    const u = byUid(S, S.turnQueue[S.queueIndex]);
     if (u && !u.ko && !(u.side === 'a' && (u.sn || u.acted))) return;
-    S.ifile += 1;
+    S.queueIndex += 1;
   }
 }
 
 
 /** The Pokémon whose turn it is (null: the round is over, or we are not in Speed mode). */
 export function currentActor(S) {
-  if (!S || S.ordre !== 'vitesse' || S.over || S.phase !== 'player') return null;
-  if (S.fileManche !== S.round || !S.file) prepareRound(S);
-  let u = byUid(S, S.file[S.ifile]);
+  if (!S || S.order !== 'vitesse' || S.over || S.phase !== 'player') return null;
+  if (S.queueRound !== S.round || !S.turnQueue) prepareRound(S);
+  let u = byUid(S, S.turnQueue[S.queueIndex]);
   while (u && u.ko) {
     advanceQueue(S);
-    u = byUid(S, S.file[S.ifile]);
+    u = byUid(S, S.turnQueue[S.queueIndex]);
   }
   return u || null;
 }
@@ -143,7 +143,7 @@ export function chosenOrder() {
 
 /** Makes the opponents play until the next ally's turn (or until the end of the round). */
 export function unrollSpeed() {
-  if (!B || B.ordre !== 'vitesse' || B.over) return;
+  if (!B || B.order !== 'vitesse' || B.over) return;
   const S0 = B;
   ui.busy = true;
   ui.turbo428 = false;
@@ -187,7 +187,7 @@ export function canSelect(u) {
     return false;
   }
   const cur = B && currentActor(B);
-  if (!cur || u === cur || B.ordre !== 'vitesse') return true;
+  if (!cur || u === cur || B.order !== 'vitesse') return true;
   toast(cur.side === 'a' ? `C’est au tour de ${cur.n}.` : 'Les adversaires jouent.');
   return false;
 }
@@ -195,7 +195,7 @@ export function canSelect(u) {
 
 /** "Next": the current ally is done, the queue advances. */
 export function endTurnSpeed() {
-  if (!B || ui.busy || B.over || B.phase !== 'player' || B.ordre !== 'vitesse') return;
+  if (!B || ui.busy || B.over || B.phase !== 'player' || B.order !== 'vitesse') return;
   ui.undo = null;
   ui.tile = null;
   clearAim();
@@ -212,7 +212,7 @@ const solid = u => !flies(u);
    In exchange, the opponents' bonus HP is reduced (tuned with the test bot). */
 const HP_ORDER_SPEED = 0.7;
 
-export const hpOrder = opt => (opt && opt.ordre === 'vitesse' ? HP_ORDER_SPEED : 1) * JIT_HB;
+export const hpOrder = opt => (opt && opt.order === 'vitesse' ? HP_ORDER_SPEED : 1) * JIT_HB;
 
 /* ---------- 4. Damage: the modifier providers ----------
    Same order and same values as the old formula (identical down to the last
@@ -223,29 +223,29 @@ const lowHp = (u, s) => u.hp / u.mhp <= s;
 export function __init() {
 
 SPEED_PROVIDERS = [
-  { id: 'paralysie', fournir: (c, { u }) => u.badge === 'PAR' && { mul: 0.5, libelle: 'Paralysie' } },
+  { id: 'paralysie', provide: (c, { u }) => u.badge === 'PAR' && { mul: 0.5, labelText: 'Paralysie' } },
   {
     id: 'boue',
-    fournir: (c, { S, u }) =>
-      S.tiles[uk(u)].mud > 0 && solid(u) && !u.t.some(t => t === 'Sol' || t === 'Eau') && { mul: 0.5, libelle: 'Boue' }
+    provide: (c, { S, u }) =>
+      S.tiles[uk(u)].mud > 0 && solid(u) && !u.t.some(t => t === 'Sol' || t === 'Eau') && { mul: 0.5, labelText: 'Boue' }
   },
   {
     id: 'givre',
-    fournir: (c, { S, u }) =>
-      markAt(S, uk(u)) === 'givre' && solid(u) && { mul: u.t.includes('Glace') ? 1.25 : 0.75, libelle: 'Givre' }
+    provide: (c, { S, u }) =>
+      markAt(S, uk(u)) === 'givre' && solid(u) && { mul: u.t.includes('Glace') ? 1.25 : 0.75, labelText: 'Givre' }
   },
   {
     id: 'glissade',
-    fournir: (c, { S, u }) =>
-      u.tal === 'glissade' &&
-      ((S.wx && S.wx.k === 'pluie') || markAt(S, uk(u)) === 'trempe') && { mul: 2, libelle: 'Glissade' }
+    provide: (c, { S, u }) =>
+      u.ability === 'glissade' &&
+      ((S.wx && S.wx.k === 'pluie') || markAt(S, uk(u)) === 'trempe') && { mul: 2, labelText: 'Glissade' }
   },
   {
     id: 'chlorophylle',
-    fournir: (c, { S, u }) =>
-      u.tal === 'chlorophylle' && S.wx && S.wx.k === 'soleil' && { mul: 2, libelle: 'Chlorophylle' }
+    provide: (c, { S, u }) =>
+      u.ability === 'chlorophylle' && S.wx && S.wx.k === 'soleil' && { mul: 2, labelText: 'Chlorophylle' }
   },
-  { id: 'eclaireur', fournir: (c, { u }) => roleOf(u) === 'Éclaireur' && { add: 1, libelle: 'Éclaireur' } }
+  { id: 'eclaireur', provide: (c, { u }) => roleOf(u) === 'Éclaireur' && { add: 1, labelText: 'Éclaireur' } }
 ];
 
 
@@ -266,17 +266,17 @@ DAMAGE_PROVIDERS = [
   // weather
   {
     id: 'meteo',
-    fournir: (c, { S, m, typ }) => {
+    provide: (c, { S, m, typ }) => {
       const W = S.wx && S.wx.k,
         out = [];
       if (W === 'pluie') {
-        if (typ === 'Eau') out.push({ mul: 1.5, libelle: 'Pluie' });
-        if (typ === 'Feu') out.push({ mul: 0.5, libelle: 'Pluie' });
+        if (typ === 'Eau') out.push({ mul: 1.5, labelText: 'Pluie' });
+        if (typ === 'Feu') out.push({ mul: 0.5, labelText: 'Pluie' });
       }
       if (W === 'soleil') {
-        if (typ === 'Feu') out.push({ mul: 1.5, libelle: 'Soleil' });
-        if (typ === 'Eau') out.push({ mul: 0.5, libelle: 'Soleil' });
-        if (m.sun) out.push({ mul: 1.5, libelle: 'Soleil' });
+        if (typ === 'Feu') out.push({ mul: 1.5, labelText: 'Soleil' });
+        if (typ === 'Eau') out.push({ mul: 0.5, labelText: 'Soleil' });
+        if (m.sun) out.push({ mul: 1.5, labelText: 'Soleil' });
       }
       return out;
     }
@@ -284,27 +284,27 @@ DAMAGE_PROVIDERS = [
   // attacker's abilities
   {
     id: 'talent',
-    fournir: (c, { u, typ }) => {
+    provide: (c, { u, typ }) => {
       if (
-        (u.tal === 'brasier' && typ === 'Feu' && lowHp(u, 0.34)) ||
-        (u.tal === 'torrent' && typ === 'Eau' && lowHp(u, 0.34)) ||
-        (u.tal === 'essaim' && typ === 'Insecte' && lowHp(u, 0.34)) ||
-        (u.tal === 'engrais' && typ === 'Plante' && lowHp(u, 0.5))
+        (u.ability === 'brasier' && typ === 'Feu' && lowHp(u, 0.34)) ||
+        (u.ability === 'torrent' && typ === 'Eau' && lowHp(u, 0.34)) ||
+        (u.ability === 'essaim' && typ === 'Insecte' && lowHp(u, 0.34)) ||
+        (u.ability === 'engrais' && typ === 'Plante' && lowHp(u, 0.5))
       ) {
-        return { mul: 1.5, libelle: TAL[u.tal].n };
+        return { mul: 1.5, labelText: TAL[u.ability].n };
       }
     }
   },
-  { id: 'cran', fournir: (c, { u }) => u.tal === 'cran' && (u.bru > 0 || u.badge) && { mul: 1.5, libelle: 'Cran' } },
-  { id: 'boost', fournir: (c, { u }) => u.boost > 0 && { mul: 1.5, libelle: 'Renforcé' } },
+  { id: 'cran', provide: (c, { u }) => u.ability === 'cran' && (u.burn > 0 || u.badge) && { mul: 1.5, labelText: 'Cran' } },
+  { id: 'boost', provide: (c, { u }) => u.boost > 0 && { mul: 1.5, labelText: 'Renforcé' } },
   // target's ability
   {
     id: 'isograisse',
-    fournir: (c, { t, typ }) =>
-      t.tal === 'isograisse' && (typ === 'Feu' || typ === 'Glace') && { mul: 0.5, libelle: 'Isograisse' }
+    provide: (c, { t, typ }) =>
+      t.ability === 'isograisse' && (typ === 'Feu' || typ === 'Glace') && { mul: 0.5, labelText: 'Isograisse' }
   },
   // same type as the attacker
-  { id: 'stab', fournir: (c, { u, typ }) => u.t.includes(typ) && { mul: 1.2, libelle: 'Même type' } }
+  { id: 'stab', provide: (c, { u, typ }) => u.t.includes(typ) && { mul: 1.2, labelText: 'Même type' } }
 ];
 
 
@@ -312,68 +312,68 @@ DAMAGE_PROVIDERS = [
 ROLE_PROVIDERS = [
   {
     id: 'frappeur',
-    fournir: (c, { S, u }) =>
+    provide: (c, { S, u }) =>
       roleOf(u) === 'Frappeur' &&
       S.units.some(
         o => !o.ko && o.side === u.side && o.uid !== u.uid && roleOf(o) === 'Rempart' && hdist(o.pos, u.pos) === 1
       ) && {
         mul: 1.25,
-        libelle: 'Frappeur couvert par un Rempart'
+        labelText: 'Frappeur couvert par un Rempart'
       }
   },
   {
     id: 'verrou',
-    fournir: (c, { S, u, t }) =>
+    provide: (c, { S, u, t }) =>
       t.side !== u.side &&
       STATUSED(t) &&
-      S.units.some(o => !o.ko && o.side === u.side && roleOf(o) === 'Verrou') && { mul: 1.25, libelle: 'Verrou' }
+      S.units.some(o => !o.ko && o.side === u.side && roleOf(o) === 'Verrou') && { mul: 1.25, labelText: 'Verrou' }
   },
   {
     id: 'synergies',
-    fournir: (c, { S, u, t, typ }) => {
+    provide: (c, { S, u, t, typ }) => {
       if (u.side !== 'a' || !S.syn) return null;
       const s = S.syn,
         out = [];
-      if (s.includes('forge') && (typ === 'Feu' || typ === 'Roche')) out.push({ add: 2, libelle: 'Forge' });
+      if (s.includes('forge') && (typ === 'Feu' || typ === 'Roche')) out.push({ add: 2, labelText: 'Forge' });
       if (s.includes('tempete') && typ === 'Électrik' && markAt(S, uk(t)) === 'trempe') {
-        out.push({ mul: 1.25, libelle: 'Tempête' });
+        out.push({ mul: 1.25, labelText: 'Tempête' });
       }
-      if (s.includes('dojo') && hdist(u.pos, t.pos) === 1) out.push({ add: 2, libelle: 'Dojo' });
-      if (s.includes('banquise') && typ === 'Glace') out.push({ add: 3, libelle: 'Banquise' });
-      if (s.includes('draco') && (typ === 'Dragon' || typ === 'Vol')) out.push({ add: 2, libelle: 'Draco' });
+      if (s.includes('dojo') && hdist(u.pos, t.pos) === 1) out.push({ add: 2, labelText: 'Dojo' });
+      if (s.includes('banquise') && typ === 'Glace') out.push({ add: 3, labelText: 'Banquise' });
+      if (s.includes('draco') && (typ === 'Dragon' || typ === 'Vol')) out.push({ add: 2, labelText: 'Draco' });
       return out;
     }
   },
   {
     id: 'acier',
-    fournir: (c, { S, t }) =>
+    provide: (c, { S, t }) =>
       t.side === 'a' &&
       S.syn &&
       S.syn.includes('acier') &&
-      t.t.some(z => z === 'Ténèbres' || z === 'Acier') && { add: -2, libelle: 'Acier' }
+      t.t.some(z => z === 'Ténèbres' || z === 'Acier') && { add: -2, labelText: 'Acier' }
   },
   {
     id: 'sable',
-    fournir: (c, { S, t }) => {
+    provide: (c, { S, t }) => {
       const tt = S.tiles[uk(t)];
       return (
         tt &&
         tt.sand &&
         !tt.w &&
-        t.t.some(z => z === 'Sol' || z === 'Roche' || z === 'Acier') && { add: -2, libelle: 'Sable' }
+        t.t.some(z => z === 'Sol' || z === 'Roche' || z === 'Acier') && { add: -2, labelText: 'Sable' }
       );
     }
   },
   {
     id: 'garde',
-    fournir: (c, { u }) => ACT && ACT.guard && ACT.u.uid === u.uid && { mul: 0.75, libelle: 'Interception' }
+    provide: (c, { u }) => ACT && ACT.guard && ACT.u.uid === u.uid && { mul: 0.75, labelText: 'Interception' }
   },
   {
     id: 'couvert',
-    fournir: (c, { S, u, m, t, typ }) => {
+    provide: (c, { S, u, m, t, typ }) => {
       if (ACT && ACT.rico && ACT.u.uid === u.uid) {
         noteAdd(`Ricochet sur ${t.n} : −25 %`);
-        return { mul: 0.75, libelle: 'Ricochet' };
+        return { mul: 0.75, labelText: 'Ricochet' };
       }
       if (
         !(ACT && ACT.guard) &&
@@ -382,7 +382,7 @@ ROLE_PROVIDERS = [
         coverOf(S, u.pos, t.pos)
       ) {
         noteAdd(`${t.n} est à couvert : −40 %`);
-        return { mul: 0.6, libelle: 'À couvert' };
+        return { mul: 0.6, labelText: 'À couvert' };
       }
     }
   }

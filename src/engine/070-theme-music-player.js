@@ -94,15 +94,15 @@ function bgmScene434() {
     if (c === 'rouge' || c === 'champion' || B.over) return c;
     // v4.49: an almost K.O.'d ally (≤ 25%) switches to the "low HP" track; returns when all go back above 35%
     const al = B.units.filter(u => u.side === 'a' && !u.ko);
-    if (al.some(u => u.hp / u.mhp <= 0.25)) B._pv449 = 1;
-    else if (!al.some(u => u.hp / u.mhp <= 0.35)) B._pv449 = 0;
-    return B._pv449 && IM448() ? 'pvbas' : c;
+    if (al.some(u => u.hp / u.mhp <= 0.25)) B._hp449 = 1;
+    else if (!al.some(u => u.hp / u.mhp <= 0.35)) B._hp449 = 0;
+    return B._hp449 && IM448() ? 'pvbas' : c;
   }
   if (cur === 'accueil') return 'accueil';
   if (cur === 'combat') return 'combats'; // v4.47: Battles menu = Cycling
   if (cur === 'carte') return 'carte'; // Route 1
   if (cur === 'types') return 'guide'; // Prof. Chen's Laboratory
-  if (cur === 'sac' && V4.sacV === 'boutique') return 'boutique';
+  if (cur === 'sac' && V4.bagView === 'boutique') return 'boutique';
   if (cur === 'pokedex' || cur === 'dex') return 'centre';
   if (cur === 'camp') {
     const t = V4.campTab;

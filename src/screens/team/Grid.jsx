@@ -56,7 +56,7 @@ function FamCard({ m }) {
     lock = !inBox(m.id),
     dim = !on && !lock && (m.c > BUDGET - cost() || squad.length >= TEAM_MAX),
     fat = isCamp() && !lock ? PROFILE.fatigue[m.id] || 0 : 0,
-    it = PROFILE.equip[m.id] && ownedItems().includes(PROFILE.equip[m.id]) ? ITEMS2[PROFILE.equip[m.id]] : null,
+    it = PROFILE.equipment[m.id] && ownedItems().includes(PROFILE.equipment[m.id]) ? ITEMS2[PROFILE.equipment[m.id]] : null,
     maxSt = Math.max(...family.map(x => x.st)),
     rg = rankId(m.id),
     placeLabel = lock && !PROFILE.dex.includes(m.id) ? captureSite421(m.id) : '',

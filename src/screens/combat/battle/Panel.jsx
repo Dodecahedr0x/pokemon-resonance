@@ -39,12 +39,12 @@ export default function Panel() {
 function Content() {
   if (B.over) return null;
   if (B.dep430) return <Placement />;
-  if (ui.busy && !ui.cine && (B.phase === 'enemy' || enemyTurn428())) return <OpponentTurn />;
+  if (ui.busy && !ui.cutscene && (B.phase === 'enemy' || enemyTurn428())) return <OpponentTurn />;
   if (ui.busy) {
     return (
       <div className="bp-wait">
         <span className="spin" />
-        {ui.cine ? 'Évolution en cours…' : 'Les adversaires agissent…'}
+        {ui.cutscene ? 'Évolution en cours…' : 'Les adversaires agissent…'}
       </div>
     );
   }
@@ -101,7 +101,7 @@ function Placement() {
 function OpponentTurn() {
   useBattleVersion('top');
   useBattleVersion('foot');
-  const file = B.ordre === 'vitesse' && B.file ? B.file.map(id => byUid(B, id)) : B.units;
+  const file = B.order === 'vitesse' && B.turnQueue ? B.turnQueue.map(id => byUid(B, id)) : B.units;
   const foes = file.filter(u => u && u.side === 'e' && !u.ko && !u.caught),
     cur = ui.act && byUid(B, ui.act),
     doneFlag = foes.filter(u => u.done && u !== cur).length,
@@ -158,7 +158,7 @@ function Role() {
   );
 }
 
-function Header({ u, sous: under }) {
+function Header({ u, underText: under }) {
   return (
     <div className="bp-h">
       <Html html={medal(u.t)} />
@@ -186,7 +186,7 @@ function Intention({ e }) {
     const F = e.force && forcedTarget(B, e);
     return e.done ? (
       <p className="bp-hint">Il a déjà joué cette manche.</p>
-    ) : e.badge || e.perdu ? (
+    ) : e.badge || e.isLost ? (
       <p className="bp-int">Neutralisé : il ne jouera pas cette manche.</p>
     ) : (
       <p className="bp-int">
@@ -225,14 +225,14 @@ function Intention({ e }) {
 }
 
 function OpponentSheet({ e }) {
-  const tl = TAL[e.tal],
+  const tl = TAL[e.ability],
     nx = hasNx(e) ? awakeningInfo(B, e) : null,
     fe = foeEvo(B, e);
   const role = roleOf(e),
     RF = ROLEFX[role];
   return (
     <>
-      <Header u={e} sous={`N.${e.lv} · ${e.t.join(' / ')}${tl ? ' · ' + tl[0] : ''}`} />
+      <Header u={e} underText={`N.${e.lv} · ${e.t.join(' / ')}${tl ? ' · ' + tl[0] : ''}`} />
       <Role />
       {NL}
       {RF ? (
@@ -412,7 +412,7 @@ function Awakening({ u, s }) {
       ? 'Immobilisé cette manche.'
       : u.acted
         ? 'Action déjà utilisée : Relance pour éveiller.'
-        : B.voix < 1
+        : B.voice < 1
           ? 'Plus de Voix cette manche.'
           : 'Prêt. Choix irréversible.';
   return (
@@ -443,7 +443,7 @@ function Awakening({ u, s }) {
 
 /* ---------- guided walkthrough (v4.78): the current step and its skip button ---------- */
 function Step({ u, st }) {
-  const n = flow478.restants(B).length,
+  const n = flow478.remaining(B).length,
     cur = { deplacer: 0, agir: 1, extra: 2, fini: 3 }[st];
   let txt = '',
     bt = null;
@@ -465,16 +465,16 @@ function Step({ u, st }) {
       </button>
     );
   } else if (st === 'extra') {
-    txt = [flow478.repli(u) ? 'Touchez une case bleue pour vous replier.' : '', flow478.relance(B) ? 'Relance (2 Voix) : il rejoue tout de suite.' : '']
+    txt = [flow478.repli(u) ? 'Touchez une case bleue pour vous replier.' : '', flow478.retrigger(B) ? 'Relance (2 Voix) : il rejoue tout de suite.' : '']
       .filter(Boolean)
       .join(' ');
-    const next = flow478.restants(B).find(x => x !== u);
+    const next = flow478.remaining(B).find(x => x !== u);
     bt = (
       <>
         <button type="button" className="b b-sm b-gold" data-vx="fin478">
           <b>Terminer {u.n}</b>
         </button>
-        {B.ordre !== 'vitesse' ? <span className="fl478-suite">{next ? `Ensuite : ${next.n}` : 'Dernier Pokémon de la manche'}</span> : null}
+        {B.order !== 'vitesse' ? <span className="fl478-suite">{next ? `Ensuite : ${next.n}` : 'Dernier Pokémon de la manche'}</span> : null}
       </>
     );
   } else if (u.sn) {
@@ -497,7 +497,7 @@ function Step({ u, st }) {
             </li>
           ])}
         </ol>
-        <span className="fl478-n">{B.ordre === 'vitesse' ? 'Ordre par Vitesse' : n ? `Encore ${n} à jouer` : 'Manche terminée'}</span>
+        <span className="fl478-n">{B.order === 'vitesse' ? 'Ordre par Vitesse' : n ? `Encore ${n} à jouer` : 'Manche terminée'}</span>
       </div>
       <div className="fl478-r">
         <p>{txt}</p>
@@ -515,11 +515,11 @@ function Bag({ u }) {
   return (
     <div className="v4-bagbar">
       <span className="lbl-s">
-        Sac · {B.objN || 0} / {BAG_MAX}
+        Sac · {B.itemsUsed || 0} / {BAG_MAX}
       </span>
       {own.map(k => {
         const it = SHOP[k],
-          info = it.heal ? `+${Math.round(it.heal * 100)} % PV` : it.voix ? `${it.voix} Voix` : 'Action';
+          info = it.heal ? `+${Math.round(it.heal * 100)} % PV` : it.voice ? `${it.voice} Voix` : 'Action';
         return (
           <button key={k} type="button" className="v4-use" data-use={k} title={it.d} disabled={!objOk414(B, u, k)}>
             <img src={ITM(it.img)} alt="" loading="lazy" />
@@ -536,11 +536,11 @@ function Bag({ u }) {
 
 /* ---------- Pokémon of your team ---------- */
 function AllySheet({ u }) {
-  const tl = TAL[u.tal];
+  const tl = TAL[u.ability];
   // guided walkthrough: the step replaces the tips when no mode is active
   const F = flow478,
-    guide = F.actif() && !ui.busy && !ui.selE && u.side === 'a' && F.aJouer(B).includes(u),
-    st = guide ? F.etape(B, u) : null,
+    guide = F.active() && !ui.busy && !ui.selE && u.side === 'a' && F.toPlay(B).includes(u),
+    st = guide ? F.stepOf(B, u) : null,
     without = guide && !ui.mode,
     s = h => (without ? withoutTip(h) : h);
   let hint = null;
@@ -562,10 +562,10 @@ function AllySheet({ u }) {
   else if (!u.acted && !u.moved) hint = <p className="bp-hint">Cases bleues : déplacement. Ou choisissez directement une capacité.</p>;
   else if (!u.acted) hint = <p className="bp-hint">Choisissez une capacité, ou éveillez-le depuis cette case.</p>;
   else hint = <p className="bp-hint">{u.n} a joué. Esquive et Relance restent possibles.</p>;
-  const relHi = st === 'extra' && F.relance(B);
+  const relHi = st === 'extra' && F.retrigger(B);
   return (
     <>
-      <Header u={u} sous={`${u.t.join(' / ')}${tl ? ' · ' + tl[0] : ''}${u.evo ? ` · éveillé ×${u.evo}` : ''}`} />
+      <Header u={u} underText={`${u.t.join(' / ')}${tl ? ' · ' + tl[0] : ''}${u.evo ? ` · éveillé ×${u.evo}` : ''}`} />
       {guide ? <Step u={u} st={st} /> : null}
       <Role />
       {NL}
@@ -614,7 +614,7 @@ function AllySheet({ u }) {
       {hint}
       {NL}
       <div className="bp-vx">
-        <button type="button" className={'vx' + (ui.mode === 'dodge' ? ' on' : '')} data-vx="dodge" disabled={!!(B.voix < 1 || u.sn)}>
+        <button type="button" className={'vx' + (ui.mode === 'dodge' ? ' on' : '')} data-vx="dodge" disabled={!!(B.voice < 1 || u.sn)}>
           <b>Esquive</b>
           <span>1 Voix · un pas</span>
         </button>
@@ -622,7 +622,7 @@ function AllySheet({ u }) {
           type="button"
           className={'vx' + (relHi ? ' fl478-hi' : '')}
           data-vx="relance"
-          disabled={!!(!u.acted || u.sn || B.relance || B.voix < 2)}
+          disabled={!!(!u.acted || u.sn || B.retrigger || B.voice < 2)}
         >
           <b>Relance</b>
           <span>2 Voix · rejouer</span>

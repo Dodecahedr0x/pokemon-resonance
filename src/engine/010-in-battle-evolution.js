@@ -187,7 +187,7 @@ MON.forEach(m => {
 });
 
 
-RECRUIT = MON.filter(m => m.st === 1 && !m.ennemi);
+RECRUIT = MON.filter(m => m.st === 1 && !m.isEnemy);
  // v4.13: without the families that became opponents
 
 Object.assign(NOTES, {

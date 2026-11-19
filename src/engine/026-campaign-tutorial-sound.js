@@ -246,7 +246,7 @@ export function duoBlock(u) {
         ? `${p.n} a déjà agi`
         : hdist(u.pos, p.pos) > 2
           ? `${p.n} est trop loin (2 cases max)`
-          : B.voix < 2
+          : B.voice < 2
             ? 'il faut 2 Voix'
             : '';
     return `<button type="button" class="duo-b${ui.mode === 'duo' && ui.duo === p.uid ? ' on' : ''}" data-duo="${p.uid}" ${ok ? '' : 'disabled'}><span class="duo-m">${medal(u.t, 'sm')}${medal(p.t, 'sm')}</span><span><b>${D.n}</b><em>${ok ? D.d + ' 2 Voix, les deux agissent.' : why}</em></span></button>`;
@@ -278,7 +278,7 @@ export function applyProgress(S) {
     rew = { links: [], caught: [], items: [], gifts: [], tired: [], badgeNew: false };
   if (D.tuto) PROFILE.tuto = 1;
   const al = S.units.filter(u => u.side === 'a');
-  Object.entries(D.pret429 ? {} : S.stats.pairs || {}).forEach(([k, v]) => { // rental team: no Bonds (v4.29)
+  Object.entries(D.ready429 ? {} : S.stats.pairs || {}).forEach(([k, v]) => { // rental team: no Bonds (v4.29)
     const [a, b] = k.split('|'),
       ua = al.find(u => u.sp === a),
       ub = al.find(u => u.sp === b),
@@ -319,7 +319,7 @@ export function applyProgress(S) {
     PROFILE.elite = 5;
     rew.champ = true;
   }
-  if (isCamp() && !D.pret429) {
+  if (isCamp() && !D.ready429) {
     const used = al.map(u => u.sp);
     PROFILE.box.forEach(id => {
       const f = PROFILE.fatigue[id] || 0;
@@ -328,7 +328,7 @@ export function applyProgress(S) {
     });
     rew.tired = used.filter(id => (PROFILE.fatigue[id] || 0) >= 70);
   }
-  if (!D.tuto && !D.pret429) {
+  if (!D.tuto && !D.ready429) {
     const atk = [
         ...new Set(
           al.flatMap(u =>
@@ -340,8 +340,8 @@ export function applyProgress(S) {
         )
       ],
       def = [...new Set(al.flatMap(u => u.t))];
-    PROFILE.hist.push({ atk, def, rx: Object.assign({}, S.stats.rxk || {}) });
-    if (PROFILE.hist.length > 10) PROFILE.hist = PROFILE.hist.slice(-10);
+    PROFILE.history.push({ atk, def, rx: Object.assign({}, S.stats.rxk || {}) });
+    if (PROFILE.history.length > 10) PROFILE.history = PROFILE.history.slice(-10);
   }
   setTimeout(() => {
     renderSquad();
@@ -350,7 +350,7 @@ export function applyProgress(S) {
   }, 0);
   // campaign: forms reached in battle become recruits
   rew.forms = [];
-  if (isCamp() && !D.pret429) {
+  if (isCamp() && !D.ready429) {
     PROFILE.forms = PROFILE.forms || [];
     (S.stats.evl || []).forEach(([, id]) => {
       if (BY[id] && BY[id].st > 1 && !PROFILE.forms.includes(id)) {

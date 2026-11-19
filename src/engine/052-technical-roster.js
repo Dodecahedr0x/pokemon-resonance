@@ -16,7 +16,7 @@ export let PRE413;
 export function afterHit413(S, u, m, v, x, mk, typ, ev) {
   if (!(m.p || m.fix) || v === u) return;
   v.dtype = typ; // for Conversion 2
-  if (m.fx === 'onde' && v.side !== u.side) (S._ondes = S._ondes || []).push({ uid: v.uid, x });
+  if (m.fx === 'onde' && v.side !== u.side) (S._waves = S._waves || []).push({ uid: v.uid, x });
   if (m.fx === 'triple' && !v.ko && v.side !== u.side) {
     let n = 1;
     for (let i = 0; i < 2 && !v.ko; i++) {
@@ -28,8 +28,8 @@ export function afterHit413(S, u, m, v, x, mk, typ, ev) {
     }
     if (n > 1) say(ev, `Triple Pied : ${n} coups !`);
   }
-  if (v.tal === 'corpsmaudit' && v.side !== u.side && !u.ko && hdist(u.pos, v.pos) === 1) {
-    if (u.tal === 'regardvif' || rune413(S, u)) return;
+  if (v.ability === 'corpsmaudit' && v.side !== u.side && !u.ko && hdist(u.pos, v.pos) === 1) {
+    if (u.ability === 'regardvif' || rune413(S, u)) return;
     u.web = Math.max(u.web, 2);
     say(ev, `Corps Maudit : ${u.n} est ralenti.`);
   }
@@ -38,9 +38,9 @@ export function afterHit413(S, u, m, v, x, mk, typ, ev) {
 
 /* ---------- end of the move ---------- */
 export function end413(S, u, m, k, v0, v1, dealt, ev) {
-  if (S._ondes) {
-    const L = S._ondes;
-    S._ondes = null;
+  if (S._waves) {
+    const L = S._waves;
+    S._waves = null;
     L.forEach(o => {
       const w = byUid(S, o.uid);
       if (w && !w.ko) shove(S, w, o.x === k ? u.pos : P(k), 1, ev, false); // from the center of the wave
@@ -60,7 +60,7 @@ export function end413(S, u, m, k, v0, v1, dealt, ev) {
   }
   if (m.fx === 'changeeclair' && !u.ko) {
     const a = S.units
-      .filter(o => !o.ko && o !== u && o.side === u.side && hdist(o.pos, u.pos) <= 4 && o.hp < o.mhp && !o.colosse && !o.seg)
+      .filter(o => !o.ko && o !== u && o.side === u.side && hdist(o.pos, u.pos) <= 4 && o.hp < o.mhp && !o.colossus && !o.seg)
       .sort((p, q) => p.hp / p.mhp - q.hp / q.mhp)[0];
     if (a) {
       const pa = u.pos;
@@ -73,11 +73,11 @@ export function end413(S, u, m, k, v0, v1, dealt, ev) {
   }
   if (m.fx === 'voltige' && !v0 && !u.ko) {
     say(ev, `${u.n} frappe le vide et s’écrase !`);
-    damage(S, u, Math.max(1, Math.round(u.mhp * 0.25)), ev, { ind: true, reflet: true });
+    damage(S, u, Math.max(1, Math.round(u.mhp * 0.25)), ev, { ind: true, reflect: true });
   }
   if (m.fx === 'escalade') {
-    u.roulN = u.roulR === S.round - 1 ? Math.min(3, (u.roulN || 0) + 1) : 1;
-    u.roulR = S.round;
+    u.rolloutCount = u.rolloutRound === S.round - 1 ? Math.min(3, (u.rolloutCount || 0) + 1) : 1;
+    u.rolloutRound = S.round;
   }
   if (m.fx === 'confond' && v1 && v1.side === 'e' && !v1.ko) retarget(S, v1, u, 'confuse', ev);
   if (m.fx === 'tourrapide' && !u.ko) {
@@ -120,12 +120,12 @@ export function reflections413(S, v, real, ev) {
   const d = hdist(a.pos, v.pos);
   if (!v.ko && ((v.riposte > 0 && d === 1) || (v.miroir > 0 && d >= 2))) {
     say(ev, `${v.riposte > 0 && d === 1 ? 'Riposte' : 'Voile Miroir'} : ${v.n} renvoie le coup à ${a.n} !`);
-    damage(S, a, Math.max(1, Math.round(real * 2)), ev, { reflet: true });
+    damage(S, a, Math.max(1, Math.round(real * 2)), ev, { reflect: true });
   }
   if (v.ko && v.destin > 0) {
     v.destin = 0;
     say(ev, `Prélèvem. Destin : ${a.n} paie le prix !`);
-    damage(S, a, Math.max(1, Math.round(a.mhp * 0.5)), ev, { ind: true, reflet: true });
+    damage(S, a, Math.max(1, Math.round(a.mhp * 0.5)), ev, { ind: true, reflect: true });
   }
 }
 
@@ -135,8 +135,8 @@ export function bonusMove413(S, u) {
   let b = 0;
   if (S.gravite > 0) b -= 1;
   if (u.agile > 0) b += 1;
-  if (u.tal === 'surfcaudal' && markAt(S, uk(u)) === 'charge') b += 2;
-  if (S.units.some(o => !o.ko && o.side !== u.side && o.tal === 'marqueombre' && hdist(o.pos, u.pos) === 1)) b -= 2;
+  if (u.ability === 'surfcaudal' && markAt(S, uk(u)) === 'charge') b += 2;
+  if (S.units.some(o => !o.ko && o.side !== u.side && o.ability === 'marqueombre' && hdist(o.pos, u.pos) === 1)) b -= 2;
   return b;
 }
 
@@ -145,16 +145,16 @@ export function bonusMove413(S, u) {
 export function durations413(S, ev) {
   S.units.forEach(u => {
     if (u.ko) return;
-    if (u.tal === 'regeforce' && u.hp < u.mhp) heal(S, u, 3, ev);
-    if (u.tal === 'cuvette' && S.wx && S.wx.k === 'pluie' && u.hp < u.mhp) heal(S, u, 4, ev);
-    if (u.tal === 'forcesoleil' && S.wx && S.wx.k === 'soleil') {
+    if (u.ability === 'regeforce' && u.hp < u.mhp) heal(S, u, 3, ev);
+    if (u.ability === 'cuvette' && S.wx && S.wx.k === 'pluie' && u.hp < u.mhp) heal(S, u, 4, ev);
+    if (u.ability === 'forcesoleil' && S.wx && S.wx.k === 'soleil') {
       say(ev, `Force Soleil : ${u.n} brûle sous le soleil.`);
       damage(S, u, 2, ev, { ind: true });
     }
     if (!u.ko && S.champ && S.champ[u.side] > 0 && markAt(S, uk(u)) === 'enracine' && u.hp < u.mhp) heal(S, u, 4, ev);
-    if (!u.ko && u.anneau > 0) {
+    if (!u.ko && u.ringTurns > 0) {
       heal(S, u, Math.round(u.mhp * 0.1), ev);
-      u.anneau--;
+      u.ringTurns--;
     }
     if (!u.ko && u.maudit > 0) {
       say(ev, `${u.n} souffre de la malédiction.`);
@@ -165,7 +165,7 @@ export function durations413(S, ev) {
       say(ev, `Requiem : le chant s’achève pour ${u.n} !`);
       damage(S, u, Math.max(1, Math.round(u.mhp * 0.4)), ev, { ind: true });
     }
-    ['affaibli', 'agile', 'cogno'].forEach(f => {
+    ['weakened', 'agile', 'cogno'].forEach(f => {
       if (u[f] > 0) u[f]--;
     });
     u.riposte = 0;
@@ -176,7 +176,7 @@ export function durations413(S, ev) {
   if (S.champ) for (const c in S.champ) if (S.champ[c] > 0 && --S.champ[c] === 0) say(ev, 'Le Champ Herbu se dissipe.');
   if (S.rune) for (const c in S.rune) if (S.rune[c] > 0 && --S.rune[c] === 0) say(ev, 'Rune Protect se dissipe.');
   if (S.gravite > 0 && --S.gravite === 0) {
-    if (S.mut !== 'gravite') S.units.forEach(o => (o.cloue = false));
+    if (S.mut !== 'gravite') S.units.forEach(o => (o.pinned = false));
     say(ev, 'La Gravité se dissipe.');
   }
 }
@@ -205,7 +205,7 @@ export function aiSupport413(S, e, opts, al, here) {
           paresse: hp < 0.6 ? 6 : 0,
           clairdelune: hp < 0.6 ? 6 : 0,
           dansedraco: !(e.agile > 0) ? 3 : 0,
-          anneauhydro: !(e.anneau > 0) && hp < 0.8 ? 4 : 0,
+          anneauhydro: !(e.ringTurns > 0) && hp < 0.8 ? 4 : 0,
           runeprotect: !(S.rune && S.rune[e.side] > 0) ? 3 : 0,
           champherbu: !(S.champ && S.champ[e.side] > 0) ? 3 : 0,
           gravite: !(S.gravite > 0) && al.some(flies) ? 4 : 0,
@@ -219,8 +219,8 @@ export function aiSupport413(S, e, opts, al, here) {
     for (const pk in opts) {
       const sim = Object.assign({}, e, { pos: P(pk) });
       al.forEach(a => {
-        if (!inReach(S, sim, m, uk(a)) || a.colosse || a.seg) return;
-        if (m.fx === 'feufollet' && (a.bru > 0 || a.t.includes('Feu') || a.tal === 'torche')) return;
+        if (!inReach(S, sim, m, uk(a)) || a.colossus || a.seg) return;
+        if (m.fx === 'feufollet' && (a.burn > 0 || a.t.includes('Feu') || a.ability === 'torche')) return;
         if (m.fx === 'malediction' && (a.maudit > 0 || hp < 0.4)) return;
         prend((m.fx === 'morphing' ? 8 + a.s[1] : 5) - (pk === here ? 0 : 0.5), pk, mid, uk(a));
       });
@@ -252,7 +252,7 @@ Object.assign(SELF412, {
   },
   gravite(S, u, ev) {
     S.gravite = 4;
-    S.units.forEach(o => (o.cloue = true));
+    S.units.forEach(o => (o.pinned = true));
     say(ev, 'Gravité : plus personne ne vole ni ne lévite pendant 4 manches, et chacun perd 1 Mouvement.');
   },
   dansedraco(S, u, ev) {
@@ -262,7 +262,7 @@ Object.assign(SELF412, {
   },
   anneauhydro(S, u, ev) {
     nbrK(uk(u)).forEach(x => setMark(S, x, 'trempe', u.uid));
-    u.anneau = 4;
+    u.ringTurns = 4;
     say(ev, `${u.n} s’entoure d’un anneau d’eau.`);
   },
   runeprotect(S, u, ev) {
@@ -348,14 +348,14 @@ Object.assign(SELF412, {
 PRE413 = {
   malediction(S, u, m, v, ev) {
     if (v.side === u.side) return;
-    damage(S, u, Math.max(1, Math.round(u.mhp * 0.25)), ev, { ind: true, reflet: true });
+    damage(S, u, Math.max(1, Math.round(u.mhp * 0.25)), ev, { ind: true, reflect: true });
     if (u.ko) return;
     v.maudit = 4;
     say(ev, `Malédiction : ${v.n} est maudit et s’affaiblira pendant 4 manches.`);
   },
   feufollet(S, u, m, v, ev) {
     if (v.side === u.side) return;
-    if (v.t.includes('Feu') || v.tal === 'torche') {
+    if (v.t.includes('Feu') || v.ability === 'torche') {
       say(ev, `${v.n} ne craint pas les flammes.`);
       return;
     }
@@ -363,8 +363,8 @@ PRE413 = {
       say(ev, `Rune Protect : ${v.n} est protégé.`);
       return;
     }
-    v.bru = Math.max(v.bru, 3);
-    v.affaibli = 3;
+    v.burn = Math.max(v.burn, 3);
+    v.weakened = 3;
     ev.push({ e: 'st', u: v.uid, s: 'BRÛ' });
     say(ev, `${v.n} est brûlé : il frappera moins fort.`);
   },
@@ -374,7 +374,7 @@ PRE413 = {
     say(ev, `${v.n} se gonfle d’orgueil : Renforcé pendant 2 manches.`);
   },
   morphing(S, u, m, v, ev) {
-    if (v === u || v.colosse || v.seg) {
+    if (v === u || v.colossus || v.seg) {
       say(ev, 'Morphing échoue.');
       return;
     }
@@ -382,7 +382,7 @@ PRE413 = {
     u.s = [u.s[0], ...v.s.slice(1)];
     u.mv = v.mv.filter(x => x !== 'morphing' && MV[x]);
     if (u.ctm && !u.mv.includes(u.ctm)) u.mv.push(u.ctm);
-    u.tal = v.tal;
+    u.ability = v.ability;
     u.morph = v.id;
     PKT.set(u.t, v.id); // it also takes on its appearance
     ev.push({ e: 'st', u: u.uid, s: 'MORPH' });
@@ -393,33 +393,33 @@ PRE413 = {
 
 /* ---------- damage: signatures and abilities ---------- */
 DAMAGE_PROVIDERS.push(
-  { id: 'eruption', fournir: (c, { u, m }) => m.fx === 'eruption' && { mul: 0.6 + 0.8 * (u.hp / u.mhp), libelle: 'Éruption' } },
+  { id: 'eruption', provide: (c, { u, m }) => m.fx === 'eruption' && { mul: 0.6 + 0.8 * (u.hp / u.mhp), labelText: 'Éruption' } },
   {
     id: 'gyro',
-    fournir: (c, { u, m, t }) => m.fx === 'gyro' && { mul: Math.max(1, Math.min(2, 1 + 0.25 * ((t.s[3] || 0) - (u.s[3] || 0)))), libelle: 'Gyroballe' }
+    provide: (c, { u, m, t }) => m.fx === 'gyro' && { mul: Math.max(1, Math.min(2, 1 + 0.25 * ((t.s[3] || 0) - (u.s[3] || 0)))), labelText: 'Gyroballe' }
   },
-  { id: 'escalade', fournir: (c, { S, u, m }) => m.fx === 'escalade' && u.roulR === S.round - 1 && u.roulN > 0 && { mul: 1 + 0.5 * u.roulN, libelle: 'Roulade' } },
-  { id: 'technicien', fournir: (c, { u, m }) => u.tal === 'technicien' && m.p > 0 && m.p <= 7 && { mul: 1.5, libelle: 'Technicien' } },
-  { id: 'poingdefer', fournir: (c, { u, m }) => u.tal === 'poingdefer' && m.r === 1 && m.p > 0 && { mul: 1.2, libelle: 'Poing de Fer' } },
-  { id: 'chasseur', fournir: (c, { u, t }) => u.tal === 'chasseur' && t.hp <= t.mhp / 2 && { mul: 1.3, libelle: 'Chasseur' } },
-  { id: 'temeraire', fournir: (c, { u, m }) => u.tal === 'temeraire' && (m.fx === 'recoil' || m.fx === 'voltige') && { mul: 1.3, libelle: 'Téméraire' } },
-  { id: 'forcesoleil', fournir: (c, { S, u, typ }) => u.tal === 'forcesoleil' && typ === 'Feu' && S.wx && S.wx.k === 'soleil' && { mul: 1.5, libelle: 'Force Soleil' } },
-  { id: 'cogno', fournir: (c, { u }) => u.cogno > 0 && { mul: 2, libelle: 'Cognobidon' } },
-  { id: 'poursuite', fournir: (c, { S, m, t }) => m.fx === 'poursuite' && t.mvR === S.round && { mul: 1.5, libelle: 'Poursuite' } }
+  { id: 'escalade', provide: (c, { S, u, m }) => m.fx === 'escalade' && u.rolloutRound === S.round - 1 && u.rolloutCount > 0 && { mul: 1 + 0.5 * u.rolloutCount, labelText: 'Roulade' } },
+  { id: 'technicien', provide: (c, { u, m }) => u.ability === 'technicien' && m.p > 0 && m.p <= 7 && { mul: 1.5, labelText: 'Technicien' } },
+  { id: 'poingdefer', provide: (c, { u, m }) => u.ability === 'poingdefer' && m.r === 1 && m.p > 0 && { mul: 1.2, labelText: 'Poing de Fer' } },
+  { id: 'chasseur', provide: (c, { u, t }) => u.ability === 'chasseur' && t.hp <= t.mhp / 2 && { mul: 1.3, labelText: 'Chasseur' } },
+  { id: 'temeraire', provide: (c, { u, m }) => u.ability === 'temeraire' && (m.fx === 'recoil' || m.fx === 'voltige') && { mul: 1.3, labelText: 'Téméraire' } },
+  { id: 'forcesoleil', provide: (c, { S, u, typ }) => u.ability === 'forcesoleil' && typ === 'Feu' && S.wx && S.wx.k === 'soleil' && { mul: 1.5, labelText: 'Force Soleil' } },
+  { id: 'cogno', provide: (c, { u }) => u.cogno > 0 && { mul: 2, labelText: 'Cognobidon' } },
+  { id: 'poursuite', provide: (c, { S, m, t }) => m.fx === 'poursuite' && t.mvR === S.round && { mul: 1.5, labelText: 'Poursuite' } }
 );
 
 
 ROLE_PROVIDERS.push({
   id: 'gardeami',
-  fournir: (c, { S, t }) =>
-    S.units.some(o => !o.ko && o !== t && o.side === t.side && o.tal === 'gardeami' && hdist(o.pos, t.pos) === 1) && { add: -2, libelle: 'Garde-Ami' }
+  provide: (c, { S, t }) =>
+    S.units.some(o => !o.ko && o !== t && o.side === t.side && o.ability === 'gardeami' && hdist(o.pos, t.pos) === 1) && { add: -2, labelText: 'Garde-Ami' }
 });
 
 
 /* Download (Téléchargement): enters battle with +2 Guard */
 HOOKS.creation.push(S => {
   S.units.forEach(u => {
-    if (u.tal === 'telechargement') u.guard = Math.max(u.guard, 2);
+    if (u.ability === 'telechargement') u.guard = Math.max(u.guard, 2);
   });
 });
 }

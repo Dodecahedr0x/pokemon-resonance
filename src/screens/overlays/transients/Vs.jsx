@@ -13,7 +13,7 @@ export default function Vs({ d }) {
         <span className="vs-k">{d.k1}</span>
         <span className="vs-team"><Html html={d.al.map(t => medal(t)).join('')} /></span>
         {d.av != null && <span className="vs-av450"><Html html={d.av} /></span>}
-        <b>{d.nom1}</b>
+        <b>{d.name1}</b>
         <em>{d.em1}</em>
       </div>
       {'\n  '}
@@ -26,7 +26,7 @@ export default function Vs({ d }) {
         ) : (
           <span className="vs-foes"><Html html={d.foes.map(t => medal(t, 'sm')).join('')} /></span>
         )}
-        <b>{d.nom2}</b>
+        <b>{d.name2}</b>
         <em>{d.em2}</em>
         {d.q != null && <q><Html html={d.q} /></q>}
       </div>

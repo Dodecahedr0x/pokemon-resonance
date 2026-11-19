@@ -30,23 +30,23 @@ function combineModifiers(base, changes) {
   for (const m of changes) {
     if (m.add) add += m.add;
     if (m.mul != null) mul *= m.mul;
-    if (m.crans) notches += m.crans;
-    if (m.fixe != null) isFixed = m.fixe;
+    if (m.stageShifts) notches += m.stageShifts;
+    if (m.fixed != null) isFixed = m.fixed;
   }
   // multiplications are applied one by one, in provider order: the result is
   // identical, down to the last digit, to a hand-written calculation (x *= a; x *= b; …)
   let amount = base + add;
   for (const m of changes) if (m.mul != null) amount *= m.mul;
   if (isFixed != null) amount = isFixed;
-  return { valeur: amount, mul, add, crans: notches, detail: changes };
+  return { amountValue: amount, mul, add, stageShifts: notches, detail: changes };
 }
 
 /** Calls each provider and flattens the result (ignores empty ones). */
 function collect(providers, channel, ctx, subject) {
   const out = [];
   for (const f of providers) {
-    if (!f || !f.fournir) continue;
-    const r = f.fournir(channel, ctx, subject);
+    if (!f || !f.provide) continue;
+    const r = f.provide(channel, ctx, subject);
     if (!r) continue;
     for (const m of Array.isArray(r) ? r : [r]) if (m) out.push({ source: f.id, ...m });
   }
@@ -76,7 +76,7 @@ function collect(providers, channel, ctx, subject) {
 
 /** Initiative: priority of the announced attack, then effective Speed, then rank (tiebreak). */
 function sortByInitiative(c, units) {
-  const key = new Map(units.map(u => [u, [c.priorite(u), c.stat(u, 'vit'), c.rang(u)]]));
+  const key = new Map(units.map(u => [u, [c.priority(u), c.stat(u, 'vit'), c.rankIndex(u)]]));
   return [...units].sort((a, b) => {
     const A = key.get(a),
       B = key.get(b);
@@ -89,59 +89,59 @@ class OrderByPhases {
     this.c = battle;
     this.mode = 'phases';
   }
-  get etat() {
-    return this.c.etat.tours;
+  get status() {
+    return this.c.status.roundCount;
   }
-  static creerEtat() {
-    return { mode: 'phases', tour: 1, phase: 'a', joues: [], charges: [], actif: null };
+  static createState() {
+    return { mode: 'phases', tour: 1, phase: 'a', played: [], charges: [], active: null };
   }
-  demarrer() {
+  begin() {
     this.c.bus.emit('tour:debut', { tour: 1 });
   }
-  ordrePhase(camp) {
+  phaseOrder(camp) {
     return sortByInitiative(
       this.c,
-      this.c.unitesVivantes().filter(u => u.camp === camp && !this.etat.joues.includes(u.id))
+      this.c.aliveUnits().filter(u => u.camp === camp && !this.status.played.includes(u.id))
     );
   }
-  prochain() {
-    const e = this.etat;
+  nextUnit() {
+    const e = this.status;
     // charged moves go off at the start of their side's phase
-    const ch = e.charges.find(x => this.c.unite(x.unite).camp === e.phase);
+    const ch = e.charges.find(x => this.c.unitRef(x.unitRef).camp === e.phase);
     if (ch) {
       e.charges = e.charges.filter(x => x !== ch);
       return { type: 'charge', charge: ch };
     }
-    const remainder = this.ordrePhase(e.phase);
+    const remainder = this.phaseOrder(e.phase);
     if (remainder.length) {
-      e.actif = remainder[0].id;
-      return { type: 'unite', unite: remainder[0], choix: remainder.map(u => u.id) }; // the player can choose another one: battle.activate(id)
+      e.active = remainder[0].id;
+      return { type: 'unite', unitRef: remainder[0], choice: remainder.map(u => u.id) }; // the player can choose another one: battle.activate(id)
     }
     if (e.phase === 'a') {
       e.phase = 'e';
-      e.joues = [];
-      return this.prochain();
+      e.played = [];
+      return this.nextUnit();
     }
-    this.c.finDeTour();
-    Object.assign(e, { phase: 'a', joues: [], tour: e.tour + 1 });
-    if (!this.c.etat.fin) this.c.bus.emit('tour:debut', { tour: e.tour });
+    this.c.endTurn();
+    Object.assign(e, { phase: 'a', played: [], tour: e.tour + 1 });
+    if (!this.c.status.fin) this.c.bus.emit('tour:debut', { tour: e.tour });
     return { type: 'finDeTour', tour: e.tour - 1 };
   }
-  apresActivation(u) {
-    this.etat.joues.push(u.id);
-    this.etat.actif = null;
+  afterActivation(u) {
+    this.status.played.push(u.id);
+    this.status.active = null;
   }
   charge(u) {
-    return this.etat.charges.find(ch => ch.unite === u.id) || null;
+    return this.status.charges.find(ch => ch.unitRef === u.id) || null;
   }
-  programmerCharge(u, moveId, target) {
-    const ch = { unite: u.id, capacite: moveId, cible: target };
-    this.etat.charges.push(ch);
+  scheduleCharge(u, moveId, target) {
+    const ch = { unitRef: u.id, moveId, targetRef: target };
+    this.status.charges.push(ch);
     u.charge = moveId;
     return ch;
   }
-  prevoir() {
-    return [...this.ordrePhase('a'), ...this.ordrePhase('e')].map(u => ({ type: 'unite', unite: u.id }));
+  forecast() {
+    return [...this.phaseOrder('a'), ...this.phaseOrder('e')].map(u => ({ type: 'unite', unitRef: u.id }));
   }
 }
 
@@ -150,59 +150,59 @@ class OrderBySpeed {
     this.c = battle;
     this.mode = 'vitesse';
   }
-  get etat() {
-    return this.c.etat.tours;
+  get status() {
+    return this.c.status.roundCount;
   }
-  static creerEtat() {
-    return { mode: 'vitesse', tour: 1, joues: [], charges: [], actif: null };
+  static createState() {
+    return { mode: 'vitesse', tour: 1, played: [], charges: [], active: null };
   }
-  demarrer() {
+  begin() {
     this.c.bus.emit('tour:debut', { tour: 1 });
   }
   /** Those who have not yet played this round, in the order they will play. */
-  ordreDuTour() {
+  turnOrder() {
     return sortByInitiative(
       this.c,
-      this.c.unitesVivantes().filter(u => !this.etat.joues.includes(u.id))
+      this.c.aliveUnits().filter(u => !this.status.played.includes(u.id))
     );
   }
-  prochain() {
-    const e = this.etat,
-      [u] = this.ordreDuTour();
+  nextUnit() {
+    const e = this.status,
+      [u] = this.turnOrder();
     if (!u) {
-      this.c.finDeTour();
-      Object.assign(e, { joues: [], tour: e.tour + 1 });
-      if (!this.c.etat.fin) this.c.bus.emit('tour:debut', { tour: e.tour });
+      this.c.endTurn();
+      Object.assign(e, { played: [], tour: e.tour + 1 });
+      if (!this.c.status.fin) this.c.bus.emit('tour:debut', { tour: e.tour });
       return { type: 'finDeTour', tour: e.tour - 1 };
     }
     // a charged move goes off on its caster's next turn, in place of its action
     const ch = this.charge(u);
     if (ch) {
       e.charges = e.charges.filter(x => x !== ch);
-      e.joues.push(u.id);
+      e.played.push(u.id);
       return { type: 'charge', charge: ch };
     }
-    e.actif = u.id;
-    return { type: 'unite', unite: u };
+    e.active = u.id;
+    return { type: 'unite', unitRef: u };
   }
-  apresActivation(u) {
-    if (!this.etat.joues.includes(u.id)) this.etat.joues.push(u.id);
-    this.etat.actif = null;
+  afterActivation(u) {
+    if (!this.status.played.includes(u.id)) this.status.played.push(u.id);
+    this.status.active = null;
   }
   charge(u) {
-    return this.etat.charges.find(ch => ch.unite === u.id) || null;
+    return this.status.charges.find(ch => ch.unitRef === u.id) || null;
   }
-  programmerCharge(u, moveId, target) {
-    const ch = { unite: u.id, capacite: moveId, cible: target };
-    this.etat.charges.push(ch);
+  scheduleCharge(u, moveId, target) {
+    const ch = { unitRef: u.id, moveId, targetRef: target };
+    this.status.charges.push(ch);
     u.charge = moveId;
     return ch;
   }
-  prevoir() {
-    return this.ordreDuTour().map(u => ({ type: 'unite', unite: u.id }));
+  forecast() {
+    return this.turnOrder().map(u => ({ type: 'unite', unitRef: u.id }));
   }
 }
 
-return { OrdreParPhases: OrderByPhases, OrdreParVitesse: OrderBySpeed, collecter: collect, combinerModificateurs: combineModifiers, trierParInitiative: sortByInitiative };
+return { OrderByPhases, OrderBySpeed, collect, combineModifiers, sortByInitiative };
 })();
 }

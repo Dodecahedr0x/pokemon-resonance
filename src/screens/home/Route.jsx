@@ -146,7 +146,7 @@ const RouteSvg = memo(function RouteSvg() {
 });
 
 export default function Route() {
-  const { tod, pressed, saison: season, sign, rr } = useRoute();
+  const { tod, pressed, season: season, sign, rr } = useRoute();
   // repositions the « ! » alert when the route changes size
   useEffect(() => {
     const r = document.getElementById('route');

@@ -42,7 +42,7 @@ export function vigilHit420(S, u, k) {
 function pVigil420(S, u) {
   if (!canVigil420(S, u)) return null;
   const ev = [];
-  u.vigil = 1;
+  u.vigilance = 1;
   u.acted = true;
   say(ev, `${u.n} se met en vigilance : il frappera le premier adversaire qui arrive à sa portée.`);
   return ev;
@@ -54,11 +54,11 @@ export function vigilance420(S, e, ev) {
   if (!e || e.ko || S.over || e.side !== 'e') return;
   const k = uk(e);
   for (const u of S.units) {
-    if (u.side !== 'a' || u.ko || !u.vigil || u.sn) continue;
+    if (u.side !== 'a' || u.ko || !u.vigilance || u.sn) continue;
     const m = vigilHit420(S, u, k);
     if (!m) continue;
-    u.vigil = 0;
-    S.stats.vigil = (S.stats.vigil || 0) + 1;
+    u.vigilance = 0;
+    S.stats.vigilance = (S.stats.vigilance || 0) + 1;
     say(ev, `Vigilance : ${u.n} intercepte ${e.n} avec ${m.n} !`);
     ev.push({ e: 'vigil420', u: u.uid, t: e.uid });
     resolve(S, u, m, k).forEach(x => ev.push(x));
@@ -111,7 +111,7 @@ function changePhase420(S, ev) {
   if (ph < 3 && r <= 0.33) {
     b.phase420 = 3;
     b.pb = (b.pb || 0) + 1;
-    const ko = S.units.filter(x => x.side === 'e' && x.ko && !x.seg && !x.colosse && !x.caught && x !== b)[0];
+    const ko = S.units.filter(x => x.side === 'e' && x.ko && !x.seg && !x.colossus && !x.caught && x !== b)[0];
     let x = null;
     if (ko) x = [uk(b), ...nbrK(uk(b))].find(y => S.tiles[y] && !S.tiles[y].rock && !uAt(S, y));
     if (ko && x) {
@@ -191,14 +191,14 @@ export function danger420Svg(S, k, x, y) {
 export function vigilBtn420(u) {
   if (!B || u.side !== 'a') return '';
   const ok = canVigil420(B, u);
-  return `<button type="button" class="vx${u.vigil ? ' on' : ''}" data-vigil420 ${ok ? '' : 'disabled'}><b>Vigilance</b><span>${u.vigil ? 'en garde' : 'action · surveille'}</span></button>`;
+  return `<button type="button" class="vx${u.vigilance ? ' on' : ''}" data-vigil420 ${ok ? '' : 'disabled'}><b>Vigilance</b><span>${u.vigilance ? 'en garde' : 'action · surveille'}</span></button>`;
 }
 
 
 export function battleStates420(u) {
   if (!B) return '';
   const o = [];
-  if (u.vigil) o.push('<span class="ux vg420">Vigilance : frappe le premier adversaire à sa portée</span>');
+  if (u.vigilance) o.push('<span class="ux vg420">Vigilance : frappe le premier adversaire à sa portée</span>');
   if (surrounded420(B, u)) o.push('<span class="ux enc420">Encerclé : −1 Mouvement, +20 % de dégâts reçus</span>');
   if (u.phase420 > 1) o.push(`<span class="ux ph420">Phase ${u.phase420}</span>`);
   return o.join('');
@@ -209,7 +209,7 @@ const canVigil420 = (S, u) => !!(S && u && u.side === 'a' && !u.ko && !u.acted &
 /* ---------- 2. Encirclement ---------- */
 const around420 = (S, t, side) => S.units.filter(o => !o.ko && o.side === side && !o.seg && hdist(o.pos, t.pos) === 1).length;
 
-export const surrounded420 = (S, u) => !!(S && u && !u.ko && !u.seg && !u.colosse && around420(S, u, u.side === 'a' ? 'e' : 'a') >= 2);
+export const surrounded420 = (S, u) => !!(S && u && !u.ko && !u.seg && !u.colossus && around420(S, u, u.side === 'a' ? 'e' : 'a') >= 2);
 
 const WEATHER_T420 = { Feu: 'soleil', Eau: 'pluie', Glace: 'grele', Roche: 'sable', Sol: 'sable' };
 
@@ -226,7 +226,7 @@ const DANGERS = {
 export function __init() {
 
 
-HOOKS.avantFinManche.push(S => S.units.forEach(u => (!S.duel433 || u.j433 !== 2) && (u.vigil = 0)));
+HOOKS.beforeRoundEnd.push(S => S.units.forEach(u => (!S.duel433 || u.j433 !== 2) && (u.vigilance = 0)));
 
  // duel: P2's Vigilance holds during P1's turn (v4.33)
 document.addEventListener('click', e => {
@@ -244,17 +244,17 @@ document.addEventListener('click', e => {
 });
 
 
-DAMAGE_PROVIDERS.push({ id: 'encerclement', fournir: (c, { S, u, t }) => S && t && u && t.side !== u.side && !t.seg && around420(S, t, u.side) >= 2 && { mul: 1.2, libelle: 'Encerclement' } });
+DAMAGE_PROVIDERS.push({ id: 'encerclement', provide: (c, { S, u, t }) => S && t && u && t.side !== u.side && !t.seg && around420(S, t, u.side) >= 2 && { mul: 1.2, labelText: 'Encerclement' } });
 
 
-HOOKS.avantFinManche.push((S, ev) => {
+HOOKS.beforeRoundEnd.push((S, ev) => {
   phaseBoss420(S, ev);
   dangerTurn420(S, ev);
 });
 
 
 ACHIEVEMENTS.push(
-  { id: 'vigil', n: 'Sentinelle', d: 'Intercepter un adversaire avec la Vigilance.', ok: c => (c.S.stats.vigil || 0) > 0 },
+  { id: 'vigil', n: 'Sentinelle', d: 'Intercepter un adversaire avec la Vigilance.', ok: c => (c.S.stats.vigilance || 0) > 0 },
   { id: 'phases', n: 'Jusqu’au bout', d: 'Battre un Maître ou une légende après sa phase 3.', t: 'Inébranlable', ok: c => c.win && c.S.units.some(u => u.phase420 === 3) }
 );
 

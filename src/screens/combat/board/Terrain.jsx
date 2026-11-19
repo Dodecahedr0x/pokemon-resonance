@@ -159,7 +159,7 @@ export function Water() {
     dx = W * 0.2,
     dy = W * 0.06;
   const gl = [];
-  E.cles.forEach(k => {
+  E.keyList.forEach(k => {
     const [x, y] = HC(k),
       s = tiltS(x, y),
       n = parseInt(k.replace(/\D/g, ''), 10) || 0;
@@ -182,7 +182,7 @@ export function Water() {
     }
   });
   return (
-    <g className={'eau477' + (E.fixe ? ' fixe' : '')} style={E.cles.length ? PE : { ...PE, display: 'none' }} aria-hidden="true" data-k={E.id}>
+    <g className={'eau477' + (E.fixed ? ' fixe' : '')} style={E.keyList.length ? PE : { ...PE, display: 'none' }} aria-hidden="true" data-k={E.id}>
       <g clipPath="url(#eau477c)">
         <rect
           className="bande477"

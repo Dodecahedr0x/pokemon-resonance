@@ -85,25 +85,25 @@ for (const k in ICO455) ICO414[k] = svg455(ICO455[k]);
 BALL455 = {
   rapide: {
     pv: (S, e) => e.hp / e.mhp <= ((S.round || 1) <= 2 ? 0.5 : 0.25),
-    tpv: 'Rapide Ball : PV sous 50 % pendant les manches 1 et 2, sinon 25 %',
+    hpText: 'Rapide Ball : PV sous 50 % pendant les manches 1 et 2, sinon 25 %',
     im: (S, e) => immobilize(e),
     tim: 'immobilisé : Gel, Paralysie, Sommeil, Racines ou Toile'
   },
   sombre: {
     pv: (S, e) => e.hp / e.mhp <= (night455(S) ? 0.4 : 0.25),
-    tpv: 'Sombre Ball : PV sous 40 % la nuit, sinon 25 %',
+    hpText: 'Sombre Ball : PV sous 40 % la nuit, sinon 25 %',
     im: (S, e) => immobilize(e),
     tim: 'immobilisé : Gel, Paralysie, Sommeil, Racines ou Toile'
   },
   filet: {
     pv: (S, e) => e.hp / e.mhp <= (waterBug455(e) ? 0.4 : 0.25),
-    tpv: 'Filet Ball : PV sous 40 % sur une cible Eau ou Insecte, sinon 25 %',
+    hpText: 'Filet Ball : PV sous 40 % sur une cible Eau ou Insecte, sinon 25 %',
     im: (S, e) => waterBug455(e) || immobilize(e),
     tim: 'Filet Ball : cible Eau ou Insecte, ou immobilisée'
   },
   faiblo: {
     pv: (S, e) => e.hp / e.mhp <= 0.25,
-    tpv: 'PV sous 25 %',
+    hpText: 'PV sous 25 %',
     im: (S, e) => e.hp / e.mhp <= 0.15 || immobilize(e),
     tim: 'Faiblo Ball : PV sous 15 %, ou cible immobilisée'
   }
@@ -115,16 +115,16 @@ for (const k in BALL455) BALLX455[k] = (S, e) => BALL455[k].pv(S, e) && BALL455[
 
 
 Object.assign(SHOP, {
-  rapide: { n: 'Rapide Ball', sn: 'Rapide', d: 'Plus facile en début de combat : PV sous 50 % pendant les manches 1 et 2. Immobilisation requise.', p: 900, cat: 'balls', img: 'quick-ball' },
-  sombre: { n: 'Sombre Ball', sn: 'Sombre', d: 'La nuit, elle capture dès 40 % de PV restants. Immobilisation requise.', p: 900, cat: 'balls', img: 'dusk-ball' },
-  filet: { n: 'Filet Ball', sn: 'Filet', d: 'Sur un Pokémon Eau ou Insecte : PV sous 40 %, sans immobilisation.', p: 800, cat: 'balls', img: 'net-ball' },
-  faiblo: { n: 'Faiblo Ball', sn: 'Faiblo', d: 'Sous 15 % de PV, plus besoin d’immobiliser la cible.', p: 1000, cat: 'balls', img: 'weak-ball' },
-  hyperpotion: { n: 'Hyper Potion', sn: 'Hyper Potion', d: 'En combat : rend 85 % des PV à un allié. Utilise son action.', p: 1300, cat: 'soins', img: 'hyper-potion', heal: 0.85 },
-  antigel: { n: 'Antigel', sn: 'Antigel', d: 'Libère de la paralysie, du gel et du sommeil. Coûte 1 Voix, l’action reste libre.', p: 300, cat: 'combat', img: 'ice-heal', voix: 1 },
-  antidote: { n: 'Antidote', sn: 'Antidote', d: 'Soigne la brûlure et le poison. Coûte 1 Voix, l’action reste libre.', p: 250, cat: 'combat', img: 'antidote', voix: 1 },
-  baiemepo: { n: 'Baie Mepo', sn: 'Mepo', d: 'Rend 30 % des PV max. Coûte 1 Voix, l’action reste libre.', p: 600, cat: 'combat', img: 'mepo-berry', voix: 1 },
-  gelee: { n: 'Gelée Résonante', sn: 'Gelée', d: '+2 losanges de Résonance (Éveil ou attaque Experte). Coûte 1 Voix.', p: 2400, cat: 'combat', img: 'jelly-res', voix: 1 },
-  rappelmax: { n: 'Rappel Max', sn: 'Rappel Max', d: 'Relève votre Pokémon K.O. le plus coûteux en PC, sur une case voisine, avec 80 % de ses PV. Utilise l’action.', p: 4000, cat: 'combat', img: 'max-revive' }
+  rapide: { n: 'Rapide Ball', sn: 'Rapide', d: 'Plus facile en début de combat : PV sous 50 % pendant les manches 1 et 2. Immobilisation requise.', p: 900, category: 'balls', img: 'quick-ball' },
+  sombre: { n: 'Sombre Ball', sn: 'Sombre', d: 'La nuit, elle capture dès 40 % de PV restants. Immobilisation requise.', p: 900, category: 'balls', img: 'dusk-ball' },
+  filet: { n: 'Filet Ball', sn: 'Filet', d: 'Sur un Pokémon Eau ou Insecte : PV sous 40 %, sans immobilisation.', p: 800, category: 'balls', img: 'net-ball' },
+  faiblo: { n: 'Faiblo Ball', sn: 'Faiblo', d: 'Sous 15 % de PV, plus besoin d’immobiliser la cible.', p: 1000, category: 'balls', img: 'weak-ball' },
+  hyperpotion: { n: 'Hyper Potion', sn: 'Hyper Potion', d: 'En combat : rend 85 % des PV à un allié. Utilise son action.', p: 1300, category: 'soins', img: 'hyper-potion', heal: 0.85 },
+  antigel: { n: 'Antigel', sn: 'Antigel', d: 'Libère de la paralysie, du gel et du sommeil. Coûte 1 Voix, l’action reste libre.', p: 300, category: 'combat', img: 'ice-heal', voice: 1 },
+  antidote: { n: 'Antidote', sn: 'Antidote', d: 'Soigne la brûlure et le poison. Coûte 1 Voix, l’action reste libre.', p: 250, category: 'combat', img: 'antidote', voice: 1 },
+  baiemepo: { n: 'Baie Mepo', sn: 'Mepo', d: 'Rend 30 % des PV max. Coûte 1 Voix, l’action reste libre.', p: 600, category: 'combat', img: 'mepo-berry', voice: 1 },
+  gelee: { n: 'Gelée Résonante', sn: 'Gelée', d: '+2 losanges de Résonance (Éveil ou attaque Experte). Coûte 1 Voix.', p: 2400, category: 'combat', img: 'jelly-res', voice: 1 },
+  rappelmax: { n: 'Rappel Max', sn: 'Rappel Max', d: 'Relève votre Pokémon K.O. le plus coûteux en PC, sur une case voisine, avec 80 % de ses PV. Utilise l’action.', p: 4000, category: 'combat', img: 'max-revive' }
 });
 
 
@@ -139,7 +139,7 @@ COMBAT414.push('antigel', 'antidote', 'baiemepo', 'gelee', 'rappelmax');
 
 OKX455 = {
   antigel: (S, u) => u.skip > 0 || ['GEL', 'PAR', 'SOM'].includes(u.badge),
-  antidote: (S, u) => u.bru > 0 || u.psn > 0,
+  antidote: (S, u) => u.burn > 0 || u.poisoned > 0,
   baiemepo: (S, u) => u.hp < u.mhp,
   gelee: (S, u) => (hasNx(u) || hasXp(u)) && u.en < EMAX,
   rappelmax: (S, u) => !u.acted && !u.sn && !!koAlly414(S) && !!freeTile414(S, u)
@@ -152,7 +152,7 @@ USE455 = {
     say(ev, `Antigel : ${u.n} retrouve ses moyens.`);
   },
   antidote: (S, u, ev) => {
-    Object.assign(u, { bru: 0, psn: 0 });
+    Object.assign(u, { burn: 0, poisoned: 0 });
     say(ev, `Antidote : ${u.n} est soigné.`);
   },
   baiemepo: (S, u, ev) => {
@@ -168,7 +168,7 @@ USE455 = {
       x = freeTile414(S, u);
     Object.assign(o, {
       ko: false, hp: Math.max(1, Math.round(o.mhp * 0.8)), pos: P(x), acted: true, moved: true, sn: false, skip: 0, badge: null,
-      bru: 0, psn: 0, web: 0, root: 0, maudit: 0, requiem: 0, affaibli: 0, en: 0, intent: null, notes: null
+      burn: 0, poisoned: 0, web: 0, root: 0, maudit: 0, requiem: 0, weakened: 0, en: 0, intent: null, notes: null
     });
     ev.push({ e: 'mv', u: o.uid }, { e: 'heal', u: o.uid, v: o.hp });
     say(ev, `Rappel Max : ${o.n} revient au combat avec ${o.hp} PV. Il jouera à la prochaine manche.`);
@@ -206,15 +206,15 @@ Object.assign(HELD_SHOP, {
 DAMAGE_PROVIDERS.push(
   {
     id: 'typeitem455',
-    fournir: (c, { u, m, typ }) => !!u && TYPEIT455[u.item] && TYPEIT455[u.item] === typ && (m.p > 0 || m.fix > 0) && { mul: 1.2, libelle: ITEMS2[u.item].n }
+    provide: (c, { u, m, typ }) => !!u && TYPEIT455[u.item] && TYPEIT455[u.item] === typ && (m.p > 0 || m.fix > 0) && { mul: 1.2, labelText: ITEMS2[u.item].n }
   },
   {
     id: 'filtre455',
-    fournir: (c, { u, t, m, typ }) => !!t && t.item === 'filtre' && !!u && t.side !== u.side && (m.p > 0 || m.fix > 0) && teff(typ, t.t) > 1 && { mul: 0.75, libelle: 'Lunettes Filtre' }
+    provide: (c, { u, t, m, typ }) => !!t && t.item === 'filtre' && !!u && t.side !== u.side && (m.p > 0 || m.fix > 0) && teff(typ, t.t) > 1 && { mul: 0.75, labelText: 'Lunettes Filtre' }
   },
   {
     id: 'cape455',
-    fournir: (c, { u, t, m }) => !!t && t.item === 'cape' && !!u && t.side !== u.side && (m.p > 0 || m.fix > 0) && { mul: 0.85, libelle: 'Gilet de Fer' }
+    provide: (c, { u, t, m }) => !!t && t.item === 'cape' && !!u && t.side !== u.side && (m.p > 0 || m.fix > 0) && { mul: 0.85, labelText: 'Gilet de Fer' }
   }
 );
 
@@ -242,15 +242,15 @@ HOOKS.combat.push(S => {
   ['ct09', { num: 'CT09', mv: 'vibraqua', p: 2500, types: ['Eau', 'Glace', 'Normal', 'Dragon', 'Psy'] }],
   ['ct10', { num: 'CT10', mv: 'ultralaser', p: 5000, types: ['Normal', 'Dragon', 'Acier', 'Électrik', 'Psy'] }],
   ['ct13', { num: 'CT13', mv: 'rayonsignal', p: 3000, types: ['Insecte', 'Psy', 'Plante', 'Fée', 'Vol'] }],
-  ['ct19', { num: 'CT19', mv: 'triplattaque', p: 3500, tous: true }],
+  ['ct19', { num: 'CT19', mv: 'triplattaque', p: 3500, forAll: true }],
   ['ct20', { num: 'CT20', mv: 'chocmental', p: 1500, types: ['Psy', 'Spectre', 'Normal', 'Fée', 'Ténèbres'] }],
-  ['ct44', { num: 'CT44', mv: 'repos', p: 2500, tous: true }],
-  ['ct45', { num: 'CT45', mv: 'abri', p: 2000, tous: true }],
+  ['ct44', { num: 'CT44', mv: 'repos', p: 2500, forAll: true }],
+  ['ct45', { num: 'CT45', mv: 'abri', p: 2000, forAll: true }],
   ['ct49', { num: 'CT49', mv: 'synthese', p: 2500, types: ['Plante', 'Normal', 'Fée', 'Eau'] }],
   ['ct50', { num: 'CT50', mv: 'hypnose', p: 2500, types: ['Psy', 'Spectre', 'Poison', 'Ténèbres', 'Plante'] }],
   ['ct56', { num: 'CT56', mv: 'cageeclair', p: 2500, types: ['Électrik', 'Acier', 'Eau', 'Dragon'] }],
   ['ct57', { num: 'CT57', mv: 'poudredodo', p: 2000, types: ['Plante', 'Insecte', 'Poison', 'Fée'] }],
-  ['ct58', { num: 'CT58', mv: 'danselames', p: 3500, tous: true }],
+  ['ct58', { num: 'CT58', mv: 'danselames', p: 3500, forAll: true }],
   ['ct60', { num: 'CT60', mv: 'grele', p: 3000, types: ['Glace', 'Eau', 'Vol', 'Roche', 'Dragon'] }]
 ].forEach(([k, M]) => {
   if (MACHINES[k] || !MV[M.mv]) return;
@@ -260,7 +260,7 @@ HOOKS.combat.push(S => {
     n: `${M.num} · ${m.n}`,
     sn: M.num,
     d: `${m.t} · ${m.p ? 'Puissance ' + m.p + ' · ' : m.pp ? 'Puissance ' + m.pp + ' · ' : ''}${m.d || ''} Usage unique.`,
-    cat: 'machines',
+    category: 'machines',
     mv: M.mv,
     cs: false,
     p: M.p

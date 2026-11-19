@@ -40,7 +40,7 @@ let REPLAY_IN_PROGRESS, DISSONANCE;
 
 /* ---------- profile (declared functions: called as soon as the file loads) ---------- */
 export function MON0() {
-  return { dissonance: 0, cadeaux: {} };
+  return { dissonance: 0, giftsClaimed: {} };
 }
 
 
@@ -48,8 +48,8 @@ export function monClean(p) {
   const o = MON0();
   if (!p || typeof p !== 'object') return o;
   if (Number.isFinite(p.dissonance)) o.dissonance = Math.max(0, Math.min(4, Math.floor(p.dissonance)));
-  if (p.cadeaux && typeof p.cadeaux === 'object') {
-    for (const k in p.cadeaux) if (/^[a-z]+-\d{4}$/.test(k)) o.cadeaux[k] = 1;
+  if (p.giftsClaimed && typeof p.giftsClaimed === 'object') {
+    for (const k in p.giftsClaimed) if (/^[a-z]+-\d{4}$/.test(k)) o.giftsClaimed[k] = 1;
   }
   return o;
 }
@@ -83,20 +83,20 @@ export function multChroma() {
 
 
 function giftTaken() {
-  return !!(PROFILE.cadeaux && PROFILE.cadeaux[giftKey()]);
+  return !!(PROFILE.giftsClaimed && PROFILE.giftsClaimed[giftKey()]);
 }
 
 
 function takeGift() {
   const s = season();
-  if (!s || !s.cadeau || giftTaken()) return;
-  PROFILE.cadeaux = PROFILE.cadeaux || {};
-  PROFILE.cadeaux[giftKey()] = 1;
+  if (!s || !s.giftFlag || giftTaken()) return;
+  PROFILE.giftsClaimed = PROFILE.giftsClaimed || {};
+  PROFILE.giftsClaimed[giftKey()] = 1;
   const txt = [];
-  for (const k in s.cadeau) {
+  for (const k in s.giftFlag) {
     if (!SHOP[k]) continue;
-    PROFILE.bag[k] = Math.min(99, bagN(k) + s.cadeau[k]);
-    txt.push(`${s.cadeau[k]} × ${SHOP[k].n}`);
+    PROFILE.bag[k] = Math.min(99, bagN(k) + s.giftFlag[k]);
+    txt.push(`${s.giftFlag[k]} × ${SHOP[k].n}`);
   }
   sfx('ui');
   vibe(30);
@@ -108,14 +108,14 @@ function takeGift() {
 
 /** Today's season on the route (data-saison of #route). */
 export function seasonRoute() {
-  setRoute({ saison: season() ? seasonOf() : '' });
+  setRoute({ season: season() ? seasonOf() : '' });
 }
 
 
 /** #v4Saison block of the Home screen (src/screens/home/Footer.jsx): the season and its gift. */
 export function seasonData() {
   const s = season();
-  return s ? { s, pris: giftTaken() } : null;
+  return s ? { s, isTaken: giftTaken() } : null;
 }
 
 
@@ -159,7 +159,7 @@ export function noteMoment(S, u, displayName, ev, previous, heading) {
   ].filter(Boolean);
   R.best = {
     score: sc.s,
-    avant: previous,
+    before: previous,
     apres: JSON.stringify(S),
     ev: JSON.parse(JSON.stringify(ev)),
     label: `Manche ${S.round} · ${heading || `${u.n} · ${displayName}`}`,
@@ -177,7 +177,7 @@ async function rebroadcast() {
     isSlow = RM || AUTO ? 0.2 : 1;
   try {
     res.hidden = true;
-    __set_B(Object.assign(JSON.parse(R.best.avant), { over: null }));
+    __set_B(Object.assign(JSON.parse(R.best.before), { over: null }));
     ui.busy = true;
     buildBoard();
     renderAll();
@@ -213,7 +213,7 @@ const SEASONS = {
     d: 'Les Pokémon Spectre, Ténèbres et Poison sortent des hautes herbes, la nuit tombe sur les combats sauvages, et chaque capture de ces types rapporte 1 Éclat.',
     types: ['Spectre', 'Ténèbres', 'Poison'],
     nuit: true,
-    cadeau: { hyper: 3 },
+    giftFlag: { hyper: 3 },
     c: '#8a5cf6'
   },
   hiver: {
@@ -221,14 +221,14 @@ const SEASONS = {
     d: 'Les Pokémon Glace et Eau sortent des hautes herbes, la grêle tombe sur les combats sauvages, et chaque capture de ces types rapporte 1 Éclat.',
     types: ['Glace', 'Eau'],
     wx: 'grele',
-    cadeau: { super: 3, superpotion: 2 },
+    giftFlag: { super: 3, superpotion: 2 },
     c: '#8fd8ff'
   },
   printemps: {
     n: 'Floraison de printemps',
     d: 'Les Pokémon Plante, Fée et Insecte sortent des hautes herbes, et chaque capture de ces types rapporte 1 Éclat.',
     types: ['Plante', 'Fée', 'Insecte'],
-    cadeau: { potion: 5 },
+    giftFlag: { potion: 5 },
     c: '#7ac74c'
   },
   ete: {
@@ -236,7 +236,7 @@ const SEASONS = {
     d: 'Les Pokémon Feu, Eau et Électrik sortent des hautes herbes, le soleil tape sur les combats sauvages, et chaque capture de ces types rapporte 1 Éclat.',
     types: ['Feu', 'Eau', 'Électrik'],
     wx: 'soleil',
-    cadeau: { super: 5 },
+    giftFlag: { super: 5 },
     c: '#ee8130'
   },
   weekend: {
@@ -418,7 +418,7 @@ DISSONANCE.forEach((T, i) => {
 });
 
 
-HOOKS.progres.push((S, rew, win) => {
+HOOKS.progress.push((S, rew, win) => {
   const D = SCEN[S.sc] || {},
     o = [0, 0];
   // season: captures of the season's types
@@ -427,7 +427,7 @@ HOOKS.progres.push((S, rew, win) => {
     const n = rew.caught.filter(c => BY[c.id] && BY[c.id].t.some(t => s.types.includes(t))).length;
     if (n) {
       o[1] += n;
-      rew.saison = n;
+      rew.season = n;
     }
   }
   // the Dissonance
@@ -442,10 +442,10 @@ HOOKS.progres.push((S, rew, win) => {
 });
 
 
-HOOKS.resultat.push(r => {
+HOOKS.battleResult.push(r => {
   const o = [];
-  if (r.saison) {
-    o.push(`<div class="res-l"><h4>${season() ? season().n : 'Saison'}</h4><div class="rl"><span>Capture de saison : +${r.saison} Éclat${r.saison > 1 ? 's' : ''}</span><b>✦</b></div></div>`);
+  if (r.season) {
+    o.push(`<div class="res-l"><h4>${season() ? season().n : 'Saison'}</h4><div class="rl"><span>Capture de saison : +${r.season} Éclat${r.season > 1 ? 's' : ''}</span><b>✦</b></div></div>`);
   }
   if (r.dissonance) {
     const T = DISSONANCE[r.dissonance - 1];
@@ -470,7 +470,7 @@ HOOKS.creation.push(S => {
   if (s.wx && !S.wx) S.wx = { k: s.wx, n: 5 };
   if (s.nuit) {
     S.time = 'nuit';
-    if (S.cyc && !S.cyc.fige) S.cyc = { ph: 'nuit', n: 0 };
+    if (S.cycle && !S.cycle.frozen) S.cycle = { ph: 'nuit', n: 0 };
   }
 });
 }
