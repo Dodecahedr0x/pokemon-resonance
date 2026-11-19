@@ -128,7 +128,78 @@ html body .activity-bar > #x2470 .defense-gym-i {
   transform: rotate(-135deg) translateY(-2px);
 }
 
+/* ================= Notes written as a sentence (all sizes) =================
+   .v4-note is a flex row meant for icon + text; in a <p> it split the bold words
+   of a sentence onto their own line ("0 / 6" in Secret places). */
+p.v4-note {
+  display: block;
+}
+
 @media (max-width: 700px) {
+  /* ---------- Title screen: the frame no longer grows wider than the screen ---------- */
+  html body #resonance-launch {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+  html body #resonance-launch .rl-frame {
+    box-sizing: border-box !important;
+    min-width: 0 !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+  /* the play disc keeps its round shape; the label gives way first */
+  html body #resonance-launch .rl-enter {
+    gap: 10px !important;
+    padding-right: 14px !important;
+    font-size: clamp(12px, 3.4vw, 14px) !important;
+    letter-spacing: 0.04em !important;
+  }
+  html body #resonance-launch .rl-enter > :is(.v4-rl-ic, .v4-rl-ch) {
+    flex: none;
+  }
+  html body #resonance-launch .rl-enter > span:not(.v4-rl-ic) {
+    flex: 1;
+    min-width: 0;
+    white-space: normal !important;
+    line-height: 1.2;
+  }
+  /* the vertical tagline ran over the artwork */
+  html body #resonance-launch .rl-scroll {
+    display: none !important;
+  }
+
+  /* ---------- Starter choice: the three difficulties on one row ---------- */
+  html body .it-diff {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px !important;
+  }
+  html body .it-diff > span {
+    grid-column: 1/-1;
+  }
+  html body .it-diff > .b {
+    min-width: 0 !important;
+    min-height: var(--tap);
+    margin: 0 !important;
+  }
+  /* intro actions: full-width buttons stacked, the main one last, under the thumb */
+  html body .it-a {
+    flex-direction: column;
+    align-items: stretch !important;
+    gap: 8px !important;
+  }
+  html body .it-a > .b {
+    width: 100% !important;
+    min-height: var(--tap);
+    margin: 0 !important;
+    justify-content: center;
+  }
+
+  /* ---------- Battle tutorial card: full-size buttons ---------- */
+  html body #coach .co-a .b {
+    min-height: var(--tap) !important;
+    padding: 0 14px !important;
+    font-size: var(--t-s) !important;
+  }
+
   /* ---------- Battles: the "Launch" bar fits on one line ---------- */
   html body #cbPrep .pt-go {
     flex-wrap: nowrap !important;
@@ -196,15 +267,19 @@ html body .activity-bar > #x2470 .defense-gym-i {
     display: none !important;
   }
 
-  /* ---------- Camp: sub-tabs on a single scrolling line ---------- */
-  html body .camp-tab {
+  /* ---------- Camp: sub-tabs on a single scrolling line ----------
+     The line bleeds to the screen edges: the bleed matches the page's 12 px side padding,
+     otherwise the whole page scrolls sideways. */
+  html:not(#pkz) body:not(#pkz) #camp .camp-tab {
     flex-wrap: nowrap !important;
     overflow-x: auto;
     scrollbar-width: none;
-    margin-inline: -16px !important;
-    padding: 6px 16px !important;
-    -webkit-mask-image: linear-gradient(90deg, transparent, #000 16px, #000 calc(100% - 24px), transparent);
-    mask-image: linear-gradient(90deg, transparent, #000 16px, #000 calc(100% - 24px), transparent);
+    margin-inline: -12px !important;
+    padding: 6px 12px !important;
+    border-radius: 0 !important;
+    border-inline: 0 !important;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 12px, #000 calc(100% - 24px), transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 12px, #000 calc(100% - 24px), transparent);
   }
   html body .camp-tab button {
     flex: none !important;
@@ -215,12 +290,133 @@ html body .activity-bar > #x2470 .defense-gym-i {
     white-space: nowrap;
   }
   html body .camp-tab button:last-child {
-    margin-right: 16px;
+    margin-right: 12px;
   }
   html:not(#pkz) body:not(#pkz) .camp-tab button[aria-selected='false'] {
     background: rgba(255, 255, 255, 0.06) !important;
     border: 1px solid rgba(255, 255, 255, 0.12) !important;
     color: #d5dee8 !important;
+  }
+
+  /* ---------- section headers: the hint goes under the title instead of squeezing it ---------- */
+  html body .v4-sec-h {
+    flex-wrap: wrap;
+    row-gap: 4px;
+  }
+  html body .v4-sec-h > span {
+    flex-basis: 100%;
+    margin-left: 0;
+    font-size: var(--t-s);
+    line-height: 1.4;
+  }
+
+  /* ---------- Map: time-of-day switch and Pokédex buttons reach a tappable height ---------- */
+  html body .tod button {
+    min-height: 40px;
+    padding-inline: 12px !important;
+  }
+  html body #dex .v4-btn {
+    min-height: 40px;
+  }
+  html body #pokedex .dc-s {
+    min-height: 40px;
+  }
+  /* Pokédex filters: the two lists fill their row */
+  html body #dex .v4-dexbar > select {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    min-height: var(--tap);
+  }
+  html body #dex .v4-dexbar > :is(.v4-srch, .v4-dexcnt) {
+    flex-basis: 100%;
+    text-align: center;
+  }
+
+  /* ---------- Settings: every panel gets the same inner padding as the .v4-ps ones ---------- */
+  html body #params .v4-params > .v4-panel:not(.v4-ps) {
+    display: grid !important;
+    gap: 10px;
+    padding: 14px !important;
+  }
+  html body #params .v4-params > .v4-panel:not(.v4-ps) > * {
+    margin: 0 !important;
+  }
+  html body #params .v4-panel .sv-io {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px !important;
+  }
+  /* board variants: short names, two per row */
+  html body #params #gimmick-boards-panel .sv-io {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  html body #params .v4-panel .sv-io > .b {
+    width: 100% !important;
+    min-height: var(--tap);
+    margin: 0 !important;
+    justify-content: center;
+  }
+
+  /* ---------- Guide: "Getting started" steps use the full card width ----------
+     Number and title on the first line, the explanation below across the whole card. */
+  html body .s5 li {
+    gap: 8px 14px !important;
+    align-items: center !important;
+    padding: 14px !important;
+  }
+  html body .s5 li > div {
+    display: contents;
+  }
+  html body .s5 li > div > p {
+    grid-column: 1/-1;
+    margin: 0 !important;
+  }
+  /* reaction matrix: the row names keep their text but lose the icon, the cells get the room */
+  html body .mx {
+    gap: 4px !important;
+    padding: 12px 10px !important;
+  }
+  html body .mx .rh {
+    padding-right: 2px !important;
+  }
+  html body .mx .rh > .mini {
+    display: none;
+  }
+  html body .mx .cell {
+    border-radius: 8px;
+  }
+  /* the sticky guide tabs stay readable over the text scrolling under them */
+  html:not(#pkz) body:not(#pkz) .gd-tabs {
+    background: linear-gradient(180deg, rgba(4, 12, 22, 0.96), rgba(7, 17, 31, 0.94)) !important;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+  }
+
+  /* ---------- Home: the folding "Classement" line is a full-height tap target ---------- */
+  html body #accueil .am-cl > summary {
+    padding-block: 14px;
+  }
+
+  /* ---------- Saves sheet: options and close button at a tappable size ---------- */
+  html body #saves .b-sm {
+    min-height: 40px !important;
+  }
+  html body #saves .sh-x {
+    width: var(--tap) !important;
+    height: var(--tap) !important;
+  }
+
+  /* ---------- Bag: daily offers one per row (names and prices no longer cut) ---------- */
+  html body #sac .v4-off-l {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+  /* shop categories scroll sideways: the right edge fades so the hidden ones are hinted */
+  html:not(#pkz) body:not(#pkz) #sac .v4-cats {
+    -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 28px), transparent);
+    mask-image: linear-gradient(90deg, #000 calc(100% - 28px), transparent);
+  }
+  html:not(#pkz) body:not(#pkz) #sac .v4-cats > button:last-child {
+    margin-right: 24px !important;
   }
 
   /* ---------- screen headers: same rhythm everywhere ---------- */

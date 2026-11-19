@@ -33,6 +33,16 @@ Then open the printed address (http://localhost:5173). `npm run build` produces 
 
 ## Release notes (in French, as shown to players)
 
+### Nouveautés v4.79 : confort sur téléphone
+- Écran titre : le texte et le bouton « Toucher pour commencer » tiennent dans l'écran (ils étaient coupés à droite) ; la phrase verticale qui passait sur l'illustration disparaît sur téléphone.
+- Camp : la page ne défile plus de côté à cause de la ligne d'onglets.
+- Paramètres : chaque panneau a sa marge intérieure (titres et boutons ne collent plus au bord) ; boutons pleine largeur ; les plateaux à gimmick s'affichent sur deux colonnes.
+- Sac : les offres du jour s'affichent une par ligne, noms et prix en entier ; la ligne de catégories s'estompe à droite pour signaler qu'elle défile.
+- Guide : les étapes de « Débuter » utilisent toute la largeur de la carte ; la matrice des réactions a des cases plus grandes et des abréviations lisibles ; les onglets collants restent lisibles au-dessus du texte.
+- Choix du starter : les trois difficultés sur une seule ligne ; boutons de l'introduction en pleine largeur, le principal en bas sous le pouce.
+- Boutons plus faciles à toucher : tutoriel de combat, Matin / Jour / Nuit sur la route, missions du Pokédex, étoiles des recrues, Sauvegardes, « Classement » de l'accueil.
+- Titres de section : l'indication passe sous le titre au lieu de l'écraser ; filtres du Pokédex sur toute la ligne ; « 0 / 6 » des Lieux secrets ne coupe plus la phrase.
+
 ### Nouveautés v4.78 : tour guidé
 - En combat, le panneau guide chaque Pokémon étape par étape : Déplacer › Agir › Terminer, avec un bouton pour sauter chaque étape (« Rester ici », « Passer l’action », « Terminer »).
 - Plus de « Fin du tour » à presser pendant votre phase : la manche se termine seule quand tous vos Pokémon ont joué. Impossible de finir le tour en oubliant un Pokémon.
