@@ -7,7 +7,7 @@ import { medal } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { uk } from '../combat/engine.js';
 import { OBST } from '../combat/synergies-obstacles.js';
-import { CAP_K } from '../state/economy.js';
+import { CAP_K } from '../items/ball-choice.js';
 import { hoennOpen } from './hoenn.js';
 
 export let HOENN_LEGEND_DEFS;

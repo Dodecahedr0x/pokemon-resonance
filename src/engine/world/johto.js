@@ -8,22 +8,17 @@ import { badgeSvg } from '../modes/league.js';
 import { EMAX, P, hdist, heal, nbrK, say, setMark, shove, uAt, uk } from '../combat/engine.js';
 import { scenLock } from '../combat/items-bonds-ai.js';
 import { wonOf } from './home-journey.js';
-import { HELD_IMG, ITEM_ICONS, ITM, SHOP, V4 } from '../state/economy.js';
+import { HELD_IMG, SHOP } from '../state/economy.js';
+import { ITEM_ICONS, ITM } from '../assets/item-icons.js';
+import { V4 } from '../ui/screen-state.js';
 import { PL, PLACES, renderMap } from './map.js';
 import { DAMAGE_PROVIDERS } from '../combat/tactical-engine.js';
 import { hourOf } from '../combat/living-board.js';
 import { TARGET_MOVE_EFFECTS, SELF_MOVE_EFFECTS, applyPoison } from '../moves/epic-tms.js';
 import { hasRune } from '../moves/technical-roster.js';
 import { hasXp } from '../combat/resonance.js';
-import {
-  johtoChapterLive,
-  johtoExtraLine,
-  johtoSetup,
-  johtoTick,
-  johtoLead,
-  johtoLock,
-  roamingPlaces,
-} from './living-johto.js';
+import { johtoChapterLive, johtoExtraLine, johtoSetup, johtoTick, johtoLead, johtoLock } from './johto-story.js';
+import { roamingPlaces } from './roaming-beasts.js';
 import { PLACES_H, hoennChapter, hoennRewardLine, hoennOpen, hoennLead, isHoennRegion } from './hoenn.js';
 
 export let PLACES_J, JMAP_SVG;

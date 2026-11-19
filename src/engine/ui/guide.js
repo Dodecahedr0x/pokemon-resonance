@@ -2,7 +2,8 @@ import { $ } from '../core/utils.js';
 import { go } from '../core/navigation.js';
 import { __set_filt, renderFilters, renderGrid } from '../team/team.js';
 import { B, renderPanel, scSel } from '../combat/ui.js';
-import { PREF, __set_PREPG, renderPrep, savePref } from '../progression/campaign.js';
+import { PREF, savePref } from './preferences.js';
+import { __set_PREPG, renderPrep } from '../combat/battle-prep.js';
 import { openRule, setGuideTab } from '../../screens/guide/guideStore.js';
 
 // Current tab, tab choice and targeted rule: React state (src/screens/guide/guideStore.js).

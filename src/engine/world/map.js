@@ -9,10 +9,12 @@ import { ELITE, scenLock } from '../combat/items-bonds-ai.js';
 import { nextGoal } from '../progression/campaign.js';
 import { ELITE_L, leaderOf } from '../progression/prestige.js';
 import { avatar, emblem, wonOf } from './home-journey.js';
-import { HELD_IMG, ITM, V4 } from '../state/economy.js';
+import { HELD_IMG } from '../state/economy.js';
+import { ITM } from '../assets/item-icons.js';
+import { V4 } from '../ui/screen-state.js';
 import { johtoRewardLine, placeStateJ, placesR, updateRouteSign } from './johto.js';
-import { safariLocked } from '../modes/fishing-safari-coop.js';
-import { updateScrollArrows } from '../progression/camp.js';
+import { safariLocked } from '../modes/safari.js';
+import { updateScrollArrows } from './map-scroll.js';
 import { builtMap, refreshMap } from '../../screens/map/mapStore.js';
 
 // Map page rendered by React (src/screens/map/): template, routes, markers, panels.

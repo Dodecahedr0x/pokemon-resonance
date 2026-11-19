@@ -5,7 +5,7 @@ import { SCEN } from '../pokemon/pokemon.js';
 import { ARENAS } from '../modes/gyms.js';
 import { hash2, mulberry32, tc } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
-import { V4 } from '../state/economy.js';
+import { V4 } from '../ui/screen-state.js';
 import { CHAIN, MAP_SVG, curvePath, placeState } from './map.js';
 import { JCHAIN, JMAP_SVG, placesR } from './johto.js';
 import { HCHAIN, HMAP_SVG } from './hoenn.js';

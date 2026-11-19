@@ -2,7 +2,7 @@
 
 import { BY, SCEN } from './pokemon.js';
 import { HOOKS } from '../core/hooks.js';
-import { V4 } from '../state/economy.js';
+import { V4 } from '../ui/screen-state.js';
 import { renderDexCard } from '../progression/pokedex.js';
 
 // Regional forms: read by the Pokédex sheet (src/screens/dex/DexCard.jsx).

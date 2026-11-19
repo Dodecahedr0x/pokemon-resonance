@@ -6,10 +6,12 @@ import { PROFILE } from '../state/game-state.js';
 import { $, toast } from '../core/utils.js';
 import { hook } from '../core/hooks.js';
 import { queueSave } from '../state/saves.js';
-import { sfx, vibe } from './campaign.js';
-import { SHOP, V4, bagN, clampI, countS, familyOwned, maxLink } from '../state/economy.js';
-import { renderWallet } from '../core/interface.js';
-import { costOf } from '../team/identity.js';
+import { sfx, vibe } from '../audio/sound-effects.js';
+import { SHOP, bagN, clampI } from '../state/economy.js';
+import { V4 } from '../ui/screen-state.js';
+import { countS, familyOwned, maxLink } from './trainer-stats.js';
+import { renderWallet } from '../ui/wallet.js';
+import { costOf } from './base-camp.js';
 
 // Quests page: src/screens/quests; Bag and Shop page: src/screens/bag.
 export let SQ;

@@ -1,4 +1,4 @@
-import { isCreator } from '../../../engine/progression/camp.js';
+import { isCreator } from '../../../engine/tools/action-replay.js';
 
 const CHEATS = [
   ['argent', '+10 000 ₽'],

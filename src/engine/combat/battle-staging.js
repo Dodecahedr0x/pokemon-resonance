@@ -9,7 +9,8 @@ import { HOOKS } from '../core/hooks.js';
 import { badgeSvg } from '../modes/league.js';
 import { uk } from './engine.js';
 import { B, HC, L } from './ui.js';
-import { PREF, calmMotion, noise, tone, vibe } from '../progression/campaign.js';
+import { PREF, calmMotion } from '../ui/preferences.js';
+import { noise, tone, vibe } from '../audio/sound-effects.js';
 import { AUTO, leaderOf } from '../progression/prestige.js';
 import { boardSet, getBoard, tokCl, tokHas, unitsBatch } from '../../screens/combat/board/boardStore.js';
 

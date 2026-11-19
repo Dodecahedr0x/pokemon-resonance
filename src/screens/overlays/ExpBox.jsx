@@ -2,7 +2,7 @@ import { Html } from '../../lib/html.jsx';
 import { Box, Dialogue } from './Window.jsx';
 import { BY } from '../../engine/pokemon/pokemon.js';
 import { medal } from '../../engine/core/utils.js';
-import { DESTINATIONS } from '../../engine/team/identity.js';
+import { DESTINATIONS } from '../../engine/progression/expeditions.js';
 import { lockedByBadges } from '../../engine/progression/companion-eggs.js';
 
 // Camp expedition window (#expBox): choice of location, then of Pokémon.

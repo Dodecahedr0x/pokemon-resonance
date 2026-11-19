@@ -34,11 +34,15 @@ import {
   renderAll,
   ui,
 } from '../combat/ui.js';
-import { PREF, openStarter, renderPrep, savePref, sfx, vibe } from '../progression/campaign.js';
-import { renderWallet } from '../core/interface.js';
+import { PREF, savePref } from '../ui/preferences.js';
+import { openStarter } from '../progression/campaign.js';
+import { renderPrep } from '../combat/battle-prep.js';
+import { sfx, vibe } from '../audio/sound-effects.js';
+import { renderWallet } from '../ui/wallet.js';
 import { renderHome } from '../world/home.js';
 import { v4After } from '../ui/settings.js';
-import { rivalBuild, towerRestore } from '../modes/adventure.js';
+import { rivalBuild } from '../modes/rival.js';
+import { towerRestore } from '../modes/resonance-tower.js';
 import { unrollSpeed } from '../combat/tactical-engine.js';
 import { fillFreeBox } from '../world/catch-anywhere.js';
 import { hideSaves, refreshSaves, showSaves } from '../../screens/saves/savesStore.js';

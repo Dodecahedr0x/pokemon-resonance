@@ -2,7 +2,7 @@
 
 import { ITEMS2, PROFILE } from '../state/game-state.js';
 import { writeLS, toast } from '../core/utils.js';
-import { sfx, vibe } from '../progression/campaign.js';
+import { sfx, vibe } from '../audio/sound-effects.js';
 import { SHOP, bagN, savePurse, today } from '../state/economy.js';
 import { refreshHome } from '../../screens/home/homeStore.js';
 import { renderBag } from '../progression/quests-shop.js';

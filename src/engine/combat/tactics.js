@@ -27,7 +27,7 @@ import {
 } from './engine.js';
 import { OBST, resolve, roleOf } from './synergies-obstacles.js';
 import { HC, poly, scSel } from './ui.js';
-import { PREF } from '../progression/campaign.js';
+import { PREF } from '../ui/preferences.js';
 import { SHOP } from '../state/economy.js';
 import { DAMAGE_PROVIDERS, ROLE_PROVIDERS } from './tactical-engine.js';
 import { MACHINES } from '../moves/tms.js';

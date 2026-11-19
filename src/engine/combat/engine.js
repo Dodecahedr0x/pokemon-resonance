@@ -21,7 +21,8 @@ import {
   roleOf,
   roundSupport,
 } from './synergies-obstacles.js';
-import { aiStyleBonus, isShinyOwned } from '../modes/adventure.js';
+import { aiStyleBonus } from './leader-styles.js';
+import { isShinyOwned } from '../pokemon/shiny.js';
 import {
   DAMAGE_PROVIDERS,
   JIT_BOSS,
@@ -45,8 +46,9 @@ import {
   trapPlan,
   placeTrap,
 } from './tactics.js';
-import { chordAfter, disobeys } from '../team/identity.js';
-import { REPLAYS, noteMoment } from '../world/seasons.js';
+import { chordAfter } from './resonance-chords.js';
+import { disobeys } from '../team/characters.js';
+import { REPLAYS, noteMoment } from './best-move-replay.js';
 import {
   TARGET_MOVE_EFFECTS,
   SELF_MOVE_EFFECTS,
@@ -63,12 +65,13 @@ import {
   aiSupportMove,
 } from '../moves/technical-roster.js';
 import { hasXp, afterHitResonance, afterDamageItems, xpCost, afterMoveHeldItems, canXP } from './resonance.js';
-import { fleeMessage } from '../world/living-johto.js';
-import { resonanceCandidate } from '../progression/companions.js';
+import { fleeMessage } from '../world/roaming-beasts.js';
+import { resonanceCandidate } from './resonant-form.js';
 import { vigilanceStrike } from './intensity.js';
-import { expertCoordination } from '../progression/quality.js';
-import { doctrineDamage, doctrineMove, journalDamage } from '../progression/camp.js';
-import { masteryDamageBonus, masteryMoveBonus } from '../modes/tactical-challenges.js';
+import { expertCoordination } from './expert-ai.js';
+import { doctrineDamage, doctrineMove } from './doctrines.js';
+import { journalDamage } from '../progression/tactical-journal.js';
+import { masteryDamageBonus, masteryMoveBonus } from '../progression/family-mastery.js';
 import { talentDamage, talentMove } from '../team/individuals.js';
 import { duelAiPlan, duelVigilance } from '../modes/duel.js';
 import { eeveeHarmony } from '../pokemon/eevee.js';

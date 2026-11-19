@@ -9,9 +9,9 @@ import { BADGES } from '../../engine/modes/gyms.js';
 import { medal } from '../../engine/core/utils.js';
 import { B } from '../../engine/combat/ui.js';
 import { SLOTS, SV, battleLine, cleanProfile, fmtD, snapshot, validBattle } from '../../engine/state/saves.js';
-import { PREF } from '../../engine/progression/campaign.js';
+import { PREF } from '../../engine/ui/preferences.js';
 import { boxCapacityLabel } from '../../engine/world/catch-anywhere.js';
-import { boxCount } from '../../engine/progression/quality.js';
+import { boxCount } from '../../engine/modes/legendary-captures.js';
 
 // "Sauvegardes" (Saves) window (#saves). Clicks, input and import are still handled by
 // the engine (listeners on #saves, data-sv, data-resume): here, display only.

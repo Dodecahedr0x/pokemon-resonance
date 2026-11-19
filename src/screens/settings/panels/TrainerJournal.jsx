@@ -1,6 +1,7 @@
 import { BY } from '../../../engine/pokemon/pokemon.js';
 import { PROFILE } from '../../../engine/state/game-state.js';
-import { PIX, ownedFam } from '../../../engine/state/economy.js';
+import { PIX } from '../../../engine/assets/item-icons.js';
+import { ownedFam } from '../../../engine/progression/trainer-stats.js';
 import { DEXS } from '../../../engine/progression/pokedex.js';
 import { readJournal } from '../../../engine/audio/immersion.js';
 

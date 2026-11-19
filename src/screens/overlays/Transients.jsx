@@ -19,18 +19,18 @@ import {
 // at the end of the shell. Key = id + version: each opening starts from a fresh node.
 const PAR_ID = {
   vs: Vs,
-  battleHelp: BattleHelp,
-  eventChoice: RouteEncounter,
-  secretPlaces: SecretPlace,
+  'battle-help': BattleHelp,
+  'event-choice': RouteEncounter,
+  'secret-places': SecretPlace,
   passerby: PassingNpc,
   souvenirs: CompanionKeepsakes,
-  seasonEventO: SeasonEvent,
-  bossRushO: BossRush,
-  defenseGymO: DefenseGym,
-  dailyChallengesO: ChallengesHub,
+  'season-event-o': SeasonEvent,
+  'boss-rush-o': BossRush,
+  'defense-gym-o': DefenseGym,
+  'daily-challenges-o': ChallengesHub,
   x2470o: X2470,
   duel433r: DuelRelay,
-  timedCatch: TimingGauge,
+  'timed-catch': TimingGauge,
 };
 
 export default function Transients() {

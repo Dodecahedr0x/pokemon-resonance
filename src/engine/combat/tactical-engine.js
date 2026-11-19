@@ -5,10 +5,10 @@ import { toast } from '../core/utils.js';
 import { byUid, execFoe, flies, hdist, markAt, uk } from './engine.js';
 import { ACT, STATUSED, coverOf, ignObst, noteAdd, roleOf } from './synergies-obstacles.js';
 import { B, autoSel, clearAim, endOfRound, finish, log, placeEnemy, renderAll, scSel, ui } from './ui.js';
-import { PREF } from '../progression/campaign.js';
+import { PREF } from '../ui/preferences.js';
 import { playEv } from './move-effects.js';
-import { coopPlayer } from '../modes/fishing-safari-coop.js';
-import { battleDelay } from './catches.js';
+import { coopPlayer } from '../modes/coop.js';
+import { battleDelay } from './quick-battle.js';
 
 export let SPEED_PROVIDERS, JIT_PBM, JIT_PB, JIT_DMG, JIT_BOSS, JIT_BOSS_HB, DAMAGE_PROVIDERS, ROLE_PROVIDERS;
 let JIT_HB;

@@ -4,9 +4,10 @@ import { BY, SCEN } from '../pokemon/pokemon.js';
 import { HOOKS } from '../core/hooks.js';
 import { renderSquad, squad } from './team.js';
 import { heal, say } from '../combat/engine.js';
-import { PREF, savePref, sfx, vibe } from '../progression/campaign.js';
+import { PREF, savePref } from '../ui/preferences.js';
+import { sfx, vibe } from '../audio/sound-effects.js';
 import { DAMAGE_PROVIDERS } from '../combat/tactical-engine.js';
-import { teamSize } from '../progression/achievements-challenges.js';
+import { teamSize } from '../progression/campaign-challenges.js';
 
 export let FORMATIONS;
 let DEFENSIVE_TYPES, OFFENSIVE_TYPES, SCOUT_TYPES, SUPPORT_TYPES;

@@ -7,13 +7,16 @@ import { TOD } from '../../engine/world/home-route.js';
 import { ELITE, scenLock } from '../../engine/combat/items-bonds-ai.js';
 import { CHAP, ELITE_L, leaderOf } from '../../engine/progression/prestige.js';
 import { avatar, goalChips } from '../../engine/world/home-journey.js';
-import { ITM, V4, bagN, dailyKey } from '../../engine/state/economy.js';
+import { ITM } from '../../engine/assets/item-icons.js';
+import { V4 } from '../../engine/ui/screen-state.js';
+import { bagN } from '../../engine/state/economy.js';
+import { dailyKey } from '../../engine/modes/daily-battle.js';
 import { PL, STATE_N, placeIcon, placeName, placeState, rewardLine } from '../../engine/world/map.js';
 import { johtoOpen, routeName } from '../../engine/world/johto.js';
-import { SAFARI_BALLS, SAFARI_STEPS, SAFARI_PRICE, safariLocked } from '../../engine/modes/fishing-safari-coop.js';
+import { SAFARI_BALLS, SAFARI_STEPS, SAFARI_PRICE, safariLocked } from '../../engine/modes/safari.js';
 import { hoennOpen } from '../../engine/world/hoenn.js';
 import { regionIndex } from '../../engine/world/catch-anywhere.js';
-import { familyCaptureStats } from '../../engine/combat/catches.js';
+import { familyCaptureStats } from '../../engine/progression/regional-dex.js';
 
 const Lock = ({ children }) => (
   <p className="v4-lock">

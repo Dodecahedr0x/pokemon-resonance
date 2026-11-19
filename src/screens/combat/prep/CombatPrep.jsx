@@ -7,7 +7,8 @@ import Detail from './Detail.jsx';
 import Team from './Team.jsx';
 import { SCEN } from '../../../engine/pokemon/pokemon.js';
 import { scSel } from '../../../engine/combat/ui.js';
-import { PREPG, nextGoal } from '../../../engine/progression/campaign.js';
+import { PREPG } from '../../../engine/combat/battle-prep.js';
+import { nextGoal } from '../../../engine/progression/campaign.js';
 import { groupOf } from '../../../engine/world/home-journey.js';
 
 // Battles: battle choice (#cbPrep). The engine keeps the logic (renderPrep, listeners

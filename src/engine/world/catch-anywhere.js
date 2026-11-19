@@ -3,7 +3,7 @@ import { RECRUIT } from '../pokemon/evolution.js';
 import { BADGE_REWARD, PROFILE, isCamp } from '../state/game-state.js';
 import { isJohtoRegion } from './johto.js';
 import { isHoennRegion } from './hoenn.js';
-import { boxCount } from '../progression/quality.js';
+import { boxCount } from '../modes/legendary-captures.js';
 
 /* =====================================================================
    v4.21: catch anywhere

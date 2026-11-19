@@ -1,7 +1,7 @@
 import { useReducer } from 'react';
 import { PROFILE } from '../../engine/state/game-state.js';
 import { queueSave } from '../../engine/state/saves.js';
-import { TUTORIAL_LIST } from '../../engine/modes/duel.js';
+import { TUTORIAL_LIST } from '../../engine/ui/tutorial-chapters.js';
 import { Html } from '../../lib/html.jsx';
 import { useGuide } from './guideStore.js';
 

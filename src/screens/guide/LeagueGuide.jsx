@@ -11,7 +11,7 @@ import {
   ownedItems,
 } from '../../engine/state/game-state.js';
 import { ico, medal, tc } from '../../engine/core/utils.js';
-import { listDuos } from '../../engine/world/living-johto.js';
+import { listDuos } from '../../engine/combat/duo-techniques.js';
 import { Html } from '../../lib/html.jsx';
 import { useGuide } from './guideStore.js';
 

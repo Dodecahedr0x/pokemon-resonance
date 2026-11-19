@@ -2,7 +2,7 @@
 
 import { $, toast } from '../core/utils.js';
 import { TABS, TNAME } from '../core/navigation.js';
-import { PREF, savePref } from '../progression/campaign.js';
+import { PREF, savePref } from '../ui/preferences.js';
 
 /* Settings › Design Workshop: paste a CSS block (e.g. written by ChatGPT), it applies immediately on this device.
    The brief gives ChatGPT the game's variables, pages and components without making it read the file's 3.7 MB. */

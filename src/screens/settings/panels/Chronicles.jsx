@@ -1,5 +1,5 @@
 import { PROFILE } from '../../../engine/state/game-state.js';
-import { SCENES } from '../../../engine/progression/companions.js';
+import { SCENES } from '../../../engine/progression/story-dialogues.js';
 import { badgeTotal } from '../../../engine/progression/item-quests.js';
 import { CHAPTERS, CHAPTER_NAMES, chapterState } from '../../../engine/progression/chronicles.js';
 

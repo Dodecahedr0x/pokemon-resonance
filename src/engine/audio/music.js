@@ -3,9 +3,9 @@
 import { $ } from '../core/utils.js';
 import { cur } from '../core/navigation.js';
 import { B } from '../combat/ui.js';
-import { PREF } from '../progression/campaign.js';
+import { PREF } from '../ui/preferences.js';
 import { MUS, musPadLevel, musPadStop, musStartCore } from '../progression/prestige.js';
-import { V4 } from '../state/economy.js';
+import { V4 } from '../ui/screen-state.js';
 import { IMMERSION_ON } from './immersion.js';
 import { OFFLINE_STATE } from '../progression/chronicles.js';
 

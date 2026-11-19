@@ -7,9 +7,11 @@ import { $, RM, after2images, writeLS, el, tc } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { byUid } from '../combat/engine.js';
 import { B, HC, L } from '../combat/ui.js';
-import { PREF, SFX, noise, savePref, tone, vibe } from '../progression/campaign.js';
+import { PREF, savePref } from '../ui/preferences.js';
+import { SFX, noise, tone, vibe } from './sound-effects.js';
 import { AUTO } from '../progression/prestige.js';
-import { V4, ownedFam } from '../state/economy.js';
+import { V4 } from '../ui/screen-state.js';
+import { ownedFam } from '../progression/trainer-stats.js';
 import { renderParams } from '../ui/settings.js';
 import { BGM } from './music.js';
 

@@ -27,11 +27,13 @@ import {
 import { noteAdd } from './synergies-obstacles.js';
 import { B, enPips } from './ui.js';
 import { queueSave } from '../state/saves.js';
-import { sfx, vibe } from '../progression/campaign.js';
-import { HEALS, HELD_IMG, SHOP, V4, bagN, today } from '../state/economy.js';
-import { renderWallet } from '../core/interface.js';
+import { sfx, vibe } from '../audio/sound-effects.js';
+import { HEALS } from '../items/battle-potions.js';
+import { HELD_IMG, SHOP, bagN, today } from '../state/economy.js';
+import { V4 } from '../ui/screen-state.js';
+import { renderWallet } from '../ui/wallet.js';
 import { renderBag } from '../progression/quests-shop.js';
-import { LEGS } from '../modes/adventure.js';
+import { LEGS } from '../modes/legendaries.js';
 import { DAMAGE_PROVIDERS } from './tactical-engine.js';
 import { de } from './tactics.js';
 import { applyPoison } from '../moves/epic-tms.js';

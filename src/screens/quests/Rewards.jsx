@@ -1,4 +1,5 @@
-import { ITM, SHOP, fmt } from '../../engine/state/economy.js';
+import { ITM } from '../../engine/assets/item-icons.js';
+import { SHOP, fmt } from '../../engine/state/economy.js';
 
 // Rewards of a quest: Pokédollars, Shards, items (formerly rewTxt).
 export default function Rewards({ r }) {

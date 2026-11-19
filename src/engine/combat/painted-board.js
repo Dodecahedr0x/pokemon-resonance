@@ -23,16 +23,18 @@ import {
   tiltS,
   ui,
 } from './ui.js';
-import { PREF, TUTORIAL_STEPS, savePref, sfx } from '../progression/campaign.js';
+import { PREF, savePref } from '../ui/preferences.js';
+import { TUTORIAL_STEPS } from '../progression/tutorial.js';
+import { sfx } from '../audio/sound-effects.js';
 import { FXS, fxAdd, fxOn, fxPrep } from './move-effects.js';
 import { renderParams } from '../ui/settings.js';
 import { currentActor } from './tactical-engine.js';
 import { hourOf } from './living-board.js';
 import { NEWS_ENTRIES } from '../ui/whats-new.js';
-import { coopPlayer } from '../modes/fishing-safari-coop.js';
-import { battleDelay } from './catches.js';
-import { animEnabled, replayAnimation } from '../progression/quality.js';
-import { TUTORIAL_LIST } from '../modes/duel.js';
+import { coopPlayer } from '../modes/coop.js';
+import { battleDelay } from './quick-battle.js';
+import { animEnabled, replayAnimation } from './expressive-pokemon.js';
+import { TUTORIAL_LIST } from '../ui/tutorial-chapters.js';
 import { refreshBattle } from '../../screens/combat/battle/battleStore.js';
 import {
   bdClass,

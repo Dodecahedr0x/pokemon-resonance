@@ -2,11 +2,13 @@ import { Html } from '../../lib/html.jsx';
 import { BY, MON, SCEN } from '../../engine/pokemon/pokemon.js';
 import { PROFILE } from '../../engine/state/game-state.js';
 import { medal } from '../../engine/core/utils.js';
-import { dailyDone, dailyKey, dailyLeft, familyOwned, fmt, trophies } from '../../engine/state/economy.js';
+import { dailyDone, dailyKey, dailyLeft } from '../../engine/modes/daily-battle.js';
+import { familyOwned, trophies } from '../../engine/progression/trainer-stats.js';
+import { fmt } from '../../engine/state/economy.js';
 import { SQ } from '../../engine/progression/quests-shop.js';
 import { seasonData } from '../../engine/world/seasons.js';
-import { radioLines } from '../../engine/progression/companions.js';
-import { buildWeeklyChallenge } from '../../engine/progression/quality.js';
+import { radioLines } from '../../engine/world/pokegear.js';
+import { buildWeeklyChallenge } from '../../engine/modes/weekly-challenge.js';
 
 // Bottom of the Home page (.v4-bottom): season (#v4Saison, v4.11), Pokématos (#v4Radio, v4.17),
 // daily challenge (#v4Event), counters (#v4Stats), weekly challenge (#v4Hebdo, v4.29).

@@ -5,9 +5,9 @@ import { writeLS, toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { save } from '../team/team.js';
 import { renderAll } from '../combat/ui.js';
-import { ownedFam } from '../state/economy.js';
+import { ownedFam } from './trainer-stats.js';
 import { DEXS } from './pokedex.js';
-import { announceSky } from './camp.js';
+import { announceSky } from '../combat/battle-sky.js';
 
 // Instructions run at startup, in the original order (see index.js).
 export function init() {

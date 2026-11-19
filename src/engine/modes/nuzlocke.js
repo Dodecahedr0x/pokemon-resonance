@@ -8,8 +8,9 @@ import { HOOKS } from '../core/hooks.js';
 import { __set_squad, squad } from '../team/team.js';
 import { B } from '../combat/ui.js';
 import { queueSave } from '../state/saves.js';
-import { PREF, savePref } from '../progression/campaign.js';
-import { V4, today } from '../state/economy.js';
+import { PREF, savePref } from '../ui/preferences.js';
+import { V4 } from '../ui/screen-state.js';
+import { today } from '../state/economy.js';
 import { renderParams } from '../ui/settings.js';
 
 export let nuzlockeConfirm;

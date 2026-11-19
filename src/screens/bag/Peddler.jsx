@@ -1,6 +1,7 @@
 import { ITEMS2, PROFILE } from '../../engine/state/game-state.js';
-import { ITM, SHOP, bagN, fmt } from '../../engine/state/economy.js';
-import { costOf0 } from '../../engine/team/identity.js';
+import { ITM } from '../../engine/assets/item-icons.js';
+import { SHOP, bagN, fmt } from '../../engine/state/economy.js';
+import { costOf0 } from '../../engine/progression/base-camp.js';
 import { heldItemCost } from '../../engine/combat/resonance.js';
 import { todaysPeddler } from '../../engine/world/route-events.js';
 import { Disc } from './Items.jsx';

@@ -5,3 +5,4 @@ public
 scripts
 package-lock.json
 *.md
+.claude

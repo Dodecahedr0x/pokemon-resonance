@@ -3,8 +3,8 @@ import { Box, Dialogue } from './Window.jsx';
 import { BY } from '../../engine/pokemon/pokemon.js';
 import { tb } from '../../engine/core/utils.js';
 import { crestSmall } from '../../engine/team/team.js';
-import { SPARK, shinyStyle } from '../../engine/modes/adventure.js';
-import { DOMINANT_CROWN_SVG } from '../../engine/world/living-johto.js';
+import { SPARK, shinyStyle } from '../../engine/pokemon/shiny.js';
+import { DOMINANT_CROWN_SVG } from '../../engine/world/dominant-pokemon.js';
 
 // Fishing (#fishingPanel): waiting, bite, catch. The engine (058) keeps the timers,
 // the clicks (data-fishing-panel) and the hidden attribute; after a shiny catch, it

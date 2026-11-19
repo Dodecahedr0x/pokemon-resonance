@@ -7,7 +7,7 @@ import { medal, tc } from '../../engine/core/utils.js';
 import { squad } from '../../engine/team/team.js';
 import { startVoice } from '../../engine/combat/engine.js';
 import { RANKS, rankId, rankTag } from '../../engine/combat/resonance.js';
-import { duoTechnique } from '../../engine/world/living-johto.js';
+import { duoTechnique } from '../../engine/combat/duo-techniques.js';
 import { FORMATIONS, formationKey, formationTeam, formationActive } from '../../engine/team/formations.js';
 
 // Collapsed analysis (#anaD): summary (#anaSum) and cards (#ana). Clicks (data-p, data-rx,

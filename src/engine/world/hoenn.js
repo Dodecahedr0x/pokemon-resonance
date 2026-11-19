@@ -5,11 +5,12 @@ import { HOOKS } from '../core/hooks.js';
 import { go } from '../core/navigation.js';
 import { badgeSvg } from '../modes/league.js';
 import { nbrK, say, setMark, uk } from '../combat/engine.js';
-import { V4, fmt } from '../state/economy.js';
+import { V4 } from '../ui/screen-state.js';
+import { fmt } from '../state/economy.js';
 import { PL, renderMap } from './map.js';
 import { DAMAGE_PROVIDERS } from '../combat/tactical-engine.js';
-import { ACHIEVEMENTS } from '../progression/achievements-challenges.js';
-import { SCENES } from '../progression/companions.js';
+import { ACHIEVEMENTS } from '../progression/achievements.js';
+import { SCENES } from '../progression/story-dialogues.js';
 
 export let PLACES_H, HCHAIN, HMAP_SVG;
 let HARENAS;

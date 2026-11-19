@@ -7,7 +7,8 @@ import { tokCl } from '../../screens/combat/board/boardStore.js';
 import { TEAM_MAX, __set_squad, renderSquad, save, squad, toggle } from '../team/team.js';
 import { BH, BW, uk } from '../combat/engine.js';
 import { B, BG, L, VERT } from '../combat/ui.js';
-import { TUTORIAL_STEPS, renderPrep } from '../progression/campaign.js';
+import { TUTORIAL_STEPS } from '../progression/tutorial.js';
+import { renderPrep } from '../combat/battle-prep.js';
 
 export let TEAM_BAK;
 export function __set_TEAM_BAK(v) {

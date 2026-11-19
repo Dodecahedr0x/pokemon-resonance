@@ -3,7 +3,7 @@
 import { $, $$ } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { cur } from '../core/navigation.js';
-import { PREF, calmMotion, savePref } from '../progression/campaign.js';
+import { PREF, calmMotion, savePref } from './preferences.js';
 import { renderParams } from './settings.js';
 
 // Statements executed at startup, in the original order (see index.js).

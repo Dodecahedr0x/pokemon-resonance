@@ -1,11 +1,13 @@
 import { Html } from '../../lib/html.jsx';
 import { PROFILE } from '../../engine/state/game-state.js';
 import { tc } from '../../engine/core/utils.js';
-import { PIX, V4, ownedFam } from '../../engine/state/economy.js';
+import { PIX } from '../../engine/assets/item-icons.js';
+import { V4 } from '../../engine/ui/screen-state.js';
+import { ownedFam } from '../../engine/progression/trainer-stats.js';
 import { DEXS, dexList } from '../../engine/progression/pokedex.js';
-import { SPARK, isShinyOwned, shinyHue } from '../../engine/modes/adventure.js';
+import { SPARK, isShinyOwned, shinyHue } from '../../engine/pokemon/shiny.js';
 import { FAMILY_REGION_NAMES } from '../../engine/world/catch-anywhere.js';
-import { familyCaptureStats } from '../../engine/combat/catches.js';
+import { familyCaptureStats } from '../../engine/progression/regional-dex.js';
 
 // Bar counter (#dex4Cnt): obtained, shiny, then per region (v4.28).
 export function DexCount() {

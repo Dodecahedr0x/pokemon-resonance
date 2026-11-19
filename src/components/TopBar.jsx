@@ -1,8 +1,9 @@
 import { useShell } from './shellStore.js';
 import { PROFILE, isCamp } from '../engine/state/game-state.js';
 import { gp, tc } from '../engine/core/utils.js';
-import { fmt, tLevel } from '../engine/state/economy.js';
-import { displayedTitle } from '../engine/progression/achievements-challenges.js';
+import { fmt } from '../engine/state/economy.js';
+import { tLevel } from '../engine/progression/trainer-stats.js';
+import { displayedTitle } from '../engine/progression/achievements.js';
 import { TRAINER_AVATAR } from '../engine/world/rare-encounters.js';
 
 // Title of the displayed page (show()).

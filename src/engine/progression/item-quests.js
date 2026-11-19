@@ -3,10 +3,10 @@
 import { ITEMS2, PROFILE } from '../state/game-state.js';
 import { BADGES } from '../modes/gyms.js';
 import { toast } from '../core/utils.js';
-import { sfx, vibe } from './campaign.js';
+import { sfx, vibe } from '../audio/sound-effects.js';
 import { SHOP, bagN, savePurse } from '../state/economy.js';
 import { renderBag } from './quests-shop.js';
-import { dailySeed } from './companions.js';
+import { dailySeed } from '../world/pokegear.js';
 import { applyReward, rewardText } from '../world/route-events.js';
 import { addItems, dailyGiftState, tmKeys, hasIngredients } from '../items/workshop.js';
 

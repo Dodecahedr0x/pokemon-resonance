@@ -23,8 +23,11 @@ import {
 } from '../../../engine/combat/engine.js';
 import { roleOf } from '../../../engine/combat/synergies-obstacles.js';
 import { B, enPips, segHp, ui } from '../../../engine/combat/ui.js';
-import { PREF, catchBlock, duoBlock, tileCard, unitExtras } from '../../../engine/progression/campaign.js';
-import { HEALS, ITM, SHOP, bagN } from '../../../engine/state/economy.js';
+import { PREF } from '../../../engine/ui/preferences.js';
+import { catchBlock, duoBlock, tileCard, unitExtras } from '../../../engine/combat/battle-panel.js';
+import { HEALS } from '../../../engine/items/battle-potions.js';
+import { ITM } from '../../../engine/assets/item-icons.js';
+import { SHOP, bagN } from '../../../engine/state/economy.js';
 import {
   COMBAT_ITEMS,
   BAG_MAX,
@@ -38,10 +41,10 @@ import {
   rankTag,
   expertBlockHtml,
 } from '../../../engine/combat/resonance.js';
-import { resonanceBlockHtml } from '../../../engine/progression/companions.js';
+import { resonanceBlockHtml } from '../../../engine/combat/resonant-form.js';
 import { battleStatesHtml, vigilButtonHtml } from '../../../engine/combat/intensity.js';
 import { turnFlow } from '../../../engine/combat/painted-board.js';
-import { isEnemyTurn } from '../../../engine/combat/catches.js';
+import { isEnemyTurn } from '../../../engine/combat/quick-battle.js';
 import { useBattleVersion } from './battleStore.js';
 import { STEP, Hi, withoutTip } from './frag.jsx';
 

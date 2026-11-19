@@ -3,9 +3,9 @@ import { bdClass, bdReplay, getHost, hostSet } from '../../screens/combat/board/
 import { $, RM } from '../core/utils.js';
 import { byUid, uk } from './engine.js';
 import { B, HC, TILT, VB, VERT, buildBoard, playLog, renderAll, tiltS, ui } from './ui.js';
-import { PREF } from '../progression/campaign.js';
+import { PREF } from '../ui/preferences.js';
 import { impactWords } from '../progression/prestige.js';
-import { liveEvent } from '../progression/quality.js';
+import { liveEvent } from './expressive-pokemon.js';
 
 let R0, cl01, eo;
 

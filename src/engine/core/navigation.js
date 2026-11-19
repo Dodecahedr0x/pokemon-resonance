@@ -3,11 +3,11 @@ import { setShellPage } from '../../components/shellStore.js';
 import { $$ } from './utils.js';
 import { hook } from './hooks.js';
 import { B, scSel } from '../combat/ui.js';
-import { __set_PREPG, renderPrep } from '../progression/campaign.js';
+import { __set_PREPG, renderPrep } from '../combat/battle-prep.js';
 import { jump } from '../ui/guide.js';
 import { afterShow } from '../world/home-journey.js';
 import { v4After } from '../ui/settings.js';
-import { fitPhoneBattle } from '../pokemon/eevee.js';
+import { fitPhoneBattle } from '../combat/compact-battle.js';
 
 export let cur;
 

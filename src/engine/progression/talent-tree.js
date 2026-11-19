@@ -6,9 +6,10 @@ import { writeLS, toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { heal, say } from '../combat/engine.js';
 import { esc, queueSave } from '../state/saves.js';
-import { sfx, vibe } from './campaign.js';
-import { bagN, tLevel } from '../state/economy.js';
-import { renderWallet } from '../core/interface.js';
+import { sfx, vibe } from '../audio/sound-effects.js';
+import { bagN } from '../state/economy.js';
+import { tLevel } from './trainer-stats.js';
+import { renderWallet } from '../ui/wallet.js';
 import { renderBag } from './quests-shop.js';
 import { DAMAGE_PROVIDERS } from '../combat/tactical-engine.js';
 

@@ -35,36 +35,28 @@ import {
 } from './engine.js';
 import { champBuild, duoParts, duoTargets, pCapture, pDuo, previewRun, scenLock } from './items-bonds-ai.js';
 import { SV, autoSave, queueSave, renderSummary } from '../state/saves.js';
-import {
-  PREF,
-  __set_PREPG,
-  __set_tutorialI,
-  applyProgress,
-  renderCoach,
-  renderPrep,
-  sfx,
-  sfxEv,
-  vibe,
-} from '../progression/campaign.js';
+import { PREF } from '../ui/preferences.js';
+import { __set_PREPG, renderPrep } from './battle-prep.js';
+import { __set_tutorialI, renderCoach } from '../progression/tutorial.js';
+import { applyProgress } from '../progression/battle-rewards.js';
+import { sfx, sfxEv, vibe } from '../audio/sound-effects.js';
 import { drawObstacles } from '../modes/gym-screen.js';
 import { fxReset, playEv } from './move-effects.js';
 import { panelRoleInfo } from '../ui/guide.js';
 import { AUTO, HPM, RK, rankOf, turnBanner, turnBanners, vsIntro } from '../progression/prestige.js';
-import { renderWallet } from '../core/interface.js';
+import { renderWallet } from '../ui/wallet.js';
 import { tagUnits, tokenArt } from '../assets/illustrations.js';
-import { rivalBuild, rivalIdx, shinyHue, towerDraft, towerRun, towerTeam } from '../modes/adventure.js';
+import { RIVAL_CHALLENGES, rivalBuild, rivalIdx } from '../modes/rival.js';
+import { shinyHue } from '../pokemon/shiny.js';
+import { towerDraft, towerRun, towerTeam } from '../modes/resonance-tower.js';
 import { currentActor, unrollSpeed, endTurnSpeed, chosenOrder, canSelect } from './tactical-engine.js';
 import { LIVING_DESC, LIVING_STATE, hourTint, chosenAlive } from './living-board.js';
 import { chosenTactic } from './tactics.js';
-import {
-  challengeLaunch,
-  activeChallenges,
-  mutTraining,
-  mutInfo,
-  teamSize,
-} from '../progression/achievements-challenges.js';
-import { charactersChosen, disobedienceChosen, level } from '../team/identity.js';
-import { REPLAYS } from '../world/seasons.js';
+import { challengeLaunch, activeChallenges, teamSize } from '../progression/campaign-challenges.js';
+import { mutTraining, mutInfo } from './mutators.js';
+import { charactersChosen, disobedienceChosen } from '../team/characters.js';
+import { level } from '../progression/base-camp.js';
+import { REPLAYS } from './best-move-replay.js';
 import { refreshBattle, evoState } from '../../screens/combat/battle/battleStore.js';
 import {
   bdClass,
@@ -79,24 +71,23 @@ import {
   unitsDirty,
 } from '../../screens/combat/board/boardStore.js';
 import { hasXp, bossScene, notesOf } from './resonance.js';
-import { resonanceCandidate, storyScene, tournamentTeam } from '../progression/companions.js';
-import { coopPassTurn, coopPlayer } from '../modes/fishing-safari-coop.js';
+import { resonanceCandidate } from './resonant-form.js';
+import { storyScene } from '../progression/story-dialogues.js';
+import { tournamentTeam } from '../modes/friends-tournament.js';
+import { coopPassTurn, coopPlayer } from '../modes/coop.js';
 import { isSurrounded } from './intensity.js';
-import { battleDelay, endSkipSpeedup } from './catches.js';
-import {
-  RIVAL_CHALLENGES,
-  hurtFlash,
-  afterBattleScene,
-  buildWeeklyChallenge,
-  weeklyTeam,
-  lockLegendaryCapture,
-  liveRender,
-  liveToken,
-} from '../progression/quality.js';
-import { afterRenderTactics, campOpen, chosenDoctrine } from '../progression/camp.js';
-import { afterRenderFog, chosenFog, noProgressResult, fixedTeam } from '../modes/tactical-challenges.js';
+import { battleDelay, endSkipSpeedup } from './quick-battle.js';
+import { hurtFlash, liveRender, liveToken } from './expressive-pokemon.js';
+import { afterBattleScene } from '../progression/story-scenes.js';
+import { buildWeeklyChallenge, weeklyTeam } from '../modes/weekly-challenge.js';
+import { lockLegendaryCapture } from '../modes/legendary-captures.js';
+import { afterRenderTactics } from './battle-sky.js';
+import { campOpen } from '../progression/camp.js';
+import { chosenDoctrine } from './doctrines.js';
+import { afterRenderFog, chosenFog } from './fog-of-war.js';
+import { noProgressResult, fixedTeam } from '../modes/camp-challenges.js';
 import { afterRenderDuel, duelPassTurn } from '../modes/duel.js';
-import { fitPhoneBattle } from '../pokemon/eevee.js';
+import { fitPhoneBattle } from './compact-battle.js';
 import { announceGimmick } from '../modes/feats-gimmicks.js';
 
 export let VERT, MQV, B, LOG, scSel;

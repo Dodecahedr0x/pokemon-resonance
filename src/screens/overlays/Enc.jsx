@@ -5,8 +5,8 @@ import { dexNo } from '../../engine/data/game-data.js';
 import { REGION_NAMES } from '../../engine/data/hoenn.js';
 import { tb, tc } from '../../engine/core/utils.js';
 import { crestSmall } from '../../engine/team/team.js';
-import { SPARK, shinyStyle } from '../../engine/modes/adventure.js';
-import { DOMINANT_CROWN_SVG } from '../../engine/world/living-johto.js';
+import { SPARK, shinyStyle } from '../../engine/pokemon/shiny.js';
+import { DOMINANT_CROWN_SVG } from '../../engine/world/dominant-pokemon.js';
 import { RARE_ENABLED, rareInfo } from '../../engine/world/rare-encounters.js';
 
 // Wild encounter (#enc), opened by encounter() (017) with a snapshot of the

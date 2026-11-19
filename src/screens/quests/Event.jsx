@@ -1,7 +1,9 @@
 import { BY, SCEN } from '../../engine/pokemon/pokemon.js';
 import { PROFILE } from '../../engine/state/game-state.js';
-import { ART, dailyDone, dailyKey, dailyLeft, fmt } from '../../engine/state/economy.js';
-import { buildWeeklyChallenge } from '../../engine/progression/quality.js';
+import { ART } from '../../engine/assets/item-icons.js';
+import { dailyDone, dailyKey, dailyLeft } from '../../engine/modes/daily-battle.js';
+import { fmt } from '../../engine/state/economy.js';
+import { buildWeeklyChallenge } from '../../engine/modes/weekly-challenge.js';
 import Rewards from './Rewards.jsx';
 
 const NL = '\n ';

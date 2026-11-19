@@ -13,11 +13,12 @@ import { RC, ROLEFX, rIco } from '../../engine/pokemon/roles-synergies.js';
 import { markOf, medal, tb, tc } from '../../engine/core/utils.js';
 import { BRANCHES, mhpOf } from '../../engine/combat/engine.js';
 import { STLN, branchNote, crestSmall, evoDiff, monEls, monMarks, nextOf, squad } from '../../engine/team/team.js';
-import { HELD_IMG, ITM } from '../../engine/state/economy.js';
+import { HELD_IMG } from '../../engine/state/economy.js';
+import { ITM } from '../../engine/assets/item-icons.js';
 import { moveLearned } from '../../engine/moves/tms.js';
-import { characterHtml } from '../../engine/team/identity.js';
+import { characterHtml } from '../../engine/team/characters.js';
 import { RANKS, stars, rankId } from '../../engine/combat/resonance.js';
-import { duoTechnique } from '../../engine/world/living-johto.js';
+import { duoTechnique } from '../../engine/combat/duo-techniques.js';
 import { captureSite } from '../../engine/world/catch-anywhere.js';
 
 // Pokémon sheet (#sheet / #sh). Opening, closing, focus and scrolling: the engine's openSheet /

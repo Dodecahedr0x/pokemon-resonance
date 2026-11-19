@@ -1,10 +1,12 @@
 import { BY } from '../../engine/pokemon/pokemon.js';
 import { PROFILE } from '../../engine/state/game-state.js';
 import { medal } from '../../engine/core/utils.js';
-import { ITM, fmt, today } from '../../engine/state/economy.js';
-import { BUILDINGS, DESTINATIONS, buildingBlocked, level, placesExp } from '../../engine/team/identity.js';
-import { daycarePair, inheritableMoves, daycareParents } from '../../engine/world/living-johto.js';
-import { POTAGER, POT_I, plotSprout } from '../../engine/progression/companions.js';
+import { ITM } from '../../engine/assets/item-icons.js';
+import { fmt, today } from '../../engine/state/economy.js';
+import { BUILDINGS, buildingBlocked, level } from '../../engine/progression/base-camp.js';
+import { DESTINATIONS, placesExp } from '../../engine/progression/expeditions.js';
+import { daycarePair, inheritableMoves, daycareParents } from '../../engine/progression/daycare.js';
+import { POTAGER, POT_I, plotSprout } from '../../engine/progression/camp-garden.js';
 import { Html } from '../../lib/html.jsx';
 
 const pl = (n, token) => `${n} ${token}${n > 1 ? 's' : ''}`;

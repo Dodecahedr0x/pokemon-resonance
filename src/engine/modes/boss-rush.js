@@ -9,12 +9,12 @@ import { squad } from '../team/team.js';
 import { heal } from '../combat/engine.js';
 import { B, backToPrep, goFight, launch } from '../combat/ui.js';
 import { esc } from '../state/saves.js';
-import { sfx, vibe } from '../progression/campaign.js';
+import { sfx, vibe } from '../audio/sound-effects.js';
 import { overlay } from '../progression/prestige.js';
 import { shut } from '../../screens/overlays/tempStore.js';
 import { refreshHome } from '../../screens/home/homeStore.js';
 import { DAMAGE_PROVIDERS } from '../combat/tactical-engine.js';
-import { teamSize } from '../progression/achievements-challenges.js';
+import { teamSize } from '../progression/campaign-challenges.js';
 
 function relicOffer(run) {
   const freeOnes = RELICS.filter(r => !run.relics.includes(r.id)).map(r => r.id);

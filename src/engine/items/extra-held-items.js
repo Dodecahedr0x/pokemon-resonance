@@ -3,10 +3,11 @@
 import { ITEMS2, PROFILE } from '../state/game-state.js';
 import { HOOKS } from '../core/hooks.js';
 import { esc } from '../state/saves.js';
-import { HELD_IMG, ITEM_ICONS, SHOP, bagN, today } from '../state/economy.js';
+import { HELD_IMG, SHOP, bagN, today } from '../state/economy.js';
+import { ITEM_ICONS } from '../assets/item-icons.js';
 import { DAMAGE_PROVIDERS } from '../combat/tactical-engine.js';
 import { HELD_SHOP } from '../combat/resonance.js';
-import { dailySeed } from '../progression/companions.js';
+import { dailySeed } from '../world/pokegear.js';
 import { seededRng } from '../world/route-events.js';
 import { berryIcon, orbIcon, wrapSvg } from './balls-held-items.js';
 import { tmKeys } from './workshop.js';

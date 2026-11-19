@@ -6,7 +6,7 @@ import { RC } from '../../engine/pokemon/roles-synergies.js';
 import { tc } from '../../engine/core/utils.js';
 import { cost, squad } from '../../engine/team/team.js';
 import { emblem, goalInfo } from '../../engine/world/home-journey.js';
-import { ART } from '../../engine/state/economy.js';
+import { ART } from '../../engine/assets/item-icons.js';
 import { routeName } from '../../engine/world/johto.js';
 import { FAMILY_REGION_NAMES, boxCapacityLabel, regionIndex } from '../../engine/world/catch-anywhere.js';
 

@@ -2,9 +2,9 @@ import { Html, parseStyle } from '../../lib/html.jsx';
 import { tc } from '../../engine/core/utils.js';
 import { squad } from '../../engine/team/team.js';
 import { PROF_AV, emblem, goalChips, goalInfo, professorMsg } from '../../engine/world/home-journey.js';
-import { ART } from '../../engine/state/economy.js';
-import { shinyStyle } from '../../engine/modes/adventure.js';
-import { heroView } from '../../engine/combat/catches.js';
+import { ART } from '../../engine/assets/item-icons.js';
+import { shinyStyle } from '../../engine/pokemon/shiny.js';
+import { heroView } from '../../engine/world/living-home.js';
 import { homeSkyInfo } from '../../engine/world/home-weather.js';
 
 // Home hero (#hmHero): next step (old renderHome), living backdrop depending on the

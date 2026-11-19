@@ -1,5 +1,5 @@
 import { Html } from '../../lib/html.jsx';
-import { dailyDone, dailyKey } from '../../engine/state/economy.js';
+import { dailyDone, dailyKey } from '../../engine/modes/daily-battle.js';
 import { STATE_N, placeIcon, placeName, placeState } from '../../engine/world/map.js';
 import { placesR } from '../../engine/world/johto.js';
 import { TREASURE_NAMES, treasureSpots, treasureState } from '../../engine/world/rare-encounters.js';

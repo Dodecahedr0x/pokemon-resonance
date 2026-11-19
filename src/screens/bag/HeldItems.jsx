@@ -1,6 +1,7 @@
 import { ITEMS2, PROFILE, isCamp, ownedItems } from '../../engine/state/game-state.js';
 import { BADGES } from '../../engine/modes/gyms.js';
-import { HELD_IMG, ITM, SHOP, fmt } from '../../engine/state/economy.js';
+import { HELD_IMG, SHOP, fmt } from '../../engine/state/economy.js';
+import { ITM } from '../../engine/assets/item-icons.js';
 import { HELD_SHOP, isDailyOffer, heldItemCost } from '../../engine/combat/resonance.js';
 import { Article, Shards } from './Items.jsx';
 
