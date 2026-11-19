@@ -32,7 +32,7 @@ function brHub466() {
   let d;
   if (!brOk466()) d = { mode: 'lock' };
   else if (!run)
-    d = { mode: 'new', best: st.best, won: st.won || 0, equipe: squad.length ? squad.slice(0, teamSize()).map(id => BY[id].n).join(', ') : 'aucun Pokémon' };
+    {d = { mode: 'new', best: st.best, won: st.won || 0, equipe: squad.length ? squad.slice(0, teamSize()).map(id => BY[id].n).join(', ') : 'aucun Pokémon' };}
   else {
     const rl = brRelics466(run)
       .map(id => RELIC466.find(r => r.id === id))
@@ -66,7 +66,7 @@ function brGo466() {
   goFight(run.boss[run.i]);
   try {
     launch(); // the run's team is locked: we go straight into battle
-  } catch (e) {}
+  } catch { /* Best effort: failure here is non-fatal. */ }
 }
 
 

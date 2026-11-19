@@ -47,8 +47,8 @@ function brief442() {
       continue;
     }
     for (const r of rules || [])
-      if (r.selectorText && /^(:root|html)$/.test(r.selectorText.trim()))
-        for (let i = 0; i < r.style.length; i++) if (r.style[i].startsWith('--')) names.add(r.style[i]);
+      {if (r.selectorText && /^(:root|html)$/.test(r.selectorText.trim()))
+        {for (let i = 0; i < r.style.length; i++) if (r.style[i].startsWith('--')) names.add(r.style[i]);}}
   }
   const cs = getComputedStyle(document.documentElement),
     vars = [...names]

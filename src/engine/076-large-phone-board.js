@@ -21,7 +21,7 @@ export function frame443() {
     let y = scrollY + r.bottom - (fb - 8);
     y = Math.max(0, Math.min(y, scrollY + r.top + 40));
     if (Math.abs(y - scrollY) > 4) window.scrollTo(0, y);
-  } catch (e) {}
+  } catch { /* Best effort: failure here is non-fatal. */ }
 }
 
 
@@ -76,7 +76,7 @@ function qa443() {
     footPos.qa = { hidden: false, nom: u.n + ' · à vous', items };
     footCls('qa-on', true);
     refreshBattle('foot');
-  } catch (e) {}
+  } catch { /* Best effort: failure here is non-fatal. */ }
 }
 
 /* ---------- 2. moves within thumb reach ---------- */

@@ -47,7 +47,7 @@ function Finds() {
   try {
     const s = trSt450();
     spots = trSpots450().filter(sp => !s.got[sp.id]);
-  } catch (e) {}
+  } catch { /* Best effort: failure here is non-fatal. */ }
   return spots.map(sp => (
     <button type="button" className="mk sp450" data-tv450={sp.id} style={{ left: sp.x / 10 + '%', top: sp.y / 10 + '%' }} aria-label={'Trouvaille cachée : ' + TH450[sp.th]} key={'tv' + sp.id}>
       <svg viewBox="0 0 24 24" width="22" height="22"><path d="M12 2l2.2 6.3L21 10l-5.4 3.7L17 21l-5-3.8L7 21l1.4-7.3L3 10l6.8-1.7Z" fill="currentColor" /></svg>
@@ -65,7 +65,7 @@ function Secrets() {
     sc = scVis460().map(s => ({ s, p: pos[s.id], f: !!st.found[s.id] }));
     const { s } = npcSt460();
     if (!s.done) pn = { p: npcPos460(), n: NPC460[s.i].n };
-  } catch (e) {}
+  } catch { /* Best effort: failure here is non-fatal. */ }
   return (
     <>
       {sc.map(({ s, p, f }) => (

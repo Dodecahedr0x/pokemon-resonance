@@ -36,7 +36,7 @@ function chOpen462(i) {
     setTimeout(() => {
       try {
         renderParams();
-      } catch (e) {}
+      } catch { /* Best effort: failure here is non-fatal. */ }
     }, 50);
   }
 }
@@ -61,7 +61,7 @@ async function offLoad462() {
       const a = BGM434.el[k];
       if (a && OFF462.urls[k] && a.paused && a.src !== OFF462.urls[k]) a.src = OFF462.urls[k];
     });
-  } catch (e) {}
+  } catch { /* Best effort: failure here is non-fatal. */ }
 }
 
 
@@ -87,7 +87,7 @@ async function offDownload462() {
       }
       try {
         renderParams();
-      } catch (e) {}
+      } catch { /* Best effort: failure here is non-fatal. */ }
     }
   } catch (e) {
     OFF462.etat = 'erreur';
@@ -100,18 +100,18 @@ async function offDownload462() {
   toast(ok ? `Musique hors ligne : ${ok} pistes enregistrées${ko ? `, ${ko} introuvables` : ''}.` : 'Aucune piste n’a pu être enregistrée.');
   try {
     renderParams();
-  } catch (e) {}
+  } catch { /* Best effort: failure here is non-fatal. */ }
 }
 
 
 async function offClear462() {
   try {
     await caches.delete(OFF462.cache);
-  } catch (e) {}
+  } catch { /* Best effort: failure here is non-fatal. */ }
   Object.values(OFF462.urls).forEach(u => {
     try {
       URL.revokeObjectURL(u);
-    } catch (e) {}
+    } catch { /* Best effort: failure here is non-fatal. */ }
   });
   OFF462.urls = {};
   OFF462.n = 0;
@@ -121,7 +121,7 @@ async function offClear462() {
   toast('Musique hors ligne supprimée.');
   try {
     renderParams();
-  } catch (e) {}
+  } catch { /* Best effort: failure here is non-fatal. */ }
 }
 
 

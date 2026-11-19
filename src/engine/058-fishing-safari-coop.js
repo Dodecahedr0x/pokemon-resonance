@@ -391,7 +391,7 @@ document.addEventListener('click', e => {
     toast(`Merci de votre visite ! ${n} capture${n > 1 ? 's' : ''}.`);
     try {
       refreshMap(); // panel of the selected location (src/screens/map/MapInfo.jsx)
-    } catch (er) {}
+    } catch { /* Best effort: failure here is non-fatal. */ }
     return;
   }
   SAF_MSG = safariAction418(k);

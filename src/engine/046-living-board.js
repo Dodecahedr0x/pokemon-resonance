@@ -63,10 +63,10 @@ export function aliveRound(S, ev) {
   if (W === 'pluie') {
     let n = 0;
     for (const k in S.tiles)
-      if (onFire(S, k)) {
+      {if (onFire(S, k)) {
         S.tiles[k].mark = null;
         n++;
-      }
+      }}
     if (n) {
       say(ev, `La pluie éteint les flammes (${n} case${n > 1 ? 's' : ''}).`);
       rebuild = true;
@@ -91,13 +91,13 @@ export function aliveRound(S, ev) {
   for (const k in S.tiles) if (fireHazard(S, k)) hasWon.push([k, nbrK(k).find(n => onFire(S, n))]);
   // downwind (v4.8), the fire jumps one more cell in the tall grass
   if (S.vent && W !== 'pluie')
-    for (const b in S.tiles) {
+    {for (const b in S.tiles) {
       if (!onFire(S, b)) continue;
       const n1 = noWind(b, S.vent.d),
         n2 = n1 && noWind(n1, S.vent.d);
       if (n1 && n2 && fireHazard(S, n1) && fireHazard(S, n2) === false && dryGrass(S, n2) && !hasWon.some(g => g[0] === n2))
-        hasWon.push([n2, n1]);
-    }
+        {hasWon.push([n2, n1]);}
+    }}
   if (hasWon.length) {
     const edges = [];
     hasWon.forEach(([k, de]) => {
@@ -106,7 +106,7 @@ export function aliveRound(S, ev) {
       t.mark = { k: 'brulant', d: mDur(S, 'brulant'), lv: 1, by: S.tiles[de].mark.by };
       edges.push([de, k, 1]);
     });
-    ev.push({ e: 'chain', edges: edges, c: 'fire' });
+    ev.push({ e: 'chain', edges, c: 'fire' });
     say(ev, `Le feu court dans les hautes herbes (${hasWon.length} case${hasWon.length > 1 ? 's' : ''}).`);
     S.stats.feu = (S.stats.feu || 0) + hasWon.length; // Pyromane (Pyromaniac) achievement (v4.9)
     hasWon.forEach(([k]) => {

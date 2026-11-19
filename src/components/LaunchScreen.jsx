@@ -11,7 +11,7 @@ function closeSplash() {
   try {
     sessionStorage.setItem('res-launch', '1');
     sessionStorage.setItem('res-splash', '1');
-  } catch {}
+  } catch { /* Best effort: failure here is non-fatal. */ }
 }
 
 // Cinematic launch screen: only once per session.

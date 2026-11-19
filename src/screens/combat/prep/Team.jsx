@@ -26,12 +26,12 @@ function Places() {
         {Array.from({ length: 4 }, (_, i) => {
           const id = squad[i];
           if (!id)
-            return (
+            {return (
               <button key={i} type="button" className="ptc-m add" data-go="pokedex" aria-label="Ajouter un Pokémon">
                 <i>+</i>
                 <em>Libre</em>
               </button>
-            );
+            );}
           const m = BY[id];
           return (
             <div key={i} className="ptc-m">

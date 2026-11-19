@@ -222,7 +222,7 @@ function cheat430(k) {
   try {
     renderSquad();
     renderHome();
-  } catch (e) {}
+  } catch { /* Best effort: failure here is non-fatal. */ }
   renderParams();
   toast(m);
 }
@@ -261,7 +261,7 @@ function sky430() {
   if (!P || B.over) return;
   if (P.ph !== E.ph) announce430(SKY430[E.ph], LIVING_STATE[E.ph] || LIVING_NAME[E.ph], LIVING_DESC[E.ph] || '');
   else if (P.wx !== E.wx)
-    E.wx ? announce430(SKY430[E.wx], `${WXN[E.wx]} · ${B.wx.n} manches`, wxInfo430(E.wx)) : announce430(['i-sol', '#cfe6ff'], 'Le ciel se dégage', 'La météo est terminée.');
+    {E.wx ? announce430(SKY430[E.wx], `${WXN[E.wx]} · ${B.wx.n} manches`, wxInfo430(E.wx)) : announce430(['i-sol', '#cfe6ff'], 'Le ciel se dégage', 'La météo est terminée.');}
 }
 
 
@@ -293,14 +293,14 @@ function large430(D) {
 function zone430(S) {
   const z = [];
   for (let r = 0; r < BH; r++)
-    for (let c = 0; c <= 1; c++) {
+    {for (let c = 0; c <= 1; c++) {
       const k = K(c, r),
         t = S.tiles[k];
       if (!t || t.rock || t.lava > 0) continue;
       const u = uAt(S, k);
       if (u && u.side !== 'a') continue;
       z.push(k);
-    }
+    }}
   return z;
 }
 
@@ -336,14 +336,14 @@ function deployRender430() {
   const on = !!(B && B.dep430 && !B.over),
     z = on ? zone430(B) : [];
   if (L.t)
-    for (const k in L.t) {
+    {for (const k in L.t) {
       L.t[k].classList.toggle('dep430z', on && z.includes(k));
-    }
+    }}
   if (L.u)
-    for (const id in L.u) {
+    {for (const id in L.u) {
       const T = L.u[id];
       if (T) tokCl(T, 'dep430s', on && ui.dsel430 === id); // token classes: Units.jsx
-    }
+    }}
   bdClass('dep430', on); // #bBoard class, rendered by React
   // « Lancer le combat » (Start battle) and the deployment phase: rendered by React (src/screens/combat/battle/Foot.jsx)
 }
@@ -414,7 +414,7 @@ export function afterRender430() {
     sky430();
     deployRender430();
     // doctrine chip (#bWx): rendered by React (TopBar.jsx)
-  } catch (e) {}
+  } catch { /* Best effort: failure here is non-fatal. */ }
 }
 
 // only the code's fingerprint is in the game, never the code itself
@@ -504,11 +504,11 @@ document.addEventListener('click', e => {
   if (!b) return;
   if (b.dataset.mode430 === 'camp') confirm430('Commencer une campagne ?', 'Vous choisirez votre partenaire, puis les chapitres s’enchaîneront depuis le premier badge.', openStarter);
   else
-    confirm430('Passer en mode Libre ?', 'Tous les combats seront ouverts. Votre Campagne ne sera conservée que si vous la rangez dans un emplacement.', () => {
+    {confirm430('Passer en mode Libre ?', 'Tous les combats seront ouverts. Votre Campagne ne sera conservée que si vous la rangez dans un emplacement.', () => {
       newGame();
       toast('Nouvelle partie en mode Libre.');
       renderParams();
-    });
+    });}
 });
 
 
@@ -632,10 +632,10 @@ HOOKS.combat.push((S, opt) => {
       S.vmax -= 1;
       S.voix = Math.min(S.voix, S.vmax);
     } else
-      al.forEach(u => {
+      {al.forEach(u => {
         u.mhp = Math.max(1, Math.round(u.mhp * 0.9));
         u.hp = Math.min(u.hp, u.mhp);
-      });
+      });}
   } else if (d === 'commandement') {
     S.vmax += 1;
     S.voix += 1;

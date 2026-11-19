@@ -53,7 +53,7 @@ export function Article({ k, mode }) {
 }
 
 // A held item in the Bag (old heldRow): who holds it, or where to find it.
-export function Outfit({ k }) {
+export function HeldItem({ k }) {
   const it = ITEMS2[k],
     own = ownedItems().includes(k),
     holder = Object.keys(PROFILE.equip).find(id => PROFILE.equip[id] === k);

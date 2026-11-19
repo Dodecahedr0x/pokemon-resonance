@@ -105,9 +105,9 @@ export function end413(S, u, m, k, v0, v1, dealt, ev) {
     say(ev, `${u.n} est K.O. après son Explosion.`);
     if (u.side === 'e') S.stats.ko++;
     else
-      S.units.forEach(o => {
+      {S.units.forEach(o => {
         if (o.side === 'a' && !o.ko && o !== u) rewardIn(S, o, 1, ev);
-      });
+      });}
   }
 }
 

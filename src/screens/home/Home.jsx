@@ -5,9 +5,9 @@ import Hero from './Hero.jsx';
 import Companion from './Companion.jsx';
 import Banners from './Banners.jsx';
 import Side from './Side.jsx';
-import WhatsNew from './News.jsx';
+import WhatsNew from './WhatsNew.jsx';
 import Tiles from './Tiles.jsx';
-import Bottom from './Footer.jsx';
+import Footer from './Footer.jsx';
 import TrainerCard from './TrainerCard.jsx';
 import Friends from './Friends.jsx';
 
@@ -36,7 +36,7 @@ export default function Home() {
         </div>
         {on && <WhatsNew />}
         <Tiles on={on} />
-        <Bottom on={on} />
+        <Footer on={on} />
       </div>
       <div className="hm-top v4-off">
         <div className="tcard" id="campBox">{on && <TrainerCard />}</div>

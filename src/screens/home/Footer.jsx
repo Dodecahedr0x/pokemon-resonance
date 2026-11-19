@@ -10,7 +10,7 @@ import { weeklyBuild429 } from '../../engine/064-quality.js';
 
 // Bottom of the Home page (.v4-bottom): season (#v4Saison, v4.11), Pokématos (#v4Radio, v4.17),
 // daily challenge (#v4Event), counters (#v4Stats), weekly challenge (#v4Hebdo, v4.29).
-export default function Bottom({ on }) {
+export default function Footer({ on }) {
   return (
     <div className="v4-bottom">
       {on && <Season />}

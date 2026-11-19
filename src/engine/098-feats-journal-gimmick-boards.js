@@ -98,7 +98,7 @@ HOOKS.progres.unshift((S, rew, win) => {
     st.h = st.h.slice(0, 15);
     jxSave467(st);
     rew.jx467 = b;
-  } catch (e) {}
+  } catch { /* Best effort: failure here is non-fatal. */ }
   return null;
 });
 
@@ -143,7 +143,7 @@ document.addEventListener(
     sfx('ui');
     try {
       renderParams();
-    } catch (x) {}
+    } catch { /* Best effort: failure here is non-fatal. */ }
   },
   true
 );

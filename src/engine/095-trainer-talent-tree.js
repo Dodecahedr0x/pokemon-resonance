@@ -95,13 +95,13 @@ HOOKS.avantFinManche.push((S, ev) => {
     s3 = tal464('s3');
   if (s1) al.forEach(u => heal(S, u, Math.max(1, Math.round((u.mhp * s1 * 2) / 100)), ev));
   if (s3)
-    al.forEach(u => {
+    {al.forEach(u => {
       if (u.hp / u.mhp < 0.3 && !S.tal464.used[u.uid]) {
         S.tal464.used[u.uid] = 1;
         heal(S, u, Math.max(1, Math.round((u.mhp * s3 * 10) / 100)), ev);
         say(ev, `Second souffle : ${u.n} se relève.`);
       }
-    });
+    });}
 });
 
 
@@ -137,7 +137,7 @@ HOOKS.progres.unshift((S, rew, win) => {
       out.push('1 Éclat');
     }
     if (out.length) rew.tal464 = out;
-  } catch (e) {}
+  } catch { /* Best effort: failure here is non-fatal. */ }
   return null;
 });
 
@@ -169,7 +169,7 @@ document.addEventListener(
       queueSave();
       renderWallet();
       renderBag();
-    } catch (x) {}
+    } catch { /* Best effort: failure here is non-fatal. */ }
   },
   true
 );

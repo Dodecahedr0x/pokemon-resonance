@@ -577,13 +577,13 @@ export function __init() {
     });
     const t0 = TUTORIAL_STEPS433.find(x => x.k === 'tour');
     if (t0)
-      t0.d = t0.d.replace(
+      {t0.d = t0.d.replace(
         'Quand tout le monde a joué, « Fin du tour » : les adversaires agissent à leur tour.',
         'Le panneau vous guide : chaque Pokémon se déplace (ou « Rester ici »), puis agit (ou « Passer l’action »). Quand tout le monde a joué, la manche se termine seule et les adversaires agissent.'
-      );
+      );}
     NEWS416.unshift(['i-play', 'Tour guidé', 'En combat, le panneau vous guide pour chaque Pokémon : déplacer, agir, terminer. La manche se termine seule quand tout le monde a joué.', null]);
     NEWS416.splice(8);
-  } catch (e) {}
+  } catch { /* Best effort: failure here is non-fatal. */ }
 
   window.__flow478 = { etape: step, restants: remaining, aJouer: toPlay, jeu: () => ({ B, ui }) };
 })();

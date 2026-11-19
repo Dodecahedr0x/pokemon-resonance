@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useEngineReady } from '../../engineReady.js';
 import { setGuideTab, useGuide } from './guideStore.js';
-import Bases from './Basics.jsx';
+import Basics from './Basics.jsx';
 import GettingStarted from './GettingStarted.jsx';
 import League from './LeagueGuide.jsx';
-import Projet from './Project.jsx';
+import Project from './Project.jsx';
 import Reactions from './Reactions.jsx';
 import Tactics from './Tactics.jsx';
 import Tutorial from './Tutorial.jsx';
@@ -26,12 +26,12 @@ const TAB_LIST = [
 const PANELS = [
   { k: 'tuto433', C: Tutorial, lazy: true },
   { k: 'debuter', C: GettingStarted },
-  { k: 'bases', C: Bases },
+  { k: 'bases', C: Basics },
   { k: 'reactions', C: Reactions },
   { k: 'tactique', C: Tactics, lazy: true },
   { k: 'ligue', C: League },
   { k: 'univers', C: Universe, lazy: true },
-  { k: 'projet', C: Projet },
+  { k: 'projet', C: Project },
 ];
 
 // Guide screen (#types). The section's "on" class is set by the engine's navigation.

@@ -78,9 +78,9 @@ HOOKS.combat.push(S => {
   S.form463 = f.k;
   if (f.k === 'phalange') f.al[0].guard = Math.max(f.al[0].guard || 0, 2);
   if (f.k === 'eclaireurs')
-    f.al.forEach((u, i) => {
+    {f.al.forEach((u, i) => {
       u.en = Math.max(u.en || 0, i === f.al.length - 1 ? 2 : 1);
-    });
+    });}
 });
 
 
@@ -117,7 +117,7 @@ document.addEventListener(
     vibe(15);
     try {
       renderSquad();
-    } catch (x) {}
+    } catch { /* Best effort: failure here is non-fatal. */ }
   },
   true
 );

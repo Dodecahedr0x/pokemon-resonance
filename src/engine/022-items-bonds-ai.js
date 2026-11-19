@@ -37,7 +37,7 @@ export function dmgItemsLinks(S, u, t, d, mult) {
       S.links &&
       S.units.some(o => o !== t && !o.ko && o.side === 'a' && hdist(o.pos, t.pos) === 1 && linkLvl(S, t.sp, o.sp) >= 1)
     )
-      red++;
+      {red++;}
     if (red) d = Math.max(1, d - red);
   }
   if (mult > 1 && u.side === 'a' && t.side === 'e' && S.links) {
@@ -207,7 +207,7 @@ export function previewRun(S, run, shown) {
       en = x.side === 'a' ? x.en - o.en : 0,
       cg = !!x.caught && !o.caught;
     if (dh || st || ko || can || ret || mv || rt || wb || evw || en > 0 || cg)
-      diff.push({ uid: x.uid, n: x.n, side: x.side, dh, st, ko, can, ret, mv, rt, wb, evw, en, cg });
+      {diff.push({ uid: x.uid, n: x.n, side: x.side, dh, st, ko, can, ret, mv, rt, wb, evw, en, cg });}
   });
   return {
     diff,
@@ -312,7 +312,7 @@ export function champBuild() {
       if (m.mv.some(id => MV[id].p && teff(MV[id].t, [t]) > 1)) s += def[t] * 0.8;
     }
     if (cnt && ((cnt.t || []).some(t => m.t.includes(t)) || (cnt.tal || []).includes(m.tal)))
-      s += 4 + (topRx[1] || 0) * 0.6;
+      {s += 4 + (topRx[1] || 0) * 0.6;}
     return s;
   };
   const ranked = pool.map(m => ({ m, s: score(m) })).sort((a, b) => b.s - a.s),
@@ -339,7 +339,7 @@ export function champBuild() {
   else {
     why.push(`${H.length} combat${H.length > 1 ? 's' : ''} étudié${H.length > 1 ? 's' : ''}.`);
     if (topAtk.length)
-      why.push(`Vos attaques favorites : ${topAtk.join(' et ')}. Il aligne des Pokémon qui les encaissent.`);
+      {why.push(`Vos attaques favorites : ${topAtk.join(' et ')}. Il aligne des Pokémon qui les encaissent.`);}
     if (cnt) {
       const c = pick.find(m => (cnt.t || []).some(t => m.t.includes(t)) || (cnt.tal || []).includes(m.tal));
       why.push(`Votre réaction préférée : ${RX[topRx[0]].n}.${c ? ` ${c.n} est là : ${cnt.why}.` : ''}`);
@@ -398,7 +398,7 @@ function lockCampaign(k) {
   }
   if (D.champ && PROFILE.elite < 4) return 'Battez d’abord le Conseil 4.';
   if (D.rival && BADGES.length < RIVAL_STEPS[D.rival - 1].after)
-    return `Kael vous attend après le badge n° ${RIVAL_STEPS[D.rival - 1].after}.`;
+    {return `Kael vous attend après le badge n° ${RIVAL_STEPS[D.rival - 1].after}.`;}
   if ((D.legend || D.tower) && PROFILE.elite < 5) return 'Après-jeu : battez d’abord la Championne.';
   if (D.dissonance && BADGES.length < D.after) return `La Team Dissonance frappera après le badge n° ${D.after}.`; // v4.11
   if (D.dissonance && (PROFILE.dissonance || 0) < D.dissonance - 1) return 'Battez d’abord le combat précédent de la Dissonance.';

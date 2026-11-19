@@ -94,10 +94,10 @@ export function v431Clean(p) {
     o.enig431 = { s, n, j: typeof E.j === 'string' && /^\d{4}-\d\d-\d\d$/.test(E.j) ? E.j : '', jd: Array.isArray(E.jd) ? E.jd.filter(x => Number.isInteger(x) && x >= 0 && x < 999).slice(0, 3) : [], cur: Number.isInteger(E.cur) ? n431(E.cur, 0, 998) : 0 };
   }
   if (p.mait431 && typeof p.mait431 === 'object')
-    Object.keys(p.mait431).forEach(k => {
+    {Object.keys(p.mait431).forEach(k => {
       const m = p.mait431[k];
       if (BY[k] && m && typeof m === 'object') o.mait431[k] = { n: n431(m.n, 0, 99999), p: typeof m.p === 'string' && /^[a-z]{3,10}$/.test(m.p) ? m.p : '' };
-    });
+    });}
   const X = p.echo431;
   if (X && typeof X === 'object') {
     o.echo431 = { best: n431(X.best, 0, 8), wins: n431(X.wins, 0, 9999), run: null };
@@ -106,7 +106,7 @@ export function v431Clean(p) {
       const team = R.team.filter(t => Array.isArray(t) && BY[t[0]]).slice(0, 4).map(t => [t[0], Math.max(0, Math.min(1, +t[1] || 0))]);
       const map = R.map.filter(Array.isArray).slice(0, 8).map(f => f.filter(x => typeof x === 'string' && /^[a-z]{2,10}$/.test(x)).slice(0, 3));
       if (team.length && map.length === 8)
-        o.echo431.run = {
+        {o.echo431.run = {
           seed: n431(R.seed, 0, 2147483647),
           f: n431(R.f, 0, 8),
           team,
@@ -117,7 +117,7 @@ export function v431Clean(p) {
           cur: Number.isInteger(R.cur) ? n431(R.cur, -1, 2) : -1,
           pv: Number.isFinite(R.pv) ? Math.max(0, Math.min(0.5, R.pv)) : 0,
           ev: typeof R.ev === 'string' && /^[a-z]{2,12}$/.test(R.ev) ? R.ev : ''
-        };
+        };}
     }
   }
   if (Array.isArray(p.arenes431)) o.arenes431 = p.arenes431.map(gymClean431).filter(Boolean).slice(0, 12);
@@ -138,7 +138,7 @@ export function fixedProgress431(S) {
     else if (D.enigme431 != null) r = puzzleAfter431(S, rew, win);
     else if (D.perso431) r = gymAfter431(S, rew, win);
     else if (D.echo431) r = echoAfter431(S, rew, win);
-  } catch (e) {}
+  } catch { /* Best effort: failure here is non-fatal. */ }
   const [m, g] = r || [0, 0];
   if (m || g) {
     PROFILE.money = Math.min(999999, (PROFILE.money || 0) + m);
@@ -633,7 +633,7 @@ export function afterRender431() {
   try {
     fogRender431();
     // relic and fog badges, riddle button and phase: rendered by React (src/screens/combat/battle)
-  } catch (e) {}
+  } catch { /* Best effort: failure here is non-fatal. */ }
 }
 
 
@@ -904,7 +904,7 @@ HOOKS.resultat.push(r => {
   const e = r.echo431;
   if (!e) return '';
   if (e.fin)
-    return `<div class="res-l"><h4>Écho profond</h4><div class="rl"><span>${e.fin.gagne ? 'Le gardien est vaincu : expédition réussie !' : `Expédition terminée à l’étage ${e.fin.f + (e.fin.gagne ? 0 : 1)}.`} Récompense : ${fmt(e.fin.m)} ₽ · ${e.fin.g} Éclats.</span><b>${e.fin.gagne ? '★' : ''}</b></div></div>`;
+    {return `<div class="res-l"><h4>Écho profond</h4><div class="rl"><span>${e.fin.gagne ? 'Le gardien est vaincu : expédition réussie !' : `Expédition terminée à l’étage ${e.fin.f + (e.fin.gagne ? 0 : 1)}.`} Récompense : ${fmt(e.fin.m)} ₽ · ${e.fin.g} Éclats.</span><b>${e.fin.gagne ? '★' : ''}</b></div></div>`;}
   return `<div class="res-l"><h4>Écho profond</h4><div class="rl"><span>Étage ${e.f} franchi${e.ech ? ` · +${e.ech} Échos` : ''}${e.type === 'elite' ? ' · une relique vous attend au Camp' : ''}. Vos PV sont conservés.</span><b>${e.f} / 8</b></div></div>`;
 });
 

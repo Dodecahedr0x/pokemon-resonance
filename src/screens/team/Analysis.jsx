@@ -249,7 +249,7 @@ function Synergies() {
   const F = has('Frappeur'),
     Rm = has('Rempart');
   if (F.length && Rm.length)
-    combos.push(`Escorte : ${displayNames(F)} gagne${F.length > 1 ? 'nt' : ''} +25 % au contact de ${Rm.map(m => m.n).join(' ou ')}.`);
+    {combos.push(`Escorte : ${displayNames(F)} gagne${F.length > 1 ? 'nt' : ''} +25 % au contact de ${Rm.map(m => m.n).join(' ou ')}.`);}
   else if (F.length) combos.push(`${displayNames(F)} n’a aucun Rempart pour l’escorter.`);
   if (has('Verrou').length) combos.push(`Prise : ${displayNames(has('Verrou'))} rend vos attaques +25 % sur les cibles altérées.`);
   if (has('Relais').length) combos.push(`Soutien : ${displayNames(has('Relais'))} soigne ses voisins en fin de manche.`);
@@ -326,11 +326,11 @@ function Links() {
   const T = squad.map(id => BY[BY[id].base]),
     rows = [];
   for (let i = 0; i < T.length; i++)
-    for (let j = i + 1; j < T.length; j++) {
+    {for (let j = i + 1; j < T.length; j++) {
       const k = pairKey(T[i].id, T[j].id),
         v = PROFILE.links[k] || 0;
       rows.push({ a: T[i], b: T[j], v, l: lvlOfPts(v), D: duoFor416(k) });
-    }
+    }}
   rows.sort((x, y) => y.v - x.v || (y.D ? 1 : 0) - (x.D ? 1 : 0));
   const act = rows.filter(r => r.l).length;
   return (

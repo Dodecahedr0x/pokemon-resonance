@@ -9,7 +9,7 @@ function Stars({ n }) {
 }
 
 // Camp › Riddles (v4.31): today's 3 riddles, then all the riddles (data-enig431).
-export default function Riddles() {
+export default function Puzzles() {
   const E = puzzleState431(),
     dayKey = puzzleOfDay431(),
     et = i => <Stars n={E.s[String(i)] || 0} />,

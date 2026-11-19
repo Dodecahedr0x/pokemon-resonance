@@ -52,7 +52,7 @@ function viewsCT459() {
   let seen = {};
   try {
     seen = JSON.parse(localStorage.getItem('res-vit455') || '{}');
-  } catch (e) {}
+  } catch { /* Best effort: failure here is non-fatal. */ }
   const learned = Object.values((PROFILE.ct && PROFILE.ct.apprises) || {});
   const all = Object.keys(SHOP).filter(k => SHOP[k].cat === 'machines' && !SHOP[k].g === !SHOP[k].g);
   return all.filter(k => seen[k] || bagN(k) > 0 || learned.includes(SHOP[k].mv)).length;

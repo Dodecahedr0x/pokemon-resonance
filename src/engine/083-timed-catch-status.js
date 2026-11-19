@@ -127,7 +127,7 @@ document.addEventListener(
       CAPOK453 = true;
       try {
         b.click();
-      } catch (er) {}
+      } catch { /* Best effort: failure here is non-fatal. */ }
       CAPOK453 = false;
       if (q === 'perfect') {
         PROFILE.bag[k] = bagN(k) + 1; // Ball returned

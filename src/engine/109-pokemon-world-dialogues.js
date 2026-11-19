@@ -46,7 +46,7 @@ export function __init() {
     try {
       if (!PREF.sound || RM || !on('pk473s')) return;
       SOUNDS[k] && SOUNDS[k]();
-    } catch (e) {}
+    } catch { /* Best effort: failure here is non-fatal. */ }
   };
   const TAB_LIST = '.v4-tabs>button,.v4-reg>button,.gd-tabs>button,.v4-cats>button,.v4-seg>button,.scn-tabs>button,.stabs>.stab,.sel-tabs>button';
   document.addEventListener(
@@ -205,8 +205,8 @@ export function __init() {
           return c.classList.contains('pk-shiny') !== !!(id && sh.includes(id));
         })
       )
-        refreshGrid();
-    } catch (e) {}
+        {refreshGrid();}
+    } catch { /* Best effort: failure here is non-fatal. */ }
   }
   if (window.MutationObserver) new MutationObserver(schedule).observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['hidden'] });
   HOOKS.page.push(schedule);

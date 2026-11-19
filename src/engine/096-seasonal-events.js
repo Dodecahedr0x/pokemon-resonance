@@ -119,7 +119,7 @@ HOOKS.progres.unshift((S, rew, win) => {
     s.pts += n;
     saSave465(s);
     rew.sa465 = { n, tot: s.pts };
-  } catch (e) {}
+  } catch { /* Best effort: failure here is non-fatal. */ }
   return null;
 });
 

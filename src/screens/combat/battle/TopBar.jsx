@@ -168,7 +168,7 @@ export function Rule() {
       gi = D.gym != null ? D.gym : ARENAS.findIndex(a => a.rule === D.rule);
     cache = !D.rule || gi < 0;
     if (!cache)
-      lastRule = (
+      {lastRule = (
         <>
           <span className="ba-b">
             <Html html={badgeSvg(gi, GYMS[gi].t, 'ba' + gi)} />
@@ -184,7 +184,7 @@ export function Rule() {
             ) : null}
           </span>
         </>
-      );
+      );}
   }
   return (
     <div className="bt-arena" id="bArena" hidden={cache}>

@@ -21,7 +21,7 @@ export function __init() {
         pausedList.forEach(a => {
           try {
             a.play();
-          } catch (e) {}
+          } catch { /* Best effort: failure here is non-fatal. */ }
         });
         pausedList = [];
       };
@@ -45,6 +45,6 @@ export function __init() {
         if (e.key === 'Escape') restart();
       });
     }
-  } catch (e) {}
+  } catch { /* Best effort: failure here is non-fatal. */ }
 })();
 }

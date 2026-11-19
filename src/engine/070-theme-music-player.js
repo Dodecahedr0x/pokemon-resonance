@@ -34,7 +34,7 @@ function bgmEl434(k) {
         try {
           MUS.on = false;
           musStartCore();
-        } catch (e) {}
+        } catch { /* Best effort: failure here is non-fatal. */ }
       }
     });
     a.src = OFF462.urls[k] || BGM434.src[k];
@@ -60,7 +60,7 @@ function bgmFade434(a, to, ms, done) {
     const p = Math.min(1, (Date.now() - t0) / Math.max(1, ms));
     try {
       a.volume = Math.max(0, Math.min(1, from + (to - from) * p));
-    } catch (e) {}
+    } catch { /* Best effort: failure here is non-fatal. */ }
     if (p >= 1) {
       clearInterval(a._f);
       if (done) done();
@@ -73,7 +73,7 @@ function bgmPlay434(a) {
   try {
     const p = a.play();
     if (p && p.catch) p.catch(() => {});
-  } catch (e) {}
+  } catch { /* Best effort: failure here is non-fatal. */ }
 }
 
 
@@ -126,7 +126,7 @@ function bgmSync434() {
     return;
   }
   const old = BGM434.el[BGM434.scene];
-  if (old) bgmFade434(old, 0, 900, () => { if (BGM434.scene !== old._k) try { old.pause(); } catch (e) {} });
+  if (old) bgmFade434(old, 0, 900, () => { if (BGM434.scene !== old._k) try { old.pause(); } catch { /* Best effort: failure here is non-fatal. */ } });
   BGM434.scene = want;
   if (!want) return;
   const a = bgmEl434(want);
@@ -164,14 +164,14 @@ function bgmStop434() {
     bgmFade434(a, 0, 600, () => {
       try {
         a.pause();
-      } catch (e) {}
+      } catch { /* Best effort: failure here is non-fatal. */ }
     });
   });
   BGM434.scene = '';
   BGM434.jingle = false;
   try {
     musPadStop();
-  } catch (e) {}
+  } catch { /* Best effort: failure here is non-fatal. */ }
 }
 
 
@@ -183,10 +183,10 @@ function jingle434(max, k, next) {
   if (!j) return;
   BGM434.jingle = true;
   const cur0 = BGM434.el[BGM434.scene];
-  if (cur0) bgmFade434(cur0, 0, 400, () => { try { cur0.pause(); } catch (e) {} });
+  if (cur0) bgmFade434(cur0, 0, 400, () => { try { cur0.pause(); } catch { /* Best effort: failure here is non-fatal. */ } });
   try {
     j.currentTime = 0;
-  } catch (e) {}
+  } catch { /* Best effort: failure here is non-fatal. */ }
   bgmPlay434(j);
   bgmFade434(j, bgmVol434(), 250);
   BGM434.jk = k;
@@ -196,7 +196,7 @@ function jingle434(max, k, next) {
     bgmFade434(j, 0, 500, () => {
       try {
         j.pause();
-      } catch (e) {}
+      } catch { /* Best effort: failure here is non-fatal. */ }
     });
     BGM434.jingle = false;
     BGM434.scene = '';
@@ -262,21 +262,21 @@ if (PREF.music === undefined) PREF.music = false;
 (function () {
   const r = document.getElementById('cbResult');
   if (r && window.MutationObserver)
-    new MutationObserver(() => {
+    {new MutationObserver(() => {
       if (!r.hidden && r.querySelector('.res-card.win')) {
         if (!r._j434) {
           r._j434 = true;
           jingle434(0, 'victoire', B && B.rew && B.rew.badgeNew ? 'badge' : '');
         }
       } else r._j434 = false;
-    }).observe(r, { attributes: true, attributeFilter: ['hidden'], childList: true });
+    }).observe(r, { attributes: true, attributeFilter: ['hidden'], childList: true });}
 })();
 
 
 document.addEventListener('visibilitychange', () => {
   BGM434.vis = !document.hidden;
   if (!BGM434.on) return;
-  if (document.hidden) Object.keys(BGM434.el).forEach(k => { try { BGM434.el[k].pause(); } catch (e) {} });
+  if (document.hidden) Object.keys(BGM434.el).forEach(k => { try { BGM434.el[k].pause(); } catch { /* Best effort: failure here is non-fatal. */ } });
   else {
     BGM434.scene = '';
     bgmSync434();

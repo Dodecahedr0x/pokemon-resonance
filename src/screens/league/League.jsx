@@ -3,7 +3,7 @@ import { useLeagueVersion } from './leagueStore.js';
 import { BADGES } from '../../engine/013-gyms.js';
 import Badges from './Badges.jsx';
 import Arena from './Arena.jsx';
-import EliteCell from './EliteCase.jsx';
+import EliteCell from './EliteCell.jsx';
 
 // "League" page (#ligue): badge case, chosen gym's sheet, Elite Four and Champion.
 // Clicks are still handled by the engine (listeners on #badges, #arena, data-chal).

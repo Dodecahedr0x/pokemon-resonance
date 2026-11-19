@@ -272,14 +272,14 @@ export function colossusKO(S, v, ev) {
     damage(S, b, Math.round(b.mhp * 0.12), ev, { ind: true });
     if (!b.ko) stun(S, b, 'PAR', ev, true);
   } else if (v.colosse)
-    S.units.forEach(s => {
+    {S.units.forEach(s => {
       if (s.seg && s.of === v.uid && !s.ko) {
         s.hp = 0;
         s.ko = true;
         s.intent = null;
         ev.push({ e: 'ko', u: s.uid });
       }
-    });
+    });}
 }
 
 
@@ -293,11 +293,11 @@ export function tacticalDrawing(S, k, x, y) {
       X = x.toFixed(1),
       Y = (y + 10).toFixed(1);
     if (t.trap.k === 'picots')
-      h += `<g class="trap" transform="translate(${X},${Y})" style="--c:${c}"><path d="M-9 4l3-8 3 8M-3 4l3-8 3 8M3 4l3-8 3 8"/></g>`;
+      {h += `<g class="trap" transform="translate(${X},${Y})" style="--c:${c}"><path d="M-9 4l3-8 3 8M-3 4l3-8 3 8M3 4l3-8 3 8"/></g>`;}
     else if (t.trap.k === 'roc')
-      h += `<g class="trap" transform="translate(${X},${Y})" style="--c:${c}"><path d="M-9 4l2-6h5l2 6ZM1 4l2-8h5l2 8Z"/></g>`;
+      {h += `<g class="trap" transform="translate(${X},${Y})" style="--c:${c}"><path d="M-9 4l2-6h5l2 6ZM1 4l2-8h5l2 8Z"/></g>`;}
     else
-      h += `<g class="trap web" transform="translate(${X},${Y})" style="--c:${c}"><path d="M-10 0h20M0-8v16M-7-6l14 12M7-6l-14 12"/><circle r="4"/><circle r="7.5"/></g>`;
+      {h += `<g class="trap web" transform="translate(${X},${Y})" style="--c:${c}"><path d="M-10 0h20M0-8v16M-7-6l14 12M7-6l-14 12"/><circle r="4"/><circle r="7.5"/></g>`;}
   }
   h += danger420Svg(S, k, x, y); // announced dangers (v4.20)
   return h;

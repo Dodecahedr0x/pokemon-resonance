@@ -121,7 +121,7 @@ export function readLS(k, d) {
 export function writeLS(k, v) {
   try {
     localStorage.setItem(k, JSON.stringify(v));
-  } catch (e) {}
+  } catch { /* Best effort: failure here is non-fatal. */ }
 }
 
 

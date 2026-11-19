@@ -40,7 +40,7 @@ export function __init() {
     try {
       if (!PREF.sound || RM || PREF.pk473s === 0) return;
       SOUNDS[k] && SOUNDS[k]();
-    } catch (e) {}
+    } catch { /* Best effort: failure here is non-fatal. */ }
   };
   window.__son473 = playSound;
 
@@ -64,7 +64,7 @@ export function __init() {
     let boss = !!(D.rival || D.legend || b.sc === 'champ' || D.gym != null);
     try {
       boss = boss || ARENAS.findIndex(a => a.k === b.sc) >= 0 || !!leaderOf(b.sc);
-    } catch (e) {}
+    } catch { /* Best effort: failure here is non-fatal. */ }
     return boss ? 'boss' : 'dresseur';
   };
   const transition = b => {
@@ -92,7 +92,7 @@ export function __init() {
     try {
       if (!L || !L.u) return;
       unitsBatch(() => Object.values(L.u).forEach(T => tokCl(T, 'pk-wait', false))); // token classes: Units.jsx
-    } catch (e) {}
+    } catch { /* Best effort: failure here is non-fatal. */ }
   };
   const prepare = b => {
     if (!b || calm472() || auto() || !L || !L.u) return;
@@ -230,23 +230,23 @@ export function __init() {
     try {
       const Lc = leaderOf(B.sc);
       if (Lc && Lc.n) leader = Lc.n;
-    } catch (e) {}
+    } catch { /* Best effort: failure here is non-fatal. */ }
     const displayName = (GYMS[i] && GYMS[i].t) || D.at || '';
     paintOverlay('badge', { svg: badgeSvg(i, (GYMS[i] && GYMS[i].t) || displayName, 'pkbc' + i), chef: leader, nom: displayName, n: BADGES.length });
     bc.hidden = false;
     try {
       vibe([20, 40, 20, 40, 90]);
-    } catch (e) {}
+    } catch { /* Best effort: failure here is non-fatal. */ }
     clearTimeout(tBc);
     tBc = setTimeout(closeBadge, isFast() ? 2400 : 4200);
   };
   const res = $('#cbResult');
   if (res && window.MutationObserver)
-    new MutationObserver(() => {
+    {new MutationObserver(() => {
       try {
         if (!res.hidden && res.querySelector('.res-card')) setTimeout(celebrateBadge, 250);
-      } catch (e) {}
-    }).observe(res, { childList: true });
+      } catch { /* Best effort: failure here is non-fatal. */ }
+    }).observe(res, { childList: true });}
 
   window.__combat473 = { transition, envoyer: send, retour: recall, feterBadge: celebrateBadge, ENTREE: ENTRANCES, genre };
 })();

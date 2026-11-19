@@ -41,7 +41,7 @@ export function gauge434() {
       key434 = k;
     }
     if (bd.style.width !== width434 + 'px') bd.style.width = width434 + 'px';
-  } catch (e) {}
+  } catch { /* Best effort: failure here is non-fatal. */ }
 }
 
 
@@ -129,6 +129,6 @@ try {
       if (x) ro.observe(x);
     });
   }
-} catch (e) {}
+} catch { /* Best effort: failure here is non-fatal. */ }
 
 }

@@ -61,7 +61,7 @@ function egBuy461(k) {
   savePurse();
   try {
     renderBag();
-  } catch (e) {}
+  } catch { /* Best effort: failure here is non-fatal. */ }
 }
 
 
@@ -293,7 +293,7 @@ HOOKS.progres.unshift((S, rew) => {
     s.n += out.length;
     writeLS('res-eg461', s);
     if (out.length) rew.eg461 = out;
-  } catch (e) {}
+  } catch { /* Best effort: failure here is non-fatal. */ }
   return null;
 });
 

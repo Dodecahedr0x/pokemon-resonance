@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react';
 // The engine initializes only once at startup (src/engine/index.js): a hot-reloaded engine
 // module would restart without its state. So we reload the whole page.
 const engineWithoutHmr = {
-  name: 'moteur-sans-hmr',
+  name: 'engine-no-hmr',
   handleHotUpdate({ file, server }) {
     if (file.includes('/src/engine/')) {
       server.ws.send({ type: 'full-reload' });

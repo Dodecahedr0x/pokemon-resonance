@@ -42,7 +42,7 @@ function Layers() {
 }
 
 // memo: a render of the container (classes, children) does not redraw the board
-const GameBoard = memo(function GameBoard() {
+const GameBoard = memo(() => {
   const S = useBoard('svg');
   return (
     <svg id="bSvg" viewBox={'0 0 ' + S.vb.join(' ')} role="img" aria-label="Plateau de combat" className={S.bio ? 'bio-' + S.bio : undefined}>

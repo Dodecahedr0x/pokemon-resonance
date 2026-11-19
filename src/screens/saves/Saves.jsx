@@ -56,7 +56,7 @@ function Slot({ k }) {
     n = k.slice(1),
     cf = SV.confirm && SV.confirm.k === k ? SV.confirm.a : null;
   if (!s)
-    return (
+    {return (
       <article className="sv-slot empty">
         <header>
           <b>Emplacement {n}</b>
@@ -68,7 +68,7 @@ function Slot({ k }) {
           </button>
         </div>
       </article>
-    );
+    );}
   return (
     <article className="sv-slot">
       <header>

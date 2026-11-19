@@ -58,7 +58,7 @@ export function __init() {
     SCEN.wk470 = Object.assign({ n: 'Dresseur de la semaine', lvl: 'Semaine · ' + D.n, lim: 12, time: 'jour', bio: 'gue', d: D.n + ' vous attend avec une équipe qui change chaque semaine.', water: [], rock: ['3,0', '3,5'], hb: 4, pb: 1, lv: D.lv, foes: mkFoes(D.ids) }, {});
     try {
       OBST.wk470 = { pil: ['4,2'], grass: ['4,4'] };
-    } catch (e) {}
+    } catch { /* Best effort: failure here is non-fatal. */ }
     return D;
   };
   wkMake();
@@ -67,7 +67,7 @@ export function __init() {
   SCEN.inv470 = Object.assign({ n: 'Ombres inversées', lvl: 'Revanche · Vaskar', lim: 14, time: 'nuit', bio: 'gue', d: 'Vaskar revient avec les Ombres renforcées. Une revanche sans répit, qui ne se refuse pas.', water: [], rock: ['3,0', '3,5'], hb: 8, pb: 2, lv: 44, foes: mkFoes(['absol', 'demolosse', 'tyranocif', 'noctali']) }, {});
   try {
     OBST.inv470 = { pil: ['4,2'], grass: ['4,4', '5,1'] };
-  } catch (e) {}
+  } catch { /* Best effort: failure here is non-fatal. */ }
 
 
   /* ---- Rewards and tracking (progression) ---- */

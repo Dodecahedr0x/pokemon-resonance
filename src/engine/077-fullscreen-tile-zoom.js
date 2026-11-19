@@ -36,14 +36,14 @@ function fsSet444(on, viaButton) {
     if (on && !fsNav444()) {
       const r = el.requestFullscreen ? el.requestFullscreen({ navigationUI: 'hide' }) : el.webkitRequestFullscreen ? el.webkitRequestFullscreen() : null;
       if (r && r.catch)
-        r.catch(() => {
+        {r.catch(() => {
           if (viaButton) toast('Plein écran du navigateur refusé ici : le combat garde quand même toute la hauteur.');
-        });
+        });}
     } else if (!on && fsNav444()) {
       const r = document.exitFullscreen ? document.exitFullscreen() : document.webkitExitFullscreen ? document.webkitExitFullscreen() : null;
       if (r && r.catch) r.catch(() => {});
     }
-  } catch (e) {}
+  } catch { /* Best effort: failure here is non-fatal. */ }
   gauge434();
   bar444();
   setTimeout(() => {
@@ -93,15 +93,15 @@ function dangers444(k) {
     if (veiled(B)) {
       if (B.units.some(e => e.side === 'e' && !e.ko && e.intent)) o.push('Intentions adverses voilées : impossible de savoir qui vise cette case.');
     } else
-      B.units.forEach(e => {
+      {B.units.forEach(e => {
         if (e.side !== 'e' || e.ko || !e.intent) return;
         const m = MV[e.intent.mv];
         if (m && affected(B, e, m, e.intent.k).includes(k)) o.push(`${e.n} vise cette case avec ${m.n}.`);
-      });
+      });}
     const an = arenaNext(B);
     if (an && an.tiles.includes(k)) o.push(an.txt);
     if (B.vivant && fireHazard(B, k)) o.push('L’herbe peut s’embraser ici.');
-  } catch (e) {}
+  } catch { /* Best effort: failure here is non-fatal. */ }
   return o;
 }
 
@@ -118,7 +118,7 @@ function context444(k) {
       const c = reach(B, u)[k];
       if (c !== undefined) o.push(`${u.n} peut y aller : ${c} Mouvement${c > 1 ? 's' : ''}.`);
     }
-  } catch (e) {}
+  } catch { /* Best effort: failure here is non-fatal. */ }
   return o;
 }
 
@@ -207,7 +207,7 @@ function sheet444() {
       const row = MX[mk];
       rx = EL.map((e, i) => (row[i] && row[i] !== 'ren' && RX[row[i]] ? [rxCat(row[i]), e + ' → ' + RX[row[i]].n] : null)).filter(Boolean);
     }
-  } catch (e) {}
+  } catch { /* Best effort: failure here is non-fatal. */ }
   F.c = {
     sw: (TER444.find(x => x[0] !== 'fog' && x[0] !== 'trap' && x[0] !== 'mark' && x[3](t)) || [0, 0, '#3a4a5a'])[2],
     nom: tileName444(k),
@@ -403,7 +403,7 @@ document.addEventListener('keydown', e => {
       SUP444 = Date.now();
       try {
         if (navigator.vibrate) navigator.vibrate(12);
-      } catch (er) {}
+      } catch { /* Best effort: failure here is non-fatal. */ }
       sheet444();
     }, 430);
   });

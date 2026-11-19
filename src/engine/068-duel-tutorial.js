@@ -54,7 +54,7 @@ export function v433Clean(p) {
     o.duel433.n = Math.max(0, Math.min(99999, Math.floor(+d.n || 0)));
     if (Array.isArray(d.noms)) o.duel433.noms = [duelName433(d.noms[0]), duelName433(d.noms[1])];
     if (Array.isArray(d.h))
-      o.duel433.h = d.h
+      {o.duel433.h = d.h
         .filter(x => x && typeof x === 'object' && Array.isArray(x.t) && x.t.length === 2)
         .slice(-12)
         .map(x => ({
@@ -64,7 +64,7 @@ export function v433Clean(p) {
           r: Math.max(0, Math.min(30, Math.floor(+x.r || 0))),
           w: x.w === 'temps' || x.w === 'forfait' ? x.w : 'ko',
           t: x.t.map(L => (Array.isArray(L) ? L : []).filter(id => typeof id === 'string' && BY[id]).slice(0, 4))
-        }));
+        }));}
   }
   if (Array.isArray(p.tuto433)) o.tuto433 = [...new Set(p.tuto433.filter(k => typeof k === 'string' && TUTORIAL_STEPS433.some(c => c.k === k)))];
   return o;
@@ -262,19 +262,19 @@ function turnStart433(S, j, ev) {
       if (!u.ko && u.j433 === 2) unitEffects433(S, u, ev);
     });
     if (S.syn && S.syn.includes('toxines'))
-      S.units.forEach(e => {
+      {S.units.forEach(e => {
         if (!e.ko && e.side === 'e' && (e.root > 0 || e.web > 0 || e.badge === 'SOM')) {
           say(ev, `Toxines : ${e.n} s’affaiblit.`);
           damage(S, e, 3, ev, { ind: true });
         }
-      });
+      });}
     endStep(S, ev);
     if (S.over) return;
   }
   if (S.round > 1)
-    S.units.forEach(u => {
+    {S.units.forEach(u => {
       if (u.j433 === j && !u.ko) rewardIn(S, u, 1, ev);
-    });
+    });}
   S.units.forEach(u => {
     if (u.ko || u.j433 !== j) return;
     u.done = false;
@@ -664,7 +664,7 @@ STMAX433 = 5;
 
 try {
   STMAX433 = Math.max(5, ...MON.map(m => Math.max(...m.s)));
-} catch (e) {}
+} catch { /* Best effort: failure here is non-fatal. */ }
 
 
 document.addEventListener('click', e => {
@@ -733,7 +733,7 @@ if (!CAMP_TABS431.some(x => x[0] === 'duel')) CAMP_TABS431.push(['duel', 'Duel']
     SCEN.duel433 = X.D;
     OBST.duel433 = X.O;
     DUEL433 = null;
-  } catch (e) {}
+  } catch { /* Best effort: failure here is non-fatal. */ }
 })();
 
 

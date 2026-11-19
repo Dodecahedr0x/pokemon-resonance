@@ -51,10 +51,10 @@ export function replayClean(p) {
   const o = REPLAY0();
   if (!p || typeof p !== 'object') return o;
   if (p.succes && typeof p.succes === 'object')
-    for (const k in p.succes) if (/^[a-z0-9]{2,16}$/.test(k) && Number.isFinite(p.succes[k])) o.succes[k] = p.succes[k];
+    {for (const k in p.succes) if (/^[a-z0-9]{2,16}$/.test(k) && Number.isFinite(p.succes[k])) o.succes[k] = p.succes[k];}
   if (typeof p.titre === 'string' && o.succes[p.titre]) o.titre = p.titre;
   if (p.cumul && typeof p.cumul === 'object')
-    for (const k in p.cumul) if (/^[a-z]{2,12}$/.test(k) && Number.isFinite(p.cumul[k])) o.cumul[k] = Math.max(0, Math.floor(p.cumul[k]));
+    {for (const k in p.cumul) if (/^[a-z]{2,12}$/.test(k) && Number.isFinite(p.cumul[k])) o.cumul[k] = Math.max(0, Math.floor(p.cumul[k]));}
   const d = p.defis;
   if (d && typeof d === 'object') {
     if (typeof d.mono === 'string' && TYPES[d.mono]) o.defis.mono = d.mono;
@@ -196,7 +196,7 @@ function verifySuccess(c) {
     let ok = false;
     try {
       ok = !!s.ok(c);
-    } catch (e) {}
+    } catch { /* Best effort: failure here is non-fatal. */ }
     if (ok) {
       PROFILE.succes[s.id] = Date.now();
       freshList.push(s.id);
@@ -342,7 +342,7 @@ HOOKS.progres.push((S, rew, win) => {
           try {
             save();
             renderSquad();
-          } catch (e) {}
+          } catch { /* Best effort: failure here is non-fatal. */ }
         }, 0);
       }
     }
@@ -357,22 +357,22 @@ HOOKS.progres.push((S, rew, win) => {
 HOOKS.resultat.push(r => {
   const o = [];
   if (r.mut)
-    o.push(`<div class="res-l"><h4>Mutateur</h4><div class="rl"><span>${mutInfo(r.mut)[0]} : +50 % de Pokédollars</span><b>×1,5</b></div></div>`);
+    {o.push(`<div class="res-l"><h4>Mutateur</h4><div class="rl"><span>${mutInfo(r.mut)[0]} : +50 % de Pokédollars</span><b>×1,5</b></div></div>`);}
   if (r.defis)
-    o.push(
+    {o.push(
       `<div class="res-l"><h4>Défis</h4><div class="rl"><span>${r.defis.map(k => CHALLENGES[k][0]).join(', ')}${r.defiBonus ? ` : +${r.defiBonus} Éclats` : ''}</span><b>${r.defis.length}</b></div>${(r.tombes || [])
         .map(b => `<div class="rl tombe">${medal(BY[b].t)}<span>${BY[b].n} est tombé au combat.</span><b>✝</b></div>`)
         .join('')}</div>`
-    );
+    );}
   if (r.succes)
-    o.push(
+    {o.push(
       `<div class="res-l"><h4>Succès</h4>${r.succes
         .map(id => {
           const s = ACHIEVEMENTS.find(x => x.id === id);
           return `<div class="rl succ"><span><b>${s.n}</b> · ${s.d}${s.t ? ` Titre gagné : « ${s.t} ».` : ''}</span><b>★</b></div>`;
         })
         .join('')}</div>`
-    );
+    );}
   return o.join('');
 });
 

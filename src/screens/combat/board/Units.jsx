@@ -14,7 +14,7 @@ const REFS = new WeakMap();
 function refs(T) {
   let r = REFS.get(T);
   if (!r)
-    REFS.set(
+    {REFS.set(
       T,
       (r = {
         g: n => n && (T.g = n),
@@ -22,7 +22,7 @@ function refs(T) {
         ring: n => n && (T.ring = n),
         im: n => (T.im = n)
       })
-    );
+    );}
   return r;
 }
 

@@ -148,7 +148,7 @@ export function resolve(S, u, m, k) {
   let shown = [];
   try {
     shown = m.sh === 'self' || m.wx ? [from] : affected(S, u, m, k);
-  } catch (e) {}
+  } catch { /* Best effort: failure here is non-fatal. */ }
   const prev = ACT;
   ACT = { u, m, typ, rico, k, guard: !!gd };
   let ev;
@@ -243,12 +243,12 @@ export function roundSupport(S) {
       }
     });
     if (S.syn && S.syn.includes('toxines'))
-      S.units.forEach(e => {
+      {S.units.forEach(e => {
         if (!e.ko && e.side === 'e' && (e.root > 0 || e.web > 0 || e.badge === 'SOM')) {
           say(pre, `Toxines : ${e.n} s’affaiblit.`);
           damage(S, e, 3, pre, { ind: true });
         }
-      });
+      });}
     S.units.forEach(u => {
       u.gdu = 0;
       u.hr = 0;

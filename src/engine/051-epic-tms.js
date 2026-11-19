@@ -42,8 +42,8 @@ export function bonusMove412(S, u) {
 
 export function durations412(S, ev) {
   if (S.arriere)
-    for (const c in S.arriere)
-      if (S.arriere[c] > 0 && --S.arriere[c] === 0) say(ev, `Le Vent Arrière ${c === 'a' ? 'de votre équipe' : 'adverse'} retombe.`);
+    {for (const c in S.arriere)
+      {if (S.arriere[c] > 0 && --S.arriere[c] === 0) say(ev, `Le Vent Arrière ${c === 'a' ? 'de votre équipe' : 'adverse'} retombe.`);}}
   if (S.distorsion > 0 && --S.distorsion === 0) say(ev, 'La Distorsion se dissipe.');
   durations413(S, ev);
 }

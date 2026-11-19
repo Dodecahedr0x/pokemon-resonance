@@ -61,7 +61,7 @@ function ensureScen(b) {
       SCEN.duel433 = b.state.duel433.D; // duel in progress: its terrain and teams (v4.33)
       OBST.duel433 = b.state.duel433.O || {};
     }
-  } catch (e) {}
+  } catch { /* Best effort: failure here is non-fatal. */ }
 }
 
 
@@ -116,29 +116,29 @@ export function cleanProfile(p) {
   o.forms = Array.isArray(p.forms) ? [...new Set(p.forms.filter(id => BY[id] && BY[id].st > 1))] : [];
   o.ranks = {};
   if (p.ranks && typeof p.ranks === 'object')
-    for (const [k, v] of Object.entries(p.ranks))
-      if (/^[a-z0-9_-]{1,24}$/i.test(k) && ['S', 'A', 'B'].includes(v)) o.ranks[k] = v;
+    {for (const [k, v] of Object.entries(p.ranks))
+      {if (/^[a-z0-9_-]{1,24}$/i.test(k) && ['S', 'A', 'B'].includes(v)) o.ranks[k] = v;}}
   o.items = Array.isArray(p.items) ? [...new Set(p.items.filter(k => ITEMS2[k]))] : [];
   if (p.equip && typeof p.equip === 'object')
-    for (const k in p.equip) if (BY[k] && ITEMS2[p.equip[k]]) o.equip[k] = p.equip[k];
+    {for (const k in p.equip) if (BY[k] && ITEMS2[p.equip[k]]) o.equip[k] = p.equip[k];}
   if (p.fatigue && typeof p.fatigue === 'object')
-    for (const k in p.fatigue)
-      if (BY[k] && Number.isFinite(p.fatigue[k])) o.fatigue[k] = Math.max(0, Math.min(100, Math.round(p.fatigue[k])));
+    {for (const k in p.fatigue)
+      {if (BY[k] && Number.isFinite(p.fatigue[k])) o.fatigue[k] = Math.max(0, Math.min(100, Math.round(p.fatigue[k])));}}
   if (p.links && typeof p.links === 'object')
-    for (const k in p.links) {
+    {for (const k in p.links) {
       const [a, b] = k.split('|');
       if (BY[a] && BY[b] && Number.isFinite(p.links[k]) && p.links[k] > 0)
-        o.links[k] = Math.min(999, Math.floor(p.links[k]));
-    }
+        {o.links[k] = Math.min(999, Math.floor(p.links[k]));}
+    }}
   if (Array.isArray(p.hist))
-    o.hist = p.hist
+    {o.hist = p.hist
       .slice(-10)
       .filter(h => h && typeof h === 'object')
       .map(h => ({
         atk: Array.isArray(h.atk) ? h.atk.filter(t => TYPES[t]) : [],
         def: Array.isArray(h.def) ? h.def.filter(t => TYPES[t]) : [],
         rx: Object.fromEntries(Object.entries(h.rx || {}).filter(([k, v]) => RX[k] && Number.isFinite(v)))
-      }));
+      }));}
   if (Number.isFinite(p.elite)) o.elite = Math.max(0, Math.min(5, Math.floor(p.elite)));
   if (p.tuto) o.tuto = 1;
   if (o.mode === 'campagne' && !o.box.length) o.box = [...CAMP_START];
@@ -219,7 +219,7 @@ async function pushRemote(k, s, now) {
             continue;
           }
           if (c === 'quota_exceeded')
-            toast('Espace de sauvegarde du compte plein : la partie reste enregistrée sur cet appareil.');
+            {toast('Espace de sauvegarde du compte plein : la partie reste enregistrée sur cet appareil.');}
           else if (c !== 'resource_exhausted') {
             SV.db = null;
             SV.cloud = false;
@@ -242,7 +242,7 @@ async function delRemote(k) {
   if (!SV.db) return;
   try {
     await ref(k).delete();
-  } catch (e) {}
+  } catch { /* Best effort: failure here is non-fatal. */ }
 }
 
 
@@ -255,7 +255,7 @@ export function applySave(s, opt) {
   free421(s.squad, s.badges); // Free: the Box fills only once (v4.21)
   __set_squad(s.squad.filter(id => inBox(id)));
   if (!squad.length)
-    __set_squad(PROFILE.box.slice(0, 4).filter((id, i, a) => a.slice(0, i + 1).reduce((t, x) => t + BY[x].c, 0) <= BUDGET));
+    {__set_squad(PROFILE.box.slice(0, 4).filter((id, i, a) => a.slice(0, i + 1).reduce((t, x) => t + BY[x].c, 0) <= BUDGET));}
   save();
   __set_BADGES(s.badges
     .filter(i => Number.isInteger(i) && i >= 0 && i < 8)
@@ -488,7 +488,7 @@ async function importSave(file) {
 function normSave(s) {
   if (!s || typeof s !== 'object') return null;
   for (const k of ['auto', 'save', 'data', 'snapshot'])
-    if (!s.squad && !s.profile && s[k] && typeof s[k] === 'object') s = s[k];
+    {if (!s.squad && !s.profile && s[k] && typeof s[k] === 'object') s = s[k];}
   if (!s || typeof s !== 'object' || (!Array.isArray(s.squad) && !s.profile)) return null;
   const o = Object.assign({}, s);
   o.v = SAVE_V;
@@ -680,7 +680,7 @@ $('#saves').addEventListener('click', e => {
         () => toast('Code de sauvegarde copié.'),
         () => {}
       );
-    } catch (e) {}
+    } catch { /* Best effort: failure here is non-fatal. */ }
     return;
   }
   if (a === 'pastecode') {
@@ -699,7 +699,7 @@ $('#saves').addEventListener('click', e => {
     let s = null;
     try {
       s = readCode(($('#svCode') || {}).value);
-    } catch (e) {}
+    } catch { /* Best effort: failure here is non-fatal. */ }
     if (importData(s)) SV.code = null;
     return;
   }
@@ -788,7 +788,7 @@ document.addEventListener('click', e => {
   i.addEventListener('cancel', mark, { once: true });
   try {
     i.click();
-  } catch (er) {}
+  } catch { /* Best effort: failure here is non-fatal. */ }
   setTimeout(() => {
     if (opened) return;
     toast('Le sélecteur de fichiers est bloqué ici : collez le texte de votre sauvegarde ci-dessous.');
@@ -849,7 +849,7 @@ document.addEventListener('click', e => {
   let uid = null;
   try {
     uid = await user.id();
-  } catch (e) {}
+  } catch { /* Best effort: failure here is non-fatal. */ }
   if (!uid) return;
   SV.db = db;
   SV.uid = uid;

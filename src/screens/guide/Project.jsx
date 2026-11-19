@@ -23,7 +23,7 @@ export function Digits() {
 }
 
 // "Project" panel (no tab: opened only by link): pillars, figures, studio.
-export default function Projet() {
+export default function Project() {
   return (
     <>
       <div className="sec">

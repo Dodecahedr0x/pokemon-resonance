@@ -50,7 +50,7 @@ export function __init() {
     SCEN[k] = Object.assign(baseScene(i === 3 ? 'Vaskar, chef des Ombres' : 'Les Ombres · épisode ' + (i + 1), 'Histoire · épisode ' + (i + 1), 'Repoussez les Ombres de Résonance.', o.lv, o.hb, mkFoes(o.ids)), { omb470: i + 1 });
     try {
       OBST[k] = { pil: ['4,2'], grass: ['4,4'] };
-    } catch (e) {}
+    } catch { /* Best effort: failure here is non-fatal. */ }
   });
 
   /* ---- 5. Daily challenge ---- */
@@ -74,7 +74,7 @@ export function __init() {
     SCEN.dq470 = Object.assign(baseScene('Défi quotidien', 'Défi · type interdit : ' + D.interdit, 'Aucun Pokémon de type ' + D.interdit + ' dans votre équipe. Adversaires renforcés.', D.lv, D.hb, mkFoes(D.ids)), { dq470: D.interdit });
     try {
       OBST.dq470 = { pil: ['4,2'], grass: ['4,4', '5,1'] };
-    } catch (e) {}
+    } catch { /* Best effort: failure here is non-fatal. */ }
     return D;
   };
   dqMake();
@@ -120,7 +120,7 @@ export function __init() {
           try {
             const st = ev454().st;
             writeLS('res-ev454', { d: st.d, done: true, res: 'Les Ombres ont été repoussées.' });
-          } catch (e) {}
+          } catch { /* Best effort: failure here is non-fatal. */ }
         }
       } else if (k === 'dq470') {
         const D = X.dq;
@@ -165,7 +165,7 @@ export function __init() {
         goFight(k);
         return true;
       }
-    } catch (e) {}
+    } catch { /* Best effort: failure here is non-fatal. */ }
     return false;
   });
 
@@ -233,7 +233,7 @@ export function __init() {
         writeX(X);
         try {
           save();
-        } catch (e2) {}
+        } catch { /* Best effort: failure here is non-fatal. */ }
         sfx('win');
         toast(BY[id].n + ' rejoint votre Boîte !');
       }

@@ -191,7 +191,7 @@ HOOKS.heure.push(route450);
 
 try {
   route450();
-} catch (e) {}
+} catch { /* Best effort: failure here is non-fatal. */ }
 
 
 // hidden finds on the map (.sp450): rendered by React (src/screens/map/Marks.jsx)

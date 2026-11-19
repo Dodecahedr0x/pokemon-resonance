@@ -112,12 +112,12 @@ function bar() {
     phase = phase.replace(/(À vous : )?déplacez, puis agissez\./, t).replace(/Tous (vos|ses) Pokémon ont joué\./, t);
     const u = ui.sel && byUid(B, ui.sel);
     if (u && u.side === 'a' && !ui.selE)
-      step = (
+      {step = (
         <>
           <b>{STEP[flow478.etape(B, u)]}</b> {u.n}
           {B.ordre !== 'vitesse' && n ? ` · encore ${n}` : ''}
         </>
-      );
+      );}
   }
   return { disabled, bouton: button, phase, joueur: playerRef, g, etape: step };
 }

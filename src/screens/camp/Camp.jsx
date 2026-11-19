@@ -4,14 +4,14 @@ import { CAMP_TABS431, echoRun431 } from '../../engine/066-tactical-challenges.j
 import { seenExits, useCampBase, useCampPage } from './campStore.js';
 import CampBase from './CampBase.jsx';
 import Outings from './Outings.jsx';
-import Riddles from './tabs/Puzzles.jsx';
+import Puzzles from './tabs/Puzzles.jsx';
 import Echo from './tabs/Echo.jsx';
 import Gyms from './tabs/Gyms.jsx';
 import Mastery from './tabs/Mastery.jsx';
 import Pantheon from './tabs/Pantheon.jsx';
 import Duel from './tabs/Duel.jsx';
 
-const TAB_LIST = { enigmes: Riddles, echo: Echo, arenes: Gyms, pantheon: Pantheon, duel: Duel, maitrise: Mastery };
+const TAB_LIST = { enigmes: Puzzles, echo: Echo, arenes: Gyms, pantheon: Pantheon, duel: Duel, maitrise: Mastery };
 
 // Camp sub-tabs (v4.31): the bar, then the content of the open tab (except « Base »).
 function Tabs({ t }) {

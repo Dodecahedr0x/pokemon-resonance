@@ -2,7 +2,7 @@ import { GIM467, gimKey467 } from '../../../engine/098-feats-journal-gimmick-boa
 
 // Gimmick boards (v4.67): a terrain rule added to battles.
 // Buttons handled by the engine (delegated click on data-gim467).
-export default function BoardGimmicks() {
+export default function GimmickBoards() {
   const c = gimKey467();
   const btn = (k, l) => (
     <button key={k} type="button" className={`b b-sm${c === k ? ' b-gold' : ' b-ghost'}`} data-gim467={k} aria-pressed={c === k}>{l}</button>

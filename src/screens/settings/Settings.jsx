@@ -1,12 +1,12 @@
 import { useEngineReady } from '../../engineReady.js';
 import { useSettingsVersion } from './settingsStore.js';
-import BattleDisplay from './panels/CombatDisplay.jsx';
+import BattleDisplay from './panels/BattleDisplay.jsx';
 import Immersion from './panels/Immersion.jsx';
 import PokemonSkin from './panels/PokemonSkin.jsx';
 import TrainerJournal from './panels/TrainerJournal.jsx';
 import Avatar from './panels/Avatar.jsx';
 import SecretPlaces from './panels/SecretPlaces.jsx';
-import BoardGimmicks from './panels/GimmickBoards.jsx';
+import GimmickBoards from './panels/GimmickBoards.jsx';
 import FeatsJournal from './panels/FeatsJournal.jsx';
 import Chronicles from './panels/Chronicles.jsx';
 import Offline from './panels/Offline.jsx';
@@ -22,15 +22,15 @@ import Phone from './panels/Phone.jsx';
 import Accessibility from './panels/Accessibility.jsx';
 import ActionReplay from './panels/ActionReplay.jsx';
 import DownloadGame from './panels/DownloadGame.jsx';
-import WorkshopDesign from './panels/DesignWorkshop.jsx';
+import DesignWorkshop from './panels/DesignWorkshop.jsx';
 
 // Panels, in the order the old game displayed them: first those added by the
 // successive versions (inserted at the top), then the base settings, then the tools.
 const PANELS = [
   BattleDisplay, Immersion, PokemonSkin, TrainerJournal, Avatar, SecretPlaces,
-  BoardGimmicks, FeatsJournal, Chronicles, Offline, Nuzlocke, BoardThemes, CaptureTiming,
+  GimmickBoards, FeatsJournal, Chronicles, Offline, Nuzlocke, BoardThemes, CaptureTiming,
   Trainer, GameMode, Sound, Combat, CampaignChallenges, Phone, Accessibility, ActionReplay,
-  DownloadGame, WorkshopDesign,
+  DownloadGame, DesignWorkshop,
 ];
 
 function Content() {

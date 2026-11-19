@@ -36,7 +36,7 @@ function Chapter({ k, gk }) {
 }
 
 // « Principale » (Main) tab: the Campaign chapters, in order.
-export default function Main() {
+export default function MainQuest() {
   const gk = nextGoal()[0];
   return (
     <>

@@ -30,7 +30,7 @@ export function v4After(t) {
       centerMap();
       try {
         placeAlert();
-      } catch (e) {}
+      } catch { /* Best effort: failure here is non-fatal. */ }
     });
   } else if (t === 'dex') renderDex();
   else if (t === 'quetes') renderQuests();
@@ -58,9 +58,9 @@ document.addEventListener('change', e => {
   if (p.dataset.pref === 'vibe' && p.checked) vibe(40);
   if (p.dataset.pref === 'sound' && p.checked) setTimeout(() => sfx('ui'), 30);
   if (B)
-    try {
+    {try {
       renderAll();
-    } catch (x) {}
+    } catch { /* Best effort: failure here is non-fatal. */ }}
 });
 
 

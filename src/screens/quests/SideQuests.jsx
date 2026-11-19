@@ -22,6 +22,6 @@ function Quest({ q }) {
   );
 }
 
-export default function Secondary() {
+export default function SideQuests() {
   return SQ.map(q => <Quest key={q.id} q={q} />);
 }

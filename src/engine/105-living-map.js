@@ -262,7 +262,7 @@ export function __init() {
         try {
           const gi = ARENAS.findIndex(a => a.k === p.id);
           if (gi >= 0) t = GYMS[gi].t;
-        } catch (e) {}
+        } catch { /* Best effort: failure here is non-fatal. */ }
         return { id: p.id, x: p.x, y: p.y, grp: p.grp, t };
       });
     } finally {
@@ -275,7 +275,7 @@ export function __init() {
     let ch = [];
     try {
       ch = R.chain().map(id => by[id]).filter(Boolean);
-    } catch (e) {}
+    } catch { /* Best effort: failure here is non-fatal. */ }
     ch.slice(1).forEach((b, i) => out.push(curvePath(ch[i], b, i)));
     R.side.forEach(([a, b], i) => by[a] && by[b] && out.push(curvePath(by[a], by[b], i + 1)));
     const tiedOnes = new Set(ch.map(p => p.id));
@@ -870,7 +870,7 @@ export function __init() {
       rnd = mulberry32((R.seed * 7919) | 0),
       seed = R.seed;
     const lands = landOf(R.svg());
-    if (!lands.length) throw new Error('terre introuvable');
+    if (!lands.length) throw new Error('land not found');
     const P = placesOf(reg);
     const roads = routesOf(reg, R, P);
     const M = maskOf(lands.map(d => ({ d, fill: true })));
@@ -906,11 +906,11 @@ export function __init() {
         y0 = Math.max(0, (cy - sy * 3) | 0),
         y1 = Math.min(GH - 1, (cy + sy * 3) | 0);
       for (let y = y0; y <= y1; y++)
-        for (let x = x0; x <= x1; x++) {
+        {for (let x = x0; x <= x1; x++) {
           const dx = (x - cx) / sx,
             dy = (y - cy) / sy;
           arr[y * GW + x] += amp * Math.exp(-(dx * dx + dy * dy) * 0.5);
-        }
+        }}
     };
     R.mounts.forEach(([x, y, s, sn]) => {
       addG(MT, x, y + 4, 34 * s, 26 * s, 0.9);
@@ -1305,12 +1305,12 @@ export function __init() {
     // beach palm trees (Hoenn)
     (R.palms || []).forEach(([x, y]) => isFree(x, y, 26) && add(y, () => palm(c, x, y, 1)));
     if (R.reef)
-      for (let t = 0; t < 260; t++) {
+      {for (let t = 0; t < 260; t++) {
         const x = rnd() * VW,
           y = rnd() * VH,
           i = gi(x, y);
         if (M[i] > 0.95 && B12[i] < 0.84 && B12[i] > 0.7 && isFree(x, y, 40) && rnd() < 0.5) add(y, () => palm(c, x, y, 0.75 + rnd() * 0.25));
-      }
+      }}
     // hamlets, gyms and scenery specific to each type
     const angles = [205, 335, 168, 12, 250, 290, 145, 35];
     P.forEach(p => {
@@ -1487,7 +1487,7 @@ export function __init() {
           puffs += `<circle cx="${(p.x + Math.cos(a) * d).toFixed(0)}" cy="${(p.y + Math.sin(a) * d * 0.7).toFixed(0)}" r="${(26 + r() * 22).toFixed(0)}" fill="url(#fg471)"/>`;
         }
       });
-    } catch (e) {}
+    } catch { /* Best effort: failure here is non-fatal. */ }
     return `<svg class="fog471" viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><radialGradient id="fg471"><stop offset="0" stop-color="#eef2f6" stop-opacity=".62"/><stop offset=".55" stop-color="#dfe6ee" stop-opacity=".34"/><stop offset="1" stop-color="#dfe6ee" stop-opacity="0"/></radialGradient></defs><g class="fog-g">${puffs}</g></svg>`;
   };
 
@@ -1533,13 +1533,13 @@ export function __init() {
         const st = t.objectStore('p');
         try {
           st.getAllKeys().onsuccess = e => (e.target.result || []).forEach(k => !String(k).endsWith(CVER) && st.delete(k));
-        } catch (e2) {}
+        } catch { /* Best effort: failure here is non-fatal. */ }
         st.put({ blob, lights: res.lights, sparks: res.sparks, smoke: res.smoke }, reg + '-' + CVER);
         t.oncomplete = ok;
         t.onerror = () => ko(t.error);
       });
       db.close();
-    } catch (e) {}
+    } catch { /* Best effort: failure here is non-fatal. */ }
   };
   const ensure = reg => {
     if (!REG[reg] || PAINT[reg]) return;
@@ -1554,8 +1554,8 @@ export function __init() {
         .catch(e => {
           PAINT[reg] = { state: 'err' };
           try {
-            console.warn('Carte v4.71 : dessin impossible, carte simple conservée.', e);
-          } catch (e2) {}
+            console.warn('Map v4.71: drawing failed, keeping the plain map.', e);
+          } catch { /* Best effort: failure here is non-fatal. */ }
         });
     }, 30);
   };

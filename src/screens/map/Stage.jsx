@@ -68,12 +68,12 @@ function Title({ drawn, rg }) {
   if (!drawn) return 'Région de la Résonance';
   const R = MAP471 && MAP471.REG[rg];
   if (R)
-    return (
+    {return (
       <>
         <b>{R.title}</b>
         <small>{R.sub}</small>
       </>
-    );
+    );}
   return rg === 'hoenn' ? 'Hoenn' : rg === 'johto' ? 'Johto' : 'Kanto · Région de la Résonance';
 }
 

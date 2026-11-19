@@ -64,13 +64,13 @@ export function v429Clean(p) {
   if (Array.isArray(p.riv429)) o.riv429 = [...new Set(p.riv429.filter(x => ['rv5', 'rv6', 'hd429'].includes(x)))];
   const h = p.hebdo429;
   if (h && typeof h === 'object' && typeof h.w === 'string' && /^\d{4}-S\d\d$/.test(h.w))
-    o.hebdo429 = {
+    {o.hebdo429 = {
       w: h.w,
       best: Number.isFinite(h.best) ? Math.max(0, Math.min(99999, Math.floor(h.best))) : 0,
       n: Number.isFinite(h.n) ? Math.max(0, Math.min(999, Math.floor(h.n))) : 0,
       rec: h.rec ? 1 : 0,
       win: h.win ? 1 : 0
-    };
+    };}
   return o;
 }
 
@@ -180,20 +180,20 @@ function actionLp429(t) {
   const tok = t.closest('#bSvg .tok');
   if (tok && B && L.u) {
     for (const id in L.u)
-      if (L.u[id].g === tok) {
+      {if (L.u[id].g === tok) {
         const u = byUid(B, id);
         return u ? () => sheet429(u.sp) : null;
-      }
+      }}
     return null;
   }
   const mk = t.closest('#mapMarks [data-place]');
   if (mk)
-    return () => {
+    {return () => {
       V4.mapSel = mk.dataset.place;
       renderMap();
       const i = document.getElementById('mapInfo');
       if (i && i.scrollIntoView) i.scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'center' });
-    };
+    };}
   const c = t.closest('[data-open],.v4-dl[data-dex],[data-lp429]');
   if (!c) return null;
   const id = c.dataset.open || c.dataset.dex || c.dataset.lp429;
@@ -697,7 +697,7 @@ document.addEventListener(
     go(TAB_LIST429[j]);
     try {
       window.scrollTo(0, 0);
-    } catch (er) {}
+    } catch { /* Best effort: failure here is non-fatal. */ }
   },
   { passive: true }
 );
@@ -767,17 +767,17 @@ Object.assign(SCENES, {
 
 
 if (!SCENES.h1)
-  SCENES.h1 = [
+  {SCENES.h1 = [
     ['prof', 'Hoenn ! Des volcans, des forêts tropicales et la mer à perte de vue.'],
     ['prof', 'Huit arènes, chacune avec sa règle, et un Maître au Plateau. Lisez bien la règle avant de lancer le combat.']
-  ];
+  ];}
 
 
 if (!SCENES.hchamp)
-  SCENES.hchamp = [
+  {SCENES.hchamp = [
     ['prof', 'Le Plateau de Hoenn… Huit badges, et Kael qui vous suit de près.'],
     ['prof', 'Le Maître change de tactique à chaque phase. Gardez des Voix et des soins pour la fin.']
-  ];
+  ];}
 
 
 /* ---------- 6. capturable legendaries ---------- */

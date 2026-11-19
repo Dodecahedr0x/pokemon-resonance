@@ -209,10 +209,10 @@ $('#enc').addEventListener('click', e => {
     }
     launch();
     if (B && !B.noCatch)
-      log(
+      {log(
         `Capture : touchez ${BY[wildId].n} pour voir les conditions (PV bas, immobilisé, un allié au contact, 2 Voix, une Ball).`,
         'sys'
-      );
+      );}
   }
   if (a === 'dex' && wildId) {
     go('pokedex');

@@ -11,8 +11,8 @@ export function reportError(e, where) {
   if (ERRS.includes(line) || ERRS.length > 6) return;
   ERRS.push(line);
   try {
-    console.error('[Résonance]', line, e);
-  } catch (x) {}
+    console.error('[Resonance]', line, e);
+  } catch { /* Best effort: failure here is non-fatal. */ }
   if (!document.body) return;
   let box = document.getElementById('errBox');
   if (!box) {

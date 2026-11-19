@@ -39,7 +39,7 @@ function dfVague468(S, ev) {
     ev.push({ e: 'terrain' });
     try {
       plan(S, ev);
-    } catch (e) {}
+    } catch { /* Best effort: failure here is non-fatal. */ }
   }
   return made > 0;
 }

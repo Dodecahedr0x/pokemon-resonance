@@ -137,45 +137,45 @@ export function analyze() {
   if (!ms.length) al.push(['bad', 'Équipe vide : recrutez jusqu’à 4 Pokémon.']);
   else {
     if (!has('Rempart'))
-      al.push(['bad', 'Aucun Rempart au départ : rien ne tient la ligne de front avant les premiers Éveils.']);
+      {al.push(['bad', 'Aucun Rempart au départ : rien ne tient la ligne de front avant les premiers Éveils.']);}
     if (!rx.size) al.push(['bad', 'Aucune réaction au premier stade : l’énergie d’Éveil montera lentement.']);
     if (!evo) al.push(['warn', 'Aucun Pokémon ne peut s’éveiller : pas de renversement possible en combat.']);
     else
-      al.push([
+      {al.push([
         'ok',
         `${evo} Pokémon capable${evo > 1 ? 's' : ''} de s’éveiller, ${stages} Éveil${stages > 1 ? 's' : ''} possible${stages > 1 ? 's' : ''} au total.`
-      ]);
+      ]);}
     const lost = ms.filter(m =>
       nextOf(m).some(n =>
         evoDiff(m.id, n).lose.some(id => ['web', 'root', 'sleep', 'confuse', 'turn', 'taunt'].includes(MV[id].fx))
       )
     );
     if (lost.length)
-      al.push([
+      {al.push([
         'warn',
         `${lost.map(m => m.n).join(', ')} perd${lost.length > 1 ? 'ent' : ''} un contrôle en évoluant : éveillez au bon moment.`
-      ]);
+      ]);}
     if (rxp.size > rx.size)
-      al.push(['ok', `Les Éveils ouvrent ${rxp.size - rx.size} réaction${rxp.size - rx.size > 1 ? 's' : ''} de plus.`]);
+      {al.push(['ok', `Les Éveils ouvrent ${rxp.size - rx.size} réaction${rxp.size - rx.size > 1 ? 's' : ''} de plus.`]);}
     if (bonus > 0)
-      al.push([
+      {al.push([
         'ok',
         `${free} point${free > 1 ? 's' : ''} libre${free > 1 ? 's' : ''} : +${bonus} Voix par manche${bonus >= 2 ? ' (plafond)' : ''}. Chaque tranche de 4 PC libres donne 1 Voix.`
-      ]);
+      ]);}
     const vet = ms.filter(m => m.st > 1);
     if (vet.length)
-      al.push([
+      {al.push([
         'ok',
         `${vet.map(m => m.n).join(', ')} : recrue${vet.length > 1 ? 's' : ''} confirmée${vet.length > 1 ? 's' : ''}, en jeu dès la première manche.`
-      ]);
+      ]);}
     if (ms.some(m => !m.nx))
-      al.push([
+      {al.push([
         'ok',
         `${ms
           .filter(m => !m.nx)
           .map(m => m.n)
           .join(', ')} : stade unique, puissant d’emblée.`
-      ]);
+      ]);}
   }
   return { ms, rx, rxp, roles, chains, c, free, bonus, covered, score, al, stages };
 }
@@ -373,7 +373,7 @@ squad = [],
 try {
   const s = JSON.parse(localStorage.getItem('res8-squad') || 'null');
   if (validSquad(s)) squad = s;
-} catch (e) {}
+} catch { /* Best effort: failure here is non-fatal. */ }
 
 
 if (!squad.length) squad = [...PRESETS.orage.ids];
@@ -403,7 +403,7 @@ $('#sheet').addEventListener('click', e => {
   const eq = e.target.closest('[data-eq]');
   if (eq) {
     equip(eq.dataset.eq, eq.dataset.it || '');
-    return;
+    
   }
 });
 

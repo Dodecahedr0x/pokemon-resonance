@@ -70,7 +70,7 @@ export function Rules() {
 }
 
 // « Combat » (Battle) tab: a four-beat turn, anatomy of an Awakening, rules.
-export default function Bases() {
+export default function Basics() {
   return (
     <>
       <div className="gd-intro"><h2 className="h2">Un tour en quatre temps</h2></div>

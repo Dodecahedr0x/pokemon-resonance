@@ -28,7 +28,7 @@ export function show(t, scroll) {
   if (scroll) window.scrollTo({ top: 0, behavior: 'auto' });
   try {
     localStorage.setItem('res8-tab', t);
-  } catch (e) {}
+  } catch { /* Best effort: failure here is non-fatal. */ }
   if (t === 'combat' && !B) renderPrep();
   if (t === 'types') guideShown();
   afterShow(t);
@@ -42,7 +42,7 @@ export function go(t) {
   show(t, true);
   try {
     history.replaceState(null, '', '#' + (t === 'ligue' ? 'combat' : t));
-  } catch (e) {}
+  } catch { /* Best effort: failure here is non-fatal. */ }
 }
 
 /* ===================== NAVIGATION ===================== */

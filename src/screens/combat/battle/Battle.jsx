@@ -4,7 +4,7 @@ import { useBattleVersion } from './battleStore.js';
 import { BtTop, Timeline, Rule, Synergies } from './TopBar.jsx';
 import { PlatesA, PlatesE } from './Plates.jsx';
 import Panel from './Panel.jsx';
-import Footer from './Foot.jsx';
+import Footer from './Footer.jsx';
 import Log from './Log.jsx';
 import EvoPick from './EvoPick.jsx';
 import Sheet444 from './Sheet444.jsx';

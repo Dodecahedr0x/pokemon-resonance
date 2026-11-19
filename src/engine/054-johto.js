@@ -133,11 +133,11 @@ export function jTick415(S, r, ev) {
     ev.push({ e: 'arena', r });
   }
   if (r === 'jnormal')
-    es.forEach(e => {
+    {es.forEach(e => {
       if (!e.ko && e.hp < e.mhp) heal(S, e, Math.max(1, Math.round(e.mhp * 0.06)), ev);
-    });
+    });}
   if (r === 'jspectre')
-    es.forEach(e => {
+    {es.forEach(e => {
       if (!e.ko || S.revenant || e.caught || e.seg) return; // only one revenant per battle
       const x = uAt(S, uk(e)) ? nbrK(uk(e)).find(y => S.tiles[y] && !S.tiles[y].rock && !uAt(S, y)) : uk(e);
       if (!x) return;
@@ -146,11 +146,11 @@ export function jTick415(S, r, ev) {
       Object.assign(e, { ko: false, hp: Math.max(1, Math.round(e.mhp * 0.3)), pos: P(x), badge: null, skip: 0, notes: null, intent: null });
       ev.push({ e: 'mv', u: e.uid }, { e: 'heal', u: e.uid, v: e.hp });
       say(ev, `Arène Spectre : ${e.n} revient d’entre les ombres !`);
-    });
+    });}
   if (r === 'jcombat')
-    es.forEach(e => {
+    {es.forEach(e => {
       if (!e.ko && al.some(a => hdist(a.pos, e.pos) === 1)) e.boost = Math.max(e.boost, 2);
-    });
+    });}
   if (r === 'jacier' && R % 3 === 0) {
     es.forEach(e => {
       if (!e.ko) e.guard = Math.max(e.guard, 2);
@@ -158,9 +158,9 @@ export function jTick415(S, r, ev) {
     say(ev, 'Arène Acier : le blindage se referme (+2 Garde).');
   }
   if (r === 'jdragon')
-    es.forEach(e => {
+    {es.forEach(e => {
       if (!e.ko && hasXp(e)) e.en = Math.min(EMAX, (e.en || 0) + 1);
-    });
+    });}
   jdTick416(S, r, ev); // story, Dominants (v4.16)
 }
 

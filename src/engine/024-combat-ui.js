@@ -168,7 +168,7 @@ export function launch() {
     __set_tutorialI(SCEN[scSel] && SCEN[scSel].tuto ? 0 : -1);
     launchCore();
     if (B && !AUTO)
-      vsIntro(); // opponent introduction
+      {vsIntro();} // opponent introduction
     else if (B) turnBanner();
     // Speed order: if an opponent is faster, it opens the round (after the introduction)
     if (B && B.ordre === 'vitesse') setTimeout(unrollSpeed, AUTO || RM ? 950 : PREF.fast ? 1500 : 2400);
@@ -232,13 +232,13 @@ function launchCore() {
   if (B.mut) log(`Mutateur · ${mutInfo(B.mut)[0]} : ${mutInfo(B.mut)[1]}`, 'arn');
   if (B.sansEveil) log('Défi Sans Éveil : vos Pokémon ne s’éveilleront pas.', 'sys');
   if (B.tac)
-    log(
+    {log(
       'Tactique avancée : entrer au contact d’un adversaire arrête le déplacement (sauf volants, Spectre, Éclaireurs). Lance-Soleil et Vol partent en fin de manche.',
       'sys'
-    );
+    );}
   if (B.units.some(u => u.colosse)) log('Colosse : brisez ses parties pour faire tomber sa carapace. Chacune le fait vaciller.', 'sys');
   if (B.vivant)
-    log(`Plateau vivant : ${LIVING_STATE[B.cyc.ph]} (${LIVING_DESC[B.cyc.ph]}) Le feu court dans les hautes herbes ; la pluie l’éteint.`, 'sys');
+    {log(`Plateau vivant : ${LIVING_STATE[B.cyc.ph]} (${LIVING_DESC[B.cyc.ph]}) Le feu court dans les hautes herbes ; la pluie l’éteint.`, 'sys');}
   autoSel();
   renderAll();
   window.scrollTo({ top: 0 });
@@ -397,7 +397,7 @@ function segHpBase(u) {
   const r = Math.max(0, (u.hp / u.mhp) * 100),
     now = performance.now(),
     key = u.uid;
-  let m = HPM[key];
+  const m = HPM[key];
   if (!m || m.s !== B) {
     HPM[key] = { r, s: B, t0: 0, a: r, b: r };
     return h;
@@ -584,7 +584,7 @@ function hit(uid) {
 export function playLog(ev) {
   ev.forEach(e => {
     if (e.e === 'msg')
-      log(e.s, /^Arène /.test(e.s) ? 'arn' : /^(Arrivée|.* évolue en|.* puise)/.test(e.s) ? 'evo' : '');
+      {log(e.s, /^Arène /.test(e.s) ? 'arn' : /^(Arrivée|.* évolue en|.* puise)/.test(e.s) ? 'evo' : '');}
     else if (e.e === 'dmg') {
       const u = byUid(B, e.u);
       if (u) {
@@ -1153,7 +1153,7 @@ $('#bPanel').addEventListener('click', e => {
       renderAll();
       playEv(ev);
     }
-    return;
+    
   }
 });
 

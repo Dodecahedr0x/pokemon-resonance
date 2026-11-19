@@ -173,14 +173,14 @@ export function newBattle(sc, team, bonus, opt) {
       jit: true // v4.12: hidden intentions, opponents decide on their own turn
     };
   for (let r = 0; r < BH; r++)
-    for (let c = 0; c < BW; c++) S.tiles[K(c, r)] = { w: false, rock: false, mark: null, mud: 0, lava: 0, fog: 0 };
+    {for (let c = 0; c < BW; c++) S.tiles[K(c, r)] = { w: false, rock: false, mark: null, mud: 0, lava: 0, fog: 0 };}
   D.water.forEach(k => (S.tiles[k].w = true));
   D.rock.forEach(k => (S.tiles[k].rock = true));
   if (D.fiss)
-    for (const k in S.tiles) {
+    {for (const k in S.tiles) {
       const c = P(k)[0];
       if (c >= 3 && c <= 6 && !S.tiles[k].rock) S.tiles[k].mark = { k: 'fissure', d: 99, lv: 1, by: null };
-    }
+    }}
   team.slice(0, 4).forEach((id, i) => {
     const u = mkUnit(id, 'a', DEPLOY[i], 'a' + i, D);
     if (BY[id] && isShinyOwned(BY[id].base)) u.shiny = true; // your shinies stay shiny in battle (v4.15)
@@ -217,11 +217,11 @@ export function newBattle(sc, team, bonus, opt) {
   S.stats.rxk = {};
   const al = S.units.filter(u => u.side === 'a');
   for (let i = 0; i < al.length; i++)
-    for (let j = i + 1; j < al.length; j++) {
+    {for (let j = i + 1; j < al.length; j++) {
       const k = pairKey(al[i].sp, al[j].sp),
         v = (opt.links || {})[k] || 0;
       if (v) S.links[k] = v;
-    }
+    }}
   al.forEach(u => {
     const it = (opt.items || {})[u.sp];
     if (it && ITEMS2[it]) {
@@ -345,14 +345,14 @@ export function targets(S, u, m) {
     if (!ign) o = o.filter(k => hdist(u.pos, P(k)) < 2 || !losBlocked(S, u.pos, P(k)));
     // ricochet: aim at a rock to hit the nearest enemy behind it
     if (m.p && R >= 2 && u.side === 'a')
-      for (const k in S.tiles) {
+      {for (const k in S.tiles) {
         const t = S.tiles[k];
         if (!t.rock || t.pil) continue;
         const d = hdist(u.pos, P(k));
         if (d < 1 || d > R) continue;
         if (!ign && d >= 2 && losBlocked(S, u.pos, P(k))) continue;
         if (ricoTgt(S, u, k)) o.push(k);
-      }
+      }}
   }
   return o;
 }
@@ -443,7 +443,7 @@ function dmgBase(S, u, m, t, typ, mult) {
   ).valeur;
   let d = Math.round((m.p + u.s[1] * 2 + (u.pb || 0)) * x);
   if (u.tal !== 'annulegarde' && m.fx !== 'percegarde')
-    d -= t.s[2] + (u.tal === 'inconscient' ? 0 : (t.guard > 0 ? 2 : 0) + (t.anchor > 0 ? 2 : 0) + (t.tal === 'coque' ? 2 : 0));
+    {d -= t.s[2] + (u.tal === 'inconscient' ? 0 : (t.guard > 0 ? 2 : 0) + (t.anchor > 0 ? 2 : 0) + (t.tal === 'coque' ? 2 : 0));}
   if (intimidate(S, u)) d -= 3;
   if (u.affaibli > 0) d -= 3; // Will-O-Wisp (v4.13)
   // v4.12: without intentions, every enemy attack lands; it hits a little softer (after Guard)
@@ -493,9 +493,9 @@ export function damage(S, v, d, ev, o) {
     say(ev, `${v.n} est K.O.`);
     if (v.side === 'e') S.stats.ko++;
     if (v.side !== 'e' || S.duel433)
-      S.units.forEach(o => {
+      {S.units.forEach(o => {
         if (o.side === v.side && !o.ko && o !== v) rewardIn(S, o, 1, ev);
-      });
+      });}
     if (v.seg || v.colosse) colossusKO(S, v, ev); // colossi (v4.8)
   }
   if (real > 0 && !o.ind) {
@@ -572,7 +572,7 @@ export function mDur(S, mk) {
     (w === 'grele' && mk === 'givre') ||
     (w === 'sable' && mk === 'fissure')
   )
-    return 3;
+    {return 3;}
   if (w === 'soleil' && mk === 'trempe') return 1;
   if (S.vivant && w === 'pluie' && mk === 'brulant') return 1;
   return 2;
@@ -722,7 +722,7 @@ function react(S, rx, k, u, v, base, ev) {
           continue;
         }
         if (x !== k && w.tal !== 'ecranpoudre')
-          damage(S, w, Math.max(2, Math.round(base * 0.5 * Math.pow(0.85, d))), ev, { ind: true });
+          {damage(S, w, Math.max(2, Math.round(base * 0.5 * Math.pow(0.85, d))), ev, { ind: true });}
         if (!w.ko) {
           stun(S, w, 'PAR', ev);
           n++;
@@ -776,7 +776,7 @@ function react(S, rx, k, u, v, base, ev) {
         setMark(S, x, 'brulant', u.uid);
         const w = uAt(S, x);
         if (w && x !== k && w.tal !== 'ecranpoudre' && w.tal !== 'torche')
-          damage(S, w, w.tal === 'isograisse' ? 3 : 6, ev, { ind: true });
+          {damage(S, w, w.tal === 'isograisse' ? 3 : 6, ev, { ind: true });}
         if (w && !w.ko && w.tal !== 'torche') w.bru = 3;
       }
       say(ev, 'Embrasement : le feu se propage.');
@@ -1247,30 +1247,30 @@ function arrive(S, u, ev) {
     } else if (f.k === 'roar') foes(1).forEach(o => shove(S, o, u.pos, f.v, ev, false));
     else if (f.k === 'heal') mates(f.r).forEach(o => heal(S, o, Math.round(o.mhp * f.p), ev));
     else if (f.k === 'fog')
-      [uk(u), ...nbrK(uk(u))].forEach(x => {
+      {[uk(u), ...nbrK(uk(u))].forEach(x => {
         S.tiles[x].fog = 2;
-      });
+      });}
     else if (f.k === 'sleep') foes(1).forEach(o => stun(S, o, 'SOM', ev, true));
     else if (f.k === 'confuse')
-      foes(1).forEach(o => {
+      {foes(1).forEach(o => {
         if ((o.intent || S.jit) && !o.done) retarget(S, o, u, 'confuse', ev); // v4.13: also without intentions
         else if (o.tal !== 'regardvif') {
           o.web = Math.max(o.web, 2);
           say(ev, `${o.n} est désorienté et ralenti.`);
         }
-      });
+      });}
     else if (f.k === 'root')
-      foes(1).forEach(o => {
+      {foes(1).forEach(o => {
         if (o.tal === 'regardvif') return;
         o.root = Math.max(o.root, f.v || 2);
         say(ev, `${o.n} ne peut plus bouger.`);
-      });
+      });}
     else if (f.k === 'guard') {
       u.guard = 2;
       if (f.who === 'allies')
-        mates(1).forEach(o => {
+        {mates(1).forEach(o => {
           o.guard = 2;
-        });
+        });}
     } else if (f.k === 'boost') u.boost = 2;
   });
 }
@@ -1378,7 +1378,7 @@ function aiScore(S, e, m, k, pos) {
   for (const x of affected(S, sim, m, k)) {
     const v = uAt(S, x);
     if (!v || v === e) continue;
-    let d = dmgOf(S, sim, m, v, mvType(S, sim, m), 1);
+    const d = dmgOf(S, sim, m, v, mvType(S, sim, m), 1);
     if (v.side === 'a') {
       sc += d + (d >= v.hp ? 30 : 0);
       if (d > 0) hitA = true;
@@ -1511,11 +1511,11 @@ function chooseAction(S, e, ev, inPlace) {
       let cands = [];
       if (m.sh === 'ring') cands = [pk];
       else
-        (F ? [F] : al).forEach(a => {
+        {(F ? [F] : al).forEach(a => {
           const ak = uk(a);
           if (S.tiles[ak].fog > 0 && hdist(pos, a.pos) > 1) return;
           if (inReach(S, sim, m, ak)) cands.push(ak);
-        });
+        });}
       if (F) cands = cands.filter(k => affected(S, sim, m, k).some(x => uAt(S, x) === F));
       cands.forEach(k => {
         const s = F ? targetScore(S, e, m, k, pos, F) : aiScore(S, e, m, k, pos);
@@ -1573,7 +1573,7 @@ export function threatZone(S, e) {
   const z = new Set(),
     opts = Object.assign({ [uk(e)]: 0 }, e.badge || e.perdu ? {} : reach(S, e));
   if (!(e.badge || e.perdu))
-    for (const pk in opts) {
+    {for (const pk in opts) {
       const sim = Object.assign({}, e, { pos: P(pk) });
       e.mv.forEach(mid => {
         const m = MV[mid];
@@ -1587,7 +1587,7 @@ export function threatZone(S, e) {
           affected(S, sim, m, k).forEach(x => z.add(x));
         }
       });
-    }
+    }}
   THREAT.k = key;
   THREAT.z = [...z];
   return THREAT.z;
@@ -1648,9 +1648,9 @@ export function endRound(S) {
   const pre = ch.concat(roundSupport(S)),
     ev = roundEffects(S);
   if (!S.over)
-    S.units.forEach(u => {
+    {S.units.forEach(u => {
       if (!u.ko && u.item === 'restes' && u.hp < u.mhp) heal(S, u, 3, ev);
-    });
+    });}
   return pre.concat(ev);
 }
 
@@ -1672,7 +1672,7 @@ export function unitEffects433(S, u, ev) {
     if (S.wx && !u.ko) {
       if (S.wx.k === 'grele' && !u.t.includes('Glace')) damage(S, u, 2, ev, { ind: true });
       if (S.wx.k === 'sable' && !u.t.some(t => ['Roche', 'Sol', 'Acier'].includes(t)))
-        damage(S, u, 2, ev, { ind: true });
+        {damage(S, u, 2, ev, { ind: true });}
     }
     if (!u.ko && S.tiles[uk(u)].lava > 0 && !flies(u)) damage(S, u, u.tal === 'isograisse' ? 2 : 4, ev, { ind: true });
     ['web', 'guard', 'anchor', 'root', 'boost'].forEach(f => {
@@ -1788,7 +1788,7 @@ function previewCore(S, uid, mi, k) {
       evw = x.side === 'e' && !x.ko && hasNx(x) && x.hp <= x.mhp * 0.5 && o.hp > o.mhp * 0.5,
       en = x.side === 'a' ? x.en - o.en : 0;
     if (dh || st || ko || can || ret || mv || rt || wb || evw || en > 0)
-      diff.push({ uid: x.uid, n: x.n, side: x.side, dh, st, ko, can, ret, mv, rt, wb, evw, en });
+      {diff.push({ uid: x.uid, n: x.n, side: x.side, dh, st, ko, can, ret, mv, rt, wb, evw, en });}
   });
   const su = byUid(S, uid);
   return {

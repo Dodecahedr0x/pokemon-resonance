@@ -3,7 +3,7 @@ import { css442 } from '../../../engine/075-css-design-workshop.js';
 // Settings › Design workshop (v4.42): buttons #ad442a/r/b handled by the engine (module 075).
 const BOX = { width: '100%', boxSizing: 'border-box', font: '12px/1.4 monospace', padding: '10px', borderRadius: '10px', border: '1px solid rgba(255,255,255,.25)', background: 'rgba(0,0,0,.35)', color: 'inherit' };
 
-export default function WorkshopDesign() {
+export default function DesignWorkshop() {
   return (
     <section className="v4-panel" id="ad442">
       <h3 className="h3">Atelier design</h3>

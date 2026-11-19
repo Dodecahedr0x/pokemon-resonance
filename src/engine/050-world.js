@@ -49,7 +49,7 @@ export function monClean(p) {
   if (!p || typeof p !== 'object') return o;
   if (Number.isFinite(p.dissonance)) o.dissonance = Math.max(0, Math.min(4, Math.floor(p.dissonance)));
   if (p.cadeaux && typeof p.cadeaux === 'object')
-    for (const k in p.cadeaux) if (/^[a-z]+-\d{4}$/.test(k)) o.cadeaux[k] = 1;
+    {for (const k in p.cadeaux) if (/^[a-z]+-\d{4}$/.test(k)) o.cadeaux[k] = 1;}
   return o;
 }
 
@@ -444,7 +444,7 @@ HOOKS.progres.push((S, rew, win) => {
 HOOKS.resultat.push(r => {
   const o = [];
   if (r.saison)
-    o.push(`<div class="res-l"><h4>${season() ? season().n : 'Saison'}</h4><div class="rl"><span>Capture de saison : +${r.saison} Éclat${r.saison > 1 ? 's' : ''}</span><b>✦</b></div></div>`);
+    {o.push(`<div class="res-l"><h4>${season() ? season().n : 'Saison'}</h4><div class="rl"><span>Capture de saison : +${r.saison} Éclat${r.saison > 1 ? 's' : ''}</span><b>✦</b></div></div>`);}
   if (r.dissonance) {
     const T = DISSONANCE[r.dissonance - 1];
     o.push(
@@ -453,9 +453,9 @@ HOOKS.resultat.push(r => {
   }
   const R = B && REPLAYS.get(B);
   if (R && R.best)
-    o.push(
+    {o.push(
       `<div class="res-l"><h4>Meilleur coup</h4><div class="rl rd"><span><b>${R.best.label}</b>${R.best.det ? ` · ${R.best.det}` : ''}</span><button type="button" class="b b-sm" data-rediff>Revoir</button></div></div>`
-    );
+    );}
   return o.join('');
 });
 

@@ -41,18 +41,18 @@ RX_P = /(\S) ([!?:;»%])/g,
     for (const m of ms) {
       if (m.type === 'characterData') q.add(m.target);
       // v4.76: the letters of the typed-out text (already fixed) are not reprocessed one by one
-      else m.addedNodes.forEach(x => {
+      else {m.addedNodes.forEach(x => {
         if (x.nodeType === 1 && x.classList && x.classList.contains('pk-tw')) return;
         q.add(x);
-      });
+      });}
     }
     if (!raf)
-      raf = requestAnimationFrame(() => {
+      {raf = requestAnimationFrame(() => {
         raf = 0;
         const a = [...q];
         q.clear();
         a.forEach(fixTree);
-      });
+      });}
   }).observe(document.body, { childList: true, subtree: true, characterData: true });
 }
 

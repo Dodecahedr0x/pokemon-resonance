@@ -132,10 +132,10 @@ export function Decor() {
         [x, y] = HC(k);
       if (t.rock || t.w || (c * 7 + r * 13) % 5) continue;
       if (S.bio === 'gue')
-        o.push(<path key={k} className="tuft" d={`M${(x - 7).toFixed(1)} ${(y + 14).toFixed(1)} l3 -9 l2 9 l3 -12 l3 12 l2 -8 l2 8Z`} />);
+        {o.push(<path key={k} className="tuft" d={`M${(x - 7).toFixed(1)} ${(y + 14).toFixed(1)} l3 -9 l2 9 l3 -12 l3 12 l2 -8 l2 8Z`} />);}
       else if (S.bio === 'tour') o.push(<circle key={k} className="ember" cx={(x + 8).toFixed(1)} cy={(y + 10).toFixed(1)} r="1.6" />);
       else if (S.bio === 'roche')
-        o.push(<path key={k} className="pebble" d={`M${(x - 8).toFixed(1)} ${(y + 13).toFixed(1)} q3 -4 6 0 q3 -3 5 0Z`} />);
+        {o.push(<path key={k} className="pebble" d={`M${(x - 8).toFixed(1)} ${(y + 13).toFixed(1)} q3 -4 6 0 q3 -3 5 0Z`} />);}
       else o.push(<path key={k} className="glint" d={`M${(x + 9).toFixed(1)} ${(y - 12).toFixed(1)}l1 3 3 1-3 1-1 3-1-3-3-1 3-1Z`} />);
     }
     return o;

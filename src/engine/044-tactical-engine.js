@@ -291,7 +291,7 @@ DAMAGE_PROVIDERS = [
         (u.tal === 'essaim' && typ === 'Insecte' && lowHp(u, 0.34)) ||
         (u.tal === 'engrais' && typ === 'Plante' && lowHp(u, 0.5))
       )
-        return { mul: 1.5, libelle: TAL[u.tal].n };
+        {return { mul: 1.5, libelle: TAL[u.tal].n };}
     }
   },
   { id: 'cran', fournir: (c, { u }) => u.tal === 'cran' && (u.bru > 0 || u.badge) && { mul: 1.5, libelle: 'Cran' } },
@@ -335,7 +335,7 @@ ROLE_PROVIDERS = [
         out = [];
       if (s.includes('forge') && (typ === 'Feu' || typ === 'Roche')) out.push({ add: 2, libelle: 'Forge' });
       if (s.includes('tempete') && typ === 'Électrik' && markAt(S, uk(t)) === 'trempe')
-        out.push({ mul: 1.25, libelle: 'Tempête' });
+        {out.push({ mul: 1.25, libelle: 'Tempête' });}
       if (s.includes('dojo') && hdist(u.pos, t.pos) === 1) out.push({ add: 2, libelle: 'Dojo' });
       if (s.includes('banquise') && typ === 'Glace') out.push({ add: 3, libelle: 'Banquise' });
       if (s.includes('draco') && (typ === 'Dragon' || typ === 'Vol')) out.push({ add: 2, libelle: 'Draco' });

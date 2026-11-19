@@ -3,9 +3,9 @@ import { useBagVersion } from './bagStore.js';
 import { ITEMS2, PROFILE } from '../../engine/011-game-state.js';
 import { SHOP, V4, bagN, fmt } from '../../engine/032-v4-foundation.js';
 import { tmDay456 } from '../../engine/089-extra-held-items-tms.js';
-import { Article, Outfit } from './Items.jsx';
+import { Article, HeldItem } from './Items.jsx';
 import Offers from './Offers.jsx';
-import Outfits from './HeldItems.jsx';
+import HeldItems from './HeldItems.jsx';
 import Peddler from './Peddler.jsx';
 import WorkshopTab from './Workshop.jsx';
 import Counter from './Counter.jsx';
@@ -18,8 +18,8 @@ function List({ v, keys }) {
   const c = V4.sacC;
   if (v === 'boutique' && c === 'ambu') return <Peddler />; // v4.54
   if (v === 'boutique' && WORKSHOP.includes(c)) return <WorkshopTab c={c} />; // v4.57 and later
-  if (v === 'boutique' && (c === 'held' || c === 'rares')) return <Outfits cat={c} />; // v4.14
-  if (c === 'held') return keys.map(k => <Outfit key={k} k={k} />);
+  if (v === 'boutique' && (c === 'held' || c === 'rares')) return <HeldItems cat={c} />; // v4.14
+  if (c === 'held') return keys.map(k => <HeldItem key={k} k={k} />);
   if (v === 'sac') {
     const L = keys.filter(k => bagN(k));
     return L.length ? L.map(k => <Article key={k} k={k} mode="sac" />) : <p className="v4-empty">Rien ici pour l’instant. Faites un tour à la Boutique.</p>;

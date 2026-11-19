@@ -39,7 +39,7 @@ const Fl = () => <svg><use href="#i-arrow" /></svg>;
 function Body({ i }) {
   if (i === 0) return <p>Bonjour, et bienvenue dans la <b>Ligue de la Résonance</b> ! Je suis la Professeure <b>Maëlle Sorbier</b>.</p>;
   if (i === 1)
-    return (
+    {return (
       <>
         <p>Ici, les Pokémon n’évoluent pas dans un menu : ils évoluent <b>en plein combat</b>, quand leur énergie de Résonance est pleine. Retenez trois choses :</p>
         <div className="it-cards">
@@ -48,16 +48,16 @@ function Body({ i }) {
           <div style={{ '--c': '#F2B807' }}><b data-n="3">3</b><span><strong>Éveillez</strong> au bon moment : il évolue en plein combat</span></div>
         </div>
       </>
-    );
+    );}
   if (i === 2)
-    return (
+    {return (
       <>
         <p>Et vous, comment vous appelez-vous ?</p>
         <label className="it-name"><input id="inName" type="text" maxLength={14} autoComplete="off" placeholder="Votre prénom" defaultValue={INTRO.name} /></label>
       </>
-    );
+    );}
   if (i === 3)
-    return (
+    {return (
       <>
         <p>Enchantée, <b>{INTRO.name || 'Dresseur'}</b> ! Choisissez votre <b>partenaire</b>. Il vous suivra toute l’aventure ; les autres Pokémon se capturent dans les hautes herbes.</p>
         <div className="it-st">
@@ -79,7 +79,7 @@ function Body({ i }) {
           ))}
         </div>
       </>
-    );
+    );}
   const m = BY[INTRO.st] || { n: 'votre partenaire' };
   return (
     <>

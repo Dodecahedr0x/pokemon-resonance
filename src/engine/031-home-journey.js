@@ -84,7 +84,7 @@ export function emblem(k, cls = '') {
   if (s.johto != null) return `<span class="emb bdg ${cls}" style="--ac:${tc(s.at)}">${badgeSvg(s.johto, s.at, 'ej' + cls + s.johto)}</span>`; // v4.15
   if (s.hoenn != null) return `<span class="emb bdg ${cls}" style="--ac:${tc(s.at)}">${badgeSvg(s.hoenn, s.at, 'eh' + cls + s.hoenn)}</span>`; // v4.19
   if (gi >= 0)
-    return `<span class="emb bdg ${cls}" style="--ac:${tc(s.at)}">${badgeSvg(gi, s.at, 'em' + cls + gi)}</span>`;
+    {return `<span class="emb bdg ${cls}" style="--ac:${tc(s.at)}">${badgeSvg(gi, s.at, 'em' + cls + gi)}</span>`;}
   if (L) return avatar(L.n, s.at || 'Dragon', cls);
   const T = { gue: 'Eau', roche: 'Roche', tour: 'Spectre', ligue: 'Combat', arene: 'Normal' }[s.bio] || 'Normal';
   return `<span class="emb ter bio-${s.bio || 'gue'} ${cls}" aria-hidden="true"><svg viewBox="0 0 24 24">${s.tuto ? '<use href="#i-book"/>' : `<path d="${gp(T)}" fill="currentColor" fill-rule="evenodd"/>`}</svg></span>`;
@@ -95,24 +95,24 @@ export function professorMsg() {
   const g = goalInfo(),
     nm = PROFILE.name ? esc(PROFILE.name) : '';
   if (!squad.length)
-    return `Votre équipe est vide${nm ? ', ' + nm : ''}. Choisissez quatre Pokémon dans l’onglet <b>Équipe</b>, puis revenez me voir.`;
+    {return `Votre équipe est vide${nm ? ', ' + nm : ''}. Choisissez quatre Pokémon dans l’onglet <b>Équipe</b>, puis revenez me voir.`;}
   if (g.k === 'tuto')
-    return `Bienvenue${nm ? ', ' + nm : ''} ! Votre premier combat est guidé : je vous explique chaque geste, pas à pas.`;
+    {return `Bienvenue${nm ? ', ' + nm : ''} ! Votre premier combat est guidé : je vous explique chaque geste, pas à pas.`;}
   if (g.gi >= 0)
-    return `${g.gi ? 'Beau travail. ' : ''}Prochaine arène : <b>${g.L.n}</b>, ${g.L.t}. ${GYMS[g.gi].r}${styleOf(g.k) ? ` Son style : ${styleOf(g.k).d.charAt(0).toLowerCase() + styleOf(g.k).d.slice(1)}` : ' Préparez-vous en conséquence !'}`;
+    {return `${g.gi ? 'Beau travail. ' : ''}Prochaine arène : <b>${g.L.n}</b>, ${g.L.t}. ${GYMS[g.gi].r}${styleOf(g.k) ? ` Son style : ${styleOf(g.k).d.charAt(0).toLowerCase() + styleOf(g.k).d.slice(1)}` : ' Préparez-vous en conséquence !'}`;}
   if (rivalIdx(g.k) >= 0)
-    return `Votre rival <b>${RIVAL.n}</b> vous attend. Son partenaire a l’avantage du type sur le vôtre : prévoyez de quoi le contrer.`;
+    {return `Votre rival <b>${RIVAL.n}</b> vous attend. Son partenaire a l’avantage du type sur le vôtre : prévoyez de quoi le contrer.`;}
   if (g.k === 'champ')
-    return PROFILE.elite >= 5
+    {return PROFILE.elite >= 5
       ? `Vous êtes Champion${nm ? ', ' + nm : ''} ! Auriane Vale attend sa revanche : elle a étudié vos derniers combats.`
-      : `Le Conseil 4 est vaincu. Il ne reste qu’<b>Auriane Vale</b>, la Championne. Elle a lu tous vos combats.`;
+      : `Le Conseil 4 est vaincu. Il ne reste qu’<b>Auriane Vale</b>, la Championne. Elle a lu tous vos combats.`;}
   if (/^h[1-8]$|^hchamp$/.test(g.k)) return hProf419(g); // Hoenn (v4.19)
   if (/^jd\d$/.test(g.k))
-    return `${g.k === 'jd1' ? 'Des ondes étranges brouillent Johto. ' : ''}La Néo-Dissonance refait surface : <b>${g.L.n}</b>, ${g.L.t}. ${SCEN[g.k].d}`;
+    {return `${g.k === 'jd1' ? 'Des ondes étranges brouillent Johto. ' : ''}La Néo-Dissonance refait surface : <b>${g.L.n}</b>, ${g.L.t}. ${SCEN[g.k].d}`;}
   if (/^j[1-8]$|^jchamp$/.test(g.k))
-    return g.k === 'jchamp'
+    {return g.k === 'jchamp'
       ? `Les huit badges de Johto sont à vous ! Le Maître de Johto, <b>${g.L.n}</b>, vous attend.`
-      : `${g.k === 'j1' ? 'Bienvenue à Johto ! Une nouvelle région, huit nouvelles arènes. ' : 'Beau travail. '}Prochaine arène : <b>${g.L.n}</b>, ${g.L.t}.`;
+      : `${g.k === 'j1' ? 'Bienvenue à Johto ! Une nouvelle région, huit nouvelles arènes. ' : 'Beau travail. '}Prochaine arène : <b>${g.L.n}</b>, ${g.L.t}.`;}
   if (g.L) return `Les huit badges sont à vous ! Le Conseil 4 vous attend : <b>${g.L.n}</b>, ${g.L.t}.`;
   return 'Choisissez votre prochain combat.';
 }
@@ -125,10 +125,10 @@ export function goalChips(S) {
 
 export function selItems(g) {
   if (g === 'arenes')
-    return ARENAS.flatMap((a, i) => [
+    {return ARENAS.flatMap((a, i) => [
       ...(isCamp() && i % 2 ? [a.k, RIVAL_KEYS[(i - 1) / 2]] : [a.k]),
       ...dissonanceAfter(i + 1) // Team Dissonance (v4.11)
-    ]);
+    ]);}
   // the Hoenn Legendaries (v4.38) stay hidden while Hoenn is closed
   if (g === 'apres') return ['tdr', ...LEGS.map(L => legKey(L.id)), ...(hoennOpen() ? HLEG435.map(L => 'hl' + L.id) : [])];
   if (g === 'ligue') return [...ELITE, 'champ'];
@@ -197,7 +197,7 @@ function focusIntro(o) {
 function closeIntro() {
   try {
     localStorage.setItem('res-intro', '1');
-  } catch (e) {}
+  } catch { /* Best effort: failure here is non-fatal. */ }
   closeIntroBox();
 }
 
@@ -206,7 +206,7 @@ export function showIntro(force) {
   if (!force) {
     try {
       if (localStorage.getItem('res-intro')) return;
-    } catch (e) {}
+    } catch { /* Best effort: failure here is non-fatal. */ }
     if (AUTO || PROFILE.battles > 0 || PROFILE.name || isCamp()) return;
   }
   Object.assign(INTRO, { i: 0, name: PROFILE.name || '', diff: PROFILE.diff || 'normal', st: null });
@@ -297,7 +297,7 @@ function startCampaign(id, name, diff) {
   );
   try {
     autoSave(true);
-  } catch (e) {}
+  } catch { /* Best effort: failure here is non-fatal. */ }
   renderHome();
 }
 
@@ -407,7 +407,7 @@ TIPSEEN = {};
 
 try {
   TIPSEEN = JSON.parse(localStorage.getItem('res-tips') || '{}') || {};
-} catch (e) {}
+} catch { /* Best effort: failure here is non-fatal. */ }
 
 
 document.addEventListener('click', e => {

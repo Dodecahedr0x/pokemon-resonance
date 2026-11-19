@@ -10,7 +10,7 @@ function initialTab() {
   try {
     const k = localStorage.getItem(STORE_KEY);
     if (k) return k;
-  } catch {}
+  } catch { /* Best effort: failure here is non-fatal. */ }
   return 'bases';
 }
 
@@ -34,7 +34,7 @@ export function setGuideTab(k) {
   if (!GUIDE_TABS.includes(k)) k = 'bases';
   try {
     localStorage.setItem(STORE_KEY, k);
-  } catch {}
+  } catch { /* Best effort: failure here is non-fatal. */ }
   emit({ tab: k });
 }
 

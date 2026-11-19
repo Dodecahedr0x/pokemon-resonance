@@ -86,13 +86,13 @@ bootStep('guide', () => {
   let f = null;
   try {
     f = localStorage.getItem('res-v3');
-  } catch (e) {}
+  } catch { /* Best effort: failure here is non-fatal. */ }
   let k = getGuide().tab;
   if (!f || k === 'projet') {
     k = 'debuter';
     try {
       localStorage.setItem('res-v3', '1');
-    } catch (e) {}
+    } catch { /* Best effort: failure here is non-fatal. */ }
   }
   setGuide(k);
 });
@@ -149,12 +149,12 @@ bootStep('intro', () => {
   // the Professor arrives when the launch screen closes
   const sel = '#resonance-launch';
   if (document.querySelector(sel))
-    new MutationObserver((m, ob) => {
+    {new MutationObserver((m, ob) => {
       if (!document.querySelector(sel)) {
         ob.disconnect();
         showIntro();
       }
-    }).observe(document.body, { childList: true, subtree: true }); // the React launch screen is in #root, not a direct child of <body>
+    }).observe(document.body, { childList: true, subtree: true });} // the React launch screen is in #root, not a direct child of <body>
   else showIntro();
 });
 

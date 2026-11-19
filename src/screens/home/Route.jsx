@@ -67,7 +67,7 @@ const RUSTLE = [
 const FIRE = Array.from({ length: 16 }, (_, i) => ({ cx: (i * 71) % W, cy: 150 + ((i * 37) % 60), d: `${(i % 7) * 0.7}s` }));
 
 // Fixed backdrop: never redrawn (the engine has attached its listeners to #rustle).
-const RouteSvg = memo(function RouteSvg() {
+const RouteSvg = memo(() => {
   return (
     <svg id="routeSvg" viewBox="0 0 1200 220" preserveAspectRatio="xMidYMax slice" role="img" aria-label="Route 29 : hautes herbes au pied des collines">
       <defs>

@@ -74,7 +74,7 @@ HOOKS.progres.unshift((S, rew) => {
       PROFILE.bag[k] = Math.min(99, bagN(k) + 1);
       rew.ct456 = k;
     }
-  } catch (e) {}
+  } catch { /* Best effort: failure here is non-fatal. */ }
 });
 
 

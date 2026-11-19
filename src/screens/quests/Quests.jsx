@@ -7,20 +7,20 @@ import { BADGES } from '../../engine/013-gyms.js';
 import { badgeSvg } from '../../engine/019-league.js';
 import { V4, trophies } from '../../engine/032-v4-foundation.js';
 import { SQ } from '../../engine/039-quests-shop.js';
-import Main from './MainQuest.jsx';
-import Secondary from './SideQuests.jsx';
+import MainQuest from './MainQuest.jsx';
+import SideQuests from './SideQuests.jsx';
 import Event from './Event.jsx';
 import Legends from './Legends.jsx';
 import Journal from './Journal.jsx';
-import Achievement from './Achievements.jsx';
+import Achievements from './Achievements.jsx';
 
 const NL = '\n ';
 
 // Content of the chosen tab (V4.qTab); any other value shows the Event tab.
 function Tab() {
-  if (V4.qTab === 'main') return <Main />;
-  if (V4.qTab === 'side') return <Secondary />;
-  if (V4.qTab === 'succes') return <Achievement />; // achievements and titles (v4.9)
+  if (V4.qTab === 'main') return <MainQuest />;
+  if (V4.qTab === 'side') return <SideQuests />;
+  if (V4.qTab === 'succes') return <Achievements />; // achievements and titles (v4.9)
   if (V4.qTab === 'leg') return <Legends />; // v4.29
   if (V4.qTab === 'journal') return <Journal />; // v4.30
   return <Event />;

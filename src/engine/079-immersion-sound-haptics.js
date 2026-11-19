@@ -26,7 +26,7 @@ function sfxType448(ty) {
   if (!PREF.sound || RM || !IM448()) return;
   try {
     (TSND448[ty] || SFX.hit)();
-  } catch (e) {}
+  } catch { /* Best effort: failure here is non-fatal. */ }
 }
 
 
@@ -34,7 +34,7 @@ function step448() {
   if (!PREF.sound || RM || !IM448()) return;
   try {
     tone(210 + Math.random() * 70, 0, 0.045, 'triangle', 0.03, 150);
-  } catch (e) {}
+  } catch { /* Best effort: failure here is non-fatal. */ }
 }
 
 
@@ -52,7 +52,7 @@ function cry448(u, ko) {
       tone(f * big, 0, 0.12, 'sawtooth', 0.035, f * 1.35 * big);
       tone(f * 1.35 * big, 0.1, 0.2, 'square', 0.025, f * 0.85 * big);
     }
-  } catch (e) {}
+  } catch { /* Best effort: failure here is non-fatal. */ }
 }
 
 
@@ -60,7 +60,7 @@ function alarm448() {
   if (!PREF.sound || RM || !IM448()) return;
   try {
     [0, 0.16, 0.32].forEach(t => tone(1568, t, 0.07, 'square', 0.035));
-  } catch (e) {}
+  } catch { /* Best effort: failure here is non-fatal. */ }
 }
 
 
@@ -73,7 +73,7 @@ function tempo448() {
       const want = 1; // v4.49: the « low HP » track replaces the speed-up
       if (a.playbackRate !== want) a.playbackRate = want;
     });
-  } catch (e) {}
+  } catch { /* Best effort: failure here is non-fatal. */ }
 }
 
 
@@ -126,7 +126,7 @@ function trans448() {
   try {
     [330, 440, 554, 740].forEach((f, i) => tone(f, i * 0.07, 0.16, 'square', 0.03, f * 1.3));
     noise(0.3, 0.45, 0.07, 2200);
-  } catch (e) {}
+  } catch { /* Best effort: failure here is non-fatal. */ }
   vibe([40, 40, 60]);
   clearTimeout(trans448.t);
   trans448.t = setTimeout(() => clearOverlay('tr448'), 1250);
@@ -204,10 +204,10 @@ export function scanDex448() {
         setTimeout(() => el.classList.remove('new448'), 1800);
         try {
           [784, 988, 1318].forEach((f, i) => tone(f, i * 0.09, 0.22, 'triangle', 0.045));
-        } catch (e) {}
+        } catch { /* Best effort: failure here is non-fatal. */ }
       }
     }
-  } catch (e) {}
+  } catch { /* Best effort: failure here is non-fatal. */ }
 }
 
 export const IM448 = () => PREF.im448 !== 0;
@@ -297,7 +297,7 @@ TSND448 = {
 setInterval(() => {
   try {
     if (!B || B.over || $('#cbBattle').hidden) tempo448();
-  } catch (e) {}
+  } catch { /* Best effort: failure here is non-fatal. */ }
 }, 1500);
 
 
@@ -400,7 +400,7 @@ new MutationObserver(() => {
   vibe([60, 40, 60, 40, 140]);
   try {
     if (c.querySelector('.rbadge448')) [659, 784, 1046, 1318, 1568].forEach((f, j) => tone(f, j * 0.1, 0.3, 'triangle', 0.05));
-  } catch (e) {}
+  } catch { /* Best effort: failure here is non-fatal. */ }
 }).observe($('#cbResult'), { childList: true, attributes: true, attributeFilter: ['hidden'] });
 
 

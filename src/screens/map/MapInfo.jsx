@@ -27,21 +27,21 @@ export default function MapInfo() {
     st = placeState(p);
   if (p.id === 'safari') return <SafariInfo p={p} />;
   if (p.id === 'jwild' && !johtoOpen())
-    return (
+    {return (
       <>
         <header className="v4-mi-h"><Html html={placeIcon(p)} /><span><small>Route 32</small><b>Hautes herbes de Johto</b></span><em className="v4-pill s-lock">{STATE_N.lock}</em></header>
         <p className="v4-mi-d">Vingt Pokémon de Johto vivent ici : Hoothoot, Marill, Granivol, Scarhino…</p>
         <div className="v4-mi-a"><Lock>Johto s’ouvre après votre victoire sur la Championne Auriane Vale.</Lock></div>
       </>
-    );
+    );}
   if (p.id === 'hwild' && !hoennOpen())
-    return (
+    {return (
       <>
         <header className="v4-mi-h"><Html html={placeIcon(p)} /><span><small>Route 104</small><b>Hautes herbes de Hoenn</b></span><em className="v4-pill s-lock">{STATE_N.lock}</em></header>
         <p className="v4-mi-d">Vingt Pokémon de Hoenn vivent ici : Arcko, Poussifeu, Gobou, Tarsal, Draby…</p>
         <div className="v4-mi-a"><Lock>Hoenn s’ouvre après votre titre de Maître de Johto.</Lock></div>
       </>
-    );
+    );}
   if (p.id === 'wild' || p.id === 'jwild' || p.id === 'hwild') {
     const balls = bagN('poke'),
       family = familyCapt428(regionNo421());
@@ -62,7 +62,7 @@ export default function MapInfo() {
     );
   }
   if (p.id === 'elite')
-    return (
+    {return (
       <>
         <header className="v4-mi-h"><Html html={placeIcon(p)} /><span><small>Chapitre 9 · Plateau de la Ligue</small><b>Le Conseil 4</b></span><em className={`v4-pill s-${st}`}>{STATE_N[st]}</em></header>
         <p className="v4-mi-d">Quatre maîtres à battre dans l’ordre, avec les huit badges. Chacun lit le plateau à sa manière.</p>
@@ -87,7 +87,7 @@ export default function MapInfo() {
           })}
         </div>
       </>
-    );
+    );}
   const k = p.id,
     S = SCEN[k],
     L = leaderOf(k),

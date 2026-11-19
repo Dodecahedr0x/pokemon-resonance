@@ -93,7 +93,7 @@ export function hook(displayName, ...args) {
     try {
       f(...args);
     } catch (e) {
-      console.error('[Résonance] crochet ' + displayName, e);
+      console.error('[Resonance] hook ' + displayName, e);
     }
   }
 }

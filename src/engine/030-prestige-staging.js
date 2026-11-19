@@ -257,7 +257,7 @@ export function musStartCore() {
     MUS.on = true;
     MUS.step = 0;
     musTick();
-  } catch (e) {}
+  } catch { /* Best effort: failure here is non-fatal. */ }
 }
 
 
@@ -273,9 +273,9 @@ export function musPadStop() {
     setTimeout(() => {
       try {
         o.disconnect();
-      } catch (e) {}
+      } catch { /* Best effort: failure here is non-fatal. */ }
     }, 1400);
-  } catch (e) {}
+  } catch { /* Best effort: failure here is non-fatal. */ }
 }
 
 
@@ -288,7 +288,7 @@ export function musPadLevel() {
       g.setValueAtTime(g.value, t);
       g.linearRampToValueAtTime(0.55 * PREF.musVol, t + 0.4);
     }
-  } catch (e) {}
+  } catch { /* Best effort: failure here is non-fatal. */ }
 }
 
 /* ===================== v2.0 PRESTIGE: universe, staging, finishing touches ===================== */
@@ -496,7 +496,7 @@ document.addEventListener('keydown', e => {
     !$('#saves').hidden ||
     !$('#sheet').hidden
   )
-    return;
+    {return;}
   const P = $('#bPanel'),
     k = e.key;
   if (k >= '1' && k <= '4') {
