@@ -1,0 +1,19 @@
+import { PREF } from '../../../engine/026-campaign-tutorial-sound.js';
+import { Switch } from '../controls.jsx';
+
+// Téléphone : vibrations, gestes, aides. Le moteur gère data-hm, data-guide et data-v4reset.
+export default function Phone() {
+  return (
+    <section className="v4-panel v4-ps">
+      <header className="v4-ph"><svg><use href="#i-phone" /></svg><b>Téléphone</b></header>
+      <Switch k="vibe" on={PREF.vibe} lab="Vibrations" sub="Coups encaissés, K.O. et récompenses" />
+      <Switch k="swipe429" on={PREF.swipe429 !== false} lab="Glisser entre les onglets" sub="Accueil, Équipe, Combat, Carte. Appui long sur un Pokémon : sa fiche." />
+      <div className="v4-ps-a">
+        <button type="button" className="b b-sm" data-hm="intro">Revoir l’accueil de la Professeure</button>
+        <button type="button" className="b b-sm" data-guide="debuter">Comment jouer</button>
+        <button type="button" className="b b-sm" data-guide="tuto433">Tutoriel complet</button>
+      </div>
+      <button type="button" className="b b-ghost b-sm v4-reset" data-v4reset="">Réinitialiser les paramètres</button>
+    </section>
+  );
+}

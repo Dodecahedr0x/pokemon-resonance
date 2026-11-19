@@ -1,13 +1,13 @@
 import { Html } from '../../../lib/html.jsx';
-import { PROFILE } from '../../../engine/011-05-etat-de-partie.js';
-import { SCEN } from '../../../engine/009-03-pokemon.js';
-import { ARENAS, BADGES } from '../../../engine/013-07-arenes.js';
-import { tc } from '../../../engine/014-08-outils.js';
-import { scenLock } from '../../../engine/022-15-systemes-objets-liens-ia.js';
-import { scSel } from '../../../engine/024-17-interface-combat.js';
-import { leaderOf } from '../../../engine/030-24-prestige-mise-en-scene.js';
-import { SELG, emblem, selItems, wonOf } from '../../../engine/031-25-v3-parcours-accueil.js';
-import { FINALE_N } from '../../../engine/037-v4-05-carte.js';
+import { PROFILE } from '../../../engine/011-game-state.js';
+import { SCEN } from '../../../engine/009-pokemon.js';
+import { ARENAS, BADGES } from '../../../engine/013-gyms.js';
+import { tc } from '../../../engine/014-utils.js';
+import { scenLock } from '../../../engine/022-items-bonds-ai.js';
+import { scSel } from '../../../engine/024-combat-ui.js';
+import { leaderOf } from '../../../engine/030-prestige-staging.js';
+import { SELG, emblem, selItems, wonOf } from '../../../engine/031-home-journey.js';
+import { FINALE_N } from '../../../engine/037-map.js';
 
 // Onglets (#selTabs) : Entraînement, Arènes, Ligue, Après-jeu. Clics : moteur (data-pg).
 export function SelTabs({ G }) {

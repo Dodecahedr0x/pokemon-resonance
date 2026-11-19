@@ -1,19 +1,19 @@
 import { Html } from '../../lib/html.jsx';
-import { puissance } from '../../lib/puissance.js';
-import { MV, SHAPE, TAL } from '../../engine/005-02-capacites.js';
-import { REGN } from '../../engine/008-v4-19-00-hoenn-donnees.js';
-import { BY, NOTES, famOf } from '../../engine/009-03-pokemon.js';
-import { RC, ROLEFX } from '../../engine/012-06-recrues-roles-synergies.js';
-import { tb, tc } from '../../engine/014-08-outils.js';
-import { STLN, squad } from '../../engine/020-13-equipe-cartes.js';
-import { ART, PIX, V4, ownedFam } from '../../engine/032-v4-00-socle.js';
-import { DEXM } from '../../engine/033-v4-01-donnees-pokedex.js';
-import { LORE } from '../../engine/034-v4-02-textes-pokedex.js';
-import { DEXS } from '../../engine/038-v4-06-pokedex.js';
-import { SPARK, isShinyOwned, shinyHue } from '../../engine/043-v4-4-01-aventure-plus.js';
-import { mrg414 } from '../../engine/053-v4-14-01-resonance.js';
-import { lieuCapture421 } from '../../engine/061-v4-21-01-capture-partout.js';
-import { FR470 } from '../../engine/102-v4-70-formes-regionales-pokedex.js';
+import { strength } from '../../lib/power.js';
+import { MV, SHAPE, TAL } from '../../engine/005-moves.js';
+import { REGN } from '../../engine/008-hoenn-data.js';
+import { BY, NOTES, familyOf } from '../../engine/009-pokemon.js';
+import { RC, ROLEFX } from '../../engine/012-recruits-roles-synergies.js';
+import { tb, tc } from '../../engine/014-utils.js';
+import { STLN, squad } from '../../engine/020-team-cards.js';
+import { ART, PIX, V4, ownedFam } from '../../engine/032-v4-foundation.js';
+import { DEXM } from '../../engine/033-pokedex-data.js';
+import { LORE } from '../../engine/034-pokedex-texts.js';
+import { DEXS } from '../../engine/038-pokedex.js';
+import { SPARK, isShinyOwned, shinyHue } from '../../engine/043-adventure-plus.js';
+import { mrg414 } from '../../engine/053-resonance.js';
+import { captureSite421 } from '../../engine/061-catch-anywhere.js';
+import { FR470 } from '../../engine/102-regional-forms.js';
 
 const no3 = n => String(n).padStart(3, '0');
 
@@ -24,13 +24,13 @@ export default function DexCard() {
   const dm = DEXM[m.no] || [0, 0, ''],
     own = ownedFam(m.id),
     sh = isShinyOwned(m.id),
-    fam = famOf(m.id),
+    family = familyOf(m.id),
     tl = TAL[m.tal],
     i = DEXS.indexOf(m),
     prev = DEXS[(i - 1 + DEXS.length) % DEXS.length],
     next = DEXS[(i + 1) % DEXS.length],
     note = NOTES[m.id],
-    lieu = lieuCapture421(m.id),
+    placeLabel = captureSite421(m.id),
     fr = FR470.find(x => x.id === m.id); // forme régionale (v4.70)
   const roles = [m.r, m.r2].filter((r, k, a) => r && a.indexOf(r) === k);
   const style = { '--c': tc(m.t[0]), '--c2': tc(m.t[1] || m.t[0]) };
@@ -54,7 +54,7 @@ export default function DexCard() {
               Chromatique capturé
             </span>
           )}
-          {!own && <span className="v4d-own">{`Non capturé${lieu ? ' · ' + lieu : ''}`}</span>}
+          {!own && <span className="v4d-own">{`Non capturé${placeLabel ? ' · ' + placeLabel : ''}`}</span>}
         </div>
         {'\n  '}
         <div className="v4d-info">
@@ -83,7 +83,7 @@ export default function DexCard() {
             </div>
             <div>
               <dt>Stade</dt>
-              <dd>{`${m.st} / ${Math.max(...fam.map(x => x.st))}`}</dd>
+              <dd>{`${m.st} / ${Math.max(...family.map(x => x.st))}`}</dd>
             </div>
           </dl>
         </div>
@@ -131,7 +131,7 @@ export default function DexCard() {
                     {v.n}
                     <Html html={mrg414(v)} />
                   </b>
-                  <span>{`${puissance(v, 'Puiss.')} · ${SHAPE[v.sh]}${v.r ? ' ' + v.r : ''}`}</span>
+                  <span>{`${strength(v, 'Puiss.')} · ${SHAPE[v.sh]}${v.r ? ' ' + v.r : ''}`}</span>
                   <em>{v.d}</em>
                 </div>
               );
@@ -154,7 +154,7 @@ export default function DexCard() {
         </button>
         {'\n   '}
         <div className="v4d-chain">
-          {fam.map((x, k) => [
+          {family.map((x, k) => [
             k > 0 && (
               <svg className="v4d-to" aria-hidden="true" key={'to' + k}>
                 <use href="#i-chevr" />

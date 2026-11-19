@@ -1,11 +1,11 @@
 import { Html } from '../../../lib/html.jsx';
-import { MV, TAL } from '../../../engine/005-02-capacites.js';
-import { BY } from '../../../engine/009-03-pokemon.js';
-import { ARR } from '../../../engine/010-04-evolution-en-combat.js';
-import { medal, tb, tc } from '../../../engine/014-08-outils.js';
-import { BRANCHES, brancheWhy, evoOpts, mhpOf } from '../../../engine/021-14-moteur-combat.js';
-import { B } from '../../../engine/024-17-interface-combat.js';
-import { evoliWhy434 } from '../../../engine/069-v4-34-01-calibrage-et-evoli.js';
+import { MV, TAL } from '../../../engine/005-moves.js';
+import { BY } from '../../../engine/009-pokemon.js';
+import { ARR } from '../../../engine/010-in-battle-evolution.js';
+import { medal, tb, tc } from '../../../engine/014-utils.js';
+import { BRANCHES, branchWhy, evoOpts, mhpOf } from '../../../engine/021-combat-engine.js';
+import { B } from '../../../engine/024-combat-ui.js';
+import { evoliWhy434 } from '../../../engine/069-calibration-eevee.js';
 import { evoState, useBattleVersion } from './battleStore.js';
 
 // Choix d'évolution (#evoPick). Ouvert et fermé par le moteur (attribut hidden) ;
@@ -15,19 +15,19 @@ export default function EvoPick() {
   const u = evoState.u;
   return (
     <div className="evopick" id="evoPick" hidden>
-      {v && u && B ? <Carte u={u} /> : null}
+      {v && u && B ? <MapScreen u={u} /> : null}
     </div>
   );
 }
 
-function Voie({ u, A, id }) {
+function Path({ u, A, id }) {
   const E = BY[id],
-    gain = E.mv.filter(x => !u.mv.includes(x)),
+    payout = E.mv.filter(x => !u.mv.includes(x)),
     lose = u.mv.filter(x => !E.mv.includes(x) && x !== u.ctm), // la capacité apprise reste
     tg = E.t.filter(t => !u.t.includes(t)),
     nm = mhpOf(E.s) + (u.hb || 0),
     why = BRANCHES[A.id]
-      ? brancheWhy(B, u, id)
+      ? branchWhy(B, u, id)
       : A.nx === 'eevee'
         ? evoliWhy434(B, u, id)
         : Array.isArray(A.nx)
@@ -56,10 +56,10 @@ function Voie({ u, A, id }) {
         </span>
         {'\n   '}
         <ul>
-          {gain.length ? (
+          {payout.length ? (
             <li className="gain">
               <span>Gagne</span>
-              {gain.map(x => MV[x].n).join(', ')}
+              {payout.map(x => MV[x].n).join(', ')}
             </li>
           ) : null}
           {lose.length ? (
@@ -96,7 +96,7 @@ function Voie({ u, A, id }) {
   );
 }
 
-function Carte({ u }) {
+function MapScreen({ u }) {
   const o = evoOpts(B, u);
   if (!o.length) return null;
   const A = BY[u.id];
@@ -118,7 +118,7 @@ function Carte({ u }) {
       </div>
       <div className="ep-opts">
         {o.map(id => (
-          <Voie key={id} u={u} A={A} id={id} />
+          <Path key={id} u={u} A={A} id={id} />
         ))}
       </div>
       <div className="ep-a">

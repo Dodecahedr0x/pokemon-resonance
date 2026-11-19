@@ -1,4 +1,4 @@
-import { canal } from '../../lib/store.js';
+import { channel } from '../../lib/store.js';
 
 // Deux versions, comme les deux anciens innerHTML :
 // - `page` : renderCampPage431() (sous-onglets, Sorties, onglet ouvert) reconstruit toute la page ;
@@ -6,11 +6,11 @@ import { canal } from '../../lib/store.js';
 let page = 0,
   base = 0;
 // Les Sorties (#sort430) ne sont remplies qu'au premier affichage de l'onglet Base, puis gardées.
-export let sortiesVues = false;
-const { emit, use } = canal();
+export let seenExits = false;
+const { emit, use } = channel();
 
-export function refreshCampPage(ongletBase) {
-  if (ongletBase) sortiesVues = true;
+export function refreshCampPage(baseTab) {
+  if (baseTab) seenExits = true;
   page++;
   emit();
 }

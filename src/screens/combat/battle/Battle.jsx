@@ -1,13 +1,13 @@
-import { B } from '../../../engine/024-17-interface-combat.js';
-import { DEF_VAGUES, DEF_VIES } from '../../../engine/099-4-68-arene-de-defense.js';
+import { B } from '../../../engine/024-combat-ui.js';
+import { DEF_VAGUES, DEF_VIES } from '../../../engine/099-defense-gym.js';
 import { useBattleVersion } from './battleStore.js';
-import { BtTop, Frise, Regle, Synergies } from './TopBar.jsx';
-import { PlaquesA, PlaquesE } from './Plates.jsx';
+import { BtTop, Timeline, Rule, Synergies } from './TopBar.jsx';
+import { PlatesA, PlatesE } from './Plates.jsx';
 import Panel from './Panel.jsx';
-import Foot from './Foot.jsx';
+import Footer from './Foot.jsx';
 import Log from './Log.jsx';
 import EvoPick from './EvoPick.jsx';
-import Fiche444 from './Fiche444.jsx';
+import Sheet444 from './Sheet444.jsx';
 
 // Écran du combat (#cbBattle) autour du plateau : le plateau (#bBoard) est passé en enfant.
 // Montré et masqué par le moteur (attribut hidden) ; chaque partie suit sa version (battleStore.js).
@@ -19,24 +19,24 @@ export default function Battle({ children }) {
         <div className="bt">
           <BtTop />
           <Synergies />
-          <Regle />
-          <Frise />
+          <Rule />
+          <Timeline />
           {/* scène (vue compacte) : le plateau plein cadre, les plaques posées sur le décor */}
           <div className="bt-stage">
-            <PlaquesE />
+            <PlatesE />
             <Defense />
             {children}
-            <PlaquesA />
+            <PlatesA />
           </div>
         </div>
         <aside className="bt-side" aria-label="Commandes">
           <Panel />
-          <Foot />
+          <Footer />
           <Log />
         </aside>
       </div>
       <EvoPick />
-      <Fiche444 />
+      <Sheet444 />
     </div>
   );
 }

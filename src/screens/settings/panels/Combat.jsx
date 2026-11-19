@@ -1,4 +1,4 @@
-import { PREF } from '../../../engine/026-20-campagne-tutoriel-son.js';
+import { PREF } from '../../../engine/026-campaign-tutorial-sound.js';
 import { Switch } from '../controls.jsx';
 
 const DEPLOIEMENTS = [
@@ -8,7 +8,7 @@ const DEPLOIEMENTS = [
 ];
 
 // Déploiement avant le combat (depHtml430). Le moteur gère data-dep430.
-function Deploiement() {
+function Deployment() {
   const v = PREF.dep430 || 'grands';
   return (
     <div className="v4-fld dep430f"><span>Déploiement avant le combat</span><div className="v4-seg" role="group" aria-label="Déploiement">
@@ -32,7 +32,7 @@ export default function Combat() {
       <Switch k="fast" on={PREF.fast} lab="Combat rapide" sub="Animations et présentations plus courtes" />
       <Switch k="anim429" on={PREF.anim429 !== false} lab="Pokémon animés" sub="Souffle au repos, bond vers la cible, recul sous les coups" />
       <Switch k="tips429" on={PREF.tips429 !== false} lab="Astuces du Prof." sub="Une explication la première fois qu’une mécanique apparaît en combat" />
-      <Deploiement />
+      <Deployment />
       <Switch k="fog431" on={PREF.fog431} lab="Brouillard de guerre" sub="Vous ne voyez que ce que vos Pokémon voient : 2 cases, 3 pour Vol et Psy, une de moins la nuit. +25 % de Pokédollars en victoire." />
       <Switch k="info" on={PREF.info} lab="Descriptions détaillées" sub="Texte complet des capacités dans le panneau" />
       <p className="v4-ps-n">Le mouvement réduit de votre appareil est respecté automatiquement.</p>

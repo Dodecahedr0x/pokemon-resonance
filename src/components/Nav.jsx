@@ -1,4 +1,4 @@
-import { TNAME } from '../engine/016-09-navigation.js';
+import { TNAME } from '../engine/016-navigation.js';
 import { useShell } from './shellStore.js';
 
 // Navigation (v4-03) : 9 destinations sur ordinateur, 5 et un menu sur téléphone.

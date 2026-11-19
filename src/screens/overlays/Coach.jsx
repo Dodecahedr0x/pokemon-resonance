@@ -1,6 +1,6 @@
 import { Html } from '../../lib/html.jsx';
 import { useCoach } from './shellOverlays.js';
-import { PROF_AV } from '../../engine/031-25-v3-parcours-accueil.js';
+import { PROF_AV } from '../../engine/031-home-journey.js';
 
 // Coach du combat guidé (#coach) : la Professeure donne la consigne de l'étape.
 // renderCoach() (026) choisit l'étape ; les boutons (data-co) restent gérés par le moteur.

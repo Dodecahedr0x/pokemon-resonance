@@ -1,4 +1,4 @@
-import { canal } from '../../lib/store.js';
+import { channel } from '../../lib/store.js';
 
 // État du Guide, partagé entre React (<Guide>) et le moteur (setGuide, openRx, jump…).
 // Le moteur n'écrit plus dans le DOM du Guide : il passe par ces fonctions.
@@ -21,7 +21,7 @@ let state = {
   focusRule: null, // { code, n } : règle à faire défiler jusqu'à l'écran
   shown: 0, // incrémenté à chaque affichage de l'écran Guide : relit l'état de partie
 };
-const { notify, use } = canal();
+const { notify, use } = channel();
 const emit = patch => {
   state = { ...state, ...patch };
   notify();

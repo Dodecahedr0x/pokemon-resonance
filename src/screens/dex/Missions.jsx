@@ -1,6 +1,6 @@
-import { ownedFam } from '../../engine/032-v4-00-socle.js';
-import { DEXS } from '../../engine/038-v4-06-pokedex.js';
-import { PAL454, msSt454, sem454, txt454, typesMs454 } from '../../engine/084-4-54-colporteur-rencontres-de-route-missions-de.js';
+import { ownedFam } from '../../engine/032-v4-foundation.js';
+import { DEXS } from '../../engine/038-pokedex.js';
+import { PAL454, msSt454, sem454, txt454, typesMs454 } from '../../engine/084-peddler-route-missions.js';
 
 // Missions du Pokédex (#ms454, v4.54) : paliers d'espèces et spécialistes de la semaine.
 // La réclamation (data-ms454) reste gérée par le moteur.

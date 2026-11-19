@@ -1,4 +1,4 @@
-import { medal, tc } from '../../../engine/014-08-outils.js';
+import { medal, tc } from '../../../engine/014-utils.js';
 import { Html } from '../../../lib/html.jsx';
 import { useEvo } from './boardStore.js';
 

@@ -1,6 +1,6 @@
-import { TYPES } from '../../../engine/004-01-donnees.js';
-import { gp, tc } from '../../../engine/014-08-outils.js';
-import { AVT450, IM450 } from '../../../engine/080-v4-50-avatar-de-dresseur-rencontres-rares-heure.js';
+import { TYPES } from '../../../engine/004-data.js';
+import { gp, tc } from '../../../engine/014-utils.js';
+import { AVT450, IM450 } from '../../../engine/080-trainer-avatar-rare-encounters.js';
 
 // Paramètres › Avatar de dresseur et Rencontres rares (v4.50) : boutons data-b450 gérés par le moteur (module 080).
 export default function Avatar() {

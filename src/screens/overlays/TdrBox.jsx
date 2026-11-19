@@ -1,9 +1,9 @@
 import { Html } from '../../lib/html.jsx';
 import { useOverlay } from './dialogsStore.js';
-import { Dialogue } from './Fenetre.jsx';
-import { BY } from '../../engine/009-03-pokemon.js';
-import { medal, tc } from '../../engine/014-08-outils.js';
-import { HELD_IMG, ITM } from '../../engine/032-v4-00-socle.js';
+import { Dialogue } from './Window.jsx';
+import { BY } from '../../engine/009-pokemon.js';
+import { medal, tc } from '../../engine/014-utils.js';
+import { HELD_IMG, ITM } from '../../engine/032-v4-foundation.js';
 
 // Tour de Résonance (#tdrBox) : choix de l'équipe, puis récompense entre deux étages.
 // Le moteur (043) garde les clics (écouteur sur #tdrBox) et l'attribut hidden : React ne
@@ -12,13 +12,13 @@ export default function TdrBox() {
   const s = useOverlay('tdr');
   return (
     <div className="result tdr-box" id="tdrBox" hidden>
-      {s && (s.mode === 'reward' ? <Recompense key={s.v} {...s} /> : <Choix key={s.v} {...s} />)}
+      {s && (s.mode === 'reward' ? <Reward key={s.v} {...s} /> : <Choice key={s.v} {...s} />)}
     </div>
   );
 }
 
 // Choix des 4 Pokémon de l'ascension.
-function Choix({ cands, pick }) {
+function Choice({ cands, pick }) {
   const n = pick.length;
   return (
     <Dialogue className="sv-card st-card tdr-card" titre="tdrT" fermer={{ 'data-tdr': 'x' }}>
@@ -46,7 +46,7 @@ function Choix({ cands, pick }) {
 }
 
 // Récompense après un étage franchi.
-function Recompense({ floor, offer }) {
+function Reward({ floor, offer }) {
   return (
     <Dialogue className="sv-card st-card tdr-card" titre="tdrT">
       <p className="kick">Tour de Résonance · étage {floor - 1} franchi</p>

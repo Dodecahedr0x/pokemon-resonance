@@ -1,10 +1,10 @@
-import { MV } from '../../../engine/005-02-capacites.js';
-import { BY, famOf } from '../../../engine/009-03-pokemon.js';
-import { PROFILE } from '../../../engine/011-05-etat-de-partie.js';
-import { tc } from '../../../engine/014-08-outils.js';
-import { STLN } from '../../../engine/020-13-equipe-cartes.js';
-import { ART } from '../../../engine/032-v4-00-socle.js';
-import { DUEL433, STMAX433, TERR433, V433_0, duelEtape433, duelNeuf433, duelOrdre433 } from '../../../engine/068-v4-33-01-duel-et-tutoriel.js';
+import { MV } from '../../../engine/005-moves.js';
+import { BY, familyOf } from '../../../engine/009-pokemon.js';
+import { PROFILE } from '../../../engine/011-game-state.js';
+import { tc } from '../../../engine/014-utils.js';
+import { STLN } from '../../../engine/020-team-cards.js';
+import { ART } from '../../../engine/032-v4-foundation.js';
+import { DUEL433, STMAX433, TERR433, V433_0, duelStep433, duelNew433, duelOrder433 } from '../../../engine/068-duel-tutorial.js';
 
 const Options = ({ L }) => L.map(([k, n]) => <option key={k} value={k}>{n}</option>);
 
@@ -22,7 +22,7 @@ function Seg({ k, L, v }) {
 }
 
 // Réglages du duel : noms (input relu par le moteur), formes, taille, terrain, heure, manches.
-function Reglages({ C }) {
+function Preferences({ C }) {
   return (
     <div className="du433-cfg">
       <div className="du433-row">
@@ -43,12 +43,12 @@ function Reglages({ C }) {
 }
 
 // Une carte du tirage (data-du433p) : bannie, prise ou sélectionnée.
-function Carte({ C, id }) {
+function MapScreen({ C, id }) {
   const m = BY[id],
     ban = C.bans[0].includes(id) ? 1 : C.bans[1].includes(id) ? 2 : 0,
     pk = C.picks[0].includes(id) ? 1 : C.picks[1].includes(id) ? 2 : 0,
-    fam = famOf(id),
-    nEv = C.mode === 'final' ? 0 : Math.max(0, ...fam.map(x => (x.st || 1) - (m.st || 1)));
+    family = familyOf(id),
+    nEv = C.mode === 'final' ? 0 : Math.max(0, ...family.map(x => (x.st || 1) - (m.st || 1)));
   const cls = ban ? ' ban' : pk ? ' pk dj' + pk : C.sel === id ? ' sel' : '';
   return (
     <button type="button" className={`du433-c${cls}`} data-du433p={id} disabled={!!(ban || pk)} aria-pressed={C.sel === id}>
@@ -70,7 +70,7 @@ function Detail({ C }) {
   const id = C.sel;
   if (!id || !BY[id]) return <p className="du433-h">Touchez un Pokémon pour voir ses capacités.</p>;
   const m = BY[id],
-    fam = famOf(id).map(x => x.n);
+    family = familyOf(id).map(x => x.n);
   return (
     <div className="du433-d">
       <div className="du433-dh"><b>{m.n}</b><Types T={m.t} /><em>{[m.r, m.r2].filter(Boolean).join(' · ')}</em></div>
@@ -84,14 +84,14 @@ function Detail({ C }) {
       </div>
       <p className="du433-dl">
         {STLN.map((n, i) => `${n} ${m.s[i]}`).join(' · ')}
-        {fam.length > 1 && C.mode !== 'final' ? <><br />{`Lignée : ${fam.join(' → ')}`}</> : null}
+        {family.length > 1 && C.mode !== 'final' ? <><br />{`Lignée : ${family.join(' → ')}`}</> : null}
       </p>
     </div>
   );
 }
 
 // L'équipe d'un joueur : ses choix et ses bannissements.
-function Equipe({ C, j }) {
+function Team({ C, j }) {
   const L = C.picks[j],
     B0 = C.bans[j];
   return (
@@ -106,9 +106,9 @@ function Equipe({ C, j }) {
 }
 
 // Le tirage : ordre, étape, équipes, réserve, actions.
-function Tirage({ C }) {
-  const st = duelEtape433(C),
-    ord = duelOrdre433(C.taille);
+function Draw({ C }) {
+  const st = duelStep433(C),
+    ord = duelOrder433(C.taille);
   return (
     <>
       <div className="du433-o" aria-label="Ordre du tirage">
@@ -121,10 +121,10 @@ function Tirage({ C }) {
       ) : (
         <p className="du433-st">Les équipes sont prêtes.</p>
       )}
-      <div className="du433-eqs"><Equipe C={C} j={0} /><Equipe C={C} j={1} /></div>
+      <div className="du433-eqs"><Team C={C} j={0} /><Team C={C} j={1} /></div>
       {st ? (
         <>
-          <div className="du433-pool">{C.pool.map(id => <Carte key={id} C={C} id={id} />)}</div>
+          <div className="du433-pool">{C.pool.map(id => <MapScreen key={id} C={C} id={id} />)}</div>
           <Detail C={C} />
         </>
       ) : null}
@@ -144,14 +144,14 @@ function Tirage({ C }) {
 
 // Camp › Duel (v4.33) : duel local à deux joueurs sur un téléphone.
 export default function Duel() {
-  const C = DUEL433 || duelNeuf433(),
+  const C = DUEL433 || duelNew433(),
     P0 = PROFILE.duel433 || V433_0().duel433,
     H = (P0.h || []).slice(-5).reverse();
   return (
     <section className="v4-panel du433">
       <header className="v4-ph"><svg><use href="#i-fight" /></svg><b>Duel local</b><span className="v4-cnt">{`${P0.n || 0} duel${(P0.n || 0) > 1 ? 's' : ''}`}</span></header>
       <p className="v4-ps-n">Deux joueurs, un téléphone. Chacun dirige son équipe à son tour, avec les mêmes règles : ni objets, ni natures, ni doctrines, terrain symétrique. Aucune récompense : seulement l’honneur.</p>
-      {C.e === 'reglages' ? <Reglages C={C} /> : <Tirage C={C} />}
+      {C.e === 'reglages' ? <Preferences C={C} /> : <Draw C={C} />}
       {H.length ? (
         <div className="du433-hi">
           <h3>Derniers duels</h3>

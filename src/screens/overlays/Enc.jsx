@@ -1,13 +1,13 @@
 import { memo } from 'react';
 import { Html, parseStyle } from '../../lib/html.jsx';
 import { useEnc } from './shellOverlays.js';
-import { dexNo } from '../../engine/004-01-donnees.js';
-import { REGN } from '../../engine/008-v4-19-00-hoenn-donnees.js';
-import { tb, tc } from '../../engine/014-08-outils.js';
-import { crestSmall } from '../../engine/020-13-equipe-cartes.js';
-import { SPARK, shinyStyle } from '../../engine/043-v4-4-01-aventure-plus.js';
-import { CROWN416 } from '../../engine/055-v4-16-01-johto-vivant.js';
-import { IM450, rareInfo450 } from '../../engine/080-v4-50-avatar-de-dresseur-rencontres-rares-heure.js';
+import { dexNo } from '../../engine/004-data.js';
+import { REGN } from '../../engine/008-hoenn-data.js';
+import { tb, tc } from '../../engine/014-utils.js';
+import { crestSmall } from '../../engine/020-team-cards.js';
+import { SPARK, shinyStyle } from '../../engine/043-adventure-plus.js';
+import { CROWN416 } from '../../engine/055-living-johto.js';
+import { IM450, rareInfo450 } from '../../engine/080-trainer-avatar-rare-encounters.js';
 
 // Rencontre sauvage (#enc), ouverte par encounter() (017) avec un instantané de la
 // rencontre. Les boutons (data-enc), le clic sur le fond et Échap restent gérés par le moteur.
@@ -16,13 +16,13 @@ export default function Enc() {
   const { open, v, snap } = useEnc();
   return (
     <div className="result enc" id="enc" hidden={!open}>
-      {snap && <Carte key={v} {...snap} />}
+      {snap && <MapScreen key={v} {...snap} />}
     </div>
   );
 }
 
 // memo : la fermeture ne redessine pas la fiche (crestSmall numérote ses dégradés à chaque appel).
-const Carte = memo(function Carte({ pick, shiny, dom, route, tod, inBox, camp, path }) {
+const MapScreen = memo(function MapScreen({ pick, shiny, dom, route, tod, inBox, camp, path }) {
   const style = { '--c': tc(pick.t[0]), ...(shiny ? parseStyle(shinyStyle(pick.id)) : {}) };
   const r = rareInfo450(pick.id); // v4.50 : apparition rare selon l'heure et la météo
   return (

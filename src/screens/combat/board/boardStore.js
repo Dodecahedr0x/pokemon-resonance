@@ -1,4 +1,4 @@
-import { canal } from '../../../lib/store.js';
+import { channel } from '../../../lib/store.js';
 
 // Plateau de combat (#bSvg) : un canal par calque, pour qu'un rendu ne reconstruise que ce
 // qui a changé. Le moteur garde ses fonctions (buildBoard, renderBoard…) qui appellent ce
@@ -33,16 +33,16 @@ let S = fresh(0);
 let EVO = { on: false, fast: false, ox: null, oy: null, fx: null };
 
 const versions = {}; // une version par calque
-const c = canal();
+const c = channel();
 function emit(names) {
   names.forEach(n => (versions[n] = (versions[n] || 0) + 1));
   c.emit();
 }
-const suivre = name => c.use(() => versions[name] || 0);
+const follow = name => c.use(() => versions[name] || 0);
 
 export const getBoard = () => S;
 export function useBoard(name) {
-  suivre(name);
+  follow(name);
   return S;
 }
 
@@ -88,7 +88,7 @@ let H = {
 
 export const getHost = () => H;
 export function useHost() {
-  suivre('host');
+  follow('host');
   return H;
 }
 export function hostSet(patch) {
@@ -97,16 +97,16 @@ export function hostSet(patch) {
 }
 
 /** classList.toggle(nom, on) sur #bBoard, rendu par React (ordre des classes conservé). */
-export function bdClass(nom, on) {
-  const a = H.cls.includes(nom);
+export function bdClass(displayName, on) {
+  const a = H.cls.includes(displayName);
   if (on === undefined) on = !a;
   if (on === a) return;
-  hostSet({ cls: on ? [...H.cls, nom] : H.cls.filter(c => c !== nom) });
+  hostSet({ cls: on ? [...H.cls, displayName] : H.cls.filter(c => c !== displayName) });
 }
 
 /** Relance une animation par classe : retirée, mise en page forcée, reposée. */
-export function bdRejouer(...noms) {
-  noms.forEach(n => bdClass(n, false));
+export function bdReplay(...displayNames) {
+  displayNames.forEach(n => bdClass(n, false));
   const bd = document.getElementById('bBoard');
   if (bd) void bd.offsetWidth;
 }
@@ -152,7 +152,7 @@ export const tokHas = (T, c) => !!(T && T.c && T.c.includes(c));
 
 /* ---------- #evoFx : cinématique d'évolution ---------- */
 export function useEvo() {
-  suivre('evo');
+  follow('evo');
   return EVO;
 }
 export function evoSet(patch) {

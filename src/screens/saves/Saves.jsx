@@ -2,16 +2,16 @@ import { useLayoutEffect, useRef } from 'react';
 import { useEngineReady } from '../../engineReady.js';
 import { Html } from '../../lib/html.jsx';
 import { useSaves } from './savesStore.js';
-import { RECRUIT } from '../../engine/010-04-evolution-en-combat.js';
-import { BY } from '../../engine/009-03-pokemon.js';
-import { DIFFS, PROFILE, isCamp } from '../../engine/011-05-etat-de-partie.js';
-import { BADGES } from '../../engine/013-07-arenes.js';
-import { medal } from '../../engine/014-08-outils.js';
-import { B } from '../../engine/024-17-interface-combat.js';
-import { SLOTS, SV, battleLine, cleanProfile, fmtD, snapshot, validBattle } from '../../engine/025-19-sauvegardes.js';
-import { PREF } from '../../engine/026-20-campagne-tutoriel-son.js';
-import { libreBox421 } from '../../engine/061-v4-21-01-capture-partout.js';
-import { boxN429 } from '../../engine/064-v4-29-01-qualite.js';
+import { RECRUIT } from '../../engine/010-in-battle-evolution.js';
+import { BY } from '../../engine/009-pokemon.js';
+import { DIFFS, PROFILE, isCamp } from '../../engine/011-game-state.js';
+import { BADGES } from '../../engine/013-gyms.js';
+import { medal } from '../../engine/014-utils.js';
+import { B } from '../../engine/024-combat-ui.js';
+import { SLOTS, SV, battleLine, cleanProfile, fmtD, snapshot, validBattle } from '../../engine/025-saves.js';
+import { PREF } from '../../engine/026-campaign-tutorial-sound.js';
+import { freeBox421 } from '../../engine/061-catch-anywhere.js';
+import { boxN429 } from '../../engine/064-quality.js';
 
 // Fenêtre « Sauvegardes » (#saves). Les clics, la saisie et l'import restent gérés par
 // le moteur (écouteurs sur #saves, data-sv, data-resume) : ici, seulement l'affichage.
@@ -26,13 +26,13 @@ export default function Saves() {
 
   return (
     <div className="result saves" id="saves" hidden={!open}>
-      {open && ready && <Carte key={version} xRef={x} />}
+      {open && ready && <MapScreen key={version} xRef={x} />}
     </div>
   );
 }
 
 // Résumé d'une sauvegarde : équipe, badges, victoires, combat en cours.
-function Resume({ s }) {
+function Summary({ s }) {
   const P = cleanProfile(s.profile);
   return (
     <div className="sv-sum">
@@ -51,7 +51,7 @@ function Resume({ s }) {
 }
 
 // Un emplacement (s1, s2, s3), vide ou rempli, avec sa question de confirmation.
-function Emplacement({ k }) {
+function Slot({ k }) {
   const s = SV.local[k],
     n = k.slice(1),
     cf = SV.confirm && SV.confirm.k === k ? SV.confirm.a : null;
@@ -78,7 +78,7 @@ function Emplacement({ k }) {
         </b>
         <em>{fmtD(s.savedAt)}</em>
       </header>
-      <Resume s={s} />
+      <Summary s={s} />
       <div className="sv-act">
         {cf ? (
           <>
@@ -157,7 +157,7 @@ function Code() {
 }
 
 // La carte, recréée à chaque version (comme l'ancien innerHTML) : les champs relisent l'état.
-function Carte({ xRef }) {
+function MapScreen({ xRef }) {
   const a = SV.local.auto || snapshot(),
     P = PROFILE,
     busy = Object.values(SV.busy).some(Boolean),
@@ -212,7 +212,7 @@ function Carte({ xRef }) {
       <div className="sv-set">
         <div className="ss-row">
           <span>Mode</span>
-          <b>{isCamp() ? `Campagne · Box ${boxN429()} / ${RECRUIT.length}` : `Libre · combats ouverts · ${libreBox421()}`}</b>
+          <b>{isCamp() ? `Campagne · Box ${boxN429()} / ${RECRUIT.length}` : `Libre · combats ouverts · ${freeBox421()}`}</b>
         </div>
         <div className="ss-row">
           <span>Difficulté</span>
@@ -250,7 +250,7 @@ function Carte({ xRef }) {
           <b>Sauvegarde automatique</b>
           <em>{a.savedAt ? fmtD(a.savedAt) : ''}</em>
         </header>
-        <Resume s={a} />
+        <Summary s={a} />
         {validBattle(a.battle) && !B && (
           <div className="sv-act">
             <button type="button" className="b b-sm b-gold" data-resume="1">
@@ -261,7 +261,7 @@ function Carte({ xRef }) {
       </article>
       <div className="sv-list">
         {SLOTS.map(k => (
-          <Emplacement key={k} k={k} />
+          <Slot key={k} k={k} />
         ))}
       </div>
       <div className="sv-io">

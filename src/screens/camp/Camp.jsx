@@ -1,20 +1,20 @@
 import { useEngineReady } from '../../engineReady.js';
-import { V4 } from '../../engine/032-v4-00-socle.js';
-import { CAMPT431, echoRun431 } from '../../engine/066-v4-31-01-defis-tactiques.js';
-import { sortiesVues, useCampBase, useCampPage } from './campStore.js';
+import { V4 } from '../../engine/032-v4-foundation.js';
+import { CAMPT431, echoRun431 } from '../../engine/066-tactical-challenges.js';
+import { seenExits, useCampBase, useCampPage } from './campStore.js';
 import CampBase from './CampBase.jsx';
-import Sorties from './Sorties.jsx';
-import Enigmes from './tabs/Enigmes.jsx';
+import Outings from './Outings.jsx';
+import Riddles from './tabs/Puzzles.jsx';
 import Echo from './tabs/Echo.jsx';
-import Arenes from './tabs/Arenes.jsx';
-import Maitrise from './tabs/Maitrise.jsx';
+import Gyms from './tabs/Gyms.jsx';
+import Mastery from './tabs/Mastery.jsx';
 import Pantheon from './tabs/Pantheon.jsx';
 import Duel from './tabs/Duel.jsx';
 
-const ONGLETS = { enigmes: Enigmes, echo: Echo, arenes: Arenes, pantheon: Pantheon, duel: Duel, maitrise: Maitrise };
+const ONGLETS = { enigmes: Riddles, echo: Echo, arenes: Gyms, pantheon: Pantheon, duel: Duel, maitrise: Mastery };
 
 // Sous-onglets du Camp (v4.31) : la barre, puis le contenu de l'onglet ouvert (hors « Base »).
-function Onglets({ t }) {
+function Tabs({ t }) {
   const R = echoRun431();
   return (
     <nav className="v4-tabs ct431" id="campTabs431" role="tablist" aria-label="Camp">
@@ -26,26 +26,26 @@ function Onglets({ t }) {
 }
 
 // #v4Camp seul se reconstruit à chaque renderCampBase() ; le reste de la page n'est pas touché.
-function CampBaseHote() {
+function CampBaseHost() {
   const base = useCampBase();
   return <CampBase key={base} rempli={base > 0} />;
 }
 
 // #camp430 : avant le premier renderCampPage431(), seulement le Camp de base et les Sorties (vides).
-function Contenu({ page }) {
+function Content({ page }) {
   const t = V4.campTab; // déjà validé par renderCampPage431()
-  const Onglet = page > 0 && t !== 'base' ? ONGLETS[t] : null;
+  const Tab = page > 0 && t !== 'base' ? ONGLETS[t] : null;
   const cache = page > 0 ? t !== 'base' : undefined;
   return (
     <div className="camp430" id="camp430">
-      {page > 0 && <Onglets t={t} />}
+      {page > 0 && <Tabs t={t} />}
       <div id="campHost430" hidden={cache}>
-        <CampBaseHote />
+        <CampBaseHost />
       </div>
       <section className="v4-panel sort430" id="sort430" aria-label="Sorties" hidden={cache}>
-        {sortiesVues && <Sorties />}
+        {seenExits && <Outings />}
       </section>
-      {page > 0 && <div id="campTab431">{Onglet && <Onglet />}</div>}
+      {page > 0 && <div id="campTab431">{Tab && <Tab />}</div>}
     </div>
   );
 }
@@ -60,7 +60,7 @@ export default function Camp() {
       {ready && (
         <>
           <div className="ph v4-ph-page"><p className="kick">Votre base</p><h1 className="h1" id="h-camp">Camp</h1><p className="sub">Bâtiments, expéditions, Pension et Potager. Les sorties du dresseur.</p></div>
-          <Contenu key={page} page={page} />
+          <Content key={page} page={page} />
         </>
       )}
     </section>

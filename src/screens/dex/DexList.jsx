@@ -1,11 +1,11 @@
 import { Html } from '../../lib/html.jsx';
-import { PROFILE } from '../../engine/011-05-etat-de-partie.js';
-import { tc } from '../../engine/014-08-outils.js';
-import { PIX, V4, ownedFam } from '../../engine/032-v4-00-socle.js';
-import { DEXS, dexList } from '../../engine/038-v4-06-pokedex.js';
-import { SPARK, isShinyOwned, shinyHue } from '../../engine/043-v4-4-01-aventure-plus.js';
-import { REGN421 } from '../../engine/061-v4-21-01-capture-partout.js';
-import { famCapt428 } from '../../engine/063-v4-28-01-captures-combat-accueil.js';
+import { PROFILE } from '../../engine/011-game-state.js';
+import { tc } from '../../engine/014-utils.js';
+import { PIX, V4, ownedFam } from '../../engine/032-v4-foundation.js';
+import { DEXS, dexList } from '../../engine/038-pokedex.js';
+import { SPARK, isShinyOwned, shinyHue } from '../../engine/043-adventure-plus.js';
+import { REGN421 } from '../../engine/061-catch-anywhere.js';
+import { familyCapt428 } from '../../engine/063-combat-catches-home.js';
 
 // Compteur de la barre (#dex4Cnt) : obtenus, chromatiques, puis par région (v4.28).
 export function DexCount() {
@@ -23,7 +23,7 @@ export function DexCount() {
       ) : null}
       <span className="cnt428">
         {[1, 2, 3].map(r => {
-          const c = famCapt428(r),
+          const c = familyCapt428(r),
             ok = (PROFILE.dipl428 || []).includes(r);
           return (
             <span className={ok ? 'ok' : ''} key={r}>

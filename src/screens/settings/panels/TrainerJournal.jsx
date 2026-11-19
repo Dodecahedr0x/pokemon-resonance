@@ -1,0 +1,37 @@
+import { BY } from '../../../engine/009-pokemon.js';
+import { PROFILE } from '../../../engine/011-game-state.js';
+import { PIX, ownedFam } from '../../../engine/032-v4-foundation.js';
+import { DEXS } from '../../../engine/038-pokedex.js';
+import { jr448 } from '../../../engine/079-immersion-sound-haptics.js';
+
+// Paramètres › Journal de dresseur (v4.48) : statistiques enregistrées sur cet appareil.
+const Cell = ({ n, l }) => <div className="j448-c"><b>{n}</b><span>{l}</span></div>;
+
+export default function TrainerJournal() {
+  const j = jr448(),
+    P = PROFILE,
+    fav = Object.entries(j.use).sort((a, b) => b[1] - a[1])[0],
+    fm = fav && BY[fav[0]],
+    rate = P.battles ? Math.round((100 * P.wins) / P.battles) : 0,
+    own = DEXS.filter(m => ownedFam(m.id)).length;
+  return (
+    <section className="v4-panel" id="aj448">
+      <h3 className="h3">Journal de dresseur</h3>
+      <p className="v4-note">Vos exploits, tels qu’ils sont enregistrés sur cet appareil.</p>
+      <div className="j448">
+        <Cell n={P.battles} l="Combats" />
+        <Cell n={P.wins} l="Victoires" />
+        <Cell n={rate + ' %'} l="Réussite" />
+        <Cell n={j.best} l="Meilleure série" />
+        <Cell n={P.kos} l="K.O. infligés" />
+        <Cell n={P.caught} l="Captures" />
+        <Cell n={P.evos} l="Éveils" />
+        <Cell n={P.rx} l="Réactions" />
+        <Cell n={own + ' / ' + DEXS.length} l="Pokédex" />
+      </div>
+      {fm && (
+        <p className="j448-f"><img src={PIX(fm.no)} alt="" width="40" height="40" /><span>Pokémon le plus engagé<b>{fm.n}</b><em>{fav[1]} combat{fav[1] > 1 ? 's' : ''}</em></span></p>
+      )}
+    </section>
+  );
+}

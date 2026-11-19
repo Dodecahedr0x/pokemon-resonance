@@ -1,39 +1,39 @@
 import { useEngineReady } from '../../engineReady.js';
 import { useSettingsVersion } from './settingsStore.js';
-import AffichageCombat from './panels/AffichageCombat.jsx';
+import BattleDisplay from './panels/CombatDisplay.jsx';
 import Immersion from './panels/Immersion.jsx';
-import HabillagePokemon from './panels/HabillagePokemon.jsx';
-import JournalDresseur from './panels/JournalDresseur.jsx';
+import PokemonSkin from './panels/PokemonSkin.jsx';
+import TrainerJournal from './panels/TrainerJournal.jsx';
 import Avatar from './panels/Avatar.jsx';
-import LieuxSecrets from './panels/LieuxSecrets.jsx';
-import PlateauxGimmick from './panels/PlateauxGimmick.jsx';
-import JournalExploits from './panels/JournalExploits.jsx';
-import Chroniques from './panels/Chroniques.jsx';
-import HorsLigne from './panels/HorsLigne.jsx';
+import SecretPlaces from './panels/SecretPlaces.jsx';
+import BoardGimmicks from './panels/GimmickBoards.jsx';
+import FeatsJournal from './panels/FeatsJournal.jsx';
+import Chronicles from './panels/Chronicles.jsx';
+import Offline from './panels/Offline.jsx';
 import Nuzlocke from './panels/Nuzlocke.jsx';
-import ThemesPlateau from './panels/ThemesPlateau.jsx';
+import BoardThemes from './panels/BoardThemes.jsx';
 import CaptureTiming from './panels/CaptureTiming.jsx';
-import Dresseur from './panels/Dresseur.jsx';
-import ModeDeJeu from './panels/ModeDeJeu.jsx';
-import Son from './panels/Son.jsx';
+import Trainer from './panels/Trainer.jsx';
+import GameMode from './panels/GameMode.jsx';
+import Sound from './panels/Sound.jsx';
 import Combat from './panels/Combat.jsx';
-import DefisCampagne from './panels/DefisCampagne.jsx';
-import Telephone from './panels/Telephone.jsx';
-import Accessibilite from './panels/Accessibilite.jsx';
+import CampaignChallenges from './panels/CampaignChallenges.jsx';
+import Phone from './panels/Phone.jsx';
+import Accessibility from './panels/Accessibility.jsx';
 import ActionReplay from './panels/ActionReplay.jsx';
-import TelechargerJeu from './panels/TelechargerJeu.jsx';
-import AtelierDesign from './panels/AtelierDesign.jsx';
+import DownloadGame from './panels/DownloadGame.jsx';
+import WorkshopDesign from './panels/DesignWorkshop.jsx';
 
 // Panneaux, dans l'ordre où l'ancien jeu les affichait : d'abord ceux ajoutés par les versions
 // successives (insérés en tête), puis les réglages de base, puis les outils.
 const PANNEAUX = [
-  AffichageCombat, Immersion, HabillagePokemon, JournalDresseur, Avatar, LieuxSecrets,
-  PlateauxGimmick, JournalExploits, Chroniques, HorsLigne, Nuzlocke, ThemesPlateau, CaptureTiming,
-  Dresseur, ModeDeJeu, Son, Combat, DefisCampagne, Telephone, Accessibilite, ActionReplay,
-  TelechargerJeu, AtelierDesign,
+  BattleDisplay, Immersion, PokemonSkin, TrainerJournal, Avatar, SecretPlaces,
+  BoardGimmicks, FeatsJournal, Chronicles, Offline, Nuzlocke, BoardThemes, CaptureTiming,
+  Trainer, GameMode, Sound, Combat, CampaignChallenges, Phone, Accessibility, ActionReplay,
+  DownloadGame, WorkshopDesign,
 ];
 
-function Contenu() {
+function Content() {
   return (
     <>
       <div className="ph v4-ph-page"><p className="kick">Réglages</p><h1 className="h1" id="h-params">Paramètres</h1><p className="sub">Réglages de cet appareil et de votre partie.</p></div>
@@ -52,7 +52,7 @@ export default function Settings() {
   const version = useSettingsVersion();
   return (
     <section className="page v4p" id="params" aria-labelledby="h-params">
-      {ready && version > 0 && <Contenu key={version} />}
+      {ready && version > 0 && <Content key={version} />}
     </section>
   );
 }

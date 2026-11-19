@@ -1,17 +1,17 @@
 import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Html } from '../../../lib/html.jsx';
-import { GYMS } from '../../../engine/004-01-donnees.js';
-import { BY, SCEN } from '../../../engine/009-03-pokemon.js';
-import { isCamp } from '../../../engine/011-05-etat-de-partie.js';
-import { ARENAS, BADGES } from '../../../engine/013-07-arenes.js';
-import { medal } from '../../../engine/014-08-outils.js';
-import { badgeSvg } from '../../../engine/019-12-ligue.js';
-import { B } from '../../../engine/024-17-interface-combat.js';
-import { calme472, nextGoal, rewHtml } from '../../../engine/026-20-campagne-tutoriel-son.js';
-import { leaderOf } from '../../../engine/030-24-prestige-mise-en-scene.js';
-import { tdrRun } from '../../../engine/043-v4-4-01-aventure-plus.js';
-import { duelSous433, duelTitre433 } from '../../../engine/068-v4-33-01-duel-et-tutoriel.js';
-import { IM448 } from '../../../engine/079-v4-48-immersion-sons-par-type-cris-vibrations-en.js';
+import { GYMS } from '../../../engine/004-data.js';
+import { BY, SCEN } from '../../../engine/009-pokemon.js';
+import { isCamp } from '../../../engine/011-game-state.js';
+import { ARENAS, BADGES } from '../../../engine/013-gyms.js';
+import { medal } from '../../../engine/014-utils.js';
+import { badgeSvg } from '../../../engine/019-league.js';
+import { B } from '../../../engine/024-combat-ui.js';
+import { calm472, nextGoal, rewHtml } from '../../../engine/026-campaign-tutorial-sound.js';
+import { leaderOf } from '../../../engine/030-prestige-staging.js';
+import { tdrRun } from '../../../engine/043-adventure-plus.js';
+import { duelUnder433, duelTitle433 } from '../../../engine/068-duel-tutorial.js';
+import { IM448 } from '../../../engine/079-immersion-sound-haptics.js';
 import { useBattleVersion } from './battleStore.js';
 
 const NL = '\n  ';
@@ -29,19 +29,19 @@ export default function Result() {
       const c = card.current;
       if (!c) return;
       const cs = getComputedStyle(c);
-      const defile = /(auto|scroll)/.test(cs.overflowY) && c.scrollHeight > c.clientHeight + 2;
-      setDeco({ v, rel: cs.position === 'static', holo: !defile, gerbe: c.classList.contains('win') && !calme472() });
+      const scrolls = /(auto|scroll)/.test(cs.overflowY) && c.scrollHeight > c.clientHeight + 2;
+      setDeco({ v, rel: cs.position === 'static', holo: !scrolls, gerbe: c.classList.contains('win') && !calm472() });
     });
     return () => cancelAnimationFrame(id);
   }, [v, S]);
   return (
     <div className="result" id="cbResult" hidden>
-      {v && S ? <Fiche S={S} cardRef={card} deco={deco && deco.v === v ? deco : null} /> : null}
+      {v && S ? <Sheet S={S} cardRef={card} deco={deco && deco.v === v ? deco : null} /> : null}
     </div>
   );
 }
 
-function Fiche({ S, cardRef, deco }) {
+function Sheet({ S, cardRef, deco }) {
   const win = S.over === 'win',
     evl = S.stats.evl || [],
     D = SCEN[S.sc],
@@ -87,7 +87,7 @@ function Fiche({ S, cardRef, deco }) {
       ) : null}
       <p className="kick">{SCEN[S.sc].n}</p>
       <h2 className="h1" id="resT">
-        {du ? <Html html={duelTitre433(S)} /> : win ? 'Victoire' : S.fuite416 ? 'Il s’est enfui' : 'Défaite'}
+        {du ? <Html html={duelTitle433(S)} /> : win ? 'Victoire' : S.fuite416 ? 'Il s’est enfui' : 'Défaite'}
       </h2>
       {L ? (
         <blockquote className="res-q">
@@ -110,7 +110,7 @@ function Fiche({ S, cardRef, deco }) {
       ) : null}
       <p className="sub">
         {du ? (
-          <Html html={duelSous433(S)} />
+          <Html html={duelUnder433(S)} />
         ) : win ? (
           S.round <= 4 ? (
             'Une victoire nette : le plan a tenu dès les premières manches.'

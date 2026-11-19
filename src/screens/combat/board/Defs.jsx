@@ -1,4 +1,4 @@
-import { B, BG, HC, HP } from '../../../engine/024-17-interface-combat.js';
+import { B, BG, HC, HP } from '../../../engine/024-combat-ui.js';
 import { useBoard } from './boardStore.js';
 
 // <defs> du plateau : motifs des terrains (texDefs), dégradés, flèche des intentions ;
@@ -25,7 +25,7 @@ function NewPat({ t }) {
 const BASE = ['grass', 'stone', 'water', 'sand', 'ash', 'marble', 'rune'];
 
 // reflet de l'eau : dégradé de la bande de lumière et découpe aux cases d'eau
-function EauDefs({ E, vb }) {
+function WaterDefs({ E, vb }) {
   const [W] = vb,
     c = E.nuit ? '#cfe0ff' : '#ffffff',
     dx = W * 0.2,
@@ -139,7 +139,7 @@ export default function Defs() {
           })}
         </clipPath>
       )}
-      {S.eau && <EauDefs E={S.eau} vb={S.vb} />}
+      {S.eau && <WaterDefs E={S.eau} vb={S.vb} />}
     </defs>
   );
 }

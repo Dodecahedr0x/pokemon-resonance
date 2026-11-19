@@ -1,11 +1,11 @@
 import { useEngineReady } from '../../engineReady.js';
 import { Html } from '../../lib/html.jsx';
 import { useStarter } from './shellOverlays.js';
-import { Dialogue } from './Fenetre.jsx';
-import { BY } from '../../engine/009-03-pokemon.js';
-import { DIFFS, PROFILE, STARTERS } from '../../engine/011-05-etat-de-partie.js';
-import { medal, tc } from '../../engine/014-08-outils.js';
-import { evoPath } from '../../engine/017-10-accueil-route.js';
+import { Dialogue } from './Window.jsx';
+import { BY } from '../../engine/009-pokemon.js';
+import { DIFFS, PROFILE, STARTERS } from '../../engine/011-game-state.js';
+import { medal, tc } from '../../engine/014-utils.js';
+import { evoPath } from '../../engine/017-home-route.js';
 
 // Nouvelle campagne : choix du partenaire (#starter). openStarter() (026) l'ouvre ;
 // les clics (data-st, data-sd) et la fermeture restent gérés par le moteur.
@@ -15,12 +15,12 @@ export default function Starter() {
   const { open, v } = useStarter();
   return (
     <div className="result starter" id="starter" hidden={!open}>
-      {ready && v > 0 && <Carte />}
+      {ready && v > 0 && <MapScreen />}
     </div>
   );
 }
 
-function Carte() {
+function MapScreen() {
   return (
     <Dialogue className="sv-card st-card" titre="stT" fermer={{ 'data-st': 'x' }}>
       <p className="kick">Nouvelle campagne</p>

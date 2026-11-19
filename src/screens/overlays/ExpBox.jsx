@@ -1,17 +1,17 @@
 import { Html } from '../../lib/html.jsx';
-import { Boite, Dialogue } from './Fenetre.jsx';
-import { BY } from '../../engine/009-03-pokemon.js';
-import { medal } from '../../engine/014-08-outils.js';
-import { DESTINATIONS } from '../../engine/049-v4-10-01-identite.js';
-import { lock461 } from '../../engine/092-4-61-compagnon-ufs-d-elevage-expeditions.js';
+import { Box, Dialogue } from './Window.jsx';
+import { BY } from '../../engine/009-pokemon.js';
+import { medal } from '../../engine/014-utils.js';
+import { DESTINATIONS } from '../../engine/049-identity.js';
+import { lock461 } from '../../engine/092-companion-eggs-expeditions.js';
 
 // Fenêtre d'expédition du Camp (#expBox) : choix du lieu, puis du Pokémon.
 // Clics (data-exp-*) et attribut hidden : moteur (049).
 export default function ExpBox() {
-  return <Boite nom="exp" className="result exp-box" id="expBox" Carte={Carte} />;
+  return <Box nom="exp" className="result exp-box" id="expBox" Carte={MapScreen} />;
 }
 
-function Carte({ dest, dispo }) {
+function MapScreen({ dest, dispo: available }) {
   return (
     <Dialogue className="sv-card exp-card" titre="expT" fermer={{ 'data-exp-x': '' }}>
       <p className="kick">Expédition</p>
@@ -33,8 +33,8 @@ function Carte({ dest, dispo }) {
         <>
           <p className="d">Qui part ? Les Pokémon dont un type convient au lieu rapportent le double. Les membres de l’équipe ne peuvent pas partir.</p>
           <div className="exp-list">
-            {dispo.length ? (
-              dispo.map(id => {
+            {available.length ? (
+              available.map(id => {
                 const bon = BY[id].t.some(t => DESTINATIONS[dest].types.includes(t));
                 return (
                   <button key={id} type="button" className="exp-d" data-exp-p={id}>

@@ -1,4 +1,4 @@
-import { canal } from '../../lib/store.js';
+import { channel } from '../../lib/store.js';
 
 // Fenêtres et couches d'effet que le moteur créait sur <body> (#tdrBox, #ctBox, #scene417,
 // #pk-badge…). Chaque fenêtre a un état : null (vide) ou les données de son dernier rendu,
@@ -8,19 +8,19 @@ import { canal } from '../../lib/store.js';
 // Rendu synchrone (flushSync) : juste après l'appel, le moteur relit le DOM
 // (focus, querySelector, hidden).
 let state = {};
-const { emit, use } = canal();
+const { emit, use } = channel();
 
 // Redessine la fenêtre `nom` avec ces données.
-export function paintOverlay(nom, data = {}) {
-  state = { ...state, [nom]: { ...data, v: ((state[nom] && state[nom].v) || 0) + 1 } };
+export function paintOverlay(displayName, data = {}) {
+  state = { ...state, [displayName]: { ...data, v: ((state[displayName] && state[displayName].v) || 0) + 1 } };
   emit();
 }
 
 // Vide la fenêtre `nom` (ancien innerHTML = '').
-export function clearOverlay(nom) {
-  if (!state[nom]) return;
-  state = { ...state, [nom]: null };
+export function clearOverlay(displayName) {
+  if (!state[displayName]) return;
+  state = { ...state, [displayName]: null };
   emit();
 }
 
-export const useOverlay = nom => use(() => state[nom] || null);
+export const useOverlay = displayName => use(() => state[displayName] || null);

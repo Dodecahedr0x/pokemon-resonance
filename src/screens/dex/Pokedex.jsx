@@ -1,5 +1,5 @@
 import { useEngineReady } from '../../engineReady.js';
-import { DEXS, dexBuilt } from '../../engine/038-v4-06-pokedex.js';
+import { DEXS, dexBuilt } from '../../engine/038-pokedex.js';
 import { useDexVersion } from './dexStore.js';
 import DexCard from './DexCard.jsx';
 import { DexCount, DexList } from './DexList.jsx';

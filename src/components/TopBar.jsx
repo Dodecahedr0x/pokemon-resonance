@@ -1,9 +1,9 @@
 import { useShell } from './shellStore.js';
-import { PROFILE, isCamp } from '../engine/011-05-etat-de-partie.js';
-import { gp, tc } from '../engine/014-08-outils.js';
-import { fmt, tLevel } from '../engine/032-v4-00-socle.js';
-import { titreAffiche } from '../engine/048-v4-9-01-rejouabilite.js';
-import { AVT450 } from '../engine/080-v4-50-avatar-de-dresseur-rencontres-rares-heure.js';
+import { PROFILE, isCamp } from '../engine/011-game-state.js';
+import { gp, tc } from '../engine/014-utils.js';
+import { fmt, tLevel } from '../engine/032-v4-foundation.js';
+import { displayedTitle } from '../engine/048-replayability.js';
+import { AVT450 } from '../engine/080-trainer-avatar-rare-encounters.js';
 
 // Titre de la page affichée (show()).
 export function TbSec() {
@@ -42,7 +42,7 @@ export function TopTrainer() {
   const on = wallet > 0; // avant le premier renderWallet : gabarit vide, comme l'ancien moteur
   return (
     <div className="v4-tb">
-      <a className="v4-trainer" data-t="params" href="#params" aria-label="Profil du dresseur">{on ? <Avatar /> : <span className="v4-av" id="v4Av" />}<span className="v4-tr-t"><b id="v4Name">{on ? PROFILE.name || 'Dresseur' : null}</b><em id="v4Lvl">{on ? `${titreAffiche() || (isCamp() ? 'Campagne' : 'Mode Libre')} · Nv. ${tLevel()}` : null}</em></span></a>
+      <a className="v4-trainer" data-t="params" href="#params" aria-label="Profil du dresseur">{on ? <Avatar /> : <span className="v4-av" id="v4Av" />}<span className="v4-tr-t"><b id="v4Name">{on ? PROFILE.name || 'Dresseur' : null}</b><em id="v4Lvl">{on ? `${displayedTitle() || (isCamp() ? 'Campagne' : 'Mode Libre')} · Nv. ${tLevel()}` : null}</em></span></a>
       <a className="v4-wal" data-t="sac" href="#sac" aria-label="Pokédollars"><span className="v4-coin" aria-hidden="true">₽</span><b id="v4Money">{on ? fmt(PROFILE.money || 0) : '0'}</b></a>
       <a className="v4-wal gem" data-t="sac" href="#sac" aria-label="Éclats de Résonance"><span className="v4-gemi" aria-hidden="true"><svg><use href="#i-gem" /></svg></span><b id="v4Gems">{on ? fmt(PROFILE.gems || 0) : '0'}</b></a>
       <a className="v4-gear" data-t="params" href="#params" aria-label="Paramètres"><svg><use href="#i-gear" /></svg></a>

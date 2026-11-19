@@ -1,23 +1,23 @@
 import { Html } from '../../../lib/html.jsx';
-import { GYMS } from '../../../engine/004-01-donnees.js';
-import { MV } from '../../../engine/005-02-capacites.js';
-import { SCEN, WXN, WXT } from '../../../engine/009-03-pokemon.js';
-import { SYN } from '../../../engine/012-06-recrues-roles-synergies.js';
-import { ARENAS, arenaNext } from '../../../engine/013-07-arenes.js';
-import { medal, tc } from '../../../engine/014-08-outils.js';
-import { badgeSvg } from '../../../engine/019-12-ligue.js';
-import { byUid } from '../../../engine/021-14-moteur-combat.js';
-import { B, ui } from '../../../engine/024-17-interface-combat.js';
-import { tourAdverse428 } from '../../../engine/063-v4-28-01-captures-combat-accueil.js';
-import { acteurCourant } from '../../../engine/044-v4-5-01-moteur-tactique.js';
-import { chipHeure } from '../../../engine/046-v4-7-01-plateau-vivant.js';
-import { chipVent } from '../../../engine/047-v4-8-01-tactique.js';
-import { chipMut } from '../../../engine/048-v4-9-01-rejouabilite.js';
-import { chipAccord } from '../../../engine/049-v4-10-01-identite.js';
-import { chips412 } from '../../../engine/051-v4-12-01-ct-epiques.js';
-import { PREF } from '../../../engine/026-20-campagne-tutoriel-son.js';
-import { DOCTRINES430 } from '../../../engine/065-v4-30-01-camp-et-tactique.js';
-import { RELIQUES431 } from '../../../engine/066-v4-31-01-defis-tactiques.js';
+import { GYMS } from '../../../engine/004-data.js';
+import { MV } from '../../../engine/005-moves.js';
+import { SCEN, WXN, WXT } from '../../../engine/009-pokemon.js';
+import { SYN } from '../../../engine/012-recruits-roles-synergies.js';
+import { ARENAS, arenaNext } from '../../../engine/013-gyms.js';
+import { medal, tc } from '../../../engine/014-utils.js';
+import { badgeSvg } from '../../../engine/019-league.js';
+import { byUid } from '../../../engine/021-combat-engine.js';
+import { B, ui } from '../../../engine/024-combat-ui.js';
+import { enemyTurn428 } from '../../../engine/063-combat-catches-home.js';
+import { currentActor } from '../../../engine/044-tactical-engine.js';
+import { chipTime } from '../../../engine/046-living-board.js';
+import { chipWind } from '../../../engine/047-tactics.js';
+import { chipMut } from '../../../engine/048-replayability.js';
+import { chipChord } from '../../../engine/049-identity.js';
+import { chips412 } from '../../../engine/051-epic-tms.js';
+import { PREF } from '../../../engine/026-campaign-tutorial-sound.js';
+import { DOCTRINES430 } from '../../../engine/065-camp-tactics.js';
+import { RELIQUES431 } from '../../../engine/066-tactical-challenges.js';
 import { useBattleVersion } from './battleStore.js';
 
 // Bandeau du haut : nom du combat, manche, pastilles (météo, heure, vent…), Voix, ×2, Abandonner.
@@ -44,7 +44,7 @@ export function BtTop() {
         )}
       </span>
       <Phase />
-      <span id="bWx">{on && <Pastilles />}</span>
+      <span id="bWx">{on && <Chips />}</span>
       <span className="voix" id="bVoix">
         {on && (
           <>
@@ -55,7 +55,7 @@ export function BtTop() {
           </>
         )}
       </span>
-      <Rapide />
+      <Quick />
       <button className="b b-sm b-ghost" id="bQuit" type="button">
         Abandonner
       </button>
@@ -65,18 +65,18 @@ export function BtTop() {
 
 // Pastille de phase (vue compacte) : Placement, À vous, Tour adverse, Éveil. Elle suit la barre du bas
 // (version « foot », réécrite à chaque changement de tour) ; son data-ph teinte la scène (combat-compact.css).
-export function phaseDe(B0) {
+export function phaseOf(B0) {
   if (!B0 || B0.over) return null;
   if (B0.dep430) return 'deploy';
   if (ui.cine) return 'evo';
-  if (ui.busy) return tourAdverse428() || B0.phase === 'enemy' ? 'enemy' : 'busy';
+  if (ui.busy) return enemyTurn428() || B0.phase === 'enemy' ? 'enemy' : 'busy';
   return 'own';
 }
 const PHASE_T = { deploy: 'Placement', own: 'À vous', enemy: 'Tour adverse', evo: 'Éveil', busy: 'Résolution' };
 function Phase() {
   useBattleVersion('foot');
   useBattleVersion('top');
-  const ph = phaseDe(B);
+  const ph = phaseOf(B);
   return (
     <span className="bt-ph" data-ph={ph || 'none'} hidden={!ph}>
       <i aria-hidden="true" />
@@ -86,7 +86,7 @@ function Phase() {
 }
 
 // Bouton « ×2 » : son état suit le réglage (rapide428).
-function Rapide() {
+function Quick() {
   const v = useBattleVersion('fast');
   return (
     <button
@@ -103,7 +103,7 @@ function Rapide() {
 
 // Pastilles : météo, heure, vent, mutateur, accord, CT (fonctions du moteur), puis doctrine (v4.30),
 // reliques et brouillard (v4.31).
-function Pastilles() {
+function Chips() {
   const doc = B.doc430 && DOCTRINES430[B.doc430];
   return (
     <>
@@ -113,7 +113,7 @@ function Pastilles() {
           {WXN[B.wx.k]} · {B.wx.n}
         </span>
       )}
-      <Html html={chipHeure(B) + chipVent(B) + chipMut(B) + chipAccord(B) + chips412(B)} />
+      <Html html={chipTime(B) + chipWind(B) + chipMut(B) + chipChord(B) + chips412(B)} />
       {doc && (
         <span className="chip chip-doc430" title={`${doc.d} ${doc.c}`}>
           <svg>
@@ -158,8 +158,8 @@ export function Synergies() {
 
 // Règle de plateau : celle de l'arène, ou la même règle reprise par une légende ou un étage de la Tour.
 // Masquée, elle garde son dernier contenu, comme l'ancien DOM.
-let derniereRegle = null;
-export function Regle() {
+let lastRule = null;
+export function Rule() {
   const v = useBattleVersion('top');
   let cache = true;
   if (v && B) {
@@ -168,7 +168,7 @@ export function Regle() {
       gi = D.gym != null ? D.gym : ARENAS.findIndex(a => a.rule === D.rule);
     cache = !D.rule || gi < 0;
     if (!cache)
-      derniereRegle = (
+      lastRule = (
         <>
           <span className="ba-b">
             <Html html={badgeSvg(gi, GYMS[gi].t, 'ba' + gi)} />
@@ -188,30 +188,30 @@ export function Regle() {
   }
   return (
     <div className="bt-arena" id="bArena" hidden={cache}>
-      {v ? derniereRegle : null}
+      {v ? lastRule : null}
     </div>
   );
 }
 
 // Frise de l'ordre par Vitesse (v4.5) : qui joue, dans quel ordre, cette manche.
-let derniereFrise = null;
-export function Frise() {
+let lastFrieze = null;
+export function Timeline() {
   const v = useBattleVersion('top');
   const vis = !!(v && B && B.ordre === 'vitesse' && B.file && !B.over);
   if (vis) {
-    const cur = acteurCourant(B);
-    derniereFrise = (
+    const cur = currentActor(B);
+    lastFrieze = (
       <>
         <span className="bo-k">Ordre · manche {B.round}</span>
         {B.file.map((id, i) => {
           const u = byUid(B, id);
           if (!u) return null;
-          const fait = i < B.ifile || u.ko,
+          const doneFlag = i < B.ifile || u.ko,
             prio = u.side === 'e' && u.intent && MV[u.intent.mv].prio;
           return (
             <span
               key={i}
-              className={`bo ${u.side === 'a' ? 'al' : 'en'}${u === cur ? ' now' : ''}${fait ? ' fait' : ''}${u.ko ? ' ko' : ''}`}
+              className={`bo ${u.side === 'a' ? 'al' : 'en'}${u === cur ? ' now' : ''}${doneFlag ? ' fait' : ''}${u.ko ? ' ko' : ''}`}
               title={'Vitesse ' + String(B.vfile[i]).replace('.', ',')}
             >
               <Html html={medal(u.t, 'sm')} />
@@ -225,7 +225,7 @@ export function Frise() {
   }
   return (
     <div className="b-ordre" id="bOrdre" hidden={!vis} aria-label="Ordre de jeu de la manche">
-      {v ? derniereFrise : null}
+      {v ? lastFrieze : null}
     </div>
   );
 }

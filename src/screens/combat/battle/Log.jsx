@@ -1,5 +1,5 @@
 import { Html } from '../../../lib/html.jsx';
-import { LOG } from '../../../engine/024-17-interface-combat.js';
+import { LOG } from '../../../engine/024-combat-ui.js';
 import { useBattleVersion } from './battleStore.js';
 
 // Journal du combat, replié : la dernière ligne dans le résumé, la liste à la demande.

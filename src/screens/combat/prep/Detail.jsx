@@ -1,13 +1,13 @@
 import { Html } from '../../../lib/html.jsx';
-import { GYMS } from '../../../engine/004-01-donnees.js';
-import { BY, SCEN } from '../../../engine/009-03-pokemon.js';
-import { PROFILE } from '../../../engine/011-05-etat-de-partie.js';
-import { ARENAS } from '../../../engine/013-07-arenes.js';
-import { medal, tc } from '../../../engine/014-08-outils.js';
-import { scenLock } from '../../../engine/022-15-systemes-objets-liens-ia.js';
-import { CHAP, leaderOf } from '../../../engine/030-24-prestige-mise-en-scene.js';
-import { emblem, goalChips, groupOf, wonOf } from '../../../engine/031-25-v3-parcours-accueil.js';
-import { styleOf } from '../../../engine/043-v4-4-01-aventure-plus.js';
+import { GYMS } from '../../../engine/004-data.js';
+import { BY, SCEN } from '../../../engine/009-pokemon.js';
+import { PROFILE } from '../../../engine/011-game-state.js';
+import { ARENAS } from '../../../engine/013-gyms.js';
+import { medal, tc } from '../../../engine/014-utils.js';
+import { scenLock } from '../../../engine/022-items-bonds-ai.js';
+import { CHAP, leaderOf } from '../../../engine/030-prestige-staging.js';
+import { emblem, goalChips, groupOf, wonOf } from '../../../engine/031-home-journey.js';
+import { styleOf } from '../../../engine/043-adventure-plus.js';
 
 // L'ancien gabarit séparait ses blocs par « \n  » : on garde ces nœuds texte,
 // fusionnés quand un bloc conditionnel est vide (comme l'ancien innerHTML).

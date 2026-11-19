@@ -1,9 +1,9 @@
 import { memo } from 'react';
 import { useBoard, useHost } from './boardStore.js';
-import Outils444 from './Outils444.jsx';
-import { Cases, Decor, Eau, Lumiere, Peinture, Reperes, Socles, Terrain, Textures } from './Terrain.jsx';
-import { PE, lref } from './partage.js';
-import { CouchePk, Intentions, Loupe, Marques, Noms, Obstacles, Surbrillances } from './Calques.jsx';
+import Tools444 from './Tools444.jsx';
+import { Cells, Decor, Water, Light, Painting, Landmarks, Pedestals, Terrain, Textures } from './Terrain.jsx';
+import { PE, lref } from './shared.js';
+import { PkLayer, Intentions, Magnifier, Markers, Names, Obstacles, Highlights } from './Layers.jsx';
 import Defs from './Defs.jsx';
 import EvoFx from './EvoFx.jsx';
 import { Units } from './Units.jsx';
@@ -13,40 +13,40 @@ import { Units } from './Units.jsx';
 // Les jetons des Pokémon sont rendus par Units.jsx ; les calques vides (effets, nombres
 // flottants) reçoivent les effets ponctuels du moteur, que React ne redessine jamais.
 
-function Calques() {
+function Layers() {
   return (
     <>
       <Defs />
-      <Peinture />
-      <Socles />
-      <Cases />
+      <Painting />
+      <Pedestals />
+      <Cells />
       <Textures />
       <Terrain />
       <Decor />
-      <Eau />
-      <Lumiere />
-      <Reperes />
-      <Marques />
+      <Water />
+      <Light />
+      <Landmarks />
+      <Markers />
       <Obstacles />
-      <Surbrillances />
+      <Highlights />
       <Intentions />
       <g style={PE} ref={lref('fx')} />
       <Units />
       <Obstacles front />
-      <Noms />
+      <Names />
       <g style={PE} ref={lref('fl')} />
-      <Loupe />
-      <CouchePk />
+      <Magnifier />
+      <PkLayer />
     </>
   );
 }
 
 // memo : un rendu du conteneur (classes, enfants) ne redessine pas le plateau
-const Plateau = memo(function Plateau() {
+const GameBoard = memo(function GameBoard() {
   const S = useBoard('svg');
   return (
     <svg id="bSvg" viewBox={'0 0 ' + S.vb.join(' ')} role="img" aria-label="Plateau de combat" className={S.bio ? 'bio-' + S.bio : undefined}>
-      {S.n > 0 && <Calques key={S.n} />}
+      {S.n > 0 && <Layers key={S.n} />}
     </svg>
   );
 });
@@ -59,7 +59,7 @@ function Board() {
   const H = useHost();
   return (
     <div className={H.cls.join(' ')} id="bBoard" data-ph={H.ph} style={{ '--ac': H.ac, '--bg477': H.bg477 }}>
-      <Plateau />
+      <GameBoard />
       <Evo />
       <div className="b-ciel" aria-hidden="true" />
       {H.cs477 && (
@@ -75,8 +75,8 @@ function Board() {
           ))}
         </div>
       )}
-      {H.ciel && <Ciel c={H.ciel} />}
-      {H.bt444 && !H.bt444.foot && <Outils444 b={H.bt444} />}
+      {H.ciel && <Sky c={H.ciel} />}
+      {H.bt444 && !H.bt444.foot && <Tools444 b={H.bt444} />}
       {H.wx448 && (
         <div id="wx448" aria-hidden="true" data-k={H.wx448} className={'wx448 wx448-' + H.wx448}>
           <i />
@@ -92,7 +92,7 @@ function Board() {
       )}
       {/* toile des effets d'attaque : dessinée et placée par le moteur (028, fxPrep) */}
       {H.fxc && <canvas className="fxc" aria-hidden="true" />}
-      {H.cielBan && <CielBan b={H.cielBan} />}
+      {H.cielBan && <SkyBanner b={H.cielBan} />}
       {H.tbn && (
         <div key={H.tbn.n} className={'tbn' + (H.tbn.en ? ' en' : '')} style={H.tbn.fast ? { animationDuration: '.8s' } : undefined}>
           <b>{H.tbn.txt}</b>
@@ -105,7 +105,7 @@ function Board() {
 }
 
 // Ciel du combat (v4.30) : heure, météo, vent.
-function Ciel({ c }) {
+function Sky({ c }) {
   return (
     <div id="ciel430" className="ciel430" aria-live="polite">
       <span className="ci430" style={{ '--c': c.co }} title={c.ti}>
@@ -133,7 +133,7 @@ function Ciel({ c }) {
 }
 
 // Annonce du ciel (v4.30) : l'heure ou la météo change.
-function CielBan({ b }) {
+function SkyBanner({ b }) {
   return (
     <div id="cielBan430" className={'cielban430' + (b.on ? ' on' : '')}>
       <span className="cb430-ic" style={{ '--c': b.ic[1] }}>

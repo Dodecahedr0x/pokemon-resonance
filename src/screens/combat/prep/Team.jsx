@@ -1,17 +1,17 @@
 import { Fragment } from 'react';
 import { Html } from '../../../lib/html.jsx';
-import { BY, SCEN } from '../../../engine/009-03-pokemon.js';
-import { BUDGET } from '../../../engine/010-04-evolution-en-combat.js';
-import { DIFFS, PROFILE } from '../../../engine/011-05-etat-de-partie.js';
-import { RC, synOf } from '../../../engine/012-06-recrues-roles-synergies.js';
-import { medal, tc } from '../../../engine/014-08-outils.js';
-import { cost, squad, vBonus } from '../../../engine/020-13-equipe-cartes.js';
-import { voixDepart } from '../../../engine/021-14-moteur-combat.js';
-import { scenLock } from '../../../engine/022-15-systemes-objets-liens-ia.js';
-import { scSel } from '../../../engine/024-17-interface-combat.js';
-import { teamBtns } from '../../../engine/027-21-arene-a-lecran.js';
-import { k2n } from '../../../engine/031-25-v3-parcours-accueil.js';
-import { DOCTRINES430 } from '../../../engine/065-v4-30-01-camp-et-tactique.js';
+import { BY, SCEN } from '../../../engine/009-pokemon.js';
+import { BUDGET } from '../../../engine/010-in-battle-evolution.js';
+import { DIFFS, PROFILE } from '../../../engine/011-game-state.js';
+import { RC, synOf } from '../../../engine/012-recruits-roles-synergies.js';
+import { medal, tc } from '../../../engine/014-utils.js';
+import { cost, squad, vBonus } from '../../../engine/020-team-cards.js';
+import { startVoice } from '../../../engine/021-combat-engine.js';
+import { scenLock } from '../../../engine/022-items-bonds-ai.js';
+import { scSel } from '../../../engine/024-combat-ui.js';
+import { teamBtns } from '../../../engine/027-gym-on-screen.js';
+import { k2n } from '../../../engine/031-home-journey.js';
+import { DOCTRINES430 } from '../../../engine/065-camp-tactics.js';
 
 // Comme avec l'ancien innerHTML, un bloc masqué garde son dernier contenu.
 let champWhy = null, // raisons du Champion affichées en dernier
@@ -105,7 +105,7 @@ function Doctrine() {
 }
 
 // Équipes enregistrées (v4.32) : #eqPrep432, sous l'en-tête.
-function Equipes() {
+function Squads() {
   const T = PROFILE.teams432 || [];
   return (
     <div className="eqp432" id="eqPrep432" hidden={!T.length}>
@@ -138,7 +138,7 @@ export default function Team({ v }) {
           Modifier
         </button>
       </div>
-      {on && <Equipes key={'e' + v} />}
+      {on && <Squads key={'e' + v} />}
       <div className="pt-list" id="ptList">
         {on && <Places key={v} />}
       </div>
@@ -165,7 +165,7 @@ export default function Team({ v }) {
               <b>
                 <Html html={k2n(scSel)} />
               </b>
-              <span>{squad.length ? `${voixDepart(vBonus())} Voix · ${DIFFS[PROFILE.diff]}` : 'Équipe vide'}</span>
+              <span>{squad.length ? `${startVoice(vBonus())} Voix · ${DIFFS[PROFILE.diff]}` : 'Équipe vide'}</span>
             </Fragment>
           )}
         </span>

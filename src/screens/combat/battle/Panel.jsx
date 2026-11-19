@@ -1,24 +1,24 @@
 import { Html } from '../../../lib/html.jsx';
-import { puissance } from '../../../lib/puissance.js';
-import { RX } from '../../../engine/004-01-donnees.js';
-import { MV, SHAPE, TAL } from '../../../engine/005-02-capacites.js';
-import { BY, SCEN } from '../../../engine/009-03-pokemon.js';
-import { ARR } from '../../../engine/010-04-evolution-en-combat.js';
-import { ROLEFX, rIco } from '../../../engine/012-06-recrues-roles-synergies.js';
-import { veiled } from '../../../engine/013-07-arenes.js';
-import { markOf, medal, rxCat, tb, tc } from '../../../engine/014-08-outils.js';
-import { EMAX, byUid, canEveil, cibleImposee, dmgOf, eveilInfo, evoOpts, foeEvo, hasNx, mvType, targets, uAt } from '../../../engine/021-14-moteur-combat.js';
-import { roleOf } from '../../../engine/023-16-roles-synergies-obstacles.js';
-import { B, enPips, segHp, ui } from '../../../engine/024-17-interface-combat.js';
-import { PREF, catchBlock, duoBlock, tileCard, unitExtras } from '../../../engine/026-20-campagne-tutoriel-son.js';
-import { HEALS, ITM, SHOP, bagN } from '../../../engine/032-v4-00-socle.js';
-import { COMBAT414, SAC_MAX, aXP, bloque414, foeReso414, mrg414, objOk414, rangOf, rgLine414, rgTag, xpBlock414 } from '../../../engine/053-v4-14-01-resonance.js';
-import { resoBlock417 } from '../../../engine/057-v4-17-01-compagnons-et-resonance.js';
-import { etatsCombat420, vigilBtn420 } from '../../../engine/060-v4-20-01-combat-intense.js';
-import { flow478 } from '../../../engine/112-v4-77-graphismes-peints-decors-et-textures-du-do.js';
-import { tourAdverse428 } from '../../../engine/063-v4-28-01-captures-combat-accueil.js';
+import { strength } from '../../../lib/power.js';
+import { RX } from '../../../engine/004-data.js';
+import { MV, SHAPE, TAL } from '../../../engine/005-moves.js';
+import { BY, SCEN } from '../../../engine/009-pokemon.js';
+import { ARR } from '../../../engine/010-in-battle-evolution.js';
+import { ROLEFX, rIco } from '../../../engine/012-recruits-roles-synergies.js';
+import { veiled } from '../../../engine/013-gyms.js';
+import { markOf, medal, rxCat, tb, tc } from '../../../engine/014-utils.js';
+import { EMAX, byUid, canAwaken, forcedTarget, dmgOf, eveilInfo, evoOpts, foeEvo, hasNx, mvType, targets, uAt } from '../../../engine/021-combat-engine.js';
+import { roleOf } from '../../../engine/023-roles-synergies-obstacles.js';
+import { B, enPips, segHp, ui } from '../../../engine/024-combat-ui.js';
+import { PREF, catchBlock, duoBlock, tileCard, unitExtras } from '../../../engine/026-campaign-tutorial-sound.js';
+import { HEALS, ITM, SHOP, bagN } from '../../../engine/032-v4-foundation.js';
+import { COMBAT414, SAC_MAX, hasXp, blocked414, foeReso414, mrg414, objOk414, rankOfValue, rankLine414, rankTag, xpBlock414 } from '../../../engine/053-resonance.js';
+import { resoBlock417 } from '../../../engine/057-companions-resonance.js';
+import { battleStates420, vigilBtn420 } from '../../../engine/060-intense-combat.js';
+import { flow478 } from '../../../engine/112-painted-graphics.js';
+import { enemyTurn428 } from '../../../engine/063-combat-catches-home.js';
 import { useBattleVersion } from './battleStore.js';
-import { ETAPE, Hi, sansAstuce } from './frag.jsx';
+import { ETAPE, Hi, withoutTip } from './frag.jsx';
 
 const NL = '\n  ';
 
@@ -31,15 +31,15 @@ export default function Panel() {
   const v = useBattleVersion('panel');
   return (
     <div className="bp" id="bPanel" aria-live="polite">
-      {v && B ? <Contenu /> : null}
+      {v && B ? <Content /> : null}
     </div>
   );
 }
 
-function Contenu() {
+function Content() {
   if (B.over) return null;
   if (B.dep430) return <Placement />;
-  if (ui.busy && !ui.cine && (B.phase === 'enemy' || tourAdverse428())) return <TourAdverse />;
+  if (ui.busy && !ui.cine && (B.phase === 'enemy' || enemyTurn428())) return <OpponentTurn />;
   if (ui.busy)
     return (
       <div className="bp-wait">
@@ -48,7 +48,7 @@ function Contenu() {
       </div>
     );
   const e = ui.selE && byUid(B, ui.selE);
-  if (e && !e.ko) return <FicheAdverse e={e} />;
+  if (e && !e.ko) return <OpponentSheet e={e} />;
   const u = ui.sel && byUid(B, ui.sel);
   if (!u || u.ko)
     return (
@@ -57,10 +57,10 @@ function Contenu() {
         <p className="bp-hint">Touchez un de vos Pokémon pour le commander, ou un adversaire pour voir sa portée.</p>
       </>
     );
-  return <FicheAllie u={u} />;
+  return <AllySheet u={u} />;
 }
 
-const caseDe = u => 'ABCDEFGH'[u.pos[0]] + (u.pos[1] + 1);
+const tileOf = u => 'ABCDEFGH'[u.pos[0]] + (u.pos[1] + 1);
 
 /* ---------- placement avant le combat (v4.30) : qui est où, qui est choisi ---------- */
 // Les clics du panneau sont bloqués par le moteur pendant le déploiement : la liste se lit, on joue sur le plateau.
@@ -86,7 +86,7 @@ function Placement() {
           <li key={u.uid} className={sel === u ? 'on' : ''}>
             <Html html={medal(u.t, 'sm')} />
             <b>{u.n}</b>
-            <span>{caseDe(u)}</span>
+            <span>{tileOf(u)}</span>
           </li>
         ))}
       </ul>
@@ -96,34 +96,34 @@ function Placement() {
 }
 
 /* ---------- tour adverse : qui a agi, qui agit, qui suit ---------- */
-function TourAdverse() {
+function OpponentTurn() {
   useBattleVersion('top');
   useBattleVersion('foot');
   const file = B.ordre === 'vitesse' && B.file ? B.file.map(id => byUid(B, id)) : B.units;
   const foes = file.filter(u => u && u.side === 'e' && !u.ko && !u.caught),
     cur = ui.act && byUid(B, ui.act),
-    fait = foes.filter(u => u.done && u !== cur).length,
-    voile = veiled(B);
+    doneFlag = foes.filter(u => u.done && u !== cur).length,
+    veil = veiled(B);
   return (
     <div className="ta-p">
       <div className="ta-h">
         <i aria-hidden="true" />
         <b>Tour adverse</b>
         <span>
-          {Math.min(fait + (cur ? 1 : 0), foes.length)} / {foes.length}
+          {Math.min(doneFlag + (cur ? 1 : 0), foes.length)} / {foes.length}
         </span>
       </div>
       <ol className="ta-l">
         {foes.map(u => {
           const st = u === cur ? 'now' : u.done ? 'done' : '';
-          const m = u.intent && !voile ? MV[u.intent.mv] : null,
+          const m = u.intent && !veil ? MV[u.intent.mv] : null,
             v = m && uAt(B, u.intent.k);
           return (
             <li key={u.uid} className={st}>
               <Html html={medal(u.t, 'sm')} />
               <span className="ta-t">
                 <b>{u.n}</b>
-                {m ? ` · ${m.n} → ${v ? v.n : 'case vide'}` : B.jit ? ' · choisit sa cible' : voile && u.intent ? ' · intention voilée' : ''}
+                {m ? ` · ${m.n} → ${v ? v.n : 'case vide'}` : B.jit ? ' · choisit sa cible' : veil && u.intent ? ' · intention voilée' : ''}
               </span>
               <em>{st === 'now' ? 'en cours' : st === 'done' ? 'a agi' : ''}</em>
             </li>
@@ -156,15 +156,15 @@ function Role() {
   );
 }
 
-function Entete({ u, sous }) {
+function Header({ u, sous: under }) {
   return (
     <div className="bp-h">
       <Html html={medal(u.t)} />
       <div className="bp-id">
         <b>
-          {u.n} <Html html={rgTag(rangOf(u))} />
+          {u.n} <Html html={rankTag(rankOfValue(u))} />
         </b>
-        <span>{sous}</span>
+        <span>{under}</span>
       </div>
       <div className="bp-hp">
         <span>
@@ -176,12 +176,12 @@ function Entete({ u, sous }) {
   );
 }
 
-const puiss = m => puissance(m, 'Puiss.');
+const powerLabel = m => strength(m, 'Puiss.');
 
 /* ---------- adversaire ---------- */
 function Intention({ e }) {
   if (B.jit) {
-    const F = e.force && cibleImposee(B, e);
+    const F = e.force && forcedTarget(B, e);
     return e.done ? (
       <p className="bp-hint">Il a déjà joué cette manche.</p>
     ) : e.badge || e.perdu ? (
@@ -221,7 +221,7 @@ function Intention({ e }) {
   return <p className="bp-hint">Aucune attaque annoncée.</p>;
 }
 
-function FicheAdverse({ e }) {
+function OpponentSheet({ e }) {
   const tl = TAL[e.tal],
     nx = hasNx(e) ? eveilInfo(B, e) : null,
     fe = foeEvo(B, e);
@@ -229,7 +229,7 @@ function FicheAdverse({ e }) {
     RF = ROLEFX[role];
   return (
     <>
-      <Entete u={e} sous={`N.${e.lv} · ${e.t.join(' / ')}${tl ? ' · ' + tl[0] : ''}`} />
+      <Header u={e} sous={`N.${e.lv} · ${e.t.join(' / ')}${tl ? ' · ' + tl[0] : ''}`} />
       <Role />
       {NL}
       {RF ? (
@@ -274,7 +274,7 @@ function FicheAdverse({ e }) {
                 <Html html={mrg414(m, e)} />
               </b>
               <span>
-                {puiss(m)} · portée {m.r}
+                {powerLabel(m)} · portée {m.r}
               </span>
             </div>
           );
@@ -289,7 +289,7 @@ function FicheAdverse({ e }) {
 }
 
 /* ---------- aperçu exact d'une action ---------- */
-function Apercu({ v }) {
+function Preview({ v }) {
   const ew = v.diff.filter(d => d.evw);
   return (
     <div className="bp-pv">
@@ -387,10 +387,10 @@ function Apercu({ v }) {
 }
 
 /* ---------- énergie d'Éveil ---------- */
-function Eveil({ u, s }) {
+function Awakening({ u, s }) {
   if (!hasNx(u)) {
     // une ligne suffit quand le Pokémon n’évolue plus
-    if (aXP(u)) return <Hi html={s(xpBlock414(u) + resoBlock417(u))} />; // losanges (v4.14), Forme Résonante (v4.17)
+    if (hasXp(u)) return <Hi html={s(xpBlock414(u) + resoBlock417(u))} />; // losanges (v4.14), Forme Résonante (v4.17)
     const rb417 = resoBlock417(u, true);
     if (rb417) return <Hi html={s(rb417)} />;
     const m = BY[u.id];
@@ -401,7 +401,7 @@ function Eveil({ u, s }) {
     );
   }
   const o = evoOpts(B, u),
-    ce = canEveil(B, u),
+    ce = canAwaken(B, u),
     full = u.en >= EMAX;
   const why = !full
     ? `Encore ${EMAX - u.en} : fin de manche, réaction, coup encaissé, allié K.O.`
@@ -439,7 +439,7 @@ function Eveil({ u, s }) {
 }
 
 /* ---------- déroulé guidé (v4.78) : l'étape en cours et son bouton pour passer ---------- */
-function Etape({ u, st }) {
+function Step({ u, st }) {
   const n = flow478.restants(B).length,
     cur = { deplacer: 0, agir: 1, extra: 2, fini: 3 }[st];
   let txt = '',
@@ -452,10 +452,10 @@ function Etape({ u, st }) {
       </button>
     );
   } else if (st === 'agir') {
-    const cible = u.mv.some(id => targets(B, u, MV[id]).length);
-    txt = cible
-      ? `Choisissez une capacité${canEveil(B, u) ? ', ou éveillez-le' : ''}.`
-      : `Aucune cible à portée${canEveil(B, u) ? ' : éveillez-le, ou passez' : ''}.`;
+    const target = u.mv.some(id => targets(B, u, MV[id]).length);
+    txt = target
+      ? `Choisissez une capacité${canAwaken(B, u) ? ', ou éveillez-le' : ''}.`
+      : `Aucune cible à portée${canAwaken(B, u) ? ' : éveillez-le, ou passez' : ''}.`;
     bt = (
       <button type="button" className="b b-sm" data-vx="passer478">
         <b>Passer l’action</b>
@@ -465,13 +465,13 @@ function Etape({ u, st }) {
     txt = [flow478.repli(u) ? 'Touchez une case bleue pour vous replier.' : '', flow478.relance(B) ? 'Relance (2 Voix) : il rejoue tout de suite.' : '']
       .filter(Boolean)
       .join(' ');
-    const suite = flow478.restants(B).find(x => x !== u);
+    const next = flow478.restants(B).find(x => x !== u);
     bt = (
       <>
         <button type="button" className="b b-sm b-gold" data-vx="fin478">
           <b>Terminer {u.n}</b>
         </button>
-        {B.ordre !== 'vitesse' ? <span className="fl478-suite">{suite ? `Ensuite : ${suite.n}` : 'Dernier Pokémon de la manche'}</span> : null}
+        {B.ordre !== 'vitesse' ? <span className="fl478-suite">{next ? `Ensuite : ${next.n}` : 'Dernier Pokémon de la manche'}</span> : null}
       </>
     );
   } else if (u.sn) {
@@ -505,7 +505,7 @@ function Etape({ u, st }) {
 }
 
 /* ---------- Sac : objets utilisables en combat (v4.0, v4.14) ---------- */
-function Sac({ u }) {
+function Bag({ u }) {
   if ((SCEN[B.sc] || {}).tuto || B.duel433 || ui.selE || u.side !== 'a') return null;
   const own = [...HEALS, ...COMBAT414].filter(k => bagN(k));
   if (!own.length) return null;
@@ -532,20 +532,20 @@ function Sac({ u }) {
 }
 
 /* ---------- Pokémon de votre équipe ---------- */
-function FicheAllie({ u }) {
+function AllySheet({ u }) {
   const tl = TAL[u.tal];
   // déroulé guidé : l'étape remplace les astuces quand aucun mode n'est actif
   const F = flow478,
     guide = F.actif() && !ui.busy && !ui.selE && u.side === 'a' && F.aJouer(B).includes(u),
     st = guide ? F.etape(B, u) : null,
-    sans = guide && !ui.mode,
-    s = h => (sans ? sansAstuce(h) : h);
+    without = guide && !ui.mode,
+    s = h => (without ? withoutTip(h) : h);
   let hint = null;
   if (ui.mode === 'duo')
-    hint = ui.pv ? <Apercu v={ui.pv} /> : <p className="bp-hint">Technique combinée : touchez une case dorée pour voir le résultat exact.</p>;
+    hint = ui.pv ? <Preview v={ui.pv} /> : <p className="bp-hint">Technique combinée : touchez une case dorée pour voir le résultat exact.</p>;
   else if (ui.mode === 'target')
-    hint = ui.pv ? <Apercu v={ui.pv} /> : <p className="bp-hint">Touchez une case dorée : l’aperçu affiche le résultat exact.</p>;
-  else if (sans) hint = null;
+    hint = ui.pv ? <Preview v={ui.pv} /> : <p className="bp-hint">Touchez une case dorée : l’aperçu affiche le résultat exact.</p>;
+  else if (without) hint = null;
   else if (ui.mode === 'dodge') hint = <p className="bp-hint">Esquive : touchez une case verte voisine.</p>;
   else if (u.sn)
     hint = (
@@ -559,8 +559,8 @@ function FicheAllie({ u }) {
   const relHi = st === 'extra' && F.relance(B);
   return (
     <>
-      <Entete u={u} sous={`${u.t.join(' / ')}${tl ? ' · ' + tl[0] : ''}${u.evo ? ` · éveillé ×${u.evo}` : ''}`} />
-      {guide ? <Etape u={u} st={st} /> : null}
+      <Header u={u} sous={`${u.t.join(' / ')}${tl ? ' · ' + tl[0] : ''}${u.evo ? ` · éveillé ×${u.evo}` : ''}`} />
+      {guide ? <Step u={u} st={st} /> : null}
       <Role />
       {NL}
       <Hi html={s(tileCard())} />
@@ -569,9 +569,9 @@ function FicheAllie({ u }) {
           <b>{tl[0]}.</b> <Html html={tl[1]} />
         </p>
       ) : null}
-      <Hi html={s(rgLine414(u) + unitExtras(u) + etatsCombat420(u))} />
+      <Hi html={s(rankLine414(u) + unitExtras(u) + battleStates420(u))} />
       {NL}
-      <Eveil u={u} s={s} />
+      <Awakening u={u} s={s} />
       {NL}
       <div className="bp-mv">
         {u.mv.map((id, i) => {
@@ -593,12 +593,12 @@ function FicheAllie({ u }) {
                 <Html html={mrg414(m, u)} />
               </b>
               <span>
-                {puiss(m)} · {SHAPE[m.sh]}
+                {powerLabel(m)} · {SHAPE[m.sh]}
                 {m.r ? ' ' + m.r : ''}
                 {m.mk ? ' · ' + markOf(m.mk).n : ''}
               </span>
               <em>
-                <Html html={n ? m.d : bloque414(B, u, m) || 'Aucune cible à portée.'} />
+                <Html html={n ? m.d : blocked414(B, u, m) || 'Aucune cible à portée.'} />
               </em>
             </button>
           );
@@ -623,7 +623,7 @@ function FicheAllie({ u }) {
         </button>
         <Hi html={s(vigilBtn420(u))} />
       </div>
-      <Sac u={u} />
+      <Bag u={u} />
     </>
   );
 }

@@ -1,6 +1,6 @@
-import { BY } from '../../../engine/009-03-pokemon.js';
-import { DIFFS, PROFILE } from '../../../engine/011-05-etat-de-partie.js';
-import { ART } from '../../../engine/032-v4-00-socle.js';
+import { BY } from '../../../engine/009-pokemon.js';
+import { DIFFS, PROFILE } from '../../../engine/011-game-state.js';
+import { ART } from '../../../engine/032-v4-foundation.js';
 
 // Camp › Panthéon (v4.32) : les équipes gravées après un Champion, un Maître ou le gardien de l'Écho.
 export default function Pantheon() {

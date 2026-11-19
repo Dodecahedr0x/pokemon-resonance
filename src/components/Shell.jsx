@@ -1,18 +1,18 @@
 import Guide from '../screens/guide/Guide.jsx';
-import Accueil from '../screens/accueil/Accueil.jsx';
-import ObjectifLateral from '../screens/accueil/ObjectifLateral.jsx';
+import Home from '../screens/home/Home.jsx';
+import SideObjective from '../screens/home/SideObjective.jsx';
 import Settings from '../screens/settings/Settings.jsx';
 import Saves from '../screens/saves/Saves.jsx';
-import Carte from '../screens/carte/Carte.jsx';
+import MapScreen from '../screens/map/MapScreen.jsx';
 import Pokedex from '../screens/dex/Pokedex.jsx';
-import Equipe from '../screens/equipe/Equipe.jsx';
-import Fiche from '../screens/equipe/Fiche.jsx';
-import { SideTeam, TbTeam } from '../screens/equipe/Dock.jsx';
-import Quetes from '../screens/quetes/Quetes.jsx';
-import Sac from '../screens/sac/Sac.jsx';
+import Team from '../screens/team/Team.jsx';
+import Sheet from '../screens/team/Sheet.jsx';
+import { SideTeam, TbTeam } from '../screens/team/Dock.jsx';
+import Quests from '../screens/quests/Quests.jsx';
+import Bag from '../screens/bag/Bag.jsx';
 import Camp from '../screens/camp/Camp.jsx';
-import Ligue from '../screens/ligue/Ligue.jsx';
-import CombatPrep from '../screens/combat/prep/CombatPrep.jsx';
+import League from '../screens/league/League.jsx';
+import BattlePrep from '../screens/combat/prep/CombatPrep.jsx';
 import Board from '../screens/combat/board/Board.jsx';
 import Battle from '../screens/combat/battle/Battle.jsx';
 import Result from '../screens/combat/battle/Result.jsx';
@@ -25,13 +25,13 @@ import Enc from '../screens/overlays/Enc.jsx';
 import Intro from '../screens/overlays/Intro.jsx';
 import Tip429 from '../screens/overlays/Tip429.jsx';
 import Dialogs from '../screens/overlays/Dialogs.jsx';
-import Temporaires from '../screens/overlays/Temporaires.jsx';
-import { PkFond } from '../screens/overlays/Effets.jsx';
-import Garde from './Garde.jsx';
+import Transients from '../screens/overlays/Transients.jsx';
+import { PkBackground } from '../screens/overlays/Effects.jsx';
+import Guard from './Guard.jsx';
 
 // Logo (barre latérale, en-tête) ; `children` : ajouts après le nom (voyants de l'en-tête).
-function Logo({ taille, children }) {
-  return <a className="logo" href="#accueil"><span className="lg-ic"><svg width={taille} height={taille}><use href="#i-logo" /></svg></span><span><small>Pokémon</small><b>Résonance</b></span>{children}</a>;
+function Logo({ taille: size, children }) {
+  return <a className="logo" href="#accueil"><span className="lg-ic"><svg width={size} height={size}><use href="#i-logo" /></svg></span><span><small>Pokémon</small><b>Résonance</b></span>{children}</a>;
 }
 
 // Coquille de l’application : navigation, conteneurs des écrans et surcouches.
@@ -39,64 +39,64 @@ function Logo({ taille, children }) {
 export default function Shell() {
   return (
     <>
-      <PkFond />
+      <PkBackground />
       <div className="ambient" aria-hidden="true" />
       <div className="app">
         <aside className="side" aria-label="Navigation principale">
           <Logo taille={30} />
-          <Garde><SideNav /></Garde>
-          <Garde><ObjectifLateral /></Garde>
-          <Garde><SideTeam /></Garde>
+          <Guard><SideNav /></Guard>
+          <Guard><SideObjective /></Guard>
+          <Guard><SideTeam /></Guard>
           <p className="side-foot">Fangame non officiel, sans affiliation.<br />Pokémon © Nintendo · Creatures · GAME FREAK.</p>
         </aside>
         <div className="main">
           <header className="topbar"><div className="topbar-in">
               <Logo taille={24}><span className="pk-leds" aria-hidden="true"><i /><i /><i /></span></Logo>
-              <Garde><TbSec /></Garde>
-              <Garde><TbSave /></Garde>
-              <Garde><TbTeam /></Garde>
-              <Garde><TopTrainer /></Garde>
+              <Guard><TbSec /></Guard>
+              <Guard><TbSave /></Guard>
+              <Guard><TbTeam /></Guard>
+              <Guard><TopTrainer /></Guard>
             </div></header>
           <main className="content"><div className="wrap">
               {/* ================= ACCUEIL ================= */}
-              <Garde><Accueil /></Garde>
+              <Guard><Home /></Guard>
               {/* ================= POKÉDEX ================= */}
-              <Garde><Equipe /></Garde>
+              <Guard><Team /></Guard>
               {/* ================= COMBAT ================= */}
               <section className="page" id="combat" aria-labelledby="h-cb">
-                <Garde><CombatPrep /></Garde>
-                <Garde><Battle>
+                <Guard><BattlePrep /></Guard>
+                <Guard><Battle>
                   <Board />
-                </Battle></Garde>
-                <Garde><Result /></Garde>
+                </Battle></Guard>
+                <Guard><Result /></Guard>
               </section>
               {/* ================= TYPES ================= */}
-              <Garde><Guide /></Garde>
-              <Garde><Carte /></Garde>
-              <Garde><Pokedex /></Garde>
-              <Garde><Quetes /></Garde>
-              <Garde><Sac /></Garde>
-              <Garde><Settings /></Garde>
-              <Garde><Camp /></Garde>
+              <Guard><Guide /></Guard>
+              <Guard><MapScreen /></Guard>
+              <Guard><Pokedex /></Guard>
+              <Guard><Quests /></Guard>
+              <Guard><Bag /></Guard>
+              <Guard><Settings /></Guard>
+              <Guard><Camp /></Guard>
               {/* ================= LIGUE ================= */}
-              <Garde><Ligue /></Garde>
+              <Guard><League /></Guard>
             </div></main>
           <footer className="foot"><div className="wrap"><span>Pokémon Résonance · fangame non officiel · v4.77</span><span>Pokémon © Nintendo · Creatures Inc. · GAME FREAK · fangame sans affiliation</span></div></footer>
         </div>
-        <Garde><BottomNav /></Garde>
+        <Guard><BottomNav /></Guard>
       </div>
-      <Garde><Fiche /></Garde>
-      <Garde><Enc /></Garde>
-      <Garde><Saves /></Garde>
-      <Garde><Starter /></Garde>
-      <Garde><Coach /></Garde>
-      <Garde><Toast /></Garde>
+      <Guard><Sheet /></Guard>
+      <Guard><Enc /></Guard>
+      <Guard><Saves /></Guard>
+      <Guard><Starter /></Guard>
+      <Guard><Coach /></Guard>
+      <Guard><Toast /></Guard>
       {/* surcouches ajoutées à la fin de <body> par le moteur, dans leur ordre d'apparition */}
-      <Garde><V4Menu /></Garde>
-      <Garde><Intro /></Garde>
-      <Garde><Tip429 /></Garde>
-      <Garde><Dialogs /></Garde>
-      <Garde><Temporaires /></Garde>
+      <Guard><V4Menu /></Guard>
+      <Guard><Intro /></Guard>
+      <Guard><Tip429 /></Guard>
+      <Guard><Dialogs /></Guard>
+      <Guard><Transients /></Guard>
     </>
   );
 }

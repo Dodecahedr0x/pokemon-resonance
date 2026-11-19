@@ -1,4 +1,4 @@
-import { canal } from '../../../lib/store.js';
+import { channel } from '../../../lib/store.js';
 
 // Interface du combat autour du plateau. Chaque partie a sa version : le moteur l'incrémente
 // là où il réécrivait l'ancien innerHTML, et la partie est reconstruite depuis B et ui.
@@ -11,7 +11,7 @@ import { canal } from '../../../lib/store.js';
 //   result : fiche de fin de combat (finish)
 //   ti444  : fiche de case (v4.44, fiche444 et place444)
 const versions = { top: 0, foot: 0, fast: 0, panel: 0, log: 0, evo: 0, result: 0, ti444: 0 };
-const c = canal();
+const c = channel();
 
 export function refreshBattle(...parts) {
   parts.forEach(k => versions[k]++);
@@ -26,15 +26,15 @@ export const evoState = { u: null };
 // Barre du bas (.bt-foot) : classes dans l'ordre où classList les posait (qa-on v4.43, f444 v4.44),
 // attaques à portée de pouce (#qa443 et .qa443-n, v4.43) : null tant que la barre n'a pas servi.
 //   qa : { hidden, nom, items: [{ t, c, col, on, disabled }] }
-export const pied = { cls: ['bt-foot'], qa: null };
+export const footPos = { cls: ['bt-foot'], qa: null };
 
 /** classList.toggle sur la barre du bas ; vrai si la classe a changé (à suivre de refreshBattle('foot')). */
-export function footCls(nom, on) {
-  const a = pied.cls.includes(nom);
+export function footCls(displayName, on) {
+  const a = footPos.cls.includes(displayName);
   if (on === a) return false;
-  pied.cls = on ? [...pied.cls, nom] : pied.cls.filter(c => c !== nom);
+  footPos.cls = on ? [...footPos.cls, displayName] : footPos.cls.filter(c => c !== displayName);
   return true;
 }
 
 // Fiche de case (#ti444, v4.44) : créée à la première ouverture, puis masquée.
-export const fiche444 = { made: false, hidden: true, k: null, haut: false, top: undefined, bottom: undefined };
+export const sheet444 = { made: false, hidden: true, k: null, haut: false, top: undefined, bottom: undefined };

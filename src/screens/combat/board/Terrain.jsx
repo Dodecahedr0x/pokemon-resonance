@@ -1,11 +1,11 @@
 import { Fragment, useMemo } from 'react';
-import { BH, BW, K, P } from '../../../engine/021-14-moteur-combat.js';
-import { B, BG, HC, HP, L, VERT, tiltS } from '../../../engine/024-17-interface-combat.js';
-import { tileTip } from '../../../engine/026-20-campagne-tutoriel-son.js';
-import { fieldSvg } from '../../../engine/027-21-arene-a-lecran.js';
+import { BH, BW, K, P } from '../../../engine/021-combat-engine.js';
+import { B, BG, HC, HP, L, VERT, tiltS } from '../../../engine/024-combat-ui.js';
+import { tileTip } from '../../../engine/026-campaign-tutorial-sound.js';
+import { fieldSvg } from '../../../engine/027-gym-on-screen.js';
 import { useBoard } from './boardStore.js';
 import { SvgHtml } from './svgHtml.jsx';
-import { PE, lref } from './partage.js';
+import { PE, lref } from './shared.js';
 
 // Sol du plateau : peinture v4.71, socles v4.77, cases, textures, terrain des stades, décor,
 // reflets de l'eau, lumière, repères A–H / 1–6.
@@ -17,7 +17,7 @@ const tRef = k => tRefs[k] || (tRefs[k] = n => n && (L.t[k] = n));
 const txRef = k => txRefs[k] || (txRefs[k] = n => n && (L.tx[k] = n));
 
 /* v4.71 : image peinte du terrain et vagues (avant les cases) */
-export function Peinture() {
+export function Painting() {
   const S = useBoard('paint');
   if (!S.pv) return null;
   const [W, H] = S.vb;
@@ -37,7 +37,7 @@ export function Peinture() {
 }
 
 /* v4.77 : dalle de terre sous chaque case */
-export function Socles() {
+export function Pedestals() {
   const S = useBoard('tilt');
   if (!S.lip) return null;
   return (
@@ -64,7 +64,7 @@ function tileClass(k) {
   return c;
 }
 
-export function Cases() {
+export function Cells() {
   useBoard('tiles');
   return (
     <g ref={lref('tiles')}>
@@ -148,7 +148,7 @@ export function Decor() {
 }
 
 /* v4.77 : reflet sur l'eau (bande de lumière découpée aux cases d'eau, éclats) */
-export function Eau() {
+export function Water() {
   const S = useBoard('eau');
   const E = S.eau;
   if (!E) return null;
@@ -197,7 +197,7 @@ export function Eau() {
 }
 
 /* v4.77 : brume de l'horizon et teinte de lune, découpées au plateau */
-export function Lumiere() {
+export function Light() {
   const S = useBoard('tilt');
   if (!S.hz) return null;
   const [W, H] = S.vb;
@@ -210,7 +210,7 @@ export function Lumiere() {
 }
 
 /* repères A–H / 1–6 ; plateau incliné : recalés au bord (v4.77) */
-export function Reperes() {
+export function Landmarks() {
   const S = useBoard('tilt');
   const base = useMemo(() => {
     const o = [];

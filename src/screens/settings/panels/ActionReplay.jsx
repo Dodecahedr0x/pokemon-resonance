@@ -1,4 +1,4 @@
-import { createur430 } from '../../../engine/065-v4-30-01-camp-et-tactique.js';
+import { createur430 } from '../../../engine/065-camp-tactics.js';
 
 const TRICHES = [
   ['argent', '+10 000 ₽'],

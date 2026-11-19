@@ -1,11 +1,11 @@
-import { CAT, EFF, EL, FAMS, MK, MX, POS, RX, WEATHER } from '../../engine/004-01-donnees.js';
-import { BY } from '../../engine/009-03-pokemon.js';
-import { markOf, medal, mini, tb, tc } from '../../engine/014-08-outils.js';
+import { CAT, EFF, EL, FAMS, MK, MX, POS, RX, WEATHER } from '../../engine/004-data.js';
+import { BY } from '../../engine/009-pokemon.js';
+import { markOf, medal, mini, tb, tc } from '../../engine/014-utils.js';
 import { Html } from '../../lib/html.jsx';
 import { selectReaction, useGuide } from './guideStore.js';
 
 // Matrice marque × élément : chaque case ouvre le détail de la réaction.
-export function Matrice() {
+export function Matrix() {
   const { rx } = useGuide();
   return (
     <div className="mx" id="mx" aria-label="Matrice des réactions">
@@ -55,7 +55,7 @@ export function DetailReaction() {
   );
 }
 
-export function TableDesTypes() {
+export function TypeTable() {
   return EFF.map(([a, b, x], i) => (
     <div key={i} className="ef"><Html html={mini(a)} /><span>{a}</span><span className="ar">→</span><Html html={mini(b)} /><span>{b}</span><b>{x}</b></div>
   ));
@@ -67,7 +67,7 @@ const CHAINE = [
   { w: 'pikachu', a: 'Éclair', p: 'Pikachu frappe l’eau : le Court-circuit parcourt tout le réseau et paralyse ce qui s’y trouve.', res: 'Court-circuit', k: 'ctl' },
 ];
 
-export function Chaine() {
+export function Chain() {
   return CHAINE.map((s, i) => {
     const m = BY[s.w];
     return (
@@ -76,7 +76,7 @@ export function Chaine() {
   });
 }
 
-export function Meteos() {
+export function Weathers() {
   return WEATHER.map(w => (
     <article key={w.n} className="wx" style={{ '--c': tc(w.t) }}><Html html={medal([w.t])} /><span className="mv">{w.mv}</span><h3 className="h3">{w.n}</h3><p><Html html={w.d} /></p><span className="dur">5 manches</span></article>
   ));
@@ -84,7 +84,7 @@ export function Meteos() {
 
 const typeCell = { display: 'inline-flex', gap: 9, alignItems: 'center' };
 
-export function Familles() {
+export function Families() {
   return FAMS.map(f => (
     <tr key={f.e}><td><span style={typeCell}><Html html={mini(f.e)} />{f.e}</span></td><td>{f.from.join(', ')}</td><td><Html html={f.m} /></td></tr>
   ));
@@ -103,7 +103,7 @@ export default function Reactions() {
       <div className="gd-intro"><h2 className="h2">Les types se répondent</h2><p className="d">La table des types classique s’applique toujours. Une marque reste deux manches sur une case ; un autre élément la consomme et déclenche une réaction. Ligne : marque posée. Colonne : élément qui arrive.</p></div>
       <div className="mx-wrap">
         <div className="panel">
-          <Matrice />
+          <Matrix />
           <div className="legend">
             <span className="lg"><i style={{background: 'var(--enemy)'}} />Dégâts</span>
             <span className="lg"><i style={{background: 'var(--ally)'}} />Contrôle</span>
@@ -116,20 +116,20 @@ export default function Reactions() {
       </div>
       <div className="sec">
         <div className="sec-h"><div><p className="kick">Table des types</p><h2 className="h2">Les repères restent intacts</h2><p className="d">Les multiplicateurs ×2, ×½ et ×0 s’appliquent avant toute réaction. Un joueur de la série retrouve ses réflexes dès le premier combat.</p></div></div>
-        <div className="eff-row" id="effRow"><TableDesTypes /></div>
+        <div className="eff-row" id="effRow"><TypeTable /></div>
       </div>
       <div className="sec">
         <div className="sec-h"><div><p className="kick">Exemple de chaîne</p><h2 className="h2">Deux Pokémon, une capture d’eau</h2><p className="d">Magnéti charge, attire l’ennemi dans la rivière, Pikachu frappe l’eau. Chaque case parcourue retire 15 % de puissance.</p></div></div>
-        <div className="chain" id="chain"><Chaine /></div>
+        <div className="chain" id="chain"><Chain /></div>
       </div>
       <div className="sec">
         <div className="sec-h"><div><p className="kick">Nouveau · Météo</p><h2 className="h2">Le ciel change les marques</h2><p className="d">Une capacité de météo dure 5 manches et modifie la durée des marques sur tout le plateau.</p></div></div>
-        <div className="wx-grid" id="wxGrid"><Meteos /></div>
+        <div className="wx-grid" id="wxGrid"><Weathers /></div>
       </div>
       <div className="sec">
         <div className="sec-h"><div><p className="kick">Les 18 types</p><h2 className="h2">Marquer ou déplacer</h2><p className="d">Six familles posent des marques. Les neuf autres types agissent sur les positions : les 18 ont un rôle sur le plateau.</p></div></div>
         <div className="two">
-          <div className="panel scroll-x"><table className="tbl" style={{minWidth: 400}}><thead><tr><th>Famille</th><th>Types</th><th>Marque</th></tr></thead><tbody id="famBody"><Familles /></tbody></table></div>
+          <div className="panel scroll-x"><table className="tbl" style={{minWidth: 400}}><thead><tr><th>Famille</th><th>Types</th><th>Marque</th></tr></thead><tbody id="famBody"><Families /></tbody></table></div>
           <div className="panel scroll-x"><table className="tbl" style={{minWidth: 400}}><thead><tr><th>Type</th><th>Effet de position</th></tr></thead><tbody id="posBody"><Positions /></tbody></table></div>
         </div>
       </div>

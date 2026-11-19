@@ -1,23 +1,23 @@
-import { BY } from '../../../engine/009-03-pokemon.js';
-import { PROFILE } from '../../../engine/011-05-etat-de-partie.js';
-import { medal } from '../../../engine/014-08-outils.js';
-import { squad } from '../../../engine/020-13-equipe-cartes.js';
-import { EVENTS431, NOEUDS431, RELIQUES431, relAlea431 } from '../../../engine/066-v4-31-01-defis-tactiques.js';
+import { BY } from '../../../engine/009-pokemon.js';
+import { PROFILE } from '../../../engine/011-game-state.js';
+import { medal } from '../../../engine/014-utils.js';
+import { squad } from '../../../engine/020-team-cards.js';
+import { EVENTS431, NOEUDS431, RELIQUES431, relRandom431 } from '../../../engine/066-tactical-challenges.js';
 import { Html } from '../../../lib/html.jsx';
 
-function Tete({ X }) {
+function Head({ X }) {
   return (
     <header className="v4-ph"><svg><use href="#i-compass" /></svg><b>Écho profond</b><span className="v4-cnt">{`record ${X.best || 0} / 8${X.wins ? ` · ${X.wins} victoire${X.wins > 1 ? 's' : ''}` : ''}`}</span></header>
   );
 }
 
 // L'événement en cours : choix d'une relique, marchand ou événement (data-echo431).
-function Evenement({ R }) {
+function Event({ R }) {
   if (R.ev === 'relique')
     return (
       <div className="ec431-ev">
         <h3>Choisissez une relique</h3>
-        {relAlea431(R, 3).map(k => <button key={k} type="button" className="b" data-echo431={`rel-${k}`}><b>{RELIQUES431[k][0]}</b><em>{RELIQUES431[k][1]}</em></button>)}
+        {relRandom431(R, 3).map(k => <button key={k} type="button" className="b" data-echo431={`rel-${k}`}><b>{RELIQUES431[k][0]}</b><em>{RELIQUES431[k][1]}</em></button>)}
       </div>
     );
   if (R.ev === 'marchand')
@@ -44,20 +44,20 @@ function Evenement({ R }) {
 }
 
 // La carte de l'expédition, du gardien (en haut) au premier étage.
-function Carte({ R }) {
+function MapScreen({ R }) {
   return (
     <div className="ec431-c">
       {R.map
         .map((L, f) => {
-          const fait = f < R.f,
-            ici = f === R.f && !R.ev;
+          const doneFlag = f < R.f,
+            hereNow = f === R.f && !R.ev;
           return (
-            <div key={f} className={`ec431-f${fait ? ' fait' : ''}${ici ? ' ici' : ''}`}>
+            <div key={f} className={`ec431-f${doneFlag ? ' fait' : ''}${hereNow ? ' ici' : ''}`}>
               <span className="ec431-fn">{f + 1}</span>
               {L.map((t, i) => {
-                const pris = fait && R.path[f] === i;
+                const takenSet = doneFlag && R.path[f] === i;
                 return (
-                  <button key={i} type="button" className={`ec431-n t-${t}${pris ? ' pris' : ''}`} data-echo431={ici ? `n${i}` : undefined} disabled={!ici} aria-label={`${NOEUDS431[t][0]}, étage ${f + 1}`}>
+                  <button key={i} type="button" className={`ec431-n t-${t}${takenSet ? ' pris' : ''}`} data-echo431={hereNow ? `n${i}` : undefined} disabled={!hereNow} aria-label={`${NOEUDS431[t][0]}, étage ${f + 1}`}>
                     <svg><use href={`#${NOEUDS431[t][1]}`} /></svg><span>{NOEUDS431[t][0]}</span>
                   </button>
                 );
@@ -77,7 +77,7 @@ export default function Echo() {
   if (!R)
     return (
       <section className="v4-panel ec431">
-        <Tete X={X} />
+        <Head X={X} />
         <p className="v4-ps-n">Une expédition de 8 étages. À chaque étage, choisissez votre chemin : combat, élite (une relique à la clé), source, marchand ou événement. <b>Les PV sont conservés d’un combat à l’autre et un Pokémon K.O. quitte l’expédition.</b> Au bout : le gardien.</p>
         <div className="ec431-t">
           {squad.slice(0, 4).filter(id => BY[id]).map(id => <span key={id} className="ec431-m"><Html html={medal(BY[id].t, 'sm')} /><b>{BY[id].n}</b></span>)}
@@ -88,7 +88,7 @@ export default function Echo() {
     );
   return (
     <section className="v4-panel ec431">
-      <Tete X={X} />
+      <Head X={X} />
       <div className="ec431-k">
         <span>Étage <b>{`${Math.min(8, R.f + 1)} / 8`}</b></span>
         <span><b>{R.ech}</b> Échos</span>
@@ -107,8 +107,8 @@ export default function Echo() {
       <div className="ec431-rl">
         {R.rel.length ? R.rel.map(k => <span key={k} className="ec431-r" title={RELIQUES431[k][1]}>{RELIQUES431[k][0]}</span>) : <em>Aucune relique.</em>}
       </div>
-      <Evenement R={R} />
-      <Carte R={R} />
+      <Event R={R} />
+      <MapScreen R={R} />
       <button type="button" className="b b-sm b-ghost" data-echo431="abandon">Abandonner l’expédition</button>
     </section>
   );

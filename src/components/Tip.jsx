@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { Html } from '../lib/html.jsx';
 import { useTip } from './tipStore.js';
-import { PROF_AV, TIPS } from '../engine/031-25-v3-parcours-accueil.js';
+import { PROF_AV, TIPS } from '../engine/031-home-journey.js';
 
 // Conseil de la Professeure (.tip), juste après l'en-tête .ph de l'écran `t` (pokedex, combat, types).
 function Tip({ t }) {

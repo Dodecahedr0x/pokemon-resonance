@@ -1,11 +1,11 @@
 import { Component } from 'react';
 import { Html } from '../../lib/html.jsx';
 import { useIntro } from './shellOverlays.js';
-import { BY } from '../../engine/009-03-pokemon.js';
-import { DIFFS, STARTERS } from '../../engine/011-05-etat-de-partie.js';
-import { medal, tc } from '../../engine/014-08-outils.js';
-import { reportError } from '../../engine/002-00-erreurs.js';
-import { INTRO, PROF_AV } from '../../engine/031-25-v3-parcours-accueil.js';
+import { BY } from '../../engine/009-pokemon.js';
+import { DIFFS, STARTERS } from '../../engine/011-game-state.js';
+import { medal, tc } from '../../engine/014-utils.js';
+import { reportError } from '../../engine/002-errors.js';
+import { INTRO, PROF_AV } from '../../engine/031-home-journey.js';
 
 // Accueil de la Professeure (#intro) : showIntro() (031) l'ouvre, renderIntro() redessine
 // l'étape (INTRO.i), closeIntro() le retire. Clics et Entrée : écouteurs du moteur sur #intro.
@@ -13,15 +13,15 @@ export default function Intro() {
   const { open, v } = useIntro();
   if (!open) return null;
   return (
-    <Garde>
-      <div id="intro" className="intro"><Carte key={v} /></div>
-    </Garde>
+    <Guard>
+      <div id="intro" className="intro"><MapScreen key={v} /></div>
+    </Guard>
   );
 }
 
 // Jamais un voile vide devant le jeu : si la carte ne peut pas se dessiner, rien n'est
 // affiché et le souci est signalé (ancien try/catch de showIntro).
-class Garde extends Component {
+class Guard extends Component {
   state = { err: false };
   static getDerivedStateFromError() {
     return { err: true };
@@ -36,7 +36,7 @@ class Garde extends Component {
 
 const Fl = () => <svg><use href="#i-arrow" /></svg>;
 
-function Corps({ i }) {
+function Body({ i }) {
   if (i === 0) return <p>Bonjour, et bienvenue dans la <b>Ligue de la Résonance</b> ! Je suis la Professeure <b>Maëlle Sorbier</b>.</p>;
   if (i === 1)
     return (
@@ -110,7 +110,7 @@ function Actions({ i }) {
   );
 }
 
-function Carte() {
+function MapScreen() {
   const i = INTRO.i;
   return (
     <div className="it-card" role="dialog" aria-modal="true" aria-label="Accueil de la Professeure">
@@ -119,7 +119,7 @@ function Carte() {
         <Html html={PROF_AV} />
         <div className="it-dots">{[0, 1, 2, 3, 4].map(k => <i key={k} className={k <= i ? 'on' : ''} />)}</div>
       </div>
-      <div className="dlgbox lg"><span className="dlg-who">Prof. Sorbier</span><Corps i={i} /></div>
+      <div className="dlgbox lg"><span className="dlg-who">Prof. Sorbier</span><Body i={i} /></div>
       <div className="it-a"><Actions i={i} /></div>
     </div>
   );

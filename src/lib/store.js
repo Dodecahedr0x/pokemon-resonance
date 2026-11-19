@@ -7,7 +7,7 @@ import { flushSync } from 'react-dom';
 // Canal d'abonnement. emit() redessine tout de suite les abonnés (flushSync), comme l'ancien
 // innerHTML : le moteur relit le DOM juste après (focus, .hidden, mesures). Si l'appel vient
 // d'un rendu React en cours, flushSync refuse : les abonnés sont alors prévenus sans attendre.
-export function canal() {
+export function channel() {
   const listeners = new Set();
   const notify = () => listeners.forEach(l => l());
   const subscribe = l => (listeners.add(l), () => listeners.delete(l));
@@ -19,7 +19,7 @@ export function canal() {
     }
   };
   // use(lire) : valeur relue à chaque emit ; le composant n'est redessiné que si elle change.
-  const use = lire => useSyncExternalStore(subscribe, lire);
+  const use = readValue => useSyncExternalStore(subscribe, readValue);
   return { emit, use, notify };
 }
 
@@ -27,7 +27,7 @@ export function canal() {
 // alors l'état du moteur. Version 0 : le moteur n'a encore rien dessiné.
 export function version() {
   let v = 0;
-  const c = canal();
+  const c = channel();
   return [
     () => {
       v++;
@@ -43,7 +43,7 @@ export function version() {
 export function makeStore(initial, { sync = true } = {}) {
   let state = initial;
   let queued = false;
-  const c = canal();
+  const c = channel();
   const get = () => state;
   const set = patch => {
     state = { ...state, ...(typeof patch === 'function' ? patch(state) : patch) };
@@ -56,6 +56,6 @@ export function makeStore(initial, { sync = true } = {}) {
     });
   };
   // use() : tout l'état ; use(lire) : une partie (le bloc ne suit que celle-ci).
-  const use = (lire = get) => c.use(() => lire(state));
+  const use = (readValue = get) => c.use(() => readValue(state));
   return { get, set, use };
 }

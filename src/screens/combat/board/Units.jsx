@@ -1,8 +1,8 @@
 import { useLayoutEffect, useRef } from 'react';
-import { DIA, L } from '../../../engine/024-17-interface-combat.js';
-import { tokArtErr, tokArtOk } from '../../../engine/041-v4-1-01-illustrations.js';
+import { DIA, L } from '../../../engine/024-combat-ui.js';
+import { tokArtErr, tokArtOk } from '../../../engine/041-illustrations.js';
 import { useBoard } from './boardStore.js';
-import { PE, lref } from './partage.js';
+import { PE, lref } from './shared.js';
 
 // Jetons des Pokémon (calque L.units) : un <g class="tok"> par unité, lu dans le modèle que le
 // moteur tient à jour (L.u[uid], voir mkTok / updTokCore). L'ordre suit L.uo (trier() du plateau
@@ -71,7 +71,7 @@ function St453() {
 
 const cls = c => (c == null ? undefined : c); // null : pas d'attribut class ; '' : class="" (classList vidé)
 
-function Jeton({ T }) {
+function Token({ T }) {
   const r = refs(T);
   // style du jeton : teinte chromatique posée à la création, puis la position
   let sty;
@@ -129,14 +129,14 @@ function Jeton({ T }) {
   );
 }
 
-const ordre = () => (L.uo || []).map(id => L.u && L.u[id]).filter(Boolean);
+const ordering = () => (L.uo || []).map(id => L.u && L.u[id]).filter(Boolean);
 
 export function Units() {
   useBoard('units');
   return (
     <g style={PE} ref={lref('units')}>
-      {ordre().map(T => (
-        <Jeton key={T.uid} T={T} />
+      {ordering().map(T => (
+        <Token key={T.uid} T={T} />
       ))}
     </g>
   );
@@ -144,9 +144,9 @@ export function Units() {
 
 /* v4.77 : noms au-dessus de tous les Pokémon (plateau incliné), dans l'ordre où ils y sont passés */
 const NMW = ['enemy', 'ally', 'ko', 'hid', 'fog431', 'pk-wait'];
-export function NomsHauts() {
+export function NamesHigh() {
   useBoard('units');
-  return ordre()
+  return ordering()
     .filter(T => T.nmO)
     .sort((a, b) => a.nmO - b.nmO)
     .map(T => (

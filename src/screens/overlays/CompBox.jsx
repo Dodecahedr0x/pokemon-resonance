@@ -1,14 +1,14 @@
 import { Html } from '../../lib/html.jsx';
-import { Boite, Dialogue } from './Fenetre.jsx';
-import { BY } from '../../engine/009-03-pokemon.js';
-import { medal } from '../../engine/014-08-outils.js';
+import { Box, Dialogue } from './Window.jsx';
+import { BY } from '../../engine/009-pokemon.js';
+import { medal } from '../../engine/014-utils.js';
 
 // Choix du compagnon (#compBox). Clics (data-comp, data-comp-p) et hidden : moteur (057).
-export default function CompBox() {
-  return <Boite nom="comp" className="result exp-box" id="compBox" Carte={Carte} />;
+export default function CompanionBox() {
+  return <Box nom="comp" className="result exp-box" id="compBox" Carte={MapScreen} />;
 }
 
-function Carte({ L, cur, bonus }) {
+function MapScreen({ L, cur, bonus }) {
   return (
     <Dialogue className="sv-card exp-card" titre="compT" fermer={{ 'data-comp': 'x' }}>
       <p className="kick">Compagnon</p>

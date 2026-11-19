@@ -1,16 +1,16 @@
 import { Html } from '../../lib/html.jsx';
-import { Boite, Dialogue } from './Fenetre.jsx';
-import { MV } from '../../engine/005-02-capacites.js';
-import { BY } from '../../engine/009-03-pokemon.js';
-import { medal, tb, tc } from '../../engine/014-08-outils.js';
+import { Box, Dialogue } from './Window.jsx';
+import { MV } from '../../engine/005-moves.js';
+import { BY } from '../../engine/009-pokemon.js';
+import { medal, tb, tc } from '../../engine/014-utils.js';
 
 // Apprendre une CT ou une CS (#ctBox, ouverte depuis le Sac). Le moteur (045) calcule
 // la liste des familles et garde les clics (data-ct, data-ctf) et l'attribut hidden.
-export default function CtBox() {
-  return <Boite nom="ct" className="result ct-box" id="ctBox" Carte={Carte} />;
+export default function TmBox() {
+  return <Box nom="ct" className="result ct-box" id="ctBox" Carte={MapScreen} />;
 }
 
-function Carte({ M, m, fams }) {
+function MapScreen({ M, m, fams: families }) {
   return (
     <Dialogue className="sv-card ct-card" titre="ctT" fermer={{ 'data-ct': 'x' }}>
       <p className="kick">{M.cs ? 'CS · réutilisable' : 'CT · usage unique'}</p>
@@ -18,15 +18,15 @@ function Carte({ M, m, fams }) {
       <p className="d"><Html html={tb(m.t)} /> {m.p ? `Puissance ${m.p} · ` : ''}<Html html={m.d} /></p>
       <p className="d">À qui l’apprendre ? Elle devient sa 3e capacité, à tous les stades de sa famille. {M.cs ? 'La CS reste dans le Sac.' : 'La CT disparaît une fois utilisée.'}</p>
       <div className="ct-list">
-        {fams.length ? (
-          fams.map(({ b, ok, deja }) => {
+        {families.length ? (
+          families.map(({ b, ok, deja: already }) => {
             const f = BY[b];
             return (
-              <button key={b} type="button" className={'ct-f' + (ok ? '' : ' off')} data-ctf={b} disabled={!(ok && deja !== M.mv)} style={{ '--c': tc(f.t[0]) }}>
+              <button key={b} type="button" className={'ct-f' + (ok ? '' : ' off')} data-ctf={b} disabled={!(ok && already !== M.mv)} style={{ '--c': tc(f.t[0]) }}>
                 <Html html={medal(f.t, 'sm')} />
                 <span>
                   <b>{f.n}</b>
-                  <em>{!ok ? 'Incompatible' : deja === M.mv ? 'La connaît déjà' : deja ? `Remplace ${MV[deja].n}` : 'Compatible'}</em>
+                  <em>{!ok ? 'Incompatible' : already === M.mv ? 'La connaît déjà' : already ? `Remplace ${MV[already].n}` : 'Compatible'}</em>
                 </span>
               </button>
             );

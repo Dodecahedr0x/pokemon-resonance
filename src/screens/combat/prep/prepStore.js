@@ -4,4 +4,4 @@ import { version } from '../../../lib/store.js';
 // combats, et renderResume() pour la carte « Combat en cours ». Version 0 : le moteur
 // n'a encore rien dessiné, le bloc garde le gabarit de départ.
 export const [refreshPrep, usePrepVersion] = version();
-export const [refreshResume, useResumeVersion] = version();
+export const [refreshSummary, useResumeVersion] = version();

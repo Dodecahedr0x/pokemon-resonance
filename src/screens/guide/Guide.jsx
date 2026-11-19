@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useEngineReady } from '../../engineReady.js';
 import { setGuideTab, useGuide } from './guideStore.js';
-import Bases from './Bases.jsx';
-import Debuter from './Debuter.jsx';
-import Ligue from './Ligue.jsx';
-import Projet from './Projet.jsx';
+import Bases from './Basics.jsx';
+import GettingStarted from './GettingStarted.jsx';
+import League from './LeagueGuide.jsx';
+import Projet from './Project.jsx';
 import Reactions from './Reactions.jsx';
-import Tactique from './Tactique.jsx';
-import Tutoriel from './Tutoriel.jsx';
-import Univers from './Univers.jsx';
+import Tactics from './Tactics.jsx';
+import Tutorial from './Tutorial.jsx';
+import Universe from './Universe.jsx';
 import Tip from '../../components/Tip.jsx';
 
 // Onglets visibles, dans l'ordre de la barre (« Projet » n'a pas d'onglet : on l'ouvre par lien).
@@ -24,13 +24,13 @@ const ONGLETS = [
 
 // Panneaux, dans l'ordre du DOM. `lazy` : rendu seulement une fois l'onglet ouvert.
 const PANNEAUX = [
-  { k: 'tuto433', C: Tutoriel, lazy: true },
-  { k: 'debuter', C: Debuter },
+  { k: 'tuto433', C: Tutorial, lazy: true },
+  { k: 'debuter', C: GettingStarted },
   { k: 'bases', C: Bases },
   { k: 'reactions', C: Reactions },
-  { k: 'tactique', C: Tactique, lazy: true },
-  { k: 'ligue', C: Ligue },
-  { k: 'univers', C: Univers, lazy: true },
+  { k: 'tactique', C: Tactics, lazy: true },
+  { k: 'ligue', C: League },
+  { k: 'univers', C: Universe, lazy: true },
   { k: 'projet', C: Projet },
 ];
 
@@ -38,9 +38,9 @@ const PANNEAUX = [
 export default function Guide() {
   const ready = useEngineReady();
   const { tab } = useGuide();
-  const [ouverts, setOuverts] = useState(() => new Set([tab]));
+  const [openItems, setOpened] = useState(() => new Set([tab]));
   useEffect(() => {
-    setOuverts(s => (s.has(tab) ? s : new Set(s).add(tab)));
+    setOpened(s => (s.has(tab) ? s : new Set(s).add(tab)));
   }, [tab]);
 
   return (
@@ -60,7 +60,7 @@ export default function Guide() {
       </div>
       {PANNEAUX.map(({ k, C, lazy }) => (
         <div key={k} className="gd-p" data-gp={k} role="tabpanel" hidden={tab !== k}>
-          {ready && (!lazy || ouverts.has(k) || tab === k) && <C />}
+          {ready && (!lazy || openItems.has(k) || tab === k) && <C />}
         </div>
       ))}
     </section>

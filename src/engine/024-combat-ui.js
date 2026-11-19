@@ -1,0 +1,1198 @@
+/* Section d'origine : 17-interface-combat.js */
+
+import { RX } from './004-data.js';
+import { MV } from './005-moves.js';
+import { BY, SCEN, WXN } from './009-pokemon.js';
+import { ITEMS2, PROFILE, isCamp, ownedItems } from './011-game-state.js';
+import { arenaSetup, arenaTick } from './013-gyms.js';
+import { $, RM, wait, el, gp, hc, hp, tc, toast, zig } from './014-utils.js';
+import { CROCHETS, hook } from './015-hooks.js';
+import { go } from './016-navigation.js';
+import { renderLeague } from './019-league.js';
+import { squad, vBonus } from './020-team-cards.js';
+import { EMAX, P, affected, byUid, canAwaken, endRound, evoOpts, execFoe, foeEvo, hasNx, newBattle, pAct, pDodge, pAwaken, pMove, pReroll, prepareEnemy, preview, reach, startEnemy, targets, uAt, uk } from './021-combat-engine.js';
+import { champBuild, duoParts, duoTargets, pCapture, pDuo, previewRun, scenLock } from './022-items-bonds-ai.js';
+import { SV, autoSave, queueSave, renderSummary } from './025-saves.js';
+import { PREF, __set_PREPG, __set_tutorialI, applyProgress, renderCoach, renderPrep, sfx, sfxEv, vibe } from './026-campaign-tutorial-sound.js';
+import { drawObstacles } from './027-gym-on-screen.js';
+import { fxReset, playEv } from './028-move-effects.js';
+import { panelRoleInfo } from './029-streamlined-guide.js';
+import { AUTO, HPM, RK, rankOf, turnBanner, turnBanners, vsIntro } from './030-prestige-staging.js';
+import { renderWallet } from './035-interface.js';
+import { tagUnits, tokenArt } from './041-illustrations.js';
+import { rivalBuild, rivalIdx, shinyHue, tdrDraft, tdrRun, tdrTeam } from './043-adventure-plus.js';
+import { currentActor, unrollSpeed, endTurnSpeed, chosenOrder, canSelect } from './044-tactical-engine.js';
+import { VIV_DESC, VIV_ETAT, hourTint, chosenAlive } from './046-living-board.js';
+import { chosenTactic } from './047-tactics.js';
+import { challengeLaunch, activeChallenges, mutTraining, mutInfo, teamSize } from './048-replayability.js';
+import { charactersChosen, disobedienceChosen, level } from './049-identity.js';
+import { REDIFF } from './050-world.js';
+import { refreshBattle, evoState } from '../screens/combat/battle/battleStore.js';
+import { boardBuild, boardRender, evoSet, tokCl, unitsBatch, unitsDirty } from '../screens/combat/board/boardStore.js';
+import { bdClass, bdReplay, bdReset, hostSet } from '../screens/combat/board/boardStore.js';
+import { hasXp, bossScene, notesOf } from './053-resonance.js';
+import { resoCand417, scene417, tournamentTeam417 } from './057-companions-resonance.js';
+import { coopPass418, player418 } from './058-fishing-safari-coop.js';
+import { surrounded420 } from './060-intense-combat.js';
+import { dl428, quick428 } from './063-combat-catches-home.js';
+import { RIV429, aie429, after429, weeklyBuild429, weeklyTeam429, lockLegendary429, liveRender429, liveTok429 } from './064-quality.js';
+import { afterRender430, campOk430, docChosen430 } from './065-camp-tactics.js';
+import { afterRender431, fogChosen431, fixedProgress431, fixedTeam431 } from './066-tactical-challenges.js';
+import { afterRender433, duelPass433 } from './068-duel-tutorial.js';
+import { gauge434 } from './069-calibration-eevee.js';
+import { announceGim467 } from './098-feats-journal-gimmick-boards.js';
+
+export let VERT, MQV, B, LOG, scSel;
+export function __set_GREEN(v) { return (VERT = v); }
+export function __set_B(v) { return (B = v); }
+export function __set_LOG(v) { return (LOG = v); }
+export function __set_scSel(v) { return (scSel = v); }
+
+
+export function tiltP(x, y) {
+  const T = TILT,
+    d = T.Hb - y,
+    s = T.f / (T.f + d * T.sn);
+  return [T.ox + (T.cx + (x - T.cx) * s) * T.k, T.oy + (T.Hb - d * T.cs * s) * T.k];
+}
+
+
+function tiltU(X, Y) {
+  const T = TILT,
+    q = T.Hb - (Y - T.oy) / T.k,
+    d = (q * T.f) / (T.f * T.cs - q * T.sn),
+    s = T.f / (T.f + d * T.sn);
+  return [T.cx + ((X - T.ox) / T.k - T.cx) / s, T.Hb - d];
+}
+
+
+/** taille apparente (1 = case à plat) au point écran X,Y */
+export function tiltS(X, Y) {
+  const g = tiltU(X, Y);
+  return (TILT.f / (TILT.f + (TILT.Hb - g[1]) * TILT.sn)) * TILT.k;
+}
+
+
+function tiltHP(X, Y, s) {
+  const [x, y] = tiltU(X, Y),
+    o = [];
+  for (let i = 0; i < 6; i++) {
+    const a = (Math.PI / 180) * (60 * i - (VERT ? 0 : 30)),
+      q = tiltP(x + s * Math.cos(a), y + s * Math.sin(a));
+    o.push(q[0].toFixed(1) + ',' + q[1].toFixed(1));
+  }
+  return o.join(' ');
+}
+
+
+function hpf(x, y, s) {
+  const o = [];
+  for (let i = 0; i < 6; i++) {
+    const a = (Math.PI / 3) * i;
+    o.push((x + s * Math.cos(a)).toFixed(1) + ',' + (y + s * Math.sin(a)).toFixed(1));
+  }
+  return o.join(' ');
+}
+
+
+/** Choisit le scénario k (à son propre onglet) et passe à l’écran Combats, pour un launch() qui suit.
+ *  Si un combat est encore en cours, la liste des combats n’est pas redessinée (ouvrirCombat le fait).
+ *  Les rencontres sauvages, le duel et l’objectif de l’Accueil gardent l’onglet choisi à la main :
+ *  ils posent scSel eux-mêmes. */
+export function chooseBattle(k) {
+  scSel = k;
+  __set_PREPG(null);
+  go('combat');
+}
+
+
+/** Le joueur demande le combat k : écran Combats sur ce scénario, à l’onglet du scénario. Ne lance pas le combat. */
+export function openBattle(k) {
+  chooseBattle(k);
+  renderPrep();
+}
+
+
+/** Comme ouvrirCombat, pour une clé venue de l’interface : sans effet si le scénario n’existe pas (encore). */
+export function goFight(k) {
+  if (SCEN[k]) openBattle(k);
+}
+
+
+export function challenge(k) {
+  openBattle(k);
+  if (!squad.length) {
+    toast('Recrutez au moins un Pokémon avant de défier une arène.');
+    return;
+  }
+  launch();
+}
+
+
+export function battleOpts() {
+  const items = {};
+  squad.slice(0, 4).forEach(id => {
+    const b = BY[id].base, // les objets sont tenus par la famille, quel que soit le stade
+      it = PROFILE.equip[b];
+    if (it && ownedItems().includes(it)) items[b] = it;
+  });
+  return {
+    diff: PROFILE.diff,
+    items,
+    fatigue: isCamp() ? PROFILE.fatigue : {},
+    links: PROFILE.links,
+    ordre: chosenOrder(),
+    vivant: chosenAlive(), // plateau vivant (v4.7-01)
+    tactique: chosenTactic(), // Tactique avancée (v4.8-01)
+    mut: mutTraining(), // mutateur en Entraînement (v4.9-01)
+    doc430: docChosen430(), // doctrine (v4.30)
+    fog431: fogChosen431(), // brouillard de guerre (v4.31)
+    defis: activeChallenges(), // défis de campagne (v4.9-01)
+    caracteres: charactersChosen(), // caractères (v4.10-01)
+    desob: disobedienceChosen(),
+    dojo: campOk430() ? level('dojo') : 0,
+    apprises: PROFILE.apprises // CT et CS (v4.6-01)
+  };
+}
+
+
+export function launch() {
+  for (const f of CROCHETS.refusLancement) {
+    const refusal = f();
+    if (refusal) return toast(refusal);
+  }
+  hook('avantLancement');
+  const previous = B;
+  // scènes d’histoire (v4.17) : la scène remplace le combat
+  if (!scene417(scSel)) {
+    __set_tutorialI(SCEN[scSel] && SCEN[scSel].tuto ? 0 : -1);
+    launchCore();
+    if (B && !AUTO)
+      vsIntro(); // présentation des adversaires
+    else if (B) turnBanner();
+    // ordre par Vitesse : si un adversaire est plus rapide, il ouvre la manche (après la présentation)
+    if (B && B.ordre === 'vitesse') setTimeout(unrollSpeed, AUTO || RM ? 950 : PREF.fast ? 1500 : 2400);
+  }
+  hook('lancement', !!B && B !== previous);
+}
+
+
+function launchCore() {
+  if (!squad.length && !fixedTeam431()) return;
+  if (scSel === 'hebdo429') weeklyBuild429(); // la semaine a pu changer (v4.29)
+  const lk = scenLock(scSel) || lockLegendary429(scSel) || (scSel === 'hebdo429' || (SCEN[scSel] || {}).sansProgres431 ? null : challengeLaunch()); // défis de campagne (v4.9-01), quêtes légendaires (v4.29)
+  if (lk) {
+    toast(lk);
+    renderPrep();
+    return;
+  }
+  if (scSel === 'champ') champBuild();
+  if (rivalIdx(scSel) >= 0 || RIV429[scSel]) rivalBuild();
+  if (scSel === 'tdr' && !tdrRun()) {
+    tdrDraft(); // pas encore d’ascension : on choisit d’abord son équipe
+    return;
+  }
+  const T = scSel === 'tdr' ? tdrTeam() : weeklyTeam429() || fixedTeam431() || tournamentTeam417(); // défi de la semaine (v4.29), énigme et Écho profond (v4.31) // Tour de Résonance, tournoi entre amis (v4.17) : l’équipe figée
+  B = T
+    ? newBattle(scSel, T.team, T.voix, T.opts) // la Tour ignore le budget : seules comptent les Voix gagnées
+    : newBattle(scSel, squad.slice(0, teamSize()), vBonus(), battleOpts()); // Équipe de 3 (v4.9-01)
+  REDIFF.set(B, { best: null }); // rediffusion du meilleur coup (v4.11-01)
+  LOG = [];
+  Object.assign(ui, {
+    sel: null,
+    selE: null,
+    mode: null,
+    mi: null,
+    pk: null,
+    pv: null,
+    busy: false,
+    act: null,
+    undo: null,
+    tile: null,
+    duo: null
+  });
+  $('#cbPrep').hidden = true;
+  $('#cbBattle').hidden = false;
+  $('#cbResult').hidden = true;
+  $('#evoPick').hidden = true;
+  const aev = [...arenaSetup(B), ...announceGim467(B)];
+  buildBoard();
+  log(`${SCEN[scSel].n} : à vous de jouer. Touchez un adversaire pour voir sa portée.`, 'sys');
+  aev.forEach(x => {
+    if (x.e === 'msg') log(x.s, 'arn');
+  });
+  B.units.forEach(u => {
+    if (u.side === 'a' && u.fat) log(`${u.n} est fatigué : −1 Mouvement (un Éveil efface la fatigue).`, 'sys');
+    if (u.side === 'a' && u.item) log(`${u.n} tient ${ITEMS2[u.item].n}.`, 'sys');
+  });
+  if (B.harmonie) log('Harmonie : trois rangs différents dans l’équipe, chaque Pokémon commence avec 1 losange.', 'sys'); // v4.14
+  if (bossScene(B)) log('Combat de prestige : vos adversaires accumulent eux aussi la Résonance (notes, attaques Expertes).', 'arn');
+  if (B.wx) log(`Météo ${WXN[B.wx.k]} dès le début du combat.`, 'sys');
+  if (B.desob) log('Désobéissance : un Pokémon épuisé ou têtu peut ignorer un ordre.', 'sys');
+  if (B.mut) log(`Mutateur · ${mutInfo(B.mut)[0]} : ${mutInfo(B.mut)[1]}`, 'arn');
+  if (B.sansEveil) log('Défi Sans Éveil : vos Pokémon ne s’éveilleront pas.', 'sys');
+  if (B.tac)
+    log(
+      'Tactique avancée : entrer au contact d’un adversaire arrête le déplacement (sauf volants, Spectre, Éclaireurs). Lance-Soleil et Vol partent en fin de manche.',
+      'sys'
+    );
+  if (B.units.some(u => u.colosse)) log('Colosse : brisez ses parties pour faire tomber sa carapace. Chacune le fait vaciller.', 'sys');
+  if (B.vivant)
+    log(`Plateau vivant : ${VIV_ETAT[B.cyc.ph]} (${VIV_DESC[B.cyc.ph]}) Le feu court dans les hautes herbes ; la pluie l’éteint.`, 'sys');
+  autoSel();
+  renderAll();
+  window.scrollTo({ top: 0 });
+}
+
+
+export function backToPrep() {
+  if (scSel === 'sauvage') scSel = 'gue'; // une rencontre sauvage ne se relance pas depuis la liste
+  B = null;
+  $('#cbBattle').hidden = true;
+  $('#cbResult').hidden = true;
+  $('#evoPick').hidden = true;
+  $('#cbPrep').hidden = false;
+  renderPrep();
+  window.scrollTo({ top: 0 });
+  queueSave();
+  renderSummary();
+  renderCoach();
+  renderWallet();
+}
+
+
+/* plateau */
+// Le SVG est rendu par React (src/screens/combat/board/) : buildBoard remonte tous les calques ;
+// L.tiles, L.t[k], L.tx[k], L.units, L.fx, L.fl… sont des références posées par le rendu.
+export function buildBoard() {
+  hook('avantPlateau');
+  VERT = !!(MQV && MQV.matches);
+  const D = SCEN[B.sc],
+    bio = D.bio,
+    st = ['arene', 'ligue', 'roche'].includes(D.bio) || D.gym != null || !!D.elite || !!D.champ; // terrain des stades (v1.1)
+  // classes du conteneur : remises à zéro ici, puis basculées par les versions suivantes
+  // (#bBoard est rendu par React : classes et variables dans l'état « host » de boardStore.js)
+  bdReset(['board', 'bio-' + bio, ...(VERT ? ['vert'] : [])]);
+  hostSet({ ac: D.at ? tc(D.at) : '' });
+  L.t = {};
+  L.tx = {};
+  L.u = {};
+  L.uo = []; // ordre des jetons dans le calque (trier() du plateau incliné le change)
+  L.txId = { gue: 'tx-grass', roche: 'tx-stone', tour: 'tx-ash', ligue: 'tx-marble', arene: 'tx-rune' }[bio]; // motif des cases
+  B.units.forEach(u => {
+    L.u[u.uid] = mkTok(u);
+    L.uo.push(u.uid);
+  });
+  boardBuild({ vb: VB(), bio, stadium: st, tilt: TILT.on }); // les jetons (Units.jsx) sont montés avec le plateau
+  bdClass('stadium', st);
+  fxReset();
+  hook('plateau');
+}
+
+
+/** Modèle d'un jeton (rendu par Units.jsx) : ce que l'ancien DOM portait, dans le même ordre. */
+function mkTok(u) {
+  const c = ['tok', u.side === 'e' ? 'enemy' : 'ally'];
+  if (u.shiny) c.push('shiny');
+  if (u.boss) c.push('boss');
+  if (u.dom) c.push('dom');
+  if (u.seg) c.push('seg');
+  if (u.colosse) c.push('colosse');
+  return liveTok429({
+    uid: u.uid,
+    c, // classes du jeton (ordre de classList)
+    sh: u.shiny ? shinyHue(u.sp) + 'deg' : null, // --sh
+    tr: null, // transform (glissement : transition CSS)
+    pc: [null, null, null], // losanges : classe de chaque losange (null : pas d'attribut)
+    nc: [null, null, null], // notes de Résonance (v4.14)
+    bdc: 'bdg-s',
+    bt: '',
+    n: ''
+  }); // groupe animé (v4.29)
+}
+
+// classe « on » seule d'un élément (classList.toggle('on', v)) : null → pas d'attribut, '' → classe vidée
+const on1 = (cur, v) => (v ? 'on' : cur === 'on' ? '' : cur);
+
+
+export function updTok(u) {
+  hook('avantJeton', u);
+  updTokCore(u);
+  hook('jeton', u);
+  tokenArt(u);
+  hook('illustration', u);
+  hook('apresJeton', u);
+}
+
+
+function updTokCore(u) {
+  const T = L.u[u.uid];
+  if (!T) return;
+  const [x, y] = HC(uk(u));
+  T.tr = `translate(${x}px,${y}px)`;
+  const c = tc(u.t[0]);
+  T.rs = c;
+  T.rf = `color-mix(in srgb,${c} 26%,#0F131A)`;
+  T.gd = gp(u.t[0]);
+  T.gf = c;
+  const C = 2 * Math.PI * 16,
+    r = u.hp / u.mhp;
+  T.ad = `${(C * r).toFixed(1)} ${C.toFixed(1)}`;
+  T.as = r > 0.5 ? 'var(--ok)' : r > 0.2 ? 'var(--warn)' : 'var(--bad)';
+  T.n = u.n;
+  const nx = hasNx(u);
+  T.pc = T.pc.map((p, i) => on1(p, i < u.en));
+  const cl = (k, v) => tokCl(T, k, v);
+  cl('ko', u.ko);
+  cl('sel', ui.sel === u.uid || ui.selE === u.uid);
+  cl('done', u.side === 'a' && u.acted && !u.ko && B.phase === 'player');
+  cl('act', ui.act === u.uid);
+  cl('has-en', !u.ko && (u.side === 'a' || B.duel433 ? nx || hasXp(u) || resoCand417(B, u) : bossScene(B) && hasXp(u))); // v4.14 : losanges des attaques Expertes
+  cl('ready', u.side === 'a' && (nx || resoCand417(B, u)) && u.en >= EMAX && !u.ko);
+  cl('fres', u.reso > 0 && !u.ko); // Forme Résonante (v4.17)
+  cl('cj1', !!B.coop && u.side === 'a' && player418(u) === 1); // coop (v4.18)
+  cl('cj2', !!B.coop && u.side === 'a' && player418(u) === 2);
+  cl('cjoff', !!B.coop && u.side === 'a' && player418(u) !== B.coop && B.phase === 'player');
+  cl('vigil420', !!u.vigil && !u.ko); // v4.20
+  cl('enc420', surrounded420(B, u));
+  cl('ph2', u.phase420 === 2 && !u.ko);
+  cl('ph3', u.phase420 === 3 && !u.ko);
+  cl('dg420', !u.ko && !!(B.danger420 && B.danger420.k.includes(uk(u)))); // dans une zone annoncée
+  cl('evw', foeEvo(B, u));
+  cl('evolved', !!u.evo);
+  const nN = notesOf(B, u); // notes de Résonance (v4.14)
+  T.nc = T.nc.map((p, i) => on1(p, i < nN));
+  cl('has-nt', nN > 0 && !u.ko);
+  cl('reso', nN >= 3 && !u.ko);
+  const b =
+    u.badge ||
+    (u.vole ? 'VOL' : u.chg ? 'CHARGE' : null) || // attaques chargées (v4.8)
+    (u.bru > 0 ? 'BRÛ' : u.psn > 0 ? 'PSN' : u.maudit > 0 ? 'MAUD' : u.requiem > 0 ? 'REQ' : u.root > 0 ? 'RAC' : u.web > 0 ? 'TOILE' : u.aide ? 'AIDE' : u.riposte ? 'RIPO' : u.miroir ? 'MIR' : u.cogno > 0 ? 'x2' : null);
+  T.bdc = 'bdg-s' + (b && !u.ko ? ' on st-' + (STC[b] || 'x') : '');
+  T.bt = b || '';
+  unitsDirty();
+}
+
+
+export function renderBoard() {
+  boardRender(); // cases, marques, surbrillances, intentions, obstacles (calques React)
+  unitsBatch(() => {
+    B.units.forEach(updTok); // jetons (Units.jsx) : redessinés une fois à la fin du lot
+    drawObstacles();
+  });
+  hook('plateauRendu');
+}
+
+
+/* bandeaux */
+export function segHp(u) {
+  return CROCHETS.barrePv.reduce((h, f) => f(h, u), segHpBase(u));
+}
+
+
+function segHpBase(u) {
+  const h =`<span class="hp hseg"><i class="${hpc(u)}" style="width:${((u.hp / u.mhp) * 100).toFixed(0)}%"></i></span>`;
+  // traînée des dégâts récents
+  if (!B) return h;
+  const r = Math.max(0, (u.hp / u.mhp) * 100),
+    now = performance.now(),
+    key = u.uid;
+  let m = HPM[key];
+  if (!m || m.s !== B) {
+    HPM[key] = { r, s: B, t0: 0, a: r, b: r };
+    return h;
+  }
+  if (r < m.r - 0.01) {
+    const top = now - m.t0 < 800 ? m.a : m.r;
+    m.a = Math.max(top, m.r);
+    m.b = r;
+    m.t0 = now;
+  }
+  m.r = r;
+  const dt = now - m.t0;
+  if (dt >= 800) return h;
+  return h.replace(
+    '<i ',
+    `<b class="lag" style="--a:${m.a.toFixed(1)}%;--b:${m.b.toFixed(1)}%;animation-delay:-${dt | 0}ms"></b><i `
+  );
+}
+
+
+// Bandeau, synergies, règle d'arène, frise, plaques, barre du bas : rendus par React
+// (src/screens/combat/battle). Ici, les effets de bord du rendu, puis la mise à jour.
+function renderTop() {
+  hourTint(B);
+  quick428(); // « Passer » pendant le tour adverse (v4.28) : l'accélération retombe hors du tour adverse
+  liveRender429(); // animations, astuces (v4.29)
+  refreshBattle('top', 'foot');
+  turnBanners();
+}
+
+
+/* panneau */
+// Panneau de commande (#bPanel) : rendu par React (src/screens/combat/battle/Panel.jsx).
+// Le moteur garde la classe « info-off » du conteneur (panelRoleInfo).
+export function renderPanel() {
+  panelRoleInfo();
+  refreshBattle('panel');
+}
+
+
+/* choix d’évolution : rendu par React (EvoPick.jsx) */
+function openEvoPick(u) {
+  if (!evoOpts(B, u).length) return;
+  evoState.u = u;
+  refreshBattle('evo');
+  $('#evoPick').hidden = false;
+  const f = $('#evoPick .eo');
+  if (f) f.focus();
+}
+
+
+/* cinématique d’évolution */
+export function cinematic(fromN, fromT, toN, toT, side, uid) {
+  const o = {}; // #evoFx (React) : l'effet part du Pokémon qui évolue
+  if (uid && L.u[uid]) {
+    const [x, y] = HC(uk(byUid(B, uid)));
+    o.ox = ((x / VB()[0]) * 100).toFixed(1) + '%';
+    o.oy = ((y / VB()[1]) * 100).toFixed(1) + '%';
+  }
+  evoSet({ ...o, on: true, fx: { fromN, fromT, toN, toT, side }, fast: !!(PREF.fast || ui.turbo428) });
+  ui.cine = true;
+  if (B) renderAll();
+  sfx('evo');
+  vibe([15, 25, 15, 25, 70]);
+  return wait(dl428(650, 1300, 2500)).then(() => {
+    evoSet({ on: false, fx: null });
+    ui.cine = false;
+  });
+}
+
+
+/* journal */
+export function log(s, c) {
+  LOG.unshift({ s, c: c || '', r: B ? B.round : 1 });
+  if (LOG.length > 70) LOG.length = 70;
+  renderLog();
+}
+
+
+// Journal (#bLog, #bLogLast) : rendu par React (Log.jsx)
+function renderLog() {
+  refreshBattle('log');
+}
+
+
+export function renderAll() {
+  hook('avantRendu');
+  tagUnits(B); // types → espèce, pour les illustrations
+  renderAllCore();
+  queueSave();
+  renderCoach();
+  afterRender430(); // ciel, déploiement, doctrine (v4.30)
+  afterRender431(); // brouillard, énigme (v4.31)
+  afterRender433(); // duel local (v4.33)
+  gauge434(); // combat sur téléphone (v4.34)
+  hook('rendu');
+}
+
+
+function renderAllCore() {
+  if (!B) return;
+  renderTop(); // avec la frise de l'ordre par Vitesse (v4.5-01)
+  renderBoard();
+  renderPanel();
+}
+
+
+/* effets */
+export function floatAt(k, txt, cls) {
+  const [x, y] = HC(k);
+  const t = el('text', { class: 'fl ' + cls, x: x.toFixed(1), y: (y - 16).toFixed(1) }, L.fl);
+  t.textContent = txt;
+  setTimeout(() => t.remove(), 1500);
+}
+
+
+function drawChain(e) {
+  const g = el('g', {}, L.fx);
+  e.edges.forEach(([a, b, d]) => {
+    const A = HC(a),
+      C = HC(b),
+      pts = zig(A[0], A[1], C[0], C[1], 4, 3.5),
+      dl = 0.05 + d * 0.12 + 's';
+    el('polyline', { class: 'chainglow ' + e.c, points: pts, style: `--d:${dl}` }, g);
+    el('polyline', { class: 'chainseg ' + e.c, points: pts, style: `--d:${dl}` }, g);
+  });
+  setTimeout(() => g.remove(), 1800);
+}
+
+
+function beam(a, b, typ) {
+  if (a === b) return;
+  const A = HC(a),
+    C = HC(b);
+  const l = el(
+    'polyline',
+    { class: 'beam', points: zig(A[0], A[1], C[0], C[1], 5, 2.5), style: `stroke:${tc(typ)}` },
+    L.fx
+  );
+  setTimeout(() => l.remove(), 700);
+}
+
+
+function burst(uid) {
+  const u = byUid(B, uid);
+  if (!u) return;
+  const [x, y] = HC(uk(u));
+  const c = el('circle', { class: 'burst', cx: x, cy: y, r: 10 }, L.fx);
+  setTimeout(() => c.remove(), 1100);
+}
+
+
+function arrFx(uid) {
+  const u = byUid(B, uid);
+  if (!u) return;
+  const [x, y] = HC(uk(u)),
+    g = el('g', { class: 'arrfx', style: `--c:${tc(u.t[0])}` }, L.fx);
+  [0, 1].forEach(i =>
+    el(
+      'polygon',
+      { points: HP(x, y, BG.S * 1.9), style: `animation-delay:${i * 0.22}s`, transform: `rotate(30 ${x} ${y})` },
+      g
+    )
+  );
+  setTimeout(() => g.remove(), 1600);
+}
+
+
+function hit(uid) {
+  const T = L.u[uid];
+  if (T) {
+    T.hit = true; // anneau qui clignote (classe « hit » de .tok-ring, Units.jsx)
+    unitsDirty();
+    setTimeout(() => {
+      T.hit = false;
+      unitsDirty();
+    }, 450);
+    aie429(uid); // le Pokémon recule sous le coup (v4.29)
+  }
+  hook('touche', uid);
+}
+
+
+export function playLog(ev) {
+  ev.forEach(e => {
+    if (e.e === 'msg')
+      log(e.s, /^Arène /.test(e.s) ? 'arn' : /^(Arrivée|.* évolue en|.* puise)/.test(e.s) ? 'evo' : '');
+    else if (e.e === 'dmg') {
+      const u = byUid(B, e.u);
+      if (u) {
+        floatAt(uk(u), '−' + e.v, 'f-dmg');
+        hit(e.u);
+      }
+    } else if (e.e === 'heal') {
+      const u = byUid(B, e.u);
+      if (u) floatAt(uk(u), '+' + e.v, 'f-heal');
+    } else if (e.e === 'rx') {
+      floatAt(e.k, RX[e.rx].n, 'f-rx');
+    } else if (e.e === 'chain') drawChain(e);
+    else if (e.e === 'evo') burst(e.u);
+    else if (e.e === 'arena') {
+      bdReplay('shock'); // reste posée jusqu'à la prochaine construction
+      bdClass('shock', true);
+    } else if (e.e === 'arr') arrFx(e.u);
+    else if (e.e === 'ready') {
+      const u = byUid(B, e.u);
+      if (u && !u.ko) setTimeout(() => floatAt(uk(u), 'Éveil prêt', 'f-ready'), 380);
+    } else if (e.e === 'use') {
+      const u = byUid(B, e.u);
+      if (u && e.k) beam(uk(u), e.k, u.t[0]);
+    } else if (e.e === 'catch') {
+      const u = byUid(B, e.u);
+      if (u) {
+        floatAt(uk(u), 'Capturé !', 'f-ready');
+        burst(e.u);
+      }
+    } else if (e.e === 'duo') {
+      [e.a, e.b].forEach(arrFx);
+    } else if (e.e === 'note') {
+      const u = byUid(B, e.u); // notes de Résonance (v4.14)
+      if (u && !u.ko) floatAt(uk(u), '♪'.repeat(e.n), 'f-note');
+    } else if (e.e === 'reso') {
+      const u = byUid(B, e.u);
+      if (u) {
+        setTimeout(() => floatAt(uk(u), 'Résonance !', 'f-reso'), 260);
+        burst(e.u);
+      }
+    }
+  });
+  sfxEv(ev);
+  hook('journal', ev);
+}
+
+
+/* interactions */
+export function autoSel() {
+  const cur = B.ordre === 'vitesse' ? currentActor(B) : null, // ordre par Vitesse : l'allié dont c'est le tour
+    nx =
+      B.ordre === 'vitesse'
+        ? cur && cur.side === 'a'
+          ? cur
+          : null
+        : B.units.find(x => x.side === 'a' && !x.ko && !x.acted && (!B.coop || player418(x) === B.coop));
+  ui.sel = nx ? nx.uid : null;
+  ui.selE = null;
+  ui.mode = null;
+  ui.pv = null;
+  ui.pk = null;
+}
+
+
+export function clearAim() {
+  ui.mode = null;
+  ui.pv = null;
+  ui.pk = null;
+  ui.duo = null;
+}
+
+
+export function confirmAct() {
+  const id = ui.sel;
+  confirmActCore();
+  const u = B && byUid(B, id);
+  if (u && u.hr && !u.ko && !B.over) {
+    // l’Éclaireur reste sélectionné : il peut encore se replier
+    ui.sel = id;
+    renderAll();
+  }
+  hook('action', id);
+}
+
+
+function confirmActCore() {
+  const u = byUid(B, ui.sel);
+  if (!u || ui.pk == null) return;
+  ui.undo = null;
+  ui.tile = null;
+  const ev = ui.mode === 'duo' ? pDuo(B, u, byUid(B, ui.duo), ui.pk) : pAct(B, u, ui.mi, ui.pk);
+  clearAim();
+  if (!ev) {
+    renderAll();
+    return;
+  }
+  renderAll();
+  playEv(ev);
+  if (B.over) {
+    finish();
+    return;
+  }
+  if (B.ordre === 'vitesse') {
+    // ordre par Vitesse : l'allié garde la main (Relance, Esquive, repli de l'Éclaireur) jusqu'à « Terminer »
+    renderAll();
+    return;
+  }
+  if (u.acted || u.ko) {
+    const nx = B.units.find(x => x.side === 'a' && !x.ko && !x.acted);
+    if (nx) ui.sel = nx.uid;
+  }
+  renderAll();
+}
+
+
+function tapTile(k) {
+  const u = ui.sel && byUid(B, ui.sel),
+    v = uAt(B, k);
+  if (u && u.hr && u.acted && !u.moved && !ui.mode && !v && reach(B, u)[k] !== undefined) {
+    // Éclaireur : après avoir frappé, une case bleue sert à se replier
+    const ev = pMove(B, u, k);
+    clearAim();
+    ui.tile = null;
+    renderAll();
+    if (ev) playEv(ev);
+    if (u.ko) {
+      autoSel();
+      renderAll();
+    }
+    return;
+  }
+  ui.tile = null;
+  if (u && ui.mode === 'duo' && ui.duo) {
+    const p = byUid(B, ui.duo);
+    if (duoTargets(B, u, p).includes(k)) {
+      if (ui.pk === k) {
+        confirmAct();
+        return;
+      }
+      ui.pk = k;
+      const X = duoParts(B, u, p);
+      ui.pv = previewRun(B, C => pDuo(C, byUid(C, u.uid), byUid(C, p.uid), k), [
+        ...new Set([...affected(B, X.A, X.D.a, k), ...affected(B, X.Bu, X.D.b, k)])
+      ]);
+      renderAll();
+      return;
+    }
+  }
+  if (u && ui.mode === 'target') {
+    const m = MV[u.mv[ui.mi]];
+    if (targets(B, u, m).includes(k)) {
+      if (ui.pk === k) {
+        confirmAct();
+        return;
+      }
+      ui.pk = k;
+      ui.pv = preview(B, u.uid, ui.mi, k);
+      renderAll();
+      return;
+    }
+  }
+  if (u && ui.mode === 'dodge') {
+    const ev = pDodge(B, u, k);
+    if (ev) {
+      ui.undo = null;
+      clearAim();
+      renderAll();
+      playEv(ev);
+      return;
+    }
+  }
+  if (v) {
+    if (v.side === 'a') {
+      if (!canSelect(v)) return;
+      ui.sel = v.uid;
+      ui.selE = null;
+    } else ui.selE = v.uid;
+    clearAim();
+    renderAll();
+    return;
+  }
+  if (u && !u.moved && !u.acted && reach(B, u)[k] !== undefined) {
+    ui.undo = { uid: u.uid, snap: JSON.stringify(B), log: LOG.length };
+    const ev = pMove(B, u, k);
+    clearAim();
+    renderAll();
+    if (ev) playEv(ev);
+    if (u.ko) {
+      autoSel();
+      renderAll();
+    }
+    return;
+  }
+  clearAim();
+  ui.selE = null;
+  ui.tile = k;
+  renderAll();
+}
+
+
+function endTurn() {
+  if (B && B.ordre === 'vitesse') return endTurnSpeed(); // ordre par Vitesse : seul l'allié courant a fini (v4.5-01)
+  if (!B || ui.busy || B.over || B.phase !== 'player') return;
+  if (coopPass418()) return; // coop : le Joueur 1 passe la main au Joueur 2 (v4.18)
+  if (duelPass433()) return; // duel local : chacun son tour (v4.33)
+  ui.busy = true;
+  ui.turbo428 = false;
+  ui.undo = null;
+  ui.tile = null;
+  clearAim();
+  ui.selE = null;
+  log(`Fin de la manche ${B.round} : les adversaires passent à l’action.`, 'sys');
+  const order = startEnemy(B),
+    S0 = B;
+  renderAll();
+  let i = 0;
+  const step = async () => {
+    if (!B || B !== S0) return;
+    if (B.over) {
+      finish();
+      return;
+    }
+    if (i >= order.length) {
+      endOfRound(S0);
+      return;
+    }
+    const uid = order[i++],
+      e = byUid(B, uid);
+    if (!e || e.ko) {
+      step();
+      return;
+    }
+    ui.act = uid;
+    if (await placeEnemy(S0, uid)) return; // v4.12 : il se place d'abord, sous vos yeux
+    const ev = execFoe(B, uid);
+    renderAll();
+    playEv(ev);
+    setTimeout(step, dl428(200, 380, 900));
+  };
+  setTimeout(step, dl428(60, 160, 420));
+}
+
+
+/** v4.12 : déplacement de l'adversaire avant son attaque. Renvoie true si le combat a changé entre-temps. */
+export async function placeEnemy(S0, uid) {
+  if (!B || !B.jit) return false;
+  const pre = prepareEnemy(B, uid);
+  if (!pre.length) return false;
+  renderAll();
+  playEv(pre);
+  if (pre.some(x => x.e === 'mv')) await new Promise(r => setTimeout(r, dl428(60, 240, 460)));
+  return !B || B !== S0;
+}
+
+
+/** Fin de manche (les deux modes) : effets de manche, règle d'arène, évolutions adverses, nouvelles annonces.
+    Renvoie true si le combat continue. */
+export async function endOfRound(S0) {
+  ui.act = null;
+  const ev = endRound(B);
+  if (!B.over) arenaTick(B).forEach(x => ev.push(x));
+  for (const x of ev.filter(x => x.e === 'evo')) {
+    renderAll();
+    await cinematic(x.from, x.ft, x.to, x.tt, x.side, x.u);
+    if (B !== S0) return false;
+  }
+  ui.busy = false;
+  renderAll();
+  playEv(ev);
+  if (B.over) {
+    finish();
+    return false;
+  }
+  log(`Manche ${B.round} : à vous de jouer.`, 'sys');
+  autoSel();
+  renderAll();
+  return true;
+}
+
+
+export function finish() {
+  hook('avantFinCombat');
+  // rang du combat
+  if (B && B.over && !B._rk) {
+    B._rk = 1;
+    const r = rankOf(B);
+    B.rank = r;
+    if (r && SCEN[B.sc] && B.sc !== 'sauvage' && !SCEN[B.sc].sansProgres431) {
+      PROFILE.ranks = PROFILE.ranks || {};
+      const o = PROFILE.ranks[B.sc];
+      B.rankNew = !o || RK.indexOf(r) > RK.indexOf(o);
+      if (B.rankNew) PROFILE.ranks[B.sc] = r;
+      queueSave();
+    }
+  }
+  // statistiques et progression
+  if (B && B.over && !B._counted) {
+    B._counted = true;
+    if ((SCEN[B.sc] || {}).sansProgres431) {
+      // énigme, arène personnalisée, Écho profond : ni compteurs ni progression ordinaire (v4.31)
+      SV.lastBattle = null;
+      B.rew = fixedProgress431(B);
+    } else {
+      PROFILE.battles++;
+      if (B.over === 'win') PROFILE.wins++;
+      else if (!B.fuite416) PROFILE.losses++; // une bête qui s’enfuit n’est pas une défaite (v4.16)
+      PROFILE.evos += B.stats.evo || 0;
+      PROFILE.rx += B.stats.rx || 0;
+      PROFILE.kos += B.stats.ko || 0;
+      SV.lastBattle = null;
+      B.rew = applyProgress(B);
+    }
+  }
+  ui.busy = false;
+  ui.act = null;
+  renderAll();
+  setTimeout(
+    () => {
+      if (!B) return;
+      const win = B.over === 'win';
+      if (SCEN[B.sc].gym != null) renderLeague();
+      sfx(win ? 'win' : 'lose');
+      refreshBattle('result'); // fiche de résultat, rang et citation (v2.4), Nuzlocke, victoire : Result.jsx
+      $('#cbResult').hidden = false;
+      after429(B.sc, win); // scène d’après-combat (v4.29)
+      const f = $('#cbResult [data-res="again"]');
+      if (f) f.focus();
+    },
+    RM ? 0 : 900
+  );
+  setTimeout(() => autoSave(true), RM ? 50 : 1200);
+  hook('finCombat');
+}
+
+/* ===================== INTERFACE DE COMBAT v0.8 ===================== */
+export const BG = { S: 27, OX: 20, OY: 22 };
+
+
+export const VB = () => (VERT ? [286, 430] : [430, 286]);
+
+
+/* v4.77 · plateau incliné : HC et HP renvoient des points vus en perspective quand TILT.on.
+   Sol = coordonnées d'origine du viewBox ; écran = sol incliné de TILT.a puis recadré. */
+export const TILT = { on: false };
+
+
+export const HC0 = k => {
+  const p = P(k),
+    q = hc(p[0], p[1], BG.S, BG.OX, BG.OY);
+  return VERT ? [q[1], 430 - q[0]] : q;
+};
+
+
+export const HC = k => (TILT.on ? tiltP(...HC0(k)) : HC0(k));
+
+
+export const HP = (x, y, s) => (TILT.on ? tiltHP(x, y, s) : VERT ? hpf(x, y, s) : hp(x, y, s));
+
+
+export const ui = { sel: null, selE: null, mode: null, mi: null, pk: null, pv: null, busy: false, act: null, cine: false };
+
+
+export const L = {};
+
+
+export const hpc = u => {
+  const r = u.hp / u.mhp;
+  return r > 0.5 ? '' : r > 0.2 ? 'mid' : 'lo';
+};
+
+
+export const DIA = 'M0 -3.4 2.5 0 0 3.4 -2.5 0Z';
+
+
+export const STC = { PAR: 'par', GEL: 'gel', SOM: 'som', REC: 'rec', BRÛ: 'bru', RAC: 'rac', TOILE: 'toile', CHARGE: 'chg', VOL: 'vol', PSN: 'psn', AIDE: 'aide', MAUD: 'maud', REQ: 'req', RIPO: 'ripo', MIR: 'ripo', x2: 'aide' };
+
+
+export const enPips = (n, cls = '') =>
+  `<span class="enp ${cls}" aria-label="Énergie d’Éveil ${n} sur 3">${[0, 1, 2].map(i => `<i class="${i < n ? 'on' : ''}"></i>`).join('')}</span>`;
+
+
+export const poly = (k, c) => {
+  const [x, y] = HC(k),
+    pt = HP(x, y, BG.S - 3);
+  return `<polygon points="${pt}" class="${c} gw"/><polygon points="${pt}" class="${c}"/>`;
+};
+
+// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+export function __init() {
+
+VERT = false;
+
+
+MQV = window.matchMedia ? matchMedia('(max-width: 700px)') : null;
+
+
+if (MQV) {
+  const onMQ = () => {
+    if (B && !$('#cbBattle').hidden && VERT !== MQV.matches) {
+      buildBoard();
+      renderAll();
+    }
+  };
+  MQV.addEventListener ? MQV.addEventListener('change', onMQ) : MQV.addListener(onMQ);
+}
+
+
+B = null,
+  LOG = [],
+  scSel = 'gue';
+
+
+$('#scenList').addEventListener('click', e => {
+  const b = e.target.closest('[data-sc]');
+  if (!b) return;
+  scSel = b.dataset.sc;
+  renderPrep();
+});
+
+
+$('#bLaunch').addEventListener('click', () => launch());
+
+
+$('#evoPick').addEventListener('click', async e => {
+  const b = e.target.closest('[data-pick]');
+  if (!b) {
+    if (e.target.id === 'evoPick') $('#evoPick').hidden = true;
+    return;
+  }
+  $('#evoPick').hidden = true;
+  const id = b.dataset.pick,
+    u = ui.sel && byUid(B, ui.sel);
+  if (!id || !u || !canAwaken(B, u)) return;
+  ui.undo = null;
+  const E = BY[id];
+  ui.busy = true;
+  clearAim();
+  renderAll();
+  await cinematic(u.n, u.t, E.n, E.t, 'a', u.uid);
+  const ev = pAwaken(B, u, id);
+  ui.busy = false;
+  if (!ev) {
+    renderAll();
+    return;
+  }
+  renderAll();
+  playEv(ev);
+  if (B.over) {
+    finish();
+    return;
+  }
+  toast(
+    `${E.n} entre en jeu. ${B.voix >= 2 && !B.relance ? 'Relance (2 Voix) pour utiliser ses capacités tout de suite.' : ''}`
+  );
+  renderAll();
+});
+
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && !$('#evoPick').hidden) $('#evoPick').hidden = true;
+});
+
+
+$('#bSvg').addEventListener('click', e => {
+  const p = e.target.closest('[data-k]');
+  if (!p || !B || ui.busy || B.over || B.phase !== 'player') return;
+  tapTile(p.dataset.k);
+});
+
+
+$('#bPanel').addEventListener('click', e => {
+  const b = e.target.closest('button');
+  if (!b || !B || ui.busy || B.over) return;
+  const u = ui.sel && byUid(B, ui.sel);
+  if (b.dataset.fc) {
+    ui.selE = null;
+    renderAll();
+    return;
+  }
+  if (b.dataset.tile) {
+    ui.tile = null;
+    renderAll();
+    return;
+  }
+  if (b.dataset.undo && ui.undo) {
+    const U = ui.undo;
+    ui.undo = null;
+    B = JSON.parse(U.snap);
+    LOG.splice(0, Math.max(0, LOG.length - U.log));
+    renderLog();
+    clearAim();
+    ui.sel = U.uid;
+    renderAll();
+    sfx('ui');
+    return;
+  }
+  if (b.dataset.cap) {
+    const al = byUid(B, ui.sel),
+      e = byUid(B, b.dataset.cap);
+    const ev = pCapture(B, al, e);
+    if (ev) {
+      ui.undo = null;
+      ui.selE = null;
+      renderAll();
+      playEv(ev);
+      if (B.over) {
+        finish();
+        return;
+      }
+      autoSel();
+      renderAll();
+    }
+    return;
+  }
+  if (b.dataset.duo && u) {
+    if (ui.mode === 'duo' && ui.duo === b.dataset.duo) clearAim();
+    else {
+      clearAim();
+      ui.mode = 'duo';
+      ui.duo = b.dataset.duo;
+    }
+    renderAll();
+    return;
+  }
+  if (b.dataset.evo === 'open' && u) {
+    if (canAwaken(B, u)) openEvoPick(u);
+    return;
+  }
+  if (b.dataset.mi != null && u) {
+    const i = +b.dataset.mi;
+    if (ui.mode === 'target' && ui.mi === i) clearAim();
+    else {
+      ui.mode = 'target';
+      ui.mi = i;
+      ui.pk = null;
+      ui.pv = null;
+      const m = MV[u.mv[i]];
+      if (m.sh === 'self' || m.sh === 'ring') {
+        ui.pk = uk(u);
+        ui.pv = preview(B, u.uid, i, ui.pk);
+      }
+    }
+    renderAll();
+    return;
+  }
+  if (b.dataset.pv === 'ok') {
+    confirmAct();
+    return;
+  }
+  if (b.dataset.pv === 'no') {
+    clearAim();
+    renderAll();
+    return;
+  }
+  if (b.dataset.vx === 'dodge' && u) {
+    ui.mode = ui.mode === 'dodge' ? null : 'dodge';
+    ui.pv = null;
+    ui.pk = null;
+    renderAll();
+    return;
+  }
+  if (b.dataset.vx === 'relance' && u) {
+    const ev = pReroll(B, u);
+    if (ev) {
+      ui.undo = null;
+      renderAll();
+      playEv(ev);
+    }
+    return;
+  }
+});
+
+
+['#bPlE', '#bPlA'].forEach(s =>
+  $(s).addEventListener('click', e => {
+    const b = e.target.closest('[data-u]');
+    if (!b || !B || ui.busy || B.over) return;
+    const u = byUid(B, b.dataset.u);
+    if (!u || u.ko) return;
+    if (u.side === 'a') {
+      if (!canSelect(u)) return;
+      ui.sel = u.uid;
+      ui.selE = null;
+    } else ui.selE = u.uid;
+    clearAim();
+    renderAll();
+  })
+);
+
+
+$('#bEnd').addEventListener('click', endTurn);
+
+
+$('#bQuit').addEventListener('click', () => {
+  if (ui.busy) return;
+  backToPrep();
+});
+
+
+$('#cbResult').addEventListener('click', e => {
+  const b = e.target.closest('[data-res]');
+  if (!b) return;
+  if (b.dataset.res === 'again') {
+    $('#cbResult').hidden = true;
+    launch();
+  } else if (b.dataset.res === 'ligue') {
+    backToPrep();
+    go('ligue');
+  } else backToPrep();
+});
+}

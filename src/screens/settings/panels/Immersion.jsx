@@ -1,4 +1,4 @@
-import { IM448 } from '../../../engine/079-v4-48-immersion-sons-par-type-cris-vibrations-en.js';
+import { IM448 } from '../../../engine/079-immersion-sound-haptics.js';
 
 // Paramètres › Immersion (v4.48) : bouton data-b448 géré par le moteur (module 079).
 export default function Immersion() {

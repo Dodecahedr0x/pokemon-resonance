@@ -1,15 +1,15 @@
 import { Html } from '../../../lib/html.jsx';
-import { MV } from '../../../engine/005-02-capacites.js';
-import { veiled } from '../../../engine/013-07-arenes.js';
-import { medal } from '../../../engine/014-08-outils.js';
-import { EMAX, eveilInfo, foeEvo, hasNx } from '../../../engine/021-14-moteur-combat.js';
-import { B, STC, enPips, segHp, ui } from '../../../engine/024-17-interface-combat.js';
-import { aXP, bossScen, plateRg414 } from '../../../engine/053-v4-14-01-resonance.js';
-import { cache431, vision431 } from '../../../engine/066-v4-31-01-defis-tactiques.js';
+import { MV } from '../../../engine/005-moves.js';
+import { veiled } from '../../../engine/013-gyms.js';
+import { medal } from '../../../engine/014-utils.js';
+import { EMAX, eveilInfo, foeEvo, hasNx } from '../../../engine/021-combat-engine.js';
+import { B, STC, enPips, segHp, ui } from '../../../engine/024-combat-ui.js';
+import { hasXp, bossScene, plateRank414 } from '../../../engine/053-resonance.js';
+import { cache431, vision431 } from '../../../engine/066-tactical-challenges.js';
 import { useBattleVersion } from './battleStore.js';
 
 // Les plaques des deux équipes, au-dessus (#bPlE) et au-dessous (#bPlA) du plateau.
-export function PlaquesE() {
+export function PlatesE() {
   const v = useBattleVersion('top');
   if (!v || !B) return <div className="plates" id="bPlE" />;
   const foes = B.units.filter(u => u.side === 'e'),
@@ -25,13 +25,13 @@ export function PlaquesE() {
       data-dj433={D ? 3 - D.j : undefined}
     >
       {foes.map(u => (
-        <Plaque key={u.uid} u={u} fog={fog && cache431(B, u, vu)} />
+        <Plate key={u.uid} u={u} fog={fog && cache431(B, u, vu)} />
       ))}
     </div>
   );
 }
 
-export function PlaquesA() {
+export function PlatesA() {
   const v = useBattleVersion('top');
   if (!v || !B) return <div className="plates" id="bPlA" />;
   const al = B.units.filter(u => u.side === 'a'),
@@ -39,14 +39,14 @@ export function PlaquesA() {
   return (
     <div className="plates" id="bPlA" style={{ '--n': al.length }} data-dj433={D ? D.j : undefined}>
       {al.map(u => (
-        <Plaque key={u.uid} u={u} />
+        <Plate key={u.uid} u={u} />
       ))}
     </div>
   );
 }
 
 // Ce qu'annonce la plaque : intention adverse, fatigue, Éveil prêt…
-function etat(u, fe, nx) {
+function state(u, fe, nx) {
   if (u.side === 'e')
     return u.caught ? (
       <span className="rdy">Capturé</span>
@@ -90,20 +90,20 @@ function etat(u, fe, nx) {
   );
 }
 
-function Plaque({ u, fog }) {
+function Plate({ u, fog }) {
   const fe = foeEvo(B, u),
     nx = hasNx(u) ? eveilInfo(B, u) : null;
   const cls =
     `plate ${u.side === 'e' ? 'pe' : 'pa'}${u.ko ? ' ko' : ''}${ui.sel === u.uid || ui.selE === u.uid ? ' act' : ''}` +
     `${ui.act === u.uid ? ' now' : ''}${fe ? ' fev' : ''}${u.side === 'a' && u.en >= EMAX && nx && !u.ko ? ' rd' : ''}${fog ? ' fog431' : ''}`;
-  const pips = u.side === 'a' ? hasNx(u) || aXP(u) : bossScen(B) && aXP(u);
+  const pips = u.side === 'a' ? hasNx(u) || hasXp(u) : bossScene(B) && hasXp(u);
   return (
     <button type="button" className={cls} data-u={u.uid}>
       <Html html={medal(u.t, 'pm')} />
       <span className="pl-b">
         <span className="pl-h">
           <span className="n">{u.n}</span>
-          <Html html={plateRg414(u)} />
+          <Html html={plateRank414(u)} />
           {pips ? <Html html={enPips(u.en)} /> : u.lv ? <span className="lv">N.{u.lv}</span> : null}
         </span>
         <Html html={segHp(u)} />
@@ -112,7 +112,7 @@ function Plaque({ u, fog }) {
           {u.badge && !u.ko ? (
             <span className={`stt st-${STC[u.badge] || 'x'}`}>{u.badge}</span>
           ) : (
-            <span className="it">{etat(u, fe, nx)}</span>
+            <span className="it">{state(u, fe, nx)}</span>
           )}
         </span>
       </span>
