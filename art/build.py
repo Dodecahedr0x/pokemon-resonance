@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""Turn art/raw/*.png into shippable img/*.webp (resize, seamless textures)."""
+"""Turn art/raw/*.png into shippable public/img/*.webp (resize, seamless textures)."""
 import json
 from pathlib import Path
 import numpy as np
 from PIL import Image
 
 ART = Path(__file__).resolve().parent
-RAW, OUT = ART / 'raw', ART.parent / 'img'
+RAW, OUT = ART / 'raw', ART.parent / 'public' / 'img'
 
 def seamless(im):
     a = np.asarray(im, dtype=np.float32)

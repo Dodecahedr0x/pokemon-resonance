@@ -1,0 +1,131 @@
+import { Html } from '../../../lib/html.jsx';
+import { MV, TAL } from '../../../engine/005-02-capacites.js';
+import { BY } from '../../../engine/009-03-pokemon.js';
+import { ARR } from '../../../engine/010-04-evolution-en-combat.js';
+import { medal, tb, tc } from '../../../engine/014-08-outils.js';
+import { BRANCHES, brancheWhy, evoOpts, mhpOf } from '../../../engine/021-14-moteur-combat.js';
+import { B } from '../../../engine/024-17-interface-combat.js';
+import { evoliWhy434 } from '../../../engine/069-v4-34-01-calibrage-et-evoli.js';
+import { evoState, useBattleVersion } from './battleStore.js';
+
+// Choix d'évolution (#evoPick). Ouvert et fermé par le moteur (attribut hidden) ;
+// le contenu est celui du Pokémon passé à openEvoPick et reste en place une fois fermé.
+export default function EvoPick() {
+  const v = useBattleVersion('evo');
+  const u = evoState.u;
+  return (
+    <div className="evopick" id="evoPick" hidden>
+      {v && u && B ? <Carte u={u} /> : null}
+    </div>
+  );
+}
+
+function Voie({ u, A, id }) {
+  const E = BY[id],
+    gain = E.mv.filter(x => !u.mv.includes(x)),
+    lose = u.mv.filter(x => !E.mv.includes(x) && x !== u.ctm), // la capacité apprise reste
+    tg = E.t.filter(t => !u.t.includes(t)),
+    nm = mhpOf(E.s) + (u.hb || 0),
+    why = BRANCHES[A.id]
+      ? brancheWhy(B, u, id)
+      : A.nx === 'eevee'
+        ? evoliWhy434(B, u, id)
+        : Array.isArray(A.nx)
+          ? id === A.nx[1]
+            ? 'Appelle la pluie'
+            : 'Combattant'
+          : '';
+  return (
+    <button type="button" className="eo" data-pick={id} style={{ '--c': tc(E.t[0]) }}>
+      <span className="eo-art">
+        <Html html={medal(E.t, 'xl')} />
+      </span>
+      <span className="eo-b">
+        <span className="eo-n">
+          <b>{E.n}</b>
+          {why ? (
+            <em>
+              <Html html={why} />
+            </em>
+          ) : null}
+        </span>
+        <span className="types">
+          {E.t.map((t, i) => (
+            <Html key={i} html={tb(t)} />
+          ))}
+        </span>
+        {'\n   '}
+        <ul>
+          {gain.length ? (
+            <li className="gain">
+              <span>Gagne</span>
+              {gain.map(x => MV[x].n).join(', ')}
+            </li>
+          ) : null}
+          {lose.length ? (
+            <li className="lose">
+              <span>Perd</span>
+              {lose.map(x => MV[x].n).join(', ')} <i>pour toujours</i>
+            </li>
+          ) : null}
+          {tg.length ? (
+            <li>
+              <span>Type</span>+ {tg.join(', ')}
+            </li>
+          ) : null}
+          {E.tal !== u.tal && TAL[E.tal] ? (
+            <li>
+              <span>Talent</span>
+              {TAL[E.tal][0]}
+            </li>
+          ) : null}
+          <li>
+            <span>PV max</span>
+            {u.mhp} → {nm}
+          </li>
+          {ARR[id] ? (
+            <li className="arr">
+              <span>Arrivée</span>
+              <Html html={ARR[id][1]} />
+            </li>
+          ) : null}
+        </ul>
+      </span>
+      <span className="eo-go">Éveiller</span>
+    </button>
+  );
+}
+
+function Carte({ u }) {
+  const o = evoOpts(B, u);
+  if (!o.length) return null;
+  const A = BY[u.id];
+  return (
+    <div className="ep-card" role="dialog" aria-modal="true" aria-labelledby="epT">
+      <p className="kick">Éveil · choix irréversible</p>
+      <h2 className="h2" id="epT">
+        {u.n} va évoluer
+      </h2>
+      <p className="sub">
+        {o.length > 1 ? 'Plusieurs voies s’ouvrent. Une seule sera prise, ' : 'Il n’y a pas de retour : '}les capacités perdues ne
+        reviendront plus de ce combat. L’Éveil coûte 1 Voix et l’action de {u.n}.
+      </p>
+      {'\n  '}
+      <div className="ep-from">
+        <Html html={medal(u.t, 'sm')} />
+        <span>{u.n}</span>
+        <span className="ep-ar">→</span>
+      </div>
+      <div className="ep-opts">
+        {o.map(id => (
+          <Voie key={id} u={u} A={A} id={id} />
+        ))}
+      </div>
+      <div className="ep-a">
+        <button type="button" className="b" data-pick="">
+          Pas maintenant
+        </button>
+      </div>
+    </div>
+  );
+}
