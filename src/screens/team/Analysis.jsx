@@ -65,7 +65,13 @@ export default function Analysis({ A }) {
               <h4>Équipes types</h4>
               <div className="presets">
                 {Object.entries(PRESETS).map(([k, p]) => (
-                  <button key={k} type="button" className={`b b-sm${p.f ? ' form' : ''}`} data-p={k} title={p.f ? 'Formation · recrues confirmées' : undefined}>
+                  <button
+                    key={k}
+                    type="button"
+                    className={`b b-sm${p.f ? ' form' : ''}`}
+                    data-p={k}
+                    title={p.f ? 'Formation · recrues confirmées' : undefined}
+                  >
                     {p.n}
                   </button>
                 ))}
@@ -86,7 +92,9 @@ export default function Analysis({ A }) {
 function recap(A) {
   const n = synOf(squad).length,
     bad = A.al.filter(a => a[0] === 'bad').length;
-  return squad.length ? `Indice ${A.score} · ${n} synergie${n > 1 ? 's' : ''}${bad ? ` · ${bad} alerte${bad > 1 ? 's' : ''}` : ''}` : 'Équipe vide';
+  return squad.length
+    ? `Indice ${A.score} · ${n} synergie${n > 1 ? 's' : ''}${bad ? ` · ${bad} alerte${bad > 1 ? 's' : ''}` : ''}`
+    : 'Équipe vide';
 }
 
 // Resonance Index: circular gauge and details.
@@ -162,7 +170,7 @@ function Radar({ v }) {
           <line key={'a' + i} className="rd-axis" x1={cx} y1={cy} x2={x} y2={y} />,
           <text key={'t' + i} className={`rd-lbl${v[i] > 0 ? ' on' : ''}`} x={lx} y={ly + 3}>
             {ROLES[i].n}
-          </text>
+          </text>,
         ];
       })}
       <polygon className="rd-shape" points={Pp.map(p => p.join(',')).join(' ')} />
@@ -184,7 +192,9 @@ function Formation() {
   } catch {
     return null;
   }
-  if (!F) return null;
+  if (!F) {
+    return null;
+  }
   return (
     <div className="ac ac-fm463">
       <h4>
@@ -192,7 +202,13 @@ function Formation() {
       </h4>
       <div className="fm463-g">
         {Object.keys(FORM463).map(x => (
-          <button key={x} type="button" className={`fm463${x === k ? ' on' : ''}`} data-fm463={x} aria-pressed={x === k}>
+          <button
+            key={x}
+            type="button"
+            className={`fm463${x === k ? ' on' : ''}`}
+            data-fm463={x}
+            aria-pressed={x === k}
+          >
             <b>{FORM463[x].n}</b>
           </button>
         ))}
@@ -202,7 +218,13 @@ function Formation() {
           ? 'Choisissez une formation : un seul bonus, mais il faut composer l’équipe qui va avec. L’ordre de l’équipe compte : le 1er est l’avant-garde, le dernier l’éclaireur.'
           : F.d}
       </p>
-      {ms.length && k !== 'libre' ? ok ? <p className="harm on">Formation active : {F.d}</p> : <p className="harm">Formation inactive. {F.need}</p> : null}
+      {ms.length && k !== 'libre' ? (
+        ok ? (
+          <p className="harm on">Formation active : {F.d}</p>
+        ) : (
+          <p className="harm">Formation inactive. {F.need}</p>
+        )
+      ) : null}
     </div>
   );
 }
@@ -235,7 +257,9 @@ function Ranks() {
         <p className="empty">Ajoutez des Pokémon pour voir leurs rangs.</p>
       )}
       <p className={`harm${harm ? ' on' : ''}`}>
-        {harm ? 'Harmonie : chaque Pokémon commence le combat avec 1 losange.' : `Harmonie : réunissez 3 rangs différents (${n} pour l’instant).`}
+        {harm
+          ? 'Harmonie : chaque Pokémon commence le combat avec 1 losange.'
+          : `Harmonie : réunissez 3 rangs différents (${n} pour l’instant).`}
       </p>
     </div>
   );
@@ -251,12 +275,21 @@ function Synergies() {
   const F = has('Frappeur'),
     Rm = has('Rempart');
   if (F.length && Rm.length) {
-    combos.push(`Escorte : ${displayNames(F)} gagne${F.length > 1 ? 'nt' : ''} +25 % au contact de ${Rm.map(m => m.n).join(' ou ')}.`);
+    combos.push(
+      `Escorte : ${displayNames(F)} gagne${F.length > 1 ? 'nt' : ''} +25 % au contact de ${Rm.map(m => m.n).join(' ou ')}.`
+    );
+  } else if (F.length) {
+    combos.push(`${displayNames(F)} n’a aucun Rempart pour l’escorter.`);
   }
-  else if (F.length) combos.push(`${displayNames(F)} n’a aucun Rempart pour l’escorter.`);
-  if (has('Verrou').length) combos.push(`Prise : ${displayNames(has('Verrou'))} rend vos attaques +25 % sur les cibles altérées.`);
-  if (has('Relais').length) combos.push(`Soutien : ${displayNames(has('Relais'))} soigne ses voisins en fin de manche.`);
-  if (Rm.length) combos.push(`Gardiennage : ${displayNames(Rm)} s’interpose une fois par manche.`);
+  if (has('Verrou').length) {
+    combos.push(`Prise : ${displayNames(has('Verrou'))} rend vos attaques +25 % sur les cibles altérées.`);
+  }
+  if (has('Relais').length) {
+    combos.push(`Soutien : ${displayNames(has('Relais'))} soigne ses voisins en fin de manche.`);
+  }
+  if (Rm.length) {
+    combos.push(`Gardiennage : ${displayNames(Rm)} s’interpose une fois par manche.`);
+  }
   return (
     <div className="ac syn-ac">
       <h4>
@@ -310,7 +343,10 @@ function Reactions({ A }) {
       </span>
     </li>
   );
-  const rows = [...[...A.rx].map(x => row(x, false)), ...[...A.rxp].filter(([id]) => !A.rx.has(id)).map(x => row(x, true))];
+  const rows = [
+    ...[...A.rx].map(x => row(x, false)),
+    ...[...A.rxp].filter(([id]) => !A.rx.has(id)).map(x => row(x, true)),
+  ];
   return (
     <div className="ac">
       <h4>
@@ -319,7 +355,11 @@ function Reactions({ A }) {
           {A.rx.size} → {A.rxp.size}
         </span>
       </h4>
-      {rows.length ? <ul className="rxl">{rows}</ul> : <p className="empty">Aucune réaction : il faut une marque et un autre élément.</p>}
+      {rows.length ? (
+        <ul className="rxl">{rows}</ul>
+      ) : (
+        <p className="empty">Aucune réaction : il faut une marque et un autre élément.</p>
+      )}
     </div>
   );
 }
@@ -369,8 +409,9 @@ function Links() {
         <p className="empty">Recrutez au moins deux Pokémon.</p>
       )}
       <p className="empty">
-        Une réaction préparée par l’un et déclenchée par l’autre donne +1 Lien (×2 si aucun des deux n’a évolué). Paliers : Soutien {LINK_T[0]} (−1 dégât
-        côte à côte), Synchro {LINK_T[1]} (+25 % sur leurs réactions), Duo {LINK_T[2]} (technique combinée).
+        Une réaction préparée par l’un et déclenchée par l’autre donne +1 Lien (×2 si aucun des deux n’a évolué).
+        Paliers : Soutien {LINK_T[0]} (−1 dégât côte à côte), Synchro {LINK_T[1]} (+25 % sur leurs réactions), Duo{' '}
+        {LINK_T[2]} (technique combinée).
       </p>
     </div>
   );

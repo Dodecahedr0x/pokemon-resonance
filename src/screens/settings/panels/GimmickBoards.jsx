@@ -5,9 +5,18 @@ import { GIM467, gimKey467 } from '../../../engine/098-feats-journal-gimmick-boa
 export default function GimmickBoards() {
   const c = gimKey467();
   const btn = (k, l) => (
-    <button key={k} type="button" className={`b b-sm${c === k ? ' b-gold' : ' b-ghost'}`} data-gim467={k} aria-pressed={c === k}>{l}</button>
+    <button
+      key={k}
+      type="button"
+      className={`b b-sm${c === k ? ' b-gold' : ' b-ghost'}`}
+      data-gim467={k}
+      aria-pressed={c === k}
+    >
+      {l}
+    </button>
   );
-  const d = c !== 'off' && c !== 'rand' ? GIM467[c].d : c === 'rand' ? 'Un gimmick différent est tiré à chaque combat.' : '';
+  const d =
+    c !== 'off' && c !== 'rand' ? GIM467[c].d : c === 'rand' ? 'Un gimmick différent est tiré à chaque combat.' : '';
   return (
     <section className="v4-panel" id="gm467">
       <h3 className="h3">Plateaux à gimmick</h3>

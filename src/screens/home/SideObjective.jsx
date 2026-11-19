@@ -10,7 +10,11 @@ import { S2n, emblem, goalInfo } from '../../engine/031-home-journey.js';
 export default function SideObjective() {
   const ready = useEngineReady(),
     v = useHomeVersion();
-  return <div className="side-goal" id="sideGoal">{(ready || v > 0) && <Content />}</div>;
+  return (
+    <div className="side-goal" id="sideGoal">
+      {(ready || v > 0) && <Content />}
+    </div>
+  );
 }
 
 function Content() {
@@ -18,7 +22,13 @@ function Content() {
   return (
     <>
       <span className="sg-k">Prochaine étape</span>
-      <button type="button" className="sg-b" data-goal={squad.length ? g.k : undefined} data-go={squad.length ? undefined : 'pokedex'} style={{ '--ac': g.type ? tc(g.type) : '#FFCB05' }}>
+      <button
+        type="button"
+        className="sg-b"
+        data-goal={squad.length ? g.k : undefined}
+        data-go={squad.length ? undefined : 'pokedex'}
+        style={{ '--ac': g.type ? tc(g.type) : '#FFCB05' }}
+      >
         <Html html={emblem(g.k, 'xs')} />
         <span>
           <b>{g.k === 'tuto' ? 'Combat guidé' : g.k === 'champ' ? 'Finale' : S2n(g)}</b>

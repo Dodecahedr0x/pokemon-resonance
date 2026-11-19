@@ -1,68 +1,378 @@
-
-html body #combat #bBoard.tilt477{background-color:#0b1520!important;background-image:linear-gradient(180deg,rgba(6,12,20,0) 30%,rgba(6,12,20,.25) 70%,rgba(6,12,20,.55)),var(--bg477),var(--resonance-landscape)!important;background-size:cover!important;background-position:center 34%!important;background-repeat:no-repeat!important}
-#bBoard.tilt477 #bSvg{filter:drop-shadow(0 10px 14px rgba(0,0,0,.45))!important}
-#bBoard.tilt477 #bSvg image.pv471,#bBoard.tilt477 #bSvg .wv471{display:none!important}
-html body #bBoard.tilt477 #bSvg .tex471{display:inline!important}
-html body #bBoard.tilt477 #bSvg .tx{opacity:1!important}
-html body #bBoard.tilt477 #bSvg .hx{fill:#22301c!important;stroke:rgba(20,14,6,.55)!important;stroke-width:.9!important}
-html body #bBoard.tilt477 #bSvg .hx.wet{fill:#2b5c96!important}
-#bBoard.tilt477 #bSvg .bv{stroke:url(#bev);stroke-width:1.4;opacity:.9}
-html body #bBoard.tilt477 #bSvg .tx.wet{opacity:.5!important}
-html body #bBoard.tilt477 #bSvg .tx.dep430z{opacity:.45!important}
-html body #bBoard.tilt477 #bSvg .tx.mud,html body #bBoard.tilt477 #bSvg .tx.lava{opacity:.35!important}
-html body #bBoard.tilt477.has-mud477 #bSvg .tx.mud{fill:url(#tx-mud);opacity:1!important}
-html body #bBoard.tilt477.has-lava477 #bSvg .tx.lava{fill:url(#tx-lava);opacity:1!important}
-#bBoard.tilt477 #bSvg .tx.fog431t{filter:brightness(.42) saturate(.5)}
-#bBoard.tilt477 #bSvg .gl{stroke:rgba(255,248,220,.10)}
-#bBoard.tilt477 #bSvg .deco471,#bBoard.tilt477 #bSvg .tuft,#bBoard.tilt477 #bSvg .pebble,#bBoard.tilt477 #bSvg .field{display:none}
-#bBoard.tilt477 .lip477 polygon{fill:#2a1d12;stroke:rgba(0,0,0,.35);stroke-width:.6}
+html body #combat #bBoard.tilt477 {
+  background-color: #0b1520 !important;
+  background-image:
+    linear-gradient(180deg, rgba(6, 12, 20, 0) 30%, rgba(6, 12, 20, 0.25) 70%, rgba(6, 12, 20, 0.55)), var(--bg477),
+    var(--resonance-landscape) !important;
+  background-size: cover !important;
+  background-position: center 34% !important;
+  background-repeat: no-repeat !important;
+}
+#bBoard.tilt477 #bSvg {
+  filter: drop-shadow(0 10px 14px rgba(0, 0, 0, 0.45)) !important;
+}
+#bBoard.tilt477 #bSvg image.pv471,
+#bBoard.tilt477 #bSvg .wv471 {
+  display: none !important;
+}
+html body #bBoard.tilt477 #bSvg .tex471 {
+  display: inline !important;
+}
+html body #bBoard.tilt477 #bSvg .tx {
+  opacity: 1 !important;
+}
+html body #bBoard.tilt477 #bSvg .hx {
+  fill: #22301c !important;
+  stroke: rgba(20, 14, 6, 0.55) !important;
+  stroke-width: 0.9 !important;
+}
+html body #bBoard.tilt477 #bSvg .hx.wet {
+  fill: #2b5c96 !important;
+}
+#bBoard.tilt477 #bSvg .bv {
+  stroke: url(#bev);
+  stroke-width: 1.4;
+  opacity: 0.9;
+}
+html body #bBoard.tilt477 #bSvg .tx.wet {
+  opacity: 0.5 !important;
+}
+html body #bBoard.tilt477 #bSvg .tx.dep430z {
+  opacity: 0.45 !important;
+}
+html body #bBoard.tilt477 #bSvg .tx.mud,
+html body #bBoard.tilt477 #bSvg .tx.lava {
+  opacity: 0.35 !important;
+}
+html body #bBoard.tilt477.has-mud477 #bSvg .tx.mud {
+  fill: url(#tx-mud);
+  opacity: 1 !important;
+}
+html body #bBoard.tilt477.has-lava477 #bSvg .tx.lava {
+  fill: url(#tx-lava);
+  opacity: 1 !important;
+}
+#bBoard.tilt477 #bSvg .tx.fog431t {
+  filter: brightness(0.42) saturate(0.5);
+}
+#bBoard.tilt477 #bSvg .gl {
+  stroke: rgba(255, 248, 220, 0.1);
+}
+#bBoard.tilt477 #bSvg .deco471,
+#bBoard.tilt477 #bSvg .tuft,
+#bBoard.tilt477 #bSvg .pebble,
+#bBoard.tilt477 #bSvg .field {
+  display: none;
+}
+#bBoard.tilt477 .lip477 polygon {
+  fill: #2a1d12;
+  stroke: rgba(0, 0, 0, 0.35);
+  stroke-width: 0.6;
+}
 /* standing tokens: rings lying on the ground, the illustration stands on them */
-#bBoard.tilt477 #bSvg .tok .tok-rdy,#bBoard.tilt477 #bSvg .tok .tok-halo,#bBoard.tilt477 #bSvg .tok .hp-bg,#bBoard.tilt477 #bSvg .tok .tok-ring,#bBoard.tilt477 #bSvg .tok .tok-rim{transform:translateY(8px) scale(1.12,.52)}
-#bBoard.tilt477 #bSvg .tok .hp-arc{transform:translateY(8px) scale(1.12,.52) rotate(-90deg)}
-#bBoard.tilt477 #bSvg .tok .tok-ring{fill-opacity:.38}
-#bBoard.tilt477 #bSvg .tok .tok-sh{transform:translateY(-5px) scale(1.25,1.4);opacity:.85}
-#bBoard.tilt477 #bSvg .tok.has-im .tok-gloss,#bBoard.tilt477 #bSvg .tok.has-im .tok-b>path{display:none}
-#bBoard.tilt477 #bSvg .tok .bdg-s{transform:translate(0,-40px) rotate(-7deg)}
-#bBoard.tilt477 #bSvg .tok .tok-ew{transform:translate(19px,-28px)}
-#bSvg .nmw477{transition:transform .85s var(--ease),opacity .6s ease}
-#bSvg .nmw477.ko{opacity:0;transition:opacity .6s ease .3s}
-#bSvg .nmw477.hid,#bSvg .nmw477.pk-wait{opacity:0}
-html body #bSvg .nmw477.fog431{opacity:0!important;transition:opacity .3s}
-html body #bSvg .nmw477.enemy .tok-nm{fill:#ff9ba0!important}
-html body #bSvg .nmw477.ally .tok-nm{fill:#a9d0ff!important}
-#bBoard.tilt477 #bSvg .tok .tok-im{filter:drop-shadow(0 1.5px 1.2px rgba(0,0,0,.45))}
-#bBoard.tilt477 .lum477 .nuit477{fill:#2a3a78;mix-blend-mode:multiply;opacity:0;transition:opacity 1.8s ease}
-#bBoard.tilt477 .lum477.n .nuit477{opacity:.55}
-#bBoard.tilt477{isolation:isolate}
-#bBoard.tilt477 .fondu477{position:absolute;inset:0;z-index:-1;pointer-events:none;border-radius:inherit;background-size:cover;background-position:center 34%;background-repeat:no-repeat;transition:opacity 1.8s ease}
-#bBoard.tilt477 .fondu477.va{opacity:0}
+#bBoard.tilt477 #bSvg .tok .tok-rdy,
+#bBoard.tilt477 #bSvg .tok .tok-halo,
+#bBoard.tilt477 #bSvg .tok .hp-bg,
+#bBoard.tilt477 #bSvg .tok .tok-ring,
+#bBoard.tilt477 #bSvg .tok .tok-rim {
+  transform: translateY(8px) scale(1.12, 0.52);
+}
+#bBoard.tilt477 #bSvg .tok .hp-arc {
+  transform: translateY(8px) scale(1.12, 0.52) rotate(-90deg);
+}
+#bBoard.tilt477 #bSvg .tok .tok-ring {
+  fill-opacity: 0.38;
+}
+#bBoard.tilt477 #bSvg .tok .tok-sh {
+  transform: translateY(-5px) scale(1.25, 1.4);
+  opacity: 0.85;
+}
+#bBoard.tilt477 #bSvg .tok.has-im .tok-gloss,
+#bBoard.tilt477 #bSvg .tok.has-im .tok-b > path {
+  display: none;
+}
+#bBoard.tilt477 #bSvg .tok .bdg-s {
+  transform: translate(0, -40px) rotate(-7deg);
+}
+#bBoard.tilt477 #bSvg .tok .tok-ew {
+  transform: translate(19px, -28px);
+}
+#bSvg .nmw477 {
+  transition:
+    transform 0.85s var(--ease),
+    opacity 0.6s ease;
+}
+#bSvg .nmw477.ko {
+  opacity: 0;
+  transition: opacity 0.6s ease 0.3s;
+}
+#bSvg .nmw477.hid,
+#bSvg .nmw477.pk-wait {
+  opacity: 0;
+}
+html body #bSvg .nmw477.fog431 {
+  opacity: 0 !important;
+  transition: opacity 0.3s;
+}
+html body #bSvg .nmw477.enemy .tok-nm {
+  fill: #ff9ba0 !important;
+}
+html body #bSvg .nmw477.ally .tok-nm {
+  fill: #a9d0ff !important;
+}
+#bBoard.tilt477 #bSvg .tok .tok-im {
+  filter: drop-shadow(0 1.5px 1.2px rgba(0, 0, 0, 0.45));
+}
+#bBoard.tilt477 .lum477 .nuit477 {
+  fill: #2a3a78;
+  mix-blend-mode: multiply;
+  opacity: 0;
+  transition: opacity 1.8s ease;
+}
+#bBoard.tilt477 .lum477.n .nuit477 {
+  opacity: 0.55;
+}
+#bBoard.tilt477 {
+  isolation: isolate;
+}
+#bBoard.tilt477 .fondu477 {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: inherit;
+  background-size: cover;
+  background-position: center 34%;
+  background-repeat: no-repeat;
+  transition: opacity 1.8s ease;
+}
+#bBoard.tilt477 .fondu477.va {
+  opacity: 0;
+}
 /* animations of the standing Pokémon */
-#bBoard.tilt477 #bSvg .tok:not(.lunge429):not(.hurt429):not(.ko) .tok-b{animation:none}
-#bBoard.tilt477 #bSvg .tok-st477{transform-origin:0 11px;animation:vie477 3.4s ease-in-out infinite}
-@keyframes vie477{0%,100%{transform:translateY(0) scale(1,1)}50%{transform:translateY(-1.4px) scale(.985,1.03)}}
-#bBoard.tilt477 #bSvg .tok.hop477 .tok-st477{animation:hop477 calc(.85s * var(--tk429,1)) cubic-bezier(.3,.6,.4,1) 1}
-@keyframes hop477{0%{transform:translateY(0) scale(1,1)}12%{transform:translateY(1px) scale(1.08,.9)}45%{transform:translateY(-11px) scale(.96,1.06)}82%{transform:translateY(0) scale(1.06,.92)}100%{transform:translateY(0) scale(1,1)}}
-#bBoard.tilt477 #bSvg .tok.ko .tok-st477{animation:none;opacity:.55;transform:translateY(5px) scale(1,.8);transition:transform .6s ease-in,opacity .6s}
-.calme429 #bBoard.tilt477 #bSvg .tok-st477{animation:none!important}
-#bBoard .cs477{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:1;border-radius:inherit;mix-blend-mode:multiply}
-#bBoard .cs477 i{position:absolute;width:70%;height:38%;border-radius:50%;background:radial-gradient(closest-side,rgba(40,48,70,.32),rgba(40,48,70,0));will-change:transform;animation:nuage477 46s linear infinite}
-#bBoard .cs477 i+i{width:55%;height:30%;top:48%;animation-duration:61s;animation-delay:-30s}
-#bBoard .cs477 i:first-child{top:22%}
-#bBoard.tilt477 .eau477 .bande477{animation:bande477 4.5s linear infinite}
-#bBoard.tilt477 .eau477.fixe .bande477{animation:none}
-@keyframes bande477{to{transform:translate(var(--dx),var(--dy))}}
-#bBoard.tilt477 .eau477 .gl477{fill:#f4fbff;opacity:0;transform-box:fill-box;transform-origin:center;animation:gl477 3s ease-in-out infinite}
-#bBoard.tilt477 .eau477.fixe .gl477{animation:none;opacity:.35}
-@keyframes gl477{0%{opacity:0;transform:scaleX(.3)}50%{opacity:1;transform:scaleX(1)}100%{opacity:0;transform:scaleX(1.25)}}
-#bBoard .amb477{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:2;border-radius:inherit}
-#bBoard .amb477 i{position:absolute;width:4px;height:4px;border-radius:50%;background:var(--c);box-shadow:0 0 6px 1.5px var(--c);opacity:0;will-change:transform,opacity;animation:amb477 10s ease-in-out infinite}
-#bBoard .amb477.nuit i{width:4.5px;height:4.5px;box-shadow:0 0 10px 3px var(--c);animation-name:luciole477}
-@keyframes amb477{0%{opacity:0;transform:translate(0,0) scale(var(--s))}25%{opacity:.9}75%{opacity:.7}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(var(--s))}}
-@keyframes luciole477{0%{opacity:0;transform:translate(0,0) scale(var(--s))}20%{opacity:.95}35%{opacity:.25}50%{opacity:.9;transform:translate(calc(var(--dx)*.6),calc(var(--dy)*-.3)) scale(var(--s))}70%{opacity:.2}85%{opacity:.85}100%{opacity:0;transform:translate(var(--dx),calc(var(--dy)*.4)) scale(var(--s))}}
-@keyframes nuage477{from{transform:translateX(-80%)}to{transform:translateX(190%)}}
-html body #bBoard.tilt477.entree477 #bSvg{animation:entree477 1s cubic-bezier(.2,.7,.2,1) .6s backwards;filter:none!important;will-change:transform,opacity}
-@keyframes entree477{from{transform:perspective(900px) rotateX(24deg) translateY(-18px) scale(.9);opacity:0}to{transform:none;opacity:1}}
-@media (prefers-reduced-motion:reduce){#bBoard.tilt477 #bSvg .tok-st477,#bBoard .cs477 i{animation:none!important}#bBoard .amb477{display:none}#bBoard.tilt477 .eau477 .gl477{animation:none;opacity:.35}#bBoard.tilt477 .eau477 .bande477{animation:none}}
-#bBoard.tilt477.bio-roche .lip477 polygon{fill:#4a2e18}
-#bBoard.tilt477.bio-ligue .lip477 polygon,#bBoard.tilt477.bio-arene .lip477 polygon{fill:#8c7a5e}
-#bBoard.tilt477.bio-tour .lip477 polygon{fill:#2a2236}
+#bBoard.tilt477 #bSvg .tok:not(.lunge429):not(.hurt429):not(.ko) .tok-b {
+  animation: none;
+}
+#bBoard.tilt477 #bSvg .tok-st477 {
+  transform-origin: 0 11px;
+  animation: vie477 3.4s ease-in-out infinite;
+}
+@keyframes vie477 {
+  0%,
+  100% {
+    transform: translateY(0) scale(1, 1);
+  }
+  50% {
+    transform: translateY(-1.4px) scale(0.985, 1.03);
+  }
+}
+#bBoard.tilt477 #bSvg .tok.hop477 .tok-st477 {
+  animation: hop477 calc(0.85s * var(--tk429, 1)) cubic-bezier(0.3, 0.6, 0.4, 1) 1;
+}
+@keyframes hop477 {
+  0% {
+    transform: translateY(0) scale(1, 1);
+  }
+  12% {
+    transform: translateY(1px) scale(1.08, 0.9);
+  }
+  45% {
+    transform: translateY(-11px) scale(0.96, 1.06);
+  }
+  82% {
+    transform: translateY(0) scale(1.06, 0.92);
+  }
+  100% {
+    transform: translateY(0) scale(1, 1);
+  }
+}
+#bBoard.tilt477 #bSvg .tok.ko .tok-st477 {
+  animation: none;
+  opacity: 0.55;
+  transform: translateY(5px) scale(1, 0.8);
+  transition:
+    transform 0.6s ease-in,
+    opacity 0.6s;
+}
+.calme429 #bBoard.tilt477 #bSvg .tok-st477 {
+  animation: none !important;
+}
+#bBoard .cs477 {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+  border-radius: inherit;
+  mix-blend-mode: multiply;
+}
+#bBoard .cs477 i {
+  position: absolute;
+  width: 70%;
+  height: 38%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(40, 48, 70, 0.32), rgba(40, 48, 70, 0));
+  will-change: transform;
+  animation: nuage477 46s linear infinite;
+}
+#bBoard .cs477 i + i {
+  width: 55%;
+  height: 30%;
+  top: 48%;
+  animation-duration: 61s;
+  animation-delay: -30s;
+}
+#bBoard .cs477 i:first-child {
+  top: 22%;
+}
+#bBoard.tilt477 .eau477 .bande477 {
+  animation: bande477 4.5s linear infinite;
+}
+#bBoard.tilt477 .eau477.fixe .bande477 {
+  animation: none;
+}
+@keyframes bande477 {
+  to {
+    transform: translate(var(--dx), var(--dy));
+  }
+}
+#bBoard.tilt477 .eau477 .gl477 {
+  fill: #f4fbff;
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: gl477 3s ease-in-out infinite;
+}
+#bBoard.tilt477 .eau477.fixe .gl477 {
+  animation: none;
+  opacity: 0.35;
+}
+@keyframes gl477 {
+  0% {
+    opacity: 0;
+    transform: scaleX(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scaleX(1.25);
+  }
+}
+#bBoard .amb477 {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 2;
+  border-radius: inherit;
+}
+#bBoard .amb477 i {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--c);
+  box-shadow: 0 0 6px 1.5px var(--c);
+  opacity: 0;
+  will-change: transform, opacity;
+  animation: amb477 10s ease-in-out infinite;
+}
+#bBoard .amb477.nuit i {
+  width: 4.5px;
+  height: 4.5px;
+  box-shadow: 0 0 10px 3px var(--c);
+  animation-name: luciole477;
+}
+@keyframes amb477 {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(var(--s));
+  }
+  25% {
+    opacity: 0.9;
+  }
+  75% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--dx), var(--dy)) scale(var(--s));
+  }
+}
+@keyframes luciole477 {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(var(--s));
+  }
+  20% {
+    opacity: 0.95;
+  }
+  35% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 0.9;
+    transform: translate(calc(var(--dx) * 0.6), calc(var(--dy) * -0.3)) scale(var(--s));
+  }
+  70% {
+    opacity: 0.2;
+  }
+  85% {
+    opacity: 0.85;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--dx), calc(var(--dy) * 0.4)) scale(var(--s));
+  }
+}
+@keyframes nuage477 {
+  from {
+    transform: translateX(-80%);
+  }
+  to {
+    transform: translateX(190%);
+  }
+}
+html body #bBoard.tilt477.entree477 #bSvg {
+  animation: entree477 1s cubic-bezier(0.2, 0.7, 0.2, 1) 0.6s backwards;
+  filter: none !important;
+  will-change: transform, opacity;
+}
+@keyframes entree477 {
+  from {
+    transform: perspective(900px) rotateX(24deg) translateY(-18px) scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  #bBoard.tilt477 #bSvg .tok-st477,
+  #bBoard .cs477 i {
+    animation: none !important;
+  }
+  #bBoard .amb477 {
+    display: none;
+  }
+  #bBoard.tilt477 .eau477 .gl477 {
+    animation: none;
+    opacity: 0.35;
+  }
+  #bBoard.tilt477 .eau477 .bande477 {
+    animation: none;
+  }
+}
+#bBoard.tilt477.bio-roche .lip477 polygon {
+  fill: #4a2e18;
+}
+#bBoard.tilt477.bio-ligue .lip477 polygon,
+#bBoard.tilt477.bio-arene .lip477 polygon {
+  fill: #8c7a5e;
+}
+#bBoard.tilt477.bio-tour .lip477 polygon {
+  fill: #2a2236;
+}

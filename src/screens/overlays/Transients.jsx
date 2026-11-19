@@ -19,7 +19,7 @@ const PAR_ID = {
   x470o: X470,
   x2470o: X2470,
   duel433r: Duel433,
-  ct453: Tm453
+  ct453: Tm453,
 };
 
 export default function Transients() {

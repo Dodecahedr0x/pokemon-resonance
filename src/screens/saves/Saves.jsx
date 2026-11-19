@@ -21,7 +21,9 @@ export default function Saves() {
   const x = useRef(null);
   // On opening, focus goes to the Close button (old openSaves).
   useLayoutEffect(() => {
-    if (open) x.current?.focus();
+    if (open) {
+      x.current?.focus();
+    }
   }, [open]);
 
   return (
@@ -42,7 +44,8 @@ function Summary({ s }) {
         ))}
       </span>
       <span className="sv-facts">
-        <b>{s.badges.length} / 8</b> badges · <b>{P.wins}</b> victoire{P.wins > 1 ? 's' : ''} · <b>{P.awakenings}</b> Éveil
+        <b>{s.badges.length} / 8</b> badges · <b>{P.wins}</b> victoire{P.wins > 1 ? 's' : ''} · <b>{P.awakenings}</b>{' '}
+        Éveil
         {P.awakenings > 1 ? 's' : ''}
       </span>
       {validBattle(s.battle) && <span className="sv-bt">Combat en cours : {battleLine(s.battle)}</span>}
@@ -84,7 +87,11 @@ function Slot({ k }) {
         {cf ? (
           <>
             <span className="sv-q">
-              {cf === 'load' ? 'Remplacer la partie en cours ?' : cf === 'put' ? 'Écraser cet emplacement ?' : 'Supprimer définitivement ?'}
+              {cf === 'load'
+                ? 'Remplacer la partie en cours ?'
+                : cf === 'put'
+                  ? 'Écraser cet emplacement ?'
+                  : 'Supprimer définitivement ?'}
             </span>
             <button type="button" className="b b-sm b-gold" data-sv="ok" data-k={k}>
               Confirmer
@@ -113,7 +120,9 @@ function Slot({ k }) {
 
 // "Save code" area: to copy, or to paste.
 function Code() {
-  if (!SV.code) return null;
+  if (!SV.code) {
+    return null;
+  }
   const copy = SV.code.mode === 'copy';
   return (
     <div className="sv-code" style={{ marginTop: '12px', display: 'grid', gap: '8px' }}>
@@ -189,7 +198,14 @@ function Card({ xRef }) {
       <div className="sv-prof">
         <label>
           <span>Nom du dresseur</span>
-          <input id="svName" type="text" maxLength={24} autoComplete="off" placeholder="Votre nom" defaultValue={P.name} />
+          <input
+            id="svName"
+            type="text"
+            maxLength={24}
+            autoComplete="off"
+            placeholder="Votre nom"
+            defaultValue={P.name}
+          />
         </label>
         <div className="sv-k">
           <div>
@@ -213,13 +229,23 @@ function Card({ xRef }) {
       <div className="sv-set">
         <div className="ss-row">
           <span>Mode</span>
-          <b>{isCamp() ? `Campagne · Box ${boxN429()} / ${RECRUIT.length}` : `Libre · combats ouverts · ${freeBox421()}`}</b>
+          <b>
+            {isCamp() ? `Campagne · Box ${boxN429()} / ${RECRUIT.length}` : `Libre · combats ouverts · ${freeBox421()}`}
+          </b>
         </div>
         <div className="ss-row">
           <span>Difficulté</span>
           <span className="ss-seg">
             {Object.entries(DIFFS).map(([k, n]) => (
-              <button key={k} type="button" className="b b-sm" data-sv="set" data-f="diff" data-v={k} aria-pressed={String(PROFILE.diff === k)}>
+              <button
+                key={k}
+                type="button"
+                className="b b-sm"
+                data-sv="set"
+                data-f="diff"
+                data-v={k}
+                aria-pressed={String(PROFILE.diff === k)}
+              >
                 {n}
               </button>
             ))}

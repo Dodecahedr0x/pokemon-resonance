@@ -20,7 +20,7 @@ function refs(T) {
         g: n => n && (T.g = n),
         b: n => n && (T.b = n),
         ring: n => n && (T.ring = n),
-        im: n => (T.im = n)
+        im: n => (T.im = n),
       })
     );
   }
@@ -32,7 +32,9 @@ function Art({ T, r }) {
   const im = useRef(null),
     [x, y, w] = T.geo;
   useLayoutEffect(() => {
-    if (T.href && im.current) im.current.setAttributeNS(XL, 'href', T.href);
+    if (T.href && im.current) {
+      im.current.setAttributeNS(XL, 'href', T.href);
+    }
   }, [T, T.href]);
   return (
     <image
@@ -79,8 +81,12 @@ function Token({ T }) {
   let sty;
   if (T.sh != null || T.tr != null) {
     sty = {};
-    if (T.sh != null) sty['--sh'] = T.sh;
-    if (T.tr != null) sty.transform = T.tr;
+    if (T.sh != null) {
+      sty['--sh'] = T.sh;
+    }
+    if (T.tr != null) {
+      sty.transform = T.tr;
+    }
   }
   const art = T.imOn && <Art T={T} r={r} />;
   return (
@@ -90,10 +96,25 @@ function Token({ T }) {
         <circle className="tok-rdy" r="21" />
         <circle className="tok-halo" r="19" />
         <circle className="hp-bg" r="16" />
-        <circle className="hp-arc" r="16" transform="rotate(-90)" style={T.ad != null ? { strokeDasharray: T.ad, stroke: T.as } : undefined} />
-        <circle ref={setRing} className={'tok-ring' + (T.hit ? ' hit' : '')} r="12.5" style={T.rs != null ? { stroke: T.rs, fill: T.rf } : undefined} />
+        <circle
+          className="hp-arc"
+          r="16"
+          transform="rotate(-90)"
+          style={T.ad != null ? { strokeDasharray: T.ad, stroke: T.as } : undefined}
+        />
+        <circle
+          ref={setRing}
+          className={'tok-ring' + (T.hit ? ' hit' : '')}
+          r="12.5"
+          style={T.rs != null ? { stroke: T.rs, fill: T.rf } : undefined}
+        />
         <circle className="tok-rim" r="12.5" />
-        <path transform="translate(-7,-7) scale(.5833)" fillRule="evenodd" d={T.gd} style={T.gf != null ? { fill: T.gf } : undefined} />
+        <path
+          transform="translate(-7,-7) scale(.5833)"
+          fillRule="evenodd"
+          d={T.gd}
+          style={T.gf != null ? { fill: T.gf } : undefined}
+        />
         <ellipse className="tok-gloss" cx="-3.5" cy="-6" rx="6" ry="3.2" />
         <g className="tok-en">
           {T.pc.map((c, i) => (
@@ -152,7 +173,11 @@ export function NamesHigh() {
     .filter(T => T.nmO)
     .sort((a, b) => a.nmO - b.nmO)
     .map(T => (
-      <g key={T.uid} className={'nmw477' + NMW.map(n => (T.c.includes(n) ? ' ' + n : '')).join('')} style={T.tr != null ? { transform: T.tr } : undefined}>
+      <g
+        key={T.uid}
+        className={'nmw477' + NMW.map(n => (T.c.includes(n) ? ' ' + n : '')).join('')}
+        style={T.tr != null ? { transform: T.tr } : undefined}
+      >
         <text className="tok-nm" y="27">
           {T.n}
         </text>

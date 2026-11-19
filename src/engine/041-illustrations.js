@@ -8,9 +8,10 @@ import { ART, HELD_IMG, ITM } from './032-v4-foundation.js';
 
 let ITEM_SVG;
 
-
 export function itemize(h) {
-  if (typeof h !== 'string') return h;
+  if (typeof h !== 'string') {
+    return h;
+  }
   for (const k in ITEM_SVG) {
     if (h.includes(ITEM_SVG[k])) {
       h = h
@@ -21,12 +22,13 @@ export function itemize(h) {
   return h;
 }
 
-
 // Token illustration (.tok-im image before the badge, in the v4.29 animated group): rendered by
 // Units.jsx from the token template (imOn, geo, href).
 export function tokenArt(u) {
   const T = L.u && L.u[u.uid];
-  if (!T) return;
+  if (!T) {
+    return;
+  }
   if (!T.imOn) {
     T.imOn = true;
     T.geo = ['-17', '-22', '34']; // x, y, width = height
@@ -50,16 +52,19 @@ export function tokArtErr(T) {
   tokCl(T, 'has-im', false);
   T.imOn = false;
   T.imBad = true;
-  if (T.w477) T.imLoose = true;
+  if (T.w477) {
+    T.imLoose = true;
+  }
   T.href = null;
   unitsDirty();
 }
 
-
 export function preload(ids) {
   ids.forEach(id => {
     const m = BY[id];
-    if (!m || pre.has(m.no)) return;
+    if (!m || pre.has(m.no)) {
+      return;
+    }
     pre.add(m.no);
     const i = new Image();
     i.decoding = 'async';
@@ -77,30 +82,27 @@ export function preload(ids) {
 export const tagUnits = S => {
   if (S && Array.isArray(S.units)) {
     S.units.forEach(u => {
-      if (u && Array.isArray(u.t) && BY[u.id]) PKT.set(u.t, u.id); // types → species
+      if (u && Array.isArray(u.t) && BY[u.id]) {
+        PKT.set(u.t, u.id);
+      } // types → species
     });
   }
 };
 
-
 const IMG_ERR = "this.parentNode&&this.parentNode.classList.remove('pk');this.remove()";
-
 
 export const artTag = (m, cls) =>
   `<img class="${cls}" src="${ART(m.no)}" alt="" loading="lazy" decoding="async" draggable="false" onerror="${IMG_ERR}">`;
-
 
 /* discreet preloading of the illustrations of the team and of the chosen battle's opponents */
 const pre = new Set();
 
 // Startup statements, run in their original order (see index.js).
 export function __init() {
+  /* held items: real image in place of the pictogram */
+  ITEM_SVG = Object.fromEntries(
+    Object.keys(ITEMS2).map(k => [k, `<svg viewBox="0 0 24 24"><path d="${ITEMS2[k].i}"/></svg>`])
+  );
 
-/* held items: real image in place of the pictogram */
-ITEM_SVG = Object.fromEntries(
-  Object.keys(ITEMS2).map(k => [k, `<svg viewBox="0 0 24 24"><path d="${ITEMS2[k].i}"/></svg>`])
-);
-
-
-/* board: the Pokémon standing on its token (tokenArt, Units.jsx) */
+  /* board: the Pokémon standing on its token (tokenArt, Units.jsx) */
 }

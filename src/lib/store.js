@@ -47,8 +47,12 @@ export function makeStore(initial, { sync = true } = {}) {
   const get = () => state;
   const set = patch => {
     state = { ...state, ...(typeof patch === 'function' ? patch(state) : patch) };
-    if (sync) return c.emit();
-    if (queued) return;
+    if (sync) {
+      return c.emit();
+    }
+    if (queued) {
+      return;
+    }
     queued = true;
     queueMicrotask(() => {
       queued = false;

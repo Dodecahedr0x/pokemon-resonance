@@ -31,8 +31,8 @@ export default function Team() {
           Mon équipe
         </h1>
         <p className="sub">
-          Choisissez 4 Pokémon avec 12 points de commandement (PC). Touchez « Recruter » sous une carte ; les premiers stades coûtent moins cher et
-          évoluent en combat.
+          Choisissez 4 Pokémon avec 12 points de commandement (PC). Touchez « Recruter » sous une carte ; les premiers
+          stades coûtent moins cher et évoluent en combat.
         </p>
       </div>
       <Tip t="pokedex" />
@@ -43,14 +43,20 @@ export default function Team() {
             <circle cx={9} cy={9} r="5.5" fill="none" stroke="currentColor" strokeWidth="1.7" />
             <path d="m13.2 13.2 3.6 3.6" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
           </svg>
-          <input id="dexQ" type="search" placeholder="Pokémon ou capacité" autoComplete="off" aria-label="Rechercher un Pokémon ou une capacité" />
+          <input
+            id="dexQ"
+            type="search"
+            placeholder="Pokémon ou capacité"
+            autoComplete="off"
+            aria-label="Rechercher un Pokémon ou une capacité"
+          />
         </label>
         <div className="seg" id="genSeg" role="group" aria-label="Génération">
           {[
             ['all', 'Tous'],
             ['1', 'Kanto'],
             ['2', 'Johto'],
-            ['3', 'Hoenn']
+            ['3', 'Hoenn'],
           ].map(([k, n]) => (
             <button key={k} type="button" data-gen={k} aria-pressed={g === k}>
               {n}

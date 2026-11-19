@@ -53,14 +53,18 @@ function Content({ id }) {
     trig = [];
   monMarks(m).forEach(k =>
     MX[k].forEach(r => {
-      if (r && r !== 'ren' && !prep.includes(r)) prep.push(r);
+      if (r && r !== 'ren' && !prep.includes(r)) {
+        prep.push(r);
+      }
     })
   );
   monEls(m).forEach(e => {
     const i = EL.indexOf(e);
     MK.forEach(k => {
       const r = MX[k.id][i];
-      if (r && r !== 'ren' && !trig.includes(r)) trig.push(r);
+      if (r && r !== 'ren' && !trig.includes(r)) {
+        trig.push(r);
+      }
     });
   });
   const rl = arr =>
@@ -120,7 +124,14 @@ function Content({ id }) {
       <div className="sh-sec">
         <div className="stabs" role="tablist" aria-label="Stades de la famille">
           {family.map(x => (
-            <button key={x.id} type="button" role="tab" aria-selected={x.id === id} className={`stab${x.id === id ? ' on' : ''}`} data-open={x.id}>
+            <button
+              key={x.id}
+              type="button"
+              role="tab"
+              aria-selected={x.id === id}
+              className={`stab${x.id === id ? ' on' : ''}`}
+              data-open={x.id}
+            >
               <Html html={medal(x.t, 'sm')} />
               <span>
                 <b>{x.n}</b>
@@ -131,7 +142,8 @@ function Content({ id }) {
         </div>
         {m.st === 1 ? (
           <p className="how ok">
-            Se recrute pour {m.c} PC.{nx.length ? ' Il évolue en combat ; ses formes évoluées se recrutent aussi directement, plus cher.' : ''}
+            Se recrute pour {m.c} PC.
+            {nx.length ? ' Il évolue en combat ; ses formes évoluées se recrutent aussi directement, plus cher.' : ''}
           </p>
         ) : (
           <>
@@ -176,7 +188,10 @@ function Content({ id }) {
               ? 'Ses 5 évolutions sont au choix au moment de l’Éveil. En harmonie avec sa case (Trempée : Aquali, Chargée : Voltali, Brûlante : Pyroli) ou avec l’heure (Mentali le jour, Noctali la nuit), il garde 1 losange.'
               : BRANCHES[m.id]
                 ? BRANCHES[m.id]
-                    .map(b => `${BY[b.id].n} : ${/^PV/.test(b.why) ? b.why : b.why[0].toLowerCase() + b.why.slice(1)}${b.def ? ' (voie par défaut)' : ''}`)
+                    .map(
+                      b =>
+                        `${BY[b.id].n} : ${/^PV/.test(b.why) ? b.why : b.why[0].toLowerCase() + b.why.slice(1)}${b.def ? ' (voie par défaut)' : ''}`
+                    )
                     .join(' · ') + '. Une seule sera prise.'
                 : Array.isArray(m.nx)
                   ? 'Deux voies au choix : une seule sera prise.'
@@ -328,7 +343,15 @@ function Evd({ a, b, from }) {
 // Illustrated item icon (old itemizeDom on the sheet); without an image, it is hidden.
 function ItemImg({ k }) {
   const k2 = Object.keys(ITEMS2).find(x => ITEMS2[x].i === ITEMS2[k].i) || k;
-  return <img className="it-img" src={ITM(HELD_IMG[k2])} alt="" loading="lazy" onError={e => (e.currentTarget.style.display = 'none')} />;
+  return (
+    <img
+      className="it-img"
+      src={ITM(HELD_IMG[k2])}
+      alt=""
+      loading="lazy"
+      onError={e => (e.currentTarget.style.display = 'none')}
+    />
+  );
 }
 
 // Held item, fatigue and links (old sheetExtras, v1.0).
@@ -356,7 +379,13 @@ function Extras({ base }) {
               {its.map(k => {
                 const holder = Object.keys(PROFILE.equipment).find(x => PROFILE.equipment[x] === k && x !== base.id);
                 return (
-                  <button key={k} type="button" className={`eq${cur === k ? ' on' : ''}`} data-eq={base.id} data-it={cur === k ? '' : k}>
+                  <button
+                    key={k}
+                    type="button"
+                    className={`eq${cur === k ? ' on' : ''}`}
+                    data-eq={base.id}
+                    data-it={cur === k ? '' : k}
+                  >
                     <span className="it-ic">
                       <ItemImg k={k} />
                     </span>
@@ -379,7 +408,10 @@ function Extras({ base }) {
         )}
         {fat ? (
           <p className={`how${fat >= 70 ? '' : ' ok'}`}>
-            Fatigue {fat} %{fat >= 70 ? ' : −1 Mouvement au prochain combat. Laissez-le se reposer un combat, ou faites-le évoluer.' : ''}
+            Fatigue {fat} %
+            {fat >= 70
+              ? ' : −1 Mouvement au prochain combat. Laissez-le se reposer un combat, ou faites-le évoluer.'
+              : ''}
           </p>
         ) : null}
       </div>

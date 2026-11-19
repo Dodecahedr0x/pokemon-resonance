@@ -10,7 +10,9 @@ import { alive450 } from '../../engine/082-living-home-weather.js';
 // Home hero (#hmHero): next step (old renderHome), living backdrop depending on the
 // region and time with the companion (v4.28), season and weather of the day (v4.52).
 export default function Hero({ on }) {
-  if (!on) return <div className="v4-hero" id="hmHero" />;
+  if (!on) {
+    return <div className="v4-hero" id="hmHero" />;
+  }
   const g = goalInfo(),
     S = g.S,
     C = g.C,
@@ -27,7 +29,13 @@ export default function Hero({ on }) {
       </>
     ) : null;
   return (
-    <div className="v4-hero hv428on" id="hmHero" style={{ '--ac': g.type ? tc(g.type) : '#FFD45B' }} data-reg={V.reg} data-tod={V.tod}>
+    <div
+      className="v4-hero hv428on"
+      id="hmHero"
+      style={{ '--ac': g.type ? tc(g.type) : '#FFD45B' }}
+      data-reg={V.reg}
+      data-tod={V.tod}
+    >
       <div className="hv428" aria-hidden="true">
         <span className="hv428-bg" />
         <span className="hv428-tod" />
@@ -71,18 +79,32 @@ export default function Hero({ on }) {
         <div className="v4h-cta">
           {squad.length ? (
             <button type="button" className="b b-gold b-lg v4-cta" data-goal={g.k}>
-              <span className="v4-cta-ic"><svg><use href="#i-play" /></svg></span>
+              <span className="v4-cta-ic">
+                <svg>
+                  <use href="#i-play" />
+                </svg>
+              </span>
               {g.k === 'tuto' ? 'Commencer l’aventure' : 'Continuer l’aventure'}
-              <svg><use href="#i-arrow" /></svg>
+              <svg>
+                <use href="#i-arrow" />
+              </svg>
             </button>
           ) : (
             <button type="button" className="b b-gold b-lg v4-cta" data-go="pokedex">
-              <span className="v4-cta-ic"><svg><use href="#i-team" /></svg></span>
+              <span className="v4-cta-ic">
+                <svg>
+                  <use href="#i-team" />
+                </svg>
+              </span>
               Choisir mon équipe
-              <svg><use href="#i-arrow" /></svg>
+              <svg>
+                <use href="#i-arrow" />
+              </svg>
             </button>
           )}
-          <button type="button" className="b b-ghost" data-guide="debuter">Comment jouer</button>
+          <button type="button" className="b b-ghost" data-guide="debuter">
+            Comment jouer
+          </button>
         </div>
         {'\n  '}
         <div className="v4h-prof">

@@ -27,7 +27,9 @@ export function showCoach(k, step) {
 }
 export function hideCoach() {
   const s = coachS.get();
-  if (!s.hidden || s.k !== '') coachS.set({ hidden: true, k: '' });
+  if (!s.hidden || s.k !== '') {
+    coachS.set({ hidden: true, k: '' });
+  }
 }
 
 /* ---------- partner choice (#starter) ---------- */
@@ -50,7 +52,9 @@ export function showEnc(snap) {
   encS.set(s => ({ open: true, snap, v: s.v + 1 }));
 }
 export function hideEnc() {
-  if (encS.get().open) encS.set({ open: false });
+  if (encS.get().open) {
+    encS.set({ open: false });
+  }
 }
 
 /* ---------- the Professor's welcome (#intro) ----------
@@ -65,7 +69,9 @@ export function refreshIntro() {
   introS.set(s => ({ v: s.v + 1 }));
 }
 export function closeIntroBox() {
-  if (introS.get().open) introS.set({ open: false });
+  if (introS.get().open) {
+    introS.set({ open: false });
+  }
 }
 
 /* ---------- Prof. Sorbier's tip in battle (#tip429) ---------- */
@@ -75,5 +81,7 @@ export function showTip429(t, d) {
   tipS.set(s => ({ tip: { t, d }, v: s.v + 1 }));
 }
 export function hideTip429() {
-  if (tipS.get().tip) tipS.set({ tip: null });
+  if (tipS.get().tip) {
+    tipS.set({ tip: null });
+  }
 }

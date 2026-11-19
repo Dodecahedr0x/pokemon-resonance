@@ -7,7 +7,13 @@ import { useBoard } from './boardStore.js';
 // terrain pattern; painted texture loaded (v4.77): the image replaces the drawing
 function Pat({ id, t, w, h, tr, on, children }) {
   return (
-    <pattern id={id} width={on ? 72 : w} height={on ? 72 : h} patternUnits="userSpaceOnUse" patternTransform={on ? 'scale(1 .78)' : tr}>
+    <pattern
+      id={id}
+      width={on ? 72 : w}
+      height={on ? 72 : h}
+      patternUnits="userSpaceOnUse"
+      patternTransform={on ? 'scale(1 .78)' : tr}
+    >
       {on ? <image href={`img/tex-${t}.webp`} width="72" height="72" preserveAspectRatio="none" /> : children}
     </pattern>
   );
@@ -37,11 +43,19 @@ function WaterDefs({ E, vb }) {
       [0.5, E.nuit ? 0.38 : 0.55],
       [0.53, E.nuit ? 0.18 : 0.28],
       [0.64, 0],
-      [1, 0]
+      [1, 0],
     ];
   return (
     <>
-      <linearGradient id="eau477g" gradientUnits="userSpaceOnUse" spreadMethod="repeat" x1="0" y1="0" x2={dx.toFixed(1)} y2={dy.toFixed(1)}>
+      <linearGradient
+        id="eau477g"
+        gradientUnits="userSpaceOnUse"
+        spreadMethod="repeat"
+        x1="0"
+        y1="0"
+        x2={dx.toFixed(1)}
+        y2={dy.toFixed(1)}
+      >
         {st.map(([o, a], i) => (
           <stop key={i} offset={o} stopColor={c} stopOpacity={a} />
         ))}
@@ -65,7 +79,15 @@ export default function Defs() {
       <pattern id="fogP" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
         <line className="fogline" x1="0" y1="0" x2="0" y2="6" />
       </pattern>
-      <marker id="iArr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+      <marker
+        id="iArr"
+        viewBox="0 0 10 10"
+        refX="8"
+        refY="5"
+        markerWidth="5"
+        markerHeight="5"
+        orient="auto-start-reverse"
+      >
         <path d="M0 0 10 5 0 10Z" className="arr-h" />
       </marker>
       <Pat id="tx-grass" t="grass" w="16" h="14" on={on('grass')}>

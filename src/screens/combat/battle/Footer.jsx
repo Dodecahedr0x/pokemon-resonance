@@ -67,7 +67,9 @@ function bar() {
           : ready
             ? 'À vous : déplacez, puis agissez.'
             : 'Tous vos Pokémon ont joué.';
-  if (B.coop && !ui.busy && !ui.cutscene) phase = `Joueur ${B.coop} · ` + phase; // co-op (v4.18)
+  if (B.coop && !ui.busy && !ui.cutscene) {
+    phase = `Joueur ${B.coop} · ` + phase;
+  } // co-op (v4.18)
   let playerRef = null;
   // deployment (v4.30)
   if (B.dep430 && !B.over) {
@@ -83,8 +85,9 @@ function bar() {
   // local duel (v4.33)
   const D = B.duel433;
   if (D && !B.over && !ui.cutscene) {
-    if (ui.busy) button = 'Fin de manche…';
-    else {
+    if (ui.busy) {
+      button = 'Fin de manche…';
+    } else {
       const r = B.units.filter(u => u.side === 'a' && !u.ko && !u.acted).length;
       button = (
         <>
@@ -108,7 +111,12 @@ function bar() {
   let step = null;
   if (g) {
     const n = flow478.remaining(B).length,
-      t = B.order === 'vitesse' ? 'À vous : déplacez, puis agissez.' : n ? `Encore ${n} Pokémon à jouer.` : 'Manche terminée.';
+      t =
+        B.order === 'vitesse'
+          ? 'À vous : déplacez, puis agissez.'
+          : n
+            ? `Encore ${n} Pokémon à jouer.`
+            : 'Manche terminée.';
     phase = phase.replace(/(À vous : )?déplacez, puis agissez\./, t).replace(/Tous (vos|ses) Pokémon ont joué\./, t);
     const u = ui.sel && byUid(B, ui.sel);
     if (u && u.side === 'a' && !ui.selE) {
@@ -129,7 +137,9 @@ export default function Footer() {
   const x = v && B ? bar() : null;
   // the hidden step keeps its last text, like the old DOM
   // (keyed by version: the step element is rebuilt on every render)
-  if (x && x.stepOf && (!lastStep || lastStep.v !== v)) setLastStep({ v, el: x.stepOf });
+  if (x && x.stepOf && (!lastStep || lastStep.v !== v)) {
+    setLastStep({ v, el: x.stepOf });
+  }
   const Q = barBottom.qa,
     tools = getHost().bt444;
   return (
@@ -138,7 +148,14 @@ export default function Footer() {
       {Q && (
         <div id="qa443" className="qa443" role="toolbar" aria-label="Actions du Pokémon choisi" hidden={Q.hidden}>
           {Q.items.map((b, i) => (
-            <button key={i} type="button" data-qa443={i} className={b.c + (b.on ? ' on' : '')} style={b.col ? { '--c': b.col } : undefined} disabled={b.disabled}>
+            <button
+              key={i}
+              type="button"
+              data-qa443={i}
+              className={b.c + (b.on ? ' on' : '')}
+              style={b.col ? { '--c': b.col } : undefined}
+              disabled={b.disabled}
+            >
               {b.col ? <i /> : null}
               {b.t}
             </button>
@@ -155,7 +172,13 @@ export default function Footer() {
         )}
       </span>
       {Q && Q.displayName ? <span className="qa443-n">{Q.displayName}</span> : null}
-      <button className="b b-gold" id="bEnd" type="button" disabled={x ? x.disabled : undefined} style={x ? { display: x.g ? 'none' : '' } : undefined}>
+      <button
+        className="b b-gold"
+        id="bEnd"
+        type="button"
+        disabled={x ? x.disabled : undefined}
+        style={x ? { display: x.g ? 'none' : '' } : undefined}
+      >
         {x ? x.actionButton : 'Fin du tour'}
       </button>
       {v > 0 && (

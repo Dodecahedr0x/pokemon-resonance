@@ -13,11 +13,16 @@ import { EQ_NAME432 } from '../../engine/067-individuals-comfort.js';
 // captured legends (v4.29), saved teams (v4.32), formations.
 // Clicks: engine listeners (#dexCall [data-stg], data-pf, data-eq432, data-lp429).
 export default function DexCall({ v }) {
-  const [isOpen, setOpen] = useState(() => !(typeof matchMedia === 'function' && matchMedia('(max-width:700px)').matches));
+  const [isOpen, setOpen] = useState(
+    () => !(typeof matchMedia === 'function' && matchMedia('(max-width:700px)').matches)
+  );
   return (
     <div className="dex-call" id="dexCall">
       <div className="dc-row">
-        <span className="lbl-s" title="Formes déjà évoluées, recrutées directement : plus puissantes tout de suite, mais plus chères.">
+        <span
+          className="lbl-s"
+          title="Formes déjà évoluées, recrutées directement : plus puissantes tout de suite, mais plus chères."
+        >
           Recrues confirmées
         </span>
         <div className="dc-stars">
@@ -52,7 +57,13 @@ export default function DexCall({ v }) {
           <span className="lbl-s">Formations</span>
           <div className="dc-f">
             {Object.entries(PRESETS).map(([k, p]) => (
-              <button key={k} type="button" className={`b b-sm${p.f ? ' form' : ''}`} data-pf={k} title={p.s432 ? 'Synergies : ' + p.s432 : ''}>
+              <button
+                key={k}
+                type="button"
+                className={`b b-sm${p.f ? ' form' : ''}`}
+                data-pf={k}
+                title={p.s432 ? 'Synergies : ' + p.s432 : ''}
+              >
                 {p.n}
               </button>
             ))}
@@ -66,7 +77,9 @@ export default function DexCall({ v }) {
 // Captured legends (old legRow429).
 function Legends() {
   const L = LEGS.filter(x => PROFILE.box.includes(x.id));
-  if (!L.length) return null;
+  if (!L.length) {
+    return null;
+  }
   return (
     <div className="dc-row">
       <span className="lbl-s" title="Légendes capturées : 8 PC chacune.">
@@ -106,7 +119,13 @@ function Squads432() {
       <div className="dc-f">
         {T.map((t, i) => (
           <span key={i} className="eq432-c">
-            <button type="button" className="b b-sm" data-eq432="charger" data-i={i} title={t.ids.map(id => (BY[id] ? BY[id].n : id)).join(', ')}>
+            <button
+              type="button"
+              className="b b-sm"
+              data-eq432="charger"
+              data-i={i}
+              title={t.ids.map(id => (BY[id] ? BY[id].n : id)).join(', ')}
+            >
               {t.n}
             </button>
             <button type="button" className="eq432-x" data-eq432="suppr" data-i={i} aria-label={`Supprimer ${t.n}`}>
@@ -116,7 +135,13 @@ function Squads432() {
         ))}
         {EQ_NAME432 ? (
           <span className="eq432-n">
-            <input type="text" id="eqNom432" maxLength={20} placeholder="Nom de l’équipe" aria-label="Nom de l’équipe" />
+            <input
+              type="text"
+              id="eqNom432"
+              maxLength={20}
+              placeholder="Nom de l’équipe"
+              aria-label="Nom de l’équipe"
+            />
             <button type="button" className="b b-sm b-gold" data-eq432="ok">
               OK
             </button>

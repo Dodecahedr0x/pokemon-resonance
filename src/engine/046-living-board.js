@@ -8,45 +8,46 @@ import { PREF } from './026-campaign-tutorial-sound.js';
 import { DAMAGE_PROVIDERS } from './044-tactical-engine.js';
 import { noWind } from './047-tactics.js';
 
-
-
 /** The player's setting. The guided prologue battle always stays classic. */
 export function chosenAlive() {
   return PREF.livingBoard !== false && !(SCEN[scSel] && SCEN[scSel].tuto);
 }
 
-
 /** At the start of a battle: the scenario's time becomes the first time of the cycle. */
 export function aliveInit(S, opt) {
-  if (!opt || !opt.livingBoard) return;
+  if (!opt || !opt.livingBoard) {
+    return;
+  }
   S.livingBoard = true;
   S.cycle = { ph: S.time === 'nuit' ? 'nuit' : 'jour', n: 0 };
   // wind (v4.8): two battles out of three, in one of the 6 directions
   S.vent = Math.random() < 0.67 ? { d: Math.floor(Math.random() * 6) } : null;
 }
 
-
 /** "day" or "night": what the game sees for Eevee. Without the living board, the scenario's time. */
 export function hourOf(S) {
   return S.cycle ? (S.cycle.ph === 'nuit' ? 'nuit' : 'jour') : S.time === 'nuit' ? 'nuit' : 'jour';
 }
-
 
 /** Range reduced at night (called by effR). */
 export function nightRange(S, u, m) {
   return S && S.cycle && S.cycle.ph === 'nuit' && m.r >= 3 && !seesAtNight(u) ? 1 : 0;
 }
 
-
 /** Would a tall grass catch fire at the next end of round? (also used to warn on screen) */
 export function fireHazard(S, k) {
   const t = S.tiles[k];
-  if (!S.livingBoard || !t || !t.grass || t.rock || t.w) return false;
-  if (S.wx && S.wx.k === 'pluie') return false;
-  if (t.mark && t.mark.k === 'trempe') return false; // soaked grass
+  if (!S.livingBoard || !t || !t.grass || t.rock || t.w) {
+    return false;
+  }
+  if (S.wx && S.wx.k === 'pluie') {
+    return false;
+  }
+  if (t.mark && t.mark.k === 'trempe') {
+    return false;
+  } // soaked grass
   return nbrK(k).some(n => onFire(S, n));
 }
-
 
 /** A tall grass that can burn (without looking at its neighbors). */
 function dryGrass(S, k) {
@@ -54,9 +55,10 @@ function dryGrass(S, k) {
   return !!(S.livingBoard && t && t.grass && !t.rock && !t.w && !(t.mark && t.mark.k === 'trempe'));
 }
 
-
 export function aliveRound(S, ev) {
-  if (!S.livingBoard) return;
+  if (!S.livingBoard) {
+    return;
+  }
   const W = S.wx && S.wx.k;
   let rebuild = false;
   // rain puts it out, hail freezes
@@ -89,14 +91,27 @@ export function aliveRound(S, ev) {
   }
   // fire spreads through tall grass: take a snapshot first, then apply
   const hasWon = [];
-  for (const k in S.tiles) if (fireHazard(S, k)) hasWon.push([k, nbrK(k).find(n => onFire(S, n))]);
+  for (const k in S.tiles) {
+    if (fireHazard(S, k)) {
+      hasWon.push([k, nbrK(k).find(n => onFire(S, n))]);
+    }
+  }
   // downwind (v4.8), the fire jumps one more cell in the tall grass
   if (S.vent && W !== 'pluie') {
     for (const b in S.tiles) {
-      if (!onFire(S, b)) continue;
+      if (!onFire(S, b)) {
+        continue;
+      }
       const n1 = noWind(b, S.vent.d),
         n2 = n1 && noWind(n1, S.vent.d);
-      if (n1 && n2 && fireHazard(S, n1) && fireHazard(S, n2) === false && dryGrass(S, n2) && !hasWon.some(g => g[0] === n2)) {
+      if (
+        n1 &&
+        n2 &&
+        fireHazard(S, n1) &&
+        fireHazard(S, n2) === false &&
+        dryGrass(S, n2) &&
+        !hasWon.some(g => g[0] === n2)
+      ) {
         hasWon.push([n2, n1]);
       }
     }
@@ -114,7 +129,9 @@ export function aliveRound(S, ev) {
     S.stats.feu = (S.stats.feu || 0) + hasWon.length; // Pyromane (Pyromaniac) achievement (v4.9)
     hasWon.forEach(([k]) => {
       const w = uAt(S, k);
-      if (!w || flies(w) || w.t.includes('Feu') || w.ability === 'torche') return;
+      if (!w || flies(w) || w.t.includes('Feu') || w.ability === 'torche') {
+        return;
+      }
       w.burn = Math.max(w.burn, 2);
       say(ev, `${w.n} est pris dans l’incendie !`);
     });
@@ -126,20 +143,30 @@ export function aliveRound(S, ev) {
     let n = 0;
     for (const k in S.tiles) {
       const f = S.tiles[k].fog;
-      if (!(f > 0)) continue;
+      if (!(f > 0)) {
+        continue;
+      }
       n++;
       const d = noWind(k, S.vent.d);
-      if (d && !S.tiles[d].rock) nf[d] = Math.max(nf[d] || 0, f);
+      if (d && !S.tiles[d].rock) {
+        nf[d] = Math.max(nf[d] || 0, f);
+      }
     }
     if (n) {
-      for (const k in S.tiles) S.tiles[k].fog = nf[k] || 0;
+      for (const k in S.tiles) {
+        S.tiles[k].fog = nf[k] || 0;
+      }
       say(ev, 'Le vent pousse le brouillard.');
       rebuild = true;
     }
   }
-  if (rebuild) ev.push({ e: 'terrain' });
+  if (rebuild) {
+    ev.push({ e: 'terrain' });
+  }
   // time advances
-  if (!S.cycle.frozen) S.cycle.n++; // Eternal Night: time does not pass (v4.9)
+  if (!S.cycle.frozen) {
+    S.cycle.n++;
+  } // Eternal Night: time does not pass (v4.9)
   if (S.cycle.n >= LIVING_STEP) {
     S.cycle = { ph: LIVING_ORDER[(LIVING_ORDER.indexOf(S.cycle.ph) + 1) % LIVING_ORDER.length], n: 0 };
     say(ev, LIVING_ANNOUNCE[S.cycle.ph]);
@@ -151,23 +178,27 @@ export function aliveRound(S, ev) {
   }
 }
 
-
 /** The time-of-day chip, next to the weather one. */
 export function chipTime(S) {
-  if (!S || !S.cycle) return '';
-  if (S.cycle.frozen) return `<span class="chip chip-heure" title="${LIVING_DESC.nuit}"><i style="background:${LIVING_COLOR.nuit}"></i>Nuit éternelle</span>`;
+  if (!S || !S.cycle) {
+    return '';
+  }
+  if (S.cycle.frozen) {
+    return `<span class="chip chip-heure" title="${LIVING_DESC.nuit}"><i style="background:${LIVING_COLOR.nuit}"></i>Nuit éternelle</span>`;
+  }
   const p = S.cycle.ph,
     remainder = LIVING_STEP - S.cycle.n,
     following = LIVING_ORDER[(LIVING_ORDER.indexOf(p) + 1) % LIVING_ORDER.length];
   return `<span class="chip chip-heure" title="${LIVING_DESC[p]}"><i style="background:${LIVING_COLOR[p]}"></i>${LIVING_NAME[p]} · ${LIVING_NAME[following].toLowerCase()} ${remainder > 1 ? 'dans ' + remainder + ' manches' : 'après cette manche'}</span>`;
 }
 
-
 /** Board tint according to the time (the attribute survives the board being rebuilt). */
 export function hourTint(S) {
   // data-ph of #bBoard: rendered by React (Board.jsx)
   const ph = S && S.cycle ? S.cycle.ph : undefined;
-  if (getHost().ph !== ph) hostSet({ ph });
+  if (getHost().ph !== ph) {
+    hostSet({ ph });
+  }
 }
 
 /* =====================================================================
@@ -205,61 +236,69 @@ export function hourTint(S) {
 
 const LIVING_STEP = 4;
 
- // rounds per time of day
+// rounds per time of day
 const LIVING_ORDER = ['jour', 'crepuscule', 'nuit', 'aube'];
-
 
 export const LIVING_NAME = { aube: 'Aube', jour: 'Jour', crepuscule: 'Crépuscule', nuit: 'Nuit' };
 
-
 const LIVING_COLOR = { aube: '#f0a6a0', jour: '#f2c94c', crepuscule: '#e8774a', nuit: '#6b7bd6' };
-
 
 export const LIVING_DESC = {
   jour: 'Plante et Vol ×1,2.',
   aube: 'Plante et Vol ×1,1.',
   crepuscule: 'Spectre et Ténèbres ×1,1.',
-  nuit: 'Spectre et Ténèbres ×1,2. Les attaques de 3 cases ou plus perdent 1 de portée (sauf Spectre, Ténèbres, Regard Vif, Écholocation).'
+  nuit: 'Spectre et Ténèbres ×1,2. Les attaques de 3 cases ou plus perdent 1 de portée (sauf Spectre, Ténèbres, Regard Vif, Écholocation).',
 };
 
-
-export const LIVING_STATE = { jour: 'Il fait jour', aube: 'C’est l’aube', crepuscule: 'Le crépuscule tombe', nuit: 'Il fait nuit' };
-
+export const LIVING_STATE = {
+  jour: 'Il fait jour',
+  aube: 'C’est l’aube',
+  crepuscule: 'Le crépuscule tombe',
+  nuit: 'Il fait nuit',
+};
 
 const LIVING_ANNOUNCE = {
   crepuscule: 'Le crépuscule tombe : les Spectres et les Ténèbres se renforcent (×1,1).',
   nuit: 'La nuit tombe : Spectre et Ténèbres ×1,2. Les attaques de 3 cases ou plus perdent 1 de portée.',
   aube: 'L’aube se lève : les Plantes et les Vols se réveillent (×1,1).',
-  jour: 'Le jour se lève : Plante et Vol ×1,2.'
+  jour: 'Le jour se lève : Plante et Vol ×1,2.',
 };
 
-
 /** Can one see well in the dark? */
-export const seesAtNight = u => u.t.includes('Spectre') || u.t.includes('Ténèbres') || u.ability === 'regardvif' || u.ability === 'echolocation';
+export const seesAtNight = u =>
+  u.t.includes('Spectre') || u.t.includes('Ténèbres') || u.ability === 'regardvif' || u.ability === 'echolocation';
 
 /* ---------- 2. End of round: time, weather and fire ---------- */
 const onFire = (S, k) => !!(S.tiles[k] && S.tiles[k].mark && S.tiles[k].mark.k === 'brulant');
 
 // Statements run at startup, in the original order (see index.js).
 export function __init() {
+  /* ---------- 1. The time, a damage modifier provider ---------- */
+  DAMAGE_PROVIDERS.push({
+    id: 'heure',
+    provide: (c, { S, typ }) => {
+      const ph = S.cycle && S.cycle.ph;
+      if (!ph) {
+        return null;
+      }
+      const nocturnal = typ === 'Spectre' || typ === 'Ténèbres',
+        diurnal = typ === 'Plante' || typ === 'Vol';
+      if (nocturnal && ph === 'nuit') {
+        return { mul: 1.2, labelText: 'Nuit' };
+      }
+      if (nocturnal && ph === 'crepuscule') {
+        return { mul: 1.1, labelText: 'Crépuscule' };
+      }
+      if (diurnal && ph === 'jour') {
+        return { mul: 1.2, labelText: 'Jour' };
+      }
+      if (diurnal && ph === 'aube') {
+        return { mul: 1.1, labelText: 'Aube' };
+      }
+      return null;
+    },
+  });
 
-/* ---------- 1. The time, a damage modifier provider ---------- */
-DAMAGE_PROVIDERS.push({
-  id: 'heure',
-  provide: (c, { S, typ }) => {
-    const ph = S.cycle && S.cycle.ph;
-    if (!ph) return null;
-    const nocturnal = typ === 'Spectre' || typ === 'Ténèbres',
-      diurnal = typ === 'Plante' || typ === 'Vol';
-    if (nocturnal && ph === 'nuit') return { mul: 1.2, labelText: 'Nuit' };
-    if (nocturnal && ph === 'crepuscule') return { mul: 1.1, labelText: 'Crépuscule' };
-    if (diurnal && ph === 'jour') return { mul: 1.2, labelText: 'Jour' };
-    if (diurnal && ph === 'aube') return { mul: 1.1, labelText: 'Aube' };
-    return null;
-  }
-});
-
-
-/* ---------- 3. On screen ---------- */
-// the board's sky (.b-ciel) is rendered by <Board> (src/screens/combat/board/)
+  /* ---------- 3. On screen ---------- */
+  // the board's sky (.b-ciel) is rendered by <Board> (src/screens/combat/board/)
 }

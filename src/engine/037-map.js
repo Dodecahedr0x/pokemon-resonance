@@ -21,48 +21,71 @@ import { builtMap, refreshMap } from '../screens/map/mapStore.js';
 export let PL, MAP_SVG;
 let mapBuilt;
 
-
 /** Name of the final battle on the map and in the battle list (Selection.jsx). */
 export const FINALE_N = 'Finale · Championne';
 
-
 export function placeName(p) {
-  if (p.n) return p.n;
-  if (p.id === 'champ') return FINALE_N;
+  if (p.n) {
+    return p.n;
+  }
+  if (p.id === 'champ') {
+    return FINALE_N;
+  }
   return SCEN[p.id] ? SCEN[p.id].n : p.id;
 }
 
-
 export function placeSub(p) {
-  if (p.s) return p.s;
+  if (p.s) {
+    return p.s;
+  }
   const L = leaderOf(p.id),
     gi = ARENAS.findIndex(a => a.k === p.id);
-  if (gi >= 0) return `Arène ${gi + 1} · ${L ? L.n : ''}`;
-  if (L) return L.n;
+  if (gi >= 0) {
+    return `Arène ${gi + 1} · ${L ? L.n : ''}`;
+  }
+  if (L) {
+    return L.n;
+  }
   return SCEN[p.id] ? SCEN[p.id].lvl : '';
 }
 
-
 export function placeState(p) {
   const gk = nextGoal()[0];
-  if (p.j) return placeStateJ(p, gk); // Johto (v4.15)
-  if (p.id === 'safari') return safariLock418() ? 'lock' : 'open'; // Safari Park (v4.18)
-  if (p.id === 'wild') return 'open';
+  if (p.j) {
+    return placeStateJ(p, gk);
+  } // Johto (v4.15)
+  if (p.id === 'safari') {
+    return safariLock418() ? 'lock' : 'open';
+  } // Safari Park (v4.18)
+  if (p.id === 'wild') {
+    return 'open';
+  }
   if (p.id === 'elite') {
-    if (PROFILE.elite >= 4) return 'done';
-    if (ELITE.includes(gk)) return 'next';
+    if (PROFILE.elite >= 4) {
+      return 'done';
+    }
+    if (ELITE.includes(gk)) {
+      return 'next';
+    }
     return scenLock('c1') ? 'lock' : 'open';
   }
   const k = p.id;
-  if (k === gk) return 'next';
-  if (wonOf(k) || (k === 'tuto' && PROFILE.tuto)) return 'done';
-  if (scenLock(k)) return 'lock';
+  if (k === gk) {
+    return 'next';
+  }
+  if (wonOf(k) || (k === 'tuto' && PROFILE.tuto)) {
+    return 'done';
+  }
+  if (scenLock(k)) {
+    return 'lock';
+  }
   return 'open';
 }
 
-
 export function placeIcon(p) {
-  if (p.id === 'safari') return `<span class="emb ter bio-roche xs"><svg viewBox="0 0 24 24"><use href="#i-grass"/></svg></span>`; // v4.18
+  if (p.id === 'safari') {
+    return `<span class="emb ter bio-roche xs"><svg viewBox="0 0 24 24"><use href="#i-grass"/></svg></span>`;
+  } // v4.18
   if (p.id === 'wild' || p.id === 'jwild' || p.id === 'hwild') {
     return `<span class="emb ter bio-gue xs"><svg viewBox="0 0 24 24"><use href="#i-grass"/></svg></span>`;
   }
@@ -71,7 +94,6 @@ export function placeIcon(p) {
   }
   return emblem(p.id, 'xs');
 }
-
 
 export function curvePath(a, b, i) {
   const mx = (a.x + b.x) / 2,
@@ -82,42 +104,48 @@ export function curvePath(a, b, i) {
   return `M${a.x} ${a.y} Q${(mx - dy * k).toFixed(0)} ${(my + dx * k).toFixed(0)} ${b.x} ${b.y}`;
 }
 
-
 // The template is rendered by React, Route 29 (#route) included, below the map.
 export function buildMap() {
   const pg = $('#carte');
-  if (!pg || mapBuilt) return;
+  if (!pg || mapBuilt) {
+    return;
+  }
   mapBuilt = true;
   builtMap();
 }
 
-
 export function renderMap() {
-  if (!V4.region) V4.region = /^h/.test(nextGoal()[0]) ? 'hoenn' : /^j/.test(nextGoal()[0]) ? 'johto' : 'kanto'; // v4.15, v4.19
+  if (!V4.region) {
+    V4.region = /^h/.test(nextGoal()[0]) ? 'hoenn' : /^j/.test(nextGoal()[0]) ? 'johto' : 'kanto';
+  } // v4.15, v4.19
   buildMap();
   if (mapBuilt) {
     // markers were drawn before the default place was chosen: we keep the old selection for them
     const marksSel = V4.mapSel;
-    if (!V4.mapSel || !placesR().some(p => p.id === V4.mapSel)) V4.mapSel = (placesR().find(p => placeState(p) === 'next') || placesR()[0]).id;
+    if (!V4.mapSel || !placesR().some(p => p.id === V4.mapSel)) {
+      V4.mapSel = (placesR().find(p => placeState(p) === 'next') || placesR()[0]).id;
+    }
     regionUi415(); // v4.15
     refreshMap({ marksSel });
   }
   hook('carte');
 }
 
-
 export function rewardLine(k) {
   const gi = ARENAS.findIndex(a => a.k === k);
-  if (gi < 0) return jRewardLine415(k); // Johto (v4.15)
+  if (gi < 0) {
+    return jRewardLine415(k);
+  } // Johto (v4.15)
   const R = BADGE_REWARD[gi];
   return `<div class="v4-rew"><span class="v4-rew-b">${badgeSvg(gi, GYMS[gi].t, 'mi' + gi)}Badge ${GYMS[gi].t}</span>${R.item ? `<span><img src="${ITM(HELD_IMG[R.item])}" alt="" loading="lazy">${ITEMS2[R.item].n}</span>` : ''}<span><span class="v4-coin" aria-hidden="true">₽</span>+500</span><span><span class="v4-gemi"><svg><use href="#i-gem"/></svg></span>+10</span></div>`;
 }
 
-
 export function centerMap() {
   const sc = $('#mapSc'),
     mk = $(`#mapMarks [data-place="${V4.mapSel}"]`);
-  if (sc && mk && sc.scrollWidth > sc.clientWidth) sc.scrollLeft = Math.max(0, mk.offsetLeft - sc.clientWidth / 2);
+  if (sc && mk && sc.scrollWidth > sc.clientWidth) {
+    sc.scrollLeft = Math.max(0, mk.offsetLeft - sc.clientWidth / 2);
+  }
   arrows430(); // scroll arrows (v4.30)
 }
 
@@ -138,45 +166,45 @@ export const PLACES = [
   { id: 'a8', x: 852, y: 258, grp: 'aventure' },
   { id: 'ligue', x: 742, y: 162, grp: 'entrainement' },
   { id: 'elite', x: 452, y: 150, n: 'Plateau de la Ligue', s: 'Conseil 4', grp: 'aventure' },
-  { id: 'champ', x: 592, y: 96, grp: 'aventure' }
+  { id: 'champ', x: 592, y: 96, grp: 'aventure' },
 ];
 
-
 export const CHAIN = ['tuto', 'wild', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 'a8', 'elite', 'champ'];
-
 
 export const STATE_N = { next: 'En cours', done: 'Terminé', lock: 'Verrouillé', open: 'Disponible' };
 
 // Instructions run at startup, in the original order (see index.js).
 export function __init() {
+  PL = Object.fromEntries(PLACES.map(p => [p.id, p]));
 
-PL = Object.fromEntries(PLACES.map(p => [p.id, p]));
-
-
-MAP_SVG = (() => {
-  const tree = (x, y, s = 1) =>
-    `<g transform="translate(${x} ${y}) scale(${s})"><circle r="9" cy="-4" fill="#1d5a32"/><circle r="7" cx="-6" cy="2" fill="#226b3a"/><circle r="7" cx="6" cy="2" fill="#1f6236"/><circle r="4" cx="-2" cy="-8" fill="#3d9152" opacity=".8"/></g>`;
-  const forest = (cx, cy, n, sp) => {
-    let o = '';
-    for (let i = 0; i < n; i++) {
-      const a = i * 2.399,
-        r = Math.sqrt(i) * sp;
-      o += tree((cx + Math.cos(a) * r).toFixed(0), (cy + Math.sin(a) * r * 0.7).toFixed(0), 0.8 + ((i * 37) % 5) / 12);
-    }
-    return o;
-  };
-  const mount = (x, y, s) =>
-    `<g transform="translate(${x} ${y}) scale(${s})"><path d="M-30 18 -4 -26 6 -12 14 -22 34 18Z" fill="url(#mRock)"/><path d="M-4 -26 6 -12 1 -8-4-14-9-6-14-10Z" fill="#f4f8ff"/><path d="M14 -22 22 -8 17-5 13-12 9-7Z" fill="#e7eefb"/><path d="M-4 -26 -30 18h20Z" fill="#000" opacity=".12"/></g>`;
-  const town = (x, y) =>
-    `<g transform="translate(${x} ${y})" class="mp-town"><rect x="-13" y="-4" width="9" height="8" fill="#f2e7d0"/><path d="M-14-4-8.5-10-3-4Z" fill="#d2523f"/><rect x="-1" y="-7" width="10" height="11" fill="#eef1f6"/><path d="M-2-7 4-13 10-7Z" fill="#3f78c8"/><rect x="11" y="-2" width="7" height="6" fill="#f2e7d0"/><path d="M10-2 14.5-7 19-2Z" fill="#d2523f"/></g>`;
-  const grass = (x, y) =>
-    `<path d="M${x} ${y}l3-9 2 9 3-11 2 11 3-8 1 8" fill="none" stroke="#7fd36b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".9"/>`;
-  const LAND =
-    'M60 250C50 170 110 95 200 82C280 70 330 96 400 80C470 64 560 58 650 70C740 82 830 92 900 130C960 165 968 240 948 300C930 360 956 410 920 450C880 490 820 470 770 495C720 520 700 575 650 590C600 605 565 560 560 500C556 450 540 420 520 430C500 440 495 480 480 530C465 580 400 600 330 598C260 596 190 612 130 580C80 552 50 500 58 440C64 380 90 330 70 290C64 275 60 262 60 250Z';
-  const ISLE =
-    'M800 548C800 515 838 500 870 504C905 508 928 530 922 556C916 584 880 596 848 590C818 585 800 572 800 548Z';
-  const ISLE2 = 'M120 640C110 620 150 612 170 622C186 630 170 640 120 640Z';
-  return `<svg class="map-svg" viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+  MAP_SVG = (() => {
+    const tree = (x, y, s = 1) =>
+      `<g transform="translate(${x} ${y}) scale(${s})"><circle r="9" cy="-4" fill="#1d5a32"/><circle r="7" cx="-6" cy="2" fill="#226b3a"/><circle r="7" cx="6" cy="2" fill="#1f6236"/><circle r="4" cx="-2" cy="-8" fill="#3d9152" opacity=".8"/></g>`;
+    const forest = (cx, cy, n, sp) => {
+      let o = '';
+      for (let i = 0; i < n; i++) {
+        const a = i * 2.399,
+          r = Math.sqrt(i) * sp;
+        o += tree(
+          (cx + Math.cos(a) * r).toFixed(0),
+          (cy + Math.sin(a) * r * 0.7).toFixed(0),
+          0.8 + ((i * 37) % 5) / 12
+        );
+      }
+      return o;
+    };
+    const mount = (x, y, s) =>
+      `<g transform="translate(${x} ${y}) scale(${s})"><path d="M-30 18 -4 -26 6 -12 14 -22 34 18Z" fill="url(#mRock)"/><path d="M-4 -26 6 -12 1 -8-4-14-9-6-14-10Z" fill="#f4f8ff"/><path d="M14 -22 22 -8 17-5 13-12 9-7Z" fill="#e7eefb"/><path d="M-4 -26 -30 18h20Z" fill="#000" opacity=".12"/></g>`;
+    const town = (x, y) =>
+      `<g transform="translate(${x} ${y})" class="mp-town"><rect x="-13" y="-4" width="9" height="8" fill="#f2e7d0"/><path d="M-14-4-8.5-10-3-4Z" fill="#d2523f"/><rect x="-1" y="-7" width="10" height="11" fill="#eef1f6"/><path d="M-2-7 4-13 10-7Z" fill="#3f78c8"/><rect x="11" y="-2" width="7" height="6" fill="#f2e7d0"/><path d="M10-2 14.5-7 19-2Z" fill="#d2523f"/></g>`;
+    const grass = (x, y) =>
+      `<path d="M${x} ${y}l3-9 2 9 3-11 2 11 3-8 1 8" fill="none" stroke="#7fd36b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".9"/>`;
+    const LAND =
+      'M60 250C50 170 110 95 200 82C280 70 330 96 400 80C470 64 560 58 650 70C740 82 830 92 900 130C960 165 968 240 948 300C930 360 956 410 920 450C880 490 820 470 770 495C720 520 700 575 650 590C600 605 565 560 560 500C556 450 540 420 520 430C500 440 495 480 480 530C465 580 400 600 330 598C260 596 190 612 130 580C80 552 50 500 58 440C64 380 90 330 70 290C64 275 60 262 60 250Z';
+    const ISLE =
+      'M800 548C800 515 838 500 870 504C905 508 928 530 922 556C916 584 880 596 848 590C818 585 800 572 800 548Z';
+    const ISLE2 = 'M120 640C110 620 150 612 170 622C186 630 170 640 120 640Z';
+    return `<svg class="map-svg" viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
  <defs>
   <radialGradient id="mSea" cx="50%" cy="45%" r="75%"><stop offset="0" stop-color="#2a8fd0"/><stop offset=".55" stop-color="#1a62a6"/><stop offset="1" stop-color="#0c2e5e"/></radialGradient>
   <linearGradient id="mLand" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5fae55"/><stop offset=".55" stop-color="#4f9d4b"/><stop offset="1" stop-color="#3f8a44"/></linearGradient>
@@ -211,27 +239,29 @@ MAP_SVG = (() => {
  <g transform="translate(518 104)"><path d="M-30 6h60l-8-14h-44Z" fill="#e9eef7" stroke="#a4adbf" stroke-width="2"/><path d="M-10-8v-14h20v14" fill="#f6d36b" stroke="#b08a2e" stroke-width="2"/></g>
  <rect width="1000" height="640" fill="url(#mLight)"/>
  </svg>`;
-})();
+  })();
 
+  mapBuilt = false;
 
-mapBuilt = false;
-
-
-document.addEventListener('click', e => {
-  const b = e.target.closest('[data-place]');
-  if (!b) return;
-  V4.mapSel = b.dataset.place;
-  renderMap();
-  if (b.closest('#mapList')) {
-    const mk = $(`#mapMarks [data-place="${V4.mapSel}"]`),
-      sc = $('#mapSc');
-    if (mk && sc && sc.scrollWidth > sc.clientWidth) {
-      sc.scrollTo({ left: mk.offsetLeft - sc.clientWidth / 2, behavior: RM ? 'auto' : 'smooth' });
+  document.addEventListener('click', e => {
+    const b = e.target.closest('[data-place]');
+    if (!b) {
+      return;
     }
-  }
-  if (innerWidth < 1000) {
-    const i = $('#mapInfo');
-    if (i && b.closest('#mapMarks')) i.scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'nearest' });
-  }
-});
+    V4.mapSel = b.dataset.place;
+    renderMap();
+    if (b.closest('#mapList')) {
+      const mk = $(`#mapMarks [data-place="${V4.mapSel}"]`),
+        sc = $('#mapSc');
+      if (mk && sc && sc.scrollWidth > sc.clientWidth) {
+        sc.scrollTo({ left: mk.offsetLeft - sc.clientWidth / 2, behavior: RM ? 'auto' : 'smooth' });
+      }
+    }
+    if (innerWidth < 1000) {
+      const i = $('#mapInfo');
+      if (i && b.closest('#mapMarks')) {
+        i.scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'nearest' });
+      }
+    }
+  });
 }

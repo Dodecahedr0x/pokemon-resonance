@@ -6,7 +6,26 @@ import { ITEMS2, PROFILE, isCamp } from './011-game-state.js';
 import { RC } from './012-recruits-roles-synergies.js';
 import { toast } from './014-utils.js';
 import { HOOKS } from './015-hooks.js';
-import { EMAX, P, byUid, damage, endStep, rewardIn, hasNx, hdist, heal, nbrK, retarget, say, setMark, shove, stun, teff, uAt, uk } from './021-combat-engine.js';
+import {
+  EMAX,
+  P,
+  byUid,
+  damage,
+  endStep,
+  rewardIn,
+  hasNx,
+  hdist,
+  heal,
+  nbrK,
+  retarget,
+  say,
+  setMark,
+  shove,
+  stun,
+  teff,
+  uAt,
+  uk,
+} from './021-combat-engine.js';
 import { noteAdd } from './023-roles-synergies-obstacles.js';
 import { B, enPips } from './024-combat-ui.js';
 import { queueSave } from './025-saves.js';
@@ -26,38 +45,61 @@ import { resoBoss460 } from './091-phase-bosses-secret-places.js';
 export let COMBAT414;
 let LEG414, OFFERS414;
 
-
 export function rankId(id) {
   const m = BY[id];
-  if (!m) return 'moyen';
-  if (LEG414.has(id)) return 'expert';
+  if (!m) {
+    return 'moyen';
+  }
+  if (LEG414.has(id)) {
+    return 'expert';
+  }
   const c = RC(id);
   return c <= 1 ? 'faible' : c <= 3 ? 'moyen' : c <= 5 ? 'fort' : 'expert';
 }
 
-
 export function bossScene(S) {
-  if (!S) return false;
+  if (!S) {
+    return false;
+  }
   const D = SCEN[S.sc] || {};
-  return D.gym != null || D.johto != null || !!D.jfinal || !!D.jdis || !!D.roam || !!D.ami || D.hoenn != null || !!D.hfinal || !!D.elite || !!D.champ || !!D.rival || !!D.colossus || /^lg/.test(S.sc || '');
+  return (
+    D.gym != null ||
+    D.johto != null ||
+    !!D.jfinal ||
+    !!D.jdis ||
+    !!D.roam ||
+    !!D.ami ||
+    D.hoenn != null ||
+    !!D.hfinal ||
+    !!D.elite ||
+    !!D.champ ||
+    !!D.rival ||
+    !!D.colossus ||
+    /^lg/.test(S.sc || '')
+  );
 }
 
-
 export function canXP(S, u, m) {
-  if (!m || !m.xp) return true;
-  if (u.side === 'e' && !bossScene(S)) return false;
+  if (!m || !m.xp) {
+    return true;
+  }
+  if (u.side === 'e' && !bossScene(S)) {
+    return false;
+  }
   return (u.en || 0) >= xpCost(u);
 }
 
-
 export function mrg414(m, u) {
-  if (!m || !m.rg || m.rg === 'soutien') return '';
+  if (!m || !m.rg || m.rg === 'soutien') {
+    return '';
+  }
   return ` <small class="mrg mrg-${m.rg}">${MRG[m.rg]}${m.xp ? ' ' + '◆'.repeat(u ? xpCost(u) : 2) : ''}</small>`;
 }
 
-
 export function blocked414(S, u, m) {
-  if (u && u.item === 'mouchoir' && u.choice && MV[u.choice] && MV[u.choice] !== m) return `Mouchoir Choix : il ne peut plus lancer que ${MV[u.choice].n}.`;
+  if (u && u.item === 'mouchoir' && u.choice && MV[u.choice] && MV[u.choice] !== m) {
+    return `Mouchoir Choix : il ne peut plus lancer que ${MV[u.choice].n}.`;
+  }
   if (m && m.xp && !canXP(S, u, m)) {
     const c = xpCost(u);
     return `Attaque Experte : il faut ${c} losange${c > 1 ? 's' : ''} de Résonance (${u.en || 0} / ${c}).`;
@@ -65,27 +107,31 @@ export function blocked414(S, u, m) {
   return '';
 }
 
-
 export function xpBlock414(u) {
   const c = xpCost(u),
     ok = u.en >= c;
   return `<div class="bp-en bp-xp${ok ? ' full' : ''}"><div class="en-h"><span class="lbl-s">Résonance</span>${enPips(u.en, 'lg')}</div><p class="bp-hint">Attaque Experte : ${c} losange${c > 1 ? 's' : ''}. ${ok ? 'Elle est prête.' : `Encore ${c - u.en} : fin de manche, réaction, coup encaissé, allié K.O.`}</p></div>`;
 }
 
-
 function momentum414(S, u, ev) {
-  if (u.side === 'a') rewardIn(S, u, 1, ev);
-  else if (hasXp(u)) u.en = Math.min(EMAX, (u.en || 0) + 1);
+  if (u.side === 'a') {
+    rewardIn(S, u, 1, ev);
+  } else if (hasXp(u)) {
+    u.en = Math.min(EMAX, (u.en || 0) + 1);
+  }
 }
 
-
 function echo414(S, u, v, typ, x, ev) {
-  if (ev.some(e => e.e === 'rx' && e.k === x)) return ''; // the terrain's reaction has already resonated
+  if (ev.some(e => e.e === 'rx' && e.k === x)) {
+    return '';
+  } // the terrain's reaction has already resonated
   const prot = rune413(S, v),
     isFree = v.ability === 'regardvif' || prot;
   switch (typ) {
     case 'Feu':
-      if (v.t.includes('Feu') || v.ability === 'torche' || prot) return '';
+      if (v.t.includes('Feu') || v.ability === 'torche' || prot) {
+        return '';
+      }
       v.burn = Math.max(v.burn, 2);
       ev.push({ e: 'st', u: v.uid, s: 'BRÛ' });
       return `${v.n} est brûlé`;
@@ -93,15 +139,21 @@ function echo414(S, u, v, typ, x, ev) {
       setMark(S, uk(v), 'trempe', u.uid);
       return 'sa case est Trempée';
     case 'Électrik':
-      if (v.t.includes('Sol')) return '';
+      if (v.t.includes('Sol')) {
+        return '';
+      }
       stun(S, v, 'PAR', ev, true);
       return v.badge === 'PAR' ? `${v.n} est paralysé` : '';
     case 'Plante':
-      if (isFree) return '';
+      if (isFree) {
+        return '';
+      }
       v.root = Math.max(v.root, 2);
       return `${v.n} est enraciné`;
     case 'Glace':
-      if (v.t.includes('Glace')) return '';
+      if (v.t.includes('Glace')) {
+        return '';
+      }
       stun(S, v, 'GEL', ev, true);
       return v.badge === 'GEL' ? `${v.n} est gelé` : '';
     case 'Sol':
@@ -109,7 +161,9 @@ function echo414(S, u, v, typ, x, ev) {
       return 'sa case se fissure';
     case 'Roche':
     case 'Insecte':
-      if (isFree) return '';
+      if (isFree) {
+        return '';
+      }
       v.web = Math.max(v.web, 2);
       return `${v.n} est ralenti`;
     case 'Combat':
@@ -119,9 +173,14 @@ function echo414(S, u, v, typ, x, ev) {
       return uk(v) !== p0 ? `${v.n} est repoussé` : '';
     }
     case 'Psy':
-      if (prot) return '';
-      if (v.side === 'e') retarget(S, v, u, 'confuse', ev);
-      else v.web = Math.max(v.web, 2);
+      if (prot) {
+        return '';
+      }
+      if (v.side === 'e') {
+        retarget(S, v, u, 'confuse', ev);
+      } else {
+        v.web = Math.max(v.web, 2);
+      }
       return `${v.n} est désorienté`;
     case 'Spectre':
       v.maudit = Math.max(v.maudit || 0, 2);
@@ -138,7 +197,9 @@ function echo414(S, u, v, typ, x, ev) {
       const a = S.units
         .filter(o => !o.ko && o.side === u.side && hdist(o.pos, u.pos) <= 3 && o.hp < o.mhp)
         .sort((p, q) => p.hp / p.mhp - q.hp / q.mhp)[0];
-      if (!a) return '';
+      if (!a) {
+        return '';
+      }
       heal(S, a, Math.round(a.mhp * 0.15), ev);
       return `${a.n} reprend des forces`;
     }
@@ -151,30 +212,42 @@ function echo414(S, u, v, typ, x, ev) {
   }
 }
 
-
 /** After each target hit: the note, then Resonance on the third. */
 export function afterHit414(S, u, m, v, x, typ, ev) {
-  if (!v || v === u || v.side === u.side || v.seg || !(m.p || m.fix) || !resoOn(S, u)) return;
-  if (teff(typ, v.t) === 0 && !(v.pinned && typ === 'Sol')) return;
-  if (!v.notes || v.notes.r !== S.round) v.notes = { r: S.round, n: 0, by: [] };
+  if (!v || v === u || v.side === u.side || v.seg || !(m.p || m.fix) || !resoOn(S, u)) {
+    return;
+  }
+  if (teff(typ, v.t) === 0 && !(v.pinned && typ === 'Sol')) {
+    return;
+  }
+  if (!v.notes || v.notes.r !== S.round) {
+    v.notes = { r: S.round, n: 0, by: [] };
+  }
   const N = v.notes;
-  if (N.n >= 3 || N.by.includes(u.uid)) return;
+  if (N.n >= 3 || N.by.includes(u.uid)) {
+    return;
+  }
   const previous = N.n;
   N.by.push(u.uid);
   N.n = Math.min(3, previous + weightNote(u));
-  if (!previous && rankOfValue(u) === 'faible') momentum414(S, u, ev);
+  if (!previous && rankOfValue(u) === 'faible') {
+    momentum414(S, u, ev);
+  }
   if (N.n < 3) {
-    if (!v.ko) ev.push({ e: 'note', u: v.uid, n: N.n });
+    if (!v.ko) {
+      ev.push({ e: 'note', u: v.uid, n: N.n });
+    }
     noteAdd(`${v.n} : ${N.n} note${N.n > 1 ? 's' : ''} de Résonance sur 3`);
     return;
   }
-  if (u.side === 'a') S.stats.resonant = (S.stats.resonant || 0) + 1;
+  if (u.side === 'a') {
+    S.stats.resonant = (S.stats.resonant || 0) + 1;
+  }
   ev.push({ e: 'reso', u: v.uid });
   noteAdd(`Résonance sur ${v.n} : ×${u.item === 'ceinturepro' ? '1,8' : '1,5'} et écho ${typ}`);
   const r = v.ko ? '' : echo414(S, u, v, typ, x, ev);
   say(ev, `Résonance ! ${v.n} vibre sous le coup ${de(u.n)}${r ? ` : ${r}` : ''}.`);
 }
-
 
 /* end of ability: Life Orb */
 export function end414(S, u, m, dealt, ev) {
@@ -183,7 +256,6 @@ export function end414(S, u, m, dealt, ev) {
     damage(S, u, Math.max(1, Math.round(u.mhp * 0.1)), ev, { ind: true, reflect: true });
   }
 }
-
 
 /* after damage taken: Rocky Helmet, Sitrus Berry */
 export function afterDamage414(S, v, real, o, ev) {
@@ -201,41 +273,69 @@ export function afterDamage414(S, v, real, o, ev) {
   }
 }
 
-
 /* ---------- display ---------- */
 export function plateRank414(u) {
   const n = notesOf(B, u);
   return `<span class="pl-rg rg-${rankOfValue(u)}">${stars(rankOfValue(u))}</span>${n && !u.ko ? `<span class="pl-nt" title="${n} note${n > 1 ? 's' : ''} de Résonance">${'♪'.repeat(n)}</span>` : ''}`;
 }
 
-
 export function foeReso414(e) {
   const n = notesOf(B, e),
     o = [];
   if (n && !e.ko) {
-    o.push(n >= 3 ? 'Résonance déjà déclenchée sur lui cette manche.' : `Résonance : ${n} note${n > 1 ? 's' : ''} sur 3. Encore ${3 - n} pour la déclencher.`);
+    o.push(
+      n >= 3
+        ? 'Résonance déjà déclenchée sur lui cette manche.'
+        : `Résonance : ${n} note${n > 1 ? 's' : ''} sur 3. Encore ${3 - n} pour la déclencher.`
+    );
   }
-  if (bossScene(B) && hasXp(e)) o.push(`Il accumule la Résonance : ${e.en || 0} / ${EMAX} losanges, ${xpCost(e)} pour son attaque Experte.`);
+  if (bossScene(B) && hasXp(e)) {
+    o.push(`Il accumule la Résonance : ${e.en || 0} / ${EMAX} losanges, ${xpCost(e)} pour son attaque Experte.`);
+  }
   return (o.length ? `<p class="bp-reso">${o.join(' ')}</p>` : '') + resoBoss460(e);
 }
 
-
 // Team ranks and Harmony: card rendered by React (src/screens/team/Analysis.jsx).
-
 
 export function objOk414(S, u, k) {
   const it = SHOP[k];
-  if (!it || !u || u.ko || u.side !== 'a' || S.phase !== 'player' || (S.itemsUsed || 0) >= BAG_MAX || S.duel433 || bagN(k) < 1) return false;
-  if (HEALS.includes(k)) return !u.acted && !u.sn && u.hp < u.mhp;
-  if (it.voice && S.voice < it.voice) return false;
-  if (OKX455[k]) return !!OKX455[k](S, u);
+  if (
+    !it ||
+    !u ||
+    u.ko ||
+    u.side !== 'a' ||
+    S.phase !== 'player' ||
+    (S.itemsUsed || 0) >= BAG_MAX ||
+    S.duel433 ||
+    bagN(k) < 1
+  ) {
+    return false;
+  }
+  if (HEALS.includes(k)) {
+    return !u.acted && !u.sn && u.hp < u.mhp;
+  }
+  if (it.voice && S.voice < it.voice) {
+    return false;
+  }
+  if (OKX455[k]) {
+    return !!OKX455[k](S, u);
+  }
   switch (k) {
     case 'rappel':
       return !u.acted && !u.sn && !!koAlly414(S) && !!freeTile414(S, u);
     case 'baieoran':
       return u.hp < u.mhp;
     case 'totalsoin':
-      return !!(u.badge || u.skip || u.burn > 0 || u.poisoned > 0 || u.web > 0 || u.root > 0 || u.maudit > 0 || u.weakened > 0);
+      return !!(
+        u.badge ||
+        u.skip ||
+        u.burn > 0 ||
+        u.poisoned > 0 ||
+        u.web > 0 ||
+        u.root > 0 ||
+        u.maudit > 0 ||
+        u.weakened > 0
+      );
     case 'cristal':
       return (hasNx(u) || hasXp(u)) && u.en < EMAX;
     default:
@@ -243,10 +343,11 @@ export function objOk414(S, u, k) {
   }
 }
 
-
 export function pUse414(S, u, k) {
   const it = SHOP[k];
-  if (!it || it.category !== 'combat' || !objOk414(S, u, k)) return null;
+  if (!it || it.category !== 'combat' || !objOk414(S, u, k)) {
+    return null;
+  }
   const ev = [];
   if (k === 'baieoran') {
     heal(S, u, 12, ev);
@@ -289,7 +390,7 @@ export function pUse414(S, u, k) {
       weakened: 0,
       en: 0,
       intent: null,
-      notes: null
+      notes: null,
     });
     ev.push({ e: 'mv', u: o.uid }, { e: 'heal', u: o.uid, v: o.hp });
     say(ev, `Rappel : ${o.n} revient au combat avec ${o.hp} PV. Il jouera à la prochaine manche.`);
@@ -303,39 +404,48 @@ export function pUse414(S, u, k) {
   }
   S.itemsUsed = (S.itemsUsed || 0) + 1;
   PROFILE.bag[k] = bagN(k) - 1;
-  if (!PROFILE.bag[k]) delete PROFILE.bag[k];
+  if (!PROFILE.bag[k]) {
+    delete PROFILE.bag[k];
+  }
   return endStep(S, ev);
 }
 
-
 export function dailyOffers() {
   const d = today();
-  if (OFFERS414.d === d) return OFFERS414.k;
+  if (OFFERS414.d === d) {
+    return OFFERS414.k;
+  }
   let h = 7;
-  for (const c of d) h = (h * 31 + c.charCodeAt(0)) >>> 0;
+  for (const c of d) {
+    h = (h * 31 + c.charCodeAt(0)) >>> 0;
+  }
   const rnd = () => (h = (Math.imul(h, 1103515245) + 12345) >>> 0) / 4294967296;
   const pools = [
     Object.keys(SHOP).filter(k => ['soins', 'combat'].includes(SHOP[k].category) && SHOP[k].p),
     Object.keys(HELD_SHOP).filter(k => HELD_SHOP[k].p),
-    Object.keys(SHOP).filter(k => ['balls', 'machines'].includes(SHOP[k].category) && SHOP[k].p && !SHOP[k].cs)
+    Object.keys(SHOP).filter(k => ['balls', 'machines'].includes(SHOP[k].category) && SHOP[k].p && !SHOP[k].cs),
   ];
   OFFERS414 = { d, k: pools.map(L => L[Math.floor(rnd() * L.length)]).filter(Boolean) };
   return OFFERS414.k;
 }
 
-
 // Shop: daily offers and held items for sale, rendered by React (src/screens/bag/Offers.jsx, HeldItems.jsx)
-
 
 function buyHeld414(k) {
   const H = HELD_SHOP[k];
-  if (!H || !isCamp() || PROFILE.items.includes(k)) return;
+  if (!H || !isCamp() || PROFILE.items.includes(k)) {
+    return;
+  }
   const price = H.g || costHeld414(k);
   if (H.g) {
-    if (PROFILE.gems < price) return;
+    if (PROFILE.gems < price) {
+      return;
+    }
     PROFILE.gems -= price;
   } else {
-    if (PROFILE.money < price) return;
+    if (PROFILE.money < price) {
+      return;
+    }
     PROFILE.money -= price;
   }
   PROFILE.items.push(k);
@@ -364,57 +474,51 @@ function buyHeld414(k) {
 
 /* ---------- 1. ranks ---------- */
 export const RANKS = {
-  faible: { n: 'Faible', i: 1, k: 'Élan', d: 'Quand il pose la première note de Résonance sur une cible, il gagne 1 losange.' },
+  faible: {
+    n: 'Faible',
+    i: 1,
+    k: 'Élan',
+    d: 'Quand il pose la première note de Résonance sur une cible, il gagne 1 losange.',
+  },
   moyen: { n: 'Moyen', i: 2, k: 'Relance', d: 'Ses coups comptent pour 2 notes de Résonance.' },
   fort: { n: 'Fort', i: 3, k: 'Impact', d: '+25 % de dégâts sur une cible qui porte déjà une note de Résonance.' },
-  expert: { n: 'Expert', i: 4, k: 'Maîtrise', d: 'Ses attaques Expertes ne coûtent qu’1 losange au lieu de 2.' }
+  expert: { n: 'Expert', i: 4, k: 'Maîtrise', d: 'Ses attaques Expertes ne coûtent qu’1 losange au lieu de 2.' },
 };
-
 
 export const rankOfValue = u => rankId(u.id);
 
-
 export const stars = r => '★'.repeat(RANKS[r].i);
 
-
-export const rankTag = r => `<span class="rg rg-${r}" title="Rang ${RANKS[r].n} · ${RANKS[r].k} : ${RANKS[r].d}">${stars(r)}</span>`;
-
+export const rankTag = r =>
+  `<span class="rg rg-${r}" title="Rang ${RANKS[r].n} · ${RANKS[r].k} : ${RANKS[r].d}">${stars(r)}</span>`;
 
 /* ---------- 2. ranked attacks, Expert attacks ---------- */
 const XP_LEG = ['fatalfoudre', 'feusacre', 'frappepsy', 'aeroblast'];
 
- // legendaries' attacks
-
+// legendaries' attacks
 
 const MRG = { soutien: 'Soutien', faible: 'Faible', moyen: 'Moyenne', fort: 'Forte', expert: 'Experte' };
 
-
 export const hasXp = u => !!(u && u.mv && u.mv.some(x => MV[x] && MV[x].xp));
-
 
 export const xpCost = u => (rankOfValue(u) === 'expert' ? 1 : 2);
 
-
 const resoOn = (S, u) => !!u && (u.side === 'a' || bossScene(S));
-
 
 export const rankLine414 = u => {
   const r = rankOfValue(u);
   return `<p class="bp-tal bp-rg"><b>${RANKS[r].n} · ${RANKS[r].k}.</b> ${RANKS[r].d}</p>`;
 };
 
-
 /* ---------- 3. Resonance notes and type echoes ---------- */
 export const notesOf = (S, v) => (S && v && v.notes && v.notes.r === S.round ? v.notes.n : 0);
 
-
 const weightNote = u => (rankOfValue(u) === 'moyen' ? 2 : 1) + (u.item === 'metronome' ? 1 : 0);
-
 
 export const ECHOS = {
   Feu: 'La cible est brûlée.',
   Eau: 'Sa case devient Trempée : de quoi préparer une réaction.',
-  'Électrik': 'La cible est paralysée (sauf type Sol).',
+  Électrik: 'La cible est paralysée (sauf type Sol).',
   Plante: 'La cible est enracinée.',
   Glace: 'La cible est gelée.',
   Sol: 'Sa case devient Fissurée.',
@@ -423,18 +527,22 @@ export const ECHOS = {
   Vol: 'La cible est repoussée de deux cases.',
   Psy: 'La cible est désorientée.',
   Spectre: 'La cible est hantée : 12 % de ses PV par manche, 2 manches.',
-  'Ténèbres': 'La cible est intimidée : −3 dégâts pendant 2 manches.',
+  Ténèbres: 'La cible est intimidée : −3 dégâts pendant 2 manches.',
   Poison: 'La cible est empoisonnée.',
   Insecte: 'La cible est engluée et ralentie.',
   Dragon: 'L’écho frappe encore : 6 dégâts de plus.',
-  'Fée': 'Votre Pokémon le plus blessé à 3 cases récupère 15 % de ses PV.',
+  Fée: 'Votre Pokémon le plus blessé à 3 cases récupère 15 % de ses PV.',
   Acier: 'L’attaquant gagne +2 Garde.',
-  Normal: 'L’attaquant gagne 1 losange.'
+  Normal: 'L’attaquant gagne 1 losange.',
 };
 
-export const bonusMove414 = (S, u) => (u.item === 'mouchoir' ? 2 : 0) + (u.item === 'crinorage' ? 1 : 0) + (u.resonant > 0 ? 1 : 0) - (surrounded420(S, u) ? 1 : 0);
+export const bonusMove414 = (S, u) =>
+  (u.item === 'mouchoir' ? 2 : 0) +
+  (u.item === 'crinorage' ? 1 : 0) +
+  (u.resonant > 0 ? 1 : 0) -
+  (surrounded420(S, u) ? 1 : 0);
 
- // Crin d’Orage (v4.16), Resonant Form (v4.17), Encirclement (v4.20)
+// Crin d’Orage (v4.16), Resonant Form (v4.17), Encirclement (v4.20)
 
 /* ---------- 4. Shop ---------- */
 export const BAG_MAX = 4;
@@ -448,12 +556,14 @@ export const HELD_SHOP = {
   mouchoir: { p: 4000 },
   orbevie: { p: 4500 },
   metronome: { g: 12 },
-  ceinturepro: { g: 18 }
+  ceinturepro: { g: 18 },
 };
 
-export const koAlly414 = S => S.units.filter(o => o.side === 'a' && o.ko && !o.seg).sort((a, b) => RC(b.id) - RC(a.id) || b.mhp - a.mhp)[0];
+export const koAlly414 = S =>
+  S.units.filter(o => o.side === 'a' && o.ko && !o.seg).sort((a, b) => RC(b.id) - RC(a.id) || b.mhp - a.mhp)[0];
 
-export const freeTile414 = (S, u) => nbrK(uk(u)).find(x => S.tiles[x] && !S.tiles[x].rock && !uAt(S, x) && !(S.tiles[x].lava > 0));
+export const freeTile414 = (S, u) =>
+  nbrK(uk(u)).find(x => S.tiles[x] && !S.tiles[x].rock && !uAt(S, x) && !(S.tiles[x].lava > 0));
 
 export const offer414 = k => dailyOffers().includes(k);
 
@@ -463,158 +573,243 @@ export const costHeld414 = k => discount414(k, HELD_SHOP[k].p);
 
 // Statements executed at startup, in the original order (see index.js).
 export function __init() {
-LEG414 = new Set(LEGS.map(l => l.id));
+  LEG414 = new Set(LEGS.map(l => l.id));
 
-
-for (const k in MV) {
-  const m = MV[k];
-  if (!m || typeof m !== 'object') continue;
-  const deg = m.p > 0 || m.fix > 0;
-  m.rg = !deg ? 'soutien' : m.sig || XP_LEG.includes(k) ? 'expert' : m.fix || m.p >= 10 ? 'fort' : m.p >= 7 ? 'moyen' : 'faible';
-  if (m.rg === 'expert') m.xp = 1;
-}
-
-
-DAMAGE_PROVIDERS.push(
-  {
-    id: 'resonance',
-    provide: (c, { S, u, m, t }) => {
-      if (!S || !t || !u || t.side === u.side || !(m.p || m.fix) || !resoOn(S, u) || t.seg) return false;
-      const n = notesOf(S, t);
-      if (n >= 3 || (n && t.notes.by.includes(u.uid)) || n + weightNote(u) < 3) return false;
-      return { mul: u.item === 'ceinturepro' ? 1.8 : 1.5, labelText: 'Résonance' };
+  for (const k in MV) {
+    const m = MV[k];
+    if (!m || typeof m !== 'object') {
+      continue;
     }
-  },
-  {
-    id: 'impact',
-    provide: (c, { S, u, t }) => !!t && t.side !== u.side && rankOfValue(u) === 'fort' && resoOn(S, u) && notesOf(S, t) > 0 && { mul: 1.25, labelText: 'Impact' }
-  },
-  { id: 'orbevie', provide: (c, { u, m }) => u.item === 'orbevie' && (m.p > 0 || m.fix > 0) && { mul: 1.3, labelText: 'Orbe Vie' } }
-);
-
-
-/* ---------- combat: start, end of round, Harmony ---------- */
-HOOKS.combat.push(S => {
-  const al = S.units.filter(u => u.side === 'a');
-  if (al.length >= 3 && new Set(al.map(rankOfValue)).size >= 3) {
-    S.harmonie = true;
-    al.forEach(u => {
-      if (hasNx(u) || hasXp(u)) u.en = Math.max(u.en || 0, 1);
-    });
+    const deg = m.p > 0 || m.fix > 0;
+    m.rg = !deg
+      ? 'soutien'
+      : m.sig || XP_LEG.includes(k)
+        ? 'expert'
+        : m.fix || m.p >= 10
+          ? 'fort'
+          : m.p >= 7
+            ? 'moyen'
+            : 'faible';
+    if (m.rg === 'expert') {
+      m.xp = 1;
+    }
   }
-  if (bossScene(S)) {
-    S.units.forEach(e => {
-      if (e.side === 'e' && hasXp(e)) e.en = Math.max(e.en || 0, 1);
-    });
-  }
-});
 
+  DAMAGE_PROVIDERS.push(
+    {
+      id: 'resonance',
+      provide: (c, { S, u, m, t }) => {
+        if (!S || !t || !u || t.side === u.side || !(m.p || m.fix) || !resoOn(S, u) || t.seg) {
+          return false;
+        }
+        const n = notesOf(S, t);
+        if (n >= 3 || (n && t.notes.by.includes(u.uid)) || n + weightNote(u) < 3) {
+          return false;
+        }
+        return { mul: u.item === 'ceinturepro' ? 1.8 : 1.5, labelText: 'Résonance' };
+      },
+    },
+    {
+      id: 'impact',
+      provide: (c, { S, u, t }) =>
+        !!t &&
+        t.side !== u.side &&
+        rankOfValue(u) === 'fort' &&
+        resoOn(S, u) &&
+        notesOf(S, t) > 0 && { mul: 1.25, labelText: 'Impact' },
+    },
+    {
+      id: 'orbevie',
+      provide: (c, { u, m }) => u.item === 'orbevie' && (m.p > 0 || m.fix > 0) && { mul: 1.3, labelText: 'Orbe Vie' },
+    }
+  );
 
-HOOKS.beforeRoundEnd.push(S => {
-  if (!bossScene(S)) return;
-  S.units.forEach(e => {
-    if (e.side === 'e' && !e.ko && hasXp(e)) e.en = Math.min(EMAX, (e.en || 0) + 1);
+  /* ---------- combat: start, end of round, Harmony ---------- */
+  HOOKS.combat.push(S => {
+    const al = S.units.filter(u => u.side === 'a');
+    if (al.length >= 3 && new Set(al.map(rankOfValue)).size >= 3) {
+      S.harmonie = true;
+      al.forEach(u => {
+        if (hasNx(u) || hasXp(u)) {
+          u.en = Math.max(u.en || 0, 1);
+        }
+      });
+    }
+    if (bossScene(S)) {
+      S.units.forEach(e => {
+        if (e.side === 'e' && hasXp(e)) {
+          e.en = Math.max(e.en || 0, 1);
+        }
+      });
+    }
   });
-});
 
+  HOOKS.beforeRoundEnd.push(S => {
+    if (!bossScene(S)) {
+      return;
+    }
+    S.units.forEach(e => {
+      if (e.side === 'e' && !e.ko && hasXp(e)) {
+        e.en = Math.min(EMAX, (e.en || 0) + 1);
+      }
+    });
+  });
 
-HOOKS.progress.push((S, rew) => {
-  if (S.stats && S.stats.resonant) rew.resonant = S.stats.resonant;
-});
+  HOOKS.progress.push((S, rew) => {
+    if (S.stats && S.stats.resonant) {
+      rew.resonant = S.stats.resonant;
+    }
+  });
 
+  HOOKS.battleResult.push(r =>
+    r.resonant
+      ? `<div class="res-l"><h4>Résonance</h4><div class="rl"><span>Résonances déclenchées par votre équipe</span><b>${r.resonant}</b></div></div>`
+      : ''
+  );
 
-HOOKS.battleResult.push(r =>
-  r.resonant
-    ? `<div class="res-l"><h4>Résonance</h4><div class="rl"><span>Résonances déclenchées par votre équipe</span><b>${r.resonant}</b></div></div>`
-    : ''
-);
+  Object.assign(ITEMS2, {
+    orbevie: {
+      n: 'Orbe Vie',
+      d: '+30 % de dégâts, mais perd 10 % de ses PV max après chaque attaque qui touche.',
+      i: 'M12 4a8 8 0 1 0 0 16 8 8 0 0 0 0-16Zm0 3a5 5 0 0 1 5 5h-2a3 3 0 0 0-3-3Z',
+    },
+    casquebrut: {
+      n: 'Casque Brut',
+      d: 'Un adversaire qui le frappe au contact perd 10 % de ses PV max.',
+      i: 'M4 16a8 8 0 0 1 16 0v3H4Z',
+    },
+    sitrus: {
+      n: 'Baie Sitrus',
+      d: 'Une fois par combat, quand ses PV passent sous la moitié : il récupère 25 % de ses PV max.',
+      i: 'M12 7c-4 0-7 3-7 6.5S8 20 12 20s7-3 7-6.5S16 7 12 7Zm1-1c0-2 1-3 3-3.5V4c-1.5.5-2 1-2 2Z',
+    },
+    mouchoir: {
+      n: 'Mouchoir Choix',
+      d: '+2 Mouvement, mais il ne peut plus lancer que la première capacité utilisée.',
+      i: 'M5 5h14l-3 6 3 8h-5l-2-6-2 6H5l3-8Z',
+    },
+    rochemeteo: {
+      n: 'Roche Météo',
+      d: 'La météo qu’il déclenche dure 3 manches de plus.',
+      i: 'M6 18l-2-6 4-6h8l4 6-2 6Z',
+    },
+    grosseracine: {
+      n: 'Grosse Racine',
+      d: 'Les soins et drains qu’il reçoit rendent 50 % de plus.',
+      i: 'M11 3h2v7l5 9h-2.3L13 13.5V21h-2v-7.5L8.3 19H6l5-9Z',
+    },
+    lentillezoom: {
+      n: 'Lentille Zoom',
+      d: '+1 Portée sur ses attaques de portée 2 ou plus.',
+      i: 'M10 4a6 6 0 1 0 0 12 6 6 0 0 0 0-12Zm4.5 10.5 5.5 5.5-1.5 1.5-5.5-5.5Z',
+    },
+    metronome: {
+      n: 'Métronome',
+      d: 'Ses coups comptent pour 1 note de Résonance de plus.',
+      i: 'M9 3h6l4 18H5Zm2.2 4L13 16h-1.6Z',
+    },
+    ceinturepro: {
+      n: 'Ceinture Pro',
+      d: 'Ses coups de Résonance font ×1,8 au lieu de ×1,5.',
+      i: 'M3 10h18v4H3Zm8-2h4v8h-4Z',
+    },
+  });
 
+  Object.assign(HELD_IMG, {
+    orbevie: 'life-orb',
+    casquebrut: 'rocky-helmet',
+    sitrus: 'sitrus-berry',
+    mouchoir: 'choice-scarf',
+    rochemeteo: 'damp-rock',
+    grosseracine: 'big-root',
+    lentillezoom: 'zoom-lens',
+    metronome: 'metronome',
+    ceinturepro: 'expert-belt',
+  });
 
-Object.assign(ITEMS2, {
-  orbevie: {
-    n: 'Orbe Vie',
-    d: '+30 % de dégâts, mais perd 10 % de ses PV max après chaque attaque qui touche.',
-    i: 'M12 4a8 8 0 1 0 0 16 8 8 0 0 0 0-16Zm0 3a5 5 0 0 1 5 5h-2a3 3 0 0 0-3-3Z'
-  },
-  casquebrut: { n: 'Casque Brut', d: 'Un adversaire qui le frappe au contact perd 10 % de ses PV max.', i: 'M4 16a8 8 0 0 1 16 0v3H4Z' },
-  sitrus: {
-    n: 'Baie Sitrus',
-    d: 'Une fois par combat, quand ses PV passent sous la moitié : il récupère 25 % de ses PV max.',
-    i: 'M12 7c-4 0-7 3-7 6.5S8 20 12 20s7-3 7-6.5S16 7 12 7Zm1-1c0-2 1-3 3-3.5V4c-1.5.5-2 1-2 2Z'
-  },
-  mouchoir: { n: 'Mouchoir Choix', d: '+2 Mouvement, mais il ne peut plus lancer que la première capacité utilisée.', i: 'M5 5h14l-3 6 3 8h-5l-2-6-2 6H5l3-8Z' },
-  rochemeteo: { n: 'Roche Météo', d: 'La météo qu’il déclenche dure 3 manches de plus.', i: 'M6 18l-2-6 4-6h8l4 6-2 6Z' },
-  grosseracine: { n: 'Grosse Racine', d: 'Les soins et drains qu’il reçoit rendent 50 % de plus.', i: 'M11 3h2v7l5 9h-2.3L13 13.5V21h-2v-7.5L8.3 19H6l5-9Z' },
-  lentillezoom: {
-    n: 'Lentille Zoom',
-    d: '+1 Portée sur ses attaques de portée 2 ou plus.',
-    i: 'M10 4a6 6 0 1 0 0 12 6 6 0 0 0 0-12Zm4.5 10.5 5.5 5.5-1.5 1.5-5.5-5.5Z'
-  },
-  metronome: { n: 'Métronome', d: 'Ses coups comptent pour 1 note de Résonance de plus.', i: 'M9 3h6l4 18H5Zm2.2 4L13 16h-1.6Z' },
-  ceinturepro: { n: 'Ceinture Pro', d: 'Ses coups de Résonance font ×1,8 au lieu de ×1,5.', i: 'M3 10h18v4H3Zm8-2h4v8h-4Z' }
-});
+  Object.assign(SHOP, {
+    baieoran: {
+      n: 'Baie Oran',
+      sn: 'Oran',
+      d: 'Rend 12 PV. Coûte 1 Voix, l’action reste libre.',
+      p: 250,
+      category: 'combat',
+      img: 'oran-berry',
+      voice: 1,
+    },
+    totalsoin: {
+      n: 'Total Soin',
+      sn: 'Total Soin',
+      d: 'Libère de tous les statuts et entraves (paralysie, gel, sommeil, brûlure, poison, toile, racines, malédiction). Une manche déjà perdue le reste. Coûte 1 Voix.',
+      p: 600,
+      category: 'combat',
+      img: 'full-heal',
+      voice: 1,
+    },
+    attaqueplus: {
+      n: 'Attaque +',
+      sn: 'Attaque +',
+      d: 'Renforcé pendant 2 manches. Coûte 1 Voix, l’action reste libre.',
+      p: 800,
+      category: 'combat',
+      img: 'x-attack',
+      voice: 1,
+    },
+    defenseplus: {
+      n: 'Défense +',
+      sn: 'Défense +',
+      d: '+2 Garde pendant 2 manches. Coûte 1 Voix, l’action reste libre.',
+      p: 800,
+      category: 'combat',
+      img: 'x-defense',
+      voice: 1,
+    },
+    vitesseplus: {
+      n: 'Vitesse +',
+      sn: 'Vitesse +',
+      d: '+1 Mouvement pendant 2 manches. Coûte 1 Voix, l’action reste libre.',
+      p: 700,
+      category: 'combat',
+      img: 'x-speed',
+      voice: 1,
+    },
+    cristal: {
+      n: 'Cristal Résonant',
+      sn: 'Cristal',
+      d: '+1 losange de Résonance (Éveil ou attaque Experte). Coûte 1 Voix.',
+      p: 1200,
+      category: 'combat',
+      img: 'star-piece',
+      voice: 1,
+    },
+    rappel: {
+      n: 'Rappel',
+      sn: 'Rappel',
+      d: 'Relève votre Pokémon K.O. le plus coûteux en PC, sur une case voisine, avec 40 % de ses PV. Utilise l’action.',
+      p: 1500,
+      category: 'combat',
+      img: 'revive',
+    },
+  });
 
+  COMBAT414 = Object.keys(SHOP).filter(k => SHOP[k].category === 'combat');
 
-Object.assign(HELD_IMG, {
-  orbevie: 'life-orb',
-  casquebrut: 'rocky-helmet',
-  sitrus: 'sitrus-berry',
-  mouchoir: 'choice-scarf',
-  rochemeteo: 'damp-rock',
-  grosseracine: 'big-root',
-  lentillezoom: 'zoom-lens',
-  metronome: 'metronome',
-  ceinturepro: 'expert-belt'
-});
+  /* daily offers: three items at −30%, the same for the whole day */
+  OFFERS414 = { d: '', k: [] };
 
+  document.addEventListener('click', e => {
+    const h = e.target.closest('[data-buyh]');
+    if (h) {
+      buyHeld414(h.dataset.buyh);
+      return;
+    }
+    const o = e.target.closest('[data-offre]');
+    if (o) {
+      V4.bagView = 'boutique';
+      V4.bagCategory = o.dataset.offre;
+      renderBag();
+    }
+  });
 
-Object.assign(SHOP, {
-  baieoran: { n: 'Baie Oran', sn: 'Oran', d: 'Rend 12 PV. Coûte 1 Voix, l’action reste libre.', p: 250, category: 'combat', img: 'oran-berry', voice: 1 },
-  totalsoin: {
-    n: 'Total Soin',
-    sn: 'Total Soin',
-    d: 'Libère de tous les statuts et entraves (paralysie, gel, sommeil, brûlure, poison, toile, racines, malédiction). Une manche déjà perdue le reste. Coûte 1 Voix.',
-    p: 600,
-    category: 'combat',
-    img: 'full-heal',
-    voice: 1
-  },
-  attaqueplus: { n: 'Attaque +', sn: 'Attaque +', d: 'Renforcé pendant 2 manches. Coûte 1 Voix, l’action reste libre.', p: 800, category: 'combat', img: 'x-attack', voice: 1 },
-  defenseplus: { n: 'Défense +', sn: 'Défense +', d: '+2 Garde pendant 2 manches. Coûte 1 Voix, l’action reste libre.', p: 800, category: 'combat', img: 'x-defense', voice: 1 },
-  vitesseplus: { n: 'Vitesse +', sn: 'Vitesse +', d: '+1 Mouvement pendant 2 manches. Coûte 1 Voix, l’action reste libre.', p: 700, category: 'combat', img: 'x-speed', voice: 1 },
-  cristal: { n: 'Cristal Résonant', sn: 'Cristal', d: '+1 losange de Résonance (Éveil ou attaque Experte). Coûte 1 Voix.', p: 1200, category: 'combat', img: 'star-piece', voice: 1 },
-  rappel: {
-    n: 'Rappel',
-    sn: 'Rappel',
-    d: 'Relève votre Pokémon K.O. le plus coûteux en PC, sur une case voisine, avec 40 % de ses PV. Utilise l’action.',
-    p: 1500,
-    category: 'combat',
-    img: 'revive'
-  }
-});
-
-
-COMBAT414 = Object.keys(SHOP).filter(k => SHOP[k].category === 'combat');
-
-
-/* daily offers: three items at −30%, the same for the whole day */
-OFFERS414 = { d: '', k: [] };
-
-
-document.addEventListener('click', e => {
-  const h = e.target.closest('[data-buyh]');
-  if (h) {
-    buyHeld414(h.dataset.buyh);
-    return;
-  }
-  const o = e.target.closest('[data-offre]');
-  if (o) {
-    V4.bagView = 'boutique';
-    V4.bagCategory = o.dataset.offre;
-    renderBag();
-  }
-});
-
-
-/* ---------- the Guide: ranks, Expert attacks, notes and echoes, rendered by React (Tactics.jsx) ---------- */
+  /* ---------- the Guide: ranks, Expert attacks, notes and echoes, rendered by React (Tactics.jsx) ---------- */
 }

@@ -17,7 +17,7 @@ export const MV = {
     r: 3,
     sh: 'one',
     fx: 'recharge',
-    d: 'Dévastateur, puis une manche de repos.'
+    d: 'Dévastateur, puis une manche de repos.',
   },
   etreinte: {
     n: 'Étreinte',
@@ -27,7 +27,7 @@ export const MV = {
     sh: 'one',
     fx: 'root',
     v: 2,
-    d: 'La cible ne peut plus bouger pendant 2 manches.'
+    d: 'La cible ne peut plus bouger pendant 2 manches.',
   },
   charme: { n: 'Charme', t: 'Fée', p: 0, r: 3, sh: 'one', fx: 'taunt', d: 'L’ennemi doit viser ce Pokémon.' },
   berceuse: { n: 'Berceuse', t: 'Normal', p: 0, r: 1, sh: 'one', fx: 'sleep', d: 'Endort une cible au contact.' },
@@ -38,7 +38,7 @@ export const MV = {
     r: 3,
     sh: 'one',
     fx: 'confuse',
-    d: 'L’ennemi vise l’unité la plus proche de lui.'
+    d: 'L’ennemi vise l’unité la plus proche de lui.',
   },
   grimace: { n: 'Grimace', t: 'Normal', p: 0, r: 2, sh: 'one', fx: 'web', d: '−3 Mouvement pendant 2 manches.' },
   hurlement: {
@@ -50,7 +50,7 @@ export const MV = {
     fx: 'push',
     v: 3,
     prio: -1,
-    d: 'Repousse de 3 cases.'
+    d: 'Repousse de 3 cases.',
   },
   regardnoir: {
     n: 'Regard Noir',
@@ -60,7 +60,7 @@ export const MV = {
     sh: 'one',
     fx: 'root',
     v: 3,
-    d: 'La cible ne peut plus bouger pendant 3 manches.'
+    d: 'La cible ne peut plus bouger pendant 3 manches.',
   },
   brouillard: {
     n: 'Brouillard',
@@ -69,7 +69,7 @@ export const MV = {
     r: 2,
     sh: 'area',
     fx: 'smoke',
-    d: '7 cases de brouillard : aucun tir à distance au travers.'
+    d: '7 cases de brouillard : aucun tir à distance au travers.',
   },
   armure: { n: 'Armure', t: 'Normal', p: 0, r: 0, sh: 'self', fx: 'guard', d: '+2 Garde pendant 2 manches.' },
   abri: {
@@ -79,7 +79,7 @@ export const MV = {
     r: 0,
     sh: 'self',
     fx: 'protect',
-    d: 'Aucun dégât subi jusqu’à la fin de la manche.'
+    d: 'Aucun dégât subi jusqu’à la fin de la manche.',
   },
   danselames: {
     n: 'Danse-Lames',
@@ -88,7 +88,7 @@ export const MV = {
     r: 0,
     sh: 'self',
     fx: 'boost',
-    d: 'Dégâts ×1,5 pendant 2 manches.'
+    d: 'Dégâts ×1,5 pendant 2 manches.',
   },
   aurore: {
     n: 'Aurore',
@@ -97,7 +97,7 @@ export const MV = {
     r: 0,
     sh: 'self',
     fx: 'selfheal',
-    d: 'Récupère 40 % des PV, 60 % sous le Soleil.'
+    d: 'Récupère 40 % des PV, 60 % sous le Soleil.',
   },
   relais: {
     n: 'Relais',
@@ -106,7 +106,7 @@ export const MV = {
     r: 2,
     sh: 'ally',
     fx: 'swapally',
-    d: 'Échange avec un allié et lui donne +2 Garde.'
+    d: 'Échange avec un allié et lui donne +2 Garde.',
   },
   repos: { n: 'Repos', t: 'Psy', p: 0, r: 0, sh: 'self', fx: 'rest', d: 'Soigne 50 %, puis dort une manche.' },
   protection: {
@@ -116,7 +116,7 @@ export const MV = {
     r: 0,
     sh: 'self',
     fx: 'reflect',
-    d: 'Lui et ses voisins alliés : +2 Garde, 2 manches.'
+    d: 'Lui et ses voisins alliés : +2 Garde, 2 manches.',
   },
   teleport: {
     n: 'Téléport',
@@ -125,7 +125,7 @@ export const MV = {
     r: 4,
     sh: 'one',
     fx: 'swap',
-    d: 'Échange de place avec une unité à 4 cases.'
+    d: 'Échange de place avec une unité à 4 cases.',
   },
   chocmental: { n: 'Choc Mental', t: 'Psy', p: 7, r: 2, sh: 'one', fx: 'push', v: 2, d: 'Repousse de 2 cases.' },
   psyko: { n: 'Psyko', t: 'Psy', p: 13, r: 3, sh: 'one', d: 'Portée 3.' },
@@ -145,7 +145,7 @@ export const MV = {
     sh: 'one',
     fx: 'root',
     v: 2,
-    d: 'Au contact : la cible ne bouge plus, 2 manches.'
+    d: 'Au contact : la cible ne bouge plus, 2 manches.',
   },
   repli: { n: 'Repli', t: 'Eau', p: 0, r: 0, sh: 'self', fx: 'guard', d: '+2 Garde pendant 2 manches.' },
   dansepluie: { n: 'Danse Pluie', t: 'Eau', p: 0, r: 0, sh: 'self', wx: 'pluie', d: 'Pluie pendant 5 manches.' },
@@ -161,7 +161,7 @@ export const MV = {
     mk: 'brulant',
     fx: 'root',
     v: 2,
-    d: 'Brûlant, et la cible ne bouge plus.'
+    d: 'Brûlant, et la cible ne bouge plus.',
   },
   lanceflammes: { n: 'Lance-Flammes', t: 'Feu', p: 11, r: 3, sh: 'line', mk: 'brulant', d: 'Ligne de 3, Brûlant.' },
   zenith: { n: 'Zénith', t: 'Feu', p: 0, r: 0, sh: 'self', wx: 'soleil', d: 'Soleil pendant 5 manches.' },
@@ -173,7 +173,7 @@ export const MV = {
     sh: 'one',
     mk: 'enracine',
     fx: 'drain',
-    d: 'Enraciné, draine.'
+    d: 'Enraciné, draine.',
   },
   fouet: { n: 'Fouet Lianes', t: 'Plante', p: 7, r: 2, sh: 'one', d: 'Portée 2.' },
   volvie: { n: 'Vol-Vie', t: 'Plante', p: 5, r: 2, sh: 'one', fx: 'drain', d: 'Récupère la moitié des dégâts.' },
@@ -185,7 +185,7 @@ export const MV = {
     r: 3,
     sh: 'line',
     sun: 1,
-    d: 'Ligne de 3. ×1,5 sous le Soleil.'
+    d: 'Ligne de 3. ×1,5 sous le Soleil.',
   },
   dansefleur: {
     n: 'Danse-Fleur',
@@ -194,7 +194,7 @@ export const MV = {
     r: 0,
     sh: 'ring',
     mk: 'enracine',
-    d: 'Les 6 cases autour, Enraciné.'
+    d: 'Les 6 cases autour, Enraciné.',
   },
   poudredodo: { n: 'Poudre Dodo', t: 'Plante', p: 0, r: 1, sh: 'one', fx: 'sleep', d: 'Endort une cible au contact.' },
   sporecoton: { n: 'Spore Coton', t: 'Plante', p: 0, r: 2, sh: 'one', fx: 'web', d: '−3 Mouvement pendant 2 manches.' },
@@ -205,7 +205,7 @@ export const MV = {
     r: 0,
     sh: 'self',
     fx: 'selfheal',
-    d: 'Récupère 40 % des PV, 60 % sous le Soleil.'
+    d: 'Récupère 40 % des PV, 60 % sous le Soleil.',
   },
   eclair: { n: 'Éclair', t: 'Électrik', p: 8, r: 3, sh: 'one', mk: 'charge', d: 'Portée 3, Chargé.' },
   tonnerre: { n: 'Tonnerre', t: 'Électrik', p: 12, r: 3, sh: 'one', mk: 'charge', d: 'Portée 3, Chargé.' },
@@ -233,7 +233,7 @@ export const MV = {
     r: 1,
     sh: 'one',
     fx: 'recoil',
-    d: 'Puissant, 25 % des dégâts en retour.'
+    d: 'Puissant, 25 % des dégâts en retour.',
   },
   tornade: { n: 'Tornade', t: 'Vol', p: 4, r: 2, sh: 'one', fx: 'push', v: 1, d: 'Repousse d’une case.' },
   criailes: { n: 'Cru-Ailes', t: 'Vol', p: 8, r: 1, sh: 'one', fx: 'push', v: 1, d: 'Repousse d’une case.' },
@@ -245,7 +245,7 @@ export const MV = {
     r: 1,
     sh: 'one',
     fx: 'drain',
-    d: 'Récupère la moitié des dégâts.'
+    d: 'Récupère la moitié des dégâts.',
   },
   secretion: {
     n: 'Sécrétion',
@@ -254,7 +254,7 @@ export const MV = {
     r: 2,
     sh: 'one',
     fx: 'web',
-    d: 'Toile : −3 Mouvement pendant 2 manches.'
+    d: 'Toile : −3 Mouvement pendant 2 manches.',
   },
   rayonsignal: { n: 'Rayon Signal', t: 'Insecte', p: 9, r: 3, sh: 'one', d: 'Portée 3.' },
   taillade: { n: 'Taillade', t: 'Insecte', p: 7, r: 1, sh: 'one', d: 'Au contact.' },
@@ -265,7 +265,7 @@ export const MV = {
     r: 3,
     sh: 'one',
     fx: 'turn',
-    d: 'L’ennemi frappe son allié le plus proche.'
+    d: 'L’ennemi frappe son allié le plus proche.',
   },
   lechouille: { n: 'Léchouille', t: 'Spectre', p: 6, r: 1, sh: 'one', fx: 'parc', d: 'Paralyse une cible Chargée.' },
   ballombre: { n: 'Ball’Ombre', t: 'Spectre', p: 11, r: 3, sh: 'one', d: 'Portée 3.' },
@@ -282,18 +282,24 @@ export const MV = {
     sh: 'one',
     fx: 'pull',
     v: 2,
-    d: 'Attire de 2 cases une cible Chargée.'
+    d: 'Attire de 2 cases une cible Chargée.',
   },
   acidarmure: { n: 'Acidarmure', t: 'Poison', p: 0, r: 0, sh: 'self', fx: 'guard', d: '+2 Garde pendant 2 manches.' },
   dracorage: { n: 'Draco-Rage', t: 'Dragon', p: 0, r: 2, sh: 'one', fix: 10, d: '10 dégâts fixes, aucune réaction.' },
   ouragan: { n: 'Ouragan', t: 'Dragon', p: 6, r: 2, sh: 'area', d: 'Zone de 7 cases, aucune réaction.' },
   pouvoirlunaire: { n: 'Pouvoir Lunaire', t: 'Fée', p: 11, r: 3, sh: 'one', d: 'Portée 3.' },
-  voeu: { n: 'Vœu', t: 'Fée', p: 0, r: 2, sh: 'ally', fx: 'heal', d: 'Soigne un allié de 30 %.' }
+  voeu: { n: 'Vœu', t: 'Fée', p: 0, r: 2, sh: 'ally', fx: 'heal', d: 'Soigne un allié de 30 %.' },
 };
 
-
-export const SHAPE = { one: 'Cible', line: 'Ligne', cone: 'Cône', area: 'Zone', ring: 'Autour', self: 'Soi', ally: 'Allié' };
-
+export const SHAPE = {
+  one: 'Cible',
+  line: 'Ligne',
+  cone: 'Cône',
+  area: 'Zone',
+  ring: 'Autour',
+  self: 'Soi',
+  ally: 'Allié',
+};
 
 export const TAL = {
   glissade: ['Glissade', '+2 Mouvement en partant d’une case Trempée.'],
@@ -325,10 +331,10 @@ export const TAL = {
   synchro: ['Synchro', 'Qui l’endort, le paralyse ou le gèle subit le même sort.'],
   crachin: ['Crachin', 'Fait tomber la pluie en entrant au combat.'],
   sablevolant: ['Sable Volant', 'Lève une tempête de sable en entrant au combat.'],
-  regardvif: ['Regard Vif', 'Insensible aux Toiles et aux entraves.']
+  regardvif: ['Regard Vif', 'Insensible aux Toiles et aux entraves.'],
 };
 
 // Statements run at startup, in the original order (see index.js).
 export function __init() {
-delete MV.trempe0;
+  delete MV.trempe0;
 }

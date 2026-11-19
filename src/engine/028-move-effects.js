@@ -10,9 +10,10 @@ import { liveEv429 } from './064-quality.js';
 
 let R0, cl01, eo;
 
-
 export function fxOn() {
-  if (RM || /jsdom/i.test(navigator.userAgent || '')) return false;
+  if (RM || /jsdom/i.test(navigator.userAgent || '')) {
+    return false;
+  }
   if (FXS.on === null) {
     try {
       const c = document.createElement('canvas');
@@ -24,26 +25,36 @@ export function fxOn() {
   return FXS.on;
 }
 
-
 export function fxReset() {
   FXS.items = [];
-  if (FXS.raf) cancelAnimationFrame(FXS.raf);
+  if (FXS.raf) {
+    cancelAnimationFrame(FXS.raf);
+  }
   FXS.raf = 0;
-  if (FXS.ctx && FXS.cv) FXS.ctx.clearRect(0, 0, FXS.cv.width, FXS.cv.height);
+  if (FXS.ctx && FXS.cv) {
+    FXS.ctx.clearRect(0, 0, FXS.cv.width, FXS.cv.height);
+  }
 }
-
 
 export function fxPrep() {
   const bd = $('#bBoard'),
     svg = $('#bSvg');
-  if (!bd || !svg) return false;
+  if (!bd || !svg) {
+    return false;
+  }
   // canvas.fxc canvas: rendered by React (Board.jsx) on the first effect; size and drawing here
-  if (!getHost().fxc) hostSet({ fxc: true });
+  if (!getHost().fxc) {
+    hostSet({ fxc: true });
+  }
   const cv = bd.querySelector('canvas.fxc');
-  if (!cv) return false;
+  if (!cv) {
+    return false;
+  }
   const r = svg.getBoundingClientRect(),
     br = bd.getBoundingClientRect();
-  if (!r.width || !r.height) return false;
+  if (!r.width || !r.height) {
+    return false;
+  }
   const dpr = Math.min(2, window.devicePixelRatio || 1);
   cv.style.left = r.left - br.left - bd.clientLeft + 'px';
   cv.style.top = r.top - br.top - bd.clientTop + 'px';
@@ -51,8 +62,12 @@ export function fxPrep() {
   cv.style.height = r.height + 'px';
   const W = Math.round(r.width * dpr),
     H = Math.round(r.height * dpr);
-  if (cv.width !== W) cv.width = W;
-  if (cv.height !== H) cv.height = H;
+  if (cv.width !== W) {
+    cv.width = W;
+  }
+  if (cv.height !== H) {
+    cv.height = H;
+  }
   const [vw, vh] = VB(),
     s = Math.min(r.width / vw, r.height / vh);
   FXS.s = s * dpr;
@@ -62,7 +77,6 @@ export function fxPrep() {
   FXS.ctx = cv.getContext('2d');
   return !!FXS.ctx;
 }
-
 
 function fxLoop(now) {
   const c = FXS.ctx,
@@ -74,31 +88,40 @@ function fxLoop(now) {
   c.clearRect(0, 0, cv.width, cv.height);
   FXS.items = FXS.items.filter(it => {
     const p = (now - it.t0) / it.d;
-    if (p < 0) return true;
-    if (p >= 1) return false;
+    if (p < 0) {
+      return true;
+    }
+    if (p >= 1) {
+      return false;
+    }
     c.save();
     try {
       it.f(c, p);
-    } catch { /* Best effort: failure here is non-fatal. */ }
+    } catch {
+      /* Best effort: failure here is non-fatal. */
+    }
     c.restore();
     return true;
   });
-  if (FXS.items.length) FXS.raf = requestAnimationFrame(fxLoop);
-  else {
+  if (FXS.items.length) {
+    FXS.raf = requestAnimationFrame(fxLoop);
+  } else {
     FXS.raf = 0;
     c.clearRect(0, 0, cv.width, cv.height);
   }
 }
 
-
 export function fxAdd(d, f, delay) {
   FXS.items.push({ t0: performance.now() + (delay || 0), d, f });
-  if (!FXS.raf) FXS.raf = requestAnimationFrame(fxLoop);
+  if (!FXS.raf) {
+    FXS.raf = requestAnimationFrame(fxLoop);
+  }
 }
 
-
 function along(pts, t) {
-  if (pts.length < 2) return pts[0];
+  if (pts.length < 2) {
+    return pts[0];
+  }
   const L = [];
   let tot = 0;
   for (let i = 1; i < pts.length; i++) {
@@ -108,12 +131,13 @@ function along(pts, t) {
   }
   let r = t * tot;
   for (let i = 0; i < L.length; i++) {
-    if (r <= L[i] || i === L.length - 1) return lp(pts[i], pts[i + 1], L[i] ? cl01(r / L[i]) : 1);
+    if (r <= L[i] || i === L.length - 1) {
+      return lp(pts[i], pts[i + 1], L[i] ? cl01(r / L[i]) : 1);
+    }
     r -= L[i];
   }
   return pts[pts.length - 1];
 }
-
 
 function glowDot(c, x, y, r, col, a) {
   const g = c.createRadialGradient(x, y, 0, x, y, r);
@@ -126,7 +150,6 @@ function glowDot(c, x, y, r, col, a) {
   c.fill();
 }
 
-
 function ringAt(c, x, y, r, col, a, lw) {
   c.globalAlpha = a;
   c.strokeStyle = col;
@@ -135,7 +158,6 @@ function ringAt(c, x, y, r, col, a, lw) {
   c.arc(x, y, Math.max(0.1, r), 0, 7);
   c.stroke();
 }
-
 
 function hexAt(c, x, y, r, col, a, lw) {
   c.globalAlpha = a;
@@ -151,7 +173,6 @@ function hexAt(c, x, y, r, col, a, lw) {
   c.closePath();
   c.stroke();
 }
-
 
 function jag(a, b, n, amp) {
   const o = [a],
@@ -169,7 +190,6 @@ function jag(a, b, n, amp) {
   return o;
 }
 
-
 function strokePts(c, pts, col, lw, a) {
   c.globalAlpha = a;
   c.strokeStyle = col;
@@ -180,7 +200,6 @@ function strokePts(c, pts, col, lw, a) {
   pts.forEach((p, i) => (i ? c.lineTo(p[0], p[1]) : c.moveTo(p[0], p[1])));
   c.stroke();
 }
-
 
 function shape(c, kind, x, y, s, rot, col, a) {
   c.globalAlpha = a;
@@ -210,26 +229,30 @@ function shape(c, kind, x, y, s, rot, col, a) {
       i ? c.lineTo(Math.cos(an) * rr, Math.sin(an) * rr) : c.moveTo(Math.cos(an) * rr, Math.sin(an) * rr);
     }
     c.closePath();
-  } else c.arc(0, 0, s, 0, 7);
+  } else {
+    c.arc(0, 0, s, 0, 7);
+  }
   c.fill();
   c.restore();
 }
 
-
 /* a complete attack effect: trajectory, impact, shards */
 /* Effects scaled to the depth of the tilted board (target at the back = smaller effect). */
 function depth(k) {
-  if (!TILT.on || k == null) return 1;
+  if (!TILT.on || k == null) {
+    return 1;
+  }
   const [x, y] = HC(k);
   return Math.max(0.6, Math.min(1.4, tiltS(x, y)));
 }
-
 
 function withDepth(k, f, topEdge) {
   const oy = FXS.oy;
   FXS.zk = depth(k);
   // shots leave from the standing Pokémon's body, not from the ground ring (positions frozen at call time)
-  if (TILT.on && topEdge) FXS.oy = oy - 10 * FXS.zk * FXS.s;
+  if (TILT.on && topEdge) {
+    FXS.oy = oy - 10 * FXS.zk * FXS.s;
+  }
   try {
     return f();
   } finally {
@@ -238,12 +261,18 @@ function withDepth(k, f, topEdge) {
   }
 }
 
-
 function fxAttack(e, dur) {
-  const onGround = !e || e.st || e.sh === 'self' || e.sh === 'area' || e.sh === 'ring' || e.sh === 'cone' || e.from === e.k || FXK[e.t] === 'quake';
+  const onGround =
+    !e ||
+    e.st ||
+    e.sh === 'self' ||
+    e.sh === 'area' ||
+    e.sh === 'ring' ||
+    e.sh === 'cone' ||
+    e.from === e.k ||
+    FXK[e.t] === 'quake';
   return withDepth(e && (e.k != null ? e.k : e.from), () => fxAttackPlat(e, dur), !onGround);
 }
-
 
 function fxAttackPlat(e, dur) {
   const z = FXS.s * (FXS.zk || 1),
@@ -251,7 +280,9 @@ function fxAttackPlat(e, dur) {
     kind0 = FXK[e.t] || 'impact',
     A = fxP(e.from);
   let T = (e.aff && e.aff.length ? e.aff : [e.k]).filter(Boolean).map(fxP);
-  if (!T.length) T = [fxP(e.k)];
+  if (!T.length) {
+    T = [fxP(e.k)];
+  }
   const rock = e.rico ? fxP(e.k) : null,
     ti = 0.42,
     area = e.sh === 'area' || e.sh === 'ring' || e.sh === 'cone';
@@ -297,7 +328,9 @@ function fxAttackPlat(e, dur) {
         strokePts(c, P, pal[3], 7 * z, 0.35 * f);
         strokePts(c, P, pal[2], 3.4 * z, 0.8 * f);
         strokePts(c, P, '#FFFFFF', 1.4 * z, f);
-        if (p < 0.25) glowDot(c, A[0], A[1], 16 * z, pal[1], 0.6);
+        if (p < 0.25) {
+          glowDot(c, A[0], A[1], 16 * z, pal[1], 0.6);
+        }
       })
     );
   } else if (kind === 'jet') {
@@ -379,7 +412,9 @@ function fxAttackPlat(e, dur) {
         c.globalCompositeOperation = 'lighter';
         if (e.sh === 'line') {
           const pts = [];
-          for (let i = 0; i <= 14; i++) pts.push(along(P, tail + ((h - tail) * i) / 14));
+          for (let i = 0; i <= 14; i++) {
+            pts.push(along(P, tail + ((h - tail) * i) / 14));
+          }
           strokePts(c, pts, pal[3], 14 * z, 0.32);
           strokePts(c, pts, pal[2], 8 * z, 0.55);
           strokePts(c, pts, pal[1], 3.6 * z, 0.9);
@@ -423,7 +458,9 @@ function fxAttackPlat(e, dur) {
       c.globalCompositeOperation = kind === 'rock' || kind === 'slash' ? 'source-over' : 'lighter';
       ps.forEach(o => {
         const u = cl01((p - o.b) / (ti - o.b * 0.5));
-        if (u <= 0 || u >= 1) return;
+        if (u <= 0 || u >= 1) {
+          return;
+        }
         const P = path(o.t),
           q = along(P, eo(u)),
           dx = o.t[0] - A[0],
@@ -521,7 +558,7 @@ function fxAttackPlat(e, dur) {
             c,
             [
               [rock[0], rock[1] - 4 * z],
-              [rock[0] + Math.cos(an) * 14 * z * p, rock[1] - 4 * z + Math.sin(an) * 14 * z * p]
+              [rock[0] + Math.cos(an) * 14 * z * p, rock[1] - 4 * z + Math.sin(an) * 14 * z * p],
             ],
             '#FFF4D6',
             1.2 * z,
@@ -602,7 +639,7 @@ function fxAttackPlat(e, dur) {
               [x - 12 * z, y + 10 * z],
               [x - 4 * z, y - 6 * z * q],
               [x + 8 * z, y + 4 * z],
-              [x + 12 * z, y - 10 * z * q]
+              [x + 12 * z, y - 10 * z * q],
             ],
             pal[2],
             2 * z,
@@ -681,7 +718,9 @@ function fxAttackPlat(e, dur) {
           for (let j = 0; j < 3; j++) {
             const d = cl01(q * 1.6 - j * 0.25),
               o2 = (j - 1) * 9 * z;
-            if (d <= 0) continue;
+            if (d <= 0) {
+              continue;
+            }
             const a1 = [x - 19 * z + o2, y - 19 * z],
               a2 = [x - 19 * z + o2 + 38 * z * d, y - 19 * z + 38 * z * d];
             strokePts(c, [a1, a2], '#0A0505', 7 * z, (1 - p) * 0.9);
@@ -695,7 +734,7 @@ function fxAttackPlat(e, dur) {
               c,
               [
                 [x, y],
-                [x + Math.cos(an) * (6 + 18 * q) * z, y + Math.sin(an) * (6 + 18 * q) * z]
+                [x + Math.cos(an) * (6 + 18 * q) * z, y + Math.sin(an) * (6 + 18 * q) * z],
               ],
               j % 2 ? pal[0] : pal[2],
               1.6 * z,
@@ -761,7 +800,7 @@ function fxAttackPlat(e, dur) {
               c,
               [
                 [x + Math.cos(an) * 6 * z, y + Math.sin(an) * 6 * z],
-                [x + Math.cos(an) * (10 + 18 * q) * z, y + Math.sin(an) * (10 + 18 * q) * z]
+                [x + Math.cos(an) * (10 + 18 * q) * z, y + Math.sin(an) * (10 + 18 * q) * z],
               ],
               j % 2 ? pal[1] : pal[2],
               2.2 * z * (1 - p * 0.6),
@@ -788,7 +827,9 @@ function fxAttackPlat(e, dur) {
       hitAt
     );
     setTimeout(() => {
-      if (!$('#bBoard')) return;
+      if (!$('#bBoard')) {
+        return;
+      }
       bdReplay('impact');
       bdClass('impact', true);
       setTimeout(() => bdClass('impact', false), 340);
@@ -797,17 +838,17 @@ function fxAttackPlat(e, dur) {
   return hitAt;
 }
 
-
 function fxGuard(e, dur) {
   const guardianRef = byUid(B, e.u);
   return withDepth(guardianRef ? uk(guardianRef) : null, () => fxGuardPlat(e, dur));
 }
 
-
 function fxGuardPlat(e, dur) {
   const g = byUid(B, e.u),
     v = byUid(B, e.v);
-  if (!g || !v) return;
+  if (!g || !v) {
+    return;
+  }
   const G = fxP(uk(g)),
     V = fxP(uk(v)),
     z = FXS.s * (FXS.zk || 1);
@@ -820,7 +861,6 @@ function fxGuardPlat(e, dur) {
     glowDot(c, G[0], G[1], 24 * z, '#D4AF6A', (1 - p) * 0.4);
   });
 }
-
 
 /* hook into event playback */
 export function playEv(ev) {
@@ -851,7 +891,9 @@ export function playEv(ev) {
   const S0 = B,
     rest = ev.filter(x => x.e !== 'fx' && x.e !== 'use');
   setTimeout(() => {
-    if (!B || B !== S0) return;
+    if (!B || B !== S0) {
+      return;
+    }
     playLog(rest);
     rest.filter(x => x.e === 'guard').forEach(x => fxGuard(x, dur));
   }, Math.round(hit));
@@ -860,7 +902,6 @@ export function playEv(ev) {
 
 /* ===================== v1.1: per-type attack effects (ephemeral canvas layer, no idle loop) ===================== */
 export const FXS = { cv: null, ctx: null, items: [], raf: 0, s: 1, ox: 0, oy: 0, on: null };
-
 
 const FXC = {
   Feu: ['#FFF3B0', '#FFB23E', '#FF5A1F', '#B3200E'],
@@ -880,9 +921,8 @@ const FXC = {
   Ténèbres: ['#F2D8D8', '#A04848', '#4A1E1E', '#120A0A'],
   Acier: ['#FFFFFF', '#DDE3EA', '#9AA6B2', '#4F5864'],
   Dragon: ['#E5E0FF', '#8F7BFF', '#5A3FE0', '#251880'],
-  Fée: ['#FFF0F8', '#FFB8E0', '#FF7CC4', '#B03A84']
+  Fée: ['#FFF0F8', '#FFB8E0', '#FF7CC4', '#B03A84'],
 };
-
 
 const FXK = {
   Feu: 'flame',
@@ -902,22 +942,18 @@ const FXK = {
   Poison: 'bubble',
   Ténèbres: 'slash',
   Acier: 'metal',
-  Fée: 'sparkle'
+  Fée: 'sparkle',
 };
-
 
 const fxP = k => {
   const [x, y] = HC(k);
   return [FXS.ox + x * FXS.s, FXS.oy + y * FXS.s];
 };
 
-
 const lp = (a, b, t) => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
 
 // Statements run at startup, in the original order (see index.js).
 export function __init() {
-/* tools */
-R0 = Math.random,
-  cl01 = v => (v < 0 ? 0 : v > 1 ? 1 : v),
-  eo = t => 1 - Math.pow(1 - t, 3);
+  /* tools */
+  ((R0 = Math.random), (cl01 = v => (v < 0 ? 0 : v > 1 ? 1 : v)), (eo = t => 1 - Math.pow(1 - t, 3)));
 }

@@ -11,15 +11,30 @@ export default function Captures() {
     endStep = c.n >= c.t;
   return (
     <div id="cp428" className="cp428">
-      <div className="cp428-h"><b>{`${ROUTE421[r]} · ${c.n} / ${c.t} familles capturées`}</b><span className="cp428-g">{endStep ? `Pokédex de ${REGION_NAMES421[r]} complet ✓` : `Diplôme : +${DIPL428[r][0]} ₽ · +${DIPL428[r][1]} Éclats`}</span></div>
+      <div className="cp428-h">
+        <b>{`${ROUTE421[r]} · ${c.n} / ${c.t} familles capturées`}</b>
+        <span className="cp428-g">
+          {endStep
+            ? `Pokédex de ${REGION_NAMES421[r]} complet ✓`
+            : `Diplôme : +${DIPL428[r][0]} ₽ · +${DIPL428[r][1]} Éclats`}
+        </span>
+      </div>
       {'\n '}
-      <span className="cp428-bar" aria-hidden="true"><i style={{ width: `${Math.round((c.n / Math.max(1, c.t)) * 100)}%` }} /></span>
+      <span className="cp428-bar" aria-hidden="true">
+        <i style={{ width: `${Math.round((c.n / Math.max(1, c.t)) * 100)}%` }} />
+      </span>
       {'\n '}
       <div className="cp428-l">
         {c.L.map(m => {
           const own = PROFILE.box.includes(m.id);
           return (
-            <button type="button" className={'cp428-m' + (own ? ' on' : '')} data-cp428={m.id} aria-label={own ? m.n + ', capturé' : 'Pokémon pas encore capturé'} key={m.id}>
+            <button
+              type="button"
+              className={'cp428-m' + (own ? ' on' : '')}
+              data-cp428={m.id}
+              aria-label={own ? m.n + ', capturé' : 'Pokémon pas encore capturé'}
+              key={m.id}
+            >
               <img src={PIX(m.no)} alt="" loading="lazy" decoding="async" />
             </button>
           );

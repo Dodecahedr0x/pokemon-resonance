@@ -25,7 +25,9 @@ export function setMenuOpen(menu) {
 
 export function setSaveIndicator(svBusy, svCloud) {
   const s = shell.get();
-  if (s.saveBusy !== svBusy || s.saveCloud !== svCloud) shell.set({ saveBusy: svBusy, saveCloud: svCloud });
+  if (s.saveBusy !== svBusy || s.saveCloud !== svCloud) {
+    shell.set({ saveBusy: svBusy, saveCloud: svCloud });
+  }
 }
 
 export function refreshWallet() {

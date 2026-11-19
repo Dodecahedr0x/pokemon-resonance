@@ -9,8 +9,12 @@ const STORE_KEY = 'res-gtab';
 function initialTab() {
   try {
     const k = localStorage.getItem(STORE_KEY);
-    if (k) return k;
-  } catch { /* Best effort: failure here is non-fatal. */ }
+    if (k) {
+      return k;
+    }
+  } catch {
+    /* Best effort: failure here is non-fatal. */
+  }
   return 'bases';
 }
 
@@ -31,10 +35,14 @@ export const getGuide = () => state;
 export const useGuide = () => use(getGuide);
 
 export function setGuideTab(k) {
-  if (!GUIDE_TABS.includes(k)) k = 'bases';
+  if (!GUIDE_TABS.includes(k)) {
+    k = 'bases';
+  }
   try {
     localStorage.setItem(STORE_KEY, k);
-  } catch { /* Best effort: failure here is non-fatal. */ }
+  } catch {
+    /* Best effort: failure here is non-fatal. */
+  }
   emit({ tab: k });
 }
 
@@ -48,7 +56,9 @@ export function openRule(code) {
 }
 
 export function setRuleOpen(code, open) {
-  if (state.openRules.has(code) === open) return;
+  if (state.openRules.has(code) === open) {
+    return;
+  }
   const s = new Set(state.openRules);
   open ? s.add(code) : s.delete(code);
   emit({ openRules: s });

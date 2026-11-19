@@ -15,12 +15,18 @@ export default function EvBar() {
       {st.done ? (
         <>
           <span className="ev454-i">✓</span>
-          <span><b>{E.t}</b><small>{st.res || 'Rencontre terminée. Une autre demain.'}</small></span>
+          <span>
+            <b>{E.t}</b>
+            <small>{st.res || 'Rencontre terminée. Une autre demain.'}</small>
+          </span>
         </>
       ) : (
         <>
           <span className="ev454-i">!</span>
-          <span><b>Rencontre sur la route</b><small>{`${E.t} · touchez pour voir`}</small></span>
+          <span>
+            <b>Rencontre sur la route</b>
+            <small>{`${E.t} · touchez pour voir`}</small>
+          </span>
         </>
       )}
     </button>

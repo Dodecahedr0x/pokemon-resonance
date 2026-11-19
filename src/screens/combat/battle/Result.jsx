@@ -25,13 +25,22 @@ export default function Result() {
   // holographic edge, seal and burst (v4.72): applied on the next frame, once the sheet is visible
   const [deco, setDeco] = useState(null);
   useLayoutEffect(() => {
-    if (!v || !S) return;
+    if (!v || !S) {
+      return;
+    }
     const id = requestAnimationFrame(() => {
       const c = card.current;
-      if (!c) return;
+      if (!c) {
+        return;
+      }
       const cs = getComputedStyle(c);
       const scrolls = /(auto|scroll)/.test(cs.overflowY) && c.scrollHeight > c.clientHeight + 2;
-      setDeco({ v, relics: cs.position === 'static', holo: !scrolls, confetti: c.classList.contains('win') && !calm472() });
+      setDeco({
+        v,
+        relics: cs.position === 'static',
+        holo: !scrolls,
+        confetti: c.classList.contains('win') && !calm472(),
+      });
     });
     return () => cancelAnimationFrame(id);
   }, [v, S]);
@@ -161,7 +170,9 @@ function Sheet({ S, cardRef, decor: deco }) {
           ))}
         </div>
       ) : (
-        <p className="empty">{du ? 'Aucun Éveil dans ce duel.' : 'Aucun Éveil ce combat : vos Pokémon ont gardé leur forme de départ.'}</p>
+        <p className="empty">
+          {du ? 'Aucun Éveil dans ce duel.' : 'Aucun Éveil ce combat : vos Pokémon ont gardé leur forme de départ.'}
+        </p>
       )}
       {NL}
       <Html html={rewHtml(S.rew)} />
@@ -223,7 +234,11 @@ function Sheet({ S, cardRef, decor: deco }) {
           {Array.from({ length: 16 }, (_, i) => (
             <i
               key={i}
-              style={{ '--a': `${Math.round(i * 22.5 + (i % 2) * 9)}deg`, '--r': `${-80 - (i % 3) * 26}px`, '--d': `${(0.32 + (i % 4) * 0.05).toFixed(2)}s` }}
+              style={{
+                '--a': `${Math.round(i * 22.5 + (i % 2) * 9)}deg`,
+                '--r': `${-80 - (i % 3) * 26}px`,
+                '--d': `${(0.32 + (i % 4) * 0.05).toFixed(2)}s`,
+              }}
             />
           ))}
         </span>

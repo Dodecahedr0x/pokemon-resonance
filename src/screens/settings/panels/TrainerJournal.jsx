@@ -5,7 +5,12 @@ import { DEXS } from '../../../engine/038-pokedex.js';
 import { jr448 } from '../../../engine/079-immersion-sound-haptics.js';
 
 // Settings › Trainer Journal (v4.48): statistics recorded on this device.
-const Cell = ({ n, l }) => <div className="j448-c"><b>{n}</b><span>{l}</span></div>;
+const Cell = ({ n, l }) => (
+  <div className="j448-c">
+    <b>{n}</b>
+    <span>{l}</span>
+  </div>
+);
 
 export default function TrainerJournal() {
   const j = jr448(),
@@ -30,7 +35,15 @@ export default function TrainerJournal() {
         <Cell n={own + ' / ' + DEXS.length} l="Pokédex" />
       </div>
       {fm && (
-        <p className="j448-f"><img src={PIX(fm.no)} alt="" width="40" height="40" /><span>Pokémon le plus engagé<b>{fm.n}</b><em>{fav[1]} combat{fav[1] > 1 ? 's' : ''}</em></span></p>
+        <p className="j448-f">
+          <img src={PIX(fm.no)} alt="" width="40" height="40" />
+          <span>
+            Pokémon le plus engagé<b>{fm.n}</b>
+            <em>
+              {fav[1]} combat{fav[1] > 1 ? 's' : ''}
+            </em>
+          </span>
+        </p>
       )}
     </section>
   );

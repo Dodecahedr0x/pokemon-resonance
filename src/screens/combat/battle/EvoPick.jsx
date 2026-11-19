@@ -98,7 +98,9 @@ function Path({ u, A, id }) {
 
 function Card({ u }) {
   const o = evoOpts(B, u);
-  if (!o.length) return null;
+  if (!o.length) {
+    return null;
+  }
   const A = BY[u.id];
   return (
     <div className="ep-card" role="dialog" aria-modal="true" aria-labelledby="epT">
@@ -107,8 +109,8 @@ function Card({ u }) {
         {u.n} va évoluer
       </h2>
       <p className="sub">
-        {o.length > 1 ? 'Plusieurs voies s’ouvrent. Une seule sera prise, ' : 'Il n’y a pas de retour : '}les capacités perdues ne
-        reviendront plus de ce combat. L’Éveil coûte 1 Voix et l’action de {u.n}.
+        {o.length > 1 ? 'Plusieurs voies s’ouvrent. Une seule sera prise, ' : 'Il n’y a pas de retour : '}les capacités
+        perdues ne reviendront plus de ce combat. L’Éveil coûte 1 Voix et l’action de {u.n}.
       </p>
       {'\n  '}
       <div className="ep-from">

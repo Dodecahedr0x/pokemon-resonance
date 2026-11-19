@@ -16,13 +16,21 @@ function joinBlocks(blocks) {
   const out = [];
   let sep = '';
   blocks.forEach((b, i) => {
-    if (i) sep += SEP;
-    if (!b) return;
-    if (sep) out.push(sep);
+    if (i) {
+      sep += SEP;
+    }
+    if (!b) {
+      return;
+    }
+    if (sep) {
+      out.push(sep);
+    }
     sep = '';
     out.push(b);
   });
-  if (sep) out.push(sep);
+  if (sep) {
+    out.push(sep);
+  }
   return out;
 }
 
@@ -41,7 +49,9 @@ export default function Detail({ k }) {
       <Html html={emblem(k, 'lg')} />
       <div>
         <p className="kick">
-          <Html html={`${C ? C.c : groupOf(k) === 'terrains' ? 'Entraînement' : 'Ligue'}${won ? ' · réussi' : ''}${r ? ` · rang ${r}` : ''}`} />
+          <Html
+            html={`${C ? C.c : groupOf(k) === 'terrains' ? 'Entraînement' : 'Ligue'}${won ? ' · réussi' : ''}${r ? ` · rang ${r}` : ''}`}
+          />
         </p>
         <h2 className="h2">
           <Html html={k === 'champ' ? 'Finale de la Ligue' : s.n} />
@@ -101,7 +111,7 @@ export default function Detail({ k }) {
         </svg>
         <Html html={lk} />
       </p>
-    )
+    ),
   ];
   return joinBlocks(blocks);
 }

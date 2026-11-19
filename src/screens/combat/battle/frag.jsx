@@ -12,7 +12,9 @@ export const STEP = { deplacer: 'Déplacer', agir: 'Agir', extra: 'Terminer', fi
 
 // The guided flow (v4.78) removes the ".bp-hint" tips from the panel when no mode is active.
 export function withoutTip(html) {
-  if (!html || !html.includes('bp-hint')) return html;
+  if (!html || !html.includes('bp-hint')) {
+    return html;
+  }
   const t = document.createElement('template');
   t.innerHTML = html;
   t.content.querySelectorAll('.bp-hint').forEach(h => h.remove());

@@ -14,10 +14,11 @@ import { shut } from '../screens/overlays/tempStore.js';
 
 export let DEF_WAVES, DEF_LIVES;
 
-
 function dfVague468(S, ev) {
   const D = S.def468;
-  if (!D || D.w >= DEF_WAVES) return false;
+  if (!D || D.w >= DEF_WAVES) {
+    return false;
+  }
   D.w++;
   const nb = Math.min(6 - S.units.filter(u => u.side === 'e' && !u.ko).length, 2 + Math.floor(D.w / 2));
   const pool = dfPool468(),
@@ -26,8 +27,12 @@ function dfVague468(S, ev) {
   let made = 0;
   for (let i = 0; i < nb; i++) {
     const freeOnes = [];
-    for (let y = 0; y < 6; y++) [7, 6].forEach(x => S.tiles[K(x, y)] && !S.tiles[K(x, y)].rock && !uAt(S, K(x, y)) && freeOnes.push([x, y]));
-    if (!freeOnes.length || !pool.length) break;
+    for (let y = 0; y < 6; y++) {
+      [7, 6].forEach(x => S.tiles[K(x, y)] && !S.tiles[K(x, y)].rock && !uAt(S, K(x, y)) && freeOnes.push([x, y]));
+    }
+    if (!freeOnes.length || !pool.length) {
+      break;
+    }
     const p = freeOnes[Math.floor(Math.random() * freeOnes.length)],
       m = pool[Math.floor(Math.random() * pool.length)];
     D.n++;
@@ -39,21 +44,23 @@ function dfVague468(S, ev) {
     ev.push({ e: 'terrain' });
     try {
       plan(S, ev);
-    } catch { /* Best effort: failure here is non-fatal. */ }
+    } catch {
+      /* Best effort: failure here is non-fatal. */
+    }
   }
   return made > 0;
 }
-
 
 function dfOpen468() {
   const st = dfSt468();
   // render: src/screens/overlays/transients/Windows.jsx (Df468)
   const o = overlay('df468o', { d: SCEN.def468.d, best: st.best, won: st.won, ok: !!dfOk468() });
   o.addEventListener('click', e => {
-    if (e.target === o) shut('df468o');
+    if (e.target === o) {
+      shut('df468o');
+    }
   });
 }
-
 
 /** Defense Gym banner on Home (#df468, render: src/screens/home/Banners.jsx). */
 export function dfTxt468() {
@@ -78,110 +85,132 @@ const dfPool468 = () => MON.filter(m => m.st === 1 && !m.leg && !m.isEnemy && m.
 
 // Statements run at startup, in the original order (see index.js).
 export function __init() {
+  SCEN.def468 = {
+    n: 'Arène de défense',
+    lvl: 'Défi · 5 vagues',
+    lim: 16,
+    time: 'jour',
+    bio: 'gue',
+    d: 'Cinq vagues d’adversaires déferlent par la droite. Un adversaire qui se trouve sur les lignes A ou B (votre camp) à la fin d’une manche fait une brèche : vous avez 3 vies. Tenez les cinq vagues pour gagner.',
+    water: [],
+    rock: ['3,0', '3,5'],
+    hb: 4,
+    pb: 0,
+    lv: 14,
+    foes: [
+      ['racaillou', [6, 2]],
+      ['nosferapti', [6, 4]],
+    ],
+    def468: true,
+  };
 
-SCEN.def468 = {
-  n: 'Arène de défense',
-  lvl: 'Défi · 5 vagues',
-  lim: 16,
-  time: 'jour',
-  bio: 'gue',
-  d: 'Cinq vagues d’adversaires déferlent par la droite. Un adversaire qui se trouve sur les lignes A ou B (votre camp) à la fin d’une manche fait une brèche : vous avez 3 vies. Tenez les cinq vagues pour gagner.',
-  water: [],
-  rock: ['3,0', '3,5'],
-  hb: 4,
-  pb: 0,
-  lv: 14,
-  foes: [
-    ['racaillou', [6, 2]],
-    ['nosferapti', [6, 4]]
-  ],
-  def468: true
-};
+  OBST.def468 = { pil: ['4,2'], grass: ['4,4', '5,1'] };
 
+  ((DEF_WAVES = 5), (DEF_LIVES = 3));
 
-OBST.def468 = { pil: ['4,2'], grass: ['4,4', '5,1'] };
-
-
-DEF_WAVES = 5,
-  DEF_LIVES = 3;
-
-
-
-HOOKS.creation.push((S, opt, D0) => {
-  if (!D0 || !D0.def468) return;
-  S.def468 = { w: 1, lives: DEF_LIVES, n: 0 };
-});
-
-
-HOOKS.beforeRoundEnd.unshift((S, ev) => {
-  const D = S.def468;
-  if (!D || S.over) return;
-  S.units
-    .filter(u => u.side === 'e' && !u.ko && u.pos[0] <= 1)
-    .forEach(u => {
-      u.ko = true;
-      u.hp = 0;
-      D.lives--;
-      say(ev, `Brèche ! ${u.n} a atteint la ligne de défense. Vies restantes : ${Math.max(0, D.lives)} / ${DEF_LIVES}.`);
-    });
-  if (D.lives <= 0) {
-    S.over = 'lose';
-    ev.push({ e: 'over' });
-    return;
-  }
-  if (S.round % 2 === 0) dfVague468(S, ev);
-});
-
-
-// no opponent left standing: the next wave arrives before the battle is judged won
-HOOKS.beforeVerdict.push((S, ev) => {
-  if (S.def468 && !S.over && !S.units.some(x => x.side === 'e' && !x.ko) && S.def468.w < DEF_WAVES && S.units.some(x => x.side === 'a' && !x.ko)) dfVague468(S, ev);
-});
-
-
-HOOKS.progress.unshift((S, rew, win) => {
-  try {
-    const D = S.def468;
-    if (!D) return null;
-    const st = dfSt468();
-    st.best = Math.max(st.best, win ? DEF_WAVES : D.w - 1);
-    if (win) st.won++;
-    dfSave468(st);
-    rew.df468 = { win, w: D.w, lives: D.lives };
-    return win ? [600 + 300 * D.lives, D.lives >= 3 ? 4 : D.lives >= 2 ? 2 : 1] : D.w > 1 ? [100 * (D.w - 1), 0] : null;
-  } catch (e) {
-    return null;
-  }
-});
-
-
-HOOKS.battleResult.unshift(r => {
-  const t = r.df468;
-  if (!t) return '';
-  return `<div class="res-l"><h4>Arène de défense</h4><div class="rl"><span>${t.win ? `<b>Défense tenue !</b> ${DEF_WAVES} vagues repoussées, ${t.lives} vie${t.lives > 1 ? 's' : ''} restante${t.lives > 1 ? 's' : ''}.` : `Vous avez tenu jusqu’à la vague ${t.w} sur ${DEF_WAVES}.`}</span></div></div>`;
-});
-
-
-// wave banner (#df468hud): rendered by React (src/screens/combat/battle/Battle.jsx)
-
-
-document.addEventListener(
-  'click',
-  e => {
-    const b = e.target.closest && e.target.closest('[data-df468]');
-    if (!b) return;
-    e.stopPropagation();
-    e.preventDefault();
-    const v = b.dataset.df468;
-    if (v === 'open') return dfOpen468();
-    shut('df468o');
-    if (v === 'go') {
-      if (!dfOk468() || !squad.length) return toast(squad.length ? 'Débloquée avec 3 badges.' : 'Composez d’abord une équipe.');
-      if (B) backToPrep();
-      goFight('def468');
+  HOOKS.creation.push((S, opt, D0) => {
+    if (!D0 || !D0.def468) {
+      return;
     }
-  },
-  true
-);
+    S.def468 = { w: 1, lives: DEF_LIVES, n: 0 };
+  });
 
+  HOOKS.beforeRoundEnd.unshift((S, ev) => {
+    const D = S.def468;
+    if (!D || S.over) {
+      return;
+    }
+    S.units
+      .filter(u => u.side === 'e' && !u.ko && u.pos[0] <= 1)
+      .forEach(u => {
+        u.ko = true;
+        u.hp = 0;
+        D.lives--;
+        say(
+          ev,
+          `Brèche ! ${u.n} a atteint la ligne de défense. Vies restantes : ${Math.max(0, D.lives)} / ${DEF_LIVES}.`
+        );
+      });
+    if (D.lives <= 0) {
+      S.over = 'lose';
+      ev.push({ e: 'over' });
+      return;
+    }
+    if (S.round % 2 === 0) {
+      dfVague468(S, ev);
+    }
+  });
+
+  // no opponent left standing: the next wave arrives before the battle is judged won
+  HOOKS.beforeVerdict.push((S, ev) => {
+    if (
+      S.def468 &&
+      !S.over &&
+      !S.units.some(x => x.side === 'e' && !x.ko) &&
+      S.def468.w < DEF_WAVES &&
+      S.units.some(x => x.side === 'a' && !x.ko)
+    ) {
+      dfVague468(S, ev);
+    }
+  });
+
+  HOOKS.progress.unshift((S, rew, win) => {
+    try {
+      const D = S.def468;
+      if (!D) {
+        return null;
+      }
+      const st = dfSt468();
+      st.best = Math.max(st.best, win ? DEF_WAVES : D.w - 1);
+      if (win) {
+        st.won++;
+      }
+      dfSave468(st);
+      rew.df468 = { win, w: D.w, lives: D.lives };
+      return win
+        ? [600 + 300 * D.lives, D.lives >= 3 ? 4 : D.lives >= 2 ? 2 : 1]
+        : D.w > 1
+          ? [100 * (D.w - 1), 0]
+          : null;
+    } catch (e) {
+      return null;
+    }
+  });
+
+  HOOKS.battleResult.unshift(r => {
+    const t = r.df468;
+    if (!t) {
+      return '';
+    }
+    return `<div class="res-l"><h4>Arène de défense</h4><div class="rl"><span>${t.win ? `<b>Défense tenue !</b> ${DEF_WAVES} vagues repoussées, ${t.lives} vie${t.lives > 1 ? 's' : ''} restante${t.lives > 1 ? 's' : ''}.` : `Vous avez tenu jusqu’à la vague ${t.w} sur ${DEF_WAVES}.`}</span></div></div>`;
+  });
+
+  // wave banner (#df468hud): rendered by React (src/screens/combat/battle/Battle.jsx)
+
+  document.addEventListener(
+    'click',
+    e => {
+      const b = e.target.closest && e.target.closest('[data-df468]');
+      if (!b) {
+        return;
+      }
+      e.stopPropagation();
+      e.preventDefault();
+      const v = b.dataset.df468;
+      if (v === 'open') {
+        return dfOpen468();
+      }
+      shut('df468o');
+      if (v === 'go') {
+        if (!dfOk468() || !squad.length) {
+          return toast(squad.length ? 'Débloquée avec 3 badges.' : 'Composez d’abord une équipe.');
+        }
+        if (B) {
+          backToPrep();
+        }
+        goFight('def468');
+      }
+    },
+    true
+  );
 }

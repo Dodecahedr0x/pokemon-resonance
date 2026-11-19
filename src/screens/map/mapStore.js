@@ -14,7 +14,9 @@ export function builtMap() {
 }
 
 export function refreshMap(o) {
-  if (!worldMap.get().built) return;
+  if (!worldMap.get().built) {
+    return;
+  }
   redraw(o ? { drawn: true, marksSel: o.marksSel } : {});
 }
 

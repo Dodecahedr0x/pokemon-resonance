@@ -7,7 +7,8 @@ export const LORE = {
   jungko: 'Les feuilles de ses bras tranchent les arbres. Il se fond dans la forêt pour surprendre.',
   poussifeu: 'Une flamme brûle dans son ventre. Quand on le serre, il devient tout chaud.',
   galifeu: 'Il pousse des cris perçants et enchaîne les coups de pied, dix en une seconde.',
-  brasegali: 'Des flammes jaillissent de ses poignets quand il combat. Plus l’adversaire est fort, plus elles grandissent.',
+  brasegali:
+    'Des flammes jaillissent de ses poignets quand il combat. Plus l’adversaire est fort, plus elles grandissent.',
   gobou: 'La nageoire sur sa tête sent les courants. Il devine le temps qu’il fera rien qu’en nageant.',
   flobio: 'Ses pattes l’ancrent dans la boue. Il y est plus à l’aise que dans l’eau claire.',
   laggron: 'Il soulève des rochers énormes sans effort et sent venir les tempêtes avant tout le monde.',
@@ -23,7 +24,8 @@ export const LORE = {
   drackhaus: 'Enfermé dans sa coquille, il attend que ses ailes poussent. Il ne bouge presque plus.',
   drattak: 'Son rêve s’est réalisé : il vole. Quand il est en colère, il crache des flammes sur tout ce qui l’entoure.',
   // v4.15
-  hoothoot: 'Il se tient sur une patte et compte le temps qui passe. Il ne manque jamais une heure, de jour comme de nuit.',
+  hoothoot:
+    'Il se tient sur une patte et compte le temps qui passe. Il ne manque jamais une heure, de jour comme de nuit.',
   noarfang: 'Ses yeux percent le noir le plus total. La nuit, il fond sur sa proie sans un bruit.',
   mimigal: 'Il tend sa toile puis attend, immobile, des jours entiers. Le moindre fil qui vibre le réveille.',
   migalos: 'Un fil invisible le relie à chacune de ses proies. Il les retrouve où qu’elles fuient.',
@@ -44,12 +46,16 @@ export const LORE = {
   marcacrin: 'Il fouille la terre gelée avec son groin pour trouver des champignons. Il adore le froid.',
   cochignon: 'Ses longs poils le protègent du gel, mais lui cachent les yeux : il fonce sans voir où il va.',
   // v4.13
-  ramoloss: 'Si lent qu’il oublie parfois pourquoi il a commencé à bouger. Mais quand il tient une case, rien ne l’en déloge.',
-  flagadoss: 'Le Kokiyas accroché à sa queue l’a rendu têtu et solide. Il encaisse les vagues et se soigne en paressant.',
+  ramoloss:
+    'Si lent qu’il oublie parfois pourquoi il a commencé à bouger. Mais quand il tient une case, rien ne l’en déloge.',
+  flagadoss:
+    'Le Kokiyas accroché à sa queue l’a rendu têtu et solide. Il encaisse les vagues et se soigne en paressant.',
   roigada: 'La couronne qui l’a mordu a éveillé son génie. Il protège sa cour et sème le doute chez l’ennemi.',
-  debugant: 'Il se bat pour devenir plus fort, peu importe l’adversaire. Sa forme finale dépend de la façon dont il combat.',
+  debugant:
+    'Il se bat pour devenir plus fort, peu importe l’adversaire. Sa forme finale dépend de la façon dont il combat.',
   kicklee: 'Ses jambes se détendent comme des ressorts. Il frappe de loin… et paie cher s’il frappe dans le vide.',
-  tygnon: 'Ses poings tournent plus vite que l’œil. Laissez-le se concentrer à l’abri : le coup qui suit est dévastateur.',
+  tygnon:
+    'Ses poings tournent plus vite que l’œil. Laissez-le se concentrer à l’abri : le coup qui suit est dévastateur.',
   kapoera: 'Il combat la tête en bas en tournoyant. Entouré d’adversaires, il est dans son élément.',
   phanpy: 'Il adore se rouler dans la boue. Sa trompe projette de la terre sur ceux qui l’approchent.',
   donphan: 'Il se roule en boule et dévale les pentes. Plus il roule longtemps, plus l’impact est violent.',
@@ -144,5 +150,5 @@ export const LORE = {
   demolosse: 'Ses cornes recourbées signalent le chef de la meute. Son feu brûle longtemps.',
   embrylex: 'Il naît sous terre et se nourrit de terre pour grandir. Ne le laissez pas à mi-vie : il mue.',
   ymphect: 'Sa carapace est si dure qu’il reste immobile pour grandir à l’intérieur. Il ralentit tout le plateau.',
-  tyranocif: 'Il déplace des montagnes pour trouver un adversaire à sa taille. Sa tempête de sable couvre tout.'
+  tyranocif: 'Il déplace des montagnes pour trouver un adversaire à sa taille. Sa tempête de sable couvre tout.',
 };

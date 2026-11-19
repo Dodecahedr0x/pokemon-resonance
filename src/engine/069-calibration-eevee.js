@@ -15,14 +15,15 @@ let width434 = 0,
   frameTracked434 = null,
   roFrame434 = null;
 
-
 export function gauge434() {
   try {
     const cb = document.getElementById('cbBattle'),
       bd = document.getElementById('bBoard');
     const on = !!(MQ434 && MQ434.matches && B && cur === 'combat' && cb && !cb.hidden);
     document.body.classList.toggle('bt434', on);
-    if (!bd) return;
+    if (!bd) {
+      return;
+    }
     if (!on || !bd.classList.contains('vert')) {
       bd.style.removeProperty('width');
       width434 = 0;
@@ -30,7 +31,9 @@ export function gauge434() {
     }
     const c = bd.closest('.bt') || bd.parentElement;
     if (roFrame434 && frameTracked434 !== c) {
-      if (frameTracked434) roFrame434.unobserve(frameTracked434);
+      if (frameTracked434) {
+        roFrame434.unobserve(frameTracked434);
+      }
       roFrame434.observe(c);
       frameTracked434 = c;
     }
@@ -40,32 +43,37 @@ export function gauge434() {
       width434 = Math.max(220, c.clientWidth - 8);
       key434 = k;
     }
-    if (bd.style.width !== width434 + 'px') bd.style.width = width434 + 'px';
-  } catch { /* Best effort: failure here is non-fatal. */ }
+    if (bd.style.width !== width434 + 'px') {
+      bd.style.width = width434 + 'px';
+    }
+  } catch {
+    /* Best effort: failure here is non-fatal. */
+  }
 }
-
 
 /* ---------- 2. Eevee: the evolution of your choice ---------- */
 /** The Eevee evolutions in harmony with the situation: mark of its cell, time of day. */
 export function eeveeHarmony434(S, u) {
   const o = [],
     mk = markAt(S, uk(u));
-  if (mk && EEVEE[mk]) o.push(EEVEE[mk]);
+  if (mk && EEVEE[mk]) {
+    o.push(EEVEE[mk]);
+  }
   o.push(EEVEE[hourOf(S)]);
   return o;
 }
 
-
 export function eeveeWhy434(S, u, id) {
-  if (!eeveeHarmony434(S, u).includes(id)) return 'Au choix';
+  if (!eeveeHarmony434(S, u).includes(id)) {
+    return 'Au choix';
+  }
   const k = Object.keys(EEVEE).find(x => EEVEE[x] === id);
   return `En harmonie · ${k === 'jour' ? 'le jour' : k === 'nuit' ? 'la nuit' : 'case ' + markOf(k).n} : garde 1 losange`;
 }
 
 // Startup statements, run in their original order (see index.js).
 export function __init() {
-
-/* =====================================================================
+  /* =====================================================================
    v4.34
    1. Battle on phone: the top banner collapses, the whole opposing
       team and yours are shown at once (no sideways scrolling),
@@ -76,59 +84,69 @@ export function __init() {
       the time (Espeon by day, Umbreon at night) gets 1 diamond.
    ===================================================================== */
 
-/* ---------- 1. battle calibration on phone ---------- */
-MQ434 = window.matchMedia ? matchMedia('(max-width: 700px)') : null;
+  /* ---------- 1. battle calibration on phone ---------- */
+  MQ434 = window.matchMedia ? matchMedia('(max-width: 700px)') : null;
 
-
-let viewWidth434 = -1;
-roFrame434 = window.ResizeObserver
-  ? new ResizeObserver(es => {
-      // only if the frame's WIDTH changes (the height moves on every render)
-      const e = es[es.length - 1],
-        l = Math.round((e && e.contentRect && e.contentRect.width) || 0);
-      if (l === viewWidth434) return;
-      viewWidth434 = l;
-      width434 = 0;
-      gauge434();
-    })
-  : null;
-const forgetWidth434 = () => {
-  width434 = 0;
-};
-// on capture: the width is forgotten before the listeners below recalibrate
-window.addEventListener('resize', forgetWidth434, true);
-window.addEventListener('orientationchange', forgetWidth434, true);
-if (window.visualViewport) visualViewport.addEventListener('resize', forgetWidth434, true);
-
-
-window.addEventListener('resize', () => gauge434());
-
-
-// the gym rule fits on one line; we touch it to read it in full
-document.addEventListener('click', e => {
-  const a = e.target.closest('#bArena');
-  if (a && document.body.classList.contains('bt434')) a.classList.toggle('open434');
-});
-
-
-if (window.visualViewport) visualViewport.addEventListener('resize', () => gauge434());
-
-
-try {
-  const cb = document.getElementById('cbBattle');
-  if (cb && window.MutationObserver) new MutationObserver(() => gauge434()).observe(cb, { attributes: true, attributeFilter: ['hidden'] });
-  // what is above the board changes size (images loaded, rule expanded): recalibrate
-  if (window.ResizeObserver) {
-    const ro = new ResizeObserver(() => gauge434());
-    ['bPlE', 'bArena', 'bSyn', 'bOrdre'].forEach(id => {
-      const x = document.getElementById(id);
-      if (x) ro.observe(x);
-    });
-    ['#cbBattle .bt-top', '#cbBattle .bt-foot'].forEach(q => {
-      const x = document.querySelector(q);
-      if (x) ro.observe(x);
-    });
+  let viewWidth434 = -1;
+  roFrame434 = window.ResizeObserver
+    ? new ResizeObserver(es => {
+        // only if the frame's WIDTH changes (the height moves on every render)
+        const e = es[es.length - 1],
+          l = Math.round((e && e.contentRect && e.contentRect.width) || 0);
+        if (l === viewWidth434) {
+          return;
+        }
+        viewWidth434 = l;
+        width434 = 0;
+        gauge434();
+      })
+    : null;
+  const forgetWidth434 = () => {
+    width434 = 0;
+  };
+  // on capture: the width is forgotten before the listeners below recalibrate
+  window.addEventListener('resize', forgetWidth434, true);
+  window.addEventListener('orientationchange', forgetWidth434, true);
+  if (window.visualViewport) {
+    visualViewport.addEventListener('resize', forgetWidth434, true);
   }
-} catch { /* Best effort: failure here is non-fatal. */ }
 
+  window.addEventListener('resize', () => gauge434());
+
+  // the gym rule fits on one line; we touch it to read it in full
+  document.addEventListener('click', e => {
+    const a = e.target.closest('#bArena');
+    if (a && document.body.classList.contains('bt434')) {
+      a.classList.toggle('open434');
+    }
+  });
+
+  if (window.visualViewport) {
+    visualViewport.addEventListener('resize', () => gauge434());
+  }
+
+  try {
+    const cb = document.getElementById('cbBattle');
+    if (cb && window.MutationObserver) {
+      new MutationObserver(() => gauge434()).observe(cb, { attributes: true, attributeFilter: ['hidden'] });
+    }
+    // what is above the board changes size (images loaded, rule expanded): recalibrate
+    if (window.ResizeObserver) {
+      const ro = new ResizeObserver(() => gauge434());
+      ['bPlE', 'bArena', 'bSyn', 'bOrdre'].forEach(id => {
+        const x = document.getElementById(id);
+        if (x) {
+          ro.observe(x);
+        }
+      });
+      ['#cbBattle .bt-top', '#cbBattle .bt-foot'].forEach(q => {
+        const x = document.querySelector(q);
+        if (x) {
+          ro.observe(x);
+        }
+      });
+    }
+  } catch {
+    /* Best effort: failure here is non-fatal. */
+  }
 }

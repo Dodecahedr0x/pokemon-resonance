@@ -10,7 +10,10 @@ import { wonOf } from '../../engine/031-home-journey.js';
 export default function EliteCell() {
   return (
     <>
-      <div className="case-h"><span>Conseil 4 et Champion</span><span>{`${Math.min(PROFILE.elite, 4)} / 4 · ${PROFILE.elite >= 5 ? 'Champion battu' : 'Champion à défier'}`}</span></div>
+      <div className="case-h">
+        <span>Conseil 4 et Champion</span>
+        <span>{`${Math.min(PROFILE.elite, 4)} / 4 · ${PROFILE.elite >= 5 ? 'Champion battu' : 'Champion à défier'}`}</span>
+      </div>
       <div className="el-grid">
         {[...ELITE, 'champ'].map((k, i) => (
           <Card key={k} k={k} L={i < 4 ? ELITE_L[i] : CHAMP_L} />
@@ -26,14 +29,33 @@ function Card({ k, L }) {
     won = wonOf(k),
     r = (PROFILE.ranks || {})[k];
   return (
-    <article className={`el-c${won ? ' won' : ''}${lk ? ' locked' : ''}`} style={{ '--ac': s.at ? tc(s.at) : 'var(--gold)' }}>
+    <article
+      className={`el-c${won ? ' won' : ''}${lk ? ' locked' : ''}`}
+      style={{ '--ac': s.at ? tc(s.at) : 'var(--gold)' }}
+    >
       <span className="el-k">{k === 'champ' ? '★' : s.elite}</span>
-      <b><Html html={s.n.replace('Conseil 4 · ', '')} /></b>
-      <span className="el-ld"><Html html={L.n} /></span>
-      <span className="el-f">{s.foes.map(([f], j) => <Html key={j} html={medal(BY[f].t, 'sm')} />)}</span>
-      <em><Html html={lk || (won ? 'Vaincu' : `N.${s.lv} · ${s.lim} manches`)} /></em>
-      <button type="button" className={`b b-sm${lk ? '' : ' b-gold'}`} data-chal={k} disabled={!!lk}>{won ? 'Rejouer' : 'Défier'}</button>
-      {r && <span className={`rk-t rk-${r}`} title={`Meilleur rang : ${r}`}>{r}</span>}
+      <b>
+        <Html html={s.n.replace('Conseil 4 · ', '')} />
+      </b>
+      <span className="el-ld">
+        <Html html={L.n} />
+      </span>
+      <span className="el-f">
+        {s.foes.map(([f], j) => (
+          <Html key={j} html={medal(BY[f].t, 'sm')} />
+        ))}
+      </span>
+      <em>
+        <Html html={lk || (won ? 'Vaincu' : `N.${s.lv} · ${s.lim} manches`)} />
+      </em>
+      <button type="button" className={`b b-sm${lk ? '' : ' b-gold'}`} data-chal={k} disabled={!!lk}>
+        {won ? 'Rejouer' : 'Défier'}
+      </button>
+      {r && (
+        <span className={`rk-t rk-${r}`} title={`Meilleur rang : ${r}`}>
+          {r}
+        </span>
+      )}
     </article>
   );
 }

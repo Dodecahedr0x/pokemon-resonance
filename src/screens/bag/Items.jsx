@@ -8,11 +8,19 @@ import { HELD_SHOP, offer414 } from '../../engine/053-resonance.js';
 
 // TM / HM disc: initials on the color of the move's type.
 export const Disc = ({ it }) => (
-  <span className="v4-it-im ct-disc" style={{ '--c': tc(MV[it.mv].t) }}><b>{it.sn.slice(0, 2)}</b></span>
+  <span className="v4-it-im ct-disc" style={{ '--c': tc(MV[it.mv].t) }}>
+    <b>{it.sn.slice(0, 2)}</b>
+  </span>
 );
 
 // Price chip in Shards.
-export const Shards = () => <span className="v4-gemi"><svg><use href="#i-gem" /></svg></span>;
+export const Shards = () => (
+  <span className="v4-gemi">
+    <svg>
+      <use href="#i-gem" />
+    </svg>
+  </span>
+);
 
 // A Shop or Bag item (old itemRow): quantity data-qk, purchase data-buy,
 // TM to learn data-apprendre, all handled by the engine.
@@ -26,9 +34,23 @@ export function Article({ k, mode }) {
     full = cs ? n > 0 : n + q > 99;
   return (
     <article className="v4-it">
-      {it.mv ? <Disc it={it} /> : <span className="v4-it-im"><img src={ITM(it.img)} alt="" loading="lazy" /></span>}
+      {it.mv ? (
+        <Disc it={it} />
+      ) : (
+        <span className="v4-it-im">
+          <img src={ITM(it.img)} alt="" loading="lazy" />
+        </span>
+      )}
       <div className="v4-it-t">
-        <b>{it.n}{offer414(k) ? <> <span className="v4-off">−30 %</span></> : null}</b>
+        <b>
+          {it.n}
+          {offer414(k) ? (
+            <>
+              {' '}
+              <span className="v4-off">−30 %</span>
+            </>
+          ) : null}
+        </b>
         <p>{it.d}</p>
         <em>{cs && n ? 'Dans le Sac' : `Dans le Sac : ${n}`}</em>
       </div>
@@ -36,17 +58,34 @@ export function Article({ k, mode }) {
         <div className="v4-it-b">
           {cs ? null : (
             <div className="v4-qty" role="group" aria-label="Quantité">
-              <button type="button" data-qk={k} data-qd="-1" aria-label="Moins" disabled={q <= 1}>−</button>
+              <button type="button" data-qk={k} data-qd="-1" aria-label="Moins" disabled={q <= 1}>
+                −
+              </button>
               <b>{q}</b>
-              <button type="button" data-qk={k} data-qd="1" aria-label="Plus" disabled={q >= 10}>+</button>
+              <button type="button" data-qk={k} data-qd="1" aria-label="Plus" disabled={q >= 10}>
+                +
+              </button>
             </div>
           )}
           <button type="button" className="b b-gold b-sm" data-buy={k} disabled={!(can && !full)}>
-            {cs && n ? 'Déjà achetée' : it.g ? <><Shards />{price}</> : `${fmt(price)} ₽`}
+            {cs && n ? (
+              'Déjà achetée'
+            ) : it.g ? (
+              <>
+                <Shards />
+                {price}
+              </>
+            ) : (
+              `${fmt(price)} ₽`
+            )}
           </button>
         </div>
       ) : it.mv ? (
-        <div className="v4-it-b"><button type="button" className="b b-gold b-sm" data-apprendre={k}>Apprendre</button></div>
+        <div className="v4-it-b">
+          <button type="button" className="b b-gold b-sm" data-apprendre={k}>
+            Apprendre
+          </button>
+        </div>
       ) : null}
     </article>
   );
@@ -59,13 +98,31 @@ export function HeldItem({ k }) {
     holder = Object.keys(PROFILE.equipment).find(id => PROFILE.equipment[id] === k);
   return (
     <article className={'v4-it' + (own ? '' : ' off')}>
-      <span className="v4-it-im"><img src={ITM(HELD_IMG[k])} alt="" loading="lazy" /></span>
+      <span className="v4-it-im">
+        <img src={ITM(HELD_IMG[k])} alt="" loading="lazy" />
+      </span>
       <div className="v4-it-t">
         <b>{it.n}</b>
         <p>{it.d}</p>
-        <em>{own ? (holder ? `Tenu par ${BY[holder].n}` : 'Libre · à confier depuis la fiche d’un Pokémon') : HELD_SHOP[k] ? (HELD_SHOP[k].g ? 'Chez le marchand rare' : 'En vente à la Boutique') : 'Récompense d’arène à gagner'}</em>
+        <em>
+          {own
+            ? holder
+              ? `Tenu par ${BY[holder].n}`
+              : 'Libre · à confier depuis la fiche d’un Pokémon'
+            : HELD_SHOP[k]
+              ? HELD_SHOP[k].g
+                ? 'Chez le marchand rare'
+                : 'En vente à la Boutique'
+              : 'Récompense d’arène à gagner'}
+        </em>
       </div>
-      {own && holder ? <div className="v4-it-b"><button type="button" className="b b-sm" data-v4sheet={holder}>Voir {BY[holder].n}</button></div> : null}
+      {own && holder ? (
+        <div className="v4-it-b">
+          <button type="button" className="b b-sm" data-v4sheet={holder}>
+            Voir {BY[holder].n}
+          </button>
+        </div>
+      ) : null}
     </article>
   );
 }

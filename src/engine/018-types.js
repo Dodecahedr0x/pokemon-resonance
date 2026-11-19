@@ -6,7 +6,6 @@ import { MK, MX } from './004-data.js';
 import { go } from './016-navigation.js';
 import { selectReaction, setGuideTab } from '../screens/guide/guideStore.js';
 
-
 export function openRx(id) {
   for (const m of MK) {
     const i = MX[m.id].indexOf(id);

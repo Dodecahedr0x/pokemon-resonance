@@ -10,7 +10,12 @@ import { cp461Data } from '../../engine/092-companion-eggs-expeditions.js';
 export default function Companion() {
   const d = companionData417();
   return (
-    <section id="v4Comp" className="v4-comp v4-panel" aria-label="Compagnon" style={d ? { '--c': tc(d.m.t[0]) } : undefined}>
+    <section
+      id="v4Comp"
+      className="v4-comp v4-panel"
+      aria-label="Compagnon"
+      style={d ? { '--c': tc(d.m.t[0]) } : undefined}
+    >
       {d ? <Sheet d={d} /> : <Empty />}
     </section>
   );
@@ -19,12 +24,21 @@ export default function Companion() {
 function Empty() {
   return (
     <div className="cp-vide">
-      <span className="cp-ic"><svg><use href="#i-team" /></svg></span>
+      <span className="cp-ic">
+        <svg>
+          <use href="#i-team" />
+        </svg>
+      </span>
       <span>
         <b>Un compagnon ?</b>
-        <em>Choisissez le Pokémon qui vous accompagne partout. Son affection grandit à chaque combat et lui donne des bonus.</em>
+        <em>
+          Choisissez le Pokémon qui vous accompagne partout. Son affection grandit à chaque combat et lui donne des
+          bonus.
+        </em>
       </span>
-      <button type="button" className="b b-sm b-gold" data-comp="choisir">Choisir</button>
+      <button type="button" className="b b-sm b-gold" data-comp="choisir">
+        Choisir
+      </button>
     </div>
   );
 }
@@ -42,22 +56,51 @@ function Sheet({ d }) {
         <b>{m.n}</b>
         <span className="cp-h" aria-label={`${h} cœur${h > 1 ? 's' : ''} sur 5`}>
           {[1, 2, 3, 4, 5].map(i => (
-            <i key={i} className={i <= h ? 'on' : ''}>♥</i>
+            <i key={i} className={i <= h ? 'on' : ''}>
+              ♥
+            </i>
           ))}
         </span>
-        <span className="cp-bar"><i style={{ width: `${pr}%` }} /></span>
+        <span className="cp-bar">
+          <i style={{ width: `${pr}%` }} />
+        </span>
         <em>{hum}</em>
         <em className="cp-bn">{bonus || '2 cœurs : premier bonus en combat'}</em>
       </div>
       <div className="cp-a">
-        <button type="button" className={`b b-sm ${petting ? 'b-ghost' : 'b-gold'}`} data-comp="caresser" disabled={petting}>{petting ? 'Câliné ✓' : 'Câliner'}</button>
-        <button type="button" className="b b-sm b-ghost" data-comp="choisir">Changer</button>
+        <button
+          type="button"
+          className={`b b-sm ${petting ? 'b-ghost' : 'b-gold'}`}
+          data-comp="caresser"
+          disabled={petting}
+        >
+          {petting ? 'Câliné ✓' : 'Câliner'}
+        </button>
+        <button type="button" className="b b-sm b-ghost" data-comp="choisir">
+          Changer
+        </button>
       </div>
       {x && (
         <div className="cp461">
-          <button type="button" className="b b-sm" data-cp461="baie" disabled={!!(x.feed || !x.baie)}>{x.feed ? 'Baie offerte ✓' : x.baie ? 'Offrir une Baie' : 'Pas de Baie'}</button>
-          <button type="button" className={'b b-sm' + (x.h >= 3 && !x.gift ? ' b-gold' : ' b-ghost')} data-cp461="cadeau" disabled={!(x.h >= 3 && !x.gift)}>{x.h < 3 ? 'Cadeau à 3 ♥' : x.gift ? 'Cadeau reçu ✓' : 'Cadeau du jour'}</button>
-          <button type="button" className={'b b-sm' + (x.isNew ? ' b-gold' : ' b-ghost')} data-cp461="souv" disabled={!x.h}>Souvenirs{x.isNew ? ' · nouveau' : ''}</button>
+          <button type="button" className="b b-sm" data-cp461="baie" disabled={!!(x.feed || !x.baie)}>
+            {x.feed ? 'Baie offerte ✓' : x.baie ? 'Offrir une Baie' : 'Pas de Baie'}
+          </button>
+          <button
+            type="button"
+            className={'b b-sm' + (x.h >= 3 && !x.gift ? ' b-gold' : ' b-ghost')}
+            data-cp461="cadeau"
+            disabled={!(x.h >= 3 && !x.gift)}
+          >
+            {x.h < 3 ? 'Cadeau à 3 ♥' : x.gift ? 'Cadeau reçu ✓' : 'Cadeau du jour'}
+          </button>
+          <button
+            type="button"
+            className={'b b-sm' + (x.isNew ? ' b-gold' : ' b-ghost')}
+            data-cp461="souv"
+            disabled={!x.h}
+          >
+            Souvenirs{x.isNew ? ' · nouveau' : ''}
+          </button>
         </div>
       )}
     </>

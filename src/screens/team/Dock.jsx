@@ -38,7 +38,10 @@ export function Dock({ A }) {
               ))}
             </div>
           </div>
-          <div className="dk" title="Voix : ordres par manche. Éveils : évolutions possibles. Indice : réactions, rôles couverts, Éveils et Voix réunis.">
+          <div
+            className="dk"
+            title="Voix : ordres par manche. Éveils : évolutions possibles. Indice : réactions, rôles couverts, Éveils et Voix réunis."
+          >
             <div>
               <b>{startVoice(A.bonus)}</b>
               <span>Voix</span>

@@ -8,9 +8,18 @@ export default function Sheet444() {
   useBattleVersion('ti444');
   const F = sheet444,
     c = F.c;
-  if (!F.made || !c) return null;
+  if (!F.made || !c) {
+    return null;
+  }
   return (
-    <aside id="ti444" className={'ti444' + (F.isTop ? ' haut' : '')} role="dialog" aria-label="Détail de la case" hidden={F.hidden} style={{ top: F.top, bottom: F.bottom }}>
+    <aside
+      id="ti444"
+      className={'ti444' + (F.isTop ? ' haut' : '')}
+      role="dialog"
+      aria-label="Détail de la case"
+      hidden={F.hidden}
+      style={{ top: F.top, bottom: F.bottom }}
+    >
       <header className="ti444-h">
         <i className="ti444-sw" style={{ background: c.sw }} />
         <b>Case {c.displayName}</b>

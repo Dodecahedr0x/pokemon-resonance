@@ -8,7 +8,12 @@ import { Disc } from './Items.jsx';
 export default function Offers() {
   return (
     <section className="v4-offres v4-panel" aria-label="Offres du jour">
-      <h3><svg><use href="#i-shop" /></svg>Offres du jour<span>−30 % jusqu’à minuit</span></h3>
+      <h3>
+        <svg>
+          <use href="#i-shop" />
+        </svg>
+        Offres du jour<span>−30 % jusqu’à minuit</span>
+      </h3>
       <div className="v4-off-l">
         {dailyOffers().map((k, i) => {
           const h = !!HELD_SHOP[k],
@@ -18,7 +23,10 @@ export default function Offers() {
             <button key={i} type="button" className="v4-off-i" data-offre={h ? 'held' : it.category}>
               {!h && it.mv ? <Disc it={it} /> : <img src={ITM(h ? HELD_IMG[k] : it.img)} alt="" loading="lazy" />}
               <b>{it.n}</b>
-              <span><s>{fmt(p0)} ₽</s>{fmt(discount414(k, p0))} ₽</span>
+              <span>
+                <s>{fmt(p0)} ₽</s>
+                {fmt(discount414(k, p0))} ₽
+              </span>
             </button>
           );
         })}

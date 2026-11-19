@@ -6,12 +6,10 @@ import { showToast } from '../screens/overlays/shellOverlays.js';
 
 export let RM;
 
-
 function lum(h) {
   const n = parseInt(h.slice(1), 16);
   return (0.2126 * (n >> 16)) / 255 + (0.7152 * ((n >> 8) & 255)) / 255 + (0.0722 * (n & 255)) / 255;
 }
-
 
 export function medal(types, cls = '') {
   const a = tc(types[0]),
@@ -21,7 +19,9 @@ export function medal(types, cls = '') {
   const h = `<span class="medal ${cls}" style="background:${bg};--glow:${a}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="${gp(types[0])}" fill="${INK}" fill-rule="evenodd"/></svg></span>`;
   // the Pokémon's artwork in its type medallion
   const id = PKT.get(types);
-  if (!id || !BY[id]) return h;
+  if (!id || !BY[id]) {
+    return h;
+  }
   return h
     .replace('<span class="medal ', '<span class="medal pk ')
     .replace(
@@ -30,11 +30,9 @@ export function medal(types, cls = '') {
     );
 }
 
-
 export function mini(t) {
   return `<span class="mini" style="background:${tc(t)}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="${gp(t)}" fill="${INK}" fill-rule="evenodd"/></svg></span>`;
 }
-
 
 export function tb(t) {
   const c = tc(t),
@@ -42,11 +40,9 @@ export function tb(t) {
   return `<span class="tb" style="--c:${c};--fg:${fg}"><i class="tb-s" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="${gp(t)}" fill="${fg}" fill-rule="evenodd"/></svg></i>${t}</span>`;
 }
 
-
 export function ico(d) {
   return `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="${d}" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 }
-
 
 // #toast is rendered by React (src/screens/overlays/Toast.jsx); deferred update, without
 // flushSync, since toast() may be called while another component is rendering.
@@ -54,20 +50,21 @@ export function toast(msg) {
   showToast(msg);
 }
 
-
 export function el(tag, attrs = {}, parent) {
   const e = document.createElementNS(NS, tag);
-  for (const k in attrs) e.setAttribute(k, attrs[k]);
-  if (parent) parent.appendChild(e);
+  for (const k in attrs) {
+    e.setAttribute(k, attrs[k]);
+  }
+  if (parent) {
+    parent.appendChild(e);
+  }
   return e;
 }
-
 
 export function hc(c, r, s, ox, oy) {
   const w = Math.sqrt(3) * s;
   return [ox + w * (c + 0.5 * (r & 1)) + w / 2, oy + 1.5 * s * r + s];
 }
-
 
 export function hp(x, y, s) {
   const p = [];
@@ -77,7 +74,6 @@ export function hp(x, y, s) {
   }
   return p.join(' ');
 }
-
 
 export function zig(x1, y1, x2, y2, n = 6, amp = 5) {
   const pts = [[x1, y1]],
@@ -99,12 +95,10 @@ export function after2images(f) {
   requestAnimationFrame(() => requestAnimationFrame(f));
 }
 
-
 /** Promise resolved after ms milliseconds. */
 export function wait(ms) {
   return new Promise(r => setTimeout(r, ms));
 }
-
 
 /** JSON value stored under k in localStorage; d if it is missing, falsy or unreadable. */
 export function readLS(k, d) {
@@ -116,14 +110,14 @@ export function readLS(k, d) {
   }
 }
 
-
 /** Stores v as JSON under k; full or forbidden storage is ignored. */
 export function writeLS(k, v) {
   try {
     localStorage.setItem(k, JSON.stringify(v));
-  } catch { /* Best effort: failure here is non-fatal. */ }
+  } catch {
+    /* Best effort: failure here is non-fatal. */
+  }
 }
-
 
 /** mulberry32 generator starting from state a (the seed is prepared by the caller: the same seed replays the same sequence). */
 export function mulberry32(a) {
@@ -136,7 +130,6 @@ export function mulberry32(a) {
   };
 }
 
-
 /** Value noise: number in [0, 1[ fixed by tile (x, y) and seed s. */
 export function hash2(x, y, s) {
   let h = (Math.imul(x, 374761393) + Math.imul(y, 668265263) + Math.imul(s, 1274126177)) | 0;
@@ -144,40 +137,33 @@ export function hash2(x, y, s) {
   return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
 }
 
-
 /** 32-bit FNV-1a fingerprint of a string (unsigned integer). */
 export function fnv(s) {
   let h = 2166136261;
-  for (let i = 0; i < s.length; i++) h = Math.imul(h ^ s.charCodeAt(i), 16777619);
+  for (let i = 0; i < s.length; i++) {
+    h = Math.imul(h ^ s.charCodeAt(i), 16777619);
+  }
   return h >>> 0;
 }
 
 /* ===================== TOOLS ===================== */
 export const $ = (s, r = document) => r.querySelector(s);
 
-
 export const $$ = (s, r = document) => [...r.querySelectorAll(s)];
-
 
 export const NS = 'http://www.w3.org/2000/svg';
 
-
 export const tc = t => (TYPES[t] || TYPES.Normal)[0];
-
 
 export const gp = t => (TYPES[t] || TYPES.Normal)[1];
 
-
 export const INK = 'rgba(8,10,14,.82)';
 
-
 export const markOf = id => MK.find(m => m.id === id);
-
 
 export const rxCat = id => (RX[id] ? RX[id].k : 'ter');
 
 // Statements run at startup, in the original order (see index.js).
 export function __init() {
-
-RM = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+  RM = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
 }

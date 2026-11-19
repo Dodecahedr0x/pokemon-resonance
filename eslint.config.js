@@ -2,6 +2,7 @@ import js from '@eslint/js';
 import globals from 'globals';
 import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
+import prettier from 'eslint-config-prettier';
 
 export default [
   { ignores: ['dist/**', 'node_modules/**', 'art/**', 'public/**', 'scripts/**'] },
@@ -46,11 +47,13 @@ export default [
       'object-shorthand': 'error',
       'prefer-arrow-callback': ['error', { allowNamedFunctions: true }],
       'no-console': ['error', { allow: ['warn', 'error'] }],
-      curly: ['error', 'multi-line'],
     },
   },
   {
     files: ['vite.config.js', 'eslint.config.js'],
     languageOptions: { globals: { ...globals.node } },
   },
+  // Layout belongs to Prettier; re-enable the one rule it turns off that still matters.
+  prettier,
+  { rules: { curly: ['error', 'all'] } },
 ];

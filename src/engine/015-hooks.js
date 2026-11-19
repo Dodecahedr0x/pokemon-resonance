@@ -85,7 +85,7 @@ export const HOOKS = {
   hpBar: [],
   routeEncounter: [],
   beforeRouteChoice: [],
-  launchRefusal: []
+  launchRefusal: [],
 };
 
 export function hook(displayName, ...args) {

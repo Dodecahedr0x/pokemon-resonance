@@ -53,9 +53,17 @@ for (let row = 0; row < 2; row++) {
   const y = 196 + row * 22,
     s = 0.9 + row * 0.25;
   for (let x = -24; x < W; x += 26 * s) {
-    if (x > 290 && x < 400) continue;
-    if (x > 760 && x < 960) continue;
-    GRASS.push({ d: `${((((x * 7 + row * 13) % 30) + 30) % 30) / 10}s`, path: tuftD(x, y, s), c: row % 2 ? 'g2' : 'g1' });
+    if (x > 290 && x < 400) {
+      continue;
+    }
+    if (x > 760 && x < 960) {
+      continue;
+    }
+    GRASS.push({
+      d: `${((((x * 7 + row * 13) % 30) + 30) % 30) / 10}s`,
+      path: tuftD(x, y, s),
+      c: row % 2 ? 'g2' : 'g1',
+    });
   }
 }
 
@@ -64,12 +72,22 @@ const RUSTLE = [
   ...Array.from({ length: 7 }, (_, i) => [tuftD(774 + i * 25, 222, 1.4), i % 2 ? 'g1' : 'g2']),
 ];
 
-const FIRE = Array.from({ length: 16 }, (_, i) => ({ cx: (i * 71) % W, cy: 150 + ((i * 37) % 60), d: `${(i % 7) * 0.7}s` }));
+const FIRE = Array.from({ length: 16 }, (_, i) => ({
+  cx: (i * 71) % W,
+  cy: 150 + ((i * 37) % 60),
+  d: `${(i % 7) * 0.7}s`,
+}));
 
 // Fixed backdrop: never redrawn (the engine has attached its listeners to #rustle).
 const RouteSvg = memo(function RouteSvg() {
   return (
-    <svg id="routeSvg" viewBox="0 0 1200 220" preserveAspectRatio="xMidYMax slice" role="img" aria-label="Route 29 : hautes herbes au pied des collines">
+    <svg
+      id="routeSvg"
+      viewBox="0 0 1200 220"
+      preserveAspectRatio="xMidYMax slice"
+      role="img"
+      aria-label="Route 29 : hautes herbes au pied des collines"
+    >
       <defs>
         <linearGradient id="rSky" x1={0} y1={0} x2={0} y2={1}>
           <stop offset="0" style={{ stopColor: 'var(--sk1)' }} />
@@ -103,8 +121,14 @@ const RouteSvg = memo(function RouteSvg() {
           </g>
         ))}
       </g>
-      <path className="sc-m1" d="M0 120 L110 70 L190 98 L300 48 L392 92 L470 66 L560 104 L660 60 L760 96 L860 52 L960 100 L1060 72 L1200 104 V220 H0Z" />
-      <path className="sc-snow" d="M282 56 L300 48 L318 60 L306 58 L298 64 L290 58Z M845 60 L860 52 L876 62 L866 60 L858 66 L852 61Z" />
+      <path
+        className="sc-m1"
+        d="M0 120 L110 70 L190 98 L300 48 L392 92 L470 66 L560 104 L660 60 L760 96 L860 52 L960 100 L1060 72 L1200 104 V220 H0Z"
+      />
+      <path
+        className="sc-snow"
+        d="M282 56 L300 48 L318 60 L306 58 L298 64 L290 58Z M845 60 L860 52 L876 62 L866 60 L858 66 L852 61Z"
+      />
       <path className="sc-h1" d="M0 140 Q160 108 330 132 T700 126 T1200 118 V220 H0Z" />
       <g className="sc-forest">
         {TREES.flatMap(({ x, y, r }, i) => [
@@ -122,7 +146,13 @@ const RouteSvg = memo(function RouteSvg() {
           </g>
         ))}
       </g>
-      <g className="sc-rustle" id="rustle" tabIndex={0} role="button" aria-label="Les hautes herbes bougent : rencontrer un Pokémon sauvage">
+      <g
+        className="sc-rustle"
+        id="rustle"
+        tabIndex={0}
+        role="button"
+        aria-label="Les hautes herbes bougent : rencontrer un Pokémon sauvage"
+      >
         <rect x={760} y={140} width={200} height={80} fill="transparent" />
         <g className="rs">
           {RUSTLE.map(([d, c], i) => (
@@ -132,7 +162,9 @@ const RouteSvg = memo(function RouteSvg() {
         <g transform="translate(860 132)">
           <g className="sc-alert">
             <rect x={-13} y={-15} width={26} height={28} rx={6} />
-            <text y={6} textAnchor="middle">!</text>
+            <text y={6} textAnchor="middle">
+              !
+            </text>
           </g>
         </g>
       </g>
@@ -150,7 +182,9 @@ export default function Route() {
   // repositions the « ! » alert when the route changes size
   useEffect(() => {
     const r = document.getElementById('route');
-    if (!r || !window.ResizeObserver) return;
+    if (!r || !window.ResizeObserver) {
+      return;
+    }
     const o = new ResizeObserver(() => placeAlert());
     o.observe(r);
     return () => o.disconnect();
@@ -164,17 +198,29 @@ export default function Route() {
         </p>
       )}
       <RouteSvg />
-      <button type="button" className="rt-alert" id="rtAlert" aria-label="Les hautes herbes bougent : rencontrer un Pokémon sauvage"><span>!</span></button>
+      <button
+        type="button"
+        className="rt-alert"
+        id="rtAlert"
+        aria-label="Les hautes herbes bougent : rencontrer un Pokémon sauvage"
+      >
+        <span>!</span>
+      </button>
       <div className="rt-ui">
         <div className="rt-top">
           <span className="rt-sign">{sign}</span>
           <div className="tod" id="todBtns" role="group" aria-label="Moment de la journée">
             {TODB.map(([k, n]) => (
-              <button key={k} type="button" data-tod={k} aria-pressed={pressed ? String(tod === k) : undefined}>{n}</button>
+              <button key={k} type="button" data-tod={k} aria-pressed={pressed ? String(tod === k) : undefined}>
+                {n}
+              </button>
             ))}
           </div>
         </div>
-        <div className="dlg" aria-live="polite"><span className="dlg-n">Hautes herbes</span><p id="dlgTxt" /></div>
+        <div className="dlg" aria-live="polite">
+          <span className="dlg-n">Hautes herbes</span>
+          <p id="dlgTxt" />
+        </div>
       </div>
     </div>
   );

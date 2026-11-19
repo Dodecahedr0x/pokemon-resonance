@@ -26,7 +26,7 @@ const fresh = (n, patch) => ({
   eau: null, // { id, keys, isNight, isFixed }
   insp: undefined, // undefined: layer absent; null: empty; otherwise the cell
   pk: false,
-  ...patch
+  ...patch,
 });
 
 let S = fresh(0);
@@ -83,7 +83,7 @@ let H = {
   fxc: false,
   skyBanner: null, // { ic, heading, text, on }
   tbn: null, // { n, en, fast, txt, sub }
-  fade: null // { n, bg, va }
+  fade: null, // { n, bg, va }
 };
 
 export const getHost = () => H;
@@ -99,8 +99,12 @@ export function hostSet(patch) {
 /** classList.toggle(name, on) on #bBoard, rendered by React (class order preserved). */
 export function bdClass(displayName, on) {
   const a = H.cls.includes(displayName);
-  if (on === undefined) on = !a;
-  if (on === a) return;
+  if (on === undefined) {
+    on = !a;
+  }
+  if (on === a) {
+    return;
+  }
   hostSet({ cls: on ? [...H.cls, displayName] : H.cls.filter(c => c !== displayName) });
 }
 
@@ -108,7 +112,9 @@ export function bdClass(displayName, on) {
 export function bdReplay(...displayNames) {
   displayNames.forEach(n => bdClass(n, false));
   const bd = document.getElementById('bBoard');
-  if (bd) void bd.offsetWidth;
+  if (bd) {
+    void bd.offsetWidth;
+  }
 }
 
 /** buildBoard: classes restart from zero (formerly className = …). */
@@ -123,8 +129,11 @@ export function bdReset(cls) {
 let UB = 0,
   UD = false;
 export function unitsDirty() {
-  if (UB) UD = true;
-  else emit(['units']);
+  if (UB) {
+    UD = true;
+  } else {
+    emit(['units']);
+  }
 }
 export function unitsBatch(f) {
   UB++;
@@ -139,12 +148,19 @@ export function unitsBatch(f) {
 }
 /** classList.toggle on a token's model: an added class goes to the end, as in the DOM. */
 export function tokCl(T, c, on) {
-  if (!T || !T.c) return;
+  if (!T || !T.c) {
+    return;
+  }
   const i = T.c.indexOf(c);
   on = on === undefined ? i < 0 : !!on; // like toggle(c, force): force absent = flip
-  if (on === i >= 0) return;
-  if (on) T.c.push(c);
-  else T.c.splice(i, 1);
+  if (on === i >= 0) {
+    return;
+  }
+  if (on) {
+    T.c.push(c);
+  } else {
+    T.c.splice(i, 1);
+  }
   unitsDirty();
 }
 /** classList.contains on a token's model */

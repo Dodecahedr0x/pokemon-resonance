@@ -10,10 +10,44 @@ import { HOOKS, hook } from './015-hooks.js';
 import { go } from './016-navigation.js';
 import { renderLeague } from './019-league.js';
 import { squad, vBonus } from './020-team-cards.js';
-import { EMAX, P, affected, byUid, canAwaken, endRound, evoOpts, execFoe, foeEvo, hasNx, newBattle, pAct, pDodge, pAwaken, pMove, pReroll, prepareEnemy, preview, reach, startEnemy, targets, uAt, uk } from './021-combat-engine.js';
+import {
+  EMAX,
+  P,
+  affected,
+  byUid,
+  canAwaken,
+  endRound,
+  evoOpts,
+  execFoe,
+  foeEvo,
+  hasNx,
+  newBattle,
+  pAct,
+  pDodge,
+  pAwaken,
+  pMove,
+  pReroll,
+  prepareEnemy,
+  preview,
+  reach,
+  startEnemy,
+  targets,
+  uAt,
+  uk,
+} from './021-combat-engine.js';
 import { champBuild, duoParts, duoTargets, pCapture, pDuo, previewRun, scenLock } from './022-items-bonds-ai.js';
 import { SV, autoSave, queueSave, renderSummary } from './025-saves.js';
-import { PREF, __set_PREPG, __set_tutorialI, applyProgress, renderCoach, renderPrep, sfx, sfxEv, vibe } from './026-campaign-tutorial-sound.js';
+import {
+  PREF,
+  __set_PREPG,
+  __set_tutorialI,
+  applyProgress,
+  renderCoach,
+  renderPrep,
+  sfx,
+  sfxEv,
+  vibe,
+} from './026-campaign-tutorial-sound.js';
 import { drawObstacles } from './027-gym-on-screen.js';
 import { fxReset, playEv } from './028-move-effects.js';
 import { panelRoleInfo } from './029-streamlined-guide.js';
@@ -28,13 +62,33 @@ import { challengeLaunch, activeChallenges, mutTraining, mutInfo, teamSize } fro
 import { charactersChosen, disobedienceChosen, level } from './049-identity.js';
 import { REPLAYS } from './050-world.js';
 import { refreshBattle, evoState } from '../screens/combat/battle/battleStore.js';
-import { bdClass, bdReplay, bdReset, boardBuild, boardRender, evoSet, hostSet, tokCl, unitsBatch, unitsDirty } from '../screens/combat/board/boardStore.js';
+import {
+  bdClass,
+  bdReplay,
+  bdReset,
+  boardBuild,
+  boardRender,
+  evoSet,
+  hostSet,
+  tokCl,
+  unitsBatch,
+  unitsDirty,
+} from '../screens/combat/board/boardStore.js';
 import { hasXp, bossScene, notesOf } from './053-resonance.js';
 import { resoCand417, scene417, tournamentTeam417 } from './057-companions-resonance.js';
 import { coopPass418, player418 } from './058-fishing-safari-coop.js';
 import { surrounded420 } from './060-intense-combat.js';
 import { dl428, quick428 } from './063-combat-catches-home.js';
-import { RIV429, ouch429, after429, weeklyBuild429, weeklyTeam429, lockLegendary429, liveRender429, liveTok429 } from './064-quality.js';
+import {
+  RIV429,
+  ouch429,
+  after429,
+  weeklyBuild429,
+  weeklyTeam429,
+  lockLegendary429,
+  liveRender429,
+  liveTok429,
+} from './064-quality.js';
 import { afterRender430, campOk430, docChosen430 } from './065-camp-tactics.js';
 import { afterRender431, fogChosen431, fixedProgress431, fixedTeam431 } from './066-tactical-challenges.js';
 import { afterRender433, duelPass433 } from './068-duel-tutorial.js';
@@ -42,11 +96,18 @@ import { gauge434 } from './069-calibration-eevee.js';
 import { announceGim467 } from './098-feats-journal-gimmick-boards.js';
 
 export let VERT, MQV, B, LOG, scSel;
-export function __set_GREEN(v) { return (VERT = v); }
-export function __set_B(v) { return (B = v); }
-export function __set_LOG(v) { return (LOG = v); }
-export function __set_scSel(v) { return (scSel = v); }
-
+export function __set_GREEN(v) {
+  return (VERT = v);
+}
+export function __set_B(v) {
+  return (B = v);
+}
+export function __set_LOG(v) {
+  return (LOG = v);
+}
+export function __set_scSel(v) {
+  return (scSel = v);
+}
 
 export function tiltP(x, y) {
   const T = TILT,
@@ -54,7 +115,6 @@ export function tiltP(x, y) {
     s = T.f / (T.f + d * T.sn);
   return [T.ox + (T.cx + (x - T.cx) * s) * T.k, T.oy + (T.Hb - d * T.cs * s) * T.k];
 }
-
 
 function tiltU(X, Y) {
   const T = TILT,
@@ -64,13 +124,11 @@ function tiltU(X, Y) {
   return [T.cx + ((X - T.ox) / T.k - T.cx) / s, T.Hb - d];
 }
 
-
 /** apparent size (1 = flat tile) at screen point X,Y */
 export function tiltS(X, Y) {
   const g = tiltU(X, Y);
   return (TILT.f / (TILT.f + (TILT.Hb - g[1]) * TILT.sn)) * TILT.k;
 }
-
 
 function tiltHP(X, Y, s) {
   const [x, y] = tiltU(X, Y),
@@ -83,7 +141,6 @@ function tiltHP(X, Y, s) {
   return o.join(' ');
 }
 
-
 function hpf(x, y, s) {
   const o = [];
   for (let i = 0; i < 6; i++) {
@@ -92,7 +149,6 @@ function hpf(x, y, s) {
   }
   return o.join(' ');
 }
-
 
 /** Picks scenario k (on its own tab) and switches to the Battles screen, for a launch() that follows.
  *  If a battle is still running, the battle list is not redrawn (openBattle does it).
@@ -104,19 +160,18 @@ export function chooseBattle(k) {
   go('combat');
 }
 
-
 /** The player requests battle k: Battles screen on that scenario, at the scenario's tab. Does not start the battle. */
 export function openBattle(k) {
   chooseBattle(k);
   renderPrep();
 }
 
-
 /** Like openBattle, for a key coming from the interface: no effect if the scenario does not exist (yet). */
 export function goFight(k) {
-  if (SCEN[k]) openBattle(k);
+  if (SCEN[k]) {
+    openBattle(k);
+  }
 }
-
 
 export function challenge(k) {
   openBattle(k);
@@ -127,13 +182,14 @@ export function challenge(k) {
   launch();
 }
 
-
 export function battleOpts() {
   const items = {};
   squad.slice(0, 4).forEach(id => {
     const b = BY[id].base, // held items belong to the family, whatever the stage
       it = PROFILE.equipment[b];
-    if (it && ownedItems().includes(it)) items[b] = it;
+    if (it && ownedItems().includes(it)) {
+      items[b] = it;
+    }
   });
   return {
     diff: PROFILE.diff,
@@ -150,15 +206,16 @@ export function battleOpts() {
     characters: charactersChosen(), // characters (v4.10-01)
     disobedience: disobedienceChosen(),
     dojo: campOk430() ? level('dojo') : 0,
-    learnedTms: PROFILE.learnedTms // CT et CS (v4.6-01)
+    learnedTms: PROFILE.learnedTms, // CT et CS (v4.6-01)
   };
 }
-
 
 export function launch() {
   for (const f of HOOKS.launchRefusal) {
     const refusal = f();
-    if (refusal) return toast(refusal);
+    if (refusal) {
+      return toast(refusal);
+    }
   }
   hook('beforeLaunch');
   const previous = B;
@@ -169,25 +226,39 @@ export function launch() {
     if (B && !AUTO) {
       vsIntro();
     } // opponent introduction
-    else if (B) turnBanner();
+    else if (B) {
+      turnBanner();
+    }
     // Speed order: if an opponent is faster, it opens the round (after the introduction)
-    if (B && B.order === 'vitesse') setTimeout(unrollSpeed, AUTO || RM ? 950 : PREF.fast ? 1500 : 2400);
+    if (B && B.order === 'vitesse') {
+      setTimeout(unrollSpeed, AUTO || RM ? 950 : PREF.fast ? 1500 : 2400);
+    }
   }
   hook('launch', !!B && B !== previous);
 }
 
-
 function launchCore() {
-  if (!squad.length && !fixedTeam431()) return;
-  if (scSel === 'hebdo429') weeklyBuild429(); // the week may have changed (v4.29)
-  const lk = scenLock(scSel) || lockLegendary429(scSel) || (scSel === 'hebdo429' || (SCEN[scSel] || {}).noProgress431 ? null : challengeLaunch()); // campaign challenges (v4.9-01), legendary quests (v4.29)
+  if (!squad.length && !fixedTeam431()) {
+    return;
+  }
+  if (scSel === 'hebdo429') {
+    weeklyBuild429();
+  } // the week may have changed (v4.29)
+  const lk =
+    scenLock(scSel) ||
+    lockLegendary429(scSel) ||
+    (scSel === 'hebdo429' || (SCEN[scSel] || {}).noProgress431 ? null : challengeLaunch()); // campaign challenges (v4.9-01), legendary quests (v4.29)
   if (lk) {
     toast(lk);
     renderPrep();
     return;
   }
-  if (scSel === 'champ') champBuild();
-  if (rivalIdx(scSel) >= 0 || RIV429[scSel]) rivalBuild();
+  if (scSel === 'champ') {
+    champBuild();
+  }
+  if (rivalIdx(scSel) >= 0 || RIV429[scSel]) {
+    rivalBuild();
+  }
   if (scSel === 'tdr' && !towerRun()) {
     towerDraft(); // no ascent yet: choose your team first
     return;
@@ -209,7 +280,7 @@ function launchCore() {
     act: null,
     undo: null,
     tile: null,
-    duo: null
+    duo: null,
   });
   $('#cbPrep').hidden = true;
   $('#cbBattle').hidden = false;
@@ -219,36 +290,60 @@ function launchCore() {
   buildBoard();
   log(`${SCEN[scSel].n} : à vous de jouer. Touchez un adversaire pour voir sa portée.`, 'sys');
   aev.forEach(x => {
-    if (x.e === 'msg') log(x.s, 'arn');
+    if (x.e === 'msg') {
+      log(x.s, 'arn');
+    }
   });
   B.units.forEach(u => {
-    if (u.side === 'a' && u.fat) log(`${u.n} est fatigué : −1 Mouvement (un Éveil efface la fatigue).`, 'sys');
-    if (u.side === 'a' && u.item) log(`${u.n} tient ${ITEMS2[u.item].n}.`, 'sys');
+    if (u.side === 'a' && u.fat) {
+      log(`${u.n} est fatigué : −1 Mouvement (un Éveil efface la fatigue).`, 'sys');
+    }
+    if (u.side === 'a' && u.item) {
+      log(`${u.n} tient ${ITEMS2[u.item].n}.`, 'sys');
+    }
   });
-  if (B.harmonie) log('Harmonie : trois rangs différents dans l’équipe, chaque Pokémon commence avec 1 losange.', 'sys'); // v4.14
-  if (bossScene(B)) log('Combat de prestige : vos adversaires accumulent eux aussi la Résonance (notes, attaques Expertes).', 'arn');
-  if (B.wx) log(`Météo ${WXN[B.wx.k]} dès le début du combat.`, 'sys');
-  if (B.disobedience) log('Désobéissance : un Pokémon épuisé ou têtu peut ignorer un ordre.', 'sys');
-  if (B.mut) log(`Mutateur · ${mutInfo(B.mut)[0]} : ${mutInfo(B.mut)[1]}`, 'arn');
-  if (B.sansEveil) log('Défi Sans Éveil : vos Pokémon ne s’éveilleront pas.', 'sys');
+  if (B.harmonie) {
+    log('Harmonie : trois rangs différents dans l’équipe, chaque Pokémon commence avec 1 losange.', 'sys');
+  } // v4.14
+  if (bossScene(B)) {
+    log('Combat de prestige : vos adversaires accumulent eux aussi la Résonance (notes, attaques Expertes).', 'arn');
+  }
+  if (B.wx) {
+    log(`Météo ${WXN[B.wx.k]} dès le début du combat.`, 'sys');
+  }
+  if (B.disobedience) {
+    log('Désobéissance : un Pokémon épuisé ou têtu peut ignorer un ordre.', 'sys');
+  }
+  if (B.mut) {
+    log(`Mutateur · ${mutInfo(B.mut)[0]} : ${mutInfo(B.mut)[1]}`, 'arn');
+  }
+  if (B.sansEveil) {
+    log('Défi Sans Éveil : vos Pokémon ne s’éveilleront pas.', 'sys');
+  }
   if (B.tac) {
     log(
       'Tactique avancée : entrer au contact d’un adversaire arrête le déplacement (sauf volants, Spectre, Éclaireurs). Lance-Soleil et Vol partent en fin de manche.',
       'sys'
     );
   }
-  if (B.units.some(u => u.colossus)) log('Colosse : brisez ses parties pour faire tomber sa carapace. Chacune le fait vaciller.', 'sys');
+  if (B.units.some(u => u.colossus)) {
+    log('Colosse : brisez ses parties pour faire tomber sa carapace. Chacune le fait vaciller.', 'sys');
+  }
   if (B.livingBoard) {
-    log(`Plateau vivant : ${LIVING_STATE[B.cycle.ph]} (${LIVING_DESC[B.cycle.ph]}) Le feu court dans les hautes herbes ; la pluie l’éteint.`, 'sys');
+    log(
+      `Plateau vivant : ${LIVING_STATE[B.cycle.ph]} (${LIVING_DESC[B.cycle.ph]}) Le feu court dans les hautes herbes ; la pluie l’éteint.`,
+      'sys'
+    );
   }
   autoSel();
   renderAll();
   window.scrollTo({ top: 0 });
 }
 
-
 export function backToPrep() {
-  if (scSel === 'sauvage') scSel = 'gue'; // a wild encounter cannot be relaunched from the list
+  if (scSel === 'sauvage') {
+    scSel = 'gue';
+  } // a wild encounter cannot be relaunched from the list
   B = null;
   $('#cbBattle').hidden = true;
   $('#cbResult').hidden = true;
@@ -261,7 +356,6 @@ export function backToPrep() {
   renderCoach();
   renderWallet();
 }
-
 
 /* board */
 // The SVG is rendered by React (src/screens/combat/board/): buildBoard remounts all the layers;
@@ -291,15 +385,24 @@ export function buildBoard() {
   hook('plateau');
 }
 
-
 /** Token model (rendered by Units.jsx): what the old DOM carried, in the same order. */
 function mkTok(u) {
   const c = ['tok', u.side === 'e' ? 'enemy' : 'ally'];
-  if (u.shiny) c.push('shiny');
-  if (u.boss) c.push('boss');
-  if (u.dom) c.push('dom');
-  if (u.seg) c.push('seg');
-  if (u.colossus) c.push('colosse');
+  if (u.shiny) {
+    c.push('shiny');
+  }
+  if (u.boss) {
+    c.push('boss');
+  }
+  if (u.dom) {
+    c.push('dom');
+  }
+  if (u.seg) {
+    c.push('seg');
+  }
+  if (u.colossus) {
+    c.push('colosse');
+  }
   return liveTok429({
     uid: u.uid,
     c, // token classes (classList order)
@@ -309,13 +412,12 @@ function mkTok(u) {
     nc: [null, null, null], // Resonance notes (v4.14)
     bdc: 'bdg-s',
     bt: '',
-    n: ''
+    n: '',
   }); // animated group (v4.29)
 }
 
 // lone « on » class of an element (classList.toggle('on', v)): null → no attribute, '' → emptied class
 const on1 = (cur, v) => (v ? 'on' : cur === 'on' ? '' : cur);
-
 
 export function updTok(u) {
   hook('beforeToken', u);
@@ -326,10 +428,11 @@ export function updTok(u) {
   hook('afterToken', u);
 }
 
-
 function updTokCore(u) {
   const T = L.u[u.uid];
-  if (!T) return;
+  if (!T) {
+    return;
+  }
   const [x, y] = HC(uk(u));
   T.tr = `translate(${x}px,${y}px)`;
   const c = tc(u.t[0]);
@@ -369,12 +472,31 @@ function updTokCore(u) {
   const b =
     u.badge ||
     (u.vole ? 'VOL' : u.chg ? 'CHARGE' : null) || // charged attacks (v4.8)
-    (u.burn > 0 ? 'BRÛ' : u.poisoned > 0 ? 'PSN' : u.maudit > 0 ? 'MAUD' : u.requiem > 0 ? 'REQ' : u.root > 0 ? 'RAC' : u.web > 0 ? 'TOILE' : u.aide ? 'AIDE' : u.riposte ? 'RIPO' : u.miroir ? 'MIR' : u.cogno > 0 ? 'x2' : null);
+    (u.burn > 0
+      ? 'BRÛ'
+      : u.poisoned > 0
+        ? 'PSN'
+        : u.maudit > 0
+          ? 'MAUD'
+          : u.requiem > 0
+            ? 'REQ'
+            : u.root > 0
+              ? 'RAC'
+              : u.web > 0
+                ? 'TOILE'
+                : u.aide
+                  ? 'AIDE'
+                  : u.riposte
+                    ? 'RIPO'
+                    : u.miroir
+                      ? 'MIR'
+                      : u.cogno > 0
+                        ? 'x2'
+                        : null);
   T.bdc = 'bdg-s' + (b && !u.ko ? ' on st-' + (STC[b] || 'x') : '');
   T.bt = b || '';
   unitsDirty();
 }
-
 
 export function renderBoard() {
   boardRender(); // tiles, marks, highlights, intents, obstacles (React layers)
@@ -385,17 +507,17 @@ export function renderBoard() {
   hook('boardRendered');
 }
 
-
 /* banners */
 export function segHp(u) {
   return HOOKS.hpBar.reduce((h, f) => f(h, u), segHpBase(u));
 }
 
-
 function segHpBase(u) {
-  const h =`<span class="hp hseg"><i class="${hpc(u)}" style="width:${((u.hp / u.mhp) * 100).toFixed(0)}%"></i></span>`;
+  const h = `<span class="hp hseg"><i class="${hpc(u)}" style="width:${((u.hp / u.mhp) * 100).toFixed(0)}%"></i></span>`;
   // trail of recent damage
-  if (!B) return h;
+  if (!B) {
+    return h;
+  }
   const r = Math.max(0, (u.hp / u.mhp) * 100),
     now = performance.now(),
     key = u.uid;
@@ -412,13 +534,14 @@ function segHpBase(u) {
   }
   m.r = r;
   const dt = now - m.t0;
-  if (dt >= 800) return h;
+  if (dt >= 800) {
+    return h;
+  }
   return h.replace(
     '<i ',
     `<b class="lag" style="--a:${m.a.toFixed(1)}%;--b:${m.b.toFixed(1)}%;animation-delay:-${dt | 0}ms"></b><i `
   );
 }
-
 
 // Banner, synergies, arena rule, timeline, plates, bottom bar: rendered by React
 // (src/screens/combat/battle). Here, the render's side effects, then the update.
@@ -430,7 +553,6 @@ function renderTop() {
   turnBanners();
 }
 
-
 /* panel */
 // Command panel (#bPanel): rendered by React (src/screens/combat/battle/Panel.jsx).
 // The engine keeps the container's « info-off » class (panelRoleInfo).
@@ -439,17 +561,19 @@ export function renderPanel() {
   refreshBattle('panel');
 }
 
-
 /* evolution choice: rendered by React (EvoPick.jsx) */
 function openEvoPick(u) {
-  if (!evoOpts(B, u).length) return;
+  if (!evoOpts(B, u).length) {
+    return;
+  }
   evoState.u = u;
   refreshBattle('evo');
   $('#evoPick').hidden = false;
   const f = $('#evoPick .eo');
-  if (f) f.focus();
+  if (f) {
+    f.focus();
+  }
 }
-
 
 /* evolution cutscene */
 export function cinematic(fromN, fromT, toN, toT, side, uid) {
@@ -461,7 +585,9 @@ export function cinematic(fromN, fromT, toN, toT, side, uid) {
   }
   evoSet({ ...o, on: true, fx: { fromN, fromT, toN, toT, side }, fast: !!(PREF.fast || ui.turbo428) });
   ui.cutscene = true;
-  if (B) renderAll();
+  if (B) {
+    renderAll();
+  }
   sfx('evo');
   vibe([15, 25, 15, 25, 70]);
   return wait(dl428(650, 1300, 2500)).then(() => {
@@ -470,20 +596,19 @@ export function cinematic(fromN, fromT, toN, toT, side, uid) {
   });
 }
 
-
 /* log */
 export function log(s, c) {
   LOG.unshift({ s, c: c || '', r: B ? B.round : 1 });
-  if (LOG.length > 70) LOG.length = 70;
+  if (LOG.length > 70) {
+    LOG.length = 70;
+  }
   renderLog();
 }
-
 
 // Log (#bLog, #bLogLast): rendered by React (Log.jsx)
 function renderLog() {
   refreshBattle('log');
 }
-
 
 export function renderAll() {
   hook('beforeRender');
@@ -498,14 +623,14 @@ export function renderAll() {
   hook('rendered');
 }
 
-
 function renderAllCore() {
-  if (!B) return;
+  if (!B) {
+    return;
+  }
   renderTop(); // with the Speed-order timeline (v4.5-01)
   renderBoard();
   renderPanel();
 }
-
 
 /* effects */
 export function floatAt(k, txt, cls) {
@@ -514,7 +639,6 @@ export function floatAt(k, txt, cls) {
   t.textContent = txt;
   setTimeout(() => t.remove(), 1500);
 }
-
 
 function drawChain(e) {
   const g = el('g', {}, L.fx);
@@ -529,9 +653,10 @@ function drawChain(e) {
   setTimeout(() => g.remove(), 1800);
 }
 
-
 function beam(a, b, typ) {
-  if (a === b) return;
+  if (a === b) {
+    return;
+  }
   const A = HC(a),
     C = HC(b);
   const l = el(
@@ -542,19 +667,21 @@ function beam(a, b, typ) {
   setTimeout(() => l.remove(), 700);
 }
 
-
 function burst(uid) {
   const u = byUid(B, uid);
-  if (!u) return;
+  if (!u) {
+    return;
+  }
   const [x, y] = HC(uk(u));
   const c = el('circle', { class: 'burst', cx: x, cy: y, r: 10 }, L.fx);
   setTimeout(() => c.remove(), 1100);
 }
 
-
 function arrFx(uid) {
   const u = byUid(B, uid);
-  if (!u) return;
+  if (!u) {
+    return;
+  }
   const [x, y] = HC(uk(u)),
     g = el('g', { class: 'arrfx', style: `--c:${tc(u.t[0])}` }, L.fx);
   [0, 1].forEach(i =>
@@ -566,7 +693,6 @@ function arrFx(uid) {
   );
   setTimeout(() => g.remove(), 1600);
 }
-
 
 function hit(uid) {
   const T = L.u[uid];
@@ -582,13 +708,11 @@ function hit(uid) {
   hook('touche', uid);
 }
 
-
 export function playLog(ev) {
   ev.forEach(e => {
     if (e.e === 'msg') {
       log(e.s, /^Arène /.test(e.s) ? 'arn' : /^(Arrivée|.* évolue en|.* puise)/.test(e.s) ? 'evo' : '');
-    }
-    else if (e.e === 'dmg') {
+    } else if (e.e === 'dmg') {
       const u = byUid(B, e.u);
       if (u) {
         floatAt(uk(u), '−' + e.v, 'f-dmg');
@@ -596,21 +720,30 @@ export function playLog(ev) {
       }
     } else if (e.e === 'heal') {
       const u = byUid(B, e.u);
-      if (u) floatAt(uk(u), '+' + e.v, 'f-heal');
+      if (u) {
+        floatAt(uk(u), '+' + e.v, 'f-heal');
+      }
     } else if (e.e === 'rx') {
       floatAt(e.k, RX[e.rx].n, 'f-rx');
-    } else if (e.e === 'chain') drawChain(e);
-    else if (e.e === 'evo') burst(e.u);
-    else if (e.e === 'arena') {
+    } else if (e.e === 'chain') {
+      drawChain(e);
+    } else if (e.e === 'evo') {
+      burst(e.u);
+    } else if (e.e === 'arena') {
       bdReplay('shock'); // stays in place until the next build
       bdClass('shock', true);
-    } else if (e.e === 'arr') arrFx(e.u);
-    else if (e.e === 'ready') {
+    } else if (e.e === 'arr') {
+      arrFx(e.u);
+    } else if (e.e === 'ready') {
       const u = byUid(B, e.u);
-      if (u && !u.ko) setTimeout(() => floatAt(uk(u), 'Éveil prêt', 'f-ready'), 380);
+      if (u && !u.ko) {
+        setTimeout(() => floatAt(uk(u), 'Éveil prêt', 'f-ready'), 380);
+      }
     } else if (e.e === 'use') {
       const u = byUid(B, e.u);
-      if (u && e.k) beam(uk(u), e.k, u.t[0]);
+      if (u && e.k) {
+        beam(uk(u), e.k, u.t[0]);
+      }
     } else if (e.e === 'catch') {
       const u = byUid(B, e.u);
       if (u) {
@@ -621,7 +754,9 @@ export function playLog(ev) {
       [e.a, e.b].forEach(arrFx);
     } else if (e.e === 'note') {
       const u = byUid(B, e.u); // Resonance notes (v4.14)
-      if (u && !u.ko) floatAt(uk(u), '♪'.repeat(e.n), 'f-note');
+      if (u && !u.ko) {
+        floatAt(uk(u), '♪'.repeat(e.n), 'f-note');
+      }
     } else if (e.e === 'reso') {
       const u = byUid(B, e.u);
       if (u) {
@@ -633,7 +768,6 @@ export function playLog(ev) {
   sfxEv(ev);
   hook('journal', ev);
 }
-
 
 /* interactions */
 export function autoSel() {
@@ -651,14 +785,12 @@ export function autoSel() {
   ui.pk = null;
 }
 
-
 export function clearAim() {
   ui.mode = null;
   ui.pv = null;
   ui.pk = null;
   ui.duo = null;
 }
-
 
 export function confirmAct() {
   const id = ui.sel;
@@ -672,10 +804,11 @@ export function confirmAct() {
   hook('action', id);
 }
 
-
 function confirmActCore() {
   const u = byUid(B, ui.sel);
-  if (!u || ui.pk == null) return;
+  if (!u || ui.pk == null) {
+    return;
+  }
   ui.undo = null;
   ui.tile = null;
   const ev = ui.mode === 'duo' ? pDuo(B, u, byUid(B, ui.duo), ui.pk) : pAct(B, u, ui.mi, ui.pk);
@@ -697,11 +830,12 @@ function confirmActCore() {
   }
   if (u.acted || u.ko) {
     const nx = B.units.find(x => x.side === 'a' && !x.ko && !x.acted);
-    if (nx) ui.sel = nx.uid;
+    if (nx) {
+      ui.sel = nx.uid;
+    }
   }
   renderAll();
 }
-
 
 function tapTile(k) {
   const u = ui.sel && byUid(B, ui.sel),
@@ -712,7 +846,9 @@ function tapTile(k) {
     clearAim();
     ui.tile = null;
     renderAll();
-    if (ev) playEv(ev);
+    if (ev) {
+      playEv(ev);
+    }
     if (u.ko) {
       autoSel();
       renderAll();
@@ -730,7 +866,7 @@ function tapTile(k) {
       ui.pk = k;
       const X = duoParts(B, u, p);
       ui.pv = previewRun(B, C => pDuo(C, byUid(C, u.uid), byUid(C, p.uid), k), [
-        ...new Set([...affected(B, X.A, X.D.a, k), ...affected(B, X.Bu, X.D.b, k)])
+        ...new Set([...affected(B, X.A, X.D.a, k), ...affected(B, X.Bu, X.D.b, k)]),
       ]);
       renderAll();
       return;
@@ -761,10 +897,14 @@ function tapTile(k) {
   }
   if (v) {
     if (v.side === 'a') {
-      if (!canSelect(v)) return;
+      if (!canSelect(v)) {
+        return;
+      }
       ui.sel = v.uid;
       ui.selE = null;
-    } else ui.selE = v.uid;
+    } else {
+      ui.selE = v.uid;
+    }
     clearAim();
     renderAll();
     return;
@@ -774,7 +914,9 @@ function tapTile(k) {
     const ev = pMove(B, u, k);
     clearAim();
     renderAll();
-    if (ev) playEv(ev);
+    if (ev) {
+      playEv(ev);
+    }
     if (u.ko) {
       autoSel();
       renderAll();
@@ -787,12 +929,19 @@ function tapTile(k) {
   renderAll();
 }
 
-
 function endTurn() {
-  if (B && B.order === 'vitesse') return endTurnSpeed(); // Speed order: only the current ally has finished (v4.5-01)
-  if (!B || ui.busy || B.over || B.phase !== 'player') return;
-  if (coopPass418()) return; // co-op: Player 1 hands over to Player 2 (v4.18)
-  if (duelPass433()) return; // local duel: each takes a turn (v4.33)
+  if (B && B.order === 'vitesse') {
+    return endTurnSpeed();
+  } // Speed order: only the current ally has finished (v4.5-01)
+  if (!B || ui.busy || B.over || B.phase !== 'player') {
+    return;
+  }
+  if (coopPass418()) {
+    return;
+  } // co-op: Player 1 hands over to Player 2 (v4.18)
+  if (duelPass433()) {
+    return;
+  } // local duel: each takes a turn (v4.33)
   ui.busy = true;
   ui.turbo428 = false;
   ui.undo = null;
@@ -805,7 +954,9 @@ function endTurn() {
   renderAll();
   let i = 0;
   const step = async () => {
-    if (!B || B !== S0) return;
+    if (!B || B !== S0) {
+      return;
+    }
     if (B.over) {
       finish();
       return;
@@ -821,7 +972,9 @@ function endTurn() {
       return;
     }
     ui.act = uid;
-    if (await placeEnemy(S0, uid)) return; // v4.12: it positions itself first, before your eyes
+    if (await placeEnemy(S0, uid)) {
+      return;
+    } // v4.12: it positions itself first, before your eyes
     const ev = execFoe(B, uid);
     renderAll();
     playEv(ev);
@@ -830,29 +983,37 @@ function endTurn() {
   setTimeout(step, dl428(60, 160, 420));
 }
 
-
 /** v4.12: opponent's move before its attack. Returns true if the battle changed in the meantime. */
 export async function placeEnemy(S0, uid) {
-  if (!B || !B.jit) return false;
+  if (!B || !B.jit) {
+    return false;
+  }
   const pre = prepareEnemy(B, uid);
-  if (!pre.length) return false;
+  if (!pre.length) {
+    return false;
+  }
   renderAll();
   playEv(pre);
-  if (pre.some(x => x.e === 'mv')) await new Promise(r => setTimeout(r, dl428(60, 240, 460)));
+  if (pre.some(x => x.e === 'mv')) {
+    await new Promise(r => setTimeout(r, dl428(60, 240, 460)));
+  }
   return !B || B !== S0;
 }
-
 
 /** End of round (both modes): round effects, arena rule, opponent evolutions, new announcements.
     Returns true if the battle continues. */
 export async function endOfRound(S0) {
   ui.act = null;
   const ev = endRound(B);
-  if (!B.over) arenaTick(B).forEach(x => ev.push(x));
+  if (!B.over) {
+    arenaTick(B).forEach(x => ev.push(x));
+  }
   for (const x of ev.filter(evt => evt.e === 'evo')) {
     renderAll();
     await cinematic(x.from, x.ft, x.to, x.tt, x.side, x.u);
-    if (B !== S0) return false;
+    if (B !== S0) {
+      return false;
+    }
   }
   ui.busy = false;
   renderAll();
@@ -867,7 +1028,6 @@ export async function endOfRound(S0) {
   return true;
 }
 
-
 export function finish() {
   hook('beforeBattleEnd');
   // battle rank
@@ -879,7 +1039,9 @@ export function finish() {
       PROFILE.ranks = PROFILE.ranks || {};
       const o = PROFILE.ranks[B.sc];
       B.rankNew = !o || RK.indexOf(r) > RK.indexOf(o);
-      if (B.rankNew) PROFILE.ranks[B.sc] = r;
+      if (B.rankNew) {
+        PROFILE.ranks[B.sc] = r;
+      }
       queueSave();
     }
   }
@@ -892,8 +1054,11 @@ export function finish() {
       B.rew = fixedProgress431(B);
     } else {
       PROFILE.battles++;
-      if (B.over === 'win') PROFILE.wins++;
-      else if (!B.flee416) PROFILE.losses++; // a beast that runs away is not a defeat (v4.16)
+      if (B.over === 'win') {
+        PROFILE.wins++;
+      } else if (!B.flee416) {
+        PROFILE.losses++;
+      } // a beast that runs away is not a defeat (v4.16)
       PROFILE.awakenings += B.stats.evo || 0;
       PROFILE.rx += B.stats.rx || 0;
       PROFILE.kos += B.stats.ko || 0;
@@ -906,15 +1071,21 @@ export function finish() {
   renderAll();
   setTimeout(
     () => {
-      if (!B) return;
+      if (!B) {
+        return;
+      }
       const win = B.over === 'win';
-      if (SCEN[B.sc].gym != null) renderLeague();
+      if (SCEN[B.sc].gym != null) {
+        renderLeague();
+      }
       sfx(win ? 'win' : 'lose');
       refreshBattle('result'); // result sheet, rank and quote (v2.4), Nuzlocke, victory: Result.jsx
       $('#cbResult').hidden = false;
       after429(B.sc, win); // post-battle scene (v4.29)
       const f = $('#cbResult [data-res="again"]');
-      if (f) f.focus();
+      if (f) {
+        f.focus();
+      }
     },
     RM ? 0 : 900
   );
@@ -925,14 +1096,11 @@ export function finish() {
 /* ===================== BATTLE INTERFACE v0.8 ===================== */
 export const BG = { S: 27, OX: 20, OY: 22 };
 
-
 export const VB = () => (VERT ? [286, 430] : [430, 286]);
-
 
 /* v4.77 · tilted board: HC and HP return perspective-view points when TILT.on.
    Ground = original viewBox coordinates; screen = ground tilted by TILT.a then reframed. */
 export const TILT = { on: false };
-
 
 export const HC0 = k => {
   const p = P(k),
@@ -940,34 +1108,52 @@ export const HC0 = k => {
   return VERT ? [q[1], 430 - q[0]] : q;
 };
 
-
 export const HC = k => (TILT.on ? tiltP(...HC0(k)) : HC0(k));
-
 
 export const HP = (x, y, s) => (TILT.on ? tiltHP(x, y, s) : VERT ? hpf(x, y, s) : hp(x, y, s));
 
-
-export const ui = { sel: null, selE: null, mode: null, mi: null, pk: null, pv: null, busy: false, act: null, cutscene: false };
-
+export const ui = {
+  sel: null,
+  selE: null,
+  mode: null,
+  mi: null,
+  pk: null,
+  pv: null,
+  busy: false,
+  act: null,
+  cutscene: false,
+};
 
 export const L = {};
-
 
 export const hpc = u => {
   const r = u.hp / u.mhp;
   return r > 0.5 ? '' : r > 0.2 ? 'mid' : 'lo';
 };
 
-
 export const DIA = 'M0 -3.4 2.5 0 0 3.4 -2.5 0Z';
 
-
-export const STC = { PAR: 'par', GEL: 'gel', SOM: 'som', REC: 'rec', BRÛ: 'bru', RAC: 'rac', TOILE: 'toile', CHARGE: 'chg', VOL: 'vol', PSN: 'psn', AIDE: 'aide', MAUD: 'maud', REQ: 'req', RIPO: 'ripo', MIR: 'ripo', x2: 'aide' };
-
+export const STC = {
+  PAR: 'par',
+  GEL: 'gel',
+  SOM: 'som',
+  REC: 'rec',
+  BRÛ: 'bru',
+  RAC: 'rac',
+  TOILE: 'toile',
+  CHARGE: 'chg',
+  VOL: 'vol',
+  PSN: 'psn',
+  AIDE: 'aide',
+  MAUD: 'maud',
+  REQ: 'req',
+  RIPO: 'ripo',
+  MIR: 'ripo',
+  x2: 'aide',
+};
 
 export const enPips = (n, cls = '') =>
   `<span class="enp ${cls}" aria-label="Énergie d’Éveil ${n} sur 3">${[0, 1, 2].map(i => `<i class="${i < n ? 'on' : ''}"></i>`).join('')}</span>`;
-
 
 export const poly = (k, c) => {
   const [x, y] = HC(k),
@@ -977,225 +1163,238 @@ export const poly = (k, c) => {
 
 // Statements run at startup, in the original order (see index.js).
 export function __init() {
+  VERT = false;
 
-VERT = false;
+  MQV = window.matchMedia ? matchMedia('(max-width: 700px)') : null;
 
+  if (MQV) {
+    const onMQ = () => {
+      if (B && !$('#cbBattle').hidden && VERT !== MQV.matches) {
+        buildBoard();
+        renderAll();
+      }
+    };
+    MQV.addEventListener ? MQV.addEventListener('change', onMQ) : MQV.addListener(onMQ);
+  }
 
-MQV = window.matchMedia ? matchMedia('(max-width: 700px)') : null;
+  ((B = null), (LOG = []), (scSel = 'gue'));
 
-
-if (MQV) {
-  const onMQ = () => {
-    if (B && !$('#cbBattle').hidden && VERT !== MQV.matches) {
-      buildBoard();
-      renderAll();
+  $('#scenList').addEventListener('click', e => {
+    const b = e.target.closest('[data-sc]');
+    if (!b) {
+      return;
     }
-  };
-  MQV.addEventListener ? MQV.addEventListener('change', onMQ) : MQV.addListener(onMQ);
-}
+    scSel = b.dataset.sc;
+    renderPrep();
+  });
 
+  $('#bLaunch').addEventListener('click', () => launch());
 
-B = null,
-  LOG = [],
-  scSel = 'gue';
-
-
-$('#scenList').addEventListener('click', e => {
-  const b = e.target.closest('[data-sc]');
-  if (!b) return;
-  scSel = b.dataset.sc;
-  renderPrep();
-});
-
-
-$('#bLaunch').addEventListener('click', () => launch());
-
-
-$('#evoPick').addEventListener('click', async e => {
-  const b = e.target.closest('[data-pick]');
-  if (!b) {
-    if (e.target.id === 'evoPick') $('#evoPick').hidden = true;
-    return;
-  }
-  $('#evoPick').hidden = true;
-  const id = b.dataset.pick,
-    u = ui.sel && byUid(B, ui.sel);
-  if (!id || !u || !canAwaken(B, u)) return;
-  ui.undo = null;
-  const E = BY[id];
-  ui.busy = true;
-  clearAim();
-  renderAll();
-  await cinematic(u.n, u.t, E.n, E.t, 'a', u.uid);
-  const ev = pAwaken(B, u, id);
-  ui.busy = false;
-  if (!ev) {
-    renderAll();
-    return;
-  }
-  renderAll();
-  playEv(ev);
-  if (B.over) {
-    finish();
-    return;
-  }
-  toast(
-    `${E.n} entre en jeu. ${B.voice >= 2 && !B.retrigger ? 'Relance (2 Voix) pour utiliser ses capacités tout de suite.' : ''}`
-  );
-  renderAll();
-});
-
-
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape' && !$('#evoPick').hidden) $('#evoPick').hidden = true;
-});
-
-
-$('#bSvg').addEventListener('click', e => {
-  const p = e.target.closest('[data-k]');
-  if (!p || !B || ui.busy || B.over || B.phase !== 'player') return;
-  tapTile(p.dataset.k);
-});
-
-
-$('#bPanel').addEventListener('click', e => {
-  const b = e.target.closest('button');
-  if (!b || !B || ui.busy || B.over) return;
-  const u = ui.sel && byUid(B, ui.sel);
-  if (b.dataset.fc) {
-    ui.selE = null;
-    renderAll();
-    return;
-  }
-  if (b.dataset.tile) {
-    ui.tile = null;
-    renderAll();
-    return;
-  }
-  if (b.dataset.undo && ui.undo) {
-    const U = ui.undo;
+  $('#evoPick').addEventListener('click', async e => {
+    const b = e.target.closest('[data-pick]');
+    if (!b) {
+      if (e.target.id === 'evoPick') {
+        $('#evoPick').hidden = true;
+      }
+      return;
+    }
+    $('#evoPick').hidden = true;
+    const id = b.dataset.pick,
+      u = ui.sel && byUid(B, ui.sel);
+    if (!id || !u || !canAwaken(B, u)) {
+      return;
+    }
     ui.undo = null;
-    B = JSON.parse(U.snap);
-    LOG.splice(0, Math.max(0, LOG.length - U.log));
-    renderLog();
+    const E = BY[id];
+    ui.busy = true;
     clearAim();
-    ui.sel = U.uid;
     renderAll();
-    sfx('ui');
-    return;
-  }
-  if (b.dataset.cap) {
-    const al = byUid(B, ui.sel),
-      target = byUid(B, b.dataset.cap);
-    const ev = pCapture(B, al, target);
-    if (ev) {
-      ui.undo = null;
+    await cinematic(u.n, u.t, E.n, E.t, 'a', u.uid);
+    const ev = pAwaken(B, u, id);
+    ui.busy = false;
+    if (!ev) {
+      renderAll();
+      return;
+    }
+    renderAll();
+    playEv(ev);
+    if (B.over) {
+      finish();
+      return;
+    }
+    toast(
+      `${E.n} entre en jeu. ${B.voice >= 2 && !B.retrigger ? 'Relance (2 Voix) pour utiliser ses capacités tout de suite.' : ''}`
+    );
+    renderAll();
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && !$('#evoPick').hidden) {
+      $('#evoPick').hidden = true;
+    }
+  });
+
+  $('#bSvg').addEventListener('click', e => {
+    const p = e.target.closest('[data-k]');
+    if (!p || !B || ui.busy || B.over || B.phase !== 'player') {
+      return;
+    }
+    tapTile(p.dataset.k);
+  });
+
+  $('#bPanel').addEventListener('click', e => {
+    const b = e.target.closest('button');
+    if (!b || !B || ui.busy || B.over) {
+      return;
+    }
+    const u = ui.sel && byUid(B, ui.sel);
+    if (b.dataset.fc) {
       ui.selE = null;
       renderAll();
-      playEv(ev);
-      if (B.over) {
-        finish();
+      return;
+    }
+    if (b.dataset.tile) {
+      ui.tile = null;
+      renderAll();
+      return;
+    }
+    if (b.dataset.undo && ui.undo) {
+      const U = ui.undo;
+      ui.undo = null;
+      B = JSON.parse(U.snap);
+      LOG.splice(0, Math.max(0, LOG.length - U.log));
+      renderLog();
+      clearAim();
+      ui.sel = U.uid;
+      renderAll();
+      sfx('ui');
+      return;
+    }
+    if (b.dataset.cap) {
+      const al = byUid(B, ui.sel),
+        target = byUid(B, b.dataset.cap);
+      const ev = pCapture(B, al, target);
+      if (ev) {
+        ui.undo = null;
+        ui.selE = null;
+        renderAll();
+        playEv(ev);
+        if (B.over) {
+          finish();
+          return;
+        }
+        autoSel();
+        renderAll();
+      }
+      return;
+    }
+    if (b.dataset.duo && u) {
+      if (ui.mode === 'duo' && ui.duo === b.dataset.duo) {
+        clearAim();
+      } else {
+        clearAim();
+        ui.mode = 'duo';
+        ui.duo = b.dataset.duo;
+      }
+      renderAll();
+      return;
+    }
+    if (b.dataset.evo === 'open' && u) {
+      if (canAwaken(B, u)) {
+        openEvoPick(u);
+      }
+      return;
+    }
+    if (b.dataset.mi != null && u) {
+      const i = +b.dataset.mi;
+      if (ui.mode === 'target' && ui.mi === i) {
+        clearAim();
+      } else {
+        ui.mode = 'target';
+        ui.mi = i;
+        ui.pk = null;
+        ui.pv = null;
+        const m = MV[u.mv[i]];
+        if (m.sh === 'self' || m.sh === 'ring') {
+          ui.pk = uk(u);
+          ui.pv = preview(B, u.uid, i, ui.pk);
+        }
+      }
+      renderAll();
+      return;
+    }
+    if (b.dataset.pv === 'ok') {
+      confirmAct();
+      return;
+    }
+    if (b.dataset.pv === 'no') {
+      clearAim();
+      renderAll();
+      return;
+    }
+    if (b.dataset.vx === 'dodge' && u) {
+      ui.mode = ui.mode === 'dodge' ? null : 'dodge';
+      ui.pv = null;
+      ui.pk = null;
+      renderAll();
+      return;
+    }
+    if (b.dataset.vx === 'relance' && u) {
+      const ev = pReroll(B, u);
+      if (ev) {
+        ui.undo = null;
+        renderAll();
+        playEv(ev);
+      }
+    }
+  });
+
+  ['#bPlE', '#bPlA'].forEach(s =>
+    $(s).addEventListener('click', e => {
+      const b = e.target.closest('[data-u]');
+      if (!b || !B || ui.busy || B.over) {
         return;
       }
-      autoSel();
-      renderAll();
-    }
-    return;
-  }
-  if (b.dataset.duo && u) {
-    if (ui.mode === 'duo' && ui.duo === b.dataset.duo) clearAim();
-    else {
-      clearAim();
-      ui.mode = 'duo';
-      ui.duo = b.dataset.duo;
-    }
-    renderAll();
-    return;
-  }
-  if (b.dataset.evo === 'open' && u) {
-    if (canAwaken(B, u)) openEvoPick(u);
-    return;
-  }
-  if (b.dataset.mi != null && u) {
-    const i = +b.dataset.mi;
-    if (ui.mode === 'target' && ui.mi === i) clearAim();
-    else {
-      ui.mode = 'target';
-      ui.mi = i;
-      ui.pk = null;
-      ui.pv = null;
-      const m = MV[u.mv[i]];
-      if (m.sh === 'self' || m.sh === 'ring') {
-        ui.pk = uk(u);
-        ui.pv = preview(B, u.uid, i, ui.pk);
+      const u = byUid(B, b.dataset.u);
+      if (!u || u.ko) {
+        return;
       }
-    }
-    renderAll();
-    return;
-  }
-  if (b.dataset.pv === 'ok') {
-    confirmAct();
-    return;
-  }
-  if (b.dataset.pv === 'no') {
-    clearAim();
-    renderAll();
-    return;
-  }
-  if (b.dataset.vx === 'dodge' && u) {
-    ui.mode = ui.mode === 'dodge' ? null : 'dodge';
-    ui.pv = null;
-    ui.pk = null;
-    renderAll();
-    return;
-  }
-  if (b.dataset.vx === 'relance' && u) {
-    const ev = pReroll(B, u);
-    if (ev) {
-      ui.undo = null;
+      if (u.side === 'a') {
+        if (!canSelect(u)) {
+          return;
+        }
+        ui.sel = u.uid;
+        ui.selE = null;
+      } else {
+        ui.selE = u.uid;
+      }
+      clearAim();
       renderAll();
-      playEv(ev);
+    })
+  );
+
+  $('#bEnd').addEventListener('click', endTurn);
+
+  $('#bQuit').addEventListener('click', () => {
+    if (ui.busy) {
+      return;
     }
-    
-  }
-});
-
-
-['#bPlE', '#bPlA'].forEach(s =>
-  $(s).addEventListener('click', e => {
-    const b = e.target.closest('[data-u]');
-    if (!b || !B || ui.busy || B.over) return;
-    const u = byUid(B, b.dataset.u);
-    if (!u || u.ko) return;
-    if (u.side === 'a') {
-      if (!canSelect(u)) return;
-      ui.sel = u.uid;
-      ui.selE = null;
-    } else ui.selE = u.uid;
-    clearAim();
-    renderAll();
-  })
-);
-
-
-$('#bEnd').addEventListener('click', endTurn);
-
-
-$('#bQuit').addEventListener('click', () => {
-  if (ui.busy) return;
-  backToPrep();
-});
-
-
-$('#cbResult').addEventListener('click', e => {
-  const b = e.target.closest('[data-res]');
-  if (!b) return;
-  if (b.dataset.res === 'again') {
-    $('#cbResult').hidden = true;
-    launch();
-  } else if (b.dataset.res === 'ligue') {
     backToPrep();
-    go('ligue');
-  } else backToPrep();
-});
+  });
+
+  $('#cbResult').addEventListener('click', e => {
+    const b = e.target.closest('[data-res]');
+    if (!b) {
+      return;
+    }
+    if (b.dataset.res === 'again') {
+      $('#cbResult').hidden = true;
+      launch();
+    } else if (b.dataset.res === 'ligue') {
+      backToPrep();
+      go('ligue');
+    } else {
+      backToPrep();
+    }
+  });
 }

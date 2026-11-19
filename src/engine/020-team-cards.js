@@ -22,20 +22,21 @@ import { hideSheet, refreshFilters, refreshGrid, refreshTeam, showSheet } from '
 
 export let squad, filt, openId, gen;
 let ftype, q, lastFocus;
-export function __set_squad(v) { return (squad = v); }
-export function __set_filt(v) { return (filt = v); }
-
+export function __set_squad(v) {
+  return (squad = v);
+}
+export function __set_filt(v) {
+  return (filt = v);
+}
 
 export function save() {
   writeLS('res8-squad', squad);
   queueSave();
 }
 
-
 export function monMarks(m) {
   return [...new Set(m.mv.map(id => MV[id].mk).filter(Boolean))];
 }
-
 
 export function monEls(m) {
   return [
@@ -45,15 +46,13 @@ export function monEls(m) {
         .filter(x => x.p || x.fix || x.mk)
         .map(x => FAMT[x.t])
         .filter(Boolean)
-    )
+    ),
   ];
 }
-
 
 export function nextOf(m) {
   return !m.nx ? [] : m.nx === 'eevee' ? Object.values(EEVEE) : Array.isArray(m.nx) ? m.nx : [m.nx];
 }
-
 
 export function evoDiff(a, b) {
   const A = BY[a],
@@ -69,35 +68,39 @@ export function evoDiff(a, b) {
     tl,
     ability: A.ability !== B2.ability ? B2.ability : null,
     role: A.r !== B2.r ? B2.r : null,
-    hp: (B2.s[0] - A.s[0]) * 8
+    hp: (B2.s[0] - A.s[0]) * 8,
   };
 }
-
 
 function rxOf(ms) {
   const marks = new Map(),
     els = new Map(),
     add = (m, k, v) => {
-      if (!m.has(k)) m.set(k, []);
+      if (!m.has(k)) {
+        m.set(k, []);
+      }
       m.get(k).push(v);
     };
   ms.forEach(m => {
     monMarks(m).forEach(k => add(marks, k, m.n));
     monEls(m).forEach(e => add(els, e, m.n));
   });
-  if (ms.some(m => m.ability === 'adaptabilite')) [...marks.keys()].forEach(k => add(els, MKT[k], 'Évoli'));
+  if (ms.some(m => m.ability === 'adaptabilite')) {
+    [...marks.keys()].forEach(k => add(els, MKT[k], 'Évoli'));
+  }
   const rx = new Map();
   marks.forEach((by, k) =>
     EL.forEach((e, i) => {
       const id = MX[k][i];
-      if (!id || id === 'ren' || !els.has(e) || rx.has(id)) return;
+      if (!id || id === 'ren' || !els.has(e) || rx.has(id)) {
+        return;
+      }
       const tr = els.get(e).find(n => !by.includes(n)) || els.get(e)[0];
       rx.set(id, { by: by.find(n => n !== tr) || by[0], tr });
     })
   );
   return rx;
 }
-
 
 export function analyze() {
   const ms = squad.map(id => BY[id]),
@@ -134,17 +137,21 @@ export function analyze() {
     : 0;
   const al = [],
     has = n => ms.some(m => m.r === n || m.r2 === n);
-  if (!ms.length) al.push(['bad', 'Équipe vide : recrutez jusqu’à 4 Pokémon.']);
-  else {
+  if (!ms.length) {
+    al.push(['bad', 'Équipe vide : recrutez jusqu’à 4 Pokémon.']);
+  } else {
     if (!has('Rempart')) {
       al.push(['bad', 'Aucun Rempart au départ : rien ne tient la ligne de front avant les premiers Éveils.']);
     }
-    if (!rx.size) al.push(['bad', 'Aucune réaction au premier stade : l’énergie d’Éveil montera lentement.']);
-    if (!evo) al.push(['warn', 'Aucun Pokémon ne peut s’éveiller : pas de renversement possible en combat.']);
-    else {
+    if (!rx.size) {
+      al.push(['bad', 'Aucune réaction au premier stade : l’énergie d’Éveil montera lentement.']);
+    }
+    if (!evo) {
+      al.push(['warn', 'Aucun Pokémon ne peut s’éveiller : pas de renversement possible en combat.']);
+    } else {
       al.push([
         'ok',
-        `${evo} Pokémon capable${evo > 1 ? 's' : ''} de s’éveiller, ${stages} Éveil${stages > 1 ? 's' : ''} possible${stages > 1 ? 's' : ''} au total.`
+        `${evo} Pokémon capable${evo > 1 ? 's' : ''} de s’éveiller, ${stages} Éveil${stages > 1 ? 's' : ''} possible${stages > 1 ? 's' : ''} au total.`,
       ]);
     }
     const lost = ms.filter(m =>
@@ -155,7 +162,7 @@ export function analyze() {
     if (lost.length) {
       al.push([
         'warn',
-        `${lost.map(m => m.n).join(', ')} perd${lost.length > 1 ? 'ent' : ''} un contrôle en évoluant : éveillez au bon moment.`
+        `${lost.map(m => m.n).join(', ')} perd${lost.length > 1 ? 'ent' : ''} un contrôle en évoluant : éveillez au bon moment.`,
       ]);
     }
     if (rxp.size > rx.size) {
@@ -164,14 +171,14 @@ export function analyze() {
     if (bonus > 0) {
       al.push([
         'ok',
-        `${free} point${free > 1 ? 's' : ''} libre${free > 1 ? 's' : ''} : +${bonus} Voix par manche${bonus >= 2 ? ' (plafond)' : ''}. Chaque tranche de 4 PC libres donne 1 Voix.`
+        `${free} point${free > 1 ? 's' : ''} libre${free > 1 ? 's' : ''} : +${bonus} Voix par manche${bonus >= 2 ? ' (plafond)' : ''}. Chaque tranche de 4 PC libres donne 1 Voix.`,
       ]);
     }
     const vet = ms.filter(m => m.st > 1);
     if (vet.length) {
       al.push([
         'ok',
-        `${vet.map(m => m.n).join(', ')} : recrue${vet.length > 1 ? 's' : ''} confirmée${vet.length > 1 ? 's' : ''}, en jeu dès la première manche.`
+        `${vet.map(m => m.n).join(', ')} : recrue${vet.length > 1 ? 's' : ''} confirmée${vet.length > 1 ? 's' : ''}, en jeu dès la première manche.`,
       ]);
     }
     if (ms.some(m => !m.nx)) {
@@ -180,13 +187,12 @@ export function analyze() {
         `${ms
           .filter(m => !m.nx)
           .map(m => m.n)
-          .join(', ')} : stade unique, puissant d’emblée.`
+          .join(', ')} : stade unique, puissant d’emblée.`,
       ]);
     }
   }
   return { ms, rx, rxp, roles, chains, c, free, bonus, covered, score, al, stages };
 }
-
 
 // Families visible with the current filters (read by the React grid).
 export function visible() {
@@ -202,39 +208,44 @@ export function visible() {
   });
 }
 
-
 // Grid, counter and recruit inset: rendered by React (src/screens/team/Grid.jsx, DexCall.jsx).
 export function renderGrid() {
   refreshGrid();
 }
 
-
 // Role and generation filters: rendered by React (src/screens/team/Team.jsx).
 export function renderFilters() {
   refreshFilters();
   const r = $('#dexRole');
-  if (r) r.value = filt;
+  if (r) {
+    r.value = filt;
+  }
 }
-
 
 // Dock, team banners and analysis: rendered by React (src/screens/team/Dock.jsx, Analysis.jsx).
 function renderTeam() {
   refreshTeam();
 }
 
-
 export function renderSquad() {
   renderGrid();
   renderTeam();
-  if (openId) openSheet(openId, true);
-  if (cur === 'combat' && !B) renderPrep();
-  if (cur === 'accueil') renderHome();
+  if (openId) {
+    openSheet(openId, true);
+  }
+  if (cur === 'combat' && !B) {
+    renderPrep();
+  }
+  if (cur === 'accueil') {
+    renderHome();
+  }
 }
-
 
 export function toggle(id, card) {
   const m = BY[id];
-  if (!m) return;
+  if (!m) {
+    return;
+  }
   const same = squad.find(x => BY[x].base === m.base);
   if (same && (same === id || card)) {
     squad.splice(squad.indexOf(same), 1);
@@ -244,7 +255,9 @@ export function toggle(id, card) {
     return;
   }
   if (!inBox(id)) {
-    toast(`${BY[m.base].n} n’est pas dans votre Box : ${captureSite421(id) ? `capturez-en un sur la ${captureSite421(id)} (${REGION_NAMES421[regFam421(id)]})` : 'capturez-en un dans les hautes herbes'}.`);
+    toast(
+      `${BY[m.base].n} n’est pas dans votre Box : ${captureSite421(id) ? `capturez-en un sur la ${captureSite421(id)} (${REGION_NAMES421[regFam421(id)]})` : 'capturez-en un dans les hautes herbes'}.`
+    );
     return;
   }
   const dr = challengeRefusal(id) || expRefusal(id); // campaign challenges (v4.9), expeditions (v4.10)
@@ -272,7 +285,6 @@ export function toggle(id, card) {
   renderSquad();
 }
 
-
 export function crestSmall(m) {
   const a = tc(m.t[0]),
     Lc = 2 * Math.PI * 84,
@@ -290,7 +302,6 @@ export function crestSmall(m) {
   return `<span class="crest-pk pk">${svg}${artTag(m, 'crest-a')}</span>`; // the illustration at the center of the crest
 }
 
-
 export function branchNote(a, b) {
   const A = BY[a];
   if (A.nx === 'eevee') {
@@ -298,17 +309,22 @@ export function branchNote(a, b) {
     return 'au choix · harmonie : ' + (k === 'jour' ? 'le jour' : k === 'nuit' ? 'la nuit' : `case ${markOf(k).n}`); // v4.34
   }
   const br = (BRANCHES[a] || []).find(x => x.id === b); // v4.13: path condition
-  if (br) return /^PV/.test(br.why) ? br.why : br.why[0].toLowerCase() + br.why.slice(1);
-  if (Array.isArray(A.nx)) return b === A.nx[1] ? 'appelle la pluie' : 'combattant';
+  if (br) {
+    return /^PV/.test(br.why) ? br.why : br.why[0].toLowerCase() + br.why.slice(1);
+  }
+  if (Array.isArray(A.nx)) {
+    return b === A.nx[1] ? 'appelle la pluie' : 'combattant';
+  }
   return '';
 }
-
 
 // A Pokémon's sheet: content rendered by React (src/screens/team/Sheet.jsx).
 export function openSheet(id, refresh) {
   const sh = $('#sh'),
     closed = $('#sheet').hidden;
-  if (!refresh) lastFocus = document.activeElement;
+  if (!refresh) {
+    lastFocus = document.activeElement;
+  }
   openId = id;
   showSheet(id);
   if (closed) {
@@ -316,38 +332,48 @@ export function openSheet(id, refresh) {
     sh.scrollTop = 0;
     setTimeout(() => {
       const x = sh.querySelector('.sh-x');
-      if (x) x.focus();
+      if (x) {
+        x.focus();
+      }
     }, 50);
-  } else if (!refresh) sh.scrollTop = 0;
+  } else if (!refresh) {
+    sh.scrollTop = 0;
+  }
 }
-
 
 function closeSheet() {
   hideSheet();
   document.body.style.overflow = '';
   openId = null;
-  if (lastFocus && lastFocus.focus) lastFocus.focus();
+  if (lastFocus && lastFocus.focus) {
+    lastFocus.focus();
+  }
 }
-
 
 /* v1.0: held items, fatigue, Bonds in the Pokédex */
 function equip(id, it) {
-  if (it && !ownedItems().includes(it)) return;
-  for (const k in PROFILE.equipment) if (PROFILE.equipment[k] === it) delete PROFILE.equipment[k];
-  if (it) PROFILE.equipment[id] = it;
-  else delete PROFILE.equipment[id];
+  if (it && !ownedItems().includes(it)) {
+    return;
+  }
+  for (const k in PROFILE.equipment) {
+    if (PROFILE.equipment[k] === it) {
+      delete PROFILE.equipment[k];
+    }
+  }
+  if (it) {
+    PROFILE.equipment[id] = it;
+  } else {
+    delete PROFILE.equipment[id];
+  }
   save();
   renderSquad();
   toast(it ? `${BY[id].n} tient ${ITEMS2[it].n}.` : `${BY[id].n} ne tient plus d’objet.`);
 }
 
-
 /* ===================== POKÉDEX & TEAM v0.8: family cards ===================== */
 export const STLN = ['PV', 'Puissance', 'Garde', 'Vitesse', 'Mouvement', 'Portée'];
 
-
 export const TEAM_MAX = 4;
-
 
 export const validSquad = s =>
   Array.isArray(s) &&
@@ -356,156 +382,154 @@ export const validSquad = s =>
   new Set(s.map(id => BY[id].base)).size === s.length &&
   s.reduce((a, id) => a + RC(id), 0) <= BUDGET;
 
-
 export const cost = () => squad.reduce((a, id) => a + RC(id), 0);
 
-
 export const vBonus = () => Math.min(2, Math.floor((BUDGET - cost()) / 4));
-
 
 export const norm = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 
 // Instructions run at startup, in the original order (see index.js).
 export function __init() {
+  ((squad = []), (filt = 'Tous'), (gen = 'all'), (ftype = ''), (q = ''), (lastFocus = null), (openId = null));
 
-squad = [],
-  filt = 'Tous',
-  gen = 'all',
-  ftype = '',
-  q = '',
-  lastFocus = null,
-  openId = null;
-
-
-try {
-  const s = JSON.parse(localStorage.getItem('res8-squad') || 'null');
-  if (validSquad(s)) squad = s;
-} catch { /* Best effort: failure here is non-fatal. */ }
-
-
-if (!squad.length) squad = [...PRESETS.orage.ids];
-
-
-$('#sheet').addEventListener('click', e => {
-  if (e.target.closest('[data-close]')) {
-    closeSheet();
-    return;
+  try {
+    const s = JSON.parse(localStorage.getItem('res8-squad') || 'null');
+    if (validSquad(s)) {
+      squad = s;
+    }
+  } catch {
+    /* Best effort: failure here is non-fatal. */
   }
-  const o = e.target.closest('[data-open]');
-  if (o) {
-    openSheet(o.dataset.open, true);
-    return;
-  }
-  const r = e.target.closest('[data-rx]');
-  if (r) {
-    closeSheet();
-    openRx(r.dataset.rx);
-    return;
-  }
-  const qq = e.target.closest('[data-qa]');
-  if (qq) {
-    toggle(qq.dataset.qa);
-    return;
-  }
-  const eq = e.target.closest('[data-eq]');
-  if (eq) {
-    equip(eq.dataset.eq, eq.dataset.it || '');
-    
-  }
-});
 
-
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape' && !$('#sheet').hidden) closeSheet();
-});
-
-
-$('#dexGrid').addEventListener('click', e => {
-  const sg = e.target.closest('[data-stg]');
-  if (sg) {
-    toggle(sg.dataset.stg);
-    return;
+  if (!squad.length) {
+    squad = [...PRESETS.orage.ids];
   }
-  const qa = e.target.closest('[data-qa]');
-  if (qa) {
-    toggle(qa.dataset.qa, true);
-    return;
-  }
-  const o = e.target.closest('[data-open]');
-  if (o) openSheet(o.dataset.open);
-});
 
-
-/* holographic shine and tilt */
-if (!RM && window.matchMedia && matchMedia('(hover:hover)').matches) {
-  $('#dexGrid').addEventListener('pointermove', e => {
-    const c = e.target.closest('.fcard');
-    if (!c) return;
-    const r = c.getBoundingClientRect(),
-      x = (e.clientX - r.left) / r.width,
-      y = (e.clientY - r.top) / r.height;
-    c.style.setProperty('--rx', ((0.5 - y) * 10).toFixed(2) + 'deg');
-    c.style.setProperty('--ry', ((x - 0.5) * 12).toFixed(2) + 'deg');
-    c.style.setProperty('--hx', (x * 100).toFixed(1) + '%');
-    c.style.setProperty('--hy', (y * 100).toFixed(1) + '%');
+  $('#sheet').addEventListener('click', e => {
+    if (e.target.closest('[data-close]')) {
+      closeSheet();
+      return;
+    }
+    const o = e.target.closest('[data-open]');
+    if (o) {
+      openSheet(o.dataset.open, true);
+      return;
+    }
+    const r = e.target.closest('[data-rx]');
+    if (r) {
+      closeSheet();
+      openRx(r.dataset.rx);
+      return;
+    }
+    const qq = e.target.closest('[data-qa]');
+    if (qq) {
+      toggle(qq.dataset.qa);
+      return;
+    }
+    const eq = e.target.closest('[data-eq]');
+    if (eq) {
+      equip(eq.dataset.eq, eq.dataset.it || '');
+    }
   });
-  $('#dexGrid').addEventListener('pointerout', e => {
-    const c = e.target.closest('.fcard');
-    if (!c || c.contains(e.relatedTarget)) return;
-    ['--rx', '--ry', '--hx', '--hy'].forEach(p => c.style.removeProperty(p));
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && !$('#sheet').hidden) {
+      closeSheet();
+    }
   });
-}
 
+  $('#dexGrid').addEventListener('click', e => {
+    const sg = e.target.closest('[data-stg]');
+    if (sg) {
+      toggle(sg.dataset.stg);
+      return;
+    }
+    const qa = e.target.closest('[data-qa]');
+    if (qa) {
+      toggle(qa.dataset.qa, true);
+      return;
+    }
+    const o = e.target.closest('[data-open]');
+    if (o) {
+      openSheet(o.dataset.open);
+    }
+  });
 
-$('#filters').addEventListener('click', e => {
-  const b = e.target.closest('[data-f]');
-  if (!b) return;
-  filt = b.dataset.f;
-  renderFilters();
-  renderGrid();
-});
-
-
-$('#genSeg').addEventListener('click', e => {
-  const b = e.target.closest('[data-gen]');
-  if (!b) return;
-  gen = b.dataset.gen;
-  renderFilters();
-  renderGrid();
-});
-
-
-// #dexType options: rendered by React (Team.jsx)
-$('#dexType').addEventListener('change', e => {
-  ftype = e.target.value;
-  renderGrid();
-});
-
-
-$('#dexQ').addEventListener('input', e => {
-  q = e.target.value;
-  renderGrid();
-});
-
-
-$('#ana').addEventListener('click', e => {
-  const p = e.target.closest('[data-p]');
-  if (p) {
-    const pr = p.dataset.p === 'clear' ? [] : [...PRESETS[p.dataset.p].ids],
-      miss = pr.filter(id => !inBox(id));
-    squad = pr.filter(id => inBox(id));
-    save();
-    renderSquad();
-    toast(
-      p.dataset.p === 'clear'
-        ? 'Équipe vidée.'
-        : miss.length
-          ? `Équipe « ${PRESETS[p.dataset.p].n} » chargée sans ${miss.map(id => BY[id].n).join(', ')} : à capturer d’abord.`
-          : `Équipe « ${PRESETS[p.dataset.p].n} » chargée.`
-    );
-    return;
+  /* holographic shine and tilt */
+  if (!RM && window.matchMedia && matchMedia('(hover:hover)').matches) {
+    $('#dexGrid').addEventListener('pointermove', e => {
+      const c = e.target.closest('.fcard');
+      if (!c) {
+        return;
+      }
+      const r = c.getBoundingClientRect(),
+        x = (e.clientX - r.left) / r.width,
+        y = (e.clientY - r.top) / r.height;
+      c.style.setProperty('--rx', ((0.5 - y) * 10).toFixed(2) + 'deg');
+      c.style.setProperty('--ry', ((x - 0.5) * 12).toFixed(2) + 'deg');
+      c.style.setProperty('--hx', (x * 100).toFixed(1) + '%');
+      c.style.setProperty('--hy', (y * 100).toFixed(1) + '%');
+    });
+    $('#dexGrid').addEventListener('pointerout', e => {
+      const c = e.target.closest('.fcard');
+      if (!c || c.contains(e.relatedTarget)) {
+        return;
+      }
+      ['--rx', '--ry', '--hx', '--hy'].forEach(p => c.style.removeProperty(p));
+    });
   }
-  const r = e.target.closest('[data-rx]');
-  if (r) openRx(r.dataset.rx);
-});
+
+  $('#filters').addEventListener('click', e => {
+    const b = e.target.closest('[data-f]');
+    if (!b) {
+      return;
+    }
+    filt = b.dataset.f;
+    renderFilters();
+    renderGrid();
+  });
+
+  $('#genSeg').addEventListener('click', e => {
+    const b = e.target.closest('[data-gen]');
+    if (!b) {
+      return;
+    }
+    gen = b.dataset.gen;
+    renderFilters();
+    renderGrid();
+  });
+
+  // #dexType options: rendered by React (Team.jsx)
+  $('#dexType').addEventListener('change', e => {
+    ftype = e.target.value;
+    renderGrid();
+  });
+
+  $('#dexQ').addEventListener('input', e => {
+    q = e.target.value;
+    renderGrid();
+  });
+
+  $('#ana').addEventListener('click', e => {
+    const p = e.target.closest('[data-p]');
+    if (p) {
+      const pr = p.dataset.p === 'clear' ? [] : [...PRESETS[p.dataset.p].ids],
+        miss = pr.filter(id => !inBox(id));
+      squad = pr.filter(id => inBox(id));
+      save();
+      renderSquad();
+      toast(
+        p.dataset.p === 'clear'
+          ? 'Équipe vidée.'
+          : miss.length
+            ? `Équipe « ${PRESETS[p.dataset.p].n} » chargée sans ${miss.map(id => BY[id].n).join(', ')} : à capturer d’abord.`
+            : `Équipe « ${PRESETS[p.dataset.p].n} » chargée.`
+      );
+      return;
+    }
+    const r = e.target.closest('[data-rx]');
+    if (r) {
+      openRx(r.dataset.rx);
+    }
+  });
 }

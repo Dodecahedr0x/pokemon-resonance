@@ -32,9 +32,22 @@ export function SideNav() {
   return (
     <nav className="side-nav">
       {PAGES.map(([k, i, n]) => (
-        <a key={k} className="nv" data-t={k} href={'#' + k} aria-current={cur(page, k)}><svg><use href={'#' + i} /></svg>{n}</a>
+        <a key={k} className="nv" data-t={k} href={'#' + k} aria-current={cur(page, k)}>
+          <svg>
+            <use href={'#' + i} />
+          </svg>
+          {n}
+        </a>
       ))}
-      <button type="button" className="nv nv-save" id="sideSave"><svg><use href="#i-save" /></svg>Sauvegardes<span className="k" id="sideSaveK">{svBusy ? '…' : svCloud ? 'COMPTE' : 'AUTO'}</span></button>
+      <button type="button" className="nv nv-save" id="sideSave">
+        <svg>
+          <use href="#i-save" />
+        </svg>
+        Sauvegardes
+        <span className="k" id="sideSaveK">
+          {svBusy ? '…' : svCloud ? 'COMPTE' : 'AUTO'}
+        </span>
+      </button>
     </nav>
   );
 }
@@ -44,9 +57,30 @@ export function BottomNav() {
   return (
     <nav className="bnav n6430" aria-label="Navigation">
       {BOTTOM.map(([k, i, n]) => (
-        <a key={k} className="bn" data-t={k} href={'#' + k} aria-current={cur(page, k)}><span className="ic"><svg><use href={'#' + i} /></svg></span>{n}</a>
+        <a key={k} className="bn" data-t={k} href={'#' + k} aria-current={cur(page, k)}>
+          <span className="ic">
+            <svg>
+              <use href={'#' + i} />
+            </svg>
+          </span>
+          {n}
+        </a>
       ))}
-      <button type="button" className="bn bn-menu" id="bnMenu" aria-haspopup="dialog" aria-expanded={menu ? 'true' : 'false'} aria-current={IN_MENU.includes(page) ? 'page' : undefined}><span className="ic"><svg><use href="#i-menu" /></svg></span>Menu</button>
+      <button
+        type="button"
+        className="bn bn-menu"
+        id="bnMenu"
+        aria-haspopup="dialog"
+        aria-expanded={menu ? 'true' : 'false'}
+        aria-current={IN_MENU.includes(page) ? 'page' : undefined}
+      >
+        <span className="ic">
+          <svg>
+            <use href="#i-menu" />
+          </svg>
+        </span>
+        Menu
+      </button>
     </nav>
   );
 }
@@ -58,12 +92,39 @@ export function V4Menu() {
     <div className="v4-menu" id="v4Menu" hidden={!menu}>
       <div className="v4-scrim" data-menux="" />
       <div className="v4-ms" role="dialog" aria-modal="true" aria-label="Menu">
-        <div className="v4-ms-h"><b>Menu</b><button type="button" className="v4-x" data-menux="" aria-label="Fermer"><svg><use href="#i-x" /></svg></button></div>
+        <div className="v4-ms-h">
+          <b>Menu</b>
+          <button type="button" className="v4-x" data-menux="" aria-label="Fermer">
+            <svg>
+              <use href="#i-x" />
+            </svg>
+          </button>
+        </div>
         <div className="v4-ms-g">
           {MENU.map(([k, i, n, d]) => (
-            <a key={k} className="v4-mi" data-t={k} href={'#' + k}><span className="v4-mi-ic"><svg><use href={'#' + i} /></svg></span><span><b>{n}</b><em>{d}</em></span></a>
+            <a key={k} className="v4-mi" data-t={k} href={'#' + k}>
+              <span className="v4-mi-ic">
+                <svg>
+                  <use href={'#' + i} />
+                </svg>
+              </span>
+              <span>
+                <b>{n}</b>
+                <em>{d}</em>
+              </span>
+            </a>
           ))}
-          <button type="button" className="v4-mi" data-v4saves=""><span className="v4-mi-ic"><svg><use href="#i-save" /></svg></span><span><b>Sauvegardes</b><em>3 emplacements, export</em></span></button>
+          <button type="button" className="v4-mi" data-v4saves="">
+            <span className="v4-mi-ic">
+              <svg>
+                <use href="#i-save" />
+              </svg>
+            </span>
+            <span>
+              <b>Sauvegardes</b>
+              <em>3 emplacements, export</em>
+            </span>
+          </button>
         </div>
       </div>
     </div>

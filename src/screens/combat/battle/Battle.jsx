@@ -45,7 +45,9 @@ export default function Battle({ children }) {
 function Defense() {
   useBattleVersion('top');
   const D = B && B.def468;
-  if (!D) return null;
+  if (!D) {
+    return null;
+  }
   return (
     <div id="df468hud">
       <b>

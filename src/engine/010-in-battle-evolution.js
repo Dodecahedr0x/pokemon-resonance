@@ -4,10 +4,8 @@ import { MON, NOTES } from './009-pokemon.js';
 
 export let RECRUIT;
 
-
 /* ===================== v0.8: evolution is decided in battle ===================== */
 export const BUDGET = 12;
-
 
 const BASECOST = {
   bulbizarre: 1,
@@ -64,7 +62,7 @@ const BASECOST = {
   gobou: 1,
   tarsal: 1,
   galekid: 1,
-  draby: 2
+  draby: 2,
 };
 
 export const ARR = {
@@ -76,7 +74,10 @@ export const ARR = {
   flobio: [[{ k: 'ring', mk: 'trempe' }], 'la boue gicle autour de lui.'],
   laggron: [[{ k: 'ring', mk: 'trempe' }, { k: 'guard' }], 'il s’ancre dans la vase : +2 Garde.'],
   kirlia: [[{ k: 'guard', who: 'allies' }], 'sa danse protège ses voisins : +2 Garde.'],
-  gardevoir: [[{ k: 'guard', who: 'allies' }, { k: 'confuse' }], 'un voile psychique protège ses alliés et trouble ses ennemis.'],
+  gardevoir: [
+    [{ k: 'guard', who: 'allies' }, { k: 'confuse' }],
+    'un voile psychique protège ses alliés et trouble ses ennemis.',
+  ],
   galegon: [[{ k: 'guard' }], 'sa carapace durcit : +2 Garde.'],
   galeking: [[{ k: 'roar', v: 1 }, { k: 'guard' }], 'il rugit et repousse ses voisins.'],
   drackhaus: [[{ k: 'guard' }], 'il se referme dans sa coquille : +2 Garde.'],
@@ -90,7 +91,10 @@ export const ARR = {
   floravol: [[{ k: 'ring', mk: 'enracine' }], 'ses spores enracinent les cases voisines.'],
   cotovol: [[{ k: 'roar', v: 1 }], 'une bourrasque de coton repousse ses voisins.'],
   maraiste: [[{ k: 'ring', mk: 'fissure' }], 'le sol se change en bourbier autour de lui.'],
-  volcaropod: [[{ k: 'ring', mk: 'brulant' }, { k: 'guard' }], 'sa coquille durcit : +2 Garde, cases voisines Brûlantes.'],
+  volcaropod: [
+    [{ k: 'ring', mk: 'brulant' }, { k: 'guard' }],
+    'sa coquille durcit : +2 Garde, cases voisines Brûlantes.',
+  ],
   cochignon: [[{ k: 'ring', mk: 'givre' }], 'le sol gèle autour de lui.'],
   // v4.13
   flagadoss: [[{ k: 'ring', mk: 'trempe' }, { k: 'guard' }], 'une vague l’enveloppe : +2 Garde.'],
@@ -107,9 +111,9 @@ export const ARR = {
   dracaufeu: [
     [
       { k: 'roar', v: 1 },
-      { k: 'ring', mk: 'brulant' }
+      { k: 'ring', mk: 'brulant' },
     ],
-    'un rugissement de flammes repousse les ennemis voisins.'
+    'un rugissement de flammes repousse les ennemis voisins.',
   ],
   carabaffe: [[{ k: 'ring', mk: 'trempe' }], 'une vague trempe les cases voisines.'],
   tortank: [[{ k: 'guard', who: 'allies' }], 'ses canons couvrent les alliés voisins : +2 Garde.'],
@@ -143,9 +147,9 @@ export const ARR = {
   leviator: [
     [
       { k: 'roar', v: 1 },
-      { k: 'ring', mk: 'trempe' }
+      { k: 'ring', mk: 'trempe' },
     ],
-    'une colère déchaînée repousse et trempe les alentours.'
+    'une colère déchaînée repousse et trempe les alentours.',
   ],
   aquali: [[{ k: 'ring', mk: 'trempe' }], 'l’eau monte autour de lui.'],
   voltali: [[{ k: 'ring', mk: 'charge' }], 'l’air crépite autour de lui.'],
@@ -160,9 +164,9 @@ export const ARR = {
   typhlosion: [
     [
       { k: 'wx', w: 'soleil' },
-      { k: 'ring', mk: 'brulant' }
+      { k: 'ring', mk: 'brulant' },
     ],
-    'une explosion de flammes fait briller le soleil.'
+    'une explosion de flammes fait briller le soleil.',
   ],
   crocrodil: [[{ k: 'root', v: 2 }], 'ses crocs bloquent les ennemis voisins.'],
   aligatueur: [[{ k: 'roar', v: 1 }, { k: 'boost' }], 'un rugissement repousse, dégâts ×1,5.'],
@@ -171,28 +175,28 @@ export const ARR = {
   demolosse: [
     [
       { k: 'ring', mk: 'brulant' },
-      { k: 'roar', v: 1 }
+      { k: 'roar', v: 1 },
     ],
-    'un hurlement de feu repousse et embrase.'
+    'un hurlement de feu repousse et embrase.',
   ],
   ymphect: [[{ k: 'ring', mk: 'fissure' }, { k: 'guard' }], 'sa coquille fend le sol, +2 Garde.'],
-  tyranocif: [[{ k: 'roar', v: 1 }], 'il rugit et lève une tempête de sable.']
+  tyranocif: [[{ k: 'roar', v: 1 }], 'il rugit et lève une tempête de sable.'],
 };
 
 // Statements run at startup, in the original order (see index.js).
 export function __init() {
+  MON.forEach(m => {
+    if (BASECOST[m.id] != null) {
+      m.c = BASECOST[m.id];
+    }
+  });
 
-MON.forEach(m => {
-  if (BASECOST[m.id] != null) m.c = BASECOST[m.id];
-});
+  RECRUIT = MON.filter(m => m.st === 1 && !m.isEnemy);
+  // v4.13: without the families that became opponents
 
-
-RECRUIT = MON.filter(m => m.st === 1 && !m.isEnemy);
- // v4.13: without the families that became opponents
-
-Object.assign(NOTES, {
-  magicarpe: 'Recrutez-le pour 1 point. Gardez-le en vie trois manches : son Éveil en Léviator renverse le combat.',
-  chenipan: 'Sécrétion ralentit l’ennemi. Évoluer, c’est renoncer à ce contrôle pour la puissance de Papilusion.',
-  tetarte: 'Choix décisif à l’Éveil : Tartard, combattant, ou Tarpaud, qui fait tomber la pluie.'
-});
+  Object.assign(NOTES, {
+    magicarpe: 'Recrutez-le pour 1 point. Gardez-le en vie trois manches : son Éveil en Léviator renverse le combat.',
+    chenipan: 'Sécrétion ralentit l’ennemi. Évoluer, c’est renoncer à ce contrôle pour la puissance de Papilusion.',
+    tetarte: 'Choix décisif à l’Éveil : Tartard, combattant, ou Tarpaud, qui fait tomber la pluie.',
+  });
 }

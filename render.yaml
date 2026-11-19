@@ -11,7 +11,7 @@ services:
     pullRequestPreviewsEnabled: false
     envVars:
       - key: NODE_VERSION
-        value: "22"
+        value: '22'
     headers:
       # Fichiers fingerprintés par Vite : mis en cache longtemps.
       - path: /assets/*

@@ -7,7 +7,7 @@ French fan game: tactical hex-grid battles, playable on phones. React app (Vite)
 npm install
 npm run dev
 ```
-Then open the printed address (http://localhost:5173). `npm run build` produces the static site in `dist/`, `npm run preview` serves it. `npm run lint` runs ESLint (strict config in `eslint.config.js`); it must report zero problems.
+Then open the printed address (http://localhost:5173). `npm run build` produces the static site in `dist/`, `npm run preview` serves it. `npm run lint` runs ESLint (strict config in `eslint.config.js`) and checks Prettier formatting (`.prettierrc.json`, 120 columns); it must report zero problems. `npm run format` fixes what can be fixed automatically.
 
 ## Layout
 - `index.html`, `src/main.jsx`: React entry point.

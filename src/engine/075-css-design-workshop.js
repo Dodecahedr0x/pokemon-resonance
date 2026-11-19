@@ -4,13 +4,11 @@ import { $, toast } from './014-utils.js';
 import { TABS, TNAME } from './016-navigation.js';
 import { PREF, savePref } from './026-campaign-tutorial-sound.js';
 
-
 /* Settings › Design Workshop: paste a CSS block (e.g. written by ChatGPT), it applies immediately on this device.
    The brief gives ChatGPT the game's variables, pages and components without making it read the file's 3.7 MB. */
 export function css442() {
   return String(PREF.css442 || '');
 }
-
 
 function cssSafe442(t) {
   return String(t || '')
@@ -20,12 +18,13 @@ function cssSafe442(t) {
     .slice(0, 60000);
 }
 
-
 function applyCss442() {
   let el = document.getElementById('css442');
   const t = cssSafe442(css442());
   if (!t) {
-    if (el) el.remove();
+    if (el) {
+      el.remove();
+    }
     return;
   }
   if (!el) {
@@ -35,7 +34,6 @@ function applyCss442() {
   el.textContent = t;
   document.head.appendChild(el); // always last: it overrides the other stylesheets
 }
-
 
 function brief442() {
   const names = new Set();
@@ -48,14 +46,29 @@ function brief442() {
     }
     for (const r of rules || []) {
       if (r.selectorText && /^(:root|html)$/.test(r.selectorText.trim())) {
-        for (let i = 0; i < r.style.length; i++) if (r.style[i].startsWith('--')) names.add(r.style[i]);
+        for (let i = 0; i < r.style.length; i++) {
+          if (r.style[i].startsWith('--')) {
+            names.add(r.style[i]);
+          }
+        }
       }
     }
   }
   const cs = getComputedStyle(document.documentElement),
     vars = [...names]
       .slice(0, 110)
-      .map(n => '  ' + n + ': ' + cs.getPropertyValue(n).trim().replace(/url\([^)]{40,}\)/g, 'url(…)').slice(0, 80) + ';')
+      .map(
+        n =>
+          '  ' +
+          n +
+          ': ' +
+          cs
+            .getPropertyValue(n)
+            .trim()
+            .replace(/url\([^)]{40,}\)/g, 'url(…)')
+            .slice(0, 80) +
+          ';'
+      )
       .join('\n');
   const pages = TABS.map(id => `#${id} (${TNAME[id] || id})`).join(', ');
   return `Tu es designer UI/CSS. Je te confie le design d’un jeu mobile : « Pokémon Résonance » (fangame non officiel, stratégie tactique sur plateau hexagonal, thème Pokémon, un seul fichier HTML, joué surtout sur téléphone Android de 360 à 412 px de large).
@@ -89,41 +102,50 @@ Après ton CSS, propose-moi 3 variantes de palette que je peux tester en changea
 
 // Instructions run at startup, in the original order (see index.js).
 export function __init() {
+  // "Atelier design" (Design Workshop) panel: rendered by React (src/screens/settings/panels/DesignWorkshop.jsx)
 
-// "Atelier design" (Design Workshop) panel: rendered by React (src/screens/settings/panels/DesignWorkshop.jsx)
-
-
-document.addEventListener('click', e => {
-  const a = e.target.closest('#ad442a,#ad442r,#ad442b');
-  if (!a) return;
-  if (a.id === 'ad442a') {
-    PREF.css442 = cssSafe442(($('#ad442t') || {}).value);
-    savePref();
-    applyCss442();
-    toast(PREF.css442 ? 'Style appliqué.' : 'Aucun CSS : style d’origine.');
-  } else if (a.id === 'ad442r') {
-    PREF.css442 = '';
-    savePref();
-    applyCss442();
-    const t = $('#ad442t');
-    if (t) t.value = '';
-    toast('Style d’origine rétabli.');
-  } else {
-    const k = $('#ad442k');
-    if (!k) return;
-    k.value = brief442();
-    k.hidden = false;
-    k.focus();
-    k.select();
-    try {
-      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(k.value).then(() => toast('Brief copié : collez-le dans ChatGPT.'), () => toast('Touchez le texte, « Tout sélectionner », puis « Copier ».'));
-      else toast('Touchez le texte, « Tout sélectionner », puis « Copier ».');
-    } catch (er) {
-      toast('Touchez le texte, « Tout sélectionner », puis « Copier ».');
+  document.addEventListener('click', e => {
+    const a = e.target.closest('#ad442a,#ad442r,#ad442b');
+    if (!a) {
+      return;
     }
-  }
-});
+    if (a.id === 'ad442a') {
+      PREF.css442 = cssSafe442(($('#ad442t') || {}).value);
+      savePref();
+      applyCss442();
+      toast(PREF.css442 ? 'Style appliqué.' : 'Aucun CSS : style d’origine.');
+    } else if (a.id === 'ad442r') {
+      PREF.css442 = '';
+      savePref();
+      applyCss442();
+      const t = $('#ad442t');
+      if (t) {
+        t.value = '';
+      }
+      toast('Style d’origine rétabli.');
+    } else {
+      const k = $('#ad442k');
+      if (!k) {
+        return;
+      }
+      k.value = brief442();
+      k.hidden = false;
+      k.focus();
+      k.select();
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(k.value).then(
+            () => toast('Brief copié : collez-le dans ChatGPT.'),
+            () => toast('Touchez le texte, « Tout sélectionner », puis « Copier ».')
+          );
+        } else {
+          toast('Touchez le texte, « Tout sélectionner », puis « Copier ».');
+        }
+      } catch (er) {
+        toast('Touchez le texte, « Tout sélectionner », puis « Copier ».');
+      }
+    }
+  });
 
-
-applyCss442();
+  applyCss442();
 }

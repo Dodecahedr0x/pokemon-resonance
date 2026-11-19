@@ -28,7 +28,6 @@ import { diplomaOut428 } from './063-combat-catches-home.js';
 export let SAFARI_PRICE, SAFARI_STEPS, SAFARI_BALLS;
 let FISHING, SAF_MSG;
 
-
 /* =====================================================================
    v4.18: fishing, Safari Park and co-op
    1. Fishing: from the tall grass (Route 29, Route 32), cast the
@@ -44,33 +43,51 @@ export function V418_0() {
   return { safari: null, catches: 0, safariTaken: 0 };
 }
 
-
 export function v418Clean(p) {
   const o = V418_0();
-  if (!p || typeof p !== 'object') return o;
+  if (!p || typeof p !== 'object') {
+    return o;
+  }
   const s = p.safari;
   if (s && typeof s === 'object' && Number.isFinite(s.stepCount) && Number.isFinite(s.balls)) {
-    o.safari = { stepCount: Math.max(0, Math.min(12, Math.floor(s.stepCount))), balls: Math.max(0, Math.min(20, Math.floor(s.balls))), isTaken: Array.isArray(s.isTaken) ? s.isTaken.filter(id => BY[id]).slice(0, 20) : [], enc: null };
-    if (!o.safari.stepCount && !o.safari.balls) o.safari = null;
+    o.safari = {
+      stepCount: Math.max(0, Math.min(12, Math.floor(s.stepCount))),
+      balls: Math.max(0, Math.min(20, Math.floor(s.balls))),
+      isTaken: Array.isArray(s.isTaken) ? s.isTaken.filter(id => BY[id]).slice(0, 20) : [],
+      enc: null,
+    };
+    if (!o.safari.stepCount && !o.safari.balls) {
+      o.safari = null;
+    }
   }
-  if (Number.isFinite(p.catches)) o.catches = Math.max(0, Math.min(99999, Math.floor(p.catches)));
-  if (Number.isFinite(p.safariTaken)) o.safariTaken = Math.max(0, Math.min(99999, Math.floor(p.safariTaken)));
+  if (Number.isFinite(p.catches)) {
+    o.catches = Math.max(0, Math.min(99999, Math.floor(p.catches)));
+  }
+  if (Number.isFinite(p.safariTaken)) {
+    o.safariTaken = Math.max(0, Math.min(99999, Math.floor(p.safariTaken)));
+  }
   return o;
 }
-
 
 /** Out-of-battle capture (Safari): Box, Pokédex, shiny. */
 function take418(id, sh) {
   const b = BY[id].base;
   PROFILE.caught++;
-  if (!PROFILE.dex.includes(b)) PROFILE.dex.push(b);
+  if (!PROFILE.dex.includes(b)) {
+    PROFILE.dex.push(b);
+  }
   const nw = !PROFILE.box.includes(b); // Free mode too (v4.21)
-  if (nw) PROFILE.box.push(b);
-  if (sh && !PROFILE.shiny.includes(b)) PROFILE.shiny.push(b);
-  if (nw) setTimeout(diplomaOut428, 0); // regional diploma (v4.28)
+  if (nw) {
+    PROFILE.box.push(b);
+  }
+  if (sh && !PROFILE.shiny.includes(b)) {
+    PROFILE.shiny.push(b);
+  }
+  if (nw) {
+    setTimeout(diplomaOut428, 0);
+  } // regional diploma (v4.28)
   return nw;
 }
-
 
 /* =====================================================================
    1. Fishing
@@ -79,46 +96,60 @@ function poolFishing418() {
   return RECRUIT.filter(m => m.t.includes('Eau') && (regFam421(m.id) === regionNo421() || m.id === 'magicarpe')); // the region's fish, Magikarp bites everywhere (v4.21)
 }
 
-
 function fishingDraw418() {
   const L = poolFishing418();
-  if (!L.length) return null;
-  const w = L.map(m => (m.id === 'magicarpe' ? [0, 4, 2, 1][regionNo421()] : 1) * (!PROFILE.box.includes(m.id) ? 2 : 1));
+  if (!L.length) {
+    return null;
+  }
+  const w = L.map(
+    m => (m.id === 'magicarpe' ? [0, 4, 2, 1][regionNo421()] : 1) * (!PROFILE.box.includes(m.id) ? 2 : 1)
+  );
   return draw418(L, w).id;
 }
-
 
 function fishingCast418() {
   clearTimeout(FISHING && FISHING.t);
   FISHING = { status: 'attente' };
   renderFishing418();
   $('#peche418').hidden = false;
-  FISHING.t = setTimeout(() => {
-    if (!FISHING || FISHING.status !== 'attente') return;
-    FISHING.status = 'mord';
-    vibe(60);
-    sfx('ui');
-    renderFishing418();
-    FISHING.t = setTimeout(() => {
-      if (!FISHING || FISHING.status !== 'mord') return;
-      FISHING.status = 'rate';
+  FISHING.t = setTimeout(
+    () => {
+      if (!FISHING || FISHING.status !== 'attente') {
+        return;
+      }
+      FISHING.status = 'mord';
+      vibe(60);
+      sfx('ui');
       renderFishing418();
-    }, PREF.fast ? 1400 : 1150);
-  }, 1200 + Math.random() * 2200);
+      FISHING.t = setTimeout(
+        () => {
+          if (!FISHING || FISHING.status !== 'mord') {
+            return;
+          }
+          FISHING.status = 'rate';
+          renderFishing418();
+        },
+        PREF.fast ? 1400 : 1150
+      );
+    },
+    1200 + Math.random() * 2200
+  );
 }
 
-
 function fishingHookSet418() {
-  if (!FISHING || FISHING.status !== 'mord') return;
+  if (!FISHING || FISHING.status !== 'mord') {
+    return;
+  }
   clearTimeout(FISHING.t);
   const id = fishingDraw418();
-  if (!id) return;
+  if (!id) {
+    return;
+  }
   FISHING = { status: 'prise', id, sh: Math.random() < SHINY_RATE * multChroma(), dom: Math.random() < 0.05 };
   PROFILE.catches = (PROFILE.catches || 0) + 1;
   queueSave();
   renderFishing418();
 }
-
 
 /* fishing window: rendered by React (src/screens/overlays/Fishing418.jsx) */
 function renderFishing418() {
@@ -133,18 +164,22 @@ function renderFishing418() {
     dom: P2.dom,
     known: !!P2.id && PROFILE.box.includes(P2.id),
     route: routeName(),
-    catches: PROFILE.catches || 0
+    catches: PROFILE.catches || 0,
   });
 }
 
-
 function fishingBattle418() {
   const P2 = FISHING;
-  if (!P2 || P2.status !== 'prise') return;
+  if (!P2 || P2.status !== 'prise') {
+    return;
+  }
   $('#peche418').hidden = true;
   __set_wildId(P2.id);
   const D = wildScen(P2.id, TOD, P2.sh, P2.dom);
-  Object.assign(D, { water: ['4,0', '5,0', '6,0', '5,1', '6,1', '7,1', '6,3', '7,3', '5,4', '6,4', '7,5'], lvl: D.lvl.replace(/rencontre|Dominant/, P2.dom ? 'pêche · Dominant' : 'pêche') });
+  Object.assign(D, {
+    water: ['4,0', '5,0', '6,0', '5,1', '6,1', '7,1', '6,3', '7,3', '5,4', '6,4', '7,5'],
+    lvl: D.lvl.replace(/rencontre|Dominant/, P2.dom ? 'pêche · Dominant' : 'pêche'),
+  });
   D.foes = D.foes.map(f => [f[0], f[0] === P2.id ? [6, 2] : [7, 4], f[2]]);
   FISHING = null;
   __set_scSel('sauvage');
@@ -156,11 +191,9 @@ function fishingBattle418() {
   launch();
 }
 
-
 function poolSafari418() {
   return poolRegion421(1); // the Safari Park is in Kanto: the Kanto families (v4.21)
 }
-
 
 function safariEncounter418() {
   const L = poolSafari418(),
@@ -169,11 +202,14 @@ function safariEncounter418() {
   return { id: m.id, sh: Math.random() < SHINY_RATE * multChroma() * 2, bait: 0, caillou: 0 };
 }
 
-
 function safariEnter418() {
-  if (safariLock418()) return void toast(safariLock418());
+  if (safariLock418()) {
+    return void toast(safariLock418());
+  }
   if (!PROFILE.safari) {
-    if (PROFILE.money < SAFARI_PRICE) return void toast('Il faut 500 ₽ pour entrer.');
+    if (PROFILE.money < SAFARI_PRICE) {
+      return void toast('Il faut 500 ₽ pour entrer.');
+    }
     PROFILE.money -= SAFARI_PRICE;
     PROFILE.safari = { stepCount: SAFARI_STEPS, balls: SAFARI_BALLS, isTaken: [], enc: null };
     renderWallet();
@@ -184,21 +220,26 @@ function safariEnter418() {
   $('#safari418').hidden = false;
 }
 
-
 /** An action in the Park; returns the message (testable without display). */
 function safariAction418(a) {
   const S2 = PROFILE.safari;
-  if (!S2) return '';
+  if (!S2) {
+    return '';
+  }
   const x = S2.enc;
   let msg = '';
   if (a === 'marcher') {
-    if (x || S2.stepCount <= 0) return '';
+    if (x || S2.stepCount <= 0) {
+      return '';
+    }
     S2.stepCount--;
     S2.enc = safariEncounter418();
     const m = BY[S2.enc.id];
     msg = S2.enc.sh ? `${SPARK} Un ${m.n} chromatique sort des herbes !` : `Un ${m.n} sauvage apparaît !`;
   } else if (x && a === 'ball') {
-    if (S2.balls <= 0) return '';
+    if (S2.balls <= 0) {
+      return '';
+    }
     S2.balls--;
     if (Math.random() < capt418(x)) {
       const nw = take418(x.id, x.sh);
@@ -206,7 +247,9 @@ function safariAction418(a) {
       PROFILE.safariTaken = (PROFILE.safariTaken || 0) + 1;
       msg = `Gotcha ! ${BY[x.id].n} est capturé${nw ? ' et rejoint votre Box' : ''}.`;
       S2.enc = null;
-    } else msg = `Raté ! ${BY[x.id].n} s’est libéré.`;
+    } else {
+      msg = `Raté ! ${BY[x.id].n} s’est libéré.`;
+    }
   } else if (x && a === 'appat') {
     x.bait = 2;
     x.caillou = 0;
@@ -225,8 +268,12 @@ function safariAction418(a) {
       msg += ` ${BY[x.id].n} s’enfuit !`;
       S2.enc = null;
     } else {
-      if (x.bait > 0 && a !== 'appat') x.bait--;
-      if (x.caillou > 0 && a !== 'caillou') x.caillou--;
+      if (x.bait > 0 && a !== 'appat') {
+        x.bait--;
+      }
+      if (x.caillou > 0 && a !== 'caillou') {
+        x.caillou--;
+      }
     }
   }
   if (!S2.enc && (S2.stepCount <= 0 || S2.balls <= 0)) {
@@ -236,7 +283,6 @@ function safariAction418(a) {
   queueSave();
   return msg;
 }
-
 
 function renderSafari418() {
   const S2 = PROFILE.safari,
@@ -253,20 +299,28 @@ function renderSafari418() {
     isTaken: S2.isTaken.length,
     fini: !!S2.fini,
     x: x ? { id: x.id, sh: x.sh } : null,
-    mood: x ? (x.bait ? 'Il mange l’appât' : x.caillou ? 'Il est agacé' : flee418(x) > 0.25 ? 'Il est méfiant' : 'Il vous observe') : '',
+    mood: x
+      ? x.bait
+        ? 'Il mange l’appât'
+        : x.caillou
+          ? 'Il est agacé'
+          : flee418(x) > 0.25
+            ? 'Il est méfiant'
+            : 'Il vous observe'
+      : '',
     caughtCount: x ? capt418(x) : 0,
     flee: x ? flee418(x) : 0,
-    msg: SAF_MSG
+    msg: SAF_MSG,
   });
 }
 
-
 // Safari Park panel on the map: src/screens/map/MapInfo.jsx (SafariInfo).
-
 
 /** End of the co-op turn: Player 1 hands over to Player 2. Returns true if control was handed over. */
 export function coopPass418() {
-  if (!B || !B.coop || B.coop !== 1 || ui.busy || B.over || B.phase !== 'player' || !coopAlive418(B, 2)) return false;
+  if (!B || !B.coop || B.coop !== 1 || ui.busy || B.over || B.phase !== 'player' || !coopAlive418(B, 2)) {
+    return false;
+  }
   B.coop = 2;
   ui.sel = null;
   ui.selE = null;
@@ -285,26 +339,25 @@ const draw418 = (L, w) => {
   let r = Math.random() * w.reduce((a, b) => a + b, 0);
   for (let i = 0; i < L.length; i++) {
     r -= w[i];
-    if (r <= 0) return L[i];
+    if (r <= 0) {
+      return L[i];
+    }
   }
   return L[L.length - 1];
 };
 
-
-export const safariLock418 = () => (isCamp() && BADGES.length < 2 ? 'Le Parc Safari ouvre après votre 2e badge.' : null);
-
+export const safariLock418 = () =>
+  isCamp() && BADGES.length < 2 ? 'Le Parc Safari ouvre après votre 2e badge.' : null;
 
 const capt418 = x => {
   const base = Math.max(0.08, Math.min(0.45, 0.5 - 0.06 * RC(x.id)));
   return Math.min(0.9, base * (x.caillou ? 1.6 : 1) * (x.bait ? 0.8 : 1));
 };
 
-
 const flee418 = x => {
   const base = Math.max(0.08, Math.min(0.35, 0.06 + 0.04 * BY[x.id].s[3]));
   return Math.min(0.85, base * (x.bait ? 0.5 : 1) * (x.caillou ? 1.6 : 1));
 };
-
 
 /* =====================================================================
    3. 2-player co-op
@@ -312,105 +365,116 @@ const flee418 = x => {
 /** Player 1: the first 2 Pokémon of the team; Player 2: the others. */
 export const player418 = u => (+String(u.uid).slice(1) < 2 ? 1 : 2);
 
-
 export const coopAlive418 = (S, j) => S.units.some(u => u.side === 'a' && !u.ko && player418(u) === j);
 
 // Statements run at startup, in the original order (see index.js).
 export function __init() {
+  FISHING = null;
 
+  // #peche418: rendered by React (src/screens/overlays/Fishing418.jsx)
 
-FISHING = null;
-
-
-// #peche418: rendered by React (src/screens/overlays/Fishing418.jsx)
-
-
-document.addEventListener('click', e => {
-  if (e.target.closest('[data-peche417]')) return void fishingCast418();
-  const b = e.target.closest('[data-peche418]');
-  if (!b) {
-    if (e.target.id === 'peche418') {
+  document.addEventListener('click', e => {
+    if (e.target.closest('[data-peche417]')) {
+      return void fishingCast418();
+    }
+    const b = e.target.closest('[data-peche418]');
+    if (!b) {
+      if (e.target.id === 'peche418') {
+        clearTimeout(FISHING && FISHING.t);
+        FISHING = null;
+        $('#peche418').hidden = true;
+      }
+      return;
+    }
+    const k = b.dataset.peche418;
+    if (k === 'ferrer') {
+      fishingHookSet418();
+    } else if (k === 'lancer') {
+      fishingCast418();
+    } else if (k === 'combat') {
+      fishingBattle418();
+    } else if (k === 'recruter' && FISHING && !squad.includes(FISHING.id)) {
+      toggle(FISHING.id);
+      $('#peche418').hidden = true;
+    } else if (k === 'relacher') {
+      toast('Il retourne à l’eau.');
+      fishingCast418();
+    } else if (k === 'x') {
       clearTimeout(FISHING && FISHING.t);
       FISHING = null;
       $('#peche418').hidden = true;
     }
-    return;
-  }
-  const k = b.dataset.peche418;
-  if (k === 'ferrer') fishingHookSet418();
-  else if (k === 'lancer') fishingCast418();
-  else if (k === 'combat') fishingBattle418();
-  else if (k === 'recruter' && FISHING && !squad.includes(FISHING.id)) {
-    toggle(FISHING.id);
-    $('#peche418').hidden = true;
-  } else if (k === 'relacher') {
-    toast('Il retourne à l’eau.');
-    fishingCast418();
-  } else if (k === 'x') {
-    clearTimeout(FISHING && FISHING.t);
-    FISHING = null;
-    $('#peche418').hidden = true;
-  }
-});
+  });
 
-
-/* =====================================================================
+  /* =====================================================================
    2. Safari Park
    ===================================================================== */
-SAFARI_PRICE = 500,
-  SAFARI_STEPS = 12,
-  SAFARI_BALLS = 20;
+  ((SAFARI_PRICE = 500), (SAFARI_STEPS = 12), (SAFARI_BALLS = 20));
 
+  PLACES.push({
+    id: 'safari',
+    x: 535,
+    y: 405,
+    n: 'Parc Safari',
+    s: 'Captures sans combat · appâts et cailloux',
+    grp: 'entrainement',
+  });
 
-PLACES.push({ id: 'safari', x: 535, y: 405, n: 'Parc Safari', s: 'Captures sans combat · appâts et cailloux', grp: 'entrainement' });
+  PL.safari = PLACES[PLACES.length - 1];
 
+  SAF_MSG = '';
 
-PL.safari = PLACES[PLACES.length - 1];
+  // #safari418: rendered by React (src/screens/overlays/Safari418.jsx)
 
+  document.addEventListener('click', e => {
+    if (e.target.closest('[data-safari418-entrer]')) {
+      return void safariEnter418();
+    }
+    const b = e.target.closest('[data-safari418]');
+    if (!b) {
+      if (e.target.id === 'safari418') {
+        $('#safari418').hidden = true;
+      }
+      return;
+    }
+    const k = b.dataset.safari418;
+    if (k === 'x') {
+      return void ($('#safari418').hidden = true);
+    }
+    if (k === 'sortir') {
+      const n = PROFILE.safari ? PROFILE.safari.isTaken.length : 0;
+      PROFILE.safari = null;
+      queueSave();
+      $('#safari418').hidden = true;
+      toast(`Merci de votre visite ! ${n} capture${n > 1 ? 's' : ''}.`);
+      try {
+        refreshMap(); // panel of the selected location (src/screens/map/MapInfo.jsx)
+      } catch {
+        /* Best effort: failure here is non-fatal. */
+      }
+      return;
+    }
+    SAF_MSG = safariAction418(k);
+    if (/Gotcha/.test(SAF_MSG)) {
+      sfx('win');
+      vibe(40);
+    }
+    renderSafari418();
+  });
 
-SAF_MSG = '';
+  HOOKS.combat.push((S, opt, D0) => {
+    if (!PREF.coop || S.order === 'vitesse' || (D0 && (D0.tuto || D0.duel433))) {
+      return;
+    }
+    if (S.units.filter(u => u.side === 'a').length < 2 || !opt || opt.robot) {
+      return;
+    }
+    S.coop = coopAlive418(S, 1) ? 1 : 2;
+  });
 
-
-// #safari418: rendered by React (src/screens/overlays/Safari418.jsx)
-
-
-document.addEventListener('click', e => {
-  if (e.target.closest('[data-safari418-entrer]')) return void safariEnter418();
-  const b = e.target.closest('[data-safari418]');
-  if (!b) {
-    if (e.target.id === 'safari418') $('#safari418').hidden = true;
-    return;
-  }
-  const k = b.dataset.safari418;
-  if (k === 'x') return void ($('#safari418').hidden = true);
-  if (k === 'sortir') {
-    const n = PROFILE.safari ? PROFILE.safari.isTaken.length : 0;
-    PROFILE.safari = null;
-    queueSave();
-    $('#safari418').hidden = true;
-    toast(`Merci de votre visite ! ${n} capture${n > 1 ? 's' : ''}.`);
-    try {
-      refreshMap(); // panel of the selected location (src/screens/map/MapInfo.jsx)
-    } catch { /* Best effort: failure here is non-fatal. */ }
-    return;
-  }
-  SAF_MSG = safariAction418(k);
-  if (/Gotcha/.test(SAF_MSG)) {
-    sfx('win');
-    vibe(40);
-  }
-  renderSafari418();
-});
-
-
-HOOKS.combat.push((S, opt, D0) => {
-  if (!PREF.coop || S.order === 'vitesse' || (D0 && (D0.tuto || D0.duel433))) return;
-  if (S.units.filter(u => u.side === 'a').length < 2 || !opt || opt.robot) return;
-  S.coop = coopAlive418(S, 1) ? 1 : 2;
-});
-
-
-HOOKS.beforeRoundEnd.push(S => {
-  if (S.coop) S.coop = coopAlive418(S, 1) ? 1 : 2;
-});
+  HOOKS.beforeRoundEnd.push(S => {
+    if (S.coop) {
+      S.coop = coopAlive418(S, 1) ? 1 : 2;
+    }
+  });
 }

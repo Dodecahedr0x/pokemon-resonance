@@ -24,8 +24,13 @@ function Card() {
   return (
     <Dialogue className="sv-card st-card" titre="stT" closeAttrs={{ 'data-st': 'x' }}>
       <p className="kick">Nouvelle campagne</p>
-      <h2 className="h2" id="stT">Choisissez votre partenaire</h2>
-      <p className="sub">Il rejoint Magicarpe, Métamorph et Chenipan dans votre Box. Les autres se capturent dans les hautes herbes et sur les terrains. Vos emplacements de sauvegarde restent intacts.</p>
+      <h2 className="h2" id="stT">
+        Choisissez votre partenaire
+      </h2>
+      <p className="sub">
+        Il rejoint Magicarpe, Métamorph et Chenipan dans votre Box. Les autres se capturent dans les hautes herbes et
+        sur les terrains. Vos emplacements de sauvegarde restent intacts.
+      </p>
       <div className="st-grid">
         {STARTERS.map(id => {
           const m = BY[id];
@@ -33,8 +38,12 @@ function Card() {
             <button key={id} type="button" className="st-o" data-st={id} style={{ '--c': tc(m.t[0]) }}>
               <Html html={medal(m.t, 'lg')} />
               <b>{m.n}</b>
-              <em>{m.r} · {m.c} PC</em>
-              <span>Éveil : <Html html={evoPath(id)} /></span>
+              <em>
+                {m.r} · {m.c} PC
+              </em>
+              <span>
+                Éveil : <Html html={evoPath(id)} />
+              </span>
             </button>
           );
         })}
@@ -42,7 +51,9 @@ function Card() {
       <div className="st-diff">
         <span>Difficulté</span>
         {Object.entries(DIFFS).map(([k, n]) => (
-          <button key={k} type="button" className="b b-sm" data-sd={k} aria-pressed={PROFILE.diff === k}>{n}</button>
+          <button key={k} type="button" className="b b-sm" data-sd={k} aria-pressed={PROFILE.diff === k}>
+            {n}
+          </button>
         ))}
       </div>
     </Dialogue>

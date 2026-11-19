@@ -13,7 +13,9 @@ export function showSaves() {
 }
 
 export function hideSaves() {
-  if (saves.get().open) saves.set({ open: false });
+  if (saves.get().open) {
+    saves.set({ open: false });
+  }
 }
 
 // Redraws the card (engine state changed).

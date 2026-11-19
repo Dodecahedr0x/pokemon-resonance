@@ -50,7 +50,13 @@ const ART_TUILE = {
       <>
         <span className="v4t-aura" />
         <span className="v4t-badge">
-          {g.gi >= 0 ? <Html html={badgeSvg(g.gi, GYMS[g.gi].t, 'v4t' + g.gi)} /> : <svg viewBox="0 0 24 24"><use href="#i-trophy" /></svg>}
+          {g.gi >= 0 ? (
+            <Html html={badgeSvg(g.gi, GYMS[g.gi].t, 'v4t' + g.gi)} />
+          ) : (
+            <svg viewBox="0 0 24 24">
+              <use href="#i-trophy" />
+            </svg>
+          )}
         </span>
       </>
     );
@@ -65,8 +71,15 @@ export default function Tiles({ on }) {
           <a key={k} className={`v4-tile ${c}`} data-t={k} href={`#${k}`}>
             {ART_TUILE[k]()}
             <span className="v4t-shade" />
-            <span className="v4t-ic"><svg><use href={`#${i}`} /></svg></span>
-            <span className="v4t-tx"><b>{t}</b><em>{d}</em></span>
+            <span className="v4t-ic">
+              <svg>
+                <use href={`#${i}`} />
+              </svg>
+            </span>
+            <span className="v4t-tx">
+              <b>{t}</b>
+              <em>{d}</em>
+            </span>
           </a>
         ))}
     </nav>

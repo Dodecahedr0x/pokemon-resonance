@@ -16,6 +16,8 @@ export const thanksShown = () => thanksSeen;
 // `shop`: the counter is displayed, the thank-you is consumed there.
 export function refreshBag(shop) {
   thanksSeen = shop && thanksMsg;
-  if (shop) thanksMsg = false;
+  if (shop) {
+    thanksMsg = false;
+  }
   refresh();
 }

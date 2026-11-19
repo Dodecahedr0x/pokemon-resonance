@@ -26,7 +26,9 @@ function BattlePrep() {
         <h1 className="h1" id="h-cb">
           Choisir un combat
         </h1>
-        <p className="sub">Un onglet, un combat dans la liste, puis « Lancer ». Votre prochaine étape est déjà sélectionnée.</p>
+        <p className="sub">
+          Un onglet, un combat dans la liste, puis « Lancer ». Votre prochaine étape est déjà sélectionnée.
+        </p>
       </div>
       <Tip t="combat" />
       <SummaryBox id="resumePrep" />

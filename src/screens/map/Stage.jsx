@@ -24,7 +24,13 @@ export default function Stage({ drawn, marksSel }) {
     }
   }
   return (
-    <div className={'v4-map-st' + (ok ? ' cv471on' : '')} id="mapSt" data-reg={drawn ? rg : undefined} data-tod={drawn ? TOD : undefined} data-wx={wx}>
+    <div
+      className={'v4-map-st' + (ok ? ' cv471on' : '')}
+      id="mapSt"
+      data-reg={drawn ? rg : undefined}
+      data-tod={drawn ? TOD : undefined}
+      data-wx={wx}
+    >
       <Html html={MAP_SVG} />
       <Html html={JMAP_SVG} />
       <Html html={HMAP_SVG} />
@@ -57,15 +63,23 @@ export default function Stage({ drawn, marksSel }) {
           <Html html={MAP471.fogSvg(rg)} />
         </div>
       )}
-      <div className="map-marks" id="mapMarks">{drawn && <Marks marksSel={marksSel} />}</div>
-      <svg className="map-comp" aria-hidden="true"><use href="#i-compass" /></svg>
-      <span className="map-title"><Title drawn={drawn} rg={rg} /></span>
+      <div className="map-marks" id="mapMarks">
+        {drawn && <Marks marksSel={marksSel} />}
+      </div>
+      <svg className="map-comp" aria-hidden="true">
+        <use href="#i-compass" />
+      </svg>
+      <span className="map-title">
+        <Title drawn={drawn} rg={rg} />
+      </span>
     </div>
   );
 }
 
 function Title({ drawn, rg }) {
-  if (!drawn) return 'Région de la Résonance';
+  if (!drawn) {
+    return 'Région de la Résonance';
+  }
   const R = MAP471 && MAP471.REG[rg];
   if (R) {
     return (
@@ -86,14 +100,14 @@ function Routes() {
   const side = H
     ? []
     : J
-    ? [['j7', 'jlac']]
-    : [
-        ['a1', 'gue'],
-        ['a1', 'roche'],
-        ['a3', 'tour'],
-        ['a8', 'ligue'],
-        ['a4', 'safari']
-      ];
+      ? [['j7', 'jlac']]
+      : [
+          ['a1', 'gue'],
+          ['a1', 'roche'],
+          ['a3', 'tour'],
+          ['a8', 'ligue'],
+          ['a4', 'safari'],
+        ];
   return (
     <svg className="map-routes" viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
       <g fill="none" strokeLinecap="round">
@@ -101,7 +115,11 @@ function Routes() {
           <path d={curvePath(pts[i], b, i)} className={`rt ${placeState(b) === 'lock' ? 'lk' : 'ok'}`} key={'c' + i} />
         ))}
         {side.map(([a, b], i) => (
-          <path d={curvePath(PL[a], PL[b], i + 1)} className={`rt side ${placeState(PL[b]) === 'lock' ? 'lk' : 'ok'}`} key={'s' + i} />
+          <path
+            d={curvePath(PL[a], PL[b], i + 1)}
+            className={`rt side ${placeState(PL[b]) === 'lock' ? 'lk' : 'ok'}`}
+            key={'s' + i}
+          />
         ))}
       </g>
     </svg>

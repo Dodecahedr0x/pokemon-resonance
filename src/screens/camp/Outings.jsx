@@ -4,9 +4,18 @@ import { routeName } from '../../engine/054-johto.js';
 function Outing({ k, ic, b, d }) {
   return (
     <button type="button" className="so430" data-sortie430={k}>
-      <span className="so430-ic"><svg><use href={`#${ic}`} /></svg></span>
-      <span><b>{b}</b><em>{d}</em></span>
-      <svg className="so430-go"><use href="#i-chevr" /></svg>
+      <span className="so430-ic">
+        <svg>
+          <use href={`#${ic}`} />
+        </svg>
+      </span>
+      <span>
+        <b>{b}</b>
+        <em>{d}</em>
+      </span>
+      <svg className="so430-go">
+        <use href="#i-chevr" />
+      </svg>
     </button>
   );
 }
@@ -15,7 +24,12 @@ function Outing({ k, ic, b, d }) {
 export default function Outings() {
   return (
     <>
-      <header className="v4-ph"><svg><use href="#i-compass" /></svg><b>Sorties</b></header>
+      <header className="v4-ph">
+        <svg>
+          <use href="#i-compass" />
+        </svg>
+        <b>Sorties</b>
+      </header>
       <div className="so430-g">
         <Outing k="herbes" ic="i-grass" b="Hautes herbes" d={`${routeName()} · rencontres et captures`} />
         <Outing k="safari" ic="i-map" b="Pêche et Parc Safari" d="Depuis la Carte de chaque région" />

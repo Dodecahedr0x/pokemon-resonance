@@ -54,14 +54,23 @@ export function Markers() {
         o.push(
           <polygon key={k + 'mf'} points={pt} className="mk-fill" style={{ fill: col }} />,
           <polygon key={k + 'me'} points={pt} className="mk-edge" style={{ stroke: col }} />,
-          <g key={k + 'mb'} className="mk-b" transform={`translate(${mx.toFixed(1)},${my.toFixed(1)}) scale(${mz.toFixed(3)})`}>
+          <g
+            key={k + 'mb'}
+            className="mk-b"
+            transform={`translate(${mx.toFixed(1)},${my.toFixed(1)}) scale(${mz.toFixed(3)})`}
+          >
             <circle cx="12" cy="12" r="12" fill={col} stroke="#0B0D12" strokeWidth="2" />
             <path d={gp(tt)} fill={INK} fillRule="evenodd" transform="translate(4.8 4.8) scale(.6)" />
           </g>
         );
         if (t.mark.lv === 2) {
           o.push(
-            <text key={k + 'ml'} className="mk-lv" x={(TILT.on ? x - 14 * ms : x - 15).toFixed(1)} y={(TILT.on ? y - 3 * ms : y - 11).toFixed(1)}>
+            <text
+              key={k + 'ml'}
+              className="mk-lv"
+              x={(TILT.on ? x - 14 * ms : x - 15).toFixed(1)}
+              y={(TILT.on ? y - 3 * ms : y - 11).toFixed(1)}
+            >
               ×2
             </text>
           );
@@ -70,13 +79,21 @@ export function Markers() {
       // rock (under a pillar, the pillar replaces it: drawObstacles)
       if (t.rock && !t.pil) {
         o.push(
-          <path key={k + 'bo'} className="boulder" d={`M${(x - 14).toFixed(1)} ${(y + 8).toFixed(1)}q-2-12 8-17q8-5 15 1q7 6 5 16q-14 6-28 0Z`} />,
+          <path
+            key={k + 'bo'}
+            className="boulder"
+            d={`M${(x - 14).toFixed(1)} ${(y + 8).toFixed(1)}q-2-12 8-17q8-5 15 1q7 6 5 16q-14 6-28 0Z`}
+          />,
           <path key={k + 'bh'} className="boulder-h" d={`M${(x - 6).toFixed(1)} ${(y - 6).toFixed(1)}q5-4 11-1`} />
         );
       }
-      if (t.fog > 0) o.push(<polygon key={k + 'fg'} points={HP(x, y, BG.S - 1)} className={'fogc2' + (t.fog > 2 ? ' tox' : '')} />);
+      if (t.fog > 0) {
+        o.push(<polygon key={k + 'fg'} points={HP(x, y, BG.S - 1)} className={'fogc2' + (t.fog > 2 ? ' tox' : '')} />);
+      }
       o.push(<SvgHtml key={k + 'dt'} html={tacticalDrawing(B, k, x, y)} />); // traps (v4.8)
-      if (B.livingBoard && fireHazard(B, k)) o.push(<polygon key={k + 'fr'} points={HP(x, y, BG.S - 4)} className="fire-risk" />); // the grass about to burn (v4.7-01)
+      if (B.livingBoard && fireHazard(B, k)) {
+        o.push(<polygon key={k + 'fr'} points={HP(x, y, BG.S - 4)} className="fire-risk" />);
+      } // the grass about to burn (v4.7-01)
     }
   }
   return (
@@ -94,7 +111,10 @@ function Pillar({ x, y }) {
       <ellipse className="pil-sh" cx={f1(x)} cy={f1(y + 12)} rx="16" ry="4.6" />
       <path className="pil-ba" d={`M${f1(x - 14)} ${f1(y + 13)}h28l-2.4-5.4h-23.2Z`} />
       <rect className="pil-sf" x={f1(x - 9)} y={f1(y - 21)} width="18" height="29.5" />
-      <path className="pil-fl" d={`M${f1(x - 4.5)} ${f1(y - 20)}v27M${f1(x)} ${f1(y - 20)}v27M${f1(x + 4.5)} ${f1(y - 20)}v27`} />
+      <path
+        className="pil-fl"
+        d={`M${f1(x - 4.5)} ${f1(y - 20)}v27M${f1(x)} ${f1(y - 20)}v27M${f1(x + 4.5)} ${f1(y - 20)}v27`}
+      />
       <rect className="pil-rn" x={f1(x - 9)} y={f1(y - 7)} width="18" height="2.6" />
       <path className="pil-ca" d={`M${f1(x - 12.5)} ${f1(y - 20.5)}h25l2.2-5.2h-29.4Z`} />
       <ellipse className="pil-tp" cx={f1(x)} cy={f1(y - 25.8)} rx="14.8" ry="3.6" />
@@ -107,7 +127,13 @@ function BackGrass({ x, y }) {
     const bx = x - 14 + i * 3.4,
       h = 10 + ((i * 7) % 5) * 2.2,
       lean = (((i * 5) % 3) - 1) * 1.6;
-    s.push(<path key={i} className={'gb' + (i % 2 ? ' g2' : '')} d={`M${f1(bx)} ${f1(y + 9)}L${f1(bx + 1.6 + lean)} ${f1(y + 9 - h)}L${f1(bx + 3.3)} ${f1(y + 9)}Z`} />);
+    s.push(
+      <path
+        key={i}
+        className={'gb' + (i % 2 ? ' g2' : '')}
+        d={`M${f1(bx)} ${f1(y + 9)}L${f1(bx + 1.6 + lean)} ${f1(y + 9 - h)}L${f1(bx + 3.3)} ${f1(y + 9)}Z`}
+      />
+    );
   }
   return <g className="grs">{s}</g>;
 }
@@ -117,7 +143,13 @@ function FrontGrass({ x, y }) {
     const bx = x - 14 + i * 4.4,
       h = 5 + ((i * 3) % 4) * 1.6,
       lean = (((i * 7) % 3) - 1) * 1.4;
-    s.push(<path key={i} className={'gf' + (i % 2 ? ' g2' : '')} d={`M${f1(bx)} ${f1(y + 15)}L${f1(bx + 1.5 + lean)} ${f1(y + 15 - h)}L${f1(bx + 3)} ${f1(y + 15)}Z`} />);
+    s.push(
+      <path
+        key={i}
+        className={'gf' + (i % 2 ? ' g2' : '')}
+        d={`M${f1(bx)} ${f1(y + 15)}L${f1(bx + 1.5 + lean)} ${f1(y + 15 - h)}L${f1(bx + 3)} ${f1(y + 15)}Z`}
+      />
+    );
   }
   return <g className="grf">{s}</g>;
 }
@@ -128,11 +160,17 @@ export function Obstacles({ front }) {
   if (B) {
     for (const k in B.tiles) {
       const t = B.tiles[k];
-      if (!t.pil && !(t.grass && !t.rock)) continue;
+      if (!t.pil && !(t.grass && !t.rock)) {
+        continue;
+      }
       const [x, y] = HC(k);
       if (front) {
-        if (!t.pil) o.push(<FrontGrass key={k} x={x} y={y} />);
-      } else o.push(t.pil ? <Pillar key={k} x={x} y={y} /> : <BackGrass key={k} x={x} y={y} />);
+        if (!t.pil) {
+          o.push(<FrontGrass key={k} x={x} y={y} />);
+        }
+      } else {
+        o.push(t.pil ? <Pillar key={k} x={x} y={y} /> : <BackGrass key={k} x={x} y={y} />);
+      }
     }
   }
   return (
@@ -159,35 +197,53 @@ function extras() {
     vl = veiled(B);
   if (u && !u.ko && B.phase === 'player' && !ui.busy && !B.over) {
     B.units.forEach(e => {
-      if (e.side === 'e' && !e.ko && coverOf(B, u.pos, e.pos)) ex.push(<Shield key={'ce' + e.uid} k={uk(e)} cls="en" />);
+      if (e.side === 'e' && !e.ko && coverOf(B, u.pos, e.pos)) {
+        ex.push(<Shield key={'ce' + e.uid} k={uk(e)} cls="en" />);
+      }
     });
     if (ui.mode === 'target') {
       const m = MV[u.mv[ui.mi]];
       if (m.sh === 'one') {
         targets(B, u, m).forEach(k => {
-          if (!B.tiles[k].rock) return;
+          if (!B.tiles[k].rock) {
+            return;
+          }
           const r = ricoTgt(B, u, k);
-          if (!r) return;
+          if (!r) {
+            return;
+          }
           const A = HC(uk(u)),
             R = HC(k),
             T = HC(r);
           ex.push(
-            <polyline key={'ri' + k} className={'rico' + (ui.pk === k ? ' on' : '')} points={`${f1(A[0])},${f1(A[1])} ${f1(R[0])},${f1(R[1])} ${f1(T[0])},${f1(T[1])}`} />,
+            <polyline
+              key={'ri' + k}
+              className={'rico' + (ui.pk === k ? ' on' : '')}
+              points={`${f1(A[0])},${f1(A[1])} ${f1(R[0])},${f1(R[1])} ${f1(T[0])},${f1(T[1])}`}
+            />,
             <circle key={'rp' + k} className="rico-p" cx={f1(R[0])} cy={f1(R[1] - 4)} r="2.6" />
           );
         });
       }
     }
-    if (u.hr && u.acted && !u.moved && !ui.mode) ex.push(...toPolys(polys(Object.keys(reach(B, u)), 'h-reach'), 'hr'));
+    if (u.hr && u.acted && !u.moved && !ui.mode) {
+      ex.push(...toPolys(polys(Object.keys(reach(B, u)), 'h-reach'), 'hr'));
+    }
   }
   if (!vl) {
     B.units.forEach(e => {
-      if (e.side !== 'e' || e.ko || !e.intent) return;
+      if (e.side !== 'e' || e.ko || !e.intent) {
+        return;
+      }
       const m = MV[e.intent.mv];
-      if (m.sh !== 'one' && m.sh !== 'line') return;
+      if (m.sh !== 'one' && m.sh !== 'line') {
+        return;
+      }
       affected(B, e, m, e.intent.k).forEach(k => {
         const v = uAt(B, k);
-        if (v && v.side === 'a' && coverOf(B, e.pos, v.pos)) ex.push(<Shield key={'ca' + e.uid + k} k={k} cls="al" />);
+        if (v && v.side === 'a' && coverOf(B, e.pos, v.pos)) {
+          ex.push(<Shield key={'ca' + e.uid + k} k={k} cls="al" />);
+        }
       });
     });
   }
@@ -202,24 +258,40 @@ export function Highlights() {
     const u = ui.sel && byUid(B, ui.sel),
       vl = veiled(B),
       an = arenaNext(B);
-    if (an) hl.push(...polys(an.tiles, 'h-arena'));
+    if (an) {
+      hl.push(...polys(an.tiles, 'h-arena'));
+    }
     B.units.forEach(e => {
-      if (!vl && e.side === 'e' && !e.ko && e.intent) hl.push(...polys(affected(B, e, MV[e.intent.mv], e.intent.k), 'h-danger'));
+      if (!vl && e.side === 'e' && !e.ko && e.intent) {
+        hl.push(...polys(affected(B, e, MV[e.intent.mv], e.intent.k), 'h-danger'));
+      }
     });
     // v4.12: the hit opponent shows its threat zone (everything it can strike after moving)
     const eSel = B.jit && ui.selE && byUid(B, ui.selE);
-    if (eSel && !eSel.ko && eSel.side === 'e' && !eSel.done && !B.over) hl.push(...polys(threatZone(B, eSel), 'h-menace'));
+    if (eSel && !eSel.ko && eSel.side === 'e' && !eSel.done && !B.over) {
+      hl.push(...polys(threatZone(B, eSel), 'h-menace'));
+    }
     if (u && !u.ko && B.phase === 'player' && !ui.busy && !B.over) {
       if (ui.mode === 'duo' && ui.duo) {
         hl.push(...polys(duoTargets(B, u, byUid(B, ui.duo)), 'h-tgt', true));
-        if (ui.pv) hl.push(...polys(ui.pv.aff, 'h-aff'));
+        if (ui.pv) {
+          hl.push(...polys(ui.pv.aff, 'h-aff'));
+        }
       } else if (ui.mode === 'target') {
         hl.push(...polys(targets(B, u, MV[u.mv[ui.mi]]), 'h-tgt', true));
-        if (ui.pv) hl.push(...polys(ui.pv.aff, 'h-aff'));
+        if (ui.pv) {
+          hl.push(...polys(ui.pv.aff, 'h-aff'));
+        }
       } else if (ui.mode === 'dodge') {
-        hl.push(...polys(nbrK(uk(u)).filter(k => !B.tiles[k].rock && !uAt(B, k)), 'h-dodge'));
+        hl.push(
+          ...polys(
+            nbrK(uk(u)).filter(k => !B.tiles[k].rock && !uAt(B, k)),
+            'h-dodge'
+          )
+        );
+      } else if (!u.moved && !u.acted) {
+        hl.push(...polys(Object.keys(reach(B, u)), 'h-reach'));
       }
-      else if (!u.moved && !u.acted) hl.push(...polys(Object.keys(reach(B, u)), 'h-reach'));
     }
   }
   return (
@@ -237,7 +309,9 @@ export function Intentions() {
   const o = [];
   if (B && !veiled(B)) {
     B.units.forEach(e => {
-      if (e.side !== 'e' || e.ko || !e.intent) return;
+      if (e.side !== 'e' || e.ko || !e.intent) {
+        return;
+      }
       const a = HC(uk(e)),
         b = HC(e.intent.k),
         dx = b[0] - a[0],
@@ -271,7 +345,9 @@ export function Intentions() {
 /* v4.44: tile shown by the magnifier (layer created on first use) */
 export function Magnifier() {
   const S = useBoard('insp');
-  if (S.insp === undefined) return null;
+  if (S.insp === undefined) {
+    return null;
+  }
   return (
     <g id="insp444" style={PE}>
       {S.insp != null && B && <Poly k={S.insp} c="h-insp444" />}

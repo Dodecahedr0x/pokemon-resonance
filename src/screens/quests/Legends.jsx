@@ -12,18 +12,33 @@ function Legend({ L, et, isTaken: takenSet, fight, condition: cond }) {
   const m = BY[L.id],
     isReady = !takenSet && et.every(x => x.ok);
   return (
-    <article className={'lq429-c v4-panel' + (takenSet ? ' pris' : isReady ? ' pret' : '')} style={{ '--c': tc(m.t[0]) }}>
+    <article
+      className={'lq429-c v4-panel' + (takenSet ? ' pris' : isReady ? ' pret' : '')}
+      style={{ '--c': tc(m.t[0]) }}
+    >
       <img src={ART(m.no)} alt="" loading="lazy" />
       <div className="lq429-t">
-        <small>{L.title}</small><b>{m.n}</b>
+        <small>{L.title}</small>
+        <b>{m.n}</b>
         <ul>
-          {et.map((x, i) => <li key={i} className={x.ok ? 'ok' : ''}>{x.ok ? '✓' : '○'} {x.t}</li>)}
+          {et.map((x, i) => (
+            <li key={i} className={x.ok ? 'ok' : ''}>
+              {x.ok ? '✓' : '○'} {x.t}
+            </li>
+          ))}
           {cond !== undefined ? <li className="cond435">Condition de capture : {cond}</li> : null}
         </ul>
         {takenSet ? (
           <span className="lq429-ok">Dans votre Box ✓</span>
         ) : (
-          <button type="button" className={`b b-sm ${isReady ? 'b-gold' : 'b-ghost'}`} data-v4fight={fight} disabled={!isReady}>{isReady ? 'Tenter la capture' : 'Quête en cours'}</button>
+          <button
+            type="button"
+            className={`b b-sm ${isReady ? 'b-gold' : 'b-ghost'}`}
+            data-v4fight={fight}
+            disabled={!isReady}
+          >
+            {isReady ? 'Tenter la capture' : 'Quête en cours'}
+          </button>
         )}
       </div>
     </article>
@@ -34,15 +49,32 @@ function Legend({ L, et, isTaken: takenSet, fight, condition: cond }) {
 export default function Legends() {
   return (
     <>
-      <p className="v4-note">Une légende vaincue peut être capturée une fois sa quête terminée. Elle rejoint votre Box et coûte 8 PC dans l’équipe.</p>
+      <p className="v4-note">
+        Une légende vaincue peut être capturée une fois sa quête terminée. Elle rejoint votre Box et coûte 8 PC dans
+        l’équipe.
+      </p>
       <div className="lq429">
-        {LEGS.map(L => <Legend key={L.id} L={L} et={stepsLeg429(L)} isTaken={PROFILE.box.includes(L.id)} fight={'lc' + L.id} />)}
+        {LEGS.map(L => (
+          <Legend key={L.id} L={L} et={stepsLeg429(L)} isTaken={PROFILE.box.includes(L.id)} fight={'lc' + L.id} />
+        ))}
       </div>
       {hoennOpen() ? (
         <>
-          <p className="v4-note">Légendes de Hoenn : vainquez-les d’abord (Combats › Après-jeu), puis remplissez leur quête. Chacune a une condition de capture propre.</p>
+          <p className="v4-note">
+            Légendes de Hoenn : vainquez-les d’abord (Combats › Après-jeu), puis remplissez leur quête. Chacune a une
+            condition de capture propre.
+          </p>
           <div className="lq429">
-            {HLEG435.map(L => <Legend key={L.id} L={L} et={steps435(L)} isTaken={inBox435(L.id)} fight={'hc' + L.id} condition={L.cap.t} />)}
+            {HLEG435.map(L => (
+              <Legend
+                key={L.id}
+                L={L}
+                et={steps435(L)}
+                isTaken={inBox435(L.id)}
+                fight={'hc' + L.id}
+                condition={L.cap.t}
+              />
+            ))}
           </div>
         </>
       ) : null}

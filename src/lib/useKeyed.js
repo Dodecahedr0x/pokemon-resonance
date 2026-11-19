@@ -9,7 +9,9 @@ const sameKeys = (a, b) => a.length === b.length && a.every((x, i) => Object.is(
  */
 export function useKeyed(compute, keys) {
   const [entry, setEntry] = useState(() => ({ keys, value: compute() }));
-  if (sameKeys(entry.keys, keys)) return entry.value;
+  if (sameKeys(entry.keys, keys)) {
+    return entry.value;
+  }
   const value = compute();
   setEntry({ keys, value });
   return value;

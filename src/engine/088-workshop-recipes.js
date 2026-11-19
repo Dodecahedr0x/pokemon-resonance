@@ -10,7 +10,6 @@ import { reward454, rng454, txt454 } from './084-peddler-route-missions.js';
 
 export { LJ455, RECIPES455, COST455 }; // read by Shop › Workshop and Draw (React, src/screens/bag/Workshop.jsx)
 
-
 /* ---------- TM fusion ---------- */
 export function donors455(target) {
   const d = [];
@@ -18,20 +17,22 @@ export function donors455(target) {
     .filter(k => k !== target && bagN(k) > 0)
     .sort((a, b) => SHOP[a].p - SHOP[b].p)
     .forEach(k => {
-      for (let i = 0; i < bagN(k) && d.length < 2; i++) d.push(k);
+      for (let i = 0; i < bagN(k) && d.length < 2; i++) {
+        d.push(k);
+      }
     });
   return d.length === 2 ? d : null;
 }
-
 
 export function fusionTargets455() {
   const r = rng454('fusion455'),
     pool = tmKeys455().filter(k => !bagN(k)),
     out = [];
-  while (out.length < 4 && pool.length) out.push(pool.splice(Math.floor(r() * pool.length), 1)[0]);
+  while (out.length < 4 && pool.length) {
+    out.push(pool.splice(Math.floor(r() * pool.length), 1)[0]);
+  }
   return out;
 }
-
 
 /* ---------- daily orders ---------- */
 export function commands455() {
@@ -42,16 +43,19 @@ export function commands455() {
     st = LJ455('res-at455', { d: today(), cmd: {}, spin: 0 });
   return [
     { id: 'c1', in: { [a]: 2 + Math.floor(r() * 2) }, rew: { g: 1 } },
-    { id: 'c2', in: { [b]: 3 }, rew: { m: 900 } }
+    { id: 'c2', in: { [b]: 3 }, rew: { m: 900 } },
   ].map(c => ({ ...c, done: !!st.cmd[c.id] }));
 }
 
-
 function spin455() {
   const st = LJ455('res-at455', { d: today(), cmd: {}, spin: 0 });
-  if (st.spin >= 4) return;
+  if (st.spin >= 4) {
+    return;
+  }
   if (st.spin > 0) {
-    if (PROFILE.money < COST455) return;
+    if (PROFILE.money < COST455) {
+      return;
+    }
     PROFILE.money -= COST455;
   }
   const r = rng454('spin455' + st.spin)();
@@ -70,7 +74,9 @@ function spin455() {
       k = cts[Math.floor(rng454('spinct455' + st.spin)() * cts.length)];
     PROFILE.bag[k] = Math.min(99, bagN(k) + 1);
     t = SHOP[k].n;
-  } else reward454(lot.o);
+  } else {
+    reward454(lot.o);
+  }
   st.spin++;
   st.last = t;
   writeLS('res-at455', st);
@@ -79,7 +85,6 @@ function spin455() {
   toast('Tirage : ' + t);
   savePurse();
 }
-
 
 /* ---------- showcase (displayed by React: src/screens/bag/Workshop.jsx) ---------- */
 // Marks the TMs / HMs in the Bag or already learned as seen, then returns the showcase state.
@@ -94,22 +99,21 @@ export function showcase455() {
   const cts = tmKeys455(),
     cs = Object.keys(SHOP).filter(k => SHOP[k].cs);
   [...cts, ...cs].forEach(k => {
-    if (bagN(k) > 0 || learned.includes(SHOP[k].mv)) seen[k] = 1;
+    if (bagN(k) > 0 || learned.includes(SHOP[k].mv)) {
+      seen[k] = 1;
+    }
   });
   writeLS('res-vit455', seen);
   return { seen, tms: cts, cs };
 }
 
-
 /* ---------- Shop tabs (Workshop, Draw…): rendered by React (src/screens/bag/Workshop.jsx) ---------- */
-
 
 function yesterday455() {
   const t = new Date(today() + 'T12:00:00Z');
   t.setUTCDate(t.getUTCDate() - 1);
   return t.toISOString().slice(0, 10);
 }
-
 
 export function cdSt455() {
   let s;
@@ -119,10 +123,11 @@ export function cdSt455() {
     s = {};
   }
   s.n = s.n || 0;
-  if (s.last && s.last !== today() && s.last !== yesterday455()) s.n = 0;
+  if (s.last && s.last !== today() && s.last !== yesterday455()) {
+    s.n = 0;
+  }
   return s;
 }
-
 
 /** "Cadeau du jour" (Daily gift) button on the Home screen (#cd455, rendered by src/screens/home/Banners.jsx). */
 export function cdData455() {
@@ -144,26 +149,26 @@ const LJ455 = (k, d) => {
   return s && s.d === today() ? s : d;
 };
 
-
 const nameIt455 = k => (SHOP[k] ? SHOP[k].n : (ITEMS2[k] || {}).n || k);
 
+export const tmKeys455 = () =>
+  Object.keys(SHOP).filter(k => SHOP[k].category === 'machines' && !SHOP[k].cs && !SHOP[k].g);
 
-export const tmKeys455 = () => Object.keys(SHOP).filter(k => SHOP[k].category === 'machines' && !SHOP[k].cs && !SHOP[k].g);
-
-
-export const txtIn455 = o => Object.keys(o).map(k => `${o[k]} × ${nameIt455(k)}`).join(' + ');
-
+export const txtIn455 = o =>
+  Object.keys(o)
+    .map(k => `${o[k]} × ${nameIt455(k)}`)
+    .join(' + ');
 
 export const add455 = (o, direction) => {
   for (const k in o) {
     PROFILE.bag[k] = Math.max(0, Math.min(99, bagN(k) + direction * o[k]));
-    if (!PROFILE.bag[k]) delete PROFILE.bag[k];
+    if (!PROFILE.bag[k]) {
+      delete PROFILE.bag[k];
+    }
   }
 };
 
-
 export const canIn455 = o => Object.keys(o).every(k => bagN(k) >= o[k]);
-
 
 /* ---------- recipe book ---------- */
 const RECIPES455 = [
@@ -174,9 +179,8 @@ const RECIPES455 = [
   { id: 'r5', in: { antigel: 2, antidote: 2 }, out: { totalsoin: 1 }, m: 0 },
   { id: 'r6', in: { baieoran: 3 }, out: { baiemepo: 1 }, m: 0 },
   { id: 'r7', in: { attaqueplus: 2, defenseplus: 2 }, out: { gelee: 1 }, m: 500 },
-  { id: 'r8', in: { rappel: 2 }, out: { rappelmax: 1 }, m: 1000 }
+  { id: 'r8', in: { rappel: 2 }, out: { rappelmax: 1 }, m: 1000 },
 ];
-
 
 /* ---------- peddler's draw ---------- */
 const LOTS455 = [
@@ -188,12 +192,10 @@ const LOTS455 = [
   { w: 6, t: 'Hyper Potion', o: { b: { hyperpotion: 1 } } },
   { w: 6, t: '1 Éclat de Résonance', o: { g: 1 } },
   { w: 4, t: 'Une CT au hasard', ct: 1 },
-  { w: 3, t: 'Baie Mepo', o: { b: { baiemepo: 1 } } }
+  { w: 3, t: 'Baie Mepo', o: { b: { baiemepo: 1 } } },
 ];
 
-
 const COST455 = 900;
-
 
 /* ---------- daily gift ---------- */
 const GIFT455 = [
@@ -203,79 +205,90 @@ const GIFT455 = [
   { g: 1 },
   { b: { super: 2, hyperpotion: 1 } },
   { m: 1500 },
-  { g: 3, ct: 1 }
+  { g: 3, ct: 1 },
 ];
 
 // Instructions run at startup, in the original order (see index.js).
 export function __init() {
-
-document.addEventListener(
-  'click',
-  e => {
-    const b = e.target.closest && e.target.closest('[data-at455]');
-    if (!b || b.disabled) return;
-    e.preventDefault();
-    e.stopPropagation();
-    const [a, k] = b.dataset.at455.split(':');
-    if (a === 'rec') {
-      const r = RECIPES455.find(x => x.id === k);
-      if (!r || !canIn455(r.in) || PROFILE.money < r.m) return;
-      add455(r.in, -1);
-      PROFILE.money -= r.m;
-      add455(r.out, 1);
-      toast('Préparé : ' + txtIn455(r.out));
-    } else if (a === 'fus') {
-      const d = donors455(k);
-      if (!tmKeys455().includes(k) || bagN(k) || !d || PROFILE.money < 1000) return;
-      d.forEach(x => add455({ [x]: 1 }, -1));
-      PROFILE.money -= 1000;
-      PROFILE.bag[k] = 1;
-      toast('Fusion réussie : ' + SHOP[k].n);
-    } else if (a === 'cmd') {
-      const c = commands455().find(x => x.id === k),
-        st = LJ455('res-at455', { d: today(), cmd: {}, spin: 0 });
-      if (!c || c.done || !canIn455(c.in)) return;
-      add455(c.in, -1);
-      reward454(c.rew);
-      st.cmd[k] = 1;
-      writeLS('res-at455', st);
-      toast('Commande livrée : ' + txt454(c.rew));
-    } else if (a === 'spin') {
-      spin455();
+  document.addEventListener(
+    'click',
+    e => {
+      const b = e.target.closest && e.target.closest('[data-at455]');
+      if (!b || b.disabled) {
+        return;
+      }
+      e.preventDefault();
+      e.stopPropagation();
+      const [a, k] = b.dataset.at455.split(':');
+      if (a === 'rec') {
+        const r = RECIPES455.find(x => x.id === k);
+        if (!r || !canIn455(r.in) || PROFILE.money < r.m) {
+          return;
+        }
+        add455(r.in, -1);
+        PROFILE.money -= r.m;
+        add455(r.out, 1);
+        toast('Préparé : ' + txtIn455(r.out));
+      } else if (a === 'fus') {
+        const d = donors455(k);
+        if (!tmKeys455().includes(k) || bagN(k) || !d || PROFILE.money < 1000) {
+          return;
+        }
+        d.forEach(x => add455({ [x]: 1 }, -1));
+        PROFILE.money -= 1000;
+        PROFILE.bag[k] = 1;
+        toast('Fusion réussie : ' + SHOP[k].n);
+      } else if (a === 'cmd') {
+        const c = commands455().find(x => x.id === k),
+          st = LJ455('res-at455', { d: today(), cmd: {}, spin: 0 });
+        if (!c || c.done || !canIn455(c.in)) {
+          return;
+        }
+        add455(c.in, -1);
+        reward454(c.rew);
+        st.cmd[k] = 1;
+        writeLS('res-at455', st);
+        toast('Commande livrée : ' + txt454(c.rew));
+      } else if (a === 'spin') {
+        spin455();
+        renderBag();
+        return;
+      } else {
+        return;
+      }
+      sfx('ui');
+      vibe(15);
+      savePurse();
       renderBag();
+    },
+    true
+  );
+
+  document.addEventListener('click', e => {
+    const b = e.target.closest && e.target.closest('[data-cd455]');
+    if (!b) {
       return;
-    } else return;
-    sfx('ui');
-    vibe(15);
+    }
+    const s = cdSt455();
+    if (s.last === today()) {
+      return;
+    }
+    const R = GIFT455[s.n % 7];
+    reward454(R);
+    let extra = '';
+    if (R.ct) {
+      const cts = tmKeys455(),
+        k = cts[Math.floor(rng454('cdct455')() * cts.length)];
+      PROFILE.bag[k] = Math.min(99, bagN(k) + 1);
+      extra = ' + ' + SHOP[k].n;
+    }
+    s.n++;
+    s.last = today();
+    writeLS('res-cd455', s);
+    sfx('win');
+    vibe(25);
+    toast('Cadeau du jour : ' + txt454(R) + extra);
     savePurse();
-    renderBag();
-  },
-  true
-);
-
-
-document.addEventListener('click', e => {
-  const b = e.target.closest && e.target.closest('[data-cd455]');
-  if (!b) return;
-  const s = cdSt455();
-  if (s.last === today()) return;
-  const R = GIFT455[s.n % 7];
-  reward454(R);
-  let extra = '';
-  if (R.ct) {
-    const cts = tmKeys455(),
-      k = cts[Math.floor(rng454('cdct455')() * cts.length)];
-    PROFILE.bag[k] = Math.min(99, bagN(k) + 1);
-    extra = ' + ' + SHOP[k].n;
-  }
-  s.n++;
-  s.last = today();
-  writeLS('res-cd455', s);
-  sfx('win');
-  vibe(25);
-  toast('Cadeau du jour : ' + txt454(R) + extra);
-  savePurse();
-  refreshHome(); // #cd455 button
-});
-
+    refreshHome(); // #cd455 button
+  });
 }

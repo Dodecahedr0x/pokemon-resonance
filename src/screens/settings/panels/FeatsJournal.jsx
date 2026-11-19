@@ -7,7 +7,10 @@ export default function FeatsJournal() {
   return (
     <section className="v4-panel" id="jx467">
       <h3 className="h3">Journal des exploits</h3>
-      <p className="v4-note">Exploits obtenus : <b>{st.n}</b> · meilleur coup : <b>{st.rec.best}</b> dégâts · victoire la plus rapide : <b>{st.rec.fast || '—'}</b> manche{st.rec.fast > 1 ? 's' : ''}.</p>
+      <p className="v4-note">
+        Exploits obtenus : <b>{st.n}</b> · meilleur coup : <b>{st.rec.best}</b> dégâts · victoire la plus rapide :{' '}
+        <b>{st.rec.fast || '—'}</b> manche{st.rec.fast > 1 ? 's' : ''}.
+      </p>
       {h8.length ? (
         <ul className="sc460-l">
           {h8.map((h, i) => (

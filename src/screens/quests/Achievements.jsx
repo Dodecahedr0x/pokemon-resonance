@@ -8,19 +8,35 @@ function AchievementRow({ s }) {
     equipped = ok && PROFILE.titre === s.id;
   return (
     <article className={'v4-panel su-row' + (ok ? ' ok' : '')}>
-      <span className="su-ic" aria-hidden="true"><svg><use href="#i-trophy" /></svg></span>
+      <span className="su-ic" aria-hidden="true">
+        <svg>
+          <use href="#i-trophy" />
+        </svg>
+      </span>
       <div className="su-t">
-        <b>{s.n}</b><em>{s.d}</em>
+        <b>{s.n}</b>
+        <em>{s.d}</em>
         {pr ? (
           <>
-            <span className="su-p"><i style={{ width: `${Math.round((100 * Math.min(pr[0], pr[1])) / pr[1])}%` }} /></span>
-            <small>{Math.min(pr[0], pr[1])} / {pr[1]}</small>
+            <span className="su-p">
+              <i style={{ width: `${Math.round((100 * Math.min(pr[0], pr[1])) / pr[1])}%` }} />
+            </span>
+            <small>
+              {Math.min(pr[0], pr[1])} / {pr[1]}
+            </small>
           </>
         ) : null}
         {s.t ? <small className="su-ti">Titre : « {s.t} »</small> : null}
       </div>
       {s.t && ok ? (
-        <button type="button" className={'b b-sm' + (equipped ? ' b-gold' : '')} data-titre={s.id} aria-pressed={equipped}>{equipped ? 'Porté' : 'Porter'}</button>
+        <button
+          type="button"
+          className={'b b-sm' + (equipped ? ' b-gold' : '')}
+          data-titre={s.id}
+          aria-pressed={equipped}
+        >
+          {equipped ? 'Porté' : 'Porter'}
+        </button>
       ) : ok ? (
         <span className="su-ok">✓</span>
       ) : null}
@@ -32,8 +48,13 @@ export default function Achievements() {
   const n = ACHIEVEMENTS.filter(s => PROFILE.achievements && PROFILE.achievements[s.id]).length;
   return (
     <>
-      <p className="v4-note">{n} / {ACHIEVEMENTS.length} succès. Ceux qui donnent un titre peuvent être portés : il s’affiche à côté de votre nom.</p>
-      {ACHIEVEMENTS.map(s => <AchievementRow key={s.id} s={s} />)}
+      <p className="v4-note">
+        {n} / {ACHIEVEMENTS.length} succès. Ceux qui donnent un titre peuvent être portés : il s’affiche à côté de votre
+        nom.
+      </p>
+      {ACHIEVEMENTS.map(s => (
+        <AchievementRow key={s.id} s={s} />
+      ))}
     </>
   );
 }

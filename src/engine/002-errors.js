@@ -1,19 +1,27 @@
 /* Original section: 00-erreurs.js */
 
 // harmless browser warnings (ResizeObserver, error from another site, interrupted audio playback)
-const BENIGN = /ResizeObserver loop|^Script error\.?$|play\(\) request|NotAllowedError|AbortError|The operation was aborted|interrupted by a (new load|call to pause)/i;
-
+const BENIGN =
+  /ResizeObserver loop|^Script error\.?$|play\(\) request|NotAllowedError|AbortError|The operation was aborted|interrupted by a (new load|call to pause)/i;
 
 export function reportError(e, where) {
-  if (BENIGN.test(String((e && (e.message || (e.reason && e.reason.message))) || e || '').trim())) return;
+  if (BENIGN.test(String((e && (e.message || (e.reason && e.reason.message))) || e || '').trim())) {
+    return;
+  }
   const msg = String((e && (e.message || (e.reason && e.reason.message))) || e || 'erreur inconnue').slice(0, 220);
   const line = (where ? where + ' · ' : '') + msg;
-  if (ERRS.includes(line) || ERRS.length > 6) return;
+  if (ERRS.includes(line) || ERRS.length > 6) {
+    return;
+  }
   ERRS.push(line);
   try {
     console.error('[Resonance]', line, e);
-  } catch { /* Best effort: failure here is non-fatal. */ }
-  if (!document.body) return;
+  } catch {
+    /* Best effort: failure here is non-fatal. */
+  }
+  if (!document.body) {
+    return;
+  }
   let box = document.getElementById('errBox');
   if (!box) {
     box = document.createElement('div');
@@ -38,10 +46,7 @@ const ERRS = [];
 
 // Statements run at startup, in the original order (see index.js).
 export function __init() {
+  window.addEventListener('error', e => reportError(e.error || e.message, e.lineno ? 'ligne ' + e.lineno : ''));
 
-
-window.addEventListener('error', e => reportError(e.error || e.message, e.lineno ? 'ligne ' + e.lineno : ''));
-
-
-window.addEventListener('unhandledrejection', e => reportError(e.reason, 'promesse'));
+  window.addEventListener('unhandledrejection', e => reportError(e.reason, 'promesse'));
 }

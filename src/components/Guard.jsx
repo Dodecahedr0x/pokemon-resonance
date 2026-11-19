@@ -16,7 +16,9 @@ class Limit extends Component {
   componentDidCatch(err) {
     try {
       reportError(err, 'rendu');
-    } catch { /* Best effort: failure here is non-fatal. */ }
+    } catch {
+      /* Best effort: failure here is non-fatal. */
+    }
   }
   render() {
     return this.state.err ? null : this.props.children;

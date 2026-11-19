@@ -11,7 +11,9 @@ import { useBattleVersion } from './battleStore.js';
 // The plates of the two teams, above (#bPlE) and below (#bPlA) the board.
 export function PlatesE() {
   const v = useBattleVersion('top');
-  if (!v || !B) return <div className="plates" id="bPlE" />;
+  if (!v || !B) {
+    return <div className="plates" id="bPlE" />;
+  }
   const foes = B.units.filter(u => u.side === 'e'),
     D = B.duel433;
   // fog (v4.31): opponents out of sight are veiled
@@ -33,7 +35,9 @@ export function PlatesE() {
 
 export function PlatesA() {
   const v = useBattleVersion('top');
-  if (!v || !B) return <div className="plates" id="bPlA" />;
+  if (!v || !B) {
+    return <div className="plates" id="bPlA" />;
+  }
   const al = B.units.filter(u => u.side === 'a'),
     D = B.duel433;
   return (

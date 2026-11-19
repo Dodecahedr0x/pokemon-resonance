@@ -22,25 +22,41 @@ export default function Banners() {
         </span>
         <span className="sa465-t">
           <b>{sa.S0.n}</b>
-          <small>{sa.pts} / {sa.top} points de saison</small>
-          <span className="cp-bar"><i style={{ width: `${sa.pc}%` }} /></span>
+          <small>
+            {sa.pts} / {sa.top} points de saison
+          </small>
+          <span className="cp-bar">
+            <i style={{ width: `${sa.pc}%` }} />
+          </span>
         </span>
       </button>
       <button type="button" id="br466" data-br466="open" className="br466">
         <span className="br466-i">{br.i}</span>
-        <span className="br466-t"><b>Boss Rush</b><small>{br.txt}</small></span>
+        <span className="br466-t">
+          <b>Boss Rush</b>
+          <small>{br.txt}</small>
+        </span>
       </button>
       <button type="button" id="df468" data-df468="open" className="df468">
         <span className="df468-i">5</span>
-        <span className="df468-t"><b>Arène de défense</b><small>{dfTxt468()}</small></span>
+        <span className="df468-t">
+          <b>Arène de défense</b>
+          <small>{dfTxt468()}</small>
+        </span>
       </button>
       <button type="button" id="x470" data-x470="open" className="df468">
         <span className="df468-i">★</span>
-        <span className="df468-t"><b>Défis du jour</b><small>Quotidien · Laboratoire · Prestige</small></span>
+        <span className="df468-t">
+          <b>Défis du jour</b>
+          <small>Quotidien · Laboratoire · Prestige</small>
+        </span>
       </button>
       <button type="button" id="x2470" data-x2470="open" className="df468">
         <span className="df468-i">+</span>
-        <span className="df468-t"><b>Défis de dresseur</b><small>Rivalité · Dresseur · Vitrine · Entraînement</small></span>
+        <span className="df468-t">
+          <b>Défis de dresseur</b>
+          <small>Rivalité · Dresseur · Vitrine · Entraînement</small>
+        </span>
       </button>
       <button type="button" id="cd455" data-cd455="1" className={'cd455' + (cd.fait ? ' done' : '')}>
         <span className="cd455-i">{cd.fait ? '✓' : '★'}</span>

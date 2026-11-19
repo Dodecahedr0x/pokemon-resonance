@@ -10,7 +10,9 @@ export let seenExits = false;
 const { emit, use } = channel();
 
 export function refreshCampPage(baseTab) {
-  if (baseTab) seenExits = true;
+  if (baseTab) {
+    seenExits = true;
+  }
   page++;
   emit();
 }

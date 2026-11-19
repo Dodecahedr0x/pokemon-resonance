@@ -6,13 +6,17 @@ let openItems = new Set();
 const { emit, use } = channel();
 
 export function showTip(t) {
-  if (openItems.has(t)) return;
+  if (openItems.has(t)) {
+    return;
+  }
   openItems = new Set(openItems).add(t);
   emit();
 }
 
 export function hideTip(t) {
-  if (!openItems.has(t)) return;
+  if (!openItems.has(t)) {
+    return;
+  }
   openItems = new Set(openItems);
   openItems.delete(t);
   emit();

@@ -20,16 +20,35 @@ const txRef = k => txRefs[k] || (txRefs[k] = n => n && (L.tx[k] = n));
 /* v4.71: painted terrain image and waves (before the cells) */
 export function Painting() {
   const S = useBoard('paint');
-  if (!S.pv) return null;
+  if (!S.pv) {
+    return null;
+  }
   const [W, H] = S.vb;
   return (
     <>
-      <image className="pv471" x="0" y="0" preserveAspectRatio="none" style={PE} width={W} height={H} href={S.pvHref || undefined} />
+      <image
+        className="pv471"
+        x="0"
+        y="0"
+        preserveAspectRatio="none"
+        style={PE}
+        width={W}
+        height={H}
+        href={S.pvHref || undefined}
+      />
       <g className="wv471" style={PE}>
         {S.waves.map(([x, y], i) => (
           <Fragment key={i}>
-            <path className="wv" style={{ animationDelay: (-i * 0.9).toFixed(1) + 's' }} d={`M${(x - 9).toFixed(1)} ${(y - 2).toFixed(1)}q3-2.4 6 0t6 0`} />
-            <path className="wv" style={{ animationDelay: (-i * 0.9 - 1.6).toFixed(1) + 's' }} d={`M${(x - 3).toFixed(1)} ${(y + 7).toFixed(1)}q3-2.4 6 0t6 0`} />
+            <path
+              className="wv"
+              style={{ animationDelay: (-i * 0.9).toFixed(1) + 's' }}
+              d={`M${(x - 9).toFixed(1)} ${(y - 2).toFixed(1)}q3-2.4 6 0t6 0`}
+            />
+            <path
+              className="wv"
+              style={{ animationDelay: (-i * 0.9 - 1.6).toFixed(1) + 's' }}
+              d={`M${(x - 3).toFixed(1)} ${(y + 7).toFixed(1)}q3-2.4 6 0t6 0`}
+            />
           </Fragment>
         ))}
       </g>
@@ -40,7 +59,9 @@ export function Painting() {
 /* v4.77: earth slab under each cell */
 export function Pedestals() {
   const S = useBoard('tilt');
-  if (!S.lip) return null;
+  if (!S.lip) {
+    return null;
+  }
   return (
     <g className="lip477" style={PE}>
       {S.lip.map((p, i) => (
@@ -55,13 +76,25 @@ function tileClass(k) {
   const t = B.tiles[k],
     pp = P(k);
   let c = 'hx' + ((pp[0] + pp[1]) % 2 ? ' alt' : '');
-  if (t.rock) c += ' rock';
-  else if (t.w) c += ' river';
-  if (t.mud > 0) c += ' mud';
-  if (t.lava > 0) c += ' lava';
-  if (t.pil) c += ' pillar';
-  else if (t.grass && !t.rock) c += ' grass';
-  if (t.sand && !t.w && !t.rock) c += ' sand';
+  if (t.rock) {
+    c += ' rock';
+  } else if (t.w) {
+    c += ' river';
+  }
+  if (t.mud > 0) {
+    c += ' mud';
+  }
+  if (t.lava > 0) {
+    c += ' lava';
+  }
+  if (t.pil) {
+    c += ' pillar';
+  } else if (t.grass && !t.rock) {
+    c += ' grass';
+  }
+  if (t.sand && !t.w && !t.rock) {
+    c += ' sand';
+  }
   return c;
 }
 
@@ -85,7 +118,9 @@ export function Cells() {
 // texture of a cell: water, sand (drawObstacles) or the location's terrain
 function texFill(k) {
   const t = B.tiles[k];
-  if (t.sand && !t.w && !t.rock) return 'url(#tx-sand)';
+  if (t.sand && !t.w && !t.rock) {
+    return 'url(#tx-sand)';
+  }
   return `url(#${t.w ? 'tx-water' : L.txId})`;
 }
 
@@ -126,20 +161,39 @@ export function Decor() {
   const S = useBoard('pv');
   const items = useKeyed(() => {
     const o = [];
-    if (!B) return o;
+    if (!B) {
+      return o;
+    }
     for (const k in B.tiles) {
       const t = B.tiles[k],
         [c, r] = P(k),
         [x, y] = HC(k);
-      if (t.rock || t.w || (c * 7 + r * 13) % 5) continue;
+      if (t.rock || t.w || (c * 7 + r * 13) % 5) {
+        continue;
+      }
       if (S.bio === 'gue') {
-        o.push(<path key={k} className="tuft" d={`M${(x - 7).toFixed(1)} ${(y + 14).toFixed(1)} l3 -9 l2 9 l3 -12 l3 12 l2 -8 l2 8Z`} />);
+        o.push(
+          <path
+            key={k}
+            className="tuft"
+            d={`M${(x - 7).toFixed(1)} ${(y + 14).toFixed(1)} l3 -9 l2 9 l3 -12 l3 12 l2 -8 l2 8Z`}
+          />
+        );
+      } else if (S.bio === 'tour') {
+        o.push(<circle key={k} className="ember" cx={(x + 8).toFixed(1)} cy={(y + 10).toFixed(1)} r="1.6" />);
+      } else if (S.bio === 'roche') {
+        o.push(
+          <path key={k} className="pebble" d={`M${(x - 8).toFixed(1)} ${(y + 13).toFixed(1)} q3 -4 6 0 q3 -3 5 0Z`} />
+        );
+      } else {
+        o.push(
+          <path
+            key={k}
+            className="glint"
+            d={`M${(x + 9).toFixed(1)} ${(y - 12).toFixed(1)}l1 3 3 1-3 1-1 3-1-3-3-1 3-1Z`}
+          />
+        );
       }
-      else if (S.bio === 'tour') o.push(<circle key={k} className="ember" cx={(x + 8).toFixed(1)} cy={(y + 10).toFixed(1)} r="1.6" />);
-      else if (S.bio === 'roche') {
-        o.push(<path key={k} className="pebble" d={`M${(x - 8).toFixed(1)} ${(y + 13).toFixed(1)} q3 -4 6 0 q3 -3 5 0Z`} />);
-      }
-      else o.push(<path key={k} className="glint" d={`M${(x + 9).toFixed(1)} ${(y - 12).toFixed(1)}l1 3 3 1-3 1-1 3-1-3-3-1 3-1Z`} />);
     }
     return o;
   }, [S.n]);
@@ -154,7 +208,9 @@ export function Decor() {
 export function Water() {
   const S = useBoard('eau');
   const E = S.eau;
-  if (!E) return null;
+  if (!E) {
+    return null;
+  }
   const [W, H] = S.vb,
     dx = W * 0.2,
     dy = W * 0.06;
@@ -164,7 +220,7 @@ export function Water() {
       s = tiltS(x, y),
       n = parseInt(k.replace(/\D/g, ''), 10) || 0;
     for (let i = 0; i < 2; i++) {
-      const r = j => ((Math.sin(n * 91.3 + i * 47.7 + j * 13.1) * 43758.5453) % 1 + 1) % 1,
+      const r = j => (((Math.sin(n * 91.3 + i * 47.7 + j * 13.1) * 43758.5453) % 1) + 1) % 1,
         gx = x + (r(1) - 0.5) * BG.S * 1.1 * s,
         gy = y + (r(2) - 0.5) * BG.S * 0.6 * s,
         rx = (3.6 + r(3) * 2.4) * s;
@@ -176,13 +232,21 @@ export function Water() {
           cy={gy.toFixed(1)}
           rx={rx.toFixed(1)}
           ry={(rx * 0.2).toFixed(2)}
-          style={{ animationDuration: (2.6 + r(4) * 2.2).toFixed(1) + 's', animationDelay: '-' + (r(5) * 4).toFixed(1) + 's' }}
+          style={{
+            animationDuration: (2.6 + r(4) * 2.2).toFixed(1) + 's',
+            animationDelay: '-' + (r(5) * 4).toFixed(1) + 's',
+          }}
         />
       );
     }
   });
   return (
-    <g className={'eau477' + (E.fixed ? ' fixe' : '')} style={E.keyList.length ? PE : { ...PE, display: 'none' }} aria-hidden="true" data-k={E.id}>
+    <g
+      className={'eau477' + (E.fixed ? ' fixe' : '')}
+      style={E.keyList.length ? PE : { ...PE, display: 'none' }}
+      aria-hidden="true"
+      data-k={E.id}
+    >
       <g clipPath="url(#eau477c)">
         <rect
           className="bande477"
@@ -202,7 +266,9 @@ export function Water() {
 /* v4.77: horizon haze and moon tint, cut out to the board */
 export function Light() {
   const S = useBoard('tilt');
-  if (!S.hz) return null;
+  if (!S.hz) {
+    return null;
+  }
   const [W, H] = S.vb;
   return (
     <g className={'lum477' + (S.night ? ' n' : '')} style={PE} clipPath="url(#cp477)">
@@ -218,11 +284,19 @@ export function Landmarks() {
   const base = useKeyed(() => {
     const o = [];
     if (VERT) {
-      for (let r = 0; r < BH; r++) o.push([r + 1, HC(K(0, r))[0], 8]);
-      for (let c = 0; c < BW; c++) o.push(['ABCDEFGH'[c], 7, HC(K(c, 0))[1] + 2.5]);
+      for (let r = 0; r < BH; r++) {
+        o.push([r + 1, HC(K(0, r))[0], 8]);
+      }
+      for (let c = 0; c < BW; c++) {
+        o.push(['ABCDEFGH'[c], 7, HC(K(c, 0))[1] + 2.5]);
+      }
     } else {
-      for (let r = 0; r < BH; r++) o.push([r + 1, 8, HC(K(0, r))[1] + 2.5]);
-      for (let c = 0; c < BW; c++) o.push(['ABCDEFGH'[c], HC(K(c, 0))[0], 10]);
+      for (let r = 0; r < BH; r++) {
+        o.push([r + 1, 8, HC(K(0, r))[1] + 2.5]);
+      }
+      for (let c = 0; c < BW; c++) {
+        o.push(['ABCDEFGH'[c], HC(K(c, 0))[0], 10]);
+      }
     }
     return o;
   }, [S.n]);

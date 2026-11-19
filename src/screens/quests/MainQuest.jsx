@@ -20,16 +20,25 @@ function Chapter({ k, gk }) {
     st = nx ? 'next' : won ? 'done' : lk ? 'lock' : 'open';
   return (
     <article className={`v4-qm s-${st}`}>
-      <span className="v4-qm-ic"><Html html={emblem(k, 'sm')} /></span>
+      <span className="v4-qm-ic">
+        <Html html={emblem(k, 'sm')} />
+      </span>
       <div className="v4-qm-t">
-        <small>{C.c}{ELITE.includes(k) ? ' · ' + (ELITE.indexOf(k) + 1) + ' / 4' : ''}</small>
+        <small>
+          {C.c}
+          {ELITE.includes(k) ? ' · ' + (ELITE.indexOf(k) + 1) + ' / 4' : ''}
+        </small>
         <b>{k === 'tuto' || k === 'champ' ? C.t : SCEN[k].n}</b>
         <em>{L ? `Battre ${L.n}, ${L.t}` : 'Le combat guidé de la Professeure'}</em>
         {gi >= 0 && !won ? <Html html={rewardLine(k)} /> : null}
       </div>
       <div className="v4-qm-r">
         <em className={`v4-pill s-${st}`}>{STATE_N[st]}</em>
-        {lk ? null : <button type="button" className={'b b-sm' + (nx ? ' b-gold' : '')} data-v4fight={k}>{won ? 'Rejouer' : 'Y aller'}</button>}
+        {lk ? null : (
+          <button type="button" className={'b b-sm' + (nx ? ' b-gold' : '')} data-v4fight={k}>
+            {won ? 'Rejouer' : 'Y aller'}
+          </button>
+        )}
       </div>
     </article>
   );
@@ -41,9 +50,17 @@ export default function MainQuest() {
   return (
     <>
       {isCamp() ? null : (
-        <div className="v4-note">Mode Libre : tous les combats sont ouverts et les Pokémon se capturent dans leur région. Les chapitres se suivent dans l’ordre en Campagne. <a className="b b-sm" data-t="params" href="#params">Changer de mode : Paramètres</a></div>
+        <div className="v4-note">
+          Mode Libre : tous les combats sont ouverts et les Pokémon se capturent dans leur région. Les chapitres se
+          suivent dans l’ordre en Campagne.{' '}
+          <a className="b b-sm" data-t="params" href="#params">
+            Changer de mode : Paramètres
+          </a>
+        </div>
       )}
-      {MAINQ().map(k => <Chapter key={k} k={k} gk={gk} />)}
+      {MAINQ().map(k => (
+        <Chapter key={k} k={k} gk={gk} />
+      ))}
     </>
   );
 }

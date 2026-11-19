@@ -8,22 +8,41 @@ export default function Nuzlocke() {
   return (
     <section className="v4-panel" id="an451">
       <h3 className="h3">Mode Nuzlocke</h3>
-      <p className="v4-note">Pour les joueurs qui aiment le risque. Un Pokémon K.O. à la fin d’un combat est perdu pour de bon (le dernier compagnon est toujours épargné), et on ne peut tenter qu’une seule rencontre par région et par jour. Désactivable à tout moment, sans rien rendre.</p>
+      <p className="v4-note">
+        Pour les joueurs qui aiment le risque. Un Pokémon K.O. à la fin d’un combat est perdu pour de bon (le dernier
+        compagnon est toujours épargné), et on ne peut tenter qu’une seule rencontre par région et par jour.
+        Désactivable à tout moment, sans rien rendre.
+      </p>
       <div className="sv-io">
         {on ? (
-          <button type="button" className="b b-sm b-gold" data-b451="off">Nuzlocke : activé</button>
+          <button type="button" className="b b-sm b-gold" data-b451="off">
+            Nuzlocke : activé
+          </button>
         ) : nzConf450 ? (
           <>
             <span className="sv-q">Activer ? Les prochains K.O. seront définitifs.</span>
-            <button type="button" className="b b-sm b-gold" data-b451="yes">Oui, activer</button>
-            <button type="button" className="b b-sm" data-b451="no">Annuler</button>
+            <button type="button" className="b b-sm b-gold" data-b451="yes">
+              Oui, activer
+            </button>
+            <button type="button" className="b b-sm" data-b451="no">
+              Annuler
+            </button>
           </>
         ) : (
-          <button type="button" className="b b-sm" data-b451="ask">Nuzlocke : désactivé</button>
+          <button type="button" className="b b-sm" data-b451="ask">
+            Nuzlocke : désactivé
+          </button>
         )}
       </div>
       {s.fallen.length > 0 && (
-        <p className="v4-note" style={{ marginTop: '10px' }}><b>Tombés au combat ({s.fallen.length})</b> : {s.fallen.slice(-12).map(m => m.n).join(', ')}.</p>
+        <p className="v4-note" style={{ marginTop: '10px' }}>
+          <b>Tombés au combat ({s.fallen.length})</b> :{' '}
+          {s.fallen
+            .slice(-12)
+            .map(m => m.n)
+            .join(', ')}
+          .
+        </p>
       )}
     </section>
   );

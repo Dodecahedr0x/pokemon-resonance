@@ -6,7 +6,12 @@ import { fmt } from '../../engine/032-v4-foundation.js';
 import { CATN430, log0430 } from '../../engine/065-camp-tactics.js';
 
 const NL = '\n  ';
-const Tile = ({ v, t }) => <div className="jt430"><b>{v}</b><span>{t}</span></div>;
+const Tile = ({ v, t }) => (
+  <div className="jt430">
+    <b>{v}</b>
+    <span>{t}</span>
+  </div>
+);
 
 // « Journal » tab (v4.30): statistics, battles by type, MVP, latest battles.
 export default function Journal() {
@@ -17,7 +22,9 @@ export default function Journal() {
         .filter(([k]) => BY[k])
         .sort((a, b) => b[1] - a[1])
         .slice(0, n);
-  if (!J.n) return <p className="v4-empty">Jouez un combat : son rapport et vos statistiques apparaîtront ici.</p>;
+  if (!J.n) {
+    return <p className="v4-empty">Jouez un combat : son rapport et vos statistiques apparaîtront ici.</p>;
+  }
   const mvp = top(J.mvp, 5);
   return (
     <div className="jr430">
@@ -36,7 +43,15 @@ export default function Journal() {
         {Object.entries(J.category)
           .sort((a, b) => b[1][0] + b[1][1] - (a[1][0] + a[1][1]))
           .map(([k, [w, l]]) => (
-            <div key={k} className="jc430"><span>{CATN430[k] || k}</span><span className="jc430-b"><i style={{ width: `${Math.round((w / Math.max(1, w + l)) * 100)}%` }} /></span><b>{w} / {w + l}</b></div>
+            <div key={k} className="jc430">
+              <span>{CATN430[k] || k}</span>
+              <span className="jc430-b">
+                <i style={{ width: `${Math.round((w / Math.max(1, w + l)) * 100)}%` }} />
+              </span>
+              <b>
+                {w} / {w + l}
+              </b>
+            </div>
           ))}
       </section>
       {NL}
@@ -44,7 +59,12 @@ export default function Journal() {
         <h3>MVP les plus fréquents</h3>
         {mvp.length ? (
           mvp.map(([k, n]) => (
-            <div key={k} className="jm430"><Html html={medal(BY[k].t, 'sm')} /><span>{BY[k].n}</span><b>{n} × MVP</b><em>{J.use[k] || 0} combats</em></div>
+            <div key={k} className="jm430">
+              <Html html={medal(BY[k].t, 'sm')} />
+              <span>{BY[k].n}</span>
+              <b>{n} × MVP</b>
+              <em>{J.use[k] || 0} combats</em>
+            </div>
           ))
         ) : (
           <p className="v4-note">Pas encore de MVP.</p>
@@ -60,7 +80,10 @@ export default function Journal() {
             <div key={i} className={'jl430' + (x[1] ? ' w' : '')}>
               <span className="jl430-r">{x[1] ? 'V' : 'D'}</span>
               <span className="jl430-n">{x[0]}</span>
-              <span>{x[2] ? 'Rang ' + x[2] + ' · ' : ''}{x[3]} manche{x[3] > 1 ? 's' : ''}</span>
+              <span>
+                {x[2] ? 'Rang ' + x[2] + ' · ' : ''}
+                {x[3]} manche{x[3] > 1 ? 's' : ''}
+              </span>
               {x[4] && BY[x[4]] ? <em>MVP {BY[x[4]].n}</em> : null}
             </div>
           ))}

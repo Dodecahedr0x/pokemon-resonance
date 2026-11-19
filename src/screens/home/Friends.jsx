@@ -22,16 +22,25 @@ function Content() {
   return (
     <>
       <header className="v4-ph">
-        <svg><use href="#i-team" /></svg>
+        <svg>
+          <use href="#i-team" />
+        </svg>
         <b>Défis entre amis</b>
         <span className="v4-cnt">{L.length}</span>
       </header>
       {'\n  '}
-      <p className="v4-ps-n">Partagez votre carte de dresseur (un code à coller), ajoutez celles de vos amis, et affrontez leurs équipes. Le classement compare vos progrès.</p>
+      <p className="v4-ps-n">
+        Partagez votre carte de dresseur (un code à coller), ajoutez celles de vos amis, et affrontez leurs équipes. Le
+        classement compare vos progrès.
+      </p>
       {'\n  '}
       <div className="am-a">
-        <button type="button" className="b b-gold b-sm" data-ami="carte">Ma carte de dresseur</button>
-        <button type="button" className="b b-sm" data-ami="ajout">Ajouter un ami</button>
+        <button type="button" className="b b-gold b-sm" data-ami="carte">
+          Ma carte de dresseur
+        </button>
+        <button type="button" className="b b-sm" data-ami="ajout">
+          Ajouter un ami
+        </button>
       </div>
       <Html html={tournamentHtml417()} />
       {'\n  '}
@@ -41,18 +50,33 @@ function Content() {
             <div key={i} className="am-r">
               <span className="am-t">
                 {a.t.map((x, j) => (
-                  <span key={j} className={'am-m' + (x[3] ? ' shn' : '')} style={x[3] ? parseStyle(shinyStyle(BY[x[0]].base)) : undefined}>
+                  <span
+                    key={j}
+                    className={'am-m' + (x[3] ? ' shn' : '')}
+                    style={x[3] ? parseStyle(shinyStyle(BY[x[0]].base)) : undefined}
+                  >
                     <Html html={medal(BY[x[0]].t, 'sm')} />
                   </span>
                 ))}
               </span>
               <span className="am-n">
                 <b>{a.n}</b>
-                <em>{a.t.map(x => BY[x[0]].n).join(', ')} · {a.w}–{a.l}</em>
+                <em>
+                  {a.t.map(x => BY[x[0]].n).join(', ')} · {a.w}–{a.l}
+                </em>
               </span>
               <span className="am-b">
-                <button type="button" className="b b-sm b-gold" data-ami-fight={i}>Affronter</button>
-                <button type="button" className={'b b-sm b-ghost am-del' + (del === i ? ' on' : '')} data-ami-del={i} aria-label={`Retirer ${a.n}`}>{del === i ? 'Retirer ?' : '×'}</button>
+                <button type="button" className="b b-sm b-gold" data-ami-fight={i}>
+                  Affronter
+                </button>
+                <button
+                  type="button"
+                  className={'b b-sm b-ghost am-del' + (del === i ? ' on' : '')}
+                  data-ami-del={i}
+                  aria-label={`Retirer ${a.n}`}
+                >
+                  {del === i ? 'Retirer ?' : '×'}
+                </button>
               </span>
             </div>
           ))}
@@ -63,22 +87,37 @@ function Content() {
         <summary>Classement</summary>
         <table>
           <thead>
-            <tr><th>#</th><th>Dresseur</th><th>Score</th><th>Badges</th><th>Tour</th><th>Jour</th></tr>
+            <tr>
+              <th>#</th>
+              <th>Dresseur</th>
+              <th>Score</th>
+              <th>Badges</th>
+              <th>Tour</th>
+              <th>Jour</th>
+            </tr>
           </thead>
           <tbody>
             {rows.map((a, i) => (
               <tr key={i} className={a.me ? 'me' : ''}>
                 <td>{i + 1}</td>
                 <td>{a.me ? (PROFILE.name ? PROFILE.name + ' (vous)' : 'Vous') : a.n}</td>
-                <td><b>{fmt(a.sc)}</b></td>
-                <td>{a.s.b}{a.s.j ? ' + ' + a.s.j : ''}</td>
+                <td>
+                  <b>{fmt(a.sc)}</b>
+                </td>
+                <td>
+                  {a.s.b}
+                  {a.s.j ? ' + ' + a.s.j : ''}
+                </td>
                 <td>{a.s.tb}</td>
                 <td>{dayKey(a)}</td>
               </tr>
             ))}
           </tbody>
         </table>
-        <p className="am-nt">Score : badges, Ligue, Johto, Pokédex, Tour de Résonance et chromatiques. « Jour » : Défi du jour relevé aujourd’hui (rang, manches). Le classement d’un ami se met à jour quand il vous renvoie sa carte.</p>
+        <p className="am-nt">
+          Score : badges, Ligue, Johto, Pokédex, Tour de Résonance et chromatiques. « Jour » : Défi du jour relevé
+          aujourd’hui (rang, manches). Le classement d’un ami se met à jour quand il vous renvoie sa carte.
+        </p>
       </details>
     </>
   );

@@ -6,9 +6,15 @@ export default function Immersion() {
   return (
     <section className="v4-panel" id="ai448">
       <h3 className="h3">Immersion</h3>
-      <p className="v4-note">Bruitages par type d’attaque, cris, entrée en combat animée, particules, tremblement des gros coups, météo animée sur le plateau, cartes holographiques et musique plus vive quand un allié est presque K.O. Les vibrations et le son se règlent plus bas.</p>
+      <p className="v4-note">
+        Bruitages par type d’attaque, cris, entrée en combat animée, particules, tremblement des gros coups, météo
+        animée sur le plateau, cartes holographiques et musique plus vive quand un allié est presque K.O. Les vibrations
+        et le son se règlent plus bas.
+      </p>
       <div className="sv-io">
-        <button type="button" className={`b b-sm${on ? ' b-gold' : ''}`} data-b448="im">{on ? 'Immersion : activée' : 'Immersion : désactivée'}</button>
+        <button type="button" className={`b b-sm${on ? ' b-gold' : ''}`} data-b448="im">
+          {on ? 'Immersion : activée' : 'Immersion : désactivée'}
+        </button>
       </div>
     </section>
   );

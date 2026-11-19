@@ -45,7 +45,9 @@ export default function SummaryBox({ id }) {
     const D = SCEN[b.sc];
     cur = { gym: D.gym, at: D.at, line: battleLine(b), v };
   }
-  if (cur && (!last || last.v !== cur.v)) setLast(cur);
+  if (cur && (!last || last.v !== cur.v)) {
+    setLast(cur);
+  }
   const c = cur || last;
   return (
     <div className="resume" id={id} hidden={!b}>

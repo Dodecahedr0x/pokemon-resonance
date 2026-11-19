@@ -19,7 +19,9 @@ export function openOverlay(id, data = {}) {
 
 // Updates the data of the open window `id` (without recreating the node).
 export function updateTemp(id, patch) {
-  if (!listItems.some(x => x.id === id)) return;
+  if (!listItems.some(x => x.id === id)) {
+    return;
+  }
   listItems = listItems.map(x => (x.id === id ? { ...x, data: { ...x.data, ...patch } } : x));
   emit();
 }
@@ -28,7 +30,9 @@ export function updateTemp(id, patch) {
 // displayed (a window reopened since has a new node).
 export function shut(target) {
   const id = typeof target === 'string' ? target : target && target.isConnected ? target.id : null;
-  if (!id || !listItems.some(x => x.id === id)) return;
+  if (!id || !listItems.some(x => x.id === id)) {
+    return;
+  }
   listItems = listItems.filter(x => x.id !== id);
   emit();
 }

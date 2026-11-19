@@ -17,7 +17,7 @@ export function SelTabs({ G }) {
     terrains: `${selItems('terrains').length} combats`,
     arenes: `${nA} / 8 badges`,
     ligue: `${nL} / 4${PROFILE.elite >= 5 ? ' · ★' : ''}`,
-    apres: `${PROFILE.legends.length} / 6 · étage ${PROFILE.tdr.best}`
+    apres: `${PROFILE.legends.length} / 6 · étage ${PROFILE.tdr.best}`,
   };
   return SELG.map(([g, n, ic]) => (
     <button key={g} type="button" role="tab" data-pg={g} aria-selected={G === g}>

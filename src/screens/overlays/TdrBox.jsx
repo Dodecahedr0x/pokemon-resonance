@@ -23,23 +23,38 @@ function Choice({ cands, pick }) {
   return (
     <Dialogue className="sv-card st-card tdr-card" titre="tdrT" closeAttrs={{ 'data-tdr': 'x' }}>
       <p className="kick">Après-jeu</p>
-      <h2 className="h2" id="tdrT">Tour de Résonance</h2>
-      <p className="d">Choisissez 4 Pokémon pour cette ascension. Pas de budget ici : à vous de trouver les bonnes synergies.</p>
+      <h2 className="h2" id="tdrT">
+        Tour de Résonance
+      </h2>
+      <p className="d">
+        Choisissez 4 Pokémon pour cette ascension. Pas de budget ici : à vous de trouver les bonnes synergies.
+      </p>
       <div className="st-grid tdr-grid">
         {cands.map(id => {
           const m = BY[id],
             on = pick.includes(id);
           return (
-            <button key={id} type="button" className={'st-o tdr-o' + (on ? ' on' : '')} data-tdrp={id} aria-pressed={on} style={{ '--c': tc(m.t[0]) }}>
+            <button
+              key={id}
+              type="button"
+              className={'st-o tdr-o' + (on ? ' on' : '')}
+              data-tdrp={id}
+              aria-pressed={on}
+              style={{ '--c': tc(m.t[0]) }}
+            >
               <Html html={medal(m.t, 'lg')} />
               <b>{m.n}</b>
-              <em>{m.t.join(' / ')} · {m.r}</em>
+              <em>
+                {m.t.join(' / ')} · {m.r}
+              </em>
             </button>
           );
         })}
       </div>
       <div className="tdr-a">
-        <button type="button" className="b b-gold" data-tdr="go" disabled={n !== 4}>Commencer l’ascension · {n} / 4</button>
+        <button type="button" className="b b-gold" data-tdr="go" disabled={n !== 4}>
+          Commencer l’ascension · {n} / 4
+        </button>
       </div>
     </Dialogue>
   );
@@ -50,22 +65,32 @@ function Reward({ floor, offer }) {
   return (
     <Dialogue className="sv-card st-card tdr-card" titre="tdrT">
       <p className="kick">Tour de Résonance · étage {floor - 1} franchi</p>
-      <h2 className="h2" id="tdrT">Choisissez une récompense</h2>
+      <h2 className="h2" id="tdrT">
+        Choisissez une récompense
+      </h2>
       <div className="tdr-rw">
         {offer.map((x, i) => (
           <button key={i} type="button" className="tdr-r" data-tdrr={i}>
             {x.k === 'voix' ? (
               <span className="tdr-ic">+1</span>
             ) : x.k === 'item' ? (
-              <span className="tdr-ic"><img src={ITM(HELD_IMG[x.it])} alt="" /></span>
+              <span className="tdr-ic">
+                <img src={ITM(HELD_IMG[x.it])} alt="" />
+              </span>
             ) : (
               <Html html={medal(BY[x.to].t, 'sm')} />
             )}
-            <span><b>{x.t}</b><em>{x.d}</em></span>
+            <span>
+              <b>{x.t}</b>
+              <em>{x.d}</em>
+            </span>
           </button>
         ))}
       </div>
-      <p className="d">Ensuite : étage {floor}{floor % 5 === 0 ? ', gardé par une légende' : ''}.</p>
+      <p className="d">
+        Ensuite : étage {floor}
+        {floor % 5 === 0 ? ', gardé par une légende' : ''}.
+      </p>
     </Dialogue>
   );
 }

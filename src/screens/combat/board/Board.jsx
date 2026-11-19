@@ -45,7 +45,13 @@ function Layers() {
 const GameBoard = memo(function GameBoard() {
   const S = useBoard('svg');
   return (
-    <svg id="bSvg" viewBox={'0 0 ' + S.vb.join(' ')} role="img" aria-label="Plateau de combat" className={S.bio ? 'bio-' + S.bio : undefined}>
+    <svg
+      id="bSvg"
+      viewBox={'0 0 ' + S.vb.join(' ')}
+      role="img"
+      aria-label="Plateau de combat"
+      className={S.bio ? 'bio-' + S.bio : undefined}
+    >
       {S.n > 0 && <Layers key={S.n} />}
     </svg>
   );
@@ -69,7 +75,13 @@ function Board() {
         </div>
       )}
       {H.amb477 && (
-        <div key={H.amb477.k} className={'amb477 ' + H.amb477.h} data-k={H.amb477.k} aria-hidden="true" style={{ '--c': H.amb477.c }}>
+        <div
+          key={H.amb477.k}
+          className={'amb477 ' + H.amb477.h}
+          data-k={H.amb477.k}
+          aria-hidden="true"
+          style={{ '--c': H.amb477.c }}
+        >
           {H.amb477.items.map((s, i) => (
             <i key={i} style={s} />
           ))}
@@ -94,12 +106,23 @@ function Board() {
       {H.fxc && <canvas className="fxc" aria-hidden="true" />}
       {H.skyBanner && <SkyBanner b={H.skyBanner} />}
       {H.tbn && (
-        <div key={H.tbn.n} className={'tbn' + (H.tbn.en ? ' en' : '')} style={H.tbn.fast ? { animationDuration: '.8s' } : undefined}>
+        <div
+          key={H.tbn.n}
+          className={'tbn' + (H.tbn.en ? ' en' : '')}
+          style={H.tbn.fast ? { animationDuration: '.8s' } : undefined}
+        >
           <b>{H.tbn.txt}</b>
           <span>{H.tbn.sub}</span>
         </div>
       )}
-      {H.fade && <div key={H.fade.n} className={'fondu477' + (H.fade.va ? ' va' : '')} aria-hidden="true" style={{ backgroundImage: H.fade.bg }} />}
+      {H.fade && (
+        <div
+          key={H.fade.n}
+          className={'fondu477' + (H.fade.va ? ' va' : '')}
+          aria-hidden="true"
+          style={{ backgroundImage: H.fade.bg }}
+        />
+      )}
     </div>
   );
 }

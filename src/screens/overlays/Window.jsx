@@ -16,7 +16,13 @@ export function Box({ displayName: displayName, className, id, cardComponent: Ca
 export function Dialogue({ className, titre: heading, closeAttrs: shut, children }) {
   return (
     <div className={className} role="dialog" aria-modal="true" aria-labelledby={heading}>
-      {shut && <button className="sh-x" type="button" {...shut} aria-label="Fermer"><svg><use href="#i-x" /></svg></button>}
+      {shut && (
+        <button className="sh-x" type="button" {...shut} aria-label="Fermer">
+          <svg>
+            <use href="#i-x" />
+          </svg>
+        </button>
+      )}
       {children}
     </div>
   );

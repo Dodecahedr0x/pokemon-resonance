@@ -40,19 +40,30 @@ export default function Guide() {
   const { tab } = useGuide();
   const [openItems, setOpened] = useState(() => new Set([tab]));
   // a tab, once opened, stays mounted (adjusting state while rendering, not in an effect)
-  if (!openItems.has(tab)) setOpened(new Set(openItems).add(tab));
+  if (!openItems.has(tab)) {
+    setOpened(new Set(openItems).add(tab));
+  }
 
   return (
     <section className="page" id="types" aria-labelledby="h-ty">
       <div className="ph">
         <p className="kick">Guide du dresseur</p>
-        <h1 className="h1" id="h-ty">Guide du dresseur</h1>
+        <h1 className="h1" id="h-ty">
+          Guide du dresseur
+        </h1>
         <p className="sub">Commencez par « Débuter » : cinq étapes suffisent pour gagner votre premier combat.</p>
       </div>
       <Tip t="types" />
       <div className="gd-tabs" role="tablist" aria-label="Rubriques du guide">
         {TAB_LIST.map(([k, label]) => (
-          <button key={k} type="button" role="tab" className="gd-t" aria-selected={String(tab === k)} onClick={() => setGuideTab(k)}>
+          <button
+            key={k}
+            type="button"
+            role="tab"
+            className="gd-t"
+            aria-selected={String(tab === k)}
+            onClick={() => setGuideTab(k)}
+          >
             {label}
           </button>
         ))}

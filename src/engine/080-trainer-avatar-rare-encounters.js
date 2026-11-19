@@ -19,18 +19,15 @@ import { setRoute } from '../screens/home/homeStore.js';
 
 let RARE450;
 
-
 function av450(cls) {
   const a = AVT450();
   return avatar(PROFILE.name || 'Dresseur', a ? a.e : 'Normal', (cls || '') + (a && a.hex ? ' hex450' : ''));
 }
 
-
 /** Trainer emblem on the "VS" screen (HTML), or null if no avatar is chosen. */
 export function vsAv450() {
   return AVT450() ? av450('sm') : null;
 }
-
 
 export function rareInfo450(id) {
   let m = 1;
@@ -44,21 +41,25 @@ export function rareInfo450(id) {
   return { m, w };
 }
 
-
 /* banner on the route: who is out right now */
 function route450() {
   const wx = weatherDay417(),
     pool = poolRegion421().filter(m => rareInfo450(m.id).m > 1);
-  const sky = { pluie: 'pluie', soleil: 'grand soleil', grele: 'grêle', sable: 'tempête de sable' }[wx] || 'ciel dégagé';
+  const sky =
+    { pluie: 'pluie', soleil: 'grand soleil', grele: 'grêle', sable: 'tempête de sable' }[wx] || 'ciel dégagé';
   // #rr450 banner at the top of #route (Route.jsx)
   setRoute({
     rr: {
       head: `${TOD === 'nuit' ? 'Nuit' : TOD === 'matin' ? 'Matin' : 'Jour'} · ${sky}`,
-      list: pool.length ? pool.slice(0, 4).map(m => m.n).join(', ') : ''
-    }
+      list: pool.length
+        ? pool
+            .slice(0, 4)
+            .map(m => m.n)
+            .join(', ')
+        : '',
+    },
   });
 }
-
 
 export function trSt450() {
   let s;
@@ -67,22 +68,23 @@ export function trSt450() {
   } catch (e) {
     s = {};
   }
-  if (s.d !== today()) s = { d: today(), got: {} };
+  if (s.d !== today()) {
+    s = { d: today(), got: {} };
+  }
   return s;
 }
-
 
 function trSave450(s) {
   writeLS('res-tr450', s);
 }
 
-
 function trTheme450() {
   const wx = weatherDay417();
-  if (wx) return wx;
+  if (wx) {
+    return wx;
+  }
   return TOD === 'nuit' ? 'nuit' : TOD === 'matin' ? 'matin' : 'jour';
 }
-
 
 export function trSpots450() {
   const reg = V4.region || 'kanto',
@@ -101,17 +103,20 @@ export function trSpots450() {
     for (let k = 0; k < 12; k++) {
       x = 70 + rnd() * 860;
       y = 90 + rnd() * 800;
-      if (pl.every(p => Math.hypot(p.x - x, p.y - y) > 70)) break;
+      if (pl.every(p => Math.hypot(p.x - x, p.y - y) > 70)) {
+        break;
+      }
     }
     out.push({ id: reg + ':' + th + ':' + i, x, y, th });
   }
   return out;
 }
 
-
 function trHarvest450(sp) {
   const s = trSt450();
-  if (s.got[sp.id]) return;
+  if (s.got[sp.id]) {
+    return;
+  }
   s.got[sp.id] = 1;
   trSave450(s);
   let h = seed417('rw' + sp.id);
@@ -159,75 +164,97 @@ export const TH450 = {
   soleil: 'Pépite solaire',
   grele: 'Cristal de givre',
   sable: 'Grain d’ambre',
-  jour: 'Éclat de lumière'
+  jour: 'Éclat de lumière',
 };
 
 // Instructions run at startup, in the original order (see index.js).
 export function __init() {
+  // trainer emblem in the top bar (#v4Av): rendered by React (src/components/TopBar.jsx)
 
+  /* the avatar precedes the name on the "VS" screen: vsAv450(), rendered in Vs.jsx */
 
-// trainer emblem in the top bar (#v4Av): rendered by React (src/components/TopBar.jsx)
+  /* ---------- 2. rare encounters by time and weather ---------- */
+  RARE450 = [
+    {
+      c: () => TOD === 'nuit',
+      m: 4,
+      w: 'nuit',
+      ids: ['nosferapti', 'fantominus', 'hoothoot', 'absol', 'tenefix', 'malosse', 'abra'],
+    },
+    { c: () => TOD === 'matin', m: 3, w: 'matin', ids: ['natu', 'tarsal', 'melo', 'granivol', 'mimigal', 'chenipan'] },
+    {
+      c: () => weatherDay417() === 'pluie',
+      m: 5,
+      w: 'pluie',
+      ids: ['ptitard', 'kaiminus', 'loupio', 'marill', 'gobou', 'magicarpe', 'axoloto'],
+    },
+    {
+      c: () => weatherDay417() === 'soleil',
+      m: 5,
+      w: 'soleil',
+      ids: ['salameche', 'hericendre', 'poussifeu', 'limagma', 'carapuce'],
+    },
+    { c: () => weatherDay417() === 'grele', m: 6, w: 'grêle', ids: ['marcacrin', 'lokhlass', 'pichu'] },
+    {
+      c: () => weatherDay417() === 'sable',
+      m: 5,
+      w: 'sable',
+      ids: ['onix', 'phanpy', 'embrylex', 'galekid', 'debugant'],
+    },
+  ];
 
+  /* the encounter sheet flags a rare appearance: rendered by React (src/screens/overlays/Enc.jsx) */
 
-/* the avatar precedes the name on the "VS" screen: vsAv450(), rendered in Vs.jsx */
+  HOOKS.timeOfDay.push(route450);
 
+  try {
+    route450();
+  } catch {
+    /* Best effort: failure here is non-fatal. */
+  }
 
-/* ---------- 2. rare encounters by time and weather ---------- */
-RARE450 = [
-  { c: () => TOD === 'nuit', m: 4, w: 'nuit', ids: ['nosferapti', 'fantominus', 'hoothoot', 'absol', 'tenefix', 'malosse', 'abra'] },
-  { c: () => TOD === 'matin', m: 3, w: 'matin', ids: ['natu', 'tarsal', 'melo', 'granivol', 'mimigal', 'chenipan'] },
-  { c: () => weatherDay417() === 'pluie', m: 5, w: 'pluie', ids: ['ptitard', 'kaiminus', 'loupio', 'marill', 'gobou', 'magicarpe', 'axoloto'] },
-  { c: () => weatherDay417() === 'soleil', m: 5, w: 'soleil', ids: ['salameche', 'hericendre', 'poussifeu', 'limagma', 'carapuce'] },
-  { c: () => weatherDay417() === 'grele', m: 6, w: 'grêle', ids: ['marcacrin', 'lokhlass', 'pichu'] },
-  { c: () => weatherDay417() === 'sable', m: 5, w: 'sable', ids: ['onix', 'phanpy', 'embrylex', 'galekid', 'debugant'] }
-];
+  // hidden finds on the map (.sp450): rendered by React (src/screens/map/Marks.jsx)
 
+  document.addEventListener(
+    'click',
+    e => {
+      const b = e.target.closest && e.target.closest('[data-tv450]');
+      if (!b) {
+        return;
+      }
+      e.stopPropagation();
+      e.preventDefault();
+      const sp = trSpots450().find(x => x.id === b.dataset.tv450);
+      if (sp) {
+        trHarvest450(sp);
+      }
+    },
+    true
+  );
 
-/* the encounter sheet flags a rare appearance: rendered by React (src/screens/overlays/Enc.jsx) */
+  /* ---------- 4. Settings: avatar and rare encounters ---------- */
+  // "Avatar de dresseur" (Trainer avatar) panel: rendered by React (src/screens/settings/panels/Avatar.jsx)
 
-
-HOOKS.timeOfDay.push(route450);
-
-
-try {
-  route450();
-} catch { /* Best effort: failure here is non-fatal. */ }
-
-
-// hidden finds on the map (.sp450): rendered by React (src/screens/map/Marks.jsx)
-
-
-document.addEventListener(
-  'click',
-  e => {
-    const b = e.target.closest && e.target.closest('[data-tv450]');
-    if (!b) return;
-    e.stopPropagation();
-    e.preventDefault();
-    const sp = trSpots450().find(x => x.id === b.dataset.tv450);
-    if (sp) trHarvest450(sp);
-  },
-  true
-);
-
-
-/* ---------- 4. Settings: avatar and rare encounters ---------- */
-// "Avatar de dresseur" (Trainer avatar) panel: rendered by React (src/screens/settings/panels/Avatar.jsx)
-
-
-document.addEventListener('click', e => {
-  const b = e.target.closest && e.target.closest('[data-b450]');
-  if (!b) return;
-  const k = b.dataset.b450;
-  if (k === 'av') PREF.av450 = { e: b.dataset.t, hex: !!(AVT450() && AVT450().hex) };
-  else if (k === 'hex') PREF.av450 = { e: (AVT450() || { e: 'Normal' }).e, hex: !(AVT450() && AVT450().hex) };
-  else if (k === 'avreset') delete PREF.av450;
-  else if (k === 'rare') PREF.rare450 = IM450() ? 0 : 1;
-  else return;
-  savePref();
-  renderWallet();
-  renderParams();
-  route450();
-});
-
+  document.addEventListener('click', e => {
+    const b = e.target.closest && e.target.closest('[data-b450]');
+    if (!b) {
+      return;
+    }
+    const k = b.dataset.b450;
+    if (k === 'av') {
+      PREF.av450 = { e: b.dataset.t, hex: !!(AVT450() && AVT450().hex) };
+    } else if (k === 'hex') {
+      PREF.av450 = { e: (AVT450() || { e: 'Normal' }).e, hex: !(AVT450() && AVT450().hex) };
+    } else if (k === 'avreset') {
+      delete PREF.av450;
+    } else if (k === 'rare') {
+      PREF.rare450 = IM450() ? 0 : 1;
+    } else {
+      return;
+    }
+    savePref();
+    renderWallet();
+    renderParams();
+    route450();
+  });
 }

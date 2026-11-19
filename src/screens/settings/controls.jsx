@@ -5,7 +5,10 @@
 export function Switch({ k, on, lab, sub }) {
   return (
     <label className="v4-sw">
-      <span><b>{lab}</b>{sub ? <em>{sub}</em> : null}</span>
+      <span>
+        <b>{lab}</b>
+        {sub ? <em>{sub}</em> : null}
+      </span>
       <input type="checkbox" data-pref={k} defaultChecked={!!on} />
       <i aria-hidden="true" />
     </label>

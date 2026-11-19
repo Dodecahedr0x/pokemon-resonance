@@ -13,7 +13,9 @@ import { useOverlay } from './dialogsStore.js';
 // Large line-art Poké Ball of the backdrop (originally the first element of the body).
 export function PkBackground() {
   return (
-    <div id="pk-fond" aria-hidden="true"><i /></div>
+    <div id="pk-fond" aria-hidden="true">
+      <i />
+    </div>
   );
 }
 
@@ -36,7 +38,9 @@ export function PkBtr() {
       {s && (
         <>
           <i className="pk-fls" />
-          {BANDS.map(n => <i key={n} className="pk-bd" style={{ '--n': n }} />)}
+          {BANDS.map(n => (
+            <i key={n} className="pk-bd" style={{ '--n': n }} />
+          ))}
           <i className="pk-bc" />
         </>
       )}
@@ -53,12 +57,19 @@ export function PkBadge() {
       {s && (
         <div className="pk-bc-in" key={s.v}>
           <div className="pk-bc-case">
-            <span className="pk-bc-bdg"><Html html={s.svg} /></span>
+            <span className="pk-bc-bdg">
+              <Html html={s.svg} />
+            </span>
             <span className="pk-bc-gerbe" aria-hidden="true">
-              {SPRAY.map(a => <i key={a} style={{ '--a': a + 'deg' }} />)}
+              {SPRAY.map(a => (
+                <i key={a} style={{ '--a': a + 'deg' }} />
+              ))}
             </span>
           </div>
-          <p className="pk-bc-t">{s.leader ? s.leader + ' vous remet le' : 'Vous obtenez le'}<b>Badge {s.displayName}</b></p>
+          <p className="pk-bc-t">
+            {s.leader ? s.leader + ' vous remet le' : 'Vous obtenez le'}
+            <b>Badge {s.displayName}</b>
+          </p>
           <p className="pk-bc-s">{s.n} / 8 badges dans la boîte</p>
           <p className="pk-bc-k">Touchez pour continuer</p>
         </div>
@@ -69,7 +80,9 @@ export function PkBadge() {
 
 export function Tr448() {
   const s = useOverlay('tr448');
-  if (!s) return null;
+  if (!s) {
+    return null;
+  }
   return (
     <div id="tr448" aria-hidden="true" key={s.v}>
       <i className="tr448-f" />

@@ -20,10 +20,17 @@ export default function TrainerCard() {
           <p className="kick">{c ? 'Aventure' : 'Mode libre'}</p>
           <h2 className="h2">{nm}</h2>
         </div>
-        {c ? null : <button type="button" className="b b-sm b-gold" data-camp="new">Commencer l’aventure</button>}
+        {c ? null : (
+          <button type="button" className="b b-sm b-gold" data-camp="new">
+            Commencer l’aventure
+          </button>
+        )}
       </div>
       {'\n  '}
-      <div className="tc-sec"><span className="lbl-s">Badges</span><b>{BADGES.length} / 8</b></div>
+      <div className="tc-sec">
+        <span className="lbl-s">Badges</span>
+        <b>{BADGES.length} / 8</b>
+      </div>
       {'\n  '}
       <div className="tc-bdg">
         {GYMS.map((g, i) => {
@@ -40,21 +47,34 @@ export default function TrainerCard() {
         <span className="lbl-s">Ligue</span>
         <span className="tc-lg">
           {[1, 2, 3, 4].map(i => (
-            <i key={i} className={PROFILE.elite >= i ? 'on' : ''}>{i}</i>
+            <i key={i} className={PROFILE.elite >= i ? 'on' : ''}>
+              {i}
+            </i>
           ))}
           <i className={'ch' + (PROFILE.elite >= 5 ? ' on' : '')}>★</i>
         </span>
       </div>
       {'\n  '}
       <div className="tc-k">
-        <div><b>{PROFILE.wins}</b><span>Victoires</span></div>
-        <div><b>{PROFILE.caught}</b><span>Captures</span></div>
-        <div><b>{PROFILE.box.length}</b><span>Pokémon</span></div>
+        <div>
+          <b>{PROFILE.wins}</b>
+          <span>Victoires</span>
+        </div>
+        <div>
+          <b>{PROFILE.caught}</b>
+          <span>Captures</span>
+        </div>
+        <div>
+          <b>{PROFILE.box.length}</b>
+          <span>Pokémon</span>
+        </div>
       </div>
       {'\n  '}
       <a className="tc-team" href="#pokedex" data-go="pokedex">
         <span className="tc-m">
-          {Array.from({ length: 4 }, (_, i) => (squad[i] ? <Html key={i} html={medal(BY[squad[i]].t, 'sm')} /> : <i key={i} />))}
+          {Array.from({ length: 4 }, (_, i) =>
+            squad[i] ? <Html key={i} html={medal(BY[squad[i]].t, 'sm')} /> : <i key={i} />
+          )}
         </span>
         <span>{squad.length ? squad.map(id => BY[id].n).join(' · ') : 'Équipe vide : touchez pour choisir'}</span>
       </a>

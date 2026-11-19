@@ -11,28 +11,50 @@ export default function Vs({ d }) {
     <div id="vs" className={'vs' + d.cls + (d.out ? ' out' : '')} style={{ '--d': d.dur + 'ms' }}>
       <div className="vs-l">
         <span className="vs-k">{d.k1}</span>
-        <span className="vs-team"><Html html={d.al.map(t => medal(t)).join('')} /></span>
-        {d.av != null && <span className="vs-av450"><Html html={d.av} /></span>}
+        <span className="vs-team">
+          <Html html={d.al.map(t => medal(t)).join('')} />
+        </span>
+        {d.av != null && (
+          <span className="vs-av450">
+            <Html html={d.av} />
+          </span>
+        )}
         <b>{d.name1}</b>
         <em>{d.em1}</em>
       </div>
       {'\n  '}
-      <div className="vs-c"><span>VS</span></div>
+      <div className="vs-c">
+        <span>VS</span>
+      </div>
       {'\n  '}
       <div className="vs-r" style={{ '--ac': d.ac }}>
         <span className="vs-k">{d.kick}</span>
         {d.badge != null ? (
-          <span className="vs-bdg"><Html html={badgeSvg(d.badge, GYMS[d.badge].t, 'vs' + d.badge)} /></span>
+          <span className="vs-bdg">
+            <Html html={badgeSvg(d.badge, GYMS[d.badge].t, 'vs' + d.badge)} />
+          </span>
         ) : (
-          <span className="vs-foes"><Html html={d.foes.map(t => medal(t, 'sm')).join('')} /></span>
+          <span className="vs-foes">
+            <Html html={d.foes.map(t => medal(t, 'sm')).join('')} />
+          </span>
         )}
         <b>{d.name2}</b>
         <em>{d.em2}</em>
-        {d.q != null && <q><Html html={d.q} /></q>}
+        {d.q != null && (
+          <q>
+            <Html html={d.q} />
+          </q>
+        )}
       </div>
       {'\n  '}
-      <p className="vs-rule"><Html html={d.rule} /></p>
-      {d.tip != null && <p className="tip448"><b>Astuce</b> {d.tip}</p>}
+      <p className="vs-rule">
+        <Html html={d.rule} />
+      </p>
+      {d.tip != null && (
+        <p className="tip448">
+          <b>Astuce</b> {d.tip}
+        </p>
+      )}
     </div>
   );
 }

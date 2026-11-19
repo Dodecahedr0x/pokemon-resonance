@@ -12,31 +12,63 @@ function Weekly() {
     D = SCEN.hebdo429,
     h = PROFILE.hebdo429 && PROFILE.hebdo429.w === H.w ? PROFILE.hebdo429 : null,
     friends = (PROFILE.friends || []).filter(a => a.wk && a.wk.w === H.w).map(a => ({ n: a.n, s: a.wk.s })),
-    rows = [...(h ? [{ n: (PROFILE.name || 'Vous') + ' (vous)', s: h.best, me: 1 }] : []), ...friends].sort((a, b) => b.s - a.s);
+    rows = [...(h ? [{ n: (PROFILE.name || 'Vous') + ' (vous)', s: h.best, me: 1 }] : []), ...friends].sort(
+      (a, b) => b.s - a.s
+    );
   return (
     <article className="hb429 v4-panel">
-      <header className="v4-ph"><svg><use href="#i-trophy" /></svg><b>Défi de la semaine</b><span className="v4-cnt">{D.lvl}</span></header>
+      <header className="v4-ph">
+        <svg>
+          <use href="#i-trophy" />
+        </svg>
+        <b>Défi de la semaine</b>
+        <span className="v4-cnt">{D.lvl}</span>
+      </header>
       {NL}
       <p className="hb429-r">{D.d}</p>
       {NL}
       <div className="hb429-t">
         {H.team.map((id, i) => (
-          <span key={i} className="hb429-m" data-lp429={id} title={BY[id].n}><img src={ART(BY[id].no)} alt="" loading="lazy" /><em>{BY[id].n}</em></span>
+          <span key={i} className="hb429-m" data-lp429={id} title={BY[id].n}>
+            <img src={ART(BY[id].no)} alt="" loading="lazy" />
+            <em>{BY[id].n}</em>
+          </span>
         ))}
       </div>
       {NL}
-      <div className="hb429-k"><span>Record <b>{h ? fmt(h.best) : '—'}</b></span><span>Essais <b>{h ? h.n : 0}</b></span><span>{h && h.rec ? 'Récompense reçue ✓' : 'Première victoire : +2 500 ₽ · +25 Éclats'}</span></div>
+      <div className="hb429-k">
+        <span>
+          Record <b>{h ? fmt(h.best) : '—'}</b>
+        </span>
+        <span>
+          Essais <b>{h ? h.n : 0}</b>
+        </span>
+        <span>{h && h.rec ? 'Récompense reçue ✓' : 'Première victoire : +2 500 ₽ · +25 Éclats'}</span>
+      </div>
       {NL}
-      <button type="button" className="b b-gold" data-v4fight="hebdo429">Relever le défi</button>
+      <button type="button" className="b b-gold" data-v4fight="hebdo429">
+        Relever le défi
+      </button>
       {NL}
       {rows.length > 1 ? (
-        <table className="hb429-cl"><caption>Classement entre amis</caption><tbody>
-          {rows.map((x, i) => (
-            <tr key={i} className={x.me ? 'me' : ''}><td>{i + 1}</td><td>{x.n}</td><td><b>{fmt(x.s)}</b></td></tr>
-          ))}
-        </tbody></table>
+        <table className="hb429-cl">
+          <caption>Classement entre amis</caption>
+          <tbody>
+            {rows.map((x, i) => (
+              <tr key={i} className={x.me ? 'me' : ''}>
+                <td>{i + 1}</td>
+                <td>{x.n}</td>
+                <td>
+                  <b>{fmt(x.s)}</b>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       ) : (
-        <p className="hb429-n">Partagez votre carte de dresseur après le défi : vos amis verront votre score de la semaine.</p>
+        <p className="hb429-n">
+          Partagez votre carte de dresseur après le défi : vos amis verront votre score de la semaine.
+        </p>
       )}
       {'\n'}
     </article>
@@ -56,12 +88,33 @@ export default function Event() {
           <article className={'v4-daily v4-panel' + (done ? ' done' : '')}>
             <span className="v4t-scene" style={{ backgroundPosition: `${(dk.charCodeAt(0) * 7) % 100}% 50%` }} />
             <div className="v4-daily-t">
-              <small>Défi du jour · se renouvelle dans {dailyLeft()}</small><b>{S.n}</b><em>{S.d || ''}</em>
-              <div className="v4-rw">{done ? <span>Relevé aujourd’hui ✓</span> : <><span>Gains ×2</span><Rewards r={{ gems: 3 }} /></>}</div>
+              <small>Défi du jour · se renouvelle dans {dailyLeft()}</small>
+              <b>{S.n}</b>
+              <em>{S.d || ''}</em>
+              <div className="v4-rw">
+                {done ? (
+                  <span>Relevé aujourd’hui ✓</span>
+                ) : (
+                  <>
+                    <span>Gains ×2</span>
+                    <Rewards r={{ gems: 3 }} />
+                  </>
+                )}
+              </div>
             </div>
-            {done ? null : <button type="button" className="b b-gold" data-v4fight={dk}>Relever le défi<svg><use href="#i-arrow" /></svg></button>}
+            {done ? null : (
+              <button type="button" className="b b-gold" data-v4fight={dk}>
+                Relever le défi
+                <svg>
+                  <use href="#i-arrow" />
+                </svg>
+              </button>
+            )}
           </article>
-          <p className="v4-note">Chaque jour, un terrain déjà ouvert devient le défi du jour. La première victoire double la prime et rapporte 3 Éclats.</p>
+          <p className="v4-note">
+            Chaque jour, un terrain déjà ouvert devient le défi du jour. La première victoire double la prime et
+            rapporte 3 Éclats.
+          </p>
         </>
       ) : (
         <p className="v4-empty">Aucun défi disponible.</p>

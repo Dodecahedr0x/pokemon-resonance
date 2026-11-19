@@ -3,15 +3,37 @@
 import { MT } from './001-tactical-engine-turn-core.js';
 import { BY } from './009-pokemon.js';
 import { synOf } from './012-recruits-roles-synergies.js';
-import { K, P, affected, byUid, damage, flies, fromCube, hdist, heal, landed, mvType, nbr, reach, resolveMove, say, toCube, uAt, uk } from './021-combat-engine.js';
+import {
+  K,
+  P,
+  affected,
+  byUid,
+  damage,
+  flies,
+  fromCube,
+  hdist,
+  heal,
+  landed,
+  mvType,
+  nbr,
+  reach,
+  resolveMove,
+  say,
+  toCube,
+  uAt,
+  uk,
+} from './021-combat-engine.js';
 import { ROLE_PROVIDERS } from './044-tactical-engine.js';
 
 export let ACT, NOTE;
-export function __set_NOTE(v) { return (NOTE = v); }
-
+export function __set_NOTE(v) {
+  return (NOTE = v);
+}
 
 export function applyObst(S) {
-  if (S._obs) return;
+  if (S._obs) {
+    return;
+  }
   S._obs = 1;
   const O = OBST[S.sc];
   if (O) {
@@ -26,16 +48,19 @@ export function applyObst(S) {
     });
     (O.grass || []).forEach(k => {
       const t = S.tiles[k];
-      if (t && !t.rock && !t.w) t.grass = true;
+      if (t && !t.rock && !t.w) {
+        t.grass = true;
+      }
     });
     (O.sand || []).forEach(k => {
       const t = S.tiles[k];
-      if (t && !t.rock && !t.w) t.sand = true;
+      if (t && !t.rock && !t.w) {
+        t.sand = true;
+      }
     });
   }
   S.syn = synOf(S.units.filter(u => u.side === 'a').map(u => u.id)).map(s => s.k);
 }
-
 
 /* --- line of sight (pillars) and cover (rocks and pillars) --- */
 function cubeRound(x, y, z) {
@@ -45,12 +70,15 @@ function cubeRound(x, y, z) {
   const dx = Math.abs(rx - x),
     dy = Math.abs(ry - y),
     dz = Math.abs(rz - z);
-  if (dx > dy && dx > dz) rx = -ry - rz;
-  else if (dy > dz) ry = -rx - rz;
-  else rz = -rx - ry;
+  if (dx > dy && dx > dz) {
+    rx = -ry - rz;
+  } else if (dy > dz) {
+    ry = -rx - rz;
+  } else {
+    rz = -rx - ry;
+  }
   return [rx, ry, rz];
 }
-
 
 function hexLine(a, b, e) {
   const A = toCube(a[0], a[1]),
@@ -66,28 +94,31 @@ function hexLine(a, b, e) {
   return o;
 }
 
-
 export function losBlocked(S, a, b) {
   const f = e => hexLine(a, b, e).some(k => S.tiles[k] && S.tiles[k].pil);
   return f(1e-6) && f(-1e-6);
 }
 
-
 export function coverOf(S, a, b) {
-  if (hdist(a, b) < 2) return null;
+  if (hdist(a, b) < 2) {
+    return null;
+  }
   const d = hdist(a, b);
   for (const q of nbr(b)) {
     const k = K(q[0], q[1]),
       t = S.tiles[k];
-    if (t && t.rock && hdist(a, q) === d - 1) return k;
+    if (t && t.rock && hdist(a, q) === d - 1) {
+      return k;
+    }
   }
   return null;
 }
 
-
 export function ricoTgt(S, u, k) {
   const t = S.tiles[k];
-  if (!t || !t.rock || t.pil) return null;
+  if (!t || !t.rock || t.pil) {
+    return null;
+  }
   const R = P(k);
   const c = S.units
     .filter(o => !o.ko && o.side !== u.side && hdist(o.pos, R) <= 2 && !losBlocked(S, R, o.pos))
@@ -95,14 +126,12 @@ export function ricoTgt(S, u, k) {
   return c.length ? uk(c[0]) : null;
 }
 
-
 /* --- damage: roles, synergies, cover, ricochet, sand --- */
 export function dmgRolesField(S, u, m, t, typ, d) {
   // roles, synergies, sand, interception, cover: supplied to the tactical engine pipeline (v4.5-01)
   const r = MT.combineModifiers(0, MT.collect(ROLE_PROVIDERS, 'degats', { S, u, m, t, typ }, 'attaquant'));
   return Math.max(1, Math.round(d * r.mul) + r.add);
 }
-
 
 /* --- Guarding: the Bulwark steps in (single-target attacks) --- */
 function guardOf(S, v) {
@@ -124,7 +153,6 @@ function guardOf(S, v) {
       .sort((a, b) => b.hp - a.hp)[0] || null
   );
 }
-
 
 /* --- resolution: context, burning grass, visual effect signal --- */
 export function resolve(S, u, m, k) {
@@ -148,7 +176,9 @@ export function resolve(S, u, m, k) {
   let shown = [];
   try {
     shown = m.sh === 'self' || m.wx ? [from] : affected(S, u, m, k);
-  } catch { /* Best effort: failure here is non-fatal. */ }
+  } catch {
+    /* Best effort: failure here is non-fatal. */
+  }
   const prev = ACT;
   ACT = { u, m, typ, rico, k, guard: !!gd };
   let ev;
@@ -173,17 +203,23 @@ export function resolve(S, u, m, k) {
       const t = S.tiles[x];
       if (t && t.grass) {
         t.grass = false;
-        if (!t.rock) t.mark = { k: 'brulant', d: 2, lv: 1, by: u.uid };
+        if (!t.rock) {
+          t.mark = { k: 'brulant', d: 2, lv: 1, by: u.uid };
+        }
         b++;
       }
     });
-    if (b) say(ev, `Les hautes herbes s’embrasent${b > 1 ? ' (' + b + ' cases)' : ''} !`);
+    if (b) {
+      say(ev, `Les hautes herbes s’embrasent${b > 1 ? ' (' + b + ' cases)' : ''} !`);
+    }
   }
   const big =
     (m.p || 0) >= 13 ||
     ev.some(e => e.e === 'ko') ||
     ev.some(e => {
-      if (e.e !== 'dmg') return false;
+      if (e.e !== 'dmg') {
+        return false;
+      }
       const v = byUid(S, e.u);
       return v && e.v >= v.mhp * 0.3;
     });
@@ -200,16 +236,17 @@ export function resolve(S, u, m, k) {
     p: m.p || 0,
     st: !m.p && !m.fix,
     big,
-    side: u.side
+    side: u.side,
   });
   return ev;
 }
 
-
 /* --- retreat of enemy Scouts after their attack --- */
 export function foeRetreat(S, e, ev) {
   const al = S.units.filter(a => a.side === 'a' && !a.ko);
-  if (!al.length) return;
+  if (!al.length) {
+    return;
+  }
   const R = reach(S, e),
     sc = k => Math.min(...al.map(a => hdist(a.pos, P(k)))) - (S.tiles[k].lava > 0 ? 5 : 0);
   let best = uk(e),
@@ -229,13 +266,14 @@ export function foeRetreat(S, e, ev) {
   }
 }
 
-
 /* --- end of round: Relay, Toxins, reset --- */
 export function roundSupport(S) {
   const pre = [];
   if (!S.over) {
     S.units.forEach(u => {
-      if (u.ko || roleOf(u) !== 'Relais') return;
+      if (u.ko || roleOf(u) !== 'Relais') {
+        return;
+      }
       const m = S.units.filter(o => o !== u && !o.ko && o.side === u.side && hdist(o.pos, u.pos) === 1 && o.hp < o.mhp);
       if (m.length) {
         say(pre, `Soutien : ${u.n} soigne ${m.map(o => o.n).join(', ')}.`);
@@ -279,31 +317,26 @@ export const OBST = {
   c3: { pil: ['3,1', '3,4'], sand: ['5,5'] },
   c4: { pil: ['4,1'], grass: ['2,2', '2,3', '5,4'] },
   champ: { pil: ['3,2', '5,4'], grass: ['2,0', '2,5'] },
-  sauvage: { grass: ['2,1', '3,1', '2,3', '4,3', '4,4', '5,3'] }
+  sauvage: { grass: ['2,1', '3,1', '2,3', '4,3', '4,4', '5,3'] },
 };
-
 
 export const roleOf = u => (BY[u.id] || {}).r;
 
-
 export const STATUSED = t => ['PAR', 'GEL', 'SOM'].includes(t.badge) || t.root > 0 || t.web > 0 || t.burn > 0;
-
 
 export const SANDOK = u => flies(u) || u.t.some(t => t === 'Sol' || t === 'Roche' || t === 'Acier');
 
-
 export const noteAdd = s => {
-  if (NOTE && !NOTE.includes(s)) NOTE.push(s);
+  if (NOTE && !NOTE.includes(s)) {
+    NOTE.push(s);
+  }
 };
 
-
 export const hasSyn = (S, u, k) => !!(u && u.side === 'a' && S.syn && S.syn.includes(k));
-
 
 export const ignObst = (S, u, typ) => hasSyn(S, u, 'esprit') && (typ === 'Psy' || typ === 'Spectre');
 
 // Instructions run at startup, in the original order (see index.js).
 export function __init() {
-ACT = null,
-  NOTE = null;
+  ((ACT = null), (NOTE = null));
 }

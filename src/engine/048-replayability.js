@@ -20,7 +20,6 @@ import { ROLE_PROVIDERS } from './044-tactical-engine.js';
 export let ACHIEVEMENTS;
 export let CHALLENGE_CONF;
 
-
 /* =====================================================================
    v4.9: replayability
    ---------------------------------------------------------------------
@@ -42,30 +41,44 @@ export function REPLAY0() {
     titre: '',
     totals: {},
     challenges: { mono: '', trio: false, sansEveil: false, nuzlocke: false },
-    graves: []
+    graves: [],
   };
 }
 
-
 export function replayClean(p) {
   const o = REPLAY0();
-  if (!p || typeof p !== 'object') return o;
-  if (p.achievements && typeof p.achievements === 'object') {
-    for (const k in p.achievements) if (/^[a-z0-9]{2,16}$/.test(k) && Number.isFinite(p.achievements[k])) o.achievements[k] = p.achievements[k];
+  if (!p || typeof p !== 'object') {
+    return o;
   }
-  if (typeof p.titre === 'string' && o.achievements[p.titre]) o.titre = p.titre;
+  if (p.achievements && typeof p.achievements === 'object') {
+    for (const k in p.achievements) {
+      if (/^[a-z0-9]{2,16}$/.test(k) && Number.isFinite(p.achievements[k])) {
+        o.achievements[k] = p.achievements[k];
+      }
+    }
+  }
+  if (typeof p.titre === 'string' && o.achievements[p.titre]) {
+    o.titre = p.titre;
+  }
   if (p.totals && typeof p.totals === 'object') {
-    for (const k in p.totals) if (/^[a-z]{2,12}$/.test(k) && Number.isFinite(p.totals[k])) o.totals[k] = Math.max(0, Math.floor(p.totals[k]));
+    for (const k in p.totals) {
+      if (/^[a-z]{2,12}$/.test(k) && Number.isFinite(p.totals[k])) {
+        o.totals[k] = Math.max(0, Math.floor(p.totals[k]));
+      }
+    }
   }
   const d = p.challenges;
   if (d && typeof d === 'object') {
-    if (typeof d.mono === 'string' && TYPES[d.mono]) o.challenges.mono = d.mono;
+    if (typeof d.mono === 'string' && TYPES[d.mono]) {
+      o.challenges.mono = d.mono;
+    }
     ['trio', 'sansEveil', 'nuzlocke'].forEach(k => (o.challenges[k] = !!d[k]));
   }
-  if (Array.isArray(p.graves)) o.graves = [...new Set(p.graves.filter(id => BY[id] && BY[id].base === id))];
+  if (Array.isArray(p.graves)) {
+    o.graves = [...new Set(p.graves.filter(id => BY[id] && BY[id].base === id))];
+  }
   return o;
 }
-
 
 /* =====================================================================
    1. Mutators
@@ -78,39 +91,83 @@ export function mutInfo(id) {
       canicule: ['Canicule', 'Soleil pendant tout le combat.', 'Feu'],
       blizzard: ['Grêle éternelle', 'Grêle pendant tout le combat.', 'Glace'],
       simoun: ['Simoun', 'Tempête de sable pendant tout le combat.', 'Sol'],
-      eclipse: ['Nuit éternelle', 'Il fait nuit tout le combat : Spectre et Ténèbres ×1,2, −1 de portée au-delà de 2 cases.', 'Ténèbres'],
-      gravite: ['Gravité', 'Personne ne vole ni ne lévite (pièges et Sol touchent tout le monde), et −1 Mouvement pour tous.', 'Psy'],
+      eclipse: [
+        'Nuit éternelle',
+        'Il fait nuit tout le combat : Spectre et Ténèbres ×1,2, −1 de portée au-delà de 2 cases.',
+        'Ténèbres',
+      ],
+      gravite: [
+        'Gravité',
+        'Personne ne vole ni ne lévite (pièges et Sol touchent tout le monde), et −1 Mouvement pour tous.',
+        'Psy',
+      ],
       frenesie: ['Frénésie', '+1 Mouvement pour tous.', 'Vol'],
       verre: ['Canons de verre', 'Tous les dégâts ×1,5, des deux côtés.', 'Combat'],
       remparts: ['Remparts', 'Tous les dégâts ×0,7, et 3 manches de plus.', 'Acier'],
       echo: ['Écho', '+2 Voix à chaque manche.', 'Fée'],
-      champ: ['Champ de pièges', '6 pièges posés au hasard au milieu du plateau. Ils touchent les deux camps.', 'Roche'],
-      eveil: ['Éveil précoce', 'Vos Pokémon commencent avec 2 points d’Éveil sur 3.', 'Dragon']
+      champ: [
+        'Champ de pièges',
+        '6 pièges posés au hasard au milieu du plateau. Ils touchent les deux camps.',
+        'Roche',
+      ],
+      eveil: ['Éveil précoce', 'Vos Pokémon commencent avec 2 points d’Éveil sur 3.', 'Dragon'],
     }[id] || null
   );
 }
 
-
 /** A Tower floor's mutator: from floor 2 on, except legend floors. */
 export function mutOfTurn(run, f) {
-  if (!run || f < 2 || f % 5 === 0) return null;
-  const ids = ['deluge', 'canicule', 'blizzard', 'simoun', 'eclipse', 'gravite', 'frenesie', 'verre', 'remparts', 'echo', 'champ', 'eveil'];
+  if (!run || f < 2 || f % 5 === 0) {
+    return null;
+  }
+  const ids = [
+    'deluge',
+    'canicule',
+    'blizzard',
+    'simoun',
+    'eclipse',
+    'gravite',
+    'frenesie',
+    'verre',
+    'remparts',
+    'echo',
+    'champ',
+    'eveil',
+  ];
   return ids[Math.abs(Math.floor(run.seed * 7 + f * 13)) % ids.length];
 }
-
 
 /** Optional: a random mutator for Training battles. */
 export function mutTraining() {
   const D = SCEN[scSel];
-  if (!PREF.trainingMutators || !D || D.tuto || D.tower || D.rule || D.elite || D.champ || D.legend || D.hleg435 || D.cap435 || D.rival || D.rival429 || D.hebdo429) return null;
+  if (
+    !PREF.trainingMutators ||
+    !D ||
+    D.tuto ||
+    D.tower ||
+    D.rule ||
+    D.elite ||
+    D.champ ||
+    D.legend ||
+    D.hleg435 ||
+    D.cap435 ||
+    D.rival ||
+    D.rival429 ||
+    D.hebdo429
+  ) {
+    return null;
+  }
   return MUT_IDS[Math.floor(Math.random() * MUT_IDS.length)];
 }
 
-
 function applyMutator(S, id) {
-  if (!mutInfo(id)) return;
+  if (!mutInfo(id)) {
+    return;
+  }
   S.mut = id;
-  if (WEATHER_MUT[id]) S.wx = { k: WEATHER_MUT[id], n: 99 };
+  if (WEATHER_MUT[id]) {
+    S.wx = { k: WEATHER_MUT[id], n: 99 };
+  }
   if (id === 'eclipse') {
     S.time = 'nuit';
     S.cycle = { ph: 'nuit', n: 0, frozen: true };
@@ -119,13 +176,19 @@ function applyMutator(S, id) {
     S.mutatorMove = -1;
     S.units.forEach(u => (u.pinned = true));
   }
-  if (id === 'frenesie') S.mutatorMove = 1;
-  if (id === 'remparts') S.lim += 3;
+  if (id === 'frenesie') {
+    S.mutatorMove = 1;
+  }
+  if (id === 'remparts') {
+    S.lim += 3;
+  }
   if (id === 'echo') {
     S.vmax += 2;
     S.voice += 2;
   }
-  if (id === 'eveil') S.units.forEach(u => u.side === 'a' && hasNx(u) && (u.en = Math.max(u.en, 2)));
+  if (id === 'eveil') {
+    S.units.forEach(u => u.side === 'a' && hasNx(u) && (u.en = Math.max(u.en, 2)));
+  }
   if (id === 'champ') {
     const freeOnes = Object.keys(S.tiles).filter(k => {
       const t = S.tiles[k],
@@ -140,65 +203,91 @@ function applyMutator(S, id) {
   }
 }
 
-
 export function chipMut(S) {
-  if (!S || !S.mut) return '';
+  if (!S || !S.mut) {
+    return '';
+  }
   const I = mutInfo(S.mut);
   return `<span class="chip chip-mut" title="${I[1]}"><i style="background:${tc(I[2])}"></i>${I[0]}</span>`;
 }
 
-
 export function activeChallenges() {
-  if (!isCamp() || !PROFILE.challenges) return [];
+  if (!isCamp() || !PROFILE.challenges) {
+    return [];
+  }
   return Object.keys(CHALLENGES).filter(k => PROFILE.challenges[k]);
 }
 
-
 export function isFallen(id) {
-  return !!(isCamp() && PROFILE.challenges && PROFILE.challenges.nuzlocke && BY[id] && (PROFILE.graves || []).includes(BY[id].base));
+  return !!(
+    isCamp() &&
+    PROFILE.challenges &&
+    PROFILE.challenges.nuzlocke &&
+    BY[id] &&
+    (PROFILE.graves || []).includes(BY[id].base)
+  );
 }
-
 
 /** Can this Pokémon join the team? (null: yes; otherwise the reason) */
 export function challengeRefusal(id) {
-  if (!isCamp() || !PROFILE.challenges) return null;
+  if (!isCamp() || !PROFILE.challenges) {
+    return null;
+  }
   const m = BY[id],
     d = PROFILE.challenges;
-  if (!m) return null;
-  if (isFallen(id)) return `${BY[m.base].n} est tombé au combat (Nuzlocke) : il ne combat plus.`;
-  if (d.mono && !m.t.includes(d.mono)) return `Défi Mono-type ${d.mono} : ${m.n} n’est pas de ce type.`;
-  if (d.trio && squad.length >= 3 && !squad.some(x => BY[x].base === m.base)) return 'Défi Équipe de 3 : trois Pokémon au plus.';
-  return null;
-}
-
-
-/** Before starting a campaign battle. */
-export function challengeLaunch() {
-  if (brWeapon466()) return null;
-  const D = SCEN[scSel];
-  if (!isCamp() || !D || D.tuto || D.tower) return null;
-  const d = PROFILE.challenges || {},
-    eq = squad.slice(0, teamSize());
-  const t = eq.find(isFallen);
-  if (t) return `${BY[t].n} est tombé au combat (Nuzlocke) : retirez-le de l’équipe.`;
-  if (d.mono) {
-    const x = eq.find(id => !BY[id].t.includes(d.mono));
-    if (x) return `Défi Mono-type ${d.mono} : ${BY[x].n} n’est pas de ce type. Retirez-le de l’équipe.`;
+  if (!m) {
+    return null;
+  }
+  if (isFallen(id)) {
+    return `${BY[m.base].n} est tombé au combat (Nuzlocke) : il ne combat plus.`;
+  }
+  if (d.mono && !m.t.includes(d.mono)) {
+    return `Défi Mono-type ${d.mono} : ${m.n} n’est pas de ce type.`;
+  }
+  if (d.trio && squad.length >= 3 && !squad.some(x => BY[x].base === m.base)) {
+    return 'Défi Équipe de 3 : trois Pokémon au plus.';
   }
   return null;
 }
 
+/** Before starting a campaign battle. */
+export function challengeLaunch() {
+  if (brWeapon466()) {
+    return null;
+  }
+  const D = SCEN[scSel];
+  if (!isCamp() || !D || D.tuto || D.tower) {
+    return null;
+  }
+  const d = PROFILE.challenges || {},
+    eq = squad.slice(0, teamSize());
+  const t = eq.find(isFallen);
+  if (t) {
+    return `${BY[t].n} est tombé au combat (Nuzlocke) : retirez-le de l’équipe.`;
+  }
+  if (d.mono) {
+    const x = eq.find(id => !BY[id].t.includes(d.mono));
+    if (x) {
+      return `Défi Mono-type ${d.mono} : ${BY[x].n} n’est pas de ce type. Retirez-le de l’équipe.`;
+    }
+  }
+  return null;
+}
 
 /** Checks achievements; returns those just unlocked. */
 function verifySuccess(c) {
   PROFILE.achievements = PROFILE.achievements || {};
   const freshList = [];
   ACHIEVEMENTS.forEach(s => {
-    if (PROFILE.achievements[s.id]) return;
+    if (PROFILE.achievements[s.id]) {
+      return;
+    }
     let ok = false;
     try {
       ok = !!s.ok(c);
-    } catch { /* Best effort: failure here is non-fatal. */ }
+    } catch {
+      /* Best effort: failure here is non-fatal. */
+    }
     if (ok) {
       PROFILE.achievements[s.id] = Date.now();
       freshList.push(s.id);
@@ -207,14 +296,11 @@ function verifySuccess(c) {
   return freshList;
 }
 
-
 export function displayedTitle() {
   return PROFILE.titre && PROFILE.achievements && PROFILE.achievements[PROFILE.titre] ? titleOf(PROFILE.titre) : '';
 }
 
-
 /* ---------- Quests: the Achievements tab, rendered by React (src/screens/quests/Achievements.jsx) ---------- */
-
 
 function updateChallenges() {
   queueSave();
@@ -222,11 +308,22 @@ function updateChallenges() {
   renderWallet();
 }
 
-const MUT_IDS = ['deluge', 'canicule', 'blizzard', 'simoun', 'eclipse', 'gravite', 'frenesie', 'verre', 'remparts', 'echo', 'champ', 'eveil'];
-
+const MUT_IDS = [
+  'deluge',
+  'canicule',
+  'blizzard',
+  'simoun',
+  'eclipse',
+  'gravite',
+  'frenesie',
+  'verre',
+  'remparts',
+  'echo',
+  'champ',
+  'eveil',
+];
 
 const WEATHER_MUT = { deluge: 'pluie', canicule: 'soleil', blizzard: 'grele', simoun: 'sable' };
-
 
 /* =====================================================================
    2. Campaign challenges
@@ -235,193 +332,351 @@ export const CHALLENGES = {
   mono: ['Mono-type', 'Seuls les Pokémon du type choisi peuvent combattre.'],
   trio: ['Équipe de 3', 'Trois Pokémon par combat au lieu de quatre.'],
   sansEveil: ['Sans Éveil', 'Vos Pokémon ne s’éveillent pas en combat.'],
-  nuzlocke: ['Nuzlocke', 'Un Pokémon mis K.O. tombe au combat : il ne combattra plus de cette campagne.']
+  nuzlocke: ['Nuzlocke', 'Un Pokémon mis K.O. tombe au combat : il ne combattra plus de cette campagne.'],
 };
 
-
 export const teamSize = () => (isCamp() && PROFILE.challenges && PROFILE.challenges.trio ? 3 : 4);
-
 
 /* =====================================================================
    3. Achievements and titles
    ===================================================================== */
 const cumulative = k => (PROFILE.totals && PROFILE.totals[k]) || 0;
 
-
 const titleOf = id => (ACHIEVEMENTS.find(s => s.id === id) || {}).t || '';
 
 // Statements run at startup, in the original order (see index.js).
 export function __init() {
+  ROLE_PROVIDERS.push({
+    id: 'mutateur',
+    provide: (c, { S }) =>
+      S.mut === 'verre'
+        ? { mul: 1.5, labelText: 'Canons de verre' }
+        : S.mut === 'remparts'
+          ? { mul: 0.7, labelText: 'Remparts' }
+          : null,
+  });
 
-ROLE_PROVIDERS.push({
-  id: 'mutateur',
-  provide: (c, { S }) =>
-    S.mut === 'verre' ? { mul: 1.5, labelText: 'Canons de verre' } : S.mut === 'remparts' ? { mul: 0.7, labelText: 'Remparts' } : null
-});
+  ACHIEVEMENTS = [
+    { id: 'victoire', n: 'Première victoire', d: 'Gagner un combat.', ok: c => c.win },
+    { id: 'eclair', n: 'Éclair', d: 'Gagner en 3 manches ou moins.', t: 'Éclair', ok: c => c.win && c.S.round <= 3 },
+    {
+      id: 'intact',
+      n: 'Intouchable',
+      d: 'Gagner sans perdre un seul Pokémon.',
+      t: 'Intouchable',
+      ok: c => c.win && c.S.units.every(u => u.side !== 'a' || !u.ko),
+    },
+    {
+      id: 'alchimiste',
+      n: 'Alchimiste',
+      d: 'Déclencher 5 réactions dans un même combat.',
+      t: 'Alchimiste',
+      ok: c => (c.S.stats.rx || 0) >= 5,
+    },
+    { id: 'eveils', n: 'Triple Éveil', d: 'Réussir 3 Éveils dans un même combat.', ok: c => (c.S.stats.evo || 0) >= 3 },
+    {
+      id: 'capture10',
+      n: 'Collection',
+      d: 'Capturer 10 Pokémon.',
+      t: 'As de la capture',
+      ok: () => PROFILE.caught >= 10,
+      p: () => [PROFILE.caught, 10],
+    },
+    {
+      id: 'badges4',
+      n: 'Mi-parcours',
+      d: 'Gagner 4 badges.',
+      ok: () => BADGES.length >= 4,
+      p: () => [BADGES.length, 4],
+    },
+    {
+      id: 'badges8',
+      n: 'Huit badges',
+      d: 'Gagner les 8 badges.',
+      t: 'Élite des arènes',
+      ok: () => BADGES.length >= 8,
+      p: () => [BADGES.length, 8],
+    },
+    {
+      id: 'champion',
+      n: 'Sacre',
+      d: 'Battre la Championne de la Ligue.',
+      t: 'Légende de la Ligue',
+      ok: () => PROFILE.elite >= 5,
+    },
+    {
+      id: 'kael',
+      n: 'Rival vaincu',
+      d: 'Battre Kael les 4 fois.',
+      ok: () => PROFILE.rival >= 4,
+      p: () => [PROFILE.rival, 4],
+    },
+    {
+      id: 'legendes',
+      n: 'Légende vivante',
+      d: 'Vaincre les 6 légendes.',
+      t: 'Légende vivante',
+      ok: () => PROFILE.legends.length >= 6,
+      p: () => [PROFILE.legends.length, 6],
+    },
+    {
+      id: 'tour10',
+      n: 'Cime de la Tour',
+      d: 'Atteindre l’étage 10 de la Tour de Résonance.',
+      t: 'Cime de la Tour',
+      ok: () => PROFILE.tdr.best >= 10,
+      p: () => [PROFILE.tdr.best, 10],
+    },
+    {
+      id: 'chroma',
+      n: 'Œil de lynx',
+      d: 'Capturer un Pokémon chromatique.',
+      t: 'Œil de lynx',
+      ok: () => PROFILE.shiny.length >= 1,
+    },
+    {
+      id: 'colosses',
+      n: 'Tombe-colosses',
+      d: 'Vaincre les 3 colosses.',
+      t: 'Tombe-colosses',
+      ok: () => (PROFILE.colossi || []).length >= 3,
+      p: () => [(PROFILE.colossi || []).length, 3],
+    },
+    {
+      id: 'briseur',
+      n: 'Briseur de carapaces',
+      d: 'Briser 6 parties de colosse.',
+      ok: () => cumulative('parts') >= 6,
+      p: () => [cumulative('parts'), 6],
+    },
+    {
+      id: 'pyromane',
+      n: 'Pyromane',
+      d: 'Le feu court sur 15 cases de hautes herbes.',
+      t: 'Pyromane',
+      ok: () => cumulative('feu') >= 15,
+      p: () => [cumulative('feu'), 15],
+    },
+    {
+      id: 'noctambule',
+      n: 'Noctambule',
+      d: 'Gagner un combat qui s’achève de nuit.',
+      t: 'Noctambule',
+      ok: c => c.win && c.S.cycle && c.S.cycle.ph === 'nuit',
+    },
+    {
+      id: 'pieges',
+      n: 'As des pièges',
+      d: 'L’adversaire tombe dans 10 de vos pièges.',
+      t: 'As des pièges',
+      ok: () => cumulative('pieges') >= 10,
+      p: () => [cumulative('pieges'), 10],
+    },
+    {
+      id: 'aviateur',
+      n: 'As du ciel',
+      d: 'Réussir 5 attaques Vol en fin de manche.',
+      ok: () => cumulative('vols') >= 5,
+      p: () => [cumulative('vols'), 5],
+    },
+    {
+      id: 'mutants',
+      n: 'Adaptable',
+      d: 'Gagner 5 combats avec un mutateur.',
+      t: 'Caméléon',
+      ok: () => cumulative('mutants') >= 5,
+      p: () => [cumulative('mutants'), 5],
+    },
+    {
+      id: 'tete',
+      n: 'Tête dure',
+      d: 'Gagner un badge avec un défi de campagne actif.',
+      t: 'Tête dure',
+      ok: c => c.win && c.rew.badgeNew && activeChallenges().length > 0,
+    },
+    {
+      id: 'survivant',
+      n: 'Increvable',
+      d: 'Gagner les 8 badges en Nuzlocke.',
+      t: 'Increvable',
+      ok: () => BADGES.length >= 8 && isCamp() && !!(PROFILE.challenges && PROFILE.challenges.nuzlocke),
+    },
+    {
+      id: 'dissonance',
+      n: 'Silence brisé',
+      d: 'Vaincre la Team Dissonance.',
+      t: 'Fléau de la Dissonance',
+      ok: () => (PROFILE.dissonance || 0) >= 4,
+      p: () => [PROFILE.dissonance || 0, 4],
+    },
+    {
+      id: 'riche',
+      n: 'Fortune',
+      d: 'Avoir 20 000 ₽.',
+      ok: () => PROFILE.money >= 20000,
+      p: () => [Math.min(PROFILE.money, 20000), 20000],
+    },
+    {
+      id: 'victoires50',
+      n: 'Cinquante victoires',
+      d: 'Gagner 50 combats.',
+      t: 'Inarrêtable',
+      ok: () => PROFILE.wins >= 50,
+      p: () => [PROFILE.wins, 50],
+    },
+  ];
 
-
-ACHIEVEMENTS = [
-  { id: 'victoire', n: 'Première victoire', d: 'Gagner un combat.', ok: c => c.win },
-  { id: 'eclair', n: 'Éclair', d: 'Gagner en 3 manches ou moins.', t: 'Éclair', ok: c => c.win && c.S.round <= 3 },
-  { id: 'intact', n: 'Intouchable', d: 'Gagner sans perdre un seul Pokémon.', t: 'Intouchable', ok: c => c.win && c.S.units.every(u => u.side !== 'a' || !u.ko) },
-  { id: 'alchimiste', n: 'Alchimiste', d: 'Déclencher 5 réactions dans un même combat.', t: 'Alchimiste', ok: c => (c.S.stats.rx || 0) >= 5 },
-  { id: 'eveils', n: 'Triple Éveil', d: 'Réussir 3 Éveils dans un même combat.', ok: c => (c.S.stats.evo || 0) >= 3 },
-  { id: 'capture10', n: 'Collection', d: 'Capturer 10 Pokémon.', t: 'As de la capture', ok: () => PROFILE.caught >= 10, p: () => [PROFILE.caught, 10] },
-  { id: 'badges4', n: 'Mi-parcours', d: 'Gagner 4 badges.', ok: () => BADGES.length >= 4, p: () => [BADGES.length, 4] },
-  { id: 'badges8', n: 'Huit badges', d: 'Gagner les 8 badges.', t: 'Élite des arènes', ok: () => BADGES.length >= 8, p: () => [BADGES.length, 8] },
-  { id: 'champion', n: 'Sacre', d: 'Battre la Championne de la Ligue.', t: 'Légende de la Ligue', ok: () => PROFILE.elite >= 5 },
-  { id: 'kael', n: 'Rival vaincu', d: 'Battre Kael les 4 fois.', ok: () => PROFILE.rival >= 4, p: () => [PROFILE.rival, 4] },
-  { id: 'legendes', n: 'Légende vivante', d: 'Vaincre les 6 légendes.', t: 'Légende vivante', ok: () => PROFILE.legends.length >= 6, p: () => [PROFILE.legends.length, 6] },
-  { id: 'tour10', n: 'Cime de la Tour', d: 'Atteindre l’étage 10 de la Tour de Résonance.', t: 'Cime de la Tour', ok: () => PROFILE.tdr.best >= 10, p: () => [PROFILE.tdr.best, 10] },
-  { id: 'chroma', n: 'Œil de lynx', d: 'Capturer un Pokémon chromatique.', t: 'Œil de lynx', ok: () => PROFILE.shiny.length >= 1 },
-  { id: 'colosses', n: 'Tombe-colosses', d: 'Vaincre les 3 colosses.', t: 'Tombe-colosses', ok: () => (PROFILE.colossi || []).length >= 3, p: () => [(PROFILE.colossi || []).length, 3] },
-  { id: 'briseur', n: 'Briseur de carapaces', d: 'Briser 6 parties de colosse.', ok: () => cumulative('parts') >= 6, p: () => [cumulative('parts'), 6] },
-  { id: 'pyromane', n: 'Pyromane', d: 'Le feu court sur 15 cases de hautes herbes.', t: 'Pyromane', ok: () => cumulative('feu') >= 15, p: () => [cumulative('feu'), 15] },
-  { id: 'noctambule', n: 'Noctambule', d: 'Gagner un combat qui s’achève de nuit.', t: 'Noctambule', ok: c => c.win && c.S.cycle && c.S.cycle.ph === 'nuit' },
-  { id: 'pieges', n: 'As des pièges', d: 'L’adversaire tombe dans 10 de vos pièges.', t: 'As des pièges', ok: () => cumulative('pieges') >= 10, p: () => [cumulative('pieges'), 10] },
-  { id: 'aviateur', n: 'As du ciel', d: 'Réussir 5 attaques Vol en fin de manche.', ok: () => cumulative('vols') >= 5, p: () => [cumulative('vols'), 5] },
-  { id: 'mutants', n: 'Adaptable', d: 'Gagner 5 combats avec un mutateur.', t: 'Caméléon', ok: () => cumulative('mutants') >= 5, p: () => [cumulative('mutants'), 5] },
-  { id: 'tete', n: 'Tête dure', d: 'Gagner un badge avec un défi de campagne actif.', t: 'Tête dure', ok: c => c.win && c.rew.badgeNew && activeChallenges().length > 0 },
-  { id: 'survivant', n: 'Increvable', d: 'Gagner les 8 badges en Nuzlocke.', t: 'Increvable', ok: () => BADGES.length >= 8 && isCamp() && !!(PROFILE.challenges && PROFILE.challenges.nuzlocke) },
-  { id: 'dissonance', n: 'Silence brisé', d: 'Vaincre la Team Dissonance.', t: 'Fléau de la Dissonance', ok: () => (PROFILE.dissonance || 0) >= 4, p: () => [PROFILE.dissonance || 0, 4] },
-  { id: 'riche', n: 'Fortune', d: 'Avoir 20 000 ₽.', ok: () => PROFILE.money >= 20000, p: () => [Math.min(PROFILE.money, 20000), 20000] },
-  { id: 'victoires50', n: 'Cinquante victoires', d: 'Gagner 50 combats.', t: 'Inarrêtable', ok: () => PROFILE.wins >= 50, p: () => [PROFILE.wins, 50] }
-];
-
-
-/* =====================================================================
+  /* =====================================================================
    Hooks
    ===================================================================== */
-HOOKS.creation.push((S, opt, D0) => {
-  const m = (opt && opt.mut) || D0.mut;
-  if (m) applyMutator(S, m);
-  if (opt && Array.isArray(opt.challenges) && opt.challenges.includes('sansEveil') && !D0.tuto) S.sansEveil = true;
-});
-
-
-// weather mutators last the whole battle
-HOOKS.beforeRoundEnd.push(S => {
-  if (S.mut && WEATHER_MUT[S.mut]) S.wx = { k: WEATHER_MUT[S.mut], n: 99 };
-});
-
-
-HOOKS.progress.push((S, rew, win) => {
-  const D = SCEN[S.sc] || {};
-  let m = 0,
-    g = 0;
-  // cumulative counters
-  PROFILE.totals = PROFILE.totals || {};
-  ['feu', 'pieges', 'vols', 'parts'].forEach(k => {
-    if (S.stats[k]) PROFILE.totals[k] = cumulative(k) + S.stats[k];
-  });
-  if (win && S.mut) PROFILE.totals.mutants = cumulative('mutants') + 1;
-  // mutator in Training: +50% Pokédollars
-  if (win && S.mut && !D.tower) {
-    m += Math.round(((rew.money || 0) * 0.5) / 10) * 10;
-    rew.mut = S.mut;
-  }
-  // campaign challenges
-  const df = D.tuto || D.tower ? [] : activeChallenges();
-  if (df.length) {
-    rew.challenges = df;
-    if (win) {
-      const bonus = df.length * (rew.badgeNew ? 4 : 1);
-      g += bonus;
-      rew.challengeBonus = bonus;
+  HOOKS.creation.push((S, opt, D0) => {
+    const m = (opt && opt.mut) || D0.mut;
+    if (m) {
+      applyMutator(S, m);
     }
-    if (df.includes('nuzlocke')) {
-      PROFILE.graves = PROFILE.graves || [];
-      const deadList = S.units.filter(u => u.side === 'a' && u.ko && BY[u.sp]).map(u => BY[u.sp].base);
-      deadList.forEach(b => {
-        if (!PROFILE.graves.includes(b)) {
-          PROFILE.graves.push(b);
-          (rew.graves = rew.graves || []).push(b);
+    if (opt && Array.isArray(opt.challenges) && opt.challenges.includes('sansEveil') && !D0.tuto) {
+      S.sansEveil = true;
+    }
+  });
+
+  // weather mutators last the whole battle
+  HOOKS.beforeRoundEnd.push(S => {
+    if (S.mut && WEATHER_MUT[S.mut]) {
+      S.wx = { k: WEATHER_MUT[S.mut], n: 99 };
+    }
+  });
+
+  HOOKS.progress.push((S, rew, win) => {
+    const D = SCEN[S.sc] || {};
+    let m = 0,
+      g = 0;
+    // cumulative counters
+    PROFILE.totals = PROFILE.totals || {};
+    ['feu', 'pieges', 'vols', 'parts'].forEach(k => {
+      if (S.stats[k]) {
+        PROFILE.totals[k] = cumulative(k) + S.stats[k];
+      }
+    });
+    if (win && S.mut) {
+      PROFILE.totals.mutants = cumulative('mutants') + 1;
+    }
+    // mutator in Training: +50% Pokédollars
+    if (win && S.mut && !D.tower) {
+      m += Math.round(((rew.money || 0) * 0.5) / 10) * 10;
+      rew.mut = S.mut;
+    }
+    // campaign challenges
+    const df = D.tuto || D.tower ? [] : activeChallenges();
+    if (df.length) {
+      rew.challenges = df;
+      if (win) {
+        const bonus = df.length * (rew.badgeNew ? 4 : 1);
+        g += bonus;
+        rew.challengeBonus = bonus;
+      }
+      if (df.includes('nuzlocke')) {
+        PROFILE.graves = PROFILE.graves || [];
+        const deadList = S.units.filter(u => u.side === 'a' && u.ko && BY[u.sp]).map(u => BY[u.sp].base);
+        deadList.forEach(b => {
+          if (!PROFILE.graves.includes(b)) {
+            PROFILE.graves.push(b);
+            (rew.graves = rew.graves || []).push(b);
+          }
+        });
+        if (rew.graves) {
+          __set_squad(squad.filter(id => !isFallen(id)));
+          setTimeout(() => {
+            try {
+              save();
+              renderSquad();
+            } catch {
+              /* Best effort: failure here is non-fatal. */
+            }
+          }, 0);
         }
-      });
-      if (rew.graves) {
-        __set_squad(squad.filter(id => !isFallen(id)));
-        setTimeout(() => {
-          try {
-            save();
-            renderSquad();
-          } catch { /* Best effort: failure here is non-fatal. */ }
-        }, 0);
       }
     }
-  }
-  // achievements
-  const freshList = verifySuccess({ S, win, rew });
-  if (freshList.length) rew.achievements = freshList;
-  return m || g ? [m, g] : null;
-});
+    // achievements
+    const freshList = verifySuccess({ S, win, rew });
+    if (freshList.length) {
+      rew.achievements = freshList;
+    }
+    return m || g ? [m, g] : null;
+  });
 
+  HOOKS.battleResult.push(r => {
+    const o = [];
+    if (r.mut) {
+      o.push(
+        `<div class="res-l"><h4>Mutateur</h4><div class="rl"><span>${mutInfo(r.mut)[0]} : +50 % de Pokédollars</span><b>×1,5</b></div></div>`
+      );
+    }
+    if (r.challenges) {
+      o.push(
+        `<div class="res-l"><h4>Défis</h4><div class="rl"><span>${r.challenges.map(k => CHALLENGES[k][0]).join(', ')}${r.challengeBonus ? ` : +${r.challengeBonus} Éclats` : ''}</span><b>${r.challenges.length}</b></div>${(
+          r.graves || []
+        )
+          .map(b => `<div class="rl tombe">${medal(BY[b].t)}<span>${BY[b].n} est tombé au combat.</span><b>✝</b></div>`)
+          .join('')}</div>`
+      );
+    }
+    if (r.achievements) {
+      o.push(
+        `<div class="res-l"><h4>Succès</h4>${r.achievements
+          .map(id => {
+            const s = ACHIEVEMENTS.find(x => x.id === id);
+            return `<div class="rl succ"><span><b>${s.n}</b> · ${s.d}${s.t ? ` Titre gagné : « ${s.t} ».` : ''}</span><b>★</b></div>`;
+          })
+          .join('')}</div>`
+      );
+    }
+    return o.join('');
+  });
 
-HOOKS.battleResult.push(r => {
-  const o = [];
-  if (r.mut) {
-    o.push(`<div class="res-l"><h4>Mutateur</h4><div class="rl"><span>${mutInfo(r.mut)[0]} : +50 % de Pokédollars</span><b>×1,5</b></div></div>`);
-  }
-  if (r.challenges) {
-    o.push(
-      `<div class="res-l"><h4>Défis</h4><div class="rl"><span>${r.challenges.map(k => CHALLENGES[k][0]).join(', ')}${r.challengeBonus ? ` : +${r.challengeBonus} Éclats` : ''}</span><b>${r.challenges.length}</b></div>${(r.graves || [])
-        .map(b => `<div class="rl tombe">${medal(BY[b].t)}<span>${BY[b].n} est tombé au combat.</span><b>✝</b></div>`)
-        .join('')}</div>`
-    );
-  }
-  if (r.achievements) {
-    o.push(
-      `<div class="res-l"><h4>Succès</h4>${r.achievements
-        .map(id => {
-          const s = ACHIEVEMENTS.find(x => x.id === id);
-          return `<div class="rl succ"><span><b>${s.n}</b> · ${s.d}${s.t ? ` Titre gagné : « ${s.t} ».` : ''}</span><b>★</b></div>`;
-        })
-        .join('')}</div>`
-    );
-  }
-  return o.join('');
-});
+  /* ---------- Settings: the challenges ---------- */
+  CHALLENGE_CONF = false;
 
-
-/* ---------- Settings: the challenges ---------- */
-CHALLENGE_CONF = false;
-
-
-document.addEventListener('change', e => {
-  const x = e.target.closest('[data-defi]');
-  if (!x || !isCamp()) return;
-  PROFILE.challenges = PROFILE.challenges || REPLAY0().challenges;
-  const k = x.dataset.defi;
-  PROFILE.challenges[k] = k === 'mono' ? x.value : x.checked;
-  if (k === 'mono' && x.value) toast(`Défi Mono-type ${x.value} : seuls les Pokémon de ce type combattront.`);
-  updateChallenges();
-});
-
-
-document.addEventListener('click', e => {
-  const n = e.target.closest('[data-nz]');
-  if (n && isCamp()) {
-    const a = n.dataset.nz;
+  document.addEventListener('change', e => {
+    const x = e.target.closest('[data-defi]');
+    if (!x || !isCamp()) {
+      return;
+    }
     PROFILE.challenges = PROFILE.challenges || REPLAY0().challenges;
-    if (a === 'on') CHALLENGE_CONF = true;
-    else if (a === 'non') CHALLENGE_CONF = false;
-    else if (a === 'ok') {
-      CHALLENGE_CONF = false;
-      PROFILE.challenges.nuzlocke = true;
-      PROFILE.graves = [];
-      toast('Nuzlocke : chaque K.O. compte désormais.');
-    } else if (a === 'stop') {
-      PROFILE.challenges.nuzlocke = false;
-      toast('Nuzlocke abandonné.');
+    const k = x.dataset.defi;
+    PROFILE.challenges[k] = k === 'mono' ? x.value : x.checked;
+    if (k === 'mono' && x.value) {
+      toast(`Défi Mono-type ${x.value} : seuls les Pokémon de ce type combattront.`);
     }
     updateChallenges();
-    return;
-  }
-  const t = e.target.closest('[data-titre]');
-  if (t) {
-    PROFILE.titre = PROFILE.titre === t.dataset.titre ? '' : t.dataset.titre;
-    queueSave();
-    renderQuests();
-    renderWallet();
-  }
-});
+  });
+
+  document.addEventListener('click', e => {
+    const n = e.target.closest('[data-nz]');
+    if (n && isCamp()) {
+      const a = n.dataset.nz;
+      PROFILE.challenges = PROFILE.challenges || REPLAY0().challenges;
+      if (a === 'on') {
+        CHALLENGE_CONF = true;
+      } else if (a === 'non') {
+        CHALLENGE_CONF = false;
+      } else if (a === 'ok') {
+        CHALLENGE_CONF = false;
+        PROFILE.challenges.nuzlocke = true;
+        PROFILE.graves = [];
+        toast('Nuzlocke : chaque K.O. compte désormais.');
+      } else if (a === 'stop') {
+        PROFILE.challenges.nuzlocke = false;
+        toast('Nuzlocke abandonné.');
+      }
+      updateChallenges();
+      return;
+    }
+    const t = e.target.closest('[data-titre]');
+    if (t) {
+      PROFILE.titre = PROFILE.titre === t.dataset.titre ? '' : t.dataset.titre;
+      queueSave();
+      renderQuests();
+      renderWallet();
+    }
+  });
 }

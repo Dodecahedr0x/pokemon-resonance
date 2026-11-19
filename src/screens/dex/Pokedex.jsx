@@ -31,7 +31,13 @@ export default function Pokedex() {
                 <circle cx="9" cy="9" r="5.5" fill="none" stroke="currentColor" strokeWidth="1.7" />
                 <path d="m13.2 13.2 3.6 3.6" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
               </svg>
-              <input id="dex4Q" type="search" placeholder="Nom, numéro ou type" autoComplete="off" aria-label="Rechercher dans le Pokédex" />
+              <input
+                id="dex4Q"
+                type="search"
+                placeholder="Nom, numéro ou type"
+                autoComplete="off"
+                aria-label="Rechercher dans le Pokédex"
+              />
             </label>
             {'\n  '}
             <select id="dex4Gen" aria-label="Région">

@@ -22,8 +22,9 @@ import { RIV429, rivBuild429 } from './064-quality.js';
 import { rivAdapt455 } from './086-adaptive-rival-board-themes.js';
 
 export let wildShiny;
-export function __set_wildShiny(v) { return (wildShiny = v); }
-
+export function __set_wildShiny(v) {
+  return (wildShiny = v);
+}
 
 /* =====================================================================
    v4.4 · Adventure+
@@ -37,19 +38,30 @@ export function APLUS0() {
   return { shiny: [], rival: 0, legends: [], tdr: { best: 0, run: null }, johto: [], jchamp: 0, lac: 0 };
 }
 
-
 export function aplusClean(p) {
   const o = APLUS0();
-  if (!p || typeof p !== 'object') return o;
-  if (Array.isArray(p.shiny)) o.shiny = [...new Set(p.shiny.filter(id => BY[id] && !BY[id].leg))];
-  if (Number.isFinite(p.rival)) o.rival = Math.max(0, Math.min(4, Math.floor(p.rival)));
-  if (Array.isArray(p.johto)) o.johto = [...new Set(p.johto.filter(i => Number.isInteger(i) && i >= 0 && i < 8))]; // v4.15
+  if (!p || typeof p !== 'object') {
+    return o;
+  }
+  if (Array.isArray(p.shiny)) {
+    o.shiny = [...new Set(p.shiny.filter(id => BY[id] && !BY[id].leg))];
+  }
+  if (Number.isFinite(p.rival)) {
+    o.rival = Math.max(0, Math.min(4, Math.floor(p.rival)));
+  }
+  if (Array.isArray(p.johto)) {
+    o.johto = [...new Set(p.johto.filter(i => Number.isInteger(i) && i >= 0 && i < 8))];
+  } // v4.15
   o.jchamp = p.jchamp ? 1 : 0;
   o.lac = p.lac ? 1 : 0;
-  if (Array.isArray(p.legends)) o.legends = [...new Set(p.legends.filter(id => LEGS.some(L => L.id === id)))];
+  if (Array.isArray(p.legends)) {
+    o.legends = [...new Set(p.legends.filter(id => LEGS.some(L => L.id === id)))];
+  }
   const t = p.tdr;
   if (t && typeof t === 'object') {
-    if (Number.isFinite(t.best)) o.tdr.best = Math.max(0, Math.min(999, Math.floor(t.best)));
+    if (Number.isFinite(t.best)) {
+      o.tdr.best = Math.max(0, Math.min(999, Math.floor(t.best)));
+    }
     const r = t.run;
     if (
       r &&
@@ -66,69 +78,105 @@ export function aplusClean(p) {
         team: [...r.team],
         voice: Number.isFinite(r.voice) ? Math.max(0, Math.min(2, Math.floor(r.voice))) : 0,
         items: {},
-        reward: !!r.reward
+        reward: !!r.reward,
       };
       if (r.items && typeof r.items === 'object') {
-        for (const k in r.items) if (BY[k] && ITEMS2[r.items[k]]) o.tdr.run.items[k] = r.items[k];
+        for (const k in r.items) {
+          if (BY[k] && ITEMS2[r.items[k]]) {
+            o.tdr.run.items[k] = r.items[k];
+          }
+        }
       }
     }
   }
   return o;
 }
 
-
 /* ---------- reproducible randomness (Tower: a floor is rebuilt identically after a save) ---------- */
 function rng(seed) {
   return mulberry32(seed >>> 0 || 1);
 }
 
-
 /* AI bonus according to the leader's style (added to the score of an attack that hits your Pokémon) */
 export function aiStyleBonus(S, e, m, k, sim) {
   const sty = (SCEN[S.sc] || {}).style;
-  if (!sty) return 0;
+  if (!sty) {
+    return 0;
+  }
   const hit = affected(S, sim, m, k)
     .map(x => uAt(S, x))
     .filter(v => v && v.side === 'a' && v !== e);
-  if (!hit.length) return 0;
+  if (!hit.length) {
+    return 0;
+  }
   let b = 0;
   if (sty === 'rempart') {
-    if (['guard', 'gguard', 'protect', 'reflect'].includes(m.fx) || m.sh === 'self') b += 5;
-    if (hit.length > 1) b += 3;
+    if (['guard', 'gguard', 'protect', 'reflect'].includes(m.fx) || m.sh === 'self') {
+      b += 5;
+    }
+    if (hit.length > 1) {
+      b += 3;
+    }
   } else if (sty === 'maree') {
-    if (m.mk === 'trempe' || m.wx === 'pluie') b += 5 + affected(S, sim, m, k).length;
-    if (m.t === 'Eau') b += 2;
+    if (m.mk === 'trempe' || m.wx === 'pluie') {
+      b += 5 + affected(S, sim, m, k).length;
+    }
+    if (m.t === 'Eau') {
+      b += 2;
+    }
   } else if (sty === 'chaine') {
     hit.forEach(v => {
       const mk = markAt(S, uk(v));
-      if (mk === 'trempe' || mk === 'charge') b += m.t === 'Électrik' ? 9 : 3;
+      if (mk === 'trempe' || mk === 'charge') {
+        b += m.t === 'Électrik' ? 9 : 3;
+      }
     });
-    if (m.mk === 'charge' || m.mk === 'trempe') b += 2;
+    if (m.mk === 'charge' || m.mk === 'trempe') {
+      b += 2;
+    }
   } else if (sty === 'ronces') {
-    if (IMMOBILE.includes(m.fx) || m.mk === 'enracine') b += 6;
+    if (IMMOBILE.includes(m.fx) || m.mk === 'enracine') {
+      b += 6;
+    }
     hit.forEach(v => {
-      if (v.root > 0 || v.web > 0 || v.badge === 'SOM') b += 3;
+      if (v.root > 0 || v.web > 0 || v.badge === 'SOM') {
+        b += 3;
+      }
     });
   } else if (sty === 'usure') {
-    if (!m.p && !m.fix) b += 4;
+    if (!m.p && !m.fix) {
+      b += 4;
+    }
     hit.forEach(v => {
-      if (v.badge || v.burn > 0) b += 3;
+      if (v.badge || v.burn > 0) {
+        b += 3;
+      }
     });
   } else if (sty === 'controle') {
-    if (CTRL.includes(m.fx)) b += 6;
+    if (CTRL.includes(m.fx)) {
+      b += 6;
+    }
   } else if (sty === 'assaut') {
     hit.forEach(v => (b += (1 - v.hp / v.mhp) * 10));
   } else if (sty === 'seisme') {
     b += (hit.length - 1) * 4;
   } else if (sty === 'piege') {
-    if (IMMOBILE.includes(m.fx)) b += 6;
+    if (IMMOBILE.includes(m.fx)) {
+      b += 6;
+    }
     hit.forEach(v => {
-      if (hasNx(v) && v.en >= EMAX - 1) b += 6;
+      if (hasNx(v) && v.en >= EMAX - 1) {
+        b += 6;
+      }
     });
   } else if (sty === 'rival') {
     hit.forEach(v => {
-      if (v.sp === (PROFILE.box && PROFILE.box[0])) b += 5;
-      if (dmgOf(S, sim, m, v, mvType(S, sim, m), 1) >= v.hp) b += 4;
+      if (v.sp === (PROFILE.box && PROFILE.box[0])) {
+        b += 5;
+      }
+      if (dmgOf(S, sim, m, v, mvType(S, sim, m), 1) >= v.hp) {
+        b += 4;
+      }
     });
   } else if (sty === 'boss') {
     b += (hit.length - 1) * 3;
@@ -137,15 +185,15 @@ export function aiStyleBonus(S, e, m, k, sim) {
   return b;
 }
 
-
 export function rivalStarter() {
   const b = PROFILE.box && PROFILE.box[0];
   return RIVAL_LINE[b] ? b : 'kaiminus';
 }
 
-
 export function rivalBuild() {
-  if (RIV429) rivBuild429(); // Kael in Johto and Hoenn follows your partner (v4.29)
+  if (RIV429) {
+    rivBuild429();
+  } // Kael in Johto and Hoenn follows your partner (v4.29)
   const line = RIVAL_LINE[rivalStarter()];
   RIVAL_STEPS.forEach((R, i) => {
     const ace = line[R.st],
@@ -165,15 +213,16 @@ export function rivalBuild() {
       style: 'rival',
       at: BY[ace].t[0],
       d: `Kael revient avec ${BY[ace].n}, qui a l’avantage du type sur votre partenaire de départ. Son équipe grandit en même temps que la vôtre.`,
-      foes: [ace, ...R.team].map((id, j) => [id, RIVAL_POS[j]])
+      foes: [ace, ...R.team].map((id, j) => [id, RIVAL_POS[j]]),
     };
     OBST[k] = i < 2 ? { grass: ['2,2', '2,3'] } : { pil: ['4,2'], sand: ['2,1', '2,4'] };
   });
   try {
     rivAdapt455(); // Kael adapts to your team (v4.55)
-  } catch { /* Best effort: failure here is non-fatal. */ }
+  } catch {
+    /* Best effort: failure here is non-fatal. */
+  }
 }
-
 
 function towerIdle() {
   SCEN.tdr = {
@@ -189,11 +238,10 @@ function towerIdle() {
     lv: 1,
     tower: true,
     d: `Choisissez 4 Pokémon parmi 8 tirés au hasard, puis montez le plus haut possible. Chaque étage est plus dur, une légende garde tous les 5 étages, et une récompense vous attend entre deux étages. Record : étage ${(PROFILE.tdr && PROFILE.tdr.best) || 0}.`,
-    foes: []
+    foes: [],
   };
   return SCEN.tdr;
 }
-
 
 function towerBuild(run) {
   const f = run.floor,
@@ -208,7 +256,7 @@ function towerBuild(run) {
     foes = [
       [L.id, [6, 2], { boss: true, hb: 30 + f * 5, pb: Math.min(10, 3 + Math.floor(f / 3)) }],
       [L.minions[0], [7, 1]],
-      [L.minions[1], [7, 4]]
+      [L.minions[1], [7, 4]],
     ];
     rule = L.rule;
     at = L.t[0];
@@ -220,11 +268,15 @@ function towerBuild(run) {
     foes = [];
     for (let i = 0; foes.length < n && i < 60; i++) {
       const m = pickOf(r, pool);
-      if (families.has(m.base)) continue;
+      if (families.has(m.base)) {
+        continue;
+      }
       families.add(m.base);
       foes.push([m.id, RIVAL_POS[foes.length]]); // same slots as the rival
     }
-    if (f % 3 === 0) rule = pickOf(r, TOWER_RULES);
+    if (f % 3 === 0) {
+      rule = pickOf(r, TOWER_RULES);
+    }
     at = BY[foes[0][0]].t[0];
   }
   OBST.tdr = pickOf(r, TOWER_OBST);
@@ -246,34 +298,44 @@ function towerBuild(run) {
     at,
     mut: mutOfTurn(run, f), // one mutator per floor (v4.9)
     d: `${mutOfTurn(run, f) ? `Mutateur · ${mutInfo(mutOfTurn(run, f))[0]} : ${mutInfo(mutOfTurn(run, f))[1]} ` : ''}${boss ? `Étage de légende : ${BY[foes[0][0]].n} garde le passage.` : `${foes.length} adversaires.`}${rule ? ` Règle du plateau : ${GYMS[TOWER_RULES.indexOf(rule)].r}` : ''} Votre équipe : ${run.team.map(id => BY[id].n).join(', ')}${run.voice ? ` · +${run.voice} Voix` : ''}.`,
-    foes
+    foes,
   };
   return SCEN.tdr;
 }
-
 
 export function towerRestore() {
   const run = towerRun();
   return run ? towerBuild(run) : towerIdle();
 }
 
-
 /* team and battle options of the current ascent */
 export function towerTeam() {
   const run = towerRun();
-  if (!run) return null;
+  if (!run) {
+    return null;
+  }
   const items = {};
   run.team.forEach(id => {
     const b = BY[id].base;
-    if (run.items[id]) items[b] = run.items[id];
+    if (run.items[id]) {
+      items[b] = run.items[id];
+    }
   });
   return {
     team: run.team.slice(0, 4),
     voice: run.voice,
-    opts: { diff: PROFILE.diff, items, fatigue: {}, links: {}, order: chosenOrder(), livingBoard: chosenAlive(), tactics: chosenTactic(), characters: charactersChosen() }
+    opts: {
+      diff: PROFILE.diff,
+      items,
+      fatigue: {},
+      links: {},
+      order: chosenOrder(),
+      livingBoard: chosenAlive(),
+      tactics: chosenTactic(),
+      characters: charactersChosen(),
+    },
   };
 }
-
 
 export function towerDraft() {
   const seed = Math.floor(Math.random() * 1e9),
@@ -283,7 +345,9 @@ export function towerDraft() {
     c = [];
   for (let i = 0; c.length < 8 && i < 200; i++) {
     const m = pickOf(r, pool);
-    if (families.has(m.base)) continue;
+    if (families.has(m.base)) {
+      continue;
+    }
     families.add(m.base);
     c.push(m.id);
   }
@@ -292,17 +356,17 @@ export function towerDraft() {
   $('#tdrBox').hidden = false;
 }
 
-
 /* rendered by src/screens/overlays/TdrBox.jsx */
 function renderDraft() {
   paintOverlay('tdr', { mode: 'draft', cands: [...TOWER.cands], pick: [...TOWER.pick] });
 }
 
-
 function towerOffer(run) {
   const r = rng(run.seed * 7 + run.floor * 131),
     o = [];
-  if (run.voice < 2) o.push({ k: 'voix', t: '+1 Voix', d: 'Pour tout le reste de l’ascension.' });
+  if (run.voice < 2) {
+    o.push({ k: 'voix', t: '+1 Voix', d: 'Pour tout le reste de l’ascension.' });
+  }
   const free = run.team.filter(id => !run.items[id]);
   if (free.length) {
     const id = pickOf(r, free),
@@ -324,37 +388,40 @@ function towerOffer(run) {
       id: out,
       to: nw.id,
       t: `${BY[nw.id].n} remplace ${BY[out].n}`,
-      d: 'Une recrue confirmée rejoint l’ascension.'
+      d: 'Une recrue confirmée rejoint l’ascension.',
     });
   }
   return o;
 }
 
-
 function towerReward() {
   const run = towerRun();
-  if (!run) return;
+  if (!run) {
+    return;
+  }
   TOWER.offer = towerOffer(run);
   paintOverlay('tdr', { mode: 'reward', floor: run.floor, offer: TOWER.offer });
   $('#tdrBox').hidden = false;
 }
 
-
 /* climb to the current floor */
 function towerClimb() {
   const run = towerRun();
-  if (!run) return;
+  if (!run) {
+    return;
+  }
   if (run.reward) {
     towerReward();
     return;
   }
   towerBuild(run);
   queueSave();
-  if (B) backToPrep();
+  if (B) {
+    backToPrep();
+  }
   chooseBattle('tdr');
   launch();
 }
-
 
 /* =====================================================================
    Progression: rewards for the new battles (called by applyProgress)
@@ -367,8 +434,12 @@ export function aplusProgress(S, rew) {
   /* shinies captured */
   (S.stats.shiny || []).forEach(id => {
     const b = BY[id] ? BY[id].id : null;
-    if (!b) return;
-    if (!PROFILE.shiny.includes(b)) PROFILE.shiny.push(b);
+    if (!b) {
+      return;
+    }
+    if (!PROFILE.shiny.includes(b)) {
+      PROFILE.shiny.push(b);
+    }
     (rew.shiny = rew.shiny || []).push(b);
   });
   if (win && D.rival && PROFILE.rival < D.rival) {
@@ -390,7 +461,9 @@ export function aplusProgress(S, rew) {
       if (win) {
         PROFILE.tdr.best = Math.max(PROFILE.tdr.best, f);
         m += 60 * f;
-        if (f % 5 === 0) g += 6;
+        if (f % 5 === 0) {
+          g += 6;
+        }
         run.floor = f + 1;
         run.reward = true;
         rew.tdr = { cleared: f, next: f + 1, best: PROFILE.tdr.best };
@@ -416,7 +489,6 @@ export function aplusProgress(S, rew) {
     rew.gems = (rew.gems || 0) + g;
   }
 }
-
 
 /* lines added to the result screen */
 export function aplusRewHtml(r) {
@@ -445,31 +517,24 @@ export function aplusRewHtml(r) {
   return o.join('');
 }
 
-
 /* Tower result screen buttons: rendered by React (src/screens/combat/battle/Result.jsx) */
 
 const pickOf = (r, a) => a[Math.floor(r() * a.length)];
-
 
 /* =====================================================================
    1. Shiny Pokémon
    ===================================================================== */
 export const SHINY_RATE = 1 / 25;
 
-
 /* hue specific to each species: a given shiny Pokémon always has the same color */
 export const shinyHue = id => 40 + ((((BY[id] && BY[id].no) || 0) * 53) % 260);
 
-
 export const shinyStyle = id => `--sh:${shinyHue(id)}deg`;
-
 
 export const isShinyOwned = id => (PROFILE.shiny || []).includes(id);
 
-
 export const SPARK =
   '<svg class="shn-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.2 6.6L21 11l-6.8 2.4L12 20l-2.2-6.6L3 11l6.8-2.4Z"/></svg>';
-
 
 /* =====================================================================
    2. Gym leaders: each with their own play style
@@ -485,24 +550,19 @@ const STYLES = {
   seisme: { n: 'Séisme', d: 'Il cherche à toucher plusieurs Pokémon d’un seul coup.' },
   piege: { n: 'Piège', d: 'Elle immobilise et vise ceux qui sont sur le point de s’éveiller.' },
   rival: { n: 'Rival', d: 'Kael vise votre partenaire de départ et les Pokémon qu’il peut mettre K.O.' },
-  boss: { n: 'Légende', d: 'Concentre ses coups et frappe plusieurs cibles dès qu’il le peut.' }
+  boss: { n: 'Légende', d: 'Concentre ses coups et frappe plusieurs cibles dès qu’il le peut.' },
 };
-
 
 const IMMOBILE = ['root', 'web', 'sleep'];
 
-
 const CTRL = ['push', 'pull', 'confuse', 'turn', 'taunt', 'swap'];
 
-
 export const styleOf = k => STYLES[(SCEN[k] || {}).style] || null;
-
 
 /* =====================================================================
    3. The rival: Kael Ferrand
    ===================================================================== */
 export const RIVAL = { n: 'Kael Ferrand', t: 'votre rival' };
-
 
 /* his partner has the advantage over yours, as in the games */
 export const RIVAL_LINE = {
@@ -511,12 +571,10 @@ export const RIVAL_LINE = {
   carapuce: ['bulbizarre', 'herbizarre', 'florizarre'],
   germignon: ['hericendre', 'feurisson', 'typhlosion'],
   hericendre: ['kaiminus', 'crocrodil', 'aligatueur'],
-  kaiminus: ['germignon', 'macronium', 'meganium']
+  kaiminus: ['germignon', 'macronium', 'meganium'],
 };
 
-
 export const RIVAL_KEYS = ['rv1', 'rv2', 'rv3', 'rv4'];
-
 
 export const RIVAL_STEPS = [
   {
@@ -528,7 +586,7 @@ export const RIVAL_STEPS = [
     team: ['nosferapti', 'abra'],
     q: 'Deux badges ? Pas mal. Mais mon partenaire et moi, on a choisi le même jour que toi. Montre-moi ce que tu vaux.',
     w: 'Tch… Ton équipe tient mieux que je pensais. La prochaine fois, je serai prêt.',
-    l: 'Tu vois ? Choisir le bon type, c’est déjà la moitié du combat.'
+    l: 'Tu vois ? Choisir le bon type, c’est déjà la moitié du combat.',
   },
   {
     after: 4,
@@ -539,7 +597,7 @@ export const RIVAL_STEPS = [
     team: ['nosferalto', 'kadabra', 'malosse'],
     q: 'Mon partenaire s’est éveillé. Le tien aussi, j’espère. Sinon, ça va être rapide.',
     w: 'Encore toi… D’accord. Tu es vraiment devenu fort.',
-    l: 'Tu t’es éveillé trop tard. Le timing, c’est tout.'
+    l: 'Tu t’es éveillé trop tard. Le timing, c’est tout.',
   },
   {
     after: 6,
@@ -550,7 +608,7 @@ export const RIVAL_STEPS = [
     team: ['nosferalto', 'kadabra', 'demolosse', 'minidraco'],
     q: 'J’ai étudié chacun de tes combats. Cette fois, j’ai un plan pour chacun de tes Pokémon.',
     w: 'Mon plan était parfait. C’est toi qui ne l’étais pas… enfin, qui l’étais trop.',
-    l: 'Un plan pour chaque Pokémon. Je te l’avais dit.'
+    l: 'Un plan pour chaque Pokémon. Je te l’avais dit.',
   },
   {
     after: 8,
@@ -561,22 +619,19 @@ export const RIVAL_STEPS = [
     team: ['nostenfer', 'alakazam', 'demolosse', 'draco'],
     q: 'Huit badges, toi aussi. Avant la Ligue, il reste une chose à régler : lequel de nous deux est le meilleur.',
     w: 'Va. Bats le Conseil 4. Et ne perds pas contre quelqu’un d’autre que moi.',
-    l: 'La Ligue attendra. Reviens quand tu seras prêt à me battre.'
-  }
+    l: 'La Ligue attendra. Reviens quand tu seras prêt à me battre.',
+  },
 ];
-
 
 export const RIVAL_POS = [
   [6, 2],
   [7, 1],
   [6, 4],
   [7, 3],
-  [7, 5]
+  [7, 5],
 ];
 
-
 export const rivalIdx = k => RIVAL_KEYS.indexOf(k);
-
 
 /* =====================================================================
    4. Legendary bosses (post-game, never recruitable)
@@ -599,7 +654,7 @@ export const LEGS = [
     title: 'le Tonnerre errant',
     q: 'Un grondement traverse la plaine. Les fronts de Charge s’allument tout seuls : Raikou est là.',
     w: 'Raikou s’éloigne dans l’orage. Il vous a reconnu comme un égal.',
-    l: 'La foudre a frappé avant que vous ne la voyiez venir.'
+    l: 'La foudre a frappé avant que vous ne la voyiez venir.',
   },
   {
     id: 'entei',
@@ -618,7 +673,7 @@ export const LEGS = [
     title: 'le Volcan qui marche',
     q: 'La lave jaillit sous vos pas. Entei rugit, et le sol lui répond.',
     w: 'Le volcan se tait. Entei vous laisse passer.',
-    l: 'Le feu a tout recouvert.'
+    l: 'Le feu a tout recouvert.',
   },
   {
     id: 'suicune',
@@ -637,7 +692,7 @@ export const LEGS = [
     title: 'la Brise du Nord',
     q: 'La pluie se met à tomber, et la marée monte avec elle. Suicune vous observe depuis l’eau.',
     w: 'Suicune bondit au-dessus des flots et disparaît. L’eau redevient claire.',
-    l: 'La marée vous a emportés.'
+    l: 'La marée vous a emportés.',
   },
   {
     id: 'mewtwo',
@@ -656,7 +711,7 @@ export const LEGS = [
     title: 'le Pokémon créé',
     q: 'Mon Écran Psy se lève une manche sur deux. Frappez au mauvais moment et vous ne m’égratignerez même pas.',
     w: 'Intéressant. Vous m’avez vaincu… cette fois.',
-    l: 'Prévisible.'
+    l: 'Prévisible.',
   },
   {
     id: 'lugia',
@@ -675,7 +730,7 @@ export const LEGS = [
     title: 'le Gardien des mers',
     q: 'Une tempête se lève au large. Lugia déploie ses ailes et la marée suit.',
     w: 'La tempête retombe. Lugia regagne le fond des mers.',
-    l: 'Le vent vous a balayés.'
+    l: 'Le vent vous a balayés.',
   },
   {
     id: 'hooh',
@@ -694,189 +749,204 @@ export const LEGS = [
     title: 'l’Oiseau arc-en-ciel',
     q: 'Un arc-en-ciel traverse le ciel, puis s’embrase. Ho-Oh se pose au centre du plateau.',
     w: 'Ho-Oh laisse tomber une plume aux reflets d’arc-en-ciel avant de s’envoler.',
-    l: 'Les flammes sacrées ont tout consumé.'
-  }
+    l: 'Les flammes sacrées ont tout consumé.',
+  },
 ];
-
 
 export const legKey = id => 'lg' + id;
 
-
 export const legOf = k => LEGS.find(L => legKey(L.id) === k) || null;
-
 
 /* =====================================================================
    5. Resonance Tower
    ===================================================================== */
 const TOWER_RULES = ['roche', 'eau', 'elec', 'plante', 'poison', 'psy', 'feu', 'sol'];
 
-
 const TOWER_MAPS = [
   { water: ['4,2', '4,3'], rock: ['3,0', '3,5'] },
   { water: ['5,0', '5,1'], rock: ['3,4'] },
   { water: [], rock: ['3,1', '4,4'] },
   { water: ['3,2', '4,2', '3,3'], rock: [] },
-  { water: ['5,4', '5,5'], rock: ['2,2', '4,1'] }
+  { water: ['5,4', '5,5'], rock: ['2,2', '4,1'] },
 ];
-
 
 const TOWER_OBST = [
   { grass: ['2,2', '2,3'] },
   { pil: ['4,2'] },
   { sand: ['2,1', '2,4', '5,2'] },
   {},
-  { pil: ['4,1', '4,4'] }
+  { pil: ['4,1', '4,4'] },
 ];
-
 
 export const towerRun = () => (PROFILE.tdr && PROFILE.tdr.run) || null;
 
-
 const towerPool = () => MON.filter(m => !m.leg && m.id !== 'eevee');
 
-
 /* Tower window: team choice and rewards (#tdrBox rendered by React, src/screens/overlays/TdrBox.jsx) */
-
 
 const TOWER = { pick: [], cands: [], offer: [] };
 
 // Statements run at startup, in the original order (see index.js).
 export function __init() {
+  wildShiny = false;
 
-wildShiny = false;
-
-
-['rempart', 'maree', 'chaine', 'ronces', 'usure', 'controle', 'assaut', 'seisme'].forEach((s, i) => {
-  if (SCEN[ARENAS[i].k]) SCEN[ARENAS[i].k].style = s;
-});
-
-
-Object.assign(MV, {
-  fatalfoudre: {
-    n: 'Fatal-Foudre',
-    t: 'Électrik',
-    p: 12,
-    r: 3,
-    sh: 'area',
-    mk: 'charge',
-    d: 'Zone de 7 cases, Chargé.'
-  },
-  feusacre: { n: 'Feu Sacré', t: 'Feu', p: 13, r: 3, sh: 'area', mk: 'brulant', d: 'Zone de 7 cases, Brûlant.' },
-  frappepsy: { n: 'Frappe Psy', t: 'Psy', p: 14, r: 3, sh: 'line', d: 'Ligne de 3 cases.' },
-  aeroblast: { n: 'Aéroblast', t: 'Vol', p: 13, r: 3, sh: 'line', fx: 'push', v: 1, d: 'Ligne de 3 cases, repousse.' }
-});
-
-
-LEGS.forEach(L => {
-  const m = {
-    id: L.id,
-    n: L.n,
-    t: L.t,
-    c: 5,
-    r: 'Frappeur',
-    r2: 'Rempart',
-    s: L.s,
-    mv: L.mv,
-    ability: L.ability,
-    nx: null,
-    no: L.no,
-    base: L.id,
-    st: 1,
-    prev: null,
-    gen: L.no <= 151 ? 1 : 2,
-    leg: true
-  };
-  BY[L.id] = m;
-  PKT.set(m.t, m.id);
-});
-
-
-LEGS.forEach(L => {
-  const k = legKey(L.id);
-  SCEN[k] = {
-    n: L.n,
-    lvl: `Légende · ${L.title}`,
-    lim: 11,
-    time: L.time,
-    bio: L.bio,
-    rule: L.rule,
-    legend: L.id,
-    style: 'boss',
-    at: L.t[0],
-    water: L.water,
-    rock: L.rock,
-    hb: 34, // the escort
-    pb: 5,
-    lv: 55,
-    d: `${L.n}, ${L.title}, vous attend sur un plateau à sa mesure. Il ne peut pas être capturé : on l’affronte pour l’honneur… et pour les Éclats.`,
-    foes: [
-      [L.id, [6, 2], { boss: true, hb: 130, pb: 7 }], // tuned to be a bit harder than the Champion
-      [L.minions[0], [7, 1]],
-      [L.minions[1], [7, 4]]
-    ]
-  };
-  OBST[k] = { pil: ['4,0', '4,5'] };
-});
-
-
-$('#tdrBox').addEventListener('click', e => {
-  const p = e.target.closest('[data-tdrp]');
-  if (p) {
-    const id = p.dataset.tdrp,
-      i = TOWER.pick.indexOf(id);
-    if (i >= 0) TOWER.pick.splice(i, 1);
-    else if (TOWER.pick.length < 4) TOWER.pick.push(id);
-    renderDraft();
-    return;
-  }
-  const rw = e.target.closest('[data-tdrr]');
-  if (rw) {
-    const run = towerRun(),
-      x = TOWER.offer[+rw.dataset.tdrr];
-    if (!run || !x) return;
-    if (x.k === 'voix') run.voice = Math.min(2, run.voice + 1);
-    if (x.k === 'item') run.items[x.id] = x.it;
-    if (x.k === 'evo' || x.k === 'swap') {
-      const i = run.team.indexOf(x.id);
-      if (i >= 0) run.team[i] = x.to;
-      if (run.items[x.id]) {
-        run.items[x.to] = run.items[x.id];
-        delete run.items[x.id];
-      }
+  ['rempart', 'maree', 'chaine', 'ronces', 'usure', 'controle', 'assaut', 'seisme'].forEach((s, i) => {
+    if (SCEN[ARENAS[i].k]) {
+      SCEN[ARENAS[i].k].style = s;
     }
-    run.reward = false;
-    $('#tdrBox').hidden = true;
-    towerClimb();
-    return;
-  }
-  const b = e.target.closest('[data-tdr]');
-  if (!b && e.target.id !== 'tdrBox') return;
-  const a = b ? b.dataset.tdr : 'x';
-  if (a === 'x') {
-    if (!towerRun() || !towerRun().reward) $('#tdrBox').hidden = true;
-    return;
-  }
-  if (a === 'go' && TOWER.pick.length === 4) {
-    PROFILE.tdr.run = { seed: TOWER.seed, floor: 1, team: [...TOWER.pick], voice: 0, items: {}, reward: false };
-    $('#tdrBox').hidden = true;
-    towerClimb();
-  }
-});
+  });
 
+  Object.assign(MV, {
+    fatalfoudre: {
+      n: 'Fatal-Foudre',
+      t: 'Électrik',
+      p: 12,
+      r: 3,
+      sh: 'area',
+      mk: 'charge',
+      d: 'Zone de 7 cases, Chargé.',
+    },
+    feusacre: { n: 'Feu Sacré', t: 'Feu', p: 13, r: 3, sh: 'area', mk: 'brulant', d: 'Zone de 7 cases, Brûlant.' },
+    frappepsy: { n: 'Frappe Psy', t: 'Psy', p: 14, r: 3, sh: 'line', d: 'Ligne de 3 cases.' },
+    aeroblast: {
+      n: 'Aéroblast',
+      t: 'Vol',
+      p: 13,
+      r: 3,
+      sh: 'line',
+      fx: 'push',
+      v: 1,
+      d: 'Ligne de 3 cases, repousse.',
+    },
+  });
 
-$('#cbResult').addEventListener(
-  'click',
-  e => {
-    const b = e.target.closest('[data-tdrn]');
-    if (!b) return;
-    e.stopPropagation();
-    backToPrep();
-    __set_scSel('tdr');
-    __set_PREPG({ g: 'apres', sc: 'tdr' });
-    renderPrep();
-    if (b.dataset.tdrn === 'reward') towerReward();
-    else towerDraft();
-  },
-  true
-);
+  LEGS.forEach(L => {
+    const m = {
+      id: L.id,
+      n: L.n,
+      t: L.t,
+      c: 5,
+      r: 'Frappeur',
+      r2: 'Rempart',
+      s: L.s,
+      mv: L.mv,
+      ability: L.ability,
+      nx: null,
+      no: L.no,
+      base: L.id,
+      st: 1,
+      prev: null,
+      gen: L.no <= 151 ? 1 : 2,
+      leg: true,
+    };
+    BY[L.id] = m;
+    PKT.set(m.t, m.id);
+  });
+
+  LEGS.forEach(L => {
+    const k = legKey(L.id);
+    SCEN[k] = {
+      n: L.n,
+      lvl: `Légende · ${L.title}`,
+      lim: 11,
+      time: L.time,
+      bio: L.bio,
+      rule: L.rule,
+      legend: L.id,
+      style: 'boss',
+      at: L.t[0],
+      water: L.water,
+      rock: L.rock,
+      hb: 34, // the escort
+      pb: 5,
+      lv: 55,
+      d: `${L.n}, ${L.title}, vous attend sur un plateau à sa mesure. Il ne peut pas être capturé : on l’affronte pour l’honneur… et pour les Éclats.`,
+      foes: [
+        [L.id, [6, 2], { boss: true, hb: 130, pb: 7 }], // tuned to be a bit harder than the Champion
+        [L.minions[0], [7, 1]],
+        [L.minions[1], [7, 4]],
+      ],
+    };
+    OBST[k] = { pil: ['4,0', '4,5'] };
+  });
+
+  $('#tdrBox').addEventListener('click', e => {
+    const p = e.target.closest('[data-tdrp]');
+    if (p) {
+      const id = p.dataset.tdrp,
+        i = TOWER.pick.indexOf(id);
+      if (i >= 0) {
+        TOWER.pick.splice(i, 1);
+      } else if (TOWER.pick.length < 4) {
+        TOWER.pick.push(id);
+      }
+      renderDraft();
+      return;
+    }
+    const rw = e.target.closest('[data-tdrr]');
+    if (rw) {
+      const run = towerRun(),
+        x = TOWER.offer[+rw.dataset.tdrr];
+      if (!run || !x) {
+        return;
+      }
+      if (x.k === 'voix') {
+        run.voice = Math.min(2, run.voice + 1);
+      }
+      if (x.k === 'item') {
+        run.items[x.id] = x.it;
+      }
+      if (x.k === 'evo' || x.k === 'swap') {
+        const i = run.team.indexOf(x.id);
+        if (i >= 0) {
+          run.team[i] = x.to;
+        }
+        if (run.items[x.id]) {
+          run.items[x.to] = run.items[x.id];
+          delete run.items[x.id];
+        }
+      }
+      run.reward = false;
+      $('#tdrBox').hidden = true;
+      towerClimb();
+      return;
+    }
+    const b = e.target.closest('[data-tdr]');
+    if (!b && e.target.id !== 'tdrBox') {
+      return;
+    }
+    const a = b ? b.dataset.tdr : 'x';
+    if (a === 'x') {
+      if (!towerRun() || !towerRun().reward) {
+        $('#tdrBox').hidden = true;
+      }
+      return;
+    }
+    if (a === 'go' && TOWER.pick.length === 4) {
+      PROFILE.tdr.run = { seed: TOWER.seed, floor: 1, team: [...TOWER.pick], voice: 0, items: {}, reward: false };
+      $('#tdrBox').hidden = true;
+      towerClimb();
+    }
+  });
+
+  $('#cbResult').addEventListener(
+    'click',
+    e => {
+      const b = e.target.closest('[data-tdrn]');
+      if (!b) {
+        return;
+      }
+      e.stopPropagation();
+      backToPrep();
+      __set_scSel('tdr');
+      __set_PREPG({ g: 'apres', sc: 'tdr' });
+      renderPrep();
+      if (b.dataset.tdrn === 'reward') {
+        towerReward();
+      } else {
+        towerDraft();
+      }
+    },
+    true
+  );
 }

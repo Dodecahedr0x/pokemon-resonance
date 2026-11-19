@@ -15,7 +15,9 @@ function Card({ destinationId: dest, available: available }) {
   return (
     <Dialogue className="sv-card exp-card" titre="expT" closeAttrs={{ 'data-exp-x': '' }}>
       <p className="kick">Expédition</p>
-      <h2 className="h2" id="expT">{dest ? DESTINATIONS[dest].n : 'Où partir ?'}</h2>
+      <h2 className="h2" id="expT">
+        {dest ? DESTINATIONS[dest].n : 'Où partir ?'}
+      </h2>
       {!dest ? (
         <div className="exp-list">
           {Object.entries(DESTINATIONS).map(([k, D]) => {
@@ -24,14 +26,21 @@ function Card({ destinationId: dest, available: available }) {
             return (
               <button key={k} type="button" className="exp-d" data-exp-d={k} disabled={lk}>
                 <b>{D.n}</b>
-                <em>{lk ? `Accessible après ${D.min} badges` : `${D.duration} combats · ${D.types.slice(0, 4).join(', ')} ×2`}</em>
+                <em>
+                  {lk
+                    ? `Accessible après ${D.min} badges`
+                    : `${D.duration} combats · ${D.types.slice(0, 4).join(', ')} ×2`}
+                </em>
               </button>
             );
           })}
         </div>
       ) : (
         <>
-          <p className="d">Qui part ? Les Pokémon dont un type convient au lieu rapportent le double. Les membres de l’équipe ne peuvent pas partir.</p>
+          <p className="d">
+            Qui part ? Les Pokémon dont un type convient au lieu rapportent le double. Les membres de l’équipe ne
+            peuvent pas partir.
+          </p>
           <div className="exp-list">
             {available.length ? (
               available.map(id => {
@@ -48,7 +57,9 @@ function Card({ destinationId: dest, available: available }) {
               <p className="v4-empty">Aucun Pokémon disponible : ceux de l’équipe restent au camp.</p>
             )}
           </div>
-          <button type="button" className="b b-sm b-ghost" data-exp-d="">Choisir un autre lieu</button>
+          <button type="button" className="b b-sm b-ghost" data-exp-d="">
+            Choisir un autre lieu
+          </button>
         </>
       )}
     </Dialogue>

@@ -17,7 +17,12 @@ import { captureSite421 } from '../../engine/061-catch-anywhere.js';
 export default function Grid({ v }) {
   return (
     <div className="dex-grid fam-grid" id="dexGrid">
-      {v && (v.length ? v.map(m => <FamCard key={m.id} m={m} />) : <p className="empty">Aucune famille ne correspond à ces filtres.</p>)}
+      {v &&
+        (v.length ? (
+          v.map(m => <FamCard key={m.id} m={m} />)
+        ) : (
+          <p className="empty">Aucune famille ne correspond à ces filtres.</p>
+        ))}
     </div>
   );
 }
@@ -56,7 +61,10 @@ function FamCard({ m }) {
     lock = !inBox(m.id),
     dim = !on && !lock && (m.c > BUDGET - cost() || squad.length >= TEAM_MAX),
     fat = isCamp() && !lock ? PROFILE.fatigue[m.id] || 0 : 0,
-    it = PROFILE.equipment[m.id] && ownedItems().includes(PROFILE.equipment[m.id]) ? ITEMS2[PROFILE.equipment[m.id]] : null,
+    it =
+      PROFILE.equipment[m.id] && ownedItems().includes(PROFILE.equipment[m.id])
+        ? ITEMS2[PROFILE.equipment[m.id]]
+        : null,
     maxSt = Math.max(...family.map(x => x.st)),
     rg = rankId(m.id),
     placeLabel = lock && !PROFILE.dex.includes(m.id) ? captureSite421(m.id) : '',
@@ -86,7 +94,14 @@ function FamCard({ m }) {
         <div className="fc-art">
           <span className="fc-burst" aria-hidden="true" />
           <Orb m={m} />
-          <img className="pokemon-art-sprite" src={PKA(m.no)} alt={m.n} loading="lazy" decoding="async" onError={onArtError} />
+          <img
+            className="pokemon-art-sprite"
+            src={PKA(m.no)}
+            alt={m.n}
+            loading="lazy"
+            decoding="async"
+            onError={onArtError}
+          />
           <span className="fc-st">{maxSt > 1 ? `${maxSt} stades` : 'Stade unique'}</span>
           {lock && (
             <span className="fc-lock">
@@ -140,7 +155,11 @@ function FamCard({ m }) {
       </div>
       <button className="dex-open" type="button" data-open={m.id} aria-label={`Ouvrir la carte de ${m.n}`} />
       {family.length > 1 && (
-        <div className={`fc-stg${family.length > 3 ? ' many' : ''}`} role="group" aria-label={`Recruter un stade de ${m.n}`}>
+        <div
+          className={`fc-stg${family.length > 3 ? ' many' : ''}`}
+          role="group"
+          aria-label={`Recruter un stade de ${m.n}`}
+        >
           {family.map(x => {
             const sel = squad.includes(x.id);
             return (
@@ -161,7 +180,13 @@ function FamCard({ m }) {
           })}
         </div>
       )}
-      <button className="qa" type="button" data-qa={m.id} aria-pressed={on} aria-label={`${on ? 'Retirer' : 'Recruter'} ${m.n}`}>
+      <button
+        className="qa"
+        type="button"
+        data-qa={m.id}
+        aria-pressed={on}
+        aria-label={`${on ? 'Retirer' : 'Recruter'} ${m.n}`}
+      >
         <svg>
           <use href="#i-plus" />
         </svg>

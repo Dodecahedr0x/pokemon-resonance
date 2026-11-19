@@ -16,15 +16,28 @@ export default function League() {
     <section className="page" id="ligue" aria-labelledby="h-lg">
       <div className="ph">
         <p className="kick">Campagne · Arènes, Conseil 4, Champion</p>
-        <h1 className="h1" id="h-lg">Huit badges, huit leçons</h1>
-        <p className="sub">Les badges dans l’ordre, puis le Conseil 4 et le Champion. Touchez un badge pour lire la règle de son arène.</p>
+        <h1 className="h1" id="h-lg">
+          Huit badges, huit leçons
+        </h1>
+        <p className="sub">
+          Les badges dans l’ordre, puis le Conseil 4 et le Champion. Touchez un badge pour lire la règle de son arène.
+        </p>
       </div>
       <div className="case">
-        <div className="case-h"><span>Boîte à badges</span><span id="caseCount">{on ? `${BADGES.length} / 8 badges` : '8 Arènes'}</span></div>
-        <div className="badges" id="badges">{on && <Badges key={v} />}</div>
-        <div className="arena" id="arena">{on && <Arena key={v} />}</div>
+        <div className="case-h">
+          <span>Boîte à badges</span>
+          <span id="caseCount">{on ? `${BADGES.length} / 8 badges` : '8 Arènes'}</span>
+        </div>
+        <div className="badges" id="badges">
+          {on && <Badges key={v} />}
+        </div>
+        <div className="arena" id="arena">
+          {on && <Arena key={v} />}
+        </div>
       </div>
-      <div className="case elite-case" id="eliteCase">{on && <EliteCell key={v} />}</div>
+      <div className="case elite-case" id="eliteCase">
+        {on && <EliteCell key={v} />}
+      </div>
     </section>
   );
 }

@@ -34,7 +34,9 @@ export default function DexCard() {
     fr = REGIONAL_FORMS470.find(x => x.id === m.id); // regional form (v4.70)
   const roles = [m.r, m.r2].filter((r, k, a) => r && a.indexOf(r) === k);
   const style = { '--c': tc(m.t[0]), '--c2': tc(m.t[1] || m.t[0]) };
-  if (sh) style['--sh'] = shinyHue(m.id) + 'deg';
+  if (sh) {
+    style['--sh'] = shinyHue(m.id) + 'deg';
+  }
   return (
     <article
       className={`v4-dexcard v4-panel${sh ? ' shiny' : ''}${own ? ' own448' : ''}`}
@@ -46,7 +48,13 @@ export default function DexCard() {
         <div className="v4d-art">
           <span className="v4d-glow" aria-hidden="true" />
           {/* one image per Pokémon: the shiny illustration (v4.25) is set by the engine */}
-          <img key={m.id} src={ART(m.no)} alt={m.n} decoding="async" style={fr ? { filter: 'hue-rotate(' + fr.hue + 'deg)' } : undefined} />
+          <img
+            key={m.id}
+            src={ART(m.no)}
+            alt={m.n}
+            decoding="async"
+            style={fr ? { filter: 'hue-rotate(' + fr.hue + 'deg)' } : undefined}
+          />
           <span className="v4d-no">{`N° ${no3(m.no)}`}</span>
           {sh && (
             <span className="v4d-shn">
@@ -160,7 +168,13 @@ export default function DexCard() {
                 <use href="#i-chevr" />
               </svg>
             ),
-            <button type="button" className={`v4d-f${x.id === m.id ? ' on' : ''}`} data-dex={x.id} style={{ '--c': tc(x.t[0]) }} key={x.id}>
+            <button
+              type="button"
+              className={`v4d-f${x.id === m.id ? ' on' : ''}`}
+              data-dex={x.id}
+              style={{ '--c': tc(x.t[0]) }}
+              key={x.id}
+            >
               <img src={PIX(x.no)} alt="" loading="lazy" width="56" height="56" />
               <b>{x.n}</b>
               <em>{`Stade ${x.st}`}</em>
@@ -189,7 +203,13 @@ export default function DexCard() {
       {fr && (
         <p
           className="fr470"
-          style={{ margin: '8px 0', padding: '6px 10px', borderRadius: '10px', background: 'hsl(' + fr.hue + ' 40% 25% / .6)', fontSize: '.85em' }}
+          style={{
+            margin: '8px 0',
+            padding: '6px 10px',
+            borderRadius: '10px',
+            background: 'hsl(' + fr.hue + ' 40% 25% / .6)',
+            fontSize: '.85em',
+          }}
         >
           {'Forme régionale · ' + fr.reg + ' : gagne le type ' + fr.plus + ' en combat dans cette région.'}
         </p>

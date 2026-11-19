@@ -27,18 +27,45 @@ import DesignWorkshop from './panels/DesignWorkshop.jsx';
 // Panels, in the order the old game displayed them: first those added by the
 // successive versions (inserted at the top), then the base settings, then the tools.
 const PANELS = [
-  BattleDisplay, Immersion, PokemonSkin, TrainerJournal, Avatar, SecretPlaces,
-  GimmickBoards, FeatsJournal, Chronicles, Offline, Nuzlocke, BoardThemes, CaptureTiming,
-  Trainer, GameMode, Sound, Combat, CampaignChallenges, Phone, Accessibility, ActionReplay,
-  DownloadGame, DesignWorkshop,
+  BattleDisplay,
+  Immersion,
+  PokemonSkin,
+  TrainerJournal,
+  Avatar,
+  SecretPlaces,
+  GimmickBoards,
+  FeatsJournal,
+  Chronicles,
+  Offline,
+  Nuzlocke,
+  BoardThemes,
+  CaptureTiming,
+  Trainer,
+  GameMode,
+  Sound,
+  Combat,
+  CampaignChallenges,
+  Phone,
+  Accessibility,
+  ActionReplay,
+  DownloadGame,
+  DesignWorkshop,
 ];
 
 function Content() {
   return (
     <>
-      <div className="ph v4-ph-page"><p className="kick">Réglages</p><h1 className="h1" id="h-params">Paramètres</h1><p className="sub">Réglages de cet appareil et de votre partie.</p></div>
+      <div className="ph v4-ph-page">
+        <p className="kick">Réglages</p>
+        <h1 className="h1" id="h-params">
+          Paramètres
+        </h1>
+        <p className="sub">Réglages de cet appareil et de votre partie.</p>
+      </div>
       <div className="v4-params">
-        {PANELS.map((P, i) => <P key={i} />)}
+        {PANELS.map((P, i) => (
+          <P key={i} />
+        ))}
       </div>
     </>
   );

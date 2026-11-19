@@ -7,7 +7,6 @@ import { refreshLeague } from '../screens/league/leagueStore.js';
 
 export let gymSel;
 
-
 /* ===================== LEAGUE ===================== */
 export function badgeSvg(i, t, id) {
   const c = tc(t),
@@ -19,7 +18,6 @@ export function badgeSvg(i, t, id) {
   <g clip-path="url(#${id}c)"><path d="M-4 26 26 -4h12L-4 38Z" fill="rgba(255,255,255,.22)"/></g></svg>`;
 }
 
-
 // League page rendered by React (src/screens/league/): badges, chosen gym, Elite 4.
 export function renderLeague() {
   refreshLeague();
@@ -27,20 +25,21 @@ export function renderLeague() {
 
 // Instructions run at startup, in the original order (see index.js).
 export function __init() {
+  gymSel = 0;
 
-gymSel = 0;
+  $('#badges').addEventListener('click', e => {
+    const b = e.target.closest('[data-g]');
+    if (!b) {
+      return;
+    }
+    gymSel = +b.dataset.g;
+    renderLeague();
+  });
 
-
-$('#badges').addEventListener('click', e => {
-  const b = e.target.closest('[data-g]');
-  if (!b) return;
-  gymSel = +b.dataset.g;
-  renderLeague();
-});
-
-
-$('#arena').addEventListener('click', e => {
-  const b = e.target.closest('[data-arena]');
-  if (b) challenge(b.dataset.arena);
-});
+  $('#arena').addEventListener('click', e => {
+    const b = e.target.closest('[data-arena]');
+    if (b) {
+      challenge(b.dataset.arena);
+    }
+  });
 }

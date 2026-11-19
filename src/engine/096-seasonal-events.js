@@ -14,8 +14,6 @@ import { DAMAGE_PROVIDERS } from './044-tactical-engine.js';
 import { reward454, txt454 } from './084-peddler-route-missions.js';
 import { battleCount464 } from './095-trainer-talent-tree.js';
 
-
-
 /** Season banner on the Home page (#sa465, rendering: src/screens/home/Banners.jsx). */
 export function saData465() {
   const S0 = season465(),
@@ -24,7 +22,6 @@ export function saData465() {
     pc = Math.min(100, Math.round((s.pts / top) * 100));
   return { S0, pts: s.pts, top, pc };
 }
-
 
 function saOpen465() {
   const S0 = season465(),
@@ -35,7 +32,9 @@ function saOpen465() {
   // rendering: src/screens/overlays/transients/Windows.jsx (Sa465)
   const o = overlay('sa465o', { n: S0.n, d: S0.d, t: S0.t, arene: gym, tiers, won: s.won || 0 });
   o.addEventListener('click', e => {
-    if (e.target === o) shut('sa465o');
+    if (e.target === o) {
+      shut('sa465o');
+    }
   });
 }
 
@@ -51,30 +50,24 @@ const SEASON465 = [
   { n: 'Rochers en fête', t: 'Roche', d: 'Les Pokémon Roche tiennent bon avec l’automne qui arrive.' },
   { n: 'Nuit des Spectres', t: 'Spectre', d: 'Les Pokémon Spectre rôdent à l’approche d’Halloween.' },
   { n: 'Tournoi des Poings', t: 'Combat', d: 'Les Pokémon Combat défient tous les dresseurs.' },
-  { n: 'Légende des Dragons', t: 'Dragon', d: 'Les Pokémon Dragon veillent sur les fêtes de fin d’année.' }
+  { n: 'Légende des Dragons', t: 'Dragon', d: 'Les Pokémon Dragon veillent sur les fêtes de fin d’année.' },
 ];
-
 
 const PAL465 = [
   [5, 'Premiers pas', { m: 600, b: { potion: 2 } }],
   [10, 'Régulier', { g: 3 }],
   [18, 'Passionné', { m: 1500, b: { superpotion: 2 } }],
   [28, 'Expert', { g: 5, m: 1500 }],
-  [40, 'Légende du mois', { g: 10, m: 3000 }]
+  [40, 'Légende du mois', { g: 10, m: 3000 }],
 ];
-
 
 const monthKey465 = () => today().slice(0, 7);
 
-
 const monthIdx465 = () => Math.max(0, Math.min(11, (parseInt(today().slice(5, 7), 10) || 1) - 1));
-
 
 const season465 = () => SEASON465[monthIdx465()];
 
-
 const featured465 = () => ARENAS[(monthIdx465() * 3 + (parseInt(today().slice(0, 4), 10) || 0)) % ARENAS.length].k;
-
 
 const saSt465 = () => {
   let s;
@@ -85,13 +78,14 @@ const saSt465 = () => {
   }
   s = s || { won: 0 };
   if (s.m !== monthKey465()) {
-    if (s.m && s.pts >= PAL465[PAL465.length - 1][0]) s.won = (s.won || 0) + 1;
+    if (s.m && s.pts >= PAL465[PAL465.length - 1][0]) {
+      s.won = (s.won || 0) + 1;
+    }
     s = { m: monthKey465(), pts: 0, got: {}, won: s.won || 0 };
   }
   s.got = s.got || {};
   return s;
 };
-
 
 const saSave465 = s => {
   writeLS('res-sa465', s);
@@ -99,61 +93,90 @@ const saSave465 = s => {
 
 // Startup statements, run in their original order (see index.js).
 export function __init() {
+  HOOKS.combat.push(S => {
+    if (battleCount464(S)) {
+      S.sa465 = season465().t;
+    }
+  });
 
-HOOKS.combat.push(S => {
-  if (battleCount464(S)) S.sa465 = season465().t;
-});
+  DAMAGE_PROVIDERS.push({
+    id: 'saison465',
+    provide: (c, { S, u }) =>
+      !!u &&
+      u.side === 'a' &&
+      !!S &&
+      !!S.sa465 &&
+      BY[u.id] &&
+      BY[u.id].t.includes(S.sa465) && { mul: 1.05, labelText: 'Saison : ' + S.sa465 },
+  });
 
+  HOOKS.progress.unshift((S, rew, win) => {
+    try {
+      if (!win || !battleCount464(S)) {
+        return null;
+      }
+      const t = season465().t,
+        s = saSt465();
+      let n = 1;
+      if (S.units.some(u => u.side === 'a' && BY[u.id] && BY[u.id].t.includes(t))) {
+        n += 1;
+      }
+      if (S.sc === featured465()) {
+        n += 2;
+      }
+      s.pts += n;
+      saSave465(s);
+      rew.sa465 = { n, tot: s.pts };
+    } catch {
+      /* Best effort: failure here is non-fatal. */
+    }
+    return null;
+  });
 
-DAMAGE_PROVIDERS.push({ id: 'saison465', provide: (c, { S, u }) => !!u && u.side === 'a' && !!S && !!S.sa465 && BY[u.id] && BY[u.id].t.includes(S.sa465) && { mul: 1.05, labelText: 'Saison : ' + S.sa465 } });
+  HOOKS.battleResult.unshift(r =>
+    r.sa465
+      ? `<div class="res-l"><h4>${esc(season465().n)}</h4><div class="rl"><span>Points de saison : +${r.sa465.n}</span><b>${r.sa465.tot}</b></div></div>`
+      : ''
+  );
 
-
-HOOKS.progress.unshift((S, rew, win) => {
-  try {
-    if (!win || !battleCount464(S)) return null;
-    const t = season465().t,
-      s = saSt465();
-    let n = 1;
-    if (S.units.some(u => u.side === 'a' && BY[u.id] && BY[u.id].t.includes(t))) n += 1;
-    if (S.sc === featured465()) n += 2;
-    s.pts += n;
-    saSave465(s);
-    rew.sa465 = { n, tot: s.pts };
-  } catch { /* Best effort: failure here is non-fatal. */ }
-  return null;
-});
-
-
-HOOKS.battleResult.unshift(r => (r.sa465 ? `<div class="res-l"><h4>${esc(season465().n)}</h4><div class="rl"><span>Points de saison : +${r.sa465.n}</span><b>${r.sa465.tot}</b></div></div>` : ''));
-
-
-document.addEventListener(
-  'click',
-  e => {
-    const b = e.target.closest && e.target.closest('[data-sa465]');
-    if (!b) return;
-    e.stopPropagation();
-    e.preventDefault();
-    const v = b.dataset.sa465;
-    if (v === 'open') return saOpen465();
-    if (v === 'close') return shut('sa465o');
-    if (b.disabled) return;
-    const s = saSt465(),
-      i = +v,
-      T = PAL465[i];
-    if (!T || s.got[i] || s.pts < T[0]) return;
-    s.got[i] = 1;
-    if (i === PAL465.length - 1) s.won = (s.won || 0) + 0;
-    saSave465(s);
-    reward454(T[2]);
-    sfx('win');
-    vibe([30, 40, 30]);
-    toast('Récompense de saison : ' + txt454(T[2]) + '.');
-    savePurse();
-    saOpen465();
-    refreshHome(); // #sa465 banner
-  },
-  true
-);
-
+  document.addEventListener(
+    'click',
+    e => {
+      const b = e.target.closest && e.target.closest('[data-sa465]');
+      if (!b) {
+        return;
+      }
+      e.stopPropagation();
+      e.preventDefault();
+      const v = b.dataset.sa465;
+      if (v === 'open') {
+        return saOpen465();
+      }
+      if (v === 'close') {
+        return shut('sa465o');
+      }
+      if (b.disabled) {
+        return;
+      }
+      const s = saSt465(),
+        i = +v,
+        T = PAL465[i];
+      if (!T || s.got[i] || s.pts < T[0]) {
+        return;
+      }
+      s.got[i] = 1;
+      if (i === PAL465.length - 1) {
+        s.won = (s.won || 0) + 0;
+      }
+      saSave465(s);
+      reward454(T[2]);
+      sfx('win');
+      vibe([30, 40, 30]);
+      toast('Récompense de saison : ' + txt454(T[2]) + '.');
+      savePurse();
+      saOpen465();
+      refreshHome(); // #sa465 banner
+    },
+    true
+  );
 }

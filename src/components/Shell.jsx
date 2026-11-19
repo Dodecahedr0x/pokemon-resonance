@@ -31,7 +31,20 @@ import Guard from './Guard.jsx';
 
 // Logo (sidebar, header); `children`: additions after the name (header indicators).
 function Logo({ sizeValue: size, children }) {
-  return <a className="logo" href="#accueil"><span className="lg-ic"><svg width={size} height={size}><use href="#i-logo" /></svg></span><span><small>Pokémon</small><b>Résonance</b></span>{children}</a>;
+  return (
+    <a className="logo" href="#accueil">
+      <span className="lg-ic">
+        <svg width={size} height={size}>
+          <use href="#i-logo" />
+        </svg>
+      </span>
+      <span>
+        <small>Pokémon</small>
+        <b>Résonance</b>
+      </span>
+      {children}
+    </a>
+  );
 }
 
 // Application shell: navigation, screen containers and overlays.
@@ -44,59 +57,142 @@ export default function Shell() {
       <div className="app">
         <aside className="side" aria-label="Navigation principale">
           <Logo sizeValue={30} />
-          <Guard><SideNav /></Guard>
-          <Guard><SideObjective /></Guard>
-          <Guard><SideTeam /></Guard>
-          <p className="side-foot">Fangame non officiel, sans affiliation.<br />Pokémon © Nintendo · Creatures · GAME FREAK.</p>
+          <Guard>
+            <SideNav />
+          </Guard>
+          <Guard>
+            <SideObjective />
+          </Guard>
+          <Guard>
+            <SideTeam />
+          </Guard>
+          <p className="side-foot">
+            Fangame non officiel, sans affiliation.
+            <br />
+            Pokémon © Nintendo · Creatures · GAME FREAK.
+          </p>
         </aside>
         <div className="main">
-          <header className="topbar"><div className="topbar-in">
-              <Logo sizeValue={24}><span className="pk-leds" aria-hidden="true"><i /><i /><i /></span></Logo>
-              <Guard><TbSec /></Guard>
-              <Guard><TbSave /></Guard>
-              <Guard><TbTeam /></Guard>
-              <Guard><TopTrainer /></Guard>
-            </div></header>
-          <main className="content"><div className="wrap">
+          <header className="topbar">
+            <div className="topbar-in">
+              <Logo sizeValue={24}>
+                <span className="pk-leds" aria-hidden="true">
+                  <i />
+                  <i />
+                  <i />
+                </span>
+              </Logo>
+              <Guard>
+                <TbSec />
+              </Guard>
+              <Guard>
+                <TbSave />
+              </Guard>
+              <Guard>
+                <TbTeam />
+              </Guard>
+              <Guard>
+                <TopTrainer />
+              </Guard>
+            </div>
+          </header>
+          <main className="content">
+            <div className="wrap">
               {/* ================= HOME ================= */}
-              <Guard><Home /></Guard>
+              <Guard>
+                <Home />
+              </Guard>
               {/* ================= POKÉDEX ================= */}
-              <Guard><Team /></Guard>
+              <Guard>
+                <Team />
+              </Guard>
               {/* ================= BATTLE ================= */}
               <section className="page" id="combat" aria-labelledby="h-cb">
-                <Guard><BattlePrep /></Guard>
-                <Guard><Battle>
-                  <Board />
-                </Battle></Guard>
-                <Guard><Result /></Guard>
+                <Guard>
+                  <BattlePrep />
+                </Guard>
+                <Guard>
+                  <Battle>
+                    <Board />
+                  </Battle>
+                </Guard>
+                <Guard>
+                  <Result />
+                </Guard>
               </section>
               {/* ================= TYPES ================= */}
-              <Guard><Guide /></Guard>
-              <Guard><MapScreen /></Guard>
-              <Guard><Pokedex /></Guard>
-              <Guard><Quests /></Guard>
-              <Guard><Bag /></Guard>
-              <Guard><Settings /></Guard>
-              <Guard><Camp /></Guard>
+              <Guard>
+                <Guide />
+              </Guard>
+              <Guard>
+                <MapScreen />
+              </Guard>
+              <Guard>
+                <Pokedex />
+              </Guard>
+              <Guard>
+                <Quests />
+              </Guard>
+              <Guard>
+                <Bag />
+              </Guard>
+              <Guard>
+                <Settings />
+              </Guard>
+              <Guard>
+                <Camp />
+              </Guard>
               {/* ================= LEAGUE ================= */}
-              <Guard><League /></Guard>
-            </div></main>
-          <footer className="foot"><div className="wrap"><span>Pokémon Résonance · fangame non officiel · v4.77</span><span>Pokémon © Nintendo · Creatures Inc. · GAME FREAK · fangame sans affiliation</span></div></footer>
+              <Guard>
+                <League />
+              </Guard>
+            </div>
+          </main>
+          <footer className="foot">
+            <div className="wrap">
+              <span>Pokémon Résonance · fangame non officiel · v4.77</span>
+              <span>Pokémon © Nintendo · Creatures Inc. · GAME FREAK · fangame sans affiliation</span>
+            </div>
+          </footer>
         </div>
-        <Guard><BottomNav /></Guard>
+        <Guard>
+          <BottomNav />
+        </Guard>
       </div>
-      <Guard><Sheet /></Guard>
-      <Guard><Enc /></Guard>
-      <Guard><Saves /></Guard>
-      <Guard><Starter /></Guard>
-      <Guard><Coach /></Guard>
-      <Guard><Toast /></Guard>
+      <Guard>
+        <Sheet />
+      </Guard>
+      <Guard>
+        <Enc />
+      </Guard>
+      <Guard>
+        <Saves />
+      </Guard>
+      <Guard>
+        <Starter />
+      </Guard>
+      <Guard>
+        <Coach />
+      </Guard>
+      <Guard>
+        <Toast />
+      </Guard>
       {/* overlays added at the end of <body> by the engine, in their order of appearance */}
-      <Guard><V4Menu /></Guard>
-      <Guard><Intro /></Guard>
-      <Guard><Tip429 /></Guard>
-      <Guard><Dialogs /></Guard>
-      <Guard><Transients /></Guard>
+      <Guard>
+        <V4Menu />
+      </Guard>
+      <Guard>
+        <Intro />
+      </Guard>
+      <Guard>
+        <Tip429 />
+      </Guard>
+      <Guard>
+        <Dialogs />
+      </Guard>
+      <Guard>
+        <Transients />
+      </Guard>
     </>
   );
 }

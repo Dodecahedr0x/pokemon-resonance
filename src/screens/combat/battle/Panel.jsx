@@ -7,12 +7,37 @@ import { ARR } from '../../../engine/010-in-battle-evolution.js';
 import { ROLEFX, rIco } from '../../../engine/012-recruits-roles-synergies.js';
 import { veiled } from '../../../engine/013-gyms.js';
 import { markOf, medal, rxCat, tb, tc } from '../../../engine/014-utils.js';
-import { EMAX, byUid, canAwaken, forcedTarget, dmgOf, awakeningInfo, evoOpts, foeEvo, hasNx, mvType, targets, uAt } from '../../../engine/021-combat-engine.js';
+import {
+  EMAX,
+  byUid,
+  canAwaken,
+  forcedTarget,
+  dmgOf,
+  awakeningInfo,
+  evoOpts,
+  foeEvo,
+  hasNx,
+  mvType,
+  targets,
+  uAt,
+} from '../../../engine/021-combat-engine.js';
 import { roleOf } from '../../../engine/023-roles-synergies-obstacles.js';
 import { B, enPips, segHp, ui } from '../../../engine/024-combat-ui.js';
 import { PREF, catchBlock, duoBlock, tileCard, unitExtras } from '../../../engine/026-campaign-tutorial-sound.js';
 import { HEALS, ITM, SHOP, bagN } from '../../../engine/032-v4-foundation.js';
-import { COMBAT414, BAG_MAX, hasXp, blocked414, foeReso414, mrg414, objOk414, rankOfValue, rankLine414, rankTag, xpBlock414 } from '../../../engine/053-resonance.js';
+import {
+  COMBAT414,
+  BAG_MAX,
+  hasXp,
+  blocked414,
+  foeReso414,
+  mrg414,
+  objOk414,
+  rankOfValue,
+  rankLine414,
+  rankTag,
+  xpBlock414,
+} from '../../../engine/053-resonance.js';
 import { resoBlock417 } from '../../../engine/057-companions-resonance.js';
 import { battleStates420, vigilBtn420 } from '../../../engine/060-intense-combat.js';
 import { flow478 } from '../../../engine/112-painted-graphics.js';
@@ -37,9 +62,15 @@ export default function Panel() {
 }
 
 function Content() {
-  if (B.over) return null;
-  if (B.dep430) return <Placement />;
-  if (ui.busy && !ui.cutscene && (B.phase === 'enemy' || enemyTurn428())) return <OpponentTurn />;
+  if (B.over) {
+    return null;
+  }
+  if (B.dep430) {
+    return <Placement />;
+  }
+  if (ui.busy && !ui.cutscene && (B.phase === 'enemy' || enemyTurn428())) {
+    return <OpponentTurn />;
+  }
   if (ui.busy) {
     return (
       <div className="bp-wait">
@@ -49,7 +80,9 @@ function Content() {
     );
   }
   const e = ui.selE && byUid(B, ui.selE);
-  if (e && !e.ko) return <OpponentSheet e={e} />;
+  if (e && !e.ko) {
+    return <OpponentSheet e={e} />;
+  }
   const u = ui.sel && byUid(B, ui.sel);
   if (!u || u.ko) {
     return (
@@ -80,7 +113,9 @@ function Placement() {
         </span>
         <div>
           <b>Placement</b>
-          <span>{sel ? `Touchez une case de départ pour ${sel.n}.` : 'Touchez un Pokémon, puis une case de départ.'}</span>
+          <span>
+            {sel ? `Touchez une case de départ pour ${sel.n}.` : 'Touchez un Pokémon, puis une case de départ.'}
+          </span>
         </div>
       </div>
       <ul className="dep-l">
@@ -92,7 +127,9 @@ function Placement() {
           </li>
         ))}
       </ul>
-      <p className="bp-hint">Les deux premières colonnes sont à vous. Posé sur un allié, un Pokémon échange sa place avec lui.</p>
+      <p className="bp-hint">
+        Les deux premières colonnes sont à vous. Posé sur un allié, un Pokémon échange sa place avec lui.
+      </p>
     </div>
   );
 }
@@ -125,7 +162,13 @@ function OpponentTurn() {
               <Html html={medal(u.t, 'sm')} />
               <span className="ta-t">
                 <b>{u.n}</b>
-                {m ? ` · ${m.n} → ${v ? v.n : 'case vide'}` : B.jit ? ' · choisit sa cible' : veil && u.intent ? ' · intention voilée' : ''}
+                {m
+                  ? ` · ${m.n} → ${v ? v.n : 'case vide'}`
+                  : B.jit
+                    ? ' · choisit sa cible'
+                    : veil && u.intent
+                      ? ' · intention voilée'
+                      : ''}
               </span>
               <em>{st === 'now' ? 'en cours' : st === 'done' ? 'a agi' : ''}</em>
             </li>
@@ -140,7 +183,9 @@ function OpponentTurn() {
 // Role and « Détails » (Details) button under the header (v1.2).
 function Role() {
   const u = (ui.selE && byUid(B, ui.selE)) || (ui.sel && byUid(B, ui.sel));
-  if (!u || u.ko) return null;
+  if (!u || u.ko) {
+    return null;
+  }
   const r = roleOf(u),
     R = ROLEFX[r];
   return (
@@ -190,8 +235,8 @@ function Intention({ e }) {
       <p className="bp-int">Neutralisé : il ne jouera pas cette manche.</p>
     ) : (
       <p className="bp-int">
-        Il choisira sa cible à son tour, selon vos positions. <b>Zone rouge</b> : tout ce qu’il peut frapper après s’être
-        déplacé.
+        Il choisira sa cible à son tour, selon vos positions. <b>Zone rouge</b> : tout ce qu’il peut frapper après
+        s’être déplacé.
         {F ? (
           <>
             {' '}
@@ -202,7 +247,9 @@ function Intention({ e }) {
     );
   }
   if (e.intent && veiled(B)) {
-    return <p className="bp-int">Intention voilée par l’Arène Psy. Elle reste fixée : lisez sa position et sa portée.</p>;
+    return (
+      <p className="bp-int">Intention voilée par l’Arène Psy. Elle reste fixée : lisez sa position et sa portée.</p>
+    );
   }
   if (e.intent) {
     const m = MV[e.intent.mv],
@@ -253,7 +300,8 @@ function OpponentSheet({ e }) {
           <p>
             {fe ? (
               <>
-                <b>Évolution imminente.</b> {e.n} est sous 50 % : il deviendra {nx.n} en fin de manche. Achevez-le avant.
+                <b>Évolution imminente.</b> {e.n} est sous 50 % : il deviendra {nx.n} en fin de manche. Achevez-le
+                avant.
               </>
             ) : (
               <>
@@ -368,12 +416,17 @@ function Preview({ v }) {
           ))}
         </ul>
       ) : (
-        <p className="bp-hint">{v.wx ? 'La météo change pour 5 manches.' : 'Pas de dégâts directs : la marque ou l’effet est appliqué.'}</p>
+        <p className="bp-hint">
+          {v.wx ? 'La météo change pour 5 manches.' : 'Pas de dégâts directs : la marque ou l’effet est appliqué.'}
+        </p>
       )}
-      {v.diff.some(d => d.side === 'a' && d.dh < 0) ? <p className="warn-ff">Attention : un de vos Pokémon est touché.</p> : null}
+      {v.diff.some(d => d.side === 'a' && d.dh < 0) ? (
+        <p className="warn-ff">Attention : un de vos Pokémon est touché.</p>
+      ) : null}
       {ew.length ? (
         <p className="warn-ev">
-          {ew.map(d => d.n).join(', ')} passe{ew.length > 1 ? 'nt' : ''} sous 50 % sans tomber : évolution en fin de manche.
+          {ew.map(d => d.n).join(', ')} passe{ew.length > 1 ? 'nt' : ''} sous 50 % sans tomber : évolution en fin de
+          manche.
         </p>
       ) : null}
       {v.over === 'win' ? <p className="win-ff">Cette action termine le combat.</p> : null}
@@ -393,13 +446,21 @@ function Preview({ v }) {
 function Awakening({ u, s }) {
   if (!hasNx(u)) {
     // one line is enough when the Pokémon no longer evolves
-    if (hasXp(u)) return <Hi html={s(xpBlock414(u) + resoBlock417(u))} />; // diamonds (v4.14), Resonant Form (v4.17)
+    if (hasXp(u)) {
+      return <Hi html={s(xpBlock414(u) + resoBlock417(u))} />;
+    } // diamonds (v4.14), Resonant Form (v4.17)
     const rb417 = resoBlock417(u, true);
-    if (rb417) return <Hi html={s(rb417)} />;
+    if (rb417) {
+      return <Hi html={s(rb417)} />;
+    }
     const m = BY[u.id];
     return (
       <p className="bp-fin">
-        {u.evo ? 'Stade final atteint en combat.' : m && m.st > 1 ? 'Recrue confirmée · stade final.' : 'Stade unique · puissant dès le départ.'}
+        {u.evo
+          ? 'Stade final atteint en combat.'
+          : m && m.st > 1
+            ? 'Recrue confirmée · stade final.'
+            : 'Stade unique · puissant dès le départ.'}
       </p>
     );
   }
@@ -465,7 +526,10 @@ function Step({ u, st }) {
       </button>
     );
   } else if (st === 'extra') {
-    txt = [flow478.repli(u) ? 'Touchez une case bleue pour vous replier.' : '', flow478.retrigger(B) ? 'Relance (2 Voix) : il rejoue tout de suite.' : '']
+    txt = [
+      flow478.repli(u) ? 'Touchez une case bleue pour vous replier.' : '',
+      flow478.retrigger(B) ? 'Relance (2 Voix) : il rejoue tout de suite.' : '',
+    ]
       .filter(Boolean)
       .join(' ');
     const next = flow478.remaining(B).find(x => x !== u);
@@ -474,12 +538,16 @@ function Step({ u, st }) {
         <button type="button" className="b b-sm b-gold" data-vx="fin478">
           <b>Terminer {u.n}</b>
         </button>
-        {B.order !== 'vitesse' ? <span className="fl478-suite">{next ? `Ensuite : ${next.n}` : 'Dernier Pokémon de la manche'}</span> : null}
+        {B.order !== 'vitesse' ? (
+          <span className="fl478-suite">{next ? `Ensuite : ${next.n}` : 'Dernier Pokémon de la manche'}</span>
+        ) : null}
       </>
     );
   } else if (u.sn) {
     txt = `${u.n} ${STATE[u.badge] ? 'est ' + STATE[u.badge] : 'ne peut pas agir'} : il passe cette manche.`;
-  } else txt = `${u.n} a fini son tour.`;
+  } else {
+    txt = `${u.n} a fini son tour.`;
+  }
   return (
     <div className="fl478" data-st={st}>
       <div className="fl478-h">
@@ -489,15 +557,17 @@ function Step({ u, st }) {
               ? [
                   <li key={'s' + i} className="sep" aria-hidden="true">
                     ›
-                  </li>
+                  </li>,
                 ]
               : []),
             <li key={i} className={i < cur ? 'ok' : i === cur ? 'on' : ''}>
               {l}
-            </li>
+            </li>,
           ])}
         </ol>
-        <span className="fl478-n">{B.order === 'vitesse' ? 'Ordre par Vitesse' : n ? `Encore ${n} à jouer` : 'Manche terminée'}</span>
+        <span className="fl478-n">
+          {B.order === 'vitesse' ? 'Ordre par Vitesse' : n ? `Encore ${n} à jouer` : 'Manche terminée'}
+        </span>
       </div>
       <div className="fl478-r">
         <p>{txt}</p>
@@ -509,9 +579,13 @@ function Step({ u, st }) {
 
 /* ---------- Bag: items usable in battle (v4.0, v4.14) ---------- */
 function Bag({ u }) {
-  if ((SCEN[B.sc] || {}).tuto || B.duel433 || ui.selE || u.side !== 'a') return null;
+  if ((SCEN[B.sc] || {}).tuto || B.duel433 || ui.selE || u.side !== 'a') {
+    return null;
+  }
   const own = [...HEALS, ...COMBAT414].filter(k => bagN(k));
-  if (!own.length) return null;
+  if (!own.length) {
+    return null;
+  }
   return (
     <div className="v4-bagbar">
       <span className="lbl-s">
@@ -545,23 +619,34 @@ function AllySheet({ u }) {
     s = h => (without ? withoutTip(h) : h);
   let hint = null;
   if (ui.mode === 'duo') {
-    hint = ui.pv ? <Preview v={ui.pv} /> : <p className="bp-hint">Technique combinée : touchez une case dorée pour voir le résultat exact.</p>;
-  }
-  else if (ui.mode === 'target') {
-    hint = ui.pv ? <Preview v={ui.pv} /> : <p className="bp-hint">Touchez une case dorée : l’aperçu affiche le résultat exact.</p>;
-  }
-  else if (without) hint = null;
-  else if (ui.mode === 'dodge') hint = <p className="bp-hint">Esquive : touchez une case verte voisine.</p>;
-  else if (u.sn) {
+    hint = ui.pv ? (
+      <Preview v={ui.pv} />
+    ) : (
+      <p className="bp-hint">Technique combinée : touchez une case dorée pour voir le résultat exact.</p>
+    );
+  } else if (ui.mode === 'target') {
+    hint = ui.pv ? (
+      <Preview v={ui.pv} />
+    ) : (
+      <p className="bp-hint">Touchez une case dorée : l’aperçu affiche le résultat exact.</p>
+    );
+  } else if (without) {
+    hint = null;
+  } else if (ui.mode === 'dodge') {
+    hint = <p className="bp-hint">Esquive : touchez une case verte voisine.</p>;
+  } else if (u.sn) {
     hint = (
       <p className="bp-hint">
         {u.n} est {STATE[u.badge] || STATE.PAR} : il ne peut pas agir cette manche.
       </p>
     );
+  } else if (!u.acted && !u.moved) {
+    hint = <p className="bp-hint">Cases bleues : déplacement. Ou choisissez directement une capacité.</p>;
+  } else if (!u.acted) {
+    hint = <p className="bp-hint">Choisissez une capacité, ou éveillez-le depuis cette case.</p>;
+  } else {
+    hint = <p className="bp-hint">{u.n} a joué. Esquive et Relance restent possibles.</p>;
   }
-  else if (!u.acted && !u.moved) hint = <p className="bp-hint">Cases bleues : déplacement. Ou choisissez directement une capacité.</p>;
-  else if (!u.acted) hint = <p className="bp-hint">Choisissez une capacité, ou éveillez-le depuis cette case.</p>;
-  else hint = <p className="bp-hint">{u.n} a joué. Esquive et Relance restent possibles.</p>;
   const relHi = st === 'extra' && F.retrigger(B);
   return (
     <>
@@ -614,7 +699,12 @@ function AllySheet({ u }) {
       {hint}
       {NL}
       <div className="bp-vx">
-        <button type="button" className={'vx' + (ui.mode === 'dodge' ? ' on' : '')} data-vx="dodge" disabled={!!(B.voice < 1 || u.sn)}>
+        <button
+          type="button"
+          className={'vx' + (ui.mode === 'dodge' ? ' on' : '')}
+          data-vx="dodge"
+          disabled={!!(B.voice < 1 || u.sn)}
+        >
           <b>Esquive</b>
           <span>1 Voix · un pas</span>
         </button>

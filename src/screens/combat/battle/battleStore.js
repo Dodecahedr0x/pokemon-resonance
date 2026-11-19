@@ -31,7 +31,9 @@ export const footPos = { cls: ['bt-foot'], qa: null };
 /** classList.toggle on the bottom bar; true if the class changed (to be followed by refreshBattle('foot')). */
 export function footCls(displayName, on) {
   const a = footPos.cls.includes(displayName);
-  if (on === a) return false;
+  if (on === a) {
+    return false;
+  }
   footPos.cls = on ? [...footPos.cls, displayName] : footPos.cls.filter(c => c !== displayName);
   return true;
 }

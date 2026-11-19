@@ -10,7 +10,9 @@ import { useGuide } from './guideStore.js';
 // PROFILE is engine state: it is changed here, outside the component.
 function markTutorialRead(k) {
   const L = (PROFILE.tuto433 = PROFILE.tuto433 || []);
-  if (L.includes(k)) return false;
+  if (L.includes(k)) {
+    return false;
+  }
   L.push(k);
   queueSave();
   return true;
@@ -28,7 +30,9 @@ export default function Tutorial() {
   const groupList = [...new Set(TUTORIAL_STEPS433.map(c => c.g))];
 
   const markRead = k => {
-    if (markTutorialRead(k)) rerender();
+    if (markTutorialRead(k)) {
+      rerender();
+    }
   };
   const resetToZero = () => {
     resetTutorial();
@@ -37,27 +41,55 @@ export default function Tutorial() {
 
   return (
     <>
-      <div className="gd-intro"><h2 className="h2">Tutoriel complet</h2><p className="d">Toutes les mécaniques du jeu, chapitre par chapitre. Ouvrez un chapitre pour le lire, puis essayez-le.</p></div>
+      <div className="gd-intro">
+        <h2 className="h2">Tutoriel complet</h2>
+        <p className="d">
+          Toutes les mécaniques du jeu, chapitre par chapitre. Ouvrez un chapitre pour le lire, puis essayez-le.
+        </p>
+      </div>
       <div className="tu433-p">
-        <span><b>{n}</b> / {TUTORIAL_STEPS433.length} chapitres lus</span>
+        <span>
+          <b>{n}</b> / {TUTORIAL_STEPS433.length} chapitres lus
+        </span>
         <i style={{ '--w': Math.round((n / TUTORIAL_STEPS433.length) * 100) + '%' }} />
-        {n > 0 && <button type="button" className="lnk" onClick={resetToZero}>Tout remettre à zéro</button>}
+        {n > 0 && (
+          <button type="button" className="lnk" onClick={resetToZero}>
+            Tout remettre à zéro
+          </button>
+        )}
       </div>
       {groupList.map(g => [
-        <h3 key={'g-' + g} className="tu433-g">{g}</h3>,
+        <h3 key={'g-' + g} className="tu433-g">
+          {g}
+        </h3>,
         ...TUTORIAL_STEPS433.filter(c => c.g === g).map(c => {
           const isRead = readFlags.has(c.k);
           return (
-            <details key={c.k} className={`tu433-c${isRead ? ' lu' : ''}`} data-tu433={c.k} onToggle={e => e.currentTarget.open && markRead(c.k)}>
+            <details
+              key={c.k}
+              className={`tu433-c${isRead ? ' lu' : ''}`}
+              data-tu433={c.k}
+              onToggle={e => e.currentTarget.open && markRead(c.k)}
+            >
               <summary>
-                <span className="tu433-i"><svg><use href={'#' + c.ic} /></svg></span>
+                <span className="tu433-i">
+                  <svg>
+                    <use href={'#' + c.ic} />
+                  </svg>
+                </span>
                 <b>{c.t}</b>
-                <span className="tu433-ok" aria-label={isRead ? 'lu' : 'à lire'}>{isRead ? '✓' : ''}</span>
+                <span className="tu433-ok" aria-label={isRead ? 'lu' : 'à lire'}>
+                  {isRead ? '✓' : ''}
+                </span>
               </summary>
-              <p><Html html={typeof c.d === 'function' ? c.d() : c.d} /></p>
+              <p>
+                <Html html={typeof c.d === 'function' ? c.d() : c.d} />
+              </p>
               {c.a.length > 0 && (
                 <div className="tu433-a">
-                  {c.a.map(([l, at], i) => <Html key={i} html={`<button type="button" class="b b-sm" ${at}>${l}</button>`} />)}
+                  {c.a.map(([l, at], i) => (
+                    <Html key={i} html={`<button type="button" class="b b-sm" ${at}>${l}</button>`} />
+                  ))}
                 </div>
               )}
             </details>

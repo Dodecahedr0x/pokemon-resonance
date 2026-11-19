@@ -49,7 +49,9 @@ export function DexList() {
             sh = isShinyOwned(m.id),
             on = V4.dexSel === m.id;
           const style = { '--c': tc(m.t[0]) };
-          if (sh) style['--sh'] = shinyHue(m.id) + 'deg';
+          if (sh) {
+            style['--sh'] = shinyHue(m.id) + 'deg';
+          }
           return (
             <button
               type="button"

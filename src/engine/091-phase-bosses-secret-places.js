@@ -17,7 +17,6 @@ import { badgeCount459 } from './090-item-quests-trophies.js';
 
 export let SECRETS460;
 
-
 /** A gym Champion (boss without phases) goes berserk below 50% HP. */
 export function rage460(S, ev) {
   const b = bossOf420(S);
@@ -30,25 +29,26 @@ export function rage460(S, ev) {
   }
 }
 
-
 /** Row of the opponent sheet: boss phase, or the Champion's rage. */
 export function resoBoss460(e) {
-  if (!B || e.ko || e !== bossOf420(B)) return '';
+  if (!B || e.ko || e !== bossOf420(B)) {
+    return '';
+  }
   if (bossPhases420(B)) {
     const ph = e.phase420 || 1;
     return `<p class="bp-reso">${ph >= 3 ? 'Phase 3 : dernier souffle.' : ph === 2 ? 'Phase 2 : renforcé. La phase 3 arrive sous 33 % de PV.' : 'Phase 1. La phase 2 arrive sous 66 % de PV.'}</p>`;
   }
-  if (leaderOf(B.sc)) return `<p class="bp-reso">${e.gym460 ? 'Il se déchaîne : renforcé.' : 'Il se déchaînera sous 50 % de PV.'}</p>`;
+  if (leaderOf(B.sc)) {
+    return `<p class="bp-reso">${e.gym460 ? 'Il se déchaîne : renforcé.' : 'Il se déchaînera sous 50 % de PV.'}</p>`;
+  }
   return '';
 }
-
 
 export function repl460(b, i) {
   const t = (b.t && b.t[0]) || 'Normal',
     a = LINES460[t] || LINES460.Normal;
   return a[i] || a[0];
 }
-
 
 function pos460(seed, taken) {
   const r = rngS460(seed),
@@ -58,11 +58,12 @@ function pos460(seed, taken) {
   for (let k = 0; k < 24; k++) {
     x = 70 + r() * 860;
     y = 90 + r() * 800;
-    if (pl.every(p => Math.hypot(p.x - x, p.y - y) > 80)) break;
+    if (pl.every(p => Math.hypot(p.x - x, p.y - y) > 80)) {
+      break;
+    }
   }
   return { x, y };
 }
-
 
 export function scPos460() {
   const reg = V4.region || 'kanto',
@@ -76,10 +77,11 @@ export function scPos460() {
   return out;
 }
 
-
 function scOpen460(id) {
   const s = SECRETS460.find(x => x.id === id);
-  if (!s) return;
+  if (!s) {
+    return;
+  }
   const st = scSt460(),
     first = !st.found[id];
   if (first) {
@@ -91,13 +93,18 @@ function scOpen460(id) {
     vibe([30, 40, 30]);
   }
   // rendering: src/screens/overlays/transients/Windows.jsx (Sc460)
-  const o = overlay('sc460', { n: s.n, lore: s.lore, msg: first ? 'Vous trouvez : ' + txt454(s.rew) + '.' : 'Vous avez déjà exploré ce lieu.' });
+  const o = overlay('sc460', {
+    n: s.n,
+    lore: s.lore,
+    msg: first ? 'Vous trouvez : ' + txt454(s.rew) + '.' : 'Vous avez déjà exploré ce lieu.',
+  });
   o.addEventListener('click', e => {
-    if (e.target === o) shut('sc460');
+    if (e.target === o) {
+      shut('sc460');
+    }
   });
   renderMap();
 }
-
 
 export function npcSt460() {
   const d = today(),
@@ -115,14 +122,12 @@ export function npcSt460() {
   return { s, all, k };
 }
 
-
 export function npcPos460() {
   const d = today(),
     reg = V4.region || 'kanto',
     sc = Object.values(scPos460());
   return pos460('pnp' + d + reg, sc);
 }
-
 
 function npcOpen460() {
   const { s } = npcSt460(),
@@ -134,18 +139,25 @@ function npcOpen460() {
   // rendering: src/screens/overlays/transients/Windows.jsx (Pn460)
   const o = overlay('pn460', { n: N.n, x: N.x, c, res: null });
   o.addEventListener('click', e => {
-    if (e.target === o) shut('pn460');
+    if (e.target === o) {
+      shut('pn460');
+    }
   });
 }
-
 
 function npcPick460(j) {
   const { s, all, k } = npcSt460(),
     N = NPC460[s.i],
     c = N.c[j];
-  if (!c || s.done || !can454(c.cost)) return;
-  if (c.cost) reward454(c.cost);
-  if (c.ok) reward454(c.ok);
+  if (!c || s.done || !can454(c.cost)) {
+    return;
+  }
+  if (c.cost) {
+    reward454(c.cost);
+  }
+  if (c.ok) {
+    reward454(c.ok);
+  }
   all[k] = { d: s.d, done: true };
   writeLS('res-pn460', all);
   savePurse();
@@ -154,7 +166,6 @@ function npcPick460(j) {
   updateTemp('pn460', { res: c.t + (c.ok ? ' (' + txt454(c.ok) + ')' : '') });
   renderMap();
 }
-
 
 /* ---------- 5. Markers (src/screens/map/Marks.jsx), clicks, Journal ---------- */
 
@@ -177,20 +188,19 @@ const LINES460 = {
   Ténèbres: ['« Voilà où les ombres vous attendent. »', '« Je n’ai pas dit mon dernier mot ! »'],
   Acier: ['« L’acier plie, il ne rompt pas ! »', '« Rien ne perce ma garde ! »'],
   Fée: ['« La magie prend le dessus ! »', '« Vous allez voir de quoi je suis capable ! »'],
-  Normal: ['« Je me suis assez retenu ! »', '« Maintenant, c’est sérieux ! »']
+  Normal: ['« Je me suis assez retenu ! »', '« Maintenant, c’est sérieux ! »'],
 };
-
 
 /* ---------- 2. Map tools ---------- */
 const hash460 = s => {
   let h = 7;
-  for (const ch of s) h = (Math.imul(h, 31) + ch.charCodeAt(0)) >>> 0;
+  for (const ch of s) {
+    h = (Math.imul(h, 31) + ch.charCodeAt(0)) >>> 0;
+  }
   return h;
 };
 
-
 const rngS460 = s => mulberry32(hash460(s) || 1);
-
 
 /* ---------- 3. Secret places ---------- */
 const weatherS460 = () => {
@@ -201,64 +211,189 @@ const weatherS460 = () => {
   }
 };
 
-
 export const scSt460 = () => readLS('res-sc460', { found: {} });
-
 
 export const scVis460 = () => SECRETS460.filter(s => badgeCount459() >= s.min && s.ok());
 
-
 /* ---------- 4. Wandering NPCs ---------- */
 export const NPC460 = [
-  { n: 'Marchand de passage', x: 'Il ouvre sa malle : « Pour 300 ₽, je vous cède un morceau de roche brillante. »', c: [{ l: 'Acheter (300 ₽)', cost: { m: -300 }, ok: { g: 1 }, t: 'Vous repartez avec un éclat.' }, { l: 'Refuser poliment', t: 'Il hausse les épaules et reprend sa route.' }] },
-  { n: 'Vieux randonneur', x: 'Il vous raconte une légende sur la Résonance autour d’un thé tiède.', c: [{ l: 'Écouter jusqu’au bout', ok: { m: 250 }, t: 'En remerciement, il vous glisse quelques pièces.' }, { l: 'Poursuivre', t: 'Vous le saluez et repartez.' }] },
-  { n: 'Jeune dresseuse', x: 'Elle cherche un partenaire d’entraînement : « Une Potion pour moi, et je partage mes trouvailles ! »', c: [{ l: 'Donner une Potion', cost: { b: { potion: -1 } }, ok: { g: 2 }, t: 'Elle vous confie deux éclats trouvés sur la route.' }, { l: 'Plus tard', t: 'Elle vous souhaite bonne chance.' }] },
-  { n: 'Pêcheur solitaire', x: 'Sa canne est cassée, mais sa boîte d’appâts déborde.', c: [{ l: 'Lui offrir une Poké Ball', cost: { b: { poke: -1 } }, ok: { m: 700 }, t: 'Il vous paie généreusement ce qu’il a pêché.' }, { l: 'Passer', t: 'Vous le laissez à ses lignes.' }] },
-  { n: 'Chercheuse errante', x: 'Elle note les variations de Résonance : « Un Antidote m’aiderait à terminer ce relevé. »', c: [{ l: 'Donner un Antidote', cost: { b: { antidote: -1 } }, ok: { g: 2, m: 150 }, t: 'Elle partage ses résultats et vous remercie.' }, { l: 'Passer', t: 'Elle reprend ses notes.' }] },
-  { n: 'Cuisinier ambulant', x: 'Une odeur de soupe flotte. « Un bol chaud avant la prochaine route ? »', c: [{ l: 'Accepter (100 ₽)', cost: { m: -100 }, ok: { b: { baiemepo: 1 } }, t: 'Il glisse une baie dans votre sac pour la route.' }, { l: 'Non merci', t: 'Il sourit et range sa marmite.' }] },
-  { n: 'Dresseur voyageur', x: 'Il a perdu son chemin : « Montrez-moi la direction et je vous récompense. »', c: [{ l: 'L’indiquer', ok: { m: 400 }, t: 'Il vous donne une petite somme et s’éloigne.' }, { l: 'Poursuivre', t: 'Il cherchera tout seul.' }] },
-  { n: 'Archiviste curieuse', x: 'Elle collectionne les légendes des routes : « Parlez-moi de votre aventure, je vous offre un souvenir. »', c: [{ l: 'Raconter', ok: { g: 3 }, t: 'Elle note tout et vous offre trois éclats.' }, { l: 'Pas aujourd’hui', t: 'Elle range son carnet.' }] }
+  {
+    n: 'Marchand de passage',
+    x: 'Il ouvre sa malle : « Pour 300 ₽, je vous cède un morceau de roche brillante. »',
+    c: [
+      { l: 'Acheter (300 ₽)', cost: { m: -300 }, ok: { g: 1 }, t: 'Vous repartez avec un éclat.' },
+      { l: 'Refuser poliment', t: 'Il hausse les épaules et reprend sa route.' },
+    ],
+  },
+  {
+    n: 'Vieux randonneur',
+    x: 'Il vous raconte une légende sur la Résonance autour d’un thé tiède.',
+    c: [
+      { l: 'Écouter jusqu’au bout', ok: { m: 250 }, t: 'En remerciement, il vous glisse quelques pièces.' },
+      { l: 'Poursuivre', t: 'Vous le saluez et repartez.' },
+    ],
+  },
+  {
+    n: 'Jeune dresseuse',
+    x: 'Elle cherche un partenaire d’entraînement : « Une Potion pour moi, et je partage mes trouvailles ! »',
+    c: [
+      {
+        l: 'Donner une Potion',
+        cost: { b: { potion: -1 } },
+        ok: { g: 2 },
+        t: 'Elle vous confie deux éclats trouvés sur la route.',
+      },
+      { l: 'Plus tard', t: 'Elle vous souhaite bonne chance.' },
+    ],
+  },
+  {
+    n: 'Pêcheur solitaire',
+    x: 'Sa canne est cassée, mais sa boîte d’appâts déborde.',
+    c: [
+      {
+        l: 'Lui offrir une Poké Ball',
+        cost: { b: { poke: -1 } },
+        ok: { m: 700 },
+        t: 'Il vous paie généreusement ce qu’il a pêché.',
+      },
+      { l: 'Passer', t: 'Vous le laissez à ses lignes.' },
+    ],
+  },
+  {
+    n: 'Chercheuse errante',
+    x: 'Elle note les variations de Résonance : « Un Antidote m’aiderait à terminer ce relevé. »',
+    c: [
+      {
+        l: 'Donner un Antidote',
+        cost: { b: { antidote: -1 } },
+        ok: { g: 2, m: 150 },
+        t: 'Elle partage ses résultats et vous remercie.',
+      },
+      { l: 'Passer', t: 'Elle reprend ses notes.' },
+    ],
+  },
+  {
+    n: 'Cuisinier ambulant',
+    x: 'Une odeur de soupe flotte. « Un bol chaud avant la prochaine route ? »',
+    c: [
+      {
+        l: 'Accepter (100 ₽)',
+        cost: { m: -100 },
+        ok: { b: { baiemepo: 1 } },
+        t: 'Il glisse une baie dans votre sac pour la route.',
+      },
+      { l: 'Non merci', t: 'Il sourit et range sa marmite.' },
+    ],
+  },
+  {
+    n: 'Dresseur voyageur',
+    x: 'Il a perdu son chemin : « Montrez-moi la direction et je vous récompense. »',
+    c: [
+      { l: 'L’indiquer', ok: { m: 400 }, t: 'Il vous donne une petite somme et s’éloigne.' },
+      { l: 'Poursuivre', t: 'Il cherchera tout seul.' },
+    ],
+  },
+  {
+    n: 'Archiviste curieuse',
+    x: 'Elle collectionne les légendes des routes : « Parlez-moi de votre aventure, je vous offre un souvenir. »',
+    c: [
+      { l: 'Raconter', ok: { g: 3 }, t: 'Elle note tout et vous offre trois éclats.' },
+      { l: 'Pas aujourd’hui', t: 'Elle range son carnet.' },
+    ],
+  },
 ];
 
 // Instructions run at startup, in the original order (see index.js).
 export function __init() {
+  SECRETS460 = [
+    {
+      id: 's1',
+      n: 'Source de la Lune',
+      ind: 'Se révèle la nuit.',
+      min: 0,
+      ok: () => TOD === 'nuit',
+      lore: 'Une eau claire coule sous les étoiles. Les anciens disaient que les premières notes de la Résonance y ont été entendues.',
+      rew: { g: 3 },
+    },
+    {
+      id: 's2',
+      n: 'Clairière du Matin',
+      ind: 'Se révèle le matin.',
+      min: 0,
+      ok: () => TOD === 'matin',
+      lore: 'La rosée perle sur les baies. Quelqu’un a laissé là un panier, comme une offrande pour les dresseurs de passage.',
+      rew: { b: { baiemepo: 2 } },
+    },
+    {
+      id: 's3',
+      n: 'Crique des Marées',
+      ind: 'Se révèle sous la pluie, après le 1er badge.',
+      min: 1,
+      ok: () => weatherS460() === 'pluie',
+      lore: 'La pluie dévoile un passage vers une crique. Une vieille caisse échouée contient de quoi payer un voyage.',
+      rew: { m: 1200 },
+    },
+    {
+      id: 's4',
+      n: 'Dune Dorée',
+      ind: 'Se révèle au soleil ou sous le sable, après le 2e badge.',
+      min: 2,
+      ok: () => ['soleil', 'sable'].includes(weatherS460()),
+      lore: 'Entre deux dunes, un cercle de pierres brille. Des éclats y dorment depuis des siècles.',
+      rew: { g: 4 },
+    },
+    {
+      id: 's5',
+      n: 'Cime Gelée',
+      ind: 'Se révèle sous la grêle, après le 3e badge.',
+      min: 3,
+      ok: () => weatherS460() === 'grele',
+      lore: 'Un refuge gelé, une lanterne encore tiède. Un randonneur y a laissé ses réserves de soins.',
+      rew: { b: { superpotion: 3 }, m: 600 },
+    },
+    {
+      id: 's6',
+      n: 'Ruine de la Résonance',
+      ind: 'Se révèle en journée, après le 4e badge.',
+      min: 4,
+      ok: () => TOD === 'jour',
+      lore: 'Les murs gravés racontent la Dissonance, ce silence qui efface les notes. Au centre, un éclat de Résonance pur vibre encore.',
+      rew: { g: 6 },
+    },
+  ];
 
-SECRETS460 = [
-  { id: 's1', n: 'Source de la Lune', ind: 'Se révèle la nuit.', min: 0, ok: () => TOD === 'nuit', lore: 'Une eau claire coule sous les étoiles. Les anciens disaient que les premières notes de la Résonance y ont été entendues.', rew: { g: 3 } },
-  { id: 's2', n: 'Clairière du Matin', ind: 'Se révèle le matin.', min: 0, ok: () => TOD === 'matin', lore: 'La rosée perle sur les baies. Quelqu’un a laissé là un panier, comme une offrande pour les dresseurs de passage.', rew: { b: { baiemepo: 2 } } },
-  { id: 's3', n: 'Crique des Marées', ind: 'Se révèle sous la pluie, après le 1er badge.', min: 1, ok: () => weatherS460() === 'pluie', lore: 'La pluie dévoile un passage vers une crique. Une vieille caisse échouée contient de quoi payer un voyage.', rew: { m: 1200 } },
-  { id: 's4', n: 'Dune Dorée', ind: 'Se révèle au soleil ou sous le sable, après le 2e badge.', min: 2, ok: () => ['soleil', 'sable'].includes(weatherS460()), lore: 'Entre deux dunes, un cercle de pierres brille. Des éclats y dorment depuis des siècles.', rew: { g: 4 } },
-  { id: 's5', n: 'Cime Gelée', ind: 'Se révèle sous la grêle, après le 3e badge.', min: 3, ok: () => weatherS460() === 'grele', lore: 'Un refuge gelé, une lanterne encore tiède. Un randonneur y a laissé ses réserves de soins.', rew: { b: { superpotion: 3 }, m: 600 } },
-  { id: 's6', n: 'Ruine de la Résonance', ind: 'Se révèle en journée, après le 4e badge.', min: 4, ok: () => TOD === 'jour', lore: 'Les murs gravés racontent la Dissonance, ce silence qui efface les notes. Au centre, un éclat de Résonance pur vibre encore.', rew: { g: 6 } }
-];
+  // secret places (.sc460) and passing character (.pn460) on the map: rendered by React
+  // (src/screens/map/Marks.jsx)
 
+  document.addEventListener(
+    'click',
+    e => {
+      const t = e.target.closest && e.target.closest('[data-sc460],[data-pn460]');
+      if (!t) {
+        return;
+      }
+      e.stopPropagation();
+      e.preventDefault();
+      if (t.dataset.sc460 !== undefined) {
+        const v = t.dataset.sc460;
+        if (v === 'close') {
+          shut('sc460');
+        } else {
+          scOpen460(v);
+        }
+      } else {
+        const v = t.dataset.pn460;
+        if (v === 'close') {
+          shut('pn460');
+        } else if (v === 'o') {
+          npcOpen460();
+        } else {
+          npcPick460(+v);
+        }
+      }
+    },
+    true
+  );
 
-// secret places (.sc460) and passing character (.pn460) on the map: rendered by React
-// (src/screens/map/Marks.jsx)
-
-
-document.addEventListener(
-  'click',
-  e => {
-    const t = e.target.closest && e.target.closest('[data-sc460],[data-pn460]');
-    if (!t) return;
-    e.stopPropagation();
-    e.preventDefault();
-    if (t.dataset.sc460 !== undefined) {
-      const v = t.dataset.sc460;
-      if (v === 'close') shut('sc460');
-      else scOpen460(v);
-    } else {
-      const v = t.dataset.pn460;
-      if (v === 'close') shut('pn460');
-      else if (v === 'o') npcOpen460();
-      else npcPick460(+v);
-    }
-  },
-  true
-);
-
-
-// "Secret places" panel: rendered by React (src/screens/settings/panels/SecretPlaces.jsx)
-
+  // "Secret places" panel: rendered by React (src/screens/settings/panels/SecretPlaces.jsx)
 }

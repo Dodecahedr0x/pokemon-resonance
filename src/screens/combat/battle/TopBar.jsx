@@ -67,10 +67,18 @@ export function BtTop() {
 // Phase chip (compact view): Placement, Your turn, Opponent turn, Awakening. It follows the bottom bar
 // ("foot" version, rewritten on every turn change); its data-ph tints the scene (combat-compact.css).
 export function phaseOf(B0) {
-  if (!B0 || B0.over) return null;
-  if (B0.dep430) return 'deploy';
-  if (ui.cutscene) return 'evo';
-  if (ui.busy) return enemyTurn428() || B0.phase === 'enemy' ? 'enemy' : 'busy';
+  if (!B0 || B0.over) {
+    return null;
+  }
+  if (B0.dep430) {
+    return 'deploy';
+  }
+  if (ui.cutscene) {
+    return 'evo';
+  }
+  if (ui.busy) {
+    return enemyTurn428() || B0.phase === 'enemy' ? 'enemy' : 'busy';
+  }
   return 'own';
 }
 const PHASE_T = { deploy: 'Placement', own: 'À vous', enemy: 'Tour adverse', evo: 'Éveil', busy: 'Résolution' };
@@ -136,7 +144,9 @@ function Chips() {
 // Active team synergies (#bSyn), created on the first render of the battle.
 export function Synergies() {
   const v = useBattleVersion('top');
-  if (!v) return null;
+  if (!v) {
+    return null;
+  }
   const L2 = B ? (B.syn || []).map(k => SYN.find(x => x.k === k)).filter(Boolean) : [];
   return (
     <div className="bt-syn" id="bSyn" hidden={!L2.length}>
@@ -167,9 +177,13 @@ export function Rule() {
     const D = SCEN[B.sc],
       an = arenaNext(B),
       gi = D.gym != null ? D.gym : ARENAS.findIndex(a => a.rule === D.rule);
-    if (D.rule && gi >= 0) cur = { gi, next: an ? an.txt : null };
+    if (D.rule && gi >= 0) {
+      cur = { gi, next: an ? an.txt : null };
+    }
   }
-  if (cur && (!last || last.gi !== cur.gi || last.next !== cur.next)) setLast(cur);
+  if (cur && (!last || last.gi !== cur.gi || last.next !== cur.next)) {
+    setLast(cur);
+  }
   const R = cur || last;
   return (
     <div className="bt-arena" id="bArena" hidden={!cur}>
@@ -206,7 +220,9 @@ export function Timeline() {
     const rows = [];
     B.turnQueue.forEach((id, i) => {
       const u = byUid(B, id);
-      if (!u) return;
+      if (!u) {
+        return;
+      }
       const doneFlag = i < B.queueIndex || u.ko,
         prio = u.side === 'e' && u.intent && MV[u.intent.mv].prio;
       rows.push({
@@ -220,7 +236,9 @@ export function Timeline() {
     });
     cur = { round: B.round, rows };
   }
-  if (cur && JSON.stringify(cur) !== JSON.stringify(last)) setLast(cur);
+  if (cur && JSON.stringify(cur) !== JSON.stringify(last)) {
+    setLast(cur);
+  }
   const F = cur || last;
   return (
     <div className="b-ordre" id="bOrdre" hidden={!vis} aria-label="Ordre de jeu de la manche">

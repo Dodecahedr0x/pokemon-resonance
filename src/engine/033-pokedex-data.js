@@ -140,5 +140,5 @@ export const DEXM = {
   229: [1.4, 35, 'Sombre'],
   246: [0.6, 72, 'Peaupierre'],
   247: [1.2, 152, 'Carapadure'],
-  248: [2, 202, 'Armure']
+  248: [2, 202, 'Armure'],
 };

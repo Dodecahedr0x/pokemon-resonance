@@ -13,10 +13,23 @@ export default function Coach() {
       {step && (
         <div className="co-in" key={v}>
           <Html html={PROF_AV} />
-          <span className="co-n">{step.n} / {step.total}</span>
-          <b><Html html={step.t} /></b>
-          <p><Html html={step.d} /></p>
-          <div className="co-a"><button type="button" className="b b-sm b-ghost" data-co="skip">Passer le tutoriel</button><button type="button" className="b b-sm b-gold" data-co="next">{step.last ? 'Terminer' : 'Suivant'}</button></div>
+          <span className="co-n">
+            {step.n} / {step.total}
+          </span>
+          <b>
+            <Html html={step.t} />
+          </b>
+          <p>
+            <Html html={step.d} />
+          </p>
+          <div className="co-a">
+            <button type="button" className="b b-sm b-ghost" data-co="skip">
+              Passer le tutoriel
+            </button>
+            <button type="button" className="b b-sm b-gold" data-co="next">
+              {step.last ? 'Terminer' : 'Suivant'}
+            </button>
+          </div>
         </div>
       )}
     </div>

@@ -19,7 +19,9 @@ function Tabs({ t }) {
   return (
     <nav className="v4-tabs ct431" id="campTabs431" role="tablist" aria-label="Camp">
       {CAMP_TABS431.map(([k, n]) => (
-        <button key={k} type="button" role="tab" aria-selected={t === k} data-ct431={k}>{n + (k === 'echo' && R ? ' •' : '')}</button>
+        <button key={k} type="button" role="tab" aria-selected={t === k} data-ct431={k}>
+          {n + (k === 'echo' && R ? ' •' : '')}
+        </button>
       ))}
     </nav>
   );
@@ -59,7 +61,13 @@ export default function Camp() {
     <section className="page v4p" id="camp" aria-labelledby="h-camp">
       {ready && (
         <>
-          <div className="ph v4-ph-page"><p className="kick">Votre base</p><h1 className="h1" id="h-camp">Camp</h1><p className="sub">Bâtiments, expéditions, Pension et Potager. Les sorties du dresseur.</p></div>
+          <div className="ph v4-ph-page">
+            <p className="kick">Votre base</p>
+            <h1 className="h1" id="h-camp">
+              Camp
+            </h1>
+            <p className="sub">Bâtiments, expéditions, Pension et Potager. Les sorties du dresseur.</p>
+          </div>
           <Content key={page} page={page} />
         </>
       )}

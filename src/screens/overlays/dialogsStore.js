@@ -18,7 +18,9 @@ export function paintOverlay(displayName, data = {}) {
 
 // Empties the `nom` window (formerly innerHTML = '').
 export function clearOverlay(displayName) {
-  if (!state[displayName]) return;
+  if (!state[displayName]) {
+    return;
+  }
   state = { ...state, [displayName]: null };
   emit();
 }

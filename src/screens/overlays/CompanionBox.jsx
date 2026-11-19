@@ -12,8 +12,13 @@ function Card({ L, cur, bonus }) {
   return (
     <Dialogue className="sv-card exp-card" titre="compT" closeAttrs={{ 'data-comp': 'x' }}>
       <p className="kick">Compagnon</p>
-      <h2 className="h2" id="compT">Qui vous accompagne ?</h2>
-      <p className="d">Son affection grandit quand il combat avec vous (+2, +1 de plus en cas de victoire) et quand vous le câlinez (une fois par jour). En changer remet l’affection à zéro.</p>
+      <h2 className="h2" id="compT">
+        Qui vous accompagne ?
+      </h2>
+      <p className="d">
+        Son affection grandit quand il combat avec vous (+2, +1 de plus en cas de victoire) et quand vous le câlinez
+        (une fois par jour). En changer remet l’affection à zéro.
+      </p>
       <div className="exp-list">
         {L.map(id => {
           const m = BY[id];
@@ -29,7 +34,9 @@ function Card({ L, cur, bonus }) {
       <div className="cp-bl">
         <b>Bonus d’affection</b>
         {bonus.map(([n, t, d]) => (
-          <span key={n}>{'♥'.repeat(n)} <b>{t}</b> : {d}</span>
+          <span key={n}>
+            {'♥'.repeat(n)} <b>{t}</b> : {d}
+          </span>
         ))}
       </div>
     </Dialogue>

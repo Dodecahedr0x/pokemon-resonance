@@ -13,7 +13,6 @@ import { teamBtns } from '../../../engine/027-gym-on-screen.js';
 import { k2n } from '../../../engine/031-home-journey.js';
 import { DOCTRINES430 } from '../../../engine/065-camp-tactics.js';
 
-
 // The four team slots, then the active synergies (#ptList).
 function Places() {
   const S = synOf(squad);
@@ -133,10 +132,14 @@ export default function Team({ v }) {
   // As with the old innerHTML, a hidden block keeps its last content.
   const [champWhy, setChampWhy] = useState(null);
   const why = champ ? SCEN.champ.why : null;
-  if (why && (!champWhy || champWhy.join('\n') !== why.join('\n'))) setChampWhy(why.slice());
+  if (why && (!champWhy || champWhy.join('\n') !== why.join('\n'))) {
+    setChampWhy(why.slice());
+  }
   const [docSeen, setDocSeen] = useState(false);
   const docShown = on && !doctrineHidden();
-  if (docShown && !docSeen) setDocSeen(true);
+  if (docShown && !docSeen) {
+    setDocSeen(true);
+  }
   return (
     <div className="pt" id="ptBox">
       <div className="pt-h">

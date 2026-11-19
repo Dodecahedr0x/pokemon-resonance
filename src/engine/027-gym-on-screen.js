@@ -12,8 +12,9 @@ import { B, BG, L, VERT } from './024-combat-ui.js';
 import { TUTORIAL_STEPS, renderPrep } from './026-campaign-tutorial-sound.js';
 
 export let TEAM_BAK;
-export function __set_TEAM_BAK(v) { return (TEAM_BAK = v); }
-
+export function __set_TEAM_BAK(v) {
+  return (TEAM_BAK = v);
+}
 
 export function fieldSvg() {
   const S = BG.S,
@@ -40,7 +41,7 @@ export function fieldSvg() {
       [a, b],
       [c, b],
       [c, d],
-      [a, d]
+      [a, d],
     ]);
   const z1 = hc(1, 0, S, BG.OX, BG.OY)[0] + w * 0.75,
     z2 = hc(BW - 2, 0, S, BG.OX, BG.OY)[0] - w * 0.25;
@@ -49,13 +50,13 @@ export function fieldSvg() {
   <polygon class="fd-zone al" points="${rect(x0 + 5, y0 + 5, z1, y1 - 5)}"/><polygon class="fd-zone en" points="${rect(z2, y0 + 5, x1 - 5, y1 - 5)}"/>
   <polyline class="fd-mid" points="${pl([
     [mx, y0 + 5],
-    [mx, y1 - 5]
+    [mx, y1 - 5],
   ])}"/><circle class="fd-ring" cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="30"/><circle class="fd-ring2" cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="5"/>
   ${[
     [x0 + 5, y0 + 5],
     [x1 - 5, y0 + 5],
     [x1 - 5, y1 - 5],
-    [x0 + 5, y1 - 5]
+    [x0 + 5, y1 - 5],
   ]
     .map(([a, b]) => {
       const [p, q] = MPT(a, b);
@@ -64,20 +65,21 @@ export function fieldSvg() {
     .join('')}`;
 }
 
-
 /** Pillars, tall grass, sand, covers and ricochets are drawn by the React layers
     (src/screens/combat/board/); what remains here is the Pokémon hidden in the tall grass (engine token). */
 export function drawObstacles() {
-  if (!L.units || !B) return;
+  if (!L.units || !B) {
+    return;
+  }
   B.units.forEach(u => {
     const T = L.u[u.uid];
-    if (T) tokCl(T, 'hid', !u.ko && !!B.tiles[uk(u)].grass);
+    if (T) {
+      tokCl(T, 'hid', !u.ko && !!B.tiles[uk(u)].grass);
+    }
   });
 }
 
-
 // battle synergies (#bSyn): rendered by React (src/screens/combat/battle/TopBar.jsx)
-
 
 function randomTeam() {
   const pool = MON.filter(m => inBox(m.id) && RC(m.id) <= BUDGET);
@@ -87,25 +89,36 @@ function randomTeam() {
       t = [];
     let c = 0;
     for (const m of sh) {
-      if (t.length >= TEAM_MAX) break;
-      if (t.some(x => BY[x].base === m.base)) continue;
+      if (t.length >= TEAM_MAX) {
+        break;
+      }
+      if (t.some(x => BY[x].base === m.base)) {
+        continue;
+      }
       const left = TEAM_MAX - t.length - 1;
-      if (c + RC(m.id) + left > BUDGET) continue;
+      if (c + RC(m.id) + left > BUDGET) {
+        continue;
+      }
       t.push(m.id);
       c += RC(m.id);
     }
-    if (!t.length) continue;
+    if (!t.length) {
+      continue;
+    }
     const rs = new Set(t.map(id => BY[id].r)),
       sc = synOf(t).length * 3 + rs.size + (rs.has('Rempart') ? 2 : 0) + (rs.has('Frappeur') ? 1 : 0) + Math.random();
-    if (!best || sc > best.sc) best = { t, sc };
+    if (!best || sc > best.sc) {
+      best = { t, sc };
+    }
   }
   return best ? best.t : [];
 }
 
-
 function teamAct(a) {
   if (a === 'reset') {
-    if (!squad.length) return;
+    if (!squad.length) {
+      return;
+    }
     TEAM_BAK = [...squad];
     __set_squad([]);
     save();
@@ -123,29 +136,34 @@ function teamAct(a) {
       toast('Aucun Pokémon disponible.');
       return;
     }
-    if (squad.length) TEAM_BAK = [...squad];
+    if (squad.length) {
+      TEAM_BAK = [...squad];
+    }
     __set_squad(t);
     save();
     renderSquad();
     const s = synOf(t);
     toast(`Tirage : ${t.map(id => BY[id].n).join(', ')}${s.length ? ' · ' + s.map(x => x.n).join(', ') : ''}.`);
   }
-  if (!B) renderPrep();
+  if (!B) {
+    renderPrep();
+  }
 }
-
 
 /* --- Pokédex: team synergies (src/screens/team/Analysis.jsx) and formations --- */
 
-
 /* --- tactical codex: rendered by the React Guide (Tactics.jsx) --- */
-
 
 function loadPreset(k) {
   const P = PRESETS[k];
-  if (!P) return;
+  if (!P) {
+    return;
+  }
   const pr = [...P.ids],
     miss = pr.filter(id => !inBox(id));
-  if (squad.length) TEAM_BAK = [...squad];
+  if (squad.length) {
+    TEAM_BAK = [...squad];
+  }
   __set_squad(pr.filter(id => inBox(id)));
   save();
   renderSquad();
@@ -160,43 +178,50 @@ function loadPreset(k) {
 /* --- board: gym lines and obstacles --- */
 const MPT = (x, y) => (VERT ? [y, 430 - x] : [x, y]);
 
-
 export const teamBtns = () =>
   `<div class="team-x"><button type="button" class="b b-sm" data-team="reset" ${squad.length ? '' : 'disabled'}>Réinitialiser l’équipe</button>${TEAM_BAK ? '<button type="button" class="b b-sm" data-team="undo">Rétablir</button>' : ''}<button type="button" class="b b-sm" data-team="rand">Tirage synergique</button></div>`;
 
-
 /* --- Pokédex: box of confirmed recruits --- */
-export const STARS = ['dracaufeu', 'leviator', 'alakazam', 'tyranocif', 'cizayox', 'dracolosse', 'ectoplasma', 'florizarre'];
+export const STARS = [
+  'dracaufeu',
+  'leviator',
+  'alakazam',
+  'tyranocif',
+  'cizayox',
+  'dracolosse',
+  'ectoplasma',
+  'florizarre',
+];
 
 // Statements run at startup, in the original order (see index.js).
 export function __init() {
+  /* --- team: reset, restore, draw --- */
+  TEAM_BAK = null;
 
-/* --- team: reset, restore, draw --- */
-TEAM_BAK = null;
+  document.addEventListener('click', e => {
+    const b = e.target.closest('[data-team]');
+    if (b) {
+      teamAct(b.dataset.team);
+    }
+  });
 
+  /* --- tutorial: a step on obstacles --- */
+  TUTORIAL_STEPS.splice(3, 0, {
+    t: 'Lisez le terrain',
+    d: 'Derrière un rocher, on prend 40 % de dégâts en moins à distance. Les piliers bloquent les tirs directs, les hautes herbes cachent au-delà de 2 cases. Touchez une case vide pour lire son terrain.',
+    sel: '#bBoard',
+    done: () => false,
+  });
 
-document.addEventListener('click', e => {
-  const b = e.target.closest('[data-team]');
-  if (b) teamAct(b.dataset.team);
-});
-
-
-/* --- tutorial: a step on obstacles --- */
-TUTORIAL_STEPS.splice(3, 0, {
-  t: 'Lisez le terrain',
-  d: 'Derrière un rocher, on prend 40 % de dégâts en moins à distance. Les piliers bloquent les tirs directs, les hautes herbes cachent au-delà de 2 cases. Touchez une case vide pour lire son terrain.',
-  sel: '#bBoard',
-  done: () => false
-});
-
-
-document.addEventListener('click', e => {
-  const f = e.target.closest('[data-pf]');
-  if (f) {
-    loadPreset(f.dataset.pf);
-    return;
-  }
-  const s = e.target.closest('#dexCall [data-stg]');
-  if (s) toggle(s.dataset.stg);
-});
+  document.addEventListener('click', e => {
+    const f = e.target.closest('[data-pf]');
+    if (f) {
+      loadPreset(f.dataset.pf);
+      return;
+    }
+    const s = e.target.closest('#dexCall [data-stg]');
+    if (s) {
+      toggle(s.dataset.stg);
+    }
+  });
 }

@@ -13,25 +13,44 @@ export default function Chronicles() {
   return (
     <section className="v4-panel" id="hi462">
       <h3 className="h3">Chroniques</h3>
-      <p className="v4-note">L’histoire de la Résonance, chapitre après chapitre, au fil de vos badges. <b>{n} / {CHAP462.length}</b> lus.</p>
+      <p className="v4-note">
+        L’histoire de la Résonance, chapitre après chapitre, au fil de vos badges.{' '}
+        <b>
+          {n} / {CHAP462.length}
+        </b>{' '}
+        lus.
+      </p>
       <div className="ch462-g">
         {CHAP462.map((c, i) => {
           const lock = nb < c.min,
             isRead = s.read[i];
           return (
-            <button key={i} type="button" className={`ch462${isRead ? ' lu' : ''}${lock ? ' lock' : ''}`} data-ch462={i} disabled={lock}>
+            <button
+              key={i}
+              type="button"
+              className={`ch462${isRead ? ' lu' : ''}${lock ? ' lock' : ''}`}
+              data-ch462={i}
+              disabled={lock}
+            >
               <b>{lock ? 'Chapitre ' + (i + 1) + ' · ???' : c.t}</b>
-              <small>{lock ? `Après ${c.min} badge${c.min > 1 ? 's' : ''}.` : isRead ? 'Relire' : 'Nouveau · +2 Éclats'}</small>
+              <small>
+                {lock ? `Après ${c.min} badge${c.min > 1 ? 's' : ''}.` : isRead ? 'Relire' : 'Nouveau · +2 Éclats'}
+              </small>
             </button>
           );
         })}
       </div>
       {seenSet.length > 0 && (
         <>
-          <h4 className="h3" style={{ marginTop: '12px' }}>Scènes déjà vues</h4>
+          <h4 className="h3" style={{ marginTop: '12px' }}>
+            Scènes déjà vues
+          </h4>
           <div className="ch462-g">
             {seenSet.map(k => (
-              <button key={k} type="button" className="ch462 lu" data-ch462={`s${k}`}><b>{NAMES_C462[k]}</b><small>Revoir</small></button>
+              <button key={k} type="button" className="ch462 lu" data-ch462={`s${k}`}>
+                <b>{NAMES_C462[k]}</b>
+                <small>Revoir</small>
+              </button>
             ))}
           </div>
         </>

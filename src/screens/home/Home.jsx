@@ -23,7 +23,9 @@ export default function Home() {
     on = ready || v > 0;
   return (
     <section className="page on" id="accueil" aria-labelledby="h-acc">
-      <h1 className="vh" id="h-acc">Aventure</h1>
+      <h1 className="vh" id="h-acc">
+        Aventure
+      </h1>
       <div className="v4-home">
         <div className="v4-hero-slot">
           <Hero on={on} />
@@ -39,19 +41,64 @@ export default function Home() {
         <Footer on={on} />
       </div>
       <div className="hm-top v4-off">
-        <div className="tcard" id="campBox">{on && <TrainerCard />}</div>
+        <div className="tcard" id="campBox">
+          {on && <TrainerCard />}
+        </div>
       </div>
       <div className="hm-quick v4-off">
-        <button type="button" className="qk qk-grass" data-hm="wild"><span className="qk-ic"><svg><use href="#i-grass" /></svg></span><span><b>Hautes herbes</b><em>Rencontrer et capturer des Pokémon</em></span></button>
-        <button type="button" className="qk qk-team" data-go="pokedex"><span className="qk-ic"><svg><use href="#i-team" /></svg></span><span><b>Mon équipe</b><em id="qkTeam">4 Pokémon, 12 PC</em></span></button>
-        <button type="button" className="qk qk-guide" data-guide="debuter"><span className="qk-ic"><svg><use href="#i-book" /></svg></span><span><b>Comment jouer</b><em>5 étapes, 2 minutes</em></span></button>
+        <button type="button" className="qk qk-grass" data-hm="wild">
+          <span className="qk-ic">
+            <svg>
+              <use href="#i-grass" />
+            </svg>
+          </span>
+          <span>
+            <b>Hautes herbes</b>
+            <em>Rencontrer et capturer des Pokémon</em>
+          </span>
+        </button>
+        <button type="button" className="qk qk-team" data-go="pokedex">
+          <span className="qk-ic">
+            <svg>
+              <use href="#i-team" />
+            </svg>
+          </span>
+          <span>
+            <b>Mon équipe</b>
+            <em id="qkTeam">4 Pokémon, 12 PC</em>
+          </span>
+        </button>
+        <button type="button" className="qk qk-guide" data-guide="debuter">
+          <span className="qk-ic">
+            <svg>
+              <use href="#i-book" />
+            </svg>
+          </span>
+          <span>
+            <b>Comment jouer</b>
+            <em>5 étapes, 2 minutes</em>
+          </span>
+        </button>
       </div>
       <Friends on={on} />
       <div className="legacy" hidden aria-hidden="true">
         <div className="stage" id="stage">
-          <div className="st-vis"><div className="st-no" id="stNo" /><svg className="crest" id="crest" viewBox="0 0 320 320" aria-hidden="true" /></div>
-          <div className="st-meta"><div><div className="st-name" id="stName" /><div className="st-epi" id="stEpi" /><div className="st-types" id="stTypes" /></div>
-            <div className="st-right"><span className="lb">Recrutement</span><b id="stCost" /><span className="lb" id="stRole" /></div></div>
+          <div className="st-vis">
+            <div className="st-no" id="stNo" />
+            <svg className="crest" id="crest" viewBox="0 0 320 320" aria-hidden="true" />
+          </div>
+          <div className="st-meta">
+            <div>
+              <div className="st-name" id="stName" />
+              <div className="st-epi" id="stEpi" />
+              <div className="st-types" id="stTypes" />
+            </div>
+            <div className="st-right">
+              <span className="lb">Recrutement</span>
+              <b id="stCost" />
+              <span className="lb" id="stRole" />
+            </div>
+          </div>
           <div className="st-evo" id="stEvo" aria-label="Lignée d’évolution" />
           <p className="st-line" id="stLine" />
           <div className="st-dots" id="stDots" aria-label="Pokémon en vedette" />
