@@ -1,0 +1,267 @@
+/* ---------- shell: sidebar, top bar, bottom navigation ---------- */
+html body .side {
+  background: linear-gradient(180deg, #0a1f3d, #071630 60%, #06122a) !important;
+  border-right: 1px solid rgba(88, 186, 255, 0.25) !important;
+}
+html body .side-nav {
+  gap: 3px !important;
+}
+html body .nv {
+  min-height: 44px !important;
+  border-radius: 10px !important;
+  font: 700 14px/1 var(--f-d) !important;
+  color: #d6e6f7 !important;
+  border: 1px solid transparent !important;
+  padding: 0 12px !important;
+  gap: 12px !important;
+}
+html body .nv svg {
+  width: 20px !important;
+  height: 20px !important;
+  opacity: 0.9;
+}
+html body .nv:hover {
+  background: rgba(120, 200, 255, 0.08) !important;
+  transform: none !important;
+}
+html body .nv[aria-current='page'],
+html body .nv.on {
+  background: linear-gradient(180deg, var(--v4-gold1), var(--v4-gold2)) !important;
+  color: var(--v4-ink) !important;
+  border-color: #fff2a8 !important;
+  box-shadow: 0 8px 18px -10px rgba(255, 190, 40, 0.8) !important;
+}
+html body .nv[aria-current='page'] svg {
+  color: var(--v4-ink) !important;
+}
+html body .topbar {
+  display: block !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 40 !important;
+  background: linear-gradient(180deg, rgba(7, 24, 48, 0.95), rgba(6, 19, 39, 0.9)) !important;
+  border-bottom: 1px solid rgba(88, 186, 255, 0.25) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+}
+html body .topbar-in {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  min-height: 58px !important;
+  padding: 6px 14px !important;
+  max-width: none !important;
+}
+html body .tb-sec,
+html body .tb-team {
+  display: none !important;
+}
+.v4-tb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  min-width: 0;
+}
+.v4-trainer {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 4px 12px 4px 4px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(120, 200, 255, 0.22);
+  text-decoration: none;
+  min-width: 0;
+}
+.v4-av {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #ffe98a, #e3a72a 60%, #8a5a12);
+  color: #2a1700;
+  font: 900 16px/1 var(--f-d);
+  border: 2px solid #fff0a8;
+  flex: none;
+}
+.v4-tr-t {
+  display: grid;
+  line-height: 1.1;
+  min-width: 0;
+}
+.v4-tr-t b {
+  font: 800 14px/1.15 var(--f-d);
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 140px;
+}
+.v4-tr-t em {
+  font: 600 11.5px/1.2 var(--f-b);
+  color: var(--v4-tx2);
+  font-style: normal;
+  white-space: nowrap;
+}
+.v4-wal {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  height: 38px;
+  padding: 0 12px 0 8px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 215, 94, 0.35);
+  text-decoration: none;
+}
+.v4-wal b {
+  font: 800 14.5px/1 var(--f-d);
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+}
+.v4-wal.gem {
+  border-color: rgba(127, 230, 255, 0.4);
+}
+.v4-gear {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(120, 200, 255, 0.25);
+  color: #d6e6f7;
+}
+.v4-gear svg {
+  width: 22px;
+  height: 22px;
+}
+html body .bnav {
+  background: linear-gradient(180deg, rgba(8, 25, 50, 0.96), rgba(5, 16, 34, 0.98)) !important;
+  border-top: 1px solid rgba(88, 186, 255, 0.28) !important;
+}
+html body .bnav {
+  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  width: 100% !important;
+  left: 0 !important;
+  right: 0 !important;
+}
+html body .bn {
+  min-width: 0 !important;
+  font: 700 11.5px/1.1 var(--f-d) !important;
+  color: #b9cde2 !important;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+html body .bn[aria-current='page'] {
+  color: #ffd75e !important;
+}
+html body .bn[aria-current='page'] .ic {
+  background: linear-gradient(180deg, rgba(255, 215, 94, 0.28), rgba(255, 180, 40, 0.12)) !important;
+  box-shadow: inset 0 0 0 1px rgba(255, 215, 94, 0.45) !important;
+}
+.v4-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.v4-menu[hidden] {
+  display: none;
+}
+.v4-scrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(2, 8, 18, 0.62);
+}
+.v4-ms {
+  position: relative;
+  width: min(560px, 100%);
+  margin: 0 0 calc(var(--bn) + env(safe-area-inset-bottom, 0px));
+  padding: 14px 14px 16px;
+  border-radius: 20px 20px 0 0;
+  background: linear-gradient(180deg, #10305a, #081a36);
+  border: 1px solid var(--v4-ln2);
+  border-bottom: 0;
+  box-shadow: 0 -20px 50px rgba(0, 0, 0, 0.5);
+  animation: v4Up 0.22s var(--ease) both;
+}
+@keyframes v4Up {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+}
+.v4-ms-h {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 2px 10px;
+}
+.v4-ms-h b {
+  font: 850 18px/1 var(--f-d);
+}
+.v4-x {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  border: 1px solid rgba(120, 200, 255, 0.25);
+  background: rgba(0, 0, 0, 0.25);
+  color: #fff;
+}
+.v4-x svg {
+  width: 16px;
+  height: 16px;
+}
+.v4-ms-g {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.v4-mi {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 64px;
+  padding: 10px;
+  border-radius: 13px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(120, 200, 255, 0.2);
+  text-decoration: none;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+}
+.v4-mi-ic {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+  background: linear-gradient(180deg, var(--v4-gold1), var(--v4-gold2));
+  color: var(--v4-ink);
+  flex: none;
+}
+.v4-mi-ic svg {
+  width: 21px;
+  height: 21px;
+}
+.v4-mi b {
+  display: block;
+  font: 800 14px/1.15 var(--f-d);
+}
+.v4-mi em {
+  display: block;
+  font: 500 12px/1.3 var(--f-b);
+  font-style: normal;
+  color: var(--v4-tx2);
+}

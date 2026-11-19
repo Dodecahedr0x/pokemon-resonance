@@ -1,0 +1,46 @@
+/* ---------- calm: Reduce animations or animated effects turned off ---------- */
+html.pk-calme #pk-fond i,
+html.pk-calme .ph::before,
+html.pk-calme .pk-leds i,
+html.pk-calme a.logo .lg-ic::after,
+html.pk-calme .kick::before,
+html.pk-calme .sel-tabs > button::before,
+html.pk-calme .pk-holo,
+html.pk-calme .pk-sceau::after,
+html.pk-calme :is(.v4-stats, .v4-walbig)::after {
+  animation: none !important;
+}
+html.pk-calme .v4-tabs > button::after,
+html.pk-calme .v4-reg > button::after,
+html.pk-calme .gd-tabs > button::after,
+html.pk-calme .v4-cats > button::after,
+html.pk-calme .v4-seg > button::after,
+html.pk-calme .scn-tabs > button::after,
+html.pk-calme .stabs > .stab::after {
+  animation: none !important;
+  display: none;
+}
+html.a11y-rm #pk-fond i,
+html.a11y-rm .ph::before,
+html.a11y-rm .pk-holo,
+html.a11y-rm .pk-gerbe {
+  animation: none !important;
+}
+html.a11y-rm .pk-gerbe,
+html.pk-calme .pk-gerbe {
+  display: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  #pk-fond i,
+  .ph::before,
+  .pk-leds i,
+  .pk-holo,
+  .pk-sceau,
+  .pk-sceau::after,
+  .pk-gerbe i {
+    animation: none !important;
+  }
+  .pk-gerbe {
+    display: none;
+  }
+}

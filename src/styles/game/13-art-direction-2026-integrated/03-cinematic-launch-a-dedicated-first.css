@@ -1,0 +1,388 @@
+/* Cinematic launch: a dedicated first screen; image stays fully inside the scene */
+#resonance-launch {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 999999 !important;
+  display: grid !important;
+  place-items: stretch !important;
+  overflow: hidden !important;
+  background: #041321 !important;
+  color: #f6fbff !important;
+  isolation: isolate !important;
+  opacity: 1;
+  visibility: visible;
+  transition:
+    opacity 0.72s ease,
+    visibility 0.72s ease;
+}
+#resonance-launch.is-leaving {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+#resonance-launch .rl-scene {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: -2 !important;
+  background-image: var(--resonance-landscape) !important;
+  background-size: cover !important;
+  background-position: center 54% !important;
+  transform: scale(1.005) !important;
+  animation: launchDrift 24s ease-in-out infinite alternate !important;
+  will-change: transform;
+}
+@keyframes launchDrift {
+  from {
+    transform: scale(1.005) translate3d(0, 0, 0);
+  }
+  to {
+    transform: scale(1.055) translate3d(-0.5%, 0.4%, 0);
+  }
+}
+#resonance-launch .rl-shade {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: -1 !important;
+  background:
+    linear-gradient(90deg, rgba(2, 14, 24, 0.88) 0%, rgba(2, 15, 26, 0.58) 38%, rgba(2, 15, 26, 0.05) 78%),
+    linear-gradient(0deg, rgba(2, 13, 22, 0.88), transparent 54%, rgba(2, 13, 22, 0.08)) !important;
+}
+#resonance-launch .rl-frame {
+  position: relative !important;
+  z-index: 1 !important;
+  width: 100% !important;
+  min-height: 100svh !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto !important;
+  grid-template-rows: 1fr auto !important;
+  align-items: end !important;
+  gap: 30px !important;
+  padding: clamp(24px, 5vw, 76px) !important;
+  max-width: none !important;
+}
+#resonance-launch .rl-copy {
+  align-self: end !important;
+  max-width: 720px !important;
+  padding-bottom: clamp(12px, 3vh, 42px) !important;
+}
+#resonance-launch .rl-kicker {
+  font-size: 11px !important;
+  letter-spacing: 0.28em !important;
+  color: #ffe17b !important;
+  text-transform: uppercase !important;
+  font-weight: 900 !important;
+}
+#resonance-launch .rl-logo {
+  font-family: var(--f-d) !important;
+  font-size: clamp(54px, 9vw, 126px) !important;
+  line-height: 0.84 !important;
+  letter-spacing: -0.035em !important;
+  color: #fff4c5 !important;
+  text-shadow:
+    0 3px 0 #81591b,
+    0 7px 0 #0a2c43,
+    0 20px 45px rgba(0, 0, 0, 0.7) !important;
+}
+#resonance-launch .rl-logo span {
+  font-size: 0.29em !important;
+  letter-spacing: 0.4em !important;
+  color: #f6fbff !important;
+  margin-top: 13px !important;
+}
+#resonance-launch .rl-desc {
+  font-size: clamp(15px, 1.4vw, 19px) !important;
+  line-height: 1.6 !important;
+  max-width: 510px !important;
+  color: #e3f2fb !important;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.9) !important;
+  margin: 22px 0 30px !important;
+}
+#resonance-launch .rl-enter {
+  min-height: 62px !important;
+  padding: 0 27px !important;
+  border-radius: 15px !important;
+  gap: 15px !important;
+  background: linear-gradient(135deg, #fff2a6, #ffd34d 52%, #eea52a) !important;
+  color: #0c2435 !important;
+  border: 1px solid #fff0a3 !important;
+  box-shadow:
+    0 7px 0 #81551b,
+    0 17px 36px rgba(0, 0, 0, 0.36),
+    0 0 30px rgba(255, 202, 69, 0.18) !important;
+  font-weight: 950 !important;
+  letter-spacing: 0.03em !important;
+}
+#resonance-launch .rl-enter:active {
+  transform: translateY(4px) !important;
+  box-shadow:
+    0 3px 0 #81551b,
+    0 9px 20px rgba(0, 0, 0, 0.3) !important;
+}
+#resonance-launch .rl-meta {
+  align-self: end !important;
+  justify-self: end !important;
+  text-align: right !important;
+  color: #e0eff8 !important;
+  font-size: 10px !important;
+  letter-spacing: 0.18em !important;
+  line-height: 1.8 !important;
+}
+#resonance-launch .rl-meta strong {
+  display: block !important;
+  color: #ffe17b !important;
+  margin-bottom: 7px !important;
+}
+#resonance-launch .rl-scroll {
+  right: clamp(20px, 3vw, 50px) !important;
+  top: clamp(22px, 4vw, 50px) !important;
+  letter-spacing: 0.25em !important;
+  color: rgba(241, 250, 255, 0.85) !important;
+}
+/* Responsive: preserve the composition instead of shrinking the desktop layout */
+@media (max-width: 999px) {
+  .app {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+  .side {
+    display: none !important;
+  }
+  .topbar {
+    display: block !important;
+  }
+  .content {
+    padding: 18px 12px 88px !important;
+  }
+  .wrap {
+    padding-inline: 4px !important;
+    max-width: 100% !important;
+  }
+  #accueil.page.on {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 13px !important;
+  }
+  #accueil .hm-hero {
+    min-height: clamp(430px, 70vh, 640px) !important;
+    background-position: 43% center !important;
+  }
+  #accueil .tcard#campBox,
+  #accueil .hm-quick,
+  #accueil .route {
+    grid-column: 1 !important;
+  }
+  #accueil .hm-quick {
+    grid-template-columns: 1fr !important;
+    grid-template-rows: repeat(3, minmax(88px, auto)) !important;
+  }
+  #accueil .route {
+    height: 300px !important;
+    background-position: 42% center !important;
+  }
+  .dex-grid {
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)) !important;
+  }
+  .fam-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+  .fam-grid .fcard {
+    min-height: 350px !important;
+  }
+  #resonance-launch .rl-frame {
+    grid-template-columns: 1fr !important;
+    grid-template-rows: 1fr auto !important;
+    gap: 12px !important;
+    padding: 24px 22px max(28px, env(safe-area-inset-bottom)) !important;
+  }
+  #resonance-launch .rl-scene {
+    background-size: auto 78% !important;
+    background-position: 43% 0 !important;
+    background-repeat: no-repeat !important;
+  }
+  #resonance-launch .rl-shade {
+    background: linear-gradient(
+      180deg,
+      rgba(2, 13, 22, 0.04) 0%,
+      rgba(2, 13, 22, 0.08) 35%,
+      rgba(2, 13, 22, 0.75) 56%,
+      rgba(2, 13, 22, 0.98) 100%
+    ) !important;
+  }
+  #resonance-launch .rl-copy {
+    align-self: end !important;
+    padding-bottom: 0 !important;
+  }
+  #resonance-launch .rl-logo {
+    font-size: clamp(54px, 13vw, 84px) !important;
+  }
+  #resonance-launch .rl-desc {
+    font-size: 14px !important;
+    margin: 14px 0 22px !important;
+    max-width: 520px !important;
+  }
+  #resonance-launch .rl-meta {
+    justify-self: start !important;
+    text-align: left !important;
+    font-size: 9px !important;
+  }
+  #resonance-launch .rl-scroll {
+    display: none !important;
+  }
+}
+@media (max-width: 560px) {
+  .fam-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+  .fam-grid .fcard {
+    min-height: 360px !important;
+  }
+  .fc-art {
+    min-height: 160px !important;
+  }
+  .dex-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+  .dex {
+    padding: 12px !important;
+    min-height: 240px !important;
+  }
+  #accueil .hh-chips {
+    gap: 5px !important;
+  }
+  #accueil .hh-chips > * {
+    font-size: 9px !important;
+  }
+  #accueil .qk {
+    min-height: 90px !important;
+    padding: 15px !important;
+  }
+  .bnav {
+    background: rgba(3, 16, 27, 0.96) !important;
+    border-top: 1px solid rgba(111, 226, 255, 0.24) !important;
+    backdrop-filter: blur(22px) !important;
+  }
+  .bn.on {
+    color: #ffe17b !important;
+  }
+  .content {
+    padding-bottom: 100px !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  #resonance-launch .rl-scene,
+  #accueil .hm-hero::before {
+    animation: none !important;
+  }
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Final visual QA fixes: launch logo layout and real creature art */
+#resonance-launch .rl-copy {
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+  justify-self: start !important;
+  align-self: end !important;
+  width: min(760px, 100%) !important;
+}
+#resonance-launch .rl-meta {
+  grid-column: 2 !important;
+  grid-row: 2 !important;
+  position: relative !important;
+}
+#resonance-launch .rl-logo {
+  display: block !important;
+  white-space: normal !important;
+  max-width: 100% !important;
+}
+#resonance-launch .rl-logo span {
+  display: block !important;
+  font-size: clamp(16px, 2.6vw, 30px) !important;
+  line-height: 1.45 !important;
+  letter-spacing: 0.16em !important;
+  white-space: nowrap !important;
+  margin-top: 12px !important;
+  max-width: 100% !important;
+}
+#resonance-launch .rl-scroll {
+  position: absolute !important;
+  left: auto !important;
+  right: clamp(22px, 4vw, 56px) !important;
+  top: clamp(22px, 4vw, 56px) !important;
+  bottom: auto !important;
+  display: block !important;
+  writing-mode: vertical-rl !important;
+}
+.fc-art {
+  isolation: isolate !important;
+}
+.fc-art > .orb {
+  display: grid !important;
+  opacity: 0.12 !important;
+  transform: scale(0.9);
+}
+.fc-art.sprite-fallback > .orb {
+  opacity: 0.78 !important;
+  transform: scale(1) !important;
+}
+.fc-art .pokemon-art-sprite {
+  position: relative !important;
+  z-index: 2 !important;
+  display: block !important;
+  width: clamp(126px, 13vw, 176px) !important;
+  height: clamp(126px, 13vw, 176px) !important;
+  max-width: 88% !important;
+  max-height: 100% !important;
+  object-fit: contain !important;
+  object-position: center !important;
+  filter: drop-shadow(0 10px 14px rgba(0, 0, 0, 0.5))
+    drop-shadow(0 0 16px color-mix(in srgb, var(--c) 25%, transparent)) !important;
+  animation: artHover 4.8s ease-in-out infinite !important;
+  transform-origin: 50% 65% !important;
+}
+@keyframes artHover {
+  0%,
+  100% {
+    transform: translateY(1px);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+.fc-art .fc-st {
+  z-index: 5 !important;
+}
+.fc-art .fc-lock,
+.fc-art .fc-it {
+  z-index: 5 !important;
+}
+.fc-art .fc-burst {
+  opacity: 0.18 !important;
+}
+@media (max-width: 999px) {
+  #resonance-launch .rl-copy {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    align-self: end !important;
+  }
+  #resonance-launch .rl-meta {
+    grid-column: 1 !important;
+    grid-row: 2 !important;
+  }
+  #resonance-launch .rl-logo span {
+    font-size: clamp(14px, 4vw, 20px) !important;
+    letter-spacing: 0.12em !important;
+  }
+  .fc-art .pokemon-art-sprite {
+    width: clamp(132px, 38vw, 170px) !important;
+    height: clamp(132px, 38vw, 170px) !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fc-art .pokemon-art-sprite {
+    animation: none !important;
+  }
+}

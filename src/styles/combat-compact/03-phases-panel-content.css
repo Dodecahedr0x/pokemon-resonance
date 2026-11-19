@@ -1,0 +1,179 @@
+/* ================= phases: panel content ================= */
+/* placement (v4.30) */
+#bPanel .dep-p,
+#bPanel .ta-p {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+#bPanel .dep-h {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+#bPanel .dep-h > div {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+#bPanel .dep-h b {
+  font-family: var(--f-d, Archivo, sans-serif);
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #f2f3f6;
+}
+#bPanel .dep-h span {
+  font-size: 12px;
+  color: #c2c7d2;
+}
+#bPanel .dep-ic {
+  width: 38px;
+  height: 38px;
+  flex: none;
+  border-radius: 11px;
+  display: grid;
+  place-items: center;
+  color: #6be3ae;
+  background: rgba(79, 214, 156, 0.1);
+  border: 1px solid rgba(79, 214, 156, 0.4);
+}
+#bPanel .dep-ic svg {
+  width: 18px;
+  height: 18px;
+}
+#bPanel .dep-l,
+#bPanel .ta-l {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+#bPanel .dep-l li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 0 12px 0 8px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+#bPanel .dep-l li.on {
+  background: rgba(227, 192, 122, 0.08);
+  border-color: rgba(227, 192, 122, 0.55);
+}
+#bPanel .dep-l li b {
+  flex: 1;
+  min-width: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #f2f3f6;
+}
+#bPanel .dep-l li span {
+  font-family: var(--f-m, ui-monospace, monospace);
+  font-size: 11.5px;
+  color: #6be3ae;
+}
+
+/* opponent turn: the action queue */
+#bPanel .ta-h {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+#bPanel .ta-h i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ff6767;
+  box-shadow: 0 0 8px #ff6767;
+}
+#bPanel .ta-h b {
+  font-family: var(--f-d, Archivo, sans-serif);
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #ffb0b0;
+}
+#bPanel .ta-h span {
+  margin-left: auto;
+  font-family: var(--f-m, ui-monospace, monospace);
+  font-size: 11px;
+  color: #868ea0;
+}
+#bPanel .ta-l li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 0 10px 0 6px;
+  border-radius: 10px;
+  font-size: 12px;
+  color: #c2c7d2;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+#bPanel .ta-l li .medal {
+  flex: none;
+}
+#bPanel .ta-l .ta-t {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+#bPanel .ta-l .ta-t b {
+  color: #f2f3f6;
+  font-weight: 600;
+}
+#bPanel .ta-l em {
+  font-style: normal;
+  font-family: var(--f-m, ui-monospace, monospace);
+  font-size: 10.5px;
+  color: #868ea0;
+}
+#bPanel .ta-l li.now {
+  background: rgba(255, 103, 103, 0.09);
+  border-color: rgba(255, 103, 103, 0.45);
+}
+#bPanel .ta-l li.now em {
+  color: #ff8c8c;
+}
+#bPanel .ta-l li.done {
+  opacity: 0.55;
+}
+@media (prefers-reduced-motion: no-preference) {
+  #bPanel .ta-l li.now {
+    animation: taNow 1.4s ease-in-out infinite;
+  }
+}
+@keyframes taNow {
+  50% {
+    border-color: rgba(255, 103, 103, 0.2);
+  }
+}
+
+/* « Terminer » (End) step: the button takes the full width, what follows is announced below */
+#bPanel .turn-guide[data-st='extra'] .turn-guide-r {
+  flex-wrap: wrap;
+}
+#bPanel .turn-guide[data-st='extra'] .turn-guide-r > p {
+  flex: 1 1 100%;
+}
+#bPanel .turn-guide[data-st='extra'] .turn-guide-r > [data-vx='finished-round'] {
+  flex: 1 1 100%;
+  height: 44px;
+  font-size: 14px;
+}
+#bPanel .turn-guide-suite {
+  flex: 1 1 100%;
+  text-align: center;
+  font-size: 11.5px;
+  color: #868ea0;
+}

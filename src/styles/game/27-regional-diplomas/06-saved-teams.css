@@ -1,0 +1,206 @@
+/* saved teams */
+.team-save .dc-f {
+  flex-wrap: wrap;
+}
+.team-save-c {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+.team-save-x {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(0, 0, 0, 0.3);
+  color: inherit;
+  font: inherit;
+  line-height: 1;
+  cursor: pointer;
+  flex: none;
+}
+.team-save-n {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+}
+.team-save-n input {
+  width: 150px;
+  max-width: 50vw;
+  height: 32px;
+  border-radius: 9px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.3);
+  color: inherit;
+  padding: 0 10px;
+  font: inherit;
+  font-size: 13px;
+}
+.saved-squads {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: 6px 0 4px;
+}
+.saved-squads[hidden] {
+  display: none;
+}
+
+/* Pantheon */
+.pantheon-tab-l {
+  display: grid;
+  gap: 10px;
+}
+.pantheon-tab-c {
+  padding: 12px;
+  border-radius: 14px;
+  background: linear-gradient(145deg, rgba(255, 215, 94, 0.1), rgba(255, 255, 255, 0.02));
+  border: 1px solid rgba(255, 215, 94, 0.35);
+}
+.pantheon-tab-h b {
+  display: block;
+  font-size: 15px;
+  color: #ffd45b;
+}
+.pantheon-tab-h em {
+  font-style: normal;
+  font-size: 12px;
+  color: #b9cad6;
+}
+.pantheon-tab-t {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+  margin-top: 8px;
+}
+.pantheon-tab-m {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 0;
+}
+.pantheon-tab-m img {
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
+}
+.pantheon-tab-m em {
+  font-style: normal;
+  font-size: 11px;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* <style id="resonance-duel-tutorial"> */
+/* v4.33 · local duel */
+:root {
+  --dj1: #5fb8ff;
+  --dj2: #ff9a5f;
+}
+.dj1 {
+  --dj: var(--dj1);
+}
+.dj2 {
+  --dj: var(--dj2);
+}
+b.dj1,
+b.dj2 {
+  color: var(--dj);
+}
+html body #bSvg .tok.dj1 .tok-rim,
+html body #bSvg .tok.dj2 .tok-rim {
+  stroke: var(--dj);
+  stroke-width: 2.6;
+}
+html body #bSvg .tok.dj1 .tok-halo,
+html body #bSvg .tok.dj2 .tok-halo {
+  stroke: var(--dj);
+}
+html body #bSvg .tok.dj1 {
+  --dj: var(--dj1);
+}
+html body #bSvg .tok.dj2 {
+  --dj: var(--dj2);
+}
+#cbBattle .plates[data-duel-player='1'] .plate {
+  box-shadow: inset 3px 0 0 var(--dj1);
+}
+#cbBattle .plates[data-duel-player='2'] .plate {
+  box-shadow: inset 3px 0 0 var(--dj2);
+}
+#bPhase b.dj1,
+#bPhase b.dj2,
+#bScen b.dj1,
+#bScen b.dj2 {
+  font-weight: 800;
+}
+
+/* handover screen */
+.forfeit-dialog {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgba(6, 10, 18, 0.86);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  animation: forfeit-dialog-in 0.25s ease-out;
+}
+@keyframes forfeit-dialog-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.forfeit-dialog-c {
+  width: min(420px, 100%);
+  padding: 22px 18px;
+  border-radius: 18px;
+  text-align: center;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02));
+  border: 2px solid var(--dj);
+  box-shadow: 0 0 40px -10px var(--dj);
+}
+.forfeit-dialog-c .h1 {
+  margin: 4px 0 6px;
+  color: var(--dj);
+  font-size: clamp(22px, 7vw, 30px);
+}
+.forfeit-dialog-c .sub {
+  margin: 0 0 14px;
+}
+.forfeit-dialog-s {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin: 0 0 16px;
+}
+.forfeit-dialog-s span {
+  padding: 8px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid var(--dj);
+  font-size: 12px;
+  line-height: 1.35;
+}
+.forfeit-dialog-s b {
+  display: block;
+  color: var(--dj);
+  font-size: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.forfeit-dialog-a {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}

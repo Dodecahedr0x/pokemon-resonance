@@ -1,0 +1,247 @@
+/* MAP — actual dynamic #carte page */
+#carte .v4-ph-page {
+  padding-bottom: 24px;
+}
+#carte .v4-reg {
+  background: rgba(4, 17, 27, 0.85) !important;
+  border: 1px solid var(--rx-edge) !important;
+  border-radius: 17px !important;
+  padding: 7px !important;
+}
+#carte .v4-reg button {
+  border-radius: 11px !important;
+  padding: 12px 24px !important;
+  letter-spacing: 0.12em !important;
+}
+#carte .v4-reg button[aria-selected='true'] {
+  background: linear-gradient(135deg, #267b8c, #174158) !important;
+  color: #f2feff !important;
+  box-shadow:
+    0 8px 22px rgba(32, 153, 168, 0.24),
+    inset 0 1px rgba(255, 255, 255, 0.18) !important;
+}
+#carte .v4-map-wrap {
+  grid-template-columns: minmax(0, 1.45fr) minmax(285px, 0.65fr) !important;
+  gap: 20px !important;
+}
+#carte .v4-map {
+  padding: 12px !important;
+  border: 1px solid rgba(124, 220, 228, 0.34) !important;
+  border-radius: 27px !important;
+  background: linear-gradient(145deg, #173b4a, #071824) !important;
+  box-shadow:
+    0 30px 80px rgba(0, 0, 0, 0.43),
+    inset 0 1px rgba(255, 255, 255, 0.1) !important;
+}
+#carte .v4-map-sc {
+  border-radius: 17px !important;
+}
+#carte .v4-map-st {
+  filter: drop-shadow(0 18px 24px rgba(0, 0, 0, 0.4));
+}
+#carte .map-title {
+  top: 16px !important;
+  left: 18px !important;
+  font-size: 11px !important;
+  letter-spacing: 0.24em !important;
+  color: #d5f8f5 !important;
+  text-shadow: 0 2px 15px #000 !important;
+}
+#carte .mk-ic {
+  border: 2px solid rgba(222, 250, 255, 0.9) !important;
+  background: radial-gradient(circle at 30% 25%, #3e8eaa, #12334b) !important;
+  box-shadow:
+    0 8px 20px rgba(0, 0, 0, 0.55),
+    0 0 0 5px rgba(124, 232, 238, 0.1) !important;
+}
+#carte .mk.sel .mk-ic,
+#carte .mk:hover .mk-ic {
+  box-shadow:
+    0 0 0 7px rgba(124, 232, 238, 0.14),
+    0 0 26px rgba(124, 232, 238, 0.55) !important;
+}
+#carte .v4-map-side .v4-panel {
+  border-radius: 22px !important;
+  background: linear-gradient(155deg, #17374a, #091b29) !important;
+}
+#carte .v4-wild {
+  border: 1px solid rgba(91, 196, 147, 0.27) !important;
+  border-radius: 24px !important;
+  background: linear-gradient(110deg, rgba(18, 70, 56, 0.46), rgba(7, 25, 31, 0.94)) !important;
+  box-shadow: 0 22px 55px rgba(0, 0, 0, 0.3) !important;
+  padding: 20px !important;
+}
+/* BATTLE: tactical command chamber */
+#combat .sel {
+  border: 1px solid rgba(124, 220, 230, 0.3) !important;
+  border-radius: 26px !important;
+  background: linear-gradient(145deg, #15384a, #081a27) !important;
+  box-shadow: 0 32px 78px rgba(0, 0, 0, 0.43) !important;
+}
+#combat .sel-tabs {
+  padding: 13px !important;
+  background: rgba(3, 14, 23, 0.65) !important;
+  border-bottom: 1px solid var(--rx-edge) !important;
+}
+#combat .sel-tabs button {
+  border-radius: 13px !important;
+}
+#combat .sel-body {
+  gap: 20px !important;
+  padding: 20px !important;
+}
+#combat .sel-list {
+  border: 1px solid var(--rx-edge) !important;
+  border-radius: 19px !important;
+  background: rgba(4, 17, 27, 0.76) !important;
+}
+#combat .sel-card,
+#combat .pt {
+  border: 1px solid rgba(124, 220, 230, 0.22) !important;
+  border-radius: 20px !important;
+  background: linear-gradient(155deg, #17394a, #081a27) !important;
+}
+#combat .battle {
+  gap: 20px !important;
+  align-items: start;
+}
+#combat .bt {
+  border: 1px solid rgba(124, 220, 230, 0.34) !important;
+  border-radius: 27px !important;
+  padding: 16px !important;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(62, 153, 174, 0.15), transparent 55%),
+    linear-gradient(145deg, #142f40, #06131f) !important;
+  box-shadow:
+    0 32px 80px rgba(0, 0, 0, 0.48),
+    inset 0 1px rgba(255, 255, 255, 0.1) !important;
+}
+#combat .bt-top {
+  min-height: 48px;
+  border-bottom: 1px solid rgba(124, 220, 230, 0.18) !important;
+}
+#combat .bt-arena {
+  border: 1px solid rgba(124, 220, 230, 0.24) !important;
+  border-radius: 18px !important;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.28) !important;
+}
+#combat .board {
+  border: 1px solid rgba(124, 232, 238, 0.42) !important;
+  border-radius: 22px !important;
+  box-shadow:
+    inset 0 0 75px rgba(0, 0, 0, 0.42),
+    0 18px 40px rgba(0, 0, 0, 0.35) !important;
+}
+#combat #bSvg {
+  filter: drop-shadow(0 10px 8px rgba(0, 0, 0, 0.3));
+}
+#combat .bp {
+  border: 1px solid rgba(124, 220, 230, 0.28) !important;
+  border-radius: 22px !important;
+  background: linear-gradient(155deg, #17394b, #081a27) !important;
+  box-shadow: 0 24px 55px rgba(0, 0, 0, 0.35) !important;
+}
+#combat .bt-side {
+  gap: 14px;
+}
+#combat #bLaunch,
+#combat #bEnd {
+  border-radius: 14px !important;
+  min-height: 48px !important;
+  background: linear-gradient(135deg, #ffe6a0, #c38a3b) !important;
+  color: #1a2025 !important;
+  box-shadow: 0 10px 28px rgba(225, 172, 78, 0.22) !important;
+}
+/* Other systems: coherent premium panels, not generic flat boxes */
+#quetes .v4-panel,
+#sac .v4-panel,
+#params .v4-panel,
+#types .gd-p,
+#ligue .case {
+  border: 1px solid var(--rx-edge) !important;
+  border-radius: 23px !important;
+  background: linear-gradient(145deg, rgba(19, 48, 65, 0.96), rgba(6, 20, 31, 0.98)) !important;
+  box-shadow:
+    0 25px 58px rgba(0, 0, 0, 0.34),
+    inset 0 1px rgba(255, 255, 255, 0.07) !important;
+}
+#types .gd-tabs {
+  border: 1px solid var(--rx-edge) !important;
+  border-radius: 17px !important;
+  background: rgba(4, 17, 27, 0.82) !important;
+  padding: 7px !important;
+}
+#types .gd-t[aria-selected='true'] {
+  background: linear-gradient(135deg, #267184, #14384c) !important;
+  color: #efffff !important;
+}
+#types .s5 li,
+#types .howto > div,
+#types .lex {
+  border: 1px solid rgba(124, 220, 230, 0.18) !important;
+  border-radius: 18px !important;
+  background: linear-gradient(145deg, #153447, #091b28) !important;
+}
+#ligue .case {
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(245, 206, 120, 0.15), transparent 60%),
+    linear-gradient(155deg, #1a3342, #081923) !important;
+}
+#ligue .badges > * {
+  filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.3));
+  transition:
+    transform 0.25s,
+    filter 0.25s;
+}
+#ligue .badges > *:hover {
+  transform: translateY(-6px) scale(1.04);
+  filter: drop-shadow(0 12px 16px rgba(245, 206, 120, 0.28));
+}
+@media (max-width: 850px) {
+  #accueil .hm-hero {
+    grid-template-columns: 1fr !important;
+    min-height: unset !important;
+    padding: 22px !important;
+  }
+
+  #accueil .hm-hero:after {
+    width: 190px;
+    right: -75px;
+    top: 24%;
+  }
+  #accueil .hm-quick {
+    grid-template-columns: 1fr !important;
+  }
+  #carte .v4-map-wrap {
+    grid-template-columns: 1fr !important;
+  }
+  #dex .v4-dex {
+    grid-template-columns: 1fr !important;
+  }
+  #dex .v4-dexlist {
+    position: relative;
+    top: auto;
+    max-height: 340px;
+  }
+  #combat .battle {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+  #combat .bt {
+    padding: 9px !important;
+  }
+  #pokedex .fam-grid {
+    grid-template-columns: repeat(auto-fill, minmax(165px, 1fr)) !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .page.on,
+  #accueil .hm-hero:after {
+    animation: none !important;
+  }
+  *,
+  *:before,
+  *:after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}

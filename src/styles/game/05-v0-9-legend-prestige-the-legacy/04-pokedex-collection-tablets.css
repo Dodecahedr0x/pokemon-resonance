@@ -1,0 +1,265 @@
+/* ---------- Pokédex: collection tablets ---------- */
+.fcard {
+  border-radius: 12px;
+}
+.fc-in {
+  border-radius: 12px;
+  border: 1.5px solid transparent;
+  background:
+    radial-gradient(130% 60% at 50% 0%, color-mix(in srgb, var(--c) 16%, transparent), transparent 62%) padding-box,
+    var(--veins) padding-box,
+    linear-gradient(180deg, #16171c, #0c0d10) padding-box,
+    var(--steel) border-box;
+  background-size:
+    auto,
+    560px 560px,
+    auto,
+    auto;
+  box-shadow:
+    0 0 0 1px #000,
+    inset 0 0 0 1px rgba(0, 0, 0, 0.6),
+    inset 0 0 0 3px rgba(212, 175, 106, 0.06),
+    0 28px 50px -30px #000;
+}
+.fcard.in .fc-in {
+  background:
+    radial-gradient(130% 60% at 50% 0%, color-mix(in srgb, var(--c) 18%, transparent), transparent 62%) padding-box,
+    var(--veins) padding-box,
+    linear-gradient(180deg, #18191e, #0c0d10) padding-box,
+    var(--brass) border-box;
+  box-shadow:
+    0 0 0 1px #000,
+    0 0 30px -8px rgba(212, 175, 106, 0.5),
+    0 28px 50px -24px #000;
+}
+.fc-top {
+  font-family: var(--f-m);
+  letter-spacing: 0.14em;
+  color: rgba(212, 175, 106, 0.85);
+}
+.fc-gen {
+  border-radius: 1px;
+  border-color: rgba(212, 175, 106, 0.35);
+  letter-spacing: 0.24em;
+}
+.fc-art {
+  height: 136px;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.8);
+  box-shadow:
+    inset 0 0 0 1px rgba(212, 175, 106, 0.18),
+    inset 0 0 40px rgba(0, 0, 0, 0.75),
+    inset 0 -24px 30px -12px rgba(0, 0, 0, 0.8);
+  background: radial-gradient(
+    circle at 50% 48%,
+    color-mix(in srgb, var(--c) 42%, #0a0a0c) 0,
+    color-mix(in srgb, var(--c) 16%, #0a0a0c) 52%,
+    #060607 100%
+  );
+}
+.fc-burst {
+  background: repeating-conic-gradient(from 0deg, rgba(212, 175, 106, 0.12) 0 1.2deg, transparent 1.2deg 12deg);
+  mix-blend-mode: normal;
+  opacity: 0.9;
+}
+.fc-art::before {
+  content: '';
+  position: absolute;
+  width: 122px;
+  height: 122px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 1px solid rgba(212, 175, 106, 0.28);
+  box-shadow:
+    0 0 0 7px rgba(0, 0, 0, 0.25),
+    0 0 0 8px rgba(212, 175, 106, 0.12);
+  pointer-events: none;
+}
+.fc-art::after {
+  background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.12) 0 1px, transparent 1px 3px);
+}
+.fc-st {
+  border-radius: 1px;
+  letter-spacing: 0.2em;
+  background: rgba(6, 6, 8, 0.75);
+  border: 1px solid rgba(212, 175, 106, 0.3);
+  color: var(--gold-l);
+}
+.orb {
+  background: conic-gradient(from 200deg, #f4e2b2, #7a5a24, #e8cf92, #4e3814, #d4af6a, #f4e2b2);
+  box-shadow:
+    0 0 0 2px #060607,
+    0 0 0 3px rgba(201, 206, 214, 0.3),
+    0 14px 30px -10px #000,
+    0 0 46px -8px var(--c);
+}
+.fc-name {
+  display: grid;
+  gap: 3px;
+}
+.fc-name h3 {
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  font-size: clamp(14px, 3.6vw, 17px);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.fc-role {
+  font-family: var(--f-m);
+  font-size: 9.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.fc-mv {
+  border-radius: 2px;
+  background: rgba(0, 0, 0, 0.35);
+  box-shadow: inset 0 0 0 1px rgba(212, 175, 106, 0.12);
+  font-size: 11.5px;
+}
+.fc-chain {
+  color: var(--gold-l);
+  font-family: var(--f-m);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+}
+.fc-foil {
+  mix-blend-mode: soft-light;
+  opacity: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 25%,
+    rgba(255, 240, 205, 0.5) 38%,
+    rgba(212, 175, 106, 0.35) 46%,
+    rgba(201, 206, 214, 0.45) 54%,
+    transparent 68%
+  );
+  background-size: 260% 260%;
+  background-position: var(--hx) var(--hy);
+}
+.fc-glare {
+  background: radial-gradient(circle at var(--hx) var(--hy), rgba(255, 248, 230, 0.28), transparent 42%);
+  mix-blend-mode: soft-light;
+}
+.fcard:hover .fc-foil {
+  opacity: 0.75;
+}
+.fcard.in .fc-foil {
+  opacity: 0.35;
+}
+.stab b {
+  font-family: var(--f-d);
+  letter-spacing: 0.06em;
+}
+.sh-hero {
+  background:
+    radial-gradient(110% 90% at 50% 0%, color-mix(in srgb, var(--c) 30%, transparent), transparent 70%), var(--veins);
+  background-size:
+    auto,
+    560px 560px;
+}
+.sh-crest svg {
+  filter: drop-shadow(0 18px 30px rgba(0, 0, 0, 0.7));
+}
+.mvc .t {
+  border-bottom: 1px solid rgba(212, 175, 106, 0.12);
+  padding-bottom: 8px;
+}
+.mvc b {
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  font-size: 14.5px;
+}
+.evd li span,
+.eo li span {
+  letter-spacing: 0.16em;
+}
+
+/* ---------- battle: preparation ---------- */
+.scn {
+  border-radius: var(--rl);
+}
+.scn b {
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  font-size: 18px;
+}
+.scn-art {
+  height: 60px;
+  filter: saturate(0.55) brightness(0.6) contrast(1.1);
+  border-bottom: 1px solid rgba(212, 175, 106, 0.3);
+}
+.scn.bio-arene .scn-art {
+  filter: none;
+  background:
+    radial-gradient(70% 140% at 20% 50%, color-mix(in srgb, var(--ac) 32%, transparent), transparent 70%),
+    repeating-linear-gradient(90deg, rgba(212, 175, 106, 0.06) 0 1px, transparent 1px 22px),
+    linear-gradient(180deg, #141519, #0b0b0e);
+}
+.scn-bdg {
+  position: absolute;
+  left: 16px;
+  top: 6px;
+  width: 48px;
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.8));
+}
+.scn-bdg svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.scn.won .scn-bdg {
+  filter: drop-shadow(0 0 12px color-mix(in srgb, var(--ac) 70%, transparent));
+}
+.scn.gym:not(.won) .scn-bdg {
+  filter: grayscale(0.7) brightness(0.6) drop-shadow(0 6px 10px rgba(0, 0, 0, 0.8));
+}
+
+.scn-gyms {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.scn-gyms .scn {
+  padding: 16px;
+  gap: 6px;
+}
+.scn-gyms .scn-art {
+  margin: -16px -16px 4px;
+}
+.scn-gyms .scn p {
+  font-size: 12.5px;
+}
+.scn-gyms .scn b {
+  font-size: 15px;
+}
+.scn-gyms .scn .foes em {
+  display: none;
+}
+@media (max-width: 600px) {
+  .scn-gyms {
+    grid-template-columns: 1fr;
+  }
+}
+.scn::after {
+  opacity: 0.18;
+}
+.scn .foes .fo.gr::after {
+  border-radius: 0;
+  background: linear-gradient(135deg, #ffb08a, #e5484d);
+}
+.howto .hn {
+  border-radius: 1px;
+  transform: rotate(45deg);
+}
+.howto .hn {
+  font-family: var(--f-n);
+  font-stretch: 72%;
+}
+.ptm em.ch {
+  font-family: var(--f-m);
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+}

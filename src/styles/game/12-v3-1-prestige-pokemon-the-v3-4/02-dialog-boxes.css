@@ -1,0 +1,187 @@
+/* ---------- dialog boxes ---------- */
+.dlgbox {
+  position: relative;
+  display: block;
+  padding: 14px 18px 15px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  background:
+    var(--glass) padding-box,
+    var(--edge) border-box;
+  color: var(--tx);
+  font-size: 15px;
+  line-height: 1.6;
+  box-shadow: 0 22px 44px -26px #000;
+}
+.dlgbox p {
+  margin: 0;
+}
+.dlgbox p + p {
+  margin-top: 8px;
+}
+.dlgbox b,
+.dlgbox strong {
+  color: var(--gold-l);
+  font-weight: 600;
+}
+.dlgbox.sm {
+  padding: 11px 15px 12px;
+  font-size: 14px;
+}
+.dlgbox.lg {
+  padding: 20px 24px 22px;
+  font-size: 16.5px;
+}
+.dlg-who {
+  display: block;
+  margin-bottom: 6px;
+  font-family: var(--f-m);
+  font-size: 9.5px;
+  font-style: normal;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+/* first-visit tips */
+.tip {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: center;
+  margin: 0 0 22px;
+  padding: 14px 16px;
+  border-radius: var(--rl);
+  border: 1px solid transparent;
+  background:
+    radial-gradient(100% 140% at 0% 50%, rgba(91, 155, 255, 0.1), transparent 60%) padding-box,
+    var(--slab) padding-box,
+    var(--edge) border-box;
+  animation: qUp 0.5s var(--rise) both;
+}
+.tip .dlgbox {
+  background: none;
+  border: 0;
+  padding: 0;
+  box-shadow: none;
+}
+@media (max-width: 640px) {
+  .tip {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+  .tip .b {
+    grid-column: 1/-1;
+    justify-self: end;
+  }
+}
+/* ---------- Adventure: chapter screen ---------- */
+.hm-top {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: minmax(0, 1fr);
+}
+@media (min-width: 1000px) {
+  #accueil.page.on {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    gap: 16px;
+    align-items: stretch;
+  }
+  #accueil .hm-top {
+    display: contents;
+  }
+  #accueil .hm-hero,
+  #accueil .resume,
+  #accueil .route {
+    grid-column: 1/-1;
+  }
+  #accueil .tcard {
+    grid-column: 1;
+  }
+  #accueil .hm-quick {
+    grid-column: 2;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: repeat(3, minmax(0, 1fr));
+    margin: 0;
+  }
+  #accueil .qk {
+    padding: 18px 20px;
+  }
+}
+.hm-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: clamp(18px, 3vw, 40px);
+  align-items: center;
+  padding: clamp(22px, 3vw, 40px) clamp(20px, 3vw, 40px) 0;
+  border-radius: var(--rl);
+  border: 1px solid transparent;
+  background:
+    radial-gradient(55% 85% at 16% 42%, color-mix(in srgb, var(--ac, #d4af6a) 26%, transparent), transparent 70%)
+      padding-box,
+    radial-gradient(70% 60% at 100% 0%, rgba(212, 175, 106, 0.07), transparent 60%) padding-box,
+    var(--veins) padding-box,
+    linear-gradient(160deg, #16171c, #0a0a0c 72%) padding-box,
+    var(--brass) border-box;
+  background-size:
+    auto,
+    auto,
+    560px 560px,
+    auto,
+    auto;
+  box-shadow:
+    0 40px 80px -42px #000,
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+.hm-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: repeating-linear-gradient(115deg, rgba(212, 175, 106, 0.025) 0 1px, transparent 1px 16px);
+  mask-image: linear-gradient(90deg, #000, transparent 70%);
+  -webkit-mask-image: linear-gradient(90deg, #000, transparent 70%);
+}
+
+.hh-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.hh-chips span {
+  padding: 4px 10px;
+  border-radius: 2px;
+  border: 1px solid rgba(212, 175, 106, 0.22);
+  background: rgba(10, 10, 12, 0.5);
+  font-family: var(--f-m);
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--tx2);
+}
+
+@media (max-width: 720px) {
+  .hm-hero {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+    text-align: center;
+    padding: 22px 18px 0;
+  }
+  .emb.bdg.xl {
+    width: 96px;
+  }
+  .av.xl,
+  .emb.ter.xl {
+    width: 92px;
+    height: 92px;
+  }
+  .av.xl b {
+    font-size: 30px;
+  }
+  .hh-chips {
+    justify-content: center;
+  }
+}

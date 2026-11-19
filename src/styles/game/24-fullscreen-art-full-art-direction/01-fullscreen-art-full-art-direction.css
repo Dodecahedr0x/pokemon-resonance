@@ -1,0 +1,373 @@
+/* ===== resonance-fullscreen-art-full-art-direction layer ===== */
+/* POKEMON RESONANCE 4.23 — full-screen art direction. Visual layer only. */
+:root {
+  --rx-bg: #06111c;
+  --rx-panel: #0d2232;
+  --rx-panel2: #132e40;
+  --rx-edge: rgba(126, 211, 224, 0.24);
+  --rx-cyan: #7ce8ee;
+  --rx-blue: #4a9ac1;
+  --rx-gold: #f5ce78;
+  --rx-text: #f3f8fb;
+  --rx-muted: #a9c1ce;
+  --rx-shadow: 0 26px 70px rgba(0, 0, 0, 0.42);
+}
+html {
+  background: #050c14;
+}
+body {
+  background:
+    radial-gradient(ellipse at 14% 4%, rgba(33, 133, 157, 0.22), transparent 32%),
+    radial-gradient(ellipse at 92% 22%, rgba(173, 120, 55, 0.12), transparent 30%),
+    linear-gradient(180deg, #071827 0%, #07111c 48%, #050b13 100%) !important;
+  color: var(--rx-text) !important;
+}
+body:before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.2;
+  background-image:
+    linear-gradient(rgba(129, 214, 226, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(129, 214, 226, 0.045) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: linear-gradient(#000, transparent 82%);
+}
+.page {
+  isolation: isolate;
+}
+.page.on {
+  animation: rx-page-in 0.42s cubic-bezier(0.2, 0.75, 0.2, 1) both;
+}
+@keyframes rx-page-in {
+  from {
+    opacity: 0.3;
+    filter: blur(3px);
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    filter: none;
+    transform: none;
+  }
+}
+.page .ph,
+.page .ph-sm {
+  margin-bottom: 24px;
+}
+.page .kick,
+.page .v4-kick {
+  color: var(--rx-cyan) !important;
+  letter-spacing: 0.23em !important;
+  font-weight: 900 !important;
+}
+.page .h1 {
+  font-size: clamp(32px, 4.5vw, 54px) !important;
+  line-height: 0.98 !important;
+  letter-spacing: -0.012em !important;
+}
+.page .sub {
+  color: #b4c9d4 !important;
+  max-width: 68ch;
+  line-height: 1.72 !important;
+}
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--rx-cyan) !important;
+  outline-offset: 3px;
+}
+.panel,
+.case,
+.resume,
+.tcard,
+.sel,
+.dock,
+.v4-panel,
+.v4-dexcard,
+.v4-dexlist,
+.v4-map,
+.v4-map-side > * {
+  border-color: var(--rx-edge) !important;
+  box-shadow:
+    var(--rx-shadow),
+    inset 0 1px rgba(255, 255, 255, 0.055) !important;
+}
+/* HOME: dramatic expedition command centre */
+#accueil {
+  gap: 18px;
+}
+#accueil .hm-top {
+  gap: 18px;
+}
+#accueil .hm-hero {
+  min-height: clamp(300px, 34vw, 430px) !important;
+  padding: clamp(22px, 4vw, 48px) !important;
+  border: 1px solid rgba(133, 227, 232, 0.42) !important;
+  border-radius: 28px !important;
+  background:
+    radial-gradient(ellipse at 22% 52%, color-mix(in srgb, var(--ac, #59c6c9) 32%, transparent), transparent 42%),
+    radial-gradient(ellipse at 86% 18%, rgba(246, 201, 113, 0.17), transparent 28%),
+    linear-gradient(118deg, rgba(4, 18, 30, 0.97) 0%, rgba(7, 32, 47, 0.9) 55%, rgba(8, 24, 35, 0.62) 100%) !important;
+  box-shadow:
+    0 32px 90px rgba(0, 0, 0, 0.48),
+    inset 0 1px rgba(255, 255, 255, 0.15) !important;
+}
+#accueil .hm-hero:before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  background:
+    repeating-linear-gradient(130deg, transparent 0 28px, rgba(173, 238, 237, 0.055) 29px 30px),
+    radial-gradient(
+      circle at 80% 50%,
+      transparent 0 115px,
+      rgba(119, 223, 229, 0.15) 116px 117px,
+      transparent 118px 150px,
+      rgba(119, 223, 229, 0.08) 151px 152px,
+      transparent 153px
+    );
+  mask-image: linear-gradient(90deg, transparent, #000 35%, #000);
+}
+#accueil .hm-hero:after {
+  content: '';
+  position: absolute;
+  right: 4%;
+  top: 50%;
+  width: clamp(190px, 25vw, 330px);
+  aspect-ratio: 1;
+  transform: translateY(-50%);
+  border-radius: 50%;
+  border: 1px solid rgba(124, 232, 238, 0.22);
+  box-shadow:
+    0 0 0 18px rgba(124, 232, 238, 0.035),
+    0 0 0 46px rgba(124, 232, 238, 0.025),
+    inset 0 0 65px rgba(124, 232, 238, 0.12);
+  animation: rx-orbit 24s linear infinite;
+  pointer-events: none;
+}
+@keyframes rx-orbit {
+  to {
+    transform: translateY(-50%) rotate(360deg);
+  }
+}
+
+#accueil .v4h-title {
+  font-size: clamp(38px, 5.3vw, 66px) !important;
+  text-shadow: 0 7px 35px rgba(0, 0, 0, 0.8) !important;
+}
+#accueil .v4h-sub {
+  font-size: clamp(14px, 1.2vw, 17px) !important;
+  max-width: 540px;
+}
+#accueil .v4h-chips span {
+  border: 1px solid rgba(124, 232, 238, 0.28) !important;
+  background: rgba(3, 17, 28, 0.62) !important;
+  backdrop-filter: blur(12px);
+}
+#accueil .v4-cta,
+#accueil .v4h-cta .b {
+  min-height: 52px !important;
+  border-radius: 15px !important;
+  box-shadow:
+    0 12px 30px rgba(0, 0, 0, 0.3),
+    0 0 24px rgba(245, 206, 120, 0.13) !important;
+}
+#accueil .tcard {
+  border: 1px solid rgba(245, 206, 120, 0.25) !important;
+  border-radius: 24px !important;
+  background:
+    radial-gradient(ellipse at 100% 0%, rgba(245, 206, 120, 0.14), transparent 42%),
+    linear-gradient(150deg, #142d3d, #091824) !important;
+  padding: 22px !important;
+}
+#accueil .hm-quick {
+  gap: 12px !important;
+}
+#accueil .hm-quick .qk {
+  position: relative;
+  overflow: hidden;
+  min-height: 104px !important;
+  border: 1px solid rgba(126, 211, 224, 0.22) !important;
+  border-radius: 19px !important;
+  background: linear-gradient(120deg, rgba(20, 52, 69, 0.96), rgba(7, 23, 35, 0.98)) !important;
+  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.27) !important;
+  transition:
+    transform 0.25s,
+    border-color 0.25s,
+    box-shadow 0.25s !important;
+}
+#accueil .hm-quick .qk:after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(110deg, transparent 25%, rgba(255, 255, 255, 0.07) 50%, transparent 75%);
+  transform: translateX(-120%);
+  transition: transform 0.7s;
+}
+#accueil .hm-quick .qk:hover {
+  transform: translateY(-4px) !important;
+  border-color: rgba(124, 232, 238, 0.62) !important;
+  box-shadow: 0 22px 44px rgba(0, 0, 0, 0.38) !important;
+}
+#accueil .hm-quick .qk:hover:after {
+  transform: translateX(120%);
+}
+#accueil .qk-ic {
+  width: 54px !important;
+  height: 54px !important;
+  border-radius: 16px !important;
+  background: linear-gradient(145deg, #1c566a, #102c3e) !important;
+  color: #a5f4f0 !important;
+  box-shadow:
+    inset 0 1px rgba(255, 255, 255, 0.15),
+    0 8px 20px rgba(0, 0, 0, 0.25);
+}
+#accueil .route {
+  margin-top: 22px !important;
+  border-radius: 25px !important;
+  border: 1px solid rgba(123, 213, 223, 0.34) !important;
+  box-shadow:
+    0 30px 75px rgba(0, 0, 0, 0.4),
+    inset 0 1px rgba(255, 255, 255, 0.13) !important;
+}
+#accueil .route:after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  box-shadow:
+    inset 0 0 80px rgba(3, 14, 21, 0.35),
+    inset 0 -35px 60px rgba(3, 14, 21, 0.28);
+}
+#accueil .rt-sign {
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  backdrop-filter: blur(10px);
+}
+#accueil .dlg {
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  backdrop-filter: blur(12px);
+}
+/* TEAM: make the roster feel like a collector's battle dossier */
+#pokedex .ph {
+  padding-bottom: 18px;
+}
+#pokedex .dock {
+  border-radius: 22px !important;
+  background: linear-gradient(115deg, #15394b, #0a1c2a) !important;
+  padding: 14px !important;
+}
+#pokedex .dexbar {
+  padding: 14px !important;
+  border: 1px solid var(--rx-edge) !important;
+  border-radius: 18px !important;
+  background: rgba(8, 25, 38, 0.82) !important;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.22) !important;
+}
+#pokedex .fam-grid {
+  gap: 18px !important;
+  perspective: 1400px;
+}
+#pokedex .fcard {
+  border: 1px solid rgba(127, 213, 224, 0.24) !important;
+  border-radius: 20px !important;
+  background: linear-gradient(155deg, #173448 0%, #0b1d2a 72%) !important;
+  box-shadow:
+    0 20px 42px rgba(0, 0, 0, 0.34),
+    inset 0 1px rgba(255, 255, 255, 0.08) !important;
+  overflow: hidden;
+  transition:
+    transform 0.28s,
+    border-color 0.28s,
+    box-shadow 0.28s !important;
+}
+#pokedex .fcard:hover {
+  transform: translateY(-7px) rotateX(1deg) !important;
+  border-color: rgba(124, 232, 238, 0.65) !important;
+  box-shadow:
+    0 30px 55px rgba(0, 0, 0, 0.48),
+    0 0 25px rgba(72, 185, 204, 0.12) !important;
+}
+#pokedex .fcard .fc-art {
+  filter: drop-shadow(0 12px 13px rgba(0, 0, 0, 0.4));
+}
+#pokedex .fcard .fc-name {
+  color: #f5fbff !important;
+}
+#pokedex .fcard .fc-stg {
+  background: linear-gradient(180deg, rgba(6, 19, 29, 0.9), rgba(5, 15, 23, 0.98)) !important;
+  border-top: 1px solid rgba(124, 232, 238, 0.16) !important;
+}
+#pokedex .ana-d {
+  border: 1px solid var(--rx-edge) !important;
+  border-radius: 20px !important;
+  background: linear-gradient(145deg, #122d3e, #081824) !important;
+  padding: 14px !important;
+}
+/* DEX page — correct dynamic page id */
+#dex .v4-dex {
+  grid-template-columns: minmax(0, 1fr) minmax(285px, 34%) !important;
+  gap: 18px !important;
+}
+#dex .v4-dexcard {
+  padding: 18px !important;
+  border: 1px solid rgba(127, 213, 224, 0.34) !important;
+  border-radius: 27px !important;
+  background:
+    radial-gradient(ellipse at 28% 12%, color-mix(in srgb, var(--c, #69d5d5) 21%, transparent), transparent 48%),
+    linear-gradient(155deg, #17374a, #091a27 78%) !important;
+  box-shadow:
+    0 30px 75px rgba(0, 0, 0, 0.42),
+    inset 0 1px rgba(255, 255, 255, 0.1) !important;
+}
+#dex .v4d-art {
+  min-height: 300px;
+  border-radius: 22px !important;
+  border: 1px solid rgba(148, 225, 231, 0.24) !important;
+  background:
+    radial-gradient(ellipse at 50% 55%, color-mix(in srgb, var(--c, #69d5d5) 38%, transparent), transparent 60%),
+    linear-gradient(145deg, #071824, #17384a) !important;
+}
+#dex .v4d-art img {
+  filter: drop-shadow(0 22px 20px rgba(0, 0, 0, 0.48)) !important;
+}
+#dex .v4d-info {
+  padding: 10px 6px;
+}
+#dex .v4d-n {
+  font-size: clamp(34px, 4vw, 52px) !important;
+}
+#dex .v4d-sec {
+  border: 1px solid rgba(128, 214, 224, 0.18) !important;
+  border-radius: 18px !important;
+  background: rgba(3, 17, 27, 0.55) !important;
+}
+#dex .v4-dexlist {
+  border: 1px solid rgba(127, 213, 224, 0.26) !important;
+  border-radius: 22px !important;
+  background: linear-gradient(180deg, #112f41, #081a27) !important;
+  box-shadow: 0 22px 50px rgba(0, 0, 0, 0.3) !important;
+}
+#dex .v4-dl {
+  min-height: 60px !important;
+  border-radius: 12px !important;
+}
+#dex .v4-dl img {
+  width: 52px !important;
+  height: 52px !important;
+  image-rendering: auto !important;
+  filter: drop-shadow(0 5px 5px rgba(0, 0, 0, 0.3));
+}
+#dex .v4-dl.on {
+  border-color: var(--rx-gold) !important;
+  background: linear-gradient(90deg, rgba(245, 206, 120, 0.2), rgba(124, 232, 238, 0.06)) !important;
+}

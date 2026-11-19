@@ -1,0 +1,203 @@
+/* ===================== v2.0 · Prestige ===================== */
+:focus-visible {
+  outline: 2px solid var(--gold-l);
+  outline-offset: 2px;
+}
+.b:focus-visible,
+.nv:focus-visible,
+.bn:focus-visible,
+.gd-t:focus-visible {
+  outline-offset: 3px;
+  box-shadow: 0 0 0 5px rgba(212, 175, 106, 0.14);
+}
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* --- opening screen --- */
+.splash {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  cursor: pointer;
+  color: var(--tx);
+  background:
+    radial-gradient(60% 50% at 50% 42%, rgba(212, 175, 106, 0.16), transparent 70%),
+    radial-gradient(120% 90% at 50% 120%, rgba(91, 155, 255, 0.08), transparent 60%),
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.012) 0 1px, transparent 1px 3px), #060608;
+  animation: spIn 0.7s ease-out both;
+}
+.splash::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(75% 75% at 50% 50%, transparent 55%, rgba(0, 0, 0, 0.75));
+}
+.sp-in {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  text-align: center;
+  max-width: 620px;
+}
+.sp-crest {
+  width: min(46vw, 190px);
+  height: auto;
+  overflow: visible;
+  filter: drop-shadow(0 0 22px rgba(212, 175, 106, 0.28));
+}
+.sp-crest circle,
+.sp-crest path,
+.sp-crest line {
+  fill: none;
+  stroke: #d4af6a;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.sp-r1 {
+  stroke-width: 1.2;
+  stroke-dasharray: 580;
+  stroke-dashoffset: 580;
+  animation: spDraw 1.6s 0.15s cubic-bezier(0.6, 0, 0.2, 1) forwards;
+}
+.sp-r2 {
+  stroke-width: 0.6;
+  stroke-opacity: 0.5;
+  stroke-dasharray: 492;
+  stroke-dashoffset: 492;
+  animation: spDraw 1.6s 0.35s cubic-bezier(0.6, 0, 0.2, 1) forwards;
+}
+.sp-ticks line {
+  stroke-width: 1;
+  stroke-opacity: 0.55;
+}
+.sp-ticks {
+  transform-origin: 100px 100px;
+  animation: spSpin 2.4s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.sp-hex {
+  stroke-width: 2.4;
+  stroke: #f2dda8 !important;
+  stroke-dasharray: 360;
+  stroke-dashoffset: 360;
+  animation: spDraw 1.2s 0.6s cubic-bezier(0.6, 0, 0.2, 1) forwards;
+}
+.sp-wave {
+  stroke-width: 3.2;
+  stroke: #fff3d2 !important;
+  stroke-dasharray: 160;
+  stroke-dashoffset: 160;
+  animation: spDraw 0.9s 1.2s cubic-bezier(0.6, 0, 0.2, 1) forwards;
+  filter: drop-shadow(0 0 6px rgba(255, 236, 190, 0.9));
+}
+.sp-k {
+  font-family: var(--f-m);
+  font-size: 11px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--gold);
+  animation: spUp 0.8s 1.1s ease-out both;
+}
+.sp-t {
+  display: grid;
+  justify-items: center;
+  margin: 0;
+  font-family: var(--f-d);
+  font-weight: 800;
+  line-height: 0.95;
+  font-size: clamp(44px, 9vw, 92px);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: linear-gradient(180deg, #fff6da 0%, #f2dda8 34%, #c9a35e 64%, #7e5c22 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: spTitle 1.3s 1.25s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.8));
+}
+.sp-t span {
+  font-size: 0.3em;
+  letter-spacing: 0.6em;
+  margin-bottom: 0.35em;
+  padding-left: 0.6em;
+}
+.sp-s {
+  font-size: 15px;
+  color: var(--tx2);
+  font-style: italic;
+  font-family: var(--f-d);
+  letter-spacing: 0.04em;
+  animation: spUp 0.8s 1.7s ease-out both;
+}
+.sp-go {
+  margin-top: 18px;
+  padding: 12px 26px;
+  border-radius: 999px;
+  border: 1px solid rgba(212, 175, 106, 0.5);
+  background: rgba(212, 175, 106, 0.06);
+  color: var(--gold-l);
+  font-family: var(--f-m);
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  cursor: pointer;
+  animation:
+    spUp 0.8s 2s ease-out both,
+    spPulse 2.2s 2.8s ease-in-out 3;
+}
+.splash.out {
+  animation: spOut 0.6s ease-in forwards;
+  pointer-events: none;
+}
+.splash.rm,
+.splash.rm * {
+  animation-duration: 1ms !important;
+  animation-delay: 0s !important;
+}
+@keyframes spIn {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes spOut {
+  to {
+    opacity: 0;
+    transform: scale(1.04);
+    filter: blur(3px);
+  }
+}
+@keyframes spDraw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes spSpin {
+  from {
+    transform: rotate(-40deg);
+    opacity: 0;
+  }
+}
+@keyframes spUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+@keyframes spTitle {
+  from {
+    opacity: 0;
+    letter-spacing: 0.5em;
+    filter: blur(8px);
+  }
+}
+@keyframes spPulse {
+  50% {
+    box-shadow: 0 0 0 8px rgba(212, 175, 106, 0.08);
+    border-color: #f2dda8;
+  }
+}

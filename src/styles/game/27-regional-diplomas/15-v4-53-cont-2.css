@@ -1,0 +1,368 @@
+/* <style id="resonance-seasonal-events-layer"> */
+.season-event {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  width: 100%;
+  margin: 10px 0;
+  padding: 11px 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(120, 220, 255, 0.45);
+  background: linear-gradient(135deg, rgba(60, 140, 200, 0.22), rgba(10, 30, 50, 0.6));
+  color: #eaf2f8;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.season-event-t {
+  flex: 1;
+  display: grid;
+  gap: 3px;
+}
+.season-event-t b {
+  font-size: 14px;
+}
+.season-event-t small {
+  color: #b8cddb;
+  font-size: 12px;
+}
+.season-event .cp-bar {
+  display: block;
+}
+
+/* <style id="resonance-boss-rush-ui"> */
+.boss-rush {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  width: 100%;
+  margin: 10px 0;
+  padding: 11px 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 120, 120, 0.5);
+  background: linear-gradient(135deg, rgba(200, 60, 60, 0.22), rgba(30, 10, 20, 0.6));
+  color: #eaf2f8;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.boss-rush-i {
+  flex: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-weight: 900;
+  background: #ff8a7a;
+  color: #2a0a0a;
+}
+.boss-rush-t {
+  display: grid;
+  gap: 2px;
+}
+.boss-rush-t small {
+  color: #d8b8b8;
+  font-size: 12px;
+}
+
+/* <style id="resonance-feats-ui"> */
+.feats-journal-e {
+  color: #ffd45b;
+  font-style: normal;
+  font-size: 12px;
+}
+.feats-journal-r small {
+  color: #b8cddb;
+}
+.feats-journal-r.lose {
+  opacity: 0.75;
+}
+
+/* <style id="resonance-defense-gym-ui"> */
+.defense-gym {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  width: 100%;
+  margin: 10px 0;
+  padding: 11px 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(120, 220, 160, 0.5);
+  background: linear-gradient(135deg, rgba(60, 170, 110, 0.22), rgba(10, 30, 25, 0.6));
+  color: #eaf2f8;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.defense-gym-i {
+  flex: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-weight: 900;
+  background: #7be0a0;
+  color: #062010;
+}
+.defense-gym-t {
+  display: grid;
+  gap: 2px;
+}
+.defense-gym-t small {
+  color: #b8d8c8;
+  font-size: 12px;
+}
+#defense-gym-hud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  align-items: center;
+  padding: 6px 10px;
+  margin: 4px 0;
+  border-radius: 12px;
+  background: rgba(10, 40, 30, 0.7);
+  border: 1px solid rgba(120, 220, 160, 0.4);
+  color: #eaf2f8;
+  font-size: 13px;
+}
+#defense-gym-hud span {
+  color: #ff8a9a;
+  letter-spacing: 2px;
+}
+#defense-gym-hud small {
+  flex-basis: 100%;
+  color: #b8d8c8;
+  font-size: 11px;
+}
+
+/* <style id="resonance-result-scroll"> */
+/* v4.69: result screen scrollable by finger (victory included) */
+#cbResult {
+  place-items: start center;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+}
+#cbResult > .res-card {
+  margin-block: auto;
+  max-height: none;
+  overflow: visible;
+}
+#cbResult > .res-card.result-fx {
+  overflow: hidden;
+  overflow: clip;
+}
+#cbResult .res-card > .res-a {
+  position: sticky;
+  bottom: env(safe-area-inset-bottom, 0px);
+  z-index: 3;
+  margin: 0 -14px -14px;
+  padding: 10px 12px 12px;
+  border-radius: 18px;
+  background: rgba(8, 20, 30, 0.96);
+  box-shadow: 0 -12px 24px -12px rgba(0, 0, 0, 0.8);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+#cbResult .res-card > .res-a > * {
+  flex: 1 1 28%;
+  min-width: 0;
+  justify-content: center;
+  text-align: center;
+}
+#cbResult .res-card > .res-a > .b-gold:first-child {
+  flex-basis: 100%;
+}
+@media (max-width: 999px) {
+  #cbResult {
+    padding-bottom: calc(var(--bn) + 16px + env(safe-area-inset-bottom, 0px));
+  }
+  #cbResult .res-card > .res-a {
+    bottom: -16px;
+  }
+  #cbResult .res-card > .res-a .b {
+    min-height: 44px;
+    padding: 8px 10px;
+    font-size: 13px;
+    line-height: 1.2;
+    white-space: normal;
+  }
+}
+/* Home: Boss Rush and Defense Arena side by side */
+@media (min-width: 340px) {
+  #boss-rush,
+  #defense-gym {
+    display: inline-flex;
+    width: calc(50% - 5px);
+    vertical-align: top;
+    margin: 0 0 10px;
+    padding: 10px 11px;
+    gap: 9px;
+  }
+  #boss-rush {
+    margin-right: 10px;
+  }
+  #boss-rush .boss-rush-t b,
+  #defense-gym .defense-gym-t b {
+    font-size: 13.5px;
+    line-height: 1.2;
+  }
+  #boss-rush .boss-rush-t small,
+  #defense-gym .defense-gym-t small {
+    font-size: 11.5px;
+    line-height: 1.3;
+  }
+  #boss-rush .boss-rush-i,
+  #defense-gym .defense-gym-i {
+    width: 26px;
+    height: 26px;
+  }
+}
+
+/* <style id="resonance-readable-sides"> */
+/* v4.77: readable sides, battle on phone without scrolling */
+/* --- sides: red = opponents, blue = your team --- */
+#bSvg .tok.enemy:not(.sel):not(.act):not(.evw) .tok-halo {
+  stroke: #ff4d57;
+  stroke-width: 2.6;
+  opacity: 1;
+  stroke-dasharray: none;
+}
+#bSvg .tok.ally:not(.sel):not(.act):not(.evw) .tok-halo {
+  stroke: #5aa8ff;
+  stroke-width: 2.2;
+  opacity: 1;
+  stroke-dasharray: none;
+}
+html body #bSvg .tok.enemy .tok-sh {
+  fill: rgba(255, 64, 72, 0.55);
+}
+html body #bSvg .tok.ally .tok-sh {
+  fill: rgba(80, 160, 255, 0.5);
+}
+html body #bSvg .tok.enemy .tok-nm {
+  fill: #ff9ba0 !important;
+}
+html body #bSvg .tok.ally .tok-nm {
+  fill: #a9d0ff !important;
+}
+html body #cbBattle #bPlE .plate {
+  background: linear-gradient(180deg, rgba(120, 22, 30, 0.55), rgba(40, 10, 16, 0.75)) !important;
+  border-color: rgba(255, 90, 100, 0.55) !important;
+}
+html body #cbBattle #bPlA .plate {
+  background: linear-gradient(180deg, rgba(20, 60, 120, 0.5), rgba(8, 22, 44, 0.75)) !important;
+  border-color: rgba(100, 170, 255, 0.5) !important;
+}
+html body #cbBattle #bPlE .plate.act,
+html body #cbBattle #bPlA .plate.act {
+  border-color: #ffe08a !important;
+  box-shadow: 0 0 0 2px rgba(255, 224, 138, 0.35) !important;
+}
+#cbBattle .plates {
+  position: relative;
+}
+#cbBattle #bPlE::before,
+#cbBattle #bPlA::before {
+  position: absolute;
+  z-index: 2;
+  top: -1px;
+  left: 12px;
+  transform: translateY(-50%);
+  padding: 1px 6px;
+  border-radius: 5px;
+  font: 700 8.5px/1.3 var(--f-m);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+#cbBattle #bPlE::before {
+  content: 'Adversaires';
+  background: #c8323c;
+  color: #fff;
+}
+#cbBattle #bPlA::before {
+  content: 'Votre équipe';
+  background: #2f6fd0;
+  color: #fff;
+}
+
+/* --- phone: the whole battle fits on screen --- */
+html body.compact-battle {
+  --bn: 0px;
+}
+html body.compact-battle .bnav {
+  display: none !important;
+}
+html body.compact-battle #combat.page.on {
+  padding-bottom: 0 !important;
+}
+html body.compact-battle .content {
+  padding-top: 6px !important;
+}
+html body.compact-battle #combat .bt {
+  padding: 6px !important;
+  border-radius: 18px !important;
+}
+html body.compact-battle #combat .bt-top {
+  padding: 4px 6px 6px !important;
+  min-height: 0 !important;
+  row-gap: 4px !important;
+}
+html body.compact-battle #cbBattle .plates {
+  padding: 8px 2px 2px !important;
+  margin: 0 !important;
+}
+html body.compact-battle #cbBattle .plates .plate {
+  padding: 3px 4px !important;
+  border-radius: 9px !important;
+}
+html body.compact-battle #cbBattle .plates .plate .medal.pm {
+  display: none !important;
+}
+html body.compact-battle #combat .board {
+  margin: 4px auto !important;
+  padding: 2px !important;
+  min-height: 0 !important;
+}
+html body.compact-battle #cbBattle .bt-side .bt-foot {
+  bottom: calc(6px + env(safe-area-inset-bottom, 0px)) !important;
+  padding: 6px 8px !important;
+  row-gap: 6px !important;
+  column-gap: 6px !important;
+  flex-wrap: wrap !important;
+}
+html body.compact-battle #cbBattle .bt-foot .board-tools.in-foot {
+  gap: 4px;
+}
+html body.compact-battle #cbBattle .bt-foot .board-tools.in-foot button {
+  width: 36px;
+  height: 36px;
+}
+html body.compact-battle #cbBattle .bt-foot #bEnd {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  height: 38px !important;
+  min-height: 38px !important;
+  padding: 0 10px !important;
+  white-space: nowrap;
+}
+html body.compact-battle #cbBattle .bt-foot .thumb-reach button {
+  min-height: 36px;
+}
+html body.compact-battle #cbBattle .bt-side {
+  padding-bottom: 110px;
+}
+/* the board keeps its shape but never exceeds the screen: banner + teams + bottom bar ≈ 335 px */
+html body.compact-battle #bBoard.vert #bSvg {
+  display: block;
+  width: 100% !important;
+  height: auto !important;
+  max-height: max(300px, calc(100dvh - 334px - env(safe-area-inset-bottom, 0px))) !important;
+  margin: 0 auto;
+}

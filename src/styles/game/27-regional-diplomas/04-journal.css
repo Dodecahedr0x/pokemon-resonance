@@ -1,0 +1,313 @@
+/* journal */
+.journal-report {
+  display: grid;
+  gap: 14px;
+}
+.stat-tile-g {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+.stat-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  min-width: 0;
+}
+.stat-tile b {
+  font-size: 18px;
+  color: #ffd45b;
+}
+.stat-tile span {
+  font-size: 11.5px;
+  color: #9fb3c2;
+}
+.journal-report-s {
+  padding: 12px 14px;
+}
+.journal-report-s h3 {
+  margin: 0 0 8px;
+  font-size: 14px;
+}
+.category-row {
+  display: grid;
+  grid-template-columns: minmax(0, 7em) minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  padding: 4px 0;
+  font-size: 13px;
+}
+.category-row-b {
+  height: 6px;
+  border-radius: 4px;
+  background: rgba(255, 120, 120, 0.25);
+  overflow: hidden;
+}
+.category-row-b i {
+  display: block;
+  height: 100%;
+  background: #6fdc8c;
+}
+.mvp-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 4px 10px;
+  align-items: center;
+  padding: 4px 0;
+  font-size: 13px;
+}
+.mvp-row em {
+  grid-column: 2/4;
+  font-style: normal;
+  font-size: 11.5px;
+  color: #9fb3c2;
+  margin-top: -4px;
+}
+.last-fight {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 2px 10px;
+  align-items: center;
+  padding: 6px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 12.5px;
+  color: #b9cad6;
+}
+.last-fight-r {
+  grid-row: span 2;
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  background: rgba(255, 110, 110, 0.18);
+  color: #ff9d9d;
+}
+.last-fight.w .last-fight-r {
+  background: rgba(110, 220, 140, 0.18);
+  color: #8fe3a8;
+}
+.last-fight-n {
+  color: #eaf2f8;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.last-fight em {
+  grid-column: 2;
+  font-style: normal;
+  color: #ffd45b;
+  font-size: 11.5px;
+}
+
+/* <style id="resonance-tactical-challenges"> */
+/* v4.31 · Camp sub-tabs */
+.camp-tab {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 4px;
+  padding: 6px;
+}
+.camp-tab::-webkit-scrollbar {
+  display: none;
+}
+.camp-tab button {
+  flex: none;
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(0, 0, 0, 0.25);
+  color: inherit;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.camp-tab button[aria-selected='true'] {
+  background: linear-gradient(145deg, #ffd45b, #e59a1f);
+  color: #241500;
+  border-color: transparent;
+}
+#camp-tab-body > section {
+  padding: 14px;
+}
+#camp-tab-body h3 {
+  font-size: 14px;
+  margin: 14px 0 8px;
+}
+
+/* fog of war */
+html body #bSvg .tok.fog-of-war {
+  opacity: 0 !important;
+  transition: opacity 0.3s;
+}
+html body #bSvg .hx.fog-of-war-t {
+  filter: brightness(0.42) saturate(0.5);
+}
+#bPlE .plate.fog-of-war .pl-b {
+  filter: blur(4px);
+  opacity: 0.5;
+}
+#bPlE .plate.fog-of-war .medal,
+#bPlE .plate.fog-of-war svg {
+  filter: grayscale(1) brightness(0.4);
+}
+
+/* riddles */
+.puzzle-tab-h {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.puzzle-tab-h em {
+  font-style: normal;
+  font-size: 11.5px;
+  color: #ffd45b;
+  font-weight: 500;
+}
+.puzzle-tab-j {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+.puzzle-tab-c {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  min-width: 0;
+  padding: 10px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 215, 94, 0.35);
+  background: rgba(255, 215, 94, 0.06);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.puzzle-tab-c.ok {
+  border-color: rgba(110, 220, 140, 0.5);
+  background: rgba(110, 220, 140, 0.07);
+}
+.puzzle-tab-n {
+  font-weight: 800;
+  font-size: 15px;
+}
+.puzzle-tab-m {
+  display: flex;
+  gap: 2px;
+}
+.puzzle-tab-c em {
+  font-style: normal;
+  font-size: 11px;
+  color: #9fb3c2;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.puzzle-tab-st {
+  color: #ffd45b;
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+.puzzle-tab-g {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(54px, 1fr));
+  gap: 6px;
+}
+.puzzle-tab-b {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  padding: 7px 2px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.03);
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+.puzzle-tab-b b {
+  font-size: 14px;
+}
+.puzzle-tab-b .puzzle-tab-st {
+  font-size: 9.5px;
+  letter-spacing: 0;
+}
+.puzzle-tab-b.ok {
+  border-color: rgba(255, 215, 94, 0.45);
+}
+
+/* mastery */
+.mastery-tab-l {
+  display: grid;
+  gap: 6px;
+}
+.mastery-tab-r {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 6px 10px;
+  align-items: center;
+  padding: 8px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+.mastery-tab-t {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+.mastery-tab-t b {
+  font-size: 14px;
+}
+.mastery-tab-t em {
+  font-style: normal;
+  font-size: 12px;
+  color: #9fb3c2;
+}
+.mastery-tab-r.on .mastery-tab-t em {
+  color: #ffd45b;
+}
+.mastery-tab-b {
+  height: 5px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+.mastery-tab-b i {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #4fc3ff, #ffd45b);
+}
+.mastery-tab-c {
+  grid-column: 1/-1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+.mastery-tab-c .b {
+  height: auto;
+  min-height: 44px;
+  padding: 6px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  white-space: normal;
+}
+.mastery-tab-c .b em {
+  font-style: normal;
+  font-size: 11px;
+  font-weight: 500;
+  opacity: 0.85;
+}

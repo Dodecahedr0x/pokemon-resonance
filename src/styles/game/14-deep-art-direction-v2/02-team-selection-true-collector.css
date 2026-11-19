@@ -1,0 +1,360 @@
+/* Team selection: true collector cards with large artwork, rarity/status and tactile states */
+#pokedex .dock {
+  padding: 12px !important;
+  margin-bottom: 13px !important;
+}
+#pokedex .dexbar {
+  display: flex !important;
+  gap: 9px !important;
+  align-items: center !important;
+  padding: 10px !important;
+  margin-bottom: 12px !important;
+}
+#pokedex .fam-grid {
+  grid-template-columns: repeat(auto-fill, minmax(205px, 1fr)) !important;
+  gap: 12px !important;
+}
+#pokedex .fcard {
+  position: relative !important;
+  overflow: hidden !important;
+  min-height: 325px !important;
+  border-radius: 16px !important;
+  background: linear-gradient(180deg, rgba(14, 50, 70, 0.97), rgba(5, 24, 39, 0.99)) !important;
+  border: 1px solid rgba(103, 210, 255, 0.25) !important;
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.23) !important;
+  transition:
+    transform 0.2s,
+    border-color 0.2s,
+    box-shadow 0.2s !important;
+}
+#pokedex .fcard:hover {
+  transform: translateY(-4px) !important;
+  border-color: rgba(255, 215, 91, 0.62) !important;
+  box-shadow: 0 18px 35px rgba(0, 0, 0, 0.32) !important;
+}
+#pokedex .fcard[aria-pressed='true'],
+#pokedex .fcard.selected {
+  border-color: #ffd45b !important;
+  box-shadow:
+    0 0 0 1px rgba(255, 212, 91, 0.32),
+    0 0 25px rgba(255, 190, 51, 0.12) !important;
+}
+#pokedex .fc-art {
+  height: 170px !important;
+  position: relative !important;
+  display: grid !important;
+  place-items: center !important;
+  background:
+    radial-gradient(ellipse at 50% 75%, rgba(58, 178, 225, 0.24), transparent 65%),
+    linear-gradient(135deg, rgba(20, 75, 100, 0.8), rgba(5, 24, 41, 0.8)) !important;
+  border-bottom: 1px solid rgba(112, 218, 255, 0.2) !important;
+  overflow: hidden !important;
+}
+#pokedex .fc-art::after {
+  content: '';
+  position: absolute;
+  inset: auto 12% 10px;
+  height: 13px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.35);
+  filter: blur(8px);
+}
+#pokedex .fc-art .pokemon-art-sprite {
+  width: clamp(130px, 14vw, 170px) !important;
+  height: clamp(130px, 14vw, 170px) !important;
+  object-fit: contain !important;
+  position: relative !important;
+  z-index: 1 !important;
+  filter: drop-shadow(0 8px 9px rgba(0, 0, 0, 0.4)) !important;
+  transition: transform 0.25s !important;
+}
+#pokedex .fcard:hover .pokemon-art-sprite {
+  transform: translateY(-5px) scale(1.05) !important;
+}
+#pokedex .fc-st {
+  padding: 12px 13px 13px !important;
+}
+#pokedex .fc-st b,
+#pokedex .fc-st strong {
+  color: #f5fbff !important;
+  font-size: 15px !important;
+}
+#pokedex .fc-st .chip,
+#pokedex .fc-st .type {
+  border-radius: 5px !important;
+  font-size: 9px !important;
+  letter-spacing: 0.04em !important;
+}
+#pokedex .fcard button {
+  border-radius: 8px !important;
+}
+/* Combat: arena is the visual anchor; commands are a clean tactical panel */
+#combat .sel {
+  overflow: hidden !important;
+  border-radius: 19px !important;
+}
+#combat .sel-tabs {
+  background: rgba(2, 16, 28, 0.55) !important;
+  border-bottom: 1px solid rgba(105, 214, 255, 0.2) !important;
+  padding: 8px !important;
+}
+#combat .sel-tabs button {
+  border-radius: 8px !important;
+}
+#combat .sel-body {
+  gap: 13px !important;
+  padding: 13px !important;
+}
+#combat .sel-list {
+  gap: 7px !important;
+}
+#combat .sel-list [role='option'] {
+  border-radius: 10px !important;
+  background: rgba(6, 28, 43, 0.8) !important;
+  border: 1px solid rgba(103, 211, 255, 0.17) !important;
+}
+#combat .sel-list [aria-selected='true'] {
+  border-color: #ffd45b !important;
+  background: linear-gradient(100deg, rgba(255, 207, 77, 0.17), rgba(12, 60, 81, 0.8)) !important;
+}
+#combat .bt {
+  background: linear-gradient(180deg, rgba(6, 30, 45, 0.7), rgba(3, 17, 29, 0.95)) !important;
+  border: 1px solid rgba(102, 214, 255, 0.24) !important;
+  border-radius: 19px !important;
+  padding: 12px !important;
+}
+#combat .bt-top {
+  border-bottom: 1px solid rgba(102, 214, 255, 0.2) !important;
+  padding-bottom: 10px !important;
+}
+#combat .board {
+  min-height: 360px !important;
+  margin: 12px 0 !important;
+  border: 1px solid rgba(110, 220, 255, 0.36) !important;
+  border-radius: 16px !important;
+  background:
+    linear-gradient(0deg, rgba(3, 19, 29, 0.18), rgba(3, 19, 29, 0.08)),
+    radial-gradient(ellipse at 50% 75%, rgba(54, 153, 177, 0.24), transparent 58%),
+    var(--resonance-landscape) center 60% / cover no-repeat !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05),
+    0 18px 36px rgba(0, 0, 0, 0.3) !important;
+  overflow: hidden !important;
+}
+#combat #bSvg {
+  filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.55));
+}
+#combat .bt-side {
+  gap: 10px !important;
+}
+#combat .bp {
+  border-radius: 15px !important;
+  background: linear-gradient(160deg, rgba(12, 46, 64, 0.98), rgba(4, 20, 34, 0.99)) !important;
+}
+#combat .plates > *,
+#combat .plate {
+  border-radius: 11px !important;
+  background: rgba(8, 37, 54, 0.92) !important;
+  border: 1px solid rgba(104, 215, 255, 0.25) !important;
+}
+/* Pokédex / type guide / league: visual hierarchy and rich panels */
+#types .gd-tabs {
+  gap: 6px !important;
+  margin-bottom: 14px !important;
+}
+#types .gd-t {
+  border-radius: 8px !important;
+  background: rgba(9, 38, 54, 0.85) !important;
+  border: 1px solid rgba(105, 214, 255, 0.2) !important;
+}
+#types .gd-t[aria-selected='true'] {
+  background: linear-gradient(120deg, #ffe17a, #efa92d) !important;
+  color: #142a38 !important;
+  border-color: #fff0a0 !important;
+}
+#types .gd-p {
+  padding: clamp(15px, 2vw, 26px) !important;
+}
+#types .gd-intro {
+  padding: 16px !important;
+  border-radius: 13px !important;
+  background: linear-gradient(110deg, rgba(15, 69, 91, 0.8), rgba(4, 25, 41, 0.7)) !important;
+  border: 1px solid rgba(107, 215, 255, 0.18) !important;
+}
+#types .s5 li {
+  background: rgba(7, 32, 47, 0.75) !important;
+  border: 1px solid rgba(102, 210, 255, 0.17) !important;
+  border-radius: 12px !important;
+  padding: 13px !important;
+}
+#ligue .case {
+  padding: 16px !important;
+}
+#ligue .case-h {
+  color: #ffe17b !important;
+  border-bottom: 1px solid rgba(110, 215, 255, 0.2) !important;
+  padding-bottom: 10px !important;
+}
+#ligue .badges {
+  gap: 10px !important;
+}
+#ligue .badges > * {
+  border-radius: 13px !important;
+  background: linear-gradient(145deg, rgba(15, 56, 76, 0.95), rgba(4, 23, 38, 0.98)) !important;
+  border: 1px solid rgba(108, 215, 255, 0.24) !important;
+  transition:
+    transform 0.2s,
+    border-color 0.2s !important;
+}
+#ligue .badges > *:hover {
+  transform: translateY(-3px) !important;
+  border-color: rgba(255, 213, 84, 0.55) !important;
+}
+#ligue .arena {
+  padding: clamp(14px, 2vw, 25px) !important;
+  margin-top: 14px !important;
+}
+/* all dialogs and controls use the same tactile glass language */
+input,
+select,
+textarea {
+  background: rgba(3, 22, 36, 0.9) !important;
+  border: 1px solid rgba(105, 212, 255, 0.26) !important;
+  border-radius: 9px !important;
+  color: #f2f9ff !important;
+}
+summary {
+  color: #f2f9ff !important;
+}
+hr {
+  border-color: rgba(104, 214, 255, 0.16) !important;
+}
+@media (max-width: 999px) {
+  .app {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+  .side {
+    display: none !important;
+  }
+  .content {
+    padding: 14px 12px 84px !important;
+  }
+  .wrap {
+    padding: 0 !important;
+  }
+  #accueil .hm-top {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+  #accueil .hm-hero {
+    min-height: 430px !important;
+  }
+  #accueil .hm-quick {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+  #accueil .qk:last-child {
+    grid-column: 1/-1;
+  }
+  #accueil .route {
+    height: 250px !important;
+  }
+  #pokedex .fam-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 9px !important;
+  }
+  #pokedex .fcard {
+    min-height: 290px !important;
+  }
+  #pokedex .fc-art {
+    height: 145px !important;
+  }
+  #pokedex .fc-art .pokemon-art-sprite {
+    width: 130px !important;
+    height: 130px !important;
+  }
+  #combat .board {
+    min-height: 280px !important;
+  }
+}
+@media (max-width: 560px) {
+  #accueil .hm-hero {
+    min-height: 440px !important;
+    background-position: 43% center !important;
+  }
+  #accueil .hm-quick {
+    grid-template-columns: 1fr !important;
+  }
+  #accueil .qk:last-child {
+    grid-column: auto;
+  }
+  #accueil .qk {
+    min-height: 82px !important;
+  }
+  #pokedex .fam-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+  #pokedex .fcard {
+    min-height: 265px !important;
+  }
+  #pokedex .fc-art {
+    height: 125px !important;
+  }
+  #pokedex .fc-art .pokemon-art-sprite {
+    width: 112px !important;
+    height: 112px !important;
+  }
+  #pokedex .fc-st {
+    padding: 9px !important;
+  }
+  #combat .board {
+    min-height: 230px !important;
+  }
+  #combat .sel-body {
+    padding: 8px !important;
+  }
+  #types .gd-tabs {
+    overflow-x: auto !important;
+    flex-wrap: nowrap !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+/* Final QA correction: hidden panels must never reserve layout space. */
+[hidden] {
+  display: none !important;
+}
+#accueil .hm-quick {
+  margin-bottom: 13px !important;
+}
+#accueil .route {
+  margin-top: 0 !important;
+  align-self: start !important;
+}
+#accueil .qk-grass {
+  background-image:
+    linear-gradient(0deg, rgba(3, 18, 29, 0.98), rgba(4, 28, 43, 0.42)), var(--resonance-landscape) !important;
+  background-position:
+    center,
+    32% 60% !important;
+}
+#accueil .qk-team {
+  background-image:
+    linear-gradient(0deg, rgba(3, 18, 29, 0.98), rgba(4, 28, 43, 0.4)), var(--resonance-landscape) !important;
+  background-position:
+    center,
+    65% 42% !important;
+}
+#accueil .qk-guide {
+  background-image:
+    linear-gradient(0deg, rgba(3, 18, 29, 0.98), rgba(4, 28, 43, 0.4)), var(--resonance-landscape) !important;
+  background-position:
+    center,
+    88% 55% !important;
+}

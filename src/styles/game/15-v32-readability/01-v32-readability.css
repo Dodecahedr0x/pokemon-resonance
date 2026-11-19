@@ -1,0 +1,261 @@
+/* ===== resonance-v32-readability layer ===== */
+/* =====================================================================
+   "READABILITY & PERFORMANCE" LAYER — v3.2
+   Changes neither the colors, nor the materials, nor the fonts of the
+   cinematic art direction. Only fixes:
+   1. the two labels placed on "full-frame" pseudo-elements
+   2. text that is too small on phone and tablet
+   3. home collisions on phone
+   4. the two looping animations that were hogging the CPU
+   ===================================================================== */
+
+/* ---------- 1. Decorative labels: they keep their place ----------
+   The old pseudo-elements covered the whole card (inset:0, z-index:-1,
+   mask). The text added on top inherited those settings: label clipped
+   on the home page, dark veil and blur over the whole Route 29. */
+html body #accueil .hm-hero::after {
+  left: auto !important;
+  bottom: auto !important;
+  width: auto !important;
+  height: auto !important;
+  z-index: 3 !important;
+  white-space: nowrap !important;
+  line-height: 1.2 !important;
+  -webkit-mask-image: none !important;
+  mask-image: none !important;
+  pointer-events: none !important;
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  background: rgba(4, 20, 34, 0.72) !important;
+  border: 1px solid rgba(123, 221, 255, 0.28) !important;
+  border-radius: 999px !important;
+  padding: 8px 13px !important;
+}
+html body #accueil .route::before {
+  right: auto !important;
+  bottom: auto !important;
+  width: auto !important;
+  height: auto !important;
+  box-shadow: none !important;
+  white-space: nowrap !important;
+  line-height: 1.2 !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  background: rgba(4, 22, 32, 0.86) !important;
+  font-size: 11px !important;
+}
+/* the original "Route 29" panel duplicated the new label */
+html body #accueil .route .rt-sign {
+  visibility: hidden !important;
+}
+
+/* ---------- 2. Visible selected state (first-launch difficulty) ---------- */
+html body .it-diff .b[aria-pressed='true'] {
+  background: linear-gradient(180deg, #ffe778, #f2b72e) !important;
+  color: #10263a !important;
+  border-color: rgba(255, 243, 174, 0.8) !important;
+  box-shadow: 0 6px 20px rgba(255, 196, 46, 0.16) !important;
+}
+
+/* ---------- 2 bis. Contrast ----------
+   shortcut icons: light blue on gold became invisible,
+   we reuse the midnight blue used on all the other gold buttons */
+html body #accueil .qk-ic {
+  color: #0b2236 !important;
+}
+/* team cards: "À capturer" (To capture) no longer slides under the quick button */
+html body .fc-art .fc-lock {
+  right: auto !important;
+  left: 8px !important;
+}
+
+/* ---------- 3. Desktop: no more text under 10 px ---------- */
+html body .hh-chips span,
+html body #accueil .hh-chips span {
+  font-size: 10px !important;
+}
+html body #resonance-launch .rl-meta,
+html body #resonance-launch .rl-meta strong {
+  font-size: 10.5px !important;
+}
+
+/* ---------- 4. Phone and tablet: minimum text size ---------- */
+@media (max-width: 999px) {
+  /* spaced capital labels */
+  html body .kick,
+  html body .lbl-s,
+  html body .dlg-who,
+  html body .dlg-n,
+  html body .case-h,
+  html body #accueil .hh-chips span,
+  html body .hh-chips span,
+  html body .srw-lv,
+  html body .pill,
+  html body #ptVoix span,
+  html body .ptc-m em,
+  html body .tod button,
+  html body #todBtns button,
+  html body .it-skip,
+  html body .co-n,
+  html body .co-a .b-sm,
+  html body .team-x .b-sm,
+  html body #bRound,
+  html body .voix span,
+  html body .evb-c,
+  html body .cnt,
+  html body dt,
+  html body .tc-k span,
+  html body #accueil .tc-k span,
+  html body .sel-tabs em,
+  html body #combat .sel-tabs em,
+  html body .fc-no,
+  html body #pokedex .fc-no,
+  html body .fc-chain em,
+  html body .chip,
+  html body .ac h4,
+  html body .ac h4 span {
+    font-size: 11px !important;
+  }
+  html body #accueil .kick {
+    font-size: 11px !important;
+  }
+  html body #resonance-launch .rl-meta,
+  html body #resonance-launch .rl-meta strong {
+    font-size: 11px !important;
+  }
+  html body .logo small {
+    font-size: 10px !important;
+  }
+  /* informational text */
+  html body #accueil .qk em,
+  html body #qkTeam,
+  html body .pl-s span,
+  html body .tr,
+  html body .tr-i,
+  html body .bm span,
+  html body .vx span,
+  html body #bPhase,
+  html body .syn-c,
+  html body #genSeg button,
+  html body .seg button {
+    font-size: 11.5px !important;
+  }
+  html body #accueil .qk em {
+    line-height: 1.35 !important;
+  }
+  /* bottom navigation bar */
+  html body .bnav .bn {
+    font-size: 11.5px !important;
+  }
+  /* team cards: dense, we gain a point without breaking the grid */
+  html body #pokedex .fc-role,
+  html body .fc-role,
+  html body #pokedex .fc-gen,
+  html body #pokedex .fc-st,
+  html body #pokedex .fc-lock,
+  html body #pokedex .types .tb,
+  html body .fc-gen,
+  html body .fc-st,
+  html body .fc-lock,
+  html body .types .tb,
+  html body .stg b,
+  html body .stg em,
+  html body #pokedex .stg b,
+  html body #pokedex .stg em {
+    font-size: 10.5px !important;
+  }
+}
+
+/* ---------- 5. Home on phone: no more overlap ---------- */
+@media (max-width: 640px) {
+  /* the label centers at the top, in short form */
+  html body #accueil .hm-hero::after {
+    content: 'KANTO  /  JOHTO  •  TON AVENTURE' !important;
+    top: 14px !important;
+    right: auto !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    font-size: 10px !important;
+    letter-spacing: 0.16em !important;
+    padding: 7px 12px !important;
+  }
+  /* the medallion goes above the title instead of covering it */
+
+  /* Route 29: the label no longer hides the Morning / Day / Night buttons */
+  html body #accueil .rt-top {
+    margin-top: 44px !important;
+  }
+  /* Battles: "Prochaine étape" (Next step) becomes a tab placed on the card,
+     the battle name gets the whole line back */
+  html body #combat .srw .pill.nx {
+    position: absolute !important;
+    top: -9px !important;
+    right: 12px !important;
+    z-index: 2 !important;
+    padding: 3px 9px !important;
+    letter-spacing: 0.12em !important;
+  }
+  html body #combat .srw:has(.pill.nx) {
+    margin-top: 8px !important;
+  }
+  /* board: readable Pokémon names and markers */
+  html body #bSvg .tok-nm {
+    font-size: 8px !important;
+    letter-spacing: 0.06em !important;
+  }
+  html body #bSvg .axl {
+    font-size: 8.5px !important;
+  }
+}
+
+/* ---------- 6. Performance: same effects, without looping repaints ---------- */
+/* "resonanceGlow" animated the shadow of the trainer card and Route 29,
+   but a fixed shadow marked !important overrides any animation:
+   the glow never appeared (0 pixels of difference, verified) while
+   repainting these two large cards 60 times per second. We stop it. */
+html body #accueil .tcard,
+html body #accueil .route {
+  animation: none !important;
+}
+/* same case on the launch screen: "launchDrift" is overridden by
+   transform:scale(1.005)!important, the landscape does not move
+   (0 pixels) but the animation cost ~93 % of the CPU on phone. */
+html body #resonance-launch .rl-scene {
+  animation: none !important;
+  will-change: auto !important;
+}
+@media (prefers-reduced-motion: no-preference) {
+  /* the dialog cursor still blinks, but on its own layer */
+  html body .dlg::after {
+    animation: resBlink 1.1s step-end infinite !important;
+    will-change: opacity;
+  }
+}
+@keyframes resBlink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* ---------- 6 bis. Fixed bars on phone ----------
+   The "resPageIn" page entry kept a transform afterwards
+   (fill mode "both"): the "Commencer" (Start) and "Fin du tour" (End turn) bars
+   scrolled with the page instead of staying at the bottom of the screen.
+   Same entry motion, but nothing is kept at the end. */
+html body .page.on {
+  animation-fill-mode: backwards !important;
+}
+
+/* ---------- 7. Launch screen: once per session ---------- */
+.rl-seen #resonance-launch {
+  display: none !important;
+}
+
+/* ---------- 8. Battles on phone: the footer goes above the fixed bar ---------- */
+@media (max-width: 999px) {
+  html body #combat.page.on {
+    padding-bottom: 84px !important;
+  }
+}

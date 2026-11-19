@@ -1,0 +1,387 @@
+/* =====================================================================
+   v0.9 · "Legend & Prestige: the Legacy of the Masters"
+   Obsidian, polished runic slabs, brushed brass and silver, smoked glass,
+   controlled energy glows. Purely visual layer.
+   ===================================================================== */
+@property --tint {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #4f8cff;
+}
+:root {
+  --bg: #0a0a0c;
+  --s0: #0c0c0f;
+  --s1: #101115;
+  --s2: #15161b;
+  --s3: #1b1d23;
+  --s4: #2a2c33;
+  --line: rgba(212, 175, 106, 0.09);
+  --line2: rgba(212, 175, 106, 0.17);
+  --line3: rgba(212, 175, 106, 0.32);
+  --tx: #eee8dc;
+  --tx2: #beb7a8;
+  --mut: #8c8679;
+  --fnt: #5f5a50;
+  --gold: #d4af6a;
+  --gold2: #9c7a3c;
+  --gold-s: rgba(212, 175, 106, 0.1);
+  --gold-l: #f2dda8;
+  --silver: #c9ced6;
+  --sapph: #5b9bff;
+  --sapph-l: #9cc4ff;
+  --amber: #f0a43a;
+  --crim: #e5484d;
+  --ally: #5b9bff;
+  --enemy: #e5484d;
+  --ok: #4db8ff;
+  --warn: #e8c26a;
+  --bad: #ff7a3d;
+  --f-d: 'Cinzel', 'Trajan Pro', Georgia, 'Times New Roman', serif;
+  --f-n: 'Archivo', 'Arial Narrow', Arial, sans-serif;
+  --rl: 12px;
+  --r: 9px;
+  --rs: 6px;
+  --brass: linear-gradient(135deg, #f4e2b2 0%, #c9a35e 24%, #8e6a2c 46%, #e8cf92 62%, #9c7a3c 82%, #f2dda8 100%);
+  --steel: linear-gradient(135deg, #e8ecf2 0%, #8d939c 26%, #4a4f58 48%, #c9ced6 66%, #6e737c 84%, #dde2ea 100%);
+  --brush: repeating-linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.045) 0 1px,
+    rgba(0, 0, 0, 0.035) 1px 2px,
+    transparent 2px 4px
+  );
+  --veins: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='560' height='560'><filter id='v' x='0' y='0' width='100%25' height='100%25'><feTurbulence type='fractalNoise' baseFrequency='.0035 .009' numOctaves='4' seed='3' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 .83 0 0 0 0 .69 0 0 0 0 .42 4 0 0 0 -1.9'/><feComponentTransfer><feFuncA type='table' tableValues='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .9 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0'/></feComponentTransfer></filter><rect width='100%25' height='100%25' filter='url(%23v)' opacity='.2'/></svg>");
+  --slab: linear-gradient(180deg, #17181d 0%, #111216 55%, #0d0e11 100%);
+  --edge: linear-gradient(
+    160deg,
+    rgba(242, 221, 168, 0.42),
+    rgba(212, 175, 106, 0.08) 30%,
+    rgba(201, 206, 214, 0.06) 62%,
+    rgba(212, 175, 106, 0.3)
+  );
+  --engrave:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05), inset 0 0 0 1px rgba(0, 0, 0, 0.55),
+    inset 0 0 0 2px rgba(212, 175, 106, 0.05), 0 26px 50px -32px rgba(0, 0, 0, 1);
+  --sh: var(--engrave);
+}
+html,
+body {
+  background-color: #0a0a0c;
+}
+body {
+  background-image:
+    var(--veins),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='27.71' height='48' viewBox='0 0 27.71 48'><path d='M13.86 0 27.71 8V24L13.86 32 0 24V8ZM13.86 32V48' fill='none' stroke='%23D4AF6A' stroke-opacity='.035' stroke-width='.8'/></svg>");
+  background-size:
+    560px 560px,
+    27.71px 48px;
+  color: var(--tx);
+}
+.ambient {
+  background:
+    radial-gradient(900px 520px at 85% -12%, color-mix(in srgb, var(--tint) 14%, transparent), transparent 66%),
+    radial-gradient(700px 480px at -10% 110%, rgba(212, 175, 106, 0.07), transparent 70%),
+    radial-gradient(150% 110% at 50% 35%, transparent 50%, rgba(0, 0, 0, 0.7) 100%);
+}
+::selection {
+  background: var(--gold);
+  color: #140f06;
+}
+:focus-visible {
+  outline: 1.5px solid var(--gold-l);
+  outline-offset: 3px;
+}
+
+/* ---------- typography ---------- */
+.h1,
+.h2,
+.h3,
+.hero h1,
+.sh-name,
+.st-name,
+.scn b,
+.howto b,
+.mvc b,
+.evd-h b,
+.eo-n b,
+.fc-name h3,
+.al b,
+.evb b,
+.bp-id b,
+.res-card .h1,
+.rxd h3,
+.cs .who,
+.log b,
+.efx-t1,
+.efx-t2 {
+  font-family: var(--f-d);
+  font-stretch: normal;
+}
+.h1 {
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  font-size: clamp(30px, 4.6vw, 54px);
+  line-height: 1.02;
+}
+.h2 {
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  font-size: clamp(22px, 2.8vw, 32px);
+  line-height: 1.08;
+}
+.h3 {
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  font-size: 14.5px;
+}
+.h1,
+.h2,
+.hero h1,
+.sh-name,
+.st-name {
+  background: linear-gradient(180deg, #fff8e8 10%, #e9d9b0 48%, #b8975a 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: none;
+}
+.hero h1 {
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  line-height: 0.95;
+  font-size: clamp(34px, 4.5vw, 74px);
+}
+.hero h1 span {
+  font-family: var(--f-d);
+  font-weight: 600;
+  letter-spacing: 0.42em;
+  font-size: 0.3em;
+  -webkit-text-fill-color: var(--gold);
+}
+@media (max-width: 880px) {
+  .hero h1 {
+    font-size: clamp(34px, 10.5vw, 74px);
+  }
+}
+.kick {
+  font-family: var(--f-m);
+  font-size: 10.5px;
+  letter-spacing: 0.3em;
+  color: var(--gold);
+}
+.kick::before {
+  width: 22px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold));
+}
+.kick::after {
+  content: '';
+  display: block;
+  order: -1;
+  width: 5px;
+  height: 5px;
+  margin-right: -4px;
+  transform: rotate(45deg);
+  background: var(--gold);
+  box-shadow: 0 0 6px rgba(212, 175, 106, 0.8);
+}
+
+.num,
+.kpi b,
+.dk b,
+#bRound b,
+.res-k b,
+.sc-n,
+.st-right b,
+.an-k,
+.st-no,
+.pt-h b,
+.bud-h b,
+.bp-hp > span,
+.pl-s > span:first-child,
+.fc-no,
+.sh-no,
+.f-dmg,
+.f-heal,
+.fl,
+.mk-lv,
+.rl b,
+.brk b {
+  font-family: var(--f-n);
+  font-stretch: 72%;
+  font-variant-numeric: tabular-nums lining-nums;
+  letter-spacing: -0.01em;
+}
+.kpi b {
+  font-weight: 700;
+  font-size: clamp(30px, 3.6vw, 44px);
+  background: linear-gradient(180deg, #fff6df, #d4af6a 70%, #8e6a2c);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.kpi span {
+  font-family: var(--f-m);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--mut);
+}
+.st-no {
+  font-weight: 800;
+  -webkit-text-stroke: 1px rgba(212, 175, 106, 0.22);
+}
+.an-k {
+  font-weight: 800;
+  -webkit-text-stroke: 1px rgba(212, 175, 106, 0.35);
+}
+.lbl-s,
+.ac h4,
+.sh-sec h4,
+.bp-en .lbl-s,
+.case-h,
+.scn .lvl,
+.bdg span,
+.arena dt {
+  font-family: var(--f-m);
+  letter-spacing: 0.24em;
+}
+
+/* ---------- surfaces: runic slabs ---------- */
+.panel,
+.ac,
+.opt,
+.rule,
+.scn,
+.an,
+.kpis,
+.howto > div,
+.evd,
+.mvc,
+.ptm,
+.stab,
+.bm,
+.vx,
+.plate,
+.res-card,
+.ep-card,
+.enc .enc-card,
+.dock,
+.bp-en,
+.st-evo,
+.st-line,
+.qc,
+.duo,
+.wx,
+.case,
+.arena,
+.cs,
+.mx-wrap .rxd,
+.rxd,
+.it,
+.rp,
+.champ,
+.note,
+.sh {
+  border: 1px solid transparent;
+  background:
+    var(--veins) padding-box,
+    var(--slab) padding-box,
+    var(--edge) border-box;
+  background-size:
+    560px 560px,
+    auto,
+    auto;
+  box-shadow: var(--engrave);
+}
+.panel,
+.ac,
+.opt,
+.an,
+.rule,
+.scn,
+.qc,
+.duo,
+.case,
+.res-card,
+.ep-card,
+.enc .enc-card,
+.dock,
+.champ {
+  border-radius: var(--rl);
+}
+.evd,
+.mvc,
+.ptm,
+.stab,
+.bm,
+.vx,
+.plate,
+.bp-en,
+.st-evo,
+.st-line,
+.howto > div,
+.wx,
+.cs,
+.it,
+.rp,
+.note,
+.arena {
+  border-radius: var(--r);
+}
+.note {
+  background:
+    linear-gradient(180deg, rgba(212, 175, 106, 0.1), rgba(212, 175, 106, 0.03)) padding-box,
+    var(--slab) padding-box,
+    var(--brass) border-box;
+}
+.sh {
+  border-radius: 0;
+  border-left: 1px solid transparent;
+  background:
+    var(--veins) padding-box,
+    linear-gradient(180deg, #141519, #0c0d10) padding-box,
+    linear-gradient(180deg, rgba(212, 175, 106, 0.5), rgba(212, 175, 106, 0.08)) border-box;
+}
+.dock {
+  background:
+    var(--veins) padding-box,
+    linear-gradient(180deg, rgba(23, 24, 29, 0.94), rgba(12, 13, 16, 0.94)) padding-box,
+    var(--edge) border-box;
+}
+.rule[open],
+.scn.on,
+.ptm.on,
+.stab.on,
+.bm.on,
+.vx.on,
+.plate.act {
+  background:
+    linear-gradient(180deg, rgba(212, 175, 106, 0.12), rgba(212, 175, 106, 0.02)) padding-box,
+    var(--slab) padding-box,
+    var(--brass) border-box;
+}
+.opt {
+  background:
+    radial-gradient(120% 90% at 100% 0%, color-mix(in srgb, var(--c) 13%, transparent), transparent 62%) padding-box,
+    var(--veins) padding-box,
+    var(--slab) padding-box,
+    var(--edge) border-box;
+}
+.opt .ico {
+  border-radius: 4px;
+  transform: rotate(45deg);
+  width: 34px;
+  height: 34px;
+  margin: 4px;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--c) 34%, #0a0a0c), #0a0a0c);
+  border: 1px solid color-mix(in srgb, var(--c) 55%, transparent);
+  box-shadow:
+    0 0 14px -4px var(--c),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+.opt .ico svg {
+  transform: rotate(-45deg);
+}
+.opt .tg {
+  letter-spacing: 0.24em;
+}

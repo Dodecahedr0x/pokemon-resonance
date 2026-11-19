@@ -1,0 +1,102 @@
+/* <style id="resonance-turn-flow"> */
+/* v4.78 : guided turn flow */
+#bPanel .turn-guide {
+  margin: 8px 0;
+  padding: 8px 10px;
+  border: 1px solid rgba(255, 214, 102, 0.35);
+  border-radius: 10px;
+  background: rgba(255, 214, 102, 0.07);
+}
+#bPanel .turn-guide-h {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+#bPanel .turn-guide-p {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+}
+#bPanel .turn-guide-p li {
+  color: var(--mut);
+  opacity: 0.7;
+}
+#bPanel .turn-guide-p li.ok {
+  opacity: 1;
+}
+#bPanel .turn-guide-p li.ok::before {
+  content: '✓ ';
+  color: var(--gold);
+}
+#bPanel .turn-guide-p li.on {
+  opacity: 1;
+  color: var(--gold);
+  font-weight: 700;
+}
+#bPanel .turn-guide-p li.sep {
+  opacity: 0.4;
+}
+#bPanel .turn-guide-n {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--mut);
+  white-space: nowrap;
+}
+#bPanel .turn-guide-r {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+#bPanel .turn-guide-r p {
+  margin: 0;
+  flex: 1;
+  font-size: 13px;
+  line-height: 1.35;
+}
+#bPanel .turn-guide-r .b {
+  flex: none;
+}
+#bPanel .vx.turn-guide-hi {
+  box-shadow: 0 0 0 2px var(--gold);
+}
+#cbBattle .turn-guide-pied {
+  display: none;
+}
+html body.compact-battle #cbBattle .bt-foot .turn-guide-pied:not([hidden]) {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  order: 3;
+  margin-left: auto;
+  min-width: 0;
+  height: 38px;
+  padding: 0 12px;
+  border: 1px solid rgba(255, 214, 102, 0.45);
+  border-radius: 12px;
+  background: rgba(255, 214, 102, 0.08);
+  font-size: 12.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+html body.compact-battle #cbBattle .bt-foot .turn-guide-pied b {
+  color: var(--gold);
+}
+
+/* ---------- screen headers: one instruction at a time ----------
+   When Prof. Sorbier's tip (.tip) follows the header, it already says what to do:
+   the subtitle returns once the tip is closed. On phone, the overline repeats the navigation bar. */
+.ph:has(+ .tip) .sub {
+  display: none !important;
+}
+@media (max-width: 700px) {
+  .page .ph > .kick {
+    display: none !important;
+  }
+}

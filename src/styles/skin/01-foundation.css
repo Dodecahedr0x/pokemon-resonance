@@ -1,0 +1,383 @@
+:root {
+  --pk-r1: #ff6c72;
+  --pk-r2: #e3262f;
+  --pk-r3: #a8131c;
+  --pk-cr: #f7f2e6;
+  --pk-ink: #151a22;
+  --pk-cy: #6fdcff;
+  --pk-or: #ffd35a;
+}
+
+/* ---------- background: large line-art Poké Ball ---------- */
+#pk-fond {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+  contain: strict;
+}
+#pk-fond i {
+  position: absolute;
+  width: 118vmin;
+  height: 118vmin;
+  right: -46vmin;
+  bottom: -30vmin;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cg fill='none' stroke='%238fd3ff' stroke-opacity='0.07' stroke-width='2.6'%3E%3Ccircle cx='50' cy='50' r='46'/%3E%3Cpath d='M4 50h31M65 50h31'/%3E%3Ccircle cx='50' cy='50' r='15'/%3E%3Ccircle cx='50' cy='50' r='7'/%3E%3C/g%3E%3C/svg%3E")
+    center/contain no-repeat;
+  transform: rotate(-12deg);
+}
+#pk-fond i + i {
+  width: 64vmin;
+  height: 64vmin;
+  right: auto;
+  left: -30vmin;
+  bottom: auto;
+  top: 14vh;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cg fill='none' stroke='%23ffd35a' stroke-opacity='0.06' stroke-width='2.6'%3E%3Ccircle cx='50' cy='50' r='46'/%3E%3Cpath d='M4 50h31M65 50h31'/%3E%3Ccircle cx='50' cy='50' r='15'/%3E%3Ccircle cx='50' cy='50' r='7'/%3E%3C/g%3E%3C/svg%3E");
+  transform: rotate(18deg);
+}
+
+/* ---------- top bar: Pokédex head ---------- */
+html:not(#pkz) body:not(#pkz) header.topbar {
+  background: linear-gradient(180deg, rgba(11, 27, 50, 0.98), rgba(6, 16, 31, 0.95)) !important;
+}
+html:not(#pkz) body:not(#pkz) header.topbar::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 2px;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(227, 38, 47, 0.9) 16%,
+    #ffd35a 50%,
+    rgba(227, 38, 47, 0.9) 84%,
+    transparent
+  );
+}
+html:not(#pkz) body:not(#pkz) a.logo {
+  position: relative;
+}
+html:not(#pkz) body:not(#pkz) a.logo .lg-ic {
+  position: relative;
+  border-radius: 50% !important;
+  background: radial-gradient(circle at 34% 30%, #e6fbff 0 2.5px, #8ee6ff 4px, #1a86d6 58%, #08386a 100%) !important;
+  box-shadow:
+    0 0 0 2px #e9eef5,
+    0 0 0 3.5px #12161d,
+    0 0 16px rgba(111, 220, 255, 0.55) !important;
+  color: #fff !important;
+  border: 0 !important;
+}
+html:not(#pkz) body:not(#pkz) a.logo .lg-ic::after {
+  content: '';
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(111, 220, 255, 0.55);
+  animation: pkHalo 2.8s ease-out infinite;
+  pointer-events: none;
+}
+.topbar a.logo .pk-leds {
+  position: absolute !important;
+  top: 7px;
+  right: 12px;
+  display: flex !important;
+  gap: 4px;
+  pointer-events: none;
+  width: auto !important;
+  height: auto !important;
+  background: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+}
+.topbar a.logo .pk-leds i {
+  display: block;
+  flex: none;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ff4b53;
+  box-shadow: 0 0 6px #ff4b53;
+  animation: pkLed 2.4s ease-in-out infinite;
+}
+.topbar a.logo .pk-leds i:nth-child(2) {
+  background: #ffd23a;
+  box-shadow: 0 0 6px #ffd23a;
+  animation-delay: 0.4s;
+}
+.topbar a.logo .pk-leds i:nth-child(3) {
+  background: #46e07c;
+  box-shadow: 0 0 6px #46e07c;
+  animation-delay: 0.8s;
+}
+
+/* ---------- bottom bar: Poké Balls ---------- */
+html:not(#pkz) body:not(#pkz) nav.bnav {
+  background: linear-gradient(180deg, rgba(13, 28, 50, 0.97), rgba(5, 12, 24, 0.99)) !important;
+  border-top: 0 !important;
+  box-shadow: 0 -12px 30px -14px rgba(0, 0, 0, 0.85) !important;
+}
+html:not(#pkz) body:not(#pkz) nav.bnav::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 2px;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(227, 38, 47, 0.9) 18%,
+    #ffd35a 50%,
+    rgba(227, 38, 47, 0.9) 82%,
+    transparent
+  );
+}
+html:not(#pkz) body:not(#pkz) nav.bnav .bn .ic {
+  position: relative;
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 50% !important;
+  display: grid !important;
+  place-items: center !important;
+  margin-inline: auto;
+  background: linear-gradient(
+      90deg,
+      rgba(150, 190, 235, 0.34) 0 20%,
+      transparent 20% 80%,
+      rgba(150, 190, 235, 0.34) 80%
+    )
+    center/100% 1.5px no-repeat !important;
+  box-shadow: inset 0 0 0 1.5px rgba(150, 190, 235, 0.24) !important;
+  transition: transform 0.2s ease;
+}
+html:not(#pkz) body:not(#pkz) nav.bnav .bn .ic svg {
+  width: 16px !important;
+  height: 16px !important;
+}
+html:not(#pkz) body:not(#pkz) nav.bnav .bn:active .ic {
+  transform: scale(0.9);
+}
+html:not(#pkz) body:not(#pkz) nav.bnav .bn[aria-current='page'] .ic {
+  background:
+    radial-gradient(circle at 50% 50%, #fff 0 8.5px, #151a22 9.1px 11px, transparent 11.6px),
+    radial-gradient(circle at 32% 20%, rgba(255, 255, 255, 0.72) 0 2.7px, transparent 4.3px),
+    linear-gradient(180deg, #ff7076 0%, #e3262f 45%, #151a22 45% 55%, #f7f2e6 55%, #d4cab3 100%) !important;
+  box-shadow:
+    0 0 0 1.5px #151a22,
+    0 5px 14px -3px rgba(255, 60, 70, 0.7),
+    0 0 18px rgba(255, 205, 90, 0.22) !important;
+  color: #151a22 !important;
+  animation: pkSecoue 0.75s cubic-bezier(0.3, 1.4, 0.5, 1) both;
+}
+html:not(#pkz) body:not(#pkz) nav.bnav .bn[aria-current='page'] .ic svg {
+  width: 11px !important;
+  height: 11px !important;
+  color: #151a22 !important;
+}
+html:not(#pkz) body:not(#pkz) nav.bnav .bn[aria-current='page'] .ic::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 211, 90, 0.6);
+  animation: pkHalo 1s ease-out 0.15s both;
+  pointer-events: none;
+}
+
+/* ---------- page header: Pokédex entry ---------- */
+html:not(#pkz) body:not(#pkz) .ph {
+  overflow-x: clip;
+}
+html:not(#pkz) body:not(#pkz) .ph::before {
+  content: '';
+  position: absolute;
+  right: 4px;
+  top: -6px;
+  width: 128px;
+  height: 128px;
+  pointer-events: none;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cg fill='none' stroke='%23ffffff' stroke-opacity='0.1' stroke-width='2.6'%3E%3Ccircle cx='50' cy='50' r='46'/%3E%3Cpath d='M4 50h31M65 50h31'/%3E%3Ccircle cx='50' cy='50' r='15'/%3E%3Ccircle cx='50' cy='50' r='7'/%3E%3C/g%3E%3C/svg%3E")
+    center/contain no-repeat;
+  transform: rotate(-15deg);
+  z-index: 0;
+}
+html:not(#pkz) body:not(#pkz) .ph > * {
+  position: relative;
+  z-index: 1;
+}
+html:not(#pkz) body:not(#pkz) .kick::before {
+  content: '' !important;
+  display: inline-block !important;
+  width: 7px !important;
+  height: 7px !important;
+  min-width: 7px;
+  border-radius: 50% !important;
+  border: 0 !important;
+  transform: none !important;
+  background: radial-gradient(circle at 35% 32%, #ffc2c5, #ff3b44 55%, #9c0f17) !important;
+  box-shadow: 0 0 8px rgba(255, 60, 70, 0.95) !important;
+  animation: pkLed 2.4s ease-in-out infinite;
+  margin-right: 7px;
+  vertical-align: 1px;
+  flex: none;
+}
+
+/* ---------- tabs: Poké Ball capsules ---------- */
+html:not(#pkz) body:not(#pkz) .v4-tabs,
+html:not(#pkz) body:not(#pkz) .v4-reg,
+html:not(#pkz) body:not(#pkz) .gd-tabs,
+html:not(#pkz) body:not(#pkz) .v4-cats,
+html:not(#pkz) body:not(#pkz) .v4-seg,
+html:not(#pkz) body:not(#pkz) .scn-tabs,
+html:not(#pkz) body:not(#pkz) .stabs {
+  background: linear-gradient(180deg, rgba(2, 9, 18, 0.74), rgba(6, 16, 30, 0.62)) !important;
+  border: 1px solid rgba(130, 185, 240, 0.16) !important;
+  box-shadow:
+    inset 0 2px 9px rgba(0, 0, 0, 0.5),
+    0 1px 0 rgba(255, 255, 255, 0.04) !important;
+  border-radius: 18px !important;
+  padding: 5px !important;
+  gap: 5px !important;
+}
+html:not(#pkz) body:not(#pkz) .v4-tabs > button,
+html:not(#pkz) body:not(#pkz) .v4-reg > button,
+html:not(#pkz) body:not(#pkz) .gd-tabs > button,
+html:not(#pkz) body:not(#pkz) .v4-cats > button,
+html:not(#pkz) body:not(#pkz) .v4-seg > button,
+html:not(#pkz) body:not(#pkz) .scn-tabs > button,
+html:not(#pkz) body:not(#pkz) .stabs > .stab {
+  position: relative;
+  border-radius: 999px !important;
+  border: 1px solid transparent !important;
+  background: transparent !important;
+  color: #b9cbe0 !important;
+  box-shadow: none !important;
+  transition:
+    color 0.2s,
+    transform 0.15s !important;
+  -webkit-tap-highlight-color: transparent;
+}
+html:not(#pkz) body:not(#pkz) .v4-tabs > button:active,
+html:not(#pkz) body:not(#pkz) .v4-reg > button:active,
+html:not(#pkz) body:not(#pkz) .gd-tabs > button:active,
+html:not(#pkz) body:not(#pkz) .v4-cats > button:active,
+html:not(#pkz) body:not(#pkz) .v4-seg > button:active,
+html:not(#pkz) body:not(#pkz) .scn-tabs > button:active,
+html:not(#pkz) body:not(#pkz) .stabs > .stab:active {
+  transform: scale(0.95);
+}
+html:not(#pkz) body:not(#pkz) .v4-tabs > button:not(:has(svg))::before,
+html:not(#pkz) body:not(#pkz) .v4-reg > button:not(:has(svg))::before,
+html:not(#pkz) body:not(#pkz) .gd-tabs > button:not(:has(svg))::before,
+html:not(#pkz) body:not(#pkz) .v4-cats > button:not(:has(svg))::before,
+html:not(#pkz) body:not(#pkz) .v4-seg > button:not(:has(svg))::before,
+html:not(#pkz) body:not(#pkz) .scn-tabs > button:not(:has(svg))::before,
+html:not(#pkz) body:not(#pkz) .stabs > .stab:not(:has(svg))::before {
+  content: '';
+  display: inline-block;
+  flex: none;
+  width: 11px;
+  height: 11px;
+  margin-right: 7px;
+  vertical-align: -1px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, #0f141c 0 1.5px, rgba(185, 203, 224, 0) 1.6px 2.6px, transparent 2.7px),
+    linear-gradient(180deg, rgba(185, 203, 224, 0.55) 0 42%, #0f141c 42% 58%, rgba(185, 203, 224, 0.3) 58%);
+  box-shadow: 0 0 0 1px rgba(185, 203, 224, 0.5);
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+html:not(#pkz) body:not(#pkz) .v4-tabs > button:is([aria-selected='true'], [aria-pressed='true'], .on),
+html:not(#pkz) body:not(#pkz) .v4-reg > button:is([aria-selected='true'], [aria-pressed='true'], .on),
+html:not(#pkz) body:not(#pkz) .gd-tabs > button:is([aria-selected='true'], [aria-pressed='true'], .on),
+html:not(#pkz) body:not(#pkz) .v4-cats > button:is([aria-selected='true'], [aria-pressed='true'], .on),
+html:not(#pkz) body:not(#pkz) .v4-seg > button:is([aria-selected='true'], [aria-pressed='true'], .on),
+html:not(#pkz) body:not(#pkz) .scn-tabs > button:is([aria-selected='true'], [aria-pressed='true'], .on),
+html:not(#pkz) body:not(#pkz) .stabs > .stab:is([aria-selected='true'], [aria-pressed='true'], .on) {
+  background:
+    radial-gradient(130% 120% at 50% -30%, rgba(255, 255, 255, 0.4), transparent 52%),
+    linear-gradient(180deg, #ff676d 0%, #e3262f 52%, #b3141d 100%) !important;
+  color: #fff !important;
+  border-color: rgba(255, 175, 175, 0.6) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -2px 0 rgba(80, 0, 8, 0.35),
+    0 8px 18px -10px rgba(255, 40, 50, 0.95),
+    0 0 0 1px rgba(60, 0, 6, 0.45) !important;
+  text-shadow: 0 1px 1px rgba(90, 0, 10, 0.5);
+  animation: pkPop 0.45s cubic-bezier(0.2, 1.5, 0.4, 1) both;
+}
+html:not(#pkz) body:not(#pkz) .v4-tabs > button:is([aria-selected='true'], [aria-pressed='true'], .on) svg,
+html:not(#pkz) body:not(#pkz) .v4-reg > button:is([aria-selected='true'], [aria-pressed='true'], .on) svg,
+html:not(#pkz) body:not(#pkz) .gd-tabs > button:is([aria-selected='true'], [aria-pressed='true'], .on) svg,
+html:not(#pkz) body:not(#pkz) .v4-cats > button:is([aria-selected='true'], [aria-pressed='true'], .on) svg,
+html:not(#pkz) body:not(#pkz) .v4-seg > button:is([aria-selected='true'], [aria-pressed='true'], .on) svg,
+html:not(#pkz) body:not(#pkz) .scn-tabs > button:is([aria-selected='true'], [aria-pressed='true'], .on) svg,
+html:not(#pkz) body:not(#pkz) .stabs > .stab:is([aria-selected='true'], [aria-pressed='true'], .on) svg {
+  color: #fff !important;
+}
+html:not(#pkz)
+  body:not(#pkz)
+  .v4-tabs
+  > button:is([aria-selected='true'], [aria-pressed='true'], .on):not(:has(svg))::before,
+html:not(#pkz)
+  body:not(#pkz)
+  .v4-reg
+  > button:is([aria-selected='true'], [aria-pressed='true'], .on):not(:has(svg))::before,
+html:not(#pkz)
+  body:not(#pkz)
+  .gd-tabs
+  > button:is([aria-selected='true'], [aria-pressed='true'], .on):not(:has(svg))::before,
+html:not(#pkz)
+  body:not(#pkz)
+  .v4-cats
+  > button:is([aria-selected='true'], [aria-pressed='true'], .on):not(:has(svg))::before,
+html:not(#pkz)
+  body:not(#pkz)
+  .v4-seg
+  > button:is([aria-selected='true'], [aria-pressed='true'], .on):not(:has(svg))::before,
+html:not(#pkz)
+  body:not(#pkz)
+  .scn-tabs
+  > button:is([aria-selected='true'], [aria-pressed='true'], .on):not(:has(svg))::before,
+html:not(#pkz)
+  body:not(#pkz)
+  .stabs
+  > .stab:is([aria-selected='true'], [aria-pressed='true'], .on):not(:has(svg))::before {
+  opacity: 1;
+  background:
+    radial-gradient(circle, #fff 0 1.6px, #151a22 1.7px 2.8px, transparent 2.9px),
+    linear-gradient(180deg, #fff 0 42%, #151a22 42% 58%, #efe9dc 58%);
+  box-shadow:
+    0 0 0 1px #151a22,
+    0 0 7px rgba(255, 255, 255, 0.7);
+  animation: pkRoule 0.6s ease-out both;
+}
+html:not(#pkz) body:not(#pkz) .v4-tabs > button:is([aria-selected='true'], [aria-pressed='true'], .on)::after,
+html:not(#pkz) body:not(#pkz) .v4-reg > button:is([aria-selected='true'], [aria-pressed='true'], .on)::after,
+html:not(#pkz) body:not(#pkz) .gd-tabs > button:is([aria-selected='true'], [aria-pressed='true'], .on)::after,
+html:not(#pkz) body:not(#pkz) .v4-cats > button:is([aria-selected='true'], [aria-pressed='true'], .on)::after,
+html:not(#pkz) body:not(#pkz) .v4-seg > button:is([aria-selected='true'], [aria-pressed='true'], .on)::after,
+html:not(#pkz) body:not(#pkz) .scn-tabs > button:is([aria-selected='true'], [aria-pressed='true'], .on)::after,
+html:not(#pkz) body:not(#pkz) .stabs > .stab:is([aria-selected='true'], [aria-pressed='true'], .on)::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(105deg, transparent 38%, rgba(255, 255, 255, 0.42) 50%, transparent 62%) 140% 0/260% 100%
+    no-repeat;
+  animation: pkReflet 1.1s ease-out 0.25s 1 both;
+}
+html:not(#pkz) body:not(#pkz) .gd-tabs {
+  border-radius: 999px !important;
+}

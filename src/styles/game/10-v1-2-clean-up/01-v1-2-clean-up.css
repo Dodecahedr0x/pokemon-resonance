@@ -1,0 +1,305 @@
+/* ===================== v1.2 · clean-up ===================== */
+/* navigation: no counters or team in the sidebar */
+.side .steam {
+  display: none;
+}
+.nv .k:not(#sideSaveK) {
+  display: none;
+}
+.lnk {
+  display: inline;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: var(--gold-l);
+  text-decoration: underline;
+  text-decoration-color: rgba(212, 175, 106, 0.45);
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.lnk:hover {
+  color: #fff0c8;
+}
+.ph .sub {
+  max-width: 640px;
+}
+/* Guide */
+.gd-tabs {
+  position: sticky;
+  top: 0;
+  z-index: 15;
+  display: flex;
+  gap: 4px;
+  margin: 4px 0 22px;
+  padding: 6px;
+  border-radius: var(--r);
+  border: 1px solid transparent;
+  background:
+    linear-gradient(180deg, rgba(18, 19, 23, 0.97), rgba(10, 10, 12, 0.97)) padding-box,
+    var(--edge) border-box;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.gd-tabs::-webkit-scrollbar {
+  display: none;
+}
+.gd-t {
+  flex: 1 0 auto;
+  min-height: 40px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 3px;
+  background: none;
+  color: var(--tx2);
+  font-family: var(--f-d);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-size: 12.5px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.gd-t[aria-selected='true'] {
+  color: #1a1205;
+  background: linear-gradient(135deg, #f6e6bc, #c9a15e 55%, #9c7735);
+}
+.gd-t:not([aria-selected='true']):hover {
+  color: var(--gold-l);
+  background: rgba(212, 175, 106, 0.08);
+}
+.gd-p[hidden] {
+  display: none;
+}
+.gd-intro {
+  margin-bottom: 16px;
+}
+.gd-intro .d {
+  max-width: 720px;
+  color: var(--tx2);
+  margin-top: 6px;
+}
+.gd-p .sec {
+  margin-top: 52px;
+}
+.gd-p .howto {
+  margin-top: 0;
+}
+@media (max-width: 999px) {
+  .gd-tabs {
+    top: calc(56px + env(safe-area-inset-top, 0px));
+    margin-inline: -2px;
+  }
+  .gd-t {
+    padding: 0 12px;
+    font-size: 11.5px;
+  }
+}
+/* Team */
+#filters {
+  display: none;
+}
+.dexbar select#dexRole {
+  min-width: 0;
+}
+.ana-d {
+  margin-top: 28px;
+  border-radius: var(--rl);
+  border: 1px solid transparent;
+  background:
+    var(--slab) padding-box,
+    var(--edge) border-box;
+}
+.ana-d > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 18px;
+  cursor: pointer;
+  list-style: none;
+}
+.ana-d > summary::-webkit-details-marker {
+  display: none;
+}
+.ana-d > summary em {
+  font-style: normal;
+  font-family: var(--f-m);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--gold-l);
+}
+.ana-d > summary::after {
+  content: '';
+  width: 9px;
+  height: 9px;
+  flex: none;
+  border-right: 1.5px solid var(--gold);
+  border-bottom: 1.5px solid var(--gold);
+  transform: rotate(45deg);
+  transition: transform 0.2s;
+}
+.ana-d[open] > summary::after {
+  transform: rotate(-135deg);
+}
+.ana-d[open] > summary {
+  border-bottom: 1px solid rgba(212, 175, 106, 0.12);
+}
+.ana-d .ana-grid {
+  padding: 16px;
+}
+.dex-call {
+  display: grid;
+  gap: 10px;
+  padding: 12px 14px;
+  margin-bottom: 14px;
+  background:
+    var(--slab) padding-box,
+    var(--edge) border-box;
+}
+.dc-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+.dc-row > .lbl-s {
+  flex: none;
+  width: 150px;
+}
+.dex-call .dc-stars {
+  display: flex;
+  gap: 6px;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  padding-bottom: 2px;
+}
+.dex-call .dc-s {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 10px 5px 6px;
+  border-radius: 999px;
+  border: 1px solid rgba(212, 175, 106, 0.28);
+  background: #0e0f12;
+}
+.dex-call .dc-s b {
+  font-family: var(--f-b, inherit);
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 12.5px;
+  font-weight: 600;
+}
+.dex-call .dc-s em {
+  font-family: var(--f-m);
+  font-size: 10px;
+  color: var(--gold);
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: rgba(212, 175, 106, 0.12);
+}
+.dex-call .dc-s.on {
+  border-color: #e9c97e;
+  background: linear-gradient(180deg, rgba(212, 175, 106, 0.24), rgba(212, 175, 106, 0.06));
+}
+.dex-call .dc-f {
+  display: flex;
+  gap: 6px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  padding-bottom: 2px;
+}
+.dex-call .dc-f .b {
+  flex: none;
+}
+@media (max-width: 700px) {
+  .dc-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+  }
+  .dc-row > .lbl-s {
+    width: auto;
+  }
+}
+/* Preparation */
+.scn-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+  margin-bottom: 12px;
+}
+.scn-tabs button {
+  display: grid;
+  gap: 2px;
+  justify-items: start;
+  padding: 10px 12px;
+  border-radius: var(--r);
+  border: 1px solid transparent;
+  background:
+    var(--slab) padding-box,
+    var(--edge) border-box;
+  color: var(--tx2);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.scn-tabs button b {
+  font-family: var(--f-d);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-size: 13px;
+  color: var(--tx);
+}
+.scn-tabs button em {
+  font-style: normal;
+  font-family: var(--f-m);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--mut);
+}
+.scn-tabs button[aria-selected='true'] {
+  background:
+    linear-gradient(180deg, rgba(212, 175, 106, 0.16), rgba(212, 175, 106, 0.03)) padding-box,
+    var(--slab) padding-box,
+    var(--brass) border-box;
+}
+.scn-tabs button[aria-selected='true'] b {
+  color: var(--gold-l);
+}
+#scenList {
+  display: grid;
+  gap: 8px;
+  align-content: start;
+}
+.scn:not(.on) .scn-art {
+  height: 30px;
+}
+.scn-gyms .scn:not(.on) .scn-art {
+  height: 30px;
+}
+.scn:not(.on) .scn-bdg {
+  width: 30px;
+  top: 2px;
+}
+.scn:not(.on) {
+  padding-bottom: 14px;
+}
+.scn .lvl {
+  font-size: 9.5px;
+}
+.pt-syn {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  padding-top: 8px;
+  border-top: 1px solid rgba(212, 175, 106, 0.12);
+}
+.pt-syn .lnk {
+  font-size: 11.5px;
+  margin-left: auto;
+}

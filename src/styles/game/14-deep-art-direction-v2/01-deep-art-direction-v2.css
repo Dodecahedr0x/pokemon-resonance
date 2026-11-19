@@ -1,0 +1,331 @@
+/* ===== resonance-deep-art-direction-v2 layer ===== */
+/* FINAL PASS — integrated cinematic Pokémon UI, not a static mockup */
+:root {
+  --bg: #06111b;
+  --s0: #081722;
+  --s1: #0a2030;
+  --s2: #0d2b40;
+  --s3: #12384f;
+  --gold: #ffd45b;
+  --gold2: #f2ad32;
+  --tx: #f3f8ff;
+  --tx2: #bdd4e2;
+  --mut: #85a5b8;
+  --line: rgba(113, 218, 255, 0.19);
+  --line2: rgba(113, 218, 255, 0.32);
+}
+body {
+  background:
+    radial-gradient(ellipse at 70% -12%, rgba(24, 108, 151, 0.28), transparent 50%),
+    linear-gradient(135deg, #06111b, #071a28 55%, #08131e) !important;
+  color: #f3f8ff !important;
+}
+.ambient {
+  opacity: 0.8;
+  background:
+    radial-gradient(900px 560px at 90% -10%, rgba(37, 155, 210, 0.22), transparent 68%),
+    radial-gradient(800px 520px at -10% 100%, rgba(255, 192, 64, 0.07), transparent 70%) !important;
+}
+.app {
+  grid-template-columns: 232px minmax(0, 1fr) !important;
+  background: transparent !important;
+}
+.side {
+  background: linear-gradient(180deg, rgba(4, 20, 32, 0.97), rgba(3, 14, 24, 0.97)) !important;
+  border-right: 1px solid rgba(102, 210, 255, 0.25) !important;
+  box-shadow: 12px 0 40px rgba(0, 0, 0, 0.18) !important;
+  padding: 25px 14px 18px !important;
+  gap: 24px !important;
+}
+.logo {
+  padding: 8px 9px 18px !important;
+  border-bottom: 1px solid rgba(111, 219, 255, 0.16) !important;
+}
+.logo b {
+  font-size: 16px !important;
+  letter-spacing: 0.13em !important;
+  color: #fff4ca !important;
+}
+.logo small {
+  color: #85a9be !important;
+  letter-spacing: 0.12em !important;
+}
+.side-nav {
+  gap: 5px !important;
+}
+.nv {
+  min-height: 43px !important;
+  border-radius: 11px !important;
+  font-size: 13px !important;
+  color: #c2d9e7 !important;
+}
+.nv.on,
+.nv[aria-current='page'] {
+  background: linear-gradient(100deg, rgba(255, 205, 73, 0.24), rgba(28, 131, 170, 0.28)) !important;
+  border: 1px solid rgba(255, 211, 85, 0.34) !important;
+  box-shadow:
+    inset 3px 0 #ffd45b,
+    0 8px 22px rgba(0, 0, 0, 0.16) !important;
+}
+.side-goal,
+.steam {
+  background: linear-gradient(145deg, rgba(12, 49, 68, 0.95), rgba(4, 22, 36, 0.97)) !important;
+  border: 1px solid rgba(94, 206, 255, 0.23) !important;
+  border-radius: 15px !important;
+}
+.content {
+  padding: 18px 22px 54px !important;
+}
+.wrap {
+  max-width: 1600px !important;
+  padding-inline: 0 !important;
+}
+.page.on {
+  animation: resPageIn 0.35s ease-out both !important;
+}
+@keyframes resPageIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.kick {
+  color: #ffdc70 !important;
+  font-size: 10px !important;
+  letter-spacing: 0.19em !important;
+}
+.h1 {
+  font-size: clamp(28px, 3vw, 43px) !important;
+  line-height: 1.02 !important;
+  letter-spacing: -0.035em !important;
+}
+.h2 {
+  font-size: clamp(20px, 2vw, 28px) !important;
+}
+.sub {
+  font-size: 13px !important;
+  line-height: 1.55 !important;
+  color: #bad0de !important;
+}
+.ph {
+  gap: 8px !important;
+  margin-bottom: 22px !important;
+}
+.tcard,
+.resume,
+.panel,
+.sec,
+.case,
+.sel-card,
+.pt,
+.bp,
+.rules,
+.codex,
+.items,
+.duos,
+.ana-grid > *,
+.kpis > *,
+.sel,
+.dock,
+.dexbar,
+.gd-p,
+.arena,
+.elite-case {
+  background: linear-gradient(145deg, rgba(10, 39, 56, 0.96), rgba(4, 20, 34, 0.98)) !important;
+  border: 1px solid rgba(100, 210, 255, 0.24) !important;
+  box-shadow:
+    0 16px 38px rgba(0, 0, 0, 0.23),
+    inset 0 1px rgba(255, 255, 255, 0.04) !important;
+  border-radius: 17px !important;
+}
+.b,
+.b-ghost {
+  border-radius: 10px !important;
+}
+.b-gold,
+.b.b-gold {
+  background: linear-gradient(110deg, #fff1a0, #ffd04c 53%, #f2a92c) !important;
+  color: #152b36 !important;
+  border: 1px solid #fff1a2 !important;
+  border-radius: 11px !important;
+  box-shadow:
+    0 4px 0 #9b681d,
+    0 10px 20px rgba(0, 0, 0, 0.22) !important;
+  font-weight: 850 !important;
+}
+/* HOME: cinematic banner + actual progress/party column + illustrated action cards */
+#accueil.page.on {
+  display: block !important;
+}
+#accueil .hm-top {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.72fr) minmax(260px, 0.78fr) !important;
+  gap: 13px !important;
+  align-items: stretch !important;
+}
+#accueil .hm-hero {
+  grid-column: auto !important;
+  min-height: clamp(330px, 31vw, 430px) !important;
+  border-radius: 20px !important;
+  border: 1px solid rgba(111, 220, 255, 0.48) !important;
+  background:
+    linear-gradient(90deg, rgba(2, 16, 29, 0.83) 0%, rgba(2, 18, 31, 0.42) 48%, rgba(2, 18, 31, 0.03) 82%),
+    linear-gradient(0deg, rgba(2, 14, 24, 0.83), transparent 58%),
+    var(--resonance-landscape) center 52% / cover no-repeat !important;
+  box-shadow:
+    0 22px 55px rgba(0, 0, 0, 0.38),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05) !important;
+}
+#accueil .hm-hero::after {
+  content: 'KANTO  /  JOHTO  •  TON AVENTURE COMMENCE ICI' !important;
+  top: 16px !important;
+  right: 18px !important;
+  font-size: 8px !important;
+  letter-spacing: 0.17em !important;
+  color: #e7f8ff !important;
+}
+.hh-chips span {
+  background: rgba(5, 26, 41, 0.78) !important;
+  border: 1px solid rgba(122, 218, 255, 0.35) !important;
+  border-radius: 6px !important;
+  color: #e7f7ff !important;
+  padding: 5px 9px !important;
+  font-size: 10px !important;
+}
+#accueil #campBox {
+  grid-column: auto !important;
+  min-height: 100% !important;
+  padding: 17px !important;
+  background: linear-gradient(180deg, rgba(10, 45, 65, 0.97), rgba(4, 21, 35, 0.98)) !important;
+  border: 1px solid rgba(106, 220, 255, 0.34) !important;
+  border-radius: 19px !important;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28) !important;
+}
+#accueil .tc-h {
+  gap: 10px !important;
+}
+.tc-av {
+  border: 1px solid rgba(255, 218, 94, 0.6) !important;
+  background: linear-gradient(145deg, #ffd65b, #9d6d25) !important;
+  color: #122331 !important;
+}
+.tc-n .h2 {
+  font-size: 20px !important;
+}
+.tc-bdg {
+  padding: 12px 0 !important;
+  border-block: 1px solid rgba(105, 213, 255, 0.15) !important;
+}
+.tcb {
+  background: rgba(255, 255, 255, 0.04) !important;
+  border: 1px solid rgba(111, 219, 255, 0.17) !important;
+  border-radius: 8px !important;
+}
+.tc-k > div {
+  background: rgba(2, 14, 24, 0.42) !important;
+  border: 1px solid rgba(110, 215, 255, 0.13) !important;
+  border-radius: 10px !important;
+  padding: 10px 6px !important;
+}
+.tc-k b {
+  color: #ffe17c !important;
+  font-size: 20px !important;
+}
+.tc-k span {
+  font-size: 10px !important;
+  color: #a9c5d6 !important;
+}
+.tc-team {
+  border-radius: 10px !important;
+  background: rgba(5, 23, 37, 0.7) !important;
+  border: 1px solid rgba(108, 218, 255, 0.18) !important;
+  padding: 10px !important;
+}
+#accueil .hm-quick {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+  margin: 13px 0 !important;
+}
+#accueil .qk {
+  position: relative !important;
+  overflow: hidden !important;
+  min-height: 112px !important;
+  display: flex !important;
+  align-items: flex-end !important;
+  padding: 15px !important;
+  border-radius: 15px !important;
+  border: 1px solid rgba(104, 211, 255, 0.3) !important;
+  background:
+    linear-gradient(0deg, rgba(3, 18, 29, 0.98), rgba(4, 28, 43, 0.68)),
+    var(--resonance-landscape) center/cover !important;
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2) !important;
+  transition:
+    transform 0.22s,
+    border-color 0.22s !important;
+}
+#accueil .qk::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(120deg, rgba(70, 198, 255, 0.13), transparent 60%);
+  opacity: 0.9;
+}
+#accueil .qk:hover {
+  transform: translateY(-3px) !important;
+  border-color: rgba(255, 215, 93, 0.6) !important;
+}
+#accueil .qk-ic {
+  position: absolute !important;
+  right: 12px !important;
+  top: 9px !important;
+  opacity: 0.65 !important;
+  color: #9ce8ff !important;
+}
+#accueil .qk > span:last-child {
+  position: relative !important;
+  z-index: 1 !important;
+}
+#accueil .qk b {
+  display: block !important;
+  font-size: 14px !important;
+  color: #fff !important;
+}
+#accueil .qk em {
+  font-size: 10px !important;
+  color: #c4dbe8 !important;
+}
+#accueil .route {
+  height: clamp(210px, 22vw, 290px) !important;
+  margin: 0 !important;
+  border-radius: 17px !important;
+  border: 1px solid rgba(104, 215, 255, 0.3) !important;
+  overflow: hidden !important;
+  background:
+    linear-gradient(0deg, rgba(3, 17, 27, 0.24), rgba(3, 17, 27, 0.03)),
+    var(--resonance-landscape) center 65% / cover no-repeat !important;
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.27) !important;
+}
+#accueil .rt-ui {
+  padding: 15px !important;
+}
+.rt-sign {
+  background: rgba(4, 25, 39, 0.85) !important;
+  border: 1px solid rgba(255, 213, 85, 0.45) !important;
+  border-radius: 7px !important;
+  color: #ffe17b !important;
+}
+.dlg {
+  background: rgba(3, 20, 33, 0.83) !important;
+  border: 1px solid rgba(106, 218, 255, 0.24) !important;
+  border-radius: 11px !important;
+  backdrop-filter: blur(12px) !important;
+}
+.dlg p {
+  color: #e8f5ff !important;
+}

@@ -1,0 +1,338 @@
+/* ---------- BATTLE: preparation ---------- */
+.scn-art {
+  display: block;
+  height: 58px;
+  margin: -18px -20px 4px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.6);
+  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.06);
+}
+.scn.bio-gue .scn-art {
+  background:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='58'><path d='M0 46q10-6 20 0t20 0' fill='none' stroke='%23A8D4FF' stroke-opacity='.35'/><path d='M6 58l3-14 2 14M26 58l2-10 2 10' stroke='%2389C66B' stroke-opacity='.5' fill='none'/></svg>"),
+    linear-gradient(180deg, #2e5e3a, #1a3324 60%, #1d4f79);
+}
+.scn.bio-roche .scn-art {
+  background:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='60' height='58'><path d='M0 30 20 12l14 12 12-8 14 14V58H0Z' fill='%23000' fill-opacity='.25'/><path d='M0 40h22l6 4h32M10 50h14l4-4h18' stroke='%23000' stroke-opacity='.35' fill='none'/></svg>"),
+    linear-gradient(180deg, #7a5a34, #4a3a28);
+}
+.scn.bio-tour .scn-art {
+  background:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='80' height='58'><path d='M30 58V22l6-8 6 8v36M34 30h4M34 40h4' stroke='%23000' stroke-opacity='.45' fill='%23000' fill-opacity='.3'/><circle cx='64' cy='14' r='6' fill='%23E9E6FF' fill-opacity='.6'/><circle cx='12' cy='20' r='1' fill='white'/><circle cx='52' cy='34' r='1' fill='white' fill-opacity='.6'/></svg>"),
+    linear-gradient(180deg, #2b2147, #120e1f);
+}
+.scn.bio-ligue .scn-art {
+  background:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='64' height='58'><path d='M-4 20C10 14 18 30 34 22S56 6 70 14M-4 48C14 40 24 56 40 46S60 34 70 40' stroke='%23E3C07A' stroke-opacity='.3' fill='none'/></svg>"),
+    linear-gradient(180deg, #26304a, #0e1322);
+}
+.scn .foes .fo {
+  position: relative;
+  display: inline-flex;
+}
+.scn .foes .fo.gr::after {
+  content: '';
+  position: absolute;
+  right: -3px;
+  top: -3px;
+  width: 9px;
+  height: 9px;
+  transform: rotate(45deg);
+  border-radius: 2px;
+  background: linear-gradient(135deg, #ffb3b3, #ff6767);
+  box-shadow: 0 0 0 1.5px #0b0d12;
+}
+.scn::after {
+  z-index: 0;
+}
+.ptm em.ch {
+  color: var(--gold-l);
+}
+.ptm em.st {
+  color: var(--mut);
+}
+.pt-h b {
+  font-variant-numeric: tabular-nums;
+}
+.howto .hn {
+  background: linear-gradient(180deg, #f6dda4, #c9a05a);
+  color: #1a1307;
+  border: 0;
+  font-weight: 600;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+/* ---------- BATTLE: arena ---------- */
+.bt {
+  border: 1px solid transparent;
+  background:
+    var(--hatch) padding-box,
+    linear-gradient(180deg, #12161e, #0a0c11) padding-box,
+    var(--bevel) border-box;
+}
+.bt-top {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.6);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+#bRound b {
+  color: var(--gold-l);
+  font-family: var(--f-d);
+  font-stretch: 118%;
+  font-size: 15px;
+}
+.voix i {
+  width: 12px;
+  height: 12px;
+  border: 0;
+  transform: rotate(45deg);
+  border-radius: 2px;
+  background: #141922;
+  box-shadow: inset 0 0 0 1.5px rgba(227, 192, 122, 0.55);
+}
+.voix i.on {
+  background: linear-gradient(135deg, #fff3cf, #e3c07a 45%, #a9843f);
+  box-shadow:
+    0 0 0 1px rgba(255, 241, 199, 0.5),
+    0 0 10px rgba(227, 192, 122, 0.6);
+}
+.board {
+  position: relative;
+  margin: 0 12px;
+  padding: 8px;
+  border-radius: 18px;
+  border: 1.5px solid transparent;
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 0, 0, 0.8),
+    inset 0 0 50px rgba(0, 0, 0, 0.55),
+    0 24px 50px -30px #000;
+}
+.board.bio-gue {
+  background:
+    radial-gradient(120% 90% at 50% 0%, #24452a, #0e1a12) padding-box,
+    var(--gold-grad) border-box;
+}
+.board.bio-roche {
+  background:
+    radial-gradient(120% 90% at 50% 0%, #433322, #16110b) padding-box,
+    var(--gold-grad) border-box;
+}
+.board.bio-tour {
+  background:
+    radial-gradient(120% 90% at 50% 0%, #2a2140, #0b0912) padding-box,
+    var(--gold-grad) border-box;
+}
+.board.bio-ligue {
+  background:
+    radial-gradient(120% 90% at 50% 0%, #1f2840, #090c14) padding-box,
+    var(--gold-grad) border-box;
+}
+.board::before,
+.board::after {
+  content: '';
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  pointer-events: none;
+  border: 0 solid #f0d59c;
+  z-index: 1;
+}
+.board::before {
+  top: 5px;
+  left: 5px;
+  border-width: 2px 0 0 2px;
+  border-top-left-radius: 8px;
+}
+.board::after {
+  bottom: 5px;
+  right: 5px;
+  border-width: 0 2px 2px 0;
+  border-bottom-right-radius: 8px;
+}
+@media (max-width: 540px) {
+  .board {
+    margin: 0 6px;
+    padding: 4px;
+    border-radius: 14px;
+  }
+}
+.tx {
+  pointer-events: none;
+}
+.tx-gr {
+  fill: none;
+  stroke: rgba(200, 245, 160, 0.2);
+  stroke-width: 1;
+  stroke-linecap: round;
+}
+.tx-gd {
+  fill: rgba(255, 240, 160, 0.3);
+}
+.tx-st {
+  fill: none;
+  stroke: rgba(0, 0, 0, 0.32);
+  stroke-width: 1;
+}
+.tx-sd {
+  fill: rgba(255, 230, 190, 0.16);
+}
+.tx-as {
+  fill: rgba(210, 190, 255, 0.2);
+}
+.tx-ac {
+  fill: none;
+  stroke: rgba(0, 0, 0, 0.4);
+  stroke-width: 0.8;
+}
+.tx-mv {
+  fill: none;
+  stroke: rgba(227, 192, 122, 0.2);
+  stroke-width: 1;
+}
+.tx-mv2 {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.07);
+}
+.tx-wv {
+  fill: none;
+  stroke: rgba(190, 225, 255, 0.32);
+  stroke-width: 1.1;
+  stroke-linecap: round;
+}
+.bv {
+  fill: none;
+  stroke: url(#bev);
+  stroke-width: 1.6;
+}
+.boulder {
+  fill: url(#rockG);
+  stroke: #07090d;
+  stroke-width: 1;
+}
+.boulder-h {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.4);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+}
+.glint {
+  fill: rgba(227, 192, 122, 0.35);
+}
+.mk-edge {
+  fill: none;
+  stroke-width: 1.3;
+  stroke-dasharray: 3 3;
+  opacity: 0.85;
+  animation: mkd 6s linear infinite;
+}
+@keyframes mkd {
+  to {
+    stroke-dashoffset: -60;
+  }
+}
+.tok-rim {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.4);
+  stroke-width: 0.8;
+}
+.tok-gloss {
+  fill: rgba(255, 255, 255, 0.2);
+  pointer-events: none;
+}
+.tok-en {
+  display: none;
+}
+.tok.has-en .tok-en {
+  display: block;
+}
+.tok-en path {
+  fill: #141922;
+  stroke: rgba(255, 255, 255, 0.35);
+  stroke-width: 0.7;
+}
+.tok-en path.on {
+  fill: #e3c07a;
+  stroke: #fff3cf;
+  filter: drop-shadow(0 0 2px rgba(227, 192, 122, 0.9));
+}
+.tok-rdy {
+  fill: none;
+  stroke: #f0d59c;
+  stroke-width: 1.6;
+  opacity: 0;
+  stroke-dasharray: 4 3;
+}
+.tok.ready .tok-rdy {
+  opacity: 1;
+  animation: rdy 1.8s ease-in-out infinite;
+}
+@keyframes rdy {
+  50% {
+    stroke-width: 2.8;
+    stroke: #fff3cf;
+  }
+}
+.tok.ready .tok-ring {
+  filter: drop-shadow(0 0 5px rgba(240, 213, 156, 0.85));
+}
+.tok-ew {
+  display: none;
+}
+.tok.evw .tok-ew {
+  display: block;
+}
+.tok-ew circle {
+  fill: #ff6767;
+  stroke: #0b0d12;
+  stroke-width: 1.2;
+}
+.tok-ew path {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.tok.evw .tok-halo {
+  stroke: #ff8a6a;
+  stroke-width: 2;
+  opacity: 1;
+  animation: evp 1.2s ease-in-out infinite;
+}
+@keyframes evp {
+  50% {
+    opacity: 0.3;
+  }
+}
+.tok.evolved .tok-rim {
+  stroke: #f0d59c;
+  stroke-width: 1.2;
+}
+.f-ready {
+  fill: #f0d59c;
+  font-family: var(--f-d);
+  font-weight: 800;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  paint-order: stroke;
+  stroke: #0b0d12;
+  stroke-width: 3px;
+}
+.arrfx polygon {
+  fill: none;
+  stroke: var(--c);
+  stroke-width: 2;
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: arrw 1.2s ease-out forwards;
+}
+@keyframes arrw {
+  0% {
+    opacity: 0.95;
+    transform: scale(0.35);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1);
+  }
+}

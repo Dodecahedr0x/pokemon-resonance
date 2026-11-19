@@ -1,0 +1,398 @@
+/* HOME: the concept is composed into the real components, not pasted over the page */
+#accueil.page.on {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.12fr) minmax(300px, 0.88fr);
+  gap: 18px !important;
+  align-items: stretch;
+}
+#accueil .hm-top {
+  display: contents !important;
+}
+#accueil .hm-hero {
+  grid-column: 1/-1 !important;
+  min-height: clamp(340px, 34vw, 470px) !important;
+  border-radius: 28px !important;
+  border: 1px solid rgba(126, 221, 255, 0.42) !important;
+  padding: 0 !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) !important;
+  align-items: end !important;
+  isolation: isolate !important;
+  overflow: hidden !important;
+  background:
+    linear-gradient(90deg, rgba(2, 14, 25, 0.88) 0%, rgba(2, 18, 31, 0.58) 38%, rgba(2, 18, 31, 0.06) 74%),
+    linear-gradient(0deg, rgba(2, 14, 24, 0.88), transparent 62%),
+    var(--resonance-landscape) center 48% / cover no-repeat !important;
+  box-shadow:
+    0 28px 70px rgba(0, 0, 0, 0.38),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.07) !important;
+}
+#accueil .hm-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(120deg, rgba(7, 25, 40, 0.12), transparent 55%);
+  animation: heroLight 12s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+#accueil .hm-hero::after {
+  content: 'POKÉMON RÉSONANCE  •  KANTO / JOHTO';
+  position: absolute;
+  right: 24px;
+  top: 22px;
+  color: rgba(235, 249, 255, 0.84);
+  font-size: 9px;
+  letter-spacing: 0.24em;
+  font-weight: 900;
+  text-shadow: 0 2px 12px #00111e;
+}
+@keyframes heroLight {
+  from {
+    opacity: 0.4;
+    transform: translateX(-1%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(1%);
+  }
+}
+
+@keyframes badgeFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-9px);
+  }
+}
+
+#accueil .hh-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 16px;
+}
+#accueil .hh-chips > * {
+  background: rgba(2, 17, 28, 0.62) !important;
+  border: 1px solid rgba(160, 225, 255, 0.32) !important;
+  backdrop-filter: blur(8px);
+  border-radius: 7px !important;
+}
+
+#accueil .tcard#campBox {
+  grid-column: 1 !important;
+  min-width: 0;
+  padding: clamp(18px, 2.2vw, 28px) !important;
+  position: relative;
+  overflow: hidden;
+}
+#accueil #campBox::before {
+  content: '';
+  position: absolute;
+  right: -100px;
+  top: -110px;
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  border: 1px solid rgba(111, 226, 255, 0.15);
+  box-shadow:
+    0 0 0 22px rgba(111, 226, 255, 0.035),
+    0 0 0 48px rgba(111, 226, 255, 0.025);
+  pointer-events: none;
+}
+#accueil .hm-quick {
+  grid-column: 2 !important;
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  grid-template-rows: repeat(3, minmax(100px, 1fr)) !important;
+  gap: 12px !important;
+  margin: 0 !important;
+  align-self: stretch;
+}
+#accueil .qk {
+  position: relative;
+  min-height: 100px !important;
+  padding: 18px 20px !important;
+  border-radius: 19px !important;
+  border: 1px solid rgba(112, 211, 255, 0.27) !important;
+  background: linear-gradient(115deg, rgba(13, 47, 65, 0.95), rgba(5, 23, 36, 0.96)) !important;
+  box-shadow:
+    0 14px 32px rgba(0, 0, 0, 0.17),
+    inset 0 1px rgba(255, 255, 255, 0.045) !important;
+  text-align: left !important;
+  overflow: hidden;
+}
+#accueil .qk::before {
+  content: '';
+  position: absolute;
+  right: -25px;
+  top: -44px;
+  width: 155px;
+  height: 155px;
+  border: 1px solid rgba(111, 226, 255, 0.14);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 15px rgba(111, 226, 255, 0.03),
+    0 0 0 32px rgba(111, 226, 255, 0.025);
+  pointer-events: none;
+}
+#accueil .qk:hover {
+  transform: translateY(-3px) !important;
+  border-color: rgba(255, 213, 93, 0.46) !important;
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.24),
+    0 0 25px rgba(84, 203, 255, 0.08) !important;
+}
+#accueil .qk b {
+  color: #f5fbff !important;
+  font-size: 15px !important;
+}
+#accueil .qk em {
+  color: #aac6d7 !important;
+}
+#accueil .qk-ic {
+  box-shadow:
+    0 0 0 6px rgba(111, 226, 255, 0.06),
+    0 0 28px rgba(111, 226, 255, 0.15) !important;
+  border: 1px solid rgba(111, 226, 255, 0.35) !important;
+}
+#accueil .route {
+  grid-column: 1/-1 !important;
+  height: clamp(250px, 28vw, 390px) !important;
+  margin-top: 0 !important;
+  border-radius: 25px !important;
+  border: 1px solid rgba(112, 211, 255, 0.3) !important;
+  background:
+    linear-gradient(0deg, rgba(3, 20, 29, 0.5), rgba(3, 20, 29, 0.03)),
+    var(--resonance-landscape) center 62% / cover no-repeat !important;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.28) !important;
+}
+#accueil .route::before {
+  content: 'ROUTE 29  /  MONDE VIVANT';
+  position: absolute;
+  top: 18px;
+  left: 20px;
+  z-index: 3;
+  padding: 9px 12px;
+  border-radius: 9px;
+  background: rgba(4, 22, 32, 0.8);
+  border: 1px solid rgba(255, 218, 104, 0.42);
+  color: #ffe17b;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  backdrop-filter: blur(10px);
+}
+#accueil .route #routeSvg {
+  opacity: 0.43;
+  mix-blend-mode: screen;
+}
+#accueil .route .rt-alert {
+  filter: drop-shadow(0 0 12px rgba(255, 210, 74, 0.8));
+}
+#accueil .tod {
+  z-index: 4;
+  right: 16px;
+  top: 16px;
+}
+/* Pokémon selection: card scale, actual sprite focus, readable controls */
+.dex-grid {
+  grid-template-columns: repeat(auto-fill, minmax(245px, 1fr)) !important;
+  gap: 16px !important;
+}
+.dex {
+  min-height: 280px !important;
+  padding: 19px !important;
+  border-radius: 22px !important;
+  background: linear-gradient(
+    155deg,
+    color-mix(in srgb, var(--c) 18%, rgba(10, 39, 55, 0.98)),
+    rgba(4, 20, 32, 0.97)
+  ) !important;
+  border: 1px solid rgba(132, 219, 255, 0.22) !important;
+  box-shadow:
+    0 15px 30px rgba(0, 0, 0, 0.17),
+    inset 0 1px rgba(255, 255, 255, 0.05) !important;
+}
+.dex:hover {
+  transform: translateY(-5px) !important;
+  border-color: color-mix(in srgb, var(--c) 62%, #6fe2ff) !important;
+  box-shadow:
+    0 22px 45px rgba(0, 0, 0, 0.28),
+    0 0 26px color-mix(in srgb, var(--c) 16%, transparent) !important;
+}
+.fam-grid .fcard {
+  min-height: 390px !important;
+}
+.fam-grid .fc-in {
+  padding: 17px !important;
+  gap: 12px !important;
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--c) 25%, #0d2939), #061723 72%) padding-box,
+    linear-gradient(140deg, #fff0a5, #8e6c31 25%, #7ce6ff 55%, #244e6b 80%, #f0d59c) border-box !important;
+  box-shadow:
+    0 18px 36px rgba(0, 0, 0, 0.25),
+    inset 0 1px rgba(255, 255, 255, 0.08) !important;
+}
+.fc-art {
+  min-height: 174px !important;
+  border-radius: 16px !important;
+  background:
+    radial-gradient(ellipse at 50% 72%, color-mix(in srgb, var(--c) 25%, transparent), transparent 67%),
+    linear-gradient(180deg, rgba(30, 86, 111, 0.3), rgba(3, 19, 31, 0.55)) !important;
+  border: 1px solid rgba(130, 222, 255, 0.16) !important;
+}
+
+.fc-art .orb {
+  opacity: 0.12 !important;
+  filter: blur(1px);
+}
+.fc-in .fc-name {
+  font-size: 18px !important;
+  color: #f6fbff !important;
+}
+
+.fam-grid .fcard button,
+.dex button {
+  min-height: 42px !important;
+  font-weight: 850 !important;
+}
+.filters,
+.seg,
+.dock {
+  border-radius: 15px !important;
+  background: rgba(5, 23, 36, 0.78) !important;
+  border: 1px solid rgba(112, 211, 255, 0.2) !important;
+  padding: 8px !important;
+  gap: 8px !important;
+}
+.filters button,
+.seg button {
+  min-height: 38px !important;
+  border-radius: 10px !important;
+}
+/* Battles: immersive arena frame, clear tactical hierarchy */
+#combat .sel-card,
+#combat .pt,
+#combat .bp,
+#combat .resume {
+  background: linear-gradient(145deg, rgba(10, 39, 55, 0.95), rgba(3, 18, 30, 0.97)) !important;
+  border-color: rgba(112, 211, 255, 0.24) !important;
+}
+#combat .bt-arena {
+  border-radius: 20px !important;
+  border: 1px solid rgba(112, 211, 255, 0.3) !important;
+  background: linear-gradient(135deg, rgba(9, 37, 53, 0.95), rgba(4, 19, 31, 0.96)) !important;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.24) !important;
+}
+#combat .board {
+  position: relative !important;
+  overflow: hidden !important;
+  border: 1px solid rgba(111, 226, 255, 0.28) !important;
+  border-radius: 22px !important;
+  background:
+    radial-gradient(ellipse at 50% 15%, rgba(48, 128, 157, 0.4), transparent 58%),
+    linear-gradient(180deg, #0b2b3c, #061522 76%) !important;
+  box-shadow:
+    inset 0 0 70px rgba(0, 0, 0, 0.38),
+    0 22px 44px rgba(0, 0, 0, 0.22) !important;
+}
+#combat .board::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    linear-gradient(0deg, rgba(2, 13, 23, 0.28), transparent 40%),
+    radial-gradient(circle at 50% 50%, transparent 28%, rgba(0, 0, 0, 0.16) 100%);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.035);
+}
+#combat #bSvg {
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.28));
+}
+#combat .plates {
+  filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.24));
+}
+#combat .bp {
+  border-radius: 20px !important;
+}
+#combat .bp button,
+#combat .pt button {
+  min-height: 44px !important;
+}
+/* Guide, type encyclopedia, league, settings — consistent premium materials */
+#types .sec,
+#types .anat,
+#types .panel,
+#types .codex,
+#types .items,
+#types .duos,
+#types .studio,
+#ligue .arena,
+#ligue .case,
+#ligue .sheet,
+#ligue .badges,
+#ligue .result {
+  border-radius: 20px !important;
+  background: linear-gradient(145deg, rgba(10, 39, 55, 0.94), rgba(4, 19, 31, 0.96)) !important;
+  border: 1px solid rgba(112, 211, 255, 0.21) !important;
+  box-shadow: 0 16px 38px rgba(0, 0, 0, 0.18) !important;
+}
+#types .sec h2,
+#ligue h2 {
+  color: #fff4c7 !important;
+}
+#types button[aria-pressed='true'],
+#types .on,
+#ligue .on {
+  box-shadow:
+    0 0 0 1px rgba(255, 214, 94, 0.5),
+    0 0 18px rgba(255, 214, 94, 0.08) !important;
+}
+/* Existing first-run guide is retained functionally, but brought into the same art direction */
+.intro {
+  background:
+    linear-gradient(0deg, rgba(2, 13, 22, 0.94), rgba(3, 18, 30, 0.72)),
+    var(--resonance-landscape) center/cover fixed !important;
+  backdrop-filter: blur(8px);
+}
+.intro::before {
+  background: radial-gradient(
+    70% 65% at 50% 25%,
+    transparent 0,
+    rgba(1, 10, 18, 0.3) 72%,
+    rgba(1, 8, 14, 0.86)
+  ) !important;
+}
+.it-card {
+  width: min(760px, 100%) !important;
+  padding: clamp(18px, 3vw, 30px) !important;
+  border-radius: 26px !important;
+  border: 1px solid rgba(122, 220, 255, 0.32) !important;
+  background: linear-gradient(145deg, rgba(8, 35, 51, 0.96), rgba(3, 18, 30, 0.97)) !important;
+  box-shadow:
+    0 30px 100px rgba(0, 0, 0, 0.6),
+    inset 0 1px rgba(255, 255, 255, 0.08) !important;
+}
+.it-card h1,
+.it-card h2,
+.it-card h3 {
+  color: #fff0b9 !important;
+}
+.it-card input,
+.it-card select {
+  background: #061b29 !important;
+  color: #f2f8ff !important;
+  border: 1px solid rgba(112, 211, 255, 0.34) !important;
+  border-radius: 12px !important;
+  min-height: 46px !important;
+}
+.it-card button {
+  min-height: 44px !important;
+  border-radius: 12px !important;
+}

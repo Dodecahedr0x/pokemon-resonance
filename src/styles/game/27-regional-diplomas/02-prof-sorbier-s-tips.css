@@ -1,0 +1,343 @@
+/* Prof. Sorbier's tips */
+.tip-card {
+  position: fixed;
+  left: 50%;
+  top: calc(12px + env(safe-area-inset-top, 0px));
+  transform: translateX(-50%);
+  z-index: 80;
+  display: flex;
+  gap: 11px;
+  align-items: flex-start;
+  width: min(440px, calc(100vw - 24px));
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: linear-gradient(145deg, #173a50, #0a1d2b);
+  border: 1px solid rgba(255, 215, 94, 0.5);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5);
+  color: #eaf2f8;
+  animation: tip-card 0.32s cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+@keyframes tip-card {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -12px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+.tip-card-av {
+  flex: none;
+  display: flex;
+}
+.tip-card small {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #ffd45b;
+}
+.tip-card b {
+  display: block;
+  font-size: 15px;
+  margin: 1px 0 3px;
+}
+.tip-card p {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: #cfe0ea;
+}
+.tip-card-a {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 9px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .tip-card {
+    animation: none;
+  }
+}
+
+/* legendary quests */
+.legend-quest {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
+  gap: 12px;
+}
+.legend-quest-c {
+  position: relative;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 12px;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--c) 45%, transparent) !important;
+}
+.legend-quest-c:before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(120% 90% at 0 0, color-mix(in srgb, var(--c) 28%, transparent), transparent 60%);
+  pointer-events: none;
+}
+.legend-quest-c img {
+  position: relative;
+  flex: none;
+  width: 76px;
+  height: 76px;
+  object-fit: contain;
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.45));
+}
+.legend-quest-c:not(.pret):not(.pris) img {
+  filter: grayscale(0.75) brightness(0.75) drop-shadow(0 6px 10px rgba(0, 0, 0, 0.45));
+}
+.legend-quest-t {
+  position: relative;
+  min-width: 0;
+  flex: 1;
+}
+.legend-quest-t small {
+  display: block;
+  font-size: 11px;
+  color: var(--tx2, #9fb3c2);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.legend-quest-t > b {
+  display: block;
+  font-size: 16px;
+  margin: 1px 0 6px;
+}
+.legend-quest-t ul {
+  list-style: none;
+  margin: 0 0 9px;
+  padding: 0;
+  display: grid;
+  gap: 3px;
+  font-size: 12.5px;
+  color: #b9cad6;
+}
+.legend-quest-t li.ok {
+  color: #8fe3a8;
+}
+.legend-quest-c.pret {
+  box-shadow:
+    0 0 0 1px rgba(255, 215, 94, 0.55),
+    0 10px 30px rgba(255, 200, 60, 0.15) !important;
+}
+.legend-quest-ok {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 700;
+  color: #8fe3a8;
+}
+
+/* challenge of the week */
+.weekly-card {
+  padding: 14px;
+  margin-bottom: 14px;
+}
+.weekly-card-r {
+  margin: 0 0 10px;
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: #cfe0ea;
+}
+.weekly-card-t {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.weekly-card-m {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 0;
+  padding: 6px 4px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.weekly-card-m img {
+  width: 54px;
+  height: 54px;
+  object-fit: contain;
+}
+.weekly-card-m em {
+  font-style: normal;
+  font-size: 11.5px;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.weekly-card-k {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  margin-bottom: 12px;
+  font-size: 12.5px;
+  color: #b9cad6;
+}
+.weekly-card-k b {
+  color: #ffd45b;
+}
+.weekly-card-cl {
+  width: 100%;
+  margin-top: 12px;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.weekly-card-cl caption {
+  text-align: left;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #9fb3c2;
+  padding-bottom: 4px;
+}
+.weekly-card-cl td {
+  padding: 6px 4px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+.weekly-card-cl td:first-child {
+  width: 28px;
+  color: #9fb3c2;
+}
+.weekly-card-cl td:last-child {
+  text-align: right;
+}
+.weekly-card-cl tr.me td {
+  color: #ffd45b;
+}
+.weekly-card-n {
+  margin: 10px 0 0;
+  font-size: 12.5px;
+  color: #9fb3c2;
+}
+.v4-bottom .v4-hebdo {
+  grid-column: 1/-1;
+}
+.v4-hebdo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-width: 0;
+  padding: 11px 14px;
+  border-radius: 18px;
+  text-align: left;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  border: 1px solid rgba(255, 215, 94, 0.4) !important;
+}
+.weekly-card-ic {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: linear-gradient(145deg, #ffd45b, #e59a1f);
+  color: #2a1a00;
+}
+.weekly-card-ic svg {
+  width: 22px;
+  height: 22px;
+}
+.weekly-card-x {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+.weekly-card-x small {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #ffd45b;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.weekly-card-x b {
+  font-size: 15px;
+}
+.weekly-card-x em {
+  font-style: normal;
+  font-size: 12px;
+  color: #b9cad6;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.weekly-card-go {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  opacity: 0.7;
+}
+
+/* <style id="resonance-camp-tactics"> */
+/* v4.30 · regional maps: scrolling works again */
+html body #carte .v4-map-sc {
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x pan-y;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+html body #carte .v4-map-sc::-webkit-scrollbar {
+  display: none;
+}
+html body #carte .v4-map {
+  position: relative;
+}
+.map-scroll {
+  position: absolute;
+  bottom: 12px;
+  z-index: 6;
+  width: 38px;
+  height: 38px;
+  opacity: 0.92;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: rgba(6, 20, 30, 0.86);
+  border: 1px solid rgba(120, 220, 255, 0.55);
+  color: #dff6ff;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+}
+.map-scroll.g {
+  left: 10px;
+}
+.map-scroll.d {
+  right: 10px;
+}
+.map-scroll[hidden] {
+  display: none;
+}
+.map-scroll svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* bottom bar: 6 tabs */
+@media (max-width: 999px) {
+  html body .bnav.n6430 {
+    grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+  }
+  html body .bnav.n6430 .bn {
+    font-size: 10.5px;
+    letter-spacing: 0;
+  }
+}

@@ -1,0 +1,128 @@
+/* ---------- launch screen ---------- */
+html body #resonance-launch .rl-shade {
+  background:
+    linear-gradient(0deg, rgba(3, 12, 26, 0.92) 0%, rgba(3, 14, 30, 0.45) 38%, transparent 62%),
+    linear-gradient(90deg, rgba(3, 14, 30, 0.55), transparent 55%) !important;
+}
+html body #resonance-launch .rl-logo {
+  display: grid !important;
+  justify-items: start;
+  gap: 2px;
+  margin: 6px 0 12px !important;
+  font-size: inherit !important;
+  line-height: 1 !important;
+  text-shadow: none !important;
+  color: inherit !important;
+}
+html body #resonance-launch .rl-logo .v4-rl-pk {
+  display: block !important;
+  margin: 0 !important;
+  font: italic 900 clamp(50px, 8.5vw, 108px)/0.92 var(--f-d) !important;
+  letter-spacing: -0.03em !important;
+  text-transform: none !important;
+  background: linear-gradient(180deg, #ffffff 10%, #fff3c4 55%, #ffd35a) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  filter: drop-shadow(0 3px 0 #0b2347) drop-shadow(0 10px 22px rgba(0, 8, 24, 0.7)) !important;
+  white-space: nowrap !important;
+}
+html body #resonance-launch .rl-logo .v4-rl-res {
+  display: block !important;
+  margin: 2px 0 0 !important;
+  font: 700 clamp(24px, 3.8vw, 46px)/1.1 var(--f-logo) !important;
+  letter-spacing: 0.16em !important;
+  text-transform: uppercase !important;
+  background: linear-gradient(180deg, #ffffff, #d3dceb 55%, #93a7c2) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  filter: drop-shadow(0 2px 8px rgba(0, 10, 30, 0.85)) !important;
+  white-space: nowrap !important;
+}
+html body #resonance-launch .rl-logo .v4-rl-live {
+  display: block !important;
+  margin: 8px 0 0 3px !important;
+  font: 800 clamp(11px, 1.2vw, 14px)/1 var(--f-d) !important;
+  letter-spacing: 0.42em !important;
+  text-transform: uppercase !important;
+  color: #ffd75e !important;
+  -webkit-text-fill-color: #ffd75e !important;
+  background: none !important;
+  text-shadow: 0 1px 8px rgba(0, 10, 24, 0.9) !important;
+  white-space: nowrap !important;
+}
+html body #resonance-launch .rl-meta strong {
+  display: none !important;
+}
+html body #resonance-launch .rl-enter {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 14px !important;
+  min-height: 58px !important;
+  padding: 0 18px 0 7px !important;
+  border-radius: 999px !important;
+  background: linear-gradient(180deg, rgba(14, 40, 78, 0.94), rgba(6, 20, 42, 0.96)) !important;
+  color: #fff !important;
+  border: 2px solid #f2c94c !important;
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.4),
+    0 10px 30px rgba(0, 0, 0, 0.45),
+    0 0 26px -6px rgba(255, 210, 80, 0.55) !important;
+  font: 800 15px/1 var(--f-d) !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+}
+.v4-rl-ic {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fff3b0, #ffcd3c 50%, #c98a12);
+  color: #10213a;
+  box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.25);
+}
+.v4-rl-ic svg {
+  width: 18px;
+  height: 18px;
+}
+.v4-rl-ch {
+  width: 18px;
+  height: 18px;
+  color: #f2c94c;
+}
+html body #resonance-launch .rl-kicker {
+  font-family: var(--f-d) !important;
+}
+@media (max-width: 640px) {
+  html body #resonance-launch .rl-enter {
+    width: 100% !important;
+    justify-content: flex-start !important;
+    font-size: 14px !important;
+    letter-spacing: 0.06em !important;
+    white-space: nowrap !important;
+  }
+  html body #resonance-launch .rl-enter > span:not(.v4-rl-ic) {
+    white-space: nowrap;
+  }
+  .v4-rl-ch {
+    margin-left: auto;
+  }
+}
+
+/* ---------- performance: illustrations float only on hover ----------
+   The "artHover" animation looped on all 30 cards and repainted
+   the page 30 times per second (≈ 27 % of the CPU). */
+html body #pokedex .fc-art img.pokemon-art-sprite {
+  animation: none !important;
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  html body #pokedex .fcard:hover .fc-art img.pokemon-art-sprite {
+    animation: artHover 2.4s ease-in-out infinite !important;
+  }
+}
+html body #pokedex .fcard .qa {
+  color: #ffd75e !important;
+  border-color: rgba(255, 215, 94, 0.5) !important;
+}

@@ -1,0 +1,376 @@
+/* =====================================================================
+   v3.1 · "Prestige Pokémon" — the v3 structure (4 tabs, selection frame,
+   the Professor's welcome) in the obsidian-and-brass language of v2.0.
+   Engraved medallions, cinematic chapter screen, brief animations (never looping).
+   ===================================================================== */
+:root {
+  --glass: linear-gradient(180deg, rgba(23, 24, 29, 0.94), rgba(11, 12, 15, 0.94));
+  --rise: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.vh {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+/* ---------- logo and navigation ---------- */
+.logo {
+  gap: 12px;
+}
+.logo .lg-ic {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  flex: none;
+  border-radius: 50%;
+  border: 1.5px solid transparent;
+  color: var(--gold-l);
+  background:
+    radial-gradient(circle at 50% 30%, #24262d, #0a0b0e 72%) padding-box,
+    var(--brass) border-box;
+  box-shadow:
+    0 0 0 4px rgba(10, 10, 12, 0.9),
+    0 0 0 5px rgba(212, 175, 106, 0.16),
+    0 10px 22px -10px #000;
+}
+.logo .lg-ic svg {
+  width: 24px;
+  height: 24px;
+}
+.topbar .logo .lg-ic {
+  width: 34px;
+  height: 34px;
+}
+.topbar .logo .lg-ic svg {
+  width: 20px;
+  height: 20px;
+}
+.logo span:last-child {
+  display: grid;
+  gap: 4px;
+  line-height: 1;
+}
+.logo small {
+  order: -1;
+  margin: 0;
+  font-family: var(--f-m);
+  font-size: 9px;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.logo b {
+  font-family: var(--f-d);
+  font-weight: 700;
+  font-size: 17px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--tx);
+}
+.topbar .logo b {
+  font-size: 15px;
+}
+.side-goal {
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+  border-radius: var(--r);
+  border: 1px solid transparent;
+  background:
+    radial-gradient(120% 90% at 0% 0%, color-mix(in srgb, var(--ac, #d4af6a) 14%, transparent), transparent 70%)
+      padding-box,
+    var(--slab) padding-box,
+    var(--edge) border-box;
+}
+.side-goal:empty {
+  display: none;
+}
+.sg-k {
+  font-family: var(--f-m);
+  font-size: 9.5px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.sg-b {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--tx);
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+}
+.sg-b span {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+.sg-b b {
+  font-family: var(--f-d);
+  font-weight: 700;
+  font-size: 12.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sg-b em {
+  font-style: normal;
+  font-size: 12px;
+  color: var(--mut);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sg-b:hover b {
+  color: var(--gold-l);
+}
+@media (max-width: 999px) {
+  .bnav {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+}
+/* ---------- engraved medallions (Professor, masters, emblems) ---------- */
+.av,
+.pav {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1.5px solid transparent;
+  background:
+    radial-gradient(circle at 50% 30%, color-mix(in srgb, var(--c, #d4af6a) 38%, #14151a), #08090b 74%) padding-box,
+    var(--brass) border-box;
+  box-shadow:
+    0 0 0 4px rgba(10, 10, 12, 0.92),
+    0 0 0 5px rgba(212, 175, 106, 0.2),
+    0 16px 30px -14px #000,
+    0 0 30px -10px color-mix(in srgb, var(--c, #d4af6a) 70%, transparent);
+}
+.av::after,
+.pav::after {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  border: 1px solid rgba(242, 221, 168, 0.22);
+  pointer-events: none;
+}
+.av b,
+.pav b {
+  font-family: var(--f-d);
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: 0.08em;
+  color: var(--gold-l);
+  text-shadow:
+    0 1px 0 #000,
+    0 0 14px color-mix(in srgb, var(--c, #d4af6a) 60%, transparent);
+}
+.av i,
+.pav i {
+  position: absolute;
+  right: -5px;
+  bottom: -5px;
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid transparent;
+  color: #fff;
+  background:
+    radial-gradient(circle at 35% 30%, color-mix(in srgb, var(--c, #5b9bff) 60%, #fff), var(--c, #5b9bff) 70%)
+      padding-box,
+    var(--brass) border-box;
+  box-shadow: 0 0 0 2px #0a0a0c;
+}
+.av i svg {
+  width: 12px;
+  height: 12px;
+}
+.av i svg path {
+  fill: #fff;
+}
+.pav {
+  --c: #5b9bff;
+  width: 56px;
+  height: 56px;
+}
+.pav b {
+  font-size: 17px;
+}
+.pav i svg {
+  width: 13px;
+  height: 13px;
+  color: #fff;
+}
+.av.xl {
+  width: 120px;
+  height: 120px;
+}
+.av.xl b {
+  font-size: 40px;
+}
+.av.xl i {
+  width: 34px;
+  height: 34px;
+  right: 2px;
+  bottom: 2px;
+}
+.av.xl i svg {
+  width: 20px;
+  height: 20px;
+}
+.av.lg {
+  width: 76px;
+  height: 76px;
+}
+.av.lg b {
+  font-size: 26px;
+}
+.av.lg i {
+  width: 26px;
+  height: 26px;
+}
+.av.lg i svg {
+  width: 15px;
+  height: 15px;
+}
+.av.sm {
+  width: 38px;
+  height: 38px;
+}
+.av.sm b {
+  font-size: 13px;
+}
+.av.sm i {
+  width: 16px;
+  height: 16px;
+  right: -4px;
+  bottom: -4px;
+}
+.av.sm i svg {
+  width: 10px;
+  height: 10px;
+}
+.av.xs {
+  width: 30px;
+  height: 30px;
+  box-shadow:
+    0 0 0 3px rgba(10, 10, 12, 0.9),
+    0 0 0 4px rgba(212, 175, 106, 0.18);
+}
+.av.xs b {
+  font-size: 11px;
+}
+.av.xs i {
+  display: none;
+}
+.emb {
+  display: grid;
+  place-items: center;
+  flex: none;
+}
+.emb.bdg svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.7));
+}
+.emb.bdg.xl {
+  width: 132px;
+}
+.emb.bdg.xl svg {
+  filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.8))
+    drop-shadow(0 0 22px color-mix(in srgb, var(--ac) 55%, transparent));
+}
+.emb.bdg.lg {
+  width: 74px;
+}
+.emb.bdg.sm {
+  width: 38px;
+}
+.emb.bdg.xs {
+  width: 30px;
+}
+.emb.bdg.dim svg {
+  filter: grayscale(0.85) brightness(0.7) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.6));
+}
+.emb.ter {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1.5px solid transparent;
+  color: var(--gold-l);
+  background:
+    radial-gradient(circle at 50% 30%, var(--tc, #2a3a2e), #08090b 76%) padding-box,
+    var(--brass) border-box;
+  box-shadow:
+    0 0 0 3px rgba(10, 10, 12, 0.9),
+    0 10px 20px -10px #000;
+}
+.emb.ter svg {
+  width: 20px;
+  height: 20px;
+}
+.emb.ter.xl {
+  width: 120px;
+  height: 120px;
+}
+.emb.ter.xl svg {
+  width: 50px;
+  height: 50px;
+}
+.emb.ter.lg {
+  width: 74px;
+  height: 74px;
+}
+.emb.ter.lg svg {
+  width: 32px;
+  height: 32px;
+}
+.emb.ter.sm {
+  width: 38px;
+  height: 38px;
+}
+.emb.ter.sm svg {
+  width: 18px;
+  height: 18px;
+}
+.emb.ter.xs {
+  width: 30px;
+  height: 30px;
+}
+.emb.ter.xs svg {
+  width: 14px;
+  height: 14px;
+}
+.emb.ter.bio-gue {
+  --tc: #1e4a5c;
+}
+.emb.ter.bio-roche {
+  --tc: #5a4524;
+}
+.emb.ter.bio-tour {
+  --tc: #3b2e63;
+}
+.emb.ter.bio-ligue {
+  --tc: #1e3866;
+}
+.emb.ter.bio-arene {
+  --tc: #5c2b1a;
+}

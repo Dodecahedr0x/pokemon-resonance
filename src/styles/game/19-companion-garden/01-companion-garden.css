@@ -1,0 +1,295 @@
+/* ===== resonance-companion-garden layer ===== */
+/* ==== v4.17: companions and Resonance ==== */
+/* --- Resonant Form --- */
+html body .fres-b {
+  margin-top: 8px;
+  border-color: rgba(201, 166, 255, 0.55) !important;
+}
+html body .fres-b:not([disabled]) {
+  background: linear-gradient(180deg, rgba(150, 110, 255, 0.28), rgba(90, 60, 190, 0.22)) !important;
+  box-shadow:
+    0 0 0 1px rgba(201, 166, 255, 0.5),
+    0 0 18px rgba(170, 130, 255, 0.35);
+}
+html body .fres-m {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #efe3ff, #8f63ff 70%);
+  color: #fff;
+}
+html body .fres-m svg {
+  width: 20px;
+  height: 20px;
+}
+html body .bp-fres {
+  border-color: rgba(201, 166, 255, 0.6) !important;
+  background: linear-gradient(180deg, rgba(150, 110, 255, 0.2), rgba(60, 40, 140, 0.18)) !important;
+}
+html body .fres-n {
+  color: #e2d2ff;
+  font-size: 13px;
+}
+html body #bSvg .tok.fres .tok-halo {
+  stroke: #c9a6ff;
+  stroke-width: 3.6;
+  filter: drop-shadow(0 0 8px rgba(190, 150, 255, 0.95));
+  animation: companion-garden-fres 1.6s ease-in-out infinite;
+}
+html body #bSvg .tok.fres .tok-rim {
+  stroke: #e7dbff;
+  stroke-width: 2.4;
+}
+@keyframes companion-garden-fres {
+  0%,
+  100% {
+    stroke-opacity: 1;
+  }
+  50% {
+    stroke-opacity: 0.45;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html body #bSvg .tok.fres .tok-halo {
+    animation: none;
+  }
+}
+
+/* --- companion --- */
+html body .v4-comp {
+  margin: 14px 0;
+  padding: 12px 14px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  border-color: color-mix(in srgb, var(--c, #ffd75e) 55%, transparent);
+}
+html body .cp-art {
+  flex: none;
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(
+    circle at 40% 35%,
+    color-mix(in srgb, var(--c, #ffd75e) 55%, #fff),
+    color-mix(in srgb, var(--c, #ffd75e) 35%, #0d1b33) 72%
+  );
+  box-shadow: 0 0 22px color-mix(in srgb, var(--c, #ffd75e) 45%, transparent);
+}
+html body .cp-art img {
+  width: 92%;
+  height: 92%;
+  object-fit: contain;
+  animation: companion-garden-souffle 3.2s ease-in-out infinite;
+}
+html body .cp-art.shiny img {
+  filter: hue-rotate(var(--sh, 120deg)) saturate(1.25);
+}
+@keyframes companion-garden-souffle {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-3px) scale(1.03);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html body .cp-art img {
+    animation: none;
+  }
+}
+html body .cp-t {
+  flex: 1;
+  min-width: 170px;
+  display: grid;
+  gap: 3px;
+}
+html body .cp-t small {
+  font: 800 11px/1 var(--f-d, inherit);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--v4-tx2, #9fb0c4);
+}
+html body .cp-t b {
+  font-size: 18px;
+}
+html body .cp-t em {
+  font-style: normal;
+  font-size: 13px;
+  color: var(--v4-tx2, #9fb0c4);
+}
+html body .cp-t em.cp-bn {
+  color: #ffd2e4;
+  font-size: 12px;
+}
+html body .cp-h i {
+  font-style: normal;
+  color: rgba(255, 255, 255, 0.2);
+  margin-right: 2px;
+  font-size: 15px;
+}
+html body .cp-h i.on,
+html body b.cp-h {
+  color: #ff7aa8;
+}
+html body .cp-bar {
+  display: block;
+  height: 5px;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+html body .cp-bar i {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #ff7aa8, #ffc1d6);
+}
+html body .cp-a {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+html body .cp-vide {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+html body .cp-vide > span:nth-child(2) {
+  flex: 1;
+  display: grid;
+  gap: 2px;
+}
+html body .cp-vide em {
+  font-style: normal;
+  font-size: 12.5px;
+  color: var(--v4-tx2, #9fb0c4);
+}
+html body .cp-ic {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 122, 168, 0.16);
+  color: #ff9cbf;
+}
+html body .cp-ic svg {
+  width: 20px;
+  height: 20px;
+}
+html body .cp-bl {
+  display: grid;
+  gap: 4px;
+  margin-top: 12px;
+  font-size: 13px;
+}
+html body .cp-bl span {
+  color: var(--v4-tx2, #9fb0c4);
+}
+
+/* --- Pokégear --- */
+html body .v4-radio {
+  margin: 14px 0;
+  padding: 12px 14px;
+}
+html body .v4-radio .v4-ph svg {
+  width: 20px;
+  height: 20px;
+}
+html body .rd-l {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+html body .rd-i {
+  width: 100%;
+  display: grid;
+  gap: 2px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(120, 200, 255, 0.12);
+  border-left: 3px solid #7fd4ff;
+  background: rgba(0, 0, 0, 0.2);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+}
+html body button.rd-i {
+  cursor: pointer;
+}
+html body .rd-i b {
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #9fe1ff;
+}
+html body .rd-i em {
+  font-style: normal;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+/* --- story scenes --- */
+html body .story-scene {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 16px 16px calc(84px + env(safe-area-inset-bottom, 0px));
+  background: linear-gradient(180deg, rgba(4, 10, 24, 0.35), rgba(4, 10, 24, 0.85));
+}
+html body .story-scene[hidden] {
+  display: none;
+}
+html body .sc-card {
+  width: min(560px, 100%);
+  padding: 16px;
+  border-radius: 18px;
+  background: linear-gradient(180deg, #13284a, #0b1830);
+  border: 1px solid rgba(255, 215, 94, 0.5);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+  animation: companion-garden-monte 0.25s ease-out;
+}
+@keyframes companion-garden-monte {
+  from {
+    transform: translateY(16px);
+    opacity: 0;
+  }
+}
+html body .sc-who {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+html body .sc-who b {
+  color: #ffd75e;
+  font-size: 16px;
+}
+html body .sc-tx {
+  margin: 0 0 12px;
+  font-size: 16px;
+  line-height: 1.5;
+}
+html body .sc-a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+html body .sc-a .sc-n {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--v4-tx2, #9fb0c4);
+}

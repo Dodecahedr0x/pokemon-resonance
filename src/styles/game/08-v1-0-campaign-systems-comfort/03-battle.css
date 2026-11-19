@@ -1,0 +1,329 @@
+/* battle */
+.tile-i {
+  display: grid;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: var(--r);
+  background: rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 0 0 1px rgba(212, 175, 106, 0.2);
+}
+.ti-h {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.ti-h b {
+  font-family: var(--f-d);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-size: 13px;
+  color: var(--gold-l);
+}
+.tile-i p {
+  font-size: 13px;
+  color: var(--tx2);
+}
+.ti-rx {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.bp-ux {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+.ux {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--f-m);
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  padding: 3px 8px;
+  border-radius: 2px;
+  border: 1px solid rgba(212, 175, 106, 0.3);
+  color: var(--tx2);
+}
+.ux svg {
+  width: 12px;
+  height: 12px;
+  color: var(--gold-l);
+}
+.ux.it {
+  color: var(--gold-l);
+}
+.ux.fa {
+  color: #ffb08a;
+  border-color: rgba(255, 122, 61, 0.45);
+}
+.ux.lk.on {
+  color: #9ce0ff;
+  border-color: rgba(91, 155, 255, 0.5);
+}
+.bp-duo {
+  display: grid;
+  gap: 8px;
+}
+.duo-b {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+  width: 100%;
+  padding: 11px 13px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  background:
+    radial-gradient(120% 140% at 0% 0%, rgba(91, 155, 255, 0.18), transparent 60%) padding-box,
+    linear-gradient(#0e0f12, #0e0f12) padding-box,
+    var(--steel) border-box;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.duo-b.on,
+.duo-b:not(:disabled):hover {
+  background:
+    radial-gradient(120% 140% at 0% 0%, rgba(212, 175, 106, 0.24), transparent 60%) padding-box,
+    linear-gradient(#0e0f12, #0e0f12) padding-box,
+    var(--brass) border-box;
+}
+.duo-b:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+.duo-b b {
+  display: block;
+  font-family: var(--f-d);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 14px;
+}
+.duo-b em {
+  display: block;
+  font-style: normal;
+  font-size: 12px;
+  color: var(--tx2);
+}
+.duo-m {
+  display: inline-flex;
+}
+.duo-m .medal + .medal {
+  margin-left: -8px;
+}
+.bp-cap {
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+  border-radius: var(--r);
+  border: 1px solid transparent;
+  background:
+    var(--slab) padding-box,
+    var(--edge) border-box;
+}
+.cap-h {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+.cap-h b {
+  font-family: var(--f-d);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 13px;
+  color: var(--gold-l);
+}
+.cap-h span {
+  font-size: 12px;
+  color: var(--mut);
+}
+.bp-cap ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 4px;
+  font-size: 12.5px;
+  color: var(--mut);
+}
+.bp-cap li::before {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-right: 8px;
+  transform: rotate(45deg);
+  border: 1px solid var(--mut);
+}
+.bp-cap li.ok {
+  color: var(--tx);
+}
+.bp-cap li.ok::before {
+  background: #5fe0c0;
+  border-color: #5fe0c0;
+  box-shadow: 0 0 6px rgba(95, 224, 192, 0.7);
+}
+.plate .it .fatg {
+  color: #ffb08a;
+}
+.evofx.fast .efx,
+.evofx.fast .efx * {
+  animation-duration: 1.3s !important;
+}
+.res-l.champ {
+  box-shadow: inset 0 0 0 1px rgba(212, 175, 106, 0.5);
+}
+.res-l .it-ic {
+  width: 30px;
+  height: 30px;
+}
+/* tutorial */
+.coach {
+  position: fixed;
+  z-index: 70;
+  left: 50%;
+  bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+  transform: translateX(-50%);
+  width: min(560px, calc(100% - 24px));
+}
+.coach[hidden] {
+  display: none;
+}
+.co-in {
+  display: grid;
+  gap: 8px;
+  padding: 16px 18px;
+  border-radius: var(--rl);
+  border: 1px solid transparent;
+  background:
+    radial-gradient(90% 120% at 0% 0%, rgba(212, 175, 106, 0.18), transparent 60%) padding-box,
+    linear-gradient(#0e0f12, #0e0f12) padding-box,
+    var(--brass) border-box;
+  box-shadow:
+    0 24px 60px -20px #000,
+    0 0 0 1px #000;
+  animation: encIn 0.4s var(--ease) both;
+}
+.co-n {
+  font-family: var(--f-m);
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  color: var(--gold);
+}
+.co-in b {
+  font-family: var(--f-d);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-size: 16px;
+  color: var(--gold-l);
+}
+.co-in p {
+  font-size: 13.5px;
+  color: var(--tx2);
+}
+.co-a {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+.coach-hl {
+  outline: 2px solid rgba(242, 221, 168, 0.85) !important;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 6px rgba(212, 175, 106, 0.18) !important;
+}
+@media (max-width: 999px) {
+  .coach {
+    bottom: calc(var(--bn) + 78px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+.fc-it svg,
+.it-ic svg,
+.ux svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+/* League: items, duos */
+.items .it.off {
+  opacity: 0.6;
+}
+.it-src {
+  display: block;
+  font-style: normal;
+  margin-top: 3px;
+  font-family: var(--f-m);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--gold);
+}
+.items .it.off .it-src {
+  color: var(--mut);
+}
+.duos {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.duo {
+  padding: 20px;
+}
+.duo h3 {
+  font-size: 21px;
+}
+.duo .duo-st {
+  padding-top: 4px;
+  display: grid;
+  gap: 6px;
+}
+@media (max-width: 1200px) {
+  .duos {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 560px) {
+  .duos {
+    grid-template-columns: 1fr;
+  }
+}
+.duo .duo-st em {
+  font-style: normal;
+  font-family: var(--f-m);
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: var(--mut);
+}
+.duo.on .duo-st em {
+  color: var(--gold-l);
+}
+body:not(:has(#combat.on)) .coach {
+  display: none;
+}
+@media (max-width: 700px) {
+  .coach {
+    top: calc(62px + env(safe-area-inset-top, 0px));
+    bottom: auto;
+    width: calc(100% - 16px);
+  }
+  .co-in {
+    padding: 10px 12px;
+    gap: 4px;
+    border-radius: 8px;
+  }
+  .co-in b {
+    font-size: 13px;
+  }
+  .co-in p {
+    font-size: 12.5px;
+    line-height: 1.4;
+  }
+  .co-a .b {
+    min-height: 32px;
+    padding: 0 10px;
+    font-size: 10px;
+  }
+}

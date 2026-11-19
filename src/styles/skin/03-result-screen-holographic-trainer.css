@@ -1,0 +1,362 @@
+/* ---------- result screen: holographic trainer card ---------- */
+html:not(#pkz) body:not(#pkz) #cbResult > .res-card > .pk-holo {
+  position: absolute !important;
+  inset: 0 !important;
+  margin: 0 !important;
+  width: auto !important;
+  height: auto !important;
+  border-radius: inherit;
+  padding: 2px;
+  pointer-events: none;
+  z-index: 4 !important;
+  background: linear-gradient(
+      115deg,
+      #ffd35a,
+      #fff4c4 14%,
+      #7fd9ff 30%,
+      #ffb2db 46%,
+      #ffd35a 62%,
+      #fff4c4 76%,
+      #7fd9ff 90%,
+      #ffd35a
+    )
+    0 50%/300% 300%;
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: pkHolo 6s linear infinite;
+}
+html:not(#pkz) body:not(#pkz) #cbResult > .res-card.lose > .pk-holo {
+  background: linear-gradient(115deg, #9aa8b8, #eef3f8 20%, #7c8a9c 40%, #dfe7ef 60%, #9aa8b8 80%, #eef3f8) 0 50%/300%
+    300%;
+}
+html:not(#pkz) body:not(#pkz) #cbResult > .res-card > .pk-sceau {
+  position: absolute !important;
+  top: 16px !important;
+  right: 16px !important;
+  left: auto !important;
+  margin: 0 !important;
+  width: 50px !important;
+  height: 50px !important;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 5 !important;
+  background:
+    radial-gradient(circle at 50% 50%, #fff8db 0 7.5px, #6b4a0e 8.1px 9.5px, transparent 10.1px),
+    radial-gradient(circle at 32% 20%, rgba(255, 255, 255, 0.72) 0 2.4px, transparent 3.8px),
+    linear-gradient(180deg, #ffe68f 0%, #f0b92e 45%, #6b4a0e 45% 55%, #f7d978 55%, #c8901c 100%);
+  box-shadow:
+    0 0 0 2px rgba(107, 74, 14, 0.9),
+    0 0 0 5px rgba(255, 214, 90, 0.25),
+    0 6px 18px rgba(0, 0, 0, 0.5);
+  animation: pkTampon 0.7s cubic-bezier(0.2, 1.3, 0.4, 1) 0.45s both;
+}
+.pk-sceau::after {
+  content: '';
+  position: absolute;
+  inset: -9px;
+  border-radius: 50%;
+  border: 1.5px dashed rgba(255, 220, 120, 0.55);
+  animation: pkTourne 14s linear infinite;
+}
+.lose .pk-sceau {
+  filter: grayscale(1) brightness(1.05);
+}
+html:not(#pkz) body:not(#pkz) #cbResult > .res-card > .pk-gerbe {
+  position: absolute !important;
+  left: 50% !important;
+  top: 120px !important;
+  margin: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+  pointer-events: none;
+  z-index: 5 !important;
+}
+.pk-gerbe i {
+  position: absolute;
+  left: -3px;
+  top: -3px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #fff3b0;
+  box-shadow:
+    0 0 10px #ffd35a,
+    0 0 3px #fff;
+  transform: rotate(var(--a)) translateY(0) scale(0.4);
+  opacity: 0;
+  animation: pkGerbe 0.95s cubic-bezier(0.15, 0.7, 0.3, 1) var(--d, 0s) forwards;
+}
+.pk-gerbe i:nth-child(3n) {
+  background: #bff0ff;
+  box-shadow: 0 0 10px #6fdcff;
+}
+.pk-gerbe i:nth-child(4n) {
+  background: #ffc2df;
+  box-shadow: 0 0 10px #ff86c0;
+}
+#cbResult > .res-card.win {
+  animation: pkCarte 0.75s cubic-bezier(0.2, 1.1, 0.3, 1) both !important;
+}
+
+/* ---------- Pokémon sheet (bottom sheet) ---------- */
+html:not(#pkz) body:not(#pkz) #sheet .sh {
+  border-top: 0 !important;
+}
+html:not(#pkz) body:not(#pkz) #sheet .sh::before {
+  content: '';
+  position: sticky;
+  top: 0;
+  display: block;
+  height: 3px;
+  margin-bottom: -3px;
+  z-index: 6;
+  background: linear-gradient(90deg, #e3262f, #ffd35a 50%, #e3262f);
+  pointer-events: none;
+}
+
+/* ---------- Poké Ball opening between tabs ---------- */
+#pk-iris {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483000;
+  pointer-events: none;
+  display: none;
+}
+#pk-iris.go {
+  display: block;
+}
+#pk-iris i {
+  position: absolute;
+  box-sizing: border-box;
+  display: block;
+  margin: 0;
+  padding: 0;
+  border-radius: 0;
+  opacity: 1;
+  box-shadow: none;
+  transform: none;
+}
+#pk-iris .pk-h {
+  left: 0;
+  right: 0;
+  height: 50.5%;
+}
+#pk-iris .pk-ht {
+  top: 0;
+  background:
+    radial-gradient(120% 90% at 28% 8%, rgba(255, 255, 255, 0.34), transparent 46%),
+    linear-gradient(180deg, #ff5b61, #d7212a 72%, #a3121a);
+  border-bottom: 7px solid #12161d;
+}
+#pk-iris .pk-hb {
+  bottom: 0;
+  background:
+    radial-gradient(120% 90% at 70% 100%, rgba(0, 0, 0, 0.12), transparent 50%),
+    linear-gradient(180deg, #fbf7ee, #d9d0bc);
+  border-top: 7px solid #12161d;
+}
+#pk-iris .pk-hc {
+  left: 50%;
+  top: 50%;
+  width: 86px;
+  height: 86px;
+  margin: -43px 0 0 -43px !important;
+  border-radius: 50% !important;
+  background: radial-gradient(circle, #fff 0 21px, #dcd5c5 22px 26px, #12161d 27px 34px, #fbf7ee 35px);
+  box-shadow:
+    0 0 0 7px #12161d,
+    0 0 34px rgba(255, 255, 255, 0.55) !important;
+}
+#pk-iris.go .pk-ht {
+  animation: pkHaut 0.44s cubic-bezier(0.65, 0, 0.35, 1) 0.14s both;
+}
+#pk-iris.go .pk-hb {
+  animation: pkBas 0.44s cubic-bezier(0.65, 0, 0.35, 1) 0.14s both;
+}
+#pk-iris.go .pk-hc {
+  animation: pkBouton 0.52s ease-out both;
+}
+
+/* ---------- animations ---------- */
+@keyframes pkTourne {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes pkLed {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+@keyframes pkHalo {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(1.35);
+    opacity: 0;
+  }
+}
+@keyframes pkSecoue {
+  0% {
+    transform: scale(0.55) rotate(0);
+  }
+  30% {
+    transform: scale(1.14) rotate(-16deg);
+  }
+  50% {
+    transform: scale(1) rotate(11deg);
+  }
+  70% {
+    transform: rotate(-6deg);
+  }
+  86% {
+    transform: rotate(3deg);
+  }
+  100% {
+    transform: scale(1) rotate(0);
+  }
+}
+@keyframes pkPop {
+  0% {
+    transform: scale(0.9);
+  }
+  55% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: none;
+  }
+}
+@keyframes pkRoule {
+  0% {
+    transform: translateX(-8px) rotate(-200deg);
+    opacity: 0;
+  }
+  100% {
+    transform: none;
+    opacity: 1;
+  }
+}
+@keyframes pkReflet {
+  0% {
+    background-position: 140% 0;
+  }
+  100% {
+    background-position: -40% 0;
+  }
+}
+@keyframes pkMonte {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes pkFondu {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes pkScan {
+  0% {
+    background-position: 0 100%;
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    background-position: 0 0;
+    opacity: 0;
+  }
+}
+@keyframes pkOnde {
+  to {
+    transform: scale(13);
+    opacity: 0;
+  }
+}
+@keyframes pkHolo {
+  to {
+    background-position: 300% 50%;
+  }
+}
+@keyframes pkTampon {
+  0% {
+    transform: scale(2.6) rotate(-35deg);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(0.9) rotate(6deg);
+    opacity: 1;
+  }
+  100% {
+    transform: none;
+    opacity: 1;
+  }
+}
+@keyframes pkGerbe {
+  0% {
+    opacity: 0;
+    transform: rotate(var(--a)) translateY(0) scale(0.4);
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: rotate(var(--a)) translateY(var(--r, -110px)) scale(1);
+  }
+}
+@keyframes pkCarte {
+  0% {
+    opacity: 0;
+    transform: perspective(900px) rotateY(-75deg) scale(0.86);
+  }
+  60% {
+    opacity: 1;
+    transform: perspective(900px) rotateY(8deg) scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes pkHaut {
+  to {
+    transform: translateY(-104%);
+  }
+}
+@keyframes pkBas {
+  to {
+    transform: translateY(104%);
+  }
+}
+@keyframes pkBouton {
+  0% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.12);
+    filter: brightness(1.35);
+  }
+  100% {
+    transform: scale(0.25);
+    opacity: 0;
+  }
+}
