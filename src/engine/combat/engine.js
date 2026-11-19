@@ -909,9 +909,8 @@ export function shove(S, v, from, n, ev, pull) {
   }
 }
 
-function react(S, rx, k, u, v, base, ev) {
-  const t = S.tiles[k],
-    by = t.mark ? t.mark.by : null;
+// Counts the reaction in the player's stats, links its author and grants the first-reaction rewards.
+function recordReaction(S, rx, k, u, by, ev) {
   if (u.side === 'a') {
     S.stats.rx++;
     const R = (S.stats.rxk = S.stats.rxk || {}); // preferred reactions (studied by the Champion)
@@ -930,40 +929,120 @@ function react(S, rx, k, u, v, base, ev) {
       rewardIn(S, pb, 1, ev);
     }
   }
-  switch (rx) {
-    case 'cc': {
-      const N = net(S, k, 'trempe');
-      ev.push({ e: 'chain', edges: N.edges, c: 'el' });
-      let n = 0;
-      for (const x in N.seen) {
-        const d = N.seen[x];
-        if (S.tiles[x].mark && S.tiles[x].mark.k === 'trempe') {
-          S.tiles[x].mark = null;
-        }
-        const w = uAt(S, x);
-        if (!w) {
-          continue;
-        }
-        if (w.t.includes('Sol')) {
-          say(ev, `${w.n} est insensible au courant.`);
-          continue;
-        }
-        if (w.ability === 'absorbvolt') {
-          say(ev, `${w.n} absorbe le courant.`);
-          heal(S, w, 8, ev);
-          continue;
-        }
-        if (x !== k && w.ability !== 'ecranpoudre') {
-          damage(S, w, Math.max(2, Math.round(base * 0.5 * Math.pow(0.85, d))), ev, { ind: true });
-        }
-        if (!w.ko) {
-          stun(S, w, 'PAR', ev);
-          n++;
-        }
-      }
-      say(ev, `Court-circuit ! ${n} Pokémon paralysé${n > 1 ? 's' : ''}.`);
-      break;
+}
+
+// Short circuit: the current runs through the Soaked network, damaging and paralysing.
+function reactShortCircuit(S, k, base, ev) {
+  const N = net(S, k, 'trempe');
+  ev.push({ e: 'chain', edges: N.edges, c: 'el' });
+  let n = 0;
+  for (const x in N.seen) {
+    const d = N.seen[x];
+    if (S.tiles[x].mark && S.tiles[x].mark.k === 'trempe') {
+      S.tiles[x].mark = null;
     }
+    const w = uAt(S, x);
+    if (!w) {
+      continue;
+    }
+    if (w.t.includes('Sol')) {
+      say(ev, `${w.n} est insensible au courant.`);
+      continue;
+    }
+    if (w.ability === 'absorbvolt') {
+      say(ev, `${w.n} absorbe le courant.`);
+      heal(S, w, 8, ev);
+      continue;
+    }
+    if (x !== k && w.ability !== 'ecranpoudre') {
+      damage(S, w, Math.max(2, Math.round(base * 0.5 * Math.pow(0.85, d))), ev, { ind: true });
+    }
+    if (!w.ko) {
+      stun(S, w, 'PAR', ev);
+      n++;
+    }
+  }
+  say(ev, `Court-circuit ! ${n} Pokémon paralysé${n > 1 ? 's' : ''}.`);
+}
+
+// Bloom: heals nearby allies and roots the tile.
+function reactBloom(S, k, u, ev) {
+  [k, ...nbrK(k)].forEach(x => {
+    const w = uAt(S, x);
+    if (w && w.side === u.side) {
+      heal(S, w, Math.round(w.mhp * 0.2), ev);
+    }
+  });
+  setMark(S, k, 'enracine', u.uid);
+  say(ev, 'Floraison : les alliés proches récupèrent.');
+}
+
+// Surge: clears the mark and damages every unit around the tile.
+function reactSurge(S, k, t, base, ev) {
+  t.mark = null;
+  nbrK(k).forEach(x => {
+    const w = uAt(S, x);
+    if (w && w.ability !== 'ecranpoudre') {
+      damage(S, w, Math.max(2, Math.round(base * 0.5)), ev, { ind: true });
+    }
+  });
+  say(ev, 'Surtension : explosion !');
+}
+
+// Wildfire: fire spreads through the Rooted network, burning the units on it.
+function reactWildfire(S, k, u, ev) {
+  const N = net(S, k, 'enracine');
+  ev.push({ e: 'chain', edges: N.edges, c: 'fire' });
+  for (const x in N.seen) {
+    setMark(S, x, 'brulant', u.uid);
+    const w = uAt(S, x);
+    if (w && x !== k && w.ability !== 'ecranpoudre' && w.ability !== 'torche') {
+      damage(S, w, w.ability === 'isograisse' ? 3 : 6, ev, { ind: true });
+    }
+    if (w && !w.ko && w.ability !== 'torche') {
+      w.burn = 3;
+    }
+  }
+  say(ev, 'Embrasement : le feu se propage.');
+}
+
+// Anchor: an ally gains Guard, a foe is rooted (unless protected by a rune).
+function reactAnchor(S, t, u, v, ev) {
+  t.mark = null;
+  if (v) {
+    if (v.side === u.side) {
+      v.anchor = 2;
+      say(ev, `${v.n} est ancré : +2 Garde.`);
+    } else if (hasRune(S, v)) {
+      say(ev, `Rune Protect : ${v.n} est protégé.`);
+    } // v4.13
+    else {
+      v.root = 2;
+      say(ev, `${v.n} est enraciné au sol.`);
+    }
+  }
+}
+
+// Ice floe: the whole Soaked network freezes.
+function reactIceFloe(S, k, u, ev) {
+  const N = net(S, k, 'trempe');
+  ev.push({ e: 'chain', edges: N.edges, c: 'ice' });
+  for (const x in N.seen) {
+    setMark(S, x, 'givre', u.uid);
+    const w = uAt(S, x);
+    if (w) {
+      stun(S, w, 'GEL', ev);
+    }
+  }
+  say(ev, 'Banquise : tout le réseau d’eau gèle.');
+}
+
+// Applies the board effect of reaction rx on tile k (t is that tile).
+function applyReactionEffect(S, rx, k, t, u, v, base, ev) {
+  switch (rx) {
+    case 'cc':
+      reactShortCircuit(S, k, base, ev);
+      break;
     case 'vap':
       [k, ...nbrK(k)].forEach(x => {
         S.tiles[x].fog = 2;
@@ -972,14 +1051,7 @@ function react(S, rx, k, u, v, base, ev) {
       say(ev, 'Vapeur : un brouillard couvre la zone.');
       break;
     case 'flo':
-      [k, ...nbrK(k)].forEach(x => {
-        const w = uAt(S, x);
-        if (w && w.side === u.side) {
-          heal(S, w, Math.round(w.mhp * 0.2), ev);
-        }
-      });
-      setMark(S, k, 'enracine', u.uid);
-      say(ev, 'Floraison : les alliés proches récupèrent.');
+      reactBloom(S, k, u, ev);
       break;
     case 'gel':
       if (v) {
@@ -994,36 +1066,16 @@ function react(S, rx, k, u, v, base, ev) {
       say(ev, 'Boue : la case ralentit pendant 3 manches.');
       break;
     case 'sur':
-      t.mark = null;
-      nbrK(k).forEach(x => {
-        const w = uAt(S, x);
-        if (w && w.ability !== 'ecranpoudre') {
-          damage(S, w, Math.max(2, Math.round(base * 0.5)), ev, { ind: true });
-        }
-      });
-      say(ev, 'Surtension : explosion !');
+      reactSurge(S, k, t, base, ev);
       break;
     case 'ter':
       t.mark = null;
       u.guard = 2;
       say(ev, `Mise à la terre : ${u.n} gagne +2 Garde.`);
       break;
-    case 'emb': {
-      const N = net(S, k, 'enracine');
-      ev.push({ e: 'chain', edges: N.edges, c: 'fire' });
-      for (const x in N.seen) {
-        setMark(S, x, 'brulant', u.uid);
-        const w = uAt(S, x);
-        if (w && x !== k && w.ability !== 'ecranpoudre' && w.ability !== 'torche') {
-          damage(S, w, w.ability === 'isograisse' ? 3 : 6, ev, { ind: true });
-        }
-        if (w && !w.ko && w.ability !== 'torche') {
-          w.burn = 3;
-        }
-      }
-      say(ev, 'Embrasement : le feu se propage.');
+    case 'emb':
+      reactWildfire(S, k, u, ev);
       break;
-    }
     case 'fon':
       setMark(S, k, 'trempe', u.uid);
       say(ev, 'Fonte : choc thermique, la case devient Trempée.');
@@ -1038,39 +1090,25 @@ function react(S, rx, k, u, v, base, ev) {
       say(ev, 'Bris : dégâts doublés.');
       break;
     case 'anc':
-      t.mark = null;
-      if (v) {
-        if (v.side === u.side) {
-          v.anchor = 2;
-          say(ev, `${v.n} est ancré : +2 Garde.`);
-        } else if (hasRune(S, v)) {
-          say(ev, `Rune Protect : ${v.n} est protégé.`);
-        } // v4.13
-        else {
-          v.root = 2;
-          say(ev, `${v.n} est enraciné au sol.`);
-        }
-      }
+      reactAnchor(S, t, u, v, ev);
       break;
-    case 'ban': {
-      const N = net(S, k, 'trempe');
-      ev.push({ e: 'chain', edges: N.edges, c: 'ice' });
-      for (const x in N.seen) {
-        setMark(S, x, 'givre', u.uid);
-        const w = uAt(S, x);
-        if (w) {
-          stun(S, w, 'GEL', ev);
-        }
-      }
-      say(ev, 'Banquise : tout le réseau d’eau gèle.');
+    case 'ban':
+      reactIceFloe(S, k, u, ev);
       break;
-    }
     case 'sei':
       nbrK(k).forEach(x => setMark(S, x, 'fissure', u.uid));
       setMark(S, k, 'fissure', u.uid);
       say(ev, 'Onde sismique : le sol se fissure.');
       break;
   }
+}
+
+// Triggers reaction rx on tile k: bookkeeping and rewards first, then the board effect.
+function react(S, rx, k, u, v, base, ev) {
+  const t = S.tiles[k],
+    by = t.mark ? t.mark.by : null;
+  recordReaction(S, rx, k, u, by, ev);
+  applyReactionEffect(S, rx, k, t, u, v, base, ev);
 }
 
 export function endStep(S, ev) {
@@ -1129,61 +1167,66 @@ export function retarget(S, e, src, fx, ev) {
   say(ev, `${e.n} vise désormais ${tgt.n}.`);
 }
 
-export function resolveMove(S, u, m, k) {
-  const ev = [];
-  if (u.ko) {
-    return ev;
-  }
-  const typ = mvType(S, u, m);
+// Records the move as the latest action and announces it in the journal.
+function announceMove(S, u, m, k, typ, ev) {
   S.lastAtk = u.uid;
   S.rxg = {};
   ev.push({ e: 'use', u: u.uid, k, ty: typ });
   S.lastActor = u.uid; // tactical log (v4.30)
   say(ev, `${u.n} utilise ${m.n} !`);
-  if (m.wx) {
-    S.wx = { k: m.wx, n: u.item === 'rochemeteo' ? 8 : 5 }; // Weather Rock (v4.14)
-    say(ev, `Météo ${WXN[m.wx]} pendant ${S.wx.n} manches.`);
-    return endStep(S, ev);
-  }
-  if (m.sh === 'self') {
-    if (m.fx === 'guard') {
-      u.guard = 2;
-      say(ev, `${u.n} gagne +2 Garde.`);
-    } else if (m.fx === 'protect') {
-      u.prot = 1;
-      say(ev, `${u.n} se met à l’abri.`);
-    } else if (m.fx === 'boost') {
-      u.boost = 2;
-      say(ev, `${u.n} aiguise ses attaques.`);
-    } else if (m.fx === 'selfheal') {
-      heal(S, u, Math.round(u.mhp * (S.wx && S.wx.k === 'soleil' ? 0.6 : 0.4)), ev);
-    } else if (m.fx === 'rest') {
-      heal(S, u, Math.round(u.mhp * 0.5), ev);
-      u.skip = 1;
-      u.badge = 'SOM';
-      say(ev, `${u.n} s’endort.`);
-    } else if (m.fx === 'reflect') {
-      S.units.forEach(o => {
-        if (!o.ko && o.side === u.side && hdist(o.pos, u.pos) <= 1) {
-          o.guard = 2;
-        }
-      });
-      say(ev, `Protection : ${u.n} et ses voisins gagnent +2 Garde.`);
-    } else if (SELF_MOVE_EFFECTS[m.fx]) {
-      SELF_MOVE_EFFECTS[m.fx](S, u, ev);
-    } // v4.12
-    return endStep(S, ev);
-  }
+}
+
+// Weather move: sets the weather and its duration.
+function applyWeatherMove(S, u, m, ev) {
+  S.wx = { k: m.wx, n: u.item === 'rochemeteo' ? 8 : 5 }; // Weather Rock (v4.14)
+  say(ev, `Météo ${WXN[m.wx]} pendant ${S.wx.n} manches.`);
+}
+
+// Self-targeted move: guard, protect, boost, heals, rest, reflect or a registered self effect.
+function applySelfMove(S, u, m, ev) {
+  if (m.fx === 'guard') {
+    u.guard = 2;
+    say(ev, `${u.n} gagne +2 Garde.`);
+  } else if (m.fx === 'protect') {
+    u.prot = 1;
+    say(ev, `${u.n} se met à l’abri.`);
+  } else if (m.fx === 'boost') {
+    u.boost = 2;
+    say(ev, `${u.n} aiguise ses attaques.`);
+  } else if (m.fx === 'selfheal') {
+    heal(S, u, Math.round(u.mhp * (S.wx && S.wx.k === 'soleil' ? 0.6 : 0.4)), ev);
+  } else if (m.fx === 'rest') {
+    heal(S, u, Math.round(u.mhp * 0.5), ev);
+    u.skip = 1;
+    u.badge = 'SOM';
+    say(ev, `${u.n} s’endort.`);
+  } else if (m.fx === 'reflect') {
+    S.units.forEach(o => {
+      if (!o.ko && o.side === u.side && hdist(o.pos, u.pos) <= 1) {
+        o.guard = 2;
+      }
+    });
+    say(ev, `Protection : ${u.n} et ses voisins gagnent +2 Garde.`);
+  } else if (SELF_MOVE_EFFECTS[m.fx]) {
+    SELF_MOVE_EFFECTS[m.fx](S, u, ev);
+  } // v4.12
+}
+
+// Tile-placed moves (trap, Future Sight); returns true when the move was one of them.
+function applyPlacedMove(S, u, m, k, ev) {
   if (m.fx === 'piege') {
     placeTrap(S, u, m, k, ev); // traps (v4.8)
-    return endStep(S, ev);
+    return true;
   }
   if (m.fx === 'presc') {
     placeForesight(S, u, m, k, ev); // Future Sight (v4.12)
-    return endStep(S, ev);
+    return true;
   }
-  const v0 = outOfReach(S, uAt(S, k), u, null), // airborne: untouchable (v4.8)
-    mk0 = markAt(S, k);
+  return false;
+}
+
+// Non-damaging moves on the main target (swaps, heal, help, retarget…); returns true when one applied.
+function applyUtilityMove(S, u, m, v0, ev) {
   if (m.fx === 'swap' && v0 && !v0.colossus && !v0.seg) {
     const a = u.pos;
     u.pos = v0.pos;
@@ -1191,7 +1234,7 @@ export function resolveMove(S, u, m, k) {
     ev.push({ e: 'mv', u: u.uid }, { e: 'mv', u: v0.uid });
     say(ev, `${u.n} échange sa place avec ${v0.n}.`);
     landed(S, v0, ev);
-    return endStep(S, ev);
+    return true;
   }
   if (m.fx === 'swapally' && v0) {
     const a = u.pos;
@@ -1200,116 +1243,138 @@ export function resolveMove(S, u, m, k) {
     v0.guard = 2;
     ev.push({ e: 'mv', u: u.uid }, { e: 'mv', u: v0.uid });
     say(ev, `Relais avec ${v0.n} : +2 Garde.`);
-    return endStep(S, ev);
+    return true;
   }
   if (m.fx === 'heal' && v0) {
     heal(S, v0, Math.round(v0.mhp * 0.3), ev);
-    return endStep(S, ev);
+    return true;
   }
   if (m.fx === 'aide' && v0) {
     v0.aide = 1; // Helping Hand (v4.12)
     ev.push({ e: 'st', u: v0.uid, s: 'AIDE' });
     say(ev, `Coup d’Main : la prochaine attaque de ${v0.n} cette manche frappera ×1,5.`);
-    return endStep(S, ev);
+    return true;
   }
   if (m.fx === 'mitra' && u.touche) {
     say(ev, `${u.n} a été touché : il perd sa concentration, Mitra-Poing échoue.`); // v4.13
-    return endStep(S, ev);
+    return true;
   }
   if (PRE_MOVE_EFFECTS[m.fx] && v0) {
     PRE_MOVE_EFFECTS[m.fx](S, u, m, v0, ev); // Curse, Will-O-Wisp, Swagger, Transform (v4.13)
-    return endStep(S, ev);
+    return true;
   }
   if (['taunt', 'turn', 'confuse'].includes(m.fx) && v0) {
     retarget(S, v0, u, m.fx, ev);
-    return endStep(S, ev);
+    return true;
   }
-  const family = typ === 'Dragon' ? null : FAMT[typ] || null,
-    sb = u.t.includes(typ) ? 1.2 : 1;
-  let dealt = 0;
-  for (const x of affected(S, u, m, k)) {
-    const t = S.tiles[x],
-      v = outOfReach(S, uAt(S, x), u, ev),
-      mk = markAt(S, x);
-    if (m.fx === 'smoke') {
-      t.fog = 2;
-      continue;
+  return false;
+}
+
+// Finds the reaction triggered on tile x and its damage multiplier; a reinforcement strengthens the mark instead.
+function tileReaction(S, m, family, t, x, mk, ev) {
+  let rx = null,
+    mult = 1,
+    ren = false;
+  if (family && mk && (m.p || m.fix || m.mk)) {
+    rx = MX[mk][EL.indexOf(family)] || null;
+  }
+  if (rx === 'ren') {
+    ren = true;
+    rx = null;
+    if (t.mark) {
+      t.mark.d += 1;
+      t.mark.lv = 2;
     }
-    let rx = null,
-      mult = 1,
-      ren = false;
-    if (family && mk && (m.p || m.fix || m.mk)) {
-      rx = MX[mk][EL.indexOf(family)] || null;
+    say(ev, `Renfort : la marque ${MK.find(z => z.id === mk).n} s’intensifie.`);
+  } else if (rx) {
+    if (t.mark && t.mark.lv === 2) {
+      mult *= 1.25;
     }
-    if (rx === 'ren') {
-      ren = true;
+    if (rx === 'sur' && moist(S, x)) {
+      say(ev, 'Moiteur empêche la Surtension.');
       rx = null;
-      if (t.mark) {
-        t.mark.d += 1;
-        t.mark.lv = 2;
-      }
-      say(ev, `Renfort : la marque ${MK.find(z => z.id === mk).n} s’intensifie.`);
-    } else if (rx) {
-      if (t.mark && t.mark.lv === 2) {
-        mult *= 1.25;
-      }
-      if (rx === 'sur' && moist(S, x)) {
-        say(ev, 'Moiteur empêche la Surtension.');
-        rx = null;
-      } else {
-        mult *= RXM[rx] || 1;
-      }
-    }
-    let base = Math.round(((m.p || 4) + u.s[1] * 2) * sb);
-    if (v && !(v.side === u.side && m.sh === 'one') && (m.p || m.fix)) {
-      const dmg = dmgOf(S, u, m, v, typ, mult),
-        b0 = dmgOf(S, u, m, v, typ, 1);
-      if (b0 > 0) {
-        base = b0;
-      }
-      if (dmg > 0) {
-        if (typ === 'Eau' && v.ability === 'absorbeau') {
-          say(ev, `${v.n} absorbe l’eau.`);
-          heal(S, v, dmg, ev);
-        } else if (typ === 'Électrik' && v.ability === 'absorbvolt') {
-          say(ev, `${v.n} absorbe le courant.`);
-          heal(S, v, dmg, ev);
-        } else if (typ === 'Électrik' && v.ability === 'paratonnerre') {
-          say(ev, `Paratonnerre : ${v.n} attire la foudre et se renforce.`); // v4.13
-          v.boost = Math.max(v.boost, 2);
-        } else if (typ === 'Feu' && v.ability === 'torche') {
-          say(ev, `Torche : ${v.n} absorbe les flammes et renforce ses attaques.`);
-          v.boost = 2;
-        } else {
-          const e = teff(typ, v.t) || 1; // 0 only under Gravity (v4.13)
-          dealt += damage(S, v, dmg, ev, {});
-          if (e > 1) {
-            say(ev, 'C’est super efficace !');
-          } else if (e < 1) {
-            say(ev, 'Ce n’est pas très efficace.');
-          }
-        }
-      } else if (teff(typ, v.t) === 0 || (typ === 'Sol' && v.ability === 'levitation')) {
-        say(ev, `Ça n’affecte pas ${v.n}.`);
-      } else if (m.fx === 'devoreve') {
-        say(ev, `${v.n} ne dort pas : Dévorêve échoue.`);
-      } // v4.12
-    }
-    if (v && !v.ko && v.side !== u.side && TARGET_MOVE_EFFECTS[m.fx]) {
-      TARGET_MOVE_EFFECTS[m.fx](S, u, v, x, mk, ev);
-    } // Icy Wind, Dragon Breath, Sludge Bomb (v4.12)
-    if (v) {
-      afterHitSignatures(S, u, m, v, x, mk, typ, ev);
-    } // Triple Kick, Psywave, Cursed Body, Conversion 2 (v4.13)
-    if (v) {
-      afterHitResonance(S, u, m, v, x, typ, ev);
-    } // Resonance notes (v4.14)
-    if (rx) {
-      react(S, rx, x, u, v && !v.ko ? v : null, base, ev);
-    } else if (m.mk && !ren) {
-      setMark(S, x, m.mk, u.uid);
+    } else {
+      mult *= RXM[rx] || 1;
     }
   }
+  return { rx, mult, ren };
+}
+
+// Deals the move's damage to v (or lets an ability absorb it); returns the reaction base and the damage dealt.
+function strikeTarget(S, u, m, v, typ, mult, base, ev) {
+  let dealt = 0,
+    reactionBase = base;
+  const dmg = dmgOf(S, u, m, v, typ, mult),
+    b0 = dmgOf(S, u, m, v, typ, 1);
+  if (b0 > 0) {
+    reactionBase = b0;
+  }
+  if (dmg > 0) {
+    if (typ === 'Eau' && v.ability === 'absorbeau') {
+      say(ev, `${v.n} absorbe l’eau.`);
+      heal(S, v, dmg, ev);
+    } else if (typ === 'Électrik' && v.ability === 'absorbvolt') {
+      say(ev, `${v.n} absorbe le courant.`);
+      heal(S, v, dmg, ev);
+    } else if (typ === 'Électrik' && v.ability === 'paratonnerre') {
+      say(ev, `Paratonnerre : ${v.n} attire la foudre et se renforce.`); // v4.13
+      v.boost = Math.max(v.boost, 2);
+    } else if (typ === 'Feu' && v.ability === 'torche') {
+      say(ev, `Torche : ${v.n} absorbe les flammes et renforce ses attaques.`);
+      v.boost = 2;
+    } else {
+      const e = teff(typ, v.t) || 1; // 0 only under Gravity (v4.13)
+      dealt += damage(S, v, dmg, ev, {});
+      if (e > 1) {
+        say(ev, 'C’est super efficace !');
+      } else if (e < 1) {
+        say(ev, 'Ce n’est pas très efficace.');
+      }
+    }
+  } else if (teff(typ, v.t) === 0 || (typ === 'Sol' && v.ability === 'levitation')) {
+    say(ev, `Ça n’affecte pas ${v.n}.`);
+  } else if (m.fx === 'devoreve') {
+    say(ev, `${v.n} ne dort pas : Dévorêve échoue.`);
+  } // v4.12
+  return { base: reactionBase, dealt };
+}
+
+// Resolves the move on one affected tile (damage, on-hit effects, reaction or mark); returns the damage dealt.
+function hitTile(S, u, m, typ, family, sb, x, ev) {
+  let dealt = 0;
+  const t = S.tiles[x],
+    v = outOfReach(S, uAt(S, x), u, ev),
+    mk = markAt(S, x);
+  if (m.fx === 'smoke') {
+    t.fog = 2;
+    return dealt;
+  }
+  const { rx, mult, ren } = tileReaction(S, m, family, t, x, mk, ev);
+  let base = Math.round(((m.p || 4) + u.s[1] * 2) * sb);
+  if (v && !(v.side === u.side && m.sh === 'one') && (m.p || m.fix)) {
+    const hit = strikeTarget(S, u, m, v, typ, mult, base, ev);
+    base = hit.base;
+    dealt += hit.dealt;
+  }
+  if (v && !v.ko && v.side !== u.side && TARGET_MOVE_EFFECTS[m.fx]) {
+    TARGET_MOVE_EFFECTS[m.fx](S, u, v, x, mk, ev);
+  } // Icy Wind, Dragon Breath, Sludge Bomb (v4.12)
+  if (v) {
+    afterHitSignatures(S, u, m, v, x, mk, typ, ev);
+  } // Triple Kick, Psywave, Cursed Body, Conversion 2 (v4.13)
+  if (v) {
+    afterHitResonance(S, u, m, v, x, typ, ev);
+  } // Resonance notes (v4.14)
+  if (rx) {
+    react(S, rx, x, u, v && !v.ko ? v : null, base, ev);
+  } else if (m.mk && !ren) {
+    setMark(S, x, m.mk, u.uid);
+  }
+  return dealt;
+}
+
+// Area aftermath of the move: smoke message and Cut on tall grass.
+function applyAreaAftermath(S, m, k, ev) {
   if (m.fx === 'smoke') {
     say(ev, 'Un brouillard épais se lève.');
   }
@@ -1318,41 +1383,46 @@ export function resolveMove(S, u, m, k) {
     say(ev, 'Coupe : les hautes herbes sont fauchées.');
     ev.push({ e: 'terrain', k });
   }
-  const v1 = v0 && !v0.ko ? v0 : null;
-  if (v1 && v1.side !== u.side) {
-    if (m.fx === 'push') {
-      shove(S, v1, u.pos, m.v, ev, false);
-    }
-    if (m.fx === 'pull') {
-      if (mk0 === 'charge' || (u.ability === 'magnepiege' && v1.t.includes('Acier'))) {
-        shove(S, v1, u.pos, m.v, ev, true);
-      } else {
-        say(ev, 'Aimant : la cible n’est pas Chargée.');
-      }
-    }
-    if (m.fx === 'parc' && mk0 === 'charge') {
-      stun(S, v1, 'PAR', ev);
-    }
-    if (m.fx === 'sleep') {
-      stun(S, v1, 'SOM', ev);
-    }
-    if (m.fx === 'web') {
-      if (v1.ability === 'regardvif' || hasRune(S, v1)) {
-        say(ev, `${v1.n} ignore l’entrave.`);
-      } else {
-        v1.web = 2;
-        say(ev, `${v1.n} est ralenti.`);
-      }
-    }
-    if (m.fx === 'root') {
-      if (v1.ability === 'regardvif' || hasRune(S, v1)) {
-        say(ev, `${v1.n} ignore l’entrave.`);
-      } else {
-        v1.root = Math.max(v1.root, m.v || 2);
-        say(ev, `${v1.n} ne peut plus bouger.`);
-      }
+}
+
+// Control effects on the surviving enemy main target: push, pull, paralysis, sleep, web, root.
+function applyControlEffects(S, u, m, v1, mk0, ev) {
+  if (m.fx === 'push') {
+    shove(S, v1, u.pos, m.v, ev, false);
+  }
+  if (m.fx === 'pull') {
+    if (mk0 === 'charge' || (u.ability === 'magnepiege' && v1.t.includes('Acier'))) {
+      shove(S, v1, u.pos, m.v, ev, true);
+    } else {
+      say(ev, 'Aimant : la cible n’est pas Chargée.');
     }
   }
+  if (m.fx === 'parc' && mk0 === 'charge') {
+    stun(S, v1, 'PAR', ev);
+  }
+  if (m.fx === 'sleep') {
+    stun(S, v1, 'SOM', ev);
+  }
+  if (m.fx === 'web') {
+    if (v1.ability === 'regardvif' || hasRune(S, v1)) {
+      say(ev, `${v1.n} ignore l’entrave.`);
+    } else {
+      v1.web = 2;
+      say(ev, `${v1.n} est ralenti.`);
+    }
+  }
+  if (m.fx === 'root') {
+    if (v1.ability === 'regardvif' || hasRune(S, v1)) {
+      say(ev, `${v1.n} ignore l’entrave.`);
+    } else {
+      v1.root = Math.max(v1.root, m.v || 2);
+      say(ev, `${v1.n} ne peut plus bouger.`);
+    }
+  }
+}
+
+// Effects on the user after the move: drain, Helping Hand, signatures, held items, recoil, guard, recharge.
+function applyUserAftermath(S, u, m, k, v0, v1, dealt, ev) {
   if (m.fx === 'drain' && dealt > 0) {
     heal(S, u, Math.ceil(dealt / 2), ev);
   }
@@ -1376,6 +1446,43 @@ export function resolveMove(S, u, m, k) {
     u.badge = 'REC';
     say(ev, `${u.n} doit recharger.`);
   }
+}
+
+export function resolveMove(S, u, m, k) {
+  const ev = [];
+  if (u.ko) {
+    return ev;
+  }
+  const typ = mvType(S, u, m);
+  announceMove(S, u, m, k, typ, ev);
+  if (m.wx) {
+    applyWeatherMove(S, u, m, ev);
+    return endStep(S, ev);
+  }
+  if (m.sh === 'self') {
+    applySelfMove(S, u, m, ev);
+    return endStep(S, ev);
+  }
+  if (applyPlacedMove(S, u, m, k, ev)) {
+    return endStep(S, ev);
+  }
+  const v0 = outOfReach(S, uAt(S, k), u, null), // airborne: untouchable (v4.8)
+    mk0 = markAt(S, k);
+  if (applyUtilityMove(S, u, m, v0, ev)) {
+    return endStep(S, ev);
+  }
+  const family = typ === 'Dragon' ? null : FAMT[typ] || null,
+    sb = u.t.includes(typ) ? 1.2 : 1;
+  let dealt = 0;
+  for (const x of affected(S, u, m, k)) {
+    dealt += hitTile(S, u, m, typ, family, sb, x, ev);
+  }
+  applyAreaAftermath(S, m, k, ev);
+  const v1 = v0 && !v0.ko ? v0 : null;
+  if (v1 && v1.side !== u.side) {
+    applyControlEffects(S, u, m, v1, mk0, ev);
+  }
+  applyUserAftermath(S, u, m, k, v0, v1, dealt, ev);
   return endStep(S, ev);
 }
 

@@ -405,37 +405,29 @@ const kindOf = () => {
 /* ---------- textures (computed once per floor) ---------- */
 const TEX = {};
 
-const texture = (name, cols, seed) => {
-  const key = name + cols.map(rgb).join('');
-  if (TEX[key]) {
-    return TEX[key];
-  }
-  const c = mk(TS, TS),
-    x = c.getContext('2d'),
-    img = x.createImageData(TS, TS),
-    D = img.data;
+// Per-floor reshaping of the base noise value of a texture pixel.
+const TEXTURE_VALUE = {
+  sand: (v, i, j, seed) => v * 0.6 + (Math.sin((j + pf(i / 64, j / 64, 4, seed + 5, 2) * 60) * 0.25) * 0.5 + 0.5) * 0.4,
+  wood: (v, i, j, seed) =>
+    v * 0.35 +
+    (Math.sin(j * 0.9 + pf(i / 16, j / 64, 16, seed + 9, 2) * 6) * 0.5 + 0.5) * 0.5 +
+    (j % 32 < 2 ? -0.35 : 0),
+  metal: (v, i, j, seed) => v * 0.4 + 0.3 + pf(i / 4, j / 64, 64, seed + 3, 1) * 0.3,
+  marble: (v, i, j, seed) =>
+    v * 0.5 + Math.abs(Math.sin(i * 0.03 + j * 0.02 + pf(i / 48, j / 48, 5.3333, seed + 7, 3) * 8)) * 0.5,
+  snow: v => v * 0.7 + 0.25,
+};
+
+// Fills the texture pixels with the floor's three-color noise gradient.
+const fillTextureBase = (D, name, cols, seed) => {
   const [c1, c2, c3] = cols;
+  const shape = TEXTURE_VALUE[name];
   for (let j = 0; j < TS; j++) {
     for (let i = 0; i < TS; i++) {
       let v = pf(i / 32, j / 32, 8, seed, 4);
       const g = (hash2(i, j, seed) - 0.5) * 0.12;
-      if (name === 'sand') {
-        v = v * 0.6 + (Math.sin((j + pf(i / 64, j / 64, 4, seed + 5, 2) * 60) * 0.25) * 0.5 + 0.5) * 0.4;
-      }
-      if (name === 'wood') {
-        v =
-          v * 0.35 +
-          (Math.sin(j * 0.9 + pf(i / 16, j / 64, 16, seed + 9, 2) * 6) * 0.5 + 0.5) * 0.5 +
-          (j % 32 < 2 ? -0.35 : 0);
-      }
-      if (name === 'metal') {
-        v = v * 0.4 + 0.3 + pf(i / 4, j / 64, 64, seed + 3, 1) * 0.3;
-      }
-      if (name === 'marble') {
-        v = v * 0.5 + Math.abs(Math.sin(i * 0.03 + j * 0.02 + pf(i / 48, j / 48, 5.3333, seed + 7, 3) * 8)) * 0.5;
-      }
-      if (name === 'snow') {
-        v = v * 0.7 + 0.25;
+      if (shape) {
+        v = shape(v, i, j, seed);
       }
       v = clamp(v + g, 0, 1);
       const t1 = clamp(v * 2, 0, 1),
@@ -447,208 +439,258 @@ const texture = (name, cols, seed) => {
       D[o + 3] = 255;
     }
   }
+};
+
+// Draws f at (px, py) and its eight periodic copies so the texture tiles seamlessly.
+const wrapTile = (f, px, py) => {
+  for (const dx of [-TS, 0, TS]) {
+    for (const dy of [-TS, 0, TS]) {
+      f(px + dx, py + dy);
+    }
+  }
+};
+
+// Grass blades shared by the grass, leaves and marsh floors.
+const paintGrassBlades = (x, r) => {
+  for (let k = 0; k < 520; k++) {
+    const px = r() * TS,
+      py = r() * TS,
+      l = 3 + r() * 5,
+      a = -1.57 + (r() - 0.5) * 0.8,
+      light = r() < 0.5;
+    wrapTile(
+      (X, Y) => {
+        x.strokeStyle = light ? 'rgba(220,255,170,.18)' : 'rgba(10,40,10,.22)';
+        x.lineWidth = 1.2;
+        x.beginPath();
+        x.moveTo(X, Y);
+        x.lineTo(X + Math.cos(a) * l, Y + Math.sin(a) * l);
+        x.stroke();
+      },
+      px,
+      py
+    );
+  }
+};
+
+// Fallen autumn leaves of the leaves floor.
+const paintFallenLeaves = (x, r) => {
+  for (let k = 0; k < 90; k++) {
+    const px = r() * TS,
+      py = r() * TS,
+      a = r() * 6.28,
+      col = ['#a5662c', '#c98a3a', '#7a8a2e', '#8c4a22'][(r() * 4) | 0];
+    wrapTile(
+      (X, Y) => {
+        x.fillStyle = col;
+        x.beginPath();
+        x.ellipse(X, Y, 4, 2, a, 0, 6.28);
+        x.fill();
+      },
+      px,
+      py
+    );
+  }
+};
+
+// Murky pools of the marsh floor.
+const paintMarshPools = (x, r) => {
+  for (let k = 0; k < 14; k++) {
+    const px = r() * TS,
+      py = r() * TS,
+      rx = 8 + r() * 14;
+    wrapTile(
+      (X, Y) => {
+        x.fillStyle = 'rgba(70,40,90,.35)';
+        x.beginPath();
+        x.ellipse(X, Y, rx, rx * 0.5, 0, 0, 6.28);
+        x.fill();
+      },
+      px,
+      py
+    );
+  }
+};
+
+// Pebbles of the dirt, sand and basalt floors.
+const paintPebbles = (x, r, name) => {
+  for (let k = 0; k < (name === 'sand' ? 60 : 160); k++) {
+    const px = r() * TS,
+      py = r() * TS,
+      s = 1 + r() * (name === 'sand' ? 1.2 : 3);
+    wrapTile(
+      (X, Y) => {
+        x.fillStyle = 'rgba(0,0,0,.25)';
+        x.beginPath();
+        x.ellipse(X + 0.8, Y + 0.8, s, s * 0.7, 0, 0, 6.28);
+        x.fill();
+        x.fillStyle = name === 'basalt' ? 'rgba(140,110,100,.5)' : 'rgba(255,240,210,.35)';
+        x.beginPath();
+        x.ellipse(X, Y, s, s * 0.7, 0, 0, 6.28);
+        x.fill();
+      },
+      px,
+      py
+    );
+  }
+};
+
+// Glowing lava cracks of the basalt floor.
+const paintLavaCracks = (x, r) => {
+  for (let k = 0; k < 10; k++) {
+    let px = r() * TS,
+      py = r() * TS;
+    const pts = [[px, py]];
+    for (let s = 0; s < 6; s++) {
+      pts.push([(px += (r() - 0.5) * 30), (py += (r() - 0.5) * 30)]);
+    }
+    wrapTile(
+      (X, Y) => {
+        x.save();
+        x.translate(X - pts[0][0], Y - pts[0][1]);
+        x.strokeStyle = 'rgba(255,110,30,.55)';
+        x.lineWidth = 2.4;
+        x.beginPath();
+        pts.forEach(([a, b], i) => (i ? x.lineTo(a, b) : x.moveTo(a, b)));
+        x.stroke();
+        x.strokeStyle = 'rgba(255,220,120,.7)';
+        x.lineWidth = 0.9;
+        x.stroke();
+        x.restore();
+      },
+      pts[0][0],
+      pts[0][1]
+    );
+  }
+};
+
+// Joint grid of the slab (staggered) and tiles (aligned) floors.
+const paintSlabJoints = (x, r, name) => {
+  const n = name === 'tiles' ? 4 : 3,
+    w = TS / n;
+  x.strokeStyle = 'rgba(0,0,0,.35)';
+  x.lineWidth = 2;
+  for (let k = 0; k <= n; k++) {
+    x.beginPath();
+    x.moveTo(0, k * w);
+    x.lineTo(TS, k * w);
+    x.stroke();
+    for (let m = 0; m < n; m++) {
+      const off = (k % 2) * (name === 'slab' ? w / 2 : 0);
+      x.beginPath();
+      x.moveTo(m * w + off, k * w);
+      x.lineTo(m * w + off, (k + 1) * w);
+      x.stroke();
+    }
+  }
+  x.strokeStyle = 'rgba(255,255,255,.08)';
+  x.lineWidth = 1;
+  for (let k = 0; k <= n; k++) {
+    x.beginPath();
+    x.moveTo(0, k * w + 1.5);
+    x.lineTo(TS, k * w + 1.5);
+    x.stroke();
+  }
+};
+
+// Riveted plate outlines of the metal floor.
+const paintMetalPlates = x => {
+  x.strokeStyle = 'rgba(0,0,0,.4)';
+  x.lineWidth = 2;
+  x.strokeRect(1, 1, TS / 2 - 2, TS / 2 - 2);
+  x.strokeRect(TS / 2 + 1, 1, TS / 2 - 2, TS / 2 - 2);
+  x.strokeRect(1, TS / 2 + 1, TS - 2, TS / 2 - 2);
+  x.fillStyle = 'rgba(220,230,240,.55)';
+  [
+    [8, 8],
+    [TS / 2 - 8, 8],
+    [TS / 2 + 8, 8],
+    [TS - 8, 8],
+    [8, TS / 2 + 8],
+    [TS - 8, TS / 2 + 8],
+    [8, TS - 8],
+    [TS - 8, TS - 8],
+  ].forEach(([a, b]) => {
+    x.beginPath();
+    x.arc(a, b, 2.6, 0, 6.28);
+    x.fill();
+  });
+};
+
+// Shallow puddles of the wet floor.
+const paintPuddles = (x, r) => {
+  for (let k = 0; k < 10; k++) {
+    const px = r() * TS,
+      py = r() * TS,
+      rx = 10 + r() * 18;
+    wrapTile(
+      (X, Y) => {
+        x.fillStyle = 'rgba(150,210,240,.22)';
+        x.beginPath();
+        x.ellipse(X, Y, rx, rx * 0.5, 0, 0, 6.28);
+        x.fill();
+        x.strokeStyle = 'rgba(230,250,255,.25)';
+        x.lineWidth = 1;
+        x.stroke();
+      },
+      px,
+      py
+    );
+  }
+};
+
+// Faint horizontal streaks of the clay floor.
+const paintClayStreaks = (x, r) => {
+  x.strokeStyle = 'rgba(255,240,220,.12)';
+  x.lineWidth = 1;
+  for (let k = 0; k < 40; k++) {
+    const py = r() * TS;
+    x.beginPath();
+    x.moveTo(0, py);
+    x.lineTo(TS, py + (r() - 0.5) * 6);
+    x.stroke();
+  }
+};
+
+// Sparkling snow grains of the snow floor.
+const paintSnowSparkles = (x, r) => {
+  for (let k = 0; k < 140; k++) {
+    const px = r() * TS,
+      py = r() * TS;
+    x.fillStyle = `rgba(255,255,255,${0.4 + r() * 0.5})`;
+    x.fillRect(px, py, 1.4, 1.4);
+  }
+};
+
+// Detail painters of each floor, run in this order on the shared random stream.
+const TEXTURE_DETAILS = {
+  grass: [paintGrassBlades],
+  leaves: [paintGrassBlades, paintFallenLeaves],
+  marsh: [paintGrassBlades, paintMarshPools],
+  dirt: [paintPebbles],
+  sand: [paintPebbles],
+  basalt: [paintPebbles, paintLavaCracks],
+  slab: [paintSlabJoints],
+  tiles: [paintSlabJoints],
+  metal: [paintMetalPlates],
+  wet: [paintPuddles],
+  clay: [paintClayStreaks],
+  snow: [paintSnowSparkles],
+};
+
+const texture = (name, cols, seed) => {
+  const key = name + cols.map(rgb).join('');
+  if (TEX[key]) {
+    return TEX[key];
+  }
+  const c = mk(TS, TS),
+    x = c.getContext('2d'),
+    img = x.createImageData(TS, TS);
+  fillTextureBase(img.data, name, cols, seed);
   x.putImageData(img, 0, 0);
   const r = mulberry32((seed * 13 + 7) | 0);
-  const wrap = (f, px, py) => {
-    for (const dx of [-TS, 0, TS]) {
-      for (const dy of [-TS, 0, TS]) {
-        f(px + dx, py + dy);
-      }
-    }
-  };
   x.lineCap = 'round';
-  if (name === 'grass' || name === 'leaves' || name === 'marsh') {
-    for (let k = 0; k < 520; k++) {
-      const px = r() * TS,
-        py = r() * TS,
-        l = 3 + r() * 5,
-        a = -1.57 + (r() - 0.5) * 0.8,
-        light = r() < 0.5;
-      wrap(
-        (X, Y) => {
-          x.strokeStyle = light ? 'rgba(220,255,170,.18)' : 'rgba(10,40,10,.22)';
-          x.lineWidth = 1.2;
-          x.beginPath();
-          x.moveTo(X, Y);
-          x.lineTo(X + Math.cos(a) * l, Y + Math.sin(a) * l);
-          x.stroke();
-        },
-        px,
-        py
-      );
-    }
-    if (name === 'leaves') {
-      for (let k = 0; k < 90; k++) {
-        const px = r() * TS,
-          py = r() * TS,
-          a = r() * 6.28,
-          col = ['#a5662c', '#c98a3a', '#7a8a2e', '#8c4a22'][(r() * 4) | 0];
-        wrap(
-          (X, Y) => {
-            x.fillStyle = col;
-            x.beginPath();
-            x.ellipse(X, Y, 4, 2, a, 0, 6.28);
-            x.fill();
-          },
-          px,
-          py
-        );
-      }
-    }
-    if (name === 'marsh') {
-      for (let k = 0; k < 14; k++) {
-        const px = r() * TS,
-          py = r() * TS,
-          rx = 8 + r() * 14;
-        wrap(
-          (X, Y) => {
-            x.fillStyle = 'rgba(70,40,90,.35)';
-            x.beginPath();
-            x.ellipse(X, Y, rx, rx * 0.5, 0, 0, 6.28);
-            x.fill();
-          },
-          px,
-          py
-        );
-      }
-    }
-  }
-  if (name === 'dirt' || name === 'sand' || name === 'basalt') {
-    for (let k = 0; k < (name === 'sand' ? 60 : 160); k++) {
-      const px = r() * TS,
-        py = r() * TS,
-        s = 1 + r() * (name === 'sand' ? 1.2 : 3);
-      wrap(
-        (X, Y) => {
-          x.fillStyle = 'rgba(0,0,0,.25)';
-          x.beginPath();
-          x.ellipse(X + 0.8, Y + 0.8, s, s * 0.7, 0, 0, 6.28);
-          x.fill();
-          x.fillStyle = name === 'basalt' ? 'rgba(140,110,100,.5)' : 'rgba(255,240,210,.35)';
-          x.beginPath();
-          x.ellipse(X, Y, s, s * 0.7, 0, 0, 6.28);
-          x.fill();
-        },
-        px,
-        py
-      );
-    }
-  }
-  if (name === 'basalt') {
-    for (let k = 0; k < 10; k++) {
-      let px = r() * TS,
-        py = r() * TS;
-      const pts = [[px, py]];
-      for (let s = 0; s < 6; s++) {
-        pts.push([(px += (r() - 0.5) * 30), (py += (r() - 0.5) * 30)]);
-      }
-      wrap(
-        (X, Y) => {
-          x.save();
-          x.translate(X - pts[0][0], Y - pts[0][1]);
-          x.strokeStyle = 'rgba(255,110,30,.55)';
-          x.lineWidth = 2.4;
-          x.beginPath();
-          pts.forEach(([a, b], i) => (i ? x.lineTo(a, b) : x.moveTo(a, b)));
-          x.stroke();
-          x.strokeStyle = 'rgba(255,220,120,.7)';
-          x.lineWidth = 0.9;
-          x.stroke();
-          x.restore();
-        },
-        pts[0][0],
-        pts[0][1]
-      );
-    }
-  }
-  if (name === 'slab' || name === 'tiles') {
-    const n = name === 'tiles' ? 4 : 3,
-      w = TS / n;
-    x.strokeStyle = 'rgba(0,0,0,.35)';
-    x.lineWidth = 2;
-    for (let k = 0; k <= n; k++) {
-      x.beginPath();
-      x.moveTo(0, k * w);
-      x.lineTo(TS, k * w);
-      x.stroke();
-      for (let m = 0; m < n; m++) {
-        const off = (k % 2) * (name === 'slab' ? w / 2 : 0);
-        x.beginPath();
-        x.moveTo(m * w + off, k * w);
-        x.lineTo(m * w + off, (k + 1) * w);
-        x.stroke();
-      }
-    }
-    x.strokeStyle = 'rgba(255,255,255,.08)';
-    x.lineWidth = 1;
-    for (let k = 0; k <= n; k++) {
-      x.beginPath();
-      x.moveTo(0, k * w + 1.5);
-      x.lineTo(TS, k * w + 1.5);
-      x.stroke();
-    }
-  }
-  if (name === 'metal') {
-    x.strokeStyle = 'rgba(0,0,0,.4)';
-    x.lineWidth = 2;
-    x.strokeRect(1, 1, TS / 2 - 2, TS / 2 - 2);
-    x.strokeRect(TS / 2 + 1, 1, TS / 2 - 2, TS / 2 - 2);
-    x.strokeRect(1, TS / 2 + 1, TS - 2, TS / 2 - 2);
-    x.fillStyle = 'rgba(220,230,240,.55)';
-    [
-      [8, 8],
-      [TS / 2 - 8, 8],
-      [TS / 2 + 8, 8],
-      [TS - 8, 8],
-      [8, TS / 2 + 8],
-      [TS - 8, TS / 2 + 8],
-      [8, TS - 8],
-      [TS - 8, TS - 8],
-    ].forEach(([a, b]) => {
-      x.beginPath();
-      x.arc(a, b, 2.6, 0, 6.28);
-      x.fill();
-    });
-  }
-  if (name === 'wet') {
-    for (let k = 0; k < 10; k++) {
-      const px = r() * TS,
-        py = r() * TS,
-        rx = 10 + r() * 18;
-      wrap(
-        (X, Y) => {
-          x.fillStyle = 'rgba(150,210,240,.22)';
-          x.beginPath();
-          x.ellipse(X, Y, rx, rx * 0.5, 0, 0, 6.28);
-          x.fill();
-          x.strokeStyle = 'rgba(230,250,255,.25)';
-          x.lineWidth = 1;
-          x.stroke();
-        },
-        px,
-        py
-      );
-    }
-  }
-  if (name === 'clay') {
-    x.strokeStyle = 'rgba(255,240,220,.12)';
-    x.lineWidth = 1;
-    for (let k = 0; k < 40; k++) {
-      const py = r() * TS;
-      x.beginPath();
-      x.moveTo(0, py);
-      x.lineTo(TS, py + (r() - 0.5) * 6);
-      x.stroke();
-    }
-  }
-  if (name === 'snow') {
-    for (let k = 0; k < 140; k++) {
-      const px = r() * TS,
-        py = r() * TS;
-      x.fillStyle = `rgba(255,255,255,${0.4 + r() * 0.5})`;
-      x.fillRect(px, py, 1.4, 1.4);
-    }
-  }
+  (TEXTURE_DETAILS[name] || []).forEach(f => f(x, r, name));
   TEX[key] = c;
   return c;
 };
@@ -1008,17 +1050,19 @@ const terrainSig = () => {
   return s;
 };
 
-const paint = sig => {
-  const kind = kindOf(),
-    K = KIND[kind],
-    seed = fnv(sig) % 100000;
-  const [VW, VH] = VB();
-  const S = BG.S;
-  const can = mk(VW * RS, VH * RS),
-    c = can.getContext('2d');
-  c.scale(RS, RS);
-  c.lineJoin = 'round';
-  c.lineCap = 'round';
+// Wraps a texture canvas into a repeating pattern scaled back to viewBox units.
+const boardPattern = (c, cv) => {
+  const p = c.createPattern(cv, 'repeat');
+  try {
+    p.setTransform(new DOMMatrix().scale(1 / RS));
+  } catch {
+    /* Best effort: failure here is non-fatal. */
+  }
+  return p;
+};
+
+// Builds the floor, border, sand and grass fill patterns of the board.
+const boardPatterns = (c, K) => {
   const tex = texture(K.tex, K.c, 17),
     texA = texture(
       K.tex,
@@ -1035,21 +1079,15 @@ const paint = sig => {
       ],
       29
     );
-  const pat = cv => {
-    const p = c.createPattern(cv, 'repeat');
-    try {
-      p.setTransform(new DOMMatrix().scale(1 / RS));
-    } catch {
-      /* Best effort: failure here is non-fatal. */
-    }
-    return p;
-  };
-  const P = pat(tex),
-    PA = pat(texA),
-    PS = pat(sandT),
-    PG = pat(grassT);
-  const r = mulberry32(seed | 0);
-  // 1. the border
+  const P = boardPattern(c, tex),
+    PA = boardPattern(c, texA),
+    PS = boardPattern(c, sandT),
+    PG = boardPattern(c, grassT);
+  return { P, PA, PS, PG };
+};
+
+// Paints the ground around the board (stadium stands, sky or darkened floor).
+const paintBorderGround = (c, K, PA, VW, VH) => {
   if (K.around === 'stade') {
     c.fillStyle = '#16181f';
     c.fillRect(0, 0, VW, VH);
@@ -1071,10 +1109,11 @@ const paint = sig => {
     c.fillStyle = PA;
     c.fillRect(0, 0, VW, VH);
   }
-  const keys = Object.keys(B.tiles);
-  const C = {};
-  keys.forEach(k => (C[k] = HC(k)));
-  // drop shadow of the board onto its border
+};
+
+// Drop shadow of the board onto its border.
+const paintBoardShadow = bd => {
+  const { c, K, C, S, keys } = bd;
   c.save();
   c.shadowColor = 'rgba(0,0,0,.55)';
   c.shadowBlur = 14;
@@ -1085,7 +1124,11 @@ const paint = sig => {
     c.fill();
   });
   c.restore();
-  // border decorations, outside the cells
+};
+
+// Border decorations, scattered outside the cells and drawn back to front.
+const paintBorderDecorations = (bd, r) => {
+  const { c, K, C, S, keys, VW, VH } = bd;
   const inside = (x, y) => keys.some(k => (C[k][0] - x) ** 2 + (C[k][1] - y) ** 2 < (S * 1.08) ** 2);
   const deco = AROUND[K.around];
   const spots = [];
@@ -1098,90 +1141,115 @@ const paint = sig => {
     spots.push([x, y]);
   }
   spots.sort((a, b) => a[1] - b[1]).forEach(([x, y]) => deco(c, x, y, r, K));
-  // 2. dark joints between cells
+};
+
+// Dark joints between cells.
+const paintJoints = bd => {
+  const { c, K, C, S, keys } = bd;
   c.fillStyle = K.side;
   keys.forEach(k => {
     path(c, hexPoints(C[k][0], C[k][1], S + 0.3));
     c.fill();
   });
-  // 3. the cells, top to bottom
-  const order = keys.slice().sort((a, b) => C[a][1] - C[b][1]);
-  const W = WATER[K.water] || WATER.riviere;
-  const waterNeighbors = k => {
-    try {
-      return nbrK(k);
-    } catch (e) {
-      return [];
+};
+
+// Small decorations scattered on a plain cell.
+const paintCellDecorations = (c, K, t, x, y, r2) => {
+  const L2 = K.decor;
+  const n = L2.length ? 1 + ((r2() * 3) | 0) : 0;
+  for (let d = 0; d < n; d++) {
+    const a = r2() * 6.28,
+      rr = 9 + r2() * 11;
+    const f = DECO[t.sand ? 'caillou' : L2[(r2() * L2.length) | 0]];
+    if (f) {
+      f(c, x + Math.cos(a) * rr, y + Math.sin(a) * rr * 0.86, r2);
     }
-  };
-  order.forEach(k => {
-    const t = B.tiles[k],
-      [x, y] = C[k],
-      r2 = mulberry32((seed + fnv(k)) | 0);
-    if (t.w) {
-      return;
-    }
-    const top = hexPoints(x, y, S - 1.1);
-    // slab thickness
-    c.fillStyle = K.side;
-    path(c, hexPoints(x, y + 2.6, S - 1.1));
-    c.fill();
-    c.save();
-    path(c, top);
-    c.clip();
-    c.fillStyle = t.sand ? PS : t.grass ? PG : P;
+  }
+};
+
+// Clipped top face of a cell: floor pattern, tint, light gradient and decorations.
+const paintCellTop = (bd, t, x, y, top, r2) => {
+  const { c, K, S, pats } = bd;
+  c.save();
+  path(c, top);
+  c.clip();
+  c.fillStyle = t.sand ? pats.PS : t.grass ? pats.PG : pats.P;
+  c.fillRect(x - S, y - S, S * 2, S * 2);
+  const v = (r2() - 0.5) * 0.12;
+  c.fillStyle = v > 0 ? `rgba(255,255,240,${v})` : `rgba(0,0,0,${-v})`;
+  c.fillRect(x - S, y - S, S * 2, S * 2);
+  const g = c.createLinearGradient(x - S, y - S, x + S * 0.6, y + S);
+  g.addColorStop(0, 'rgba(255,250,225,.2)');
+  g.addColorStop(0.55, 'rgba(255,250,225,0)');
+  g.addColorStop(1, 'rgba(0,0,0,.22)');
+  c.fillStyle = g;
+  c.fillRect(x - S, y - S, S * 2, S * 2);
+  // small decorations
+  if (!t.rock && !t.pil && !t.grass) {
+    paintCellDecorations(c, K, t, x, y, r2);
+  }
+  if (t.pil) {
+    c.fillStyle = 'rgba(0,0,0,.18)';
     c.fillRect(x - S, y - S, S * 2, S * 2);
-    const v = (r2() - 0.5) * 0.12;
-    c.fillStyle = v > 0 ? `rgba(255,255,240,${v})` : `rgba(0,0,0,${-v})`;
-    c.fillRect(x - S, y - S, S * 2, S * 2);
-    const g = c.createLinearGradient(x - S, y - S, x + S * 0.6, y + S);
-    g.addColorStop(0, 'rgba(255,250,225,.2)');
-    g.addColorStop(0.55, 'rgba(255,250,225,0)');
-    g.addColorStop(1, 'rgba(0,0,0,.22)');
-    c.fillStyle = g;
-    c.fillRect(x - S, y - S, S * 2, S * 2);
-    // small decorations
-    if (!t.rock && !t.pil && !t.grass) {
-      const L2 = K.decor;
-      const n = L2.length ? 1 + ((r2() * 3) | 0) : 0;
-      for (let d = 0; d < n; d++) {
-        const a = r2() * 6.28,
-          rr = 9 + r2() * 11;
-        const f = DECO[t.sand ? 'caillou' : L2[(r2() * L2.length) | 0]];
-        if (f) {
-          f(c, x + Math.cos(a) * rr, y + Math.sin(a) * rr * 0.86, r2);
-        }
-      }
+  }
+  c.restore();
+};
+
+// One land cell: slab thickness, top face, bright top edge and rocks (water cells are skipped).
+const paintCell = (bd, k) => {
+  const { c, K, C, S, seed } = bd;
+  const t = B.tiles[k],
+    [x, y] = C[k],
+    r2 = mulberry32((seed + fnv(k)) | 0);
+  if (t.w) {
+    return;
+  }
+  const top = hexPoints(x, y, S - 1.1);
+  // slab thickness
+  c.fillStyle = K.side;
+  path(c, hexPoints(x, y + 2.6, S - 1.1));
+  c.fill();
+  paintCellTop(bd, t, x, y, top, r2);
+  // bright edge at the top, shadow at the bottom
+  c.lineWidth = 0.9;
+  c.strokeStyle = 'rgba(255,255,240,.28)';
+  c.beginPath();
+  const tp = top;
+  const hi = VERT ? [3, 4, 5, 0] : [3, 4, 5];
+  hi.forEach((i, j) => (j ? c.lineTo(tp[i][0], tp[i][1]) : c.moveTo(tp[i][0], tp[i][1])));
+  c.stroke();
+  if (t.rock) {
+    rock(c, x - 3, y + 2, 1, K, r2);
+    rock(c, x + 9, y + 7, 0.5, K, r2);
+    if (r2() < 0.6) {
+      rock(c, x - 11, y + 9, 0.38, K, r2);
     }
-    if (t.pil) {
-      c.fillStyle = 'rgba(0,0,0,.18)';
-      c.fillRect(x - S, y - S, S * 2, S * 2);
-    }
-    c.restore();
-    // bright edge at the top, shadow at the bottom
-    c.lineWidth = 0.9;
-    c.strokeStyle = 'rgba(255,255,240,.28)';
-    c.beginPath();
-    const tp = top;
-    const hi = VERT ? [3, 4, 5, 0] : [3, 4, 5];
-    hi.forEach((i, j) => (j ? c.lineTo(tp[i][0], tp[i][1]) : c.moveTo(tp[i][0], tp[i][1])));
-    c.stroke();
-    if (t.rock) {
-      rock(c, x - 3, y + 2, 1, K, r2);
-      rock(c, x + 9, y + 7, 0.5, K, r2);
-      if (r2() < 0.6) {
-        rock(c, x - 11, y + 9, 0.38, K, r2);
-      }
-    }
-  });
-  // 4. the water, carved into the board
-  const water = order.filter(k => B.tiles[k].w);
+  }
+};
+
+// Neighbors of a water cell, or none when the lookup fails.
+const waterNeighbors = k => {
+  try {
+    return nbrK(k);
+  } catch (e) {
+    return [];
+  }
+};
+
+// Dark holes carved under the water cells.
+const paintWaterHoles = (bd, water) => {
+  const { c, C, S } = bd;
   water.forEach(k => {
     const [x, y] = C[k];
     c.fillStyle = 'rgba(0,0,0,.35)';
     path(c, hexPoints(x, y, S + 0.2));
     c.fill();
   });
+};
+
+// Deep-to-mid radial gradient of each water cell.
+const paintWaterBeds = (bd, water, W) => {
+  const { c, C, S } = bd;
   water.forEach(k => {
     const [x, y] = C[k];
     const g = c.createRadialGradient(x, y + 3, 2, x, y, S * 1.1);
@@ -1191,58 +1259,78 @@ const paint = sig => {
     path(c, hexPoints(x, y + 1, S + 0.6));
     c.fill();
   });
+};
+
+// Wavy ripples clipped inside a water cell.
+const paintWaterRipples = (bd, W, x, y, r3) => {
+  const { c, S } = bd;
+  c.save();
+  path(c, hexPoints(x, y + 1, S + 0.6));
+  c.clip();
+  c.strokeStyle = W.light;
+  c.globalAlpha = 0.5;
+  c.lineWidth = 0.9;
+  for (let w = 0; w < 4; w++) {
+    const yy = y - 12 + w * 8 + r3() * 3,
+      xx = x - 12 + r3() * 8;
+    c.beginPath();
+    c.moveTo(xx, yy);
+    c.quadraticCurveTo(xx + 3.5, yy - 2.2, xx + 7, yy);
+    c.quadraticCurveTo(xx + 10.5, yy + 2.2, xx + 14, yy);
+    c.stroke();
+  }
+  c.globalAlpha = 1;
+  c.restore();
+};
+
+// Foam and bank shadow on each water cell edge that does not touch other water.
+const paintWaterBanks = (bd, W, k, x, y) => {
+  const { c, C, S } = bd;
+  const tp = hexPoints(x, y + 1, S - 0.4);
+  const nb = waterNeighbors(k);
+  for (let i = 0; i < 6; i++) {
+    const a = tp[i],
+      b = tp[(i + 1) % 6],
+      mx = (a[0] + b[0]) / 2,
+      my = (a[1] + b[1]) / 2,
+      ox = x + (mx - x) * 2,
+      oy = y + (my - y) * 2;
+    const vk = nb.find(n => {
+      const q = C[n];
+      return q && Math.abs(q[0] - ox) < 6 && Math.abs(q[1] - oy) < 6;
+    });
+    if (vk && B.tiles[vk].w) {
+      continue;
+    }
+    c.strokeStyle = W.foam;
+    c.lineWidth = 1.4;
+    c.beginPath();
+    c.moveTo(a[0] + (x - a[0]) * 0.06, a[1] + (y - a[1]) * 0.06);
+    c.lineTo(b[0] + (x - b[0]) * 0.06, b[1] + (y - b[1]) * 0.06);
+    c.stroke();
+    c.strokeStyle = 'rgba(0,0,0,.25)';
+    c.lineWidth = 2.2;
+    c.beginPath();
+    c.moveTo(a[0], a[1]);
+    c.lineTo(b[0], b[1]);
+    c.stroke();
+  }
+};
+
+// Water surfaces: ripples then bank foam, cell by cell.
+const paintWaterSurfaces = (bd, water, W) => {
+  const { C, seed } = bd;
   water.forEach(k => {
     const [x, y] = C[k],
       r3 = mulberry32((seed + fnv(k) * 3) | 0);
-    c.save();
-    path(c, hexPoints(x, y + 1, S + 0.6));
-    c.clip();
-    c.strokeStyle = W.light;
-    c.globalAlpha = 0.5;
-    c.lineWidth = 0.9;
-    for (let w = 0; w < 4; w++) {
-      const yy = y - 12 + w * 8 + r3() * 3,
-        xx = x - 12 + r3() * 8;
-      c.beginPath();
-      c.moveTo(xx, yy);
-      c.quadraticCurveTo(xx + 3.5, yy - 2.2, xx + 7, yy);
-      c.quadraticCurveTo(xx + 10.5, yy + 2.2, xx + 14, yy);
-      c.stroke();
-    }
-    c.globalAlpha = 1;
-    c.restore();
+    paintWaterRipples(bd, W, x, y, r3);
     // foam along the banks
-    const tp = hexPoints(x, y + 1, S - 0.4);
-    const nb = waterNeighbors(k);
-    for (let i = 0; i < 6; i++) {
-      const a = tp[i],
-        b = tp[(i + 1) % 6],
-        mx = (a[0] + b[0]) / 2,
-        my = (a[1] + b[1]) / 2,
-        ox = x + (mx - x) * 2,
-        oy = y + (my - y) * 2;
-      const vk = nb.find(n => {
-        const q = C[n];
-        return q && Math.abs(q[0] - ox) < 6 && Math.abs(q[1] - oy) < 6;
-      });
-      if (vk && B.tiles[vk].w) {
-        continue;
-      }
-      c.strokeStyle = W.foam;
-      c.lineWidth = 1.4;
-      c.beginPath();
-      c.moveTo(a[0] + (x - a[0]) * 0.06, a[1] + (y - a[1]) * 0.06);
-      c.lineTo(b[0] + (x - b[0]) * 0.06, b[1] + (y - b[1]) * 0.06);
-      c.stroke();
-      c.strokeStyle = 'rgba(0,0,0,.25)';
-      c.lineWidth = 2.2;
-      c.beginPath();
-      c.moveTo(a[0], a[1]);
-      c.lineTo(b[0], b[1]);
-      c.stroke();
-    }
+    paintWaterBanks(bd, W, k, x, y);
   });
-  // 5. overall light and vignetting
+};
+
+// Overall warm light and vignetting over the whole image.
+const paintLighting = (c, VW, VH) => {
   const gl = c.createRadialGradient(VW * 0.25, VH * 0.1, 10, VW * 0.25, VH * 0.1, Math.max(VW, VH));
   gl.addColorStop(0, 'rgba(255,240,200,.12)');
   gl.addColorStop(1, 'rgba(255,240,200,0)');
@@ -1253,6 +1341,44 @@ const paint = sig => {
   vg.addColorStop(1, 'rgba(0,0,0,.4)');
   c.fillStyle = vg;
   c.fillRect(0, 0, VW, VH);
+};
+
+const paint = sig => {
+  const kind = kindOf(),
+    K = KIND[kind],
+    seed = fnv(sig) % 100000;
+  const [VW, VH] = VB();
+  const S = BG.S;
+  const can = mk(VW * RS, VH * RS),
+    c = can.getContext('2d');
+  c.scale(RS, RS);
+  c.lineJoin = 'round';
+  c.lineCap = 'round';
+  const pats = boardPatterns(c, K);
+  const r = mulberry32(seed | 0);
+  // 1. the border
+  paintBorderGround(c, K, pats.PA, VW, VH);
+  const keys = Object.keys(B.tiles);
+  const C = {};
+  keys.forEach(k => (C[k] = HC(k)));
+  const bd = { c, K, C, S, keys, seed, VW, VH, pats };
+  // drop shadow of the board onto its border
+  paintBoardShadow(bd);
+  // border decorations, outside the cells
+  paintBorderDecorations(bd, r);
+  // 2. dark joints between cells
+  paintJoints(bd);
+  // 3. the cells, top to bottom
+  const order = keys.slice().sort((a, b) => C[a][1] - C[b][1]);
+  const W = WATER[K.water] || WATER.riviere;
+  order.forEach(k => paintCell(bd, k));
+  // 4. the water, carved into the board
+  const water = order.filter(k => B.tiles[k].w);
+  paintWaterHoles(bd, water);
+  paintWaterBeds(bd, water, W);
+  paintWaterSurfaces(bd, water, W);
+  // 5. overall light and vignetting
+  paintLighting(c, VW, VH);
   return { can, eau: water.map(k => C[k]), kind };
 };
 

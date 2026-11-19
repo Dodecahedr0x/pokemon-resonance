@@ -1265,7 +1265,9 @@ const whirl = (c, x, y) => {
 };
 
 /* ---------- generating a region ---------- */
-const generate = async reg => {
+
+// Draws nothing: resolves region data, seeded RNG, land outlines, places, routes and the shared output lists.
+const prepareRegion = reg => {
   const R = REG[reg],
     rnd = mulberry32((R.seed * 7919) | 0),
     seed = R.seed;
@@ -1275,6 +1277,12 @@ const generate = async reg => {
   }
   const P = placesOf(reg);
   const roads = routesOf(reg, R, P);
+  return { R, rnd, seed, lands, P, roads, items: [], lights: [], smoke: [], sparks: [] };
+};
+
+// Draws nothing: computes the land mask, its blurred coast fields and the noise fields.
+const computeLandFields = async st => {
+  const { seed, lands } = st;
   const M = maskOf(lands.map(d => ({ d, fill: true })));
   await tick();
   const B4 = blur(M, 2, 2),
@@ -1290,43 +1298,63 @@ const generate = async reg => {
   await tick();
   const N3 = noiseField(seed + 203, 26, 3);
   await tick();
+  Object.assign(st, { M, B4, B12, BI, BS, N1, N2, N3 });
+};
+
+// Draws nothing: rasterizes the water (lakes, rivers) and road masks.
+const computeWaterRoadMasks = async st => {
+  const { R, roads } = st;
   const WM = maskOf([...R.lakes.map(d => ({ d, fill: true })), ...R.rivers.map(d => ({ d, w: 14 }))]);
   await tick();
   const RM2 = maskOf(roads.map(d => ({ d, w: 12 })));
   await tick();
+  Object.assign(st, { WM, RM2 });
+};
+
+// Draws nothing: adds an anisotropic Gaussian bump (map coordinates) to a grid field.
+const addGauss = (arr, cx, cy, sx, sy, amp) => {
+  cx /= Q;
+  cy /= Q;
+  sx /= Q;
+  sy /= Q;
+  const x0 = Math.max(0, (cx - sx * 3) | 0),
+    x1 = Math.min(GW - 1, (cx + sx * 3) | 0),
+    y0 = Math.max(0, (cy - sy * 3) | 0),
+    y1 = Math.min(GH - 1, (cy + sy * 3) | 0);
+  for (let y = y0; y <= y1; y++) {
+    for (let x = x0; x <= x1; x++) {
+      const dx = (x - cx) / sx,
+        dy = (y - cy) / sy;
+      arr[y * GW + x] += amp * Math.exp(-(dx * dx + dy * dy) * 0.5);
+    }
+  }
+};
+
+// Draws nothing: builds the mountain, snow, forest-density and height fields.
+const computeRelief = async st => {
+  const { R, BI, N1, N3 } = st;
   // terrain: mountains + forests
   const MT = new Float32Array(GW * GH),
     SN = new Float32Array(GW * GH),
     FF = new Float32Array(GW * GH);
-  const addG = (arr, cx, cy, sx, sy, amp) => {
-    cx /= Q;
-    cy /= Q;
-    sx /= Q;
-    sy /= Q;
-    const x0 = Math.max(0, (cx - sx * 3) | 0),
-      x1 = Math.min(GW - 1, (cx + sx * 3) | 0),
-      y0 = Math.max(0, (cy - sy * 3) | 0),
-      y1 = Math.min(GH - 1, (cy + sy * 3) | 0);
-    for (let y = y0; y <= y1; y++) {
-      for (let x = x0; x <= x1; x++) {
-        const dx = (x - cx) / sx,
-          dy = (y - cy) / sy;
-        arr[y * GW + x] += amp * Math.exp(-(dx * dx + dy * dy) * 0.5);
-      }
-    }
-  };
   R.mounts.forEach(([x, y, s, sn]) => {
-    addG(MT, x, y + 4, 34 * s, 26 * s, 0.9);
+    addGauss(MT, x, y + 4, 34 * s, 26 * s, 0.9);
     if (sn) {
-      addG(SN, x, y - 6 * s, 16 * s, 12 * s, 1);
+      addGauss(SN, x, y - 6 * s, 16 * s, 12 * s, 1);
     }
   });
-  R.forests.forEach(([, x, y, n, sp]) => addG(FF, x, y, sp * Math.sqrt(n) * 0.75, sp * Math.sqrt(n) * 0.55, 0.9));
+  R.forests.forEach(([, x, y, n, sp]) => addGauss(FF, x, y, sp * Math.sqrt(n) * 0.75, sp * Math.sqrt(n) * 0.55, 0.9));
   const HT = new Float32Array(GW * GH);
   for (let i = 0; i < HT.length; i++) {
     HT[i] = BI[i] * 0.5 + (N1[i] - 0.5) * 0.32 + MT[i] * 1.25 + N3[i] * 0.04;
   }
   await tick();
+  Object.assign(st, { MT, SN, FF, HT });
+};
+
+// Paints the low-resolution terrain and sea pixels (grass, biomes, relief shading, beaches, sea depth, foam).
+const paintTerrainPixels = async st => {
+  const { R, seed, M, B4, B12, BS, N1, N2, N3, MT, SN, FF, HT } = st;
   const bios = R.biomes.map(([k, cx, cy, rx, ry]) => ({
     k,
     cx,
@@ -1509,7 +1537,11 @@ const generate = async reg => {
   }
   sx.putImageData(img, 0, 0);
   await tick();
-  /* ---- high-definition vector layer ---- */
+  return small;
+};
+
+// Upscales the terrain pixels onto the high-definition canvas and sets up the vector context.
+const createVectorCanvas = (st, small) => {
   const big = mkCanvas(VW * SC, VH * SC),
     c = big.getContext('2d');
   c.imageSmoothingEnabled = true;
@@ -1519,6 +1551,12 @@ const generate = async reg => {
   c.scale(SC, SC);
   c.lineJoin = 'round';
   c.lineCap = 'round';
+  Object.assign(st, { big, c });
+};
+
+// Draws the shoreline edge strokes.
+const drawShoreline = st => {
+  const { lands, c } = st;
   // shoreline edge
   lands.forEach(d => {
     const p = new Path2D(d);
@@ -1529,6 +1567,11 @@ const generate = async reg => {
     c.lineWidth = 5;
     c.stroke(p);
   });
+};
+
+// Draws the dirt paths along routes.
+const drawRoads = st => {
+  const { roads, c } = st;
   // dirt paths
   roads.forEach(d => {
     const p = new Path2D(d);
@@ -1544,6 +1587,11 @@ const generate = async reg => {
     c.stroke(p);
     c.setLineDash([]);
   });
+};
+
+// Draws the offshore wave strokes.
+const drawWaves = st => {
+  const { rnd, c, M, BS } = st;
   // waves drawn offshore
   c.strokeStyle = 'rgba(214,240,255,.22)';
   c.lineWidth = 0.9;
@@ -1561,6 +1609,11 @@ const generate = async reg => {
     c.quadraticCurveTo(x + 3.5, y - 3, x + 7, y);
     c.stroke();
   }
+};
+
+// Draws the lakes.
+const drawLakes = st => {
+  const { R, c } = st;
   // lakes
   R.lakes.forEach(d => {
     const p = new Path2D(d);
@@ -1576,6 +1629,11 @@ const generate = async reg => {
     c.stroke(p);
     c.restore();
   });
+};
+
+// Draws the rivers.
+const drawRivers = st => {
+  const { R, c } = st;
   // rivers
   R.rivers.forEach(d => {
     const p = new Path2D(d);
@@ -1591,7 +1649,11 @@ const generate = async reg => {
     c.stroke(p);
     c.setLineDash([]);
   });
-  await tick();
+};
+
+// Draws the cultivated fields around hamlets.
+const drawFields = st => {
+  const { R, P, seed, c, M, B12, WM, RM2, MT } = st;
   // cultivated fields around hamlets
   const FCOL = [
     ['#d8c070', '#c2a650'],
@@ -1650,6 +1712,11 @@ const generate = async reg => {
       c.restore();
     }
   });
+};
+
+// Draws the clearings beneath each location.
+const drawClearings = st => {
+  const { P, c } = st;
   // clearings beneath each location
   P.forEach(p => {
     const g = c.createRadialGradient(p.x, p.y, 2, p.x, p.y, 34);
@@ -1659,43 +1726,57 @@ const generate = async reg => {
     c.fillStyle = g;
     ell(c, p.x, p.y, 34, 26);
   });
-  // elements sorted by depth
-  const land = (x, y) => {
-    const i = gi(x, y);
-    return M[i] > 0.95 && B12[i] > 0.8;
-  };
-  const isFree = (x, y, rp) => {
-    const i = gi(x, y);
-    if (WM[i] > 0.05 || RM2[i] > 0.05) {
+};
+
+// elements sorted by depth
+// Draws nothing: returns a function queueing a depth-sorted drawing callback.
+const itemAdder = items => (y, f) => items.push([y, f]);
+
+// Draws nothing: tells whether a point is solid inland ground.
+const isLandAt = (st, x, y) => {
+  const { M, B12 } = st;
+  const i = gi(x, y);
+  return M[i] > 0.95 && B12[i] > 0.8;
+};
+
+// Draws nothing: tells whether a point is clear of water, roads, places and their labels.
+const isFreeAt = (st, x, y, rp) => {
+  const { WM, RM2, P } = st;
+  const i = gi(x, y);
+  if (WM[i] > 0.05 || RM2[i] > 0.05) {
+    return false;
+  }
+  for (const p of P) {
+    const dx = x - p.x,
+      dy = (y - p.y) * 1.25;
+    if (dx * dx + dy * dy < rp * rp) {
       return false;
     }
-    for (const p of P) {
-      const dx = x - p.x,
-        dy = (y - p.y) * 1.25;
-      if (dx * dx + dy * dy < rp * rp) {
-        return false;
-      }
-      if (y > p.y + 14 && y < p.y + 62 && Math.abs(x - p.x) < 62) {
-        return false;
-      } // label placement
+    if (y > p.y + 14 && y < p.y + 62 && Math.abs(x - p.x) < 62) {
+      return false;
+    } // label placement
+  }
+  return true;
+};
+
+// Draws nothing: returns the dominant biome key at a point, or null.
+const biomeAt = (R, x, y) => {
+  let best = null,
+    bw = 0.25;
+  R.biomes.forEach(([k, cx, cy, rx, ry]) => {
+    const e = ((x - cx) / rx) ** 2 + ((y - cy) / ry) ** 2,
+      w = 1 - e;
+    if (w > bw) {
+      ((bw = w), (best = k));
     }
-    return true;
-  };
-  const biomeAt = (x, y) => {
-    let best = null,
-      bw = 0.25;
-    R.biomes.forEach(([k, cx, cy, rx, ry]) => {
-      const e = ((x - cx) / rx) ** 2 + ((y - cy) / ry) ** 2,
-        w = 1 - e;
-      if (w > bw) {
-        ((bw = w), (best = k));
-      }
-    });
-    return best;
-  };
-  const items = [];
-  const lights = [];
-  const add = (y, f) => items.push([y, f]);
+  });
+  return best;
+};
+
+// Queues the mountains (with their flanking peaks).
+const queueMountains = st => {
+  const { R, P, seed, c } = st;
+  const add = itemAdder(st.items);
   R.mounts.forEach(([x, y, s, sn]) => {
     const lib = P.every(p => Math.hypot(p.x - x, p.y - y) > 26 * Math.max(1, s));
     if (!lib) {
@@ -1708,6 +1789,12 @@ const generate = async reg => {
     });
     add(y + 14 * s, () => mountain(c, x, y, s, sn, r2));
   });
+};
+
+// Queues the forest trees.
+const queueForests = st => {
+  const { R, rnd, c } = st;
+  const add = itemAdder(st.items);
   // forests
   R.forests.forEach(([k, fx, fy, n, sp]) => {
     const rad = sp * Math.sqrt(n) * 1.15;
@@ -1717,7 +1804,7 @@ const generate = async reg => {
         d = Math.sqrt(rnd()) * rad,
         x = fx + Math.cos(a) * d,
         y = fy + Math.sin(a) * d * 0.72;
-      if (!land(x, y) || !isFree(x, y, 34)) {
+      if (!isLandAt(st, x, y) || !isFreeAt(st, x, y, 34)) {
         continue;
       }
       put++;
@@ -1732,15 +1819,21 @@ const generate = async reg => {
       }
     }
   });
+};
+
+// Queues the sparse vegetation depending on the biome.
+const queueVegetation = st => {
+  const { R, rnd, c, MT, FF } = st;
+  const add = itemAdder(st.items);
   // sparse vegetation depending on the biome
   for (let t = 0; t < 520; t++) {
     const x = 20 + rnd() * (VW - 40),
       y = 20 + rnd() * (VH - 40),
       i = gi(x, y);
-    if (!land(x, y) || !isFree(x, y, 46) || MT[i] > 0.35) {
+    if (!isLandAt(st, x, y) || !isFreeAt(st, x, y, 46) || MT[i] > 0.35) {
       continue;
     }
-    const b = biomeAt(x, y),
+    const b = biomeAt(R, x, y),
       r = rnd();
     if (b === 'desert') {
       if (r < 0.35) {
@@ -1786,18 +1879,30 @@ const generate = async reg => {
       }
     }
   }
+};
+
+// Queues the beach palm trees and reef islet palms.
+const queuePalms = st => {
+  const { R, rnd, c, M, B12 } = st;
+  const add = itemAdder(st.items);
   // beach palm trees (Hoenn)
-  (R.palms || []).forEach(([x, y]) => isFree(x, y, 26) && add(y, () => palm(c, x, y, 1)));
+  (R.palms || []).forEach(([x, y]) => isFreeAt(st, x, y, 26) && add(y, () => palm(c, x, y, 1)));
   if (R.reef) {
     for (let t = 0; t < 260; t++) {
       const x = rnd() * VW,
         y = rnd() * VH,
         i = gi(x, y);
-      if (M[i] > 0.95 && B12[i] < 0.84 && B12[i] > 0.7 && isFree(x, y, 40) && rnd() < 0.5) {
+      if (M[i] > 0.95 && B12[i] < 0.84 && B12[i] > 0.7 && isFreeAt(st, x, y, 40) && rnd() < 0.5) {
         add(y, () => palm(c, x, y, 0.75 + rnd() * 0.25));
       }
     }
   }
+};
+
+// Queues the hamlets, gyms and per-type scenery around places.
+const queuePlaces = st => {
+  const { P, seed, c, WM, lights } = st;
+  const add = itemAdder(st.items);
   // hamlets, gyms and scenery specific to each type
   const angles = [205, 335, 168, 12, 250, 290, 145, 35];
   P.forEach(p => {
@@ -1806,7 +1911,7 @@ const generate = async reg => {
       p.x + Math.cos((ang * Math.PI) / 180) * rr,
       p.y + Math.sin((ang * Math.PI) / 180) * rr * 0.8,
     ];
-    const ok = (x, y) => land(x, y) && WM[gi(x, y)] < 0.05;
+    const ok = (x, y) => isLandAt(st, x, y) && WM[gi(x, y)] < 0.05;
     if (p.grp === 'route') {
       add(p.y + 30, () => tallGrass(c, p.x, p.y + 2, 46, 44, r3));
       return;
@@ -1871,8 +1976,13 @@ const generate = async reg => {
       });
     }
   });
+};
+
+// Queues the monuments and records their smoke and light points.
+const queueLandmarks = st => {
+  const { R, c, lights, smoke } = st;
+  const add = itemAdder(st.items);
   // monuments
-  const smoke = [];
   R.marks.forEach(([k, x, y, s]) => {
     if (!LANDMARK[k]) {
       return;
@@ -1888,15 +1998,21 @@ const generate = async reg => {
       lights.push([x, y - 14]);
     }
   });
+};
+
+// Queues the grass tufts and flowers.
+const queueTufts = st => {
+  const { R, rnd, c, MT, WM, RM2, N2 } = st;
+  const add = itemAdder(st.items);
   // tufts and flowers
   for (let t = 0; t < 900; t++) {
     const x = rnd() * VW,
       y = rnd() * VH,
       i = gi(x, y);
-    if (!land(x, y) || MT[i] > 0.3 || WM[i] > 0.05 || RM2[i] > 0.05) {
+    if (!isLandAt(st, x, y) || MT[i] > 0.3 || WM[i] > 0.05 || RM2[i] > 0.05) {
       continue;
     }
-    const b = biomeAt(x, y);
+    const b = biomeAt(R, x, y);
     if (b === 'desert' || b === 'snow' || b === 'ash' || b === 'lava') {
       continue;
     }
@@ -1922,9 +2038,14 @@ const generate = async reg => {
       });
     }
   }
+};
+
+// Queues the sea rocks, sailboats and whirlpools, and records sea sparkles.
+const queueSeaDecor = st => {
+  const { R, rnd, c, P, M, BS, sparks } = st;
+  const add = itemAdder(st.items);
   // sea: rocks, sailboats, whirlpools
-  const seaSpots = [],
-    sparks = [];
+  const seaSpots = [];
   for (let t = 0; t < 4000 && (seaSpots.length < 14 || sparks.length < 18); t++) {
     const x = 14 + rnd() * (VW - 28),
       y = 14 + rnd() * (VH - 28),
@@ -1951,6 +2072,11 @@ const generate = async reg => {
   }
   seaSpots.forEach(([x, y, k]) => add(y, () => (k === 'boat' ? boat(c, x, y) : seaRock(c, x, y, 0.7 + rnd() * 0.5))));
   (R.whirl || []).forEach(([x, y]) => add(y, () => whirl(c, x, y)));
+};
+
+// Draws the queued elements in depth order.
+const drawQueuedItems = async st => {
+  const { items } = st;
   items.sort((a, b) => a[0] - b[0]);
   for (let k = 0; k < items.length; k++) {
     items[k][1]();
@@ -1958,6 +2084,11 @@ const generate = async reg => {
       await tick();
     }
   }
+};
+
+// Draws the warm light and vignetting.
+const drawLighting = st => {
+  const { c } = st;
   // warm light and vignetting
   const gl = c.createRadialGradient(VW * 0.22, VH * 0.08, 10, VW * 0.22, VH * 0.08, VW * 0.85);
   gl.addColorStop(0, 'rgba(255,236,190,.16)');
@@ -1969,6 +2100,11 @@ const generate = async reg => {
   vg.addColorStop(1, 'rgba(2,12,30,.34)');
   c.fillStyle = vg;
   c.fillRect(0, 0, VW, VH);
+};
+
+// Encodes the final canvas as an image URL and releases it.
+const exportCanvas = async st => {
+  const { big } = st;
   const url = await new Promise(res => {
     try {
       big.toBlob(b => res(b ? URL.createObjectURL(b) : big.toDataURL('image/jpeg', 0.9)), 'image/jpeg', 0.9);
@@ -1977,7 +2113,38 @@ const generate = async reg => {
     }
   });
   big.width = 0;
-  return { url, lights, sparks, smoke };
+  return url;
+};
+
+// Paints a whole region map and returns its image URL with the animated-layer anchor points.
+const generate = async reg => {
+  const st = prepareRegion(reg);
+  await computeLandFields(st);
+  await computeWaterRoadMasks(st);
+  await computeRelief(st);
+  const small = await paintTerrainPixels(st);
+  /* ---- high-definition vector layer ---- */
+  createVectorCanvas(st, small);
+  drawShoreline(st);
+  drawRoads(st);
+  drawWaves(st);
+  drawLakes(st);
+  drawRivers(st);
+  await tick();
+  drawFields(st);
+  drawClearings(st);
+  queueMountains(st);
+  queueForests(st);
+  queueVegetation(st);
+  queuePalms(st);
+  queuePlaces(st);
+  queueLandmarks(st);
+  queueTufts(st);
+  queueSeaDecor(st);
+  await drawQueuedItems(st);
+  drawLighting(st);
+  const url = await exportCanvas(st);
+  return { url, lights: st.lights, sparks: st.sparks, smoke: st.smoke };
 };
 
 /* ---------- animated layer: clouds, birds, reflections, smoke, night ---------- */
