@@ -2,14 +2,14 @@
 .v4-walbig {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px 28px;
-  padding: 14px 16px;
-  margin-bottom: 12px;
+  gap: var(--space-md) var(--space-2xl);
+  padding: var(--space-md) var(--space-lg);
+  margin-bottom: var(--space-md);
 }
 .v4-walbig > div {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: var(--space-md);
 }
 .v4-walbig span:last-child {
   display: grid;
@@ -25,13 +25,13 @@
 .v4-sac {
   display: grid;
   grid-template-columns: 200px minmax(0, 1fr);
-  gap: 12px;
+  gap: var(--space-md);
   align-items: start;
 }
 .v4-cats {
   display: grid;
-  gap: 6px;
-  padding: 6px;
+  gap: var(--space-xs);
+  padding: var(--space-xs);
   border-radius: 13px;
   background: rgba(3, 14, 30, 0.6);
   border: 1px solid rgba(120, 200, 255, 0.18);
@@ -39,9 +39,9 @@
 .v4-cats button {
   display: flex;
   align-items: center;
-  gap: 9px;
+  gap: var(--space-sm);
   min-height: 44px;
-  padding: 0 12px;
+  padding: 0 var(--space-md);
   border-radius: 10px;
   border: 1px solid transparent;
   background: none;
@@ -61,13 +61,13 @@
 }
 .v4-items {
   display: grid;
-  gap: 8px;
+  gap: var(--space-sm);
 }
 .v4-it {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 10px 12px;
+  gap: var(--space-md);
+  padding: var(--space-sm) var(--space-md);
   border-radius: 13px;
   background: linear-gradient(180deg, var(--v4-p1), var(--v4-p2));
   border: 1px solid var(--v4-ln);
@@ -98,7 +98,7 @@
   font: 850 15.5px/1.2 var(--f-d);
 }
 .v4-it-t p {
-  margin: 2px 0;
+  margin: var(--space-3xs) 0;
   font-size: 13px;
   line-height: 1.4;
   color: var(--v4-tx2);
@@ -111,7 +111,7 @@
 .v4-it-b {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-sm);
   flex: none;
 }
 .v4-it-b .b {
@@ -120,7 +120,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: var(--space-xs);
 }
 .v4-qty {
   display: flex;
@@ -152,17 +152,17 @@
 .v4-params {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
+  gap: var(--space-md);
 }
 .v4-ps {
-  padding: 14px;
+  padding: var(--space-md);
   display: grid;
-  gap: 10px;
+  gap: var(--space-sm);
   align-content: start;
 }
 .v4-fld {
   display: grid;
-  gap: 6px;
+  gap: var(--space-xs);
 }
 .v4-fld > span {
   font: 700 12.5px/1 var(--f-d);
@@ -170,14 +170,14 @@
 }
 html body .v4-fld input {
   min-height: 44px;
-  padding: 0 12px;
+  padding: 0 var(--space-md);
   border-radius: 10px !important;
   font: 600 15px var(--f-b);
 }
 .v4-seg {
   display: flex;
-  gap: 4px;
-  padding: 4px;
+  gap: var(--space-2xs);
+  padding: var(--space-2xs);
   border-radius: 11px;
   background: rgba(0, 0, 0, 0.3);
   border: 1px solid rgba(120, 200, 255, 0.2);
@@ -204,13 +204,13 @@ html body .v4-fld input {
 .v4-ps-a {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: var(--space-sm);
 }
 .v4-sw {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 8px 0;
+  gap: var(--space-md);
+  padding: var(--space-sm) 0;
   cursor: pointer;
 }
 .v4-sw > span {
@@ -270,8 +270,8 @@ html body .v4-fld input {
   display: grid;
   grid-template-columns: 1fr auto;
   align-items: center;
-  gap: 4px 10px;
-  padding: 0 0 6px;
+  gap: var(--space-2xs) var(--space-sm);
+  padding: 0 0 var(--space-xs);
 }
 .v4-sl span {
   grid-column: 1/-1;
@@ -290,7 +290,7 @@ html body .v4-fld input {
 }
 .v4-reset {
   justify-self: start;
-  margin-top: 4px;
+  margin-top: var(--space-2xs);
 }
 
 /* ---------- Team: collection cards ---------- */
@@ -309,7 +309,7 @@ html body #pokedex .fc-art {
     linear-gradient(165deg, color-mix(in srgb, var(--c) 40%, #123158), color-mix(in srgb, var(--c2) 30%, #0a1d3a)) !important;
   border-bottom: 0 !important;
   border-radius: 12px !important;
-  margin: 0 8px !important;
+  margin: 0 var(--space-sm) !important;
 }
 html body #pokedex .fc-art .orb {
   display: none !important;
@@ -344,7 +344,7 @@ html body .tb {
   border-radius: 999px !important;
   font: 800 10.5px/1 var(--f-d) !important;
   letter-spacing: 0.06em !important;
-  padding: 4px 9px 4px 4px !important;
+  padding: var(--space-2xs) var(--space-sm) var(--space-2xs) var(--space-2xs) !important;
   box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.2);
 }
 html body .tb .tb-s {

@@ -16,6 +16,7 @@ import { SPARK, isShinyOwned, shinyHue } from '../../engine/pokemon/shiny.js';
 import { roleBadgeHtml } from '../../engine/combat/resonance.js';
 import { captureSite } from '../../engine/world/catch-anywhere.js';
 import { REGIONAL_FORM_LIST } from '../../engine/pokemon/regional-forms.js';
+import { space } from '../../lib/theme.js';
 
 const no3 = n => String(n).padStart(3, '0');
 
@@ -206,8 +207,8 @@ export default function DexCard() {
         <p
           className="regional-form"
           style={{
-            margin: '8px 0',
-            padding: '6px 10px',
+            margin: `${space.sm} 0`,
+            padding: `${space.xs} ${space.sm}`,
             borderRadius: '10px',
             background: 'hsl(' + fr.hue + ' 40% 25% / .6)',
             fontSize: '.85em',

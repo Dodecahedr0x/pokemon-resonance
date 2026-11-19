@@ -38,9 +38,9 @@
 .st-evo {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-sm);
   flex-wrap: wrap;
-  padding: 12px 14px;
+  padding: var(--space-md) var(--space-md);
   border-radius: 14px;
   border: 1px solid transparent;
   background:
@@ -54,7 +54,7 @@
 .se {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: var(--space-xs);
   font-size: 12px;
   color: var(--mut);
 }
@@ -88,7 +88,7 @@
   position: relative;
   overflow: hidden;
   height: clamp(230px, 30vw, 290px);
-  margin-top: 18px;
+  margin-top: var(--space-lg);
   border-radius: 24px;
   border: 1px solid transparent;
   background:
@@ -195,14 +195,14 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
+  gap: var(--space-sm);
   flex-wrap: wrap;
 }
 .rt-sign {
   display: inline-flex;
   align-items: center;
   height: 30px;
-  padding: 0 14px;
+  padding: 0 var(--space-md);
   border-radius: 6px;
   font-family: var(--f-d);
   font-stretch: 118%;
@@ -244,7 +244,7 @@
   font-size: 13px;
   color: var(--tx2);
   display: grid;
-  gap: 3px;
+  gap: var(--space-3xs);
 }
 .enc-evo span {
   font-family: var(--f-m);

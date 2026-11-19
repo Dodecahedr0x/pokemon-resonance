@@ -2,7 +2,7 @@
 .dlgbox {
   position: relative;
   display: block;
-  padding: 14px 18px 15px;
+  padding: var(--space-md) var(--space-lg) var(--space-lg);
   border-radius: 10px;
   border: 1px solid transparent;
   background:
@@ -17,7 +17,7 @@
   margin: 0;
 }
 .dlgbox p + p {
-  margin-top: 8px;
+  margin-top: var(--space-sm);
 }
 .dlgbox b,
 .dlgbox strong {
@@ -25,16 +25,16 @@
   font-weight: 600;
 }
 .dlgbox.sm {
-  padding: 11px 15px 12px;
+  padding: var(--space-md) var(--space-lg) var(--space-md);
   font-size: 14px;
 }
 .dlgbox.lg {
-  padding: 20px 24px 22px;
+  padding: var(--space-xl) var(--space-2xl) var(--space-xl);
   font-size: 16.5px;
 }
 .dlg-who {
   display: block;
-  margin-bottom: 6px;
+  margin-bottom: var(--space-xs);
   font-family: var(--f-m);
   font-size: 9.5px;
   font-style: normal;
@@ -46,10 +46,10 @@
 .tip {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
-  gap: 16px;
+  gap: var(--space-lg);
   align-items: center;
-  margin: 0 0 22px;
-  padding: 14px 16px;
+  margin: 0 0 var(--space-xl);
+  padding: var(--space-md) var(--space-lg);
   border-radius: var(--rl);
   border: 1px solid transparent;
   background:
@@ -76,14 +76,14 @@
 /* ---------- Adventure: chapter screen ---------- */
 .hm-top {
   display: grid;
-  gap: 16px;
+  gap: var(--space-lg);
   grid-template-columns: minmax(0, 1fr);
 }
 @media (min-width: 1000px) {
   #accueil.page.on {
     display: grid;
     grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
-    gap: 16px;
+    gap: var(--space-lg);
     align-items: stretch;
   }
   #accueil .hm-top {
@@ -104,7 +104,7 @@
     margin: 0;
   }
   #accueil .qk {
-    padding: 18px 20px;
+    padding: var(--space-lg) var(--space-xl);
   }
 }
 .hm-hero {
@@ -149,10 +149,10 @@
 .hh-chips {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: var(--space-xs);
 }
 .hh-chips span {
-  padding: 4px 10px;
+  padding: var(--space-2xs) var(--space-sm);
   border-radius: 2px;
   border: 1px solid rgba(212, 175, 106, 0.22);
   background: rgba(10, 10, 12, 0.5);
@@ -168,7 +168,7 @@
     grid-template-columns: minmax(0, 1fr);
     justify-items: center;
     text-align: center;
-    padding: 22px 18px 0;
+    padding: var(--space-xl) var(--space-lg) 0;
   }
   .emb.bdg.xl {
     width: 96px;

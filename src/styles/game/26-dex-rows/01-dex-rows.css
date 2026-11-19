@@ -10,8 +10,8 @@ html body .v4-dl b {
 }
 @media (max-width: 480px) {
   html body #dex .v4-dl {
-    gap: 5px;
-    padding-right: 6px;
+    gap: var(--space-2xs);
+    padding-right: var(--space-xs);
   }
   html body #dex .v4-dl img {
     width: 42px !important;

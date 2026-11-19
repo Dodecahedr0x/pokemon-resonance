@@ -3,17 +3,17 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 8px;
-  padding: 10px;
-  margin-bottom: 12px;
+  gap: var(--space-sm);
+  padding: var(--space-sm);
+  margin-bottom: var(--space-md);
 }
 .v4-srch {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-sm);
   flex: 1 1 220px;
   min-height: 42px;
-  padding: 0 12px;
+  padding: 0 var(--space-md);
   border-radius: 10px;
   background: rgba(3, 16, 32, 0.8);
   border: 1px solid rgba(120, 200, 255, 0.28);
@@ -35,7 +35,7 @@ html body .v4-srch input {
 }
 html body .v4-dexbar select {
   min-height: 42px;
-  padding: 0 10px;
+  padding: 0 var(--space-sm);
   border-radius: 10px !important;
   font: 700 14px var(--f-d);
 }
@@ -51,13 +51,13 @@ html body .v4-dexbar select {
 .v4-dex {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 300px;
-  gap: 12px;
+  gap: var(--space-md);
   align-items: start;
 }
 .v4-dexlist {
   max-height: calc(100vh - 220px);
   overflow: auto;
-  padding: 6px;
+  padding: var(--space-xs);
   position: sticky;
   top: 76px;
   scrollbar-width: thin;
@@ -65,11 +65,11 @@ html body .v4-dexbar select {
 .v4-dl {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-sm);
   width: 100%;
   min-height: 52px;
-  padding: 2px 10px 2px 2px;
-  margin-bottom: 4px;
+  padding: var(--space-3xs) var(--space-sm) var(--space-3xs) var(--space-3xs);
+  margin-bottom: var(--space-2xs);
   border-radius: 10px;
   border: 1px solid transparent;
   background: rgba(255, 255, 255, 0.03);
@@ -110,14 +110,14 @@ html body .v4-dexbar select {
   color: #8ea8c4;
 }
 .v4-dexcard {
-  padding: 16px;
+  padding: var(--space-lg);
   --c: #e3350d;
   --c2: #e3350d;
 }
 .v4d-top {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
-  gap: 16px;
+  gap: var(--space-lg);
   align-items: center;
 }
 .v4d-art {
@@ -151,7 +151,7 @@ html body .v4-dexbar select {
   left: 10px;
   top: 10px;
   font: 800 13px/1 var(--f-m);
-  padding: 5px 8px;
+  padding: var(--space-2xs) var(--space-sm);
   border-radius: 7px;
   background: rgba(3, 16, 32, 0.75);
   border: 1px solid rgba(255, 255, 255, 0.18);
@@ -161,7 +161,7 @@ html body .v4-dexbar select {
   right: 10px;
   top: 10px;
   font: 800 11px/1 var(--f-d);
-  padding: 5px 8px;
+  padding: var(--space-2xs) var(--space-sm);
   border-radius: 7px;
   background: rgba(3, 16, 32, 0.8);
   color: #ffd75e;
@@ -175,17 +175,17 @@ html body .v4-dexbar select {
   color: #ffd75e;
 }
 .v4d-n {
-  margin: 2px 0 8px;
+  margin: var(--space-3xs) 0 var(--space-sm);
   font: 850 clamp(28px, 3.2vw, 40px)/1 var(--f-d);
   letter-spacing: -0.02em;
 }
 .v4d-types {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: var(--space-xs);
 }
 .v4d-lore {
-  margin: 12px 0;
+  margin: var(--space-md) 0;
   font-size: 14.5px;
   line-height: 1.55;
   color: #e6f1fb;
@@ -193,11 +193,11 @@ html body .v4-dexbar select {
 .v4d-hw {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 6px;
+  gap: var(--space-xs);
   margin: 0;
 }
 .v4d-hw div {
-  padding: 8px;
+  padding: var(--space-sm);
   border-radius: 10px;
   background: rgba(0, 0, 0, 0.25);
   border: 1px solid rgba(120, 200, 255, 0.16);

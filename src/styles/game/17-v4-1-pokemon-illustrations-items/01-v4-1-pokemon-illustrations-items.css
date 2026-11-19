@@ -89,7 +89,7 @@ html body .it-ic .it-img {
 html body .ux.it .it-img {
   width: 18px;
   height: 18px;
-  margin-right: 4px;
+  margin-right: var(--space-2xs);
 }
 html body .rl .it-ic {
   display: grid;
@@ -207,7 +207,7 @@ html body #bSvg .tok.shiny .tok-halo {
   color: #ffe9a3;
 }
 .v4-dl.shiny {
-  gap: 4px;
+  gap: var(--space-2xs);
 }
 .v4-dl.shiny > .shn-ic {
   order: 3;
@@ -223,9 +223,9 @@ html body #bSvg .tok.shiny .tok-halo {
   bottom: 10px;
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: var(--space-2xs);
   font: 800 11px/1 var(--f-d);
-  padding: 5px 8px;
+  padding: var(--space-2xs) var(--space-sm);
   border-radius: 7px;
   color: #ffe9a3;
   background: rgba(3, 16, 32, 0.78);
@@ -259,7 +259,7 @@ html body #bSvg .tok.boss .tok-rim {
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 .tdr-o {
-  padding: 12px 6px;
+  padding: var(--space-md) var(--space-xs);
   position: relative;
 }
 .tdr-o b {
@@ -288,20 +288,20 @@ html body #bSvg .tok.boss .tok-rim {
   z-index: 9; /* above the illustrations that overflow their medallion */
   display: flex;
   justify-content: center;
-  margin-top: 14px;
-  padding: 12px 0 26px;
+  margin-top: var(--space-md);
+  padding: var(--space-md) 0 var(--space-2xl);
   background: linear-gradient(180deg, rgba(6, 14, 26, 0), rgba(6, 14, 26, 0.97) 35%);
 }
 .tdr-rw {
   display: grid;
-  gap: 8px;
+  gap: var(--space-sm);
 }
 .tdr-r {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: var(--space-md);
   width: 100%;
-  padding: 10px 12px;
+  padding: var(--space-sm) var(--space-md);
   border-radius: var(--r, 12px);
   border: 1px solid rgba(255, 255, 255, 0.14);
   background: rgba(255, 255, 255, 0.04);
@@ -317,7 +317,7 @@ html body #bSvg .tok.boss .tok-rim {
 }
 .tdr-r > span:last-child {
   display: grid;
-  gap: 2px;
+  gap: var(--space-3xs);
 }
 .tdr-r b {
   font: 800 14px/1.2 var(--f-d);
@@ -367,7 +367,7 @@ html body #bSvg .tok.boss .tok-rim {
   .sel-tabs button {
     flex-direction: row;
     justify-content: flex-start;
-    gap: 10px;
+    gap: var(--space-sm);
     min-height: 48px;
     text-align: left;
   }

@@ -34,11 +34,11 @@ body {
   background: linear-gradient(180deg, rgba(4, 20, 32, 0.97), rgba(3, 14, 24, 0.97)) !important;
   border-right: 1px solid rgba(102, 210, 255, 0.25) !important;
   box-shadow: 12px 0 40px rgba(0, 0, 0, 0.18) !important;
-  padding: 25px 14px 18px !important;
-  gap: 24px !important;
+  padding: var(--space-2xl) var(--space-md) var(--space-lg) !important;
+  gap: var(--space-2xl) !important;
 }
 .logo {
-  padding: 8px 9px 18px !important;
+  padding: var(--space-sm) var(--space-sm) var(--space-lg) !important;
   border-bottom: 1px solid rgba(111, 219, 255, 0.16) !important;
 }
 .logo b {
@@ -51,7 +51,7 @@ body {
   letter-spacing: 0.12em !important;
 }
 .side-nav {
-  gap: 5px !important;
+  gap: var(--space-2xs) !important;
 }
 .nv {
   min-height: 43px !important;
@@ -74,7 +74,7 @@ body {
   border-radius: 15px !important;
 }
 .content {
-  padding: 18px 22px 54px !important;
+  padding: var(--space-lg) var(--space-xl) var(--space-5xl) !important;
 }
 .wrap {
   max-width: 1600px !important;
@@ -112,8 +112,8 @@ body {
   color: #bad0de !important;
 }
 .ph {
-  gap: 8px !important;
-  margin-bottom: 22px !important;
+  gap: var(--space-sm) !important;
+  margin-bottom: var(--space-xl) !important;
 }
 .tcard,
 .resume,
@@ -164,7 +164,7 @@ body {
 #accueil .hm-top {
   display: grid !important;
   grid-template-columns: minmax(0, 1.72fr) minmax(260px, 0.78fr) !important;
-  gap: 13px !important;
+  gap: var(--space-md) !important;
   align-items: stretch !important;
 }
 #accueil .hm-hero {
@@ -193,20 +193,20 @@ body {
   border: 1px solid rgba(122, 218, 255, 0.35) !important;
   border-radius: 6px !important;
   color: #e7f7ff !important;
-  padding: 5px 9px !important;
+  padding: var(--space-2xs) var(--space-sm) !important;
   font-size: 10px !important;
 }
 #accueil #campBox {
   grid-column: auto !important;
   min-height: 100% !important;
-  padding: 17px !important;
+  padding: var(--space-lg) !important;
   background: linear-gradient(180deg, rgba(10, 45, 65, 0.97), rgba(4, 21, 35, 0.98)) !important;
   border: 1px solid rgba(106, 220, 255, 0.34) !important;
   border-radius: 19px !important;
   box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28) !important;
 }
 #accueil .tc-h {
-  gap: 10px !important;
+  gap: var(--space-sm) !important;
 }
 .tc-av {
   border: 1px solid rgba(255, 218, 94, 0.6) !important;
@@ -217,7 +217,7 @@ body {
   font-size: 20px !important;
 }
 .tc-bdg {
-  padding: 12px 0 !important;
+  padding: var(--space-md) 0 !important;
   border-block: 1px solid rgba(105, 213, 255, 0.15) !important;
 }
 .tcb {
@@ -229,7 +229,7 @@ body {
   background: rgba(2, 14, 24, 0.42) !important;
   border: 1px solid rgba(110, 215, 255, 0.13) !important;
   border-radius: 10px !important;
-  padding: 10px 6px !important;
+  padding: var(--space-sm) var(--space-xs) !important;
 }
 .tc-k b {
   color: #ffe17c !important;
@@ -243,13 +243,13 @@ body {
   border-radius: 10px !important;
   background: rgba(5, 23, 37, 0.7) !important;
   border: 1px solid rgba(108, 218, 255, 0.18) !important;
-  padding: 10px !important;
+  padding: var(--space-sm) !important;
 }
 #accueil .hm-quick {
   display: grid !important;
   grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-  gap: 12px !important;
-  margin: 13px 0 !important;
+  gap: var(--space-md) !important;
+  margin: var(--space-md) 0 !important;
 }
 #accueil .qk {
   position: relative !important;
@@ -257,7 +257,7 @@ body {
   min-height: 112px !important;
   display: flex !important;
   align-items: flex-end !important;
-  padding: 15px !important;
+  padding: var(--space-lg) !important;
   border-radius: 15px !important;
   border: 1px solid rgba(104, 211, 255, 0.3) !important;
   background:
@@ -312,7 +312,7 @@ body {
   box-shadow: 0 18px 42px rgba(0, 0, 0, 0.27) !important;
 }
 #accueil .rt-ui {
-  padding: 15px !important;
+  padding: var(--space-lg) !important;
 }
 .rt-sign {
   background: rgba(4, 25, 39, 0.85) !important;

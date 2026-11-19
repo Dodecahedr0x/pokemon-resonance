@@ -69,7 +69,7 @@
 }
 @media (max-width: 850px) {
   #accueil .v4h-body {
-    padding: 24px !important;
+    padding: var(--space-2xl) !important;
   }
   #accueil .v4-hero:after {
     width: 190px;
@@ -77,7 +77,7 @@
     top: 28%;
   }
   #accueil .v4-tiles {
-    gap: 10px !important;
+    gap: var(--space-sm) !important;
   }
   #carte .v4-map-wrap {
     grid-template-columns: 1fr !important;
@@ -155,10 +155,10 @@ html:is(:root, #r9) body #accueil .v4t-item.i2 {
 /* 3. mobile: more compact headers, the cyan rule stays */
 @media (max-width: 700px) {
   html body .page .ph:after {
-    margin-top: 12px;
+    margin-top: var(--space-md);
     width: 84px;
   }
   html body #carte .v4-reg {
-    margin: 12px 0 16px;
+    margin: var(--space-md) 0 var(--space-lg);
   }
 }

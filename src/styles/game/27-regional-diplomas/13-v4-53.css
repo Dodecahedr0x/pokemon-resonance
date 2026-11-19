@@ -138,8 +138,8 @@
 .timed-catch-c {
   display: grid;
   justify-items: center;
-  gap: 14px;
-  padding: 22px;
+  gap: var(--space-md);
+  padding: var(--space-xl);
   border-radius: 22px;
   background: linear-gradient(160deg, #173a50, #0a1d2b);
   border: 1px solid rgba(255, 215, 94, 0.4);
@@ -205,11 +205,11 @@
 /* <style id="resonance-event-cards"> */
 .route-event {
   display: flex;
-  gap: 12px;
+  gap: var(--space-md);
   align-items: center;
   width: 100%;
-  margin-bottom: 10px;
-  padding: 11px 14px;
+  margin-bottom: var(--space-sm);
+  padding: var(--space-md) var(--space-md);
   border-radius: 16px;
   border: 1px solid rgba(255, 212, 91, 0.45);
   background: linear-gradient(135deg, rgba(255, 212, 91, 0.16), rgba(20, 50, 70, 0.7));
@@ -258,9 +258,9 @@
 }
 .route-event-c {
   display: grid;
-  gap: 2px;
+  gap: var(--space-3xs);
   text-align: left;
-  padding: 12px 14px;
+  padding: var(--space-md) var(--space-md);
   border-radius: 14px;
   border: 1px solid rgba(255, 255, 255, 0.18);
   background: rgba(255, 255, 255, 0.06);
@@ -280,10 +280,10 @@
   color: #ffd45b;
 }
 .dex-mission {
-  margin: 0 0 12px;
-  padding: 12px 14px;
+  margin: 0 0 var(--space-md);
+  padding: var(--space-md) var(--space-md);
   display: grid;
-  gap: 10px;
+  gap: var(--space-sm);
 }
 .dex-mission h3 {
   margin: 0;
@@ -294,7 +294,7 @@
 }
 .dex-mission-r {
   display: flex;
-  gap: 12px;
+  gap: var(--space-md);
   align-items: center;
   justify-content: space-between;
 }
@@ -309,14 +309,14 @@
   font-style: normal;
   font-size: 11px;
   color: #9fd8ff;
-  margin-left: 4px;
+  margin-left: var(--space-2xs);
 }
 .dex-mission-r i {
   display: block;
   height: 6px;
   border-radius: 4px;
   background: rgba(255, 255, 255, 0.12);
-  margin: 5px 0 3px;
+  margin: var(--space-2xs) 0 var(--space-3xs);
   overflow: hidden;
 }
 .dex-mission-r u {

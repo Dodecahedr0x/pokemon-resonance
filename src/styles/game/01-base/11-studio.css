@@ -2,7 +2,7 @@
 .prod {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
+  gap: var(--space-md);
   align-items: start;
 }
 @media (max-width: 860px) {
@@ -12,8 +12,8 @@
 }
 .pc-card {
   display: grid;
-  gap: 16px;
-  padding: 24px;
+  gap: var(--space-lg);
+  padding: var(--space-2xl);
   border-radius: var(--rl);
   background: linear-gradient(180deg, var(--s2), var(--s1));
   border: 1px solid var(--line);
@@ -28,8 +28,8 @@
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  gap: 12px;
-  padding: 11px 0;
+  gap: var(--space-md);
+  padding: var(--space-md) 0;
   border-bottom: 1px solid var(--line);
   font-size: 14px;
   color: var(--tx2);
@@ -47,14 +47,14 @@
 }
 .layers {
   display: grid;
-  gap: 6px;
+  gap: var(--space-xs);
 }
 .layer {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  gap: 10px;
+  gap: var(--space-sm);
   align-items: center;
-  padding: 13px 15px;
+  padding: var(--space-md) var(--space-lg);
   border-radius: 12px;
   background: var(--s2);
   border: 1px solid var(--line);
@@ -84,7 +84,7 @@
 .road {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 12px;
+  gap: var(--space-md);
 }
 @media (max-width: 980px) {
   .road {
@@ -98,9 +98,9 @@
 }
 .rp {
   display: grid;
-  gap: 10px;
+  gap: var(--space-sm);
   align-content: start;
-  padding: 22px;
+  padding: var(--space-xl);
   border-radius: var(--r);
   background: var(--s1);
   border: 1px solid var(--line);
@@ -133,8 +133,8 @@
 .legal {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
-  gap: 16px;
-  padding: 22px;
+  gap: var(--space-lg);
+  padding: var(--space-xl);
   border-radius: var(--r);
   border: 1px solid rgba(242, 195, 90, 0.3);
   background: rgba(242, 195, 90, 0.06);
@@ -160,21 +160,21 @@
 }
 footer.foot {
   border-top: 1px solid var(--line);
-  padding-block: 22px;
-  padding-left: max(16px, env(safe-area-inset-left, 0px));
-  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: var(--space-xl);
+  padding-left: max(var(--space-lg), env(safe-area-inset-left, 0px));
+  padding-right: max(var(--space-lg), env(safe-area-inset-right, 0px));
 }
 footer.foot .wrap {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  gap: 8px 24px;
+  gap: var(--space-sm) var(--space-2xl);
   font-size: 11.5px;
   color: var(--fnt);
 }
 @media (max-width: 999px) {
   footer.foot {
-    padding-bottom: calc(var(--bn) + 24px + env(safe-area-inset-bottom, 0px));
+    padding-bottom: calc(var(--bn) + var(--space-2xl) + env(safe-area-inset-bottom, 0px));
   }
 }
 

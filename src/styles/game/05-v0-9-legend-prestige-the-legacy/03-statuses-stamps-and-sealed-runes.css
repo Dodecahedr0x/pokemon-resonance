@@ -1,7 +1,7 @@
 /* ---------- statuses: stamps and sealed runes ---------- */
 .stt {
   display: inline-block;
-  padding: 1px 6px;
+  padding: 1px var(--space-xs);
   border-radius: 1px;
   border: 1.5px solid currentColor;
   outline: 1px solid currentColor;

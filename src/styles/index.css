@@ -1,4 +1,5 @@
 /* Stylesheet entry point. The import order is the cascade order: later layers override earlier ones. */
+@import './theme/spacing.css';
 @import './fonts.css';
 @import './game/index.css';
 @import './living-map.css';

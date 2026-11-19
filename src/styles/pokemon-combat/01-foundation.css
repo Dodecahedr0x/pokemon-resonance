@@ -293,7 +293,7 @@
 html:not(#pkz) body:not(#pkz) #cbBattle :is(.plate, .bp-hp) .hp.hseg {
   position: relative;
   height: 8px !important;
-  margin-left: 21px !important;
+  margin-left: var(--space-xl) !important;
   border-radius: 6px !important;
   overflow: visible !important;
   border: 0 !important;
@@ -308,7 +308,7 @@ html:not(#pkz) body:not(#pkz) #cbBattle :is(.plate, .bp-hp) .hp.hseg::before {
   right: calc(100% + 3px);
   top: 50%;
   transform: translateY(-50%);
-  padding: 1px 3px 0;
+  padding: 1px var(--space-3xs) 0;
   border-radius: 3px;
   background: linear-gradient(180deg, #ffd84d, #ef9f1c);
   color: #3a2300;

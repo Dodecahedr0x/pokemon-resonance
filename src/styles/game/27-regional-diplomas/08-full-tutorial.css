@@ -2,9 +2,9 @@
 .tutorial-ch-p {
   display: grid;
   grid-template-columns: 1fr auto;
-  gap: 6px 10px;
+  gap: var(--space-xs) var(--space-sm);
   align-items: center;
-  margin: 8px 0 12px;
+  margin: var(--space-sm) 0 var(--space-md);
   font-size: 13px;
 }
 .tutorial-ch-p i {
@@ -19,20 +19,20 @@
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: #ffd45b;
-  margin: 16px 0 6px;
+  margin: var(--space-lg) 0 var(--space-xs);
 }
 .tutorial-ch-c {
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.12);
   background: rgba(255, 255, 255, 0.035);
-  margin-bottom: 6px;
+  margin-bottom: var(--space-xs);
   overflow: hidden;
 }
 .tutorial-ch-c > summary {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px 12px;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
   cursor: pointer;
   list-style: none;
   min-height: 44px;
@@ -75,15 +75,15 @@
 }
 .tutorial-ch-c > p {
   margin: 0;
-  padding: 0 12px 10px;
+  padding: 0 var(--space-md) var(--space-sm);
   font-size: 13.5px;
   line-height: 1.55;
 }
 .tutorial-ch-a {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
-  padding: 0 12px 12px;
+  gap: var(--space-xs);
+  padding: 0 var(--space-md) var(--space-md);
 }
 
 /* <style id="resonance-phone-battle"> */
@@ -93,17 +93,17 @@
     display: none !important;
   }
   html body.compact-battle main.content {
-    padding-top: 6px !important;
+    padding-top: var(--space-xs) !important;
   }
   html body.compact-battle .battle {
-    gap: 6px;
+    gap: var(--space-xs);
   }
   html body.compact-battle .bt-top {
     display: flex !important;
     flex-wrap: wrap;
     align-items: center;
-    gap: 4px 6px !important;
-    padding: 6px 8px !important;
+    gap: var(--space-2xs) var(--space-xs) !important;
+    padding: var(--space-xs) var(--space-sm) !important;
   }
   html body.compact-battle #bScen {
     order: 1;
@@ -141,7 +141,7 @@
   html body.compact-battle #bQuit {
     height: 28px !important;
     min-height: 28px !important;
-    padding: 0 9px !important;
+    padding: 0 var(--space-sm) !important;
     font-size: 11.5px !important;
     flex: none;
   }
@@ -157,7 +157,7 @@
     min-width: 0;
     display: flex !important;
     flex-wrap: nowrap !important;
-    gap: 4px;
+    gap: var(--space-2xs);
     overflow-x: auto;
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
@@ -168,7 +168,7 @@
   html body.compact-battle #bWx > * {
     flex: none;
     font-size: 10px !important;
-    padding: 3px 7px !important;
+    padding: var(--space-3xs) var(--space-xs) !important;
     white-space: nowrap;
     letter-spacing: 0.02em !important;
   }
@@ -176,8 +176,8 @@
     display: flex !important;
     flex-wrap: nowrap !important;
     overflow-x: auto;
-    gap: 4px !important;
-    padding: 2px 8px !important;
+    gap: var(--space-2xs) !important;
+    padding: var(--space-3xs) var(--space-sm) !important;
     scrollbar-width: none;
     min-height: 0 !important;
     align-items: center;
@@ -193,14 +193,14 @@
   html body.compact-battle .bt-syn .syn-c {
     flex: none;
     font-size: 10.5px !important;
-    padding: 2px 7px !important;
+    padding: var(--space-3xs) var(--space-xs) !important;
   }
   html body.compact-battle .bt-arena {
-    padding: 3px 8px !important;
-    gap: 8px !important;
+    padding: var(--space-3xs) var(--space-sm) !important;
+    gap: var(--space-sm) !important;
     font-size: 11.5px;
     line-height: 1.3;
-    margin: 0 6px;
+    margin: 0 var(--space-xs);
     cursor: pointer;
     min-height: 0 !important;
   }
@@ -227,8 +227,8 @@
   html body.compact-battle #cbBattle .plates {
     display: grid !important;
     grid-template-columns: repeat(var(--n, 4), minmax(0, 1fr));
-    gap: 4px !important;
-    padding: 4px 6px !important;
+    gap: var(--space-2xs) !important;
+    padding: var(--space-2xs) var(--space-xs) !important;
     overflow: visible !important;
   }
   html body.compact-battle #cbBattle .plates .plate {
@@ -237,7 +237,7 @@
     grid-template-columns: 1fr !important;
     justify-items: center;
     gap: 1px !important;
-    padding: 4px 3px !important;
+    padding: var(--space-2xs) var(--space-3xs) !important;
     text-align: center;
   }
   html body.compact-battle #cbBattle .plates .plate .medal.pm {
@@ -249,7 +249,7 @@
   }
   html body.compact-battle #cbBattle .plate .pl-b {
     width: 100%;
-    gap: 2px !important;
+    gap: var(--space-3xs) !important;
     min-width: 0;
   }
   html body.compact-battle #cbBattle .plate .pl-h {
@@ -279,7 +279,7 @@
   html body.compact-battle #cbBattle .plate .pl-s {
     justify-content: center !important;
     font-size: 9px !important;
-    gap: 3px !important;
+    gap: var(--space-3xs) !important;
     flex-wrap: wrap;
   }
   html body.compact-battle #cbBattle .plate .pl-s .it {
@@ -291,7 +291,7 @@
   }
   html body.compact-battle #cbBattle .plate .pl-s .stt {
     font-size: 8.5px;
-    padding: 0 3px;
+    padding: 0 var(--space-3xs);
   }
   html body.compact-battle #bBoard.vert {
     margin-inline: auto !important;
@@ -300,15 +300,15 @@
 /* Awakening choice on phone: more compact cards (5 paths for Eevee) */
 @media (max-width: 700px) {
   html body #evoPick .ep-card {
-    padding: 16px 14px !important;
-    gap: 10px !important;
+    padding: var(--space-lg) var(--space-md) !important;
+    gap: var(--space-sm) !important;
   }
   html body #evoPick .ep-opts {
-    gap: 8px !important;
+    gap: var(--space-sm) !important;
   }
   html body #evoPick .eo {
-    padding: 10px 12px !important;
-    gap: 6px !important;
+    padding: var(--space-sm) var(--space-md) !important;
+    gap: var(--space-xs) !important;
   }
   html body #evoPick .eo-art {
     padding: 0 !important;
@@ -319,10 +319,10 @@
   }
   html body #evoPick .eo ul {
     font-size: 12px !important;
-    gap: 3px !important;
+    gap: var(--space-3xs) !important;
   }
   html body #evoPick .eo-go {
-    padding: 8px !important;
+    padding: var(--space-sm) !important;
   }
 }
 

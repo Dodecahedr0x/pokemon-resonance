@@ -1,17 +1,17 @@
 /* League: Elite Four */
 .elite-case {
-  margin-top: 16px;
+  margin-top: var(--space-lg);
 }
 .el-grid {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 10px;
+  gap: var(--space-sm);
 }
 .el-c {
   display: grid;
-  gap: 8px;
+  gap: var(--space-sm);
   justify-items: start;
-  padding: 14px;
+  padding: var(--space-md);
   border-radius: var(--r);
   border: 1px solid transparent;
   background:
@@ -64,7 +64,7 @@
 }
 .el-f {
   display: flex;
-  gap: 4px;
+  gap: var(--space-2xs);
   flex-wrap: wrap;
 }
 .el-c em {
@@ -97,7 +97,7 @@
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: #f2dda8;
-  padding: 2px 7px;
+  padding: var(--space-3xs) var(--space-xs);
   border: 1px solid rgba(212, 175, 106, 0.5);
   background: rgba(6, 6, 8, 0.8);
   border-radius: 1px;
@@ -124,7 +124,7 @@
 .fc-fat {
   display: block;
   height: 3px;
-  margin-top: -6px;
+  margin-top: calc(var(--space-xs) * -1);
   background: #0a0b0e;
   box-shadow: inset 0 0 0 1px rgba(212, 175, 106, 0.18);
   position: relative;
@@ -155,14 +155,14 @@
 }
 .eq-l {
   display: grid;
-  gap: 8px;
+  gap: var(--space-sm);
 }
 .eq {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
-  gap: 12px;
+  gap: var(--space-md);
   align-items: center;
-  padding: 10px 12px;
+  padding: var(--space-sm) var(--space-md);
   border-radius: var(--r);
   border: 1px solid transparent;
   background:
@@ -194,7 +194,7 @@
 .lk-row {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) 70px;
-  gap: 10px;
+  gap: var(--space-sm);
   align-items: center;
 }
 .lk-row b {
@@ -224,12 +224,12 @@
   margin: 0;
   padding: 0;
   display: grid;
-  gap: 8px;
+  gap: var(--space-sm);
 }
 .lk-l li {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
-  gap: 10px;
+  gap: var(--space-sm);
   align-items: center;
 }
 .lk-l b {
@@ -246,5 +246,5 @@
   display: inline-flex;
 }
 .lk-m .medal + .medal {
-  margin-left: -6px;
+  margin-left: calc(var(--space-xs) * -1);
 }

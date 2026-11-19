@@ -1,8 +1,8 @@
 /* <style id="resonance-turn-flow"> */
 /* v4.78 : guided turn flow */
 #bPanel .turn-guide {
-  margin: 8px 0;
-  padding: 8px 10px;
+  margin: var(--space-sm) 0;
+  padding: var(--space-sm) var(--space-sm);
   border: 1px solid rgba(255, 214, 102, 0.35);
   border-radius: 10px;
   background: rgba(255, 214, 102, 0.07);
@@ -10,13 +10,13 @@
 #bPanel .turn-guide-h {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 6px;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-xs);
 }
 #bPanel .turn-guide-p {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: var(--space-xs);
   list-style: none;
   margin: 0;
   padding: 0;
@@ -51,7 +51,7 @@
 #bPanel .turn-guide-r {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--space-sm);
 }
 #bPanel .turn-guide-r p {
   margin: 0;
@@ -71,12 +71,12 @@
 html body.compact-battle #cbBattle .bt-foot .turn-guide-pied:not([hidden]) {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: var(--space-xs);
   order: 3;
   margin-left: auto;
   min-width: 0;
   height: 38px;
-  padding: 0 12px;
+  padding: 0 var(--space-md);
   border: 1px solid rgba(255, 214, 102, 0.45);
   border-radius: 12px;
   background: rgba(255, 214, 102, 0.08);

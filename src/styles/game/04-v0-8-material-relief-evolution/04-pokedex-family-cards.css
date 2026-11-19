@@ -1,7 +1,7 @@
 /* ---------- POKÉDEX: family cards ---------- */
 .fam-grid {
   grid-template-columns: repeat(auto-fill, minmax(222px, 1fr));
-  gap: 16px;
+  gap: var(--space-lg);
   perspective: 1100px;
 }
 .fcard {
@@ -27,10 +27,10 @@
 .fc-in {
   position: relative;
   display: grid;
-  gap: 10px;
+  gap: var(--space-sm);
   align-content: start;
   height: 100%;
-  padding: 12px 12px 14px;
+  padding: var(--space-md) var(--space-md) var(--space-md);
   border-radius: 20px;
   overflow: hidden;
   border: 2px solid transparent;
@@ -50,7 +50,7 @@
 .fc-top {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-sm);
   font-family: var(--f-m);
   font-size: 10.5px;
   color: color-mix(in srgb, #fff 70%, var(--c));
@@ -60,7 +60,7 @@
   margin-left: auto;
 }
 .fc-gen {
-  padding: 1px 7px;
+  padding: 1px var(--space-xs);
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, 0.2);
   font-size: 9.5px;
@@ -109,7 +109,7 @@
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: #fff;
-  padding: 2px 7px;
+  padding: var(--space-3xs) var(--space-xs);
   border-radius: 5px;
   background: rgba(5, 7, 10, 0.6);
 }
@@ -121,7 +121,7 @@
   width: 88px;
   height: 88px;
   border-radius: 50%;
-  padding: 4px;
+  padding: var(--space-2xs);
   background: conic-gradient(from 210deg, #f7e1ac, #8e6c31, #f3dba6, #6b4f22, #e3c07a, #f7e1ac);
   box-shadow:
     0 0 0 2px #07090d,
@@ -161,8 +161,8 @@
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: 8px;
-  padding: 0 2px;
+  gap: var(--space-sm);
+  padding: 0 var(--space-3xs);
 }
 .fc-name h3 {
   font-family: var(--f-d);
@@ -180,14 +180,14 @@
 }
 .fcard .types {
   display: flex;
-  gap: 4px;
+  gap: var(--space-2xs);
   flex-wrap: wrap;
-  padding: 0 2px;
+  padding: 0 var(--space-3xs);
 }
 .fc-mv {
   font-size: 12px;
   color: var(--tx2);
-  padding: 7px 9px;
+  padding: var(--space-xs) var(--space-sm);
   border-radius: 9px;
   background: rgba(0, 0, 0, 0.28);
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
@@ -195,8 +195,8 @@
 .fc-chain {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 0 2px;
+  gap: var(--space-sm);
+  padding: 0 var(--space-3xs);
   font-size: 11px;
   color: var(--gold-l);
   min-height: 20px;
@@ -301,12 +301,12 @@
     0 0 8px rgba(227, 192, 122, 0.4);
 }
 .dk {
-  gap: 16px;
+  gap: var(--space-lg);
 }
 @media (max-width: 540px) {
   .fam-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
+    gap: var(--space-sm);
   }
   .fc-art {
     height: 104px;
@@ -334,14 +334,14 @@
 /* sheet: stage tabs */
 .stabs {
   display: flex;
-  gap: 6px;
+  gap: var(--space-xs);
   flex-wrap: wrap;
 }
 .stab {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 7px 12px 7px 7px;
+  gap: var(--space-sm);
+  padding: var(--space-xs) var(--space-md) var(--space-xs) var(--space-xs);
   border-radius: 14px;
   cursor: pointer;
   color: inherit;

@@ -2,9 +2,9 @@
 html body.compact-battle #cbBattle .bt-foot:has(.board-tools.in-foot),
 html body.compact-battle #cbBattle .bt-foot.foot-tools {
   flex-wrap: wrap !important;
-  row-gap: 7px !important;
-  column-gap: 8px !important;
-  padding: 7px 10px !important;
+  row-gap: var(--space-xs) !important;
+  column-gap: var(--space-sm) !important;
+  padding: var(--space-xs) var(--space-sm) !important;
 }
 html body.compact-battle #cbBattle .bt-foot.foot-tools .phase {
   order: -1 !important;
@@ -72,8 +72,8 @@ html body.compact-battle #cbBattle .bt-foot.foot-tools #bEnd {
 .tile-info-h {
   display: flex;
   align-items: center;
-  gap: 9px;
-  padding: 10px 10px 10px 14px;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-sm) var(--space-sm) var(--space-md);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 .tile-info-sw {
@@ -111,22 +111,22 @@ html body.compact-battle #cbBattle .bt-foot.foot-tools #bEnd {
 .tile-info-b {
   overflow-y: auto;
   overscroll-behavior: contain;
-  padding: 10px 14px 12px;
+  padding: var(--space-sm) var(--space-md) var(--space-md);
   display: grid;
-  gap: 9px;
+  gap: var(--space-sm);
 }
 .tile-info-b ul {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
-  gap: 5px;
+  gap: var(--space-2xs);
 }
 .tile-info-r li {
   font-size: 13px;
   line-height: 1.4;
   color: #cfd8e4;
-  padding-left: 14px;
+  padding-left: var(--space-md);
   position: relative;
 }
 .tile-info-r li::before {
@@ -146,7 +146,7 @@ html body.compact-battle #cbBattle .bt-foot.foot-tools #bEnd {
   background: rgba(255, 159, 26, 0.12);
   border: 1px solid rgba(255, 159, 26, 0.4);
   border-radius: 9px;
-  padding: 6px 9px;
+  padding: var(--space-xs) var(--space-sm);
 }
 .tile-info-c li {
   font-size: 12.5px;
@@ -155,7 +155,7 @@ html body.compact-battle #cbBattle .bt-foot.foot-tools #bEnd {
   background: rgba(91, 155, 255, 0.12);
   border: 1px solid rgba(127, 178, 255, 0.4);
   border-radius: 9px;
-  padding: 6px 9px;
+  padding: var(--space-xs) var(--space-sm);
 }
 .tile-info-k {
   margin: 0;
@@ -167,12 +167,12 @@ html body.compact-battle #cbBattle .bt-foot.foot-tools #bEnd {
 .tile-info-rx {
   display: flex;
   flex-wrap: wrap;
-  gap: 5px;
+  gap: var(--space-2xs);
 }
 .tile-info-u {
   display: grid;
-  gap: 6px;
-  padding: 9px 10px;
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-sm);
   border-radius: 11px;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -186,7 +186,7 @@ html body.compact-battle #cbBattle .bt-foot.foot-tools #bEnd {
 .tile-info-uh {
   display: flex;
   align-items: baseline;
-  gap: 8px;
+  gap: var(--space-sm);
 }
 .tile-info-uh b {
   font: 700 14px/1.1 var(--f-d);
@@ -219,7 +219,7 @@ html body.compact-battle #cbBattle .bt-foot.foot-tools #bEnd {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 6px;
+  gap: var(--space-xs);
   font-size: 12px;
   color: #cfd8e4;
 }
@@ -237,7 +237,7 @@ html body.compact-battle #cbBattle .bt-foot.foot-tools #bEnd {
   letter-spacing: 0.07em;
   text-transform: uppercase;
   color: #d8c08a;
-  padding: 6px 0;
+  padding: var(--space-xs) 0;
   list-style: none;
 }
 .tile-info-leg summary::-webkit-details-marker {
@@ -253,7 +253,7 @@ html body.compact-battle #cbBattle .bt-foot.foot-tools #bEnd {
   display: grid;
   grid-template-columns: 14px auto 1fr;
   align-items: start;
-  gap: 3px 8px;
+  gap: var(--space-3xs) var(--space-sm);
   font-size: 12px;
   line-height: 1.35;
   color: #cfd8e4;
@@ -262,7 +262,7 @@ html body.compact-battle #cbBattle .bt-foot.foot-tools #bEnd {
   width: 12px;
   height: 12px;
   border-radius: 3px;
-  margin-top: 2px;
+  margin-top: var(--space-3xs);
 }
 .tile-info-leg li b {
   white-space: nowrap;

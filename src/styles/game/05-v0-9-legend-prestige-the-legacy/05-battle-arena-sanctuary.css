@@ -37,10 +37,10 @@
 .bt-arena {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
-  gap: 12px;
+  gap: var(--space-md);
   align-items: center;
-  margin: 10px 14px 0;
-  padding: 9px 12px;
+  margin: var(--space-sm) var(--space-md) 0;
+  padding: var(--space-sm) var(--space-md);
   border-radius: var(--r);
   border: 1px solid transparent;
   background:
@@ -65,7 +65,7 @@
   font-style: normal;
   color: var(--gold-l);
   font-size: 12px;
-  margin-top: 2px;
+  margin-top: var(--space-3xs);
 }
 .ba-b {
   width: 34px;
@@ -78,7 +78,7 @@
 }
 .board {
   border-radius: 10px;
-  padding: 9px;
+  padding: var(--space-sm);
   border: 1.5px solid transparent;
   box-shadow:
     inset 0 0 0 1px rgba(0, 0, 0, 0.9),

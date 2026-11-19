@@ -97,7 +97,7 @@
 }
 .fc-name {
   display: grid;
-  gap: 3px;
+  gap: var(--space-3xs);
 }
 .fc-name h3 {
   font-weight: 800;
@@ -165,7 +165,7 @@
 }
 .mvc .t {
   border-bottom: 1px solid rgba(212, 175, 106, 0.12);
-  padding-bottom: 8px;
+  padding-bottom: var(--space-sm);
 }
 .mvc b {
   font-weight: 700;
@@ -220,14 +220,14 @@
 .scn-gyms {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
+  gap: var(--space-sm);
 }
 .scn-gyms .scn {
-  padding: 16px;
-  gap: 6px;
+  padding: var(--space-lg);
+  gap: var(--space-xs);
 }
 .scn-gyms .scn-art {
-  margin: -16px -16px 4px;
+  margin: calc(var(--space-lg) * -1) calc(var(--space-lg) * -1) var(--space-2xs);
 }
 .scn-gyms .scn p {
   font-size: 12.5px;

@@ -16,7 +16,7 @@
   display: grid;
   place-items: center;
   align-content: center;
-  gap: 10px;
+  gap: var(--space-sm);
   background: radial-gradient(circle at 50% 46%, color-mix(in srgb, var(--c0) 30%, #05060a), #030407 70%);
   animation: efxIn 2.5s ease both;
 }
@@ -218,7 +218,7 @@
   text-align: center;
   color: #fff;
   text-shadow: 0 2px 18px rgba(0, 0, 0, 0.8);
-  padding: 0 16px;
+  padding: 0 var(--space-lg);
 }
 .efx-t1 {
   animation: t1 2.5s ease both;

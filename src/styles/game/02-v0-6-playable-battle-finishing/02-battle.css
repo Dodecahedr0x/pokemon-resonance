@@ -5,7 +5,7 @@
   }
 }
 .bt-top .voix span {
-  margin-right: 2px;
+  margin-right: var(--space-3xs);
 }
 .bt-top #bWx:empty {
   display: none;
@@ -283,14 +283,14 @@
   }
 }
 .bp {
-  padding: 4px 14px 14px;
+  padding: var(--space-2xs) var(--space-md) var(--space-md);
   display: grid;
-  gap: 10px;
+  gap: var(--space-sm);
 }
 .bp-h {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) 110px;
-  gap: 12px;
+  gap: var(--space-md);
   align-items: center;
 }
 .bp-h .medal {
@@ -310,11 +310,11 @@
   display: block;
   font-size: 12px;
   color: var(--mut);
-  margin-top: 4px;
+  margin-top: var(--space-2xs);
 }
 .bp-hp {
   display: grid;
-  gap: 5px;
+  gap: var(--space-2xs);
   text-align: right;
   font-family: var(--f-m);
   font-size: 11px;
@@ -333,14 +333,14 @@
 .bp-mv {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 8px;
+  gap: var(--space-sm);
 }
 .bm {
   display: grid;
-  gap: 4px;
+  gap: var(--space-2xs);
   align-content: start;
   justify-items: start;
-  padding: 11px 12px;
+  padding: var(--space-md) var(--space-md);
   border-radius: 14px;
   border: 1px solid var(--line2);
   background: var(--s2);

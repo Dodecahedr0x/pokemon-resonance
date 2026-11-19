@@ -50,7 +50,7 @@ body {
   height: 5px;
   transform: rotate(45deg);
   background: currentColor;
-  margin-left: -6px;
+  margin-left: calc(var(--space-xs) * -1);
   flex: none;
   order: -1;
   display: none;
@@ -229,7 +229,7 @@ body {
 
 .b-lg {
   height: 52px;
-  padding: 0 26px;
+  padding: 0 var(--space-2xl);
   font-size: 15px;
 }
 /* medals with metallic rims */
@@ -310,9 +310,9 @@ body {
 /* Awakening energy */
 .enp {
   display: inline-flex;
-  gap: 5px;
+  gap: var(--space-2xs);
   align-items: center;
-  padding: 0 2px;
+  padding: 0 var(--space-3xs);
 }
 .enp i {
   width: 8px;
@@ -332,7 +332,7 @@ body {
     0 0 9px rgba(227, 192, 122, 0.75);
 }
 .enp.lg {
-  gap: 8px;
+  gap: var(--space-sm);
 }
 .enp.lg i {
   width: 12px;

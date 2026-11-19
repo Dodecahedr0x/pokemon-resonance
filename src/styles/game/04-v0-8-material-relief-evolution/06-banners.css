@@ -1,20 +1,20 @@
 /* banners */
 .plate {
   grid-template-columns: auto minmax(0, 1fr);
-  gap: 9px;
+  gap: var(--space-sm);
   align-items: center;
-  padding: 8px 10px;
+  padding: var(--space-sm) var(--space-sm);
   border-radius: 14px;
 }
 .plate .pl-b {
   display: grid;
-  gap: 5px;
+  gap: var(--space-2xs);
   min-width: 0;
 }
 .plate .pl-h {
   align-items: center;
   justify-content: space-between;
-  gap: 6px;
+  gap: var(--space-xs);
 }
 .plate .pl-h .n {
   white-space: nowrap;
@@ -62,7 +62,7 @@
   font-weight: 600;
 }
 .plate .enp {
-  gap: 4px;
+  gap: var(--space-2xs);
 }
 .plate .enp i {
   width: 6px;
@@ -71,7 +71,7 @@
 @media (max-width: 640px) {
   .plate {
     grid-template-columns: 1fr;
-    padding: 7px 8px;
+    padding: var(--space-xs) var(--space-sm);
   }
   .plate .medal.pm {
     display: none;
@@ -83,8 +83,8 @@
 /* panel */
 .bp-en {
   display: grid;
-  gap: 9px;
-  padding: 12px;
+  gap: var(--space-sm);
+  padding: var(--space-md);
   border-radius: 14px;
   border: 1px solid transparent;
   background:
@@ -106,15 +106,15 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
+  gap: var(--space-sm);
 }
 .evb {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
-  gap: 12px;
+  gap: var(--space-md);
   align-items: center;
   width: 100%;
-  padding: 11px 13px;
+  padding: var(--space-md) var(--space-md);
   border-radius: 12px;
   border: 1px solid var(--line2);
   background: #10131a;
@@ -137,13 +137,13 @@
   font-style: normal;
   font-size: 12px;
   color: var(--mut);
-  margin-top: 2px;
+  margin-top: var(--space-3xs);
 }
 .evb-m {
   display: inline-flex;
 }
 .evb-m .medal {
-  margin-left: -8px;
+  margin-left: calc(var(--space-sm) * -1);
 }
 .evb-m .medal:first-child {
   margin-left: 0;
@@ -177,9 +177,9 @@
 .bp-evw {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
-  gap: 10px;
+  gap: var(--space-sm);
   align-items: center;
-  padding: 10px 12px;
+  padding: var(--space-sm) var(--space-md);
   border-radius: 12px;
   border: 1px dashed rgba(255, 138, 106, 0.35);
   font-size: 13px;
@@ -212,7 +212,8 @@
   z-index: 86;
   display: grid;
   place-items: center;
-  padding: 20px max(16px, env(safe-area-inset-right, 0px)) 20px max(16px, env(safe-area-inset-left, 0px));
+  padding: var(--space-xl) max(var(--space-lg), env(safe-area-inset-right, 0px)) var(--space-xl)
+    max(var(--space-lg), env(safe-area-inset-left, 0px));
   background: radial-gradient(60% 50% at 50% 40%, rgba(227, 192, 122, 0.12), transparent 70%), rgba(3, 4, 7, 0.8);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
@@ -225,8 +226,8 @@
   max-height: 92vh;
   overflow-y: auto;
   display: grid;
-  gap: 14px;
-  padding: 26px;
+  gap: var(--space-md);
+  padding: var(--space-2xl);
   border-radius: 26px;
   animation: encIn 0.5s var(--ease) both;
 }
@@ -237,7 +238,7 @@
 .ep-from {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-sm);
   font-weight: 600;
 }
 .ep-ar {
@@ -246,14 +247,14 @@
 .ep-opts {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 12px;
+  gap: var(--space-md);
 }
 .eo {
   position: relative;
   display: grid;
   grid-template-rows: auto 1fr auto;
-  gap: 12px;
-  padding: 16px;
+  gap: var(--space-md);
+  padding: var(--space-lg);
   border-radius: 18px;
   color: inherit;
   font: inherit;
@@ -280,18 +281,18 @@
 .eo-art {
   display: grid;
   place-items: center;
-  padding: 6px 0;
+  padding: var(--space-xs) 0;
 }
 .eo-b {
   display: grid;
-  gap: 9px;
+  gap: var(--space-sm);
   align-content: start;
 }
 .eo-n {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: 8px;
+  gap: var(--space-sm);
 }
 .eo-n b {
   font-family: var(--f-d);
@@ -310,14 +311,14 @@
 }
 .eo .types {
   display: flex;
-  gap: 4px;
+  gap: var(--space-2xs);
 }
 .eo ul {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
-  gap: 5px;
+  gap: var(--space-2xs);
   font-size: 13px;
   color: var(--tx2);
 }
@@ -347,7 +348,7 @@
 .eo-go {
   justify-self: stretch;
   text-align: center;
-  padding: 10px;
+  padding: var(--space-sm);
   border-radius: 999px;
   font-weight: 700;
   font-size: 14px;

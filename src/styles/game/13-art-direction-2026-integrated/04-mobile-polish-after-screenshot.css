@@ -8,7 +8,7 @@
 }
 #resonance-launch .rl-meta strong {
   display: block !important;
-  margin-bottom: 7px !important;
+  margin-bottom: var(--space-xs) !important;
 }
 @media (max-width: 999px) {
   #accueil .hm-hero {
@@ -113,7 +113,7 @@ body {
   max-width: 1540px !important;
 }
 .ph {
-  margin-bottom: 22px !important;
+  margin-bottom: var(--space-xl) !important;
 }
 .kick,
 .lbl-s,
@@ -206,12 +206,12 @@ body {
 #accueil.page.on {
   display: grid !important;
   grid-template-columns: minmax(0, 1fr) !important;
-  gap: 18px !important;
+  gap: var(--space-lg) !important;
 }
 #accueil .hm-top {
   display: grid !important;
   grid-template-columns: minmax(0, 1fr) minmax(260px, 31%) !important;
-  gap: 16px !important;
+  gap: var(--space-lg) !important;
   align-items: stretch !important;
 }
 #accueil .hm-hero {
@@ -238,7 +238,7 @@ body {
   color: #e9faff !important;
   font-size: 9px !important;
   letter-spacing: 0.2em !important;
-  padding: 9px 12px !important;
+  padding: var(--space-sm) var(--space-md) !important;
   border: 1px solid rgba(123, 221, 255, 0.25) !important;
   border-radius: 999px !important;
   background: rgba(4, 20, 34, 0.55) !important;
@@ -249,7 +249,7 @@ body {
   grid-column: 2 !important;
   min-height: 100% !important;
   border-radius: 22px !important;
-  padding: 22px !important;
+  padding: var(--space-xl) !important;
   background: linear-gradient(180deg, rgba(11, 44, 66, 0.96), rgba(5, 20, 35, 0.98)) !important;
   border: 1px solid rgba(109, 222, 255, 0.38) !important;
   box-shadow: 0 22px 50px rgba(0, 0, 0, 0.3) !important;
@@ -257,14 +257,14 @@ body {
 #accueil .hm-quick {
   display: grid !important;
   grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-  gap: 14px !important;
+  gap: var(--space-md) !important;
 }
 #accueil .qk {
   min-height: 112px !important;
   display: flex !important;
   align-items: center !important;
-  gap: 16px !important;
-  padding: 20px !important;
+  gap: var(--space-lg) !important;
+  padding: var(--space-xl) !important;
   border-radius: 18px !important;
   background: linear-gradient(135deg, rgba(14, 50, 72, 0.96), rgba(5, 23, 39, 0.98)) !important;
   border: 1px solid rgba(105, 214, 246, 0.3) !important;
@@ -318,7 +318,7 @@ body {
   border-radius: 18px !important;
 }
 #pokedex .dexbar {
-  padding: 14px !important;
+  padding: var(--space-md) !important;
   background: rgba(7, 29, 46, 0.82) !important;
   border: 1px solid rgba(104, 216, 248, 0.22) !important;
   border-radius: 16px !important;
@@ -326,7 +326,7 @@ body {
 }
 #pokedex .fam-grid {
   grid-template-columns: repeat(auto-fill, minmax(225px, 1fr)) !important;
-  gap: 16px !important;
+  gap: var(--space-lg) !important;
 }
 #pokedex .fcard {
   filter: drop-shadow(0 14px 22px rgba(0, 0, 0, 0.2)) !important;

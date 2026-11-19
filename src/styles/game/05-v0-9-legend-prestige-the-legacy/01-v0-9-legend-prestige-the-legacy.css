@@ -179,7 +179,7 @@ body {
   order: -1;
   width: 5px;
   height: 5px;
-  margin-right: -4px;
+  margin-right: calc(var(--space-2xs) * -1);
   transform: rotate(45deg);
   background: var(--gold);
   box-shadow: 0 0 6px rgba(212, 175, 106, 0.8);
@@ -372,7 +372,7 @@ body {
   transform: rotate(45deg);
   width: 34px;
   height: 34px;
-  margin: 4px;
+  margin: var(--space-2xs);
   background: linear-gradient(135deg, color-mix(in srgb, var(--c) 34%, #0a0a0c), #0a0a0c);
   border: 1px solid color-mix(in srgb, var(--c) 55%, transparent);
   box-shadow:

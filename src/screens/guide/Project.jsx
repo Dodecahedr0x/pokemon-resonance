@@ -4,6 +4,7 @@ import { FAMS30, MON, NEWS } from '../../engine/pokemon/pokemon.js';
 import { ARR } from '../../engine/pokemon/evolution.js';
 import { ico } from '../../engine/core/utils.js';
 import { Html } from '../../lib/html.jsx';
+import { space } from '../../lib/theme.js';
 
 export function Pillars() {
   return NEWS.map(o => (
@@ -127,7 +128,7 @@ export default function Project() {
             </div>
           </div>
         </div>
-        <div className="road" style={{ marginTop: 12 }}>
+        <div className="road" style={{ marginTop: space.md }}>
           <div className="rp">
             <span className="k">1</span>
             <span className="du">2 semaines</span>
@@ -153,7 +154,7 @@ export default function Project() {
             <p>Région complète, 8 Arènes, Ligue et Champion adaptatif.</p>
           </div>
         </div>
-        <div className="legal" style={{ marginTop: 12 }}>
+        <div className="legal" style={{ marginTop: space.md }}>
           <span className="ic">!</span>
           <p>
             <b>Point juridique.</b> Pokémon est une marque de Nintendo, Creatures Inc. et GAME FREAK. Un fangame avec

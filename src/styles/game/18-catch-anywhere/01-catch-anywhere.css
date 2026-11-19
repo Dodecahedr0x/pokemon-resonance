@@ -105,7 +105,7 @@ html body .sf-card {
 html body .pe-eau {
   position: relative;
   height: 120px;
-  margin: 10px 0;
+  margin: var(--space-sm) 0;
   border-radius: 16px;
   background:
     repeating-radial-gradient(ellipse at 50% 60%, rgba(191, 233, 255, 0.18) 0 2px, transparent 3px 18px),
@@ -118,7 +118,7 @@ html body .pe-bouchon {
   top: 48%;
   width: 22px;
   height: 22px;
-  margin-left: -11px;
+  margin-left: calc(var(--space-md) * -1);
   border-radius: 50%;
   background: linear-gradient(180deg, #ff5a4f 0 50%, #fff 50%);
   box-shadow: 0 0 0 2px #1b2a44;
@@ -154,7 +154,7 @@ html body .pe-eau.mord .pe-bouchon {
   }
 }
 html body .pe-alerte {
-  margin: 4px 0 10px;
+  margin: var(--space-2xs) 0 var(--space-sm);
   font: 800 24px/1.1 var(--f-d, inherit);
   color: #ffd75e;
 }
@@ -162,10 +162,10 @@ html body .pe-prise,
 html body .sf-poke {
   display: grid;
   place-items: center;
-  margin: 8px auto;
+  margin: var(--space-sm) auto;
 }
 html body .pe-n {
-  margin: 10px 0 0;
+  margin: var(--space-sm) 0 0;
   font-size: 12px;
   color: var(--v4-tx2, #9fb0c4);
 }
@@ -174,18 +174,18 @@ html body .sf-a {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 8px;
-  margin-top: 10px;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
 }
 html body .sf-k {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 6px;
-  margin: 6px 0;
+  gap: var(--space-xs);
+  margin: var(--space-xs) 0;
 }
 html body .sf-k span {
-  padding: 4px 10px;
+  padding: var(--space-2xs) var(--space-sm);
   border-radius: 999px;
   background: rgba(0, 0, 0, 0.3);
   border: 1px solid rgba(120, 200, 255, 0.2);
@@ -193,7 +193,7 @@ html body .sf-k span {
 }
 html body .sf-herbe {
   height: 120px;
-  margin: 10px 0;
+  margin: var(--space-sm) 0;
   border-radius: 16px;
   background:
     repeating-linear-gradient(100deg, transparent 0 10px, rgba(40, 110, 50, 0.6) 10px 13px),
@@ -201,16 +201,16 @@ html body .sf-herbe {
     linear-gradient(180deg, #8fd36b, #3f8a3c);
 }
 html body .sf-h {
-  margin: 6px 0;
+  margin: var(--space-xs) 0;
   font-weight: 700;
 }
 html body .sf-m {
   display: grid;
   grid-template-columns: auto 1fr;
-  gap: 6px 10px;
+  gap: var(--space-xs) var(--space-sm);
   align-items: center;
   max-width: 320px;
-  margin: 6px auto;
+  margin: var(--space-xs) auto;
   font-size: 12px;
   text-align: left;
 }
@@ -228,7 +228,7 @@ html body .sf-j i {
 }
 html body .sf-msg {
   min-height: 2.6em;
-  margin: 8px 0 0;
+  margin: var(--space-sm) 0 0;
   font-size: 14px;
 }
 /* co-op: the tokens of both players */

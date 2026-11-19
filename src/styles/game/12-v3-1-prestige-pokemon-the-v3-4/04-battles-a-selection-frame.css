@@ -1,6 +1,6 @@
 /* ---------- Battles: a selection frame ---------- */
 .ph-sm {
-  margin-bottom: 18px;
+  margin-bottom: var(--space-lg);
 }
 .sel {
   position: relative;
@@ -20,8 +20,8 @@
 .sel-tabs {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 4px;
-  padding: 6px;
+  gap: var(--space-2xs);
+  padding: var(--space-xs);
   border-bottom: 1px solid rgba(212, 175, 106, 0.14);
   background: linear-gradient(180deg, rgba(6, 6, 8, 0.6), rgba(6, 6, 8, 0.2));
 }
@@ -30,9 +30,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: var(--space-md);
   min-height: 56px;
-  padding: 6px 10px;
+  padding: var(--space-xs) var(--space-sm);
   border: 0;
   border-radius: 3px;
   background: none;
@@ -52,7 +52,7 @@
 }
 .sel-tabs button span {
   display: grid;
-  gap: 3px;
+  gap: var(--space-3xs);
   line-height: 1;
 }
 .sel-tabs b {
@@ -96,19 +96,19 @@
 }
 .sel-list {
   display: grid;
-  gap: 2px;
+  gap: var(--space-3xs);
   align-content: start;
-  padding: 8px;
+  padding: var(--space-sm);
   background: rgba(6, 6, 8, 0.28);
 }
 .srw {
   position: relative;
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
-  gap: 12px;
+  gap: var(--space-md);
   align-items: center;
   min-height: 60px;
-  padding: 8px 12px;
+  padding: var(--space-sm) var(--space-md);
   border: 1px solid transparent;
   border-radius: var(--r);
   background: none;
@@ -142,7 +142,7 @@
 }
 .srw-t {
   display: grid;
-  gap: 3px;
+  gap: var(--space-3xs);
   min-width: 0;
 }
 .srw-t b {
@@ -169,7 +169,7 @@
 .srw-r {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: var(--space-xs);
 }
 .srw-lk,
 .srw-ok {
@@ -192,7 +192,7 @@
   display: inline-flex;
   align-items: center;
   height: 22px;
-  padding: 0 9px;
+  padding: 0 var(--space-sm);
   border-radius: 2px;
   font-family: var(--f-m);
   font-size: 9.5px;
@@ -211,23 +211,23 @@
 }
 .sel-det {
   display: grid;
-  gap: 16px;
+  gap: var(--space-lg);
   align-content: start;
   padding: clamp(16px, 2.4vw, 26px);
 }
 .sel-card {
   display: grid;
-  gap: 14px;
+  gap: var(--space-md);
   animation: qUp 0.45s var(--rise) both;
 }
 .sx-h {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
-  gap: 18px;
+  gap: var(--space-lg);
   align-items: center;
 }
 .sx-h .kick {
-  margin: 0 0 6px;
+  margin: 0 0 var(--space-xs);
 }
 .sx-h .h2 {
   margin: 0;
@@ -236,7 +236,7 @@
   text-transform: uppercase;
 }
 .sx-who {
-  margin: 6px 0 0;
+  margin: var(--space-xs) 0 0;
   font-size: 13.5px;
   color: var(--tx2);
 }
@@ -262,9 +262,9 @@
 }
 .sx-rule {
   display: grid;
-  gap: 4px;
+  gap: var(--space-2xs);
   margin: 0;
-  padding: 10px 14px;
+  padding: var(--space-sm) var(--space-md);
   border-left: 2px solid var(--ac, var(--gold));
   background: linear-gradient(90deg, color-mix(in srgb, var(--ac, #d4af6a) 12%, transparent), transparent 85%);
   font-size: 14px;
@@ -290,13 +290,13 @@
 .sx-foes {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: var(--space-xs);
 }
 .sx-f {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 3px 12px 3px 3px;
+  gap: var(--space-sm);
+  padding: var(--space-3xs) var(--space-md) var(--space-3xs) var(--space-3xs);
   border-radius: 999px;
   border: 1px solid rgba(212, 175, 106, 0.16);
   background: rgba(10, 10, 12, 0.6);
@@ -309,9 +309,9 @@
 .sx-lock {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-sm);
   margin: 0;
-  padding: 10px 14px;
+  padding: var(--space-sm) var(--space-md);
   border: 1px solid rgba(229, 72, 77, 0.35);
   border-radius: var(--r);
   background: rgba(229, 72, 77, 0.07);

@@ -9,10 +9,10 @@
 .bt-ph {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: var(--space-xs);
   flex: none;
   height: 24px;
-  padding: 0 10px;
+  padding: 0 var(--space-sm);
   border-radius: 999px;
   font: 600 10.5px/1 var(--f-m, ui-monospace, monospace);
   letter-spacing: 0.1em;
@@ -94,8 +94,8 @@
     grid-template-columns: 64px minmax(0, 1fr) !important;
   }
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) .side {
-    padding: 14px 10px !important;
-    gap: 16px !important;
+    padding: var(--space-md) var(--space-sm) !important;
+    gap: var(--space-lg) !important;
     align-items: center;
     overflow: hidden !important;
   }
@@ -111,7 +111,7 @@
     justify-content: center;
   }
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) .side-nav {
-    gap: 4px !important;
+    gap: var(--space-2xs) !important;
     align-items: center;
   }
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) .side .nv {
@@ -136,7 +136,7 @@
     display: none !important;
   }
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) .content {
-    padding: 12px !important;
+    padding: var(--space-md) !important;
   }
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) .wrap {
     max-width: none !important;
@@ -147,7 +147,7 @@
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .battle {
     display: grid !important;
     grid-template-columns: minmax(0, 1fr) 336px !important;
-    gap: 12px !important;
+    gap: var(--space-md) !important;
     height: calc(100dvh - 24px);
     min-height: 600px;
     align-items: stretch !important;
@@ -175,10 +175,10 @@
     display: flex !important;
     flex-wrap: nowrap !important;
     align-items: center;
-    gap: 10px !important;
+    gap: var(--space-sm) !important;
     height: 48px;
     min-height: 0 !important;
-    padding: 0 14px !important;
+    padding: 0 var(--space-md) !important;
     overflow: hidden;
     white-space: nowrap;
   }
@@ -193,7 +193,7 @@
     flex: 1 1 0;
     min-width: 0;
     display: flex !important;
-    gap: 6px;
+    gap: var(--space-xs);
     overflow: hidden;
     -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 24px), transparent);
     mask-image: linear-gradient(90deg, #000 calc(100% - 24px), transparent);
@@ -215,10 +215,10 @@
     grid-column: 2;
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: var(--space-xs);
     height: 48px;
     margin: 0 !important;
-    padding: 0 14px 0 0 !important;
+    padding: 0 var(--space-md) 0 0 !important;
     border: 0 !important;
     border-bottom: inherit;
     background: none !important;
@@ -255,7 +255,7 @@
     min-height: 0 !important;
     height: auto;
     margin: 0 !important;
-    padding: 66px 12px 72px !important;
+    padding: 66px var(--space-md) 72px !important;
     border: 0 !important;
     border-radius: 0 !important;
     box-shadow: none !important;
@@ -275,7 +275,7 @@
     z-index: 7;
     margin: 0 !important;
     padding: 0 !important;
-    gap: 6px !important;
+    gap: var(--space-xs) !important;
     filter: none !important;
     pointer-events: none;
   }
@@ -292,7 +292,7 @@
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .plates .plate {
     pointer-events: auto;
     min-height: 0 !important;
-    padding: 6px 9px !important;
+    padding: var(--space-xs) var(--space-sm) !important;
     border-radius: 12px !important;
     -webkit-backdrop-filter: blur(12px);
     backdrop-filter: blur(12px);
@@ -339,7 +339,7 @@
     min-height: 0;
     display: flex !important;
     flex-direction: column;
-    gap: 10px !important;
+    gap: var(--space-sm) !important;
     padding: 0 !important;
     overflow: hidden !important;
   }

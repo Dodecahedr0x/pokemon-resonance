@@ -22,18 +22,18 @@
 .activity-bar {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
-  margin: 12px 0;
+  gap: var(--space-sm);
+  margin: var(--space-md) 0;
 }
 html body .activity-bar > button {
   display: flex !important;
   align-items: center;
-  gap: 10px !important;
+  gap: var(--space-sm) !important;
   width: auto !important;
   min-width: 0;
   min-height: 60px;
   margin: 0 !important;
-  padding: 10px 12px !important;
+  padding: var(--space-sm) var(--space-md) !important;
   border-radius: var(--r-m) !important;
   border: 1px solid var(--act-line) !important;
   background: var(--act-bg) !important;
@@ -95,13 +95,13 @@ html body .activity-bar > #x2470 .defense-gym-i {
 /* ================= Team: saved teams and collapsible formations ================= */
 .dex-call .dc-more {
   display: grid;
-  gap: 10px;
+  gap: var(--space-sm);
   min-width: 0;
 }
 .dex-call .dc-more > summary {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-sm);
   min-height: var(--tap);
   cursor: pointer;
   list-style: none;
@@ -109,7 +109,7 @@ html body .activity-bar > #x2470 .defense-gym-i {
   font-weight: 600;
   color: #c9d6e2;
   border-top: 1px solid var(--act-line);
-  padding-top: 4px;
+  padding-top: var(--space-2xs);
 }
 .dex-call .dc-more > summary::-webkit-details-marker {
   display: none;

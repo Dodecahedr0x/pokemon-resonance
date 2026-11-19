@@ -56,7 +56,7 @@
   grid-template-columns: minmax(0, 1fr) auto !important;
   grid-template-rows: 1fr auto !important;
   align-items: end !important;
-  gap: 30px !important;
+  gap: var(--space-3xl) !important;
   padding: clamp(24px, 5vw, 76px) !important;
   max-width: none !important;
 }
@@ -87,7 +87,7 @@
   font-size: 0.29em !important;
   letter-spacing: 0.4em !important;
   color: #f6fbff !important;
-  margin-top: 13px !important;
+  margin-top: var(--space-md) !important;
 }
 #resonance-launch .rl-desc {
   font-size: clamp(15px, 1.4vw, 19px) !important;
@@ -95,13 +95,13 @@
   max-width: 510px !important;
   color: #e3f2fb !important;
   text-shadow: 0 2px 18px rgba(0, 0, 0, 0.9) !important;
-  margin: 22px 0 30px !important;
+  margin: var(--space-xl) 0 var(--space-3xl) !important;
 }
 #resonance-launch .rl-enter {
   min-height: 62px !important;
-  padding: 0 27px !important;
+  padding: 0 var(--space-2xl) !important;
   border-radius: 15px !important;
-  gap: 15px !important;
+  gap: var(--space-lg) !important;
   background: linear-gradient(135deg, #fff2a6, #ffd34d 52%, #eea52a) !important;
   color: #0c2435 !important;
   border: 1px solid #fff0a3 !important;
@@ -130,7 +130,7 @@
 #resonance-launch .rl-meta strong {
   display: block !important;
   color: #ffe17b !important;
-  margin-bottom: 7px !important;
+  margin-bottom: var(--space-xs) !important;
 }
 #resonance-launch .rl-scroll {
   right: clamp(20px, 3vw, 50px) !important;
@@ -150,15 +150,15 @@
     display: block !important;
   }
   .content {
-    padding: 18px 12px 88px !important;
+    padding: var(--space-lg) var(--space-md) 88px !important;
   }
   .wrap {
-    padding-inline: 4px !important;
+    padding-inline: var(--space-2xs) !important;
     max-width: 100% !important;
   }
   #accueil.page.on {
     grid-template-columns: minmax(0, 1fr) !important;
-    gap: 13px !important;
+    gap: var(--space-md) !important;
   }
   #accueil .hm-hero {
     min-height: clamp(430px, 70vh, 640px) !important;
@@ -189,8 +189,8 @@
   #resonance-launch .rl-frame {
     grid-template-columns: 1fr !important;
     grid-template-rows: 1fr auto !important;
-    gap: 12px !important;
-    padding: 24px 22px max(28px, env(safe-area-inset-bottom)) !important;
+    gap: var(--space-md) !important;
+    padding: var(--space-2xl) var(--space-xl) max(var(--space-2xl), env(safe-area-inset-bottom)) !important;
   }
   #resonance-launch .rl-scene {
     background-size: auto 78% !important;
@@ -215,7 +215,7 @@
   }
   #resonance-launch .rl-desc {
     font-size: 14px !important;
-    margin: 14px 0 22px !important;
+    margin: var(--space-md) 0 var(--space-xl) !important;
     max-width: 520px !important;
   }
   #resonance-launch .rl-meta {
@@ -239,21 +239,21 @@
   }
   .dex-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 10px !important;
+    gap: var(--space-sm) !important;
   }
   .dex {
-    padding: 12px !important;
+    padding: var(--space-md) !important;
     min-height: 240px !important;
   }
   #accueil .hh-chips {
-    gap: 5px !important;
+    gap: var(--space-2xs) !important;
   }
   #accueil .hh-chips > * {
     font-size: 9px !important;
   }
   #accueil .qk {
     min-height: 90px !important;
-    padding: 15px !important;
+    padding: var(--space-lg) !important;
   }
   .bnav {
     background: rgba(3, 16, 27, 0.96) !important;
@@ -304,7 +304,7 @@
   line-height: 1.45 !important;
   letter-spacing: 0.16em !important;
   white-space: nowrap !important;
-  margin-top: 12px !important;
+  margin-top: var(--space-md) !important;
   max-width: 100% !important;
 }
 #resonance-launch .rl-scroll {

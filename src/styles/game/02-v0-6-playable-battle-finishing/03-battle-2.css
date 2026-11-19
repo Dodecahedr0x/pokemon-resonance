@@ -34,12 +34,12 @@
 .bp-vx {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 6px;
+  gap: var(--space-xs);
 }
 .vx {
   display: grid;
-  gap: 2px;
-  padding: 9px 10px;
+  gap: var(--space-3xs);
+  padding: var(--space-sm) var(--space-sm);
   border-radius: 12px;
   border: 1px solid rgba(227, 192, 122, 0.25);
   background: rgba(227, 192, 122, 0.05);
@@ -81,8 +81,8 @@
 }
 .bp-pv {
   display: grid;
-  gap: 10px;
-  padding: 12px 14px;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-md);
   border-radius: 14px;
   border: 1px solid rgba(227, 192, 122, 0.35);
   background: linear-gradient(180deg, rgba(227, 192, 122, 0.07), rgba(227, 192, 122, 0.02));
@@ -90,7 +90,7 @@
 .pv-h {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: var(--space-xs);
   flex-wrap: wrap;
   font-family: var(--f-m);
   font-size: 10px;
@@ -99,19 +99,19 @@
   color: var(--gold);
 }
 .pv-h > span:first-child {
-  margin-right: 4px;
+  margin-right: var(--space-2xs);
 }
 .bp-pv ul {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
-  gap: 5px;
+  gap: var(--space-2xs);
 }
 .bp-pv li {
   display: flex;
   justify-content: space-between;
-  gap: 10px;
+  gap: var(--space-sm);
   font-size: 13px;
   color: var(--tx2);
 }
@@ -122,7 +122,7 @@
   height: 6px;
   border-radius: 50%;
   background: var(--ally);
-  margin-right: 7px;
+  margin-right: var(--space-xs);
   vertical-align: 1px;
 }
 .bp-pv li.fo span:first-child::before {
@@ -132,7 +132,7 @@
   height: 6px;
   border-radius: 50%;
   background: var(--enemy);
-  margin-right: 7px;
+  margin-right: var(--space-xs);
   vertical-align: 1px;
 }
 .bp-pv em {
@@ -157,15 +157,15 @@
 .pv-act {
   display: flex;
   justify-content: flex-end;
-  gap: 8px;
+  gap: var(--space-sm);
 }
 .bp-wait {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--space-sm);
   font-size: 13.5px;
   color: var(--tx2);
-  padding: 8px 0;
+  padding: var(--space-sm) 0;
 }
 .spin {
   width: 16px;
@@ -179,8 +179,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  padding: 12px 14px 14px;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-md) var(--space-md);
   border-top: 1px solid var(--line);
   flex-wrap: wrap;
 }
@@ -191,12 +191,12 @@
 .bt-foot .cnt {
   font-family: var(--f-m);
   font-size: 10.5px;
-  padding: 2px 7px;
+  padding: var(--space-3xs) var(--space-xs);
   border-radius: 999px;
   background: rgba(23, 18, 10, 0.18);
 }
 .blog {
-  padding: 16px 6px 8px 16px;
+  padding: var(--space-lg) var(--space-xs) var(--space-sm) var(--space-lg);
   max-height: 640px;
   display: grid;
   grid-template-rows: auto 1fr;
@@ -213,21 +213,21 @@
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--mut);
-  margin: 0 0 10px;
+  margin: 0 0 var(--space-sm);
 }
 .blog ol {
   list-style: none;
   margin: 0;
-  padding: 0 10px 0 0;
+  padding: 0 var(--space-sm) 0 0;
   overflow-y: auto;
   display: grid;
-  gap: 6px;
+  gap: var(--space-xs);
   align-content: start;
 }
 .blog li {
   display: grid;
   grid-template-columns: 22px minmax(0, 1fr);
-  gap: 8px;
+  gap: var(--space-sm);
   font-size: 12.5px;
   color: var(--tx2);
   line-height: 1.45;
@@ -236,7 +236,7 @@
   font-family: var(--f-m);
   font-size: 9.5px;
   color: var(--fnt);
-  padding-top: 2px;
+  padding-top: var(--space-3xs);
 }
 .blog li.sys {
   color: var(--gold-l);
@@ -247,7 +247,8 @@
   z-index: 85;
   display: grid;
   place-items: center;
-  padding: 20px max(16px, env(safe-area-inset-right, 0px)) 20px max(16px, env(safe-area-inset-left, 0px));
+  padding: var(--space-xl) max(var(--space-lg), env(safe-area-inset-right, 0px)) var(--space-xl)
+    max(var(--space-lg), env(safe-area-inset-left, 0px));
   background: rgba(3, 4, 7, 0.72);
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
@@ -261,8 +262,8 @@
   max-height: 90vh;
   overflow-y: auto;
   display: grid;
-  gap: 16px;
-  padding: 28px;
+  gap: var(--space-lg);
+  padding: var(--space-2xl);
   border-radius: 26px;
   border: 1px solid var(--line2);
   background:
@@ -285,7 +286,7 @@
 .res-k {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 8px;
+  gap: var(--space-sm);
 }
 @media (max-width: 460px) {
   .res-k {
@@ -293,7 +294,7 @@
   }
 }
 .res-k div {
-  padding: 12px;
+  padding: var(--space-md);
   border-radius: 12px;
   background: var(--s3);
   border: 1px solid var(--line);
@@ -312,7 +313,7 @@
 }
 .res-l {
   display: grid;
-  gap: 8px;
+  gap: var(--space-sm);
 }
 .res-l h4 {
   font-family: var(--f-m);
@@ -326,7 +327,7 @@
 .rl {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-sm);
   font-size: 13.5px;
 }
 .rl .medal {
@@ -335,7 +336,7 @@
   box-shadow: none;
 }
 .rl .medal + .medal {
-  margin-left: -10px;
+  margin-left: calc(var(--space-sm) * -1);
 }
 .rl b {
   margin-left: auto;
@@ -343,7 +344,7 @@
 }
 .res-a {
   display: flex;
-  gap: 10px;
+  gap: var(--space-sm);
   justify-content: flex-end;
   flex-wrap: wrap;
 }

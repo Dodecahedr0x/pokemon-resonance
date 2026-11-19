@@ -28,8 +28,8 @@
   height: 100%;
   display: grid;
   align-content: center;
-  gap: 10px;
-  padding: 40px clamp(18px, 5vw, 64px);
+  gap: var(--space-sm);
+  padding: var(--space-4xl) clamp(18px, 5vw, 64px);
 }
 .vs-l {
   justify-items: end;
@@ -89,7 +89,7 @@
 .vs-team,
 .vs-foes {
   display: flex;
-  gap: 6px;
+  gap: var(--space-xs);
   flex-wrap: wrap;
 }
 .vs-l .vs-team {
@@ -204,7 +204,7 @@
   .vs-r {
     justify-items: center;
     text-align: center;
-    padding: 28px 20px;
+    padding: var(--space-2xl) var(--space-xl);
   }
   .vs-l {
     clip-path: polygon(0 0, 100% 0, 100% 88%, 0 100%);
@@ -248,8 +248,8 @@
   z-index: 6;
   display: grid;
   justify-items: center;
-  gap: 2px;
-  padding: 12px 0;
+  gap: var(--space-3xs);
+  padding: var(--space-md) 0;
   pointer-events: none;
   background: linear-gradient(90deg, transparent, rgba(6, 6, 8, 0.88) 22%, rgba(6, 6, 8, 0.88) 78%, transparent);
   border-block: 1px solid transparent;

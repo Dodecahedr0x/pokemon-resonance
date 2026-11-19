@@ -1,0 +1,17 @@
+/* Spacing scale: every padding, margin and gap in the app uses one of these steps.
+   4px grid, with 2px and 6px half-steps for tight UI. Pick the nearest step rather than a raw pixel value;
+   0 and 1px hairlines stay literal, fluid values (clamp, vw) and layout offsets stay as they are. */
+:root {
+  --space-3xs: 2px;
+  --space-2xs: 4px;
+  --space-xs: 6px;
+  --space-sm: 8px;
+  --space-md: 12px;
+  --space-lg: 16px;
+  --space-xl: 20px;
+  --space-2xl: 24px;
+  --space-3xl: 32px;
+  --space-4xl: 40px;
+  --space-5xl: 48px;
+  --space-6xl: 64px;
+}

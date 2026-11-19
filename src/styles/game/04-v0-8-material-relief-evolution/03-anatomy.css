@@ -6,7 +6,7 @@
   grid-column: span 2;
   position: relative;
   overflow: hidden;
-  padding: 22px;
+  padding: var(--space-xl);
 }
 .an.wide {
   grid-column: span 4;
@@ -28,7 +28,7 @@
   margin: 0;
   padding: 0;
   display: grid;
-  gap: 6px;
+  gap: var(--space-xs);
   font-size: 13px;
   color: var(--tx2);
 }
@@ -37,7 +37,7 @@
   place-items: center;
   min-width: 26px;
   height: 20px;
-  margin-right: 8px;
+  margin-right: var(--space-sm);
   border-radius: 5px;
   font-family: var(--f-m);
   font-size: 10.5px;
@@ -47,7 +47,7 @@
 .an-br {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--space-sm);
 }
 .an-fork {
   position: relative;
@@ -72,25 +72,25 @@
 }
 .an-opts {
   display: grid;
-  gap: 8px;
+  gap: var(--space-sm);
   font-size: 13px;
   font-weight: 600;
 }
 .an-opts span {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-sm);
 }
 .an-line {
   display: flex;
   align-items: flex-start;
-  gap: 10px;
+  gap: var(--space-sm);
   flex-wrap: wrap;
 }
 .al {
   display: grid;
   justify-items: center;
-  gap: 6px;
+  gap: var(--space-xs);
   text-align: center;
   min-width: 98px;
 }
@@ -103,11 +103,11 @@
 }
 .amv {
   display: grid;
-  gap: 4px;
+  gap: var(--space-2xs);
 }
 .am {
   font-size: 11.5px;
-  padding: 2px 8px;
+  padding: var(--space-3xs) var(--space-sm);
   border-radius: 999px;
   border: 1px solid var(--line2);
   color: var(--tx2);
@@ -163,7 +163,7 @@
 .an-foe {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--space-sm);
 }
 .an-foe .hp {
   flex: 1;

@@ -3,9 +3,9 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 9px;
+  gap: var(--space-sm);
   height: 46px;
-  padding: 0 20px;
+  padding: 0 var(--space-xl);
   border-radius: 999px;
   font-weight: 600;
   font-size: 14.5px;
@@ -53,7 +53,7 @@
 }
 .b-sm {
   height: 36px;
-  padding: 0 14px;
+  padding: 0 var(--space-md);
   font-size: 13px;
 }
 .b[aria-pressed='true'] {
@@ -64,9 +64,9 @@
 .chip {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
+  gap: var(--space-xs);
   min-height: 26px;
-  padding: 3px 11px 3px 9px;
+  padding: var(--space-3xs) var(--space-md) var(--space-3xs) var(--space-sm);
   border-radius: 999px;
   border: 1px solid var(--line2);
   background: var(--s2);
@@ -115,9 +115,9 @@ button.chip:hover {
 .tb {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: var(--space-2xs);
   height: 22px;
-  padding: 0 9px 0 4px;
+  padding: 0 var(--space-sm) 0 var(--space-2xs);
   border-radius: 6px;
   background: var(--c);
   color: var(--fg, #0c0e13);
@@ -135,7 +135,7 @@ button.chip:hover {
 .tb svg {
   width: 14px;
   height: 14px;
-  padding: 2px;
+  padding: var(--space-3xs);
   border-radius: 4px;
   background: rgba(255, 255, 255, 0.28);
 }
@@ -181,11 +181,11 @@ button.chip:hover {
   color: var(--mut);
   text-align: left;
   font-weight: 500;
-  padding: 14px 18px;
+  padding: var(--space-md) var(--space-lg);
   border-bottom: 1px solid var(--line2);
 }
 .tbl td {
-  padding: 14px 18px;
+  padding: var(--space-md) var(--space-lg);
   border-bottom: 1px solid var(--line);
   vertical-align: top;
   color: var(--tx2);
@@ -211,9 +211,9 @@ button.chip:hover {
   z-index: 90;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--space-sm);
   max-width: min(92vw, 440px);
-  padding: 12px 18px;
+  padding: var(--space-md) var(--space-lg);
   border-radius: 14px;
   background: rgba(30, 35, 46, 0.96);
   border: 1px solid var(--line2);

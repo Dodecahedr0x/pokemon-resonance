@@ -61,7 +61,7 @@ body {
 
 /* HOME — real container after JS move: .v4-hero */
 #accueil .v4-home {
-  gap: 20px !important;
+  gap: var(--space-xl) !important;
 }
 #accueil .v4-hero {
   position: relative !important;
@@ -106,7 +106,7 @@ body {
   letter-spacing: 0.2em !important;
 }
 #accueil .v4h-chips span {
-  padding: 8px 12px !important;
+  padding: var(--space-sm) var(--space-md) !important;
   border-radius: 999px !important;
   border: 1px solid rgba(131, 240, 239, 0.36) !important;
   background: rgba(3, 17, 28, 0.74) !important;
@@ -114,23 +114,23 @@ body {
   color: #e8ffff !important;
 }
 #accueil .v4h-cta {
-  gap: 12px !important;
+  gap: var(--space-md) !important;
 }
 #accueil .v4-cta {
   min-height: 56px !important;
   border-radius: 15px !important;
-  padding: 0 22px !important;
+  padding: 0 var(--space-xl) !important;
   box-shadow:
     0 12px 32px rgba(218, 166, 77, 0.23),
     inset 0 1px rgba(255, 255, 255, 0.25) !important;
 }
 #accueil .v4h-prof {
   border-top: 1px solid rgba(155, 225, 231, 0.2) !important;
-  margin-top: 24px !important;
-  padding-top: 16px !important;
+  margin-top: var(--space-2xl) !important;
+  padding-top: var(--space-lg) !important;
 }
 #accueil .v4-aside {
-  gap: 14px !important;
+  gap: var(--space-md) !important;
 }
 #accueil .v4-team,
 #accueil .v4-quest {
@@ -144,7 +144,7 @@ body {
     inset 0 1px rgba(255, 255, 255, 0.09) !important;
 }
 #accueil .v4-team {
-  padding: 17px !important;
+  padding: var(--space-lg) !important;
 }
 #accueil .v4-ph {
   color: #effcff !important;
@@ -154,7 +154,7 @@ body {
   filter: drop-shadow(0 0 9px rgba(131, 240, 239, 0.35));
 }
 #accueil .v4-team-g {
-  gap: 9px !important;
+  gap: var(--space-sm) !important;
 }
 #accueil .v4-mon {
   position: relative !important;
@@ -183,7 +183,7 @@ body {
   font-weight: 900 !important;
 }
 #accueil .v4-tiles {
-  gap: 14px !important;
+  gap: var(--space-md) !important;
 }
 #accueil .v4-tile {
   border: 1px solid rgba(130, 221, 230, 0.28) !important;
@@ -210,7 +210,7 @@ body {
   text-shadow: 0 3px 14px #000 !important;
 }
 #accueil .v4-bottom {
-  gap: 14px !important;
+  gap: var(--space-md) !important;
 }
 #accueil .v4-event,
 #accueil .v4-stats {
@@ -223,7 +223,7 @@ body {
   min-height: 112px !important;
 }
 #accueil .v4-st {
-  padding: 15px !important;
+  padding: var(--space-lg) !important;
   border-radius: 14px !important;
   transition:
     background 0.2s,
@@ -236,7 +236,7 @@ body {
 
 /* TEAM / DEX — collection cards with frame and depth */
 #pokedex .fam-grid {
-  gap: 18px !important;
+  gap: var(--space-lg) !important;
 }
 #pokedex .fcard {
   position: relative !important;
@@ -283,12 +283,12 @@ body {
 
 /* MAP — route actually moved into #carte by buildMap() */
 #carte .v4-map-wrap {
-  gap: 20px !important;
+  gap: var(--space-xl) !important;
 }
 #carte .v4-map {
   border: 1px solid rgba(131, 226, 232, 0.42) !important;
   border-radius: 28px !important;
-  padding: 13px !important;
+  padding: var(--space-md) !important;
   background: linear-gradient(145deg, #1b4253, #071824) !important;
   box-shadow:
     0 32px 82px rgba(0, 0, 0, 0.48),
@@ -305,7 +305,7 @@ body {
   filter: drop-shadow(0 0 10px rgba(131, 240, 239, 0.4));
 }
 #carte .map-title {
-  padding: 10px 14px !important;
+  padding: var(--space-sm) var(--space-md) !important;
   border: 1px solid rgba(131, 240, 239, 0.2) !important;
   border-radius: 999px !important;
   background: rgba(4, 18, 28, 0.72) !important;

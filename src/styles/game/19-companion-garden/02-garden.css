@@ -2,16 +2,16 @@
 html body .pt-g {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-  margin-bottom: 8px;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
 }
 html body .pt-p {
   display: grid;
   justify-items: center;
   align-content: center;
-  gap: 2px;
+  gap: var(--space-3xs);
   min-height: 96px;
-  padding: 8px 6px;
+  padding: var(--space-sm) var(--space-xs);
   border-radius: 12px;
   border: 1px solid rgba(160, 120, 70, 0.55);
   background: linear-gradient(180deg, rgba(110, 72, 40, 0.35), rgba(70, 44, 24, 0.5));
@@ -43,11 +43,11 @@ html body .pt-p.mur {
 html body .pt-p.choix {
   grid-column: 1 / -1;
   justify-items: stretch;
-  gap: 6px;
+  gap: var(--space-xs);
 }
 html body .pt-p.choix .b {
   display: grid;
-  gap: 2px;
+  gap: var(--space-3xs);
   text-align: left;
 }
 html body .pt-p.choix .b em {
@@ -85,7 +85,7 @@ html body .pt-pl::after {
   top: 6px;
   width: 16px;
   height: 10px;
-  margin-left: -8px;
+  margin-left: calc(var(--space-sm) * -1);
   border-radius: 50% 50% 40% 40%;
   background: #6cc24a;
   opacity: 0;
@@ -97,7 +97,7 @@ html body .pt-pl.s3::after {
 html body .pt-pl.s4::after {
   opacity: 1;
   width: 22px;
-  margin-left: -11px;
+  margin-left: calc(var(--space-md) * -1);
   background:
     radial-gradient(circle at 25% 60%, #3d7be0 0 3.5px, transparent 4px),
     radial-gradient(circle at 70% 45%, #3d7be0 0 3.5px, transparent 4px), #6cc24a;
@@ -107,8 +107,8 @@ html body .pt-pl.s4::after {
 html body .tn-c {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px;
+  gap: var(--space-sm);
+  padding: var(--space-sm);
   border-radius: 12px;
   border: 1px solid rgba(255, 215, 94, 0.35);
   background: rgba(255, 215, 94, 0.07);
@@ -117,7 +117,7 @@ html body .tn-c > span:first-child {
   flex: 1;
   min-width: 0;
   display: grid;
-  gap: 2px;
+  gap: var(--space-3xs);
 }
 html body .tn-c em {
   font-style: normal;
@@ -130,6 +130,6 @@ html body .tn-c.on {
 
 html body .cp-t .cp-h {
   display: flex;
-  gap: 3px;
+  gap: var(--space-3xs);
   justify-content: flex-start;
 }

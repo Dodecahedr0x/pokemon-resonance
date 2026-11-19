@@ -5,7 +5,7 @@
 .team-save-c {
   display: inline-flex;
   align-items: center;
-  gap: 2px;
+  gap: var(--space-3xs);
 }
 .team-save-x {
   width: 26px;
@@ -21,7 +21,7 @@
 }
 .team-save-n {
   display: inline-flex;
-  gap: 6px;
+  gap: var(--space-xs);
   align-items: center;
 }
 .team-save-n input {
@@ -32,7 +32,7 @@
   border: 1px solid rgba(255, 255, 255, 0.2);
   background: rgba(0, 0, 0, 0.3);
   color: inherit;
-  padding: 0 10px;
+  padding: 0 var(--space-sm);
   font: inherit;
   font-size: 13px;
 }
@@ -40,8 +40,8 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 6px;
-  margin: 6px 0 4px;
+  gap: var(--space-xs);
+  margin: var(--space-xs) 0 var(--space-2xs);
 }
 .saved-squads[hidden] {
   display: none;
@@ -50,10 +50,10 @@
 /* Pantheon */
 .pantheon-tab-l {
   display: grid;
-  gap: 10px;
+  gap: var(--space-sm);
 }
 .pantheon-tab-c {
-  padding: 12px;
+  padding: var(--space-md);
   border-radius: 14px;
   background: linear-gradient(145deg, rgba(255, 215, 94, 0.1), rgba(255, 255, 255, 0.02));
   border: 1px solid rgba(255, 215, 94, 0.35);
@@ -71,8 +71,8 @@
 .pantheon-tab-t {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 6px;
-  margin-top: 8px;
+  gap: var(--space-xs);
+  margin-top: var(--space-sm);
 }
 .pantheon-tab-m {
   display: flex;
@@ -145,7 +145,7 @@ html body #bSvg .tok.dj2 {
   z-index: 9000;
   display: grid;
   place-items: center;
-  padding: 16px;
+  padding: var(--space-lg);
   background: rgba(6, 10, 18, 0.86);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
@@ -161,7 +161,7 @@ html body #bSvg .tok.dj2 {
 }
 .forfeit-dialog-c {
   width: min(420px, 100%);
-  padding: 22px 18px;
+  padding: var(--space-xl) var(--space-lg);
   border-radius: 18px;
   text-align: center;
   background: linear-gradient(160deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02));
@@ -169,21 +169,21 @@ html body #bSvg .tok.dj2 {
   box-shadow: 0 0 40px -10px var(--dj);
 }
 .forfeit-dialog-c .h1 {
-  margin: 4px 0 6px;
+  margin: var(--space-2xs) 0 var(--space-xs);
   color: var(--dj);
   font-size: clamp(22px, 7vw, 30px);
 }
 .forfeit-dialog-c .sub {
-  margin: 0 0 14px;
+  margin: 0 0 var(--space-md);
 }
 .forfeit-dialog-s {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  margin: 0 0 16px;
+  gap: var(--space-sm);
+  margin: 0 0 var(--space-lg);
 }
 .forfeit-dialog-s span {
-  padding: 8px;
+  padding: var(--space-sm);
   border-radius: 12px;
   background: rgba(0, 0, 0, 0.28);
   border: 1px solid var(--dj);
@@ -201,6 +201,6 @@ html body #bSvg .tok.dj2 {
 .forfeit-dialog-a {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: var(--space-sm);
   justify-content: center;
 }

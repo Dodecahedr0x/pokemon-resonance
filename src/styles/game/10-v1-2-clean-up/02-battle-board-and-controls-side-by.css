@@ -2,17 +2,17 @@
 .battle {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: 12px;
+  gap: var(--space-md);
   align-items: start;
 }
 .bt-side {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: var(--space-sm);
   min-width: 0;
 }
 .bt-side .bp {
-  padding: 12px 14px 14px;
+  padding: var(--space-md) var(--space-md) var(--space-md);
   border-radius: var(--rl);
   border: 1px solid transparent;
   background:
@@ -30,7 +30,7 @@
   background:
     linear-gradient(180deg, #141519, #0b0b0e) padding-box,
     var(--brass) border-box;
-  padding: 10px 12px;
+  padding: var(--space-sm) var(--space-md);
 }
 .blog {
   max-height: none;
@@ -39,8 +39,8 @@
 .blog > summary {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 12px 14px;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-md);
   cursor: pointer;
   list-style: none;
   min-width: 0;
@@ -72,7 +72,7 @@
 }
 .blog ol {
   max-height: 260px;
-  padding: 0 14px 12px;
+  padding: 0 var(--space-md) var(--space-md);
 }
 @media (min-width: 1000px) {
   .battle {
@@ -116,17 +116,17 @@
 .bp-tr {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: var(--space-xs);
   align-items: center;
 }
 .bp-tr .tr {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: var(--space-xs);
   font-family: var(--f-m);
   font-size: 10.5px;
   letter-spacing: 0.04em;
-  padding: 3px 9px 3px 6px;
+  padding: var(--space-3xs) var(--space-sm) var(--space-3xs) var(--space-xs);
   border-radius: 2px;
   border: 1px solid rgba(212, 175, 106, 0.4);
   color: var(--gold-l);
@@ -145,7 +145,7 @@
 }
 .tr-i {
   margin-left: auto;
-  padding: 3px 8px;
+  padding: var(--space-3xs) var(--space-sm);
   border: 0;
   background: none;
   color: var(--mut);
@@ -161,7 +161,7 @@
   color: var(--gold-l);
 }
 .bt-syn {
-  padding: 6px 12px;
+  padding: var(--space-xs) var(--space-md);
 }
 /* pages keep no transform: fixed elements stay fixed */
 .page.on {
@@ -169,7 +169,7 @@
 }
 #dexRole {
   height: 40px;
-  padding: 0 12px;
+  padding: 0 var(--space-md);
   border-radius: 4px;
   border: 1px solid var(--line2);
   background: linear-gradient(180deg, #121317, #0d0e11);
@@ -182,7 +182,7 @@
   font-size: 10.5px;
   letter-spacing: 0.06em;
   color: var(--mut);
-  padding: 2px 0;
+  padding: var(--space-3xs) 0;
 }
 @media (max-width: 560px) {
   .fc-art {

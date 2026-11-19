@@ -7,8 +7,8 @@ html body #resonance-launch .rl-shade {
 html body #resonance-launch .rl-logo {
   display: grid !important;
   justify-items: start;
-  gap: 2px;
-  margin: 6px 0 12px !important;
+  gap: var(--space-3xs);
+  margin: var(--space-xs) 0 var(--space-md) !important;
   font-size: inherit !important;
   line-height: 1 !important;
   text-shadow: none !important;
@@ -29,7 +29,7 @@ html body #resonance-launch .rl-logo .v4-rl-pk {
 }
 html body #resonance-launch .rl-logo .v4-rl-res {
   display: block !important;
-  margin: 2px 0 0 !important;
+  margin: var(--space-3xs) 0 0 !important;
   font: 700 clamp(24px, 3.8vw, 46px)/1.1 var(--f-logo) !important;
   letter-spacing: 0.16em !important;
   text-transform: uppercase !important;
@@ -42,7 +42,7 @@ html body #resonance-launch .rl-logo .v4-rl-res {
 }
 html body #resonance-launch .rl-logo .v4-rl-live {
   display: block !important;
-  margin: 8px 0 0 3px !important;
+  margin: var(--space-sm) 0 0 var(--space-3xs) !important;
   font: 800 clamp(11px, 1.2vw, 14px)/1 var(--f-d) !important;
   letter-spacing: 0.42em !important;
   text-transform: uppercase !important;
@@ -58,9 +58,9 @@ html body #resonance-launch .rl-meta strong {
 html body #resonance-launch .rl-enter {
   display: inline-flex !important;
   align-items: center !important;
-  gap: 14px !important;
+  gap: var(--space-md) !important;
   min-height: 58px !important;
-  padding: 0 18px 0 7px !important;
+  padding: 0 var(--space-lg) 0 var(--space-xs) !important;
   border-radius: 999px !important;
   background: linear-gradient(180deg, rgba(14, 40, 78, 0.94), rgba(6, 20, 42, 0.96)) !important;
   color: #fff !important;

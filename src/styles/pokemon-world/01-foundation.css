@@ -33,7 +33,7 @@ html:not(#pkz) body:not(#pkz) .pk-dlg .dlg-who {
   z-index: 2;
   display: inline-block !important;
   margin: 0 !important;
-  padding: 3px 9px 2px !important;
+  padding: var(--space-3xs) var(--space-sm) var(--space-3xs) !important;
   border-radius: 6px !important;
   background: linear-gradient(180deg, #5a93e6, #2c5fae) !important;
   color: #fff !important;
@@ -52,7 +52,7 @@ html:not(#pkz) body:not(#pkz) .pk-dlg .pk-fl {
   position: relative;
   width: 0;
   height: 0;
-  margin-left: 7px;
+  margin-left: var(--space-xs);
   vertical-align: middle;
   border-left: 6px solid transparent;
   border-right: 6px solid transparent;
@@ -91,23 +91,23 @@ html:not(#pkz) body:not(#pkz) .v4h-prof {
   align-items: center !important;
   background: transparent !important;
   border: 0 !important;
-  padding: 10px 4px 4px !important;
+  padding: var(--space-sm) var(--space-2xs) var(--space-2xs) !important;
 }
 html:not(#pkz) body:not(#pkz) .v4h-prof > p.pk-dlg {
   flex: 1;
-  margin: 8px 0 0 !important;
-  padding: 14px 16px 13px !important;
+  margin: var(--space-sm) 0 0 !important;
+  padding: var(--space-md) var(--space-lg) var(--space-md) !important;
   font-size: 13.5px !important;
   line-height: 1.5 !important;
 }
 /* Professor's advice */
 html:not(#pkz) body:not(#pkz) .tip .dlgbox.pk-dlg {
-  padding: 15px 30px 13px 14px !important;
-  margin-top: 8px;
+  padding: var(--space-lg) var(--space-3xl) var(--space-md) var(--space-md) !important;
+  margin-top: var(--space-sm);
 }
 /* story scenes */
 html:not(#pkz) body:not(#pkz) #story-scene .sc-card.pk-dlg {
-  padding: 16px 16px 14px !important;
+  padding: var(--space-lg) var(--space-lg) var(--space-md) !important;
   animation: pkDlgIn 0.32s cubic-bezier(0.2, 1, 0.4, 1) both !important;
 }
 html:not(#pkz) body:not(#pkz) #story-scene .sc-card.pk-dlg .sc-who > b {
@@ -132,7 +132,7 @@ html:not(#pkz) body:not(#pkz) .pk-dlg .b-ghost {
 }
 /* tutorial coach */
 html:not(#pkz) body:not(#pkz) #coach .co-in.pk-dlg {
-  padding: 12px 14px !important;
+  padding: var(--space-md) var(--space-md) !important;
 }
 html:not(#pkz) body:not(#pkz) #coach .co-in.pk-dlg > b {
   color: #1d4ea8 !important;
@@ -145,7 +145,7 @@ html:not(#pkz) body:not(#pkz) #coach .co-in.pk-dlg p {
 }
 /* tips in battle */
 html:not(#pkz) body:not(#pkz) #tip-card.pk-dlg {
-  padding: 12px 14px !important;
+  padding: var(--space-md) var(--space-md) !important;
 }
 html:not(#pkz) body:not(#pkz) #tip-card.pk-dlg small {
   color: #2c5fae !important;
@@ -157,13 +157,13 @@ html:not(#pkz) body:not(#pkz) #tip-card.pk-dlg > div > b {
 }
 /* the champion's line before the battle */
 html:not(#pkz) body:not(#pkz) .sel-card .dlgbox.pk-dlg {
-  padding: 12px 30px 13px 14px !important;
-  margin: 6px 2px;
+  padding: var(--space-md) var(--space-3xl) var(--space-md) var(--space-md) !important;
+  margin: var(--space-xs) var(--space-3xs);
 }
 /* introduction */
 html:not(#pkz) body:not(#pkz) .intro .dlgbox.pk-dlg {
-  padding: 20px 22px 22px !important;
-  margin-top: 10px;
+  padding: var(--space-xl) var(--space-xl) var(--space-xl) !important;
+  margin-top: var(--space-sm);
 }
 @keyframes pkDlgIn {
   from {
@@ -277,7 +277,7 @@ html:not(#pkz) body:not(#pkz) #pokedex .fcard .pk-shn {
   right: 8px;
   top: 30px;
   z-index: 6;
-  padding: 2px 7px;
+  padding: var(--space-3xs) var(--space-xs);
   border-radius: 999px;
   background: linear-gradient(90deg, #ffd35a, #ff9ad5, #8fe3ff);
   color: #2a1630;
@@ -297,7 +297,7 @@ html:not(#pkz) body:not(#pkz) #pokedex .fcard .pk-shn {
 /* ---------- 7. velvet badge case ---------- */
 html:not(#pkz) body:not(#pkz) :is(.tc-bdg, .v4-tr-b) {
   position: relative;
-  padding: 12px !important;
+  padding: var(--space-md) !important;
   border-radius: 14px !important;
   border: 0 !important;
   background:
@@ -311,7 +311,7 @@ html:not(#pkz) body:not(#pkz) :is(.tc-bdg, .v4-tr-b) {
     0 10px 24px -12px rgba(0, 0, 0, 0.85) !important;
   outline: 1.5px dashed rgba(255, 215, 140, 0.38);
   outline-offset: -7px;
-  gap: 8px !important;
+  gap: var(--space-sm) !important;
 }
 html:not(#pkz) body:not(#pkz) :is(.tcb, .v4-tbg) {
   position: relative;

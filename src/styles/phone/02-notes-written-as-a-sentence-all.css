@@ -17,8 +17,8 @@ p.v4-note {
   }
   /* the play disc keeps its round shape; the label gives way first */
   html body #resonance-launch .rl-enter {
-    gap: 10px !important;
-    padding-right: 14px !important;
+    gap: var(--space-sm) !important;
+    padding-right: var(--space-md) !important;
     font-size: clamp(12px, 3.4vw, 14px) !important;
     letter-spacing: 0.04em !important;
   }
@@ -40,7 +40,7 @@ p.v4-note {
   html body .it-diff {
     display: grid !important;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 8px !important;
+    gap: var(--space-sm) !important;
   }
   html body .it-diff > span {
     grid-column: 1/-1;
@@ -54,7 +54,7 @@ p.v4-note {
   html body .it-a {
     flex-direction: column;
     align-items: stretch !important;
-    gap: 8px !important;
+    gap: var(--space-sm) !important;
   }
   html body .it-a > .b {
     width: 100% !important;
@@ -66,15 +66,15 @@ p.v4-note {
   /* ---------- Battle tutorial card: full-size buttons ---------- */
   html body #coach .co-a .b {
     min-height: var(--tap) !important;
-    padding: 0 14px !important;
+    padding: 0 var(--space-md) !important;
     font-size: var(--t-s) !important;
   }
 
   /* ---------- Battles: the "Launch" bar fits on one line ---------- */
   html body #cbPrep .pt-go {
     flex-wrap: nowrap !important;
-    gap: 10px !important;
-    padding: 8px 8px 8px 14px !important;
+    gap: var(--space-sm) !important;
+    padding: var(--space-sm) var(--space-sm) var(--space-sm) var(--space-md) !important;
   }
   html body #cbPrep .pt-go #ptVoix {
     flex: 1;
@@ -93,7 +93,7 @@ p.v4-note {
   html body #cbPrep .pt-go #bLaunch {
     flex: none;
     height: var(--tap) !important;
-    padding: 0 16px !important;
+    padding: 0 var(--space-lg) !important;
   }
   /* "Next step": placed in the right column instead of overlapping the title */
   html body #cbPrep .srw .pill.nx {
@@ -104,15 +104,15 @@ p.v4-note {
     line-height: 1.15;
     max-width: 72px;
     font-size: 10px !important;
-    padding: 3px 7px !important;
+    padding: var(--space-3xs) var(--space-xs) !important;
   }
 
   /* ---------- Team: tidy search bar ---------- */
   html body #pokedex .dexbar {
     display: grid !important;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 8px !important;
-    padding: 10px !important;
+    gap: var(--space-sm) !important;
+    padding: var(--space-sm) !important;
   }
   html body #pokedex .dexbar .srch,
   html body #pokedex .dexbar #genSeg {
@@ -144,8 +144,8 @@ p.v4-note {
     flex-wrap: nowrap !important;
     overflow-x: auto;
     scrollbar-width: none;
-    margin-inline: -12px !important;
-    padding: 6px 12px !important;
+    margin-inline: calc(var(--space-md) * -1) !important;
+    padding: var(--space-xs) var(--space-md) !important;
     border-radius: 0 !important;
     border-inline: 0 !important;
     -webkit-mask-image: linear-gradient(90deg, transparent, #000 12px, #000 calc(100% - 24px), transparent);
@@ -154,13 +154,13 @@ p.v4-note {
   html body .camp-tab button {
     flex: none !important;
     height: 40px !important;
-    padding: 0 16px !important;
+    padding: 0 var(--space-lg) !important;
     border-radius: var(--r-p) !important;
     font-size: var(--t-s) !important;
     white-space: nowrap;
   }
   html body .camp-tab button:last-child {
-    margin-right: 12px;
+    margin-right: var(--space-md);
   }
   html:not(#pkz) body:not(#pkz) .camp-tab button[aria-selected='false'] {
     background: rgba(255, 255, 255, 0.06) !important;
@@ -171,7 +171,7 @@ p.v4-note {
   /* ---------- section headers: the hint goes under the title instead of squeezing it ---------- */
   html body .v4-sec-h {
     flex-wrap: wrap;
-    row-gap: 4px;
+    row-gap: var(--space-2xs);
   }
   html body .v4-sec-h > span {
     flex-basis: 100%;
@@ -183,7 +183,7 @@ p.v4-note {
   /* ---------- Map: time-of-day switch and Pokédex buttons reach a tappable height ---------- */
   html body .tod button {
     min-height: 40px;
-    padding-inline: 12px !important;
+    padding-inline: var(--space-md) !important;
   }
   html body #dex .v4-btn {
     min-height: 40px;
@@ -205,8 +205,8 @@ p.v4-note {
   /* ---------- Settings: every panel gets the same inner padding as the .v4-ps ones ---------- */
   html body #params .v4-params > .v4-panel:not(.v4-ps) {
     display: grid !important;
-    gap: 10px;
-    padding: 14px !important;
+    gap: var(--space-sm);
+    padding: var(--space-md) !important;
   }
   html body #params .v4-params > .v4-panel:not(.v4-ps) > * {
     margin: 0 !important;
@@ -214,7 +214,7 @@ p.v4-note {
   html body #params .v4-panel .sv-io {
     display: grid !important;
     grid-template-columns: minmax(0, 1fr);
-    gap: 8px !important;
+    gap: var(--space-sm) !important;
   }
   /* board variants: short names, two per row */
   html body #params #gimmick-boards-panel .sv-io {
@@ -230,9 +230,9 @@ p.v4-note {
   /* ---------- Guide: "Getting started" steps use the full card width ----------
      Number and title on the first line, the explanation below across the whole card. */
   html body .s5 li {
-    gap: 8px 14px !important;
+    gap: var(--space-sm) var(--space-md) !important;
     align-items: center !important;
-    padding: 14px !important;
+    padding: var(--space-md) !important;
   }
   html body .s5 li > div {
     display: contents;
@@ -243,11 +243,11 @@ p.v4-note {
   }
   /* reaction matrix: the row names keep their text but lose the icon, the cells get the room */
   html body .mx {
-    gap: 4px !important;
-    padding: 12px 10px !important;
+    gap: var(--space-2xs) !important;
+    padding: var(--space-md) var(--space-sm) !important;
   }
   html body .mx .rh {
-    padding-right: 2px !important;
+    padding-right: var(--space-3xs) !important;
   }
   html body .mx .rh > .mini {
     display: none;
@@ -264,7 +264,7 @@ p.v4-note {
 
   /* ---------- Home: the folding "Classement" line is a full-height tap target ---------- */
   html body #accueil .am-cl > summary {
-    padding-block: 14px;
+    padding-block: var(--space-md);
   }
 
   /* ---------- Saves sheet: options and close button at a tappable size ---------- */
@@ -286,13 +286,13 @@ p.v4-note {
     mask-image: linear-gradient(90deg, #000 calc(100% - 28px), transparent);
   }
   html:not(#pkz) body:not(#pkz) #sac .v4-cats > button:last-child {
-    margin-right: 24px !important;
+    margin-right: var(--space-2xl) !important;
   }
 
   /* ---------- screen headers: same rhythm everywhere ---------- */
   html body .page .ph {
-    gap: 6px !important;
-    margin-bottom: 16px !important;
+    gap: var(--space-xs) !important;
+    margin-bottom: var(--space-lg) !important;
   }
   html body .page .ph .sub {
     font-size: var(--t-s) !important;

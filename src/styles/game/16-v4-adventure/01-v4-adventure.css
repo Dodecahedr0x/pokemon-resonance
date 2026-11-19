@@ -86,9 +86,9 @@ html body #accueil .v4-off,
 .v4-ph {
   display: flex;
   align-items: center;
-  gap: 9px;
-  padding: 0 0 10px;
-  margin-bottom: 10px;
+  gap: var(--space-sm);
+  padding: 0 0 var(--space-sm);
+  margin-bottom: var(--space-sm);
   border-bottom: 1px solid rgba(120, 200, 255, 0.14);
 }
 .v4-ph > svg {
@@ -110,11 +110,11 @@ html body #accueil .v4-off,
   color: var(--v4-tx2);
   background: rgba(0, 0, 0, 0.25);
   border: 1px solid rgba(120, 200, 255, 0.2);
-  padding: 5px 8px;
+  padding: var(--space-2xs) var(--space-sm);
   border-radius: 999px;
 }
 .v4-pcs {
-  margin-left: 6px;
+  margin-left: var(--space-xs);
   color: #ffd75e;
 }
 html body .b {
@@ -147,10 +147,10 @@ html body .b-gold[disabled] {
 .v4-pill {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: var(--space-2xs);
   font: 800 11px/1 var(--f-d);
   letter-spacing: 0.04em;
-  padding: 5px 9px;
+  padding: var(--space-2xs) var(--space-sm);
   border-radius: 999px;
   white-space: nowrap;
   background: rgba(255, 255, 255, 0.06);
@@ -180,9 +180,9 @@ html body .b-gold[disabled] {
 }
 .v4-tabs {
   display: flex;
-  gap: 6px;
-  padding: 5px;
-  margin: 0 0 14px;
+  gap: var(--space-xs);
+  padding: var(--space-2xs);
+  margin: 0 0 var(--space-md);
   background: rgba(3, 14, 30, 0.7);
   border: 1px solid rgba(120, 200, 255, 0.18);
   border-radius: 13px;
@@ -194,9 +194,9 @@ html body .b-gold[disabled] {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 7px;
+  gap: var(--space-xs);
   min-height: 42px;
-  padding: 0 16px;
+  padding: 0 var(--space-lg);
   border: 1px solid transparent;
   border-radius: 10px;
   background: transparent;
@@ -219,7 +219,7 @@ html body .b-gold[disabled] {
   place-items: center;
   min-width: 18px;
   height: 18px;
-  padding: 0 5px;
+  padding: 0 var(--space-2xs);
   border-radius: 9px;
   background: #ff5f57;
   color: #fff;
@@ -262,9 +262,9 @@ html body .b-gold[disabled] {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 10px;
-  padding: 12px 14px;
-  margin: 0 0 12px;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-md);
+  margin: 0 0 var(--space-md);
   border-radius: 12px;
   background: rgba(255, 215, 94, 0.08);
   border: 1px solid rgba(255, 215, 94, 0.28);
@@ -272,15 +272,15 @@ html body .b-gold[disabled] {
   font-size: 13.5px;
 }
 .v4-empty {
-  padding: 22px;
+  padding: var(--space-xl);
   text-align: center;
   color: var(--v4-mut);
 }
 .v4-sec-h {
   display: flex;
   align-items: center;
-  gap: 9px;
-  margin: 22px 0 10px;
+  gap: var(--space-sm);
+  margin: var(--space-xl) 0 var(--space-sm);
 }
 .v4-sec-h svg {
   width: 20px;
@@ -300,15 +300,15 @@ html body .b-gold[disabled] {
 .v4-mi-k {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: var(--space-xs);
 }
 .v4-rw > span,
 .v4-rew > span,
 .v4-mi-k > span {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 4px 9px 4px 5px;
+  gap: var(--space-xs);
+  padding: var(--space-2xs) var(--space-sm) var(--space-2xs) var(--space-2xs);
   border-radius: 999px;
   background: rgba(0, 0, 0, 0.28);
   border: 1px solid rgba(120, 200, 255, 0.18);
@@ -327,5 +327,5 @@ html body .b-gold[disabled] {
   height: 20px;
 }
 .v4-rew {
-  margin: 10px 0 2px;
+  margin: var(--space-sm) 0 var(--space-3xs);
 }

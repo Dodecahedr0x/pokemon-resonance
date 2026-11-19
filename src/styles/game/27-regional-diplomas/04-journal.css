@@ -1,18 +1,18 @@
 /* journal */
 .journal-report {
   display: grid;
-  gap: 14px;
+  gap: var(--space-md);
 }
 .stat-tile-g {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
+  gap: var(--space-sm);
 }
 .stat-tile {
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  padding: 10px;
+  gap: var(--space-3xs);
+  padding: var(--space-sm);
   border-radius: 14px;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -27,18 +27,18 @@
   color: #9fb3c2;
 }
 .journal-report-s {
-  padding: 12px 14px;
+  padding: var(--space-md) var(--space-md);
 }
 .journal-report-s h3 {
-  margin: 0 0 8px;
+  margin: 0 0 var(--space-sm);
   font-size: 14px;
 }
 .category-row {
   display: grid;
   grid-template-columns: minmax(0, 7em) minmax(0, 1fr) auto;
-  gap: 10px;
+  gap: var(--space-sm);
   align-items: center;
-  padding: 4px 0;
+  padding: var(--space-2xs) 0;
   font-size: 13px;
 }
 .category-row-b {
@@ -55,9 +55,9 @@
 .mvp-row {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
-  gap: 4px 10px;
+  gap: var(--space-2xs) var(--space-sm);
   align-items: center;
-  padding: 4px 0;
+  padding: var(--space-2xs) 0;
   font-size: 13px;
 }
 .mvp-row em {
@@ -65,14 +65,14 @@
   font-style: normal;
   font-size: 11.5px;
   color: #9fb3c2;
-  margin-top: -4px;
+  margin-top: calc(var(--space-2xs) * -1);
 }
 .last-fight {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
-  gap: 2px 10px;
+  gap: var(--space-3xs) var(--space-sm);
   align-items: center;
-  padding: 6px 0;
+  padding: var(--space-xs) 0;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
   font-size: 12.5px;
   color: #b9cad6;
@@ -111,9 +111,9 @@
 .camp-tab {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
-  margin: 0 0 4px;
-  padding: 6px;
+  gap: var(--space-xs);
+  margin: 0 0 var(--space-2xs);
+  padding: var(--space-xs);
 }
 .camp-tab::-webkit-scrollbar {
   display: none;
@@ -121,7 +121,7 @@
 .camp-tab button {
   flex: none;
   height: 36px;
-  padding: 0 14px;
+  padding: 0 var(--space-md);
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, 0.14);
   background: rgba(0, 0, 0, 0.25);
@@ -137,11 +137,11 @@
   border-color: transparent;
 }
 #camp-tab-body > section {
-  padding: 14px;
+  padding: var(--space-md);
 }
 #camp-tab-body h3 {
   font-size: 14px;
-  margin: 14px 0 8px;
+  margin: var(--space-md) 0 var(--space-sm);
 }
 
 /* fog of war */
@@ -165,7 +165,7 @@ html body #bSvg .hx.fog-of-war-t {
 .puzzle-tab-h {
   display: flex;
   align-items: baseline;
-  gap: 8px;
+  gap: var(--space-sm);
 }
 .puzzle-tab-h em {
   font-style: normal;
@@ -176,15 +176,15 @@ html body #bSvg .hx.fog-of-war-t {
 .puzzle-tab-j {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
+  gap: var(--space-sm);
 }
 .puzzle-tab-c {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 4px;
+  gap: var(--space-2xs);
   min-width: 0;
-  padding: 10px;
+  padding: var(--space-sm);
   border-radius: 14px;
   border: 1px solid rgba(255, 215, 94, 0.35);
   background: rgba(255, 215, 94, 0.06);
@@ -203,7 +203,7 @@ html body #bSvg .hx.fog-of-war-t {
 }
 .puzzle-tab-m {
   display: flex;
-  gap: 2px;
+  gap: var(--space-3xs);
 }
 .puzzle-tab-c em {
   font-style: normal;
@@ -222,14 +222,14 @@ html body #bSvg .hx.fog-of-war-t {
 .puzzle-tab-g {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(54px, 1fr));
-  gap: 6px;
+  gap: var(--space-xs);
 }
 .puzzle-tab-b {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1px;
-  padding: 7px 2px;
+  padding: var(--space-xs) var(--space-3xs);
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.12);
   background: rgba(255, 255, 255, 0.03);
@@ -251,20 +251,20 @@ html body #bSvg .hx.fog-of-war-t {
 /* mastery */
 .mastery-tab-l {
   display: grid;
-  gap: 6px;
+  gap: var(--space-xs);
 }
 .mastery-tab-r {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
-  gap: 6px 10px;
+  gap: var(--space-xs) var(--space-sm);
   align-items: center;
-  padding: 8px 0;
+  padding: var(--space-sm) 0;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 .mastery-tab-t {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: var(--space-3xs);
   min-width: 0;
 }
 .mastery-tab-t b {
@@ -293,12 +293,12 @@ html body #bSvg .hx.fog-of-war-t {
   grid-column: 1/-1;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 6px;
+  gap: var(--space-xs);
 }
 .mastery-tab-c .b {
   height: auto;
   min-height: 44px;
-  padding: 6px 10px;
+  padding: var(--space-xs) var(--space-sm);
   display: flex;
   flex-direction: column;
   align-items: flex-start;

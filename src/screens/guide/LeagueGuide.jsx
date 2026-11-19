@@ -14,6 +14,7 @@ import { ico, medal, tc } from '../../engine/core/utils.js';
 import { listDuos } from '../../engine/combat/duo-techniques.js';
 import { Html } from '../../lib/html.jsx';
 import { useGuide } from './guideStore.js';
+import { space } from '../../lib/theme.js';
 
 function sourceObject(k) {
   const i = BADGE_REWARD.findIndex(r => r.item === k);
@@ -201,7 +202,7 @@ export default function League() {
         <div className="champ">
           <div>
             <p className="kick">Ligue Pokémon</p>
-            <h2 className="h1" style={{ marginTop: 14 }}>
+            <h2 className="h1" style={{ marginTop: space.md }}>
               Un Champion qui a vu vos combats
             </h2>
           </div>

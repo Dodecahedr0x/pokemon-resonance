@@ -60,13 +60,13 @@
 }
 .sh-hero {
   position: relative;
-  padding: 22px 22px 24px;
-  padding-top: calc(22px + env(safe-area-inset-top, 0px));
+  padding: var(--space-xl) var(--space-xl) var(--space-2xl);
+  padding-top: calc(var(--space-xl) + env(safe-area-inset-top, 0px));
   background: radial-gradient(110% 95% at 50% 0%, color-mix(in srgb, var(--c) 40%, transparent), transparent 72%);
 }
 @media (max-width: 700px) {
   .sh-hero {
-    padding-top: 22px;
+    padding-top: var(--space-xl);
   }
 }
 .grab {
@@ -75,7 +75,7 @@
   height: 4px;
   border-radius: 2px;
   background: var(--line3);
-  margin: 0 auto 14px;
+  margin: 0 auto var(--space-md);
 }
 @media (max-width: 700px) {
   .grab {
@@ -112,7 +112,7 @@
 .sh-crest {
   display: grid;
   place-items: center;
-  margin: 8px 0 6px;
+  margin: var(--space-sm) 0 var(--space-xs);
 }
 .sh-crest svg {
   width: 170px;
@@ -132,20 +132,20 @@
   text-align: center;
   color: var(--tx2);
   font-size: 14px;
-  margin-top: 8px;
+  margin-top: var(--space-sm);
 }
 .sh-tags {
   display: flex;
   justify-content: center;
-  gap: 6px;
+  gap: var(--space-xs);
   flex-wrap: wrap;
-  margin-top: 14px;
+  margin-top: var(--space-md);
 }
 .sh-sec {
-  padding: 20px 22px;
+  padding: var(--space-xl) var(--space-xl);
   border-top: 1px solid var(--line);
   display: grid;
-  gap: 14px;
+  gap: var(--space-md);
 }
 .sh-sec h4 {
   font-family: var(--f-m);
@@ -163,12 +163,12 @@
 
 .stats {
   display: grid;
-  gap: 9px;
+  gap: var(--space-sm);
 }
 .sr {
   display: grid;
   grid-template-columns: 78px minmax(0, 1fr) 16px;
-  gap: 12px;
+  gap: var(--space-md);
   align-items: center;
   font-family: var(--f-m);
   font-size: 11px;
@@ -200,8 +200,8 @@
 }
 .mvc {
   display: grid;
-  gap: 6px;
-  padding: 14px 16px;
+  gap: var(--space-xs);
+  padding: var(--space-md) var(--space-lg);
   border-radius: 14px;
   background: var(--s2);
   border: 1px solid var(--line);
@@ -210,7 +210,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 10px;
+  gap: var(--space-sm);
 }
 .mvc b {
   font-family: var(--f-d);
@@ -226,7 +226,7 @@
 .evo {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: var(--space-md);
   flex-wrap: wrap;
   font-size: 14px;
   color: var(--tx2);
@@ -241,7 +241,7 @@
 .note {
   font-size: 14.5px;
   color: var(--tx);
-  padding: 14px 16px;
+  padding: var(--space-md) var(--space-lg);
   border-radius: 14px;
   background: var(--gold-s);
   border: 1px solid rgba(227, 192, 122, 0.22);
@@ -251,8 +251,8 @@
   position: sticky;
   bottom: 0;
   display: flex;
-  gap: 10px;
-  padding: 16px 22px calc(16px + env(safe-area-inset-bottom, 0px));
+  gap: var(--space-sm);
+  padding: var(--space-lg) var(--space-xl) calc(var(--space-lg) + env(safe-area-inset-bottom, 0px));
   background: linear-gradient(180deg, rgba(15, 18, 24, 0), var(--s1) 34%);
 }
 .sh-act .b {

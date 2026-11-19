@@ -5,23 +5,23 @@
   letter-spacing: 0.06em;
 }
 .v4d-hw dd {
-  margin: 4px 0 0;
+  margin: var(--space-2xs) 0 0;
   font: 850 16px/1 var(--f-d);
 }
 .v4d-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
-  margin-top: 14px;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
 }
 .v4d-sec {
-  padding: 12px;
+  padding: var(--space-md);
   border-radius: 12px;
   background: rgba(0, 0, 0, 0.2);
   border: 1px solid rgba(120, 200, 255, 0.14);
 }
 .v4d-sec h3 {
-  margin: 0 0 8px;
+  margin: 0 0 var(--space-sm);
   font: 800 12px/1 var(--f-d);
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -30,10 +30,10 @@
 .v4d-roles {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: var(--space-xs);
 }
 .v4d-role {
-  padding: 5px 9px;
+  padding: var(--space-2xs) var(--space-sm);
   border-radius: 999px;
   background: rgba(120, 200, 255, 0.1);
   border: 1px solid rgba(120, 200, 255, 0.3);
@@ -43,7 +43,7 @@
   font-family: var(--f-d);
 }
 .v4d-p {
-  margin: 8px 0 0;
+  margin: var(--space-sm) 0 0;
   font-size: 13px;
   line-height: 1.5;
   color: var(--v4-tx2);
@@ -53,13 +53,13 @@
 }
 .v4d-stats {
   display: grid;
-  gap: 6px;
+  gap: var(--space-xs);
 }
 .v4-sb {
   display: grid;
   grid-template-columns: 82px 1fr 16px;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-sm);
   font-size: 12.5px;
   color: var(--v4-tx2);
 }
@@ -87,7 +87,7 @@
 }
 .v4d-mv {
   display: grid;
-  gap: 10px;
+  gap: var(--space-sm);
 }
 .v4d-m {
   display: block;
@@ -96,7 +96,7 @@ html body .v4d-m .tb {
   display: inline-flex !important;
   width: auto !important;
   vertical-align: middle;
-  margin-right: 6px;
+  margin-right: var(--space-xs);
 }
 .v4d-m b {
   font: 800 14.5px/1.2 var(--f-d);
@@ -104,7 +104,7 @@ html body .v4d-m .tb {
 }
 .v4d-m span {
   display: block;
-  margin-top: 3px;
+  margin-top: var(--space-3xs);
   font-size: 12px;
   color: #bfe6ff;
 }
@@ -118,9 +118,9 @@ html body .v4d-m .tb {
 .v4d-fam {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-top: 14px;
-  padding: 10px;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+  padding: var(--space-sm);
   border-radius: 12px;
   background: rgba(0, 0, 0, 0.22);
   border: 1px solid rgba(120, 200, 255, 0.14);
@@ -145,7 +145,7 @@ html body .v4d-m .tb {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: var(--space-xs);
   flex: 1;
   overflow-x: auto;
   scrollbar-width: none;
@@ -154,7 +154,7 @@ html body .v4d-m .tb {
   display: grid;
   justify-items: center;
   gap: 1px;
-  padding: 4px 8px;
+  padding: var(--space-2xs) var(--space-sm);
   border-radius: 10px;
   border: 1px solid transparent;
   background: none;
@@ -190,8 +190,8 @@ html body .v4d-m .tb {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
-  gap: 8px;
-  margin-top: 14px;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
 }
 .v4d-act .b {
   min-height: 46px;
@@ -203,13 +203,13 @@ html body .v4d-m .tb {
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  padding: 12px 14px;
-  margin-bottom: 12px;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-md);
+  margin-bottom: var(--space-md);
 }
 .v4-tr-b {
   display: flex;
-  gap: 6px;
+  gap: var(--space-xs);
   flex-wrap: wrap;
 }
 .v4-tbg {
@@ -233,7 +233,7 @@ html body .v4d-m .tb {
 }
 .v4-tr-k {
   display: flex;
-  gap: 16px;
+  gap: var(--space-lg);
 }
 .v4-tr-k div {
   display: grid;
@@ -249,14 +249,14 @@ html body .v4d-m .tb {
 }
 .v4-qlist {
   display: grid;
-  gap: 8px;
+  gap: var(--space-sm);
 }
 .v4-qm,
 .v4-qs {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 12px;
+  gap: var(--space-md);
+  padding: var(--space-md);
   border-radius: 13px;
   background: linear-gradient(180deg, var(--v4-p1), var(--v4-p2));
   border: 1px solid var(--v4-ln);
@@ -282,7 +282,7 @@ html body .v4d-m .tb {
 .v4-qm-t,
 .v4-qs-t {
   display: grid;
-  gap: 3px;
+  gap: var(--space-3xs);
   flex: 1;
   min-width: 0;
 }
@@ -306,13 +306,13 @@ html body .v4d-m .tb {
 .v4-qs-r {
   display: grid;
   justify-items: end;
-  gap: 8px;
+  gap: var(--space-sm);
   flex: none;
 }
 .v4-prog {
   display: block;
   height: 8px;
-  margin-top: 6px;
+  margin-top: var(--space-xs);
   border-radius: 4px;
   background: rgba(0, 0, 0, 0.4);
   overflow: hidden;
@@ -340,8 +340,8 @@ html body .v4d-m .tb {
 .v4-daily {
   display: flex;
   align-items: center;
-  gap: 14px;
-  padding: 14px;
+  gap: var(--space-md);
+  padding: var(--space-md);
   overflow: hidden;
   border-color: rgba(255, 120, 200, 0.5) !important;
 }
@@ -358,7 +358,7 @@ html body .v4d-m .tb {
 }
 .v4-daily-t {
   display: grid;
-  gap: 4px;
+  gap: var(--space-2xs);
   flex: 1;
   min-width: 0;
 }

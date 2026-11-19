@@ -2,11 +2,11 @@
 .codex {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-  margin-top: 18px;
+  gap: var(--space-md);
+  margin-top: var(--space-lg);
 }
 .cx-c {
-  padding: 16px;
+  padding: var(--space-lg);
   border-radius: var(--r);
   border: 1px solid transparent;
   background:
@@ -18,8 +18,8 @@
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  gap: 8px;
-  margin: 0 0 8px;
+  gap: var(--space-sm);
+  margin: 0 0 var(--space-sm);
   font-family: var(--f-d);
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -35,9 +35,9 @@
 .cx-r {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
-  gap: 10px;
+  gap: var(--space-sm);
   align-items: start;
-  padding: 8px 0;
+  padding: var(--space-sm) 0;
   border-top: 1px solid rgba(212, 175, 106, 0.08);
 }
 .cx-r b {
@@ -69,7 +69,7 @@
 }
 .ob-pil {
   width: 12px;
-  margin: 0 5px;
+  margin: 0 var(--space-2xs);
   border-radius: 1px;
   background: linear-gradient(90deg, #24252b, #b0b0b7 50%, #17181c);
   box-shadow:
@@ -110,7 +110,7 @@
 @media (max-width: 560px) {
   .dock .team-x .b {
     flex: 1;
-    padding-inline: 8px;
+    padding-inline: var(--space-sm);
     font-size: 10px;
     letter-spacing: 0.08em;
   }
@@ -124,7 +124,7 @@
   z-index: 4;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 4px;
+  gap: var(--space-2xs);
 }
 .fc-sp {
   height: 58px;
@@ -136,9 +136,9 @@
 .stg {
   display: grid;
   justify-items: center;
-  gap: 2px;
+  gap: var(--space-3xs);
   min-width: 0;
-  padding: 6px 3px 5px;
+  padding: var(--space-xs) var(--space-3xs) var(--space-2xs);
   border-radius: 3px;
   border: 1px solid rgba(212, 175, 106, 0.22);
   background: linear-gradient(180deg, #15161a, #0c0d10);
@@ -184,9 +184,9 @@
 }
 .dex-call {
   display: grid;
-  gap: 12px;
-  margin: 0 0 16px;
-  padding: 18px;
+  gap: var(--space-md);
+  margin: 0 0 var(--space-lg);
+  padding: var(--space-lg);
   border-radius: var(--rl);
   border: 1px solid transparent;
   background:
@@ -199,15 +199,15 @@
 .dc-stars {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 8px;
+  gap: var(--space-sm);
 }
 .dc-s {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
-  gap: 10px;
+  gap: var(--space-sm);
   align-items: center;
   min-width: 0;
-  padding: 9px 10px;
+  padding: var(--space-sm) var(--space-sm);
   border-radius: var(--r);
   border: 1px solid transparent;
   background:
@@ -250,11 +250,11 @@
 .dc-f {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: var(--space-xs);
   align-items: center;
 }
 .dc-f .lbl-s {
-  margin-right: 4px;
+  margin-right: var(--space-2xs);
 }
 .dc-f .b.form {
   border-color: rgba(212, 175, 106, 0.6);
@@ -268,7 +268,7 @@
 }
 @media (max-width: 560px) {
   .dex-call {
-    padding: 14px;
+    padding: var(--space-md);
   }
   .stg b {
     font-size: 9.5px;

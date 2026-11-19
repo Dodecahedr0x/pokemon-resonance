@@ -1,31 +1,31 @@
 /* ===== resonance-v4161 layer ===== */
 /* ==== v4.16.1: "Nouveau" (New) card on the Home page ==== */
 html body .v4-news {
-  margin: 14px 0;
-  padding: 12px 14px;
+  margin: var(--space-md) 0;
+  padding: var(--space-md) var(--space-md);
   border-color: rgba(255, 215, 94, 0.45);
 }
 html body .v4-news .v4-ph {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-sm);
 }
 html body .v4-news .nw-x {
   margin-left: auto;
 }
 html body .nw-l {
   list-style: none;
-  margin: 8px 0 0;
+  margin: var(--space-sm) 0 0;
   padding: 0;
   display: grid;
-  gap: 6px;
+  gap: var(--space-xs);
 }
 html body .nw-i {
   width: 100%;
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 8px 10px;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-sm);
   border-radius: 12px;
   border: 1px solid rgba(120, 200, 255, 0.14);
   background: rgba(0, 0, 0, 0.22);
@@ -44,7 +44,7 @@ html body .nw-i > span:nth-child(2) {
   flex: 1;
   min-width: 0;
   display: grid;
-  gap: 2px;
+  gap: var(--space-3xs);
 }
 html body .nw-i em {
   font-style: normal;
@@ -76,26 +76,26 @@ html body .nw-go {
 /* ==== v4.16: living Johto ==== */
 /* --- Home: challenges between friends --- */
 html body .v4-amis {
-  margin: 16px 0;
-  padding: 14px;
+  margin: var(--space-lg) 0;
+  padding: var(--space-md);
   display: grid;
-  gap: 10px;
+  gap: var(--space-sm);
 }
 html body .v4-amis .am-a,
 html body .am-card .am-a {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: var(--space-sm);
 }
 html body .am-l {
   display: grid;
-  gap: 6px;
+  gap: var(--space-xs);
 }
 html body .am-r {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 8px 10px;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-sm);
   border-radius: 12px;
   background: rgba(0, 0, 0, 0.22);
   border: 1px solid rgba(120, 200, 255, 0.14);
@@ -103,7 +103,7 @@ html body .am-r {
 html body .am-t {
   display: grid;
   grid-template-columns: repeat(2, 18px);
-  gap: 2px;
+  gap: var(--space-3xs);
   flex: none;
 }
 html body .am-t .medal,
@@ -134,7 +134,7 @@ html body .am-n em {
 }
 html body .am-b {
   display: flex;
-  gap: 6px;
+  gap: var(--space-xs);
   flex: none;
 }
 html body .am-del {
@@ -150,17 +150,17 @@ html body .am-cl summary {
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--v4-tx2, #9fb0c4);
-  padding: 4px 0;
+  padding: var(--space-2xs) 0;
 }
 html body .am-cl table {
   width: 100%;
   border-collapse: collapse;
   font-size: 13px;
-  margin-top: 6px;
+  margin-top: var(--space-xs);
 }
 html body .am-cl th,
 html body .am-cl td {
-  padding: 6px 4px;
+  padding: var(--space-xs) var(--space-2xs);
   text-align: left;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
@@ -185,21 +185,21 @@ html body .am-cl tr:first-child td:first-child {
   font-weight: 800;
 }
 html body .am-nt {
-  margin: 6px 0 0;
+  margin: var(--space-xs) 0 0;
   font-size: 12px;
   color: var(--v4-tx2, #9fb0c4);
 }
 html body .am-card .am-lb {
   display: grid;
-  gap: 4px;
+  gap: var(--space-2xs);
   font-size: 13px;
   font-weight: 700;
-  margin: 6px 0 10px;
+  margin: var(--space-xs) 0 var(--space-sm);
 }
 html body .am-card input[type='text'] {
   font: inherit;
   font-size: 16px;
-  padding: 10px 12px;
+  padding: var(--space-sm) var(--space-md);
   border-radius: 10px;
   border: 1px solid rgba(120, 200, 255, 0.3);
   background: rgba(0, 0, 0, 0.3);
@@ -214,8 +214,8 @@ html body .am-code {
     Consolas,
     monospace;
   word-break: break-all;
-  padding: 10px;
-  margin: 8px 0 10px;
+  padding: var(--space-sm);
+  margin: var(--space-sm) 0 var(--space-sm);
   border-radius: 10px;
   border: 1px solid rgba(255, 215, 94, 0.45);
   background: rgba(0, 0, 0, 0.35);
@@ -231,7 +231,7 @@ html body #amiColle.am-code {
 }
 html body .am-err {
   min-height: 1em;
-  margin: 0 0 8px;
+  margin: 0 0 var(--space-sm);
   font-size: 13px;
   color: #ffb4a8;
 }
@@ -240,8 +240,8 @@ html body .am-err {
 html body .pe-row {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin: 2px 0 8px;
+  gap: var(--space-sm);
+  margin: var(--space-3xs) 0 var(--space-sm);
 }
 html body .pe-egg {
   width: 34px;
@@ -253,8 +253,8 @@ html body .pe-s {
   min-width: 0;
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 8px;
+  gap: var(--space-xs);
+  padding: var(--space-sm);
   border-radius: 10px;
   border: 1px dashed rgba(255, 255, 255, 0.22);
   color: var(--v4-tx2, #9fb0c4);
@@ -315,7 +315,7 @@ html body .enc-card.dom .enc-t {
   color: #ffd75e;
 }
 html body .enc-dom {
-  margin: 4px 0 0;
+  margin: var(--space-2xs) 0 0;
   font-size: 13px;
   color: #ffe6a8;
 }
@@ -364,7 +364,7 @@ html body .mk[data-place='rsuicune'] .mk-n {
 html body .v4-rew .rm-hp {
   position: relative;
   overflow: hidden;
-  padding-left: 9px !important;
+  padding-left: var(--space-sm) !important;
 }
 html body .v4-rew .rm-hp i {
   position: absolute;

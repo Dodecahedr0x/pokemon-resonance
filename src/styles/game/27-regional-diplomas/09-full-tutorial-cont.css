@@ -6,13 +6,13 @@
 }
 html body.compact-battle #cbBattle .bt-foot.qa-on {
   flex-wrap: wrap !important;
-  row-gap: 7px !important;
+  row-gap: var(--space-xs) !important;
 }
 html body.compact-battle #cbBattle .bt-foot.qa-on .phase {
   display: none !important;
 }
 html body.compact-battle #cbBattle .bt-foot.qa-on {
-  padding: 7px 10px !important;
+  padding: var(--space-xs) var(--space-sm) !important;
 }
 html body.compact-battle #cbBattle .bt-foot.qa-on #bEnd {
   margin-left: auto;
@@ -30,12 +30,12 @@ html body.compact-battle .thumb-reach:not([hidden]) {
   flex: 0 0 100%;
   order: -1;
   align-items: center;
-  gap: 6px;
+  gap: var(--space-xs);
   overflow-x: auto;
   overflow-y: hidden;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
-  padding: 1px 1px 2px;
+  padding: 1px 1px var(--space-3xs);
   margin: 0;
   overscroll-behavior-x: contain;
 }
@@ -57,9 +57,9 @@ html body.compact-battle .thumb-reach:not([hidden]) {
   flex: none;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: var(--space-xs);
   min-height: 38px;
-  padding: 0 13px;
+  padding: 0 var(--space-md);
   border-radius: 999px;
   border: 1px solid rgba(140, 168, 188, 0.45);
   background: #0f2233;
@@ -115,7 +115,7 @@ html body.compact-battle .thumb-reach:not([hidden]) {
   left: 10px;
   z-index: 6;
   display: flex;
-  gap: 6px;
+  gap: var(--space-xs);
 }
 .board-tools button {
   width: 36px;
@@ -142,7 +142,7 @@ html body.compact-battle .thumb-reach:not([hidden]) {
   position: static;
   order: 1;
   flex: none;
-  gap: 5px;
+  gap: var(--space-2xs);
 }
 .board-tools.in-foot button {
   width: 38px;

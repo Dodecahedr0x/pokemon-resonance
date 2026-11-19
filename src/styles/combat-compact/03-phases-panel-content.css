@@ -4,12 +4,12 @@
 #bPanel .ta-p {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: var(--space-sm);
 }
 #bPanel .dep-h {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--space-sm);
 }
 #bPanel .dep-h > div {
   display: flex;
@@ -50,14 +50,14 @@
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: var(--space-2xs);
 }
 #bPanel .dep-l li {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--space-sm);
   min-height: 44px;
-  padding: 0 12px 0 8px;
+  padding: 0 var(--space-md) 0 var(--space-sm);
   border-radius: 12px;
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.07);
@@ -83,7 +83,7 @@
 #bPanel .ta-h {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-sm);
 }
 #bPanel .ta-h i {
   width: 8px;
@@ -109,9 +109,9 @@
 #bPanel .ta-l li {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-sm);
   min-height: 36px;
-  padding: 0 10px 0 6px;
+  padding: 0 var(--space-sm) 0 var(--space-xs);
   border-radius: 10px;
   font-size: 12px;
   color: #c2c7d2;

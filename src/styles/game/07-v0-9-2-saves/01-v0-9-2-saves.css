@@ -8,9 +8,9 @@ button.nv {
   cursor: pointer;
 }
 .nv-save {
-  margin-top: 6px;
+  margin-top: var(--space-xs);
   border-top: 1px solid rgba(212, 175, 106, 0.12) !important;
-  padding-top: 13px !important;
+  padding-top: var(--space-md) !important;
 }
 .nv-save .k {
   color: var(--gold);
@@ -54,17 +54,17 @@ button.nv {
     background: var(--gold);
   }
   .topbar .tb-team {
-    margin-left: 8px;
+    margin-left: var(--space-sm);
   }
 }
 /* resuming a battle */
 .resume {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
-  gap: 12px;
+  gap: var(--space-md);
   align-items: center;
-  margin-top: 18px;
-  padding: 12px 14px;
+  margin-top: var(--space-lg);
+  padding: var(--space-md) var(--space-md);
   border-radius: var(--r);
   border: 1px solid transparent;
   background:
@@ -100,16 +100,16 @@ button.nv {
   font-style: normal;
   font-size: 12.5px;
   color: var(--tx2);
-  margin-top: 2px;
+  margin-top: var(--space-3xs);
 }
 .rs-a {
   display: flex;
-  gap: 6px;
+  gap: var(--space-xs);
   flex-wrap: wrap;
   justify-content: flex-end;
 }
 #cbPrep .resume {
-  margin: 0 0 18px;
+  margin: 0 0 var(--space-lg);
 }
 @media (max-width: 560px) {
   .resume {
@@ -134,8 +134,8 @@ button.nv {
   overflow-y: auto;
   overscroll-behavior: contain;
   display: grid;
-  gap: 14px;
-  padding: 26px;
+  gap: var(--space-md);
+  padding: var(--space-2xl);
   border-radius: var(--rl);
   border: 1px solid transparent;
   background:
@@ -157,7 +157,7 @@ button.nv {
 .sv-st {
   display: flex;
   align-items: flex-start;
-  gap: 9px;
+  gap: var(--space-sm);
   font-size: 13px;
   color: var(--tx2);
 }
@@ -165,7 +165,7 @@ button.nv {
   flex: none;
   width: 8px;
   height: 8px;
-  margin-top: 6px;
+  margin-top: var(--space-xs);
   border-radius: 50%;
   background: var(--mut);
 }
@@ -180,16 +180,16 @@ button.nv {
 .sv-prof {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  gap: 14px;
+  gap: var(--space-md);
   align-items: end;
-  padding: 14px;
+  padding: var(--space-md);
   border-radius: var(--r);
   background: rgba(0, 0, 0, 0.25);
   box-shadow: inset 0 0 0 1px rgba(212, 175, 106, 0.14);
 }
 .sv-prof label {
   display: grid;
-  gap: 6px;
+  gap: var(--space-xs);
 }
 .sv-prof label span {
   font-family: var(--f-m);
@@ -200,7 +200,7 @@ button.nv {
 }
 .sv-prof input {
   height: 40px;
-  padding: 0 12px;
+  padding: 0 var(--space-md);
   border-radius: 3px;
   border: 1px solid rgba(212, 175, 106, 0.3);
   background: #0a0b0e;
@@ -216,7 +216,7 @@ button.nv {
 .sv-k {
   display: grid;
   grid-template-columns: repeat(4, auto);
-  gap: 16px;
+  gap: var(--space-lg);
   text-align: center;
 }
 .sv-k b {
@@ -238,12 +238,12 @@ button.nv {
 }
 .sv-list {
   display: grid;
-  gap: 10px;
+  gap: var(--space-sm);
 }
 .sv-slot {
   display: grid;
-  gap: 10px;
-  padding: 14px;
+  gap: var(--space-sm);
+  padding: var(--space-md);
   border-radius: var(--r);
   border: 1px solid transparent;
   background:
@@ -267,7 +267,7 @@ button.nv {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  gap: 10px;
+  gap: var(--space-sm);
 }
 .sv-slot header b {
   font-family: var(--f-d);
@@ -288,11 +288,11 @@ button.nv {
 }
 .sv-sum {
   display: grid;
-  gap: 7px;
+  gap: var(--space-xs);
 }
 .sv-meds {
   display: flex;
-  gap: 8px;
+  gap: var(--space-sm);
 }
 .sv-facts {
   font-size: 12.5px;
@@ -310,27 +310,27 @@ button.nv {
 }
 .sv-act {
   display: flex;
-  gap: 6px;
+  gap: var(--space-xs);
   flex-wrap: wrap;
   align-items: center;
 }
 .sv-q {
   font-size: 12.5px;
   color: var(--gold-l);
-  margin-right: 4px;
+  margin-right: var(--space-2xs);
 }
 .sv-io {
   display: flex;
-  gap: 8px;
+  gap: var(--space-sm);
   flex-wrap: wrap;
   align-items: center;
-  padding-top: 6px;
+  padding-top: var(--space-xs);
   border-top: 1px solid rgba(212, 175, 106, 0.14);
 }
 
 @media (max-width: 560px) {
   .sv-card {
-    padding: 22px 16px;
+    padding: var(--space-xl) var(--space-lg);
   }
   .sv-prof {
     grid-template-columns: 1fr;
@@ -354,7 +354,7 @@ button.nv {
 }
 @media (max-width: 560px) {
   .sv-k {
-    gap: 6px;
+    gap: var(--space-xs);
   }
   .sv-meds {
     flex-wrap: wrap;

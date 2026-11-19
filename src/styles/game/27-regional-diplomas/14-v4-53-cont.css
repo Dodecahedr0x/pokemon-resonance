@@ -2,13 +2,13 @@
 .board-theme-g {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
+  gap: var(--space-sm);
 }
 .board-theme-b {
   display: grid;
-  gap: 3px;
+  gap: var(--space-3xs);
   justify-items: center;
-  padding: 10px 6px;
+  padding: var(--space-sm) var(--space-xs);
   border-radius: 14px;
   border: 1px solid rgba(255, 255, 255, 0.16);
   background: rgba(255, 255, 255, 0.05);
@@ -91,11 +91,11 @@ body.board-theme-cristal .board {
 /* <style id="resonance-daily-craft"> */
 .dailygift {
   display: flex;
-  gap: 12px;
+  gap: var(--space-md);
   align-items: center;
   width: 100%;
-  margin: 10px 0;
-  padding: 11px 14px;
+  margin: var(--space-sm) 0;
+  padding: var(--space-md) var(--space-md);
   border-radius: 16px;
   border: 1px solid rgba(255, 212, 91, 0.45);
   background: linear-gradient(135deg, rgba(255, 212, 91, 0.16), rgba(20, 50, 70, 0.7));
@@ -136,9 +136,9 @@ body.board-theme-cristal .board {
 }
 .last-batch {
   display: grid;
-  gap: 6px;
+  gap: var(--space-xs);
   justify-items: start;
-  margin: 8px 0 14px;
+  margin: var(--space-sm) 0 var(--space-md);
 }
 .last-batch small {
   color: #b8cddb;
@@ -148,10 +148,10 @@ body.board-theme-cristal .board {
   min-width: 180px;
 }
 .tm-showcase {
-  padding: 12px 14px;
+  padding: var(--space-md) var(--space-md);
   display: grid;
-  gap: 10px;
-  margin-top: 10px;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
 }
 .tm-showcase h3 {
   margin: 0;
@@ -164,7 +164,7 @@ body.board-theme-cristal .board {
 .tm-chip-g {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: var(--space-xs);
 }
 .item-chip {
   width: 34px;
@@ -184,7 +184,7 @@ body.board-theme-cristal .board {
 .tm-chip {
   min-width: 34px;
   height: 26px;
-  padding: 0 6px;
+  padding: 0 var(--space-xs);
   display: grid;
   place-items: center;
   border-radius: 8px;
@@ -210,7 +210,7 @@ body.board-theme-cristal .board {
 }
 .quest-log em {
   display: block;
-  margin-top: 4px;
+  margin-top: var(--space-2xs);
   font-style: normal;
   font-size: 12px;
   color: #9fd8ff;
@@ -220,7 +220,7 @@ body.board-theme-cristal .board {
   height: 6px;
   border-radius: 4px;
   background: rgba(255, 255, 255, 0.12);
-  margin: 6px 0 4px;
+  margin: var(--space-xs) 0 var(--space-2xs);
   overflow: hidden;
 }
 .trophy-room-b u {
@@ -262,15 +262,15 @@ body.board-theme-cristal .board {
 }
 .secret-places-l {
   list-style: none;
-  margin: 8px 0 0;
+  margin: var(--space-sm) 0 0;
   padding: 0;
   display: grid;
-  gap: 6px;
+  gap: var(--space-xs);
 }
 .secret-places-r {
   display: grid;
   gap: 1px;
-  padding: 8px 12px;
+  padding: var(--space-sm) var(--space-md);
   border-radius: 12px;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.12);
@@ -287,8 +287,8 @@ body.board-theme-cristal .board {
 .buddy {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 10px;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
   width: 100%;
   flex-basis: 100%;
 }
@@ -299,20 +299,20 @@ body.board-theme-cristal .board {
   opacity: 0.55;
 }
 .egg-shop .cp-bar {
-  margin-top: 6px;
+  margin-top: var(--space-xs);
 }
 
 /* <style id="resonance-chronicles-ui"> */
 .chronicle-g {
   display: grid;
-  gap: 8px;
-  margin-top: 8px;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
 }
 .chronicle {
   display: grid;
-  gap: 2px;
+  gap: var(--space-3xs);
   text-align: left;
-  padding: 11px 14px;
+  padding: var(--space-md) var(--space-md);
   border-radius: 14px;
   border: 1px solid rgba(255, 212, 91, 0.4);
   background: rgba(255, 255, 255, 0.06);
@@ -337,11 +337,11 @@ body.board-theme-cristal .board {
 .form-picker-g {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
-  margin: 8px 0;
+  gap: var(--space-xs);
+  margin: var(--space-sm) 0;
 }
 .form-picker {
-  padding: 7px 12px;
+  padding: var(--space-xs) var(--space-md);
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.2);
   background: rgba(255, 255, 255, 0.06);
@@ -356,14 +356,14 @@ body.board-theme-cristal .board {
 .form-picker-d {
   font-size: 12px;
   color: #b8cddb;
-  margin: 4px 0;
+  margin: var(--space-2xs) 0;
 }
 
 /* <style id="resonance-talents-ui"> */
 .talent-tree-p {
   display: inline-flex;
-  gap: 4px;
-  margin-left: 8px;
+  gap: var(--space-2xs);
+  margin-left: var(--space-sm);
   vertical-align: middle;
 }
 .talent-tree-p i {
@@ -382,5 +382,5 @@ body.board-theme-cristal .board {
   color: #9fe8ff;
   font-size: 12px;
   font-style: normal;
-  margin-top: 2px;
+  margin-top: var(--space-3xs);
 }

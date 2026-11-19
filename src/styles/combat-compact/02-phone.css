@@ -31,8 +31,8 @@
     flex-direction: column;
     height: calc(100dvh - var(--dock));
     box-sizing: border-box;
-    padding: 6px 6px 10px !important;
-    gap: 6px;
+    padding: var(--space-xs) var(--space-xs) var(--space-sm) !important;
+    gap: var(--space-xs);
     border: 0 !important;
     border-radius: 0 !important;
     box-shadow: none !important;
@@ -42,7 +42,7 @@
     flex: none;
   }
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-top {
-    padding: 6px 8px !important;
+    padding: var(--space-xs) var(--space-sm) !important;
     border-radius: 13px;
     border: 1px solid rgba(255, 255, 255, 0.1) !important;
     background: rgba(9, 11, 16, 0.72) !important;
@@ -88,7 +88,7 @@
   }
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bPlA {
     flex: none;
-    padding: 6px !important;
+    padding: var(--space-xs) !important;
     background: rgba(9, 11, 16, 0.6);
     border-radius: 0 0 14px 14px;
   }
@@ -124,8 +124,8 @@
     height: var(--dock);
     display: flex !important;
     flex-direction: column;
-    gap: 8px !important;
-    padding: 10px 10px 0 !important;
+    gap: var(--space-sm) !important;
+    padding: var(--space-sm) var(--space-sm) 0 !important;
     overflow: hidden !important;
     border-radius: 22px 22px 0 0;
     border: 1px solid transparent;
@@ -154,7 +154,7 @@
     min-height: 0;
     overflow-y: auto;
     overscroll-behavior: contain;
-    padding: 2px 2px 8px !important;
+    padding: var(--space-3xs) var(--space-3xs) var(--space-sm) !important;
     border: 0 !important;
     background: none !important;
     box-shadow: none !important;
@@ -165,8 +165,8 @@
     right: auto !important;
     bottom: auto !important;
     flex: none;
-    margin: 0 -10px !important;
-    padding: 8px 10px calc(10px + env(safe-area-inset-bottom, 0px)) !important;
+    margin: 0 calc(var(--space-sm) * -1) !important;
+    padding: var(--space-sm) var(--space-sm) calc(var(--space-sm) + env(safe-area-inset-bottom, 0px)) !important;
     border-radius: 0 !important;
     border: 0 !important;
     border-top: 1px solid rgba(255, 255, 255, 0.07) !important;
@@ -177,7 +177,7 @@
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bPanel .bp-h {
     grid-template-columns: 40px minmax(0, 1fr) 112px !important;
     align-items: center;
-    gap: 10px !important;
+    gap: var(--space-sm) !important;
     flex: none !important;
   }
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bPanel .bp-h .bp-hp {

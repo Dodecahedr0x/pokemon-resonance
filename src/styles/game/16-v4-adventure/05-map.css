@@ -2,11 +2,11 @@
 .v4-map-wrap {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(300px, 32%);
-  gap: 14px;
+  gap: var(--space-md);
   align-items: start;
 }
 .v4-map {
-  padding: 8px;
+  padding: var(--space-sm);
   overflow: hidden;
 }
 .v4-map-sc {
@@ -53,7 +53,7 @@
   transform: translate(-50%, -50%);
   display: grid;
   justify-items: center;
-  gap: 3px;
+  gap: var(--space-3xs);
   padding: 0;
   border: 0;
   background: none;
@@ -88,7 +88,7 @@
 }
 .mk-n {
   font: 800 11px/1.1 var(--f-d);
-  padding: 3px 7px;
+  padding: var(--space-3xs) var(--space-xs);
   border-radius: 6px;
   background: rgba(4, 18, 38, 0.85);
   border: 1px solid rgba(120, 210, 255, 0.35);
@@ -112,7 +112,7 @@
   left: 50%;
   width: 40px;
   height: 40px;
-  margin-left: -20px;
+  margin-left: calc(var(--space-xl) * -1);
   border-radius: 50%;
   border: 2px solid #ffe17b;
   animation: v4Pulse 1.8s ease-out infinite;
@@ -166,7 +166,7 @@
   position: absolute;
   top: -8px;
   left: -12px;
-  padding: 2px 5px;
+  padding: var(--space-3xs) var(--space-2xs);
   border-radius: 6px;
   background: #ff5fb0;
   color: #fff;
@@ -198,16 +198,16 @@
 }
 .v4-map-side {
   display: grid;
-  gap: 12px;
+  gap: var(--space-md);
 }
 .v4-mapinfo {
-  padding: 14px;
+  padding: var(--space-md);
 }
 .v4-mi-h {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 8px;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
 }
 .v4-mi-h .emb,
 .v4-mi-h .av {
@@ -238,8 +238,8 @@
   color: #ffe17b;
 }
 .v4-mi-q {
-  margin: 6px 0 8px;
-  padding: 8px 10px;
+  margin: var(--space-xs) 0 var(--space-sm);
+  padding: var(--space-sm) var(--space-sm);
   border-left: 3px solid #ffd75e;
   background: rgba(255, 215, 94, 0.06);
   border-radius: 0 8px 8px 0;
@@ -248,16 +248,16 @@
   font-size: 13.5px;
 }
 .v4-mi-d {
-  margin: 6px 0 10px;
+  margin: var(--space-xs) 0 var(--space-sm);
   font-size: 13.5px;
   line-height: 1.5;
   color: var(--v4-tx2);
 }
 .v4-mi-a {
-  margin-top: 12px;
+  margin-top: var(--space-md);
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: var(--space-sm);
 }
 .v4-mi-a .b {
   min-height: 46px;
@@ -265,7 +265,7 @@
 .v4-lock {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-sm);
   margin: 0;
   color: #aab8c8;
   font-size: 13.5px;
@@ -276,13 +276,13 @@
 }
 .v4-elite {
   display: grid;
-  gap: 6px;
+  gap: var(--space-xs);
 }
 .v4-el {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 8px 10px;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-sm);
   border-radius: 11px;
   border: 1px solid rgba(120, 200, 255, 0.22);
   background: rgba(255, 255, 255, 0.04);
@@ -319,10 +319,10 @@
   color: #8ea8c4;
 }
 .v4-maplist {
-  padding: 12px;
+  padding: var(--space-md);
 }
 .v4-lg {
-  margin: 10px 2px 6px;
+  margin: var(--space-sm) var(--space-3xs) var(--space-xs);
   font: 800 11px/1 var(--f-d);
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -331,10 +331,10 @@
 .v4-pl {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--space-sm);
   width: 100%;
-  padding: 7px 8px;
-  margin-bottom: 5px;
+  padding: var(--space-xs) var(--space-sm);
+  margin-bottom: var(--space-2xs);
   border-radius: 10px;
   border: 1px solid transparent;
   background: rgba(255, 255, 255, 0.03);

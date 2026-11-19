@@ -2,7 +2,7 @@
 #accueil.page.on {
   display: grid !important;
   grid-template-columns: minmax(0, 1.12fr) minmax(300px, 0.88fr);
-  gap: 18px !important;
+  gap: var(--space-lg) !important;
   align-items: stretch;
 }
 #accueil .hm-top {
@@ -71,8 +71,8 @@
 #accueil .hh-chips {
   display: flex;
   flex-wrap: wrap;
-  gap: 7px;
-  margin-top: 16px;
+  gap: var(--space-xs);
+  margin-top: var(--space-lg);
 }
 #accueil .hh-chips > * {
   background: rgba(2, 17, 28, 0.62) !important;
@@ -107,14 +107,14 @@
   display: grid !important;
   grid-template-columns: 1fr !important;
   grid-template-rows: repeat(3, minmax(100px, 1fr)) !important;
-  gap: 12px !important;
+  gap: var(--space-md) !important;
   margin: 0 !important;
   align-self: stretch;
 }
 #accueil .qk {
   position: relative;
   min-height: 100px !important;
-  padding: 18px 20px !important;
+  padding: var(--space-lg) var(--space-xl) !important;
   border-radius: 19px !important;
   border: 1px solid rgba(112, 211, 255, 0.27) !important;
   background: linear-gradient(115deg, rgba(13, 47, 65, 0.95), rgba(5, 23, 36, 0.96)) !important;
@@ -175,7 +175,7 @@
   top: 18px;
   left: 20px;
   z-index: 3;
-  padding: 9px 12px;
+  padding: var(--space-sm) var(--space-md);
   border-radius: 9px;
   background: rgba(4, 22, 32, 0.8);
   border: 1px solid rgba(255, 218, 104, 0.42);
@@ -200,11 +200,11 @@
 /* Pokémon selection: card scale, actual sprite focus, readable controls */
 .dex-grid {
   grid-template-columns: repeat(auto-fill, minmax(245px, 1fr)) !important;
-  gap: 16px !important;
+  gap: var(--space-lg) !important;
 }
 .dex {
   min-height: 280px !important;
-  padding: 19px !important;
+  padding: var(--space-xl) !important;
   border-radius: 22px !important;
   background: linear-gradient(
     155deg,
@@ -227,8 +227,8 @@
   min-height: 390px !important;
 }
 .fam-grid .fc-in {
-  padding: 17px !important;
-  gap: 12px !important;
+  padding: var(--space-lg) !important;
+  gap: var(--space-md) !important;
   background:
     linear-gradient(180deg, color-mix(in srgb, var(--c) 25%, #0d2939), #061723 72%) padding-box,
     linear-gradient(140deg, #fff0a5, #8e6c31 25%, #7ce6ff 55%, #244e6b 80%, #f0d59c) border-box !important;
@@ -265,8 +265,8 @@
   border-radius: 15px !important;
   background: rgba(5, 23, 36, 0.78) !important;
   border: 1px solid rgba(112, 211, 255, 0.2) !important;
-  padding: 8px !important;
-  gap: 8px !important;
+  padding: var(--space-sm) !important;
+  gap: var(--space-sm) !important;
 }
 .filters button,
 .seg button {

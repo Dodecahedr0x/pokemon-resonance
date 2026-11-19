@@ -1,9 +1,9 @@
 /* ---------- 9. Shop: counter, vendor, shelves ---------- */
 html:not(#pkz) body:not(#pkz) .pk-mart-ban {
   position: relative;
-  margin: 2px 0 18px;
+  margin: var(--space-3xs) 0 var(--space-lg);
   display: grid;
-  gap: 14px;
+  gap: var(--space-md);
 }
 html:not(#pkz) body:not(#pkz) .pk-front {
   position: relative;
@@ -39,8 +39,8 @@ html:not(#pkz) body:not(#pkz) .pk-front .pk-sign {
   z-index: 3;
   display: flex;
   align-items: center;
-  gap: 7px;
-  padding: 5px 11px 5px 7px;
+  gap: var(--space-xs);
+  padding: var(--space-2xs) var(--space-md) var(--space-2xs) var(--space-xs);
   border-radius: 9px;
   background: linear-gradient(180deg, #3b7fe0, #1d4ea8);
   color: #fff;
@@ -127,8 +127,8 @@ html:not(#pkz) body:not(#pkz) .pk-front .pk-cnt::after {
   box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.25);
 }
 html:not(#pkz) body:not(#pkz) .pk-mart-dlg {
-  padding: 14px 30px 13px 14px !important;
-  margin: 0 4px !important;
+  padding: var(--space-md) var(--space-3xl) var(--space-md) var(--space-md) !important;
+  margin: 0 var(--space-2xs) !important;
 }
 html:not(#pkz) body:not(#pkz) .pk-mart-dlg p {
   margin: 0;
@@ -158,7 +158,7 @@ html:not(#pkz) body:not(#pkz) #sac.pk-mart .v4-items .v4-it {
     inset 0 -6px 0 #7c5226,
     inset 0 -7px 0 #b8834f,
     0 10px 20px -14px rgba(0, 0, 0, 0.8) !important;
-  padding-bottom: 16px !important;
+  padding-bottom: var(--space-lg) !important;
 }
 html:not(#pkz) body:not(#pkz) #sac.pk-mart .v4-items .v4-it .v4-it-im {
   background: radial-gradient(circle at 50% 40%, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.03) 70%) !important;
@@ -168,7 +168,7 @@ html:not(#pkz) body:not(#pkz) #sac.pk-mart .v4-items .v4-it .v4-it-im {
 html:not(#pkz) body:not(#pkz) #sac.pk-mart .v4-items [data-buy] {
   position: relative;
   clip-path: polygon(12px 0, 100% 0, 100% 100%, 12px 100%, 0 50%);
-  padding-left: 18px !important;
+  padding-left: var(--space-lg) !important;
   border-radius: 4px !important;
   background: linear-gradient(180deg, #ffe877, #f5b82a) !important;
   color: #3a2600 !important;
@@ -190,9 +190,9 @@ html:not(#pkz) body:not(#pkz) #sac.pk-mart .v4-items [data-buy]::before {
 html:not(#pkz) body:not(#pkz) .pk-bag-ban {
   display: flex;
   align-items: center;
-  gap: 14px;
-  margin: 2px 0 16px;
-  padding: 12px 16px;
+  gap: var(--space-md);
+  margin: var(--space-3xs) 0 var(--space-lg);
+  padding: var(--space-md) var(--space-lg);
   border-radius: 18px;
   background:
     radial-gradient(120% 100% at 0% 50%, rgba(240, 167, 58, 0.22), transparent 60%),
@@ -217,7 +217,7 @@ html:not(#pkz) body:not(#pkz) .pk-bag-ban b {
 }
 html:not(#pkz) body:not(#pkz) .pk-bag-ban em {
   display: block;
-  margin-top: 3px;
+  margin-top: var(--space-3xs);
   font: 600 12.5px/1.35 var(--f-b);
   font-style: normal;
   color: #d9b48a;
@@ -242,7 +242,7 @@ html:not(#pkz) body:not(#pkz) #sac.pk-bag .v4-cats {
     0 0 0 2px #1d120a !important;
   outline: 1.5px dashed rgba(255, 214, 150, 0.45);
   outline-offset: -5px;
-  padding: 7px !important;
+  padding: var(--space-xs) !important;
 }
 html:not(#pkz) body:not(#pkz) #sac.pk-bag .v4-cats > button {
   border-radius: 12px 12px 8px 8px !important;

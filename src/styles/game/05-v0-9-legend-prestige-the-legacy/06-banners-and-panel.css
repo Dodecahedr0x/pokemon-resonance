@@ -43,7 +43,7 @@
 .bp-tal {
   font-size: 13px;
   color: var(--tx2);
-  padding: 8px 12px;
+  padding: var(--space-sm) var(--space-md);
   border-left: 2px solid var(--gold);
   background: linear-gradient(90deg, rgba(212, 175, 106, 0.08), transparent);
 }
@@ -155,9 +155,9 @@
 .res-bdg {
   display: grid;
   grid-template-columns: 72px minmax(0, 1fr);
-  gap: 14px;
+  gap: var(--space-md);
   align-items: center;
-  padding: 12px 14px;
+  padding: var(--space-md) var(--space-md);
   border-radius: 8px;
   border: 1px solid transparent;
   background:
@@ -206,7 +206,7 @@
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--mut);
-  margin-top: 3px;
+  margin-top: var(--space-3xs);
 }
 /* ---------- League: badge box ---------- */
 .case {
@@ -266,18 +266,18 @@
 .ar-d {
   font-size: 14px;
   color: var(--tx2);
-  margin-top: 10px;
+  margin-top: var(--space-sm);
 }
 .ar-foes {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 14px;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
 }
 .ar-foes span {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
+  gap: var(--space-xs);
   font-size: 12px;
   color: var(--tx2);
 }
@@ -286,11 +286,11 @@
 }
 .arena dl {
   display: grid;
-  gap: 12px;
+  gap: var(--space-md);
   margin: 0;
 }
 .ar-go {
-  padding-top: 4px;
+  padding-top: var(--space-2xs);
 }
 .ar-go .b {
   width: 100%;

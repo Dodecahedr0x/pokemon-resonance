@@ -33,15 +33,15 @@ body {
 }
 .page .ph {
   position: relative;
-  padding: 8px 0 20px;
-  margin-bottom: 26px;
+  padding: var(--space-sm) 0 var(--space-xl);
+  margin-bottom: var(--space-2xl);
 }
 .page .ph:after {
   content: '';
   display: block;
   width: 110px;
   height: 2px;
-  margin-top: 20px;
+  margin-top: var(--space-xl);
   background: linear-gradient(90deg, var(--r22-cyan), transparent);
   box-shadow: 0 0 18px rgba(113, 228, 237, 0.35);
 }
@@ -82,7 +82,7 @@ body {
   mask-image: linear-gradient(#000, transparent);
 }
 #accueil .v4-home {
-  gap: 22px !important;
+  gap: var(--space-xl) !important;
 }
 #accueil .v4-hero {
   position: relative !important;
@@ -139,7 +139,7 @@ body {
   border-radius: 20px !important;
 }
 #accueil .v4-team {
-  padding: 20px !important;
+  padding: var(--space-xl) !important;
 }
 #accueil .v4-ph {
   color: #eaf7fa !important;
@@ -162,7 +162,7 @@ body {
   filter: drop-shadow(0 9px 9px rgba(0, 0, 0, 0.45));
 }
 #accueil .v4-tiles {
-  gap: 14px !important;
+  gap: var(--space-md) !important;
 }
 #accueil .v4-tile {
   border-radius: 19px !important;
@@ -182,7 +182,7 @@ body {
   text-shadow: 0 3px 16px #000;
 }
 #accueil .v4-bottom {
-  gap: 16px !important;
+  gap: var(--space-lg) !important;
 }
 /* MAP — regional atlas, cartographic panel */
 #carte .v4-ph-page {
@@ -190,9 +190,9 @@ body {
 }
 #carte .v4-reg {
   display: flex;
-  gap: 8px;
-  margin: 18px 0 24px;
-  padding: 6px;
+  gap: var(--space-sm);
+  margin: var(--space-lg) 0 var(--space-2xl);
+  padding: var(--space-xs);
   width: max-content;
   max-width: 100%;
   border: 1px solid rgba(125, 206, 220, 0.2);
@@ -202,7 +202,7 @@ body {
 }
 #carte .v4-reg button {
   border-radius: 10px !important;
-  padding: 11px 22px !important;
+  padding: var(--space-md) var(--space-xl) !important;
   color: #9bb4c1 !important;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -217,7 +217,7 @@ body {
     inset 0 1px rgba(255, 255, 255, 0.18);
 }
 #carte .v4-map-wrap {
-  gap: 18px !important;
+  gap: var(--space-lg) !important;
   align-items: stretch;
 }
 #carte .v4-map {
@@ -260,8 +260,8 @@ body {
   box-shadow: 0 18px 42px rgba(0, 0, 0, 0.27) !important;
 }
 #carte .v4-wild {
-  margin-top: 24px;
-  padding: 18px;
+  margin-top: var(--space-2xl);
+  padding: var(--space-lg);
   border-radius: 22px;
   border: 1px solid rgba(123, 208, 222, 0.18);
   background: linear-gradient(110deg, rgba(20, 59, 55, 0.45), rgba(8, 25, 32, 0.8));
@@ -271,7 +271,7 @@ body {
 }
 /* TEAM / POKÉDEX — collector's-Pokédex-style selection screen */
 #pokedex .v4-dex {
-  gap: 18px !important;
+  gap: var(--space-lg) !important;
   align-items: stretch;
 }
 #pokedex .v4-dexcard {
@@ -314,7 +314,7 @@ body {
   border: 1px solid rgba(148, 212, 223, 0.16) !important;
   border-radius: 17px !important;
   background: rgba(4, 18, 28, 0.48) !important;
-  padding: 18px !important;
+  padding: var(--space-lg) !important;
 }
 #pokedex .v4d-sec h3 {
   color: #9fe7e9 !important;
@@ -324,7 +324,7 @@ body {
 }
 #pokedex .v4d-fam {
   border-top: 1px solid rgba(148, 212, 223, 0.17) !important;
-  padding: 18px !important;
+  padding: var(--space-lg) !important;
 }
 #pokedex .v4d-f {
   border: 1px solid rgba(148, 212, 223, 0.17) !important;

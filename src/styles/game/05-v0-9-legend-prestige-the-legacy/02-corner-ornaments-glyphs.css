@@ -20,7 +20,7 @@
 }
 .sec-h {
   position: relative;
-  padding-bottom: 16px;
+  padding-bottom: var(--space-lg);
   border-bottom: 1px solid transparent;
   border-image: linear-gradient(90deg, rgba(212, 175, 106, 0.4), rgba(212, 175, 106, 0.05) 60%, transparent) 1;
 }
@@ -28,7 +28,7 @@
 /* ---------- buttons: brushed brass, smoked glass, cut corners ---------- */
 .b {
   height: 44px;
-  padding: 0 20px;
+  padding: 0 var(--space-xl);
   border-radius: 3px;
   font-family: var(--f-b);
   font-weight: 600;
@@ -61,14 +61,14 @@
 }
 .b-sm {
   height: 34px;
-  padding: 0 13px;
+  padding: 0 var(--space-md);
   font-size: 11px;
   letter-spacing: 0.12em;
   clip-path: polygon(7px 0, 100% 0, 100% calc(100% - 7px), calc(100% - 7px) 100%, 0 100%, 0 7px);
 }
 .b-lg {
   height: 52px;
-  padding: 0 28px;
+  padding: 0 var(--space-2xl);
   font-size: 13px;
 }
 .b-gold {
@@ -167,8 +167,8 @@
 /* ---------- type seals ---------- */
 .tb {
   height: 22px;
-  padding: 0 9px 0 3px;
-  gap: 7px;
+  padding: 0 var(--space-sm) 0 var(--space-3xs);
+  gap: var(--space-xs);
   border-radius: 2px;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(0, 0, 0, 0.25)), #0e0f12;
   border: 1px solid color-mix(in srgb, var(--c) 55%, transparent);
@@ -186,7 +186,7 @@
   flex: none;
   width: 13px;
   height: 13px;
-  margin: 0 1px 0 2px;
+  margin: 0 1px 0 var(--space-3xs);
   transform: rotate(45deg);
   background: var(--c);
   box-shadow:

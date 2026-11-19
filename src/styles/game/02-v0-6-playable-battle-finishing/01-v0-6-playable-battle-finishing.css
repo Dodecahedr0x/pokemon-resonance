@@ -23,7 +23,7 @@
 }
 .b-lg {
   height: 52px;
-  padding: 0 26px;
+  padding: 0 var(--space-2xl);
   font-size: 15.5px;
 }
 .b-ghost {
@@ -35,14 +35,14 @@
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--mut);
-  margin-bottom: 12px;
+  margin-bottom: var(--space-md);
 }
 
 /* preparation */
 .prep {
   display: grid;
   grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
-  gap: 16px;
+  gap: var(--space-lg);
   align-items: start;
 }
 @media (max-width: 940px) {
@@ -54,9 +54,9 @@
 .scn {
   position: relative;
   display: grid;
-  gap: 8px;
+  gap: var(--space-sm);
   text-align: left;
-  padding: 18px 20px;
+  padding: var(--space-lg) var(--space-xl);
   border-radius: 18px;
   border: 1px solid var(--line);
   background: linear-gradient(180deg, var(--s2), var(--s1));
@@ -100,9 +100,9 @@
 .scn .foes {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: var(--space-2xs);
   flex-wrap: wrap;
-  margin-top: 2px;
+  margin-top: var(--space-3xs);
 }
 .scn .foes .medal {
   width: 26px;
@@ -113,12 +113,12 @@
   font-style: normal;
   font-size: 11.5px;
   color: var(--mut);
-  margin-left: 6px;
+  margin-left: var(--space-xs);
 }
 .pt {
-  padding: 18px;
+  padding: var(--space-lg);
   display: grid;
-  gap: 12px;
+  gap: var(--space-md);
 }
 .pt-h {
   display: flex;
@@ -135,14 +135,14 @@
 }
 .pt-list {
   display: grid;
-  gap: 7px;
+  gap: var(--space-xs);
 }
 .ptm {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
-  gap: 12px;
+  gap: var(--space-md);
   align-items: center;
-  padding: 10px 12px;
+  padding: var(--space-sm) var(--space-md);
   border-radius: 14px;
   border: 1px solid var(--line);
   background: var(--s1);
@@ -185,9 +185,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: var(--space-md);
   flex-wrap: wrap;
-  padding-top: 6px;
+  padding-top: var(--space-xs);
 }
 .pt-go span {
   font-size: 12.5px;
@@ -196,8 +196,8 @@
 .howto {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 10px;
-  margin-top: 16px;
+  gap: var(--space-sm);
+  margin-top: var(--space-lg);
 }
 @media (max-width: 860px) {
   .howto {
@@ -206,9 +206,9 @@
 }
 .howto > div {
   display: grid;
-  gap: 6px;
+  gap: var(--space-xs);
   align-content: start;
-  padding: 16px;
+  padding: var(--space-lg);
   border-radius: 14px;
   border: 1px solid var(--line);
   background: rgba(255, 255, 255, 0.02);

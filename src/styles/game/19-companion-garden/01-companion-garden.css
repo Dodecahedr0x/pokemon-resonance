@@ -2,7 +2,7 @@
 /* ==== v4.17: companions and Resonance ==== */
 /* --- Resonant Form --- */
 html body .fres-b {
-  margin-top: 8px;
+  margin-top: var(--space-sm);
   border-color: rgba(201, 166, 255, 0.55) !important;
 }
 html body .fres-b:not([disabled]) {
@@ -59,12 +59,12 @@ html body #bSvg .tok.fres .tok-rim {
 
 /* --- companion --- */
 html body .v4-comp {
-  margin: 14px 0;
-  padding: 12px 14px;
+  margin: var(--space-md) 0;
+  padding: var(--space-md) var(--space-md);
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 12px;
+  gap: var(--space-md);
   border-color: color-mix(in srgb, var(--c, #ffd75e) 55%, transparent);
 }
 html body .cp-art {
@@ -108,7 +108,7 @@ html body .cp-t {
   flex: 1;
   min-width: 170px;
   display: grid;
-  gap: 3px;
+  gap: var(--space-3xs);
 }
 html body .cp-t small {
   font: 800 11px/1 var(--f-d, inherit);
@@ -131,7 +131,7 @@ html body .cp-t em.cp-bn {
 html body .cp-h i {
   font-style: normal;
   color: rgba(255, 255, 255, 0.2);
-  margin-right: 2px;
+  margin-right: var(--space-3xs);
   font-size: 15px;
 }
 html body .cp-h i.on,
@@ -152,19 +152,19 @@ html body .cp-bar i {
 }
 html body .cp-a {
   display: flex;
-  gap: 6px;
+  gap: var(--space-xs);
   flex-wrap: wrap;
 }
 html body .cp-vide {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--space-sm);
   width: 100%;
 }
 html body .cp-vide > span:nth-child(2) {
   flex: 1;
   display: grid;
-  gap: 2px;
+  gap: var(--space-3xs);
 }
 html body .cp-vide em {
   font-style: normal;
@@ -187,8 +187,8 @@ html body .cp-ic svg {
 }
 html body .cp-bl {
   display: grid;
-  gap: 4px;
-  margin-top: 12px;
+  gap: var(--space-2xs);
+  margin-top: var(--space-md);
   font-size: 13px;
 }
 html body .cp-bl span {
@@ -197,8 +197,8 @@ html body .cp-bl span {
 
 /* --- Pokégear --- */
 html body .v4-radio {
-  margin: 14px 0;
-  padding: 12px 14px;
+  margin: var(--space-md) 0;
+  padding: var(--space-md) var(--space-md);
 }
 html body .v4-radio .v4-ph svg {
   width: 20px;
@@ -206,16 +206,16 @@ html body .v4-radio .v4-ph svg {
 }
 html body .rd-l {
   list-style: none;
-  margin: 8px 0 0;
+  margin: var(--space-sm) 0 0;
   padding: 0;
   display: grid;
-  gap: 6px;
+  gap: var(--space-xs);
 }
 html body .rd-i {
   width: 100%;
   display: grid;
-  gap: 2px;
-  padding: 8px 10px;
+  gap: var(--space-3xs);
+  padding: var(--space-sm) var(--space-sm);
   border-radius: 10px;
   border: 1px solid rgba(120, 200, 255, 0.12);
   border-left: 3px solid #7fd4ff;
@@ -247,7 +247,7 @@ html body .story-scene {
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  padding: 16px 16px calc(84px + env(safe-area-inset-bottom, 0px));
+  padding: var(--space-lg) var(--space-lg) calc(84px + env(safe-area-inset-bottom, 0px));
   background: linear-gradient(180deg, rgba(4, 10, 24, 0.35), rgba(4, 10, 24, 0.85));
 }
 html body .story-scene[hidden] {
@@ -255,7 +255,7 @@ html body .story-scene[hidden] {
 }
 html body .sc-card {
   width: min(560px, 100%);
-  padding: 16px;
+  padding: var(--space-lg);
   border-radius: 18px;
   background: linear-gradient(180deg, #13284a, #0b1830);
   border: 1px solid rgba(255, 215, 94, 0.5);
@@ -271,22 +271,22 @@ html body .sc-card {
 html body .sc-who {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 8px;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
 }
 html body .sc-who b {
   color: #ffd75e;
   font-size: 16px;
 }
 html body .sc-tx {
-  margin: 0 0 12px;
+  margin: 0 0 var(--space-md);
   font-size: 16px;
   line-height: 1.5;
 }
 html body .sc-a {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-sm);
 }
 html body .sc-a .sc-n {
   margin-left: auto;

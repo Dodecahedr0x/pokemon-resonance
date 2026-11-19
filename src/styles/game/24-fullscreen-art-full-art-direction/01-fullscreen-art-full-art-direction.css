@@ -55,7 +55,7 @@ body:before {
 }
 .page .ph,
 .page .ph-sm {
-  margin-bottom: 24px;
+  margin-bottom: var(--space-2xl);
 }
 .page .kick,
 .page .v4-kick {
@@ -100,10 +100,10 @@ a:focus-visible {
 }
 /* HOME: dramatic expedition command centre */
 #accueil {
-  gap: 18px;
+  gap: var(--space-lg);
 }
 #accueil .hm-top {
-  gap: 18px;
+  gap: var(--space-lg);
 }
 #accueil .hm-hero {
   min-height: clamp(300px, 34vw, 430px) !important;
@@ -186,10 +186,10 @@ a:focus-visible {
   background:
     radial-gradient(ellipse at 100% 0%, rgba(245, 206, 120, 0.14), transparent 42%),
     linear-gradient(150deg, #142d3d, #091824) !important;
-  padding: 22px !important;
+  padding: var(--space-xl) !important;
 }
 #accueil .hm-quick {
-  gap: 12px !important;
+  gap: var(--space-md) !important;
 }
 #accueil .hm-quick .qk {
   position: relative;
@@ -232,7 +232,7 @@ a:focus-visible {
     0 8px 20px rgba(0, 0, 0, 0.25);
 }
 #accueil .route {
-  margin-top: 22px !important;
+  margin-top: var(--space-xl) !important;
   border-radius: 25px !important;
   border: 1px solid rgba(123, 213, 223, 0.34) !important;
   box-shadow:
@@ -259,22 +259,22 @@ a:focus-visible {
 }
 /* TEAM: make the roster feel like a collector's battle dossier */
 #pokedex .ph {
-  padding-bottom: 18px;
+  padding-bottom: var(--space-lg);
 }
 #pokedex .dock {
   border-radius: 22px !important;
   background: linear-gradient(115deg, #15394b, #0a1c2a) !important;
-  padding: 14px !important;
+  padding: var(--space-md) !important;
 }
 #pokedex .dexbar {
-  padding: 14px !important;
+  padding: var(--space-md) !important;
   border: 1px solid var(--rx-edge) !important;
   border-radius: 18px !important;
   background: rgba(8, 25, 38, 0.82) !important;
   box-shadow: 0 16px 36px rgba(0, 0, 0, 0.22) !important;
 }
 #pokedex .fam-grid {
-  gap: 18px !important;
+  gap: var(--space-lg) !important;
   perspective: 1400px;
 }
 #pokedex .fcard {
@@ -311,15 +311,15 @@ a:focus-visible {
   border: 1px solid var(--rx-edge) !important;
   border-radius: 20px !important;
   background: linear-gradient(145deg, #122d3e, #081824) !important;
-  padding: 14px !important;
+  padding: var(--space-md) !important;
 }
 /* DEX page — correct dynamic page id */
 #dex .v4-dex {
   grid-template-columns: minmax(0, 1fr) minmax(285px, 34%) !important;
-  gap: 18px !important;
+  gap: var(--space-lg) !important;
 }
 #dex .v4-dexcard {
-  padding: 18px !important;
+  padding: var(--space-lg) !important;
   border: 1px solid rgba(127, 213, 224, 0.34) !important;
   border-radius: 27px !important;
   background:
@@ -341,7 +341,7 @@ a:focus-visible {
   filter: drop-shadow(0 22px 20px rgba(0, 0, 0, 0.48)) !important;
 }
 #dex .v4d-info {
-  padding: 10px 6px;
+  padding: var(--space-sm) var(--space-xs);
 }
 #dex .v4d-n {
   font-size: clamp(34px, 4vw, 52px) !important;

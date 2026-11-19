@@ -2,7 +2,7 @@
 .ana-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
+  gap: var(--space-md);
 }
 @media (max-width: 1100px) {
   .ana-grid {
@@ -16,9 +16,9 @@
 }
 .ac {
   display: grid;
-  gap: 14px;
+  gap: var(--space-md);
   align-content: start;
-  padding: 20px;
+  padding: var(--space-xl);
   border-radius: var(--r);
   background: linear-gradient(180deg, var(--s2), var(--s1));
   border: 1px solid var(--line);
@@ -33,7 +33,7 @@
   color: var(--mut);
   display: flex;
   justify-content: space-between;
-  gap: 8px;
+  gap: var(--space-sm);
   flex-wrap: wrap;
 }
 .ac h4 span {
@@ -42,7 +42,7 @@
 .score {
   display: grid;
   grid-template-columns: 118px minmax(0, 1fr);
-  gap: 18px;
+  gap: var(--space-lg);
   align-items: center;
 }
 .score svg {
@@ -78,15 +78,15 @@
 }
 .brk {
   display: grid;
-  gap: 8px;
+  gap: var(--space-sm);
   font-size: 13px;
   color: var(--tx2);
 }
 .brk div {
   display: flex;
   justify-content: space-between;
-  gap: 8px;
-  padding-bottom: 8px;
+  gap: var(--space-sm);
+  padding-bottom: var(--space-sm);
   border-bottom: 1px solid var(--line);
 }
 .brk div:last-child {
@@ -136,13 +136,13 @@
   margin: 0;
   padding: 0;
   display: grid;
-  gap: 8px;
+  gap: var(--space-sm);
 }
 .rxl li {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
+  gap: var(--space-sm);
   flex-wrap: wrap;
 }
 .rxl .by {
@@ -158,12 +158,12 @@
   margin: 0;
   padding: 0;
   display: grid;
-  gap: 10px;
+  gap: var(--space-sm);
 }
 .alerts li {
   display: grid;
   grid-template-columns: 18px minmax(0, 1fr);
-  gap: 10px;
+  gap: var(--space-sm);
   font-size: 13.5px;
   color: var(--tx2);
   line-height: 1.45;
@@ -188,7 +188,7 @@
 .presets {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: var(--space-sm);
 }
 
 /* ---------- hexagonal board ---------- */

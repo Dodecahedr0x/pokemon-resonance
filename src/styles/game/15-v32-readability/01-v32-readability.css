@@ -31,7 +31,7 @@ html body #accueil .hm-hero::after {
   background: rgba(4, 20, 34, 0.72) !important;
   border: 1px solid rgba(123, 221, 255, 0.28) !important;
   border-radius: 999px !important;
-  padding: 8px 13px !important;
+  padding: var(--space-sm) var(--space-md) !important;
 }
 html body #accueil .route::before {
   right: auto !important;
@@ -179,13 +179,13 @@ html body #resonance-launch .rl-meta strong {
     transform: translateX(-50%) !important;
     font-size: 10px !important;
     letter-spacing: 0.16em !important;
-    padding: 7px 12px !important;
+    padding: var(--space-xs) var(--space-md) !important;
   }
   /* the medallion goes above the title instead of covering it */
 
   /* Route 29: the label no longer hides the Morning / Day / Night buttons */
   html body #accueil .rt-top {
-    margin-top: 44px !important;
+    margin-top: var(--space-4xl) !important;
   }
   /* Battles: "Prochaine étape" (Next step) becomes a tab placed on the card,
      the battle name gets the whole line back */
@@ -194,11 +194,11 @@ html body #resonance-launch .rl-meta strong {
     top: -9px !important;
     right: 12px !important;
     z-index: 2 !important;
-    padding: 3px 9px !important;
+    padding: var(--space-3xs) var(--space-sm) !important;
     letter-spacing: 0.12em !important;
   }
   html body #combat .srw:has(.pill.nx) {
-    margin-top: 8px !important;
+    margin-top: var(--space-sm) !important;
   }
   /* board: readable Pokémon names and markers */
   html body #bSvg .tok-nm {

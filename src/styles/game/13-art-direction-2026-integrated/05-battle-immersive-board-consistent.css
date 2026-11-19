@@ -31,15 +31,15 @@
 #combat .bt-top {
   background: linear-gradient(90deg, rgba(11, 49, 71, 0.96), rgba(4, 22, 38, 0.96)) !important;
   border-bottom: 1px solid rgba(108, 216, 248, 0.2) !important;
-  padding: 16px 18px !important;
+  padding: var(--space-lg) var(--space-lg) !important;
 }
 #combat .bt-top b#bScen {
   color: #ffe478 !important;
   letter-spacing: 0.08em !important;
 }
 #combat .board {
-  margin: 12px !important;
-  padding: 10px !important;
+  margin: var(--space-md) !important;
+  padding: var(--space-sm) !important;
   min-height: 320px !important;
   border: 1px solid rgba(112, 222, 255, 0.38) !important;
   border-radius: 18px !important;
@@ -75,8 +75,8 @@
 }
 /* Guide, types and league: same graphic universe on all screens */
 #types .gd-tabs {
-  padding: 6px !important;
-  gap: 6px !important;
+  padding: var(--space-xs) !important;
+  gap: var(--space-xs) !important;
   background: rgba(3, 18, 31, 0.75) !important;
   border: 1px solid rgba(108, 216, 248, 0.2) !important;
   border-radius: 16px !important;
@@ -144,8 +144,8 @@
     grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
   }
   #accueil .qk {
-    padding: 14px !important;
-    gap: 9px !important;
+    padding: var(--space-md) !important;
+    gap: var(--space-sm) !important;
     min-height: 100px !important;
   }
   #accueil .route {
@@ -164,7 +164,7 @@
   }
   #pokedex .fam-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 9px !important;
+    gap: var(--space-sm) !important;
   }
   #pokedex .fc-art {
     height: 140px !important;
@@ -174,7 +174,7 @@
     height: clamp(105px, 35vw, 145px) !important;
   }
   #combat .board {
-    margin: 7px !important;
+    margin: var(--space-xs) !important;
     min-height: 220px !important;
   }
   #types .gd-tabs {
@@ -198,7 +198,7 @@
 #accueil .hm-top {
   display: grid !important;
   grid-template-columns: minmax(0, 1fr) minmax(270px, 31%) !important;
-  gap: 16px !important;
+  gap: var(--space-lg) !important;
   align-items: stretch !important;
 }
 #accueil .hm-hero {
@@ -215,7 +215,7 @@
 #accueil .hm-quick,
 #accueil .route {
   width: 100% !important;
-  margin-top: 18px !important;
+  margin-top: var(--space-lg) !important;
 }
 #accueil .hm-quick {
   display: grid !important;
