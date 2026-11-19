@@ -1,9 +1,9 @@
 import { Html } from '../../lib/html.jsx';
 import { useEngineReady } from '../../engineReady.js';
 import { useHomeVersion } from './homeStore.js';
-import { tc } from '../../engine/014-utils.js';
-import { squad } from '../../engine/020-team-cards.js';
-import { S2n, emblem, goalInfo } from '../../engine/031-home-journey.js';
+import { tc } from '../../engine/core/utils.js';
+import { squad } from '../../engine/team/team.js';
+import { S2n, emblem, goalInfo } from '../../engine/world/home-journey.js';
 
 // "Prochaine étape" (Next step) in the sidebar (#sideGoal, formerly renderSideGoal): mirrors
 // the Home objective. The click (data-goal / data-go) is still handled by the engine.

@@ -1,10 +1,10 @@
 import { Html } from '../../lib/html.jsx';
-import { BY, SCEN } from '../../engine/009-pokemon.js';
-import { PROFILE } from '../../engine/011-game-state.js';
-import { medal, tc } from '../../engine/014-utils.js';
-import { ELITE, scenLock } from '../../engine/022-items-bonds-ai.js';
-import { CHAMP_L, ELITE_L } from '../../engine/030-prestige-staging.js';
-import { wonOf } from '../../engine/031-home-journey.js';
+import { BY, SCEN } from '../../engine/pokemon/pokemon.js';
+import { PROFILE } from '../../engine/state/game-state.js';
+import { medal, tc } from '../../engine/core/utils.js';
+import { ELITE, scenLock } from '../../engine/combat/items-bonds-ai.js';
+import { CHAMP_L, ELITE_L } from '../../engine/progression/prestige.js';
+import { wonOf } from '../../engine/world/home-journey.js';
 
 // Elite 4 and Champion (#eliteCase): trainer name (v4.20) and best rank (v4.24).
 export default function EliteCell() {

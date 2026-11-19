@@ -1,7 +1,7 @@
-import { BY } from '../../../engine/009-pokemon.js';
-import { medal } from '../../../engine/014-utils.js';
-import { today } from '../../../engine/032-v4-foundation.js';
-import { PUZZLES, puzzleOfDay, puzzleState } from '../../../engine/066-tactical-challenges.js';
+import { BY } from '../../../engine/pokemon/pokemon.js';
+import { medal } from '../../../engine/core/utils.js';
+import { today } from '../../../engine/state/economy.js';
+import { PUZZLES, puzzleOfDay, puzzleState } from '../../../engine/modes/tactical-challenges.js';
 import { Html } from '../../../lib/html.jsx';
 
 function Stars({ n }) {

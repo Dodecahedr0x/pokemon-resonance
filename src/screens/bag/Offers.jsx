@@ -1,7 +1,7 @@
-import { ITEMS2 } from '../../engine/011-game-state.js';
-import { HELD_IMG, ITM, SHOP, fmt } from '../../engine/032-v4-foundation.js';
-import { costOf0 } from '../../engine/049-identity.js';
-import { HELD_SHOP, dailyOffers, dailyDiscount } from '../../engine/053-resonance.js';
+import { ITEMS2 } from '../../engine/state/game-state.js';
+import { HELD_IMG, ITM, SHOP, fmt } from '../../engine/state/economy.js';
+import { costOf0 } from '../../engine/team/identity.js';
+import { HELD_SHOP, dailyOffers, dailyDiscount } from '../../engine/combat/resonance.js';
 import { Disc } from './Items.jsx';
 
 // Daily offers (v4.14): −30% until midnight; data-offre opens the category (engine).

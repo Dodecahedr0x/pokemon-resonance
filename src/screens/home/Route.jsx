@@ -1,5 +1,5 @@
 import { memo, useEffect } from 'react';
-import { placeAlert } from '../../engine/017-home-route.js';
+import { placeAlert } from '../../engine/world/home-route.js';
 import { useRoute } from './homeStore.js';
 
 // Route 29 (#route), mounted under the map (Map page, .v4-route-slot): tall grass backdrop, « ! » alert, time of day.

@@ -1,8 +1,8 @@
 import { useEngineReady } from '../../engineReady.js';
-import { TYPES, ROLES } from '../../engine/004-data.js';
-import { RECRUIT } from '../../engine/010-in-battle-evolution.js';
-import { ROLEFX } from '../../engine/012-recruits-roles-synergies.js';
-import { filt, gen, visible } from '../../engine/020-team-cards.js';
+import { TYPES, ROLES } from '../../engine/data/game-data.js';
+import { RECRUIT } from '../../engine/pokemon/evolution.js';
+import { ROLEFX } from '../../engine/pokemon/roles-synergies.js';
+import { filt, gen, visible } from '../../engine/team/team.js';
 import { useRosterKey } from './teamStore.js';
 import { analysis } from './analysis.js';
 import { Dock } from './Dock.jsx';
@@ -11,7 +11,7 @@ import Grid from './Grid.jsx';
 import Analysis from './Analysis.jsx';
 import Tip from '../../components/Tip.jsx';
 
-// "My team" screen (#pokedex). The logic stays in the engine (020-team-cards.js):
+// "My team" screen (#pokedex). The logic stays in the engine (team/team.js):
 // renderGrid, renderFilters, renderTeam increment the versions of teamStore.js.
 // The #dexQ, #dexType, #dexRole fields are uncontrolled: the engine listens to them and re-reads them,
 // they are never remounted (focus stays in the search while typing).

@@ -1,4 +1,4 @@
-import { GIMMICKS, gimmickKey } from '../../../engine/098-feats-journal-gimmick-boards.js';
+import { GIMMICKS, gimmickKey } from '../../../engine/modes/feats-gimmicks.js';
 
 // Gimmick boards (v4.67): a terrain rule added to battles.
 // Buttons handled by the engine (delegated click on data-gimmick-board).

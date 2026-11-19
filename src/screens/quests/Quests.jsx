@@ -1,12 +1,12 @@
 import { useEngineReady } from '../../engineReady.js';
 import { useQuestsVersion } from './questsStore.js';
 import { Html } from '../../lib/html.jsx';
-import { GYMS } from '../../engine/004-data.js';
-import { PROFILE } from '../../engine/011-game-state.js';
-import { BADGES } from '../../engine/013-gyms.js';
-import { badgeSvg } from '../../engine/019-league.js';
-import { V4, trophies } from '../../engine/032-v4-foundation.js';
-import { SQ } from '../../engine/039-quests-shop.js';
+import { GYMS } from '../../engine/data/game-data.js';
+import { PROFILE } from '../../engine/state/game-state.js';
+import { BADGES } from '../../engine/modes/gyms.js';
+import { badgeSvg } from '../../engine/modes/league.js';
+import { V4, trophies } from '../../engine/state/economy.js';
+import { SQ } from '../../engine/progression/quests-shop.js';
 import MainQuest from './MainQuest.jsx';
 import SideQuests from './SideQuests.jsx';
 import Event from './Event.jsx';

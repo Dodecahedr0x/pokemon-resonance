@@ -1,7 +1,7 @@
-import { PROFILE } from '../../../engine/011-game-state.js';
-import { SCENES } from '../../../engine/057-companions-resonance.js';
-import { badgeTotal } from '../../../engine/090-item-quests-trophies.js';
-import { CHAPTERS, CHAPTER_NAMES, chapterState } from '../../../engine/093-chronicles-chapters.js';
+import { PROFILE } from '../../../engine/state/game-state.js';
+import { SCENES } from '../../../engine/progression/companions.js';
+import { badgeTotal } from '../../../engine/progression/item-quests.js';
+import { CHAPTERS, CHAPTER_NAMES, chapterState } from '../../../engine/progression/chronicles.js';
 
 // Chronicles (v4.62): chapters unlocked by badges, then scenes already seen.
 // Buttons handled by the engine (delegated click on data-chronicle).

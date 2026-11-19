@@ -1,12 +1,12 @@
 import { Html } from '../../../lib/html.jsx';
 import { strength } from '../../../lib/power.js';
-import { RX } from '../../../engine/004-data.js';
-import { MV, SHAPE, TAL } from '../../../engine/005-moves.js';
-import { BY, SCEN } from '../../../engine/009-pokemon.js';
-import { ARR } from '../../../engine/010-in-battle-evolution.js';
-import { ROLEFX, rIco } from '../../../engine/012-recruits-roles-synergies.js';
-import { veiled } from '../../../engine/013-gyms.js';
-import { markOf, medal, rxCat, tb, tc } from '../../../engine/014-utils.js';
+import { RX } from '../../../engine/data/game-data.js';
+import { MV, SHAPE, TAL } from '../../../engine/data/moves.js';
+import { BY, SCEN } from '../../../engine/pokemon/pokemon.js';
+import { ARR } from '../../../engine/pokemon/evolution.js';
+import { ROLEFX, rIco } from '../../../engine/pokemon/roles-synergies.js';
+import { veiled } from '../../../engine/modes/gyms.js';
+import { markOf, medal, rxCat, tb, tc } from '../../../engine/core/utils.js';
 import {
   EMAX,
   byUid,
@@ -20,11 +20,11 @@ import {
   mvType,
   targets,
   uAt,
-} from '../../../engine/021-combat-engine.js';
-import { roleOf } from '../../../engine/023-roles-synergies-obstacles.js';
-import { B, enPips, segHp, ui } from '../../../engine/024-combat-ui.js';
-import { PREF, catchBlock, duoBlock, tileCard, unitExtras } from '../../../engine/026-campaign-tutorial-sound.js';
-import { HEALS, ITM, SHOP, bagN } from '../../../engine/032-v4-foundation.js';
+} from '../../../engine/combat/engine.js';
+import { roleOf } from '../../../engine/combat/synergies-obstacles.js';
+import { B, enPips, segHp, ui } from '../../../engine/combat/ui.js';
+import { PREF, catchBlock, duoBlock, tileCard, unitExtras } from '../../../engine/progression/campaign.js';
+import { HEALS, ITM, SHOP, bagN } from '../../../engine/state/economy.js';
 import {
   COMBAT_ITEMS,
   BAG_MAX,
@@ -37,11 +37,11 @@ import {
   rankLineHtml,
   rankTag,
   expertBlockHtml,
-} from '../../../engine/053-resonance.js';
-import { resonanceBlockHtml } from '../../../engine/057-companions-resonance.js';
-import { battleStatesHtml, vigilButtonHtml } from '../../../engine/060-intense-combat.js';
-import { turnFlow } from '../../../engine/112-painted-graphics.js';
-import { isEnemyTurn } from '../../../engine/063-combat-catches-home.js';
+} from '../../../engine/combat/resonance.js';
+import { resonanceBlockHtml } from '../../../engine/progression/companions.js';
+import { battleStatesHtml, vigilButtonHtml } from '../../../engine/combat/intensity.js';
+import { turnFlow } from '../../../engine/combat/painted-board.js';
+import { isEnemyTurn } from '../../../engine/combat/catches.js';
 import { useBattleVersion } from './battleStore.js';
 import { STEP, Hi, withoutTip } from './frag.jsx';
 

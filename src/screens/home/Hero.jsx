@@ -1,11 +1,11 @@
 import { Html, parseStyle } from '../../lib/html.jsx';
-import { tc } from '../../engine/014-utils.js';
-import { squad } from '../../engine/020-team-cards.js';
-import { PROF_AV, emblem, goalChips, goalInfo, professorMsg } from '../../engine/031-home-journey.js';
-import { ART } from '../../engine/032-v4-foundation.js';
-import { shinyStyle } from '../../engine/043-adventure-plus.js';
-import { heroView } from '../../engine/063-combat-catches-home.js';
-import { homeSkyInfo } from '../../engine/082-living-home-weather.js';
+import { tc } from '../../engine/core/utils.js';
+import { squad } from '../../engine/team/team.js';
+import { PROF_AV, emblem, goalChips, goalInfo, professorMsg } from '../../engine/world/home-journey.js';
+import { ART } from '../../engine/state/economy.js';
+import { shinyStyle } from '../../engine/modes/adventure.js';
+import { heroView } from '../../engine/combat/catches.js';
+import { homeSkyInfo } from '../../engine/world/home-weather.js';
 
 // Home hero (#hmHero): next step (old renderHome), living backdrop depending on the
 // region and time with the companion (v4.28), season and weather of the day (v4.52).

@@ -1,4 +1,4 @@
-import { analyze } from '../../engine/020-team-cards.js';
+import { analyze } from '../../engine/team/team.js';
 
 // the engine's analyze(), computed once per renderTeam (#dock, #sideTeam, #tbTeam, #ana read it).
 let vu = -1,

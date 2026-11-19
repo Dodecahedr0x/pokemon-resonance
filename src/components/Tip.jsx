@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { Html } from '../lib/html.jsx';
 import { useTip } from './tipStore.js';
-import { PROF_AV, TIPS } from '../engine/031-home-journey.js';
+import { PROF_AV, TIPS } from '../engine/world/home-journey.js';
 
 // Professor's tip (.tip), right after the .ph header of the `t` screen (pokedex, battle, types).
 function Tip({ t }) {

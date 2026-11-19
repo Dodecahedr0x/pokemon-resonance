@@ -1,7 +1,7 @@
-import { ITEMS2, PROFILE, isCamp, ownedItems } from '../../engine/011-game-state.js';
-import { BADGES } from '../../engine/013-gyms.js';
-import { HELD_IMG, ITM, SHOP, fmt } from '../../engine/032-v4-foundation.js';
-import { HELD_SHOP, isDailyOffer, heldItemCost } from '../../engine/053-resonance.js';
+import { ITEMS2, PROFILE, isCamp, ownedItems } from '../../engine/state/game-state.js';
+import { BADGES } from '../../engine/modes/gyms.js';
+import { HELD_IMG, ITM, SHOP, fmt } from '../../engine/state/economy.js';
+import { HELD_SHOP, isDailyOffer, heldItemCost } from '../../engine/combat/resonance.js';
 import { Article, Shards } from './Items.jsx';
 
 // Held item for sale (v4.14): one-time purchase, data-buyh (engine).

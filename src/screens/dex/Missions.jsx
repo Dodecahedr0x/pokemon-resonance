@@ -1,12 +1,6 @@
-import { ownedFam } from '../../engine/032-v4-foundation.js';
-import { DEXS } from '../../engine/038-pokedex.js';
-import {
-  MISSION_TIERS,
-  missionState,
-  weekKey,
-  rewardText,
-  typeProgress,
-} from '../../engine/084-peddler-route-missions.js';
+import { ownedFam } from '../../engine/state/economy.js';
+import { DEXS } from '../../engine/progression/pokedex.js';
+import { MISSION_TIERS, missionState, weekKey, rewardText, typeProgress } from '../../engine/world/route-events.js';
 
 // Pokédex missions (#dexMission, v4.54): species tiers and specialists of the week.
 // Claiming (data-dex-mission) is still handled by the engine.

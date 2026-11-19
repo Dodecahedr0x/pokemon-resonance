@@ -1,6 +1,6 @@
 import { useEngineReady } from '../../engineReady.js';
-import { V4 } from '../../engine/032-v4-foundation.js';
-import { CAMP_TABS, echoRun } from '../../engine/066-tactical-challenges.js';
+import { V4 } from '../../engine/state/economy.js';
+import { CAMP_TABS, echoRun } from '../../engine/modes/tactical-challenges.js';
 import { seenExits, useCampBase, useCampPage } from './campStore.js';
 import CampBase from './CampBase.jsx';
 import Outings from './Outings.jsx';

@@ -1,6 +1,6 @@
-import { CAT, EFF, EL, FAMS, MK, MX, POS, RX, WEATHER } from '../../engine/004-data.js';
-import { BY } from '../../engine/009-pokemon.js';
-import { markOf, medal, mini, tb, tc } from '../../engine/014-utils.js';
+import { CAT, EFF, EL, FAMS, MK, MX, POS, RX, WEATHER } from '../../engine/data/game-data.js';
+import { BY } from '../../engine/pokemon/pokemon.js';
+import { markOf, medal, mini, tb, tc } from '../../engine/core/utils.js';
 import { Html } from '../../lib/html.jsx';
 import { selectReaction, useGuide } from './guideStore.js';
 

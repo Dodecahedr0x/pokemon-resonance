@@ -1,5 +1,5 @@
-import { GYMS } from '../../engine/004-data.js';
-import { BY } from '../../engine/009-pokemon.js';
+import { GYMS } from '../../engine/data/game-data.js';
+import { BY } from '../../engine/pokemon/pokemon.js';
 import {
   BADGE_REWARD,
   ITEMS2,
@@ -9,9 +9,9 @@ import {
   linkPts,
   lvlOfPts,
   ownedItems,
-} from '../../engine/011-game-state.js';
-import { ico, medal, tc } from '../../engine/014-utils.js';
-import { listDuos } from '../../engine/055-living-johto.js';
+} from '../../engine/state/game-state.js';
+import { ico, medal, tc } from '../../engine/core/utils.js';
+import { listDuos } from '../../engine/world/living-johto.js';
 import { Html } from '../../lib/html.jsx';
 import { useGuide } from './guideStore.js';
 

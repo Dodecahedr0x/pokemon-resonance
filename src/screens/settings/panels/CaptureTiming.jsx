@@ -1,6 +1,6 @@
-import { PREF } from '../../../engine/026-campaign-tutorial-sound.js';
+import { PREF } from '../../../engine/progression/campaign.js';
 
-// Settings › Timed capture (v4.53): data-catch-action button handled by the engine (module 083).
+// Settings › Timed capture (v4.53): data-catch-action button handled by the engine (engine/combat/timed-catch.js).
 export default function CaptureTiming() {
   const on = PREF.catchTimingEnabled !== 0;
   return (

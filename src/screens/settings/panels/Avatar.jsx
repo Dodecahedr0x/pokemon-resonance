@@ -1,8 +1,8 @@
-import { TYPES } from '../../../engine/004-data.js';
-import { gp, tc } from '../../../engine/014-utils.js';
-import { TRAINER_AVATAR, RARE_ENABLED } from '../../../engine/080-trainer-avatar-rare-encounters.js';
+import { TYPES } from '../../../engine/data/game-data.js';
+import { gp, tc } from '../../../engine/core/utils.js';
+import { TRAINER_AVATAR, RARE_ENABLED } from '../../../engine/world/rare-encounters.js';
 
-// Settings › Trainer avatar and Rare encounters (v4.50): data-avatar-action buttons handled by the engine (module 080).
+// Settings › Trainer avatar and Rare encounters (v4.50): data-avatar-action buttons handled by the engine (engine/world/rare-encounters.js).
 export default function Avatar() {
   const a = TRAINER_AVATAR(),
     types = Object.keys(TYPES),

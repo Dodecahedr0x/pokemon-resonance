@@ -1,5 +1,5 @@
-import { SECRET_PLACES, secretState } from '../../../engine/091-phase-bosses-secret-places.js';
-import { badgeTotal } from '../../../engine/090-item-quests-trophies.js';
+import { SECRET_PLACES, secretState } from '../../../engine/world/secret-places.js';
+import { badgeTotal } from '../../../engine/progression/item-quests.js';
 
 // Secret places (v4.60): those already discovered, and a hint for the others.
 export default function SecretPlaces() {

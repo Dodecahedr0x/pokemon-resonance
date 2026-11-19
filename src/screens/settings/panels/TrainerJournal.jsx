@@ -1,8 +1,8 @@
-import { BY } from '../../../engine/009-pokemon.js';
-import { PROFILE } from '../../../engine/011-game-state.js';
-import { PIX, ownedFam } from '../../../engine/032-v4-foundation.js';
-import { DEXS } from '../../../engine/038-pokedex.js';
-import { readJournal } from '../../../engine/079-immersion-sound-haptics.js';
+import { BY } from '../../../engine/pokemon/pokemon.js';
+import { PROFILE } from '../../../engine/state/game-state.js';
+import { PIX, ownedFam } from '../../../engine/state/economy.js';
+import { DEXS } from '../../../engine/progression/pokedex.js';
+import { readJournal } from '../../../engine/audio/immersion.js';
 
 // Settings › Trainer Journal (v4.48): statistics recorded on this device.
 const Cell = ({ n, l }) => (

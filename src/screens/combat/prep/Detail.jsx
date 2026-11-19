@@ -1,13 +1,13 @@
 import { Html } from '../../../lib/html.jsx';
-import { GYMS } from '../../../engine/004-data.js';
-import { BY, SCEN } from '../../../engine/009-pokemon.js';
-import { PROFILE } from '../../../engine/011-game-state.js';
-import { ARENAS } from '../../../engine/013-gyms.js';
-import { medal, tc } from '../../../engine/014-utils.js';
-import { scenLock } from '../../../engine/022-items-bonds-ai.js';
-import { CHAP, leaderOf } from '../../../engine/030-prestige-staging.js';
-import { emblem, goalChips, groupOf, wonOf } from '../../../engine/031-home-journey.js';
-import { styleOf } from '../../../engine/043-adventure-plus.js';
+import { GYMS } from '../../../engine/data/game-data.js';
+import { BY, SCEN } from '../../../engine/pokemon/pokemon.js';
+import { PROFILE } from '../../../engine/state/game-state.js';
+import { ARENAS } from '../../../engine/modes/gyms.js';
+import { medal, tc } from '../../../engine/core/utils.js';
+import { scenLock } from '../../../engine/combat/items-bonds-ai.js';
+import { CHAP, leaderOf } from '../../../engine/progression/prestige.js';
+import { emblem, goalChips, groupOf, wonOf } from '../../../engine/world/home-journey.js';
+import { styleOf } from '../../../engine/modes/adventure.js';
 
 // The old template separated its blocks with « \n  »: we keep these text nodes,
 // merged when a conditional block is empty (like the old innerHTML).

@@ -1,10 +1,10 @@
 import { Html } from '../../lib/html.jsx';
-import { GYMS } from '../../engine/004-data.js';
-import { BY } from '../../engine/009-pokemon.js';
-import { badgeSvg } from '../../engine/019-league.js';
-import { squad } from '../../engine/020-team-cards.js';
-import { goalInfo } from '../../engine/031-home-journey.js';
-import { ART, ITM } from '../../engine/032-v4-foundation.js';
+import { GYMS } from '../../engine/data/game-data.js';
+import { BY } from '../../engine/pokemon/pokemon.js';
+import { badgeSvg } from '../../engine/modes/league.js';
+import { squad } from '../../engine/team/team.js';
+import { goalInfo } from '../../engine/world/home-journey.js';
+import { ART, ITM } from '../../engine/state/economy.js';
 
 // Illustrated shortcuts on the Home page (#v4Tiles, old renderTiles).
 const TILES = [

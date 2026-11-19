@@ -5,10 +5,10 @@ import Tip from '../../../components/Tip.jsx';
 import { SelList, SelTabs } from './Selection.jsx';
 import Detail from './Detail.jsx';
 import Team from './Team.jsx';
-import { SCEN } from '../../../engine/009-pokemon.js';
-import { scSel } from '../../../engine/024-combat-ui.js';
-import { PREPG, nextGoal } from '../../../engine/026-campaign-tutorial-sound.js';
-import { groupOf } from '../../../engine/031-home-journey.js';
+import { SCEN } from '../../../engine/pokemon/pokemon.js';
+import { scSel } from '../../../engine/combat/ui.js';
+import { PREPG, nextGoal } from '../../../engine/progression/campaign.js';
+import { groupOf } from '../../../engine/world/home-journey.js';
 
 // Battles: battle choice (#cbPrep). The engine keeps the logic (renderPrep, listeners
 // on #selTabs, #scenList, #bLaunch, data-…) and hides #cbPrep during a battle

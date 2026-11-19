@@ -1,11 +1,11 @@
 import { Html } from '../../lib/html.jsx';
-import { GYMS } from '../../engine/004-data.js';
-import { BY } from '../../engine/009-pokemon.js';
-import { PROFILE, isCamp } from '../../engine/011-game-state.js';
-import { BADGES } from '../../engine/013-gyms.js';
-import { medal, tc } from '../../engine/014-utils.js';
-import { badgeSvg } from '../../engine/019-league.js';
-import { squad } from '../../engine/020-team-cards.js';
+import { GYMS } from '../../engine/data/game-data.js';
+import { BY } from '../../engine/pokemon/pokemon.js';
+import { PROFILE, isCamp } from '../../engine/state/game-state.js';
+import { BADGES } from '../../engine/modes/gyms.js';
+import { medal, tc } from '../../engine/core/utils.js';
+import { badgeSvg } from '../../engine/modes/league.js';
+import { squad } from '../../engine/team/team.js';
 
 // Trainer card (#campBox, formerly trainerCard). Hidden since v4 (.hm-top.v4-off),
 // but still kept up to date.

@@ -1,13 +1,13 @@
 import { memo } from 'react';
 import { Html, parseStyle } from '../../lib/html.jsx';
 import { useEnc } from './shellOverlays.js';
-import { dexNo } from '../../engine/004-data.js';
-import { REGION_NAMES } from '../../engine/008-hoenn-data.js';
-import { tb, tc } from '../../engine/014-utils.js';
-import { crestSmall } from '../../engine/020-team-cards.js';
-import { SPARK, shinyStyle } from '../../engine/043-adventure-plus.js';
-import { DOMINANT_CROWN_SVG } from '../../engine/055-living-johto.js';
-import { RARE_ENABLED, rareInfo } from '../../engine/080-trainer-avatar-rare-encounters.js';
+import { dexNo } from '../../engine/data/game-data.js';
+import { REGION_NAMES } from '../../engine/data/hoenn.js';
+import { tb, tc } from '../../engine/core/utils.js';
+import { crestSmall } from '../../engine/team/team.js';
+import { SPARK, shinyStyle } from '../../engine/modes/adventure.js';
+import { DOMINANT_CROWN_SVG } from '../../engine/world/living-johto.js';
+import { RARE_ENABLED, rareInfo } from '../../engine/world/rare-encounters.js';
 
 // Wild encounter (#enc), opened by encounter() (017) with a snapshot of the
 // encounter. The buttons (data-enc), the click on the backdrop and Esc are still handled by the engine.

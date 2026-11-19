@@ -1,13 +1,13 @@
 import { Html } from '../../lib/html.jsx';
-import { SCEN } from '../../engine/009-pokemon.js';
-import { PROFILE, isCamp } from '../../engine/011-game-state.js';
-import { ARENAS } from '../../engine/013-gyms.js';
-import { ELITE, scenLock } from '../../engine/022-items-bonds-ai.js';
-import { nextGoal } from '../../engine/026-campaign-tutorial-sound.js';
-import { CHAP, leaderOf } from '../../engine/030-prestige-staging.js';
-import { emblem, wonOf } from '../../engine/031-home-journey.js';
-import { STATE_N, rewardLine } from '../../engine/037-map.js';
-import { MAINQ } from '../../engine/039-quests-shop.js';
+import { SCEN } from '../../engine/pokemon/pokemon.js';
+import { PROFILE, isCamp } from '../../engine/state/game-state.js';
+import { ARENAS } from '../../engine/modes/gyms.js';
+import { ELITE, scenLock } from '../../engine/combat/items-bonds-ai.js';
+import { nextGoal } from '../../engine/progression/campaign.js';
+import { CHAP, leaderOf } from '../../engine/progression/prestige.js';
+import { emblem, wonOf } from '../../engine/world/home-journey.js';
+import { STATE_N, rewardLine } from '../../engine/world/map.js';
+import { MAINQ } from '../../engine/progression/quests-shop.js';
 
 // A chapter of the main quest (formerly mainRow).
 function Chapter({ k, gk }) {

@@ -5,8 +5,8 @@ import MapList from './MapList.jsx';
 import EvBar from './EvBar.jsx';
 import Captures from './Captures.jsx';
 import Route from '../home/Route.jsx';
-import { V4 } from '../../engine/032-v4-foundation.js';
-import { routeName } from '../../engine/054-johto.js';
+import { V4 } from '../../engine/state/economy.js';
+import { routeName } from '../../engine/world/johto.js';
 
 const REGIONS = [
   ['kanto', 'Kanto'],

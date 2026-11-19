@@ -1,6 +1,6 @@
 import { Html } from '../../lib/html.jsx';
 import { useCoach } from './shellOverlays.js';
-import { PROF_AV } from '../../engine/031-home-journey.js';
+import { PROF_AV } from '../../engine/world/home-journey.js';
 
 // Guided battle coach (#coach): the Professor gives the step's instruction.
 // renderCoach() (026) picks the step; the buttons (data-co) are still handled by the engine.

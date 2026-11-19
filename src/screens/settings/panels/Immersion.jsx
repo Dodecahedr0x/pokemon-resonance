@@ -1,6 +1,6 @@
-import { IMMERSION_ON } from '../../../engine/079-immersion-sound-haptics.js';
+import { IMMERSION_ON } from '../../../engine/audio/immersion.js';
 
-// Settings › Immersion (v4.48): data-immersion-action button handled by the engine (module 079).
+// Settings › Immersion (v4.48): data-immersion-action button handled by the engine (engine/audio/immersion.js).
 export default function Immersion() {
   const on = IMMERSION_ON();
   return (

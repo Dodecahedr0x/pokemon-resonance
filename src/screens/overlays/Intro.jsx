@@ -1,11 +1,11 @@
 import { Component } from 'react';
 import { Html } from '../../lib/html.jsx';
 import { useIntro } from './shellOverlays.js';
-import { BY } from '../../engine/009-pokemon.js';
-import { DIFFS, STARTERS } from '../../engine/011-game-state.js';
-import { medal, tc } from '../../engine/014-utils.js';
-import { reportError } from '../../engine/002-errors.js';
-import { INTRO, PROF_AV } from '../../engine/031-home-journey.js';
+import { BY } from '../../engine/pokemon/pokemon.js';
+import { DIFFS, STARTERS } from '../../engine/state/game-state.js';
+import { medal, tc } from '../../engine/core/utils.js';
+import { reportError } from '../../engine/core/errors.js';
+import { INTRO, PROF_AV } from '../../engine/world/home-journey.js';
 
 // The Professor's welcome (#intro): showIntro() (031) opens it, renderIntro() redraws
 // the step (INTRO.i), closeIntro() removes it. Clicks and Enter: engine listeners on #intro.

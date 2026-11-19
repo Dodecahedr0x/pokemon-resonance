@@ -1,9 +1,9 @@
 import { useShell } from './shellStore.js';
-import { PROFILE, isCamp } from '../engine/011-game-state.js';
-import { gp, tc } from '../engine/014-utils.js';
-import { fmt, tLevel } from '../engine/032-v4-foundation.js';
-import { displayedTitle } from '../engine/048-replayability.js';
-import { TRAINER_AVATAR } from '../engine/080-trainer-avatar-rare-encounters.js';
+import { PROFILE, isCamp } from '../engine/state/game-state.js';
+import { gp, tc } from '../engine/core/utils.js';
+import { fmt, tLevel } from '../engine/state/economy.js';
+import { displayedTitle } from '../engine/progression/achievements-challenges.js';
+import { TRAINER_AVATAR } from '../engine/world/rare-encounters.js';
 
 // Title of the displayed page (show()).
 export function TbSec() {

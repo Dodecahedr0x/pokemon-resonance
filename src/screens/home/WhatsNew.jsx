@@ -1,4 +1,4 @@
-import { NEWS_ENTRIES, hasNewsToView } from '../../engine/056-polish-v4-16.js';
+import { NEWS_ENTRIES, hasNewsToView } from '../../engine/ui/whats-new.js';
 
 // "Nouveau" (New) panel on the Home page (#v4News, v4.16.1), before the shortcuts.
 // Removed once the player has tapped "Compris" (Understood) (data-news="ok", handled by the engine).

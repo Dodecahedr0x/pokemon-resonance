@@ -1,6 +1,6 @@
-import { PREF } from '../../../engine/026-campaign-tutorial-sound.js';
+import { PREF } from '../../../engine/progression/campaign.js';
 
-// Settings › Battle display (v4.44): data-tool-action buttons handled by the engine (module 077).
+// Settings › Battle display (v4.44): data-tool-action buttons handled by the engine (engine/combat/board-tools.js).
 export default function BattleDisplay() {
   const fs = document.body.classList.contains('fullscreen-mode');
   return (

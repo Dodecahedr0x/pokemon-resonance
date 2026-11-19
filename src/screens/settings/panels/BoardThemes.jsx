@@ -1,11 +1,6 @@
-import { PROFILE } from '../../../engine/011-game-state.js';
-import { PREF } from '../../../engine/026-campaign-tutorial-sound.js';
-import {
-  BOARD_THEMES,
-  rivalState,
-  isThemeUnlocked,
-  dominantType,
-} from '../../../engine/086-adaptive-rival-board-themes.js';
+import { PROFILE } from '../../../engine/state/game-state.js';
+import { PREF } from '../../../engine/progression/campaign.js';
+import { BOARD_THEMES, rivalState, isThemeUnlocked, dominantType } from '../../../engine/modes/rival-board-themes.js';
 
 // Board themes (v4.55), bought with Shards, then the rival Kael's report.
 // Buttons handled by the engine (delegated click on data-board-theme-action).

@@ -1,4 +1,4 @@
-import { featsState } from '../../../engine/098-feats-journal-gimmick-boards.js';
+import { featsState } from '../../../engine/modes/feats-gimmicks.js';
 
 // Feats Journal (v4.67): records and latest battles.
 export default function FeatsJournal() {

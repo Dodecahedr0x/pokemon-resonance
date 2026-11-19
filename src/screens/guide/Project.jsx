@@ -1,8 +1,8 @@
-import { MV } from '../../engine/005-moves.js';
-import { RX } from '../../engine/004-data.js';
-import { FAMS30, MON, NEWS } from '../../engine/009-pokemon.js';
-import { ARR } from '../../engine/010-in-battle-evolution.js';
-import { ico } from '../../engine/014-utils.js';
+import { MV } from '../../engine/data/moves.js';
+import { RX } from '../../engine/data/game-data.js';
+import { FAMS30, MON, NEWS } from '../../engine/pokemon/pokemon.js';
+import { ARR } from '../../engine/pokemon/evolution.js';
+import { ico } from '../../engine/core/utils.js';
 import { Html } from '../../lib/html.jsx';
 
 export function Pillars() {

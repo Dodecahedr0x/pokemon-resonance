@@ -1,8 +1,8 @@
-import { V4 } from '../../engine/032-v4-foundation.js';
+import { V4 } from '../../engine/state/economy.js';
 import { thanksShown } from './bagStore.js';
 
 // "Pokémon world" skin (v4.73): counter with its vendor in the Shop, pocketed bag
-// in the Bag. The vendor's line is written letter by letter (engine, module 109: .pk-mart-dlg).
+// in the Bag. The vendor's line is written letter by letter (engine, engine/ui/dialogues.js: .pk-mart-dlg).
 
 /* original drawings */
 const Vendor = () => (

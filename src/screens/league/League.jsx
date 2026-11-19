@@ -1,6 +1,6 @@
 import { useEngineReady } from '../../engineReady.js';
 import { useLeagueVersion } from './leagueStore.js';
-import { BADGES } from '../../engine/013-gyms.js';
+import { BADGES } from '../../engine/modes/gyms.js';
 import Badges from './Badges.jsx';
 import Arena from './Arena.jsx';
 import EliteCell from './EliteCell.jsx';

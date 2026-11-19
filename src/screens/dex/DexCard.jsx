@@ -1,19 +1,19 @@
 import { Html } from '../../lib/html.jsx';
 import { strength } from '../../lib/power.js';
-import { MV, SHAPE, TAL } from '../../engine/005-moves.js';
-import { REGION_NAMES } from '../../engine/008-hoenn-data.js';
-import { BY, NOTES, familyOf } from '../../engine/009-pokemon.js';
-import { RC, ROLEFX } from '../../engine/012-recruits-roles-synergies.js';
-import { tb, tc } from '../../engine/014-utils.js';
-import { STLN, squad } from '../../engine/020-team-cards.js';
-import { ART, PIX, V4, ownedFam } from '../../engine/032-v4-foundation.js';
-import { DEXM } from '../../engine/033-pokedex-data.js';
-import { LORE } from '../../engine/034-pokedex-texts.js';
-import { DEXS } from '../../engine/038-pokedex.js';
-import { SPARK, isShinyOwned, shinyHue } from '../../engine/043-adventure-plus.js';
-import { roleBadgeHtml } from '../../engine/053-resonance.js';
-import { captureSite } from '../../engine/061-catch-anywhere.js';
-import { REGIONAL_FORM_LIST } from '../../engine/102-regional-forms.js';
+import { MV, SHAPE, TAL } from '../../engine/data/moves.js';
+import { REGION_NAMES } from '../../engine/data/hoenn.js';
+import { BY, NOTES, familyOf } from '../../engine/pokemon/pokemon.js';
+import { RC, ROLEFX } from '../../engine/pokemon/roles-synergies.js';
+import { tb, tc } from '../../engine/core/utils.js';
+import { STLN, squad } from '../../engine/team/team.js';
+import { ART, PIX, V4, ownedFam } from '../../engine/state/economy.js';
+import { DEXM } from '../../engine/data/pokedex.js';
+import { LORE } from '../../engine/data/pokedex-texts.js';
+import { DEXS } from '../../engine/progression/pokedex.js';
+import { SPARK, isShinyOwned, shinyHue } from '../../engine/modes/adventure.js';
+import { roleBadgeHtml } from '../../engine/combat/resonance.js';
+import { captureSite } from '../../engine/world/catch-anywhere.js';
+import { REGIONAL_FORM_LIST } from '../../engine/pokemon/regional-forms.js';
 
 const no3 = n => String(n).padStart(3, '0');
 

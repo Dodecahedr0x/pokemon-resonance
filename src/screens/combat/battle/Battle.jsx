@@ -1,5 +1,5 @@
-import { B } from '../../../engine/024-combat-ui.js';
-import { DEF_WAVES, DEF_LIVES } from '../../../engine/099-defense-gym.js';
+import { B } from '../../../engine/combat/ui.js';
+import { DEF_WAVES, DEF_LIVES } from '../../../engine/modes/defense-gym.js';
 import { useBattleVersion } from './battleStore.js';
 import { BtTop, Timeline, Rule, Synergies } from './TopBar.jsx';
 import { PlatesA, PlatesE } from './Plates.jsx';

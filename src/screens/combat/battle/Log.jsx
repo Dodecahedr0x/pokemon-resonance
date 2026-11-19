@@ -1,5 +1,5 @@
 import { Html } from '../../../lib/html.jsx';
-import { LOG } from '../../../engine/024-combat-ui.js';
+import { LOG } from '../../../engine/combat/ui.js';
 import { useBattleVersion } from './battleStore.js';
 
 // Battle log, collapsed: the last line in the summary, the list on demand.

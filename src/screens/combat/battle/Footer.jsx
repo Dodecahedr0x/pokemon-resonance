@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { byUid, canAwaken, foeEvo } from '../../../engine/021-combat-engine.js';
-import { B, ui } from '../../../engine/024-combat-ui.js';
-import { currentActor } from '../../../engine/044-tactical-engine.js';
-import { isCoopPlayerAlive } from '../../../engine/058-fishing-safari-coop.js';
-import { isEnemyTurn } from '../../../engine/063-combat-catches-home.js';
-import { riddlePhase } from '../../../engine/066-tactical-challenges.js';
-import { turnFlow } from '../../../engine/112-painted-graphics.js';
+import { byUid, canAwaken, foeEvo } from '../../../engine/combat/engine.js';
+import { B, ui } from '../../../engine/combat/ui.js';
+import { currentActor } from '../../../engine/combat/tactical-engine.js';
+import { isCoopPlayerAlive } from '../../../engine/modes/fishing-safari-coop.js';
+import { isEnemyTurn } from '../../../engine/combat/catches.js';
+import { riddlePhase } from '../../../engine/modes/tactical-challenges.js';
+import { turnFlow } from '../../../engine/combat/painted-board.js';
 import { getHost } from '../board/boardStore.js';
 import BoardTools from '../board/BoardTools.jsx';
 import { footPos as barBottom, useBattleVersion } from './battleStore.js';

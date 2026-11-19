@@ -1,6 +1,6 @@
 import { Html } from '../../lib/html.jsx';
 import { useTipOverlay } from './shellOverlays.js';
-import { PROF_AV } from '../../engine/031-home-journey.js';
+import { PROF_AV } from '../../engine/world/home-journey.js';
 
 // Tip from Prof. Sorbier during a battle (#tipCard, v4.29): set by seenTips(),
 // removed by endTooltip() or the button (data-tip-card, handled by the engine).

@@ -1,9 +1,9 @@
 import { Html } from '../../lib/html.jsx';
-import { medal, tc } from '../../engine/014-utils.js';
-import { dailyGiftData } from '../../engine/088-workshop-recipes.js';
-import { seasonBannerData } from '../../engine/096-seasonal-events.js';
-import { bossRushData } from '../../engine/097-boss-rush-relics.js';
-import { defenseBannerText } from '../../engine/099-defense-gym.js';
+import { medal, tc } from '../../engine/core/utils.js';
+import { dailyGiftData } from '../../engine/items/workshop.js';
+import { seasonBannerData } from '../../engine/modes/seasonal-events.js';
+import { bossRushData } from '../../engine/modes/boss-rush.js';
+import { defenseBannerText } from '../../engine/modes/defense-gym.js';
 
 // Banners under the hero, in the old DOM's order (each was inserted right after
 // the hero or after the previous one): season (v4.65), Boss Rush (v4.66), Defense Gym

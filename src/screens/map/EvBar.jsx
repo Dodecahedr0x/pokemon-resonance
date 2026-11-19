@@ -1,4 +1,4 @@
-import { routeEvent } from '../../engine/084-peddler-route-missions.js';
+import { routeEvent } from '../../engine/world/route-events.js';
 
 // "Rencontre sur la route" (Encounter on the route) banner (v4.54), at the top of the map panel. The click
 // (data-route-event) opens the encounter: handled by the engine.

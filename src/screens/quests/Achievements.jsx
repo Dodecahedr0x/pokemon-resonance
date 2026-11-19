@@ -1,5 +1,5 @@
-import { PROFILE } from '../../engine/011-game-state.js';
-import { ACHIEVEMENTS } from '../../engine/048-replayability.js';
+import { PROFILE } from '../../engine/state/game-state.js';
+import { ACHIEVEMENTS } from '../../engine/progression/achievements-challenges.js';
 
 // « Succès » (Achievements) tab (v4.9): an achievement that grants a title can be worn (data-titre, engine).
 function AchievementRow({ s }) {

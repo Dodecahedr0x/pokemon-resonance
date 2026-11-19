@@ -1,8 +1,8 @@
-import { ITEMS2, PROFILE } from '../../engine/011-game-state.js';
-import { ITM, SHOP, bagN, fmt } from '../../engine/032-v4-foundation.js';
-import { costOf0 } from '../../engine/049-identity.js';
-import { heldItemCost } from '../../engine/053-resonance.js';
-import { todaysPeddler } from '../../engine/084-peddler-route-missions.js';
+import { ITEMS2, PROFILE } from '../../engine/state/game-state.js';
+import { ITM, SHOP, bagN, fmt } from '../../engine/state/economy.js';
+import { costOf0 } from '../../engine/team/identity.js';
+import { heldItemCost } from '../../engine/combat/resonance.js';
+import { todaysPeddler } from '../../engine/world/route-events.js';
 import { Disc } from './Items.jsx';
 
 // Shop › Peddler (v4.54): limited stock of the day, data-wanderer (engine).

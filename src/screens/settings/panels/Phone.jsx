@@ -1,4 +1,4 @@
-import { PREF } from '../../../engine/026-campaign-tutorial-sound.js';
+import { PREF } from '../../../engine/progression/campaign.js';
 import { Switch } from '../controls.jsx';
 
 // Phone: vibrations, gestures, aids. The engine handles data-hm, data-guide and data-v4reset.

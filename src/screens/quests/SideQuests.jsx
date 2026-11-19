@@ -1,5 +1,5 @@
-import { PROFILE } from '../../engine/011-game-state.js';
-import { SQ } from '../../engine/039-quests-shop.js';
+import { PROFILE } from '../../engine/state/game-state.js';
+import { SQ } from '../../engine/progression/quests-shop.js';
 import Rewards from './Rewards.jsx';
 
 // A side quest (formerly sideRow); "Réclamer" (Claim): data-claim, handled by the engine.

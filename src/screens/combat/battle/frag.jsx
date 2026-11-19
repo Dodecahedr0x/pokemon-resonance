@@ -1,5 +1,5 @@
 import { Html } from '../../../lib/html.jsx';
-import { itemize } from '../../../engine/041-illustrations.js';
+import { itemize } from '../../../engine/assets/illustrations.js';
 
 // Fragment produced by an engine function, with illustrated held items
 // (the old itemizeDom ran over the whole panel after its render).

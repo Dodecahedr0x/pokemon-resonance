@@ -1,7 +1,7 @@
 import { Html } from '../../lib/html.jsx';
-import { GYMS } from '../../engine/004-data.js';
-import { BADGES } from '../../engine/013-gyms.js';
-import { badgeSvg, gymSel } from '../../engine/019-league.js';
+import { GYMS } from '../../engine/data/game-data.js';
+import { BADGES } from '../../engine/modes/gyms.js';
+import { badgeSvg, gymSel } from '../../engine/modes/league.js';
 
 // The eight badges (#badges): the chosen one is "on", the won ones "won".
 export default function Badges() {

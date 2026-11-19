@@ -1,13 +1,13 @@
 import { Html } from '../../lib/html.jsx';
 import Marks from './Marks.jsx';
 import { regionMap } from './MapScreen.jsx';
-import { TOD } from '../../engine/017-home-route.js';
-import { V4 } from '../../engine/032-v4-foundation.js';
-import { CHAIN, MAP_SVG, PL, curvePath, placeState } from '../../engine/037-map.js';
-import { JCHAIN, JMAP_SVG } from '../../engine/054-johto.js';
-import { todayWeather } from '../../engine/057-companions-resonance.js';
-import { HCHAIN, HMAP_SVG } from '../../engine/059-hoenn.js';
-import { LIVING_MAP } from '../../engine/105-living-map.js';
+import { TOD } from '../../engine/world/home-route.js';
+import { V4 } from '../../engine/state/economy.js';
+import { CHAIN, MAP_SVG, PL, curvePath, placeState } from '../../engine/world/map.js';
+import { JCHAIN, JMAP_SVG } from '../../engine/world/johto.js';
+import { todayWeather } from '../../engine/progression/companions.js';
+import { HCHAIN, HMAP_SVG } from '../../engine/world/hoenn.js';
+import { LIVING_MAP } from '../../engine/world/living-map.js';
 
 // Map stage (#mapSt): the three drawn maps, the painting and its layers (v4.71),
 // the routes (#mapRoutes), the fog, the markers (#mapMarks), the compass and the title.

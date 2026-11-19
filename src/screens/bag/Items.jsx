@@ -1,10 +1,10 @@
-import { MV } from '../../engine/005-moves.js';
-import { BY } from '../../engine/009-pokemon.js';
-import { ITEMS2, PROFILE, ownedItems } from '../../engine/011-game-state.js';
-import { tc } from '../../engine/014-utils.js';
-import { HELD_IMG, ITM, SHOP, V4, bagN, fmt } from '../../engine/032-v4-foundation.js';
-import { costOf } from '../../engine/049-identity.js';
-import { HELD_SHOP, isDailyOffer } from '../../engine/053-resonance.js';
+import { MV } from '../../engine/data/moves.js';
+import { BY } from '../../engine/pokemon/pokemon.js';
+import { ITEMS2, PROFILE, ownedItems } from '../../engine/state/game-state.js';
+import { tc } from '../../engine/core/utils.js';
+import { HELD_IMG, ITM, SHOP, V4, bagN, fmt } from '../../engine/state/economy.js';
+import { costOf } from '../../engine/team/identity.js';
+import { HELD_SHOP, isDailyOffer } from '../../engine/combat/resonance.js';
 
 // TM / HM disc: initials on the color of the move's type.
 export const Disc = ({ it }) => (

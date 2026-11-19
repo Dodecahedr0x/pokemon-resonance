@@ -1,10 +1,10 @@
-import { GYMS } from '../../engine/004-data.js';
-import { SCEN } from '../../engine/009-pokemon.js';
-import { ARENAS } from '../../engine/013-gyms.js';
-import { tc } from '../../engine/014-utils.js';
-import { badgeSvg } from '../../engine/019-league.js';
-import { ELITE } from '../../engine/022-items-bonds-ai.js';
-import { CHAMP_L, CHAP, ELITE_L, LEAD, UNIV } from '../../engine/030-prestige-staging.js';
+import { GYMS } from '../../engine/data/game-data.js';
+import { SCEN } from '../../engine/pokemon/pokemon.js';
+import { ARENAS } from '../../engine/modes/gyms.js';
+import { tc } from '../../engine/core/utils.js';
+import { badgeSvg } from '../../engine/modes/league.js';
+import { ELITE } from '../../engine/combat/items-bonds-ai.js';
+import { CHAMP_L, CHAP, ELITE_L, LEAD, UNIV } from '../../engine/progression/prestige.js';
 import { Html } from '../../lib/html.jsx';
 
 function Master({ className, style, mark, kicker, who }) {

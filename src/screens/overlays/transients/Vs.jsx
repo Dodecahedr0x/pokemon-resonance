@@ -1,7 +1,7 @@
 import { Html } from '../../../lib/html.jsx';
-import { GYMS } from '../../../engine/004-data.js';
-import { medal } from '../../../engine/014-utils.js';
-import { badgeSvg } from '../../../engine/019-league.js';
+import { GYMS } from '../../../engine/data/game-data.js';
+import { medal } from '../../../engine/core/utils.js';
+import { badgeSvg } from '../../../engine/modes/league.js';
 
 // "VS" presentation before a battle (#vs, opened by vsIntro, 030). The engine keeps the
 // click that closes it; `out` (animated close) comes from the store.

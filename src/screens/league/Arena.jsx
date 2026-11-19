@@ -1,10 +1,10 @@
 import { Html } from '../../lib/html.jsx';
-import { GYMS } from '../../engine/004-data.js';
-import { BY, SCEN } from '../../engine/009-pokemon.js';
-import { ARENAS, BADGES } from '../../engine/013-gyms.js';
-import { medal } from '../../engine/014-utils.js';
-import { badgeSvg, gymSel } from '../../engine/019-league.js';
-import { LEAD } from '../../engine/030-prestige-staging.js';
+import { GYMS } from '../../engine/data/game-data.js';
+import { BY, SCEN } from '../../engine/pokemon/pokemon.js';
+import { ARENAS, BADGES } from '../../engine/modes/gyms.js';
+import { medal } from '../../engine/core/utils.js';
+import { badgeSvg, gymSel } from '../../engine/modes/league.js';
+import { LEAD } from '../../engine/progression/prestige.js';
 
 // Sheet of the chosen gym (#arena), with its gym Champion's line (v4.24).
 export default function Arena() {

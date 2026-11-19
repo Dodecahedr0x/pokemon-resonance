@@ -2,10 +2,10 @@ import { useEngineReady } from '../../engineReady.js';
 import { Html } from '../../lib/html.jsx';
 import { useStarter } from './shellOverlays.js';
 import { Dialogue } from './Window.jsx';
-import { BY } from '../../engine/009-pokemon.js';
-import { DIFFS, PROFILE, STARTERS } from '../../engine/011-game-state.js';
-import { medal, tc } from '../../engine/014-utils.js';
-import { evoPath } from '../../engine/017-home-route.js';
+import { BY } from '../../engine/pokemon/pokemon.js';
+import { DIFFS, PROFILE, STARTERS } from '../../engine/state/game-state.js';
+import { medal, tc } from '../../engine/core/utils.js';
+import { evoPath } from '../../engine/world/home-route.js';
 
 // New campaign: partner choice (#starter). openStarter() (026) opens it;
 // clicks (data-st, data-sd) and closing are still handled by the engine.

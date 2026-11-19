@@ -2,16 +2,16 @@ import { useLayoutEffect, useRef } from 'react';
 import { useEngineReady } from '../../engineReady.js';
 import { Html } from '../../lib/html.jsx';
 import { useSaves } from './savesStore.js';
-import { RECRUIT } from '../../engine/010-in-battle-evolution.js';
-import { BY } from '../../engine/009-pokemon.js';
-import { DIFFS, PROFILE, isCamp } from '../../engine/011-game-state.js';
-import { BADGES } from '../../engine/013-gyms.js';
-import { medal } from '../../engine/014-utils.js';
-import { B } from '../../engine/024-combat-ui.js';
-import { SLOTS, SV, battleLine, cleanProfile, fmtD, snapshot, validBattle } from '../../engine/025-saves.js';
-import { PREF } from '../../engine/026-campaign-tutorial-sound.js';
-import { boxCapacityLabel } from '../../engine/061-catch-anywhere.js';
-import { boxCount } from '../../engine/064-quality.js';
+import { RECRUIT } from '../../engine/pokemon/evolution.js';
+import { BY } from '../../engine/pokemon/pokemon.js';
+import { DIFFS, PROFILE, isCamp } from '../../engine/state/game-state.js';
+import { BADGES } from '../../engine/modes/gyms.js';
+import { medal } from '../../engine/core/utils.js';
+import { B } from '../../engine/combat/ui.js';
+import { SLOTS, SV, battleLine, cleanProfile, fmtD, snapshot, validBattle } from '../../engine/state/saves.js';
+import { PREF } from '../../engine/progression/campaign.js';
+import { boxCapacityLabel } from '../../engine/world/catch-anywhere.js';
+import { boxCount } from '../../engine/progression/quality.js';
 
 // "Sauvegardes" (Saves) window (#saves). Clicks, input and import are still handled by
 // the engine (listeners on #saves, data-sv, data-resume): here, display only.

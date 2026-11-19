@@ -1,4 +1,4 @@
-import { isCreator } from '../../../engine/065-camp-tactics.js';
+import { isCreator } from '../../../engine/progression/camp.js';
 
 const CHEATS = [
   ['argent', '+10 000 ₽'],

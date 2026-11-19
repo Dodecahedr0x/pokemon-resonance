@@ -1,9 +1,9 @@
 import { Html, parseStyle } from '../../lib/html.jsx';
 import { Box, Dialogue } from './Window.jsx';
-import { BY } from '../../engine/009-pokemon.js';
-import { tb } from '../../engine/014-utils.js';
-import { crestSmall } from '../../engine/020-team-cards.js';
-import { shinyStyle } from '../../engine/043-adventure-plus.js';
+import { BY } from '../../engine/pokemon/pokemon.js';
+import { tb } from '../../engine/core/utils.js';
+import { crestSmall } from '../../engine/team/team.js';
+import { shinyStyle } from '../../engine/modes/adventure.js';
 
 // Safari Park (#safariPanel). The engine (058) computes the visit state (catch and
 // flee chances, message) and keeps the clicks (data-safari-panel) and the hidden attribute.

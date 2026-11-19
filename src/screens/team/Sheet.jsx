@@ -3,22 +3,22 @@ import { Html } from '../../lib/html.jsx';
 import { strength } from '../../lib/power.js';
 import { useEngineReady } from '../../engineReady.js';
 import { useRoster } from './teamStore.js';
-import { EL, MK, MX, RX, dexNo } from '../../engine/004-data.js';
-import { MV, SHAPE, TAL } from '../../engine/005-moves.js';
-import { REGION_NAMES } from '../../engine/008-hoenn-data.js';
-import { BY, NOTES, familyOf } from '../../engine/009-pokemon.js';
-import { ARR } from '../../engine/010-in-battle-evolution.js';
-import { ITEMS2, LINK_N, LINK_T, PROFILE, inBox, isCamp, lvlOfPts, ownedItems } from '../../engine/011-game-state.js';
-import { RC, ROLEFX, rIco } from '../../engine/012-recruits-roles-synergies.js';
-import { markOf, medal, tb, tc } from '../../engine/014-utils.js';
-import { BRANCHES, mhpOf } from '../../engine/021-combat-engine.js';
-import { STLN, branchNote, crestSmall, evoDiff, monEls, monMarks, nextOf, squad } from '../../engine/020-team-cards.js';
-import { HELD_IMG, ITM } from '../../engine/032-v4-foundation.js';
-import { moveLearned } from '../../engine/045-tms-hms.js';
-import { characterHtml } from '../../engine/049-identity.js';
-import { RANKS, stars, rankId } from '../../engine/053-resonance.js';
-import { duoTechnique } from '../../engine/055-living-johto.js';
-import { captureSite } from '../../engine/061-catch-anywhere.js';
+import { EL, MK, MX, RX, dexNo } from '../../engine/data/game-data.js';
+import { MV, SHAPE, TAL } from '../../engine/data/moves.js';
+import { REGION_NAMES } from '../../engine/data/hoenn.js';
+import { BY, NOTES, familyOf } from '../../engine/pokemon/pokemon.js';
+import { ARR } from '../../engine/pokemon/evolution.js';
+import { ITEMS2, LINK_N, LINK_T, PROFILE, inBox, isCamp, lvlOfPts, ownedItems } from '../../engine/state/game-state.js';
+import { RC, ROLEFX, rIco } from '../../engine/pokemon/roles-synergies.js';
+import { markOf, medal, tb, tc } from '../../engine/core/utils.js';
+import { BRANCHES, mhpOf } from '../../engine/combat/engine.js';
+import { STLN, branchNote, crestSmall, evoDiff, monEls, monMarks, nextOf, squad } from '../../engine/team/team.js';
+import { HELD_IMG, ITM } from '../../engine/state/economy.js';
+import { moveLearned } from '../../engine/moves/tms.js';
+import { characterHtml } from '../../engine/team/identity.js';
+import { RANKS, stars, rankId } from '../../engine/combat/resonance.js';
+import { duoTechnique } from '../../engine/world/living-johto.js';
+import { captureSite } from '../../engine/world/catch-anywhere.js';
 
 // Pokémon sheet (#sheet / #sh). Opening, closing, focus and scrolling: the engine's openSheet /
 // closeSheet; clicks (data-close, data-open, data-rx, data-qa, data-eq): the engine's

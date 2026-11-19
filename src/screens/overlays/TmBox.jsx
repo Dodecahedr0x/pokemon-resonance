@@ -1,8 +1,8 @@
 import { Html } from '../../lib/html.jsx';
 import { Box, Dialogue } from './Window.jsx';
-import { MV } from '../../engine/005-moves.js';
-import { BY } from '../../engine/009-pokemon.js';
-import { medal, tb, tc } from '../../engine/014-utils.js';
+import { MV } from '../../engine/data/moves.js';
+import { BY } from '../../engine/pokemon/pokemon.js';
+import { medal, tb, tc } from '../../engine/core/utils.js';
 
 // Learn a TM or HM (#ctBox, opened from the Bag). The engine (045) computes
 // the list of families and keeps the clicks (data-ct, data-ctf) and the hidden attribute.

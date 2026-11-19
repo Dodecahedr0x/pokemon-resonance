@@ -1,6 +1,6 @@
 import { makeStore } from '../../lib/store.js';
 
-// Display state of the Team screen, shared between React and the engine (020-team-cards.js).
+// Display state of the Team screen, shared between React and the engine (team/team.js).
 // One version per block: grid (renderGrid), filters (renderFilters), team and analysis
 // (renderTeam), sheet (openSheet / closeSheet). The engine re-reads the DOM right after each
 // call ($('#teamName').focus(), $('#sheet').hidden, .sh-x...).

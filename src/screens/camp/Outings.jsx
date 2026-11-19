@@ -1,4 +1,4 @@
-import { routeName } from '../../engine/054-johto.js';
+import { routeName } from '../../engine/world/johto.js';
 
 // An outing (data-outing, handled by the engine).
 function Outing({ k, ic, b, d }) {

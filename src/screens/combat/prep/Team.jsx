@@ -1,17 +1,17 @@
 import { Fragment, useState } from 'react';
 import { Html } from '../../../lib/html.jsx';
-import { BY, SCEN } from '../../../engine/009-pokemon.js';
-import { BUDGET } from '../../../engine/010-in-battle-evolution.js';
-import { DIFFS, PROFILE } from '../../../engine/011-game-state.js';
-import { RC, synOf } from '../../../engine/012-recruits-roles-synergies.js';
-import { medal, tc } from '../../../engine/014-utils.js';
-import { cost, squad, vBonus } from '../../../engine/020-team-cards.js';
-import { startVoice } from '../../../engine/021-combat-engine.js';
-import { scenLock } from '../../../engine/022-items-bonds-ai.js';
-import { scSel } from '../../../engine/024-combat-ui.js';
-import { teamBtns } from '../../../engine/027-gym-on-screen.js';
-import { k2n } from '../../../engine/031-home-journey.js';
-import { DOCTRINE_DEFS } from '../../../engine/065-camp-tactics.js';
+import { BY, SCEN } from '../../../engine/pokemon/pokemon.js';
+import { BUDGET } from '../../../engine/pokemon/evolution.js';
+import { DIFFS, PROFILE } from '../../../engine/state/game-state.js';
+import { RC, synOf } from '../../../engine/pokemon/roles-synergies.js';
+import { medal, tc } from '../../../engine/core/utils.js';
+import { cost, squad, vBonus } from '../../../engine/team/team.js';
+import { startVoice } from '../../../engine/combat/engine.js';
+import { scenLock } from '../../../engine/combat/items-bonds-ai.js';
+import { scSel } from '../../../engine/combat/ui.js';
+import { teamBtns } from '../../../engine/modes/gym-screen.js';
+import { k2n } from '../../../engine/world/home-journey.js';
+import { DOCTRINE_DEFS } from '../../../engine/progression/camp.js';
 
 // The four team slots, then the active synergies (#ptList).
 function Places() {

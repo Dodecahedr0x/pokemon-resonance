@@ -1,19 +1,19 @@
 import { Html } from '../../lib/html.jsx';
-import { GYMS } from '../../engine/004-data.js';
-import { SCEN } from '../../engine/009-pokemon.js';
-import { PROFILE } from '../../engine/011-game-state.js';
-import { ARENAS } from '../../engine/013-gyms.js';
-import { TOD } from '../../engine/017-home-route.js';
-import { ELITE, scenLock } from '../../engine/022-items-bonds-ai.js';
-import { CHAP, ELITE_L, leaderOf } from '../../engine/030-prestige-staging.js';
-import { avatar, goalChips } from '../../engine/031-home-journey.js';
-import { ITM, V4, bagN, dailyKey } from '../../engine/032-v4-foundation.js';
-import { PL, STATE_N, placeIcon, placeName, placeState, rewardLine } from '../../engine/037-map.js';
-import { johtoOpen, routeName } from '../../engine/054-johto.js';
-import { SAFARI_BALLS, SAFARI_STEPS, SAFARI_PRICE, safariLocked } from '../../engine/058-fishing-safari-coop.js';
-import { hoennOpen } from '../../engine/059-hoenn.js';
-import { regionIndex } from '../../engine/061-catch-anywhere.js';
-import { familyCaptureStats } from '../../engine/063-combat-catches-home.js';
+import { GYMS } from '../../engine/data/game-data.js';
+import { SCEN } from '../../engine/pokemon/pokemon.js';
+import { PROFILE } from '../../engine/state/game-state.js';
+import { ARENAS } from '../../engine/modes/gyms.js';
+import { TOD } from '../../engine/world/home-route.js';
+import { ELITE, scenLock } from '../../engine/combat/items-bonds-ai.js';
+import { CHAP, ELITE_L, leaderOf } from '../../engine/progression/prestige.js';
+import { avatar, goalChips } from '../../engine/world/home-journey.js';
+import { ITM, V4, bagN, dailyKey } from '../../engine/state/economy.js';
+import { PL, STATE_N, placeIcon, placeName, placeState, rewardLine } from '../../engine/world/map.js';
+import { johtoOpen, routeName } from '../../engine/world/johto.js';
+import { SAFARI_BALLS, SAFARI_STEPS, SAFARI_PRICE, safariLocked } from '../../engine/modes/fishing-safari-coop.js';
+import { hoennOpen } from '../../engine/world/hoenn.js';
+import { regionIndex } from '../../engine/world/catch-anywhere.js';
+import { familyCaptureStats } from '../../engine/combat/catches.js';
 
 const Lock = ({ children }) => (
   <p className="v4-lock">

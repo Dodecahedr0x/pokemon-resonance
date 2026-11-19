@@ -1,6 +1,6 @@
-import { customCss } from '../../../engine/075-css-design-workshop.js';
+import { customCss } from '../../../engine/tools/design-workshop.js';
 
-// Settings › Design workshop (v4.42): buttons #designActionA/r/b handled by the engine (module 075).
+// Settings › Design workshop (v4.42): buttons #designActionA/r/b handled by the engine (engine/tools/design-workshop.js).
 const BOX = {
   width: '100%',
   boxSizing: 'border-box',

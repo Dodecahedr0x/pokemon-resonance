@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { Html } from '../../../lib/html.jsx';
 import { useResumeVersion } from './prepStore.js';
-import { SCEN } from '../../../engine/009-pokemon.js';
-import { medal } from '../../../engine/014-utils.js';
-import { badgeSvg } from '../../../engine/019-league.js';
-import { B } from '../../../engine/024-combat-ui.js';
-import { SV, battleLine, validBattle } from '../../../engine/025-saves.js';
+import { SCEN } from '../../../engine/pokemon/pokemon.js';
+import { medal } from '../../../engine/core/utils.js';
+import { badgeSvg } from '../../../engine/modes/league.js';
+import { B } from '../../../engine/combat/ui.js';
+import { SV, battleLine, validBattle } from '../../../engine/state/saves.js';
 
 // "Combat en cours" (Battle in progress) card (formerly renderResume), shared by #resumePrep (Battles) and
 // #resumeHome (Home). The data-resume / data-drop buttons are still handled by the engine.

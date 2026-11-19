@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { reportError } from '../engine/002-errors.js';
+import { reportError } from '../engine/core/errors.js';
 import { useShell } from './shellStore.js';
 
 // A render error must break only its block, not the whole app (like the old

@@ -1,4 +1,4 @@
-import { OFFLINE_STATE, offlineSupported, chapterTracks } from '../../../engine/093-chronicles-chapters.js';
+import { OFFLINE_STATE, offlineSupported, chapterTracks } from '../../../engine/progression/chronicles.js';
 
 // Offline mode (v4.62): music cached on the device.
 // Buttons handled by the engine (delegated click on data-offline-pack).

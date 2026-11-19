@@ -1,8 +1,8 @@
-import { BY } from '../../../engine/009-pokemon.js';
-import { PROFILE } from '../../../engine/011-game-state.js';
-import { medal } from '../../../engine/014-utils.js';
-import { fmt } from '../../../engine/032-v4-foundation.js';
-import { MASTERY_DEFS, MASTERY_THRESHOLD, masteryChoice } from '../../../engine/066-tactical-challenges.js';
+import { BY } from '../../../engine/pokemon/pokemon.js';
+import { PROFILE } from '../../../engine/state/game-state.js';
+import { medal } from '../../../engine/core/utils.js';
+import { fmt } from '../../../engine/state/economy.js';
+import { MASTERY_DEFS, MASTERY_THRESHOLD, masteryChoice } from '../../../engine/modes/tactical-challenges.js';
 import { Html } from '../../../lib/html.jsx';
 
 // A family: progression, then the choice between two masteries (data-mastery-track).

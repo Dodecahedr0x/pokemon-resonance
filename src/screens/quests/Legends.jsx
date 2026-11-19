@@ -1,11 +1,11 @@
-import { BY } from '../../engine/009-pokemon.js';
-import { PROFILE } from '../../engine/011-game-state.js';
-import { tc } from '../../engine/014-utils.js';
-import { ART } from '../../engine/032-v4-foundation.js';
-import { LEGS } from '../../engine/043-adventure-plus.js';
-import { hoennOpen } from '../../engine/059-hoenn.js';
-import { legendSteps } from '../../engine/064-quality.js';
-import { HOENN_LEGEND_DEFS, hoennLegendSteps, isInBox } from '../../engine/071-hoenn-legendaries.js';
+import { BY } from '../../engine/pokemon/pokemon.js';
+import { PROFILE } from '../../engine/state/game-state.js';
+import { tc } from '../../engine/core/utils.js';
+import { ART } from '../../engine/state/economy.js';
+import { LEGS } from '../../engine/modes/adventure.js';
+import { hoennOpen } from '../../engine/world/hoenn.js';
+import { legendSteps } from '../../engine/progression/quality.js';
+import { HOENN_LEGEND_DEFS, hoennLegendSteps, isInBox } from '../../engine/world/hoenn-legendaries.js';
 
 // Card of a legend: steps of its quest, then capture (data-v4fight lc… / hc…).
 function Legend({ L, et, isTaken: takenSet, fight, condition: cond }) {

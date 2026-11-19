@@ -1,11 +1,11 @@
 import { Html } from '../../../lib/html.jsx';
-import { MV, TAL } from '../../../engine/005-moves.js';
-import { BY } from '../../../engine/009-pokemon.js';
-import { ARR } from '../../../engine/010-in-battle-evolution.js';
-import { medal, tb, tc } from '../../../engine/014-utils.js';
-import { BRANCHES, branchWhy, evoOpts, mhpOf } from '../../../engine/021-combat-engine.js';
-import { B } from '../../../engine/024-combat-ui.js';
-import { eeveeWhy } from '../../../engine/069-calibration-eevee.js';
+import { MV, TAL } from '../../../engine/data/moves.js';
+import { BY } from '../../../engine/pokemon/pokemon.js';
+import { ARR } from '../../../engine/pokemon/evolution.js';
+import { medal, tb, tc } from '../../../engine/core/utils.js';
+import { BRANCHES, branchWhy, evoOpts, mhpOf } from '../../../engine/combat/engine.js';
+import { B } from '../../../engine/combat/ui.js';
+import { eeveeWhy } from '../../../engine/pokemon/eevee.js';
 import { evoState, useBattleVersion } from './battleStore.js';
 
 // Evolution choice (#evoPick). Opened and closed by the engine (hidden attribute);

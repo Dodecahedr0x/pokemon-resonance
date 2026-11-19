@@ -1,8 +1,8 @@
 import { Html } from '../../lib/html.jsx';
-import { dailyDone, dailyKey } from '../../engine/032-v4-foundation.js';
-import { STATE_N, placeIcon, placeName, placeState } from '../../engine/037-map.js';
-import { placesR } from '../../engine/054-johto.js';
-import { TREASURE_NAMES, treasureSpots, treasureState } from '../../engine/080-trainer-avatar-rare-encounters.js';
+import { dailyDone, dailyKey } from '../../engine/state/economy.js';
+import { STATE_N, placeIcon, placeName, placeState } from '../../engine/world/map.js';
+import { placesR } from '../../engine/world/johto.js';
+import { TREASURE_NAMES, treasureSpots, treasureState } from '../../engine/world/rare-encounters.js';
 import {
   WANDERING_NPCS,
   npcPositions,
@@ -10,7 +10,7 @@ import {
   secretPositions,
   secretState,
   visibleSecrets,
-} from '../../engine/091-phase-bosses-secret-places.js';
+} from '../../engine/world/secret-places.js';
 
 // Map markers (#mapMarks): places, then hidden finds (v4.50), secret places
 // and the passing character (v4.60), in the order the versions added them.

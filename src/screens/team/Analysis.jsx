@@ -1,14 +1,14 @@
 import { Html } from '../../lib/html.jsx';
-import { ROLES, RX } from '../../engine/004-data.js';
-import { BY, PRESETS } from '../../engine/009-pokemon.js';
-import { LINK_N, LINK_T, PROFILE, lvlOfPts, pairKey } from '../../engine/011-game-state.js';
-import { SYN, synOf } from '../../engine/012-recruits-roles-synergies.js';
-import { medal, tc } from '../../engine/014-utils.js';
-import { squad } from '../../engine/020-team-cards.js';
-import { startVoice } from '../../engine/021-combat-engine.js';
-import { RANKS, rankId, rankTag } from '../../engine/053-resonance.js';
-import { duoTechnique } from '../../engine/055-living-johto.js';
-import { FORMATIONS, formationKey, formationTeam, formationActive } from '../../engine/094-team-formations.js';
+import { ROLES, RX } from '../../engine/data/game-data.js';
+import { BY, PRESETS } from '../../engine/pokemon/pokemon.js';
+import { LINK_N, LINK_T, PROFILE, lvlOfPts, pairKey } from '../../engine/state/game-state.js';
+import { SYN, synOf } from '../../engine/pokemon/roles-synergies.js';
+import { medal, tc } from '../../engine/core/utils.js';
+import { squad } from '../../engine/team/team.js';
+import { startVoice } from '../../engine/combat/engine.js';
+import { RANKS, rankId, rankTag } from '../../engine/combat/resonance.js';
+import { duoTechnique } from '../../engine/world/living-johto.js';
+import { FORMATIONS, formationKey, formationTeam, formationActive } from '../../engine/team/formations.js';
 
 // Collapsed analysis (#anaD): summary (#anaSum) and cards (#ana). Clicks (data-p, data-rx,
 // data-form-picker): engine listeners on #ana and on the document.

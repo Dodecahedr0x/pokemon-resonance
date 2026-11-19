@@ -1,16 +1,16 @@
 import { Html } from '../../lib/html.jsx';
-import { PKA } from '../../engine/003-images.js';
-import { dexNo } from '../../engine/004-data.js';
-import { MV } from '../../engine/005-moves.js';
-import { REGION_NAMES } from '../../engine/008-hoenn-data.js';
-import { BY, familyOf } from '../../engine/009-pokemon.js';
-import { BUDGET } from '../../engine/010-in-battle-evolution.js';
-import { ITEMS2, PROFILE, inBox, isCamp, ownedItems } from '../../engine/011-game-state.js';
-import { RC, ROLEFX } from '../../engine/012-recruits-roles-synergies.js';
-import { INK, gp, medal, tb, tc } from '../../engine/014-utils.js';
-import { TEAM_MAX, cost, squad } from '../../engine/020-team-cards.js';
-import { RANKS, stars, rankId } from '../../engine/053-resonance.js';
-import { captureSite } from '../../engine/061-catch-anywhere.js';
+import { PKA } from '../../engine/assets/images.js';
+import { dexNo } from '../../engine/data/game-data.js';
+import { MV } from '../../engine/data/moves.js';
+import { REGION_NAMES } from '../../engine/data/hoenn.js';
+import { BY, familyOf } from '../../engine/pokemon/pokemon.js';
+import { BUDGET } from '../../engine/pokemon/evolution.js';
+import { ITEMS2, PROFILE, inBox, isCamp, ownedItems } from '../../engine/state/game-state.js';
+import { RC, ROLEFX } from '../../engine/pokemon/roles-synergies.js';
+import { INK, gp, medal, tb, tc } from '../../engine/core/utils.js';
+import { TEAM_MAX, cost, squad } from '../../engine/team/team.js';
+import { RANKS, stars, rankId } from '../../engine/combat/resonance.js';
+import { captureSite } from '../../engine/world/catch-anywhere.js';
 
 // Family grid (#dexGrid), v: visible families (engine's visible()). Clicks (data-stg, data-qa, data-open) and hover reflection:
 // engine listeners on #dexGrid, which stays mounted.

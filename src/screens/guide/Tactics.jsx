@@ -1,9 +1,9 @@
-import { ROLES } from '../../engine/004-data.js';
-import { ROLEFX, SYN, rIco, synOf } from '../../engine/012-recruits-roles-synergies.js';
-import { tc } from '../../engine/014-utils.js';
-import { squad } from '../../engine/020-team-cards.js';
-import { CHORDS } from '../../engine/049-identity.js';
-import { ECHOS, RANKS, stars } from '../../engine/053-resonance.js';
+import { ROLES } from '../../engine/data/game-data.js';
+import { ROLEFX, SYN, rIco, synOf } from '../../engine/pokemon/roles-synergies.js';
+import { tc } from '../../engine/core/utils.js';
+import { squad } from '../../engine/team/team.js';
+import { CHORDS } from '../../engine/team/identity.js';
+import { ECHOS, RANKS, stars } from '../../engine/combat/resonance.js';
 import { Html } from '../../lib/html.jsx';
 import { useGuide } from './guideStore.js';
 

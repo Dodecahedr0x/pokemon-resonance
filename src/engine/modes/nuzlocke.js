@@ -1,0 +1,129 @@
+/* Nuzlocke mode (option) (added in v4.51). */
+
+import { BY, SCEN } from '../pokemon/pokemon.js';
+import { BUDGET } from '../pokemon/evolution.js';
+import { PROFILE } from '../state/game-state.js';
+import { writeLS, toast } from '../core/utils.js';
+import { HOOKS } from '../core/hooks.js';
+import { __set_squad, squad } from '../team/team.js';
+import { B } from '../combat/ui.js';
+import { queueSave } from '../state/saves.js';
+import { PREF, savePref } from '../progression/campaign.js';
+import { V4, today } from '../state/economy.js';
+import { renderParams } from '../ui/settings.js';
+
+export let nuzlockeConfirm;
+
+export function nuzlockeState() {
+  let s;
+  try {
+    s = JSON.parse(localStorage.getItem('res-nuzlocke-run') || '{}');
+  } catch (e) {
+    s = {};
+  }
+  s.fallen = Array.isArray(s.fallen) ? s.fallen : [];
+  if (!s.enc || s.enc.d !== today()) {
+    s.enc = { d: today(), r: {} };
+  }
+  return s;
+}
+
+function saveNuzlocke(s) {
+  writeLS('res-nuzlocke-run', s);
+}
+
+/** Rule 1: a single encounter per region per day. Returns false if the encounter is refused. */
+export function nuzlockeEncounter() {
+  if (!NUZLOCKE_ON()) {
+    return true;
+  }
+  const s = nuzlockeState(),
+    r = V4.region || 'kanto';
+  if (s.enc.r[r]) {
+    toast('Nuzlocke : une seule rencontre par région et par jour. Revenez demain.');
+    return false;
+  }
+  s.enc.r[r] = 1;
+  saveNuzlocke(s);
+  return true;
+}
+
+export const NUZLOCKE_ON = () => !!PREF.nuzlockeOn;
+
+// Instructions run at startup, in the original order (see index.js).
+export function init() {
+  /** Rule 2: a Pokémon KO'd at the end of a battle is lost for good. */
+  HOOKS.battleEnd.push(() => {
+    if (!NUZLOCKE_ON() || !B || !B.over || B._nuzlockeDone) {
+      return;
+    }
+    B._nuzlockeDone = 1;
+    const D = SCEN[B.sc] || {};
+    if (D.noProgress || B.duel433 || D.tuto || D.duel433 || SCEN.ami === D) {
+      return;
+    }
+    const bases = [];
+    B.units
+      .filter(u => u.side === 'a' && u.ko)
+      .forEach(u => {
+        const b = (BY[u.id] && BY[u.id].base) || u.sp;
+        if (b && PROFILE.box.includes(b) && !bases.includes(b)) {
+          bases.push(b);
+        }
+      });
+    if (!bases.length) {
+      return;
+    }
+    let spared = null;
+    if (PROFILE.box.length - bases.length < 1) {
+      spared = bases.pop();
+    } // the last companion is spared
+    const s = nuzlockeState(),
+      displayNames = [];
+    bases.forEach(b => {
+      PROFILE.box = PROFILE.box.filter(x => x !== b);
+      PROFILE.forms = (PROFILE.forms || []).filter(x => !BY[x] || BY[x].base !== b);
+      __set_squad(squad.filter(x => !BY[x] || BY[x].base !== b));
+      displayNames.push(BY[b].n);
+      s.fallen.push({ id: b, n: BY[b].n, d: today(), sc: B.sc });
+    });
+    s.fallen = s.fallen.slice(-60);
+    saveNuzlocke(s);
+    B._nuzlockeDeaths = { names: displayNames, spared: spared ? BY[spared].n : '' };
+    if (!squad.length) {
+      __set_squad(
+        PROFILE.box.filter((id, i, a) => a.slice(0, i + 1).reduce((t, x) => t + BY[x].c, 0) <= BUDGET).slice(0, 4)
+      );
+    }
+    writeLS('res8-squad', squad);
+    queueSave();
+  });
+
+  // the fallen on the result sheet (.nuzlockeRun): rendered by React (src/screens/combat/battle/Result.jsx)
+
+  /** Settings: activation to confirm and list of the fallen. */
+  nuzlockeConfirm = false;
+
+  // "Mode Nuzlocke" (Nuzlocke mode) panel: rendered by React (src/screens/settings/panels/Nuzlocke.jsx)
+
+  document.addEventListener('click', e => {
+    const b = e.target.closest && e.target.closest('[data-nuzlocke-action]');
+    if (!b) {
+      return;
+    }
+    const k = b.dataset.nuzlockeAction;
+    if (k === 'ask') {
+      nuzlockeConfirm = true;
+    } else if (k === 'no') {
+      nuzlockeConfirm = false;
+    } else if (k === 'yes') {
+      nuzlockeConfirm = false;
+      PREF.nuzlockeOn = 1;
+      savePref();
+    } else if (k === 'off') {
+      PREF.nuzlockeOn = 0;
+      savePref();
+    }
+    renderParams();
+  });
+}

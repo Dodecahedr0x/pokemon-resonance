@@ -1,9 +1,9 @@
-import { MV } from '../../../engine/005-moves.js';
-import { BY, familyOf } from '../../../engine/009-pokemon.js';
-import { PROFILE } from '../../../engine/011-game-state.js';
-import { tc } from '../../../engine/014-utils.js';
-import { STLN } from '../../../engine/020-team-cards.js';
-import { ART } from '../../../engine/032-v4-foundation.js';
+import { MV } from '../../../engine/data/moves.js';
+import { BY, familyOf } from '../../../engine/pokemon/pokemon.js';
+import { PROFILE } from '../../../engine/state/game-state.js';
+import { tc } from '../../../engine/core/utils.js';
+import { STLN } from '../../../engine/team/team.js';
+import { ART } from '../../../engine/state/economy.js';
 import {
   DUEL_STATE,
   STAT_MAX,
@@ -12,7 +12,7 @@ import {
   duelStep,
   duelNew,
   duelOrder,
-} from '../../../engine/068-duel-tutorial.js';
+} from '../../../engine/modes/duel.js';
 
 const Options = ({ L }) =>
   L.map(([k, n]) => (

@@ -1,7 +1,7 @@
 import { Html } from '../../lib/html.jsx';
 import { Box, Dialogue } from './Window.jsx';
-import { BY } from '../../engine/009-pokemon.js';
-import { medal } from '../../engine/014-utils.js';
+import { BY } from '../../engine/pokemon/pokemon.js';
+import { medal } from '../../engine/core/utils.js';
 
 // Companion choice (#compBox). Clicks (data-comp, data-comp-p) and hidden: engine (057).
 export default function CompanionBox() {

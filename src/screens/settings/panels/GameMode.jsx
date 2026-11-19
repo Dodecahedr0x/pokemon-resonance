@@ -1,4 +1,4 @@
-import { isCamp } from '../../../engine/011-game-state.js';
+import { isCamp } from '../../../engine/state/game-state.js';
 
 // Game mode. The engine handles data-game-mode (with confirmation) and data-v4saves.
 export default function GameMode() {

@@ -1,14 +1,14 @@
 import { Html } from '../../lib/html.jsx';
-import { BY, SCEN } from '../../engine/009-pokemon.js';
-import { BUDGET } from '../../engine/010-in-battle-evolution.js';
-import { PROFILE, isCamp } from '../../engine/011-game-state.js';
-import { RC } from '../../engine/012-recruits-roles-synergies.js';
-import { tc } from '../../engine/014-utils.js';
-import { cost, squad } from '../../engine/020-team-cards.js';
-import { emblem, goalInfo } from '../../engine/031-home-journey.js';
-import { ART } from '../../engine/032-v4-foundation.js';
-import { routeName } from '../../engine/054-johto.js';
-import { FAMILY_REGION_NAMES, boxCapacityLabel, regionIndex } from '../../engine/061-catch-anywhere.js';
+import { BY, SCEN } from '../../engine/pokemon/pokemon.js';
+import { BUDGET } from '../../engine/pokemon/evolution.js';
+import { PROFILE, isCamp } from '../../engine/state/game-state.js';
+import { RC } from '../../engine/pokemon/roles-synergies.js';
+import { tc } from '../../engine/core/utils.js';
+import { cost, squad } from '../../engine/team/team.js';
+import { emblem, goalInfo } from '../../engine/world/home-journey.js';
+import { ART } from '../../engine/state/economy.js';
+import { routeName } from '../../engine/world/johto.js';
+import { FAMILY_REGION_NAMES, boxCapacityLabel, regionIndex } from '../../engine/world/catch-anywhere.js';
 
 // Home column (.v4-aside): team (#v4Team) and main quest (#v4Quest).
 export default function Side({ on }) {

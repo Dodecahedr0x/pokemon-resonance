@@ -1,9 +1,9 @@
 import { Fragment } from 'react';
-import { ITEMS2, PROFILE } from '../../engine/011-game-state.js';
-import { tc } from '../../engine/014-utils.js';
-import { MV } from '../../engine/005-moves.js';
-import { SHOP, fmt, tLevel, today } from '../../engine/032-v4-foundation.js';
-import { canAfford, rewardText } from '../../engine/084-peddler-route-missions.js';
+import { ITEMS2, PROFILE } from '../../engine/state/game-state.js';
+import { tc } from '../../engine/core/utils.js';
+import { MV } from '../../engine/data/moves.js';
+import { SHOP, fmt, tLevel, today } from '../../engine/state/economy.js';
+import { canAfford, rewardText } from '../../engine/world/route-events.js';
 import {
   FUSION_COST,
   loadToday,
@@ -14,7 +14,7 @@ import {
   hasIngredients,
   ingredientsText,
   tmShowcase,
-} from '../../engine/088-workshop-recipes.js';
+} from '../../engine/items/workshop.js';
 import {
   QUESTS,
   TROPHIES,
@@ -24,8 +24,8 @@ import {
   questRewardText,
   questState,
   trophyState,
-} from '../../engine/090-item-quests-trophies.js';
-import { EGG_SHOP, eggPool, eggState } from '../../engine/092-companion-eggs-expeditions.js';
+} from '../../engine/progression/item-quests.js';
+import { EGG_SHOP, eggPool, eggState } from '../../engine/progression/companion-eggs.js';
 import {
   TALENTS,
   TALENT_MAX,
@@ -33,7 +33,7 @@ import {
   talentPoints,
   talentSpent,
   talentState,
-} from '../../engine/095-trainer-talent-tree.js';
+} from '../../engine/progression/talent-tree.js';
 import { Disc } from './Items.jsx';
 
 // Workshop row: text on the left, engine button on the right (data-craft-bench, data-quest-log…).

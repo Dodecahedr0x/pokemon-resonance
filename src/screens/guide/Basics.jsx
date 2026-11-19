@@ -1,8 +1,8 @@
 import { useEffect, useRef } from 'react';
-import { MV } from '../../engine/005-moves.js';
-import { BY, SYS3 } from '../../engine/009-pokemon.js';
-import { ARR } from '../../engine/010-in-battle-evolution.js';
-import { RM, medal } from '../../engine/014-utils.js';
+import { MV } from '../../engine/data/moves.js';
+import { BY, SYS3 } from '../../engine/pokemon/pokemon.js';
+import { ARR } from '../../engine/pokemon/evolution.js';
+import { RM, medal } from '../../engine/core/utils.js';
 import { Html } from '../../lib/html.jsx';
 import { setRuleOpen, useGuide } from './guideStore.js';
 

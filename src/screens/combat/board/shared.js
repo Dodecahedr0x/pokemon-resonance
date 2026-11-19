@@ -1,4 +1,4 @@
-import { L } from '../../../engine/024-combat-ui.js';
+import { L } from '../../../engine/combat/ui.js';
 
 // Shared by the board layers (Terrain, Layers, Units, Board).
 

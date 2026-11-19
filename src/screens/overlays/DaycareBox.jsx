@@ -1,7 +1,7 @@
 import { Html } from '../../lib/html.jsx';
 import { Box, Dialogue } from './Window.jsx';
-import { BY } from '../../engine/009-pokemon.js';
-import { medal } from '../../engine/014-utils.js';
+import { BY } from '../../engine/pokemon/pokemon.js';
+import { medal } from '../../engine/core/utils.js';
 
 // Camp Daycare (#pensBox): choice of a pair. The engine (055) computes the list and
 // the compatibility, and keeps the clicks (data-pens, data-pens-p) and the hidden attribute.

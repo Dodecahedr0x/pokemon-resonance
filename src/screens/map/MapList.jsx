@@ -1,8 +1,8 @@
 import { Fragment } from 'react';
 import { Html } from '../../lib/html.jsx';
-import { V4 } from '../../engine/032-v4-foundation.js';
-import { STATE_N, placeIcon, placeName, placeState, placeSub } from '../../engine/037-map.js';
-import { placesR } from '../../engine/054-johto.js';
+import { V4 } from '../../engine/state/economy.js';
+import { STATE_N, placeIcon, placeName, placeState, placeSub } from '../../engine/world/map.js';
+import { placesR } from '../../engine/world/johto.js';
 
 const G = [
   ['aventure', 'Aventure'],

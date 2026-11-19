@@ -1,9 +1,9 @@
 import { Html } from '../../lib/html.jsx';
-import { BUDGET } from '../../engine/010-in-battle-evolution.js';
-import { medal } from '../../engine/014-utils.js';
-import { TEAM_MAX } from '../../engine/020-team-cards.js';
-import { startVoice } from '../../engine/021-combat-engine.js';
-import { teamBtns } from '../../engine/027-gym-on-screen.js';
+import { BUDGET } from '../../engine/pokemon/evolution.js';
+import { medal } from '../../engine/core/utils.js';
+import { TEAM_MAX } from '../../engine/team/team.js';
+import { startVoice } from '../../engine/combat/engine.js';
+import { teamBtns } from '../../engine/modes/gym-screen.js';
 import { useEngineReady } from '../../engineReady.js';
 import { useRosterKey } from './teamStore.js';
 import { analysis } from './analysis.js';

@@ -1,4 +1,4 @@
-import { B, BG, HC, HP } from '../../../engine/024-combat-ui.js';
+import { B, BG, HC, HP } from '../../../engine/combat/ui.js';
 import { useBoard } from './boardStore.js';
 
 // board <defs>: terrain patterns (texDefs), gradients, intent arrow;

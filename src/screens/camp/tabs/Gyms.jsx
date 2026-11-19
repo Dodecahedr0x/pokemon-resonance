@@ -1,7 +1,7 @@
-import { BY, MON, SCEN } from '../../../engine/009-pokemon.js';
-import { PROFILE } from '../../../engine/011-game-state.js';
-import { medal } from '../../../engine/014-utils.js';
-import { GYM_EDITOR, GYM_RULES, GYM_TERRAINS, gymShareCode } from '../../../engine/066-tactical-challenges.js';
+import { BY, MON, SCEN } from '../../../engine/pokemon/pokemon.js';
+import { PROFILE } from '../../../engine/state/game-state.js';
+import { medal } from '../../../engine/core/utils.js';
+import { GYM_EDITOR, GYM_RULES, GYM_TERRAINS, gymShareCode } from '../../../engine/modes/tactical-challenges.js';
 import { Html } from '../../../lib/html.jsx';
 
 const Options = ({ L }) =>

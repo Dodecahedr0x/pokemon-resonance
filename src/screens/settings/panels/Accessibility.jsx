@@ -1,4 +1,4 @@
-import { PREF } from '../../../engine/026-campaign-tutorial-sound.js';
+import { PREF } from '../../../engine/progression/campaign.js';
 import { Switch } from '../controls.jsx';
 
 const SIZES = [

@@ -1,9 +1,9 @@
 import { Html } from '../../lib/html.jsx';
-import { BY } from '../../engine/009-pokemon.js';
-import { PROFILE } from '../../engine/011-game-state.js';
-import { medal } from '../../engine/014-utils.js';
-import { fmt } from '../../engine/032-v4-foundation.js';
-import { CATEGORY_NAMES, log0430 } from '../../engine/065-camp-tactics.js';
+import { BY } from '../../engine/pokemon/pokemon.js';
+import { PROFILE } from '../../engine/state/game-state.js';
+import { medal } from '../../engine/core/utils.js';
+import { fmt } from '../../engine/state/economy.js';
+import { CATEGORY_NAMES, log0430 } from '../../engine/progression/camp.js';
 
 const NL = '\n  ';
 const Tile = ({ v, t }) => (

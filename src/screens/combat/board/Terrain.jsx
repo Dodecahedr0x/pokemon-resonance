@@ -1,9 +1,9 @@
 import { Fragment } from 'react';
 import { useKeyed } from '../../../lib/useKeyed.js';
-import { BH, BW, K, P } from '../../../engine/021-combat-engine.js';
-import { B, BG, HC, HP, L, VERT, tiltS } from '../../../engine/024-combat-ui.js';
-import { tileTip } from '../../../engine/026-campaign-tutorial-sound.js';
-import { fieldSvg } from '../../../engine/027-gym-on-screen.js';
+import { BH, BW, K, P } from '../../../engine/combat/engine.js';
+import { B, BG, HC, HP, L, VERT, tiltS } from '../../../engine/combat/ui.js';
+import { tileTip } from '../../../engine/progression/campaign.js';
+import { fieldSvg } from '../../../engine/modes/gym-screen.js';
 import { useBoard } from './boardStore.js';
 import { SvgHtml } from './svgHtml.jsx';
 import { PE, lref } from './shared.js';

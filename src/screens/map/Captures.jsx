@@ -1,7 +1,7 @@
-import { PROFILE } from '../../engine/011-game-state.js';
-import { PIX } from '../../engine/032-v4-foundation.js';
-import { FAMILY_REGION_NAMES, ROUTE_NAMES, regionIndex } from '../../engine/061-catch-anywhere.js';
-import { DIPLOMA_REWARDS, familyCaptureStats } from '../../engine/063-combat-catches-home.js';
+import { PROFILE } from '../../engine/state/game-state.js';
+import { PIX } from '../../engine/state/economy.js';
+import { FAMILY_REGION_NAMES, ROUTE_NAMES, regionIndex } from '../../engine/world/catch-anywhere.js';
+import { DIPLOMA_REWARDS, familyCaptureStats } from '../../engine/combat/catches.js';
 
 // Families captured in the region (v4.28), below the route. Clicking a Pokémon
 // (data-region-dex) is still handled by the engine.

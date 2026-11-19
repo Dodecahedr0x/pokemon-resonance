@@ -1,9 +1,9 @@
 import { Html } from '../../lib/html.jsx';
 import { Box, Dialogue } from './Window.jsx';
-import { BY } from '../../engine/009-pokemon.js';
-import { medal } from '../../engine/014-utils.js';
-import { DESTINATIONS } from '../../engine/049-identity.js';
-import { lockedByBadges } from '../../engine/092-companion-eggs-expeditions.js';
+import { BY } from '../../engine/pokemon/pokemon.js';
+import { medal } from '../../engine/core/utils.js';
+import { DESTINATIONS } from '../../engine/team/identity.js';
+import { lockedByBadges } from '../../engine/progression/companion-eggs.js';
 
 // Camp expedition window (#expBox): choice of location, then of Pokémon.
 // Clicks (data-exp-*) and hidden attribute: engine (049).

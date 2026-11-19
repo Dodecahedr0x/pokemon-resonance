@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef } from 'react';
-import { DIA, L } from '../../../engine/024-combat-ui.js';
-import { tokArtErr, tokArtOk } from '../../../engine/041-illustrations.js';
+import { DIA, L } from '../../../engine/combat/ui.js';
+import { tokArtErr, tokArtOk } from '../../../engine/assets/illustrations.js';
 import { useBoard } from './boardStore.js';
 import { PE, lref } from './shared.js';
 

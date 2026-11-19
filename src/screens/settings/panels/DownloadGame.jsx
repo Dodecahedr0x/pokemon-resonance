@@ -1,4 +1,4 @@
-// Settings › « Télécharger le jeu » (Download the game) (v4.41): the click on #downloadB is handled by the engine (module 074).
+// Settings › « Télécharger le jeu » (Download the game) (v4.41): the click on #downloadB is handled by the engine (engine/tools/download-game.js).
 export default function DownloadGame() {
   return (
     <section className="v4-panel" id="download">

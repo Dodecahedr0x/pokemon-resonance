@@ -1,6 +1,6 @@
-import { NUZLOCKE_ON, nuzlockeConfirm, nuzlockeState } from '../../../engine/081-nuzlocke-mode.js';
+import { NUZLOCKE_ON, nuzlockeConfirm, nuzlockeState } from '../../../engine/modes/nuzlocke.js';
 
-// Settings › Nuzlocke Mode (v4.51): data-nuzlocke-action buttons handled by the engine (module 081),
+// Settings › Nuzlocke Mode (v4.51): data-nuzlocke-action buttons handled by the engine (engine/modes/nuzlocke.js),
 // which toggles nuzlockeConfirm (confirmation) then calls renderParams().
 export default function Nuzlocke() {
   const s = nuzlockeState(),

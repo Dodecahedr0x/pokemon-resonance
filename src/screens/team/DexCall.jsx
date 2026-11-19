@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { Html } from '../../lib/html.jsx';
-import { BY, PRESETS } from '../../engine/009-pokemon.js';
-import { PROFILE, inBox } from '../../engine/011-game-state.js';
-import { RC } from '../../engine/012-recruits-roles-synergies.js';
-import { medal } from '../../engine/014-utils.js';
-import { squad } from '../../engine/020-team-cards.js';
-import { STARS } from '../../engine/027-gym-on-screen.js';
-import { LEGS } from '../../engine/043-adventure-plus.js';
-import { TEAM_NAME_EDIT } from '../../engine/067-individuals-comfort.js';
+import { BY, PRESETS } from '../../engine/pokemon/pokemon.js';
+import { PROFILE, inBox } from '../../engine/state/game-state.js';
+import { RC } from '../../engine/pokemon/roles-synergies.js';
+import { medal } from '../../engine/core/utils.js';
+import { squad } from '../../engine/team/team.js';
+import { STARS } from '../../engine/modes/gym-screen.js';
+import { LEGS } from '../../engine/modes/adventure.js';
+import { TEAM_NAME_EDIT } from '../../engine/team/individuals.js';
 
 // Panel above the grid (#dexCall, old renderDexCall): confirmed recruits,
 // captured legends (v4.29), saved teams (v4.32), formations.
