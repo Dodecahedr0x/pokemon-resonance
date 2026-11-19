@@ -1,0 +1,359 @@
+/* ---------- Bag and Shop ---------- */
+.v4-walbig {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md) var(--space-2xl);
+  padding: var(--space-md) var(--space-lg);
+  margin-bottom: var(--space-md);
+}
+.v4-walbig > div {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+.v4-walbig span:last-child {
+  display: grid;
+}
+.v4-walbig small {
+  font: 700 12px/1.2 var(--f-d);
+  color: var(--v4-tx2);
+}
+.v4-walbig b {
+  font: 850 26px/1.05 var(--f-d);
+  font-variant-numeric: tabular-nums;
+}
+.v4-sac {
+  display: grid;
+  grid-template-columns: 200px minmax(0, 1fr);
+  gap: var(--space-md);
+  align-items: start;
+}
+.v4-cats {
+  display: grid;
+  gap: var(--space-xs);
+  padding: var(--space-xs);
+  border-radius: 13px;
+  background: rgba(3, 14, 30, 0.6);
+  border: 1px solid rgba(120, 200, 255, 0.18);
+}
+.v4-cats button {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  min-height: 44px;
+  padding: 0 var(--space-md);
+  border-radius: 10px;
+  border: 1px solid transparent;
+  background: none;
+  color: var(--v4-tx2);
+  font: 800 14px/1 var(--f-d);
+  cursor: pointer;
+  text-align: left;
+}
+.v4-cats button svg {
+  width: 18px;
+  height: 18px;
+}
+.v4-cats button[aria-pressed='true'] {
+  background: linear-gradient(180deg, var(--v4-gold1), var(--v4-gold2));
+  color: var(--v4-ink);
+  border-color: #fff2a8;
+}
+.v4-items {
+  display: grid;
+  gap: var(--space-sm);
+}
+.v4-it {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: 13px;
+  background: linear-gradient(180deg, var(--v4-p1), var(--v4-p2));
+  border: 1px solid var(--v4-ln);
+}
+.v4-it.off {
+  opacity: 0.55;
+}
+.v4-it-im {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.02) 70%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  flex: none;
+}
+.v4-it-im img {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+}
+.v4-it-t {
+  flex: 1;
+  min-width: 0;
+}
+.v4-it-t b {
+  font: 850 15.5px/1.2 var(--f-d);
+}
+.v4-it-t p {
+  margin: var(--space-3xs) 0;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--v4-tx2);
+}
+.v4-it-t em {
+  font: 700 12px/1.2 var(--f-d);
+  font-style: normal;
+  color: #bfe6ff;
+}
+.v4-it-b {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex: none;
+}
+.v4-it-b .b {
+  min-width: 96px;
+  min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+}
+.v4-qty {
+  display: flex;
+  align-items: center;
+  border-radius: 10px;
+  border: 1px solid rgba(120, 200, 255, 0.3);
+  background: rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+}
+.v4-qty button {
+  width: 36px;
+  height: 40px;
+  border: 0;
+  background: none;
+  color: #fff;
+  font: 800 18px/1 var(--f-d);
+  cursor: pointer;
+}
+.v4-qty button[disabled] {
+  opacity: 0.3;
+}
+.v4-qty b {
+  min-width: 26px;
+  text-align: center;
+  font: 850 15px/1 var(--f-d);
+}
+
+/* ---------- Settings ---------- */
+.v4-params {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-md);
+}
+.v4-ps {
+  padding: var(--space-md);
+  display: grid;
+  gap: var(--space-sm);
+  align-content: start;
+}
+.v4-fld {
+  display: grid;
+  gap: var(--space-xs);
+}
+.v4-fld > span {
+  font: 700 12.5px/1 var(--f-d);
+  color: var(--v4-tx2);
+}
+html body .v4-fld input {
+  min-height: 44px;
+  padding: 0 var(--space-md);
+  border-radius: 10px !important;
+  font: 600 15px var(--f-b);
+}
+.v4-seg {
+  display: flex;
+  gap: var(--space-2xs);
+  padding: var(--space-2xs);
+  border-radius: 11px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(120, 200, 255, 0.2);
+}
+.v4-seg button {
+  flex: 1;
+  min-height: 38px;
+  border-radius: 8px;
+  border: 0;
+  background: none;
+  color: var(--v4-tx2);
+  font: 800 13.5px/1 var(--f-d);
+  cursor: pointer;
+}
+.v4-seg button[aria-pressed='true'] {
+  background: linear-gradient(180deg, var(--v4-gold1), var(--v4-gold2));
+  color: var(--v4-ink);
+}
+.v4-ps-n {
+  margin: 0;
+  font-size: 13px;
+  color: var(--v4-tx2);
+}
+.v4-ps-a {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+.v4-sw {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-sm) 0;
+  cursor: pointer;
+}
+.v4-sw > span {
+  flex: 1;
+  display: grid;
+}
+.v4-sw b {
+  font: 800 14.5px/1.2 var(--f-d);
+}
+.v4-sw em {
+  font-size: 12.5px;
+  font-style: normal;
+  color: var(--v4-tx2);
+}
+.v4-sw input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+.v4-sw i {
+  position: relative;
+  width: 48px;
+  height: 28px;
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(120, 200, 255, 0.3);
+  flex: none;
+  transition: background 0.2s;
+}
+.v4-sw i::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #c9d8e8;
+  transition:
+    transform 0.2s var(--ease),
+    background 0.2s;
+}
+.v4-sw input:checked + i {
+  background: linear-gradient(90deg, #20b38a, #3fd4a0);
+  border-color: #9ff2d4;
+}
+.v4-sw input:checked + i::after {
+  transform: translateX(20px);
+  background: #fff;
+}
+.v4-sw input:focus-visible + i {
+  outline: 2px solid #ffd75e;
+  outline-offset: 2px;
+}
+.v4-sl {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: var(--space-2xs) var(--space-sm);
+  padding: 0 0 var(--space-xs);
+}
+.v4-sl span {
+  grid-column: 1/-1;
+  font: 600 12.5px/1 var(--f-b);
+  color: var(--v4-tx2);
+}
+.v4-sl b {
+  font: 800 13px/1 var(--f-d);
+  min-width: 46px;
+  text-align: right;
+}
+.v4-sl input {
+  width: 100%;
+  accent-color: #3fd4a0;
+  height: 28px;
+}
+.v4-reset {
+  justify-self: start;
+  margin-top: var(--space-2xs);
+}
+
+/* ---------- Team: collection cards ---------- */
+html body #pokedex .fcard {
+  border-radius: 16px !important;
+  border: 1px solid color-mix(in srgb, var(--c) 55%, #9fd8ff 25%) !important;
+  background: linear-gradient(170deg, color-mix(in srgb, var(--c2) 30%, #0c2244), #081a36 55%) !important;
+}
+html body #pokedex .fcard .fc-in {
+  background: transparent !important;
+  border: 0 !important;
+}
+html body #pokedex .fc-art {
+  background:
+    radial-gradient(70% 60% at 50% 60%, color-mix(in srgb, var(--c) 65%, transparent), transparent 72%),
+    linear-gradient(165deg, color-mix(in srgb, var(--c) 40%, #123158), color-mix(in srgb, var(--c2) 30%, #0a1d3a)) !important;
+  border-bottom: 0 !important;
+  border-radius: 12px !important;
+  margin: 0 var(--space-sm) !important;
+}
+html body #pokedex .fc-art .orb {
+  display: none !important;
+}
+html body #pokedex .fc-art::after {
+  top: auto !important;
+  bottom: 10px !important;
+  left: 18% !important;
+  right: 18% !important;
+  width: auto !important;
+  height: 14px !important;
+  border-radius: 50% !important;
+}
+html body #pokedex .fc-art .pokemon-art-sprite {
+  position: relative !important;
+  z-index: 2 !important;
+  width: 88% !important;
+  height: auto !important;
+  max-height: 94% !important;
+  aspect-ratio: 1 !important;
+  object-fit: contain !important;
+}
+html body #pokedex .fc-name h3 {
+  font: 850 17px/1.1 var(--f-d) !important;
+  text-transform: none !important;
+  letter-spacing: -0.01em !important;
+}
+html body .tb {
+  background: var(--c) !important;
+  color: var(--fg) !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  font: 800 10.5px/1 var(--f-d) !important;
+  letter-spacing: 0.06em !important;
+  padding: var(--space-2xs) var(--space-sm) var(--space-2xs) var(--space-2xs) !important;
+  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+}
+html body .tb .tb-s {
+  background: rgba(0, 0, 0, 0.18) !important;
+  border-radius: 50% !important;
+}
+html body #pokedex .fcard.in {
+  border-color: #ffe17b !important;
+  box-shadow:
+    0 0 0 2px rgba(255, 215, 94, 0.45),
+    0 16px 30px -14px rgba(255, 190, 40, 0.5) !important;
+}

@@ -1,6 +1,7 @@
 import { PROFILE } from '../../../engine/state/game-state.js';
 import { PREF } from '../../../engine/ui/preferences.js';
 import { BOARD_THEMES, rivalState, isThemeUnlocked, dominantType } from '../../../engine/modes/rival-board-themes.js';
+import { space } from '../../../lib/theme.js';
 
 // Board themes (v4.55), bought with Shards, then the rival Kael's report.
 // Buttons handled by the engine (delegated click on data-board-theme-action).
@@ -37,7 +38,7 @@ export default function BoardThemes() {
           );
         })}
       </div>
-      <h3 className="h3" style={{ marginTop: '14px' }}>
+      <h3 className="h3" style={{ marginTop: space.md }}>
         Votre rival
       </h3>
       <p className="v4-note">{`Kael : ${rv.w} défaite${rv.w > 1 ? 's' : ''} contre vous, ${rv.l} victoire${rv.l > 1 ? 's' : ''}.${rival}`}</p>

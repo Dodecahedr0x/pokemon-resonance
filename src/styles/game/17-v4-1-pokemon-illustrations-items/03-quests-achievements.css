@@ -1,0 +1,363 @@
+/* --- Quests: achievements --- */
+html body .su-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  margin-bottom: var(--space-sm);
+  opacity: 0.62;
+}
+html body .su-row.ok {
+  opacity: 1;
+}
+html body .su-ic {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+html body .su-row.ok .su-ic {
+  background: rgba(255, 215, 94, 0.16);
+  border-color: #ffd75e;
+}
+html body .su-ic svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  color: var(--mut, #9fb0c4);
+}
+html body .su-row.ok .su-ic svg {
+  color: #ffd75e;
+}
+html body .su-t {
+  flex: 1;
+  display: grid;
+  gap: var(--space-3xs);
+  min-width: 0;
+}
+html body .su-t b {
+  font-size: 14.5px;
+}
+html body .su-t em {
+  font-style: normal;
+  font-size: 12.5px;
+  color: var(--mut, #9fb0c4);
+}
+html body .su-t small {
+  font-size: 11.5px;
+  color: var(--mut, #9fb0c4);
+}
+html body .su-t .su-ti {
+  color: #ffe17b;
+}
+html body .su-p {
+  display: block;
+  height: 5px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+html body .su-p i {
+  display: block;
+  height: 100%;
+  background: #ffd75e;
+}
+html body .su-ok {
+  color: #ffd75e;
+  font-weight: 800;
+}
+/* --- result --- */
+html body .res-l .rl.tombe {
+  opacity: 0.8;
+}
+html body .res-l .rl.succ b:last-child {
+  color: #ffd75e;
+}
+/* --- Quests: 4 tabs that fit on a phone --- */
+html body #quetes .v4-tabs {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  overflow: visible;
+}
+html body #quetes .v4-tabs button {
+  min-width: 0;
+  white-space: nowrap;
+}
+@media (max-width: 520px) {
+  html body #quetes .v4-tabs {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* ==== 26-v4.10-identite.css ==== */
+/* =====================================================================
+   v4.10: Resonance Chords, character, base camp, expeditions
+   ===================================================================== */
+/* --- chord badge --- */
+html body .chip-acc {
+  white-space: nowrap;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-color: rgba(255, 215, 94, 0.4);
+}
+html body .chip-acc i {
+  margin-right: var(--space-3xs);
+}
+html body .chip-acc i:last-of-type {
+  margin-right: var(--space-xs);
+}
+html body .chip-acc.fait {
+  background: rgba(255, 215, 94, 0.16);
+  color: #ffe17b;
+}
+/* --- Guide: the chord list --- */
+html body .acc-codex {
+  margin-top: var(--space-lg);
+  display: grid;
+  gap: var(--space-sm);
+}
+html body .acc-row {
+  display: flex;
+  gap: var(--space-sm);
+  align-items: flex-start;
+  padding: var(--space-sm) var(--space-sm);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+html body .acc-row em {
+  display: block;
+  font-style: normal;
+  font-size: 12.5px;
+  color: var(--mut, #9fb0c4);
+}
+html body .acc-t {
+  display: flex;
+  gap: var(--space-3xs);
+  padding-top: var(--space-2xs);
+  flex: none;
+}
+html body .acc-t i {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+/* --- sheet: character --- */
+html body .car-mvc .chip {
+  background: rgba(150, 200, 255, 0.16);
+  color: #a9d4ff;
+}
+/* --- Home: base camp --- */
+html body .camp4 {
+  margin: var(--space-lg) 0;
+  padding: var(--space-md);
+}
+html body .camp4[hidden] {
+  display: none;
+}
+html body .cb-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: var(--space-sm);
+  margin: var(--space-sm) 0 var(--space-md);
+}
+html body .cb-b {
+  display: grid;
+  gap: var(--space-xs);
+  align-content: start;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+html body .cb-b.on {
+  border-color: rgba(255, 215, 94, 0.45);
+}
+html body .cb-b p {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--mut, #9fb0c4);
+}
+html body .cb-h {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-sm);
+}
+html body .cb-lv {
+  display: flex;
+  gap: var(--space-2xs);
+}
+html body .cb-lv i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 215, 94, 0.6);
+}
+html body .cb-lv i.on {
+  background: #ffd75e;
+}
+html body .cb-lk {
+  font-style: normal;
+  font-size: 12px;
+  color: #ffb37a;
+}
+html body .cb-st {
+  margin: var(--space-2xs) 0 var(--space-sm);
+  font: 800 13px/1.2 var(--f-d, inherit);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--mut, #9fb0c4);
+}
+html body .cb-x {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+html body .cb-x > span {
+  flex: 1;
+  display: grid;
+  min-width: 0;
+}
+html body .cb-x em,
+html body .cb-x small {
+  font-style: normal;
+  font-size: 12px;
+  color: var(--mut, #9fb0c4);
+}
+/* --- expedition window --- */
+html body .exp-box {
+  z-index: 92;
+}
+html body .exp-card {
+  width: min(520px, 100%);
+}
+html body .exp-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-sm);
+  margin: var(--space-sm) 0;
+}
+html body .exp-d {
+  display: grid;
+  gap: var(--space-3xs);
+  justify-items: start;
+  padding: var(--space-sm);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.04);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+html body .exp-d:hover,
+html body .exp-d:focus-visible {
+  border-color: #ffe17b;
+}
+html body .exp-d em {
+  font-style: normal;
+  font-size: 12px;
+  color: var(--mut, #9fb0c4);
+}
+@media (max-width: 420px) {
+  html body .exp-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ==== 27-v4.11-monde.css ==== */
+/* =====================================================================
+   v4.11: seasons, rebroadcast, Team Dissonance
+   ===================================================================== */
+html body .v4-saison[hidden] {
+  display: none;
+}
+html body .v4-saison {
+  margin-bottom: var(--space-md);
+}
+html body .sa-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-md);
+  border-color: color-mix(in srgb, var(--c) 60%, transparent);
+  background: linear-gradient(120deg, color-mix(in srgb, var(--c) 22%, transparent), transparent 70%);
+}
+html body .sa-ic {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--c) 28%, #0b1622);
+  border: 1px solid var(--c);
+}
+html body .sa-ic svg {
+  width: 20px;
+  height: 20px;
+  fill: var(--c);
+}
+html body .sa-t {
+  flex: 1;
+  display: grid;
+  gap: var(--space-3xs);
+  min-width: 0;
+}
+html body .sa-t small {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--c);
+}
+html body .sa-t em {
+  font-style: normal;
+  font-size: 12.5px;
+  color: var(--mut, #9fb0c4);
+}
+html body .sa-ty {
+  display: flex;
+  gap: var(--space-2xs);
+}
+html body .sa-ok {
+  font-size: 12.5px;
+  color: var(--c);
+  white-space: nowrap;
+}
+@media (max-width: 520px) {
+  html body .sa-card {
+    flex-wrap: wrap;
+  }
+}
+/* the route takes on the colors of the season */
+html body #route[data-saison='halloween'] {
+  box-shadow: inset 0 0 140px rgba(120, 60, 200, 0.45);
+}
+html body #route[data-saison='hiver'] {
+  box-shadow: inset 0 0 140px rgba(190, 230, 255, 0.4);
+}
+html body #route[data-saison='printemps'] {
+  box-shadow: inset 0 0 140px rgba(255, 170, 210, 0.3);
+}
+html body #route[data-saison='ete'] {
+  box-shadow: inset 0 0 140px rgba(255, 170, 60, 0.3);
+}
+/* result: the best move */
+html body .res-l .rl.rd {
+  align-items: center;
+}
+html body .res-l .rl.rd span {
+  flex: 1;
+}
+html body .res-l .rl > b:last-child {
+  white-space: nowrap;
+}

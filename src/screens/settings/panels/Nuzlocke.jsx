@@ -1,4 +1,5 @@
 import { NUZLOCKE_ON, nuzlockeConfirm, nuzlockeState } from '../../../engine/modes/nuzlocke.js';
+import { space } from '../../../lib/theme.js';
 
 // Settings › Nuzlocke Mode (v4.51): data-nuzlocke-action buttons handled by the engine (engine/modes/nuzlocke.js),
 // which toggles nuzlockeConfirm (confirmation) then calls renderParams().
@@ -35,7 +36,7 @@ export default function Nuzlocke() {
         )}
       </div>
       {s.fallen.length > 0 && (
-        <p className="v4-note" style={{ marginTop: '10px' }}>
+        <p className="v4-note" style={{ marginTop: space.sm }}>
           <b>Tombés au combat ({s.fallen.length})</b> :{' '}
           {s.fallen
             .slice(-12)

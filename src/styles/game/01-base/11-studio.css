@@ -1,0 +1,195 @@
+/* ---------- studio ---------- */
+.prod {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-md);
+  align-items: start;
+}
+@media (max-width: 860px) {
+  .prod {
+    grid-template-columns: 1fr;
+  }
+}
+.pc-card {
+  display: grid;
+  gap: var(--space-lg);
+  padding: var(--space-2xl);
+  border-radius: var(--rl);
+  background: linear-gradient(180deg, var(--s2), var(--s1));
+  border: 1px solid var(--line);
+}
+.scope {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+}
+.scope li {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-md);
+  padding: var(--space-md) 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 14px;
+  color: var(--tx2);
+}
+.scope li:last-child {
+  border: 0;
+}
+.scope b {
+  font-family: var(--f-d);
+  font-stretch: 125%;
+  font-weight: 800;
+  font-size: 19px;
+  color: var(--tx);
+  font-variant-numeric: tabular-nums;
+}
+.layers {
+  display: grid;
+  gap: var(--space-xs);
+}
+.layer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--space-sm);
+  align-items: center;
+  padding: var(--space-md) var(--space-lg);
+  border-radius: 12px;
+  background: var(--s2);
+  border: 1px solid var(--line);
+}
+.layer b {
+  display: block;
+  font-family: var(--f-d);
+  font-stretch: 112%;
+  font-weight: 750;
+  font-size: 15px;
+  text-transform: uppercase;
+}
+.layer span {
+  font-size: 12.5px;
+  color: var(--mut);
+}
+.layer .t {
+  font-family: var(--f-m);
+  font-size: 10px;
+  color: var(--tx2);
+  white-space: nowrap;
+}
+.layer.core {
+  border-color: rgba(227, 192, 122, 0.5);
+  background: var(--gold-s);
+}
+.road {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-md);
+}
+@media (max-width: 980px) {
+  .road {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 540px) {
+  .road {
+    grid-template-columns: 1fr;
+  }
+}
+.rp {
+  display: grid;
+  gap: var(--space-sm);
+  align-content: start;
+  padding: var(--space-xl);
+  border-radius: var(--r);
+  background: var(--s1);
+  border: 1px solid var(--line);
+  position: relative;
+  overflow: hidden;
+}
+.rp .k {
+  font-family: var(--f-d);
+  font-stretch: 125%;
+  font-weight: 900;
+  font-size: 46px;
+  line-height: 0.8;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.18);
+}
+.rp:first-child .k {
+  -webkit-text-stroke-color: var(--gold);
+}
+.rp .du {
+  font-family: var(--f-m);
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.rp p {
+  font-size: 13.5px;
+  color: var(--tx2);
+}
+.legal {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--space-lg);
+  padding: var(--space-xl);
+  border-radius: var(--r);
+  border: 1px solid rgba(242, 195, 90, 0.3);
+  background: rgba(242, 195, 90, 0.06);
+}
+.legal .ic {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: var(--warn);
+  color: #17120a;
+  font-family: var(--f-d);
+  font-weight: 900;
+  font-size: 20px;
+}
+.legal p {
+  font-size: 14px;
+  color: var(--tx2);
+}
+.legal b {
+  color: var(--tx);
+}
+footer.foot {
+  border-top: 1px solid var(--line);
+  padding-block: var(--space-xl);
+  padding-left: max(var(--space-lg), env(safe-area-inset-left, 0px));
+  padding-right: max(var(--space-lg), env(safe-area-inset-right, 0px));
+}
+footer.foot .wrap {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-sm) var(--space-2xl);
+  font-size: 11.5px;
+  color: var(--fnt);
+}
+@media (max-width: 999px) {
+  footer.foot {
+    padding-bottom: calc(var(--bn) + var(--space-2xl) + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+  .chainseg {
+    stroke-dashoffset: 0 !important;
+  }
+  .chainglow {
+    opacity: 0.15 !important;
+  }
+}

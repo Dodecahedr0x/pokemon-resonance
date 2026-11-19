@@ -1,0 +1,380 @@
+/* Camp tab */
+.camp-news {
+  display: grid;
+  gap: var(--space-lg);
+}
+#camp .camp4 {
+  margin: 0;
+}
+.outings-panel {
+  padding: var(--space-md);
+}
+.outing-btn-g {
+  display: grid;
+  gap: var(--space-sm);
+}
+.outing-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  width: 100%;
+  min-width: 0;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.outing-btn-ic {
+  flex: none;
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  display: grid;
+  place-items: center;
+  background: rgba(79, 195, 255, 0.14);
+  color: #7fd0ff;
+}
+.outing-btn-ic svg {
+  width: 20px;
+  height: 20px;
+}
+.outing-btn > span:nth-child(2) {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+.outing-btn b {
+  font-size: 14.5px;
+}
+.outing-btn em {
+  font-style: normal;
+  font-size: 12px;
+  color: #9fb3c2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.outing-btn-go {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  opacity: 0.6;
+}
+
+/* confirmation before a new game */
+.new-game {
+  position: fixed;
+  inset: 0;
+  z-index: 400;
+  display: grid;
+  place-items: center;
+  padding: var(--space-lg);
+}
+.new-game[hidden] {
+  display: none;
+}
+.new-game-s {
+  position: absolute;
+  inset: 0;
+  background: rgba(2, 6, 10, 0.72);
+}
+.new-game-c {
+  position: relative;
+  width: min(440px, 100%);
+  padding: var(--space-lg);
+  border-radius: 18px;
+  background: linear-gradient(145deg, #173a50, #0a1d2b) !important;
+  border: 1px solid rgba(255, 215, 94, 0.45) !important;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+}
+.new-game-c p {
+  margin: var(--space-sm) 0 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #d4e2ec;
+}
+.new-game-c .new-game-w {
+  color: #ffd9a0;
+}
+.new-game-a {
+  display: grid;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+}
+.game-mode-w {
+  color: #ffd9a0 !important;
+}
+
+/* secret code and Creator's Workshop */
+.cheat-code-f {
+  display: flex;
+  gap: var(--space-sm);
+}
+.cheat-code-f input {
+  flex: 1;
+  min-width: 0;
+  height: 38px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(0, 0, 0, 0.3);
+  color: inherit;
+  padding: 0 var(--space-md);
+  font: inherit;
+  letter-spacing: 0.08em;
+}
+.cheat-code-g {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin: var(--space-sm) 0 var(--space-sm);
+}
+.cheat-code.on {
+  border-color: rgba(255, 215, 94, 0.5) !important;
+}
+
+/* battle sky */
+#bBoard {
+  position: relative;
+}
+#bBoard .sky-banner {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  padding: var(--space-3xs) var(--space-sm) var(--space-3xs) var(--space-2xs);
+  border-radius: 999px;
+  background: rgba(6, 14, 22, 0.74);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  font-size: 11.5px;
+  color: #eef5fb;
+  pointer-events: none;
+}
+.sky-chip {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--c) 24%, transparent);
+  color: var(--c);
+}
+.sky-chip svg {
+  width: 16px;
+  height: 16px;
+}
+.sky-chip.v {
+  width: 20px;
+  height: 20px;
+  background: none;
+}
+#bBoard .sky-banner b {
+  font-weight: 700;
+  margin-left: var(--space-3xs);
+  white-space: nowrap;
+}
+#bBoard .sky-banner-strip {
+  position: absolute;
+  left: 50%;
+  top: 42%;
+  transform: translate(-50%, -50%) scale(0.92);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 7;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2xs);
+  padding: var(--space-md) var(--space-xl);
+  border-radius: 18px;
+  background: rgba(6, 14, 22, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  text-align: center;
+  width: max-content;
+  max-width: min(320px, 86%);
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+}
+#bBoard .sky-banner-strip.on {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+.banner-art-ic {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: var(--c);
+  background: color-mix(in srgb, var(--c) 20%, transparent);
+  box-shadow: 0 0 24px color-mix(in srgb, var(--c) 40%, transparent);
+}
+.banner-art-ic svg {
+  width: 34px;
+  height: 34px;
+}
+#bBoard .sky-banner-strip b {
+  font-size: 16px;
+  color: #fff;
+}
+#bBoard .sky-banner-strip em {
+  font-style: normal;
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: #c9d6e0;
+}
+@media (prefers-reduced-motion: reduce) {
+  #bBoard .sky-banner-strip {
+    transition: none;
+    transform: translate(-50%, -50%);
+  }
+}
+
+/* deployment */
+html body #bSvg .hx.deploy-phase-z {
+  fill: rgba(90, 190, 255, 0.4) !important;
+  stroke: #b5ecff !important;
+  stroke-width: 2.2 !important;
+  stroke-dasharray: 5 3 !important;
+}
+html body #bSvg .tok.deploy-phase-s .tok-halo {
+  stroke: #7fd0ff !important;
+  stroke-width: 2.8 !important;
+  opacity: 1 !important;
+  stroke-dasharray: none !important;
+}
+.board.deploy-phase #bSvg .tok.ally {
+  cursor: pointer;
+}
+
+/* doctrines */
+.doctrine-choice {
+  margin: var(--space-sm) 0;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.doctrine-choice[hidden] {
+  display: none;
+}
+.doctrine-choice-h {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-sm);
+}
+.doctrine-choice-h svg {
+  width: 16px;
+  height: 16px;
+  color: #ffd45b;
+}
+.doctrine-choice-c {
+  display: flex;
+  gap: var(--space-xs);
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: var(--space-3xs);
+}
+.doctrine-choice-c::-webkit-scrollbar {
+  display: none;
+}
+.doctrine-choice-b {
+  flex: none;
+  height: 32px;
+  padding: 0 var(--space-md);
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(0, 0, 0, 0.25);
+  color: inherit;
+  font: inherit;
+  font-size: 12.5px;
+  cursor: pointer;
+}
+.doctrine-choice-b[aria-pressed='true'] {
+  background: linear-gradient(145deg, #ffd45b, #e59a1f);
+  color: #241500;
+  border-color: transparent;
+  font-weight: 700;
+}
+.doctrine-choice-d {
+  margin: var(--space-sm) 0 0;
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: #b9cad6;
+}
+.doctrine-choice-d b {
+  color: #eaf2f8;
+  font-weight: 600;
+}
+.chip-doctrine-choice svg {
+  width: 12px;
+  height: 12px;
+  margin-right: var(--space-2xs);
+  vertical-align: -2px;
+}
+
+/* tactical report */
+.battle-report-r {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) 64px auto;
+  gap: var(--space-sm);
+  align-items: center;
+  padding: var(--space-2xs) 0;
+}
+.battle-report-n {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+}
+.battle-report-n b {
+  font-size: 13px;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.battle-report-n em {
+  font-style: normal;
+  font-size: 10px;
+  font-weight: 800;
+  color: #2a1a00;
+  background: #ffd45b;
+  border-radius: 6px;
+  padding: 0 var(--space-xs);
+}
+.battle-report-b {
+  height: 6px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+.battle-report-b i {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #4fc3ff, #ffd45b);
+}
+.battle-report-v {
+  font-size: 12.5px;
+  white-space: nowrap;
+}
+.battle-report-v small {
+  color: #9fb3c2;
+}
+.battle-report-r.ko {
+  opacity: 0.62;
+}
+.battle-report-l {
+  font-size: 11.5px;
+  color: #9fb3c2;
+  margin: var(--space-xs) 0 0;
+}

@@ -1,133 +1,3 @@
-/* Phone pass (November 2026).
-   Loaded last. A single set of values for all out-of-battle screens:
-   text 11 / 12.5 / 14 / 16 px, radii 10 / 14 / 999 px, 44 px touch targets.
-   The rules of the previous layers are often !important: we take them up again here. */
-
-:root {
-  --t-xs: 11px;
-  --t-s: 12.5px;
-  --t-m: 14px;
-  --t-l: 16px;
-  --r-s: 10px;
-  --r-m: 14px;
-  --r-p: 999px;
-  --tap: 44px;
-  --act-bg: linear-gradient(180deg, rgba(20, 30, 44, 0.92), rgba(11, 17, 26, 0.92));
-  --act-line: rgba(255, 255, 255, 0.1);
-}
-
-/* ================= Home: activities (all sizes) =================
-   Six banners with six different designs become a grid with one design;
-   only the badge keeps the activity's color. */
-.activity-bar {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
-  margin: 12px 0;
-}
-html body .activity-bar > button {
-  display: flex !important;
-  align-items: center;
-  gap: 10px !important;
-  width: auto !important;
-  min-width: 0;
-  min-height: 60px;
-  margin: 0 !important;
-  padding: 10px 12px !important;
-  border-radius: var(--r-m) !important;
-  border: 1px solid var(--act-line) !important;
-  background: var(--act-bg) !important;
-  box-shadow: none !important;
-  color: #eaf2f8;
-  text-align: left;
-  vertical-align: top;
-}
-html body .activity-bar > button > span:not([class$='-i']) {
-  min-width: 0;
-  flex: 1;
-}
-html body .activity-bar > button b {
-  display: block;
-  font-size: var(--t-m) !important;
-  line-height: 1.2;
-  font-weight: 700;
-}
-html body .activity-bar > button small {
-  display: block;
-  font-size: var(--t-xs) !important;
-  line-height: 1.35;
-  color: #afc2d2 !important;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-}
-html body .activity-bar :is(.boss-rush-i, .defense-gym-i, .dailygift-i) {
-  width: 30px !important;
-  height: 30px !important;
-  flex: none;
-  font-size: 13px;
-}
-html body .activity-bar .season-event-i {
-  flex: none;
-}
-/* the season (progress bar) and the daily gift take the full width */
-html body .activity-bar > #season-event,
-html body .activity-bar > #dailygift {
-  grid-column: 1/-1;
-}
-html body .activity-bar > #dailygift:not(.done) {
-  border-color: rgba(255, 212, 91, 0.55) !important;
-  background: linear-gradient(135deg, rgba(255, 212, 91, 0.14), rgba(11, 17, 26, 0.92)) !important;
-}
-html body .activity-bar > #boss-rush .boss-rush-i {
-  background: #ff8a7a;
-}
-html body .activity-bar > #daily-challenges .defense-gym-i {
-  background: #7be0a0;
-}
-html body .activity-bar > #x2470 .defense-gym-i {
-  background: #8fbfff;
-  color: #06142a;
-}
-
-/* ================= Team: saved teams and collapsible formations ================= */
-.dex-call .dc-more {
-  display: grid;
-  gap: 10px;
-  min-width: 0;
-}
-.dex-call .dc-more > summary {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-height: var(--tap);
-  cursor: pointer;
-  list-style: none;
-  font-size: var(--t-s);
-  font-weight: 600;
-  color: #c9d6e2;
-  border-top: 1px solid var(--act-line);
-  padding-top: 4px;
-}
-.dex-call .dc-more > summary::-webkit-details-marker {
-  display: none;
-}
-.dex-call .dc-more > summary::after {
-  content: '';
-  margin-left: auto;
-  width: 8px;
-  height: 8px;
-  border-right: 2px solid currentColor;
-  border-bottom: 2px solid currentColor;
-  transform: rotate(45deg) translateY(-2px);
-  transition: transform 0.2s;
-}
-.dex-call .dc-more[open] > summary::after {
-  transform: rotate(-135deg) translateY(-2px);
-}
-
 /* ================= Notes written as a sentence (all sizes) =================
    .v4-note is a flex row meant for icon + text; in a <p> it split the bold words
    of a sentence onto their own line ("0 / 6" in Secret places). */
@@ -147,8 +17,8 @@ p.v4-note {
   }
   /* the play disc keeps its round shape; the label gives way first */
   html body #resonance-launch .rl-enter {
-    gap: 10px !important;
-    padding-right: 14px !important;
+    gap: var(--space-sm) !important;
+    padding-right: var(--space-md) !important;
     font-size: clamp(12px, 3.4vw, 14px) !important;
     letter-spacing: 0.04em !important;
   }
@@ -170,7 +40,7 @@ p.v4-note {
   html body .it-diff {
     display: grid !important;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 8px !important;
+    gap: var(--space-sm) !important;
   }
   html body .it-diff > span {
     grid-column: 1/-1;
@@ -184,7 +54,7 @@ p.v4-note {
   html body .it-a {
     flex-direction: column;
     align-items: stretch !important;
-    gap: 8px !important;
+    gap: var(--space-sm) !important;
   }
   html body .it-a > .b {
     width: 100% !important;
@@ -196,15 +66,15 @@ p.v4-note {
   /* ---------- Battle tutorial card: full-size buttons ---------- */
   html body #coach .co-a .b {
     min-height: var(--tap) !important;
-    padding: 0 14px !important;
+    padding: 0 var(--space-md) !important;
     font-size: var(--t-s) !important;
   }
 
   /* ---------- Battles: the "Launch" bar fits on one line ---------- */
   html body #cbPrep .pt-go {
     flex-wrap: nowrap !important;
-    gap: 10px !important;
-    padding: 8px 8px 8px 14px !important;
+    gap: var(--space-sm) !important;
+    padding: var(--space-sm) var(--space-sm) var(--space-sm) var(--space-md) !important;
   }
   html body #cbPrep .pt-go #ptVoix {
     flex: 1;
@@ -223,7 +93,7 @@ p.v4-note {
   html body #cbPrep .pt-go #bLaunch {
     flex: none;
     height: var(--tap) !important;
-    padding: 0 16px !important;
+    padding: 0 var(--space-lg) !important;
   }
   /* "Next step": placed in the right column instead of overlapping the title */
   html body #cbPrep .srw .pill.nx {
@@ -234,15 +104,15 @@ p.v4-note {
     line-height: 1.15;
     max-width: 72px;
     font-size: 10px !important;
-    padding: 3px 7px !important;
+    padding: var(--space-3xs) var(--space-xs) !important;
   }
 
   /* ---------- Team: tidy search bar ---------- */
   html body #pokedex .dexbar {
     display: grid !important;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 8px !important;
-    padding: 10px !important;
+    gap: var(--space-sm) !important;
+    padding: var(--space-sm) !important;
   }
   html body #pokedex .dexbar .srch,
   html body #pokedex .dexbar #genSeg {
@@ -274,8 +144,8 @@ p.v4-note {
     flex-wrap: nowrap !important;
     overflow-x: auto;
     scrollbar-width: none;
-    margin-inline: -12px !important;
-    padding: 6px 12px !important;
+    margin-inline: calc(var(--space-md) * -1) !important;
+    padding: var(--space-xs) var(--space-md) !important;
     border-radius: 0 !important;
     border-inline: 0 !important;
     -webkit-mask-image: linear-gradient(90deg, transparent, #000 12px, #000 calc(100% - 24px), transparent);
@@ -284,13 +154,13 @@ p.v4-note {
   html body .camp-tab button {
     flex: none !important;
     height: 40px !important;
-    padding: 0 16px !important;
+    padding: 0 var(--space-lg) !important;
     border-radius: var(--r-p) !important;
     font-size: var(--t-s) !important;
     white-space: nowrap;
   }
   html body .camp-tab button:last-child {
-    margin-right: 12px;
+    margin-right: var(--space-md);
   }
   html:not(#pkz) body:not(#pkz) .camp-tab button[aria-selected='false'] {
     background: rgba(255, 255, 255, 0.06) !important;
@@ -301,7 +171,7 @@ p.v4-note {
   /* ---------- section headers: the hint goes under the title instead of squeezing it ---------- */
   html body .v4-sec-h {
     flex-wrap: wrap;
-    row-gap: 4px;
+    row-gap: var(--space-2xs);
   }
   html body .v4-sec-h > span {
     flex-basis: 100%;
@@ -313,7 +183,7 @@ p.v4-note {
   /* ---------- Map: time-of-day switch and Pokédex buttons reach a tappable height ---------- */
   html body .tod button {
     min-height: 40px;
-    padding-inline: 12px !important;
+    padding-inline: var(--space-md) !important;
   }
   html body #dex .v4-btn {
     min-height: 40px;
@@ -335,8 +205,8 @@ p.v4-note {
   /* ---------- Settings: every panel gets the same inner padding as the .v4-ps ones ---------- */
   html body #params .v4-params > .v4-panel:not(.v4-ps) {
     display: grid !important;
-    gap: 10px;
-    padding: 14px !important;
+    gap: var(--space-sm);
+    padding: var(--space-md) !important;
   }
   html body #params .v4-params > .v4-panel:not(.v4-ps) > * {
     margin: 0 !important;
@@ -344,7 +214,7 @@ p.v4-note {
   html body #params .v4-panel .sv-io {
     display: grid !important;
     grid-template-columns: minmax(0, 1fr);
-    gap: 8px !important;
+    gap: var(--space-sm) !important;
   }
   /* board variants: short names, two per row */
   html body #params #gimmick-boards-panel .sv-io {
@@ -360,9 +230,9 @@ p.v4-note {
   /* ---------- Guide: "Getting started" steps use the full card width ----------
      Number and title on the first line, the explanation below across the whole card. */
   html body .s5 li {
-    gap: 8px 14px !important;
+    gap: var(--space-sm) var(--space-md) !important;
     align-items: center !important;
-    padding: 14px !important;
+    padding: var(--space-md) !important;
   }
   html body .s5 li > div {
     display: contents;
@@ -373,11 +243,11 @@ p.v4-note {
   }
   /* reaction matrix: the row names keep their text but lose the icon, the cells get the room */
   html body .mx {
-    gap: 4px !important;
-    padding: 12px 10px !important;
+    gap: var(--space-2xs) !important;
+    padding: var(--space-md) var(--space-sm) !important;
   }
   html body .mx .rh {
-    padding-right: 2px !important;
+    padding-right: var(--space-3xs) !important;
   }
   html body .mx .rh > .mini {
     display: none;
@@ -394,7 +264,7 @@ p.v4-note {
 
   /* ---------- Home: the folding "Classement" line is a full-height tap target ---------- */
   html body #accueil .am-cl > summary {
-    padding-block: 14px;
+    padding-block: var(--space-md);
   }
 
   /* ---------- Saves sheet: options and close button at a tappable size ---------- */
@@ -416,13 +286,13 @@ p.v4-note {
     mask-image: linear-gradient(90deg, #000 calc(100% - 28px), transparent);
   }
   html:not(#pkz) body:not(#pkz) #sac .v4-cats > button:last-child {
-    margin-right: 24px !important;
+    margin-right: var(--space-2xl) !important;
   }
 
   /* ---------- screen headers: same rhythm everywhere ---------- */
   html body .page .ph {
-    gap: 6px !important;
-    margin-bottom: 16px !important;
+    gap: var(--space-xs) !important;
+    margin-bottom: var(--space-lg) !important;
   }
   html body .page .ph .sub {
     font-size: var(--t-s) !important;

@@ -1,0 +1,359 @@
+/* ===== resonance-per-screen-art-director-cut layer ===== */
+/* RESONANCE 4.22 — per-screen art direction: no change to rules or data */
+:root {
+  --r22-ink: #07121d;
+  --r22-deep: #091b2a;
+  --r22-panel: #102638;
+  --r22-line: rgba(153, 211, 231, 0.19);
+  --r22-cyan: #71e4ed;
+  --r22-gold: #f3c66d;
+  --r22-white: #f2f7fa;
+}
+body {
+  background:
+    radial-gradient(ellipse at 50% -18%, rgba(47, 112, 145, 0.22), transparent 55%),
+    linear-gradient(180deg, #07131f 0%, #080e18 55%, #060b12 100%) !important;
+  color: var(--r22-white);
+}
+.page {
+  position: relative;
+}
+.page.on {
+  animation: r22-enter 0.48s cubic-bezier(0.2, 0.75, 0.2, 1) both;
+}
+@keyframes r22-enter {
+  from {
+    opacity: 0.35;
+    transform: translateY(9px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.page .ph {
+  position: relative;
+  padding: var(--space-sm) 0 var(--space-xl);
+  margin-bottom: var(--space-2xl);
+}
+.page .ph:after {
+  content: '';
+  display: block;
+  width: 110px;
+  height: 2px;
+  margin-top: var(--space-xl);
+  background: linear-gradient(90deg, var(--r22-cyan), transparent);
+  box-shadow: 0 0 18px rgba(113, 228, 237, 0.35);
+}
+.page .kick,
+.v4-kick {
+  letter-spacing: 0.2em !important;
+  text-transform: uppercase !important;
+  color: var(--r22-cyan) !important;
+  font-weight: 800 !important;
+  font-size: 10px !important;
+}
+.page .h1 {
+  font-size: clamp(30px, 4vw, 48px) !important;
+  line-height: 1.02 !important;
+  letter-spacing: -0.012em !important;
+  text-shadow: 0 8px 30px #000;
+}
+.page .sub {
+  color: #a9bfcb !important;
+  max-width: 720px;
+  font-size: 14px !important;
+  line-height: 1.7 !important;
+}
+/* HOME — adventure dashboard, regional lighting */
+#accueil {
+  isolation: isolate;
+}
+#accueil:before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: -30px -5vw 35%;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 16% 12%, rgba(48, 147, 167, 0.22), transparent 42%),
+    radial-gradient(ellipse at 82% 20%, rgba(227, 166, 76, 0.13), transparent 36%),
+    linear-gradient(135deg, transparent 40%, rgba(105, 183, 197, 0.035) 40.2%, transparent 40.5%);
+  mask-image: linear-gradient(#000, transparent);
+}
+#accueil .v4-home {
+  gap: var(--space-xl) !important;
+}
+#accueil .v4-hero {
+  position: relative !important;
+  isolation: isolate;
+  overflow: hidden !important;
+  border: 1px solid rgba(143, 220, 231, 0.32) !important;
+  border-radius: 28px !important;
+  box-shadow:
+    0 35px 90px rgba(0, 0, 0, 0.42),
+    inset 0 1px rgba(255, 255, 255, 0.12) !important;
+}
+@keyframes r22-orbit {
+  to {
+    transform: translateY(-50%) rotate(360deg);
+  }
+}
+#accueil .v4h-body {
+  max-width: 690px !important;
+  padding: clamp(26px, 4vw, 52px) !important;
+}
+#accueil .v4h-title {
+  font-size: clamp(34px, 5vw, 58px) !important;
+  line-height: 0.99 !important;
+  letter-spacing: -0.055em !important;
+  text-shadow: 0 5px 28px #000 !important;
+}
+#accueil .v4h-sub {
+  max-width: 500px;
+  color: #c1d6df !important;
+  font-size: 15px !important;
+  line-height: 1.65 !important;
+}
+#accueil .v4h-chips span {
+  border: 1px solid rgba(135, 220, 230, 0.25) !important;
+  background: rgba(4, 18, 28, 0.55) !important;
+  backdrop-filter: blur(10px);
+}
+#accueil .v4h-cta .b {
+  min-height: 48px !important;
+  border-radius: 14px !important;
+  letter-spacing: 0.02em;
+}
+#accueil .v4h-prof {
+  border-top: 1px solid rgba(160, 220, 230, 0.18) !important;
+  color: #c2d6df !important;
+}
+#accueil .v4-panel,
+#accueil .v4-quest {
+  border: 1px solid var(--r22-line) !important;
+  background: linear-gradient(145deg, rgba(19, 47, 64, 0.94), rgba(8, 23, 35, 0.96)) !important;
+  box-shadow:
+    0 20px 45px rgba(0, 0, 0, 0.25),
+    inset 0 1px rgba(255, 255, 255, 0.07) !important;
+  border-radius: 20px !important;
+}
+#accueil .v4-team {
+  padding: var(--space-xl) !important;
+}
+#accueil .v4-ph {
+  color: #eaf7fa !important;
+  letter-spacing: 0.04em;
+}
+#accueil .v4-mon {
+  border: 1px solid rgba(148, 217, 226, 0.16) !important;
+  border-radius: 15px !important;
+  transition:
+    transform 0.25s,
+    border-color 0.25s,
+    box-shadow 0.25s;
+}
+#accueil .v4-mon:hover {
+  transform: translateY(-5px);
+  border-color: rgba(113, 228, 237, 0.55) !important;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.3);
+}
+#accueil .v4-mon img {
+  filter: drop-shadow(0 9px 9px rgba(0, 0, 0, 0.45));
+}
+#accueil .v4-tiles {
+  gap: var(--space-md) !important;
+}
+#accueil .v4-tile {
+  border-radius: 19px !important;
+  border: 1px solid rgba(146, 218, 228, 0.2) !important;
+  box-shadow: 0 18px 38px rgba(0, 0, 0, 0.27) !important;
+  transition:
+    transform 0.25s,
+    border-color 0.25s,
+    filter 0.25s;
+}
+#accueil .v4-tile:hover {
+  transform: translateY(-5px) scale(1.012);
+  border-color: rgba(113, 228, 237, 0.6) !important;
+  filter: saturate(1.15);
+}
+#accueil .v4t-tx b {
+  text-shadow: 0 3px 16px #000;
+}
+#accueil .v4-bottom {
+  gap: var(--space-lg) !important;
+}
+/* MAP — regional atlas, cartographic panel */
+#carte .v4-ph-page {
+  max-width: 850px;
+}
+#carte .v4-reg {
+  display: flex;
+  gap: var(--space-sm);
+  margin: var(--space-lg) 0 var(--space-2xl);
+  padding: var(--space-xs);
+  width: max-content;
+  max-width: 100%;
+  border: 1px solid rgba(125, 206, 220, 0.2);
+  border-radius: 15px;
+  background: rgba(5, 18, 29, 0.78);
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.05);
+}
+#carte .v4-reg button {
+  border-radius: 10px !important;
+  padding: var(--space-md) var(--space-xl) !important;
+  color: #9bb4c1 !important;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-size: 10px;
+  font-weight: 900;
+}
+#carte .v4-reg button[aria-selected='true'] {
+  background: linear-gradient(135deg, #27647a, #17394c) !important;
+  color: #e8fbff !important;
+  box-shadow:
+    0 5px 18px rgba(25, 115, 139, 0.28),
+    inset 0 1px rgba(255, 255, 255, 0.18);
+}
+#carte .v4-map-wrap {
+  gap: var(--space-lg) !important;
+  align-items: stretch;
+}
+#carte .v4-map {
+  border: 1px solid rgba(123, 208, 222, 0.3) !important;
+  border-radius: 24px !important;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 50% 45%, rgba(69, 144, 157, 0.12), transparent 65%), #0b1a25 !important;
+  box-shadow:
+    0 30px 70px rgba(0, 0, 0, 0.38),
+    inset 0 1px rgba(255, 255, 255, 0.1) !important;
+}
+#carte .v4-map-sc {
+  background: linear-gradient(145deg, rgba(13, 45, 57, 0.4), rgba(5, 18, 28, 0.5));
+}
+#carte .v4-map-st {
+  filter: drop-shadow(0 15px 22px rgba(0, 0, 0, 0.35));
+}
+#carte .map-title {
+  font-size: 11px !important;
+  letter-spacing: 0.24em !important;
+  text-transform: uppercase;
+  color: #b9e5e9 !important;
+  text-shadow: 0 2px 12px #06121b;
+}
+#carte .mk {
+  filter: drop-shadow(0 5px 7px rgba(0, 0, 0, 0.6));
+  transition:
+    transform 0.2s,
+    filter 0.2s;
+}
+#carte .mk:hover,
+#carte .mk.sel {
+  transform: translate(-50%, -50%) scale(1.12) !important;
+  filter: drop-shadow(0 0 12px rgba(113, 228, 237, 0.75));
+}
+#carte .v4-map-side .v4-panel {
+  border: 1px solid rgba(123, 208, 222, 0.22) !important;
+  border-radius: 20px !important;
+  background: linear-gradient(155deg, #132e3d, #0a1925) !important;
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.27) !important;
+}
+#carte .v4-wild {
+  margin-top: var(--space-2xl);
+  padding: var(--space-lg);
+  border-radius: 22px;
+  border: 1px solid rgba(123, 208, 222, 0.18);
+  background: linear-gradient(110deg, rgba(20, 59, 55, 0.45), rgba(8, 25, 32, 0.8));
+}
+#carte .v4-sec-h {
+  color: #c7e8df !important;
+}
+/* TEAM / POKÉDEX — collector's-Pokédex-style selection screen */
+#pokedex .v4-dex {
+  gap: var(--space-lg) !important;
+  align-items: stretch;
+}
+#pokedex .v4-dexcard {
+  border: 1px solid rgba(139, 214, 227, 0.3) !important;
+  border-radius: 26px !important;
+  background:
+    radial-gradient(ellipse at 28% 12%, color-mix(in srgb, var(--c, #69d5d5) 18%, transparent), transparent 48%),
+    linear-gradient(155deg, #142e3d, #091923 78%) !important;
+  box-shadow:
+    0 28px 65px rgba(0, 0, 0, 0.36),
+    inset 0 1px rgba(255, 255, 255, 0.1) !important;
+  overflow: hidden;
+}
+#pokedex .v4d-top {
+  padding: clamp(20px, 3vw, 34px) !important;
+  position: relative;
+}
+#pokedex .v4d-art {
+  min-height: 280px !important;
+  border-radius: 20px !important;
+  background:
+    radial-gradient(ellipse at 50% 55%, color-mix(in srgb, var(--c, #69d5d5) 28%, transparent), transparent 60%),
+    linear-gradient(145deg, rgba(4, 17, 26, 0.9), rgba(18, 47, 59, 0.7)) !important;
+  border: 1px solid rgba(153, 222, 230, 0.18);
+}
+#pokedex .v4d-art img {
+  filter: drop-shadow(0 20px 16px rgba(0, 0, 0, 0.45)) !important;
+  transition:
+    transform 0.35s,
+    filter 0.35s;
+}
+#pokedex .v4d-art:hover img {
+  transform: translateY(-7px) scale(1.055);
+}
+#pokedex .v4d-n {
+  font-size: clamp(32px, 4vw, 48px) !important;
+  letter-spacing: -0.05em !important;
+}
+#pokedex .v4d-sec {
+  border: 1px solid rgba(148, 212, 223, 0.16) !important;
+  border-radius: 17px !important;
+  background: rgba(4, 18, 28, 0.48) !important;
+  padding: var(--space-lg) !important;
+}
+#pokedex .v4d-sec h3 {
+  color: #9fe7e9 !important;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-size: 10px !important;
+}
+#pokedex .v4d-fam {
+  border-top: 1px solid rgba(148, 212, 223, 0.17) !important;
+  padding: var(--space-lg) !important;
+}
+#pokedex .v4d-f {
+  border: 1px solid rgba(148, 212, 223, 0.17) !important;
+  border-radius: 14px !important;
+  background: rgba(4, 18, 28, 0.58) !important;
+  transition:
+    transform 0.2s,
+    border-color 0.2s;
+}
+#pokedex .v4d-f:hover,
+#pokedex .v4d-f.on {
+  transform: translateY(-3px);
+  border-color: var(--r22-cyan) !important;
+}
+#pokedex .v4-dexlist {
+  border: 1px solid rgba(139, 214, 227, 0.22) !important;
+  border-radius: 22px !important;
+  background: linear-gradient(180deg, #102737, #091923) !important;
+}
+#pokedex .v4-dl {
+  border-bottom: 1px solid rgba(139, 214, 227, 0.1) !important;
+  transition: background 0.2s;
+}
+#pokedex .v4-dl:hover,
+#pokedex .v4-dl.on {
+  background: linear-gradient(90deg, rgba(72, 164, 181, 0.2), transparent) !important;
+}
+#pokedex .dock {
+  border: 1px solid rgba(139, 214, 227, 0.2) !important;
+  background: linear-gradient(120deg, #122e3e, #0a1b28) !important;
+  border-radius: 20px !important;
+}

@@ -36,6 +36,7 @@ import {
   talentState,
 } from '../../engine/progression/talent-tree.js';
 import { Disc } from './Items.jsx';
+import { space } from '../../lib/theme.js';
 
 // Workshop row: text on the left, engine button on the right (data-craft-bench, data-quest-log…).
 const Line = ({ cls = '', before: previous = null, children, actionButton: button }) => (
@@ -78,7 +79,7 @@ function Workshop() {
           </p>
         </Line>
       ))}
-      <h3 className="h3" style={{ marginTop: '14px' }}>
+      <h3 className="h3" style={{ marginTop: space.md }}>
         Fusion de CT
       </h3>
       {fusionTargets.length ? (
@@ -108,7 +109,7 @@ function Workshop() {
       ) : (
         <p className="v4-empty">Vous avez déjà toutes les CT.</p>
       )}
-      <h3 className="h3" style={{ marginTop: '14px' }}>
+      <h3 className="h3" style={{ marginTop: space.md }}>
         Commandes du jour
       </h3>
       {dailyOrders().map(c => (

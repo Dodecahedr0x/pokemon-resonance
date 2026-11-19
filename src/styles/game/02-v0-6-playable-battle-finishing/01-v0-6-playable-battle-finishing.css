@@ -1,0 +1,237 @@
+/* ===================== v0.6: playable battle & finishing touches ===================== */
+.h1 {
+  font-stretch: 118%;
+  font-weight: 780;
+}
+.h2 {
+  font-stretch: 114%;
+  font-weight: 720;
+}
+
+.mvc .mvs {
+  font-family: var(--f-m);
+  font-size: 10.5px;
+  color: var(--mut);
+  letter-spacing: 0.02em;
+}
+.mvc.tal {
+  background: transparent;
+  border-style: dashed;
+}
+.sh-sec .mvc + .mvc {
+  margin-top: 0;
+}
+.b-lg {
+  height: 52px;
+  padding: 0 var(--space-2xl);
+  font-size: 15.5px;
+}
+.b-ghost {
+  background: transparent;
+}
+.lbl-s {
+  font-family: var(--f-m);
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--mut);
+  margin-bottom: var(--space-md);
+}
+
+/* preparation */
+.prep {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: var(--space-lg);
+  align-items: start;
+}
+@media (max-width: 940px) {
+  .prep {
+    grid-template-columns: 1fr;
+  }
+}
+
+.scn {
+  position: relative;
+  display: grid;
+  gap: var(--space-sm);
+  text-align: left;
+  padding: var(--space-lg) var(--space-xl);
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: linear-gradient(180deg, var(--s2), var(--s1));
+  cursor: pointer;
+  color: inherit;
+  font: inherit;
+  transition:
+    border-color 0.25s,
+    box-shadow 0.25s,
+    transform 0.25s var(--ease);
+}
+.scn:hover {
+  border-color: var(--line3);
+  transform: translateY(-1px);
+}
+.scn.on {
+  border-color: rgba(227, 192, 122, 0.6);
+  box-shadow:
+    inset 0 0 0 1px rgba(227, 192, 122, 0.4),
+    0 18px 40px -26px rgba(227, 192, 122, 0.5);
+}
+.scn .lvl {
+  font-family: var(--f-m);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.scn b {
+  font-family: var(--f-d);
+  font-stretch: 118%;
+  font-weight: 780;
+  font-size: 20px;
+  text-transform: uppercase;
+  line-height: 1;
+}
+.scn p {
+  font-size: 13.5px;
+  color: var(--tx2);
+}
+.scn .foes {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  flex-wrap: wrap;
+  margin-top: var(--space-3xs);
+}
+.scn .foes .medal {
+  width: 26px;
+  height: 26px;
+  box-shadow: none;
+}
+.scn .foes em {
+  font-style: normal;
+  font-size: 11.5px;
+  color: var(--mut);
+  margin-left: var(--space-xs);
+}
+.pt {
+  padding: var(--space-lg);
+  display: grid;
+  gap: var(--space-md);
+}
+.pt-h {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.pt-h .lbl-s {
+  margin: 0;
+}
+.pt-h b {
+  font-family: var(--f-d);
+  font-stretch: 118%;
+  font-size: 18px;
+}
+.pt-list {
+  display: grid;
+  gap: var(--space-xs);
+}
+.ptm {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: var(--space-md);
+  align-items: center;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: var(--s1);
+  cursor: pointer;
+  text-align: left;
+  color: inherit;
+  font: inherit;
+  transition:
+    border-color 0.2s,
+    background 0.2s,
+    opacity 0.2s;
+}
+.ptm .medal {
+  width: 36px;
+  height: 36px;
+}
+.ptm b {
+  display: block;
+  font-size: 14px;
+}
+.ptm em {
+  display: block;
+  font-style: normal;
+  font-size: 11.5px;
+  color: var(--mut);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ptm.on {
+  border-color: rgba(227, 192, 122, 0.5);
+  background: var(--gold-s);
+}
+
+.ptm:not(.on) {
+  opacity: 0.72;
+}
+.pt-go {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+  padding-top: var(--space-xs);
+}
+.pt-go span {
+  font-size: 12.5px;
+  color: var(--mut);
+}
+.howto {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-sm);
+  margin-top: var(--space-lg);
+}
+@media (max-width: 860px) {
+  .howto {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+.howto > div {
+  display: grid;
+  gap: var(--space-xs);
+  align-content: start;
+  padding: var(--space-lg);
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.02);
+}
+.howto .hn {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-family: var(--f-m);
+  font-size: 11px;
+  color: var(--gold);
+  border: 1px solid rgba(227, 192, 122, 0.4);
+}
+.howto b {
+  font-family: var(--f-d);
+  font-stretch: 112%;
+  font-weight: 720;
+  text-transform: uppercase;
+  font-size: 14px;
+}
+.howto p {
+  font-size: 13px;
+  color: var(--tx2);
+}

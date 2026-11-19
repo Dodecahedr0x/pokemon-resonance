@@ -1,0 +1,341 @@
+/* ===================== v0.8: material, relief, evolution ===================== */
+:root {
+  --gold-grad: linear-gradient(135deg, #f7e1ac 0%, #c9a15a 30%, #f3dba6 50%, #9c7737 78%, #e3c07a 100%);
+  --bevel: linear-gradient(
+    165deg,
+    rgba(255, 255, 255, 0.17),
+    rgba(255, 255, 255, 0.035) 34%,
+    rgba(255, 255, 255, 0.02) 66%,
+    rgba(227, 192, 122, 0.2)
+  );
+  --hatch: repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.014) 0 1px, transparent 1px 6px);
+  --surf: linear-gradient(180deg, #171b24, #0f1219);
+}
+body {
+  background-color: var(--bg);
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='27.71' height='48' viewBox='0 0 27.71 48'><path d='M13.86 0 27.71 8V24L13.86 32 0 24V8ZM13.86 32V48' fill='none' stroke='white' stroke-opacity='.028' stroke-width='1'/></svg>");
+  background-size: 27.71px 48px;
+}
+.ambient {
+  background:
+    radial-gradient(1000px 560px at 82% -10%, color-mix(in srgb, var(--tint) 19%, transparent), transparent 68%),
+    radial-gradient(760px 520px at -12% 112%, rgba(227, 192, 122, 0.07), transparent 70%),
+    radial-gradient(140% 100% at 50% 40%, transparent 55%, rgba(0, 0, 0, 0.55) 100%);
+}
+.ambient::after {
+  opacity: 0.75;
+}
+/* engraved titles */
+.h1,
+.h2,
+.hero h1,
+.sh-name,
+.st-name {
+  background: linear-gradient(180deg, #ffffff 20%, #d9dde6 62%, #9ea6b6);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.hero h1 span {
+  -webkit-text-fill-color: var(--tx2);
+}
+.kick::before {
+  width: 26px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, currentColor);
+}
+.kick::after {
+  content: '';
+  width: 5px;
+  height: 5px;
+  transform: rotate(45deg);
+  background: currentColor;
+  margin-left: calc(var(--space-xs) * -1);
+  flex: none;
+  order: -1;
+  display: none;
+}
+/* beveled surfaces */
+.panel,
+.ac,
+.opt,
+.rule,
+.scn,
+.an,
+.kpis,
+.howto > div,
+.evd,
+.mvc,
+.ptm,
+.stab,
+.bm,
+.vx,
+.plate,
+.res-card,
+.ep-card,
+.enc .enc-card,
+.dock {
+  border: 1px solid transparent;
+  background:
+    var(--hatch) padding-box,
+    var(--surf) padding-box,
+    var(--bevel) border-box;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.5),
+    0 22px 44px -30px rgba(0, 0, 0, 0.95);
+}
+.dock {
+  background:
+    var(--hatch) padding-box,
+    linear-gradient(180deg, rgba(26, 31, 41, 0.92), rgba(14, 17, 23, 0.92)) padding-box,
+    var(--bevel) border-box;
+}
+.rule[open] {
+  background:
+    var(--hatch) padding-box,
+    linear-gradient(180deg, #1a1f29, #11141b) padding-box,
+    linear-gradient(165deg, rgba(227, 192, 122, 0.45), rgba(255, 255, 255, 0.04) 40%, rgba(227, 192, 122, 0.25))
+      border-box;
+}
+.scn.on,
+.ptm.on,
+.stab.on,
+.bm.on,
+.vx.on,
+.plate.act {
+  background:
+    linear-gradient(180deg, rgba(227, 192, 122, 0.12), rgba(227, 192, 122, 0.03)) padding-box,
+    var(--surf) padding-box,
+    var(--gold-grad) border-box;
+}
+.opt {
+  background:
+    radial-gradient(120% 80% at 100% 0%, color-mix(in srgb, var(--c) 16%, transparent), transparent 60%) padding-box,
+    var(--hatch) padding-box,
+    var(--surf) padding-box,
+    var(--bevel) border-box;
+}
+.opt .ico {
+  background: linear-gradient(
+    160deg,
+    color-mix(in srgb, var(--c) 30%, transparent),
+    color-mix(in srgb, var(--c) 8%, transparent)
+  );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 6px 14px -8px var(--c);
+}
+/* corner ornaments */
+.orn {
+  position: relative;
+}
+.orn::before,
+.orn::after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
+  border: 0 solid rgba(227, 192, 122, 0.6);
+  z-index: 2;
+}
+.orn::before {
+  top: 8px;
+  left: 8px;
+  border-width: 1.5px 0 0 1.5px;
+  border-top-left-radius: 5px;
+}
+.orn::after {
+  bottom: 8px;
+  right: 8px;
+  border-width: 0 1.5px 1.5px 0;
+  border-bottom-right-radius: 5px;
+}
+/* embossed buttons */
+.b {
+  border: 1px solid transparent;
+  background:
+    linear-gradient(180deg, #222937, #151a23) padding-box,
+    linear-gradient(180deg, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0.05) 60%, rgba(0, 0, 0, 0.3)) border-box;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.09),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.25),
+    0 8px 18px -12px #000;
+}
+.b:hover {
+  border-color: transparent;
+  background:
+    linear-gradient(180deg, #283041, #181e28) padding-box,
+    linear-gradient(180deg, rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0.08) 60%, rgba(0, 0, 0, 0.3)) border-box;
+}
+.b[aria-pressed='true'] {
+  background:
+    linear-gradient(180deg, rgba(227, 192, 122, 0.2), rgba(227, 192, 122, 0.06)) padding-box,
+    var(--gold-grad) border-box;
+  color: var(--gold-l);
+}
+.b-gold {
+  position: relative;
+  overflow: hidden;
+  color: #1a1307;
+  text-shadow: 0 1px 0 rgba(255, 244, 214, 0.5);
+  background:
+    linear-gradient(180deg, #fbe7b8 0%, #e8c682 42%, #c9a05a 58%, #ddb672 100%) padding-box,
+    linear-gradient(180deg, #fff3d6, #7e5e28) border-box;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    inset 0 -2px 0 rgba(110, 80, 30, 0.4),
+    0 14px 30px -14px rgba(227, 192, 122, 0.8);
+}
+.b-gold:hover {
+  background:
+    linear-gradient(180deg, #fff0c8 0%, #edcd8e 42%, #cfa862 58%, #e3be7c 100%) padding-box,
+    linear-gradient(180deg, #fff3d6, #7e5e28) border-box;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    inset 0 -2px 0 rgba(110, 80, 30, 0.4),
+    0 18px 36px -14px rgba(227, 192, 122, 0.95);
+}
+.b-gold::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 30%, rgba(255, 255, 255, 0.6) 48%, transparent 62%);
+  transform: translateX(-130%);
+  transition: transform 0.8s var(--ease);
+  pointer-events: none;
+}
+.b-gold:hover::after {
+  transform: translateX(130%);
+}
+.b-gold:disabled {
+  filter: saturate(0.3);
+}
+.filters .b[aria-pressed='true'],
+.presets .b[aria-pressed='true'] {
+  color: #1a1307;
+  text-shadow: none;
+  background:
+    linear-gradient(180deg, #fbe7b8, #e8c682 42%, #c9a05a 58%, #ddb672) padding-box,
+    linear-gradient(180deg, #fff3d6, #7e5e28) border-box;
+}
+.b-ghost {
+  background:
+    transparent padding-box,
+    linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.03)) border-box;
+  box-shadow: none;
+}
+
+.b-lg {
+  height: 52px;
+  padding: 0 var(--space-2xl);
+  font-size: 15px;
+}
+/* medals with metallic rims */
+.medal {
+  box-shadow:
+    0 0 0 1.5px #090b10,
+    0 0 0 3px rgba(227, 192, 122, 0.42),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -6px 14px rgba(0, 0, 0, 0.32),
+    0 8px 22px -10px var(--glow, rgba(0, 0, 0, 0.6));
+}
+.medal.xs {
+  width: 18px;
+  height: 18px;
+  box-shadow:
+    0 0 0 1px #090b10,
+    0 0 0 2px rgba(227, 192, 122, 0.35);
+}
+.medal.sm {
+  width: 28px;
+  height: 28px;
+}
+.medal.pm {
+  width: 34px;
+  height: 34px;
+}
+.medal.lg {
+  width: 66px;
+  height: 66px;
+}
+.medal.xl {
+  width: 104px;
+  height: 104px;
+  box-shadow:
+    0 0 0 3px #090b10,
+    0 0 0 6px #d9b470,
+    0 0 0 7px #6b4f22,
+    inset 0 2px 0 rgba(255, 255, 255, 0.55),
+    inset 0 -14px 28px rgba(0, 0, 0, 0.35),
+    0 20px 50px -16px var(--glow);
+}
+.medal::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(60% 34% at 40% 22%, rgba(255, 255, 255, 0.35), transparent 70%);
+  pointer-events: none;
+}
+/* segmented HP bars */
+.hp {
+  position: relative;
+  overflow: hidden;
+}
+.hp.hseg {
+  height: 9px;
+  border-radius: 3px;
+  background: #07090d;
+  box-shadow:
+    inset 0 1px 3px rgba(0, 0, 0, 0.9),
+    0 0 0 1px rgba(255, 255, 255, 0.09);
+}
+.hp.hseg i {
+  border-radius: 2px;
+  background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0) 55%, rgba(0, 0, 0, 0.2));
+}
+.hp.hseg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent 0 calc(10% - 1.5px),
+    rgba(7, 9, 13, 0.9) calc(10% - 1.5px) 10%
+  );
+  pointer-events: none;
+}
+/* Awakening energy */
+.enp {
+  display: inline-flex;
+  gap: var(--space-2xs);
+  align-items: center;
+  padding: 0 var(--space-3xs);
+}
+.enp i {
+  width: 8px;
+  height: 8px;
+  transform: rotate(45deg);
+  border-radius: 1.5px;
+  background: #141922;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22);
+  transition:
+    background 0.4s,
+    box-shadow 0.4s;
+}
+.enp i.on {
+  background: linear-gradient(135deg, #fff3cf, #e3c07a 45%, #a9843f);
+  box-shadow:
+    0 0 0 1px rgba(255, 241, 199, 0.6),
+    0 0 9px rgba(227, 192, 122, 0.75);
+}
+.enp.lg {
+  gap: var(--space-sm);
+}
+.enp.lg i {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+}

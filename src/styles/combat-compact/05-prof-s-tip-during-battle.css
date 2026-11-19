@@ -1,0 +1,148 @@
+/* ================= Prof.'s tip during battle =================
+   .pk-dlg forces position:relative: the tip fell into the flow, under the command drawer,
+   and stretched the page with a big empty gap. It stays floating, at the top, above the board. */
+html:not(#pkz) body:not(#pkz) #tip-card.pk-dlg {
+  position: fixed !important;
+}
+
+/* ================= phone: decluttered HUD and drawer ================= */
+@media (max-width: 700px) {
+  /* HUD on two clean lines: phase · opponent · Voices / round · conditions · settings */
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-top {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center;
+    gap: var(--space-xs) var(--space-sm) !important;
+    height: auto !important;
+  }
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-top .bt-ph {
+    order: 1;
+  }
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-top #bScen {
+    order: 2;
+    flex: 1 1 0;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 13px !important;
+  }
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-top .voix {
+    order: 3;
+    flex: none;
+  }
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-top::after {
+    content: '';
+    order: 4;
+    flex: 0 0 100%;
+    height: 0;
+  }
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-top .voix > span {
+    display: none;
+  }
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-top #bRound {
+    order: 5;
+    flex: none;
+    font-size: 11px;
+  }
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-top #bWx {
+    order: 6;
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    gap: var(--space-2xs);
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 18px), transparent);
+    mask-image: linear-gradient(90deg, #000 calc(100% - 18px), transparent);
+  }
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-top #bWx::-webkit-scrollbar {
+    display: none;
+  }
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-top #bWx .chip {
+    flex: none;
+    white-space: nowrap;
+    font-size: 11px !important;
+  }
+  /* sun and time are already on the board (sky badge) */
+  html:not(#cc)
+    body:not(#cc):has(#cbBattle:not([hidden])):has(#bBoard > .sky-banner)
+    #cbBattle
+    .bt-top
+    #bWx
+    .chip:not(.chip-vent):not(.chip-acc) {
+    display: none !important;
+  }
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-top #bFast {
+    order: 7;
+    flex: none;
+    min-width: 40px;
+    height: 36px !important;
+  }
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-top #bQuit {
+    order: 8;
+    flex: none;
+    height: 36px !important;
+  }
+
+  /* drawer footer on two rows: quick actions (or the phase hint) get the full width,
+     board tools and the end/launch button share the second row. */
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .bt-foot {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center;
+    gap: var(--space-sm) !important;
+  }
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .bt-foot .phase {
+    order: 0 !important;
+    flex: 0 0 100% !important;
+    min-width: 0;
+  }
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .bt-foot #bEnd {
+    order: 3;
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    padding: 0 var(--space-sm) !important;
+    height: 44px !important;
+    min-height: 44px !important;
+  }
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .bt-foot .turn-guide-pied {
+    display: none !important;
+  }
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .bt-foot #thumb-reach {
+    order: 1;
+    flex: 1 1 100%;
+    min-width: 0;
+    margin: 0 !important;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 20px), transparent);
+    mask-image: linear-gradient(90deg, #000 calc(100% - 20px), transparent);
+  }
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .bt-foot #thumb-reach::-webkit-scrollbar {
+    display: none;
+  }
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .bt-foot #thumb-reach > button {
+    flex: none;
+    height: 40px;
+  }
+  html:not(#cc)
+    body:not(#cc):has(#cbBattle:not([hidden]))
+    #cbBattle
+    .bt-side
+    .bt-foot
+    #thumb-reach
+    > button:last-child {
+    margin-right: var(--space-lg);
+  }
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .bt-foot .board-tools.in-foot {
+    order: 2;
+    flex: none;
+    gap: var(--space-2xs) !important;
+  }
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .bt-foot .board-tools.in-foot button {
+    width: 44px !important;
+    height: 44px !important;
+  }
+}

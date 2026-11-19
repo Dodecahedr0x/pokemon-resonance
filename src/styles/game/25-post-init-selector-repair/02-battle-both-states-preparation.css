@@ -1,0 +1,164 @@
+/* BATTLE — both states: preparation and board in progress */
+#combat .sel {
+  border: 1px solid rgba(131, 226, 232, 0.4) !important;
+  border-radius: 27px !important;
+  background:
+    radial-gradient(ellipse at 10% 0%, rgba(67, 157, 177, 0.15), transparent 50%),
+    linear-gradient(145deg, #173b4e, #071722) !important;
+  box-shadow:
+    0 32px 78px rgba(0, 0, 0, 0.48),
+    inset 0 1px rgba(255, 255, 255, 0.1) !important;
+}
+#combat .scn {
+  border: 1px solid rgba(131, 221, 230, 0.2) !important;
+  border-radius: 17px !important;
+  background: linear-gradient(150deg, #15374a, #091b28) !important;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22) !important;
+  transition:
+    transform 0.2s,
+    border-color 0.2s,
+    box-shadow 0.2s !important;
+}
+#combat .scn:hover {
+  transform: translateY(-3px) !important;
+  border-color: rgba(131, 240, 239, 0.55) !important;
+}
+#combat .scn.on {
+  border-color: var(--r24-gold) !important;
+  box-shadow:
+    0 0 0 2px rgba(245, 207, 122, 0.14),
+    0 18px 35px rgba(0, 0, 0, 0.34) !important;
+}
+#combat .bt {
+  border: 1px solid rgba(131, 226, 232, 0.42) !important;
+  border-radius: 27px !important;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(62, 153, 174, 0.2), transparent 54%),
+    linear-gradient(145deg, #17394c, #06131f) !important;
+  box-shadow:
+    0 34px 85px rgba(0, 0, 0, 0.5),
+    inset 0 1px rgba(255, 255, 255, 0.12) !important;
+}
+#combat .board {
+  border: 1px solid rgba(131, 240, 239, 0.55) !important;
+  border-radius: 23px !important;
+  box-shadow:
+    inset 0 0 85px rgba(0, 0, 0, 0.45),
+    0 22px 48px rgba(0, 0, 0, 0.42) !important;
+}
+#combat .bp {
+  border: 1px solid rgba(131, 221, 230, 0.34) !important;
+  border-radius: 23px !important;
+  background:
+    radial-gradient(ellipse at 100% 0%, rgba(222, 174, 86, 0.12), transparent 48%),
+    linear-gradient(155deg, #183b4d, #081925) !important;
+  box-shadow: 0 25px 55px rgba(0, 0, 0, 0.38) !important;
+}
+#combat .bt-side .panel {
+  border: 1px solid rgba(131, 221, 230, 0.24) !important;
+  border-radius: 19px !important;
+  background: linear-gradient(150deg, #143346, #081925) !important;
+}
+#combat .bt-top {
+  color: #eafaff !important;
+}
+#combat .b-gold {
+  box-shadow:
+    0 10px 28px rgba(224, 172, 80, 0.26),
+    inset 0 1px rgba(255, 255, 255, 0.25) !important;
+}
+@media (max-width: 850px) {
+  #accueil .v4h-body {
+    padding: var(--space-2xl) !important;
+  }
+  #accueil .v4-hero:after {
+    width: 190px;
+    right: -70px;
+    top: 28%;
+  }
+  #accueil .v4-tiles {
+    gap: var(--space-sm) !important;
+  }
+  #carte .v4-map-wrap {
+    grid-template-columns: 1fr !important;
+  }
+  #combat .battle {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  #accueil .v4-hero:after {
+    animation: none !important;
+  }
+}
+/* ===== resonance-art-merge layer ===== */
+/* ==========================================================
+   v4.25 — applying ChatGPT's art direction (layers
+   v4.21 premium → v4.24 selector repair, just above).
+   Their code is taken as is; this stylesheet only:
+   1. enforces what the game rules were still blocking,
+   2. keeps what makes the game's identity (type colors,
+      each gym's decor, "in the team" states),
+   3. lightens mobile.
+   ========================================================== */
+
+/* 1. collection cards: the large rounding and inner frame
+      wanted by v4.24 (the background keeps the type color) */
+html:is(:root, #r9) body #pokedex .fcard {
+  border-radius: 22px !important;
+  overflow: hidden !important;
+}
+
+/* 2. shinies: real shiny artwork (loaded by the game), without the artificial tint */
+html:is(:root, #r9) body #dex4Card.shiny .v4d-art img.art-sh,
+html:is(:root, #r9) body .v4-dl.shiny img.art-sh,
+html:is(:root, #r9) body .enc-card.shiny .enc-cr img.art-sh,
+html:is(:root, #r9) body .pe-prise.shiny img.art-sh {
+  filter: drop-shadow(0 0 12px rgba(255, 224, 139, 0.52)) drop-shadow(0 10px 12px rgba(0, 0, 0, 0.35)) !important;
+}
+
+/*    offline or while loading: the game's shiny tint stays visible
+      (the v4.23 layers put a lone shadow on these images and erased the tint) */
+html:is(:root, #r9) body #dex4Card.shiny .v4d-art img:not(.art-sh),
+html:is(:root, #r9) body .v4-dl.shiny img:not(.art-sh),
+html:is(:root, #r9) body .enc-card.shiny .enc-cr img:not(.art-sh) {
+  filter: hue-rotate(var(--sh, 120deg)) saturate(1.25) drop-shadow(0 0 8px rgba(255, 233, 160, 0.55))
+    drop-shadow(0 10px 12px rgba(0, 0, 0, 0.35)) !important;
+}
+
+/*    home: the v4.22 halo overflowed by 5 % on the right (the page slid sideways on phone) */
+html:is(:root, #r9) body #accueil:before {
+  left: 0 !important;
+  right: 0 !important;
+}
+
+/* 4. Home: each illustration whole inside its card (no more Pokémon cut off at the edge) */
+html:is(:root, #r9) body #accueil .v4-mon {
+  min-height: 124px;
+}
+html:is(:root, #r9) body #accueil .v4-mon img {
+  right: 4px;
+  top: 4px;
+  width: 78px;
+  height: 78px;
+}
+html:is(:root, #r9) body #accueil .v4t-art {
+  right: 6px;
+  top: 6px;
+  width: min(58%, 132px);
+}
+html:is(:root, #r9) body #accueil .v4t-item.i2 {
+  right: 12px;
+  top: 14px;
+}
+
+/* 3. mobile: more compact headers, the cyan rule stays */
+@media (max-width: 700px) {
+  html body .page .ph:after {
+    margin-top: var(--space-md);
+    width: 84px;
+  }
+  html body #carte .v4-reg {
+    margin: var(--space-md) 0 var(--space-lg);
+  }
+}

@@ -1,0 +1,351 @@
+/* evolution cutscene */
+.evofx {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  border-radius: 16px;
+  overflow: hidden;
+  pointer-events: none;
+}
+.evofx[hidden] {
+  display: none;
+}
+.efx {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: var(--space-sm);
+  background: radial-gradient(circle at 50% 46%, color-mix(in srgb, var(--c0) 30%, #05060a), #030407 70%);
+  animation: efxIn 2.5s ease both;
+}
+.efx.foe {
+  background: radial-gradient(circle at 50% 46%, rgba(140, 30, 30, 0.55), #030407 70%);
+}
+@keyframes efxIn {
+  0% {
+    opacity: 0;
+  }
+  8% {
+    opacity: 1;
+  }
+  88% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+.efx-rays {
+  position: absolute;
+  left: 50%;
+  top: 44%;
+  width: 240%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  background: repeating-conic-gradient(
+    from 0deg,
+    color-mix(in srgb, var(--c) 45%, transparent) 0 7deg,
+    transparent 7deg 18deg
+  );
+  opacity: 0;
+  animation: rays 2.5s ease both;
+  -webkit-mask: radial-gradient(circle, #000 0, transparent 55%);
+  mask: radial-gradient(circle, #000 0, transparent 55%);
+}
+@keyframes rays {
+  0%,
+  52% {
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(0);
+  }
+  62% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.6;
+    transform: translate(-50%, -50%) rotate(40deg);
+  }
+}
+.efx-ring {
+  position: absolute;
+  left: 50%;
+  top: 44%;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  border: 2px solid #fff;
+  opacity: 0;
+  animation: efr 2.5s ease-out both;
+}
+@keyframes efr {
+  0%,
+  55% {
+    opacity: 0;
+    width: 110px;
+    height: 110px;
+  }
+  58% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    width: 420px;
+    height: 420px;
+  }
+}
+.efx-orb {
+  position: absolute;
+  left: calc(50% - 55px);
+  top: calc(44% - 55px);
+  width: 110px;
+  height: 110px;
+  display: grid;
+  place-items: center;
+  animation: sil 2.5s ease both;
+}
+.efx-orb > span {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+}
+.efx-a {
+  animation: fa 2.5s linear both;
+}
+.efx-b {
+  animation: fb 2.5s linear both;
+}
+@keyframes sil {
+  0%,
+  16% {
+    filter: none;
+    transform: scale(1);
+  }
+  22%,
+  52% {
+    filter: brightness(0) invert(1) drop-shadow(0 0 16px #fff);
+  }
+  56% {
+    transform: scale(1.25);
+    filter: brightness(0) invert(1) drop-shadow(0 0 30px #fff);
+  }
+  64%,
+  100% {
+    filter: drop-shadow(0 0 24px var(--c));
+    transform: scale(1);
+  }
+}
+@keyframes fa {
+  0%,
+  22% {
+    opacity: 1;
+  }
+  26% {
+    opacity: 0;
+  }
+  31% {
+    opacity: 1;
+  }
+  36% {
+    opacity: 0;
+  }
+  40% {
+    opacity: 1;
+  }
+  43% {
+    opacity: 0;
+  }
+  46% {
+    opacity: 1;
+  }
+  48% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  52%,
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes fb {
+  0%,
+  22% {
+    opacity: 0;
+  }
+  26% {
+    opacity: 1;
+  }
+  31% {
+    opacity: 0;
+  }
+  36% {
+    opacity: 1;
+  }
+  40% {
+    opacity: 0;
+  }
+  43% {
+    opacity: 1;
+  }
+  46% {
+    opacity: 0;
+  }
+  48% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  52%,
+  100% {
+    opacity: 1;
+  }
+}
+.efx-t1,
+.efx-t2 {
+  position: relative;
+  font-family: var(--f-d);
+  font-stretch: 118%;
+  font-weight: 800;
+  font-size: clamp(14px, 3vw, 20px);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  text-align: center;
+  color: #fff;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.8);
+  padding: 0 var(--space-lg);
+}
+.efx-t1 {
+  animation: t1 2.5s ease both;
+}
+.efx-t2 {
+  position: absolute;
+  top: calc(44% + 76px);
+  left: 0;
+  right: 0;
+  animation: t2 2.5s ease both;
+}
+.efx-t2 b {
+  color: var(--gold-l);
+}
+.efx.foe .efx-t2 b {
+  color: #ff9a8a;
+}
+.efx-t1 {
+  position: absolute;
+  top: calc(44% - 112px);
+  left: 0;
+  right: 0;
+}
+@keyframes t1 {
+  0%,
+  6% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  12%,
+  48% {
+    opacity: 1;
+    transform: none;
+  }
+  54%,
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes t2 {
+  0%,
+  58% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  66%,
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+.efx-flash {
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  opacity: 0;
+  animation: fl8 2.5s ease both;
+}
+@keyframes fl8 {
+  0%,
+  52% {
+    opacity: 0;
+  }
+  56% {
+    opacity: 0.95;
+  }
+  70%,
+  100% {
+    opacity: 0;
+  }
+}
+.efx-orb .medal.xl {
+  width: 100px;
+  height: 100px;
+}
+.efx-orb {
+}
+@media (max-width: 540px) {
+  .efx-orb {
+    width: 84px;
+    height: 84px;
+    left: calc(50% - 42px);
+    top: calc(44% - 42px);
+  }
+  .efx-orb .medal.xl {
+    width: 78px;
+    height: 78px;
+  }
+  .efx-t2 {
+    top: calc(44% + 60px);
+  }
+  .efx-t1 {
+    top: calc(44% - 112px);
+  }
+}
+/* result */
+.res-card {
+  background:
+    radial-gradient(90% 60% at 50% 0%, rgba(227, 192, 122, 0.16), transparent 70%) padding-box,
+    var(--hatch) padding-box,
+    var(--surf) padding-box,
+    var(--gold-grad) border-box;
+}
+.res-card.lose {
+  background:
+    radial-gradient(90% 60% at 50% 0%, rgba(255, 103, 103, 0.14), transparent 70%) padding-box,
+    var(--hatch) padding-box,
+    var(--surf) padding-box,
+    var(--bevel) border-box;
+}
+@media (prefers-reduced-motion: reduce) {
+  .efx,
+  .efx * {
+    animation: none !important;
+  }
+  .efx-a,
+  .efx-t1,
+  .efx-rays,
+  .efx-ring,
+  .efx-flash {
+    opacity: 0;
+  }
+  .efx-b,
+  .efx-t2 {
+    opacity: 1;
+  }
+  .fcard {
+    transform: none !important;
+  }
+}

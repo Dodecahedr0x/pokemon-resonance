@@ -1,0 +1,328 @@
+/* phone: 1st row = moves (or the turn state), 2nd row = tools + "Fin du tour" (End turn) */
+html body.compact-battle #cbBattle .bt-foot:has(.board-tools.in-foot),
+html body.compact-battle #cbBattle .bt-foot.foot-tools {
+  flex-wrap: wrap !important;
+  row-gap: var(--space-xs) !important;
+  column-gap: var(--space-sm) !important;
+  padding: var(--space-xs) var(--space-sm) !important;
+}
+html body.compact-battle #cbBattle .bt-foot.foot-tools .phase {
+  order: -1 !important;
+  flex: 0 0 100% !important;
+  min-width: 0;
+}
+html body.compact-battle #cbBattle .bt-foot.foot-tools .thumb-reach-n {
+  display: none !important;
+}
+html body.compact-battle #cbBattle .bt-foot.foot-tools #bEnd {
+  margin-left: auto;
+  height: 40px !important;
+  min-height: 40px !important;
+}
+.board-tools button.on {
+  background: linear-gradient(180deg, #ffe28a, #d6a82d);
+  border-color: transparent;
+  color: #1d1406;
+}
+#bSvg {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+#bSvg .h-inspect-tile {
+  fill: rgba(255, 224, 138, 0.16);
+  stroke: #ffe08a;
+  stroke-width: 2.4;
+  stroke-dasharray: 5 3;
+  animation: inspect-tile 1.2s linear infinite;
+}
+@keyframes inspect-tile {
+  to {
+    stroke-dashoffset: -16;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  #bSvg .h-inspect-tile {
+    animation: none;
+  }
+}
+
+.tile-info {
+  position: fixed;
+  z-index: 44;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 18px;
+  width: min(420px, calc(100vw - 16px));
+  max-height: min(42vh, 400px);
+  display: flex;
+  flex-direction: column;
+  border-radius: 16px;
+  background: rgba(9, 12, 18, 0.97);
+  border: 1px solid rgba(212, 175, 106, 0.38);
+  box-shadow:
+    0 18px 50px -12px #000,
+    0 0 0 1px rgba(0, 0, 0, 0.6);
+  color: #e9eef6;
+  overflow: hidden;
+}
+.tile-info[hidden] {
+  display: none;
+}
+.tile-info-h {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-sm) var(--space-sm) var(--space-md);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.tile-info-sw {
+  width: 16px;
+  height: 18px;
+  flex: none;
+  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+}
+.tile-info-h b {
+  font: 700 15px/1.1 var(--f-d);
+}
+.tile-info-h span {
+  flex: 1;
+  min-width: 0;
+  font: 600 10.5px/1.2 var(--f-m);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: #d8c08a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tile-info-x {
+  width: 40px;
+  height: 40px;
+  flex: none;
+  border-radius: 50%;
+  border: 0;
+  background: rgba(255, 255, 255, 0.07);
+  color: #fff;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+}
+.tile-info-b {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--space-sm) var(--space-md) var(--space-md);
+  display: grid;
+  gap: var(--space-sm);
+}
+.tile-info-b ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-2xs);
+}
+.tile-info-r li {
+  font-size: 13px;
+  line-height: 1.4;
+  color: #cfd8e4;
+  padding-left: var(--space-md);
+  position: relative;
+}
+.tile-info-r li::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 0.55em;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #d8c08a;
+}
+.tile-info-d li {
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: #ffd9a8;
+  background: rgba(255, 159, 26, 0.12);
+  border: 1px solid rgba(255, 159, 26, 0.4);
+  border-radius: 9px;
+  padding: var(--space-xs) var(--space-sm);
+}
+.tile-info-c li {
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: #cfe3ff;
+  background: rgba(91, 155, 255, 0.12);
+  border: 1px solid rgba(127, 178, 255, 0.4);
+  border-radius: 9px;
+  padding: var(--space-xs) var(--space-sm);
+}
+.tile-info-k {
+  margin: 0;
+  font: 600 10px/1 var(--f-m);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #9fb0c4;
+}
+.tile-info-rx {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2xs);
+}
+.tile-info-u {
+  display: grid;
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-sm);
+  border-radius: 11px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.tile-info-u.pe {
+  border-color: rgba(255, 107, 129, 0.35);
+}
+.tile-info-u.pa {
+  border-color: rgba(127, 178, 255, 0.35);
+}
+.tile-info-uh {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-sm);
+}
+.tile-info-uh b {
+  font: 700 14px/1.1 var(--f-d);
+}
+.tile-info-side {
+  font: 600 10px/1 var(--f-m);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: #9fb0c4;
+}
+.tile-info-hp {
+  height: 6px;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+.tile-info-hp i {
+  display: block;
+  height: 100%;
+  border-radius: 9px;
+  background: #4ade80;
+}
+.tile-info-hp i.mid {
+  background: #facc15;
+}
+.tile-info-hp i.lo {
+  background: #f87171;
+}
+.tile-info-ul {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: 12px;
+  color: #cfd8e4;
+}
+.tile-info-ul em {
+  font-style: normal;
+  color: #ffd9a8;
+}
+.tile-info-u .b {
+  justify-self: start;
+  min-height: 38px;
+}
+.tile-info-leg summary {
+  cursor: pointer;
+  font: 600 11px/1 var(--f-m);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: #d8c08a;
+  padding: var(--space-xs) 0;
+  list-style: none;
+}
+.tile-info-leg summary::-webkit-details-marker {
+  display: none;
+}
+.tile-info-leg summary::before {
+  content: '▸ ';
+}
+.tile-info-leg[open] summary::before {
+  content: '▾ ';
+}
+.tile-info-leg li {
+  display: grid;
+  grid-template-columns: 14px auto 1fr;
+  align-items: start;
+  gap: var(--space-3xs) var(--space-sm);
+  font-size: 12px;
+  line-height: 1.35;
+  color: #cfd8e4;
+}
+.tile-info-leg li i {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  margin-top: var(--space-3xs);
+}
+.tile-info-leg li b {
+  white-space: nowrap;
+  color: #fff;
+}
+.tile-info-leg li span {
+  grid-column: 2/4;
+}
+.tile-info-leg .lg-reach {
+  background: transparent;
+  box-shadow: inset 0 0 0 2px #7fb2ff;
+}
+.tile-info-leg .lg-danger {
+  background: transparent;
+  box-shadow: inset 0 0 0 2px #ff9f1a;
+}
+.tile-info-hint {
+  margin: 0;
+  font-size: 11.5px;
+  color: #8fa1b6;
+}
+
+/* full screen: in battle on phone, the bottom navigation disappears */
+html body.fullscreen-mode.compact-battle {
+  --bn: 0px;
+}
+html body.fullscreen-mode.compact-battle .bnav {
+  display: none !important;
+}
+html body.fullscreen-mode.compact-battle #cbBattle .bt-side .bt-foot {
+  bottom: calc(6px + env(safe-area-inset-bottom, 0px)) !important;
+}
+
+/* contrasted board */
+body.board-contrast #bSvg .hx {
+  stroke: rgba(214, 230, 255, 0.62) !important;
+  stroke-width: 1.6 !important;
+}
+body.board-contrast #bSvg .tx {
+  opacity: 0.5;
+}
+body.board-contrast #bSvg .hx.grass {
+  fill: #1f6a30 !important;
+}
+body.board-contrast #bSvg .hx.river {
+  fill: #17508f !important;
+}
+body.board-contrast #bSvg .hx.sand {
+  fill: #77602f !important;
+}
+body.board-contrast #bSvg .hx.mud {
+  fill: #5a3d22 !important;
+}
+body.board-contrast #bSvg .hx.lava {
+  fill: #8a2a12 !important;
+}
+body.board-contrast #bSvg .hx.rock {
+  fill: #3b3f47 !important;
+}
+body.board-contrast #bSvg .axl {
+  fill: #f2e6c8 !important;
+  font-weight: 700;
+}

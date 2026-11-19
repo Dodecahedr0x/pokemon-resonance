@@ -12,6 +12,7 @@ import { SLOTS, SV, battleLine, cleanProfile, fmtD, snapshot, validBattle } from
 import { PREF } from '../../engine/ui/preferences.js';
 import { boxCapacityLabel } from '../../engine/world/catch-anywhere.js';
 import { boxCount } from '../../engine/modes/legendary-captures.js';
+import { space } from '../../lib/theme.js';
 
 // "Sauvegardes" (Saves) window (#saves). Clicks, input and import are still handled by
 // the engine (listeners on #saves, data-sv, data-resume): here, display only.
@@ -125,7 +126,7 @@ function Code() {
   }
   const copy = SV.code.mode === 'copy';
   return (
-    <div className="sv-code" style={{ marginTop: '12px', display: 'grid', gap: '8px' }}>
+    <div className="sv-code" style={{ marginTop: space.md, display: 'grid', gap: space.sm }}>
       <b>{copy ? 'Votre code de sauvegarde' : 'Collez votre code de sauvegarde'}</b>
       <span style={{ opacity: '.8', fontSize: '13px' }}>
         {copy
@@ -144,7 +145,7 @@ function Code() {
           width: '100%',
           boxSizing: 'border-box',
           font: '12px/1.4 monospace',
-          padding: '10px',
+          padding: space.sm,
           borderRadius: '10px',
           border: '1px solid rgba(255,255,255,.25)',
           background: 'rgba(0,0,0,.35)',
@@ -152,7 +153,7 @@ function Code() {
           resize: 'vertical',
         }}
       />
-      <span style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+      <span style={{ display: 'flex', gap: space.sm, flexWrap: 'wrap' }}>
         {!copy && (
           <button type="button" className="b b-sm b-gold" data-sv="importcode">
             Importer ce code

@@ -1,0 +1,342 @@
+/* encounter */
+.enc .enc-card {
+  width: min(440px, 100%);
+  max-height: 92vh;
+  overflow-y: auto;
+  display: grid;
+  gap: var(--space-md);
+  justify-items: center;
+  text-align: center;
+  padding: var(--space-2xl) var(--space-2xl);
+  border-radius: 26px;
+  border: 1px solid var(--line2);
+  background:
+    radial-gradient(90% 70% at 50% 0%, color-mix(in srgb, var(--c) 34%, transparent), transparent 70%),
+    linear-gradient(180deg, var(--s2), var(--s1));
+  box-shadow: var(--sh);
+  animation: encIn 0.6s var(--ease) both;
+}
+@keyframes encIn {
+  0% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.04);
+  }
+  100% {
+    transform: none;
+    opacity: 1;
+  }
+}
+.enc-t {
+  font-family: var(--f-d);
+  font-stretch: 112%;
+  font-weight: 750;
+  font-size: 18px;
+}
+.enc-cr svg {
+  width: 150px;
+  height: 150px;
+  overflow: visible;
+}
+
+.enc-a {
+  display: flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: var(--space-2xs);
+}
+/* Pokédex */
+.dexbar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-sm);
+}
+.srch {
+  flex: 1 1 220px;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  height: 40px;
+  padding: 0 var(--space-md);
+  border-radius: 999px;
+  border: 1px solid var(--line2);
+  background: var(--s1);
+  color: var(--mut);
+}
+.srch svg {
+  width: 16px;
+  height: 16px;
+  flex: none;
+}
+.srch input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  color: var(--tx);
+  font: inherit;
+  font-size: 14px;
+  outline: none;
+}
+.srch:focus-within {
+  border-color: var(--gold);
+}
+.seg {
+  display: flex;
+  gap: var(--space-3xs);
+  padding: var(--space-3xs);
+  border-radius: 999px;
+  border: 1px solid var(--line2);
+  background: var(--s1);
+}
+.seg button {
+  border: 0;
+  background: transparent;
+  color: var(--tx2);
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 500;
+  padding: var(--space-xs) var(--space-md);
+  border-radius: 999px;
+  cursor: pointer;
+}
+.seg button[aria-pressed='true'] {
+  background: var(--tx);
+  color: var(--bg);
+}
+#dexType {
+  height: 40px;
+  padding: 0 var(--space-md);
+  border-radius: 999px;
+  border: 1px solid var(--line2);
+  background: var(--s1);
+  color: var(--tx);
+  font: inherit;
+  font-size: 13px;
+}
+.dexbar .cnt {
+  font-family: var(--f-m);
+  font-size: 11px;
+  color: var(--mut);
+  margin-left: auto;
+}
+.stg {
+  display: inline-flex;
+  gap: var(--space-3xs);
+  margin-right: var(--space-xs);
+  vertical-align: 1px;
+}
+.stg i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  border: 1px solid var(--line3);
+}
+.stg i.on {
+  background: var(--gold);
+  border-color: var(--gold);
+}
+
+.fam {
+  display: flex;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+}
+
+.evd {
+  display: grid;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-md);
+  border-radius: 14px;
+  border: 1px solid var(--line2);
+  background: var(--s2);
+}
+.evd-h {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+.evd-h .medal {
+  width: 30px;
+  height: 30px;
+}
+.evd-h b {
+  font-family: var(--f-d);
+  font-stretch: 112%;
+  font-weight: 750;
+  font-size: 16px;
+  text-transform: uppercase;
+}
+.evd-h em {
+  font-style: normal;
+  font-size: 11.5px;
+  color: var(--gold);
+}
+.evd ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-2xs);
+  font-size: 13px;
+  color: var(--tx2);
+}
+.evd li span {
+  display: inline-block;
+  min-width: 62px;
+  font-family: var(--f-m);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--mut);
+}
+.evd li.gain {
+  color: var(--ok);
+}
+.evd li.lose {
+  color: #ff8a8a;
+}
+.sm-slots.four {
+  grid-template-columns: repeat(4, 1fr);
+}
+/* preparation */
+.ptm {
+  cursor: default;
+}
+.ptm .pcs {
+  font-family: var(--f-m);
+  font-size: 11px;
+  color: var(--gold);
+}
+.pt > .b {
+  justify-self: start;
+}
+.scn {
+  overflow: hidden;
+}
+.scn::after {
+  content: '';
+  position: absolute;
+  right: -30px;
+  top: -30px;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  opacity: 0.35;
+  filter: blur(20px);
+  background: var(--bc, #4f8a3c);
+  pointer-events: none;
+}
+.scn.bio-gue {
+  --bc: #3e8f4a;
+}
+.scn.bio-roche {
+  --bc: #b6853e;
+}
+.scn.bio-tour {
+  --bc: #7b5cc4;
+}
+.scn.bio-ligue {
+  --bc: #e3c07a;
+}
+/* boards by biome */
+.board {
+  transition: background 0.6s;
+}
+.board.bio-gue {
+  background: radial-gradient(120% 90% at 50% 0%, #1f3a22, #0e1a12);
+}
+.board.bio-roche {
+  background: radial-gradient(120% 90% at 50% 0%, #3a2d1f, #16110b);
+}
+.board.bio-tour {
+  background: radial-gradient(120% 90% at 50% 0%, #241c33, #0b0912);
+}
+.board.bio-ligue {
+  background: radial-gradient(120% 90% at 50% 0%, #1a2134, #090c14);
+}
+.bio-gue .hx {
+  fill: #2c4a27;
+  stroke: rgba(255, 255, 255, 0.07);
+}
+.bio-gue .hx.alt {
+  fill: #31522b;
+}
+.bio-gue .hx.river {
+  fill: #1d4f79;
+}
+.bio-gue .hx.rock {
+  fill: #3b3f45;
+}
+.bio-roche .hx {
+  fill: #4a3a28;
+  stroke: rgba(255, 230, 190, 0.08);
+}
+.bio-roche .hx.alt {
+  fill: #52412d;
+}
+.bio-roche .hx.rock {
+  fill: #2a231b;
+}
+.bio-tour .hx {
+  fill: #2a2236;
+  stroke: rgba(200, 180, 255, 0.07);
+}
+.bio-tour .hx.alt {
+  fill: #30273e;
+}
+.bio-tour .hx.rock {
+  fill: #16121f;
+}
+.bio-ligue .hx {
+  fill: #1a2132;
+  stroke: rgba(227, 192, 122, 0.14);
+}
+.bio-ligue .hx.alt {
+  fill: #1e263a;
+}
+.bio-ligue .hx.river {
+  fill: #18406a;
+}
+.bio-ligue .hx.rock {
+  fill: #0f131c;
+}
+.bio-gue .hx.wet,
+.bio-roche .hx.wet,
+.bio-tour .hx.wet,
+.bio-ligue .hx.wet {
+  fill: #2b5c96;
+}
+.bio-gue .hx.mud,
+.bio-roche .hx.mud,
+.bio-tour .hx.mud,
+.bio-ligue .hx.mud {
+  fill: #4a3620;
+}
+.bio-gue .hx.lava,
+.bio-roche .hx.lava,
+.bio-tour .hx.lava,
+.bio-ligue .hx.lava {
+  fill: #6b2a15;
+}
+.tuft {
+  fill: #4f8a3c;
+  opacity: 0.7;
+}
+.pebble {
+  fill: #6e5a40;
+  opacity: 0.8;
+}
+.ember {
+  fill: #b48cff;
+  opacity: 0.7;
+  animation: tw 2.6s ease-in-out infinite;
+}
+.axl {
+  fill: rgba(255, 255, 255, 0.35);
+}

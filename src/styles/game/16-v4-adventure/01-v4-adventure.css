@@ -1,0 +1,331 @@
+/* ===== resonance-v4-adventure layer ===== */
+/* =====================================================================
+   v4.0 "ADVENTURE" — art direction based on the mockup:
+   deep midnight blue, glass panels ringed in cyan, bright gold,
+   large illustrations, titles in Archivo, logo in Cinzel.
+   ===================================================================== */
+:root {
+  --f-d: 'Archivo', 'Arial Black', 'Helvetica Neue', Arial, sans-serif;
+  --f-logo: 'Cinzel', 'Trajan Pro', Georgia, serif;
+  --f-script: 'Kaushan Script', 'Brush Script MT', cursive;
+  --v4-bg: #061327;
+  --v4-p1: rgba(17, 44, 78, 0.94);
+  --v4-p2: rgba(8, 23, 46, 0.96);
+  --v4-ln: rgba(88, 186, 255, 0.34);
+  --v4-ln2: rgba(120, 210, 255, 0.55);
+  --v4-glow: rgba(70, 180, 255, 0.28);
+  --v4-gold1: #ffe877;
+  --v4-gold2: #ffc12f;
+  --v4-gold3: #e89a17;
+  --v4-ink: #10213a;
+  --v4-tx: #f4f8ff;
+  --v4-tx2: #c3d6ea;
+  --v4-mut: #8ea8c4;
+  --v4-ok: #45d483;
+  --v4-red: #ff5f57;
+  --v4-r: 14px;
+}
+html body {
+  background:
+    radial-gradient(1200px 700px at 78% -12%, rgba(46, 140, 230, 0.28), transparent 60%),
+    radial-gradient(900px 600px at -10% 105%, rgba(255, 196, 64, 0.08), transparent 65%),
+    linear-gradient(180deg, #071a33, #061327 45%, #050f20) !important;
+  color: var(--v4-tx) !important;
+}
+html body .ambient {
+  opacity: 0.55 !important;
+}
+html body .h1,
+html body .ph h1 {
+  font-family: var(--f-d) !important;
+  font-weight: 850 !important;
+  font-stretch: 100%;
+  letter-spacing: -0.02em !important;
+  text-transform: none !important;
+  font-size: clamp(26px, 3vw, 38px) !important;
+  line-height: 1.05 !important;
+  color: #fff !important;
+  text-shadow: 0 2px 18px rgba(0, 30, 70, 0.6) !important;
+}
+html body .h2 {
+  font-family: var(--f-d) !important;
+  font-weight: 800 !important;
+  text-transform: none !important;
+  letter-spacing: -0.01em !important;
+}
+html body .kick {
+  font-family: var(--f-d) !important;
+  font-weight: 800 !important;
+  font-stretch: 90%;
+  letter-spacing: 0.16em !important;
+  color: #ffd75e !important;
+}
+html body .sub {
+  color: var(--v4-tx2) !important;
+}
+html body .logo b {
+  font-family: var(--f-logo) !important;
+  letter-spacing: 0.14em !important;
+}
+html body #accueil .v4-off,
+.v4-off {
+  display: none !important;
+}
+
+/* ---------- components ---------- */
+.v4-panel {
+  position: relative;
+  background: linear-gradient(180deg, var(--v4-p1), var(--v4-p2));
+  border: 1px solid var(--v4-ln);
+  border-radius: var(--v4-r);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 0 0 1px rgba(0, 0, 0, 0.25),
+    0 16px 36px -18px rgba(0, 0, 0, 0.8);
+}
+.v4-ph {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 0 0 var(--space-sm);
+  margin-bottom: var(--space-sm);
+  border-bottom: 1px solid rgba(120, 200, 255, 0.14);
+}
+.v4-ph > svg {
+  width: 20px;
+  height: 20px;
+  color: #ffd75e;
+  flex: none;
+}
+.v4-ph b {
+  font-family: var(--f-d);
+  font-weight: 800;
+  font-size: 15px;
+  color: #fff;
+}
+.v4-cnt,
+.v4-pcs {
+  margin-left: auto;
+  font: 700 12px/1 var(--f-d);
+  color: var(--v4-tx2);
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(120, 200, 255, 0.2);
+  padding: var(--space-2xs) var(--space-sm);
+  border-radius: 999px;
+}
+.v4-pcs {
+  margin-left: var(--space-xs);
+  color: #ffd75e;
+}
+html body .b {
+  border-radius: 11px !important;
+  font-family: var(--f-d) !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.02em !important;
+  text-transform: none !important;
+}
+html body .b-gold,
+html body .b.b-gold {
+  background: linear-gradient(180deg, var(--v4-gold1), var(--v4-gold2) 60%, var(--v4-gold3)) !important;
+  color: var(--v4-ink) !important;
+  border: 1px solid #fff2a8 !important;
+  box-shadow:
+    0 3px 0 #a86a12,
+    0 10px 22px -8px rgba(255, 180, 40, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7) !important;
+}
+html body .b-gold:active {
+  transform: translateY(2px) !important;
+  box-shadow:
+    0 1px 0 #a86a12,
+    0 6px 14px -8px rgba(255, 180, 40, 0.5) !important;
+}
+html body .b-gold[disabled] {
+  filter: saturate(0.25) brightness(0.7) !important;
+  box-shadow: none !important;
+}
+.v4-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  font: 800 11px/1 var(--f-d);
+  letter-spacing: 0.04em;
+  padding: var(--space-2xs) var(--space-sm);
+  border-radius: 999px;
+  white-space: nowrap;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--v4-tx2);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+.v4-pill svg {
+  width: 12px;
+  height: 12px;
+}
+.v4-pill.s-next {
+  background: linear-gradient(180deg, #4fe08e, #22a65c);
+  color: #05230f;
+  border-color: #9ff2c2;
+}
+.v4-pill.s-done {
+  background: rgba(69, 212, 131, 0.14);
+  color: #7ff0ad;
+  border-color: rgba(69, 212, 131, 0.4);
+}
+.v4-pill.s-lock {
+  color: #8ea8c4;
+}
+.v4-pill.s-open {
+  color: #bfe6ff;
+  border-color: rgba(120, 200, 255, 0.35);
+}
+.v4-tabs {
+  display: flex;
+  gap: var(--space-xs);
+  padding: var(--space-2xs);
+  margin: 0 0 var(--space-md);
+  background: rgba(3, 14, 30, 0.7);
+  border: 1px solid rgba(120, 200, 255, 0.18);
+  border-radius: 13px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.v4-tabs button {
+  flex: 1 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  min-height: 42px;
+  padding: 0 var(--space-lg);
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--v4-tx2);
+  font: 800 14px/1 var(--f-d);
+  cursor: pointer;
+}
+.v4-tabs button svg {
+  width: 18px;
+  height: 18px;
+}
+.v4-tabs button[aria-selected='true'] {
+  background: linear-gradient(180deg, var(--v4-gold1), var(--v4-gold2));
+  color: var(--v4-ink);
+  border-color: #fff2a8;
+  box-shadow: 0 6px 16px -8px rgba(255, 190, 40, 0.7);
+}
+.v4-dot {
+  display: inline-grid;
+  place-items: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 var(--space-2xs);
+  border-radius: 9px;
+  background: #ff5f57;
+  color: #fff;
+  font: 800 11px/1 var(--f-d);
+  font-style: normal;
+}
+.v4-coin {
+  display: inline-grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fff3b0, #ffcd3c 45%, #c98a12);
+  color: #6b4300;
+  font: 900 12px/1 var(--f-d);
+  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.25);
+  flex: none;
+}
+.v4-gemi {
+  display: inline-grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  color: #7fe6ff;
+  flex: none;
+}
+.v4-gemi svg {
+  width: 20px;
+  height: 20px;
+  filter: drop-shadow(0 0 4px rgba(90, 220, 255, 0.6));
+}
+.v4-coin.big,
+.v4-gemi.big,
+.v4-gemi.big svg {
+  width: 38px;
+  height: 38px;
+  font-size: 20px;
+}
+.v4-note {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-md);
+  margin: 0 0 var(--space-md);
+  border-radius: 12px;
+  background: rgba(255, 215, 94, 0.08);
+  border: 1px solid rgba(255, 215, 94, 0.28);
+  color: #ffe7a3;
+  font-size: 13.5px;
+}
+.v4-empty {
+  padding: var(--space-xl);
+  text-align: center;
+  color: var(--v4-mut);
+}
+.v4-sec-h {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin: var(--space-xl) 0 var(--space-sm);
+}
+.v4-sec-h svg {
+  width: 20px;
+  height: 20px;
+  color: #7fd36b;
+}
+.v4-sec-h b {
+  font: 800 17px/1.1 var(--f-d);
+}
+.v4-sec-h span {
+  margin-left: auto;
+  color: var(--v4-mut);
+  font-size: 13px;
+}
+.v4-rw,
+.v4-rew,
+.v4-mi-k {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+.v4-rw > span,
+.v4-rew > span,
+.v4-mi-k > span {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-2xs) var(--space-sm) var(--space-2xs) var(--space-2xs);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(120, 200, 255, 0.18);
+  font: 700 12px/1.1 var(--f-d);
+  color: #e7f4ff;
+}
+.v4-rw img,
+.v4-rew img,
+.v4-mi-k img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+.v4-rew .v4-rew-b svg {
+  width: 20px;
+  height: 20px;
+}
+.v4-rew {
+  margin: var(--space-sm) 0 var(--space-3xs);
+}

@@ -8,7 +8,7 @@ html body #carte .map-title {
   left: clamp(52px, 7.5%, 74px) !important;
   display: grid !important;
   gap: 1px;
-  padding: 7px 14px !important;
+  padding: var(--space-xs) var(--space-md) !important;
   max-width: 60%;
   border-radius: 12px !important;
   background: linear-gradient(180deg, rgba(251, 243, 220, 0.94), rgba(234, 216, 176, 0.94)) !important;
@@ -156,7 +156,7 @@ html body #carte .map-title small {
 .fa-pf {
   width: 16px;
   height: 16px;
-  margin: -8px 0 0 -8px;
+  margin: calc(var(--space-sm) * -1) 0 0 calc(var(--space-sm) * -1);
   border-radius: 50%;
   background: radial-gradient(closest-side, rgba(214, 208, 204, 0.85), rgba(214, 208, 204, 0));
   opacity: 0;

@@ -1,0 +1,358 @@
+/* battle team */
+#ptBox.pt {
+  display: grid;
+  gap: var(--space-md);
+  padding: var(--space-md);
+  border-radius: var(--r);
+  border: 1px solid rgba(212, 175, 106, 0.16);
+  background: rgba(6, 6, 8, 0.45);
+  box-shadow: none;
+}
+#ptBox .pt-h {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+#ptBox .pt-h b {
+  margin-left: auto;
+  font-family: var(--f-m);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--tx2);
+}
+.ptc {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-xs);
+}
+.ptc-m {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-2xs);
+  padding: var(--space-md) var(--space-2xs) var(--space-sm);
+  border-radius: var(--r);
+  border: 1px solid rgba(212, 175, 106, 0.12);
+  background: linear-gradient(180deg, #15161a, #0c0d10);
+  text-align: center;
+  min-width: 0;
+}
+.ptc-m b {
+  max-width: 100%;
+  font-family: var(--f-d);
+  font-weight: 700;
+  font-size: 11.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--tx);
+}
+.ptc-m em {
+  font-style: normal;
+  font-family: var(--f-m);
+  font-size: 9.5px;
+  letter-spacing: 0.06em;
+  color: var(--gold);
+}
+.ptc-m.add {
+  border: 1px dashed rgba(212, 175, 106, 0.3);
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  color: var(--mut);
+}
+.ptc-m.add i {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  transform: rotate(45deg);
+  border: 1px solid rgba(212, 175, 106, 0.4);
+  font-style: normal;
+  color: var(--gold-l);
+}
+.ptc-m.add i {
+  font-size: 0;
+}
+.ptc-m.add i::before {
+  content: '+';
+  transform: rotate(-45deg);
+  font-size: 16px;
+  font-family: var(--f-n);
+}
+.ptc-m.add:hover {
+  border-color: var(--gold);
+  color: var(--gold-l);
+}
+#ptBox .pt-syn {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  padding: 0;
+  border: 0;
+}
+#ptBox .pt-go {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+  padding-top: var(--space-md);
+  border-top: 1px solid rgba(212, 175, 106, 0.12);
+}
+#ptVoix {
+  display: grid;
+  gap: var(--space-3xs);
+  min-width: 0;
+}
+#ptVoix b {
+  font-family: var(--f-d);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--tx);
+}
+#ptVoix span {
+  font-family: var(--f-m);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--mut);
+}
+.pt-x[hidden] {
+  display: none !important;
+}
+.scn-tabs {
+  display: none !important;
+}
+@media (max-width: 899px) {
+  #cbPrep .pt-go {
+    position: fixed;
+    left: 8px;
+    right: 8px;
+    bottom: calc(var(--bn, 64px) + 8px + env(safe-area-inset-bottom, 0px));
+    z-index: 40;
+    padding: var(--space-sm) var(--space-sm) var(--space-sm) var(--space-lg) !important;
+    border: 1px solid transparent !important;
+    border-radius: var(--rl);
+    background:
+      var(--glass) padding-box,
+      var(--brass) border-box;
+    box-shadow: 0 -12px 40px -12px #000;
+  }
+  #cbPrep .pt-go .b-lg {
+    height: 48px;
+    padding: 0 var(--space-xl);
+  }
+  #cbPrep {
+    padding-bottom: 86px;
+  }
+  .sel-tabs button {
+    flex-direction: column;
+    gap: var(--space-2xs);
+    min-height: 64px;
+    text-align: center;
+  }
+  .sel-tabs button span {
+    justify-items: center;
+  }
+  .sel-tabs b {
+    font-size: 11.5px;
+    letter-spacing: 0.1em;
+  }
+  .sel-tabs em {
+    font-size: 9.5px;
+  }
+}
+/* ---------- Team: an explicit button to recruit ---------- */
+.qa {
+  display: inline-flex !important;
+  align-items: center;
+  gap: var(--space-xs);
+  width: auto !important;
+  height: 28px !important;
+  padding: 0 var(--space-md) 0 var(--space-sm) !important;
+  border-radius: 2px !important;
+  border: 0 !important;
+  transform: none !important;
+  clip-path: none !important;
+  color: #1a1205 !important;
+  background: linear-gradient(135deg, #f6e6bc, #c9a15e 55%, #9c7735) !important;
+  box-shadow: 0 8px 18px -8px rgba(0, 0, 0, 0.8) !important;
+  font-family: var(--f-m);
+  font-size: 9.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.qa::before {
+  display: none !important;
+}
+.qa::after {
+  content: 'Recruter';
+  display: inline !important;
+  position: static !important;
+  inset: auto !important;
+  width: auto !important;
+  height: auto !important;
+  background: none !important;
+  border: 0 !important;
+  transform: none !important;
+}
+.qa svg {
+  width: 12px !important;
+  height: 12px !important;
+  transform: none !important;
+  color: #1a1205 !important;
+}
+.qa[aria-pressed='true'] {
+  color: var(--gold-l) !important;
+  background: rgba(10, 10, 12, 0.85) !important;
+  box-shadow: inset 0 0 0 1px rgba(212, 175, 106, 0.6) !important;
+}
+.qa[aria-pressed='true'] svg {
+  color: var(--gold-l) !important;
+  transform: rotate(45deg) !important;
+}
+.qa[aria-pressed='true']::after {
+  content: 'Retirer';
+}
+@media (max-width: 540px) {
+  .qa::after,
+  .qa[aria-pressed='true']::after {
+    content: '';
+  }
+  .qa {
+    padding: 0 var(--space-sm) !important;
+  }
+}
+/* ---------- Guide: getting started ---------- */
+.s5 {
+  display: grid;
+  gap: var(--space-sm);
+  list-style: none;
+  margin: 0 0 var(--space-xl);
+  padding: 0;
+}
+.s5 li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--space-lg);
+  align-items: start;
+  padding: var(--space-lg);
+  border-radius: var(--rl);
+  border: 1px solid transparent;
+  background:
+    radial-gradient(80% 120% at 0% 0%, color-mix(in srgb, var(--c) 10%, transparent), transparent 60%) padding-box,
+    var(--slab) padding-box,
+    var(--edge) border-box;
+}
+.s5-n {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  margin: var(--space-2xs);
+  transform: rotate(45deg);
+  border: 1px solid transparent;
+  background:
+    linear-gradient(135deg, #1a1b20, #0b0c0f) padding-box,
+    var(--brass) border-box;
+  font-size: 0;
+}
+.s5-n::before {
+  content: attr(data-n);
+  transform: rotate(-45deg);
+  font-family: var(--f-d);
+  font-weight: 800;
+  font-size: 17px;
+  color: var(--gold-l);
+}
+.s5 b {
+  font-family: var(--f-d);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--tx);
+}
+.s5 p {
+  margin: var(--space-xs) 0 0;
+  color: var(--tx2);
+  font-size: 14.5px;
+  line-height: 1.6;
+}
+.s5 p b {
+  font-family: inherit;
+  font-size: inherit;
+  letter-spacing: 0;
+  text-transform: none;
+  font-weight: 600;
+  color: var(--gold-l);
+}
+@media (min-width: 900px) {
+  .s5 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .s5 li:last-child {
+    grid-column: 1/-1;
+  }
+}
+.gd-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin: var(--space-2xs) 0 var(--space-2xl);
+}
+.lex {
+  padding: var(--space-xl);
+  border-radius: var(--rl);
+  border: 1px solid transparent;
+  background:
+    var(--slab) padding-box,
+    var(--edge) border-box;
+}
+.lex dl {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 1px;
+  margin: var(--space-md) 0 0;
+  border-radius: var(--r);
+  overflow: hidden;
+  background: rgba(212, 175, 106, 0.1);
+}
+.lex dl div {
+  padding: var(--space-md) var(--space-md);
+  background: #0d0e11;
+}
+.lex dt {
+  font-family: var(--f-m);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.lex dd {
+  margin: var(--space-2xs) 0 0;
+  color: var(--tx2);
+  font-size: 13.5px;
+}
+/* ---------- tutorial: the Professor as coach ---------- */
+.coach .co-in {
+  display: grid !important;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--space-2xs) var(--space-md);
+  align-items: start;
+}
+.coach .co-in > .pav {
+  grid-row: 1 / span 4;
+  width: 48px;
+  height: 48px;
+  margin-top: var(--space-3xs);
+}
+.coach .co-in > .pav b {
+  font-size: 14px;
+}
+.coach .co-in > *:not(.pav) {
+  grid-column: 2;
+}

@@ -1,0 +1,337 @@
+/* ===== resonance-post-init-selector-repair layer ===== */
+/*
+  v4.24 — APPLICATION FIX
+  v4.23 still targeted .hm-hero/.hm-quick after the v4 script
+  moved those elements and gave them the .v4-hero/.v4-tiles classes.
+  This stylesheet targets the classes actually present after initialization.
+  Presentation only: no data, rule or interaction modified.
+*/
+:root {
+  --r24-bg: #06111c;
+  --r24-panel: #102b3d;
+  --r24-edge: rgba(128, 221, 230, 0.34);
+  --r24-cyan: #83f0ef;
+  --r24-gold: #f5cf7a;
+  --r24-white: #f4fbff;
+}
+html,
+body {
+  background-color: #050d16 !important;
+}
+body {
+  background:
+    radial-gradient(ellipse at 12% 2%, rgba(39, 157, 174, 0.2), transparent 34%),
+    radial-gradient(ellipse at 88% 18%, rgba(218, 159, 71, 0.13), transparent 27%),
+    linear-gradient(180deg, #071a29 0%, #07111d 58%, #040a12 100%) !important;
+  color: var(--r24-white) !important;
+}
+.content {
+  position: relative;
+}
+.content:before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.17;
+  background-image:
+    linear-gradient(rgba(134, 225, 232, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(134, 225, 232, 0.07) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: linear-gradient(#000, transparent 75%);
+}
+.content > .wrap {
+  position: relative;
+  z-index: 1;
+}
+.page .ph .h1 {
+  letter-spacing: -0.012em !important;
+  text-shadow: 0 8px 30px rgba(0, 0, 0, 0.48) !important;
+}
+.page .ph .kick {
+  color: var(--r24-cyan) !important;
+  letter-spacing: 0.22em !important;
+  font-weight: 900 !important;
+}
+.page .ph .sub {
+  color: #b4cbd6 !important;
+  line-height: 1.7 !important;
+}
+
+/* HOME — real container after JS move: .v4-hero */
+#accueil .v4-home {
+  gap: var(--space-xl) !important;
+}
+#accueil .v4-hero {
+  position: relative !important;
+  isolation: isolate !important;
+  overflow: hidden !important;
+  border: 1px solid rgba(130, 231, 234, 0.52) !important;
+  border-radius: 30px !important;
+  box-shadow:
+    0 36px 90px rgba(0, 0, 0, 0.58),
+    inset 0 1px rgba(255, 255, 255, 0.17),
+    inset 0 -70px 100px rgba(0, 0, 0, 0.22) !important;
+}
+@keyframes r24-orbit {
+  to {
+    transform: translateY(-50%) rotate(360deg);
+  }
+}
+#accueil .v4h-body {
+  position: relative !important;
+  z-index: 2 !important;
+  max-width: 690px !important;
+  padding: clamp(26px, 4vw, 54px) !important;
+}
+#accueil .v4h-title {
+  font-size: clamp(42px, 5.4vw, 72px) !important;
+  line-height: 0.98 !important;
+  letter-spacing: -0.045em !important;
+  color: #fff !important;
+  text-shadow:
+    0 5px 0 rgba(0, 0, 0, 0.25),
+    0 12px 38px rgba(0, 0, 0, 0.8) !important;
+  transform: none !important;
+}
+#accueil .v4h-sub {
+  font-size: clamp(15px, 1.3vw, 18px) !important;
+  line-height: 1.65 !important;
+  max-width: 530px !important;
+  color: #e0f1f6 !important;
+}
+#accueil .v4-kick {
+  color: #a4f4ed !important;
+  letter-spacing: 0.2em !important;
+}
+#accueil .v4h-chips span {
+  padding: var(--space-sm) var(--space-md) !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(131, 240, 239, 0.36) !important;
+  background: rgba(3, 17, 28, 0.74) !important;
+  backdrop-filter: blur(12px);
+  color: #e8ffff !important;
+}
+#accueil .v4h-cta {
+  gap: var(--space-md) !important;
+}
+#accueil .v4-cta {
+  min-height: 56px !important;
+  border-radius: 15px !important;
+  padding: 0 var(--space-xl) !important;
+  box-shadow:
+    0 12px 32px rgba(218, 166, 77, 0.23),
+    inset 0 1px rgba(255, 255, 255, 0.25) !important;
+}
+#accueil .v4h-prof {
+  border-top: 1px solid rgba(155, 225, 231, 0.2) !important;
+  margin-top: var(--space-2xl) !important;
+  padding-top: var(--space-lg) !important;
+}
+#accueil .v4-aside {
+  gap: var(--space-md) !important;
+}
+#accueil .v4-team,
+#accueil .v4-quest {
+  border: 1px solid rgba(130, 221, 230, 0.3) !important;
+  border-radius: 23px !important;
+  background:
+    radial-gradient(ellipse at 100% 0%, rgba(230, 183, 93, 0.12), transparent 42%),
+    linear-gradient(150deg, #17394b, #091b29) !important;
+  box-shadow:
+    0 22px 48px rgba(0, 0, 0, 0.38),
+    inset 0 1px rgba(255, 255, 255, 0.09) !important;
+}
+#accueil .v4-team {
+  padding: var(--space-lg) !important;
+}
+#accueil .v4-ph {
+  color: #effcff !important;
+}
+#accueil .v4-ph > svg {
+  color: var(--r24-cyan) !important;
+  filter: drop-shadow(0 0 9px rgba(131, 240, 239, 0.35));
+}
+#accueil .v4-team-g {
+  gap: var(--space-sm) !important;
+}
+#accueil .v4-mon {
+  position: relative !important;
+  border: 1px solid color-mix(in srgb, var(--c, #7ce8ee) 38%, transparent) !important;
+  border-radius: 16px !important;
+  box-shadow:
+    inset 0 1px rgba(255, 255, 255, 0.1),
+    0 9px 18px rgba(0, 0, 0, 0.22) !important;
+  transition:
+    transform 0.22s,
+    border-color 0.22s,
+    box-shadow 0.22s !important;
+}
+#accueil .v4-mon:hover {
+  transform: translateY(-4px) !important;
+  border-color: var(--r24-gold) !important;
+  box-shadow:
+    0 14px 28px rgba(0, 0, 0, 0.35),
+    0 0 18px color-mix(in srgb, var(--c, #7ce8ee) 18%, transparent) !important;
+}
+#accueil .v4-mon img {
+  filter: drop-shadow(0 8px 8px rgba(0, 0, 0, 0.48)) !important;
+}
+#accueil .v4-mon-n {
+  color: #f4fcff !important;
+  font-weight: 900 !important;
+}
+#accueil .v4-tiles {
+  gap: var(--space-md) !important;
+}
+#accueil .v4-tile {
+  border: 1px solid rgba(130, 221, 230, 0.28) !important;
+  border-radius: 22px !important;
+  box-shadow:
+    0 20px 42px rgba(0, 0, 0, 0.38),
+    inset 0 1px rgba(255, 255, 255, 0.1) !important;
+  transition:
+    transform 0.25s,
+    border-color 0.25s,
+    box-shadow 0.25s !important;
+}
+#accueil .v4-tile:hover {
+  transform: translateY(-6px) !important;
+  border-color: rgba(131, 240, 239, 0.7) !important;
+  box-shadow:
+    0 28px 55px rgba(0, 0, 0, 0.48),
+    0 0 25px rgba(80, 196, 207, 0.13) !important;
+}
+#accueil .v4t-art {
+  filter: drop-shadow(0 14px 15px rgba(0, 0, 0, 0.58)) !important;
+}
+#accueil .v4t-tx b {
+  text-shadow: 0 3px 14px #000 !important;
+}
+#accueil .v4-bottom {
+  gap: var(--space-md) !important;
+}
+#accueil .v4-event,
+#accueil .v4-stats {
+  border: 1px solid var(--r24-edge) !important;
+  border-radius: 21px !important;
+  background: linear-gradient(145deg, #143346, #081925) !important;
+  box-shadow: 0 18px 38px rgba(0, 0, 0, 0.3) !important;
+}
+#accueil .v4-ev {
+  min-height: 112px !important;
+}
+#accueil .v4-st {
+  padding: var(--space-lg) !important;
+  border-radius: 14px !important;
+  transition:
+    background 0.2s,
+    transform 0.2s !important;
+}
+#accueil .v4-st:hover {
+  background: rgba(131, 240, 239, 0.09) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* TEAM / DEX — collection cards with frame and depth */
+#pokedex .fam-grid {
+  gap: var(--space-lg) !important;
+}
+#pokedex .fcard {
+  position: relative !important;
+  overflow: hidden !important;
+  border: 1px solid rgba(131, 220, 230, 0.32) !important;
+  border-radius: 22px !important;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(85, 175, 193, 0.17), transparent 54%),
+    linear-gradient(155deg, #193c50, #081925 78%) !important;
+  box-shadow:
+    0 20px 42px rgba(0, 0, 0, 0.4),
+    inset 0 1px rgba(255, 255, 255, 0.1) !important;
+  transition:
+    transform 0.25s,
+    border-color 0.25s,
+    box-shadow 0.25s !important;
+}
+#pokedex .fcard:before {
+  content: '';
+  position: absolute;
+  inset: 7px;
+  border: 1px solid rgba(171, 232, 234, 0.1);
+  border-radius: 15px;
+  pointer-events: none;
+}
+#pokedex .fcard:hover {
+  transform: translateY(-6px) !important;
+  border-color: rgba(245, 207, 122, 0.7) !important;
+  box-shadow:
+    0 30px 58px rgba(0, 0, 0, 0.5),
+    0 0 25px rgba(131, 240, 239, 0.1) !important;
+}
+#pokedex .fcard .fc-art {
+  filter: drop-shadow(0 13px 12px rgba(0, 0, 0, 0.48)) !important;
+}
+#pokedex .fcard .fc-name {
+  font-weight: 900 !important;
+  letter-spacing: 0.01em !important;
+}
+#pokedex .fcard .fc-stg {
+  border-top: 1px solid rgba(131, 240, 239, 0.2) !important;
+  background: linear-gradient(180deg, rgba(6, 21, 32, 0.88), #06131e) !important;
+}
+
+/* MAP — route actually moved into #carte by buildMap() */
+#carte .v4-map-wrap {
+  gap: var(--space-xl) !important;
+}
+#carte .v4-map {
+  border: 1px solid rgba(131, 226, 232, 0.42) !important;
+  border-radius: 28px !important;
+  padding: var(--space-md) !important;
+  background: linear-gradient(145deg, #1b4253, #071824) !important;
+  box-shadow:
+    0 32px 82px rgba(0, 0, 0, 0.48),
+    inset 0 1px rgba(255, 255, 255, 0.12) !important;
+}
+#carte .v4-map-sc {
+  overflow: hidden !important;
+  border-radius: 19px !important;
+}
+#carte .v4-map-st {
+  filter: drop-shadow(0 20px 26px rgba(0, 0, 0, 0.48)) !important;
+}
+#carte .map-comp {
+  filter: drop-shadow(0 0 10px rgba(131, 240, 239, 0.4));
+}
+#carte .map-title {
+  padding: var(--space-sm) var(--space-md) !important;
+  border: 1px solid rgba(131, 240, 239, 0.2) !important;
+  border-radius: 999px !important;
+  background: rgba(4, 18, 28, 0.72) !important;
+  backdrop-filter: blur(12px);
+}
+#carte .v4-mapinfo,
+#carte .v4-maplist {
+  border: 1px solid rgba(131, 221, 230, 0.3) !important;
+  border-radius: 22px !important;
+  background:
+    radial-gradient(ellipse at 100% 0%, rgba(222, 174, 86, 0.1), transparent 45%),
+    linear-gradient(150deg, #16384b, #081a27) !important;
+  box-shadow: 0 22px 48px rgba(0, 0, 0, 0.36) !important;
+}
+#carte .v4-wild {
+  border: 1px solid rgba(103, 211, 160, 0.35) !important;
+  border-radius: 24px !important;
+  background: linear-gradient(115deg, rgba(18, 74, 56, 0.42), rgba(6, 22, 29, 0.97)) !important;
+  box-shadow: 0 22px 52px rgba(0, 0, 0, 0.35) !important;
+}
+#carte .route {
+  border: 1px solid rgba(131, 221, 230, 0.32) !important;
+  border-radius: 24px !important;
+  box-shadow: 0 28px 65px rgba(0, 0, 0, 0.42) !important;
+  overflow: hidden !important;
+}
+#carte .route .rt-ui {
+  filter: drop-shadow(0 5px 12px rgba(0, 0, 0, 0.4));
+}

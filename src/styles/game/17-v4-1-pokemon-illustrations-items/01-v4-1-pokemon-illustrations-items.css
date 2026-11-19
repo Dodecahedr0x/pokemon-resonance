@@ -1,0 +1,377 @@
+/* =====================================================================
+   v4.1 — Pokémon illustrations everywhere, items as images
+   ===================================================================== */
+html body .medal.pk {
+  overflow: visible !important;
+}
+html body .medal.pk > svg {
+  opacity: 0 !important;
+}
+html body .medal.pk::after {
+  z-index: 1;
+}
+html body .medal .mdl-a {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 122%;
+  height: 122%;
+  transform: translate(-50%, -55%);
+  object-fit: contain;
+  z-index: 2;
+  pointer-events: none;
+  filter: drop-shadow(0 1px 1.5px rgba(0, 0, 0, 0.6));
+  -webkit-user-drag: none;
+}
+html body .medal.xs .mdl-a {
+  width: 130%;
+  height: 130%;
+}
+html body .medal.lg .mdl-a,
+html body .medal.xl .mdl-a {
+  width: 112%;
+  height: 112%;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.55));
+}
+html body .crest-pk {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+html body .crest-pk > svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+html body .crest-pk.pk > svg > path {
+  opacity: 0;
+}
+html body .crest-pk .crest-a {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 70%;
+  height: 70%;
+  transform: translate(-50%, -52%);
+  object-fit: contain;
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.55));
+  pointer-events: none;
+}
+/* board */
+html body #bSvg .tok-im {
+  pointer-events: none;
+}
+html body #bSvg .tok.has-im > path {
+  opacity: 0;
+}
+html body #bSvg .tok.has-im .tok-gloss {
+  opacity: 0;
+}
+html body #bSvg .tok.ko .tok-im {
+  opacity: 0.35;
+}
+html body #bSvg .tok.enemy .tok-im {
+  transform: scaleX(-1);
+}
+/* held items */
+html body .it-img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  vertical-align: middle;
+  flex: none;
+}
+html body .it-ic .it-img {
+  width: 100%;
+  height: 100%;
+}
+html body .ux.it .it-img {
+  width: 18px;
+  height: 18px;
+  margin-right: var(--space-2xs);
+}
+html body .rl .it-ic {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+}
+/* toasts: at the top on phone, so they no longer pass under the "Fin du tour" (End turn) bar */
+@media (max-width: 999px) {
+  html body .toast {
+    top: calc(64px + env(safe-area-inset-top, 0px)) !important;
+    bottom: auto !important;
+  }
+}
+html body .toast {
+  background: linear-gradient(180deg, #123462, #0a1f40) !important;
+  border: 1px solid rgba(120, 210, 255, 0.45) !important;
+  border-radius: 12px !important;
+  color: #fff !important;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45) !important;
+}
+/* battle intro in v4 colors */
+html body .vs {
+  background: #061327 !important;
+}
+html body .vs-l {
+  background:
+    radial-gradient(80% 70% at 100% 50%, rgba(70, 160, 255, 0.3), transparent 70%),
+    linear-gradient(90deg, #071a33, #0d2c55) !important;
+}
+html body .vs-r {
+  background:
+    radial-gradient(80% 70% at 0% 50%, color-mix(in srgb, var(--ac) 40%, transparent), transparent 70%),
+    linear-gradient(270deg, #071a33, #14254a) !important;
+}
+html body .vs-c {
+  background: radial-gradient(circle at 35% 30%, #2b4f86, #0b1f3d 70%) !important;
+  box-shadow:
+    0 0 0 2px #ffd75e,
+    0 0 0 7px rgba(6, 19, 39, 0.9),
+    0 0 40px rgba(255, 200, 60, 0.35) !important;
+}
+html body .vs-c span {
+  background: linear-gradient(180deg, #fff, #ffe17b 55%, #f2a92c) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+}
+html body .vs-l b,
+html body .vs-r b {
+  background: linear-gradient(180deg, #ffffff, #ffe9a3 65%, #f5b92e) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+}
+html body .vs-k {
+  color: #ffd75e !important;
+}
+html body .vs .medal {
+  width: 56px !important;
+  height: 56px !important;
+}
+html body .vs .vs-foes .medal {
+  width: 46px !important;
+  height: 46px !important;
+}
+html body .vs::after {
+  background: linear-gradient(90deg, #f2a92c, #fff2a8, #f2a92c) !important;
+}
+html body img.img-off.img-off.img-off {
+  display: none !important;
+}
+html body .v4-dl img,
+html body .v4d-f img {
+  image-rendering: auto !important;
+  object-fit: contain;
+}
+
+/* ==== 20-v4.4-aventure-plus.css ==== */
+/* =====================================================================
+   v4.4: shinies, rival, legendary bosses, Resonance Tower
+   ===================================================================== */
+
+/* --- shiny Pokémon: the tint (--sh) is specific to each species --- */
+.shn-ic {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.12em;
+  fill: #ffe9a3;
+  filter: drop-shadow(0 0 4px rgba(255, 225, 120, 0.85));
+  flex: none;
+}
+html body #bSvg .tok.shiny .tok-im,
+.enc-card.shiny .enc-cr img,
+.enc-card.shiny .enc-cr image,
+.v4-dl.shiny img,
+#dex4Card.shiny .v4d-art img {
+  filter: hue-rotate(var(--sh, 120deg)) saturate(1.25) drop-shadow(0 0 6px rgba(255, 233, 160, 0.55));
+}
+html body #bSvg .tok.shiny .tok-halo {
+  stroke: #ffe9a3;
+  stroke-width: 2;
+  stroke-dasharray: 3 4;
+  animation: shnSpin 6s linear infinite;
+}
+@keyframes shnSpin {
+  to {
+    stroke-dashoffset: -70;
+  }
+}
+.enc-card.shiny {
+  box-shadow:
+    0 0 0 1px rgba(255, 233, 160, 0.55),
+    0 0 40px rgba(255, 220, 120, 0.25);
+}
+.enc-card.shiny .enc-t {
+  color: #ffe9a3;
+}
+.v4-dl.shiny {
+  gap: var(--space-2xs);
+}
+.v4-dl.shiny > .shn-ic {
+  order: 3;
+  margin-left: auto;
+}
+.v4-shc {
+  color: #ffe9a3;
+  white-space: nowrap;
+}
+.v4d-shn {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  font: 800 11px/1 var(--f-d);
+  padding: var(--space-2xs) var(--space-sm);
+  border-radius: 7px;
+  color: #ffe9a3;
+  background: rgba(3, 16, 32, 0.78);
+  border: 1px solid rgba(255, 233, 160, 0.5);
+}
+.rl.shn b {
+  color: #ffe9a3;
+}
+
+/* --- legendary boss: golden edging on its token --- */
+html body #bSvg .tok.boss .tok-halo {
+  stroke: #ffd75e;
+  stroke-width: 2.4;
+  filter: drop-shadow(0 0 5px rgba(255, 215, 94, 0.8));
+}
+html body #bSvg .tok.boss .tok-rim {
+  stroke: #ffd75e;
+}
+.emb.lgd {
+  filter: drop-shadow(0 0 6px rgba(255, 215, 94, 0.55));
+}
+
+/* --- Resonance Tower --- */
+.tdr-box {
+  z-index: 92;
+}
+.tdr-card {
+  width: min(760px, 100%);
+}
+.tdr-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.tdr-o {
+  padding: var(--space-md) var(--space-xs);
+  position: relative;
+}
+.tdr-o b {
+  font-size: 13px;
+}
+.tdr-o.on {
+  background:
+    radial-gradient(90% 70% at 50% 0%, color-mix(in srgb, var(--c) 40%, transparent), transparent 70%) padding-box,
+    var(--slab) padding-box,
+    linear-gradient(135deg, #ffe17b, #b8862b) border-box;
+  box-shadow: 0 0 0 2px rgba(255, 225, 123, 0.35);
+}
+.tdr-o.on::after {
+  content: '✓';
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  font: 800 14px/1 var(--f-d);
+  color: #ffe17b;
+}
+.tdr-a {
+  /* the button stays visible while the 8 Pokémon are scrolled */
+  position: sticky;
+  bottom: -26px; /* up to the edge of the card (its inner margin is 26 px) */
+  margin-bottom: -26px;
+  z-index: 9; /* above the illustrations that overflow their medallion */
+  display: flex;
+  justify-content: center;
+  margin-top: var(--space-md);
+  padding: var(--space-md) 0 var(--space-2xl);
+  background: linear-gradient(180deg, rgba(6, 14, 26, 0), rgba(6, 14, 26, 0.97) 35%);
+}
+.tdr-rw {
+  display: grid;
+  gap: var(--space-sm);
+}
+.tdr-r {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  width: 100%;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--r, 12px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.04);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.tdr-r:hover,
+.tdr-r:focus-visible {
+  border-color: #ffe17b;
+  background: rgba(255, 215, 94, 0.1);
+}
+.tdr-r > span:last-child {
+  display: grid;
+  gap: var(--space-3xs);
+}
+.tdr-r b {
+  font: 800 14px/1.2 var(--f-d);
+}
+.tdr-r em {
+  font-style: normal;
+  font-size: 12px;
+  color: var(--mut, #9fb0c4);
+}
+.tdr-ic {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  flex: none;
+  border-radius: 50%;
+  font: 800 15px/1 var(--f-d);
+  color: #ffe17b;
+  background: rgba(255, 215, 94, 0.12);
+  border: 1px solid rgba(255, 215, 94, 0.4);
+}
+.tdr-ic img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+@media (max-width: 560px) {
+  .tdr-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html body #bSvg .tok.shiny .tok-halo {
+    animation: none;
+  }
+}
+
+/* --- battle choice tabs: a fourth, "Après-jeu" (Postgame) --- */
+.sel-tabs {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+@media (max-width: 560px) {
+  /* two rows of two on phone: labels stay readable */
+  .sel-tabs {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .sel-tabs button {
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: var(--space-sm);
+    min-height: 48px;
+    text-align: left;
+  }
+  .sel-tabs button span {
+    justify-items: start;
+  }
+}

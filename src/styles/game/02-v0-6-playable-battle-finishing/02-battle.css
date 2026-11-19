@@ -1,0 +1,363 @@
+/* battle */
+@media (min-width: 1121px) {
+  .battle {
+    grid-template-columns: minmax(0, 1fr) 320px;
+  }
+}
+.bt-top .voix span {
+  margin-right: var(--space-3xs);
+}
+.bt-top #bWx:empty {
+  display: none;
+}
+.plate {
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  display: grid;
+}
+.plate .pl-h,
+.plate .pl-s {
+  display: flex;
+}
+.plate .hp {
+  display: block;
+}
+.plate.ko {
+  opacity: 0.32;
+  cursor: default;
+}
+.plate.now {
+  border-color: var(--enemy);
+  box-shadow: 0 0 0 3px rgba(255, 103, 103, 0.15);
+}
+.pl-s .it {
+  color: var(--tx2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: var(--f-b);
+  font-size: 10.5px;
+}
+#bPlE .plate {
+  border-color: rgba(255, 103, 103, 0.18);
+}
+#bSvg {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+#bSvg .hx {
+  cursor: pointer;
+}
+.hx.rock {
+  fill: #1d222c;
+  stroke: rgba(255, 255, 255, 0.04);
+}
+
+.hx.mud {
+  fill: #3a2e20;
+}
+.hx.lava {
+  fill: #5c2414;
+  animation: lava 2.4s ease-in-out infinite;
+}
+@keyframes lava {
+  50% {
+    fill: #7a3116;
+  }
+}
+.mk-fill {
+  opacity: 0.22;
+}
+.mk-lv {
+  font-family: var(--f-m);
+  font-size: 6.5px;
+  font-weight: 600;
+  fill: var(--gold);
+}
+.fogc2 {
+  fill: url(#fogP);
+  opacity: 0.9;
+}
+.h-reach {
+  fill: rgba(99, 164, 255, 0.18);
+  stroke: rgba(99, 164, 255, 0.75);
+  stroke-width: 1.2;
+}
+.h-tgt {
+  fill: rgba(227, 192, 122, 0.12);
+  stroke: rgba(227, 192, 122, 0.85);
+  stroke-width: 1.1;
+  stroke-dasharray: 3 2;
+}
+.h-tgt.on {
+  fill: rgba(227, 192, 122, 0.28);
+  stroke-width: 2;
+  stroke-dasharray: none;
+}
+.h-aff {
+  fill: rgba(227, 192, 122, 0.22);
+  stroke: var(--gold);
+  stroke-width: 1.6;
+}
+.h-danger {
+  fill: rgba(255, 103, 103, 0.13);
+  stroke: rgba(255, 103, 103, 0.7);
+  stroke-width: 1.2;
+  stroke-dasharray: 4 2.5;
+}
+.h-dodge {
+  fill: rgba(79, 214, 156, 0.2);
+  stroke: rgba(79, 214, 156, 0.8);
+  stroke-width: 1.2;
+}
+.intent {
+  stroke: var(--enemy);
+  stroke-width: 1.6;
+  stroke-dasharray: 4.5 3;
+  fill: none;
+  opacity: 0.85;
+}
+.intent.on {
+  stroke-width: 2.4;
+  opacity: 1;
+}
+.arr-h {
+  fill: var(--enemy);
+}
+.hp-bg {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 2.2;
+}
+.hp-arc {
+  fill: none;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  transition:
+    stroke-dasharray 0.8s var(--ease),
+    stroke 0.6s;
+}
+.tok-halo {
+  fill: none;
+  stroke-width: 1;
+  opacity: 0.6;
+}
+.tok.sel .tok-halo {
+  stroke: var(--gold);
+  stroke-width: 2.2;
+  opacity: 1;
+  stroke-dasharray: none;
+  animation: act 1.6s ease-in-out infinite;
+}
+.tok.act .tok-halo {
+  stroke: var(--enemy);
+  stroke-width: 2.6;
+  opacity: 1;
+  stroke-dasharray: none;
+}
+.tok.done {
+  opacity: 0.55;
+}
+.tok.ko {
+  opacity: 0;
+  transition: opacity 0.6s ease 0.3s;
+}
+.tok-ring.hit {
+  animation: hitf 0.45s ease;
+}
+@keyframes hitf {
+  0%,
+  100% {
+    stroke-width: 2.4;
+  }
+  30% {
+    stroke-width: 6;
+    stroke: #fff;
+  }
+}
+.bdg-s {
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.bdg-s.on {
+  opacity: 1;
+}
+.bdg-s rect {
+  fill: #f7d02c;
+}
+.bdg-s text {
+  font-family: var(--f-d);
+  font-stretch: 112%;
+  font-weight: 800;
+  font-size: 5.6px;
+  fill: #14120a;
+  text-anchor: middle;
+  letter-spacing: 0.04em;
+}
+.fl {
+  font-family: var(--f-d);
+  font-stretch: 118%;
+  font-weight: 850;
+  text-anchor: middle;
+  paint-order: stroke;
+  stroke: #07080c;
+  stroke-width: 3px;
+  stroke-linejoin: round;
+  animation: fl 1.4s var(--ease) forwards;
+}
+.f-dmg {
+  font-size: 13px;
+  fill: #ff8a8a;
+}
+.f-heal {
+  font-size: 12px;
+  fill: var(--ok);
+}
+.f-rx {
+  font-size: 9px;
+  fill: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+@keyframes fl {
+  0% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  15% {
+    opacity: 1;
+    transform: none;
+  }
+  75% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-14px);
+  }
+}
+.beam {
+  fill: none;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  opacity: 0.9;
+  stroke-dasharray: 200;
+  stroke-dashoffset: 200;
+  animation:
+    draw 0.3s ease-out forwards,
+    beamo 0.7s ease forwards;
+}
+@keyframes beamo {
+  60% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+.chainseg.fire {
+  stroke: #ffb36a;
+}
+.chainglow.fire {
+  stroke: #ee8130;
+}
+.chainseg.ice {
+  stroke: #d8fbfa;
+}
+.chainglow.ice {
+  stroke: #96d9d6;
+}
+.burst {
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: 3;
+  animation: burst 1s var(--ease) forwards;
+}
+@keyframes burst {
+  to {
+    r: 46;
+    opacity: 0;
+    stroke-width: 0.5;
+  }
+}
+.bp {
+  padding: var(--space-2xs) var(--space-md) var(--space-md);
+  display: grid;
+  gap: var(--space-sm);
+}
+.bp-h {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) 110px;
+  gap: var(--space-md);
+  align-items: center;
+}
+.bp-h .medal {
+  width: 40px;
+  height: 40px;
+}
+.bp-id b {
+  display: block;
+  font-family: var(--f-d);
+  font-stretch: 118%;
+  font-weight: 780;
+  font-size: 18px;
+  text-transform: uppercase;
+  line-height: 1;
+}
+.bp-id span {
+  display: block;
+  font-size: 12px;
+  color: var(--mut);
+  margin-top: var(--space-2xs);
+}
+.bp-hp {
+  display: grid;
+  gap: var(--space-2xs);
+  text-align: right;
+  font-family: var(--f-m);
+  font-size: 11px;
+  color: var(--tx2);
+}
+.bp-hp .hp {
+  display: block;
+}
+.bp-tal {
+  font-size: 12.5px;
+  color: var(--tx2);
+}
+.bp-tal b {
+  color: var(--tx);
+}
+.bp-mv {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--space-sm);
+}
+.bm {
+  display: grid;
+  gap: var(--space-2xs);
+  align-content: start;
+  justify-items: start;
+  padding: var(--space-md) var(--space-md);
+  border-radius: 14px;
+  border: 1px solid var(--line2);
+  background: var(--s2);
+  cursor: pointer;
+  text-align: left;
+  color: inherit;
+  font: inherit;
+  transition:
+    border-color 0.2s,
+    background 0.2s,
+    transform 0.2s var(--ease);
+}
+.bm:hover:not(:disabled) {
+  border-color: var(--line3);
+  transform: translateY(-1px);
+}
+.bm.on {
+  border-color: var(--gold);
+  background: var(--gold-s);
+}

@@ -1,0 +1,384 @@
+/* ===== resonance-v4161 layer ===== */
+/* ==== v4.16.1: "Nouveau" (New) card on the Home page ==== */
+html body .v4-news {
+  margin: var(--space-md) 0;
+  padding: var(--space-md) var(--space-md);
+  border-color: rgba(255, 215, 94, 0.45);
+}
+html body .v4-news .v4-ph {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+html body .v4-news .nw-x {
+  margin-left: auto;
+}
+html body .nw-l {
+  list-style: none;
+  margin: var(--space-sm) 0 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-xs);
+}
+html body .nw-i {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-sm);
+  border-radius: 12px;
+  border: 1px solid rgba(120, 200, 255, 0.14);
+  background: rgba(0, 0, 0, 0.22);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+}
+html body button.nw-i {
+  cursor: pointer;
+}
+html body button.nw-i:hover,
+html body button.nw-i:focus-visible {
+  border-color: #ffe17b;
+}
+html body .nw-i > span:nth-child(2) {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  gap: var(--space-3xs);
+}
+html body .nw-i em {
+  font-style: normal;
+  font-size: 12.5px;
+  line-height: 1.35;
+  color: var(--v4-tx2, #9fb0c4);
+}
+html body .nw-ic {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 215, 94, 0.14);
+  color: #ffd75e;
+}
+html body .nw-ic svg {
+  width: 18px;
+  height: 18px;
+}
+html body .nw-go {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  opacity: 0.7;
+}
+/* ===== resonance-living-johto layer ===== */
+/* ==== v4.16: living Johto ==== */
+/* --- Home: challenges between friends --- */
+html body .v4-amis {
+  margin: var(--space-lg) 0;
+  padding: var(--space-md);
+  display: grid;
+  gap: var(--space-sm);
+}
+html body .v4-amis .am-a,
+html body .am-card .am-a {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+html body .am-l {
+  display: grid;
+  gap: var(--space-xs);
+}
+html body .am-r {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-sm);
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.22);
+  border: 1px solid rgba(120, 200, 255, 0.14);
+}
+html body .am-t {
+  display: grid;
+  grid-template-columns: repeat(2, 18px);
+  gap: var(--space-3xs);
+  flex: none;
+}
+html body .am-t .medal,
+html body .am-t svg {
+  width: 18px;
+  height: 18px;
+}
+html body .am-m.shn {
+  filter: drop-shadow(0 0 3px rgba(255, 225, 120, 0.9));
+}
+html body .am-n {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+}
+html body .am-n b {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+html body .am-n em {
+  font-style: normal;
+  font-size: 12px;
+  color: var(--v4-tx2, #9fb0c4);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+html body .am-b {
+  display: flex;
+  gap: var(--space-xs);
+  flex: none;
+}
+html body .am-del {
+  min-width: 34px;
+}
+html body .am-del.on {
+  color: #ffb4a8 !important;
+  border-color: #ff8a7a !important;
+}
+html body .am-cl summary {
+  cursor: pointer;
+  font: 800 13px/1.2 var(--f-d, inherit);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--v4-tx2, #9fb0c4);
+  padding: var(--space-2xs) 0;
+}
+html body .am-cl table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin-top: var(--space-xs);
+}
+html body .am-cl th,
+html body .am-cl td {
+  padding: var(--space-xs) var(--space-2xs);
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+html body .am-cl th {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--v4-tx2, #9fb0c4);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+html body .am-cl td:nth-child(2) {
+  max-width: 110px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+html body .am-cl tr.me td {
+  color: #ffe17b;
+}
+html body .am-cl tr:first-child td:first-child {
+  color: #ffd75e;
+  font-weight: 800;
+}
+html body .am-nt {
+  margin: var(--space-xs) 0 0;
+  font-size: 12px;
+  color: var(--v4-tx2, #9fb0c4);
+}
+html body .am-card .am-lb {
+  display: grid;
+  gap: var(--space-2xs);
+  font-size: 13px;
+  font-weight: 700;
+  margin: var(--space-xs) 0 var(--space-sm);
+}
+html body .am-card input[type='text'] {
+  font: inherit;
+  font-size: 16px;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: 10px;
+  border: 1px solid rgba(120, 200, 255, 0.3);
+  background: rgba(0, 0, 0, 0.3);
+  color: inherit;
+}
+html body .am-code {
+  width: 100%;
+  box-sizing: border-box;
+  font:
+    12px/1.35 ui-monospace,
+    Menlo,
+    Consolas,
+    monospace;
+  word-break: break-all;
+  padding: var(--space-sm);
+  margin: var(--space-sm) 0 var(--space-sm);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 215, 94, 0.45);
+  background: rgba(0, 0, 0, 0.35);
+  color: #fff3c4;
+  resize: vertical;
+  user-select: all;
+  -webkit-user-select: all;
+}
+html body #amiColle.am-code {
+  user-select: text;
+  -webkit-user-select: text;
+  font-size: 16px;
+}
+html body .am-err {
+  min-height: 1em;
+  margin: 0 0 var(--space-sm);
+  font-size: 13px;
+  color: #ffb4a8;
+}
+
+/* --- Day Care: the couple --- */
+html body .pe-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin: var(--space-3xs) 0 var(--space-sm);
+}
+html body .pe-egg {
+  width: 34px;
+  height: 34px;
+  flex: none;
+}
+html body .pe-s {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-sm);
+  border-radius: 10px;
+  border: 1px dashed rgba(255, 255, 255, 0.22);
+  color: var(--v4-tx2, #9fb0c4);
+  font-size: 13px;
+}
+html body .pe-s svg {
+  width: 16px;
+  height: 16px;
+}
+html body .pe-s.on {
+  border-style: solid;
+  border-color: rgba(122, 199, 76, 0.6);
+  background: rgba(122, 199, 76, 0.1);
+  color: inherit;
+}
+html body .pe-s b {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+html body .pe-x {
+  font-weight: 800;
+  color: var(--v4-tx2, #9fb0c4);
+}
+html body .exp-d.on {
+  border-color: #7ac74c;
+  background: rgba(122, 199, 76, 0.14);
+}
+html body .her-mvc .chip {
+  background: rgba(122, 199, 76, 0.2);
+  color: #b8f08f;
+}
+html body .res-egg {
+  width: 22px;
+  height: 22px;
+  vertical-align: middle;
+}
+
+/* --- Dominant Pokémon --- */
+html body .dom-cr {
+  width: 1.1em;
+  height: 1.1em;
+  vertical-align: -0.15em;
+  margin-right: 0.25em;
+  color: #ffd75e;
+  filter: drop-shadow(0 0 4px rgba(255, 200, 60, 0.8));
+}
+html body .enc-card.dom {
+  box-shadow:
+    0 0 0 2px rgba(255, 196, 64, 0.7),
+    0 0 50px rgba(255, 170, 40, 0.35);
+}
+html body .enc-card.dom .enc-cr {
+  transform: scale(1.18);
+  filter: drop-shadow(0 0 14px rgba(255, 190, 60, 0.75));
+}
+html body .enc-card.dom .enc-t {
+  color: #ffd75e;
+}
+html body .enc-dom {
+  margin: var(--space-2xs) 0 0;
+  font-size: 13px;
+  color: #ffe6a8;
+}
+html body #bSvg .tok.dom .tok-halo {
+  stroke: #ffb02e;
+  stroke-width: 3.4;
+  filter: drop-shadow(0 0 7px rgba(255, 170, 40, 0.95));
+}
+html body #bSvg .tok.dom .tok-rim {
+  stroke: #ffcf4a;
+  stroke-width: 2.6;
+}
+
+/* --- map: roaming beasts --- */
+html body .mk[data-place='rraikou'] .mk-ic,
+html body .mk[data-place='rentei'] .mk-ic,
+html body .mk[data-place='rsuicune'] .mk-ic {
+  border-color: #c9a6ff;
+  box-shadow:
+    0 0 0 3px rgba(180, 140, 255, 0.35),
+    0 0 18px rgba(180, 140, 255, 0.55);
+  animation: living-johto-roam 2.2s ease-in-out infinite;
+}
+html body .mk[data-place='rraikou'] .mk-n,
+html body .mk[data-place='rentei'] .mk-n,
+html body .mk[data-place='rsuicune'] .mk-n {
+  border-color: #c9a6ff;
+  color: #ead9ff;
+}
+@keyframes living-johto-roam {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html body .mk[data-place='rraikou'] .mk-ic,
+  html body .mk[data-place='rentei'] .mk-ic,
+  html body .mk[data-place='rsuicune'] .mk-ic {
+    animation: none;
+  }
+}
+html body .v4-rew .rm-hp {
+  position: relative;
+  overflow: hidden;
+  padding-left: var(--space-sm) !important;
+}
+html body .v4-rew .rm-hp i {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: linear-gradient(90deg, rgba(180, 140, 255, 0.45), rgba(180, 140, 255, 0.2));
+  z-index: -1;
+}
+
+/* legend medallion in a small emblem (map, location sheet) */
+html body .emb.lgd.xs .medal,
+html body .mk-ic .emb.lgd .medal {
+  width: 100% !important;
+  height: 100% !important;
+}
+html body .emb.lgd.xs {
+  overflow: visible;
+}

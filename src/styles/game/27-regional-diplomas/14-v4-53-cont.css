@@ -1,0 +1,386 @@
+/* <style id="resonance-workshop-ui"> */
+.board-theme-g {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-sm);
+}
+.board-theme-b {
+  display: grid;
+  gap: var(--space-3xs);
+  justify-items: center;
+  padding: var(--space-sm) var(--space-xs);
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.05);
+  color: #eaf2f8;
+  font: inherit;
+  cursor: pointer;
+}
+.board-theme-b.on {
+  border-color: #ffd45b;
+  box-shadow: 0 0 0 2px rgba(255, 212, 91, 0.35);
+}
+.board-theme-b b {
+  font-size: 13px;
+}
+.board-theme-b small {
+  font-size: 11px;
+  color: #b8cddb;
+}
+.board-theme-s {
+  display: flex;
+  border-radius: 8px;
+  overflow: hidden;
+  height: 22px;
+  width: 54px;
+}
+.board-theme-s i {
+  flex: 1;
+}
+body.board-theme-crepuscule .board .hx:not(.rock):not(.river):not(.mud):not(.lava) {
+  fill: #3a2f4f;
+  stroke: rgba(210, 190, 255, 0.12);
+}
+body.board-theme-crepuscule .board .hx.alt:not(.rock):not(.river):not(.mud):not(.lava) {
+  fill: #41355a;
+}
+body.board-theme-crepuscule .board {
+  background: radial-gradient(120% 90% at 50% 0%, #2a2046, #0b0812) !important;
+}
+body.board-theme-jardin .board .hx:not(.rock):not(.river):not(.mud):not(.lava) {
+  fill: #3c6b3a;
+  stroke: rgba(220, 255, 200, 0.14);
+}
+body.board-theme-jardin .board .hx.alt:not(.rock):not(.river):not(.mud):not(.lava) {
+  fill: #437542;
+}
+body.board-theme-jardin .board {
+  background: radial-gradient(120% 90% at 50% 0%, #2a5a2a, #0d1f10) !important;
+}
+body.board-theme-givre .board .hx:not(.rock):not(.river):not(.mud):not(.lava) {
+  fill: #3f6e86;
+  stroke: rgba(220, 245, 255, 0.18);
+}
+body.board-theme-givre .board .hx.alt:not(.rock):not(.river):not(.mud):not(.lava) {
+  fill: #467993;
+}
+body.board-theme-givre .board {
+  background: radial-gradient(120% 90% at 50% 0%, #1d4a62, #0a1a24) !important;
+}
+body.board-theme-braise .board .hx:not(.rock):not(.river):not(.mud):not(.lava) {
+  fill: #6a3a2a;
+  stroke: rgba(255, 200, 150, 0.14);
+}
+body.board-theme-braise .board .hx.alt:not(.rock):not(.river):not(.mud):not(.lava) {
+  fill: #74422f;
+}
+body.board-theme-braise .board {
+  background: radial-gradient(120% 90% at 50% 0%, #4a1d12, #180806) !important;
+}
+body.board-theme-cristal .board .hx:not(.rock):not(.river):not(.mud):not(.lava) {
+  fill: #4a4478;
+  stroke: rgba(230, 220, 255, 0.2);
+}
+body.board-theme-cristal .board .hx.alt:not(.rock):not(.river):not(.mud):not(.lava) {
+  fill: #524b84;
+}
+body.board-theme-cristal .board {
+  background: radial-gradient(120% 90% at 50% 0%, #3a3478, #110f2c) !important;
+}
+
+/* <style id="resonance-daily-craft"> */
+.dailygift {
+  display: flex;
+  gap: var(--space-md);
+  align-items: center;
+  width: 100%;
+  margin: var(--space-sm) 0;
+  padding: var(--space-md) var(--space-md);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 212, 91, 0.45);
+  background: linear-gradient(135deg, rgba(255, 212, 91, 0.16), rgba(20, 50, 70, 0.7));
+  color: #eaf2f8;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+}
+.dailygift:not(.done) {
+  animation: route-event 2.4s ease-in-out infinite;
+}
+.dailygift.done {
+  opacity: 0.72;
+  border-color: rgba(255, 255, 255, 0.15);
+  background: rgba(20, 50, 70, 0.5);
+  cursor: default;
+}
+.dailygift-i {
+  flex: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-weight: 900;
+  background: #ffd45b;
+  color: #0a1d2b;
+}
+.dailygift b {
+  display: block;
+  font-size: 14px;
+}
+.dailygift small {
+  display: block;
+  color: #b8cddb;
+  font-size: 12px;
+  line-height: 1.35;
+}
+.last-batch {
+  display: grid;
+  gap: var(--space-xs);
+  justify-items: start;
+  margin: var(--space-sm) 0 var(--space-md);
+}
+.last-batch small {
+  color: #b8cddb;
+  font-size: 12px;
+}
+.last-batch .v4-btn {
+  min-width: 180px;
+}
+.tm-showcase {
+  padding: var(--space-md) var(--space-md);
+  display: grid;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
+}
+.tm-showcase h3 {
+  margin: 0;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #ffd45b;
+}
+.item-chip-g,
+.tm-chip-g {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+.item-chip {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #586a78;
+  background: rgba(255, 255, 255, 0.03);
+}
+.item-chip.on {
+  color: #ffd45b;
+  border-color: rgba(255, 212, 91, 0.55);
+  background: rgba(255, 212, 91, 0.1);
+}
+.tm-chip {
+  min-width: 34px;
+  height: 26px;
+  padding: 0 var(--space-xs);
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  font: 800 11px/1 var(--f-d);
+  color: #6d7f8c;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+}
+.tm-chip.on {
+  color: #0a1d2b;
+  background: var(--c);
+  border-color: transparent;
+}
+@media (prefers-reduced-motion: reduce) {
+  .dailygift:not(.done) {
+    animation: none;
+  }
+}
+
+/* <style id="resonance-quest-locks"> */
+.quest-log.lock {
+  opacity: 0.55;
+}
+.quest-log em {
+  display: block;
+  margin-top: var(--space-2xs);
+  font-style: normal;
+  font-size: 12px;
+  color: #9fd8ff;
+}
+.trophy-room-b {
+  display: block;
+  height: 6px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.12);
+  margin: var(--space-xs) 0 var(--space-2xs);
+  overflow: hidden;
+}
+.trophy-room-b u {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #43c0ff, #ffd45b);
+  text-decoration: none;
+}
+
+/* <style id="resonance-secret-places-ui"> */
+.mk.secret-places {
+  z-index: 3;
+  color: #9fe8ff;
+  filter: drop-shadow(0 0 6px rgba(120, 220, 255, 0.9));
+  animation: secret-places 1.8s ease-in-out infinite;
+}
+.mk.secret-places.vu {
+  opacity: 0.55;
+  animation: none;
+}
+.mk.passerby {
+  z-index: 3;
+  color: #ffb86b;
+  filter: drop-shadow(0 0 6px rgba(255, 170, 80, 0.9));
+  animation: secret-places 1.4s ease-in-out infinite;
+}
+.mk.secret-places svg,
+.mk.passerby svg {
+  display: block;
+}
+@keyframes secret-places {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scale(0.88);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.14);
+  }
+}
+.secret-places-l {
+  list-style: none;
+  margin: var(--space-sm) 0 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-xs);
+}
+.secret-places-r {
+  display: grid;
+  gap: 1px;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+.secret-places-r.on {
+  border-color: rgba(120, 220, 255, 0.5);
+}
+.secret-places-r small {
+  color: #b8cddb;
+  font-size: 12px;
+}
+
+/* <style id="resonance-keepsakes-ui"> */
+.buddy {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
+  width: 100%;
+  flex-basis: 100%;
+}
+.buddy .b {
+  flex: 1 1 auto;
+}
+.buddy-l {
+  opacity: 0.55;
+}
+.egg-shop .cp-bar {
+  margin-top: var(--space-xs);
+}
+
+/* <style id="resonance-chronicles-ui"> */
+.chronicle-g {
+  display: grid;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
+}
+.chronicle {
+  display: grid;
+  gap: var(--space-3xs);
+  text-align: left;
+  padding: var(--space-md) var(--space-md);
+  border-radius: 14px;
+  border: 1px solid rgba(255, 212, 91, 0.4);
+  background: rgba(255, 255, 255, 0.06);
+  color: #eaf2f8;
+  font: inherit;
+  cursor: pointer;
+}
+.chronicle small {
+  color: #b8cddb;
+  font-size: 12px;
+}
+.chronicle.lu {
+  border-color: rgba(255, 255, 255, 0.18);
+}
+.chronicle.lock {
+  opacity: 0.5;
+  cursor: not-allowed;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+/* <style id="resonance-forms-ui"> */
+.form-picker-g {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin: var(--space-sm) 0;
+}
+.form-picker {
+  padding: var(--space-xs) var(--space-md);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.06);
+  color: #eaf2f8;
+  font: inherit;
+  cursor: pointer;
+}
+.form-picker.on {
+  border-color: #ffd45b;
+  background: rgba(255, 212, 91, 0.16);
+}
+.form-picker-d {
+  font-size: 12px;
+  color: #b8cddb;
+  margin: var(--space-2xs) 0;
+}
+
+/* <style id="resonance-talents-ui"> */
+.talent-tree-p {
+  display: inline-flex;
+  gap: var(--space-2xs);
+  margin-left: var(--space-sm);
+  vertical-align: middle;
+}
+.talent-tree-p i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  display: inline-block;
+}
+.talent-tree-p i.on {
+  background: #ffd45b;
+  border-color: #ffd45b;
+}
+.talent-tree em {
+  display: block;
+  color: #9fe8ff;
+  font-size: 12px;
+  font-style: normal;
+  margin-top: var(--space-3xs);
+}

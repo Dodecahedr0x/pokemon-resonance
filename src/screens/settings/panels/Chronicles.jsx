@@ -2,6 +2,7 @@ import { PROFILE } from '../../../engine/state/game-state.js';
 import { SCENES } from '../../../engine/progression/story-dialogues.js';
 import { badgeTotal } from '../../../engine/progression/item-quests.js';
 import { CHAPTERS, CHAPTER_NAMES, chapterState } from '../../../engine/progression/chronicles.js';
+import { space } from '../../../lib/theme.js';
 
 // Chronicles (v4.62): chapters unlocked by badges, then scenes already seen.
 // Buttons handled by the engine (delegated click on data-chronicle).
@@ -42,7 +43,7 @@ export default function Chronicles() {
       </div>
       {seenSet.length > 0 && (
         <>
-          <h4 className="h3" style={{ marginTop: '12px' }}>
+          <h4 className="h3" style={{ marginTop: space.md }}>
             Scènes déjà vues
           </h4>
           <div className="chronicle-g">

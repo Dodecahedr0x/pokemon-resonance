@@ -1,6 +1,7 @@
 import { TYPES } from '../../../engine/data/game-data.js';
 import { gp, tc } from '../../../engine/core/utils.js';
 import { TRAINER_AVATAR, RARE_ENABLED } from '../../../engine/world/rare-encounters.js';
+import { space } from '../../../lib/theme.js';
 
 // Settings › Trainer avatar and Rare encounters (v4.50): data-avatar-action buttons handled by the engine (engine/world/rare-encounters.js).
 export default function Avatar() {
@@ -43,7 +44,7 @@ export default function Avatar() {
           Retirer l’avatar
         </button>
       </div>
-      <h3 className="h3" style={{ marginTop: '16px' }}>
+      <h3 className="h3" style={{ marginTop: space.lg }}>
         Rencontres rares
       </h3>
       <p className="v4-note">

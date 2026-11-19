@@ -1,0 +1,336 @@
+/* team analysis */
+.ana-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-md);
+}
+@media (max-width: 1100px) {
+  .ana-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 640px) {
+  .ana-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.ac {
+  display: grid;
+  gap: var(--space-md);
+  align-content: start;
+  padding: var(--space-xl);
+  border-radius: var(--r);
+  background: linear-gradient(180deg, var(--s2), var(--s1));
+  border: 1px solid var(--line);
+  min-width: 0;
+}
+.ac h4 {
+  font-family: var(--f-m);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--mut);
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+.ac h4 span {
+  color: var(--tx);
+}
+.score {
+  display: grid;
+  grid-template-columns: 118px minmax(0, 1fr);
+  gap: var(--space-lg);
+  align-items: center;
+}
+.score svg {
+  width: 118px;
+  height: 118px;
+}
+.sc-bg {
+  fill: none;
+  stroke: var(--s4);
+  stroke-width: 8;
+}
+.sc-fg {
+  fill: none;
+  stroke: url(#gGold);
+  stroke-width: 8;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1s var(--ease);
+}
+.sc-n {
+  font-family: var(--f-d);
+  font-stretch: 125%;
+  font-weight: 850;
+  font-size: 30px;
+  fill: var(--tx);
+  text-anchor: middle;
+}
+.sc-l {
+  font-family: var(--f-m);
+  font-size: 8px;
+  fill: var(--mut);
+  text-anchor: middle;
+  letter-spacing: 0.14em;
+}
+.brk {
+  display: grid;
+  gap: var(--space-sm);
+  font-size: 13px;
+  color: var(--tx2);
+}
+.brk div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  padding-bottom: var(--space-sm);
+  border-bottom: 1px solid var(--line);
+}
+.brk div:last-child {
+  border: 0;
+  padding: 0;
+}
+.brk b {
+  color: var(--tx);
+  font-variant-numeric: tabular-nums;
+}
+.radar svg {
+  display: block;
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+  margin-inline: auto;
+}
+.rd-grid {
+  fill: none;
+  stroke: var(--line2);
+  stroke-width: 1;
+}
+.rd-axis {
+  stroke: var(--line);
+  stroke-width: 1;
+}
+.rd-shape {
+  fill: rgba(227, 192, 122, 0.16);
+  stroke: var(--gold);
+  stroke-width: 1.6;
+}
+.rd-lbl {
+  font-family: var(--f-m);
+  font-size: 8.5px;
+  fill: var(--fnt);
+  text-anchor: middle;
+  letter-spacing: 0.04em;
+}
+.rd-lbl.on {
+  fill: var(--tx2);
+}
+.rd-pt {
+  fill: var(--gold);
+}
+.rxl {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-sm);
+}
+.rxl li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+.rxl .by {
+  font-size: 12px;
+  color: var(--mut);
+}
+.empty {
+  font-size: 13.5px;
+  color: var(--mut);
+}
+.alerts {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-sm);
+}
+.alerts li {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr);
+  gap: var(--space-sm);
+  font-size: 13.5px;
+  color: var(--tx2);
+  line-height: 1.45;
+}
+.alerts li::before {
+  content: '';
+  width: 18px;
+  height: 18px;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--k, var(--warn)) 18%, transparent);
+  border: 1px solid color-mix(in srgb, var(--k, var(--warn)) 50%, transparent);
+}
+.alerts li.ok {
+  --k: var(--ok);
+}
+.alerts li.bad {
+  --k: var(--bad);
+}
+.alerts li.warn {
+  --k: var(--warn);
+}
+.presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+/* ---------- hexagonal board ---------- */
+.hx {
+  fill: var(--tile);
+  stroke: var(--tile-l);
+  stroke-width: 1;
+  transition: fill 0.6s ease;
+}
+.hx.river {
+  fill: var(--river);
+}
+.hx.wet {
+  fill: var(--wet);
+}
+
+@keyframes zapf {
+  0% {
+    fill: var(--wet);
+  }
+  12% {
+    fill: #8c7a25;
+  }
+  100% {
+    fill: var(--wet);
+  }
+}
+@keyframes zapr {
+  0% {
+    fill: var(--river);
+  }
+  12% {
+    fill: #7d6e26;
+  }
+  100% {
+    fill: var(--river);
+  }
+}
+
+.fogline {
+  stroke: rgba(255, 255, 255, 0.1);
+  stroke-width: 1.2;
+}
+.axl {
+  font-family: var(--f-m);
+  font-size: 7px;
+  fill: var(--fnt);
+  text-anchor: middle;
+  letter-spacing: 0.04em;
+}
+.tok {
+  transition:
+    transform 0.85s var(--ease),
+    opacity 0.6s ease;
+}
+.tok.hid {
+  opacity: 0;
+}
+.tok-sh {
+  fill: rgba(0, 0, 0, 0.45);
+}
+.tok-ring {
+  stroke-width: 2.4;
+}
+.tok-halo {
+  fill: none;
+  stroke-width: 1.3;
+}
+.tok.ally .tok-halo {
+  stroke: var(--ally);
+}
+.tok.enemy .tok-halo {
+  stroke: var(--enemy);
+  stroke-dasharray: 3 2.4;
+}
+.tok.act .tok-halo {
+  stroke: var(--gold);
+  stroke-width: 2.4;
+  stroke-dasharray: none;
+  animation: act 1.6s ease-in-out infinite;
+}
+@keyframes act {
+  50% {
+    stroke-opacity: 0.3;
+  }
+}
+.tok-nm {
+  font-family: var(--f-m);
+  font-size: 6.2px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  fill: var(--tx2);
+  text-anchor: middle;
+  text-transform: uppercase;
+  paint-order: stroke;
+  stroke: var(--bg);
+  stroke-width: 2.6px;
+  stroke-linejoin: round;
+}
+
+.intent {
+  stroke: var(--enemy);
+  stroke-width: 1.7;
+  stroke-dasharray: 5 3.5;
+  fill: none;
+  transition: opacity 0.5s;
+}
+
+.off {
+  opacity: 0;
+}
+
+.chainseg {
+  fill: none;
+  stroke: #ffe36a;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-dasharray: 60;
+  stroke-dashoffset: 60;
+  animation: draw 0.32s ease-out forwards;
+  animation-delay: var(--d, 0s);
+}
+.chainglow {
+  fill: none;
+  stroke: #f7d02c;
+  stroke-width: 10;
+  stroke-linecap: round;
+  opacity: 0;
+  animation: glow 1.1s ease-out forwards;
+  animation-delay: var(--d, 0s);
+}
+
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes glow {
+  0% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 0.1;
+  }
+}

@@ -1,0 +1,387 @@
+/* ---------- battle: arena / sanctuary ---------- */
+.bt {
+  border-radius: var(--rl);
+  background:
+    var(--veins) padding-box,
+    linear-gradient(180deg, #121317, #08080a) padding-box,
+    var(--edge) border-box;
+  background-size:
+    560px 560px,
+    auto,
+    auto;
+}
+.bt-top {
+  background:
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.012) 0 1px, transparent 1px 3px),
+    linear-gradient(180deg, rgba(212, 175, 106, 0.06), transparent);
+  border-bottom: 1px solid rgba(212, 175, 106, 0.18);
+}
+.bt-top b#bScen {
+  font-family: var(--f-d);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-size: 13px;
+  color: var(--gold-l);
+}
+#bRound {
+  font-family: var(--f-m);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-size: 10.5px;
+}
+#bRound b {
+  font-size: 17px;
+  color: var(--gold-l);
+}
+.bt-arena {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--space-md);
+  align-items: center;
+  margin: var(--space-sm) var(--space-md) 0;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--r);
+  border: 1px solid transparent;
+  background:
+    radial-gradient(80% 140% at 0% 50%, color-mix(in srgb, var(--ac, #d4af6a) 18%, transparent), transparent 70%)
+      padding-box,
+    linear-gradient(#0d0e11, #0d0e11) padding-box,
+    var(--brass) border-box;
+  font-size: 12.5px;
+  color: var(--tx2);
+}
+.bt-arena[hidden] {
+  display: none;
+}
+.bt-arena b {
+  display: block;
+  font-weight: 600;
+  color: var(--tx);
+  font-size: 12.5px;
+}
+.bt-arena em {
+  display: block;
+  font-style: normal;
+  color: var(--gold-l);
+  font-size: 12px;
+  margin-top: var(--space-3xs);
+}
+.ba-b {
+  width: 34px;
+  display: block;
+}
+.ba-b svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.board {
+  border-radius: 10px;
+  padding: var(--space-sm);
+  border: 1.5px solid transparent;
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 0, 0, 0.9),
+    inset 0 0 60px rgba(0, 0, 0, 0.75),
+    0 0 0 1px rgba(0, 0, 0, 0.6),
+    0 30px 60px -30px #000;
+}
+.board.bio-gue {
+  background:
+    radial-gradient(120% 90% at 50% 0%, #14211a, #08090a) padding-box,
+    var(--brass) border-box;
+}
+.board.bio-roche {
+  background:
+    radial-gradient(120% 90% at 50% 0%, #211a13, #08080a) padding-box,
+    var(--brass) border-box;
+}
+.board.bio-tour {
+  background:
+    radial-gradient(120% 90% at 50% 0%, #1a1424, #070609) padding-box,
+    var(--brass) border-box;
+}
+.board.bio-ligue {
+  background:
+    radial-gradient(120% 90% at 50% 0%, #141a28, #07080b) padding-box,
+    var(--brass) border-box;
+}
+.board.bio-arene {
+  background:
+    radial-gradient(120% 90% at 50% 0%, color-mix(in srgb, var(--ac, #d4af6a) 14%, #0b0b0e), #060608) padding-box,
+    var(--brass) border-box;
+}
+.board::before,
+.board::after {
+  width: 26px;
+  height: 26px;
+  border-color: #f2dda8;
+  border-radius: 0;
+}
+.board::before {
+  top: 4px;
+  left: 4px;
+  border-width: 1.5px 0 0 1.5px;
+  background: radial-gradient(circle at 0 0, #f2dda8 0 2px, transparent 2.6px);
+}
+.board::after {
+  bottom: 4px;
+  right: 4px;
+  border-width: 0 1.5px 1.5px 0;
+  background: radial-gradient(circle at 100% 100%, #f2dda8 0 2px, transparent 2.6px);
+}
+.board.shock {
+  animation: shock 0.55s ease;
+}
+@keyframes shock {
+  20% {
+    transform: translateX(-3px);
+  }
+  40% {
+    transform: translateX(3px);
+  }
+  60% {
+    transform: translateX(-2px);
+  }
+  80% {
+    transform: translateX(1px);
+  }
+}
+/* slabs */
+#bSvg .hx {
+  stroke: rgba(110, 160, 255, 0.26);
+  stroke-width: 0.9;
+}
+.bio-gue .hx {
+  fill: #141b17;
+}
+.bio-gue .hx.alt {
+  fill: #17201a;
+}
+.bio-roche .hx {
+  fill: #1b1712;
+}
+.bio-roche .hx.alt {
+  fill: #201b14;
+}
+.bio-tour .hx {
+  fill: #16131c;
+}
+.bio-tour .hx.alt {
+  fill: #1a1622;
+}
+.bio-ligue .hx {
+  fill: #12151d;
+}
+.bio-ligue .hx.alt {
+  fill: #151925;
+}
+.bio-arene .hx {
+  fill: #131418;
+  stroke: rgba(212, 175, 106, 0.3);
+}
+.bio-arene .hx.alt {
+  fill: #16171c;
+}
+.bio-gue .hx.river,
+.bio-roche .hx.river,
+.bio-tour .hx.river,
+.bio-ligue .hx.river,
+.bio-arene .hx.river {
+  fill: #0e2240;
+}
+.hx.rock {
+  fill: #0a0a0c !important;
+}
+.hx.mud {
+  fill: #2a1f14 !important;
+}
+.hx.lava {
+  fill: #4a1a0c !important;
+  filter: drop-shadow(0 0 4px rgba(255, 110, 40, 0.7));
+}
+.tx {
+  opacity: 0.55;
+}
+.tx-gr {
+  stroke: rgba(140, 200, 130, 0.16);
+}
+.tx-gd {
+  fill: rgba(212, 175, 106, 0.25);
+}
+.tx-st {
+  stroke: rgba(0, 0, 0, 0.4);
+}
+.tx-sd {
+  fill: rgba(212, 175, 106, 0.18);
+}
+.tx-mv {
+  stroke: rgba(212, 175, 106, 0.22);
+}
+.tx-rn {
+  fill: none;
+  stroke: rgba(212, 175, 106, 0.2);
+  stroke-width: 0.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.tx-wv {
+  stroke: rgba(140, 190, 255, 0.35);
+}
+.gl {
+  fill: none;
+  stroke: rgba(212, 175, 106, 0.07);
+  stroke-width: 0.7;
+}
+.bv {
+  stroke-width: 1.2;
+  opacity: 0.8;
+}
+.tuft {
+  fill: #2d5a33;
+  opacity: 0.45;
+}
+.pebble {
+  fill: #4a3d2c;
+  opacity: 0.6;
+}
+.ember {
+  fill: #9b7bff;
+}
+.glint {
+  fill: rgba(242, 221, 168, 0.45);
+}
+.axl {
+  font-family: var(--f-m);
+  fill: rgba(212, 175, 106, 0.5);
+  letter-spacing: 0.1em;
+}
+.boulder {
+  fill: url(#rockG);
+  stroke: #000;
+}
+/* range glows */
+.h-reach {
+  fill: rgba(91, 155, 255, 0.07);
+  stroke: #7fb2ff;
+  stroke-width: 1.1;
+  filter: drop-shadow(0 0 3px rgba(91, 155, 255, 0.9));
+}
+.h-tgt {
+  fill: rgba(212, 175, 106, 0.1);
+  stroke: #e9c97e;
+  stroke-width: 1.1;
+  filter: drop-shadow(0 0 3px rgba(240, 200, 110, 0.85));
+}
+.h-tgt.on {
+  fill: rgba(242, 221, 168, 0.28);
+  stroke: #fff0c8;
+  stroke-width: 1.8;
+}
+.h-aff {
+  fill: rgba(242, 221, 168, 0.16);
+  stroke: rgba(255, 240, 200, 0.8);
+  stroke-dasharray: 2 2;
+}
+.h-danger {
+  fill: rgba(229, 72, 77, 0.14);
+  stroke: #ff6b6f;
+  stroke-width: 1.1;
+  filter: drop-shadow(0 0 3px rgba(229, 72, 77, 0.9));
+  animation: dgr 1.8s ease-in-out infinite;
+}
+@keyframes dgr {
+  50% {
+    fill: rgba(229, 72, 77, 0.24);
+  }
+}
+.h-dodge {
+  fill: rgba(77, 214, 180, 0.12);
+  stroke: #5fe0c0;
+  filter: drop-shadow(0 0 3px rgba(77, 214, 180, 0.9));
+}
+.h-arena {
+  fill: rgba(240, 164, 58, 0.08);
+  stroke: #f0a43a;
+  stroke-width: 1;
+  stroke-dasharray: 3 2.2;
+  filter: drop-shadow(0 0 3px rgba(240, 164, 58, 0.8));
+  animation: arn 1.4s ease-in-out infinite;
+}
+@keyframes arn {
+  50% {
+    fill: rgba(240, 164, 58, 0.2);
+  }
+}
+.fogc2.tox {
+  fill: rgba(120, 70, 160, 0.42);
+}
+.intent {
+  stroke: #ff6b6f;
+  filter: drop-shadow(0 0 2px rgba(229, 72, 77, 0.9));
+}
+.arr-h {
+  fill: #ff6b6f;
+}
+.mk-fill {
+  opacity: 0.2;
+}
+.mk-edge {
+  stroke-width: 1;
+  stroke-dasharray: 2 2.5;
+  filter: drop-shadow(0 0 2px currentColor);
+}
+/* tokens */
+.tok-ring {
+  stroke-width: 1.4;
+}
+.tok-rim {
+  stroke: rgba(212, 175, 106, 0.55);
+}
+.hp-arc {
+  filter: drop-shadow(0 0 1.6px rgba(120, 190, 255, 0.9));
+}
+.hp-bg {
+  stroke: rgba(0, 0, 0, 0.7);
+}
+.tok-halo {
+  stroke: rgba(212, 175, 106, 0.25);
+}
+.tok.ally .tok-halo {
+  stroke: rgba(91, 155, 255, 0.55);
+}
+.tok.enemy .tok-halo {
+  stroke: rgba(229, 72, 77, 0.5);
+}
+.tok.sel .tok-halo {
+  stroke: #f2dda8;
+  filter: drop-shadow(0 0 3px rgba(242, 221, 168, 0.9));
+}
+.tok-nm {
+  font-family: var(--f-m);
+  letter-spacing: 0.14em;
+  fill: #e9e2d2;
+  stroke: #08080a;
+}
+.tok-en path.on {
+  fill: #f0c766;
+  filter: drop-shadow(0 0 2px rgba(240, 190, 90, 1));
+}
+.f-dmg {
+  fill: #ff7a6e;
+  font-weight: 700;
+}
+.f-heal {
+  fill: #7fd8ff;
+  font-weight: 700;
+}
+.f-rx {
+  font-family: var(--f-d);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  fill: #f2dda8;
+}
+.f-ready {
+  font-family: var(--f-d);
+  letter-spacing: 0.1em;
+}

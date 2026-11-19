@@ -3,6 +3,7 @@ import { BY } from '../../engine/pokemon/pokemon.js';
 import { markOf, medal, mini, tb, tc } from '../../engine/core/utils.js';
 import { Html } from '../../lib/html.jsx';
 import { selectReaction, useGuide } from './guideStore.js';
+import { space } from '../../lib/theme.js';
 
 // Mark × element matrix: each cell opens the reaction details.
 export function Matrix() {
@@ -175,7 +176,7 @@ export function Weathers() {
   ));
 }
 
-const typeCell = { display: 'inline-flex', gap: 9, alignItems: 'center' };
+const typeCell = { display: 'inline-flex', gap: space.sm, alignItems: 'center' };
 
 export function Families() {
   return FAMS.map(f => (
