@@ -178,6 +178,148 @@ export const ITEM_USE_EFFECTS = {
   },
 };
 
+const BALL_AND_REMEDY_SHOP_ITEMS = {
+  rapide: {
+    n: 'Rapide Ball',
+    sn: 'Rapide',
+    d: 'Plus facile en début de combat : PV sous 50 % pendant les manches 1 et 2. Immobilisation requise.',
+    p: 900,
+    category: 'balls',
+    img: 'quick-ball',
+  },
+  sombre: {
+    n: 'Sombre Ball',
+    sn: 'Sombre',
+    d: 'La nuit, elle capture dès 40 % de PV restants. Immobilisation requise.',
+    p: 900,
+    category: 'balls',
+    img: 'dusk-ball',
+  },
+  filet: {
+    n: 'Filet Ball',
+    sn: 'Filet',
+    d: 'Sur un Pokémon Eau ou Insecte : PV sous 40 %, sans immobilisation.',
+    p: 800,
+    category: 'balls',
+    img: 'net-ball',
+  },
+  faiblo: {
+    n: 'Faiblo Ball',
+    sn: 'Faiblo',
+    d: 'Sous 15 % de PV, plus besoin d’immobiliser la cible.',
+    p: 1000,
+    category: 'balls',
+    img: 'weak-ball',
+  },
+  hyperpotion: {
+    n: 'Hyper Potion',
+    sn: 'Hyper Potion',
+    d: 'En combat : rend 85 % des PV à un allié. Utilise son action.',
+    p: 1300,
+    category: 'soins',
+    img: 'hyper-potion',
+    heal: 0.85,
+  },
+  antigel: {
+    n: 'Antigel',
+    sn: 'Antigel',
+    d: 'Libère de la paralysie, du gel et du sommeil. Coûte 1 Voix, l’action reste libre.',
+    p: 300,
+    category: 'combat',
+    img: 'ice-heal',
+    voice: 1,
+  },
+  antidote: {
+    n: 'Antidote',
+    sn: 'Antidote',
+    d: 'Soigne la brûlure et le poison. Coûte 1 Voix, l’action reste libre.',
+    p: 250,
+    category: 'combat',
+    img: 'antidote',
+    voice: 1,
+  },
+  baiemepo: {
+    n: 'Baie Mepo',
+    sn: 'Mepo',
+    d: 'Rend 30 % des PV max. Coûte 1 Voix, l’action reste libre.',
+    p: 600,
+    category: 'combat',
+    img: 'mepo-berry',
+    voice: 1,
+  },
+  gelee: {
+    n: 'Gelée Résonante',
+    sn: 'Gelée',
+    d: '+2 losanges de Résonance (Éveil ou attaque Experte). Coûte 1 Voix.',
+    p: 2400,
+    category: 'combat',
+    img: 'jelly-res',
+    voice: 1,
+  },
+  rappelmax: {
+    n: 'Rappel Max',
+    sn: 'Rappel Max',
+    d: 'Relève votre Pokémon K.O. le plus coûteux en PC, sur une case voisine, avec 80 % de ses PV. Utilise l’action.',
+    p: 4000,
+    category: 'combat',
+    img: 'max-revive',
+  },
+};
+
+const TYPE_HELD_ITEMS = {
+  charbon: {
+    n: 'Charbon',
+    d: '+20 % de dégâts des capacités de type Feu.',
+    i: 'M12 3c3 3 6 6 4 11-1 3-6 3-7 0-2-5 0-8 3-11Z',
+  },
+  eaumystique: {
+    n: 'Eau Mystique',
+    d: '+20 % de dégâts des capacités de type Eau.',
+    i: 'M12 3c4 6 6 9 4 13-1 2-7 2-8 0-2-4 0-7 4-13Z',
+  },
+  graine: {
+    n: 'Graine Miracle',
+    d: '+20 % de dégâts des capacités de type Plante.',
+    i: 'M12 4c6 2 8 8 4 13-5 0-9-4-4-13Z',
+  },
+  aimantelec: {
+    n: 'Aimant',
+    d: '+20 % de dégâts des capacités de type Électrik.',
+    i: 'M5 5h5v8a2 2 0 0 0 4 0V5h5v8a7 7 0 0 1-14 0Z',
+  },
+  glaceeternelle: {
+    n: 'Glace Éternelle',
+    d: '+20 % de dégâts des capacités de type Glace.',
+    i: 'M12 3v18M4 12h16M6 6l12 12M18 6 6 18',
+  },
+  ceintnoire: {
+    n: 'Ceinture Noire',
+    d: '+20 % de dégâts des capacités de type Combat.',
+    i: 'M2 9h20v6H2ZM9 7h6v10H9Z',
+  },
+  cuiller: {
+    n: 'Cuiller Tordue',
+    d: '+20 % de dégâts des capacités de type Psy.',
+    i: 'M15 3a5 6 20 1 1-8 5c1 2 3 3 5 3l-6 10',
+  },
+  filtre: {
+    n: 'Lunettes Filtre',
+    d: 'Réduit de 25 % les dégâts des attaques super efficaces contre ce Pokémon.',
+    i: 'M3 12a4 4 0 1 0 8 0 4 4 0 0 0-8 0Zm10 0a4 4 0 1 0 8 0 4 4 0 0 0-8 0Z',
+  },
+  cape: { n: 'Gilet de Fer', d: 'Réduit de 15 % tous les dégâts subis.', i: 'M6 4l3 2h6l3-2 2 4-2 3v9H6v-9L4 8Z' },
+  banniere: {
+    n: 'Bannière de Guerre',
+    d: 'Commence le combat Renforcé pendant 1 manche.',
+    i: 'M6 3v18M6 4h12l-3 4 3 4H6',
+  },
+  bottes: {
+    n: 'Bottes Ailées',
+    d: 'Commence le combat avec +1 Mouvement pendant 1 manche.',
+    i: 'M7 3h7v9l5 3v5H5v-5l2-2Z',
+  },
+};
+
 // Statements executed at startup, in the original order (see index.js).
 export function init() {
   for (const k in HELD_ITEM_ICONS) {
@@ -186,149 +328,11 @@ export function init() {
   for (const k in SPECIAL_BALLS) {
     BALL_CAPTURE_CHECKS[k] = (S, e) => SPECIAL_BALLS[k].pv(S, e) && SPECIAL_BALLS[k].im(S, e);
   }
-  Object.assign(SHOP, {
-    rapide: {
-      n: 'Rapide Ball',
-      sn: 'Rapide',
-      d: 'Plus facile en début de combat : PV sous 50 % pendant les manches 1 et 2. Immobilisation requise.',
-      p: 900,
-      category: 'balls',
-      img: 'quick-ball',
-    },
-    sombre: {
-      n: 'Sombre Ball',
-      sn: 'Sombre',
-      d: 'La nuit, elle capture dès 40 % de PV restants. Immobilisation requise.',
-      p: 900,
-      category: 'balls',
-      img: 'dusk-ball',
-    },
-    filet: {
-      n: 'Filet Ball',
-      sn: 'Filet',
-      d: 'Sur un Pokémon Eau ou Insecte : PV sous 40 %, sans immobilisation.',
-      p: 800,
-      category: 'balls',
-      img: 'net-ball',
-    },
-    faiblo: {
-      n: 'Faiblo Ball',
-      sn: 'Faiblo',
-      d: 'Sous 15 % de PV, plus besoin d’immobiliser la cible.',
-      p: 1000,
-      category: 'balls',
-      img: 'weak-ball',
-    },
-    hyperpotion: {
-      n: 'Hyper Potion',
-      sn: 'Hyper Potion',
-      d: 'En combat : rend 85 % des PV à un allié. Utilise son action.',
-      p: 1300,
-      category: 'soins',
-      img: 'hyper-potion',
-      heal: 0.85,
-    },
-    antigel: {
-      n: 'Antigel',
-      sn: 'Antigel',
-      d: 'Libère de la paralysie, du gel et du sommeil. Coûte 1 Voix, l’action reste libre.',
-      p: 300,
-      category: 'combat',
-      img: 'ice-heal',
-      voice: 1,
-    },
-    antidote: {
-      n: 'Antidote',
-      sn: 'Antidote',
-      d: 'Soigne la brûlure et le poison. Coûte 1 Voix, l’action reste libre.',
-      p: 250,
-      category: 'combat',
-      img: 'antidote',
-      voice: 1,
-    },
-    baiemepo: {
-      n: 'Baie Mepo',
-      sn: 'Mepo',
-      d: 'Rend 30 % des PV max. Coûte 1 Voix, l’action reste libre.',
-      p: 600,
-      category: 'combat',
-      img: 'mepo-berry',
-      voice: 1,
-    },
-    gelee: {
-      n: 'Gelée Résonante',
-      sn: 'Gelée',
-      d: '+2 losanges de Résonance (Éveil ou attaque Experte). Coûte 1 Voix.',
-      p: 2400,
-      category: 'combat',
-      img: 'jelly-res',
-      voice: 1,
-    },
-    rappelmax: {
-      n: 'Rappel Max',
-      sn: 'Rappel Max',
-      d: 'Relève votre Pokémon K.O. le plus coûteux en PC, sur une case voisine, avec 80 % de ses PV. Utilise l’action.',
-      p: 4000,
-      category: 'combat',
-      img: 'max-revive',
-    },
-  });
+  Object.assign(SHOP, BALL_AND_REMEDY_SHOP_ITEMS);
   BALLS.push('rapide', 'sombre', 'filet', 'faiblo');
   HEALS.push('hyperpotion');
   COMBAT_ITEMS.push('antigel', 'antidote', 'baiemepo', 'gelee', 'rappelmax');
-  Object.assign(ITEMS2, {
-    charbon: {
-      n: 'Charbon',
-      d: '+20 % de dégâts des capacités de type Feu.',
-      i: 'M12 3c3 3 6 6 4 11-1 3-6 3-7 0-2-5 0-8 3-11Z',
-    },
-    eaumystique: {
-      n: 'Eau Mystique',
-      d: '+20 % de dégâts des capacités de type Eau.',
-      i: 'M12 3c4 6 6 9 4 13-1 2-7 2-8 0-2-4 0-7 4-13Z',
-    },
-    graine: {
-      n: 'Graine Miracle',
-      d: '+20 % de dégâts des capacités de type Plante.',
-      i: 'M12 4c6 2 8 8 4 13-5 0-9-4-4-13Z',
-    },
-    aimantelec: {
-      n: 'Aimant',
-      d: '+20 % de dégâts des capacités de type Électrik.',
-      i: 'M5 5h5v8a2 2 0 0 0 4 0V5h5v8a7 7 0 0 1-14 0Z',
-    },
-    glaceeternelle: {
-      n: 'Glace Éternelle',
-      d: '+20 % de dégâts des capacités de type Glace.',
-      i: 'M12 3v18M4 12h16M6 6l12 12M18 6 6 18',
-    },
-    ceintnoire: {
-      n: 'Ceinture Noire',
-      d: '+20 % de dégâts des capacités de type Combat.',
-      i: 'M2 9h20v6H2ZM9 7h6v10H9Z',
-    },
-    cuiller: {
-      n: 'Cuiller Tordue',
-      d: '+20 % de dégâts des capacités de type Psy.',
-      i: 'M15 3a5 6 20 1 1-8 5c1 2 3 3 5 3l-6 10',
-    },
-    filtre: {
-      n: 'Lunettes Filtre',
-      d: 'Réduit de 25 % les dégâts des attaques super efficaces contre ce Pokémon.',
-      i: 'M3 12a4 4 0 1 0 8 0 4 4 0 0 0-8 0Zm10 0a4 4 0 1 0 8 0 4 4 0 0 0-8 0Z',
-    },
-    cape: { n: 'Gilet de Fer', d: 'Réduit de 15 % tous les dégâts subis.', i: 'M6 4l3 2h6l3-2 2 4-2 3v9H6v-9L4 8Z' },
-    banniere: {
-      n: 'Bannière de Guerre',
-      d: 'Commence le combat Renforcé pendant 1 manche.',
-      i: 'M6 3v18M6 4h12l-3 4 3 4H6',
-    },
-    bottes: {
-      n: 'Bottes Ailées',
-      d: 'Commence le combat avec +1 Mouvement pendant 1 manche.',
-      i: 'M7 3h7v9l5 3v5H5v-5l2-2Z',
-    },
-  });
+  Object.assign(ITEMS2, TYPE_HELD_ITEMS);
   Object.assign(HELD_IMG, {
     charbon: 'charcoal',
     eaumystique: 'mystic-water',

@@ -272,53 +272,132 @@ async function copyShareCode() {
   toast('Le code est sélectionné : appuyez longuement dessus pour le copier.');
 }
 
+function onCombat(S, opt, D0) {
+  if (S.restricted) {
+    return;
+  } // fixed-rule battles (v4.31)
+  D0 = D0 || SCEN[S.sc] || {};
+  // a friend's team: its learned moves and its items
+  if (D0.ami) {
+    const A = (PROFILE.friends || [])[D0.ami - 1];
+    if (A) {
+      A.t.forEach((x, j) => {
+        const u = S.units.find(e => e.uid === 'e' + j);
+        if (!u) {
+          return;
+        }
+        [x[1], x[4]].forEach(k => k && MV[k] && !u.mv.includes(k) && u.mv.push(k));
+        if (x[1]) {
+          u.ctm = x[1];
+        }
+        if (x[4]) {
+          u.hm = x[4];
+        }
+        const it = x[2];
+        if (it && ITEMS2[it]) {
+          u.item = it;
+          if (it === 'ceinture') {
+            u.belt = true;
+          }
+          if (it === 'bandeau') {
+            u.pb = (u.pb || 0) + 2;
+          }
+          if (it === 'crinorage') {
+            u.pb = (u.pb || 0) + 1;
+          }
+          if (it === 'lentille' && (hasNx(u) || hasXp(u))) {
+            u.en = 1;
+          }
+        }
+      });
+    }
+  }
+}
+
+function onFriendChallengesClick(e) {
+  const a = e.target.closest('[data-ami]');
+  if (a) {
+    const k = a.dataset.ami;
+    if (k === 'carte' || k === 'ajout') {
+      FRIEND_MODE = k;
+      renderFriendBox();
+      $('#amiBox').hidden = false;
+      queueSave();
+      return;
+    }
+    if (k === 'x') {
+      $('#amiBox').hidden = true;
+      refreshHome();
+      return;
+    }
+    if (k === 'copier') {
+      return void copyShareCode();
+    }
+    if (k === 'partager') {
+      const ta = $('#amiCode');
+      if (ta && navigator.share) {
+        navigator
+          .share({
+            text: `Affronte mon équipe dans Pokémon Résonance ! Colle ce code dans « Défis entre amis » : ${ta.value}`,
+          })
+          .catch(() => copyShareCode());
+      }
+      return;
+    }
+    if (k === 'valider') {
+      const ta = $('#amiColle'),
+        msg = addFriendFromCode(ta ? ta.value : ''),
+        ok = /rejoint|mise à jour/.test(msg);
+      if (ok) {
+        $('#amiBox').hidden = true;
+        toast(msg);
+        refreshHome();
+      } else {
+        const er = $('#amiErr');
+        if (er) {
+          er.textContent = msg;
+        }
+      }
+      return;
+    }
+  }
+  if (e.target.id === 'amiBox') {
+    $('#amiBox').hidden = true;
+    return;
+  }
+  const f = e.target.closest('[data-ami-fight]');
+  if (f) {
+    FRIEND_DEL = -1;
+    if (!squad.length) {
+      return void toast('Composez d’abord une équipe.');
+    }
+    return void fightFriend(+f.dataset.amiFight);
+  }
+  const d = e.target.closest('[data-ami-del]');
+  if (d) {
+    const i = +d.dataset.amiDel;
+    if (FRIEND_DEL === i) {
+      const A = PROFILE.friends[i];
+      PROFILE.friends.splice(i, 1);
+      FRIEND_DEL = -1;
+      queueSave();
+      if (A) {
+        toast(`${A.n} est retiré de vos défis.`);
+      }
+    } else {
+      FRIEND_DEL = i;
+    }
+    refreshHome();
+  }
+}
+
 // Instructions run at startup, in the original order (see index.js).
 export function init() {
   // a safe value as long as no challenge is running
   SCEN.ami = Object.assign({}, SCEN.gue, { n: 'Défi entre amis', ami: 0 });
 
   /* ---------- hooks: battle creation ---------- */
-  HOOKS.combat.push((S, opt, D0) => {
-    if (S.restricted) {
-      return;
-    } // fixed-rule battles (v4.31)
-    D0 = D0 || SCEN[S.sc] || {};
-    // a friend's team: its learned moves and its items
-    if (D0.ami) {
-      const A = (PROFILE.friends || [])[D0.ami - 1];
-      if (A) {
-        A.t.forEach((x, j) => {
-          const u = S.units.find(e => e.uid === 'e' + j);
-          if (!u) {
-            return;
-          }
-          [x[1], x[4]].forEach(k => k && MV[k] && !u.mv.includes(k) && u.mv.push(k));
-          if (x[1]) {
-            u.ctm = x[1];
-          }
-          if (x[4]) {
-            u.hm = x[4];
-          }
-          const it = x[2];
-          if (it && ITEMS2[it]) {
-            u.item = it;
-            if (it === 'ceinture') {
-              u.belt = true;
-            }
-            if (it === 'bandeau') {
-              u.pb = (u.pb || 0) + 2;
-            }
-            if (it === 'crinorage') {
-              u.pb = (u.pb || 0) + 1;
-            }
-            if (it === 'lentille' && (hasNx(u) || hasXp(u))) {
-              u.en = 1;
-            }
-          }
-        });
-      }
-    }
-  });
+  HOOKS.combat.push(onCombat);
 
   /* ---------- hooks: after the battle ---------- */
   HOOKS.progress.push((S, rew, win) => {
@@ -371,82 +450,7 @@ export function init() {
 
   FRIEND_MODE = null;
 
-  document.addEventListener('click', e => {
-    const a = e.target.closest('[data-ami]');
-    if (a) {
-      const k = a.dataset.ami;
-      if (k === 'carte' || k === 'ajout') {
-        FRIEND_MODE = k;
-        renderFriendBox();
-        $('#amiBox').hidden = false;
-        queueSave();
-        return;
-      }
-      if (k === 'x') {
-        $('#amiBox').hidden = true;
-        refreshHome();
-        return;
-      }
-      if (k === 'copier') {
-        return void copyShareCode();
-      }
-      if (k === 'partager') {
-        const ta = $('#amiCode');
-        if (ta && navigator.share) {
-          navigator
-            .share({
-              text: `Affronte mon équipe dans Pokémon Résonance ! Colle ce code dans « Défis entre amis » : ${ta.value}`,
-            })
-            .catch(() => copyShareCode());
-        }
-        return;
-      }
-      if (k === 'valider') {
-        const ta = $('#amiColle'),
-          msg = addFriendFromCode(ta ? ta.value : ''),
-          ok = /rejoint|mise à jour/.test(msg);
-        if (ok) {
-          $('#amiBox').hidden = true;
-          toast(msg);
-          refreshHome();
-        } else {
-          const er = $('#amiErr');
-          if (er) {
-            er.textContent = msg;
-          }
-        }
-        return;
-      }
-    }
-    if (e.target.id === 'amiBox') {
-      $('#amiBox').hidden = true;
-      return;
-    }
-    const f = e.target.closest('[data-ami-fight]');
-    if (f) {
-      FRIEND_DEL = -1;
-      if (!squad.length) {
-        return void toast('Composez d’abord une équipe.');
-      }
-      return void fightFriend(+f.dataset.amiFight);
-    }
-    const d = e.target.closest('[data-ami-del]');
-    if (d) {
-      const i = +d.dataset.amiDel;
-      if (FRIEND_DEL === i) {
-        const A = PROFILE.friends[i];
-        PROFILE.friends.splice(i, 1);
-        FRIEND_DEL = -1;
-        queueSave();
-        if (A) {
-          toast(`${A.n} est retiré de vos défis.`);
-        }
-      } else {
-        FRIEND_DEL = i;
-      }
-      refreshHome();
-    }
-  });
+  document.addEventListener('click', onFriendChallengesClick);
 
   document.addEventListener('input', e => {
     if (e.target.id !== 'amiNom') {

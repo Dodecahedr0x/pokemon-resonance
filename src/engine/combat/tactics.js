@@ -489,51 +489,53 @@ export const COLOSSI = [
   },
 ].filter(C => BY[C.id] && C.escort.every(([e]) => BY[e]));
 
+const TACTICAL_MOVES = {
+  picots: {
+    n: 'Picots',
+    t: 'Sol',
+    p: 0,
+    r: 3,
+    sh: 'one',
+    fx: 'piege',
+    piege: 'picots',
+    d: 'Pose des Picots sur une case libre à 3 cases : 5 dégâts au premier adversaire qui s’y arrête (sauf volants).',
+  },
+  piegederoc: {
+    n: 'Piège de Roc',
+    t: 'Roche',
+    p: 0,
+    r: 3,
+    sh: 'one',
+    fx: 'piege',
+    piege: 'roc',
+    d: 'Pose un Piège de Roc sur une case libre à 3 cases : dégâts selon la faiblesse à la Roche, volants compris.',
+  },
+  toilegluante: {
+    n: 'Toile Gluante',
+    t: 'Insecte',
+    p: 0,
+    r: 3,
+    sh: 'one',
+    fx: 'piege',
+    piege: 'toile',
+    d: 'Tend une Toile Gluante sur une case libre à 3 cases : le premier adversaire qui s’y arrête est englué (−3 Mouvement).',
+  },
+  volcs: {
+    n: 'Vol',
+    t: 'Vol',
+    p: 12,
+    r: 4,
+    sh: 'one',
+    charge: 'vol',
+    d: 'Portée 4. Tactique avancée : s’envole (intouchable pendant le tour adverse), puis fond sur sa cible en fin de manche.',
+  },
+  coupdequeue: { n: 'Coup de Queue', t: 'Normal', p: 7, r: 0, sh: 'ring', d: 'Balaie les 6 cases autour.' },
+};
+
 // Statements run at startup, in the original order (see index.js).
 export function init() {
   /* ---------- moves ---------- */
-  Object.assign(MV, {
-    picots: {
-      n: 'Picots',
-      t: 'Sol',
-      p: 0,
-      r: 3,
-      sh: 'one',
-      fx: 'piege',
-      piege: 'picots',
-      d: 'Pose des Picots sur une case libre à 3 cases : 5 dégâts au premier adversaire qui s’y arrête (sauf volants).',
-    },
-    piegederoc: {
-      n: 'Piège de Roc',
-      t: 'Roche',
-      p: 0,
-      r: 3,
-      sh: 'one',
-      fx: 'piege',
-      piege: 'roc',
-      d: 'Pose un Piège de Roc sur une case libre à 3 cases : dégâts selon la faiblesse à la Roche, volants compris.',
-    },
-    toilegluante: {
-      n: 'Toile Gluante',
-      t: 'Insecte',
-      p: 0,
-      r: 3,
-      sh: 'one',
-      fx: 'piege',
-      piege: 'toile',
-      d: 'Tend une Toile Gluante sur une case libre à 3 cases : le premier adversaire qui s’y arrête est englué (−3 Mouvement).',
-    },
-    volcs: {
-      n: 'Vol',
-      t: 'Vol',
-      p: 12,
-      r: 4,
-      sh: 'one',
-      charge: 'vol',
-      d: 'Portée 4. Tactique avancée : s’envole (intouchable pendant le tour adverse), puis fond sur sa cible en fin de manche.',
-    },
-    coupdequeue: { n: 'Coup de Queue', t: 'Normal', p: 7, r: 0, sh: 'ring', d: 'Balaie les 6 cases autour.' },
-  });
+  Object.assign(MV, TACTICAL_MOVES);
   MV.lancesoleil.charge = 'soleil';
   MV.lancesoleil.d =
     'Ligne de 3. ×1,5 sous le Soleil. Tactique avancée : part en fin de manche (×1,3), tout de suite sous le Soleil.';

@@ -176,7 +176,15 @@ export const STATE_N = { next: 'En cours', done: 'Terminé', lock: 'Verrouillé'
 const tree = (x, y, s = 1) =>
   `<g transform="translate(${x} ${y}) scale(${s})"><circle r="9" cy="-4" fill="#1d5a32"/><circle r="7" cx="-6" cy="2" fill="#226b3a"/><circle r="7" cx="6" cy="2" fill="#1f6236"/><circle r="4" cx="-2" cy="-8" fill="#3d9152" opacity=".8"/></g>`;
 
-let forest;
+const forest = (cx, cy, n, sp) => {
+  let o = '';
+  for (let i = 0; i < n; i++) {
+    const a = i * 2.399,
+      r = Math.sqrt(i) * sp;
+    o += tree((cx + Math.cos(a) * r).toFixed(0), (cy + Math.sin(a) * r * 0.7).toFixed(0), 0.8 + ((i * 37) % 5) / 12);
+  }
+  return o;
+};
 
 const mount = (x, y, s) =>
   `<g transform="translate(${x} ${y}) scale(${s})"><path d="M-30 18 -4 -26 6 -12 14 -22 34 18Z" fill="url(#mRock)"/><path d="M-4 -26 6 -12 1 -8-4-14-9-6-14-10Z" fill="#f4f8ff"/><path d="M14 -22 22 -8 17-5 13-12 9-7Z" fill="#e7eefb"/><path d="M-4 -26 -30 18h20Z" fill="#000" opacity=".12"/></g>`;
@@ -199,15 +207,6 @@ export const PL = Object.fromEntries(PLACES.map(p => [p.id, p]));
 
 // Instructions run at startup, in the original order (see index.js).
 export function init() {
-  forest = (cx, cy, n, sp) => {
-    let o = '';
-    for (let i = 0; i < n; i++) {
-      const a = i * 2.399,
-        r = Math.sqrt(i) * sp;
-      o += tree((cx + Math.cos(a) * r).toFixed(0), (cy + Math.sin(a) * r * 0.7).toFixed(0), 0.8 + ((i * 37) % 5) / 12);
-    }
-    return o;
-  };
   MAP_SVG = `<svg class="map-svg" viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
  <defs>
   <radialGradient id="mSea" cx="50%" cy="45%" r="75%"><stop offset="0" stop-color="#2a8fd0"/><stop offset=".55" stop-color="#1a62a6"/><stop offset="1" stop-color="#0c2e5e"/></radialGradient>

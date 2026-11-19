@@ -114,6 +114,56 @@ function renderDaycareBox() {
   });
 }
 
+function onDaycareClick(e) {
+  const p = e.target.closest('[data-pens]');
+  if (p) {
+    const k = p.dataset.pens;
+    if (k === 'ouvrir') {
+      PENS_SEL = [];
+      renderDaycareBox();
+      $('#pensBox').hidden = false;
+    } else if (k === 'x') {
+      $('#pensBox').hidden = true;
+    } else if (k === 'rendre') {
+      PROFILE.pair = [];
+      toast('Le couple revient au camp.');
+      queueSave();
+      renderCampBase();
+    } else if (k === 'ok' && PENS_SEL.length === 2 && breedCompatibleList(PENS_SEL[0], PENS_SEL[1])) {
+      PROFILE.pair = [...PENS_SEL];
+      __set_squad(squad.filter(s => !PENS_SEL.includes(BY[s].base)));
+      $('#pensBox').hidden = true;
+      toast(`${BY[PENS_SEL[0]].n} et ${BY[PENS_SEL[1]].n} s’installent à la Pension.`);
+      save();
+      queueSave();
+      renderCampBase();
+      try {
+        renderSquad();
+      } catch {
+        /* Best effort: failure here is non-fatal. */
+      }
+    }
+    return;
+  }
+  const pp = e.target.closest('[data-pens-p]');
+  if (pp) {
+    const id = pp.dataset.pensP,
+      i = PENS_SEL.indexOf(id);
+    if (i >= 0) {
+      PENS_SEL.splice(i, 1);
+    } else if (PENS_SEL.length < 2) {
+      PENS_SEL.push(id);
+    } else {
+      PENS_SEL = [PENS_SEL[0], id];
+    }
+    renderDaycareBox();
+    return;
+  }
+  if (e.target.id === 'pensBox') {
+    $('#pensBox').hidden = true;
+  }
+}
+
 // Instructions run at startup, in the original order (see index.js).
 export function init() {
   Object.assign(ITEM_ICONS, {
@@ -164,53 +214,5 @@ export function init() {
     ok: () => (PROFILE.oeufs || 0) >= 1,
   });
 
-  document.addEventListener('click', e => {
-    const p = e.target.closest('[data-pens]');
-    if (p) {
-      const k = p.dataset.pens;
-      if (k === 'ouvrir') {
-        PENS_SEL = [];
-        renderDaycareBox();
-        $('#pensBox').hidden = false;
-      } else if (k === 'x') {
-        $('#pensBox').hidden = true;
-      } else if (k === 'rendre') {
-        PROFILE.pair = [];
-        toast('Le couple revient au camp.');
-        queueSave();
-        renderCampBase();
-      } else if (k === 'ok' && PENS_SEL.length === 2 && breedCompatibleList(PENS_SEL[0], PENS_SEL[1])) {
-        PROFILE.pair = [...PENS_SEL];
-        __set_squad(squad.filter(s => !PENS_SEL.includes(BY[s].base)));
-        $('#pensBox').hidden = true;
-        toast(`${BY[PENS_SEL[0]].n} et ${BY[PENS_SEL[1]].n} s’installent à la Pension.`);
-        save();
-        queueSave();
-        renderCampBase();
-        try {
-          renderSquad();
-        } catch {
-          /* Best effort: failure here is non-fatal. */
-        }
-      }
-      return;
-    }
-    const pp = e.target.closest('[data-pens-p]');
-    if (pp) {
-      const id = pp.dataset.pensP,
-        i = PENS_SEL.indexOf(id);
-      if (i >= 0) {
-        PENS_SEL.splice(i, 1);
-      } else if (PENS_SEL.length < 2) {
-        PENS_SEL.push(id);
-      } else {
-        PENS_SEL = [PENS_SEL[0], id];
-      }
-      renderDaycareBox();
-      return;
-    }
-    if (e.target.id === 'pensBox') {
-      $('#pensBox').hidden = true;
-    }
-  });
+  document.addEventListener('click', onDaycareClick);
 }

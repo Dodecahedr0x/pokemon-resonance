@@ -61,6 +61,43 @@ export const dqViol = () => {
   return D ? squad.slice(0, teamSize()).find(id => BY[id] && BY[id].t.includes(D)) : null;
 };
 
+function onProgress(S, rew, win) {
+  try {
+    if (!win) {
+      return null;
+    }
+    const X = readChallengeState();
+    let m = 0,
+      g = 0;
+    const k = S.sc || '';
+    if (k === 'dq470') {
+      const D = X.dq;
+      if (!(D.d === today() && D.done)) {
+        const yesterdayKey = new Date(Date.now() - 864e5);
+        const h =
+          yesterdayKey.getFullYear() +
+          '-' +
+          String(yesterdayKey.getMonth() + 1).padStart(2, '0') +
+          '-' +
+          String(yesterdayKey.getDate()).padStart(2, '0');
+        D.streak = D.last === h ? D.streak + 1 : 1;
+        D.best = Math.max(D.best, D.streak);
+        D.tot += 1;
+        D.last = today();
+        D.d = today();
+        D.done = true;
+        X.fossils += 1;
+        m += 500 + 100 * Math.min(D.streak, 7);
+        g += 2;
+      }
+      writeChallengeState(X);
+    }
+    return m || g ? [m, g] : null;
+  } catch (e) {
+    return null;
+  }
+}
+
 // Statements run at startup, in the original order (see index.js).
 export function init() {
   dqMake();
@@ -71,40 +108,5 @@ export function init() {
   });
 
   /* ---- victory: once a day, streak, a fossil, Pokédollars and Shards ---- */
-  HOOKS.progress.unshift((S, rew, win) => {
-    try {
-      if (!win) {
-        return null;
-      }
-      const X = readChallengeState();
-      let m = 0,
-        g = 0;
-      const k = S.sc || '';
-      if (k === 'dq470') {
-        const D = X.dq;
-        if (!(D.d === today() && D.done)) {
-          const yesterdayKey = new Date(Date.now() - 864e5);
-          const h =
-            yesterdayKey.getFullYear() +
-            '-' +
-            String(yesterdayKey.getMonth() + 1).padStart(2, '0') +
-            '-' +
-            String(yesterdayKey.getDate()).padStart(2, '0');
-          D.streak = D.last === h ? D.streak + 1 : 1;
-          D.best = Math.max(D.best, D.streak);
-          D.tot += 1;
-          D.last = today();
-          D.d = today();
-          D.done = true;
-          X.fossils += 1;
-          m += 500 + 100 * Math.min(D.streak, 7);
-          g += 2;
-        }
-        writeChallengeState(X);
-      }
-      return m || g ? [m, g] : null;
-    } catch (e) {
-      return null;
-    }
-  });
+  HOOKS.progress.unshift(onProgress);
 }

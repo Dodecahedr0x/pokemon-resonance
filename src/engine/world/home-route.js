@@ -170,6 +170,45 @@ const WILDW = {
   nuit: ['Spectre', 'Ténèbres', 'Poison', 'Psy'],
 };
 
+function onEncounterClick(e) {
+  const b = e.target.closest('[data-enc]');
+  if (!b) {
+    if (e.target.id === 'enc') {
+      hideEnc();
+    }
+    return;
+  }
+  const a = b.dataset.enc;
+  hideEnc();
+  if (a === 'take' && wildId && !squad.includes(wildId)) {
+    toggle(wildId);
+  }
+  if (a === 'fight' && wildId) {
+    wildScen(wildId, TOD, wildShiny, wildDominant);
+    __set_scSel('sauvage');
+    go('combat');
+    if (!squad.length) {
+      renderPrep();
+      toast('Recrutez au moins un Pokémon avant de combattre.');
+      return;
+    }
+    launch();
+    if (B && !B.noCatch) {
+      log(
+        `Capture : touchez ${BY[wildId].n} pour voir les conditions (PV bas, immobilisé, un allié au contact, 2 Voix, une Ball).`,
+        'sys'
+      );
+    }
+  }
+  if (a === 'dex' && wildId) {
+    go('pokedex');
+    openSheet(wildId);
+  }
+  if (a === 'run') {
+    typeDlg('Vous avez pris la fuite. Les herbes bougent encore…');
+  }
+}
+
 // Startup statements, run in their original order (see index.js).
 export function init() {
   TOD = nowTod();
@@ -211,44 +250,7 @@ export function init() {
     }
   });
 
-  $('#enc').addEventListener('click', e => {
-    const b = e.target.closest('[data-enc]');
-    if (!b) {
-      if (e.target.id === 'enc') {
-        hideEnc();
-      }
-      return;
-    }
-    const a = b.dataset.enc;
-    hideEnc();
-    if (a === 'take' && wildId && !squad.includes(wildId)) {
-      toggle(wildId);
-    }
-    if (a === 'fight' && wildId) {
-      wildScen(wildId, TOD, wildShiny, wildDominant);
-      __set_scSel('sauvage');
-      go('combat');
-      if (!squad.length) {
-        renderPrep();
-        toast('Recrutez au moins un Pokémon avant de combattre.');
-        return;
-      }
-      launch();
-      if (B && !B.noCatch) {
-        log(
-          `Capture : touchez ${BY[wildId].n} pour voir les conditions (PV bas, immobilisé, un allié au contact, 2 Voix, une Ball).`,
-          'sys'
-        );
-      }
-    }
-    if (a === 'dex' && wildId) {
-      go('pokedex');
-      openSheet(wildId);
-    }
-    if (a === 'run') {
-      typeDlg('Vous avez pris la fuite. Les herbes bougent encore…');
-    }
-  });
+  $('#enc').addEventListener('click', onEncounterClick);
 
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape' && !$('#enc').hidden) {

@@ -631,6 +631,97 @@ export const duelTitle = S => {
   return D && D.g ? `Victoire de ${esc(D.names[D.g - 1])}` : 'Match nul';
 };
 
+function onCombat(S, opt, D0) {
+  if (!S.duel433) {
+    return;
+  }
+  const D = S.duel433;
+  // Player 2 is built exactly like Player 1: no HP or Power bonus
+  S.units.forEach(u => {
+    if (u.duelPlayer !== 2) {
+      return;
+    }
+    const n = mkUnit(u.id, 'a', u.pos, u.uid, D0);
+    Object.keys(u).forEach(k => delete u[k]);
+    Object.assign(u, n, { side: 'e', duelPlayer: 2 });
+  });
+  const p2 = S.units.filter(u => u.duelPlayer === 2);
+  let h2 = null;
+  if (p2.length >= 3 && new Set(p2.map(rankOfValue)).size >= 3) {
+    h2 = true;
+    p2.forEach(u => {
+      if (hasNx(u) || hasXp(u)) {
+        u.en = Math.max(u.en || 0, 1);
+      }
+    });
+  }
+  D.status[0] = {
+    syn: S.syn || [],
+    harmonie: S.harmonie || null,
+    resonantUnit: null,
+    acc: null,
+    retrigger: false,
+    lastAtk: null,
+  };
+  D.status[1] = {
+    syn: synOf(p2.map(u => u.id)).map(s => s.k),
+    harmonie: h2,
+    resonantUnit: null,
+    acc: null,
+    retrigger: false,
+    lastAtk: null,
+  };
+  S.noCatch = true;
+  D.ready = 1;
+}
+
+function onDuelClick(e) {
+  const s = e.target.closest('[data-duel-report-s]');
+  if (s && DUEL_STATE) {
+    const k = s.dataset.duelReportS,
+      v = s.dataset.v;
+    DUEL_STATE[k] = k === 'sizeValue' ? (v === '3' ? 3 : 4) : v === 'final' ? 'final' : 'base';
+    duelRender();
+    return;
+  }
+  const p = e.target.closest('[data-duel-report-p]');
+  if (p && DUEL_STATE && DUEL_STATE.e === 'draft') {
+    const id = p.dataset.duelReportP;
+    DUEL_STATE.sel = DUEL_STATE.sel === id ? null : id;
+    duelRender();
+    return;
+  }
+  const b = e.target.closest('[data-duel-report]');
+  if (!b) {
+    return;
+  }
+  const C = DUEL_STATE || duelNew(),
+    a = b.dataset.duelReport;
+  if (a === 'tirer') {
+    C.names = C.names.map((x, i) => duelName(x) || 'Joueur ' + (i + 1));
+    if (C.names[0] === C.names[1]) {
+      C.names[1] += ' 2';
+    }
+    duelDraw(C);
+  } else if (a === 'ok' && C.sel) {
+    duelTake(C, C.sel);
+  } else if (a === 'annuler') {
+    duelCancel(C);
+  } else if (a === 'reglages') {
+    C.e = 'reglages';
+  } else if (a === 'lancer') {
+    return launchDuel(C);
+  }
+  duelRender();
+  const box = a === 'tirer' && document.querySelector('.duel-report-o');
+  if (box) {
+    window.scrollTo({
+      top: Math.max(0, box.getBoundingClientRect().top + window.scrollY - 160),
+      behavior: RM ? 'auto' : 'smooth',
+    });
+  }
+}
+
 // Statements run at startup, in the original order (see index.js).
 export function init() {
   DUEL_STATE = null;
@@ -657,49 +748,7 @@ export function init() {
     S.noCatch = true;
   });
 
-  HOOKS.combat.push((S, opt, D0) => {
-    if (!S.duel433) {
-      return;
-    }
-    const D = S.duel433;
-    // Player 2 is built exactly like Player 1: no HP or Power bonus
-    S.units.forEach(u => {
-      if (u.duelPlayer !== 2) {
-        return;
-      }
-      const n = mkUnit(u.id, 'a', u.pos, u.uid, D0);
-      Object.keys(u).forEach(k => delete u[k]);
-      Object.assign(u, n, { side: 'e', duelPlayer: 2 });
-    });
-    const p2 = S.units.filter(u => u.duelPlayer === 2);
-    let h2 = null;
-    if (p2.length >= 3 && new Set(p2.map(rankOfValue)).size >= 3) {
-      h2 = true;
-      p2.forEach(u => {
-        if (hasNx(u) || hasXp(u)) {
-          u.en = Math.max(u.en || 0, 1);
-        }
-      });
-    }
-    D.status[0] = {
-      syn: S.syn || [],
-      harmonie: S.harmonie || null,
-      resonantUnit: null,
-      acc: null,
-      retrigger: false,
-      lastAtk: null,
-    };
-    D.status[1] = {
-      syn: synOf(p2.map(u => u.id)).map(s => s.k),
-      harmonie: h2,
-      resonantUnit: null,
-      acc: null,
-      retrigger: false,
-      lastAtk: null,
-    };
-    S.noCatch = true;
-    D.ready = 1;
-  });
+  HOOKS.combat.push(onCombat);
 
   document.addEventListener('click', e => {
     const b = e.target.closest('[data-forfeit-dialog]');
@@ -812,52 +861,7 @@ export function init() {
     /* Best effort: failure here is non-fatal. */
   }
 
-  document.addEventListener('click', e => {
-    const s = e.target.closest('[data-duel-report-s]');
-    if (s && DUEL_STATE) {
-      const k = s.dataset.duelReportS,
-        v = s.dataset.v;
-      DUEL_STATE[k] = k === 'sizeValue' ? (v === '3' ? 3 : 4) : v === 'final' ? 'final' : 'base';
-      duelRender();
-      return;
-    }
-    const p = e.target.closest('[data-duel-report-p]');
-    if (p && DUEL_STATE && DUEL_STATE.e === 'draft') {
-      const id = p.dataset.duelReportP;
-      DUEL_STATE.sel = DUEL_STATE.sel === id ? null : id;
-      duelRender();
-      return;
-    }
-    const b = e.target.closest('[data-duel-report]');
-    if (!b) {
-      return;
-    }
-    const C = DUEL_STATE || duelNew(),
-      a = b.dataset.duelReport;
-    if (a === 'tirer') {
-      C.names = C.names.map((x, i) => duelName(x) || 'Joueur ' + (i + 1));
-      if (C.names[0] === C.names[1]) {
-        C.names[1] += ' 2';
-      }
-      duelDraw(C);
-    } else if (a === 'ok' && C.sel) {
-      duelTake(C, C.sel);
-    } else if (a === 'annuler') {
-      duelCancel(C);
-    } else if (a === 'reglages') {
-      C.e = 'reglages';
-    } else if (a === 'lancer') {
-      return launchDuel(C);
-    }
-    duelRender();
-    const box = a === 'tirer' && document.querySelector('.duel-report-o');
-    if (box) {
-      window.scrollTo({
-        top: Math.max(0, box.getBoundingClientRect().top + window.scrollY - 160),
-        behavior: RM ? 'auto' : 'smooth',
-      });
-    }
-  });
+  document.addEventListener('click', onDuelClick);
 
   document.addEventListener('input', e => {
     const x = e.target.closest('[data-duel-report-n]');

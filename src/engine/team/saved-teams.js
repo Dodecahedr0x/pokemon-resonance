@@ -52,6 +52,60 @@ function loadTeam(i) {
   toast(miss.length ? `« ${t.n} » chargée sans ${miss.map(id => BY[id].n).join(', ')}.` : `Équipe « ${t.n} » chargée.`);
 }
 
+function onSavedTeamsClick(e) {
+  const b = e.target.closest('[data-team-save]');
+  if (!b) {
+    return;
+  }
+  const a = b.dataset.teamSave,
+    T = (PROFILE.savedTeams = PROFILE.savedTeams || []);
+  if (a === 'nouv') {
+    TEAM_NAME_EDIT = true;
+    renderSquad();
+    const i = document.getElementById('team-name');
+    if (i) {
+      i.focus();
+    }
+    return;
+  }
+  if (a === 'ok') {
+    const v =
+        ((document.getElementById('team-name') || {}).value || '')
+          .replace(/[<>&"]/g, '')
+          .trim()
+          .slice(0, 20) || `Équipe ${T.length + 1}`,
+      it = {};
+    squad.forEach(id => {
+      const bb = BY[id].base;
+      if (PROFILE.equipment[bb]) {
+        it[bb] = PROFILE.equipment[bb];
+      }
+    });
+    if (squad.length && T.length < 8) {
+      T.push({ n: v, ids: [...squad], it });
+    }
+    TEAM_NAME_EDIT = false;
+    save();
+    toast(`Équipe « ${v} » enregistrée.`);
+  } else if (a === 'charger') {
+    return loadTeam(+b.dataset.i);
+  } else if (a === 'suppr') {
+    if (!b.dataset.ok) {
+      b.dataset.ok = '1';
+      b.textContent = 'Sûr ?';
+      return;
+    }
+    T.splice(+b.dataset.i, 1);
+    save();
+  }
+  renderSquad();
+  try {
+    renderPrep();
+  } catch {
+    /* Best effort: failure here is non-fatal. */
+  }
+}
+
 /* in Battles: the saved teams (#savedSquadsBox) are rendered by React
    (src/screens/combat/prep/Team.jsx) */
 
@@ -59,59 +113,7 @@ function loadTeam(i) {
 export function init() {
   TEAM_NAME_EDIT = false;
 
-  document.addEventListener('click', e => {
-    const b = e.target.closest('[data-team-save]');
-    if (!b) {
-      return;
-    }
-    const a = b.dataset.teamSave,
-      T = (PROFILE.savedTeams = PROFILE.savedTeams || []);
-    if (a === 'nouv') {
-      TEAM_NAME_EDIT = true;
-      renderSquad();
-      const i = document.getElementById('team-name');
-      if (i) {
-        i.focus();
-      }
-      return;
-    }
-    if (a === 'ok') {
-      const v =
-          ((document.getElementById('team-name') || {}).value || '')
-            .replace(/[<>&"]/g, '')
-            .trim()
-            .slice(0, 20) || `Équipe ${T.length + 1}`,
-        it = {};
-      squad.forEach(id => {
-        const bb = BY[id].base;
-        if (PROFILE.equipment[bb]) {
-          it[bb] = PROFILE.equipment[bb];
-        }
-      });
-      if (squad.length && T.length < 8) {
-        T.push({ n: v, ids: [...squad], it });
-      }
-      TEAM_NAME_EDIT = false;
-      save();
-      toast(`Équipe « ${v} » enregistrée.`);
-    } else if (a === 'charger') {
-      return loadTeam(+b.dataset.i);
-    } else if (a === 'suppr') {
-      if (!b.dataset.ok) {
-        b.dataset.ok = '1';
-        b.textContent = 'Sûr ?';
-        return;
-      }
-      T.splice(+b.dataset.i, 1);
-      save();
-    }
-    renderSquad();
-    try {
-      renderPrep();
-    } catch {
-      /* Best effort: failure here is non-fatal. */
-    }
-  });
+  document.addEventListener('click', onSavedTeamsClick);
 
   document.addEventListener('keydown', e => {
     if (e.key === 'Enter' && e.target && e.target.id === 'team-name') {

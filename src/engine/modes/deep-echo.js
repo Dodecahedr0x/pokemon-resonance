@@ -349,41 +349,75 @@ const ECHO_EVENTS = {
   ],
 };
 
-// Statements run at startup, in the original order (see index.js).
-export function init() {
-  HOOKS.combat.push(S => {
-    if (S.sc !== 'echo431') {
+function onCombat(S) {
+  if (S.sc !== 'echo431') {
+    return;
+  }
+  const R = echoRun();
+  if (!R) {
+    return;
+  }
+  S.echo431 = 1;
+  S.relicBag = R.relics.slice();
+  const alive = R.team.filter(t => t[1] > 0),
+    al = S.units.filter(u => u.side === 'a');
+  al.forEach((u, i) => {
+    const t = alive[i];
+    if (!t) {
       return;
     }
+    if (R.pv) {
+      u.mhp = Math.round(u.mhp * (1 + R.pv));
+    }
+    u.hp = Math.max(1, Math.round(u.mhp * t[1]));
+    if (S.relicBag.includes('diapason')) {
+      u.en = Math.min(EMAX, (u.en || 0) + 1);
+    }
+    if (S.relicBag.includes('talisman')) {
+      u.sturdy = true;
+    }
+  });
+  if (S.relicBag.includes('cloche')) {
+    S.vmax += 1;
+    S.voice += 1;
+  }
+}
+
+function onDeepEchoClick(e) {
+  const b = e.target.closest('[data-echo431]');
+  if (!b) {
+    return;
+  }
+  const a = b.dataset.echo431;
+  if (a === 'partir') {
+    echoLeave();
+  } else if (a === 'abandon') {
     const R = echoRun();
     if (!R) {
       return;
     }
-    S.echo431 = 1;
-    S.relicBag = R.relics.slice();
-    const alive = R.team.filter(t => t[1] > 0),
-      al = S.units.filter(u => u.side === 'a');
-    al.forEach((u, i) => {
-      const t = alive[i];
-      if (!t) {
-        return;
-      }
-      if (R.pv) {
-        u.mhp = Math.round(u.mhp * (1 + R.pv));
-      }
-      u.hp = Math.max(1, Math.round(u.mhp * t[1]));
-      if (S.relicBag.includes('diapason')) {
-        u.en = Math.min(EMAX, (u.en || 0) + 1);
-      }
-      if (S.relicBag.includes('talisman')) {
-        u.sturdy = true;
-      }
-    });
-    if (S.relicBag.includes('cloche')) {
-      S.vmax += 1;
-      S.voice += 1;
+    if (!b.dataset.ok) {
+      b.dataset.ok = '1';
+      b.textContent = 'Confirmer l’abandon';
+      return;
     }
-  });
+    const [m, g, f] = echoEnd(R, false);
+    PROFILE.money = Math.min(999999, (PROFILE.money || 0) + m);
+    PROFILE.gems = Math.min(99999, (PROFILE.gems || 0) + g);
+    toast(`Expédition abandonnée à l’étage ${f + 1} : ${fmt(m)} ₽ · ${g} Éclats.`);
+    queueSave();
+    renderWallet();
+    renderCampPage();
+  } else if (a.startsWith('n')) {
+    echoNode(+a.slice(1));
+  } else {
+    echoChoice(a);
+  }
+}
+
+// Statements run at startup, in the original order (see index.js).
+export function init() {
+  HOOKS.combat.push(onCombat);
 
   HOOKS.battleResult.push(r => {
     const e = r.echo431;
@@ -414,35 +448,5 @@ export function init() {
     true
   );
 
-  document.addEventListener('click', e => {
-    const b = e.target.closest('[data-echo431]');
-    if (!b) {
-      return;
-    }
-    const a = b.dataset.echo431;
-    if (a === 'partir') {
-      echoLeave();
-    } else if (a === 'abandon') {
-      const R = echoRun();
-      if (!R) {
-        return;
-      }
-      if (!b.dataset.ok) {
-        b.dataset.ok = '1';
-        b.textContent = 'Confirmer l’abandon';
-        return;
-      }
-      const [m, g, f] = echoEnd(R, false);
-      PROFILE.money = Math.min(999999, (PROFILE.money || 0) + m);
-      PROFILE.gems = Math.min(99999, (PROFILE.gems || 0) + g);
-      toast(`Expédition abandonnée à l’étage ${f + 1} : ${fmt(m)} ₽ · ${g} Éclats.`);
-      queueSave();
-      renderWallet();
-      renderCampPage();
-    } else if (a.startsWith('n')) {
-      echoNode(+a.slice(1));
-    } else {
-      echoChoice(a);
-    }
-  });
+  document.addEventListener('click', onDeepEchoClick);
 }

@@ -58,54 +58,56 @@ export const NEWS_ENTRIES = [
   ],
 ];
 
+function onWhatsNewClick(e) {
+  const b = e.target.closest('[data-news]');
+  if (!b) {
+    return;
+  }
+  const k = b.dataset.news;
+  if (k === 'ok') {
+    PREF.news = '471';
+    savePref();
+    refreshHome();
+    return;
+  }
+  if (k === 'johto') {
+    V4.region = 'johto';
+    V4.mapSel = null;
+    go('carte');
+    renderMap();
+    return;
+  }
+  if (k === 'herbes') {
+    go('carte');
+    const r = $('#route');
+    if (r && r.scrollIntoView) {
+      r.scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'center' });
+    }
+    return;
+  }
+  if (k === 'safari') {
+    V4.region = 'kanto';
+    V4.mapSel = 'safari';
+    go('carte');
+    renderMap();
+    return;
+  }
+  if (k === 'comp') {
+    const c = document.getElementById('v4Comp');
+    if (c && c.scrollIntoView) {
+      c.scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'start' });
+    }
+    return;
+  }
+  if (k === 'amis') {
+    const a = document.getElementById('v4Amis');
+    if (a && a.scrollIntoView) {
+      a.scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'start' });
+    }
+  }
+}
+
 // Statements run at startup, in the original order (see index.js).
 export function init() {
-  document.addEventListener('click', e => {
-    const b = e.target.closest('[data-news]');
-    if (!b) {
-      return;
-    }
-    const k = b.dataset.news;
-    if (k === 'ok') {
-      PREF.news = '471';
-      savePref();
-      refreshHome();
-      return;
-    }
-    if (k === 'johto') {
-      V4.region = 'johto';
-      V4.mapSel = null;
-      go('carte');
-      renderMap();
-      return;
-    }
-    if (k === 'herbes') {
-      go('carte');
-      const r = $('#route');
-      if (r && r.scrollIntoView) {
-        r.scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'center' });
-      }
-      return;
-    }
-    if (k === 'safari') {
-      V4.region = 'kanto';
-      V4.mapSel = 'safari';
-      go('carte');
-      renderMap();
-      return;
-    }
-    if (k === 'comp') {
-      const c = document.getElementById('v4Comp');
-      if (c && c.scrollIntoView) {
-        c.scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'start' });
-      }
-      return;
-    }
-    if (k === 'amis') {
-      const a = document.getElementById('v4Amis');
-      if (a && a.scrollIntoView) {
-        a.scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'start' });
-      }
-    }
-  });
+  document.addEventListener('click', onWhatsNewClick);
 }

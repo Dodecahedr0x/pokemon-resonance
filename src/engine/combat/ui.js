@@ -1159,6 +1159,151 @@ export const poly = (k, c) => {
   return `<polygon points="${pt}" class="${c} gw"/><polygon points="${pt}" class="${c}"/>`;
 };
 
+async function onEvoPickClick(e) {
+  const b = e.target.closest('[data-pick]');
+  if (!b) {
+    if (e.target.id === 'evoPick') {
+      $('#evoPick').hidden = true;
+    }
+    return;
+  }
+  $('#evoPick').hidden = true;
+  const id = b.dataset.pick,
+    u = ui.sel && byUid(B, ui.sel);
+  if (!id || !u || !canAwaken(B, u)) {
+    return;
+  }
+  ui.undo = null;
+  const E = BY[id];
+  ui.busy = true;
+  clearAim();
+  renderAll();
+  await cinematic(u.n, u.t, E.n, E.t, 'a', u.uid);
+  const ev = pAwaken(B, u, id);
+  ui.busy = false;
+  if (!ev) {
+    renderAll();
+    return;
+  }
+  renderAll();
+  playEv(ev);
+  if (B.over) {
+    finish();
+    return;
+  }
+  toast(
+    `${E.n} entre en jeu. ${B.voice >= 2 && !B.retrigger ? 'Relance (2 Voix) pour utiliser ses capacités tout de suite.' : ''}`
+  );
+  renderAll();
+}
+
+function onBattlePanelClick(e) {
+  const b = e.target.closest('button');
+  if (!b || !B || ui.busy || B.over) {
+    return;
+  }
+  const u = ui.sel && byUid(B, ui.sel);
+  if (b.dataset.fc) {
+    ui.selE = null;
+    renderAll();
+    return;
+  }
+  if (b.dataset.tile) {
+    ui.tile = null;
+    renderAll();
+    return;
+  }
+  if (b.dataset.undo && ui.undo) {
+    const U = ui.undo;
+    ui.undo = null;
+    B = JSON.parse(U.snap);
+    LOG.splice(0, Math.max(0, LOG.length - U.log));
+    renderLog();
+    clearAim();
+    ui.sel = U.uid;
+    renderAll();
+    sfx('ui');
+    return;
+  }
+  if (b.dataset.cap) {
+    const al = byUid(B, ui.sel),
+      target = byUid(B, b.dataset.cap);
+    const ev = pCapture(B, al, target);
+    if (ev) {
+      ui.undo = null;
+      ui.selE = null;
+      renderAll();
+      playEv(ev);
+      if (B.over) {
+        finish();
+        return;
+      }
+      autoSel();
+      renderAll();
+    }
+    return;
+  }
+  if (b.dataset.duo && u) {
+    if (ui.mode === 'duo' && ui.duo === b.dataset.duo) {
+      clearAim();
+    } else {
+      clearAim();
+      ui.mode = 'duo';
+      ui.duo = b.dataset.duo;
+    }
+    renderAll();
+    return;
+  }
+  if (b.dataset.evo === 'open' && u) {
+    if (canAwaken(B, u)) {
+      openEvoPick(u);
+    }
+    return;
+  }
+  if (b.dataset.mi != null && u) {
+    const i = +b.dataset.mi;
+    if (ui.mode === 'target' && ui.mi === i) {
+      clearAim();
+    } else {
+      ui.mode = 'target';
+      ui.mi = i;
+      ui.pk = null;
+      ui.pv = null;
+      const m = MV[u.mv[i]];
+      if (m.sh === 'self' || m.sh === 'ring') {
+        ui.pk = uk(u);
+        ui.pv = preview(B, u.uid, i, ui.pk);
+      }
+    }
+    renderAll();
+    return;
+  }
+  if (b.dataset.pv === 'ok') {
+    confirmAct();
+    return;
+  }
+  if (b.dataset.pv === 'no') {
+    clearAim();
+    renderAll();
+    return;
+  }
+  if (b.dataset.vx === 'dodge' && u) {
+    ui.mode = ui.mode === 'dodge' ? null : 'dodge';
+    ui.pv = null;
+    ui.pk = null;
+    renderAll();
+    return;
+  }
+  if (b.dataset.vx === 'relance' && u) {
+    const ev = pReroll(B, u);
+    if (ev) {
+      ui.undo = null;
+      renderAll();
+      playEv(ev);
+    }
+  }
+}
+
 // Statements run at startup, in the original order (see index.js).
 export function init() {
   VERT = false;
@@ -1188,43 +1333,7 @@ export function init() {
 
   $('#bLaunch').addEventListener('click', () => launch());
 
-  $('#evoPick').addEventListener('click', async e => {
-    const b = e.target.closest('[data-pick]');
-    if (!b) {
-      if (e.target.id === 'evoPick') {
-        $('#evoPick').hidden = true;
-      }
-      return;
-    }
-    $('#evoPick').hidden = true;
-    const id = b.dataset.pick,
-      u = ui.sel && byUid(B, ui.sel);
-    if (!id || !u || !canAwaken(B, u)) {
-      return;
-    }
-    ui.undo = null;
-    const E = BY[id];
-    ui.busy = true;
-    clearAim();
-    renderAll();
-    await cinematic(u.n, u.t, E.n, E.t, 'a', u.uid);
-    const ev = pAwaken(B, u, id);
-    ui.busy = false;
-    if (!ev) {
-      renderAll();
-      return;
-    }
-    renderAll();
-    playEv(ev);
-    if (B.over) {
-      finish();
-      return;
-    }
-    toast(
-      `${E.n} entre en jeu. ${B.voice >= 2 && !B.retrigger ? 'Relance (2 Voix) pour utiliser ses capacités tout de suite.' : ''}`
-    );
-    renderAll();
-  });
+  $('#evoPick').addEventListener('click', onEvoPickClick);
 
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape' && !$('#evoPick').hidden) {
@@ -1240,112 +1349,7 @@ export function init() {
     tapTile(p.dataset.k);
   });
 
-  $('#bPanel').addEventListener('click', e => {
-    const b = e.target.closest('button');
-    if (!b || !B || ui.busy || B.over) {
-      return;
-    }
-    const u = ui.sel && byUid(B, ui.sel);
-    if (b.dataset.fc) {
-      ui.selE = null;
-      renderAll();
-      return;
-    }
-    if (b.dataset.tile) {
-      ui.tile = null;
-      renderAll();
-      return;
-    }
-    if (b.dataset.undo && ui.undo) {
-      const U = ui.undo;
-      ui.undo = null;
-      B = JSON.parse(U.snap);
-      LOG.splice(0, Math.max(0, LOG.length - U.log));
-      renderLog();
-      clearAim();
-      ui.sel = U.uid;
-      renderAll();
-      sfx('ui');
-      return;
-    }
-    if (b.dataset.cap) {
-      const al = byUid(B, ui.sel),
-        target = byUid(B, b.dataset.cap);
-      const ev = pCapture(B, al, target);
-      if (ev) {
-        ui.undo = null;
-        ui.selE = null;
-        renderAll();
-        playEv(ev);
-        if (B.over) {
-          finish();
-          return;
-        }
-        autoSel();
-        renderAll();
-      }
-      return;
-    }
-    if (b.dataset.duo && u) {
-      if (ui.mode === 'duo' && ui.duo === b.dataset.duo) {
-        clearAim();
-      } else {
-        clearAim();
-        ui.mode = 'duo';
-        ui.duo = b.dataset.duo;
-      }
-      renderAll();
-      return;
-    }
-    if (b.dataset.evo === 'open' && u) {
-      if (canAwaken(B, u)) {
-        openEvoPick(u);
-      }
-      return;
-    }
-    if (b.dataset.mi != null && u) {
-      const i = +b.dataset.mi;
-      if (ui.mode === 'target' && ui.mi === i) {
-        clearAim();
-      } else {
-        ui.mode = 'target';
-        ui.mi = i;
-        ui.pk = null;
-        ui.pv = null;
-        const m = MV[u.mv[i]];
-        if (m.sh === 'self' || m.sh === 'ring') {
-          ui.pk = uk(u);
-          ui.pv = preview(B, u.uid, i, ui.pk);
-        }
-      }
-      renderAll();
-      return;
-    }
-    if (b.dataset.pv === 'ok') {
-      confirmAct();
-      return;
-    }
-    if (b.dataset.pv === 'no') {
-      clearAim();
-      renderAll();
-      return;
-    }
-    if (b.dataset.vx === 'dodge' && u) {
-      ui.mode = ui.mode === 'dodge' ? null : 'dodge';
-      ui.pv = null;
-      ui.pk = null;
-      renderAll();
-      return;
-    }
-    if (b.dataset.vx === 'relance' && u) {
-      const ev = pReroll(B, u);
-      if (ev) {
-        ui.undo = null;
-        renderAll();
-        playEv(ev);
-      }
-    }
-  });
+  $('#bPanel').addEventListener('click', onBattlePanelClick);
 
   ['#bPlE', '#bPlA'].forEach(s =>
     $(s).addEventListener('click', e => {

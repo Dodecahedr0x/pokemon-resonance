@@ -49,7 +49,9 @@ export function fitPhoneBattle() {
 
 let viewWidth;
 
-let forgetWidth;
+const forgetWidth = () => {
+  boardWidth = 0;
+};
 
 // Startup statements, run in their original order (see index.js).
 export function init() {
@@ -68,9 +70,6 @@ export function init() {
         fitPhoneBattle();
       })
     : null;
-  forgetWidth = () => {
-    boardWidth = 0;
-  };
   // on capture: the width is forgotten before the listeners below recalibrate
   window.addEventListener('resize', forgetWidth, true);
   window.addEventListener('orientationchange', forgetWidth, true);

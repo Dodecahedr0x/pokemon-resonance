@@ -164,6 +164,48 @@ const BUILDINGS = {
   },
 };
 
+function onProgress(S, rew) {
+  const D = SCEN[S.sc] || {};
+  if (!campOpen() || D.tuto || D.tower) {
+    return null;
+  }
+  // Infirmary: resting Pokémon recover faster
+  const inf = level('inf');
+  if (inf) {
+    const used = S.units.filter(u => u.side === 'a').map(u => u.sp);
+    for (const id in PROFILE.fatigue) {
+      if (used.includes(id)) {
+        continue;
+      }
+      PROFILE.fatigue[id] = Math.max(0, PROFILE.fatigue[id] - inf * 10);
+      if (!PROFILE.fatigue[id]) {
+        delete PROFILE.fatigue[id];
+      }
+    }
+  }
+  // Daycare: an egg
+  const pe = level('pens');
+  if (pe) {
+    PROFILE.camp.oeuf = (PROFILE.camp.oeuf || 0) + 1;
+    if (PROFILE.camp.oeuf >= [8, 6, 4][pe - 1] && !hatchDaycareEgg(rew)) {
+      // without a pair: an unknown family (v4.10); with a pair: their egg (v4.16)
+      const pool = MON.filter(
+        m => m.st === 1 && !m.leg && !m.isEnemy && m.base === m.id && !PROFILE.box.includes(m.id)
+      );
+      if (pool.length) {
+        const m = pool[Math.floor(Math.random() * pool.length)];
+        PROFILE.box.push(m.id);
+        if (!PROFILE.dex.includes(m.id)) {
+          PROFILE.dex.push(m.id);
+        }
+        PROFILE.camp.oeuf = 0;
+        rew.oeuf = m.id;
+      }
+    }
+  }
+  return null;
+}
+
 // Startup statements, run in their original order (see index.js).
 export function init() {
   /* ---------- the #v4Camp panel is rendered by React (Camp page) ---------- */
@@ -185,47 +227,7 @@ export function init() {
         .forEach(u => hasNx(u) && (u.en = Math.max(u.en, 1)));
     }
   });
-  HOOKS.progress.push((S, rew) => {
-    const D = SCEN[S.sc] || {};
-    if (!campOpen() || D.tuto || D.tower) {
-      return null;
-    }
-    // Infirmary: resting Pokémon recover faster
-    const inf = level('inf');
-    if (inf) {
-      const used = S.units.filter(u => u.side === 'a').map(u => u.sp);
-      for (const id in PROFILE.fatigue) {
-        if (used.includes(id)) {
-          continue;
-        }
-        PROFILE.fatigue[id] = Math.max(0, PROFILE.fatigue[id] - inf * 10);
-        if (!PROFILE.fatigue[id]) {
-          delete PROFILE.fatigue[id];
-        }
-      }
-    }
-    // Daycare: an egg
-    const pe = level('pens');
-    if (pe) {
-      PROFILE.camp.oeuf = (PROFILE.camp.oeuf || 0) + 1;
-      if (PROFILE.camp.oeuf >= [8, 6, 4][pe - 1] && !hatchDaycareEgg(rew)) {
-        // without a pair: an unknown family (v4.10); with a pair: their egg (v4.16)
-        const pool = MON.filter(
-          m => m.st === 1 && !m.leg && !m.isEnemy && m.base === m.id && !PROFILE.box.includes(m.id)
-        );
-        if (pool.length) {
-          const m = pool[Math.floor(Math.random() * pool.length)];
-          PROFILE.box.push(m.id);
-          if (!PROFILE.dex.includes(m.id)) {
-            PROFILE.dex.push(m.id);
-          }
-          PROFILE.camp.oeuf = 0;
-          rew.oeuf = m.id;
-        }
-      }
-    }
-    return null;
-  });
+  HOOKS.progress.push(onProgress);
   HOOKS.battleResult.push(r =>
     r.oeuf
       ? `<div class="res-l"><h4>Pension</h4><div class="rl">${medal(BY[r.oeuf].t)}<span>Un œuf a éclos : ${BY[r.oeuf].n} rejoint votre Box !</span><b>🥚</b></div></div>`

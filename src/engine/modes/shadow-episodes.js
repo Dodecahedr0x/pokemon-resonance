@@ -7,9 +7,17 @@ import { routeEvent, pickRouteChoice } from '../world/route-events.js';
 
 const KEY = 'res-shadow-story';
 
-let readValue;
+const readValue = () => {
+  try {
+    return Object.assign({ stepOf: 0 }, JSON.parse(localStorage.getItem(KEY)));
+  } catch (e) {
+    return { stepOf: 0 };
+  }
+};
 
-let write;
+const write = o => {
+  writeLS(KEY, o);
+};
 
 const has = v => (Array.isArray(v) ? v.length > 0 : !!v);
 
@@ -105,26 +113,15 @@ const EPS = [
   },
 ];
 
-let current;
+const current = () => {
+  const e = readValue().stepOf;
+  return e < EPS.length && EPS[e].ok() ? EPS[e] : null;
+};
 
 let wasEpisode;
 
 // Statements run at startup, in the original order (see index.js).
 export function init() {
-  readValue = () => {
-    try {
-      return Object.assign({ stepOf: 0 }, JSON.parse(localStorage.getItem(KEY)));
-    } catch (e) {
-      return { stepOf: 0 };
-    }
-  };
-  write = o => {
-    writeLS(KEY, o);
-  };
-  current = () => {
-    const e = readValue().stepOf;
-    return e < EPS.length && EPS[e].ok() ? EPS[e] : null;
-  };
   // the current episode replaces the day's encounter; choosing it advances the story
   HOOKS.routeEncounter.push(r => {
     const E = current();

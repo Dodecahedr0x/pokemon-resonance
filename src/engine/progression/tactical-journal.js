@@ -132,63 +132,65 @@ const CATEGORY_NAMES = {
   entrainement: 'Entraînement',
 };
 
+function onProgress(S, rew, win) {
+  const D = SCEN[S.sc] || {};
+  if (D.tuto) {
+    return null;
+  }
+  const J0 = S.stats.journalStats || { d: {}, t: {}, k: {} },
+    al = S.units.filter(u => u.side === 'a');
+  const rows = al.map(u => ({
+    uid: u.uid,
+    id: u.id,
+    sp: u.sp,
+    d: J0.d[u.uid] || 0,
+    t: J0.t[u.uid] || 0,
+    k: J0.k[u.uid] || 0,
+    ko: u.ko ? 1 : 0,
+  }));
+  const sc = r => r.d + r.k * 40 - r.ko * 15,
+    mvp = rows.length ? rows.reduce((a, b) => (sc(b) > sc(a) ? b : a)) : null;
+  rew.journalStats = { rows, mvp: mvp && mvp.d > 0 ? mvp.uid : null };
+  // cumulative statistics
+  const J = (PROFILE.tacticsJournal = PROFILE.tacticsJournal || log0430());
+  J.n++;
+  if (win) {
+    J.w++;
+    J.runStreak++;
+    J.best = Math.max(J.best, J.runStreak);
+  } else {
+    J.runStreak = 0;
+  }
+  rows.forEach(r => {
+    J.dealt += r.d;
+    J.taken += r.t;
+    J.ko += r.k;
+    if (BY[r.sp]) {
+      J.use[r.sp] = (J.use[r.sp] || 0) + 1;
+    }
+  });
+  if (mvp && mvp.d > 0 && BY[mvp.sp]) {
+    J.mvp[mvp.sp] = (J.mvp[mvp.sp] || 0) + 1;
+  }
+  const c = scenarioCategory(S.sc, D);
+  J.category[c] = J.category[c] || [0, 0];
+  J.category[c][win ? 0 : 1]++;
+  J.last.push([
+    (SCEN[S.sc] && SCEN[S.sc].n) || S.sc,
+    win ? 1 : 0,
+    S.rank || '',
+    S.round || 0,
+    mvp && mvp.d > 0 ? mvp.sp : '',
+  ]);
+  if (J.last.length > 10) {
+    J.last = J.last.slice(-10);
+  }
+  return null;
+}
+
 // Startup statements, run in their original order (see index.js).
 export function init() {
-  HOOKS.progress.push((S, rew, win) => {
-    const D = SCEN[S.sc] || {};
-    if (D.tuto) {
-      return null;
-    }
-    const J0 = S.stats.journalStats || { d: {}, t: {}, k: {} },
-      al = S.units.filter(u => u.side === 'a');
-    const rows = al.map(u => ({
-      uid: u.uid,
-      id: u.id,
-      sp: u.sp,
-      d: J0.d[u.uid] || 0,
-      t: J0.t[u.uid] || 0,
-      k: J0.k[u.uid] || 0,
-      ko: u.ko ? 1 : 0,
-    }));
-    const sc = r => r.d + r.k * 40 - r.ko * 15,
-      mvp = rows.length ? rows.reduce((a, b) => (sc(b) > sc(a) ? b : a)) : null;
-    rew.journalStats = { rows, mvp: mvp && mvp.d > 0 ? mvp.uid : null };
-    // cumulative statistics
-    const J = (PROFILE.tacticsJournal = PROFILE.tacticsJournal || log0430());
-    J.n++;
-    if (win) {
-      J.w++;
-      J.runStreak++;
-      J.best = Math.max(J.best, J.runStreak);
-    } else {
-      J.runStreak = 0;
-    }
-    rows.forEach(r => {
-      J.dealt += r.d;
-      J.taken += r.t;
-      J.ko += r.k;
-      if (BY[r.sp]) {
-        J.use[r.sp] = (J.use[r.sp] || 0) + 1;
-      }
-    });
-    if (mvp && mvp.d > 0 && BY[mvp.sp]) {
-      J.mvp[mvp.sp] = (J.mvp[mvp.sp] || 0) + 1;
-    }
-    const c = scenarioCategory(S.sc, D);
-    J.category[c] = J.category[c] || [0, 0];
-    J.category[c][win ? 0 : 1]++;
-    J.last.push([
-      (SCEN[S.sc] && SCEN[S.sc].n) || S.sc,
-      win ? 1 : 0,
-      S.rank || '',
-      S.round || 0,
-      mvp && mvp.d > 0 ? mvp.sp : '',
-    ]);
-    if (J.last.length > 10) {
-      J.last = J.last.slice(-10);
-    }
-    return null;
-  });
+  HOOKS.progress.push(onProgress);
 
   HOOKS.battleResult.push(r => {
     const j = r.journalStats;

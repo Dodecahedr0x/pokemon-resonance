@@ -90,6 +90,51 @@ export function renderCompanionBox() {
   paintOverlay('comp', { L: L.map(m => m.id), cur: activeCompanionId(), bonus: COMP_BONUS });
 }
 
+function onCompanionPokemonClick(e) {
+  const b = e.target.closest('[data-comp]');
+  if (b) {
+    const k = b.dataset.comp;
+    if (k === 'choisir') {
+      renderCompanionBox();
+      $('#compBox').hidden = false;
+    } else if (k === 'x') {
+      $('#compBox').hidden = true;
+    } else if (k === 'caresser' && activeCompanionId() && PROFILE.comp.j !== today()) {
+      PROFILE.comp.j = today();
+      const up = gainCompanionAffinity(3);
+      sfx('ui');
+      vibe(25);
+      toast(
+        up
+          ? `${BY[activeCompanionId()].n} est ravi : ${up} cœur${up > 1 ? 's' : ''} !`
+          : `${BY[activeCompanionId()].n} ferme les yeux de bonheur.`
+      );
+      queueSave();
+      refreshHome();
+    }
+    return;
+  }
+  const p = e.target.closest('[data-comp-p]');
+  if (p) {
+    const id = p.dataset.compP;
+    if (PROFILE.comp.id !== id) {
+      PROFILE.comp = {
+        id,
+        aff: PROFILE.comp.id && BY[PROFILE.comp.id] && BY[PROFILE.comp.id].base === BY[id].base ? PROFILE.comp.aff : 0,
+        j: PROFILE.comp.j,
+      };
+    }
+    $('#compBox').hidden = true;
+    toast(`${BY[id].n} devient votre compagnon.`);
+    queueSave();
+    refreshHome();
+    return;
+  }
+  if (e.target.id === 'compBox') {
+    $('#compBox').hidden = true;
+  }
+}
+
 // Statements run at startup, in the original order (see index.js).
 export function init() {
   HOOKS.combat.push(S => {
@@ -161,51 +206,7 @@ export function init() {
 
   // #compBox: rendered by React (src/screens/overlays/CompBox.jsx)
 
-  document.addEventListener('click', e => {
-    const b = e.target.closest('[data-comp]');
-    if (b) {
-      const k = b.dataset.comp;
-      if (k === 'choisir') {
-        renderCompanionBox();
-        $('#compBox').hidden = false;
-      } else if (k === 'x') {
-        $('#compBox').hidden = true;
-      } else if (k === 'caresser' && activeCompanionId() && PROFILE.comp.j !== today()) {
-        PROFILE.comp.j = today();
-        const up = gainCompanionAffinity(3);
-        sfx('ui');
-        vibe(25);
-        toast(
-          up
-            ? `${BY[activeCompanionId()].n} est ravi : ${up} cœur${up > 1 ? 's' : ''} !`
-            : `${BY[activeCompanionId()].n} ferme les yeux de bonheur.`
-        );
-        queueSave();
-        refreshHome();
-      }
-      return;
-    }
-    const p = e.target.closest('[data-comp-p]');
-    if (p) {
-      const id = p.dataset.compP;
-      if (PROFILE.comp.id !== id) {
-        PROFILE.comp = {
-          id,
-          aff:
-            PROFILE.comp.id && BY[PROFILE.comp.id] && BY[PROFILE.comp.id].base === BY[id].base ? PROFILE.comp.aff : 0,
-          j: PROFILE.comp.j,
-        };
-      }
-      $('#compBox').hidden = true;
-      toast(`${BY[id].n} devient votre compagnon.`);
-      queueSave();
-      refreshHome();
-      return;
-    }
-    if (e.target.id === 'compBox') {
-      $('#compBox').hidden = true;
-    }
-  });
+  document.addEventListener('click', onCompanionPokemonClick);
 
   /* ---------- achievements ---------- */
   ACHIEVEMENTS.push({

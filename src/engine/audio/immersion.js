@@ -326,6 +326,53 @@ const TYPE_SOUNDS = {
   Fée: () => [1318, 1760, 2093, 2637].forEach((f, i) => tone(f, i * 0.07, 0.24, 'sine', 0.04)),
 };
 
+function onJournal(ev) {
+  let steps = 0,
+    boom = false,
+    kos = 0,
+    low = false;
+  ev.forEach(e => {
+    if (e.e === 'use') {
+      playTypeSfx(e.ty);
+      if (e.k != null) {
+        spawnParticles(e.k, e.ty);
+      }
+    } else if (e.e === 'mv') {
+      if (steps++ < 2) {
+        playStep();
+      }
+    } else if (e.e === 'dmg') {
+      const u = byUid(B, e.u);
+      if (u && u.side === 'a' && !u.ko && u.hp / u.mhp <= 0.25 && !u._lowHpAlerted) {
+        u._lowHpAlerted = 1;
+        low = true;
+      }
+      if (u && e.v >= u.mhp * 0.35) {
+        boom = true;
+      }
+    } else if (e.e === 'ko') {
+      kos++;
+      playCry(byUid(B, e.u), true);
+      boom = true;
+    } else if (e.e === 'msg' && /super efficace/.test(e.s || '')) {
+      boom = true;
+      vibe([18, 30, 40]);
+    } else if (e.e === 'catch') {
+      vibe([30, 40, 30, 40, 90]);
+    } else if (e.e === 'rx' || e.e === 'reso') {
+      vibe(22);
+    }
+  });
+  if (boom) {
+    screenShake(kos > 0);
+  }
+  if (low) {
+    setTimeout(lowHpAlarm, 380);
+    vibe([30, 60, 30]);
+  }
+  adaptMusicTempo();
+}
+
 // Statements run at startup, in the original order (see index.js).
 export function init() {
   setInterval(() => {
@@ -337,52 +384,7 @@ export function init() {
       /* Best effort: failure here is non-fatal. */
     }
   }, 1500);
-  HOOKS.journal.push(ev => {
-    let steps = 0,
-      boom = false,
-      kos = 0,
-      low = false;
-    ev.forEach(e => {
-      if (e.e === 'use') {
-        playTypeSfx(e.ty);
-        if (e.k != null) {
-          spawnParticles(e.k, e.ty);
-        }
-      } else if (e.e === 'mv') {
-        if (steps++ < 2) {
-          playStep();
-        }
-      } else if (e.e === 'dmg') {
-        const u = byUid(B, e.u);
-        if (u && u.side === 'a' && !u.ko && u.hp / u.mhp <= 0.25 && !u._lowHpAlerted) {
-          u._lowHpAlerted = 1;
-          low = true;
-        }
-        if (u && e.v >= u.mhp * 0.35) {
-          boom = true;
-        }
-      } else if (e.e === 'ko') {
-        kos++;
-        playCry(byUid(B, e.u), true);
-        boom = true;
-      } else if (e.e === 'msg' && /super efficace/.test(e.s || '')) {
-        boom = true;
-        vibe([18, 30, 40]);
-      } else if (e.e === 'catch') {
-        vibe([30, 40, 30, 40, 90]);
-      } else if (e.e === 'rx' || e.e === 'reso') {
-        vibe(22);
-      }
-    });
-    if (boom) {
-      screenShake(kos > 0);
-    }
-    if (low) {
-      setTimeout(lowHpAlarm, 380);
-      vibe([30, 60, 30]);
-    }
-    adaptMusicTempo();
-  });
+  HOOKS.journal.push(onJournal);
   /* ---------- 4. the attack's type in the log (for sound and particles) ---------- */
   /* (resolveMove adds « ty » to the « use » event: see the source patch) */
 

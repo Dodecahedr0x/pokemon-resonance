@@ -92,6 +92,42 @@ function updateChallenges() {
   renderWallet();
 }
 
+function onProgress(S, rew, win) {
+  const D = SCEN[S.sc] || {};
+  let g = 0;
+  const df = D.tuto || D.tower ? [] : activeChallenges();
+  if (df.length) {
+    rew.challenges = df;
+    if (win) {
+      const bonus = df.length * (rew.badgeNew ? 4 : 1);
+      g += bonus;
+      rew.challengeBonus = bonus;
+    }
+    if (df.includes('nuzlocke')) {
+      PROFILE.graves = PROFILE.graves || [];
+      const deadList = S.units.filter(u => u.side === 'a' && u.ko && BY[u.sp]).map(u => BY[u.sp].base);
+      deadList.forEach(b => {
+        if (!PROFILE.graves.includes(b)) {
+          PROFILE.graves.push(b);
+          (rew.graves = rew.graves || []).push(b);
+        }
+      });
+      if (rew.graves) {
+        __set_squad(squad.filter(id => !isFallen(id)));
+        setTimeout(() => {
+          try {
+            save();
+            renderSquad();
+          } catch {
+            /* Best effort: failure here is non-fatal. */
+          }
+        }, 0);
+      }
+    }
+  }
+  return g ? [0, g] : null;
+}
+
 // Statements run at startup, in the original order (see index.js).
 export function init() {
   HOOKS.creation.push((S, opt, D0) => {
@@ -100,41 +136,7 @@ export function init() {
     }
   });
 
-  HOOKS.progress.push((S, rew, win) => {
-    const D = SCEN[S.sc] || {};
-    let g = 0;
-    const df = D.tuto || D.tower ? [] : activeChallenges();
-    if (df.length) {
-      rew.challenges = df;
-      if (win) {
-        const bonus = df.length * (rew.badgeNew ? 4 : 1);
-        g += bonus;
-        rew.challengeBonus = bonus;
-      }
-      if (df.includes('nuzlocke')) {
-        PROFILE.graves = PROFILE.graves || [];
-        const deadList = S.units.filter(u => u.side === 'a' && u.ko && BY[u.sp]).map(u => BY[u.sp].base);
-        deadList.forEach(b => {
-          if (!PROFILE.graves.includes(b)) {
-            PROFILE.graves.push(b);
-            (rew.graves = rew.graves || []).push(b);
-          }
-        });
-        if (rew.graves) {
-          __set_squad(squad.filter(id => !isFallen(id)));
-          setTimeout(() => {
-            try {
-              save();
-              renderSquad();
-            } catch {
-              /* Best effort: failure here is non-fatal. */
-            }
-          }, 0);
-        }
-      }
-    }
-    return g ? [0, g] : null;
-  });
+  HOOKS.progress.push(onProgress);
 
   HOOKS.battleResult.push(r =>
     r.challenges

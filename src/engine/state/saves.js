@@ -693,6 +693,183 @@ const readText = f =>
         fr.readAsText(f);
       });
 
+function onSavesOverlayClick(e) {
+  if (e.target.id === 'saves') {
+    closeSaves();
+    return;
+  }
+  const r = e.target.closest('[data-resume]');
+  if (r) {
+    closeSaves();
+    resumeBattle();
+    return;
+  }
+  const b = e.target.closest('[data-sv]');
+  if (!b) {
+    return;
+  }
+  const a = b.dataset.sv,
+    k = b.dataset.k;
+  if (a === 'close') {
+    closeSaves();
+    return;
+  }
+  if (a === 'export') {
+    exportSave();
+    return;
+  }
+  if (a === 'copycode') {
+    autoSave();
+    SV.code = { mode: 'copy', text: saveCode(snapshot()) };
+    renderSaves();
+    const t = $('#svCode');
+    if (t) {
+      t.focus();
+      t.select();
+    }
+    try {
+      navigator.clipboard.writeText(SV.code.text).then(
+        () => toast('Code de sauvegarde copié.'),
+        () => {}
+      );
+    } catch {
+      /* Best effort: failure here is non-fatal. */
+    }
+    return;
+  }
+  if (a === 'pastecode') {
+    SV.code = { mode: 'paste' };
+    renderSaves();
+    const t = $('#svCode');
+    if (t) {
+      t.focus();
+    }
+    return;
+  }
+  if (a === 'closecode') {
+    SV.code = null;
+    renderSaves();
+    return;
+  }
+  if (a === 'importcode') {
+    let s = null;
+    try {
+      s = readCode(($('#svCode') || {}).value);
+    } catch {
+      /* Best effort: failure here is non-fatal. */
+    }
+    if (importData(s)) {
+      SV.code = null;
+    }
+    return;
+  }
+  if (a === 'no') {
+    SV.confirm = null;
+    renderSaves();
+    return;
+  }
+  if (a === 'ok' && SV.confirm) {
+    const c = SV.confirm;
+    SV.confirm = null;
+    if (c.k === 'reset') {
+      newGame();
+    } else if (c.a === 'load') {
+      loadSlot(c.k);
+    } else if (c.a === 'put') {
+      putSlot(c.k);
+      renderSaves();
+    } else if (c.a === 'del') {
+      delSlot(c.k);
+      renderSaves();
+    }
+    return;
+  }
+  if (a === 'put' && !SV.local[k]) {
+    putSlot(k);
+    renderSaves();
+    return;
+  }
+  if (a === 'reset') {
+    SV.confirm = { k: 'reset', a: 'reset' };
+    renderSaves();
+    return;
+  }
+  if (a === 'camp') {
+    SV.confirm = null;
+    closeSaves();
+    openStarter();
+    return;
+  }
+  if (a === 'set') {
+    const f = b.dataset.f,
+      v = b.dataset.v;
+    if (f === 'diff') {
+      PROFILE.diff = v;
+      queueSave();
+      renderHome();
+    } else {
+      PREF[f] = !PREF[f];
+      savePref();
+      if (f === 'sound' && PREF.sound) {
+        sfx('ui');
+      }
+      if (f === 'vibe' && PREF.vibe) {
+        vibe(30);
+      }
+    }
+    renderSaves();
+    return;
+  }
+  if (a === 'tuto') {
+    closeSaves();
+    __set_scSel('tuto');
+    go('combat');
+    renderPrep();
+    if (squad.length) {
+      launch();
+    }
+    return;
+  }
+  if (['load', 'put', 'del'].includes(a)) {
+    SV.confirm = { k, a };
+    renderSaves();
+  }
+}
+
+function onImportFileClick(e) {
+  const b = e.target.closest('[data-sv="importfile"]');
+  if (!b) {
+    return;
+  }
+  const i = $('#svFile');
+  if (!i) {
+    return;
+  }
+  let opened = false;
+  const mark = () => (opened = true);
+  window.addEventListener('blur', mark, { once: true });
+  document.addEventListener('visibilitychange', mark, { once: true });
+  i.addEventListener('change', mark, { once: true });
+  i.addEventListener('cancel', mark, { once: true });
+  try {
+    i.click();
+  } catch {
+    /* Best effort: failure here is non-fatal. */
+  }
+  setTimeout(() => {
+    if (opened) {
+      return;
+    }
+    toast('Le sélecteur de fichiers est bloqué ici : collez le texte de votre sauvegarde ci-dessous.');
+    SV.code = { mode: 'paste' };
+    renderSaves();
+    const t = $('#svCode');
+    if (t) {
+      t.focus();
+    }
+  }, 1400);
+}
+
 // Instructions run at startup, in the original order (see index.js).
 export function init() {
   /* ===================== SAVES ===================== */
@@ -728,148 +905,7 @@ export function init() {
     }
   });
 
-  $('#saves').addEventListener('click', e => {
-    if (e.target.id === 'saves') {
-      closeSaves();
-      return;
-    }
-    const r = e.target.closest('[data-resume]');
-    if (r) {
-      closeSaves();
-      resumeBattle();
-      return;
-    }
-    const b = e.target.closest('[data-sv]');
-    if (!b) {
-      return;
-    }
-    const a = b.dataset.sv,
-      k = b.dataset.k;
-    if (a === 'close') {
-      closeSaves();
-      return;
-    }
-    if (a === 'export') {
-      exportSave();
-      return;
-    }
-    if (a === 'copycode') {
-      autoSave();
-      SV.code = { mode: 'copy', text: saveCode(snapshot()) };
-      renderSaves();
-      const t = $('#svCode');
-      if (t) {
-        t.focus();
-        t.select();
-      }
-      try {
-        navigator.clipboard.writeText(SV.code.text).then(
-          () => toast('Code de sauvegarde copié.'),
-          () => {}
-        );
-      } catch {
-        /* Best effort: failure here is non-fatal. */
-      }
-      return;
-    }
-    if (a === 'pastecode') {
-      SV.code = { mode: 'paste' };
-      renderSaves();
-      const t = $('#svCode');
-      if (t) {
-        t.focus();
-      }
-      return;
-    }
-    if (a === 'closecode') {
-      SV.code = null;
-      renderSaves();
-      return;
-    }
-    if (a === 'importcode') {
-      let s = null;
-      try {
-        s = readCode(($('#svCode') || {}).value);
-      } catch {
-        /* Best effort: failure here is non-fatal. */
-      }
-      if (importData(s)) {
-        SV.code = null;
-      }
-      return;
-    }
-    if (a === 'no') {
-      SV.confirm = null;
-      renderSaves();
-      return;
-    }
-    if (a === 'ok' && SV.confirm) {
-      const c = SV.confirm;
-      SV.confirm = null;
-      if (c.k === 'reset') {
-        newGame();
-      } else if (c.a === 'load') {
-        loadSlot(c.k);
-      } else if (c.a === 'put') {
-        putSlot(c.k);
-        renderSaves();
-      } else if (c.a === 'del') {
-        delSlot(c.k);
-        renderSaves();
-      }
-      return;
-    }
-    if (a === 'put' && !SV.local[k]) {
-      putSlot(k);
-      renderSaves();
-      return;
-    }
-    if (a === 'reset') {
-      SV.confirm = { k: 'reset', a: 'reset' };
-      renderSaves();
-      return;
-    }
-    if (a === 'camp') {
-      SV.confirm = null;
-      closeSaves();
-      openStarter();
-      return;
-    }
-    if (a === 'set') {
-      const f = b.dataset.f,
-        v = b.dataset.v;
-      if (f === 'diff') {
-        PROFILE.diff = v;
-        queueSave();
-        renderHome();
-      } else {
-        PREF[f] = !PREF[f];
-        savePref();
-        if (f === 'sound' && PREF.sound) {
-          sfx('ui');
-        }
-        if (f === 'vibe' && PREF.vibe) {
-          vibe(30);
-        }
-      }
-      renderSaves();
-      return;
-    }
-    if (a === 'tuto') {
-      closeSaves();
-      __set_scSel('tuto');
-      go('combat');
-      renderPrep();
-      if (squad.length) {
-        launch();
-      }
-      return;
-    }
-    if (['load', 'put', 'del'].includes(a)) {
-      SV.confirm = { k, a };
-      renderSaves();
-    }
-  });
+  $('#saves').addEventListener('click', onSavesOverlayClick);
 
   $('#saves').addEventListener('change', e => {
     if (e.target.id === 'svFile') {
@@ -878,39 +914,7 @@ export function init() {
   });
 
   /* In some apps the file picker does not open. The button detects this and opens the "Paste a code" area (the .json file's text works there too). */
-  document.addEventListener('click', e => {
-    const b = e.target.closest('[data-sv="importfile"]');
-    if (!b) {
-      return;
-    }
-    const i = $('#svFile');
-    if (!i) {
-      return;
-    }
-    let opened = false;
-    const mark = () => (opened = true);
-    window.addEventListener('blur', mark, { once: true });
-    document.addEventListener('visibilitychange', mark, { once: true });
-    i.addEventListener('change', mark, { once: true });
-    i.addEventListener('cancel', mark, { once: true });
-    try {
-      i.click();
-    } catch {
-      /* Best effort: failure here is non-fatal. */
-    }
-    setTimeout(() => {
-      if (opened) {
-        return;
-      }
-      toast('Le sélecteur de fichiers est bloqué ici : collez le texte de votre sauvegarde ci-dessous.');
-      SV.code = { mode: 'paste' };
-      renderSaves();
-      const t = $('#svCode');
-      if (t) {
-        t.focus();
-      }
-    }, 1400);
-  });
+  document.addEventListener('click', onImportFileClick);
 
   $('#saves').addEventListener('input', e => {
     if (e.target.id === 'svName') {

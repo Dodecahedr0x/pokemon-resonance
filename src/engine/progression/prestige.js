@@ -514,6 +514,84 @@ const MPROG = [
   [55, 62, 67, 71],
 ];
 
+function onBattleShortcutKeydown(e) {
+  if (cur !== 'combat' || !B || B.over || ui.busy || e.altKey || e.ctrlKey || e.metaKey) {
+    return;
+  }
+  const tg = e.target;
+  if (tg && (tg.tagName === 'INPUT' || tg.tagName === 'TEXTAREA' || tg.tagName === 'SELECT')) {
+    return;
+  }
+  if (
+    document.getElementById('vs') ||
+    !$('#evoPick').hidden ||
+    !$('#cbResult').hidden ||
+    !$('#saves').hidden ||
+    !$('#sheet').hidden
+  ) {
+    return;
+  }
+  const P = $('#bPanel'),
+    k = e.key;
+  if (k >= '1' && k <= '4') {
+    const b = P.querySelector(`[data-mi="${+k - 1}"]:not([disabled])`);
+    if (b) {
+      b.click();
+      e.preventDefault();
+    }
+    return;
+  }
+  if (k === 'Enter') {
+    const b = P.querySelector('[data-pv="ok"]');
+    if (b) {
+      b.click();
+      e.preventDefault();
+    }
+    return;
+  }
+  if (k === 'Escape') {
+    if (ui.mode || ui.selE) {
+      clearAim();
+      ui.selE = null;
+      renderAll();
+      e.preventDefault();
+    }
+    return;
+  }
+  if (k === 'ArrowRight' || k === 'ArrowLeft') {
+    const al = B.units.filter(u => u.side === 'a' && !u.ko);
+    if (!al.length) {
+      return;
+    }
+    const i = al.findIndex(u => u.uid === ui.sel),
+      n = al[(i + (k === 'ArrowRight' ? 1 : -1) + al.length) % al.length];
+    ui.sel = n.uid;
+    ui.selE = null;
+    clearAim();
+    renderAll();
+    e.preventDefault();
+    return;
+  }
+  if (k === ' ' && tg && tg.tagName === 'BUTTON') {
+    return;
+  }
+  if (k === ' ' || k === 'e' || k === 'E') {
+    const b = $('#bEnd');
+    if (b && !b.disabled) {
+      b.click();
+      e.preventDefault();
+    }
+    return;
+  }
+  if (k === 'v' || k === 'V') {
+    const b = P.querySelector('[data-evo="open"]:not([disabled])');
+    if (b) {
+      b.click();
+      e.preventDefault();
+    }
+  }
+}
+
 // Statements run at startup, in the original order (see index.js).
 export function init() {
   /* --- League, Council, journey: the League's faces (gym line: src/screens/league/Arena.jsx) --- */
@@ -540,83 +618,7 @@ export function init() {
   );
 
   /* --- Keyboard: playing without a mouse --- */
-  document.addEventListener('keydown', e => {
-    if (cur !== 'combat' || !B || B.over || ui.busy || e.altKey || e.ctrlKey || e.metaKey) {
-      return;
-    }
-    const tg = e.target;
-    if (tg && (tg.tagName === 'INPUT' || tg.tagName === 'TEXTAREA' || tg.tagName === 'SELECT')) {
-      return;
-    }
-    if (
-      document.getElementById('vs') ||
-      !$('#evoPick').hidden ||
-      !$('#cbResult').hidden ||
-      !$('#saves').hidden ||
-      !$('#sheet').hidden
-    ) {
-      return;
-    }
-    const P = $('#bPanel'),
-      k = e.key;
-    if (k >= '1' && k <= '4') {
-      const b = P.querySelector(`[data-mi="${+k - 1}"]:not([disabled])`);
-      if (b) {
-        b.click();
-        e.preventDefault();
-      }
-      return;
-    }
-    if (k === 'Enter') {
-      const b = P.querySelector('[data-pv="ok"]');
-      if (b) {
-        b.click();
-        e.preventDefault();
-      }
-      return;
-    }
-    if (k === 'Escape') {
-      if (ui.mode || ui.selE) {
-        clearAim();
-        ui.selE = null;
-        renderAll();
-        e.preventDefault();
-      }
-      return;
-    }
-    if (k === 'ArrowRight' || k === 'ArrowLeft') {
-      const al = B.units.filter(u => u.side === 'a' && !u.ko);
-      if (!al.length) {
-        return;
-      }
-      const i = al.findIndex(u => u.uid === ui.sel),
-        n = al[(i + (k === 'ArrowRight' ? 1 : -1) + al.length) % al.length];
-      ui.sel = n.uid;
-      ui.selE = null;
-      clearAim();
-      renderAll();
-      e.preventDefault();
-      return;
-    }
-    if (k === ' ' && tg && tg.tagName === 'BUTTON') {
-      return;
-    }
-    if (k === ' ' || k === 'e' || k === 'E') {
-      const b = $('#bEnd');
-      if (b && !b.disabled) {
-        b.click();
-        e.preventDefault();
-      }
-      return;
-    }
-    if (k === 'v' || k === 'V') {
-      const b = P.querySelector('[data-evo="open"]:not([disabled])');
-      if (b) {
-        b.click();
-        e.preventDefault();
-      }
-    }
-  });
+  document.addEventListener('keydown', onBattleShortcutKeydown);
 
   document.addEventListener(
     'pointerdown',

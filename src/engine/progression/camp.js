@@ -17,6 +17,38 @@ export function campOpen() {
   return true;
 }
 
+function onCampClick(e) {
+  const b = e.target.closest('[data-outing]');
+  if (!b) {
+    return;
+  }
+  const k = b.dataset.outing;
+  if (k === 'herbes') {
+    go('carte');
+    const r = $('#route');
+    if (r && r.scrollIntoView) {
+      r.scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'center' });
+    }
+  } else if (k === 'safari') {
+    V4.region = 'kanto';
+    V4.mapSel = 'safari';
+    go('carte');
+    renderMap();
+  } else if (k === 'tour') {
+    goFight('tdr');
+  } else if (k === 'amis') {
+    go('accueil');
+    const a = document.getElementById('v4Amis');
+    if (a && a.scrollIntoView) {
+      a.scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'start' });
+    }
+  } else if (k === 'hebdo') {
+    V4.questTab = 'event';
+    go('quetes');
+    renderQuests();
+  }
+}
+
 // The Camp page (skeleton, base Camp, Outings) is rendered by React: src/screens/camp.
 
 // Startup statements, run in their original order (see index.js).
@@ -28,37 +60,7 @@ export function init() {
     SWIPE_TABS.push('camp');
   }
 
-  document.addEventListener('click', e => {
-    const b = e.target.closest('[data-outing]');
-    if (!b) {
-      return;
-    }
-    const k = b.dataset.outing;
-    if (k === 'herbes') {
-      go('carte');
-      const r = $('#route');
-      if (r && r.scrollIntoView) {
-        r.scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'center' });
-      }
-    } else if (k === 'safari') {
-      V4.region = 'kanto';
-      V4.mapSel = 'safari';
-      go('carte');
-      renderMap();
-    } else if (k === 'tour') {
-      goFight('tdr');
-    } else if (k === 'amis') {
-      go('accueil');
-      const a = document.getElementById('v4Amis');
-      if (a && a.scrollIntoView) {
-        a.scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'start' });
-      }
-    } else if (k === 'hebdo') {
-      V4.questTab = 'event';
-      go('quetes');
-      renderQuests();
-    }
-  });
+  document.addEventListener('click', onCampClick);
 
   /* ---------- what's new ---------- */
   document.addEventListener('click', e => {

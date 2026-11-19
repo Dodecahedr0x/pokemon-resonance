@@ -86,6 +86,39 @@ const TALENTS = [
   },
 ];
 
+function onTalentTreeClick(e) {
+  const b = e.target.closest && e.target.closest('[data-talent-tree]');
+  if (!b || b.disabled) {
+    return;
+  }
+  e.stopPropagation();
+  e.preventDefault();
+  const k = b.dataset.talentTree,
+    st = talentState();
+  if (k === 'reset') {
+    if (PROFILE.money < TALENT_RESET_COST || !talentSpent()) {
+      return;
+    }
+    PROFILE.money -= TALENT_RESET_COST;
+    talentSave({});
+    toast('Talents réinitialisés.');
+  } else if (k in st && st[k] < TALENT_MAX && talentPoints() > 0) {
+    st[k]++;
+    talentSave(st);
+    sfx('ui');
+    vibe(20);
+  } else {
+    return;
+  }
+  try {
+    queueSave();
+    renderWallet();
+    renderBag();
+  } catch {
+    /* Best effort: failure here is non-fatal. */
+  }
+}
+
 // Statements run at startup, in the original order (see index.js).
 export function init() {
   ((TALENT_MAX = 3), (TALENT_RESET_COST = 500));
@@ -172,40 +205,5 @@ export function init() {
       ? `<div class="res-l"><h4>Talents</h4><div class="rl"><span>Bonus de talents : ${esc(r.talentTree.join(', '))}</span></div></div>`
       : ''
   );
-  document.addEventListener(
-    'click',
-    e => {
-      const b = e.target.closest && e.target.closest('[data-talent-tree]');
-      if (!b || b.disabled) {
-        return;
-      }
-      e.stopPropagation();
-      e.preventDefault();
-      const k = b.dataset.talentTree,
-        st = talentState();
-      if (k === 'reset') {
-        if (PROFILE.money < TALENT_RESET_COST || !talentSpent()) {
-          return;
-        }
-        PROFILE.money -= TALENT_RESET_COST;
-        talentSave({});
-        toast('Talents réinitialisés.');
-      } else if (k in st && st[k] < TALENT_MAX && talentPoints() > 0) {
-        st[k]++;
-        talentSave(st);
-        sfx('ui');
-        vibe(20);
-      } else {
-        return;
-      }
-      try {
-        queueSave();
-        renderWallet();
-        renderBag();
-      } catch {
-        /* Best effort: failure here is non-fatal. */
-      }
-    },
-    true
-  );
+  document.addEventListener('click', onTalentTreeClick, true);
 }

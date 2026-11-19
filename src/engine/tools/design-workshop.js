@@ -100,52 +100,54 @@ COMPOSANTS CLÉS
 Après ton CSS, propose-moi 3 variantes de palette que je peux tester en changeant seulement le bloc « :root ».`;
 }
 
+function onDesignWorkshopClick(e) {
+  const a = e.target.closest('#design-action-a,#design-action-r,#design-action-b');
+  if (!a) {
+    return;
+  }
+  if (a.id === 'design-action-a') {
+    PREF.customCss = sanitizeCss(($('#design-action-t') || {}).value);
+    savePref();
+    applyCustomCss();
+    toast(PREF.customCss ? 'Style appliqué.' : 'Aucun CSS : style d’origine.');
+  } else if (a.id === 'design-action-r') {
+    PREF.customCss = '';
+    savePref();
+    applyCustomCss();
+    const t = $('#design-action-t');
+    if (t) {
+      t.value = '';
+    }
+    toast('Style d’origine rétabli.');
+  } else {
+    const k = $('#design-action-k');
+    if (!k) {
+      return;
+    }
+    k.value = designBrief();
+    k.hidden = false;
+    k.focus();
+    k.select();
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(k.value).then(
+          () => toast('Brief copié : collez-le dans ChatGPT.'),
+          () => toast('Touchez le texte, « Tout sélectionner », puis « Copier ».')
+        );
+      } else {
+        toast('Touchez le texte, « Tout sélectionner », puis « Copier ».');
+      }
+    } catch (er) {
+      toast('Touchez le texte, « Tout sélectionner », puis « Copier ».');
+    }
+  }
+}
+
 // Instructions run at startup, in the original order (see index.js).
 export function init() {
   // "Atelier design" (Design Workshop) panel: rendered by React (src/screens/settings/panels/DesignWorkshop.jsx)
 
-  document.addEventListener('click', e => {
-    const a = e.target.closest('#design-action-a,#design-action-r,#design-action-b');
-    if (!a) {
-      return;
-    }
-    if (a.id === 'design-action-a') {
-      PREF.customCss = sanitizeCss(($('#design-action-t') || {}).value);
-      savePref();
-      applyCustomCss();
-      toast(PREF.customCss ? 'Style appliqué.' : 'Aucun CSS : style d’origine.');
-    } else if (a.id === 'design-action-r') {
-      PREF.customCss = '';
-      savePref();
-      applyCustomCss();
-      const t = $('#design-action-t');
-      if (t) {
-        t.value = '';
-      }
-      toast('Style d’origine rétabli.');
-    } else {
-      const k = $('#design-action-k');
-      if (!k) {
-        return;
-      }
-      k.value = designBrief();
-      k.hidden = false;
-      k.focus();
-      k.select();
-      try {
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(k.value).then(
-            () => toast('Brief copié : collez-le dans ChatGPT.'),
-            () => toast('Touchez le texte, « Tout sélectionner », puis « Copier ».')
-          );
-        } else {
-          toast('Touchez le texte, « Tout sélectionner », puis « Copier ».');
-        }
-      } catch (er) {
-        toast('Touchez le texte, « Tout sélectionner », puis « Copier ».');
-      }
-    }
-  });
+  document.addEventListener('click', onDesignWorkshopClick);
 
   applyCustomCss();
 }

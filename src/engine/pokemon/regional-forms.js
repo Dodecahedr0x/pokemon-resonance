@@ -33,15 +33,14 @@ const REGIONAL_FORMS = [
 ].filter(f => BY[f.id]);
 
 // .regionalForm banner and illustration tint: rendered by React
-let regionOf;
+const regionOf = sc => {
+  const c = SCEN[sc] || {};
+  return c.hoenn != null ? 3 : c.johto != null ? 2 : 1;
+};
 
 // Statements executed at startup, in the original order (see index.js).
 export function init() {
   REGIONAL_FORM_LIST = REGIONAL_FORMS;
-  regionOf = sc => {
-    const c = SCEN[sc] || {};
-    return c.hoenn != null ? 3 : c.johto != null ? 2 : 1;
-  };
   HOOKS.creation.push(S => {
     const g = regionOf(S.sc);
     S.units.forEach(u => {

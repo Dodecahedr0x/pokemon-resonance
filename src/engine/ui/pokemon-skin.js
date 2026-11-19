@@ -8,9 +8,9 @@ import { renderParams } from './settings.js';
 
 let H;
 
-let on;
+const on = k => PREF[k] !== 0;
 
-let doApply;
+const doApply = () => H.classList.toggle('pk-calme', !on('pokemonSkinA'));
 
 /* ---------- added elements: #pk-fond and #pk-iris are rendered by React
      (src/screens/overlays/Effects.jsx); the iris's .go class is still set here ---------- */
@@ -21,32 +21,59 @@ let iris;
 /* ---------- Poké Ball opening (bottom bar and menu) ---------- */
 let tIris;
 
-let openOverlay;
+const openOverlay = () => {
+  if (calmMotion() || !on('pokemonSkinT')) {
+    return;
+  }
+  iris.classList.remove('go');
+  void iris.offsetWidth;
+  iris.classList.add('go');
+  clearTimeout(tIris);
+  tIris = setTimeout(() => iris.classList.remove('go'), 700);
+};
 
 /* ---------- screen entry: rise and scanner sweep ---------- */
 const CAND = '.v4-panel,.v4-hero,.case,.sel-card,.gd-p,.gd-intro,.v4-it,.v4-qm,.cb-b,.v4-stats,.v4d-sec,.tip';
 
 let tEntry;
 
-let entrance;
+const entrance = () => {
+  if (calmMotion()) {
+    return;
+  }
+  const pg = $('.page.on');
+  if (!pg) {
+    return;
+  }
+  clearTimeout(tEntry);
+  $$('.pk-rise,.pk-fade,.pk-scan').forEach(x => x.classList.remove('pk-rise', 'pk-fade', 'pk-scan'));
+  const isFixed = pg.id === 'combat';
+  const vh = innerHeight * 1.25;
+  const L = [...pg.querySelectorAll(CAND)].filter(x => {
+    if (x.parentElement && x.parentElement.closest(CAND)) {
+      return false;
+    }
+    const r = x.getBoundingClientRect();
+    return r.width > 0 && r.top < vh;
+  });
+  L.slice(0, 12).forEach((x, i) => {
+    x.style.setProperty('--pk-i', i);
+    x.classList.add(isFixed ? 'pk-fade' : 'pk-rise');
+    if (x.matches('.v4-panel,.v4-hero,.case')) {
+      x.classList.add('pk-scan');
+    }
+  });
+  tEntry = setTimeout(
+    () => $$('.pk-rise,.pk-fade,.pk-scan').forEach(x => x.classList.remove('pk-rise', 'pk-fade', 'pk-scan')),
+    1900
+  );
+};
 
 // Statements executed at startup, in the original order (see index.js).
 export function init() {
   H = document.documentElement;
-  on = k => PREF[k] !== 0;
-  doApply = () => H.classList.toggle('pk-calme', !on('pokemonSkinA'));
   iris = document.getElementById('pk-iris');
   tIris = 0;
-  openOverlay = () => {
-    if (calmMotion() || !on('pokemonSkinT')) {
-      return;
-    }
-    iris.classList.remove('go');
-    void iris.offsetWidth;
-    iris.classList.add('go');
-    clearTimeout(tIris);
-    tIris = setTimeout(() => iris.classList.remove('go'), 700);
-  };
   document.addEventListener(
     'click',
     e => {
@@ -65,37 +92,6 @@ export function init() {
     true
   );
   tEntry = 0;
-  entrance = () => {
-    if (calmMotion()) {
-      return;
-    }
-    const pg = $('.page.on');
-    if (!pg) {
-      return;
-    }
-    clearTimeout(tEntry);
-    $$('.pk-rise,.pk-fade,.pk-scan').forEach(x => x.classList.remove('pk-rise', 'pk-fade', 'pk-scan'));
-    const isFixed = pg.id === 'combat';
-    const vh = innerHeight * 1.25;
-    const L = [...pg.querySelectorAll(CAND)].filter(x => {
-      if (x.parentElement && x.parentElement.closest(CAND)) {
-        return false;
-      }
-      const r = x.getBoundingClientRect();
-      return r.width > 0 && r.top < vh;
-    });
-    L.slice(0, 12).forEach((x, i) => {
-      x.style.setProperty('--pk-i', i);
-      x.classList.add(isFixed ? 'pk-fade' : 'pk-rise');
-      if (x.matches('.v4-panel,.v4-hero,.case')) {
-        x.classList.add('pk-scan');
-      }
-    });
-    tEntry = setTimeout(
-      () => $$('.pk-rise,.pk-fade,.pk-scan').forEach(x => x.classList.remove('pk-rise', 'pk-fade', 'pk-scan')),
-      1900
-    );
-  };
   HOOKS.page.push(previous => {
     if (cur !== previous) {
       requestAnimationFrame(entrance);

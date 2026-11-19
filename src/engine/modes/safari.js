@@ -214,6 +214,42 @@ const fleeChance = x => {
   return Math.min(0.85, base * (x.bait ? 0.5 : 1) * (x.caillou ? 1.6 : 1));
 };
 
+function onSafariClick(e) {
+  if (e.target.closest('[data-safari-panel-entrer]')) {
+    return void enterSafari();
+  }
+  const b = e.target.closest('[data-safari-panel]');
+  if (!b) {
+    if (e.target.id === 'safari-panel') {
+      $('#safari-panel').hidden = true;
+    }
+    return;
+  }
+  const k = b.dataset.safariPanel;
+  if (k === 'x') {
+    return void ($('#safari-panel').hidden = true);
+  }
+  if (k === 'sortir') {
+    const n = PROFILE.safari ? PROFILE.safari.isTaken.length : 0;
+    PROFILE.safari = null;
+    queueSave();
+    $('#safari-panel').hidden = true;
+    toast(`Merci de votre visite ! ${n} capture${n > 1 ? 's' : ''}.`);
+    try {
+      refreshMap(); // panel of the selected location (src/screens/map/MapInfo.jsx)
+    } catch {
+      /* Best effort: failure here is non-fatal. */
+    }
+    return;
+  }
+  SAF_MSG = performSafariAction(k);
+  if (/Gotcha/.test(SAF_MSG)) {
+    sfx('win');
+    vibe(40);
+  }
+  renderSafariPanel();
+}
+
 // Statements run at startup, in the original order (see index.js).
 export function init() {
   ((SAFARI_PRICE = 500), (SAFARI_STEPS = 12), (SAFARI_BALLS = 20));
@@ -233,39 +269,5 @@ export function init() {
 
   // #safariPanel: rendered by React (src/screens/overlays/SafariWindow.jsx)
 
-  document.addEventListener('click', e => {
-    if (e.target.closest('[data-safari-panel-entrer]')) {
-      return void enterSafari();
-    }
-    const b = e.target.closest('[data-safari-panel]');
-    if (!b) {
-      if (e.target.id === 'safari-panel') {
-        $('#safari-panel').hidden = true;
-      }
-      return;
-    }
-    const k = b.dataset.safariPanel;
-    if (k === 'x') {
-      return void ($('#safari-panel').hidden = true);
-    }
-    if (k === 'sortir') {
-      const n = PROFILE.safari ? PROFILE.safari.isTaken.length : 0;
-      PROFILE.safari = null;
-      queueSave();
-      $('#safari-panel').hidden = true;
-      toast(`Merci de votre visite ! ${n} capture${n > 1 ? 's' : ''}.`);
-      try {
-        refreshMap(); // panel of the selected location (src/screens/map/MapInfo.jsx)
-      } catch {
-        /* Best effort: failure here is non-fatal. */
-      }
-      return;
-    }
-    SAF_MSG = performSafariAction(k);
-    if (/Gotcha/.test(SAF_MSG)) {
-      sfx('win');
-      vibe(40);
-    }
-    renderSafariPanel();
-  });
+  document.addEventListener('click', onSafariClick);
 }

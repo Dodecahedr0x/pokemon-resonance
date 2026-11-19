@@ -14,9 +14,15 @@ import { refreshGrid } from '../../screens/team/teamStore.js';
 
 let H;
 
-let on;
+const on = k => PREF[k] !== 0;
 
-let directText;
+const directText = () => {
+  try {
+    return !!RM || H.classList.contains('a11y-rm') || !on('pokeStyleT') || !!AUTO;
+  } catch (e) {
+    return true;
+  }
+};
 
 /* ---------- 10. house UI sounds (synthesized) ---------- */
 const SOUNDS = {
@@ -36,7 +42,16 @@ const SOUNDS = {
   suite: () => tone(1175, 0, 0.05, 'square', 0.015),
 };
 
-let playSound;
+const playSound = k => {
+  try {
+    if (!PREF.sound || RM || !on('pokeStyleS')) {
+      return;
+    }
+    SOUNDS[k] && SOUNDS[k]();
+  } catch {
+    /* Best effort: failure here is non-fatal. */
+  }
+};
 
 const TAB_LIST =
   '.v4-tabs>button,.v4-reg>button,.gd-tabs>button,.v4-cats>button,.v4-seg>button,.scn-tabs>button,.stabs>.stab,.sel-tabs>button';
@@ -66,14 +81,116 @@ const visible = e => !!(e.offsetParent || (e.getClientRects && e.getClientRects(
 
 const key = e => e.textContent.replace(/\s+/g, ' ').trim();
 
-let finishUp;
+const finishUp = j => {
+  if (j.fini) {
+    return;
+  }
+  j.fini = true;
+  cancelAnimationFrame(j.raf);
+  j.wraps.forEach(([w, t]) => {
+    if (w.parentNode) {
+      w.parentNode.replaceChild(document.createTextNode(t), w);
+    }
+  });
+  if (j.box) {
+    j.box.classList.remove('pk-typing');
+  }
+  JOBS.delete(j.el);
+};
 
-let write;
+const write = (e, box) => {
+  const k = key(e);
+  if (!k) {
+    return;
+  }
+  if (SEEN.has(k)) {
+    return;
+  }
+  SEEN.add(k);
+  if (directText()) {
+    return;
+  }
+  const nodes = [];
+  const tw = document.createTreeWalker(e, NodeFilter.SHOW_TEXT);
+  let n;
+  while ((n = tw.nextNode())) {
+    if (!n.data.trim()) {
+      continue;
+    }
+    const s = n.parentElement && n.parentElement.closest(SKIP);
+    if (s && e.contains(s)) {
+      continue;
+    }
+    nodes.push(n);
+  }
+  if (!nodes.length) {
+    return;
+  }
+  const spans = [],
+    wraps = [];
+  nodes.forEach(t => {
+    const w = document.createElement('span');
+    w.className = 'pk-tw';
+    const txt = t.data;
+    for (const ch of txt) {
+      const c = document.createElement('span');
+      c.className = 'pk-c';
+      c.textContent = ch;
+      w.appendChild(c);
+      spans.push(c);
+    }
+    t.parentNode.replaceChild(w, t);
+    wraps.push([w, txt]);
+  });
+  const j = {
+    el: e,
+    box,
+    spans,
+    wraps,
+    k: 0,
+    t0: performance.now(),
+    ms: PREF.fast ? 11 : Math.max(8, Math.min(26, 2600 / spans.length)),
+    fini: false,
+    raf: 0,
+  };
+  if (box) {
+    box.classList.add('pk-typing');
+  }
+  JOBS.set(e, j);
+  const tick = now => {
+    if (j.fini) {
+      return;
+    }
+    if (!e.isConnected) {
+      return finishUp(j);
+    }
+    // at most ~22 updates per second: several letters at once, fewer recalculations
+    if (now - (j.last || 0) < 45 && j.k) {
+      j.raf = requestAnimationFrame(tick);
+      return;
+    }
+    j.last = now;
+    const k2 = Math.min(spans.length, Math.floor((now - j.t0) / j.ms) + 1);
+    for (let i = j.k; i < k2; i++) {
+      spans[i].classList.add('v');
+    }
+    j.k = k2;
+    if (k2 >= spans.length) {
+      return finishUp(j);
+    }
+    j.raf = requestAnimationFrame(tick);
+  };
+  j.raf = requestAnimationFrame(tick);
+};
 
 /* ---------- common pass after each screen change ---------- */
 let rafScan;
 
-let schedule;
+const schedule = () => {
+  if (!rafScan) {
+    rafScan = requestAnimationFrame(scan);
+  }
+};
 
 function scan() {
   rafScan = 0;
@@ -120,24 +237,6 @@ function scan() {
 // Statements executed at startup, in the original order (see index.js).
 export function init() {
   H = document.documentElement;
-  on = k => PREF[k] !== 0;
-  directText = () => {
-    try {
-      return !!RM || H.classList.contains('a11y-rm') || !on('pokeStyleT') || !!AUTO;
-    } catch (e) {
-      return true;
-    }
-  };
-  playSound = k => {
-    try {
-      if (!PREF.sound || RM || !on('pokeStyleS')) {
-        return;
-      }
-      SOUNDS[k] && SOUNDS[k]();
-    } catch {
-      /* Best effort: failure here is non-fatal. */
-    }
-  };
   document.addEventListener(
     'click',
     e => {
@@ -166,106 +265,6 @@ export function init() {
     },
     true
   );
-  finishUp = j => {
-    if (j.fini) {
-      return;
-    }
-    j.fini = true;
-    cancelAnimationFrame(j.raf);
-    j.wraps.forEach(([w, t]) => {
-      if (w.parentNode) {
-        w.parentNode.replaceChild(document.createTextNode(t), w);
-      }
-    });
-    if (j.box) {
-      j.box.classList.remove('pk-typing');
-    }
-    JOBS.delete(j.el);
-  };
-  write = (e, box) => {
-    const k = key(e);
-    if (!k) {
-      return;
-    }
-    if (SEEN.has(k)) {
-      return;
-    }
-    SEEN.add(k);
-    if (directText()) {
-      return;
-    }
-    const nodes = [];
-    const tw = document.createTreeWalker(e, NodeFilter.SHOW_TEXT);
-    let n;
-    while ((n = tw.nextNode())) {
-      if (!n.data.trim()) {
-        continue;
-      }
-      const s = n.parentElement && n.parentElement.closest(SKIP);
-      if (s && e.contains(s)) {
-        continue;
-      }
-      nodes.push(n);
-    }
-    if (!nodes.length) {
-      return;
-    }
-    const spans = [],
-      wraps = [];
-    nodes.forEach(t => {
-      const w = document.createElement('span');
-      w.className = 'pk-tw';
-      const txt = t.data;
-      for (const ch of txt) {
-        const c = document.createElement('span');
-        c.className = 'pk-c';
-        c.textContent = ch;
-        w.appendChild(c);
-        spans.push(c);
-      }
-      t.parentNode.replaceChild(w, t);
-      wraps.push([w, txt]);
-    });
-    const j = {
-      el: e,
-      box,
-      spans,
-      wraps,
-      k: 0,
-      t0: performance.now(),
-      ms: PREF.fast ? 11 : Math.max(8, Math.min(26, 2600 / spans.length)),
-      fini: false,
-      raf: 0,
-    };
-    if (box) {
-      box.classList.add('pk-typing');
-    }
-    JOBS.set(e, j);
-    const tick = now => {
-      if (j.fini) {
-        return;
-      }
-      if (!e.isConnected) {
-        return finishUp(j);
-      }
-      // at most ~22 updates per second: several letters at once, fewer recalculations
-      if (now - (j.last || 0) < 45 && j.k) {
-        j.raf = requestAnimationFrame(tick);
-        return;
-      }
-      j.last = now;
-      const k2 = Math.min(spans.length, Math.floor((now - j.t0) / j.ms) + 1);
-      for (let i = j.k; i < k2; i++) {
-        spans[i].classList.add('v');
-      }
-      j.k = k2;
-      if (k2 >= spans.length) {
-        return finishUp(j);
-      }
-      j.raf = requestAnimationFrame(tick);
-    };
-    j.raf = requestAnimationFrame(tick);
-  };
   // touching the box finishes the text; in a scene, the first touch does not advance
   document.addEventListener(
     'click',
@@ -294,11 +293,6 @@ export function init() {
     true
   );
   rafScan = 0;
-  schedule = () => {
-    if (!rafScan) {
-      rafScan = requestAnimationFrame(scan);
-    }
-  };
   if (window.MutationObserver) {
     new MutationObserver(schedule).observe(document.body, {
       childList: true,

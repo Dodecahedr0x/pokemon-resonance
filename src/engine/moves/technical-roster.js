@@ -370,109 +370,111 @@ export const PRE_MOVE_EFFECTS = {
   },
 };
 
+const ROSTER_SELF_EFFECTS = {
+  champherbu(S, u, ev) {
+    nbrK(uk(u)).forEach(x => setMark(S, x, 'enracine', u.uid));
+    S.champ = Object.assign({}, S.champ, { [u.side]: 3 });
+    say(ev, 'Champ Herbu : les cases Enracinées soignent votre équipe pendant 3 manches.');
+  },
+  gravite(S, u, ev) {
+    S.gravite = 4;
+    S.units.forEach(o => (o.pinned = true));
+    say(ev, 'Gravité : plus personne ne vole ni ne lévite pendant 4 manches, et chacun perd 1 Mouvement.');
+  },
+  dansedraco(S, u, ev) {
+    u.boost = Math.max(u.boost, 2);
+    u.agile = 2;
+    say(ev, `${u.n} danse : Renforcé et +1 Mouvement pendant 2 manches.`);
+  },
+  anneauhydro(S, u, ev) {
+    nbrK(uk(u)).forEach(x => setMark(S, x, 'trempe', u.uid));
+    u.ringTurns = 4;
+    say(ev, `${u.n} s’entoure d’un anneau d’eau.`);
+  },
+  runeprotect(S, u, ev) {
+    S.rune = Object.assign({}, S.rune, { [u.side]: 3 });
+    say(ev, 'Rune Protect : votre équipe est protégée des statuts et des entraves pendant 3 manches.');
+  },
+  clairdelune(S, u, ev) {
+    heal(S, u, Math.round(u.mhp * (hourOf(S) === 'nuit' ? 0.5 : 0.3)), ev);
+    u.guard = 2;
+    say(ev, `${u.n} se baigne de clair de lune : +2 Garde.`);
+  },
+  cognobidon(S, u, ev) {
+    const c = Math.floor(u.hp / 2);
+    if (c < 1) {
+      say(ev, `${u.n} est trop faible pour Cognobidon.`);
+      return;
+    }
+    u.hp -= c;
+    ev.push({ e: 'dmg', u: u.uid, v: c });
+    u.cogno = 3;
+    say(ev, `Cognobidon : ${u.n} sacrifie ${c} PV, ses attaques font ×2 pendant 3 manches.`);
+  },
+  requiem(S, u, ev) {
+    const t = S.units.filter(o => !o.ko && o.side !== u.side && hdist(o.pos, u.pos) <= 2 && !(o.requiem > 0));
+    t.forEach(o => (o.requiem = 3));
+    say(
+      ev,
+      t.length
+        ? `Requiem : ${t.map(o => o.n).join(', ')} ${t.length > 1 ? 'entendent' : 'entend'} le chant. Dans 3 manches…`
+        : 'Requiem : personne n’est assez près pour entendre le chant.'
+    );
+  },
+  paresse(S, u, ev) {
+    heal(S, u, Math.round(u.mhp * 0.5), ev);
+    u.guard = 2;
+    say(ev, `${u.n} paresse : +2 Garde.`);
+  },
+  conversion(S, u, ev) {
+    const mk = markAt(S, uk(u)),
+      t = mk ? MKT[mk] : 'Normal';
+    u.t = [t];
+    PKT.set(u.t, u.id);
+    say(ev, `Conversion : ${u.n} devient de type ${t}.`);
+  },
+  conversion2(S, u, ev) {
+    if (!u.dtype) {
+      say(ev, `${u.n} n’a encore reçu aucune attaque : Conversion 2 échoue.`);
+      return;
+    }
+    let best = null,
+      bv = 9;
+    Object.keys(TYPES).forEach(t => {
+      const e = teff(u.dtype, [t]);
+      if (e < bv) {
+        bv = e;
+        best = t;
+      }
+    });
+    if (!best || bv >= 1) {
+      say(ev, 'Conversion 2 échoue.');
+      return;
+    }
+    u.t = [best];
+    PKT.set(u.t, u.id);
+    say(ev, `Conversion 2 : ${u.n} devient de type ${best} et résiste au type ${u.dtype}.`);
+  },
+  riposte(S, u, ev) {
+    u.riposte = 1;
+    say(ev, `${u.n} se prépare à riposter au contact.`);
+  },
+  miroir(S, u, ev) {
+    u.miroir = 1;
+    say(ev, `${u.n} dresse un Voile Miroir contre les attaques à distance.`);
+  },
+  destin(S, u, ev) {
+    u.destin = 1;
+    say(ev, `${u.n} lie son destin à celui de son prochain agresseur.`);
+  },
+};
+
 // Statements run at startup, in the original order (see index.js).
 export function init() {
   NEEDU.push('morphing', 'malediction', 'feufollet', 'vantardise');
   HOSTILE.push('malediction', 'feufollet');
   /* ---------- self-targeted moves ---------- */
-  Object.assign(SELF_MOVE_EFFECTS, {
-    champherbu(S, u, ev) {
-      nbrK(uk(u)).forEach(x => setMark(S, x, 'enracine', u.uid));
-      S.champ = Object.assign({}, S.champ, { [u.side]: 3 });
-      say(ev, 'Champ Herbu : les cases Enracinées soignent votre équipe pendant 3 manches.');
-    },
-    gravite(S, u, ev) {
-      S.gravite = 4;
-      S.units.forEach(o => (o.pinned = true));
-      say(ev, 'Gravité : plus personne ne vole ni ne lévite pendant 4 manches, et chacun perd 1 Mouvement.');
-    },
-    dansedraco(S, u, ev) {
-      u.boost = Math.max(u.boost, 2);
-      u.agile = 2;
-      say(ev, `${u.n} danse : Renforcé et +1 Mouvement pendant 2 manches.`);
-    },
-    anneauhydro(S, u, ev) {
-      nbrK(uk(u)).forEach(x => setMark(S, x, 'trempe', u.uid));
-      u.ringTurns = 4;
-      say(ev, `${u.n} s’entoure d’un anneau d’eau.`);
-    },
-    runeprotect(S, u, ev) {
-      S.rune = Object.assign({}, S.rune, { [u.side]: 3 });
-      say(ev, 'Rune Protect : votre équipe est protégée des statuts et des entraves pendant 3 manches.');
-    },
-    clairdelune(S, u, ev) {
-      heal(S, u, Math.round(u.mhp * (hourOf(S) === 'nuit' ? 0.5 : 0.3)), ev);
-      u.guard = 2;
-      say(ev, `${u.n} se baigne de clair de lune : +2 Garde.`);
-    },
-    cognobidon(S, u, ev) {
-      const c = Math.floor(u.hp / 2);
-      if (c < 1) {
-        say(ev, `${u.n} est trop faible pour Cognobidon.`);
-        return;
-      }
-      u.hp -= c;
-      ev.push({ e: 'dmg', u: u.uid, v: c });
-      u.cogno = 3;
-      say(ev, `Cognobidon : ${u.n} sacrifie ${c} PV, ses attaques font ×2 pendant 3 manches.`);
-    },
-    requiem(S, u, ev) {
-      const t = S.units.filter(o => !o.ko && o.side !== u.side && hdist(o.pos, u.pos) <= 2 && !(o.requiem > 0));
-      t.forEach(o => (o.requiem = 3));
-      say(
-        ev,
-        t.length
-          ? `Requiem : ${t.map(o => o.n).join(', ')} ${t.length > 1 ? 'entendent' : 'entend'} le chant. Dans 3 manches…`
-          : 'Requiem : personne n’est assez près pour entendre le chant.'
-      );
-    },
-    paresse(S, u, ev) {
-      heal(S, u, Math.round(u.mhp * 0.5), ev);
-      u.guard = 2;
-      say(ev, `${u.n} paresse : +2 Garde.`);
-    },
-    conversion(S, u, ev) {
-      const mk = markAt(S, uk(u)),
-        t = mk ? MKT[mk] : 'Normal';
-      u.t = [t];
-      PKT.set(u.t, u.id);
-      say(ev, `Conversion : ${u.n} devient de type ${t}.`);
-    },
-    conversion2(S, u, ev) {
-      if (!u.dtype) {
-        say(ev, `${u.n} n’a encore reçu aucune attaque : Conversion 2 échoue.`);
-        return;
-      }
-      let best = null,
-        bv = 9;
-      Object.keys(TYPES).forEach(t => {
-        const e = teff(u.dtype, [t]);
-        if (e < bv) {
-          bv = e;
-          best = t;
-        }
-      });
-      if (!best || bv >= 1) {
-        say(ev, 'Conversion 2 échoue.');
-        return;
-      }
-      u.t = [best];
-      PKT.set(u.t, u.id);
-      say(ev, `Conversion 2 : ${u.n} devient de type ${best} et résiste au type ${u.dtype}.`);
-    },
-    riposte(S, u, ev) {
-      u.riposte = 1;
-      say(ev, `${u.n} se prépare à riposter au contact.`);
-    },
-    miroir(S, u, ev) {
-      u.miroir = 1;
-      say(ev, `${u.n} dresse un Voile Miroir contre les attaques à distance.`);
-    },
-    destin(S, u, ev) {
-      u.destin = 1;
-      say(ev, `${u.n} lie son destin à celui de son prochain agresseur.`);
-    },
-  });
+  Object.assign(SELF_MOVE_EFFECTS, ROSTER_SELF_EFFECTS);
   /* ---------- damage: signatures and abilities ---------- */
   DAMAGE_PROVIDERS.push(
     {

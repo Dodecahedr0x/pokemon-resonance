@@ -138,42 +138,44 @@ export const drawWeightedMon = (L, w) => {
   return L[L.length - 1];
 };
 
+function onFishingClick(e) {
+  if (e.target.closest('[data-fishing-start]')) {
+    return void castFishingLine();
+  }
+  const b = e.target.closest('[data-fishing-panel]');
+  if (!b) {
+    if (e.target.id === 'fishing-panel') {
+      clearTimeout(FISHING && FISHING.t);
+      FISHING = null;
+      $('#fishing-panel').hidden = true;
+    }
+    return;
+  }
+  const k = b.dataset.fishingPanel;
+  if (k === 'ferrer') {
+    setFishingHook();
+  } else if (k === 'lancer') {
+    castFishingLine();
+  } else if (k === 'combat') {
+    startFishingBattle();
+  } else if (k === 'recruter' && FISHING && !squad.includes(FISHING.id)) {
+    toggle(FISHING.id);
+    $('#fishing-panel').hidden = true;
+  } else if (k === 'relacher') {
+    toast('Il retourne à l’eau.');
+    castFishingLine();
+  } else if (k === 'x') {
+    clearTimeout(FISHING && FISHING.t);
+    FISHING = null;
+    $('#fishing-panel').hidden = true;
+  }
+}
+
 // Statements run at startup, in the original order (see index.js).
 export function init() {
   FISHING = null;
 
   // #fishingPanel: rendered by React (src/screens/overlays/FishingWindow.jsx)
 
-  document.addEventListener('click', e => {
-    if (e.target.closest('[data-fishing-start]')) {
-      return void castFishingLine();
-    }
-    const b = e.target.closest('[data-fishing-panel]');
-    if (!b) {
-      if (e.target.id === 'fishing-panel') {
-        clearTimeout(FISHING && FISHING.t);
-        FISHING = null;
-        $('#fishing-panel').hidden = true;
-      }
-      return;
-    }
-    const k = b.dataset.fishingPanel;
-    if (k === 'ferrer') {
-      setFishingHook();
-    } else if (k === 'lancer') {
-      castFishingLine();
-    } else if (k === 'combat') {
-      startFishingBattle();
-    } else if (k === 'recruter' && FISHING && !squad.includes(FISHING.id)) {
-      toggle(FISHING.id);
-      $('#fishing-panel').hidden = true;
-    } else if (k === 'relacher') {
-      toast('Il retourne à l’eau.');
-      castFishingLine();
-    } else if (k === 'x') {
-      clearTimeout(FISHING && FISHING.t);
-      FISHING = null;
-      $('#fishing-panel').hidden = true;
-    }
-  });
+  document.addEventListener('click', onFishingClick);
 }

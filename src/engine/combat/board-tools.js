@@ -359,7 +359,42 @@ const TERRAINS = [
 ];
 
 /* ---------- 4. wiring ---------- */
-let rangerLens;
+const rangerLens = () => {
+  INSPECTED_TILE = null;
+  MAGNIFIER_ON = false;
+};
+
+function onBoardToolsClick(e) {
+  const b = e.target.closest('[data-tool-action]');
+  if (!b) {
+    return;
+  }
+  const a = b.dataset.toolAction;
+  if (a === 'fs') {
+    setFullscreen(!document.body.classList.contains('fullscreen-mode'), true);
+  } else if (a === 'lp') {
+    MAGNIFIER_ON = !MAGNIFIER_ON;
+    if (!MAGNIFIER_ON) {
+      INSPECTED_TILE = null;
+    }
+    toast(MAGNIFIER_ON ? 'Loupe : touchez une case pour lire son détail.' : 'Loupe rangée.');
+    syncBoardTools();
+    tileSheet();
+  } else if (a === 'ct') {
+    PREF.boardContrast = PREF.boardContrast ? 0 : 1;
+    savePref();
+    applyContrast();
+    syncBoardTools();
+  } else if (a === 'pfs') {
+    setFullscreen(!document.body.classList.contains('fullscreen-mode'), true);
+    renderParams();
+  } else if (a === 'pct') {
+    PREF.boardContrast = PREF.boardContrast ? 0 : 1;
+    savePref();
+    applyContrast();
+    renderParams();
+  }
+}
 
 // Startup statements, run in their original order (see index.js).
 export function init() {
@@ -395,37 +430,7 @@ export function init() {
   /* ---------- 2. board toolbar ---------- */
   // toolbar icons: in BoardTools.jsx
 
-  document.addEventListener('click', e => {
-    const b = e.target.closest('[data-tool-action]');
-    if (!b) {
-      return;
-    }
-    const a = b.dataset.toolAction;
-    if (a === 'fs') {
-      setFullscreen(!document.body.classList.contains('fullscreen-mode'), true);
-    } else if (a === 'lp') {
-      MAGNIFIER_ON = !MAGNIFIER_ON;
-      if (!MAGNIFIER_ON) {
-        INSPECTED_TILE = null;
-      }
-      toast(MAGNIFIER_ON ? 'Loupe : touchez une case pour lire son détail.' : 'Loupe rangée.');
-      syncBoardTools();
-      tileSheet();
-    } else if (a === 'ct') {
-      PREF.boardContrast = PREF.boardContrast ? 0 : 1;
-      savePref();
-      applyContrast();
-      syncBoardTools();
-    } else if (a === 'pfs') {
-      setFullscreen(!document.body.classList.contains('fullscreen-mode'), true);
-      renderParams();
-    } else if (a === 'pct') {
-      PREF.boardContrast = PREF.boardContrast ? 0 : 1;
-      savePref();
-      applyContrast();
-      renderParams();
-    }
-  });
+  document.addEventListener('click', onBoardToolsClick);
   document.addEventListener('click', e => {
     const b = e.target.closest('[data-tile-info]');
     if (!b || !B) {
@@ -534,10 +539,6 @@ export function init() {
       true
     );
   })();
-  rangerLens = () => {
-    INSPECTED_TILE = null;
-    MAGNIFIER_ON = false;
-  };
   HOOKS.rendered.push(() => {
     syncBoardTools();
     tileSheet();

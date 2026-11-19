@@ -63,6 +63,46 @@ export function openStarter() {
   openStarterBox();
 }
 
+function onStarterClick(e) {
+  const d = e.target.closest('[data-sd]');
+  if (d) {
+    PROFILE.diff = d.dataset.sd;
+    refreshStarter(); // difficulty buttons (aria-pressed)
+    return;
+  }
+  const b = e.target.closest('[data-st]');
+  if (!b) {
+    if (e.target.id === 'starter') {
+      hideStarter();
+    }
+    return;
+  }
+  if (b.dataset.st === 'x') {
+    hideStarter();
+    return;
+  }
+  const id = b.dataset.st,
+    keep = { name: PROFILE.name, diff: PROFILE.diff };
+  hideStarter();
+  const box = [id, ...CAMP_START];
+  applySave(
+    {
+      v: SAVE_V,
+      savedAt: new Date().toISOString(),
+      squad: box.slice(0, 4),
+      badges: [],
+      profile: Object.assign(defProfile(), keep, { mode: 'campagne', box, dex: [...box] }),
+      battle: null,
+    },
+    { leaveBattle: true }
+  );
+  closeSaves();
+  autoSave(true);
+  go('accueil');
+  renderHome();
+  toast(`Campagne lancée avec ${BY[id].n}. Commencez par le combat guidé ou la Route 29.`);
+}
+
 // Instructions run at startup, in the original order (see index.js).
 export function init() {
   document.addEventListener('click', e => {
@@ -87,43 +127,5 @@ export function init() {
     }
   });
 
-  $('#starter').addEventListener('click', e => {
-    const d = e.target.closest('[data-sd]');
-    if (d) {
-      PROFILE.diff = d.dataset.sd;
-      refreshStarter(); // difficulty buttons (aria-pressed)
-      return;
-    }
-    const b = e.target.closest('[data-st]');
-    if (!b) {
-      if (e.target.id === 'starter') {
-        hideStarter();
-      }
-      return;
-    }
-    if (b.dataset.st === 'x') {
-      hideStarter();
-      return;
-    }
-    const id = b.dataset.st,
-      keep = { name: PROFILE.name, diff: PROFILE.diff };
-    hideStarter();
-    const box = [id, ...CAMP_START];
-    applySave(
-      {
-        v: SAVE_V,
-        savedAt: new Date().toISOString(),
-        squad: box.slice(0, 4),
-        badges: [],
-        profile: Object.assign(defProfile(), keep, { mode: 'campagne', box, dex: [...box] }),
-        battle: null,
-      },
-      { leaveBattle: true }
-    );
-    closeSaves();
-    autoSave(true);
-    go('accueil');
-    renderHome();
-    toast(`Campagne lancée avec ${BY[id].n}. Commencez par le combat guidé ou la Route 29.`);
-  });
+  $('#starter').addEventListener('click', onStarterClick);
 }

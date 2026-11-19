@@ -249,68 +249,70 @@ function towerClimb() {
   launch();
 }
 
+function onTowerBoxClick(e) {
+  const p = e.target.closest('[data-tdrp]');
+  if (p) {
+    const id = p.dataset.tdrp,
+      i = TOWER.pick.indexOf(id);
+    if (i >= 0) {
+      TOWER.pick.splice(i, 1);
+    } else if (TOWER.pick.length < 4) {
+      TOWER.pick.push(id);
+    }
+    renderDraft();
+    return;
+  }
+  const rw = e.target.closest('[data-tdrr]');
+  if (rw) {
+    const run = towerRun(),
+      x = TOWER.offer[+rw.dataset.tdrr];
+    if (!run || !x) {
+      return;
+    }
+    if (x.k === 'voix') {
+      run.voice = Math.min(2, run.voice + 1);
+    }
+    if (x.k === 'item') {
+      run.items[x.id] = x.it;
+    }
+    if (x.k === 'evo' || x.k === 'swap') {
+      const i = run.team.indexOf(x.id);
+      if (i >= 0) {
+        run.team[i] = x.to;
+      }
+      if (run.items[x.id]) {
+        run.items[x.to] = run.items[x.id];
+        delete run.items[x.id];
+      }
+    }
+    run.reward = false;
+    $('#tdrBox').hidden = true;
+    towerClimb();
+    return;
+  }
+  const b = e.target.closest('[data-tdr]');
+  if (!b && e.target.id !== 'tdrBox') {
+    return;
+  }
+  const a = b ? b.dataset.tdr : 'x';
+  if (a === 'x') {
+    if (!towerRun() || !towerRun().reward) {
+      $('#tdrBox').hidden = true;
+    }
+    return;
+  }
+  if (a === 'go' && TOWER.pick.length === 4) {
+    PROFILE.tdr.run = { seed: TOWER.seed, floor: 1, team: [...TOWER.pick], voice: 0, items: {}, reward: false };
+    $('#tdrBox').hidden = true;
+    towerClimb();
+  }
+}
+
 /* Tower result screen buttons: rendered by React (src/screens/combat/battle/Result.jsx) */
 
 // Statements run at startup, in the original order (see index.js).
 export function init() {
-  $('#tdrBox').addEventListener('click', e => {
-    const p = e.target.closest('[data-tdrp]');
-    if (p) {
-      const id = p.dataset.tdrp,
-        i = TOWER.pick.indexOf(id);
-      if (i >= 0) {
-        TOWER.pick.splice(i, 1);
-      } else if (TOWER.pick.length < 4) {
-        TOWER.pick.push(id);
-      }
-      renderDraft();
-      return;
-    }
-    const rw = e.target.closest('[data-tdrr]');
-    if (rw) {
-      const run = towerRun(),
-        x = TOWER.offer[+rw.dataset.tdrr];
-      if (!run || !x) {
-        return;
-      }
-      if (x.k === 'voix') {
-        run.voice = Math.min(2, run.voice + 1);
-      }
-      if (x.k === 'item') {
-        run.items[x.id] = x.it;
-      }
-      if (x.k === 'evo' || x.k === 'swap') {
-        const i = run.team.indexOf(x.id);
-        if (i >= 0) {
-          run.team[i] = x.to;
-        }
-        if (run.items[x.id]) {
-          run.items[x.to] = run.items[x.id];
-          delete run.items[x.id];
-        }
-      }
-      run.reward = false;
-      $('#tdrBox').hidden = true;
-      towerClimb();
-      return;
-    }
-    const b = e.target.closest('[data-tdr]');
-    if (!b && e.target.id !== 'tdrBox') {
-      return;
-    }
-    const a = b ? b.dataset.tdr : 'x';
-    if (a === 'x') {
-      if (!towerRun() || !towerRun().reward) {
-        $('#tdrBox').hidden = true;
-      }
-      return;
-    }
-    if (a === 'go' && TOWER.pick.length === 4) {
-      PROFILE.tdr.run = { seed: TOWER.seed, floor: 1, team: [...TOWER.pick], voice: 0, items: {}, reward: false };
-      $('#tdrBox').hidden = true;
-      towerClimb();
-    }
-  });
+  $('#tdrBox').addEventListener('click', onTowerBoxClick);
 
   $('#cbResult').addEventListener(
     'click',

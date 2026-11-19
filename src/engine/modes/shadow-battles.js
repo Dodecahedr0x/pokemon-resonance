@@ -18,6 +18,38 @@ const SHADOWS = [
   { ids: ['absol', 'demolosse', 'tyranocif', 'noctali'], lv: 36, hb: 6 },
 ];
 
+function onProgress(S, rew, win) {
+  try {
+    if (!win) {
+      return null;
+    }
+    const X = readChallengeState();
+    let m = 0,
+      g = 0;
+    const k = S.sc || '';
+    if (/^omb470_/.test(k)) {
+      const n = +k.slice(7),
+        O = window.__shadowEpisodes;
+      if (O && O.readValue().stepOf === n - 1) {
+        O.write({ stepOf: n });
+        X.fossils += 1;
+        m += 400 * n;
+        g += n;
+        try {
+          const st = routeEvent().st;
+          writeLS('res-route-event', { d: st.d, done: true, res: 'Les Ombres ont été repoussées.' });
+        } catch {
+          /* Best effort: failure here is non-fatal. */
+        }
+      }
+      writeChallengeState(X);
+    }
+    return m || g ? [m, g] : null;
+  } catch (e) {
+    return null;
+  }
+}
+
 // Statements run at startup, in the original order (see index.js).
 export function init() {
   SHADOWS.forEach((o, i) => {
@@ -41,37 +73,7 @@ export function init() {
   });
 
   /* ---- victory: next episode, a fossil, Pokédollars and Shards ---- */
-  HOOKS.progress.unshift((S, rew, win) => {
-    try {
-      if (!win) {
-        return null;
-      }
-      const X = readChallengeState();
-      let m = 0,
-        g = 0;
-      const k = S.sc || '';
-      if (/^omb470_/.test(k)) {
-        const n = +k.slice(7),
-          O = window.__shadowEpisodes;
-        if (O && O.readValue().stepOf === n - 1) {
-          O.write({ stepOf: n });
-          X.fossils += 1;
-          m += 400 * n;
-          g += n;
-          try {
-            const st = routeEvent().st;
-            writeLS('res-route-event', { d: st.d, done: true, res: 'Les Ombres ont été repoussées.' });
-          } catch {
-            /* Best effort: failure here is non-fatal. */
-          }
-        }
-        writeChallengeState(X);
-      }
-      return m || g ? [m, g] : null;
-    } catch (e) {
-      return null;
-    }
-  });
+  HOOKS.progress.unshift(onProgress);
 
   /* ---- link with the episodes: « Affronter » (Face) button ---- */
   // returns true: the « Affronter » choice leads to battle instead of resolving the encounter

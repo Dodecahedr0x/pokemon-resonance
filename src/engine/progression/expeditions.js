@@ -138,41 +138,43 @@ export const onExpedition = id =>
 
 const placesExp = () => level('guet');
 
+function onExpeditionsClick(e) {
+  if (e.target.closest('[data-camp-b]')) {
+    return; // a Base Camp building (progression/base-camp.js)
+  }
+  const r = e.target.closest('[data-exp-r]');
+  if (r) {
+    return retrieve(+r.dataset.expR);
+  }
+  if (e.target.closest('[data-exp-new]')) {
+    EXP_DEST = null;
+    renderExpBox();
+    $('#expBox').hidden = false;
+    return;
+  }
+  const d = e.target.closest('[data-exp-d]');
+  if (d) {
+    EXP_DEST = d.dataset.expD || null;
+    renderExpBox();
+    return;
+  }
+  const p = e.target.closest('[data-exp-p]');
+  if (p && EXP_DEST) {
+    send(p.dataset.expP, EXP_DEST);
+    $('#expBox').hidden = true;
+    return;
+  }
+  if (e.target.closest('[data-exp-x]') || e.target.id === 'expBox') {
+    $('#expBox').hidden = true;
+  }
+}
+
 // Startup statements, run in their original order (see index.js).
 export function init() {
   // #expBox: rendered by React (src/screens/overlays/ExpBox.jsx)
   EXP_DEST = null;
 
-  document.addEventListener('click', e => {
-    if (e.target.closest('[data-camp-b]')) {
-      return; // a Base Camp building (progression/base-camp.js)
-    }
-    const r = e.target.closest('[data-exp-r]');
-    if (r) {
-      return retrieve(+r.dataset.expR);
-    }
-    if (e.target.closest('[data-exp-new]')) {
-      EXP_DEST = null;
-      renderExpBox();
-      $('#expBox').hidden = false;
-      return;
-    }
-    const d = e.target.closest('[data-exp-d]');
-    if (d) {
-      EXP_DEST = d.dataset.expD || null;
-      renderExpBox();
-      return;
-    }
-    const p = e.target.closest('[data-exp-p]');
-    if (p && EXP_DEST) {
-      send(p.dataset.expP, EXP_DEST);
-      $('#expBox').hidden = true;
-      return;
-    }
-    if (e.target.closest('[data-exp-x]') || e.target.id === 'expBox') {
-      $('#expBox').hidden = true;
-    }
-  });
+  document.addEventListener('click', onExpeditionsClick);
 
   HOOKS.progress.push((S, rew) => {
     const D = SCEN[S.sc] || {};

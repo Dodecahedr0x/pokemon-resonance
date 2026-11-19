@@ -14,9 +14,15 @@ import { noise, tone, vibe } from '../audio/sound-effects.js';
 import { AUTO, leaderOf } from '../progression/prestige.js';
 import { boardSet, getBoard, tokCl, tokHas, unitsBatch } from '../../screens/combat/board/boardStore.js';
 
-let auto;
+const auto = () => !!AUTO;
 
-let isFast;
+const isFast = () => {
+  try {
+    return !!PREF.fast;
+  } catch (e) {
+    return false;
+  }
+};
 
 /* ---------- home-made sounds (synthesized, no official sound) ---------- */
 const SOUNDS = {
@@ -28,12 +34,28 @@ const SOUNDS = {
   retour: () => tone(1500, 0, 0.26, 'sine', 0.035, 320),
 };
 
-let playSound;
+const playSound = k => {
+  try {
+    if (!PREF.sound || RM || PREF.pokeStyleS === 0) {
+      return;
+    }
+    SOUNDS[k] && SOUNDS[k]();
+  } catch {
+    /* Best effort: failure here is non-fatal. */
+  }
+};
 
 /* ---------- drawings: SVG Poké Ball ---------- */
-let ballSvg;
+const ballSvg = r =>
+  `<path class="pk-sbt" d="M${-r} 0A${r} ${r} 0 0 1 ${r} 0Z"/><path class="pk-sbb" d="M${-r} 0A${r} ${r} 0 0 0 ${r} 0Z"/><circle class="pk-sbn" r="${(r * 0.32).toFixed(2)}"/>`;
 
-let sparks;
+const sparks = (n, cls) => {
+  let h = '';
+  for (let i = 0; i < n; i++) {
+    h += `<circle class="${cls}" r="1.5" style="--a:${Math.round((360 / n) * i + 15)}deg"/>`;
+  }
+  return h;
+};
 
 /* ---------- 1. battle entry ---------- */
 // #pk-btr is rendered by React (src/screens/overlays/Effects.jsx): its bands are
@@ -42,23 +64,140 @@ let btr;
 
 let tBtr;
 
-let genre;
+const genre = b => {
+  const D = SCEN[b.sc] || {};
+  if (D.wild && !D.legend) {
+    return 'sauvage';
+  }
+  let boss = !!(D.rival || D.legend || b.sc === 'champ' || D.gym != null);
+  try {
+    boss = boss || ARENAS.findIndex(a => a.k === b.sc) >= 0 || !!leaderOf(b.sc);
+  } catch {
+    /* Best effort: failure here is non-fatal. */
+  }
+  return boss ? 'boss' : 'dresseur';
+};
 
-let transition;
+const transition = b => {
+  if (calmMotion() || auto()) {
+    return;
+  }
+  btr.className = '';
+  paintOverlay('btr', { on: true });
+  void btr.offsetWidth;
+  btr.className = 'go ' + genre(b) + (isFast() ? ' vite' : '');
+  playSound('whoosh');
+  clearTimeout(tBtr);
+  tBtr = setTimeout(
+    () => {
+      btr.className = '';
+      clearOverlay('btr');
+    },
+    isFast() ? 700 : 1500
+  );
+};
 
 /* ---------- 2. sending out Pokémon and returning on K.O. ---------- */
 let ENTRANCES;
 
 // effects layer (React, last on the board), created on first use
-let layer;
+const layer = () => {
+  if (!getBoard().pk) {
+    boardSet({ pk: true }, 'pk');
+  }
+  return L.pk73 && L.pk73.isConnected ? L.pk73 : null;
+};
 
-let showIt;
+const showIt = _b => {
+  try {
+    if (!L || !L.u) {
+      return;
+    }
+    unitsBatch(() => Object.values(L.u).forEach(T => tokCl(T, 'pk-wait', false))); // token classes: Units.jsx
+  } catch {
+    /* Best effort: failure here is non-fatal. */
+  }
+};
 
-let prepare;
+const prepare = b => {
+  if (!b || calmMotion() || auto() || !L || !L.u) {
+    return;
+  }
+  ENTRANCES.set(b, 1);
+  b.units.forEach(u => {
+    const T = L.u[u.uid];
+    if (T && !u.ko) {
+      tokCl(T, 'pk-wait', true);
+    }
+  });
+  setTimeout(() => {
+    if (ENTRANCES.get(b) === 1) {
+      ENTRANCES.set(b, 2);
+      showIt(b);
+    }
+  }, 9000);
+};
 
-let send;
+const send = b => {
+  const g = layer();
+  if (!g || calmMotion()) {
+    return showIt(b);
+  }
+  const D = SCEN[b.sc] || {},
+    wild = !!D.wild;
+  const listItems = b.units.filter(u => !u.ko && L.u[u.uid]);
+  listItems.sort((x, y) => (x.side === 'e' ? 0 : 1) - (y.side === 'e' ? 0 : 1));
+  const stepSize = isFast() ? 0.04 : 0.11;
+  listItems.forEach((u, i) => {
+    const T = L.u[u.uid];
+    let x, y;
+    try {
+      [x, y] = HC(uk(u));
+    } catch (e) {
+      tokCl(T, 'pk-wait', false);
+      return;
+    }
+    const d = i * stepSize,
+      wildMon = wild && u.side === 'e';
+    const w = el('g', { transform: `translate(${x.toFixed(1)},${y.toFixed(1)})` }, g);
+    w.style.setProperty('--d', d.toFixed(2) + 's');
+    w.innerHTML = wildMon
+      ? `<circle class="pk-wl-r" r="15"/>${sparks(6, 'pk-lf')}`
+      : `<circle class="pk-so-fl" r="17"/>${sparks(6, 'pk-spk')}<g class="pk-so">${ballSvg(7)}</g>`;
+    setTimeout(() => tokCl(T, 'pk-wait', false), (d + (wildMon ? 0.12 : 0.36)) * 1000);
+    setTimeout(() => w.remove(), (d + 1.1) * 1000);
+  });
+  if (listItems.length) {
+    playSound('envoi');
+  }
+  setTimeout(() => showIt(b), listItems.length * stepSize * 1000 + 900);
+};
 
-let recall;
+const recall = u => {
+  const g = layer(),
+    T = L.u && L.u[u.uid];
+  if (!g || !T) {
+    return;
+  }
+  let x, y;
+  try {
+    [x, y] = HC(uk(u));
+  } catch (e) {
+    return;
+  }
+  const D = (B && SCEN[B.sc]) || {},
+    wildMon = !!D.wild && u.side === 'e';
+  const w = el('g', { transform: `translate(${x.toFixed(1)},${y.toFixed(1)})` }, g);
+  if (wildMon) {
+    w.innerHTML = '<circle class="pk-poof" r="14"/>';
+  } else {
+    w.innerHTML = `<circle class="pk-ko-r" r="15"/><rect class="pk-ko-bm" x="-2" y="-42" width="4" height="42" rx="2"/><g transform="translate(0,-46)"><g class="pk-ko-b">${ballSvg(7.5)}</g></g>`;
+    tokCl(T, 'pk-rouge', true);
+    setTimeout(() => tokCl(T, 'pk-rouge', false), 800);
+    playSound('retour');
+  }
+  setTimeout(() => w.remove(), 1300);
+};
 
 // a Pokémon that has just been knocked out returns to its Poké Ball
 let wasKo;
@@ -71,169 +210,66 @@ let bc;
 
 let tBc;
 
-let closeBadge;
+const closeBadge = () => {
+  if (bc.hidden || bc.classList.contains('out')) {
+    return;
+  }
+  clearTimeout(tBc);
+  bc.classList.add('out');
+  setTimeout(() => {
+    bc.hidden = true;
+    bc.classList.remove('out');
+    clearOverlay('badge');
+  }, 300);
+};
 
-let celebrateBadge;
+const celebrateBadge = () => {
+  if (!B || !B.rew || !B.rew.badgeNew || CELEBRATED.has(B) || calmMotion() || auto()) {
+    return;
+  }
+  const D = SCEN[B.sc] || {};
+  let i = typeof D.gym === 'number' ? D.gym : -1;
+  if (i < 0) {
+    i = ARENAS.findIndex(a => a.k === B.sc);
+  }
+  if (i < 0) {
+    return;
+  }
+  CELEBRATED.add(B);
+  let leader = '';
+  try {
+    const Lc = leaderOf(B.sc);
+    if (Lc && Lc.n) {
+      leader = Lc.n;
+    }
+  } catch {
+    /* Best effort: failure here is non-fatal. */
+  }
+  const displayName = (GYMS[i] && GYMS[i].t) || D.at || '';
+  paintOverlay('badge', {
+    svg: badgeSvg(i, (GYMS[i] && GYMS[i].t) || displayName, 'pkbc' + i),
+    leader,
+    displayName,
+    n: BADGES.length,
+  });
+  bc.hidden = false;
+  try {
+    vibe([20, 40, 20, 40, 90]);
+  } catch {
+    /* Best effort: failure here is non-fatal. */
+  }
+  clearTimeout(tBc);
+  tBc = setTimeout(closeBadge, isFast() ? 2400 : 4200);
+};
 
 let res;
 
 // Statements run at startup, in the original order (see index.js).
 export function init() {
-  auto = () => !!AUTO;
-  isFast = () => {
-    try {
-      return !!PREF.fast;
-    } catch (e) {
-      return false;
-    }
-  };
-  playSound = k => {
-    try {
-      if (!PREF.sound || RM || PREF.pokeStyleS === 0) {
-        return;
-      }
-      SOUNDS[k] && SOUNDS[k]();
-    } catch {
-      /* Best effort: failure here is non-fatal. */
-    }
-  };
   window.__battleSound = playSound;
-  ballSvg = r =>
-    `<path class="pk-sbt" d="M${-r} 0A${r} ${r} 0 0 1 ${r} 0Z"/><path class="pk-sbb" d="M${-r} 0A${r} ${r} 0 0 0 ${r} 0Z"/><circle class="pk-sbn" r="${(r * 0.32).toFixed(2)}"/>`;
-  sparks = (n, cls) => {
-    let h = '';
-    for (let i = 0; i < n; i++) {
-      h += `<circle class="${cls}" r="1.5" style="--a:${Math.round((360 / n) * i + 15)}deg"/>`;
-    }
-    return h;
-  };
   btr = document.getElementById('pk-btr');
   tBtr = 0;
-  genre = b => {
-    const D = SCEN[b.sc] || {};
-    if (D.wild && !D.legend) {
-      return 'sauvage';
-    }
-    let boss = !!(D.rival || D.legend || b.sc === 'champ' || D.gym != null);
-    try {
-      boss = boss || ARENAS.findIndex(a => a.k === b.sc) >= 0 || !!leaderOf(b.sc);
-    } catch {
-      /* Best effort: failure here is non-fatal. */
-    }
-    return boss ? 'boss' : 'dresseur';
-  };
-  transition = b => {
-    if (calmMotion() || auto()) {
-      return;
-    }
-    btr.className = '';
-    paintOverlay('btr', { on: true });
-    void btr.offsetWidth;
-    btr.className = 'go ' + genre(b) + (isFast() ? ' vite' : '');
-    playSound('whoosh');
-    clearTimeout(tBtr);
-    tBtr = setTimeout(
-      () => {
-        btr.className = '';
-        clearOverlay('btr');
-      },
-      isFast() ? 700 : 1500
-    );
-  };
   ENTRANCES = new WeakMap();
-  layer = () => {
-    if (!getBoard().pk) {
-      boardSet({ pk: true }, 'pk');
-    }
-    return L.pk73 && L.pk73.isConnected ? L.pk73 : null;
-  };
-  showIt = _b => {
-    try {
-      if (!L || !L.u) {
-        return;
-      }
-      unitsBatch(() => Object.values(L.u).forEach(T => tokCl(T, 'pk-wait', false))); // token classes: Units.jsx
-    } catch {
-      /* Best effort: failure here is non-fatal. */
-    }
-  };
-  prepare = b => {
-    if (!b || calmMotion() || auto() || !L || !L.u) {
-      return;
-    }
-    ENTRANCES.set(b, 1);
-    b.units.forEach(u => {
-      const T = L.u[u.uid];
-      if (T && !u.ko) {
-        tokCl(T, 'pk-wait', true);
-      }
-    });
-    setTimeout(() => {
-      if (ENTRANCES.get(b) === 1) {
-        ENTRANCES.set(b, 2);
-        showIt(b);
-      }
-    }, 9000);
-  };
-  send = b => {
-    const g = layer();
-    if (!g || calmMotion()) {
-      return showIt(b);
-    }
-    const D = SCEN[b.sc] || {},
-      wild = !!D.wild;
-    const listItems = b.units.filter(u => !u.ko && L.u[u.uid]);
-    listItems.sort((x, y) => (x.side === 'e' ? 0 : 1) - (y.side === 'e' ? 0 : 1));
-    const stepSize = isFast() ? 0.04 : 0.11;
-    listItems.forEach((u, i) => {
-      const T = L.u[u.uid];
-      let x, y;
-      try {
-        [x, y] = HC(uk(u));
-      } catch (e) {
-        tokCl(T, 'pk-wait', false);
-        return;
-      }
-      const d = i * stepSize,
-        wildMon = wild && u.side === 'e';
-      const w = el('g', { transform: `translate(${x.toFixed(1)},${y.toFixed(1)})` }, g);
-      w.style.setProperty('--d', d.toFixed(2) + 's');
-      w.innerHTML = wildMon
-        ? `<circle class="pk-wl-r" r="15"/>${sparks(6, 'pk-lf')}`
-        : `<circle class="pk-so-fl" r="17"/>${sparks(6, 'pk-spk')}<g class="pk-so">${ballSvg(7)}</g>`;
-      setTimeout(() => tokCl(T, 'pk-wait', false), (d + (wildMon ? 0.12 : 0.36)) * 1000);
-      setTimeout(() => w.remove(), (d + 1.1) * 1000);
-    });
-    if (listItems.length) {
-      playSound('envoi');
-    }
-    setTimeout(() => showIt(b), listItems.length * stepSize * 1000 + 900);
-  };
-  recall = u => {
-    const g = layer(),
-      T = L.u && L.u[u.uid];
-    if (!g || !T) {
-      return;
-    }
-    let x, y;
-    try {
-      [x, y] = HC(uk(u));
-    } catch (e) {
-      return;
-    }
-    const D = (B && SCEN[B.sc]) || {},
-      wildMon = !!D.wild && u.side === 'e';
-    const w = el('g', { transform: `translate(${x.toFixed(1)},${y.toFixed(1)})` }, g);
-    if (wildMon) {
-      w.innerHTML = '<circle class="pk-poof" r="14"/>';
-    } else {
-      w.innerHTML = `<circle class="pk-ko-r" r="15"/><rect class="pk-ko-bm" x="-2" y="-42" width="4" height="42" rx="2"/><g transform="translate(0,-46)"><g class="pk-ko-b">${ballSvg(7.5)}</g></g>`;
-      tokCl(T, 'pk-rouge', true);
-      setTimeout(() => tokCl(T, 'pk-rouge', false), 800);
-      playSound('retour');
-    }
-    setTimeout(() => w.remove(), 1300);
-  };
   HOOKS.beforePresentation.push(() => {
     if (B && !B.over) {
       prepare(B);
@@ -282,62 +318,12 @@ export function init() {
   CELEBRATED = new WeakSet();
   bc = document.getElementById('pk-badge');
   tBc = 0;
-  closeBadge = () => {
-    if (bc.hidden || bc.classList.contains('out')) {
-      return;
-    }
-    clearTimeout(tBc);
-    bc.classList.add('out');
-    setTimeout(() => {
-      bc.hidden = true;
-      bc.classList.remove('out');
-      clearOverlay('badge');
-    }, 300);
-  };
   bc.addEventListener('click', closeBadge);
   document.addEventListener('keydown', e => {
     if (!bc.hidden && (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ')) {
       closeBadge();
     }
   });
-  celebrateBadge = () => {
-    if (!B || !B.rew || !B.rew.badgeNew || CELEBRATED.has(B) || calmMotion() || auto()) {
-      return;
-    }
-    const D = SCEN[B.sc] || {};
-    let i = typeof D.gym === 'number' ? D.gym : -1;
-    if (i < 0) {
-      i = ARENAS.findIndex(a => a.k === B.sc);
-    }
-    if (i < 0) {
-      return;
-    }
-    CELEBRATED.add(B);
-    let leader = '';
-    try {
-      const Lc = leaderOf(B.sc);
-      if (Lc && Lc.n) {
-        leader = Lc.n;
-      }
-    } catch {
-      /* Best effort: failure here is non-fatal. */
-    }
-    const displayName = (GYMS[i] && GYMS[i].t) || D.at || '';
-    paintOverlay('badge', {
-      svg: badgeSvg(i, (GYMS[i] && GYMS[i].t) || displayName, 'pkbc' + i),
-      leader,
-      displayName,
-      n: BADGES.length,
-    });
-    bc.hidden = false;
-    try {
-      vibe([20, 40, 20, 40, 90]);
-    } catch {
-      /* Best effort: failure here is non-fatal. */
-    }
-    clearTimeout(tBc);
-    tBc = setTimeout(closeBadge, isFast() ? 2400 : 4200);
-  };
   res = $('#cbResult');
   if (res && window.MutationObserver) {
     new MutationObserver(() => {

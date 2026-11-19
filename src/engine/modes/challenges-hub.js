@@ -77,56 +77,54 @@ export const openChallengesHub = () => {
   });
 };
 
+function onChallengesHubClick(e) {
+  const b = e.target.closest && e.target.closest('[data-daily-challenges]');
+  if (!b || b.disabled) {
+    return;
+  }
+  e.stopPropagation();
+  e.preventDefault();
+  const v = b.dataset.dailyChallenges,
+    X = readChallengeState();
+  if (v === 'open') {
+    return openChallengesHub();
+  }
+  if (v === 'close') {
+    return shut('daily-challenges-o');
+  }
+  if (v === 'omb') {
+    const O = window.__shadowEpisodes;
+    if (!O.available() || !squad.length) {
+      return toast(squad.length ? 'Épisode verrouillé.' : 'Composez d’abord une équipe.');
+    }
+    shut('daily-challenges-o');
+    if (B) {
+      backToPrep();
+    }
+    return goFight('omb470_' + (O.readValue().stepOf + 1));
+  }
+  if (v === 'dq') {
+    if (!squad.length) {
+      return toast('Composez d’abord une équipe.');
+    }
+    dqMake();
+    shut('daily-challenges-o');
+    if (B) {
+      backToPrep();
+    }
+    return goFight('dq470');
+  }
+  if (v === 'rev' && !reviveSpecimen(X)) {
+    return;
+  }
+  adjustPrestige(v, X);
+  shut('daily-challenges-o');
+  openChallengesHub();
+}
+
 // Statements run at startup, in the original order (see index.js).
 export function init() {
-  document.addEventListener(
-    'click',
-    e => {
-      const b = e.target.closest && e.target.closest('[data-daily-challenges]');
-      if (!b || b.disabled) {
-        return;
-      }
-      e.stopPropagation();
-      e.preventDefault();
-      const v = b.dataset.dailyChallenges,
-        X = readChallengeState();
-      if (v === 'open') {
-        return openChallengesHub();
-      }
-      if (v === 'close') {
-        return shut('daily-challenges-o');
-      }
-      if (v === 'omb') {
-        const O = window.__shadowEpisodes;
-        if (!O.available() || !squad.length) {
-          return toast(squad.length ? 'Épisode verrouillé.' : 'Composez d’abord une équipe.');
-        }
-        shut('daily-challenges-o');
-        if (B) {
-          backToPrep();
-        }
-        return goFight('omb470_' + (O.readValue().stepOf + 1));
-      }
-      if (v === 'dq') {
-        if (!squad.length) {
-          return toast('Composez d’abord une équipe.');
-        }
-        dqMake();
-        shut('daily-challenges-o');
-        if (B) {
-          backToPrep();
-        }
-        return goFight('dq470');
-      }
-      if (v === 'rev' && !reviveSpecimen(X)) {
-        return;
-      }
-      adjustPrestige(v, X);
-      shut('daily-challenges-o');
-      openChallengesHub();
-    },
-    true
-  );
+  document.addEventListener('click', onChallengesHubClick, true);
   /* « Défis » (Challenges) banner on the Home page (#dailyChallenges): rendered by React (src/screens/home/Banners.jsx) */
   window.__challenges = {
     readValue: readChallengeState,

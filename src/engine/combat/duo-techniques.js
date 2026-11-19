@@ -154,40 +154,42 @@ export function listDuos() {
   return o;
 }
 
+const DUO_TECHNIQUES = {
+  'loupio|marill': {
+    n: 'Abysse Lumineux',
+    first: 'marill',
+    r: 3,
+    d: 'Marill inonde la zone, Loupio y allume ses lanternes électriques.',
+    a: { n: 'Abysse Lumineux', t: 'Eau', p: 4, r: 3, sh: 'area', mk: 'trempe' },
+    b: { n: 'Abysse Lumineux', t: 'Électrik', p: 9, r: 4, sh: 'one' },
+  },
+  'axoloto|limagma': {
+    n: 'Geyser Volcanique',
+    first: 'axoloto',
+    r: 3,
+    d: 'Axoloto détrempe le sol, Limagma y verse sa lave : la vapeur jaillit.',
+    a: { n: 'Geyser Volcanique', t: 'Eau', p: 4, r: 3, sh: 'area', mk: 'trempe' },
+    b: { n: 'Geyser Volcanique', t: 'Feu', p: 9, r: 4, sh: 'one' },
+  },
+  'granivol|mimigal': {
+    n: 'Spores Gluantes',
+    first: 'granivol',
+    r: 3,
+    d: 'Granivol sème des racines, Mimigal y tisse une toile empoisonnée.',
+    a: { n: 'Spores Gluantes', t: 'Plante', p: 3, r: 3, sh: 'area', mk: 'enracine' },
+    b: { n: 'Spores Gluantes', t: 'Poison', p: 8, r: 4, sh: 'one', fx: 'toxweb' },
+  },
+  'hoothoot|natu': {
+    n: 'Vision Nocturne',
+    first: 'natu',
+    r: 3,
+    d: 'Natu voit l’avenir, Hoothoot fond sur la cible au bon moment.',
+    a: { n: 'Vision Nocturne', t: 'Psy', p: 6, r: 3, sh: 'area' },
+    b: { n: 'Vision Nocturne', t: 'Vol', p: 9, r: 4, sh: 'one', fx: 'sleep' },
+  },
+};
+
 // Instructions run at startup, in the original order (see index.js).
 export function init() {
-  Object.assign(DUOT, {
-    'loupio|marill': {
-      n: 'Abysse Lumineux',
-      first: 'marill',
-      r: 3,
-      d: 'Marill inonde la zone, Loupio y allume ses lanternes électriques.',
-      a: { n: 'Abysse Lumineux', t: 'Eau', p: 4, r: 3, sh: 'area', mk: 'trempe' },
-      b: { n: 'Abysse Lumineux', t: 'Électrik', p: 9, r: 4, sh: 'one' },
-    },
-    'axoloto|limagma': {
-      n: 'Geyser Volcanique',
-      first: 'axoloto',
-      r: 3,
-      d: 'Axoloto détrempe le sol, Limagma y verse sa lave : la vapeur jaillit.',
-      a: { n: 'Geyser Volcanique', t: 'Eau', p: 4, r: 3, sh: 'area', mk: 'trempe' },
-      b: { n: 'Geyser Volcanique', t: 'Feu', p: 9, r: 4, sh: 'one' },
-    },
-    'granivol|mimigal': {
-      n: 'Spores Gluantes',
-      first: 'granivol',
-      r: 3,
-      d: 'Granivol sème des racines, Mimigal y tisse une toile empoisonnée.',
-      a: { n: 'Spores Gluantes', t: 'Plante', p: 3, r: 3, sh: 'area', mk: 'enracine' },
-      b: { n: 'Spores Gluantes', t: 'Poison', p: 8, r: 4, sh: 'one', fx: 'toxweb' },
-    },
-    'hoothoot|natu': {
-      n: 'Vision Nocturne',
-      first: 'natu',
-      r: 3,
-      d: 'Natu voit l’avenir, Hoothoot fond sur la cible au bon moment.',
-      a: { n: 'Vision Nocturne', t: 'Psy', p: 6, r: 3, sh: 'area' },
-      b: { n: 'Vision Nocturne', t: 'Vol', p: 9, r: 4, sh: 'one', fx: 'sleep' },
-    },
-  });
+  Object.assign(DUOT, DUO_TECHNIQUES);
 }

@@ -69,49 +69,47 @@ export const openMoreChallenges = () => {
   });
 };
 
+function onMoreChallengesClick(e) {
+  const b = e.target.closest && e.target.closest('[data-x2470]');
+  if (!b || b.disabled) {
+    return;
+  }
+  e.stopPropagation();
+  e.preventDefault();
+  const v = b.dataset.x2470;
+  if (v === 'open') {
+    return openMoreChallenges();
+  }
+  if (v === 'close') {
+    return shut('x2470o');
+  }
+  if (!squad.length) {
+    return toast('Composez d’abord une équipe.');
+  }
+  if (v === 'wk') {
+    wkMake();
+    shut('x2470o');
+    if (B) {
+      backToPrep();
+    }
+    return goFight('wk470');
+  }
+  if (v === 'inv') {
+    shut('x2470o');
+    if (B) {
+      backToPrep();
+    }
+    return goFight('inv470');
+  }
+  if (v === 'ct') {
+    shut('x2470o');
+    return trainingSession();
+  }
+}
+
 // Statements run at startup, in the original order (see index.js).
 export function init() {
-  document.addEventListener(
-    'click',
-    e => {
-      const b = e.target.closest && e.target.closest('[data-x2470]');
-      if (!b || b.disabled) {
-        return;
-      }
-      e.stopPropagation();
-      e.preventDefault();
-      const v = b.dataset.x2470;
-      if (v === 'open') {
-        return openMoreChallenges();
-      }
-      if (v === 'close') {
-        return shut('x2470o');
-      }
-      if (!squad.length) {
-        return toast('Composez d’abord une équipe.');
-      }
-      if (v === 'wk') {
-        wkMake();
-        shut('x2470o');
-        if (B) {
-          backToPrep();
-        }
-        return goFight('wk470');
-      }
-      if (v === 'inv') {
-        shut('x2470o');
-        if (B) {
-          backToPrep();
-        }
-        return goFight('inv470');
-      }
-      if (v === 'ct') {
-        shut('x2470o');
-        return trainingSession();
-      }
-    },
-    true
-  );
+  document.addEventListener('click', onMoreChallengesClick, true);
 
   /* "Plus de défis" (More challenges) button under the Challenges bar on the Home screen */
   /* the #x2470 button is rendered by React (src/screens/home/Banners.jsx) */

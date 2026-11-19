@@ -103,6 +103,38 @@ export function resonanceBlockHtml(u, gauge) {
   return `${gauge ? `<div class="bp-en${u.en >= EMAX ? ' full' : ''}"><div class="en-h"><span class="lbl-s">Résonance</span>${enPips(u.en, 'lg')}</div></div>` : ''}<button type="button" class="evb fres-b" data-resonance-burst ${ok ? '' : 'disabled'}><span class="evb-m fres-m"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.6 6.4L21 9l-5 4.4 1.6 6.6L12 16.6 6.4 20 8 13.4 3 9l6.4-.6Z" fill="currentColor"/></svg></span><span><b>Forme Résonante</b><em>${why}</em></span><span class="evb-c">1 Voix<br>+ jauge</span></button>`;
 }
 
+async function onResonantFormClick(e) {
+  const b = e.target.closest('[data-resonance-burst]');
+  if (!b || !B) {
+    return;
+  }
+  const u = ui.sel && byUid(B, ui.sel);
+  if (!u || !canTriggerResonance(B, u)) {
+    return;
+  }
+  ui.undo = null;
+  ui.busy = true;
+  clearAim();
+  renderAll();
+  try {
+    await cinematic(u.n, u.t, `${u.n} · Forme Résonante`, u.t, 'a', u.uid);
+  } catch {
+    /* Best effort: failure here is non-fatal. */
+  }
+  const ev = playerResonance(B, u);
+  ui.busy = false;
+  renderAll();
+  if (!ev) {
+    return;
+  }
+  playEv(ev);
+  if (B.over) {
+    return void finish();
+  }
+  toast(`${u.n} résonne pour ${RESO_TURNS} manches : son action reste libre.`);
+  renderAll();
+}
+
 // Statements run at startup, in the original order (see index.js).
 export function init() {
   DAMAGE_PROVIDERS.push({
@@ -133,37 +165,7 @@ export function init() {
     opponentResonance(S, ev);
   });
 
-  document.addEventListener('click', async e => {
-    const b = e.target.closest('[data-resonance-burst]');
-    if (!b || !B) {
-      return;
-    }
-    const u = ui.sel && byUid(B, ui.sel);
-    if (!u || !canTriggerResonance(B, u)) {
-      return;
-    }
-    ui.undo = null;
-    ui.busy = true;
-    clearAim();
-    renderAll();
-    try {
-      await cinematic(u.n, u.t, `${u.n} · Forme Résonante`, u.t, 'a', u.uid);
-    } catch {
-      /* Best effort: failure here is non-fatal. */
-    }
-    const ev = playerResonance(B, u);
-    ui.busy = false;
-    renderAll();
-    if (!ev) {
-      return;
-    }
-    playEv(ev);
-    if (B.over) {
-      return void finish();
-    }
-    toast(`${u.n} résonne pour ${RESO_TURNS} manches : son action reste libre.`);
-    renderAll();
-  });
+  document.addEventListener('click', onResonantFormClick);
 
   /* ---------- achievements ---------- */
   ACHIEVEMENTS.push({

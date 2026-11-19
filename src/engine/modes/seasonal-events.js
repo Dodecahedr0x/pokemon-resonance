@@ -91,6 +91,43 @@ const seasonSave = s => {
   writeLS('res-season-event', s);
 };
 
+function onSeasonalEventsClick(e) {
+  const b = e.target.closest && e.target.closest('[data-season-event]');
+  if (!b) {
+    return;
+  }
+  e.stopPropagation();
+  e.preventDefault();
+  const v = b.dataset.seasonEvent;
+  if (v === 'open') {
+    return seasonOpen();
+  }
+  if (v === 'close') {
+    return shut('season-event-o');
+  }
+  if (b.disabled) {
+    return;
+  }
+  const s = seasonState(),
+    i = +v,
+    T = TIER_POINTS[i];
+  if (!T || s.got[i] || s.pts < T[0]) {
+    return;
+  }
+  s.got[i] = 1;
+  if (i === TIER_POINTS.length - 1) {
+    s.won = (s.won || 0) + 0;
+  }
+  seasonSave(s);
+  applyReward(T[2]);
+  sfx('win');
+  vibe([30, 40, 30]);
+  toast('Récompense de saison : ' + rewardText(T[2]) + '.');
+  savePurse();
+  seasonOpen();
+  refreshHome(); // #seasonEvent banner
+}
+
 // Startup statements, run in their original order (see index.js).
 export function init() {
   HOOKS.combat.push(S => {
@@ -139,44 +176,5 @@ export function init() {
       : ''
   );
 
-  document.addEventListener(
-    'click',
-    e => {
-      const b = e.target.closest && e.target.closest('[data-season-event]');
-      if (!b) {
-        return;
-      }
-      e.stopPropagation();
-      e.preventDefault();
-      const v = b.dataset.seasonEvent;
-      if (v === 'open') {
-        return seasonOpen();
-      }
-      if (v === 'close') {
-        return shut('season-event-o');
-      }
-      if (b.disabled) {
-        return;
-      }
-      const s = seasonState(),
-        i = +v,
-        T = TIER_POINTS[i];
-      if (!T || s.got[i] || s.pts < T[0]) {
-        return;
-      }
-      s.got[i] = 1;
-      if (i === TIER_POINTS.length - 1) {
-        s.won = (s.won || 0) + 0;
-      }
-      seasonSave(s);
-      applyReward(T[2]);
-      sfx('win');
-      vibe([30, 40, 30]);
-      toast('Récompense de saison : ' + rewardText(T[2]) + '.');
-      savePurse();
-      seasonOpen();
-      refreshHome(); // #seasonEvent banner
-    },
-    true
-  );
+  document.addEventListener('click', onSeasonalEventsClick, true);
 }

@@ -120,6 +120,82 @@ function readGym(txt) {
   }
 }
 
+function onCustomArenasClick(e) {
+  const b = e.target.closest('[data-gym-arena]');
+  if (!b) {
+    return;
+  }
+  const a = b.dataset.gymArena,
+    i = +b.dataset.i,
+    A = (PROFILE.customGyms = PROFILE.customGyms || []);
+  if (a === 'new') {
+    if (A.length >= 12) {
+      return toast('12 arènes au plus : supprimez-en une.');
+    }
+    GYM_EDITOR = {
+      i: -1,
+      a: { n: 'Mon arène', t: 'gue', r: '', h: 'jour', lim: 10, hb: 10, f: ['onix', 'racaillou', '', '', ''] },
+    };
+  } else if (a === 'edit' && A[i]) {
+    GYM_EDITOR = { i, a: Object.assign({}, A[i], { f: [...A[i].f, '', '', '', '', ''].slice(0, 5) }) };
+  } else if (a === 'annuler') {
+    GYM_EDITOR = null;
+  } else if (a === 'save' && GYM_EDITOR) {
+    const c = gymClean(
+      Object.assign({}, GYM_EDITOR.a, { f: GYM_EDITOR.a.f.filter(Boolean), author: PROFILE.name || '' })
+    );
+    if (!c) {
+      return toast('Choisissez au moins un adversaire.');
+    }
+    if (GYM_EDITOR.i >= 0) {
+      A[GYM_EDITOR.i] = Object.assign(c, { id: A[GYM_EDITOR.i].id });
+    } else {
+      A.unshift(c);
+    }
+    GYM_EDITOR = null;
+    queueSave();
+    toast('Arène enregistrée.');
+  } else if (a === 'suppr' && A[i]) {
+    if (!b.dataset.ok) {
+      b.dataset.ok = '1';
+      b.textContent = 'Confirmer';
+      return;
+    }
+    A.splice(i, 1);
+    queueSave();
+  } else if (a === 'code' && A[i]) {
+    GYM_EDITOR = { code: i };
+  } else if (a === 'copier' && A[i]) {
+    const t = gymShareCode(A[i]);
+    try {
+      navigator.clipboard.writeText(t).then(
+        () => toast('Code copié.'),
+        () => toast('Sélectionnez le code et copiez-le.')
+      );
+    } catch (er) {
+      toast('Sélectionnez le code et copiez-le.');
+    }
+    return;
+  } else if (a === 'import') {
+    const v = (document.getElementById('gym-code') || {}).value,
+      c = readGym(v);
+    if (!c) {
+      return toast('Code d’arène illisible. Il commence par « ARN- ».');
+    }
+    if (A.length >= 12) {
+      return toast('12 arènes au plus : supprimez-en une.');
+    }
+    A.unshift(c);
+    queueSave();
+    toast(`Arène « ${c.n} » ajoutée.`);
+  } else if (a === 'jouer' && A[i]) {
+    gymScene(A[i]);
+    openBattle('perso431');
+    return;
+  }
+  renderCampPage();
+}
+
 // Statements run at startup, in the original order (see index.js).
 export function init() {
   HOOKS.battleResult.push(r =>
@@ -153,79 +229,5 @@ export function init() {
     }
   });
 
-  document.addEventListener('click', e => {
-    const b = e.target.closest('[data-gym-arena]');
-    if (!b) {
-      return;
-    }
-    const a = b.dataset.gymArena,
-      i = +b.dataset.i,
-      A = (PROFILE.customGyms = PROFILE.customGyms || []);
-    if (a === 'new') {
-      if (A.length >= 12) {
-        return toast('12 arènes au plus : supprimez-en une.');
-      }
-      GYM_EDITOR = {
-        i: -1,
-        a: { n: 'Mon arène', t: 'gue', r: '', h: 'jour', lim: 10, hb: 10, f: ['onix', 'racaillou', '', '', ''] },
-      };
-    } else if (a === 'edit' && A[i]) {
-      GYM_EDITOR = { i, a: Object.assign({}, A[i], { f: [...A[i].f, '', '', '', '', ''].slice(0, 5) }) };
-    } else if (a === 'annuler') {
-      GYM_EDITOR = null;
-    } else if (a === 'save' && GYM_EDITOR) {
-      const c = gymClean(
-        Object.assign({}, GYM_EDITOR.a, { f: GYM_EDITOR.a.f.filter(Boolean), author: PROFILE.name || '' })
-      );
-      if (!c) {
-        return toast('Choisissez au moins un adversaire.');
-      }
-      if (GYM_EDITOR.i >= 0) {
-        A[GYM_EDITOR.i] = Object.assign(c, { id: A[GYM_EDITOR.i].id });
-      } else {
-        A.unshift(c);
-      }
-      GYM_EDITOR = null;
-      queueSave();
-      toast('Arène enregistrée.');
-    } else if (a === 'suppr' && A[i]) {
-      if (!b.dataset.ok) {
-        b.dataset.ok = '1';
-        b.textContent = 'Confirmer';
-        return;
-      }
-      A.splice(i, 1);
-      queueSave();
-    } else if (a === 'code' && A[i]) {
-      GYM_EDITOR = { code: i };
-    } else if (a === 'copier' && A[i]) {
-      const t = gymShareCode(A[i]);
-      try {
-        navigator.clipboard.writeText(t).then(
-          () => toast('Code copié.'),
-          () => toast('Sélectionnez le code et copiez-le.')
-        );
-      } catch (er) {
-        toast('Sélectionnez le code et copiez-le.');
-      }
-      return;
-    } else if (a === 'import') {
-      const v = (document.getElementById('gym-code') || {}).value,
-        c = readGym(v);
-      if (!c) {
-        return toast('Code d’arène illisible. Il commence par « ARN- ».');
-      }
-      if (A.length >= 12) {
-        return toast('12 arènes au plus : supprimez-en une.');
-      }
-      A.unshift(c);
-      queueSave();
-      toast(`Arène « ${c.n} » ajoutée.`);
-    } else if (a === 'jouer' && A[i]) {
-      gymScene(A[i]);
-      openBattle('perso431');
-      return;
-    }
-    renderCampPage();
-  });
+  document.addEventListener('click', onCustomArenasClick);
 }
