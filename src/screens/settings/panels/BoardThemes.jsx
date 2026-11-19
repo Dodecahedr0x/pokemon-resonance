@@ -1,5 +1,5 @@
 import { PROFILE } from '../../../engine/state/game-state.js';
-import { PREF } from '../../../engine/progression/campaign.js';
+import { PREF } from '../../../engine/ui/preferences.js';
 import { BOARD_THEMES, rivalState, isThemeUnlocked, dominantType } from '../../../engine/modes/rival-board-themes.js';
 
 // Board themes (v4.55), bought with Shards, then the rival Kael's report.

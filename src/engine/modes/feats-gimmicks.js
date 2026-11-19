@@ -5,7 +5,8 @@ import { writeLS } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { byUid, setMark, uAt } from '../combat/engine.js';
 import { esc } from '../state/saves.js';
-import { PREF, savePref, sfx } from '../progression/campaign.js';
+import { PREF, savePref } from '../ui/preferences.js';
+import { sfx } from '../audio/sound-effects.js';
 import { today } from '../state/economy.js';
 import { renderParams } from '../ui/settings.js';
 import { bossScene } from '../combat/resonance.js';
@@ -101,6 +102,37 @@ export const GIMMICKS = {
 export const gimmickKey = () =>
   PREF.gimmickBoard === 'rand' || GIMMICKS[PREF.gimmickBoard] ? PREF.gimmickBoard : 'off';
 
+function onProgress(S, rew, win) {
+  try {
+    if (!S.stats || (SCEN[S.sc] && SCEN[S.sc].tuto)) {
+      return null;
+    }
+    const b = featsSummary(S, win),
+      st = featsState();
+    st.n += b.ex.length;
+    st.rec.best = Math.max(st.rec.best, b.best ? b.best.d : 0);
+    if (win && (!st.rec.fast || b.rounds < st.rec.fast)) {
+      st.rec.fast = b.rounds;
+    }
+    st.h.unshift({
+      d: today(),
+      sc: (SCEN[S.sc] && SCEN[S.sc].n) || S.sc,
+      w: win ? 1 : 0,
+      mvp: b.mvp ? b.mvp.n : '',
+      mdmg: b.mvp ? b.mvp.d : 0,
+      best: b.best ? b.best.d : 0,
+      r: b.rounds,
+      ex: b.ex,
+    });
+    st.h = st.h.slice(0, 15);
+    featsSave(st);
+    rew.featsJournal = b;
+  } catch {
+    /* Best effort: failure here is non-fatal. */
+  }
+  return null;
+}
+
 // Statements run at startup, in the original order (see index.js).
 export function init() {
   HOOKS.damage.push((S, v, real, o) => {
@@ -113,36 +145,7 @@ export function init() {
     }
   });
 
-  HOOKS.progress.unshift((S, rew, win) => {
-    try {
-      if (!S.stats || (SCEN[S.sc] && SCEN[S.sc].tuto)) {
-        return null;
-      }
-      const b = featsSummary(S, win),
-        st = featsState();
-      st.n += b.ex.length;
-      st.rec.best = Math.max(st.rec.best, b.best ? b.best.d : 0);
-      if (win && (!st.rec.fast || b.rounds < st.rec.fast)) {
-        st.rec.fast = b.rounds;
-      }
-      st.h.unshift({
-        d: today(),
-        sc: (SCEN[S.sc] && SCEN[S.sc].n) || S.sc,
-        w: win ? 1 : 0,
-        mvp: b.mvp ? b.mvp.n : '',
-        mdmg: b.mvp ? b.mvp.d : 0,
-        best: b.best ? b.best.d : 0,
-        r: b.rounds,
-        ex: b.ex,
-      });
-      st.h = st.h.slice(0, 15);
-      featsSave(st);
-      rew.featsJournal = b;
-    } catch {
-      /* Best effort: failure here is non-fatal. */
-    }
-    return null;
-  });
+  HOOKS.progress.unshift(onProgress);
 
   HOOKS.battleResult.unshift(r => {
     const b = r.featsJournal;

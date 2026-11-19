@@ -27,11 +27,13 @@ import {
 import { noteAdd } from './synergies-obstacles.js';
 import { B, enPips } from './ui.js';
 import { queueSave } from '../state/saves.js';
-import { sfx, vibe } from '../progression/campaign.js';
-import { HEALS, HELD_IMG, SHOP, V4, bagN, today } from '../state/economy.js';
-import { renderWallet } from '../core/interface.js';
+import { sfx, vibe } from '../audio/sound-effects.js';
+import { HEALS } from '../items/battle-potions.js';
+import { HELD_IMG, SHOP, bagN, today } from '../state/economy.js';
+import { V4 } from '../ui/screen-state.js';
+import { renderWallet } from '../ui/wallet.js';
 import { renderBag } from '../progression/quests-shop.js';
-import { LEGS } from '../modes/adventure.js';
+import { LEGS } from '../modes/legendaries.js';
 import { DAMAGE_PROVIDERS } from './tactical-engine.js';
 import { de } from './tactics.js';
 import { applyPoison } from '../moves/epic-tms.js';
@@ -569,6 +571,119 @@ export const dailyDiscount = (k, p) => (p && isDailyOffer(k) ? Math.round((p * 0
 
 export const heldItemCost = k => dailyDiscount(k, HELD_SHOP[k].p);
 
+const COMPETITIVE_HELD_ITEMS = {
+  orbevie: {
+    n: 'Orbe Vie',
+    d: '+30 % de dégâts, mais perd 10 % de ses PV max après chaque attaque qui touche.',
+    i: 'M12 4a8 8 0 1 0 0 16 8 8 0 0 0 0-16Zm0 3a5 5 0 0 1 5 5h-2a3 3 0 0 0-3-3Z',
+  },
+  casquebrut: {
+    n: 'Casque Brut',
+    d: 'Un adversaire qui le frappe au contact perd 10 % de ses PV max.',
+    i: 'M4 16a8 8 0 0 1 16 0v3H4Z',
+  },
+  sitrus: {
+    n: 'Baie Sitrus',
+    d: 'Une fois par combat, quand ses PV passent sous la moitié : il récupère 25 % de ses PV max.',
+    i: 'M12 7c-4 0-7 3-7 6.5S8 20 12 20s7-3 7-6.5S16 7 12 7Zm1-1c0-2 1-3 3-3.5V4c-1.5.5-2 1-2 2Z',
+  },
+  mouchoir: {
+    n: 'Mouchoir Choix',
+    d: '+2 Mouvement, mais il ne peut plus lancer que la première capacité utilisée.',
+    i: 'M5 5h14l-3 6 3 8h-5l-2-6-2 6H5l3-8Z',
+  },
+  rochemeteo: {
+    n: 'Roche Météo',
+    d: 'La météo qu’il déclenche dure 3 manches de plus.',
+    i: 'M6 18l-2-6 4-6h8l4 6-2 6Z',
+  },
+  grosseracine: {
+    n: 'Grosse Racine',
+    d: 'Les soins et drains qu’il reçoit rendent 50 % de plus.',
+    i: 'M11 3h2v7l5 9h-2.3L13 13.5V21h-2v-7.5L8.3 19H6l5-9Z',
+  },
+  lentillezoom: {
+    n: 'Lentille Zoom',
+    d: '+1 Portée sur ses attaques de portée 2 ou plus.',
+    i: 'M10 4a6 6 0 1 0 0 12 6 6 0 0 0 0-12Zm4.5 10.5 5.5 5.5-1.5 1.5-5.5-5.5Z',
+  },
+  metronome: {
+    n: 'Métronome',
+    d: 'Ses coups comptent pour 1 note de Résonance de plus.',
+    i: 'M9 3h6l4 18H5Zm2.2 4L13 16h-1.6Z',
+  },
+  ceinturepro: {
+    n: 'Ceinture Pro',
+    d: 'Ses coups de Résonance font ×1,8 au lieu de ×1,5.',
+    i: 'M3 10h18v4H3Zm8-2h4v8h-4Z',
+  },
+};
+
+const CONSUMABLE_SHOP_ITEMS = {
+  baieoran: {
+    n: 'Baie Oran',
+    sn: 'Oran',
+    d: 'Rend 12 PV. Coûte 1 Voix, l’action reste libre.',
+    p: 250,
+    category: 'combat',
+    img: 'oran-berry',
+    voice: 1,
+  },
+  totalsoin: {
+    n: 'Total Soin',
+    sn: 'Total Soin',
+    d: 'Libère de tous les statuts et entraves (paralysie, gel, sommeil, brûlure, poison, toile, racines, malédiction). Une manche déjà perdue le reste. Coûte 1 Voix.',
+    p: 600,
+    category: 'combat',
+    img: 'full-heal',
+    voice: 1,
+  },
+  attaqueplus: {
+    n: 'Attaque +',
+    sn: 'Attaque +',
+    d: 'Renforcé pendant 2 manches. Coûte 1 Voix, l’action reste libre.',
+    p: 800,
+    category: 'combat',
+    img: 'x-attack',
+    voice: 1,
+  },
+  defenseplus: {
+    n: 'Défense +',
+    sn: 'Défense +',
+    d: '+2 Garde pendant 2 manches. Coûte 1 Voix, l’action reste libre.',
+    p: 800,
+    category: 'combat',
+    img: 'x-defense',
+    voice: 1,
+  },
+  vitesseplus: {
+    n: 'Vitesse +',
+    sn: 'Vitesse +',
+    d: '+1 Mouvement pendant 2 manches. Coûte 1 Voix, l’action reste libre.',
+    p: 700,
+    category: 'combat',
+    img: 'x-speed',
+    voice: 1,
+  },
+  cristal: {
+    n: 'Cristal Résonant',
+    sn: 'Cristal',
+    d: '+1 losange de Résonance (Éveil ou attaque Experte). Coûte 1 Voix.',
+    p: 1200,
+    category: 'combat',
+    img: 'star-piece',
+    voice: 1,
+  },
+  rappel: {
+    n: 'Rappel',
+    sn: 'Rappel',
+    d: 'Relève votre Pokémon K.O. le plus coûteux en PC, sur une case voisine, avec 40 % de ses PV. Utilise l’action.',
+    p: 1500,
+    category: 'combat',
+    img: 'revive',
+  },
+};
+
 // Statements executed at startup, in the original order (see index.js).
 export function init() {
   LEGENDARY_IDS = new Set(LEGS.map(l => l.id));
@@ -665,53 +780,7 @@ export function init() {
       : ''
   );
 
-  Object.assign(ITEMS2, {
-    orbevie: {
-      n: 'Orbe Vie',
-      d: '+30 % de dégâts, mais perd 10 % de ses PV max après chaque attaque qui touche.',
-      i: 'M12 4a8 8 0 1 0 0 16 8 8 0 0 0 0-16Zm0 3a5 5 0 0 1 5 5h-2a3 3 0 0 0-3-3Z',
-    },
-    casquebrut: {
-      n: 'Casque Brut',
-      d: 'Un adversaire qui le frappe au contact perd 10 % de ses PV max.',
-      i: 'M4 16a8 8 0 0 1 16 0v3H4Z',
-    },
-    sitrus: {
-      n: 'Baie Sitrus',
-      d: 'Une fois par combat, quand ses PV passent sous la moitié : il récupère 25 % de ses PV max.',
-      i: 'M12 7c-4 0-7 3-7 6.5S8 20 12 20s7-3 7-6.5S16 7 12 7Zm1-1c0-2 1-3 3-3.5V4c-1.5.5-2 1-2 2Z',
-    },
-    mouchoir: {
-      n: 'Mouchoir Choix',
-      d: '+2 Mouvement, mais il ne peut plus lancer que la première capacité utilisée.',
-      i: 'M5 5h14l-3 6 3 8h-5l-2-6-2 6H5l3-8Z',
-    },
-    rochemeteo: {
-      n: 'Roche Météo',
-      d: 'La météo qu’il déclenche dure 3 manches de plus.',
-      i: 'M6 18l-2-6 4-6h8l4 6-2 6Z',
-    },
-    grosseracine: {
-      n: 'Grosse Racine',
-      d: 'Les soins et drains qu’il reçoit rendent 50 % de plus.',
-      i: 'M11 3h2v7l5 9h-2.3L13 13.5V21h-2v-7.5L8.3 19H6l5-9Z',
-    },
-    lentillezoom: {
-      n: 'Lentille Zoom',
-      d: '+1 Portée sur ses attaques de portée 2 ou plus.',
-      i: 'M10 4a6 6 0 1 0 0 12 6 6 0 0 0 0-12Zm4.5 10.5 5.5 5.5-1.5 1.5-5.5-5.5Z',
-    },
-    metronome: {
-      n: 'Métronome',
-      d: 'Ses coups comptent pour 1 note de Résonance de plus.',
-      i: 'M9 3h6l4 18H5Zm2.2 4L13 16h-1.6Z',
-    },
-    ceinturepro: {
-      n: 'Ceinture Pro',
-      d: 'Ses coups de Résonance font ×1,8 au lieu de ×1,5.',
-      i: 'M3 10h18v4H3Zm8-2h4v8h-4Z',
-    },
-  });
+  Object.assign(ITEMS2, COMPETITIVE_HELD_ITEMS);
 
   Object.assign(HELD_IMG, {
     orbevie: 'life-orb',
@@ -725,70 +794,7 @@ export function init() {
     ceinturepro: 'expert-belt',
   });
 
-  Object.assign(SHOP, {
-    baieoran: {
-      n: 'Baie Oran',
-      sn: 'Oran',
-      d: 'Rend 12 PV. Coûte 1 Voix, l’action reste libre.',
-      p: 250,
-      category: 'combat',
-      img: 'oran-berry',
-      voice: 1,
-    },
-    totalsoin: {
-      n: 'Total Soin',
-      sn: 'Total Soin',
-      d: 'Libère de tous les statuts et entraves (paralysie, gel, sommeil, brûlure, poison, toile, racines, malédiction). Une manche déjà perdue le reste. Coûte 1 Voix.',
-      p: 600,
-      category: 'combat',
-      img: 'full-heal',
-      voice: 1,
-    },
-    attaqueplus: {
-      n: 'Attaque +',
-      sn: 'Attaque +',
-      d: 'Renforcé pendant 2 manches. Coûte 1 Voix, l’action reste libre.',
-      p: 800,
-      category: 'combat',
-      img: 'x-attack',
-      voice: 1,
-    },
-    defenseplus: {
-      n: 'Défense +',
-      sn: 'Défense +',
-      d: '+2 Garde pendant 2 manches. Coûte 1 Voix, l’action reste libre.',
-      p: 800,
-      category: 'combat',
-      img: 'x-defense',
-      voice: 1,
-    },
-    vitesseplus: {
-      n: 'Vitesse +',
-      sn: 'Vitesse +',
-      d: '+1 Mouvement pendant 2 manches. Coûte 1 Voix, l’action reste libre.',
-      p: 700,
-      category: 'combat',
-      img: 'x-speed',
-      voice: 1,
-    },
-    cristal: {
-      n: 'Cristal Résonant',
-      sn: 'Cristal',
-      d: '+1 losange de Résonance (Éveil ou attaque Experte). Coûte 1 Voix.',
-      p: 1200,
-      category: 'combat',
-      img: 'star-piece',
-      voice: 1,
-    },
-    rappel: {
-      n: 'Rappel',
-      sn: 'Rappel',
-      d: 'Relève votre Pokémon K.O. le plus coûteux en PC, sur une case voisine, avec 40 % de ses PV. Utilise l’action.',
-      p: 1500,
-      category: 'combat',
-      img: 'revive',
-    },
-  });
+  Object.assign(SHOP, CONSUMABLE_SHOP_ITEMS);
 
   COMBAT_ITEMS = Object.keys(SHOP).filter(k => SHOP[k].category === 'combat');
 

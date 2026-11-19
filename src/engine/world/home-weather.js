@@ -6,10 +6,10 @@ import { BY, WXN } from '../pokemon/pokemon.js';
 import { ROLEFX } from '../pokemon/roles-synergies.js';
 import { byUid } from '../combat/engine.js';
 import { B, ui } from '../combat/ui.js';
-import { tileTip } from '../progression/campaign.js';
+import { tileTip } from '../combat/battle-panel.js';
 import { overlay } from '../progression/prestige.js';
 import { shut } from '../../screens/overlays/tempStore.js';
-import { todayWeather } from '../progression/companions.js';
+import { todayWeather } from './pokegear.js';
 import { effectsEnabled } from '../audio/immersion.js';
 
 /* ---------- 1. living home ---------- */

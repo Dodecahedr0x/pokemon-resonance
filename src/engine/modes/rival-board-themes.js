@@ -7,12 +7,12 @@ import { HOOKS } from '../core/hooks.js';
 import { squad } from '../team/team.js';
 import { teff } from '../combat/engine.js';
 import { B } from '../combat/ui.js';
-import { PREF, savePref, sfx } from '../progression/campaign.js';
+import { PREF, savePref } from '../ui/preferences.js';
+import { sfx } from '../audio/sound-effects.js';
 import { savePurse } from '../state/economy.js';
 import { DEXS } from '../progression/pokedex.js';
 import { renderParams } from '../ui/settings.js';
-import { RIVAL_KEYS, rivalIdx } from './adventure.js';
-import { RIVAL_CHALLENGES } from '../progression/quality.js';
+import { RIVAL_CHALLENGES, RIVAL_KEYS, rivalIdx } from './rival.js';
 
 /* ---------- 1. evolving rival ---------- */
 export function rivalState() {

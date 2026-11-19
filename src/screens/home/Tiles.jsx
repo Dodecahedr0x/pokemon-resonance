@@ -4,7 +4,7 @@ import { BY } from '../../engine/pokemon/pokemon.js';
 import { badgeSvg } from '../../engine/modes/league.js';
 import { squad } from '../../engine/team/team.js';
 import { goalInfo } from '../../engine/world/home-journey.js';
-import { ART, ITM } from '../../engine/state/economy.js';
+import { ART, ITM } from '../../engine/assets/item-icons.js';
 
 // Illustrated shortcuts on the Home page (#v4Tiles, old renderTiles).
 const TILES = [

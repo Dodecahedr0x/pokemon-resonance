@@ -6,9 +6,9 @@ import { EMAX, P, byUid, damage, endStep, hdist, heal, inReach, nbrK, say, setMa
 import { resolve } from './synergies-obstacles.js';
 import { B, autoSel, clearAim, log, renderAll, ui } from './ui.js';
 import { DAMAGE_PROVIDERS } from './tactical-engine.js';
-import { ACHIEVEMENTS } from '../progression/achievements-challenges.js';
+import { ACHIEVEMENTS } from '../progression/achievements.js';
 import { hasXp, bossScene } from './resonance.js';
-import { MARK_BY_TYPE } from '../world/living-johto.js';
+import { MARK_BY_TYPE } from './duo-techniques.js';
 import { bossEnrage, bossLine } from '../world/secret-places.js';
 
 /* =====================================================================

@@ -1,8 +1,8 @@
 import { parseStyle } from '../../lib/html.jsx';
 import { tc } from '../../engine/core/utils.js';
-import { ART } from '../../engine/state/economy.js';
-import { shinyStyle } from '../../engine/modes/adventure.js';
-import { companionPanelData } from '../../engine/progression/companions.js';
+import { ART } from '../../engine/assets/item-icons.js';
+import { shinyStyle } from '../../engine/pokemon/shiny.js';
+import { companionPanelData } from '../../engine/progression/companion-pokemon.js';
 import { buddyData } from '../../engine/progression/companion-eggs.js';
 
 // Companion (#v4Comp, v4.17) and its Berry, Gift and Memories buttons (.buddy, v4.61).

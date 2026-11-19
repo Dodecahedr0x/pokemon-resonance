@@ -1,7 +1,7 @@
 import { BY } from '../../../engine/pokemon/pokemon.js';
 import { medal } from '../../../engine/core/utils.js';
 import { today } from '../../../engine/state/economy.js';
-import { PUZZLES, puzzleOfDay, puzzleState } from '../../../engine/modes/tactical-challenges.js';
+import { PUZZLES, puzzleOfDay, puzzleState } from '../../../engine/modes/riddles.js';
 import { Html } from '../../../lib/html.jsx';
 
 function Stars({ n }) {

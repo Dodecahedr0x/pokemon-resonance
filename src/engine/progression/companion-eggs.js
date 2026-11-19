@@ -4,19 +4,19 @@ import { BY, MON, SCEN } from '../pokemon/pokemon.js';
 import { ITEMS2, PROFILE } from '../state/game-state.js';
 import { writeLS, readLS, medal, toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
-import { sfx, vibe } from './campaign.js';
+import { sfx, vibe } from '../audio/sound-effects.js';
 import { overlay } from './prestige.js';
 import { shut } from '../../screens/overlays/tempStore.js';
 import { SHOP, bagN, savePurse, today } from '../state/economy.js';
 import { renderBag } from './quests-shop.js';
-import { DESTINATIONS, renderCampBase } from '../team/identity.js';
-import { affinityHearts, gainCompanionAffinity, activeCompanionId } from './companions.js';
+import { DESTINATIONS } from './expeditions.js';
+import { renderCampBase } from './base-camp.js';
+import { affinityHearts, gainCompanionAffinity, activeCompanionId } from './companion-pokemon.js';
 import { refreshHome } from '../../screens/home/homeStore.js';
 import { applyReward, canAfford, seededRng, rewardText } from '../world/route-events.js';
 import { tmKeys } from '../items/workshop.js';
 import { badgeTotal } from './item-quests.js';
 
-let KEEPSAKE_SCENES;
 export { EGG_SHOP, eggState, eggPool }; // read by Shop › Eggs (React, src/screens/bag/Workshop.jsx)
 
 /** Companion's Berry, Gift and Memories buttons (.buddy in #v4Comp, rendering: src/screens/home/Companion.jsx). */
@@ -245,111 +245,108 @@ const DESTINATION_HISTORY = {
 
 export const lockedByBadges = D => (D.min || 0) > badgeTotal();
 
+const KEEPSAKE_SCENES = [
+  (n, a) => `${n} reste près de vous et ${a[0]}. C’est sa façon de vous dire bonjour.`,
+  (n, a) => `Un soir, ${n} ${a[1]}. Vous comprenez qu’il commence à vous faire confiance.`,
+  (n, a) => `Au détour d’un chemin, ${n} s’arrête et vous regarde. Puis il ${a[0]}, comme pour vous dire qu’il est là.`,
+  (n, a) => `Pendant une longue marche, ${n} ${a[1]}. Il ne cherche plus à se cacher : il vous a choisi.`,
+  (n, a) =>
+    `Après tous ces combats, ${n} ${a[0]}, puis se blottit contre vous. Vous n’avez plus besoin de mots : vous formez un duo inséparable.`,
+];
+
+function onCompanionEggsClick(e) {
+  const b = e.target.closest && e.target.closest('[data-buddy]');
+  if (!b) {
+    return;
+  }
+  e.stopPropagation();
+  e.preventDefault();
+  const k = b.dataset.buddy,
+    id = activeCompanionId();
+  if (k === 'close') {
+    return shut('souvenirs');
+  }
+  if (!id || b.disabled) {
+    return;
+  }
+  const m = BY[id],
+    st = companionState();
+  if (k === 'souv') {
+    return keepsakeOpenOverlay();
+  }
+  if (k === 'baie' && !st.feed && bagN('baiemepo') > 0) {
+    PROFILE.bag.baiemepo = bagN('baiemepo') - 1;
+    st.feed = 1;
+    companionSave(st);
+    const up = gainCompanionAffinity(5);
+    sfx('ui');
+    vibe(25);
+    toast(
+      up
+        ? `${m.n} adore cette baie : ${up} cœur${up > 1 ? 's' : ''} !`
+        : `${m.n} croque la baie avec bonheur : +5 d’affection.`
+    );
+    savePurse();
+    refreshHome();
+  } else if (k === 'cadeau') {
+    const h = affinityHearts((PROFILE.comp && PROFILE.comp.aff) || 0);
+    if (h < 3 || st.gift) {
+      return;
+    }
+    const g = companionGift(h, m);
+    st.gift = 1;
+    companionSave(st);
+    applyReward(g);
+    sfx('win');
+    vibe([20, 30, 20]);
+    toast(`${m.n} vous rapporte un cadeau : ${rewardText(g)}.`);
+    savePurse();
+    refreshHome();
+  }
+}
+
+function onProgress(S, rew) {
+  try {
+    const D = SCEN[S.sc] || {};
+    if (D.tuto) {
+      return null;
+    }
+    const s = eggState();
+    if (!s.list.length) {
+      return null;
+    }
+    const out = [],
+      keep = [];
+    s.list.forEach(e => {
+      e.left -= 1;
+      if (e.left <= 0) {
+        const r = eggHatch(e);
+        if (r) {
+          out.push(r);
+        } else {
+          const O = EGG_SHOP[e.k];
+          applyReward({ m: O.cost.m ? -O.cost.m : 0, g: O.cost.g ? -O.cost.g : 0 });
+        }
+      } else {
+        keep.push(e);
+      }
+    });
+    s.list = keep;
+    s.n += out.length;
+    writeLS('res-egg-shop', s);
+    if (out.length) {
+      rew.eggShop = out;
+    }
+  } catch {
+    /* Best effort: failure here is non-fatal. */
+  }
+  return null;
+}
+
 // Instructions run at startup, in the original order (see index.js).
 export function init() {
-  KEEPSAKE_SCENES = [
-    (n, a) => `${n} reste près de vous et ${a[0]}. C’est sa façon de vous dire bonjour.`,
-    (n, a) => `Un soir, ${n} ${a[1]}. Vous comprenez qu’il commence à vous faire confiance.`,
-    (n, a) =>
-      `Au détour d’un chemin, ${n} s’arrête et vous regarde. Puis il ${a[0]}, comme pour vous dire qu’il est là.`,
-    (n, a) => `Pendant une longue marche, ${n} ${a[1]}. Il ne cherche plus à se cacher : il vous a choisi.`,
-    (n, a) =>
-      `Après tous ces combats, ${n} ${a[0]}, puis se blottit contre vous. Vous n’avez plus besoin de mots : vous formez un duo inséparable.`,
-  ];
-
-  document.addEventListener(
-    'click',
-    e => {
-      const b = e.target.closest && e.target.closest('[data-buddy]');
-      if (!b) {
-        return;
-      }
-      e.stopPropagation();
-      e.preventDefault();
-      const k = b.dataset.buddy,
-        id = activeCompanionId();
-      if (k === 'close') {
-        return shut('souvenirs');
-      }
-      if (!id || b.disabled) {
-        return;
-      }
-      const m = BY[id],
-        st = companionState();
-      if (k === 'souv') {
-        return keepsakeOpenOverlay();
-      }
-      if (k === 'baie' && !st.feed && bagN('baiemepo') > 0) {
-        PROFILE.bag.baiemepo = bagN('baiemepo') - 1;
-        st.feed = 1;
-        companionSave(st);
-        const up = gainCompanionAffinity(5);
-        sfx('ui');
-        vibe(25);
-        toast(
-          up
-            ? `${m.n} adore cette baie : ${up} cœur${up > 1 ? 's' : ''} !`
-            : `${m.n} croque la baie avec bonheur : +5 d’affection.`
-        );
-        savePurse();
-        refreshHome();
-      } else if (k === 'cadeau') {
-        const h = affinityHearts((PROFILE.comp && PROFILE.comp.aff) || 0);
-        if (h < 3 || st.gift) {
-          return;
-        }
-        const g = companionGift(h, m);
-        st.gift = 1;
-        companionSave(st);
-        applyReward(g);
-        sfx('win');
-        vibe([20, 30, 20]);
-        toast(`${m.n} vous rapporte un cadeau : ${rewardText(g)}.`);
-        savePurse();
-        refreshHome();
-      }
-    },
-    true
-  );
-
-  HOOKS.progress.unshift((S, rew) => {
-    try {
-      const D = SCEN[S.sc] || {};
-      if (D.tuto) {
-        return null;
-      }
-      const s = eggState();
-      if (!s.list.length) {
-        return null;
-      }
-      const out = [],
-        keep = [];
-      s.list.forEach(e => {
-        e.left -= 1;
-        if (e.left <= 0) {
-          const r = eggHatch(e);
-          if (r) {
-            out.push(r);
-          } else {
-            const O = EGG_SHOP[e.k];
-            applyReward({ m: O.cost.m ? -O.cost.m : 0, g: O.cost.g ? -O.cost.g : 0 });
-          }
-        } else {
-          keep.push(e);
-        }
-      });
-      s.list = keep;
-      s.n += out.length;
-      writeLS('res-egg-shop', s);
-      if (out.length) {
-        rew.eggShop = out;
-      }
-    } catch {
-      /* Best effort: failure here is non-fatal. */
-    }
-    return null;
-  });
-
+  document.addEventListener('click', onCompanionEggsClick, true);
+  HOOKS.progress.unshift(onProgress);
   HOOKS.battleResult.unshift(r => {
     if (!r.eggShop) {
       return '';
@@ -361,7 +358,6 @@ export function init() {
       )
       .join('');
   });
-
   document.addEventListener(
     'click',
     e => {
@@ -375,7 +371,6 @@ export function init() {
     },
     true
   );
-
   /* ---------- 3. Expeditions: new places and rare finds ---------- */
   Object.assign(DESTINATIONS, {
     plage: {
@@ -406,6 +401,4 @@ export function init() {
       min: 5,
     },
   });
-
-  // locked places in the expedition window: rendered by React (src/screens/overlays/ExpBox.jsx, lockedByBadges)
 }

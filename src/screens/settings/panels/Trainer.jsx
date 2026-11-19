@@ -1,6 +1,6 @@
 import { DIFFS, PROFILE, isCamp } from '../../../engine/state/game-state.js';
 import { BADGES } from '../../../engine/modes/gyms.js';
-import { tLevel } from '../../../engine/state/economy.js';
+import { tLevel } from '../../../engine/progression/trainer-stats.js';
 import { boxCapacityLabel } from '../../../engine/world/catch-anywhere.js';
 
 // Trainer: first name, difficulty, game state. The engine handles #v4Nm, data-diff and data-v4saves.

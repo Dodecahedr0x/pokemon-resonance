@@ -1,4 +1,4 @@
-import { PREF } from '../../../engine/progression/campaign.js';
+import { PREF } from '../../../engine/ui/preferences.js';
 
 // Settings › Timed capture (v4.53): data-catch-action button handled by the engine (engine/combat/timed-catch.js).
 export default function CaptureTiming() {

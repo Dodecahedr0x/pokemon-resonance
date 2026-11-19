@@ -3,7 +3,7 @@ import { getHost, hostSet } from '../../screens/combat/board/boardStore.js';
 import { SCEN } from '../pokemon/pokemon.js';
 import { flies, mDur, nbrK, say, uAt } from './engine.js';
 import { scSel } from './ui.js';
-import { PREF } from '../progression/campaign.js';
+import { PREF } from '../ui/preferences.js';
 import { DAMAGE_PROVIDERS } from './tactical-engine.js';
 import { noWind } from './tactics.js';
 

@@ -1,4 +1,4 @@
-import { PREF } from '../../../engine/progression/campaign.js';
+import { PREF } from '../../../engine/ui/preferences.js';
 
 // Settings › Battle display (v4.44): data-tool-action buttons handled by the engine (engine/combat/board-tools.js).
 export default function BattleDisplay() {

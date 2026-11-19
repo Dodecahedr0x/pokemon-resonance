@@ -3,9 +3,9 @@ import { BY } from '../../engine/pokemon/pokemon.js';
 import { PROFILE } from '../../engine/state/game-state.js';
 import { medal } from '../../engine/core/utils.js';
 import { fmt } from '../../engine/state/economy.js';
-import { shinyStyle } from '../../engine/modes/adventure.js';
-import { friendsPanelData } from '../../engine/world/living-johto.js';
-import { tournamentPanelHtml } from '../../engine/progression/companions.js';
+import { shinyStyle } from '../../engine/pokemon/shiny.js';
+import { friendsPanelData } from '../../engine/modes/friend-challenges.js';
+import { tournamentPanelHtml } from '../../engine/modes/friends-tournament.js';
 
 // Friend challenges (#v4Amis, v4.16), under the hidden Home shortcuts.
 // data-ami, data-ami-fight, data-ami-del and tournoi buttons: handled by the engine.

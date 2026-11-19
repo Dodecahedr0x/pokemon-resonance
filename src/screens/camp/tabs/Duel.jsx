@@ -3,7 +3,7 @@ import { BY, familyOf } from '../../../engine/pokemon/pokemon.js';
 import { PROFILE } from '../../../engine/state/game-state.js';
 import { tc } from '../../../engine/core/utils.js';
 import { STLN } from '../../../engine/team/team.js';
-import { ART } from '../../../engine/state/economy.js';
+import { ART } from '../../../engine/assets/item-icons.js';
 import {
   DUEL_STATE,
   STAT_MAX,

@@ -7,13 +7,15 @@ import { $, RM, after2images, writeLS, el, tc } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { byUid } from '../combat/engine.js';
 import { B, HC, L } from '../combat/ui.js';
-import { PREF, SFX, noise, savePref, tone, vibe } from '../progression/campaign.js';
+import { PREF, savePref } from '../ui/preferences.js';
+import { SFX, noise, tone, vibe } from './sound-effects.js';
 import { AUTO } from '../progression/prestige.js';
-import { V4, ownedFam } from '../state/economy.js';
+import { V4 } from '../ui/screen-state.js';
+import { ownedFam } from '../progression/trainer-stats.js';
 import { renderParams } from '../ui/settings.js';
 import { BGM } from './music.js';
 
-let TYPE_SOUNDS, tipIndex, lastTiltAt;
+let tipIndex, lastTiltAt;
 
 /** Immersion on and animations not reduced (same test as IMMERSION_ON() && !RM, hoisted for 082 and 083). */
 export function effectsEnabled() {
@@ -263,69 +265,116 @@ const IMMERSION_TIPS = [
   'Une Roche Météo prolonge la météo déclenchée par son porteur de 3 manches.',
 ];
 
+/* ---------- 1. sounds by attack type (synthesized, no file) ---------- */
+const TYPE_SOUNDS = {
+  Normal: () => {
+    noise(0, 0.1, 0.12, 1400);
+    tone(190, 0, 0.1, 'sine', 0.07, 90);
+  },
+  Feu: () => {
+    noise(0, 0.4, 0.13, 2600);
+    tone(320, 0, 0.35, 'sawtooth', 0.04, 110);
+  },
+  Eau: () => [520, 700, 900].forEach((f, i) => tone(f, i * 0.07, 0.14, 'sine', 0.05, f * 1.5)),
+  Plante: () => {
+    tone(392, 0, 0.16, 'triangle', 0.05, 523);
+    tone(523, 0.12, 0.2, 'triangle', 0.04, 659);
+    noise(0, 0.18, 0.05, 3200);
+  },
+  Électrik: () => [1200, 520, 1500, 480, 1300].forEach((f, i) => tone(f, i * 0.04, 0.05, 'square', 0.035)),
+  Glace: () => [2093, 2637, 3136].forEach((f, i) => tone(f, i * 0.06, 0.22, 'triangle', 0.035)),
+  Combat: () => {
+    noise(0, 0.08, 0.16, 900);
+    tone(110, 0, 0.14, 'sine', 0.1, 50);
+    tone(90, 0.1, 0.14, 'sine', 0.08, 45);
+  },
+  Poison: () => {
+    tone(200, 0, 0.3, 'sawtooth', 0.035, 330);
+    noise(0.05, 0.25, 0.06, 1800);
+  },
+  Sol: () => {
+    noise(0, 0.35, 0.16, 320);
+    tone(62, 0, 0.35, 'sine', 0.1, 40);
+  },
+  Vol: () => noise(0, 0.32, 0.1, 4200),
+  Psy: () => {
+    tone(600, 0, 0.35, 'sine', 0.05, 920);
+    tone(920, 0.3, 0.3, 'sine', 0.04, 560);
+  },
+  Insecte: () => [0, 0.05, 0.1, 0.15, 0.2].forEach(t => tone(760 + Math.random() * 120, t, 0.06, 'sawtooth', 0.03)),
+  Roche: () => {
+    noise(0, 0.2, 0.15, 520);
+    tone(95, 0, 0.18, 'sine', 0.09, 60);
+  },
+  Spectre: () => {
+    tone(320, 0, 0.5, 'sine', 0.05, 140);
+    tone(326, 0, 0.5, 'sine', 0.04, 146);
+  },
+  Dragon: () => {
+    tone(120, 0, 0.45, 'sawtooth', 0.05, 66);
+    noise(0, 0.4, 0.08, 1500);
+  },
+  Ténèbres: () => {
+    tone(160, 0, 0.38, 'triangle', 0.07, 76);
+    noise(0.05, 0.25, 0.06, 600);
+  },
+  Acier: () => {
+    tone(1760, 0, 0.12, 'square', 0.03);
+    tone(2349, 0.02, 0.22, 'triangle', 0.04);
+    noise(0, 0.06, 0.1, 5000);
+  },
+  Fée: () => [1318, 1760, 2093, 2637].forEach((f, i) => tone(f, i * 0.07, 0.24, 'sine', 0.04)),
+};
+
+function onJournal(ev) {
+  let steps = 0,
+    boom = false,
+    kos = 0,
+    low = false;
+  ev.forEach(e => {
+    if (e.e === 'use') {
+      playTypeSfx(e.ty);
+      if (e.k != null) {
+        spawnParticles(e.k, e.ty);
+      }
+    } else if (e.e === 'mv') {
+      if (steps++ < 2) {
+        playStep();
+      }
+    } else if (e.e === 'dmg') {
+      const u = byUid(B, e.u);
+      if (u && u.side === 'a' && !u.ko && u.hp / u.mhp <= 0.25 && !u._lowHpAlerted) {
+        u._lowHpAlerted = 1;
+        low = true;
+      }
+      if (u && e.v >= u.mhp * 0.35) {
+        boom = true;
+      }
+    } else if (e.e === 'ko') {
+      kos++;
+      playCry(byUid(B, e.u), true);
+      boom = true;
+    } else if (e.e === 'msg' && /super efficace/.test(e.s || '')) {
+      boom = true;
+      vibe([18, 30, 40]);
+    } else if (e.e === 'catch') {
+      vibe([30, 40, 30, 40, 90]);
+    } else if (e.e === 'rx' || e.e === 'reso') {
+      vibe(22);
+    }
+  });
+  if (boom) {
+    screenShake(kos > 0);
+  }
+  if (low) {
+    setTimeout(lowHpAlarm, 380);
+    vibe([30, 60, 30]);
+  }
+  adaptMusicTempo();
+}
+
 // Statements run at startup, in the original order (see index.js).
 export function init() {
-  /* ---------- 1. sounds by attack type (synthesized, no file) ---------- */
-  TYPE_SOUNDS = {
-    Normal: () => {
-      noise(0, 0.1, 0.12, 1400);
-      tone(190, 0, 0.1, 'sine', 0.07, 90);
-    },
-    Feu: () => {
-      noise(0, 0.4, 0.13, 2600);
-      tone(320, 0, 0.35, 'sawtooth', 0.04, 110);
-    },
-    Eau: () => [520, 700, 900].forEach((f, i) => tone(f, i * 0.07, 0.14, 'sine', 0.05, f * 1.5)),
-    Plante: () => {
-      tone(392, 0, 0.16, 'triangle', 0.05, 523);
-      tone(523, 0.12, 0.2, 'triangle', 0.04, 659);
-      noise(0, 0.18, 0.05, 3200);
-    },
-    Électrik: () => [1200, 520, 1500, 480, 1300].forEach((f, i) => tone(f, i * 0.04, 0.05, 'square', 0.035)),
-    Glace: () => [2093, 2637, 3136].forEach((f, i) => tone(f, i * 0.06, 0.22, 'triangle', 0.035)),
-    Combat: () => {
-      noise(0, 0.08, 0.16, 900);
-      tone(110, 0, 0.14, 'sine', 0.1, 50);
-      tone(90, 0.1, 0.14, 'sine', 0.08, 45);
-    },
-    Poison: () => {
-      tone(200, 0, 0.3, 'sawtooth', 0.035, 330);
-      noise(0.05, 0.25, 0.06, 1800);
-    },
-    Sol: () => {
-      noise(0, 0.35, 0.16, 320);
-      tone(62, 0, 0.35, 'sine', 0.1, 40);
-    },
-    Vol: () => noise(0, 0.32, 0.1, 4200),
-    Psy: () => {
-      tone(600, 0, 0.35, 'sine', 0.05, 920);
-      tone(920, 0.3, 0.3, 'sine', 0.04, 560);
-    },
-    Insecte: () => [0, 0.05, 0.1, 0.15, 0.2].forEach(t => tone(760 + Math.random() * 120, t, 0.06, 'sawtooth', 0.03)),
-    Roche: () => {
-      noise(0, 0.2, 0.15, 520);
-      tone(95, 0, 0.18, 'sine', 0.09, 60);
-    },
-    Spectre: () => {
-      tone(320, 0, 0.5, 'sine', 0.05, 140);
-      tone(326, 0, 0.5, 'sine', 0.04, 146);
-    },
-    Dragon: () => {
-      tone(120, 0, 0.45, 'sawtooth', 0.05, 66);
-      noise(0, 0.4, 0.08, 1500);
-    },
-    Ténèbres: () => {
-      tone(160, 0, 0.38, 'triangle', 0.07, 76);
-      noise(0.05, 0.25, 0.06, 600);
-    },
-    Acier: () => {
-      tone(1760, 0, 0.12, 'square', 0.03);
-      tone(2349, 0.02, 0.22, 'triangle', 0.04);
-      noise(0, 0.06, 0.1, 5000);
-    },
-    Fée: () => [1318, 1760, 2093, 2637].forEach((f, i) => tone(f, i * 0.07, 0.24, 'sine', 0.04)),
-  };
-
   setInterval(() => {
     try {
       if (!B || B.over || $('#cbBattle').hidden) {
@@ -335,69 +384,19 @@ export function init() {
       /* Best effort: failure here is non-fatal. */
     }
   }, 1500);
-
-  HOOKS.journal.push(ev => {
-    let steps = 0,
-      boom = false,
-      kos = 0,
-      low = false;
-    ev.forEach(e => {
-      if (e.e === 'use') {
-        playTypeSfx(e.ty);
-        if (e.k != null) {
-          spawnParticles(e.k, e.ty);
-        }
-      } else if (e.e === 'mv') {
-        if (steps++ < 2) {
-          playStep();
-        }
-      } else if (e.e === 'dmg') {
-        const u = byUid(B, e.u);
-        if (u && u.side === 'a' && !u.ko && u.hp / u.mhp <= 0.25 && !u._lowHpAlerted) {
-          u._lowHpAlerted = 1;
-          low = true;
-        }
-        if (u && e.v >= u.mhp * 0.35) {
-          boom = true;
-        }
-      } else if (e.e === 'ko') {
-        kos++;
-        playCry(byUid(B, e.u), true);
-        boom = true;
-      } else if (e.e === 'msg' && /super efficace/.test(e.s || '')) {
-        boom = true;
-        vibe([18, 30, 40]);
-      } else if (e.e === 'catch') {
-        vibe([30, 40, 30, 40, 90]);
-      } else if (e.e === 'rx' || e.e === 'reso') {
-        vibe(22);
-      }
-    });
-    if (boom) {
-      screenShake(kos > 0);
-    }
-    if (low) {
-      setTimeout(lowHpAlarm, 380);
-      vibe([30, 60, 30]);
-    }
-    adaptMusicTempo();
-  });
-
+  HOOKS.journal.push(onJournal);
   /* ---------- 4. the attack's type in the log (for sound and particles) ---------- */
   /* (resolveMove adds « ty » to the « use » event: see the source patch) */
 
   tipIndex = Math.floor(Math.random() * IMMERSION_TIPS.length);
-
   HOOKS.launch.push(() => {
     if (B && !AUTO) {
       showTransition();
     }
   });
-
   /* the tip is shown under the « VS » presentation: versusTip(), rendered in Vs.jsx */
 
   HOOKS.rendered.push(boardWeather);
-
   document.addEventListener(
     'pointermove',
     e => {
@@ -411,11 +410,8 @@ export function init() {
     },
     { passive: true }
   );
-
   document.addEventListener('pointerleave', () => {}, { passive: true });
-
   lastTiltAt = 0;
-
   addEventListener(
     'deviceorientation',
     e => {
@@ -440,7 +436,6 @@ export function init() {
     },
     { passive: true }
   );
-
   /* ---------- 8. victory: burst, badge appearing, vibration ---------- */
   // resultFx / goldGlow classes and .resultBadge badge: rendered by React (Result.jsx); here, vibration and chime
   new MutationObserver(() => {
@@ -459,7 +454,6 @@ export function init() {
       /* Best effort: failure here is non-fatal. */
     }
   }).observe($('#cbResult'), { childList: true, attributes: true, attributeFilter: ['hidden'] });
-
   HOOKS.battleEnd.push(() => {
     if (B && B.over && !B._journalDone && !(SCEN[B.sc] || {}).noProgress) {
       B._journalDone = 1;
@@ -476,7 +470,6 @@ export function init() {
       saveJournal(j);
     }
   });
-
   // « Immersion » and « Trainer journal » panels: rendered by React (src/screens/settings/panels/Immersion.jsx, TrainerJournal.jsx)
 
   document.addEventListener('click', e => {

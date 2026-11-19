@@ -2,8 +2,10 @@ import { MV } from '../../engine/data/moves.js';
 import { BY } from '../../engine/pokemon/pokemon.js';
 import { ITEMS2, PROFILE, ownedItems } from '../../engine/state/game-state.js';
 import { tc } from '../../engine/core/utils.js';
-import { HELD_IMG, ITM, SHOP, V4, bagN, fmt } from '../../engine/state/economy.js';
-import { costOf } from '../../engine/team/identity.js';
+import { HELD_IMG, SHOP, bagN, fmt } from '../../engine/state/economy.js';
+import { ITM } from '../../engine/assets/item-icons.js';
+import { V4 } from '../../engine/ui/screen-state.js';
+import { costOf } from '../../engine/progression/base-camp.js';
 import { HELD_SHOP, isDailyOffer } from '../../engine/combat/resonance.js';
 
 // TM / HM disc: initials on the color of the move's type.

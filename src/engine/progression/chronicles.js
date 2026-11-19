@@ -1,10 +1,10 @@
 /* Chronicles (story in chapters) and offline mode (added in v4.62). */
 
 import { $, writeLS, readLS, toast } from '../core/utils.js';
-import { PREF, savePref } from './campaign.js';
+import { PREF, savePref } from '../ui/preferences.js';
 import { savePurse } from '../state/economy.js';
 import { renderParams } from '../ui/settings.js';
-import { SCENES, __set_SCN, renderStoryScene } from './companions.js';
+import { SCENES, __set_SCN, renderStoryScene } from './story-dialogues.js';
 import { BGM } from '../audio/music.js';
 import { applyReward } from '../world/route-events.js';
 import { badgeTotal } from './item-quests.js';

@@ -4,14 +4,15 @@ import { toast } from '../core/utils.js';
 import { placeAlert } from '../world/home-route.js';
 import { B, renderAll } from '../combat/ui.js';
 import { queueSave } from '../state/saves.js';
-import { PREF, savePref, sfx, vibe } from '../progression/campaign.js';
+import { PREF, savePref } from './preferences.js';
+import { sfx, vibe } from '../audio/sound-effects.js';
 import { musLevel } from '../audio/music.js';
-import { V4 } from '../state/economy.js';
-import { renderWallet } from '../core/interface.js';
+import { V4 } from './screen-state.js';
+import { renderWallet } from './wallet.js';
 import { centerMap, renderMap } from '../world/map.js';
 import { renderDex } from '../progression/pokedex.js';
 import { renderBag, renderQuests } from '../progression/quests-shop.js';
-import { renderCampPage } from '../modes/tactical-challenges.js';
+import { renderCampPage } from '../modes/camp-challenges.js';
 
 // The Settings page is rendered by React (src/screens/settings): redrawing = rebuilding it.
 export function renderParams() {

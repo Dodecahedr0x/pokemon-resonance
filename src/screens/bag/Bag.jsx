@@ -1,7 +1,8 @@
 import { useEngineReady } from '../../engineReady.js';
 import { useBagVersion } from './bagStore.js';
 import { ITEMS2, PROFILE } from '../../engine/state/game-state.js';
-import { SHOP, V4, bagN, fmt } from '../../engine/state/economy.js';
+import { SHOP, bagN, fmt } from '../../engine/state/economy.js';
+import { V4 } from '../../engine/ui/screen-state.js';
 import { dailyTm } from '../../engine/items/extra-held-items.js';
 import { Article, HeldItem } from './Items.jsx';
 import Offers from './Offers.jsx';

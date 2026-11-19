@@ -3,7 +3,8 @@ import { useOverlay } from './dialogsStore.js';
 import { Dialogue } from './Window.jsx';
 import { BY } from '../../engine/pokemon/pokemon.js';
 import { medal, tc } from '../../engine/core/utils.js';
-import { HELD_IMG, ITM } from '../../engine/state/economy.js';
+import { HELD_IMG } from '../../engine/state/economy.js';
+import { ITM } from '../../engine/assets/item-icons.js';
 
 // Resonance Tower (#tdrBox): team choice, then reward between two floors.
 // The engine (043) keeps the clicks (listener on #tdrBox) and the hidden attribute: React only

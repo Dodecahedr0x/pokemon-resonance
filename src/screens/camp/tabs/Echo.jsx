@@ -2,7 +2,7 @@ import { BY } from '../../../engine/pokemon/pokemon.js';
 import { PROFILE } from '../../../engine/state/game-state.js';
 import { medal } from '../../../engine/core/utils.js';
 import { squad } from '../../../engine/team/team.js';
-import { ECHO_EVENTS, ECHO_NODES, RELIC_DEFS, randomRelic } from '../../../engine/modes/tactical-challenges.js';
+import { ECHO_EVENTS, ECHO_NODES, RELIC_DEFS, randomRelic } from '../../../engine/modes/deep-echo.js';
 import { Html } from '../../../lib/html.jsx';
 
 function Head({ X }) {

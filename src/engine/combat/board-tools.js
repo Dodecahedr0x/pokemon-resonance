@@ -7,17 +7,18 @@ import { rxCat, toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { P, affected, byUid, markAt, reach, targets, uAt } from './engine.js';
 import { B, STC, clearAim, hpc, renderAll, ui } from './ui.js';
-import { PREF, savePref, tileTip } from '../progression/campaign.js';
+import { PREF, savePref } from '../ui/preferences.js';
+import { tileTip } from './battle-panel.js';
 import { renderParams } from '../ui/settings.js';
 import { canSelect } from './tactical-engine.js';
 import { fireHazard } from './living-board.js';
 import { trapTip } from './tactics.js';
-import { fitPhoneBattle } from '../pokemon/eevee.js';
+import { fitPhoneBattle } from './compact-battle.js';
 import { alignBoardFrame } from './phone-board.js';
 import { boardSet, getBoard, getHost, hostSet } from '../../screens/combat/board/boardStore.js';
 import { tileSheet as TILE_SHEET, footCls, refreshBattle } from '../../screens/combat/battle/battleStore.js';
 
-let INSPECTED_TILE, MAGNIFIER_ON, LONG_PRESS_AT, FULLSCREEN_SEEN, TERRAINS;
+let INSPECTED_TILE, MAGNIFIER_ON, LONG_PRESS_AT, FULLSCREEN_SEEN;
 
 // timestamp: ignore the « click » that follows a long press
 
@@ -343,6 +344,58 @@ function dismissTileSheet() {
   }
 }
 
+/* ---------- 3. cell sheet ---------- */
+const TERRAINS = [
+  ['pil', 'Pilier', '#5b5f6b', t => t.pil],
+  ['rock', 'Rocher', '#8b8f98', t => t.rock && !t.pil],
+  ['w', 'Eau', '#3b82f6', t => t.w],
+  ['lava', 'Lave', '#ff6a2a', t => t.lava > 0],
+  ['mud', 'Boue', '#9a6b3e', t => t.mud > 0],
+  ['grass', 'Hautes herbes', '#43b05c', t => t.grass],
+  ['sand', 'Sable', '#d6b26e', t => t.sand && !t.w],
+  ['fog', 'Brouillard', '#a9b4c4', t => t.fog > 0],
+  ['trap', 'Piège', '#e94b6a', t => t.trap],
+  ['mark', 'Marque élémentaire', '#ffd75e', t => t.mark],
+];
+
+/* ---------- 4. wiring ---------- */
+const rangerLens = () => {
+  INSPECTED_TILE = null;
+  MAGNIFIER_ON = false;
+};
+
+function onBoardToolsClick(e) {
+  const b = e.target.closest('[data-tool-action]');
+  if (!b) {
+    return;
+  }
+  const a = b.dataset.toolAction;
+  if (a === 'fs') {
+    setFullscreen(!document.body.classList.contains('fullscreen-mode'), true);
+  } else if (a === 'lp') {
+    MAGNIFIER_ON = !MAGNIFIER_ON;
+    if (!MAGNIFIER_ON) {
+      INSPECTED_TILE = null;
+    }
+    toast(MAGNIFIER_ON ? 'Loupe : touchez une case pour lire son détail.' : 'Loupe rangée.');
+    syncBoardTools();
+    tileSheet();
+  } else if (a === 'ct') {
+    PREF.boardContrast = PREF.boardContrast ? 0 : 1;
+    savePref();
+    applyContrast();
+    syncBoardTools();
+  } else if (a === 'pfs') {
+    setFullscreen(!document.body.classList.contains('fullscreen-mode'), true);
+    renderParams();
+  } else if (a === 'pct') {
+    PREF.boardContrast = PREF.boardContrast ? 0 : 1;
+    savePref();
+    applyContrast();
+    renderParams();
+  }
+}
+
 // Startup statements, run in their original order (see index.js).
 export function init() {
   /* 1. Fullscreen: button on the board (and in Settings). The browser goes fullscreen when it allows it;
@@ -355,7 +408,6 @@ export function init() {
   ((INSPECTED_TILE = null), // cell shown in the sheet
     (MAGNIFIER_ON = false), // a tap opens the sheet instead of acting
     (LONG_PRESS_AT = 0));
-
   // exit via Android's « back » gesture or the Esc key: immersive mode is exited too
   ['fullscreenchange', 'webkitfullscreenchange'].forEach(ev =>
     document.addEventListener(ev, () => {
@@ -372,60 +424,13 @@ export function init() {
       }
     })
   );
-
   FULLSCREEN_SEEN = false;
-
   // the browser did accept fullscreen
 
   /* ---------- 2. board toolbar ---------- */
   // toolbar icons: in BoardTools.jsx
 
-  document.addEventListener('click', e => {
-    const b = e.target.closest('[data-tool-action]');
-    if (!b) {
-      return;
-    }
-    const a = b.dataset.toolAction;
-    if (a === 'fs') {
-      setFullscreen(!document.body.classList.contains('fullscreen-mode'), true);
-    } else if (a === 'lp') {
-      MAGNIFIER_ON = !MAGNIFIER_ON;
-      if (!MAGNIFIER_ON) {
-        INSPECTED_TILE = null;
-      }
-      toast(MAGNIFIER_ON ? 'Loupe : touchez une case pour lire son détail.' : 'Loupe rangée.');
-      syncBoardTools();
-      tileSheet();
-    } else if (a === 'ct') {
-      PREF.boardContrast = PREF.boardContrast ? 0 : 1;
-      savePref();
-      applyContrast();
-      syncBoardTools();
-    } else if (a === 'pfs') {
-      setFullscreen(!document.body.classList.contains('fullscreen-mode'), true);
-      renderParams();
-    } else if (a === 'pct') {
-      PREF.boardContrast = PREF.boardContrast ? 0 : 1;
-      savePref();
-      applyContrast();
-      renderParams();
-    }
-  });
-
-  /* ---------- 3. cell sheet ---------- */
-  TERRAINS = [
-    ['pil', 'Pilier', '#5b5f6b', t => t.pil],
-    ['rock', 'Rocher', '#8b8f98', t => t.rock && !t.pil],
-    ['w', 'Eau', '#3b82f6', t => t.w],
-    ['lava', 'Lave', '#ff6a2a', t => t.lava > 0],
-    ['mud', 'Boue', '#9a6b3e', t => t.mud > 0],
-    ['grass', 'Hautes herbes', '#43b05c', t => t.grass],
-    ['sand', 'Sable', '#d6b26e', t => t.sand && !t.w],
-    ['fog', 'Brouillard', '#a9b4c4', t => t.fog > 0],
-    ['trap', 'Piège', '#e94b6a', t => t.trap],
-    ['mark', 'Marque élémentaire', '#ffd75e', t => t.mark],
-  ];
-
+  document.addEventListener('click', onBoardToolsClick);
   document.addEventListener('click', e => {
     const b = e.target.closest('[data-tile-info]');
     if (!b || !B) {
@@ -450,13 +455,11 @@ export function init() {
       renderAll();
     }
   });
-
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape' && document.getElementById('tile-info') && !document.getElementById('tile-info').hidden) {
       dismissTileSheet();
     }
   });
-
   /* long press (and magnifier) on the board */
   (function () {
     const svg = document.getElementById('bSvg');
@@ -536,45 +539,29 @@ export function init() {
       true
     );
   })();
-
-  /* ---------- 4. wiring ---------- */
-  const rangerLens = () => {
-    INSPECTED_TILE = null;
-    MAGNIFIER_ON = false;
-  };
-
   HOOKS.rendered.push(() => {
     syncBoardTools();
     tileSheet();
   });
-
   HOOKS.beforeLaunch.push(rangerLens);
-
   HOOKS.launch.push(isNew => {
     if (isNew && PREF.fullscreenMode) {
       setFullscreen(true, false);
     } // tapping « Lancer » (Start) allows fullscreen
   });
-
   HOOKS.beforeBattleEnd.push(rangerLens);
-
   HOOKS.battleEnd.push(tileSheet);
-
   addEventListener('resize', () => setTimeout(placeSheet, 60));
-
   addEventListener('scroll', () => placeSheet(), { passive: true });
-
   // « Affichage du combat » (Battle display) panel: rendered by React (src/screens/settings/panels/CombatDisplay.jsx)
 
   if (PREF.fullscreenMode) {
     document.body.classList.add('fullscreen-mode');
   }
-
   // immersive mode comes back; browser fullscreen waits for a tap
   if (PREF.boardContrast === undefined) {
     PREF.boardContrast = 1;
   }
-
   // v4.45: high-contrast board enabled by default (can be disabled)
   applyContrast();
 }

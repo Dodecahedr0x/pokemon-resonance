@@ -3,14 +3,13 @@
 import { ITEMS2, PROFILE } from '../state/game-state.js';
 import { BADGES } from '../modes/gyms.js';
 import { toast } from '../core/utils.js';
-import { sfx, vibe } from './campaign.js';
+import { sfx, vibe } from '../audio/sound-effects.js';
 import { SHOP, bagN, savePurse } from '../state/economy.js';
 import { renderBag } from './quests-shop.js';
-import { dailySeed } from './companions.js';
+import { dailySeed } from '../world/pokegear.js';
 import { applyReward, rewardText } from '../world/route-events.js';
 import { addItems, dailyGiftState, tmKeys, hasIngredients } from '../items/workshop.js';
 
-let TROPHIES;
 export { QUESTS, TROPHIES }; // read by Shop › Quests and Trophies (React, src/screens/bag/Workshop.jsx)
 
 export function questState() {
@@ -164,70 +163,67 @@ export const badgeTotal = () => BADGES.length;
 
 const ownedTmKey = () => tmKeys().find(k => bagN(k) > 0);
 
+/* ---------- trophy box ---------- */
+const TROPHIES = [
+  { id: 't1', t: 'Collection d’objets tenus', n: 5, v: () => PROFILE.items.length, g: 1 },
+  { id: 't2', t: 'Collection d’objets tenus', n: 10, v: () => PROFILE.items.length, g: 2 },
+  { id: 't3', t: 'Collection d’objets tenus', n: 20, v: () => PROFILE.items.length, g: 4 },
+  { id: 't4', t: 'CT et CS vues', n: 10, v: () => tmSeenCount(), g: 1 },
+  { id: 't5', t: 'CT et CS vues', n: 25, v: () => tmSeenCount(), g: 2 },
+  { id: 't6', t: 'CT et CS vues', n: 40, v: () => tmSeenCount(), g: 4 },
+  { id: 't7', t: 'Quêtes d’objets', n: 3, v: () => Object.keys(questState().done).length, g: 1 },
+  { id: 't8', t: 'Quêtes d’objets', n: 6, v: () => Object.keys(questState().done).length, g: 2 },
+  { id: 't9', t: 'Quêtes d’objets', n: 10, v: () => Object.keys(questState().done).length, g: 5 },
+  { id: 't10', t: 'Cadeaux du jour d’affilée', n: 7, v: () => dailyGiftState().n, g: 3 },
+];
+
+function onItemQuestsClick(e) {
+  const b = e.target.closest && e.target.closest('[data-quest-log]');
+  if (!b || b.disabled) {
+    return;
+  }
+  e.preventDefault();
+  e.stopPropagation();
+  const q = QUESTS.find(x => x.id === b.dataset.questLog),
+    S = questState();
+  if (!q || S.done[q.id] || badgeTotal() < q.min || !questUnlocked(q)) {
+    return;
+  }
+  const tm = q.in.ct ? ownedTmKey() : null;
+  addItems(questCost(q), -1);
+  if (tm) {
+    addItems({ [tm]: 1 }, -1);
+  }
+  const r = q.rew;
+  applyReward({ m: r.m, g: r.g, b: r.b });
+  let extra = '';
+  if (r.item) {
+    if (PROFILE.items.includes(r.item)) {
+      PROFILE.money += 2500;
+    } else {
+      PROFILE.items = [...PROFILE.items, r.item];
+    }
+    extra = ITEMS2[r.item].n;
+  }
+  if (r.ct) {
+    const pool = tmKeys().filter(k => !bagN(k)),
+      all = pool.length ? pool : tmKeys(),
+      k = all[dailySeed('qo' + q.id) % all.length];
+    PROFILE.bag[k] = Math.min(99, bagN(k) + 1);
+    extra = (extra ? extra + ' + ' : '') + SHOP[k].n;
+  }
+  S.done[q.id] = 1;
+  localStorage.setItem('res-quest-log', JSON.stringify(S));
+  sfx('win');
+  vibe(25);
+  toast(`${q.giver} : merci ! ${extra || rewardText({ m: r.m, g: r.g, b: r.b })}`);
+  savePurse();
+  renderBag();
+}
+
 // Statements run at startup, in the original order (see index.js).
 export function init() {
-  document.addEventListener(
-    'click',
-    e => {
-      const b = e.target.closest && e.target.closest('[data-quest-log]');
-      if (!b || b.disabled) {
-        return;
-      }
-      e.preventDefault();
-      e.stopPropagation();
-      const q = QUESTS.find(x => x.id === b.dataset.questLog),
-        S = questState();
-      if (!q || S.done[q.id] || badgeTotal() < q.min || !questUnlocked(q)) {
-        return;
-      }
-      const tm = q.in.ct ? ownedTmKey() : null;
-      addItems(questCost(q), -1);
-      if (tm) {
-        addItems({ [tm]: 1 }, -1);
-      }
-      const r = q.rew;
-      applyReward({ m: r.m, g: r.g, b: r.b });
-      let extra = '';
-      if (r.item) {
-        if (PROFILE.items.includes(r.item)) {
-          PROFILE.money += 2500;
-        } else {
-          PROFILE.items = [...PROFILE.items, r.item];
-        }
-        extra = ITEMS2[r.item].n;
-      }
-      if (r.ct) {
-        const pool = tmKeys().filter(k => !bagN(k)),
-          all = pool.length ? pool : tmKeys(),
-          k = all[dailySeed('qo' + q.id) % all.length];
-        PROFILE.bag[k] = Math.min(99, bagN(k) + 1);
-        extra = (extra ? extra + ' + ' : '') + SHOP[k].n;
-      }
-      S.done[q.id] = 1;
-      localStorage.setItem('res-quest-log', JSON.stringify(S));
-      sfx('win');
-      vibe(25);
-      toast(`${q.giver} : merci ! ${extra || rewardText({ m: r.m, g: r.g, b: r.b })}`);
-      savePurse();
-      renderBag();
-    },
-    true
-  );
-
-  /* ---------- trophy box ---------- */
-  TROPHIES = [
-    { id: 't1', t: 'Collection d’objets tenus', n: 5, v: () => PROFILE.items.length, g: 1 },
-    { id: 't2', t: 'Collection d’objets tenus', n: 10, v: () => PROFILE.items.length, g: 2 },
-    { id: 't3', t: 'Collection d’objets tenus', n: 20, v: () => PROFILE.items.length, g: 4 },
-    { id: 't4', t: 'CT et CS vues', n: 10, v: () => tmSeenCount(), g: 1 },
-    { id: 't5', t: 'CT et CS vues', n: 25, v: () => tmSeenCount(), g: 2 },
-    { id: 't6', t: 'CT et CS vues', n: 40, v: () => tmSeenCount(), g: 4 },
-    { id: 't7', t: 'Quêtes d’objets', n: 3, v: () => Object.keys(questState().done).length, g: 1 },
-    { id: 't8', t: 'Quêtes d’objets', n: 6, v: () => Object.keys(questState().done).length, g: 2 },
-    { id: 't9', t: 'Quêtes d’objets', n: 10, v: () => Object.keys(questState().done).length, g: 5 },
-    { id: 't10', t: 'Cadeaux du jour d’affilée', n: 7, v: () => dailyGiftState().n, g: 3 },
-  ];
-
+  document.addEventListener('click', onItemQuestsClick, true);
   document.addEventListener(
     'click',
     e => {

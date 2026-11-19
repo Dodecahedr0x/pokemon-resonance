@@ -6,18 +6,18 @@ import { writeLS, toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { TOD } from './home-route.js';
 import { queueSave } from '../state/saves.js';
-import { PREF, savePref, sfx, vibe } from '../progression/campaign.js';
+import { PREF, savePref } from '../ui/preferences.js';
+import { sfx, vibe } from '../audio/sound-effects.js';
 import { avatar } from './home-journey.js';
-import { V4, today } from '../state/economy.js';
-import { renderWallet } from '../core/interface.js';
+import { V4 } from '../ui/screen-state.js';
+import { today } from '../state/economy.js';
+import { renderWallet } from '../ui/wallet.js';
 import { renderMap } from './map.js';
 import { renderParams } from '../ui/settings.js';
 import { placesR } from './johto.js';
-import { dailySeed, todayWeather } from '../progression/companions.js';
+import { dailySeed, todayWeather } from './pokegear.js';
 import { regionPool } from './catch-anywhere.js';
 import { setRoute } from '../../screens/home/homeStore.js';
-
-let RARE_LIST;
 
 function typeAvatar(cls) {
   const a = TRAINER_AVATAR();
@@ -167,52 +167,50 @@ export const TREASURE_NAMES = {
   jour: 'Éclat de lumière',
 };
 
+// trainer emblem in the top bar (#v4Av): rendered by React (src/components/TopBar.jsx)
+
+/* the avatar precedes the name on the "VS" screen: versusAvatar(), rendered in Vs.jsx */
+
+/* ---------- 2. rare encounters by time and weather ---------- */
+const RARE_LIST = [
+  {
+    c: () => TOD === 'nuit',
+    m: 4,
+    w: 'nuit',
+    ids: ['nosferapti', 'fantominus', 'hoothoot', 'absol', 'tenefix', 'malosse', 'abra'],
+  },
+  { c: () => TOD === 'matin', m: 3, w: 'matin', ids: ['natu', 'tarsal', 'melo', 'granivol', 'mimigal', 'chenipan'] },
+  {
+    c: () => todayWeather() === 'pluie',
+    m: 5,
+    w: 'pluie',
+    ids: ['ptitard', 'kaiminus', 'loupio', 'marill', 'gobou', 'magicarpe', 'axoloto'],
+  },
+  {
+    c: () => todayWeather() === 'soleil',
+    m: 5,
+    w: 'soleil',
+    ids: ['salameche', 'hericendre', 'poussifeu', 'limagma', 'carapuce'],
+  },
+  { c: () => todayWeather() === 'grele', m: 6, w: 'grêle', ids: ['marcacrin', 'lokhlass', 'pichu'] },
+  {
+    c: () => todayWeather() === 'sable',
+    m: 5,
+    w: 'sable',
+    ids: ['onix', 'phanpy', 'embrylex', 'galekid', 'debugant'],
+  },
+];
+
 // Instructions run at startup, in the original order (see index.js).
 export function init() {
-  // trainer emblem in the top bar (#v4Av): rendered by React (src/components/TopBar.jsx)
-
-  /* the avatar precedes the name on the "VS" screen: versusAvatar(), rendered in Vs.jsx */
-
-  /* ---------- 2. rare encounters by time and weather ---------- */
-  RARE_LIST = [
-    {
-      c: () => TOD === 'nuit',
-      m: 4,
-      w: 'nuit',
-      ids: ['nosferapti', 'fantominus', 'hoothoot', 'absol', 'tenefix', 'malosse', 'abra'],
-    },
-    { c: () => TOD === 'matin', m: 3, w: 'matin', ids: ['natu', 'tarsal', 'melo', 'granivol', 'mimigal', 'chenipan'] },
-    {
-      c: () => todayWeather() === 'pluie',
-      m: 5,
-      w: 'pluie',
-      ids: ['ptitard', 'kaiminus', 'loupio', 'marill', 'gobou', 'magicarpe', 'axoloto'],
-    },
-    {
-      c: () => todayWeather() === 'soleil',
-      m: 5,
-      w: 'soleil',
-      ids: ['salameche', 'hericendre', 'poussifeu', 'limagma', 'carapuce'],
-    },
-    { c: () => todayWeather() === 'grele', m: 6, w: 'grêle', ids: ['marcacrin', 'lokhlass', 'pichu'] },
-    {
-      c: () => todayWeather() === 'sable',
-      m: 5,
-      w: 'sable',
-      ids: ['onix', 'phanpy', 'embrylex', 'galekid', 'debugant'],
-    },
-  ];
-
   /* the encounter sheet flags a rare appearance: rendered by React (src/screens/overlays/Enc.jsx) */
 
   HOOKS.timeOfDay.push(refreshRares);
-
   try {
     refreshRares();
   } catch {
     /* Best effort: failure here is non-fatal. */
   }
-
   // hidden finds on the map (.findSpot): rendered by React (src/screens/map/Marks.jsx)
 
   document.addEventListener(
@@ -231,7 +229,6 @@ export function init() {
     },
     true
   );
-
   /* ---------- 4. Settings: avatar and rare encounters ---------- */
   // "Avatar de dresseur" (Trainer avatar) panel: rendered by React (src/screens/settings/panels/Avatar.jsx)
 

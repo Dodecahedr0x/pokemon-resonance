@@ -2,10 +2,10 @@ import { Html } from '../../lib/html.jsx';
 import Marks from './Marks.jsx';
 import { regionMap } from './MapScreen.jsx';
 import { TOD } from '../../engine/world/home-route.js';
-import { V4 } from '../../engine/state/economy.js';
+import { V4 } from '../../engine/ui/screen-state.js';
 import { CHAIN, MAP_SVG, PL, curvePath, placeState } from '../../engine/world/map.js';
 import { JCHAIN, JMAP_SVG } from '../../engine/world/johto.js';
-import { todayWeather } from '../../engine/progression/companions.js';
+import { todayWeather } from '../../engine/world/pokegear.js';
 import { HCHAIN, HMAP_SVG } from '../../engine/world/hoenn.js';
 import { LIVING_MAP } from '../../engine/world/living-map.js';
 

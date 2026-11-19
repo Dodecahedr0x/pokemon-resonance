@@ -5,10 +5,10 @@ import { paintOverlay } from '../../screens/overlays/dialogsStore.js';
 import { $, toast } from '../core/utils.js';
 import { openId, openSheet } from '../team/team.js';
 import { queueSave } from '../state/saves.js';
-import { sfx, vibe } from '../progression/campaign.js';
+import { sfx, vibe } from '../audio/sound-effects.js';
 import { SHOP, bagN } from '../state/economy.js';
 import { renderBag } from '../progression/quests-shop.js';
-import { inheritedMoveHtml } from '../world/living-johto.js';
+import { inheritedMoveHtml } from '../progression/daycare.js';
 
 let TM_K;
 

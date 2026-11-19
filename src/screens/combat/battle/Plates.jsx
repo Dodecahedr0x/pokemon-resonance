@@ -5,7 +5,7 @@ import { medal } from '../../../engine/core/utils.js';
 import { EMAX, awakeningInfo, foeEvo, hasNx } from '../../../engine/combat/engine.js';
 import { B, STC, enPips, segHp, ui } from '../../../engine/combat/ui.js';
 import { hasXp, bossScene, plateRankHtml } from '../../../engine/combat/resonance.js';
-import { fogHidden, fogVision } from '../../../engine/modes/tactical-challenges.js';
+import { fogHidden, fogVision } from '../../../engine/combat/fog-of-war.js';
 import { useBattleVersion } from './battleStore.js';
 
 // The plates of the two teams, above (#bPlE) and below (#bPlA) the board.

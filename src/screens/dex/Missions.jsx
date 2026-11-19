@@ -1,4 +1,4 @@
-import { ownedFam } from '../../engine/state/economy.js';
+import { ownedFam } from '../../engine/progression/trainer-stats.js';
 import { DEXS } from '../../engine/progression/pokedex.js';
 import { MISSION_TIERS, missionState, weekKey, rewardText, typeProgress } from '../../engine/world/route-events.js';
 

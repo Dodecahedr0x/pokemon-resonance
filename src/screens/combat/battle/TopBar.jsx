@@ -9,16 +9,16 @@ import { medal, tc } from '../../../engine/core/utils.js';
 import { badgeSvg } from '../../../engine/modes/league.js';
 import { byUid } from '../../../engine/combat/engine.js';
 import { B, ui } from '../../../engine/combat/ui.js';
-import { isEnemyTurn } from '../../../engine/combat/catches.js';
+import { isEnemyTurn } from '../../../engine/combat/quick-battle.js';
 import { currentActor } from '../../../engine/combat/tactical-engine.js';
 import { chipTime } from '../../../engine/combat/living-board.js';
 import { chipWind } from '../../../engine/combat/tactics.js';
-import { chipMut } from '../../../engine/progression/achievements-challenges.js';
-import { chipChord } from '../../../engine/team/identity.js';
+import { chipMut } from '../../../engine/combat/mutators.js';
+import { chipChord } from '../../../engine/combat/resonance-chords.js';
 import { fieldEffectChips } from '../../../engine/moves/epic-tms.js';
-import { PREF } from '../../../engine/progression/campaign.js';
-import { DOCTRINE_DEFS } from '../../../engine/progression/camp.js';
-import { RELIC_DEFS } from '../../../engine/modes/tactical-challenges.js';
+import { PREF } from '../../../engine/ui/preferences.js';
+import { DOCTRINE_DEFS } from '../../../engine/combat/doctrines.js';
+import { RELIC_DEFS } from '../../../engine/modes/deep-echo.js';
 import { useBattleVersion } from './battleStore.js';
 
 // Top banner: battle name, round, chips (weather, time, wind…), Voice, ×2, Abandon.

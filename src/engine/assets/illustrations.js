@@ -2,7 +2,8 @@ import { BY, PKT } from '../pokemon/pokemon.js';
 import { ITEMS2 } from '../state/game-state.js';
 import { tokCl, unitsDirty } from '../../screens/combat/board/boardStore.js';
 import { L } from '../combat/ui.js';
-import { ART, HELD_IMG, ITM } from '../state/economy.js';
+import { ART, ITM } from './item-icons.js';
+import { HELD_IMG } from '../state/economy.js';
 
 let ITEM_SVG;
 

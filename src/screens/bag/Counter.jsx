@@ -1,4 +1,4 @@
-import { V4 } from '../../engine/state/economy.js';
+import { V4 } from '../../engine/ui/screen-state.js';
 import { thanksShown } from './bagStore.js';
 
 // "Pokémon world" skin (v4.73): counter with its vendor in the Shop, pocketed bag

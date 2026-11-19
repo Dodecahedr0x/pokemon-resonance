@@ -7,7 +7,7 @@ import { medal, tc } from '../../../engine/core/utils.js';
 import { scenLock } from '../../../engine/combat/items-bonds-ai.js';
 import { CHAP, leaderOf } from '../../../engine/progression/prestige.js';
 import { emblem, goalChips, groupOf, wonOf } from '../../../engine/world/home-journey.js';
-import { styleOf } from '../../../engine/modes/adventure.js';
+import { styleOf } from '../../../engine/combat/leader-styles.js';
 
 // The old template separated its blocks with « \n  »: we keep these text nodes,
 // merged when a conditional block is empty (like the old innerHTML).

@@ -3,7 +3,7 @@ import { BY } from '../../engine/pokemon/pokemon.js';
 import { PROFILE } from '../../engine/state/game-state.js';
 import { medal } from '../../engine/core/utils.js';
 import { fmt } from '../../engine/state/economy.js';
-import { CATEGORY_NAMES, log0430 } from '../../engine/progression/camp.js';
+import { CATEGORY_NAMES, log0430 } from '../../engine/progression/tactical-journal.js';
 
 const NL = '\n  ';
 const Tile = ({ v, t }) => (

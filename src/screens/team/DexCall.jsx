@@ -6,8 +6,8 @@ import { RC } from '../../engine/pokemon/roles-synergies.js';
 import { medal } from '../../engine/core/utils.js';
 import { squad } from '../../engine/team/team.js';
 import { STARS } from '../../engine/modes/gym-screen.js';
-import { LEGS } from '../../engine/modes/adventure.js';
-import { TEAM_NAME_EDIT } from '../../engine/team/individuals.js';
+import { LEGS } from '../../engine/modes/legendaries.js';
+import { TEAM_NAME_EDIT } from '../../engine/team/saved-teams.js';
 
 // Panel above the grid (#dexCall, old renderDexCall): confirmed recruits,
 // captured legends (v4.29), saved teams (v4.32), formations.

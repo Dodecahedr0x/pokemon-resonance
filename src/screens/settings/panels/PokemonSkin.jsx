@@ -1,4 +1,4 @@
-import { PREF } from '../../../engine/progression/campaign.js';
+import { PREF } from '../../../engine/ui/preferences.js';
 
 // Pokémon Skin (v4.72), completed by v4.73 (text, sounds) and v4.77 (graphics).
 // Buttons handled by the engine (delegated clicks on data-pokemon-skin, data-poke-style, data-gfx-toggle).

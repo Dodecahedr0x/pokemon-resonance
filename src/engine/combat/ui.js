@@ -35,36 +35,28 @@ import {
 } from './engine.js';
 import { champBuild, duoParts, duoTargets, pCapture, pDuo, previewRun, scenLock } from './items-bonds-ai.js';
 import { SV, autoSave, queueSave, renderSummary } from '../state/saves.js';
-import {
-  PREF,
-  __set_PREPG,
-  __set_tutorialI,
-  applyProgress,
-  renderCoach,
-  renderPrep,
-  sfx,
-  sfxEv,
-  vibe,
-} from '../progression/campaign.js';
+import { PREF } from '../ui/preferences.js';
+import { __set_PREPG, renderPrep } from './battle-prep.js';
+import { __set_tutorialI, renderCoach } from '../progression/tutorial.js';
+import { applyProgress } from '../progression/battle-rewards.js';
+import { sfx, sfxEv, vibe } from '../audio/sound-effects.js';
 import { drawObstacles } from '../modes/gym-screen.js';
 import { fxReset, playEv } from './move-effects.js';
 import { panelRoleInfo } from '../ui/guide.js';
 import { AUTO, HPM, RK, rankOf, turnBanner, turnBanners, vsIntro } from '../progression/prestige.js';
-import { renderWallet } from '../core/interface.js';
+import { renderWallet } from '../ui/wallet.js';
 import { tagUnits, tokenArt } from '../assets/illustrations.js';
-import { rivalBuild, rivalIdx, shinyHue, towerDraft, towerRun, towerTeam } from '../modes/adventure.js';
+import { RIVAL_CHALLENGES, rivalBuild, rivalIdx } from '../modes/rival.js';
+import { shinyHue } from '../pokemon/shiny.js';
+import { towerDraft, towerRun, towerTeam } from '../modes/resonance-tower.js';
 import { currentActor, unrollSpeed, endTurnSpeed, chosenOrder, canSelect } from './tactical-engine.js';
 import { LIVING_DESC, LIVING_STATE, hourTint, chosenAlive } from './living-board.js';
 import { chosenTactic } from './tactics.js';
-import {
-  challengeLaunch,
-  activeChallenges,
-  mutTraining,
-  mutInfo,
-  teamSize,
-} from '../progression/achievements-challenges.js';
-import { charactersChosen, disobedienceChosen, level } from '../team/identity.js';
-import { REPLAYS } from '../world/seasons.js';
+import { challengeLaunch, activeChallenges, teamSize } from '../progression/campaign-challenges.js';
+import { mutTraining, mutInfo } from './mutators.js';
+import { charactersChosen, disobedienceChosen } from '../team/characters.js';
+import { level } from '../progression/base-camp.js';
+import { REPLAYS } from './best-move-replay.js';
 import { refreshBattle, evoState } from '../../screens/combat/battle/battleStore.js';
 import {
   bdClass,
@@ -79,24 +71,23 @@ import {
   unitsDirty,
 } from '../../screens/combat/board/boardStore.js';
 import { hasXp, bossScene, notesOf } from './resonance.js';
-import { resonanceCandidate, storyScene, tournamentTeam } from '../progression/companions.js';
-import { coopPassTurn, coopPlayer } from '../modes/fishing-safari-coop.js';
+import { resonanceCandidate } from './resonant-form.js';
+import { storyScene } from '../progression/story-dialogues.js';
+import { tournamentTeam } from '../modes/friends-tournament.js';
+import { coopPassTurn, coopPlayer } from '../modes/coop.js';
 import { isSurrounded } from './intensity.js';
-import { battleDelay, endSkipSpeedup } from './catches.js';
-import {
-  RIVAL_CHALLENGES,
-  hurtFlash,
-  afterBattleScene,
-  buildWeeklyChallenge,
-  weeklyTeam,
-  lockLegendaryCapture,
-  liveRender,
-  liveToken,
-} from '../progression/quality.js';
-import { afterRenderTactics, campOpen, chosenDoctrine } from '../progression/camp.js';
-import { afterRenderFog, chosenFog, noProgressResult, fixedTeam } from '../modes/tactical-challenges.js';
+import { battleDelay, endSkipSpeedup } from './quick-battle.js';
+import { hurtFlash, liveRender, liveToken } from './expressive-pokemon.js';
+import { afterBattleScene } from '../progression/story-scenes.js';
+import { buildWeeklyChallenge, weeklyTeam } from '../modes/weekly-challenge.js';
+import { lockLegendaryCapture } from '../modes/legendary-captures.js';
+import { afterRenderTactics } from './battle-sky.js';
+import { campOpen } from '../progression/camp.js';
+import { chosenDoctrine } from './doctrines.js';
+import { afterRenderFog, chosenFog } from './fog-of-war.js';
+import { noProgressResult, fixedTeam } from '../modes/camp-challenges.js';
 import { afterRenderDuel, duelPassTurn } from '../modes/duel.js';
-import { fitPhoneBattle } from '../pokemon/eevee.js';
+import { fitPhoneBattle } from './compact-battle.js';
 import { announceGimmick } from '../modes/feats-gimmicks.js';
 
 export let VERT, MQV, B, LOG, scSel;
@@ -1168,6 +1159,151 @@ export const poly = (k, c) => {
   return `<polygon points="${pt}" class="${c} gw"/><polygon points="${pt}" class="${c}"/>`;
 };
 
+async function onEvoPickClick(e) {
+  const b = e.target.closest('[data-pick]');
+  if (!b) {
+    if (e.target.id === 'evoPick') {
+      $('#evoPick').hidden = true;
+    }
+    return;
+  }
+  $('#evoPick').hidden = true;
+  const id = b.dataset.pick,
+    u = ui.sel && byUid(B, ui.sel);
+  if (!id || !u || !canAwaken(B, u)) {
+    return;
+  }
+  ui.undo = null;
+  const E = BY[id];
+  ui.busy = true;
+  clearAim();
+  renderAll();
+  await cinematic(u.n, u.t, E.n, E.t, 'a', u.uid);
+  const ev = pAwaken(B, u, id);
+  ui.busy = false;
+  if (!ev) {
+    renderAll();
+    return;
+  }
+  renderAll();
+  playEv(ev);
+  if (B.over) {
+    finish();
+    return;
+  }
+  toast(
+    `${E.n} entre en jeu. ${B.voice >= 2 && !B.retrigger ? 'Relance (2 Voix) pour utiliser ses capacités tout de suite.' : ''}`
+  );
+  renderAll();
+}
+
+function onBattlePanelClick(e) {
+  const b = e.target.closest('button');
+  if (!b || !B || ui.busy || B.over) {
+    return;
+  }
+  const u = ui.sel && byUid(B, ui.sel);
+  if (b.dataset.fc) {
+    ui.selE = null;
+    renderAll();
+    return;
+  }
+  if (b.dataset.tile) {
+    ui.tile = null;
+    renderAll();
+    return;
+  }
+  if (b.dataset.undo && ui.undo) {
+    const U = ui.undo;
+    ui.undo = null;
+    B = JSON.parse(U.snap);
+    LOG.splice(0, Math.max(0, LOG.length - U.log));
+    renderLog();
+    clearAim();
+    ui.sel = U.uid;
+    renderAll();
+    sfx('ui');
+    return;
+  }
+  if (b.dataset.cap) {
+    const al = byUid(B, ui.sel),
+      target = byUid(B, b.dataset.cap);
+    const ev = pCapture(B, al, target);
+    if (ev) {
+      ui.undo = null;
+      ui.selE = null;
+      renderAll();
+      playEv(ev);
+      if (B.over) {
+        finish();
+        return;
+      }
+      autoSel();
+      renderAll();
+    }
+    return;
+  }
+  if (b.dataset.duo && u) {
+    if (ui.mode === 'duo' && ui.duo === b.dataset.duo) {
+      clearAim();
+    } else {
+      clearAim();
+      ui.mode = 'duo';
+      ui.duo = b.dataset.duo;
+    }
+    renderAll();
+    return;
+  }
+  if (b.dataset.evo === 'open' && u) {
+    if (canAwaken(B, u)) {
+      openEvoPick(u);
+    }
+    return;
+  }
+  if (b.dataset.mi != null && u) {
+    const i = +b.dataset.mi;
+    if (ui.mode === 'target' && ui.mi === i) {
+      clearAim();
+    } else {
+      ui.mode = 'target';
+      ui.mi = i;
+      ui.pk = null;
+      ui.pv = null;
+      const m = MV[u.mv[i]];
+      if (m.sh === 'self' || m.sh === 'ring') {
+        ui.pk = uk(u);
+        ui.pv = preview(B, u.uid, i, ui.pk);
+      }
+    }
+    renderAll();
+    return;
+  }
+  if (b.dataset.pv === 'ok') {
+    confirmAct();
+    return;
+  }
+  if (b.dataset.pv === 'no') {
+    clearAim();
+    renderAll();
+    return;
+  }
+  if (b.dataset.vx === 'dodge' && u) {
+    ui.mode = ui.mode === 'dodge' ? null : 'dodge';
+    ui.pv = null;
+    ui.pk = null;
+    renderAll();
+    return;
+  }
+  if (b.dataset.vx === 'relance' && u) {
+    const ev = pReroll(B, u);
+    if (ev) {
+      ui.undo = null;
+      renderAll();
+      playEv(ev);
+    }
+  }
+}
+
 // Statements run at startup, in the original order (see index.js).
 export function init() {
   VERT = false;
@@ -1197,43 +1333,7 @@ export function init() {
 
   $('#bLaunch').addEventListener('click', () => launch());
 
-  $('#evoPick').addEventListener('click', async e => {
-    const b = e.target.closest('[data-pick]');
-    if (!b) {
-      if (e.target.id === 'evoPick') {
-        $('#evoPick').hidden = true;
-      }
-      return;
-    }
-    $('#evoPick').hidden = true;
-    const id = b.dataset.pick,
-      u = ui.sel && byUid(B, ui.sel);
-    if (!id || !u || !canAwaken(B, u)) {
-      return;
-    }
-    ui.undo = null;
-    const E = BY[id];
-    ui.busy = true;
-    clearAim();
-    renderAll();
-    await cinematic(u.n, u.t, E.n, E.t, 'a', u.uid);
-    const ev = pAwaken(B, u, id);
-    ui.busy = false;
-    if (!ev) {
-      renderAll();
-      return;
-    }
-    renderAll();
-    playEv(ev);
-    if (B.over) {
-      finish();
-      return;
-    }
-    toast(
-      `${E.n} entre en jeu. ${B.voice >= 2 && !B.retrigger ? 'Relance (2 Voix) pour utiliser ses capacités tout de suite.' : ''}`
-    );
-    renderAll();
-  });
+  $('#evoPick').addEventListener('click', onEvoPickClick);
 
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape' && !$('#evoPick').hidden) {
@@ -1249,112 +1349,7 @@ export function init() {
     tapTile(p.dataset.k);
   });
 
-  $('#bPanel').addEventListener('click', e => {
-    const b = e.target.closest('button');
-    if (!b || !B || ui.busy || B.over) {
-      return;
-    }
-    const u = ui.sel && byUid(B, ui.sel);
-    if (b.dataset.fc) {
-      ui.selE = null;
-      renderAll();
-      return;
-    }
-    if (b.dataset.tile) {
-      ui.tile = null;
-      renderAll();
-      return;
-    }
-    if (b.dataset.undo && ui.undo) {
-      const U = ui.undo;
-      ui.undo = null;
-      B = JSON.parse(U.snap);
-      LOG.splice(0, Math.max(0, LOG.length - U.log));
-      renderLog();
-      clearAim();
-      ui.sel = U.uid;
-      renderAll();
-      sfx('ui');
-      return;
-    }
-    if (b.dataset.cap) {
-      const al = byUid(B, ui.sel),
-        target = byUid(B, b.dataset.cap);
-      const ev = pCapture(B, al, target);
-      if (ev) {
-        ui.undo = null;
-        ui.selE = null;
-        renderAll();
-        playEv(ev);
-        if (B.over) {
-          finish();
-          return;
-        }
-        autoSel();
-        renderAll();
-      }
-      return;
-    }
-    if (b.dataset.duo && u) {
-      if (ui.mode === 'duo' && ui.duo === b.dataset.duo) {
-        clearAim();
-      } else {
-        clearAim();
-        ui.mode = 'duo';
-        ui.duo = b.dataset.duo;
-      }
-      renderAll();
-      return;
-    }
-    if (b.dataset.evo === 'open' && u) {
-      if (canAwaken(B, u)) {
-        openEvoPick(u);
-      }
-      return;
-    }
-    if (b.dataset.mi != null && u) {
-      const i = +b.dataset.mi;
-      if (ui.mode === 'target' && ui.mi === i) {
-        clearAim();
-      } else {
-        ui.mode = 'target';
-        ui.mi = i;
-        ui.pk = null;
-        ui.pv = null;
-        const m = MV[u.mv[i]];
-        if (m.sh === 'self' || m.sh === 'ring') {
-          ui.pk = uk(u);
-          ui.pv = preview(B, u.uid, i, ui.pk);
-        }
-      }
-      renderAll();
-      return;
-    }
-    if (b.dataset.pv === 'ok') {
-      confirmAct();
-      return;
-    }
-    if (b.dataset.pv === 'no') {
-      clearAim();
-      renderAll();
-      return;
-    }
-    if (b.dataset.vx === 'dodge' && u) {
-      ui.mode = ui.mode === 'dodge' ? null : 'dodge';
-      ui.pv = null;
-      ui.pk = null;
-      renderAll();
-      return;
-    }
-    if (b.dataset.vx === 'relance' && u) {
-      const ev = pReroll(B, u);
-      if (ev) {
-        ui.undo = null;
-        renderAll();
-        playEv(ev);
-      }
-    }
-  });
+  $('#bPanel').addEventListener('click', onBattlePanelClick);
 
   ['#bPlE', '#bPlA'].forEach(s =>
     $(s).addEventListener('click', e => {

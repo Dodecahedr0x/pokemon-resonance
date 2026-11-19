@@ -1,4 +1,4 @@
-import { PREF } from '../../../engine/progression/campaign.js';
+import { PREF } from '../../../engine/ui/preferences.js';
 import { Slider, Switch } from '../controls.jsx';
 
 // Sound: music and effects, each with its own volume.

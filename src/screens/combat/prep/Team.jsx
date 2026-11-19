@@ -11,7 +11,7 @@ import { scenLock } from '../../../engine/combat/items-bonds-ai.js';
 import { scSel } from '../../../engine/combat/ui.js';
 import { teamBtns } from '../../../engine/modes/gym-screen.js';
 import { k2n } from '../../../engine/world/home-journey.js';
-import { DOCTRINE_DEFS } from '../../../engine/progression/camp.js';
+import { DOCTRINE_DEFS } from '../../../engine/combat/doctrines.js';
 
 // The four team slots, then the active synergies (#ptList).
 function Places() {

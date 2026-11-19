@@ -1,6 +1,6 @@
 import { Fragment } from 'react';
 import { Html } from '../../lib/html.jsx';
-import { V4 } from '../../engine/state/economy.js';
+import { V4 } from '../../engine/ui/screen-state.js';
 import { STATE_N, placeIcon, placeName, placeState, placeSub } from '../../engine/world/map.js';
 import { placesR } from '../../engine/world/johto.js';
 

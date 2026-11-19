@@ -4,18 +4,17 @@ import { TOD } from './home-route.js';
 import { say } from '../combat/engine.js';
 import { B } from '../combat/ui.js';
 import { writeLS, readLS, mulberry32 } from '../core/utils.js';
-import { sfx, vibe } from '../progression/campaign.js';
+import { sfx, vibe } from '../audio/sound-effects.js';
 import { leaderOf, overlay } from '../progression/prestige.js';
 import { shut, updateTemp } from '../../screens/overlays/tempStore.js';
-import { V4, savePurse, today } from '../state/economy.js';
+import { V4 } from '../ui/screen-state.js';
+import { savePurse, today } from '../state/economy.js';
 import { renderMap } from './map.js';
 import { placesR } from './johto.js';
-import { todayWeather } from '../progression/companions.js';
+import { todayWeather } from './pokegear.js';
 import { getBoss, hasBossPhases } from '../combat/intensity.js';
 import { applyReward, canAfford, rewardText } from './route-events.js';
 import { badgeTotal } from '../progression/item-quests.js';
-
-export let SECRET_PLACES;
 
 /** A gym Champion (boss without phases) goes berserk below 50% HP. */
 export function bossEnrage(S, ev) {
@@ -303,65 +302,65 @@ export const WANDERING_NPCS = [
   },
 ];
 
+export const SECRET_PLACES = [
+  {
+    id: 's1',
+    n: 'Source de la Lune',
+    ind: 'Se révèle la nuit.',
+    min: 0,
+    ok: () => TOD === 'nuit',
+    lore: 'Une eau claire coule sous les étoiles. Les anciens disaient que les premières notes de la Résonance y ont été entendues.',
+    rew: { g: 3 },
+  },
+  {
+    id: 's2',
+    n: 'Clairière du Matin',
+    ind: 'Se révèle le matin.',
+    min: 0,
+    ok: () => TOD === 'matin',
+    lore: 'La rosée perle sur les baies. Quelqu’un a laissé là un panier, comme une offrande pour les dresseurs de passage.',
+    rew: { b: { baiemepo: 2 } },
+  },
+  {
+    id: 's3',
+    n: 'Crique des Marées',
+    ind: 'Se révèle sous la pluie, après le 1er badge.',
+    min: 1,
+    ok: () => currentWeather() === 'pluie',
+    lore: 'La pluie dévoile un passage vers une crique. Une vieille caisse échouée contient de quoi payer un voyage.',
+    rew: { m: 1200 },
+  },
+  {
+    id: 's4',
+    n: 'Dune Dorée',
+    ind: 'Se révèle au soleil ou sous le sable, après le 2e badge.',
+    min: 2,
+    ok: () => ['soleil', 'sable'].includes(currentWeather()),
+    lore: 'Entre deux dunes, un cercle de pierres brille. Des éclats y dorment depuis des siècles.',
+    rew: { g: 4 },
+  },
+  {
+    id: 's5',
+    n: 'Cime Gelée',
+    ind: 'Se révèle sous la grêle, après le 3e badge.',
+    min: 3,
+    ok: () => currentWeather() === 'grele',
+    lore: 'Un refuge gelé, une lanterne encore tiède. Un randonneur y a laissé ses réserves de soins.',
+    rew: { b: { superpotion: 3 }, m: 600 },
+  },
+  {
+    id: 's6',
+    n: 'Ruine de la Résonance',
+    ind: 'Se révèle en journée, après le 4e badge.',
+    min: 4,
+    ok: () => TOD === 'jour',
+    lore: 'Les murs gravés racontent la Dissonance, ce silence qui efface les notes. Au centre, un éclat de Résonance pur vibre encore.',
+    rew: { g: 6 },
+  },
+];
+
 // Instructions run at startup, in the original order (see index.js).
 export function init() {
-  SECRET_PLACES = [
-    {
-      id: 's1',
-      n: 'Source de la Lune',
-      ind: 'Se révèle la nuit.',
-      min: 0,
-      ok: () => TOD === 'nuit',
-      lore: 'Une eau claire coule sous les étoiles. Les anciens disaient que les premières notes de la Résonance y ont été entendues.',
-      rew: { g: 3 },
-    },
-    {
-      id: 's2',
-      n: 'Clairière du Matin',
-      ind: 'Se révèle le matin.',
-      min: 0,
-      ok: () => TOD === 'matin',
-      lore: 'La rosée perle sur les baies. Quelqu’un a laissé là un panier, comme une offrande pour les dresseurs de passage.',
-      rew: { b: { baiemepo: 2 } },
-    },
-    {
-      id: 's3',
-      n: 'Crique des Marées',
-      ind: 'Se révèle sous la pluie, après le 1er badge.',
-      min: 1,
-      ok: () => currentWeather() === 'pluie',
-      lore: 'La pluie dévoile un passage vers une crique. Une vieille caisse échouée contient de quoi payer un voyage.',
-      rew: { m: 1200 },
-    },
-    {
-      id: 's4',
-      n: 'Dune Dorée',
-      ind: 'Se révèle au soleil ou sous le sable, après le 2e badge.',
-      min: 2,
-      ok: () => ['soleil', 'sable'].includes(currentWeather()),
-      lore: 'Entre deux dunes, un cercle de pierres brille. Des éclats y dorment depuis des siècles.',
-      rew: { g: 4 },
-    },
-    {
-      id: 's5',
-      n: 'Cime Gelée',
-      ind: 'Se révèle sous la grêle, après le 3e badge.',
-      min: 3,
-      ok: () => currentWeather() === 'grele',
-      lore: 'Un refuge gelé, une lanterne encore tiède. Un randonneur y a laissé ses réserves de soins.',
-      rew: { b: { superpotion: 3 }, m: 600 },
-    },
-    {
-      id: 's6',
-      n: 'Ruine de la Résonance',
-      ind: 'Se révèle en journée, après le 4e badge.',
-      min: 4,
-      ok: () => TOD === 'jour',
-      lore: 'Les murs gravés racontent la Dissonance, ce silence qui efface les notes. Au centre, un éclat de Résonance pur vibre encore.',
-      rew: { g: 6 },
-    },
-  ];
-
   // secret places (.secretPlaces) and passing character (.passerby) on the map: rendered by React
   // (src/screens/map/Marks.jsx)
 
@@ -394,6 +393,4 @@ export function init() {
     },
     true
   );
-
-  // "Secret places" panel: rendered by React (src/screens/settings/panels/SecretPlaces.jsx)
 }

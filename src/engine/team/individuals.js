@@ -1,29 +1,17 @@
-import { BY, PRESETS, familyOf } from '../pokemon/pokemon.js';
-import { DIFFS, ITEMS2, PROFILE, inBox, isCamp, ownedItems } from '../state/game-state.js';
-import { synOf } from '../pokemon/roles-synergies.js';
-import { fnv, toast } from '../core/utils.js';
+import { BY, familyOf } from '../pokemon/pokemon.js';
+import { DIFFS, ITEMS2, PROFILE } from '../state/game-state.js';
+import { fnv } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
-import { __set_squad, renderSquad, save, squad, validSquad } from './team.js';
 import { EMAX, say } from '../combat/engine.js';
 import { queueSave } from '../state/saves.js';
-import { PREF, renderPrep, savePref } from '../progression/campaign.js';
-import { __set_TEAM_BAK } from '../modes/gym-screen.js';
-import { today } from '../state/economy.js';
-import { renderParams } from '../ui/settings.js';
-import { CHARACTERS, onExpedition } from './identity.js';
-import { CAMP_TABS } from '../modes/tactical-challenges.js';
-
-export let TEAM_NAME_EDIT;
+import { CHARACTERS } from './characters.js';
 
 /* =====================================================================
-   v4.32
-   1. Individual nature and ability: each captured Pokémon receives a
-      nature (among the characters that suit its family) and an
-      ability (tied to its types), kept through its evolutions.
-   2. Saved teams: your teams (Pokémon and held items).
-   3. Synergy formations: eight new recommended teams.
-   4. Accessibility: text, contrast, color blindness, left-handed, animations.
-   5. Pantheon: the teams that beat a Master or the guardian.
+   Individual nature and ability (added in v4.32): each captured Pokémon
+   receives a nature (among the characters that suit its family) and an
+   ability (tied to its types), kept through its evolutions. Also holds
+   the profile defaults and sanitizer of the v4.32 state (traits, saved
+   teams, Pantheon).
    ===================================================================== */
 export function INDIVIDUALS_COMFORT_0() {
   return { traits: {}, traitsInit: 0, savedTeams: [], pantheonlist: [] };
@@ -179,80 +167,6 @@ export function individualHtml(id) {
   return `<div class="mvc car-mvc ability-card"><div class="t"><b>${T[0]}</b><span class="chip">Talent perso</span></div><p>${T[1]}</p></div>`;
 }
 
-// "Mes équipes" (My teams) row of the Team screen: rendered by React (src/screens/team/DexCall.jsx)
-
-function loadTeam(i) {
-  const t = (PROFILE.savedTeams || [])[i];
-  if (!t) {
-    return;
-  }
-  const ok = t.ids.filter(id => inBox(id) && !onExpedition(id)),
-    miss = t.ids.filter(id => !ok.includes(id));
-  if (squad.length) {
-    __set_TEAM_BAK([...squad]);
-  }
-  const s = [];
-  ok.forEach(id => {
-    if (validSquad([...s, id])) {
-      s.push(id);
-    }
-  });
-  __set_squad(s);
-  Object.entries(t.it || {}).forEach(([b, it]) => {
-    if (!ownedItems().includes(it) || !BY[b]) {
-      return;
-    }
-    for (const k in PROFILE.equipment) {
-      if (PROFILE.equipment[k] === it) {
-        delete PROFILE.equipment[k];
-      }
-    }
-    PROFILE.equipment[b] = it;
-  });
-  save();
-  renderSquad();
-  try {
-    renderPrep();
-  } catch {
-    /* Best effort: failure here is non-fatal. */
-  }
-  toast(miss.length ? `« ${t.n} » chargée sans ${miss.map(id => BY[id].n).join(', ')}.` : `Équipe « ${t.n} » chargée.`);
-}
-
-/* in Battles: the saved teams (#savedSquadsBox) are rendered by React
-   (src/screens/combat/prep/Team.jsx) */
-
-/* ---------- 4. accessibility ---------- */
-function a11y432() {
-  const h = document.documentElement,
-    t = PREF.textSize || 'normal';
-  h.classList.toggle('a11y-t1', t === 'grand');
-  h.classList.toggle('a11y-t2', t === 'tgrand');
-  h.classList.toggle('a11y-hc', !!PREF.highContrast);
-  h.classList.toggle('a11y-cb', !!PREF.colorBlind);
-  h.classList.toggle('a11y-lh', !!PREF.leftHand);
-  h.classList.toggle('a11y-rm', !!PREF.reduceMotion);
-}
-
-export function pantheonEngrave(k, n, team, S) {
-  const L = (PROFILE.pantheonlist = PROFILE.pantheonlist || []);
-  L.unshift({
-    d: today(),
-    k,
-    n,
-    t: team.filter(id => BY[id]).slice(0, 4),
-    r: (S && S.round) || 0,
-    rk: (S && S.rank) || '',
-    df: (S && S.diff) || PROFILE.diff || 'normal',
-    md: isCamp() ? 'campagne' : 'libre',
-  });
-  if (L.length > 40) {
-    L.length = 40;
-  }
-}
-
-// the Camp › Pantheon tab is rendered by React: src/screens/camp/tabs/Pantheon.jsx
-
 /* ---------- 1. individual nature and ability ---------- */
 const ABILITY_DEFS = {
   fermete: [
@@ -284,14 +198,6 @@ const ABILITY_DEFS = {
   ],
   robuste: ['Robustesse', '+10 % de PV maximum.', ['Normal', 'Plante', 'Sol', 'Glace', 'Roche']],
   garde: ['Vigilance', 'Commence le combat sous Garde pendant 2 manches.', ['Acier', 'Psy', 'Fée', 'Normal', 'Eau']],
-};
-
-/* ---------- 5. Pantheon ---------- */
-export const PANTHEON_STORE = {
-  champ: 'Champion de Kanto',
-  jchamp: 'Maître de Johto',
-  hchamp: 'Maître de Hoenn',
-  echo: 'Gardien de l’Écho profond',
 };
 
 // Statements run at startup, in the original order (see index.js).
@@ -333,169 +239,4 @@ export function init() {
       }
     });
   });
-
-  /* ---------- 2. saved teams ---------- */
-  TEAM_NAME_EDIT = false;
-
-  document.addEventListener('click', e => {
-    const b = e.target.closest('[data-team-save]');
-    if (!b) {
-      return;
-    }
-    const a = b.dataset.teamSave,
-      T = (PROFILE.savedTeams = PROFILE.savedTeams || []);
-    if (a === 'nouv') {
-      TEAM_NAME_EDIT = true;
-      renderSquad();
-      const i = document.getElementById('team-name');
-      if (i) {
-        i.focus();
-      }
-      return;
-    }
-    if (a === 'ok') {
-      const v =
-          ((document.getElementById('team-name') || {}).value || '')
-            .replace(/[<>&"]/g, '')
-            .trim()
-            .slice(0, 20) || `Équipe ${T.length + 1}`,
-        it = {};
-      squad.forEach(id => {
-        const bb = BY[id].base;
-        if (PROFILE.equipment[bb]) {
-          it[bb] = PROFILE.equipment[bb];
-        }
-      });
-      if (squad.length && T.length < 8) {
-        T.push({ n: v, ids: [...squad], it });
-      }
-      TEAM_NAME_EDIT = false;
-      save();
-      toast(`Équipe « ${v} » enregistrée.`);
-    } else if (a === 'charger') {
-      return loadTeam(+b.dataset.i);
-    } else if (a === 'suppr') {
-      if (!b.dataset.ok) {
-        b.dataset.ok = '1';
-        b.textContent = 'Sûr ?';
-        return;
-      }
-      T.splice(+b.dataset.i, 1);
-      save();
-    }
-    renderSquad();
-    try {
-      renderPrep();
-    } catch {
-      /* Best effort: failure here is non-fatal. */
-    }
-  });
-
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Enter' && e.target && e.target.id === 'team-name') {
-      e.preventDefault();
-      const b = document.querySelector('[data-team-save="ok"]');
-      if (b) {
-        b.click();
-      }
-    }
-  });
-
-  /* ---------- 3. synergy formations ---------- */
-  Object.assign(PRESETS, {
-    grandorage: {
-      n: 'Grand orage',
-      ids: ['scarhino', 'ramoloss', 'hoothoot', 'loupio'],
-      synergyText: 'Tempête, Escadrille, Dojo',
-    },
-    cieldraco: {
-      n: 'Ciel draconique',
-      ids: ['evoli', 'scarhino', 'hoothoot', 'minidraco'],
-      synergyText: 'Escadrille, Dojo, Ciel draconique',
-    },
-    forge: {
-      n: 'Forge volcanique',
-      ids: ['hoothoot', 'onix', 'limagma', 'scarhino'],
-      synergyText: 'Forge, Escadrille, Dojo',
-    },
-    jardin: {
-      n: 'Jardin gelé',
-      ids: ['lokhlass', 'marill', 'fantominus', 'bulbizarre'],
-      synergyText: 'Toxines, Banquise, Bénédiction',
-    },
-    brume: {
-      n: 'Brume toxique',
-      ids: ['granivol', 'fantominus', 'porygon', 'scarhino'],
-      synergyText: 'Escadrille, Dojo, Toxines',
-    },
-    lumiere: {
-      n: 'Lame et lumière',
-      ids: ['tarsal', 'absol', 'magneti', 'bulbizarre'],
-      synergyText: 'Acier trempé, Bénédiction',
-    },
-    abysses: { n: 'Abysses', ids: ['natu', 'axoloto', 'lokhlass', 'tenefix'], synergyText: 'Esprit, Banquise' },
-    oragedraco: {
-      n: 'Orage draconique',
-      ids: ['draby', 'lokhlass', 'pichu', 'hoothoot'],
-      synergyText: 'Tempête, Ciel draconique',
-    },
-  });
-
-  Object.keys(PRESETS).forEach(k => {
-    const P = PRESETS[k];
-    P.ids = P.ids.filter(id => BY[id]);
-    if (!P.synergyText) {
-      P.synergyText = synOf(P.ids)
-        .map(x => x.n)
-        .join(', ');
-    }
-  });
-
-  a11y432();
-
-  document.addEventListener('click', e => {
-    const b = e.target.closest('[data-text-size]');
-    if (!b) {
-      return;
-    }
-    PREF.textSize = b.dataset.textSize;
-    savePref();
-    a11y432();
-    renderParams();
-  });
-
-  document.addEventListener('change', e => {
-    const p = e.target.closest('[data-pref]');
-    if (p && /432$/.test(p.dataset.pref)) {
-      if (p.dataset.pref === 'reduceMotion') {
-        PREF.animEnabled = !p.checked;
-      }
-      savePref();
-      a11y432();
-    }
-  });
-
-  HOOKS.progress.push((S, rew, win) => {
-    if (!win || !PANTHEON_STORE[S.sc]) {
-      return null;
-    }
-    pantheonEngrave(
-      S.sc,
-      PANTHEON_STORE[S.sc],
-      S.units.filter(u => u.side === 'a').map(u => u.id),
-      S
-    );
-    rew.pantheonlist = PANTHEON_STORE[S.sc];
-    return null;
-  });
-
-  HOOKS.battleResult.push(r =>
-    r.pantheonlist
-      ? `<div class="res-l"><h4>Panthéon</h4><div class="rl"><span>Votre équipe est gravée au Panthéon : ${r.pantheonlist}.</span><b>★</b></div></div>`
-      : ''
-  );
-
-  if (!CAMP_TABS.some(x => x[0] === 'pantheon')) {
-    CAMP_TABS.push(['pantheon', 'Panthéon']);
-  }
 }

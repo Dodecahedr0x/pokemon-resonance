@@ -6,13 +6,14 @@ import { writeLS, toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { heal, say } from '../combat/engine.js';
 import { esc, queueSave } from '../state/saves.js';
-import { sfx, vibe } from './campaign.js';
-import { bagN, tLevel } from '../state/economy.js';
-import { renderWallet } from '../core/interface.js';
+import { sfx, vibe } from '../audio/sound-effects.js';
+import { bagN } from '../state/economy.js';
+import { tLevel } from './trainer-stats.js';
+import { renderWallet } from '../ui/wallet.js';
 import { renderBag } from './quests-shop.js';
 import { DAMAGE_PROVIDERS } from '../combat/tactical-engine.js';
 
-let TALENTS, TALENT_MAX, TALENT_RESET_COST;
+let TALENT_MAX, TALENT_RESET_COST;
 // read by Shop › Talents (React, src/screens/bag/Workshop.jsx)
 export { TALENTS, TALENT_MAX, TALENT_RESET_COST, talentState, talentSpent, talentPoints };
 
@@ -44,51 +45,83 @@ const talentPoints = () => Math.max(0, tLevel() - 1 - talentSpent());
 
 const talentTree = id => talentState()[id] || 0;
 
+const TALENTS = [
+  {
+    b: 'attaque',
+    n: 'Attaque',
+    t: [
+      { id: 'a1', n: 'Mordant', d: r => `+${r * 2} % de dégâts.` },
+      {
+        id: 'a2',
+        n: 'Concentration',
+        d: r =>
+          r >= 3
+            ? 'Toute l’équipe commence avec 1 losange.'
+            : `Les ${r} premier${r > 1 ? 's' : ''} Pokémon commence${r > 1 ? 'nt' : ''} avec 1 losange.`,
+      },
+      { id: 'a3', n: 'Coup de grâce', d: r => `+${r * 4} % de dégâts sur une cible sous 50 % de PV.` },
+    ],
+  },
+  {
+    b: 'soin',
+    n: 'Soin',
+    t: [
+      { id: 's1', n: 'Premiers secours', d: r => `Fin de manche : l’équipe récupère ${r * 2} % de ses PV max.` },
+      { id: 's2', n: 'Robustesse', d: r => `L’avant-garde commence avec ${r} de Garde.` },
+      {
+        id: 's3',
+        n: 'Second souffle',
+        d: r => `Une fois par combat, un allié sous 30 % de PV récupère ${r * 10} % de ses PV max.`,
+      },
+    ],
+  },
+  {
+    b: 'exploration',
+    n: 'Exploration',
+    t: [
+      { id: 'e1', n: 'Négociateur', d: r => `+${r * 40} ₽ après chaque victoire.` },
+      { id: 'e2', n: 'Collectionneur', d: r => `${r * 8} % de chances de trouver une Poké Ball après une victoire.` },
+      { id: 'e3', n: 'Œil de lynx', d: r => `${r * 8} % de chances de trouver un Éclat après une victoire.` },
+    ],
+  },
+];
+
+function onTalentTreeClick(e) {
+  const b = e.target.closest && e.target.closest('[data-talent-tree]');
+  if (!b || b.disabled) {
+    return;
+  }
+  e.stopPropagation();
+  e.preventDefault();
+  const k = b.dataset.talentTree,
+    st = talentState();
+  if (k === 'reset') {
+    if (PROFILE.money < TALENT_RESET_COST || !talentSpent()) {
+      return;
+    }
+    PROFILE.money -= TALENT_RESET_COST;
+    talentSave({});
+    toast('Talents réinitialisés.');
+  } else if (k in st && st[k] < TALENT_MAX && talentPoints() > 0) {
+    st[k]++;
+    talentSave(st);
+    sfx('ui');
+    vibe(20);
+  } else {
+    return;
+  }
+  try {
+    queueSave();
+    renderWallet();
+    renderBag();
+  } catch {
+    /* Best effort: failure here is non-fatal. */
+  }
+}
+
 // Statements run at startup, in the original order (see index.js).
 export function init() {
-  TALENTS = [
-    {
-      b: 'attaque',
-      n: 'Attaque',
-      t: [
-        { id: 'a1', n: 'Mordant', d: r => `+${r * 2} % de dégâts.` },
-        {
-          id: 'a2',
-          n: 'Concentration',
-          d: r =>
-            r >= 3
-              ? 'Toute l’équipe commence avec 1 losange.'
-              : `Les ${r} premier${r > 1 ? 's' : ''} Pokémon commence${r > 1 ? 'nt' : ''} avec 1 losange.`,
-        },
-        { id: 'a3', n: 'Coup de grâce', d: r => `+${r * 4} % de dégâts sur une cible sous 50 % de PV.` },
-      ],
-    },
-    {
-      b: 'soin',
-      n: 'Soin',
-      t: [
-        { id: 's1', n: 'Premiers secours', d: r => `Fin de manche : l’équipe récupère ${r * 2} % de ses PV max.` },
-        { id: 's2', n: 'Robustesse', d: r => `L’avant-garde commence avec ${r} de Garde.` },
-        {
-          id: 's3',
-          n: 'Second souffle',
-          d: r => `Une fois par combat, un allié sous 30 % de PV récupère ${r * 10} % de ses PV max.`,
-        },
-      ],
-    },
-    {
-      b: 'exploration',
-      n: 'Exploration',
-      t: [
-        { id: 'e1', n: 'Négociateur', d: r => `+${r * 40} ₽ après chaque victoire.` },
-        { id: 'e2', n: 'Collectionneur', d: r => `${r * 8} % de chances de trouver une Poké Ball après une victoire.` },
-        { id: 'e3', n: 'Œil de lynx', d: r => `${r * 8} % de chances de trouver un Éclat après une victoire.` },
-      ],
-    },
-  ];
-
   ((TALENT_MAX = 3), (TALENT_RESET_COST = 500));
-
   HOOKS.combat.push(S => {
     if (!isCountedBattle(S)) {
       return;
@@ -106,7 +139,6 @@ export function init() {
     }
     S.talentTree = { used: {} };
   });
-
   HOOKS.beforeRoundEnd.push((S, ev) => {
     if (!S.talentTree) {
       return;
@@ -127,7 +159,6 @@ export function init() {
       });
     }
   });
-
   DAMAGE_PROVIDERS.push({
     id: 'talent-bonus',
     provide: (c, { S, u, t }) => {
@@ -140,7 +171,6 @@ export function init() {
       return pc > 0 && { mul: 1 + pc / 100, labelText: 'Talents' };
     },
   });
-
   HOOKS.progress.unshift((S, rew, win) => {
     try {
       if (!win || !isCountedBattle(S)) {
@@ -170,47 +200,10 @@ export function init() {
     }
     return null;
   });
-
   HOOKS.battleResult.unshift(r =>
     r.talentTree
       ? `<div class="res-l"><h4>Talents</h4><div class="rl"><span>Bonus de talents : ${esc(r.talentTree.join(', '))}</span></div></div>`
       : ''
   );
-
-  document.addEventListener(
-    'click',
-    e => {
-      const b = e.target.closest && e.target.closest('[data-talent-tree]');
-      if (!b || b.disabled) {
-        return;
-      }
-      e.stopPropagation();
-      e.preventDefault();
-      const k = b.dataset.talentTree,
-        st = talentState();
-      if (k === 'reset') {
-        if (PROFILE.money < TALENT_RESET_COST || !talentSpent()) {
-          return;
-        }
-        PROFILE.money -= TALENT_RESET_COST;
-        talentSave({});
-        toast('Talents réinitialisés.');
-      } else if (k in st && st[k] < TALENT_MAX && talentPoints() > 0) {
-        st[k]++;
-        talentSave(st);
-        sfx('ui');
-        vibe(20);
-      } else {
-        return;
-      }
-      try {
-        queueSave();
-        renderWallet();
-        renderBag();
-      } catch {
-        /* Best effort: failure here is non-fatal. */
-      }
-    },
-    true
-  );
+  document.addEventListener('click', onTalentTreeClick, true);
 }

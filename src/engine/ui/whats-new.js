@@ -1,51 +1,11 @@
+/* Home: the « Nouveau » (New) card presenting the latest additions, once per device (added in v4.16.1). */
+
 import { $, RM } from '../core/utils.js';
 import { go } from '../core/navigation.js';
-import { PREF, savePref } from '../progression/campaign.js';
-import { V4 } from '../state/economy.js';
+import { PREF, savePref } from './preferences.js';
+import { V4 } from './screen-state.js';
 import { renderMap } from '../world/map.js';
-import { PLACES_J } from '../world/johto.js';
 import { refreshHome } from '../../screens/home/homeStore.js';
-
-/* =====================================================================
-   v4.16.1: polish
-   - Wandering beasts: their marker is placed where it bothers the others least.
-   - Trophies: the Johto badges and the Master title count (22).
-   - Home: a « Nouveau » (New) card presents the v4.16 additions
-     (once per device).
-   ===================================================================== */
-/** A free spot next to where the beast roams: its marker and name cover no other place. */
-export function pickRoamSpot(h, takenSet) {
-  const C = [
-      [110, 0],
-      [-110, 0],
-      [95, -58],
-      [-95, -58],
-      [95, 62],
-      [-95, 62],
-      [0, -96],
-      [0, 100],
-      [150, 0],
-      [-150, 0],
-    ],
-    labelBox = (x, y) => [x - 62, y - 28, x + 62, y + 52], // the circle and the name label
-    inter = (a, b) =>
-      Math.max(0, Math.min(a[2], b[2]) - Math.max(a[0], b[0])) *
-      Math.max(0, Math.min(a[3], b[3]) - Math.max(a[1], b[1])),
-    others = [...PLACES_J, ...takenSet].map(p => labelBox(p.x, p.y));
-  let best = [h.x + 110, h.y],
-    bs = Infinity;
-  C.forEach(([dx, dy], i) => {
-    const x = Math.max(60, Math.min(940, h.x + dx)),
-      y = Math.max(40, Math.min(590, h.y + dy)),
-      b = labelBox(x, y),
-      sc = others.reduce((t, o) => t + inter(b, o), 0) + i;
-    if (sc < bs) {
-      bs = sc;
-      best = [x, y];
-    }
-  });
-  return best;
-}
 
 /** The « Nouveau » (New) panel of Home (#v4News, src/screens/home/News.jsx) has been read. */
 export function hasNewsToView() {
@@ -98,54 +58,56 @@ export const NEWS_ENTRIES = [
   ],
 ];
 
+function onWhatsNewClick(e) {
+  const b = e.target.closest('[data-news]');
+  if (!b) {
+    return;
+  }
+  const k = b.dataset.news;
+  if (k === 'ok') {
+    PREF.news = '471';
+    savePref();
+    refreshHome();
+    return;
+  }
+  if (k === 'johto') {
+    V4.region = 'johto';
+    V4.mapSel = null;
+    go('carte');
+    renderMap();
+    return;
+  }
+  if (k === 'herbes') {
+    go('carte');
+    const r = $('#route');
+    if (r && r.scrollIntoView) {
+      r.scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'center' });
+    }
+    return;
+  }
+  if (k === 'safari') {
+    V4.region = 'kanto';
+    V4.mapSel = 'safari';
+    go('carte');
+    renderMap();
+    return;
+  }
+  if (k === 'comp') {
+    const c = document.getElementById('v4Comp');
+    if (c && c.scrollIntoView) {
+      c.scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'start' });
+    }
+    return;
+  }
+  if (k === 'amis') {
+    const a = document.getElementById('v4Amis');
+    if (a && a.scrollIntoView) {
+      a.scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'start' });
+    }
+  }
+}
+
 // Statements run at startup, in the original order (see index.js).
 export function init() {
-  document.addEventListener('click', e => {
-    const b = e.target.closest('[data-news]');
-    if (!b) {
-      return;
-    }
-    const k = b.dataset.news;
-    if (k === 'ok') {
-      PREF.news = '471';
-      savePref();
-      refreshHome();
-      return;
-    }
-    if (k === 'johto') {
-      V4.region = 'johto';
-      V4.mapSel = null;
-      go('carte');
-      renderMap();
-      return;
-    }
-    if (k === 'herbes') {
-      go('carte');
-      const r = $('#route');
-      if (r && r.scrollIntoView) {
-        r.scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'center' });
-      }
-      return;
-    }
-    if (k === 'safari') {
-      V4.region = 'kanto';
-      V4.mapSel = 'safari';
-      go('carte');
-      renderMap();
-      return;
-    }
-    if (k === 'comp') {
-      const c = document.getElementById('v4Comp');
-      if (c && c.scrollIntoView) {
-        c.scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'start' });
-      }
-      return;
-    }
-    if (k === 'amis') {
-      const a = document.getElementById('v4Amis');
-      if (a && a.scrollIntoView) {
-        a.scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'start' });
-      }
-    }
-  });
+  document.addEventListener('click', onWhatsNewClick);
 }

@@ -2,7 +2,7 @@ import { ROLES } from '../../engine/data/game-data.js';
 import { ROLEFX, SYN, rIco, synOf } from '../../engine/pokemon/roles-synergies.js';
 import { tc } from '../../engine/core/utils.js';
 import { squad } from '../../engine/team/team.js';
-import { CHORDS } from '../../engine/team/identity.js';
+import { CHORDS } from '../../engine/combat/resonance-chords.js';
 import { ECHOS, RANKS, stars } from '../../engine/combat/resonance.js';
 import { Html } from '../../lib/html.jsx';
 import { useGuide } from './guideStore.js';

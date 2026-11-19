@@ -7,13 +7,13 @@ import { HOOKS } from '../core/hooks.js';
 import { TOD } from '../world/home-route.js';
 import { EMAX, P, rewardIn, hasNx, heal, say, teff } from '../combat/engine.js';
 import { immobilize } from '../combat/items-bonds-ai.js';
-import { BALLS, HEALS, HELD_IMG, ITEM_ICONS, SHOP } from '../state/economy.js';
+import { BALLS } from './ball-choice.js';
+import { HEALS } from './battle-potions.js';
+import { HELD_IMG, SHOP } from '../state/economy.js';
+import { ITEM_ICONS } from '../assets/item-icons.js';
 import { DAMAGE_PROVIDERS } from '../combat/tactical-engine.js';
 import { MACHINES } from '../moves/tms.js';
 import { COMBAT_ITEMS, HELD_SHOP, hasXp, freeTileFor, koAllyOf } from '../combat/resonance.js';
-
-export let SPECIAL_BALLS, ITEM_CAN_USE, ITEM_USE_EFFECTS;
-let HELD_ITEM_ICONS;
 
 /* ---------- icons ---------- */
 const ICON_STROKE = '#1b1b22';
@@ -52,290 +52,287 @@ const TYPE_ITEMS = {
   cuiller: 'Psy',
 };
 
+const HELD_ITEM_ICONS = {
+  'quick-ball': ballIcon(
+    '#3b8be8',
+    '#f4f4f4',
+    '<path d="M27 8l-7 9h6l-4 8" fill="none" stroke="#ffd45b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>'
+  ),
+  'dusk-ball': ballIcon(
+    '#2d2d3d',
+    '#7b7b86',
+    '<circle cx="15" cy="15" r="2" fill="#ffd45b"/><circle cx="33" cy="15" r="2" fill="#ffd45b"/><circle cx="24" cy="10" r="2" fill="#ffd45b"/>'
+  ),
+  'net-ball': ballIcon(
+    '#3fb59a',
+    '#f4f4f4',
+    '<path d="M12 14l24 8M16 10l20 14M12 22l20-12" stroke="#0e4a3e" stroke-width="1.4" opacity=".7"/>'
+  ),
+  'weak-ball': ballIcon(
+    '#f08fb0',
+    '#f4f4f4',
+    '<path d="M24 8v9m-4-4l4 4 4-4" fill="none" stroke="#7b2d58" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>'
+  ),
+  'hyper-potion': flaskIcon('#f2994a', '#f2d45c'),
+  'ice-heal': flaskIcon('#8fd9ff', '#f2f2f2'),
+  antidote: flaskIcon('#b57be8', '#f2f2f2'),
+  'mepo-berry': berryIcon('#f2d45c'),
+  'jelly-res': orbIcon(
+    '#f59ac0',
+    '<path d="M24 14l3 8 8 1-6 5 2 8-7-5-7 5 2-8-6-5 8-1z" fill="#fff3b0" stroke="#7b2d58" stroke-width="1.5"/>'
+  ),
+  'max-revive': `<path d="M24 4l14 20-14 20-14-20z" fill="#ffd45b" stroke="#8a6d0f" stroke-width="2" stroke-linejoin="round"/><path d="M24 11l8 13-8 13" fill="#fff3b0" opacity=".7"/><circle cx="24" cy="24" r="4" fill="#fff"/>`,
+  charcoal: orbIcon('#3a3a3f', '<path d="M24 15c4 4 5 8 2 12-1 2-4 2-5 0-2-3-1-7 3-12z" fill="#ff7a2f"/>'),
+  'mystic-water': orbIcon('#43a3ff', '<path d="M24 14c4 6 6 9 4 13-1 2-7 2-8 0-2-4 0-7 4-13z" fill="#d8f0ff"/>'),
+  'miracle-seed': orbIcon('#58b85a', '<path d="M24 14c6 2 8 8 4 13-5 0-9-4-4-13z" fill="#e5ffd0"/>'),
+  magnet: `<path d="M10 12h10v18a4 4 0 0 0 8 0V12h10v18a14 14 0 0 1-28 0z" fill="#e5484d" stroke="${ICON_STROKE}" stroke-width="2" stroke-linejoin="round"/><path d="M10 12h10v7H10zM28 12h10v7H28z" fill="#dfe6ee" stroke="${ICON_STROKE}" stroke-width="2"/>`,
+  'never-melt-ice': orbIcon(
+    '#a9e7ff',
+    '<path d="M24 14v22M14 25h20M17 17l14 16M31 17L17 33" stroke="#fff" stroke-width="2" opacity=".8"/>'
+  ),
+  'black-belt': `<path d="M4 19h40v10H4z" fill="#1d1d24" stroke="#000" stroke-width="2"/><rect x="18" y="15" width="12" height="18" rx="3" fill="#c9c9d1" stroke="#000" stroke-width="2"/>`,
+  'twisted-spoon': `<path d="M30 6a8 10 20 1 1-14 8c2 3 5 4 8 5l-12 22" fill="none" stroke="#c9b6ff" stroke-width="4" stroke-linecap="round"/>`,
+  'wise-glasses': `<circle cx="15" cy="26" r="9" fill="#d8f0ff" stroke="${ICON_STROKE}" stroke-width="3"/><circle cx="33" cy="26" r="9" fill="#d8f0ff" stroke="${ICON_STROKE}" stroke-width="3"/><path d="M24 26h0M6 24l-2-8M42 24l2-8" stroke="${ICON_STROKE}" stroke-width="3"/>`,
+  'iron-vest': `<path d="M12 8l6 4h12l6-4 4 8-4 6v20H12V22l-4-6z" fill="#8fa4b5" stroke="${ICON_STROKE}" stroke-width="2" stroke-linejoin="round"/><path d="M24 12v32" stroke="${ICON_STROKE}" stroke-width="2"/>`,
+  'war-flag': `<path d="M12 5v40" stroke="${ICON_STROKE}" stroke-width="3"/><path d="M12 8h26l-6 8 6 8H12z" fill="#e5484d" stroke="${ICON_STROKE}" stroke-width="2" stroke-linejoin="round"/>`,
+  'wing-boots': `<path d="M13 6h14v20l10 6v8H11V30l2-4z" fill="#3fbf7f" stroke="${ICON_STROKE}" stroke-width="2" stroke-linejoin="round"/><path d="M33 14c5-3 9-1 11 4-4 0-8 0-11-4z" fill="#fff" stroke="${ICON_STROKE}" stroke-width="2"/>`,
+};
+
+export const SPECIAL_BALLS = {
+  rapide: {
+    pv: (S, e) => e.hp / e.mhp <= ((S.round || 1) <= 2 ? 0.5 : 0.25),
+    hpText: 'Rapide Ball : PV sous 50 % pendant les manches 1 et 2, sinon 25 %',
+    im: (S, e) => immobilize(e),
+    tim: 'immobilisé : Gel, Paralysie, Sommeil, Racines ou Toile',
+  },
+  sombre: {
+    pv: (S, e) => e.hp / e.mhp <= (isNightTime(S) ? 0.4 : 0.25),
+    hpText: 'Sombre Ball : PV sous 40 % la nuit, sinon 25 %',
+    im: (S, e) => immobilize(e),
+    tim: 'immobilisé : Gel, Paralysie, Sommeil, Racines ou Toile',
+  },
+  filet: {
+    pv: (S, e) => e.hp / e.mhp <= (isWaterOrBug(e) ? 0.4 : 0.25),
+    hpText: 'Filet Ball : PV sous 40 % sur une cible Eau ou Insecte, sinon 25 %',
+    im: (S, e) => isWaterOrBug(e) || immobilize(e),
+    tim: 'Filet Ball : cible Eau ou Insecte, ou immobilisée',
+  },
+  faiblo: {
+    pv: (S, e) => e.hp / e.mhp <= 0.25,
+    hpText: 'PV sous 25 %',
+    im: (S, e) => e.hp / e.mhp <= 0.15 || immobilize(e),
+    tim: 'Faiblo Ball : PV sous 15 %, ou cible immobilisée',
+  },
+};
+
+export const ITEM_CAN_USE = {
+  antigel: (S, u) => u.skip > 0 || ['GEL', 'PAR', 'SOM'].includes(u.badge),
+  antidote: (S, u) => u.burn > 0 || u.poisoned > 0,
+  baiemepo: (S, u) => u.hp < u.mhp,
+  gelee: (S, u) => (hasNx(u) || hasXp(u)) && u.en < EMAX,
+  rappelmax: (S, u) => !u.acted && !u.sn && !!koAllyOf(S) && !!freeTileFor(S, u),
+};
+
+export const ITEM_USE_EFFECTS = {
+  antigel: (S, u, ev) => {
+    Object.assign(u, { badge: null, skip: 0 });
+    say(ev, `Antigel : ${u.n} retrouve ses moyens.`);
+  },
+  antidote: (S, u, ev) => {
+    Object.assign(u, { burn: 0, poisoned: 0 });
+    say(ev, `Antidote : ${u.n} est soigné.`);
+  },
+  baiemepo: (S, u, ev) => {
+    heal(S, u, Math.ceil(u.mhp * 0.3), ev);
+    say(ev, `Baie Mepo : ${u.n} reprend des forces.`);
+  },
+  gelee: (S, u, ev) => {
+    rewardIn(S, u, 2, ev);
+    say(ev, `Gelée Résonante : ${u.n} gagne 2 losanges.`);
+  },
+  rappelmax: (S, u, ev) => {
+    const o = koAllyOf(S),
+      x = freeTileFor(S, u);
+    Object.assign(o, {
+      ko: false,
+      hp: Math.max(1, Math.round(o.mhp * 0.8)),
+      pos: P(x),
+      acted: true,
+      moved: true,
+      sn: false,
+      skip: 0,
+      badge: null,
+      burn: 0,
+      poisoned: 0,
+      web: 0,
+      root: 0,
+      maudit: 0,
+      requiem: 0,
+      weakened: 0,
+      en: 0,
+      intent: null,
+      notes: null,
+    });
+    ev.push({ e: 'mv', u: o.uid }, { e: 'heal', u: o.uid, v: o.hp });
+    say(ev, `Rappel Max : ${o.n} revient au combat avec ${o.hp} PV. Il jouera à la prochaine manche.`);
+  },
+};
+
+const BALL_AND_REMEDY_SHOP_ITEMS = {
+  rapide: {
+    n: 'Rapide Ball',
+    sn: 'Rapide',
+    d: 'Plus facile en début de combat : PV sous 50 % pendant les manches 1 et 2. Immobilisation requise.',
+    p: 900,
+    category: 'balls',
+    img: 'quick-ball',
+  },
+  sombre: {
+    n: 'Sombre Ball',
+    sn: 'Sombre',
+    d: 'La nuit, elle capture dès 40 % de PV restants. Immobilisation requise.',
+    p: 900,
+    category: 'balls',
+    img: 'dusk-ball',
+  },
+  filet: {
+    n: 'Filet Ball',
+    sn: 'Filet',
+    d: 'Sur un Pokémon Eau ou Insecte : PV sous 40 %, sans immobilisation.',
+    p: 800,
+    category: 'balls',
+    img: 'net-ball',
+  },
+  faiblo: {
+    n: 'Faiblo Ball',
+    sn: 'Faiblo',
+    d: 'Sous 15 % de PV, plus besoin d’immobiliser la cible.',
+    p: 1000,
+    category: 'balls',
+    img: 'weak-ball',
+  },
+  hyperpotion: {
+    n: 'Hyper Potion',
+    sn: 'Hyper Potion',
+    d: 'En combat : rend 85 % des PV à un allié. Utilise son action.',
+    p: 1300,
+    category: 'soins',
+    img: 'hyper-potion',
+    heal: 0.85,
+  },
+  antigel: {
+    n: 'Antigel',
+    sn: 'Antigel',
+    d: 'Libère de la paralysie, du gel et du sommeil. Coûte 1 Voix, l’action reste libre.',
+    p: 300,
+    category: 'combat',
+    img: 'ice-heal',
+    voice: 1,
+  },
+  antidote: {
+    n: 'Antidote',
+    sn: 'Antidote',
+    d: 'Soigne la brûlure et le poison. Coûte 1 Voix, l’action reste libre.',
+    p: 250,
+    category: 'combat',
+    img: 'antidote',
+    voice: 1,
+  },
+  baiemepo: {
+    n: 'Baie Mepo',
+    sn: 'Mepo',
+    d: 'Rend 30 % des PV max. Coûte 1 Voix, l’action reste libre.',
+    p: 600,
+    category: 'combat',
+    img: 'mepo-berry',
+    voice: 1,
+  },
+  gelee: {
+    n: 'Gelée Résonante',
+    sn: 'Gelée',
+    d: '+2 losanges de Résonance (Éveil ou attaque Experte). Coûte 1 Voix.',
+    p: 2400,
+    category: 'combat',
+    img: 'jelly-res',
+    voice: 1,
+  },
+  rappelmax: {
+    n: 'Rappel Max',
+    sn: 'Rappel Max',
+    d: 'Relève votre Pokémon K.O. le plus coûteux en PC, sur une case voisine, avec 80 % de ses PV. Utilise l’action.',
+    p: 4000,
+    category: 'combat',
+    img: 'max-revive',
+  },
+};
+
+const TYPE_HELD_ITEMS = {
+  charbon: {
+    n: 'Charbon',
+    d: '+20 % de dégâts des capacités de type Feu.',
+    i: 'M12 3c3 3 6 6 4 11-1 3-6 3-7 0-2-5 0-8 3-11Z',
+  },
+  eaumystique: {
+    n: 'Eau Mystique',
+    d: '+20 % de dégâts des capacités de type Eau.',
+    i: 'M12 3c4 6 6 9 4 13-1 2-7 2-8 0-2-4 0-7 4-13Z',
+  },
+  graine: {
+    n: 'Graine Miracle',
+    d: '+20 % de dégâts des capacités de type Plante.',
+    i: 'M12 4c6 2 8 8 4 13-5 0-9-4-4-13Z',
+  },
+  aimantelec: {
+    n: 'Aimant',
+    d: '+20 % de dégâts des capacités de type Électrik.',
+    i: 'M5 5h5v8a2 2 0 0 0 4 0V5h5v8a7 7 0 0 1-14 0Z',
+  },
+  glaceeternelle: {
+    n: 'Glace Éternelle',
+    d: '+20 % de dégâts des capacités de type Glace.',
+    i: 'M12 3v18M4 12h16M6 6l12 12M18 6 6 18',
+  },
+  ceintnoire: {
+    n: 'Ceinture Noire',
+    d: '+20 % de dégâts des capacités de type Combat.',
+    i: 'M2 9h20v6H2ZM9 7h6v10H9Z',
+  },
+  cuiller: {
+    n: 'Cuiller Tordue',
+    d: '+20 % de dégâts des capacités de type Psy.',
+    i: 'M15 3a5 6 20 1 1-8 5c1 2 3 3 5 3l-6 10',
+  },
+  filtre: {
+    n: 'Lunettes Filtre',
+    d: 'Réduit de 25 % les dégâts des attaques super efficaces contre ce Pokémon.',
+    i: 'M3 12a4 4 0 1 0 8 0 4 4 0 0 0-8 0Zm10 0a4 4 0 1 0 8 0 4 4 0 0 0-8 0Z',
+  },
+  cape: { n: 'Gilet de Fer', d: 'Réduit de 15 % tous les dégâts subis.', i: 'M6 4l3 2h6l3-2 2 4-2 3v9H6v-9L4 8Z' },
+  banniere: {
+    n: 'Bannière de Guerre',
+    d: 'Commence le combat Renforcé pendant 1 manche.',
+    i: 'M6 3v18M6 4h12l-3 4 3 4H6',
+  },
+  bottes: {
+    n: 'Bottes Ailées',
+    d: 'Commence le combat avec +1 Mouvement pendant 1 manche.',
+    i: 'M7 3h7v9l5 3v5H5v-5l2-2Z',
+  },
+};
+
 // Statements executed at startup, in the original order (see index.js).
 export function init() {
-  HELD_ITEM_ICONS = {
-    'quick-ball': ballIcon(
-      '#3b8be8',
-      '#f4f4f4',
-      '<path d="M27 8l-7 9h6l-4 8" fill="none" stroke="#ffd45b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>'
-    ),
-    'dusk-ball': ballIcon(
-      '#2d2d3d',
-      '#7b7b86',
-      '<circle cx="15" cy="15" r="2" fill="#ffd45b"/><circle cx="33" cy="15" r="2" fill="#ffd45b"/><circle cx="24" cy="10" r="2" fill="#ffd45b"/>'
-    ),
-    'net-ball': ballIcon(
-      '#3fb59a',
-      '#f4f4f4',
-      '<path d="M12 14l24 8M16 10l20 14M12 22l20-12" stroke="#0e4a3e" stroke-width="1.4" opacity=".7"/>'
-    ),
-    'weak-ball': ballIcon(
-      '#f08fb0',
-      '#f4f4f4',
-      '<path d="M24 8v9m-4-4l4 4 4-4" fill="none" stroke="#7b2d58" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>'
-    ),
-    'hyper-potion': flaskIcon('#f2994a', '#f2d45c'),
-    'ice-heal': flaskIcon('#8fd9ff', '#f2f2f2'),
-    antidote: flaskIcon('#b57be8', '#f2f2f2'),
-    'mepo-berry': berryIcon('#f2d45c'),
-    'jelly-res': orbIcon(
-      '#f59ac0',
-      '<path d="M24 14l3 8 8 1-6 5 2 8-7-5-7 5 2-8-6-5 8-1z" fill="#fff3b0" stroke="#7b2d58" stroke-width="1.5"/>'
-    ),
-    'max-revive': `<path d="M24 4l14 20-14 20-14-20z" fill="#ffd45b" stroke="#8a6d0f" stroke-width="2" stroke-linejoin="round"/><path d="M24 11l8 13-8 13" fill="#fff3b0" opacity=".7"/><circle cx="24" cy="24" r="4" fill="#fff"/>`,
-    charcoal: orbIcon('#3a3a3f', '<path d="M24 15c4 4 5 8 2 12-1 2-4 2-5 0-2-3-1-7 3-12z" fill="#ff7a2f"/>'),
-    'mystic-water': orbIcon('#43a3ff', '<path d="M24 14c4 6 6 9 4 13-1 2-7 2-8 0-2-4 0-7 4-13z" fill="#d8f0ff"/>'),
-    'miracle-seed': orbIcon('#58b85a', '<path d="M24 14c6 2 8 8 4 13-5 0-9-4-4-13z" fill="#e5ffd0"/>'),
-    magnet: `<path d="M10 12h10v18a4 4 0 0 0 8 0V12h10v18a14 14 0 0 1-28 0z" fill="#e5484d" stroke="${ICON_STROKE}" stroke-width="2" stroke-linejoin="round"/><path d="M10 12h10v7H10zM28 12h10v7H28z" fill="#dfe6ee" stroke="${ICON_STROKE}" stroke-width="2"/>`,
-    'never-melt-ice': orbIcon(
-      '#a9e7ff',
-      '<path d="M24 14v22M14 25h20M17 17l14 16M31 17L17 33" stroke="#fff" stroke-width="2" opacity=".8"/>'
-    ),
-    'black-belt': `<path d="M4 19h40v10H4z" fill="#1d1d24" stroke="#000" stroke-width="2"/><rect x="18" y="15" width="12" height="18" rx="3" fill="#c9c9d1" stroke="#000" stroke-width="2"/>`,
-    'twisted-spoon': `<path d="M30 6a8 10 20 1 1-14 8c2 3 5 4 8 5l-12 22" fill="none" stroke="#c9b6ff" stroke-width="4" stroke-linecap="round"/>`,
-    'wise-glasses': `<circle cx="15" cy="26" r="9" fill="#d8f0ff" stroke="${ICON_STROKE}" stroke-width="3"/><circle cx="33" cy="26" r="9" fill="#d8f0ff" stroke="${ICON_STROKE}" stroke-width="3"/><path d="M24 26h0M6 24l-2-8M42 24l2-8" stroke="${ICON_STROKE}" stroke-width="3"/>`,
-    'iron-vest': `<path d="M12 8l6 4h12l6-4 4 8-4 6v20H12V22l-4-6z" fill="#8fa4b5" stroke="${ICON_STROKE}" stroke-width="2" stroke-linejoin="round"/><path d="M24 12v32" stroke="${ICON_STROKE}" stroke-width="2"/>`,
-    'war-flag': `<path d="M12 5v40" stroke="${ICON_STROKE}" stroke-width="3"/><path d="M12 8h26l-6 8 6 8H12z" fill="#e5484d" stroke="${ICON_STROKE}" stroke-width="2" stroke-linejoin="round"/>`,
-    'wing-boots': `<path d="M13 6h14v20l10 6v8H11V30l2-4z" fill="#3fbf7f" stroke="${ICON_STROKE}" stroke-width="2" stroke-linejoin="round"/><path d="M33 14c5-3 9-1 11 4-4 0-8 0-11-4z" fill="#fff" stroke="${ICON_STROKE}" stroke-width="2"/>`,
-  };
-
   for (const k in HELD_ITEM_ICONS) {
     ITEM_ICONS[k] = wrapSvg(HELD_ITEM_ICONS[k]);
   }
-
-  SPECIAL_BALLS = {
-    rapide: {
-      pv: (S, e) => e.hp / e.mhp <= ((S.round || 1) <= 2 ? 0.5 : 0.25),
-      hpText: 'Rapide Ball : PV sous 50 % pendant les manches 1 et 2, sinon 25 %',
-      im: (S, e) => immobilize(e),
-      tim: 'immobilisé : Gel, Paralysie, Sommeil, Racines ou Toile',
-    },
-    sombre: {
-      pv: (S, e) => e.hp / e.mhp <= (isNightTime(S) ? 0.4 : 0.25),
-      hpText: 'Sombre Ball : PV sous 40 % la nuit, sinon 25 %',
-      im: (S, e) => immobilize(e),
-      tim: 'immobilisé : Gel, Paralysie, Sommeil, Racines ou Toile',
-    },
-    filet: {
-      pv: (S, e) => e.hp / e.mhp <= (isWaterOrBug(e) ? 0.4 : 0.25),
-      hpText: 'Filet Ball : PV sous 40 % sur une cible Eau ou Insecte, sinon 25 %',
-      im: (S, e) => isWaterOrBug(e) || immobilize(e),
-      tim: 'Filet Ball : cible Eau ou Insecte, ou immobilisée',
-    },
-    faiblo: {
-      pv: (S, e) => e.hp / e.mhp <= 0.25,
-      hpText: 'PV sous 25 %',
-      im: (S, e) => e.hp / e.mhp <= 0.15 || immobilize(e),
-      tim: 'Faiblo Ball : PV sous 15 %, ou cible immobilisée',
-    },
-  };
-
   for (const k in SPECIAL_BALLS) {
     BALL_CAPTURE_CHECKS[k] = (S, e) => SPECIAL_BALLS[k].pv(S, e) && SPECIAL_BALLS[k].im(S, e);
   }
-
-  Object.assign(SHOP, {
-    rapide: {
-      n: 'Rapide Ball',
-      sn: 'Rapide',
-      d: 'Plus facile en début de combat : PV sous 50 % pendant les manches 1 et 2. Immobilisation requise.',
-      p: 900,
-      category: 'balls',
-      img: 'quick-ball',
-    },
-    sombre: {
-      n: 'Sombre Ball',
-      sn: 'Sombre',
-      d: 'La nuit, elle capture dès 40 % de PV restants. Immobilisation requise.',
-      p: 900,
-      category: 'balls',
-      img: 'dusk-ball',
-    },
-    filet: {
-      n: 'Filet Ball',
-      sn: 'Filet',
-      d: 'Sur un Pokémon Eau ou Insecte : PV sous 40 %, sans immobilisation.',
-      p: 800,
-      category: 'balls',
-      img: 'net-ball',
-    },
-    faiblo: {
-      n: 'Faiblo Ball',
-      sn: 'Faiblo',
-      d: 'Sous 15 % de PV, plus besoin d’immobiliser la cible.',
-      p: 1000,
-      category: 'balls',
-      img: 'weak-ball',
-    },
-    hyperpotion: {
-      n: 'Hyper Potion',
-      sn: 'Hyper Potion',
-      d: 'En combat : rend 85 % des PV à un allié. Utilise son action.',
-      p: 1300,
-      category: 'soins',
-      img: 'hyper-potion',
-      heal: 0.85,
-    },
-    antigel: {
-      n: 'Antigel',
-      sn: 'Antigel',
-      d: 'Libère de la paralysie, du gel et du sommeil. Coûte 1 Voix, l’action reste libre.',
-      p: 300,
-      category: 'combat',
-      img: 'ice-heal',
-      voice: 1,
-    },
-    antidote: {
-      n: 'Antidote',
-      sn: 'Antidote',
-      d: 'Soigne la brûlure et le poison. Coûte 1 Voix, l’action reste libre.',
-      p: 250,
-      category: 'combat',
-      img: 'antidote',
-      voice: 1,
-    },
-    baiemepo: {
-      n: 'Baie Mepo',
-      sn: 'Mepo',
-      d: 'Rend 30 % des PV max. Coûte 1 Voix, l’action reste libre.',
-      p: 600,
-      category: 'combat',
-      img: 'mepo-berry',
-      voice: 1,
-    },
-    gelee: {
-      n: 'Gelée Résonante',
-      sn: 'Gelée',
-      d: '+2 losanges de Résonance (Éveil ou attaque Experte). Coûte 1 Voix.',
-      p: 2400,
-      category: 'combat',
-      img: 'jelly-res',
-      voice: 1,
-    },
-    rappelmax: {
-      n: 'Rappel Max',
-      sn: 'Rappel Max',
-      d: 'Relève votre Pokémon K.O. le plus coûteux en PC, sur une case voisine, avec 80 % de ses PV. Utilise l’action.',
-      p: 4000,
-      category: 'combat',
-      img: 'max-revive',
-    },
-  });
-
+  Object.assign(SHOP, BALL_AND_REMEDY_SHOP_ITEMS);
   BALLS.push('rapide', 'sombre', 'filet', 'faiblo');
-
   HEALS.push('hyperpotion');
-
   COMBAT_ITEMS.push('antigel', 'antidote', 'baiemepo', 'gelee', 'rappelmax');
-
-  ITEM_CAN_USE = {
-    antigel: (S, u) => u.skip > 0 || ['GEL', 'PAR', 'SOM'].includes(u.badge),
-    antidote: (S, u) => u.burn > 0 || u.poisoned > 0,
-    baiemepo: (S, u) => u.hp < u.mhp,
-    gelee: (S, u) => (hasNx(u) || hasXp(u)) && u.en < EMAX,
-    rappelmax: (S, u) => !u.acted && !u.sn && !!koAllyOf(S) && !!freeTileFor(S, u),
-  };
-
-  ITEM_USE_EFFECTS = {
-    antigel: (S, u, ev) => {
-      Object.assign(u, { badge: null, skip: 0 });
-      say(ev, `Antigel : ${u.n} retrouve ses moyens.`);
-    },
-    antidote: (S, u, ev) => {
-      Object.assign(u, { burn: 0, poisoned: 0 });
-      say(ev, `Antidote : ${u.n} est soigné.`);
-    },
-    baiemepo: (S, u, ev) => {
-      heal(S, u, Math.ceil(u.mhp * 0.3), ev);
-      say(ev, `Baie Mepo : ${u.n} reprend des forces.`);
-    },
-    gelee: (S, u, ev) => {
-      rewardIn(S, u, 2, ev);
-      say(ev, `Gelée Résonante : ${u.n} gagne 2 losanges.`);
-    },
-    rappelmax: (S, u, ev) => {
-      const o = koAllyOf(S),
-        x = freeTileFor(S, u);
-      Object.assign(o, {
-        ko: false,
-        hp: Math.max(1, Math.round(o.mhp * 0.8)),
-        pos: P(x),
-        acted: true,
-        moved: true,
-        sn: false,
-        skip: 0,
-        badge: null,
-        burn: 0,
-        poisoned: 0,
-        web: 0,
-        root: 0,
-        maudit: 0,
-        requiem: 0,
-        weakened: 0,
-        en: 0,
-        intent: null,
-        notes: null,
-      });
-      ev.push({ e: 'mv', u: o.uid }, { e: 'heal', u: o.uid, v: o.hp });
-      say(ev, `Rappel Max : ${o.n} revient au combat avec ${o.hp} PV. Il jouera à la prochaine manche.`);
-    },
-  };
-
-  Object.assign(ITEMS2, {
-    charbon: {
-      n: 'Charbon',
-      d: '+20 % de dégâts des capacités de type Feu.',
-      i: 'M12 3c3 3 6 6 4 11-1 3-6 3-7 0-2-5 0-8 3-11Z',
-    },
-    eaumystique: {
-      n: 'Eau Mystique',
-      d: '+20 % de dégâts des capacités de type Eau.',
-      i: 'M12 3c4 6 6 9 4 13-1 2-7 2-8 0-2-4 0-7 4-13Z',
-    },
-    graine: {
-      n: 'Graine Miracle',
-      d: '+20 % de dégâts des capacités de type Plante.',
-      i: 'M12 4c6 2 8 8 4 13-5 0-9-4-4-13Z',
-    },
-    aimantelec: {
-      n: 'Aimant',
-      d: '+20 % de dégâts des capacités de type Électrik.',
-      i: 'M5 5h5v8a2 2 0 0 0 4 0V5h5v8a7 7 0 0 1-14 0Z',
-    },
-    glaceeternelle: {
-      n: 'Glace Éternelle',
-      d: '+20 % de dégâts des capacités de type Glace.',
-      i: 'M12 3v18M4 12h16M6 6l12 12M18 6 6 18',
-    },
-    ceintnoire: {
-      n: 'Ceinture Noire',
-      d: '+20 % de dégâts des capacités de type Combat.',
-      i: 'M2 9h20v6H2ZM9 7h6v10H9Z',
-    },
-    cuiller: {
-      n: 'Cuiller Tordue',
-      d: '+20 % de dégâts des capacités de type Psy.',
-      i: 'M15 3a5 6 20 1 1-8 5c1 2 3 3 5 3l-6 10',
-    },
-    filtre: {
-      n: 'Lunettes Filtre',
-      d: 'Réduit de 25 % les dégâts des attaques super efficaces contre ce Pokémon.',
-      i: 'M3 12a4 4 0 1 0 8 0 4 4 0 0 0-8 0Zm10 0a4 4 0 1 0 8 0 4 4 0 0 0-8 0Z',
-    },
-    cape: { n: 'Gilet de Fer', d: 'Réduit de 15 % tous les dégâts subis.', i: 'M6 4l3 2h6l3-2 2 4-2 3v9H6v-9L4 8Z' },
-    banniere: {
-      n: 'Bannière de Guerre',
-      d: 'Commence le combat Renforcé pendant 1 manche.',
-      i: 'M6 3v18M6 4h12l-3 4 3 4H6',
-    },
-    bottes: {
-      n: 'Bottes Ailées',
-      d: 'Commence le combat avec +1 Mouvement pendant 1 manche.',
-      i: 'M7 3h7v9l5 3v5H5v-5l2-2Z',
-    },
-  });
-
+  Object.assign(ITEMS2, TYPE_HELD_ITEMS);
   Object.assign(HELD_IMG, {
     charbon: 'charcoal',
     eaumystique: 'mystic-water',
@@ -349,7 +346,6 @@ export function init() {
     banniere: 'war-flag',
     bottes: 'wing-boots',
   });
-
   Object.assign(HELD_SHOP, {
     charbon: { p: 2500 },
     eaumystique: { p: 2500 },
@@ -363,7 +359,6 @@ export function init() {
     banniere: { p: 2000 },
     bottes: { p: 2000 },
   });
-
   DAMAGE_PROVIDERS.push(
     {
       id: 'type-item-boost',
@@ -393,7 +388,6 @@ export function init() {
         (m.p > 0 || m.fix > 0) && { mul: 0.85, labelText: 'Gilet de Fer' },
     }
   );
-
   HOOKS.combat.push(S => {
     S.units.forEach(u => {
       if (u.side !== 'a' || u.ko) {
@@ -407,7 +401,6 @@ export function init() {
       }
     });
   });
-
   /* ---------- extra TMs ---------- */
   [
     ['ct25', { num: 'CT25', mv: 'tonnerre', p: 3500, types: ['Électrik', 'Normal', 'Eau', 'Vol', 'Acier', 'Dragon'] }],

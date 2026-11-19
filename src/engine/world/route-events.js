@@ -3,17 +3,18 @@
 import { ITEMS2, PROFILE } from '../state/game-state.js';
 import { writeLS, mulberry32, toast } from '../core/utils.js';
 import { HOOKS, hook } from '../core/hooks.js';
-import { sfx, vibe } from '../progression/campaign.js';
+import { sfx, vibe } from '../audio/sound-effects.js';
 import { overlay } from '../progression/prestige.js';
 import { shut, updateTemp } from '../../screens/overlays/tempStore.js';
-import { SHOP, bagN, fmt, ownedFam, savePurse, today } from '../state/economy.js';
+import { SHOP, bagN, fmt, savePurse, today } from '../state/economy.js';
+import { ownedFam } from '../progression/trainer-stats.js';
 import { refreshMap } from '../../screens/map/mapStore.js';
 import { DEXS } from '../progression/pokedex.js';
 import { refreshDex } from '../../screens/dex/dexStore.js';
 import { renderBag } from '../progression/quests-shop.js';
-import { costOf0 } from '../team/identity.js';
+import { costOf0 } from '../progression/base-camp.js';
 import { HELD_SHOP, heldItemCost } from '../combat/resonance.js';
-import { dailySeed } from '../progression/companions.js';
+import { dailySeed } from './pokegear.js';
 
 export function todaysPeddler() {
   const d = today(),
@@ -354,56 +355,85 @@ export const MISSION_TIERS = [
   [119, { g: 5 }],
 ];
 
+function onWandererClick(e) {
+  const b = e.target.closest && e.target.closest('[data-wanderer]');
+  if (!b) {
+    return;
+  }
+  e.preventDefault();
+  e.stopPropagation();
+  const A = todaysPeddler(),
+    k = b.dataset.wanderer;
+  if (!A.present) {
+    return;
+  }
+  if (k.startsWith('h:')) {
+    const h = k.slice(2);
+    if (h !== A.th || A.st.got[k]) {
+      return;
+    }
+    const px = Math.round((heldItemCost(h) * 0.8) / 50) * 50;
+    if (PROFILE.money < px) {
+      return;
+    }
+    PROFILE.money -= px;
+    PROFILE.items.push(h);
+    A.st.got[k] = 1;
+    toast(`Acheté : ${ITEMS2[h].n}. Confiez-le depuis la fiche d’un Pokémon.`);
+  } else {
+    if (!A.pick.includes(k) || (A.st.got[k] || 0) >= (SHOP[k].mv ? 1 : 3) || bagN(k) >= 99) {
+      return;
+    }
+    const px = Math.max(50, Math.round((costOf0(k) * 0.75) / 50) * 50);
+    if (PROFILE.money < px) {
+      return;
+    }
+    PROFILE.money -= px;
+    PROFILE.bag[k] = bagN(k) + 1;
+    A.st.got[k] = (A.st.got[k] || 0) + 1;
+    toast(`Acheté : 1 × ${SHOP[k].n}`);
+  }
+  writeLS('res-wanderer', A.st);
+  sfx('ui');
+  vibe(15);
+  savePurse();
+  renderBag();
+}
+
+function onDexMissionClick(e) {
+  const b = e.target.closest && e.target.closest('[data-dex-mission]');
+  if (!b || b.disabled) {
+    return;
+  }
+  const S = missionState(),
+    [k, v] = b.dataset.dexMission.split(':');
+  if (k === 'p') {
+    const p = MISSION_TIERS.find(x => x[0] === +v);
+    if (!p || S.pal[v] || DEXS.filter(m => ownedFam(m.id)).length < p[0]) {
+      return;
+    }
+    S.pal[v] = 1;
+    applyReward(p[1]);
+    toast('Mission accomplie : ' + rewardText(p[1]));
+  } else {
+    const t = typeProgress().find(x => x.t === v);
+    if (!t || t.own < t.n || S.ty[weekKey() + v]) {
+      return;
+    }
+    S.ty[weekKey() + v] = 1;
+    applyReward({ g: 1 });
+    toast('Spécialiste ' + v + ' : +1 Éclat');
+  }
+  writeLS('res-dex-mission', S);
+  sfx('ui');
+  vibe(20);
+  savePurse();
+  refreshDex(); // missions (#dexMission) rendered by React: src/screens/dex/Missions.jsx
+}
+
 // Statements run at startup, in the original order (see index.js).
 export function init() {
-  document.addEventListener(
-    'click',
-    e => {
-      const b = e.target.closest && e.target.closest('[data-wanderer]');
-      if (!b) {
-        return;
-      }
-      e.preventDefault();
-      e.stopPropagation();
-      const A = todaysPeddler(),
-        k = b.dataset.wanderer;
-      if (!A.present) {
-        return;
-      }
-      if (k.startsWith('h:')) {
-        const h = k.slice(2);
-        if (h !== A.th || A.st.got[k]) {
-          return;
-        }
-        const px = Math.round((heldItemCost(h) * 0.8) / 50) * 50;
-        if (PROFILE.money < px) {
-          return;
-        }
-        PROFILE.money -= px;
-        PROFILE.items.push(h);
-        A.st.got[k] = 1;
-        toast(`Acheté : ${ITEMS2[h].n}. Confiez-le depuis la fiche d’un Pokémon.`);
-      } else {
-        if (!A.pick.includes(k) || (A.st.got[k] || 0) >= (SHOP[k].mv ? 1 : 3) || bagN(k) >= 99) {
-          return;
-        }
-        const px = Math.max(50, Math.round((costOf0(k) * 0.75) / 50) * 50);
-        if (PROFILE.money < px) {
-          return;
-        }
-        PROFILE.money -= px;
-        PROFILE.bag[k] = bagN(k) + 1;
-        A.st.got[k] = (A.st.got[k] || 0) + 1;
-        toast(`Acheté : 1 × ${SHOP[k].n}`);
-      }
-      writeLS('res-wanderer', A.st);
-      sfx('ui');
-      vibe(15);
-      savePurse();
-      renderBag();
-    },
-    true
-  );
+  document.addEventListener('click', onWandererClick, true);
 
   document.addEventListener('click', e => {
     const b = e.target.closest && e.target.closest('[data-route-event]');
@@ -420,34 +450,5 @@ export function init() {
     }
   });
 
-  document.addEventListener('click', e => {
-    const b = e.target.closest && e.target.closest('[data-dex-mission]');
-    if (!b || b.disabled) {
-      return;
-    }
-    const S = missionState(),
-      [k, v] = b.dataset.dexMission.split(':');
-    if (k === 'p') {
-      const p = MISSION_TIERS.find(x => x[0] === +v);
-      if (!p || S.pal[v] || DEXS.filter(m => ownedFam(m.id)).length < p[0]) {
-        return;
-      }
-      S.pal[v] = 1;
-      applyReward(p[1]);
-      toast('Mission accomplie : ' + rewardText(p[1]));
-    } else {
-      const t = typeProgress().find(x => x.t === v);
-      if (!t || t.own < t.n || S.ty[weekKey() + v]) {
-        return;
-      }
-      S.ty[weekKey() + v] = 1;
-      applyReward({ g: 1 });
-      toast('Spécialiste ' + v + ' : +1 Éclat');
-    }
-    writeLS('res-dex-mission', S);
-    sfx('ui');
-    vibe(20);
-    savePurse();
-    refreshDex(); // missions (#dexMission) rendered by React: src/screens/dex/Missions.jsx
-  });
+  document.addEventListener('click', onDexMissionClick);
 }

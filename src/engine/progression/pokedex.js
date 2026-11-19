@@ -1,8 +1,8 @@
 import { BY, MON } from '../pokemon/pokemon.js';
 import { $, $$, RM } from '../core/utils.js';
 import { norm, openSheet, squad } from '../team/team.js';
-import { V4 } from '../state/economy.js';
-import { isShinyOwned } from '../modes/adventure.js';
+import { V4 } from '../ui/screen-state.js';
+import { isShinyOwned } from '../pokemon/shiny.js';
 import { applyShinyArt } from '../assets/art-direction.js';
 import { scanPokedex } from '../audio/immersion.js';
 import { refreshDex } from '../../screens/dex/dexStore.js';

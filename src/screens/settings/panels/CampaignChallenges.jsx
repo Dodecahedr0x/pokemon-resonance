@@ -1,7 +1,7 @@
 import { TYPES } from '../../../engine/data/game-data.js';
 import { BY } from '../../../engine/pokemon/pokemon.js';
 import { PROFILE, isCamp } from '../../../engine/state/game-state.js';
-import { CHALLENGES, CHALLENGE_CONF } from '../../../engine/progression/achievements-challenges.js';
+import { CHALLENGES, CHALLENGE_CONF } from '../../../engine/progression/campaign-challenges.js';
 
 // Challenge switch (data-defi, handled by the engine).
 function Challenge({ k, on }) {

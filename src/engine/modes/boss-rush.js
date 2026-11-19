@@ -9,12 +9,12 @@ import { squad } from '../team/team.js';
 import { heal } from '../combat/engine.js';
 import { B, backToPrep, goFight, launch } from '../combat/ui.js';
 import { esc } from '../state/saves.js';
-import { sfx, vibe } from '../progression/campaign.js';
+import { sfx, vibe } from '../audio/sound-effects.js';
 import { overlay } from '../progression/prestige.js';
 import { shut } from '../../screens/overlays/tempStore.js';
 import { refreshHome } from '../../screens/home/homeStore.js';
 import { DAMAGE_PROVIDERS } from '../combat/tactical-engine.js';
-import { teamSize } from '../progression/achievements-challenges.js';
+import { teamSize } from '../progression/campaign-challenges.js';
 
 function relicOffer(run) {
   const freeOnes = RELICS.filter(r => !run.relics.includes(r.id)).map(r => r.id);
@@ -151,38 +151,142 @@ const runRelics = run => (run && run.relics ? run.relics : []);
 
 const bossName = k => (SCEN[k] ? SCEN[k].n : k);
 
-// Instructions run at startup, in the original order (see index.js).
-export function init() {
-  HOOKS.combat.push(S => {
-    const run = currentRun();
-    if (!BOSS_RUSH.armed || !run || S.sc !== run.boss[run.i]) {
+function onCombat(S) {
+  const run = currentRun();
+  if (!BOSS_RUSH.armed || !run || S.sc !== run.boss[run.i]) {
+    return;
+  }
+  S.bossRush = true;
+  const al = S.units.filter(u => u.side === 'a');
+  al.forEach(u => {
+    const r = run.hp[u.sp];
+    if (r == null) {
       return;
     }
-    S.bossRush = true;
-    const al = S.units.filter(u => u.side === 'a');
-    al.forEach(u => {
-      const r = run.hp[u.sp];
-      if (r == null) {
-        return;
-      }
-      if (r <= 0) {
-        u.hp = 0;
-        u.ko = true;
-      } else {
-        u.hp = Math.max(1, Math.round(u.mhp * r));
-      }
-    });
-    const R = runRelics(run);
-    if (R.includes('cristal')) {
-      al.forEach(u => !u.ko && (u.en = Math.max(u.en || 0, 1)));
-    }
-    if (R.includes('bouclier')) {
-      const f = al.find(u => !u.ko);
-      if (f) {
-        f.guard = Math.max(f.guard || 0, 2);
-      }
+    if (r <= 0) {
+      u.hp = 0;
+      u.ko = true;
+    } else {
+      u.hp = Math.max(1, Math.round(u.mhp * r));
     }
   });
+  const R = runRelics(run);
+  if (R.includes('cristal')) {
+    al.forEach(u => !u.ko && (u.en = Math.max(u.en || 0, 1)));
+  }
+  if (R.includes('bouclier')) {
+    const f = al.find(u => !u.ko);
+    if (f) {
+      f.guard = Math.max(f.guard || 0, 2);
+    }
+  }
+}
+
+function onProgress(S, rew, win) {
+  try {
+    const st = bossRushState(),
+      run = st.run;
+    if (!S.bossRush || !run || S.sc !== run.boss[run.i]) {
+      return null;
+    }
+    BOSS_RUSH.armed = false;
+    const n = run.boss.length;
+    if (!win) {
+      st.best = Math.max(st.best, run.i);
+      st.run = null;
+      bossRushSave(st);
+      rew.bossRush = { fin: true, i: run.i, n };
+      return run.i ? [100 * run.i, 0] : null;
+    }
+    S.units.filter(u => u.side === 'a').forEach(u => (run.hp[u.sp] = u.ko ? 0 : u.hp / u.mhp));
+    run.i++;
+    if (run.i >= n) {
+      st.best = n;
+      st.won = (st.won || 0) + 1;
+      st.run = null;
+      bossRushSave(st);
+      rew.bossRush = { gagne: true, n };
+      return [3000, 10];
+    }
+    if (run.relics.includes('tonique')) {
+      Object.keys(run.hp).forEach(k => run.hp[k] > 0 && (run.hp[k] = Math.min(1, run.hp[k] + 0.25)));
+    }
+    if (run.relics.includes('coeur') && !run.coeur) {
+      const k = Object.keys(run.hp).find(x => run.hp[x] <= 0);
+      if (k) {
+        run.hp[k] = 0.3;
+        run.coeur = 1;
+      }
+    }
+    run.pend = relicOffer(run);
+    st.best = Math.max(st.best, run.i);
+    bossRushSave(st);
+    rew.bossRush = { suite: true, i: run.i, n, displayName: bossName(run.boss[run.i]) };
+    return [150 * run.i, run.i >= 3 ? 1 : 0];
+  } catch (e) {
+    return null;
+  }
+}
+
+function onBossRushClick(e) {
+  const b = e.target.closest && e.target.closest('[data-boss-rush]');
+  if (!b) {
+    return;
+  }
+  e.stopPropagation();
+  e.preventDefault();
+  const v = b.dataset.bossRush,
+    st = bossRushState();
+  if (v === 'open') {
+    return bossRushHub();
+  }
+  if (v === 'close') {
+    return shut('boss-rush-o');
+  }
+  if (v === 'start') {
+    if (!bossRushUnlocked() || !squad.length || st.run) {
+      return;
+    }
+    st.run = { team: squad.slice(0, teamSize()), boss: bossRushBosses(), i: 0, hp: {}, relics: [], pend: null };
+    bossRushSave(st);
+    return bossRushGo();
+  }
+  if (v === 'go') {
+    return bossRushGo();
+  }
+  if (v === 'suite') {
+    $('#cbResult').hidden = true;
+    return bossRushHub();
+  }
+  if (v === 'abandon') {
+    if (st.run) {
+      st.best = Math.max(st.best, st.run.i);
+    }
+    st.run = null;
+    bossRushSave(st);
+    BOSS_RUSH.armed = false;
+    toast('Boss Rush abandonné.');
+    shut('boss-rush-o');
+    return refreshHome();
+  }
+  if (v.startsWith('rel:') && st.run && st.run.pend) {
+    const id = v.slice(4);
+    if (!st.run.pend.includes(id)) {
+      return;
+    }
+    st.run.relics.push(id);
+    st.run.pend = null;
+    bossRushSave(st);
+    sfx('win');
+    vibe(25);
+    toast('Relique obtenue : ' + RELICS.find(r => r.id === id).n + '.');
+    return bossRushHub();
+  }
+}
+
+// Instructions run at startup, in the original order (see index.js).
+export function init() {
+  HOOKS.combat.push(onCombat);
 
   HOOKS.beforeRoundEnd.push((S, ev) => {
     if (!S.bossRush || !runRelics(currentRun()).includes('petale')) {
@@ -209,51 +313,7 @@ export function init() {
     },
   });
 
-  HOOKS.progress.unshift((S, rew, win) => {
-    try {
-      const st = bossRushState(),
-        run = st.run;
-      if (!S.bossRush || !run || S.sc !== run.boss[run.i]) {
-        return null;
-      }
-      BOSS_RUSH.armed = false;
-      const n = run.boss.length;
-      if (!win) {
-        st.best = Math.max(st.best, run.i);
-        st.run = null;
-        bossRushSave(st);
-        rew.bossRush = { fin: true, i: run.i, n };
-        return run.i ? [100 * run.i, 0] : null;
-      }
-      S.units.filter(u => u.side === 'a').forEach(u => (run.hp[u.sp] = u.ko ? 0 : u.hp / u.mhp));
-      run.i++;
-      if (run.i >= n) {
-        st.best = n;
-        st.won = (st.won || 0) + 1;
-        st.run = null;
-        bossRushSave(st);
-        rew.bossRush = { gagne: true, n };
-        return [3000, 10];
-      }
-      if (run.relics.includes('tonique')) {
-        Object.keys(run.hp).forEach(k => run.hp[k] > 0 && (run.hp[k] = Math.min(1, run.hp[k] + 0.25)));
-      }
-      if (run.relics.includes('coeur') && !run.coeur) {
-        const k = Object.keys(run.hp).find(x => run.hp[x] <= 0);
-        if (k) {
-          run.hp[k] = 0.3;
-          run.coeur = 1;
-        }
-      }
-      run.pend = relicOffer(run);
-      st.best = Math.max(st.best, run.i);
-      bossRushSave(st);
-      rew.bossRush = { suite: true, i: run.i, n, displayName: bossName(run.boss[run.i]) };
-      return [150 * run.i, run.i >= 3 ? 1 : 0];
-    } catch (e) {
-      return null;
-    }
-  });
+  HOOKS.progress.unshift(onProgress);
 
   HOOKS.battleResult.unshift(r => {
     const t = r.bossRush;
@@ -269,63 +329,5 @@ export function init() {
     return `<div class="res-l"><h4>Boss Rush</h4><div class="rl"><span>Boss ${t.i} sur ${t.n}. Prochain : ${esc(t.displayName)}. Vos PV ne se régénèrent pas.</span><button type="button" class="b b-sm b-gold" data-boss-rush="suite">Étape suivante</button></div></div>`;
   });
 
-  document.addEventListener(
-    'click',
-    e => {
-      const b = e.target.closest && e.target.closest('[data-boss-rush]');
-      if (!b) {
-        return;
-      }
-      e.stopPropagation();
-      e.preventDefault();
-      const v = b.dataset.bossRush,
-        st = bossRushState();
-      if (v === 'open') {
-        return bossRushHub();
-      }
-      if (v === 'close') {
-        return shut('boss-rush-o');
-      }
-      if (v === 'start') {
-        if (!bossRushUnlocked() || !squad.length || st.run) {
-          return;
-        }
-        st.run = { team: squad.slice(0, teamSize()), boss: bossRushBosses(), i: 0, hp: {}, relics: [], pend: null };
-        bossRushSave(st);
-        return bossRushGo();
-      }
-      if (v === 'go') {
-        return bossRushGo();
-      }
-      if (v === 'suite') {
-        $('#cbResult').hidden = true;
-        return bossRushHub();
-      }
-      if (v === 'abandon') {
-        if (st.run) {
-          st.best = Math.max(st.best, st.run.i);
-        }
-        st.run = null;
-        bossRushSave(st);
-        BOSS_RUSH.armed = false;
-        toast('Boss Rush abandonné.');
-        shut('boss-rush-o');
-        return refreshHome();
-      }
-      if (v.startsWith('rel:') && st.run && st.run.pend) {
-        const id = v.slice(4);
-        if (!st.run.pend.includes(id)) {
-          return;
-        }
-        st.run.relics.push(id);
-        st.run.pend = null;
-        bossRushSave(st);
-        sfx('win');
-        vibe(25);
-        toast('Relique obtenue : ' + RELICS.find(r => r.id === id).n + '.');
-        return bossRushHub();
-      }
-    },
-    true
-  );
+  document.addEventListener('click', onBossRushClick, true);
 }

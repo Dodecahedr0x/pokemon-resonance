@@ -2,7 +2,7 @@
 
 import { ITEMS2, PROFILE } from '../state/game-state.js';
 import { writeLS, toast } from '../core/utils.js';
-import { sfx, vibe } from '../progression/campaign.js';
+import { sfx, vibe } from '../audio/sound-effects.js';
 import { SHOP, bagN, savePurse, today } from '../state/economy.js';
 import { refreshHome } from '../../screens/home/homeStore.js';
 import { renderBag } from '../progression/quests-shop.js';
@@ -207,61 +207,59 @@ const DAILY_GIFTS = [
   { g: 3, ct: 1 },
 ];
 
+function onWorkshopClick(e) {
+  const b = e.target.closest && e.target.closest('[data-craft-bench]');
+  if (!b || b.disabled) {
+    return;
+  }
+  e.preventDefault();
+  e.stopPropagation();
+  const [a, k] = b.dataset.craftBench.split(':');
+  if (a === 'rec') {
+    const r = RECIPES.find(x => x.id === k);
+    if (!r || !hasIngredients(r.in) || PROFILE.money < r.m) {
+      return;
+    }
+    addItems(r.in, -1);
+    PROFILE.money -= r.m;
+    addItems(r.out, 1);
+    toast('Préparé : ' + ingredientsText(r.out));
+  } else if (a === 'fus') {
+    const d = fusionDonors(k);
+    if (!tmKeys().includes(k) || bagN(k) || !d || PROFILE.money < 1000) {
+      return;
+    }
+    d.forEach(x => addItems({ [x]: 1 }, -1));
+    PROFILE.money -= 1000;
+    PROFILE.bag[k] = 1;
+    toast('Fusion réussie : ' + SHOP[k].n);
+  } else if (a === 'cmd') {
+    const c = dailyOrders().find(x => x.id === k),
+      st = loadToday('res-craft-bench', { d: today(), cmd: {}, spin: 0 });
+    if (!c || c.done || !hasIngredients(c.in)) {
+      return;
+    }
+    addItems(c.in, -1);
+    applyReward(c.rew);
+    st.cmd[k] = 1;
+    writeLS('res-craft-bench', st);
+    toast('Commande livrée : ' + rewardText(c.rew));
+  } else if (a === 'spin') {
+    dailySpin();
+    renderBag();
+    return;
+  } else {
+    return;
+  }
+  sfx('ui');
+  vibe(15);
+  savePurse();
+  renderBag();
+}
+
 // Instructions run at startup, in the original order (see index.js).
 export function init() {
-  document.addEventListener(
-    'click',
-    e => {
-      const b = e.target.closest && e.target.closest('[data-craft-bench]');
-      if (!b || b.disabled) {
-        return;
-      }
-      e.preventDefault();
-      e.stopPropagation();
-      const [a, k] = b.dataset.craftBench.split(':');
-      if (a === 'rec') {
-        const r = RECIPES.find(x => x.id === k);
-        if (!r || !hasIngredients(r.in) || PROFILE.money < r.m) {
-          return;
-        }
-        addItems(r.in, -1);
-        PROFILE.money -= r.m;
-        addItems(r.out, 1);
-        toast('Préparé : ' + ingredientsText(r.out));
-      } else if (a === 'fus') {
-        const d = fusionDonors(k);
-        if (!tmKeys().includes(k) || bagN(k) || !d || PROFILE.money < 1000) {
-          return;
-        }
-        d.forEach(x => addItems({ [x]: 1 }, -1));
-        PROFILE.money -= 1000;
-        PROFILE.bag[k] = 1;
-        toast('Fusion réussie : ' + SHOP[k].n);
-      } else if (a === 'cmd') {
-        const c = dailyOrders().find(x => x.id === k),
-          st = loadToday('res-craft-bench', { d: today(), cmd: {}, spin: 0 });
-        if (!c || c.done || !hasIngredients(c.in)) {
-          return;
-        }
-        addItems(c.in, -1);
-        applyReward(c.rew);
-        st.cmd[k] = 1;
-        writeLS('res-craft-bench', st);
-        toast('Commande livrée : ' + rewardText(c.rew));
-      } else if (a === 'spin') {
-        dailySpin();
-        renderBag();
-        return;
-      } else {
-        return;
-      }
-      sfx('ui');
-      vibe(15);
-      savePurse();
-      renderBag();
-    },
-    true
-  );
+  document.addEventListener('click', onWorkshopClick, true);
 
   document.addEventListener('click', e => {
     const b = e.target.closest && e.target.closest('[data-dailygift]');

@@ -1,6 +1,7 @@
 import { ITEMS2 } from '../../engine/state/game-state.js';
-import { HELD_IMG, ITM, SHOP, fmt } from '../../engine/state/economy.js';
-import { costOf0 } from '../../engine/team/identity.js';
+import { HELD_IMG, SHOP, fmt } from '../../engine/state/economy.js';
+import { ITM } from '../../engine/assets/item-icons.js';
+import { costOf0 } from '../../engine/progression/base-camp.js';
 import { HELD_SHOP, dailyOffers, dailyDiscount } from '../../engine/combat/resonance.js';
 import { Disc } from './Items.jsx';
 

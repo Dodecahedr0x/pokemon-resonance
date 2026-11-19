@@ -2,8 +2,8 @@ import { $, RM } from '../core/utils.js';
 import { go } from '../core/navigation.js';
 import { encounter } from './home-route.js';
 import { goFight } from '../combat/ui.js';
-import { renderWallet } from '../core/interface.js';
-import { renderCampBase } from '../team/identity.js';
+import { renderWallet } from '../ui/wallet.js';
+import { renderCampBase } from '../progression/base-camp.js';
 import { seasonRoute } from './seasons.js';
 import { refreshHome } from '../../screens/home/homeStore.js';
 

@@ -2,7 +2,8 @@ import { Fragment } from 'react';
 import { ITEMS2, PROFILE } from '../../engine/state/game-state.js';
 import { tc } from '../../engine/core/utils.js';
 import { MV } from '../../engine/data/moves.js';
-import { SHOP, fmt, tLevel, today } from '../../engine/state/economy.js';
+import { SHOP, fmt, today } from '../../engine/state/economy.js';
+import { tLevel } from '../../engine/progression/trainer-stats.js';
 import { canAfford, rewardText } from '../../engine/world/route-events.js';
 import {
   FUSION_COST,

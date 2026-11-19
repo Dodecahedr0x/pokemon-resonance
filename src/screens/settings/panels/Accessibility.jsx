@@ -1,4 +1,4 @@
-import { PREF } from '../../../engine/progression/campaign.js';
+import { PREF } from '../../../engine/ui/preferences.js';
 import { Switch } from '../controls.jsx';
 
 const SIZES = [
@@ -29,7 +29,7 @@ export default function Accessibility() {
         </div>
       </div>
       <Switch
-        k="high-contrast"
+        k="highContrast"
         on={PREF.highContrast}
         lab="Contraste renforcé"
         sub="Textes plus clairs, bordures plus nettes"
@@ -40,9 +40,9 @@ export default function Accessibility() {
         lab="Couleurs pour daltonisme"
         sub="Vert et rouge remplacés par bleu et orange (PV, dangers, résultats)"
       />
-      <Switch k="left-hand" on={PREF.leftHand} lab="Mode gaucher" sub="Le bouton de fin de tour passe à gauche" />
+      <Switch k="leftHand" on={PREF.leftHand} lab="Mode gaucher" sub="Le bouton de fin de tour passe à gauche" />
       <Switch
-        k="reduce-motion"
+        k="reduceMotion"
         on={PREF.reduceMotion}
         lab="Réduire les animations"
         sub="Supprime les mouvements décoratifs"

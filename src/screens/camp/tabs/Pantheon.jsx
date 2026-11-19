@@ -1,6 +1,6 @@
 import { BY } from '../../../engine/pokemon/pokemon.js';
 import { DIFFS, PROFILE } from '../../../engine/state/game-state.js';
-import { ART } from '../../../engine/state/economy.js';
+import { ART } from '../../../engine/assets/item-icons.js';
 
 // Camp › Pantheon (v4.32): teams engraved after a Champion, a Master or the Echo guardian.
 export default function Pantheon() {

@@ -9,20 +9,22 @@ import { __set_squad, renderFilters, renderSquad, save, squad } from '../team/te
 import { champBuild } from '../combat/items-bonds-ai.js';
 import { B, __set_scSel } from '../combat/ui.js';
 import { SV, bootSaves, queueSave } from '../state/saves.js';
-import { __set_PREPG, nextGoal, renderPrep } from '../progression/campaign.js';
+import { __set_PREPG, renderPrep } from '../combat/battle-prep.js';
+import { nextGoal } from '../progression/campaign.js';
 import { renderHome } from '../world/home.js';
 import { setGuide } from '../ui/guide.js';
 import { getGuide } from '../../screens/guide/guideStore.js';
 import { showIntro } from '../world/home-journey.js';
 import { ecoClean } from '../state/economy.js';
-import { renderWallet } from './interface.js';
+import { renderWallet } from '../ui/wallet.js';
 import { buildMap } from '../world/map.js';
-import { fixTree } from '../ui/polish.js';
-import { rivalBuild, towerRestore } from '../modes/adventure.js';
+import { fixTree } from '../ui/french-typography.js';
+import { rivalBuild } from '../modes/rival.js';
+import { towerRestore } from '../modes/resonance-tower.js';
 import { fillFreeBox } from '../world/catch-anywhere.js';
-import { awardRegionDiplomas } from '../combat/catches.js';
-import { buildWeeklyChallenge } from '../progression/quality.js';
-import { challengeSetBoot } from '../modes/tactical-challenges.js';
+import { awardRegionDiplomas } from '../progression/regional-dex.js';
+import { buildWeeklyChallenge } from '../modes/weekly-challenge.js';
+import { challengeSetBoot } from '../modes/camp-challenges.js';
 
 /* ===================== STARTUP =====================
    All the code is loaded: we restore the game, then display.
