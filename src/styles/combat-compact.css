@@ -976,20 +976,33 @@ html:not(#pkz) body:not(#pkz) #tip-card.pk-dlg {
     height: 36px !important;
   }
 
-  /* drawer footer on a single line: quick actions (scroll), then board tools.
-     The footer's phase badge repeats the panel header (Move · Act · End). */
+  /* drawer footer on two rows: quick actions (or the phase hint) get the full width,
+     board tools and the end/launch button share the second row. */
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .bt-foot {
     display: flex !important;
-    flex-wrap: nowrap !important;
+    flex-wrap: wrap !important;
     align-items: center;
     gap: 8px !important;
+  }
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .bt-foot .phase {
+    order: 0 !important;
+    flex: 0 0 100% !important;
+    min-width: 0;
+  }
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .bt-foot #bEnd {
+    order: 3;
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    padding: 0 10px !important;
+    height: 44px !important;
+    min-height: 44px !important;
   }
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .bt-foot .turn-guide-pied {
     display: none !important;
   }
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .bt-foot #thumb-reach {
     order: 1;
-    flex: 1 1 auto;
+    flex: 1 1 100%;
     min-width: 0;
     margin: 0 !important;
     overflow-x: auto;
@@ -1019,7 +1032,7 @@ html:not(#pkz) body:not(#pkz) #tip-card.pk-dlg {
     gap: 4px !important;
   }
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .bt-foot .board-tools.in-foot button {
-    width: 36px !important;
-    height: 40px !important;
+    width: 44px !important;
+    height: 44px !important;
   }
 }

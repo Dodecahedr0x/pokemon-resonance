@@ -35,6 +35,7 @@ Then open the printed address (http://localhost:5173). `npm run build` produces 
 
 ### Nouveautés v4.79 : confort sur téléphone
 - Écran titre : le texte et le bouton « Toucher pour commencer » tiennent dans l'écran (ils étaient coupés à droite) ; la phrase verticale qui passait sur l'illustration disparaît sur téléphone.
+- Combat : la barre du bas passe sur deux lignes. Les capacités ont toute la largeur (deux à trois visibles au lieu d'une), les outils du plateau et « Lancer le combat » partagent la seconde ligne ; ce bouton sortait de l'écran pendant le placement.
 - Camp : la page ne défile plus de côté à cause de la ligne d'onglets.
 - Paramètres : chaque panneau a sa marge intérieure (titres et boutons ne collent plus au bord) ; boutons pleine largeur ; les plateaux à gimmick s'affichent sur deux colonnes.
 - Sac : les offres du jour s'affichent une par ligne, noms et prix en entier ; la ligne de catégories s'estompe à droite pour signaler qu'elle défile.
