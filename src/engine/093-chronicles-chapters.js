@@ -4,32 +4,32 @@ import { $, writeLS, readLS, toast } from './014-utils.js';
 import { PREF, savePref } from './026-campaign-tutorial-sound.js';
 import { savePurse } from './032-v4-foundation.js';
 import { renderParams } from './040-settings.js';
-import { SCENES, __set_SCN, renderScene417 } from './057-companions-resonance.js';
-import { BGM434 } from './070-theme-music-player.js';
-import { reward454 } from './084-peddler-route-missions.js';
-import { badgeCount459 } from './090-item-quests-trophies.js';
+import { SCENES, __set_SCN, renderStoryScene } from './057-companions-resonance.js';
+import { BGM } from './070-theme-music-player.js';
+import { applyReward } from './084-peddler-route-missions.js';
+import { badgeTotal } from './090-item-quests-trophies.js';
 
 /** Offline mode: music tracks kept in cache (urls = blob: addresses per track). */
-export const OFF462 = { cache: 'res-audio-462', urls: {}, status: '', n: 0 };
+export const OFFLINE_STATE = { cache: 'res-audio-462', urls: {}, status: '', n: 0 };
 
-function chPlay462(L, c) {
+function chapterPlay(L, c) {
   __set_SCN({ k: c, c, i: 0, L, apres: true });
-  renderScene417();
-  $('#scene417').hidden = false;
+  renderStoryScene();
+  $('#story-scene').hidden = false;
 }
 
-function chOpen462(i) {
-  const C = CHAP462[i];
-  if (!C || badgeCount459() < C.min) {
+function chapterOpen(i) {
+  const C = CHAPTERS[i];
+  if (!C || badgeTotal() < C.min) {
     return;
   }
-  const s = chSt462(),
+  const s = chapterState(),
     first = !s.read[i];
-  chPlay462(C.L, 'ch462_' + i);
+  chapterPlay(C.L, 'chronicle_' + i);
   if (first) {
     s.read[i] = 1;
-    writeLS('res-ch462', s);
-    reward454({ g: 2 });
+    writeLS('res-chronicle', s);
+    applyReward({ g: 2 });
     savePurse();
     toast('Chronique lue : +2 Éclats.');
     setTimeout(() => {
@@ -42,27 +42,27 @@ function chOpen462(i) {
   }
 }
 
-async function offLoad462() {
-  if (!offOk462()) {
+async function offlineLoad() {
+  if (!offlineSupported()) {
     return;
   }
   try {
-    const c = await caches.open(OFF462.cache);
+    const c = await caches.open(OFFLINE_STATE.cache);
     let n = 0;
-    for (const [k, u] of tracks462()) {
+    for (const [k, u] of chapterTracks()) {
       const r = await c.match(u);
       if (r) {
         const bl = await r.blob();
-        OFF462.urls[k] = URL.createObjectURL(bl);
+        OFFLINE_STATE.urls[k] = URL.createObjectURL(bl);
         n++;
       }
     }
-    OFF462.n = n;
-    OFF462.status = n ? 'prêt' : '';
-    Object.keys(BGM434.el).forEach(k => {
-      const a = BGM434.el[k];
-      if (a && OFF462.urls[k] && a.paused && a.src !== OFF462.urls[k]) {
-        a.src = OFF462.urls[k];
+    OFFLINE_STATE.n = n;
+    OFFLINE_STATE.status = n ? 'prêt' : '';
+    Object.keys(BGM.el).forEach(k => {
+      const a = BGM.el[k];
+      if (a && OFFLINE_STATE.urls[k] && a.paused && a.src !== OFFLINE_STATE.urls[k]) {
+        a.src = OFFLINE_STATE.urls[k];
       }
     });
   } catch {
@@ -70,19 +70,19 @@ async function offLoad462() {
   }
 }
 
-async function offDownload462() {
-  if (!offOk462()) {
+async function offlineDownload() {
+  if (!offlineSupported()) {
     return toast('Le stockage hors ligne n’est pas disponible ici.');
   }
-  OFF462.status = 'chargement';
+  OFFLINE_STATE.status = 'chargement';
   let ok = 0,
     ko = 0;
   try {
-    const c = await caches.open(OFF462.cache),
-      L = tracks462();
+    const c = await caches.open(OFFLINE_STATE.cache),
+      L = chapterTracks();
     for (let i = 0; i < L.length; i++) {
       const [, u] = L[i];
-      OFF462.n = i;
+      OFFLINE_STATE.n = i;
       try {
         const r = await fetch(u);
         if (r && r.ok) {
@@ -101,12 +101,12 @@ async function offDownload462() {
       }
     }
   } catch (e) {
-    OFF462.status = 'erreur';
+    OFFLINE_STATE.status = 'erreur';
     return toast('Le stockage hors ligne a été refusé par l’appareil.');
   }
-  await offLoad462();
-  OFF462.status = ok ? 'prêt' : 'erreur';
-  PREF.off462 = ok ? 1 : 0;
+  await offlineLoad();
+  OFFLINE_STATE.status = ok ? 'prêt' : 'erreur';
+  PREF.offlinePack = ok ? 1 : 0;
   savePref();
   toast(
     ok
@@ -120,23 +120,23 @@ async function offDownload462() {
   }
 }
 
-async function offClear462() {
+async function offlineClear() {
   try {
-    await caches.delete(OFF462.cache);
+    await caches.delete(OFFLINE_STATE.cache);
   } catch {
     /* Best effort: failure here is non-fatal. */
   }
-  Object.values(OFF462.urls).forEach(u => {
+  Object.values(OFFLINE_STATE.urls).forEach(u => {
     try {
       URL.revokeObjectURL(u);
     } catch {
       /* Best effort: failure here is non-fatal. */
     }
   });
-  OFF462.urls = {};
-  OFF462.n = 0;
-  OFF462.status = '';
-  PREF.off462 = 0;
+  OFFLINE_STATE.urls = {};
+  OFFLINE_STATE.n = 0;
+  OFFLINE_STATE.status = '';
+  PREF.offlinePack = 0;
   savePref();
   toast('Musique hors ligne supprimée.');
   try {
@@ -146,7 +146,7 @@ async function offClear462() {
   }
 }
 
-async function offSave462() {
+async function offlineSave() {
   try {
     const r = await fetch(location.href);
     if (!r.ok) {
@@ -166,7 +166,7 @@ async function offSave462() {
 }
 
 /* ---------- 1. Chronicles ---------- */
-export const CHAP462 = [
+export const CHAPTERS = [
   {
     t: 'Chapitre 1 · Le premier écho',
     min: 0,
@@ -274,7 +274,7 @@ export const CHAP462 = [
   },
 ];
 
-export const NAMES_C462 = {
+export const CHAPTER_NAMES = {
   j1: 'Arrivée à Johto',
   jd1: 'La Team Dissonance',
   jd2: 'La tour en flammes',
@@ -287,10 +287,10 @@ export const NAMES_C462 = {
   hchamp: 'Le Champion de Hoenn',
 };
 
-export const chSt462 = () => readLS('res-ch462', { read: {} });
+export const chapterState = () => readLS('res-chronicle', { read: {} });
 
 /* ---------- 2. Offline mode (music in cache) ---------- */
-export const offOk462 = () => {
+export const offlineSupported = () => {
   try {
     return (
       typeof caches !== 'undefined' &&
@@ -303,27 +303,27 @@ export const offOk462 = () => {
   }
 };
 
-export const tracks462 = () => Object.entries(BGM434.src);
+export const chapterTracks = () => Object.entries(BGM.src);
 
 // Startup statements, run in their original order (see index.js).
 export function __init() {
   document.addEventListener(
     'click',
     e => {
-      const b = e.target.closest && e.target.closest('[data-ch462]');
+      const b = e.target.closest && e.target.closest('[data-chronicle]');
       if (!b || b.disabled) {
         return;
       }
       e.stopPropagation();
       e.preventDefault();
-      const v = b.dataset.ch462;
+      const v = b.dataset.chronicle;
       if (v[0] === 's') {
         const k = v.slice(1);
         if (SCENES[k]) {
-          chPlay462(SCENES[k], k);
+          chapterPlay(SCENES[k], k);
         }
       } else {
-        chOpen462(+v);
+        chapterOpen(+v);
       }
     },
     true
@@ -332,19 +332,19 @@ export function __init() {
   document.addEventListener(
     'click',
     e => {
-      const b = e.target.closest && e.target.closest('[data-off462]');
+      const b = e.target.closest && e.target.closest('[data-offline-pack]');
       if (!b || b.disabled) {
         return;
       }
       e.stopPropagation();
       e.preventDefault();
-      const v = b.dataset.off462;
+      const v = b.dataset.offlinePack;
       if (v === 'dl') {
-        offDownload462();
+        offlineDownload();
       } else if (v === 'rm') {
-        offClear462();
+        offlineClear();
       } else if (v === 'jeu') {
-        offSave462();
+        offlineSave();
       }
     },
     true
@@ -354,5 +354,5 @@ export function __init() {
 
   window.addEventListener('offline', () => toast('Vous êtes hors ligne : le jeu continue de fonctionner.'));
 
-  setTimeout(() => offLoad462(), 1500);
+  setTimeout(() => offlineLoad(), 1500);
 }

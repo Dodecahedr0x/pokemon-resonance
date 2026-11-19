@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { useBoard, useHost } from './boardStore.js';
-import Tools444 from './Tools444.jsx';
+import BoardTools from './BoardTools.jsx';
 import { Cells, Decor, Water, Light, Painting, Landmarks, Pedestals, Terrain, Textures } from './Terrain.jsx';
 import { PE, lref } from './shared.js';
 import { PkLayer, Intentions, Magnifier, Markers, Names, Obstacles, Highlights } from './Layers.jsx';
@@ -60,44 +60,49 @@ const Evo = memo(EvoFx);
 
 // #bBoard container: classes, variables and data-ph follow the « host » state (boardStore.js).
 // Children outside the SVG are in the order of a normal battle start (created on first use).
-// The width (style.width, gauge434) is still set by the engine: React does not manage this property.
+// The width (style.width, fitPhoneBattle) is still set by the engine: React does not manage this property.
 function Board() {
   const H = useHost();
   return (
-    <div className={H.cls.join(' ')} id="bBoard" data-ph={H.ph} style={{ '--ac': H.ac, '--bg477': H.bg477 }}>
+    <div className={H.cls.join(' ')} id="bBoard" data-ph={H.ph} style={{ '--ac': H.ac, '--boardBg': H.boardBg }}>
       <GameBoard />
       <Evo />
       <div className="b-ciel" aria-hidden="true" />
-      {H.cs477 && (
-        <div className="cs477" aria-hidden="true">
+      {H.cloudShade && (
+        <div className="cloud-shade" aria-hidden="true">
           <i />
           <i />
         </div>
       )}
-      {H.amb477 && (
+      {H.ambience && (
         <div
-          key={H.amb477.k}
-          className={'amb477 ' + H.amb477.h}
-          data-k={H.amb477.k}
+          key={H.ambience.k}
+          className={'ambience ' + H.ambience.h}
+          data-k={H.ambience.k}
           aria-hidden="true"
-          style={{ '--c': H.amb477.c }}
+          style={{ '--c': H.ambience.c }}
         >
-          {H.amb477.items.map((s, i) => (
+          {H.ambience.items.map((s, i) => (
             <i key={i} style={s} />
           ))}
         </div>
       )}
       {H.ciel && <Sky c={H.ciel} />}
-      {H.bt444 && !H.bt444.foot && <Tools444 b={H.bt444} />}
-      {H.wx448 && (
-        <div id="wx448" aria-hidden="true" data-k={H.wx448} className={'wx448 wx448-' + H.wx448}>
+      {H.boardTools && !H.boardTools.foot && <BoardTools b={H.boardTools} />}
+      {H.boardWeather && (
+        <div
+          id="board-weather"
+          aria-hidden="true"
+          data-k={H.boardWeather}
+          className={'board-weather board-weather-' + H.boardWeather}
+        >
           <i />
           <i />
         </div>
       )}
-      {H.amb471 && (
-        <div className="amb471" aria-hidden="true" data-k={H.amb471.k}>
-          {H.amb471.items.map(([cls, s], i) => (
+      {H.ambientFx && (
+        <div className="ambient-fx" aria-hidden="true" data-k={H.ambientFx.k}>
+          {H.ambientFx.items.map(([cls, s], i) => (
             <i key={i} className={cls} style={s} />
           ))}
         </div>
@@ -118,7 +123,7 @@ function Board() {
       {H.fade && (
         <div
           key={H.fade.n}
-          className={'fondu477' + (H.fade.va ? ' va' : '')}
+          className={'bg-fade' + (H.fade.va ? ' va' : '')}
           aria-hidden="true"
           style={{ backgroundImage: H.fade.bg }}
         />
@@ -130,14 +135,14 @@ function Board() {
 // Battle sky (v4.30): time, weather, wind.
 function Sky({ c }) {
   return (
-    <div id="ciel430" className="ciel430" aria-live="polite">
-      <span className="ci430" style={{ '--c': c.co }} title={c.ti}>
+    <div id="sky-banner" className="sky-banner" aria-live="polite">
+      <span className="sky-chip" style={{ '--c': c.co }} title={c.ti}>
         <svg>
           <use href={'#' + c.ic} />
         </svg>
       </span>
       {c.w && (
-        <span className="ci430" style={{ '--c': c.w[1] }} title={c.w[2]}>
+        <span className="sky-chip" style={{ '--c': c.w[1] }} title={c.w[2]}>
           <svg>
             <use href={'#' + c.w[0]} />
           </svg>
@@ -145,7 +150,7 @@ function Sky({ c }) {
       )}
       <b>{c.displayName}</b>
       {c.vent && (
-        <span className="ci430 v" style={{ '--c': '#cfe6ff' }} title="Vent">
+        <span className="sky-chip v" style={{ '--c': '#cfe6ff' }} title="Vent">
           <svg>
             <use href="#i-vent" />
           </svg>
@@ -158,8 +163,8 @@ function Sky({ c }) {
 // Sky announcement (v4.30): the time or weather changes.
 function SkyBanner({ b }) {
   return (
-    <div id="cielBan430" className={'cielban430' + (b.on ? ' on' : '')}>
-      <span className="cb430-ic" style={{ '--c': b.ic[1] }}>
+    <div id="sky-banner-box" className={'sky-banner-strip' + (b.on ? ' on' : '')}>
+      <span className="banner-art-ic" style={{ '--c': b.ic[1] }}>
         <svg>
           <use href={'#' + b.ic[0]} />
         </svg>

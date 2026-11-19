@@ -5,13 +5,13 @@ import { tc } from '../../../engine/014-utils.js';
 import { STLN } from '../../../engine/020-team-cards.js';
 import { ART } from '../../../engine/032-v4-foundation.js';
 import {
-  DUEL433,
-  STMAX433,
-  TERR433,
-  V433_0,
-  duelStep433,
-  duelNew433,
-  duelOrder433,
+  DUEL_STATE,
+  STAT_MAX,
+  DUEL_TERRAINS,
+  DUEL_TUTORIAL_0,
+  duelStep,
+  duelNew,
+  duelOrder,
 } from '../../../engine/068-duel-tutorial.js';
 
 const Options = ({ L }) =>
@@ -23,18 +23,18 @@ const Options = ({ L }) =>
 
 function Types({ T }) {
   return T.map((t, i) => (
-    <i key={i} className="du433-ty" style={{ '--c': tc(t) }}>
+    <i key={i} className="duel-report-ty" style={{ '--c': tc(t) }}>
       {t}
     </i>
   ));
 }
 
-// Toggle buttons for the settings (data-du433s).
+// Toggle buttons for the settings (data-duel-report-s).
 function Seg({ k, L, v }) {
   return (
     <div className="v4-seg" role="group">
       {L.map(([x, n]) => (
-        <button key={x} type="button" data-du433s={k} data-v={x} aria-pressed={String(v) === String(x)}>
+        <button key={x} type="button" data-duel-report-s={k} data-v={x} aria-pressed={String(v) === String(x)}>
           {n}
         </button>
       ))}
@@ -45,15 +45,15 @@ function Seg({ k, L, v }) {
 // Duel settings: names (input reread by the engine), forms, size, terrain, time of day, rounds.
 function Preferences({ C }) {
   return (
-    <div className="du433-cfg">
-      <div className="du433-row">
-        <label className="v4-fld du433-n dj1">
+    <div className="duel-report-cfg">
+      <div className="duel-report-row">
+        <label className="v4-fld duel-report-n dj1">
           <span>Joueur 1 · commence</span>
-          <input type="text" data-du433n="0" maxLength={14} defaultValue={C.names[0]} autoComplete="off" />
+          <input type="text" data-duel-report-n="0" maxLength={14} defaultValue={C.names[0]} autoComplete="off" />
         </label>
-        <label className="v4-fld du433-n dj2">
+        <label className="v4-fld duel-report-n dj2">
           <span>Joueur 2</span>
-          <input type="text" data-du433n="1" maxLength={14} defaultValue={C.names[1]} autoComplete="off" />
+          <input type="text" data-duel-report-n="1" maxLength={14} defaultValue={C.names[1]} autoComplete="off" />
         </label>
       </div>
       <div className="v4-fld">
@@ -78,16 +78,16 @@ function Preferences({ C }) {
           v={C.sizeValue}
         />
       </div>
-      <div className="du433-row">
+      <div className="duel-report-row">
         <label className="v4-fld">
           <span>Terrain</span>
-          <select data-du433c="terrain" defaultValue={String(C.terrain)}>
-            <Options L={Object.entries(TERR433).map(([k, t]) => [k, t.n])} />
+          <select data-duel-report-c="terrain" defaultValue={String(C.terrain)}>
+            <Options L={Object.entries(DUEL_TERRAINS).map(([k, t]) => [k, t.n])} />
           </select>
         </label>
         <label className="v4-fld">
           <span>Heure</span>
-          <select data-du433c="heure" defaultValue={String(C.timeOfDay)}>
+          <select data-duel-report-c="heure" defaultValue={String(C.timeOfDay)}>
             <Options
               L={[
                 ['jour', 'Jour'],
@@ -98,14 +98,14 @@ function Preferences({ C }) {
         </label>
         <label className="v4-fld">
           <span>Manches</span>
-          <select data-du433c="lim" defaultValue={String(C.lim)}>
+          <select data-duel-report-c="lim" defaultValue={String(C.lim)}>
             <Options L={[8, 10, 12].map(x => [x, String(x)])} />
           </select>
         </label>
       </div>
-      <p className="du433-h">{`${C.sizeValue * 2 + 4} Pokémon tirés au hasard, un bannissement chacun, puis le choix en serpent : ${C.sizeValue === 3 ? 'J1, J2, J2, J1, J1, J2' : 'J1, J2, J2, J1, J1, J2, J2, J1'}. Le Joueur 2 joue en second : il choisit deux fois d’affilée en premier.`}</p>
-      <div className="du433-a">
-        <button type="button" className="b b-gold" data-du433="tirer">
+      <p className="duel-report-h">{`${C.sizeValue * 2 + 4} Pokémon tirés au hasard, un bannissement chacun, puis le choix en serpent : ${C.sizeValue === 3 ? 'J1, J2, J2, J1, J1, J2' : 'J1, J2, J2, J1, J1, J2, J2, J1'}. Le Joueur 2 joue en second : il choisit deux fois d’affilée en premier.`}</p>
+      <div className="duel-report-a">
+        <button type="button" className="b b-gold" data-duel-report="tirer">
           Tirer les Pokémon
         </button>
       </div>
@@ -113,7 +113,7 @@ function Preferences({ C }) {
   );
 }
 
-// A draw card (data-du433p): banned, taken or selected.
+// A draw card (data-duel-report-p): banned, taken or selected.
 function Card({ C, id }) {
   const m = BY[id],
     ban = C.bans[0].includes(id) ? 1 : C.bans[1].includes(id) ? 2 : 0,
@@ -124,27 +124,27 @@ function Card({ C, id }) {
   return (
     <button
       type="button"
-      className={`du433-c${cls}`}
-      data-du433p={id}
+      className={`duel-report-c${cls}`}
+      data-duel-report-p={id}
       disabled={!!(ban || pk)}
       aria-pressed={C.sel === id}
     >
       <img src={ART(m.no)} alt="" loading="lazy" />
       <b>{m.n}</b>
-      <span className="du433-t">
+      <span className="duel-report-t">
         <Types T={m.t} />
       </span>
       <em>{m.r || ''}</em>
-      <span className="du433-s" aria-label={STLN.map((n, i) => n + ' ' + m.s[i]).join(', ')}>
+      <span className="duel-report-s" aria-label={STLN.map((n, i) => n + ' ' + m.s[i]).join(', ')}>
         {m.s.map((v, i) => (
-          <i key={i} title={`${STLN[i]} ${v}`} style={{ '--v': `${Math.round((v / STMAX433) * 100)}%` }} />
+          <i key={i} title={`${STLN[i]} ${v}`} style={{ '--v': `${Math.round((v / STAT_MAX) * 100)}%` }} />
         ))}
       </span>
       {nEv ? <small>{`${nEv} Éveil${nEv > 1 ? 's' : ''}`}</small> : null}
       {ban ? (
-        <span className="du433-x">{`Banni · J${ban}`}</span>
+        <span className="duel-report-x">{`Banni · J${ban}`}</span>
       ) : pk ? (
-        <span className="du433-x">{`J${pk}`}</span>
+        <span className="duel-report-x">{`J${pk}`}</span>
       ) : null}
     </button>
   );
@@ -154,18 +154,18 @@ function Card({ C, id }) {
 function Detail({ C }) {
   const id = C.sel;
   if (!id || !BY[id]) {
-    return <p className="du433-h">Touchez un Pokémon pour voir ses capacités.</p>;
+    return <p className="duel-report-h">Touchez un Pokémon pour voir ses capacités.</p>;
   }
   const m = BY[id],
     family = familyOf(id).map(x => x.n);
   return (
-    <div className="du433-d">
-      <div className="du433-dh">
+    <div className="duel-report-d">
+      <div className="duel-report-dh">
         <b>{m.n}</b>
         <Types T={m.t} />
         <em>{[m.r, m.r2].filter(Boolean).join(' · ')}</em>
       </div>
-      <div className="du433-mv">
+      <div className="duel-report-mv">
         {m.mv
           .filter(k => MV[k])
           .map((k, i) => {
@@ -179,7 +179,7 @@ function Detail({ C }) {
             );
           })}
       </div>
-      <p className="du433-dl">
+      <p className="duel-report-dl">
         {STLN.map((n, i) => `${n} ${m.s[i]}`).join(' · ')}
         {family.length > 1 && C.mode !== 'final' ? (
           <>
@@ -197,9 +197,9 @@ function Team({ C, j }) {
   const L = C.picks[j],
     B0 = C.bans[j];
   return (
-    <div className={`du433-eq dj${j + 1}`}>
+    <div className={`duel-report-eq dj${j + 1}`}>
       <b>{C.names[j]}</b>
-      <div className="du433-eqm">
+      <div className="duel-report-eqm">
         {Array.from({ length: C.sizeValue }, (_, i) =>
           L[i] ? (
             <span key={i} title={BY[L[i]].n}>
@@ -217,11 +217,11 @@ function Team({ C, j }) {
 
 // The draw: order, step, teams, pool, actions.
 function Draw({ C }) {
-  const st = duelStep433(C),
-    ord = duelOrder433(C.sizeValue);
+  const st = duelStep(C),
+    ord = duelOrder(C.sizeValue);
   return (
     <>
-      <div className="du433-o" aria-label="Ordre du tirage">
+      <div className="duel-report-o" aria-label="Ordre du tirage">
         {ord.map((x, i) => (
           <span
             key={i}
@@ -230,20 +230,20 @@ function Draw({ C }) {
         ))}
       </div>
       {st ? (
-        <p className="du433-st">
+        <p className="duel-report-st">
           <b className={`dj${st.j + 1}`}>{C.names[st.j]}</b>
           {' ' + (st.a === 'ban' ? 'bannit un Pokémon : personne ne pourra le prendre.' : 'choisit un Pokémon.')}
         </p>
       ) : (
-        <p className="du433-st">Les équipes sont prêtes.</p>
+        <p className="duel-report-st">Les équipes sont prêtes.</p>
       )}
-      <div className="du433-eqs">
+      <div className="duel-report-eqs">
         <Team C={C} j={0} />
         <Team C={C} j={1} />
       </div>
       {st ? (
         <>
-          <div className="du433-pool">
+          <div className="duel-report-pool">
             {C.pool.map(id => (
               <Card key={id} C={C} id={id} />
             ))}
@@ -251,25 +251,25 @@ function Draw({ C }) {
           <Detail C={C} />
         </>
       ) : null}
-      <div className="du433-a">
+      <div className="duel-report-a">
         {st ? (
-          <button type="button" className="b b-gold" data-du433="ok" disabled={!C.sel}>
+          <button type="button" className="b b-gold" data-duel-report="ok" disabled={!C.sel}>
             {C.sel ? (st.a === 'ban' ? 'Bannir ' : 'Choisir ') + BY[C.sel].n : st.a === 'ban' ? 'Bannir…' : 'Choisir…'}
           </button>
         ) : (
-          <button type="button" className="b b-gold b-lg" data-du433="lancer">
+          <button type="button" className="b b-gold b-lg" data-duel-report="lancer">
             Lancer le duel
           </button>
         )}
         {C.stepCount ? (
-          <button type="button" className="b" data-du433="annuler">
+          <button type="button" className="b" data-duel-report="annuler">
             Annuler le dernier choix
           </button>
         ) : null}
-        <button type="button" className="b b-ghost" data-du433="tirer">
+        <button type="button" className="b b-ghost" data-duel-report="tirer">
           Nouveau tirage
         </button>
-        <button type="button" className="b b-ghost" data-du433="reglages">
+        <button type="button" className="b b-ghost" data-duel-report="reglages">
           Réglages
         </button>
       </div>
@@ -279,11 +279,11 @@ function Draw({ C }) {
 
 // Camp › Duel (v4.33): local two-player duel on one phone.
 export default function Duel() {
-  const C = DUEL433 || duelNew433(),
-    P0 = PROFILE.duel433 || V433_0().duel433,
+  const C = DUEL_STATE || duelNew(),
+    P0 = PROFILE.duel433 || DUEL_TUTORIAL_0().duel433,
     H = (P0.h || []).slice(-5).reverse();
   return (
-    <section className="v4-panel du433">
+    <section className="v4-panel duel-report">
       <header className="v4-ph">
         <svg>
           <use href="#i-fight" />
@@ -297,10 +297,10 @@ export default function Duel() {
       </p>
       {C.e === 'reglages' ? <Preferences C={C} /> : <Draw C={C} />}
       {H.length ? (
-        <div className="du433-hi">
+        <div className="duel-report-hi">
           <h3>Derniers duels</h3>
           {H.map((x, i) => (
-            <div key={i} className="du433-hl">
+            <div key={i} className="duel-report-hl">
               <span className={x.g === 1 ? 'g' : ''}>{x.n[0]}</span>
               <em>{x.g ? 'contre' : 'nul ·'}</em>
               <span className={x.g === 2 ? 'g' : ''}>{x.n[1]}</span>

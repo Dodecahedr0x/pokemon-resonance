@@ -1,7 +1,7 @@
 import { DIFFS, PROFILE, isCamp } from '../../../engine/011-game-state.js';
 import { BADGES } from '../../../engine/013-gyms.js';
 import { tLevel } from '../../../engine/032-v4-foundation.js';
-import { freeBox421 } from '../../../engine/061-catch-anywhere.js';
+import { boxCapacityLabel } from '../../../engine/061-catch-anywhere.js';
 
 // Trainer: first name, difficulty, game state. The engine handles #v4Nm, data-diff and data-v4saves.
 export default function Trainer() {
@@ -37,7 +37,7 @@ export default function Trainer() {
       <p className="v4-ps-n">
         {isCamp()
           ? `Campagne en cours · ${BADGES.length} badge${BADGES.length > 1 ? 's' : ''} · Nv. ${tLevel()}`
-          : `Mode Libre : arènes ouvertes · ${freeBox421()}`}
+          : `Mode Libre : arènes ouvertes · ${boxCapacityLabel()}`}
       </p>
       <div className="v4-ps-a">
         <button type="button" className="b b-sm" data-v4saves="">

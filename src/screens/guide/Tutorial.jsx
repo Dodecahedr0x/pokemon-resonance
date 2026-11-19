@@ -1,12 +1,12 @@
 import { useReducer } from 'react';
 import { PROFILE } from '../../engine/011-game-state.js';
 import { queueSave } from '../../engine/025-saves.js';
-import { TUTORIAL_STEPS433 } from '../../engine/068-duel-tutorial.js';
+import { TUTORIAL_LIST } from '../../engine/068-duel-tutorial.js';
 import { Html } from '../../lib/html.jsx';
 import { useGuide } from './guideStore.js';
 
 // « Tutoriel » (Tutorial) tab: grouped chapters, marked « read » on first open (saved).
-// The « try » buttons keep their data-t433 attributes: the engine handles them.
+// The « try » buttons keep their data-try-it attributes: the engine handles them.
 // PROFILE is engine state: it is changed here, outside the component.
 function markTutorialRead(k) {
   const L = (PROFILE.tuto433 = PROFILE.tuto433 || []);
@@ -26,8 +26,8 @@ export default function Tutorial() {
   useGuide();
   const [, rerender] = useReducer(x => x + 1, 0);
   const readFlags = new Set(PROFILE.tuto433 || []);
-  const n = TUTORIAL_STEPS433.filter(c => readFlags.has(c.k)).length;
-  const groupList = [...new Set(TUTORIAL_STEPS433.map(c => c.g))];
+  const n = TUTORIAL_LIST.filter(c => readFlags.has(c.k)).length;
+  const groupList = [...new Set(TUTORIAL_LIST.map(c => c.g))];
 
   const markRead = k => {
     if (markTutorialRead(k)) {
@@ -47,11 +47,11 @@ export default function Tutorial() {
           Toutes les mécaniques du jeu, chapitre par chapitre. Ouvrez un chapitre pour le lire, puis essayez-le.
         </p>
       </div>
-      <div className="tu433-p">
+      <div className="tutorial-ch-p">
         <span>
-          <b>{n}</b> / {TUTORIAL_STEPS433.length} chapitres lus
+          <b>{n}</b> / {TUTORIAL_LIST.length} chapitres lus
         </span>
-        <i style={{ '--w': Math.round((n / TUTORIAL_STEPS433.length) * 100) + '%' }} />
+        <i style={{ '--w': Math.round((n / TUTORIAL_LIST.length) * 100) + '%' }} />
         {n > 0 && (
           <button type="button" className="lnk" onClick={resetToZero}>
             Tout remettre à zéro
@@ -59,26 +59,26 @@ export default function Tutorial() {
         )}
       </div>
       {groupList.map(g => [
-        <h3 key={'g-' + g} className="tu433-g">
+        <h3 key={'g-' + g} className="tutorial-ch-g">
           {g}
         </h3>,
-        ...TUTORIAL_STEPS433.filter(c => c.g === g).map(c => {
+        ...TUTORIAL_LIST.filter(c => c.g === g).map(c => {
           const isRead = readFlags.has(c.k);
           return (
             <details
               key={c.k}
-              className={`tu433-c${isRead ? ' lu' : ''}`}
-              data-tu433={c.k}
+              className={`tutorial-ch-c${isRead ? ' lu' : ''}`}
+              data-tutorial-ch={c.k}
               onToggle={e => e.currentTarget.open && markRead(c.k)}
             >
               <summary>
-                <span className="tu433-i">
+                <span className="tutorial-ch-i">
                   <svg>
                     <use href={'#' + c.ic} />
                   </svg>
                 </span>
                 <b>{c.t}</b>
-                <span className="tu433-ok" aria-label={isRead ? 'lu' : 'à lire'}>
+                <span className="tutorial-ch-ok" aria-label={isRead ? 'lu' : 'à lire'}>
                   {isRead ? '✓' : ''}
                 </span>
               </summary>
@@ -86,7 +86,7 @@ export default function Tutorial() {
                 <Html html={typeof c.d === 'function' ? c.d() : c.d} />
               </p>
               {c.a.length > 0 && (
-                <div className="tu433-a">
+                <div className="tutorial-ch-a">
                   {c.a.map(([l, at], i) => (
                     <Html key={i} html={`<button type="button" class="b b-sm" ${at}>${l}</button>`} />
                   ))}

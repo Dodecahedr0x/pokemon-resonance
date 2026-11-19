@@ -2,7 +2,7 @@ import { useEngineReady } from '../../engineReady.js';
 import { useBagVersion } from './bagStore.js';
 import { ITEMS2, PROFILE } from '../../engine/011-game-state.js';
 import { SHOP, V4, bagN, fmt } from '../../engine/032-v4-foundation.js';
-import { tmDay456 } from '../../engine/089-extra-held-items-tms.js';
+import { dailyTm } from '../../engine/089-extra-held-items-tms.js';
 import { Article, HeldItem } from './Items.jsx';
 import Offers from './Offers.jsx';
 import HeldItems from './HeldItems.jsx';
@@ -41,9 +41,9 @@ function List({ v, keys }) {
 
 // TM vendor of the day (v4.58): −20% on two TMs, in Shop › TMs and HMs.
 function TmVendor() {
-  const J = tmDay456();
+  const J = dailyTm();
   return (
-    <p id="ctj456" className="v4-note">
+    <p id="tm-vendor" className="v4-note">
       <b>Vendeur de CT de {J.reg}</b> : −20 % aujourd’hui sur {J.o.map(k => SHOP[k].n).join(' et ')}.
     </p>
   );
@@ -151,7 +151,7 @@ function Content() {
 
 // Bag and Shop page (#sac). Nothing is rendered before the engine's first renderBag(); each
 // renderBag() rebuilds the content (delegated handlers in the engine: data-sacv,
-// data-sacc, data-qk, data-buy, data-buyh, data-offre, data-am454, data-at455…). The
+// data-sacc, data-qk, data-buy, data-buyh, data-offre, data-wanderer, data-craft-bench…). The
 // pk-mart / pk-bag classes of the section are set by the engine (renderBag).
 export default function Bag() {
   const ready = useEngineReady();

@@ -24,12 +24,12 @@ let HARENAS;
    - 8 gyms with rules (sand, ring, current, volcano, low blow, winds,
      warp, deluge) and the Hoenn Master, on an original map.
    ===================================================================== */
-export function V419_0() {
+export function HOENN_REGION_0() {
   return { hoenn: [], hchamp: 0 };
 }
 
-export function v419Clean(p) {
-  const o = V419_0();
+export function hoennRegionClean(p) {
+  const o = HOENN_REGION_0();
   if (!p || typeof p !== 'object') {
     return o;
   }
@@ -41,7 +41,7 @@ export function v419Clean(p) {
 }
 
 // v4.46: Free mode included
-export function regionH419() {
+export function isHoennRegion() {
   try {
     return V4.region === 'hoenn' && hoennOpen();
   } catch (e) {
@@ -49,7 +49,7 @@ export function regionH419() {
   }
 }
 
-export function hNext419() {
+export function nextHoennStep() {
   if (isCamp() && !PROFILE.jchamp) {
     return null;
   }
@@ -64,7 +64,7 @@ export function hNext419() {
   return null;
 }
 
-export function lockH419(k, D) {
+export function lockHoenn(k, D) {
   if (!PROFILE.jchamp) {
     return 'Hoenn s’ouvre après votre titre de Maître de Johto.';
   }
@@ -77,7 +77,7 @@ export function lockH419(k, D) {
   return null;
 }
 
-export function leadH419(sc) {
+export function hoennLead(sc) {
   const D = SCEN[sc];
   if (!D) {
     return null;
@@ -91,7 +91,7 @@ export function leadH419(sc) {
   return null;
 }
 
-export function chapH419(k) {
+export function hoennChapter(k) {
   const D = SCEN[k];
   if (!D) {
     return null;
@@ -105,20 +105,20 @@ export function chapH419(k) {
   return null;
 }
 
-export function hRewardLine419(k) {
+export function hoennRewardLine(k) {
   const D = SCEN[k];
   const g = D.hfinal ? 20 : HREW[D.hoenn];
   return `<div class="v4-rew"><span class="v4-rew-b">${D.hfinal ? medal(['Dragon']) + 'Titre de Maître de Hoenn' : badgeSvg(D.hoenn, HGYMS[D.hoenn], 'mh' + D.hoenn) + 'Badge ' + HGYMS[D.hoenn]}</span><span><span class="v4-coin" aria-hidden="true">₽</span>+${fmt(D.hfinal ? 8000 : 3500 + 300 * D.hoenn)}</span><span><span class="v4-gemi"><svg><use href="#i-gem"/></svg></span>+${g}</span></div>`;
 }
 
-export function hProf419(g) {
+export function hoennProfessor(g) {
   if (g.k === 'hchamp') {
     return `Les huit badges de Hoenn sont à vous ! Le Maître, <b>${g.L.n}</b>, vous attend au sommet.`;
   }
   return `${g.k === 'h1' ? 'Bienvenue à Hoenn ! Des îles, un volcan, et vingt nouveaux Pokémon sur la Route 104. ' : 'Beau travail. '}Prochaine arène : <b>${g.L.n}</b>, ${g.L.t}.`;
 }
 
-export function hSetup419(S, r, ev) {
+export function hoennSetup(S, r, ev) {
   if (!/^jh\d$/.test(r || '')) {
     return;
   }
@@ -158,7 +158,7 @@ export function hSetup419(S, r, ev) {
   }
 }
 
-export function hTick419(S, r, ev) {
+export function hoennTick(S, r, ev) {
   if (r !== 'jh3' || S.over) {
     return;
   }
@@ -251,7 +251,7 @@ const HCHAMP_L = {
 const HREW = [4, 4, 5, 5, 6, 6, 7, 8];
 
 /* ---------- Hoenn gym rules ---------- */
-const ruleH419 = S => (S && SCEN[S.sc] && SCEN[S.sc].rule) || '';
+const sceneRule = S => (S && SCEN[S.sc] && SCEN[S.sc].rule) || '';
 
 // Startup statements, run in their original order (see index.js).
 export function __init() {
@@ -480,7 +480,7 @@ export function __init() {
     {
       id: 'ringdojo',
       provide: (c, { S, m }) =>
-        ruleH419(S) === 'jh2' &&
+        sceneRule(S) === 'jh2' &&
         m &&
         m.p > 0 &&
         (m.r <= 1 ? { mul: 1.25, labelText: 'Ring du Dojo' } : { mul: 0.75, labelText: 'Ring du Dojo' }),
@@ -488,7 +488,7 @@ export function __init() {
     {
       id: 'coupbas',
       provide: (c, { S, u, t }) =>
-        ruleH419(S) === 'jh5' &&
+        sceneRule(S) === 'jh5' &&
         u.side === 'e' &&
         t &&
         t.side === 'a' &&

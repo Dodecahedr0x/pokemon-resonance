@@ -2,12 +2,12 @@ import { useState } from 'react';
 import { byUid, canAwaken, foeEvo } from '../../../engine/021-combat-engine.js';
 import { B, ui } from '../../../engine/024-combat-ui.js';
 import { currentActor } from '../../../engine/044-tactical-engine.js';
-import { coopAlive418 } from '../../../engine/058-fishing-safari-coop.js';
-import { enemyTurn428 } from '../../../engine/063-combat-catches-home.js';
-import { riddlePhase431 } from '../../../engine/066-tactical-challenges.js';
-import { flow478 } from '../../../engine/112-painted-graphics.js';
+import { isCoopPlayerAlive } from '../../../engine/058-fishing-safari-coop.js';
+import { isEnemyTurn } from '../../../engine/063-combat-catches-home.js';
+import { riddlePhase } from '../../../engine/066-tactical-challenges.js';
+import { turnFlow } from '../../../engine/112-painted-graphics.js';
 import { getHost } from '../board/boardStore.js';
-import Tools444 from '../board/Tools444.jsx';
+import BoardTools from '../board/BoardTools.jsx';
 import { footPos as barBottom, useBattleVersion } from './battleStore.js';
 import { STEP } from './frag.jsx';
 
@@ -18,12 +18,12 @@ function bar() {
     al = B.units.filter(u => u.side === 'a');
   const ready = al.filter(u => !u.ko && !u.acted).length,
     cur = B.order === 'vitesse' ? currentActor(B) : null;
-  let disabled = (ui.busy && !enemyTurn428()) || !!B.over || !!ui.turbo428;
+  let disabled = (ui.busy && !isEnemyTurn()) || !!B.over || !!ui.skipSpeedup;
   let button = ui.cutscene ? (
     'Éveil…'
   ) : ui.busy ? (
-    enemyTurn428() ? (
-      ui.turbo428 ? (
+    isEnemyTurn() ? (
+      ui.skipSpeedup ? (
         'Accéléré…'
       ) : (
         <>
@@ -39,7 +39,7 @@ function bar() {
     </>
   ) : B.coop ? (
     <>
-      {B.coop === 1 && coopAlive418(B, 2) ? 'Passer au J2' : 'Fin du tour'} <span className="cnt">J{B.coop}</span>
+      {B.coop === 1 && isCoopPlayerAlive(B, 2) ? 'Passer au J2' : 'Fin du tour'} <span className="cnt">J{B.coop}</span>
     </>
   ) : (
     <>
@@ -72,15 +72,15 @@ function bar() {
   } // co-op (v4.18)
   let playerRef = null;
   // deployment (v4.30)
-  if (B.dep430 && !B.over) {
+  if (B.deployPhase && !B.over) {
     disabled = false;
     button = 'Lancer le combat';
-    phase = ui.dsel430 ? 'Touchez une case bleue.' : 'Placez vos Pokémon sur les cases bleues.';
+    phase = ui.deploySel ? 'Touchez une case bleue.' : 'Placez vos Pokémon sur les cases bleues.';
   }
   // riddle (v4.31)
-  if (B.sc === 'enigme431' && !B.over && !B.dep430) {
+  if (B.sc === 'enigme431' && !B.over && !B.deployPhase) {
     button = 'Abandonner l’énigme';
-    phase = riddlePhase431();
+    phase = riddlePhase();
   }
   // local duel (v4.33)
   const D = B.duel433;
@@ -107,10 +107,10 @@ function bar() {
     }
   }
   // guided tour (v4.78): no more "Fin du tour" (End of turn) during your phase
-  const g = flow478.guide();
+  const g = turnFlow.guide();
   let step = null;
   if (g) {
-    const n = flow478.remaining(B).length,
+    const n = turnFlow.remaining(B).length,
       t =
         B.order === 'vitesse'
           ? 'À vous : déplacez, puis agissez.'
@@ -122,7 +122,7 @@ function bar() {
     if (u && u.side === 'a' && !ui.selE) {
       step = (
         <>
-          <b>{STEP[flow478.stepOf(B, u)]}</b> {u.n}
+          <b>{STEP[turnFlow.stepOf(B, u)]}</b> {u.n}
           {B.order !== 'vitesse' && n ? ` · encore ${n}` : ''}
         </>
       );
@@ -141,17 +141,23 @@ export default function Footer() {
     setLastStep({ v, el: x.stepOf });
   }
   const Q = barBottom.qa,
-    tools = getHost().bt444;
+    tools = getHost().boardTools;
   return (
     <div className={barBottom.cls.join(' ')}>
       {/* thumb-reach attacks (phone, v4.43): created on first use, then hidden */}
       {Q && (
-        <div id="qa443" className="qa443" role="toolbar" aria-label="Actions du Pokémon choisi" hidden={Q.hidden}>
+        <div
+          id="thumb-reach"
+          className="thumb-reach"
+          role="toolbar"
+          aria-label="Actions du Pokémon choisi"
+          hidden={Q.hidden}
+        >
           {Q.items.map((b, i) => (
             <button
               key={i}
               type="button"
-              data-qa443={i}
+              data-thumb-reach={i}
               className={b.c + (b.on ? ' on' : '')}
               style={b.col ? { '--c': b.col } : undefined}
               disabled={b.disabled}
@@ -171,7 +177,7 @@ export default function Footer() {
           x && x.phase
         )}
       </span>
-      {Q && Q.displayName ? <span className="qa443-n">{Q.displayName}</span> : null}
+      {Q && Q.displayName ? <span className="thumb-reach-n">{Q.displayName}</span> : null}
       <button
         className="b b-gold"
         id="bEnd"
@@ -182,7 +188,7 @@ export default function Footer() {
         {x ? x.actionButton : 'Fin du tour'}
       </button>
       {v > 0 && (
-        <span id="fl478pied" className="fl478-pied" aria-live="polite" hidden={!(x && x.stepOf)}>
+        <span id="turn-guide-pied" className="turn-guide-pied" aria-live="polite" hidden={!(x && x.stepOf)}>
           {(x && x.stepOf) || (lastStep && lastStep.el)}
         </span>
       )}
@@ -194,7 +200,7 @@ export default function Footer() {
         </span>
       )}
       {/* board toolbar, under the thumb on phones (v4.44) */}
-      {tools && tools.foot && <Tools444 b={tools} />}
+      {tools && tools.foot && <BoardTools b={tools} />}
     </div>
   );
 }

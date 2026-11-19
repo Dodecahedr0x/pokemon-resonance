@@ -48,7 +48,7 @@ function WaterDefs({ E, vb }) {
   return (
     <>
       <linearGradient
-        id="eau477g"
+        id="lake-g"
         gradientUnits="userSpaceOnUse"
         spreadMethod="repeat"
         x1="0"
@@ -60,7 +60,7 @@ function WaterDefs({ E, vb }) {
           <stop key={i} offset={o} stopColor={c} stopOpacity={a} />
         ))}
       </linearGradient>
-      <clipPath id="eau477c">
+      <clipPath id="lake-c">
         {E.keyList.map(k => {
           const [x, y] = HC(k);
           return <polygon key={k} points={HP(x, y, BG.S - 1)} />;
@@ -72,7 +72,7 @@ function WaterDefs({ E, vb }) {
 
 export default function Defs() {
   const S = useBoard('defs');
-  const on = t => S.tex477.includes(t),
+  const on = t => S.paintedTextures.includes(t),
     hzc = S.night ? '120,140,200' : '255,236,206';
   return (
     <defs>
@@ -139,19 +139,19 @@ export default function Defs() {
         <stop offset="1" stopColor="#17181C" />
       </linearGradient>
       {/* v4.77 · tilted board */}
-      {S.tex477
+      {S.paintedTextures
         .filter(t => !BASE.includes(t))
         .map(t => (
           <NewPat key={t} t={t} />
         ))}
       {S.hz && (
-        <linearGradient id="hz477" x1="0" y1={S.hz[0]} x2="0" y2={S.hz[1]} gradientUnits="userSpaceOnUse">
+        <linearGradient id="haze-gradient" x1="0" y1={S.hz[0]} x2="0" y2={S.hz[1]} gradientUnits="userSpaceOnUse">
           <stop offset="0" stopColor={`rgba(${hzc},${S.night ? 0.38 : 0.42})`} />
           <stop offset="1" stopColor={`rgba(${hzc},0)`} />
         </linearGradient>
       )}
       {S.lip && B && (
-        <clipPath id="cp477">
+        <clipPath id="lip-clip">
           {S.lip.map((p, i) => (
             <polygon key={'l' + i} points={p} />
           ))}

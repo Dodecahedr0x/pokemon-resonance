@@ -4,8 +4,8 @@ import { veiled } from '../../../engine/013-gyms.js';
 import { medal } from '../../../engine/014-utils.js';
 import { EMAX, awakeningInfo, foeEvo, hasNx } from '../../../engine/021-combat-engine.js';
 import { B, STC, enPips, segHp, ui } from '../../../engine/024-combat-ui.js';
-import { hasXp, bossScene, plateRank414 } from '../../../engine/053-resonance.js';
-import { cache431, vision431 } from '../../../engine/066-tactical-challenges.js';
+import { hasXp, bossScene, plateRankHtml } from '../../../engine/053-resonance.js';
+import { fogHidden, fogVision } from '../../../engine/066-tactical-challenges.js';
 import { useBattleVersion } from './battleStore.js';
 
 // The plates of the two teams, above (#bPlE) and below (#bPlA) the board.
@@ -17,17 +17,17 @@ export function PlatesE() {
   const foes = B.units.filter(u => u.side === 'e'),
     D = B.duel433;
   // fog (v4.31): opponents out of sight are veiled
-  const fog = !!(B.fog431 && !B.over),
-    vu = fog ? vision431(B) : null;
+  const fog = !!(B.fogOfWar && !B.over),
+    vu = fog ? fogVision(B) : null;
   return (
     <div
       className={'plates' + (foes.length >= 5 ? ' many' : '')}
       id="bPlE"
       style={{ '--n': foes.length }}
-      data-dj433={D ? 3 - D.j : undefined}
+      data-duel-player={D ? 3 - D.j : undefined}
     >
       {foes.map(u => (
-        <Plate key={u.uid} u={u} fog={fog && cache431(B, u, vu)} />
+        <Plate key={u.uid} u={u} fog={fog && fogHidden(B, u, vu)} />
       ))}
     </div>
   );
@@ -41,7 +41,7 @@ export function PlatesA() {
   const al = B.units.filter(u => u.side === 'a'),
     D = B.duel433;
   return (
-    <div className="plates" id="bPlA" style={{ '--n': al.length }} data-dj433={D ? D.j : undefined}>
+    <div className="plates" id="bPlA" style={{ '--n': al.length }} data-duel-player={D ? D.j : undefined}>
       {al.map(u => (
         <Plate key={u.uid} u={u} />
       ))}
@@ -100,7 +100,7 @@ function Plate({ u, fog }) {
     nx = hasNx(u) ? awakeningInfo(B, u) : null;
   const cls =
     `plate ${u.side === 'e' ? 'pe' : 'pa'}${u.ko ? ' ko' : ''}${ui.sel === u.uid || ui.selE === u.uid ? ' act' : ''}` +
-    `${ui.act === u.uid ? ' now' : ''}${fe ? ' fev' : ''}${u.side === 'a' && u.en >= EMAX && nx && !u.ko ? ' rd' : ''}${fog ? ' fog431' : ''}`;
+    `${ui.act === u.uid ? ' now' : ''}${fe ? ' fev' : ''}${u.side === 'a' && u.en >= EMAX && nx && !u.ko ? ' rd' : ''}${fog ? ' fog-of-war' : ''}`;
   const pips = u.side === 'a' ? hasNx(u) || hasXp(u) : bossScene(B) && hasXp(u);
   return (
     <button type="button" className={cls} data-u={u.uid}>
@@ -108,7 +108,7 @@ function Plate({ u, fog }) {
       <span className="pl-b">
         <span className="pl-h">
           <span className="n">{u.n}</span>
-          <Html html={plateRank414(u)} />
+          <Html html={plateRankHtml(u)} />
           {pips ? <Html html={enPips(u.en)} /> : u.lv ? <span className="lv">N.{u.lv}</span> : null}
         </span>
         <Html html={segHp(u)} />

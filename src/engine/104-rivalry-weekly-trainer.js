@@ -10,10 +10,10 @@ import { overlay } from './030-prestige-staging.js';
 import { shut } from '../screens/overlays/tempStore.js';
 import { today } from './032-v4-foundation.js';
 import { DEXS } from './038-pokedex.js';
-import { weatherDay417 } from './057-companions-resonance.js';
-import { timing453 } from './083-timed-catch-status.js';
-import { reward454 } from './084-peddler-route-missions.js';
-import { RELIC466 } from './097-boss-rush-relics.js';
+import { todayWeather } from './057-companions-resonance.js';
+import { startCatchTiming } from './083-timed-catch-status.js';
+import { applyReward } from './084-peddler-route-missions.js';
+import { RELICS } from './097-boss-rush-relics.js';
 
 // Statements run at startup, in the original order (see index.js).
 export function __init() {
@@ -56,7 +56,7 @@ export function __init() {
     const WEATHER_NAME = { pluie: 'Pluie', soleil: 'Soleil', sable: 'Sable', grele: 'Grêle' };
     const weatherKind = () => {
       try {
-        return weatherDay417();
+        return todayWeather();
       } catch (e) {
         return null;
       }
@@ -182,11 +182,11 @@ export function __init() {
     document.addEventListener(
       'click',
       e => {
-        const b = e.target.closest && e.target.closest('[data-br466^="rel:"]');
+        const b = e.target.closest && e.target.closest('[data-boss-rush^="rel:"]');
         if (!b) {
           return;
         }
-        const id = b.dataset.br466.slice(4);
+        const id = b.dataset.bossRush.slice(4);
         const X = readValue();
         if (!X.relics.includes(id)) {
           X.relics.push(id);
@@ -211,7 +211,7 @@ export function __init() {
         if (hits >= 5) {
           return endStep();
         }
-        timing453(q => {
+        startCatchTiming(q => {
           hits++;
           score += q === 'perfect' ? 2 : q === 'ok' ? 1 : 0;
           launchMove();
@@ -221,7 +221,7 @@ export function __init() {
         const Y = readValue();
         Y.ct = { d: dateDay(), n: (Y.ct.n || 0) + 1, best: Math.max(Y.ct.best || 0, score) };
         if (score >= 8) {
-          reward454({ b: { poke: 1 }, m: 200 });
+          applyReward({ b: { poke: 1 }, m: 200 });
           toast('Entraînement réussi : une Poké Ball et 200 ₽ !');
         } else {
           toast('Score : ' + score + ' / 10. Record : ' + Y.ct.best + '.');
@@ -240,8 +240,8 @@ export function __init() {
         w = weatherKind(),
         isFinished = X.wk.k === week() && X.wk.done,
         dayInv = X.inv.d === dateDay() && X.inv.done,
-        storyFinished = window.__shadow470 && window.__shadow470.readValue().stepOf >= 4,
-        showcase = RELIC466.map(r => ({ r, on: X.relics.includes(r.id) })),
+        storyFinished = window.__shadowEpisodes && window.__shadowEpisodes.readValue().stepOf >= 4,
+        showcase = RELICS.map(r => ({ r, on: X.relics.includes(r.id) })),
         nb = showcase.filter(v => v.on).length;
       // rendered: src/screens/overlays/transients/Windows.jsx (X2470)
       const o = overlay('x2470o', {

@@ -11,34 +11,34 @@ import { shut } from '../screens/overlays/tempStore.js';
 import { savePurse, today } from './032-v4-foundation.js';
 import { refreshHome } from '../screens/home/homeStore.js';
 import { DAMAGE_PROVIDERS } from './044-tactical-engine.js';
-import { reward454, txt454 } from './084-peddler-route-missions.js';
-import { battleCount464 } from './095-trainer-talent-tree.js';
+import { applyReward, rewardText } from './084-peddler-route-missions.js';
+import { isCountedBattle } from './095-trainer-talent-tree.js';
 
-/** Season banner on the Home page (#sa465, rendering: src/screens/home/Banners.jsx). */
-export function saData465() {
-  const S0 = season465(),
-    s = saSt465(),
-    top = PAL465[PAL465.length - 1][0],
+/** Season banner on the Home page (#seasonEvent, rendering: src/screens/home/Banners.jsx). */
+export function seasonBannerData() {
+  const S0 = eventSeason(),
+    s = seasonState(),
+    top = TIER_POINTS[TIER_POINTS.length - 1][0],
     pc = Math.min(100, Math.round((s.pts / top) * 100));
   return { S0, pts: s.pts, top, pc };
 }
 
-function saOpen465() {
-  const S0 = season465(),
-    s = saSt465(),
-    vd = featured465();
-  const tiers = PAL465.map(([p, n, R], i) => ({ p, n, txt: txt454(R), ok: s.pts >= p, got: !!s.got[i] }));
+function seasonOpen() {
+  const S0 = eventSeason(),
+    s = seasonState(),
+    vd = featuredGym();
+  const tiers = TIER_POINTS.map(([p, n, R], i) => ({ p, n, txt: rewardText(R), ok: s.pts >= p, got: !!s.got[i] }));
   const gym = SCEN[vd] ? SCEN[vd].n : vd;
-  // rendering: src/screens/overlays/transients/Windows.jsx (Sa465)
-  const o = overlay('sa465o', { n: S0.n, d: S0.d, t: S0.t, arene: gym, tiers, won: s.won || 0 });
+  // rendering: src/screens/overlays/transients/Windows.jsx (SeasonEvent)
+  const o = overlay('season-event-o', { n: S0.n, d: S0.d, t: S0.t, arene: gym, tiers, won: s.won || 0 });
   o.addEventListener('click', e => {
     if (e.target === o) {
-      shut('sa465o');
+      shut('season-event-o');
     }
   });
 }
 
-const SEASON465 = [
+const SEASON_LIST = [
   { n: 'Grand Froid', t: 'Glace', d: 'L’hiver s’installe : les Pokémon Glace sont à l’honneur.' },
   { n: 'Cœur de Fée', t: 'Fée', d: 'Un mois de douceur et de magie pour les Pokémon Fée.' },
   { n: 'Éveil de la Sève', t: 'Plante', d: 'Le printemps réveille les Pokémon Plante.' },
@@ -53,7 +53,7 @@ const SEASON465 = [
   { n: 'Légende des Dragons', t: 'Dragon', d: 'Les Pokémon Dragon veillent sur les fêtes de fin d’année.' },
 ];
 
-const PAL465 = [
+const TIER_POINTS = [
   [5, 'Premiers pas', { m: 600, b: { potion: 2 } }],
   [10, 'Régulier', { g: 3 }],
   [18, 'Passionné', { m: 1500, b: { superpotion: 2 } }],
@@ -61,72 +61,72 @@ const PAL465 = [
   [40, 'Légende du mois', { g: 10, m: 3000 }],
 ];
 
-const monthKey465 = () => today().slice(0, 7);
+const monthKey = () => today().slice(0, 7);
 
-const monthIdx465 = () => Math.max(0, Math.min(11, (parseInt(today().slice(5, 7), 10) || 1) - 1));
+const monthIndex = () => Math.max(0, Math.min(11, (parseInt(today().slice(5, 7), 10) || 1) - 1));
 
-const season465 = () => SEASON465[monthIdx465()];
+const eventSeason = () => SEASON_LIST[monthIndex()];
 
-const featured465 = () => ARENAS[(monthIdx465() * 3 + (parseInt(today().slice(0, 4), 10) || 0)) % ARENAS.length].k;
+const featuredGym = () => ARENAS[(monthIndex() * 3 + (parseInt(today().slice(0, 4), 10) || 0)) % ARENAS.length].k;
 
-const saSt465 = () => {
+const seasonState = () => {
   let s;
   try {
-    s = JSON.parse(localStorage.getItem('res-sa465') || 'null');
+    s = JSON.parse(localStorage.getItem('res-season-event') || 'null');
   } catch (e) {
     s = null;
   }
   s = s || { won: 0 };
-  if (s.m !== monthKey465()) {
-    if (s.m && s.pts >= PAL465[PAL465.length - 1][0]) {
+  if (s.m !== monthKey()) {
+    if (s.m && s.pts >= TIER_POINTS[TIER_POINTS.length - 1][0]) {
       s.won = (s.won || 0) + 1;
     }
-    s = { m: monthKey465(), pts: 0, got: {}, won: s.won || 0 };
+    s = { m: monthKey(), pts: 0, got: {}, won: s.won || 0 };
   }
   s.got = s.got || {};
   return s;
 };
 
-const saSave465 = s => {
-  writeLS('res-sa465', s);
+const seasonSave = s => {
+  writeLS('res-season-event', s);
 };
 
 // Startup statements, run in their original order (see index.js).
 export function __init() {
   HOOKS.combat.push(S => {
-    if (battleCount464(S)) {
-      S.sa465 = season465().t;
+    if (isCountedBattle(S)) {
+      S.seasonEvent = eventSeason().t;
     }
   });
 
   DAMAGE_PROVIDERS.push({
-    id: 'saison465',
+    id: 'season-bonus',
     provide: (c, { S, u }) =>
       !!u &&
       u.side === 'a' &&
       !!S &&
-      !!S.sa465 &&
+      !!S.seasonEvent &&
       BY[u.id] &&
-      BY[u.id].t.includes(S.sa465) && { mul: 1.05, labelText: 'Saison : ' + S.sa465 },
+      BY[u.id].t.includes(S.seasonEvent) && { mul: 1.05, labelText: 'Saison : ' + S.seasonEvent },
   });
 
   HOOKS.progress.unshift((S, rew, win) => {
     try {
-      if (!win || !battleCount464(S)) {
+      if (!win || !isCountedBattle(S)) {
         return null;
       }
-      const t = season465().t,
-        s = saSt465();
+      const t = eventSeason().t,
+        s = seasonState();
       let n = 1;
       if (S.units.some(u => u.side === 'a' && BY[u.id] && BY[u.id].t.includes(t))) {
         n += 1;
       }
-      if (S.sc === featured465()) {
+      if (S.sc === featuredGym()) {
         n += 2;
       }
       s.pts += n;
-      saSave465(s);
-      rew.sa465 = { n, tot: s.pts };
+      seasonSave(s);
+      rew.seasonEvent = { n, tot: s.pts };
     } catch {
       /* Best effort: failure here is non-fatal. */
     }
@@ -134,48 +134,48 @@ export function __init() {
   });
 
   HOOKS.battleResult.unshift(r =>
-    r.sa465
-      ? `<div class="res-l"><h4>${esc(season465().n)}</h4><div class="rl"><span>Points de saison : +${r.sa465.n}</span><b>${r.sa465.tot}</b></div></div>`
+    r.seasonEvent
+      ? `<div class="res-l"><h4>${esc(eventSeason().n)}</h4><div class="rl"><span>Points de saison : +${r.seasonEvent.n}</span><b>${r.seasonEvent.tot}</b></div></div>`
       : ''
   );
 
   document.addEventListener(
     'click',
     e => {
-      const b = e.target.closest && e.target.closest('[data-sa465]');
+      const b = e.target.closest && e.target.closest('[data-season-event]');
       if (!b) {
         return;
       }
       e.stopPropagation();
       e.preventDefault();
-      const v = b.dataset.sa465;
+      const v = b.dataset.seasonEvent;
       if (v === 'open') {
-        return saOpen465();
+        return seasonOpen();
       }
       if (v === 'close') {
-        return shut('sa465o');
+        return shut('season-event-o');
       }
       if (b.disabled) {
         return;
       }
-      const s = saSt465(),
+      const s = seasonState(),
         i = +v,
-        T = PAL465[i];
+        T = TIER_POINTS[i];
       if (!T || s.got[i] || s.pts < T[0]) {
         return;
       }
       s.got[i] = 1;
-      if (i === PAL465.length - 1) {
+      if (i === TIER_POINTS.length - 1) {
         s.won = (s.won || 0) + 0;
       }
-      saSave465(s);
-      reward454(T[2]);
+      seasonSave(s);
+      applyReward(T[2]);
       sfx('win');
       vibe([30, 40, 30]);
-      toast('Récompense de saison : ' + txt454(T[2]) + '.');
+      toast('Récompense de saison : ' + rewardText(T[2]) + '.');
       savePurse();
-      saOpen465();
-      refreshHome(); // #sa465 banner
+      seasonOpen();
+      refreshHome(); // #seasonEvent banner
     },
     true
   );

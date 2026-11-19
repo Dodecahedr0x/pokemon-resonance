@@ -9,8 +9,8 @@ import { ACT, STATUSED, coverOf, ignObst, noteAdd, roleOf } from './023-roles-sy
 import { B, autoSel, clearAim, endOfRound, finish, log, placeEnemy, renderAll, scSel, ui } from './024-combat-ui.js';
 import { PREF } from './026-campaign-tutorial-sound.js';
 import { playEv } from './028-move-effects.js';
-import { player418 } from './058-fishing-safari-coop.js';
-import { dl428 } from './063-combat-catches-home.js';
+import { coopPlayer } from './058-fishing-safari-coop.js';
+import { battleDelay } from './063-combat-catches-home.js';
 
 export let SPEED_PROVIDERS, JIT_PBM, JIT_PB, JIT_DMG, JIT_BOSS, JIT_BOSS_HB, DAMAGE_PROVIDERS, ROLE_PROVIDERS;
 let JIT_HB;
@@ -157,7 +157,7 @@ export function unrollSpeed() {
   }
   const S0 = B;
   ui.busy = true;
-  ui.turbo428 = false;
+  ui.skipSpeedup = false;
   renderAll();
   const step = async () => {
     if (!B || B !== S0) {
@@ -191,14 +191,14 @@ export function unrollSpeed() {
     const ev = playCurrentEnemy(B);
     renderAll();
     playEv(ev);
-    setTimeout(step, dl428(200, 380, 900));
+    setTimeout(step, battleDelay(200, 380, 900));
   };
-  setTimeout(step, dl428(60, 160, 420));
+  setTimeout(step, battleDelay(60, 160, 420));
 }
 
 /** Order by Speed: only the ally whose turn it is can be commanded. */
 export function canSelect(u) {
-  if (B && B.coop && u.side === 'a' && player418(u) !== B.coop) {
+  if (B && B.coop && u.side === 'a' && coopPlayer(u) !== B.coop) {
     toast(`C’est au Joueur ${B.coop} de jouer.`); // co-op (v4.18)
     return false;
   }

@@ -4,8 +4,8 @@ import { tc } from '../../engine/014-utils.js';
 import { PIX, V4, ownedFam } from '../../engine/032-v4-foundation.js';
 import { DEXS, dexList } from '../../engine/038-pokedex.js';
 import { SPARK, isShinyOwned, shinyHue } from '../../engine/043-adventure-plus.js';
-import { REGION_NAMES421 } from '../../engine/061-catch-anywhere.js';
-import { familyCapt428 } from '../../engine/063-combat-catches-home.js';
+import { FAMILY_REGION_NAMES } from '../../engine/061-catch-anywhere.js';
+import { familyCaptureStats } from '../../engine/063-combat-catches-home.js';
 
 // Bar counter (#dex4Cnt): obtained, shiny, then per region (v4.28).
 export function DexCount() {
@@ -21,13 +21,13 @@ export function DexCount() {
           {`${n} chromatique${n > 1 ? 's' : ''}`}
         </span>
       ) : null}
-      <span className="cnt428">
+      <span className="diploma-count">
         {[1, 2, 3].map(r => {
-          const c = familyCapt428(r),
-            ok = (PROFILE.diplomas428 || []).includes(r);
+          const c = familyCaptureStats(r),
+            ok = (PROFILE.regionDiplomas || []).includes(r);
           return (
             <span className={ok ? 'ok' : ''} key={r}>
-              {`${REGION_NAMES421[r]} `}
+              {`${FAMILY_REGION_NAMES[r]} `}
               <b>{c.n}</b>
               {`/${c.t}${ok ? ' ✓' : ''}`}
             </span>

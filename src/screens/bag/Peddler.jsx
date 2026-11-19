@@ -1,13 +1,13 @@
 import { ITEMS2, PROFILE } from '../../engine/011-game-state.js';
 import { ITM, SHOP, bagN, fmt } from '../../engine/032-v4-foundation.js';
 import { costOf0 } from '../../engine/049-identity.js';
-import { costHeld414 } from '../../engine/053-resonance.js';
-import { peddler454 } from '../../engine/084-peddler-route-missions.js';
+import { heldItemCost } from '../../engine/053-resonance.js';
+import { todaysPeddler } from '../../engine/084-peddler-route-missions.js';
 import { Disc } from './Items.jsx';
 
-// Shop › Peddler (v4.54): limited stock of the day, data-am454 (engine).
+// Shop › Peddler (v4.54): limited stock of the day, data-wanderer (engine).
 export default function Peddler() {
-  const A = peddler454();
+  const A = todaysPeddler();
   if (!A.present) {
     return (
       <p className="v4-note">
@@ -41,7 +41,7 @@ export default function Peddler() {
           <button
             type="button"
             className="v4-btn"
-            data-am454={k}
+            data-wanderer={k}
             disabled={left <= 0 || PROFILE.money < px || bagN(k) >= 99}
           >
             {fmt(px)} ₽
@@ -52,7 +52,7 @@ export default function Peddler() {
   };
   let th = null;
   if (A.th) {
-    const px = Math.round((costHeld414(A.th) * 0.8) / 50) * 50,
+    const px = Math.round((heldItemCost(A.th) * 0.8) / 50) * 50,
       takenSet = A.st.got['h:' + A.th];
     th = (
       <article className="v4-it">
@@ -69,7 +69,12 @@ export default function Peddler() {
           <em>Objet tenu, un seul exemplaire</em>
         </div>
         <div className="v4-buy">
-          <button type="button" className="v4-btn" data-am454={'h:' + A.th} disabled={!!takenSet || PROFILE.money < px}>
+          <button
+            type="button"
+            className="v4-btn"
+            data-wanderer={'h:' + A.th}
+            disabled={!!takenSet || PROFILE.money < px}
+          >
             {fmt(px)} ₽
           </button>
         </div>
@@ -78,7 +83,7 @@ export default function Peddler() {
   }
   return (
     <>
-      <p className="v4-note am454">
+      <p className="v4-note wanderer">
         <b>{A.displayName}, le colporteur</b> a posé sa carriole aujourd’hui. Stock limité, il repart à minuit.
       </p>
       {A.pick.map(row)}

@@ -5,7 +5,7 @@ import { channel } from '../../../lib/store.js';
 // store; rendering is synchronous (flushSync): the engine re-reads the board right after.
 //   svg    : board construction (new game, rotation…) → all layers remounted
 //   tiles  : cells (classes, tooltips) and textures; marks, hl, obs: per-render layers
-//   pv     : v4.71 painting (classes tex471/deco471); paint: painted image and waves
+//   pv     : v4.71 painting (classes textureLayer/paintscape); paint: painted image and waves
 //   tilt   : v4.77 dressing (bases, markers, light); eau: water reflections
 //   insp   : magnifier cell (v4.44); pk: Poké Ball layer (v4.73); evo: #evoFx
 
@@ -18,7 +18,7 @@ const fresh = (n, patch) => ({
   pv: false, // v4.71 painting layers placed
   pvHref: null,
   waves: [],
-  tex477: [], // painted textures loaded (patterns replaced by the image)
+  paintedTextures: [], // painted textures loaded (patterns replaced by the image)
   lip: null, // cell bases (points)
   ax: null, // markers realigned on the tilted board: [text, x, y]
   hz: null, // horizon haze: [y1, y2]
@@ -65,21 +65,21 @@ export function boardRender() {
 
 /* ---------- #bBoard: the container and its children outside the SVG ---------- */
 // cls: #bBoard classes in the order classList used to place them (an addition goes to the end);
-// ac, bg477: variables --ac and --bg477; ph: data-ph (time of the live board).
+// ac, boardBg: variables --ac and --boardBg; ph: data-ph (time of the live board).
 // Children: clouds and dust (v4.77), sky (v4.30), toolbar (v4.44, if it is not
 // in the bottom bar), weather (v4.48), particles (v4.71), effects canvas, sky announcement,
 // round banner, backdrop fade. Each is created on first use, as before.
 let H = {
   cls: ['board'],
   ac: undefined,
-  bg477: undefined,
+  boardBg: undefined,
   ph: undefined,
-  cs477: false,
-  amb477: null, // { k, h, c, items }
+  cloudShade: false,
+  ambience: null, // { k, h, c, items }
   ciel: null, // { co, ic, ti, w, displayName, wind }
-  bt444: null, // { foot, fs, lp, ct }
-  wx448: null, // animated weather: key
-  amb471: null, // { k, items }
+  boardTools: null, // { foot, fs, lp, ct }
+  boardWeather: null, // animated weather: key
+  ambientFx: null, // { k, items }
   fxc: false,
   skyBanner: null, // { ic, heading, text, on }
   tbn: null, // { n, en, fast, txt, sub }

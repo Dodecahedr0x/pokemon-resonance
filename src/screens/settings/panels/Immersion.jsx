@@ -1,10 +1,10 @@
-import { IM448 } from '../../../engine/079-immersion-sound-haptics.js';
+import { IMMERSION_ON } from '../../../engine/079-immersion-sound-haptics.js';
 
-// Settings › Immersion (v4.48): data-b448 button handled by the engine (module 079).
+// Settings › Immersion (v4.48): data-immersion-action button handled by the engine (module 079).
 export default function Immersion() {
-  const on = IM448();
+  const on = IMMERSION_ON();
   return (
-    <section className="v4-panel" id="ai448">
+    <section className="v4-panel" id="immersion-panel">
       <h3 className="h3">Immersion</h3>
       <p className="v4-note">
         Bruitages par type d’attaque, cris, entrée en combat animée, particules, tremblement des gros coups, météo
@@ -12,7 +12,7 @@ export default function Immersion() {
         et le son se règlent plus bas.
       </p>
       <div className="sv-io">
-        <button type="button" className={`b b-sm${on ? ' b-gold' : ''}`} data-b448="im">
+        <button type="button" className={`b b-sm${on ? ' b-gold' : ''}`} data-immersion-action="im">
           {on ? 'Immersion : activée' : 'Immersion : désactivée'}
         </button>
       </div>

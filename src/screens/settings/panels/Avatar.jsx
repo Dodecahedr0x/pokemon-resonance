@@ -1,28 +1,28 @@
 import { TYPES } from '../../../engine/004-data.js';
 import { gp, tc } from '../../../engine/014-utils.js';
-import { AVT450, IM450 } from '../../../engine/080-trainer-avatar-rare-encounters.js';
+import { TRAINER_AVATAR, RARE_ENABLED } from '../../../engine/080-trainer-avatar-rare-encounters.js';
 
-// Settings › Trainer avatar and Rare encounters (v4.50): data-b450 buttons handled by the engine (module 080).
+// Settings › Trainer avatar and Rare encounters (v4.50): data-avatar-action buttons handled by the engine (module 080).
 export default function Avatar() {
-  const a = AVT450(),
+  const a = TRAINER_AVATAR(),
     types = Object.keys(TYPES),
-    on = IM450();
+    on = RARE_ENABLED();
   return (
-    <section className="v4-panel" id="aa450">
+    <section className="v4-panel" id="avatar-panel">
       <h3 className="h3">Avatar de dresseur</h3>
       <p className="v4-note">
         Choisissez l’emblème de votre type : il colore votre pastille en haut de l’écran et s’affiche sur l’écran « VS
         ».
       </p>
-      <div className="av450-g">
+      <div className="type-avatar-g">
         {types.map(t => {
           const sel = !!(a && a.e === t);
           return (
             <button
               key={t}
               type="button"
-              className={`av450-b${sel ? ' on' : ''}`}
-              data-b450="av"
+              className={`type-avatar-b${sel ? ' on' : ''}`}
+              data-avatar-action="av"
               data-t={t}
               style={{ '--c': tc(t) }}
               aria-label={t}
@@ -36,10 +36,10 @@ export default function Avatar() {
         })}
       </div>
       <div className="sv-io">
-        <button type="button" className={`b b-sm${a && a.hex ? ' b-gold' : ''}`} data-b450="hex">
+        <button type="button" className={`b b-sm${a && a.hex ? ' b-gold' : ''}`} data-avatar-action="hex">
           {a && a.hex ? 'Cadre carré arrondi : activé' : 'Cadre carré arrondi : désactivé'}
         </button>
-        <button type="button" className="b b-sm" data-b450="avreset">
+        <button type="button" className="b b-sm" data-avatar-action="avreset">
           Retirer l’avatar
         </button>
       </div>
@@ -51,7 +51,7 @@ export default function Avatar() {
         Des trouvailles scintillent aussi sur la carte, une fois par jour.
       </p>
       <div className="sv-io">
-        <button type="button" className={`b b-sm${on ? ' b-gold' : ''}`} data-b450="rare">
+        <button type="button" className={`b b-sm${on ? ' b-gold' : ''}`} data-avatar-action="rare">
           {on ? 'Rencontres rares : activées' : 'Rencontres rares : désactivées'}
         </button>
       </div>

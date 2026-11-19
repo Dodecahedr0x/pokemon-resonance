@@ -1,14 +1,14 @@
 import { BY, SCEN } from '../../engine/009-pokemon.js';
 import { PROFILE } from '../../engine/011-game-state.js';
 import { ART, dailyDone, dailyKey, dailyLeft, fmt } from '../../engine/032-v4-foundation.js';
-import { weeklyBuild429 } from '../../engine/064-quality.js';
+import { buildWeeklyChallenge } from '../../engine/064-quality.js';
 import Rewards from './Rewards.jsx';
 
 const NL = '\n ';
 
 // Challenge of the week (v4.29): same rental team for everyone, ranking among friends.
 function Weekly() {
-  const H = weeklyBuild429(),
+  const H = buildWeeklyChallenge(),
     D = SCEN.hebdo429,
     h = PROFILE.hebdo429 && PROFILE.hebdo429.w === H.w ? PROFILE.hebdo429 : null,
     friends = (PROFILE.friends || []).filter(a => a.wk && a.wk.w === H.w).map(a => ({ n: a.n, s: a.wk.s })),
@@ -16,7 +16,7 @@ function Weekly() {
       (a, b) => b.s - a.s
     );
   return (
-    <article className="hb429 v4-panel">
+    <article className="weekly-card v4-panel">
       <header className="v4-ph">
         <svg>
           <use href="#i-trophy" />
@@ -25,18 +25,18 @@ function Weekly() {
         <span className="v4-cnt">{D.lvl}</span>
       </header>
       {NL}
-      <p className="hb429-r">{D.d}</p>
+      <p className="weekly-card-r">{D.d}</p>
       {NL}
-      <div className="hb429-t">
+      <div className="weekly-card-t">
         {H.team.map((id, i) => (
-          <span key={i} className="hb429-m" data-lp429={id} title={BY[id].n}>
+          <span key={i} className="weekly-card-m" data-species-sheet={id} title={BY[id].n}>
             <img src={ART(BY[id].no)} alt="" loading="lazy" />
             <em>{BY[id].n}</em>
           </span>
         ))}
       </div>
       {NL}
-      <div className="hb429-k">
+      <div className="weekly-card-k">
         <span>
           Record <b>{h ? fmt(h.best) : '—'}</b>
         </span>
@@ -51,7 +51,7 @@ function Weekly() {
       </button>
       {NL}
       {rows.length > 1 ? (
-        <table className="hb429-cl">
+        <table className="weekly-card-cl">
           <caption>Classement entre amis</caption>
           <tbody>
             {rows.map((x, i) => (
@@ -66,7 +66,7 @@ function Weekly() {
           </tbody>
         </table>
       ) : (
-        <p className="hb429-n">
+        <p className="weekly-card-n">
           Partagez votre carte de dresseur après le défi : vos amis verront votre score de la semaine.
         </p>
       )}

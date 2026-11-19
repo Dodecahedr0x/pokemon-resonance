@@ -7,42 +7,42 @@ import { HOOKS } from './015-hooks.js';
 import { TOD } from './017-home-route.js';
 import { EMAX, P, rewardIn, hasNx, heal, say, teff } from './021-combat-engine.js';
 import { immobilize } from './022-items-bonds-ai.js';
-import { BALLS, HEALS, HELD_IMG, ICO414, SHOP } from './032-v4-foundation.js';
+import { BALLS, HEALS, HELD_IMG, ITEM_ICONS, SHOP } from './032-v4-foundation.js';
 import { DAMAGE_PROVIDERS } from './044-tactical-engine.js';
 import { MACHINES } from './045-tms-hms.js';
-import { COMBAT414, HELD_SHOP, hasXp, freeTile414, koAlly414 } from './053-resonance.js';
+import { COMBAT_ITEMS, HELD_SHOP, hasXp, freeTileFor, koAllyOf } from './053-resonance.js';
 
-export let BALL455, OKX455, USE455;
-let ICO455;
+export let SPECIAL_BALLS, ITEM_CAN_USE, ITEM_USE_EFFECTS;
+let HELD_ITEM_ICONS;
 
 /* ---------- icons ---------- */
-const ST455 = '#1b1b22';
+const ICON_STROKE = '#1b1b22';
 
-const ball455 = (top, bot, extra) =>
-  `<circle cx="24" cy="24" r="17" fill="${bot}" stroke="${ST455}" stroke-width="2"/><path d="M7 24a17 17 0 0 1 34 0z" fill="${top}" stroke="${ST455}" stroke-width="2"/><path d="M7 24h34" stroke="${ST455}" stroke-width="3"/><circle cx="24" cy="24" r="5" fill="#fff" stroke="${ST455}" stroke-width="2"/>${extra || ''}`;
+const ballIcon = (top, bot, extra) =>
+  `<circle cx="24" cy="24" r="17" fill="${bot}" stroke="${ICON_STROKE}" stroke-width="2"/><path d="M7 24a17 17 0 0 1 34 0z" fill="${top}" stroke="${ICON_STROKE}" stroke-width="2"/><path d="M7 24h34" stroke="${ICON_STROKE}" stroke-width="3"/><circle cx="24" cy="24" r="5" fill="#fff" stroke="${ICON_STROKE}" stroke-width="2"/>${extra || ''}`;
 
-const flask455 = (c, c2) =>
-  `<path d="M19 7h10v6l6 9v16a4 4 0 0 1-4 4H17a4 4 0 0 1-4-4V22l6-9z" fill="${c}" stroke="${ST455}" stroke-width="2" stroke-linejoin="round"/><rect x="18" y="4" width="12" height="5" rx="2" fill="${c2}" stroke="${ST455}" stroke-width="2"/><path d="M17 27h14" stroke="#fff" stroke-width="2.5" opacity=".7"/>`;
+const flaskIcon = (c, c2) =>
+  `<path d="M19 7h10v6l6 9v16a4 4 0 0 1-4 4H17a4 4 0 0 1-4-4V22l6-9z" fill="${c}" stroke="${ICON_STROKE}" stroke-width="2" stroke-linejoin="round"/><rect x="18" y="4" width="12" height="5" rx="2" fill="${c2}" stroke="${ICON_STROKE}" stroke-width="2"/><path d="M17 27h14" stroke="#fff" stroke-width="2.5" opacity=".7"/>`;
 
-export const berry455 = c =>
-  `<circle cx="24" cy="27" r="14" fill="${c}" stroke="${ST455}" stroke-width="2"/><path d="M24 13c1-5 5-7 10-7-2 4-5 6-10 7z" fill="#5cb85c" stroke="#2f6b2f" stroke-width="2"/><circle cx="19" cy="22" r="3.5" fill="#fff" opacity=".5"/>`;
+export const berryIcon = c =>
+  `<circle cx="24" cy="27" r="14" fill="${c}" stroke="${ICON_STROKE}" stroke-width="2"/><path d="M24 13c1-5 5-7 10-7-2 4-5 6-10 7z" fill="#5cb85c" stroke="#2f6b2f" stroke-width="2"/><circle cx="19" cy="22" r="3.5" fill="#fff" opacity=".5"/>`;
 
-export const orb455 = (c, g) =>
-  `<circle cx="24" cy="25" r="15" fill="${c}" stroke="${ST455}" stroke-width="2"/><circle cx="18" cy="19" r="4" fill="#fff" opacity=".45"/>${g || ''}`;
+export const orbIcon = (c, g) =>
+  `<circle cx="24" cy="25" r="15" fill="${c}" stroke="${ICON_STROKE}" stroke-width="2"/><circle cx="18" cy="19" r="4" fill="#fff" opacity=".45"/>${g || ''}`;
 
-export const svg455 = s =>
+export const wrapSvg = s =>
   'data:image/svg+xml;charset=utf-8,' +
   encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">${s}</svg>`);
 
 /* ---------- Balls ---------- */
-const night455 = S => ((SCEN[S.sc] || {}).time || TOD) === 'nuit';
+const isNightTime = S => ((SCEN[S.sc] || {}).time || TOD) === 'nuit';
 
-const waterBug455 = e => e.t.includes('Eau') || e.t.includes('Insecte');
+const isWaterOrBug = e => e.t.includes('Eau') || e.t.includes('Insecte');
 
-export const BALLX455 = {};
+export const BALL_CAPTURE_CHECKS = {};
 
 /* ---------- held items ---------- */
-const TYPEIT455 = {
+const TYPE_ITEMS = {
   charbon: 'Feu',
   eaumystique: 'Eau',
   graine: 'Plante',
@@ -54,57 +54,57 @@ const TYPEIT455 = {
 
 // Statements executed at startup, in the original order (see index.js).
 export function __init() {
-  ICO455 = {
-    'quick-ball': ball455(
+  HELD_ITEM_ICONS = {
+    'quick-ball': ballIcon(
       '#3b8be8',
       '#f4f4f4',
       '<path d="M27 8l-7 9h6l-4 8" fill="none" stroke="#ffd45b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>'
     ),
-    'dusk-ball': ball455(
+    'dusk-ball': ballIcon(
       '#2d2d3d',
       '#7b7b86',
       '<circle cx="15" cy="15" r="2" fill="#ffd45b"/><circle cx="33" cy="15" r="2" fill="#ffd45b"/><circle cx="24" cy="10" r="2" fill="#ffd45b"/>'
     ),
-    'net-ball': ball455(
+    'net-ball': ballIcon(
       '#3fb59a',
       '#f4f4f4',
       '<path d="M12 14l24 8M16 10l20 14M12 22l20-12" stroke="#0e4a3e" stroke-width="1.4" opacity=".7"/>'
     ),
-    'weak-ball': ball455(
+    'weak-ball': ballIcon(
       '#f08fb0',
       '#f4f4f4',
       '<path d="M24 8v9m-4-4l4 4 4-4" fill="none" stroke="#7b2d58" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>'
     ),
-    'hyper-potion': flask455('#f2994a', '#f2d45c'),
-    'ice-heal': flask455('#8fd9ff', '#f2f2f2'),
-    antidote: flask455('#b57be8', '#f2f2f2'),
-    'mepo-berry': berry455('#f2d45c'),
-    'jelly-res': orb455(
+    'hyper-potion': flaskIcon('#f2994a', '#f2d45c'),
+    'ice-heal': flaskIcon('#8fd9ff', '#f2f2f2'),
+    antidote: flaskIcon('#b57be8', '#f2f2f2'),
+    'mepo-berry': berryIcon('#f2d45c'),
+    'jelly-res': orbIcon(
       '#f59ac0',
       '<path d="M24 14l3 8 8 1-6 5 2 8-7-5-7 5 2-8-6-5 8-1z" fill="#fff3b0" stroke="#7b2d58" stroke-width="1.5"/>'
     ),
     'max-revive': `<path d="M24 4l14 20-14 20-14-20z" fill="#ffd45b" stroke="#8a6d0f" stroke-width="2" stroke-linejoin="round"/><path d="M24 11l8 13-8 13" fill="#fff3b0" opacity=".7"/><circle cx="24" cy="24" r="4" fill="#fff"/>`,
-    charcoal: orb455('#3a3a3f', '<path d="M24 15c4 4 5 8 2 12-1 2-4 2-5 0-2-3-1-7 3-12z" fill="#ff7a2f"/>'),
-    'mystic-water': orb455('#43a3ff', '<path d="M24 14c4 6 6 9 4 13-1 2-7 2-8 0-2-4 0-7 4-13z" fill="#d8f0ff"/>'),
-    'miracle-seed': orb455('#58b85a', '<path d="M24 14c6 2 8 8 4 13-5 0-9-4-4-13z" fill="#e5ffd0"/>'),
-    magnet: `<path d="M10 12h10v18a4 4 0 0 0 8 0V12h10v18a14 14 0 0 1-28 0z" fill="#e5484d" stroke="${ST455}" stroke-width="2" stroke-linejoin="round"/><path d="M10 12h10v7H10zM28 12h10v7H28z" fill="#dfe6ee" stroke="${ST455}" stroke-width="2"/>`,
-    'never-melt-ice': orb455(
+    charcoal: orbIcon('#3a3a3f', '<path d="M24 15c4 4 5 8 2 12-1 2-4 2-5 0-2-3-1-7 3-12z" fill="#ff7a2f"/>'),
+    'mystic-water': orbIcon('#43a3ff', '<path d="M24 14c4 6 6 9 4 13-1 2-7 2-8 0-2-4 0-7 4-13z" fill="#d8f0ff"/>'),
+    'miracle-seed': orbIcon('#58b85a', '<path d="M24 14c6 2 8 8 4 13-5 0-9-4-4-13z" fill="#e5ffd0"/>'),
+    magnet: `<path d="M10 12h10v18a4 4 0 0 0 8 0V12h10v18a14 14 0 0 1-28 0z" fill="#e5484d" stroke="${ICON_STROKE}" stroke-width="2" stroke-linejoin="round"/><path d="M10 12h10v7H10zM28 12h10v7H28z" fill="#dfe6ee" stroke="${ICON_STROKE}" stroke-width="2"/>`,
+    'never-melt-ice': orbIcon(
       '#a9e7ff',
       '<path d="M24 14v22M14 25h20M17 17l14 16M31 17L17 33" stroke="#fff" stroke-width="2" opacity=".8"/>'
     ),
     'black-belt': `<path d="M4 19h40v10H4z" fill="#1d1d24" stroke="#000" stroke-width="2"/><rect x="18" y="15" width="12" height="18" rx="3" fill="#c9c9d1" stroke="#000" stroke-width="2"/>`,
     'twisted-spoon': `<path d="M30 6a8 10 20 1 1-14 8c2 3 5 4 8 5l-12 22" fill="none" stroke="#c9b6ff" stroke-width="4" stroke-linecap="round"/>`,
-    'wise-glasses': `<circle cx="15" cy="26" r="9" fill="#d8f0ff" stroke="${ST455}" stroke-width="3"/><circle cx="33" cy="26" r="9" fill="#d8f0ff" stroke="${ST455}" stroke-width="3"/><path d="M24 26h0M6 24l-2-8M42 24l2-8" stroke="${ST455}" stroke-width="3"/>`,
-    'iron-vest': `<path d="M12 8l6 4h12l6-4 4 8-4 6v20H12V22l-4-6z" fill="#8fa4b5" stroke="${ST455}" stroke-width="2" stroke-linejoin="round"/><path d="M24 12v32" stroke="${ST455}" stroke-width="2"/>`,
-    'war-flag': `<path d="M12 5v40" stroke="${ST455}" stroke-width="3"/><path d="M12 8h26l-6 8 6 8H12z" fill="#e5484d" stroke="${ST455}" stroke-width="2" stroke-linejoin="round"/>`,
-    'wing-boots': `<path d="M13 6h14v20l10 6v8H11V30l2-4z" fill="#3fbf7f" stroke="${ST455}" stroke-width="2" stroke-linejoin="round"/><path d="M33 14c5-3 9-1 11 4-4 0-8 0-11-4z" fill="#fff" stroke="${ST455}" stroke-width="2"/>`,
+    'wise-glasses': `<circle cx="15" cy="26" r="9" fill="#d8f0ff" stroke="${ICON_STROKE}" stroke-width="3"/><circle cx="33" cy="26" r="9" fill="#d8f0ff" stroke="${ICON_STROKE}" stroke-width="3"/><path d="M24 26h0M6 24l-2-8M42 24l2-8" stroke="${ICON_STROKE}" stroke-width="3"/>`,
+    'iron-vest': `<path d="M12 8l6 4h12l6-4 4 8-4 6v20H12V22l-4-6z" fill="#8fa4b5" stroke="${ICON_STROKE}" stroke-width="2" stroke-linejoin="round"/><path d="M24 12v32" stroke="${ICON_STROKE}" stroke-width="2"/>`,
+    'war-flag': `<path d="M12 5v40" stroke="${ICON_STROKE}" stroke-width="3"/><path d="M12 8h26l-6 8 6 8H12z" fill="#e5484d" stroke="${ICON_STROKE}" stroke-width="2" stroke-linejoin="round"/>`,
+    'wing-boots': `<path d="M13 6h14v20l10 6v8H11V30l2-4z" fill="#3fbf7f" stroke="${ICON_STROKE}" stroke-width="2" stroke-linejoin="round"/><path d="M33 14c5-3 9-1 11 4-4 0-8 0-11-4z" fill="#fff" stroke="${ICON_STROKE}" stroke-width="2"/>`,
   };
 
-  for (const k in ICO455) {
-    ICO414[k] = svg455(ICO455[k]);
+  for (const k in HELD_ITEM_ICONS) {
+    ITEM_ICONS[k] = wrapSvg(HELD_ITEM_ICONS[k]);
   }
 
-  BALL455 = {
+  SPECIAL_BALLS = {
     rapide: {
       pv: (S, e) => e.hp / e.mhp <= ((S.round || 1) <= 2 ? 0.5 : 0.25),
       hpText: 'Rapide Ball : PV sous 50 % pendant les manches 1 et 2, sinon 25 %',
@@ -112,15 +112,15 @@ export function __init() {
       tim: 'immobilisé : Gel, Paralysie, Sommeil, Racines ou Toile',
     },
     sombre: {
-      pv: (S, e) => e.hp / e.mhp <= (night455(S) ? 0.4 : 0.25),
+      pv: (S, e) => e.hp / e.mhp <= (isNightTime(S) ? 0.4 : 0.25),
       hpText: 'Sombre Ball : PV sous 40 % la nuit, sinon 25 %',
       im: (S, e) => immobilize(e),
       tim: 'immobilisé : Gel, Paralysie, Sommeil, Racines ou Toile',
     },
     filet: {
-      pv: (S, e) => e.hp / e.mhp <= (waterBug455(e) ? 0.4 : 0.25),
+      pv: (S, e) => e.hp / e.mhp <= (isWaterOrBug(e) ? 0.4 : 0.25),
       hpText: 'Filet Ball : PV sous 40 % sur une cible Eau ou Insecte, sinon 25 %',
-      im: (S, e) => waterBug455(e) || immobilize(e),
+      im: (S, e) => isWaterOrBug(e) || immobilize(e),
       tim: 'Filet Ball : cible Eau ou Insecte, ou immobilisée',
     },
     faiblo: {
@@ -131,8 +131,8 @@ export function __init() {
     },
   };
 
-  for (const k in BALL455) {
-    BALLX455[k] = (S, e) => BALL455[k].pv(S, e) && BALL455[k].im(S, e);
+  for (const k in SPECIAL_BALLS) {
+    BALL_CAPTURE_CHECKS[k] = (S, e) => SPECIAL_BALLS[k].pv(S, e) && SPECIAL_BALLS[k].im(S, e);
   }
 
   Object.assign(SHOP, {
@@ -227,17 +227,17 @@ export function __init() {
 
   HEALS.push('hyperpotion');
 
-  COMBAT414.push('antigel', 'antidote', 'baiemepo', 'gelee', 'rappelmax');
+  COMBAT_ITEMS.push('antigel', 'antidote', 'baiemepo', 'gelee', 'rappelmax');
 
-  OKX455 = {
+  ITEM_CAN_USE = {
     antigel: (S, u) => u.skip > 0 || ['GEL', 'PAR', 'SOM'].includes(u.badge),
     antidote: (S, u) => u.burn > 0 || u.poisoned > 0,
     baiemepo: (S, u) => u.hp < u.mhp,
     gelee: (S, u) => (hasNx(u) || hasXp(u)) && u.en < EMAX,
-    rappelmax: (S, u) => !u.acted && !u.sn && !!koAlly414(S) && !!freeTile414(S, u),
+    rappelmax: (S, u) => !u.acted && !u.sn && !!koAllyOf(S) && !!freeTileFor(S, u),
   };
 
-  USE455 = {
+  ITEM_USE_EFFECTS = {
     antigel: (S, u, ev) => {
       Object.assign(u, { badge: null, skip: 0 });
       say(ev, `Antigel : ${u.n} retrouve ses moyens.`);
@@ -255,8 +255,8 @@ export function __init() {
       say(ev, `Gelée Résonante : ${u.n} gagne 2 losanges.`);
     },
     rappelmax: (S, u, ev) => {
-      const o = koAlly414(S),
-        x = freeTile414(S, u);
+      const o = koAllyOf(S),
+        x = freeTileFor(S, u);
       Object.assign(o, {
         ko: false,
         hp: Math.max(1, Math.round(o.mhp * 0.8)),
@@ -366,15 +366,15 @@ export function __init() {
 
   DAMAGE_PROVIDERS.push(
     {
-      id: 'typeitem455',
+      id: 'type-item-boost',
       provide: (c, { u, m, typ }) =>
         !!u &&
-        TYPEIT455[u.item] &&
-        TYPEIT455[u.item] === typ &&
+        TYPE_ITEMS[u.item] &&
+        TYPE_ITEMS[u.item] === typ &&
         (m.p > 0 || m.fix > 0) && { mul: 1.2, labelText: ITEMS2[u.item].n },
     },
     {
-      id: 'filtre455',
+      id: 'filter-guard',
       provide: (c, { u, t, m, typ }) =>
         !!t &&
         t.item === 'filtre' &&
@@ -384,7 +384,7 @@ export function __init() {
         teff(typ, t.t) > 1 && { mul: 0.75, labelText: 'Lunettes Filtre' },
     },
     {
-      id: 'cape455',
+      id: 'cape-guard',
       provide: (c, { u, t, m }) =>
         !!t &&
         t.item === 'cape' &&

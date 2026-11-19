@@ -1,35 +1,35 @@
 import { PROFILE } from '../../../engine/011-game-state.js';
 import { SCENES } from '../../../engine/057-companions-resonance.js';
-import { badgeCount459 } from '../../../engine/090-item-quests-trophies.js';
-import { CHAP462, NAMES_C462, chSt462 } from '../../../engine/093-chronicles-chapters.js';
+import { badgeTotal } from '../../../engine/090-item-quests-trophies.js';
+import { CHAPTERS, CHAPTER_NAMES, chapterState } from '../../../engine/093-chronicles-chapters.js';
 
 // Chronicles (v4.62): chapters unlocked by badges, then scenes already seen.
-// Buttons handled by the engine (delegated click on data-ch462).
+// Buttons handled by the engine (delegated click on data-chronicle).
 export default function Chronicles() {
-  const s = chSt462(),
-    nb = badgeCount459(),
-    n = CHAP462.filter((c, i) => s.read[i]).length;
-  const seenSet = Object.keys(NAMES_C462).filter(k => SCENES[k] && PROFILE.scenes && PROFILE.scenes[k]);
+  const s = chapterState(),
+    nb = badgeTotal(),
+    n = CHAPTERS.filter((c, i) => s.read[i]).length;
+  const seenSet = Object.keys(CHAPTER_NAMES).filter(k => SCENES[k] && PROFILE.scenes && PROFILE.scenes[k]);
   return (
-    <section className="v4-panel" id="hi462">
+    <section className="v4-panel" id="chronicles-panel">
       <h3 className="h3">Chroniques</h3>
       <p className="v4-note">
         L’histoire de la Résonance, chapitre après chapitre, au fil de vos badges.{' '}
         <b>
-          {n} / {CHAP462.length}
+          {n} / {CHAPTERS.length}
         </b>{' '}
         lus.
       </p>
-      <div className="ch462-g">
-        {CHAP462.map((c, i) => {
+      <div className="chronicle-g">
+        {CHAPTERS.map((c, i) => {
           const lock = nb < c.min,
             isRead = s.read[i];
           return (
             <button
               key={i}
               type="button"
-              className={`ch462${isRead ? ' lu' : ''}${lock ? ' lock' : ''}`}
-              data-ch462={i}
+              className={`chronicle${isRead ? ' lu' : ''}${lock ? ' lock' : ''}`}
+              data-chronicle={i}
               disabled={lock}
             >
               <b>{lock ? 'Chapitre ' + (i + 1) + ' · ???' : c.t}</b>
@@ -45,10 +45,10 @@ export default function Chronicles() {
           <h4 className="h3" style={{ marginTop: '12px' }}>
             Scènes déjà vues
           </h4>
-          <div className="ch462-g">
+          <div className="chronicle-g">
             {seenSet.map(k => (
-              <button key={k} type="button" className="ch462 lu" data-ch462={`s${k}`}>
-                <b>{NAMES_C462[k]}</b>
+              <button key={k} type="button" className="chronicle lu" data-chronicle={`s${k}`}>
+                <b>{CHAPTER_NAMES[k]}</b>
                 <small>Revoir</small>
               </button>
             ))}

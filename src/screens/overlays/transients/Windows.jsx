@@ -1,38 +1,38 @@
-// Small « hp452 » windows (shared frame: title, × button, .hp452-b body).
-// Clicks stay in the engine (delegated listeners data-b452, data-ev454…); the click
+// Small « battleHelp » windows (shared frame: title, × button, .battleHelp-b body).
+// Clicks stay in the engine (delegated listeners data-help-action, data-route-event…); the click
 // on the backdrop is set by the engine on the node returned by overlay().
 
 // Shared frame. `k`: name of the close button's data-… attribute.
 export function Window({ id, tid, k, titre: heading, children }) {
   return (
-    <div id={id} className="hp452">
-      <div className="hp452-c" role="dialog" aria-modal="true" aria-labelledby={tid}>
+    <div id={id} className="battle-help">
+      <div className="battle-help-c" role="dialog" aria-modal="true" aria-labelledby={tid}>
         <header>
           <h3 id={tid}>{heading}</h3>
           <button type="button" className="sh-x" {...{ ['data-' + k]: 'close' }} aria-label="Fermer">
             ×
           </button>
         </header>
-        <div className="hp452-b">{children}</div>
+        <div className="battle-help-b">{children}</div>
       </div>
     </div>
   );
 }
 
-// Choice button (.ev454-c): label, detail (<small>) if `eff` is not null.
+// Choice button (.routeEvent-c): label, detail (<small>) if `eff` is not null.
 function Choice({ k, v, ok = true, l, eff = null }) {
   return (
-    <button type="button" className="ev454-c" {...{ ['data-' + k]: v }} disabled={!ok}>
+    <button type="button" className="route-event-c" {...{ ['data-' + k]: v }} disabled={!ok}>
       <b>{l}</b>
       {eff != null ? <small>{eff}</small> : null}
     </button>
   );
 }
 
-// Battle help (#hp452, v4.52 · Help452 in 082).
-export function Help452({ d }) {
+// Battle help (#battleHelp, v4.52 · BattleHelp in 082).
+export function BattleHelp({ d }) {
   return (
-    <Window id="hp452" tid="hp452t" k="b452" titre="Aide du combat">
+    <Window id="battle-help" tid="battle-help-t" k="help-action" titre="Aide du combat">
       {d.sel && (
         <section>
           <h4>{d.sel.n} · votre sélection</h4>
@@ -86,23 +86,23 @@ export function Help452({ d }) {
   );
 }
 
-// Encounter on the route (#evs454, v4.54); `res`: outcome after a choice (evPick454).
-export function Ev454({ d }) {
+// Encounter on the route (#eventChoice, v4.54); `res`: outcome after a choice (pickRouteChoice).
+export function RouteEncounter({ d }) {
   return (
-    <Window id="evs454" tid="evt454" k="ev454" titre={d.t}>
+    <Window id="event-choice" tid="encounter-title" k="route-event" titre={d.t}>
       {d.res ? (
         <>
           <p>
             <b>{d.res.ok ? 'Bonne nouvelle' : 'Pas de chance'}</b>
           </p>
           <p>{d.res.txt}</p>
-          <Choice k="ev454" v="close" l="Continuer" />
+          <Choice k="route-event" v="close" l="Continuer" />
         </>
       ) : (
         <>
           <p>{d.x}</p>
           {d.c.map((c, j) => (
-            <Choice key={j} k="ev454" v={j} {...c} />
+            <Choice key={j} k="route-event" v={j} {...c} />
           ))}
         </>
       )}
@@ -110,33 +110,33 @@ export function Ev454({ d }) {
   );
 }
 
-// Secret place on the map (#sc460, v4.60).
-export function Sc460({ d }) {
+// Secret place on the map (#secretPlaces, v4.60).
+export function SecretPlace({ d }) {
   return (
-    <Window id="sc460" tid="sct460" k="sc460" titre={d.n}>
+    <Window id="secret-places" tid="secret-title" k="secret-places" titre={d.n}>
       <p>{d.lore}</p>
       <p>
         <b>{d.msg}</b>
       </p>
-      <Choice k="sc460" v="close" l="Continuer" />
+      <Choice k="secret-places" v="close" l="Continuer" />
     </Window>
   );
 }
 
-// Passing character (#pn460, v4.60); `res`: reply after a choice (pnPick460).
-export function Npc460({ d }) {
+// Passing character (#passerby, v4.60); `res`: reply after a choice.
+export function PassingNpc({ d }) {
   return (
-    <Window id="pn460" tid="pnt460" k="pn460" titre={d.n}>
+    <Window id="passerby" tid="npc-title" k="passerby" titre={d.n}>
       {d.res != null ? (
         <>
           <p>{d.res}</p>
-          <Choice k="pn460" v="close" l="Continuer" />
+          <Choice k="passerby" v="close" l="Continuer" />
         </>
       ) : (
         <>
           <p>{d.x}</p>
           {d.c.map((c, j) => (
-            <Choice key={j} k="pn460" v={j} {...c} />
+            <Choice key={j} k="passerby" v={j} {...c} />
           ))}
         </>
       )}
@@ -144,10 +144,10 @@ export function Npc460({ d }) {
   );
 }
 
-// Companion keepsakes (#souv461, v4.61): one keepsake per heart.
-export function Souv461({ d }) {
+// Companion keepsakes (#souvenirs, v4.61): one keepsake per heart.
+export function CompanionKeepsakes({ d }) {
   return (
-    <Window id="souv461" tid="souvt461" k="cp461" titre={'Souvenirs de ' + d.n}>
+    <Window id="souvenirs" tid="keepsake-title" k="buddy" titre={'Souvenirs de ' + d.n}>
       {d.rows.map((t, k) => {
         const i = k + 1;
         return t != null ? (
@@ -155,20 +155,20 @@ export function Souv461({ d }) {
             <b>{'♥'.repeat(i)}</b> {t}
           </p>
         ) : (
-          <p key={i} className="cp461-l">
+          <p key={i} className="buddy-l">
             <b>{'♥'.repeat(i)}</b> Un souvenir se débloquera à {i} cœur{i > 1 ? 's' : ''}.
           </p>
         );
       })}
-      <Choice k="cp461" v="close" l="Fermer" />
+      <Choice k="buddy" v="close" l="Fermer" />
     </Window>
   );
 }
 
-// Monthly seasonal event (#sa465o, v4.65).
-export function Sa465({ d }) {
+// Monthly seasonal event (#seasonEventO, v4.65).
+export function SeasonEvent({ d }) {
   return (
-    <Window id="sa465o" tid="sat465" k="sa465" titre={d.n}>
+    <Window id="season-event-o" tid="season-title" k="season-event" titre={d.n}>
       <p>{d.d}</p>
       <p>
         <b>Bonus du mois :</b> vos Pokémon de type {d.t} infligent +5 % de dégâts.
@@ -185,7 +185,7 @@ export function Sa465({ d }) {
             <p>{x.txt}</p>
           </div>
           <div className="v4-buy">
-            <button type="button" className="v4-btn" data-sa465={i} disabled={!(x.ok && !x.got)}>
+            <button type="button" className="v4-btn" data-season-event={i} disabled={!(x.ok && !x.got)}>
               {x.got ? 'Reçu' : x.ok ? 'Récupérer' : 'Verrouillé'}
             </button>
           </div>
@@ -196,10 +196,10 @@ export function Sa465({ d }) {
   );
 }
 
-// Boss Rush (#br466o, v4.66): locked, before a run, or run in progress.
-export function Br466({ d }) {
+// Boss Rush (#bossRushO, v4.66): locked, before a run, or run in progress.
+export function BossRush({ d }) {
   return (
-    <Window id="br466o" tid="brt466" k="br466" titre="Boss Rush">
+    <Window id="boss-rush-o" tid="boss-rush-title" k="boss-rush" titre="Boss Rush">
       {d.mode === 'lock' ? (
         <p>Le Boss Rush se débloque avec 5 badges.</p>
       ) : d.mode === 'new' ? (
@@ -209,7 +209,7 @@ export function Br466({ d }) {
             combats, et un Pokémon tombé ne revient pas. Après chaque boss, choisissez <b>une relique</b> parmi trois.
             Record : <b>{d.best}</b> · terminés : <b>{d.won}</b>.
           </p>
-          <Choice k="br466" v="start" l="Commencer un run" eff={'Équipe actuelle · ' + d.teamNames} />
+          <Choice k="boss-rush" v="start" l="Commencer un run" eff={'Équipe actuelle · ' + d.teamNames} />
         </>
       ) : (
         <>
@@ -231,13 +231,13 @@ export function Br466({ d }) {
                 <b>Choisissez une relique :</b>
               </p>
               {d.pend.map(r => (
-                <Choice key={r.id} k="br466" v={'rel:' + r.id} l={r.n} eff={r.d} />
+                <Choice key={r.id} k="boss-rush" v={'rel:' + r.id} l={r.n} eff={r.d} />
               ))}
             </>
           ) : (
-            <Choice k="br466" v="go" l={`Lancer le boss ${d.i + 1} : ${d.boss}`} />
+            <Choice k="boss-rush" v="go" l={`Lancer le boss ${d.i + 1} : ${d.boss}`} />
           )}
-          <button type="button" className="b b-sm b-ghost" data-br466="abandon">
+          <button type="button" className="b b-sm b-ghost" data-boss-rush="abandon">
             Abandonner le run
           </button>
         </>
@@ -246,16 +246,21 @@ export function Br466({ d }) {
   );
 }
 
-// Defense gym (#df468o, v4.68).
-export function Df468({ d }) {
+// Defense gym (#defenseGymO, v4.68).
+export function DefenseGym({ d }) {
   return (
-    <Window id="df468o" tid="dft468" k="df468" titre="Arène de défense">
+    <Window id="defense-gym-o" tid="defense-gym-title" k="defense-gym" titre="Arène de défense">
       <p>{d.d}</p>
       <p>
         Record : <b>{d.best}</b> vague{d.best > 1 ? 's' : ''} · défenses réussies : <b>{d.won}</b>.
       </p>
       {d.ok ? (
-        <Choice k="df468" v="go" l="Défendre" eff="Votre équipe actuelle · récompenses selon les vies restantes" />
+        <Choice
+          k="defense-gym"
+          v="go"
+          l="Défendre"
+          eff="Votre équipe actuelle · récompenses selon les vies restantes"
+        />
       ) : (
         <p>Débloquée avec 3 badges.</p>
       )}
@@ -263,11 +268,11 @@ export function Df468({ d }) {
   );
 }
 
-// « Défis » (Challenges) hub (#x470o, v4.71 · 103). The original template's line breaks are kept.
-export function X470({ d }) {
+// « Défis » (Challenges) hub (#dailyChallengesO, v4.71 · 103). The original template's line breaks are kept.
+export function ChallengesHub({ d }) {
   const nl = '\n';
   return (
-    <Window id="x470o" tid="x470t" k="x470" titre="Défis du jour">
+    <Window id="daily-challenges-o" tid="daily-challenges-t" k="daily-challenges" titre="Défis du jour">
       {nl}
       {d.shadowState.fin ? (
         <p>
@@ -279,7 +284,7 @@ export function X470({ d }) {
             <b>Les Ombres de Résonance</b> · épisode {d.shadowState.e + 1}/4
           </p>
           <Choice
-            k="x470"
+            k="daily-challenges"
             v="omb"
             ok={d.shadowState.available}
             l={d.shadowState.available ? d.shadowState.titre : 'Épisode verrouillé'}
@@ -296,7 +301,7 @@ export function X470({ d }) {
       </p>
       {nl}
       <Choice
-        k="x470"
+        k="daily-challenges"
         v="dq"
         ok={!d.fait}
         l={d.fait ? 'Défi du jour réussi' : 'Lancer le défi du jour'}
@@ -308,7 +313,7 @@ export function X470({ d }) {
       </p>
       {nl}
       <Choice
-        k="x470"
+        k="daily-challenges"
         v="rev"
         ok={!(d.fossils < 1 || !d.freeSlots)}
         l="Ressusciter un spécimen"
@@ -323,13 +328,13 @@ export function X470({ d }) {
       {d.preOk ? (
         <>
           <Choice
-            k="x470"
+            k="daily-challenges"
             v="pre+"
             ok={d.pre.n < 5}
             l="Monter de niveau"
             eff="Adversaires +2 PV par niveau · +150 ₽ par niveau à chaque victoire"
           />
-          <Choice k="x470" v="pre" l={(d.pre.on ? 'Désactiver' : 'Activer') + ' le prestige'} />
+          <Choice k="daily-challenges" v="pre" l={(d.pre.on ? 'Désactiver' : 'Activer') + ' le prestige'} />
         </>
       ) : (
         <p>Débloqué avec 8 badges ou la Ligue.</p>

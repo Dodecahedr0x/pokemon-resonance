@@ -3,7 +3,7 @@
 import { $, $$ } from './014-utils.js';
 import { HOOKS } from './015-hooks.js';
 import { cur } from './016-navigation.js';
-import { PREF, calm472, savePref } from './026-campaign-tutorial-sound.js';
+import { PREF, calmMotion, savePref } from './026-campaign-tutorial-sound.js';
 import { renderParams } from './040-settings.js';
 
 // Statements executed at startup, in the original order (see index.js).
@@ -11,7 +11,7 @@ export function __init() {
   (() => {
     const H = document.documentElement;
     const on = k => PREF[k] !== 0;
-    const doApply = () => H.classList.toggle('pk-calme', !on('pk472a'));
+    const doApply = () => H.classList.toggle('pk-calme', !on('pokemonSkinA'));
 
     /* ---------- added elements: #pk-fond and #pk-iris are rendered by React
      (src/screens/overlays/Effects.jsx); the iris's .go class is still set here ---------- */
@@ -22,7 +22,7 @@ export function __init() {
     /* ---------- Poké Ball opening (bottom bar and menu) ---------- */
     let tIris = 0;
     const openOverlay = () => {
-      if (calm472() || !on('pk472t')) {
+      if (calmMotion() || !on('pokemonSkinT')) {
         return;
       }
       iris.classList.remove('go');
@@ -53,7 +53,7 @@ export function __init() {
     const CAND = '.v4-panel,.v4-hero,.case,.sel-card,.gd-p,.gd-intro,.v4-it,.v4-qm,.cb-b,.v4-stats,.v4d-sec,.tip';
     let tEntry = 0;
     const entrance = () => {
-      if (calm472()) {
+      if (calmMotion()) {
         return;
       }
       const pg = $('.page.on');
@@ -94,7 +94,7 @@ export function __init() {
       'pointerdown',
       e => {
         const b = e.target.closest && e.target.closest('.b-gold,.v4-cta');
-        if (!b || calm472()) {
+        if (!b || calmMotion()) {
           return;
         }
         const cs = getComputedStyle(b);
@@ -117,11 +117,11 @@ export function __init() {
     /* ---------- Settings: skin options ---------- */
     // "Habillage Pokémon" (Pokémon skin) panel: rendered by React (src/screens/settings/panels/PokemonSkin.jsx)
     document.addEventListener('click', e => {
-      const b = e.target.closest && e.target.closest('[data-pk472]');
+      const b = e.target.closest && e.target.closest('[data-pokemon-skin]');
       if (!b) {
         return;
       }
-      const k = b.dataset.pk472 === 't' ? 'pk472t' : 'pk472a';
+      const k = b.dataset.pokemonSkin === 't' ? 'pokemon-skin-t' : 'pokemon-skin-a';
       PREF[k] = on(k) ? 0 : 1;
       savePref();
       doApply();
@@ -129,6 +129,6 @@ export function __init() {
     });
     doApply();
 
-    window.__styling472 = { openOverlay, entrance };
+    window.__skinStyling = { openOverlay, entrance };
   })();
 }

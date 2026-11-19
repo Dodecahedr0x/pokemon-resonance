@@ -1,6 +1,6 @@
-import { css442 } from '../../../engine/075-css-design-workshop.js';
+import { customCss } from '../../../engine/075-css-design-workshop.js';
 
-// Settings › Design workshop (v4.42): buttons #ad442a/r/b handled by the engine (module 075).
+// Settings › Design workshop (v4.42): buttons #designActionA/r/b handled by the engine (module 075).
 const BOX = {
   width: '100%',
   boxSizing: 'border-box',
@@ -14,33 +14,33 @@ const BOX = {
 
 export default function DesignWorkshop() {
   return (
-    <section className="v4-panel" id="ad442">
+    <section className="v4-panel" id="design-action">
       <h3 className="h3">Atelier design</h3>
       <p className="v4-note">
         Collez ici un bloc de CSS (écrit par exemple avec ChatGPT) : il s’applique tout de suite sur cet appareil. «
         Brief pour ChatGPT » donne à votre IA tout ce qu’il lui faut sans lui faire lire le fichier du jeu.
       </p>
       <textarea
-        id="ad442t"
+        id="design-action-t"
         rows="7"
         spellCheck="false"
         autoComplete="off"
         placeholder=":root{ --… } …"
         style={{ ...BOX, resize: 'vertical' }}
-        defaultValue={css442()}
+        defaultValue={customCss()}
       />
       <div className="sv-io">
-        <button type="button" className="b b-sm b-gold" id="ad442a">
+        <button type="button" className="b b-sm b-gold" id="design-action-a">
           Appliquer
         </button>
-        <button type="button" className="b b-sm" id="ad442r">
+        <button type="button" className="b b-sm" id="design-action-r">
           Retirer mon CSS
         </button>
-        <button type="button" className="b b-sm" id="ad442b">
+        <button type="button" className="b b-sm" id="design-action-b">
           Brief pour ChatGPT
         </button>
       </div>
-      <textarea id="ad442k" rows="8" readOnly hidden style={{ ...BOX, marginTop: '8px' }} defaultValue="" />
+      <textarea id="design-action-k" rows="8" readOnly hidden style={{ ...BOX, marginTop: '8px' }} defaultValue="" />
     </section>
   );
 }

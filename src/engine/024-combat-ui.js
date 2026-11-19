@@ -75,25 +75,25 @@ import {
   unitsDirty,
 } from '../screens/combat/board/boardStore.js';
 import { hasXp, bossScene, notesOf } from './053-resonance.js';
-import { resoCand417, scene417, tournamentTeam417 } from './057-companions-resonance.js';
-import { coopPass418, player418 } from './058-fishing-safari-coop.js';
-import { surrounded420 } from './060-intense-combat.js';
-import { dl428, quick428 } from './063-combat-catches-home.js';
+import { resonanceCandidate, storyScene, tournamentTeam } from './057-companions-resonance.js';
+import { coopPassTurn, coopPlayer } from './058-fishing-safari-coop.js';
+import { isSurrounded } from './060-intense-combat.js';
+import { battleDelay, endSkipSpeedup } from './063-combat-catches-home.js';
 import {
-  RIV429,
-  ouch429,
-  after429,
-  weeklyBuild429,
-  weeklyTeam429,
-  lockLegendary429,
-  liveRender429,
-  liveTok429,
+  RIVAL_CHALLENGES,
+  hurtFlash,
+  afterBattleScene,
+  buildWeeklyChallenge,
+  weeklyTeam,
+  lockLegendaryCapture,
+  liveRender,
+  liveToken,
 } from './064-quality.js';
-import { afterRender430, campOk430, docChosen430 } from './065-camp-tactics.js';
-import { afterRender431, fogChosen431, fixedProgress431, fixedTeam431 } from './066-tactical-challenges.js';
-import { afterRender433, duelPass433 } from './068-duel-tutorial.js';
-import { gauge434 } from './069-calibration-eevee.js';
-import { announceGim467 } from './098-feats-journal-gimmick-boards.js';
+import { afterRenderTactics, campOpen, chosenDoctrine } from './065-camp-tactics.js';
+import { afterRenderFog, chosenFog, noProgressResult, fixedTeam } from './066-tactical-challenges.js';
+import { afterRenderDuel, duelPassTurn } from './068-duel-tutorial.js';
+import { fitPhoneBattle } from './069-calibration-eevee.js';
+import { announceGimmick } from './098-feats-journal-gimmick-boards.js';
 
 export let VERT, MQV, B, LOG, scSel;
 export function __set_GREEN(v) {
@@ -200,12 +200,12 @@ export function battleOpts() {
     livingBoard: chosenAlive(), // living board (v4.7-01)
     tactics: chosenTactic(), // Advanced Tactics (v4.8-01)
     mut: mutTraining(), // mutator in Training (v4.9-01)
-    doc430: docChosen430(), // doctrine (v4.30)
-    fog431: fogChosen431(), // fog of war (v4.31)
+    doctrineChoice: chosenDoctrine(), // doctrine (v4.30)
+    fogOfWar: chosenFog(), // fog of war (v4.31)
     challenges: activeChallenges(), // campaign challenges (v4.9-01)
     characters: charactersChosen(), // characters (v4.10-01)
     disobedience: disobedienceChosen(),
-    dojo: campOk430() ? level('dojo') : 0,
+    dojo: campOpen() ? level('dojo') : 0,
     learnedTms: PROFILE.learnedTms, // CT et CS (v4.6-01)
   };
 }
@@ -220,7 +220,7 @@ export function launch() {
   hook('beforeLaunch');
   const previous = B;
   // story scenes (v4.17): the scene replaces the battle
-  if (!scene417(scSel)) {
+  if (!storyScene(scSel)) {
     __set_tutorialI(SCEN[scSel] && SCEN[scSel].tuto ? 0 : -1);
     launchCore();
     if (B && !AUTO) {
@@ -238,16 +238,16 @@ export function launch() {
 }
 
 function launchCore() {
-  if (!squad.length && !fixedTeam431()) {
+  if (!squad.length && !fixedTeam()) {
     return;
   }
   if (scSel === 'hebdo429') {
-    weeklyBuild429();
+    buildWeeklyChallenge();
   } // the week may have changed (v4.29)
   const lk =
     scenLock(scSel) ||
-    lockLegendary429(scSel) ||
-    (scSel === 'hebdo429' || (SCEN[scSel] || {}).noProgress431 ? null : challengeLaunch()); // campaign challenges (v4.9-01), legendary quests (v4.29)
+    lockLegendaryCapture(scSel) ||
+    (scSel === 'hebdo429' || (SCEN[scSel] || {}).noProgress ? null : challengeLaunch()); // campaign challenges (v4.9-01), legendary quests (v4.29)
   if (lk) {
     toast(lk);
     renderPrep();
@@ -256,14 +256,14 @@ function launchCore() {
   if (scSel === 'champ') {
     champBuild();
   }
-  if (rivalIdx(scSel) >= 0 || RIV429[scSel]) {
+  if (rivalIdx(scSel) >= 0 || RIVAL_CHALLENGES[scSel]) {
     rivalBuild();
   }
   if (scSel === 'tdr' && !towerRun()) {
     towerDraft(); // no ascent yet: choose your team first
     return;
   }
-  const T = scSel === 'tdr' ? towerTeam() : weeklyTeam429() || fixedTeam431() || tournamentTeam417(); // weekly challenge (v4.29), riddle and Deep Echo (v4.31) // Resonance Tower, tournament between friends (v4.17): the team is frozen
+  const T = scSel === 'tdr' ? towerTeam() : weeklyTeam() || fixedTeam() || tournamentTeam(); // weekly challenge (v4.29), riddle and Deep Echo (v4.31) // Resonance Tower, tournament between friends (v4.17): the team is frozen
   B = T
     ? newBattle(scSel, T.team, T.voice, T.opts) // the Tower ignores the budget: only the Voices earned count
     : newBattle(scSel, squad.slice(0, teamSize()), vBonus(), battleOpts()); // Team of 3 (v4.9-01)
@@ -286,7 +286,7 @@ function launchCore() {
   $('#cbBattle').hidden = false;
   $('#cbResult').hidden = true;
   $('#evoPick').hidden = true;
-  const aev = [...arenaSetup(B), ...announceGim467(B)];
+  const aev = [...arenaSetup(B), ...announceGimmick(B)];
   buildBoard();
   log(`${SCEN[scSel].n} : à vous de jouer. Touchez un adversaire pour voir sa portée.`, 'sys');
   aev.forEach(x => {
@@ -403,7 +403,7 @@ function mkTok(u) {
   if (u.colossus) {
     c.push('colosse');
   }
-  return liveTok429({
+  return liveToken({
     uid: u.uid,
     c, // token classes (classList order)
     sh: u.shiny ? shinyHue(u.sp) + 'deg' : null, // --sh
@@ -452,17 +452,20 @@ function updTokCore(u) {
   cl('sel', ui.sel === u.uid || ui.selE === u.uid);
   cl('done', u.side === 'a' && u.acted && !u.ko && B.phase === 'player');
   cl('act', ui.act === u.uid);
-  cl('has-en', !u.ko && (u.side === 'a' || B.duel433 ? nx || hasXp(u) || resoCand417(B, u) : bossScene(B) && hasXp(u))); // v4.14: diamonds of Expert attacks
-  cl('ready', u.side === 'a' && (nx || resoCand417(B, u)) && u.en >= EMAX && !u.ko);
+  cl(
+    'has-en',
+    !u.ko && (u.side === 'a' || B.duel433 ? nx || hasXp(u) || resonanceCandidate(B, u) : bossScene(B) && hasXp(u))
+  ); // v4.14: diamonds of Expert attacks
+  cl('ready', u.side === 'a' && (nx || resonanceCandidate(B, u)) && u.en >= EMAX && !u.ko);
   cl('fres', u.resonant > 0 && !u.ko); // Resonant Form (v4.17)
-  cl('cj1', !!B.coop && u.side === 'a' && player418(u) === 1); // co-op (v4.18)
-  cl('cj2', !!B.coop && u.side === 'a' && player418(u) === 2);
-  cl('cjoff', !!B.coop && u.side === 'a' && player418(u) !== B.coop && B.phase === 'player');
-  cl('vigil420', !!u.vigilance && !u.ko); // v4.20
-  cl('enc420', surrounded420(B, u));
-  cl('ph2', u.phase420 === 2 && !u.ko);
-  cl('ph3', u.phase420 === 3 && !u.ko);
-  cl('dg420', !u.ko && !!(B.danger420 && B.danger420.k.includes(uk(u)))); // inside an announced zone
+  cl('cj1', !!B.coop && u.side === 'a' && coopPlayer(u) === 1); // co-op (v4.18)
+  cl('cj2', !!B.coop && u.side === 'a' && coopPlayer(u) === 2);
+  cl('cjoff', !!B.coop && u.side === 'a' && coopPlayer(u) !== B.coop && B.phase === 'player');
+  cl('vigil-strike', !!u.vigilance && !u.ko); // v4.20
+  cl('encircled', isSurrounded(B, u));
+  cl('ph2', u.bossPhase === 2 && !u.ko);
+  cl('ph3', u.bossPhase === 3 && !u.ko);
+  cl('in-danger', !u.ko && !!(B.dangerZone && B.dangerZone.k.includes(uk(u)))); // inside an announced zone
   cl('evw', foeEvo(B, u));
   cl('evolved', !!u.evo);
   const nN = notesOf(B, u); // Resonance notes (v4.14)
@@ -547,8 +550,8 @@ function segHpBase(u) {
 // (src/screens/combat/battle). Here, the render's side effects, then the update.
 function renderTop() {
   hourTint(B);
-  quick428(); // « Passer » (Skip) during the opponent's turn (v4.28): the speed-up ends outside the opponent's turn
-  liveRender429(); // animations, tips (v4.29)
+  endSkipSpeedup(); // « Passer » (Skip) during the opponent's turn (v4.28): the speed-up ends outside the opponent's turn
+  liveRender(); // animations, tips (v4.29)
   refreshBattle('top', 'foot');
   turnBanners();
 }
@@ -583,14 +586,14 @@ export function cinematic(fromN, fromT, toN, toT, side, uid) {
     o.ox = ((x / VB()[0]) * 100).toFixed(1) + '%';
     o.oy = ((y / VB()[1]) * 100).toFixed(1) + '%';
   }
-  evoSet({ ...o, on: true, fx: { fromN, fromT, toN, toT, side }, fast: !!(PREF.fast || ui.turbo428) });
+  evoSet({ ...o, on: true, fx: { fromN, fromT, toN, toT, side }, fast: !!(PREF.fast || ui.skipSpeedup) });
   ui.cutscene = true;
   if (B) {
     renderAll();
   }
   sfx('evo');
   vibe([15, 25, 15, 25, 70]);
-  return wait(dl428(650, 1300, 2500)).then(() => {
+  return wait(battleDelay(650, 1300, 2500)).then(() => {
     evoSet({ on: false, fx: null });
     ui.cutscene = false;
   });
@@ -616,10 +619,10 @@ export function renderAll() {
   renderAllCore();
   queueSave();
   renderCoach();
-  afterRender430(); // sky, deployment, doctrine (v4.30)
-  afterRender431(); // fog, riddle (v4.31)
-  afterRender433(); // local duel (v4.33)
-  gauge434(); // battle on phone (v4.34)
+  afterRenderTactics(); // sky, deployment, doctrine (v4.30)
+  afterRenderFog(); // fog, riddle (v4.31)
+  afterRenderDuel(); // local duel (v4.33)
+  fitPhoneBattle(); // battle on phone (v4.34)
   hook('rendered');
 }
 
@@ -703,7 +706,7 @@ function hit(uid) {
       T.hit = false;
       unitsDirty();
     }, 450);
-    ouch429(uid); // the Pokémon recoils from the blow (v4.29)
+    hurtFlash(uid); // the Pokémon recoils from the blow (v4.29)
   }
   hook('touche', uid);
 }
@@ -777,7 +780,7 @@ export function autoSel() {
         ? cur && cur.side === 'a'
           ? cur
           : null
-        : B.units.find(x => x.side === 'a' && !x.ko && !x.acted && (!B.coop || player418(x) === B.coop));
+        : B.units.find(x => x.side === 'a' && !x.ko && !x.acted && (!B.coop || coopPlayer(x) === B.coop));
   ui.sel = nx ? nx.uid : null;
   ui.selE = null;
   ui.mode = null;
@@ -936,14 +939,14 @@ function endTurn() {
   if (!B || ui.busy || B.over || B.phase !== 'player') {
     return;
   }
-  if (coopPass418()) {
+  if (coopPassTurn()) {
     return;
   } // co-op: Player 1 hands over to Player 2 (v4.18)
-  if (duelPass433()) {
+  if (duelPassTurn()) {
     return;
   } // local duel: each takes a turn (v4.33)
   ui.busy = true;
-  ui.turbo428 = false;
+  ui.skipSpeedup = false;
   ui.undo = null;
   ui.tile = null;
   clearAim();
@@ -978,9 +981,9 @@ function endTurn() {
     const ev = execFoe(B, uid);
     renderAll();
     playEv(ev);
-    setTimeout(step, dl428(200, 380, 900));
+    setTimeout(step, battleDelay(200, 380, 900));
   };
-  setTimeout(step, dl428(60, 160, 420));
+  setTimeout(step, battleDelay(60, 160, 420));
 }
 
 /** v4.12: opponent's move before its attack. Returns true if the battle changed in the meantime. */
@@ -995,7 +998,7 @@ export async function placeEnemy(S0, uid) {
   renderAll();
   playEv(pre);
   if (pre.some(x => x.e === 'mv')) {
-    await new Promise(r => setTimeout(r, dl428(60, 240, 460)));
+    await new Promise(r => setTimeout(r, battleDelay(60, 240, 460)));
   }
   return !B || B !== S0;
 }
@@ -1035,7 +1038,7 @@ export function finish() {
     B._rk = 1;
     const r = rankOf(B);
     B.rank = r;
-    if (r && SCEN[B.sc] && B.sc !== 'sauvage' && !SCEN[B.sc].noProgress431) {
+    if (r && SCEN[B.sc] && B.sc !== 'sauvage' && !SCEN[B.sc].noProgress) {
       PROFILE.ranks = PROFILE.ranks || {};
       const o = PROFILE.ranks[B.sc];
       B.rankNew = !o || RK.indexOf(r) > RK.indexOf(o);
@@ -1048,15 +1051,15 @@ export function finish() {
   // statistics and progression
   if (B && B.over && !B._counted) {
     B._counted = true;
-    if ((SCEN[B.sc] || {}).noProgress431) {
+    if ((SCEN[B.sc] || {}).noProgress) {
       // riddle, custom arena, Deep Echo: neither counters nor ordinary progression (v4.31)
       SV.lastBattle = null;
-      B.rew = fixedProgress431(B);
+      B.rew = noProgressResult(B);
     } else {
       PROFILE.battles++;
       if (B.over === 'win') {
         PROFILE.wins++;
-      } else if (!B.flee416) {
+      } else if (!B.fled) {
         PROFILE.losses++;
       } // a beast that runs away is not a defeat (v4.16)
       PROFILE.awakenings += B.stats.evo || 0;
@@ -1081,7 +1084,7 @@ export function finish() {
       sfx(win ? 'win' : 'lose');
       refreshBattle('result'); // result sheet, rank and quote (v2.4), Nuzlocke, victory: Result.jsx
       $('#cbResult').hidden = false;
-      after429(B.sc, win); // post-battle scene (v4.29)
+      afterBattleScene(B.sc, win); // post-battle scene (v4.29)
       const f = $('#cbResult [data-res="again"]');
       if (f) {
         f.focus();

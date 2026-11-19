@@ -3,8 +3,8 @@ import { PROFILE } from '../../engine/011-game-state.js';
 import { medal } from '../../engine/014-utils.js';
 import { ITM, fmt, today } from '../../engine/032-v4-foundation.js';
 import { BUILDINGS, DESTINATIONS, buildingBlocked, level, placesExp } from '../../engine/049-identity.js';
-import { pair416, heritable416, parents416 } from '../../engine/055-living-johto.js';
-import { POTAGER, POT_I, sprout417 } from '../../engine/057-companions-resonance.js';
+import { daycarePair, inheritableMoves, daycareParents } from '../../engine/055-living-johto.js';
+import { POTAGER, POT_I, plotSprout } from '../../engine/057-companions-resonance.js';
 import { Html } from '../../lib/html.jsx';
 
 const pl = (n, token) => `${n} ${token}${n > 1 ? 's' : ''}`;
@@ -68,8 +68,8 @@ function Daycare() {
   if (!pe) {
     return null;
   }
-  const c = pair416(),
-    P2 = parents416(),
+  const c = daycarePair(),
+    P2 = daycareParents(),
     remainder = Math.max(0, [8, 6, 4][pe - 1] - (PROFILE.camp.oeuf || 0)),
     slot = id =>
       id ? (
@@ -87,7 +87,7 @@ function Daycare() {
       );
   let txt;
   if (P2) {
-    const L = heritable416(P2.mother, P2.father);
+    const L = inheritableMoves(P2.mother, P2.father);
     txt = `Prochain œuf dans ${pl(remainder, 'combat')} : un ${BY[P2.mother].n}${L.length ? `, qui héritera d’une attaque de ${BY[P2.father].n}` : ''}${P2.meta ? ' (Métamorph : deux fois plus de chances de chromatique)' : ''}.`;
   } else if (c.length === 2) {
     txt = 'Ces deux-là ne s’entendent pas : il faut un type en commun, ou Métamorph.';
@@ -141,7 +141,7 @@ function Plot({ x, i }) {
       </button>
     );
   }
-  const r = sprout417(x),
+  const r = plotSprout(x),
     G = POTAGER[x.g];
   return r ? (
     <div className="pt-p pousse">
@@ -172,7 +172,7 @@ function Garden() {
           <Plot key={i} x={x} i={i} />
         ))}
       </div>
-      {P2.some(x => x && sprout417(x) > 0) ? (
+      {P2.some(x => x && plotSprout(x) > 0) ? (
         <button type="button" className="b b-sm" data-pot-eau="" disabled={watered}>
           {watered ? 'Arrosé aujourd’hui ✓' : 'Arroser (une fois par jour)'}
         </button>

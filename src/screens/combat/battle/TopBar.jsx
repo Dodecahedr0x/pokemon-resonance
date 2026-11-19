@@ -9,16 +9,16 @@ import { medal, tc } from '../../../engine/014-utils.js';
 import { badgeSvg } from '../../../engine/019-league.js';
 import { byUid } from '../../../engine/021-combat-engine.js';
 import { B, ui } from '../../../engine/024-combat-ui.js';
-import { enemyTurn428 } from '../../../engine/063-combat-catches-home.js';
+import { isEnemyTurn } from '../../../engine/063-combat-catches-home.js';
 import { currentActor } from '../../../engine/044-tactical-engine.js';
 import { chipTime } from '../../../engine/046-living-board.js';
 import { chipWind } from '../../../engine/047-tactics.js';
 import { chipMut } from '../../../engine/048-replayability.js';
 import { chipChord } from '../../../engine/049-identity.js';
-import { chips412 } from '../../../engine/051-epic-tms.js';
+import { fieldEffectChips } from '../../../engine/051-epic-tms.js';
 import { PREF } from '../../../engine/026-campaign-tutorial-sound.js';
-import { DOCTRINES430 } from '../../../engine/065-camp-tactics.js';
-import { RELICS431 } from '../../../engine/066-tactical-challenges.js';
+import { DOCTRINE_DEFS } from '../../../engine/065-camp-tactics.js';
+import { RELIC_DEFS } from '../../../engine/066-tactical-challenges.js';
 import { useBattleVersion } from './battleStore.js';
 
 // Top banner: battle name, round, chips (weather, time, wind…), Voice, ×2, Abandon.
@@ -70,14 +70,14 @@ export function phaseOf(B0) {
   if (!B0 || B0.over) {
     return null;
   }
-  if (B0.dep430) {
+  if (B0.deployPhase) {
     return 'deploy';
   }
   if (ui.cutscene) {
     return 'evo';
   }
   if (ui.busy) {
-    return enemyTurn428() || B0.phase === 'enemy' ? 'enemy' : 'busy';
+    return isEnemyTurn() || B0.phase === 'enemy' ? 'enemy' : 'busy';
   }
   return 'own';
 }
@@ -94,7 +94,7 @@ function Phase() {
   );
 }
 
-// "×2" button: its state follows the setting (quick428).
+// "×2" button: its state follows the setting (endSkipSpeedup).
 function Quick() {
   const v = useBattleVersion('fast');
   return (
@@ -113,7 +113,7 @@ function Quick() {
 // Chips: weather, time, wind, mutator, chord, TM (engine functions), then doctrine (v4.30),
 // relics and fog (v4.31).
 function Chips() {
-  const doc = B.doc430 && DOCTRINES430[B.doc430];
+  const doc = B.doctrineChoice && DOCTRINE_DEFS[B.doctrineChoice];
   return (
     <>
       {B.wx && (
@@ -122,21 +122,21 @@ function Chips() {
           {WXN[B.wx.k]} · {B.wx.n}
         </span>
       )}
-      <Html html={chipTime(B) + chipWind(B) + chipMut(B) + chipChord(B) + chips412(B)} />
+      <Html html={chipTime(B) + chipWind(B) + chipMut(B) + chipChord(B) + fieldEffectChips(B)} />
       {doc && (
-        <span className="chip chip-doc430" title={`${doc.d} ${doc.c}`}>
+        <span className="chip chip-doctrine-choice" title={`${doc.d} ${doc.c}`}>
           <svg>
             <use href="#i-doctrine" />
           </svg>
           {doc.n}
         </span>
       )}
-      {B.sc === 'echo431' && B.relics431 && B.relics431.length > 0 && (
-        <span className="chip chip-rel431" title={B.relics431.map(k => RELICS431[k][0]).join(', ')}>
-          {B.relics431.length} relique{B.relics431.length > 1 ? 's' : ''}
+      {B.sc === 'echo431' && B.relicBag && B.relicBag.length > 0 && (
+        <span className="chip chip-relic-chip" title={B.relicBag.map(k => RELIC_DEFS[k][0]).join(', ')}>
+          {B.relicBag.length} relique{B.relicBag.length > 1 ? 's' : ''}
         </span>
       )}
-      {B.fog431 && <span className="chip chip-fog431">Brouillard</span>}
+      {B.fogOfWar && <span className="chip chip-fog-of-war">Brouillard</span>}
     </>
   );
 }

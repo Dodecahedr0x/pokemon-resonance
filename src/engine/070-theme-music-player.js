@@ -6,17 +6,17 @@ import { B } from './024-combat-ui.js';
 import { PREF } from './026-campaign-tutorial-sound.js';
 import { MUS, musPadLevel, musPadStop, musStartCore } from './030-prestige-staging.js';
 import { V4 } from './032-v4-foundation.js';
-import { IM448 } from './079-immersion-sound-haptics.js';
-import { OFF462 } from './093-chronicles-chapters.js';
+import { IMMERSION_ON } from './079-immersion-sound-haptics.js';
+import { OFFLINE_STATE } from './093-chronicles-chapters.js';
 
-export let BGM434;
+export let BGM;
 
-function bgmOk434() {
-  return !/jsdom/i.test(navigator.userAgent || '') && typeof Audio !== 'undefined' && BGM434.failed < 2;
+function bgmOk() {
+  return !/jsdom/i.test(navigator.userAgent || '') && typeof Audio !== 'undefined' && BGM.failed < 2;
 }
 
-function bgmEl434(k) {
-  let a = BGM434.el[k];
+function bgmEl(k) {
+  let a = BGM.el[k];
   if (a) {
     return a;
   }
@@ -27,10 +27,10 @@ function bgmEl434(k) {
     a.volume = 0;
     a.setAttribute('playsinline', '');
     a.addEventListener('error', () => {
-      BGM434.failed++;
-      if (BGM434.failed >= 2 && BGM434.on) {
+      BGM.failed++;
+      if (BGM.failed >= 2 && BGM.on) {
         // tracks not found: back to the ambient pad
-        BGM434.on = false;
+        BGM.on = false;
         try {
           MUS.on = false;
           musStartCore();
@@ -39,19 +39,19 @@ function bgmEl434(k) {
         }
       }
     });
-    a.src = OFF462.urls[k] || BGM434.src[k];
-    BGM434.el[k] = a;
+    a.src = OFFLINE_STATE.urls[k] || BGM.src[k];
+    BGM.el[k] = a;
   } catch (e) {
     a = null;
   }
   return a;
 }
 
-function bgmVol434() {
+function bgmVol() {
   return Math.max(0, Math.min(1, 0.85 * (PREF.musVol === undefined ? 0.7 : PREF.musVol)));
 }
 
-function bgmFade434(a, to, ms, done) {
+function bgmFade(a, to, ms, done) {
   if (!a) {
     return;
   }
@@ -74,7 +74,7 @@ function bgmFade434(a, to, ms, done) {
   }, 50);
 }
 
-function bgmPlay434(a) {
+function bgmPlay(a) {
   try {
     const p = a.play();
     if (p && p.catch) {
@@ -86,7 +86,7 @@ function bgmPlay434(a) {
 }
 
 /* Battles: gym → Gym Leaders medley · Council / Masters → Champion battle · named opponents and duels → trainer battle · the rest → wild battle */
-function bgmCombat434(sc) {
+function bgmCombat(sc) {
   sc = String(sc || '');
   if (/^(a|j|h)[1-8]$/.test(sc)) {
     return 'arene';
@@ -103,20 +103,20 @@ function bgmCombat434(sc) {
   return 'combat';
 }
 
-function bgmScene434() {
+function bgmScene() {
   if (B && !$('#cbBattle').hidden) {
-    const c = bgmCombat434(B.sc);
+    const c = bgmCombat(B.sc);
     if (c === 'rouge' || c === 'champion' || B.over) {
       return c;
     }
     // v4.49: an almost K.O.'d ally (≤ 25%) switches to the "low HP" track; returns when all go back above 35%
     const al = B.units.filter(u => u.side === 'a' && !u.ko);
     if (al.some(u => u.hp / u.mhp <= 0.25)) {
-      B._hp449 = 1;
+      B._lowHpPlayed = 1;
     } else if (!al.some(u => u.hp / u.mhp <= 0.35)) {
-      B._hp449 = 0;
+      B._lowHpPlayed = 0;
     }
-    return B._hp449 && IM448() ? 'pvbas' : c;
+    return B._lowHpPlayed && IMMERSION_ON() ? 'pvbas' : c;
   }
   if (cur === 'accueil') {
     return 'accueil';
@@ -154,28 +154,28 @@ function bgmScene434() {
   return 'camp';
 }
 
-function bgmSync434() {
-  if (!BGM434.on || !PREF.music) {
+function bgmSync() {
+  if (!BGM.on || !PREF.music) {
     return;
   }
-  const sc = bgmScene434();
-  if (!BGMC434.includes(sc) || !(B && !$('#cbBattle').hidden)) {
-    BGM434.silent = false;
+  const sc = bgmScene();
+  if (!BGM_COMBAT.includes(sc) || !(B && !$('#cbBattle').hidden)) {
+    BGM.silent = false;
   }
-  if (BGM434.jingle) {
+  if (BGM.jingle) {
     return;
   }
-  const want = BGM434.silent || !BGM434.vis ? '' : sc;
-  if (want === BGM434.scene && (!want || !BGM434.el[want] || !BGM434.el[want].paused)) {
+  const want = BGM.silent || !BGM.vis ? '' : sc;
+  if (want === BGM.scene && (!want || !BGM.el[want] || !BGM.el[want].paused)) {
     if (want) {
-      bgmFade434(BGM434.el[want], bgmVol434(), 200);
+      bgmFade(BGM.el[want], bgmVol(), 200);
     }
     return;
   }
-  const old = BGM434.el[BGM434.scene];
+  const old = BGM.el[BGM.scene];
   if (old) {
-    bgmFade434(old, 0, 900, () => {
-      if (BGM434.scene !== old._k) {
+    bgmFade(old, 0, 900, () => {
+      if (BGM.scene !== old._k) {
         try {
           old.pause();
         } catch {
@@ -184,45 +184,45 @@ function bgmSync434() {
       }
     });
   }
-  BGM434.scene = want;
+  BGM.scene = want;
   if (!want) {
     return;
   }
-  const a = bgmEl434(want);
+  const a = bgmEl(want);
   if (!a) {
     return;
   }
   a._k = want;
-  bgmPlay434(a);
-  bgmFade434(a, bgmVol434(), 1100);
+  bgmPlay(a);
+  bgmFade(a, bgmVol(), 1100);
 }
 
 export function musStart() {
   if (!PREF.music) {
     return;
   }
-  if (!bgmOk434()) {
+  if (!bgmOk()) {
     musStartCore();
     return;
   }
-  if (BGM434.on) {
-    bgmSync434();
+  if (BGM.on) {
+    bgmSync();
     return;
   }
-  BGM434.on = true;
+  BGM.on = true;
   MUS.on = true; // keeps the pad from also starting
-  clearInterval(BGM434.tmr);
-  BGM434.tmr = setInterval(bgmSync434, 800);
-  bgmSync434();
+  clearInterval(BGM.tmr);
+  BGM.tmr = setInterval(bgmSync, 800);
+  bgmSync();
 }
 
-function bgmStop434() {
-  BGM434.on = false;
+function bgmStop() {
+  BGM.on = false;
   MUS.on = false;
-  clearInterval(BGM434.tmr);
-  Object.keys(BGM434.el).forEach(k => {
-    const a = BGM434.el[k];
-    bgmFade434(a, 0, 600, () => {
+  clearInterval(BGM.tmr);
+  Object.keys(BGM.el).forEach(k => {
+    const a = BGM.el[k];
+    bgmFade(a, 0, 600, () => {
       try {
         a.pause();
       } catch {
@@ -230,8 +230,8 @@ function bgmStop434() {
       }
     });
   });
-  BGM434.scene = '';
-  BGM434.jingle = false;
+  BGM.scene = '';
+  BGM.jingle = false;
   try {
     musPadStop();
   } catch {
@@ -240,19 +240,19 @@ function bgmStop434() {
 }
 
 /* jingle (victory, badge, evolution) over the current music. max = duration in seconds (0 = in full), suite = chained jingle */
-function jingle434(max, k, next) {
+function playJingle(max, k, next) {
   k = k || 'victoire';
-  if (!PREF.music || !BGM434.on || !bgmOk434() || BGM434.jingle) {
+  if (!PREF.music || !BGM.on || !bgmOk() || BGM.jingle) {
     return;
   }
-  const j = bgmEl434(k);
+  const j = bgmEl(k);
   if (!j) {
     return;
   }
-  BGM434.jingle = true;
-  const cur0 = BGM434.el[BGM434.scene];
+  BGM.jingle = true;
+  const cur0 = BGM.el[BGM.scene];
   if (cur0) {
-    bgmFade434(cur0, 0, 400, () => {
+    bgmFade(cur0, 0, 400, () => {
       try {
         cur0.pause();
       } catch {
@@ -265,33 +265,33 @@ function jingle434(max, k, next) {
   } catch {
     /* Best effort: failure here is non-fatal. */
   }
-  bgmPlay434(j);
-  bgmFade434(j, bgmVol434(), 250);
-  BGM434.jk = k;
+  bgmPlay(j);
+  bgmFade(j, bgmVol(), 250);
+  BGM.jk = k;
   const endStep = () => {
     j.removeEventListener('ended', endStep);
     clearTimeout(j._t);
-    bgmFade434(j, 0, 500, () => {
+    bgmFade(j, 0, 500, () => {
       try {
         j.pause();
       } catch {
         /* Best effort: failure here is non-fatal. */
       }
     });
-    BGM434.jingle = false;
-    BGM434.scene = '';
+    BGM.jingle = false;
+    BGM.scene = '';
     if (next) {
-      jingle434(0, next);
-      if (BGM434.jingle) {
+      playJingle(0, next);
+      if (BGM.jingle) {
         return;
       }
     }
     if (k === 'victoire' || k === 'badge') {
-      if (BGMC434.includes(bgmScene434()) && B && B.over) {
-        BGM434.silent = true;
+      if (BGM_COMBAT.includes(bgmScene()) && B && B.over) {
+        BGM.silent = true;
       } // the result stays calm
     }
-    setTimeout(bgmSync434, 600);
+    setTimeout(bgmSync, 600);
   };
   j.addEventListener('ended', endStep);
   if (max) {
@@ -301,18 +301,18 @@ function jingle434(max, k, next) {
 
 /* The Music switch, volume slider and resume-on-touch go through these three functions. */
 export function musStop() {
-  if (BGM434.on) {
-    bgmStop434();
+  if (BGM.on) {
+    bgmStop();
   } else {
     musPadStop();
   }
 }
 
 export function musLevel() {
-  if (BGM434.on) {
-    const a = BGM434.el[BGM434.jingle ? BGM434.jk : BGM434.scene];
+  if (BGM.on) {
+    const a = BGM.el[BGM.jingle ? BGM.jk : BGM.scene];
     if (a) {
-      bgmFade434(a, bgmVol434(), 150);
+      bgmFade(a, bgmVol(), 150);
     }
   } else {
     musPadLevel();
@@ -322,19 +322,19 @@ export function musLevel() {
 /* jingle associated with a sound effect (called by sfx) */
 export function sfxJingle(n) {
   if (n === 'win' && !(B && B.over)) {
-    jingle434(7);
+    playJingle(7);
   } else if (n === 'evo') {
-    jingle434(10, 'evolution');
+    playJingle(10, 'evolution');
   }
 }
 
-const BGMC434 = ['combat', 'arene', 'champion', 'dresseur', 'rouge', 'pvbas'];
+const BGM_COMBAT = ['combat', 'arene', 'champion', 'dresseur', 'rouge', 'pvbas'];
 
 // Statements run at startup, in the original order (see index.js).
 export function __init() {
   /* Home: S1 theme · Camp, garden and the rest: Route 201 · Battle: wild battle · Shop: Pokémart · Victory: RSE jingle.
    The tracks are files next to the page (audio/…). If they cannot be found (offline file), the ambient pad is still used. */
-  BGM434 = {
+  BGM = {
     src: Object.fromEntries(
       [
         'accueil',
@@ -378,33 +378,33 @@ export function __init() {
     if (r && window.MutationObserver) {
       new MutationObserver(() => {
         if (!r.hidden && r.querySelector('.res-card.win')) {
-          if (!r._j434) {
-            r._j434 = true;
-            jingle434(0, 'victoire', B && B.rew && B.rew.badgeNew ? 'badge' : '');
+          if (!r._jinglePlayed) {
+            r._jinglePlayed = true;
+            playJingle(0, 'victoire', B && B.rew && B.rew.badgeNew ? 'badge' : '');
           }
         } else {
-          r._j434 = false;
+          r._jinglePlayed = false;
         }
       }).observe(r, { attributes: true, attributeFilter: ['hidden'], childList: true });
     }
   })();
 
   document.addEventListener('visibilitychange', () => {
-    BGM434.vis = !document.hidden;
-    if (!BGM434.on) {
+    BGM.vis = !document.hidden;
+    if (!BGM.on) {
       return;
     }
     if (document.hidden) {
-      Object.keys(BGM434.el).forEach(k => {
+      Object.keys(BGM.el).forEach(k => {
         try {
-          BGM434.el[k].pause();
+          BGM.el[k].pause();
         } catch {
           /* Best effort: failure here is non-fatal. */
         }
       });
     } else {
-      BGM434.scene = '';
-      bgmSync434();
+      BGM.scene = '';
+      bgmSync();
     }
   });
 }

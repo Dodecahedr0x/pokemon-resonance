@@ -9,7 +9,7 @@ import { HOOKS } from './015-hooks.js';
 import { badgeSvg } from './019-league.js';
 import { uk } from './021-combat-engine.js';
 import { B, HC, L } from './024-combat-ui.js';
-import { PREF, calm472, noise, tone, vibe } from './026-campaign-tutorial-sound.js';
+import { PREF, calmMotion, noise, tone, vibe } from './026-campaign-tutorial-sound.js';
 import { AUTO, leaderOf } from './030-prestige-staging.js';
 import { boardSet, getBoard, tokCl, tokHas, unitsBatch } from '../screens/combat/board/boardStore.js';
 
@@ -36,7 +36,7 @@ export function __init() {
     };
     const playSound = k => {
       try {
-        if (!PREF.sound || RM || PREF.pk473s === 0) {
+        if (!PREF.sound || RM || PREF.pokeStyleS === 0) {
           return;
         }
         SOUNDS[k] && SOUNDS[k]();
@@ -44,7 +44,7 @@ export function __init() {
         /* Best effort: failure here is non-fatal. */
       }
     };
-    window.__sound473 = playSound;
+    window.__battleSound = playSound;
 
     /* ---------- drawings: SVG Poké Ball ---------- */
     const ballSvg = r =>
@@ -76,7 +76,7 @@ export function __init() {
       return boss ? 'boss' : 'dresseur';
     };
     const transition = b => {
-      if (calm472() || auto()) {
+      if (calmMotion() || auto()) {
         return;
       }
       btr.className = '';
@@ -114,7 +114,7 @@ export function __init() {
       }
     };
     const prepare = b => {
-      if (!b || calm472() || auto() || !L || !L.u) {
+      if (!b || calmMotion() || auto() || !L || !L.u) {
         return;
       }
       ENTRANCES.set(b, 1);
@@ -133,7 +133,7 @@ export function __init() {
     };
     const send = b => {
       const g = layer();
-      if (!g || calm472()) {
+      if (!g || calmMotion()) {
         return showIt(b);
       }
       const D = SCEN[b.sc] || {},
@@ -215,7 +215,7 @@ export function __init() {
       wasKo = T ? tokHas(T, 'ko') : null;
     });
     HOOKS.afterToken.push(u => {
-      if (wasKo === false && u.ko && !u.caught && !calm472() && !auto()) {
+      if (wasKo === false && u.ko && !u.caught && !calmMotion() && !auto()) {
         recall(u);
       }
     });
@@ -223,7 +223,7 @@ export function __init() {
     /* ---------- 3. HP drops gradually ---------- */
     HOOKS.hpBar.push(h => {
       try {
-        if (calm472()) {
+        if (calmMotion()) {
           return h;
         }
         const m = /--a:([\d.]+)%;--b:([\d.]+)%;animation-delay:-(\d+)ms/.exec(h);
@@ -263,7 +263,7 @@ export function __init() {
       }
     });
     const celebrateBadge = () => {
-      if (!B || !B.rew || !B.rew.badgeNew || CELEBRATED.has(B) || calm472() || auto()) {
+      if (!B || !B.rew || !B.rew.badgeNew || CELEBRATED.has(B) || calmMotion() || auto()) {
         return;
       }
       const D = SCEN[B.sc] || {};
@@ -313,6 +313,6 @@ export function __init() {
       }).observe(res, { childList: true });
     }
 
-    window.__battle473 = { transition, send, retour: recall, celebrateBadge, ENTREE: ENTRANCES, genre };
+    window.__battleStyle = { transition, send, retour: recall, celebrateBadge, ENTREE: ENTRANCES, genre };
   })();
 }

@@ -3,7 +3,7 @@ import { PROFILE, isCamp } from '../engine/011-game-state.js';
 import { gp, tc } from '../engine/014-utils.js';
 import { fmt, tLevel } from '../engine/032-v4-foundation.js';
 import { displayedTitle } from '../engine/048-replayability.js';
-import { AVT450 } from '../engine/080-trainer-avatar-rare-encounters.js';
+import { TRAINER_AVATAR } from '../engine/080-trainer-avatar-rare-encounters.js';
 
 // Title of the displayed page (show()).
 export function TbSec() {
@@ -36,7 +36,7 @@ export function TbSave() {
 // Trainer emblem: initial, or chip of the chosen type (v4.50).
 function Avatar() {
   const ini = (PROFILE.name || 'D').trim().charAt(0).toUpperCase() || 'D';
-  const a = AVT450();
+  const a = TRAINER_AVATAR();
   if (!a) {
     return (
       <span className="v4-av" id="v4Av">
@@ -53,7 +53,7 @@ function Avatar() {
   }
   style.position = 'relative';
   return (
-    <span className="v4-av" id="v4Av" data-k450={a.e + ini + (a.hex ? 'h' : '')} style={style}>
+    <span className="v4-av" id="v4Av" data-avatar-key={a.e + ini + (a.hex ? 'h' : '')} style={style}>
       <b style={{ font: '900 15px/1 var(--f-d)' }}>{ini}</b>
       <svg
         viewBox="0 0 24 24"

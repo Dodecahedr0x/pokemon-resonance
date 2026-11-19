@@ -26,22 +26,22 @@ import { B, enPips, segHp, ui } from '../../../engine/024-combat-ui.js';
 import { PREF, catchBlock, duoBlock, tileCard, unitExtras } from '../../../engine/026-campaign-tutorial-sound.js';
 import { HEALS, ITM, SHOP, bagN } from '../../../engine/032-v4-foundation.js';
 import {
-  COMBAT414,
+  COMBAT_ITEMS,
   BAG_MAX,
   hasXp,
-  blocked414,
-  foeReso414,
-  mrg414,
-  objOk414,
+  moveBlockedMessage,
+  foeResonanceNotes,
+  roleBadgeHtml,
+  canUseBagItem,
   rankOfValue,
-  rankLine414,
+  rankLineHtml,
   rankTag,
-  xpBlock414,
+  expertBlockHtml,
 } from '../../../engine/053-resonance.js';
-import { resoBlock417 } from '../../../engine/057-companions-resonance.js';
-import { battleStates420, vigilBtn420 } from '../../../engine/060-intense-combat.js';
-import { flow478 } from '../../../engine/112-painted-graphics.js';
-import { enemyTurn428 } from '../../../engine/063-combat-catches-home.js';
+import { resonanceBlockHtml } from '../../../engine/057-companions-resonance.js';
+import { battleStatesHtml, vigilButtonHtml } from '../../../engine/060-intense-combat.js';
+import { turnFlow } from '../../../engine/112-painted-graphics.js';
+import { isEnemyTurn } from '../../../engine/063-combat-catches-home.js';
 import { useBattleVersion } from './battleStore.js';
 import { STEP, Hi, withoutTip } from './frag.jsx';
 
@@ -65,10 +65,10 @@ function Content() {
   if (B.over) {
     return null;
   }
-  if (B.dep430) {
+  if (B.deployPhase) {
     return <Placement />;
   }
-  if (ui.busy && !ui.cutscene && (B.phase === 'enemy' || enemyTurn428())) {
+  if (ui.busy && !ui.cutscene && (B.phase === 'enemy' || isEnemyTurn())) {
     return <OpponentTurn />;
   }
   if (ui.busy) {
@@ -101,7 +101,7 @@ const tileOf = u => 'ABCDEFGH'[u.pos[0]] + (u.pos[1] + 1);
 // Panel clicks are blocked by the engine during deployment: the list is read-only, you play on the board.
 function Placement() {
   const al = B.units.filter(u => u.side === 'a' && !u.ko),
-    sel = ui.dsel430 && byUid(B, ui.dsel430);
+    sel = ui.deploySel && byUid(B, ui.deploySel);
   return (
     <div className="dep-p">
       <div className="dep-h">
@@ -312,7 +312,7 @@ function OpponentSheet({ e }) {
           </p>
         </div>
       ) : null}
-      <Hi html={foeReso414(e)} />
+      <Hi html={foeResonanceNotes(e)} />
       <Html html={catchBlock(e)} />
       <div className="bp-mv">
         {e.mv.map((id, i) => {
@@ -322,7 +322,7 @@ function OpponentSheet({ e }) {
               <Html html={tb(m.t)} />
               <b>
                 {m.n}
-                <Html html={mrg414(m, e)} />
+                <Html html={roleBadgeHtml(m, e)} />
               </b>
               <span>
                 {powerLabel(m)} · portée {m.r}
@@ -447,11 +447,11 @@ function Awakening({ u, s }) {
   if (!hasNx(u)) {
     // one line is enough when the Pokémon no longer evolves
     if (hasXp(u)) {
-      return <Hi html={s(xpBlock414(u) + resoBlock417(u))} />;
+      return <Hi html={s(expertBlockHtml(u) + resonanceBlockHtml(u))} />;
     } // diamonds (v4.14), Resonant Form (v4.17)
-    const rb417 = resoBlock417(u, true);
-    if (rb417) {
-      return <Hi html={s(rb417)} />;
+    const resonanceHtml = resonanceBlockHtml(u, true);
+    if (resonanceHtml) {
+      return <Hi html={s(resonanceHtml)} />;
     }
     const m = BY[u.id];
     return (
@@ -504,14 +504,14 @@ function Awakening({ u, s }) {
 
 /* ---------- guided walkthrough (v4.78): the current step and its skip button ---------- */
 function Step({ u, st }) {
-  const n = flow478.remaining(B).length,
+  const n = turnFlow.remaining(B).length,
     cur = { deplacer: 0, agir: 1, extra: 2, fini: 3 }[st];
   let txt = '',
     bt = null;
   if (st === 'deplacer') {
     txt = `Touchez une case bleue pour déplacer ${u.n}, ou attaquez d’ici.`;
     bt = (
-      <button type="button" className="b b-sm" data-vx="rester478">
+      <button type="button" className="b b-sm" data-vx="stay-put">
         <b>Rester ici</b>
       </button>
     );
@@ -521,25 +521,25 @@ function Step({ u, st }) {
       ? `Choisissez une capacité${canAwaken(B, u) ? ', ou éveillez-le' : ''}.`
       : `Aucune cible à portée${canAwaken(B, u) ? ' : éveillez-le, ou passez' : ''}.`;
     bt = (
-      <button type="button" className="b b-sm" data-vx="passer478">
+      <button type="button" className="b b-sm" data-vx="skip-action">
         <b>Passer l’action</b>
       </button>
     );
   } else if (st === 'extra') {
     txt = [
-      flow478.repli(u) ? 'Touchez une case bleue pour vous replier.' : '',
-      flow478.retrigger(B) ? 'Relance (2 Voix) : il rejoue tout de suite.' : '',
+      turnFlow.repli(u) ? 'Touchez une case bleue pour vous replier.' : '',
+      turnFlow.retrigger(B) ? 'Relance (2 Voix) : il rejoue tout de suite.' : '',
     ]
       .filter(Boolean)
       .join(' ');
-    const next = flow478.remaining(B).find(x => x !== u);
+    const next = turnFlow.remaining(B).find(x => x !== u);
     bt = (
       <>
-        <button type="button" className="b b-sm b-gold" data-vx="fin478">
+        <button type="button" className="b b-sm b-gold" data-vx="finished-round">
           <b>Terminer {u.n}</b>
         </button>
         {B.order !== 'vitesse' ? (
-          <span className="fl478-suite">{next ? `Ensuite : ${next.n}` : 'Dernier Pokémon de la manche'}</span>
+          <span className="turn-guide-suite">{next ? `Ensuite : ${next.n}` : 'Dernier Pokémon de la manche'}</span>
         ) : null}
       </>
     );
@@ -549,9 +549,9 @@ function Step({ u, st }) {
     txt = `${u.n} a fini son tour.`;
   }
   return (
-    <div className="fl478" data-st={st}>
-      <div className="fl478-h">
-        <ol className="fl478-p">
+    <div className="turn-guide" data-st={st}>
+      <div className="turn-guide-h">
+        <ol className="turn-guide-p">
           {[STEP.deplacer, STEP.agir, STEP.extra].flatMap((l, i) => [
             ...(i
               ? [
@@ -565,11 +565,11 @@ function Step({ u, st }) {
             </li>,
           ])}
         </ol>
-        <span className="fl478-n">
+        <span className="turn-guide-n">
           {B.order === 'vitesse' ? 'Ordre par Vitesse' : n ? `Encore ${n} à jouer` : 'Manche terminée'}
         </span>
       </div>
-      <div className="fl478-r">
+      <div className="turn-guide-r">
         <p>{txt}</p>
         {bt}
       </div>
@@ -582,7 +582,7 @@ function Bag({ u }) {
   if ((SCEN[B.sc] || {}).tuto || B.duel433 || ui.selE || u.side !== 'a') {
     return null;
   }
-  const own = [...HEALS, ...COMBAT414].filter(k => bagN(k));
+  const own = [...HEALS, ...COMBAT_ITEMS].filter(k => bagN(k));
   if (!own.length) {
     return null;
   }
@@ -595,7 +595,7 @@ function Bag({ u }) {
         const it = SHOP[k],
           info = it.heal ? `+${Math.round(it.heal * 100)} % PV` : it.voice ? `${it.voice} Voix` : 'Action';
         return (
-          <button key={k} type="button" className="v4-use" data-use={k} title={it.d} disabled={!objOk414(B, u, k)}>
+          <button key={k} type="button" className="v4-use" data-use={k} title={it.d} disabled={!canUseBagItem(B, u, k)}>
             <img src={ITM(it.img)} alt="" loading="lazy" />
             <b>{it.sn || it.n}</b>
             <span>
@@ -612,7 +612,7 @@ function Bag({ u }) {
 function AllySheet({ u }) {
   const tl = TAL[u.ability];
   // guided walkthrough: the step replaces the tips when no mode is active
-  const F = flow478,
+  const F = turnFlow,
     guide = F.active() && !ui.busy && !ui.selE && u.side === 'a' && F.toPlay(B).includes(u),
     st = guide ? F.stepOf(B, u) : null,
     without = guide && !ui.mode,
@@ -660,7 +660,7 @@ function AllySheet({ u }) {
           <b>{tl[0]}.</b> <Html html={tl[1]} />
         </p>
       ) : null}
-      <Hi html={s(rankLine414(u) + unitExtras(u) + battleStates420(u))} />
+      <Hi html={s(rankLineHtml(u) + unitExtras(u) + battleStatesHtml(u))} />
       {NL}
       <Awakening u={u} s={s} />
       {NL}
@@ -681,7 +681,7 @@ function AllySheet({ u }) {
               <Html html={tb(typ)} />
               <b>
                 {m.n}
-                <Html html={mrg414(m, u)} />
+                <Html html={roleBadgeHtml(m, u)} />
               </b>
               <span>
                 {powerLabel(m)} · {SHAPE[m.sh]}
@@ -689,7 +689,7 @@ function AllySheet({ u }) {
                 {m.mk ? ' · ' + markOf(m.mk).n : ''}
               </span>
               <em>
-                <Html html={n ? m.d : blocked414(B, u, m) || 'Aucune cible à portée.'} />
+                <Html html={n ? m.d : moveBlockedMessage(B, u, m) || 'Aucune cible à portée.'} />
               </em>
             </button>
           );
@@ -710,14 +710,14 @@ function AllySheet({ u }) {
         </button>
         <button
           type="button"
-          className={'vx' + (relHi ? ' fl478-hi' : '')}
+          className={'vx' + (relHi ? ' turn-guide-hi' : '')}
           data-vx="relance"
           disabled={!!(!u.acted || u.sn || B.retrigger || B.voice < 2)}
         >
           <b>Relance</b>
           <span>2 Voix · rejouer</span>
         </button>
-        <Hi html={s(vigilBtn420(u))} />
+        <Hi html={s(vigilButtonHtml(u))} />
       </div>
       <Bag u={u} />
     </>

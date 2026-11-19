@@ -8,9 +8,9 @@ import { B, ui } from './024-combat-ui.js';
 import { footCls, footPos, refreshBattle } from '../screens/combat/battle/battleStore.js';
 
 /** Aligns the page: the bottom of the board (your side) just above "Fin du tour" (End turn), without cutting off its top. */
-export function frame443() {
+export function alignBoardFrame() {
   try {
-    if (!document.body.classList.contains('bt434') || !B || B.over) {
+    if (!document.body.classList.contains('compact-battle') || !B || B.over) {
       return;
     }
     const bd = document.getElementById('bBoard'),
@@ -31,7 +31,7 @@ export function frame443() {
   }
 }
 
-function qaLabel443(b, u) {
+function thumbActionLabel(b, u) {
   const d = b.dataset;
   if (d.pv) {
     return { t: d.pv === 'ok' ? 'Confirmer' : 'Annuler', c: d.pv === 'ok' ? 'qa-ok' : 'qa-no' };
@@ -64,7 +64,7 @@ function qaLabel443(b, u) {
   return { t: b.textContent.trim().slice(0, 18) };
 }
 
-function qa443() {
+function thumbReach() {
   try {
     const ft = document.querySelector('#cbBattle .bt-foot'),
       P = document.getElementById('bPanel');
@@ -73,10 +73,10 @@ function qa443() {
     }
     const u = B && ui.sel && byUid(B, ui.sel);
     const on = !!(
-      document.body.classList.contains('bt434') &&
+      document.body.classList.contains('compact-battle') &&
       B &&
       !B.over &&
-      !B.dep430 &&
+      !B.deployPhase &&
       B.phase === 'player' &&
       !ui.busy &&
       u &&
@@ -84,10 +84,10 @@ function qa443() {
       !u.ko
     );
     const bs = on
-      ? [...P.querySelectorAll(QA443)].filter(b => b.dataset.mi != null || b.dataset.pv || !b.disabled)
+      ? [...P.querySelectorAll(THUMB_ACTION_SELECTOR)].filter(b => b.dataset.mi != null || b.dataset.pv || !b.disabled)
       : [];
     const useful = bs.some(b => !b.disabled);
-    // #qa443 and .qa443-n: rendered by React (src/screens/combat/battle/Foot.jsx) from footPos.qa
+    // #thumbReach and .thumbReach-n: rendered by React (src/screens/combat/battle/Foot.jsx) from footPos.qa
     const Q = footPos.qa;
     if (!useful) {
       const chg = footCls('qa-on', false);
@@ -103,10 +103,10 @@ function qa443() {
     const rankNo = b => (b.dataset.pv ? (b.dataset.pv === 'ok' ? 0 : 1) : b.dataset.mi != null ? 2 : 3);
     bs.sort((a, b) => rankNo(a) - rankNo(b));
     // marker on the panel buttons (#bPanel, rendered by React): a shortcut's click targets them
-    P.querySelectorAll('[data-qa443-src]').forEach(b => b.removeAttribute('data-qa443-src'));
+    P.querySelectorAll('[data-thumb-reach-src]').forEach(b => b.removeAttribute('data-thumb-reach-src'));
     const items = bs.map((b, i) => {
-      const L = qaLabel443(b, u);
-      b.setAttribute('data-qa443-src', i);
+      const L = thumbActionLabel(b, u);
+      b.setAttribute('data-thumb-reach-src', i);
       return { t: L.t || '', c: L.c || '', col: L.col || '', on: b.classList.contains('on'), disabled: !!b.disabled };
     });
     footPos.qa = { hidden: false, displayName: u.n + ' · à vous', items };
@@ -118,7 +118,7 @@ function qa443() {
 }
 
 /* ---------- 2. moves within thumb reach ---------- */
-const QA443 = '[data-pv],[data-mi],[data-evo="open"],[data-undo],[data-duo],[data-vx],[data-cap]';
+const THUMB_ACTION_SELECTOR = '[data-pv],[data-mi],[data-evo="open"],[data-undo],[data-duo],[data-vx],[data-cap]';
 
 // Statements run at startup, in the original order (see index.js).
 export function __init() {
@@ -133,20 +133,20 @@ export function __init() {
   /* ---------- 1. board ---------- */
   HOOKS.launch.push(isNew => {
     if (isNew && !B.over) {
-      setTimeout(frame443, 80);
+      setTimeout(alignBoardFrame, 80);
     }
   });
 
   document.addEventListener('click', e => {
-    const c = e.target.closest('[data-qa443]');
+    const c = e.target.closest('[data-thumb-reach]');
     if (!c || c.disabled) {
       return;
     }
-    const b = document.querySelector(`#bPanel [data-qa443-src="${c.dataset.qa443}"]`);
+    const b = document.querySelector(`#bPanel [data-thumb-reach-src="${c.dataset.thumbReach}"]`);
     if (b && !b.disabled) {
       b.click();
     }
   });
 
-  HOOKS.rendered.push(qa443);
+  HOOKS.rendered.push(thumbReach);
 }

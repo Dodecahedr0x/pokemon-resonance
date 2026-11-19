@@ -12,13 +12,13 @@ import { savePurse } from './032-v4-foundation.js';
 import { DEXS } from './038-pokedex.js';
 import { renderParams } from './040-settings.js';
 import { RIVAL_KEYS, rivalIdx } from './043-adventure-plus.js';
-import { RIV429 } from './064-quality.js';
+import { RIVAL_CHALLENGES } from './064-quality.js';
 
 /* ---------- 1. evolving rival ---------- */
-export function rvSt455() {
+export function rivalState() {
   let s;
   try {
-    s = JSON.parse(localStorage.getItem('res-rv455') || '{}');
+    s = JSON.parse(localStorage.getItem('res-rival-record') || '{}');
   } catch (e) {
     s = {};
   }
@@ -27,7 +27,7 @@ export function rvSt455() {
   return s;
 }
 
-export function typeDom455() {
+export function dominantType() {
   const c = {};
   (squad || []).forEach(id => {
     const m = BY[id];
@@ -39,7 +39,7 @@ export function typeDom455() {
   return e.length ? e[0][0] : null;
 }
 
-function counter455(T, rem, used) {
+function pickCounter(T, rem, used) {
   const pw = id => BY[id].s.reduce((a, b) => a + b, 0),
     target = pw(rem);
   let best = null,
@@ -62,17 +62,17 @@ function counter455(T, rem, used) {
   return best;
 }
 
-export function rivAdapt455() {
-  const s = rvSt455(),
+export function adaptRival() {
+  const s = rivalState(),
     lvl = Math.min(2, s.w),
-    T = typeDom455();
+    T = dominantType();
   if (!lvl || !T) {
     return;
   }
-  const keys = [...RIVAL_KEYS, ...Object.keys(RIV429).filter(k => k !== 'hd429')];
+  const keys = [...RIVAL_KEYS, ...Object.keys(RIVAL_CHALLENGES).filter(k => k !== 'hd429')];
   keys.forEach(k => {
     const D = SCEN[k];
-    if (!D || !D.foes || D._rv455) {
+    if (!D || !D.foes || D._rivalDone) {
       return;
     }
     const done = [];
@@ -82,26 +82,28 @@ export function rivAdapt455() {
         break;
       }
       const used = D.foes.map(f => f[0]),
-        c = counter455(T, D.foes[j][0], used);
+        c = pickCounter(T, D.foes[j][0], used);
       if (c) {
         done.push(BY[c].n);
         D.foes[j] = [c, D.foes[j][1]];
       }
     }
     if (done.length) {
-      D._rv455 = 1;
+      D._rivalDone = 1;
       D.d += ` Il a étudié votre équipe, très ${T} : ${done.join(' et ')} ${done.length > 1 ? 'sont' : 'est'} là pour vous contrer.`;
     }
   });
 }
 
-function thApply455() {
-  const k = TH455[PREF.th455] ? PREF.th455 : 'classique';
-  Object.keys(TH455).forEach(x => document.body.classList.toggle('th455-' + x, x === k && k !== 'classique'));
+function applyBoardTheme() {
+  const k = BOARD_THEMES[PREF.boardTheme] ? PREF.boardTheme : 'classique';
+  Object.keys(BOARD_THEMES).forEach(x =>
+    document.body.classList.toggle('board-theme-' + x, x === k && k !== 'classique')
+  );
 }
 
 /* ---------- 2. board themes ---------- */
-export const TH455 = {
+export const BOARD_THEMES = {
   classique: { n: 'Classique', p: 0, c: ['#4A3A28', '#2C4A27'] },
   crepuscule: { n: 'Crépuscule', p: 3, c: ['#3A2F4F', '#41355A'] },
   jardin: { n: 'Jardin', p: 3, c: ['#3C6B3A', '#437542'] },
@@ -110,52 +112,52 @@ export const TH455 = {
   cristal: { n: 'Cristal', p: 8, c: ['#4A4478', '#524B84'] },
 };
 
-export const thOk455 = k => !TH455[k].p || (PREF.thU455 || []).includes(k);
+export const isThemeUnlocked = k => !BOARD_THEMES[k].p || (PREF.unlockedThemes || []).includes(k);
 
 // Instructions run at startup, in the original order (see index.js).
 export function __init() {
   HOOKS.battleEnd.push(() => {
-    if (B && B.over && !B._rv455 && SCEN[B.sc] && (rivalIdx(B.sc) >= 0 || SCEN[B.sc].rival429)) {
-      B._rv455 = 1;
-      const s = rvSt455();
+    if (B && B.over && !B._rivalDone && SCEN[B.sc] && (rivalIdx(B.sc) >= 0 || SCEN[B.sc].rivalFight)) {
+      B._rivalDone = 1;
+      const s = rivalState();
       if (B.over === 'win') {
         s.w++;
       } else {
         s.l++;
       }
-      localStorage.setItem('res-rv455', JSON.stringify(s));
+      localStorage.setItem('res-rival-record', JSON.stringify(s));
     }
   });
 
   // "Thèmes de plateau" (Board themes) panel: rendered by React (src/screens/settings/panels/BoardThemes.jsx)
 
   document.addEventListener('click', e => {
-    const b = e.target.closest && e.target.closest('[data-b455]');
+    const b = e.target.closest && e.target.closest('[data-board-theme-action]');
     if (!b) {
       return;
     }
-    const [a, k] = b.dataset.b455.split(':');
-    if (!TH455[k]) {
+    const [a, k] = b.dataset.boardThemeAction.split(':');
+    if (!BOARD_THEMES[k]) {
       return;
     }
     if (a === 'buy') {
-      if (thOk455(k) || PROFILE.gems < TH455[k].p) {
-        toast(thOk455(k) ? 'Déjà débloqué' : 'Pas assez d’Éclats');
+      if (isThemeUnlocked(k) || PROFILE.gems < BOARD_THEMES[k].p) {
+        toast(isThemeUnlocked(k) ? 'Déjà débloqué' : 'Pas assez d’Éclats');
         return;
       }
-      PROFILE.gems -= TH455[k].p;
-      PREF.thU455 = [...(PREF.thU455 || []), k];
-      PREF.th455 = k;
-      toast('Thème « ' + TH455[k].n + ' » débloqué');
+      PROFILE.gems -= BOARD_THEMES[k].p;
+      PREF.unlockedThemes = [...(PREF.unlockedThemes || []), k];
+      PREF.boardTheme = k;
+      toast('Thème « ' + BOARD_THEMES[k].n + ' » débloqué');
       savePurse();
-    } else if (thOk455(k)) {
-      PREF.th455 = k;
+    } else if (isThemeUnlocked(k)) {
+      PREF.boardTheme = k;
     }
     savePref();
-    thApply455();
+    applyBoardTheme();
     sfx('ui');
     renderParams();
   });
 
-  thApply455();
+  applyBoardTheme();
 }

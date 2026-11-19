@@ -37,20 +37,20 @@ import { LEGS } from './043-adventure-plus.js';
 import { DAMAGE_PROVIDERS } from './044-tactical-engine.js';
 import { de } from './047-tactics.js';
 import { applyPoison } from './051-epic-tms.js';
-import { rune413 } from './052-technical-roster.js';
-import { surrounded420 } from './060-intense-combat.js';
-import { OKX455, USE455 } from './087-balls-held-items.js';
-import { resoBoss460 } from './091-phase-bosses-secret-places.js';
+import { hasRune } from './052-technical-roster.js';
+import { isSurrounded } from './060-intense-combat.js';
+import { ITEM_CAN_USE, ITEM_USE_EFFECTS } from './087-balls-held-items.js';
+import { bossResonanceHtml } from './091-phase-bosses-secret-places.js';
 
-export let COMBAT414;
-let LEG414, OFFERS414;
+export let COMBAT_ITEMS;
+let LEGENDARY_IDS, DAILY_OFFERS_CACHE;
 
 export function rankId(id) {
   const m = BY[id];
   if (!m) {
     return 'moyen';
   }
-  if (LEG414.has(id)) {
+  if (LEGENDARY_IDS.has(id)) {
     return 'expert';
   }
   const c = RC(id);
@@ -89,14 +89,14 @@ export function canXP(S, u, m) {
   return (u.en || 0) >= xpCost(u);
 }
 
-export function mrg414(m, u) {
+export function roleBadgeHtml(m, u) {
   if (!m || !m.rg || m.rg === 'soutien') {
     return '';
   }
   return ` <small class="mrg mrg-${m.rg}">${MRG[m.rg]}${m.xp ? ' ' + '◆'.repeat(u ? xpCost(u) : 2) : ''}</small>`;
 }
 
-export function blocked414(S, u, m) {
+export function moveBlockedMessage(S, u, m) {
   if (u && u.item === 'mouchoir' && u.choice && MV[u.choice] && MV[u.choice] !== m) {
     return `Mouchoir Choix : il ne peut plus lancer que ${MV[u.choice].n}.`;
   }
@@ -107,13 +107,13 @@ export function blocked414(S, u, m) {
   return '';
 }
 
-export function xpBlock414(u) {
+export function expertBlockHtml(u) {
   const c = xpCost(u),
     ok = u.en >= c;
   return `<div class="bp-en bp-xp${ok ? ' full' : ''}"><div class="en-h"><span class="lbl-s">Résonance</span>${enPips(u.en, 'lg')}</div><p class="bp-hint">Attaque Experte : ${c} losange${c > 1 ? 's' : ''}. ${ok ? 'Elle est prête.' : `Encore ${c - u.en} : fin de manche, réaction, coup encaissé, allié K.O.`}</p></div>`;
 }
 
-function momentum414(S, u, ev) {
+function gainDiamond(S, u, ev) {
   if (u.side === 'a') {
     rewardIn(S, u, 1, ev);
   } else if (hasXp(u)) {
@@ -121,11 +121,11 @@ function momentum414(S, u, ev) {
   }
 }
 
-function echo414(S, u, v, typ, x, ev) {
+function resonanceEcho(S, u, v, typ, x, ev) {
   if (ev.some(e => e.e === 'rx' && e.k === x)) {
     return '';
   } // the terrain's reaction has already resonated
-  const prot = rune413(S, v),
+  const prot = hasRune(S, v),
     isFree = v.ability === 'regardvif' || prot;
   switch (typ) {
     case 'Feu':
@@ -207,13 +207,13 @@ function echo414(S, u, v, typ, x, ev) {
       u.guard = Math.max(u.guard, 2);
       return `${u.n} gagne +2 Garde`;
     default:
-      momentum414(S, u, ev);
+      gainDiamond(S, u, ev);
       return `${u.n} gagne 1 losange`;
   }
 }
 
 /** After each target hit: the note, then Resonance on the third. */
-export function afterHit414(S, u, m, v, x, typ, ev) {
+export function afterHitResonance(S, u, m, v, x, typ, ev) {
   if (!v || v === u || v.side === u.side || v.seg || !(m.p || m.fix) || !resoOn(S, u)) {
     return;
   }
@@ -231,7 +231,7 @@ export function afterHit414(S, u, m, v, x, typ, ev) {
   N.by.push(u.uid);
   N.n = Math.min(3, previous + weightNote(u));
   if (!previous && rankOfValue(u) === 'faible') {
-    momentum414(S, u, ev);
+    gainDiamond(S, u, ev);
   }
   if (N.n < 3) {
     if (!v.ko) {
@@ -245,12 +245,12 @@ export function afterHit414(S, u, m, v, x, typ, ev) {
   }
   ev.push({ e: 'reso', u: v.uid });
   noteAdd(`Résonance sur ${v.n} : ×${u.item === 'ceinturepro' ? '1,8' : '1,5'} et écho ${typ}`);
-  const r = v.ko ? '' : echo414(S, u, v, typ, x, ev);
+  const r = v.ko ? '' : resonanceEcho(S, u, v, typ, x, ev);
   say(ev, `Résonance ! ${v.n} vibre sous le coup ${de(u.n)}${r ? ` : ${r}` : ''}.`);
 }
 
 /* end of ability: Life Orb */
-export function end414(S, u, m, dealt, ev) {
+export function afterMoveHeldItems(S, u, m, dealt, ev) {
   if (u.item === 'orbevie' && dealt > 0 && !u.ko) {
     say(ev, `Orbe Vie : ${u.n} paie sa puissance.`);
     damage(S, u, Math.max(1, Math.round(u.mhp * 0.1)), ev, { ind: true, reflect: true });
@@ -258,7 +258,7 @@ export function end414(S, u, m, dealt, ev) {
 }
 
 /* after damage taken: Rocky Helmet, Sitrus Berry */
-export function afterDamage414(S, v, real, o, ev) {
+export function afterDamageItems(S, v, real, o, ev) {
   if (!o.ind && !o.reflect && v.item === 'casquebrut') {
     const a = S.lastAtk && byUid(S, S.lastAtk);
     if (a && a !== v && !a.ko && a.side !== v.side && hdist(a.pos, v.pos) === 1) {
@@ -274,12 +274,12 @@ export function afterDamage414(S, v, real, o, ev) {
 }
 
 /* ---------- display ---------- */
-export function plateRank414(u) {
+export function plateRankHtml(u) {
   const n = notesOf(B, u);
   return `<span class="pl-rg rg-${rankOfValue(u)}">${stars(rankOfValue(u))}</span>${n && !u.ko ? `<span class="pl-nt" title="${n} note${n > 1 ? 's' : ''} de Résonance">${'♪'.repeat(n)}</span>` : ''}`;
 }
 
-export function foeReso414(e) {
+export function foeResonanceNotes(e) {
   const n = notesOf(B, e),
     o = [];
   if (n && !e.ko) {
@@ -292,12 +292,12 @@ export function foeReso414(e) {
   if (bossScene(B) && hasXp(e)) {
     o.push(`Il accumule la Résonance : ${e.en || 0} / ${EMAX} losanges, ${xpCost(e)} pour son attaque Experte.`);
   }
-  return (o.length ? `<p class="bp-reso">${o.join(' ')}</p>` : '') + resoBoss460(e);
+  return (o.length ? `<p class="bp-reso">${o.join(' ')}</p>` : '') + bossResonanceHtml(e);
 }
 
 // Team ranks and Harmony: card rendered by React (src/screens/team/Analysis.jsx).
 
-export function objOk414(S, u, k) {
+export function canUseBagItem(S, u, k) {
   const it = SHOP[k];
   if (
     !it ||
@@ -317,12 +317,12 @@ export function objOk414(S, u, k) {
   if (it.voice && S.voice < it.voice) {
     return false;
   }
-  if (OKX455[k]) {
-    return !!OKX455[k](S, u);
+  if (ITEM_CAN_USE[k]) {
+    return !!ITEM_CAN_USE[k](S, u);
   }
   switch (k) {
     case 'rappel':
-      return !u.acted && !u.sn && !!koAlly414(S) && !!freeTile414(S, u);
+      return !u.acted && !u.sn && !!koAllyOf(S) && !!freeTileFor(S, u);
     case 'baieoran':
       return u.hp < u.mhp;
     case 'totalsoin':
@@ -343,9 +343,9 @@ export function objOk414(S, u, k) {
   }
 }
 
-export function pUse414(S, u, k) {
+export function useCombatItem(S, u, k) {
   const it = SHOP[k];
-  if (!it || it.category !== 'combat' || !objOk414(S, u, k)) {
+  if (!it || it.category !== 'combat' || !canUseBagItem(S, u, k)) {
     return null;
   }
   const ev = [];
@@ -367,11 +367,11 @@ export function pUse414(S, u, k) {
   } else if (k === 'cristal') {
     rewardIn(S, u, 1, ev);
     say(ev, `Cristal Résonant : ${u.n} gagne 1 losange.`);
-  } else if (USE455[k]) {
-    USE455[k](S, u, ev);
+  } else if (ITEM_USE_EFFECTS[k]) {
+    ITEM_USE_EFFECTS[k](S, u, ev);
   } else if (k === 'rappel') {
-    const o = koAlly414(S),
-      x = freeTile414(S, u);
+    const o = koAllyOf(S),
+      x = freeTileFor(S, u);
     Object.assign(o, {
       ko: false,
       hp: Math.max(1, Math.round(o.mhp * 0.4)),
@@ -412,8 +412,8 @@ export function pUse414(S, u, k) {
 
 export function dailyOffers() {
   const d = today();
-  if (OFFERS414.d === d) {
-    return OFFERS414.k;
+  if (DAILY_OFFERS_CACHE.d === d) {
+    return DAILY_OFFERS_CACHE.k;
   }
   let h = 7;
   for (const c of d) {
@@ -425,18 +425,18 @@ export function dailyOffers() {
     Object.keys(HELD_SHOP).filter(k => HELD_SHOP[k].p),
     Object.keys(SHOP).filter(k => ['balls', 'machines'].includes(SHOP[k].category) && SHOP[k].p && !SHOP[k].cs),
   ];
-  OFFERS414 = { d, k: pools.map(L => L[Math.floor(rnd() * L.length)]).filter(Boolean) };
-  return OFFERS414.k;
+  DAILY_OFFERS_CACHE = { d, k: pools.map(L => L[Math.floor(rnd() * L.length)]).filter(Boolean) };
+  return DAILY_OFFERS_CACHE.k;
 }
 
 // Shop: daily offers and held items for sale, rendered by React (src/screens/bag/Offers.jsx, HeldItems.jsx)
 
-function buyHeld414(k) {
+function buyHeldItem(k) {
   const H = HELD_SHOP[k];
   if (!H || !isCamp() || PROFILE.items.includes(k)) {
     return;
   }
-  const price = H.g || costHeld414(k);
+  const price = H.g || heldItemCost(k);
   if (H.g) {
     if (PROFILE.gems < price) {
       return;
@@ -505,7 +505,7 @@ export const xpCost = u => (rankOfValue(u) === 'expert' ? 1 : 2);
 
 const resoOn = (S, u) => !!u && (u.side === 'a' || bossScene(S));
 
-export const rankLine414 = u => {
+export const rankLineHtml = u => {
   const r = rankOfValue(u);
   return `<p class="bp-tal bp-rg"><b>${RANKS[r].n} · ${RANKS[r].k}.</b> ${RANKS[r].d}</p>`;
 };
@@ -536,11 +536,11 @@ export const ECHOS = {
   Normal: 'L’attaquant gagne 1 losange.',
 };
 
-export const bonusMove414 = (S, u) =>
+export const heldMoveBonus = (S, u) =>
   (u.item === 'mouchoir' ? 2 : 0) +
   (u.item === 'crinorage' ? 1 : 0) +
   (u.resonant > 0 ? 1 : 0) -
-  (surrounded420(S, u) ? 1 : 0);
+  (isSurrounded(S, u) ? 1 : 0);
 
 // Crin d’Orage (v4.16), Resonant Form (v4.17), Encirclement (v4.20)
 
@@ -559,21 +559,21 @@ export const HELD_SHOP = {
   ceinturepro: { g: 18 },
 };
 
-export const koAlly414 = S =>
+export const koAllyOf = S =>
   S.units.filter(o => o.side === 'a' && o.ko && !o.seg).sort((a, b) => RC(b.id) - RC(a.id) || b.mhp - a.mhp)[0];
 
-export const freeTile414 = (S, u) =>
+export const freeTileFor = (S, u) =>
   nbrK(uk(u)).find(x => S.tiles[x] && !S.tiles[x].rock && !uAt(S, x) && !(S.tiles[x].lava > 0));
 
-export const offer414 = k => dailyOffers().includes(k);
+export const isDailyOffer = k => dailyOffers().includes(k);
 
-export const discount414 = (k, p) => (p && offer414(k) ? Math.round((p * 0.7) / 50) * 50 : p);
+export const dailyDiscount = (k, p) => (p && isDailyOffer(k) ? Math.round((p * 0.7) / 50) * 50 : p);
 
-export const costHeld414 = k => discount414(k, HELD_SHOP[k].p);
+export const heldItemCost = k => dailyDiscount(k, HELD_SHOP[k].p);
 
 // Statements executed at startup, in the original order (see index.js).
 export function __init() {
-  LEG414 = new Set(LEGS.map(l => l.id));
+  LEGENDARY_IDS = new Set(LEGS.map(l => l.id));
 
   for (const k in MV) {
     const m = MV[k];
@@ -792,15 +792,15 @@ export function __init() {
     },
   });
 
-  COMBAT414 = Object.keys(SHOP).filter(k => SHOP[k].category === 'combat');
+  COMBAT_ITEMS = Object.keys(SHOP).filter(k => SHOP[k].category === 'combat');
 
   /* daily offers: three items at −30%, the same for the whole day */
-  OFFERS414 = { d: '', k: [] };
+  DAILY_OFFERS_CACHE = { d: '', k: [] };
 
   document.addEventListener('click', e => {
     const h = e.target.closest('[data-buyh]');
     if (h) {
-      buyHeld414(h.dataset.buyh);
+      buyHeldItem(h.dataset.buyh);
       return;
     }
     const o = e.target.closest('[data-offre]');

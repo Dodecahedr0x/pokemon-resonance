@@ -1,10 +1,10 @@
 import { channel } from '../../lib/store.js';
 
 // Transient windows that the engine used to add at the end of <body> (old overlay(): #vs,
-// #hp452, #evs454, #ct453…). List in opening order: {id, data, v}.
+// #battleHelp, #eventChoice, #timedCatch…). List in opening order: {id, data, v}.
 // Reopening an id removes it then appends it at the end, with a new `v` (rendered with key={id+v}:
 // fresh node, like the old remove() + appendChild).
-// Synchronous render (flushSync): right after, the engine rereads the DOM ($('#hp452'), focus,
+// Synchronous render (flushSync): right after, the engine rereads the DOM ($('#battleHelp'), focus,
 // querySelector) and attaches its listeners there.
 let listItems = [];
 let n = 0;

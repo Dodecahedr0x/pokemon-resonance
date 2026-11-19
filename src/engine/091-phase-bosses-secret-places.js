@@ -10,48 +10,48 @@ import { shut, updateTemp } from '../screens/overlays/tempStore.js';
 import { V4, savePurse, today } from './032-v4-foundation.js';
 import { renderMap } from './037-map.js';
 import { placesR } from './054-johto.js';
-import { weatherDay417 } from './057-companions-resonance.js';
-import { bossOf420, bossPhases420 } from './060-intense-combat.js';
-import { reward454, can454, txt454 } from './084-peddler-route-missions.js';
-import { badgeCount459 } from './090-item-quests-trophies.js';
+import { todayWeather } from './057-companions-resonance.js';
+import { getBoss, hasBossPhases } from './060-intense-combat.js';
+import { applyReward, canAfford, rewardText } from './084-peddler-route-missions.js';
+import { badgeTotal } from './090-item-quests-trophies.js';
 
-export let SECRETS460;
+export let SECRET_PLACES;
 
 /** A gym Champion (boss without phases) goes berserk below 50% HP. */
-export function rage460(S, ev) {
-  const b = bossOf420(S);
-  if (b && !b.ko && !S.over && !bossPhases420(S) && !b.gym460 && leaderOf(S.sc) && b.hp / b.mhp <= 0.5) {
-    b.gym460 = 1;
+export function bossEnrage(S, ev) {
+  const b = getBoss(S);
+  if (b && !b.ko && !S.over && !hasBossPhases(S) && !b.enraged && leaderOf(S.sc) && b.hp / b.mhp <= 0.5) {
+    b.enraged = 1;
     b.boost = Math.max(b.boost || 0, 1);
     b.guard = Math.max(b.guard || 0, 1);
-    say(ev, `${b.n} se déchaîne : dernière ligne droite ! ${repl460(b, 0)}`);
+    say(ev, `${b.n} se déchaîne : dernière ligne droite ! ${bossLine(b, 0)}`);
     ev.push({ e: 'arena', r: 'phase2' });
   }
 }
 
 /** Row of the opponent sheet: boss phase, or the Champion's rage. */
-export function resoBoss460(e) {
-  if (!B || e.ko || e !== bossOf420(B)) {
+export function bossResonanceHtml(e) {
+  if (!B || e.ko || e !== getBoss(B)) {
     return '';
   }
-  if (bossPhases420(B)) {
-    const ph = e.phase420 || 1;
+  if (hasBossPhases(B)) {
+    const ph = e.bossPhase || 1;
     return `<p class="bp-reso">${ph >= 3 ? 'Phase 3 : dernier souffle.' : ph === 2 ? 'Phase 2 : renforcé. La phase 3 arrive sous 33 % de PV.' : 'Phase 1. La phase 2 arrive sous 66 % de PV.'}</p>`;
   }
   if (leaderOf(B.sc)) {
-    return `<p class="bp-reso">${e.gym460 ? 'Il se déchaîne : renforcé.' : 'Il se déchaînera sous 50 % de PV.'}</p>`;
+    return `<p class="bp-reso">${e.enraged ? 'Il se déchaîne : renforcé.' : 'Il se déchaînera sous 50 % de PV.'}</p>`;
   }
   return '';
 }
 
-export function repl460(b, i) {
+export function bossLine(b, i) {
   const t = (b.t && b.t[0]) || 'Normal',
-    a = LINES460[t] || LINES460.Normal;
+    a = TYPE_LINES[t] || TYPE_LINES.Normal;
   return a[i] || a[0];
 }
 
-function pos460(seed, taken) {
-  const r = rngS460(seed),
+function pickPosition(seed, taken) {
+  const r = stringSeededRng(seed),
     pl = placesR().concat(taken || []);
   let x = 0,
     y = 0;
@@ -65,112 +65,112 @@ function pos460(seed, taken) {
   return { x, y };
 }
 
-export function scPos460() {
+export function secretPositions() {
   const reg = V4.region || 'kanto',
     out = {},
     taken = [];
-  SECRETS460.forEach(s => {
-    const p = pos460('sc' + reg + s.id, taken);
+  SECRET_PLACES.forEach(s => {
+    const p = pickPosition('sc' + reg + s.id, taken);
     out[s.id] = p;
     taken.push(p);
   });
   return out;
 }
 
-function scOpen460(id) {
-  const s = SECRETS460.find(x => x.id === id);
+function secretOpen(id) {
+  const s = SECRET_PLACES.find(x => x.id === id);
   if (!s) {
     return;
   }
-  const st = scSt460(),
+  const st = secretState(),
     first = !st.found[id];
   if (first) {
     st.found[id] = 1;
-    writeLS('res-sc460', st);
-    reward454(s.rew);
+    writeLS('res-secret-places', st);
+    applyReward(s.rew);
     savePurse();
     sfx('win');
     vibe([30, 40, 30]);
   }
-  // rendering: src/screens/overlays/transients/Windows.jsx (Sc460)
-  const o = overlay('sc460', {
+  // rendering: src/screens/overlays/transients/Windows.jsx (SecretPlace)
+  const o = overlay('secret-places', {
     n: s.n,
     lore: s.lore,
-    msg: first ? 'Vous trouvez : ' + txt454(s.rew) + '.' : 'Vous avez déjà exploré ce lieu.',
+    msg: first ? 'Vous trouvez : ' + rewardText(s.rew) + '.' : 'Vous avez déjà exploré ce lieu.',
   });
   o.addEventListener('click', e => {
     if (e.target === o) {
-      shut('sc460');
+      shut('secret-places');
     }
   });
   renderMap();
 }
 
-export function npcSt460() {
+export function npcState() {
   const d = today(),
     reg = V4.region || 'kanto',
-    all = readLS('res-pn460', {});
+    all = readLS('res-passerby', {});
   const k = reg;
   let s = all[k];
   if (!s || s.d !== d) {
     s = { d, done: false };
     all[k] = s;
-    writeLS('res-pn460', all);
+    writeLS('res-passerby', all);
   }
-  const r = rngS460('pn' + d + reg);
-  s.i = Math.floor(r() * NPC460.length);
+  const r = stringSeededRng('pn' + d + reg);
+  s.i = Math.floor(r() * WANDERING_NPCS.length);
   return { s, all, k };
 }
 
-export function npcPos460() {
+export function npcPositions() {
   const d = today(),
     reg = V4.region || 'kanto',
-    sc = Object.values(scPos460());
-  return pos460('pnp' + d + reg, sc);
+    sc = Object.values(secretPositions());
+  return pickPosition('pnp' + d + reg, sc);
 }
 
-function npcOpen460() {
-  const { s } = npcSt460(),
-    N = NPC460[s.i];
+function npcOpenOverlay() {
+  const { s } = npcState(),
+    N = WANDERING_NPCS[s.i];
   const c = N.c.map(choice => {
-    const eff = choice.cost ? 'Coût : ' + txt454(choice.cost) : '';
-    return { l: choice.l, ok: can454(choice.cost), eff: eff || null };
+    const eff = choice.cost ? 'Coût : ' + rewardText(choice.cost) : '';
+    return { l: choice.l, ok: canAfford(choice.cost), eff: eff || null };
   });
-  // rendering: src/screens/overlays/transients/Windows.jsx (Pn460)
-  const o = overlay('pn460', { n: N.n, x: N.x, c, res: null });
+  // rendering: src/screens/overlays/transients/Windows.jsx (PassingNpc)
+  const o = overlay('passerby', { n: N.n, x: N.x, c, res: null });
   o.addEventListener('click', e => {
     if (e.target === o) {
-      shut('pn460');
+      shut('passerby');
     }
   });
 }
 
-function npcPick460(j) {
-  const { s, all, k } = npcSt460(),
-    N = NPC460[s.i],
+function npcPickChoice(j) {
+  const { s, all, k } = npcState(),
+    N = WANDERING_NPCS[s.i],
     c = N.c[j];
-  if (!c || s.done || !can454(c.cost)) {
+  if (!c || s.done || !canAfford(c.cost)) {
     return;
   }
   if (c.cost) {
-    reward454(c.cost);
+    applyReward(c.cost);
   }
   if (c.ok) {
-    reward454(c.ok);
+    applyReward(c.ok);
   }
   all[k] = { d: s.d, done: true };
-  writeLS('res-pn460', all);
+  writeLS('res-passerby', all);
   savePurse();
   sfx(c.ok ? 'ui' : 'hit');
   vibe(20);
-  updateTemp('pn460', { res: c.t + (c.ok ? ' (' + txt454(c.ok) + ')' : '') });
+  updateTemp('passerby', { res: c.t + (c.ok ? ' (' + rewardText(c.ok) + ')' : '') });
   renderMap();
 }
 
 /* ---------- 5. Markers (src/screens/map/Marks.jsx), clicks, Journal ---------- */
 
 /* ---------- 1. Bosses: lines and gym Champion phase ---------- */
-const LINES460 = {
+const TYPE_LINES = {
   Feu: ['« Mes flammes ne s’éteignent jamais ! »', '« Brûlez avec moi ! »'],
   Eau: ['« La marée monte, tenez bon si vous le pouvez ! »', '« Le déluge ne s’arrête pas ! »'],
   Plante: ['« Mes racines tiennent ce terrain ! »', '« La forêt ne recule pas ! »'],
@@ -192,7 +192,7 @@ const LINES460 = {
 };
 
 /* ---------- 2. Map tools ---------- */
-const hash460 = s => {
+const hashString = s => {
   let h = 7;
   for (const ch of s) {
     h = (Math.imul(h, 31) + ch.charCodeAt(0)) >>> 0;
@@ -200,23 +200,23 @@ const hash460 = s => {
   return h;
 };
 
-const rngS460 = s => mulberry32(hash460(s) || 1);
+const stringSeededRng = s => mulberry32(hashString(s) || 1);
 
 /* ---------- 3. Secret places ---------- */
-const weatherS460 = () => {
+const currentWeather = () => {
   try {
-    return weatherDay417();
+    return todayWeather();
   } catch (e) {
     return null;
   }
 };
 
-export const scSt460 = () => readLS('res-sc460', { found: {} });
+export const secretState = () => readLS('res-secret-places', { found: {} });
 
-export const scVis460 = () => SECRETS460.filter(s => badgeCount459() >= s.min && s.ok());
+export const visibleSecrets = () => SECRET_PLACES.filter(s => badgeTotal() >= s.min && s.ok());
 
 /* ---------- 4. Wandering NPCs ---------- */
-export const NPC460 = [
+export const WANDERING_NPCS = [
   {
     n: 'Marchand de passage',
     x: 'Il ouvre sa malle : « Pour 300 ₽, je vous cède un morceau de roche brillante. »',
@@ -305,7 +305,7 @@ export const NPC460 = [
 
 // Instructions run at startup, in the original order (see index.js).
 export function __init() {
-  SECRETS460 = [
+  SECRET_PLACES = [
     {
       id: 's1',
       n: 'Source de la Lune',
@@ -329,7 +329,7 @@ export function __init() {
       n: 'Crique des Marées',
       ind: 'Se révèle sous la pluie, après le 1er badge.',
       min: 1,
-      ok: () => weatherS460() === 'pluie',
+      ok: () => currentWeather() === 'pluie',
       lore: 'La pluie dévoile un passage vers une crique. Une vieille caisse échouée contient de quoi payer un voyage.',
       rew: { m: 1200 },
     },
@@ -338,7 +338,7 @@ export function __init() {
       n: 'Dune Dorée',
       ind: 'Se révèle au soleil ou sous le sable, après le 2e badge.',
       min: 2,
-      ok: () => ['soleil', 'sable'].includes(weatherS460()),
+      ok: () => ['soleil', 'sable'].includes(currentWeather()),
       lore: 'Entre deux dunes, un cercle de pierres brille. Des éclats y dorment depuis des siècles.',
       rew: { g: 4 },
     },
@@ -347,7 +347,7 @@ export function __init() {
       n: 'Cime Gelée',
       ind: 'Se révèle sous la grêle, après le 3e badge.',
       min: 3,
-      ok: () => weatherS460() === 'grele',
+      ok: () => currentWeather() === 'grele',
       lore: 'Un refuge gelé, une lanterne encore tiède. Un randonneur y a laissé ses réserves de soins.',
       rew: { b: { superpotion: 3 }, m: 600 },
     },
@@ -362,33 +362,33 @@ export function __init() {
     },
   ];
 
-  // secret places (.sc460) and passing character (.pn460) on the map: rendered by React
+  // secret places (.secretPlaces) and passing character (.passerby) on the map: rendered by React
   // (src/screens/map/Marks.jsx)
 
   document.addEventListener(
     'click',
     e => {
-      const t = e.target.closest && e.target.closest('[data-sc460],[data-pn460]');
+      const t = e.target.closest && e.target.closest('[data-secret-places],[data-passerby]');
       if (!t) {
         return;
       }
       e.stopPropagation();
       e.preventDefault();
-      if (t.dataset.sc460 !== undefined) {
-        const v = t.dataset.sc460;
+      if (t.dataset.secretPlaces !== undefined) {
+        const v = t.dataset.secretPlaces;
         if (v === 'close') {
-          shut('sc460');
+          shut('secret-places');
         } else {
-          scOpen460(v);
+          secretOpen(v);
         }
       } else {
-        const v = t.dataset.pn460;
+        const v = t.dataset.passerby;
         if (v === 'close') {
-          shut('pn460');
+          shut('passerby');
         } else if (v === 'o') {
-          npcOpen460();
+          npcOpenOverlay();
         } else {
-          npcPick460(+v);
+          npcPickChoice(+v);
         }
       }
     },

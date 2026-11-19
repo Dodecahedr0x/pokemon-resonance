@@ -29,12 +29,12 @@ import {
 } from './021-combat-engine.js';
 import { DAMAGE_PROVIDERS, ROLE_PROVIDERS } from './044-tactical-engine.js';
 import { hourOf } from './046-living-board.js';
-import { SELF412 } from './051-epic-tms.js';
+import { SELF_MOVE_EFFECTS } from './051-epic-tms.js';
 
-export let PRE413;
+export let PRE_MOVE_EFFECTS;
 
 /* ---------- after each target hit ---------- */
-export function afterHit413(S, u, m, v, x, mk, typ, ev) {
+export function afterHitSignatures(S, u, m, v, x, mk, typ, ev) {
   if (!(m.p || m.fix) || v === u) {
     return;
   }
@@ -56,7 +56,7 @@ export function afterHit413(S, u, m, v, x, mk, typ, ev) {
     }
   }
   if (v.ability === 'corpsmaudit' && v.side !== u.side && !u.ko && hdist(u.pos, v.pos) === 1) {
-    if (u.ability === 'regardvif' || rune413(S, u)) {
+    if (u.ability === 'regardvif' || hasRune(S, u)) {
       return;
     }
     u.web = Math.max(u.web, 2);
@@ -65,7 +65,7 @@ export function afterHit413(S, u, m, v, x, mk, typ, ev) {
 }
 
 /* ---------- end of the move ---------- */
-export function end413(S, u, m, k, v0, v1, dealt, ev) {
+export function afterMoveSignatures(S, u, m, k, v0, v1, dealt, ev) {
   if (S._waves) {
     const L = S._waves;
     S._waves = null;
@@ -155,7 +155,7 @@ export function end413(S, u, m, k, v0, v1, dealt, ev) {
 }
 
 /* ---------- Riposte, Mirror Veil, Destiny Draw ---------- */
-export function reflections413(S, v, real, ev) {
+export function reflectEffects(S, v, real, ev) {
   const a = S.lastAtk && byUid(S, S.lastAtk);
   if (!a || a === v || a.ko || a.side === v.side) {
     return;
@@ -173,7 +173,7 @@ export function reflections413(S, v, real, ev) {
 }
 
 /* ---------- Movement ---------- */
-export function bonusMove413(S, u) {
+export function statusMoveBonus(S, u) {
   let b = 0;
   if (S.gravite > 0) {
     b -= 1;
@@ -191,7 +191,7 @@ export function bonusMove413(S, u) {
 }
 
 /* ---------- end of round ---------- */
-export function durations413(S, ev) {
+export function tickTechnicalEffects(S, ev) {
   S.units.forEach(u => {
     if (u.ko) {
       return;
@@ -256,7 +256,7 @@ export function durations413(S, ev) {
 
 /* Enemy AI: when no attack reaches, a support Pokémon (Qulbutoké, Métamorph…)
    plays its move rather than waiting. Changes nothing for opponents that have an attack in range. */
-export function aiSupport413(S, e, opts, al, here) {
+export function aiSupportMove(S, e, opts, al, here) {
   let best = null;
   const prend = (sc, pk, mid, k) => {
     if (sc > 0 && (!best || sc > best.sc)) {
@@ -314,9 +314,9 @@ export function aiSupport413(S, e, opts, al, here) {
 }
 
 /* Mechanics of the signature moves and the new abilities. Everything goes through
-   tables (SOI412 / PRE413 / CIBLE412 / afterHit413 / end413) and through the damage
+   tables (PRE_MOVE_EFFECTS / afterHitSignatures / afterMoveSignatures) and through the damage
    providers: existing rules do not change. */
-export const rune413 = (S, v) => !!(v && S && S.rune && S.rune[v.side] > 0);
+export const hasRune = (S, v) => !!(v && S && S.rune && S.rune[v.side] > 0);
 
 // Statements run at startup, in the original order (see index.js).
 export function __init() {
@@ -325,7 +325,7 @@ export function __init() {
   HOSTILE.push('malediction', 'feufollet');
 
   /* ---------- self-targeted moves ---------- */
-  Object.assign(SELF412, {
+  Object.assign(SELF_MOVE_EFFECTS, {
     champherbu(S, u, ev) {
       nbrK(uk(u)).forEach(x => setMark(S, x, 'enracine', u.uid));
       S.champ = Object.assign({}, S.champ, { [u.side]: 3 });
@@ -425,7 +425,7 @@ export function __init() {
   });
 
   /* ---------- moves on a target, without damage ---------- */
-  PRE413 = {
+  PRE_MOVE_EFFECTS = {
     malediction(S, u, m, v, ev) {
       if (v.side === u.side) {
         return;
@@ -445,7 +445,7 @@ export function __init() {
         say(ev, `${v.n} ne craint pas les flammes.`);
         return;
       }
-      if (rune413(S, v)) {
+      if (hasRune(S, v)) {
         say(ev, `Rune Protect : ${v.n} est protégé.`);
         return;
       }

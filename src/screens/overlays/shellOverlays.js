@@ -1,7 +1,7 @@
 import { makeStore } from '../../lib/store.js';
 
 // Small shell overlays. The engine keeps its functions (toast, openStarter,
-// renderCoach, encounter, showIntro, tips429) and goes through these stores.
+// renderCoach, encounter, showIntro, seenTips) and goes through these stores.
 
 /* ---------- toast ----------
    toast() is called from everywhere, sometimes while another component is rendering:
@@ -74,13 +74,13 @@ export function closeIntroBox() {
   }
 }
 
-/* ---------- Prof. Sorbier's tip in battle (#tip429) ---------- */
+/* ---------- Prof. Sorbier's tip in battle (#tipCard) ---------- */
 const tipS = makeStore({ tip: null, v: 0 });
-export const useTip429 = tipS.use;
-export function showTip429(t, d) {
+export const useTipOverlay = tipS.use;
+export function showTooltip(t, d) {
   tipS.set(s => ({ tip: { t, d }, v: s.v + 1 }));
 }
-export function hideTip429() {
+export function hideTooltip() {
   if (tipS.get().tip) {
     tipS.set({ tip: null });
   }

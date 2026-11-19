@@ -8,7 +8,7 @@ import { cost, squad } from '../../engine/020-team-cards.js';
 import { emblem, goalInfo } from '../../engine/031-home-journey.js';
 import { ART } from '../../engine/032-v4-foundation.js';
 import { routeName } from '../../engine/054-johto.js';
-import { REGION_NAMES421, freeBox421, regionNo421 } from '../../engine/061-catch-anywhere.js';
+import { FAMILY_REGION_NAMES, boxCapacityLabel, regionIndex } from '../../engine/061-catch-anywhere.js';
 
 // Home column (.v4-aside): team (#v4Team) and main quest (#v4Quest).
 export default function Side({ on }) {
@@ -61,7 +61,7 @@ function Team() {
               className="v4-mon"
               data-t="pokedex"
               href="#pokedex"
-              data-lp429={m.id}
+              data-species-sheet={m.id}
               style={{ '--c': tc(m.t[0]), '--c2': tc(m.t[1] || m.t[0]) }}
             >
               <img src={ART(m.no)} alt="" loading="lazy" />
@@ -92,10 +92,10 @@ function Quest() {
           </svg>
         </span>
         <span className="v4q-t">
-          <small>Mode Libre · {freeBox421()}</small>
+          <small>Mode Libre · {boxCapacityLabel()}</small>
           <b>Combats ouverts</b>
           <em>
-            Capturez vos Pokémon sur la {routeName()} ({REGION_NAMES421[regionNo421()]}).
+            Capturez vos Pokémon sur la {routeName()} ({FAMILY_REGION_NAMES[regionIndex()]}).
           </em>
         </span>
       </>

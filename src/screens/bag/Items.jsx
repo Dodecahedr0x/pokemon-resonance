@@ -4,7 +4,7 @@ import { ITEMS2, PROFILE, ownedItems } from '../../engine/011-game-state.js';
 import { tc } from '../../engine/014-utils.js';
 import { HELD_IMG, ITM, SHOP, V4, bagN, fmt } from '../../engine/032-v4-foundation.js';
 import { costOf } from '../../engine/049-identity.js';
-import { HELD_SHOP, offer414 } from '../../engine/053-resonance.js';
+import { HELD_SHOP, isDailyOffer } from '../../engine/053-resonance.js';
 
 // TM / HM disc: initials on the color of the move's type.
 export const Disc = ({ it }) => (
@@ -44,7 +44,7 @@ export function Article({ k, mode }) {
       <div className="v4-it-t">
         <b>
           {it.n}
-          {offer414(k) ? (
+          {isDailyOffer(k) ? (
             <>
               {' '}
               <span className="v4-off">−30 %</span>

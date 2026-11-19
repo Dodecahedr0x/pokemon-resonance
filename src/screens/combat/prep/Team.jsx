@@ -11,7 +11,7 @@ import { scenLock } from '../../../engine/022-items-bonds-ai.js';
 import { scSel } from '../../../engine/024-combat-ui.js';
 import { teamBtns } from '../../../engine/027-gym-on-screen.js';
 import { k2n } from '../../../engine/031-home-journey.js';
-import { DOCTRINES430 } from '../../../engine/065-camp-tactics.js';
+import { DOCTRINE_DEFS } from '../../../engine/065-camp-tactics.js';
 
 // The four team slots, then the active synergies (#ptList).
 function Places() {
@@ -59,7 +59,7 @@ function Places() {
   );
 }
 
-// Doctrine (v4.30): #doc430, before the Start button.
+// Doctrine (v4.30): #doctrineChoice, before the Start button.
 const doctrineHidden = () => {
   const D = SCEN[scSel] || {};
   return !!(D.tuto || D.hebdo429 || D.enigme431);
@@ -68,26 +68,32 @@ const doctrineHidden = () => {
 // docSeen: the doctrine has already been drawn once (a hidden block keeps its last content).
 function Doctrine({ docSeen }) {
   const hidden = doctrineHidden();
-  const k = DOCTRINES430[PROFILE.doc430] ? PROFILE.doc430 : '',
-    X = DOCTRINES430[k];
+  const k = DOCTRINE_DEFS[PROFILE.doctrineChoice] ? PROFILE.doctrineChoice : '',
+    X = DOCTRINE_DEFS[k];
   return (
-    <div className="doc430" id="doc430" hidden={hidden}>
+    <div className="doctrine-choice" id="doctrine-choice" hidden={hidden}>
       {docSeen && (
         <>
-          <div className="doc430-h">
+          <div className="doctrine-choice-h">
             <svg>
               <use href="#i-doctrine" />
             </svg>
             <span className="lbl-s">Doctrine</span>
           </div>
-          <div className="doc430-c" role="group" aria-label="Doctrine">
-            {[['', 'Aucune'], ...Object.entries(DOCTRINES430).map(([x, o]) => [x, o.n])].map(([x, n]) => (
-              <button key={x} type="button" className="doc430-b" data-doc430={x} aria-pressed={k === x}>
+          <div className="doctrine-choice-c" role="group" aria-label="Doctrine">
+            {[['', 'Aucune'], ...Object.entries(DOCTRINE_DEFS).map(([x, o]) => [x, o.n])].map(([x, n]) => (
+              <button
+                key={x}
+                type="button"
+                className="doctrine-choice-b"
+                data-doctrine-choice={x}
+                aria-pressed={k === x}
+              >
                 <Html html={n} />
               </button>
             ))}
           </div>
-          <p className="doc430-d">
+          <p className="doctrine-choice-d">
             {X ? (
               <>
                 <b>
@@ -105,16 +111,16 @@ function Doctrine({ docSeen }) {
   );
 }
 
-// Saved teams (v4.32): #eqPrep432, under the header.
+// Saved teams (v4.32): #savedSquadsBox, under the header.
 function Squads() {
-  const T = PROFILE.teams432 || [];
+  const T = PROFILE.savedTeams || [];
   return (
-    <div className="eqp432" id="eqPrep432" hidden={!T.length}>
+    <div className="saved-squads" id="saved-squads-box" hidden={!T.length}>
       {T.length ? (
         <>
           <span className="lbl-s">Mes équipes</span>
           {T.map((t, i) => (
-            <button key={i} type="button" className="b b-sm" data-eq432="charger" data-i={i}>
+            <button key={i} type="button" className="b b-sm" data-team-save="charger" data-i={i}>
               {t.n}
             </button>
           ))}

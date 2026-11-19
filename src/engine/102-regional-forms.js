@@ -6,7 +6,7 @@ import { V4 } from './032-v4-foundation.js';
 import { renderDexCard } from './038-pokedex.js';
 
 // Regional forms: read by the Pokédex sheet (src/screens/dex/DexCard.jsx).
-export let REGIONAL_FORMS470 = [];
+export let REGIONAL_FORM_LIST = [];
 
 // Statements executed at startup, in the original order (see index.js).
 export function __init() {
@@ -34,7 +34,7 @@ export function __init() {
       { id: 'draby', reg: 'Hoenn céleste', plus: 'Vol', hue: 200, g: 3 },
       { id: 'massko', reg: 'Hoenn des dunes', plus: 'Dragon', hue: 90, g: 3 },
     ].filter(f => BY[f.id]);
-    REGIONAL_FORMS470 = REGIONAL_FORMS; // .fr470 banner and illustration tint: rendered by React
+    REGIONAL_FORM_LIST = REGIONAL_FORMS; // .regionalForm banner and illustration tint: rendered by React
     const regionOf = sc => {
       const c = SCEN[sc] || {};
       return c.hoenn != null ? 3 : c.johto != null ? 2 : 1;
@@ -51,9 +51,9 @@ export function __init() {
         }
       });
     });
-    window.__regional470 = REGIONAL_FORMS;
-    window.__regional470.regionOf = regionOf;
-    window.__regional470.V4 = () => V4;
-    window.__regional470.renderCard = () => renderDexCard();
+    window.__regionalForms = REGIONAL_FORMS;
+    window.__regionalForms.regionOf = regionOf;
+    window.__regionalForms.V4 = () => V4;
+    window.__regionalForms.renderCard = () => renderDexCard();
   })();
 }

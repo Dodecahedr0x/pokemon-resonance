@@ -11,13 +11,13 @@ import { DEXM } from '../../engine/033-pokedex-data.js';
 import { LORE } from '../../engine/034-pokedex-texts.js';
 import { DEXS } from '../../engine/038-pokedex.js';
 import { SPARK, isShinyOwned, shinyHue } from '../../engine/043-adventure-plus.js';
-import { mrg414 } from '../../engine/053-resonance.js';
-import { captureSite421 } from '../../engine/061-catch-anywhere.js';
-import { REGIONAL_FORMS470 } from '../../engine/102-regional-forms.js';
+import { roleBadgeHtml } from '../../engine/053-resonance.js';
+import { captureSite } from '../../engine/061-catch-anywhere.js';
+import { REGIONAL_FORM_LIST } from '../../engine/102-regional-forms.js';
 
 const no3 = n => String(n).padStart(3, '0');
 
-// Sheet of the selected Pokémon (#dex4Card). The transient classes scan448 / new448
+// Sheet of the selected Pokémon (#dex4Card). The transient classes scanSweep / dexNew
 // (sweep, first discovery) are still set by the engine (v4.48).
 export default function DexCard() {
   const m = BY[V4.dexSel] || DEXS[0];
@@ -30,8 +30,8 @@ export default function DexCard() {
     prev = DEXS[(i - 1 + DEXS.length) % DEXS.length],
     next = DEXS[(i + 1) % DEXS.length],
     note = NOTES[m.id],
-    placeLabel = captureSite421(m.id),
-    fr = REGIONAL_FORMS470.find(x => x.id === m.id); // regional form (v4.70)
+    placeLabel = captureSite(m.id),
+    fr = REGIONAL_FORM_LIST.find(x => x.id === m.id); // regional form (v4.70)
   const roles = [m.r, m.r2].filter((r, k, a) => r && a.indexOf(r) === k);
   const style = { '--c': tc(m.t[0]), '--c2': tc(m.t[1] || m.t[0]) };
   if (sh) {
@@ -39,7 +39,7 @@ export default function DexCard() {
   }
   return (
     <article
-      className={`v4-dexcard v4-panel${sh ? ' shiny' : ''}${own ? ' own448' : ''}`}
+      className={`v4-dexcard v4-panel${sh ? ' shiny' : ''}${own ? ' dex-owned' : ''}`}
       id="dex4Card"
       aria-live="polite"
       style={style}
@@ -137,7 +137,7 @@ export default function DexCard() {
                   <Html html={tb(v.t)} />
                   <b>
                     {v.n}
-                    <Html html={mrg414(v)} />
+                    <Html html={roleBadgeHtml(v)} />
                   </b>
                   <span>{`${strength(v, 'Puiss.')} · ${SHAPE[v.sh]}${v.r ? ' ' + v.r : ''}`}</span>
                   <em>{v.d}</em>
@@ -202,7 +202,7 @@ export default function DexCard() {
       </div>
       {fr && (
         <p
-          className="fr470"
+          className="regional-form"
           style={{
             margin: '8px 0',
             padding: '6px 10px',

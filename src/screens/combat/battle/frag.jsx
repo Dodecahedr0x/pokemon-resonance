@@ -7,7 +7,7 @@ export function Hi({ html }) {
   return <Html html={itemize(html)} />;
 }
 
-// Steps of the guided turn (v4.78), keys of flow478.step: foot of the bar (Foot) and panel timeline (Panel).
+// Steps of the guided turn (v4.78), keys of turnFlow.step: foot of the bar (Foot) and panel timeline (Panel).
 export const STEP = { deplacer: 'Déplacer', agir: 'Agir', extra: 'Terminer', fini: 'Fini' };
 
 // The guided flow (v4.78) removes the ".bp-hint" tips from the panel when no mode is active.

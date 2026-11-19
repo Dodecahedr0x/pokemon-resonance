@@ -10,28 +10,28 @@ import { badgeSvg } from './019-league.js';
 import { EMAX, P, hdist, heal, nbrK, say, setMark, shove, uAt, uk } from './021-combat-engine.js';
 import { scenLock } from './022-items-bonds-ai.js';
 import { wonOf } from './031-home-journey.js';
-import { HELD_IMG, ICO414, ITM, SHOP, V4 } from './032-v4-foundation.js';
+import { HELD_IMG, ITEM_ICONS, ITM, SHOP, V4 } from './032-v4-foundation.js';
 import { PL, PLACES, renderMap } from './037-map.js';
 import { DAMAGE_PROVIDERS } from './044-tactical-engine.js';
 import { hourOf } from './046-living-board.js';
-import { TARGET412, SELF412, applyPoison } from './051-epic-tms.js';
-import { rune413 } from './052-technical-roster.js';
+import { TARGET_MOVE_EFFECTS, SELF_MOVE_EFFECTS, applyPoison } from './051-epic-tms.js';
+import { hasRune } from './052-technical-roster.js';
 import { hasXp } from './053-resonance.js';
 import {
-  chapJ416,
-  extraLine416,
-  jdSetup416,
-  jdTick416,
-  leadJ416,
-  lockJ416,
-  roamPlaces416,
+  johtoChapterLive,
+  johtoExtraLine,
+  johtoSetup,
+  johtoTick,
+  johtoLead,
+  johtoLock,
+  roamingPlaces,
 } from './055-living-johto.js';
-import { PLACES_H, chapH419, hRewardLine419, hoennOpen, leadH419, regionH419 } from './059-hoenn.js';
+import { PLACES_H, hoennChapter, hoennRewardLine, hoennOpen, hoennLead, isHoennRegion } from './059-hoenn.js';
 
 export let PLACES_J, JMAP_SVG;
 
 // v4.46: Free mode included
-export function regionJ415() {
+export function isJohtoRegion() {
   try {
     return V4.region === 'johto' && johtoOpen();
   } catch (e) {
@@ -40,14 +40,14 @@ export function regionJ415() {
 }
 
 export function routeName() {
-  return regionH419() ? 'Route 104' : regionJ415() ? 'Route 32' : 'Route 29'; // Hoenn (v4.19)
+  return isHoennRegion() ? 'Route 104' : isJohtoRegion() ? 'Route 32' : 'Route 29'; // Hoenn (v4.19)
 }
 
-export function lockJ415(k, D) {
+export function lockJohto(k, D) {
   if (PROFILE.elite < 5) {
     return 'Johto s’ouvre après votre victoire sur la Championne Auriane Vale.';
   }
-  const l16 = lockJ416(k, D); // story, roaming beasts (v4.16)
+  const l16 = johtoLock(k, D); // story, roaming beasts (v4.16)
   if (l16 !== undefined) {
     return l16;
   }
@@ -63,12 +63,12 @@ export function lockJ415(k, D) {
   return null;
 }
 
-export function leadJ415(sc) {
+export function johtoLeader(sc) {
   const D = SCEN[sc];
   if (!D) {
     return null;
   }
-  const l16 = leadJ416(sc) || leadH419(sc); // v4.16, Hoenn (v4.19)
+  const l16 = johtoLead(sc) || hoennLead(sc); // v4.16, Hoenn (v4.19)
   if (l16) {
     return l16;
   }
@@ -81,12 +81,12 @@ export function leadJ415(sc) {
   return null;
 }
 
-export function chapJ415(k) {
+export function johtoChapter(k) {
   const D = SCEN[k];
   if (!D) {
     return null;
   }
-  const c16 = chapJ416(k) || chapH419(k); // v4.16, Hoenn (v4.19)
+  const c16 = johtoChapterLive(k) || hoennChapter(k); // v4.16, Hoenn (v4.19)
   if (c16) {
     return c16;
   }
@@ -102,13 +102,13 @@ export function chapJ415(k) {
   return null;
 }
 
-export function jRewardLine415(k) {
+export function johtoRewardLine(k) {
   const D = SCEN[k];
   if (D && (D.roam || D.jdis)) {
-    return extraLine416(k);
+    return johtoExtraLine(k);
   } // v4.16
   if (D && (D.hoenn != null || D.hfinal)) {
-    return hRewardLine419(k);
+    return hoennRewardLine(k);
   } // Hoenn (v4.19)
   if (!D || (D.johto == null && !D.jfinal)) {
     return '';
@@ -120,7 +120,7 @@ export function jRewardLine415(k) {
 }
 
 /* ---------- Johto gym rules ---------- */
-export function jSetup415(S, r, ev) {
+export function johtoGymSetup(S, r, ev) {
   if (!r || r[0] !== 'j') {
     return;
   }
@@ -163,10 +163,10 @@ export function jSetup415(S, r, ev) {
   if (r === 'jdragon') {
     say(ev, 'Arène Dragon : le souffle ancestral nourrit la Résonance adverse.');
   }
-  jdSetup416(S, r, ev); // story, beasts, Dominants (v4.16)
+  johtoSetup(S, r, ev); // story, beasts, Dominants (v4.16)
 }
 
-export function jTick415(S, r, ev) {
+export function johtoGymTick(S, r, ev) {
   if (!r || r[0] !== 'j' || S.over) {
     return;
   }
@@ -245,7 +245,7 @@ export function jTick415(S, r, ev) {
       }
     });
   }
-  jdTick416(S, r, ev); // story, Dominants (v4.16)
+  johtoTick(S, r, ev); // story, Dominants (v4.16)
 }
 
 // + roaming beasts (v4.16), Hoenn (v4.19)
@@ -270,7 +270,7 @@ export function placeStateJ(p, gk) {
 
 // Map region, tabs, title, captured families (v4.28): rendered by React
 // (src/screens/map/). Only the Route 29 panel remains (#route, rendered in the home page).
-export function regionUi415() {
+export function updateRouteSign() {
   setRoute({ sign: routeName() }); // name displayed on the route (Route.jsx)
 }
 
@@ -517,15 +517,15 @@ export const johtoOpen = () => PROFILE.elite >= 5;
 export const JCHAIN = ['jwild', 'j1', 'j2', 'j3', 'j4', 'j5', 'j6', 'j7', 'j8', 'jchamp'];
 
 export const placesR = () =>
-  V4.region === 'hoenn' ? PLACES_H : V4.region === 'johto' ? [...PLACES_J, ...roamPlaces416()] : PLACES;
+  V4.region === 'hoenn' ? PLACES_H : V4.region === 'johto' ? [...PLACES_J, ...roamingPlaces()] : PLACES;
 
 // Startup statements, run in their original order (see index.js).
 export function __init() {
   /* ---------- moves and abilities of the new families ---------- */
-  Object.assign(TARGET412, {
+  Object.assign(TARGET_MOVE_EFFECTS, {
     toxweb(S, u, v, x, mk, ev) {
       applyPoison(S, v, ev);
-      if (v.ability === 'regardvif' || rune413(S, v)) {
+      if (v.ability === 'regardvif' || hasRune(S, v)) {
         return;
       }
       v.web = Math.max(v.web, 2);
@@ -536,14 +536,14 @@ export function __init() {
       say(ev, `${v.n} est intimidé : −3 dégâts pendant 2 manches.`);
     },
     bourbier(S, u, v, _x, _mk, _ev) {
-      if (v.ability === 'regardvif' || rune413(S, v)) {
+      if (v.ability === 'regardvif' || hasRune(S, v)) {
         return;
       }
       v.web = Math.max(v.web, 2);
     },
   });
 
-  Object.assign(SELF412, {
+  Object.assign(SELF_MOVE_EFFECTS, {
     carapace(S, u, ev) {
       u.guard = Math.max(u.guard, 3);
       nbrK(uk(u)).forEach(x => {
@@ -569,7 +569,7 @@ export function __init() {
   );
 
   /* ---------- shinies ---------- */
-  Object.assign(ICO414, {
+  Object.assign(ITEM_ICONS, {
     'shiny-charm':
       'data:image/svg+xml;charset=utf-8,' +
       encodeURIComponent(

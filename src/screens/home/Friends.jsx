@@ -4,8 +4,8 @@ import { PROFILE } from '../../engine/011-game-state.js';
 import { medal } from '../../engine/014-utils.js';
 import { fmt } from '../../engine/032-v4-foundation.js';
 import { shinyStyle } from '../../engine/043-adventure-plus.js';
-import { friendsData416 } from '../../engine/055-living-johto.js';
-import { tournamentHtml417 } from '../../engine/057-companions-resonance.js';
+import { friendsPanelData } from '../../engine/055-living-johto.js';
+import { tournamentPanelHtml } from '../../engine/057-companions-resonance.js';
 
 // Friend challenges (#v4Amis, v4.16), under the hidden Home shortcuts.
 // data-ami, data-ami-fight, data-ami-del and tournoi buttons: handled by the engine.
@@ -18,7 +18,7 @@ export default function Friends({ on }) {
 }
 
 function Content() {
-  const { L, rows, jour: dayKey, del } = friendsData416();
+  const { L, rows, jour: dayKey, del } = friendsPanelData();
   return (
     <>
       <header className="v4-ph">
@@ -42,7 +42,7 @@ function Content() {
           Ajouter un ami
         </button>
       </div>
-      <Html html={tournamentHtml417()} />
+      <Html html={tournamentPanelHtml()} />
       {'\n  '}
       {L.length ? (
         <div className="am-l">

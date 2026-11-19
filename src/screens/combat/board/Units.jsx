@@ -6,7 +6,7 @@ import { PE, lref } from './shared.js';
 
 // Pokémon tokens (L.units layer): one <g class="tok"> per unit, read from the model the
 // engine keeps up to date (L.u[uid], see mkTok / updTokCore). Order follows L.uo (sort() of the
-// tilted board v4.77: back ones first). Names on the tilted board go through the .nms477 layer.
+// tilted board v4.77: back ones first). Names on the tilted board go through the .namesHigh layer.
 // References kept by the engine: T.g (token), T.b (animated group), T.ring, T.im.
 
 const XL = 'http://www.w3.org/1999/xlink';
@@ -56,9 +56,9 @@ function Art({ T, r }) {
 }
 
 /* v4.53: bubbles, lightning, ice cubes, status "z" */
-function St453() {
+function StatusFx() {
   return (
-    <g className="st453" aria-hidden="true">
+    <g className="status-fx" aria-hidden="true">
       <circle className="b1" cx="-9" cy="2" r="2" />
       <circle className="b2" cx="0" cy="4" r="1.6" />
       <circle className="b3" cx="9" cy="1" r="2.2" />
@@ -90,7 +90,7 @@ function Token({ T }) {
   }
   const art = T.imOn && <Art T={T} r={r} />;
   return (
-    <g ref={setG} className={T.c.join(' ')} style={sty} data-s453={T.s453 || undefined}>
+    <g ref={setG} className={T.c.join(' ')} style={sty} data-status-mark={T.statusMark || undefined}>
       <g ref={setB} className="tok-b" style={{ animationDelay: T.dl }}>
         <ellipse className="tok-sh" cx="0" cy="14" rx="12" ry="3.6" />
         <circle className="tok-rdy" r="21" />
@@ -125,12 +125,12 @@ function Token({ T }) {
           <circle r="5.6" />
           <path d="M-2.6 1.4 0 -1.6 2.6 1.4" />
         </g>
-        {T.w477 && (
-          <g className="tok-st477" style={{ animationDelay: T.dl }}>
+        {T.artGrouped && (
+          <g className="tok-stand" style={{ animationDelay: T.dl }}>
             {!T.imLoose && art}
           </g>
         )}
-        {(T.imLoose || !T.w477) && art}
+        {(T.imLoose || !T.artGrouped) && art}
         <g className={T.bdc} transform="translate(0,-22) rotate(-7)">
           <rect x="-12" y="-4.8" width="24" height="9" rx="1" />
           <rect className="in" x="-10.6" y="-3.4" width="21.2" height="6.2" rx="0.5" />
@@ -147,7 +147,7 @@ function Token({ T }) {
           ))}
         </g>
       </g>
-      {T.st && <St453 />}
+      {T.st && <StatusFx />}
     </g>
   );
 }
@@ -166,7 +166,7 @@ export function Units() {
 }
 
 /* v4.77: names above all Pokémon (tilted board), in the order they were passed in */
-const NMW = ['enemy', 'ally', 'ko', 'hid', 'fog431', 'pk-wait'];
+const NMW = ['enemy', 'ally', 'ko', 'hid', 'fog-of-war', 'pk-wait'];
 export function NamesHigh() {
   useBoard('units');
   return ordering()
@@ -175,7 +175,7 @@ export function NamesHigh() {
     .map(T => (
       <g
         key={T.uid}
-        className={'nmw477' + NMW.map(n => (T.c.includes(n) ? ' ' + n : '')).join('')}
+        className={'name-wrap' + NMW.map(n => (T.c.includes(n) ? ' ' + n : '')).join('')}
         style={T.tr != null ? { transform: T.tr } : undefined}
       >
         <text className="tok-nm" y="27">

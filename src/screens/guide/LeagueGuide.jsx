@@ -11,7 +11,7 @@ import {
   ownedItems,
 } from '../../engine/011-game-state.js';
 import { ico, medal, tc } from '../../engine/014-utils.js';
-import { duoList416 } from '../../engine/055-living-johto.js';
+import { listDuos } from '../../engine/055-living-johto.js';
 import { Html } from '../../lib/html.jsx';
 import { useGuide } from './guideStore.js';
 
@@ -44,7 +44,7 @@ export function Items() {
 // Combined techniques: progression of each duo's Bond (re-read on every display of the Guide).
 export function Duos() {
   useGuide();
-  return Object.entries(duoList416()).map(([k, d]) => {
+  return Object.entries(listDuos()).map(([k, d]) => {
     const [x, y] = k.split('|'),
       a = BY[x],
       b = BY[y];

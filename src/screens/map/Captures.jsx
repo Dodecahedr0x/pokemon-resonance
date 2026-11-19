@@ -1,37 +1,37 @@
 import { PROFILE } from '../../engine/011-game-state.js';
 import { PIX } from '../../engine/032-v4-foundation.js';
-import { REGION_NAMES421, ROUTE421, regionNo421 } from '../../engine/061-catch-anywhere.js';
-import { DIPL428, familyCapt428 } from '../../engine/063-combat-catches-home.js';
+import { FAMILY_REGION_NAMES, ROUTE_NAMES, regionIndex } from '../../engine/061-catch-anywhere.js';
+import { DIPLOMA_REWARDS, familyCaptureStats } from '../../engine/063-combat-catches-home.js';
 
 // Families captured in the region (v4.28), below the route. Clicking a Pokémon
-// (data-cp428) is still handled by the engine.
+// (data-region-dex) is still handled by the engine.
 export default function Captures() {
-  const r = regionNo421(),
-    c = familyCapt428(r),
+  const r = regionIndex(),
+    c = familyCaptureStats(r),
     endStep = c.n >= c.t;
   return (
-    <div id="cp428" className="cp428">
-      <div className="cp428-h">
-        <b>{`${ROUTE421[r]} · ${c.n} / ${c.t} familles capturées`}</b>
-        <span className="cp428-g">
+    <div id="region-dex" className="region-dex">
+      <div className="region-dex-h">
+        <b>{`${ROUTE_NAMES[r]} · ${c.n} / ${c.t} familles capturées`}</b>
+        <span className="region-dex-g">
           {endStep
-            ? `Pokédex de ${REGION_NAMES421[r]} complet ✓`
-            : `Diplôme : +${DIPL428[r][0]} ₽ · +${DIPL428[r][1]} Éclats`}
+            ? `Pokédex de ${FAMILY_REGION_NAMES[r]} complet ✓`
+            : `Diplôme : +${DIPLOMA_REWARDS[r][0]} ₽ · +${DIPLOMA_REWARDS[r][1]} Éclats`}
         </span>
       </div>
       {'\n '}
-      <span className="cp428-bar" aria-hidden="true">
+      <span className="region-dex-bar" aria-hidden="true">
         <i style={{ width: `${Math.round((c.n / Math.max(1, c.t)) * 100)}%` }} />
       </span>
       {'\n '}
-      <div className="cp428-l">
+      <div className="region-dex-l">
         {c.L.map(m => {
           const own = PROFILE.box.includes(m.id);
           return (
             <button
               type="button"
-              className={'cp428-m' + (own ? ' on' : '')}
-              data-cp428={m.id}
+              className={'region-dex-m' + (own ? ' on' : '')}
+              data-region-dex={m.id}
               aria-label={own ? m.n + ', capturé' : 'Pokémon pas encore capturé'}
               key={m.id}
             >

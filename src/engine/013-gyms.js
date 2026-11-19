@@ -5,7 +5,7 @@ import { SCEN } from './009-pokemon.js';
 import { writeLS } from './014-utils.js';
 import { BH, BW, K, P, say, setMark, uAt } from './021-combat-engine.js';
 import { LEAD } from './030-prestige-staging.js';
-import { jSetup415, jTick415 } from './054-johto.js';
+import { johtoGymSetup, johtoGymTick } from './054-johto.js';
 
 export let TERR, BADGES;
 export function __set_BADGES(v) {
@@ -59,7 +59,7 @@ export function arenaSetup(S) {
   if (r === 'psy') {
     say(ev, 'Arène Psy : une manche sur deux, un Écran Psy protège les adversaires (+2 Garde).');
   }
-  jSetup415(S, r, ev); // Johto gyms (v4.15)
+  johtoGymSetup(S, r, ev); // Johto gyms (v4.15)
   return ev;
 }
 
@@ -201,7 +201,7 @@ export function arenaTick(S) {
     );
     ev.push({ e: 'arena', r });
   }
-  jTick415(S, r, ev); // Johto gyms (v4.15)
+  johtoGymTick(S, r, ev); // Johto gyms (v4.15)
   return ev;
 }
 

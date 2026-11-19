@@ -3,7 +3,7 @@
 import { AUTO } from './030-prestige-staging.js';
 
 // no. → true (loaded) / false (unavailable)
-export function chromaArt425(img, no) {
+export function applyShinyArt(img, no) {
   if (!img || !no || AUTO) {
     return;
   }
@@ -11,24 +11,24 @@ export function chromaArt425(img, no) {
     if (!img.isConnected) {
       return;
     }
-    img.src = SHART425(no);
+    img.src = shinyArtUrl(no);
     img.classList.add('art-sh');
   };
-  if (SHOK425[no] === true) {
+  if (SHINY_ART_OK[no] === true) {
     return void applyIt();
   }
-  if (SHOK425[no] === false) {
+  if (SHINY_ART_OK[no] === false) {
     return;
   }
   const t = new Image();
   t.onload = () => {
-    SHOK425[no] = true;
+    SHINY_ART_OK[no] = true;
     applyIt();
   };
   t.onerror = () => {
-    SHOK425[no] = false;
+    SHINY_ART_OK[no] = false;
   };
-  t.src = SHART425(no);
+  t.src = shinyArtUrl(no);
 }
 
 /* =====================================================================
@@ -37,9 +37,9 @@ export function chromaArt425(img, no) {
    illustrations (Pokédex, list, encounter, fishing). They replace the
    game's tint only once loaded; offline, nothing changes.
    ===================================================================== */
-const SHART425 = no =>
+const shinyArtUrl = no =>
   'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/' +
   no +
   '.png';
 
-const SHOK425 = {};
+const SHINY_ART_OK = {};

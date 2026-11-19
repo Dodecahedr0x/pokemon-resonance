@@ -13,7 +13,7 @@ import { renderWallet } from './035-interface.js';
 import { centerMap, renderMap } from './037-map.js';
 import { renderDex } from './038-pokedex.js';
 import { renderBag, renderQuests } from './039-quests-shop.js';
-import { renderCampPage431 } from './066-tactical-challenges.js';
+import { renderCampPage } from './066-tactical-challenges.js';
 
 // The Settings page is rendered by React (src/screens/settings): redrawing = rebuilding it.
 export function renderParams() {
@@ -42,7 +42,7 @@ export function v4After(t) {
   } else if (t === 'params') {
     renderParams();
   } else if (t === 'camp') {
-    renderCampPage431();
+    renderCampPage();
   } // sub-tabs (v4.31)
   renderWallet();
 }

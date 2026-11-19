@@ -18,7 +18,7 @@ export function __init() {
     const on = k => PREF[k] !== 0;
     const directText = () => {
       try {
-        return !!RM || H.classList.contains('a11y-rm') || !on('pk473t') || !!AUTO;
+        return !!RM || H.classList.contains('a11y-rm') || !on('pokeStyleT') || !!AUTO;
       } catch (e) {
         return true;
       }
@@ -43,7 +43,7 @@ export function __init() {
     };
     const playSound = k => {
       try {
-        if (!PREF.sound || RM || !on('pk473s')) {
+        if (!PREF.sound || RM || !on('pokeStyleS')) {
           return;
         }
         SOUNDS[k] && SOUNDS[k]();
@@ -87,9 +87,9 @@ export function __init() {
     /* ---------- 4. text typed letter by letter ---------- */
     // [typed element, framed box, absolute arrow?]
     const DLG = [
-      ['#scene417 .sc-tx', e => e.closest('.sc-card'), false],
+      ['#story-scene .sc-tx', e => e.closest('.sc-card'), false],
       ['#coach .co-in p', e => e.closest('.co-in'), false],
-      ['#tip429 p', e => e.closest('#tip429'), false],
+      ['#tip-card p', e => e.closest('#tip-card'), false],
       ['.tip .dlgbox', e => e, true],
       ['.v4h-prof > p', e => e, false],
       ['.intro .dlgbox', e => e, true],
@@ -210,7 +210,7 @@ export function __init() {
         }
         for (const j of [...JOBS.values()]) {
           const zone = j.box || j.el;
-          const scene = j.el.closest('#scene417');
+          const scene = j.el.closest('#story-scene');
           if (scene && scene.contains(e.target)) {
             if (e.target.closest('[data-scene="passer"]')) {
               finishUp(j);
@@ -300,20 +300,20 @@ export function __init() {
     /* ---------- Settings: options added to "Habillage Pokémon" (Pokémon skin) ---------- */
     // buttons added to "Habillage Pokémon" (Pokémon skin): rendered by React (src/screens/settings/panels/PokemonSkin.jsx)
     document.addEventListener('click', e => {
-      const b = e.target.closest && e.target.closest('[data-pk473]');
+      const b = e.target.closest && e.target.closest('[data-poke-style]');
       if (!b) {
         return;
       }
-      const k = b.dataset.pk473 === 't' ? 'pk473t' : 'pk473s';
+      const k = b.dataset.pokeStyle === 't' ? 'poke-style-t' : 'poke-style-s';
       PREF[k] = on(k) ? 0 : 1;
       savePref();
       renderParams();
-      if (k === 'pk473s' && on(k)) {
+      if (k === 'pokeStyleS' && on(k)) {
         playSound('bip');
       }
     });
 
     schedule();
-    window.__world473 = { scan, write, finishUp, JOBS, VU: SEEN, son: playSound };
+    window.__worldDialogues = { scan, write, finishUp, JOBS, VU: SEEN, son: playSound };
   })();
 }

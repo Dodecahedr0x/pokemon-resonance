@@ -2,7 +2,7 @@ import { BY } from '../../../engine/009-pokemon.js';
 import { PROFILE } from '../../../engine/011-game-state.js';
 import { medal } from '../../../engine/014-utils.js';
 import { squad } from '../../../engine/020-team-cards.js';
-import { EVENTS431, NODES431, RELICS431, relRandom431 } from '../../../engine/066-tactical-challenges.js';
+import { ECHO_EVENTS, ECHO_NODES, RELIC_DEFS, randomRelic } from '../../../engine/066-tactical-challenges.js';
 import { Html } from '../../../lib/html.jsx';
 
 function Head({ X }) {
@@ -21,12 +21,12 @@ function Head({ X }) {
 function Event({ R }) {
   if (R.ev === 'relique') {
     return (
-      <div className="ec431-ev">
+      <div className="echo-tab-ev">
         <h3>Choisissez une relique</h3>
-        {relRandom431(R, 3).map(k => (
+        {randomRelic(R, 3).map(k => (
           <button key={k} type="button" className="b" data-echo431={`rel-${k}`}>
-            <b>{RELICS431[k][0]}</b>
-            <em>{RELICS431[k][1]}</em>
+            <b>{RELIC_DEFS[k][0]}</b>
+            <em>{RELIC_DEFS[k][1]}</em>
           </button>
         ))}
       </div>
@@ -34,7 +34,7 @@ function Event({ R }) {
   }
   if (R.ev === 'marchand') {
     return (
-      <div className="ec431-ev">
+      <div className="echo-tab-ev">
         <h3>
           Le Marchand <em>{`${R.echoes} Échos`}</em>
         </h3>
@@ -56,10 +56,10 @@ function Event({ R }) {
       </div>
     );
   }
-  if (EVENTS431[R.ev]) {
-    const [t, d, C] = EVENTS431[R.ev];
+  if (ECHO_EVENTS[R.ev]) {
+    const [t, d, C] = ECHO_EVENTS[R.ev];
     return (
-      <div className="ec431-ev">
+      <div className="echo-tab-ev">
         <h3>{t}</h3>
         <p>{d}</p>
         {C.map(([l, k]) => (
@@ -76,29 +76,29 @@ function Event({ R }) {
 // The expedition map, from the guardian (top) to the first floor.
 function Card({ R }) {
   return (
-    <div className="ec431-c">
+    <div className="echo-tab-c">
       {R.map
         .map((L, f) => {
           const doneFlag = f < R.f,
             hereNow = f === R.f && !R.ev;
           return (
-            <div key={f} className={`ec431-f${doneFlag ? ' fait' : ''}${hereNow ? ' ici' : ''}`}>
-              <span className="ec431-fn">{f + 1}</span>
+            <div key={f} className={`echo-tab-f${doneFlag ? ' fait' : ''}${hereNow ? ' ici' : ''}`}>
+              <span className="echo-tab-fn">{f + 1}</span>
               {L.map((t, i) => {
                 const takenSet = doneFlag && R.path[f] === i;
                 return (
                   <button
                     key={i}
                     type="button"
-                    className={`ec431-n t-${t}${takenSet ? ' pris' : ''}`}
+                    className={`echo-tab-n t-${t}${takenSet ? ' pris' : ''}`}
                     data-echo431={hereNow ? `n${i}` : undefined}
                     disabled={!hereNow}
-                    aria-label={`${NODES431[t][0]}, étage ${f + 1}`}
+                    aria-label={`${ECHO_NODES[t][0]}, étage ${f + 1}`}
                   >
                     <svg>
-                      <use href={`#${NODES431[t][1]}`} />
+                      <use href={`#${ECHO_NODES[t][1]}`} />
                     </svg>
-                    <span>{NODES431[t][0]}</span>
+                    <span>{ECHO_NODES[t][0]}</span>
                   </button>
                 );
               })}
@@ -116,7 +116,7 @@ export default function Echo() {
     R = X.run;
   if (!R) {
     return (
-      <section className="v4-panel ec431">
+      <section className="v4-panel echo-tab">
         <Head X={X} />
         <p className="v4-ps-n">
           Une expédition de 8 étages. À chaque étage, choisissez votre chemin : combat, élite (une relique à la clé),
@@ -124,12 +124,12 @@ export default function Echo() {
           <b>Les PV sont conservés d’un combat à l’autre et un Pokémon K.O. quitte l’expédition.</b> Au bout : le
           gardien.
         </p>
-        <div className="ec431-t">
+        <div className="echo-tab-t">
           {squad
             .slice(0, 4)
             .filter(id => BY[id])
             .map(id => (
-              <span key={id} className="ec431-m">
+              <span key={id} className="echo-tab-m">
                 <Html html={medal(BY[id].t, 'sm')} />
                 <b>{BY[id].n}</b>
               </span>
@@ -145,9 +145,9 @@ export default function Echo() {
     );
   }
   return (
-    <section className="v4-panel ec431">
+    <section className="v4-panel echo-tab">
       <Head X={X} />
-      <div className="ec431-k">
+      <div className="echo-tab-k">
         <span>
           Étage <b>{`${Math.min(8, R.f + 1)} / 8`}</b>
         </span>
@@ -156,23 +156,23 @@ export default function Echo() {
         </span>
         {R.pv ? <span>{`PV max +${Math.round(R.pv * 100)} %`}</span> : null}
       </div>
-      <div className="ec431-t">
+      <div className="echo-tab-t">
         {R.team.map(([id, h], i) => (
-          <span key={i} className={`ec431-m${h <= 0 ? ' ko' : ''}`}>
+          <span key={i} className={`echo-tab-m${h <= 0 ? ' ko' : ''}`}>
             <Html html={medal(BY[id].t, 'sm')} />
             <b>{BY[id].n}</b>
-            <span className="ec431-hp">
+            <span className="echo-tab-hp">
               <i style={{ width: `${Math.round(h * 100)}%` }} />
             </span>
             <em>{h <= 0 ? 'K.O.' : Math.round(h * 100) + ' %'}</em>
           </span>
         ))}
       </div>
-      <div className="ec431-rl">
+      <div className="echo-tab-rl">
         {R.relics.length ? (
           R.relics.map(k => (
-            <span key={k} className="ec431-r" title={RELICS431[k][1]}>
-              {RELICS431[k][0]}
+            <span key={k} className="echo-tab-r" title={RELIC_DEFS[k][1]}>
+              {RELIC_DEFS[k][0]}
             </span>
           ))
         ) : (

@@ -4,13 +4,13 @@ import { BY } from '../../engine/009-pokemon.js';
 import { tb } from '../../engine/014-utils.js';
 import { crestSmall } from '../../engine/020-team-cards.js';
 import { SPARK, shinyStyle } from '../../engine/043-adventure-plus.js';
-import { CROWN416 } from '../../engine/055-living-johto.js';
+import { DOMINANT_CROWN_SVG } from '../../engine/055-living-johto.js';
 
-// Fishing (#peche418): waiting, bite, catch. The engine (058) keeps the timers,
-// the clicks (data-peche418) and the hidden attribute; after a shiny catch, it
-// recolors the illustration (.pe-prise img, chromaArt425) right after rendering.
-export default function Fishing418() {
-  return <Box displayName="peche" className="result exp-box pe418" id="peche418" cardComponent={Card} />;
+// Fishing (#fishingPanel): waiting, bite, catch. The engine (058) keeps the timers,
+// the clicks (data-fishing-panel) and the hidden attribute; after a shiny catch, it
+// recolors the illustration (.pe-prise img, applyShinyArt) right after rendering.
+export default function FishingWindow() {
+  return <Box displayName="peche" className="result exp-box fishing-box" id="fishing-panel" cardComponent={Card} />;
 }
 
 function Body({ status: state, id, sh, dom, known: known }) {
@@ -34,7 +34,7 @@ function Body({ status: state, id, sh, dom, known: known }) {
           <span className="pe-bouchon" />
         </div>
         <p className="pe-alerte">Ça mord !</p>
-        <button type="button" className="b b-gold b-lg" data-peche418="ferrer">
+        <button type="button" className="b b-gold b-lg" data-fishing-panel="ferrer">
           Ferrer !
         </button>
       </>
@@ -45,7 +45,7 @@ function Body({ status: state, id, sh, dom, known: known }) {
       <>
         <div className="pe-eau" />
         <p className="d">Trop tard : il s’est échappé.</p>
-        <button type="button" className="b b-gold" data-peche418="lancer">
+        <button type="button" className="b b-gold" data-fishing-panel="lancer">
           Relancer la ligne
         </button>
       </>
@@ -63,7 +63,7 @@ function Body({ status: state, id, sh, dom, known: known }) {
       <p className="enc-t">
         {dom ? (
           <>
-            <Html html={CROWN416} />
+            <Html html={DOMINANT_CROWN_SVG} />
             Un gros {m.n} Dominant !
           </>
         ) : sh ? (
@@ -80,10 +80,10 @@ function Body({ status: state, id, sh, dom, known: known }) {
         ))}
       </div>
       <div className="enc-a">
-        <button type="button" className="b" data-peche418="relacher">
+        <button type="button" className="b" data-fishing-panel="relacher">
           Relâcher
         </button>
-        <button type="button" className="b b-gold" data-peche418="combat">
+        <button type="button" className="b b-gold" data-fishing-panel="combat">
           {known ? 'Combattre' : 'Combattre pour le capturer'}
         </button>
       </div>
@@ -93,7 +93,7 @@ function Body({ status: state, id, sh, dom, known: known }) {
 
 function Card({ route, catches: catches, ...p }) {
   return (
-    <Dialogue className="sv-card exp-card pe-card" titre="peT" closeAttrs={{ 'data-peche418': 'x' }}>
+    <Dialogue className="sv-card exp-card pe-card" titre="peT" closeAttrs={{ 'data-fishingPanel': 'x' }}>
       <p className="kick">{route} · pêche</p>
       <h2 className="h2" id="peT">
         Pêche

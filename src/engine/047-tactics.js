@@ -33,9 +33,9 @@ import { PREF } from './026-campaign-tutorial-sound.js';
 import { SHOP } from './032-v4-foundation.js';
 import { DAMAGE_PROVIDERS, ROLE_PROVIDERS } from './044-tactical-engine.js';
 import { MACHINES } from './045-tms-hms.js';
-import { rune413 } from './052-technical-roster.js';
-import { danger420Svg } from './060-intense-combat.js';
-import { duelLoad433 } from './068-duel-tutorial.js';
+import { hasRune } from './052-technical-roster.js';
+import { dangerZoneSvg } from './060-intense-combat.js';
+import { duelCanCharge } from './068-duel-tutorial.js';
 
 export let COLOSSI;
 
@@ -118,7 +118,7 @@ export function trapArrival(S, v, ev) {
   } else if (p.k === 'picots') {
     say(ev, `${n} : ${v.n} marche sur les pointes.`);
     damage(S, v, 5, ev, { ind: true });
-  } else if (v.ability === 'regardvif' || rune413(S, v)) {
+  } else if (v.ability === 'regardvif' || hasRune(S, v)) {
     say(ev, `${v.n} ignore la toile.`);
   } else {
     v.web = Math.max(v.web, 2);
@@ -189,7 +189,7 @@ export function outOfReach(S, v, u, ev) {
 
 export function unloadCharges(S, ev) {
   S.units
-    .filter(u => u.chg && duelLoad433(S, u)) // duel: after the opponent's turn (v4.33)
+    .filter(u => u.chg && duelCanCharge(S, u)) // duel: after the opponent's turn (v4.33)
     .forEach(u => {
       const c = u.chg,
         m = MV[c.mv],
@@ -354,7 +354,7 @@ export function tacticalDrawing(S, k, x, y) {
       h += `<g class="trap web" transform="translate(${X},${Y})" style="--c:${c}"><path d="M-10 0h20M0-8v16M-7-6l14 12M7-6l-14 12"/><circle r="4"/><circle r="7.5"/></g>`;
     }
   }
-  h += danger420Svg(S, k, x, y); // announced dangers (v4.20)
+  h += dangerZoneSvg(S, k, x, y); // announced dangers (v4.20)
   return h;
 }
 

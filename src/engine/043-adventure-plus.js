@@ -18,8 +18,8 @@ import { chosenAlive } from './046-living-board.js';
 import { chosenTactic } from './047-tactics.js';
 import { mutOfTurn, mutInfo } from './048-replayability.js';
 import { charactersChosen } from './049-identity.js';
-import { RIV429, rivBuild429 } from './064-quality.js';
-import { rivAdapt455 } from './086-adaptive-rival-board-themes.js';
+import { RIVAL_CHALLENGES, buildRival } from './064-quality.js';
+import { adaptRival } from './086-adaptive-rival-board-themes.js';
 
 export let wildShiny;
 export function __set_wildShiny(v) {
@@ -191,8 +191,8 @@ export function rivalStarter() {
 }
 
 export function rivalBuild() {
-  if (RIV429) {
-    rivBuild429();
+  if (RIVAL_CHALLENGES) {
+    buildRival();
   } // Kael in Johto and Hoenn follows your partner (v4.29)
   const line = RIVAL_LINE[rivalStarter()];
   RIVAL_STEPS.forEach((R, i) => {
@@ -218,7 +218,7 @@ export function rivalBuild() {
     OBST[k] = i < 2 ? { grass: ['2,2', '2,3'] } : { pil: ['4,2'], sand: ['2,1', '2,4'] };
   });
   try {
-    rivAdapt455(); // Kael adapts to your team (v4.55)
+    adaptRival(); // Kael adapts to your team (v4.55)
   } catch {
     /* Best effort: failure here is non-fatal. */
   }

@@ -602,7 +602,7 @@ html:not(#pkz) body:not(#pkz) .evofx.fast .efx::after {
   background: linear-gradient(115deg, transparent 38%, rgba(255, 255, 255, 0.55) 50%, transparent 62%) 160% 0/260% 100%
     no-repeat;
   mix-blend-mode: overlay;
-  animation: pkReflet473 1s ease-out 1.25s both;
+  animation: poke-glint 1s ease-out 1.25s both;
 }
 #pk-badge .pk-bc-gerbe {
   position: absolute;
@@ -621,7 +621,7 @@ html:not(#pkz) body:not(#pkz) .evofx.fast .efx::after {
   background: #fff3b0;
   box-shadow: 0 0 10px #ffd35a;
   opacity: 0;
-  animation: pkGerbe473 1s cubic-bezier(0.15, 0.7, 0.3, 1) 1.15s forwards;
+  animation: poke-spray 1s cubic-bezier(0.15, 0.7, 0.3, 1) 1.15s forwards;
   transform: rotate(var(--a));
 }
 #pk-badge .pk-bc-gerbe i:nth-child(3n) {
@@ -668,7 +668,7 @@ html:not(#pkz) body:not(#pkz) .evofx.fast .efx::after {
     transform: none;
   }
 }
-@keyframes pkReflet473 {
+@keyframes poke-glint {
   0% {
     background-position: 160% 0;
   }
@@ -676,7 +676,7 @@ html:not(#pkz) body:not(#pkz) .evofx.fast .efx::after {
     background-position: -60% 0;
   }
 }
-@keyframes pkGerbe473 {
+@keyframes poke-spray {
   0% {
     opacity: 0;
     transform: rotate(var(--a)) translateY(0) scale(0.4);

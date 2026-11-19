@@ -4,14 +4,14 @@ import ExpBox from './ExpBox.jsx';
 import DaycareBox from './DaycareBox.jsx';
 import FriendBox from './FriendBox.jsx';
 import CompanionBox from './CompanionBox.jsx';
-import Scene417 from './Scene417.jsx';
-import Fishing418 from './Fishing418.jsx';
-import Safari418 from './Safari418.jsx';
-import Conf430 from './Conf430.jsx';
-import { PkBadge, PkBtr, PkIris, Tr448 } from './Effects.jsx';
+import StoryScene from './StoryScene.jsx';
+import FishingWindow from './FishingWindow.jsx';
+import SafariWindow from './SafariWindow.jsx';
+import NewGameConfirm from './NewGameConfirm.jsx';
+import { PkBadge, PkBtr, PkIris, ScreenTransition } from './Effects.jsx';
 
 // Windows and effect layers that the engine appended to the end of <body>, in the original
-// order. #conf430 and #tr448 only existed once created (first call), hence after.
+// order. #newGame and #battleTransition only existed once created (first call), hence after.
 export default function Dialogs() {
   return (
     <>
@@ -21,14 +21,14 @@ export default function Dialogs() {
       <DaycareBox />
       <FriendBox />
       <CompanionBox />
-      <Scene417 />
-      <Fishing418 />
-      <Safari418 />
+      <StoryScene />
+      <FishingWindow />
+      <SafariWindow />
       <PkIris />
       <PkBtr />
       <PkBadge />
-      <Conf430 />
-      <Tr448 />
+      <NewGameConfirm />
+      <ScreenTransition />
     </>
   );
 }

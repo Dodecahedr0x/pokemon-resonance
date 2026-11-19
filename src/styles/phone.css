@@ -19,13 +19,13 @@
 /* ================= Home: activities (all sizes) =================
    Six banners with six different designs become a grid with one design;
    only the badge keeps the activity's color. */
-.act470 {
+.activity-bar {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 8px;
   margin: 12px 0;
 }
-html body .act470 > button {
+html body .activity-bar > button {
   display: flex !important;
   align-items: center;
   gap: 10px !important;
@@ -42,17 +42,17 @@ html body .act470 > button {
   text-align: left;
   vertical-align: top;
 }
-html body .act470 > button > span:not([class$='-i']) {
+html body .activity-bar > button > span:not([class$='-i']) {
   min-width: 0;
   flex: 1;
 }
-html body .act470 > button b {
+html body .activity-bar > button b {
   display: block;
   font-size: var(--t-m) !important;
   line-height: 1.2;
   font-weight: 700;
 }
-html body .act470 > button small {
+html body .activity-bar > button small {
   display: block;
   font-size: var(--t-xs) !important;
   line-height: 1.35;
@@ -63,31 +63,31 @@ html body .act470 > button small {
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
 }
-html body .act470 :is(.br466-i, .df468-i, .cd455-i) {
+html body .activity-bar :is(.boss-rush-i, .defense-gym-i, .dailygift-i) {
   width: 30px !important;
   height: 30px !important;
   flex: none;
   font-size: 13px;
 }
-html body .act470 .sa465-i {
+html body .activity-bar .season-event-i {
   flex: none;
 }
 /* the season (progress bar) and the daily gift take the full width */
-html body .act470 > #sa465,
-html body .act470 > #cd455 {
+html body .activity-bar > #season-event,
+html body .activity-bar > #dailygift {
   grid-column: 1/-1;
 }
-html body .act470 > #cd455:not(.done) {
+html body .activity-bar > #dailygift:not(.done) {
   border-color: rgba(255, 212, 91, 0.55) !important;
   background: linear-gradient(135deg, rgba(255, 212, 91, 0.14), rgba(11, 17, 26, 0.92)) !important;
 }
-html body .act470 > #br466 .br466-i {
+html body .activity-bar > #boss-rush .boss-rush-i {
   background: #ff8a7a;
 }
-html body .act470 > #x470 .df468-i {
+html body .activity-bar > #daily-challenges .defense-gym-i {
   background: #7be0a0;
 }
-html body .act470 > #x2470 .df468-i {
+html body .activity-bar > #x2470 .defense-gym-i {
   background: #8fbfff;
   color: #06142a;
 }
@@ -197,7 +197,7 @@ html body .act470 > #x2470 .df468-i {
   }
 
   /* ---------- Camp: sub-tabs on a single scrolling line ---------- */
-  html body .ct431 {
+  html body .camp-tab {
     flex-wrap: nowrap !important;
     overflow-x: auto;
     scrollbar-width: none;
@@ -206,7 +206,7 @@ html body .act470 > #x2470 .df468-i {
     -webkit-mask-image: linear-gradient(90deg, transparent, #000 16px, #000 calc(100% - 24px), transparent);
     mask-image: linear-gradient(90deg, transparent, #000 16px, #000 calc(100% - 24px), transparent);
   }
-  html body .ct431 button {
+  html body .camp-tab button {
     flex: none !important;
     height: 40px !important;
     padding: 0 16px !important;
@@ -214,10 +214,10 @@ html body .act470 > #x2470 .df468-i {
     font-size: var(--t-s) !important;
     white-space: nowrap;
   }
-  html body .ct431 button:last-child {
+  html body .camp-tab button:last-child {
     margin-right: 16px;
   }
-  html:not(#pkz) body:not(#pkz) .ct431 button[aria-selected='false'] {
+  html:not(#pkz) body:not(#pkz) .camp-tab button[aria-selected='false'] {
     background: rgba(255, 255, 255, 0.06) !important;
     border: 1px solid rgba(255, 255, 255, 0.12) !important;
     color: #d5dee8 !important;

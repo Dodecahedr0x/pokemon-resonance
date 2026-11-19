@@ -6,11 +6,11 @@ import { PREF, savePref } from './026-campaign-tutorial-sound.js';
 
 /* Settings › Design Workshop: paste a CSS block (e.g. written by ChatGPT), it applies immediately on this device.
    The brief gives ChatGPT the game's variables, pages and components without making it read the file's 3.7 MB. */
-export function css442() {
-  return String(PREF.css442 || '');
+export function customCss() {
+  return String(PREF.customCss || '');
 }
 
-function cssSafe442(t) {
+function sanitizeCss(t) {
   return String(t || '')
     .replace(/@import[^;]*;?/gi, '')
     .replace(/javascript:/gi, '')
@@ -18,9 +18,9 @@ function cssSafe442(t) {
     .slice(0, 60000);
 }
 
-function applyCss442() {
-  let el = document.getElementById('css442');
-  const t = cssSafe442(css442());
+function applyCustomCss() {
+  let el = document.getElementById('custom-css');
+  const t = sanitizeCss(customCss());
   if (!t) {
     if (el) {
       el.remove();
@@ -29,13 +29,13 @@ function applyCss442() {
   }
   if (!el) {
     el = document.createElement('style');
-    el.id = 'css442';
+    el.id = 'custom-css';
   }
   el.textContent = t;
   document.head.appendChild(el); // always last: it overrides the other stylesheets
 }
 
-function brief442() {
+function designBrief() {
   const names = new Set();
   for (const ss of document.styleSheets) {
     let rules;
@@ -95,7 +95,7 @@ PAGES
 ${pages}
 
 COMPOSANTS CLÉS
-.b / .b-gold / .b-sm (boutons) · .v4-panel (cartes) · .v4-tabs (onglets) · .nv (navigation ordinateur) · .bn (navigation téléphone) · #combat .sel-card (fiche du combat) · #combat .pt (équipe) · .res-card (résultat de combat) · .bt-top (haut du combat) · #bArena (règle d’arène) · .v4-params (Paramètres) · .lq429-c (carte de légende) · .doc430-b (boutons de doctrine).
+.b / .b-gold / .b-sm (boutons) · .v4-panel (cartes) · .v4-tabs (onglets) · .nv (navigation ordinateur) · .bn (navigation téléphone) · #combat .sel-card (fiche du combat) · #combat .pt (équipe) · .res-card (résultat de combat) · .bt-top (haut du combat) · #bArena (règle d’arène) · .v4-params (Paramètres) · .legend-quest-c (carte de légende) · .doctrine-choice-b (boutons de doctrine).
 
 Après ton CSS, propose-moi 3 variantes de palette que je peux tester en changeant seulement le bloc « :root ».`;
 }
@@ -105,30 +105,30 @@ export function __init() {
   // "Atelier design" (Design Workshop) panel: rendered by React (src/screens/settings/panels/DesignWorkshop.jsx)
 
   document.addEventListener('click', e => {
-    const a = e.target.closest('#ad442a,#ad442r,#ad442b');
+    const a = e.target.closest('#design-action-a,#design-action-r,#design-action-b');
     if (!a) {
       return;
     }
-    if (a.id === 'ad442a') {
-      PREF.css442 = cssSafe442(($('#ad442t') || {}).value);
+    if (a.id === 'design-action-a') {
+      PREF.customCss = sanitizeCss(($('#design-action-t') || {}).value);
       savePref();
-      applyCss442();
-      toast(PREF.css442 ? 'Style appliqué.' : 'Aucun CSS : style d’origine.');
-    } else if (a.id === 'ad442r') {
-      PREF.css442 = '';
+      applyCustomCss();
+      toast(PREF.customCss ? 'Style appliqué.' : 'Aucun CSS : style d’origine.');
+    } else if (a.id === 'design-action-r') {
+      PREF.customCss = '';
       savePref();
-      applyCss442();
-      const t = $('#ad442t');
+      applyCustomCss();
+      const t = $('#design-action-t');
       if (t) {
         t.value = '';
       }
       toast('Style d’origine rétabli.');
     } else {
-      const k = $('#ad442k');
+      const k = $('#design-action-k');
       if (!k) {
         return;
       }
-      k.value = brief442();
+      k.value = designBrief();
       k.hidden = false;
       k.focus();
       k.select();
@@ -147,5 +147,5 @@ export function __init() {
     }
   });
 
-  applyCss442();
+  applyCustomCss();
 }

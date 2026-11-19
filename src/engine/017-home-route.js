@@ -14,12 +14,12 @@ import { renderPrep } from './026-campaign-tutorial-sound.js';
 import { SHINY_RATE, __set_wildShiny, wildShiny } from './043-adventure-plus.js';
 import { multChroma, seasonWeight } from './050-world.js';
 import { routeName } from './054-johto.js';
-import { __set_wildDom416, domDraw416, wildDom416 } from './055-living-johto.js';
-import { domDay417 } from './057-companions-resonance.js';
-import { poolRegion421 } from './061-catch-anywhere.js';
-import { chromaArt425 } from './062-art-direction.js';
-import { rareW450 } from './080-trainer-avatar-rare-encounters.js';
-import { nzEncounter450 } from './081-nuzlocke-mode.js';
+import { __set_wildDominant, rollDominant, wildDominant } from './055-living-johto.js';
+import { dailyDominant } from './057-companions-resonance.js';
+import { regionPool } from './061-catch-anywhere.js';
+import { applyShinyArt } from './062-art-direction.js';
+import { rareWeight } from './080-trainer-avatar-rare-encounters.js';
+import { nuzlockeEncounter } from './081-nuzlocke-mode.js';
 
 export let TOD;
 let dlgT, wildId;
@@ -78,18 +78,18 @@ export function setTod(t) {
 }
 
 export function encounter() {
-  if (!nzEncounter450()) {
+  if (!nuzlockeEncounter()) {
     return;
   }
-  const pool = poolRegion421(); // each family in its region: Route 29, Route 32, Route 104 (v4.21)
+  const pool = regionPool(); // each family in its region: Route 29, Route 32, Route 104 (v4.21)
   const w = pool.map(
     m =>
       (m.t.some(t => WILDW[TOD].includes(t)) ? 4 : 1) *
       (!PROFILE.box.includes(m.id) ? 3 : 1) *
       seasonWeight(m) *
-      rareW450(m) * // v4.50: rare encounters (time, weather)
+      rareWeight(m) * // v4.50: rare encounters (time, weather)
       // seasonal event (v4.11)
-      (m.id === domDay417() ? 2 : 1) // Dominant flagged on the Pokématos (v4.17)
+      (m.id === dailyDominant() ? 2 : 1) // Dominant flagged on the Pokématos (v4.17)
   );
   let r = Math.random() * w.reduce((a, b) => a + b, 0),
     pick = pool[0];
@@ -104,7 +104,7 @@ export function encounter() {
     pick = pool[(pool.indexOf(pick) + 3) % pool.length];
   }
   wildId = pick.id;
-  __set_wildDom416(domDraw416(pick.id)); // Dominant Pokémon (v4.16)
+  __set_wildDominant(rollDominant(pick.id)); // Dominant Pokémon (v4.16)
   __set_wildShiny(Math.random() < SHINY_RATE * multChroma()); // rare: a shiny Pokémon (×2 on Shiny Weekend, v4.11)
   const path = evoPath(pick.id);
   $('#route').classList.remove('shake');
@@ -116,7 +116,7 @@ export function encounter() {
       showEnc({
         pick,
         shiny: wildShiny,
-        dom: wildDom416,
+        dom: wildDominant,
         route: routeName(),
         tod: TOD,
         inBox: PROFILE.box.includes(pick.id),
@@ -124,7 +124,7 @@ export function encounter() {
         path,
       });
       if (wildShiny) {
-        chromaArt425($('#enc .enc-cr img'), pick.no);
+        applyShinyArt($('#enc .enc-cr img'), pick.no);
       } // v4.25
       const f = $('#enc [data-enc="take"]');
       if (f) {
@@ -227,7 +227,7 @@ export function __init() {
       toggle(wildId);
     }
     if (a === 'fight' && wildId) {
-      wildScen(wildId, TOD, wildShiny, wildDom416);
+      wildScen(wildId, TOD, wildShiny, wildDominant);
       __set_scSel('sauvage');
       go('combat');
       if (!squad.length) {

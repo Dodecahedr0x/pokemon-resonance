@@ -1,10 +1,10 @@
 import { PREF } from '../../../engine/026-campaign-tutorial-sound.js';
 
-// Settings › Timed capture (v4.53): data-b453 button handled by the engine (module 083).
+// Settings › Timed capture (v4.53): data-catch-action button handled by the engine (module 083).
 export default function CaptureTiming() {
-  const on = PREF.capT453 !== 0;
+  const on = PREF.catchTimingEnabled !== 0;
   return (
-    <section className="v4-panel" id="ac453">
+    <section className="v4-panel" id="capture-timing-panel">
       <h3 className="h3">Capture avec timing</h3>
       <p className="v4-note">
         Quand les conditions de capture sont réunies, un anneau se resserre : touchez au bon moment. Parfait : la Ball
@@ -12,7 +12,7 @@ export default function CaptureTiming() {
         gardez vos Voix. Un bouton permet toujours de passer le timing.
       </p>
       <div className="sv-io">
-        <button type="button" className={`b b-sm${on ? ' b-gold' : ''}`} data-b453="cap">
+        <button type="button" className={`b b-sm${on ? ' b-gold' : ''}`} data-catch-action="cap">
           {on ? 'Timing de capture : activé' : 'Timing de capture : désactivé'}
         </button>
       </div>

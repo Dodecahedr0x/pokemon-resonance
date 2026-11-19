@@ -1,27 +1,27 @@
-import { SECRETS460, scSt460 } from '../../../engine/091-phase-bosses-secret-places.js';
-import { badgeCount459 } from '../../../engine/090-item-quests-trophies.js';
+import { SECRET_PLACES, secretState } from '../../../engine/091-phase-bosses-secret-places.js';
+import { badgeTotal } from '../../../engine/090-item-quests-trophies.js';
 
 // Secret places (v4.60): those already discovered, and a hint for the others.
 export default function SecretPlaces() {
-  const st = scSt460();
-  const n = SECRETS460.filter(s => st.found[s.id]).length;
+  const st = secretState();
+  const n = SECRET_PLACES.filter(s => st.found[s.id]).length;
   return (
-    <section className="v4-panel" id="sc460j">
+    <section className="v4-panel" id="secret-places-j">
       <h3 className="h3">Lieux secrets</h3>
       <p className="v4-note">
         Des lieux n’apparaissent sur la carte qu’à certaines heures ou sous certaines météos.{' '}
         <b>
-          {n} / {SECRETS460.length}
+          {n} / {SECRET_PLACES.length}
         </b>{' '}
         découverts. Un habitant itinérant passe aussi chaque jour sur la carte.
       </p>
-      <ul className="sc460-l">
-        {SECRETS460.map(s => {
+      <ul className="secret-places-l">
+        {SECRET_PLACES.map(s => {
           const f = st.found[s.id];
           return (
-            <li key={s.id} className={`sc460-r${f ? ' on' : ''}`}>
+            <li key={s.id} className={`secret-places-r${f ? ' on' : ''}`}>
               <b>{f ? s.n : '???'}</b>
-              <small>{f ? 'Découvert.' : badgeCount459() < s.min ? 'Se révélera avec plus de badges.' : s.ind}</small>
+              <small>{f ? 'Découvert.' : badgeTotal() < s.min ? 'Se révélera avec plus de badges.' : s.ind}</small>
             </li>
           );
         })}

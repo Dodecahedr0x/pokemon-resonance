@@ -3,9 +3,9 @@
 import { BY, PRESETS, familyOf } from './009-pokemon.js';
 import { RECRUIT } from './010-in-battle-evolution.js';
 import { BADGE_REWARD, PROFILE, isCamp } from './011-game-state.js';
-import { regionJ415 } from './054-johto.js';
-import { regionH419 } from './059-hoenn.js';
-import { boxN429 } from './064-quality.js';
+import { isJohtoRegion } from './054-johto.js';
+import { isHoennRegion } from './059-hoenn.js';
+import { boxCount } from './064-quality.js';
 
 /* =====================================================================
    v4.21: catch anywhere
@@ -16,27 +16,27 @@ import { boxN429 } from './064-quality.js';
       included (Magikarp bites everywhere). A family belongs to the
       region of its first known member: Pichu → Pikachu is Kanto.
    3. Free-mode players keep their team, their catches, their
-      companion and their badge gifts (one-time migration, lib421).
+      companion and their badge gifts (one-time migration, freeMigrated).
    ===================================================================== */
-export function V421_0() {
-  return { lib421: 0 };
+export function CATCH_ANYWHERE_0() {
+  return { freeMigrated: 0 };
 }
 
-export function v421Clean(p) {
-  return { lib421: p && p.lib421 ? 1 : 0 };
+export function catchAnywhereClean(p) {
+  return { freeMigrated: p && p.freeMigrated ? 1 : 0 };
 }
 
 /** Region of a family: 1 Kanto, 2 Johto, 3 Hoenn (first known member). */
-export function regFam421(id) {
+export function familyRegion(id) {
   const m = BY[id];
   if (!m) {
     return 1;
   }
   const b = m.base || id;
-  if (REG421[b] == null) {
-    REG421[b] = Math.min(...familyOf(b).map(x => x.gen || 1));
+  if (REGION_CACHE[b] == null) {
+    REGION_CACHE[b] = Math.min(...familyOf(b).map(x => x.gen || 1));
   }
-  return REG421[b];
+  return REGION_CACHE[b];
 }
 
 /**
@@ -44,7 +44,7 @@ export function regFam421(id) {
  * the team, catches already made, the companion and the gifts
  * from badges already won are put into it. An empty Box receives the starter team.
  */
-export function free421(sq, badges) {
+export function fillFreeBox(sq, badges) {
   if (isCamp()) {
     return false;
   }
@@ -52,12 +52,12 @@ export function free421(sq, badges) {
     add = id => {
       const m = BY[id],
         b = m && m.base;
-      if (b && isRecruit421(b) && !box.includes(b)) {
+      if (b && isRecruitable(b) && !box.includes(b)) {
         box.push(b);
       }
     };
   let ch = false;
-  if (!PROFILE.lib421) {
+  if (!PROFILE.freeMigrated) {
     (sq || []).forEach(add);
     (PROFILE.dex || []).forEach(add);
     if (PROFILE.comp && PROFILE.comp.id) {
@@ -70,7 +70,7 @@ export function free421(sq, badges) {
         add(g);
       }
     });
-    PROFILE.lib421 = 1;
+    PROFILE.freeMigrated = 1;
     ch = true;
   }
   if (!box.length) {
@@ -80,21 +80,21 @@ export function free421(sq, badges) {
   return ch;
 }
 
-const REG421 = {};
+const REGION_CACHE = {};
 
-export const regionNo421 = () => (regionH419() ? 3 : regionJ415() ? 2 : 1);
+export const regionIndex = () => (isHoennRegion() ? 3 : isJohtoRegion() ? 2 : 1);
 
-export const ROUTE421 = ['', 'Route 29', 'Route 32', 'Route 104'];
+export const ROUTE_NAMES = ['', 'Route 29', 'Route 32', 'Route 104'];
 
-export const REGION_NAMES421 = ['', 'Kanto', 'Johto', 'Hoenn'];
+export const FAMILY_REGION_NAMES = ['', 'Kanto', 'Johto', 'Hoenn'];
 
-const isRecruit421 = id => !!BY[id] && RECRUIT.some(x => x.id === BY[id].base);
+const isRecruitable = id => !!BY[id] && RECRUIT.some(x => x.id === BY[id].base);
 
 /** Where to catch a family (empty for legends, never recruitable). */
-export const captureSite421 = id => (isRecruit421(id) ? ROUTE421[regFam421(id)] : '');
+export const captureSite = id => (isRecruitable(id) ? ROUTE_NAMES[familyRegion(id)] : '');
 
 /** The wild families of the displayed region. */
-export const poolRegion421 = (r = regionNo421()) => RECRUIT.filter(m => regFam421(m.id) === r);
+export const regionPool = (r = regionIndex()) => RECRUIT.filter(m => familyRegion(m.id) === r);
 
 /** Short text for the Free-mode screens. */
-export const freeBox421 = () => `Box ${boxN429()} / ${RECRUIT.length}`;
+export const boxCapacityLabel = () => `Box ${boxCount()} / ${RECRUIT.length}`;

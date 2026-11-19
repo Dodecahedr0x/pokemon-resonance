@@ -313,15 +313,15 @@
       0 0 18px -4px rgba(227, 192, 122, 0.7) !important;
   }
   /* board tools and time badge: just below the opponent cards */
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bBoard > .bt444 {
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bBoard > .board-tools {
     top: 66px !important;
     left: 12px !important;
   }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bBoard > .ciel430 {
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bBoard > .sky-banner {
     top: 66px !important;
     right: 12px !important;
   }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #df468hud {
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #defense-gym-hud {
     position: absolute;
     left: 50%;
     top: 70px;
@@ -479,7 +479,7 @@
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bPlA .plate {
     background: rgba(8, 22, 44, 0.7) !important;
   }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bBoard > .ciel430 {
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bBoard > .sky-banner {
     top: 66px !important;
   }
 
@@ -733,18 +733,18 @@
 }
 
 /* « Terminer » (End) step: the button takes the full width, what follows is announced below */
-#bPanel .fl478[data-st='extra'] .fl478-r {
+#bPanel .turn-guide[data-st='extra'] .turn-guide-r {
   flex-wrap: wrap;
 }
-#bPanel .fl478[data-st='extra'] .fl478-r > p {
+#bPanel .turn-guide[data-st='extra'] .turn-guide-r > p {
   flex: 1 1 100%;
 }
-#bPanel .fl478[data-st='extra'] .fl478-r > [data-vx='fin478'] {
+#bPanel .turn-guide[data-st='extra'] .turn-guide-r > [data-vx='finished-round'] {
   flex: 1 1 100%;
   height: 44px;
   font-size: 14px;
 }
-#bPanel .fl478-suite {
+#bPanel .turn-guide-suite {
   flex: 1 1 100%;
   text-align: center;
   font-size: 11.5px;
@@ -811,7 +811,7 @@ html body #evoPick .ep-card .h2 {
   font-size: 22px;
   letter-spacing: 0.03em;
 }
-html body #ct453 .ct453-c {
+html body #timed-catch .timed-catch-c {
   gap: 12px;
   padding: 16px 18px 14px;
   border-radius: 20px;
@@ -821,20 +821,20 @@ html body #ct453 .ct453-c {
   border: 1px solid rgba(227, 192, 122, 0.45);
   box-shadow: 0 30px 60px -24px #000;
 }
-html body #ct453 .ct453-z {
+html body #timed-catch .timed-catch-z {
   border-color: #f0d59c;
 }
-html body #ct453 .ct453-g {
+html body #timed-catch .timed-catch-g {
   border-color: #ffffff;
   box-shadow: 0 0 14px rgba(255, 255, 255, 0.45);
 }
-html body #ct453 .ct453-b {
+html body #timed-catch .timed-catch-b {
   width: 100%;
   height: 48px;
   font-size: 15px;
   font-weight: 800;
 }
-html body #ct453 .ct453-s {
+html body #timed-catch .timed-catch-s {
   color: #e3c07a;
   text-decoration: none;
 }
@@ -891,7 +891,7 @@ html body #cbResult > .res-card {
 /* ================= Prof.'s tip during battle =================
    .pk-dlg forces position:relative: the tip fell into the flow, under the command drawer,
    and stretched the page with a big empty gap. It stays floating, at the top, above the board. */
-html:not(#pkz) body:not(#pkz) #tip429.pk-dlg {
+html:not(#pkz) body:not(#pkz) #tip-card.pk-dlg {
   position: fixed !important;
 }
 
@@ -957,7 +957,7 @@ html:not(#pkz) body:not(#pkz) #tip429.pk-dlg {
   }
   /* sun and time are already on the board (sky badge) */
   html:not(#cc)
-    body:not(#cc):has(#cbBattle:not([hidden])):has(#bBoard > .ciel430)
+    body:not(#cc):has(#cbBattle:not([hidden])):has(#bBoard > .sky-banner)
     #cbBattle
     .bt-top
     #bWx
@@ -984,10 +984,10 @@ html:not(#pkz) body:not(#pkz) #tip429.pk-dlg {
     align-items: center;
     gap: 8px !important;
   }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .bt-foot .fl478-pied {
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .bt-foot .turn-guide-pied {
     display: none !important;
   }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .bt-foot #qa443 {
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .bt-foot #thumb-reach {
     order: 1;
     flex: 1 1 auto;
     min-width: 0;
@@ -997,22 +997,28 @@ html:not(#pkz) body:not(#pkz) #tip429.pk-dlg {
     -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 20px), transparent);
     mask-image: linear-gradient(90deg, #000 calc(100% - 20px), transparent);
   }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .bt-foot #qa443::-webkit-scrollbar {
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .bt-foot #thumb-reach::-webkit-scrollbar {
     display: none;
   }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .bt-foot #qa443 > button {
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .bt-foot #thumb-reach > button {
     flex: none;
     height: 40px;
   }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .bt-foot #qa443 > button:last-child {
+  html:not(#cc)
+    body:not(#cc):has(#cbBattle:not([hidden]))
+    #cbBattle
+    .bt-side
+    .bt-foot
+    #thumb-reach
+    > button:last-child {
     margin-right: 18px;
   }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .bt-foot .bt444.in-foot {
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .bt-foot .board-tools.in-foot {
     order: 2;
     flex: none;
     gap: 4px !important;
   }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .bt-foot .bt444.in-foot button {
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .bt-foot .board-tools.in-foot button {
     width: 36px !important;
     height: 40px !important;
   }

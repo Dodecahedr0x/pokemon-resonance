@@ -7,11 +7,11 @@ import { medal } from '../../engine/014-utils.js';
 import { squad } from '../../engine/020-team-cards.js';
 import { STARS } from '../../engine/027-gym-on-screen.js';
 import { LEGS } from '../../engine/043-adventure-plus.js';
-import { EQ_NAME432 } from '../../engine/067-individuals-comfort.js';
+import { TEAM_NAME_EDIT } from '../../engine/067-individuals-comfort.js';
 
 // Panel above the grid (#dexCall, old renderDexCall): confirmed recruits,
 // captured legends (v4.29), saved teams (v4.32), formations.
-// Clicks: engine listeners (#dexCall [data-stg], data-pf, data-eq432, data-lp429).
+// Clicks: engine listeners (#dexCall [data-stg], data-pf, data-team-save, data-species-sheet).
 export default function DexCall({ v }) {
   const [isOpen, setOpen] = useState(
     () => !(typeof matchMedia === 'function' && matchMedia('(max-width:700px)').matches)
@@ -52,7 +52,7 @@ export default function DexCall({ v }) {
       <details className="dc-more" open={isOpen} onToggle={e => setOpen(e.currentTarget.open)}>
         <summary>Équipes enregistrées et formations</summary>
         {/* rebuilt on every render, like the old innerHTML: « Sûr ? » (Sure?) is written by the engine */}
-        <Squads432 key={v} />
+        <SavedSquads key={v} />
         <div className="dc-row">
           <span className="lbl-s">Formations</span>
           <div className="dc-f">
@@ -62,7 +62,7 @@ export default function DexCall({ v }) {
                 type="button"
                 className={`b b-sm${p.f ? ' form' : ''}`}
                 data-pf={k}
-                title={p.s432 ? 'Synergies : ' + p.s432 : ''}
+                title={p.synergyText ? 'Synergies : ' + p.synergyText : ''}
               >
                 {p.n}
               </button>
@@ -74,7 +74,7 @@ export default function DexCall({ v }) {
   );
 }
 
-// Captured legends (old legRow429).
+// Captured legends.
 function Legends() {
   const L = LEGS.filter(x => PROFILE.box.includes(x.id));
   if (!L.length) {
@@ -95,7 +95,7 @@ function Legends() {
               type="button"
               className={`dc-s${sel ? ' on' : ''}`}
               data-stg={x.id}
-              data-lp429={x.id}
+              data-species-sheet={x.id}
               aria-pressed={sel}
               title={`${m.n} · ${RC(x.id)} PC`}
             >
@@ -110,44 +110,55 @@ function Legends() {
   );
 }
 
-// Saved teams (old equipesHtml432). Uncontrolled #eqNom432 field, re-read by the engine.
-function Squads432() {
-  const T = PROFILE.teams432 || [];
+// Saved teams. Uncontrolled #teamName field, re-read by the engine.
+function SavedSquads() {
+  const T = PROFILE.savedTeams || [];
   return (
-    <div className="dc-row eq432">
+    <div className="dc-row team-save">
       <span className="lbl-s">Mes équipes</span>
       <div className="dc-f">
         {T.map((t, i) => (
-          <span key={i} className="eq432-c">
+          <span key={i} className="team-save-c">
             <button
               type="button"
               className="b b-sm"
-              data-eq432="charger"
+              data-team-save="charger"
               data-i={i}
               title={t.ids.map(id => (BY[id] ? BY[id].n : id)).join(', ')}
             >
               {t.n}
             </button>
-            <button type="button" className="eq432-x" data-eq432="suppr" data-i={i} aria-label={`Supprimer ${t.n}`}>
+            <button
+              type="button"
+              className="team-save-x"
+              data-team-save="suppr"
+              data-i={i}
+              aria-label={`Supprimer ${t.n}`}
+            >
               ×
             </button>
           </span>
         ))}
-        {EQ_NAME432 ? (
-          <span className="eq432-n">
+        {TEAM_NAME_EDIT ? (
+          <span className="team-save-n">
             <input
               type="text"
-              id="eqNom432"
+              id="team-name"
               maxLength={20}
               placeholder="Nom de l’équipe"
               aria-label="Nom de l’équipe"
             />
-            <button type="button" className="b b-sm b-gold" data-eq432="ok">
+            <button type="button" className="b b-sm b-gold" data-team-save="ok">
               OK
             </button>
           </span>
         ) : (
-          <button type="button" className="b b-sm b-ghost" data-eq432="nouv" disabled={!(squad.length && T.length < 8)}>
+          <button
+            type="button"
+            className="b b-sm b-ghost"
+            data-team-save="nouv"
+            disabled={!(squad.length && T.length < 8)}
+          >
             + Enregistrer l’équipe
           </button>
         )}

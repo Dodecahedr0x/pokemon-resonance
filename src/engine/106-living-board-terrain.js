@@ -368,7 +368,7 @@ export function __init() {
     };
     const kindOf = () => {
       try {
-        const th = [...document.body.classList].map(c => /^th455-(.+)$/.exec(c)).find(Boolean);
+        const th = [...document.body.classList].map(c => /^board-theme-(.+)$/.exec(c)).find(Boolean);
         if (th && THEME_KIND[th[1]]) {
           return THEME_KIND[th[1]];
         }
@@ -1258,7 +1258,7 @@ export function __init() {
     let cur = '',
       busy = 0;
     const board = () => document.getElementById('bBoard');
-    // painted image, waves, tex471/deco471 classes: rendered by the board's React layers
+    // painted image, waves, textureLayer/paintscape classes: rendered by the board's React layers
     const ensureLayers = () => {
       const svg = document.getElementById('bSvg');
       if (!svg || !L.tiles) {
@@ -1267,14 +1267,14 @@ export function __init() {
       if (!getBoard().pv) {
         boardSet({ pv: true }, 'pv', 'paint');
       }
-      return svg.querySelector('image.pv471');
+      return svg.querySelector('image.paintedterrain');
     };
-    // .amb471 particles: rendered by React (Board.jsx), [class, style] per particle
+    // .ambientFx particles: rendered by React (Board.jsx), [class, style] per particle
     const particles = kind => {
       if (!board()) {
         return;
       }
-      const a = getHost().amb471;
+      const a = getHost().ambientFx;
       if (a && a.k === kind) {
         return;
       }
@@ -1309,7 +1309,7 @@ export function __init() {
           ]);
         }
       }
-      hostSet({ amb471: { k: kind, items } });
+      hostSet({ ambientFx: { k: kind, items } });
     };
     const doApply = (sig, res) => {
       if (!B || terrainSig() !== sig) {
@@ -1319,7 +1319,7 @@ export function __init() {
       if (!im) {
         return;
       }
-      const ok = () => bdClass('pv471', true); // class of #bBoard, rendered by React
+      const ok = () => bdClass('paintedterrain', true); // class of #bBoard, rendered by React
       if (im.getAttribute('href') === res.url) {
         ok();
       } else {
@@ -1362,7 +1362,7 @@ export function __init() {
           } catch {
             /* Best effort: failure here is non-fatal. */
           }
-          bdClass('pv471', false);
+          bdClass('paintedterrain', false);
           return;
         }
         const endStep = url => {
@@ -1397,10 +1397,10 @@ export function __init() {
     };
     HOOKS.plateau.push(() => {
       cur = '';
-      bdClass('pv471', false);
+      bdClass('paintedterrain', false);
       launchMove();
     });
     HOOKS.boardRendered.push(launchMove);
-    window.__board471 = { paint, kindOf, KIND, CACHE, lancer: launchMove, terrainSig };
+    window.__livingBoard = { paint, kindOf, KIND, CACHE, lancer: launchMove, terrainSig };
   })();
 }

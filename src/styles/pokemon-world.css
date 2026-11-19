@@ -106,22 +106,22 @@ html:not(#pkz) body:not(#pkz) .tip .dlgbox.pk-dlg {
   margin-top: 8px;
 }
 /* story scenes */
-html:not(#pkz) body:not(#pkz) #scene417 .sc-card.pk-dlg {
+html:not(#pkz) body:not(#pkz) #story-scene .sc-card.pk-dlg {
   padding: 16px 16px 14px !important;
   animation: pkDlgIn 0.32s cubic-bezier(0.2, 1, 0.4, 1) both !important;
 }
-html:not(#pkz) body:not(#pkz) #scene417 .sc-card.pk-dlg .sc-who > b {
+html:not(#pkz) body:not(#pkz) #story-scene .sc-card.pk-dlg .sc-who > b {
   color: #1d4ea8 !important;
   font-family: var(--f-d) !important;
   letter-spacing: 0.04em;
 }
-html:not(#pkz) body:not(#pkz) #scene417 .sc-card.pk-dlg .sc-tx {
+html:not(#pkz) body:not(#pkz) #story-scene .sc-card.pk-dlg .sc-tx {
   font-size: 16.5px !important;
   line-height: 1.55 !important;
   font-weight: 500;
   color: #1f2836 !important;
 }
-html:not(#pkz) body:not(#pkz) #scene417 .sc-card.pk-dlg .sc-n {
+html:not(#pkz) body:not(#pkz) #story-scene .sc-card.pk-dlg .sc-n {
   color: #6a7688 !important;
 }
 html:not(#pkz) body:not(#pkz) .pk-dlg .b-ghost {
@@ -144,15 +144,15 @@ html:not(#pkz) body:not(#pkz) #coach .co-in.pk-dlg p {
   color: #273142 !important;
 }
 /* tips in battle */
-html:not(#pkz) body:not(#pkz) #tip429.pk-dlg {
+html:not(#pkz) body:not(#pkz) #tip-card.pk-dlg {
   padding: 12px 14px !important;
 }
-html:not(#pkz) body:not(#pkz) #tip429.pk-dlg small {
+html:not(#pkz) body:not(#pkz) #tip-card.pk-dlg small {
   color: #2c5fae !important;
   font-weight: 800;
   letter-spacing: 0.06em;
 }
-html:not(#pkz) body:not(#pkz) #tip429.pk-dlg > div > b {
+html:not(#pkz) body:not(#pkz) #tip-card.pk-dlg > div > b {
   color: #1d4ea8 !important;
 }
 /* the champion's line before the battle */
@@ -198,10 +198,10 @@ html:not(#pkz) body:not(#pkz) .v4-dl.unk::before {
   box-shadow: 0 0 0 1.5px #151a22;
   pointer-events: none;
 }
-html:not(#pkz) body:not(#pkz) #dex4Card:not(.own448) .v4d-art img {
+html:not(#pkz) body:not(#pkz) #dex4Card:not(.dex-owned) .v4d-art img {
   filter: brightness(0) drop-shadow(0 0 2px rgba(150, 205, 255, 0.85)) drop-shadow(0 0 16px rgba(111, 220, 255, 0.3)) !important;
 }
-html:not(#pkz) body:not(#pkz) #dex4Card:not(.own448) .v4d-art::after {
+html:not(#pkz) body:not(#pkz) #dex4Card:not(.dex-owned) .v4d-art::after {
   content: '?' !important;
   position: absolute !important;
   display: grid !important;

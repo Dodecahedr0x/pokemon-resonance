@@ -38,7 +38,7 @@ const BALANCING = {
 };
 
 /* v4.13 · technical kits: own ability for each stage, sharp role, signature at the final form */
-const KITS413 = {
+const TECHNICAL_KITS = {
   herbizarre: { ability: 'ecranpoudre' },
   florizarre: { mv: ['lancesoleil', 'synthese', 'vegeattak'] },
   reptincel: { ability: 'cran', r: 'Verrou', r2: 'Frappeur' },
@@ -83,7 +83,7 @@ const KITS413 = {
 };
 
 /* v4.13 · families that can no longer be recruited: they remain opponents */
-const OPPONENTS413 = [
+const OPPONENT_ONLY_FAMILIES = [
   'roucool',
   'roucoups',
   'roucarnage',
@@ -2286,13 +2286,13 @@ export function __init() {
     }
   }
 
-  for (const id in KITS413) {
+  for (const id in TECHNICAL_KITS) {
     if (BY[id]) {
-      Object.assign(BY[id], KITS413[id]);
+      Object.assign(BY[id], TECHNICAL_KITS[id]);
     }
   }
 
-  OPPONENTS413.forEach(id => {
+  OPPONENT_ONLY_FAMILIES.forEach(id => {
     if (BY[id]) {
       BY[id].isEnemy = true;
     }

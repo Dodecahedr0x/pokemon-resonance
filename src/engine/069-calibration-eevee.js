@@ -7,44 +7,44 @@ import { markAt, uk } from './021-combat-engine.js';
 import { B } from './024-combat-ui.js';
 import { hourOf } from './046-living-board.js';
 
-let MQ434;
+let COMPACT_MQ;
 /* Board width on phone: kept in memory (reading it forces layout) and
    re-read only when the screen or the frame changes width. */
-let width434 = 0,
-  key434 = '',
-  frameTracked434 = null,
-  roFrame434 = null;
+let boardWidth = 0,
+  lastKey = '',
+  frameTracked = null,
+  resizeFrame = null;
 
-export function gauge434() {
+export function fitPhoneBattle() {
   try {
     const cb = document.getElementById('cbBattle'),
       bd = document.getElementById('bBoard');
-    const on = !!(MQ434 && MQ434.matches && B && cur === 'combat' && cb && !cb.hidden);
-    document.body.classList.toggle('bt434', on);
+    const on = !!(COMPACT_MQ && COMPACT_MQ.matches && B && cur === 'combat' && cb && !cb.hidden);
+    document.body.classList.toggle('compact-battle', on);
     if (!bd) {
       return;
     }
     if (!on || !bd.classList.contains('vert')) {
       bd.style.removeProperty('width');
-      width434 = 0;
+      boardWidth = 0;
       return;
     }
     const c = bd.closest('.bt') || bd.parentElement;
-    if (roFrame434 && frameTracked434 !== c) {
-      if (frameTracked434) {
-        roFrame434.unobserve(frameTracked434);
+    if (resizeFrame && frameTracked !== c) {
+      if (frameTracked) {
+        resizeFrame.unobserve(frameTracked);
       }
-      roFrame434.observe(c);
-      frameTracked434 = c;
+      resizeFrame.observe(c);
+      frameTracked = c;
     }
     // (no innerWidth here: reading it also forces layout)
-    const k = String(document.body.classList.contains('fs444'));
-    if (!width434 || k !== key434) {
-      width434 = Math.max(220, c.clientWidth - 8);
-      key434 = k;
+    const k = String(document.body.classList.contains('fullscreen-mode'));
+    if (!boardWidth || k !== lastKey) {
+      boardWidth = Math.max(220, c.clientWidth - 8);
+      lastKey = k;
     }
-    if (bd.style.width !== width434 + 'px') {
-      bd.style.width = width434 + 'px';
+    if (bd.style.width !== boardWidth + 'px') {
+      bd.style.width = boardWidth + 'px';
     }
   } catch {
     /* Best effort: failure here is non-fatal. */
@@ -53,7 +53,7 @@ export function gauge434() {
 
 /* ---------- 2. Eevee: the evolution of your choice ---------- */
 /** The Eevee evolutions in harmony with the situation: mark of its cell, time of day. */
-export function eeveeHarmony434(S, u) {
+export function eeveeHarmony(S, u) {
   const o = [],
     mk = markAt(S, uk(u));
   if (mk && EEVEE[mk]) {
@@ -63,8 +63,8 @@ export function eeveeHarmony434(S, u) {
   return o;
 }
 
-export function eeveeWhy434(S, u, id) {
-  if (!eeveeHarmony434(S, u).includes(id)) {
+export function eeveeWhy(S, u, id) {
+  if (!eeveeHarmony(S, u).includes(id)) {
     return 'Au choix';
   }
   const k = Object.keys(EEVEE).find(x => EEVEE[x] === id);
@@ -85,54 +85,54 @@ export function __init() {
    ===================================================================== */
 
   /* ---------- 1. battle calibration on phone ---------- */
-  MQ434 = window.matchMedia ? matchMedia('(max-width: 700px)') : null;
+  COMPACT_MQ = window.matchMedia ? matchMedia('(max-width: 700px)') : null;
 
-  let viewWidth434 = -1;
-  roFrame434 = window.ResizeObserver
+  let viewWidth = -1;
+  resizeFrame = window.ResizeObserver
     ? new ResizeObserver(es => {
         // only if the frame's WIDTH changes (the height moves on every render)
         const e = es[es.length - 1],
           l = Math.round((e && e.contentRect && e.contentRect.width) || 0);
-        if (l === viewWidth434) {
+        if (l === viewWidth) {
           return;
         }
-        viewWidth434 = l;
-        width434 = 0;
-        gauge434();
+        viewWidth = l;
+        boardWidth = 0;
+        fitPhoneBattle();
       })
     : null;
-  const forgetWidth434 = () => {
-    width434 = 0;
+  const forgetWidth = () => {
+    boardWidth = 0;
   };
   // on capture: the width is forgotten before the listeners below recalibrate
-  window.addEventListener('resize', forgetWidth434, true);
-  window.addEventListener('orientationchange', forgetWidth434, true);
+  window.addEventListener('resize', forgetWidth, true);
+  window.addEventListener('orientationchange', forgetWidth, true);
   if (window.visualViewport) {
-    visualViewport.addEventListener('resize', forgetWidth434, true);
+    visualViewport.addEventListener('resize', forgetWidth, true);
   }
 
-  window.addEventListener('resize', () => gauge434());
+  window.addEventListener('resize', () => fitPhoneBattle());
 
   // the gym rule fits on one line; we touch it to read it in full
   document.addEventListener('click', e => {
     const a = e.target.closest('#bArena');
-    if (a && document.body.classList.contains('bt434')) {
-      a.classList.toggle('open434');
+    if (a && document.body.classList.contains('compact-battle')) {
+      a.classList.toggle('arena-open');
     }
   });
 
   if (window.visualViewport) {
-    visualViewport.addEventListener('resize', () => gauge434());
+    visualViewport.addEventListener('resize', () => fitPhoneBattle());
   }
 
   try {
     const cb = document.getElementById('cbBattle');
     if (cb && window.MutationObserver) {
-      new MutationObserver(() => gauge434()).observe(cb, { attributes: true, attributeFilter: ['hidden'] });
+      new MutationObserver(() => fitPhoneBattle()).observe(cb, { attributes: true, attributeFilter: ['hidden'] });
     }
     // what is above the board changes size (images loaded, rule expanded): recalibrate
     if (window.ResizeObserver) {
-      const ro = new ResizeObserver(() => gauge434());
+      const ro = new ResizeObserver(() => fitPhoneBattle());
       ['bPlE', 'bArena', 'bSyn', 'bOrdre'].forEach(id => {
         const x = document.getElementById(id);
         if (x) {

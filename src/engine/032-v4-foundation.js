@@ -10,10 +10,10 @@ import { B, finish, renderAll, ui } from './024-combat-ui.js';
 import { queueSave } from './025-saves.js';
 import { playEv } from './028-move-effects.js';
 import { renderWallet } from './035-interface.js';
-import { BAG_MAX, pUse414 } from './053-resonance.js';
-import { BALLX455 } from './087-balls-held-items.js';
+import { BAG_MAX, useCombatItem } from './053-resonance.js';
+import { BALL_CAPTURE_CHECKS } from './087-balls-held-items.js';
 
-export let ICO414, BALLS, HEALS, CAP_K;
+export let ITEM_ICONS, BALLS, HEALS, CAP_K;
 let BALL_SEL;
 export function __set_CAP_K(v) {
   return (CAP_K = v);
@@ -166,7 +166,7 @@ export const ART = no => PKA(no);
 
 export const PIX = no => PKA(no);
 
-export const ITM = k => ICO414[k] || ITA(k);
+export const ITM = k => ITEM_ICONS[k] || ITA(k);
 
 // v4.14: icons drawn for the new items
 export const fmt = n => Math.round(n).toLocaleString('fr-FR');
@@ -272,8 +272,8 @@ export const dailyDone = () => PROFILE.daily && PROFILE.daily.d === today() && P
 
 const ballReqOk = (k, e) => {
   const h = e.hp / e.mhp;
-  if (BALLX455[k]) {
-    return BALLX455[k](B, e);
+  if (BALL_CAPTURE_CHECKS[k]) {
+    return BALL_CAPTURE_CHECKS[k](B, e);
   }
   if (k === 'master') {
     return true;
@@ -294,7 +294,7 @@ export const ballChips = () =>
 // Instructions run at startup, in the original order (see index.js).
 export function __init() {
   /* original icons for the new items (v4.14): simple drawings, no official artwork */
-  ICO414 = (() => {
+  ITEM_ICONS = (() => {
     const g = (id, a, b) =>
       `<radialGradient id="${id}" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></radialGradient>`;
     const S = {
@@ -340,7 +340,9 @@ export function __init() {
     if (us && B) {
       const u = byUid(B, ui.sel);
       const ev =
-        (SHOP[us.dataset.use] || {}).category === 'combat' ? pUse414(B, u, us.dataset.use) : pUse(B, u, us.dataset.use); // v4.14
+        (SHOP[us.dataset.use] || {}).category === 'combat'
+          ? useCombatItem(B, u, us.dataset.use)
+          : pUse(B, u, us.dataset.use); // v4.14
       if (!ev) {
         return;
       }

@@ -18,10 +18,10 @@ import { renderHome } from './036-home.js';
 import { LEGS, RIVAL, RIVAL_KEYS, legKey, legOf, rivalIdx, styleOf } from './043-adventure-plus.js';
 import { COLOSSI } from './047-tactics.js';
 import { dissonanceAfter } from './050-world.js';
-import { roamOk416 } from './055-living-johto.js';
-import { hProf419, hoennOpen } from './059-hoenn.js';
-import { HLEG435 } from './071-hoenn-legendaries.js';
-import { confirm430, gameInProgress430 } from './065-camp-tactics.js';
+import { roamerCaught } from './055-living-johto.js';
+import { hoennProfessor, hoennOpen } from './059-hoenn.js';
+import { HOENN_LEGEND_DEFS } from './071-hoenn-legendaries.js';
+import { confirmDialog, gameInProgress } from './065-camp-tactics.js';
 import { refreshPrep } from '../screens/combat/prep/prepStore.js';
 import { refreshHome } from '../screens/home/homeStore.js';
 import { closeIntroBox, openIntro, refreshIntro } from '../screens/overlays/shellOverlays.js';
@@ -57,7 +57,7 @@ export function wonOf(k) {
     return (PROFILE.jdis || 0) >= s.jdis;
   } // Neo-Dissonance (v4.16)
   if (s.roam) {
-    return roamOk416(s.roam);
+    return roamerCaught(s.roam);
   }
   if (s.ami != null) {
     return false;
@@ -80,8 +80,8 @@ export function wonOf(k) {
   if (k === 'champ') {
     return PROFILE.elite >= 5;
   }
-  if (s.rival429) {
-    return (PROFILE.rivals429 || []).includes(s.rival429);
+  if (s.rivalFight) {
+    return (PROFILE.rivalsMet || []).includes(s.rivalFight);
   } // v4.29
   if (s.rival) {
     return PROFILE.rival >= s.rival;
@@ -109,7 +109,7 @@ export function emblem(k, cls = '') {
   const s = SCEN[k] || {},
     gi = ARENAS.findIndex(a => a.k === k),
     L = leaderOf(k),
-    legendInfo = s.hleg435 || s.cap435 || s.legend || s.colossus || s.roam;
+    legendInfo = s.hoennLegend || s.captureHoennLegend || s.legend || s.colossus || s.roam;
   if (legendInfo) {
     return `<span class="emb lgd ${cls}" style="--ac:${tc(s.at)}">${medal(BY[legendInfo].t, 'lg')}</span>`;
   }
@@ -150,7 +150,7 @@ export function professorMsg() {
       : `Le Conseil 4 est vaincu. Il ne reste qu’<b>Auriane Vale</b>, la Championne. Elle a lu tous vos combats.`;
   }
   if (/^h[1-8]$|^hchamp$/.test(g.k)) {
-    return hProf419(g);
+    return hoennProfessor(g);
   } // Hoenn (v4.19)
   if (/^jd\d$/.test(g.k)) {
     return `${g.k === 'jd1' ? 'Des ondes étranges brouillent Johto. ' : ''}La Néo-Dissonance refait surface : <b>${g.L.n}</b>, ${g.L.t}. ${SCEN[g.k].d}`;
@@ -179,7 +179,7 @@ export function selItems(g) {
   }
   // the Hoenn Legendaries (v4.38) stay hidden while Hoenn is closed
   if (g === 'apres') {
-    return ['tdr', ...LEGS.map(L => legKey(L.id)), ...(hoennOpen() ? HLEG435.map(L => 'hl' + L.id) : [])];
+    return ['tdr', ...LEGS.map(L => legKey(L.id)), ...(hoennOpen() ? HOENN_LEGEND_DEFS.map(L => 'hl' + L.id) : [])];
   }
   if (g === 'ligue') {
     return [...ELITE, 'champ'];
@@ -193,7 +193,7 @@ export function selItems(g) {
 
 export function groupOf(k) {
   const D = SCEN[k] || {};
-  if (D.hleg435 || D.cap435 || k === 'tdr' || legOf(k) || D.cap429) {
+  if (D.hoennLegend || D.captureHoennLegend || k === 'tdr' || legOf(k) || D.captureLegend) {
     return 'apres';
   }
   if (rivalIdx(k) >= 0 || /^td\d$/.test(k)) {
@@ -317,15 +317,15 @@ export function showIntro(force) {
       INTRO.i = 3;
       renderIntro();
     } else if (a === 'start' && INTRO.st) {
-      if (gameInProgress430() && !INTRO.ok430) {
+      if (gameInProgress() && !INTRO.restartConfirmed) {
         // revisiting the welcome must not erase a save without warning (v4.30)
-        confirm430('Recommencer l’aventure ?', 'Choisir un partenaire ici lance une nouvelle campagne.', () => {
-          INTRO.ok430 = 1;
+        confirmDialog('Recommencer l’aventure ?', 'Choisir un partenaire ici lance une nouvelle campagne.', () => {
+          INTRO.restartConfirmed = 1;
           b.click();
         });
         return;
       }
-      INTRO.ok430 = 0;
+      INTRO.restartConfirmed = 0;
       startCampaign(INTRO.st, INTRO.name, INTRO.diff);
       INTRO.i = 4;
       renderIntro();

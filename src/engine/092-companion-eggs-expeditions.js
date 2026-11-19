@@ -10,56 +10,56 @@ import { shut } from '../screens/overlays/tempStore.js';
 import { SHOP, bagN, savePurse, today } from './032-v4-foundation.js';
 import { renderBag } from './039-quests-shop.js';
 import { DESTINATIONS, renderCampBase } from './049-identity.js';
-import { hearts417, companionGain417, companionId417 } from './057-companions-resonance.js';
+import { affinityHearts, gainCompanionAffinity, activeCompanionId } from './057-companions-resonance.js';
 import { refreshHome } from '../screens/home/homeStore.js';
-import { reward454, can454, rng454, txt454 } from './084-peddler-route-missions.js';
-import { tmKeys455 } from './088-workshop-recipes.js';
-import { badgeCount459 } from './090-item-quests-trophies.js';
+import { applyReward, canAfford, seededRng, rewardText } from './084-peddler-route-missions.js';
+import { tmKeys } from './088-workshop-recipes.js';
+import { badgeTotal } from './090-item-quests-trophies.js';
 
-let SCN461;
-export { EGG461, egSt461, egPool461 }; // read by Shop › Eggs (React, src/screens/bag/Workshop.jsx)
+let KEEPSAKE_SCENES;
+export { EGG_SHOP, eggState, eggPool }; // read by Shop › Eggs (React, src/screens/bag/Workshop.jsx)
 
-/** Companion's Berry, Gift and Memories buttons (.cp461 in #v4Comp, rendering: src/screens/home/Companion.jsx). */
-export function cp461Data() {
-  const id = companionId417();
+/** Companion's Berry, Gift and Memories buttons (.buddy in #v4Comp, rendering: src/screens/home/Companion.jsx). */
+export function buddyData() {
+  const id = activeCompanionId();
   if (!id) {
     return null;
   }
-  const h = hearts417((PROFILE.comp && PROFILE.comp.aff) || 0),
-    st = cpSt461();
+  const h = affinityHearts((PROFILE.comp && PROFILE.comp.aff) || 0),
+    st = companionState();
   return { h, feed: st.feed, gift: st.gift, baie: bagN('baiemepo') > 0, isNew: h > (st.seen[id] || 0) };
 }
 
-function keepsakeOpen461() {
-  const id = companionId417();
+function keepsakeOpenOverlay() {
+  const id = activeCompanionId();
   if (!id) {
     return;
   }
   const m = BY[id],
-    h = hearts417((PROFILE.comp && PROFILE.comp.aff) || 0),
-    st = cpSt461();
+    h = affinityHearts((PROFILE.comp && PROFILE.comp.aff) || 0),
+    st = companionState();
   st.seen[id] = h;
-  cpSave461(st);
-  // one memory per heart (null: not unlocked yet); rendering: transients/Windows.jsx (Souv461)
-  const rows = [1, 2, 3, 4, 5].map(i => (i <= h ? scene461(m, i) : null));
-  const o = overlay('souv461', { n: m.n, rows });
+  companionSave(st);
+  // one memory per heart (null: not unlocked yet); rendering: transients/Windows.jsx (CompanionKeepsakes)
+  const rows = [1, 2, 3, 4, 5].map(i => (i <= h ? keepsakeScene(m, i) : null));
+  const o = overlay('souvenirs', { n: m.n, rows });
   o.addEventListener('click', e => {
     if (e.target === o) {
-      shut('souv461');
+      shut('souvenirs');
     }
   });
   refreshHome();
 }
 
-function egBuy461(k) {
-  const O = EGG461[k],
-    s = egSt461();
-  if (!O || s.list.length >= 3 || !can454(O.cost) || !egPool461().length) {
+function eggBuy(k) {
+  const O = EGG_SHOP[k],
+    s = eggState();
+  if (!O || s.list.length >= 3 || !canAfford(O.cost) || !eggPool().length) {
     return;
   }
-  reward454(O.cost);
+  applyReward(O.cost);
   s.list.push({ k, left: O.batt, tot: O.batt });
-  writeLS('res-eg461', s);
+  writeLS('res-egg-shop', s);
   sfx('ui');
   vibe(25);
   toast(`${O.n} acheté. Il éclora après ${O.batt} combats.`);
@@ -71,12 +71,12 @@ function egBuy461(k) {
   }
 }
 
-function egHatch461(e) {
-  const pool = egPool461();
+function eggHatch(e) {
+  const pool = eggPool();
   if (!pool.length) {
     return null;
   }
-  const O = EGG461[e.k],
+  const O = EGG_SHOP[e.k],
     m = pool[Math.floor(Math.random() * pool.length)];
   PROFILE.box.push(m.id);
   if (!PROFILE.dex.includes(m.id)) {
@@ -93,9 +93,9 @@ function egHatch461(e) {
 // Shop › Eggs: rendered by React (src/screens/bag/Workshop.jsx)
 
 /** Return of expedition x (already cashed in by retrieve): a short tale, and sometimes a rare find. */
-export function story461(x) {
+export function expeditionStory(x) {
   const D = DESTINATIONS[x.destinationId],
-    h = HIST461[x.destinationId] || [],
+    h = DESTINATION_HISTORY[x.destinationId] || [],
     m = BY[x.id],
     hist = h.length ? `${m.n} ${h[Math.floor(Math.random() * h.length)]}.` : '';
   let rare = '';
@@ -115,8 +115,8 @@ export function story461(x) {
         rare = '1 500 ₽';
       }
     } else {
-      const pool = tmKeys455().filter(k => !bagN(k)),
-        all = pool.length ? pool : tmKeys455();
+      const pool = tmKeys().filter(k => !bagN(k)),
+        all = pool.length ? pool : tmKeys();
       if (all.length) {
         const k = all[Math.floor(Math.random() * all.length)];
         PROFILE.bag[k] = Math.min(99, bagN(k) + 1);
@@ -132,7 +132,7 @@ export function story461(x) {
   renderCampBase();
 }
 
-const jd461 = () => {
+const dayNumber = () => {
   try {
     return today();
   } catch (e) {
@@ -141,7 +141,7 @@ const jd461 = () => {
 };
 
 /* ---------- 1. Companion: memories, berry, gift ---------- */
-const ACT461 = {
+const COMPANION_ACTIONS = {
   Normal: ['se roule dans l’herbe à vos pieds', 'veille sur votre sac sans jamais le quitter des yeux'],
   Feu: ['fait danser une petite flamme au bout de sa queue', 'réchauffe vos mains par une nuit froide'],
   Eau: ['vous éclabousse d’une gerbe d’eau claire', 'vous guide jusqu’à une source cachée'],
@@ -171,15 +171,15 @@ const ACT461 = {
   Fée: ['sème une poussière brillante autour de vous', 'chante une mélodie qui apaise toute la clairière'],
 };
 
-const scene461 = (m, h) => {
-  const a = ACT461[(m.t && m.t[0]) || 'Normal'] || ACT461.Normal;
-  return SCN461[h - 1](m.n, a);
+const keepsakeScene = (m, h) => {
+  const a = COMPANION_ACTIONS[(m.t && m.t[0]) || 'Normal'] || COMPANION_ACTIONS.Normal;
+  return KEEPSAKE_SCENES[h - 1](m.n, a);
 };
 
-const cpSt461 = () => {
-  const s = readLS('res-cp461', {});
-  if (s.d !== jd461()) {
-    s.d = jd461();
+const companionState = () => {
+  const s = readLS('res-buddy', {});
+  if (s.d !== dayNumber()) {
+    s.d = dayNumber();
     s.feed = 0;
     s.gift = 0;
   }
@@ -187,10 +187,10 @@ const cpSt461 = () => {
   return s;
 };
 
-const cpSave461 = s => writeLS('res-cp461', s);
+const companionSave = s => writeLS('res-buddy', s);
 
-const cpGift461 = (h, m) => {
-  const r = rng454('cp461' + m.id);
+const companionGift = (h, m) => {
+  const r = seededRng('buddy' + m.id);
   const v = r();
   if (h >= 5 && v < 0.3) {
     return { g: 1 };
@@ -205,7 +205,7 @@ const cpGift461 = (h, m) => {
 };
 
 /* ---------- 2. Breeding eggs ---------- */
-const EGG461 = {
+const EGG_SHOP = {
   mys: {
     n: 'Œuf mystère',
     cost: { m: -1500 },
@@ -224,16 +224,16 @@ const EGG461 = {
   },
 };
 
-const egSt461 = () => {
-  const s = readLS('res-eg461', { list: [], n: 0 });
+const eggState = () => {
+  const s = readLS('res-egg-shop', { list: [], n: 0 });
   s.list = Array.isArray(s.list) ? s.list : [];
   return s;
 };
 
-const egPool461 = () =>
+const eggPool = () =>
   MON.filter(m => m.st === 1 && !m.leg && !m.isEnemy && m.base === m.id && !PROFILE.box.includes(m.id));
 
-const HIST461 = {
+const DESTINATION_HISTORY = {
   foret: ['a suivi un sentier couvert de mousse', 'a trouvé un tronc creux plein de baies'],
   lac: ['a longé les berges glacées', 'a repéré un reflet étrange au fond de l’eau'],
   grotte: ['a exploré une galerie étroite', 'a creusé près d’un filon brillant'],
@@ -243,11 +243,11 @@ const HIST461 = {
   ruines: ['a déchiffré des gravures très anciennes', 'a ressenti la Résonance vibrer dans les pierres'],
 };
 
-export const lock461 = D => (D.min || 0) > badgeCount459();
+export const lockedByBadges = D => (D.min || 0) > badgeTotal();
 
 // Instructions run at startup, in the original order (see index.js).
 export function __init() {
-  SCN461 = [
+  KEEPSAKE_SCENES = [
     (n, a) => `${n} reste près de vous et ${a[0]}. C’est sa façon de vous dire bonjour.`,
     (n, a) => `Un soir, ${n} ${a[1]}. Vous comprenez qu’il commence à vous faire confiance.`,
     (n, a) =>
@@ -260,30 +260,30 @@ export function __init() {
   document.addEventListener(
     'click',
     e => {
-      const b = e.target.closest && e.target.closest('[data-cp461]');
+      const b = e.target.closest && e.target.closest('[data-buddy]');
       if (!b) {
         return;
       }
       e.stopPropagation();
       e.preventDefault();
-      const k = b.dataset.cp461,
-        id = companionId417();
+      const k = b.dataset.buddy,
+        id = activeCompanionId();
       if (k === 'close') {
-        return shut('souv461');
+        return shut('souvenirs');
       }
       if (!id || b.disabled) {
         return;
       }
       const m = BY[id],
-        st = cpSt461();
+        st = companionState();
       if (k === 'souv') {
-        return keepsakeOpen461();
+        return keepsakeOpenOverlay();
       }
       if (k === 'baie' && !st.feed && bagN('baiemepo') > 0) {
         PROFILE.bag.baiemepo = bagN('baiemepo') - 1;
         st.feed = 1;
-        cpSave461(st);
-        const up = companionGain417(5);
+        companionSave(st);
+        const up = gainCompanionAffinity(5);
         sfx('ui');
         vibe(25);
         toast(
@@ -294,17 +294,17 @@ export function __init() {
         savePurse();
         refreshHome();
       } else if (k === 'cadeau') {
-        const h = hearts417((PROFILE.comp && PROFILE.comp.aff) || 0);
+        const h = affinityHearts((PROFILE.comp && PROFILE.comp.aff) || 0);
         if (h < 3 || st.gift) {
           return;
         }
-        const g = cpGift461(h, m);
+        const g = companionGift(h, m);
         st.gift = 1;
-        cpSave461(st);
-        reward454(g);
+        companionSave(st);
+        applyReward(g);
         sfx('win');
         vibe([20, 30, 20]);
-        toast(`${m.n} vous rapporte un cadeau : ${txt454(g)}.`);
+        toast(`${m.n} vous rapporte un cadeau : ${rewardText(g)}.`);
         savePurse();
         refreshHome();
       }
@@ -318,7 +318,7 @@ export function __init() {
       if (D.tuto) {
         return null;
       }
-      const s = egSt461();
+      const s = eggState();
       if (!s.list.length) {
         return null;
       }
@@ -327,12 +327,12 @@ export function __init() {
       s.list.forEach(e => {
         e.left -= 1;
         if (e.left <= 0) {
-          const r = egHatch461(e);
+          const r = eggHatch(e);
           if (r) {
             out.push(r);
           } else {
-            const O = EGG461[e.k];
-            reward454({ m: O.cost.m ? -O.cost.m : 0, g: O.cost.g ? -O.cost.g : 0 });
+            const O = EGG_SHOP[e.k];
+            applyReward({ m: O.cost.m ? -O.cost.m : 0, g: O.cost.g ? -O.cost.g : 0 });
           }
         } else {
           keep.push(e);
@@ -340,9 +340,9 @@ export function __init() {
       });
       s.list = keep;
       s.n += out.length;
-      writeLS('res-eg461', s);
+      writeLS('res-egg-shop', s);
       if (out.length) {
-        rew.eg461 = out;
+        rew.eggShop = out;
       }
     } catch {
       /* Best effort: failure here is non-fatal. */
@@ -351,10 +351,10 @@ export function __init() {
   });
 
   HOOKS.battleResult.unshift(r => {
-    if (!r.eg461) {
+    if (!r.eggShop) {
       return '';
     }
-    return r.eg461
+    return r.eggShop
       .map(
         x =>
           `<div class="res-l"><h4>Élevage</h4><div class="rl">${medal(BY[x.id].t)}<span>Un œuf a éclos : ${BY[x.id].n}${x.sh ? ' chromatique !' : ''} rejoint votre Box !</span><b>🥚</b></div></div>`
@@ -365,13 +365,13 @@ export function __init() {
   document.addEventListener(
     'click',
     e => {
-      const b = e.target.closest && e.target.closest('[data-eg461]');
+      const b = e.target.closest && e.target.closest('[data-egg-shop]');
       if (!b || b.disabled) {
         return;
       }
       e.stopPropagation();
       e.preventDefault();
-      egBuy461(b.dataset.eg461);
+      eggBuy(b.dataset.eggShop);
     },
     true
   );
@@ -407,5 +407,5 @@ export function __init() {
     },
   });
 
-  // locked places in the expedition window: rendered by React (src/screens/overlays/ExpBox.jsx, lock461)
+  // locked places in the expedition window: rendered by React (src/screens/overlays/ExpBox.jsx, lockedByBadges)
 }

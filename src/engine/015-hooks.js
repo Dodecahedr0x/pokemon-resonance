@@ -20,7 +20,7 @@
    resultat(rew)             HTML lines added to the result screen
 
    Interface (called by hook(): a feature that fails does not interrupt the game):
-   degats(S, v, real, o)     jDmg430(): Pokémon v has just lost real HP
+   degats(S, v, real, o)     journalDamage(): Pokémon v has just lost real HP
    avantLancement()          launch(): before the battle is created
    lancement(nouveau)        launch(): after; nouveau = a battle has just been created
    avantRendu()              renderAll(): before redrawing the battle
@@ -43,12 +43,12 @@
    page(avant)               show(): after; avant = previous page
    carte()                   renderMap(): after
    achat()                   buy(): after a purchase that changed the wallet
-   choixRoute(j)             evPick454(j): after choice j of the route encounter
+   choixRoute(j)             pickRouteChoice(j): after choice j of the route encounter
 
    Filters and refusals (called by the engine, an error propagates):
    barrePv(html, u)          segHp(u): returns the banner's HP bar, transformed
-   rencontreRoute(r)         ev454(): returns the day's encounter, possibly replaced
-   avantChoixRoute(j)        evPick454(j): returning true takes over choice j
+   rencontreRoute(r)         routeEvent(): returns the day's encounter, possibly replaced
+   avantChoixRoute(j)        pickRouteChoice(j): returning true takes over choice j
    refusLancement()          launch(): returning a message refuses to start the battle
    ===================================================================== */
 export const HOOKS = {

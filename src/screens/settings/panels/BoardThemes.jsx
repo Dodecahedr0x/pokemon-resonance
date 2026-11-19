@@ -1,33 +1,38 @@
 import { PROFILE } from '../../../engine/011-game-state.js';
 import { PREF } from '../../../engine/026-campaign-tutorial-sound.js';
-import { TH455, rvSt455, thOk455, typeDom455 } from '../../../engine/086-adaptive-rival-board-themes.js';
+import {
+  BOARD_THEMES,
+  rivalState,
+  isThemeUnlocked,
+  dominantType,
+} from '../../../engine/086-adaptive-rival-board-themes.js';
 
 // Board themes (v4.55), bought with Shards, then the rival Kael's report.
-// Buttons handled by the engine (delegated click on data-b455).
+// Buttons handled by the engine (delegated click on data-board-theme-action).
 export default function BoardThemes() {
-  const cur = TH455[PREF.th455] ? PREF.th455 : 'classique';
-  const rv = rvSt455();
-  const T = typeDom455();
+  const cur = BOARD_THEMES[PREF.boardTheme] ? PREF.boardTheme : 'classique';
+  const rv = rivalState();
+  const T = dominantType();
   const rival = rv.w
     ? ` Il apprend de ses défaites${T ? ` et prépare des Pokémon contre le type ${T}, le plus présent dans votre équipe` : ''}.`
     : ' Battez-le : il s’adaptera à votre style.';
   return (
-    <section className="v4-panel" id="at455">
+    <section className="v4-panel" id="craft-bench">
       <h3 className="h3">Thèmes de plateau</h3>
       <p className="v4-note">Change seulement les couleurs du plateau. Éclats de Résonance : {PROFILE.gems}.</p>
-      <div className="th455-g">
-        {Object.keys(TH455).map(k => {
-          const th = TH455[k],
-            ok = thOk455(k);
+      <div className="board-theme-g">
+        {Object.keys(BOARD_THEMES).map(k => {
+          const th = BOARD_THEMES[k],
+            ok = isThemeUnlocked(k);
           return (
             <button
               key={k}
               type="button"
-              className={`th455-b${cur === k ? ' on' : ''}`}
-              data-b455={`${ok ? 'set' : 'buy'}:${k}`}
+              className={`board-theme-b${cur === k ? ' on' : ''}`}
+              data-board-theme-action={`${ok ? 'set' : 'buy'}:${k}`}
               aria-pressed={cur === k}
             >
-              <span className="th455-s">
+              <span className="board-theme-s">
                 <i style={{ background: th.c[0] }} />
                 <i style={{ background: th.c[1] }} />
               </span>

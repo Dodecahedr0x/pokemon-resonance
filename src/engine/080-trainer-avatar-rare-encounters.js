@@ -13,26 +13,26 @@ import { renderWallet } from './035-interface.js';
 import { renderMap } from './037-map.js';
 import { renderParams } from './040-settings.js';
 import { placesR } from './054-johto.js';
-import { seed417, weatherDay417 } from './057-companions-resonance.js';
-import { poolRegion421 } from './061-catch-anywhere.js';
+import { dailySeed, todayWeather } from './057-companions-resonance.js';
+import { regionPool } from './061-catch-anywhere.js';
 import { setRoute } from '../screens/home/homeStore.js';
 
-let RARE450;
+let RARE_LIST;
 
-function av450(cls) {
-  const a = AVT450();
-  return avatar(PROFILE.name || 'Dresseur', a ? a.e : 'Normal', (cls || '') + (a && a.hex ? ' hex450' : ''));
+function typeAvatar(cls) {
+  const a = TRAINER_AVATAR();
+  return avatar(PROFILE.name || 'Dresseur', a ? a.e : 'Normal', (cls || '') + (a && a.hex ? ' hex-avatar' : ''));
 }
 
 /** Trainer emblem on the "VS" screen (HTML), or null if no avatar is chosen. */
-export function vsAv450() {
-  return AVT450() ? av450('sm') : null;
+export function versusAvatar() {
+  return TRAINER_AVATAR() ? typeAvatar('sm') : null;
 }
 
-export function rareInfo450(id) {
+export function rareInfo(id) {
   let m = 1;
   const w = [];
-  RARE450.forEach(r => {
+  RARE_LIST.forEach(r => {
     if (r.ids.includes(id) && r.c()) {
       m *= r.m;
       w.push(r.w);
@@ -42,12 +42,12 @@ export function rareInfo450(id) {
 }
 
 /* banner on the route: who is out right now */
-function route450() {
-  const wx = weatherDay417(),
-    pool = poolRegion421().filter(m => rareInfo450(m.id).m > 1);
+function refreshRares() {
+  const wx = todayWeather(),
+    pool = regionPool().filter(m => rareInfo(m.id).m > 1);
   const sky =
     { pluie: 'pluie', soleil: 'grand soleil', grele: 'grêle', sable: 'tempête de sable' }[wx] || 'ciel dégagé';
-  // #rr450 banner at the top of #route (Route.jsx)
+  // #routeRates banner at the top of #route (Route.jsx)
   setRoute({
     rr: {
       head: `${TOD === 'nuit' ? 'Nuit' : TOD === 'matin' ? 'Matin' : 'Jour'} · ${sky}`,
@@ -61,10 +61,10 @@ function route450() {
   });
 }
 
-export function trSt450() {
+export function treasureState() {
   let s;
   try {
-    s = JSON.parse(localStorage.getItem('res-tr450') || '{}');
+    s = JSON.parse(localStorage.getItem('res-treasure-hunt') || '{}');
   } catch (e) {
     s = {};
   }
@@ -74,25 +74,25 @@ export function trSt450() {
   return s;
 }
 
-function trSave450(s) {
-  writeLS('res-tr450', s);
+function saveTreasures(s) {
+  writeLS('res-treasure-hunt', s);
 }
 
-function trTheme450() {
-  const wx = weatherDay417();
+function treasureTheme() {
+  const wx = todayWeather();
   if (wx) {
     return wx;
   }
   return TOD === 'nuit' ? 'nuit' : TOD === 'matin' ? 'matin' : 'jour';
 }
 
-export function trSpots450() {
+export function treasureSpots() {
   const reg = V4.region || 'kanto',
-    th = trTheme450(),
+    th = treasureTheme(),
     n = th === 'jour' ? 2 : 3,
     pl = placesR(),
     out = [];
-  let h = seed417('tr' + reg + th);
+  let h = dailySeed('tr' + reg + th);
   const rnd = () => {
     h = (Math.imul(h, 1664525) + 1013904223) >>> 0;
     return h / 4294967296;
@@ -112,14 +112,14 @@ export function trSpots450() {
   return out;
 }
 
-function trHarvest450(sp) {
-  const s = trSt450();
+function harvestSpot(sp) {
+  const s = treasureState();
   if (s.got[sp.id]) {
     return;
   }
   s.got[sp.id] = 1;
-  trSave450(s);
-  let h = seed417('rw' + sp.id);
+  saveTreasures(s);
+  let h = dailySeed('rw' + sp.id);
   const rnd = n => {
     h = (Math.imul(h, 1664525) + 1013904223) >>> 0;
     return h % n;
@@ -145,19 +145,19 @@ function trHarvest450(sp) {
   renderWallet();
   sfx('win');
   vibe([30, 40, 30]);
-  toast(`${TH450[sp.th]} trouvé : +${gems} éclats, +${money} ₽${extra}.`);
+  toast(`${TREASURE_NAMES[sp.th]} trouvé : +${gems} éclats, +${money} ₽${extra}.`);
   renderMap();
 }
 
 /* ---------- 1. trainer avatar ---------- */
-export const AVT450 = () => (PREF.av450 && TYPES[PREF.av450.e] ? PREF.av450 : null);
+export const TRAINER_AVATAR = () => (PREF.typeAvatar && TYPES[PREF.typeAvatar.e] ? PREF.typeAvatar : null);
 
-export const rareW450 = mon => (IM450() ? rareInfo450(mon.id).m : 1);
+export const rareWeight = mon => (RARE_ENABLED() ? rareInfo(mon.id).m : 1);
 
-export const IM450 = () => PREF.rare450 !== 0;
+export const RARE_ENABLED = () => PREF.rareEncounter !== 0;
 
 /* ---------- 3. hidden finds on the map ---------- */
-export const TH450 = {
+export const TREASURE_NAMES = {
   nuit: 'Éclat lunaire',
   matin: 'Rosée du matin',
   pluie: 'Perle de pluie',
@@ -171,10 +171,10 @@ export const TH450 = {
 export function __init() {
   // trainer emblem in the top bar (#v4Av): rendered by React (src/components/TopBar.jsx)
 
-  /* the avatar precedes the name on the "VS" screen: vsAv450(), rendered in Vs.jsx */
+  /* the avatar precedes the name on the "VS" screen: versusAvatar(), rendered in Vs.jsx */
 
   /* ---------- 2. rare encounters by time and weather ---------- */
-  RARE450 = [
+  RARE_LIST = [
     {
       c: () => TOD === 'nuit',
       m: 4,
@@ -183,20 +183,20 @@ export function __init() {
     },
     { c: () => TOD === 'matin', m: 3, w: 'matin', ids: ['natu', 'tarsal', 'melo', 'granivol', 'mimigal', 'chenipan'] },
     {
-      c: () => weatherDay417() === 'pluie',
+      c: () => todayWeather() === 'pluie',
       m: 5,
       w: 'pluie',
       ids: ['ptitard', 'kaiminus', 'loupio', 'marill', 'gobou', 'magicarpe', 'axoloto'],
     },
     {
-      c: () => weatherDay417() === 'soleil',
+      c: () => todayWeather() === 'soleil',
       m: 5,
       w: 'soleil',
       ids: ['salameche', 'hericendre', 'poussifeu', 'limagma', 'carapuce'],
     },
-    { c: () => weatherDay417() === 'grele', m: 6, w: 'grêle', ids: ['marcacrin', 'lokhlass', 'pichu'] },
+    { c: () => todayWeather() === 'grele', m: 6, w: 'grêle', ids: ['marcacrin', 'lokhlass', 'pichu'] },
     {
-      c: () => weatherDay417() === 'sable',
+      c: () => todayWeather() === 'sable',
       m: 5,
       w: 'sable',
       ids: ['onix', 'phanpy', 'embrylex', 'galekid', 'debugant'],
@@ -205,28 +205,28 @@ export function __init() {
 
   /* the encounter sheet flags a rare appearance: rendered by React (src/screens/overlays/Enc.jsx) */
 
-  HOOKS.timeOfDay.push(route450);
+  HOOKS.timeOfDay.push(refreshRares);
 
   try {
-    route450();
+    refreshRares();
   } catch {
     /* Best effort: failure here is non-fatal. */
   }
 
-  // hidden finds on the map (.sp450): rendered by React (src/screens/map/Marks.jsx)
+  // hidden finds on the map (.findSpot): rendered by React (src/screens/map/Marks.jsx)
 
   document.addEventListener(
     'click',
     e => {
-      const b = e.target.closest && e.target.closest('[data-tv450]');
+      const b = e.target.closest && e.target.closest('[data-treasure-spot]');
       if (!b) {
         return;
       }
       e.stopPropagation();
       e.preventDefault();
-      const sp = trSpots450().find(x => x.id === b.dataset.tv450);
+      const sp = treasureSpots().find(x => x.id === b.dataset.treasureSpot);
       if (sp) {
-        trHarvest450(sp);
+        harvestSpot(sp);
       }
     },
     true
@@ -236,25 +236,28 @@ export function __init() {
   // "Avatar de dresseur" (Trainer avatar) panel: rendered by React (src/screens/settings/panels/Avatar.jsx)
 
   document.addEventListener('click', e => {
-    const b = e.target.closest && e.target.closest('[data-b450]');
+    const b = e.target.closest && e.target.closest('[data-avatar-action]');
     if (!b) {
       return;
     }
-    const k = b.dataset.b450;
+    const k = b.dataset.avatarAction;
     if (k === 'av') {
-      PREF.av450 = { e: b.dataset.t, hex: !!(AVT450() && AVT450().hex) };
+      PREF.typeAvatar = { e: b.dataset.t, hex: !!(TRAINER_AVATAR() && TRAINER_AVATAR().hex) };
     } else if (k === 'hex') {
-      PREF.av450 = { e: (AVT450() || { e: 'Normal' }).e, hex: !(AVT450() && AVT450().hex) };
+      PREF.typeAvatar = {
+        e: (TRAINER_AVATAR() || { e: 'Normal' }).e,
+        hex: !(TRAINER_AVATAR() && TRAINER_AVATAR().hex),
+      };
     } else if (k === 'avreset') {
-      delete PREF.av450;
+      delete PREF.typeAvatar;
     } else if (k === 'rare') {
-      PREF.rare450 = IM450() ? 0 : 1;
+      PREF.rareEncounter = RARE_ENABLED() ? 0 : 1;
     } else {
       return;
     }
     savePref();
     renderWallet();
     renderParams();
-    route450();
+    refreshRares();
   });
 }

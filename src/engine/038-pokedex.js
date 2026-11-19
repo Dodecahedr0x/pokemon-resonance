@@ -5,8 +5,8 @@ import { $, $$, RM } from './014-utils.js';
 import { norm, openSheet, squad } from './020-team-cards.js';
 import { V4 } from './032-v4-foundation.js';
 import { isShinyOwned } from './043-adventure-plus.js';
-import { chromaArt425 } from './062-art-direction.js';
-import { scanDex448 } from './079-immersion-sound-haptics.js';
+import { applyShinyArt } from './062-art-direction.js';
+import { scanPokedex } from './079-immersion-sound-haptics.js';
 import { refreshDex } from '../screens/dex/dexStore.js';
 
 export let DEXS;
@@ -37,7 +37,7 @@ function renderDexList() {
   }
   refreshDex();
   $$('#dex4List .v4-dl.shiny').forEach(
-    b => BY[b.dataset.dex] && chromaArt425(b.querySelector('img'), BY[b.dataset.dex].no)
+    b => BY[b.dataset.dex] && applyShinyArt(b.querySelector('img'), BY[b.dataset.dex].no)
   ); // v4.25
 }
 
@@ -46,9 +46,9 @@ export function renderDexCard() {
     const m = BY[V4.dexSel] || DEXS[0];
     V4.dexSel = m.id;
     refreshDex();
-    setTimeout(() => isShinyOwned(m.id) && chromaArt425($('#dex4Card .v4d-art img'), m.no), 0); // v4.25
+    setTimeout(() => isShinyOwned(m.id) && applyShinyArt($('#dex4Card .v4d-art img'), m.no), 0); // v4.25
   }
-  scanDex448();
+  scanPokedex();
 }
 
 export function renderDex() {

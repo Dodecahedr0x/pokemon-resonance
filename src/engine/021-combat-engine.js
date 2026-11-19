@@ -49,18 +49,31 @@ import {
 } from './047-tactics.js';
 import { chordAfter, disobeys } from './049-identity.js';
 import { REPLAYS, noteMoment } from './050-world.js';
-import { TARGET412, SELF412, bonusMove412, durations412, placeForesight } from './051-epic-tms.js';
-import { PRE413, afterHit413, end413, reflections413, rune413, aiSupport413 } from './052-technical-roster.js';
-import { hasXp, afterHit414, afterDamage414, xpCost, end414, canXP } from './053-resonance.js';
-import { fleeMsg416 } from './055-living-johto.js';
-import { resoCand417 } from './057-companions-resonance.js';
-import { vigilance420 } from './060-intense-combat.js';
-import { expert429 } from './064-quality.js';
-import { docDmg430, docMov430, jDmg430 } from './065-camp-tactics.js';
-import { bonusDmg431, bonusMove431 } from './066-tactical-challenges.js';
-import { talDmg432, talMov432 } from './067-individuals-comfort.js';
-import { duelPlan433, vigilDuel433 } from './068-duel-tutorial.js';
-import { eeveeHarmony434 } from './069-calibration-eevee.js';
+import {
+  TARGET_MOVE_EFFECTS,
+  SELF_MOVE_EFFECTS,
+  tailwindMoveBonus,
+  tickFieldEffects,
+  placeForesight,
+} from './051-epic-tms.js';
+import {
+  PRE_MOVE_EFFECTS,
+  afterHitSignatures,
+  afterMoveSignatures,
+  reflectEffects,
+  hasRune,
+  aiSupportMove,
+} from './052-technical-roster.js';
+import { hasXp, afterHitResonance, afterDamageItems, xpCost, afterMoveHeldItems, canXP } from './053-resonance.js';
+import { fleeMessage } from './055-living-johto.js';
+import { resonanceCandidate } from './057-companions-resonance.js';
+import { vigilanceStrike } from './060-intense-combat.js';
+import { expertCoordination } from './064-quality.js';
+import { doctrineDamage, doctrineMove, journalDamage } from './065-camp-tactics.js';
+import { masteryDamageBonus, masteryMoveBonus } from './066-tactical-challenges.js';
+import { talentDamage, talentMove } from './067-individuals-comfort.js';
+import { duelAiPlan, duelVigilance } from './068-duel-tutorial.js';
+import { eeveeHarmony } from './069-calibration-eevee.js';
 
 export let BW, BH, BRANCHES;
 
@@ -330,7 +343,7 @@ export function movPts(S, u) {
   if (u.temperament === 'vif') {
     m++;
   } // Quick nature (v4.10)
-  m = Math.max(0, m + bonusMove412(S, u) + docMov430(S, u) + bonusMove431(S, u) + talMov432(S, u)); // doctrine (v4.30); Tailwind, Trick Room (v4.12), Gravity, Shadow Mark… (v4.13)
+  m = Math.max(0, m + tailwindMoveBonus(S, u) + doctrineMove(S, u) + masteryMoveBonus(S, u) + talentMove(S, u)); // doctrine (v4.30); Tailwind, Trick Room (v4.12), Gravity, Shadow Mark… (v4.13)
   return m;
 }
 
@@ -563,7 +576,7 @@ export function dmgOf(S, u, m, t, typ, mult) {
     return d;
   }
   d = dmgItemsLinks(S, u, t, d, mult);
-  return talDmg432(S, u, t, bonusDmg431(S, u, t, docDmg430(S, u, t, dmgRolesField(S, u, m, t, typ, d)))); // doctrine (v4.30), mastery and relics (v4.31), ability (v4.32)
+  return talentDamage(S, u, t, masteryDamageBonus(S, u, t, doctrineDamage(S, u, t, dmgRolesField(S, u, m, t, typ, d)))); // doctrine (v4.30), mastery and relics (v4.31), ability (v4.32)
 }
 
 function dmgBase(S, u, m, t, typ, mult) {
@@ -653,7 +666,7 @@ export function damage(S, v, d, ev, o) {
   const real = v.hp - Math.max(0, nh);
   v.hp = Math.max(0, nh);
   ev.push({ e: 'dmg', u: v.uid, v: real });
-  jDmg430(S, v, real, o); // tactical log (v4.30)
+  journalDamage(S, v, real, o); // tactical log (v4.30)
   if ((v.side === 'a' || S.duel433) && v.hp > 0 && real >= v.mhp * 0.3) {
     rewardIn(S, v, 1, ev);
   } // duel: both players (v4.33)
@@ -679,11 +692,11 @@ export function damage(S, v, d, ev, o) {
   if (real > 0 && !o.ind) {
     v.touche = true; // Mach Punch (v4.13)
     if (!o.reflect) {
-      reflections413(S, v, real, ev);
+      reflectEffects(S, v, real, ev);
     } // Counter, Mirror Coat, Destiny Bond (v4.13)
   }
   if (real > 0) {
-    afterDamage414(S, v, real, o, ev);
+    afterDamageItems(S, v, real, o, ev);
   } // Rocky Helmet, Sitrus Berry (v4.14)
   if (belt) {
     say(ev, `${v.n} tient bon grâce à la Ceinture Force !`);
@@ -713,9 +726,9 @@ export function stun(S, v, lab, ev, noSync) {
   if (!v || v.ko) {
     return;
   }
-  if (v.item === 'baielum' && !v.lum455) {
+  if (v.item === 'baielum' && !v.lumBerryUsed) {
     // held item (v4.58): cancels the first status inflicted
-    v.lum455 = 1;
+    v.lumBerryUsed = 1;
     say(ev, `Baie Lum : ${v.n} annule l’état ${lab}.`);
     return;
   }
@@ -731,12 +744,12 @@ export function stun(S, v, lab, ev, noSync) {
     say(ev, `${v.n} est trop souple pour être paralysé.`); // v4.13
     return;
   }
-  if (rune413(S, v)) {
+  if (hasRune(S, v)) {
     say(ev, `Rune Protect : ${v.n} est protégé.`); // v4.13
     return;
   }
   v.badge = lab;
-  v.badgeSeen433 = 0;
+  v.stunBadgeSeen = 0;
   if (v.side === 'e' && !v.done && (v.intent || S.jit)) {
     v.intent = null;
     say(
@@ -1029,7 +1042,7 @@ function react(S, rx, k, u, v, base, ev) {
         if (v.side === u.side) {
           v.anchor = 2;
           say(ev, `${v.n} est ancré : +2 Garde.`);
-        } else if (rune413(S, v)) {
+        } else if (hasRune(S, v)) {
           say(ev, `Rune Protect : ${v.n} est protégé.`);
         } // v4.13
         else {
@@ -1124,7 +1137,7 @@ export function resolveMove(S, u, m, k) {
   S.lastAtk = u.uid;
   S.rxg = {};
   ev.push({ e: 'use', u: u.uid, k, ty: typ });
-  S.actor430 = u.uid; // tactical log (v4.30)
+  S.lastActor = u.uid; // tactical log (v4.30)
   say(ev, `${u.n} utilise ${m.n} !`);
   if (m.wx) {
     S.wx = { k: m.wx, n: u.item === 'rochemeteo' ? 8 : 5 }; // Weather Rock (v4.14)
@@ -1155,8 +1168,8 @@ export function resolveMove(S, u, m, k) {
         }
       });
       say(ev, `Protection : ${u.n} et ses voisins gagnent +2 Garde.`);
-    } else if (SELF412[m.fx]) {
-      SELF412[m.fx](S, u, ev);
+    } else if (SELF_MOVE_EFFECTS[m.fx]) {
+      SELF_MOVE_EFFECTS[m.fx](S, u, ev);
     } // v4.12
     return endStep(S, ev);
   }
@@ -1202,8 +1215,8 @@ export function resolveMove(S, u, m, k) {
     say(ev, `${u.n} a été touché : il perd sa concentration, Mitra-Poing échoue.`); // v4.13
     return endStep(S, ev);
   }
-  if (PRE413[m.fx] && v0) {
-    PRE413[m.fx](S, u, m, v0, ev); // Curse, Will-O-Wisp, Swagger, Transform (v4.13)
+  if (PRE_MOVE_EFFECTS[m.fx] && v0) {
+    PRE_MOVE_EFFECTS[m.fx](S, u, m, v0, ev); // Curse, Will-O-Wisp, Swagger, Transform (v4.13)
     return endStep(S, ev);
   }
   if (['taunt', 'turn', 'confuse'].includes(m.fx) && v0) {
@@ -1281,14 +1294,14 @@ export function resolveMove(S, u, m, k) {
         say(ev, `${v.n} ne dort pas : Dévorêve échoue.`);
       } // v4.12
     }
-    if (v && !v.ko && v.side !== u.side && TARGET412[m.fx]) {
-      TARGET412[m.fx](S, u, v, x, mk, ev);
+    if (v && !v.ko && v.side !== u.side && TARGET_MOVE_EFFECTS[m.fx]) {
+      TARGET_MOVE_EFFECTS[m.fx](S, u, v, x, mk, ev);
     } // Icy Wind, Dragon Breath, Sludge Bomb (v4.12)
     if (v) {
-      afterHit413(S, u, m, v, x, mk, typ, ev);
+      afterHitSignatures(S, u, m, v, x, mk, typ, ev);
     } // Triple Kick, Psywave, Cursed Body, Conversion 2 (v4.13)
     if (v) {
-      afterHit414(S, u, m, v, x, typ, ev);
+      afterHitResonance(S, u, m, v, x, typ, ev);
     } // Resonance notes (v4.14)
     if (rx) {
       react(S, rx, x, u, v && !v.ko ? v : null, base, ev);
@@ -1323,7 +1336,7 @@ export function resolveMove(S, u, m, k) {
       stun(S, v1, 'SOM', ev);
     }
     if (m.fx === 'web') {
-      if (v1.ability === 'regardvif' || rune413(S, v1)) {
+      if (v1.ability === 'regardvif' || hasRune(S, v1)) {
         say(ev, `${v1.n} ignore l’entrave.`);
       } else {
         v1.web = 2;
@@ -1331,7 +1344,7 @@ export function resolveMove(S, u, m, k) {
       }
     }
     if (m.fx === 'root') {
-      if (v1.ability === 'regardvif' || rune413(S, v1)) {
+      if (v1.ability === 'regardvif' || hasRune(S, v1)) {
         say(ev, `${v1.n} ignore l’entrave.`);
       } else {
         v1.root = Math.max(v1.root, m.v || 2);
@@ -1348,8 +1361,8 @@ export function resolveMove(S, u, m, k) {
   if (u.aide && (m.p || m.fix)) {
     u.aide = 0;
   } // Helping Hand consumed (v4.12)
-  end413(S, u, m, k, v0, v1, dealt, ev); // signatures (v4.13)
-  end414(S, u, m, dealt, ev); // Life Orb (v4.14)
+  afterMoveSignatures(S, u, m, k, v0, v1, dealt, ev); // signatures (v4.13)
+  afterMoveHeldItems(S, u, m, dealt, ev); // Life Orb (v4.14)
   if (m.fx === 'recoil' && dealt > 0) {
     say(ev, `${u.n} subit le contrecoup.`);
     damage(S, u, Math.max(1, Math.round(dealt * 0.25)), ev, { ind: true });
@@ -1385,7 +1398,7 @@ export function pMove(S, u, k) {
     ev.push({ e: 'mv', u: u.uid });
     landed(S, u, ev);
     if (S.duel433) {
-      vigilDuel433(S, u, ev);
+      duelVigilance(S, u, ev);
     } // duel: the opponent's Vigilance (v4.33)
     ev = endStep(S, ev);
   } finally {
@@ -1446,7 +1459,7 @@ export function pAct(S, u, mi, k) {
 }
 
 export function rewardIn(S, u, n, ev) {
-  if (!u || u.ko || (u.side !== 'a' && !(S && S.duel433)) || !(hasNx(u) || hasXp(u) || resoCand417(S, u))) {
+  if (!u || u.ko || (u.side !== 'a' && !(S && S.duel433)) || !(hasNx(u) || hasXp(u) || resonanceCandidate(S, u))) {
     return;
   } // v4.14: Expert attacks; v4.17: Resonant Form
   const b = u.en;
@@ -1455,7 +1468,7 @@ export function rewardIn(S, u, n, ev) {
     ev.push({ e: 'en', u: u.uid, v: u.en - b });
     if (u.en === EMAX && hasNx(u)) {
       ev.push({ e: 'ready', u: u.uid }, { e: 'msg', s: `${u.n} est prêt à s’éveiller.` });
-    } else if (u.en === EMAX && !u.resonanceMsg && resoCand417(S, u)) {
+    } else if (u.en === EMAX && !u.resonanceMsg && resonanceCandidate(S, u)) {
       u.resonanceMsg = 1;
       ev.push({ e: 'ready', u: u.uid }, { e: 'msg', s: `${u.n} peut entrer en Forme Résonante.` });
     }
@@ -1650,14 +1663,14 @@ export function pAwaken(S, u, id) {
   const ev = [],
     previous = REPLAYS.has(S) ? JSON.stringify(S) : null, // replay (v4.11)
     displayName = u.n,
-    harm434 = BY[u.id].nx === 'eevee' && eeveeHarmony434(S, u).includes(id); // Eevee in harmony (v4.34)
+    inHarmony = BY[u.id].nx === 'eevee' && eeveeHarmony(S, u).includes(id); // Eevee in harmony (v4.34)
   S.lastAtk = u.uid;
   S.voice -= 1;
   S.stats.voice += 1;
   S.stats.evo++;
   S.eveil = true;
   transform(S, u, id, ev);
-  if (harm434 && !u.ko) {
+  if (inHarmony && !u.ko) {
     u.en = Math.min(EMAX, (u.en || 0) + 1);
     say(ev, `En harmonie : ${u.n} garde 1 losange.`);
   }
@@ -1693,7 +1706,7 @@ export function pReroll(S, u) {
   }
   u.acted = false;
   u.moved = false;
-  u.restart478 = 0; // guided turn: the Pokémon restarts from the Move step
+  u.restartedRound = 0; // guided turn: the Pokémon restarts from the Move step
   S.retrigger = true;
   S.voice -= 2;
   S.stats.voice += 2;
@@ -1751,7 +1764,7 @@ function aiScore(S, e, m, k, pos) {
     sc -= 12;
   }
   if (lv > 1) {
-    sc += expert429(S, e, m, k, pos, sim);
+    sc += expertCoordination(S, e, m, k, pos, sim);
   } // Expert: coordinated attacks (v4.29)
   return sc;
 }
@@ -1761,7 +1774,7 @@ export function plan(S, ev) {
     applyObst(S);
   } // obstacles placed before the first intentions
   if (S.duel433) {
-    return duelPlan433(S, ev);
+    return duelAiPlan(S, ev);
   } // duel: two players, no AI (v4.33)
   S.units
     .filter(e => e.side === 'e' && !e.ko)
@@ -1897,7 +1910,7 @@ function chooseAction(S, e, ev, inPlace) {
     });
   }
   if (!best && !F) {
-    best = aiSupport413(S, e, opts, al, here);
+    best = aiSupportMove(S, e, opts, al, here);
   } // support moves of the new families (v4.13)
   const pg = F ? null : trapPlan(S, e, best, al); // place a trap (v4.8)
   if (pg) {
@@ -1949,7 +1962,7 @@ export function prepareEnemy(S, uid) {
     );
   }
   chooseAction(S, e, ev, true);
-  vigilance420(S, e, ev); // Vigilance: interception before the attack (v4.20)
+  vigilanceStrike(S, e, ev); // Vigilance: interception before the attack (v4.20)
   return endStep(S, ev);
 }
 
@@ -2051,7 +2064,7 @@ export function execFoe(S, uid) {
 
 /* end of round: role support, round effects, then Leftovers */
 export function endRound(S) {
-  S.actor430 = null; // end-of-round effects have no author (v4.30)
+  S.lastActor = null; // end-of-round effects have no author (v4.30)
   const ch = [];
   HOOKS.beforeRoundEnd.forEach(h => h(S, ch)); // charged attacks, trap wear (v4.8)
   if (S.over) {
@@ -2070,7 +2083,7 @@ export function endRound(S) {
 }
 
 /** End-of-round effects of a Pokémon: burn, poison, weather, lava, durations (v4.33: separate function for the duel). */
-export function unitEffects433(S, u, ev) {
+export function unitRoundEffects(S, u, ev) {
   if (u.ko) {
     return;
   }
@@ -2116,10 +2129,10 @@ function roundEffects(S) {
     return ev;
   }
   S.units.forEach(u => {
-    if (u.ko || (S.duel433 && u.j433 === 2)) {
+    if (u.ko || (S.duel433 && u.duelPlayer === 2)) {
       return;
     } // duel: Player 2's at the start of their turn (v4.33)
-    unitEffects433(S, u, ev);
+    unitRoundEffects(S, u, ev);
   });
   for (const k in S.tiles) {
     const t = S.tiles[k];
@@ -2136,7 +2149,7 @@ function roundEffects(S) {
     });
   }
   aliveRound(S, ev); // living board: fire, rain, hail and time of day (v4.7-01)
-  durations412(S, ev); // Tailwind, Trick Room (v4.12)
+  tickFieldEffects(S, ev); // Tailwind, Trick Room (v4.12)
   if (S.wx) {
     S.wx.n--;
     if (S.wx.n <= 0) {
@@ -2158,14 +2171,14 @@ function roundEffects(S) {
     S.over = 'lose';
     S.timeout = true;
     if ((SCEN[S.sc] || {}).roam) {
-      S.flee416 = true;
+      S.fled = true;
     } // wandering beast (v4.16)
     say(
       ev,
       S.duel433
         ? 'Temps écoulé : les PV restants départagent les joueurs.'
-        : S.flee416
-          ? fleeMsg416(S)
+        : S.fled
+          ? fleeMessage(S)
           : 'Temps écoulé : l’adversaire tient la position.'
     );
     ev.push({ e: 'over' });

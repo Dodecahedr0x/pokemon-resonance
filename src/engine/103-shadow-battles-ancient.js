@@ -14,12 +14,12 @@ import { shut } from '../screens/overlays/tempStore.js';
 import { today } from './032-v4-foundation.js';
 import { DEXS } from './038-pokedex.js';
 import { teamSize } from './048-replayability.js';
-import { ev454 } from './084-peddler-route-missions.js';
+import { routeEvent } from './084-peddler-route-missions.js';
 
 // Startup statements, run in their original order (see index.js).
 export function __init() {
   (() => {
-    const KEY = 'res-x470';
+    const KEY = 'res-daily-challenges';
     const readX = () => {
       try {
         return Object.assign(
@@ -85,7 +85,7 @@ export function __init() {
           o.hb,
           mkFoes(o.ids)
         ),
-        { shadow470: i + 1 }
+        { shadowStep: i + 1 }
       );
       try {
         OBST[k] = { pil: ['4,2'], grass: ['4,4'] };
@@ -172,15 +172,15 @@ export function __init() {
         const k = S.sc || '';
         if (/^omb470_/.test(k)) {
           const n = +k.slice(7),
-            O = window.__shadow470;
+            O = window.__shadowEpisodes;
           if (O && O.readValue().stepOf === n - 1) {
             O.write({ stepOf: n });
             X.fossils += 1;
             m += 400 * n;
             g += n;
             try {
-              const st = ev454().st;
-              writeLS('res-ev454', { d: st.d, done: true, res: 'Les Ombres ont été repoussées.' });
+              const st = routeEvent().st;
+              writeLS('res-route-event', { d: st.d, done: true, res: 'Les Ombres ont été repoussées.' });
             } catch {
               /* Best effort: failure here is non-fatal. */
             }
@@ -220,17 +220,17 @@ export function __init() {
     // returns true: the « Affronter » choice leads to battle instead of resolving the encounter
     HOOKS.beforeRouteChoice.push(j => {
       try {
-        const { E, st } = ev454();
+        const { E, st } = routeEvent();
         if (E && E.ombre && !st.done && E.c[j] && E.c[j].fight) {
           if (!squad.length) {
             toast('Composez d’abord une équipe.');
             return true;
           }
-          const k = 'omb470_' + (window.__shadow470.readValue().stepOf + 1);
+          const k = 'omb470_' + (window.__shadowEpisodes.readValue().stepOf + 1);
           if (!SCEN[k]) {
             return true;
           }
-          shut('evs454');
+          shut('event-choice');
           if (B) {
             backToPrep();
           }
@@ -251,11 +251,11 @@ export function __init() {
         doneFlag = D.d === today() && D.done,
         di = dqDef();
       const freeOnes = REV().filter(id => !PROFILE.box.includes(id) && !(PROFILE.dex || []).includes(id));
-      const O = window.__shadow470,
+      const O = window.__shadowEpisodes,
         e = O.readValue().stepOf,
         endStep = e >= 4;
-      // rendering: src/screens/overlays/transients/Windows.jsx (X470)
-      const o = overlay('x470o', {
+      // rendering: src/screens/overlays/transients/Windows.jsx (ChallengesHub)
+      const o = overlay('daily-challenges-o', {
         shadowState: endStep
           ? { fin: endStep }
           : {
@@ -277,33 +277,33 @@ export function __init() {
       });
       o.addEventListener('click', evt => {
         if (evt.target === o) {
-          shut('x470o');
+          shut('daily-challenges-o');
         }
       });
     };
     document.addEventListener(
       'click',
       e => {
-        const b = e.target.closest && e.target.closest('[data-x470]');
+        const b = e.target.closest && e.target.closest('[data-daily-challenges]');
         if (!b || b.disabled) {
           return;
         }
         e.stopPropagation();
         e.preventDefault();
-        const v = b.dataset.x470,
+        const v = b.dataset.dailyChallenges,
           X = readX();
         if (v === 'open') {
           return hub();
         }
         if (v === 'close') {
-          return shut('x470o');
+          return shut('daily-challenges-o');
         }
         if (v === 'omb') {
-          const O = window.__shadow470;
+          const O = window.__shadowEpisodes;
           if (!O.available() || !squad.length) {
             return toast(squad.length ? 'Épisode verrouillé.' : 'Composez d’abord une équipe.');
           }
-          shut('x470o');
+          shut('daily-challenges-o');
           if (B) {
             backToPrep();
           }
@@ -314,7 +314,7 @@ export function __init() {
             return toast('Composez d’abord une équipe.');
           }
           dqMake();
-          shut('x470o');
+          shut('daily-challenges-o');
           if (B) {
             backToPrep();
           }
@@ -350,12 +350,19 @@ export function __init() {
           X.pre.on = !X.pre.on;
           writeX(X);
         }
-        shut('x470o');
+        shut('daily-challenges-o');
         hub();
       },
       true
     );
-    /* « Défis » (Challenges) banner on the Home page (#x470): rendered by React (src/screens/home/Banners.jsx) */
-    window.__x470 = { readValue: readX, write: writeX, hub, makeDailyChallenge: dqMake, dailyViolation: dqViol, ok };
+    /* « Défis » (Challenges) banner on the Home page (#dailyChallenges): rendered by React (src/screens/home/Banners.jsx) */
+    window.__challenges = {
+      readValue: readX,
+      write: writeX,
+      hub,
+      makeDailyChallenge: dqMake,
+      dailyViolation: dqViol,
+      ok,
+    };
   })();
 }

@@ -16,7 +16,7 @@ import { refreshHome } from '../screens/home/homeStore.js';
      (once per device).
    ===================================================================== */
 /** A free spot next to where the beast roams: its marker and name cover no other place. */
-export function roamPos416(h, takenSet) {
+export function pickRoamSpot(h, takenSet) {
   const C = [
       [110, 0],
       [-110, 0],
@@ -50,14 +50,14 @@ export function roamPos416(h, takenSet) {
 }
 
 /** The « Nouveau » (New) panel of Home (#v4News, src/screens/home/News.jsx) has been read. */
-export function newsView416() {
+export function hasNewsToView() {
   return PREF.news === '471';
 }
 
 /* ---------- Home: what's new ---------- */
 // The 8 latest news items, most recent first. Startup (111) already shows the
 // panel: v4.78 then adds its own (112), keeping 8 entries.
-export const NEWS416 = [
+export const NEWS_ENTRIES = [
   [
     'i-star',
     'Le monde Pokémon',

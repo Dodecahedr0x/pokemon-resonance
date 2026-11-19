@@ -21,10 +21,10 @@ import { renderWallet } from './035-interface.js';
 import { buildMap } from './037-map.js';
 import { fixTree } from './042-polish.js';
 import { rivalBuild, towerRestore } from './043-adventure-plus.js';
-import { free421 } from './061-catch-anywhere.js';
-import { diplomaOut428 } from './063-combat-catches-home.js';
-import { weeklyBuild429 } from './064-quality.js';
-import { challenges431Boot } from './066-tactical-challenges.js';
+import { fillFreeBox } from './061-catch-anywhere.js';
+import { awardRegionDiplomas } from './063-combat-catches-home.js';
+import { buildWeeklyChallenge } from './064-quality.js';
+import { challengeSetBoot } from './066-tactical-challenges.js';
 
 /* ===================== STARTUP =====================
    All the code is loaded: we restore the game, then display.
@@ -49,7 +49,7 @@ export function __init() {
 
   bootStep('captures Libre', () => {
     // v4.21: the Box replaces Free mode's "everything is open"
-    if (!free421(squad, BADGES)) {
+    if (!fillFreeBox(squad, BADGES)) {
       return;
     }
     __set_squad(squad.filter(id => inBox(id)));
@@ -61,7 +61,7 @@ export function __init() {
     save();
   });
 
-  bootStep('diplômes régionaux', () => setTimeout(diplomaOut428, 1500));
+  bootStep('diplômes régionaux', () => setTimeout(awardRegionDiplomas, 1500));
 
   // v4.28: regions already complete
   bootStep('Champion', champBuild);
@@ -72,10 +72,10 @@ export function __init() {
     towerRestore();
   });
 
-  bootStep('défi de la semaine', weeklyBuild429);
+  bootStep('défi de la semaine', buildWeeklyChallenge);
 
   // v4.29
-  bootStep('défis tactiques', challenges431Boot);
+  bootStep('défis tactiques', challengeSetBoot);
 
   // riddle, expedition and gym in progress (v4.31)
   // the old title screen (#splash) is gone: the React launch screen replaces it

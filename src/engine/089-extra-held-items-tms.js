@@ -3,31 +3,33 @@
 import { ITEMS2, PROFILE } from './011-game-state.js';
 import { HOOKS } from './015-hooks.js';
 import { esc } from './025-saves.js';
-import { HELD_IMG, ICO414, SHOP, bagN, today } from './032-v4-foundation.js';
+import { HELD_IMG, ITEM_ICONS, SHOP, bagN, today } from './032-v4-foundation.js';
 import { DAMAGE_PROVIDERS } from './044-tactical-engine.js';
 import { HELD_SHOP } from './053-resonance.js';
-import { seed417 } from './057-companions-resonance.js';
-import { rng454 } from './084-peddler-route-missions.js';
-import { berry455, orb455, svg455 } from './087-balls-held-items.js';
-import { tmKeys455 } from './088-workshop-recipes.js';
+import { dailySeed } from './057-companions-resonance.js';
+import { seededRng } from './084-peddler-route-missions.js';
+import { berryIcon, orbIcon, wrapSvg } from './087-balls-held-items.js';
+import { tmKeys } from './088-workshop-recipes.js';
 
-export function tmDay456() {
-  const r = rng454('ctjour456'),
-    pool = tmKeys455().slice(),
+export function dailyTm() {
+  const r = seededRng('tm-daily'),
+    pool = tmKeys().slice(),
     o = [];
   while (o.length < 2 && pool.length) {
     o.push(pool.splice(Math.floor(r() * pool.length), 1)[0]);
   }
-  return { o, reg: ['Kanto', 'Johto', 'Hoenn'][seed417('ctreg456') % 3] };
+  return { o, reg: ['Kanto', 'Johto', 'Hoenn'][dailySeed('tm-region') % 3] };
 }
 
 // Statements run at startup, in the original order (see index.js).
 export function __init() {
-  Object.assign(ICO414, {
-    'lum-berry': svg455(berry455('#58b85a')),
-    'flame-orb': svg455(orb455('#e5484d', '<path d="M24 14c4 4 5 8 2 12-1 2-4 2-5 0-2-3-1-7 3-12z" fill="#ffd45b"/>')),
-    'toxic-orb': svg455(
-      orb455('#9a5fd0', '<path d="M17 24h14M24 17v14" stroke="#e8d0ff" stroke-width="3" stroke-linecap="round"/>')
+  Object.assign(ITEM_ICONS, {
+    'lum-berry': wrapSvg(berryIcon('#58b85a')),
+    'flame-orb': wrapSvg(
+      orbIcon('#e5484d', '<path d="M24 14c4 4 5 8 2 12-1 2-4 2-5 0-2-3-1-7 3-12z" fill="#ffd45b"/>')
+    ),
+    'toxic-orb': wrapSvg(
+      orbIcon('#9a5fd0', '<path d="M17 24h14M24 17v14" stroke="#e8d0ff" stroke-width="3" stroke-linecap="round"/>')
     ),
   });
 
@@ -55,7 +57,7 @@ export function __init() {
   Object.assign(HELD_SHOP, { baielum: { p: 3000 }, orbeflamme: { p: 3000 }, orbetoxik: { p: 3000 } });
 
   DAMAGE_PROVIDERS.push({
-    id: 'orbes456',
+    id: 'orb-boost',
     provide: (c, { u, m }) =>
       !!u &&
       ((u.item === 'orbeflamme' && u.burn > 0) || (u.item === 'orbetoxik' && u.poisoned > 0)) &&
@@ -80,15 +82,15 @@ export function __init() {
   HOOKS.progress.unshift((S, rew) => {
     try {
       if (S && S.rank === 'S' && S.rankNew && S.sc !== 'sauvage' && S.sc !== 'tuto') {
-        const cts = tmKeys455().filter(k => !bagN(k)),
-          pool = cts.length ? cts : tmKeys455();
+        const cts = tmKeys().filter(k => !bagN(k)),
+          pool = cts.length ? cts : tmKeys();
         let h = 5;
         for (const ch of S.sc + today()) {
           h = (h * 31 + ch.charCodeAt(0)) >>> 0;
         }
         const k = pool[h % pool.length];
         PROFILE.bag[k] = Math.min(99, bagN(k) + 1);
-        rew.ct456 = k;
+        rew.tmReward = k;
       }
     } catch {
       /* Best effort: failure here is non-fatal. */
@@ -96,10 +98,10 @@ export function __init() {
   });
 
   HOOKS.battleResult.unshift(r =>
-    r.ct456
-      ? `<div class="res-l"><h4>Récompense de rang S</h4><div class="rl"><span>${esc(SHOP[r.ct456].n)} ajoutée au Sac</span><b>CT</b></div></div>`
+    r.tmReward
+      ? `<div class="res-l"><h4>Récompense de rang S</h4><div class="rl"><span>${esc(SHOP[r.tmReward].n)} ajoutée au Sac</span><b>CT</b></div></div>`
       : ''
   );
 
-  // TM vendor of the day (#ctj456, Shop › TMs and HMs): rendered by React (src/screens/bag/Bag.jsx)
+  // TM vendor of the day (#tmVendor, Shop › TMs and HMs): rendered by React (src/screens/bag/Bag.jsx)
 }

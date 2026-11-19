@@ -8,7 +8,7 @@ import { useOverlay } from './dialogsStore.js';
 // - #pk-btr: battle entrance; 108 sets its class (go, boss|dresseur|sauvage, vite),
 //   the bands are rendered here between paintOverlay('btr') and clearOverlay('btr');
 // - #pk-badge: badge ceremony; 108 manages hidden and .out, the content comes from the store;
-// - #tr448: battle-entry flash (v4.48, 079), present for 1.25 s.
+// - #battleTransition: battle-entry flash (v4.48, 079), present for 1.25 s.
 
 // Large line-art Poké Ball of the backdrop (originally the first element of the body).
 export function PkBackground() {
@@ -78,15 +78,15 @@ export function PkBadge() {
   );
 }
 
-export function Tr448() {
-  const s = useOverlay('tr448');
+export function ScreenTransition() {
+  const s = useOverlay('battle-transition');
   if (!s) {
     return null;
   }
   return (
-    <div id="tr448" aria-hidden="true" key={s.v}>
-      <i className="tr448-f" />
-      <i className="tr448-i" />
+    <div id="battle-transition" aria-hidden="true" key={s.v}>
+      <i className="battle-transition-f" />
+      <i className="battle-transition-i" />
     </div>
   );
 }

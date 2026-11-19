@@ -1,9 +1,9 @@
-import { NEWS416, newsView416 } from '../../engine/056-polish-v4-16.js';
+import { NEWS_ENTRIES, hasNewsToView } from '../../engine/056-polish-v4-16.js';
 
 // "Nouveau" (New) panel on the Home page (#v4News, v4.16.1), before the shortcuts.
 // Removed once the player has tapped "Compris" (Understood) (data-news="ok", handled by the engine).
 export default function WhatsNew() {
-  if (newsView416()) {
+  if (hasNewsToView()) {
     return null;
   }
   return (
@@ -18,7 +18,7 @@ export default function WhatsNew() {
         </button>
       </header>
       <ul className="nw-l">
-        {NEWS416.map(([ic, t, d, go], i) => {
+        {NEWS_ENTRIES.map(([ic, t, d, go], i) => {
           const body = (
             <>
               <span className="nw-ic">

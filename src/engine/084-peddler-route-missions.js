@@ -12,13 +12,13 @@ import { DEXS } from './038-pokedex.js';
 import { refreshDex } from '../screens/dex/dexStore.js';
 import { renderBag } from './039-quests-shop.js';
 import { costOf0 } from './049-identity.js';
-import { HELD_SHOP, costHeld414 } from './053-resonance.js';
-import { seed417 } from './057-companions-resonance.js';
+import { HELD_SHOP, heldItemCost } from './053-resonance.js';
+import { dailySeed } from './057-companions-resonance.js';
 
-export function peddler454() {
+export function todaysPeddler() {
   const d = today(),
-    r = rng454('ambu'),
-    present = seed417('ambu7') % 7 < 4;
+    r = seededRng('ambu'),
+    present = dailySeed('ambu7') % 7 < 4;
   const keyList = Object.keys(SHOP).filter(
     k =>
       !SHOP[k].g &&
@@ -38,87 +38,87 @@ export function peddler454() {
   }
   const held = Object.keys(HELD_SHOP).filter(k => !HELD_SHOP[k].g && !PROFILE.items.includes(k));
   const th = held.length ? held[Math.floor(r() * held.length)] : null;
-  const st = LS454('res-am454', d) || { d, got: {} };
-  return { present, displayName: NAMES454[seed417('ambunom') % NAMES454.length], pick, th, st };
+  const st = loadDailyState('res-wanderer', d) || { d, got: {} };
+  return { present, displayName: MERCHANT_NAMES[dailySeed('ambunom') % MERCHANT_NAMES.length], pick, th, st };
 }
 
 // Shop › Peddler: rendered by React (src/screens/bag/Peddler.jsx)
 
-export function ev454() {
+export function routeEvent() {
   const d = today(),
-    i = seed417('ev454') % EV454.length,
-    st = LS454('res-ev454', d) || { d, done: false };
-  return HOOKS.routeEncounter.reduce((r, f) => f(r), { E: EV454[i], i, st });
+    i = dailySeed('routeEvent') % ROUTE_EVENTS.length,
+    st = loadDailyState('res-route-event', d) || { d, done: false };
+  return HOOKS.routeEncounter.reduce((r, f) => f(r), { E: ROUTE_EVENTS[i], i, st });
 }
 
-function evOpen454() {
-  const { E, st } = ev454();
+function openRouteEvent() {
+  const { E, st } = routeEvent();
   if (st.done) {
     return;
   }
   const c = E.c.map(choice => {
     const eff = [
-      choice.cost ? 'Coût : ' + txt454(choice.cost) : '',
+      choice.cost ? 'Coût : ' + rewardText(choice.cost) : '',
       choice.p && choice.p < 1 ? `${Math.round(choice.p * 100)} % de réussite` : '',
     ]
       .filter(Boolean)
       .join(' · ');
-    return { l: choice.l, ok: can454(choice.cost), eff: eff || null };
+    return { l: choice.l, ok: canAfford(choice.cost), eff: eff || null };
   });
-  // rendered by src/screens/overlays/transients/Windows.jsx (Ev454)
-  const o = overlay('evs454', { t: E.t, x: E.x, c, res: null });
+  // rendered by src/screens/overlays/transients/Windows.jsx (RouteEncounter)
+  const o = overlay('event-choice', { t: E.t, x: E.x, c, res: null });
   o.addEventListener('click', e => {
     if (e.target === o) {
-      shut('evs454');
+      shut('event-choice');
     }
   });
 }
 
-export function evPick454(j) {
+export function pickRouteChoice(j) {
   for (const f of HOOKS.beforeRouteChoice) {
     if (f(j)) {
       return;
     }
   }
-  solve454(j);
+  resolveChoice(j);
   hook('routeChoice', j);
 }
 
-function solve454(j) {
-  const { E, st } = ev454(),
+function resolveChoice(j) {
+  const { E, st } = routeEvent(),
     c = E.c[j];
-  if (!c || st.done || !can454(c.cost)) {
+  if (!c || st.done || !canAfford(c.cost)) {
     return;
   }
-  reward454(c.cost);
+  applyReward(c.cost);
   let issue = 'ok';
   if (c.p && c.p < 1) {
-    issue = rng454('ev454r' + j)() < c.p ? 'ok' : 'ko';
+    issue = seededRng('routeEventR' + j)() < c.p ? 'ok' : 'ko';
   }
   const g = issue === 'ok' ? c.ok : c.ko,
     t = (issue === 'ok' ? c.successText : c.failText) || (c.cost ? 'Affaire conclue.' : 'Vous poursuivez votre route.');
   if (g) {
-    reward454(g);
+    applyReward(g);
   }
-  const res = t + (g && txt454(g) ? ' (' + txt454(g) + ')' : '');
-  writeLS('res-ev454', { d: st.d, done: true, res });
+  const res = t + (g && rewardText(g) ? ' (' + rewardText(g) + ')' : '');
+  writeLS('res-route-event', { d: st.d, done: true, res });
   sfx(issue === 'ok' ? 'ui' : 'hit');
   vibe(issue === 'ok' ? 20 : 40);
   savePurse();
-  updateTemp('evs454', { res: { ok: issue === 'ok', txt: res } });
-  refreshMap(); // "Rencontre sur la route" (Route encounter) banner (#ev454, src/screens/map/EvBar.jsx)
+  updateTemp('event-choice', { res: { ok: issue === 'ok', txt: res } });
+  refreshMap(); // "Rencontre sur la route" (Route encounter) banner (#routeEvent, src/screens/map/EvBar.jsx)
 }
 
-export function week454() {
+export function weekKey() {
   const t = new Date(today() + 'T00:00:00Z'),
     j = Math.floor(t.getTime() / 86400000 + 3);
   return 'w' + Math.floor(j / 7);
 }
 
-export function msSt454() {
+export function missionState() {
   let s;
   try {
-    s = JSON.parse(localStorage.getItem('res-ms454') || '{}');
+    s = JSON.parse(localStorage.getItem('res-dex-mission') || '{}');
   } catch (e) {
     s = {};
   }
@@ -127,7 +127,7 @@ export function msSt454() {
   return s;
 }
 
-export function typesMs454() {
+export function typeProgress() {
   const cnt = {};
   DEXS.forEach(m => {
     (m.t || []).forEach(t => {
@@ -141,7 +141,7 @@ export function typesMs454() {
   const ts = Object.keys(cnt)
     .filter(t => cnt[t].tot >= 4)
     .sort();
-  const w = week454();
+  const w = weekKey();
   let h = 7;
   for (const ch of w) {
     h = (h * 31 + ch.charCodeAt(0)) >>> 0;
@@ -151,7 +151,7 @@ export function typesMs454() {
   return [a, b === a ? ts[(h + 1) % ts.length] : b].map(t => ({ t, n: Math.min(4, cnt[t].tot), own: cnt[t].own }));
 }
 
-const LS454 = (k, d) => {
+const loadDailyState = (k, d) => {
   let s;
   try {
     s = JSON.parse(localStorage.getItem(k) || 'null');
@@ -161,9 +161,9 @@ const LS454 = (k, d) => {
   return s && s.d === d ? s : null;
 };
 
-export const rng454 = sel => mulberry32(seed417(sel) || 1);
+export const seededRng = sel => mulberry32(dailySeed(sel) || 1);
 
-export const reward454 = (o, _t) => {
+export const applyReward = (o, _t) => {
   /* applies a gain/cost {m,g,b:{k:n}} */
   if (!o) {
     return;
@@ -181,7 +181,7 @@ export const reward454 = (o, _t) => {
   }
 };
 
-export const can454 = c => {
+export const canAfford = c => {
   if (!c) {
     return true;
   }
@@ -201,7 +201,7 @@ export const can454 = c => {
   return true;
 };
 
-export const txt454 = o => {
+export const rewardText = o => {
   if (!o) {
     return '';
   }
@@ -221,10 +221,10 @@ export const txt454 = o => {
 };
 
 /* ---------- 1. peddler ---------- */
-const NAMES454 = ['Basile', 'Maëlle', 'Hugo', 'Iris', 'Gaspard', 'Solène', 'Théo'];
+const MERCHANT_NAMES = ['Basile', 'Maëlle', 'Hugo', 'Iris', 'Gaspard', 'Solène', 'Théo'];
 
 /* ---------- 2. route encounters ---------- */
-const EV454 = [
+const ROUTE_EVENTS = [
   {
     t: 'Un vieux pêcheur',
     x: 'Un pêcheur peine à remonter ses filets sur la rive.',
@@ -343,7 +343,7 @@ const EV454 = [
 ];
 
 /* ---------- 3. Pokédex missions ---------- */
-export const PAL454 = [
+export const MISSION_TIERS = [
   [5, { m: 500 }],
   [10, { g: 1 }],
   [20, { m: 1500 }],
@@ -359,14 +359,14 @@ export function __init() {
   document.addEventListener(
     'click',
     e => {
-      const b = e.target.closest && e.target.closest('[data-am454]');
+      const b = e.target.closest && e.target.closest('[data-wanderer]');
       if (!b) {
         return;
       }
       e.preventDefault();
       e.stopPropagation();
-      const A = peddler454(),
-        k = b.dataset.am454;
+      const A = todaysPeddler(),
+        k = b.dataset.wanderer;
       if (!A.present) {
         return;
       }
@@ -375,7 +375,7 @@ export function __init() {
         if (h !== A.th || A.st.got[k]) {
           return;
         }
-        const px = Math.round((costHeld414(h) * 0.8) / 50) * 50;
+        const px = Math.round((heldItemCost(h) * 0.8) / 50) * 50;
         if (PROFILE.money < px) {
           return;
         }
@@ -396,7 +396,7 @@ export function __init() {
         A.st.got[k] = (A.st.got[k] || 0) + 1;
         toast(`Acheté : 1 × ${SHOP[k].n}`);
       }
-      writeLS('res-am454', A.st);
+      writeLS('res-wanderer', A.st);
       sfx('ui');
       vibe(15);
       savePurse();
@@ -406,48 +406,48 @@ export function __init() {
   );
 
   document.addEventListener('click', e => {
-    const b = e.target.closest && e.target.closest('[data-ev454]');
+    const b = e.target.closest && e.target.closest('[data-route-event]');
     if (!b) {
       return;
     }
-    const v = b.dataset.ev454;
+    const v = b.dataset.routeEvent;
     if (v === 'open') {
-      evOpen454();
+      openRouteEvent();
     } else if (v === 'close') {
-      shut('evs454');
+      shut('event-choice');
     } else {
-      evPick454(+v);
+      pickRouteChoice(+v);
     }
   });
 
   document.addEventListener('click', e => {
-    const b = e.target.closest && e.target.closest('[data-ms454]');
+    const b = e.target.closest && e.target.closest('[data-dex-mission]');
     if (!b || b.disabled) {
       return;
     }
-    const S = msSt454(),
-      [k, v] = b.dataset.ms454.split(':');
+    const S = missionState(),
+      [k, v] = b.dataset.dexMission.split(':');
     if (k === 'p') {
-      const p = PAL454.find(x => x[0] === +v);
+      const p = MISSION_TIERS.find(x => x[0] === +v);
       if (!p || S.pal[v] || DEXS.filter(m => ownedFam(m.id)).length < p[0]) {
         return;
       }
       S.pal[v] = 1;
-      reward454(p[1]);
-      toast('Mission accomplie : ' + txt454(p[1]));
+      applyReward(p[1]);
+      toast('Mission accomplie : ' + rewardText(p[1]));
     } else {
-      const t = typesMs454().find(x => x.t === v);
-      if (!t || t.own < t.n || S.ty[week454() + v]) {
+      const t = typeProgress().find(x => x.t === v);
+      if (!t || t.own < t.n || S.ty[weekKey() + v]) {
         return;
       }
-      S.ty[week454() + v] = 1;
-      reward454({ g: 1 });
+      S.ty[weekKey() + v] = 1;
+      applyReward({ g: 1 });
       toast('Spécialiste ' + v + ' : +1 Éclat');
     }
-    writeLS('res-ms454', S);
+    writeLS('res-dex-mission', S);
     sfx('ui');
     vibe(20);
     savePurse();
-    refreshDex(); // missions (#ms454) rendered by React: src/screens/dex/Missions.jsx
+    refreshDex(); // missions (#dexMission) rendered by React: src/screens/dex/Missions.jsx
   });
 }

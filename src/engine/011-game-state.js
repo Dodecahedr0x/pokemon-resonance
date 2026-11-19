@@ -8,18 +8,18 @@ import { TAC0, tacClean } from './047-tactics.js';
 import { REPLAY0, replayClean } from './048-replayability.js';
 import { IDP0, idpClean } from './049-identity.js';
 import { MON0, monClean } from './050-world.js';
-import { V416_0, v416Clean } from './055-living-johto.js';
-import { V417_0, v417Clean } from './057-companions-resonance.js';
-import { V418_0, v418Clean } from './058-fishing-safari-coop.js';
-import { V419_0, v419Clean } from './059-hoenn.js';
-import { V421_0, v421Clean } from './061-catch-anywhere.js';
-import { V428_0, v428Clean } from './063-combat-catches-home.js';
-import { V429_0, v429Clean } from './064-quality.js';
-import { V430_0, v430Clean } from './065-camp-tactics.js';
-import { V431_0, v431Clean } from './066-tactical-challenges.js';
-import { V432_0, v432Clean } from './067-individuals-comfort.js';
-import { V433_0, v433Clean } from './068-duel-tutorial.js';
-import { V435_0, v435Clean } from './071-hoenn-legendaries.js';
+import { LIVING_JOHTO_0, livingJohtoClean } from './055-living-johto.js';
+import { COMPANIONS_0, companionGardenClean } from './057-companions-resonance.js';
+import { FISHING_SAFARI_0, fishingSafariClean } from './058-fishing-safari-coop.js';
+import { HOENN_REGION_0, hoennRegionClean } from './059-hoenn.js';
+import { CATCH_ANYWHERE_0, catchAnywhereClean } from './061-catch-anywhere.js';
+import { REGIONAL_DIPLOMAS_0, regionalDiplomasClean } from './063-combat-catches-home.js';
+import { QUALITY_PASS_0, qualityPassClean } from './064-quality.js';
+import { CAMP_TACTICS_0, campTacticsClean } from './065-camp-tactics.js';
+import { TACTICAL_CHALLENGES_0, tacticalChallengesClean } from './066-tactical-challenges.js';
+import { INDIVIDUALS_COMFORT_0, individualsComfortClean } from './067-individuals-comfort.js';
+import { DUEL_TUTORIAL_0, duelTutorialClean } from './068-duel-tutorial.js';
+import { HOENN_LEGENDS_0, hoennLegendsClean } from './071-hoenn-legendaries.js';
 
 export let LINK_T, LINK_N, PROFILE;
 export function __set_PROFILE(v) {
@@ -37,18 +37,18 @@ export const PROFILE_SECTIONS = [
   [REPLAY0, replayClean], // achievements, title, challenges (v4.9)
   [IDP0, idpClean], // camp and expeditions (v4.10)
   [MON0, monClean], // Team Dissonance, seasonal gifts (v4.11)
-  [V416_0, v416Clean], // living Johto: story, beasts, Daycare, friends (v4.16)
-  [V417_0, v417Clean], // companion, scenes, vegetable garden, tournament (v4.17)
-  [V418_0, v418Clean], // fishing, Safari Park (v4.18)
-  [V419_0, v419Clean], // Hoenn (v4.19)
-  [V421_0, v421Clean], // catching everywhere (v4.21)
-  [V428_0, v428Clean], // regional diplomas (v4.28)
-  [V429_0, v429Clean], // tips, rival, weekly challenge (v4.29)
-  [V430_0, v430Clean], // doctrine, tactical log (v4.30)
-  [V431_0, v431Clean], // riddles, mastery, Deep Echo, arenas (v4.31)
-  [V432_0, v432Clean], // nature and ability, squads, Pantheon (v4.32)
-  [V433_0, v433Clean], // duel and tutorial (v4.33)
-  [V435_0, v435Clean], // Hoenn legends (v4.38)
+  [LIVING_JOHTO_0, livingJohtoClean], // living Johto: story, beasts, Daycare, friends (v4.16)
+  [COMPANIONS_0, companionGardenClean], // companion, scenes, vegetable garden, tournament (v4.17)
+  [FISHING_SAFARI_0, fishingSafariClean], // fishing, Safari Park (v4.18)
+  [HOENN_REGION_0, hoennRegionClean], // Hoenn (v4.19)
+  [CATCH_ANYWHERE_0, catchAnywhereClean], // catching everywhere (v4.21)
+  [REGIONAL_DIPLOMAS_0, regionalDiplomasClean], // regional diplomas (v4.28)
+  [QUALITY_PASS_0, qualityPassClean], // tips, rival, weekly challenge (v4.29)
+  [CAMP_TACTICS_0, campTacticsClean], // doctrine, tactical log (v4.30)
+  [TACTICAL_CHALLENGES_0, tacticalChallengesClean], // riddles, mastery, Deep Echo, arenas (v4.31)
+  [INDIVIDUALS_COMFORT_0, individualsComfortClean], // nature and ability, squads, Pantheon (v4.32)
+  [DUEL_TUTORIAL_0, duelTutorialClean], // duel and tutorial (v4.33)
+  [HOENN_LEGENDS_0, hoennLegendsClean], // Hoenn legends (v4.38)
 ];
 
 export function defProfile() {

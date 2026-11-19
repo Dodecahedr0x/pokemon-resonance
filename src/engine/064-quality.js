@@ -16,20 +16,20 @@ import { queueSave } from './025-saves.js';
 import { PREF, savePref, vibe } from './026-campaign-tutorial-sound.js';
 import { AUTO } from './030-prestige-staging.js';
 import { avatar } from './031-home-journey.js';
-import { hideTip429, showTip429 } from '../screens/overlays/shellOverlays.js';
+import { hideTooltip, showTooltip } from '../screens/overlays/shellOverlays.js';
 import { V4, fmt } from './032-v4-foundation.js';
 import { PL, renderMap } from './037-map.js';
 import { renderQuests } from './039-quests-shop.js';
 import { LEGS, RIVAL, RIVAL_LINE, RIVAL_POS, legKey, rivalStarter } from './043-adventure-plus.js';
 import { notesOf } from './053-resonance.js';
 import { PLACES_J } from './054-johto.js';
-import { SCENES, SCN, __set_SCN, renderScene417, resoCand417 } from './057-companions-resonance.js';
+import { SCENES, SCN, __set_SCN, renderStoryScene, resonanceCandidate } from './057-companions-resonance.js';
 import { PLACES_H } from './059-hoenn.js';
-import { bossPhases420, surrounded420 } from './060-intense-combat.js';
-import { REGION_NAMES421 } from './061-catch-anywhere.js';
-import { familyCapt428 } from './063-combat-catches-home.js';
+import { hasBossPhases, isSurrounded } from './060-intense-combat.js';
+import { FAMILY_REGION_NAMES } from './061-catch-anywhere.js';
+import { familyCaptureStats } from './063-combat-catches-home.js';
 
-let WEEK429;
+let WEEK_CACHE;
 
 /* =====================================================================
    v4.29: gameplay quality
@@ -50,20 +50,20 @@ let WEEK429;
    Tables read by functions called elsewhere are declared with "var":
    never a load-order error.
    ===================================================================== */
-export function V429_0() {
-  return { tips429: {}, rivals429: [], hebdo429: null };
+export function QUALITY_PASS_0() {
+  return { seenTips: {}, rivalsMet: [], hebdo429: null };
 }
 
-export function v429Clean(p) {
-  const o = V429_0();
+export function qualityPassClean(p) {
+  const o = QUALITY_PASS_0();
   if (!p || typeof p !== 'object') {
     return o;
   }
-  if (p.tips429 && typeof p.tips429 === 'object') {
-    Object.keys(p.tips429).forEach(k => /^[a-z]{2,12}$/.test(k) && (o.tips429[k] = 1));
+  if (p.seenTips && typeof p.seenTips === 'object') {
+    Object.keys(p.seenTips).forEach(k => /^[a-z]{2,12}$/.test(k) && (o.seenTips[k] = 1));
   }
-  if (Array.isArray(p.rivals429)) {
-    o.rivals429 = [...new Set(p.rivals429.filter(x => ['rv5', 'rv6', 'hd429'].includes(x)))];
+  if (Array.isArray(p.rivalsMet)) {
+    o.rivalsMet = [...new Set(p.rivalsMet.filter(x => ['rv5', 'rv6', 'hd429'].includes(x)))];
   }
   const h = p.hebdo429;
   if (h && typeof h === 'object' && typeof h.w === 'string' && /^\d{4}-S\d\d$/.test(h.w)) {
@@ -79,33 +79,33 @@ export function v429Clean(p) {
 }
 
 /** This week's score on the trainer card. */
-export function wkClean429(x) {
+export function sanitizeWeekly(x) {
   return x && typeof x === 'object' && typeof x.w === 'string' && /^\d{4}-S\d\d$/.test(x.w) && Number.isFinite(x.s)
     ? { w: x.w, s: Math.max(0, Math.min(99999, Math.floor(x.s))) }
     : null;
 }
 
 /** Displayed Box: captured legends don't count in "Box x / 151". */
-export function boxN429() {
+export function boxCount() {
   return PROFILE.box.filter(id => !(BY[id] && BY[id].leg)).length;
 }
 
 /* ---------- 1. expressive Pokémon ---------- */
-export function anim429() {
-  return !RM && PREF.anim429 !== false;
+export function animEnabled() {
+  return !RM && PREF.animEnabled !== false;
 }
 
 /** All the token's parts sit in an inner .tok-b group (Units.jsx): it moves without
     shifting the tile. Each token breathes with a different offset. */
-export function liveTok429(T) {
-  liveTok429.n = (liveTok429.n || 0) + 1;
-  T.dl = (-((liveTok429.n * 0.77) % 3.4)).toFixed(2) + 's';
+export function liveToken(T) {
+  liveToken.n = (liveToken.n || 0) + 1;
+  T.dl = (-((liveToken.n * 0.77) % 3.4)).toFixed(2) + 's';
   return T;
 }
 
 /* Restarts a small token animation. If it is already playing, restart it two frames later
    (rather than forcing a layout of the whole page). */
-export function replay429(T, cl, ms) {
+export function replayAnimation(T, cl, ms) {
   const g = T && T.g;
   if (!g) {
     return;
@@ -123,10 +123,10 @@ export function replay429(T, cl, ms) {
   after2images(launchMove);
 }
 
-function bond429(uid, k) {
+function bondHop(uid, k) {
   const T = L.u && L.u[uid],
     u = B && byUid(B, uid);
-  if (!anim429() || !T || !T.b || !u || u.ko) {
+  if (!animEnabled() || !T || !T.b || !u || u.ko) {
     return;
   }
   const [x0, y0] = HC(uk(u)),
@@ -143,27 +143,27 @@ function bond429(uid, k) {
   }
   T.b.style.setProperty('--lx', dx.toFixed(1) + 'px');
   T.b.style.setProperty('--ly', dy.toFixed(1) + 'px');
-  replay429(T, 'lunge429', 560);
+  replayAnimation(T, 'lunge-hit', 560);
 }
 
-export function ouch429(uid) {
+export function hurtFlash(uid) {
   const T = L.u && L.u[uid];
-  if (anim429() && T && T.b) {
-    replay429(T, 'hurt429', 480);
+  if (animEnabled() && T && T.b) {
+    replayAnimation(T, 'hurt-flash', 480);
   }
 }
 
-export function liveEv429(ev) {
+export function liveEvent(ev) {
   if (!B || !ev || !ev.length) {
     return;
   }
   const sv = document.getElementById('bSvg');
   if (sv) {
-    sv.style.setProperty('--tk429', PREF.fast || ui.turbo428 ? '0.6' : '1');
+    sv.style.setProperty('--anim-scale', PREF.fast || ui.skipSpeedup ? '0.6' : '1');
   }
   ev.forEach(x => {
     if (x.e === 'use' && x.u && x.k) {
-      bond429(x.u, x.k);
+      bondHop(x.u, x.k);
     }
   });
   // vibration: one of your Pokémon takes a big hit, or a Pokémon is knocked out
@@ -180,25 +180,25 @@ export function liveEv429(ev) {
   }
 }
 
-function calm429() {
-  bdClass('calme429', !anim429()); // class of #bBoard, rendered by React
+function applyCalmMode() {
+  bdClass('calm-motion', !animEnabled()); // class of #bBoard, rendered by React
 }
 
-function actionLp429(t) {
+function longPressAction(t) {
   if (!t || !t.closest) {
     return null;
   }
   const hx = t.closest('#bSvg [data-k]');
   if (hx && B) {
     const u = uAt(B, hx.dataset.k);
-    return u ? () => sheet429(u.sp) : null;
+    return u ? () => openSpeciesSheet(u.sp) : null;
   }
   const tok = t.closest('#bSvg .tok');
   if (tok && B && L.u) {
     for (const id in L.u) {
       if (L.u[id].g === tok) {
         const u = byUid(B, id);
-        return u ? () => sheet429(u.sp) : null;
+        return u ? () => openSpeciesSheet(u.sp) : null;
       }
     }
     return null;
@@ -214,16 +214,16 @@ function actionLp429(t) {
       }
     };
   }
-  const c = t.closest('[data-open],.v4-dl[data-dex],[data-lp429]');
+  const c = t.closest('[data-open],.v4-dl[data-dex],[data-species-sheet]');
   if (!c) {
     return null;
   }
-  const id = c.dataset.open || c.dataset.dex || c.dataset.lp429;
-  return id && BY[id] ? () => sheet429(id) : null;
+  const id = c.dataset.open || c.dataset.dex || c.dataset.speciesSheet;
+  return id && BY[id] ? () => openSpeciesSheet(id) : null;
 }
 
 /** A Pokémon's sheet; for a legend or an opponent with no sheet, a summary. */
-function sheet429(id) {
+function openSpeciesSheet(id) {
   const m = BY[id];
   if (!m) {
     return;
@@ -237,8 +237,8 @@ function sheet429(id) {
   openSheet(id);
 }
 
-function slideOk429(t) {
-  if (PREF.swipe429 === false || !t || !t.closest || !t.closest('main,.content,.page')) {
+function canSwipeHere(t) {
+  if (PREF.swipeNav === false || !t || !t.closest || !t.closest('main,.content,.page')) {
     return false;
   }
   if (t.closest('input,textarea,select,#bBoard,.board,.v4-map,#mapMarks,.route,.v4-tabs,.v4-seg,[role="dialog"]')) {
@@ -259,14 +259,14 @@ function slideOk429(t) {
   return true;
 }
 
-function tips429(force) {
-  if (!B || B.over || ui.busy || ui.cutscene || B.phase !== 'player' || (AUTO && !force) || PREF.tips429 === false) {
+function seenTips(force) {
+  if (!B || B.over || ui.busy || ui.cutscene || B.phase !== 'player' || (AUTO && !force) || PREF.seenTips === false) {
     return;
   }
-  if ((SCEN[B.sc] || {}).tuto || document.getElementById('tip429')) {
+  if ((SCEN[B.sc] || {}).tuto || document.getElementById('tip-card')) {
     return;
   }
-  const seenSet = (PROFILE.tips429 = PROFILE.tips429 || {}),
+  const seenSet = (PROFILE.seenTips = PROFILE.seenTips || {}),
     al = B.units.filter(u => u.side === 'a' && !u.ko),
     en = B.units.filter(u => u.side === 'e' && !u.ko),
     c = [];
@@ -279,16 +279,16 @@ function tips429(force) {
   if (en.some(u => notesOf(B, u) > 0)) {
     c.push('reso');
   }
-  if (al.some(u => u.en >= EMAX && resoCand417(B, u))) {
+  if (al.some(u => u.en >= EMAX && resonanceCandidate(B, u))) {
     c.push('forme');
   }
-  if (al.some(u => surrounded420(B, u))) {
+  if (al.some(u => isSurrounded(B, u))) {
     c.push('encercle');
   }
-  if (bossPhases420(B)) {
+  if (hasBossPhases(B)) {
     c.push('phase');
   }
-  if (B.danger420) {
+  if (B.dangerZone) {
     c.push('danger');
   }
   if ((PROFILE.battles || 0) >= 2 && B.round >= 2) {
@@ -300,28 +300,28 @@ function tips429(force) {
   }
   seenSet[k] = 1;
   queueSave();
-  const [t, d] = TIPS429[k];
-  showTip429(t, d); // #tip429: src/screens/overlays/Tip429.jsx
+  const [t, d] = TIP_TEXTS[k];
+  showTooltip(t, d); // #tipCard: src/screens/overlays/BattleTip.jsx
 }
 
-function endTip429() {
+function endTooltip() {
   if (!B || B.over) {
-    hideTip429();
+    hideTooltip();
   }
 }
 
 /** After each battle render: animations according to the setting, tip if any. */
-export function liveRender429() {
-  calm429();
-  endTip429();
-  clearTimeout(liveRender429.t);
+export function liveRender() {
+  applyCalmMode();
+  endTooltip();
+  clearTimeout(liveRender.t);
   if (B && !B.over) {
-    liveRender429.t = setTimeout(tips429, 650);
+    liveRender.t = setTimeout(seenTips, 650);
   }
 }
 
 /* ---------- 4. Expert difficulty: opponents that coordinate ---------- */
-export function expert429(S, e, m, k, pos, sim) {
+export function expertCoordination(S, e, m, k, pos, sim) {
   let b = 0;
   const typ = mvType(S, sim, m);
   for (const x of affected(S, sim, m, k)) {
@@ -346,22 +346,22 @@ export function expert429(S, e, m, k, pos, sim) {
   return b;
 }
 
-function rivAce429() {
+function rivalAce() {
   const L0 = RIVAL_LINE[rivalStarter()];
   return L0 ? L0[2] : 'aligatueur';
 }
 
-export function rivBuild429() {
-  Object.entries(RIV429).forEach(([k, R]) => {
+export function buildRival() {
+  Object.entries(RIVAL_CHALLENGES).forEach(([k, R]) => {
     const b = SCEN[R.base];
     if (!b) {
       return;
     }
     const dis = k === 'hd429',
-      team = (dis ? R.team : [rivAce429(), ...R.team]).filter(id => BY[id]);
+      team = (dis ? R.team : [rivalAce(), ...R.team]).filter(id => BY[id]);
     SCEN[k] = {
       n: R.n,
-      lvl: dis ? 'Hoenn · Dissonance' : `Rival · ${REGION_NAMES421[R.reg]}`,
+      lvl: dis ? 'Hoenn · Dissonance' : `Rival · ${FAMILY_REGION_NAMES[R.reg]}`,
       lim: 11,
       time: dis ? 'nuit' : 'jour',
       bio: dis ? 'roche' : b.bio,
@@ -373,46 +373,46 @@ export function rivBuild429() {
       lv: (b.lv || 50) + 2,
       style: dis ? 'boss' : 'rival',
       at: BY[team[0]].t[0],
-      rival429: k,
+      rivalFight: k,
       d: dis
         ? 'Une cellule oubliée de la Dissonance brouille Hoenn : en fin de manche, votre Pokémon le plus chargé perd 1 losange. Éveillez vite vos Pokémon !'
-        : `Kael revient avec ${BY[team[0]].n} et une équipe de ${REGION_NAMES421[R.reg]}. Il a progressé autant que vous.`,
+        : `Kael revient avec ${BY[team[0]].n} et une équipe de ${FAMILY_REGION_NAMES[R.reg]}. Il a progressé autant que vous.`,
       foes: team.map((id, j) => [id, RIVAL_POS[j]]),
     };
     OBST[k] = R.obstacles;
   });
 }
 
-export function lockRival429(D) {
-  if (!RIV429 || !D) {
+export function lockRival(D) {
+  if (!RIVAL_CHALLENGES || !D) {
     return null;
   }
-  const R = RIV429[D.rival429];
+  const R = RIVAL_CHALLENGES[D.rivalFight];
   if (!R) {
     return null;
   }
   const n = (R.reg === 2 ? PROFILE.johto : PROFILE.hoenn) || [];
   if (n.length < R.after) {
-    return `${D.rival429 === 'hd429' ? 'Les Échos se montreront' : 'Kael vous attend'} après ${R.after} badges de ${REGION_NAMES421[R.reg]}.`;
+    return `${D.rivalFight === 'hd429' ? 'Les Échos se montreront' : 'Kael vous attend'} après ${R.after} badges de ${FAMILY_REGION_NAMES[R.reg]}.`;
   }
   return null;
 }
 
-export function leader429(sc) {
-  if (!RIV429) {
+export function scenarioLeader(sc) {
+  if (!RIVAL_CHALLENGES) {
     return null;
   }
   const D = SCEN[sc];
   if (!D) {
     return null;
   }
-  if (D.cap429) {
-    const lg = LEGS.find(x => x.id === D.cap429);
+  if (D.captureLegend) {
+    const lg = LEGS.find(x => x.id === D.captureLegend);
     return lg
       ? { n: lg.n, t: lg.title, q: `${lg.n} ne fuit plus. Il vous observe… et vous attend.`, w: lg.w, l: lg.l }
       : null;
   }
-  const R = RIV429[sc];
+  const R = RIVAL_CHALLENGES[sc];
   if (!R) {
     return null;
   }
@@ -421,9 +421,9 @@ export function leader429(sc) {
     : Object.assign({}, RIVAL, { q: R.q, w: R.w, l: R.l });
 }
 
-export function who429(who) {
+export function npcProfile(who) {
   if (who === 'kael') {
-    const ace = BY[rivAce429()];
+    const ace = BY[rivalAce()];
     return { n: 'Kael Ferrand', av: avatar('Kael Ferrand', ace ? ace.t[0] : 'Normal', 'sm') };
   }
   if (who === 'sirene') {
@@ -436,56 +436,56 @@ export function who429(who) {
 }
 
 /** Post-battle scene: only once, after a victory. */
-export function after429(sc, win, force) {
+export function afterBattleScene(sc, win, force) {
   const c = 'apres-' + sc,
-    Lg = AFTER429[sc];
+    Lg = POST_BATTLE_DIALOGUE[sc];
   if (!win || !Lg || (AUTO && !force) || (PROFILE.scenes && PROFILE.scenes[c]) || (SCN && SCN.c === c)) {
     return;
   }
   if (sc === 'champ' && !isCamp()) {
     return;
   }
-  after429.seenFlags = after429.seenFlags || {};
-  if (after429.seenFlags[c]) {
+  afterBattleScene.seenFlags = afterBattleScene.seenFlags || {};
+  if (afterBattleScene.seenFlags[c]) {
     return;
   }
-  after429.seenFlags[c] = 1;
+  afterBattleScene.seenFlags[c] = 1;
   setTimeout(() => {
     if ((B && !B.over) || SCN) {
       return;
     }
     __set_SCN({ k: sc, c, i: 0, L: Lg, apres: true });
-    renderScene417();
-    $('#scene417').hidden = false;
+    renderStoryScene();
+    $('#story-scene').hidden = false;
   }, 700);
 }
 
-function regLeg429(id) {
+function legendRegion(id) {
   return id === 'mewtwo' ? 1 : 2;
 }
 
-export function stepsLeg429(leg) {
-  const r = regLeg429(leg.id),
-    c = familyCapt428(r);
+export function legendSteps(leg) {
+  const r = legendRegion(leg.id),
+    c = familyCaptureStats(r);
   return [
     { ok: (PROFILE.legends || []).includes(leg.id), t: `Vaincre ${leg.n} (Combats › Après-jeu)` },
     {
-      ok: (PROFILE.diplomas428 || []).includes(r),
-      t: `Compléter le Pokédex de ${REGION_NAMES421[r]} (${c.n} / ${c.t})`,
+      ok: (PROFILE.regionDiplomas || []).includes(r),
+      t: `Compléter le Pokédex de ${FAMILY_REGION_NAMES[r]} (${c.n} / ${c.t})`,
     },
     ...(isCamp() ? [{ ok: !!PROFILE.hchamp, t: 'Devenir Maître de Hoenn' }] : []),
   ];
 }
 
-export function lockLegendary429(k) {
+export function lockLegendaryCapture(k) {
   const D = SCEN[k];
-  if (!D || !D.cap429) {
+  if (!D || !D.captureLegend) {
     return null;
   }
-  if (PROFILE.box.includes(D.cap429)) {
-    return `${BY[D.cap429].n} est déjà dans votre Box.`;
+  if (PROFILE.box.includes(D.captureLegend)) {
+    return `${BY[D.captureLegend].n} est déjà dans votre Box.`;
   }
-  const e = stepsLeg429(LEGS.find(leg => leg.id === D.cap429)).find(x => !x.ok);
+  const e = legendSteps(LEGS.find(leg => leg.id === D.captureLegend)).find(x => !x.ok);
   return e ? `Quête légendaire : ${e.t.replace(/ \(.*\)$/, '')} d’abord.` : null;
 }
 
@@ -494,7 +494,7 @@ export function lockLegendary429(k) {
 // Quests › Legends: rendered by React (src/screens/quests/Legends.jsx)
 
 /* ---------- 7. challenge of the week ---------- */
-function week429(d) {
+function weekNumber(d) {
   d = d || new Date();
   const t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate())),
     j = t.getUTCDay() || 7;
@@ -504,23 +504,23 @@ function week429(d) {
   return `${t.getUTCFullYear()}-S${String(n).padStart(2, '0')}`;
 }
 
-export function rand429(w) {
+export function fingerprintRandom(w) {
   let a = 0;
   for (let i = 0; i < w.length; i++) {
     a = (Math.imul(a ^ w.charCodeAt(i), 2654435761) + 0x9e3779b9) | 0;
   }
-  // without "|| 1" (unlike rng454 / rngS460): a zero fingerprint always gives the same sequence as before
+  // without "|| 1" (unlike seededRng / stringSeededRng): a zero fingerprint always gives the same sequence as before
   return mulberry32(a);
 }
 
-export function weeklyBuild429() {
-  const w = week429();
-  if (WEEK429 && WEEK429.w === w && SCEN.hebdo429) {
-    return WEEK429;
+export function buildWeeklyChallenge() {
+  const w = weekNumber();
+  if (WEEK_CACHE && WEEK_CACHE.w === w && SCEN.hebdo429) {
+    return WEEK_CACHE;
   }
-  const r = rand429(w),
+  const r = fingerprintRandom(w),
     pick = L0 => L0[Math.floor(r() * L0.length)],
-    R = Object.assign({}, WEEKLY429[Math.floor(r() * WEEKLY429.length)]),
+    R = Object.assign({}, WEEKLY_PRESETS[Math.floor(r() * WEEKLY_PRESETS.length)]),
     bases = ['a4', 'a5', 'a6', 'a7', 'a8', 'j3', 'j5', 'j6', 'j7', 'h3', 'h5', 'h6'].filter(
       k => SCEN[k] && SCEN[k].foes
     ),
@@ -561,26 +561,26 @@ export function weeklyBuild429() {
       lvl: `Semaine ${w.slice(-2)} · ${R.n}`,
       d: `${R.d} Terrain et adversaires : « ${b.n} ». Le meilleur score est gardé ; récompense à la première victoire de la semaine.`,
       hebdo429: w,
-      rule429: R.k,
-      ready429: team,
+      weeklyRule: R.k,
+      rentalTeam: team,
       lim: R.k === 'chrono' ? 6 : b.lim || 10,
       catch: false,
     });
-  PROGRESS429.forEach(x => delete D[x]);
+  PROGRESS_KEYS.forEach(x => delete D[x]);
   SCEN.hebdo429 = D;
   OBST.hebdo429 = OBST[bk] || {};
-  WEEK429 = { w, R, bk, team };
-  return WEEK429;
+  WEEK_CACHE = { w, R, bk, team };
+  return WEEK_CACHE;
 }
 
 /** The challenge's rental team, with identical settings for everyone. */
-export function weeklyTeam429() {
+export function weeklyTeam() {
   const D = SCEN[scSel];
-  if (scSel !== 'hebdo429' || !D || !D.ready429) {
+  if (scSel !== 'hebdo429' || !D || !D.rentalTeam) {
     return null;
   }
   return {
-    team: D.ready429.slice(),
+    team: D.rentalTeam.slice(),
     voice: 0,
     opts: Object.assign(battleOpts(), {
       diff: 'normal',
@@ -597,12 +597,12 @@ export function weeklyTeam429() {
   };
 }
 
-export function monWeekly429() {
+export function weeklyProgress() {
   const h = PROFILE.hebdo429;
-  return h && h.w === week429() ? { w: h.w, s: h.best } : null;
+  return h && h.w === weekNumber() ? { w: h.w, s: h.best } : null;
 }
 
-function weeklyScore429(S, win) {
+function weeklyScore(S, win) {
   const al = S.units.filter(u => u.side === 'a'),
     livingUnits = al.filter(u => !u.ko).length,
     hp = al.reduce((a, u) => a + (u.ko ? 0 : u.hp / u.mhp), 0) / Math.max(1, al.length),
@@ -618,17 +618,17 @@ function weeklyScore429(S, win) {
 /* the Home screen #v4Hebdo button is rendered by React (src/screens/home/Footer.jsx) */
 
 /* ---------- 2. touch gestures ---------- */
-const LP429 = { t: 0, x: 0, y: 0, fait: 0 };
+const LONG_PRESS = { t: 0, x: 0, y: 0, fait: 0 };
 
-const endLp429 = () => clearTimeout(LP429.t);
+const endLongPress = () => clearTimeout(LONG_PRESS.t);
 
 /* swipe to change tab */
-export const TAB_LIST429 = ['accueil', 'pokedex', 'combat', 'carte'];
+export const SWIPE_TABS = ['accueil', 'pokedex', 'combat', 'carte'];
 
-const SW429 = { x: 0, y: 0, t: 0, ok: false };
+const SWIPE_STATE = { x: 0, y: 0, t: 0, ok: false };
 
 /* ---------- 3. tips at the right time ---------- */
-const TIPS429 = {
+const TIP_TEXTS = {
   capture: [
     'Capturer un Pokémon',
     'Affaiblissez-le sous 25 % de ses PV et immobilisez-le (Sommeil, Paralysie, Gel, Racines ou Toile). Sélectionnez ensuite un allié à son contact, puis touchez l’adversaire : le panneau « Capture » lance la Ball pour 2 Voix.',
@@ -664,7 +664,7 @@ const TIPS429 = {
 };
 
 /* ---------- 5. story and rival ---------- */
-export const RIV429 = {
+export const RIVAL_CHALLENGES = {
   rv5: {
     reg: 2,
     after: 4,
@@ -717,7 +717,7 @@ export const RIV429 = {
   },
 };
 
-const AFTER429 = {
+const POST_BATTLE_DIALOGUE = {
   champ: [['prof', 'Championne vaincue ! Kanto vous appartient… et Johto vous attend, au bout de la Route 29.']],
   jchamp: [['prof', 'Maître de Johto ! Kael vient de m’appeler : il est parti pour Hoenn. Vous devriez le suivre.']],
   rv5: [
@@ -741,7 +741,7 @@ const AFTER429 = {
   ],
 };
 
-const WEEKLY429 = [
+const WEEKLY_PRESETS = [
   { k: 'location', n: 'Équipe de location', d: 'Tout le monde joue la même équipe, tirée au sort pour la semaine.' },
   { k: 'mono', n: 'Monotype', d: 'Une équipe de location d’un seul type.' },
   { k: 'debut', n: 'Premiers pas', d: 'Quatre Pokémon au premier stade : à vous de les éveiller en combat.' },
@@ -749,7 +749,7 @@ const WEEKLY429 = [
 ];
 
 // the challenge reuses a battle's opponents without its progression rewards
-export const PROGRESS429 = [
+export const PROGRESS_KEYS = [
   'gym',
   'elite',
   'champ',
@@ -767,8 +767,8 @@ export const PROGRESS429 = [
   'tower',
   'tuto',
   'ami',
-  'rival429',
-  'cap429',
+  'rivalFight',
+  'captureLegend',
   'dom',
   'jafter',
   'after',
@@ -781,19 +781,19 @@ export function __init() {
   document.addEventListener(
     'pointerdown',
     e => {
-      clearTimeout(LP429.t);
-      LP429.fait = 0; // a new gesture: the previous long press is forgotten
+      clearTimeout(LONG_PRESS.t);
+      LONG_PRESS.fait = 0; // a new gesture: the previous long press is forgotten
       if (e.pointerType === 'mouse' && e.button !== 0) {
         return;
       }
-      const a = actionLp429(e.target);
+      const a = longPressAction(e.target);
       if (!a) {
         return;
       }
-      LP429.x = e.clientX;
-      LP429.y = e.clientY;
-      LP429.t = setTimeout(() => {
-        LP429.fait = Date.now();
+      LONG_PRESS.x = e.clientX;
+      LONG_PRESS.y = e.clientY;
+      LONG_PRESS.t = setTimeout(() => {
+        LONG_PRESS.fait = Date.now();
         vibe(15);
         a();
       }, 480);
@@ -801,15 +801,15 @@ export function __init() {
     { passive: true }
   );
 
-  document.addEventListener('pointerup', endLp429, { passive: true });
+  document.addEventListener('pointerup', endLongPress, { passive: true });
 
-  document.addEventListener('pointercancel', endLp429, { passive: true });
+  document.addEventListener('pointercancel', endLongPress, { passive: true });
 
   document.addEventListener(
     'pointermove',
     e => {
-      if (Math.abs(e.clientX - LP429.x) + Math.abs(e.clientY - LP429.y) > 12) {
-        clearTimeout(LP429.t);
+      if (Math.abs(e.clientX - LONG_PRESS.x) + Math.abs(e.clientY - LONG_PRESS.y) > 12) {
+        clearTimeout(LONG_PRESS.t);
       }
     },
     { passive: true }
@@ -819,8 +819,8 @@ export function __init() {
   document.addEventListener(
     'click',
     e => {
-      if (LP429.fait && Date.now() - LP429.fait < 700) {
-        LP429.fait = 0;
+      if (LONG_PRESS.fait && Date.now() - LONG_PRESS.fait < 700) {
+        LONG_PRESS.fait = 0;
         e.preventDefault();
         e.stopPropagation();
       }
@@ -829,7 +829,7 @@ export function __init() {
   );
 
   document.addEventListener('contextmenu', e => {
-    if (actionLp429(e.target)) {
+    if (longPressAction(e.target)) {
       e.preventDefault();
     }
   });
@@ -838,11 +838,11 @@ export function __init() {
     'touchstart',
     e => {
       if (e.touches.length !== 1) {
-        SW429.ok = false;
+        SWIPE_STATE.ok = false;
         return;
       }
       const p = e.touches[0];
-      Object.assign(SW429, { x: p.clientX, y: p.clientY, t: Date.now(), ok: slideOk429(e.target) });
+      Object.assign(SWIPE_STATE, { x: p.clientX, y: p.clientY, t: Date.now(), ok: canSwipeHere(e.target) });
     },
     { passive: true }
   );
@@ -850,23 +850,23 @@ export function __init() {
   document.addEventListener(
     'touchend',
     e => {
-      if (!SW429.ok) {
+      if (!SWIPE_STATE.ok) {
         return;
       }
-      SW429.ok = false;
+      SWIPE_STATE.ok = false;
       const p = e.changedTouches[0],
-        dx = p.clientX - SW429.x,
-        dy = p.clientY - SW429.y;
-      if (Date.now() - SW429.t > 650 || Math.abs(dx) < 80 || Math.abs(dy) > Math.abs(dx) * 0.5) {
+        dx = p.clientX - SWIPE_STATE.x,
+        dy = p.clientY - SWIPE_STATE.y;
+      if (Date.now() - SWIPE_STATE.t > 650 || Math.abs(dx) < 80 || Math.abs(dy) > Math.abs(dx) * 0.5) {
         return;
       }
       const pg = document.querySelector('.page.on'),
-        i = TAB_LIST429.indexOf(pg && pg.id),
+        i = SWIPE_TABS.indexOf(pg && pg.id),
         j = i + (dx < 0 ? 1 : -1);
-      if (i < 0 || j < 0 || j >= TAB_LIST429.length) {
+      if (i < 0 || j < 0 || j >= SWIPE_TABS.length) {
         return;
       }
-      go(TAB_LIST429[j]);
+      go(SWIPE_TABS[j]);
       try {
         window.scrollTo(0, 0);
       } catch {
@@ -877,27 +877,27 @@ export function __init() {
   );
 
   document.addEventListener('click', e => {
-    const b = e.target.closest('[data-tip429]');
+    const b = e.target.closest('[data-tip-card]');
     if (!b) {
       return;
     }
-    if (b.dataset.tip429 === 'off') {
-      PREF.tips429 = false;
+    if (b.dataset.tipCard === 'off') {
+      PREF.seenTips = false;
       savePref();
       toast('Astuces désactivées. Réactivez-les dans les Paramètres.');
     }
-    hideTip429();
+    hideTooltip();
     if (B) {
-      setTimeout(tips429, 400);
+      setTimeout(seenTips, 400);
     }
   });
 
-  rivBuild429();
+  buildRival();
 
   PLACES_J.push({
     id: 'rv5',
-    x: RIV429.rv5.x,
-    y: RIV429.rv5.y,
+    x: RIVAL_CHALLENGES.rv5.x,
+    y: RIVAL_CHALLENGES.rv5.y,
     n: 'Kael',
     s: 'Rival · après 4 badges de Johto',
     grp: 'aventure',
@@ -906,8 +906,8 @@ export function __init() {
 
   PLACES_H.push({
     id: 'rv6',
-    x: RIV429.rv6.x,
-    y: RIV429.rv6.y,
+    x: RIVAL_CHALLENGES.rv6.x,
+    y: RIVAL_CHALLENGES.rv6.y,
     n: 'Kael',
     s: 'Rival · après 4 badges de Hoenn',
     grp: 'aventure',
@@ -916,8 +916,8 @@ export function __init() {
 
   PLACES_H.push({
     id: 'hd429',
-    x: RIV429.hd429.x,
-    y: RIV429.hd429.y,
+    x: RIVAL_CHALLENGES.hd429.x,
+    y: RIVAL_CHALLENGES.hd429.y,
     n: 'Grotte des Échos',
     s: 'Dissonance · Sirène',
     grp: 'aventure',
@@ -928,17 +928,17 @@ export function __init() {
 
   HOOKS.progress.push((S, rew, win) => {
     const D = SCEN[S.sc] || {};
-    if (!win || !D.rival429 || (PROFILE.rivals429 || []).includes(D.rival429)) {
+    if (!win || !D.rivalFight || (PROFILE.rivalsMet || []).includes(D.rivalFight)) {
       return null;
     }
-    PROFILE.rivals429 = [...(PROFILE.rivals429 || []), D.rival429];
-    rew.rivals429 = D.rival429;
-    return RIV429[D.rival429].rew;
+    PROFILE.rivalsMet = [...(PROFILE.rivalsMet || []), D.rivalFight];
+    rew.rivalsMet = D.rivalFight;
+    return RIVAL_CHALLENGES[D.rivalFight].rew;
   });
 
   HOOKS.battleResult.push(r =>
-    r.rivals429
-      ? `<div class="res-l"><h4>${r.rivals429 === 'hd429' ? 'Dissonance' : 'Rival'}</h4><div class="rl"><span>${r.rivals429 === 'hd429' ? 'Les Échos de la Dissonance sont réduits au silence.' : `Kael est battu à ${REGION_NAMES421[RIV429[r.rivals429].reg]}.`}</span><b>+${fmt(RIV429[r.rivals429].rew[0])} ₽ · +${RIV429[r.rivals429].rew[1]} Éclats</b></div></div>`
+    r.rivalsMet
+      ? `<div class="res-l"><h4>${r.rivalsMet === 'hd429' ? 'Dissonance' : 'Rival'}</h4><div class="rl"><span>${r.rivalsMet === 'hd429' ? 'Les Échos de la Dissonance sont réduits au silence.' : `Kael est battu à ${FAMILY_REGION_NAMES[RIVAL_CHALLENGES[r.rivalsMet].reg]}.`}</span><b>+${fmt(RIVAL_CHALLENGES[r.rivalsMet].rew[0])} ₽ · +${RIVAL_CHALLENGES[r.rivalsMet].rew[1]} Éclats</b></div></div>`
       : ''
   );
 
@@ -1008,13 +1008,13 @@ export function __init() {
       n: `${leg.n} · capture`,
       lvl: `Légende · ${leg.title}`,
       catch: true,
-      cap429: leg.id,
+      captureLegend: leg.id,
       d: `${leg.n} ne fuit plus. Affaiblissez-le sous 25 %, immobilisez-le, puis capturez-le avec un allié à son contact. Son escorte ne se capture pas.`,
     });
     OBST[k] = OBST[legKey(leg.id)] || {};
   });
 
-  WEEK429 = null;
+  WEEK_CACHE = null;
 
   HOOKS.progress.push((S, rew, win) => {
     const D = SCEN[S.sc] || {};
@@ -1022,7 +1022,7 @@ export function __init() {
       return null;
     }
     const w = D.hebdo429,
-      sc = weeklyScore429(S, win);
+      sc = weeklyScore(S, win);
     let h = PROFILE.hebdo429;
     if (!h || h.w !== w) {
       h = PROFILE.hebdo429 = { w, best: 0, n: 0, rec: 0, win: 0 };
@@ -1061,7 +1061,7 @@ export function __init() {
   });
 
   document.addEventListener('click', e => {
-    if (!e.target.closest('[data-news="leg429"]')) {
+    if (!e.target.closest('[data-news="legend-quests"]')) {
       return;
     }
     e.stopPropagation();
@@ -1071,9 +1071,9 @@ export function __init() {
   });
 
   document.addEventListener('change', e => {
-    const p = e.target.closest('[data-pref="anim429"]');
+    const p = e.target.closest('[data-pref="anim-enabled"]');
     if (p) {
-      calm429();
+      applyCalmMode();
     }
   });
 }

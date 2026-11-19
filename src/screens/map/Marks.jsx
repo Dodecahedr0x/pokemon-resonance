@@ -2,14 +2,14 @@ import { Html } from '../../lib/html.jsx';
 import { dailyDone, dailyKey } from '../../engine/032-v4-foundation.js';
 import { STATE_N, placeIcon, placeName, placeState } from '../../engine/037-map.js';
 import { placesR } from '../../engine/054-johto.js';
-import { TH450, trSpots450, trSt450 } from '../../engine/080-trainer-avatar-rare-encounters.js';
+import { TREASURE_NAMES, treasureSpots, treasureState } from '../../engine/080-trainer-avatar-rare-encounters.js';
 import {
-  NPC460,
-  npcPos460,
-  npcSt460,
-  scPos460,
-  scSt460,
-  scVis460,
+  WANDERING_NPCS,
+  npcPositions,
+  npcState,
+  secretPositions,
+  secretState,
+  visibleSecrets,
 } from '../../engine/091-phase-bosses-secret-places.js';
 
 // Map markers (#mapMarks): places, then hidden finds (v4.50), secret places
@@ -62,18 +62,18 @@ export default function Marks({ marksSel }) {
 function Finds() {
   let spots = [];
   try {
-    const s = trSt450();
-    spots = trSpots450().filter(sp => !s.got[sp.id]);
+    const s = treasureState();
+    spots = treasureSpots().filter(sp => !s.got[sp.id]);
   } catch {
     /* Best effort: failure here is non-fatal. */
   }
   return spots.map(sp => (
     <button
       type="button"
-      className="mk sp450"
-      data-tv450={sp.id}
+      className="mk find-spot"
+      data-treasure-spot={sp.id}
       style={{ left: sp.x / 10 + '%', top: sp.y / 10 + '%' }}
-      aria-label={'Trouvaille cachée : ' + TH450[sp.th]}
+      aria-label={'Trouvaille cachée : ' + TREASURE_NAMES[sp.th]}
       key={'tv' + sp.id}
     >
       <svg viewBox="0 0 24 24" width="22" height="22">
@@ -88,12 +88,12 @@ function Secrets() {
   let sc = [],
     pn = null;
   try {
-    const st = scSt460(),
-      pos = scPos460();
-    sc = scVis460().map(s => ({ s, p: pos[s.id], f: !!st.found[s.id] }));
-    const { s } = npcSt460();
+    const st = secretState(),
+      pos = secretPositions();
+    sc = visibleSecrets().map(s => ({ s, p: pos[s.id], f: !!st.found[s.id] }));
+    const { s } = npcState();
     if (!s.done) {
-      pn = { p: npcPos460(), n: NPC460[s.i].n };
+      pn = { p: npcPositions(), n: WANDERING_NPCS[s.i].n };
     }
   } catch {
     /* Best effort: failure here is non-fatal. */
@@ -103,8 +103,8 @@ function Secrets() {
       {sc.map(({ s, p, f }) => (
         <button
           type="button"
-          className={'mk sc460' + (f ? ' vu' : '')}
-          data-sc460={s.id}
+          className={'mk secret-places' + (f ? ' vu' : '')}
+          data-secret-places={s.id}
           style={{ left: p.x / 10 + '%', top: p.y / 10 + '%' }}
           aria-label={'Lieu secret : ' + s.n}
           key={'sc' + s.id}
@@ -120,8 +120,8 @@ function Secrets() {
       {pn && (
         <button
           type="button"
-          className="mk pn460"
-          data-pn460="o"
+          className="mk passerby"
+          data-passerby="o"
           style={{ left: pn.p.x / 10 + '%', top: pn.p.y / 10 + '%' }}
           aria-label={'Personnage de passage : ' + pn.n}
           key="pn"

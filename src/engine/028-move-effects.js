@@ -6,7 +6,7 @@ import { byUid, uk } from './021-combat-engine.js';
 import { B, HC, TILT, VB, VERT, buildBoard, playLog, renderAll, tiltS, ui } from './024-combat-ui.js';
 import { PREF } from './026-campaign-tutorial-sound.js';
 import { impactWords } from './030-prestige-staging.js';
-import { liveEv429 } from './064-quality.js';
+import { liveEvent } from './064-quality.js';
 
 let R0, cl01, eo;
 
@@ -864,7 +864,7 @@ function fxGuardPlat(e, dur) {
 
 /* hook into event playback */
 export function playEv(ev) {
-  liveEv429(ev); // lunge toward the target, vibrations (v4.29)
+  liveEvent(ev); // lunge toward the target, vibrations (v4.29)
   // the board changed (grass cut down): redraw it after the animation
   if (ev.some(x => x.e === 'terrain')) {
     setTimeout(
@@ -874,7 +874,7 @@ export function playEv(ev) {
           renderAll();
         }
       },
-      PREF.fast || ui.turbo428 ? 500 : 900
+      PREF.fast || ui.skipSpeedup ? 500 : 900
     );
   }
   const fx = ev.filter(x => x.e === 'fx');
@@ -883,7 +883,7 @@ export function playEv(ev) {
     impactWords(ev);
     return;
   }
-  const dur = ui.turbo428 ? 300 : PREF.fast ? 440 : 720;
+  const dur = ui.skipSpeedup ? 300 : PREF.fast ? 440 : 720;
   let hit = 0;
   fx.forEach((x, i) => {
     hit = Math.max(hit, fxAttack(x, dur) + i * 90);

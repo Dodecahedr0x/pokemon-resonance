@@ -1,6 +1,6 @@
 import { useEngineReady } from '../../engineReady.js';
 import { V4 } from '../../engine/032-v4-foundation.js';
-import { CAMP_TABS431, echoRun431 } from '../../engine/066-tactical-challenges.js';
+import { CAMP_TABS, echoRun } from '../../engine/066-tactical-challenges.js';
 import { seenExits, useCampBase, useCampPage } from './campStore.js';
 import CampBase from './CampBase.jsx';
 import Outings from './Outings.jsx';
@@ -15,11 +15,11 @@ const TAB_LIST = { enigmes: Puzzles, echo: Echo, arenes: Gyms, pantheon: Pantheo
 
 // Camp sub-tabs (v4.31): the bar, then the content of the open tab (except « Base »).
 function Tabs({ t }) {
-  const R = echoRun431();
+  const R = echoRun();
   return (
-    <nav className="v4-tabs ct431" id="campTabs431" role="tablist" aria-label="Camp">
-      {CAMP_TABS431.map(([k, n]) => (
-        <button key={k} type="button" role="tab" aria-selected={t === k} data-ct431={k}>
+    <nav className="v4-tabs camp-tab" id="camp-tab-list" role="tablist" aria-label="Camp">
+      {CAMP_TABS.map(([k, n]) => (
+        <button key={k} type="button" role="tab" aria-selected={t === k} data-camp-tab={k}>
           {n + (k === 'echo' && R ? ' •' : '')}
         </button>
       ))}
@@ -33,26 +33,26 @@ function CampBaseHost() {
   return <CampBase key={base} filled={base > 0} />;
 }
 
-// #camp430: before the first renderCampPage431(), only the Base camp and the Outings (empty).
+// #campNews: before the first renderCampPage(), only the Base camp and the Outings (empty).
 function Content({ page }) {
-  const t = V4.campTab; // already validated by renderCampPage431()
+  const t = V4.campTab; // already validated by renderCampPage()
   const Tab = page > 0 && t !== 'base' ? TAB_LIST[t] : null;
   const cache = page > 0 ? t !== 'base' : undefined;
   return (
-    <div className="camp430" id="camp430">
+    <div className="camp-news" id="camp-news">
       {page > 0 && <Tabs t={t} />}
-      <div id="campHost430" hidden={cache}>
+      <div id="camp-host" hidden={cache}>
         <CampBaseHost />
       </div>
-      <section className="v4-panel sort430" id="sort430" aria-label="Sorties" hidden={cache}>
+      <section className="v4-panel outings-panel" id="outings-panel" aria-label="Sorties" hidden={cache}>
         {seenExits && <Outings />}
       </section>
-      {page > 0 && <div id="campTab431">{Tab && <Tab />}</div>}
+      {page > 0 && <div id="camp-tab-body">{Tab && <Tab />}</div>}
     </div>
   );
 }
 
-// Camp page (#camp). Each renderCampPage431() of the engine rebuilds it (uncontrolled fields,
+// Camp page (#camp). Each renderCampPage() of the engine rebuilds it (uncontrolled fields,
 // delegated handlers in the engine); renderCampBase() only rebuilds #v4Camp.
 export default function Camp() {
   const ready = useEngineReady();

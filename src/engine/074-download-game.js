@@ -9,7 +9,7 @@ export function __init() {
   // "Download the game" panel: rendered by React (src/screens/settings/panels/DownloadGame.jsx)
 
   document.addEventListener('click', async e => {
-    const b = e.target.closest('#dl441b');
+    const b = e.target.closest('#download-b');
     if (!b) {
       return;
     }

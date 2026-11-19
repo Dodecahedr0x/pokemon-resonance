@@ -349,8 +349,8 @@ export function Magnifier() {
     return null;
   }
   return (
-    <g id="insp444" style={PE}>
-      {S.insp != null && B && <Poly k={S.insp} c="h-insp444" />}
+    <g id="inspect-tile" style={PE}>
+      {S.insp != null && B && <Poly k={S.insp} c="h-inspect-tile" />}
     </g>
   );
 }
@@ -365,7 +365,7 @@ export function PkLayer() {
 export function Names() {
   const S = useBoard('svg');
   return S.tilt ? (
-    <g className="nms477" style={PE} ref={lref('nm477')}>
+    <g className="names-high" style={PE} ref={lref('nameTags')}>
       <NamesHigh />
     </g>
   ) : null;

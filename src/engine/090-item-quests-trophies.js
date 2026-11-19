@@ -6,17 +6,17 @@ import { toast } from './014-utils.js';
 import { sfx, vibe } from './026-campaign-tutorial-sound.js';
 import { SHOP, bagN, savePurse } from './032-v4-foundation.js';
 import { renderBag } from './039-quests-shop.js';
-import { seed417 } from './057-companions-resonance.js';
-import { reward454, txt454 } from './084-peddler-route-missions.js';
-import { add455, cdSt455, tmKeys455, canIn455 } from './088-workshop-recipes.js';
+import { dailySeed } from './057-companions-resonance.js';
+import { applyReward, rewardText } from './084-peddler-route-missions.js';
+import { addItems, dailyGiftState, tmKeys, hasIngredients } from './088-workshop-recipes.js';
 
-let TROPH459;
-export { QO459, TROPH459 }; // read by Shop › Quests and Trophies (React, src/screens/bag/Workshop.jsx)
+let TROPHIES;
+export { QUESTS, TROPHIES }; // read by Shop › Quests and Trophies (React, src/screens/bag/Workshop.jsx)
 
-export function qoSt459() {
+export function questState() {
   let s;
   try {
-    s = JSON.parse(localStorage.getItem('res-qo459') || '{}');
+    s = JSON.parse(localStorage.getItem('res-quest-log') || '{}');
   } catch (e) {
     s = {};
   }
@@ -24,7 +24,7 @@ export function qoSt459() {
   return s;
 }
 
-export function qoIn459(q) {
+export function questCost(q) {
   /* needs: the item keys, and "ct" = a TM from the Bag */
   const o = {};
   for (const k in q.in) {
@@ -35,14 +35,14 @@ export function qoIn459(q) {
   return o;
 }
 
-export function qoOk459(q) {
-  return canIn455(qoIn459(q)) && (!q.in.ct || !!tmPos459());
+export function questUnlocked(q) {
+  return hasIngredients(questCost(q)) && (!q.in.ct || !!ownedTmKey());
 }
 
-export function qoRewTxt459(r) {
+export function questRewardText(r) {
   const a = [];
   if (r.m || r.g || r.b) {
-    a.push(txt454({ m: r.m, g: r.g, b: r.b }));
+    a.push(rewardText({ m: r.m, g: r.g, b: r.b }));
   }
   if (r.item) {
     a.push(ITEMS2[r.item].n + (PROFILE.items.includes(r.item) ? ' (déjà en votre possession : 2 500 ₽)' : ''));
@@ -53,10 +53,10 @@ export function qoRewTxt459(r) {
   return a.filter(Boolean).join(' + ');
 }
 
-function viewsCT459() {
+function tmSeenCount() {
   let seen = {};
   try {
-    seen = JSON.parse(localStorage.getItem('res-vit455') || '{}');
+    seen = JSON.parse(localStorage.getItem('res-tm-showcase') || '{}');
   } catch {
     /* Best effort: failure here is non-fatal. */
   }
@@ -65,10 +65,10 @@ function viewsCT459() {
   return all.filter(k => seen[k] || bagN(k) > 0 || learned.includes(SHOP[k].mv)).length;
 }
 
-export function tpSt459() {
+export function trophyState() {
   let s;
   try {
-    s = JSON.parse(localStorage.getItem('res-tp459') || '{}');
+    s = JSON.parse(localStorage.getItem('res-trophy-room') || '{}');
   } catch (e) {
     s = {};
   }
@@ -77,7 +77,7 @@ export function tpSt459() {
 
 // Shop › Quests and Trophies: rendered by React (src/screens/bag/Workshop.jsx)
 
-const QO459 = [
+const QUESTS = [
   {
     id: 'q1',
     min: 0,
@@ -160,33 +160,33 @@ const QO459 = [
   },
 ];
 
-export const badgeCount459 = () => BADGES.length;
+export const badgeTotal = () => BADGES.length;
 
-const tmPos459 = () => tmKeys455().find(k => bagN(k) > 0);
+const ownedTmKey = () => tmKeys().find(k => bagN(k) > 0);
 
 // Statements run at startup, in the original order (see index.js).
 export function __init() {
   document.addEventListener(
     'click',
     e => {
-      const b = e.target.closest && e.target.closest('[data-qo459]');
+      const b = e.target.closest && e.target.closest('[data-quest-log]');
       if (!b || b.disabled) {
         return;
       }
       e.preventDefault();
       e.stopPropagation();
-      const q = QO459.find(x => x.id === b.dataset.qo459),
-        S = qoSt459();
-      if (!q || S.done[q.id] || badgeCount459() < q.min || !qoOk459(q)) {
+      const q = QUESTS.find(x => x.id === b.dataset.questLog),
+        S = questState();
+      if (!q || S.done[q.id] || badgeTotal() < q.min || !questUnlocked(q)) {
         return;
       }
-      const tm = q.in.ct ? tmPos459() : null;
-      add455(qoIn459(q), -1);
+      const tm = q.in.ct ? ownedTmKey() : null;
+      addItems(questCost(q), -1);
       if (tm) {
-        add455({ [tm]: 1 }, -1);
+        addItems({ [tm]: 1 }, -1);
       }
       const r = q.rew;
-      reward454({ m: r.m, g: r.g, b: r.b });
+      applyReward({ m: r.m, g: r.g, b: r.b });
       let extra = '';
       if (r.item) {
         if (PROFILE.items.includes(r.item)) {
@@ -197,17 +197,17 @@ export function __init() {
         extra = ITEMS2[r.item].n;
       }
       if (r.ct) {
-        const pool = tmKeys455().filter(k => !bagN(k)),
-          all = pool.length ? pool : tmKeys455(),
-          k = all[seed417('qo' + q.id) % all.length];
+        const pool = tmKeys().filter(k => !bagN(k)),
+          all = pool.length ? pool : tmKeys(),
+          k = all[dailySeed('qo' + q.id) % all.length];
         PROFILE.bag[k] = Math.min(99, bagN(k) + 1);
         extra = (extra ? extra + ' + ' : '') + SHOP[k].n;
       }
       S.done[q.id] = 1;
-      localStorage.setItem('res-qo459', JSON.stringify(S));
+      localStorage.setItem('res-quest-log', JSON.stringify(S));
       sfx('win');
       vibe(25);
-      toast(`${q.giver} : merci ! ${extra || txt454({ m: r.m, g: r.g, b: r.b })}`);
+      toast(`${q.giver} : merci ! ${extra || rewardText({ m: r.m, g: r.g, b: r.b })}`);
       savePurse();
       renderBag();
     },
@@ -215,36 +215,36 @@ export function __init() {
   );
 
   /* ---------- trophy box ---------- */
-  TROPH459 = [
+  TROPHIES = [
     { id: 't1', t: 'Collection d’objets tenus', n: 5, v: () => PROFILE.items.length, g: 1 },
     { id: 't2', t: 'Collection d’objets tenus', n: 10, v: () => PROFILE.items.length, g: 2 },
     { id: 't3', t: 'Collection d’objets tenus', n: 20, v: () => PROFILE.items.length, g: 4 },
-    { id: 't4', t: 'CT et CS vues', n: 10, v: () => viewsCT459(), g: 1 },
-    { id: 't5', t: 'CT et CS vues', n: 25, v: () => viewsCT459(), g: 2 },
-    { id: 't6', t: 'CT et CS vues', n: 40, v: () => viewsCT459(), g: 4 },
-    { id: 't7', t: 'Quêtes d’objets', n: 3, v: () => Object.keys(qoSt459().done).length, g: 1 },
-    { id: 't8', t: 'Quêtes d’objets', n: 6, v: () => Object.keys(qoSt459().done).length, g: 2 },
-    { id: 't9', t: 'Quêtes d’objets', n: 10, v: () => Object.keys(qoSt459().done).length, g: 5 },
-    { id: 't10', t: 'Cadeaux du jour d’affilée', n: 7, v: () => cdSt455().n, g: 3 },
+    { id: 't4', t: 'CT et CS vues', n: 10, v: () => tmSeenCount(), g: 1 },
+    { id: 't5', t: 'CT et CS vues', n: 25, v: () => tmSeenCount(), g: 2 },
+    { id: 't6', t: 'CT et CS vues', n: 40, v: () => tmSeenCount(), g: 4 },
+    { id: 't7', t: 'Quêtes d’objets', n: 3, v: () => Object.keys(questState().done).length, g: 1 },
+    { id: 't8', t: 'Quêtes d’objets', n: 6, v: () => Object.keys(questState().done).length, g: 2 },
+    { id: 't9', t: 'Quêtes d’objets', n: 10, v: () => Object.keys(questState().done).length, g: 5 },
+    { id: 't10', t: 'Cadeaux du jour d’affilée', n: 7, v: () => dailyGiftState().n, g: 3 },
   ];
 
   document.addEventListener(
     'click',
     e => {
-      const b = e.target.closest && e.target.closest('[data-tp459]');
+      const b = e.target.closest && e.target.closest('[data-trophy-room]');
       if (!b || b.disabled) {
         return;
       }
       e.preventDefault();
       e.stopPropagation();
-      const T = TROPH459.find(x => x.id === b.dataset.tp459),
-        S = tpSt459();
+      const T = TROPHIES.find(x => x.id === b.dataset.trophyRoom),
+        S = trophyState();
       if (!T || S[T.id] || T.v() < T.n) {
         return;
       }
       S[T.id] = 1;
-      localStorage.setItem('res-tp459', JSON.stringify(S));
-      reward454({ g: T.g });
+      localStorage.setItem('res-trophy-room', JSON.stringify(S));
+      applyReward({ g: T.g });
       sfx('win');
       vibe(25);
       toast(`Trophée : +${T.g} Éclat${T.g > 1 ? 's' : ''}`);

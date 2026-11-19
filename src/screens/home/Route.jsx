@@ -9,7 +9,7 @@ import { useRoute } from './homeStore.js';
 // - placeAlert(), which places #rtAlert (style left/top, « on » class);
 // - the « shake » class of #route on each encounter;
 // - the text written letter by letter in #dlgTxt (never rendered with children here);
-// The rest (data-time, data-saison, pressed buttons, #rr450 banner, route name)
+// The rest (data-time, data-saison, pressed buttons, #routeRates banner, route name)
 // is pushed by the engine into the store (setRoute).
 
 const W = 1200;
@@ -192,7 +192,7 @@ export default function Route() {
   return (
     <div className="route" id="route" data-time={tod} data-saison={season ?? undefined}>
       {rr && (
-        <p id="rr450" className="rr450">
+        <p id="route-rates" className="route-rates">
           <b>{rr.head}</b>
           {rr.list ? ` · plus de chances : ${rr.list}` : ''}
         </p>

@@ -16,7 +16,7 @@ import { DUOT, wildScen } from './022-items-bonds-ai.js';
 import { OBST } from './023-roles-synergies-obstacles.js';
 import { B, backToPrep, goFight } from './024-combat-ui.js';
 import { esc, queueSave } from './025-saves.js';
-import { HELD_IMG, ICO414, ITM, SHOP, bagN, familyOwned, fmt, today } from './032-v4-foundation.js';
+import { HELD_IMG, ITEM_ICONS, ITM, SHOP, bagN, familyOwned, fmt, today } from './032-v4-foundation.js';
 import { PL, placeName } from './037-map.js';
 import { LEGS, isShinyOwned, shinyStyle } from './043-adventure-plus.js';
 import { DAMAGE_PROVIDERS } from './044-tactical-engine.js';
@@ -25,22 +25,22 @@ import { ACHIEVEMENTS, isFallen } from './048-replayability.js';
 import { onExpedition, renderCampBase } from './049-identity.js';
 import { multChroma } from './050-world.js';
 import { HELD_SHOP, hasXp } from './053-resonance.js';
-import { JCHAIN, JGYMS, PLACES_J, johtoOpen, regionJ415 } from './054-johto.js';
-import { roamPos416 } from './056-polish-v4-16.js';
-import { ofPlace417, domDay417 } from './057-companions-resonance.js';
+import { JCHAIN, JGYMS, PLACES_J, johtoOpen, isJohtoRegion } from './054-johto.js';
+import { pickRoamSpot } from './056-polish-v4-16.js';
+import { placeWithArticle, dailyDominant } from './057-companions-resonance.js';
 import { refreshHome } from '../screens/home/homeStore.js';
-import { hSetup419, hTick419 } from './059-hoenn.js';
-import { regFam421, regionNo421 } from './061-catch-anywhere.js';
-import { monWeekly429, wkClean429 } from './064-quality.js';
-import { campOk430 } from './065-camp-tactics.js';
+import { hoennSetup, hoennTick } from './059-hoenn.js';
+import { familyRegion, regionIndex } from './061-catch-anywhere.js';
+import { weeklyProgress, sanitizeWeekly } from './064-quality.js';
+import { campOpen } from './065-camp-tactics.js';
 import { migrateKeys } from '../lib/saveMigration.js';
 
-export let wildDom416;
+export let wildDominant;
 let JDIS, PENS_SEL, FRIEND_DEL, FRIEND_MODE;
-export function __set_wildDom416(v) {
-  return (wildDom416 = v);
+export function __set_wildDominant(v) {
+  return (wildDominant = v);
 }
-export { pair416, parents416, heritable416 }; // read by the Camp's Daycare (src/screens/camp)
+export { daycarePair, daycareParents, inheritableMoves }; // read by the Camp's Daycare (src/screens/camp)
 
 /* =====================================================================
    v4.16: Living Johto
@@ -62,11 +62,11 @@ export { pair416, parents416, heritable416 }; // read by the Camp's Daycare (src
    ===================================================================== */
 
 /* ---------- profile (declared functions: called as soon as the file loads) ---------- */
-export function V416_0() {
+export function LIVING_JOHTO_0() {
   return { jdis: 0, roam: {}, inherited: {}, pair: [], tid: '', friends: [], jour: null, dom: 0, oeufs: 0 };
 }
 
-function friendClean416(a) {
+function sanitizeFriend(a) {
   if (!a || typeof a !== 'object' || typeof a.id !== 'string' || !/^[a-z0-9]{6,12}$/.test(a.id)) {
     return null;
   }
@@ -106,12 +106,12 @@ function friendClean416(a) {
     w: I(a.w, 9999),
     l: I(a.l, 9999),
     dw: typeof a.dw === 'string' && /^\d{4}-\d\d-\d\d$/.test(a.dw) ? a.dw : '',
-    wk: wkClean429(a.wk), // v4.29
+    wk: sanitizeWeekly(a.wk), // v4.29
   };
 }
 
-export function v416Clean(p) {
-  const o = V416_0();
+export function livingJohtoClean(p) {
+  const o = LIVING_JOHTO_0();
   if (!p || typeof p !== 'object') {
     return o;
   }
@@ -146,7 +146,7 @@ export function v416Clean(p) {
     o.tid = p.tid;
   }
   if (Array.isArray(p.friends)) {
-    o.friends = p.friends.map(friendClean416).filter(Boolean).slice(0, 12);
+    o.friends = p.friends.map(sanitizeFriend).filter(Boolean).slice(0, 12);
   }
   if (p.jour && typeof p.jour.d === 'string' && /^\d{4}-\d\d-\d\d$/.test(p.jour.d)) {
     o.jour = {
@@ -165,7 +165,7 @@ export function v416Clean(p) {
 }
 
 /** The next step in Johto: gyms and story intermixed. */
-export function jNext416() {
+export function nextJohtoStep() {
   const J = PROFILE.johto || [],
     d = PROFILE.jdis || 0,
     T = JDIS[d];
@@ -186,7 +186,7 @@ export function jNext416() {
   return null;
 }
 
-export function lockJ416(k, D) {
+export function johtoLock(k, D) {
   const J = (PROFILE.johto || []).length;
   if (D.jdis) {
     if (J < D.jafter) {
@@ -198,7 +198,7 @@ export function lockJ416(k, D) {
     return null;
   }
   if (D.roam) {
-    return roamActive416() ? null : 'Les bêtes légendaires dorment encore sous la Tour Cendrée.';
+    return isRoamingActive() ? null : 'Les bêtes légendaires dorment encore sous la Tour Cendrée.';
   }
   if (D.jfinal && J >= 8 && (PROFILE.jdis || 0) < 4 && !PROFILE.jchamp) {
     return 'Arrêtez d’abord Cobalt au Relais du Plateau.';
@@ -206,7 +206,7 @@ export function lockJ416(k, D) {
   return undefined; // the v4.15 rules apply
 }
 
-export function chapJ416(k) {
+export function johtoChapterLive(k) {
   const D = SCEN[k];
   if (!D) {
     return null;
@@ -216,14 +216,14 @@ export function chapJ416(k) {
     return { c: `Johto · Néo-Dissonance ${D.jdis} / 4`, t: T.lieu, who: T.who, L: T.L };
   }
   if (D.roam) {
-    const L = roamLeg416(D.roam);
-    return { c: 'Johto · Bête errante', t: `${L.n}, ${L.title}`, who: L.n, L: roamL416(D.roam) };
+    const L = findRoamLegend(D.roam);
+    return { c: 'Johto · Bête errante', t: `${L.n}, ${L.title}`, who: L.n, L: roamLegendInfo(D.roam) };
   }
   return null;
 }
 
 /** Under a location's description: story rewards, state of a roaming beast. */
-export function extraLine416(k) {
+export function johtoExtraLine(k) {
   const D = SCEN[k];
   if (D.jdis) {
     const T = JDIS[D.jdis - 1];
@@ -233,14 +233,14 @@ export function extraLine416(k) {
     return `<div class="v4-rew"><span><span class="v4-coin" aria-hidden="true">₽</span>+${fmt(T.rew[0])}</span><span><span class="v4-gemi"><svg><use href="#i-gem"/></svg></span>+${T.rew[1]}</span></div>`;
   }
   if (D.roam) {
-    const r = roamState416(D.roam),
+    const r = getRoamState(D.roam),
       it = TALIS[D.roam];
     return `<div class="v4-rew"><span class="v4-rew-b rm-hp"><i style="width:${Math.round((r.hp || 1) * 100)}%"></i>PV ${Math.round((r.hp || 1) * 100)} %${r.seenFlags ? ` · vu ${r.seenFlags} fois` : ''}</span><span><img src="${ITM(HELD_IMG[it])}" alt="" loading="lazy">${ITEMS2[it].n}</span><span><span class="v4-gemi"><svg><use href="#i-gem"/></svg></span>+12</span></div>`;
   }
   return '';
 }
 
-export function leadJ416(sc) {
+export function johtoLead(sc) {
   const D = SCEN[sc];
   if (!D) {
     return null;
@@ -249,13 +249,13 @@ export function leadJ416(sc) {
     return JDIS[D.jdis - 1].L;
   }
   if (D.roam) {
-    return roamL416(D.roam);
+    return roamLegendInfo(D.roam);
   }
   return null;
 }
 
 /* ---------- story battle rules ---------- */
-export function jdSetup416(S, r, ev) {
+export function johtoSetup(S, r, ev) {
   if (r === 'jbrouille') {
     say(ev, 'Brouilleur : en fin de manche, votre Pokémon le plus chargé perd 1 losange.');
   }
@@ -269,15 +269,15 @@ export function jdSetup416(S, r, ev) {
     say(ev, 'Relais de Mauvaise Onde : les notes de Résonance s’effacent en fin de manche.');
   }
   if (r === 'jroam') {
-    roamSetup416(S, ev);
+    setupRoaming(S, ev);
   }
-  hSetup419(S, r, ev); // Hoenn gyms (v4.19)
+  hoennSetup(S, r, ev); // Hoenn gyms (v4.19)
   if (r === 'jdom') {
-    domSetup416(S, ev);
+    dominantSetup(S, ev);
   }
 }
 
-export function jdTick416(S, r, ev) {
+export function johtoTick(S, r, ev) {
   if (S.over) {
     return;
   }
@@ -334,12 +334,12 @@ export function jdTick416(S, r, ev) {
     }
   }
   if (r === 'jdom') {
-    domTick416(S, ev);
+    dominantTick(S, ev);
   }
-  hTick419(S, r, ev); // Hoenn gyms (v4.19)
+  hoennTick(S, r, ev); // Hoenn gyms (v4.19)
 }
 
-export function roamState416(id) {
+export function getRoamState(id) {
   PROFILE.roam = PROFILE.roam || {};
   if (!PROFILE.roam[id]) {
     PROFILE.roam[id] = { at: ROAM_H[(ROAM.indexOf(id) * 3 + 2) % ROAM_H.length], hp: 1, ok: 0, seenFlags: 0 };
@@ -347,13 +347,13 @@ export function roamState416(id) {
   return PROFILE.roam[id];
 }
 
-function roamMove416() {
+function moveRoamers() {
   ROAM.forEach(id => {
-    const r = roamState416(id);
+    const r = getRoamState(id);
     if (r.ok) {
       return;
     }
-    const takenSet = ROAM.filter(x => x !== id).map(x => roamState416(x).at),
+    const takenSet = ROAM.filter(x => x !== id).map(x => getRoamState(x).at),
       pool = ROAM_H.filter(h => h !== r.at && !takenSet.includes(h));
     if (pool.length) {
       r.at = pool[Math.floor(Math.random() * pool.length)];
@@ -361,21 +361,21 @@ function roamMove416() {
   });
 }
 
-export function roamPlaces416() {
-  if (!roamActive416()) {
+export function roamingPlaces() {
+  if (!isRoamingActive()) {
     return [];
   }
   const takenSet = [];
-  return ROAM.filter(id => !roamOk416(id)).map(id => {
-    const h = PL[roamState416(id).at] || PL.j1,
-      L = roamLeg416(id),
-      [x, y] = roamPos416(h, takenSet), // v4.16.1: the clearest spot
+  return ROAM.filter(id => !roamerCaught(id)).map(id => {
+    const h = PL[getRoamState(id).at] || PL.j1,
+      L = findRoamLegend(id),
+      [x, y] = pickRoamSpot(h, takenSet), // v4.16.1: the clearest spot
       p = {
         id: 'r' + id,
         x,
         y,
         n: L.n,
-        s: `Bête errante · près ${ofPlace417(placeName(h))}`,
+        s: `Bête errante · près ${placeWithArticle(placeName(h))}`,
         grp: 'route',
         j: 1,
         roam: id,
@@ -386,14 +386,14 @@ export function roamPlaces416() {
   });
 }
 
-function roamSetup416(S, ev) {
+function setupRoaming(S, ev) {
   const D = SCEN[S.sc] || {},
     u = S.units.find(e => e.side === 'e' && e.id === D.roam);
   S.lim = D.flee || 4;
   if (!u) {
     return;
   }
-  const r = roamState416(D.roam);
+  const r = getRoamState(D.roam);
   if (r.ok) {
     return void say(ev, `${u.n} accepte un combat amical. Il s’enfuira au bout de ${S.lim} manches.`);
   } // already calmed: a rematch, no bounty
@@ -406,17 +406,19 @@ function roamSetup416(S, ev) {
   );
 }
 
-export function domDraw416(id) {
-  if (isCamp() && BADGES.length < 2 && !regionJ415()) {
+export function rollDominant(id) {
+  if (isCamp() && BADGES.length < 2 && !isJohtoRegion()) {
     return false;
   }
-  return Math.random() < (TOD === 'nuit' ? 0.1 : 0.07) * (id && id === domDay417() ? 3 : 1); // Dominant flagged (v4.17)
+  return Math.random() < (TOD === 'nuit' ? 0.1 : 0.07) * (id && id === dailyDominant() ? 3 : 1); // Dominant flagged (v4.17)
 }
 
-export function dom416(D, id, shiny) {
+export function makeDominantScenario(D, id, shiny) {
   const m = BY[id],
-    neighbors = RECRUIT.filter(x => x.id !== id && x.t.some(t => m.t.includes(t)) && regFam421(x.id) === regionNo421()), // region escort (v4.21)
-    nearby = RECRUIT.filter(x => x.id !== id && regFam421(x.id) === regionNo421()),
+    neighbors = RECRUIT.filter(
+      x => x.id !== id && x.t.some(t => m.t.includes(t)) && familyRegion(x.id) === regionIndex()
+    ), // region escort (v4.21)
+    nearby = RECRUIT.filter(x => x.id !== id && familyRegion(x.id) === regionIndex()),
     pool = neighbors.length ? neighbors : nearby.length ? nearby : RECRUIT.filter(x => x.id !== id),
     a = pool[Math.floor(Math.random() * pool.length)];
   Object.assign(D, {
@@ -433,7 +435,7 @@ export function dom416(D, id, shiny) {
   return D;
 }
 
-function domSetup416(S, ev) {
+function dominantSetup(S, ev) {
   const u = S.units.find(e => e.side === 'e' && e.uid === 'e0');
   if (!u) {
     return;
@@ -443,7 +445,7 @@ function domSetup416(S, ev) {
   say(ev, `Aura du Dominant : ${u.n} est blindé (+2 Garde).`);
 }
 
-function domTick416(S, ev) {
+function dominantTick(S, ev) {
   const u = S.units.find(e => e.dom && !e.ko);
   if (!u || S.round % 2 !== 1) {
     return;
@@ -453,7 +455,7 @@ function domTick416(S, ev) {
   say(ev, `Aura du Dominant : ${u.n} se blinde et se renforce.`);
 }
 
-function domReward416(rew) {
+function dominantReward(rew) {
   const r = Math.random(),
     o = { g: 2 };
   const cts = Object.keys(MACHINES).filter(k => SHOP[k] && !MACHINES[k].cs),
@@ -477,7 +479,7 @@ function domReward416(rew) {
   return [o.m || 0, o.g];
 }
 
-function compatible416List(a, b) {
+function breedCompatibleList(a, b) {
   if (!BY[a] || !BY[b] || a === b) {
     return false;
   }
@@ -488,9 +490,9 @@ function compatible416List(a, b) {
 }
 
 /** The mother gives the family; with Ditto, it is the other parent. */
-function parents416() {
-  const c = pair416();
-  if (c.length < 2 || !compatible416List(c[0], c[1])) {
+function daycareParents() {
+  const c = daycarePair();
+  if (c.length < 2 || !breedCompatibleList(c[0], c[1])) {
     return null;
   }
   const motherRef = c[0] === 'metamorph' ? c[1] : c[0],
@@ -498,28 +500,28 @@ function parents416() {
   return { mother: motherRef, father, meta: c.includes('metamorph') };
 }
 
-function row416(b) {
+function movesetRows(b) {
   return MON.filter(m => m.base === b);
 }
 
-function heritable416(motherRef, father) {
+function inheritableMoves(motherRef, father) {
   if (father === 'metamorph') {
     return [];
   }
-  const already = new Set(row416(motherRef).flatMap(m => m.mv));
-  return [...new Set(row416(father).flatMap(m => m.mv))].filter(
+  const already = new Set(movesetRows(motherRef).flatMap(m => m.mv));
+  return [...new Set(movesetRows(father).flatMap(m => m.mv))].filter(
     k => MV[k] && MV[k].p > 0 && !MV[k].sig && !MV[k].xp && !already.has(k)
   );
 }
 
 /** An egg from the pair: returns true if it hatched. */
-export function daycare416(rew) {
-  const P2 = parents416();
+export function hatchDaycareEgg(rew) {
+  const P2 = daycareParents();
   if (!P2) {
     return false;
   }
   const { mother: motherRef, father: father, meta } = P2,
-    L = heritable416(motherRef, father),
+    L = inheritableMoves(motherRef, father),
     mv = L.length ? L[Math.floor(Math.random() * L.length)] : null,
     ch = Math.min(0.75, (1 / 16) * multChroma() * (meta ? 2 : 1)),
     sh = Math.random() < ch;
@@ -534,11 +536,11 @@ export function daycare416(rew) {
   }
   PROFILE.camp.oeuf = 0;
   PROFILE.oeufs = (PROFILE.oeufs || 0) + 1;
-  rew.egg416 = { id: motherRef, father, mv, sh };
+  rew.daycareEgg = { id: motherRef, father, mv, sh };
   return true;
 }
 
-export function inheritance416(b) {
+export function inheritedMoveHtml(b) {
   const k = b && PROFILE.inherited && PROFILE.inherited[b];
   if (!k || !MV[k]) {
     return '';
@@ -553,20 +555,20 @@ function renderDaycareBox() {
   const available = PROFILE.box.filter(
     id => BY[id] && !squad.some(s => BY[s].base === id) && !onExpedition(id) && !isFallen(id)
   );
-  const ok = PENS_SEL.length === 2 && compatible416List(PENS_SEL[0], PENS_SEL[1]);
+  const ok = PENS_SEL.length === 2 && breedCompatibleList(PENS_SEL[0], PENS_SEL[1]);
   paintOverlay('pens', {
     ok,
     L: available.map(id => {
       const i = PENS_SEL.indexOf(id);
-      return { id, i, cp: PENS_SEL.length === 1 && i < 0 ? compatible416List(PENS_SEL[0], id) : null };
+      return { id, i, cp: PENS_SEL.length === 1 && i < 0 ? breedCompatibleList(PENS_SEL[0], id) : null };
     }),
   });
 }
 
-function duoGen416(x, y) {
+function generateDuo(x, y) {
   const k = pairKey(x, y);
-  if (DUOG416[k]) {
-    return DUOG416[k];
+  if (DUO_CACHE[k]) {
+    return DUO_CACHE[k];
   }
   const a = BY[x],
     b = BY[y];
@@ -589,43 +591,46 @@ function duoGen416(x, y) {
   ]) {
     for (const tx of X.t) {
       for (const ty of Y.t) {
-        if (!A && MARK_T416[tx] && reacts(MARK_T416[tx], ty)) {
+        if (!A && MARK_BY_TYPE[tx] && reacts(MARK_BY_TYPE[tx], ty)) {
           [A, Bm, tA, tB] = [X, Y, tx, ty];
         }
       }
     }
   }
   if (!A) {
-    const mk = m => m.t.find(t => MARK_T416[t]);
+    const mk = m => m.t.find(t => MARK_BY_TYPE[t]);
     [A, Bm] = !mk(a) && mk(b) ? [b, a] : [a, b];
     tA = mk(A) || A.t[0];
     tB = Bm.t.find(t => t !== tA) || Bm.t[0];
   }
-  const m = MARK_T416[tA] || null,
-    n = tA === tB ? `Double ${DUO_N416[tA] || 'Assaut'}` : `${DUO_N416[tA] || 'Assaut'} ${DUO_OF416[tB] || 'combiné'}`;
-  return (DUOG416[k] = {
+  const m = MARK_BY_TYPE[tA] || null,
+    n =
+      tA === tB
+        ? `Double ${DUO_ATTACK_NAMES[tA] || 'Assaut'}`
+        : `${DUO_ATTACK_NAMES[tA] || 'Assaut'} ${DUO_PARTNER_NAMES[tB] || 'combiné'}`;
+  return (DUO_CACHE[k] = {
     n,
     first: A.id,
     r: 3,
     gen: true,
     d: m
-      ? `${A.n} rend la zone ${MARK_N416[m]}, ${Bm.n} frappe aussitôt dedans.`
+      ? `${A.n} rend la zone ${MARK_ZONE_NAMES[m]}, ${Bm.n} frappe aussitôt dedans.`
       : `${A.n} ouvre une brèche, ${Bm.n} s’y engouffre.`,
     a: Object.assign({ n, t: tA, p: m ? 4 : 6, r: 3, sh: 'area' }, m ? { mk: m } : {}),
     b: { n, t: tB, p: 8, r: 4, sh: 'one' },
   });
 }
 
-export function duoFor416(k) {
+export function duoTechnique(k) {
   if (DUOT[k]) {
     return DUOT[k];
   }
   const [x, y] = String(k).split('|');
-  return duoGen416(x, y);
+  return generateDuo(x, y);
 }
 
 /** The Guide: the fixed techniques, then those of your most advanced duos. */
-export function duoList416() {
+export function listDuos() {
   const o = Object.assign({}, DUOT);
   try {
     Object.entries(PROFILE.links || {})
@@ -633,7 +638,7 @@ export function duoList416() {
       .sort((a, b) => b[1] - a[1])
       .slice(0, 8)
       .forEach(([k]) => {
-        const D = duoFor416(k);
+        const D = duoTechnique(k);
         if (D) {
           o[k] = D;
         }
@@ -644,7 +649,7 @@ export function duoList416() {
   return o;
 }
 
-function monState416() {
+function playerStandings() {
   return {
     b: BADGES.length,
     j: (PROFILE.johto || []).length,
@@ -658,11 +663,11 @@ function monState416() {
   };
 }
 
-export function hash416(s) {
+export function codeChecksum(s) {
   return fnv(s).toString(36).slice(-4).padStart(4, '0');
 }
 
-function mapCode416() {
+function exportSquadCode() {
   if (!PROFILE.tid) {
     PROFILE.tid = (Math.random().toString(36).slice(2) + Date.now().toString(36))
       .replace(/[^a-z0-9]/g, '')
@@ -684,32 +689,32 @@ function mapCode416() {
     id: PROFILE.tid,
     n: PROFILE.name || 'Dresseur',
     t: T,
-    s: monState416(),
+    s: playerStandings(),
     jr: PROFILE.jour && PROFILE.jour.d === today() ? PROFILE.jour : null,
     dt: today(),
-    wk: monWeekly429(), // weekly challenge (v4.29)
+    wk: weeklyProgress(), // weekly challenge (v4.29)
   };
   const b64 = btoa(unescape(encodeURIComponent(JSON.stringify(o))))
     .replace(/\+/g, '-')
     .replace(/\//g, '_')
     .replace(/=+$/, '');
-  return `RES-${b64}-${hash416(b64)}`;
+  return `RES-${b64}-${codeChecksum(b64)}`;
 }
 
-function readCode416(txt) {
+function parseShareCode(txt) {
   const m = String(txt || '')
     .replace(/\s+/g, '')
     .match(/RES-([A-Za-z0-9_-]+)-([a-z0-9]{4})/);
   if (!m) {
     return { err: 'Aucun code de dresseur reconnu. Il commence par « RES- ».' };
   }
-  if (hash416(m[1]) !== m[2]) {
+  if (codeChecksum(m[1]) !== m[2]) {
     return { err: 'Ce code est incomplet ou abîmé. Demandez à votre ami de le renvoyer.' };
   }
   try {
     const b = m[1].replace(/-/g, '+').replace(/_/g, '/'),
       o = migrateKeys(JSON.parse(decodeURIComponent(escape(atob(b + '==='.slice((b.length + 3) % 4))))));
-    const a = friendClean416(o);
+    const a = sanitizeFriend(o);
     if (!a) {
       return { err: 'Ce code ne contient pas d’équipe utilisable.' };
     }
@@ -719,8 +724,8 @@ function readCode416(txt) {
   }
 }
 
-function addFriend416(txt) {
-  const r = readCode416(txt);
+function addFriendFromCode(txt) {
+  const r = parseShareCode(txt);
   if (r.err) {
     return r.err;
   }
@@ -744,7 +749,7 @@ function addFriend416(txt) {
   return `${a.n} rejoint vos défis entre amis !`;
 }
 
-export function friendBuild416(i) {
+export function buildFriendTeam(i) {
   const A = (PROFILE.friends || [])[i];
   if (!A) {
     return false;
@@ -771,8 +776,8 @@ export function friendBuild416(i) {
   return true;
 }
 
-function friendFight416(i) {
-  if (!friendBuild416(i)) {
+function fightFriend(i) {
+  if (!buildFriendTeam(i)) {
     return;
   }
   if (B) {
@@ -782,15 +787,15 @@ function friendFight416(i) {
 }
 
 /** Friend challenges on the Home screen (#v4Amis, rendered by src/screens/home/Friends.jsx). */
-export function friendsData416() {
+export function friendsPanelData() {
   const L = PROFILE.friends || [],
     selfRef = {
       n: PROFILE.name || 'Vous',
-      s: monState416(),
+      s: playerStandings(),
       jr: PROFILE.jour && PROFILE.jour.d === today() ? PROFILE.jour : null,
       me: true,
     },
-    rows = [selfRef, ...L].map(a => Object.assign({ sc: scoreOf416(a.s) }, a)).sort((a, b) => b.sc - a.sc);
+    rows = [selfRef, ...L].map(a => Object.assign({ sc: friendScore(a.s) }, a)).sort((a, b) => b.sc - a.sc);
   const dayKey = a =>
     a.jr && a.jr.d === today() ? `✓${a.jr.r ? ' ' + a.jr.r : ''}${a.jr.m ? ' · ' + a.jr.m + ' m.' : ''}` : '—';
   return { L, rows, jour: dayKey, del: FRIEND_DEL };
@@ -802,7 +807,7 @@ function renderFriendBox() {
     paintOverlay('ami', {
       mode: 'carte',
       displayName: PROFILE.name || '',
-      code: squad.length ? mapCode416() : '',
+      code: squad.length ? exportSquadCode() : '',
       teamNames: squad.slice(0, 4).map(id => BY[id].n),
       canShare: !!navigator.share,
     });
@@ -811,7 +816,7 @@ function renderFriendBox() {
   }
 }
 
-async function copy416() {
+async function copyShareCode() {
   const ta = $('#amiCode');
   if (!ta) {
     return;
@@ -839,11 +844,11 @@ async function copy416() {
 }
 
 /* ---------- original icons ---------- */
-const SVGI416 = s =>
+const svgDataUri = s =>
   'data:image/svg+xml;charset=utf-8,' +
   encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">' + s + '</svg>');
 
-export const CROWN416 =
+export const DOMINANT_CROWN_SVG =
   '<svg class="dom-cr" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 18 4.5 7l5 5L12 4l2.5 8 5-5L21 18Z" fill="currentColor"/><path d="M3 20h18" stroke="currentColor" stroke-width="2"/></svg>';
 
 /* =====================================================================
@@ -855,31 +860,31 @@ const ROAM_H = ['j1', 'j2', 'j3', 'j4', 'j5', 'j6', 'j7', 'j8', 'jwild', 'jlac']
 
 const TALIS = { raikou: 'crinorage', entei: 'braisesacree', suicune: 'cristalboreal' };
 
-export const roamLeg416 = id => LEGS.find(L => L.id === id);
+export const findRoamLegend = id => LEGS.find(L => L.id === id);
 
-const roamL416 = id => {
-  const L = roamLeg416(id);
+const roamLegendInfo = id => {
+  const L = findRoamLegend(id);
   return { n: L.n, t: L.title, q: L.q, w: L.w, l: 'Il s’est enfui avant que vous ne puissiez l’apaiser.' };
 };
 
-export const roamActive416 = () => johtoOpen() && (!isCamp() || (PROFILE.jdis || 0) >= 2);
+export const isRoamingActive = () => johtoOpen() && (!isCamp() || (PROFILE.jdis || 0) >= 2);
 
-export const roamOk416 = id => !!(PROFILE.roam && PROFILE.roam[id] && PROFILE.roam[id].ok);
+export const roamerCaught = id => !!(PROFILE.roam && PROFILE.roam[id] && PROFILE.roam[id].ok);
 
-export const fleeMsg416 = S => {
+export const fleeMessage = S => {
   const D = SCEN[S.sc] || {},
-    L = D.roam && roamLeg416(D.roam);
+    L = D.roam && findRoamLegend(D.roam);
   return `${L ? L.n : 'La bête'} bondit hors du plateau et disparaît : il s’est enfui !`;
 };
 
 /* =====================================================================
    4. The Daycare, as a pair
    ===================================================================== */
-const pair416 = () => (campOk430() ? (PROFILE.pair || []).filter(id => PROFILE.box.includes(id)) : []);
+const daycarePair = () => (campOpen() ? (PROFILE.pair || []).filter(id => PROFILE.box.includes(id)) : []);
 
-export const inDaycare416 = id => !!(campOk430() && BY[id] && pair416().includes(BY[id].base));
+export const isInDaycare = id => !!(campOpen() && BY[id] && daycarePair().includes(BY[id].base));
 
-export const MARK_T416 = {
+export const MARK_BY_TYPE = {
   Eau: 'trempe',
   Électrik: 'charge',
   Feu: 'brulant',
@@ -888,7 +893,7 @@ export const MARK_T416 = {
   Sol: 'fissure',
 };
 
-const MARK_N416 = {
+const MARK_ZONE_NAMES = {
   trempe: 'Trempée',
   charge: 'Chargée',
   brulant: 'Brûlante',
@@ -897,7 +902,7 @@ const MARK_N416 = {
   fissure: 'Fissurée',
 };
 
-const DUO_N416 = {
+const DUO_ATTACK_NAMES = {
   Eau: 'Torrent',
   Feu: 'Brasier',
   Plante: 'Ronces',
@@ -918,7 +923,7 @@ const DUO_N416 = {
   Fée: 'Halo',
 };
 
-const DUO_OF416 = {
+const DUO_PARTNER_NAMES = {
   Eau: 'd’écume',
   Feu: 'de feu',
   Plante: 'de lianes',
@@ -939,12 +944,12 @@ const DUO_OF416 = {
   Fée: 'de fées',
 };
 
-const DUOG416 = {};
+const DUO_CACHE = {};
 
 /* =====================================================================
    6. Friend challenges
    ===================================================================== */
-export const scoreOf416 = s => s.b * 100 + s.j * 120 + s.e * 60 + s.c * 400 + s.d * 10 + s.tb * 25 + s.sh * 15;
+export const friendScore = s => s.b * 100 + s.j * 120 + s.e * 60 + s.c * 400 + s.d * 10 + s.tb * 25 + s.sh * 15;
 
 const FRIEND_POS = [
   [6, 1],
@@ -955,17 +960,17 @@ const FRIEND_POS = [
 
 // Instructions run at startup, in the original order (see index.js).
 export function __init() {
-  Object.assign(ICO414, {
-    'crin-orage': SVGI416(
+  Object.assign(ITEM_ICONS, {
+    'crin-orage': svgDataUri(
       '<path d="M7 36c7-11 15-15 28-17" stroke="#2f3366" stroke-width="6" fill="none" stroke-linecap="round"/><path d="M7 36c7-11 15-15 28-17" stroke="#9aa2e6" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M28 5 17 25h8l-4 18 15-23h-8l5-15Z" fill="#ffd94a" stroke="#86650f" stroke-width="2" stroke-linejoin="round"/>'
     ),
-    'braise-sacree': SVGI416(
+    'braise-sacree': svgDataUri(
       '<path d="M24 4c3 8 13 12 13 25a13 13 0 0 1-26 0c0-7 4-11 7-13 0 4 2 7 4 7 0-8-2-12 2-19Z" fill="#f2672e" stroke="#7a2412" stroke-width="2" stroke-linejoin="round"/><path d="M24 22c2 4 6 6 6 11a6 6 0 0 1-12 0c0-3 2-5 3-6 0 2 1 3 2 3 0-3 0-5 1-8Z" fill="#ffd34d"/>'
     ),
-    'cristal-boreal': SVGI416(
+    'cristal-boreal': svgDataUri(
       '<path d="M24 3 36 18 24 45 12 18Z" fill="#8fe3ff" stroke="#1f5d86" stroke-width="2" stroke-linejoin="round"/><path d="M24 3v42M12 18h24" stroke="#1f5d86" stroke-width="1.5" opacity=".6"/><path d="M24 3 30 18 24 45" fill="#d8f6ff" opacity=".7"/><path d="M38 6l1.5 3.5L43 11l-3.5 1.5L38 16l-1.5-3.5L33 11l3.5-1.5z" fill="#fff"/>'
     ),
-    oeuf: SVGI416(
+    oeuf: svgDataUri(
       '<path d="M24 5c9 0 15 14 15 23a15 15 0 0 1-30 0C9 19 15 5 24 5Z" fill="#fff6e0" stroke="#8b6b3d" stroke-width="2"/><circle cx="18" cy="22" r="4" fill="#7ac74c"/><circle cx="30" cy="31" r="5" fill="#7ac74c"/><circle cx="27" cy="14" r="2.5" fill="#7ac74c"/>'
     ),
   });
@@ -1155,7 +1160,7 @@ export function __init() {
   Object.assign(HELD_IMG, { crinorage: 'crin-orage', braisesacree: 'braise-sacree', cristalboreal: 'cristal-boreal' });
 
   ROAM.forEach(id => {
-    const L = roamLeg416(id);
+    const L = findRoamLegend(id);
     if (!L) {
       return;
     }
@@ -1204,7 +1209,7 @@ export function __init() {
   /* =====================================================================
    3. Dominant Pokémon
    ===================================================================== */
-  wildDom416 = false;
+  wildDominant = false;
 
   // #pensBox: rendered by React (src/screens/overlays/DaycareBox.jsx)
 
@@ -1253,7 +1258,7 @@ export function __init() {
 
   /* ---------- hooks: battle creation ---------- */
   HOOKS.combat.push((S, opt, D0) => {
-    if (S.fixed431) {
+    if (S.restricted) {
       return;
     } // fixed-rule battles (v4.31)
     D0 = D0 || SCEN[S.sc] || {};
@@ -1331,7 +1336,7 @@ export function __init() {
     }
     // roaming beast
     if (D.roam) {
-      const r = roamState416(D.roam),
+      const r = getRoamState(D.roam),
         u = S.units.find(e => e.side === 'e' && e.id === D.roam);
       r.seenFlags = (r.seenFlags || 0) + 1;
       if (r.ok) {
@@ -1351,13 +1356,13 @@ export function __init() {
         rew.roam = { id: D.roam, ok: false, hp: r.hp };
       }
     }
-    if (roamActive416() && !(D.tuto || D.tower)) {
-      roamMove416();
+    if (isRoamingActive() && !(D.tuto || D.tower)) {
+      moveRoamers();
     }
     // Dominant
     if (D.dom) {
       if (win) {
-        const x = domReward416(rew);
+        const x = dominantReward(rew);
         o[0] += x[0];
         o[1] += x[1];
       }
@@ -1394,7 +1399,7 @@ export function __init() {
       );
     }
     if (r.roam) {
-      const L = roamLeg416(r.roam.id);
+      const L = findRoamLegend(r.roam.id);
       o.push(
         r.roam.ok
           ? `<div class="res-l"><h4>Bête errante</h4><div class="rl">${medal(L.t)}<span>${L.n} est apaisé. « ${L.w} » Il vous laisse son talisman : <b>${ITEMS2[r.roam.it].n}</b>.</span><b>✦</b></div></div>`
@@ -1410,11 +1415,11 @@ export function __init() {
             : x.item
               ? `${ITEMS2[x.item].n} rejoint votre Sac (objet tenu)`
               : `${fmt(x.m || 0)} ₽ et des Éclats`
-        }</span><b>${CROWN416}</b></div></div>`
+        }</span><b>${DOMINANT_CROWN_SVG}</b></div></div>`
       );
     }
-    if (r.egg416) {
-      const x = r.egg416;
+    if (r.daycareEgg) {
+      const x = r.daycareEgg;
       o.push(
         `<div class="res-l"><h4>Pension</h4><div class="rl${x.sh ? ' shn' : ''}"${x.sh ? ` style="${shinyStyle(x.id)}"` : ''}>${medal(BY[x.id].t)}<span>Un œuf a éclos : un ${BY[x.id].n}${x.sh ? ' <b>chromatique</b>' : ''} !${x.mv ? ` Il hérite de <b>${MV[x.mv].n}</b> grâce à ${BY[x.father].n}.` : ''}</span><b><img class="res-egg" src="${ITM('oeuf')}" alt=""></b></div></div>`
       );
@@ -1442,8 +1447,8 @@ export function __init() {
       n: 'Trois bêtes',
       d: 'Apaiser Raikou, Entei et Suicune.',
       t: 'Ami des bêtes',
-      ok: () => ROAM.every(roamOk416),
-      p: () => [ROAM.filter(roamOk416).length, 3],
+      ok: () => ROAM.every(roamerCaught),
+      p: () => [ROAM.filter(roamerCaught).length, 3],
     },
     {
       id: 'dominant',
@@ -1495,7 +1500,7 @@ export function __init() {
         return;
       }
       if (k === 'copier') {
-        return void copy416();
+        return void copyShareCode();
       }
       if (k === 'partager') {
         const ta = $('#amiCode');
@@ -1504,13 +1509,13 @@ export function __init() {
             .share({
               text: `Affronte mon équipe dans Pokémon Résonance ! Colle ce code dans « Défis entre amis » : ${ta.value}`,
             })
-            .catch(() => copy416());
+            .catch(() => copyShareCode());
         }
         return;
       }
       if (k === 'valider') {
         const ta = $('#amiColle'),
-          msg = addFriend416(ta ? ta.value : ''),
+          msg = addFriendFromCode(ta ? ta.value : ''),
           ok = /rejoint|mise à jour/.test(msg);
         if (ok) {
           $('#amiBox').hidden = true;
@@ -1535,7 +1540,7 @@ export function __init() {
       if (!squad.length) {
         return void toast('Composez d’abord une équipe.');
       }
-      return void friendFight416(+f.dataset.amiFight);
+      return void fightFriend(+f.dataset.amiFight);
     }
     const d = e.target.closest('[data-ami-del]');
     if (d) {
@@ -1569,7 +1574,7 @@ export function __init() {
         toast('Le couple revient au camp.');
         queueSave();
         renderCampBase();
-      } else if (k === 'ok' && PENS_SEL.length === 2 && compatible416List(PENS_SEL[0], PENS_SEL[1])) {
+      } else if (k === 'ok' && PENS_SEL.length === 2 && breedCompatibleList(PENS_SEL[0], PENS_SEL[1])) {
         PROFILE.pair = [...PENS_SEL];
         __set_squad(squad.filter(s => !PENS_SEL.includes(BY[s].base)));
         $('#pensBox').hidden = true;
@@ -1611,7 +1616,7 @@ export function __init() {
     PROFILE.name = e.target.value.replace(/[<>&"]/g, '').slice(0, 14);
     const ta = $('#amiCode');
     if (ta && squad.length) {
-      ta.value = mapCode416();
+      ta.value = exportSquadCode();
     }
     queueSave();
   });

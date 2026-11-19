@@ -9,7 +9,7 @@ import { __set_PREPG, renderPrep } from './026-campaign-tutorial-sound.js';
 import { jump } from './029-streamlined-guide.js';
 import { afterShow } from './031-home-journey.js';
 import { v4After } from './040-settings.js';
-import { gauge434 } from './069-calibration-eevee.js';
+import { fitPhoneBattle } from './069-calibration-eevee.js';
 
 export let cur;
 
@@ -42,7 +42,7 @@ export function show(t, scroll) {
   }
   afterShow(t);
   v4After(cur);
-  gauge434(); // battle on phone (v4.34)
+  fitPhoneBattle(); // battle on phone (v4.34)
   hook('page', previous);
 }
 

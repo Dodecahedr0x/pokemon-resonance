@@ -1,6 +1,6 @@
 import { channel } from '../../lib/store.js';
 
-// Windows and effect layers that the engine used to create on <body> (#tdrBox, #ctBox, #scene417,
+// Windows and effect layers that the engine used to create on <body> (#tdrBox, #ctBox, #storyScene,
 // #pk-badge…). Each window has a state: null (empty) or the data of its last render,
 // with `v` incremented on every call. The content is rendered with key={v}: like the old
 // innerHTML, every render restarts from zero (the engine's additions inside it, text typed letter

@@ -12,41 +12,41 @@ import { renderWallet } from './035-interface.js';
 import { renderBag } from './039-quests-shop.js';
 import { DAMAGE_PROVIDERS } from './044-tactical-engine.js';
 
-let TAL464, TALMAX464, TALRESET464;
+let TALENTS, TALENT_MAX, TALENT_RESET_COST;
 // read by Shop › Talents (React, src/screens/bag/Workshop.jsx)
-export { TAL464, TALMAX464, TALRESET464, talSt464, talSpent464, talPts464 };
+export { TALENTS, TALENT_MAX, TALENT_RESET_COST, talentState, talentSpent, talentPoints };
 
 /** The battle counts for talents and the season (4.65): neither frozen team nor tutorial. */
-export function battleCount464(S) {
-  return S && !S.fixed431 && !(SCEN[S.sc] && SCEN[S.sc].tuto);
+export function isCountedBattle(S) {
+  return S && !S.restricted && !(SCEN[S.sc] && SCEN[S.sc].tuto);
 }
 
-const talSt464 = () => {
+const talentState = () => {
   const s = (() => {
     try {
-      return JSON.parse(localStorage.getItem('res-tal464') || 'null') || {};
+      return JSON.parse(localStorage.getItem('res-talent-tree') || 'null') || {};
     } catch (e) {
       return {};
     }
   })();
   const o = {};
-  TAL464.forEach(B => B.t.forEach(t => (o[t.id] = Math.max(0, Math.min(TALMAX464, s[t.id] | 0)))));
+  TALENTS.forEach(B => B.t.forEach(t => (o[t.id] = Math.max(0, Math.min(TALENT_MAX, s[t.id] | 0)))));
   return o;
 };
 
-const talSave464 = o => {
-  writeLS('res-tal464', o);
+const talentSave = o => {
+  writeLS('res-talent-tree', o);
 };
 
-const talSpent464 = () => Object.values(talSt464()).reduce((a, b) => a + b, 0);
+const talentSpent = () => Object.values(talentState()).reduce((a, b) => a + b, 0);
 
-const talPts464 = () => Math.max(0, tLevel() - 1 - talSpent464());
+const talentPoints = () => Math.max(0, tLevel() - 1 - talentSpent());
 
-const tal464 = id => talSt464()[id] || 0;
+const talentTree = id => talentState()[id] || 0;
 
 // Statements run at startup, in the original order (see index.js).
 export function __init() {
-  TAL464 = [
+  TALENTS = [
     {
       b: 'attaque',
       n: 'Attaque',
@@ -87,15 +87,15 @@ export function __init() {
     },
   ];
 
-  ((TALMAX464 = 3), (TALRESET464 = 500));
+  ((TALENT_MAX = 3), (TALENT_RESET_COST = 500));
 
   HOOKS.combat.push(S => {
-    if (!battleCount464(S)) {
+    if (!isCountedBattle(S)) {
       return;
     }
     const al = S.units.filter(u => u.side === 'a'),
-      a2 = tal464('a2'),
-      s2 = tal464('s2');
+      a2 = talentTree('a2'),
+      s2 = talentTree('s2');
     al.forEach((u, i) => {
       if (a2 >= 3 || i < a2) {
         u.en = Math.max(u.en || 0, 1);
@@ -104,23 +104,23 @@ export function __init() {
     if (s2 && al[0]) {
       al[0].guard = Math.max(al[0].guard || 0, s2);
     }
-    S.tal464 = { used: {} };
+    S.talentTree = { used: {} };
   });
 
   HOOKS.beforeRoundEnd.push((S, ev) => {
-    if (!S.tal464) {
+    if (!S.talentTree) {
       return;
     }
     const al = S.units.filter(u => u.side === 'a' && !u.ko),
-      s1 = tal464('s1'),
-      s3 = tal464('s3');
+      s1 = talentTree('s1'),
+      s3 = talentTree('s3');
     if (s1) {
       al.forEach(u => heal(S, u, Math.max(1, Math.round((u.mhp * s1 * 2) / 100)), ev));
     }
     if (s3) {
       al.forEach(u => {
-        if (u.hp / u.mhp < 0.3 && !S.tal464.used[u.uid]) {
-          S.tal464.used[u.uid] = 1;
+        if (u.hp / u.mhp < 0.3 && !S.talentTree.used[u.uid]) {
+          S.talentTree.used[u.uid] = 1;
           heal(S, u, Math.max(1, Math.round((u.mhp * s3 * 10) / 100)), ev);
           say(ev, `Second souffle : ${u.n} se relève.`);
         }
@@ -129,13 +129,13 @@ export function __init() {
   });
 
   DAMAGE_PROVIDERS.push({
-    id: 'talents464',
+    id: 'talent-bonus',
     provide: (c, { S, u, t }) => {
-      if (!S || !S.tal464 || !u || u.side !== 'a') {
+      if (!S || !S.talentTree || !u || u.side !== 'a') {
         return false;
       }
-      const a1 = tal464('a1'),
-        a3 = t && t.hp / t.mhp < 0.5 ? tal464('a3') : 0,
+      const a1 = talentTree('a1'),
+        a3 = t && t.hp / t.mhp < 0.5 ? talentTree('a3') : 0,
         pc = a1 * 2 + a3 * 4;
       return pc > 0 && { mul: 1 + pc / 100, labelText: 'Talents' };
     },
@@ -143,12 +143,12 @@ export function __init() {
 
   HOOKS.progress.unshift((S, rew, win) => {
     try {
-      if (!win || !battleCount464(S)) {
+      if (!win || !isCountedBattle(S)) {
         return null;
       }
-      const e1 = tal464('e1'),
-        e2 = tal464('e2'),
-        e3 = tal464('e3'),
+      const e1 = talentTree('e1'),
+        e2 = talentTree('e2'),
+        e3 = talentTree('e3'),
         out = [];
       if (e1) {
         PROFILE.money = Math.min(999999, PROFILE.money + e1 * 40);
@@ -163,7 +163,7 @@ export function __init() {
         out.push('1 Éclat');
       }
       if (out.length) {
-        rew.tal464 = out;
+        rew.talentTree = out;
       }
     } catch {
       /* Best effort: failure here is non-fatal. */
@@ -172,32 +172,32 @@ export function __init() {
   });
 
   HOOKS.battleResult.unshift(r =>
-    r.tal464
-      ? `<div class="res-l"><h4>Talents</h4><div class="rl"><span>Bonus de talents : ${esc(r.tal464.join(', '))}</span></div></div>`
+    r.talentTree
+      ? `<div class="res-l"><h4>Talents</h4><div class="rl"><span>Bonus de talents : ${esc(r.talentTree.join(', '))}</span></div></div>`
       : ''
   );
 
   document.addEventListener(
     'click',
     e => {
-      const b = e.target.closest && e.target.closest('[data-tal464]');
+      const b = e.target.closest && e.target.closest('[data-talent-tree]');
       if (!b || b.disabled) {
         return;
       }
       e.stopPropagation();
       e.preventDefault();
-      const k = b.dataset.tal464,
-        st = talSt464();
+      const k = b.dataset.talentTree,
+        st = talentState();
       if (k === 'reset') {
-        if (PROFILE.money < TALRESET464 || !talSpent464()) {
+        if (PROFILE.money < TALENT_RESET_COST || !talentSpent()) {
           return;
         }
-        PROFILE.money -= TALRESET464;
-        talSave464({});
+        PROFILE.money -= TALENT_RESET_COST;
+        talentSave({});
         toast('Talents réinitialisés.');
-      } else if (k in st && st[k] < TALMAX464 && talPts464() > 0) {
+      } else if (k in st && st[k] < TALENT_MAX && talentPoints() > 0) {
         st[k]++;
-        talSave464(st);
+        talentSave(st);
         sfx('ui');
         vibe(20);
       } else {

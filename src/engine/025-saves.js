@@ -42,7 +42,7 @@ import { renderHome } from './036-home.js';
 import { v4After } from './040-settings.js';
 import { rivalBuild, towerRestore } from './043-adventure-plus.js';
 import { unrollSpeed } from './044-tactical-engine.js';
-import { free421 } from './061-catch-anywhere.js';
+import { fillFreeBox } from './061-catch-anywhere.js';
 import { hideSaves, refreshSaves, showSaves } from '../screens/saves/savesStore.js';
 import { refreshSummary } from '../screens/combat/prep/prepStore.js';
 import { migrateKeys } from '../lib/saveMigration.js';
@@ -319,7 +319,7 @@ export function applySave(s, opt) {
   __set_PROFILE(cleanProfile(s.profile));
   rivalBuild();
   towerRestore();
-  free421(s.squad, s.badges); // Free: the Box fills only once (v4.21)
+  fillFreeBox(s.squad, s.badges); // Free: the Box fills only once (v4.21)
   __set_squad(s.squad.filter(id => inBox(id)));
   if (!squad.length) {
     __set_squad(

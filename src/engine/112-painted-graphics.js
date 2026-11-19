@@ -28,11 +28,11 @@ import { FXS, fxAdd, fxOn, fxPrep } from './028-move-effects.js';
 import { renderParams } from './040-settings.js';
 import { currentActor } from './044-tactical-engine.js';
 import { hourOf } from './046-living-board.js';
-import { NEWS416 } from './056-polish-v4-16.js';
-import { player418 } from './058-fishing-safari-coop.js';
-import { dl428 } from './063-combat-catches-home.js';
-import { anim429, replay429 } from './064-quality.js';
-import { TUTORIAL_STEPS433 } from './068-duel-tutorial.js';
+import { NEWS_ENTRIES } from './056-polish-v4-16.js';
+import { coopPlayer } from './058-fishing-safari-coop.js';
+import { battleDelay } from './063-combat-catches-home.js';
+import { animEnabled, replayAnimation } from './064-quality.js';
+import { TUTORIAL_LIST } from './068-duel-tutorial.js';
 import { refreshBattle } from '../screens/combat/battle/battleStore.js';
 import {
   bdClass,
@@ -45,7 +45,7 @@ import {
 } from '../screens/combat/board/boardStore.js';
 
 // Guided turn flow (v4.78): steps read by the panel and the bottom bar (src/screens/combat/battle).
-export let flow478;
+export let turnFlow;
 
 // Startup statements, run in their original order (see index.js).
 export function __init() {
@@ -53,10 +53,10 @@ export function __init() {
     /* Images come from the img/ folder placed next to the file, like audio/.
      Without that folder, or in « Léger » (Light) mode, nothing changes: flat board from v4.76. */
     const TEX = ['grass', 'stone', 'water', 'sand', 'ash', 'marble', 'rune', 'mud', 'lava'];
-    const STATES = ['wet', 'mud', 'lava', 'dep430z', 'fog431t']; // cell states drawn on the cell: copied onto its texture
+    const STATES = ['wet', 'mud', 'lava', 'deploy-phase-z', 'fog-of-war-t']; // cell states drawn on the cell: copied onto its texture
     const OK = new Set();
     let artOk = false;
-    const richText = () => artOk && PREF.gfx477 !== 'leger';
+    const richText = () => artOk && PREF.graphicsMode !== 'leger';
     const inBattle = () => B && L.tiles && !$('#cbBattle').hidden;
     const rebuildAll = () => {
       if (inBattle()) {
@@ -82,11 +82,11 @@ export function __init() {
       'grass',
       () => {
         artOk = true;
-        document.body.classList.remove('no-art477');
+        document.body.classList.remove('no-no-art');
         TEX.slice(1).forEach(t => load(t, rebuildAll)); // no effect outside battle
         rebuildAll();
       },
-      () => document.body.classList.add('no-art477')
+      () => document.body.classList.add('no-no-art')
     );
 
     /* ---------- perspective: set on every board build ---------- */
@@ -160,17 +160,17 @@ export function __init() {
       return [`bg-${bio}-${h}.webp`, `bg-${bio}-jour.webp`, `bg-gue-${h}.webp`].map(img).join(',');
     };
     // horizon haze and moon tint: set here so the time of day can change mid-battle
-    // (React layers: .lum477.n and the #hz477 stops follow the « night » state)
+    // (React layers: .hazeLight.n and the #hazeGradient stops follow the « night » state)
     const tint = isNight => boardSet({ night: isNight }, 'defs', 'tilt');
     // night falls (or day breaks) during the battle: the painted backdrop cross-fades, the light follows
     const changeTime = () => {
       const bd = $('#bBoard'),
         h = hourOf(B);
-      L.h477 = h;
+      L.hourOfDay = h;
       const previous = getComputedStyle(bd).backgroundImage;
-      hostSet({ bg477: bgFill() });
-      // .fondu477 (old backdrop fading out): rendered by React (Board.jsx)
-      if (anim429() && previous && previous !== 'none') {
+      hostSet({ boardBg: bgFill() });
+      // .bgFade (old backdrop fading out): rendered by React (Board.jsx)
+      if (animEnabled() && previous && previous !== 'none') {
         const n = ((getHost().fade || {}).n || 0) + 1,
           fd = { n, bg: previous, va: false };
         hostSet({ fade: fd });
@@ -194,13 +194,13 @@ export function __init() {
       water(true); // recolored highlights (moon or sun)
     };
     const dress = () => {
-      // classes, --bg477, clouds and dust of #bBoard: rendered by React (« host » state of boardStore.js)
-      bdClass('tilt477', TILT.on);
+      // classes, --boardBg, clouds and dust of #bBoard: rendered by React (« host » state of boardStore.js)
+      bdClass('painted-tilt', TILT.on);
       if (!TILT.on) {
-        hostSet({ bg477: undefined, cs477: false, amb477: null });
+        hostSet({ boardBg: undefined, cloudShade: false, ambience: null });
         return;
       }
-      hostSet({ bg477: bgFill() });
+      hostSet({ boardBg: bgFill() });
       if (SCEN[B.sc].bio === 'arene') {
         const t = { roche: 'stone', tour: 'rune', ligue: 'marble' }[placeLabel()];
         if (OK.has(t)) {
@@ -208,8 +208,8 @@ export function __init() {
         } // renderBoard applies this pattern to each cell
       }
       // painted textures inside the existing patterns (renderBoard already picks them per cell)
-      TEX.forEach(t => bdClass('has-' + t + '477', OK.has(t)));
-      const tex477 = TEX.filter(t => OK.has(t)); // patterns replaced by the image (React <defs> layer)
+      TEX.forEach(t => bdClass('has-' + t, OK.has(t)));
+      const paintedTextures = TEX.filter(t => OK.has(t)); // patterns replaced by the image (React <defs> layer)
       // earth slab: each cell sits on a darker pedestal, visible on the player's side
       const lip = [];
       for (const k in B.tiles) {
@@ -229,13 +229,13 @@ export function __init() {
         copyText(k);
       }
       if (window.MutationObserver) {
-        if (L.mo477) {
-          L.mo477.disconnect();
+        if (L.mutationObserver) {
+          L.mutationObserver.disconnect();
         }
-        L.mo477 = new MutationObserver(ms =>
+        L.mutationObserver = new MutationObserver(ms =>
           ms.forEach(m => m.target.dataset.k && L.tx[m.target.dataset.k] && copyText(m.target.dataset.k))
         );
-        L.mo477.observe(L.tiles, { subtree: true, attributes: true, attributeFilter: ['class'] });
+        L.mutationObserver.observe(L.tiles, { subtree: true, attributes: true, attributeFilter: ['class'] });
       }
       // A–H / 1–6 landmarks re-aligned to the edge of the tilted board
       const ax = [],
@@ -260,13 +260,13 @@ export function __init() {
         }
       }
       // overall light: haze toward the horizon, moon tint at night (fixed layers, nothing moves)
-      // #cp477 clip: pedestals and cells; everything is drawn by the board's React layers
+      // #lipClip clip: pedestals and cells; everything is drawn by the board's React layers
       const H = VB()[1],
         isNight = hourOf(B) === 'nuit',
         backgroundY = HC(VERT ? K(BW - 1, 0) : K(0, 0))[1] - BG.S;
       boardSet(
         {
-          tex477,
+          paintedTextures,
           lip,
           ax,
           hz: [backgroundY.toFixed(1), (backgroundY + (H - backgroundY) * 0.55).toFixed(1)],
@@ -275,7 +275,7 @@ export function __init() {
         'defs',
         'tilt'
       );
-      L.h477 = hourOf(B);
+      L.hourOfDay = hourOf(B);
       cloudList();
       ambiance();
       water();
@@ -293,24 +293,24 @@ export function __init() {
     HOOKS.plateau.push(() => {
       if (B !== lastFight) {
         lastFight = B;
-        if (TILT.on && anim429()) {
-          bdReplay('entree477');
-          bdClass('entree477', true);
+        if (TILT.on && animEnabled()) {
+          bdReplay('entrance-fx');
+          bdClass('entrance-fx', true);
           clearTimeout(endEntry);
-          endEntry = setTimeout(() => bdClass('entree477', false), 1800);
+          endEntry = setTimeout(() => bdClass('entrance-fx', false), 1800);
         }
       }
     });
     HOOKS.plateau.push(dress);
 
     /* ---------- animations: jump while moving, dust on landing ---------- */
-    const tempo = () => (PREF.fast || ui.turbo428 ? 0.6 : 1); // same rule as --tk429 (quick battle)
+    const tempo = () => (PREF.fast || ui.skipSpeedup ? 0.6 : 1); // same rule as --animScale (quick battle)
     const skip = (T, x, y, s) => {
-      if (!anim429()) {
+      if (!animEnabled()) {
         return;
       }
       const ms = 850 * tempo();
-      replay429(T, 'hop477', ms);
+      replayAnimation(T, 'hop', ms);
       if (!fxOn() || !fxPrep()) {
         return;
       }
@@ -348,7 +348,7 @@ export function __init() {
       return [FXS.ox + x * FXS.s, FXS.oy + (y + 9 * s) * FXS.s, s * FXS.s];
     };
     const ripple = (u, col) => {
-      if (!TILT.on || !anim429() || !fxOn() || !fxPrep()) {
+      if (!TILT.on || !animEnabled() || !fxOn() || !fxPrep()) {
         return;
       }
       const [px, py, k] = footPos(u);
@@ -375,7 +375,7 @@ export function __init() {
       }
     });
     const fall = u => {
-      if (!TILT.on || !anim429() || !fxOn() || !fxPrep()) {
+      if (!TILT.on || !animEnabled() || !fxOn() || !fxPrep()) {
         return;
       }
       const [px, py, k] = footPos(u),
@@ -409,11 +409,11 @@ export function __init() {
     };
 
     /* cloud shadows drifting across the board by day (separate layer: only the graphics card works) */
-    // .cs477: rendered by React (Board.jsx)
+    // .cloudShade: rendered by React (Board.jsx)
     const cloudList = () => {
       const on = !(!TILT.on || RM || hourOf(B) === 'nuit');
-      if (getHost().cs477 !== on) {
-        hostSet({ cs477: on });
+      if (getHost().cloudShade !== on) {
+        hostSet({ cloudShade: on });
       }
     };
 
@@ -422,15 +422,15 @@ export function __init() {
       jour: { gue: '#fff1b8', roche: '#f2d7a6', tour: '#e2c8ff', ligue: '#ffe28a' },
       nuit: { gue: '#d8ff7a', roche: '#ffc27a', tour: '#c79bff', ligue: '#cfe0ff' },
     };
-    // .amb477: rendered by React (Board.jsx), recreated when the time or place changes (key)
+    // .ambience: rendered by React (Board.jsx), recreated when the time or place changes (key)
     const ambiance = () => {
-      const n = getHost().amb477;
+      const n = getHost().ambience;
       const h = hourOf(B),
         l = placeLabel(),
         key = h + '-' + l;
-      if (!TILT.on || !anim429()) {
+      if (!TILT.on || !animEnabled()) {
         if (n) {
-          hostSet({ amb477: null });
+          hostSet({ ambience: null });
         }
         return;
       }
@@ -451,12 +451,14 @@ export function __init() {
           animationDelay: '-' + (r(7) * 15).toFixed(1) + 's',
         });
       }
-      hostSet({ amb477: { k: key, h, c: (AMB[h] || AMB.jour)[l] || AMB[h === 'nuit' ? 'nuit' : 'jour'].gue, items } });
+      hostSet({
+        ambience: { k: key, h, c: (AMB[h] || AMB.jour)[l] || AMB[h === 'nuit' ? 'nuit' : 'jour'].gue, items },
+      });
     };
 
     /* water reflection: a band of light slides over the water cells, sparkles glint;
      follows the tide of the Water Gym (resynchronized on every board render) */
-    // .eau477 layer, #eau477g gradient and #eau477c clip: drawn by React (« eau » (water) state);
+    // .lake layer, #lakeG gradient and #lakeC clip: drawn by React (« eau » (water) state);
     // color (moon or sun) and animation fixed at creation, recreated when the time changes (fresh)
     const water = freshNode => {
       if (!TILT.on || !L.tiles || !B) {
@@ -471,10 +473,10 @@ export function __init() {
         }
         return;
       }
-      boardSet({ eau: { id, keyList: keys, nuit: hourOf(B) === 'nuit', fixed: !anim429() } }, 'defs', 'eau');
+      boardSet({ eau: { id, keyList: keys, nuit: hourOf(B) === 'nuit', fixed: !animEnabled() } }, 'defs', 'eau');
     };
     HOOKS.boardRendered.push(() => {
-      if (TILT.on && L.h477 && L.h477 !== hourOf(B)) {
+      if (TILT.on && L.hourOfDay && L.hourOfDay !== hourOf(B)) {
         changeTime();
       }
       water();
@@ -486,7 +488,7 @@ export function __init() {
       if (!TILT.on || !L.units || !L.uo) {
         return;
       }
-      const y = id => L.u[id] && L.u[id].y477,
+      const y = id => L.u[id] && L.u[id].sortY,
         toks = L.uo.filter(id => y(id) != null),
         tri = toks.slice().sort((a, b) => y(a) - y(b));
       if (tri.every((n, i) => n === toks[i])) {
@@ -505,15 +507,15 @@ export function __init() {
           s = Math.max(0.6, Math.min(1.4, tiltS(x, y)));
         T.tr = `translate(${x}px,${y}px) scale(${s.toFixed(3)})`; // token: Units.jsx (sliding: CSS transition)
         unitsDirty();
-        if (T.k477 && T.k477 !== k && !u.ko) {
+        if (T.lastKind && T.lastKind !== k && !u.ko) {
           skip(T, x, y, s);
         }
-        T.k477 = k;
-        if (u.ko && T.ko477 === false) {
+        T.lastKind = k;
+        if (u.ko && T.koSeen === false) {
           fall(u);
         }
-        T.ko477 = !!u.ko;
-        T.y477 = y;
+        T.koSeen = !!u.ko;
+        T.sortY = y;
         clearTimeout(sort.t);
         sort.t = setTimeout(sort, 950 * tempo()); // after the slide: re-inserting cuts the transition
       }
@@ -521,9 +523,9 @@ export function __init() {
 
     /* names above all Pokémon: a large Pokémon in front no longer hides the name of the one behind */
     const topName = T => {
-      // .nms477 layer (React): the name goes into its .nmw477 wrapper, which follows the classes and
+      // .namesHigh layer (React): the name goes into its .nameWrap wrapper, which follows the classes and
       // the token's position (NamesHigh, Units.jsx); nmO: draw order
-      if (!L.fl || !L.nm477 || !L.nm477.isConnected) {
+      if (!L.fl || !L.nameTags || !L.nameTags.isConnected) {
         return;
       }
       if (!T.nmO) {
@@ -543,9 +545,9 @@ export function __init() {
     HOOKS.illustration.push(u => {
       const T = L.u && L.u[u.uid];
       // token template, rendered by Units.jsx
-      if (T && T.imOn && !T.w477 && T.b) {
-        // only the illustration breathes and jumps (.tok-st477 group): the ring stays on the ground
-        T.w477 = true;
+      if (T && T.imOn && !T.artGrouped && T.b) {
+        // only the illustration breathes and jumps (.tok-stand group): the ring stays on the ground
+        T.artGrouped = true;
         unitsDirty();
       }
       if (T && T.imOn) {
@@ -560,24 +562,24 @@ export function __init() {
     /* ---------- Settings › Pokémon Skin: Rich / Light graphics ---------- */
     // « Graphismes » (Graphics) button of « Habillage Pokémon » (Pokémon Skin): rendered by React (src/screens/settings/panels/PokemonSkin.jsx)
     document.addEventListener('click', e => {
-      if (!(e.target.closest && e.target.closest('[data-pk477]'))) {
+      if (!(e.target.closest && e.target.closest('[data-gfx-toggle]'))) {
         return;
       }
-      PREF.gfx477 = PREF.gfx477 === 'leger' ? 'riche' : 'leger';
+      PREF.graphicsMode = PREF.graphicsMode === 'leger' ? 'riche' : 'leger';
       savePref();
       renderParams();
       rebuildAll();
     });
-    window.__gfx477 = { TILT, OK, riche: richText, rebuild: rebuildAll };
+    window.__paintedGfx = { TILT, OK, riche: richText, rebuild: rebuildAll };
   })();
 
   /* ==== v4.78: guided turn flow ====
    Each Pokémon follows Move → Act → End. Each step is skipped with an
    explicit tap (« Rester ici » (Stay here), « Passer l'action » (Skip action), « Terminer » (Finish)); the round ends
    by itself once everyone is done: no more « Fin du tour » (End turn) to press during your phase.
-   u.rst478 / u.fin478: round number in which the Pokémon stayed in place / finished. */
+   u.restartedRound / u.finishedRound: round number in which the Pokémon stayed in place / finished. */
   (() => {
-    const active = () => !!(B && !B.over && B.phase === 'player' && !B.dep430 && !ui.cutscene);
+    const active = () => !!(B && !B.over && B.phase === 'player' && !B.deployPhase && !ui.cutscene);
     // riddle: « Fin du tour » (End turn) stays visible, it is the button to give up
     const guide = () => active() && !ui.busy && B.sc !== 'enigme431';
     /** The Pokémon the active player is currently commanding. */
@@ -586,27 +588,27 @@ export function __init() {
         const c = currentActor(S);
         return c && c.side === 'a' ? [c] : [];
       }
-      return S.units.filter(u => u.side === 'a' && !u.ko && (!S.coop || player418(u) === S.coop));
+      return S.units.filter(u => u.side === 'a' && !u.ko && (!S.coop || coopPlayer(u) === S.coop));
     }
     const hitAndRun = u => !!(u.hr && !u.moved);
     const retrigger = S => S.voice >= 2 && !S.retrigger;
     /** deplacer | agir | extra | fini */
     function step(S, u) {
-      if (!u || u.ko || u.sn || u.fin478 === S.round) {
+      if (!u || u.ko || u.sn || u.finishedRound === S.round) {
         return 'fini';
       }
       if (!u.acted) {
-        return u.moved || u.restart478 === S.round ? 'agir' : 'deplacer';
+        return u.moved || u.restartedRound === S.round ? 'agir' : 'deplacer';
       }
       return hitAndRun(u) || retrigger(S) ? 'extra' : 'fini';
     }
     const remaining = S => toPlay(S).filter(u => step(S, u) !== 'fini');
     // panel (current step and skip button) and bottom bar: rendered by React (Panel.jsx, Foot.jsx)
-    flow478 = { active, guide, toPlay, repli: hitAndRun, retrigger, stepOf: step, remaining };
+    turnFlow = { active, guide, toPlay, repli: hitAndRun, retrigger, stepOf: step, remaining };
 
     /* ---------- « Rester ici », « Passer l'action », « Terminer » buttons ---------- */
     $('#bPanel').addEventListener('click', e => {
-      const b = e.target.closest('[data-vx$="478"]');
+      const b = e.target.closest('[data-vx="stay-put"],[data-vx="skip-action"],[data-vx="finished-round"]');
       if (!b || !B || ui.busy || B.over) {
         return;
       }
@@ -614,10 +616,10 @@ export function __init() {
       if (!u || u.ko) {
         return;
       }
-      if (b.dataset.vx === 'rester478') {
-        u.restart478 = B.round;
+      if (b.dataset.vx === 'stay-put') {
+        u.restartedRound = B.round;
       } else {
-        u.fin478 = B.round;
+        u.finishedRound = B.round;
         ui.undo = null; // the choice is made: no going back on the move
       }
       clearAim();
@@ -636,9 +638,9 @@ export function __init() {
     });
 
     /* ---------- on to the next: when the tracked Pokémon is done, move to the next one ---------- */
-    function following478() {
+    function followMover() {
       if (!active() || ui.busy) {
-        ui.fl478 = null;
+        ui.turnGuide = null;
         return;
       }
       if (ui.selE || ui.mode) {
@@ -649,7 +651,7 @@ export function __init() {
       if (!rest.length) {
         return;
       }
-      if (!u || u.ko || (step(B, u) === 'fini' && ui.fl478 === u.uid)) {
+      if (!u || u.ko || (step(B, u) === 'fini' && ui.turnGuide === u.uid)) {
         const order = toPlay(B),
           i = u ? order.indexOf(u) : -1;
         const nx = rest.find(x => order.indexOf(x) > i) || rest[0];
@@ -658,13 +660,13 @@ export function __init() {
       }
       const s = ui.sel && byUid(B, ui.sel);
       if (s && step(B, s) !== 'fini') {
-        ui.fl478 = s.uid;
+        ui.turnGuide = s.uid;
       }
     }
 
     /* ---------- automatic end of round ---------- */
-    let T478 = 0;
-    const key478 = () =>
+    let autoEndTimer = 0;
+    const flowKey = () =>
       B
         ? [
             B.round,
@@ -673,23 +675,23 @@ export function __init() {
             B.order === 'vitesse' ? (currentActor(B) || {}).uid : '',
           ].join(':')
         : '';
-    const isReady478 = () =>
+    const isFlowReady = () =>
       active() &&
       !ui.busy &&
       !ui.mode &&
       !remaining(B).length &&
       $('#evoPick').hidden &&
       (B.order !== 'vitesse' || (currentActor(B) || {}).side === 'a');
-    function schedule478() {
-      if (T478 || !isReady478()) {
+    function scheduleAutoEnd() {
+      if (autoEndTimer || !isFlowReady()) {
         return;
       }
       const S = B,
-        k = key478();
-      T478 = setTimeout(
+        k = flowKey();
+      autoEndTimer = setTimeout(
         () => {
-          T478 = 0;
-          if (B !== S || key478() !== k || !isReady478()) {
+          autoEndTimer = 0;
+          if (B !== S || flowKey() !== k || !isFlowReady()) {
             return;
           }
           if (!B.coop && !B.duel433 && B.order !== 'vitesse' && B.sc !== 'enigme431') {
@@ -699,13 +701,13 @@ export function __init() {
           // bubbling: otherwise the document's « Passer » (Skip) listener would immediately speed up the opponent's turn.
           $('#bEnd').dispatchEvent(new MouseEvent('click', { bubbles: false, cancelable: true }));
         },
-        dl428(250, 500, 900)
+        battleDelay(250, 500, 900)
       );
     }
 
     /* ---------- bottom bar: no more « Fin du tour » during your phase ---------- */
     // the bar (hidden button, the Pokémon's step on phone, phase) is computed by Foot.jsx
-    const footPos478 = () => refreshBattle('foot');
+    const refreshFootPos = () => refreshBattle('foot');
 
     /* ---------- keyboard: Space (or E) skips the step instead of ending the turn ---------- */
     window.addEventListener(
@@ -726,7 +728,7 @@ export function __init() {
         }
         e.preventDefault();
         e.stopImmediatePropagation();
-        const b = document.querySelector('#bPanel .fl478 [data-vx]');
+        const b = document.querySelector('#bPanel .turn-guide [data-vx]');
         if (b) {
           b.click();
         }
@@ -736,13 +738,13 @@ export function __init() {
 
     HOOKS.beforeRender.push(() => {
       if (B) {
-        following478();
+        followMover();
       }
     });
     HOOKS.rendered.push(() => {
       if (B) {
-        footPos478();
-        schedule478();
+        refreshFootPos();
+        scheduleAutoEnd();
       }
     });
 
@@ -757,24 +759,24 @@ export function __init() {
           'Chaque Pokémon se déplace (ou « Rester ici »), puis agit (ou « Passer l’action »). Quand tous ont joué, la manche se termine seule : les adversaires se déplacent, puis attaquent.';
         s.sel = '#bPanel';
       });
-      const t0 = TUTORIAL_STEPS433.find(x => x.k === 'tour');
+      const t0 = TUTORIAL_LIST.find(x => x.k === 'tour');
       if (t0) {
         t0.d = t0.d.replace(
           'Quand tout le monde a joué, « Fin du tour » : les adversaires agissent à leur tour.',
           'Le panneau vous guide : chaque Pokémon se déplace (ou « Rester ici »), puis agit (ou « Passer l’action »). Quand tout le monde a joué, la manche se termine seule et les adversaires agissent.'
         );
       }
-      NEWS416.unshift([
+      NEWS_ENTRIES.unshift([
         'i-play',
         'Tour guidé',
         'En combat, le panneau vous guide pour chaque Pokémon : déplacer, agir, terminer. La manche se termine seule quand tout le monde a joué.',
         null,
       ]);
-      NEWS416.splice(8);
+      NEWS_ENTRIES.splice(8);
     } catch {
       /* Best effort: failure here is non-fatal. */
     }
 
-    window.__flow478 = { stepOf: step, remaining, toPlay, jeu: () => ({ B, ui }) };
+    window.__turnFlowDebug = { stepOf: step, remaining, toPlay, jeu: () => ({ B, ui }) };
   })();
 }

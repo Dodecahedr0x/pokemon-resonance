@@ -7,7 +7,7 @@ import Panel from './Panel.jsx';
 import Footer from './Footer.jsx';
 import Log from './Log.jsx';
 import EvoPick from './EvoPick.jsx';
-import Sheet444 from './Sheet444.jsx';
+import CellSheet from './CellSheet.jsx';
 
 // Battle screen (#cbBattle) around the board: the board (#bBoard) is passed as a child.
 // Shown and hidden by the engine (hidden attribute); each part follows its version (battleStore.js).
@@ -36,7 +36,7 @@ export default function Battle({ children }) {
         </aside>
       </div>
       <EvoPick />
-      <Sheet444 />
+      <CellSheet />
     </div>
   );
 }
@@ -49,7 +49,7 @@ function Defense() {
     return null;
   }
   return (
-    <div id="df468hud">
+    <div id="defense-gym-hud">
       <b>
         Vague {D.w} / {DEF_WAVES}
       </b>

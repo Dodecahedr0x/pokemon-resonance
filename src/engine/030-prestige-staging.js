@@ -16,23 +16,23 @@ import { fxOn } from './028-move-effects.js';
 import { musStart } from './070-theme-music-player.js';
 import { RIVAL, RIVAL_STEPS, legOf, rivalIdx, styleOf } from './043-adventure-plus.js';
 import { dissonanceOf } from './050-world.js';
-import { chapJ415, leadJ415 } from './054-johto.js';
-import { leader429 } from './064-quality.js';
-import { tipVs448 } from './079-immersion-sound-haptics.js';
-import { vsAv450 } from './080-trainer-avatar-rare-encounters.js';
+import { johtoChapter, johtoLeader } from './054-johto.js';
+import { scenarioLeader } from './064-quality.js';
+import { versusTip } from './079-immersion-sound-haptics.js';
+import { versusAvatar } from './080-trainer-avatar-rare-encounters.js';
 import { shut, updateTemp, openOverlay } from '../screens/overlays/tempStore.js';
 
 export let AUTO;
 let LASTPH;
 
 export function leaderOf(sc) {
-  const jl = leadJ415(sc); // Johto (v4.15)
+  const jl = johtoLeader(sc); // Johto (v4.15)
   if (jl) {
     return jl;
   }
-  const l429 = leader429(sc); // Kael, Sirène, legends to capture (v4.29)
-  if (l429) {
-    return l429;
+  const leaderInfo = scenarioLeader(sc); // Kael, Sirène, legends to capture (v4.29)
+  if (leaderInfo) {
+    return leaderInfo;
   }
   const i = ARENAS.findIndex(a => a.k === sc);
   if (i >= 0) {
@@ -62,7 +62,7 @@ export function leaderOf(sc) {
 
 /* --- Guide: the universe, rendered by React (Universe.jsx) --- */
 
-// Transient window (#vs, #hp452, #evs454…): rendered by React (src/screens/overlays/Transients.jsx),
+// Transient window (#vs, #battleHelp, #eventChoice…): rendered by React (src/screens/overlays/Transients.jsx),
 // at the end of the shell, in opening order. Returns the node; close(id) removes it.
 export function overlay(id, data) {
   return openOverlay(id, data);
@@ -106,7 +106,7 @@ export function vsIntro() {
     dur,
     k1: B.duel433 ? 'Joueur 1' : 'Votre équipe',
     al: al.map(u => u.t),
-    av: vsAv450(), // trainer emblem (v4.50)
+    av: versusAvatar(), // trainer emblem (v4.50)
     name1: B.duel433 ? B.duel433.names[0] : PROFILE.name || 'Dresseur',
     em1: al.map(u => u.n).join(' · '),
     ac: D.at ? tc(D.at) : 'var(--gold)',
@@ -117,7 +117,7 @@ export function vsIntro() {
     em2: B.duel433 ? 'Joueur 2' : L ? L.t : D.lvl || '',
     q: L ? L.q : null,
     rule: `${D.rule && GYMS[ri] ? GYMS[ri].r : D.n}${styleOf(B.sc) ? ` · Style : ${styleOf(B.sc).n}` : ''} · ${B.lim} manches`,
-    tip: tipVs448(), // tip under the presentation (v4.48)
+    tip: versusTip(), // tip under the presentation (v4.48)
   });
   let done = false;
   const close = () => {
@@ -463,7 +463,7 @@ export const UNIV = [
 ];
 
 export const CHAP = k => {
-  const jc = chapJ415(k); // Johto (v4.15)
+  const jc = johtoChapter(k); // Johto (v4.15)
   if (jc) {
     return jc;
   }

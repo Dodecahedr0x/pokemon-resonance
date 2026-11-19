@@ -7,15 +7,15 @@ const DEPLOYMENTS = [
   ['jamais', 'Jamais'],
 ];
 
-// Deployment before the battle (depHtml430). The engine handles data-dep430.
+// Deployment before the battle. The engine handles data-deploy-phase.
 function Deployment() {
-  const v = PREF.dep430 || 'grands';
+  const v = PREF.deployPhase || 'grands';
   return (
-    <div className="v4-fld dep430f">
+    <div className="v4-fld deploy-phase-f">
       <span>Déploiement avant le combat</span>
       <div className="v4-seg" role="group" aria-label="Déploiement">
         {DEPLOYMENTS.map(([k, n]) => (
-          <button key={k} type="button" data-dep430={k} aria-pressed={v === k}>
+          <button key={k} type="button" data-deploy-phase={k} aria-pressed={v === k}>
             {n}
           </button>
         ))}
@@ -78,21 +78,21 @@ export default function Combat() {
       />
       <Switch k="fast" on={PREF.fast} lab="Combat rapide" sub="Animations et présentations plus courtes" />
       <Switch
-        k="anim429"
-        on={PREF.anim429 !== false}
+        k="animEnabled"
+        on={PREF.animEnabled !== false}
         lab="Pokémon animés"
         sub="Souffle au repos, bond vers la cible, recul sous les coups"
       />
       <Switch
-        k="tips429"
-        on={PREF.tips429 !== false}
+        k="seenTips"
+        on={PREF.seenTips !== false}
         lab="Astuces du Prof."
         sub="Une explication la première fois qu’une mécanique apparaît en combat"
       />
       <Deployment />
       <Switch
-        k="fog431"
-        on={PREF.fog431}
+        k="fogOfWar"
+        on={PREF.fogOfWar}
         lab="Brouillard de guerre"
         sub="Vous ne voyez que ce que vos Pokémon voient : 2 cases, 3 pour Vol et Psy, une de moins la nuit. +25 % de Pokédollars en victoire."
       />

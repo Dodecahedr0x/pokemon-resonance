@@ -1,39 +1,45 @@
 import { ownedFam } from '../../engine/032-v4-foundation.js';
 import { DEXS } from '../../engine/038-pokedex.js';
-import { PAL454, msSt454, week454, txt454, typesMs454 } from '../../engine/084-peddler-route-missions.js';
+import {
+  MISSION_TIERS,
+  missionState,
+  weekKey,
+  rewardText,
+  typeProgress,
+} from '../../engine/084-peddler-route-missions.js';
 
-// Pokédex missions (#ms454, v4.54): species tiers and specialists of the week.
-// Claiming (data-ms454) is still handled by the engine.
+// Pokédex missions (#dexMission, v4.54): species tiers and specialists of the week.
+// Claiming (data-dex-mission) is still handled by the engine.
 export default function Missions() {
-  const S = msSt454(),
+  const S = missionState(),
     n = DEXS.filter(m => ownedFam(m.id)).length;
-  const pals = PAL454.filter(p => !S.pal[p[0]]).slice(0, 2);
-  const w = week454();
+  const pals = MISSION_TIERS.filter(p => !S.pal[p[0]]).slice(0, 2);
+  const w = weekKey();
   return (
-    <section id="ms454" className="ms454 v4-panel">
+    <section id="dex-mission" className="dex-mission v4-panel">
       <h3>Missions du Pokédex</h3>
       {pals.map(([k, r]) => {
         const ok = n >= k;
         return (
-          <div className={`ms454-r${ok ? ' ok' : ''}`} key={'p' + k}>
+          <div className={`dex-mission-r${ok ? ' ok' : ''}`} key={'p' + k}>
             <div>
               <b>{`Capturer ${k} espèces`}</b>
               <i>
                 <u style={{ width: Math.min(100, (n / k) * 100) + '%' }} />
               </i>
-              <small>{`${Math.min(n, k)} / ${k} · ${txt454(r)}`}</small>
+              <small>{`${Math.min(n, k)} / ${k} · ${rewardText(r)}`}</small>
             </div>
-            <button type="button" className="v4-btn" data-ms454={`p:${k}`} disabled={!ok}>
+            <button type="button" className="v4-btn" data-dex-mission={`p:${k}`} disabled={!ok}>
               {ok ? 'Réclamer' : '—'}
             </button>
           </div>
         );
       })}
-      {typesMs454().map(({ t, n: need, own }) => {
+      {typeProgress().map(({ t, n: need, own }) => {
         const done = S.ty[w + t],
           ok = own >= need;
         return (
-          <div className={`ms454-r${ok && !done ? ' ok' : ''}${done ? ' done' : ''}`} key={'t' + t}>
+          <div className={`dex-mission-r${ok && !done ? ' ok' : ''}${done ? ' done' : ''}`} key={'t' + t}>
             <div>
               <b>
                 {`Spécialiste ${t} `}
@@ -44,7 +50,7 @@ export default function Missions() {
               </i>
               <small>{`${Math.min(own, need)} / ${need} Pokémon de type ${t} · +1 Éclat`}</small>
             </div>
-            <button type="button" className="v4-btn" data-ms454={`t:${t}`} disabled={!(ok && !done)}>
+            <button type="button" className="v4-btn" data-dex-mission={`t:${t}`} disabled={!(ok && !done)}>
               {done ? 'Fait' : ok ? 'Réclamer' : '—'}
             </button>
           </div>

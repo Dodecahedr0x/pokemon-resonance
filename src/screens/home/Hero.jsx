@@ -4,8 +4,8 @@ import { squad } from '../../engine/020-team-cards.js';
 import { PROF_AV, emblem, goalChips, goalInfo, professorMsg } from '../../engine/031-home-journey.js';
 import { ART } from '../../engine/032-v4-foundation.js';
 import { shinyStyle } from '../../engine/043-adventure-plus.js';
-import { hero428 } from '../../engine/063-combat-catches-home.js';
-import { alive450 } from '../../engine/082-living-home-weather.js';
+import { heroView } from '../../engine/063-combat-catches-home.js';
+import { homeSkyInfo } from '../../engine/082-living-home-weather.js';
 
 // Home hero (#hmHero): next step (old renderHome), living backdrop depending on the
 // region and time with the companion (v4.28), season and weather of the day (v4.52).
@@ -16,8 +16,8 @@ export default function Hero({ on }) {
   const g = goalInfo(),
     S = g.S,
     C = g.C,
-    V = hero428(g),
-    W = alive450(),
+    V = heroView(g),
+    W = homeSkyInfo(),
     m = V.m;
   const title = g.k === 'tuto' ? 'L’aventure commence ici…' : (C && C.t) || S.n;
   const sub =
@@ -30,36 +30,38 @@ export default function Hero({ on }) {
     ) : null;
   return (
     <div
-      className="v4-hero hv428on"
+      className="v4-hero hero-banner-on"
       id="hmHero"
       style={{ '--ac': g.type ? tc(g.type) : '#FFD45B' }}
       data-reg={V.reg}
       data-tod={V.tod}
     >
-      <div className="hv428" aria-hidden="true">
-        <span className="hv428-bg" />
-        <span className="hv428-tod" />
-        <span className="hv428-shade" />
-        {W && <span className={'hv450s hv450-' + W.se} data-s={W.se} />}
+      <div className="hero-banner" aria-hidden="true">
+        <span className="hero-banner-bg" />
+        <span className="hero-banner-tod" />
+        <span className="hero-banner-shade" />
+        {W && <span className={'heroenv-s heroenv-' + W.se} data-s={W.se} />}
         {W && W.wx && (
-          <span className={'hv450w wx448 wx448-' + W.wx} data-k={W.wx}>
+          <span className={'heroenv-w board-weather board-weather-' + W.wx} data-k={W.wx}>
             <i />
             <i />
           </span>
         )}
       </div>
-      <span className="hv428-tag">{V.tag}</span>
+      <span className="hero-banner-tag">{V.tag}</span>
       {m && (
         <button
           type="button"
-          className={'hv428-comp' + (V.sh ? ' shiny' : '')}
-          data-hv428={V.comp ? 'calin' : 'choisir'}
+          className={'hero-banner-comp' + (V.sh ? ' shiny' : '')}
+          data-hero-banner={V.comp ? 'calin' : 'choisir'}
           aria-label={V.comp ? `Câliner ${m.n}` : 'Choisir un compagnon'}
           style={V.sh ? parseStyle(shinyStyle(m.base)) : undefined}
         >
-          <span className="hv428-sol" />
+          <span className="hero-banner-sol" />
           <img src={ART(m.no)} alt="" decoding="async" />
-          <span className="hv428-n">{V.comp ? `${m.n} ${'♥'.repeat(Math.max(1, V.hearts))}` : 'Un compagnon ?'}</span>
+          <span className="hero-banner-n">
+            {V.comp ? `${m.n} ${'♥'.repeat(Math.max(1, V.hearts))}` : 'Un compagnon ?'}
+          </span>
         </button>
       )}
       <div className="v4h-body">
@@ -115,7 +117,7 @@ export default function Hero({ on }) {
           </p>
         </div>
       </div>
-      {W && <span className="hv450c">{W.txt}</span>}
+      {W && <span className="heroenv-c">{W.txt}</span>}
     </div>
   );
 }

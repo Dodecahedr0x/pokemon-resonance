@@ -1,10 +1,10 @@
 import { PREF } from '../../../engine/026-campaign-tutorial-sound.js';
 
-// Settings › Battle display (v4.44): data-b444 buttons handled by the engine (module 077).
+// Settings › Battle display (v4.44): data-tool-action buttons handled by the engine (module 077).
 export default function BattleDisplay() {
-  const fs = document.body.classList.contains('fs444');
+  const fs = document.body.classList.contains('fullscreen-mode');
   return (
-    <section className="v4-panel" id="af444">
+    <section className="v4-panel" id="battle-display-panel">
       <h3 className="h3">Affichage du combat</h3>
       <p className="v4-note">
         Plein écran : le navigateur masque ses barres quand il l’autorise, et en combat sur téléphone la barre de
@@ -12,11 +12,11 @@ export default function BattleDisplay() {
         un appui long sur une case (ou la loupe) affiche son détail.
       </p>
       <div className="sv-io">
-        <button type="button" className={`b b-sm${fs ? ' b-gold' : ''}`} data-b444="pfs">
+        <button type="button" className={`b b-sm${fs ? ' b-gold' : ''}`} data-tool-action="pfs">
           {fs ? 'Plein écran : activé' : 'Plein écran : désactivé'}
         </button>
-        <button type="button" className={`b b-sm${PREF.ct444 ? ' b-gold' : ''}`} data-b444="pct">
-          {PREF.ct444 ? 'Plateau contrasté : activé' : 'Plateau contrasté : désactivé'}
+        <button type="button" className={`b b-sm${PREF.boardContrast ? ' b-gold' : ''}`} data-tool-action="pct">
+          {PREF.boardContrast ? 'Plateau contrasté : activé' : 'Plateau contrasté : désactivé'}
         </button>
       </div>
     </section>

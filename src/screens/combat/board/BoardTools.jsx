@@ -1,6 +1,6 @@
 // Board toolbar (v4.44): fullscreen, magnifier, high-contrast board, help.
 // Large screen: corner of the board (#bBoard); phone: in the bottom bar (.bt-foot).
-// State set by bar444 (engine, 077) in getHost().bt444; delegated engine clicks.
+// State set by syncBoardTools (engine, 077) in getHost().boardTools; delegated engine clicks.
 
 const IC = {
   fs: 'M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5',
@@ -18,13 +18,13 @@ function Ico({ d, full: fullAmount }) {
   );
 }
 
-export default function Tools444({ b }) {
+export default function BoardTools({ b }) {
   const fsT = b.fs ? 'Quitter le plein écran' : 'Plein écran';
   return (
-    <div id="bt444" className={'bt444' + (b.foot ? ' in-foot' : '')}>
+    <div id="board-tools" className={'board-tools' + (b.foot ? ' in-foot' : '')}>
       <button
         type="button"
-        data-b444="fs"
+        data-tool-action="fs"
         className={b.fs ? 'on' : ''}
         aria-pressed={b.fs}
         aria-label={fsT}
@@ -34,7 +34,7 @@ export default function Tools444({ b }) {
       </button>
       <button
         type="button"
-        data-b444="lp"
+        data-tool-action="lp"
         className={b.lp ? 'on' : ''}
         aria-pressed={b.lp}
         aria-label="Loupe : lire le détail d’une case"
@@ -44,7 +44,7 @@ export default function Tools444({ b }) {
       </button>
       <button
         type="button"
-        data-b444="ct"
+        data-tool-action="ct"
         className={b.ct ? 'on' : ''}
         aria-pressed={b.ct}
         aria-label="Plateau contrasté"
@@ -54,7 +54,7 @@ export default function Tools444({ b }) {
       </button>
       <button
         type="button"
-        data-b452="help"
+        data-help-action="help"
         aria-label="Aide du combat"
         title="Aide : ce qui compte maintenant"
         style={{ font: '800 17px/1 var(--f-d)' }}

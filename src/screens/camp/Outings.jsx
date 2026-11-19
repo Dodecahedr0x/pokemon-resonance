@@ -1,10 +1,10 @@
 import { routeName } from '../../engine/054-johto.js';
 
-// An outing (data-sortie430, handled by the engine).
+// An outing (data-outing, handled by the engine).
 function Outing({ k, ic, b, d }) {
   return (
-    <button type="button" className="so430" data-sortie430={k}>
-      <span className="so430-ic">
+    <button type="button" className="outing-btn" data-outing={k}>
+      <span className="outing-btn-ic">
         <svg>
           <use href={`#${ic}`} />
         </svg>
@@ -13,14 +13,14 @@ function Outing({ k, ic, b, d }) {
         <b>{b}</b>
         <em>{d}</em>
       </span>
-      <svg className="so430-go">
+      <svg className="outing-btn-go">
         <use href="#i-chevr" />
       </svg>
     </button>
   );
 }
 
-// Contents of #sort430 (v4.30): shortcuts to the tall grass, the Safari, the Tower, friends, the weekly challenge.
+// Contents of #outingsPanel (v4.30): shortcuts to the tall grass, the Safari, the Tower, friends, the weekly challenge.
 export default function Outings() {
   return (
     <>
@@ -30,7 +30,7 @@ export default function Outings() {
         </svg>
         <b>Sorties</b>
       </header>
-      <div className="so430-g">
+      <div className="outing-btn-g">
         <Outing k="herbes" ic="i-grass" b="Hautes herbes" d={`${routeName()} · rencontres et captures`} />
         <Outing k="safari" ic="i-map" b="Pêche et Parc Safari" d="Depuis la Carte de chaque région" />
         <Outing k="tour" ic="i-league" b="Tour de Résonance" d="Ascension avec une équipe tirée" />

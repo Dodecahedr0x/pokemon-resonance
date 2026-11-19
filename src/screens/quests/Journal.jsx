@@ -3,11 +3,11 @@ import { BY } from '../../engine/009-pokemon.js';
 import { PROFILE } from '../../engine/011-game-state.js';
 import { medal } from '../../engine/014-utils.js';
 import { fmt } from '../../engine/032-v4-foundation.js';
-import { CATN430, log0430 } from '../../engine/065-camp-tactics.js';
+import { CATEGORY_NAMES, log0430 } from '../../engine/065-camp-tactics.js';
 
 const NL = '\n  ';
 const Tile = ({ v, t }) => (
-  <div className="jt430">
+  <div className="stat-tile">
     <b>{v}</b>
     <span>{t}</span>
   </div>
@@ -15,7 +15,7 @@ const Tile = ({ v, t }) => (
 
 // « Journal » tab (v4.30): statistics, battles by type, MVP, latest battles.
 export default function Journal() {
-  const J = PROFILE.journal430 || log0430(),
+  const J = PROFILE.tacticsJournal || log0430(),
     pct = (a, b) => (b ? Math.round((a / b) * 100) + ' %' : '—'),
     top = (m, n) =>
       Object.entries(m)
@@ -27,9 +27,9 @@ export default function Journal() {
   }
   const mvp = top(J.mvp, 5);
   return (
-    <div className="jr430">
+    <div className="journal-report">
       {NL}
-      <div className="jt430-g">
+      <div className="stat-tile-g">
         <Tile v={J.n} t="Combats suivis" />
         <Tile v={pct(J.w, J.n)} t="Victoires" />
         <Tile v={J.runStreak} t="Série en cours" />
@@ -38,14 +38,14 @@ export default function Journal() {
         <Tile v={J.ko} t="K.O. infligés" />
       </div>
       {NL}
-      <section className="v4-panel jr430-s">
+      <section className="v4-panel journal-report-s">
         <h3>Par type de combat</h3>
         {Object.entries(J.category)
           .sort((a, b) => b[1][0] + b[1][1] - (a[1][0] + a[1][1]))
           .map(([k, [w, l]]) => (
-            <div key={k} className="jc430">
-              <span>{CATN430[k] || k}</span>
-              <span className="jc430-b">
+            <div key={k} className="category-row">
+              <span>{CATEGORY_NAMES[k] || k}</span>
+              <span className="category-row-b">
                 <i style={{ width: `${Math.round((w / Math.max(1, w + l)) * 100)}%` }} />
               </span>
               <b>
@@ -55,11 +55,11 @@ export default function Journal() {
           ))}
       </section>
       {NL}
-      <section className="v4-panel jr430-s">
+      <section className="v4-panel journal-report-s">
         <h3>MVP les plus fréquents</h3>
         {mvp.length ? (
           mvp.map(([k, n]) => (
-            <div key={k} className="jm430">
+            <div key={k} className="mvp-row">
               <Html html={medal(BY[k].t, 'sm')} />
               <span>{BY[k].n}</span>
               <b>{n} × MVP</b>
@@ -71,15 +71,15 @@ export default function Journal() {
         )}
       </section>
       {NL}
-      <section className="v4-panel jr430-s">
+      <section className="v4-panel journal-report-s">
         <h3>Derniers combats</h3>
         {J.last
           .slice()
           .reverse()
           .map((x, i) => (
-            <div key={i} className={'jl430' + (x[1] ? ' w' : '')}>
-              <span className="jl430-r">{x[1] ? 'V' : 'D'}</span>
-              <span className="jl430-n">{x[0]}</span>
+            <div key={i} className={'last-fight' + (x[1] ? ' w' : '')}>
+              <span className="last-fight-r">{x[1] ? 'V' : 'D'}</span>
+              <span className="last-fight-n">{x[0]}</span>
               <span>
                 {x[2] ? 'Rang ' + x[2] + ' · ' : ''}
                 {x[3]} manche{x[3] > 1 ? 's' : ''}

@@ -13,7 +13,7 @@ import { refreshMap } from '../screens/map/mapStore.js';
 
 // Map painting, layers and fog (v4.71), read by React (src/screens/map/Stage.jsx):
 // { PAINT: {region: {state, url, lights, sparks, smoke}}, REG, fxSvg, fxHtml, fogSvg }.
-export let MAP471;
+export let LIVING_MAP;
 
 // Instructions run at startup, in the original order (see index.js).
 export function __init() {
@@ -1960,7 +1960,7 @@ export function __init() {
 
     /* ---------- animated layer: clouds, birds, reflections, smoke, night ---------- */
     const fxSvg = F =>
-      `<svg class="fx471" viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><radialGradient id="fx471lum"><stop offset="0" stop-color="#fff2b8" stop-opacity="1"/><stop offset=".3" stop-color="#ffc35a" stop-opacity=".55"/><stop offset="1" stop-color="#ffb040" stop-opacity="0"/></radialGradient></defs><g class="fx-lums">${F.lights.map(([x, y]) => `<circle cx="${x.toFixed(0)}" cy="${y.toFixed(0)}" r="10" fill="url(#fx471lum)"/>`).join('')}</g></svg>`;
+      `<svg class="map-fx" viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><radialGradient id="map-fx-lum"><stop offset="0" stop-color="#fff2b8" stop-opacity="1"/><stop offset=".3" stop-color="#ffc35a" stop-opacity=".55"/><stop offset="1" stop-color="#ffb040" stop-opacity="0"/></radialGradient></defs><g class="fx-lums">${F.lights.map(([x, y]) => `<circle cx="${x.toFixed(0)}" cy="${y.toFixed(0)}" r="10" fill="url(#map-fx-lum)"/>`).join('')}</g></svg>`;
     const fxHtml = F => {
       const pc = (x, y) => `left:${(x / 10).toFixed(2)}%;top:${(y / 6.4).toFixed(2)}%`;
       let h = '';
@@ -2008,22 +2008,22 @@ export function __init() {
           for (let k = 0; k < 7; k++) {
             const a = r() * 6.283,
               d = 6 + r() * 34;
-            puffs += `<circle cx="${(p.x + Math.cos(a) * d).toFixed(0)}" cy="${(p.y + Math.sin(a) * d * 0.7).toFixed(0)}" r="${(26 + r() * 22).toFixed(0)}" fill="url(#fg471)"/>`;
+            puffs += `<circle cx="${(p.x + Math.cos(a) * d).toFixed(0)}" cy="${(p.y + Math.sin(a) * d * 0.7).toFixed(0)}" r="${(26 + r() * 22).toFixed(0)}" fill="url(#fog-gradient)"/>`;
           }
         });
       } catch {
         /* Best effort: failure here is non-fatal. */
       }
-      return `<svg class="fog471" viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><radialGradient id="fg471"><stop offset="0" stop-color="#eef2f6" stop-opacity=".62"/><stop offset=".55" stop-color="#dfe6ee" stop-opacity=".34"/><stop offset="1" stop-color="#dfe6ee" stop-opacity="0"/></radialGradient></defs><g class="fog-g">${puffs}</g></svg>`;
+      return `<svg class="fogveil" viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><radialGradient id="fog-gradient"><stop offset="0" stop-color="#eef2f6" stop-opacity=".62"/><stop offset=".55" stop-color="#dfe6ee" stop-opacity=".34"/><stop offset="1" stop-color="#dfe6ee" stop-opacity="0"/></radialGradient></defs><g class="fog-g">${puffs}</g></svg>`;
     };
 
     /* ---------- integration into the map ---------- */
     // Painting, animated layers, fog, title and data-tod / data-wx of #mapSt: rendered by
-    // React (src/screens/map/Stage.jsx), which reads CARTE471. Only the (asynchronous) drawing is here.
+    // React (src/screens/map/Stage.jsx), which reads LIVING_MAP. Only the (asynchronous) drawing is here.
     const PAINT = {};
-    MAP471 = { PAINT, REG, fxSvg, fxHtml, fogSvg };
+    LIVING_MAP = { PAINT, REG, fxSvg, fxHtml, fogSvg };
     const apply = () => refreshMap();
-    const CVER = 'v471-2';
+    const CVER = 'map-cache-2';
     const idb = () =>
       new Promise((res, rej) => {
         try {
@@ -2111,6 +2111,6 @@ export function __init() {
         st.dataset.tod = t;
       }
     });
-    window.__map471 = { generate, PAINT, apply, ensure, REG };
+    window.__livingMap = { generate, PAINT, apply, ensure, REG };
   })();
 }

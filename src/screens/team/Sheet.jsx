@@ -17,8 +17,8 @@ import { HELD_IMG, ITM } from '../../engine/032-v4-foundation.js';
 import { moveLearned } from '../../engine/045-tms-hms.js';
 import { characterHtml } from '../../engine/049-identity.js';
 import { RANKS, stars, rankId } from '../../engine/053-resonance.js';
-import { duoFor416 } from '../../engine/055-living-johto.js';
-import { captureSite421 } from '../../engine/061-catch-anywhere.js';
+import { duoTechnique } from '../../engine/055-living-johto.js';
+import { captureSite } from '../../engine/061-catch-anywhere.js';
 
 // Pokémon sheet (#sheet / #sh). Opening, closing, focus and scrolling: the engine's openSheet /
 // closeSheet; clicks (data-close, data-open, data-rx, data-qa, data-eq): the engine's
@@ -256,7 +256,7 @@ function Action({ m, base, id }) {
           ? `${cur ? 'Remplacer ' + BY[cur].n + ' par ' : 'Recruter '}${m.n} · ${RC(id)} PC`
           : m.st > 1 && isCamp() && inBox(base.id)
             ? `${m.n} : à éveiller en combat d’abord`
-            : `${base.n} : à capturer${captureSite421(base.id) ? ' · ' + captureSite421(base.id) : ''}`}
+            : `${base.n} : à capturer${captureSite(base.id) ? ' · ' + captureSite(base.id) : ''}`}
     </button>
   );
 }
@@ -423,7 +423,7 @@ function Extras({ base }) {
           {mates.map(([k, v]) => {
             const o = k.split('|').find(x => x !== base.id) || base.id,
               l = lvlOfPts(v),
-              D = duoFor416(k);
+              D = duoTechnique(k);
             return (
               <div key={k} className="lk-row">
                 <Html html={medal(BY[o].t, 'sm')} />

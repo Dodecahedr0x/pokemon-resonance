@@ -12,9 +12,9 @@ import { nextGoal } from './026-campaign-tutorial-sound.js';
 import { ELITE_L, leaderOf } from './030-prestige-staging.js';
 import { avatar, emblem, wonOf } from './031-home-journey.js';
 import { HELD_IMG, ITM, V4 } from './032-v4-foundation.js';
-import { jRewardLine415, placeStateJ, placesR, regionUi415 } from './054-johto.js';
-import { safariLock418 } from './058-fishing-safari-coop.js';
-import { arrows430 } from './065-camp-tactics.js';
+import { johtoRewardLine, placeStateJ, placesR, updateRouteSign } from './054-johto.js';
+import { safariLocked } from './058-fishing-safari-coop.js';
+import { updateScrollArrows } from './065-camp-tactics.js';
 import { builtMap, refreshMap } from '../screens/map/mapStore.js';
 
 // Map page rendered by React (src/screens/map/): template, routes, markers, panels.
@@ -55,7 +55,7 @@ export function placeState(p) {
     return placeStateJ(p, gk);
   } // Johto (v4.15)
   if (p.id === 'safari') {
-    return safariLock418() ? 'lock' : 'open';
+    return safariLocked() ? 'lock' : 'open';
   } // Safari Park (v4.18)
   if (p.id === 'wild') {
     return 'open';
@@ -125,7 +125,7 @@ export function renderMap() {
     if (!V4.mapSel || !placesR().some(p => p.id === V4.mapSel)) {
       V4.mapSel = (placesR().find(p => placeState(p) === 'next') || placesR()[0]).id;
     }
-    regionUi415(); // v4.15
+    updateRouteSign(); // v4.15
     refreshMap({ marksSel });
   }
   hook('carte');
@@ -134,7 +134,7 @@ export function renderMap() {
 export function rewardLine(k) {
   const gi = ARENAS.findIndex(a => a.k === k);
   if (gi < 0) {
-    return jRewardLine415(k);
+    return johtoRewardLine(k);
   } // Johto (v4.15)
   const R = BADGE_REWARD[gi];
   return `<div class="v4-rew"><span class="v4-rew-b">${badgeSvg(gi, GYMS[gi].t, 'mi' + gi)}Badge ${GYMS[gi].t}</span>${R.item ? `<span><img src="${ITM(HELD_IMG[R.item])}" alt="" loading="lazy">${ITEMS2[R.item].n}</span>` : ''}<span><span class="v4-coin" aria-hidden="true">₽</span>+500</span><span><span class="v4-gemi"><svg><use href="#i-gem"/></svg></span>+10</span></div>`;
@@ -146,7 +146,7 @@ export function centerMap() {
   if (sc && mk && sc.scrollWidth > sc.clientWidth) {
     sc.scrollLeft = Math.max(0, mk.offsetLeft - sc.clientWidth / 2);
   }
-  arrows430(); // scroll arrows (v4.30)
+  updateScrollArrows(); // scroll arrows (v4.30)
 }
 
 /* ---------- Region map (original drawing) ---------- */

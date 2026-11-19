@@ -3,7 +3,7 @@ import { Box, Dialogue } from './Window.jsx';
 import { BY } from '../../engine/009-pokemon.js';
 import { medal } from '../../engine/014-utils.js';
 import { DESTINATIONS } from '../../engine/049-identity.js';
-import { lock461 } from '../../engine/092-companion-eggs-expeditions.js';
+import { lockedByBadges } from '../../engine/092-companion-eggs-expeditions.js';
 
 // Camp expedition window (#expBox): choice of location, then of Pokémon.
 // Clicks (data-exp-*) and hidden attribute: engine (049).
@@ -22,7 +22,7 @@ function Card({ destinationId: dest, available: available }) {
         <div className="exp-list">
           {Object.entries(DESTINATIONS).map(([k, D]) => {
             // location locked until N badges (v4.61)
-            const lk = !!lock461 && lock461(D);
+            const lk = !!lockedByBadges && lockedByBadges(D);
             return (
               <button key={k} type="button" className="exp-d" data-exp-d={k} disabled={lk}>
                 <b>{D.n}</b>

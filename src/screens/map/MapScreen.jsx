@@ -18,9 +18,9 @@ export const regionMap = () => (V4.region === 'hoenn' ? 'hoenn' : V4.region === 
 
 // "Map" page (#carte). Nothing before buildMap() (engine startup); content that depends
 // on the game (routes, markers, panels…) after the first renderMap(), like the old DOM.
-// Clicks are still handled by the engine (data-place, data-reg, data-mf430, data-v4fight…).
+// Clicks are still handled by the engine (data-place, data-reg, data-map-scroll, data-v4fight…).
 // Still set by the engine on elements rendered here:
-// - hidden on the .mf430 arrows (arrows430, based on the scroll of #mapSc);
+// - hidden on the .mapScroll arrows (updateScrollArrows, based on the scroll of #mapSc);
 // - data-tod of #mapSt when the time changes (setTod, same value as the one rendered).
 export default function MapScreen() {
   const { built, drawn, marksSel } = useMap();
@@ -57,12 +57,12 @@ function Content({ drawn, marksSel }) {
           </div>
           {drawn && (
             <>
-              <button type="button" className="mf430 g" data-mf430="-1" aria-label="Voir l’ouest de la carte">
+              <button type="button" className="map-scroll g" data-map-scroll="-1" aria-label="Voir l’ouest de la carte">
                 <svg>
                   <use href="#i-chevl" />
                 </svg>
               </button>
-              <button type="button" className="mf430 d" data-mf430="1" aria-label="Voir l’est de la carte">
+              <button type="button" className="map-scroll d" data-map-scroll="1" aria-label="Voir l’est de la carte">
                 <svg>
                   <use href="#i-chevr" />
                 </svg>

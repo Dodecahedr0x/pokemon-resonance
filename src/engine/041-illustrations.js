@@ -52,7 +52,7 @@ export function tokArtErr(T) {
   tokCl(T, 'has-im', false);
   T.imOn = false;
   T.imBad = true;
-  if (T.w477) {
+  if (T.artGrouped) {
     T.imLoose = true;
   }
   T.href = null;

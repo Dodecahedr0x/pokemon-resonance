@@ -6,17 +6,17 @@
      style calculation for the whole map on every frame (≈ 28% of the CPU).
    Same effects here, but moved via transform / opacity: the graphics card
    handles it, the CPU stays free.
-   This stylesheet must stay last: it redefines @keyframes (gl448, rn448, sd448)
+   This stylesheet must stay last: it redefines @keyframes (hail-fall, rain-fall, sand-drift)
    declared further up. */
 
 /* 1. Route encounter / daily encounter: halo in opacity */
-.ev454:not(.done),
-.cd455:not(.done) {
+.route-event:not(.done),
+.dailygift:not(.done) {
   animation: none !important;
   position: relative;
 }
-.ev454:not(.done)::after,
-.cd455:not(.done)::after {
+.route-event:not(.done)::after,
+.dailygift:not(.done)::after {
   content: '';
   position: absolute;
   inset: -1px;
@@ -26,20 +26,20 @@
     0 0 0 5px rgba(255, 212, 91, 0.28),
     0 0 16px 2px rgba(255, 212, 91, 0.22);
   opacity: 0;
-  animation: pk474Halo 2.4s ease-in-out infinite;
+  animation: poke-fx-halo 2.4s ease-in-out infinite;
   will-change: opacity;
 }
-@keyframes pk474Halo {
+@keyframes poke-fx-halo {
   50% {
     opacity: 1;
   }
 }
 
 /* 2. Weather: we move the whole layer (already larger than the frame) */
-.wx448 i {
+.board-weather i {
   will-change: transform;
 }
-@keyframes gl448 {
+@keyframes hail-fall {
   from {
     transform: translate(0, 0);
   }
@@ -47,7 +47,7 @@
     transform: translate(-14px, 82px);
   }
 }
-@keyframes rn448 {
+@keyframes rain-fall {
   from {
     transform: rotate(9deg) translateY(0);
   }
@@ -55,7 +55,7 @@
     transform: rotate(9deg) translateY(38px);
   }
 }
-@keyframes sd448 {
+@keyframes sand-drift {
   from {
     transform: translateX(0);
   }
@@ -65,20 +65,20 @@
 }
 
 /* 3. Home seasons: two particle layers that slide (seamless loop) */
-.hv450s.hv450-printemps,
-.hv450s.hv450-automne,
-.hv450s.hv450-hiver,
-.hv450s.hv450-ete {
+.heroenv-s.heroenv-printemps,
+.heroenv-s.heroenv-automne,
+.heroenv-s.heroenv-hiver,
+.heroenv-s.heroenv-ete {
   background: none !important;
   animation: none !important;
   overflow: hidden;
 }
-.hv450s.hv450-printemps::before,
-.hv450s.hv450-printemps::after,
-.hv450s.hv450-automne::before,
-.hv450s.hv450-automne::after,
-.hv450s.hv450-hiver::before,
-.hv450s.hv450-hiver::after {
+.heroenv-s.heroenv-printemps::before,
+.heroenv-s.heroenv-printemps::after,
+.heroenv-s.heroenv-automne::before,
+.heroenv-s.heroenv-automne::after,
+.heroenv-s.heroenv-hiver::before,
+.heroenv-s.heroenv-hiver::after {
   content: '';
   position: absolute;
   inset: -180px -100px -20px -100px;
@@ -87,67 +87,67 @@
   animation-timing-function: linear;
   animation-iteration-count: infinite;
 }
-.hv450s.hv450-printemps::before {
+.heroenv-s.heroenv-printemps::before {
   background: radial-gradient(ellipse, rgba(255, 186, 214, 0.95) 0 2.4px, transparent 3.2px) 0 0/61px 73px;
-  animation-name: pk474P1;
+  animation-name: poke-fx-p1;
   animation-duration: 11s;
 }
-.hv450s.hv450-printemps::after {
+.heroenv-s.heroenv-printemps::after {
   background: radial-gradient(ellipse, rgba(255, 216, 232, 0.8) 0 1.8px, transparent 2.6px) 24px 31px/83px 59px;
-  animation-name: pk474P2;
+  animation-name: poke-fx-p2;
   animation-duration: 14s;
 }
-.hv450s.hv450-automne::before {
+.heroenv-s.heroenv-automne::before {
   background: radial-gradient(ellipse, rgba(224, 138, 60, 0.95) 0 3px, transparent 3.8px) 0 0/67px 79px;
-  animation-name: pk474A1;
+  animation-name: poke-fx-a1;
   animation-duration: 13s;
 }
-.hv450s.hv450-automne::after {
+.heroenv-s.heroenv-automne::after {
   background: radial-gradient(ellipse, rgba(194, 85, 43, 0.85) 0 2.4px, transparent 3.2px) 30px 22px/89px 63px;
-  animation-name: pk474A2;
+  animation-name: poke-fx-a2;
   animation-duration: 15s;
 }
-.hv450s.hv450-hiver::before {
+.heroenv-s.heroenv-hiver::before {
   background: radial-gradient(circle, rgba(255, 255, 255, 0.95) 0 1.8px, transparent 2.5px) 0 0/43px 51px;
-  animation-name: pk474H1;
+  animation-name: poke-fx-h1;
   animation-duration: 8s;
 }
-.hv450s.hv450-hiver::after {
+.heroenv-s.heroenv-hiver::after {
   background: radial-gradient(circle, rgba(230, 244, 255, 0.8) 0 1.2px, transparent 1.9px) 17px 23px/59px 47px;
-  animation-name: pk474H2;
+  animation-name: poke-fx-h2;
   animation-duration: 10s;
 }
-@keyframes pk474P1 {
+@keyframes poke-fx-p1 {
   to {
     transform: translate(61px, 146px);
   }
 }
-@keyframes pk474P2 {
+@keyframes poke-fx-p2 {
   to {
     transform: translate(83px, 177px);
   }
 }
-@keyframes pk474A1 {
+@keyframes poke-fx-a1 {
   to {
     transform: translate(-67px, 158px);
   }
 }
-@keyframes pk474A2 {
+@keyframes poke-fx-a2 {
   to {
     transform: translate(-89px, 126px);
   }
 }
-@keyframes pk474H1 {
+@keyframes poke-fx-h1 {
   to {
     transform: translate(-43px, 102px);
   }
 }
-@keyframes pk474H2 {
+@keyframes poke-fx-h2 {
   to {
     transform: translate(-59px, 94px);
   }
 }
-.hv450s.hv450-ete::before {
+.heroenv-s.heroenv-ete::before {
   content: '';
   position: absolute;
   top: 0;
@@ -156,10 +156,10 @@
   width: 220%;
   pointer-events: none;
   background: linear-gradient(115deg, transparent 28%, rgba(255, 236, 160, 0.2) 40%, transparent 52%);
-  animation: pk474E 9s ease-in-out infinite alternate;
+  animation: poke-fx-e 9s ease-in-out infinite alternate;
   will-change: transform;
 }
-@keyframes pk474E {
+@keyframes poke-fx-e {
   to {
     transform: translateX(-54.545%);
   }
@@ -174,10 +174,10 @@
   background-size: 100% 100% !important;
   width: 36% !important;
   right: auto !important;
-  animation: pk474Sheen 3.2s linear infinite !important;
+  animation: poke-fx-sheen 3.2s linear infinite !important;
   will-change: transform;
 }
-@keyframes pk474Sheen {
+@keyframes poke-fx-sheen {
   from {
     transform: translateX(-170%);
   }
@@ -187,20 +187,20 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ev454::after,
-  .cd455::after,
-  .hv450s::before,
-  .hv450s::after,
-  .wx448 i,
+  .route-event::after,
+  .dailygift::after,
+  .heroenv-s::before,
+  .heroenv-s::after,
+  .board-weather i,
   .hp.hseg i::after {
     animation: none !important;
   }
 }
-html.a11y-rm .ev454::after,
-html.a11y-rm .cd455::after,
-html.a11y-rm .hv450s::before,
-html.a11y-rm .hv450s::after,
-html.a11y-rm .wx448 i,
+html.a11y-rm .route-event::after,
+html.a11y-rm .dailygift::after,
+html.a11y-rm .heroenv-s::before,
+html.a11y-rm .heroenv-s::after,
+html.a11y-rm .board-weather i,
 html.a11y-rm .hp.hseg i::after {
   animation: none !important;
 }

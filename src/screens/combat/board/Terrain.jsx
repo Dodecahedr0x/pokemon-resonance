@@ -27,7 +27,7 @@ export function Painting() {
   return (
     <>
       <image
-        className="pv471"
+        className="paintedterrain"
         x="0"
         y="0"
         preserveAspectRatio="none"
@@ -36,7 +36,7 @@ export function Painting() {
         height={H}
         href={S.pvHref || undefined}
       />
-      <g className="wv471" style={PE}>
+      <g className="waves-layer" style={PE}>
         {S.waves.map(([x, y], i) => (
           <Fragment key={i}>
             <path
@@ -63,7 +63,7 @@ export function Pedestals() {
     return null;
   }
   return (
-    <g className="lip477" style={PE}>
+    <g className="slab-lip" style={PE}>
       {S.lip.map((p, i) => (
         <polygon key={i} points={p} />
       ))}
@@ -129,7 +129,7 @@ export function Textures() {
   useBoard('tiles');
   const S = useBoard('pv');
   return (
-    <g style={PE} className={S.pv ? 'tex471' : undefined} ref={lref('tex')}>
+    <g style={PE} className={S.pv ? 'texture-layer' : undefined} ref={lref('tex')}>
       {B &&
         Object.keys(B.tiles).map(k => {
           const [x, y] = HC(k);
@@ -198,7 +198,7 @@ export function Decor() {
     return o;
   }, [S.n]);
   return (
-    <g style={PE} className={S.pv ? 'deco471' : undefined}>
+    <g style={PE} className={S.pv ? 'paintscape' : undefined}>
       {items}
     </g>
   );
@@ -227,7 +227,7 @@ export function Water() {
       gl.push(
         <ellipse
           key={k + i}
-          className="gl477"
+          className="water-glint"
           cx={gx.toFixed(1)}
           cy={gy.toFixed(1)}
           rx={rx.toFixed(1)}
@@ -242,19 +242,19 @@ export function Water() {
   });
   return (
     <g
-      className={'eau477' + (E.fixed ? ' fixe' : '')}
+      className={'lake' + (E.fixed ? ' fixe' : '')}
       style={E.keyList.length ? PE : { ...PE, display: 'none' }}
       aria-hidden="true"
       data-k={E.id}
     >
-      <g clipPath="url(#eau477c)">
+      <g clipPath="url(#lake-c)">
         <rect
-          className="bande477"
+          className="water-band"
           x={(-dx).toFixed(1)}
           y={(-dy).toFixed(1)}
           width={(W + 2 * dx).toFixed(1)}
           height={(H + 2 * dy).toFixed(1)}
-          fill="url(#eau477g)"
+          fill="url(#lake-g)"
           style={{ '--dx': dx.toFixed(1) + 'px', '--dy': dy.toFixed(1) + 'px' }}
         />
       </g>
@@ -271,9 +271,9 @@ export function Light() {
   }
   const [W, H] = S.vb;
   return (
-    <g className={'lum477' + (S.night ? ' n' : '')} style={PE} clipPath="url(#cp477)">
-      <rect className="nuit477" x="0" y="0" width={W} height={H} />
-      <rect x="0" y="0" width={W} height={H} fill="url(#hz477)" />
+    <g className={'haze-light' + (S.night ? ' n' : '')} style={PE} clipPath="url(#lip-clip)">
+      <rect className="night-tint" x="0" y="0" width={W} height={H} />
+      <rect x="0" y="0" width={W} height={H} fill="url(#haze-gradient)" />
     </g>
   );
 }

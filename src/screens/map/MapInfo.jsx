@@ -10,10 +10,10 @@ import { avatar, goalChips } from '../../engine/031-home-journey.js';
 import { ITM, V4, bagN, dailyKey } from '../../engine/032-v4-foundation.js';
 import { PL, STATE_N, placeIcon, placeName, placeState, rewardLine } from '../../engine/037-map.js';
 import { johtoOpen, routeName } from '../../engine/054-johto.js';
-import { SAFARI_BALLS, SAFARI_STEPS, SAFARI_PRICE, safariLock418 } from '../../engine/058-fishing-safari-coop.js';
+import { SAFARI_BALLS, SAFARI_STEPS, SAFARI_PRICE, safariLocked } from '../../engine/058-fishing-safari-coop.js';
 import { hoennOpen } from '../../engine/059-hoenn.js';
-import { regionNo421 } from '../../engine/061-catch-anywhere.js';
-import { familyCapt428 } from '../../engine/063-combat-catches-home.js';
+import { regionIndex } from '../../engine/061-catch-anywhere.js';
+import { familyCaptureStats } from '../../engine/063-combat-catches-home.js';
 
 const Lock = ({ children }) => (
   <p className="v4-lock">
@@ -75,7 +75,7 @@ export default function MapInfo() {
   }
   if (p.id === 'wild' || p.id === 'jwild' || p.id === 'hwild') {
     const balls = bagN('poke'),
-      family = familyCapt428(regionNo421());
+      family = familyCaptureStats(regionIndex());
     return (
       <>
         <header className="v4-mi-h">
@@ -102,7 +102,7 @@ export default function MapInfo() {
             Explorer les hautes herbes
             <Arrow />
           </button>
-          <button type="button" className="b" data-peche417="">
+          <button type="button" className="b" data-fishing-start="">
             Pêcher
           </button>
         </div>
@@ -219,7 +219,7 @@ export default function MapInfo() {
 
 // Safari Park (v4.18).
 function SafariInfo({ p }) {
-  const lk = safariLock418(),
+  const lk = safariLocked(),
     S2 = PROFILE.safari,
     takenSet = PROFILE.safariTaken || 0;
   return (
@@ -248,7 +248,7 @@ function SafariInfo({ p }) {
             <Html html={lk} />
           </Lock>
         ) : (
-          <button type="button" className="b b-gold" data-safari418-entrer="">
+          <button type="button" className="b b-gold" data-safari-panel-entrer="">
             {S2 ? 'Reprendre la visite' : `Entrer · ${SAFARI_PRICE} ₽`}
             <Arrow />
           </button>

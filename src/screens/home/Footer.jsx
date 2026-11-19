@@ -5,8 +5,8 @@ import { medal } from '../../engine/014-utils.js';
 import { dailyDone, dailyKey, dailyLeft, familyOwned, fmt, trophies } from '../../engine/032-v4-foundation.js';
 import { SQ } from '../../engine/039-quests-shop.js';
 import { seasonData } from '../../engine/050-world.js';
-import { radio417 } from '../../engine/057-companions-resonance.js';
-import { weeklyBuild429 } from '../../engine/064-quality.js';
+import { radioLines } from '../../engine/057-companions-resonance.js';
+import { buildWeeklyChallenge } from '../../engine/064-quality.js';
 
 // Bottom of the Home page (.v4-bottom): season (#v4Saison, v4.11), Pokématos (#v4Radio, v4.17),
 // daily challenge (#v4Event), counters (#v4Stats), weekly challenge (#v4Hebdo, v4.29).
@@ -81,7 +81,7 @@ function Radio() {
         <span className="v4-cnt">Radio du jour</span>
       </header>
       <ul className="rd-l">
-        {radio417().map(([t, x, go], i) => (
+        {radioLines().map(([t, x, go], i) => (
           <li key={i}>
             {go ? (
               <button type="button" className="rd-i" data-news={go}>
@@ -165,21 +165,21 @@ function Stats() {
 }
 
 function Weekly() {
-  const H = weeklyBuild429(),
+  const H = buildWeeklyChallenge(),
     h = PROFILE.hebdo429 && PROFILE.hebdo429.w === H.w ? PROFILE.hebdo429 : null;
   return (
     <button type="button" id="v4Hebdo" className="v4-hebdo v4-panel" data-hebdo429="1">
-      <span className="hb429-ic">
+      <span className="weekly-card-ic">
         <svg>
           <use href="#i-trophy" />
         </svg>
       </span>
-      <span className="hb429-x">
+      <span className="weekly-card-x">
         <small>Défi de la semaine · {H.R.n}</small>
         <b>{h ? `Record : ${fmt(h.best)}${h.rec ? ' ✓' : ''}` : 'Même équipe pour tous'}</b>
         <em>{H.team.map(id => BY[id].n).join(' · ')}</em>
       </span>
-      <svg className="hb429-go">
+      <svg className="weekly-card-go">
         <use href="#i-chevr" />
       </svg>
     </button>

@@ -6,8 +6,8 @@ import { REGION_NAMES } from '../../engine/008-hoenn-data.js';
 import { tb, tc } from '../../engine/014-utils.js';
 import { crestSmall } from '../../engine/020-team-cards.js';
 import { SPARK, shinyStyle } from '../../engine/043-adventure-plus.js';
-import { CROWN416 } from '../../engine/055-living-johto.js';
-import { IM450, rareInfo450 } from '../../engine/080-trainer-avatar-rare-encounters.js';
+import { DOMINANT_CROWN_SVG } from '../../engine/055-living-johto.js';
+import { RARE_ENABLED, rareInfo } from '../../engine/080-trainer-avatar-rare-encounters.js';
 
 // Wild encounter (#enc), opened by encounter() (017) with a snapshot of the
 // encounter. The buttons (data-enc), the click on the backdrop and Esc are still handled by the engine.
@@ -24,7 +24,7 @@ export default function Enc() {
 // memo: closing does not redraw the sheet (crestSmall numbers its gradients on every call).
 const Card = memo(function Card({ pick, shiny, dom, route, tod, inBox, camp, path }) {
   const style = { '--c': tc(pick.t[0]), ...(shiny ? parseStyle(shinyStyle(pick.id)) : {}) };
-  const r = rareInfo450(pick.id); // v4.50: rare appearance depending on time and weather
+  const r = rareInfo(pick.id); // v4.50: rare appearance depending on time and weather
   return (
     <div
       className={'enc-card' + (shiny ? ' shiny' : '') + (dom ? ' dom' : '')}
@@ -39,7 +39,7 @@ const Card = memo(function Card({ pick, shiny, dom, route, tod, inBox, camp, pat
       <p className="enc-t">
         {dom ? (
           <>
-            <Html html={CROWN416} />
+            <Html html={DOMINANT_CROWN_SVG} />
             Un {pick.n} Dominant{shiny ? ' chromatique' : ''} surgit !
           </>
         ) : shiny ? (
@@ -60,7 +60,7 @@ const Card = memo(function Card({ pick, shiny, dom, route, tod, inBox, camp, pat
       <p className="sh-epi">
         {dexNo(pick.no)} · {REGION_NAMES[pick.gen] || 'Johto'} · {pick.r} · {pick.c} PC
       </p>
-      {r.m > 1 && IM450() && <p className="rare450">Apparition rare · {r.w.join(' + ')}</p>}
+      {r.m > 1 && RARE_ENABLED() && <p className="rare-encounter">Apparition rare · {r.w.join(' + ')}</p>}
       <div className="sh-tags">
         {pick.t.map(t => (
           <Html key={t} html={tb(t)} />

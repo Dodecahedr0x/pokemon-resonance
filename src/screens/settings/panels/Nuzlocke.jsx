@@ -1,12 +1,12 @@
-import { NZ450, nzConf450, nzSt450 } from '../../../engine/081-nuzlocke-mode.js';
+import { NUZLOCKE_ON, nuzlockeConfirm, nuzlockeState } from '../../../engine/081-nuzlocke-mode.js';
 
-// Settings › Nuzlocke Mode (v4.51): data-b451 buttons handled by the engine (module 081),
-// which toggles nzConf450 (confirmation) then calls renderParams().
+// Settings › Nuzlocke Mode (v4.51): data-nuzlocke-action buttons handled by the engine (module 081),
+// which toggles nuzlockeConfirm (confirmation) then calls renderParams().
 export default function Nuzlocke() {
-  const s = nzSt450(),
-    on = NZ450();
+  const s = nuzlockeState(),
+    on = NUZLOCKE_ON();
   return (
-    <section className="v4-panel" id="an451">
+    <section className="v4-panel" id="nuzlocke-panel">
       <h3 className="h3">Mode Nuzlocke</h3>
       <p className="v4-note">
         Pour les joueurs qui aiment le risque. Un Pokémon K.O. à la fin d’un combat est perdu pour de bon (le dernier
@@ -15,21 +15,21 @@ export default function Nuzlocke() {
       </p>
       <div className="sv-io">
         {on ? (
-          <button type="button" className="b b-sm b-gold" data-b451="off">
+          <button type="button" className="b b-sm b-gold" data-nuzlocke-action="off">
             Nuzlocke : activé
           </button>
-        ) : nzConf450 ? (
+        ) : nuzlockeConfirm ? (
           <>
             <span className="sv-q">Activer ? Les prochains K.O. seront définitifs.</span>
-            <button type="button" className="b b-sm b-gold" data-b451="yes">
+            <button type="button" className="b b-sm b-gold" data-nuzlocke-action="yes">
               Oui, activer
             </button>
-            <button type="button" className="b b-sm" data-b451="no">
+            <button type="button" className="b b-sm" data-nuzlocke-action="no">
               Annuler
             </button>
           </>
         ) : (
-          <button type="button" className="b b-sm" data-b451="ask">
+          <button type="button" className="b b-sm" data-nuzlocke-action="ask">
             Nuzlocke : désactivé
           </button>
         )}

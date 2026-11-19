@@ -15,7 +15,7 @@ export default function Vs({ d }) {
           <Html html={d.al.map(t => medal(t)).join('')} />
         </span>
         {d.av != null && (
-          <span className="vs-av450">
+          <span className="vs-type-avatar">
             <Html html={d.av} />
           </span>
         )}
@@ -51,7 +51,7 @@ export default function Vs({ d }) {
         <Html html={d.rule} />
       </p>
       {d.tip != null && (
-        <p className="tip448">
+        <p className="vs-tip">
           <b>Astuce</b> {d.tip}
         </p>
       )}

@@ -30,12 +30,12 @@ import { SHOP, bagN, fmt } from './032-v4-foundation.js';
 import { renderWallet } from './035-interface.js';
 import { ROLE_PROVIDERS } from './044-tactical-engine.js';
 import { isFallen } from './048-replayability.js';
-import { discount414 } from './053-resonance.js';
-import { inDaycare416, daycare416 } from './055-living-johto.js';
-import { campOk430 } from './065-camp-tactics.js';
-import { individualOf432, individualHtml432 } from './067-individuals-comfort.js';
-import { tmDay456 } from './089-extra-held-items-tms.js';
-import { lock461, story461 } from './092-companion-eggs-expeditions.js';
+import { dailyDiscount } from './053-resonance.js';
+import { isInDaycare, hatchDaycareEgg } from './055-living-johto.js';
+import { campOpen } from './065-camp-tactics.js';
+import { individualOf, individualHtml } from './067-individuals-comfort.js';
+import { dailyTm } from './089-extra-held-items-tms.js';
+import { lockedByBadges, expeditionStory } from './092-companion-eggs-expeditions.js';
 import { refreshCampBase } from '../screens/camp/campStore.js';
 import { paintOverlay } from '../screens/overlays/dialogsStore.js';
 
@@ -240,9 +240,9 @@ export function chipChord(S) {
 
 /** A family's character: always the same for a given family. */
 function characterOf(id) {
-  const I432 = individualOf432(id); // individual nature of your Pokémon (v4.32)
-  if (I432 && CHARACTERS[I432.temperament]) {
-    return I432.temperament;
+  const individualInfo = individualOf(id); // individual nature of your Pokémon (v4.32)
+  if (individualInfo && CHARACTERS[individualInfo.temperament]) {
+    return individualInfo.temperament;
   }
   const b = BY[id] ? BY[id].base : id,
     ks = Object.keys(CHARACTERS);
@@ -275,7 +275,7 @@ export function characterHtml(id) {
   const k = characterOf(id);
   return (
     `<div class="mvc car-mvc"><div class="t"><b>${CHARACTERS[k][0]}</b><span class="chip">Nature</span></div><p>${CHARACTERS[k][1]}</p></div>` +
-    individualHtml432(id)
+    individualHtml(id)
   ); // ability (v4.32)
 }
 
@@ -290,7 +290,7 @@ function buildingBlocked(k) {
 }
 
 function build(k) {
-  if (!campOk430() || buildingBlocked(k)) {
+  if (!campOpen() || buildingBlocked(k)) {
     return;
   }
   const [m, g] = BUILDINGS[k].upgradeCost[level(k)];
@@ -312,8 +312,8 @@ function build(k) {
 
 /** Workshop: an item's price in the Shop (Pokédollars). */
 export function costOf(k) {
-  const p = discount414(k, costOf0(k)); // daily offers (v4.14)
-  return tmDay456().o.includes(k) ? Math.max(50, Math.round((p * 0.8) / 50) * 50) : p; // daily TM: −20% (v4.58)
+  const p = dailyDiscount(k, costOf0(k)); // daily offers (v4.14)
+  return dailyTm().o.includes(k) ? Math.max(50, Math.round((p * 0.8) / 50) * 50) : p; // daily TM: −20% (v4.58)
 }
 
 export function costOf0(k) {
@@ -321,12 +321,12 @@ export function costOf0(k) {
   if (!it || it.g) {
     return it ? it.p : 0;
   }
-  return it.mv && !it.cs && campOk430() ? Math.round((it.p * (1 - 0.1 * level('ate'))) / 50) * 50 : it.p;
+  return it.mv && !it.cs && campOpen() ? Math.round((it.p * (1 - 0.1 * level('ate'))) / 50) * 50 : it.p;
 }
 
 // or at the Daycare (v4.16)
 export function expRefusal(id) {
-  if (inDaycare416(id)) {
+  if (isInDaycare(id)) {
     return `${BY[BY[id].base].n} est à la Pension : reprenez le couple au Camp pour le faire combattre.`;
   } // v4.16
   return onExpedition(id) ? `${BY[BY[id].base].n} est en expédition : il reviendra bientôt.` : null;
@@ -334,10 +334,10 @@ export function expRefusal(id) {
 
 export function send(id, dest) {
   const D = DESTINATIONS[dest];
-  if (D && lock461(D)) {
+  if (D && lockedByBadges(D)) {
     return toast(`${D.n} : accessible après ${D.min} badges.`);
   }
-  if (!campOk430() || !D || !inBox(id) || onExpedition(id) || PROFILE.exp.length >= placesExp()) {
+  if (!campOpen() || !D || !inBox(id) || onExpedition(id) || PROFILE.exp.length >= placesExp()) {
     return;
   }
   const r = () => Math.random(),
@@ -385,7 +385,7 @@ export function retrieve(i) {
   renderWallet();
   renderCampBase();
   try {
-    story461(x); // story and rare find (v4.61)
+    expeditionStory(x); // story and rare find (v4.61)
   } catch {
     /* Best effort: failure here is non-fatal. */
   }
@@ -522,7 +522,7 @@ export const DESTINATIONS = {
 };
 
 export const onExpedition = id =>
-  !!(campOk430() && PROFILE.exp && BY[id] && PROFILE.exp.some(x => BY[x.id].base === BY[id].base)) || inDaycare416(id);
+  !!(campOpen() && PROFILE.exp && BY[id] && PROFILE.exp.some(x => BY[x.id].base === BY[id].base)) || isInDaycare(id);
 
 const placesExp = () => level('guet');
 
@@ -666,7 +666,7 @@ export function __init() {
 
   HOOKS.progress.push((S, rew) => {
     const D = SCEN[S.sc] || {};
-    if (!campOk430() || D.tuto || D.tower) {
+    if (!campOpen() || D.tuto || D.tower) {
       return null;
     }
     // Infirmary: resting Pokémon recover faster
@@ -687,7 +687,7 @@ export function __init() {
     const pe = level('pens');
     if (pe) {
       PROFILE.camp.oeuf = (PROFILE.camp.oeuf || 0) + 1;
-      if (PROFILE.camp.oeuf >= [8, 6, 4][pe - 1] && !daycare416(rew)) {
+      if (PROFILE.camp.oeuf >= [8, 6, 4][pe - 1] && !hatchDaycareEgg(rew)) {
         // without a pair: an unknown family (v4.10); with a pair: their egg (v4.16)
         const pool = MON.filter(
           m => m.st === 1 && !m.leg && !m.isEnemy && m.base === m.id && !PROFILE.box.includes(m.id)

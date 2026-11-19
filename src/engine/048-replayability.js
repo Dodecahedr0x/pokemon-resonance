@@ -9,7 +9,7 @@ import { HOOKS } from './015-hooks.js';
 import { __set_squad, renderSquad, save, squad } from './020-team-cards.js';
 import { P, hasNx, uAt } from './021-combat-engine.js';
 import { scSel } from './024-combat-ui.js';
-import { brWeapon466 } from './097-boss-rush-relics.js';
+import { armedBossRush } from './097-boss-rush-relics.js';
 import { queueSave } from './025-saves.js';
 import { PREF } from './026-campaign-tutorial-sound.js';
 import { renderWallet } from './035-interface.js';
@@ -149,10 +149,10 @@ export function mutTraining() {
     D.elite ||
     D.champ ||
     D.legend ||
-    D.hleg435 ||
-    D.cap435 ||
+    D.hoennLegend ||
+    D.captureHoennLegend ||
     D.rival ||
-    D.rival429 ||
+    D.rivalFight ||
     D.hebdo429
   ) {
     return null;
@@ -252,7 +252,7 @@ export function challengeRefusal(id) {
 
 /** Before starting a campaign battle. */
 export function challengeLaunch() {
-  if (brWeapon466()) {
+  if (armedBossRush()) {
     return null;
   }
   const D = SCEN[scSel];

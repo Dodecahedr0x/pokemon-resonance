@@ -2,13 +2,13 @@ import { parseStyle } from '../../lib/html.jsx';
 import { tc } from '../../engine/014-utils.js';
 import { ART } from '../../engine/032-v4-foundation.js';
 import { shinyStyle } from '../../engine/043-adventure-plus.js';
-import { companionData417 } from '../../engine/057-companions-resonance.js';
-import { cp461Data } from '../../engine/092-companion-eggs-expeditions.js';
+import { companionPanelData } from '../../engine/057-companions-resonance.js';
+import { buddyData } from '../../engine/092-companion-eggs-expeditions.js';
 
-// Companion (#v4Comp, v4.17) and its Berry, Gift and Memories buttons (.cp461, v4.61).
-// Clicks (data-comp, data-cp461) are still handled by the engine.
+// Companion (#v4Comp, v4.17) and its Berry, Gift and Memories buttons (.buddy, v4.61).
+// Clicks (data-comp, data-buddy) are still handled by the engine.
 export default function Companion() {
-  const d = companionData417();
+  const d = companionPanelData();
   return (
     <section
       id="v4Comp"
@@ -45,7 +45,7 @@ function Empty() {
 
 function Sheet({ d }) {
   const { m, h, pr, petting: petting, mood: hum, sh, bonus } = d,
-    x = cp461Data();
+    x = buddyData();
   return (
     <>
       <div className={'cp-art' + (sh ? ' shiny' : '')} style={sh ? parseStyle(shinyStyle(m.base)) : undefined}>
@@ -81,14 +81,14 @@ function Sheet({ d }) {
         </button>
       </div>
       {x && (
-        <div className="cp461">
-          <button type="button" className="b b-sm" data-cp461="baie" disabled={!!(x.feed || !x.baie)}>
+        <div className="buddy">
+          <button type="button" className="b b-sm" data-buddy="baie" disabled={!!(x.feed || !x.baie)}>
             {x.feed ? 'Baie offerte ✓' : x.baie ? 'Offrir une Baie' : 'Pas de Baie'}
           </button>
           <button
             type="button"
             className={'b b-sm' + (x.h >= 3 && !x.gift ? ' b-gold' : ' b-ghost')}
-            data-cp461="cadeau"
+            data-buddy="cadeau"
             disabled={!(x.h >= 3 && !x.gift)}
           >
             {x.h < 3 ? 'Cadeau à 3 ♥' : x.gift ? 'Cadeau reçu ✓' : 'Cadeau du jour'}
@@ -96,7 +96,7 @@ function Sheet({ d }) {
           <button
             type="button"
             className={'b b-sm' + (x.isNew ? ' b-gold' : ' b-ghost')}
-            data-cp461="souv"
+            data-buddy="souv"
             disabled={!x.h}
           >
             Souvenirs{x.isNew ? ' · nouveau' : ''}

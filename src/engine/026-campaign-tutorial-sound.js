@@ -32,9 +32,9 @@ import { renderWallet } from './035-interface.js';
 import { itemize, preload } from './041-illustrations.js';
 import { RIVAL, RIVAL_KEYS, aplusProgress, aplusRewHtml, rivalBuild } from './043-adventure-plus.js';
 import { trapTip } from './047-tactics.js';
-import { jNext416 } from './055-living-johto.js';
-import { hNext419 } from './059-hoenn.js';
-import { confirm430 } from './065-camp-tactics.js';
+import { nextJohtoStep } from './055-living-johto.js';
+import { nextHoennStep } from './059-hoenn.js';
+import { confirmDialog } from './065-camp-tactics.js';
 
 export let PREF, SFX, PREPG, TUTORIAL_STEPS;
 let AC, tutorialI;
@@ -47,7 +47,8 @@ export function __set_tutorialI(v) {
 
 // Pokémon-style reduced animations (v4.72): system preference, accessibility setting or
 // theme animations turned off. Same test as the local copies in modules 108 and 109.
-export const calm472 = () => !!RM || document.documentElement.classList.contains('a11y-rm') || PREF.pk472a === 0;
+export const calmMotion = () =>
+  !!RM || document.documentElement.classList.contains('a11y-rm') || PREF.pokemonSkinA === 0;
 
 export function savePref() {
   writeLS('res-pref', PREF);
@@ -339,7 +340,7 @@ export function applyProgress(S) {
     PROFILE.tuto = 1;
   }
   const al = S.units.filter(u => u.side === 'a');
-  Object.entries(D.ready429 ? {} : S.stats.pairs || {}).forEach(([k, v]) => {
+  Object.entries(D.rentalTeam ? {} : S.stats.pairs || {}).forEach(([k, v]) => {
     // rental team: no Bonds (v4.29)
     const [a, b] = k.split('|'),
       ua = al.find(u => u.sp === a),
@@ -385,7 +386,7 @@ export function applyProgress(S) {
     PROFILE.elite = 5;
     rew.champ = true;
   }
-  if (isCamp() && !D.ready429) {
+  if (isCamp() && !D.rentalTeam) {
     const used = al.map(u => u.sp);
     PROFILE.box.forEach(id => {
       const f = PROFILE.fatigue[id] || 0;
@@ -396,7 +397,7 @@ export function applyProgress(S) {
     });
     rew.tired = used.filter(id => (PROFILE.fatigue[id] || 0) >= 70);
   }
-  if (!D.tuto && !D.ready429) {
+  if (!D.tuto && !D.rentalTeam) {
     const atk = [
         ...new Set(
           al.flatMap(u =>
@@ -420,7 +421,7 @@ export function applyProgress(S) {
   }, 0);
   // campaign: forms reached in battle become recruits
   rew.forms = [];
-  if (isCamp() && !D.ready429) {
+  if (isCamp() && !D.rentalTeam) {
     PROFILE.forms = PROFILE.forms || [];
     (S.stats.evl || []).forEach(([, id]) => {
       if (BY[id] && BY[id].st > 1 && !PROFILE.forms.includes(id)) {
@@ -571,11 +572,11 @@ export function nextGoal() {
     }
   }
   if (PROFILE.elite >= 5) {
-    const jn = jNext416(); // Johto after Kanto (v4.15), with its story (v4.16)
+    const jn = nextJohtoStep(); // Johto after Kanto (v4.15), with its story (v4.16)
     if (jn) {
       return jn;
     }
-    const hn = hNext419(); // Hoenn after Johto (v4.19)
+    const hn = nextHoennStep(); // Hoenn after Johto (v4.19)
     if (hn) {
       return hn;
     }
@@ -709,7 +710,7 @@ export function __init() {
     }
     const c = e.target.closest('[data-camp]');
     if (c) {
-      confirm430(
+      confirmDialog(
         'Commencer une campagne ?',
         'Vous choisirez votre partenaire, puis les chapitres s’enchaîneront depuis le premier badge.',
         openStarter

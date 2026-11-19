@@ -3,12 +3,12 @@
 import { PROFILE } from './011-game-state.js';
 import { writeLS } from './014-utils.js';
 import { HOOKS } from './015-hooks.js';
-import { ev454, evPick454 } from './084-peddler-route-missions.js';
+import { routeEvent, pickRouteChoice } from './084-peddler-route-missions.js';
 
 // Statements run at startup, in the original order (see index.js).
 export function __init() {
   (() => {
-    const KEY = 'res-ombre470';
+    const KEY = 'res-shadow-story';
     const readValue = () => {
       try {
         return Object.assign({ stepOf: 0 }, JSON.parse(localStorage.getItem(KEY)));
@@ -122,7 +122,7 @@ export function __init() {
     });
     let wasEpisode = false;
     HOOKS.beforeRouteChoice.push(() => {
-      const { E, st } = ev454();
+      const { E, st } = routeEvent();
       wasEpisode = !!(E && E.ombre && !st.done);
     });
     HOOKS.routeChoice.push(() => {
@@ -130,14 +130,14 @@ export function __init() {
         write({ stepOf: readValue().stepOf + 1 });
       }
     });
-    window.__shadow470 = {
+    window.__shadowEpisodes = {
       readValue,
       write,
       available: () => !!current(),
       titre: () => (current() || {}).t,
       req: () => (readValue().stepOf === 1 ? 'Commencez Johto' : readValue().stepOf === 2 ? 'Commencez Hoenn' : ''),
-      ev: () => ev454(),
-      pick: j => evPick454(j),
+      ev: () => routeEvent(),
+      pick: j => pickRouteChoice(j),
       nb: EPS.length,
     };
   })();

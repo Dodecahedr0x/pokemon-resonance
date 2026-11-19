@@ -7,11 +7,11 @@ import { medal, tc } from '../../engine/014-utils.js';
 import { squad } from '../../engine/020-team-cards.js';
 import { startVoice } from '../../engine/021-combat-engine.js';
 import { RANKS, rankId, rankTag } from '../../engine/053-resonance.js';
-import { duoFor416 } from '../../engine/055-living-johto.js';
-import { FORM463, formKey463, formMs463, formOn463 } from '../../engine/094-team-formations.js';
+import { duoTechnique } from '../../engine/055-living-johto.js';
+import { FORMATIONS, formationKey, formationTeam, formationActive } from '../../engine/094-team-formations.js';
 
 // Collapsed analysis (#anaD): summary (#anaSum) and cards (#ana). Clicks (data-p, data-rx,
-// data-fm463): engine listeners on #ana and on the document.
+// data-form-picker): engine listeners on #ana and on the document.
 export default function Analysis({ A }) {
   return (
     <details className="ana-d" id="anaD">
@@ -185,10 +185,10 @@ function Radar({ v }) {
 function Formation() {
   let ms, k, F, ok;
   try {
-    ms = formMs463();
-    k = formKey463();
-    F = FORM463[k];
-    ok = formOn463();
+    ms = formationTeam();
+    k = formationKey();
+    F = FORMATIONS[k];
+    ok = formationActive();
   } catch {
     return null;
   }
@@ -196,24 +196,24 @@ function Formation() {
     return null;
   }
   return (
-    <div className="ac ac-fm463">
+    <div className="ac ac-form-picker">
       <h4>
         Formation<span>{F.n}</span>
       </h4>
-      <div className="fm463-g">
-        {Object.keys(FORM463).map(x => (
+      <div className="form-picker-g">
+        {Object.keys(FORMATIONS).map(x => (
           <button
             key={x}
             type="button"
-            className={`fm463${x === k ? ' on' : ''}`}
-            data-fm463={x}
+            className={`form-picker${x === k ? ' on' : ''}`}
+            data-form-picker={x}
             aria-pressed={x === k}
           >
-            <b>{FORM463[x].n}</b>
+            <b>{FORMATIONS[x].n}</b>
           </button>
         ))}
       </div>
-      <p className="fm463-d">
+      <p className="form-picker-d">
         {k === 'libre'
           ? 'Choisissez une formation : un seul bonus, mais il faut composer l’équipe qui va avec. L’ordre de l’équipe compte : le 1er est l’avant-garde, le dernier l’éclaireur.'
           : F.d}
@@ -372,7 +372,7 @@ function Links() {
     for (let j = i + 1; j < T.length; j++) {
       const k = pairKey(T[i].id, T[j].id),
         v = PROFILE.links[k] || 0;
-      rows.push({ a: T[i], b: T[j], v, l: lvlOfPts(v), D: duoFor416(k) });
+      rows.push({ a: T[i], b: T[j], v, l: lvlOfPts(v), D: duoTechnique(k) });
     }
   }
   rows.sort((x, y) => y.v - x.v || (y.D ? 1 : 0) - (x.D ? 1 : 0));

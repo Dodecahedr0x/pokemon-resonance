@@ -1,34 +1,34 @@
 // Local duel (#duel433r, v4.33 · 068): relay screen between the two players, or
-// abandon confirmation. The clicks (data-dr433) stay in the engine.
-export default function Duel433({ d }) {
+// abandon confirmation. The clicks (data-forfeit-dialog) stay in the engine.
+export default function DuelRelay({ d }) {
   return (
-    <div id="duel433r" className="dr433">
+    <div id="duel433r" className="forfeit-dialog">
       {d.mode === 'abandon' ? (
-        <div className={'dr433-c dj' + d.j} role="dialog" aria-modal="true" aria-labelledby="dr433T">
+        <div className={'forfeit-dialog-c dj' + d.j} role="dialog" aria-modal="true" aria-labelledby="forfeit-dialog-t">
           <p className="kick">Duel local</p>
-          <h2 className="h1" id="dr433T">
+          <h2 className="h1" id="forfeit-dialog-t">
             {d.displayName} abandonne ?
           </h2>
           <p className="sub">{d.other} remporte le duel.</p>
-          <div className="dr433-a">
-            <button type="button" className="b b-gold" data-dr433="forfait">
+          <div className="forfeit-dialog-a">
+            <button type="button" className="b b-gold" data-forfeit-dialog="forfait">
               Déclarer forfait
             </button>
-            <button type="button" className="b b-ghost" data-dr433="non">
+            <button type="button" className="b b-ghost" data-forfeit-dialog="non">
               Continuer le duel
             </button>
           </div>
         </div>
       ) : (
-        <div className={'dr433-c dj' + d.j} role="dialog" aria-modal="true" aria-labelledby="dr433T">
+        <div className={'forfeit-dialog-c dj' + d.j} role="dialog" aria-modal="true" aria-labelledby="forfeit-dialog-t">
           <p className="kick">
             Manche {d.round} / {d.lim} · Joueur {d.j}
           </p>
-          <h2 className="h1" id="dr433T">
+          <h2 className="h1" id="forfeit-dialog-t">
             Au tour de {d.displayName}
           </h2>
           <p className="sub">{d.sub}</p>
-          <div className="dr433-s">
+          <div className="forfeit-dialog-s">
             {d.s.map(x => (
               <span key={x.j} className={'dj' + x.j}>
                 <b>{x.displayName}</b>
@@ -36,7 +36,7 @@ export default function Duel433({ d }) {
               </span>
             ))}
           </div>
-          <button type="button" className="b b-gold b-lg" data-dr433="go">
+          <button type="button" className="b b-gold b-lg" data-forfeit-dialog="go">
             C’est parti
           </button>
         </div>

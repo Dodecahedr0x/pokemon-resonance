@@ -8,11 +8,11 @@ import { ARENAS, BADGES } from '../../../engine/013-gyms.js';
 import { medal } from '../../../engine/014-utils.js';
 import { badgeSvg } from '../../../engine/019-league.js';
 import { B } from '../../../engine/024-combat-ui.js';
-import { calm472, nextGoal, rewHtml } from '../../../engine/026-campaign-tutorial-sound.js';
+import { calmMotion, nextGoal, rewHtml } from '../../../engine/026-campaign-tutorial-sound.js';
 import { leaderOf } from '../../../engine/030-prestige-staging.js';
 import { towerRun } from '../../../engine/043-adventure-plus.js';
-import { duelUnder433, duelTitle433 } from '../../../engine/068-duel-tutorial.js';
-import { IM448 } from '../../../engine/079-immersion-sound-haptics.js';
+import { duelUnder, duelTitle } from '../../../engine/068-duel-tutorial.js';
+import { IMMERSION_ON } from '../../../engine/079-immersion-sound-haptics.js';
 import { useBattleVersion } from './battleStore.js';
 
 const NL = '\n  ';
@@ -39,7 +39,7 @@ export default function Result() {
         v,
         relics: cs.position === 'static',
         holo: !scrolls,
-        confetti: c.classList.contains('win') && !calm472(),
+        confetti: c.classList.contains('win') && !calmMotion(),
       });
     });
     return () => cancelAnimationFrame(id);
@@ -60,14 +60,14 @@ function Sheet({ S, cardRef, decor: deco }) {
     du = !!S.duel433;
   const L = leaderOf(S.sc);
   // victory (v4.48): flash, badge appearing, gold for a Champion
-  const fx = win && IM448(),
+  const fx = win && IMMERSION_ON(),
     ia = ARENAS.findIndex(a => a.k === S.sc),
-    nz = S._nzdead450; // Nuzlocke (v4.51)
+    nz = S._nuzlockeDeaths; // Nuzlocke (v4.51)
   const cls =
     `res-card ${win ? 'win' : 'lose'}` +
-    (fx ? ' fx448' : '') +
-    (fx && /^(champ|jchamp|hchamp)$/.test(S.sc) ? ' gold448' : '') +
-    (nz ? ' nz450d' : '');
+    (fx ? ' result-fx' : '') +
+    (fx && /^(champ|jchamp|hchamp)$/.test(S.sc) ? ' gold-glow' : '') +
+    (nz ? ' nuzlocke-run-d' : '');
   // Resonance Tower: go up or start over; elsewhere, the rest of the campaign
   const tower = S.sc === 'tdr',
     run = tower && towerRun();
@@ -82,8 +82,8 @@ function Sheet({ S, cardRef, decor: deco }) {
       style={deco && deco.relics ? { position: 'relative' } : undefined}
     >
       {fx && S.rew && S.rew.badgeNew && ia >= 0 ? (
-        <div className="rbadge448">
-          <Html html={badgeSvg(ia, GYMS[ia].t, 'rb448')} />
+        <div className="result-badge">
+          <Html html={badgeSvg(ia, GYMS[ia].t, 'result-badge-svg')} />
         </div>
       ) : null}
       {S.rank ? (
@@ -97,7 +97,7 @@ function Sheet({ S, cardRef, decor: deco }) {
       ) : null}
       <p className="kick">{SCEN[S.sc].n}</p>
       <h2 className="h1" id="resT">
-        {du ? <Html html={duelTitle433(S)} /> : win ? 'Victoire' : S.flee416 ? 'Il s’est enfui' : 'Défaite'}
+        {du ? <Html html={duelTitle(S)} /> : win ? 'Victoire' : S.fled ? 'Il s’est enfui' : 'Défaite'}
       </h2>
       {L ? (
         <blockquote className="res-q">
@@ -120,14 +120,14 @@ function Sheet({ S, cardRef, decor: deco }) {
       ) : null}
       <p className="sub">
         {du ? (
-          <Html html={duelUnder433(S)} />
+          <Html html={duelUnder(S)} />
         ) : win ? (
           S.round <= 4 ? (
             'Une victoire nette : le plan a tenu dès les premières manches.'
           ) : (
             'Le plan a tenu.'
           )
-        ) : S.flee416 ? (
+        ) : S.fled ? (
           'Ses blessures restent : retrouvez-le sur la carte de Johto et finissez le travail.'
         ) : S.timeout ? (
           'Temps écoulé : l’adversaire a tenu sa position.'
@@ -178,7 +178,7 @@ function Sheet({ S, cardRef, decor: deco }) {
       <Html html={rewHtml(S.rew)} />
       {NL}
       {nz ? (
-        <div className="nz450">
+        <div className="nuzlocke-run">
           <h4>Nuzlocke</h4>
           {nz.names.length ? (
             <p>

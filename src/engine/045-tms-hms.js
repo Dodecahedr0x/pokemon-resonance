@@ -10,7 +10,7 @@ import { queueSave } from './025-saves.js';
 import { sfx, vibe } from './026-campaign-tutorial-sound.js';
 import { SHOP, bagN } from './032-v4-foundation.js';
 import { renderBag } from './039-quests-shop.js';
-import { inheritance416 } from './055-living-johto.js';
+import { inheritedMoveHtml } from './055-living-johto.js';
 
 let TM_K;
 
@@ -118,12 +118,12 @@ export function moveLearned(id) {
   const b = BY[id] && BY[id].base,
     a = b && PROFILE.learnedTms[b];
   if (!a) {
-    return inheritance416(b);
+    return inheritedMoveHtml(b);
   } // inherited move (v4.16)
   const M = Object.values(MACHINES).find(x => x.mv === a);
   return (
     `<div class="mvc ct-mvc"><div class="t"><b>${MV[a].n}</b><span class="chip">${M ? M.num : 'Apprise'}</span></div><p>${MV[a].d}</p><button type="button" class="b b-sm b-ghost" data-ctoubli="${b}">Oublier</button></div>` +
-    inheritance416(b)
+    inheritedMoveHtml(b)
   );
 }
 

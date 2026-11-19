@@ -5,10 +5,10 @@ import { tb } from '../../engine/014-utils.js';
 import { crestSmall } from '../../engine/020-team-cards.js';
 import { shinyStyle } from '../../engine/043-adventure-plus.js';
 
-// Safari Park (#safari418). The engine (058) computes the visit state (catch and
-// flee chances, message) and keeps the clicks (data-safari418) and the hidden attribute.
-export default function Safari418() {
-  return <Box displayName="safari" className="result exp-box" id="safari418" cardComponent={Card} />;
+// Safari Park (#safariPanel). The engine (058) computes the visit state (catch and
+// flee chances, message) and keeps the clicks (data-safari-panel) and the hidden attribute.
+export default function SafariWindow() {
+  return <Box displayName="safari" className="result exp-box" id="safari-panel" cardComponent={Card} />;
 }
 
 // Percentage gauge (catch, flee).
@@ -37,7 +37,7 @@ function Card({
 }) {
   const m = x && BY[x.id];
   return (
-    <Dialogue className="sv-card exp-card sf-card" titre="sfT" closeAttrs={{ 'data-safari418': 'x' }}>
+    <Dialogue className="sv-card exp-card sf-card" titre="sfT" closeAttrs={{ 'data-safariPanel': 'x' }}>
       <p className="kick">Parc Safari</p>
       <h2 className="h2" id="sfT">
         {x ? m.n : 'Les herbes du Parc'}
@@ -75,30 +75,30 @@ function Card({
       </p>
       <div className="sf-a">
         {isFinished ? (
-          <button type="button" className="b b-gold" data-safari418="sortir">
+          <button type="button" className="b b-gold" data-safari-panel="sortir">
             Quitter le Parc
           </button>
         ) : x ? (
           <>
-            <button type="button" className="b b-sm b-gold" data-safari418="ball" disabled={!balls}>
+            <button type="button" className="b b-sm b-gold" data-safari-panel="ball" disabled={!balls}>
               Safari Ball
             </button>
-            <button type="button" className="b b-sm" data-safari418="appat">
+            <button type="button" className="b b-sm" data-safari-panel="appat">
               Appât
             </button>
-            <button type="button" className="b b-sm" data-safari418="caillou">
+            <button type="button" className="b b-sm" data-safari-panel="caillou">
               Caillou
             </button>
-            <button type="button" className="b b-sm b-ghost" data-safari418="fuir">
+            <button type="button" className="b b-sm b-ghost" data-safari-panel="fuir">
               Fuir
             </button>
           </>
         ) : (
           <>
-            <button type="button" className="b b-gold" data-safari418="marcher">
+            <button type="button" className="b b-gold" data-safari-panel="marcher">
               Avancer dans les herbes
             </button>
-            <button type="button" className="b b-ghost" data-safari418="sortir">
+            <button type="button" className="b b-ghost" data-safari-panel="sortir">
               Quitter le Parc
             </button>
           </>

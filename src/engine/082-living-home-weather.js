@@ -9,28 +9,28 @@ import { B, ui } from './024-combat-ui.js';
 import { tileTip } from './026-campaign-tutorial-sound.js';
 import { overlay } from './030-prestige-staging.js';
 import { shut } from '../screens/overlays/tempStore.js';
-import { weatherDay417 } from './057-companions-resonance.js';
-import { FX448 } from './079-immersion-sound-haptics.js';
+import { todayWeather } from './057-companions-resonance.js';
+import { effectsEnabled } from './079-immersion-sound-haptics.js';
 
 /* ---------- 1. living home ---------- */
-function season450() {
+function currentSeason() {
   const m = new Date().getMonth();
   return m >= 2 && m <= 4 ? 'printemps' : m >= 5 && m <= 7 ? 'ete' : m >= 8 && m <= 10 ? 'automne' : 'hiver';
 }
 
 /** Season and weather of the day on the Home hero (rendering: src/screens/home/Hero.jsx). */
-export function alive450() {
-  const wx = FX448() ? weatherDay417() : null,
-    se = FX448() ? season450() : '';
+export function homeSkyInfo() {
+  const wx = effectsEnabled() ? todayWeather() : null,
+    se = effectsEnabled() ? currentSeason() : '';
   if (!se) {
     return null;
   }
-  return { se, wx, txt: SNOM450[se] + (wx ? ' · ' + SKY450[wx] : '') };
+  return { se, wx, txt: SEASON_NAMES[se] + (wx ? ' · ' + WEATHER_NAMES[wx] : '') };
 }
 
 /* ---------- 2. contextual help in battle ---------- */
-// help data (rendering: src/screens/overlays/transients/Windows.jsx, Help452)
-function help452() {
+// help data (rendering: src/screens/overlays/transients/Windows.jsx, BattleHelp)
+function battleHelpData() {
   const u = ui.sel != null ? byUid(B, ui.sel) : null,
     out = { sel: null, terrainList: [], wx: null, rx: [] };
   if (u && BY[u.id]) {
@@ -94,39 +94,39 @@ function help452() {
   return out;
 }
 
-function openHelp452() {
+function openBattleHelp() {
   if (!B) {
     return;
   }
-  const o = overlay('hp452', help452());
+  const o = overlay('battle-help', battleHelpData());
   o.addEventListener('click', e => {
     if (e.target === o) {
-      shut('hp452');
+      shut('battle-help');
     }
   });
 }
 
-const SNOM450 = { printemps: 'Printemps', ete: 'Été', automne: 'Automne', hiver: 'Hiver' };
+const SEASON_NAMES = { printemps: 'Printemps', ete: 'Été', automne: 'Automne', hiver: 'Hiver' };
 
-const SKY450 = { pluie: 'pluie', soleil: 'soleil', grele: 'grêle', sable: 'sable' };
+const WEATHER_NAMES = { pluie: 'pluie', soleil: 'soleil', grele: 'grêle', sable: 'sable' };
 
 // Instructions run at startup, in the original order (see index.js).
 export function __init() {
   document.addEventListener('click', e => {
-    const b = e.target.closest && e.target.closest('[data-b452]');
+    const b = e.target.closest && e.target.closest('[data-help-action]');
     if (!b) {
       return;
     }
-    if (b.dataset.b452 === 'help') {
-      openHelp452();
-    } else if (b.dataset.b452 === 'close') {
-      shut('hp452');
+    if (b.dataset.helpAction === 'help') {
+      openBattleHelp();
+    } else if (b.dataset.helpAction === 'close') {
+      shut('battle-help');
     }
   });
 
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') {
-      shut('hp452');
+      shut('battle-help');
     }
   });
 }

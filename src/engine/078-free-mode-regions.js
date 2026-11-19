@@ -5,9 +5,9 @@ import { PROFILE } from './011-game-state.js';
 import { johtoOpen } from './054-johto.js';
 import { hoennOpen } from './059-hoenn.js';
 
-const JLEG446 = ['raikou', 'entei', 'suicune', 'lugia', 'hooh'];
+const JOHTO_LEGENDARIES = ['raikou', 'entei', 'suicune', 'lugia', 'hooh'];
 
-function region446(k) {
+function regionOfKey(k) {
   const D = SCEN[k];
   if (!D) {
     return null;
@@ -22,7 +22,7 @@ function region446(k) {
     D.jdis ||
     D.roam ||
     k === 'rv5' ||
-    JLEG446.some(id => k === 'lg' + id || k === 'lc' + id)
+    JOHTO_LEGENDARIES.some(id => k === 'lg' + id || k === 'lc' + id)
   ) {
     return 'johto';
   }
@@ -32,8 +32,8 @@ function region446(k) {
 /* Kanto first. Johto opens after beating the Kanto Champion (Auriane Vale),
    Hoenn after the Johto Master title — as in Campaign. In an open region,
    Free Mode keeps all its battles open (no badge order). Called by scenLock(). */
-export function lockRegion446(k) {
-  const r = region446(k);
+export function lockFreeRegion(k) {
+  const r = regionOfKey(k);
   if (r === 'johto' && !johtoOpen()) {
     return 'Johto s’ouvre après votre victoire sur la Championne Auriane Vale (Kanto).';
   }

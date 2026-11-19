@@ -17,7 +17,7 @@ import { renderHome } from './036-home.js';
 import { artTag } from './041-illustrations.js';
 import { challengeRefusal } from './048-replayability.js';
 import { expRefusal } from './049-identity.js';
-import { REGION_NAMES421, captureSite421, regFam421 } from './061-catch-anywhere.js';
+import { FAMILY_REGION_NAMES, captureSite, familyRegion } from './061-catch-anywhere.js';
 import { hideSheet, refreshFilters, refreshGrid, refreshTeam, showSheet } from '../screens/team/teamStore.js';
 
 export let squad, filt, openId, gen;
@@ -256,7 +256,7 @@ export function toggle(id, card) {
   }
   if (!inBox(id)) {
     toast(
-      `${BY[m.base].n} n’est pas dans votre Box : ${captureSite421(id) ? `capturez-en un sur la ${captureSite421(id)} (${REGION_NAMES421[regFam421(id)]})` : 'capturez-en un dans les hautes herbes'}.`
+      `${BY[m.base].n} n’est pas dans votre Box : ${captureSite(id) ? `capturez-en un sur la ${captureSite(id)} (${FAMILY_REGION_NAMES[familyRegion(id)]})` : 'capturez-en un dans les hautes herbes'}.`
     );
     return;
   }

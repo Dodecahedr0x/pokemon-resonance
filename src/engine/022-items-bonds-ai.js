@@ -26,14 +26,14 @@ import { CHAMP_L, ELITE_L } from './030-prestige-staging.js';
 import { CAP_K, SHOP, __set_BALL_SEL, bagN } from './032-v4-foundation.js';
 import { renderWallet } from './035-interface.js';
 import { RIVAL_STEPS } from './043-adventure-plus.js';
-import { lockJ415, regionJ415, routeName } from './054-johto.js';
-import { dom416, duoFor416 } from './055-living-johto.js';
-import { lockH419, regionH419 } from './059-hoenn.js';
-import { lockRival429 } from './064-quality.js';
-import { HLEG435, lock435 } from './071-hoenn-legendaries.js';
-import { BALL455 } from './087-balls-held-items.js';
-import { lockRegion446 } from './078-free-mode-regions.js';
-import { brBoss466 } from './097-boss-rush-relics.js';
+import { lockJohto, isJohtoRegion, routeName } from './054-johto.js';
+import { makeDominantScenario, duoTechnique } from './055-living-johto.js';
+import { lockHoenn, isHoennRegion } from './059-hoenn.js';
+import { lockRival } from './064-quality.js';
+import { HOENN_LEGEND_DEFS, lockHoennLegend } from './071-hoenn-legendaries.js';
+import { SPECIAL_BALLS } from './087-balls-held-items.js';
+import { lockFreeRegion } from './078-free-mode-regions.js';
+import { isBossRushBoss } from './097-boss-rush-relics.js';
 
 export function linkLvl(S, a, b) {
   return lvlOfPts((S.links || {})[pairKey(a, b)] || 0);
@@ -78,11 +78,11 @@ export function captureReq(S, u, e) {
     { ok: !!u && !u.acted && !u.sn, t: 'cet allié n’a pas encore agi' },
     { ok: S.voice >= 2, t: '2 Voix' },
   ];
-  if ((SCEN[S.sc] || {}).cap429) {
-    r.push({ ok: e.sp === SCEN[S.sc].cap429, t: 'la légende elle-même, pas son escorte' });
+  if ((SCEN[S.sc] || {}).captureLegend) {
+    r.push({ ok: e.sp === SCEN[S.sc].captureLegend, t: 'la légende elle-même, pas son escorte' });
   } // v4.29
-  if ((SCEN[S.sc] || {}).cap435) {
-    const L = HLEG435.find(x => x.id === SCEN[S.sc].cap435); // Hoenn legends (v4.38)
+  if ((SCEN[S.sc] || {}).captureHoennLegend) {
+    const L = HOENN_LEGEND_DEFS.find(x => x.id === SCEN[S.sc].captureHoennLegend); // Hoenn legends (v4.38)
     r.push({ ok: e.sp === L.id, t: 'la légende elle-même, pas son escorte' }, { ok: !!L.cap.f(S, L, e), t: L.cap.t });
   }
   // the chosen Ball changes the conditions
@@ -98,7 +98,7 @@ export function captureReq(S, u, e) {
     r[1] = { ok: true, t: 'Master Ball : PV indifférents' };
     r[2] = { ok: true, t: 'Master Ball : pas besoin d’immobiliser' };
   }
-  const special = BALL455 && BALL455[k]; // special Balls (v4.56)
+  const special = SPECIAL_BALLS && SPECIAL_BALLS[k]; // special Balls (v4.56)
   if (special) {
     r[1] = { ok: special.pv(S, e), t: special.hpText };
     r[2] = { ok: special.im(S, e), t: special.tim };
@@ -156,7 +156,7 @@ export function duoOf(S, u, p) {
   if (!u || !p || u === p || u.side !== 'a' || p.side !== 'a') {
     return null;
   }
-  const D = duoFor416(pairKey(u.sp, p.sp)); // each duo has its own technique (v4.16)
+  const D = duoTechnique(pairKey(u.sp, p.sp)); // each duo has its own technique (v4.16)
   return D && linkLvl(S, u.sp, p.sp) >= 3 ? D : null;
 }
 
@@ -318,16 +318,16 @@ export function wildScen(id, tod, shiny, dom) {
     bio: 'gue',
     water: ['5,0', '5,1'],
     rock: ['3,4'],
-    hb: 6 + b * 3 + (regionJ415() ? 10 : 0) + (regionH419() ? 18 : 0),
+    hb: 6 + b * 3 + (isJohtoRegion() ? 10 : 0) + (isHoennRegion() ? 18 : 0),
     pb: Math.min(3, Math.floor(b / 2)),
-    lv: 6 + b * 4 + (regionJ415() ? 8 : 0) + (regionH419() ? 16 : 0),
+    lv: 6 + b * 4 + (isJohtoRegion() ? 8 : 0) + (isHoennRegion() ? 16 : 0),
     catch: true,
     wild: true,
     d: 'Affaiblissez-le sous 25 % de ses PV, immobilisez-le (Gel, Paralysie, Sommeil, Racines, Toile), puis capturez-le au contact pour 2 Voix. K.O., il s’enfuit.',
     foes: [shiny ? [id, [6, 2], { shiny: true }] : [id, [6, 2]]],
   };
   if (dom) {
-    dom416(SCEN.sauvage, id, shiny);
+    makeDominantScenario(SCEN.sauvage, id, shiny);
   } // Dominant Pokémon (v4.16)
   return SCEN.sauvage;
 }
@@ -430,35 +430,35 @@ export function champBuild() {
 /* --- availability of a battle depending on the mode --- */
 /** Why scenario k is closed (text), or null if it is open. */
 export function scenLock(k) {
-  if (brBoss466(k)) {
+  if (isBossRushBoss(k)) {
     return null;
   } // Boss Rush: the current boss is always open
   const l = lockCampaign(k);
   if (l || isCamp()) {
     return l;
   }
-  return lockRegion446(k); // Free Mode: regions open in order
+  return lockFreeRegion(k); // Free Mode: regions open in order
 }
 
 function lockCampaign(k) {
   const D = SCEN[k];
-  if (D && (D.hleg435 || D.cap435)) {
-    return lock435(k, D);
+  if (D && (D.hoennLegend || D.captureHoennLegend)) {
+    return lockHoennLegend(k, D);
   } // Hoenn Legendaries (v4.38)
   if (!D || !isCamp()) {
     return null;
   }
-  if (D.rival429) {
-    return lockRival429(D);
+  if (D.rivalFight) {
+    return lockRival(D);
   } // Kael, the Echoes (v4.29)
   if (D.hebdo429 && BADGES.length < 2) {
     return 'Le défi de la semaine s’ouvre après 2 badges.';
   }
   if (D.hoenn != null || D.hfinal) {
-    return lockH419(k, D);
+    return lockHoenn(k, D);
   } // Hoenn (v4.19)
   if (D.johto != null || D.jfinal || D.lac || D.jdis || D.roam) {
-    return lockJ415(k, D);
+    return lockJohto(k, D);
   } // Johto (v4.15, v4.16)
   if (D.gym != null && D.gym > 0 && !BADGES.includes(D.gym - 1)) {
     return `Gagnez d’abord le badge ${GYMS[D.gym - 1].t}.`;

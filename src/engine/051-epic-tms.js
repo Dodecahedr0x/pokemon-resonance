@@ -8,10 +8,10 @@ import { SHOP } from './032-v4-foundation.js';
 import { DAMAGE_PROVIDERS, SPEED_PROVIDERS } from './044-tactical-engine.js';
 import { MACHINES } from './045-tms-hms.js';
 import { de } from './047-tactics.js';
-import { bonusMove413, durations413, rune413 } from './052-technical-roster.js';
-import { bonusMove414 } from './053-resonance.js';
+import { statusMoveBonus, tickTechnicalEffects, hasRune } from './052-technical-roster.js';
+import { heldMoveBonus } from './053-resonance.js';
 
-export let SELF412, TARGET412;
+export let SELF_MOVE_EFFECTS, TARGET_MOVE_EFFECTS;
 
 /* ---------- effects on each target hit ---------- */
 export function applyPoison(S, v, ev) {
@@ -22,7 +22,7 @@ export function applyPoison(S, v, ev) {
     say(ev, `${v.n} ne craint pas le poison.`);
     return false;
   }
-  if (rune413(S, v)) {
+  if (hasRune(S, v)) {
     say(ev, `Rune Protect : ${v.n} est protégé.`);
     return false;
   }
@@ -31,7 +31,7 @@ export function applyPoison(S, v, ev) {
   return true;
 }
 
-export function bonusMove412(S, u) {
+export function tailwindMoveBonus(S, u) {
   let b = 0;
   if (S.arriere && S.arriere[u.side] > 0) {
     b += 2;
@@ -39,11 +39,11 @@ export function bonusMove412(S, u) {
   if (S.distorsion > 0 && u.s[3] <= 2) {
     b += 1;
   }
-  b += bonusMove413(S, u) + bonusMove414(S, u); // Choice Scarf (v4.14)
+  b += statusMoveBonus(S, u) + heldMoveBonus(S, u); // Choice Scarf (v4.14)
   return b;
 }
 
-export function durations412(S, ev) {
+export function tickFieldEffects(S, ev) {
   if (S.arriere) {
     for (const c in S.arriere) {
       if (S.arriere[c] > 0 && --S.arriere[c] === 0) {
@@ -54,7 +54,7 @@ export function durations412(S, ev) {
   if (S.distorsion > 0 && --S.distorsion === 0) {
     say(ev, 'La Distorsion se dissipe.');
   }
-  durations413(S, ev);
+  tickTechnicalEffects(S, ev);
 }
 
 /* ---------- Future Sight ---------- */
@@ -101,7 +101,7 @@ export function foresightOnBoard(S) {
 }
 
 /* ---------- battle banner ---------- */
-export function chips412(S) {
+export function fieldEffectChips(S) {
   if (!S) {
     return '';
   }
@@ -303,7 +303,7 @@ export function __init() {
   });
 
   /* ---------- effects on oneself ---------- */
-  SELF412 = {
+  SELF_MOVE_EFFECTS = {
     arriere(S, u, ev) {
       S.arriere = Object.assign({}, S.arriere, { [u.side]: 3 });
       say(
@@ -339,9 +339,9 @@ export function __init() {
     },
   };
 
-  TARGET412 = {
+  TARGET_MOVE_EFFECTS = {
     ventglace(S, u, v, k, mk, ev) {
-      if (v.ability === 'regardvif' || rune413(S, v)) {
+      if (v.ability === 'regardvif' || hasRune(S, v)) {
         say(ev, `${v.n} ignore l’entrave.`);
       } else {
         v.web = Math.max(v.web, 2);

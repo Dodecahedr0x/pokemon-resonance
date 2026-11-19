@@ -1,7 +1,7 @@
 import { ITEMS2, PROFILE, isCamp, ownedItems } from '../../engine/011-game-state.js';
 import { BADGES } from '../../engine/013-gyms.js';
 import { HELD_IMG, ITM, SHOP, fmt } from '../../engine/032-v4-foundation.js';
-import { HELD_SHOP, offer414, costHeld414 } from '../../engine/053-resonance.js';
+import { HELD_SHOP, isDailyOffer, heldItemCost } from '../../engine/053-resonance.js';
 import { Article, Shards } from './Items.jsx';
 
 // Held item for sale (v4.14): one-time purchase, data-buyh (engine).
@@ -9,7 +9,7 @@ function OutfitForSale({ k }) {
   const it = ITEMS2[k],
     H = HELD_SHOP[k],
     own = ownedItems().includes(k),
-    price = H.g || costHeld414(k),
+    price = H.g || heldItemCost(k),
     can = H.g ? PROFILE.gems >= price : PROFILE.money >= price;
   return (
     <article className={'v4-it' + (own ? ' own' : '')}>
@@ -19,7 +19,7 @@ function OutfitForSale({ k }) {
       <div className="v4-it-t">
         <b>
           {it.n}
-          {!own && offer414(k) ? (
+          {!own && isDailyOffer(k) ? (
             <>
               {' '}
               <span className="v4-off">−30 %</span>

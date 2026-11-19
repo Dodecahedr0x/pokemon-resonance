@@ -10,8 +10,8 @@ import { medal } from '../../engine/014-utils.js';
 import { B } from '../../engine/024-combat-ui.js';
 import { SLOTS, SV, battleLine, cleanProfile, fmtD, snapshot, validBattle } from '../../engine/025-saves.js';
 import { PREF } from '../../engine/026-campaign-tutorial-sound.js';
-import { freeBox421 } from '../../engine/061-catch-anywhere.js';
-import { boxN429 } from '../../engine/064-quality.js';
+import { boxCapacityLabel } from '../../engine/061-catch-anywhere.js';
+import { boxCount } from '../../engine/064-quality.js';
 
 // "Sauvegardes" (Saves) window (#saves). Clicks, input and import are still handled by
 // the engine (listeners on #saves, data-sv, data-resume): here, display only.
@@ -230,7 +230,9 @@ function Card({ xRef }) {
         <div className="ss-row">
           <span>Mode</span>
           <b>
-            {isCamp() ? `Campagne · Box ${boxN429()} / ${RECRUIT.length}` : `Libre · combats ouverts · ${freeBox421()}`}
+            {isCamp()
+              ? `Campagne · Box ${boxCount()} / ${RECRUIT.length}`
+              : `Libre · combats ouverts · ${boxCapacityLabel()}`}
           </b>
         </div>
         <div className="ss-row">

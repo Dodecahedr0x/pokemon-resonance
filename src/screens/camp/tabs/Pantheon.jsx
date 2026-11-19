@@ -4,9 +4,9 @@ import { ART } from '../../../engine/032-v4-foundation.js';
 
 // Camp › Pantheon (v4.32): teams engraved after a Champion, a Master or the Echo guardian.
 export default function Pantheon() {
-  const L = PROFILE.panth432 || [];
+  const L = PROFILE.pantheonlist || [];
   return (
-    <section className="v4-panel pa432">
+    <section className="v4-panel pantheon-tab">
       <header className="v4-ph">
         <svg>
           <use href="#i-trophy" />
@@ -17,17 +17,17 @@ export default function Pantheon() {
       <p className="v4-ps-n">
         Chaque équipe qui bat un Champion ou un Maître, ou le gardien de l’Écho profond, est gravée ici.
       </p>
-      <div className="pa432-l">
+      <div className="pantheon-tab-l">
         {L.length ? (
           L.map((x, i) => (
-            <article key={i} className="pa432-c">
-              <div className="pa432-h">
+            <article key={i} className="pantheon-tab-c">
+              <div className="pantheon-tab-h">
                 <b>{x.n}</b>
                 <em>{`${x.d ? x.d.split('-').reverse().join('/') : ''} · ${DIFFS[x.df] || ''}${x.r ? ` · ${x.r} manche${x.r > 1 ? 's' : ''}` : ''}${x.rk ? ` · rang ${x.rk}` : ''}${x.md ? ' · ' + (x.md === 'campagne' ? 'Campagne' : 'Libre') : ''}`}</em>
               </div>
-              <div className="pa432-t">
+              <div className="pantheon-tab-t">
                 {x.t.map((id, j) => (
-                  <span key={j} className="pa432-m">
+                  <span key={j} className="pantheon-tab-m">
                     <img src={ART(BY[id].no)} alt="" loading="lazy" />
                     <em>{BY[id].n}</em>
                   </span>

@@ -7,7 +7,7 @@ import { RC } from './012-recruits-roles-synergies.js';
 import { $, medal, toast } from './014-utils.js';
 import { HOOKS } from './015-hooks.js';
 import { squad, vBonus } from './020-team-cards.js';
-import { brWeapon466, brBoss466 } from './097-boss-rush-relics.js';
+import { armedBossRush, isBossRushBoss } from './097-boss-rush-relics.js';
 import { EMAX, byUid, endStep, hasNx, heal, say } from './021-combat-engine.js';
 import {
   B,
@@ -37,26 +37,26 @@ import { MACHINES } from './045-tms-hms.js';
 import { ACHIEVEMENTS, teamSize } from './048-replayability.js';
 import { renderCampBase } from './049-identity.js';
 import { hasXp } from './053-resonance.js';
-import { regionJ415, routeName } from './054-johto.js';
+import { isJohtoRegion, routeName } from './054-johto.js';
 import {
   ROAM,
-  friendBuild416,
-  roamActive416,
-  roamState416,
-  roamLeg416,
-  roamOk416,
-  scoreOf416,
+  buildFriendTeam,
+  isRoamingActive,
+  getRoamState,
+  findRoamLegend,
+  roamerCaught,
+  friendScore,
 } from './055-living-johto.js';
-import { regionH419 } from './059-hoenn.js';
-import { poolRegion421 } from './061-catch-anywhere.js';
-import { who429 } from './064-quality.js';
-import { campOk430 } from './065-camp-tactics.js';
+import { isHoennRegion } from './059-hoenn.js';
+import { regionPool } from './061-catch-anywhere.js';
+import { npcProfile } from './064-quality.js';
+import { campOpen } from './065-camp-tactics.js';
 import { refreshHome } from '../screens/home/homeStore.js';
 import { paintOverlay } from '../screens/overlays/dialogsStore.js';
 
 export let SCN;
 let POT_I;
-export { POTAGER, sprout417, POT_I }; // read by the Camp Garden (src/screens/camp)
+export { POTAGER, plotSprout, POT_I }; // read by the Camp Garden (src/screens/camp)
 export function __set_SCN(v) {
   return (SCN = v);
 }
@@ -78,7 +78,7 @@ export function __set_SCN(v) {
    ===================================================================== */
 
 /* ---------- profile (declared functions: called as soon as the file loads) ---------- */
-export function V417_0() {
+export function COMPANIONS_0() {
   return {
     comp: { id: '', aff: 0, j: '' },
     scenes: {},
@@ -88,8 +88,8 @@ export function V417_0() {
   };
 }
 
-export function v417Clean(p) {
-  const o = V417_0();
+export function companionGardenClean(p) {
+  const o = COMPANIONS_0();
   if (!p || typeof p !== 'object') {
     return o;
   }
@@ -150,7 +150,7 @@ export function v417Clean(p) {
 }
 
 /** Can an ally aim for the Resonant Form (final stage, not a legend, not yet used)? */
-export function resoCand417(S, u) {
+export function resonanceCandidate(S, u) {
   return !!(
     S &&
     u &&
@@ -160,15 +160,15 @@ export function resoCand417(S, u) {
     !(BY[u.id] && (BY[u.id].leg || BY[u.id].isEnemy)) &&
     !u.seg &&
     !u.colossus &&
-    !S.resonance417
+    !S.resonantUnit
   );
 }
 
-function canResonance417(S, u) {
-  return !!(resoCand417(S, u) && S.phase === 'player' && !u.sn && u.en >= EMAX && S.voice >= 1);
+function canTriggerResonance(S, u) {
+  return !!(resonanceCandidate(S, u) && S.phase === 'player' && !u.sn && u.en >= EMAX && S.voice >= 1);
 }
 
-function enterResonance417(S, u, ev, strongSpot) {
+function startResonantForm(S, u, ev, strongSpot) {
   u.resonant = RESO_TURNS;
   u.pb = (u.pb || 0) + (strongSpot ? 2 : 1);
   u.resonancePb = strongSpot ? 2 : 1;
@@ -179,29 +179,29 @@ function enterResonance417(S, u, ev, strongSpot) {
   u.burn = 0;
   u.web = 0;
   u.root = 0;
-  ev.push({ e: 'reso417', u: u.uid });
+  ev.push({ e: 'resonanceBurst', u: u.uid });
   say(ev, `${u.n} entre en Forme Résonante !`);
 }
 
 /** The player triggers the Resonant Form: 1 Voice and the whole gauge; the action stays free. */
-function pReso417(S, u) {
-  if (!canResonance417(S, u)) {
+function playerResonance(S, u) {
+  if (!canTriggerResonance(S, u)) {
     return null;
   }
   const ev = [];
   S.voice -= 1;
   S.stats.voice += 1;
-  S.resonance417 = u.uid;
+  S.resonantUnit = u.uid;
   S.stats.resonant = (S.stats.resonant || 0) + 1;
   u.en = 0;
-  enterResonance417(S, u, ev, true);
+  startResonantForm(S, u, ev, true);
   return endStep(S, ev);
 }
 
 /** Masters and your friends' teams use it too, once, when their best Pokémon starts to fade. */
-function resoOpponent417(S, ev) {
+function opponentResonance(S, ev) {
   const D = SCEN[S.sc] || {};
-  if (S.resonance417e || !(D.champ || D.jfinal || D.hfinal || D.ami)) {
+  if (S.resonantUnitE || !(D.champ || D.jfinal || D.hfinal || D.ami)) {
     return;
   }
   const e = S.units
@@ -210,22 +210,22 @@ function resoOpponent417(S, ev) {
   if (!e) {
     return;
   }
-  S.resonance417e = e.uid;
-  enterResonance417(S, e, ev, false);
+  S.resonantUnitE = e.uid;
+  startResonantForm(S, e, ev, false);
 }
 
 /** The battle panel block. */
-export function resoBlock417(u, gauge) {
+export function resonanceBlockHtml(u, gauge) {
   if (!B || u.side !== 'a' || hasNx(u)) {
     return '';
   }
   if (u.resonant > 0) {
     return `<div class="bp-en bp-fres full"><div class="en-h"><span class="lbl-s">Forme Résonante</span><b class="fres-n">${u.resonant} manche${u.resonant > 1 ? 's' : ''}</b></div><p class="bp-hint">+2 Puissance, +1 Mouvement, +20 % de dégâts, entraves dissipées en fin de manche.</p></div>`;
   }
-  if (!resoCand417(B, u)) {
+  if (!resonanceCandidate(B, u)) {
     return '';
   }
-  const ok = canResonance417(B, u),
+  const ok = canTriggerResonance(B, u),
     why =
       u.en < EMAX
         ? `Encore ${EMAX - u.en} losange${EMAX - u.en > 1 ? 's' : ''}`
@@ -234,28 +234,28 @@ export function resoBlock417(u, gauge) {
           : B.voice < 1
             ? 'Plus de Voix'
             : 'Prêt · une fois par combat';
-  return `${gauge ? `<div class="bp-en${u.en >= EMAX ? ' full' : ''}"><div class="en-h"><span class="lbl-s">Résonance</span>${enPips(u.en, 'lg')}</div></div>` : ''}<button type="button" class="evb fres-b" data-reso417 ${ok ? '' : 'disabled'}><span class="evb-m fres-m"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.6 6.4L21 9l-5 4.4 1.6 6.6L12 16.6 6.4 20 8 13.4 3 9l6.4-.6Z" fill="currentColor"/></svg></span><span><b>Forme Résonante</b><em>${why}</em></span><span class="evb-c">1 Voix<br>+ jauge</span></button>`;
+  return `${gauge ? `<div class="bp-en${u.en >= EMAX ? ' full' : ''}"><div class="en-h"><span class="lbl-s">Résonance</span>${enPips(u.en, 'lg')}</div></div>` : ''}<button type="button" class="evb fres-b" data-resonance-burst ${ok ? '' : 'disabled'}><span class="evb-m fres-m"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.6 6.4L21 9l-5 4.4 1.6 6.6L12 16.6 6.4 20 8 13.4 3 9l6.4-.6Z" fill="currentColor"/></svg></span><span><b>Forme Résonante</b><em>${why}</em></span><span class="evb-c">1 Voix<br>+ jauge</span></button>`;
 }
 
-export function companionGain417(n) {
+export function gainCompanionAffinity(n) {
   const c = PROFILE.comp;
   if (!c || !c.id) {
     return 0;
   }
-  const previous = hearts417(c.aff);
+  const previous = affinityHearts(c.aff);
   c.aff = Math.min(255, (c.aff || 0) + n);
-  return hearts417(c.aff) > previous ? hearts417(c.aff) : 0;
+  return affinityHearts(c.aff) > previous ? affinityHearts(c.aff) : 0;
 }
 
 /** The Home screen companion (#v4Comp, rendered by src/screens/home/Companion.jsx). */
-export function companionData417() {
-  const id = companionId417();
+export function companionPanelData() {
+  const id = activeCompanionId();
   if (!id) {
     return null;
   }
   const m = BY[id],
     a = PROFILE.comp.aff || 0,
-    h = hearts417(a);
+    h = affinityHearts(a);
   return {
     m,
     h,
@@ -273,7 +273,7 @@ export function companionData417() {
 }
 
 /* companion choice: rendered by React (src/screens/overlays/CompBox.jsx) */
-export function renderCompBox417() {
+export function renderCompanionBox() {
   const L = MON.filter(
     m =>
       !m.isEnemy &&
@@ -281,13 +281,13 @@ export function renderCompBox417() {
       PROFILE.box.includes(m.base) &&
       (m.st === 1 || (isCamp() && (PROFILE.forms || []).includes(m.id)))
   ).slice(0, 80);
-  paintOverlay('comp', { L: L.map(m => m.id), cur: companionId417(), bonus: COMP_BONUS });
+  paintOverlay('comp', { L: L.map(m => m.id), cur: activeCompanionId(), bonus: COMP_BONUS });
 }
 
 /* =====================================================================
    3. Pokégear (daily radio) and story scenes
    ===================================================================== */
-export function seed417(sel) {
+export function dailySeed(sel) {
   let h = 11;
   for (const ch of today() + sel) {
     h = (h * 31 + ch.charCodeAt(0)) >>> 0;
@@ -296,13 +296,15 @@ export function seed417(sel) {
 }
 
 /** The Dominant species sighted today (depending on the displayed region). */
-export function domDay417() {
-  const pool = poolRegion421(); // the sighted Dominant lives in the displayed region (v4.21)
-  return pool.length ? pool[seed417('dom' + (regionH419() ? 'h' : regionJ415() ? 'j' : 'k')) % pool.length].id : null;
+export function dailyDominant() {
+  const pool = regionPool(); // the sighted Dominant lives in the displayed region (v4.21)
+  return pool.length
+    ? pool[dailySeed('dom' + (isHoennRegion() ? 'h' : isJohtoRegion() ? 'j' : 'k')) % pool.length].id
+    : null;
 }
 
 /** "près de l’Arène Vol" (near the Flying Gym), "près de la Route 32" (near Route 32), "près du Lac Colère" (near Lake of Rage). */
-export function ofPlace417(n) {
+export function placeWithArticle(n) {
   if (/^(Lac|Plateau|Puits|Relais)\b/.test(n)) {
     return 'du ' + n;
   }
@@ -316,13 +318,13 @@ export function ofPlace417(n) {
 }
 
 /** The Pokégear lines (#v4Radio on the Home screen, rendered by src/screens/home/Footer.jsx). */
-export function radio417() {
+export function radioLines() {
   const L = [],
-    d = domDay417(),
-    w = weatherDay417();
-  if (roamActive416()) {
-    const b = ROAM.filter(id => !roamOk416(id)).map(
-      id => `${roamLeg416(id).n} près ${ofPlace417(placeName(PL[roamState416(id).at]))}`
+    d = dailyDominant(),
+    w = todayWeather();
+  if (isRoamingActive()) {
+    const b = ROAM.filter(id => !roamerCaught(id)).map(
+      id => `${findRoamLegend(id).n} près ${placeWithArticle(placeName(PL[getRoamState(id).at]))}`
     );
     if (b.length) {
       L.push(['Bêtes errantes', `Aperçus ce matin : ${b.join(', ')}.`, 'johto']);
@@ -338,50 +340,50 @@ export function radio417() {
   L.push([
     'Météo',
     w
-      ? `${WXN417[w]} sur les hautes herbes aujourd’hui : les combats sauvages commencent sous ${w === 'soleil' ? 'le soleil' : w === 'pluie' ? 'la pluie' : w === 'sable' ? 'le sable' : 'la grêle'}.`
+      ? `${WEATHER_LABELS[w]} sur les hautes herbes aujourd’hui : les combats sauvages commencent sous ${w === 'soleil' ? 'le soleil' : w === 'pluie' ? 'la pluie' : w === 'sable' ? 'le sable' : 'la grêle'}.`
       : 'Temps calme sur les hautes herbes aujourd’hui.',
     null,
   ]);
-  L.push(['Le conseil du Prof. Sorbier', tip417(), null]);
+  L.push(['Le conseil du Prof. Sorbier', dailyTip(), null]);
   return L;
 }
 
-function whoScene417(who, k) {
+function npcScene(who, k) {
   if (who === 'prof') {
     return { n: 'Prof. Sorbier', av: PROF_AV };
   }
   if (who === 'orphee') {
     return { n: 'Orphée Valcourt', av: avatar('Orphée Valcourt', 'Ténèbres', 'sm') };
   }
-  const q429 = who429(who); // Kael, Sirène, Vesper (v4.29)
-  if (q429) {
-    return q429;
+  const storyNpc = npcProfile(who); // Kael, Sirène, Vesper (v4.29)
+  if (storyNpc) {
+    return storyNpc;
   }
   const L = leaderOf(who) || leaderOf(k);
   const S = SCEN[who] || SCEN[k] || {};
   return L ? { n: L.n, av: avatar(L.n, S.at || 'Normal', 'sm') } : { n: '…', av: PROF_AV };
 }
 
-export function scene417(k, force) {
-  const c = sceneKey417(k),
+export function storyScene(k, force) {
+  const c = sceneKeyOf(k),
     L = SCENES[c];
   if (!L || (PROFILE.scenes && PROFILE.scenes[c]) || (!force && AUTO)) {
     return false;
   } // no scene during automated tests
   SCN = { k, c, i: 0, L };
-  renderScene417();
-  $('#scene417').hidden = false;
+  renderStoryScene();
+  $('#story-scene').hidden = false;
   return true;
 }
 
-export function renderScene417() {
+export function renderStoryScene() {
   if (!SCN) {
     return;
   }
   const [who, txt] = SCN.L[SCN.i],
-    q = whoScene417(who, SCN.k),
+    q = npcScene(who, SCN.k),
     last = SCN.i === SCN.L.length - 1;
-  // rendered by src/screens/overlays/Scene417.jsx
+  // rendered by src/screens/overlays/StoryScene.jsx
   paintOverlay('scene', {
     av: q.av,
     n: q.n,
@@ -392,7 +394,7 @@ export function renderScene417() {
   });
 }
 
-function endScene417() {
+function closeStoryScene() {
   if (!SCN) {
     return;
   }
@@ -400,16 +402,16 @@ function endScene417() {
   PROFILE.scenes[SCN.c] = 1;
   const ap = SCN.apres;
   SCN = null;
-  $('#scene417').hidden = true;
+  $('#story-scene').hidden = true;
   queueSave();
   if (!ap) {
     launch();
   } // a post-battle scene triggers nothing else (v4.29)
 }
 
-function plant417(i, g) {
+function plantSeed(i, g) {
   const G = POTAGER[g];
-  if (!campOk430() || !G || PROFILE.garden[i]) {
+  if (!campOpen() || !G || PROFILE.garden[i]) {
     return;
   }
   if (PROFILE.money < G.p) {
@@ -424,9 +426,9 @@ function plant417(i, g) {
   renderCampBase();
 }
 
-function harvest417(i) {
+function harvestPlot(i) {
   const x = PROFILE.garden[i];
-  if (!x || sprout417(x) > 0) {
+  if (!x || plotSprout(x) > 0) {
     return;
   }
   const add = (k, n) => SHOP[k] && (PROFILE.bag[k] = Math.min(99, bagN(k) + n));
@@ -468,14 +470,14 @@ function harvest417(i) {
   renderCampBase();
 }
 
-function water417() {
-  if (!campOk430() || PROFILE.watered === today()) {
+function waterGarden() {
+  if (!campOpen() || PROFILE.watered === today()) {
     return;
   }
   PROFILE.watered = today();
   let n = 0;
   PROFILE.garden.forEach(x => {
-    if (x && sprout417(x) > 0) {
+    if (x && plotSprout(x) > 0) {
       x.fin--;
       n++;
     }
@@ -487,15 +489,15 @@ function water417() {
 
 // the base Camp Garden is rendered by React: src/screens/camp/CampBase.jsx
 
-function tournamentOrder417() {
+function computeTournamentOrder() {
   return [...(PROFILE.friends || [])]
-    .sort((a, b) => scoreOf416(a.s) - scoreOf416(b.s))
+    .sort((a, b) => friendScore(a.s) - friendScore(b.s))
     .slice(0, 5)
     .map(a => a.id);
 }
 
-function tournamentLaunch417() {
-  const ordering = tournamentOrder417();
+function launchTournament() {
+  const ordering = computeTournamentOrder();
   if (ordering.length < 2) {
     return void toast('Il faut au moins 2 amis pour un tournoi.');
   }
@@ -504,11 +506,11 @@ function tournamentLaunch417() {
   }
   PROFILE.tournoi.run = { team: squad.slice(0, teamSize()), order: ordering, i: 0, hp: {} };
   queueSave();
-  tournamentBattle417();
+  startTournamentBattle();
 }
 
-function tournamentBattle417() {
-  const run = tournamentRun417();
+function startTournamentBattle() {
+  const run = getTournamentRun();
   if (!run) {
     return;
   }
@@ -517,7 +519,7 @@ function tournamentBattle417() {
     PROFILE.tournoi.run = null;
     return void toast('Un ami a quitté le carnet : le tournoi s’arrête.');
   }
-  friendBuild416(i);
+  buildFriendTeam(i);
   Object.assign(SCEN.ami, {
     tournoi: run.order[run.i],
     n: `Tournoi · ${PROFILE.friends[i].n}`,
@@ -533,11 +535,11 @@ function tournamentBattle417() {
 }
 
 /** The frozen tournament team (read when battles are launched). */
-export function tournamentTeam417() {
-  if (brBoss466(scSel)) {
-    return { team: brWeapon466().team, voice: vBonus(), opts: battleOpts() };
+export function tournamentTeam() {
+  if (isBossRushBoss(scSel)) {
+    return { team: armedBossRush().team, voice: vBonus(), opts: battleOpts() };
   } // Boss Rush: frozen team
-  const run = tournamentRun417(),
+  const run = getTournamentRun(),
     D = SCEN.ami || {};
   if (scSel !== 'ami' || !run || D.tournoi !== run.order[run.i]) {
     return null;
@@ -546,9 +548,9 @@ export function tournamentTeam417() {
   return { team: run.team, voice: Math.min(2, Math.floor((BUDGET - c) / 4)), opts: battleOpts() };
 }
 
-export function tournamentHtml417() {
+export function tournamentPanelHtml() {
   const L = PROFILE.friends || [],
-    run = tournamentRun417(),
+    run = getTournamentRun(),
     T = PROFILE.tournoi || {};
   if (L.length < 2) {
     return '';
@@ -570,9 +572,9 @@ const RESO_TURNS = 3;
    ===================================================================== */
 const AFF_T = [10, 30, 60, 100, 150];
 
-export const hearts417 = a => AFF_T.filter(t => a >= t).length;
+export const affinityHearts = a => AFF_T.filter(t => a >= t).length;
 
-export const companionId417 = () => {
+export const activeCompanionId = () => {
   const c = PROFILE.comp;
   return c && BY[c.id] && PROFILE.box.includes(BY[c.id].base) ? c.id : ''; // Free mode too (v4.21)
 };
@@ -595,7 +597,7 @@ const COMP_BONUS = [
 
 const WEATHER_J = [null, 'pluie', 'soleil', null, 'sable', 'grele', null];
 
-export const weatherDay417 = () => WEATHER_J[seed417('wx') % WEATHER_J.length];
+export const todayWeather = () => WEATHER_J[dailySeed('wx') % WEATHER_J.length];
 
 const TIPS = [
   'Une case Trempée et une attaque Électrik : Court-circuit. Sortez vos Pokémon de l’eau avant de frapper !',
@@ -610,9 +612,9 @@ const TIPS = [
   'Les baies du Potager poussent plus vite si vous arrosez chaque jour.',
 ];
 
-const tip417 = () => TIPS[seed417('tip') % TIPS.length];
+const dailyTip = () => TIPS[dailySeed('tip') % TIPS.length];
 
-const WXN417 = { pluie: 'Pluie', soleil: 'Grand soleil', sable: 'Tempête de sable', grele: 'Grêle' };
+const WEATHER_LABELS = { pluie: 'Pluie', soleil: 'Grand soleil', sable: 'Tempête de sable', grele: 'Grêle' };
 
 /* ---------- story scenes ---------- */
 export const SCENES = {
@@ -664,7 +666,7 @@ export const SCENES = {
   ],
 };
 
-const sceneKey417 = k => (SCEN[k] && SCEN[k].roam ? 'roam' : k);
+const sceneKeyOf = k => (SCEN[k] && SCEN[k].roam ? 'roam' : k);
 
 /* =====================================================================
    4. The Camp Garden
@@ -675,12 +677,12 @@ const POTAGER = {
   mystere: { n: 'Graine mystère', p: 400, duration: 6, d: 'une surprise : Éclats, Balls ou une CT' },
 };
 
-const sprout417 = x => (x ? Math.max(0, x.fin - PROFILE.battles) : 0);
+const plotSprout = x => (x ? Math.max(0, x.fin - PROFILE.battles) : 0);
 
 /* =====================================================================
    5. Friends tournament
    ===================================================================== */
-const tournamentRun417 = () => (PROFILE.tournoi && PROFILE.tournoi.run) || null;
+const getTournamentRun = () => (PROFILE.tournoi && PROFILE.tournoi.run) || null;
 
 // Statements run at startup, in the original order (see index.js).
 export function __init() {
@@ -709,16 +711,16 @@ export function __init() {
         say(ev, `La Forme Résonante de ${u.n} s’estompe.`);
       }
     });
-    resoOpponent417(S, ev);
+    opponentResonance(S, ev);
   });
 
   document.addEventListener('click', async e => {
-    const b = e.target.closest('[data-reso417]');
+    const b = e.target.closest('[data-resonance-burst]');
     if (!b || !B) {
       return;
     }
     const u = ui.sel && byUid(B, ui.sel);
-    if (!u || !canResonance417(B, u)) {
+    if (!u || !canTriggerResonance(B, u)) {
       return;
     }
     ui.undo = null;
@@ -730,7 +732,7 @@ export function __init() {
     } catch {
       /* Best effort: failure here is non-fatal. */
     }
-    const ev = pReso417(B, u);
+    const ev = playerResonance(B, u);
     ui.busy = false;
     renderAll();
     if (!ev) {
@@ -745,10 +747,10 @@ export function __init() {
   });
 
   HOOKS.combat.push(S => {
-    if (S.fixed431) {
+    if (S.restricted) {
       return;
     } // fixed-rule battles: no companion bonus (v4.31)
-    const id = companionId417();
+    const id = activeCompanionId();
     if (!id) {
       return;
     }
@@ -756,9 +758,9 @@ export function __init() {
     if (!u) {
       return;
     }
-    const h = hearts417(PROFILE.comp.aff);
+    const h = affinityHearts(PROFILE.comp.aff);
     u.comp = h || 1;
-    if (h >= 2 && (hasNx(u) || hasXp(u) || resoCand417(S, u))) {
+    if (h >= 2 && (hasNx(u) || hasXp(u) || resonanceCandidate(S, u))) {
       u.en = Math.max(u.en, 1);
     }
     if (h >= 3) {
@@ -786,7 +788,7 @@ export function __init() {
   });
 
   HOOKS.progress.push((S, rew, win) => {
-    const id = companionId417(),
+    const id = activeCompanionId(),
       D = SCEN[S.sc] || {};
     if (!id || D.tuto) {
       return null;
@@ -796,17 +798,17 @@ export function __init() {
       return null;
     }
     const n = win ? 3 : 2,
-      up = companionGain417(n);
-    rew.companion417 = { id, n, up };
+      up = gainCompanionAffinity(n);
+    rew.companionReward = { id, n, up };
     return null;
   });
 
   HOOKS.battleResult.push(r => {
-    const c = r.companion417;
+    const c = r.companionReward;
     if (!c) {
       return '';
     }
-    const h = hearts417(PROFILE.comp.aff || 0),
+    const h = affinityHearts(PROFILE.comp.aff || 0),
       B2 = COMP_BONUS.find(([n]) => n === c.up);
     return `<div class="res-l"><h4>Compagnon</h4><div class="rl">${medal(BY[c.id].t)}<span>${BY[c.id].n} : +${c.n} d’affection${c.up ? ` · <b>${c.up} cœur${c.up > 1 ? 's' : ''} !</b>${B2 ? ` Nouveau bonus : ${B2[1]} (${B2[2]}).` : ''}` : ''}</span><b class="cp-h">${'♥'.repeat(h) || '♡'}</b></div></div>`;
   });
@@ -818,19 +820,19 @@ export function __init() {
     if (b) {
       const k = b.dataset.comp;
       if (k === 'choisir') {
-        renderCompBox417();
+        renderCompanionBox();
         $('#compBox').hidden = false;
       } else if (k === 'x') {
         $('#compBox').hidden = true;
-      } else if (k === 'caresser' && companionId417() && PROFILE.comp.j !== today()) {
+      } else if (k === 'caresser' && activeCompanionId() && PROFILE.comp.j !== today()) {
         PROFILE.comp.j = today();
-        const up = companionGain417(3);
+        const up = gainCompanionAffinity(3);
         sfx('ui');
         vibe(25);
         toast(
           up
-            ? `${BY[companionId417()].n} est ravi : ${up} cœur${up > 1 ? 's' : ''} !`
-            : `${BY[companionId417()].n} ferme les yeux de bonheur.`
+            ? `${BY[activeCompanionId()].n} est ravi : ${up} cœur${up > 1 ? 's' : ''} !`
+            : `${BY[activeCompanionId()].n} ferme les yeux de bonheur.`
         );
         queueSave();
         refreshHome();
@@ -864,32 +866,32 @@ export function __init() {
     if (S.sc !== 'sauvage' || S.wx) {
       return;
     }
-    const w = weatherDay417();
+    const w = todayWeather();
     if (w) {
       S.wx = { k: w, n: 5 };
     }
   });
 
-  // #scene417: rendered by React (src/screens/overlays/Scene417.jsx)
+  // #storyScene: rendered by React (src/screens/overlays/StoryScene.jsx)
 
   SCN = null;
 
   document.addEventListener('click', e => {
     const b = e.target.closest('[data-scene]');
-    if (!b && e.target.id !== 'scene417') {
+    if (!b && e.target.id !== 'story-scene') {
       return;
     }
     if (!SCN) {
       return;
     }
     if (b && b.dataset.scene === 'passer') {
-      return endScene417();
+      return closeStoryScene();
     }
     if (SCN.i < SCN.L.length - 1) {
       SCN.i++;
-      renderScene417();
+      renderStoryScene();
     } else {
-      endScene417();
+      closeStoryScene();
     }
   });
 
@@ -906,7 +908,7 @@ export function __init() {
     if (g && POT_I >= 0) {
       const k = POT_I;
       POT_I = -1;
-      plant417(k, g.dataset.potG);
+      plantSeed(k, g.dataset.potG);
       return;
     }
     if (e.target.closest('[data-pot-x]')) {
@@ -916,19 +918,19 @@ export function __init() {
     }
     const r = e.target.closest('[data-pot-r]');
     if (r) {
-      return void harvest417(+r.dataset.potR);
+      return void harvestPlot(+r.dataset.potR);
     }
     if (e.target.closest('[data-pot-eau]')) {
-      water417();
+      waterGarden();
     }
   });
 
   HOOKS.combat.push((S, opt, D0) => {
-    const run = tournamentRun417();
+    const run = getTournamentRun();
     if (!D0 || !D0.tournoi || !run || D0.tournoi !== run.order[run.i]) {
       return;
     }
-    S.tournament417 = D0.tournoi;
+    S.tournamentScene = D0.tournoi;
     S.units.forEach(u => {
       if (u.side !== 'a' || run.hp[u.sp] == null) {
         return;
@@ -944,8 +946,8 @@ export function __init() {
   });
 
   HOOKS.progress.push((S, rew, win) => {
-    const run = tournamentRun417();
-    if (!S.tournament417 || !run || S.tournament417 !== run.order[run.i]) {
+    const run = getTournamentRun();
+    if (!S.tournamentScene || !run || S.tournamentScene !== run.order[run.i]) {
       return null;
     }
     if (SCEN.ami) {
@@ -993,12 +995,12 @@ export function __init() {
     }
     const k = b.dataset.tournoi;
     if (k === 'lancer') {
-      tournamentLaunch417();
+      launchTournament();
     } else if (k === 'suite') {
       $('#cbResult').hidden = true;
-      tournamentBattle417();
+      startTournamentBattle();
     } else if (k === 'abandon') {
-      const run = tournamentRun417();
+      const run = getTournamentRun();
       if (run) {
         PROFILE.tournoi.best = Math.max(PROFILE.tournoi.best, run.i);
       }
@@ -1022,7 +1024,7 @@ export function __init() {
       n: 'Inséparables',
       d: 'Atteindre 5 cœurs avec votre compagnon.',
       t: 'Inséparables',
-      ok: () => hearts417((PROFILE.comp || {}).aff || 0) >= 5,
+      ok: () => affinityHearts((PROFILE.comp || {}).aff || 0) >= 5,
     },
     {
       id: 'tournoi',

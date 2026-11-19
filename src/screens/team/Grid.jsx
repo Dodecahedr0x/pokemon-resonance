@@ -10,7 +10,7 @@ import { RC, ROLEFX } from '../../engine/012-recruits-roles-synergies.js';
 import { INK, gp, medal, tb, tc } from '../../engine/014-utils.js';
 import { TEAM_MAX, cost, squad } from '../../engine/020-team-cards.js';
 import { RANKS, stars, rankId } from '../../engine/053-resonance.js';
-import { captureSite421 } from '../../engine/061-catch-anywhere.js';
+import { captureSite } from '../../engine/061-catch-anywhere.js';
 
 // Family grid (#dexGrid), v: visible families (engine's visible()). Clicks (data-stg, data-qa, data-open) and hover reflection:
 // engine listeners on #dexGrid, which stays mounted.
@@ -67,7 +67,7 @@ function FamCard({ m }) {
         : null,
     maxSt = Math.max(...family.map(x => x.st)),
     rg = rankId(m.id),
-    placeLabel = lock && !PROFILE.dex.includes(m.id) ? captureSite421(m.id) : '',
+    placeLabel = lock && !PROFILE.dex.includes(m.id) ? captureSite(m.id) : '',
     // captured shiny (v4.73 styling)
     shiny = ((PROFILE && PROFILE.shiny) || []).includes(m.id);
   const cls =

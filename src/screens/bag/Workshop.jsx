@@ -3,40 +3,40 @@ import { ITEMS2, PROFILE } from '../../engine/011-game-state.js';
 import { tc } from '../../engine/014-utils.js';
 import { MV } from '../../engine/005-moves.js';
 import { SHOP, fmt, tLevel, today } from '../../engine/032-v4-foundation.js';
-import { can454, txt454 } from '../../engine/084-peddler-route-missions.js';
+import { canAfford, rewardText } from '../../engine/084-peddler-route-missions.js';
 import {
-  COST455,
-  LJ455,
-  RECIPES455,
-  fusionTargets455,
-  commands455,
-  donors455,
-  canIn455,
-  txtIn455,
-  showcase455,
+  FUSION_COST,
+  loadToday,
+  RECIPES,
+  tmFusionTargets,
+  dailyOrders,
+  fusionDonors,
+  hasIngredients,
+  ingredientsText,
+  tmShowcase,
 } from '../../engine/088-workshop-recipes.js';
 import {
-  QO459,
-  TROPH459,
-  badgeCount459,
-  qoIn459,
-  qoOk459,
-  qoRewTxt459,
-  qoSt459,
-  tpSt459,
+  QUESTS,
+  TROPHIES,
+  badgeTotal,
+  questCost,
+  questUnlocked,
+  questRewardText,
+  questState,
+  trophyState,
 } from '../../engine/090-item-quests-trophies.js';
-import { EGG461, egPool461, egSt461 } from '../../engine/092-companion-eggs-expeditions.js';
+import { EGG_SHOP, eggPool, eggState } from '../../engine/092-companion-eggs-expeditions.js';
 import {
-  TAL464,
-  TALMAX464,
-  TALRESET464,
-  talPts464,
-  talSpent464,
-  talSt464,
+  TALENTS,
+  TALENT_MAX,
+  TALENT_RESET_COST,
+  talentPoints,
+  talentSpent,
+  talentState,
 } from '../../engine/095-trainer-talent-tree.js';
 import { Disc } from './Items.jsx';
 
-// Workshop row: text on the left, engine button on the right (data-at455, data-qo459…).
+// Workshop row: text on the left, engine button on the right (data-craft-bench, data-quest-log…).
 const Line = ({ cls = '', before: previous = null, children, actionButton: button }) => (
   <article className={'v4-it ' + cls}>
     {previous}
@@ -47,7 +47,7 @@ const Line = ({ cls = '', before: previous = null, children, actionButton: butto
 
 /* ---------- Workshop (v4.57): recipes, TM fusion, daily orders ---------- */
 function Workshop() {
-  const fusionTargets = fusionTargets455();
+  const fusionTargets = tmFusionTargets();
   return (
     <>
       <p className="v4-note">
@@ -55,24 +55,24 @@ function Workshop() {
         trouvent.
       </p>
       <h3 className="h3">Livre de recettes</h3>
-      {RECIPES455.map(r => (
+      {RECIPES.map(r => (
         <Line
           key={r.id}
-          cls="at455-r"
+          cls="craft-bench-r"
           actionButton={
             <button
               type="button"
               className="v4-btn"
-              data-at455={'rec:' + r.id}
-              disabled={!(canIn455(r.in) && PROFILE.money >= r.m)}
+              data-craft-bench={'rec:' + r.id}
+              disabled={!(hasIngredients(r.in) && PROFILE.money >= r.m)}
             >
               Préparer
             </button>
           }
         >
-          <b>{txtIn455(r.out)}</b>
+          <b>{ingredientsText(r.out)}</b>
           <p>
-            Avec : {txtIn455(r.in)}
+            Avec : {ingredientsText(r.in)}
             {r.m ? ` + ${fmt(r.m)} ₽` : ''}
           </p>
         </Line>
@@ -82,15 +82,15 @@ function Workshop() {
       </h3>
       {fusionTargets.length ? (
         fusionTargets.map(k => {
-          const d = donors455(k),
+          const d = fusionDonors(k),
             ok = d && PROFILE.money >= 1000;
           return (
             <Line
               key={k}
-              cls="at455-r"
+              cls="craft-bench-r"
               before={<Disc it={SHOP[k]} />}
               actionButton={
-                <button type="button" className="v4-btn" data-at455={'fus:' + k} disabled={!ok}>
+                <button type="button" className="v4-btn" data-craft-bench={'fus:' + k} disabled={!ok}>
                   Fusionner
                 </button>
               }
@@ -110,19 +110,24 @@ function Workshop() {
       <h3 className="h3" style={{ marginTop: '14px' }}>
         Commandes du jour
       </h3>
-      {commands455().map(c => (
+      {dailyOrders().map(c => (
         <Line
           key={c.id}
-          cls={'at455-r' + (c.done ? ' own' : '')}
+          cls={'craft-bench-r' + (c.done ? ' own' : '')}
           actionButton={
-            <button type="button" className="v4-btn" data-at455={'cmd:' + c.id} disabled={!(!c.done && canIn455(c.in))}>
+            <button
+              type="button"
+              className="v4-btn"
+              data-craft-bench={'cmd:' + c.id}
+              disabled={!(!c.done && hasIngredients(c.in))}
+            >
               {c.done ? 'Livrée' : 'Livrer'}
             </button>
           }
         >
-          <b>Commande : {txtIn455(c.in)}</b>
+          <b>Commande : {ingredientsText(c.in)}</b>
           <p>
-            Récompense : {txt454(c.rew)}
+            Récompense : {rewardText(c.rew)}
             {c.done ? ' · livrée' : ''}
           </p>
         </Line>
@@ -133,29 +138,29 @@ function Workshop() {
 
 /* ---------- Peddler's draw (v4.57) ---------- */
 function Draw() {
-  const st = LJ455('res-at455', { d: today(), cmd: {}, spin: 0 }),
+  const st = loadToday('res-craft-bench', { d: today(), cmd: {}, spin: 0 }),
     freeOfCharge = st.spin === 0,
     remainder = Math.max(0, 4 - st.spin);
   return (
     <>
       <h3 className="h3">Tirage du colporteur</h3>
       <p className="v4-note">
-        Un tirage gratuit par jour. Ensuite, {fmt(COST455)} ₽ le tirage (4 par jour au maximum). Le résultat est fixé à
-        l’avance : inutile de recharger la page.
+        Un tirage gratuit par jour. Ensuite, {fmt(FUSION_COST)} ₽ le tirage (4 par jour au maximum). Le résultat est
+        fixé à l’avance : inutile de recharger la page.
       </p>
       {st.last ? (
-        <p className="v4-note tir455">
+        <p className="v4-note last-batch">
           Dernier lot : <b>{st.last}</b>
         </p>
       ) : null}
-      <div className="tir455">
+      <div className="last-batch">
         <button
           type="button"
           className="v4-btn"
-          data-at455="spin"
-          disabled={!(remainder > 0 && (freeOfCharge || PROFILE.money >= COST455))}
+          data-craft-bench="spin"
+          disabled={!(remainder > 0 && (freeOfCharge || PROFILE.money >= FUSION_COST))}
         >
-          {remainder <= 0 ? 'Revenez demain' : freeOfCharge ? 'Tirage gratuit' : `Tirer · ${fmt(COST455)} ₽`}
+          {remainder <= 0 ? 'Revenez demain' : freeOfCharge ? 'Tirage gratuit' : `Tirer · ${fmt(FUSION_COST)} ₽`}
         </button>
         <small>Tirages restants aujourd’hui : {remainder}</small>
       </div>
@@ -165,13 +170,13 @@ function Draw() {
 
 /* ---------- Finds showcase (v4.57) ---------- */
 function Showcase() {
-  const { seen, tms: cts, cs } = showcase455(),
+  const { seen, tms: cts, cs } = tmShowcase(),
     held = Object.keys(ITEMS2),
     nh = held.filter(k => PROFILE.items.includes(k)).length,
     all = [...cts, ...cs],
     nc = all.filter(k => seen[k]).length;
   return (
-    <section className="v4-panel vit455">
+    <section className="v4-panel tm-showcase">
       <h3>Vitrine des trouvailles</h3>
       <p className="v4-note">
         Objets tenus :{' '}
@@ -183,11 +188,15 @@ function Showcase() {
           {nc} / {cts.length + cs.length}
         </b>
       </p>
-      <div className="vi455-g">
+      <div className="item-chip-g">
         {held.map(k => {
           const own = PROFILE.items.includes(k);
           return (
-            <span key={k} className={'vi455' + (own ? ' on' : '')} title={ITEMS2[k].n + (own ? '' : ' (à trouver)')}>
+            <span
+              key={k}
+              className={'item-chip' + (own ? ' on' : '')}
+              title={ITEMS2[k].n + (own ? '' : ' (à trouver)')}
+            >
               <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.6">
                 <path d={ITEMS2[k].i} />
               </svg>
@@ -195,11 +204,11 @@ function Showcase() {
           );
         })}
       </div>
-      <div className="vc455-g">
+      <div className="tm-chip-g">
         {all.map((k, i) => (
           <span
             key={i}
-            className={'vc455' + (seen[k] ? ' on' : '')}
+            className={'tm-chip' + (seen[k] ? ' on' : '')}
             title={SHOP[k].n + (seen[k] ? '' : ' (à trouver)')}
             style={{ '--c': tc(MV[SHOP[k].mv].t) }}
           >
@@ -213,29 +222,34 @@ function Showcase() {
 
 /* ---------- Item quests (v4.59) ---------- */
 function QuestItems() {
-  const S = qoSt459(),
-    nb = badgeCount459(),
-    n = QO459.filter(q => S.done[q.id]).length;
+  const S = questState(),
+    nb = badgeTotal(),
+    n = QUESTS.filter(q => S.done[q.id]).length;
   return (
     <>
       <h3 className="h3">Quêtes d’objets</h3>
       <p className="v4-note">
         Les habitants vous confient des services en échange d’objets rares.{' '}
         <b>
-          {n} / {QO459.length}
+          {n} / {QUESTS.length}
         </b>{' '}
         quêtes terminées. De nouveaux habitants se présentent avec vos badges ({nb}).
       </p>
-      {QO459.map(q => {
+      {QUESTS.map(q => {
         const done = S.done[q.id],
           lock = nb < q.min,
-          need = [txtIn455(qoIn459(q)), q.in.ct ? '1 CT de votre Sac' : ''].filter(Boolean).join(' + ');
+          need = [ingredientsText(questCost(q)), q.in.ct ? '1 CT de votre Sac' : ''].filter(Boolean).join(' + ');
         return (
           <Line
             key={q.id}
-            cls={'qo459' + (done ? ' own' : '') + (lock ? ' lock' : '')}
+            cls={'quest-log' + (done ? ' own' : '') + (lock ? ' lock' : '')}
             actionButton={
-              <button type="button" className="v4-btn" data-qo459={q.id} disabled={!!(done || lock || !qoOk459(q))}>
+              <button
+                type="button"
+                className="v4-btn"
+                data-quest-log={q.id}
+                disabled={!!(done || lock || !questUnlocked(q))}
+              >
                 {done ? 'Terminée' : lock ? 'Verrouillée' : 'Livrer'}
               </button>
             }
@@ -244,7 +258,7 @@ function QuestItems() {
             <p>{lock ? `Se présentera après ${q.min} badge${q.min > 1 ? 's' : ''}.` : q.txt}</p>
             {lock ? null : (
               <em>
-                Il faut : {need} · Récompense : {qoRewTxt459(q.rew)}
+                Il faut : {need} · Récompense : {questRewardText(q.rew)}
               </em>
             )}
           </Line>
@@ -256,20 +270,20 @@ function QuestItems() {
 
 /* ---------- Trophy case (v4.59) ---------- */
 function Trophies() {
-  const S = tpSt459();
+  const S = trophyState();
   return (
     <>
       <h3 className="h3">Boîte de trophées</h3>
-      {TROPH459.map(T => {
+      {TROPHIES.map(T => {
         const v = Math.min(T.v(), T.n),
           ok = T.v() >= T.n,
           done = S[T.id];
         return (
           <Line
             key={T.id}
-            cls={'tp459' + (done ? ' own' : '')}
+            cls={'trophy-room' + (done ? ' own' : '')}
             actionButton={
-              <button type="button" className="v4-btn" data-tp459={T.id} disabled={!(ok && !done)}>
+              <button type="button" className="v4-btn" data-trophy-room={T.id} disabled={!(ok && !done)}>
                 {done ? 'Récupéré' : ok ? 'Réclamer' : '—'}
               </button>
             }
@@ -277,7 +291,7 @@ function Trophies() {
             <b>
               {T.t} · {T.n}
             </b>
-            <i className="tp459-b">
+            <i className="trophy-room-b">
               <u style={{ width: `${Math.round((v / T.n) * 100)}%` }} />
             </i>
             <p>
@@ -293,8 +307,8 @@ function Trophies() {
 
 /* ---------- Breeding eggs (v4.61) ---------- */
 function Eggs() {
-  const s = egSt461(),
-    isFree = egPool461().length;
+  const s = eggState(),
+    isFree = eggPool().length;
   return (
     <>
       <h3 className="h3">Élevage</h3>
@@ -306,10 +320,10 @@ function Eggs() {
         <>
           <h4 className="h3">En incubation ({s.list.length} / 3)</h4>
           {s.list.map((e, i) => {
-            const O = EGG461[e.k],
+            const O = EGG_SHOP[e.k],
               p = Math.round(((e.tot - e.left) / e.tot) * 100);
             return (
-              <article key={i} className="v4-it eg461">
+              <article key={i} className="v4-it egg-shop">
                 <div className="v4-it-t">
                   <b>{O.n}</b>
                   <p>
@@ -325,15 +339,15 @@ function Eggs() {
         </>
       ) : null}
       <h4 className="h3">Acheter un œuf</h4>
-      {Object.keys(EGG461).map(k => {
-        const O = EGG461[k],
-          ok = s.list.length < 3 && can454(O.cost) && isFree;
+      {Object.keys(EGG_SHOP).map(k => {
+        const O = EGG_SHOP[k],
+          ok = s.list.length < 3 && canAfford(O.cost) && isFree;
         return (
           <Line
             key={k}
-            cls="eg461"
+            cls="egg-shop"
             actionButton={
-              <button type="button" className="v4-btn" data-eg461={k} disabled={!ok}>
+              <button type="button" className="v4-btn" data-egg-shop={k} disabled={!ok}>
                 {O.price}
               </button>
             }
@@ -349,9 +363,9 @@ function Eggs() {
 
 /* ---------- Trainer abilities (v4.64) ---------- */
 function Talents() {
-  const st = talSt464(),
-    pts = talPts464(),
-    spent = talSpent464();
+  const st = talentState(),
+    pts = talentPoints(),
+    spent = talentSpent();
   return (
     <>
       <h3 className="h3">Talents du dresseur</h3>
@@ -359,7 +373,7 @@ function Talents() {
         Chaque niveau de dresseur donne 1 point. Niveau {tLevel()} : <b>{pts}</b> point{pts > 1 ? 's' : ''} à dépenser,{' '}
         {spent} dépensé{spent > 1 ? 's' : ''}. Les talents ne comptent pas dans les combats à règles fixes.
       </p>
-      {TAL464.map(B => (
+      {TALENTS.map(B => (
         <Fragment key={B.b}>
           <h4 className="h3">{B.n}</h4>
           {B.t.map(t => {
@@ -367,16 +381,16 @@ function Talents() {
             return (
               <Line
                 key={t.id}
-                cls="tal464"
+                cls="talent-tree"
                 actionButton={
-                  <button type="button" className="v4-btn" data-tal464={t.id} disabled={r >= TALMAX464 || !pts}>
-                    {r >= TALMAX464 ? 'Max' : '+1'}
+                  <button type="button" className="v4-btn" data-talent-tree={t.id} disabled={r >= TALENT_MAX || !pts}>
+                    {r >= TALENT_MAX ? 'Max' : '+1'}
                   </button>
                 }
               >
                 <b>
                   {t.n}{' '}
-                  <span className="tal464-p">
+                  <span className="talent-tree-p">
                     {[1, 2, 3].map(i => (
                       <i key={i} className={i <= r ? 'on' : ''} />
                     ))}
@@ -384,7 +398,7 @@ function Talents() {
                 </b>
                 <p>
                   {r ? t.d(r) : t.d(1)}
-                  {r < TALMAX464 && r ? (
+                  {r < TALENT_MAX && r ? (
                     <>
                       {' '}
                       <em>Rang suivant : {t.d(r + 1)}</em>
@@ -400,10 +414,10 @@ function Talents() {
         <button
           type="button"
           className="b b-sm b-ghost"
-          data-tal464="reset"
-          disabled={!(spent && PROFILE.money >= TALRESET464)}
+          data-talent-tree="reset"
+          disabled={!(spent && PROFILE.money >= TALENT_RESET_COST)}
         >
-          Réinitialiser · {TALRESET464} ₽
+          Réinitialiser · {TALENT_RESET_COST} ₽
         </button>
       </div>
     </>

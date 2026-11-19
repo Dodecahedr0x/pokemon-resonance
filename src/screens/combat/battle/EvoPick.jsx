@@ -5,7 +5,7 @@ import { ARR } from '../../../engine/010-in-battle-evolution.js';
 import { medal, tb, tc } from '../../../engine/014-utils.js';
 import { BRANCHES, branchWhy, evoOpts, mhpOf } from '../../../engine/021-combat-engine.js';
 import { B } from '../../../engine/024-combat-ui.js';
-import { eeveeWhy434 } from '../../../engine/069-calibration-eevee.js';
+import { eeveeWhy } from '../../../engine/069-calibration-eevee.js';
 import { evoState, useBattleVersion } from './battleStore.js';
 
 // Evolution choice (#evoPick). Opened and closed by the engine (hidden attribute);
@@ -29,7 +29,7 @@ function Path({ u, A, id }) {
     why = BRANCHES[A.id]
       ? branchWhy(B, u, id)
       : A.nx === 'eevee'
-        ? eeveeWhy434(B, u, id)
+        ? eeveeWhy(B, u, id)
         : Array.isArray(A.nx)
           ? id === A.nx[1]
             ? 'Appelle la pluie'

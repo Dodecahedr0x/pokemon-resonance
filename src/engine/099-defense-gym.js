@@ -14,14 +14,14 @@ import { shut } from '../screens/overlays/tempStore.js';
 
 export let DEF_WAVES, DEF_LIVES;
 
-function dfVague468(S, ev) {
+function defenseWave(S, ev) {
   const D = S.def468;
   if (!D || D.w >= DEF_WAVES) {
     return false;
   }
   D.w++;
   const nb = Math.min(6 - S.units.filter(u => u.side === 'e' && !u.ko).length, 2 + Math.floor(D.w / 2));
-  const pool = dfPool468(),
+  const pool = defensePool(),
     bad = BADGES.length,
     Dx = { hb: 4 + D.w * 3, pb: Math.floor(D.w / 2) + (bad >= 5 ? 1 : 0), lv: 14 + D.w * 3 + Math.min(10, bad * 2) };
   let made = 0;
@@ -51,37 +51,37 @@ function dfVague468(S, ev) {
   return made > 0;
 }
 
-function dfOpen468() {
-  const st = dfSt468();
-  // render: src/screens/overlays/transients/Windows.jsx (Df468)
-  const o = overlay('df468o', { d: SCEN.def468.d, best: st.best, won: st.won, ok: !!dfOk468() });
+function defenseOpen() {
+  const st = defenseState();
+  // render: src/screens/overlays/transients/Windows.jsx (DefenseGym)
+  const o = overlay('defense-gym-o', { d: SCEN.def468.d, best: st.best, won: st.won, ok: !!defenseUnlocked() });
   o.addEventListener('click', e => {
     if (e.target === o) {
-      shut('df468o');
+      shut('defense-gym-o');
     }
   });
 }
 
-/** Defense Gym banner on Home (#df468, render: src/screens/home/Banners.jsx). */
-export function dfTxt468() {
-  return dfOk468() ? `5 vagues · record ${dfSt468().best}` : 'Débloquée avec 3 badges';
+/** Defense Gym banner on Home (#defenseGym, render: src/screens/home/Banners.jsx). */
+export function defenseBannerText() {
+  return defenseUnlocked() ? `5 vagues · record ${defenseState().best}` : 'Débloquée avec 3 badges';
 }
 
-const dfSt468 = () => {
+const defenseState = () => {
   try {
-    return JSON.parse(localStorage.getItem('res-df468') || 'null') || { won: 0, best: 0 };
+    return JSON.parse(localStorage.getItem('res-defense-gym') || 'null') || { won: 0, best: 0 };
   } catch (e) {
     return { won: 0, best: 0 };
   }
 };
 
-const dfSave468 = s => {
-  writeLS('res-df468', s);
+const defenseSave = s => {
+  writeLS('res-defense-gym', s);
 };
 
-const dfOk468 = () => (isCamp() ? BADGES.length >= 3 : true);
+const defenseUnlocked = () => (isCamp() ? BADGES.length >= 3 : true);
 
-const dfPool468 = () => MON.filter(m => m.st === 1 && !m.leg && !m.isEnemy && m.base === m.id);
+const defensePool = () => MON.filter(m => m.st === 1 && !m.leg && !m.isEnemy && m.base === m.id);
 
 // Statements run at startup, in the original order (see index.js).
 export function __init() {
@@ -137,7 +137,7 @@ export function __init() {
       return;
     }
     if (S.round % 2 === 0) {
-      dfVague468(S, ev);
+      defenseWave(S, ev);
     }
   });
 
@@ -150,7 +150,7 @@ export function __init() {
       S.def468.w < DEF_WAVES &&
       S.units.some(x => x.side === 'a' && !x.ko)
     ) {
-      dfVague468(S, ev);
+      defenseWave(S, ev);
     }
   });
 
@@ -160,13 +160,13 @@ export function __init() {
       if (!D) {
         return null;
       }
-      const st = dfSt468();
+      const st = defenseState();
       st.best = Math.max(st.best, win ? DEF_WAVES : D.w - 1);
       if (win) {
         st.won++;
       }
-      dfSave468(st);
-      rew.df468 = { win, w: D.w, lives: D.lives };
+      defenseSave(st);
+      rew.defenseGym = { win, w: D.w, lives: D.lives };
       return win
         ? [600 + 300 * D.lives, D.lives >= 3 ? 4 : D.lives >= 2 ? 2 : 1]
         : D.w > 1
@@ -178,31 +178,31 @@ export function __init() {
   });
 
   HOOKS.battleResult.unshift(r => {
-    const t = r.df468;
+    const t = r.defenseGym;
     if (!t) {
       return '';
     }
     return `<div class="res-l"><h4>Arène de défense</h4><div class="rl"><span>${t.win ? `<b>Défense tenue !</b> ${DEF_WAVES} vagues repoussées, ${t.lives} vie${t.lives > 1 ? 's' : ''} restante${t.lives > 1 ? 's' : ''}.` : `Vous avez tenu jusqu’à la vague ${t.w} sur ${DEF_WAVES}.`}</span></div></div>`;
   });
 
-  // wave banner (#df468hud): rendered by React (src/screens/combat/battle/Battle.jsx)
+  // wave banner (#defenseGymHud): rendered by React (src/screens/combat/battle/Battle.jsx)
 
   document.addEventListener(
     'click',
     e => {
-      const b = e.target.closest && e.target.closest('[data-df468]');
+      const b = e.target.closest && e.target.closest('[data-defense-gym]');
       if (!b) {
         return;
       }
       e.stopPropagation();
       e.preventDefault();
-      const v = b.dataset.df468;
+      const v = b.dataset.defenseGym;
       if (v === 'open') {
-        return dfOpen468();
+        return defenseOpen();
       }
-      shut('df468o');
+      shut('defense-gym-o');
       if (v === 'go') {
-        if (!dfOk468() || !squad.length) {
+        if (!defenseUnlocked() || !squad.length) {
           return toast(squad.length ? 'Débloquée avec 3 badges.' : 'Composez d’abord une équipe.');
         }
         if (B) {

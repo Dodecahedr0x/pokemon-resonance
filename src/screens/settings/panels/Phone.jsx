@@ -13,8 +13,8 @@ export default function Phone() {
       </header>
       <Switch k="vibe" on={PREF.vibe} lab="Vibrations" sub="Coups encaissés, K.O. et récompenses" />
       <Switch
-        k="swipe429"
-        on={PREF.swipe429 !== false}
+        k="swipeNav"
+        on={PREF.swipeNav !== false}
         lab="Glisser entre les onglets"
         sub="Accueil, Équipe, Combat, Carte. Appui long sur un Pokémon : sa fiche."
       />

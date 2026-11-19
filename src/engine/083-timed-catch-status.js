@@ -13,12 +13,12 @@ import { CAP_K, bagN } from './032-v4-foundation.js';
 import { renderWallet } from './035-interface.js';
 import { renderParams } from './040-settings.js';
 import { shut, updateTemp, openOverlay } from '../screens/overlays/tempStore.js';
-import { FX448 } from './079-immersion-sound-haptics.js';
+import { effectsEnabled } from './079-immersion-sound-haptics.js';
 
-let CAPOK453;
+let CATCH_TIMED_OK;
 
 /* ---------- 1. visible statuses and reactions on tokens ---------- */
-function stKey453(u) {
+function statusKey(u) {
   if (u.ko) {
     return '';
   }
@@ -43,12 +43,12 @@ function stKey453(u) {
   return '';
 }
 
-// the .st453 group (bubbles, lightning, ice cubes, "z") is rendered by Units.jsx (St453)
+// the .statusFx group (bubbles, lightning, ice cubes, "z") is rendered by Units.jsx (StatusFx)
 
-export function timing453(cb) {
+export function startCatchTiming(cb) {
   // gauge rendered by React (src/screens/overlays/transients/Ct453.jsx); the ring is animated here
-  const o = openOverlay('ct453', { q: null });
-  const g = o.querySelector('.ct453-g');
+  const o = openOverlay('timed-catch', { q: null });
+  const g = o.querySelector('.timed-catch-g');
   const T0 = performance.now(),
     DUR = 1500;
   let done = false,
@@ -75,7 +75,7 @@ export function timing453(cb) {
     cancelAnimationFrame(raf);
     q = q || 'miss';
     if (o.isConnected) {
-      updateTemp('ct453', { q });
+      updateTemp('timed-catch', { q });
     } // text and res-… class
     sfx(q === 'miss' ? 'lose' : 'rx');
     vibe(q === 'perfect' ? [30, 40, 60] : q === 'miss' ? [60] : 25);
@@ -87,8 +87,8 @@ export function timing453(cb) {
       q === 'skip' ? 0 : 650
     );
   };
-  o.querySelector('.ct453-b').addEventListener('click', () => endStep(quality()));
-  o.querySelector('.ct453-s').addEventListener('click', () => endStep('skip'));
+  o.querySelector('.timed-catch-b').addEventListener('click', () => endStep(quality()));
+  o.querySelector('.timed-catch-s').addEventListener('click', () => endStep('skip'));
   o.addEventListener('keydown', e => {
     if (e.key === ' ' || e.key === 'Enter') {
       e.preventDefault();
@@ -96,10 +96,10 @@ export function timing453(cb) {
     }
   });
   raf = requestAnimationFrame(frame);
-  o.querySelector('.ct453-b').focus();
+  o.querySelector('.timed-catch-b').focus();
 }
 
-const CAPT453 = () => PREF.capT453 !== 0 && !RM && !AUTO;
+const CATCH_TIMING_ON = () => PREF.catchTimingEnabled !== 0 && !RM && !AUTO;
 
 // Instructions run at startup, in the original order (see index.js).
 export function __init() {
@@ -108,20 +108,20 @@ export function __init() {
     if (!T) {
       return;
     }
-    T.st = true; // token's .st453 group (Units.jsx)
-    T.s453 = FX448() ? stKey453(u) : ''; // data-s453
-    tokCl(T, 'low453', FX448() && !u.ko && u.hp / u.mhp <= 0.25);
+    T.st = true; // token's .statusFx group (Units.jsx)
+    T.statusMark = effectsEnabled() ? statusKey(u) : ''; // data-status-mark
+    tokCl(T, 'low-hp', effectsEnabled() && !u.ko && u.hp / u.mhp <= 0.25);
     unitsDirty();
   });
 
   /* ---------- 2. timed capture ---------- */
-  CAPOK453 = false;
+  CATCH_TIMED_OK = false;
 
   document.addEventListener(
     'click',
     e => {
       const b = e.target.closest && e.target.closest('[data-cap]');
-      if (!b || CAPOK453 || !CAPT453() || !B || document.getElementById('ct453')) {
+      if (!b || CATCH_TIMED_OK || !CATCH_TIMING_ON() || !B || document.getElementById('timed-catch')) {
         return;
       }
       const al = byUid(B, ui.sel),
@@ -132,7 +132,7 @@ export function __init() {
       e.preventDefault();
       e.stopPropagation();
       e.stopImmediatePropagation();
-      timing453(q => {
+      startCatchTiming(q => {
         if (q === 'miss') {
           // the Ball bounces off: it is lost, but the ally did not act and the Voices are kept
           const k = CAP_K;
@@ -146,13 +146,13 @@ export function __init() {
           return;
         }
         const k = CAP_K;
-        CAPOK453 = true;
+        CATCH_TIMED_OK = true;
         try {
           b.click();
         } catch {
           /* Best effort: failure here is non-fatal. */
         }
-        CAPOK453 = false;
+        CATCH_TIMED_OK = false;
         if (q === 'perfect') {
           PROFILE.bag[k] = bagN(k) + 1; // Ball returned
           renderWallet();
@@ -167,12 +167,12 @@ export function __init() {
   // "Timed capture" panel: rendered by React (src/screens/settings/panels/CaptureTiming.jsx)
 
   document.addEventListener('click', e => {
-    const b = e.target.closest && e.target.closest('[data-b453]');
+    const b = e.target.closest && e.target.closest('[data-catch-action]');
     if (!b) {
       return;
     }
-    if (b.dataset.b453 === 'cap') {
-      PREF.capT453 = PREF.capT453 === 0 ? 1 : 0;
+    if (b.dataset.catchAction === 'cap') {
+      PREF.catchTimingEnabled = PREF.catchTimingEnabled === 0 ? 1 : 0;
       savePref();
       renderParams();
     }

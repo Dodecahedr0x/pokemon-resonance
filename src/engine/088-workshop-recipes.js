@@ -6,14 +6,14 @@ import { sfx, vibe } from './026-campaign-tutorial-sound.js';
 import { SHOP, bagN, savePurse, today } from './032-v4-foundation.js';
 import { refreshHome } from '../screens/home/homeStore.js';
 import { renderBag } from './039-quests-shop.js';
-import { reward454, rng454, txt454 } from './084-peddler-route-missions.js';
+import { applyReward, seededRng, rewardText } from './084-peddler-route-missions.js';
 
-export { LJ455, RECIPES455, COST455 }; // read by Shop › Workshop and Draw (React, src/screens/bag/Workshop.jsx)
+export { loadToday, RECIPES, FUSION_COST }; // read by Shop › Workshop and Draw (React, src/screens/bag/Workshop.jsx)
 
 /* ---------- TM fusion ---------- */
-export function donors455(target) {
+export function fusionDonors(target) {
   const d = [];
-  tmKeys455()
+  tmKeys()
     .filter(k => k !== target && bagN(k) > 0)
     .sort((a, b) => SHOP[a].p - SHOP[b].p)
     .forEach(k => {
@@ -24,9 +24,9 @@ export function donors455(target) {
   return d.length === 2 ? d : null;
 }
 
-export function fusionTargets455() {
-  const r = rng454('fusion455'),
-    pool = tmKeys455().filter(k => !bagN(k)),
+export function tmFusionTargets() {
+  const r = seededRng('tm-fusion'),
+    pool = tmKeys().filter(k => !bagN(k)),
     out = [];
   while (out.length < 4 && pool.length) {
     out.push(pool.splice(Math.floor(r() * pool.length), 1)[0]);
@@ -35,34 +35,34 @@ export function fusionTargets455() {
 }
 
 /* ---------- daily orders ---------- */
-export function commands455() {
-  const r = rng454('cmd455'),
+export function dailyOrders() {
+  const r = seededRng('daily-orders'),
     pool = ['potion', 'poke', 'super', 'antidote', 'antigel', 'baieoran', 'superpotion'],
     a = pool.splice(Math.floor(r() * pool.length), 1)[0],
     b = pool.splice(Math.floor(r() * pool.length), 1)[0],
-    st = LJ455('res-at455', { d: today(), cmd: {}, spin: 0 });
+    st = loadToday('res-craft-bench', { d: today(), cmd: {}, spin: 0 });
   return [
     { id: 'c1', in: { [a]: 2 + Math.floor(r() * 2) }, rew: { g: 1 } },
     { id: 'c2', in: { [b]: 3 }, rew: { m: 900 } },
   ].map(c => ({ ...c, done: !!st.cmd[c.id] }));
 }
 
-function spin455() {
-  const st = LJ455('res-at455', { d: today(), cmd: {}, spin: 0 });
+function dailySpin() {
+  const st = loadToday('res-craft-bench', { d: today(), cmd: {}, spin: 0 });
   if (st.spin >= 4) {
     return;
   }
   if (st.spin > 0) {
-    if (PROFILE.money < COST455) {
+    if (PROFILE.money < FUSION_COST) {
       return;
     }
-    PROFILE.money -= COST455;
+    PROFILE.money -= FUSION_COST;
   }
-  const r = rng454('spin455' + st.spin)();
-  const tot = LOTS455.reduce((a, l) => a + l.w, 0);
+  const r = seededRng('dailySpin' + st.spin)();
+  const tot = SPIN_PRIZES.reduce((a, l) => a + l.w, 0);
   let x = r * tot,
-    lot = LOTS455[0];
-  for (const l of LOTS455) {
+    lot = SPIN_PRIZES[0];
+  for (const l of SPIN_PRIZES) {
     if ((x -= l.w) < 0) {
       lot = l;
       break;
@@ -70,16 +70,16 @@ function spin455() {
   }
   let t = lot.t;
   if (lot.ct) {
-    const cts = tmKeys455(),
-      k = cts[Math.floor(rng454('spinct455' + st.spin)() * cts.length)];
+    const cts = tmKeys(),
+      k = cts[Math.floor(seededRng('daily-spin-tm' + st.spin)() * cts.length)];
     PROFILE.bag[k] = Math.min(99, bagN(k) + 1);
     t = SHOP[k].n;
   } else {
-    reward454(lot.o);
+    applyReward(lot.o);
   }
   st.spin++;
   st.last = t;
-  writeLS('res-at455', st);
+  writeLS('res-craft-bench', st);
   sfx('win');
   vibe(25);
   toast('Tirage : ' + t);
@@ -88,58 +88,58 @@ function spin455() {
 
 /* ---------- showcase (displayed by React: src/screens/bag/Workshop.jsx) ---------- */
 // Marks the TMs / HMs in the Bag or already learned as seen, then returns the showcase state.
-export function showcase455() {
+export function tmShowcase() {
   let seen;
   try {
-    seen = JSON.parse(localStorage.getItem('res-vit455') || '{}');
+    seen = JSON.parse(localStorage.getItem('res-tm-showcase') || '{}');
   } catch (e) {
     seen = {};
   }
   const learned = Object.values((PROFILE.ct && PROFILE.ct.learnedTms) || {});
-  const cts = tmKeys455(),
+  const cts = tmKeys(),
     cs = Object.keys(SHOP).filter(k => SHOP[k].cs);
   [...cts, ...cs].forEach(k => {
     if (bagN(k) > 0 || learned.includes(SHOP[k].mv)) {
       seen[k] = 1;
     }
   });
-  writeLS('res-vit455', seen);
+  writeLS('res-tm-showcase', seen);
   return { seen, tms: cts, cs };
 }
 
 /* ---------- Shop tabs (Workshop, Draw…): rendered by React (src/screens/bag/Workshop.jsx) ---------- */
 
-function yesterday455() {
+function yesterdayDate() {
   const t = new Date(today() + 'T12:00:00Z');
   t.setUTCDate(t.getUTCDate() - 1);
   return t.toISOString().slice(0, 10);
 }
 
-export function cdSt455() {
+export function dailyGiftState() {
   let s;
   try {
-    s = JSON.parse(localStorage.getItem('res-cd455') || '{}');
+    s = JSON.parse(localStorage.getItem('res-dailygift') || '{}');
   } catch (e) {
     s = {};
   }
   s.n = s.n || 0;
-  if (s.last && s.last !== today() && s.last !== yesterday455()) {
+  if (s.last && s.last !== today() && s.last !== yesterdayDate()) {
     s.n = 0;
   }
   return s;
 }
 
-/** "Cadeau du jour" (Daily gift) button on the Home screen (#cd455, rendered by src/screens/home/Banners.jsx). */
-export function cdData455() {
-  const s = cdSt455(),
+/** "Cadeau du jour" (Daily gift) button on the Home screen (#dailygift, rendered by src/screens/home/Banners.jsx). */
+export function dailyGiftData() {
+  const s = dailyGiftState(),
     doneFlag = s.last === today(),
     j = doneFlag ? Math.max(0, s.n - 1) % 7 : s.n % 7,
-    R = GIFT455[j],
-    txt = [txt454(R), R.ct ? '1 CT' : ''].filter(Boolean).join(' + ');
+    R = DAILY_GIFTS[j],
+    txt = [rewardText(R), R.ct ? '1 CT' : ''].filter(Boolean).join(' + ');
   return { fait: doneFlag, j, txt };
 }
 
-const LJ455 = (k, d) => {
+const loadToday = (k, d) => {
   let s;
   try {
     s = JSON.parse(localStorage.getItem(k) || 'null');
@@ -149,17 +149,16 @@ const LJ455 = (k, d) => {
   return s && s.d === today() ? s : d;
 };
 
-const nameIt455 = k => (SHOP[k] ? SHOP[k].n : (ITEMS2[k] || {}).n || k);
+const itemName = k => (SHOP[k] ? SHOP[k].n : (ITEMS2[k] || {}).n || k);
 
-export const tmKeys455 = () =>
-  Object.keys(SHOP).filter(k => SHOP[k].category === 'machines' && !SHOP[k].cs && !SHOP[k].g);
+export const tmKeys = () => Object.keys(SHOP).filter(k => SHOP[k].category === 'machines' && !SHOP[k].cs && !SHOP[k].g);
 
-export const txtIn455 = o =>
+export const ingredientsText = o =>
   Object.keys(o)
-    .map(k => `${o[k]} × ${nameIt455(k)}`)
+    .map(k => `${o[k]} × ${itemName(k)}`)
     .join(' + ');
 
-export const add455 = (o, direction) => {
+export const addItems = (o, direction) => {
   for (const k in o) {
     PROFILE.bag[k] = Math.max(0, Math.min(99, bagN(k) + direction * o[k]));
     if (!PROFILE.bag[k]) {
@@ -168,10 +167,10 @@ export const add455 = (o, direction) => {
   }
 };
 
-export const canIn455 = o => Object.keys(o).every(k => bagN(k) >= o[k]);
+export const hasIngredients = o => Object.keys(o).every(k => bagN(k) >= o[k]);
 
 /* ---------- recipe book ---------- */
-const RECIPES455 = [
+const RECIPES = [
   { id: 'r1', in: { potion: 3 }, out: { superpotion: 1 }, m: 0 },
   { id: 'r2', in: { superpotion: 3 }, out: { hyperpotion: 1 }, m: 200 },
   { id: 'r3', in: { poke: 3 }, out: { super: 1 }, m: 200 },
@@ -183,7 +182,7 @@ const RECIPES455 = [
 ];
 
 /* ---------- peddler's draw ---------- */
-const LOTS455 = [
+const SPIN_PRIZES = [
   { w: 25, t: 'Poké Ball × 3', o: { b: { poke: 3 } } },
   { w: 22, t: 'Potion × 2', o: { b: { potion: 2 } } },
   { w: 14, t: 'Super Ball', o: { b: { super: 1 } } },
@@ -195,10 +194,10 @@ const LOTS455 = [
   { w: 3, t: 'Baie Mepo', o: { b: { baiemepo: 1 } } },
 ];
 
-const COST455 = 900;
+const FUSION_COST = 900;
 
 /* ---------- daily gift ---------- */
-const GIFT455 = [
+const DAILY_GIFTS = [
   { m: 300, b: { potion: 1 } },
   { b: { poke: 2 } },
   { m: 800 },
@@ -213,44 +212,44 @@ export function __init() {
   document.addEventListener(
     'click',
     e => {
-      const b = e.target.closest && e.target.closest('[data-at455]');
+      const b = e.target.closest && e.target.closest('[data-craft-bench]');
       if (!b || b.disabled) {
         return;
       }
       e.preventDefault();
       e.stopPropagation();
-      const [a, k] = b.dataset.at455.split(':');
+      const [a, k] = b.dataset.craftBench.split(':');
       if (a === 'rec') {
-        const r = RECIPES455.find(x => x.id === k);
-        if (!r || !canIn455(r.in) || PROFILE.money < r.m) {
+        const r = RECIPES.find(x => x.id === k);
+        if (!r || !hasIngredients(r.in) || PROFILE.money < r.m) {
           return;
         }
-        add455(r.in, -1);
+        addItems(r.in, -1);
         PROFILE.money -= r.m;
-        add455(r.out, 1);
-        toast('Préparé : ' + txtIn455(r.out));
+        addItems(r.out, 1);
+        toast('Préparé : ' + ingredientsText(r.out));
       } else if (a === 'fus') {
-        const d = donors455(k);
-        if (!tmKeys455().includes(k) || bagN(k) || !d || PROFILE.money < 1000) {
+        const d = fusionDonors(k);
+        if (!tmKeys().includes(k) || bagN(k) || !d || PROFILE.money < 1000) {
           return;
         }
-        d.forEach(x => add455({ [x]: 1 }, -1));
+        d.forEach(x => addItems({ [x]: 1 }, -1));
         PROFILE.money -= 1000;
         PROFILE.bag[k] = 1;
         toast('Fusion réussie : ' + SHOP[k].n);
       } else if (a === 'cmd') {
-        const c = commands455().find(x => x.id === k),
-          st = LJ455('res-at455', { d: today(), cmd: {}, spin: 0 });
-        if (!c || c.done || !canIn455(c.in)) {
+        const c = dailyOrders().find(x => x.id === k),
+          st = loadToday('res-craft-bench', { d: today(), cmd: {}, spin: 0 });
+        if (!c || c.done || !hasIngredients(c.in)) {
           return;
         }
-        add455(c.in, -1);
-        reward454(c.rew);
+        addItems(c.in, -1);
+        applyReward(c.rew);
         st.cmd[k] = 1;
-        writeLS('res-at455', st);
-        toast('Commande livrée : ' + txt454(c.rew));
+        writeLS('res-craft-bench', st);
+        toast('Commande livrée : ' + rewardText(c.rew));
       } else if (a === 'spin') {
-        spin455();
+        dailySpin();
         renderBag();
         return;
       } else {
@@ -265,30 +264,30 @@ export function __init() {
   );
 
   document.addEventListener('click', e => {
-    const b = e.target.closest && e.target.closest('[data-cd455]');
+    const b = e.target.closest && e.target.closest('[data-dailygift]');
     if (!b) {
       return;
     }
-    const s = cdSt455();
+    const s = dailyGiftState();
     if (s.last === today()) {
       return;
     }
-    const R = GIFT455[s.n % 7];
-    reward454(R);
+    const R = DAILY_GIFTS[s.n % 7];
+    applyReward(R);
     let extra = '';
     if (R.ct) {
-      const cts = tmKeys455(),
-        k = cts[Math.floor(rng454('cdct455')() * cts.length)];
+      const cts = tmKeys(),
+        k = cts[Math.floor(seededRng('daily-gift-tm')() * cts.length)];
       PROFILE.bag[k] = Math.min(99, bagN(k) + 1);
       extra = ' + ' + SHOP[k].n;
     }
     s.n++;
     s.last = today();
-    writeLS('res-cd455', s);
+    writeLS('res-dailygift', s);
     sfx('win');
     vibe(25);
-    toast('Cadeau du jour : ' + txt454(R) + extra);
+    toast('Cadeau du jour : ' + rewardText(R) + extra);
     savePurse();
-    refreshHome(); // #cd455 button
+    refreshHome(); // #dailygift button
   });
 }

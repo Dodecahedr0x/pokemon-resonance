@@ -23,7 +23,7 @@ import Coach from '../screens/overlays/Coach.jsx';
 import Starter from '../screens/overlays/Starter.jsx';
 import Enc from '../screens/overlays/Enc.jsx';
 import Intro from '../screens/overlays/Intro.jsx';
-import Tip429 from '../screens/overlays/Tip429.jsx';
+import BattleTip from '../screens/overlays/BattleTip.jsx';
 import Dialogs from '../screens/overlays/Dialogs.jsx';
 import Transients from '../screens/overlays/Transients.jsx';
 import { PkBackground } from '../screens/overlays/Effects.jsx';
@@ -185,7 +185,7 @@ export default function Shell() {
         <Intro />
       </Guard>
       <Guard>
-        <Tip429 />
+        <BattleTip />
       </Guard>
       <Guard>
         <Dialogs />
