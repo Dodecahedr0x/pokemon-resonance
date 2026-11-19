@@ -3,7 +3,7 @@
 import { MV } from './005-02-capacites.js';
 import { BY, SCEN } from './009-03-pokemon.js';
 import { PROFILE, isCamp } from './011-05-etat-de-partie.js';
-import { $, RM, toast } from './014-08-outils.js';
+import { $, RM, attendre, toast } from './014-08-outils.js';
 import { refreshAccueil, setRoute } from '../screens/accueil/accueilStore.js';
 import { CROCHETS } from './015-v4-8-00-crochets.js';
 import { byUid } from './021-14-moteur-combat.js';
@@ -15,8 +15,8 @@ import { playEv } from './028-22-effets-attaque.js';
 import { AUTO } from './030-24-prestige-mise-en-scene.js';
 import { SHOP, bagN } from './032-v4-00-socle.js';
 
-export let REDIFF, dissonanceDe;
-let SAISONS, saison, cleCadeau, pause, REDIFF_EN_COURS, DISSONANCE;
+export let REDIFF;
+let REDIFF_EN_COURS, DISSONANCE;
 
 
 /* =====================================================================
@@ -181,11 +181,11 @@ async function rediffuser() {
     buildBoard();
     renderAll();
     log(`Rediffusion : ${R.best.label}`, 'arn');
-    await pause(900 * lent);
+    await attendre(900 * lent);
     __set_B(Object.assign(JSON.parse(R.best.apres), { over: null }));
     renderAll();
     playEv(R.best.ev);
-    await pause(3200 * lent);
+    await attendre(3200 * lent);
   } finally {
     __set_B(fin);
     ui.busy = false;
@@ -203,13 +203,10 @@ export function dissonanceApres(n) {
   return { 1: ['td1'], 3: ['td2'], 5: ['td3'], 7: ['td4'] }[n] || [];
 }
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
-export function __init() {
-
 /* =====================================================================
    1. Événements du calendrier
    ===================================================================== */
-SAISONS = {
+const SAISONS = {
   halloween: {
     n: 'Nuit des Spectres',
     d: 'Les Pokémon Spectre, Ténèbres et Poison sortent des hautes herbes, la nuit tombe sur les combats sauvages, et chaque capture de ces types rapporte 1 Éclat.',
@@ -251,11 +248,15 @@ SAISONS = {
 };
 
 
-saison = () => SAISONS[saisonDu()] || null;
+const saison = () => SAISONS[saisonDu()] || null;
 
 
-cleCadeau = () => `${saisonDu()}-${new Date().getFullYear()}`;
+const cleCadeau = () => `${saisonDu()}-${new Date().getFullYear()}`;
 
+export const dissonanceDe = k => DISSONANCE.find(T => T.k === k) || null;
+
+// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+export function __init() {
 
 document.addEventListener('click', e => {
   if (e.target.closest('[data-cadeau]')) prendreCadeau();
@@ -266,9 +267,6 @@ document.addEventListener('click', e => {
    2. Rediffusion du meilleur coup
    ===================================================================== */
 REDIFF = new WeakMap();
-
-
-pause = ms => new Promise(r => setTimeout(r, ms));
 
 
 REDIFF_EN_COURS = false;
@@ -392,9 +390,6 @@ DISSONANCE = [
     d: 'Le QG de la Dissonance. Orphée a réglé l’arène en « Canons de verre » : chaque coup compte double… pour tout le monde.'
   }
 ].filter(T => T.foes.every(([id]) => BY[id]));
-
-
-dissonanceDe = k => DISSONANCE.find(T => T.k === k) || null;
 
 
 DISSONANCE.forEach((T, i) => {

@@ -6,12 +6,12 @@ import { norm, openSheet, squad } from './020-13-equipe-cartes.js';
 import { V4 } from './032-v4-00-socle.js';
 import { isShinyOwned } from './043-v4-4-01-aventure-plus.js';
 import { chromaArt425 } from './062-v4-25-01-direction-artistique.js';
+import { scanDex448 } from './079-v4-48-immersion-sons-par-type-cris-vibrations-en.js';
 import { refreshDex } from '../screens/dex/dexStore.js';
 
 export let DEXS;
 // vrai dès le premier affichage de la page : avant, #dex reste vide (ancien buildDex)
 export let dexBuilt;
-export function __set_renderDexCard(v) { return (renderDexCard = v); }
 
  // v4.13
 export function dexList() {
@@ -36,11 +36,13 @@ function renderDexList() {
 
 
 export function renderDexCard() {
-  if (!dexBuilt) return;
-  const m = BY[V4.dexSel] || DEXS[0];
-  V4.dexSel = m.id;
-  refreshDex();
-  setTimeout(() => isShinyOwned(m.id) && chromaArt425($('#dex4Card .v4d-art img'), m.no), 0); // v4.25
+  if (dexBuilt) {
+    const m = BY[V4.dexSel] || DEXS[0];
+    V4.dexSel = m.id;
+    refreshDex();
+    setTimeout(() => isShinyOwned(m.id) && chromaArt425($('#dex4Card .v4d-art img'), m.no), 0); // v4.25
+  }
+  scanDex448();
 }
 
 

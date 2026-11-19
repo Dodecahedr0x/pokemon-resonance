@@ -1,23 +1,17 @@
 import { Html } from '../../lib/html.jsx';
-import { useOverlay } from './dialogsStore.js';
+import { Boite, Dialogue } from './Fenetre.jsx';
 import { BY } from '../../engine/009-03-pokemon.js';
 import { medal } from '../../engine/014-08-outils.js';
 
 // Pension du Camp (#pensBox) : choix d'un couple. Le moteur (055) calcule la liste et
 // la compatibilité, et garde les clics (data-pens, data-pens-p) et l'attribut hidden.
 export default function PensBox() {
-  const s = useOverlay('pens');
-  return (
-    <div className="result exp-box" id="pensBox" hidden>
-      {s && <Carte key={s.v} {...s} />}
-    </div>
-  );
+  return <Boite nom="pens" className="result exp-box" id="pensBox" Carte={Carte} />;
 }
 
 function Carte({ L, ok }) {
   return (
-    <div className="sv-card exp-card" role="dialog" aria-modal="true" aria-labelledby="pensT">
-      <button className="sh-x" type="button" data-pens="x" aria-label="Fermer"><svg><use href="#i-x" /></svg></button>
+    <Dialogue className="sv-card exp-card" titre="pensT" fermer={{ 'data-pens': 'x' }}>
       <p className="kick">Pension</p>
       <h2 className="h2" id="pensT">Choisissez un couple</h2>
       <p className="d">Deux Pokémon qui partagent un type, ou Métamorph avec n’importe qui. Le premier choisi donne la famille de l’œuf, le second lui transmet une attaque. Les membres de l’équipe restent au camp.</p>
@@ -35,6 +29,6 @@ function Carte({ L, ok }) {
         )}
       </div>
       <button type="button" className="b b-gold" data-pens="ok" disabled={!ok}>Confier le couple</button>
-    </div>
+    </Dialogue>
   );
 }

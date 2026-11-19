@@ -9,9 +9,10 @@ import { TABS, show } from './016-09-navigation.js';
 import { renderLigue } from './019-12-ligue.js';
 import { __set_squad, renderFilters, renderSquad, save, squad } from './020-13-equipe-cartes.js';
 import { champBuild } from './022-15-systemes-objets-liens-ia.js';
-import { B, __set_scSel, scSel } from './024-17-interface-combat.js';
+import { B, __set_scSel } from './024-17-interface-combat.js';
 import { SV, bootSaves, queueSave } from './025-19-sauvegardes.js';
-import { PREPG, __set_PREPG, nextGoal, renderCamp, renderPrep } from './026-20-campagne-tutoriel-son.js';
+import { __set_PREPG, nextGoal, renderPrep } from './026-20-campagne-tutoriel-son.js';
+import { renderHome } from './036-v4-04-accueil.js';
 import { setGuide } from './029-23-guide-epure.js';
 import { getGuide } from '../screens/guide/guideStore.js';
 import { showIntro } from './031-25-v3-parcours-accueil.js';
@@ -25,16 +26,10 @@ import { diplomeHors428 } from './063-v4-28-01-captures-combat-accueil.js';
 import { hebdoBuild429 } from './064-v4-29-01-qualite.js';
 import { defis431Boot } from './066-v4-31-01-defis-tactiques.js';
 
-let bootStep;
-
-
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
-export function __init() {
-
 /* ===================== DÉMARRAGE =====================
    Tout le code est chargé : on restaure la partie, puis on affiche.
    Chaque étape est protégée : si l’une casse, les autres continuent (et le souci s’affiche). */
-bootStep = (name, f) => {
+const bootStep = (name, f) => {
   try {
     f();
   } catch (e) {
@@ -42,6 +37,8 @@ bootStep = (name, f) => {
   }
 };
 
+// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+export function __init() {
 
 bootStep('Champion', champBuild);
 
@@ -118,7 +115,7 @@ bootStep('prochain combat', () => {
 });
 
 
-bootStep('carte de dresseur', renderCamp);
+bootStep('carte de dresseur', renderHome);
 
 
 bootStep('combats', renderPrep);

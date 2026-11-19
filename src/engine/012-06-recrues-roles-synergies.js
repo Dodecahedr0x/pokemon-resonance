@@ -2,8 +2,6 @@
 
 import { BY, PRESETS } from './009-03-pokemon.js';
 
-export let RC, ROLEFX, SYN, rIco;
-let RSLUG, RICON;
 
 
 export function synOf(ids) {
@@ -11,17 +9,14 @@ export function synOf(ids) {
   return SYN.filter(s => T.some((a, i) => a.includes(s.t[0]) && T.some((b, j) => j !== i && b.includes(s.t[1]))));
 }
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
-export function __init() {
-
 /* ===================== v1.1 : recrues confirmées, rôles, synergies ===================== */
-RC = id => {
+export const RC = id => {
   const m = BY[id];
   return m.st === 1 ? m.c : m.c + m.st - 1;
 };
 
 
-ROLEFX = {
+export const ROLEFX = {
   Rempart: {
     k: 'Protecteur',
     d: 'Gardiennage : une fois par manche, s’interpose devant un allié au contact visé par une attaque à cible unique et encaisse 75 % du coup.'
@@ -40,7 +35,7 @@ ROLEFX = {
 };
 
 
-SYN = [
+export const SYN = [
   { k: 'forge', n: 'Forge', t: ['Feu', 'Roche'], d: 'Attaques Feu et Roche : +2 dégâts.' },
   { k: 'acier', n: 'Acier trempé', t: ['Ténèbres', 'Acier'], d: 'Pokémon Ténèbres et Acier : −2 dégâts subis.' },
   { k: 'tempete', n: 'Tempête', t: ['Eau', 'Électrik'], d: 'Attaques Électrik : +25 % sur les cibles Trempées.' },
@@ -64,18 +59,10 @@ SYN = [
 ];
 
 
-Object.assign(PRESETS, {
-  escorte: { n: 'Escorte du dragon', ids: ['dracaufeu', 'ymphect', 'germignon', 'melo'], f: 1 },
-  acier: { n: 'Acier et ténèbres', ids: ['tyranocif', 'magneti', 'onix', 'pichu'], f: 1 },
-  esprit: { n: 'Esprit frappeur', ids: ['alakazam', 'fantominus', 'melofee', 'ptitard'], f: 1 },
-  maree: { n: 'Marée électrique', ids: ['leviator', 'pikachu', 'carapuce', 'kaiminus'], f: 1 }
-});
+const RSLUG ={ Rempart: 'rem', Frappeur: 'fra', Éclaireur: 'ecl', Verrou: 'ver', Déclencheur: 'dec', Relais: 'rel' };
 
 
-RSLUG = { Rempart: 'rem', Frappeur: 'fra', Éclaireur: 'ecl', Verrou: 'ver', Déclencheur: 'dec', Relais: 'rel' };
-
-
-RICON = {
+const RICON = {
   rem: 'M12 3 19 6v6c0 4.4-3 7.4-7 9-4-1.6-7-4.6-7-9V6Z',
   fra: 'M5 19 15 9M13 5h6v6M7 21l-4-4',
   ecl: 'M4 12h11M11 6l6 6-6 6M19 5v14',
@@ -85,8 +72,17 @@ RICON = {
 };
 
 
-rIco = r => {
+export const rIco = r => {
   const s = RSLUG[r] || 'rel';
   return `<svg class="ri ri-${s}" viewBox="0 0 24 24" aria-hidden="true"><path d="${RICON[s]}"/></svg>`;
 };
+
+// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+export function __init() {
+Object.assign(PRESETS, {
+  escorte: { n: 'Escorte du dragon', ids: ['dracaufeu', 'ymphect', 'germignon', 'melo'], f: 1 },
+  acier: { n: 'Acier et ténèbres', ids: ['tyranocif', 'magneti', 'onix', 'pichu'], f: 1 },
+  esprit: { n: 'Esprit frappeur', ids: ['alakazam', 'fantominus', 'melofee', 'ptitard'], f: 1 },
+  maree: { n: 'Marée électrique', ids: ['leviator', 'pikachu', 'carapuce', 'kaiminus'], f: 1 }
+});
 }

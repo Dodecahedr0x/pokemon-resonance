@@ -1,29 +1,53 @@
 /* Section d'origine : 05-etat-de-partie.js */
 
 import { BY } from './009-03-pokemon.js';
-import { ECO0 } from './032-v4-00-socle.js';
-import { APLUS0 } from './043-v4-4-01-aventure-plus.js';
-import { CT0 } from './045-v4-6-01-ct-cs.js';
-import { TAC0 } from './047-v4-8-01-tactique.js';
-import { REJ0 } from './048-v4-9-01-rejouabilite.js';
-import { IDP0 } from './049-v4-10-01-identite.js';
-import { MON0 } from './050-v4-11-01-monde.js';
-import { V416_0 } from './055-v4-16-01-johto-vivant.js';
-import { V417_0 } from './057-v4-17-01-compagnons-et-resonance.js';
-import { V418_0 } from './058-v4-18-01-peche-safari-coop.js';
-import { V419_0 } from './059-v4-19-01-hoenn.js';
-import { V421_0 } from './061-v4-21-01-capture-partout.js';
-import { V428_0 } from './063-v4-28-01-captures-combat-accueil.js';
-import { V429_0 } from './064-v4-29-01-qualite.js';
-import { V430_0 } from './065-v4-30-01-camp-et-tactique.js';
-import { V431_0 } from './066-v4-31-01-defis-tactiques.js';
-import { V432_0 } from './067-v4-32-01-individus-et-confort.js';
-import { V433_0 } from './068-v4-33-01-duel-et-tutoriel.js';
-import { V435_0 } from './071-v4-38-les-legendaires-de-hoenn.js';
+import { ECO0, ecoClean } from './032-v4-00-socle.js';
+import { APLUS0, aplusClean } from './043-v4-4-01-aventure-plus.js';
+import { CT0, ctClean } from './045-v4-6-01-ct-cs.js';
+import { TAC0, tacClean } from './047-v4-8-01-tactique.js';
+import { REJ0, rejClean } from './048-v4-9-01-rejouabilite.js';
+import { IDP0, idpClean } from './049-v4-10-01-identite.js';
+import { MON0, monClean } from './050-v4-11-01-monde.js';
+import { V416_0, v416Clean } from './055-v4-16-01-johto-vivant.js';
+import { V417_0, v417Clean } from './057-v4-17-01-compagnons-et-resonance.js';
+import { V418_0, v418Clean } from './058-v4-18-01-peche-safari-coop.js';
+import { V419_0, v419Clean } from './059-v4-19-01-hoenn.js';
+import { V421_0, v421Clean } from './061-v4-21-01-capture-partout.js';
+import { V428_0, v428Clean } from './063-v4-28-01-captures-combat-accueil.js';
+import { V429_0, v429Clean } from './064-v4-29-01-qualite.js';
+import { V430_0, v430Clean } from './065-v4-30-01-camp-et-tactique.js';
+import { V431_0, v431Clean } from './066-v4-31-01-defis-tactiques.js';
+import { V432_0, v432Clean } from './067-v4-32-01-individus-et-confort.js';
+import { V433_0, v433Clean } from './068-v4-33-01-duel-et-tutoriel.js';
+import { V435_0, v435Clean } from './071-v4-38-les-legendaires-de-hoenn.js';
 
-export let ITEMS2, BADGE_REWARD, STARTERS, CAMP_START, LINK_T, LINK_N, DIFFS, PROFILE, isCamp, inBox, ownedItems, pairKey, linkPts, lvlOfPts;
+export let LINK_T, LINK_N, PROFILE;
 export function __set_PROFILE(v) { return (PROFILE = v); }
 
+/* Sections du profil ajoutées par les versions : [valeurs par défaut, nettoyage d'une
+   sauvegarde]. L'ordre fixe celui des clés dans la sauvegarde : n'ajouter qu'à la fin.
+   (fonctions hoistées : la table peut être construite avant l'évaluation de leurs modules) */
+export const SECTIONS_PROFIL = [
+  [ECO0, ecoClean], // porte-monnaie, Sac, quêtes
+  [APLUS0, aplusClean], // chromatiques, rival, légendes, Tour (v4.4)
+  [CT0, ctClean], // capacités apprises par CT et CS (v4.6)
+  [TAC0, tacClean], // colosses vaincus (v4.8)
+  [REJ0, rejClean], // succès, titre, défis (v4.9)
+  [IDP0, idpClean], // camp et expéditions (v4.10)
+  [MON0, monClean], // Team Dissonance, cadeaux de saison (v4.11)
+  [V416_0, v416Clean], // Johto vivant : histoire, bêtes, Pension, amis (v4.16)
+  [V417_0, v417Clean], // compagnon, scènes, potager, tournoi (v4.17)
+  [V418_0, v418Clean], // pêche, Parc Safari (v4.18)
+  [V419_0, v419Clean], // Hoenn (v4.19)
+  [V421_0, v421Clean], // capture partout (v4.21)
+  [V428_0, v428Clean], // diplômes régionaux (v4.28)
+  [V429_0, v429Clean], // astuces, rival, défi de la semaine (v4.29)
+  [V430_0, v430Clean], // doctrine, journal tactique (v4.30)
+  [V431_0, v431Clean], // énigmes, maîtrise, Écho profond, arènes (v4.31)
+  [V432_0, v432Clean], // nature et talent, équipes, Panthéon (v4.32)
+  [V433_0, v433Clean], // duel et tutoriel (v4.33)
+  [V435_0, v435Clean] // légendes de Hoenn (v4.38)
+];
 
 export function defProfile() {
   return Object.assign(
@@ -50,33 +74,12 @@ export function defProfile() {
       forms: [],
       ranks: {}
     },
-    ECO0(), // porte-monnaie, Sac, quêtes
-    APLUS0(), // chromatiques, rival, légendes, Tour (v4.4)
-    CT0(), // capacités apprises par CT et CS (v4.6)
-    TAC0(), // colosses vaincus (v4.8)
-    REJ0(), // succès, titre, défis (v4.9)
-    IDP0(), // camp et expéditions (v4.10)
-    MON0(), // Team Dissonance, cadeaux de saison (v4.11)
-    V416_0(), // Johto vivant : histoire, bêtes, Pension, amis (v4.16)
-    V417_0(), // compagnon, scènes, potager, tournoi (v4.17)
-    V418_0(), // pêche, Parc Safari (v4.18)
-    V419_0(), // Hoenn (v4.19)
-    V421_0(), // capture partout (v4.21)
-    V428_0(), // diplômes régionaux (v4.28)
-    V429_0(), // astuces, rival, défi de la semaine (v4.29)
-    V430_0(), // doctrine, journal tactique (v4.30)
-    V431_0(), // énigmes, maîtrise, Écho profond, arènes (v4.31)
-    V432_0(), // nature et talent, équipes, Panthéon (v4.32)
-    V433_0(), // duel et tutoriel (v4.33)
-    V435_0() // légendes de Hoenn (v4.38)
+    ...SECTIONS_PROFIL.map(([defaut]) => defaut())
   );
 }
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
-export function __init() {
-
 /* ===================== ÉTAT DE PARTIE (v1.0) ===================== */
-ITEMS2 = {
+export const ITEMS2 = {
   ceinture: { n: 'Ceinture Force', d: 'Survit une fois à un coup fatal avec 1 PV.', i: 'M3 10h18v4H3ZM10 8.5h4v7h-4Z' },
   restes: {
     n: 'Restes',
@@ -102,7 +105,7 @@ ITEMS2 = {
 };
 
 
-BADGE_REWARD = [
+export const BADGE_REWARD = [
   { item: 'ceinture', gift: ['onix', 'phanpy', 'debugant'] },
   { item: 'restes', gift: ['ptitard', 'pomdepik', 'ramoloss'] },
   { item: 'grelot', gift: ['magneti', 'porygon', 'pichu'] },
@@ -114,40 +117,44 @@ BADGE_REWARD = [
 ];
 
 
-STARTERS = ['bulbizarre', 'salameche', 'carapuce', 'germignon', 'hericendre', 'kaiminus'];
+export const STARTERS = ['bulbizarre', 'salameche', 'carapuce', 'germignon', 'hericendre', 'kaiminus'];
 
 
-CAMP_START = ['magicarpe', 'metamorph', 'chenipan'];
+export const CAMP_START = ['magicarpe', 'metamorph', 'chenipan'];
 
  // v4.13 : Métamorph remplace Roucool
-LINK_T = [2, 5, 9],
-  LINK_N = ['', 'Soutien', 'Synchro', 'Duo'];
 
 
-DIFFS = { facile: 'Facile', normal: 'Normal', expert: 'Expert' };
+export const DIFFS = { facile: 'Facile', normal: 'Normal', expert: 'Expert' };
 
 
-PROFILE = defProfile();
+export const isCamp = () => PROFILE.mode === 'campagne';
 
 
-isCamp = () => PROFILE.mode === 'campagne';
-
-
-inBox = id => {
+export const inBox = id => {
   const m = BY[id];
   if (!m) return false;
   return PROFILE.box.includes(m.base); // Libre aussi : on capture (v4.21)
 };
 
 
-ownedItems = () => (isCamp() ? PROFILE.items.filter(k => ITEMS2[k]) : Object.keys(ITEMS2));
+export const ownedItems = () => (isCamp() ? PROFILE.items.filter(k => ITEMS2[k]) : Object.keys(ITEMS2));
 
 
-pairKey = (a, b) => [a, b].sort().join('|');
+export const pairKey = (a, b) => [a, b].sort().join('|');
 
 
-linkPts = (a, b) => PROFILE.links[pairKey(a, b)] || 0;
+export const linkPts = (a, b) => PROFILE.links[pairKey(a, b)] || 0;
 
 
-lvlOfPts = v => (v >= LINK_T[2] ? 3 : v >= LINK_T[1] ? 2 : v >= LINK_T[0] ? 1 : 0);
+export const lvlOfPts = v => (v >= LINK_T[2] ? 3 : v >= LINK_T[1] ? 2 : v >= LINK_T[0] ? 1 : 0);
+
+// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+export function __init() {
+
+LINK_T = [2, 5, 9],
+  LINK_N = ['', 'Soutien', 'Synchro', 'Duo'];
+
+
+PROFILE = defProfile();
 }

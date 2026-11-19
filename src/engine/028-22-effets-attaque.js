@@ -3,15 +3,12 @@ import { bdClass, bdRejouer, getHost, hostSet } from '../screens/combat/board/bo
 
 import { $, RM } from './014-08-outils.js';
 import { byUid, uk } from './021-14-moteur-combat.js';
-import { B, HC, VB, VERT, buildBoard, playLog, renderAll, ui } from './024-17-interface-combat.js';
+import { B, HC, TILT, VB, VERT, buildBoard, playLog, renderAll, tiltS, ui } from './024-17-interface-combat.js';
 import { PREF } from './026-20-campagne-tutoriel-son.js';
 import { impactWords } from './030-24-prestige-mise-en-scene.js';
 import { vivEv429 } from './064-v4-29-01-qualite.js';
 
-export let FXS, FXK;
-let FXC, fxP, R0, cl01, eo, lp;
-export function __set_fxAttack(v) { return (fxAttack = v); }
-export function __set_fxGuard(v) { return (fxGuard = v); }
+let R0, cl01, eo;
 
 
 export function fxOn() {
@@ -220,8 +217,36 @@ function shape(c, kind, x, y, s, rot, col, a) {
 
 
 /* un effet d’attaque complet : trajectoire, impact, éclats */
-export function fxAttack(e, dur) {
-  const z = FXS.s * (FXS.zk || 1), // zk : plus petit au fond du plateau incliné (v4.77)
+/* Effets à l'échelle de la profondeur du plateau incliné (cible au fond = effet plus petit). */
+function profondeur(k) {
+  if (!TILT.on || k == null) return 1;
+  const [x, y] = HC(k);
+  return Math.max(0.6, Math.min(1.4, tiltS(x, y)));
+}
+
+
+function avecProfondeur(k, f, haut) {
+  const oy = FXS.oy;
+  FXS.zk = profondeur(k);
+  // les tirs partent du corps du Pokémon debout, pas de l'anneau au sol (positions figées à l'appel)
+  if (TILT.on && haut) FXS.oy = oy - 10 * FXS.zk * FXS.s;
+  try {
+    return f();
+  } finally {
+    FXS.zk = 1;
+    FXS.oy = oy;
+  }
+}
+
+
+function fxAttack(e, dur) {
+  const sol = !e || e.st || e.sh === 'self' || e.sh === 'area' || e.sh === 'ring' || e.sh === 'cone' || e.from === e.k || FXK[e.t] === 'quake';
+  return avecProfondeur(e && (e.k != null ? e.k : e.from), () => fxAttackPlat(e, dur), !sol);
+}
+
+
+function fxAttackPlat(e, dur) {
+  const z = FXS.s * (FXS.zk || 1),
     pal = FXC[e.t] || FXC.Normal,
     kind0 = FXK[e.t] || 'impact',
     A = fxP(e.from);
@@ -261,10 +286,6 @@ export function fxAttack(e, dur) {
     );
     return dur * 0.3;
   }
-  const far = T.reduce(
-    (m, t) => (Math.hypot(t[0] - A[0], t[1] - A[1]) > Math.hypot(m[0] - A[0], m[1] - A[1]) ? t : m),
-    T[0]
-  );
   const path = t => (rock ? [A, rock, t] : [A, t]);
   /* trajectoire */
   if (kind === 'bolt') {
@@ -773,7 +794,13 @@ export function fxAttack(e, dur) {
 }
 
 
-export function fxGuard(e, dur) {
+function fxGuard(e, dur) {
+  const gardien = byUid(B, e.u);
+  return avecProfondeur(gardien ? uk(gardien) : null, () => fxGuardPlat(e, dur));
+}
+
+
+function fxGuardPlat(e, dur) {
   const g = byUid(B, e.u),
     v = byUid(B, e.v);
   if (!g || !v) return;
@@ -826,14 +853,11 @@ export function playEv(ev) {
   impactWords(ev);
 }
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
-export function __init() {
-
 /* ===================== v1.1 : effets d’attaque par type (calque canvas éphémère, aucune boucle au repos) ===================== */
-FXS = { cv: null, ctx: null, items: [], raf: 0, s: 1, ox: 0, oy: 0, on: null };
+export const FXS = { cv: null, ctx: null, items: [], raf: 0, s: 1, ox: 0, oy: 0, on: null };
 
 
-FXC = {
+const FXC = {
   Feu: ['#FFF3B0', '#FFB23E', '#FF5A1F', '#B3200E'],
   Eau: ['#E6F7FF', '#7FD0FF', '#2F8CFF', '#1546A8'],
   Électrik: ['#FFFFFF', '#FFF27A', '#FFD21F', '#B88A00'],
@@ -855,7 +879,7 @@ FXC = {
 };
 
 
-FXK = {
+const FXK = {
   Feu: 'flame',
   Dragon: 'flame',
   Électrik: 'bolt',
@@ -877,17 +901,18 @@ FXK = {
 };
 
 
-fxP = k => {
+const fxP = k => {
   const [x, y] = HC(k);
   return [FXS.ox + x * FXS.s, FXS.oy + y * FXS.s];
 };
 
 
+const lp = (a, b, t) => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
+
+// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+export function __init() {
 /* outils */
 R0 = Math.random,
   cl01 = v => (v < 0 ? 0 : v > 1 ? 1 : v),
   eo = t => 1 - Math.pow(1 - t, 3);
-
-
-lp = (a, b, t) => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
 }

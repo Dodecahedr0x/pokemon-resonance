@@ -7,17 +7,16 @@ import { RECRUIT } from './010-04-evolution-en-combat.js';
 import { ITEMS2, PROFILE, isCamp, lvlOfPts, ownedItems, pairKey } from './011-05-etat-de-partie.js';
 import { BADGES } from './013-07-arenes.js';
 import { paintOverlay } from '../screens/overlays/dialogsStore.js';
-import { $, medal, toast } from './014-08-outils.js';
+import { $, fnv, medal, toast } from './014-08-outils.js';
 import { CROCHETS } from './015-v4-8-00-crochets.js';
 import { TOD } from './017-10-accueil-route.js';
 import { __set_squad, renderSquad, save, squad } from './020-13-equipe-cartes.js';
 import { P, hasNx, heal, nextId, say, setMark, transform } from './021-14-moteur-combat.js';
 import { DUOT, wildScen } from './022-15-systemes-objets-liens-ia.js';
 import { OBST } from './023-16-roles-synergies-obstacles.js';
-import { B, backToPrep } from './024-17-interface-combat.js';
+import { B, backToPrep, goFight } from './024-17-interface-combat.js';
 import { esc, queueSave } from './025-19-sauvegardes.js';
 import { HELD_IMG, ICO414, ITM, SHOP, bagN, famOwned, fmt, today } from './032-v4-00-socle.js';
-import { goFight } from './036-v4-04-accueil.js';
 import { PL, placeName } from './037-v4-05-carte.js';
 import { LEGS, isShinyOwned, shinyStyle } from './043-v4-4-01-aventure-plus.js';
 import { FOURNISSEURS_DEGATS } from './044-v4-5-01-moteur-tactique.js';
@@ -35,8 +34,8 @@ import { regFam421, regionNo421 } from './061-v4-21-01-capture-partout.js';
 import { monHebdo429, wkClean429 } from './064-v4-29-01-qualite.js';
 import { campOk430 } from './065-v4-30-01-camp-et-tactique.js';
 
-export let CROWN416, ROAM, roamLeg416, roamActif416, roamOk416, fuiteMsg416, wildDom416, enPension416, MARK_T416, scoreDe416;
-let SVGI416, JDIS, jdisDe, ROAM_H, TALIS, roamL416, couple416, PENS_SEL, MARK_N416, DUO_N416, DUO_DE416, DUOG416, AMI_POS, AMI_DEL, AMI_MODE;
+export let wildDom416;
+let JDIS, PENS_SEL, AMI_DEL, AMI_MODE;
 export function __set_wildDom416(v) { return (wildDom416 = v); }
 export { couple416, parents416, heritable416 }; // lus par la Pension du Camp (src/screens/camp)
 
@@ -433,7 +432,7 @@ export function heritage416(b) {
 
 /* choix du couple de la Pension : rendu par React (src/screens/overlays/PensBox.jsx) */
 function renderPensBox() {
-  const dispo = PROFILE.box.filter(id => BY[id] && !squad.some(s => BY[s].base === id) && !enExpedition(id) && !(typeof estTombe === 'function' && estTombe(id)));
+  const dispo = PROFILE.box.filter(id => BY[id] && !squad.some(s => BY[s].base === id) && !enExpedition(id) && !estTombe(id));
   const ok = PENS_SEL.length === 2 && compatibles416(PENS_SEL[0], PENS_SEL[1]);
   paintOverlay('pens', {
     ok,
@@ -528,9 +527,7 @@ function monEtat416() {
 
 
 export function hash416(s) {
-  let h = 2166136261;
-  for (let i = 0; i < s.length; i++) h = Math.imul(h ^ s.charCodeAt(i), 16777619);
-  return (h >>> 0).toString(36).slice(-4).padStart(4, '0');
+  return fnv(s).toString(36).slice(-4).padStart(4, '0');
 }
 
 
@@ -640,11 +637,6 @@ export function amisData416() {
 }
 
 
-export function renderAmis416() {
-  refreshAccueil();
-}
-
-
 /* carte de dresseur / ajout d’un ami : rendu par React (src/screens/overlays/AmiBox.jsx) */
 function renderAmiBox() {
   if (AMI_MODE === 'carte')
@@ -680,11 +672,124 @@ async function copier416() {
   toast('Le code est sélectionné : appuyez longuement dessus pour le copier.');
 }
 
+/* ---------- icônes originales ---------- */
+const SVGI416 = s => 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">' + s + '</svg>');
+
+
+export const CROWN416 = '<svg class="dom-cr" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 18 4.5 7l5 5L12 4l2.5 8 5-5L21 18Z" fill="currentColor"/><path d="M3 20h18" stroke="currentColor" stroke-width="2"/></svg>';
+
+
+/* =====================================================================
+   2. Les bêtes errantes
+   ===================================================================== */
+export const ROAM = ['raikou', 'entei', 'suicune'];
+
+
+const ROAM_H = ['j1', 'j2', 'j3', 'j4', 'j5', 'j6', 'j7', 'j8', 'jwild', 'jlac'];
+
+
+const TALIS = { raikou: 'crinorage', entei: 'braisesacree', suicune: 'cristalboreal' };
+
+
+export const roamLeg416 = id => LEGS.find(L => L.id === id);
+
+
+const roamL416 = id => {
+  const L = roamLeg416(id);
+  return { n: L.n, t: L.title, q: L.q, w: L.w, l: 'Il s’est enfui avant que vous ne puissiez l’apaiser.' };
+};
+
+
+export const roamActif416 = () => johtoOuvert() && (!isCamp() || (PROFILE.jdis || 0) >= 2);
+
+
+export const roamOk416 = id => !!(PROFILE.roam && PROFILE.roam[id] && PROFILE.roam[id].ok);
+
+
+export const fuiteMsg416 = S => {
+  const D = SCEN[S.sc] || {},
+    L = D.roam && roamLeg416(D.roam);
+  return `${L ? L.n : 'La bête'} bondit hors du plateau et disparaît : il s’est enfui !`;
+};
+
+
+/* =====================================================================
+   4. La Pension, en couple
+   ===================================================================== */
+const couple416 = () => (campOk430() ? (PROFILE.couple || []).filter(id => PROFILE.box.includes(id)) : []);
+
+
+export const enPension416 = id => !!(campOk430() && BY[id] && couple416().includes(BY[id].base));
+
+
+export const MARK_T416 = { Eau: 'trempe', Électrik: 'charge', Feu: 'brulant', Plante: 'enracine', Glace: 'givre', Sol: 'fissure' };
+
+
+const MARK_N416 = { trempe: 'Trempée', charge: 'Chargée', brulant: 'Brûlante', enracine: 'Enracinée', givre: 'Givrée', fissure: 'Fissurée' };
+
+
+const DUO_N416 = {
+  Eau: 'Torrent',
+  Feu: 'Brasier',
+  Plante: 'Ronces',
+  Électrik: 'Orage',
+  Glace: 'Blizzard',
+  Sol: 'Faille',
+  Roche: 'Éboulis',
+  Vol: 'Bourrasque',
+  Psy: 'Mirage',
+  Spectre: 'Hantise',
+  Ténèbres: 'Nuit',
+  Dragon: 'Rugissement',
+  Combat: 'Assaut',
+  Normal: 'Charge',
+  Poison: 'Miasme',
+  Insecte: 'Essaim',
+  Acier: 'Lame',
+  Fée: 'Halo'
+};
+
+
+const DUO_DE416 = {
+  Eau: 'd’écume',
+  Feu: 'de feu',
+  Plante: 'de lianes',
+  Électrik: 'd’éclairs',
+  Glace: 'de givre',
+  Sol: 'de sable',
+  Roche: 'de roc',
+  Vol: 'de plumes',
+  Psy: 'd’esprit',
+  Spectre: 'd’ombre',
+  Ténèbres: 'de ténèbres',
+  Dragon: 'de dragon',
+  Combat: 'de poings',
+  Normal: 'de force',
+  Poison: 'de venin',
+  Insecte: 'd’élytres',
+  Acier: 'd’acier',
+  Fée: 'de fées'
+};
+
+
+const DUOG416 = {};
+
+
+/* =====================================================================
+   6. Défis entre amis
+   ===================================================================== */
+export const scoreDe416 = s => s.b * 100 + s.j * 120 + s.e * 60 + s.c * 400 + s.d * 10 + s.tb * 25 + s.sh * 15;
+
+
+const AMI_POS = [
+  [6, 1],
+  [6, 3],
+  [6, 5],
+  [7, 2]
+];
+
 // Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
 export function __init() {
-
-/* ---------- icônes originales ---------- */
-SVGI416 = s => 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">' + s + '</svg>');
 
 
 Object.assign(ICO414, {
@@ -701,9 +806,6 @@ Object.assign(ICO414, {
     '<path d="M24 5c9 0 15 14 15 23a15 15 0 0 1-30 0C9 19 15 5 24 5Z" fill="#fff6e0" stroke="#8b6b3d" stroke-width="2"/><circle cx="18" cy="22" r="4" fill="#7ac74c"/><circle cx="30" cy="31" r="5" fill="#7ac74c"/><circle cx="27" cy="14" r="2.5" fill="#7ac74c"/>'
   )
 });
-
-
-CROWN416 = '<svg class="dom-cr" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 18 4.5 7l5 5L12 4l2.5 8 5-5L21 18Z" fill="currentColor"/><path d="M3 20h18" stroke="currentColor" stroke-width="2"/></svg>';
 
 
 /* =====================================================================
@@ -877,21 +979,6 @@ JCHAIN.splice(JCHAIN.indexOf('jchamp'), 0, 'jd4');
 PLACES_J.forEach(p => (PL[p.id] = p));
 
 
-jdisDe = k => JDIS.find(T => T.k === k) || null;
-
-
-/* =====================================================================
-   2. Les bêtes errantes
-   ===================================================================== */
-ROAM = ['raikou', 'entei', 'suicune'];
-
-
-ROAM_H = ['j1', 'j2', 'j3', 'j4', 'j5', 'j6', 'j7', 'j8', 'jwild', 'jlac'];
-
-
-TALIS = { raikou: 'crinorage', entei: 'braisesacree', suicune: 'cristalboreal' };
-
-
 Object.assign(ITEMS2, {
   crinorage: { n: 'Crin d’Orage', d: 'Talisman de Raikou : +1 Mouvement et +1 Puissance sur toutes ses attaques.', i: 'M13 2 5 14h6l-2 8 8-12h-6l2-8Z' },
   braisesacree: {
@@ -904,21 +991,6 @@ Object.assign(ITEMS2, {
 
 
 Object.assign(HELD_IMG, { crinorage: 'crin-orage', braisesacree: 'braise-sacree', cristalboreal: 'cristal-boreal' });
-
-
-roamLeg416 = id => LEGS.find(L => L.id === id);
-
-
-roamL416 = id => {
-  const L = roamLeg416(id);
-  return { n: L.n, t: L.title, q: L.q, w: L.w, l: 'Il s’est enfui avant que vous ne puissiez l’apaiser.' };
-};
-
-
-roamActif416 = () => johtoOuvert() && (!isCamp() || (PROFILE.jdis || 0) >= 2);
-
-
-roamOk416 = id => !!(PROFILE.roam && PROFILE.roam[id] && PROFILE.roam[id].ok);
 
 
 ROAM.forEach(id => {
@@ -947,13 +1019,6 @@ ROAM.forEach(id => {
 });
 
 
-fuiteMsg416 = S => {
-  const D = SCEN[S.sc] || {},
-    L = D.roam && roamLeg416(D.roam);
-  return `${L ? L.n : 'La bête'} bondit hors du plateau et disparaît : il s’est enfui !`;
-};
-
-
 /* effets des talismans */
 FOURNISSEURS_DEGATS.push({ id: 'braisesacree', fournir: (c, { u }) => u.item === 'braisesacree' && u.hp > u.mhp / 2 && { mul: 1.2, libelle: 'Braise Sacrée' } });
 
@@ -971,15 +1036,6 @@ CROCHETS.avantFinManche.push((S, ev) => {
    3. Les Pokémon Dominants
    ===================================================================== */
 wildDom416 = false;
-
-
-/* =====================================================================
-   4. La Pension, en couple
-   ===================================================================== */
-couple416 = () => (campOk430() ? (PROFILE.couple || []).filter(id => PROFILE.box.includes(id)) : []);
-
-
-enPension416 = id => !!(campOk430() && BY[id] && couple416().includes(BY[id].base));
 
 
 // #pensBox : rendu par React (src/screens/overlays/PensBox.jsx)
@@ -1027,75 +1083,8 @@ Object.assign(DUOT, {
 });
 
 
-MARK_T416 = { Eau: 'trempe', Électrik: 'charge', Feu: 'brulant', Plante: 'enracine', Glace: 'givre', Sol: 'fissure' };
-
-
-MARK_N416 = { trempe: 'Trempée', charge: 'Chargée', brulant: 'Brûlante', enracine: 'Enracinée', givre: 'Givrée', fissure: 'Fissurée' };
-
-
-DUO_N416 = {
-  Eau: 'Torrent',
-  Feu: 'Brasier',
-  Plante: 'Ronces',
-  Électrik: 'Orage',
-  Glace: 'Blizzard',
-  Sol: 'Faille',
-  Roche: 'Éboulis',
-  Vol: 'Bourrasque',
-  Psy: 'Mirage',
-  Spectre: 'Hantise',
-  Ténèbres: 'Nuit',
-  Dragon: 'Rugissement',
-  Combat: 'Assaut',
-  Normal: 'Charge',
-  Poison: 'Miasme',
-  Insecte: 'Essaim',
-  Acier: 'Lame',
-  Fée: 'Halo'
-};
-
-
-DUO_DE416 = {
-  Eau: 'd’écume',
-  Feu: 'de feu',
-  Plante: 'de lianes',
-  Électrik: 'd’éclairs',
-  Glace: 'de givre',
-  Sol: 'de sable',
-  Roche: 'de roc',
-  Vol: 'de plumes',
-  Psy: 'd’esprit',
-  Spectre: 'd’ombre',
-  Ténèbres: 'de ténèbres',
-  Dragon: 'de dragon',
-  Combat: 'de poings',
-  Normal: 'de force',
-  Poison: 'de venin',
-  Insecte: 'd’élytres',
-  Acier: 'd’acier',
-  Fée: 'de fées'
-};
-
-
-DUOG416 = {};
-
-
-/* =====================================================================
-   6. Défis entre amis
-   ===================================================================== */
-scoreDe416 = s => s.b * 100 + s.j * 120 + s.e * 60 + s.c * 400 + s.d * 10 + s.tb * 25 + s.sh * 15;
-
-
-AMI_POS = [
-  [6, 1],
-  [6, 3],
-  [6, 5],
-  [7, 2]
-];
-
-
 // une valeur sûre tant qu’aucun défi n’est lancé
-SCEN.ami = Object.assign({}, SCEN.gue || SCEN.tuto, { n: 'Défi entre amis', ami: 0 });
+SCEN.ami = Object.assign({}, SCEN.gue, { n: 'Défi entre amis', ami: 0 });
 
 
 /* ---------- branchements : création des combats ---------- */
@@ -1276,7 +1265,7 @@ document.addEventListener('click', e => {
     }
     if (k === 'x') {
       $('#amiBox').hidden = true;
-      renderAmis416();
+      refreshAccueil();
       return;
     }
     if (k === 'copier') return void copier416();
@@ -1293,7 +1282,7 @@ document.addEventListener('click', e => {
       if (ok) {
         $('#amiBox').hidden = true;
         toast(msg);
-        renderAmis416();
+        refreshAccueil();
       } else {
         const er = $('#amiErr');
         if (er) er.textContent = msg;
@@ -1321,7 +1310,7 @@ document.addEventListener('click', e => {
       queueSave();
       if (A) toast(`${A.n} est retiré de vos défis.`);
     } else AMI_DEL = i;
-    renderAmis416();
+    refreshAccueil();
     return;
   }
   // Pension

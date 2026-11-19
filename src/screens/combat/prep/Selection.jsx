@@ -7,6 +7,7 @@ import { scenLock } from '../../../engine/022-15-systemes-objets-liens-ia.js';
 import { scSel } from '../../../engine/024-17-interface-combat.js';
 import { leaderOf } from '../../../engine/030-24-prestige-mise-en-scene.js';
 import { SELG, emblem, selItems, wonOf } from '../../../engine/031-25-v3-parcours-accueil.js';
+import { FINALE_N } from '../../../engine/037-v4-05-carte.js';
 
 // Onglets (#selTabs) : Entraînement, Arènes, Ligue, Après-jeu. Clics : moteur (data-pg).
 export function SelTabs({ G }) {
@@ -68,7 +69,7 @@ function Row({ k, gk }) {
       <Html html={emblem(k, 'sm' + (gi >= 0 && !won ? ' dim' : ''))} />
       <span className="srw-t">
         <b>
-          <Html html={k === 'champ' ? 'Finale · Championne' : s.n} />
+          <Html html={k === 'champ' ? FINALE_N : s.n} />
         </b>
         <em>
           <Html html={L ? L.n : s.tuto ? 'Combat guidé · 7 étapes' : s.lvl || ''} />

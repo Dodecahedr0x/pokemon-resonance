@@ -9,6 +9,7 @@ import { CROCHETS } from './015-v4-8-00-crochets.js';
 import { __set_squad, renderSquad, save, squad } from './020-13-equipe-cartes.js';
 import { P, hasNx, uAt } from './021-14-moteur-combat.js';
 import { scSel } from './024-17-interface-combat.js';
+import { brArme466 } from './097-4-66-boss-rush-et-reliques-de-run.js';
 import { queueSave } from './025-19-sauvegardes.js';
 import { PREF } from './026-20-campagne-tutoriel-son.js';
 import { renderWallet } from './035-v4-03-interface.js';
@@ -16,10 +17,8 @@ import { renderQuests } from './039-v4-07-quetes-boutique.js';
 import { renderParams } from './040-v4-08-parametres.js';
 import { FOURNISSEURS_ROLES } from './044-v4-5-01-moteur-tactique.js';
 
-export let tailleEquipe, SUCCES;
-export let DEFIS, DEFI_CONF;
-let MUT_IDS, METEO_MUT, cumul, titreDe;
-export function __set_defiLancement(v) { return (defiLancement = v); }
+export let SUCCES;
+export let DEFI_CONF;
 
 
 /* =====================================================================
@@ -173,6 +172,7 @@ export function defiRefus(id) {
 
 /** Avant de lancer un combat de campagne. */
 export function defiLancement() {
+  if (brArme466()) return null;
   const D = SCEN[scSel];
   if (!isCamp() || !D || D.tuto || D.tower) return null;
   const d = PROFILE.defis || {},
@@ -220,26 +220,16 @@ function majDefis() {
   renderWallet();
 }
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
-export function __init() {
-
-MUT_IDS = ['deluge', 'canicule', 'blizzard', 'simoun', 'eclipse', 'gravite', 'frenesie', 'verre', 'remparts', 'echo', 'champ', 'eveil'];
+const MUT_IDS = ['deluge', 'canicule', 'blizzard', 'simoun', 'eclipse', 'gravite', 'frenesie', 'verre', 'remparts', 'echo', 'champ', 'eveil'];
 
 
-METEO_MUT = { deluge: 'pluie', canicule: 'soleil', blizzard: 'grele', simoun: 'sable' };
-
-
-FOURNISSEURS_ROLES.push({
-  id: 'mutateur',
-  fournir: (c, { S }) =>
-    S.mut === 'verre' ? { mul: 1.5, libelle: 'Canons de verre' } : S.mut === 'remparts' ? { mul: 0.7, libelle: 'Remparts' } : null
-});
+const METEO_MUT = { deluge: 'pluie', canicule: 'soleil', blizzard: 'grele', simoun: 'sable' };
 
 
 /* =====================================================================
    2. Défis de campagne
    ===================================================================== */
-DEFIS = {
+export const DEFIS = {
   mono: ['Mono-type', 'Seuls les Pokémon du type choisi peuvent combattre.'],
   trio: ['Équipe de 3', 'Trois Pokémon par combat au lieu de quatre.'],
   sansEveil: ['Sans Éveil', 'Vos Pokémon ne s’éveillent pas en combat.'],
@@ -247,13 +237,25 @@ DEFIS = {
 };
 
 
-tailleEquipe = () => (isCamp() && PROFILE.defis && PROFILE.defis.trio ? 3 : 4);
+export const tailleEquipe = () => (isCamp() && PROFILE.defis && PROFILE.defis.trio ? 3 : 4);
 
 
 /* =====================================================================
    3. Succès et titres
    ===================================================================== */
-cumul = k => (PROFILE.cumul && PROFILE.cumul[k]) || 0;
+const cumul = k => (PROFILE.cumul && PROFILE.cumul[k]) || 0;
+
+
+const titreDe = id => (SUCCES.find(s => s.id === id) || {}).t || '';
+
+// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+export function __init() {
+
+FOURNISSEURS_ROLES.push({
+  id: 'mutateur',
+  fournir: (c, { S }) =>
+    S.mut === 'verre' ? { mul: 1.5, libelle: 'Canons de verre' } : S.mut === 'remparts' ? { mul: 0.7, libelle: 'Remparts' } : null
+});
 
 
 SUCCES = [
@@ -283,9 +285,6 @@ SUCCES = [
   { id: 'riche', n: 'Fortune', d: 'Avoir 20 000 ₽.', ok: () => PROFILE.money >= 20000, p: () => [Math.min(PROFILE.money, 20000), 20000] },
   { id: 'victoires50', n: 'Cinquante victoires', d: 'Gagner 50 combats.', t: 'Inarrêtable', ok: () => PROFILE.wins >= 50, p: () => [PROFILE.wins, 50] }
 ];
-
-
-titreDe = id => (SUCCES.find(s => s.id === id) || {}).t || '';
 
 
 /* =====================================================================

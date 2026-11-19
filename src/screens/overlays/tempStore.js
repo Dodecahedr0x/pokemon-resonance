@@ -1,5 +1,4 @@
-import { useSyncExternalStore } from 'react';
-import { flushSync } from 'react-dom';
+import { canal } from '../../lib/store.js';
 
 // Fenêtres temporaires que le moteur ajoutait à la fin de <body> (ancien overlay() : #vs,
 // #hp452, #evs454, #ct453…). Liste dans l'ordre d'ouverture : {id, data, v}.
@@ -9,16 +8,7 @@ import { flushSync } from 'react-dom';
 // querySelector) et y pose ses écouteurs.
 let liste = [];
 let n = 0;
-const listeners = new Set();
-const subscribe = l => (listeners.add(l), () => listeners.delete(l));
-
-function emit() {
-  try {
-    flushSync(() => listeners.forEach(l => l()));
-  } catch {
-    listeners.forEach(l => l());
-  }
-}
+const { emit, use } = canal();
 
 // Ouvre (ou rouvre) la fenêtre `id` ; renvoie son nœud.
 export function ouvrir(id, data = {}) {
@@ -43,4 +33,4 @@ export function fermer(cible) {
   emit();
 }
 
-export const useTemporaires = () => useSyncExternalStore(subscribe, () => liste);
+export const useTemporaires = () => use(() => liste);

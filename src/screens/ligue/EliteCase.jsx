@@ -4,6 +4,7 @@ import { PROFILE } from '../../engine/011-05-etat-de-partie.js';
 import { medal, tc } from '../../engine/014-08-outils.js';
 import { ELITE, scenLock } from '../../engine/022-15-systemes-objets-liens-ia.js';
 import { CHAMP_L, ELITE_L } from '../../engine/030-24-prestige-mise-en-scene.js';
+import { wonOf } from '../../engine/031-25-v3-parcours-accueil.js';
 
 // Conseil 4 et Champion (#eliteCase) : nom du dresseur (v4.20) et meilleur rang (v4.24).
 export default function EliteCase() {
@@ -20,9 +21,9 @@ export default function EliteCase() {
 }
 
 function Carte({ k, L }) {
-  const s = k === 'champ' ? SCEN.champ : SCEN[k],
+  const s = SCEN[k],
     lk = scenLock(k),
-    won = k === 'champ' ? PROFILE.elite >= 5 : PROFILE.elite >= s.elite,
+    won = wonOf(k),
     r = (PROFILE.ranks || {})[k];
   return (
     <article className={`el-c${won ? ' won' : ''}${lk ? ' locked' : ''}`} style={{ '--ac': s.at ? tc(s.at) : 'var(--gold)' }}>

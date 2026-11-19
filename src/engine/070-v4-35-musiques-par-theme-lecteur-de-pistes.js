@@ -3,16 +3,13 @@
 import { $ } from './014-08-outils.js';
 import { cur } from './016-09-navigation.js';
 import { B } from './024-17-interface-combat.js';
-import { PREF, __set_sfx, sfx } from './026-20-campagne-tutoriel-son.js';
-import { MUS, __set_musStart, __set_musStop, musStart, musStartCore, musStop } from './030-24-prestige-mise-en-scene.js';
+import { PREF } from './026-20-campagne-tutoriel-son.js';
+import { MUS, musPadLevel, musPadStop, musStartCore } from './030-24-prestige-mise-en-scene.js';
 import { V4 } from './032-v4-00-socle.js';
-import { __set_musLevel, musLevel } from './040-v4-08-parametres.js';
-import { NEWS416 } from './056-v4-16-1-01-finitions.js';
 import { IM448 } from './079-v4-48-immersion-sons-par-type-cris-vibrations-en.js';
+import { OFF462 } from './093-4-62-chroniques-histoire-en-chapitres-et-mode-ho.js';
 
 export let BGM434;
-let BGMC434, musLevelOld434, sfxOld434;
-export function __set_bgmEl434(v) { return (bgmEl434 = v); }
 
 
 function bgmOk434() {
@@ -20,7 +17,7 @@ function bgmOk434() {
 }
 
 
-export function bgmEl434(k) {
+function bgmEl434(k) {
   let a = BGM434.el[k];
   if (a) return a;
   try {
@@ -40,7 +37,7 @@ export function bgmEl434(k) {
         } catch (e) {}
       }
     });
-    a.src = BGM434.src[k];
+    a.src = OFF462.urls[k] || BGM434.src[k];
     BGM434.el[k] = a;
   } catch (e) {
     a = null;
@@ -92,7 +89,7 @@ function bgmCombat434(sc) {
 
 
 function bgmScene434() {
-  if (typeof B !== 'undefined' && B && !$('#cbBattle').hidden) {
+  if (B && !$('#cbBattle').hidden) {
     const c = bgmCombat434(B.sc);
     if (c === 'rouge' || c === 'champion' || B.over) return c;
     // v4.49 : un allié presque K.O. (≤ 25 %) fait passer à la piste « PV bas » ; retour quand tous remontent au-dessus de 35 %
@@ -105,9 +102,9 @@ function bgmScene434() {
   if (cur === 'combat') return 'combats'; // v4.47 : menu Combats = Cyclisme
   if (cur === 'carte') return 'carte'; // Route 1
   if (cur === 'types') return 'guide'; // Laboratoire du Prof. Chen
-  if (cur === 'sac' && typeof V4 !== 'undefined' && V4.sacV === 'boutique') return 'boutique';
+  if (cur === 'sac' && V4.sacV === 'boutique') return 'boutique';
   if (cur === 'pokedex' || cur === 'dex') return 'centre';
-  if (cur === 'camp' && typeof V4 !== 'undefined') {
+  if (cur === 'camp') {
     const t = V4.campTab;
     if (t === 'enigmes' || t === 'echo') return 'ruines';
     if (t === 'arenes') return 'arene';
@@ -121,7 +118,7 @@ function bgmScene434() {
 function bgmSync434() {
   if (!BGM434.on || !PREF.music) return;
   const sc = bgmScene434();
-  if (!BGMC434.includes(sc) || !(typeof B !== 'undefined' && B && !$('#cbBattle').hidden)) BGM434.silent = false;
+  if (!BGMC434.includes(sc) || !(B && !$('#cbBattle').hidden)) BGM434.silent = false;
   if (BGM434.jingle) return;
   const want = BGM434.silent || !BGM434.vis ? '' : sc;
   if (want === BGM434.scene && (!want || !BGM434.el[want] || !BGM434.el[want].paused)) {
@@ -140,7 +137,7 @@ function bgmSync434() {
 }
 
 
-function bgmStart434() {
+export function musStart() {
   if (!PREF.music) return;
   if (!bgmOk434()) {
     musStartCore();
@@ -173,7 +170,7 @@ function bgmStop434() {
   BGM434.scene = '';
   BGM434.jingle = false;
   try {
-    musStopPad434();
+    musPadStop();
   } catch (e) {}
 }
 
@@ -208,7 +205,7 @@ function jingle434(max, k, suite) {
       if (BGM434.jingle) return;
     }
     if (k === 'victoire' || k === 'badge') {
-      if (BGMC434.includes(bgmScene434()) && typeof B !== 'undefined' && B && B.over) BGM434.silent = true; // le résultat reste au calme
+      if (BGMC434.includes(bgmScene434()) && B && B.over) BGM434.silent = true; // le résultat reste au calme
     }
     setTimeout(bgmSync434, 600);
   };
@@ -217,22 +214,28 @@ function jingle434(max, k, suite) {
 }
 
 
-function musStopPad434() {
-  if (!MUS.ac || !MUS.out) return;
-  clearTimeout(MUS.timer);
-  try {
-    const o = MUS.out,
-      t = MUS.ac.currentTime;
-    o.gain.cancelScheduledValues(t);
-    o.gain.setValueAtTime(o.gain.value, t);
-    o.gain.linearRampToValueAtTime(0, t + 1.2);
-    setTimeout(() => {
-      try {
-        o.disconnect();
-      } catch (e) {}
-    }, 1400);
-  } catch (e) {}
+/* Interrupteur Musique, curseur de volume et reprise au toucher passent par ces trois fonctions. */
+export function musStop() {
+  if (BGM434.on) bgmStop434();
+  else musPadStop();
 }
+
+
+export function musLevel() {
+  if (BGM434.on) {
+    const a = BGM434.el[BGM434.jingle ? BGM434.jk : BGM434.scene];
+    if (a) bgmFade434(a, bgmVol434(), 150);
+  } else musPadLevel();
+}
+
+
+/* jingle associé à un effet sonore (appelé par sfx) */
+export function sfxJingle(n) {
+  if (n === 'win' && !(B && B.over)) jingle434(7);
+  else if (n === 'evo') jingle434(10, 'evolution');
+}
+
+const BGMC434 = ['combat', 'arene', 'champion', 'dresseur', 'rouge', 'pvbas'];
 
 // Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
 export function __init() {
@@ -252,35 +255,9 @@ BGM434 = {
 };
 
 
-BGMC434 = ['combat', 'arene', 'champion', 'dresseur', 'rouge', 'pvbas'];
+if (PREF.music === undefined) PREF.music = false;
 
-
-/* branchement sur les réglages existants (interrupteur Musique, curseur de volume, reprise au toucher) */
-__set_musStart(function () {
-  bgmStart434();
-});
-
-
-__set_musStop(function () {
-  if (BGM434.on) bgmStop434();
-  else musStopPad434();
-});
-
-
-musLevelOld434 = musLevel;
-
-
-__set_musLevel(function () {
-  if (BGM434.on) {
-    const a = BGM434.el[BGM434.jingle ? BGM434.jk : BGM434.scene];
-    if (a) bgmFade434(a, bgmVol434(), 150);
-  } else musLevelOld434();
-});
-
-
-if (PREF.music === undefined) PREF.music = true;
-
- // nouvelle installation : thèmes activés (réglable dans Paramètres)
+ // nouvelle installation : musique coupée (réglable dans Paramètres)
 /* victoire : fiche de résultat gagnée, capture réussie, récompense de quête */
 (function () {
   const r = document.getElementById('cbResult');
@@ -296,16 +273,6 @@ if (PREF.music === undefined) PREF.music = true;
 })();
 
 
-sfxOld434 = sfx;
-
-
-__set_sfx(function (n) {
-  sfxOld434(n);
-  if (n === 'win' && !(typeof B !== 'undefined' && B && B.over)) jingle434(7);
-  else if (n === 'evo') jingle434(10, 'evolution');
-});
-
-
 document.addEventListener('visibilitychange', () => {
   BGM434.vis = !document.hidden;
   if (!BGM434.on) return;
@@ -316,9 +283,4 @@ document.addEventListener('visibilitychange', () => {
   }
 });
 
-
-NEWS416.unshift(['i-star', 'Plus de musiques', 'Un thème par écran : arènes, Champions, dresseurs et duels, ruines (Énigmes, Écho profond), Centre Pokémon (Équipe), Hall de la Renommée (Maîtrise) ; jingles d’évolution et de badge.', null]);
-
-
-NEWS416.splice(8);
 }

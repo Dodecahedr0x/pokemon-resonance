@@ -6,9 +6,7 @@ import { tokCl, unitsDirty } from '../screens/combat/board/boardStore.js';
 import { L } from './024-17-interface-combat.js';
 import { ART, HELD_IMG, ITM } from './032-v4-00-socle.js';
 
-export let tagUnits, artTag;
-let TMAP, IMG_ERR, ITEM_SVG, pre;
-export function __set_tokenArt(v) { return (tokenArt = v); }
+let ITEM_SVG;
 
 
 export function itemize(h) {
@@ -67,9 +65,6 @@ export function preload(ids) {
   });
 }
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
-export function __init() {
-
 /* =====================================================================
    v4.1 · les vrais Pokémon partout
    Chaque médaillon de type qui représente un Pokémon affiche désormais
@@ -77,24 +72,26 @@ export function __init() {
    évolutions et les résultats aussi. Les objets tenus ont leur image.
    Hors ligne, le médaillon de type d'origine reste affiché.
    ===================================================================== */
-/* tableau de types d'une espèce ou d'une unité → identifiant de l'espèce */
-TMAP = PKT;
-
-
-tagUnits = S => {
+export const tagUnits = S => {
   if (S && Array.isArray(S.units))
     S.units.forEach(u => {
-      if (u && Array.isArray(u.t) && BY[u.id]) TMAP.set(u.t, u.id);
+      if (u && Array.isArray(u.t) && BY[u.id]) PKT.set(u.t, u.id); // types → espèce
     });
 };
 
 
-IMG_ERR = "this.parentNode&&this.parentNode.classList.remove('pk');this.remove()";
+const IMG_ERR = "this.parentNode&&this.parentNode.classList.remove('pk');this.remove()";
 
 
-artTag = (m, cls) =>
+export const artTag = (m, cls) =>
   `<img class="${cls}" src="${ART(m.no)}" alt="" loading="lazy" decoding="async" draggable="false" onerror="${IMG_ERR}">`;
 
+
+/* préchargement discret des illustrations de l'équipe et des adversaires du combat choisi */
+const pre = new Set();
+
+// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+export function __init() {
 
 /* objets tenus : vraie image à la place du pictogramme */
 ITEM_SVG = Object.fromEntries(
@@ -103,8 +100,4 @@ ITEM_SVG = Object.fromEntries(
 
 
 /* plateau : le Pokémon debout sur son jeton (tokenArt, Units.jsx) */
-
-
-/* préchargement discret des illustrations de l'équipe et des adversaires du combat choisi */
-pre = new Set();
 }

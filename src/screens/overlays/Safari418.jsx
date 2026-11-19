@@ -1,5 +1,5 @@
 import { Html, parseStyle } from '../../lib/html.jsx';
-import { useOverlay } from './dialogsStore.js';
+import { Boite, Dialogue } from './Fenetre.jsx';
 import { BY } from '../../engine/009-03-pokemon.js';
 import { tb } from '../../engine/014-08-outils.js';
 import { crestSmall } from '../../engine/020-13-equipe-cartes.js';
@@ -8,12 +8,7 @@ import { shinyStyle } from '../../engine/043-v4-4-01-aventure-plus.js';
 // Parc Safari (#safari418). Le moteur (058) calcule l'état de la visite (chances de
 // capture et de fuite, message) et garde les clics (data-safari418) et l'attribut hidden.
 export default function Safari418() {
-  const s = useOverlay('safari');
-  return (
-    <div className="result exp-box" id="safari418" hidden>
-      {s && <Carte key={s.v} {...s} />}
-    </div>
-  );
+  return <Boite nom="safari" className="result exp-box" id="safari418" Carte={Carte} />;
 }
 
 // Jauge en pourcentage (capture, fuite).
@@ -25,8 +20,7 @@ function Jauge({ v, c }) {
 function Carte({ pas, balls, pris, fini, x, hum, capt, fuite, msg }) {
   const m = x && BY[x.id];
   return (
-    <div className="sv-card exp-card sf-card" role="dialog" aria-modal="true" aria-labelledby="sfT">
-      <button className="sh-x" type="button" data-safari418="x" aria-label="Fermer"><svg><use href="#i-x" /></svg></button>
+    <Dialogue className="sv-card exp-card sf-card" titre="sfT" fermer={{ 'data-safari418': 'x' }}>
       <p className="kick">Parc Safari</p>
       <h2 className="h2" id="sfT">{x ? m.n : 'Les herbes du Parc'}</h2>
       <div className="sf-k">
@@ -67,6 +61,6 @@ function Carte({ pas, balls, pris, fini, x, hum, capt, fuite, msg }) {
           </>
         )}
       </div>
-    </div>
+    </Dialogue>
   );
 }

@@ -6,10 +6,14 @@ import { cur } from './016-09-navigation.js';
 import { markAt, uk } from './021-14-moteur-combat.js';
 import { B } from './024-17-interface-combat.js';
 import { heureDe } from './046-v4-7-01-plateau-vivant.js';
-import { NEWS416 } from './056-v4-16-1-01-finitions.js';
 
-export let MQ434;
-export function __set_calibre434(v) { return (calibre434 = v); }
+let MQ434;
+/* Largeur du plateau sur téléphone : gardée en mémoire (la relire force la mise en page) et
+   relue seulement quand l’écran ou le cadre change de largeur. */
+let largeur434 = 0,
+  cle434 = '',
+  cadreSuivi434 = null,
+  roCadre434 = null;
 
 
 export function calibre434() {
@@ -21,22 +25,22 @@ export function calibre434() {
     if (!bd) return;
     if (!on || !bd.classList.contains('vert')) {
       bd.style.removeProperty('width');
+      largeur434 = 0;
       return;
     }
-    const bt = bd.closest('.bt') || bd.parentElement,
-      dessus = bd.getBoundingClientRect().top + window.scrollY, // bandeau, synergies, équipe adverse (page tout en haut)
-      ft = document.querySelector('#cbBattle .bt-foot'),
-      nav = document.querySelector('.bnav'),
-      vh = window.visualViewport ? visualViewport.height : innerHeight,
-      // le bas utile : le haut de la barre « Fin du tour » (fixe), sinon celui de la barre d’onglets
-      bas = Math.min(vh, ft && getComputedStyle(ft).position === 'fixed' ? ft.getBoundingClientRect().top : vh - ((ft && ft.offsetHeight) || 0) - ((nav && nav.offsetHeight) || 0)),
-      plA = (document.getElementById('bPlA') || {}).offsetHeight || 0,
-      dispo = bt.clientWidth - 8,
-      larg = h => Math.round((h - 22) * (286 / 430) + 22);
-    let w = larg(bas - dessus - plA - 10);
-    if (w < 262) w = larg(bas - dessus - 6); // petit écran : votre équipe passe juste sous le plateau
-    w = Math.max(220, Math.min(dispo, w));
-    if (bd.style.width !== w + 'px') bd.style.width = w + 'px';
+    const c = bd.closest('.bt') || bd.parentElement;
+    if (roCadre434 && cadreSuivi434 !== c) {
+      if (cadreSuivi434) roCadre434.unobserve(cadreSuivi434);
+      roCadre434.observe(c);
+      cadreSuivi434 = c;
+    }
+    // (pas de innerWidth ici : sa lecture force elle aussi la mise en page)
+    const k = String(document.body.classList.contains('fs444'));
+    if (!largeur434 || k !== cle434) {
+      largeur434 = Math.max(220, c.clientWidth - 8);
+      cle434 = k;
+    }
+    if (bd.style.width !== largeur434 + 'px') bd.style.width = largeur434 + 'px';
   } catch (e) {}
 }
 
@@ -76,6 +80,27 @@ export function __init() {
 MQ434 = window.matchMedia ? matchMedia('(max-width: 700px)') : null;
 
 
+let largeurVue434 = -1;
+roCadre434 = window.ResizeObserver
+  ? new ResizeObserver(es => {
+      // seulement si la LARGEUR du cadre change (la hauteur bouge à chaque rendu)
+      const e = es[es.length - 1],
+        l = Math.round((e && e.contentRect && e.contentRect.width) || 0);
+      if (l === largeurVue434) return;
+      largeurVue434 = l;
+      largeur434 = 0;
+      calibre434();
+    })
+  : null;
+const oublierLargeur434 = () => {
+  largeur434 = 0;
+};
+// en capture : la largeur est oubliée avant que les écouteurs ci-dessous ne recalibrent
+window.addEventListener('resize', oublierLargeur434, true);
+window.addEventListener('orientationchange', oublierLargeur434, true);
+if (window.visualViewport) visualViewport.addEventListener('resize', oublierLargeur434, true);
+
+
 window.addEventListener('resize', () => calibre434());
 
 
@@ -106,12 +131,4 @@ try {
   }
 } catch (e) {}
 
-
-NEWS416.unshift(
-  ['i-team', 'Combat sur téléphone', 'Le plateau, toute l’équipe adverse et la vôtre tiennent à l’écran ; le bandeau du haut se replie pendant le combat.', null],
-  ['i-star', 'Évoli au choix', 'À l’Éveil, choisissez librement parmi ses 5 évolutions. En harmonie avec sa case ou l’heure, il garde 1 losange.', null]
-);
-
-
-NEWS416.splice(8);
 }

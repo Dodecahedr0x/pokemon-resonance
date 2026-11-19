@@ -8,8 +8,6 @@ import { PREF } from './026-20-campagne-tutoriel-son.js';
 import { FOURNISSEURS_DEGATS } from './044-v4-5-01-moteur-tactique.js';
 import { pasVent } from './047-v4-8-01-tactique.js';
 
-export let VIV_NOM, VIV_DESC, VIV_ETAT, voitLaNuit;
-let VIV_PAS, VIV_ORDRE, VIV_COUL, VIV_ANNONCE, enFeu;
 
 
 /** Le réglage du joueur. Le combat guidé du prologue reste toujours classique. */
@@ -169,9 +167,6 @@ export function teinteHeure(S) {
   if (getHost().ph !== ph) hostSet({ ph });
 }
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
-export function __init() {
-
 /* =====================================================================
    v4.7 : Plateau vivant
    ---------------------------------------------------------------------
@@ -205,19 +200,19 @@ export function __init() {
    défaut). Sans lui (ou pour les tests moteur), le combat est celui d'avant.
    ===================================================================== */
 
-VIV_PAS = 4;
+const VIV_PAS = 4;
 
  // manches par heure de la journée
-VIV_ORDRE = ['jour', 'crepuscule', 'nuit', 'aube'];
+const VIV_ORDRE = ['jour', 'crepuscule', 'nuit', 'aube'];
 
 
-VIV_NOM = { aube: 'Aube', jour: 'Jour', crepuscule: 'Crépuscule', nuit: 'Nuit' };
+export const VIV_NOM = { aube: 'Aube', jour: 'Jour', crepuscule: 'Crépuscule', nuit: 'Nuit' };
 
 
-VIV_COUL = { aube: '#f0a6a0', jour: '#f2c94c', crepuscule: '#e8774a', nuit: '#6b7bd6' };
+const VIV_COUL = { aube: '#f0a6a0', jour: '#f2c94c', crepuscule: '#e8774a', nuit: '#6b7bd6' };
 
 
-VIV_DESC = {
+export const VIV_DESC = {
   jour: 'Plante et Vol ×1,2.',
   aube: 'Plante et Vol ×1,1.',
   crepuscule: 'Spectre et Ténèbres ×1,1.',
@@ -225,10 +220,10 @@ VIV_DESC = {
 };
 
 
-VIV_ETAT = { jour: 'Il fait jour', aube: 'C’est l’aube', crepuscule: 'Le crépuscule tombe', nuit: 'Il fait nuit' };
+export const VIV_ETAT = { jour: 'Il fait jour', aube: 'C’est l’aube', crepuscule: 'Le crépuscule tombe', nuit: 'Il fait nuit' };
 
 
-VIV_ANNONCE = {
+const VIV_ANNONCE = {
   crepuscule: 'Le crépuscule tombe : les Spectres et les Ténèbres se renforcent (×1,1).',
   nuit: 'La nuit tombe : Spectre et Ténèbres ×1,2. Les attaques de 3 cases ou plus perdent 1 de portée.',
   aube: 'L’aube se lève : les Plantes et les Vols se réveillent (×1,1).',
@@ -237,8 +232,13 @@ VIV_ANNONCE = {
 
 
 /** Voit-on bien dans le noir ? */
-voitLaNuit = u => u.t.includes('Spectre') || u.t.includes('Ténèbres') || u.tal === 'regardvif' || u.tal === 'echolocation';
+export const voitLaNuit = u => u.t.includes('Spectre') || u.t.includes('Ténèbres') || u.tal === 'regardvif' || u.tal === 'echolocation';
 
+/* ---------- 2. Fin de manche : le temps, la météo et le feu ---------- */
+const enFeu = (S, k) => !!(S.tiles[k] && S.tiles[k].mark && S.tiles[k].mark.k === 'brulant');
+
+// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+export function __init() {
 
 /* ---------- 1. L'heure, fournisseur de modificateurs de dégâts ---------- */
 FOURNISSEURS_DEGATS.push({
@@ -255,10 +255,6 @@ FOURNISSEURS_DEGATS.push({
     return null;
   }
 });
-
-
-/* ---------- 2. Fin de manche : le temps, la météo et le feu ---------- */
-enFeu = (S, k) => !!(S.tiles[k] && S.tiles[k].mark && S.tiles[k].mark.k === 'brulant');
 
 
 /* ---------- 3. À l'écran ---------- */

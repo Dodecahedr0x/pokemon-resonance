@@ -5,6 +5,7 @@ import { LINK_N, LINK_T, PROFILE, lvlOfPts, pairKey } from '../../engine/011-05-
 import { SYN, synOf } from '../../engine/012-06-recrues-roles-synergies.js';
 import { medal, tc } from '../../engine/014-08-outils.js';
 import { squad } from '../../engine/020-13-equipe-cartes.js';
+import { voixDepart } from '../../engine/021-14-moteur-combat.js';
 import { RANGS, rangId, rgTag } from '../../engine/053-v4-14-01-resonance.js';
 import { duoDe416 } from '../../engine/055-v4-16-01-johto-vivant.js';
 import { FORM463, formCle463, formMs463, formOn463 } from '../../engine/094-4-63-formations-d-equipe.js';
@@ -130,7 +131,7 @@ function Indice({ A }) {
           </div>
           <div>
             <span>Voix par manche</span>
-            <b>{3 + A.bonus}</b>
+            <b>{voixDepart(A.bonus)}</b>
           </div>
         </div>
       </div>

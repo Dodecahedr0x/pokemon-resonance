@@ -1,8 +1,10 @@
 /* Section d'origine : v4.71 : plateau vivant (refonte du terrain de combat) */
 
 import { SCEN } from './009-03-pokemon.js';
+import { fnv, hash2, mulberry32 } from './014-08-outils.js';
+import { CROCHETS } from './015-v4-8-00-crochets.js';
 import { nbrK } from './021-14-moteur-combat.js';
-import { B, BG, HC, HP, L, VB, VERT, __set_buildBoard, __set_renderBoard, buildBoard, renderBoard } from './024-17-interface-combat.js';
+import { B, BG, HC, HP, L, VB, VERT } from './024-17-interface-combat.js';
 import { bdClass, boardSet, getBoard, getHost, hostSet } from '../screens/combat/board/boardStore.js';
 
 // Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
@@ -11,23 +13,7 @@ export function __init() {
 (() => {
   const RS = 3; // pixels par unité du viewBox
   const TS = 256; // taille des textures
-  const hash2 = (x, y, s) => {
-    let h = (Math.imul(x, 374761393) + Math.imul(y, 668265263) + Math.imul(s, 1274126177)) | 0;
-    h = Math.imul(h ^ (h >>> 13), 1274126177);
-    return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
-  };
-  const rngOf = a => () => {
-    a |= 0;
-    a = (a + 0x6d2b79f5) | 0;
-    let t = Math.imul(a ^ (a >>> 15), 1 | a);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-  const strSeed = s => {
-    let h = 2166136261;
-    for (let i = 0; i < s.length; i++) h = Math.imul(h ^ s.charCodeAt(i), 16777619);
-    return h >>> 0;
-  };
+  // hasard et bruit déterministes : mulberry32, hash2 et fnv (014)
   const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
   /* bruit périodique : les textures se raccordent sans couture */
   const pn = (x, y, per, s) => {
@@ -135,7 +121,7 @@ export function __init() {
         D[o + 3] = 255;
       }
     x.putImageData(img, 0, 0);
-    const r = rngOf(seed * 13 + 7);
+    const r = mulberry32((seed * 13 + 7) | 0);
     const wrap = (f, px, py) => {
       for (const dx of [-TS, 0, TS]) for (const dy of [-TS, 0, TS]) f(px + dx, py + dy);
     };
@@ -625,7 +611,7 @@ export function __init() {
   const paint = sig => {
     const kind = kindOf(),
       K = KIND[kind],
-      seed = strSeed(sig) % 100000;
+      seed = fnv(sig) % 100000;
     const [VW, VH] = VB();
     const S = BG.S;
     const can = mk(VW * RS, VH * RS),
@@ -648,7 +634,7 @@ export function __init() {
       PA = pat(texA),
       PS = pat(sandT),
       PG = pat(grassT);
-    const r = rngOf(seed);
+    const r = mulberry32(seed | 0);
     // 1. le pourtour
     if (K.around === 'stade') {
       c.fillStyle = '#16181f';
@@ -715,7 +701,7 @@ export function __init() {
     order.forEach(k => {
       const t = B.tiles[k],
         [x, y] = C[k],
-        r2 = rngOf(seed + strSeed(k));
+        r2 = mulberry32((seed + fnv(k)) | 0);
       if (t.w) return;
       const top = pts(x, y, S - 1.1);
       // épaisseur de la dalle
@@ -785,7 +771,7 @@ export function __init() {
     });
     eau.forEach(k => {
       const [x, y] = C[k],
-        r3 = rngOf(seed + strSeed(k) * 3);
+        r3 = mulberry32((seed + fnv(k) * 3) | 0);
       c.save();
       path(c, pts(x, y + 1, S + 0.6));
       c.clip();
@@ -936,85 +922,12 @@ export function __init() {
       }
     }, 0);
   };
-  const bbAvant = buildBoard;
-  __set_buildBoard(function () {
-    const r = bbAvant.apply(this, arguments);
+  CROCHETS.plateau.push(() => {
     cur = '';
     bdClass('pv471', false);
-    try {
-      lancer();
-    } catch (e) {}
-    return r;
+    lancer();
   });
-  const rbAvant = renderBoard;
-  __set_renderBoard(function () {
-    const r = rbAvant.apply(this, arguments);
-    try {
-      lancer();
-    } catch (e) {}
-    return r;
-  });
-  const css = document.createElement('style');
-  css.id = 'resonance-v471-plateau';
-  css.textContent = `
-#bBoard .amb471{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:2;opacity:0;transition:opacity .8s}
-#bBoard.pv471 .amb471{opacity:1}
-#bBoard.pv471 #bSvg{filter:none!important}
-#bSvg image.pv471{opacity:0;transition:opacity .45s}
-#bBoard.pv471 #bSvg image.pv471{opacity:1}
-#bBoard.pv471 #bSvg .tex471,#bBoard.pv471 #bSvg .deco471,#bBoard.pv471 #bSvg .boulder,#bBoard.pv471 #bSvg .boulder-h{display:none}
-#bBoard.pv471 #bSvg .hx{fill:transparent;pointer-events:all}
-body:not(.ct444) #bBoard.pv471 #bSvg .hx{stroke:rgba(255,250,230,.2);stroke-width:.8}
-#bBoard.pv471 #bSvg .hx.rock,#bBoard.pv471 #bSvg .hx.pillar,#bBoard.pv471 #bSvg .hx.grass,#bBoard.pv471 #bSvg .hx.sand,#bBoard.pv471 #bSvg .hx.river{fill:transparent!important}
-#bBoard.pv471 #bSvg .hx.wet{fill:rgba(70,150,230,.32)!important}
-#bBoard.pv471 #bSvg .hx.mud{fill:rgba(78,52,26,.62)!important}
-#bBoard.pv471 #bSvg .hx.lava{fill:rgba(236,86,26,.5)!important}
-body.ct444 #bBoard.pv471 #bSvg .hx{stroke:rgba(255,252,236,.5)!important;stroke-width:1.1!important}
-body.ct444 #bBoard.pv471 #bSvg .hx.dep430z{stroke:#b5ecff!important;stroke-width:2.2!important}
-body.ct444 #bBoard.pv471 #bSvg .hx.lava{stroke:#ff7a3d!important}
-html.a11y-cb body.ct444 #bBoard.pv471 #bSvg .dg420 .hx{stroke:#ff9f1a!important}
-#bBoard.pv471 #bSvg .axl{fill:#fff4d8!important;paint-order:stroke;stroke:rgba(10,8,4,.75);stroke-width:2.2px;font-weight:700}
-#bBoard.pv471 #bSvg .h-reach{fill:rgba(70,140,255,.24);stroke:#bcd8ff;stroke-width:1.5}
-#bBoard.pv471 #bSvg .h-tgt{fill:rgba(255,200,80,.2);stroke:#ffe7a6;stroke-width:1.5}
-#bBoard.pv471 #bSvg .h-tgt.on{fill:rgba(255,214,110,.42);stroke:#fff6d8;stroke-width:2.2}
-#bBoard.pv471 #bSvg .h-danger{fill:rgba(229,52,60,.22);stroke:#ff8a8d;stroke-width:1.5}
-#bBoard.pv471 #bSvg .h-menace{fill:rgba(229,52,60,.18);stroke:#ff9a9c}
-#bBoard.pv471 #bSvg .h-dodge{fill:rgba(60,214,170,.24);stroke:#9af2d8;stroke-width:1.5}
-#bBoard.pv471 #bSvg .h-aff{fill:rgba(255,220,140,.3)}
-#bBoard.pv471 #bSvg .gw{stroke-opacity:.42!important;stroke-width:5!important}
-#bBoard.pv471 #bSvg .h-reach.gw{stroke:#0b2a66}
-#bBoard.pv471 #bSvg .h-tgt.gw{stroke:#5a3a00}
-#bBoard.pv471 #bSvg .h-danger.gw{stroke:#5a0a10}
-#bBoard.pv471 #bSvg .h-dodge.gw{stroke:#063a2c}
-#bBoard.pv471 #bSvg .gb{fill:#3a8a3a}#bBoard.pv471 #bSvg .gb.g2{fill:#58aa4a}
-#bBoard.pv471 #bSvg .gf{fill:#2f7a32}#bBoard.pv471 #bSvg .gf.g2{fill:#6cbc58}
-#bBoard.pv471 #bSvg .fd-out{stroke:rgba(255,246,220,.55)}
-#bBoard.pv471 #bSvg .fd-mid,#bBoard.pv471 #bSvg .fd-ring{stroke:rgba(255,246,220,.42)}
-#bSvg .wv471 .wv{fill:none;stroke:rgba(230,248,255,.55);stroke-width:.9;stroke-linecap:round}
-.amb471 .p{position:absolute;display:block;width:5px;height:5px;border-radius:50%;will-change:transform,opacity;animation-name:flot471;animation-timing-function:linear;animation-iteration-count:infinite;opacity:0}
-@keyframes flot471{0%{opacity:0;transform:translate(0,0) rotate(0)}12%{opacity:.85}88%{opacity:.85}100%{opacity:0;transform:translate(46px,70px) rotate(300deg)}}
-@keyframes monte471{0%{opacity:0;transform:translate(0,0) scale(.6)}15%{opacity:1}100%{opacity:0;transform:translate(14px,-90px) scale(1.2)}}
-@keyframes tombe471{0%{opacity:0;transform:translate(0,-10px)}10%{opacity:.95}100%{opacity:0;transform:translate(-20px,110px)}}
-@keyframes luc471{0%,100%{opacity:0;transform:translate(0,0)}30%{opacity:1}50%{opacity:.4;transform:translate(10px,-8px)}70%{opacity:1;transform:translate(-6px,-14px)}}
-.amb471 .feuille{width:6px;height:3px;border-radius:60% 0;background:#d08a36}
-.amb471 .petale{width:5px;height:3px;border-radius:60% 0;background:#ffb4cc}
-.amb471 .plume{width:7px;height:2px;border-radius:2px;background:rgba(255,255,255,.9)}
-.amb471 .poussiere{width:3px;height:3px;background:rgba(255,236,200,.55);animation-name:flot471}
-.amb471 .neige{width:4px;height:4px;background:#fff;box-shadow:0 0 4px rgba(255,255,255,.9);animation-name:tombe471}
-.amb471 .braise{width:3px;height:3px;background:#ffb04a;box-shadow:0 0 6px #ff6a1a;animation-name:monte471}
-.amb471 .ame{width:5px;height:5px;background:rgba(190,160,255,.8);box-shadow:0 0 8px rgba(170,130,255,.9);animation-name:monte471}
-.amb471 .etincelle{width:3px;height:3px;background:#fff6a0;box-shadow:0 0 6px #ffe03a;animation-name:luc471}
-.amb471 .bulle,.amb471 .bullePsn{width:5px;height:5px;background:transparent;border:1px solid rgba(220,245,255,.8);animation-name:monte471}
-.amb471 .bullePsn{border-color:rgba(220,180,255,.85)}
-.amb471 .paillette{width:3px;height:3px;background:#fff3c4;box-shadow:0 0 5px #ffd77a;animation-name:luc471}
-.amb471 .luciole{width:4px;height:4px;background:#f4ff9a;box-shadow:0 0 7px #e8ff6a;animation-name:luc471}
-.amb471 .luciole.n{display:none}
-#bBoard[data-ph=nuit] .amb471 .luciole.n,#bBoard[data-ph=crepuscule] .amb471 .luciole.n{display:block}
-#bBoard[data-ph=nuit] .amb471 .feuille,#bBoard[data-ph=nuit] .amb471 .petale{display:none}
-html.a11y-rm .amb471{display:none}
-@media (prefers-reduced-motion:reduce){.amb471{display:none}}
-`;
-  document.head.appendChild(css);
+  CROCHETS.plateauRendu.push(lancer);
   window.__plateau471 = { paint, kindOf, KIND, CACHE, lancer, terrainSig };
 })();
 }

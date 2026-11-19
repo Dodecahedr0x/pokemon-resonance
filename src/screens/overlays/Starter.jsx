@@ -1,6 +1,7 @@
 import { useEngineReady } from '../../engineReady.js';
 import { Html } from '../../lib/html.jsx';
 import { useStarter } from './shellOverlays.js';
+import { Dialogue } from './Fenetre.jsx';
 import { BY } from '../../engine/009-03-pokemon.js';
 import { DIFFS, PROFILE, STARTERS } from '../../engine/011-05-etat-de-partie.js';
 import { medal, tc } from '../../engine/014-08-outils.js';
@@ -21,8 +22,7 @@ export default function Starter() {
 
 function Carte() {
   return (
-    <div className="sv-card st-card" role="dialog" aria-modal="true" aria-labelledby="stT">
-      <button className="sh-x" type="button" data-st="x" aria-label="Fermer"><svg><use href="#i-x" /></svg></button>
+    <Dialogue className="sv-card st-card" titre="stT" fermer={{ 'data-st': 'x' }}>
       <p className="kick">Nouvelle campagne</p>
       <h2 className="h2" id="stT">Choisissez votre partenaire</h2>
       <p className="sub">Il rejoint Magicarpe, Métamorph et Chenipan dans votre Box. Les autres se capturent dans les hautes herbes et sur les terrains. Vos emplacements de sauvegarde restent intacts.</p>
@@ -45,6 +45,6 @@ function Carte() {
           <button key={k} type="button" className="b b-sm" data-sd={k} aria-pressed={PROFILE.diff === k}>{n}</button>
         ))}
       </div>
-    </div>
+    </Dialogue>
   );
 }

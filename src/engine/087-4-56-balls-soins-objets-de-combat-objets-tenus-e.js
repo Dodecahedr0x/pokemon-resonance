@@ -6,45 +6,53 @@ import { ITEMS2 } from './011-05-etat-de-partie.js';
 import { CROCHETS } from './015-v4-8-00-crochets.js';
 import { TOD } from './017-10-accueil-route.js';
 import { EMAX, P, gainEn, hasNx, heal, say, teff } from './021-14-moteur-combat.js';
-import { __set_captureReq, captureReq, immob } from './022-15-systemes-objets-liens-ia.js';
-import { BALLS, CAP_K, HEALS, HELD_IMG, ICO414, SHOP } from './032-v4-00-socle.js';
+import { immob } from './022-15-systemes-objets-liens-ia.js';
+import { BALLS, HEALS, HELD_IMG, ICO414, SHOP } from './032-v4-00-socle.js';
 import { FOURNISSEURS_DEGATS } from './044-v4-5-01-moteur-tactique.js';
 import { MACHINES } from './045-v4-6-01-ct-cs.js';
 import { COMBAT414, HELD_SHOP, aXP, caseLibre414, koAllie414 } from './053-v4-14-01-resonance.js';
-import { NEWS416 } from './056-v4-16-1-01-finitions.js';
 
-export let berry455, orb455, svg455, BALLX455, OKX455, USE455;
-let ST455, ball455, flask455, gem455, ICO455, nuit455, eauIns455, BALL455, captureReqOld455, TYPEIT455;
-
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
-export function __init() {
+export let BALL455, OKX455, USE455;
+let ICO455;
 
 /* ---------- icônes ---------- */
-ST455 = '#1b1b22';
+const ST455 = '#1b1b22';
 
 
-ball455 = (top, bot, extra) =>
+const ball455 = (top, bot, extra) =>
   `<circle cx="24" cy="24" r="17" fill="${bot}" stroke="${ST455}" stroke-width="2"/><path d="M7 24a17 17 0 0 1 34 0z" fill="${top}" stroke="${ST455}" stroke-width="2"/><path d="M7 24h34" stroke="${ST455}" stroke-width="3"/><circle cx="24" cy="24" r="5" fill="#fff" stroke="${ST455}" stroke-width="2"/>${extra || ''}`;
 
 
-flask455 = (c, c2) =>
+const flask455 = (c, c2) =>
   `<path d="M19 7h10v6l6 9v16a4 4 0 0 1-4 4H17a4 4 0 0 1-4-4V22l6-9z" fill="${c}" stroke="${ST455}" stroke-width="2" stroke-linejoin="round"/><rect x="18" y="4" width="12" height="5" rx="2" fill="${c2}" stroke="${ST455}" stroke-width="2"/><path d="M17 27h14" stroke="#fff" stroke-width="2.5" opacity=".7"/>`;
 
 
-berry455 = c =>
+export const berry455 = c =>
   `<circle cx="24" cy="27" r="14" fill="${c}" stroke="${ST455}" stroke-width="2"/><path d="M24 13c1-5 5-7 10-7-2 4-5 6-10 7z" fill="#5cb85c" stroke="#2f6b2f" stroke-width="2"/><circle cx="19" cy="22" r="3.5" fill="#fff" opacity=".5"/>`;
 
 
-orb455 = (c, g) =>
+export const orb455 = (c, g) =>
   `<circle cx="24" cy="25" r="15" fill="${c}" stroke="${ST455}" stroke-width="2"/><circle cx="18" cy="19" r="4" fill="#fff" opacity=".45"/>${g || ''}`;
 
 
-gem455 = c =>
-  `<path d="M24 5l14 13-14 25L10 18z" fill="${c}" stroke="${ST455}" stroke-width="2" stroke-linejoin="round"/><path d="M10 18h28M24 5l-5 13 5 25 5-25z" fill="none" stroke="#fff" stroke-width="1.5" opacity=".6"/>`;
+export const svg455 = s => 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">${s}</svg>`);
 
 
-svg455 = s => 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">${s}</svg>`);
+/* ---------- Balls ---------- */
+const nuit455 = S => ((SCEN[S.sc] || {}).time || TOD) === 'nuit';
 
+
+const eauIns455 = e => e.t.includes('Eau') || e.t.includes('Insecte');
+
+
+export const BALLX455 = {};
+
+
+/* ---------- objets tenus ---------- */
+const TYPEIT455 = { charbon: 'Feu', eaumystique: 'Eau', graine: 'Plante', aimantelec: 'Électrik', glaceeternelle: 'Glace', ceintnoire: 'Combat', cuiller: 'Psy' };
+
+// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+export function __init() {
 
 ICO455 = {
   'quick-ball': ball455('#3b8be8', '#f4f4f4', '<path d="M27 8l-7 9h6l-4 8" fill="none" stroke="#ffd45b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>'),
@@ -72,13 +80,6 @@ ICO455 = {
 
 
 for (const k in ICO455) ICO414[k] = svg455(ICO455[k]);
-
-
-/* ---------- Balls ---------- */
-nuit455 = S => ((SCEN[S.sc] || {}).time || (typeof TOD !== 'undefined' ? TOD : '')) === 'nuit';
-
-
-eauIns455 = e => e.t.includes('Eau') || e.t.includes('Insecte');
 
 
 BALL455 = {
@@ -109,24 +110,8 @@ BALL455 = {
 };
 
 
-BALLX455 = {};
-
-
 for (const k in BALL455) BALLX455[k] = (S, e) => BALL455[k].pv(S, e) && BALL455[k].im(S, e);
 
-
-captureReqOld455 = captureReq;
-
-
-__set_captureReq(function (S, u, e) {
-  const r = captureReqOld455(S, u, e),
-    d = BALL455[CAP_K];
-  if (d) {
-    r[1] = { ok: d.pv(S, e), t: d.tpv };
-    r[2] = { ok: d.im(S, e), t: d.tim };
-  }
-  return r;
-});
 
 
 Object.assign(SHOP, {
@@ -189,10 +174,6 @@ USE455 = {
     say(ev, `Rappel Max : ${o.n} revient au combat avec ${o.hp} PV. Il jouera à la prochaine manche.`);
   }
 };
-
-
-/* ---------- objets tenus ---------- */
-TYPEIT455 = { charbon: 'Feu', eaumystique: 'Eau', graine: 'Plante', aimantelec: 'Électrik', glaceeternelle: 'Glace', ceintnoire: 'Combat', cuiller: 'Psy' };
 
 
 Object.assign(ITEMS2, {
@@ -286,9 +267,4 @@ CROCHETS.combat.push(S => {
   };
 });
 
-
-NEWS416.unshift(['i-gem', 'Nouveaux objets et CT', '4 Balls spéciales (Rapide, Sombre, Filet, Faiblo), Hyper Potion, Antigel, Antidote, Baie Mepo, Gelée Résonante, Rappel Max, 11 objets tenus (Charbon, Eau Mystique, Lunettes Filtre, Gilet de Fer…) et 21 CT en Boutique.']);
-
-
-NEWS416.splice(8);
 }

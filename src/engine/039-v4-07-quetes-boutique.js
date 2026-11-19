@@ -6,6 +6,7 @@ import { ELITE } from './022-15-systemes-objets-liens-ia.js';
 import { ARENAS, BADGES } from './013-07-arenes.js';
 import { PROFILE } from './011-05-etat-de-partie.js';
 import { $, toast } from './014-08-outils.js';
+import { crochet } from './015-v4-8-00-crochets.js';
 import { queueSave } from './025-19-sauvegardes.js';
 import { sfx, vibe } from './026-20-campagne-tutoriel-son.js';
 import { SHOP, V4, bagN, clampI, countS, famOwned, maxLink } from './032-v4-00-socle.js';
@@ -13,8 +14,7 @@ import { renderWallet } from './035-v4-03-interface.js';
 import { prixDe } from './049-v4-10-01-identite.js';
 
 // Page Quêtes : src/screens/quetes ; page Sac et Boutique : src/screens/sac.
-export let SQ, MAINQ;
-export function __set_buy(v) { return (buy = v); }
+export let SQ;
 
 
 function claim(id) {
@@ -61,6 +61,7 @@ export function buy(k) {
   if (!it) return;
   const price = it.g ? it.g * q : prixDe(k) * q; // Atelier (v4.10)
   if (bagN(k) + q > 99 || ((it.cs || it.cle) && bagN(k))) return;
+  const avant = PROFILE.money + ':' + PROFILE.gems;
   if (it.g) {
     if (PROFILE.gems < price) return;
     PROFILE.gems -= price;
@@ -76,7 +77,11 @@ export function buy(k) {
   queueSave();
   renderWallet();
   renderBag();
+  if (PROFILE.money + ':' + PROFILE.gems !== avant) crochet('achat');
 }
+
+
+export const MAINQ = () => ['tuto', ...ARENAS.map(a => a.k), ...ELITE, 'champ'];
 
 // Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
 export function __init() {
@@ -140,9 +145,6 @@ SQ = [
   },
   { id: 'dex30', t: 'Pokédex complet', d: 'Réunissez les 30 familles.', v: famOwned, n: 30, r: { gems: 30 } }
 ];
-
-
-MAINQ = () => ['tuto', ...ARENAS.map(a => a.k), ...ELITE, 'champ'];
 
 
 document.addEventListener('click', e => {

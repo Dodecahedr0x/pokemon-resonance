@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Html } from '../../lib/html.jsx';
 import { BY, PRESETS } from '../../engine/009-03-pokemon.js';
 import { PROFILE, inBox } from '../../engine/011-05-etat-de-partie.js';
@@ -12,6 +13,7 @@ import { EQ_NOM432 } from '../../engine/067-v4-32-01-individus-et-confort.js';
 // légendes capturées (v4.29), équipes enregistrées (v4.32), formations.
 // Clics : écouteurs du moteur (#dexCall [data-stg], data-pf, data-eq432, data-lp429).
 export default function DexCall({ v }) {
+  const [ouvert, setOuvert] = useState(() => !(typeof matchMedia === 'function' && matchMedia('(max-width:700px)').matches));
   return (
     <div className="dex-call" id="dexCall">
       <div className="dc-row">
@@ -41,18 +43,22 @@ export default function DexCall({ v }) {
         </div>
       </div>
       <Legendes />
-      {/* reconstruit à chaque rendu, comme l'ancien innerHTML : « Sûr ? » est écrit par le moteur */}
-      <Equipes432 key={v} />
-      <div className="dc-row">
-        <span className="lbl-s">Formations</span>
-        <div className="dc-f">
-          {Object.entries(PRESETS).map(([k, p]) => (
-            <button key={k} type="button" className={`b b-sm${p.f ? ' form' : ''}`} data-pf={k} title={p.s432 ? 'Synergies : ' + p.s432 : ''}>
-              {p.n}
-            </button>
-          ))}
+      {/* Équipes enregistrées et formations : repliées sur téléphone, où elles poussaient la grille sous l'écran */}
+      <details className="dc-more" open={ouvert} onToggle={e => setOuvert(e.currentTarget.open)}>
+        <summary>Équipes enregistrées et formations</summary>
+        {/* reconstruit à chaque rendu, comme l'ancien innerHTML : « Sûr ? » est écrit par le moteur */}
+        <Equipes432 key={v} />
+        <div className="dc-row">
+          <span className="lbl-s">Formations</span>
+          <div className="dc-f">
+            {Object.entries(PRESETS).map(([k, p]) => (
+              <button key={k} type="button" className={`b b-sm${p.f ? ' form' : ''}`} data-pf={k} title={p.s432 ? 'Synergies : ' + p.s432 : ''}>
+                {p.n}
+              </button>
+            ))}
+          </div>
         </div>
-      </div>
+      </details>
     </div>
   );
 }

@@ -2,6 +2,7 @@ import { Html } from '../../lib/html.jsx';
 import { BUDGET } from '../../engine/010-04-evolution-en-combat.js';
 import { medal } from '../../engine/014-08-outils.js';
 import { TEAM_MAX } from '../../engine/020-13-equipe-cartes.js';
+import { voixDepart } from '../../engine/021-14-moteur-combat.js';
 import { teamBtns } from '../../engine/027-21-arene-a-lecran.js';
 import { useEngineReady } from '../../engineReady.js';
 import { useEquipeKey } from './equipeStore.js';
@@ -39,7 +40,7 @@ export function Dock({ A }) {
           </div>
           <div className="dk" title="Voix : ordres par manche. Éveils : évolutions possibles. Indice : réactions, rôles couverts, Éveils et Voix réunis.">
             <div>
-              <b>{3 + A.bonus}</b>
+              <b>{voixDepart(A.bonus)}</b>
               <span>Voix</span>
             </div>
             <div>
@@ -82,7 +83,7 @@ export function SideTeam() {
           </div>
           <div className="steam-h">
             <span>
-              {3 + A.bonus} Voix · {A.stages} Éveils
+              {voixDepart(A.bonus)} Voix · {A.stages} Éveils
             </span>
             <span style={{ color: 'var(--gold)' }}>Modifier</span>
           </div>

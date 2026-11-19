@@ -1,9 +1,10 @@
 /* Section d'origine : v4.70 : récompense quand une région est complète au Pokédex */
 
 import { PROFILE } from './011-05-etat-de-partie.js';
-import { toast } from './014-08-outils.js';
+import { ecrireLS, toast } from './014-08-outils.js';
+import { CROCHETS } from './015-v4-8-00-crochets.js';
 import { save } from './020-13-equipe-cartes.js';
-import { __set_renderAll, renderAll } from './024-17-interface-combat.js';
+import { renderAll } from './024-17-interface-combat.js';
 import { ownedFam } from './032-v4-00-socle.js';
 import { DEXS } from './038-v4-06-pokedex.js';
 import { annonce430 } from './065-v4-30-01-camp-et-tactique.js';
@@ -22,9 +23,7 @@ export function __init() {
     }
   };
   const ecrire470 = a => {
-    try {
-      localStorage.setItem(KEY, JSON.stringify(a));
-    } catch (e) {}
+    ecrireLS(KEY, a);
   };
   const REGIONS470 = [
     { g: 1, nom: 'Kanto' },
@@ -46,19 +45,14 @@ export function __init() {
       PROFILE.money += 3000;
       PROFILE.gems = (PROFILE.gems || 0) + 10;
       toast(`Pokédex de ${r.nom} complet : 3 000 ₽ et 10 Éclats !`);
-      if (typeof annonce430 === 'function') annonce430('🏆', 'Pokédex complet', `${r.nom} est entièrement capturé.`);
+      annonce430('🏆', 'Pokédex complet', `${r.nom} est entièrement capturé.`);
     });
     if (change) {
       ecrire470(deja);
-      if (typeof save === 'function') save();
+      save();
     }
   };
-  const avant470 = renderAll;
-  __set_renderAll(function () {
-    const r = avant470.apply(this, arguments);
-    verifier470();
-    return r;
-  });
+  CROCHETS.rendu.push(verifier470);
   window.__pdx470 = { verifier: verifier470, lire: lire470, P: () => PROFILE, dex: () => DEXS, ownedFam, renderAll };
 })();
 }

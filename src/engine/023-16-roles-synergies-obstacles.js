@@ -6,7 +6,7 @@ import { synOf } from './012-06-recrues-roles-synergies.js';
 import { K, P, affected, byUid, damage, flies, fromCube, hdist, heal, landed, mvType, nbr, reach, resolveMove, say, toCube, uAt, uk } from './021-14-moteur-combat.js';
 import { FOURNISSEURS_ROLES } from './044-v4-5-01-moteur-tactique.js';
 
-export let OBST, roleOf, STATUSED, SANDOK, ACT, NOTE, noteAdd, hasSyn, ignObst;
+export let ACT, NOTE;
 export function __set_NOTE(v) { return (NOTE = v); }
 
 
@@ -257,12 +257,9 @@ export function roundSupport(S) {
   return pre;
 }
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
-export function __init() {
-
 /* ===================== v1.1 : rôles, synergies, obstacles (module additif, sans DOM) ===================== */
 /* --- obstacles par terrain : piliers (bloquent les tirs directs), hautes herbes (cachent au-delà de 2 cases), sable (2 Mouvements) --- */
-OBST = {
+export const OBST = {
   tuto: { grass: ['2,4', '3,4', '3,5'] },
   gue: { grass: ['2,2', '2,3', '3,2'], sand: ['5,0', '5,4'] },
   roche: { pil: ['5,2'], sand: ['2,1', '2,4'] },
@@ -285,26 +282,27 @@ OBST = {
 };
 
 
-roleOf = u => (BY[u.id] || {}).r;
+export const roleOf = u => (BY[u.id] || {}).r;
 
 
-STATUSED = t => ['PAR', 'GEL', 'SOM'].includes(t.badge) || t.root > 0 || t.web > 0 || t.bru > 0;
+export const STATUSED = t => ['PAR', 'GEL', 'SOM'].includes(t.badge) || t.root > 0 || t.web > 0 || t.bru > 0;
 
 
-SANDOK = u => flies(u) || u.t.some(t => t === 'Sol' || t === 'Roche' || t === 'Acier');
+export const SANDOK = u => flies(u) || u.t.some(t => t === 'Sol' || t === 'Roche' || t === 'Acier');
 
 
-ACT = null,
-  NOTE = null;
-
-
-noteAdd = s => {
+export const noteAdd = s => {
   if (NOTE && !NOTE.includes(s)) NOTE.push(s);
 };
 
 
-hasSyn = (S, u, k) => !!(u && u.side === 'a' && S.syn && S.syn.includes(k));
+export const hasSyn = (S, u, k) => !!(u && u.side === 'a' && S.syn && S.syn.includes(k));
 
 
-ignObst = (S, u, typ) => hasSyn(S, u, 'esprit') && (typ === 'Psy' || typ === 'Spectre');
+export const ignObst = (S, u, typ) => hasSyn(S, u, 'esprit') && (typ === 'Psy' || typ === 'Spectre');
+
+// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+export function __init() {
+ACT = null,
+  NOTE = null;
 }

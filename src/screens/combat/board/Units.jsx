@@ -2,7 +2,7 @@ import { useLayoutEffect, useRef } from 'react';
 import { DIA, L } from '../../../engine/024-17-interface-combat.js';
 import { tokArtErr, tokArtOk } from '../../../engine/041-v4-1-01-illustrations.js';
 import { useBoard } from './boardStore.js';
-import { PE, lref } from './Terrain.jsx';
+import { PE, lref } from './partage.js';
 
 // Jetons des Pokémon (calque L.units) : un <g class="tok"> par unité, lu dans le modèle que le
 // moteur tient à jour (L.u[uid], voir mkTok / updTokCore). L'ordre suit L.uo (trier() du plateau

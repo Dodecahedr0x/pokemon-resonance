@@ -1,10 +1,11 @@
 /* Section d'origine : 00-erreurs.js */
 
-let ERRS;
-export function __set_reportError(v) { return (reportError = v); }
+// avertissements sans gravité du navigateur (ResizeObserver, erreur venue d’un autre site, lecture audio interrompue)
+const BENIN = /ResizeObserver loop|^Script error\.?$|play\(\) request|NotAllowedError|AbortError|The operation was aborted|interrupted by a (new load|call to pause)/i;
 
 
 export function reportError(e, where) {
+  if (BENIN.test(String((e && (e.message || (e.reason && e.reason.message))) || e || '').trim())) return;
   const msg = String((e && (e.message || (e.reason && e.reason.message))) || e || 'erreur inconnue').slice(0, 220);
   const line = (where ? where + ' · ' : '') + msg;
   if (ERRS.includes(line) || ERRS.length > 6) return;
@@ -30,13 +31,13 @@ export function reportError(e, where) {
   box.querySelector('ul').appendChild(li);
 }
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
-export function __init() {
-
 /* ===================== SOUCIS TECHNIQUES =====================
    Si quelque chose casse, le jeu ne reste pas figé ou noir en silence :
    un petit message s'affiche en bas de l'écran. Une capture suffit pour le signaler. */
-ERRS = [];
+const ERRS = [];
+
+// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+export function __init() {
 
 
 window.addEventListener('error', e => reportError(e.error || e.message, e.lineno ? 'ligne ' + e.lineno : ''));

@@ -1,10 +1,10 @@
 /* Section d'origine : 23-guide-epure.js */
 
 import { $ } from './014-08-outils.js';
-import { TNAME, go } from './016-09-navigation.js';
+import { go } from './016-09-navigation.js';
 import { __set_filt, renderFilters, renderGrid } from './020-13-equipe-cartes.js';
 import { B, renderPanel, scSel } from './024-17-interface-combat.js';
-import { PREF, PREPG, __set_PREPG, renderPrep, savePref } from './026-20-campagne-tutoriel-son.js';
+import { PREF, __set_PREPG, renderPrep, savePref } from './026-20-campagne-tutoriel-son.js';
 import { openRule, setGuideTab } from '../screens/guide/guideStore.js';
 
 // Onglet courant, choix d'onglet et règle ciblée : état React (src/screens/guide/guideStore.js).
@@ -41,7 +41,6 @@ export function panelRoleInfo() {
 export function __init() {
 
 /* ===================== v1.2 : épure — un Guide unique, des écrans consacrés au jeu ===================== */
-Object.assign(TNAME, { pokedex: 'Équipe', types: 'Guide', ligue: 'Ligue' });
 
 
 /* --- Guide à onglets : l'onglet mémorisé est lu par guideStore.js --- */

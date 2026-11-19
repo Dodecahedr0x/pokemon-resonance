@@ -7,10 +7,32 @@ import { heal, say } from './021-14-moteur-combat.js';
 import { PREF, savePref, sfx, vibe } from './026-20-campagne-tutoriel-son.js';
 import { FOURNISSEURS_DEGATS } from './044-v4-5-01-moteur-tactique.js';
 import { tailleEquipe } from './048-v4-9-01-rejouabilite.js';
-import { NEWS416 } from './056-v4-16-1-01-finitions.js';
 
-export let FORM463, formCle463, formMs463, formOn463;
-let DEF463, OFF463, ECL463, SOU463, hasT463, formS463;
+export let FORM463;
+let DEF463, OFF463, ECL463, SOU463;
+
+const hasT463 = (m, L) => !!m && m.t.some(t => L.includes(t));
+
+
+export const formCle463 = () => (FORM463[PREF.form463] ? PREF.form463 : 'libre');
+
+
+export const formMs463 = () => squad.slice(0, tailleEquipe()).map(id => BY[id]).filter(Boolean);
+
+
+export const formOn463 = () => {
+  const k = formCle463();
+  return k !== 'libre' && FORM463[k].cond(formMs463());
+};
+
+
+const formS463 = S => {
+  if (!S || S.fixe431 || (SCEN[S.sc] && SCEN[S.sc].tuto)) return null;
+  const al = S.units.filter(u => u.side === 'a'),
+    k = formCle463();
+  if (k === 'libre' || !al.length || !FORM463[k].cond(al.map(u => BY[u.id]).filter(Boolean))) return null;
+  return { k, al };
+};
 
 // Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
 export function __init() {
@@ -19,9 +41,6 @@ DEF463 = ['Roche', 'Acier', 'Sol', 'Combat', 'Eau', 'Normal'],
   OFF463 = ['Feu', 'Combat', 'Dragon', 'Électrik', 'Spectre', 'Ténèbres', 'Roche', 'Sol'],
   ECL463 = ['Vol', 'Insecte', 'Électrik', 'Psy', 'Spectre'],
   SOU463 = ['Plante', 'Fée', 'Eau', 'Normal', 'Psy'];
-
-
-hasT463 = (m, L) => !!m && m.t.some(t => L.includes(t));
 
 
 FORM463 = {
@@ -50,27 +69,6 @@ FORM463 = {
     need: 'Un Pokémon au moins de type Plante, Fée, Eau, Normal ou Psy.',
     cond: ms => ms.some(m => hasT463(m, SOU463))
   }
-};
-
-
-formCle463 = () => (FORM463[PREF.form463] ? PREF.form463 : 'libre');
-
-
-formMs463 = () => (typeof squad !== 'undefined' ? squad.slice(0, typeof tailleEquipe === 'function' ? tailleEquipe() : 3) : []).map(id => BY[id]).filter(Boolean);
-
-
-formOn463 = () => {
-  const k = formCle463();
-  return k !== 'libre' && FORM463[k].cond(formMs463());
-};
-
-
-formS463 = S => {
-  if (!S || S.fixe431 || (SCEN[S.sc] && SCEN[S.sc].tuto)) return null;
-  const al = S.units.filter(u => u.side === 'a'),
-    k = formCle463();
-  if (k === 'libre' || !al.length || !FORM463[k].cond(al.map(u => BY[u.id]).filter(Boolean))) return null;
-  return { k, al };
 };
 
 
@@ -124,6 +122,4 @@ document.addEventListener(
   true
 );
 
-
-NEWS416.unshift(['i-team', 'Formations d’équipe', 'Choisissez une formation (Phalange, Assaut, Éclaireurs, Soutien) dans l’onglet Équipe. Elle donne un bonus de combat si vos Pokémon ont les bons types et le bon ordre.']);
 }

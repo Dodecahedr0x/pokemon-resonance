@@ -16,8 +16,7 @@ import { rune413 } from './052-v4-13-01-roster-technique.js';
 import { danger420Svg } from './060-v4-20-01-combat-intense.js';
 import { duelCharge433 } from './068-v4-33-01-duel-et-tutoriel.js';
 
-export let piegeHostile, de, COLOSSES;
-let PIEGES, PIEGE_DUREE, colosseOf, partiesIntactes;
+export let COLOSSES;
 
 
 /* =====================================================================
@@ -336,6 +335,32 @@ export function piegeTip(p) {
   return `${PIEGES[p.k].n} (${p.side === 'a' ? 'à vous' : 'adverse'}) : ${PIEGES[p.k].d}, encore ${p.d} manche${p.d > 1 ? 's' : ''}. On ne le traverse pas sans s’y arrêter`;
 }
 
+/* ---------- 1. Pièges ---------- */
+const PIEGES = {
+  picots: { n: 'Picots', d: '5 dégâts au premier adversaire qui s’y arrête, sauf volants' },
+  roc: { n: 'Piège de Roc', d: 'dégâts selon la faiblesse à la Roche, volants compris' },
+  toile: { n: 'Toile Gluante', d: 'englue le premier adversaire qui s’y arrête (−3 Mouvement), sauf volants' }
+};
+
+
+const PIEGE_DUREE = 6;
+
+
+export const piegeHostile = (S, u, k) => {
+  const t = S.tiles[k];
+  return !!(t && t.trap && t.trap.side !== u.side);
+};
+
+
+/* ---------- 5. Colosses ---------- */
+export const de = n => (/^[AEIOUYÉÈÊ]/i.test(n) ? 'd’' : 'de ') + n;
+
+
+const colosseOf = k => COLOSSES.find(C => C.k === k) || null;
+
+
+const partiesIntactes = (S, b) => S.units.filter(s => s.seg && s.of === b.uid && !s.ko).length;
+
 // Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
 export function __init() {
 
@@ -390,23 +415,6 @@ MV.lancesoleil.charge = 'soleil';
 MV.lancesoleil.d = 'Ligne de 3. ×1,5 sous le Soleil. Tactique avancée : part en fin de manche (×1,3), tout de suite sous le Soleil.';
 
 
-/* ---------- 1. Pièges ---------- */
-PIEGES = {
-  picots: { n: 'Picots', d: '5 dégâts au premier adversaire qui s’y arrête, sauf volants' },
-  roc: { n: 'Piège de Roc', d: 'dégâts selon la faiblesse à la Roche, volants compris' },
-  toile: { n: 'Toile Gluante', d: 'englue le premier adversaire qui s’y arrête (−3 Mouvement), sauf volants' }
-};
-
-
-PIEGE_DUREE = 6;
-
-
-piegeHostile = (S, u, k) => {
-  const t = S.tiles[k];
-  return !!(t && t.trap && t.trap.side !== u.side);
-};
-
-
 CROCHETS.avantFinManche.push((S, ev) => {
   dechargerCharges(S, ev);
   // usure des pièges
@@ -430,10 +438,6 @@ FOURNISSEURS_DEGATS.push({
     return null;
   }
 });
-
-
-/* ---------- 5. Colosses ---------- */
-de = n => (/^[AEIOUYÉÈÊ]/i.test(n) ? 'd’' : 'de ') + n;
 
 
 COLOSSES = [
@@ -515,9 +519,6 @@ COLOSSES = [
 ].filter(C => BY[C.id] && C.escort.every(([e]) => BY[e]));
 
 
-colosseOf = k => COLOSSES.find(C => C.k === k) || null;
-
-
 COLOSSES.forEach(C => {
   C.escort.forEach(([, , x]) => x && x.mv && (x.mv = x.mv.filter(m => MV[m]))); // capacités absentes : ignorées
   SCEN[C.k] = {
@@ -540,9 +541,6 @@ COLOSSES.forEach(C => {
   };
   OBST[C.k] = {};
 });
-
-
-partiesIntactes = (S, b) => S.units.filter(s => s.seg && s.of === b.uid && !s.ko).length;
 
 
 FOURNISSEURS_ROLES.push({

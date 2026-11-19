@@ -2,19 +2,15 @@
 
 import { ITEMS2, PROFILE } from './011-05-etat-de-partie.js';
 import { CROCHETS } from './015-v4-8-00-crochets.js';
-import { __set_stun, say, stun } from './021-14-moteur-combat.js';
 import { esc } from './025-19-sauvegardes.js';
 import { HELD_IMG, ICO414, SHOP, bagN, today } from './032-v4-00-socle.js';
 import { FOURNISSEURS_DEGATS } from './044-v4-5-01-moteur-tactique.js';
-import { __set_prixDe, prixDe } from './049-v4-10-01-identite.js';
 import { HELD_SHOP } from './053-v4-14-01-resonance.js';
-import { NEWS416 } from './056-v4-16-1-01-finitions.js';
 import { graine417 } from './057-v4-17-01-compagnons-et-resonance.js';
 import { rng454 } from './084-4-54-colporteur-rencontres-de-route-missions-de.js';
 import { berry455, orb455, svg455 } from './087-4-56-balls-soins-objets-de-combat-objets-tenus-e.js';
 import { ctKeys455 } from './088-4-57-atelier-recettes-commandes-tirage-vitrine-c.js';
 
-let stunOld456, prixDeOld456;
 
 
 export function ctJour456() {
@@ -49,17 +45,6 @@ Object.assign(HELD_IMG, { baielum: 'lum-berry', orbeflamme: 'flame-orb', orbetox
 Object.assign(HELD_SHOP, { baielum: { p: 3000 }, orbeflamme: { p: 3000 }, orbetoxik: { p: 3000 } });
 
 
-stunOld456 = stun;
-
-
-__set_stun(function (S, v, lab, ev, nos) {
-  if (v && !v.ko && v.item === 'baielum' && !v.lum455) {
-    v.lum455 = 1;
-    say(ev, `Baie Lum : ${v.n} annule l’état ${lab}.`);
-    return;
-  }
-  return stunOld456(S, v, lab, ev, nos);
-});
 
 
 FOURNISSEURS_DEGATS.push({
@@ -96,20 +81,8 @@ CROCHETS.progres.unshift((S, rew) => {
 CROCHETS.resultat.unshift(r => (r.ct456 ? `<div class="res-l"><h4>Récompense de rang S</h4><div class="rl"><span>${esc(SHOP[r.ct456].n)} ajoutée au Sac</span><b>CT</b></div></div>` : ''));
 
 
-prixDeOld456 = prixDe;
-
-
-__set_prixDe(function (k) {
-  const p = prixDeOld456(k);
-  return ctJour456().o.includes(k) ? Math.max(50, Math.round((p * 0.8) / 50) * 50) : p;
-});
 
 
 // vendeur de CT du jour (#ctj456, Boutique › CT et CS) : rendu par React (src/screens/sac/Sac.jsx)
 
-
-NEWS416.unshift(['i-gem', 'Objets tenus et CT à gagner', 'Baie Lum et deux Orbes en plus. Un premier rang S offre une CT, et un vendeur de CT propose −20 % chaque jour sur deux CT.']);
-
-
-NEWS416.splice(8);
 }

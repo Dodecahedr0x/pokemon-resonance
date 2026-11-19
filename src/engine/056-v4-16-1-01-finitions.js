@@ -8,8 +8,6 @@ import { renderMap } from './037-v4-05-carte.js';
 import { PLACES_J } from './054-v4-15-01-johto.js';
 import { refreshAccueil } from '../screens/accueil/accueilStore.js';
 
-export let NEWS416;
-
 
 /* =====================================================================
    v4.16.1 : finitions
@@ -56,23 +54,22 @@ export function newsVue416() {
   return PREF.news === '471';
 }
 
-
-export function renderNews416() {
-  refreshAccueil();
-}
+/* ---------- Accueil : quoi de neuf ---------- */
+// Les 8 dernières nouveautés, la plus récente en tête. Le démarrage (111) affiche déjà le
+// panneau : la v4.78 ajoute la sienne ensuite (112), en gardant 8 entrées.
+export const NEWS416 = [
+  ['i-star', 'Le monde Pokémon', 'Entrée en combat qui brise l’écran, Pokémon qui sortent de leur Poké Ball et y retournent au K.O., barres de PV comme dans les jeux, dialogues lettre par lettre, silhouettes des Pokémon à capturer, cartes à collectionner, boîte à badges en velours avec sa cérémonie, Boutique avec son vendeur, Sac à poches et sons d’interface.'],
+  ['i-star', 'Habillage Pokémon', 'Onglets en capsules Poké Ball, barre du bas en Poké Balls, menu avec une Ball par rubrique, tête de Pokédex avec ses voyants, ouverture en Poké Ball entre les onglets et carte de résultat holographique. Réglable dans Paramètres.'],
+  ['i-map', 'Carte et plateau vivants', 'La carte est repeinte (relief, villages, arènes, nuages, météo, brouillard des zones inexplorées) et chaque combat se joue sur un vrai terrain : herbe, sable, eau, neige, lave, marbre, tôle ou parquet selon l’arène, avec son ambiance animée.'],
+  ['i-team', 'Défis et Ombres', 'Combattez les Ombres de Résonance, relevez le défi quotidien, ressuscitez des spécimens anciens et montez en prestige depuis la bannière Défis. 20 formes régionales au Pokédex.'],
+  ['i-team', 'Arène de défense', 'Cinq vagues d’adversaires attaquent : tenez la ligne de défense avec 3 vies. Lancez le défi depuis la bannière de l’Accueil (3 badges).'],
+  ['i-bolt', 'Journal des exploits et plateaux à gimmick', 'Après chaque combat : Pokémon du combat, meilleur coup et exploits obtenus. Dans Paramètres, activez des plateaux à gimmick (Marais, Fournaise, Verglas, Orage, Terrain instable) pour varier la tactique.'],
+  ['i-medal', 'Boss Rush et reliques', 'Enchaînez 5 boss d’arène avec la même équipe, sans soin entre les combats. Après chaque boss, choisissez une relique parmi trois. Lancez le défi depuis la bannière de l’Accueil (5 badges).'],
+  ['i-star', 'Événements saisonniers', 'Chaque mois a son thème : un type à l’honneur (+5 % de dégâts), un combat vedette et cinq paliers de récompenses. Touchez la bannière sur l’Accueil.']
+];
 
 // Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
 export function __init() {
-
-/* ---------- Accueil : quoi de neuf ---------- */
-NEWS416 = [
-  ['i-star', 'Forme Résonante', 'Une fois par combat, un Pokémon au stade final à jauge pleine se transforme pour 3 manches.', null],
-  ['i-team', 'Compagnon', 'Votre Pokémon préféré vous attend sur l’Accueil. Son affection lui donne des bonus en combat.', 'comp'],
-  ['i-map', 'Pokématos et histoire', 'La radio du jour (bêtes, Dominant signalé, météo) et des scènes avant les grands combats.', null],
-  ['i-grass', 'Pêche et Parc Safari', 'Pêchez depuis les hautes herbes, ou capturez sans combattre au Parc Safari (carte de Kanto).', 'safari'],
-  ['i-plus', 'Coop, tournoi, potager', 'Jouez à 2 sur le même téléphone (Paramètres), lancez un tournoi entre amis, cultivez des baies au Camp.', 'amis']
-];
-
 
 document.addEventListener('click', e => {
   const b = e.target.closest('[data-news]');
@@ -81,7 +78,7 @@ document.addEventListener('click', e => {
   if (k === 'ok') {
     PREF.news = '471';
     savePref();
-    renderNews416();
+    refreshAccueil();
     return;
   }
   if (k === 'johto') {

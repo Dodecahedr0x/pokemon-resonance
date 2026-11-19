@@ -1,6 +1,8 @@
 /* Section d'origine : 00-images.js */
 
-export let PKIMG, PKA, ITA;
+import { RES_IMAGES } from './000-images-integrees.js';
+
+export let PKIMG;
 let ITIMG, IMGU, IMGB;
 
 
@@ -19,30 +21,28 @@ function b64url(k, b) {
   return (IMGU[k] = u);
 }
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
-export function __init() {
-
-/* images intégrées (bloc <script id="images"> ajouté par build.mjs) : le jeu n'a pas besoin d'Internet */
-PKIMG = (window.RES_IMAGES && window.RES_IMAGES.pk) || {};
-
-
-ITIMG = (window.RES_IMAGES && window.RES_IMAGES.it) || {};
-
-
-IMGU = {},
-  IMGB = {};
-
-
-PKA = no =>
+export const PKA = no =>
   PKIMG[no]
     ? b64url('p' + no, PKIMG[no])
     : 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/' + no + '.png';
 
-
-ITA = k =>
+export const ITA = k =>
   ITIMG[k]
     ? b64url('i' + k, ITIMG[k])
     : 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/dream-world/' + k + '.png';
+
+// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+export function __init() {
+
+/* images intégrées (000-images-integrees.js) : le jeu n'a pas besoin d'Internet */
+PKIMG = RES_IMAGES.pk;
+
+
+ITIMG = RES_IMAGES.it;
+
+
+IMGU = {},
+  IMGB = {};
 
 
 /* si un lecteur refuse les URL blob, on bascule sur l'image intégrée en data URI */

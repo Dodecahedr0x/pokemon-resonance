@@ -1,17 +1,15 @@
 /* Section d'origine : 10-accueil-route.js */
 
-import { RX } from './004-01-donnees.js';
-import { MV } from './005-02-capacites.js';
-import { BY, FAMS30, MON, NEWS, SYS3 } from './009-03-pokemon.js';
-import { ARR } from './010-04-evolution-en-combat.js';
+import { BY } from './009-03-pokemon.js';
 import { PROFILE, isCamp } from './011-05-etat-de-partie.js';
-import { $, RM, codeChip, ico, medal, toast } from './014-08-outils.js';
+import { $, RM, toast } from './014-08-outils.js';
+import { crochet } from './015-v4-8-00-crochets.js';
 import { hideEnc, showEnc } from '../screens/overlays/shellOverlays.js';
 import { setRoute } from '../screens/accueil/accueilStore.js';
 import { go } from './016-09-navigation.js';
 import { nextOf, openSheet, squad, toggle } from './020-13-equipe-cartes.js';
 import { wildScen } from './022-15-systemes-objets-liens-ia.js';
-import { B, __set_scSel, launch, log, scSel } from './024-17-interface-combat.js';
+import { B, __set_scSel, launch, log } from './024-17-interface-combat.js';
 import { renderPrep } from './026-20-campagne-tutoriel-son.js';
 import { SHINY_RATE, __set_wildShiny, wildShiny } from './043-v4-4-01-aventure-plus.js';
 import { multChroma, poidsSaison } from './050-v4-11-01-monde.js';
@@ -21,12 +19,11 @@ import { domJour417 } from './057-v4-17-01-compagnons-et-resonance.js';
 import { poolRegion421 } from './061-v4-21-01-capture-partout.js';
 import { chromaArt425 } from './062-v4-25-01-direction-artistique.js';
 import { rareW450 } from './080-v4-50-avatar-de-dresseur-rencontres-rares-heure.js';
+import { nzRencontre450 } from './081-v4-51-mode-nuzlocke-option.js';
 
-export let TOD, wildId;
-let TODTXT, dlgT, WILDW;
-export function __set_setTod(v) { return (setTod = v); }
+export let TOD;
+let dlgT, wildId;
 export function __set_wildId(v) { return (wildId = v); }
-export function __set_encounter(v) { return (encounter = v); }
 
 
 /* ===================== ACCUEIL v0.8 : blason, route, anatomie ===================== */
@@ -73,10 +70,12 @@ export function setTod(t) {
   TOD = t;
   setRoute({ tod: t, pressed: true }); // data-time de #route, bouton pressé (Route.jsx)
   typeDlg(TODTXT[t].replace('Route 29', routeNom()));
+  crochet('heure', t);
 }
 
 
 export function encounter() {
+  if (!nzRencontre450()) return;
   const pool = poolRegion421(); // chaque famille dans sa région : Route 29, Route 32, Route 104 (v4.21)
   const w = pool.map(
     m =>
@@ -99,8 +98,7 @@ export function encounter() {
   wildId = pick.id;
   __set_wildDom416(domTirage416(pick.id)); // Pokémon Dominant (v4.16)
   __set_wildShiny(Math.random() < SHINY_RATE * multChroma()); // rare : un Pokémon chromatique (×2 le Week-end chromatique, v4.11)
-  const on = squad.includes(pick.id),
-    path = evoPath(pick.id);
+  const path = evoPath(pick.id);
   $('#route').classList.remove('shake');
   void $('#route').offsetWidth;
   $('#route').classList.add('shake');
@@ -135,17 +133,23 @@ export function placeAlert() {
   al.classList.add('on');
 }
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
-export function __init() {
-
-TOD = nowTod();
-
-
-TODTXT = {
+const TODTXT = {
   matin: 'Le matin se lève sur la Route 29. Plante, Insecte et Vol sortent les premiers. Les herbes bougent…',
   jour: 'Il fait jour sur la Route 29. Quelque chose bouge dans les hautes herbes. Touchez-les.',
   nuit: 'La nuit tombe sur la Route 29. Spectres et Pokémon Ténèbres rôdent dans les herbes.'
 };
+
+/* rencontres sauvages */
+const WILDW = {
+  matin: ['Plante', 'Insecte', 'Vol', 'Fée'],
+  jour: ['Eau', 'Feu', 'Électrik', 'Normal', 'Combat', 'Roche'],
+  nuit: ['Spectre', 'Ténèbres', 'Poison', 'Psy']
+};
+
+// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+export function __init() {
+
+TOD = nowTod();
 
 
 dlgT = null;
@@ -159,14 +163,6 @@ document.addEventListener('click', e => {
 
 
 setTod(TOD);
-
-
-/* rencontres sauvages */
-WILDW = {
-  matin: ['Plante', 'Insecte', 'Vol', 'Fée'],
-  jour: ['Eau', 'Feu', 'Électrik', 'Normal', 'Combat', 'Roche'],
-  nuit: ['Spectre', 'Ténèbres', 'Poison', 'Psy']
-};
 
 
 wildId = null;

@@ -9,31 +9,26 @@ import { BADGES, __set_BADGES } from './013-07-arenes.js';
 import { $, RM, medal, toast } from './014-08-outils.js';
 import { tokCl } from '../screens/combat/board/boardStore.js';
 import { bdClass, getHost, hostSet } from '../screens/combat/board/boardStore.js';
-import { CROCHETS } from './015-v4-8-00-crochets.js';
-import { TABS, TNAME, cur, go } from './016-09-navigation.js';
+import { CROCHETS, crochet } from './015-v4-8-00-crochets.js';
+import { cur, go } from './016-09-navigation.js';
 import { renderSquad, save } from './020-13-equipe-cartes.js';
 import { BH, EMAX, K, P, byUid, uAt } from './021-14-moteur-combat.js';
-import { B, L, finish, log, renderAll, scSel, ui } from './024-17-interface-combat.js';
+import { B, L, finish, goFight, log, renderAll, scSel, ui } from './024-17-interface-combat.js';
 import { SLOTS, SV, newGame, openSaves, putSlot, queueSave } from './025-19-sauvegardes.js';
-import { PREF, openStarter, renderCamp, savePref, sfx } from './026-20-campagne-tutoriel-son.js';
+import { PREF, openStarter, savePref, sfx } from './026-20-campagne-tutoriel-son.js';
 import { AUTO } from './030-24-prestige-mise-en-scene.js';
 import { SHOP, V4, dailyKey, fmt } from './032-v4-00-socle.js';
 import { renderWallet } from './035-v4-03-interface.js';
-import { goFight } from './036-v4-04-accueil.js';
+import { renderHome } from './036-v4-04-accueil.js';
 import { renderMap } from './037-v4-05-carte.js';
 import { renderQuests } from './039-v4-07-quetes-boutique.js';
 import { renderParams } from './040-v4-08-parametres.js';
 import { LEGS } from './043-v4-4-01-aventure-plus.js';
 import { VIV_DESC, VIV_ETAT, VIV_NOM } from './046-v4-7-01-plateau-vivant.js';
-import { NEWS416 } from './056-v4-16-1-01-finitions.js';
 import { ONGLETS429 } from './064-v4-29-01-qualite.js';
 import { refreshPrep } from '../screens/combat/prep/prepStore.js';
 
-export let DOCTRINES430;
-export let createur430;
-let CLE430, CIEL430, CATN430;
 export { CATN430 }; // lu par Quêtes › Journal (React)
-export function __set_jDmg430(v) { return (jDmg430 = v); }
 
 
 /* =====================================================================
@@ -59,7 +54,7 @@ export function V430_0() {
 export function v430Clean(p) {
   const o = V430_0();
   if (!p || typeof p !== 'object') return o;
-  if (typeof p.doc430 === 'string' && typeof DOCTRINES430 !== 'undefined' && DOCTRINES430 && DOCTRINES430[p.doc430]) o.doc430 = p.doc430;
+  if (typeof p.doc430 === 'string' && DOCTRINES430[p.doc430]) o.doc430 = p.doc430;
   const J = p.journal430;
   if (J && typeof J === 'object') {
     const n = x => (Number.isFinite(x) ? Math.max(0, Math.min(1e9, Math.floor(x))) : 0),
@@ -226,7 +221,7 @@ function triche430(k) {
   renderWallet();
   try {
     renderSquad();
-    renderCamp();
+    renderHome();
   } catch (e) {}
   renderParams();
   toast(m);
@@ -393,6 +388,7 @@ export function jDmg430(S, v, real, o) {
     J.d[a.uid] = (J.d[a.uid] || 0) + real;
     if (v.hp <= 0) J.k[a.uid] = (J.k[a.uid] || 0) + 1;
   }
+  crochet('degats', S, v, real, o);
 }
 
 
@@ -421,20 +417,43 @@ export function apresRendu430() {
   } catch (e) {}
 }
 
+// seule l’empreinte du code est dans le jeu, jamais le code lui-même
+const CLE430 = 'agg9t7xer71nts93h0hym';
+
+export const createur430 = () => PREF.dev430 === CLE430;
+
+/* ---------- 5. le ciel du combat : logo et annonces ---------- */
+const CIEL430 = {
+  jour: ['i-sol', '#f2c94c'],
+  aube: ['i-aube', '#f0a6a0'],
+  crepuscule: ['i-crep', '#e8774a'],
+  nuit: ['i-lune', '#9aa8ff'],
+  pluie: ['i-pluie', '#5aa9ff'],
+  soleil: ['i-sol', '#ff9a3c'],
+  grele: ['i-grele', '#9fe3ff'],
+  sable: ['i-sable', '#d9b26a']
+};
+
+/* ---------- 7. doctrines ---------- */
+export const DOCTRINES430 = {
+  assaut: { n: 'Assaut', d: 'Vos Pokémon infligent +15 % de dégâts.', c: 'Ils en subissent +10 %.' },
+  rempart: { n: 'Rempart', d: 'Vos Pokémon subissent −15 % de dégâts.', c: '−1 Mouvement.' },
+  mobilite: { n: 'Mobilité', d: '+1 Mouvement pour vos Pokémon.', c: 'Ils infligent −10 % de dégâts.' },
+  resonance: { n: 'Résonance', d: 'Chaque Pokémon commence avec 1 losange de plus.', c: '−1 Voix maximum (avec 1 seule Voix : PV −10 %).' },
+  commandement: { n: 'Commandement', d: '+1 Voix maximum dès le départ.', c: 'PV maximum −10 %.' },
+  butin: { n: 'Butin', d: '+30 % de Pokédollars en cas de victoire.', c: 'Vos Pokémon infligent −10 % de dégâts.' }
+};
+
+const CATN430 = { arenes: 'Arènes', ligue: 'Ligue', rivaux: 'Rivaux', dissonance: 'Dissonance', legendes: 'Légendes', defis: 'Défis', sauvages: 'Sauvages', entrainement: 'Entraînement' };
+
 // Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
 export function __init() {
 
 /* icônes (camp, ciel, météo, doctrine) : dans src/components/SvgSprite.jsx */
 
 
-if (!TABS.includes('camp')) TABS.push('camp');
-
-
-TNAME.camp = 'Camp';
-
-
 // la page #camp et ses liens de navigation (barre latérale, barre du bas) sont rendus par React
-if (typeof ONGLETS429 !== 'undefined' && !ONGLETS429.includes('camp')) ONGLETS429.push('camp');
+if (!ONGLETS429.includes('camp')) ONGLETS429.push('camp');
 
 
 document.addEventListener('click', e => {
@@ -523,13 +542,6 @@ document.addEventListener('click', () => {
 });
 
 
-// seule l’empreinte du code est dans le jeu, jamais le code lui-même
-CLE430 = 'agg9t7xer71nts93h0hym';
-
-
-createur430 = () => PREF.dev430 === CLE430;
-
-
 document.addEventListener('click', e => {
   const v = e.target.closest('[data-code430]');
   if (v) {
@@ -558,19 +570,6 @@ document.addEventListener('keydown', e => {
     if (b) b.click();
   }
 });
-
-
-/* ---------- 5. le ciel du combat : logo et annonces ---------- */
-CIEL430 = {
-  jour: ['i-sol', '#f2c94c'],
-  aube: ['i-aube', '#f0a6a0'],
-  crepuscule: ['i-crep', '#e8774a'],
-  nuit: ['i-lune', '#9aa8ff'],
-  pluie: ['i-pluie', '#5aa9ff'],
-  soleil: ['i-sol', '#ff9a3c'],
-  grele: ['i-grele', '#9fe3ff'],
-  sable: ['i-sable', '#d9b26a']
-};
 
 
 CROCHETS.combat.push((S, opt, D0) => {
@@ -622,17 +621,6 @@ document.addEventListener(
 );
 
 
-/* ---------- 7. doctrines ---------- */
-DOCTRINES430 = {
-  assaut: { n: 'Assaut', d: 'Vos Pokémon infligent +15 % de dégâts.', c: 'Ils en subissent +10 %.' },
-  rempart: { n: 'Rempart', d: 'Vos Pokémon subissent −15 % de dégâts.', c: '−1 Mouvement.' },
-  mobilite: { n: 'Mobilité', d: '+1 Mouvement pour vos Pokémon.', c: 'Ils infligent −10 % de dégâts.' },
-  resonance: { n: 'Résonance', d: 'Chaque Pokémon commence avec 1 losange de plus.', c: '−1 Voix maximum (avec 1 seule Voix : PV −10 %).' },
-  commandement: { n: 'Commandement', d: '+1 Voix maximum dès le départ.', c: 'PV maximum −10 %.' },
-  butin: { n: 'Butin', d: '+30 % de Pokédollars en cas de victoire.', c: 'Vos Pokémon infligent −10 % de dégâts.' }
-};
-
-
 CROCHETS.combat.push((S, opt) => {
   const d = opt && opt.doc430;
   if (!d || !DOCTRINES430[d]) return;
@@ -681,9 +669,6 @@ document.addEventListener('click', e => {
   queueSave();
   docRender430();
 });
-
-
-CATN430 = { arenes: 'Arènes', ligue: 'Ligue', rivaux: 'Rivaux', dissonance: 'Dissonance', legendes: 'Légendes', defis: 'Défis', sauvages: 'Sauvages', entrainement: 'Entraînement' };
 
 
 CROCHETS.progres.push((S, rew, win) => {
@@ -740,13 +725,4 @@ document.addEventListener('click', e => {
   go('camp');
 });
 
-
-NEWS416.unshift(
-  ['i-camp', 'Onglet Camp', 'Bâtiments, expéditions, Pension et Potager réunis dans un onglet, en Campagne comme en Libre. Le mode de jeu passe dans les Paramètres, avec confirmation.', 'camp430'],
-  ['i-fight', 'Déploiement et doctrines', 'Avant les grands combats, placez vos Pokémon. Choisissez une doctrine (Assaut, Rempart, Mobilité…) avant de lancer le combat.', null],
-  ['i-quest', 'Journal tactique', 'Rapport après chaque combat (MVP, dégâts) et vos statistiques dans Quêtes › Journal. Le ciel du combat s’affiche en logo.', null]
-);
-
-
-NEWS416.splice(8);
 }

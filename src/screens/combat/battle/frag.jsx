@@ -7,6 +7,9 @@ export function Hi({ html }) {
   return <Html html={itemize(html)} />;
 }
 
+// Étapes du tour guidé (v4.78), clés de flow478.etape : pied de la barre (Foot) et frise du panneau (Panel).
+export const ETAPE = { deplacer: 'Déplacer', agir: 'Agir', extra: 'Terminer', fini: 'Fini' };
+
 // Le déroulé guidé (v4.78) retire les astuces « .bp-hint » du panneau quand aucun mode n'est actif.
 export function sansAstuce(html) {
   if (!html || !html.includes('bp-hint')) return html;

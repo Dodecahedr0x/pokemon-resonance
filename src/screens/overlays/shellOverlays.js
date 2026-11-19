@@ -70,7 +70,7 @@ export function closeIntroBox() {
 
 /* ---------- astuce du Prof. Sorbier en combat (#tip429) ---------- */
 const tipS = makeStore({ tip: null, v: 0 });
-export const useTip = tipS.use;
+export const useTip429 = tipS.use;
 export function showTip429(t, d) {
   tipS.set(s => ({ tip: { t, d }, v: s.v + 1 }));
 }

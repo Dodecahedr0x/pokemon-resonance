@@ -29,6 +29,11 @@ import Temporaires from '../screens/overlays/Temporaires.jsx';
 import { PkFond } from '../screens/overlays/Effets.jsx';
 import Garde from './Garde.jsx';
 
+// Logo (barre latérale, en-tête) ; `children` : ajouts après le nom (voyants de l'en-tête).
+function Logo({ taille, children }) {
+  return <a className="logo" href="#accueil"><span className="lg-ic"><svg width={taille} height={taille}><use href="#i-logo" /></svg></span><span><small>Pokémon</small><b>Résonance</b></span>{children}</a>;
+}
+
 // Coquille de l’application : navigation, conteneurs des écrans et surcouches.
 // Chaque écran est un composant de src/screens ; le moteur (src/engine) garde la logique.
 export default function Shell() {
@@ -38,7 +43,7 @@ export default function Shell() {
       <div className="ambient" aria-hidden="true" />
       <div className="app">
         <aside className="side" aria-label="Navigation principale">
-          <a className="logo" href="#accueil"><span className="lg-ic"><svg width={30} height={30}><use href="#i-logo" /></svg></span><span><small>Pokémon</small><b>Résonance</b></span></a>
+          <Logo taille={30} />
           <Garde><SideNav /></Garde>
           <Garde><ObjectifLateral /></Garde>
           <Garde><SideTeam /></Garde>
@@ -46,7 +51,7 @@ export default function Shell() {
         </aside>
         <div className="main">
           <header className="topbar"><div className="topbar-in">
-              <a className="logo" href="#accueil"><span className="lg-ic"><svg width={24} height={24}><use href="#i-logo" /></svg></span><span><small>Pokémon</small><b>Résonance</b></span><span className="pk-leds" aria-hidden="true"><i /><i /><i /></span></a>
+              <Logo taille={24}><span className="pk-leds" aria-hidden="true"><i /><i /><i /></span></Logo>
               <Garde><TbSec /></Garde>
               <Garde><TbSave /></Garde>
               <Garde><TbTeam /></Garde>

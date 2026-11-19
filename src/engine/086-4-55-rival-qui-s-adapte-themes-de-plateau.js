@@ -2,21 +2,18 @@
 
 import { BY, SCEN } from './009-03-pokemon.js';
 import { PROFILE } from './011-05-etat-de-partie.js';
-import { $, toast } from './014-08-outils.js';
+import { toast } from './014-08-outils.js';
+import { CROCHETS } from './015-v4-8-00-crochets.js';
 import { squad } from './020-13-equipe-cartes.js';
 import { teff } from './021-14-moteur-combat.js';
-import { B, __set_finish, finish } from './024-17-interface-combat.js';
-import { queueSave } from './025-19-sauvegardes.js';
+import { B } from './024-17-interface-combat.js';
 import { PREF, savePref, sfx } from './026-20-campagne-tutoriel-son.js';
-import { renderWallet } from './035-v4-03-interface.js';
+import { sauverBourse } from './032-v4-00-socle.js';
 import { DEXS } from './038-v4-06-pokedex.js';
 import { renderParams } from './040-v4-08-parametres.js';
-import { RIVAL_KEYS, __set_rivalBuild, rivalBuild, rivalIdx } from './043-v4-4-01-aventure-plus.js';
-import { NEWS416 } from './056-v4-16-1-01-finitions.js';
+import { RIVAL_KEYS, rivalIdx } from './043-v4-4-01-aventure-plus.js';
 import { RIV429 } from './064-v4-29-01-qualite.js';
 
-let rivalBuildOld455, finishOld455;
-export let TH455, thOk455;
 
 
 /* ---------- 1. rival qui évolue ---------- */
@@ -64,12 +61,12 @@ function contre455(T, rem, used) {
 }
 
 
-function rivAdapt455() {
+export function rivAdapt455() {
   const s = rvSt455(),
     lvl = Math.min(2, s.w),
     T = typeDom455();
   if (!lvl || !T) return;
-  const keys = [...RIVAL_KEYS, ...Object.keys(typeof RIV429 !== 'undefined' ? RIV429 : {}).filter(k => k !== 'hd429')];
+  const keys = [...RIVAL_KEYS, ...Object.keys(RIV429).filter(k => k !== 'hd429')];
   keys.forEach(k => {
     const D = SCEN[k];
     if (!D || !D.foes || D._rv455) return;
@@ -97,39 +94,8 @@ function thApply455() {
   Object.keys(TH455).forEach(x => document.body.classList.toggle('th455-' + x, x === k && k !== 'classique'));
 }
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
-export function __init() {
-
-rivalBuildOld455 = rivalBuild;
-
-
-__set_rivalBuild(function () {
-  rivalBuildOld455();
-  try {
-    rivAdapt455();
-  } catch (e) {}
-});
-
-
-finishOld455 = finish;
-
-
-__set_finish(function () {
-  finishOld455();
-  try {
-    if (B && B.over && !B._rv455 && SCEN[B.sc] && (rivalIdx(B.sc) >= 0 || SCEN[B.sc].rival429)) {
-      B._rv455 = 1;
-      const s = rvSt455();
-      if (B.over === 'win') s.w++;
-      else s.l++;
-      localStorage.setItem('res-rv455', JSON.stringify(s));
-    }
-  } catch (e) {}
-});
-
-
 /* ---------- 2. thèmes de plateau ---------- */
-TH455 = {
+export const TH455 = {
   classique: { n: 'Classique', p: 0, c: ['#4A3A28', '#2C4A27'] },
   crepuscule: { n: 'Crépuscule', p: 3, c: ['#3A2F4F', '#41355A'] },
   jardin: { n: 'Jardin', p: 3, c: ['#3C6B3A', '#437542'] },
@@ -139,7 +105,20 @@ TH455 = {
 };
 
 
-thOk455 = k => !TH455[k].p || (PREF.thU455 || []).includes(k);
+export const thOk455 = k => !TH455[k].p || (PREF.thU455 || []).includes(k);
+
+// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+export function __init() {
+
+CROCHETS.finCombat.push(() => {
+  if (B && B.over && !B._rv455 && SCEN[B.sc] && (rivalIdx(B.sc) >= 0 || SCEN[B.sc].rival429)) {
+    B._rv455 = 1;
+    const s = rvSt455();
+    if (B.over === 'win') s.w++;
+    else s.l++;
+    localStorage.setItem('res-rv455', JSON.stringify(s));
+  }
+});
 
 
 // panneau « Thèmes de plateau » : rendu par React (src/screens/settings/panels/ThemesPlateau.jsx)
@@ -159,10 +138,7 @@ document.addEventListener('click', e => {
     PREF.thU455 = [...(PREF.thU455 || []), k];
     PREF.th455 = k;
     toast('Thème « ' + TH455[k].n + ' » débloqué');
-    try {
-      queueSave();
-      renderWallet();
-    } catch (er) {}
+    sauverBourse();
   } else if (thOk455(k)) PREF.th455 = k;
   savePref();
   thApply455();
@@ -173,9 +149,4 @@ document.addEventListener('click', e => {
 
 thApply455();
 
-
-NEWS416.unshift(['i-star', 'Rival qui s’adapte, thèmes de plateau', 'Plus vous battez Kael, plus il prépare de Pokémon contre le type dominant de votre équipe. Dans les Paramètres, 5 thèmes de plateau à débloquer avec des Éclats.']);
-
-
-NEWS416.splice(8);
 }

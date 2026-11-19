@@ -16,15 +16,13 @@ import { renderWallet } from './035-v4-03-interface.js';
 import { renderHome } from './036-v4-04-accueil.js';
 import { isShinyOwned } from './043-v4-4-01-aventure-plus.js';
 import { JCHAIN } from './054-v4-15-01-johto.js';
-import { NEWS416 } from './056-v4-16-1-01-finitions.js';
-import { coeurs417, compGain417, compId417, renderComp417, renderCompBox417 } from './057-v4-17-01-compagnons-et-resonance.js';
+import { coeurs417, compGain417, compId417, renderCompBox417 } from './057-v4-17-01-compagnons-et-resonance.js';
+import { refreshAccueil } from '../screens/accueil/accueilStore.js';
 import { HCHAIN } from './059-v4-19-01-hoenn.js';
 import { REGN421, lieuCapture421, poolRegion421, regionNo421 } from './061-v4-21-01-capture-partout.js';
 import { evoSet } from '../screens/combat/board/boardStore.js';
 import { refreshBattle } from '../screens/combat/battle/battleStore.js';
 
-export let famCapt428, dl428, tourAdverse428, DIPL428;
-let gainDipl428, TODN428;
 
 
 /* =====================================================================
@@ -116,20 +114,32 @@ export function hero428(g) {
   };
 }
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
-export function __init() {
-
 /* ---------- 1. suivi des captures ---------- */
-famCapt428 = r => {
+export const famCapt428 = r => {
   const L = poolRegion421(r);
   return { L, n: L.filter(m => PROFILE.box.includes(m.id)).length, t: L.length };
 };
 
 
-DIPL428 = { 1: [5000, 40], 2: [6000, 50], 3: [4000, 40] };
+export const DIPL428 = { 1: [5000, 40], 2: [6000, 50], 3: [4000, 40] };
 
 
-gainDipl428 = nv => nv.reduce((a, r) => [a[0] + DIPL428[r][0], a[1] + DIPL428[r][1]], [0, 0]);
+const gainDipl428 = nv => nv.reduce((a, r) => [a[0] + DIPL428[r][0], a[1] + DIPL428[r][1]], [0, 0]);
+
+
+/* ---------- 2. combat rapide ---------- */
+export const dl428 = (rm, fast, slow) => (RM || ui.turbo428 ? rm : PREF.fast ? fast : slow);
+
+
+export const tourAdverse428 = () =>
+  !!(B && !B.over && ui.busy && !ui.cine && (B.phase === 'enemy' || (B.ordre === 'vitesse' && ui.act && (byUid(B, ui.act) || {}).side === 'e')));
+
+
+/* ---------- 3. accueil vivant ---------- */
+const TODN428 = { matin: 'Matin', jour: 'Jour', nuit: 'Nuit' };
+
+// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+export function __init() {
 
 
 CROCHETS.progres.push((S, rew) => {
@@ -158,14 +168,6 @@ document.addEventListener('click', e => {
 });
 
 
-/* ---------- 2. combat rapide ---------- */
-dl428 = (rm, fast, slow) => (RM || ui.turbo428 ? rm : PREF.fast ? fast : slow);
-
-
-tourAdverse428 = () =>
-  !!(B && !B.over && ui.busy && !ui.cine && (B.phase === 'enemy' || (B.ordre === 'vitesse' && ui.act && (byUid(B, ui.act) || {}).side === 'e')));
-
-
 document.addEventListener('click', e => {
   if (e.target.closest('#bFast')) {
     PREF.fast = !PREF.fast;
@@ -180,10 +182,6 @@ document.addEventListener('click', e => {
     renderAll();
   }
 });
-
-
-/* ---------- 3. accueil vivant ---------- */
-TODN428 = { matin: 'Matin', jour: 'Jour', nuit: 'Nuit' };
 
 
 document.addEventListener('click', e => {
@@ -208,12 +206,10 @@ document.addEventListener('click', e => {
     vibe(25);
     toast(up ? `${n} est ravi : ${up} cœur${up > 1 ? 's' : ''} !` : `${n} ferme les yeux de bonheur.`);
     queueSave();
-    renderComp417();
+    refreshAccueil();
     return;
   }
   if (e.target.closest('[data-comp-p]')) setTimeout(() => cur === 'accueil' && renderHome(), 0);
 });
 
-
-NEWS416.unshift(['i-grass', 'Suivi des captures', 'Sur la Carte : les Pokémon qui vous manquent sur chaque route, et un diplôme récompensé par région complétée. En combat : bouton ×2 et « Passer » pendant le tour adverse.', 'herbes']);
 }

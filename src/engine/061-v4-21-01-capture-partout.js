@@ -4,13 +4,8 @@ import { BY, PRESETS, famOf } from './009-03-pokemon.js';
 import { RECRUIT } from './010-04-evolution-en-combat.js';
 import { BADGE_REWARD, PROFILE, isCamp } from './011-05-etat-de-partie.js';
 import { regionJ415 } from './054-v4-15-01-johto.js';
-import { NEWS416 } from './056-v4-16-1-01-finitions.js';
 import { regionH419 } from './059-v4-19-01-hoenn.js';
 import { boxN429 } from './064-v4-29-01-qualite.js';
-
-export let regionNo421, ROUTE421, REGN421, lieuCapture421, poolRegion421, libreBox421;
-let REG421, estRecrue421;
-
 
 /* =====================================================================
    v4.21 : capture partout
@@ -76,40 +71,28 @@ export function libre421(sq, badges) {
   return ch;
 }
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
-export function __init() {
-
-REG421 = {};
+const REG421 = {};
 
 
-regionNo421 = () => (regionH419() ? 3 : regionJ415() ? 2 : 1);
+export const regionNo421 = () => (regionH419() ? 3 : regionJ415() ? 2 : 1);
 
 
-ROUTE421 = ['', 'Route 29', 'Route 32', 'Route 104'];
+export const ROUTE421 = ['', 'Route 29', 'Route 32', 'Route 104'];
 
 
-REGN421 = ['', 'Kanto', 'Johto', 'Hoenn'];
+export const REGN421 = ['', 'Kanto', 'Johto', 'Hoenn'];
 
 
-estRecrue421 = id => !!BY[id] && RECRUIT.some(x => x.id === BY[id].base);
+const estRecrue421 = id => !!BY[id] && RECRUIT.some(x => x.id === BY[id].base);
 
 
 /** Où capturer une famille (vide pour les légendes, jamais recrutables). */
-lieuCapture421 = id => (estRecrue421(id) ? ROUTE421[regFam421(id)] : '');
+export const lieuCapture421 = id => (estRecrue421(id) ? ROUTE421[regFam421(id)] : '');
 
 
 /** Les familles sauvages de la région affichée. */
-poolRegion421 = (r = regionNo421()) => RECRUIT.filter(m => regFam421(m.id) === r);
+export const poolRegion421 = (r = regionNo421()) => RECRUIT.filter(m => regFam421(m.id) === r);
 
 
 /** Texte court pour les écrans Libre. */
-libreBox421 = () => `Box ${boxN429()} / ${RECRUIT.length}`;
-
-
-NEWS416.unshift([
-  'i-grass',
-  'Capture partout',
-  'Même en Libre, chaque Pokémon se capture dans sa région : Kanto sur la Route 29, Johto sur la Route 32, Hoenn sur la Route 104. Les combats restent ouverts et votre équipe est conservée.',
-  'herbes'
-]);
-}
+export const libreBox421 = () => `Box ${boxN429()} / ${RECRUIT.length}`;

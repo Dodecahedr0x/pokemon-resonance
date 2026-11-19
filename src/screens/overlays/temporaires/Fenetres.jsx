@@ -200,7 +200,7 @@ export function Df468({ d }) {
 export function X470({ d }) {
   const nl = '\n';
   return (
-    <Fenetre id="x470o" tid="x470t" k="x470" titre="Défis">
+    <Fenetre id="x470o" tid="x470t" k="x470" titre="Défis du jour">
       {nl}
       {d.omb.fin ? (
         <p><b>Les Ombres de Résonance</b> · histoire terminée</p>
@@ -238,7 +238,7 @@ export function X470({ d }) {
 export function X2470({ d }) {
   const nl = '\n';
   return (
-    <Fenetre id="x2470o" tid="x2470t" k="x2470" titre="Plus de défis">
+    <Fenetre id="x2470o" tid="x2470t" k="x2470" titre="Défis de dresseur">
       {nl}
       <p><b>Rivalité</b></p>
       {d.lignes.map((t, i) => <p key={i} className="x2470-r">{t}</p>)}

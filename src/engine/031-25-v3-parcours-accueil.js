@@ -4,36 +4,30 @@ import { GYMS } from './004-01-donnees.js';
 import { BY, SCEN } from './009-03-pokemon.js';
 import { CAMP_START, PROFILE, defProfile, isCamp } from './011-05-etat-de-partie.js';
 import { ARENAS, BADGES, TERR } from './013-07-arenes.js';
-import { $, RM, gp, medal, tc, toast } from './014-08-outils.js';
-import { TNAME, go } from './016-09-navigation.js';
+import { $, RM, ecrireLS, gp, medal, tc, toast } from './014-08-outils.js';
+import { go } from './016-09-navigation.js';
 import { encounter } from './017-10-accueil-route.js';
 import { badgeSvg } from './019-12-ligue.js';
 import { save, squad } from './020-13-equipe-cartes.js';
 import { ELITE, scenLock } from './022-15-systemes-objets-liens-ia.js';
-import { __set_scSel, launch, scSel } from './024-17-interface-combat.js';
+import { __set_scSel, launch, ouvrirCombat, scSel } from './024-17-interface-combat.js';
 import { SAVE_V, applySave, autoSave, esc } from './025-19-sauvegardes.js';
-import { TUTO, __set_PREPG, nextGoal, renderCamp, renderPrep } from './026-20-campagne-tutoriel-son.js';
+import { TUTO, __set_PREPG, nextGoal, renderPrep } from './026-20-campagne-tutoriel-son.js';
 import { AUTO, CHAP, leaderOf } from './030-24-prestige-mise-en-scene.js';
 import { renderHome } from './036-v4-04-accueil.js';
 import { LEGS, RIVAL, RIVAL_KEYS, legKey, legOf, rivalIdx, styleOf } from './043-v4-4-01-aventure-plus.js';
 import { COLOSSES } from './047-v4-8-01-tactique.js';
 import { dissonanceApres } from './050-v4-11-01-monde.js';
 import { roamOk416 } from './055-v4-16-01-johto-vivant.js';
-import { hProf419 } from './059-v4-19-01-hoenn.js';
+import { hProf419, hoennOuvert } from './059-v4-19-01-hoenn.js';
+import { HLEG435 } from './071-v4-38-les-legendaires-de-hoenn.js';
 import { confirmer430, partieEnCours430 } from './065-v4-30-01-camp-et-tactique.js';
 import { refreshPrep } from '../screens/combat/prep/prepStore.js';
 import { refreshAccueil } from '../screens/accueil/accueilStore.js';
 import { closeIntroBox, openIntro, refreshIntro } from '../screens/overlays/shellOverlays.js';
 import { cacherTip, montrerTip } from '../components/tipStore.js';
 
-export let PROF_AV, S2n;
-export let SELG, k2n; // lus par la sélection des combats (React)
-export let INTRO; // étape de l'accueil de la Professeure, lue par Intro.jsx
-export let TIPS; // lu par src/components/Tip.jsx
 let TIPSEEN;
-export function __set_emblem(v) { return (emblem = v); }
-export function __set_selItems(v) { return (selItems = v); }
-export function __set_groupOf(v) { return (groupOf = v); }
 
 
 /* --- portraits : initiales sur la couleur du type (personnages originaux) --- */
@@ -84,9 +78,9 @@ export function goalInfo() {
 export function emblem(k, cls = '') {
   const s = SCEN[k] || {},
     gi = ARENAS.findIndex(a => a.k === k),
-    L = leaderOf(k);
-  if (s.legend || s.colosse || s.roam)
-    return `<span class="emb lgd ${cls}" style="--ac:${tc(s.at)}">${medal(BY[s.legend || s.colosse || s.roam].t, 'lg')}</span>`;
+    L = leaderOf(k),
+    legende = s.hleg435 || s.cap435 || s.legend || s.colosse || s.roam;
+  if (legende) return `<span class="emb lgd ${cls}" style="--ac:${tc(s.at)}">${medal(BY[legende].t, 'lg')}</span>`;
   if (s.johto != null) return `<span class="emb bdg ${cls}" style="--ac:${tc(s.at)}">${badgeSvg(s.johto, s.at, 'ej' + cls + s.johto)}</span>`; // v4.15
   if (s.hoenn != null) return `<span class="emb bdg ${cls}" style="--ac:${tc(s.at)}">${badgeSvg(s.hoenn, s.at, 'eh' + cls + s.hoenn)}</span>`; // v4.19
   if (gi >= 0)
@@ -129,25 +123,14 @@ export function goalChips(S) {
 }
 
 
-// L'objectif de la barre latérale (#sideGoal, src/screens/accueil/ObjectifLateral.jsx).
-export function renderSideGoal() {
-  refreshAccueil();
-}
-
-
-/* carte de dresseur (#campBox, src/screens/accueil/CarteDresseur.jsx) : redessinée avec l'Accueil */
-export function trainerCard() {
-  renderHome();
-}
-
-
 export function selItems(g) {
   if (g === 'arenes')
     return ARENAS.flatMap((a, i) => [
       ...(isCamp() && i % 2 ? [a.k, RIVAL_KEYS[(i - 1) / 2]] : [a.k]),
       ...dissonanceApres(i + 1) // Team Dissonance (v4.11)
     ]);
-  if (g === 'apres') return ['tdr', ...LEGS.map(L => legKey(L.id))];
+  // les Légendaires de Hoenn (v4.38) restent masqués tant que Hoenn est fermée
+  if (g === 'apres') return ['tdr', ...LEGS.map(L => legKey(L.id)), ...(hoennOuvert() ? HLEG435.map(L => 'hl' + L.id) : [])];
   if (g === 'ligue') return [...ELITE, 'champ'];
   return [
     'tuto',
@@ -158,7 +141,8 @@ export function selItems(g) {
 
 
 export function groupOf(k) {
-  if (k === 'tdr' || legOf(k) || (SCEN[k] && SCEN[k].cap429)) return 'apres';
+  const D = SCEN[k] || {};
+  if (D.hleg435 || D.cap435 || k === 'tdr' || legOf(k) || D.cap429) return 'apres';
   if (rivalIdx(k) >= 0 || /^td\d$/.test(k)) return 'arenes';
   return ELITE.includes(k) || k === 'champ' ? 'ligue' : ARENAS.some(a => a.k === k) ? 'arenes' : 'terrains';
 }
@@ -177,7 +161,7 @@ function pickIn(g) {
 export function renderSelection() {
   if (!$('#scenList') || !SCEN[scSel]) return;
   refreshPrep();
-  renderSideGoal();
+  refreshAccueil(); // objectif de la barre latérale (#sideGoal, src/screens/accueil/ObjectifLateral.jsx)
 }
 
 
@@ -272,10 +256,7 @@ export function showIntro(force) {
       renderIntro();
     } else if (a === 'go') {
       closeIntro();
-      __set_scSel('tuto');
-      __set_PREPG(null);
-      go('combat');
-      renderPrep();
+      ouvrirCombat('tuto');
       launch();
     } else if (a === 'skip' && INTRO.i < 3) {
       // passer la présentation mène au choix du partenaire : la Campagne (et ses captures) commence toujours
@@ -288,7 +269,7 @@ export function showIntro(force) {
       }
       closeIntro();
       go('accueil');
-      renderCamp();
+      renderHome();
     }
   });
   o.addEventListener('keydown', e => {
@@ -317,20 +298,46 @@ function startCampaign(id, name, diff) {
   try {
     autoSave(true);
   } catch (e) {}
-  renderCamp();
+  renderHome();
 }
+
+export const PROF_AV = `<span class="pav" aria-hidden="true"><b>MS</b><i><svg viewBox="0 0 24 24"><path d="M2.5 12.5h4l2.2-5.2 3.4 10.4 3.2-10.4 2.2 5.2h4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></i></span>`;
+
+
+export const S2n = g => (g.gi >= 0 ? `Arène ${g.gi + 1} · ${GYMS[g.gi].t}` : g.S.n || g.n);
+
+
+/* --- Combats : un seul cadre (onglet → liste → fiche) --- */
+// SELG et k2n : lus par la sélection des combats (React)
+export const SELG = [
+  ['terrains', 'Entraînement', 'i-fight'],
+  ['arenes', 'Arènes', 'i-league'],
+  ['ligue', 'Ligue', 'i-star'],
+  ['apres', 'Après-jeu', 'i-trophy']
+];
+
+
+export const k2n = k => (k === 'champ' ? 'Finale' : k === 'tuto' ? 'Combat guidé' : (SCEN[k] || {}).n || '');
+
+
+/* --- première visite d’un écran : un conseil de la Professeure --- */
+// lu par src/components/Tip.jsx
+export const TIPS = {
+  pokedex:
+    'Touchez <b>Recruter</b> sous un Pokémon pour l’ajouter. Quatre Pokémon et 12 PC au maximum : la jauge en haut vous guide.',
+  combat: 'Choisissez un onglet, puis un combat dans la liste. Le bouton doré lance la partie avec votre équipe.',
+  types: 'Commencez par <b>Débuter</b> : cinq étapes, deux minutes de lecture.'
+};
+
+
+/* --- accueil de la Professeure (premier lancement) --- */
+// étape de l'accueil de la Professeure, lue par Intro.jsx
+export const INTRO ={ i: 0, name: '', diff: 'normal', st: null };
 
 // Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
 export function __init() {
 
 /* ===================== v3.0 « Pokémon » : un chemin clair, un cadre de sélection, un accueil qui guide ===================== */
-Object.assign(TNAME, { accueil: 'Aventure', pokedex: 'Équipe', combat: 'Combats', types: 'Guide', ligue: 'Combats' });
-
-
-PROF_AV = `<span class="pav" aria-hidden="true"><b>MS</b><i><svg viewBox="0 0 24 24"><path d="M2.5 12.5h4l2.2-5.2 3.4 10.4 3.2-10.4 2.2 5.2h4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></i></span>`;
-
-
-S2n = g => (g.gi >= 0 ? `Arène ${g.gi + 1} · ${GYMS[g.gi].t}` : g.S.n || g.n);
 
 
 /* --- raccourcis de l’accueil et du guide --- */
@@ -344,26 +351,11 @@ document.addEventListener('click', e => {
     if (r && r.scrollIntoView) r.scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'center' });
     setTimeout(() => encounter(), RM ? 0 : 450);
   } else if (k === 'tuto') {
-    __set_scSel('tuto');
-    __set_PREPG(null);
-    go('combat');
-    renderPrep();
+    ouvrirCombat('tuto');
     if (squad.length) launch();
     else toast('Choisissez d’abord un Pokémon dans l’onglet Équipe.');
   } else if (k === 'intro') showIntro(true);
 });
-
-
-/* --- Combats : un seul cadre (onglet → liste → fiche) --- */
-SELG = [
-  ['terrains', 'Entraînement', 'i-fight'],
-  ['arenes', 'Arènes', 'i-league'],
-  ['ligue', 'Ligue', 'i-star'],
-  ['apres', 'Après-jeu', 'i-trophy']
-];
-
-
-k2n = k => (k === 'champ' ? 'Finale' : k === 'tuto' ? 'Combat guidé' : (SCEN[k] || {}).n || '');
 
 
 $('#selTabs').addEventListener('click', e => {
@@ -410,15 +402,6 @@ $('#selTabs').addEventListener('click', e => {
 }
 
 
-/* --- première visite d’un écran : un conseil de la Professeure --- */
-TIPS = {
-  pokedex:
-    'Touchez <b>Recruter</b> sous un Pokémon pour l’ajouter. Quatre Pokémon et 12 PC au maximum : la jauge en haut vous guide.',
-  combat: 'Choisissez un onglet, puis un combat dans la liste. Le bouton doré lance la partie avec votre équipe.',
-  types: 'Commencez par <b>Débuter</b> : cinq étapes, deux minutes de lecture.'
-};
-
-
 TIPSEEN = {};
 
 
@@ -431,19 +414,9 @@ document.addEventListener('click', e => {
   const b = e.target.closest('[data-tipok]');
   if (!b) return;
   TIPSEEN[b.dataset.tipok] = 1;
-  try {
-    localStorage.setItem('res-tips', JSON.stringify(TIPSEEN));
-  } catch (x) {}
+  ecrireLS('res-tips', TIPSEEN);
   cacherTip(b.dataset.tipok);
 });
-
-
-/* --- accueil de la Professeure (premier lancement) --- */
-INTRO = { i: 0, name: '', diff: 'normal', st: null };
-
-
-/* un terrain d’entraînement ne doit pas porter le nom d’une arène */
-if (SCEN.roche && /^Arène/.test(SCEN.roche.n)) SCEN.roche.n = 'Carrière de Roche';
 
 
 /* résultat : la boîte à badges vit désormais dans l’onglet Arènes (« Voir les arènes », Result.jsx) */

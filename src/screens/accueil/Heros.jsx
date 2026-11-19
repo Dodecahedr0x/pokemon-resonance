@@ -17,7 +17,7 @@ export default function Heros({ on }) {
     V = hero428(g),
     W = vivant450(),
     m = V.m;
-  const title = g.k === 'tuto' ? 'L’aventure commence ici…' : g.k === 'champ' ? 'La onzième bataille' : (C && C.t) || S.n;
+  const title = g.k === 'tuto' ? 'L’aventure commence ici…' : (C && C.t) || S.n;
   const sub =
     g.k === 'tuto' ? (
       'Explorez, capturez, éveillez vos Pokémon en plein combat et devenez Champion de la Résonance !'

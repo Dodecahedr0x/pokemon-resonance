@@ -12,15 +12,15 @@ import { playEv } from './028-22-effets-attaque.js';
 import { joueur418 } from './058-v4-18-01-peche-safari-coop.js';
 import { dl428 } from './063-v4-28-01-captures-combat-accueil.js';
 
-export let FOURNISSEURS_VITESSE, JIT_PBM, JIT_PB, JIT_DMG, JIT_BOSS, JIT_BOSS_HB, pvOrdre, FOURNISSEURS_DEGATS, FOURNISSEURS_ROLES;
-let solide, PV_ORDRE_VITESSE, JIT_HB, lowHp;
+export let FOURNISSEURS_VITESSE, JIT_PBM, JIT_PB, JIT_DMG, JIT_BOSS, JIT_BOSS_HB, FOURNISSEURS_DEGATS, FOURNISSEURS_ROLES;
+let JIT_HB;
 
 
 /* =====================================================================
    v4.5 : le moteur tactique branché sur le combat de Résonance
    ---------------------------------------------------------------------
-   Le cœur de src/moteur-tactique (bus, modificateurs, stratégies d'ordre
-   des tours) est embarqué dans le jeu sous le nom MT par build.mjs.
+   Le noyau tactique (modificateurs, stratégies d'ordre des tours) est
+   l'objet MT de 001-moteur-tactique-noyau-tours.js.
    Ce fichier est l'ADAPTATEUR : il présente un combat du jeu (S) au moteur
    sous la forme que celui-ci attend (unités vivantes, Vitesse, priorité,
    rang), sans rien changer aux règles du jeu.
@@ -204,12 +204,23 @@ export function finTourVitesse() {
   deroulerVitesse();
 }
 
+/* ---------- 2. Vitesse effective ---------- */
+const solide = u => !flies(u);
+
+/* ---------- 3. Mode « Ordre par Vitesse » : la file de la manche ---------- */
+/* Équilibrage : par Vitesse, vous perdez l'avantage de toujours jouer en premier.
+   En échange, les PV bonus des adversaires sont réduits (réglé au robot de test). */
+const PV_ORDRE_VITESSE = 0.7;
+
+export const pvOrdre = opt => (opt && opt.ordre === 'vitesse' ? PV_ORDRE_VITESSE : 1) * JIT_HB;
+
+/* ---------- 4. Dégâts : les fournisseurs de modificateurs ----------
+   Même ordre et mêmes valeurs que l'ancienne formule (résultat identique au dernier
+   chiffre, vérifié par le test moteur). Pour ajouter un effet : une ligne ici.        */
+const lowHp = (u, s) => u.hp / u.mhp <= s;
+
 // Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
 export function __init() {
-
-/* ---------- 2. Vitesse effective ---------- */
-solide = u => !flies(u);
-
 
 FOURNISSEURS_VITESSE = [
   { id: 'paralysie', fournir: (c, { u }) => u.badge === 'PAR' && { mul: 0.5, libelle: 'Paralysie' } },
@@ -238,12 +249,6 @@ FOURNISSEURS_VITESSE = [
 ];
 
 
-/* ---------- 3. Mode « Ordre par Vitesse » : la file de la manche ---------- */
-/* Équilibrage : par Vitesse, vous perdez l'avantage de toujours jouer en premier.
-   En échange, les PV bonus des adversaires sont réduits (réglé au robot de test). */
-PV_ORDRE_VITESSE = 0.7;
-
-
 /* v4.12 : sans intentions annoncées, l'adversaire frappe toujours la meilleure cible à sa portée.
    En échange, ses PV bonus et sa puissance bonus baissent (réglés au robot de test : mêmes taux de
    victoire qu'en v4.11 pour un joueur qui se place bien). */
@@ -255,13 +260,6 @@ JIT_HB = 0.8,
   JIT_BOSS_HB = 0.6;
 
  // boss : PV bonus (combats plus courts : chaque coup adverse porte)
-pvOrdre = opt => (opt && opt.ordre === 'vitesse' ? PV_ORDRE_VITESSE : 1) * JIT_HB;
-
-
-/* ---------- 4. Dégâts : les fournisseurs de modificateurs ----------
-   Même ordre et mêmes valeurs que l'ancienne formule (résultat identique au dernier
-   chiffre, vérifié par le test moteur). Pour ajouter un effet : une ligne ici.        */
-lowHp = (u, s) => u.hp / u.mhp <= s;
 
 
 FOURNISSEURS_DEGATS = [

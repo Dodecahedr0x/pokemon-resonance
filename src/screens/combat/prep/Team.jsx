@@ -6,6 +6,7 @@ import { DIFFS, PROFILE } from '../../../engine/011-05-etat-de-partie.js';
 import { RC, synOf } from '../../../engine/012-06-recrues-roles-synergies.js';
 import { medal, tc } from '../../../engine/014-08-outils.js';
 import { cost, squad, vBonus } from '../../../engine/020-13-equipe-cartes.js';
+import { voixDepart } from '../../../engine/021-14-moteur-combat.js';
 import { scenLock } from '../../../engine/022-15-systemes-objets-liens-ia.js';
 import { scSel } from '../../../engine/024-17-interface-combat.js';
 import { teamBtns } from '../../../engine/027-21-arene-a-lecran.js';
@@ -164,7 +165,7 @@ export default function Team({ v }) {
               <b>
                 <Html html={k2n(scSel)} />
               </b>
-              <span>{squad.length ? `${3 + vBonus()} Voix · ${DIFFS[PROFILE.diff]}` : 'Équipe vide'}</span>
+              <span>{squad.length ? `${voixDepart(vBonus())} Voix · ${DIFFS[PROFILE.diff]}` : 'Équipe vide'}</span>
             </Fragment>
           )}
         </span>

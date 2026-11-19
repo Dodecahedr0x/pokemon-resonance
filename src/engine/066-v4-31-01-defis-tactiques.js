@@ -12,22 +12,20 @@ import { go } from './016-09-navigation.js';
 import { squad } from './020-13-equipe-cartes.js';
 import { EMAX, P, hdist, uAt, uk } from './021-14-moteur-combat.js';
 import { OBST } from './023-16-roles-synergies-obstacles.js';
-import { B, L, __set_scSel, backToPrep, battleOpts, finish, launch, scSel, ui } from './024-17-interface-combat.js';
+import { B, L, __set_scSel, backToPrep, battleOpts, choisirCombat, finish, launch, ouvrirCombat, scSel, ui } from './024-17-interface-combat.js';
 import { queueSave } from './025-19-sauvegardes.js';
-import { PREF, PREPG, __set_PREPG, renderPrep } from './026-20-campagne-tutoriel-son.js';
+import { PREF } from './026-20-campagne-tutoriel-son.js';
 import { V4, fmt, today } from './032-v4-00-socle.js';
 import { renderWallet } from './035-v4-03-interface.js';
 import { RIVAL_POS } from './043-v4-4-01-aventure-plus.js';
 import { heureDe, voitLaNuit } from './046-v4-7-01-plateau-vivant.js';
 import { hash416 } from './055-v4-16-01-johto-vivant.js';
-import { NEWS416 } from './056-v4-16-1-01-finitions.js';
 import { PROGRES429, alea429 } from './064-v4-29-01-qualite.js';
 import { PANTH432, graver432 } from './067-v4-32-01-individus-et-confort.js';
 import { duelFin433, duelOpts433 } from './068-v4-33-01-duel-et-tutoriel.js';
 import { refreshCampPage } from '../screens/camp/campStore.js';
 
-export let ENIGMES431, MAIT_SEUIL431, CAMPT431;
-let ENIG_CUR431, n431, MAIT431, RELIQUES431, ECHO_POOL431, NOEUDS431, EVENTS431, ARN_ED431;
+let ENIG_CUR431, ARN_ED431;
 // lus par les onglets du Camp (src/screens/camp/tabs)
 export { MAIT431, RELIQUES431, NOEUDS431, EVENTS431, ARN_ED431, enigEtat431, enigDuJour431, maitChoix431, relAlea431, REGLES431, TERRAINS431, areneCode431 };
 
@@ -245,9 +243,7 @@ function enigLancer431(i) {
   const E = enigEtat431();
   E.cur = i;
   enigPrepare431(P);
-  __set_scSel('enigme431');
-  __set_PREPG(null);
-  go('combat');
+  choisirCombat('enigme431');
   launch();
 }
 
@@ -388,10 +384,8 @@ function echoNoeud431(i) {
   R.cur = i;
   if (t === 'combat' || t === 'elite' || t === 'boss') {
     echoScen431(R, t);
-    __set_scSel('echo431');
-    __set_PREPG(null);
     queueSave();
-    go('combat');
+    choisirCombat('echo431');
     launch();
     return;
   }
@@ -553,7 +547,7 @@ function areneClean431(a) {
 
 function REGLES431() {
   const L = [['', 'Aucune']];
-  (typeof ARENAS !== 'undefined' ? ARENAS : []).forEach((A, i) => A.rule && GYMS[i] && L.push([A.rule, `Arène ${GYMS[i].t}`]));
+  ARENAS.forEach((A, i) => A.rule && GYMS[i] && L.push([A.rule, `Arène ${GYMS[i].t}`]));
   return L;
 }
 
@@ -662,12 +656,73 @@ export function defis431Boot() {
   areneScen431(A[0] || { id: 'demo', n: 'Arène', au: '', t: 'gue', r: '', h: 'jour', lim: 10, hb: 10, f: ['onix'] });
 }
 
+/* énigmes construites et vérifiées hors ligne avec le moteur (gen_enig431.js) : [terrain, alliés [id, colonne, rangée, losanges], adversaires [id, colonne, rangée, PV], premier allié de la solution] */
+export const ENIGMES431 = [["gue",[["aquali",1,0,0],["drackhaus",3,4,0],["cochignon",2,2,1]],[["marcacrin",4,3,12],["xatu",2,1,19],["maraiste",3,2,19]],1],["gue",[["cotovol",2,4,1],["reptincel",1,3,3],["magneton",0,2,1]],[["gardevoir",2,2,15],["lainergie",5,2,20]],1],["gue",[["noctali",1,1,1],["gardevoir",2,2,3],["floravol",1,0,1]],[["demolosse",5,2,20],["galifeu",3,2,35]],0],["tour",[["feurisson",1,3,1],["nosferalto",1,1,3],["flagadoss",3,3,0]],[["cotovol",3,5,18],["melodelfe",4,1,25]],2],["roche",[["flobio",3,0,3],["pikachu",2,4,3],["drackhaus",1,1,0]],[["porygon2",5,2,11],["papilusion",5,3,17]],0],["gue",[["maraiste",2,3,0],["xatu",3,1,0],["kadabra",3,3,1]],[["pharamp",4,5,17],["typhlosion",5,3,22]],2],["tour",[["spectrum",3,3,3],["carabaffe",0,5,0],["magneton",1,1,0]],[["fantominus",4,4,25],["foretress",5,2,16]],1],["gue",[["papilusion",2,1,1],["nostenfer",0,3,1],["pikachu",3,5,3]],[["mackogneur",2,3,14],["noctali",2,2,51]],0],["roche",[["carabaffe",1,4,3],["cochignon",2,4,1],["galeking",3,5,1]],[["pharamp",5,3,42],["marcacrin",3,2,21]],1],["tour",[["kirlia",1,4,0],["herbizarre",2,2,3],["raichu",2,0,0]],[["aligatueur",3,1,37],["carabaffe",3,3,25]],0],["tour",[["papilusion",1,4,0],["tetarte",2,1,0],["kadabra",2,0,3]],[["kokiyas",5,4,20],["gardevoir",2,3,26]],0],["tour",[["flobio",1,1,3],["lanturn",1,4,0],["macronium",1,5,0]],[["absol",2,1,20],["feurisson",3,5,33]],0],["gue",[["spectrum",1,5,3],["porygon2",1,1,0],["tygnon",3,2,0]],[["drattak",5,2,45],["salameche",4,0,21]],2],["roche",[["galegon",1,0,0],["tortank",2,5,1],["kadabra",2,0,3]],[["axoloto",3,0,27],["laggron",3,4,21]],1],["tour",[["xatu",3,5,1],["azumarill",0,5,1],["flobio",2,2,3]],[["cochignon",4,1,35],["arcko",5,4,18]],2],["tour",[["kirlia",0,0,3],["cizayox",0,5,3],["volcaropod",0,1,1]],[["flagadoss",5,2,12],["mackogneur",3,5,20]],1],["gue",[["flagadoss",2,3,1],["draco",3,5,1],["flobio",3,1,3]],[["pyroli",4,2,34],["migalos",3,2,38]],1],["tour",[["raichu",1,4,3],["kirlia",1,5,3],["mentali",2,4,3]],[["kaiminus",5,1,26],["kadabra",4,0,23],["voltali",2,0,21]],2],["roche",[["leviator",2,2,0],["drattak",0,3,3],["pikachu",1,2,1]],[["embrylex",3,5,37],["cizayox",5,0,24]],1],["gue",[["flobio",2,4,3],["volcaropod",0,4,3],["noctali",3,4,3]],[["machopeur",5,2,16],["kirlia",2,2,34]],0],["gue",[["spectrum",1,5,3],["galegon",0,2,1],["nostenfer",2,2,0]],[["tarsal",4,4,21],["drackhaus",3,1,36]],0],["tour",[["reptincel",2,4,3],["kirlia",1,1,3],["galegon",3,2,3]],[["hericendre",5,3,10],["flagadoss",5,0,31]],0],["roche",[["ymphect",2,2,3],["reptincel",1,5,3],["melodelfe",3,4,0]],[["minidraco",5,5,9],["magicarpe",4,1,19]],1],["roche",[["reptincel",0,1,3],["aquali",2,4,1],["flobio",3,2,1]],[["voltali",2,5,16],["debugant",4,1,26]],1],["gue",[["meganium",3,4,3],["drattak",0,1,1],["tortank",0,3,1]],[["arcko",3,0,42],["alakazam",5,5,21]],0],["roche",[["demolosse",1,3,1],["cochignon",1,0,1],["spectrum",0,1,0]],[["reptincel",4,5,21],["crustabri",4,1,20]],0],["tour",[["drackhaus",2,5,0],["gardevoir",1,1,0],["jungko",0,3,0]],[["scarhino",2,3,31],["pyroli",4,1,22]],0],["gue",[["leviator",2,3,0],["draco",3,5,3],["papilusion",0,5,1]],[["jungko",3,2,15],["evoli",2,1,16],["tetarte",2,4,28]],2],["tour",[["leviator",2,5,3],["gardevoir",0,1,1],["reptincel",3,3,3]],[["wattouat",5,1,14],["germignon",5,2,30],["mackogneur",4,3,16]],0],["roche",[["noarfang",0,0,3],["gardevoir",0,3,3],["drackhaus",1,4,3]],[["spectrum",2,2,37],["cotovol",5,1,14]],1],["tour",[["foretress",3,2,3],["flobio",0,2,0],["herbizarre",0,1,3]],[["aquali",2,2,44],["pichu",4,0,13]],2],["roche",[["migalos",2,1,3],["porygon2",0,5,0],["draco",3,0,3]],[["scarhino",5,1,14],["wattouat",3,2,18],["evoli",3,4,21]],1],["roche",[["drackhaus",1,0,1],["lanturn",2,0,0],["tortank",3,0,1]],[["absol",2,3,20],["macronium",5,2,9],["raichu",2,1,15]],0],["tour",[["leviator",0,1,3],["reptincel",1,4,3],["alakazam",3,2,0]],[["tenefix",4,0,14],["crocrodil",2,1,39]],1],["tour",[["raichu",2,3,3],["pyroli",1,1,1],["ectoplasma",1,2,0]],[["tarpaud",2,1,23],["raichu",3,2,23],["galekid",3,3,40]],1],["tour",[["draco",3,5,0],["florizarre",0,0,0],["kadabra",1,4,1]],[["natu",2,1,12],["malosse",4,1,19]],1],["tour",[["feurisson",0,1,3],["aquali",2,1,0],["galegon",1,1,1]],[["noctali",2,0,15],["melodelfe",4,4,35]],1],["gue",[["cochignon",1,5,1],["xatu",0,5,3],["floravol",2,2,3]],[["tenefix",3,5,28],["mackogneur",3,0,28]],0],["gue",[["lanturn",1,5,1],["feurisson",3,5,0],["draco",2,4,1]],[["galeking",4,0,8],["galeking",5,4,67]],2],["roche",[["pikachu",0,2,1],["feurisson",3,0,3],["cizayox",2,2,1]],[["tenefix",5,2,43],["galekid",3,4,21]],1],["roche",[["tarpaud",2,4,0],["draco",0,0,3],["crocrodil",3,5,3]],[["kirlia",2,5,14],["meganium",2,2,25]],0],["roche",[["drackhaus",2,3,1],["kicklee",1,1,0],["tetarte",1,4,1]],[["galifeu",3,4,12],["roucarnage",5,0,25]],0],["roche",[["raichu",1,1,0],["tartard",2,0,3],["drattak",2,1,3]],[["chenipan",3,2,36],["porygon2",4,3,27]],0],["gue",[["mentali",0,1,0],["crocrodil",0,2,3],["ymphect",1,0,1]],[["volcaropod",3,1,31],["natu",2,2,17],["evoli",4,4,26]],1],["roche",[["kapoera",0,1,0],["nostenfer",2,1,0],["migalos",0,5,0]],[["mentali",3,4,23],["absol",3,2,41]],2],["roche",[["alakazam",1,5,0],["ectoplasma",1,1,1],["dracaufeu",2,4,0]],[["lanturn",4,5,31],["galeking",2,2,19]],0],["gue",[["raichu",2,1,1],["brasegali",1,2,1],["kicklee",1,0,1]],[["arcanin",4,2,35],["granivol",3,0,22]],0],["roche",[["flobio",3,4,3],["floravol",2,4,1],["meganium",1,4,3]],[["phanpy",4,0,10],["roucoups",2,0,17]],1],["roche",[["leviator",1,1,1],["voltali",1,3,0],["massko",0,1,3]],[["kapoera",2,1,25],["pyroli",2,4,35]],1],["roche",[["feurisson",1,0,3],["flobio",1,1,3],["noarfang",3,5,1]],[["nosferapti",3,2,10],["brasegali",3,4,35]],2],["roche",[["spectrum",0,1,3],["nosferalto",2,0,3],["tortank",2,3,3]],[["tarsal",2,2,17],["phanpy",5,2,20]],1],["roche",[["feurisson",3,4,3],["noctali",2,4,3],["draco",2,2,0]],[["aquali",3,5,24],["insecateur",5,3,15]],1],["gue",[["aquali",1,3,1],["carabaffe",0,0,1],["floravol",1,4,3]],[["demolosse",3,3,33],["insecateur",5,5,20],["nosferapti",3,2,18]],2],["tour",[["reptincel",0,5,1],["typhlosion",0,1,3],["herbizarre",2,3,3]],[["limagma",3,2,10],["pikachu",2,2,29],["leviator",2,4,18]],1],["gue",[["dracaufeu",2,3,0],["nosferalto",1,1,1],["tetarte",3,0,1]],[["drackhaus",5,1,28],["voltali",5,0,23]],1],["gue",[["melodelfe",2,2,1],["nosferalto",0,2,3],["kapoera",3,2,1]],[["laggron",4,0,38],["mentali",5,2,19]],0],["gue",[["tyranocif",3,4,0],["aquali",3,2,1],["feurisson",0,3,0]],[["tarsal",4,3,21],["drattak",2,4,20]],1],["tour",[["floravol",0,0,0],["herbizarre",2,5,3],["roigada",2,2,1]],[["magneti",2,0,8],["machopeur",5,3,21]],0],["tour",[["draco",2,3,3],["florizarre",1,2,3],["steelix",2,0,0]],[["kicklee",5,3,24],["tarpaud",3,1,24]],0],["tour",[["aligatueur",1,5,0],["feurisson",3,3,3],["kirlia",0,0,0]],[["roucarnage",4,1,15],["jungko",4,4,22],["crustabri",2,0,16]],0]];
+
+
+const n431 = (x, lo, hi) => (Number.isFinite(x) ? Math.max(lo, Math.min(hi, Math.floor(x))) : lo);
+
+
+/* ---------- 3. maîtrise des familles ---------- */
+const MAIT431 = {
+  puissance: ['Puissance', '+8 % de dégâts infligés'],
+  robuste: ['Robustesse', '+10 % de PV maximum'],
+  vif: ['Vivacité', '+1 Mouvement'],
+  eveil: ['Éveil précoce', 'Commence avec 1 losange de plus'],
+  garde: ['Garde', '−8 % de dégâts subis']
+};
+
+
+export const MAIT_SEUIL431 = 10;
+
+
+/* ---------- 4. Écho profond ---------- */
+const RELIQUES431 = {
+  plume: ['Plume vive', '+1 Mouvement pour toute l’équipe.'],
+  braise: ['Cœur ardent', '+10 % de dégâts infligés.'],
+  ecaille: ['Écaille', '−10 % de dégâts subis.'],
+  diapason: ['Diapason', 'Chaque Pokémon commence avec 1 losange de plus.'],
+  cloche: ['Cloche claire', '+1 Voix maximum.'],
+  baie: ['Baie dorée', 'Après chaque combat, +15 % de PV.'],
+  aimant: ['Aimant à Échos', '+50 % d’Échos gagnés.'],
+  talisman: ['Talisman', 'Chaque Pokémon survit une fois à un coup fatal par combat.']
+};
+
+
+const ECHO_POOL431 = [
+  ['gue', 'roche', 'a1', 'a2'],
+  ['a3', 'a4', 'tour', 'td1'],
+  ['a5', 'a6', 'j1', 'j2'],
+  ['a7', 'j3', 'j4', 'h1'],
+  ['a8', 'j5', 'j6', 'h2', 'h3'],
+  ['j7', 'h4', 'h5', 'jd2'],
+  ['j8', 'h6', 'h7', 'jd4'],
+  ['jchamp', 'hchamp', 'lgraikou', 'lgentei', 'lgsuicune']
+];
+
+
+const NOEUDS431 = { combat: ['Combat', 'i-fight'], elite: ['Élite', 'i-star'], soin: ['Source', 'i-heal'], marchand: ['Marchand', 'i-shop'], evenement: ['Événement', 'i-quest'], boss: ['Gardien', 'i-trophy'] };
+
+
+const EVENTS431 = {
+  autel: ['Autel brisé', 'Une relique repose sur un autel fissuré. La prendre coûte 20 % des PV de chaque Pokémon.', [['Prendre la relique', 'autel-ok'], ['Passer son chemin', 'passer']]],
+  source: ['Source claire', 'Une eau limpide chante doucement.', [['Boire (+30 % de PV)', 'source-pv'], ['Remplir les gourdes (+25 Échos)', 'source-ech']]],
+  passe: ['Écho du passé', 'Un souvenir de vos premiers combats vous revient.', [['S’en inspirer (+10 % de PV max pour l’expédition)', 'passe-pv'], ['Le vendre (+30 Échos)', 'passe-ech']]],
+  pari: ['Le Pari', 'Un dresseur masqué propose un jeu : pile, 60 Échos ; face, chaque Pokémon perd 20 % de PV.', [['Jouer', 'pari-ok'], ['Refuser', 'passer']]]
+};
+
+
+/* ---------- l’onglet Camp, en sous-onglets ---------- */
+export const CAMPT431 = [
+  ['base', 'Base'],
+  ['enigmes', 'Énigmes'],
+  ['echo', 'Écho profond'],
+  ['arenes', 'Arènes'],
+  ['maitrise', 'Maîtrise']
+];
+
 // Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
 export function __init() {
-
-/* énigmes construites et vérifiées hors ligne avec le moteur (gen_enig431.js) : [terrain, alliés [id, colonne, rangée, losanges], adversaires [id, colonne, rangée, PV], premier allié de la solution] */
-ENIGMES431 = [["gue",[["aquali",1,0,0],["drackhaus",3,4,0],["cochignon",2,2,1]],[["marcacrin",4,3,12],["xatu",2,1,19],["maraiste",3,2,19]],1],["gue",[["cotovol",2,4,1],["reptincel",1,3,3],["magneton",0,2,1]],[["gardevoir",2,2,15],["lainergie",5,2,20]],1],["gue",[["noctali",1,1,1],["gardevoir",2,2,3],["floravol",1,0,1]],[["demolosse",5,2,20],["galifeu",3,2,35]],0],["tour",[["feurisson",1,3,1],["nosferalto",1,1,3],["flagadoss",3,3,0]],[["cotovol",3,5,18],["melodelfe",4,1,25]],2],["roche",[["flobio",3,0,3],["pikachu",2,4,3],["drackhaus",1,1,0]],[["porygon2",5,2,11],["papilusion",5,3,17]],0],["gue",[["maraiste",2,3,0],["xatu",3,1,0],["kadabra",3,3,1]],[["pharamp",4,5,17],["typhlosion",5,3,22]],2],["tour",[["spectrum",3,3,3],["carabaffe",0,5,0],["magneton",1,1,0]],[["fantominus",4,4,25],["foretress",5,2,16]],1],["gue",[["papilusion",2,1,1],["nostenfer",0,3,1],["pikachu",3,5,3]],[["mackogneur",2,3,14],["noctali",2,2,51]],0],["roche",[["carabaffe",1,4,3],["cochignon",2,4,1],["galeking",3,5,1]],[["pharamp",5,3,42],["marcacrin",3,2,21]],1],["tour",[["kirlia",1,4,0],["herbizarre",2,2,3],["raichu",2,0,0]],[["aligatueur",3,1,37],["carabaffe",3,3,25]],0],["tour",[["papilusion",1,4,0],["tetarte",2,1,0],["kadabra",2,0,3]],[["kokiyas",5,4,20],["gardevoir",2,3,26]],0],["tour",[["flobio",1,1,3],["lanturn",1,4,0],["macronium",1,5,0]],[["absol",2,1,20],["feurisson",3,5,33]],0],["gue",[["spectrum",1,5,3],["porygon2",1,1,0],["tygnon",3,2,0]],[["drattak",5,2,45],["salameche",4,0,21]],2],["roche",[["galegon",1,0,0],["tortank",2,5,1],["kadabra",2,0,3]],[["axoloto",3,0,27],["laggron",3,4,21]],1],["tour",[["xatu",3,5,1],["azumarill",0,5,1],["flobio",2,2,3]],[["cochignon",4,1,35],["arcko",5,4,18]],2],["tour",[["kirlia",0,0,3],["cizayox",0,5,3],["volcaropod",0,1,1]],[["flagadoss",5,2,12],["mackogneur",3,5,20]],1],["gue",[["flagadoss",2,3,1],["draco",3,5,1],["flobio",3,1,3]],[["pyroli",4,2,34],["migalos",3,2,38]],1],["tour",[["raichu",1,4,3],["kirlia",1,5,3],["mentali",2,4,3]],[["kaiminus",5,1,26],["kadabra",4,0,23],["voltali",2,0,21]],2],["roche",[["leviator",2,2,0],["drattak",0,3,3],["pikachu",1,2,1]],[["embrylex",3,5,37],["cizayox",5,0,24]],1],["gue",[["flobio",2,4,3],["volcaropod",0,4,3],["noctali",3,4,3]],[["machopeur",5,2,16],["kirlia",2,2,34]],0],["gue",[["spectrum",1,5,3],["galegon",0,2,1],["nostenfer",2,2,0]],[["tarsal",4,4,21],["drackhaus",3,1,36]],0],["tour",[["reptincel",2,4,3],["kirlia",1,1,3],["galegon",3,2,3]],[["hericendre",5,3,10],["flagadoss",5,0,31]],0],["roche",[["ymphect",2,2,3],["reptincel",1,5,3],["melodelfe",3,4,0]],[["minidraco",5,5,9],["magicarpe",4,1,19]],1],["roche",[["reptincel",0,1,3],["aquali",2,4,1],["flobio",3,2,1]],[["voltali",2,5,16],["debugant",4,1,26]],1],["gue",[["meganium",3,4,3],["drattak",0,1,1],["tortank",0,3,1]],[["arcko",3,0,42],["alakazam",5,5,21]],0],["roche",[["demolosse",1,3,1],["cochignon",1,0,1],["spectrum",0,1,0]],[["reptincel",4,5,21],["crustabri",4,1,20]],0],["tour",[["drackhaus",2,5,0],["gardevoir",1,1,0],["jungko",0,3,0]],[["scarhino",2,3,31],["pyroli",4,1,22]],0],["gue",[["leviator",2,3,0],["draco",3,5,3],["papilusion",0,5,1]],[["jungko",3,2,15],["evoli",2,1,16],["tetarte",2,4,28]],2],["tour",[["leviator",2,5,3],["gardevoir",0,1,1],["reptincel",3,3,3]],[["wattouat",5,1,14],["germignon",5,2,30],["mackogneur",4,3,16]],0],["roche",[["noarfang",0,0,3],["gardevoir",0,3,3],["drackhaus",1,4,3]],[["spectrum",2,2,37],["cotovol",5,1,14]],1],["tour",[["foretress",3,2,3],["flobio",0,2,0],["herbizarre",0,1,3]],[["aquali",2,2,44],["pichu",4,0,13]],2],["roche",[["migalos",2,1,3],["porygon2",0,5,0],["draco",3,0,3]],[["scarhino",5,1,14],["wattouat",3,2,18],["evoli",3,4,21]],1],["roche",[["drackhaus",1,0,1],["lanturn",2,0,0],["tortank",3,0,1]],[["absol",2,3,20],["macronium",5,2,9],["raichu",2,1,15]],0],["tour",[["leviator",0,1,3],["reptincel",1,4,3],["alakazam",3,2,0]],[["tenefix",4,0,14],["crocrodil",2,1,39]],1],["tour",[["raichu",2,3,3],["pyroli",1,1,1],["ectoplasma",1,2,0]],[["tarpaud",2,1,23],["raichu",3,2,23],["galekid",3,3,40]],1],["tour",[["draco",3,5,0],["florizarre",0,0,0],["kadabra",1,4,1]],[["natu",2,1,12],["malosse",4,1,19]],1],["tour",[["feurisson",0,1,3],["aquali",2,1,0],["galegon",1,1,1]],[["noctali",2,0,15],["melodelfe",4,4,35]],1],["gue",[["cochignon",1,5,1],["xatu",0,5,3],["floravol",2,2,3]],[["tenefix",3,5,28],["mackogneur",3,0,28]],0],["gue",[["lanturn",1,5,1],["feurisson",3,5,0],["draco",2,4,1]],[["galeking",4,0,8],["galeking",5,4,67]],2],["roche",[["pikachu",0,2,1],["feurisson",3,0,3],["cizayox",2,2,1]],[["tenefix",5,2,43],["galekid",3,4,21]],1],["roche",[["tarpaud",2,4,0],["draco",0,0,3],["crocrodil",3,5,3]],[["kirlia",2,5,14],["meganium",2,2,25]],0],["roche",[["drackhaus",2,3,1],["kicklee",1,1,0],["tetarte",1,4,1]],[["galifeu",3,4,12],["roucarnage",5,0,25]],0],["roche",[["raichu",1,1,0],["tartard",2,0,3],["drattak",2,1,3]],[["chenipan",3,2,36],["porygon2",4,3,27]],0],["gue",[["mentali",0,1,0],["crocrodil",0,2,3],["ymphect",1,0,1]],[["volcaropod",3,1,31],["natu",2,2,17],["evoli",4,4,26]],1],["roche",[["kapoera",0,1,0],["nostenfer",2,1,0],["migalos",0,5,0]],[["mentali",3,4,23],["absol",3,2,41]],2],["roche",[["alakazam",1,5,0],["ectoplasma",1,1,1],["dracaufeu",2,4,0]],[["lanturn",4,5,31],["galeking",2,2,19]],0],["gue",[["raichu",2,1,1],["brasegali",1,2,1],["kicklee",1,0,1]],[["arcanin",4,2,35],["granivol",3,0,22]],0],["roche",[["flobio",3,4,3],["floravol",2,4,1],["meganium",1,4,3]],[["phanpy",4,0,10],["roucoups",2,0,17]],1],["roche",[["leviator",1,1,1],["voltali",1,3,0],["massko",0,1,3]],[["kapoera",2,1,25],["pyroli",2,4,35]],1],["roche",[["feurisson",1,0,3],["flobio",1,1,3],["noarfang",3,5,1]],[["nosferapti",3,2,10],["brasegali",3,4,35]],2],["roche",[["spectrum",0,1,3],["nosferalto",2,0,3],["tortank",2,3,3]],[["tarsal",2,2,17],["phanpy",5,2,20]],1],["roche",[["feurisson",3,4,3],["noctali",2,4,3],["draco",2,2,0]],[["aquali",3,5,24],["insecateur",5,3,15]],1],["gue",[["aquali",1,3,1],["carabaffe",0,0,1],["floravol",1,4,3]],[["demolosse",3,3,33],["insecateur",5,5,20],["nosferapti",3,2,18]],2],["tour",[["reptincel",0,5,1],["typhlosion",0,1,3],["herbizarre",2,3,3]],[["limagma",3,2,10],["pikachu",2,2,29],["leviator",2,4,18]],1],["gue",[["dracaufeu",2,3,0],["nosferalto",1,1,1],["tetarte",3,0,1]],[["drackhaus",5,1,28],["voltali",5,0,23]],1],["gue",[["melodelfe",2,2,1],["nosferalto",0,2,3],["kapoera",3,2,1]],[["laggron",4,0,38],["mentali",5,2,19]],0],["gue",[["tyranocif",3,4,0],["aquali",3,2,1],["feurisson",0,3,0]],[["tarsal",4,3,21],["drattak",2,4,20]],1],["tour",[["floravol",0,0,0],["herbizarre",2,5,3],["roigada",2,2,1]],[["magneti",2,0,8],["machopeur",5,3,21]],0],["tour",[["draco",2,3,3],["florizarre",1,2,3],["steelix",2,0,0]],[["kicklee",5,3,24],["tarpaud",3,1,24]],0],["tour",[["aligatueur",1,5,0],["feurisson",3,3,3],["kirlia",0,0,0]],[["roucarnage",4,1,15],["jungko",4,4,22],["crustabri",2,0,16]],0]];
-
 
 /* ---------- énigmes tactiques : construction (partagée avec le générateur) ---------- */
 // Une énigme : P = { id, t, b (terrain), a: [[id, c, r, losanges]], f: [[id, c, r, PV]] }
@@ -698,9 +753,6 @@ CROCHETS.combat.push(S => {
   });
   S.lim = 1;
 });
-
-
-n431 = (x, lo, hi) => (Number.isFinite(x) ? Math.max(lo, Math.min(hi, Math.floor(x))) : lo);
 
 
 CROCHETS.combat.push((S, opt) => {
@@ -768,19 +820,6 @@ document.addEventListener('click', e => {
 });
 
 
-/* ---------- 3. maîtrise des familles ---------- */
-MAIT431 = {
-  puissance: ['Puissance', '+8 % de dégâts infligés'],
-  robuste: ['Robustesse', '+10 % de PV maximum'],
-  vif: ['Vivacité', '+1 Mouvement'],
-  eveil: ['Éveil précoce', 'Commence avec 1 losange de plus'],
-  garde: ['Garde', '−8 % de dégâts subis']
-};
-
-
-MAIT_SEUIL431 = 10;
-
-
 CROCHETS.progres.push((S, rew) => {
   const D = SCEN[S.sc] || {};
   if (D.tuto || D.pret429) return null;
@@ -838,34 +877,6 @@ document.addEventListener('click', e => {
 });
 
 
-/* ---------- 4. Écho profond ---------- */
-RELIQUES431 = {
-  plume: ['Plume vive', '+1 Mouvement pour toute l’équipe.'],
-  braise: ['Cœur ardent', '+10 % de dégâts infligés.'],
-  ecaille: ['Écaille', '−10 % de dégâts subis.'],
-  diapason: ['Diapason', 'Chaque Pokémon commence avec 1 losange de plus.'],
-  cloche: ['Cloche claire', '+1 Voix maximum.'],
-  baie: ['Baie dorée', 'Après chaque combat, +15 % de PV.'],
-  aimant: ['Aimant à Échos', '+50 % d’Échos gagnés.'],
-  talisman: ['Talisman', 'Chaque Pokémon survit une fois à un coup fatal par combat.']
-};
-
-
-ECHO_POOL431 = [
-  ['gue', 'roche', 'a1', 'a2'],
-  ['a3', 'a4', 'tour', 'td1'],
-  ['a5', 'a6', 'j1', 'j2'],
-  ['a7', 'j3', 'j4', 'h1'],
-  ['a8', 'j5', 'j6', 'h2', 'h3'],
-  ['j7', 'h4', 'h5', 'jd2'],
-  ['j8', 'h6', 'h7', 'jd4'],
-  ['jchamp', 'hchamp', 'lgraikou', 'lgentei', 'lgsuicune']
-];
-
-
-NOEUDS431 = { combat: ['Combat', 'i-fight'], elite: ['Élite', 'i-star'], soin: ['Source', 'i-heal'], marchand: ['Marchand', 'i-shop'], evenement: ['Événement', 'i-quest'], boss: ['Gardien', 'i-trophy'] };
-
-
 CROCHETS.combat.push(S => {
   if (S.sc !== 'echo431') return;
   const R = echoRun431();
@@ -913,14 +924,6 @@ document.addEventListener(
   },
   true
 );
-
-
-EVENTS431 = {
-  autel: ['Autel brisé', 'Une relique repose sur un autel fissuré. La prendre coûte 20 % des PV de chaque Pokémon.', [['Prendre la relique', 'autel-ok'], ['Passer son chemin', 'passer']]],
-  source: ['Source claire', 'Une eau limpide chante doucement.', [['Boire (+30 % de PV)', 'source-pv'], ['Remplir les gourdes (+25 Échos)', 'source-ech']]],
-  passe: ['Écho du passé', 'Un souvenir de vos premiers combats vous revient.', [['S’en inspirer (+10 % de PV max pour l’expédition)', 'passe-pv'], ['Le vendre (+30 Échos)', 'passe-ech']]],
-  pari: ['Le Pari', 'Un dresseur masqué propose un jeu : pile, 60 Échos ; face, chaque Pokémon perd 20 % de PV.', [['Jouer', 'pari-ok'], ['Refuser', 'passer']]]
-};
 
 
 document.addEventListener('click', e => {
@@ -1021,24 +1024,11 @@ document.addEventListener('click', e => {
     toast(`Arène « ${c.n} » ajoutée.`);
   } else if (a === 'jouer' && A[i]) {
     areneScen431(A[i]);
-    __set_scSel('perso431');
-    __set_PREPG(null);
-    go('combat');
-    renderPrep();
+    ouvrirCombat('perso431');
     return;
   }
   renderCampPage431();
 });
-
-
-/* ---------- l’onglet Camp, en sous-onglets ---------- */
-CAMPT431 = [
-  ['base', 'Base'],
-  ['enigmes', 'Énigmes'],
-  ['echo', 'Écho profond'],
-  ['arenes', 'Arènes'],
-  ['maitrise', 'Maîtrise']
-];
 
 
 document.addEventListener('click', e => {
@@ -1059,12 +1049,4 @@ document.addEventListener('click', e => {
   go('camp');
 });
 
-
-NEWS416.unshift(
-  ['i-quest', 'Énigmes et Écho profond', `Camp › Énigmes : ${ENIGMES431.length} énigmes tactiques en une manche. Camp › Écho profond : 8 étages, une seule vie, des reliques.`, 'camp431'],
-  ['i-league', 'Arènes et maîtrises', 'Créez une arène et partagez son code. Après 10 combats, chaque famille débloque une maîtrise. Option : brouillard de guerre (Paramètres).', null]
-);
-
-
-NEWS416.splice(8);
 }

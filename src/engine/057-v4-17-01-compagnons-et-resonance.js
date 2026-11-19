@@ -6,9 +6,10 @@ import { PROFILE, isCamp } from './011-05-etat-de-partie.js';
 import { RC } from './012-06-recrues-roles-synergies.js';
 import { $, medal, toast } from './014-08-outils.js';
 import { CROCHETS } from './015-v4-8-00-crochets.js';
-import { squad } from './020-13-equipe-cartes.js';
+import { squad, vBonus } from './020-13-equipe-cartes.js';
+import { brArme466, brBoss466 } from './097-4-66-boss-rush-et-reliques-de-run.js';
 import { EMAX, byUid, fin, hasNx, heal, say } from './021-14-moteur-combat.js';
-import { B, backToPrep, battleOpts, cine, clearAim, enPips, finish, launch, renderAll, scSel, ui } from './024-17-interface-combat.js';
+import { B, backToPrep, battleOpts, cine, clearAim, enPips, finish, goFight, launch, renderAll, scSel, ui } from './024-17-interface-combat.js';
 import { esc, queueSave } from './025-19-sauvegardes.js';
 import { sfx, vibe } from './026-20-campagne-tutoriel-son.js';
 import { playEv } from './028-22-effets-attaque.js';
@@ -16,7 +17,6 @@ import { AUTO, leaderOf } from './030-24-prestige-mise-en-scene.js';
 import { PROF_AV, avatar } from './031-25-v3-parcours-accueil.js';
 import { SHOP, bagN, today } from './032-v4-00-socle.js';
 import { renderWallet } from './035-v4-03-interface.js';
-import { goFight } from './036-v4-04-accueil.js';
 import { PL, placeName } from './037-v4-05-carte.js';
 import { isShinyOwned } from './043-v4-4-01-aventure-plus.js';
 import { FOURNISSEURS_DEGATS } from './044-v4-5-01-moteur-tactique.js';
@@ -25,7 +25,7 @@ import { SUCCES, tailleEquipe } from './048-v4-9-01-rejouabilite.js';
 import { renderCampBase } from './049-v4-10-01-identite.js';
 import { aXP } from './053-v4-14-01-resonance.js';
 import { regionJ415, routeNom } from './054-v4-15-01-johto.js';
-import { ROAM, amiBuild416, renderAmis416, roamActif416, roamEtat416, roamLeg416, roamOk416, scoreDe416 } from './055-v4-16-01-johto-vivant.js';
+import { ROAM, amiBuild416, roamActif416, roamEtat416, roamLeg416, roamOk416, scoreDe416 } from './055-v4-16-01-johto-vivant.js';
 import { regionH419 } from './059-v4-19-01-hoenn.js';
 import { poolRegion421 } from './061-v4-21-01-capture-partout.js';
 import { qui429 } from './064-v4-29-01-qualite.js';
@@ -33,11 +33,10 @@ import { campOk430 } from './065-v4-30-01-camp-et-tactique.js';
 import { refreshAccueil } from '../screens/accueil/accueilStore.js';
 import { paintOverlay } from '../screens/overlays/dialogsStore.js';
 
-export let coeurs417, compId417, meteoJour417, SCENES, SCN;
-let RESO_TOURS, AFF_T, COMP_HUMEUR, COMP_BONUS, METEO_J, ASTUCES, astuce417, WXN417, cleScene417, POTAGER, pousse417, POT_I, tournoiRun417;
+export let SCN;
+let POT_I;
 export { POTAGER, pousse417, POT_I }; // lus par le Potager du Camp (src/screens/camp)
 export function __set_SCN(v) { return (SCN = v); }
-export function __set_tournoiTeam417(v) { return (tournoiTeam417 = v); }
 
 
 /* =====================================================================
@@ -190,11 +189,6 @@ export function compData417() {
 }
 
 
-export function renderComp417() {
-  refreshAccueil();
-}
-
-
 /* choix du compagnon : rendu par React (src/screens/overlays/CompBox.jsx) */
 export function renderCompBox417() {
   const L = MON.filter(m => !m.ennemi && !m.leg && PROFILE.box.includes(m.base) && (m.st === 1 || (isCamp() && (PROFILE.forms || []).includes(m.id)))).slice(0, 80);
@@ -258,7 +252,7 @@ function quiScene417(who, k) {
 export function scene417(k, force) {
   const c = cleScene417(k),
     L = SCENES[c];
-  if (!L || (PROFILE.scenes && PROFILE.scenes[c]) || (!force && typeof AUTO !== 'undefined' && AUTO)) return false; // pas de scène pendant les tests automatiques
+  if (!L || (PROFILE.scenes && PROFILE.scenes[c]) || (!force && AUTO)) return false; // pas de scène pendant les tests automatiques
   SCN = { k, c, i: 0, L };
   renderScene417();
   $('#scene417').hidden = false;
@@ -400,6 +394,7 @@ function tournoiCombat417() {
 
 /** L’équipe figée du tournoi (lue par le lancement des combats). */
 export function tournoiTeam417() {
+  if (brBoss466(scSel)) return { team: brArme466().team, voix: vBonus(), opts: battleOpts() }; // Boss Rush : équipe figée
   const run = tournoiRun417(),
     D = SCEN.ami || {};
   if (scSel !== 'ami' || !run || D.tournoi !== run.ordre[run.i]) return null;
@@ -420,13 +415,133 @@ export function tournoiHtml417() {
   return `<div class="tn-c"><span><b>Tournoi entre amis</b><em>${Math.min(5, L.length)} équipes à la suite, sans soin entre les combats. Record : ${T.best || 0}${T.gagnes ? ` · remporté ${T.gagnes} fois` : ''}.</em></span><button type="button" class="b b-sm b-gold" data-tournoi="lancer">Lancer</button></div>`;
 }
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
-export function __init() {
-
 /* =====================================================================
    1. Forme Résonante
    ===================================================================== */
-RESO_TOURS = 3;
+const RESO_TOURS = 3;
+
+
+/* =====================================================================
+   2. Pokémon compagnon
+   ===================================================================== */
+const AFF_T = [10, 30, 60, 100, 150];
+
+
+export const coeurs417 = a => AFF_T.filter(t => a >= t).length;
+
+
+export const compId417 = () => {
+  const c = PROFILE.comp;
+  return c && BY[c.id] && PROFILE.box.includes(BY[c.id].base) ? c.id : ''; // Libre aussi (v4.21)
+};
+
+
+const COMP_HUMEUR = [
+  '{n} vous observe avec curiosité.',
+  '{n} trottine à vos côtés.',
+  '{n} se blottit contre vous.',
+  '{n} rayonne de confiance.',
+  '{n} vous suit partout, l’air fier.',
+  '{n} et vous, vous vous comprenez sans un mot.'
+];
+
+
+const COMP_BONUS = [
+  [2, 'Confiance', 'commence chaque combat avec 1 losange'],
+  [3, 'Tenir bon', 'survit une fois à un coup fatal avec 1 PV'],
+  [4, 'Complicité', '+10 % de dégâts'],
+  [5, 'Lien parfait', 'se libère seul de ses statuts en fin de manche']
+];
+
+
+const METEO_J = [null, 'pluie', 'soleil', null, 'sable', 'grele', null];
+
+
+export const meteoJour417 = () => METEO_J[graine417('wx') % METEO_J.length];
+
+
+const ASTUCES = [
+  'Une case Trempée et une attaque Électrik : Court-circuit. Sortez vos Pokémon de l’eau avant de frapper !',
+  'Deux coups sur la même cible dans la même manche déclenchent la Résonance : ×1,5 sur le second.',
+  'Trois rangs différents dans l’équipe (Faible, Moyen, Fort…) : l’Harmonie offre 1 losange à chacun.',
+  'La Forme Résonante ne coûte pas l’action : déclenchez-la, puis attaquez dans la foulée.',
+  'Un Pokémon au palier Duo avec un autre débloque une technique combinée : 2 Voix, deux attaques.',
+  'Les bêtes errantes gardent leurs blessures : même une fuite vous rapproche du but.',
+  'La nuit, les Pokémon Dominants sont plus fréquents dans les hautes herbes.',
+  'L’Esquive coûte 1 Voix et ne gaspille pas l’action : parfait pour sortir d’une zone dangereuse.',
+  'Un compagnon à 3 cœurs encaisse un coup fatal avec 1 PV : mettez-le en première ligne.',
+  'Les baies du Potager poussent plus vite si vous arrosez chaque jour.'
+];
+
+
+const astuce417 = () => ASTUCES[graine417('tip') % ASTUCES.length];
+
+
+const WXN417 = { pluie: 'Pluie', soleil: 'Grand soleil', sable: 'Tempête de sable', grele: 'Grêle' };
+
+
+/* ---------- scènes d’histoire ---------- */
+export const SCENES = {
+  j1: [
+    ['prof', 'Bienvenue à Johto ! Huit nouvelles arènes, et des Pokémon que vous n’avez jamais vus.'],
+    ['prof', 'Votre première adversaire, Zéphyrine Altair, se bat avec le vent. Restez près des rochers.'],
+    ['j1', 'Le vent ne se bat pas. Il pousse, et il attend que vous tombiez.']
+  ],
+  jd1: [
+    ['prof', 'Des ondes étranges brouillent la Route 32… On dirait la Team Dissonance. Mais Orphée l’avait dissoute !'],
+    ['jd1', 'La Dissonance, dissoute ? Elle a juste changé de chef. Cobalt nous a promis une Résonance qui obéit.'],
+    ['prof', 'Leur brouilleur aspire vos losanges. Ne les laissez pas s’accumuler sur un seul Pokémon !']
+  ],
+  jd2: [
+    ['jd2', 'Toi encore. Tu sens cette fumée ? La vieille tour brûle, et c’est moi qui l’ai voulu.'],
+    ['prof', 'Vesper ! Sous cette tour dorment trois Pokémon légendaires… Le feu pourrait les réveiller !'],
+    ['jd2', 'Orphée nous avait dissous. Cobalt m’a rappelée. Je ne sais plus qui a raison… mais je sais encore me battre.']
+  ],
+  jd3: [
+    ['jd3', 'L’Éveil ? Un caprice. Il faut attendre un lien, une émotion… Quelle perte de temps.'],
+    ['jd3', 'Mon Antenne Rouge fait évoluer mes Pokémon quand je le décide. Regarde bien.'],
+    ['prof', 'Frappez vite : à la fin des manches 1 et 3, ses Pokémon évolueront de force !']
+  ],
+  jd4: [
+    ['jd4', 'Le Relais est prêt. Une seule impulsion, et toute la Résonance de Johto se taira.'],
+    ['orphee', 'Cobalt… La Dissonance devait s’éteindre avec moi. Arrête ça.'],
+    ['jd4', 'Orphée a choisi le silence. Moi, je choisis le contrôle. Ta Résonance s’arrête ici, dans mon brouillage.']
+  ],
+  jchamp: [
+    ['prof', 'Les huit badges de Johto, et la Néo-Dissonance réduite au silence… Vous y êtes.'],
+    ['jchamp', 'Kanto vous a couronné. Johto, lui, vous juge.'],
+    ['prof', 'Orion Céleste se sert de tout : notes de Résonance, attaques Expertes… et, s’il le faut, de la Forme Résonante.']
+  ],
+  roam: [
+    ['prof', 'Une silhouette immense bondit entre les arbres… Une bête légendaire, réveillée par l’incendie de la tour !'],
+    ['prof', 'Elle s’enfuira au bout de 4 manches, mais ses blessures resteront. Usez-la, retrouvez-la, puis apaisez-la.']
+  ]
+};
+
+
+const cleScene417 = k => (SCEN[k] && SCEN[k].roam ? 'roam' : k);
+
+
+/* =====================================================================
+   4. Le Potager du Camp
+   ===================================================================== */
+const POTAGER = {
+  oran: { n: 'Baie Oran', p: 200, duree: 3, d: '3 Baies Oran (soin en combat)' },
+  sitrus: { n: 'Baie Sitrus', p: 600, duree: 5, d: 'une Baie Sitrus (objet tenu), sinon 3 Baies Oran et 2 Éclats' },
+  mystere: { n: 'Graine mystère', p: 400, duree: 6, d: 'une surprise : Éclats, Balls ou une CT' }
+};
+
+
+const pousse417 = x => (x ? Math.max(0, x.fin - PROFILE.battles) : 0);
+
+
+/* =====================================================================
+   5. Tournoi entre amis
+   ===================================================================== */
+const tournoiRun417 = () => (PROFILE.tournoi && PROFILE.tournoi.run) || null;
+
+// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+export function __init() {
 
 
 FOURNISSEURS_DEGATS.push({ id: 'formeresonante', fournir: (c, { u }) => u.reso > 0 && { mul: u.side === 'a' ? 1.2 : 1.1, libelle: 'Forme Résonante' } });
@@ -475,39 +590,6 @@ document.addEventListener('click', async e => {
   toast(`${u.n} résonne pour ${RESO_TOURS} manches : son action reste libre.`);
   renderAll();
 });
-
-
-/* =====================================================================
-   2. Pokémon compagnon
-   ===================================================================== */
-AFF_T = [10, 30, 60, 100, 150];
-
-
-coeurs417 = a => AFF_T.filter(t => a >= t).length;
-
-
-compId417 = () => {
-  const c = PROFILE.comp;
-  return c && BY[c.id] && PROFILE.box.includes(BY[c.id].base) ? c.id : ''; // Libre aussi (v4.21)
-};
-
-
-COMP_HUMEUR = [
-  '{n} vous observe avec curiosité.',
-  '{n} trottine à vos côtés.',
-  '{n} se blottit contre vous.',
-  '{n} rayonne de confiance.',
-  '{n} vous suit partout, l’air fier.',
-  '{n} et vous, vous vous comprenez sans un mot.'
-];
-
-
-COMP_BONUS = [
-  [2, 'Confiance', 'commence chaque combat avec 1 losange'],
-  [3, 'Tenir bon', 'survit une fois à un coup fatal avec 1 PV'],
-  [4, 'Complicité', '+10 % de dégâts'],
-  [5, 'Lien parfait', 'se libère seul de ses statuts en fin de manche']
-];
 
 
 CROCHETS.combat.push(S => {
@@ -579,7 +661,7 @@ document.addEventListener('click', e => {
       vibe(25);
       toast(up ? `${BY[compId417()].n} est ravi : ${up} cœur${up > 1 ? 's' : ''} !` : `${BY[compId417()].n} ferme les yeux de bonheur.`);
       queueSave();
-      renderComp417();
+      refreshAccueil();
     }
     return;
   }
@@ -590,37 +672,11 @@ document.addEventListener('click', e => {
     $('#compBox').hidden = true;
     toast(`${BY[id].n} devient votre compagnon.`);
     queueSave();
-    renderComp417();
+    refreshAccueil();
     return;
   }
   if (e.target.id === 'compBox') $('#compBox').hidden = true;
 });
-
-
-METEO_J = [null, 'pluie', 'soleil', null, 'sable', 'grele', null];
-
-
-meteoJour417 = () => METEO_J[graine417('wx') % METEO_J.length];
-
-
-ASTUCES = [
-  'Une case Trempée et une attaque Électrik : Court-circuit. Sortez vos Pokémon de l’eau avant de frapper !',
-  'Deux coups sur la même cible dans la même manche déclenchent la Résonance : ×1,5 sur le second.',
-  'Trois rangs différents dans l’équipe (Faible, Moyen, Fort…) : l’Harmonie offre 1 losange à chacun.',
-  'La Forme Résonante ne coûte pas l’action : déclenchez-la, puis attaquez dans la foulée.',
-  'Un Pokémon au palier Duo avec un autre débloque une technique combinée : 2 Voix, deux attaques.',
-  'Les bêtes errantes gardent leurs blessures : même une fuite vous rapproche du but.',
-  'La nuit, les Pokémon Dominants sont plus fréquents dans les hautes herbes.',
-  'L’Esquive coûte 1 Voix et ne gaspille pas l’action : parfait pour sortir d’une zone dangereuse.',
-  'Un compagnon à 3 cœurs encaisse un coup fatal avec 1 PV : mettez-le en première ligne.',
-  'Les baies du Potager poussent plus vite si vous arrosez chaque jour.'
-];
-
-
-astuce417 = () => ASTUCES[graine417('tip') % ASTUCES.length];
-
-
-WXN417 = { pluie: 'Pluie', soleil: 'Grand soleil', sable: 'Tempête de sable', grele: 'Grêle' };
 
 
 // la météo du jour s’invite dans les combats sauvages (si la saison n’en impose pas déjà une)
@@ -629,48 +685,6 @@ CROCHETS.creation.push(S => {
   const w = meteoJour417();
   if (w) S.wx = { k: w, n: 5 };
 });
-
-
-/* ---------- scènes d’histoire ---------- */
-SCENES = {
-  j1: [
-    ['prof', 'Bienvenue à Johto ! Huit nouvelles arènes, et des Pokémon que vous n’avez jamais vus.'],
-    ['prof', 'Votre première adversaire, Zéphyrine Altair, se bat avec le vent. Restez près des rochers.'],
-    ['j1', 'Le vent ne se bat pas. Il pousse, et il attend que vous tombiez.']
-  ],
-  jd1: [
-    ['prof', 'Des ondes étranges brouillent la Route 32… On dirait la Team Dissonance. Mais Orphée l’avait dissoute !'],
-    ['jd1', 'La Dissonance, dissoute ? Elle a juste changé de chef. Cobalt nous a promis une Résonance qui obéit.'],
-    ['prof', 'Leur brouilleur aspire vos losanges. Ne les laissez pas s’accumuler sur un seul Pokémon !']
-  ],
-  jd2: [
-    ['jd2', 'Toi encore. Tu sens cette fumée ? La vieille tour brûle, et c’est moi qui l’ai voulu.'],
-    ['prof', 'Vesper ! Sous cette tour dorment trois Pokémon légendaires… Le feu pourrait les réveiller !'],
-    ['jd2', 'Orphée nous avait dissous. Cobalt m’a rappelée. Je ne sais plus qui a raison… mais je sais encore me battre.']
-  ],
-  jd3: [
-    ['jd3', 'L’Éveil ? Un caprice. Il faut attendre un lien, une émotion… Quelle perte de temps.'],
-    ['jd3', 'Mon Antenne Rouge fait évoluer mes Pokémon quand je le décide. Regarde bien.'],
-    ['prof', 'Frappez vite : à la fin des manches 1 et 3, ses Pokémon évolueront de force !']
-  ],
-  jd4: [
-    ['jd4', 'Le Relais est prêt. Une seule impulsion, et toute la Résonance de Johto se taira.'],
-    ['orphee', 'Cobalt… La Dissonance devait s’éteindre avec moi. Arrête ça.'],
-    ['jd4', 'Orphée a choisi le silence. Moi, je choisis le contrôle. Ta Résonance s’arrête ici, dans mon brouillage.']
-  ],
-  jchamp: [
-    ['prof', 'Les huit badges de Johto, et la Néo-Dissonance réduite au silence… Vous y êtes.'],
-    ['jchamp', 'Kanto vous a couronné. Johto, lui, vous juge.'],
-    ['prof', 'Orion Céleste se sert de tout : notes de Résonance, attaques Expertes… et, s’il le faut, de la Forme Résonante.']
-  ],
-  roam: [
-    ['prof', 'Une silhouette immense bondit entre les arbres… Une bête légendaire, réveillée par l’incendie de la tour !'],
-    ['prof', 'Elle s’enfuira au bout de 4 manches, mais ses blessures resteront. Usez-la, retrouvez-la, puis apaisez-la.']
-  ]
-};
-
-
-cleScene417 = k => (SCEN[k] && SCEN[k].roam ? 'roam' : k);
 
 
 // #scene417 : rendu par React (src/screens/overlays/Scene417.jsx)
@@ -689,19 +703,6 @@ document.addEventListener('click', e => {
     renderScene417();
   } else finScene417();
 });
-
-
-/* =====================================================================
-   4. Le Potager du Camp
-   ===================================================================== */
-POTAGER = {
-  oran: { n: 'Baie Oran', p: 200, duree: 3, d: '3 Baies Oran (soin en combat)' },
-  sitrus: { n: 'Baie Sitrus', p: 600, duree: 5, d: 'une Baie Sitrus (objet tenu), sinon 3 Baies Oran et 2 Éclats' },
-  mystere: { n: 'Graine mystère', p: 400, duree: 6, d: 'une surprise : Éclats, Balls ou une CT' }
-};
-
-
-pousse417 = x => (x ? Math.max(0, x.fin - PROFILE.battles) : 0);
 
 
 POT_I = -1;
@@ -730,12 +731,6 @@ document.addEventListener('click', e => {
   if (r) return void recolter417(+r.dataset.potR);
   if (e.target.closest('[data-pot-eau]')) arroser417();
 });
-
-
-/* =====================================================================
-   5. Tournoi entre amis
-   ===================================================================== */
-tournoiRun417 = () => (PROFILE.tournoi && PROFILE.tournoi.run) || null;
 
 
 CROCHETS.combat.push((S, opt, D0) => {
@@ -803,7 +798,7 @@ document.addEventListener('click', e => {
     PROFILE.tournoi.run = null;
     queueSave();
     toast('Tournoi abandonné.');
-    renderAmis416();
+    refreshAccueil();
   }
 });
 

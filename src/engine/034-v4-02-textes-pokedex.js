@@ -1,11 +1,6 @@
 /* Section d'origine : v4-02-textes-pokedex.js */
 
-export let LORE;
-
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
-export function __init() {
-
-LORE = {
+export const LORE = {
   // v4.19
   arcko: 'Il grimpe aux murs grâce aux minuscules crochets de ses pattes. Rien ne le déconcentre.',
   massko: 'Il bondit de branche en branche dans la jungle, si vite qu’on ne voit qu’un éclair vert.',
@@ -151,4 +146,3 @@ LORE = {
   ymphect: 'Sa carapace est si dure qu’il reste immobile pour grandir à l’intérieur. Il ralentit tout le plateau.',
   tyranocif: 'Il déplace des montagnes pour trouver un adversaire à sa taille. Sa tempête de sable couvre tout.'
 };
-}

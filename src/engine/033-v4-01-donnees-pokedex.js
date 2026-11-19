@@ -1,11 +1,6 @@
 /* Section d'origine : v4-01-donnees-pokedex.js */
 
-export let DEXM;
-
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
-export function __init() {
-
-DEXM = {
+export const DEXM = {
   // v4.19
   252: [0.5, 5, 'Bois Gecko'],
   253: [0.9, 21.6, 'Bois Gecko'],
@@ -147,4 +142,3 @@ DEXM = {
   247: [1.2, 152, 'Carapadure'],
   248: [2, 202, 'Armure']
 };
-}

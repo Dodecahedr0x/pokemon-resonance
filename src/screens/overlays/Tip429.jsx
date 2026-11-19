@@ -1,12 +1,12 @@
 import { Html } from '../../lib/html.jsx';
-import { useTip } from './shellOverlays.js';
+import { useTip429 } from './shellOverlays.js';
 import { PROF_AV } from '../../engine/031-25-v3-parcours-accueil.js';
 
 // Astuce du Prof. Sorbier pendant un combat (#tip429, v4.29) : posée par astuces429(),
 // retirée par finTip429() ou le bouton (data-tip429, géré par le moteur).
 // Un nouveau bloc par astuce (key) : le texte est ensuite écrit lettre par lettre (v4.73).
 export default function Tip429() {
-  const { tip, v } = useTip();
+  const { tip, v } = useTip429();
   if (!tip) return null;
   return (
     <aside className="tip429" id="tip429" role="status" aria-live="polite" key={v}>

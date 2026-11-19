@@ -2,7 +2,7 @@
 
 import { SCEN } from './009-03-pokemon.js';
 import { PROFILE } from './011-05-etat-de-partie.js';
-import { toast } from './014-08-outils.js';
+import { ecrireLS, toast } from './014-08-outils.js';
 import { CROCHETS } from './015-v4-8-00-crochets.js';
 import { heal, say } from './021-14-moteur-combat.js';
 import { esc, queueSave } from './025-19-sauvegardes.js';
@@ -11,11 +11,43 @@ import { bagN, tLevel } from './032-v4-00-socle.js';
 import { renderWallet } from './035-v4-03-interface.js';
 import { renderBag } from './039-v4-07-quetes-boutique.js';
 import { FOURNISSEURS_DEGATS } from './044-v4-5-01-moteur-tactique.js';
-import { NEWS416 } from './056-v4-16-1-01-finitions.js';
 
-let TAL464, TALMAX464, TALRESET464, talSt464, talSave464, talSpent464, talPts464, tal464, talOn464;
+let TAL464, TALMAX464, TALRESET464;
 // lus par Boutique › Talents (React, src/screens/sac/Atelier.jsx)
 export { TAL464, TALMAX464, TALRESET464, talSt464, talSpent464, talPts464 };
+
+
+/** Le combat compte pour les talents et la saison (4.65) : ni équipe figée, ni tutoriel. */
+export function combatCompte464(S) {
+  return S && !S.fixe431 && !(SCEN[S.sc] && SCEN[S.sc].tuto);
+}
+
+const talSt464 = () => {
+  const s = (() => {
+    try {
+      return JSON.parse(localStorage.getItem('res-tal464') || 'null') || {};
+    } catch (e) {
+      return {};
+    }
+  })();
+  const o = {};
+  TAL464.forEach(B => B.t.forEach(t => (o[t.id] = Math.max(0, Math.min(TALMAX464, s[t.id] | 0)))));
+  return o;
+};
+
+
+const talSave464 = o => {
+  ecrireLS('res-tal464', o);
+};
+
+
+const talSpent464 = () => Object.values(talSt464()).reduce((a, b) => a + b, 0);
+
+
+const talPts464 = () => Math.max(0, tLevel() - 1 - talSpent464());
+
+
+const tal464 = id => talSt464()[id] || 0;
 
 // Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
 export function __init() {
@@ -43,41 +75,8 @@ TALMAX464 = 3,
   TALRESET464 = 500;
 
 
-talSt464 = () => {
-  const s = (() => {
-    try {
-      return JSON.parse(localStorage.getItem('res-tal464') || 'null') || {};
-    } catch (e) {
-      return {};
-    }
-  })();
-  const o = {};
-  TAL464.forEach(B => B.t.forEach(t => (o[t.id] = Math.max(0, Math.min(TALMAX464, s[t.id] | 0)))));
-  return o;
-};
-
-
-talSave464 = o => {
-  try {
-    localStorage.setItem('res-tal464', JSON.stringify(o));
-  } catch (e) {}
-};
-
-
-talSpent464 = () => Object.values(talSt464()).reduce((a, b) => a + b, 0);
-
-
-talPts464 = () => Math.max(0, tLevel() - 1 - talSpent464());
-
-
-tal464 = id => talSt464()[id] || 0;
-
-
-talOn464 = S => S && !S.fixe431 && !(SCEN[S.sc] && SCEN[S.sc].tuto);
-
-
 CROCHETS.combat.push(S => {
-  if (!talOn464(S)) return;
+  if (!combatCompte464(S)) return;
   const al = S.units.filter(u => u.side === 'a'),
     a2 = tal464('a2'),
     s2 = tal464('s2');
@@ -120,7 +119,7 @@ FOURNISSEURS_DEGATS.push({
 
 CROCHETS.progres.unshift((S, rew, win) => {
   try {
-    if (!win || !talOn464(S)) return null;
+    if (!win || !combatCompte464(S)) return null;
     const e1 = tal464('e1'),
       e2 = tal464('e2'),
       e3 = tal464('e3'),
@@ -176,7 +175,4 @@ document.addEventListener(
 );
 
 
-
-
-NEWS416.unshift(['i-medal', 'Arbre de talents', 'Chaque niveau de dresseur donne un point à répartir dans trois branches : Attaque, Soin et Exploration. Onglet « Talents » de la boutique. Une réinitialisation coûte 500 ₽.']);
 }

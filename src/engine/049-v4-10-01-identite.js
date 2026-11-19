@@ -18,16 +18,13 @@ import { remise414 } from './053-v4-14-01-resonance.js';
 import { enPension416, pension416 } from './055-v4-16-01-johto-vivant.js';
 import { campOk430 } from './065-v4-30-01-camp-et-tactique.js';
 import { indivDe432, indivHtml432 } from './067-v4-32-01-individus-et-confort.js';
+import { ctJour456 } from './089-4-58-objets-tenus-en-plus-ct-a-gagner.js';
+import { lock461, recit461 } from './092-4-61-compagnon-ufs-d-elevage-expeditions.js';
 import { refreshCampBase } from '../screens/camp/campStore.js';
 import { paintOverlay } from '../screens/overlays/dialogsStore.js';
 
-export let CARACTERES, caracteresChoisis, desobeissanceChoisie, niveau, DESTINATIONS, enExpedition;
-export let ACCORDS;
-let BATIMENTS, placesExp, EXP_DEST;
+let BATIMENTS, EXP_DEST;
 export { BATIMENTS, placesExp, batimentBloque }; // lus par le Camp de base (src/screens/camp)
-export function __set_prixDe(v) { return (prixDe = v); }
-export function __set_envoyer(v) { return (envoyer = v); }
-export function __set_recuperer(v) { return (recuperer = v); }
 
 
 /* =====================================================================
@@ -236,7 +233,8 @@ function construire(k) {
 
 /** Atelier : le prix d'un objet en Boutique (Pokédollars). */
 export function prixDe(k) {
-  return remise414(k, prixDe0(k)); // offres du jour (v4.14)
+  const p = remise414(k, prixDe0(k)); // offres du jour (v4.14)
+  return ctJour456().o.includes(k) ? Math.max(50, Math.round((p * 0.8) / 50) * 50) : p; // CT du jour : −20 % (v4.58)
 }
 
 
@@ -255,6 +253,7 @@ export function expRefus(id) {
 
 export function envoyer(id, dest) {
   const D = DESTINATIONS[dest];
+  if (D && lock461(D)) return toast(`${D.n} : accessible après ${D.min} badges.`);
   if (!campOk430() || !D || !inBox(id) || enExpedition(id) || PROFILE.exp.length >= placesExp()) return;
   const r = () => Math.random(),
     entre = ([a, b]) => Math.round((a + r() * (b - a)) / 10) * 10,
@@ -293,6 +292,9 @@ export function recuperer(i) {
   queueSave();
   renderWallet();
   renderCampBase();
+  try {
+    recit461(x); // récit et trouvaille rare (v4.61)
+  } catch (e) {}
 }
 
 
@@ -304,17 +306,14 @@ export function renderCampBase() {
 
 /* fenêtre d’expédition : rendu par React (src/screens/overlays/ExpBox.jsx) */
 export function renderExpBox() {
-  const dispo = PROFILE.box.filter(id => BY[id] && !squad.some(s => BY[s].base === id) && !enExpedition(id) && !(typeof estTombe === 'function' && estTombe(id)));
+  const dispo = PROFILE.box.filter(id => BY[id] && !squad.some(s => BY[s].base === id) && !enExpedition(id) && !estTombe(id));
   paintOverlay('exp', { dest: EXP_DEST, dispo });
 }
-
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
-export function __init() {
 
 /* =====================================================================
    1. Accords de Résonance
    ===================================================================== */
-ACCORDS = [
+export const ACCORDS = [
   { id: 'orage', n: 'Orage', t: ['Eau', 'Électrik', 'Vol'], d: 'Tout adversaire sur une case Trempée ou dans l’eau est paralysé et subit 6 dégâts.' },
   { id: 'forge', n: 'Forge', t: ['Feu', 'Roche', 'Acier'], d: 'Vos Pokémon gagnent +2 Garde ; tout adversaire au contact d’une case Brûlante subit 5 dégâts.' },
   { id: 'seisme', n: 'Grand Séisme', t: ['Sol', 'Roche', 'Combat'], d: 'Tout adversaire au sol subit 6 dégâts et sa case devient Fissurée.' },
@@ -331,7 +330,7 @@ ACCORDS = [
 /* =====================================================================
    2. Caractère et désobéissance
    ===================================================================== */
-CARACTERES = {
+export const CARACTERES = {
   brave: ['Brave', '+2 dégâts infligés, +1 dégât subi.'],
   prudent: ['Prudent', '−2 dégâts subis, −1 dégât infligé.'],
   vif: ['Vif', '+1 Mouvement, −1 dégât infligé.'],
@@ -341,11 +340,33 @@ CARACTERES = {
 };
 
 
-caracteresChoisis = () => PREF.caracteres !== false && !(SCEN[scSel] && SCEN[scSel].tuto);
+export const caracteresChoisis = () => PREF.caracteres !== false && !(SCEN[scSel] && SCEN[scSel].tuto);
 
 
-desobeissanceChoisie = () => !!PREF.desob && isCamp() && !(SCEN[scSel] && SCEN[scSel].tuto);
+export const desobeissanceChoisie = () => !!PREF.desob && isCamp() && !(SCEN[scSel] && SCEN[scSel].tuto);
 
+
+export const niveau = k => (PROFILE.camp && PROFILE.camp[k]) || 0;
+
+
+/* =====================================================================
+   4. Expéditions
+   ===================================================================== */
+export const DESTINATIONS = {
+  foret: { n: 'Forêt de Jade', types: ['Plante', 'Insecte', 'Vol'], duree: 3, m: [150, 300], g: [0, 1], obj: ['potion', 'poke'] },
+  lac: { n: 'Lac Colère', types: ['Eau', 'Glace', 'Normal'], duree: 4, m: [200, 400], g: [1, 2], obj: ['superpotion', 'super'] },
+  grotte: { n: 'Grotte Sombre', types: ['Roche', 'Sol', 'Acier', 'Combat'], duree: 5, m: [300, 600], g: [2, 4], obj: ['hyper', 'superpotion'] },
+  tour: { n: 'Tour Cendrée', types: ['Feu', 'Spectre', 'Psy', 'Ténèbres', 'Dragon', 'Électrik', 'Poison', 'Fée'], duree: 6, m: [400, 800], g: [3, 6], obj: ['hyper'] }
+};
+
+
+export const enExpedition = id => !!(campOk430() && PROFILE.exp && BY[id] && PROFILE.exp.some(x => BY[x.id].base === BY[id].base)) || enPension416(id);
+
+
+const placesExp = () => niveau('guet');
+
+// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+export function __init() {
 
 FOURNISSEURS_ROLES.push({
   id: 'caractere',
@@ -395,26 +416,6 @@ BATIMENTS = {
     badges: [2, 4, 6]
   }
 };
-
-
-niveau = k => (PROFILE.camp && PROFILE.camp[k]) || 0;
-
-
-/* =====================================================================
-   4. Expéditions
-   ===================================================================== */
-DESTINATIONS = {
-  foret: { n: 'Forêt de Jade', types: ['Plante', 'Insecte', 'Vol'], duree: 3, m: [150, 300], g: [0, 1], obj: ['potion', 'poke'] },
-  lac: { n: 'Lac Colère', types: ['Eau', 'Glace', 'Normal'], duree: 4, m: [200, 400], g: [1, 2], obj: ['superpotion', 'super'] },
-  grotte: { n: 'Grotte Sombre', types: ['Roche', 'Sol', 'Acier', 'Combat'], duree: 5, m: [300, 600], g: [2, 4], obj: ['hyper', 'superpotion'] },
-  tour: { n: 'Tour Cendrée', types: ['Feu', 'Spectre', 'Psy', 'Ténèbres', 'Dragon', 'Électrik', 'Poison', 'Fée'], duree: 6, m: [400, 800], g: [3, 6], obj: ['hyper'] }
-};
-
-
-enExpedition = id => !!(campOk430() && PROFILE.exp && BY[id] && PROFILE.exp.some(x => BY[x.id].base === BY[id].base)) || enPension416(id);
-
-
-placesExp = () => niveau('guet');
 
 
 /* ---------- camp et expéditions : le panneau #v4Camp est rendu par React (page Camp) ---------- */

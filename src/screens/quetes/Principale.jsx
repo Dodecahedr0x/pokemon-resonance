@@ -23,7 +23,7 @@ function Chapitre({ k, gk }) {
       <span className="v4-qm-ic"><Html html={emblem(k, 'sm')} /></span>
       <div className="v4-qm-t">
         <small>{C.c}{ELITE.includes(k) ? ' · ' + (ELITE.indexOf(k) + 1) + ' / 4' : ''}</small>
-        <b>{k === 'tuto' ? 'Le premier éveil' : k === 'champ' ? 'La onzième bataille' : SCEN[k].n}</b>
+        <b>{k === 'tuto' || k === 'champ' ? C.t : SCEN[k].n}</b>
         <em>{L ? `Battre ${L.n}, ${L.t}` : 'Le combat guidé de la Professeure'}</em>
         {gi >= 0 && !won ? <Html html={rewardLine(k)} /> : null}
       </div>

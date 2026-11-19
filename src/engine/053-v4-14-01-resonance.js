@@ -21,11 +21,10 @@ import { empoisonner } from './051-v4-12-01-ct-epiques.js';
 import { rune413 } from './052-v4-13-01-roster-technique.js';
 import { encercle420 } from './060-v4-20-01-combat-intense.js';
 import { OKX455, USE455 } from './087-4-56-balls-soins-objets-de-combat-objets-tenus-e.js';
+import { resoBoss460 } from './091-4-60-boss-a-phases-lieux-secrets-pnj-itinerants.js';
 
-export let RANGS, rangOf, etoiles, rgTag, aXP, coutXP, rgLine414, notesDe, bonusMouv414, SAC_MAX, HELD_SHOP, COMBAT414, koAllie414, caseLibre414, offre414, remise414, prixHeld414;
-export let ECHOS;
-let LEG414, XP_LEG, MRG, resoOn, poidsNote, OFFRES414;
-export function __set_foeReso414(v) { return (foeReso414 = v); }
+export let COMBAT414;
+let LEG414, OFFRES414;
 
 
 export function rangId(id) {
@@ -216,7 +215,7 @@ export function foeReso414(e) {
   if (n && !e.ko)
     o.push(n >= 3 ? 'Résonance déjà déclenchée sur lui cette manche.' : `Résonance : ${n} note${n > 1 ? 's' : ''} sur 3. Encore ${3 - n} pour la déclencher.`);
   if (bossScen(B) && aXP(e)) o.push(`Il accumule la Résonance : ${e.en || 0} / ${EMAX} losanges, ${coutXP(e)} pour son attaque Experte.`);
-  return o.length ? `<p class="bp-reso">${o.join(' ')}</p>` : '';
+  return (o.length ? `<p class="bp-reso">${o.join(' ')}</p>` : '') + resoBoss460(e);
 }
 
 
@@ -228,7 +227,7 @@ export function objOk414(S, u, k) {
   if (!it || !u || u.ko || u.side !== 'a' || S.phase !== 'player' || (S.objN || 0) >= SAC_MAX || S.duel433 || bagN(k) < 1) return false;
   if (HEALS.includes(k)) return !u.acted && !u.sn && u.hp < u.mhp;
   if (it.voix && S.voix < it.voix) return false;
-  if (typeof OKX455 !== 'undefined' && OKX455[k]) return !!OKX455[k](S, u);
+  if (OKX455[k]) return !!OKX455[k](S, u);
   switch (k) {
     case 'rappel':
       return !u.acted && !u.sn && !!koAllie414(S) && !!caseLibre414(S, u);
@@ -266,7 +265,7 @@ export function pUse414(S, u, k) {
   } else if (k === 'cristal') {
     gainEn(S, u, 1, ev);
     say(ev, `Cristal Résonant : ${u.n} gagne 1 losange.`);
-  } else if (typeof USE455 !== 'undefined' && USE455[k]) {
+  } else if (USE455[k]) {
     USE455[k](S, u, ev);
   } else if (k === 'rappel') {
     const o = koAllie414(S),
@@ -347,9 +346,6 @@ function buyHeld414(k) {
   renderBag();
 }
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
-export function __init() {
-
 /* =====================================================================
    v4.14 : la Résonance au cœur du combat
    1. Rangs Faible, Moyen, Fort, Expert (d'après le coût en PC de la forme).
@@ -366,7 +362,7 @@ export function __init() {
    ===================================================================== */
 
 /* ---------- 1. rangs ---------- */
-RANGS = {
+export const RANGS = {
   faible: { n: 'Faible', i: 1, k: 'Élan', d: 'Quand il pose la première note de Résonance sur une cible, il gagne 1 losange.' },
   moyen: { n: 'Moyen', i: 2, k: 'Relance', d: 'Ses coups comptent pour 2 notes de Résonance.' },
   fort: { n: 'Fort', i: 3, k: 'Impact', d: '+25 % de dégâts sur une cible qui porte déjà une note de Résonance.' },
@@ -374,57 +370,47 @@ RANGS = {
 };
 
 
-LEG414 = new Set(LEGS.map(l => l.id));
+export const rangOf = u => rangId(u.id);
 
 
-rangOf = u => rangId(u.id);
+export const etoiles = r => '★'.repeat(RANGS[r].i);
 
 
-etoiles = r => '★'.repeat(RANGS[r].i);
-
-
-rgTag = r => `<span class="rg rg-${r}" title="Rang ${RANGS[r].n} · ${RANGS[r].k} : ${RANGS[r].d}">${etoiles(r)}</span>`;
+export const rgTag = r => `<span class="rg rg-${r}" title="Rang ${RANGS[r].n} · ${RANGS[r].k} : ${RANGS[r].d}">${etoiles(r)}</span>`;
 
 
 /* ---------- 2. attaques classées, attaques Expertes ---------- */
-XP_LEG = ['fatalfoudre', 'feusacre', 'frappepsy', 'aeroblast'];
+const XP_LEG = ['fatalfoudre', 'feusacre', 'frappepsy', 'aeroblast'];
 
  // les attaques des légendaires
-for (const k in MV) {
-  const m = MV[k];
-  if (!m || typeof m !== 'object') continue;
-  const deg = m.p > 0 || m.fix > 0;
-  m.rg = !deg ? 'soutien' : m.sig || XP_LEG.includes(k) ? 'expert' : m.fix || m.p >= 10 ? 'fort' : m.p >= 7 ? 'moyen' : 'faible';
-  if (m.rg === 'expert') m.xp = 1;
-}
 
 
-MRG = { soutien: 'Soutien', faible: 'Faible', moyen: 'Moyenne', fort: 'Forte', expert: 'Experte' };
+const MRG = { soutien: 'Soutien', faible: 'Faible', moyen: 'Moyenne', fort: 'Forte', expert: 'Experte' };
 
 
-aXP = u => !!(u && u.mv && u.mv.some(x => MV[x] && MV[x].xp));
+export const aXP = u => !!(u && u.mv && u.mv.some(x => MV[x] && MV[x].xp));
 
 
-coutXP = u => (rangOf(u) === 'expert' ? 1 : 2);
+export const coutXP = u => (rangOf(u) === 'expert' ? 1 : 2);
 
 
-resoOn = (S, u) => !!u && (u.side === 'a' || bossScen(S));
+const resoOn = (S, u) => !!u && (u.side === 'a' || bossScen(S));
 
 
-rgLine414 = u => {
+export const rgLine414 = u => {
   const r = rangOf(u);
   return `<p class="bp-tal bp-rg"><b>${RANGS[r].n} · ${RANGS[r].k}.</b> ${RANGS[r].d}</p>`;
 };
 
 
 /* ---------- 3. notes de Résonance et échos de type ---------- */
-notesDe = (S, v) => (S && v && v.notes && v.notes.r === S.round ? v.notes.n : 0);
+export const notesDe = (S, v) => (S && v && v.notes && v.notes.r === S.round ? v.notes.n : 0);
 
 
-poidsNote = u => (rangOf(u) === 'moyen' ? 2 : 1) + (u.item === 'metronome' ? 1 : 0);
+const poidsNote = u => (rangOf(u) === 'moyen' ? 2 : 1) + (u.item === 'metronome' ? 1 : 0);
 
 
-ECHOS = {
+export const ECHOS = {
   Feu: 'La cible est brûlée.',
   Eau: 'Sa case devient Trempée : de quoi préparer une réaction.',
   'Électrik': 'La cible est paralysée (sauf type Sol).',
@@ -445,6 +431,48 @@ ECHOS = {
   Normal: 'L’attaquant gagne 1 losange.'
 };
 
+export const bonusMouv414 = (S, u) => (u.item === 'mouchoir' ? 2 : 0) + (u.item === 'crinorage' ? 1 : 0) + (u.reso > 0 ? 1 : 0) - (encercle420(S, u) ? 1 : 0);
+
+ // Crin d’Orage (v4.16), Forme Résonante (v4.17), Encerclement (v4.20)
+
+/* ---------- 4. Boutique ---------- */
+export const SAC_MAX = 4;
+
+export const HELD_SHOP = {
+  sitrus: { p: 2500 },
+  rochemeteo: { p: 3000 },
+  grosseracine: { p: 3000 },
+  casquebrut: { p: 3500 },
+  lentillezoom: { p: 3500 },
+  mouchoir: { p: 4000 },
+  orbevie: { p: 4500 },
+  metronome: { g: 12 },
+  ceinturepro: { g: 18 }
+};
+
+export const koAllie414 = S => S.units.filter(o => o.side === 'a' && o.ko && !o.seg).sort((a, b) => RC(b.id) - RC(a.id) || b.mhp - a.mhp)[0];
+
+export const caseLibre414 = (S, u) => nbrK(uk(u)).find(x => S.tiles[x] && !S.tiles[x].rock && !uAt(S, x) && !(S.tiles[x].lava > 0));
+
+export const offre414 = k => offresDuJour().includes(k);
+
+export const remise414 = (k, p) => (p && offre414(k) ? Math.round((p * 0.7) / 50) * 50 : p);
+
+export const prixHeld414 = k => remise414(k, HELD_SHOP[k].p);
+
+// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+export function __init() {
+LEG414 = new Set(LEGS.map(l => l.id));
+
+
+for (const k in MV) {
+  const m = MV[k];
+  if (!m || typeof m !== 'object') continue;
+  const deg = m.p > 0 || m.fix > 0;
+  m.rg = !deg ? 'soutien' : m.sig || XP_LEG.includes(k) ? 'expert' : m.fix || m.p >= 10 ? 'fort' : m.p >= 7 ? 'moyen' : 'faible';
+  if (m.rg === 'expert') m.xp = 1;
+}
+
 
 FOURNISSEURS_DEGATS.push(
   {
@@ -463,10 +491,6 @@ FOURNISSEURS_DEGATS.push(
   { id: 'orbevie', fournir: (c, { u, m }) => u.item === 'orbevie' && (m.p > 0 || m.fix > 0) && { mul: 1.3, libelle: 'Orbe Vie' } }
 );
 
-
-bonusMouv414 = (S, u) => (u.item === 'mouchoir' ? 2 : 0) + (u.item === 'crinorage' ? 1 : 0) + (u.reso > 0 ? 1 : 0) - (encercle420(S, u) ? 1 : 0);
-
- // Crin d’Orage (v4.16), Forme Résonante (v4.17), Encerclement (v4.20)
 
 /* ---------- combat : départ, fin de manche, Harmonie ---------- */
 CROCHETS.combat.push(S => {
@@ -502,10 +526,6 @@ CROCHETS.resultat.push(r =>
     ? `<div class="res-l"><h4>Résonance</h4><div class="rl"><span>Résonances déclenchées par votre équipe</span><b>${r.reso}</b></div></div>`
     : ''
 );
-
-
-/* ---------- 4. Boutique ---------- */
-SAC_MAX = 4;
 
 
 Object.assign(ITEMS2, {
@@ -546,19 +566,6 @@ Object.assign(HELD_IMG, {
 });
 
 
-HELD_SHOP = {
-  sitrus: { p: 2500 },
-  rochemeteo: { p: 3000 },
-  grosseracine: { p: 3000 },
-  casquebrut: { p: 3500 },
-  lentillezoom: { p: 3500 },
-  mouchoir: { p: 4000 },
-  orbevie: { p: 4500 },
-  metronome: { g: 12 },
-  ceinturepro: { g: 18 }
-};
-
-
 Object.assign(SHOP, {
   baieoran: { n: 'Baie Oran', sn: 'Oran', d: 'Rend 12 PV. Coûte 1 Voix, l’action reste libre.', p: 250, cat: 'combat', img: 'oran-berry', voix: 1 },
   totalsoin: {
@@ -588,23 +595,8 @@ Object.assign(SHOP, {
 COMBAT414 = Object.keys(SHOP).filter(k => SHOP[k].cat === 'combat');
 
 
-koAllie414 = S => S.units.filter(o => o.side === 'a' && o.ko && !o.seg).sort((a, b) => RC(b.id) - RC(a.id) || b.mhp - a.mhp)[0];
-
-
-caseLibre414 = (S, u) => nbrK(uk(u)).find(x => S.tiles[x] && !S.tiles[x].rock && !uAt(S, x) && !(S.tiles[x].lava > 0));
-
-
 /* offres du jour : trois articles à −30 %, les mêmes pour toute la journée */
 OFFRES414 = { d: '', k: [] };
-
-
-offre414 = k => offresDuJour().includes(k);
-
-
-remise414 = (k, p) => (p && offre414(k) ? Math.round((p * 0.7) / 50) * 50 : p);
-
-
-prixHeld414 = k => remise414(k, HELD_SHOP[k].p);
 
 
 document.addEventListener('click', e => {

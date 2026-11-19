@@ -1,5 +1,6 @@
 import { Html } from '../../lib/html.jsx';
 import { useOverlay } from './dialogsStore.js';
+import { Dialogue } from './Fenetre.jsx';
 import { BY } from '../../engine/009-03-pokemon.js';
 import { medal, tc } from '../../engine/014-08-outils.js';
 import { HELD_IMG, ITM } from '../../engine/032-v4-00-socle.js';
@@ -20,8 +21,7 @@ export default function TdrBox() {
 function Choix({ cands, pick }) {
   const n = pick.length;
   return (
-    <div className="sv-card st-card tdr-card" role="dialog" aria-modal="true" aria-labelledby="tdrT">
-      <button className="sh-x" type="button" data-tdr="x" aria-label="Fermer"><svg><use href="#i-x" /></svg></button>
+    <Dialogue className="sv-card st-card tdr-card" titre="tdrT" fermer={{ 'data-tdr': 'x' }}>
       <p className="kick">Après-jeu</p>
       <h2 className="h2" id="tdrT">Tour de Résonance</h2>
       <p className="d">Choisissez 4 Pokémon pour cette ascension. Pas de budget ici : à vous de trouver les bonnes synergies.</p>
@@ -41,14 +41,14 @@ function Choix({ cands, pick }) {
       <div className="tdr-a">
         <button type="button" className="b b-gold" data-tdr="go" disabled={n !== 4}>Commencer l’ascension · {n} / 4</button>
       </div>
-    </div>
+    </Dialogue>
   );
 }
 
 // Récompense après un étage franchi.
 function Recompense({ floor, offer }) {
   return (
-    <div className="sv-card st-card tdr-card" role="dialog" aria-modal="true" aria-labelledby="tdrT">
+    <Dialogue className="sv-card st-card tdr-card" titre="tdrT">
       <p className="kick">Tour de Résonance · étage {floor - 1} franchi</p>
       <h2 className="h2" id="tdrT">Choisissez une récompense</h2>
       <div className="tdr-rw">
@@ -66,6 +66,6 @@ function Recompense({ floor, offer }) {
         ))}
       </div>
       <p className="d">Ensuite : étage {floor}{floor % 5 === 0 ? ', gardé par une légende' : ''}.</p>
-    </div>
+    </Dialogue>
   );
 }

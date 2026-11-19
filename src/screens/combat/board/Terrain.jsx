@@ -5,15 +5,12 @@ import { tileTip } from '../../../engine/026-20-campagne-tutoriel-son.js';
 import { fieldSvg } from '../../../engine/027-21-arene-a-lecran.js';
 import { useBoard } from './boardStore.js';
 import { SvgHtml } from './svgHtml.jsx';
+import { PE, lref } from './partage.js';
 
 // Sol du plateau : peinture v4.71, socles v4.77, cases, textures, terrain des stades, décor,
 // reflets de l'eau, lumière, repères A–H / 1–6.
 
-export const PE = { pointerEvents: 'none' };
-
-// références gardées par le moteur (L.tiles, L.t[k]…) : fonctions stables, pas de détachement inutile
-const refs = {};
-export const lref = name => refs[name] || (refs[name] = n => (L[name] = n));
+// références de cases gardées par le moteur (L.t[k], L.tx[k]) : fonctions stables
 const tRefs = {},
   txRefs = {};
 const tRef = k => tRefs[k] || (tRefs[k] = n => n && (L.t[k] = n));

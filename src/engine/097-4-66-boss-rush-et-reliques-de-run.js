@@ -3,25 +3,19 @@
 import { BY, SCEN } from './009-03-pokemon.js';
 import { isCamp } from './011-05-etat-de-partie.js';
 import { ARENAS, BADGES } from './013-07-arenes.js';
-import { $, toast } from './014-08-outils.js';
+import { $, ecrireLS, lireLS, toast } from './014-08-outils.js';
 import { CROCHETS } from './015-v4-8-00-crochets.js';
-import { squad, vBonus } from './020-13-equipe-cartes.js';
+import { squad } from './020-13-equipe-cartes.js';
 import { heal } from './021-14-moteur-combat.js';
-import { __set_scenLock, scenLock } from './022-15-systemes-objets-liens-ia.js';
-import { B, backToPrep, battleOpts, launch, scSel } from './024-17-interface-combat.js';
+import { B, backToPrep, goFight, launch } from './024-17-interface-combat.js';
 import { esc } from './025-19-sauvegardes.js';
 import { sfx, vibe } from './026-20-campagne-tutoriel-son.js';
 import { overlay } from './030-24-prestige-mise-en-scene.js';
 import { fermer } from '../screens/overlays/tempStore.js';
-import { goFight } from './036-v4-04-accueil.js';
 import { refreshAccueil } from '../screens/accueil/accueilStore.js';
 import { FOURNISSEURS_DEGATS } from './044-v4-5-01-moteur-tactique.js';
-import { __set_defiLancement, defiLancement, tailleEquipe } from './048-v4-9-01-rejouabilite.js';
-import { NEWS416 } from './056-v4-16-1-01-finitions.js';
-import { __set_tournoiTeam417, tournoiTeam417 } from './057-v4-17-01-compagnons-et-resonance.js';
+import { tailleEquipe } from './048-v4-9-01-rejouabilite.js';
 
-export let RELIC466;
-let BR466_KEY, brSt466, brSave466, BR466, brRun466, brBosses466, brOk466, brRel466, brNom466, scenLockOld466, defiLancementOld466, tournoiTeamOld466;
 
 
 function brPropose466(run) {
@@ -86,14 +80,20 @@ export function brData466() {
 }
 
 
-function brBar466() {
-  refreshAccueil();
+/** Boss Rush armé : le run en cours, sinon null. Le moteur s’en sert pour ouvrir le boss du moment,
+    passer les défis de campagne et figer l’équipe (scenLock, defiLancement, tournoiTeam417). */
+export function brArme466() {
+  return (BR466 && BR466.armed && brRun466()) || null;
 }
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
-export function __init() {
 
-RELIC466 = [
+/** Le scénario k est-il le boss à affronter maintenant dans le Boss Rush armé ? */
+export function brBoss466(k) {
+  const run = brArme466();
+  return !!run && k === run.boss[run.i];
+}
+
+export const RELIC466 = [
   { id: 'ecaille', n: 'Écaille ardente', d: '+10 % de dégâts pour toute l’équipe.' },
   { id: 'petale', n: 'Pétale de vie', d: 'Fin de manche : l’équipe récupère 5 % de ses PV max.' },
   { id: 'cristal', n: 'Cristal de Résonance', d: 'Chaque combat, toute l’équipe commence avec 1 losange.' },
@@ -104,72 +104,39 @@ RELIC466 = [
 ];
 
 
-BR466_KEY = 'res-br466';
+const BR466_KEY = 'res-br466';
 
 
-brSt466 = () => {
-  try {
-    return JSON.parse(localStorage.getItem(BR466_KEY) || 'null') || { best: 0, won: 0, run: null };
-  } catch (e) {
-    return { best: 0, won: 0, run: null };
-  }
+const brSt466 = () => lireLS(BR466_KEY, { best: 0, won: 0, run: null });
+
+
+const brSave466 = s => {
+  ecrireLS(BR466_KEY, s);
 };
 
 
-brSave466 = s => {
-  try {
-    localStorage.setItem(BR466_KEY, JSON.stringify(s));
-  } catch (e) {}
-};
+const BR466 = { armed: false };
 
 
-BR466 = { armed: false };
+const brRun466 = () => brSt466().run;
 
 
-brRun466 = () => brSt466().run;
-
-
-brBosses466 = () => {
+const brBosses466 = () => {
   const L = isCamp() ? ARENAS.filter((a, i) => BADGES.includes(i) || BADGES.includes(a.k)) : ARENAS; // BADGES : numéros d’arène (0 à 7)
   return L.slice(-5).map(a => a.k);
 };
 
 
-brOk466 = () => (isCamp() ? BADGES.length >= 5 : true);
+const brOk466 = () => (isCamp() ? BADGES.length >= 5 : true);
 
 
-brRel466 = run => (run && run.rel ? run.rel : []);
+const brRel466 = run => (run && run.rel ? run.rel : []);
 
 
-brNom466 = k => (SCEN[k] ? SCEN[k].n : k);
+const brNom466 = k => (SCEN[k] ? SCEN[k].n : k);
 
-
-/* le moteur : contournements pendant un Boss Rush, équipe figée */
-scenLockOld466 = scenLock;
-
-
-__set_scenLock(function (k) {
-  return BR466.armed && brRun466() && k === brRun466().boss[brRun466().i] ? null : scenLockOld466.apply(this, arguments);
-});
-
-
-defiLancementOld466 = defiLancement;
-
-
-__set_defiLancement(function () {
-  return BR466.armed && brRun466() ? null : defiLancementOld466.apply(this, arguments);
-});
-
-
-tournoiTeamOld466 = tournoiTeam417;
-
-
-__set_tournoiTeam417(function () {
-  const run = brRun466();
-  if (BR466.armed && run && scSel === run.boss[run.i]) return { team: run.team, voix: vBonus(), opts: battleOpts() };
-  return tournoiTeamOld466.apply(this, arguments);
-});
-
+// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+export function __init() {
 
 CROCHETS.combat.push(S => {
   const run = brRun466();
@@ -293,7 +260,7 @@ document.addEventListener(
       BR466.armed = false;
       toast('Boss Rush abandonné.');
       fermer('br466o');
-      return brBar466();
+      return refreshAccueil();
     }
     if (v.startsWith('rel:') && st.run && st.run.pend) {
       const id = v.slice(4);
@@ -310,6 +277,4 @@ document.addEventListener(
   true
 );
 
-
-NEWS416.unshift(['i-medal', 'Boss Rush et reliques', 'Enchaînez 5 boss d’arène avec la même équipe, sans soin entre les combats. Après chaque boss, choisissez une relique parmi trois. Lancez le défi depuis la bannière de l’Accueil (5 badges).']);
 }

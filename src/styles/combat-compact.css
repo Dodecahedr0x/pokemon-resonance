@@ -192,3 +192,38 @@ html body #cbResult>.res-card{width:min(640px,100%);padding:22px;gap:14px;border
 }
 @keyframes epUp{from{transform:translateY(40px);opacity:0}}
 @media (prefers-reduced-motion:reduce){html body #evoPick .ep-card{animation:none}}
+
+/* ================= astuce du Prof. pendant le combat =================
+   .pk-dlg impose position:relative : l'astuce tombait dans le flux, sous le tiroir de commandes,
+   et allongeait la page d'un grand vide. Elle reste flottante, en haut, au-dessus du plateau. */
+html:not(#pkz) body:not(#pkz) #tip429.pk-dlg{position:fixed!important}
+
+/* ================= téléphone : HUD et tiroir désencombrés ================= */
+@media (max-width:700px){
+  /* HUD sur deux lignes nettes : phase · adversaire · Voix / manche · conditions · réglages */
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-top{display:flex!important;flex-wrap:wrap!important;align-items:center;gap:6px 8px!important;height:auto!important}
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-top .bt-ph{order:1}
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-top #bScen{order:2;flex:1 1 0;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px!important}
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-top .voix{order:3;flex:none}
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-top::after{content:"";order:4;flex:0 0 100%;height:0}
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-top .voix>span{display:none}
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-top #bRound{order:5;flex:none;font-size:11px}
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-top #bWx{order:6;flex:1 1 0;min-width:0;display:flex!important;flex-wrap:nowrap!important;gap:5px;overflow-x:auto;scrollbar-width:none;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 18px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 18px),transparent)}
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-top #bWx::-webkit-scrollbar{display:none}
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-top #bWx .chip{flex:none;white-space:nowrap;font-size:11px!important}
+  /* soleil et heure sont déjà sur le plateau (pastille du ciel) */
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])):has(#bBoard>.ciel430) #cbBattle .bt-top #bWx .chip:not(.chip-vent):not(.chip-acc){display:none!important}
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-top #bFast{order:7;flex:none;min-width:40px;height:36px!important}
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-top #bQuit{order:8;flex:none;height:36px!important}
+
+  /* pied du tiroir sur une seule ligne : actions rapides (défilent), puis outils du plateau.
+     La pastille de phase du pied répète l'en-tête du panneau (Déplacer · Agir · Terminer). */
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .bt-foot{display:flex!important;flex-wrap:nowrap!important;align-items:center;gap:8px!important}
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .bt-foot .fl478-pied{display:none!important}
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .bt-foot #qa443{order:1;flex:1 1 auto;min-width:0;margin:0!important;overflow-x:auto;scrollbar-width:none;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 20px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 20px),transparent)}
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .bt-foot #qa443::-webkit-scrollbar{display:none}
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .bt-foot #qa443>button{flex:none;height:40px}
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .bt-foot #qa443>button:last-child{margin-right:18px}
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .bt-foot .bt444.in-foot{order:2;flex:none;gap:4px!important}
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .bt-foot .bt444.in-foot button{width:36px!important;height:40px!important}
+}

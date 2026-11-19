@@ -8,6 +8,15 @@
         "value": "cubic-bezier(.3, 1.5, .5, 1)",
         "createdAt": "2026-11-18T16:53:24.030Z",
         "reason": "Claude: existing game styling from the original v4.73 module, kept identical during the React port (not a new design choice)"
+      },
+      {
+        "rule": "gradient-text",
+        "value": "*",
+        "files": [
+          "src/styles/combat-compact.css"
+        ],
+        "createdAt": "2026-11-19T08:57:35.143Z",
+        "reason": "Claude: the gold gradient on the round banner title is the game's existing banner style (game.css .tbn b) and appears in the approved battle mockups"
       }
     ]
   }

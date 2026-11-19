@@ -20,8 +20,7 @@ import { aXP } from './053-v4-14-01-resonance.js';
 import { chapJ416, extraLine416, jdSetup416, jdTick416, leadJ416, lockJ416, roamPlaces416 } from './055-v4-16-01-johto-vivant.js';
 import { PLACES_H, chapH419, hRewardLine419, hoennOuvert, leadH419, regionH419 } from './059-v4-19-01-hoenn.js';
 
-export let JGYMS, johtoOuvert, PLACES_J, JCHAIN, placesR, JMAP_SVG;
-let NEW415, JLEAD, JCHAMP_L, JREW, JARENAS;
+export let PLACES_J, JMAP_SVG;
 
  // v4.46 : Mode Libre compris
 export function regionJ415() {
@@ -35,13 +34,6 @@ export function regionJ415() {
 
 export function routeNom() {
   return regionH419() ? 'Route 104' : regionJ415() ? 'Route 32' : 'Route 29'; // Hoenn (v4.19)
-}
-
-
-function jNext415() {
-  for (let i = 0; i < 8; i++) if (!(PROFILE.johto || []).includes(i)) return ['j' + (i + 1), `Johto · Arène ${JGYMS[i]}`];
-  if (!PROFILE.jchamp) return ['jchamp', 'Maître de Johto'];
-  return null;
 }
 
 
@@ -189,9 +181,6 @@ export function regionUi415() {
   setRoute({ sign: routeNom() }); // nom affiché sur la route (Route.jsx)
 }
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
-export function __init() {
-
 /* =====================================================================
    v4.15 : Johto
    - 20 Pokémon de Johto (Route 32, après la Championne en Campagne).
@@ -201,71 +190,11 @@ export function __init() {
      Charme Chroma chez le marchand rare.
    ===================================================================== */
 
-/* ---------- capacités et talents des nouvelles familles ---------- */
-Object.assign(CIBLE412, {
-  toxweb(S, u, v, x, mk, ev) {
-    empoisonner(S, v, ev);
-    if (v.tal === 'regardvif' || rune413(S, v)) return;
-    v.web = Math.max(v.web, 2);
-    say(ev, `${v.n} est englué.`);
-  },
-  affaiblit(S, u, v, x, mk, ev) {
-    v.affaibli = Math.max(v.affaibli || 0, 2);
-    say(ev, `${v.n} est intimidé : −3 dégâts pendant 2 manches.`);
-  },
-  bourbier(S, u, v, x, mk, ev) {
-    if (v.tal === 'regardvif' || rune413(S, v)) return;
-    v.web = Math.max(v.web, 2);
-  }
-});
-
-
-Object.assign(SOI412, {
-  carapace(S, u, ev) {
-    u.guard = Math.max(u.guard, 3);
-    nbrK(uk(u)).forEach(x => {
-      if (S.tiles[x] && !S.tiles[x].rock) setMark(S, x, 'brulant', u.uid);
-    });
-    say(ev, `${u.n} durcit sa carapace : +2 Garde, cases voisines Brûlantes.`);
-  }
-});
-
-
-FOURNISSEURS_DEGATS.push(
-  { id: 'nocturne', fournir: (c, { S, u }) => u.tal === 'nocturne' && S && heureDe(S) === 'nuit' && { mul: 1.25, libelle: 'Nocturne' } },
-  { id: 'forcepure', fournir: (c, { u, m }) => u.tal === 'forcepure' && m.r === 1 && m.p > 0 && { mul: 1.3, libelle: 'Force Pure' } }
-);
-
-
-NEW415 = ['hoothoot', 'mimigal', 'loupio', 'natu', 'marill', 'granivol', 'axoloto', 'scarhino', 'limagma', 'marcacrin'];
-
-
-/* ---------- chromatiques ---------- */
-Object.assign(ICO414, {
-  'shiny-charm':
-    'data:image/svg+xml;charset=utf-8,' +
-    encodeURIComponent(
-      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path d="M24 4l4 12 12 4-12 4-4 12-4-12-12-4 12-4z" fill="#ffd75e" stroke="#8a6a12" stroke-width="2" stroke-linejoin="round"/><path d="M37 30l2 5 5 2-5 2-2 5-2-5-5-2 5-2z" fill="#9be7ff" stroke="#2a6f8a" stroke-width="1.5" stroke-linejoin="round"/><path d="M11 30l1.5 3.5L16 35l-3.5 1.5L11 40l-1.5-3.5L6 35l3.5-1.5z" fill="#ffb3e0" stroke="#7b2d58" stroke-width="1.5" stroke-linejoin="round"/></svg>'
-    )
-});
-
-
-SHOP.charme = {
-  n: 'Charme Chroma',
-  sn: 'Charme',
-  d: 'Objet clé : dans les hautes herbes, les Pokémon chromatiques apparaissent trois fois plus souvent. Un seul suffit.',
-  g: 25,
-  cat: 'rares',
-  img: 'shiny-charm',
-  cle: 1
-};
-
-
 /* ---------- Johto : arènes, maîtres, récompenses ---------- */
-JGYMS = ['Vol', 'Insecte', 'Normal', 'Spectre', 'Combat', 'Acier', 'Glace', 'Dragon'];
+export const JGYMS = ['Vol', 'Insecte', 'Normal', 'Spectre', 'Combat', 'Acier', 'Glace', 'Dragon'];
 
 
-JLEAD = [
+const JLEAD = [
   {
     n: 'Zéphyrine Altair',
     t: 'la Danseuse des Vents',
@@ -325,7 +254,7 @@ JLEAD = [
 ];
 
 
-JCHAMP_L = {
+const JCHAMP_L = {
   n: 'Orion Céleste',
   t: 'Maître de Johto',
   q: 'Kanto vous a couronné. Johto, lui, vous juge.',
@@ -334,7 +263,7 @@ JCHAMP_L = {
 };
 
 
-JREW = [
+const JREW = [
   { item: 'lentillezoom', g: 3 },
   { item: 'casquebrut', g: 3 },
   { item: 'sitrus', g: 3 },
@@ -346,7 +275,7 @@ JREW = [
 ];
 
 
-JARENAS = [
+const JARENAS = [
   {
     k: 'j1',
     rule: 'jvol',
@@ -495,6 +424,74 @@ JARENAS = [
 ];
 
 
+export const johtoOuvert = () => PROFILE.elite >= 5;
+
+
+export const JCHAIN = ['jwild', 'j1', 'j2', 'j3', 'j4', 'j5', 'j6', 'j7', 'j8', 'jchamp'];
+
+
+export const placesR = () => (V4.region === 'hoenn' ? PLACES_H : V4.region === 'johto' ? [...PLACES_J, ...roamPlaces416()] : PLACES);
+
+// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+export function __init() {
+
+/* ---------- capacités et talents des nouvelles familles ---------- */
+Object.assign(CIBLE412, {
+  toxweb(S, u, v, x, mk, ev) {
+    empoisonner(S, v, ev);
+    if (v.tal === 'regardvif' || rune413(S, v)) return;
+    v.web = Math.max(v.web, 2);
+    say(ev, `${v.n} est englué.`);
+  },
+  affaiblit(S, u, v, x, mk, ev) {
+    v.affaibli = Math.max(v.affaibli || 0, 2);
+    say(ev, `${v.n} est intimidé : −3 dégâts pendant 2 manches.`);
+  },
+  bourbier(S, u, v, x, mk, ev) {
+    if (v.tal === 'regardvif' || rune413(S, v)) return;
+    v.web = Math.max(v.web, 2);
+  }
+});
+
+
+Object.assign(SOI412, {
+  carapace(S, u, ev) {
+    u.guard = Math.max(u.guard, 3);
+    nbrK(uk(u)).forEach(x => {
+      if (S.tiles[x] && !S.tiles[x].rock) setMark(S, x, 'brulant', u.uid);
+    });
+    say(ev, `${u.n} durcit sa carapace : +2 Garde, cases voisines Brûlantes.`);
+  }
+});
+
+
+FOURNISSEURS_DEGATS.push(
+  { id: 'nocturne', fournir: (c, { S, u }) => u.tal === 'nocturne' && S && heureDe(S) === 'nuit' && { mul: 1.25, libelle: 'Nocturne' } },
+  { id: 'forcepure', fournir: (c, { u, m }) => u.tal === 'forcepure' && m.r === 1 && m.p > 0 && { mul: 1.3, libelle: 'Force Pure' } }
+);
+
+
+/* ---------- chromatiques ---------- */
+Object.assign(ICO414, {
+  'shiny-charm':
+    'data:image/svg+xml;charset=utf-8,' +
+    encodeURIComponent(
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path d="M24 4l4 12 12 4-12 4-4 12-4-12-12-4 12-4z" fill="#ffd75e" stroke="#8a6a12" stroke-width="2" stroke-linejoin="round"/><path d="M37 30l2 5 5 2-5 2-2 5-2-5-5-2 5-2z" fill="#9be7ff" stroke="#2a6f8a" stroke-width="1.5" stroke-linejoin="round"/><path d="M11 30l1.5 3.5L16 35l-3.5 1.5L11 40l-1.5-3.5L6 35l3.5-1.5z" fill="#ffb3e0" stroke="#7b2d58" stroke-width="1.5" stroke-linejoin="round"/></svg>'
+    )
+});
+
+
+SHOP.charme = {
+  n: 'Charme Chroma',
+  sn: 'Charme',
+  d: 'Objet clé : dans les hautes herbes, les Pokémon chromatiques apparaissent trois fois plus souvent. Un seul suffit.',
+  g: 25,
+  cat: 'rares',
+  img: 'shiny-charm',
+  cle: 1
+};
+
+
 JARENAS.forEach((a, i) => {
   SCEN[a.k] = Object.assign({ n: `Arène ${JGYMS[i]}`, lvl: `Johto · Arène ${i + 1} · Badge ${JGYMS[i]}`, bio: 'arene', johto: i, at: JGYMS[i] }, a);
 });
@@ -544,9 +541,6 @@ SCEN.jlac = {
   ],
   d: 'Un Léviator rouge sème la panique sur le lac. Affaiblissez-le sous 25 % de ses PV, immobilisez-le, puis capturez-le au contact : il rejoindra votre Box en chromatique.'
 };
-
-
-johtoOuvert = () => PROFILE.elite >= 5;
 
 
 CROCHETS.progres.push((S, rew, win) => {
@@ -605,19 +599,13 @@ PLACES_J = [
 PLACES_J.forEach(p => (PL[p.id] = p));
 
 
-JCHAIN = ['jwild', 'j1', 'j2', 'j3', 'j4', 'j5', 'j6', 'j7', 'j8', 'jchamp'];
-
-
-placesR = () => (V4.region === 'hoenn' ? PLACES_H : V4.region === 'johto' ? [...PLACES_J, ...roamPlaces416()] : PLACES);
-
-
 document.addEventListener('click', e => {
   const b = e.target.closest('.v4-reg [data-reg]');
   if (!b) return;
   V4.region = b.dataset.reg;
   V4.mapSel = null;
   renderMap();
-  if (typeof setTod === 'function') setTod(TOD);
+  setTod(TOD);
 });
 
 

@@ -5,6 +5,7 @@ import { SCEN } from './009-03-pokemon.js';
 import { BADGE_REWARD, ITEMS2, PROFILE } from './011-05-etat-de-partie.js';
 import { ARENAS } from './013-07-arenes.js';
 import { $, RM } from './014-08-outils.js';
+import { crochet } from './015-v4-8-00-crochets.js';
 import { badgeSvg } from './019-12-ligue.js';
 import { ELITE, scenLock } from './022-15-systemes-objets-liens-ia.js';
 import { nextGoal } from './026-20-campagne-tutoriel-son.js';
@@ -17,14 +18,17 @@ import { fleches430 } from './065-v4-30-01-camp-et-tactique.js';
 import { carteBatie, refreshCarte } from '../screens/carte/carteStore.js';
 
 // Page Carte rendue par React (src/screens/carte/) : gabarit, tracés, marqueurs, panneaux.
-export let PLACES, PL, CHAIN, STATE_N, MAP_SVG;
+export let PL, MAP_SVG;
 let mapBuilt;
-export function __set_renderMap(v) { return (renderMap = v); }
+
+
+/** Nom du combat final sur la carte et dans la liste des combats (Selection.jsx). */
+export const FINALE_N = 'Finale · Championne';
 
 
 export function placeName(p) {
   if (p.n) return p.n;
-  if (p.id === 'champ') return 'Finale · Championne';
+  if (p.id === 'champ') return FINALE_N;
   return SCEN[p.id] ? SCEN[p.id].n : p.id;
 }
 
@@ -89,12 +93,14 @@ export function buildMap() {
 export function renderMap() {
   if (!V4.region) V4.region = /^h/.test(nextGoal()[0]) ? 'hoenn' : /^j/.test(nextGoal()[0]) ? 'johto' : 'kanto'; // v4.15, v4.19
   buildMap();
-  if (!mapBuilt) return;
-  // les marqueurs étaient dessinés avant le choix du lieu par défaut : on garde l'ancienne sélection pour eux
-  const marksSel = V4.mapSel;
-  if (!V4.mapSel || !placesR().some(p => p.id === V4.mapSel)) V4.mapSel = (placesR().find(p => placeState(p) === 'next') || placesR()[0]).id;
-  regionUi415(); // v4.15
-  refreshCarte({ marksSel });
+  if (mapBuilt) {
+    // les marqueurs étaient dessinés avant le choix du lieu par défaut : on garde l'ancienne sélection pour eux
+    const marksSel = V4.mapSel;
+    if (!V4.mapSel || !placesR().some(p => p.id === V4.mapSel)) V4.mapSel = (placesR().find(p => placeState(p) === 'next') || placesR()[0]).id;
+    regionUi415(); // v4.15
+    refreshCarte({ marksSel });
+  }
+  crochet('carte');
 }
 
 
@@ -106,12 +112,6 @@ export function rewardLine(k) {
 }
 
 
-// Panneau du lieu choisi (src/screens/carte/MapInfo.jsx) : nouveau rendu de la page.
-export function renderMapInfo() {
-  refreshCarte();
-}
-
-
 export function centerMap() {
   const sc = $('#mapSc'),
     mk = $(`#mapMarks [data-place="${V4.mapSel}"]`);
@@ -119,11 +119,8 @@ export function centerMap() {
   fleches430(); // flèches de défilement (v4.30)
 }
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
-export function __init() {
-
 /* ---------- Carte de la région (dessin original) ---------- */
-PLACES = [
+export const PLACES = [
   { id: 'tuto', x: 115, y: 522, n: 'Laboratoire Sorbier', s: 'Prologue', grp: 'aventure' },
   { id: 'wild', x: 205, y: 462, n: 'Route 29', s: 'Hautes herbes · captures', grp: 'route' },
   { id: 'a1', x: 335, y: 428, grp: 'aventure' },
@@ -143,13 +140,15 @@ PLACES = [
 ];
 
 
+export const CHAIN = ['tuto', 'wild', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 'a8', 'elite', 'champ'];
+
+
+export const STATE_N = { next: 'En cours', done: 'Terminé', lock: 'Verrouillé', open: 'Disponible' };
+
+// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+export function __init() {
+
 PL = Object.fromEntries(PLACES.map(p => [p.id, p]));
-
-
-CHAIN = ['tuto', 'wild', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 'a8', 'elite', 'champ'];
-
-
-STATE_N = { next: 'En cours', done: 'Terminé', lock: 'Verrouillé', open: 'Disponible' };
 
 
 MAP_SVG = (() => {

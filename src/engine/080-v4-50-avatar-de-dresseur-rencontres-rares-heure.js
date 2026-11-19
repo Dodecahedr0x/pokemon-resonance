@@ -2,8 +2,9 @@
 
 import { TYPES } from './004-01-donnees.js';
 import { ITEMS2, PROFILE } from './011-05-etat-de-partie.js';
-import { toast } from './014-08-outils.js';
-import { TOD, __set_setTod, setTod } from './017-10-accueil-route.js';
+import { ecrireLS, toast } from './014-08-outils.js';
+import { CROCHETS } from './015-v4-8-00-crochets.js';
+import { TOD } from './017-10-accueil-route.js';
 import { queueSave } from './025-19-sauvegardes.js';
 import { PREF, savePref, sfx, vibe } from './026-20-campagne-tutoriel-son.js';
 import { avatar } from './031-25-v3-parcours-accueil.js';
@@ -12,13 +13,11 @@ import { renderWallet } from './035-v4-03-interface.js';
 import { renderMap } from './037-v4-05-carte.js';
 import { renderParams } from './040-v4-08-parametres.js';
 import { placesR } from './054-v4-15-01-johto.js';
-import { NEWS416 } from './056-v4-16-1-01-finitions.js';
 import { graine417, meteoJour417 } from './057-v4-17-01-compagnons-et-resonance.js';
 import { poolRegion421 } from './061-v4-21-01-capture-partout.js';
 import { setRoute } from '../screens/accueil/accueilStore.js';
 
-export let rareW450, AVT450, IM450, TH450;
-let RARE450, setTodOld450;
+let RARE450;
 
 
 function av450(cls) {
@@ -74,9 +73,7 @@ export function trSt450() {
 
 
 function trSave450(s) {
-  try {
-    localStorage.setItem('res-tr450', JSON.stringify(s));
-  } catch (e) {}
+  ecrireLS('res-tr450', s);
 }
 
 
@@ -147,11 +144,26 @@ function trRecolte450(sp) {
   renderMap();
 }
 
+/* ---------- 1. avatar de dresseur ---------- */
+export const AVT450 = () => (PREF.av450 && TYPES[PREF.av450.e] ? PREF.av450 : null);
+
+export const rareW450 = mon => (IM450() ? rareInfo450(mon.id).m : 1);
+
+export const IM450 = () => PREF.rare450 !== 0;
+
+/* ---------- 3. trouvailles cachées sur la carte ---------- */
+export const TH450 = {
+  nuit: 'Éclat lunaire',
+  matin: 'Rosée du matin',
+  pluie: 'Perle de pluie',
+  soleil: 'Pépite solaire',
+  grele: 'Cristal de givre',
+  sable: 'Grain d’ambre',
+  jour: 'Éclat de lumière'
+};
+
 // Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
 export function __init() {
-
-/* ---------- 1. avatar de dresseur ---------- */
-AVT450 = () => (PREF.av450 && TYPES[PREF.av450.e] ? PREF.av450 : null);
 
 
 // emblème du dresseur dans la barre du haut (#v4Av) : rendu par React (src/components/TopBar.jsx)
@@ -171,41 +183,15 @@ RARE450 = [
 ];
 
 
-rareW450 = mon => (IM450() ? rareInfo450(mon.id).m : 1);
-
-
-IM450 = () => PREF.rare450 !== 0;
-
-
 /* la fiche de rencontre signale une apparition rare : rendu par React (src/screens/overlays/Enc.jsx) */
 
 
-setTodOld450 = setTod;
-
-
-__set_setTod(function (t) {
-  setTodOld450(t);
-  try {
-    route450();
-  } catch (e) {}
-});
+CROCHETS.heure.push(route450);
 
 
 try {
   route450();
 } catch (e) {}
-
-
-/* ---------- 3. trouvailles cachées sur la carte ---------- */
-TH450 = {
-  nuit: 'Éclat lunaire',
-  matin: 'Rosée du matin',
-  pluie: 'Perle de pluie',
-  soleil: 'Pépite solaire',
-  grele: 'Cristal de givre',
-  sable: 'Grain d’ambre',
-  jour: 'Éclat de lumière'
-};
 
 
 // trouvailles cachées sur la carte (.sp450) : rendues par React (src/screens/carte/Marks.jsx)
@@ -244,9 +230,4 @@ document.addEventListener('click', e => {
   route450();
 });
 
-
-NEWS416.unshift(['i-star', 'Rencontres rares, trouvailles et avatar', 'Certains Pokémon sortent selon l’heure et la météo du jour, des trouvailles scintillent sur la carte (une fois par jour) et vous pouvez choisir l’emblème de votre dresseur dans Paramètres.', null]);
-
-
-NEWS416.splice(8);
 }

@@ -1,5 +1,4 @@
-import { useSyncExternalStore } from 'react';
-import { flushSync } from 'react-dom';
+import { canal } from '../../../lib/store.js';
 
 // Plateau de combat (#bSvg) : un canal par calque, pour qu'un rendu ne reconstruise que ce
 // qui a changé. Le moteur garde ses fonctions (buildBoard, renderBoard…) qui appellent ce
@@ -33,29 +32,17 @@ const fresh = (n, patch) => ({
 let S = fresh(0);
 let EVO = { on: false, fast: false, ox: null, oy: null, fx: null };
 
-const chans = {};
-const ch = name => {
-  let c = chans[name];
-  if (!c) {
-    c = chans[name] = { v: 0, ls: new Set() };
-    c.sub = l => (c.ls.add(l), () => c.ls.delete(l));
-  }
-  return c;
-};
+const versions = {}; // une version par calque
+const c = canal();
 function emit(names) {
-  names.forEach(n => ch(n).v++);
-  const run = () => names.forEach(n => ch(n).ls.forEach(l => l()));
-  try {
-    flushSync(run);
-  } catch {
-    run();
-  }
+  names.forEach(n => (versions[n] = (versions[n] || 0) + 1));
+  c.emit();
 }
+const suivre = name => c.use(() => versions[name] || 0);
 
 export const getBoard = () => S;
 export function useBoard(name) {
-  const c = ch(name);
-  useSyncExternalStore(c.sub, () => c.v);
+  suivre(name);
   return S;
 }
 
@@ -101,8 +88,7 @@ let H = {
 
 export const getHost = () => H;
 export function useHost() {
-  const c = ch('host');
-  useSyncExternalStore(c.sub, () => c.v);
+  suivre('host');
   return H;
 }
 export function hostSet(patch) {
@@ -165,10 +151,8 @@ export function tokCl(T, c, on) {
 export const tokHas = (T, c) => !!(T && T.c && T.c.includes(c));
 
 /* ---------- #evoFx : cinématique d'évolution ---------- */
-export const getEvo = () => EVO;
 export function useEvo() {
-  const c = ch('evo');
-  useSyncExternalStore(c.sub, () => c.v);
+  suivre('evo');
   return EVO;
 }
 export function evoSet(patch) {

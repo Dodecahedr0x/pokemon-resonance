@@ -1,7 +1,8 @@
 import { memo } from 'react';
 import { useBoard, useHost } from './boardStore.js';
 import Outils444 from './Outils444.jsx';
-import { Cases, Decor, Eau, Lumiere, PE, Peinture, Reperes, Socles, Terrain, Textures, lref } from './Terrain.jsx';
+import { Cases, Decor, Eau, Lumiere, Peinture, Reperes, Socles, Terrain, Textures } from './Terrain.jsx';
+import { PE, lref } from './partage.js';
 import { CouchePk, Intentions, Loupe, Marques, Noms, Obstacles, Surbrillances } from './Calques.jsx';
 import Defs from './Defs.jsx';
 import EvoFx from './EvoFx.jsx';

@@ -2,12 +2,12 @@
 
 import { GYMS } from './004-01-donnees.js';
 import { SCEN } from './009-03-pokemon.js';
+import { ecrireLS } from './014-08-outils.js';
 import { BH, BW, K, P, say, setMark, uAt } from './021-14-moteur-combat.js';
+import { LEAD } from './030-24-prestige-mise-en-scene.js';
 import { jSetup415, jTick415 } from './054-v4-15-01-johto.js';
 
-export let ARENAS, TERR, veiled, BADGES;
-let LAVAW;
-export function __set_arenaSetup(v) { return (arenaSetup = v); }
+export let TERR, BADGES;
 export function __set_BADGES(v) { return (BADGES = v); }
 
 
@@ -253,17 +253,12 @@ export function winBadge(i) {
   if (BADGES.includes(i)) return false;
   BADGES.push(i);
   BADGES.sort((a, b) => a - b);
-  try {
-    localStorage.setItem('res9-badges', JSON.stringify(BADGES));
-  } catch (e) {}
+  ecrireLS('res9-badges', BADGES);
   return true;
 }
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
-export function __init() {
-
 /* ===================== ARÈNES : huit badges jouables (module additif, le moteur n’est pas modifié) ===================== */
-ARENAS = [
+export const ARENAS = [
   {
     k: 'a1',
     rule: 'roche',
@@ -413,27 +408,26 @@ ARENAS = [
   }
 ];
 
-
-ARENAS.forEach((a, i) => {
-  const g = GYMS[i];
-  SCEN[a.k] = Object.assign({ n: g.n, lvl: `Arène ${i + 1} · Badge ${g.t}`, bio: 'arene', gym: i, at: g.t }, a);
-});
-
-
-GYMS[4].r = 'Brume toxique : le camp adverse se révèle colonne par colonne.';
-
-
-TERR = Object.keys(SCEN).filter(k => !SCEN[k].rule);
-
- // terrains d’entraînement (sans règle d’arène)
-LAVAW = [
+const LAVAW = [
   ['3,1', '3,2', '4,3', '4,4'],
   ['2,2', '3,3', '4,1', '5,4'],
   ['3,0', '3,4', '4,2', '5,5']
 ];
 
+export const veiled = S => !!(S && S.jit) || (arenaOf(S) === 'psy' && S.round % 2 === 0);
 
-veiled = S => !!(S && S.jit) || (arenaOf(S) === 'psy' && S.round % 2 === 0);
+// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+export function __init() {
+
+ARENAS.forEach((a, i) => {
+  const g = GYMS[i];
+  SCEN[a.k] = Object.assign({ n: g.n, lvl: `Arène ${i + 1} · ${LEAD[i].n}`, bio: 'arene', gym: i, at: g.t }, a);
+});
+
+
+TERR = Object.keys(SCEN).filter(k => !SCEN[k].rule);
+
+ // terrains d’entraînement (sans règle d’arène)
 
  // v4.12 : intentions cachées
 BADGES = [];

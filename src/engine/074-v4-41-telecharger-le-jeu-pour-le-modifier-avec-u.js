@@ -20,7 +20,7 @@ document.addEventListener('click', async e => {
     const r = await fetch('source/Pokemon_Resonance.txt');
     if (!r.ok) throw new Error('indisponible');
     const data = await r.text();
-    if (typeof SV !== 'undefined' && SV.dl) {
+    if (SV.dl) {
       try {
         await SV.dl.save({ filename: 'Pokemon_Resonance.html', data });
         toast('Fichier du jeu téléchargé.');

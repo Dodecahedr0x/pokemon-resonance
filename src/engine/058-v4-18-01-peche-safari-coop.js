@@ -9,14 +9,15 @@ import { paintOverlay } from '../screens/overlays/dialogsStore.js';
 import { $, toast } from './014-08-outils.js';
 import { CROCHETS } from './015-v4-8-00-crochets.js';
 import { go } from './016-09-navigation.js';
-import { TOD, __set_wildId, wildId } from './017-10-accueil-route.js';
+import { TOD, __set_wildId } from './017-10-accueil-route.js';
 import { squad, toggle } from './020-13-equipe-cartes.js';
 import { wildScen } from './022-15-systemes-objets-liens-ia.js';
-import { B, __set_scSel, clearAim, launch, log, renderAll, scSel, ui } from './024-17-interface-combat.js';
+import { B, __set_scSel, clearAim, launch, log, renderAll, ui } from './024-17-interface-combat.js';
 import { queueSave } from './025-19-sauvegardes.js';
 import { PREF, renderPrep, sfx, vibe } from './026-20-campagne-tutoriel-son.js';
 import { renderWallet } from './035-v4-03-interface.js';
-import { PL, PLACES, renderMapInfo } from './037-v4-05-carte.js';
+import { PL, PLACES } from './037-v4-05-carte.js';
+import { refreshCarte } from '../screens/carte/carteStore.js';
 import { SHINY_RATE, SPARK } from './043-v4-4-01-aventure-plus.js';
 import { multChroma } from './050-v4-11-01-monde.js';
 import { routeNom } from './054-v4-15-01-johto.js';
@@ -24,9 +25,8 @@ import { poolRegion421, regFam421, regionNo421 } from './061-v4-21-01-capture-pa
 import { chromaArt425 } from './062-v4-25-01-direction-artistique.js';
 import { diplomeHors428 } from './063-v4-28-01-captures-combat-accueil.js';
 
-export let safariVerrou418, joueur418, coopVivants418;
 export let SAFARI_PRIX, SAFARI_PAS, SAFARI_BALLS;
-let tirage418, PECHE, capt418, fuite418, SAF_MSG;
+let PECHE, SAF_MSG;
 
 
 /* =====================================================================
@@ -281,10 +281,7 @@ export function coopPasse418() {
   return true;
 }
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
-export function __init() {
-
-tirage418 = (L, w) => {
+const tirage418 = (L, w) => {
   let r = Math.random() * w.reduce((a, b) => a + b, 0);
   for (let i = 0; i < L.length; i++) {
     r -= w[i];
@@ -292,6 +289,34 @@ tirage418 = (L, w) => {
   }
   return L[L.length - 1];
 };
+
+
+export const safariVerrou418 = () => (isCamp() && BADGES.length < 2 ? 'Le Parc Safari ouvre après votre 2e badge.' : null);
+
+
+const capt418 = x => {
+  const base = Math.max(0.08, Math.min(0.45, 0.5 - 0.06 * RC(x.id)));
+  return Math.min(0.9, base * (x.caillou ? 1.6 : 1) * (x.appat ? 0.8 : 1));
+};
+
+
+const fuite418 = x => {
+  const base = Math.max(0.08, Math.min(0.35, 0.06 + 0.04 * BY[x.id].s[3]));
+  return Math.min(0.85, base * (x.appat ? 0.5 : 1) * (x.caillou ? 1.6 : 1));
+};
+
+
+/* =====================================================================
+   3. Coop à 2 joueurs
+   ===================================================================== */
+/** Joueur 1 : les 2 premiers Pokémon de l’équipe ; Joueur 2 : les autres. */
+export const joueur418 = u => (+String(u.uid).slice(1) < 2 ? 1 : 2);
+
+
+export const coopVivants418 = (S, j) => S.units.some(u => u.side === 'a' && !u.ko && joueur418(u) === j);
+
+// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+export function __init() {
 
 
 PECHE = null;
@@ -337,25 +362,10 @@ SAFARI_PRIX = 500,
   SAFARI_BALLS = 20;
 
 
-safariVerrou418 = () => (isCamp() && BADGES.length < 2 ? 'Le Parc Safari ouvre après votre 2e badge.' : null);
-
-
 PLACES.push({ id: 'safari', x: 535, y: 405, n: 'Parc Safari', s: 'Captures sans combat · appâts et cailloux', grp: 'entrainement' });
 
 
 PL.safari = PLACES[PLACES.length - 1];
-
-
-capt418 = x => {
-  const base = Math.max(0.08, Math.min(0.45, 0.5 - 0.06 * RC(x.id)));
-  return Math.min(0.9, base * (x.caillou ? 1.6 : 1) * (x.appat ? 0.8 : 1));
-};
-
-
-fuite418 = x => {
-  const base = Math.max(0.08, Math.min(0.35, 0.06 + 0.04 * BY[x.id].s[3]));
-  return Math.min(0.85, base * (x.appat ? 0.5 : 1) * (x.caillou ? 1.6 : 1));
-};
 
 
 SAF_MSG = '';
@@ -380,7 +390,7 @@ document.addEventListener('click', e => {
     $('#safari418').hidden = true;
     toast(`Merci de votre visite ! ${n} capture${n > 1 ? 's' : ''}.`);
     try {
-      renderMapInfo();
+      refreshCarte(); // panneau du lieu choisi (src/screens/carte/MapInfo.jsx)
     } catch (er) {}
     return;
   }
@@ -393,18 +403,8 @@ document.addEventListener('click', e => {
 });
 
 
-/* =====================================================================
-   3. Coop à 2 joueurs
-   ===================================================================== */
-/** Joueur 1 : les 2 premiers Pokémon de l’équipe ; Joueur 2 : les autres. */
-joueur418 = u => (+String(u.uid).slice(1) < 2 ? 1 : 2);
-
-
-coopVivants418 = (S, j) => S.units.some(u => u.side === 'a' && !u.ko && joueur418(u) === j);
-
-
 CROCHETS.combat.push((S, opt, D0) => {
-  if (!PREF.coop || S.ordre === 'vitesse' || (D0 && (D0.tuto || D0.duel433)) || typeof B === 'undefined') return;
+  if (!PREF.coop || S.ordre === 'vitesse' || (D0 && (D0.tuto || D0.duel433))) return;
   if (S.units.filter(u => u.side === 'a').length < 2 || !opt || opt.robot) return;
   S.coop = coopVivants418(S, 1) ? 1 : 2;
 });

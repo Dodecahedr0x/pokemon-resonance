@@ -12,8 +12,7 @@ import { SHOP, bagN } from './032-v4-00-socle.js';
 import { renderBag } from './039-v4-07-quetes-boutique.js';
 import { heritage416 } from './055-v4-16-01-johto-vivant.js';
 
-export let MACHINES, avecApprise;
-let typesFamille, famillesEleves, CT_K;
+let CT_K;
 
 
 /* ---------- état de la partie ---------- */
@@ -104,9 +103,6 @@ export function capaciteApprise(id) {
   return `<div class="mvc ct-mvc"><div class="t"><b>${MV[a].n}</b><span class="chip">${M ? M.num : 'Apprise'}</span></div><p>${MV[a].d}</p><button type="button" class="b b-sm b-ghost" data-ctoubli="${b}">Oublier</button></div>` + heritage416(b);
 }
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
-export function __init() {
-
 /* =====================================================================
    v4.6 : CT et CS
    ---------------------------------------------------------------------
@@ -120,24 +116,8 @@ export function __init() {
    plus quelques familles connues pour l'apprendre dans les jeux.
    ===================================================================== */
 
-/* ---------- capacités des CS qui n'existaient pas encore ---------- */
-Object.assign(MV, {
-  coupe: {
-    n: 'Coupe',
-    t: 'Normal',
-    p: 7,
-    r: 1,
-    sh: 'one',
-    fx: 'cut',
-    d: 'Au contact. Fauche les hautes herbes de la case visée.'
-  },
-  force: { n: 'Force', t: 'Normal', p: 9, r: 1, sh: 'one', fx: 'push', v: 2, d: 'Au contact, repousse de 2 cases.' },
-  cascade: { n: 'Cascade', t: 'Eau', p: 9, r: 1, sh: 'one', mk: 'trempe', d: 'Au contact, Trempé.' }
-});
-
-
 /* ---------- les machines (numéros de Johto) ---------- */
-MACHINES = {
+export const MACHINES = {
   ct01: { num: 'CT01', mv: 'dynamopoing', p: 3000, types: ['Combat', 'Psy', 'Roche', 'Normal'] },
   ct11: { num: 'CT11', mv: 'zenith', p: 2000, tous: true },
   ct14: { num: 'CT14', mv: 'blizzard', p: 4000, types: ['Glace', 'Eau'] },
@@ -180,6 +160,42 @@ MACHINES = {
 };
 
 
+/* ---------- compatibilité ---------- */
+const typesFamille = base => [...new Set(famOf(base).flatMap(m => m.t))];
+
+
+/** Les familles à qui l'on peut apprendre : en Campagne celles du Box, en Libre toutes. */
+const famillesEleves = () => [
+  ...new Set(PROFILE.box.map(id => BY[id] && BY[id].base).filter(Boolean)) // Libre aussi : les familles capturées (v4.21)
+];
+
+
+/** Après un Éveil, les capacités de la nouvelle forme, plus la capacité apprise. */
+export const avecApprise = (u, mv) => {
+  const o = u.ctm && !mv.includes(u.ctm) ? [...mv, u.ctm] : [...mv];
+  if (u.hm && MV[u.hm] && !o.includes(u.hm)) o.push(u.hm); // capacité héritée (v4.16)
+  return o;
+};
+
+// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+export function __init() {
+
+/* ---------- capacités des CS qui n'existaient pas encore ---------- */
+Object.assign(MV, {
+  coupe: {
+    n: 'Coupe',
+    t: 'Normal',
+    p: 7,
+    r: 1,
+    sh: 'one',
+    fx: 'cut',
+    d: 'Au contact. Fauche les hautes herbes de la case visée.'
+  },
+  force: { n: 'Force', t: 'Normal', p: 9, r: 1, sh: 'one', fx: 'push', v: 2, d: 'Au contact, repousse de 2 cases.' },
+  cascade: { n: 'Cascade', t: 'Eau', p: 9, r: 1, sh: 'one', mk: 'trempe', d: 'Au contact, Trempé.' }
+});
+
+
 // elles se rangent dans la Boutique et le Sac comme les autres objets
 for (const k in MACHINES) {
   const M = MACHINES[k],
@@ -194,24 +210,6 @@ for (const k in MACHINES) {
     ...(M.g ? { g: M.g } : { p: M.p })
   };
 }
-
-
-/* ---------- compatibilité ---------- */
-typesFamille = base => [...new Set(famOf(base).flatMap(m => m.t))];
-
-
-/** Les familles à qui l'on peut apprendre : en Campagne celles du Box, en Libre toutes. */
-famillesEleves = () => [
-  ...new Set(PROFILE.box.map(id => BY[id] && BY[id].base).filter(Boolean)) // Libre aussi : les familles capturées (v4.21)
-];
-
-
-/** Après un Éveil, les capacités de la nouvelle forme, plus la capacité apprise. */
-avecApprise = (u, mv) => {
-  const o = u.ctm && !mv.includes(u.ctm) ? [...mv, u.ctm] : [...mv];
-  if (u.hm && MV[u.hm] && !o.includes(u.hm)) o.push(u.hm); // capacité héritée (v4.16)
-  return o;
-};
 
 
 /* ---------- Sac : apprendre ---------- */

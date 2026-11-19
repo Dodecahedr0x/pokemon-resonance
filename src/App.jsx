@@ -4,8 +4,8 @@ import LaunchScreen from './components/LaunchScreen.jsx';
 import Shell from './components/Shell.jsx';
 import { setEngineReady as signalEngineReady } from './engineReady.js';
 
-// Le shell est rendu une seule fois : le moteur écrit ensuite dans ses conteneurs
-// (#accueil, #combat, #sheet…). Rien ici ne doit provoquer un nouveau rendu de <Shell>.
+// Le moteur est chargé après le premier rendu ; les écrans relisent son état et se
+// redessinent par leurs stores (useEngineReady, …Store.js), pas par l'état d'App.
 export default function App() {
   const [engineReady, setEngineReady] = useState(false);
 

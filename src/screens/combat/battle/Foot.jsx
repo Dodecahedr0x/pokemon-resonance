@@ -9,8 +9,7 @@ import { flow478 } from '../../../engine/112-v4-77-graphismes-peints-decors-et-t
 import { getHost } from '../board/boardStore.js';
 import Outils444 from '../board/Outils444.jsx';
 import { pied as barreBas, useBattleVersion } from './battleStore.js';
-
-const ETAPE = { deplacer: 'Déplacer', agir: 'Agir', extra: 'Terminer', fini: 'Fini' };
+import { ETAPE } from './frag.jsx';
 
 // Bouton de fin de tour, phase et étape : renderTop, puis les versions qui les réécrivaient
 // (déploiement v4.30, énigme v4.31, duel v4.33, tour guidé v4.78), dans le même ordre.

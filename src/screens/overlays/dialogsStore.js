@@ -1,5 +1,4 @@
-import { useSyncExternalStore } from 'react';
-import { flushSync } from 'react-dom';
+import { canal } from '../../lib/store.js';
 
 // Fenêtres et couches d'effet que le moteur créait sur <body> (#tdrBox, #ctBox, #scene417,
 // #pk-badge…). Chaque fenêtre a un état : null (vide) ou les données de son dernier rendu,
@@ -9,16 +8,7 @@ import { flushSync } from 'react-dom';
 // Rendu synchrone (flushSync) : juste après l'appel, le moteur relit le DOM
 // (focus, querySelector, hidden).
 let state = {};
-const listeners = new Set();
-const subscribe = l => (listeners.add(l), () => listeners.delete(l));
-
-function emit() {
-  try {
-    flushSync(() => listeners.forEach(l => l()));
-  } catch {
-    listeners.forEach(l => l());
-  }
-}
+const { emit, use } = canal();
 
 // Redessine la fenêtre `nom` avec ces données.
 export function paintOverlay(nom, data = {}) {
@@ -33,4 +23,4 @@ export function clearOverlay(nom) {
   emit();
 }
 
-export const useOverlay = nom => useSyncExternalStore(subscribe, () => state[nom] || null);
+export const useOverlay = nom => use(() => state[nom] || null);

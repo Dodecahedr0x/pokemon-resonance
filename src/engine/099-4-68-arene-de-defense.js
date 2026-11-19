@@ -3,20 +3,16 @@
 import { MON, SCEN } from './009-03-pokemon.js';
 import { isCamp } from './011-05-etat-de-partie.js';
 import { BADGES } from './013-07-arenes.js';
-import { toast } from './014-08-outils.js';
+import { ecrireLS, toast } from './014-08-outils.js';
 import { CROCHETS } from './015-v4-8-00-crochets.js';
 import { squad } from './020-13-equipe-cartes.js';
-import { K, __set_fin, fin, mkUnit, plan, say, uAt } from './021-14-moteur-combat.js';
+import { K, mkUnit, plan, say, uAt } from './021-14-moteur-combat.js';
 import { OBST } from './023-16-roles-synergies-obstacles.js';
-import { B, backToPrep } from './024-17-interface-combat.js';
+import { B, backToPrep, goFight } from './024-17-interface-combat.js';
 import { overlay } from './030-24-prestige-mise-en-scene.js';
 import { fermer } from '../screens/overlays/tempStore.js';
-import { __set_groupOf, groupOf } from './031-25-v3-parcours-accueil.js';
-import { goFight } from './036-v4-04-accueil.js';
-import { NEWS416 } from './056-v4-16-1-01-finitions.js';
 
 export let DEF_VAGUES, DEF_VIES;
-let dfSt468, dfSave468, dfOk468, groupOfOld468, dfPool468, finOld468;
 
 
 function dfVague468(S, ev) {
@@ -64,6 +60,22 @@ export function dfTxt468() {
   return dfOk468() ? `5 vagues · record ${dfSt468().best}` : 'Débloquée avec 3 badges';
 }
 
+const dfSt468 = () => {
+  try {
+    return JSON.parse(localStorage.getItem('res-df468') || 'null') || { won: 0, best: 0 };
+  } catch (e) {
+    return { won: 0, best: 0 };
+  }
+};
+
+const dfSave468 = s => {
+  ecrireLS('res-df468', s);
+};
+
+const dfOk468 = () => (isCamp() ? BADGES.length >= 3 : true);
+
+const dfPool468 = () => MON.filter(m => m.st === 1 && !m.leg && !m.ennemi && m.base === m.id);
+
 // Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
 export function __init() {
 
@@ -87,49 +99,18 @@ SCEN.def468 = {
 };
 
 
-try {
-  OBST.def468 = { pil: ['4,2'], grass: ['4,4', '5,1'] };
-} catch (e) {}
+OBST.def468 = { pil: ['4,2'], grass: ['4,4', '5,1'] };
 
 
 DEF_VAGUES = 5,
   DEF_VIES = 3;
 
 
-dfSt468 = () => {
-  try {
-    return JSON.parse(localStorage.getItem('res-df468') || 'null') || { won: 0, best: 0 };
-  } catch (e) {
-    return { won: 0, best: 0 };
-  }
-};
-
-
-dfSave468 = s => {
-  try {
-    localStorage.setItem('res-df468', JSON.stringify(s));
-  } catch (e) {}
-};
-
-
-dfOk468 = () => (isCamp() ? BADGES.length >= 3 : true);
-
-
-groupOfOld468 = groupOf;
-
-
-__set_groupOf(function (k) {
-  return k === 'def468' ? 'terrains' : groupOfOld468.apply(this, arguments);
-});
-
 
 CROCHETS.creation.push((S, opt, D0) => {
   if (!D0 || !D0.def468) return;
   S.def468 = { w: 1, vies: DEF_VIES, n: 0 };
 });
-
-
-dfPool468 = () => MON.filter(m => m.st === 1 && !m.leg && !m.ennemi && m.base === m.id);
 
 
 CROCHETS.avantFinManche.unshift((S, ev) => {
@@ -152,12 +133,9 @@ CROCHETS.avantFinManche.unshift((S, ev) => {
 });
 
 
-finOld468 = fin;
-
-
-__set_fin(function (S, ev) {
+// plus d’adversaire debout : la vague suivante arrive avant que le combat ne soit jugé gagné
+CROCHETS.avantVerdict.push((S, ev) => {
   if (S.def468 && !S.over && !S.units.some(x => x.side === 'e' && !x.ko) && S.def468.w < DEF_VAGUES && S.units.some(x => x.side === 'a' && !x.ko)) dfVague468(S, ev);
-  return finOld468.apply(this, arguments);
 });
 
 
@@ -206,6 +184,4 @@ document.addEventListener(
   true
 );
 
-
-NEWS416.unshift(['i-team', 'Arène de défense', 'Cinq vagues d’adversaires attaquent : tenez la ligne de défense avec 3 vies. Lancez le défi depuis la bannière de l’Accueil (3 badges).']);
 }

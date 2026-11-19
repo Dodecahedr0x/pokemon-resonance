@@ -2,12 +2,9 @@
 
 import { PROFILE } from './011-05-etat-de-partie.js';
 import { $, $$ } from './014-08-outils.js';
-import { TABS, TNAME } from './016-09-navigation.js';
 import { openSaves } from './025-19-sauvegardes.js';
 import { V4, fmt } from './032-v4-00-socle.js';
 import { refreshWallet, setMenuOpen } from '../components/shellStore.js';
-
-export let NEWP;
 
 
 function menu(open) {
@@ -28,26 +25,15 @@ export function renderWallet() {
   });
 }
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
-export function __init() {
-
 /* pictogrammes supplémentaires : dans src/components/SvgSprite.jsx */
 
 
 /* ---------- navigation : 9 destinations sur ordinateur, 5 sur téléphone ---------- */
-NEWP = { carte: 'Carte', dex: 'Pokédex', quetes: 'Quêtes', sac: 'Sac et Boutique', params: 'Paramètres' };
+// pages et titres : TABS et TNAME (016) ; barre latérale, barre du bas et menu du
+// téléphone (#v4Menu) : src/components/Nav.jsx
 
-
-Object.entries(NEWP).forEach(([k, n]) => {
-  if (!TABS.includes(k)) TABS.push(k);
-  TNAME[k] = n;
-});
-
-
-Object.assign(TNAME, { accueil: 'Accueil', pokedex: 'Équipe', combat: 'Combats', types: 'Guide' });
-
-
-// barre latérale, barre du bas et menu du téléphone (#v4Menu) : src/components/Nav.jsx
+// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+export function __init() {
 
 
 document.addEventListener('click', e => {

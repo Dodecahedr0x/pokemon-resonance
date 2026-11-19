@@ -4,10 +4,10 @@ import { GYMS } from '../../../engine/004-01-donnees.js';
 import { BY, SCEN } from '../../../engine/009-03-pokemon.js';
 import { isCamp } from '../../../engine/011-05-etat-de-partie.js';
 import { ARENAS, BADGES } from '../../../engine/013-07-arenes.js';
-import { RM, medal } from '../../../engine/014-08-outils.js';
+import { medal } from '../../../engine/014-08-outils.js';
 import { badgeSvg } from '../../../engine/019-12-ligue.js';
 import { B } from '../../../engine/024-17-interface-combat.js';
-import { PREF, nextGoal, rewHtml } from '../../../engine/026-20-campagne-tutoriel-son.js';
+import { calme472, nextGoal, rewHtml } from '../../../engine/026-20-campagne-tutoriel-son.js';
 import { leaderOf } from '../../../engine/030-24-prestige-mise-en-scene.js';
 import { tdrRun } from '../../../engine/043-v4-4-01-aventure-plus.js';
 import { duelSous433, duelTitre433 } from '../../../engine/068-v4-33-01-duel-et-tutoriel.js';
@@ -15,9 +15,6 @@ import { IM448 } from '../../../engine/079-v4-48-immersion-sons-par-type-cris-vi
 import { useBattleVersion } from './battleStore.js';
 
 const NL = '\n  ';
-
-// Animations réduites (habillage Pokémon v4.72) : pas de gerbe.
-const calme = () => !!RM || document.documentElement.classList.contains('a11y-rm') || PREF.pk472a === 0;
 
 // Fiche de fin de combat (#cbResult), affichée par finish() via l'attribut hidden.
 export default function Result() {
@@ -33,7 +30,7 @@ export default function Result() {
       if (!c) return;
       const cs = getComputedStyle(c);
       const defile = /(auto|scroll)/.test(cs.overflowY) && c.scrollHeight > c.clientHeight + 2;
-      setDeco({ v, rel: cs.position === 'static', holo: !defile, gerbe: c.classList.contains('win') && !calme() });
+      setDeco({ v, rel: cs.position === 'static', holo: !defile, gerbe: c.classList.contains('win') && !calme472() });
     });
     return () => cancelAnimationFrame(id);
   }, [v, S]);

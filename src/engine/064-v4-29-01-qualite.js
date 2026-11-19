@@ -5,11 +5,11 @@ import { MV } from './005-02-capacites.js';
 import { BY, MON, SCEN, famOf } from './009-03-pokemon.js';
 import { RECRUIT } from './010-04-evolution-en-combat.js';
 import { PROFILE, isCamp } from './011-05-etat-de-partie.js';
-import { $, RM, medal, toast } from './014-08-outils.js';
-import { tokCl } from '../screens/combat/board/boardStore.js';
+import { $, RM, apres2images, mulberry32, toast } from './014-08-outils.js';
+import { tokCl, tokHas } from '../screens/combat/board/boardStore.js';
 import { CROCHETS } from './015-v4-8-00-crochets.js';
 import { go } from './016-09-navigation.js';
-import { openSheet, squad } from './020-13-equipe-cartes.js';
+import { openSheet } from './020-13-equipe-cartes.js';
 import { EMAX, affected, byUid, canEveil, hdist, mvType, teff, uAt, uk } from './021-14-moteur-combat.js';
 import { OBST } from './023-16-roles-synergies-obstacles.js';
 import { B, HC, L, battleOpts, scSel, ui } from './024-17-interface-combat.js';
@@ -24,16 +24,13 @@ import { renderQuests } from './039-v4-07-quetes-boutique.js';
 import { LEGS, RIVAL, RIVAL_LINE, RIVAL_POS, legKey, rivalStarter } from './043-v4-4-01-aventure-plus.js';
 import { notesDe } from './053-v4-14-01-resonance.js';
 import { PLACES_J } from './054-v4-15-01-johto.js';
-import { NEWS416 } from './056-v4-16-1-01-finitions.js';
 import { SCENES, SCN, __set_SCN, renderScene417, resoCand417 } from './057-v4-17-01-compagnons-et-resonance.js';
 import { PLACES_H } from './059-v4-19-01-hoenn.js';
 import { bossPhases420, encercle420 } from './060-v4-20-01-combat-intense.js';
 import { REGN421 } from './061-v4-21-01-capture-partout.js';
 import { famCapt428 } from './063-v4-28-01-captures-combat-accueil.js';
 
-export let ONGLETS429, RIV429, PROGRES429;
-let LP429, finLp429, SW429, ASTUCES429, APRES429, HEBDO429, HEB429;
-export function __set_rejouer429(v) { return (rejouer429 = v); }
+let HEB429;
 
 
 /* =====================================================================
@@ -105,12 +102,20 @@ export function vivTok429(T) {
 }
 
 
+/* Relance une petite animation de jeton. Si elle joue déjà, on la relance deux images plus tard
+   (plutôt que de forcer la mise en page de toute la page). */
 export function rejouer429(T, cl, ms) {
-  tokCl(T, cl, false);
-  if (T.g) void T.g.getBoundingClientRect();
-  tokCl(T, cl, true);
+  const g = T && T.g;
+  if (!g) return;
   clearTimeout(T['t_' + cl]);
-  T['t_' + cl] = setTimeout(() => tokCl(T, cl, false), ms);
+  const lancer = () => {
+    tokCl(T, cl, true);
+    clearTimeout(T['t_' + cl]);
+    T['t_' + cl] = setTimeout(() => tokCl(T, cl, false), ms);
+  };
+  if (!tokHas(T, cl)) return lancer();
+  tokCl(T, cl, false);
+  apres2images(lancer);
 }
 
 
@@ -210,7 +215,7 @@ function fiche429(id) {
 
 function glisserOk429(t) {
   if (PREF.swipe429 === false || !t || !t.closest || !t.closest('main,.content,.page')) return false;
-  if (t.closest('input,textarea,select,#bBoard,.board,.v4-map,#mapMarks,.route,.v4-tabs,.v4-seg,[data-noswipe],[role="dialog"]')) return false;
+  if (t.closest('input,textarea,select,#bBoard,.board,.v4-map,#mapMarks,.route,.v4-tabs,.v4-seg,[role="dialog"]')) return false;
   if (B && !B.over && document.querySelector('#cbBattle:not([hidden])')) return false;
   if ([...document.querySelectorAll('[role="dialog"],.sheet,.modal')].some(d => !d.hidden && d.offsetParent !== null)) return false;
   for (let x = t; x && x !== document.body; x = x.parentElement) {
@@ -414,12 +419,8 @@ function semaine429(d) {
 export function alea429(w) {
   let a = 0;
   for (let i = 0; i < w.length; i++) a = (Math.imul(a ^ w.charCodeAt(i), 2654435761) + 0x9e3779b9) | 0;
-  return () => {
-    a = (a + 0x6d2b79f5) | 0;
-    let t = Math.imul(a ^ (a >>> 15), 1 | a);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
+  // sans « || 1 » (contrairement à rng454 / rngS460) : une empreinte nulle donne toujours la même suite qu'avant
+  return mulberry32(a);
 }
 
 
@@ -502,115 +503,18 @@ function scoreHebdo429(S, win) {
 
 /* le bouton #v4Hebdo de l'Accueil est rendu par React (src/screens/accueil/Bas.jsx) */
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
-export function __init() {
-
 /* ---------- 2. gestes tactiles ---------- */
-LP429 = { t: 0, x: 0, y: 0, fait: 0 };
+const LP429 = { t: 0, x: 0, y: 0, fait: 0 };
 
-
-document.addEventListener(
-  'pointerdown',
-  e => {
-    clearTimeout(LP429.t);
-    LP429.fait = 0; // un nouveau geste : l’appui long précédent est oublié
-    if (e.pointerType === 'mouse' && e.button !== 0) return;
-    const a = actionLp429(e.target);
-    if (!a) return;
-    LP429.x = e.clientX;
-    LP429.y = e.clientY;
-    LP429.t = setTimeout(() => {
-      LP429.fait = Date.now();
-      vibe(15);
-      a();
-    }, 480);
-  },
-  { passive: true }
-);
-
-
-finLp429 = () => clearTimeout(LP429.t);
-
-
-document.addEventListener('pointerup', finLp429, { passive: true });
-
-
-document.addEventListener('pointercancel', finLp429, { passive: true });
-
-
-document.addEventListener(
-  'pointermove',
-  e => {
-    if (Math.abs(e.clientX - LP429.x) + Math.abs(e.clientY - LP429.y) > 12) clearTimeout(LP429.t);
-  },
-  { passive: true }
-);
-
-
-// le relâché qui suit un appui long ne déclenche pas aussi le clic
-document.addEventListener(
-  'click',
-  e => {
-    if (LP429.fait && Date.now() - LP429.fait < 700) {
-      LP429.fait = 0;
-      e.preventDefault();
-      e.stopPropagation();
-    }
-  },
-  true
-);
-
-
-document.addEventListener('contextmenu', e => {
-  if (actionLp429(e.target)) e.preventDefault();
-});
-
+const finLp429 = () => clearTimeout(LP429.t);
 
 /* glisser pour changer d'onglet */
-ONGLETS429 = ['accueil', 'pokedex', 'combat', 'carte'];
+export const ONGLETS429 = ['accueil', 'pokedex', 'combat', 'carte'];
 
-
-SW429 = { x: 0, y: 0, t: 0, ok: false };
-
-
-document.addEventListener(
-  'touchstart',
-  e => {
-    if (e.touches.length !== 1) {
-      SW429.ok = false;
-      return;
-    }
-    const p = e.touches[0];
-    Object.assign(SW429, { x: p.clientX, y: p.clientY, t: Date.now(), ok: glisserOk429(e.target) });
-  },
-  { passive: true }
-);
-
-
-document.addEventListener(
-  'touchend',
-  e => {
-    if (!SW429.ok) return;
-    SW429.ok = false;
-    const p = e.changedTouches[0],
-      dx = p.clientX - SW429.x,
-      dy = p.clientY - SW429.y;
-    if (Date.now() - SW429.t > 650 || Math.abs(dx) < 80 || Math.abs(dy) > Math.abs(dx) * 0.5) return;
-    const pg = document.querySelector('.page.on'),
-      i = ONGLETS429.indexOf(pg && pg.id),
-      j = i + (dx < 0 ? 1 : -1);
-    if (i < 0 || j < 0 || j >= ONGLETS429.length) return;
-    go(ONGLETS429[j]);
-    try {
-      window.scrollTo(0, 0);
-    } catch (er) {}
-  },
-  { passive: true }
-);
-
+const SW429 = { x: 0, y: 0, t: 0, ok: false };
 
 /* ---------- 3. astuces au bon moment ---------- */
-ASTUCES429 = {
+const ASTUCES429 = {
   capture: ['Capturer un Pokémon', 'Affaiblissez-le sous 25 % de ses PV et immobilisez-le (Sommeil, Paralysie, Gel, Racines ou Toile). Sélectionnez ensuite un allié à son contact, puis touchez l’adversaire : le panneau « Capture » lance la Ball pour 2 Voix.'],
   reso: ['Notes de Résonance', 'Chaque allié qui frappe la même cible dans la manche y pose une note. À 3 notes, Résonance : dégâts ×1,5 et un écho selon le type. Frappez ensemble !'],
   eveil: ['L’Éveil', 'Un de vos Pokémon a ses losanges pleins : sélectionnez-le, puis « Éveiller ». Il évolue en plein combat et devient plus fort tout de suite.'],
@@ -621,22 +525,8 @@ ASTUCES429 = {
   vigil: ['Vigilance', 'Au lieu d’attaquer, un Pokémon peut surveiller : il frappe le premier adversaire qui entre à sa portée, avant que celui-ci n’attaque.']
 };
 
-
-document.addEventListener('click', e => {
-  const b = e.target.closest('[data-tip429]');
-  if (!b) return;
-  if (b.dataset.tip429 === 'off') {
-    PREF.tips429 = false;
-    savePref();
-    toast('Astuces désactivées. Réactivez-les dans les Paramètres.');
-  }
-  hideTip429();
-  if (B) setTimeout(astuces429, 400);
-});
-
-
 /* ---------- 5. histoire et rival ---------- */
-RIV429 = {
+export const RIV429 = {
   rv5: {
     reg: 2,
     after: 4,
@@ -688,6 +578,142 @@ RIV429 = {
     l: 'Écoute ce silence. Plus un losange, plus un Éveil.'
   }
 };
+
+const APRES429 = {
+  champ: [['prof', 'Championne vaincue ! Kanto vous appartient… et Johto vous attend, au bout de la Route 29.']],
+  jchamp: [['prof', 'Maître de Johto ! Kael vient de m’appeler : il est parti pour Hoenn. Vous devriez le suivre.']],
+  rv5: [
+    ['kael', 'Encore toi… Tu sais quoi ? Je file à Hoenn.'],
+    ['prof', 'Votre rival n’abandonne jamais. On le reverra, j’en suis sûre.']
+  ],
+  rv6: [
+    ['kael', '…D’accord. Tu es meilleur que moi. Pour l’instant.'],
+    ['kael', 'Le Maître de Hoenn t’attend. Si tu perds contre lui, je ne te le pardonnerai pas.']
+  ],
+  hd429: [
+    ['sirene', 'Les Échos se taisent… On ne contrôle pas la Résonance.'],
+    ['vesper', 'Cette fois, c’est vraiment fini. Merci… Je vais aider le Prof. Sorbier à réparer ce qu’on a abîmé.']
+  ],
+  hchamp: [
+    ['prof', 'Maître de Hoenn ! Trois régions, une seule Résonance.'],
+    ['prof', 'On raconte que les légendes ne fuient plus devant vous… Ouvrez l’onglet « Légendes » des Quêtes : elles peuvent désormais être capturées.']
+  ]
+};
+
+const HEBDO429 = [
+  { k: 'location', n: 'Équipe de location', d: 'Tout le monde joue la même équipe, tirée au sort pour la semaine.' },
+  { k: 'mono', n: 'Monotype', d: 'Une équipe de location d’un seul type.' },
+  { k: 'debut', n: 'Premiers pas', d: 'Quatre Pokémon au premier stade : à vous de les éveiller en combat.' },
+  { k: 'chrono', n: 'Contre-la-montre', d: 'Une équipe de location, et seulement 6 manches pour gagner.' }
+];
+
+// le défi reprend les adversaires d’un combat sans ses récompenses de progression
+export const PROGRES429 = ['gym', 'elite', 'champ', 'johto', 'hoenn', 'hfinal', 'jfinal', 'jdis', 'roam', 'legend', 'rival', 'dissonance', 'colosse', 'lac', 'tower', 'tuto', 'ami', 'rival429', 'cap429', 'dom', 'jafter', 'after', 'daily', 'tdr'];
+
+// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+export function __init() {
+
+document.addEventListener(
+  'pointerdown',
+  e => {
+    clearTimeout(LP429.t);
+    LP429.fait = 0; // un nouveau geste : l’appui long précédent est oublié
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    const a = actionLp429(e.target);
+    if (!a) return;
+    LP429.x = e.clientX;
+    LP429.y = e.clientY;
+    LP429.t = setTimeout(() => {
+      LP429.fait = Date.now();
+      vibe(15);
+      a();
+    }, 480);
+  },
+  { passive: true }
+);
+
+
+document.addEventListener('pointerup', finLp429, { passive: true });
+
+
+document.addEventListener('pointercancel', finLp429, { passive: true });
+
+
+document.addEventListener(
+  'pointermove',
+  e => {
+    if (Math.abs(e.clientX - LP429.x) + Math.abs(e.clientY - LP429.y) > 12) clearTimeout(LP429.t);
+  },
+  { passive: true }
+);
+
+
+// le relâché qui suit un appui long ne déclenche pas aussi le clic
+document.addEventListener(
+  'click',
+  e => {
+    if (LP429.fait && Date.now() - LP429.fait < 700) {
+      LP429.fait = 0;
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  },
+  true
+);
+
+
+document.addEventListener('contextmenu', e => {
+  if (actionLp429(e.target)) e.preventDefault();
+});
+
+
+document.addEventListener(
+  'touchstart',
+  e => {
+    if (e.touches.length !== 1) {
+      SW429.ok = false;
+      return;
+    }
+    const p = e.touches[0];
+    Object.assign(SW429, { x: p.clientX, y: p.clientY, t: Date.now(), ok: glisserOk429(e.target) });
+  },
+  { passive: true }
+);
+
+
+document.addEventListener(
+  'touchend',
+  e => {
+    if (!SW429.ok) return;
+    SW429.ok = false;
+    const p = e.changedTouches[0],
+      dx = p.clientX - SW429.x,
+      dy = p.clientY - SW429.y;
+    if (Date.now() - SW429.t > 650 || Math.abs(dx) < 80 || Math.abs(dy) > Math.abs(dx) * 0.5) return;
+    const pg = document.querySelector('.page.on'),
+      i = ONGLETS429.indexOf(pg && pg.id),
+      j = i + (dx < 0 ? 1 : -1);
+    if (i < 0 || j < 0 || j >= ONGLETS429.length) return;
+    go(ONGLETS429[j]);
+    try {
+      window.scrollTo(0, 0);
+    } catch (er) {}
+  },
+  { passive: true }
+);
+
+
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-tip429]');
+  if (!b) return;
+  if (b.dataset.tip429 === 'off') {
+    PREF.tips429 = false;
+    savePref();
+    toast('Astuces désactivées. Réactivez-les dans les Paramètres.');
+  }
+  hideTip429();
+  if (B) setTimeout(astuces429, 400);
+});
 
 
 rivBuild429();
@@ -754,28 +780,6 @@ if (!SCENES.hchamp)
   ];
 
 
-APRES429 = {
-  champ: [['prof', 'Championne vaincue ! Kanto vous appartient… et Johto vous attend, au bout de la Route 29.']],
-  jchamp: [['prof', 'Maître de Johto ! Kael vient de m’appeler : il est parti pour Hoenn. Vous devriez le suivre.']],
-  rv5: [
-    ['kael', 'Encore toi… Tu sais quoi ? Je file à Hoenn.'],
-    ['prof', 'Votre rival n’abandonne jamais. On le reverra, j’en suis sûre.']
-  ],
-  rv6: [
-    ['kael', '…D’accord. Tu es meilleur que moi. Pour l’instant.'],
-    ['kael', 'Le Maître de Hoenn t’attend. Si tu perds contre lui, je ne te le pardonnerai pas.']
-  ],
-  hd429: [
-    ['sirene', 'Les Échos se taisent… On ne contrôle pas la Résonance.'],
-    ['vesper', 'Cette fois, c’est vraiment fini. Merci… Je vais aider le Prof. Sorbier à réparer ce qu’on a abîmé.']
-  ],
-  hchamp: [
-    ['prof', 'Maître de Hoenn ! Trois régions, une seule Résonance.'],
-    ['prof', 'On raconte que les légendes ne fuient plus devant vous… Ouvrez l’onglet « Légendes » des Quêtes : elles peuvent désormais être capturées.']
-  ]
-};
-
-
 /* ---------- 6. légendaires capturables ---------- */
 LEGS.forEach(L => {
   BY[L.id].c = 8; // une légende dans l’équipe coûte 8 PC
@@ -797,18 +801,6 @@ LEGS.forEach(L => {
   });
   OBST[k] = OBST[legKey(L.id)] || {};
 });
-
-
-HEBDO429 = [
-  { k: 'location', n: 'Équipe de location', d: 'Tout le monde joue la même équipe, tirée au sort pour la semaine.' },
-  { k: 'mono', n: 'Monotype', d: 'Une équipe de location d’un seul type.' },
-  { k: 'debut', n: 'Premiers pas', d: 'Quatre Pokémon au premier stade : à vous de les éveiller en combat.' },
-  { k: 'chrono', n: 'Contre-la-montre', d: 'Une équipe de location, et seulement 6 manches pour gagner.' }
-];
-
-
-// le défi reprend les adversaires d’un combat sans ses récompenses de progression
-PROGRES429 = ['gym', 'elite', 'champ', 'johto', 'hoenn', 'hfinal', 'jfinal', 'jdis', 'roam', 'legend', 'rival', 'dissonance', 'colosse', 'lac', 'tower', 'tuto', 'ami', 'rival429', 'cap429', 'dom', 'jafter', 'after', 'daily', 'tdr'];
 
 
 HEB429 = null;
@@ -847,7 +839,7 @@ document.addEventListener('click', e => {
   e.stopPropagation();
   V4.qTab = 'event';
   go('quetes');
-  if (typeof renderQuests === 'function') renderQuests();
+  renderQuests();
 });
 
 
@@ -856,7 +848,7 @@ document.addEventListener('click', e => {
   e.stopPropagation();
   V4.qTab = 'leg';
   go('quetes');
-  if (typeof renderQuests === 'function') renderQuests();
+  renderQuests();
 });
 
 
@@ -865,13 +857,4 @@ document.addEventListener('change', e => {
   if (p) calme429();
 });
 
-
-NEWS416.unshift(
-  ['i-trophy', 'Défi de la semaine', 'Même équipe et même règle pour tous, chaque semaine. Meilleur score gardé, récompense à la première victoire, classement entre amis.', 'hebdo429'],
-  ['i-star', 'Légendes capturables', 'Mewtwo, Raikou, Entei, Suicune, Lugia et Ho-Oh : terminez leur quête pour les capturer (Quêtes › Légendes).', 'leg429'],
-  ['i-bolt', 'Combats plus vivants', 'Pokémon animés, appui long pour la fiche, glisser pour changer d’onglet, astuces du Prof., Expert plus malin, et Kael revient à Johto et à Hoenn.', null]
-);
-
-
-NEWS416.splice(8);
 }

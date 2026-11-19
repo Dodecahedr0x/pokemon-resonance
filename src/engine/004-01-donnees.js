@@ -1,12 +1,8 @@
 /* Section d'origine : 01-donnees.js */
 
-export let TYPES, MK, EL, MX, CAT, RX, ROLES, CHAINS, FAMS, POS, GYMS, WEATHER, EFF, BSHAPE, dexNo;
-
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
-export function __init() {
 
 /* ===================== DONNÉES ===================== */
-TYPES = {
+export const TYPES = {
   Normal: ['#A8A77A', 'M12 3.5a8.5 8.5 0 1 0 0 17a8.5 8.5 0 1 0 0-17Zm0 4.5a4 4 0 1 1 0 8a4 4 0 1 1 0-8Z'],
   Feu: [
     '#EE8130',
@@ -40,7 +36,7 @@ TYPES = {
 };
 
 
-MK = [
+export const MK = [
   { id: 'trempe', n: 'Trempé', t: 'Eau' },
   { id: 'charge', n: 'Chargé', t: 'Électrik' },
   { id: 'brulant', n: 'Brûlant', t: 'Feu' },
@@ -50,10 +46,10 @@ MK = [
 ];
 
 
-EL = ['Eau', 'Électrik', 'Feu', 'Plante', 'Glace', 'Sol'];
+export const EL = ['Eau', 'Électrik', 'Feu', 'Plante', 'Glace', 'Sol'];
 
 
-MX = {
+export const MX = {
   trempe: ['ren', 'cc', 'vap', 'flo', 'gel', 'bou'],
   charge: ['cc', 'ren', 'sur', 0, 0, 'ter'],
   brulant: ['vap', 'sur', 'ren', 'emb', 'fon', 'cou'],
@@ -63,10 +59,10 @@ MX = {
 };
 
 
-CAT = { deg: 'Dégâts', ctl: 'Contrôle', ter: 'Terrain', sou: 'Soutien' };
+export const CAT = { deg: 'Dégâts', ctl: 'Contrôle', ter: 'Terrain', sou: 'Soutien' };
 
 
-RX = {
+export const RX = {
   cc: {
     n: 'Court-circuit',
     a: 'Circ',
@@ -190,7 +186,7 @@ RX = {
 };
 
 
-ROLES = [
+export const ROLES = [
   { n: 'Frappeur', d: 'Consomme les marques et déclenche les réactions.' },
   { n: 'Déclencheur', d: 'Pose les marques à faible coût, souvent à distance.' },
   { n: 'Verrou', d: 'Ralentit, immobilise, détourne les attaques.' },
@@ -200,7 +196,7 @@ ROLES = [
 ];
 
 
-CHAINS = [
+export const CHAINS = [
   { n: 'Fonte → Court-circuit', need: ['fon', 'cc'] },
   { n: 'Banquise → Bris', need: ['ban', 'bri'] },
   { n: 'Gel → Bris', need: ['gel', 'bri'] },
@@ -210,7 +206,7 @@ CHAINS = [
 ];
 
 
-FAMS = [
+export const FAMS = [
   { e: 'Eau', from: ['Eau'], m: 'Trempé' },
   { e: 'Électrik', from: ['Électrik'], m: 'Chargé' },
   { e: 'Feu', from: ['Feu'], m: 'Brûlant' },
@@ -220,7 +216,7 @@ FAMS = [
 ];
 
 
-POS = [
+export const POS = [
   { t: 'Normal', n: 'Couverture', d: 'Prend un coup à la place d’un allié adjacent.' },
   { t: 'Vol', n: 'Courant', d: 'Pousse la cible d’une case dans l’axe de l’attaque.' },
   { t: 'Psy', n: 'Déplacement', d: 'Échange deux unités à portée.' },
@@ -233,7 +229,7 @@ POS = [
 ];
 
 
-GYMS = [
+export const GYMS = [
   {
     t: 'Roche',
     n: 'Arène Roche',
@@ -265,7 +261,7 @@ GYMS = [
   {
     t: 'Poison',
     n: 'Arène Poison',
-    r: 'Brume toxique : la carte se révèle case par case.',
+    r: 'Brume toxique : le camp adverse se révèle colonne par colonne.',
     l: 'Éclaireurs et information.',
     s: ['S-06', 'S-02']
   },
@@ -293,7 +289,7 @@ GYMS = [
 ];
 
 
-WEATHER = [
+export const WEATHER = [
   { n: 'Pluie', mv: 'Danse Pluie', t: 'Eau', d: 'Trempé dure un tour de plus. Brûlant ne tient qu’un tour.' },
   { n: 'Soleil', mv: 'Zénith', t: 'Feu', d: 'Brûlant dure un tour de plus. Trempé s’évapore en fin de tour.' },
   { n: 'Grêle', mv: 'Grêle', t: 'Glace', d: 'Givré dure un tour de plus. Banquise s’étend d’une case supplémentaire.' },
@@ -306,14 +302,14 @@ WEATHER = [
 ];
 
 
-EFF = [
+export const EFF = [
   ['Eau', 'Feu', '×2'],
   ['Feu', 'Eau', '×½'],
   ['Électrik', 'Sol', '×0']
 ];
 
 
-BSHAPE = [
+export const BSHAPE = [
   'M32 4 56 18v28L32 60 8 46V18Z',
   'M32 4c14 16 22 27 22 37a22 22 0 0 1-44 0c0-10 8-21 22-37Z',
   'M32 3 61 32 32 61 3 32Z',
@@ -325,8 +321,10 @@ BSHAPE = [
 ];
 
 
-dexNo = n => '#' + String(n).padStart(4, '0');
+export const dexNo = n => '#' + String(n).padStart(4, '0');
 
+// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+export function __init() {
 
 RX.cc.tip =
   'Sortez vos Pokémon de l’eau avant de frapper. Les Pokémon Sol y sont insensibles, comme dans la table des types.';

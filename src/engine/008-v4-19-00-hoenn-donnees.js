@@ -2,14 +2,11 @@
 
 import { MV } from './005-02-capacites.js';
 
-export let REGN;
+/* v4.19 : capacités signatures des Pokémon de Hoenn, nom des régions */
+export const REGN = ['', 'Kanto', 'Johto', 'Hoenn'];
 
 // Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
 export function __init() {
-
-/* v4.19 : capacités signatures des Pokémon de Hoenn, nom des régions */
-REGN = ['', 'Kanto', 'Johto', 'Hoenn'];
-
 
 Object.assign(MV, {
   lamefeuille: { n: 'Lame-Feuille', t: 'Plante', p: 13, r: 1, sh: 'one', mk: 'enracine', fx: 'percegarde', sig: 1, d: 'Signature. Contact, Enraciné, ignore la Garde.' },

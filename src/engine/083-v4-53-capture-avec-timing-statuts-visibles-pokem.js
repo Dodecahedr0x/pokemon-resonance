@@ -2,19 +2,20 @@
 
 import { PROFILE } from './011-05-etat-de-partie.js';
 import { RM, toast } from './014-08-outils.js';
+import { CROCHETS } from './015-v4-8-00-crochets.js';
 import { tokCl, unitsDirty } from '../screens/combat/board/boardStore.js';
 import { byUid } from './021-14-moteur-combat.js';
 import { canCapture } from './022-15-systemes-objets-liens-ia.js';
-import { B, L, __set_updTokCore, renderAll, ui, updTokCore } from './024-17-interface-combat.js';
+import { B, L, renderAll, ui } from './024-17-interface-combat.js';
 import { PREF, savePref, sfx, vibe } from './026-20-campagne-tutoriel-son.js';
 import { AUTO } from './030-24-prestige-mise-en-scene.js';
 import { CAP_K, bagN } from './032-v4-00-socle.js';
 import { renderWallet } from './035-v4-03-interface.js';
 import { renderParams } from './040-v4-08-parametres.js';
-import { NEWS416 } from './056-v4-16-1-01-finitions.js';
 import { fermer, majTemp, ouvrir } from '../screens/overlays/tempStore.js';
+import { FX448 } from './079-v4-48-immersion-sons-par-type-cris-vibrations-en.js';
 
-let FX453, updTokCoreOld453, CAPOK453, CAPT453;
+let CAPOK453;
 
 
 /* ---------- 1. statuts visibles et réactions sur les jetons ---------- */
@@ -81,33 +82,23 @@ export function timing453(cb) {
   o.querySelector('.ct453-b').focus();
 }
 
+const CAPT453 = () => PREF.capT453 !== 0 && !RM && !AUTO;
+
 // Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
 export function __init() {
 
-FX453 = () => PREF.im448 !== 0 && !RM;
-
-
-updTokCoreOld453 = updTokCore;
-
-
-__set_updTokCore(function (u) {
-  updTokCoreOld453(u);
-  try {
-    const T = L.u[u.uid];
-    if (!T) return;
-    T.st = true; // groupe .st453 du jeton (Units.jsx)
-    T.s453 = FX453() ? stKey453(u) : ''; // data-s453
-    tokCl(T, 'low453', FX453() && !u.ko && u.hp / u.mhp <= 0.25);
-    unitsDirty();
-  } catch (e) {}
+CROCHETS.jeton.push(u => {
+  const T = L.u[u.uid];
+  if (!T) return;
+  T.st = true; // groupe .st453 du jeton (Units.jsx)
+  T.s453 = FX448() ? stKey453(u) : ''; // data-s453
+  tokCl(T, 'low453', FX448() &&!u.ko && u.hp / u.mhp <= 0.25);
+  unitsDirty();
 });
 
 
 /* ---------- 2. capture avec timing ---------- */
 CAPOK453 = false;
-
-
-CAPT453 = () => PREF.capT453 !== 0 && !RM && !AUTO;
 
 
 document.addEventListener(
@@ -163,9 +154,4 @@ document.addEventListener('click', e => {
   }
 });
 
-
-NEWS416.unshift(['i-star', 'Capture, statuts et réactions', 'Capture avec timing (réglable), statuts visibles sur les jetons (brûlure, poison, paralysie, gel, sommeil, racines) et Pokémon qui réagissent : léger balancement quand on les sélectionne, tremblement quand ils sont presque K.O.', null]);
-
-
-NEWS416.splice(8);
 }

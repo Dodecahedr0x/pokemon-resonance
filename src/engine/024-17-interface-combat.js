@@ -5,14 +5,15 @@ import { MV } from './005-02-capacites.js';
 import { BY, SCEN, WXN } from './009-03-pokemon.js';
 import { ITEMS2, PROFILE, isCamp, ownedItems } from './011-05-etat-de-partie.js';
 import { arenaSetup, arenaTick } from './013-07-arenes.js';
-import { $, RM, el, gp, hc, hp, tc, toast, zig } from './014-08-outils.js';
+import { $, RM, attendre, el, gp, hc, hp, tc, toast, zig } from './014-08-outils.js';
+import { CROCHETS, crochet } from './015-v4-8-00-crochets.js';
 import { go } from './016-09-navigation.js';
 import { renderLigue } from './019-12-ligue.js';
 import { squad, vBonus } from './020-13-equipe-cartes.js';
 import { EMAX, P, affected, byUid, canEveil, endRound, evoOpts, execFoe, foeEvo, hasNx, newBattle, pAct, pDodge, pEveil, pMove, pRelance, preparerEnnemi, preview, reach, startEnemy, targets, uAt, uk } from './021-14-moteur-combat.js';
 import { champBuild, duoParts, duoTargets, pCapture, pDuo, previewRun, scenLock } from './022-15-systemes-objets-liens-ia.js';
 import { SV, autoSave, queueSave, renderResume } from './025-19-sauvegardes.js';
-import { PREF, PREPG, __set_PREPG, __set_tutoI, applyProgress, renderCoach, renderPrep, sfx, sfxEv, tutoI, vibe } from './026-20-campagne-tutoriel-son.js';
+import { PREF, __set_PREPG, __set_tutoI, applyProgress, renderCoach, renderPrep, sfx, sfxEv, vibe } from './026-20-campagne-tutoriel-son.js';
 import { drawObstacles } from './027-21-arene-a-lecran.js';
 import { fxReset, playEv } from './028-22-effets-attaque.js';
 import { panelRoleInfo } from './029-23-guide-epure.js';
@@ -39,24 +40,13 @@ import { apresRendu430, campOk430, docChoisie430 } from './065-v4-30-01-camp-et-
 import { apresRendu431, brouillardChoisi431, progresFixe431, teamFixe431 } from './066-v4-31-01-defis-tactiques.js';
 import { apresRendu433, duelPasse433 } from './068-v4-33-01-duel-et-tutoriel.js';
 import { calibre434 } from './069-v4-34-01-calibrage-et-evoli.js';
+import { annonceGim467 } from './098-4-67-journal-des-exploits-et-plateaux-a-gimmick.js';
 
-export let BG, VERT, MQV, VB, TILT, HC0, HC, HP, B, LOG, scSel, ui, L, hpc, wait, STC, enPips, poly;
-export let DIA;
+export let VERT, MQV, B, LOG, scSel;
 export function __set_VERT(v) { return (VERT = v); }
 export function __set_B(v) { return (B = v); }
 export function __set_LOG(v) { return (LOG = v); }
 export function __set_scSel(v) { return (scSel = v); }
-export function __set_launch(v) { return (launch = v); }
-export function __set_buildBoard(v) { return (buildBoard = v); }
-export function __set_updTok(v) { return (updTok = v); }
-export function __set_updTokCore(v) { return (updTokCore = v); }
-export function __set_renderBoard(v) { return (renderBoard = v); }
-export function __set_segHp(v) { return (segHp = v); }
-export function __set_renderAll(v) { return (renderAll = v); }
-export function __set_hit(v) { return (hit = v); }
-export function __set_playLog(v) { return (playLog = v); }
-export function __set_confirmAct(v) { return (confirmAct = v); }
-export function __set_finish(v) { return (finish = v); }
 
 
 export function tiltP(x, y) {
@@ -105,11 +95,32 @@ function hpf(x, y, s) {
 }
 
 
-export function challenge(k) {
-  __set_PREPG(null);
+/** Choisit le scénario k (à son propre onglet) et passe à l’écran Combats, pour un launch() qui suit.
+ *  Si un combat est encore en cours, la liste des combats n’est pas redessinée (ouvrirCombat le fait).
+ *  Les rencontres sauvages, le duel et l’objectif de l’Accueil gardent l’onglet choisi à la main :
+ *  ils posent scSel eux-mêmes. */
+export function choisirCombat(k) {
   scSel = k;
+  __set_PREPG(null);
   go('combat');
+}
+
+
+/** Le joueur demande le combat k : écran Combats sur ce scénario, à l’onglet du scénario. Ne lance pas le combat. */
+export function ouvrirCombat(k) {
+  choisirCombat(k);
   renderPrep();
+}
+
+
+/** Comme ouvrirCombat, pour une clé venue de l’interface : sans effet si le scénario n’existe pas (encore). */
+export function goFight(k) {
+  if (SCEN[k]) ouvrirCombat(k);
+}
+
+
+export function challenge(k) {
+  ouvrirCombat(k);
   if (!squad.length) {
     toast('Recrutez au moins un Pokémon avant de défier une arène.');
     return;
@@ -146,14 +157,23 @@ export function battleOpts() {
 
 
 export function launch() {
-  if (scene417(scSel)) return; // scènes d’histoire (v4.17)
-  __set_tutoI(SCEN[scSel] && SCEN[scSel].tuto ? 0 : -1);
-  launchCore();
-  if (B && !AUTO)
-    vsIntro(); // présentation des adversaires
-  else if (B) turnBanner();
-  // ordre par Vitesse : si un adversaire est plus rapide, il ouvre la manche (après la présentation)
-  if (B && B.ordre === 'vitesse') setTimeout(deroulerVitesse, AUTO || RM ? 950 : PREF.fast ? 1500 : 2400);
+  for (const f of CROCHETS.refusLancement) {
+    const refus = f();
+    if (refus) return toast(refus);
+  }
+  crochet('avantLancement');
+  const avant = B;
+  // scènes d’histoire (v4.17) : la scène remplace le combat
+  if (!scene417(scSel)) {
+    __set_tutoI(SCEN[scSel] && SCEN[scSel].tuto ? 0 : -1);
+    launchCore();
+    if (B && !AUTO)
+      vsIntro(); // présentation des adversaires
+    else if (B) turnBanner();
+    // ordre par Vitesse : si un adversaire est plus rapide, il ouvre la manche (après la présentation)
+    if (B && B.ordre === 'vitesse') setTimeout(deroulerVitesse, AUTO || RM ? 950 : PREF.fast ? 1500 : 2400);
+  }
+  crochet('lancement', !!B && B !== avant);
 }
 
 
@@ -195,7 +215,7 @@ function launchCore() {
   $('#cbBattle').hidden = false;
   $('#cbResult').hidden = true;
   $('#evoPick').hidden = true;
-  const aev = arenaSetup(B);
+  const aev = [...arenaSetup(B), ...annonceGim467(B)];
   buildBoard();
   log(`${SCEN[scSel].n} : à vous de jouer. Touchez un adversaire pour voir sa portée.`, 'sys');
   aev.forEach(x => {
@@ -245,6 +265,7 @@ export function backToPrep() {
 // Le SVG est rendu par React (src/screens/combat/board/) : buildBoard remonte tous les calques ;
 // L.tiles, L.t[k], L.tx[k], L.units, L.fx, L.fl… sont des références posées par le rendu.
 export function buildBoard() {
+  crochet('avantPlateau');
   VERT = !!(MQV && MQV.matches);
   const D = SCEN[B.sc],
     bio = D.bio,
@@ -263,10 +284,9 @@ export function buildBoard() {
     L.uo.push(u.uid);
   });
   boardBuild({ vb: VB(), bio, stadium: st, tilt: TILT.on }); // les jetons (Units.jsx) sont montés avec le plateau
-  {
-    bdClass('stadium', st);
-    if (typeof fxReset === 'function') fxReset();
-  }
+  bdClass('stadium', st);
+  fxReset();
+  crochet('plateau');
 }
 
 
@@ -296,12 +316,16 @@ const on1 = (cur, v) => (v ? 'on' : cur === 'on' ? '' : cur);
 
 
 export function updTok(u) {
+  crochet('avantJeton', u);
   updTokCore(u);
+  crochet('jeton', u);
   tokenArt(u);
+  crochet('illustration', u);
+  crochet('apresJeton', u);
 }
 
 
-export function updTokCore(u) {
+function updTokCore(u) {
   const T = L.u[u.uid];
   if (!T) return;
   const [x, y] = HC(uk(u));
@@ -356,12 +380,18 @@ export function renderBoard() {
     B.units.forEach(updTok); // jetons (Units.jsx) : redessinés une fois à la fin du lot
     drawObstacles();
   });
+  crochet('plateauRendu');
 }
 
 
 /* bandeaux */
 export function segHp(u) {
-  const h = `<span class="hp hseg"><i class="${hpc(u)}" style="width:${((u.hp / u.mhp) * 100).toFixed(0)}%"></i></span>`;
+  return CROCHETS.barrePv.reduce((h, f) => f(h, u), segHpBase(u));
+}
+
+
+function segHpBase(u) {
+  const h =`<span class="hp hseg"><i class="${hpc(u)}" style="width:${((u.hp / u.mhp) * 100).toFixed(0)}%"></i></span>`;
   // traînée des dégâts récents
   if (!B) return h;
   const r = Math.max(0, (u.hp / u.mhp) * 100),
@@ -432,7 +462,7 @@ export function cine(fromN, fromT, toN, toT, side, uid) {
   if (B) renderAll();
   sfx('evo');
   vibe([15, 25, 15, 25, 70]);
-  return wait(dl428(650, 1300, 2500)).then(() => {
+  return attendre(dl428(650, 1300, 2500)).then(() => {
     evoSet({ on: false, fx: null });
     ui.cine = false;
   });
@@ -454,6 +484,7 @@ function renderLog() {
 
 
 export function renderAll() {
+  crochet('avantRendu');
   tagUnits(B); // types → espèce, pour les illustrations
   renderAllCore();
   queueSave();
@@ -462,6 +493,7 @@ export function renderAll() {
   apresRendu431(); // brouillard, énigme (v4.31)
   apresRendu433(); // duel local (v4.33)
   calibre434(); // combat sur téléphone (v4.34)
+  crochet('rendu');
 }
 
 
@@ -534,16 +566,18 @@ function arrFx(uid) {
 }
 
 
-export function hit(uid) {
+function hit(uid) {
   const T = L.u[uid];
-  if (!T) return;
-  T.hit = true; // anneau qui clignote (classe « hit » de .tok-ring, Units.jsx)
-  unitsDirty();
-  setTimeout(() => {
-    T.hit = false;
+  if (T) {
+    T.hit = true; // anneau qui clignote (classe « hit » de .tok-ring, Units.jsx)
     unitsDirty();
-  }, 450);
-  aie429(uid); // le Pokémon recule sous le coup (v4.29)
+    setTimeout(() => {
+      T.hit = false;
+      unitsDirty();
+    }, 450);
+    aie429(uid); // le Pokémon recule sous le coup (v4.29)
+  }
+  crochet('touche', uid);
 }
 
 
@@ -594,6 +628,7 @@ export function playLog(ev) {
     }
   });
   sfxEv(ev);
+  crochet('journal', ev);
 }
 
 
@@ -631,6 +666,7 @@ export function confirmAct() {
     ui.sel = id;
     renderAll();
   }
+  crochet('action', id);
 }
 
 
@@ -830,6 +866,7 @@ export async function finDeManche(S0) {
 
 
 export function finish() {
+  crochet('avantFinCombat');
   // rang du combat
   if (B && B.over && !B._rk) {
     B._rk = 1;
@@ -879,40 +916,69 @@ export function finish() {
     RM ? 0 : 900
   );
   setTimeout(() => autoSave(true), RM ? 50 : 1200);
+  crochet('finCombat');
 }
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
-export function __init() {
-
 /* ===================== INTERFACE DE COMBAT v0.8 ===================== */
-BG = { S: 27, OX: 20, OY: 22 };
+export const BG = { S: 27, OX: 20, OY: 22 };
 
 
-VERT = false;
-
-
-MQV = window.matchMedia ? matchMedia('(max-width: 700px)') : null;
-
-
-VB = () => (VERT ? [286, 430] : [430, 286]);
+export const VB = () => (VERT ? [286, 430] : [430, 286]);
 
 
 /* v4.77 · plateau incliné : HC et HP renvoient des points vus en perspective quand TILT.on.
    Sol = coordonnées d'origine du viewBox ; écran = sol incliné de TILT.a puis recadré. */
-TILT = { on: false };
+export const TILT = { on: false };
 
 
-HC0 = k => {
+export const HC0 = k => {
   const p = P(k),
     q = hc(p[0], p[1], BG.S, BG.OX, BG.OY);
   return VERT ? [q[1], 430 - q[0]] : q;
 };
 
 
-HC = k => (TILT.on ? tiltP(...HC0(k)) : HC0(k));
+export const HC = k => (TILT.on ? tiltP(...HC0(k)) : HC0(k));
 
 
-HP = (x, y, s) => (TILT.on ? tiltHP(x, y, s) : VERT ? hpf(x, y, s) : hp(x, y, s));
+export const HP = (x, y, s) => (TILT.on ? tiltHP(x, y, s) : VERT ? hpf(x, y, s) : hp(x, y, s));
+
+
+export const ui = { sel: null, selE: null, mode: null, mi: null, pk: null, pv: null, busy: false, act: null, cine: false };
+
+
+export const L = {};
+
+
+export const hpc = u => {
+  const r = u.hp / u.mhp;
+  return r > 0.5 ? '' : r > 0.2 ? 'mid' : 'lo';
+};
+
+
+export const DIA = 'M0 -3.4 2.5 0 0 3.4 -2.5 0Z';
+
+
+export const STC = { PAR: 'par', GEL: 'gel', SOM: 'som', REC: 'rec', BRÛ: 'bru', RAC: 'rac', TOILE: 'toile', CHARGE: 'chg', VOL: 'vol', PSN: 'psn', AIDE: 'aide', MAUD: 'maud', REQ: 'req', RIPO: 'ripo', MIR: 'ripo', x2: 'aide' };
+
+
+export const enPips = (n, cls = '') =>
+  `<span class="enp ${cls}" aria-label="Énergie d’Éveil ${n} sur 3">${[0, 1, 2].map(i => `<i class="${i < n ? 'on' : ''}"></i>`).join('')}</span>`;
+
+
+export const poly = (k, c) => {
+  const [x, y] = HC(k),
+    pt = HP(x, y, BG.S - 3);
+  return `<polygon points="${pt}" class="${c} gw"/><polygon points="${pt}" class="${c}"/>`;
+};
+
+// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+export function __init() {
+
+VERT = false;
+
+
+MQV = window.matchMedia ? matchMedia('(max-width: 700px)') : null;
 
 
 if (MQV) {
@@ -931,31 +997,6 @@ B = null,
   scSel = 'gue';
 
 
-ui = { sel: null, selE: null, mode: null, mi: null, pk: null, pv: null, busy: false, act: null, cine: false };
-
-
-L = {};
-
-
-hpc = u => {
-  const r = u.hp / u.mhp;
-  return r > 0.5 ? '' : r > 0.2 ? 'mid' : 'lo';
-};
-
-
-wait = ms => new Promise(r => setTimeout(r, ms));
-
-
-DIA = 'M0 -3.4 2.5 0 0 3.4 -2.5 0Z';
-
-
-STC = { PAR: 'par', GEL: 'gel', SOM: 'som', REC: 'rec', BRÛ: 'bru', RAC: 'rac', TOILE: 'toile', CHARGE: 'chg', VOL: 'vol', PSN: 'psn', AIDE: 'aide', MAUD: 'maud', REQ: 'req', RIPO: 'ripo', MIR: 'ripo', x2: 'aide' };
-
-
-enPips = (n, cls = '') =>
-  `<span class="enp ${cls}" aria-label="Énergie d’Éveil ${n} sur 3">${[0, 1, 2].map(i => `<i class="${i < n ? 'on' : ''}"></i>`).join('')}</span>`;
-
-
 $('#scenList').addEventListener('click', e => {
   const b = e.target.closest('[data-sc]');
   if (!b) return;
@@ -965,13 +1006,6 @@ $('#scenList').addEventListener('click', e => {
 
 
 $('#bLaunch').addEventListener('click', () => launch());
-
-
-poly = (k, c) => {
-  const [x, y] = HC(k),
-    pt = HP(x, y, BG.S - 3);
-  return `<polygon points="${pt}" class="${c} gw"/><polygon points="${pt}" class="${c}"/>`;
-};
 
 
 $('#evoPick').addEventListener('click', async e => {

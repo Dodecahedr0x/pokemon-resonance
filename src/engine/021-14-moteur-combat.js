@@ -29,11 +29,7 @@ import { talDmg432, talMov432 } from './067-v4-32-01-individus-et-confort.js';
 import { duelPlan433, vigilDuel433 } from './068-v4-33-01-duel-et-tutoriel.js';
 import { evoliHarmonie434 } from './069-v4-34-01-calibrage-et-evoli.js';
 
-export let BW, BH, K, P, inB, CDIR, nbrK, mhpOf, uk, uAt, byUid, flies, effR, NEEDU, HOSTILE, EMAX, hasNx, BRANCHES;
-let RXM, auContact, MENACE;
-export function __set_stun(v) { return (stun = v); }
-export function __set_fin(v) { return (fin = v); }
-export function __set_pRelance(v) { return (pRelance = v); }
+export let BW, BH, BRANCHES;
 
 
 export function toCube(c, r) {
@@ -144,6 +140,9 @@ function entryWx(S, u, ev) {
 }
 
 
+// Voix par manche au début d'un combat : 3, plus le bonus de l'équipe (vBonus, PC libres).
+export const voixDepart = bonus => 3 + bonus;
+
 export function newBattle(sc, team, bonus, opt) {
   opt = opt || {};
   const D0 = SCEN[sc],
@@ -163,8 +162,8 @@ export function newBattle(sc, team, bonus, opt) {
       tiles: {},
       units: [],
       wx: null,
-      voix: 3 + bonus,
-      vmax: 3 + bonus,
+      voix: voixDepart(bonus),
+      vmax: voixDepart(bonus),
       eveil: false,
       relance: false,
       over: null,
@@ -522,6 +521,12 @@ export function heal(S, v, a, ev) {
 
 export function stun(S, v, lab, ev, nos) {
   if (!v || v.ko) return;
+  if (v.item === 'baielum' && !v.lum455) {
+    // objet tenu (v4.58) : annule le premier état subi
+    v.lum455 = 1;
+    say(ev, `Baie Lum : ${v.n} annule l’état ${lab}.`);
+    return;
+  }
   if (v.tal === 'attention') {
     say(ev, `${v.n} reste concentré.`);
     return;
@@ -824,6 +829,7 @@ function react(S, rx, k, u, v, base, ev) {
 
 
 export function fin(S, ev) {
+  CROCHETS.avantVerdict.forEach(h => h(S, ev));
   if (!S.over) {
     const a = S.units.some(x => x.side === 'a' && !x.ko),
       e = S.units.some(x => x.side === 'e' && !x.ko);
@@ -1356,6 +1362,7 @@ export function pRelance(S, u) {
   if (S.phase !== 'player' || S.voix < 2 || S.relance || !u.acted || u.ko || u.sn) return null;
   u.acted = false;
   u.moved = false;
+  u.rst478 = 0; // tour guidé : le Pokémon repart de l’étape Déplacer
   S.relance = true;
   S.voix -= 2;
   S.stats.voix += 2;
@@ -1794,24 +1801,17 @@ function previewCore(S, uid, mi, k) {
   };
 }
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
-export function __init() {
-
 /* ===================== MOTEUR DE COMBAT v0.8 ===================== */
-BW = 8,
-  BH = 6;
+export const K = (c, r) => c + ',' + r;
 
 
-K = (c, r) => c + ',' + r;
+export const P = k => k.split(',').map(Number);
 
 
-P = k => k.split(',').map(Number);
+export const inB = (c, r) => c >= 0 && c < BW && r >= 0 && r < BH;
 
 
-inB = (c, r) => c >= 0 && c < BW && r >= 0 && r < BH;
-
-
-CDIR = [
+export const CDIR = [
   [1, -1, 0],
   [1, 0, -1],
   [0, 1, -1],
@@ -1821,45 +1821,55 @@ CDIR = [
 ];
 
 
-nbrK = k => nbr(P(k)).map(q => K(q[0], q[1]));
+export const nbrK = k => nbr(P(k)).map(q => K(q[0], q[1]));
 
 
-mhpOf = s => 20 + s[0] * 8;
+export const mhpOf = s => 20 + s[0] * 8;
 
 
-uk = u => K(u.pos[0], u.pos[1]);
+export const uk = u => K(u.pos[0], u.pos[1]);
 
 
-uAt = (S, k) => S.units.find(u => !u.ko && uk(u) === k);
+export const uAt = (S, k) => S.units.find(u => !u.ko && uk(u) === k);
 
 
-byUid = (S, id) => S.units.find(u => u.uid === id);
+export const byUid = (S, id) => S.units.find(u => u.uid === id);
 
 
-flies = u => !u.cloue && (u.t.includes('Vol') || u.tal === 'levitation');
+export const flies = u => !u.cloue && (u.t.includes('Vol') || u.tal === 'levitation');
 
 
-effR = (u, m, S) =>
+export const effR = (u, m, S) =>
   m.r + (u.tal === 'oeilcompose' && m.r > 0 ? 1 : 0) + (u.colosse && m.r > 0 ? 2 : 0) - nuitPortee(S, u, m) + (m.pluie && S && S.wx && S.wx.k === 'pluie' ? 2 : 0) + (u.item === 'lentillezoom' && m.r >= 2 ? 1 : 0);
 
 
-NEEDU = ['swap', 'swapally', 'push', 'pull', 'web', 'confuse', 'turn', 'taunt', 'heal', 'parc', 'sleep', 'root'];
+export const NEEDU = ['swap', 'swapally', 'push', 'pull', 'web', 'confuse', 'turn', 'taunt', 'heal', 'parc', 'sleep', 'root'];
 
 
-HOSTILE = ['confuse', 'turn', 'taunt', 'push', 'pull', 'web', 'parc', 'sleep', 'root'];
+export const HOSTILE = ['confuse', 'turn', 'taunt', 'push', 'pull', 'web', 'parc', 'sleep', 'root'];
 
 
-RXM = { fon: 1.5, bri: 2, sur: 1.3 };
+const RXM = { fon: 1.5, bri: 2, sur: 1.3 };
 
 
-EMAX = 3;
+export const EMAX = 3;
 
 
-hasNx = u => !!(BY[u.id] && BY[u.id].nx);
+export const hasNx = u => !!(BY[u.id] && BY[u.id].nx);
 
 
 /* v4.13 · Éveils à embranchement : chaque voie a sa condition ; la voie « par défaut » reste toujours ouverte */
-auContact = (S, u, camp) => S.units.filter(o => !o.ko && o !== u && (camp === 'allie' ? o.side === u.side : o.side !== u.side) && hdist(o.pos, u.pos) === 1).length;
+const auContact = (S, u, camp) => S.units.filter(o => !o.ko && o !== u && (camp === 'allie' ? o.side === u.side : o.side !== u.side) && hdist(o.pos, u.pos) === 1).length;
+
+
+/** v4.12 : toutes les cases qu'un adversaire peut atteindre ce tour-ci (déplacement + portée de ses attaques). */
+const MENACE = { k: '', z: [] };
+
+// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+export function __init() {
+
+BW = 8,
+  BH = 6;
 
 
 BRANCHES = {
@@ -1877,8 +1887,4 @@ BRANCHES = {
     { id: 'tygnon', why: 'PV à 50 % ou moins', ok: (S, u) => u.hp <= u.mhp / 2 }
   ]
 };
-
-
-/** v4.12 : toutes les cases qu'un adversaire peut atteindre ce tour-ci (déplacement + portée de ses attaques). */
-MENACE = { k: '', z: [] };
 }

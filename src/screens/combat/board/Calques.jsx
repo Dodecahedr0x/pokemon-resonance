@@ -12,7 +12,7 @@ import { prescSurPlateau } from '../../../engine/051-v4-12-01-ct-epiques.js';
 import { useBoard } from './boardStore.js';
 import { SvgHtml } from './svgHtml.jsx';
 import { NomsHauts } from './Units.jsx';
-import { PE, lref } from './Terrain.jsx';
+import { PE, lref } from './partage.js';
 
 // Calques redessinés à chaque renderBoard : marques élémentaires, rochers, brouillard, pièges,
 // obstacles (piliers, hautes herbes), surbrillances, couvertures, ricochets, intentions adverses.

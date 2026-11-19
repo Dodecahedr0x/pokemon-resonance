@@ -3,47 +3,30 @@
 import { RX, TYPES } from './004-01-donnees.js';
 import { BY, PRESETS, SCEN } from './009-03-pokemon.js';
 import { BUDGET } from './010-04-evolution-en-combat.js';
-import { CAMP_START, DIFFS, ITEMS2, PROFILE, __set_PROFILE, defProfile, inBox } from './011-05-etat-de-partie.js';
+import { CAMP_START, DIFFS, ITEMS2, PROFILE, SECTIONS_PROFIL, __set_PROFILE, defProfile, inBox } from './011-05-etat-de-partie.js';
 import { BADGES, __set_BADGES } from './013-07-arenes.js';
-import { $, toast } from './014-08-outils.js';
+import { RC } from './012-06-recrues-roles-synergies.js';
+import { $, attendre, ecrireLS, toast } from './014-08-outils.js';
 import { setSaveIndicator } from '../components/shellStore.js';
 import { cur, go } from './016-09-navigation.js';
 import { renderLigue } from './019-12-ligue.js';
-import { __set_squad, renderSquad, save, squad, validSquad } from './020-13-equipe-cartes.js';
+import { TEAM_MAX, __set_squad, renderSquad, save, squad, validSquad } from './020-13-equipe-cartes.js';
 import { BH, BW } from './021-14-moteur-combat.js';
 import { wildScen } from './022-15-systemes-objets-liens-ia.js';
 import { OBST } from './023-16-roles-synergies-obstacles.js';
-import { B, LOG, __set_B, __set_LOG, __set_scSel, autoSel, buildBoard, launch, log, renderAll, scSel, ui, wait } from './024-17-interface-combat.js';
-import { PREF, openStarter, renderCamp, renderPrep, savePref, sfx, vibe } from './026-20-campagne-tutoriel-son.js';
-import { ecoClean } from './032-v4-00-socle.js';
+import { B, LOG, __set_B, __set_LOG, __set_scSel, autoSel, buildBoard, launch, log, renderAll, ui } from './024-17-interface-combat.js';
+import { PREF, openStarter, renderPrep, savePref, sfx, vibe } from './026-20-campagne-tutoriel-son.js';
 import { renderWallet } from './035-v4-03-interface.js';
+import { renderHome } from './036-v4-04-accueil.js';
 import { v4After } from './040-v4-08-parametres.js';
-import { aplusClean, rivalBuild, tdrRestore } from './043-v4-4-01-aventure-plus.js';
+import { rivalBuild, tdrRestore } from './043-v4-4-01-aventure-plus.js';
 import { deroulerVitesse } from './044-v4-5-01-moteur-tactique.js';
-import { ctClean } from './045-v4-6-01-ct-cs.js';
-import { tacClean } from './047-v4-8-01-tactique.js';
-import { rejClean } from './048-v4-9-01-rejouabilite.js';
-import { idpClean } from './049-v4-10-01-identite.js';
-import { monClean } from './050-v4-11-01-monde.js';
-import { v416Clean } from './055-v4-16-01-johto-vivant.js';
-import { v417Clean } from './057-v4-17-01-compagnons-et-resonance.js';
-import { v418Clean } from './058-v4-18-01-peche-safari-coop.js';
-import { v419Clean } from './059-v4-19-01-hoenn.js';
-import { libre421, v421Clean } from './061-v4-21-01-capture-partout.js';
-import { v428Clean } from './063-v4-28-01-captures-combat-accueil.js';
-import { v429Clean } from './064-v4-29-01-qualite.js';
-import { v430Clean } from './065-v4-30-01-camp-et-tactique.js';
-import { v431Clean } from './066-v4-31-01-defis-tactiques.js';
-import { v432Clean } from './067-v4-32-01-individus-et-confort.js';
-import { v433Clean } from './068-v4-33-01-duel-et-tutoriel.js';
-import { v435Clean } from './071-v4-38-les-legendaires-de-hoenn.js';
+import { libre421 } from './061-v4-21-01-capture-partout.js';
 import { hideSaves, refreshSaves, showSaves } from '../screens/saves/savesStore.js';
 import { refreshResume } from '../screens/combat/prep/prepStore.js';
 
-export let SAVE_V, SLOTS, SV, esc, readText, fmtD;
-let LSK, sigOf, svT, saveCode;
-export function __set_importSave(v) { return (importSave = v); }
-export function __set_importData(v) { return (importData = v); }
+export let SAVE_V, SLOTS;
+let LSK, svT;
 
 
 function lsGet(k) {
@@ -104,7 +87,7 @@ export function validBattle(b) {
 }
 
 
-export function validSave(s) {
+function validSave(s) {
   return !!(
     s &&
     typeof s === 'object' &&
@@ -119,7 +102,8 @@ export function validSave(s) {
 
 export function cleanProfile(p) {
   const o = defProfile();
-  if (!p || typeof p !== 'object') return Object.assign(o, ecoClean(p), aplusClean(p), ctClean(p), tacClean(p), rejClean(p), idpClean(p), monClean(p), v416Clean(p), v417Clean(p), v418Clean(p), v419Clean(p), v421Clean(p), v428Clean(p), v429Clean(p), v430Clean(p), v431Clean(p), v432Clean(p), v433Clean(p), v435Clean(p));
+  const sections = () => SECTIONS_PROFIL.map(([, nettoyer]) => nettoyer(p));
+  if (!p || typeof p !== 'object') return Object.assign(o, ...sections());
   if (typeof p.name === 'string') o.name = p.name.slice(0, 24);
   ['battles', 'wins', 'losses', 'evos', 'rx', 'kos', 'caught'].forEach(k => {
     if (Number.isFinite(p[k]) && p[k] >= 0) o[k] = Math.floor(p[k]);
@@ -158,7 +142,7 @@ export function cleanProfile(p) {
   if (Number.isFinite(p.elite)) o.elite = Math.max(0, Math.min(5, Math.floor(p.elite)));
   if (p.tuto) o.tuto = 1;
   if (o.mode === 'campagne' && !o.box.length) o.box = [...CAMP_START];
-  return Object.assign(o, ecoClean(p), aplusClean(p), ctClean(p), tacClean(p), rejClean(p), idpClean(p), monClean(p), v416Clean(p), v417Clean(p), v418Clean(p), v419Clean(p), v421Clean(p), v428Clean(p), v429Clean(p), v430Clean(p), v431Clean(p), v432Clean(p), v433Clean(p), v435Clean(p));
+  return Object.assign(o, ...sections());
 }
 
 
@@ -231,7 +215,7 @@ async function pushRemote(k, s, now) {
         } catch (e) {
           const c = e && e.code;
           if (c === 'unavailable' && a === 0) {
-            await wait(800 + Math.random() * 700);
+            await attendre(800 + Math.random() * 700);
             continue;
           }
           if (c === 'quota_exceeded')
@@ -243,7 +227,7 @@ async function pushRemote(k, s, now) {
           break;
         }
       }
-      if (k === 'auto' && !now && SV.pend[k]) await wait(5000);
+      if (k === 'auto' && !now && SV.pend[k]) await attendre(5000);
     }
   } finally {
     SV.busy[k] = false;
@@ -277,14 +261,12 @@ export function applySave(s, opt) {
     .filter(i => Number.isInteger(i) && i >= 0 && i < 8)
     .filter((v, i, a) => a.indexOf(v) === i)
     .sort((a, b) => a - b));
-  try {
-    localStorage.setItem('res9-badges', JSON.stringify(BADGES));
-  } catch (e) {}
+  ecrireLS('res9-badges', BADGES);
   SV.lastBattle = validBattle(s.battle) ? JSON.parse(JSON.stringify(s.battle)) : null;
   renderSquad();
   renderLigue();
   renderResume();
-  if (typeof renderCamp === 'function') renderCamp();
+  renderHome();
   if (opt.resume && SV.lastBattle) resumeBattle();
   else if (opt.leaveBattle && B) {
     __set_B(null);
@@ -370,7 +352,7 @@ export function renderResume() {
 }
 
 
-export function readCode(t) {
+function readCode(t) {
   t = String(t || '').trim();
   if (t.startsWith('{')) return JSON.parse(t);
   return JSON.parse(decodeURIComponent(escape(atob(t.replace(/^RES1\./, '').replace(/\s+/g, '')))));
@@ -485,27 +467,63 @@ async function exportSave() {
 }
 
 
-export async function importSave(file) {
+async function importSave(file) {
   if (!file) return;
   let s = null;
   try {
     s = readCode(await readText(file));
-  } catch (e) {}
+  } catch (e) {
+    toast('Fichier illisible : ce n’est ni un fichier .json ni un code de sauvegarde.');
+    const i = $('#svFile');
+    if (i) i.value = '';
+    return;
+  }
   importData(s);
+  const i = $('#svFile');
+  if (i) i.value = '';
 }
 
 
-export function importData(s) {
+/* L’import répare ce qui peut l’être (équipe hors budget ou espèce inconnue filtrées, enveloppe {auto: …}, autre version). */
+function normSave(s) {
+  if (!s || typeof s !== 'object') return null;
+  for (const k of ['auto', 'save', 'data', 'snapshot'])
+    if (!s.squad && !s.profile && s[k] && typeof s[k] === 'object') s = s[k];
+  if (!s || typeof s !== 'object' || (!Array.isArray(s.squad) && !s.profile)) return null;
+  const o = Object.assign({}, s);
+  o.v = SAVE_V;
+  if (typeof o.savedAt !== 'string') o.savedAt = new Date().toISOString();
+  if (!Array.isArray(o.badges)) o.badges = [];
+  const keep = [],
+    seen = new Set();
+  let cost = 0;
+  (Array.isArray(o.squad) ? o.squad : []).forEach(id => {
+    if (!BY[id] || keep.length >= TEAM_MAX || seen.has(BY[id].base) || cost + RC(id) > BUDGET) return;
+    seen.add(BY[id].base);
+    cost += RC(id);
+    keep.push(id);
+  });
+  o.squad = keep.length ? keep : [...PRESETS.orage.ids];
+  return o;
+}
+
+
+function importData(s) {
+  const n = normSave(s);
+  if (!n) {
+    toast('Fichier illisible : ce n’est pas une sauvegarde Résonance.');
+    return false;
+  }
   try {
-    if (!validSave(s)) throw 0;
+    if (!validSave(n)) throw new Error('sauvegarde incomplète');
     autoSave();
-    applySave(s, { leaveBattle: true });
+    applySave(n, { leaveBattle: true });
     closeSaves();
     autoSave(true);
     toast(validBattle(SV.lastBattle) ? 'Partie importée : un combat en cours vous attend.' : 'Partie importée.');
     return true;
   } catch (e) {
-    toast('Ce n’est pas une sauvegarde Résonance valide.');
+    toast('Import impossible : ' + String((e && e.message) || 'sauvegarde invalide').slice(0, 80));
     return false;
   }
 }
@@ -529,19 +547,7 @@ export function bootSaves() {
   if (!validSave(a)) autoSave(true);
 }
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
-export function __init() {
-
-/* ===================== SAUVEGARDES ===================== */
-/* Sauvegarde automatique + 3 emplacements, combat en cours compris.
-   Toujours sur l’appareil (localStorage) ; synchronisées avec le compte Claude
-   quand la page y a accès (db, sous-arbre privé de chaque joueur). */
-SAVE_V = 1,
-  SLOTS = ['s1', 's2', 's3'],
-  LSK = k => 'res-save-' + k;
-
-
-SV = {
+export const SV = {
   db: null,
   uid: null,
   dl: null,
@@ -559,7 +565,51 @@ SV = {
 };
 
 
-sigOf = s => JSON.stringify([s.squad, s.badges, s.profile, s.battle]);
+const sigOf = s => JSON.stringify([s.squad, s.badges, s.profile, s.battle]);
+
+
+/* ---- affichage ---- */
+export const fmtD = iso => {
+  try {
+    return new Date(iso).toLocaleString('fr-FR', {
+      day: 'numeric',
+      month: 'short',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  } catch (e) {
+    return '';
+  }
+};
+
+
+export const esc = t => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+
+
+/* sauvegarde en texte : se copie et se colle partout, même là où l’on ne peut ni télécharger ni choisir un fichier */
+const saveCode = s => 'RES1.' + btoa(unescape(encodeURIComponent(JSON.stringify(s))));
+
+
+const readText = f =>
+  f.text
+    ? f.text()
+    : new Promise((res, rej) => {
+        const fr = new FileReader();
+        fr.onload = () => res(String(fr.result));
+        fr.onerror = () => rej(fr.error);
+        fr.readAsText(f);
+      });
+
+// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+export function __init() {
+
+/* ===================== SAUVEGARDES ===================== */
+/* Sauvegarde automatique + 3 emplacements, combat en cours compris.
+   Toujours sur l’appareil (localStorage) ; synchronisées avec le compte Claude
+   quand la page y a accès (db, sous-arbre privé de chaque joueur). */
+SAVE_V = 1,
+  SLOTS = ['s1', 's2', 's3'],
+  LSK = k => 'res-save-' + k;
 
 
 /* ---- écriture : appareil tout de suite, compte avec une écriture à la fois par emplacement ---- */
@@ -591,39 +641,6 @@ window.addEventListener('pagehide', () => {
     autoSave();
   }
 });
-
-
-/* ---- affichage ---- */
-fmtD = iso => {
-  try {
-    return new Date(iso).toLocaleString('fr-FR', {
-      day: 'numeric',
-      month: 'short',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  } catch (e) {
-    return '';
-  }
-};
-
-
-esc = t => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
-
-
-/* sauvegarde en texte : se copie et se colle partout, même là où l’on ne peut ni télécharger ni choisir un fichier */
-saveCode = s => 'RES1.' + btoa(unescape(encodeURIComponent(JSON.stringify(s))));
-
-
-readText = f =>
-  f.text
-    ? f.text()
-    : new Promise((res, rej) => {
-        const fr = new FileReader();
-        fr.onload = () => res(String(fr.result));
-        fr.onerror = () => rej(fr.error);
-        fr.readAsText(f);
-      });
 
 
 $('#saves').addEventListener('click', e => {
@@ -727,7 +744,7 @@ $('#saves').addEventListener('click', e => {
     if (f === 'diff') {
       PROFILE.diff = v;
       queueSave();
-      if (typeof renderCamp === 'function') renderCamp();
+      renderHome();
     } else {
       PREF[f] = !PREF[f];
       savePref();
@@ -754,6 +771,32 @@ $('#saves').addEventListener('click', e => {
 
 $('#saves').addEventListener('change', e => {
   if (e.target.id === 'svFile') importSave(e.target.files && e.target.files[0]);
+});
+
+
+/* Dans certaines applis le sélecteur de fichiers ne s’ouvre pas. Le bouton le détecte et ouvre la zone « Coller un code » (le texte du fichier .json y marche aussi). */
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-sv="importfile"]');
+  if (!b) return;
+  const i = $('#svFile');
+  if (!i) return;
+  let opened = false;
+  const mark = () => (opened = true);
+  window.addEventListener('blur', mark, { once: true });
+  document.addEventListener('visibilitychange', mark, { once: true });
+  i.addEventListener('change', mark, { once: true });
+  i.addEventListener('cancel', mark, { once: true });
+  try {
+    i.click();
+  } catch (er) {}
+  setTimeout(() => {
+    if (opened) return;
+    toast('Le sélecteur de fichiers est bloqué ici : collez le texte de votre sauvegarde ci-dessous.');
+    SV.code = { mode: 'paste' };
+    renderSaves();
+    const t = $('#svCode');
+    if (t) t.focus();
+  }, 1400);
 });
 
 

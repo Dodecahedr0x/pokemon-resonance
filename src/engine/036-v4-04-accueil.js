@@ -1,18 +1,14 @@
 /* Section d'origine : v4-04-accueil.js */
 
-import { SCEN } from './009-03-pokemon.js';
 import { $, RM } from './014-08-outils.js';
 import { go } from './016-09-navigation.js';
 import { encounter } from './017-10-accueil-route.js';
-import { __set_scSel } from './024-17-interface-combat.js';
-import { __set_PREPG, renderPrep } from './026-20-campagne-tutoriel-son.js';
-import { groupOf } from './031-25-v3-parcours-accueil.js';
+import { goFight } from './024-17-interface-combat.js';
 import { renderWallet } from './035-v4-03-interface.js';
 import { renderCampBase } from './049-v4-10-01-identite.js';
 import { saisonRoute } from './050-v4-11-01-monde.js';
 import { refreshAccueil } from '../screens/accueil/accueilStore.js';
 
-export let goFight;
 
 
 // L'Accueil est rendu par React (src/screens/accueil) : héros, compagnon, bannières, équipe,
@@ -29,15 +25,6 @@ export function renderHome() {
 export function __init() {
 
 /* ---------- Accueil : hub d’aventure ---------- */
-goFight = k => {
-  if (!SCEN[k]) return;
-  __set_scSel(k);
-  __set_PREPG({ g: groupOf(k), sc: k });
-  go('combat');
-  renderPrep();
-};
-
-
 /* la grille v4 de l'Accueil (.v4-home) et ses raccourcis sont rendus par React (Accueil.jsx, Tuiles.jsx) */
 document.addEventListener('click', e => {
   const f = e.target.closest('[data-v4fight]');

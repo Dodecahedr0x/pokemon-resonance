@@ -12,7 +12,9 @@ Paramètres › « Télécharger le jeu » / « Enregistrer le jeu » téléchar
 ## Suite, par étapes indépendantes et vérifiables
 1. ~~**Découper le moteur en modules ES.**~~ Fait : 113 modules, un par section d'origine, avec `import`/`export` explicites.
    - Corps de module = déclarations seulement ; le code de démarrage est dans `__init()`, appelé par `index.js` dans l'ordre du fichier d'origine. Les imports circulaires sont donc sans danger, et l'ordre d'exécution est identique.
-   - Les 83 variables réaffectées depuis un autre module (`squad`, `B`, `scSel`, `show`…) passent par `__set_<nom>(v)`, car un import ES est en lecture seule. Beaucoup sont des fonctions « enveloppées » par des sections de version plus récentes (`show`, `setTod`, `scenLock`…) : les futures étapes les remplaceront par des points d'extension explicites.
+   - Les variables d'état réaffectées depuis un autre module (`squad`, `B`, `scSel`…, 18 en tout) passent par `__set_<nom>(v)`, car un import ES est en lecture seule.
+   - ~~Fonctions « enveloppées » par des sections de version plus récentes (`show`, `setTod`, `scenLock`…).~~ Fait : plus aucune fonction n'est réaffectée. Les 76 enveloppes sont devenues des abonnements aux événements nommés de `015-…-crochets.js`, ou des règles écrites dans la fonction qu'elles modifiaient (voir le README). Les sections 072 et 073 (import de sauvegarde) sont fondues dans `025`.
+   - Les constantes, tables et fonctions sont déclarées dans le corps du module ; `__init()` ne garde que ce qui dépend de l'ordre de démarrage.
    - Vérifié : rendu identique à l'ancien moteur sur Accueil, Équipe, Combats et Guide (aléatoire et horloge figés ; seules différences, la progression du texte lettre par lettre), une manche de combat complète, sauvegarde et rechargement.
    - Prochain nettoyage utile : regrouper les sections de versions (`v4.43 : …`) dans les modules des écrans qu'elles modifient.
 2. **Un état de partie observable.** Exposer l'état (`05-etat-de-partie`, sauvegardes) par un petit store (`useSyncExternalStore`) pour que les composants React se re-rendent quand le moteur le modifie.
@@ -37,7 +39,7 @@ Paramètres › « Télécharger le jeu » / « Enregistrer le jeu » téléchar
      - le message d'erreur de `002` (il doit survivre à un plantage de React) ;
      - les effets passagers posés dans des calques vides rendus par React (`L.fx`, `L.fl`, `pk73fx`, ondes `pk-onde`, lettres du texte qui s'écrit, `canvas.fxc`), la transformation image par image `ct453` et la largeur de `#bBoard` (`calibre434`) ;
      - les bascules `hidden` de `#cbBattle`, `#evoPick`, `#cbResult`, le surlignage `coach-hl` hors plateau, `placeAlert()` (position de l'alerte « ! ») ;
-     - les liens `<a>` temporaires de téléchargement, les canevas hors écran et les `<style>` injectés (CSS personnalisé, sections 105 à 112).
+     - les liens `<a>` temporaires de téléchargement, les canevas hors écran et le `<style>` du CSS personnalisé (les styles des sections 105 à 112 sont désormais des fichiers de `src/styles/`).
    Pour reprendre un écran : chercher dans `src/engine/` chaque id et chaque classe du conteneur, et toute écriture (`innerHTML`, `insertAdjacentHTML`, `textContent =`, `appendChild`…) ou enveloppe de version qui le vise. Le JSX doit reproduire l'ancien DOM (un attribut vide s'écrit `data-x=""`) ; un état visuel posé par le moteur (`classList`, `hidden`, `style`) passe dans le rendu, ou l'élément reste monté.
 4. **Navigation.** Une fois les écrans portés, remplacer `09-navigation` (ancres `#accueil`…) par un état React ; garder les ancres dans l'URL pour les favoris.
 5. **Retirer les surcouches de versions** (`<style id="resonance-v4xx">` regroupées dans `src/styles/game.css`) en les fusionnant dans les styles des composants portés.

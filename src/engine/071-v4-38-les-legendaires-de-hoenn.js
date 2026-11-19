@@ -3,18 +3,14 @@
 import { PKIMG } from './003-00-images.js';
 import { BY, PKT, SCEN } from './009-03-pokemon.js';
 import { PROFILE, isCamp } from './011-05-etat-de-partie.js';
-import { medal, tc } from './014-08-outils.js';
+import { medal } from './014-08-outils.js';
 import { CROCHETS } from './015-v4-8-00-crochets.js';
 import { uk } from './021-14-moteur-combat.js';
-import { __set_scenLock, scenLock } from './022-15-systemes-objets-liens-ia.js';
 import { OBST } from './023-16-roles-synergies-obstacles.js';
-import { __set_emblem, __set_groupOf, __set_selItems, emblem, groupOf, selItems } from './031-25-v3-parcours-accueil.js';
 import { CAP_K } from './032-v4-00-socle.js';
-import { NEWS416 } from './056-v4-16-1-01-finitions.js';
 import { hoennOuvert } from './059-v4-19-01-hoenn.js';
 
 export let HLEG435;
-let hlOk435, inBox435, nbH435, ballOk435, escorteKO435, caseMark435, hlOf435, scenLockOld435, selItemsOld435, groupOfOld435, emblemOld435;
 export { inBox435 }; // lu par Quêtes › Légendes (React)
 
 
@@ -41,7 +37,7 @@ export function etapes435(L) {
 }
 
 
-function lock435(k, D) {
+export function lock435(k, D) {
   const L = hlOf435(k);
   if (!L) return null;
   if (!hoennOuvert()) return 'Hoenn s’ouvre après votre titre de Maître de Johto.';
@@ -55,29 +51,33 @@ function lock435(k, D) {
   return null;
 }
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
-export function __init() {
-
-hlOk435 = id => (PROFILE.hleg || []).includes(id);
+const hlOk435 = id => (PROFILE.hleg || []).includes(id);
 
 
-inBox435 = id => (PROFILE.box || []).includes(id);
+const inBox435 = id => (PROFILE.box || []).includes(id);
 
 
-nbH435 = () => (PROFILE.hoenn || []).length;
+const nbH435 = () => (PROFILE.hoenn || []).length;
 
 
-ballOk435 = (...k) => k.includes(CAP_K);
+const ballOk435 = (...k) => k.includes(CAP_K);
 
 
-escorteKO435 = (S, L) => S.units.filter(x => x.side === 'e' && x.sp !== L.id).every(x => x.ko);
+const escorteKO435 = (S, L) => S.units.filter(x => x.side === 'e' && x.sp !== L.id).every(x => x.ko);
 
 
-caseMark435 = (S, e, mk) => {
+const caseMark435 = (S, e, mk) => {
   const t = S.tiles && S.tiles[uk(e)];
   return !!(t && t.mark && t.mark.k === mk);
 };
 
+const hlOf435 = k => {
+  const D = SCEN[k];
+  return D && (D.hleg435 || D.cap435) ? HLEG435.find(L => L.id === (D.hleg435 || D.cap435)) : null;
+};
+
+// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+export function __init() {
 
 HLEG435 = [
   {
@@ -209,50 +209,6 @@ HLEG435.forEach(L => {
 });
 
 
-hlOf435 = k => {
-  const D = SCEN[k];
-  return D && (D.hleg435 || D.cap435) ? HLEG435.find(L => L.id === (D.hleg435 || D.cap435)) : null;
-};
-
-
-scenLockOld435 = scenLock;
-
-
-__set_scenLock(function (k) {
-  const D = SCEN[k];
-  if (D && (D.hleg435 || D.cap435)) return lock435(k, D);
-  return scenLockOld435(k);
-});
-
-
-/* masquées tant que Hoenn est fermée ; rangées dans Après-jeu */
-selItemsOld435 = selItems;
-
-
-__set_selItems(function (g) {
-  const a = selItemsOld435(g);
-  return g === 'apres' && hoennOuvert() ? [...a, ...HLEG435.map(L => 'hl' + L.id)] : a;
-});
-
-
-groupOfOld435 = groupOf;
-
-
-__set_groupOf(function (k) {
-  const D = SCEN[k];
-  return D && (D.hleg435 || D.cap435) ? 'apres' : groupOfOld435(k);
-});
-
-
-emblemOld435 = emblem;
-
-
-__set_emblem(function (k, cls = '') {
-  const D = SCEN[k];
-  if (D && (D.hleg435 || D.cap435)) return `<span class="emb lgd ${cls || ''}" style="--ac:${tc(D.at)}">${medal(BY[D.hleg435 || D.cap435].t, 'lg')}</span>`;
-  return emblemOld435(k, cls);
-});
-
 
 /* victoire : le combat est noté, récompense la première fois */
 CROCHETS.progres.push((S, rew, win) => {
@@ -274,9 +230,4 @@ CROCHETS.resultat.push(r =>
 /* Quêtes › Légendes : les légendes de Hoenn apparaissent en dessous, seulement quand Hoenn est
    ouverte ; rendu par React (src/screens/quetes/Legendes.jsx) */
 
-
-NEWS416.unshift(['i-star', 'Légendes de Hoenn', 'Regirock, Regice, Registeel, Latias, Latios, Kyogre, Groudon et Rayquaza : à vaincre, puis à capturer sous conditions. Invisibles tant que Hoenn n’est pas ouverte.', null]);
-
-
-NEWS416.splice(8);
 }

@@ -11,11 +11,10 @@ import { V4, fmt } from './032-v4-00-socle.js';
 import { PL, renderMap } from './037-v4-05-carte.js';
 import { FOURNISSEURS_DEGATS } from './044-v4-5-01-moteur-tactique.js';
 import { SUCCES } from './048-v4-9-01-rejouabilite.js';
-import { NEWS416 } from './056-v4-16-1-01-finitions.js';
 import { SCENES } from './057-v4-17-01-compagnons-et-resonance.js';
 
-export let hoennOuvert, PLACES_H, HCHAIN, HMAP_SVG;
-let NEW419, HGYMS, HLEAD, HCHAMP_L, HREW, HARENAS, regleH419;
+export let PLACES_H, HCHAIN, HMAP_SVG;
+let HARENAS;
 
 
 /* =====================================================================
@@ -139,20 +138,14 @@ export function hTick419(S, r, ev) {
   }
 }
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
-export function __init() {
-
-NEW419 = ['arcko', 'poussifeu', 'gobou', 'tarsal', 'tenefix', 'galekid', 'absol', 'draby'];
-
-
-hoennOuvert = () => !!PROFILE.jchamp;
+export const hoennOuvert = () => !!PROFILE.jchamp;
 
 
 /* ---------- arènes et maîtres ---------- */
-HGYMS = ['Roche', 'Combat', 'Électrik', 'Feu', 'Normal', 'Vol', 'Psy', 'Eau'];
+const HGYMS = ['Roche', 'Combat', 'Électrik', 'Feu', 'Normal', 'Vol', 'Psy', 'Eau'];
 
 
-HLEAD = [
+const HLEAD = [
   { n: 'Agathe Silex', t: 'la Géologue', q: 'Le sable use tout, même les plus grands dresseurs.', w: 'Vous avez tenu dans la tempête. Bravo.', l: 'Le sable a eu raison de vous.' },
   { n: 'Néo Fracas', t: 'le Surfeur du Dojo', q: 'De loin, on hésite. De près, on se révèle.', w: 'Quel cran ! Vous êtes venu au contact.', l: 'Trop de distance, pas assez de cœur.' },
   { n: 'Volta Sénéchal', t: 'l’Inventeur', q: 'Mon arène est sous tension. Attention où vous mettez les pieds.', w: 'Court-circuité ! Je retourne à mes plans.', l: 'Le courant passe toujours chez moi.' },
@@ -164,11 +157,17 @@ HLEAD = [
 ];
 
 
-HCHAMP_L = { n: 'Silas Météore', t: 'Maître de Hoenn', q: 'Kanto, Johto… Et maintenant Hoenn. Montrez-moi jusqu’où va votre Résonance.', w: 'Trois régions, trois couronnes. Vous êtes une légende.', l: 'Hoenn est vaste. Revenez plus fort.' };
+const HCHAMP_L = { n: 'Silas Météore', t: 'Maître de Hoenn', q: 'Kanto, Johto… Et maintenant Hoenn. Montrez-moi jusqu’où va votre Résonance.', w: 'Trois régions, trois couronnes. Vous êtes une légende.', l: 'Hoenn est vaste. Revenez plus fort.' };
 
 
-HREW = [4, 4, 5, 5, 6, 6, 7, 8];
+const HREW = [4, 4, 5, 5, 6, 6, 7, 8];
 
+
+/* ---------- règles des arènes de Hoenn ---------- */
+const regleH419 = S => (S && SCEN[S.sc] && SCEN[S.sc].rule) || '';
+
+// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+export function __init() {
 
 HARENAS = [
   { k: 'h1', rule: 'jh1', time: 'jour', rock: ['3,1', '4,4'], water: [], hb: 22, pb: 5, lv: 64, foes: [['galegon', [6, 1]], ['onix', [6, 3]], ['gravalanch', [6, 5]], ['galekid', [7, 2]]], d: 'Une tempête de sable souffle pendant tout le combat : elle use chaque manche les Pokémon qui ne sont ni Roche, ni Sol, ni Acier.' },
@@ -243,10 +242,6 @@ SUCCES.push(
 );
 
 
-/* ---------- règles des arènes de Hoenn ---------- */
-regleH419 = S => (S && SCEN[S.sc] && SCEN[S.sc].rule) || '';
-
-
 FOURNISSEURS_DEGATS.push(
   { id: 'ringdojo', fournir: (c, { S, m }) => regleH419(S) === 'jh2' && m && m.p > 0 && (m.r <= 1 ? { mul: 1.25, libelle: 'Ring du Dojo' } : { mul: 0.75, libelle: 'Ring du Dojo' }) },
   { id: 'coupbas', fournir: (c, { S, u, t }) => regleH419(S) === 'jh5' && u.side === 'e' && t && t.side === 'a' && t.hp <= t.mhp / 2 && { mul: 1.3, libelle: 'Coup bas' } }
@@ -265,9 +260,6 @@ Object.assign(SCENES, {
     ['hchamp', 'Kanto, Johto… Et maintenant Hoenn. Montrez-moi jusqu’où va votre Résonance.']
   ]
 });
-
-
-NEWS416.unshift(['i-map', 'Hoenn', 'Une troisième région après Johto : 20 nouveaux Pokémon sur la Route 104, 8 arènes à règles et le Maître de Hoenn.', 'hoenn']);
 
 
 document.addEventListener('click', e => {

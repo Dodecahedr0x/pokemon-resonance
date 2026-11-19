@@ -1,5 +1,5 @@
 import { Html } from '../../lib/html.jsx';
-import { useOverlay } from './dialogsStore.js';
+import { Boite, Dialogue } from './Fenetre.jsx';
 import { BY } from '../../engine/009-03-pokemon.js';
 import { medal } from '../../engine/014-08-outils.js';
 import { DESTINATIONS } from '../../engine/049-v4-10-01-identite.js';
@@ -8,18 +8,12 @@ import { lock461 } from '../../engine/092-4-61-compagnon-ufs-d-elevage-expeditio
 // Fenêtre d'expédition du Camp (#expBox) : choix du lieu, puis du Pokémon.
 // Clics (data-exp-*) et attribut hidden : moteur (049).
 export default function ExpBox() {
-  const s = useOverlay('exp');
-  return (
-    <div className="result exp-box" id="expBox" hidden>
-      {s && <Carte key={s.v} {...s} />}
-    </div>
-  );
+  return <Boite nom="exp" className="result exp-box" id="expBox" Carte={Carte} />;
 }
 
 function Carte({ dest, dispo }) {
   return (
-    <div className="sv-card exp-card" role="dialog" aria-modal="true" aria-labelledby="expT">
-      <button className="sh-x" type="button" data-exp-x="" aria-label="Fermer"><svg><use href="#i-x" /></svg></button>
+    <Dialogue className="sv-card exp-card" titre="expT" fermer={{ 'data-exp-x': '' }}>
       <p className="kick">Expédition</p>
       <h2 className="h2" id="expT">{dest ? DESTINATIONS[dest].n : 'Où partir ?'}</h2>
       {!dest ? (
@@ -57,6 +51,6 @@ function Carte({ dest, dispo }) {
           <button type="button" className="b b-sm b-ghost" data-exp-d="">Choisir un autre lieu</button>
         </>
       )}
-    </div>
+    </Dialogue>
   );
 }

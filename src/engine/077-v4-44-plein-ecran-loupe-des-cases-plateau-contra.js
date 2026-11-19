@@ -4,20 +4,20 @@ import { EL, MX, RX } from './004-01-donnees.js';
 import { MV } from './005-02-capacites.js';
 import { arenaNext, veiled } from './013-07-arenes.js';
 import { rxCat, toast } from './014-08-outils.js';
+import { CROCHETS } from './015-v4-8-00-crochets.js';
 import { P, affected, byUid, markAt, reach, targets, uAt } from './021-14-moteur-combat.js';
-import { B, STC, __set_finish, __set_launch, __set_renderAll, clearAim, finish, hpc, launch, renderAll, ui } from './024-17-interface-combat.js';
+import { B, STC, clearAim, hpc, renderAll, ui } from './024-17-interface-combat.js';
 import { PREF, savePref, tileTip } from './026-20-campagne-tutoriel-son.js';
 import { renderParams } from './040-v4-08-parametres.js';
 import { peutSelectionner } from './044-v4-5-01-moteur-tactique.js';
 import { risqueFeu } from './046-v4-7-01-plateau-vivant.js';
 import { piegeTip } from './047-v4-8-01-tactique.js';
-import { NEWS416 } from './056-v4-16-1-01-finitions.js';
 import { calibre434 } from './069-v4-34-01-calibrage-et-evoli.js';
 import { cadre443 } from './076-v4-43-plateau-en-grand-sur-telephone-attaques-a.js';
 import { boardSet, getBoard, getHost, hostSet } from '../screens/combat/board/boardStore.js';
 import { fiche444 as FICHE444, footCls, refreshBattle } from '../screens/combat/battle/battleStore.js';
 
-let INSP444, LOUPE444, SUP444, FSVU444, TER444, renderAllOld444, launchOld444, finishOld444;
+let INSP444, LOUPE444, SUP444, FSVU444, TER444;
 
  // horodatage : ignorer le « click » qui suit un appui long
 
@@ -48,7 +48,7 @@ function fsSet444(on, viaBouton) {
   barre444();
   setTimeout(() => {
     calibre434();
-    if (typeof cadre443 === 'function') cadre443();
+    cadre443();
   }, 250);
 }
 
@@ -100,7 +100,7 @@ function dangers444(k) {
       });
     const an = arenaNext(B);
     if (an && an.tiles.includes(k)) o.push(an.txt);
-    if (B.vivant && typeof risqueFeu === 'function' && risqueFeu(B, k)) o.push('L’herbe peut s’embraser ici.');
+    if (B.vivant && risqueFeu(B, k)) o.push('L’herbe peut s’embraser ici.');
   } catch (e) {}
   return o;
 }
@@ -441,42 +441,30 @@ document.addEventListener('keydown', e => {
 
 
 /* ---------- 4. branchements ---------- */
-renderAllOld444 = renderAll;
-
-
-__set_renderAll(function () {
-  renderAllOld444.apply(this, arguments);
-  try {
-    barre444();
-    fiche444();
-  } catch (e) {}
-});
-
-
-launchOld444 = launch;
-
-
-__set_launch(function () {
+const rangerLoupe444 = () => {
   INSP444 = null;
   LOUPE444 = false;
-  const avant = B;
-  launchOld444.apply(this, arguments);
-  if (B && B !== avant && PREF.fs444) fsSet444(true, false); // toucher « Lancer » autorise le plein écran
+};
+
+
+CROCHETS.rendu.push(() => {
+  barre444();
+  fiche444();
 });
 
 
-finishOld444 = finish;
+CROCHETS.avantLancement.push(rangerLoupe444);
 
 
-__set_finish(function () {
-  INSP444 = null;
-  LOUPE444 = false;
-  const r = finishOld444.apply(this, arguments);
-  try {
-    fiche444();
-  } catch (e) {}
-  return r;
+CROCHETS.lancement.push(nouveau => {
+  if (nouveau && PREF.fs444) fsSet444(true, false); // toucher « Lancer » autorise le plein écran
 });
+
+
+CROCHETS.avantFinCombat.push(rangerLoupe444);
+
+
+CROCHETS.finCombat.push(fiche444);
 
 
 addEventListener('resize', () => setTimeout(place444, 60));
@@ -496,9 +484,4 @@ if (PREF.ct444 === undefined) PREF.ct444 = 1;
  // v4.45 : plateau contrasté activé par défaut (désactivable)
 contraste444();
 
-
-NEWS416.unshift(['i-map', 'Plein écran et loupe', 'Nouveaux boutons sur le plateau : plein écran, loupe (ou appui long sur une case) pour lire son terrain, ses dangers et le Pokémon présent, et plateau contrasté (activé par défaut, réglable dans Paramètres).', null]);
-
-
-NEWS416.splice(8);
 }

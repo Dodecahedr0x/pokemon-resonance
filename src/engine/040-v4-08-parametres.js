@@ -2,35 +2,18 @@
 
 import { refreshSettings } from '../screens/settings/settingsStore.js';
 import { DIFFS, PROFILE } from './011-05-etat-de-partie.js';
-import { $, toast } from './014-08-outils.js';
+import { toast } from './014-08-outils.js';
 import { placeAlert } from './017-10-accueil-route.js';
 import { B, renderAll } from './024-17-interface-combat.js';
 import { queueSave } from './025-19-sauvegardes.js';
 import { PREF, savePref, sfx, vibe } from './026-20-campagne-tutoriel-son.js';
-import { MUS } from './030-24-prestige-mise-en-scene.js';
+import { musLevel } from './070-v4-35-musiques-par-theme-lecteur-de-pistes.js';
 import { V4 } from './032-v4-00-socle.js';
 import { renderWallet } from './035-v4-03-interface.js';
 import { centerMap, renderMap } from './037-v4-05-carte.js';
 import { renderDex } from './038-v4-06-pokedex.js';
 import { renderBag, renderQuests } from './039-v4-07-quetes-boutique.js';
 import { renderCampPage431 } from './066-v4-31-01-defis-tactiques.js';
-
-export function __set_musLevel(v) { return (musLevel = v); }
-export function __set_renderParams(v) { return (renderParams = v); }
-
-
-export function musLevel() {
-  try {
-    if (MUS.on && MUS.out && MUS.ac) {
-      const t = MUS.ac.currentTime,
-        g = MUS.out.gain;
-      g.cancelScheduledValues(t);
-      g.setValueAtTime(g.value, t);
-      g.linearRampToValueAtTime(0.55 * PREF.musVol, t + 0.4);
-    }
-  } catch (e) {}
-}
-
 
 // La page Paramètres est rendue par React (src/screens/settings) : redessiner = la reconstruire.
 export function renderParams() {

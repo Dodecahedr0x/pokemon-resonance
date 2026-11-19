@@ -2,17 +2,14 @@
 
 import { MON, NOTES } from './009-03-pokemon.js';
 
-export let BUDGET, RECRUIT, ARR;
-let BASECOST;
+export let RECRUIT;
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
-export function __init() {
 
 /* ===================== v0.8 : l’évolution se décide en combat ===================== */
-BUDGET = 12;
+export const BUDGET = 12;
 
 
-BASECOST = {
+const BASECOST = {
   bulbizarre: 1,
   salameche: 1, // v4.12 : même coût que les autres starters
   carapuce: 1,
@@ -70,16 +67,7 @@ BASECOST = {
   draby: 2
 };
 
-
-MON.forEach(m => {
-  if (BASECOST[m.id] != null) m.c = BASECOST[m.id];
-});
-
-
-RECRUIT = MON.filter(m => m.st === 1 && !m.ennemi);
-
- // v4.13 : sans les familles devenues adversaires
-ARR = {
+export const ARR = {
   // v4.19
   massko: [[{ k: 'ring', mk: 'enracine' }], 'des lianes jaillissent autour de lui.'],
   jungko: [[{ k: 'ring', mk: 'enracine' }, { k: 'boost' }], 'la forêt l’accueille : il est Renforcé.'],
@@ -191,6 +179,16 @@ ARR = {
   tyranocif: [[{ k: 'roar', v: 1 }], 'il rugit et lève une tempête de sable.']
 };
 
+// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+export function __init() {
+
+MON.forEach(m => {
+  if (BASECOST[m.id] != null) m.c = BASECOST[m.id];
+});
+
+
+RECRUIT = MON.filter(m => m.st === 1 && !m.ennemi);
+ // v4.13 : sans les familles devenues adversaires
 
 Object.assign(NOTES, {
   magicarpe: 'Recrutez-le pour 1 point. Gardez-le en vie trois manches : son Éveil en Léviator renverse le combat.',

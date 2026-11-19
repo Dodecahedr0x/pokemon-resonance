@@ -1,26 +1,19 @@
 /* Section d'origine : 4.54 : colporteur, rencontres de route, missions de Pokédex */
 
 import { ITEMS2, PROFILE } from './011-05-etat-de-partie.js';
-import { toast } from './014-08-outils.js';
-import { queueSave } from './025-19-sauvegardes.js';
+import { ecrireLS, mulberry32, toast } from './014-08-outils.js';
+import { CROCHETS, crochet } from './015-v4-8-00-crochets.js';
 import { sfx, vibe } from './026-20-campagne-tutoriel-son.js';
 import { overlay } from './030-24-prestige-mise-en-scene.js';
 import { fermer, majTemp } from '../screens/overlays/tempStore.js';
-import { SHOP, bagN, fmt, ownedFam, today } from './032-v4-00-socle.js';
-import { renderWallet } from './035-v4-03-interface.js';
+import { SHOP, bagN, fmt, ownedFam, sauverBourse, today } from './032-v4-00-socle.js';
 import { refreshCarte } from '../screens/carte/carteStore.js';
 import { DEXS } from './038-v4-06-pokedex.js';
 import { refreshDex } from '../screens/dex/dexStore.js';
 import { renderBag } from './039-v4-07-quetes-boutique.js';
 import { prixDe0 } from './049-v4-10-01-identite.js';
 import { HELD_SHOP, prixHeld414 } from './053-v4-14-01-resonance.js';
-import { NEWS416 } from './056-v4-16-1-01-finitions.js';
 import { graine417 } from './057-v4-17-01-compagnons-et-resonance.js';
-
-export let LSS454, rng454, gain454, peut454, txt454, PAL454;
-let LS454, refresh454, NOMS454, EV454;
-export function __set_ev454(v) { return (ev454 = v); }
-export function __set_evPick454(v) { return (evPick454 = v); }
 
 
 export function ambu454() {
@@ -47,14 +40,7 @@ export function ev454() {
   const d = today(),
     i = graine417('ev454') % EV454.length,
     st = LS454('res-ev454', d) || { d, done: false };
-  return { E: EV454[i], i, st };
-}
-
-
-// bandeau « Rencontre sur la route » (#ev454, au-dessus du panneau de la carte) :
-// rendu par React (src/screens/carte/EvBar.jsx)
-function evBar454() {
-  refreshCarte();
+  return CROCHETS.rencontreRoute.reduce((r, f) => f(r), { E: EV454[i], i, st });
 }
 
 
@@ -74,7 +60,14 @@ function evOpen454() {
 
 
 export function evPick454(j) {
-  const { E, i, st } = ev454(),
+  for (const f of CROCHETS.avantChoixRoute) if (f(j)) return;
+  resoudre454(j);
+  crochet('choixRoute', j);
+}
+
+
+function resoudre454(j) {
+  const { E, st } = ev454(),
     c = E.c[j];
   if (!c || st.done || !peut454(c.cost)) return;
   gain454(c.cost);
@@ -84,12 +77,12 @@ export function evPick454(j) {
     t = (issue === 'ok' ? c.okT : c.koT) || (c.cost ? 'Affaire conclue.' : 'Vous poursuivez votre route.');
   if (g) gain454(g);
   const res = t + (g && txt454(g) ? ' (' + txt454(g) + ')' : '');
-  LSS454('res-ev454', { d: st.d, done: true, res });
+  ecrireLS('res-ev454', { d: st.d, done: true, res });
   sfx(issue === 'ok' ? 'ui' : 'hit');
   vibe(issue === 'ok' ? 20 : 40);
-  refresh454();
+  sauverBourse();
   majTemp('evs454', { res: { ok: issue === 'ok', txt: res } });
-  evBar454();
+  refreshCarte(); // bandeau « Rencontre sur la route » (#ev454, src/screens/carte/EvBar.jsx)
 }
 
 
@@ -135,10 +128,7 @@ export function typesMs454() {
 
 
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
-export function __init() {
-
-LS454 = (k, d) => {
+const LS454 = (k, d) => {
   let s;
   try {
     s = JSON.parse(localStorage.getItem(k) || 'null');
@@ -149,26 +139,10 @@ LS454 = (k, d) => {
 };
 
 
-LSS454 = (k, v) => {
-  try {
-    localStorage.setItem(k, JSON.stringify(v));
-  } catch (e) {}
-};
+export const rng454 = sel => mulberry32(graine417(sel) || 1);
 
 
-rng454 = sel => {
-  let a = graine417(sel) || 1;
-  return () => {
-    a = (a + 0x6d2b79f5) >>> 0;
-    let t = a;
-    t = Math.imul(t ^ (t >>> 15), t | 1);
-    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-};
-
-
-gain454 = (o, t) => {
+export const gain454 = (o, t) => {
   /* applique un gain/coût {m,g,b:{k:n}} */
   if (!o) return;
   if (o.m) PROFILE.money = Math.max(0, PROFILE.money + o.m);
@@ -177,7 +151,7 @@ gain454 = (o, t) => {
 };
 
 
-peut454 = c => {
+export const peut454 = c => {
   if (!c) return true;
   if (c.m && PROFILE.money + c.m < 0) return false;
   if (c.g && PROFILE.gems + c.g < 0) return false;
@@ -186,7 +160,7 @@ peut454 = c => {
 };
 
 
-txt454 = o => {
+export const txt454 = o => {
   if (!o) return '';
   const a = [];
   if (o.m) a.push(`${o.m > 0 ? '+' : '−'}${fmt(Math.abs(o.m))} ₽`);
@@ -196,58 +170,12 @@ txt454 = o => {
 };
 
 
-refresh454 = () => {
-  try {
-    queueSave();
-    renderWallet();
-  } catch (e) {}
-};
-
-
 /* ---------- 1. colporteur ---------- */
-NOMS454 = ['Basile', 'Maëlle', 'Hugo', 'Iris', 'Gaspard', 'Solène', 'Théo'];
-
-
-document.addEventListener(
-  'click',
-  e => {
-    const b = e.target.closest && e.target.closest('[data-am454]');
-    if (!b) return;
-    e.preventDefault();
-    e.stopPropagation();
-    const A = ambu454(),
-      k = b.dataset.am454;
-    if (!A.present) return;
-    if (k.startsWith('h:')) {
-      const h = k.slice(2);
-      if (h !== A.th || A.st.got[k]) return;
-      const px = Math.round((prixHeld414(h) * 0.8) / 50) * 50;
-      if (PROFILE.money < px) return;
-      PROFILE.money -= px;
-      PROFILE.items.push(h);
-      A.st.got[k] = 1;
-      toast(`Acheté : ${ITEMS2[h].n}. Confiez-le depuis la fiche d’un Pokémon.`);
-    } else {
-      if (!A.pick.includes(k) || (A.st.got[k] || 0) >= (SHOP[k].mv ? 1 : 3) || bagN(k) >= 99) return;
-      const px = Math.max(50, Math.round((prixDe0(k) * 0.75) / 50) * 50);
-      if (PROFILE.money < px) return;
-      PROFILE.money -= px;
-      PROFILE.bag[k] = bagN(k) + 1;
-      A.st.got[k] = (A.st.got[k] || 0) + 1;
-      toast(`Acheté : 1 × ${SHOP[k].n}`);
-    }
-    LSS454('res-am454', A.st);
-    sfx('ui');
-    vibe(15);
-    refresh454();
-    renderBag();
-  },
-  true
-);
+const NOMS454 = ['Basile', 'Maëlle', 'Hugo', 'Iris', 'Gaspard', 'Solène', 'Théo'];
 
 
 /* ---------- 2. rencontres sur la route ---------- */
-EV454 = [
+const EV454 = [
   {
     t: 'Un vieux pêcheur',
     x: 'Un pêcheur peine à remonter ses filets sur la rive.',
@@ -317,18 +245,8 @@ EV454 = [
 ];
 
 
-document.addEventListener('click', e => {
-  const b = e.target.closest && e.target.closest('[data-ev454]');
-  if (!b) return;
-  const v = b.dataset.ev454;
-  if (v === 'open') evOpen454();
-  else if (v === 'close') fermer('evs454');
-  else evPick454(+v);
-});
-
-
 /* ---------- 3. missions de Pokédex ---------- */
-PAL454 = [
+export const PAL454 = [
   [5, { m: 500 }],
   [10, { g: 1 }],
   [20, { m: 1500 }],
@@ -338,6 +256,56 @@ PAL454 = [
   [100, { m: 5000 }],
   [119, { g: 5 }]
 ];
+
+// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+export function __init() {
+
+document.addEventListener(
+  'click',
+  e => {
+    const b = e.target.closest && e.target.closest('[data-am454]');
+    if (!b) return;
+    e.preventDefault();
+    e.stopPropagation();
+    const A = ambu454(),
+      k = b.dataset.am454;
+    if (!A.present) return;
+    if (k.startsWith('h:')) {
+      const h = k.slice(2);
+      if (h !== A.th || A.st.got[k]) return;
+      const px = Math.round((prixHeld414(h) * 0.8) / 50) * 50;
+      if (PROFILE.money < px) return;
+      PROFILE.money -= px;
+      PROFILE.items.push(h);
+      A.st.got[k] = 1;
+      toast(`Acheté : ${ITEMS2[h].n}. Confiez-le depuis la fiche d’un Pokémon.`);
+    } else {
+      if (!A.pick.includes(k) || (A.st.got[k] || 0) >= (SHOP[k].mv ? 1 : 3) || bagN(k) >= 99) return;
+      const px = Math.max(50, Math.round((prixDe0(k) * 0.75) / 50) * 50);
+      if (PROFILE.money < px) return;
+      PROFILE.money -= px;
+      PROFILE.bag[k] = bagN(k) + 1;
+      A.st.got[k] = (A.st.got[k] || 0) + 1;
+      toast(`Acheté : 1 × ${SHOP[k].n}`);
+    }
+    ecrireLS('res-am454', A.st);
+    sfx('ui');
+    vibe(15);
+    sauverBourse();
+    renderBag();
+  },
+  true
+);
+
+
+document.addEventListener('click', e => {
+  const b = e.target.closest && e.target.closest('[data-ev454]');
+  if (!b) return;
+  const v = b.dataset.ev454;
+  if (v === 'open') evOpen454();
+  else if (v === 'close') fermer('evs454');
+  else evPick454(+v);
+});
 
 
 document.addEventListener('click', e => {
@@ -358,18 +326,11 @@ document.addEventListener('click', e => {
     gain454({ g: 1 });
     toast('Spécialiste ' + v + ' : +1 Éclat');
   }
-  try {
-    localStorage.setItem('res-ms454', JSON.stringify(S));
-  } catch (er) {}
+  ecrireLS('res-ms454', S);
   sfx('ui');
   vibe(20);
-  refresh454();
+  sauverBourse();
   refreshDex(); // missions (#ms454) rendues par React : src/screens/dex/Missions.jsx
 });
 
-
-NEWS416.unshift(['i-gem', 'Colporteur, rencontres et missions', 'Un colporteur passe certains jours avec des prix réduits (Boutique). Une rencontre par jour sur la Carte, avec des choix. Dans le Pokédex, des missions à paliers et des spécialistes de la semaine donnent Éclats et Pokédollars.']);
-
-
-NEWS416.splice(8);
 }

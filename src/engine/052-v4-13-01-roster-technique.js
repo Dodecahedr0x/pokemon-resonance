@@ -9,7 +9,7 @@ import { FOURNISSEURS_DEGATS, FOURNISSEURS_ROLES } from './044-v4-5-01-moteur-ta
 import { heureDe } from './046-v4-7-01-plateau-vivant.js';
 import { SOI412 } from './051-v4-12-01-ct-epiques.js';
 
-export let rune413, PRE413;
+export let PRE413;
 
 
 /* ---------- après chaque cible touchée ---------- */
@@ -228,14 +228,13 @@ export function soutienIA413(S, e, opts, al, here) {
   return best;
 }
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
-export function __init() {
-
 /* Mécaniques des capacités signature et des nouveaux talents. Tout passe par des
    tables (SOI412 / PRE413 / CIBLE412 / apresCoup413 / fin413) et par les fournisseurs
    de dégâts : les règles existantes ne changent pas. */
-rune413 = (S, v) => !!(v && S && S.rune && S.rune[v.side] > 0);
+export const rune413 = (S, v) => !!(v && S && S.rune && S.rune[v.side] > 0);
 
+// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+export function __init() {
 
 NEEDU.push('morphing', 'malediction', 'feufollet', 'vantardise');
 

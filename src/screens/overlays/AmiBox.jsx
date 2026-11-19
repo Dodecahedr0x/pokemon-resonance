@@ -1,4 +1,5 @@
 import { useOverlay } from './dialogsStore.js';
+import { Dialogue } from './Fenetre.jsx';
 
 // Défis entre amis (#amiBox) : ma carte de dresseur, ou ajout d'un ami.
 // Le moteur (055) garde les clics (data-ami), la saisie (#amiNom met à jour #amiCode),
@@ -13,14 +14,11 @@ export default function AmiBox() {
   );
 }
 
-const Fermer = () => (
-  <button className="sh-x" type="button" data-ami="x" aria-label="Fermer"><svg><use href="#i-x" /></svg></button>
-);
+const FERMER = { 'data-ami': 'x' };
 
 function MaCarte({ nom, code, equipe, partage }) {
   return (
-    <div className="sv-card exp-card am-card" role="dialog" aria-modal="true" aria-labelledby="amiT">
-      <Fermer />
+    <Dialogue className="sv-card exp-card am-card" titre="amiT" fermer={FERMER}>
       <p className="kick">Défis entre amis</p>
       <h2 className="h2" id="amiT">Ma carte de dresseur</h2>
       <label className="am-lb">Votre nom<input type="text" id="amiNom" maxLength={14} defaultValue={nom} placeholder="Dresseur" autoComplete="off" /></label>
@@ -37,14 +35,13 @@ function MaCarte({ nom, code, equipe, partage }) {
       ) : (
         <p className="d">Composez d’abord une équipe : c’est elle que vos amis affronteront.</p>
       )}
-    </div>
+    </Dialogue>
   );
 }
 
 function Ajout() {
   return (
-    <div className="sv-card exp-card am-card" role="dialog" aria-modal="true" aria-labelledby="amiT">
-      <Fermer />
+    <Dialogue className="sv-card exp-card am-card" titre="amiT" fermer={FERMER}>
       <p className="kick">Défis entre amis</p>
       <h2 className="h2" id="amiT">Ajouter un ami</h2>
       <p className="d">Collez ici le code que votre ami vous a envoyé (il commence par « RES- »). Si vous l’avez déjà, sa carte est mise à jour.</p>
@@ -53,6 +50,6 @@ function Ajout() {
       <div className="am-a">
         <button type="button" className="b b-gold" data-ami="valider">Ajouter</button>
       </div>
-    </div>
+    </Dialogue>
   );
 }

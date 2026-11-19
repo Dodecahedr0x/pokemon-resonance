@@ -3,12 +3,11 @@
 import { GYMS } from './004-01-donnees.js';
 import { SCEN } from './009-03-pokemon.js';
 import { ARENAS } from './013-07-arenes.js';
-import { RM, tc } from './014-08-outils.js';
-import { __set_setTod, setTod } from './017-10-accueil-route.js';
+import { RM, hash2, mulberry32, tc } from './014-08-outils.js';
+import { CROCHETS } from './015-v4-8-00-crochets.js';
 import { V4 } from './032-v4-00-socle.js';
-import { CHAIN, MAP_SVG, __set_renderMap, curvePath, placeState, renderMap } from './037-v4-05-carte.js';
+import { CHAIN, MAP_SVG, curvePath, placeState } from './037-v4-05-carte.js';
 import { JCHAIN, JMAP_SVG, placesR } from './054-v4-15-01-johto.js';
-import { NEWS416 } from './056-v4-16-1-01-finitions.js';
 import { HCHAIN, HMAP_SVG } from './059-v4-19-01-hoenn.js';
 import { refreshCarte } from '../screens/carte/carteStore.js';
 
@@ -34,19 +33,7 @@ export function __init() {
       return false;
     }
   };
-  /* ---------- hasard et bruit (déterministes) ---------- */
-  const rngOf = a => () => {
-    a |= 0;
-    a = (a + 0x6d2b79f5) | 0;
-    let t = Math.imul(a ^ (a >>> 15), 1 | a);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-  const hash2 = (x, y, s) => {
-    let h = (Math.imul(x, 374761393) + Math.imul(y, 668265263) + Math.imul(s, 1274126177)) | 0;
-    h = Math.imul(h ^ (h >>> 13), 1274126177);
-    return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
-  };
+  /* ---------- hasard et bruit (déterministes) : mulberry32 et hash2 (014) ---------- */
   const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
   const sstep = (a, b, v) => {
     const t = clamp((v - a) / (b - a), 0, 1);
@@ -880,7 +867,7 @@ export function __init() {
   /* ---------- génération d’une région ---------- */
   const generate = async reg => {
     const R = REG[reg],
-      rnd = rngOf(R.seed * 7919),
+      rnd = mulberry32((R.seed * 7919) | 0),
       seed = R.seed;
     const lands = landOf(R.svg());
     if (!lands.length) throw new Error('terre introuvable');
@@ -1181,7 +1168,7 @@ export function __init() {
     // champs cultivés autour des hameaux
     const FCOL = [['#d8c070', '#c2a650'], ['#86b45a', '#6f9c46'], ['#a87a4e', '#8e643c'], ['#b8cc6a', '#9fb456']];
     P.filter(p => p.grp === 'aventure' && p.t && !/^rv/.test(p.id)).forEach(p => {
-      const r4 = rngOf(((p.x * 53) ^ (p.y * 29)) + seed * 3);
+      const r4 = mulberry32((((p.x * 53) ^ (p.y * 29)) + seed * 3) | 0);
       for (let k = 0, put = 0; k < 14 && put < 3; k++) {
         const a = r4() * 6.283,
           d = 62 + r4() * 34,
@@ -1259,7 +1246,7 @@ export function __init() {
     R.mounts.forEach(([x, y, s, sn]) => {
       const lib = P.every(p => Math.hypot(p.x - x, p.y - y) > 26 * Math.max(1, s));
       if (!lib) return;
-      const r2 = rngOf(((x * 31) ^ (y * 17)) + seed);
+      const r2 = mulberry32((((x * 31) ^ (y * 17)) + seed) | 0);
       add(y + 13 * s - 0.5, () => {
         mountain(c, x - 22 * s, y - 6 * s, s * 0.62, sn, r2);
         mountain(c, x + 20 * s, y - 4 * s, s * 0.55, sn, r2);
@@ -1327,7 +1314,7 @@ export function __init() {
     // hameaux, arènes et décors propres à chaque type
     const angles = [205, 335, 168, 12, 250, 290, 145, 35];
     P.forEach(p => {
-      const r3 = rngOf(((p.x * 131) ^ (p.y * 71)) + seed);
+      const r3 = mulberry32((((p.x * 131) ^ (p.y * 71)) + seed) | 0);
       const at = (ang, rr) => [p.x + Math.cos((ang * Math.PI) / 180) * rr, p.y + Math.sin((ang * Math.PI) / 180) * rr * 0.8];
       const ok = (x, y) => land(x, y) && WM[gi(x, y)] < 0.05;
       if (p.grp === 'route') {
@@ -1493,7 +1480,7 @@ export function __init() {
         V4.region = old;
       }
       L.forEach(p => {
-        const r = rngOf(p.x * 97 + p.y * 13);
+        const r = mulberry32((p.x * 97 + p.y * 13) | 0);
         for (let k = 0; k < 7; k++) {
           const a = r() * 6.283,
             d = 6 + r() * 34;
@@ -1572,86 +1559,14 @@ export function __init() {
         });
     }, 30);
   };
-  const avant = renderMap;
-  __set_renderMap(function () {
-    const r = avant.apply(this, arguments);
-    try {
-      if (document.getElementById('mapSt')) ensure(V4.region === 'hoenn' ? 'hoenn' : V4.region === 'johto' ? 'johto' : 'kanto');
-    } catch (e) {}
-    return r;
+  CROCHETS.carte.push(() => {
+    if (document.getElementById('mapSt')) ensure(V4.region === 'hoenn' ? 'hoenn' : V4.region === 'johto' ? 'johto' : 'kanto');
   });
-  const todAvant = setTod;
-  __set_setTod(function (t) {
-    const r = todAvant.apply(this, arguments);
-    // posé directement, sans redessiner la carte (comme avant) ; Stage.jsx rend la même valeur (TOD)
-    try {
-      const st = document.getElementById('mapSt');
-      if (st) st.dataset.tod = t;
-    } catch (e) {}
-    return r;
+  CROCHETS.heure.push(t => {
+    // posé directement, sans redessiner la carte ; Stage.jsx rend la même valeur (TOD)
+    const st = document.getElementById('mapSt');
+    if (st) st.dataset.tod = t;
   });
-  /* styles */
-  const css = document.createElement('style');
-  css.id = 'resonance-v471-carte';
-  css.textContent = `
-html body #carte .v4-map-st{filter:none!important}
-html body #carte .map-title{right:auto!important;bottom:auto!important;top:12px!important;left:clamp(52px,7.5%,74px)!important;display:grid!important;gap:1px;padding:7px 14px!important;max-width:60%;border-radius:12px!important;background:linear-gradient(180deg,rgba(251,243,220,.94),rgba(234,216,176,.94))!important;border:1px solid rgba(120,84,30,.55)!important;color:#3a2a14!important;text-shadow:none!important;box-shadow:0 6px 16px rgba(0,0,0,.3)!important;backdrop-filter:none!important;z-index:3;letter-spacing:.04em!important;text-transform:none!important}
-html body #carte .map-title b{font:800 13px/1.1 var(--f-d);letter-spacing:.18em;text-transform:uppercase}
-html body #carte .map-title small{font:600 10px/1.1 var(--f-d);letter-spacing:.06em;opacity:.75}
-#mapSt .map-paint471{position:absolute;inset:0;width:100%;height:100%;display:none;pointer-events:none;user-select:none;-webkit-user-drag:none;opacity:0;transition:opacity .7s ease}
-#mapSt.cv471on .map-paint471{display:block}
-#mapSt.cv471on .map-paint471.in{opacity:1}
-#mapSt.cv471on > .map-svg{visibility:hidden}
-#mapSt .fx471-wrap,#mapSt .fog471-wrap{position:absolute;inset:0;pointer-events:none;overflow:hidden}
-#mapSt .fx471-svg,#mapSt .fx471-svg svg,#mapSt .fog471-wrap svg{position:absolute;inset:0;width:100%;height:100%}
-#mapSt:not(.cv471on) .fx471-wrap{display:none}
-.fx471-tint{position:absolute;inset:0;opacity:0;transition:opacity 1.2s}
-.fx471-tint.t-nuit{background:radial-gradient(120% 90% at 50% 40%,rgba(18,34,90,.42),rgba(4,10,34,.62))}
-.fx471-tint.t-matin{background:linear-gradient(180deg,rgba(255,160,110,.16),rgba(255,214,170,.05))}
-#mapSt[data-tod=nuit] .t-nuit,#mapSt[data-tod=matin] .t-matin{opacity:1}
-.fx471 .fx-lums{opacity:0;transition:opacity 1.2s}
-#mapSt[data-tod=nuit] .fx471 .fx-lums{opacity:1}
-.fx471-anim{position:absolute;inset:0;overflow:hidden}
-.fx471-anim i{position:absolute;display:block;will-change:transform,opacity;pointer-events:none}
-.fa-sh{left:0;aspect-ratio:2/1;border-radius:50%;background:radial-gradient(closest-side,rgba(0,22,38,.2),rgba(0,22,38,0));animation:dr471 95s linear infinite}
-.fa-cl{left:0;aspect-ratio:3/1;opacity:.7;background:radial-gradient(closest-side at 32% 62%,rgba(255,255,255,.95),rgba(255,255,255,0)),radial-gradient(closest-side at 62% 44%,rgba(255,255,255,.9),rgba(255,255,255,0)),radial-gradient(closest-side at 50% 70%,rgba(255,255,255,.8),rgba(255,255,255,0));animation:dr471 150s linear infinite}
-@keyframes dr471{from{transform:translateX(-100%)}to{transform:translateX(var(--to))}}
-.fa-sp{width:7px;height:7px;margin:-3.5px 0 0 -3.5px;background:#fff;clip-path:polygon(50% 0,60% 40%,100% 50%,60% 60%,50% 100%,40% 60%,0 50%,40% 40%);opacity:0;animation:sp471 3.8s ease-in-out infinite}
-@keyframes sp471{0%,60%,100%{opacity:0;transform:scale(.3)}75%{opacity:.95;transform:scale(1)}}
-#mapSt[data-tod=nuit] .fa-sp{background:#cfe2ff}
-.fa-pf{width:16px;height:16px;margin:-8px 0 0 -8px;border-radius:50%;background:radial-gradient(closest-side,rgba(214,208,204,.85),rgba(214,208,204,0));opacity:0;animation:pf471 6s linear infinite}
-@keyframes pf471{0%{opacity:0;transform:translate(0,0) scale(.5)}15%{opacity:.85}100%{opacity:0;transform:translate(14px,-60px) scale(2.6)}}
-.fa-bd{left:0;width:4%;animation:dr471 46s linear infinite}
-.fa-bd.b2{left:auto;right:0;animation-duration:58s;animation-delay:-25s}
-.fa-bd svg{display:block;width:100%;height:auto}
-#mapSt[data-tod=nuit] .fa-bd,#mapSt[data-tod=nuit] .fa-cl{opacity:.3}
-.fx471-wx{position:absolute;inset:0;opacity:0;transition:opacity 1s;overflow:hidden}
-#mapSt[data-wx=pluie] .fx471-wx,#mapSt[data-wx=grele] .fx471-wx,#mapSt[data-wx=sable] .fx471-wx,#mapSt[data-wx=soleil] .fx471-wx{opacity:1}
-.fx471-wx::before{content:"";position:absolute;left:0;right:0;top:-64px;height:calc(100% + 128px);will-change:transform}
-#mapSt[data-wx=pluie] .fx471-wx::before{background:linear-gradient(104deg,transparent 46%,rgba(214,232,255,.26) 47.5%,rgba(214,232,255,.26) 49%,transparent 50.5%) 0 0/26px 64px;animation:wx471 .55s linear infinite}
-#mapSt[data-wx=grele] .fx471-wx::before{background:radial-gradient(circle at 12% 18%,rgba(255,255,255,.9) 0 1.2px,transparent 1.8px),radial-gradient(circle at 63% 41%,rgba(255,255,255,.75) 0 1px,transparent 1.6px),radial-gradient(circle at 37% 77%,rgba(255,255,255,.85) 0 1.4px,transparent 2px),radial-gradient(circle at 86% 88%,rgba(255,255,255,.7) 0 .9px,transparent 1.5px);background-size:113px 64px;animation:wx471 4.6s linear infinite}
-#mapSt[data-wx=sable] .fx471-wx{background:linear-gradient(90deg,rgba(226,190,120,.18),rgba(240,210,150,.06),rgba(226,190,120,.18))}
-#mapSt[data-wx=soleil] .fx471-wx{background:radial-gradient(70% 60% at 18% 8%,rgba(255,236,170,.3),rgba(255,236,170,0) 70%)}
-@keyframes wx471{from{transform:translateY(0)}to{transform:translateY(64px)}}
-.fog471-wrap svg{will-change:transform;animation:fog471 16s ease-in-out infinite alternate}
-@keyframes fog471{from{transform:translateX(-5px)}to{transform:translateX(5px)}}
-#mapSt.cv471on .map-routes .rt{stroke-width:2.6;stroke:#fff6d2;stroke-dasharray:.1 8;stroke-linecap:round;opacity:.95}
-#mapSt.cv471on .map-routes .rt.lk{stroke:#5b4a36;opacity:.45;stroke-dasharray:.1 6}
-#mapSt.cv471on .map-routes .rt.side{stroke:#e8f6ff}
-html body #carte .mk.sel{background:none!important;border:0!important;box-shadow:none!important;overflow:visible!important;border-radius:0!important}
-html body #carte .mk-n{background:linear-gradient(180deg,#fbf3dc,#ead8b0)!important;color:#3a2a14!important;border:1px solid rgba(120,84,30,.6)!important;box-shadow:0 3px 8px rgba(0,0,0,.35)!important;text-shadow:none!important}
-html body #carte .mk-next .mk-n{background:linear-gradient(180deg,#ffe48a,#f0b42a)!important;color:#2a1a04!important;border-color:#fff1a8!important}
-html body #carte .mk-lock .mk-n{background:linear-gradient(180deg,#e6e1d6,#cfc8b8)!important;color:#5c564a!important}
-html body #carte .mk-done .mk-n{background:linear-gradient(180deg,#f2f8e6,#d4e8c2)!important;color:#22421e!important;border-color:rgba(60,120,60,.55)!important}
-html.a11y-rm .fx471-anim,html.a11y-rm .fx471-wx::before{display:none}
-html.a11y-rm .fog471-wrap svg{animation:none}
-@media (prefers-reduced-motion:reduce){.fx471-anim{display:none}.fog471-wrap svg,.fx471-wx::before{animation:none!important}}
-`;
-  document.head.appendChild(css);
-  try {
-    NEWS416.unshift(['i-map', 'Carte et plateau vivants', 'La carte est repeinte (relief, villages, arènes, nuages, météo, brouillard des zones inexplorées) et chaque combat se joue sur un vrai terrain : herbe, sable, eau, neige, lave, marbre, tôle ou parquet selon l’arène, avec son ambiance animée.']);
-    NEWS416.splice(8);
-  } catch (e) {}
   window.__carte471 = { generate, PAINT, apply, ensure, REG };
 })();
 }

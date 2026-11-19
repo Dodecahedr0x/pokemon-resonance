@@ -1,5 +1,4 @@
-import { useSyncExternalStore } from 'react';
-import { flushSync } from 'react-dom';
+import { canal } from '../../../lib/store.js';
 
 // Interface du combat autour du plateau. Chaque partie a sa version : le moteur l'incrémente
 // là où il réécrivait l'ancien innerHTML, et la partie est reconstruite depuis B et ui.
@@ -12,20 +11,14 @@ import { flushSync } from 'react-dom';
 //   result : fiche de fin de combat (finish)
 //   ti444  : fiche de case (v4.44, fiche444 et place444)
 const versions = { top: 0, foot: 0, fast: 0, panel: 0, log: 0, evo: 0, result: 0, ti444: 0 };
-const listeners = new Set();
-const subscribe = l => (listeners.add(l), () => listeners.delete(l));
+const c = canal();
 
-// Synchrone, comme l'ancien innerHTML : le moteur relit le DOM juste après (focus, mesures).
 export function refreshBattle(...parts) {
   parts.forEach(k => versions[k]++);
-  try {
-    flushSync(() => listeners.forEach(l => l()));
-  } catch {
-    listeners.forEach(l => l());
-  }
+  c.emit();
 }
 
-export const useBattleVersion = k => useSyncExternalStore(subscribe, () => versions[k]);
+export const useBattleVersion = k => c.use(() => versions[k]);
 
 // Choix d'évolution ouvert : le Pokémon qui évolue.
 export const evoState = { u: null };

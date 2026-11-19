@@ -6,7 +6,7 @@ import { BY, EEVEE, FAMT, MKT, PRESETS, famOf } from './009-03-pokemon.js';
 import { BUDGET, RECRUIT } from './010-04-evolution-en-combat.js';
 import { ITEMS2, PROFILE, inBox, ownedItems } from './011-05-etat-de-partie.js';
 import { RC } from './012-06-recrues-roles-synergies.js';
-import { $, INK, RM, gp, markOf, tc, toast } from './014-08-outils.js';
+import { $, INK, RM, ecrireLS, gp, markOf, tc, toast } from './014-08-outils.js';
 import { cur } from './016-09-navigation.js';
 import { openRx } from './018-11-types.js';
 import { BRANCHES } from './021-14-moteur-combat.js';
@@ -20,16 +20,14 @@ import { expRefus } from './049-v4-10-01-identite.js';
 import { REGN421, lieuCapture421, regFam421 } from './061-v4-21-01-capture-partout.js';
 import { hideSheet, refreshFilters, refreshGrid, refreshTeam, showSheet } from '../screens/equipe/equipeStore.js';
 
-export let STLN, TEAM_MAX, squad, filt, openId, validSquad, cost, vBonus, norm, gen;
+export let squad, filt, openId, gen;
 let ftype, q, lastFocus;
 export function __set_squad(v) { return (squad = v); }
 export function __set_filt(v) { return (filt = v); }
 
 
 export function save() {
-  try {
-    localStorage.setItem('res8-squad', JSON.stringify(squad));
-  } catch (e) {}
+  ecrireLS('res8-squad', squad);
   queueSave();
 }
 
@@ -222,7 +220,7 @@ export function renderSquad() {
   renderGrid();
   renderTeam();
   if (openId) openSheet(openId, true);
-  if (typeof renderPrep === 'function' && cur === 'combat' && !B) renderPrep();
+  if (cur === 'combat' && !B) renderPrep();
   if (cur === 'accueil') renderHome();
 }
 
@@ -337,15 +335,31 @@ function equip(id, it) {
 }
 
 
+/* ===================== POKÉDEX & ÉQUIPE v0.8 : cartes de famille ===================== */
+export const STLN = ['PV', 'Puissance', 'Garde', 'Vitesse', 'Mouvement', 'Portée'];
+
+
+export const TEAM_MAX = 4;
+
+
+export const validSquad = s =>
+  Array.isArray(s) &&
+  s.length <= TEAM_MAX &&
+  s.every(id => BY[id]) &&
+  new Set(s.map(id => BY[id].base)).size === s.length &&
+  s.reduce((a, id) => a + RC(id), 0) <= BUDGET;
+
+
+export const cost = () => squad.reduce((a, id) => a + RC(id), 0);
+
+
+export const vBonus = () => Math.min(2, Math.floor((BUDGET - cost()) / 4));
+
+
+export const norm = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+
 // Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
 export function __init() {
-
-/* ===================== POKÉDEX & ÉQUIPE v0.8 : cartes de famille ===================== */
-STLN = ['PV', 'Puissance', 'Garde', 'Vitesse', 'Mouvement', 'Portée'];
-
-
-TEAM_MAX = 4;
-
 
 squad = [],
   filt = 'Tous',
@@ -356,14 +370,6 @@ squad = [],
   openId = null;
 
 
-validSquad = s =>
-  Array.isArray(s) &&
-  s.length <= TEAM_MAX &&
-  s.every(id => BY[id]) &&
-  new Set(s.map(id => BY[id].base)).size === s.length &&
-  s.reduce((a, id) => a + RC(id), 0) <= BUDGET;
-
-
 try {
   const s = JSON.parse(localStorage.getItem('res8-squad') || 'null');
   if (validSquad(s)) squad = s;
@@ -371,15 +377,6 @@ try {
 
 
 if (!squad.length) squad = [...PRESETS.orage.ids];
-
-
-cost = () => squad.reduce((a, id) => a + RC(id), 0);
-
-
-vBonus = () => Math.min(2, Math.floor((BUDGET - cost()) / 4));
-
-
-norm = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 
 
 $('#sheet').addEventListener('click', e => {

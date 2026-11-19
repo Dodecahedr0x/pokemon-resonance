@@ -1,16 +1,14 @@
 /* Section d'origine : v4.71 : rivalité, météo du défi, dresseur de la semaine, vitrine de reliques, Ombres revanche, entraînement de Ball */
 
 import { BY, SCEN } from './009-03-pokemon.js';
-import { toast } from './014-08-outils.js';
+import { ecrireLS, toast } from './014-08-outils.js';
 import { CROCHETS } from './015-v4-8-00-crochets.js';
 import { save, squad } from './020-13-equipe-cartes.js';
 import { OBST } from './023-16-roles-synergies-obstacles.js';
-import { B, backToPrep } from './024-17-interface-combat.js';
+import { B, backToPrep, goFight } from './024-17-interface-combat.js';
 import { overlay } from './030-24-prestige-mise-en-scene.js';
 import { fermer } from '../screens/overlays/tempStore.js';
-import { __set_groupOf, groupOf } from './031-25-v3-parcours-accueil.js';
 import { today } from './032-v4-00-socle.js';
-import { goFight } from './036-v4-04-accueil.js';
 import { DEXS } from './038-v4-06-pokedex.js';
 import { meteoJour417 } from './057-v4-17-01-compagnons-et-resonance.js';
 import { timing453 } from './083-v4-53-capture-avec-timing-statuts-visibles-pokem.js';
@@ -31,9 +29,7 @@ export function __init() {
     }
   };
   const ecrire = o => {
-    try {
-      localStorage.setItem(KEY, JSON.stringify(o));
-    } catch (e) {}
+    ecrireLS(KEY, o);
   };
   const hash = s => {
     let h = 17;
@@ -73,10 +69,6 @@ export function __init() {
     OBST.inv470 = { pil: ['4,2'], grass: ['4,4', '5,1'] };
   } catch (e) {}
 
-  const groupOfAvant = groupOf;
-  __set_groupOf(function (k) {
-    return /^(wk470|inv470)$/.test(k) ? 'terrains' : groupOfAvant.apply(this, arguments);
-  });
 
   /* ---- Récompenses et suivi (progression) ---- */
   CROCHETS.progres.unshift((S, rew, win) => {

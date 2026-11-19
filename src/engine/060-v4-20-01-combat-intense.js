@@ -11,11 +11,8 @@ import { FOURNISSEURS_DEGATS } from './044-v4-5-01-moteur-tactique.js';
 import { SUCCES } from './048-v4-9-01-rejouabilite.js';
 import { aXP, bossScen } from './053-v4-14-01-resonance.js';
 import { MARK_T416 } from './055-v4-16-01-johto-vivant.js';
-import { NEWS416 } from './056-v4-16-1-01-finitions.js';
+import { rage460, repl460 } from './091-4-60-boss-a-phases-lieux-secrets-pnj-itinerants.js';
 
-export let encercle420;
-let peutVigil420, autour420, METEO_T420, DANGERS;
-export function __set_phaseBoss420(v) { return (phaseBoss420 = v); }
 
 
 /* =====================================================================
@@ -85,7 +82,16 @@ export function bossDe420(S) {
 }
 
 
-export function phaseBoss420(S, ev) {
+function phaseBoss420(S, ev) {
+  const b = bossDe420(S),
+    avant = b ? b.phase420 || 1 : 0;
+  rage460(S, ev);
+  changerPhase420(S, ev);
+  if (b && bossPhases420(S) && (b.phase420 || 1) > avant && !b.ko) say(ev, repl460(b, b.phase420 === 3 ? 1 : 0)); // réplique du boss (v4.60)
+}
+
+
+function changerPhase420(S, ev) {
   if (!bossPhases420(S) || S.over) return;
   const b = bossDe420(S);
   if (!b || b.ko) return;
@@ -198,10 +204,26 @@ export function etatsCombat420(u) {
   return o.join('');
 }
 
+const peutVigil420 = (S, u) => !!(S && u && u.side === 'a' && !u.ko && !u.acted && !u.sn && S.phase === 'player' && u.mv.some(id => MV[id] && MV[id].p > 0));
+
+/* ---------- 2. Encerclement ---------- */
+const autour420 = (S, t, side) => S.units.filter(o => !o.ko && o.side === side && !o.seg && hdist(o.pos, t.pos) === 1).length;
+
+export const encercle420 = (S, u) => !!(S && u && !u.ko && !u.seg && !u.colosse && autour420(S, u, u.side === 'a' ? 'e' : 'a') >= 2);
+
+const METEO_T420 = { Feu: 'soleil', Eau: 'pluie', Glace: 'grele', Roche: 'sable', Sol: 'sable' };
+
+/* ---------- 4. Dangers annoncés ---------- */
+const DANGERS = {
+  eboulement: { n: 'Éboulement', d: 9, mk: 'fissure' },
+  foudre: { n: 'Foudre', d: 8, mk: 'charge' },
+  vague: { n: 'Vague', d: 7, mk: 'trempe' },
+  flammes: { n: 'Flammes', d: 7, mk: 'brulant' },
+  onde: { n: 'Onde', d: 8, mk: null }
+};
+
 // Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
 export function __init() {
-
-peutVigil420 = (S, u) => !!(S && u && u.side === 'a' && !u.ko && !u.acted && !u.sn && S.phase === 'player' && u.mv.some(id => MV[id] && MV[id].p > 0));
 
 
 CROCHETS.avantFinManche.push(S => S.units.forEach(u => (!S.duel433 || u.j433 !== 2) && (u.vigil = 0)));
@@ -222,27 +244,7 @@ document.addEventListener('click', e => {
 });
 
 
-/* ---------- 2. Encerclement ---------- */
-autour420 = (S, t, side) => S.units.filter(o => !o.ko && o.side === side && !o.seg && hdist(o.pos, t.pos) === 1).length;
-
-
-encercle420 = (S, u) => !!(S && u && !u.ko && !u.seg && !u.colosse && autour420(S, u, u.side === 'a' ? 'e' : 'a') >= 2);
-
-
 FOURNISSEURS_DEGATS.push({ id: 'encerclement', fournir: (c, { S, u, t }) => S && t && u && t.side !== u.side && !t.seg && autour420(S, t, u.side) >= 2 && { mul: 1.2, libelle: 'Encerclement' } });
-
-
-METEO_T420 = { Feu: 'soleil', Eau: 'pluie', Glace: 'grele', Roche: 'sable', Sol: 'sable' };
-
-
-/* ---------- 4. Dangers annoncés ---------- */
-DANGERS = {
-  eboulement: { n: 'Éboulement', d: 9, mk: 'fissure' },
-  foudre: { n: 'Foudre', d: 8, mk: 'charge' },
-  vague: { n: 'Vague', d: 7, mk: 'trempe' },
-  flammes: { n: 'Flammes', d: 7, mk: 'brulant' },
-  onde: { n: 'Onde', d: 8, mk: null }
-};
 
 
 CROCHETS.avantFinManche.push((S, ev) => {
@@ -256,6 +258,4 @@ SUCCES.push(
   { id: 'phases', n: 'Jusqu’au bout', d: 'Battre un Maître ou une légende après sa phase 3.', t: 'Inébranlable', ok: c => c.win && c.S.units.some(u => u.phase420 === 3) }
 );
 
-
-NEWS416.unshift(['i-bolt', 'Combats plus intenses', 'Vigilance (interceptez un adversaire), Encerclement (+20 %), Maîtres et légendes à 3 phases, dangers annoncés sur le plateau.', null]);
 }

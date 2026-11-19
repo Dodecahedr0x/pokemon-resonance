@@ -4,16 +4,14 @@ import { RX, WEATHER } from './004-01-donnees.js';
 import { TAL } from './005-02-capacites.js';
 import { BY, WXN } from './009-03-pokemon.js';
 import { ROLEFX } from './012-06-recrues-roles-synergies.js';
-import { RM } from './014-08-outils.js';
 import { byUid } from './021-14-moteur-combat.js';
 import { B, ui } from './024-17-interface-combat.js';
-import { PREF, tileTip } from './026-20-campagne-tutoriel-son.js';
+import { tileTip } from './026-20-campagne-tutoriel-son.js';
 import { overlay } from './030-24-prestige-mise-en-scene.js';
 import { fermer } from '../screens/overlays/tempStore.js';
-import { NEWS416 } from './056-v4-16-1-01-finitions.js';
 import { meteoJour417 } from './057-v4-17-01-compagnons-et-resonance.js';
+import { FX448 } from './079-v4-48-immersion-sons-par-type-cris-vibrations-en.js';
 
-let SNOM450, CIEL450, IM450b;
 
 
 /* ---------- 1. accueil vivant ---------- */
@@ -25,8 +23,8 @@ function saison450() {
 
 /** Saison et météo du jour sur le héros de l'Accueil (rendu : src/screens/accueil/Heros.jsx). */
 export function vivant450() {
-  const wx = IM450b() ? meteoJour417() : null,
-    se = IM450b() ? saison450() : '';
+  const wx = FX448() ? meteoJour417() : null,
+    se = FX448() ? saison450() : '';
   if (!se) return null;
   return { se, wx, txt: SNOM450[se] + (wx ? ' · ' + CIEL450[wx] : '') };
 }
@@ -68,17 +66,13 @@ function ouvrirAide452() {
   });
 }
 
+const SNOM450 = { printemps: 'Printemps', ete: 'Été', automne: 'Automne', hiver: 'Hiver' };
+
+
+const CIEL450 = { pluie: 'pluie', soleil: 'soleil', grele: 'grêle', sable: 'sable' };
+
 // Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
 export function __init() {
-
-SNOM450 = { printemps: 'Printemps', ete: 'Été', automne: 'Automne', hiver: 'Hiver' };
-
-
-CIEL450 = { pluie: 'pluie', soleil: 'soleil', grele: 'grêle', sable: 'sable' };
-
-
-IM450b = () => PREF.im448 !== 0 && !RM;
-
 
 document.addEventListener('click', e => {
   const b = e.target.closest && e.target.closest('[data-b452]');
@@ -92,9 +86,4 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape') fermer('hp452');
 });
 
-
-NEWS416.unshift(['i-star', 'Accueil vivant et aide', 'La saison et la météo du jour animent l’accueil. En combat, le bouton « ? » explique ce qui compte maintenant : votre Pokémon sélectionné, le terrain, la météo et les réactions.', null]);
-
-
-NEWS416.splice(8);
 }

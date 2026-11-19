@@ -2,20 +2,18 @@
 
 import { BY, SCEN } from './009-03-pokemon.js';
 import { ARENAS } from './013-07-arenes.js';
-import { toast } from './014-08-outils.js';
+import { ecrireLS, toast } from './014-08-outils.js';
 import { CROCHETS } from './015-v4-8-00-crochets.js';
-import { esc, queueSave } from './025-19-sauvegardes.js';
+import { esc } from './025-19-sauvegardes.js';
 import { sfx, vibe } from './026-20-campagne-tutoriel-son.js';
 import { overlay } from './030-24-prestige-mise-en-scene.js';
 import { fermer } from '../screens/overlays/tempStore.js';
-import { today } from './032-v4-00-socle.js';
-import { renderWallet } from './035-v4-03-interface.js';
+import { sauverBourse, today } from './032-v4-00-socle.js';
 import { refreshAccueil } from '../screens/accueil/accueilStore.js';
 import { FOURNISSEURS_DEGATS } from './044-v4-5-01-moteur-tactique.js';
-import { NEWS416 } from './056-v4-16-1-01-finitions.js';
 import { gain454, txt454 } from './084-4-54-colporteur-rencontres-de-route-missions-de.js';
+import { combatCompte464 } from './095-4-64-arbre-de-talents-du-dresseur.js';
 
-let SAI465, PAL465, moisCle465, moisIdx465, sai465, vedette465, saSt465, saSave465, saOk465;
 
 
 /** Bannière de saison de l'Accueil (#sa465, rendu : src/screens/accueil/Bannieres.jsx). */
@@ -41,10 +39,7 @@ function saOpen465() {
   });
 }
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
-export function __init() {
-
-SAI465 = [
+const SAI465 = [
   { n: 'Grand Froid', t: 'Glace', d: 'L’hiver s’installe : les Pokémon Glace sont à l’honneur.' },
   { n: 'Cœur de Fée', t: 'Fée', d: 'Un mois de douceur et de magie pour les Pokémon Fée.' },
   { n: 'Éveil de la Sève', t: 'Plante', d: 'Le printemps réveille les Pokémon Plante.' },
@@ -60,7 +55,7 @@ SAI465 = [
 ];
 
 
-PAL465 = [
+const PAL465 = [
   [5, 'Premiers pas', { m: 600, b: { potion: 2 } }],
   [10, 'Régulier', { g: 3 }],
   [18, 'Passionné', { m: 1500, b: { superpotion: 2 } }],
@@ -69,19 +64,19 @@ PAL465 = [
 ];
 
 
-moisCle465 = () => today().slice(0, 7);
+const moisCle465 = () => today().slice(0, 7);
 
 
-moisIdx465 = () => Math.max(0, Math.min(11, (parseInt(today().slice(5, 7), 10) || 1) - 1));
+const moisIdx465 = () => Math.max(0, Math.min(11, (parseInt(today().slice(5, 7), 10) || 1) - 1));
 
 
-sai465 = () => SAI465[moisIdx465()];
+const sai465 = () => SAI465[moisIdx465()];
 
 
-vedette465 = () => ARENAS[(moisIdx465() * 3 + (parseInt(today().slice(0, 4), 10) || 0)) % ARENAS.length].k;
+const vedette465 = () => ARENAS[(moisIdx465() * 3 + (parseInt(today().slice(0, 4), 10) || 0)) % ARENAS.length].k;
 
 
-saSt465 = () => {
+const saSt465 = () => {
   let s;
   try {
     s = JSON.parse(localStorage.getItem('res-sa465') || 'null');
@@ -98,18 +93,15 @@ saSt465 = () => {
 };
 
 
-saSave465 = s => {
-  try {
-    localStorage.setItem('res-sa465', JSON.stringify(s));
-  } catch (e) {}
+const saSave465 = s => {
+  ecrireLS('res-sa465', s);
 };
 
-
-saOk465 = S => S && !S.fixe431 && !(SCEN[S.sc] && SCEN[S.sc].tuto);
-
+// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+export function __init() {
 
 CROCHETS.combat.push(S => {
-  if (saOk465(S)) S.sa465 = sai465().t;
+  if (combatCompte464(S)) S.sa465 = sai465().t;
 });
 
 
@@ -118,7 +110,7 @@ FOURNISSEURS_DEGATS.push({ id: 'saison465', fournir: (c, { S, u }) => !!u && u.s
 
 CROCHETS.progres.unshift((S, rew, win) => {
   try {
-    if (!win || !saOk465(S)) return null;
+    if (!win || !combatCompte464(S)) return null;
     const t = sai465().t,
       s = saSt465();
     let n = 1;
@@ -157,16 +149,11 @@ document.addEventListener(
     sfx('win');
     vibe([30, 40, 30]);
     toast('Récompense de saison : ' + txt454(T[2]) + '.');
-    try {
-      queueSave();
-      renderWallet();
-    } catch (x) {}
+    sauverBourse();
     saOpen465();
     refreshAccueil(); // bannière #sa465
   },
   true
 );
 
-
-NEWS416.unshift(['i-star', 'Événements saisonniers', 'Chaque mois a son thème : un type à l’honneur (+5 % de dégâts), un combat vedette et cinq paliers de récompenses. Touchez la bannière sur l’Accueil.']);
 }

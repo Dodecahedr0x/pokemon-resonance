@@ -14,7 +14,6 @@ const shell = makeStore({
 });
 
 export const useShell = shell.use;
-export const getShell = shell.get;
 
 export function setShellPage(page, sec) {
   shell.set({ page, sec });

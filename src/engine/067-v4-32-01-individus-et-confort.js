@@ -3,7 +3,7 @@
 import { BY, PRESETS, famOf } from './009-03-pokemon.js';
 import { DIFFS, ITEMS2, PROFILE, inBox, isCamp, ownedItems } from './011-05-etat-de-partie.js';
 import { synOf } from './012-06-recrues-roles-synergies.js';
-import { toast } from './014-08-outils.js';
+import { fnv, toast } from './014-08-outils.js';
 import { CROCHETS } from './015-v4-8-00-crochets.js';
 import { __set_squad, renderSquad, save, squad, validSquad } from './020-13-equipe-cartes.js';
 import { EMAX, say } from './021-14-moteur-combat.js';
@@ -13,11 +13,9 @@ import { __set_TEAM_BAK } from './027-21-arene-a-lecran.js';
 import { today } from './032-v4-00-socle.js';
 import { renderParams } from './040-v4-08-parametres.js';
 import { CARACTERES, enExpedition } from './049-v4-10-01-identite.js';
-import { NEWS416 } from './056-v4-16-1-01-finitions.js';
 import { CAMPT431 } from './066-v4-31-01-defis-tactiques.js';
 
-export let PANTH432, EQ_NOM432;
-let TALENTS432;
+export let EQ_NOM432;
 
 
 /* =====================================================================
@@ -72,20 +70,13 @@ export function v432Clean(p) {
 }
 
 
-function hash432(s) {
-  let h = 2166136261;
-  for (let i = 0; i < s.length; i++) h = Math.imul(h ^ s.charCodeAt(i), 16777619);
-  return h >>> 0;
-}
-
-
 /** Les trois talents possibles d’une famille : ceux de ses types, de la forme de base à la dernière évolution. */
 function talentsFamille432(b) {
   const types = new Set(famOf(b).flatMap(m => m.t)),
-    h = hash432(b),
+    h = fnv(b),
     L = Object.keys(TALENTS432)
       .filter(k => TALENTS432[k][2].some(t => types.has(t)))
-      .sort((x, y) => ((hash432(x + b) ^ h) >>> 0) - ((hash432(y + b) ^ h) >>> 0));
+      .sort((x, y) => ((fnv(x + b) ^ h) >>> 0) - ((fnv(y + b) ^ h) >>> 0));
   ['robuste', 'elan', 'focus'].forEach(k => L.length < 3 && !L.includes(k) && L.push(k));
   return L.slice(0, 3);
 }
@@ -126,7 +117,7 @@ export function indivDe432(id) {
   if (!PROFILE.indiv432Init) {
     // les familles déjà présentes gardent leur caractère d’avant la v4.32
     PROFILE.box.forEach(x => {
-      if (!I[x] && BY[x]) I[x] = { car: caractereHash432(x), tal: talentsFamille432(x)[hash432(x) % 3] };
+      if (!I[x] && BY[x]) I[x] = { car: caractereHash432(x), tal: talentsFamille432(x)[fnv(x) % 3] };
     });
     PROFILE.indiv432Init = 1;
     queueSave();
@@ -220,11 +211,8 @@ export function graver432(k, n, team, S) {
 
 // l’onglet Camp › Panthéon est rendu par React : src/screens/camp/tabs/Pantheon.jsx
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
-export function __init() {
-
 /* ---------- 1. nature et talent individuels ---------- */
-TALENTS432 = {
+const TALENTS432 = {
   fermete: ['Fermeté', 'Survit une fois par combat à un coup fatal (1 PV).', ['Roche', 'Sol', 'Acier', 'Combat', 'Normal']],
   regen: ['Régénération', 'Récupère 8 % de ses PV à chaque fin de manche.', ['Eau', 'Plante', 'Normal', 'Fée', 'Poison']],
   elan: ['Élan', '+1 Mouvement pendant la première manche.', ['Vol', 'Électrik', 'Feu', 'Insecte', 'Combat']],
@@ -236,6 +224,12 @@ TALENTS432 = {
   garde: ['Vigilance', 'Commence le combat sous Garde pendant 2 manches.', ['Acier', 'Psy', 'Fée', 'Normal', 'Eau']]
 };
 
+
+/* ---------- 5. Panthéon ---------- */
+export const PANTH432 = { champ: 'Champion de Kanto', jchamp: 'Maître de Johto', hchamp: 'Maître de Hoenn', echo: 'Gardien de l’Écho profond' };
+
+// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+export function __init() {
 
 CROCHETS.combat.push(S => {
   if ((S.fixe431 && S.sc !== 'echo431') || !S.car) return; // réglage « Natures et talents »
@@ -361,10 +355,6 @@ document.addEventListener('change', e => {
 });
 
 
-/* ---------- 5. Panthéon ---------- */
-PANTH432 = { champ: 'Champion de Kanto', jchamp: 'Maître de Johto', hchamp: 'Maître de Hoenn', echo: 'Gardien de l’Écho profond' };
-
-
 CROCHETS.progres.push((S, rew, win) => {
   if (!win || !PANTH432[S.sc]) return null;
   graver432(
@@ -383,12 +373,4 @@ CROCHETS.resultat.push(r => (r.panth432 ? `<div class="res-l"><h4>Panthéon</h4>
 
 if (!CAMPT431.some(x => x[0] === 'pantheon')) CAMPT431.push(['pantheon', 'Panthéon']);
 
-
-NEWS416.unshift(
-  ['i-star', 'Nature et talent', 'Chaque Pokémon capturé a sa propre nature et son propre talent, gardés à travers ses évolutions (fiche du Pokémon).', null],
-  ['i-team', 'Équipes et accessibilité', 'Enregistrez vos équipes, 8 nouvelles formations en synergie, le Panthéon (Camp), et des réglages d’accessibilité. Le code secret devient « Action Replay ».', null]
-);
-
-
-NEWS416.splice(8);
 }

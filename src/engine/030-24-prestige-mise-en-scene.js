@@ -6,13 +6,14 @@ import { SCEN } from './009-03-pokemon.js';
 import { PROFILE } from './011-05-etat-de-partie.js';
 import { ARENAS } from './013-07-arenes.js';
 import { $, RM, tc } from './014-08-outils.js';
+import { crochet } from './015-v4-8-00-crochets.js';
 import { cur } from './016-09-navigation.js';
 import { byUid, uk } from './021-14-moteur-combat.js';
 import { ELITE } from './022-15-systemes-objets-liens-ia.js';
-import { B, __set_scSel, backToPrep, clearAim, floatAt, renderAll, scSel, ui } from './024-17-interface-combat.js';
-import { PREF, PREPG, __set_PREPG, renderPrep } from './026-20-campagne-tutoriel-son.js';
+import { B, __set_scSel, backToPrep, clearAim, floatAt, renderAll, ui } from './024-17-interface-combat.js';
+import { PREF, __set_PREPG, renderPrep } from './026-20-campagne-tutoriel-son.js';
 import { fxOn } from './028-22-effets-attaque.js';
-import { musLevel } from './040-v4-08-parametres.js';
+import { musStart } from './070-v4-35-musiques-par-theme-lecteur-de-pistes.js';
 import { RIVAL, RIVAL_STEPS, legOf, rivalIdx, styleOf } from './043-v4-4-01-aventure-plus.js';
 import { dissonanceDe } from './050-v4-11-01-monde.js';
 import { chapJ415, leadJ415 } from './054-v4-15-01-johto.js';
@@ -21,12 +22,8 @@ import { astuceVs448 } from './079-v4-48-immersion-sons-par-type-cris-vibrations
 import { vsAv450 } from './080-v4-50-avatar-de-dresseur-rencontres-rares-heure.js';
 import { fermer, majTemp, ouvrir } from '../screens/overlays/tempStore.js';
 
-export let ELITE_L, CHAMP_L, CHAP, AUTO, HPM, RK, rkTag, MUS, LEAD, UNIV;
-let PROF, LASTPH, MPROG;
-export function __set_vsIntro(v) { return (vsIntro = v); }
-export function __set_turnBanner(v) { return (turnBanner = v); }
-export function __set_musStart(v) { return (musStart = v); }
-export function __set_musStop(v) { return (musStop = v); }
+export let AUTO;
+let LASTPH;
 
 
 export function leaderOf(sc) {
@@ -62,6 +59,7 @@ export function overlay(id, data) {
 
 
 export function vsIntro() {
+  crochet('avantPresentation');
   if (!B) return;
   const D = SCEN[B.sc],
     L = leaderOf(B.sc),
@@ -128,6 +126,7 @@ export function vsIntro() {
 
 
 export function turnBanner(txt, sub) {
+  crochet('avantBandeau');
   if (!B || RM) return;
   const bd = $('#bBoard');
   if (!bd) return;
@@ -239,12 +238,7 @@ function musTick() {
 }
 
 
-export function musStart() {
-  musStartCore();
-  setTimeout(musLevel, 3100);
-}
-
-
+/* Nappe d’ambiance synthétisée : repli du lecteur de pistes (070) quand les fichiers audio manquent. */
 export function musStartCore() {
   if (MUS.on) return;
   try {
@@ -267,9 +261,8 @@ export function musStartCore() {
 }
 
 
-export function musStop() {
-  if (!MUS.on) return;
-  MUS.on = false;
+export function musPadStop() {
+  if (!MUS.ac || !MUS.out) return;
   clearTimeout(MUS.timer);
   try {
     const o = MUS.out,
@@ -286,16 +279,21 @@ export function musStop() {
 }
 
 
-export function musResume() {
-  if (PREF.music && !MUS.on) musStart();
+export function musPadLevel() {
+  try {
+    if (MUS.on && MUS.out && MUS.ac) {
+      const t = MUS.ac.currentTime,
+        g = MUS.out.gain;
+      g.cancelScheduledValues(t);
+      g.setValueAtTime(g.value, t);
+      g.linearRampToValueAtTime(0.55 * PREF.musVol, t + 0.4);
+    }
+  } catch (e) {}
 }
-
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
-export function __init() {
 
 /* ===================== v2.0 PRESTIGE : univers, mise en scène, finitions ===================== */
 /* --- Univers : la Ligue de la Résonance et ses maîtres (personnages originaux) --- */
-LEAD = [
+export const LEAD = [
   {
     n: 'Bastien Grès',
     t: 'le Tailleur de la Faille',
@@ -355,7 +353,7 @@ LEAD = [
 ];
 
 
-ELITE_L = [
+export const ELITE_L = [
   {
     n: 'Séléné Voilée',
     t: 'Maîtresse des Ombres',
@@ -387,7 +385,7 @@ ELITE_L = [
 ];
 
 
-CHAMP_L = {
+export const CHAMP_L = {
   n: 'Auriane Vale',
   t: 'Championne de la Résonance',
   q: 'J’ai lu vos dix derniers combats. Montrez-moi le onzième.',
@@ -396,10 +394,10 @@ CHAMP_L = {
 };
 
 
-PROF = { n: 'Professeure Maëlle Sorbier', t: 'chercheuse en Résonance' };
+const PROF = { n: 'Professeure Maëlle Sorbier', t: 'chercheuse en Résonance' };
 
 
-UNIV = [
+export const UNIV = [
   [
     'La Résonance',
     'À Kanto et à Johto, les dresseurs l’ont constaté depuis longtemps : quand un Pokémon et son dresseur agissent au même tempo, une énergie monte entre eux. Trois pulsations, et le Pokémon franchit un stade, en plein combat, sans retour possible. Les chercheurs l’ont appelée la Résonance.'
@@ -419,7 +417,7 @@ UNIV = [
 ];
 
 
-CHAP = k => {
+export const CHAP = k => {
   const jc = chapJ415(k); // Johto (v4.15)
   if (jc) return jc;
   const i = ARENAS.findIndex(a => a.k === k);
@@ -437,15 +435,27 @@ CHAP = k => {
 };
 
 
-ARENAS.forEach((a, i) => {
-  SCEN[a.k].lvl = `Arène ${i + 1} · ${LEAD[i].n}`;
-});
+/* --- Barres de vie : la perte reste visible un instant --- */
+export const HPM = {};
 
 
-ELITE.forEach((k, i) => {
-  SCEN[k].lvl = `Conseil 4 · ${ELITE_L[i].n}`;
-});
+/* --- Rang de fin de combat et meilleur rang par terrain --- */
+export const RK = ['B', 'A', 'S'];
 
+
+/* --- Musique d’ambiance générative (option « Musique ») --- */
+export const MUS = { ac: null, out: null, on: false, timer: 0, step: 0 };
+
+
+const MPROG = [
+  [57, 64, 69, 72],
+  [53, 60, 65, 69],
+  [48, 55, 64, 67],
+  [55, 62, 67, 71]
+];
+
+// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+export function __init() {
 
 /* --- Ligue, Conseil, parcours : les visages de la Ligue (réplique d'arène : src/screens/ligue/Arena.jsx) --- */
 
@@ -455,14 +465,6 @@ AUTO = !!navigator.webdriver || /jsdom/i.test(navigator.userAgent || '');
 
 
 LASTPH = null;
-
-
-/* --- Barres de vie : la perte reste visible un instant --- */
-HPM = {};
-
-
-/* --- Rang de fin de combat et meilleur rang par terrain --- */
-RK = ['B', 'A', 'S'];
 
 
 
@@ -480,13 +482,6 @@ $('#cbResult').addEventListener(
   },
   true
 );
-
-
-/* rang affiché sur les terrains, arènes et cartes de Ligue */
-rkTag = k => {
-  const r = (PROFILE.ranks || {})[k];
-  return r ? `<span class="rk-t rk-${r}" title="Meilleur rang : ${r}">${r}</span>` : '';
-};
 
 
 /* --- Clavier : jouer sans souris --- */
@@ -558,18 +553,6 @@ document.addEventListener('keydown', e => {
     }
   }
 });
-
-
-/* --- Musique d’ambiance générative (option « Musique ») --- */
-MUS = { ac: null, out: null, on: false, timer: 0, step: 0 };
-
-
-MPROG = [
-  [57, 64, 69, 72],
-  [53, 60, 65, 69],
-  [48, 55, 64, 67],
-  [55, 62, 67, 71]
-];
 
 
 document.addEventListener(

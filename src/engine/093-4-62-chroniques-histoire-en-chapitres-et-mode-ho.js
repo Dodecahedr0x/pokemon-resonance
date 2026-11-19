@@ -1,18 +1,17 @@
 /* Section d'origine : 4.62 : chroniques (histoire en chapitres) et mode hors ligne */
 
-import { $, toast } from './014-08-outils.js';
-import { queueSave } from './025-19-sauvegardes.js';
+import { $, ecrireLS, lireLS, toast } from './014-08-outils.js';
 import { PREF, savePref } from './026-20-campagne-tutoriel-son.js';
-import { renderWallet } from './035-v4-03-interface.js';
+import { sauverBourse } from './032-v4-00-socle.js';
 import { renderParams } from './040-v4-08-parametres.js';
-import { NEWS416 } from './056-v4-16-1-01-finitions.js';
-import { SCENES, SCN, __set_SCN, renderScene417 } from './057-v4-17-01-compagnons-et-resonance.js';
-import { BGM434, __set_bgmEl434, bgmEl434 } from './070-v4-35-musiques-par-theme-lecteur-de-pistes.js';
+import { SCENES, __set_SCN, renderScene417 } from './057-v4-17-01-compagnons-et-resonance.js';
+import { BGM434 } from './070-v4-35-musiques-par-theme-lecteur-de-pistes.js';
 import { gain454 } from './084-4-54-colporteur-rencontres-de-route-missions-de.js';
 import { nbBadge459 } from './090-4-59-quetes-d-objets-et-trophees.js';
 
-let L462, S462, bgmElOld462;
-export let CHAP462, NOMSC462, chSt462, OFF462, offOk462, pistes462;
+
+/** Mode hors ligne : pistes de musique gardées en cache (urls = adresses blob: par piste). */
+export const OFF462 = { cache: 'res-audio-462', urls: {}, etat: '', n: 0 };
 
 
 function chPlay462(L, c) {
@@ -30,12 +29,9 @@ function chOpen462(i) {
   chPlay462(C.L, 'ch462_' + i);
   if (first) {
     s.read[i] = 1;
-    S462('res-ch462', s);
+    ecrireLS('res-ch462', s);
     gain454({ g: 2 });
-    try {
-      queueSave();
-      renderWallet();
-    } catch (e) {}
+    sauverBourse();
     toast('Chronique lue : +2 Éclats.');
     setTimeout(() => {
       try {
@@ -146,28 +142,8 @@ async function offSave462() {
   }
 }
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
-export function __init() {
-
-L462 = (k, d) => {
-  try {
-    const v = JSON.parse(localStorage.getItem(k) || 'null');
-    return v || d;
-  } catch (e) {
-    return d;
-  }
-};
-
-
-S462 = (k, v) => {
-  try {
-    localStorage.setItem(k, JSON.stringify(v));
-  } catch (e) {}
-};
-
-
 /* ---------- 1. Chroniques ---------- */
-CHAP462 = [
+export const CHAP462 = [
   { t: 'Chapitre 1 · Le premier écho', min: 0, L: [['prof', 'Chaque Pokémon porte une note. Quand deux notes s’accordent, la Résonance naît. Voilà ce que je cherche à comprendre depuis vingt ans.'], ['prof', 'Votre partenaire a répondu à votre voix dès le premier jour. C’est rare, et c’est précieux.'], ['kael', 'Alors c’est toi, la nouvelle recrue du Prof. Je m’appelle Kael. On verra bientôt qui entend le mieux.']] },
   { t: 'Chapitre 2 · Une note qui manque', min: 1, L: [['prof', 'Votre premier badge vibre dans la Résonance. Mais écoutez : il manque une note dans l’enregistrement de la région.'], ['prof', 'Quelque chose efface les notes au fil des routes. Je l’appelle la Dissonance.'], ['kael', 'Une Dissonance ? Ça ressemble à un prétexte pour me ralentir. Mais je viens avec toi, juste pour voir.']] },
   { t: 'Chapitre 3 · Les fréquences brouillées', min: 2, L: [['prof', 'Les capteurs du labo captent des fréquences brouillées autour des arènes. Quelqu’un teste un brouilleur.'], ['kael', 'Tu crois que les Champions sont impliqués ? Je n’y crois pas. Ils se battent pour leur ville.'], ['prof', 'Gardez l’oreille ouverte. Une Résonance sincère ne se force pas, et ne s’achète pas.']] },
@@ -179,11 +155,26 @@ CHAP462 = [
 ];
 
 
-NOMSC462 = { j1: 'Arrivée à Johto', jd1: 'La Team Dissonance', jd2: 'La tour en flammes', jd3: 'L’Antenne Rouge', jd4: 'Le Relais', jchamp: 'Le Champion de Johto', roam: 'La bête errante', rv5: 'Kael à Johto', h1: 'Arrivée à Hoenn', hchamp: 'Le Champion de Hoenn' };
+export const NOMSC462 = { j1: 'Arrivée à Johto', jd1: 'La Team Dissonance', jd2: 'La tour en flammes', jd3: 'L’Antenne Rouge', jd4: 'Le Relais', jchamp: 'Le Champion de Johto', roam: 'La bête errante', rv5: 'Kael à Johto', h1: 'Arrivée à Hoenn', hchamp: 'Le Champion de Hoenn' };
 
 
-chSt462 = () => L462('res-ch462', { read: {} });
+export const chSt462 = () => lireLS('res-ch462', { read: {} });
 
+
+/* ---------- 2. Mode hors ligne (musique en cache) ---------- */
+export const offOk462 = () => {
+  try {
+    return typeof caches !== 'undefined' && typeof fetch === 'function' && typeof URL !== 'undefined' && !!URL.createObjectURL;
+  } catch (e) {
+    return false;
+  }
+};
+
+
+export const pistes462 = () => Object.entries(BGM434.src);
+
+// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+export function __init() {
 
 document.addEventListener(
   'click',
@@ -200,35 +191,6 @@ document.addEventListener(
   },
   true
 );
-
-
-/* ---------- 2. Mode hors ligne (musique en cache) ---------- */
-OFF462 = { cache: 'res-audio-462', urls: {}, etat: '', n: 0 };
-
-
-offOk462 = () => {
-  try {
-    return typeof caches !== 'undefined' && typeof fetch === 'function' && typeof URL !== 'undefined' && !!URL.createObjectURL;
-  } catch (e) {
-    return false;
-  }
-};
-
-
-pistes462 = () => Object.entries(BGM434.src);
-
-
-bgmElOld462 = bgmEl434;
-
-
-__set_bgmEl434(function (k) {
-  const had = !!BGM434.el[k],
-    a = bgmElOld462(k);
-  try {
-    if (a && !had && OFF462.urls[k]) a.src = OFF462.urls[k];
-  } catch (e) {}
-  return a;
-});
 
 
 document.addEventListener(
@@ -255,6 +217,4 @@ window.addEventListener('offline', () => toast('Vous êtes hors ligne : le jeu c
 
 setTimeout(() => offLoad462(), 1500);
 
-
-NEWS416.unshift(['i-star', 'Chroniques et mode hors ligne', 'Huit chapitres d’histoire se débloquent avec vos badges, et vous pouvez revoir les scènes déjà vues. Un mode hors ligne enregistre la musique sur votre appareil.']);
 }

@@ -1,18 +1,13 @@
 /* Section d'origine : 4.57 : atelier, recettes, commandes, tirage, vitrine, cadeau du jour */
 
 import { ITEMS2, PROFILE } from './011-05-etat-de-partie.js';
-import { toast } from './014-08-outils.js';
-import { queueSave } from './025-19-sauvegardes.js';
+import { ecrireLS, toast } from './014-08-outils.js';
 import { sfx, vibe } from './026-20-campagne-tutoriel-son.js';
-import { SHOP, bagN, today } from './032-v4-00-socle.js';
-import { renderWallet } from './035-v4-03-interface.js';
+import { SHOP, bagN, sauverBourse, today } from './032-v4-00-socle.js';
 import { refreshAccueil } from '../screens/accueil/accueilStore.js';
 import { renderBag } from './039-v4-07-quetes-boutique.js';
-import { NEWS416 } from './056-v4-16-1-01-finitions.js';
 import { gain454, rng454, txt454 } from './084-4-54-colporteur-rencontres-de-route-missions-de.js';
 
-export let ctKeys455, txtIn455, ajout455, peutIn455, maj455;
-let LJ455, LJS455, nomIt455, RECETTES455, LOTS455, COUT455, CADEAU455;
 export { LJ455, RECETTES455, COUT455 }; // lus par Boutique › Atelier et Tirage (React, src/screens/sac/Atelier.jsx)
 
 
@@ -78,11 +73,11 @@ function spin455() {
   } else gain454(lot.o);
   st.spin++;
   st.last = t;
-  LJS455('res-at455', st);
+  ecrireLS('res-at455', st);
   sfx('win');
   vibe(25);
   toast('Tirage : ' + t);
-  maj455();
+  sauverBourse();
 }
 
 
@@ -101,9 +96,7 @@ export function vitrine455() {
   [...cts, ...cs].forEach(k => {
     if (bagN(k) > 0 || appr.includes(SHOP[k].mv)) seen[k] = 1;
   });
-  try {
-    localStorage.setItem('res-vit455', JSON.stringify(seen));
-  } catch (e) {}
+  ecrireLS('res-vit455', seen);
   return { seen, cts, cs };
 }
 
@@ -141,10 +134,7 @@ export function cdData455() {
   return { fait, j, txt };
 }
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
-export function __init() {
-
-LJ455 = (k, d) => {
+const LJ455 = (k, d) => {
   let s;
   try {
     s = JSON.parse(localStorage.getItem(k) || 'null');
@@ -155,23 +145,16 @@ LJ455 = (k, d) => {
 };
 
 
-LJS455 = (k, v) => {
-  try {
-    localStorage.setItem(k, JSON.stringify(v));
-  } catch (e) {}
-};
+const nomIt455 = k => (SHOP[k] ? SHOP[k].n : (ITEMS2[k] || {}).n || k);
 
 
-nomIt455 = k => (SHOP[k] ? SHOP[k].n : (ITEMS2[k] || {}).n || k);
+export const ctKeys455 = () => Object.keys(SHOP).filter(k => SHOP[k].cat === 'machines' && !SHOP[k].cs && !SHOP[k].g);
 
 
-ctKeys455 = () => Object.keys(SHOP).filter(k => SHOP[k].cat === 'machines' && !SHOP[k].cs && !SHOP[k].g);
+export const txtIn455 = o => Object.keys(o).map(k => `${o[k]} × ${nomIt455(k)}`).join(' + ');
 
 
-txtIn455 = o => Object.keys(o).map(k => `${o[k]} × ${nomIt455(k)}`).join(' + ');
-
-
-ajout455 = (o, sens) => {
+export const ajout455 = (o, sens) => {
   for (const k in o) {
     PROFILE.bag[k] = Math.max(0, Math.min(99, bagN(k) + sens * o[k]));
     if (!PROFILE.bag[k]) delete PROFILE.bag[k];
@@ -179,19 +162,11 @@ ajout455 = (o, sens) => {
 };
 
 
-peutIn455 = o => Object.keys(o).every(k => bagN(k) >= o[k]);
-
-
-maj455 = () => {
-  try {
-    queueSave();
-    renderWallet();
-  } catch (e) {}
-};
+export const peutIn455 = o => Object.keys(o).every(k => bagN(k) >= o[k]);
 
 
 /* ---------- livre de recettes ---------- */
-RECETTES455 = [
+const RECETTES455 = [
   { id: 'r1', in: { potion: 3 }, out: { superpotion: 1 }, m: 0 },
   { id: 'r2', in: { superpotion: 3 }, out: { hyperpotion: 1 }, m: 200 },
   { id: 'r3', in: { poke: 3 }, out: { super: 1 }, m: 200 },
@@ -204,7 +179,7 @@ RECETTES455 = [
 
 
 /* ---------- tirage du colporteur ---------- */
-LOTS455 = [
+const LOTS455 = [
   { w: 25, t: 'Poké Ball × 3', o: { b: { poke: 3 } } },
   { w: 22, t: 'Potion × 2', o: { b: { potion: 2 } } },
   { w: 14, t: 'Super Ball', o: { b: { super: 1 } } },
@@ -217,8 +192,22 @@ LOTS455 = [
 ];
 
 
-COUT455 = 900;
+const COUT455 = 900;
 
+
+/* ---------- cadeau du jour ---------- */
+const CADEAU455 = [
+  { m: 300, b: { potion: 1 } },
+  { b: { poke: 2 } },
+  { m: 800 },
+  { g: 1 },
+  { b: { super: 2, hyperpotion: 1 } },
+  { m: 1500 },
+  { g: 3, ct: 1 }
+];
+
+// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+export function __init() {
 
 document.addEventListener(
   'click',
@@ -249,7 +238,7 @@ document.addEventListener(
       ajout455(c.in, -1);
       gain454(c.rew);
       st.cmd[k] = 1;
-      LJS455('res-at455', st);
+      ecrireLS('res-at455', st);
       toast('Commande livrée : ' + txt454(c.rew));
     } else if (a === 'spin') {
       spin455();
@@ -258,23 +247,11 @@ document.addEventListener(
     } else return;
     sfx('ui');
     vibe(15);
-    maj455();
+    sauverBourse();
     renderBag();
   },
   true
 );
-
-
-/* ---------- cadeau du jour ---------- */
-CADEAU455 = [
-  { m: 300, b: { potion: 1 } },
-  { b: { poke: 2 } },
-  { m: 800 },
-  { g: 1 },
-  { b: { super: 2, hyperpotion: 1 } },
-  { m: 1500 },
-  { g: 3, ct: 1 }
-];
 
 
 document.addEventListener('click', e => {
@@ -293,19 +270,12 @@ document.addEventListener('click', e => {
   }
   s.n++;
   s.last = today();
-  try {
-    localStorage.setItem('res-cd455', JSON.stringify(s));
-  } catch (er) {}
+  ecrireLS('res-cd455', s);
   sfx('win');
   vibe(25);
   toast('Cadeau du jour : ' + txt454(R) + extra);
-  maj455();
+  sauverBourse();
   refreshAccueil(); // bouton #cd455
 });
 
-
-NEWS416.unshift(['i-bolt', 'Atelier, tirage et cadeau du jour', 'Boutique : un Atelier (recettes de soins et de Balls, fusion de CT, commandes du jour) et un Tirage du colporteur avec une vitrine des trouvailles. Sur l’Accueil, un cadeau chaque jour, qui s’améliore sur 7 jours de suite.']);
-
-
-NEWS416.splice(8);
 }

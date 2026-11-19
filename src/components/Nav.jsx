@@ -1,40 +1,29 @@
+import { TNAME } from '../engine/016-09-navigation.js';
 import { useShell } from './shellStore.js';
 
 // Navigation (v4-03) : 9 destinations sur ordinateur, 5 et un menu sur téléphone.
 // Les clics restent gérés par le moteur (délégation sur [data-t], #bnMenu, [data-menux]) ;
 // la page marquée (aria-current) vient de show() via shellStore.
 
-const SIDE = [
-  ['accueil', 'i-home', 'Accueil'],
-  ['pokedex', 'i-team', 'Équipe'],
-  ['dex', 'i-dex', 'Pokédex'],
-  ['combat', 'i-fight', 'Combats'],
-  ['carte', 'i-map', 'Carte'],
-  ['camp', 'i-camp', 'Camp'], // v4.30 : juste après « Carte »
-  ['quetes', 'i-quest', 'Quêtes'],
-  ['sac', 'i-bag', 'Sac et Boutique'],
-  ['types', 'i-book', 'Guide'],
-  ['params', 'i-gear', 'Paramètres'],
-];
+// Pages, dans l'ordre de la barre latérale, avec leur titre pris dans TNAME. Avec une
+// description : rangée dans le menu du téléphone ; sans : dans la barre du bas (même ordre).
+const PAGES = [
+  ['accueil', 'i-home'],
+  ['pokedex', 'i-team'],
+  ['dex', 'i-dex', '82 Pokémon de Kanto et Johto'],
+  ['combat', 'i-fight'],
+  ['carte', 'i-map'],
+  ['camp', 'i-camp'], // v4.30 : juste après « Carte », juste avant le bouton Menu
+  ['quetes', 'i-quest', 'Chapitres, défis et récompenses'],
+  ['sac', 'i-bag', 'Poké Balls, Potions, objets'],
+  ['types', 'i-book', 'Règles, types et réactions'],
+  ['params', 'i-gear', 'Son, vibrations, difficulté'],
+].map(([k, i, d]) => [k, i, TNAME[k], d]);
+const BOTTOM = PAGES.filter(p => !p[3]);
+const MENU = PAGES.filter(p => p[3]);
 
-const BOTTOM = [
-  ['accueil', 'i-home', 'Accueil'],
-  ['pokedex', 'i-team', 'Équipe'],
-  ['combat', 'i-fight', 'Combats'],
-  ['carte', 'i-map', 'Carte'],
-  ['camp', 'i-camp', 'Camp'], // v4.30 : juste avant le bouton Menu
-];
-
-const MENU = [
-  ['dex', 'i-dex', 'Pokédex', '82 Pokémon de Kanto et Johto'],
-  ['quetes', 'i-quest', 'Quêtes', 'Chapitres, défis et récompenses'],
-  ['sac', 'i-bag', 'Sac et Boutique', 'Poké Balls, Potions, objets'],
-  ['types', 'i-book', 'Guide', 'Règles, types et réactions'],
-  ['params', 'i-gear', 'Paramètres', 'Son, vibrations, difficulté'],
-];
-
-// pages rangées dans le menu du téléphone : le bouton Menu est alors marqué
-const IN_MENU = ['dex', 'quetes', 'sac', 'params', 'types'];
+// page rangée dans le menu du téléphone : le bouton Menu est alors marqué
+const IN_MENU = MENU.map(p => p[0]);
 
 const cur = (page, k) => (page === k ? 'page' : undefined);
 
@@ -42,7 +31,7 @@ export function SideNav() {
   const { page, svBusy, svCloud } = useShell();
   return (
     <nav className="side-nav">
-      {SIDE.map(([k, i, n]) => (
+      {PAGES.map(([k, i, n]) => (
         <a key={k} className="nv" data-t={k} href={'#' + k} aria-current={cur(page, k)}><svg><use href={'#' + i} /></svg>{n}</a>
       ))}
       <button type="button" className="nv nv-save" id="sideSave"><svg><use href="#i-save" /></svg>Sauvegardes<span className="k" id="sideSaveK">{svBusy ? '…' : svCloud ? 'COMPTE' : 'AUTO'}</span></button>

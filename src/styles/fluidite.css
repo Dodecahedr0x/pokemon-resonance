@@ -1,0 +1,50 @@
+
+/* v4.74–v4.75 : fluidité. Mesuré au téléphone simulé (processeur ÷4) :
+   - Accueil : la météo (grêle, pluie, sable) et les saisons déplaçaient un fond
+     (background-position / mask-position) : tout le bandeau était repeint 60 fois
+     par seconde, environ 1,8 s de dessin pour 2 s d'affichage.
+   - Carte : l'ombre pulsée de « Rencontre sur la route » (box-shadow) relançait
+     le calcul des styles de toute la carte à chaque image (≈ 28 % du processeur).
+   Mêmes effets ici, mais déplacés par transform / opacity : la carte graphique
+   s'en charge, le processeur reste libre.
+   Cette feuille doit rester la dernière : elle redéfinit des @keyframes (gl448, rn448, sd448)
+   déclarés plus haut. */
+
+/* 1. Rencontre sur la route / rencontre du jour : halo en opacité */
+.ev454:not(.done),.cd455:not(.done){animation:none!important;position:relative}
+.ev454:not(.done)::after,.cd455:not(.done)::after{content:"";position:absolute;inset:-1px;border-radius:inherit;pointer-events:none;box-shadow:0 0 0 5px rgba(255,212,91,.28),0 0 16px 2px rgba(255,212,91,.22);opacity:0;animation:pk474Halo 2.4s ease-in-out infinite;will-change:opacity}
+@keyframes pk474Halo{50%{opacity:1}}
+
+/* 2. Météo : on déplace la couche entière (déjà plus grande que le cadre) */
+.wx448 i{will-change:transform}
+@keyframes gl448{from{transform:translate(0,0)}to{transform:translate(-14px,82px)}}
+@keyframes rn448{from{transform:rotate(9deg) translateY(0)}to{transform:rotate(9deg) translateY(38px)}}
+@keyframes sd448{from{transform:translateX(0)}to{transform:translateX(-70px)}}
+
+/* 3. Saisons de l'accueil : deux calques de particules qui glissent (boucle sans à-coup) */
+.hv450s.hv450-printemps,.hv450s.hv450-automne,.hv450s.hv450-hiver,.hv450s.hv450-ete{background:none!important;animation:none!important;overflow:hidden}
+.hv450s.hv450-printemps::before,.hv450s.hv450-printemps::after,.hv450s.hv450-automne::before,.hv450s.hv450-automne::after,.hv450s.hv450-hiver::before,.hv450s.hv450-hiver::after{content:"";position:absolute;inset:-180px -100px -20px -100px;pointer-events:none;will-change:transform;animation-timing-function:linear;animation-iteration-count:infinite}
+.hv450s.hv450-printemps::before{background:radial-gradient(ellipse,rgba(255,186,214,.95) 0 2.4px,transparent 3.2px) 0 0/61px 73px;animation-name:pk474P1;animation-duration:11s}
+.hv450s.hv450-printemps::after{background:radial-gradient(ellipse,rgba(255,216,232,.8) 0 1.8px,transparent 2.6px) 24px 31px/83px 59px;animation-name:pk474P2;animation-duration:14s}
+.hv450s.hv450-automne::before{background:radial-gradient(ellipse,rgba(224,138,60,.95) 0 3px,transparent 3.8px) 0 0/67px 79px;animation-name:pk474A1;animation-duration:13s}
+.hv450s.hv450-automne::after{background:radial-gradient(ellipse,rgba(194,85,43,.85) 0 2.4px,transparent 3.2px) 30px 22px/89px 63px;animation-name:pk474A2;animation-duration:15s}
+.hv450s.hv450-hiver::before{background:radial-gradient(circle,rgba(255,255,255,.95) 0 1.8px,transparent 2.5px) 0 0/43px 51px;animation-name:pk474H1;animation-duration:8s}
+.hv450s.hv450-hiver::after{background:radial-gradient(circle,rgba(230,244,255,.8) 0 1.2px,transparent 1.9px) 17px 23px/59px 47px;animation-name:pk474H2;animation-duration:10s}
+@keyframes pk474P1{to{transform:translate(61px,146px)}}
+@keyframes pk474P2{to{transform:translate(83px,177px)}}
+@keyframes pk474A1{to{transform:translate(-67px,158px)}}
+@keyframes pk474A2{to{transform:translate(-89px,126px)}}
+@keyframes pk474H1{to{transform:translate(-43px,102px)}}
+@keyframes pk474H2{to{transform:translate(-59px,94px)}}
+.hv450s.hv450-ete::before{content:"";position:absolute;top:0;bottom:0;left:0;width:220%;pointer-events:none;background:linear-gradient(115deg,transparent 28%,rgba(255,236,160,.2) 40%,transparent 52%);animation:pk474E 9s ease-in-out infinite alternate;will-change:transform}
+@keyframes pk474E{to{transform:translateX(-54.545%)}}
+
+/* 4. Reflet des barres de PV : le reflet glisse au lieu de repeindre la barre */
+.hp.hseg i{overflow:hidden}
+.hp.hseg i::after{background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent) no-repeat!important;background-size:100% 100%!important;width:36%!important;right:auto!important;animation:pk474Sheen 3.2s linear infinite!important;will-change:transform}
+@keyframes pk474Sheen{from{transform:translateX(-170%)}to{transform:translateX(450%)}}
+
+@media (prefers-reduced-motion:reduce){
+ .ev454::after,.cd455::after,.hv450s::before,.hv450s::after,.wx448 i,.hp.hseg i::after{animation:none!important}
+}
+html.a11y-rm .ev454::after,html.a11y-rm .cd455::after,html.a11y-rm .hv450s::before,html.a11y-rm .hv450s::after,html.a11y-rm .wx448 i,html.a11y-rm .hp.hseg i::after{animation:none!important}

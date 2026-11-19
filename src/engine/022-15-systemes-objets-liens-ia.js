@@ -8,20 +8,19 @@ import { BADGES } from './013-07-arenes.js';
 import { P, byUid, dmgOf, effR, fin, hasNx, hdist, movPts, mvType, say, targets, teff, uk } from './021-14-moteur-combat.js';
 import { resolve } from './023-16-roles-synergies-obstacles.js';
 import { B } from './024-17-interface-combat.js';
-import { CHAMP_L } from './030-24-prestige-mise-en-scene.js';
-import { BALL_SEL, CAP_K, SHOP, __set_BALL_SEL, bagN } from './032-v4-00-socle.js';
+import { CHAMP_L, ELITE_L } from './030-24-prestige-mise-en-scene.js';
+import { CAP_K, SHOP, __set_BALL_SEL, bagN } from './032-v4-00-socle.js';
 import { renderWallet } from './035-v4-03-interface.js';
 import { RIVAL_STEPS } from './043-v4-4-01-aventure-plus.js';
 import { lockJ415, regionJ415, routeNom } from './054-v4-15-01-johto.js';
 import { dom416, duoDe416 } from './055-v4-16-01-johto-vivant.js';
 import { lockH419, regionH419 } from './059-v4-19-01-hoenn.js';
 import { lockRiv429 } from './064-v4-29-01-qualite.js';
-import { HLEG435 } from './071-v4-38-les-legendaires-de-hoenn.js';
+import { HLEG435, lock435 } from './071-v4-38-les-legendaires-de-hoenn.js';
+import { BALL455 } from './087-4-56-balls-soins-objets-de-combat-objets-tenus-e.js';
+import { lockRegion446 } from './078-v4-46-en-mode-libre-aussi-les-regions-s-ouvrent.js';
+import { brBoss466 } from './097-4-66-boss-rush-et-reliques-de-run.js';
 
-export let DIFF, immob, DUOT, ELITE;
-let RX_COUNTER;
-export function __set_captureReq(v) { return (captureReq = v); }
-export function __set_scenLock(v) { return (scenLock = v); }
 
 
 export function linkLvl(S, a, b) {
@@ -75,6 +74,11 @@ export function captureReq(S, u, e) {
   if (k === 'master') {
     r[1] = { ok: true, t: 'Master Ball : PV indifférents' };
     r[2] = { ok: true, t: 'Master Ball : pas besoin d’immobiliser' };
+  }
+  const speciale = BALL455 && BALL455[k]; // Balls spéciales (v4.56)
+  if (speciale) {
+    r[1] = { ok: speciale.pv(S, e), t: speciale.tpv };
+    r[2] = { ok: speciale.im(S, e), t: speciale.tim };
   }
   r.push({ ok: bagN(k) > 0, t: `une ${SHOP[k].n} dans le Sac` });
   return r;
@@ -370,8 +374,18 @@ export function champBuild() {
 
 
 /* --- disponibilité d’un combat selon le mode --- */
+/** Pourquoi le scénario k est fermé (texte), ou null s’il est ouvert. */
 export function scenLock(k) {
+  if (brBoss466(k)) return null; // Boss Rush : le boss du moment est toujours ouvert
+  const l = lockCampagne(k);
+  if (l || isCamp()) return l;
+  return lockRegion446(k); // Mode Libre : les régions s’ouvrent dans l’ordre
+}
+
+
+function lockCampagne(k) {
   const D = SCEN[k];
+  if (D && (D.hleg435 || D.cap435)) return lock435(k, D); // Légendaires de Hoenn (v4.38)
   if (!D || !isCamp()) return null;
   if (D.rival429) return lockRiv429(D); // Kael, les Échos (v4.29)
   if (D.hebdo429 && BADGES.length < 2) return 'Le défi de la semaine s’ouvre après 2 badges.';
@@ -394,11 +408,8 @@ export function scenLock(k) {
   return null;
 }
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
-export function __init() {
-
 /* ===================== SYSTÈMES v1.0 : objets, Liens, duos, capture, fatigue, difficulté, IA ===================== */
-DIFF = {
+export const DIFF = {
   facile: { hb: 0.4, pb: -1, lim: 2, ai: 0 },
   normal: { hb: 1, pb: 0, lim: 0, ai: 1 },
   expert: { hb: 1.3, hbAdd: 4, pb: 1, lim: -1, ai: 2 }
@@ -406,11 +417,11 @@ DIFF = {
 
 
 /* --- capture --- */
-immob = e => ['GEL', 'PAR', 'SOM'].includes(e.badge) || e.root > 0 || e.web > 0;
+export const immob = e => ['GEL', 'PAR', 'SOM'].includes(e.badge) || e.root > 0 || e.web > 0;
 
 
 /* --- techniques combinées (palier 3 de Lien) --- */
-DUOT = {
+export const DUOT = {
   'magicarpe|pichu': {
     n: 'Pluie d’Orage',
     first: 'magicarpe',
@@ -478,11 +489,32 @@ DUOT = {
 };
 
 
+export const ELITE = ['c1', 'c2', 'c3', 'c4'];
+
+
+/* --- le Champion lit vos 10 derniers combats --- */
+const RX_COUNTER = {
+  cc: { t: ['Sol'], why: 'insensible aux Courts-circuits' },
+  sur: { tal: ['moiteur'], why: 'Moiteur empêche vos Surtensions' },
+  emb: { tal: ['torche'], t: ['Feu'], why: 'les flammes ne le brûlent pas' },
+  gel: { t: ['Feu', 'Glace'], why: 'le Gel ne le retient pas' },
+  ban: { t: ['Feu', 'Glace'], why: 'la Banquise ne le retient pas' },
+  bou: { t: ['Vol'], tal: ['levitation'], why: 'la Boue ne le ralentit pas' },
+  sei: { t: ['Vol'], tal: ['levitation'], why: 'il survole vos ondes sismiques' },
+  cou: { t: ['Vol'], tal: ['isograisse'], why: 'la lave ne le gêne pas' },
+  vap: { tal: ['echolocation'], why: 'il voit à travers la vapeur' },
+  flo: { t: ['Feu'], why: 'il brûle vos Floraisons' },
+  anc: { tal: ['regardvif'], why: 'Regard Vif ignore les entraves' }
+};
+
+// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+export function __init() {
+
 /* --- Conseil 4, combat guidé, rencontres sauvages --- */
 Object.assign(SCEN, {
   tuto: {
     n: 'Combat guidé',
-    lvl: 'Tutoriel · 6 étapes',
+    lvl: 'Tutoriel · 7 étapes',
     lim: 10,
     time: 'jour',
     bio: 'gue',
@@ -501,7 +533,7 @@ Object.assign(SCEN, {
   },
   c1: {
     n: 'Conseil 4 · les Ombres',
-    lvl: 'Conseil 4 · 1 sur 4',
+    lvl: `Conseil 4 · ${ELITE_L[0].n}`,
     lim: 9,
     time: 'nuit',
     bio: 'arene',
@@ -522,7 +554,7 @@ Object.assign(SCEN, {
   },
   c2: {
     n: 'Conseil 4 · les Poings',
-    lvl: 'Conseil 4 · 2 sur 4',
+    lvl: `Conseil 4 · ${ELITE_L[1].n}`,
     lim: 9,
     time: 'jour',
     bio: 'arene',
@@ -543,7 +575,7 @@ Object.assign(SCEN, {
   },
   c3: {
     n: 'Conseil 4 · les Dragons',
-    lvl: 'Conseil 4 · 3 sur 4',
+    lvl: `Conseil 4 · ${ELITE_L[2].n}`,
     lim: 9,
     time: 'nuit',
     bio: 'arene',
@@ -564,7 +596,7 @@ Object.assign(SCEN, {
   },
   c4: {
     n: 'Conseil 4 · les Flammes Noires',
-    lvl: 'Conseil 4 · 4 sur 4',
+    lvl: `Conseil 4 · ${ELITE_L[3].n}`,
     lim: 9,
     time: 'nuit',
     bio: 'arene',
@@ -585,39 +617,4 @@ Object.assign(SCEN, {
     ]
   }
 });
-
-
-SCEN.gue.catch = true;
-
-
-SCEN.roche.catch = true;
-
-
-SCEN.tour.catch = true;
-
-
-SCEN.ligue.n = 'Ligue · Exhibition';
-
-
-SCEN.ligue.d =
-  'Un match d’exhibition contre une équipe de la Ligue : Léviator ouvre, Draco, Têtarte, Pikachu et Caninos attendent leur moment.';
-
-
-ELITE = ['c1', 'c2', 'c3', 'c4'];
-
-
-/* --- le Champion lit vos 10 derniers combats --- */
-RX_COUNTER = {
-  cc: { t: ['Sol'], why: 'insensible aux Courts-circuits' },
-  sur: { tal: ['moiteur'], why: 'Moiteur empêche vos Surtensions' },
-  emb: { tal: ['torche'], t: ['Feu'], why: 'les flammes ne le brûlent pas' },
-  gel: { t: ['Feu', 'Glace'], why: 'le Gel ne le retient pas' },
-  ban: { t: ['Feu', 'Glace'], why: 'la Banquise ne le retient pas' },
-  bou: { t: ['Vol'], tal: ['levitation'], why: 'la Boue ne le ralentit pas' },
-  sei: { t: ['Vol'], tal: ['levitation'], why: 'il survole vos ondes sismiques' },
-  cou: { t: ['Vol'], tal: ['isograisse'], why: 'la lave ne le gêne pas' },
-  vap: { tal: ['echolocation'], why: 'il voit à travers la vapeur' },
-  flo: { t: ['Feu'], why: 'il brûle vos Floraisons' },
-  anc: { tal: ['regardvif'], why: 'Regard Vif ignore les entraves' }
-};
 }

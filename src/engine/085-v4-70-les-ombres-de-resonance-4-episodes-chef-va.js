@@ -1,7 +1,9 @@
 /* Section d'origine : v4.70 : Les Ombres de Résonance (4 épisodes, chef Vaskar) */
 
 import { PROFILE } from './011-05-etat-de-partie.js';
-import { __set_ev454, __set_evPick454, ev454, evPick454 } from './084-4-54-colporteur-rencontres-de-route-missions-de.js';
+import { ecrireLS } from './014-08-outils.js';
+import { CROCHETS } from './015-v4-8-00-crochets.js';
+import { ev454, evPick454 } from './084-4-54-colporteur-rencontres-de-route-missions-de.js';
 
 // Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
 export function __init() {
@@ -16,9 +18,7 @@ export function __init() {
     }
   };
   const ecrire = o => {
-    try {
-      localStorage.setItem(KEY, JSON.stringify(o));
-    } catch (e) {}
+    ecrireLS(KEY, o);
   };
   const has = v => Array.isArray(v) ? v.length > 0 : !!v;
   // Chaque épisode remplace la rencontre du jour quand sa condition est remplie.
@@ -72,20 +72,18 @@ export function __init() {
     const e = lire().etape;
     return e < EPS.length && EPS[e].ok() ? EPS[e] : null;
   };
-  const avantEv = ev454;
-  __set_ev454(function () {
-    const r = avantEv.apply(this, arguments);
+  // l'épisode en cours remplace la rencontre du jour ; le choisir fait avancer l'histoire
+  CROCHETS.rencontreRoute.push(r => {
     const E = courant();
-    if (E && !r.st.done) return { ...r, E: { ...E, ombre: 1 }, i: -1 };
-    return r;
+    return E && !r.st.done ? { ...r, E: { ...E, ombre: 1 }, i: -1 } : r;
   });
-  const avantPick = evPick454;
-  __set_evPick454(function (j) {
+  let etaitEpisode = false;
+  CROCHETS.avantChoixRoute.push(() => {
     const { E, st } = ev454();
-    const etait = E && E.ombre && !st.done;
-    const res = avantPick.apply(this, arguments);
-    if (etait) ecrire({ etape: lire().etape + 1 });
-    return res;
+    etaitEpisode = !!(E && E.ombre && !st.done);
+  });
+  CROCHETS.choixRoute.push(() => {
+    if (etaitEpisode) ecrire({ etape: lire().etape + 1 });
   });
   window.__ombre470 = { lire, ecrire, dispo: () => !!courant(), titre: () => (courant() || {}).t, req: () => (lire().etape === 1 ? 'Commencez Johto' : lire().etape === 2 ? 'Commencez Hoenn' : ''), ev: () => ev454(), pick: j => evPick454(j), nb: EPS.length };
 })();

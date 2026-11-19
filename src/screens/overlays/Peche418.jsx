@@ -1,5 +1,5 @@
 import { Html, parseStyle } from '../../lib/html.jsx';
-import { useOverlay } from './dialogsStore.js';
+import { Boite, Dialogue } from './Fenetre.jsx';
 import { BY } from '../../engine/009-03-pokemon.js';
 import { tb } from '../../engine/014-08-outils.js';
 import { crestSmall } from '../../engine/020-13-equipe-cartes.js';
@@ -10,12 +10,7 @@ import { CROWN416 } from '../../engine/055-v4-16-01-johto-vivant.js';
 // les clics (data-peche418) et l'attribut hidden ; après une prise chromatique, il
 // recolore l'illustration (.pe-prise img, chromaArt425) juste après le rendu.
 export default function Peche418() {
-  const s = useOverlay('peche');
-  return (
-    <div className="result exp-box pe418" id="peche418" hidden>
-      {s && <Carte key={s.v} {...s} />}
-    </div>
-  );
+  return <Boite nom="peche" className="result exp-box pe418" id="peche418" Carte={Carte} />;
 }
 
 function Corps({ etat, id, sh, dom, connu }) {
@@ -68,12 +63,11 @@ function Corps({ etat, id, sh, dom, connu }) {
 
 function Carte({ route, peches, ...p }) {
   return (
-    <div className="sv-card exp-card pe-card" role="dialog" aria-modal="true" aria-labelledby="peT">
-      <button className="sh-x" type="button" data-peche418="x" aria-label="Fermer"><svg><use href="#i-x" /></svg></button>
+    <Dialogue className="sv-card exp-card pe-card" titre="peT" fermer={{ 'data-peche418': 'x' }}>
       <p className="kick">{route} · pêche</p>
       <h2 className="h2" id="peT">Pêche</h2>
       <Corps {...p} />
       <p className="pe-n">{peches} prise{peches > 1 ? 's' : ''} au total</p>
-    </div>
+    </Dialogue>
   );
 }

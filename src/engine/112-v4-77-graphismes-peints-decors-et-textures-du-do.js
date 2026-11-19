@@ -2,12 +2,12 @@
 
 import { SCEN } from './009-03-pokemon.js';
 import { $, RM, toast } from './014-08-outils.js';
-import { BH, BW, K, __set_pRelance, byUid, pRelance, uk } from './021-14-moteur-combat.js';
-import { B, BG, HC, HC0, HP, L, MQV, TILT, VB, VERT, __set_VERT, __set_buildBoard, __set_confirmAct, __set_hit, __set_renderAll, __set_renderBoard, __set_updTokCore, buildBoard, clearAim, confirmAct, hit, renderAll, renderBoard, tiltP, tiltS, ui, updTokCore } from './024-17-interface-combat.js';
+import { CROCHETS } from './015-v4-8-00-crochets.js';
+import { BH, BW, K, byUid, uk } from './021-14-moteur-combat.js';
+import { B, BG, HC, HC0, HP, L, MQV, TILT, VB, VERT, __set_VERT, buildBoard, clearAim, renderAll, tiltP, tiltS, ui } from './024-17-interface-combat.js';
 import { PREF, TUTO, savePref, sfx } from './026-20-campagne-tutoriel-son.js';
-import { FXK, FXS, __set_fxAttack, __set_fxGuard, fxAdd, fxAttack, fxGuard, fxOn, fxPrep } from './028-22-effets-attaque.js';
+import { FXS, fxAdd, fxOn, fxPrep } from './028-22-effets-attaque.js';
 import { renderParams } from './040-v4-08-parametres.js';
-import { __set_tokenArt, tokenArt } from './041-v4-1-01-illustrations.js';
 import { acteurCourant } from './044-v4-5-01-moteur-tactique.js';
 import { heureDe } from './046-v4-7-01-plateau-vivant.js';
 import { NEWS416 } from './056-v4-16-1-01-finitions.js';
@@ -103,7 +103,10 @@ export function __init() {
   const fond = () => {
     const bio = lieu(),
       h = heureDe(B);
-    return `url(img/bg-${bio}-${h}.webp),url(img/bg-${bio}-jour.webp),url(img/bg-gue-${h}.webp)`;
+    // Adresses complètes : dans une variable CSS, une url() relative se résout par rapport à la
+    // feuille qui lit la variable (assets/ une fois le jeu compilé), pas par rapport à la page.
+    const img = f => `url(${new URL('img/' + f, document.baseURI).href})`;
+    return [`bg-${bio}-${h}.webp`, `bg-${bio}-jour.webp`, `bg-gue-${h}.webp`].map(img).join(',');
   };
   // brume de l'horizon et teinte de lune : réglées ici pour pouvoir changer d'heure en plein combat
   // (calques React : .lum477.n et les arrêts de #hz477 suivent l'état « night »)
@@ -196,35 +199,28 @@ export function __init() {
     ambiance();
     eau();
   };
-  const bbAvant = buildBoard;
-  __set_buildBoard(function () {
+  CROCHETS.avantPlateau.push(() => {
     try {
       regler();
     } catch (e) {
       TILT.on = false;
     }
-    const r = bbAvant.apply(this, arguments);
-    try {
-      // nouveau combat : la caméra se pose sur le plateau pendant que l'écran de transition s'efface
-      if (B !== bbAvant.dernier) {
-        bbAvant.dernier = B;
-        if (TILT.on && anim429()) {
-          bdRejouer('entree477');
-          bdClass('entree477', true);
-          clearTimeout(bbAvant.t);
-          bbAvant.t = setTimeout(() => bdClass('entree477', false), 1800);
-        }
-      }
-    } catch (e) {}
-    try {
-      habiller();
-    } catch (e) {
-      try {
-        console.warn('Plateau v4.77 : habillage impossible.', e);
-      } catch (e2) {}
-    }
-    return r;
   });
+  // nouveau combat : la caméra se pose sur le plateau pendant que l'écran de transition s'efface
+  let dernierCombat = null,
+    finEntree = 0;
+  CROCHETS.plateau.push(() => {
+    if (B !== dernierCombat) {
+      dernierCombat = B;
+      if (TILT.on && anim429()) {
+        bdRejouer('entree477');
+        bdClass('entree477', true);
+        clearTimeout(finEntree);
+        finEntree = setTimeout(() => bdClass('entree477', false), 1800);
+      }
+    }
+  });
+  CROCHETS.plateau.push(habiller);
 
   /* ---------- animations : saut pendant un déplacement, poussière à l'atterrissage ---------- */
   const tempo = () => (PREF.fast || ui.turbo428 ? 0.6 : 1); // même règle que --tk429 (combat rapide)
@@ -232,7 +228,7 @@ export function __init() {
     if (!anim429()) return;
     const ms = 850 * tempo();
     rejouer429(T, 'hop477', ms);
-    if (typeof fxOn !== 'function' || !fxOn() || !fxPrep()) return;
+    if (!fxOn() || !fxPrep()) return;
     const px = FXS.ox + x * FXS.s,
       py = FXS.oy + (y + 9 * s) * FXS.s,
       R = 15 * s * FXS.s;
@@ -259,7 +255,7 @@ export function __init() {
     return [FXS.ox + x * FXS.s, FXS.oy + (y + 9 * s) * FXS.s, s * FXS.s];
   };
   const onde = (u, col) => {
-    if (!TILT.on || !anim429() || typeof fxOn !== 'function' || !fxOn() || !fxPrep()) return;
+    if (!TILT.on || !anim429() || !fxOn() || !fxPrep()) return;
     const [px, py, k] = pied(u);
     fxAdd(520, (c, p) => {
       const e = 1 - Math.pow(1 - p, 3),
@@ -277,17 +273,12 @@ export function __init() {
       c.fill();
     });
   };
-  const hitAvant = hit;
-  __set_hit(function (uid) {
-    const r = hitAvant.apply(this, arguments);
-    try {
-      const u = byUid(B, uid);
-      if (u) onde(u, u.side === 'e' ? '#ff6a5a' : '#7cc0ff');
-    } catch (e) {}
-    return r;
+  CROCHETS.touche.push(uid => {
+    const u = byUid(B, uid);
+    if (u) onde(u, u.side === 'e' ? '#ff6a5a' : '#7cc0ff');
   });
   const chute = u => {
-    if (!TILT.on || !anim429() || typeof fxOn !== 'function' || !fxOn() || !fxPrep()) return;
+    if (!TILT.on || !anim429() || !fxOn() || !fxPrep()) return;
     const [px, py, k] = pied(u),
       bits = Array.from({ length: 14 }, (_, i) => [(Math.PI * 2 * i) / 14 + Math.random() * 0.4, 0.6 + Math.random() * 0.6]);
     fxAdd(
@@ -362,14 +353,9 @@ export function __init() {
     }
     boardSet({ eau: { id, cles, nuit: heureDe(B) === 'nuit', fixe: !anim429() } }, 'defs', 'eau');
   };
-  const rbAvant477 = renderBoard;
-  __set_renderBoard(function () {
-    const r = rbAvant477.apply(this, arguments);
-    try {
-      if (TILT.on && L.h477 && L.h477 !== heureDe(B)) changerHeure();
-      eau();
-    } catch (e) {}
-    return r;
+  CROCHETS.plateauRendu.push(() => {
+    if (TILT.on && L.h477 && L.h477 !== heureDe(B)) changerHeure();
+    eau();
   });
 
   /* les Pokémon du fond passent derrière ceux de devant */
@@ -385,27 +371,22 @@ export function __init() {
   }
 
   /* ---------- jetons : debout, plus petits au fond ---------- */
-  const utAvant = updTokCore;
-  __set_updTokCore(function (u) {
-    const r = utAvant.apply(this, arguments);
-    try {
-      const T = TILT.on && L.u[u.uid];
-      if (T) {
-        const k = uk(u),
-          [x, y] = HC(k),
-          s = Math.max(0.6, Math.min(1.4, tiltS(x, y)));
-        T.tr = `translate(${x}px,${y}px) scale(${s.toFixed(3)})`; // jeton : Units.jsx (glissement : transition CSS)
-        unitsDirty();
-        if (T.k477 && T.k477 !== k && !u.ko) sauter(T, x, y, s);
-        T.k477 = k;
-        if (u.ko && T.ko477 === false) chute(u);
-        T.ko477 = !!u.ko;
-        T.y477 = y;
-        clearTimeout(trier.t);
-        trier.t = setTimeout(trier, 950 * tempo()); // après le glissement : réinsérer coupe la transition
-      }
-    } catch (e) {}
-    return r;
+  CROCHETS.jeton.push(u => {
+    const T = TILT.on && L.u[u.uid];
+    if (T) {
+      const k = uk(u),
+        [x, y] = HC(k),
+        s = Math.max(0.6, Math.min(1.4, tiltS(x, y)));
+      T.tr = `translate(${x}px,${y}px) scale(${s.toFixed(3)})`; // jeton : Units.jsx (glissement : transition CSS)
+      unitsDirty();
+      if (T.k477 && T.k477 !== k && !u.ko) sauter(T, x, y, s);
+      T.k477 = k;
+      if (u.ko && T.ko477 === false) chute(u);
+      T.ko477 = !!u.ko;
+      T.y477 = y;
+      clearTimeout(trier.t);
+      trier.t = setTimeout(trier, 950 * tempo()); // après le glissement : réinsérer coupe la transition
+    }
   });
 
   /* noms au-dessus de tous les Pokémon : un grand Pokémon devant ne cache plus le nom de celui de derrière */
@@ -418,146 +399,29 @@ export function __init() {
       unitsDirty();
     }
   };
-  const utAvant2 = updTokCore;
-  __set_updTokCore(function (u) {
-    const r = utAvant2.apply(this, arguments);
-    try {
-      const T = TILT.on && L.u[u.uid];
-      if (T) nomHaut(T);
-    } catch (e) {}
-    return r;
-  });
-
-  /* effets d'attaque à l'échelle de la profondeur (cible au fond = effet plus petit) */
-  const prof = k => {
-    if (!TILT.on || k == null) return 1;
-    const [x, y] = HC(k);
-    return Math.max(0.6, Math.min(1.4, tiltS(x, y)));
-  };
-  const avecProf = (k, f, haut) => {
-    const oy = FXS.oy;
-    FXS.zk = prof(k);
-    // les tirs partent du corps du Pokémon debout, pas de l'anneau au sol (positions figées à l'appel)
-    if (TILT.on && haut) FXS.oy = oy - 10 * FXS.zk * FXS.s;
-    try {
-      return f();
-    } finally {
-      FXS.zk = 1;
-      FXS.oy = oy;
-    }
-  };
-  const faAvant = fxAttack;
-  __set_fxAttack(function (e, dur) {
-    const sol = !e || e.st || e.sh === 'self' || e.sh === 'area' || e.sh === 'ring' || e.sh === 'cone' || e.from === e.k || FXK[e.t] === 'quake';
-    return avecProf(e && (e.k != null ? e.k : e.from), () => faAvant.apply(this, [e, dur]), !sol);
-  });
-  const fgAvant = fxGuard;
-  __set_fxGuard(function (e, dur) {
-    let k = null;
-    try {
-      const g = byUid(B, e.u);
-      if (g) k = uk(g);
-    } catch (x) {}
-    return avecProf(k, () => fgAvant.apply(this, [e, dur]));
+  CROCHETS.jeton.push(u => {
+    const T = TILT.on && L.u[u.uid];
+    if (T) nomHaut(T);
   });
 
   /* illustration plus grande, pieds posés sur l'anneau au sol (attributs : la transformation sert déjà au miroir et au rebond) */
   const GEO = { plat: ['-17', '-22', '34'], debout: ['-23', '-35', '46'] };
-  const taAvant = tokenArt;
-  __set_tokenArt(function (u) {
-    const r = taAvant.apply(this, arguments);
-    try {
-      const T = L.u && L.u[u.uid];
-      // modèle du jeton, rendu par Units.jsx
-      if (T && T.imOn && !T.w477 && T.b) {
-        // l'illustration seule respire et saute (groupe .tok-st477) : l'anneau reste posé au sol
-        T.w477 = true;
+  CROCHETS.illustration.push(u => {
+    const T = L.u && L.u[u.uid];
+    // modèle du jeton, rendu par Units.jsx
+    if (T && T.imOn && !T.w477 && T.b) {
+      // l'illustration seule respire et saute (groupe .tok-st477) : l'anneau reste posé au sol
+      T.w477 = true;
+      unitsDirty();
+    }
+    if (T && T.imOn) {
+      const g = GEO[TILT.on ? 'debout' : 'plat'];
+      if (T.geo[1] !== g[1]) {
+        T.geo = g;
         unitsDirty();
       }
-      if (T && T.imOn) {
-        const g = GEO[TILT.on ? 'debout' : 'plat'];
-        if (T.geo[1] !== g[1]) {
-          T.geo = g;
-          unitsDirty();
-        }
-      }
-    } catch (e) {}
-    return r;
+    }
   });
-
-  /* ---------- styles ---------- */
-  const css = document.createElement('style');
-  css.id = 'resonance-v477-graphismes';
-  css.textContent = `
-html body #combat #bBoard.tilt477{background-color:#0b1520!important;background-image:linear-gradient(180deg,rgba(6,12,20,0) 30%,rgba(6,12,20,.25) 70%,rgba(6,12,20,.55)),var(--bg477),var(--resonance-landscape)!important;background-size:cover!important;background-position:center 34%!important;background-repeat:no-repeat!important}
-#bBoard.tilt477 #bSvg{filter:drop-shadow(0 10px 14px rgba(0,0,0,.45))!important}
-#bBoard.tilt477 #bSvg image.pv471,#bBoard.tilt477 #bSvg .wv471{display:none!important}
-html body #bBoard.tilt477 #bSvg .tex471{display:inline!important}
-html body #bBoard.tilt477 #bSvg .tx{opacity:1!important}
-html body #bBoard.tilt477 #bSvg .hx{fill:#22301c!important;stroke:rgba(20,14,6,.55)!important;stroke-width:.9!important}
-html body #bBoard.tilt477 #bSvg .hx.wet{fill:#2b5c96!important}
-#bBoard.tilt477 #bSvg .bv{stroke:url(#bev);stroke-width:1.4;opacity:.9}
-html body #bBoard.tilt477 #bSvg .tx.wet{opacity:.5!important}
-html body #bBoard.tilt477 #bSvg .tx.dep430z{opacity:.45!important}
-html body #bBoard.tilt477 #bSvg .tx.mud,html body #bBoard.tilt477 #bSvg .tx.lava{opacity:.35!important}
-html body #bBoard.tilt477.has-mud477 #bSvg .tx.mud{fill:url(#tx-mud);opacity:1!important}
-html body #bBoard.tilt477.has-lava477 #bSvg .tx.lava{fill:url(#tx-lava);opacity:1!important}
-#bBoard.tilt477 #bSvg .tx.fog431t{filter:brightness(.42) saturate(.5)}
-#bBoard.tilt477 #bSvg .gl{stroke:rgba(255,248,220,.10)}
-#bBoard.tilt477 #bSvg .deco471,#bBoard.tilt477 #bSvg .tuft,#bBoard.tilt477 #bSvg .pebble,#bBoard.tilt477 #bSvg .field{display:none}
-#bBoard.tilt477 .lip477 polygon{fill:#2a1d12;stroke:rgba(0,0,0,.35);stroke-width:.6}
-/* jetons debout : anneaux couchés sur le sol, l'illustration se tient dessus */
-#bBoard.tilt477 #bSvg .tok .tok-rdy,#bBoard.tilt477 #bSvg .tok .tok-halo,#bBoard.tilt477 #bSvg .tok .hp-bg,#bBoard.tilt477 #bSvg .tok .tok-ring,#bBoard.tilt477 #bSvg .tok .tok-rim{transform:translateY(8px) scale(1.12,.52)}
-#bBoard.tilt477 #bSvg .tok .hp-arc{transform:translateY(8px) scale(1.12,.52) rotate(-90deg)}
-#bBoard.tilt477 #bSvg .tok .tok-ring{fill-opacity:.38}
-#bBoard.tilt477 #bSvg .tok .tok-sh{transform:translateY(-5px) scale(1.25,1.4);opacity:.85}
-#bBoard.tilt477 #bSvg .tok.has-im .tok-gloss,#bBoard.tilt477 #bSvg .tok.has-im .tok-b>path{display:none}
-#bBoard.tilt477 #bSvg .tok .bdg-s{transform:translate(0,-40px) rotate(-7deg)}
-#bBoard.tilt477 #bSvg .tok .tok-ew{transform:translate(19px,-28px)}
-#bSvg .nmw477{transition:transform .85s var(--ease),opacity .6s ease}
-#bSvg .nmw477.ko{opacity:0;transition:opacity .6s ease .3s}
-#bSvg .nmw477.hid,#bSvg .nmw477.pk-wait{opacity:0}
-html body #bSvg .nmw477.fog431{opacity:0!important;transition:opacity .3s}
-html body #bSvg .nmw477.enemy .tok-nm{fill:#ff9ba0!important}
-html body #bSvg .nmw477.ally .tok-nm{fill:#a9d0ff!important}
-#bBoard.tilt477 #bSvg .tok .tok-im{filter:drop-shadow(0 1.5px 1.2px rgba(0,0,0,.45))}
-#bBoard.tilt477 .lum477 .nuit477{fill:#2a3a78;mix-blend-mode:multiply;opacity:0;transition:opacity 1.8s ease}
-#bBoard.tilt477 .lum477.n .nuit477{opacity:.55}
-#bBoard.tilt477{isolation:isolate}
-#bBoard.tilt477 .fondu477{position:absolute;inset:0;z-index:-1;pointer-events:none;border-radius:inherit;background-size:cover;background-position:center 34%;background-repeat:no-repeat;transition:opacity 1.8s ease}
-#bBoard.tilt477 .fondu477.va{opacity:0}
-/* animations des Pokémon debout */
-#bBoard.tilt477 #bSvg .tok:not(.lunge429):not(.hurt429):not(.ko) .tok-b{animation:none}
-#bBoard.tilt477 #bSvg .tok-st477{transform-origin:0 11px;animation:vie477 3.4s ease-in-out infinite}
-@keyframes vie477{0%,100%{transform:translateY(0) scale(1,1)}50%{transform:translateY(-1.4px) scale(.985,1.03)}}
-#bBoard.tilt477 #bSvg .tok.hop477 .tok-st477{animation:hop477 calc(.85s * var(--tk429,1)) cubic-bezier(.3,.6,.4,1) 1}
-@keyframes hop477{0%{transform:translateY(0) scale(1,1)}12%{transform:translateY(1px) scale(1.08,.9)}45%{transform:translateY(-11px) scale(.96,1.06)}82%{transform:translateY(0) scale(1.06,.92)}100%{transform:translateY(0) scale(1,1)}}
-#bBoard.tilt477 #bSvg .tok.ko .tok-st477{animation:none;opacity:.55;transform:translateY(5px) scale(1,.8);transition:transform .6s ease-in,opacity .6s}
-.calme429 #bBoard.tilt477 #bSvg .tok-st477{animation:none!important}
-#bBoard .cs477{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:1;border-radius:inherit;mix-blend-mode:multiply}
-#bBoard .cs477 i{position:absolute;width:70%;height:38%;border-radius:50%;background:radial-gradient(closest-side,rgba(40,48,70,.32),rgba(40,48,70,0));will-change:transform;animation:nuage477 46s linear infinite}
-#bBoard .cs477 i+i{width:55%;height:30%;top:48%;animation-duration:61s;animation-delay:-30s}
-#bBoard .cs477 i:first-child{top:22%}
-#bBoard.tilt477 .eau477 .bande477{animation:bande477 4.5s linear infinite}
-#bBoard.tilt477 .eau477.fixe .bande477{animation:none}
-@keyframes bande477{to{transform:translate(var(--dx),var(--dy))}}
-#bBoard.tilt477 .eau477 .gl477{fill:#f4fbff;opacity:0;transform-box:fill-box;transform-origin:center;animation:gl477 3s ease-in-out infinite}
-#bBoard.tilt477 .eau477.fixe .gl477{animation:none;opacity:.35}
-@keyframes gl477{0%{opacity:0;transform:scaleX(.3)}50%{opacity:1;transform:scaleX(1)}100%{opacity:0;transform:scaleX(1.25)}}
-#bBoard .amb477{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:2;border-radius:inherit}
-#bBoard .amb477 i{position:absolute;width:4px;height:4px;border-radius:50%;background:var(--c);box-shadow:0 0 6px 1.5px var(--c);opacity:0;will-change:transform,opacity;animation:amb477 10s ease-in-out infinite}
-#bBoard .amb477.nuit i{width:4.5px;height:4.5px;box-shadow:0 0 10px 3px var(--c);animation-name:luciole477}
-@keyframes amb477{0%{opacity:0;transform:translate(0,0) scale(var(--s))}25%{opacity:.9}75%{opacity:.7}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(var(--s))}}
-@keyframes luciole477{0%{opacity:0;transform:translate(0,0) scale(var(--s))}20%{opacity:.95}35%{opacity:.25}50%{opacity:.9;transform:translate(calc(var(--dx)*.6),calc(var(--dy)*-.3)) scale(var(--s))}70%{opacity:.2}85%{opacity:.85}100%{opacity:0;transform:translate(var(--dx),calc(var(--dy)*.4)) scale(var(--s))}}
-@keyframes nuage477{from{transform:translateX(-80%)}to{transform:translateX(190%)}}
-html body #bBoard.tilt477.entree477 #bSvg{animation:entree477 1s cubic-bezier(.2,.7,.2,1) .6s backwards;filter:none!important;will-change:transform,opacity}
-@keyframes entree477{from{transform:perspective(900px) rotateX(24deg) translateY(-18px) scale(.9);opacity:0}to{transform:none;opacity:1}}
-@media (prefers-reduced-motion:reduce){#bBoard.tilt477 #bSvg .tok-st477,#bBoard .cs477 i{animation:none!important}#bBoard .amb477{display:none}#bBoard.tilt477 .eau477 .gl477{animation:none;opacity:.35}#bBoard.tilt477 .eau477 .bande477{animation:none}}
-#bBoard.tilt477.bio-roche .lip477 polygon{fill:#4a2e18}
-#bBoard.tilt477.bio-ligue .lip477 polygon,#bBoard.tilt477.bio-arene .lip477 polygon{fill:#8c7a5e}
-#bBoard.tilt477.bio-tour .lip477 polygon{fill:#2a2236}
-`;
-  document.head.appendChild(css);
 
   /* ---------- Paramètres › Habillage Pokémon : Graphismes Riche / Léger ---------- */
   // bouton « Graphismes » de « Habillage Pokémon » : rendu par React (src/screens/settings/panels/HabillagePokemon.jsx)
@@ -618,25 +482,13 @@ html body #bBoard.tilt477.entree477 #bSvg{animation:entree477 1s cubic-bezier(.2
     renderAll();
   });
 
-  /* ---------- Relance : le Pokémon repart de l'étape Déplacer ---------- */
-  const relOld478 = pRelance;
-  __set_pRelance(function (S, u) {
-    const r = relOld478.apply(this, arguments);
-    if (r && u) u.rst478 = 0;
-    return r;
-  });
-
   /* ---------- après une attaque : rester sur le Pokémon s'il lui reste un bonus ---------- */
-  const caOld478 = confirmAct;
-  __set_confirmAct(function () {
-    const id = ui.sel,
-      r = caOld478.apply(this, arguments);
+  CROCHETS.action.push(id => {
     const u = B && byUid(B, id);
     if (u && actif() && !ui.busy && B.ordre !== 'vitesse' && etape(B, u) === 'extra' && ui.sel !== id) {
       ui.sel = id;
       renderAll();
     }
-    return r;
   });
 
   /* ---------- au suivant : quand le Pokémon suivi a fini, on passe au prochain ---------- */
@@ -705,19 +557,14 @@ html body #bBoard.tilt477.entree477 #bSvg{animation:entree477 1s cubic-bezier(.2
     true
   );
 
-  const raOld478 = renderAll;
-  __set_renderAll(function () {
-    try {
-      if (B) suivant478();
-    } catch (e) {}
-    const r = raOld478.apply(this, arguments);
-    try {
-      if (B) {
-        pied478();
-        planifier478();
-      }
-    } catch (e) {}
-    return r;
+  CROCHETS.avantRendu.push(() => {
+    if (B) suivant478();
+  });
+  CROCHETS.rendu.push(() => {
+    if (B) {
+      pied478();
+      planifier478();
+    }
   });
 
   /* ---------- textes du tutoriel et du guide ---------- */

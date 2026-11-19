@@ -4,15 +4,13 @@ import { ITEMS2, PROFILE } from './011-05-etat-de-partie.js';
 import { BADGES } from './013-07-arenes.js';
 import { toast } from './014-08-outils.js';
 import { sfx, vibe } from './026-20-campagne-tutoriel-son.js';
-import { SHOP, bagN } from './032-v4-00-socle.js';
+import { SHOP, bagN, sauverBourse } from './032-v4-00-socle.js';
 import { renderBag } from './039-v4-07-quetes-boutique.js';
-import { NEWS416 } from './056-v4-16-1-01-finitions.js';
 import { graine417 } from './057-v4-17-01-compagnons-et-resonance.js';
 import { gain454, txt454 } from './084-4-54-colporteur-rencontres-de-route-missions-de.js';
-import { ajout455, cdSt455, ctKeys455, maj455, peutIn455 } from './088-4-57-atelier-recettes-commandes-tirage-vitrine-c.js';
+import { ajout455, cdSt455, ctKeys455, peutIn455 } from './088-4-57-atelier-recettes-commandes-tirage-vitrine-c.js';
 
-export let nbBadge459;
-let QO459, ctPos459, TROPH459;
+let TROPH459;
 export { QO459, TROPH459 }; // lus par Boutique › Quêtes et Trophées (React, src/screens/sac/Atelier.jsx)
 
 
@@ -74,10 +72,7 @@ export function tpSt459() {
 
 // Boutique › Quêtes et Trophées : rendus par React (src/screens/sac/Atelier.jsx)
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
-export function __init() {
-
-QO459 = [
+const QO459 = [
   { id: 'q1', min: 0, qui: 'Infirmière Lise', txt: 'Une randonnée a mal tourné ce matin et la salle de soins est vide. Rapportez-moi de quoi remettre tout le monde sur pied.', in: { potion: 3 }, rew: { m: 800, b: { baiemepo: 1 } } },
   { id: 'q2', min: 0, qui: 'Pêcheur Marcel', txt: 'Je veux sortir un gros Pokémon de la rivière, mais mes Balls sont trop faibles. Prêtez-moi les vôtres, je vous laisse ma pierre porte-bonheur.', in: { poke: 2, super: 1 }, rew: { item: 'eaumystique' } },
   { id: 'q3', min: 1, qui: 'Randonneuse Clémence', txt: 'Mon groupe a été piqué et gelé en une seule nuit sur la route. Avec de quoi les soigner, je vous offre une baie qui ne rate jamais.', in: { antidote: 2, antigel: 2 }, rew: { item: 'baielum' } },
@@ -91,11 +86,13 @@ QO459 = [
 ];
 
 
-nbBadge459 = () => (typeof BADGES !== 'undefined' ? BADGES.length : 0);
+export const nbBadge459 = () => BADGES.length;
 
 
-ctPos459 = () => ctKeys455().find(k => bagN(k) > 0);
+const ctPos459 = () => ctKeys455().find(k => bagN(k) > 0);
 
+// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+export function __init() {
 
 document.addEventListener(
   'click',
@@ -130,7 +127,7 @@ document.addEventListener(
     sfx('win');
     vibe(25);
     toast(`${q.qui} : merci ! ${extra || txt454({ m: r.m, g: r.g, b: r.b })}`);
-    maj455();
+    sauverBourse();
     renderBag();
   },
   true
@@ -168,16 +165,10 @@ document.addEventListener(
     sfx('win');
     vibe(25);
     toast(`Trophée : +${T.g} Éclat${T.g > 1 ? 's' : ''}`);
-    maj455();
+    sauverBourse();
     renderBag();
   },
   true
 );
 
-
-/* ---------- onglets ---------- */
-NEWS416.unshift(['i-star', 'Quêtes d’objets et trophées', 'Dix habitants vous confient des quêtes d’objets, avec des objets tenus et des CT en récompense, qui se débloquent avec vos badges. Une boîte de trophées donne des Éclats pour vos collections.']);
-
-
-NEWS416.splice(8);
 }

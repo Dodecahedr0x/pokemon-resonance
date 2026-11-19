@@ -19,14 +19,13 @@ import { fermer } from '../screens/overlays/tempStore.js';
 import { V4 } from './032-v4-00-socle.js';
 import { dechargerCharges } from './047-v4-8-01-tactique.js';
 import { aXP, rangOf } from './053-v4-14-01-resonance.js';
-import { NEWS416 } from './056-v4-16-1-01-finitions.js';
 import { vigilCoup420 } from './060-v4-20-01-combat-intense.js';
 import { dl428 } from './063-v4-28-01-captures-combat-accueil.js';
 import { DOCTRINES430 } from './065-v4-30-01-camp-et-tactique.js';
 import { CAMPT431, ENIGMES431, MAIT_SEUIL431, renderCampPage431 } from './066-v4-31-01-defis-tactiques.js';
 
-export let duelCharge433, duelTitre433, TUTO433;
-let nomDuel433, TERR433, miroir433, deux433, posJ2433, DUEL433, DUELCUR433, PERSO433, STUN433, STMAX433;
+export let TUTO433;
+let DUEL433, DUELCUR433, STMAX433;
 export { TERR433, DUEL433, STMAX433, duelOrdre433, duelNeuf433, duelEtape433 }; // lus par Camp › Duel (src/screens/camp)
 
 
@@ -477,10 +476,7 @@ function duelRendre433() {
 
 // le tutoriel complet est rendu par le Guide React (Tutoriel.jsx)
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
-export function __init() {
-
-nomDuel433 = x =>
+const nomDuel433 = x =>
   String(x == null ? '' : x)
     .replace(/[<>&"`]/g, '')
     .replace(/\s+/g, ' ')
@@ -490,7 +486,7 @@ nomDuel433 = x =>
 
 /* ---------- 1. duel : terrains symétriques ---------- */
 // demi-plateau décrit, l’autre moitié en miroir (rotation d’un demi-tour : la grille hexagonale y est symétrique)
-TERR433 = {
+const TERR433 = {
   arene: { n: 'Arène', bio: 'arene', pil: ['3,1'], sand: ['2,3'] },
   gue: { n: 'Gué', bio: 'gue', water: ['3,0', '3,3', '3,4'], grass: ['1,0'] },
   roche: { n: 'Rocaille', bio: 'roche', rock: ['3,2'], pil: ['2,0'], sand: ['2,4'] },
@@ -499,25 +495,39 @@ TERR433 = {
 };
 
 
-miroir433 = k => {
+const miroir433 = k => {
   const [c, r] = P(k);
   return K(BW - 1 - c, BH - 1 - r);
 };
 
 
-deux433 = L => [...new Set([...(L || []), ...(L || []).map(miroir433)])];
+const deux433 = L => [...new Set([...(L || []), ...(L || []).map(miroir433)])];
 
 
-posJ2433 = i => [BW - 1 - DEPLOY[i][0], BH - 1 - DEPLOY[i][1]];
+const posJ2433 = i => [BW - 1 - DEPLOY[i][0], BH - 1 - DEPLOY[i][1]];
 
+
+const PERSO433 = ['syn', 'harmonie', 'reso417', 'acc', 'relance', 'lastAtk'];
+
+
+const STUN433 = ['SOM', 'GEL', 'PAR'];
+
+
+export const duelCharge433 = (S, u) => !S.duel433 || u.j433 === S.duel433.dech;
+
+
+export const duelTitre433 = S => {
+  const D = S.duel433;
+  return D && D.g ? `Victoire de ${esc(D.noms[D.g - 1])}` : 'Match nul';
+};
+
+// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+export function __init() {
 
 DUEL433 = null;
 
  // le tirage en cours (en mémoire)
 DUELCUR433 = null;
-
-
-PERSO433 = ['syn', 'harmonie', 'reso417', 'acc', 'relance', 'lastAtk'];
 
 
 CROCHETS.creation.push((S, opt, D0) => {
@@ -553,12 +563,6 @@ CROCHETS.combat.push((S, opt, D0) => {
   S.noCatch = true;
   D.pret = 1;
 });
-
-
-STUN433 = ['SOM', 'GEL', 'PAR'];
-
-
-duelCharge433 = (S, u) => !S.duel433 || u.j433 === S.duel433.dech;
 
 
 document.addEventListener('click', e => {
@@ -600,12 +604,6 @@ document.addEventListener(
   },
   true
 );
-
-
-duelTitre433 = S => {
-  const D = S.duel433;
-  return D && D.g ? `Victoire de ${esc(D.noms[D.g - 1])}` : 'Match nul';
-};
 
 
 CROCHETS.resultat.push(r => {
@@ -786,12 +784,4 @@ document.addEventListener('click', e => {
   } else go(a);
 });
 
-
-NEWS416.unshift(
-  ['i-fight', 'Duel local à 2', 'Camp › Duel : tirage, bannissements, choix en serpent, puis un combat sur le même téléphone. Mêmes règles des deux côtés.', 'duel433'],
-  ['i-book', 'Tutoriel complet', 'Guide › Tutoriel : toutes les mécaniques, de la Résonance au duel, chapitre par chapitre, avec un bouton pour essayer.', 'tuto433']
-);
-
-
-NEWS416.splice(8);
 }

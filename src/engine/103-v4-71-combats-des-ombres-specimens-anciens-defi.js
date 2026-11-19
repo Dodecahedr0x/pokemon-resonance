@@ -3,21 +3,18 @@
 import { BY, SCEN } from './009-03-pokemon.js';
 import { PROFILE, isCamp } from './011-05-etat-de-partie.js';
 import { BADGES } from './013-07-arenes.js';
-import { toast } from './014-08-outils.js';
+import { ecrireLS, toast } from './014-08-outils.js';
 import { CROCHETS } from './015-v4-8-00-crochets.js';
 import { save, squad } from './020-13-equipe-cartes.js';
 import { OBST } from './023-16-roles-synergies-obstacles.js';
-import { B, __set_launch, backToPrep, launch, scSel } from './024-17-interface-combat.js';
+import { B, backToPrep, goFight, scSel } from './024-17-interface-combat.js';
 import { sfx } from './026-20-campagne-tutoriel-son.js';
 import { overlay } from './030-24-prestige-mise-en-scene.js';
 import { fermer } from '../screens/overlays/tempStore.js';
-import { __set_groupOf, groupOf } from './031-25-v3-parcours-accueil.js';
 import { today } from './032-v4-00-socle.js';
-import { goFight } from './036-v4-04-accueil.js';
 import { DEXS } from './038-v4-06-pokedex.js';
 import { tailleEquipe } from './048-v4-9-01-rejouabilite.js';
-import { NEWS416 } from './056-v4-16-1-01-finitions.js';
-import { LSS454, __set_evPick454, ev454, evPick454 } from './084-4-54-colporteur-rencontres-de-route-missions-de.js';
+import { ev454 } from './084-4-54-colporteur-rencontres-de-route-missions-de.js';
 
 // Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
 export function __init() {
@@ -32,9 +29,7 @@ export function __init() {
     }
   };
   const ecrireX = o => {
-    try {
-      localStorage.setItem(KEY, JSON.stringify(o));
-    } catch (e) {}
+    ecrireLS(KEY, o);
   };
   const ok = ids => ids.filter(i => BY[i]);
   const POS = [[6, 1], [6, 3], [7, 2], [7, 4], [6, 5]];
@@ -84,22 +79,13 @@ export function __init() {
   };
   dqMake();
 
-  const groupOfAvant = groupOf;
-  __set_groupOf(function (k) {
-    return /^(omb470_|dq470)/.test(k) ? 'terrains' : groupOfAvant.apply(this, arguments);
-  });
-
   const dqViol = () => {
     const D = SCEN.dq470 && SCEN.dq470.dq470;
     return D ? squad.slice(0, tailleEquipe()).find(id => BY[id] && BY[id].t.includes(D)) : null;
   };
-  const launchAvant = launch;
-  __set_launch(function () {
-    if (scSel === 'dq470') {
-      const v = dqViol();
-      if (v) return toast(BY[v].n + ' est de type ' + SCEN.dq470.dq470 + ' : retirez-le de l’équipe.');
-    }
-    return launchAvant.apply(this, arguments);
+  CROCHETS.refusLancement.push(() => {
+    const v = scSel === 'dq470' && dqViol();
+    return v ? BY[v].n + ' est de type ' + SCEN.dq470.dq470 + ' : retirez-le de l’équipe.' : null;
   });
 
   /* ---- 7. Prestige ---- */
@@ -133,7 +119,7 @@ export function __init() {
           g += n;
           try {
             const st = ev454().st;
-            LSS454('res-ev454', { d: st.d, done: true, res: 'Les Ombres ont été repoussées.' });
+            ecrireLS('res-ev454', { d: st.d, done: true, res: 'Les Ombres ont été repoussées.' });
           } catch (e) {}
         }
       } else if (k === 'dq470') {
@@ -163,20 +149,24 @@ export function __init() {
   });
 
   /* ---- liaison avec les épisodes : bouton « Affronter » ---- */
-  const evPickAvant = evPick454;
-  __set_evPick454(function (j) {
+  // renvoie true : le choix « Affronter » mène au combat au lieu de résoudre la rencontre
+  CROCHETS.avantChoixRoute.push(j => {
     try {
       const { E, st } = ev454();
       if (E && E.ombre && !st.done && E.c[j] && E.c[j].fight) {
-        if (!squad.length) return toast('Composez d’abord une équipe.');
+        if (!squad.length) {
+          toast('Composez d’abord une équipe.');
+          return true;
+        }
         const k = 'omb470_' + (window.__ombre470.lire().etape + 1);
-        if (!SCEN[k]) return;
+        if (!SCEN[k]) return true;
         fermer('evs454');
         if (B) backToPrep();
-        return goFight(k);
+        goFight(k);
+        return true;
       }
     } catch (e) {}
-    return evPickAvant.apply(this, arguments);
+    return false;
   });
 
   /* ---- Hub « Défis » : spécimens, quotidien, prestige ---- */
@@ -262,10 +252,6 @@ export function __init() {
     true
   );
   /* bannière « Défis » de l'Accueil (#x470) : rendue par React (src/screens/accueil/Bannieres.jsx) */
-  try {
-    NEWS416.unshift(['i-team', 'Défis et Ombres', 'Combattez les Ombres de Résonance, relevez le défi quotidien, ressuscitez des spécimens anciens et montez en prestige depuis la bannière Défis. 20 formes régionales au Pokédex.']);
-    NEWS416.splice(8);
-  } catch (e) {}
   window.__x470 = { lire: lireX, ecrire: ecrireX, hub, dqMake, dqViol, ok };
 })();
 }

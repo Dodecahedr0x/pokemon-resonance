@@ -7,7 +7,7 @@ import { BY, SCEN } from './009-03-pokemon.js';
 import { BADGE_REWARD, CAMP_START, ITEMS2, LINK_N, PROFILE, defProfile, isCamp, lvlOfPts } from './011-05-etat-de-partie.js';
 import { ROLEFX, rIco } from './012-06-recrues-roles-synergies.js';
 import { ARENAS, BADGES, winBadge } from './013-07-arenes.js';
-import { $, $$, RM, ico, markOf, medal, rxCat, toast } from './014-08-outils.js';
+import { $, $$, RM, ecrireLS, markOf, medal, rxCat, toast } from './014-08-outils.js';
 import { go } from './016-09-navigation.js';
 import { getCoach, hideCoach, hideStarter, openStarterBox, refreshStarter, showCoach } from '../screens/overlays/shellOverlays.js';
 import { renderLigue } from './019-12-ligue.js';
@@ -17,28 +17,30 @@ import { ELITE, canCapture, canDuo, captureReq, champBuild, duoOf, linkLvl } fro
 import { roleOf } from './023-16-roles-synergies-obstacles.js';
 import { B, __set_scSel, challenge, launch, scSel, ui } from './024-17-interface-combat.js';
 import { SAVE_V, applySave, autoSave, closeSaves, queueSave, renderResume } from './025-19-sauvegardes.js';
-import { musStart, musStop } from './030-24-prestige-mise-en-scene.js';
-import { renderSelection, trainerCard } from './031-25-v3-parcours-accueil.js';
+import { musStart, musStop, sfxJingle } from './070-v4-35-musiques-par-theme-lecteur-de-pistes.js';
+import { renderSelection } from './031-25-v3-parcours-accueil.js';
+import { renderHome } from './036-v4-04-accueil.js';
 import { CAP_K, SHOP, __set_CAP_K, ballChips, ballFor, dailyDone, dailyKey, fmt, today } from './032-v4-00-socle.js';
 import { renderWallet } from './035-v4-03-interface.js';
 import { itemize, preload } from './041-v4-1-01-illustrations.js';
 import { RIVAL, RIVAL_KEYS, aplusProgress, aplusRewHtml, rivalBuild } from './043-v4-4-01-aventure-plus.js';
 import { piegeTip } from './047-v4-8-01-tactique.js';
-import { duosListe416, jNext416 } from './055-v4-16-01-johto-vivant.js';
+import { jNext416 } from './055-v4-16-01-johto-vivant.js';
 import { hNext419 } from './059-v4-19-01-hoenn.js';
 import { confirmer430 } from './065-v4-30-01-camp-et-tactique.js';
 
-export let PREF, SFX, PREPG, TUTO, tutoI;
-let AC;
-export function __set_sfx(v) { return (sfx = v); }
+export let PREF, SFX, PREPG, TUTO;
+let AC, tutoI;
 export function __set_PREPG(v) { return (PREPG = v); }
 export function __set_tutoI(v) { return (tutoI = v); }
 
+// Animations réduites façon Pokémon (v4.72) : préférence système, réglage d'accessibilité ou
+// animations du thème coupées. Même test que les copies locales des modules 108 et 109.
+export const calme472 = () => !!RM || document.documentElement.classList.contains('a11y-rm') || PREF.pk472a === 0;
+
 
 export function savePref() {
-  try {
-    localStorage.setItem('res-pref', JSON.stringify(PREF));
-  } catch (e) {}
+  ecrireLS('res-pref', PREF);
   if (PREF.music) musStart();
   else musStop();
 }
@@ -104,10 +106,12 @@ export function noise(t0, dur, vol, lp) {
 
 
 export function sfx(n) {
-  if (!PREF.sound || RM) return;
-  try {
-    SFX[n] && SFX[n]();
-  } catch (e) {}
+  if (PREF.sound && !RM) {
+    try {
+      SFX[n] && SFX[n]();
+    } catch (e) {}
+  }
+  sfxJingle(n);
 }
 
 
@@ -336,7 +340,7 @@ export function applyProgress(S) {
   setTimeout(() => {
     renderSquad();
     renderLigue();
-    renderCamp();
+    renderHome();
   }, 0);
   // campagne : les formes atteintes en combat deviennent des recrues
   rew.forms = [];
@@ -430,7 +434,7 @@ export function renderPrep() {
   rivalBuild();
   if (scSel === 'sauvage' && !SCEN.sauvage) __set_scSel(nextGoal()[0]);
   if (scSel === 'champ') champBuild();
-  renderResume && renderResume();
+  renderResume();
   renderSelection();
   try {
     // illustrations de l’équipe et des adversaires préchargées
@@ -464,13 +468,6 @@ export function nextGoal() {
     if (hn) return hn;
   }
   return ['champ', PROFILE.elite >= 5 ? 'Champion (revanche)' : 'Champion de la Ligue'];
-}
-
-
-// L'ancien résumé de campagne (#campBox) et son chapitre étaient aussitôt remplacés par la
-// carte de dresseur : seule celle-ci reste (src/screens/accueil/CarteDresseur.jsx).
-export function renderCamp() {
-  trainerCard();
 }
 
 
@@ -629,10 +626,10 @@ $('#starter').addEventListener('click', e => {
     },
     { leaveBattle: true }
   );
-  if (typeof closeSaves === 'function') closeSaves();
+  closeSaves();
   autoSave(true);
   go('accueil');
-  renderCamp();
+  renderHome();
   toast(`Campagne lancée avec ${BY[id].n}. Commencez par le combat guidé ou la Route 29.`);
 });
 

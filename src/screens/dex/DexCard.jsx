@@ -1,4 +1,5 @@
 import { Html } from '../../lib/html.jsx';
+import { puissance } from '../../lib/puissance.js';
 import { MV, SHAPE, TAL } from '../../engine/005-02-capacites.js';
 import { REGN } from '../../engine/008-v4-19-00-hoenn-donnees.js';
 import { BY, NOTES, famOf } from '../../engine/009-03-pokemon.js';
@@ -130,7 +131,7 @@ export default function DexCard() {
                     {v.n}
                     <Html html={mrg414(v)} />
                   </b>
-                  <span>{`${v.p ? 'Puiss. ' + v.p : v.fix ? v.fix + ' fixes' : 'Effet'} · ${SHAPE[v.sh]}${v.r ? ' ' + v.r : ''}`}</span>
+                  <span>{`${puissance(v, 'Puiss.')} · ${SHAPE[v.sh]}${v.r ? ' ' + v.r : ''}`}</span>
                   <em>{v.d}</em>
                 </div>
               );

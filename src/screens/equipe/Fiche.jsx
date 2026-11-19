@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { Html } from '../../lib/html.jsx';
+import { puissance } from '../../lib/puissance.js';
 import { useEngineReady } from '../../engineReady.js';
 import { useEquipe } from './equipeStore.js';
 import { EL, MK, MX, RX, dexNo } from '../../engine/004-01-donnees.js';
@@ -10,7 +11,7 @@ import { ARR } from '../../engine/010-04-evolution-en-combat.js';
 import { ITEMS2, LINK_N, LINK_T, PROFILE, inBox, isCamp, lvlOfPts, ownedItems } from '../../engine/011-05-etat-de-partie.js';
 import { RC, ROLEFX, rIco } from '../../engine/012-06-recrues-roles-synergies.js';
 import { markOf, medal, tb, tc } from '../../engine/014-08-outils.js';
-import { BRANCHES } from '../../engine/021-14-moteur-combat.js';
+import { BRANCHES, mhpOf } from '../../engine/021-14-moteur-combat.js';
 import { STLN, branchNote, crestSmall, evoDiff, monEls, monMarks, nextOf, squad } from '../../engine/020-13-equipe-cartes.js';
 import { HELD_IMG, ITM } from '../../engine/032-v4-00-socle.js';
 import { capaciteApprise } from '../../engine/045-v4-6-01-ct-cs.js';
@@ -188,7 +189,7 @@ function Contenu({ id }) {
       ) : null}
       <div className="sh-sec">
         <h4>
-          Statistiques<span>PV en combat : {20 + m.s[0] * 8}</span>
+          Statistiques<span>PV en combat : {mhpOf(m.s)}</span>
         </h4>
         <div className="stats">
           {m.s.map((v, i) => (
@@ -248,7 +249,7 @@ function Action({ m, base, id }) {
 // Carte d'une capacité (ancien mvCard).
 function MvCard({ id }) {
   const m = MV[id];
-  const sp = [m.p ? `Puissance ${m.p}` : m.fix ? `${m.fix} fixes` : 'Effet', SHAPE[m.sh] + (m.r ? ' ' + m.r : ''), m.mk ? markOf(m.mk).n : null]
+  const sp = [puissance(m), SHAPE[m.sh] + (m.r ? ' ' + m.r : ''), m.mk ? markOf(m.mk).n : null]
     .filter(Boolean)
     .join(' · ');
   return (

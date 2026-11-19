@@ -6,25 +6,23 @@ import { BY, EEVEE, MON, PKT, SCEN } from './009-03-pokemon.js';
 import { ITEMS2, PROFILE } from './011-05-etat-de-partie.js';
 import { ARENAS } from './013-07-arenes.js';
 import { paintOverlay } from '../screens/overlays/dialogsStore.js';
-import { $, medal } from './014-08-outils.js';
+import { $, medal, mulberry32 } from './014-08-outils.js';
 import { CROCHETS } from './015-v4-8-00-crochets.js';
-import { go } from './016-09-navigation.js';
 import { EMAX, affected, dmgOf, hasNx, markAt, mvType, uAt, uk } from './021-14-moteur-combat.js';
 import { OBST } from './023-16-roles-synergies-obstacles.js';
-import { B, __set_scSel, backToPrep, launch, scSel } from './024-17-interface-combat.js';
+import { B, __set_scSel, backToPrep, choisirCombat, launch } from './024-17-interface-combat.js';
 import { queueSave } from './025-19-sauvegardes.js';
-import { PREPG, __set_PREPG, renderPrep } from './026-20-campagne-tutoriel-son.js';
+import { __set_PREPG, renderPrep } from './026-20-campagne-tutoriel-son.js';
 import { ordreChoisi } from './044-v4-5-01-moteur-tactique.js';
 import { vivantChoisi } from './046-v4-7-01-plateau-vivant.js';
 import { tactiqueChoisie } from './047-v4-8-01-tactique.js';
 import { mutDeLaTour, mutInfo } from './048-v4-9-01-rejouabilite.js';
 import { caracteresChoisis } from './049-v4-10-01-identite.js';
 import { RIV429, rivBuild429 } from './064-v4-29-01-qualite.js';
+import { rivAdapt455 } from './086-4-55-rival-qui-s-adapte-themes-de-plateau.js';
 
-export let SHINY_RATE, wildShiny, shinyHue, shinyStyle, isShinyOwned, SPARK, styleOf, RIVAL, RIVAL_LINE, RIVAL_KEYS, RIVAL_STEPS, RIVAL_POS, rivalIdx, LEGS, legKey, legOf, tdrRun;
-let pickOf, STYLES, IMMO, CTRL, TDR_RULES, TDR_MAPS, TDR_OBST, TDR_POS, tdrPool, TDR;
+export let wildShiny;
 export function __set_wildShiny(v) { return (wildShiny = v); }
-export function __set_rivalBuild(v) { return (rivalBuild = v); }
 
 
 /* =====================================================================
@@ -80,14 +78,7 @@ export function aplusClean(p) {
 
 /* ---------- hasard reproductible (Tour : un étage se reconstruit à l’identique après une sauvegarde) ---------- */
 function rng(seed) {
-  let a = seed >>> 0 || 1;
-  return () => {
-    a = (a + 0x6d2b79f5) >>> 0;
-    let t = a;
-    t = Math.imul(t ^ (t >>> 15), t | 1);
-    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
+  return mulberry32(seed >>> 0 || 1);
 }
 
 
@@ -177,6 +168,9 @@ export function rivalBuild() {
     };
     OBST[k] = i < 2 ? { grass: ['2,2', '2,3'] } : { pil: ['4,2'], sand: ['2,1', '2,4'] };
   });
+  try {
+    rivAdapt455(); // Kael s’adapte à votre équipe (v4.55)
+  } catch (e) {}
 }
 
 
@@ -227,7 +221,7 @@ function tdrBuild(run) {
       const m = pickOf(r, pool);
       if (fams.has(m.base)) continue;
       fams.add(m.base);
-      foes.push([m.id, TDR_POS[foes.length]]);
+      foes.push([m.id, RIVAL_POS[foes.length]]); // mêmes places que le rival
     }
     if (f % 3 === 0) rule = pickOf(r, TDR_RULES);
     at = BY[foes[0][0]].t[0];
@@ -356,9 +350,7 @@ function tdrClimb() {
   tdrBuild(run);
   queueSave();
   if (B) backToPrep();
-  __set_scSel('tdr');
-  __set_PREPG({ g: 'apres', sc: 'tdr' });
-  go('combat');
+  choisirCombat('tdr');
   launch();
 }
 
@@ -451,39 +443,33 @@ export function aplusRewHtml(r) {
 
 /* boutons de l’écran de résultat de la Tour : rendus par React (src/screens/combat/battle/Result.jsx) */
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
-export function __init() {
-
-pickOf = (r, a) => a[Math.floor(r() * a.length)];
+const pickOf = (r, a) => a[Math.floor(r() * a.length)];
 
 
 /* =====================================================================
    1. Pokémon chromatiques
    ===================================================================== */
-SHINY_RATE = 1 / 25;
-
-
-wildShiny = false;
+export const SHINY_RATE = 1 / 25;
 
 
 /* teinte propre à chaque espèce : un même Pokémon chromatique a toujours la même couleur */
-shinyHue = id => 40 + ((((BY[id] && BY[id].no) || 0) * 53) % 260);
+export const shinyHue = id => 40 + ((((BY[id] && BY[id].no) || 0) * 53) % 260);
 
 
-shinyStyle = id => `--sh:${shinyHue(id)}deg`;
+export const shinyStyle = id => `--sh:${shinyHue(id)}deg`;
 
 
-isShinyOwned = id => (PROFILE.shiny || []).includes(id);
+export const isShinyOwned = id => (PROFILE.shiny || []).includes(id);
 
 
-SPARK =
+export const SPARK =
   '<svg class="shn-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.2 6.6L21 11l-6.8 2.4L12 20l-2.2-6.6L3 11l6.8-2.4Z"/></svg>';
 
 
 /* =====================================================================
    2. Maîtres d’arène : chacun son style de jeu
    ===================================================================== */
-STYLES = {
+const STYLES = {
   rempart: { n: 'Rempart', d: 'Il s’ancre, se protège et frappe en zone.' },
   maree: { n: 'Marée', d: 'Elle trempe tout le plateau avant de frapper.' },
   chaine: { n: 'Court-circuit', d: 'Il vise en priorité vos Pokémon trempés ou chargés.' },
@@ -498,28 +484,23 @@ STYLES = {
 };
 
 
-['rempart', 'maree', 'chaine', 'ronces', 'usure', 'controle', 'assaut', 'seisme'].forEach((s, i) => {
-  if (SCEN[ARENAS[i].k]) SCEN[ARENAS[i].k].style = s;
-});
+const IMMO = ['root', 'web', 'sleep'];
 
 
-IMMO = ['root', 'web', 'sleep'];
+const CTRL = ['push', 'pull', 'confuse', 'turn', 'taunt', 'swap'];
 
 
-CTRL = ['push', 'pull', 'confuse', 'turn', 'taunt', 'swap'];
-
-
-styleOf = k => STYLES[(SCEN[k] || {}).style] || null;
+export const styleOf = k => STYLES[(SCEN[k] || {}).style] || null;
 
 
 /* =====================================================================
    3. Le rival : Kael Ferrand
    ===================================================================== */
-RIVAL = { n: 'Kael Ferrand', t: 'votre rival' };
+export const RIVAL = { n: 'Kael Ferrand', t: 'votre rival' };
 
 
 /* son partenaire a l’avantage sur le vôtre, comme dans les jeux */
-RIVAL_LINE = {
+export const RIVAL_LINE = {
   bulbizarre: ['salameche', 'reptincel', 'dracaufeu'],
   salameche: ['carapuce', 'carabaffe', 'tortank'],
   carapuce: ['bulbizarre', 'herbizarre', 'florizarre'],
@@ -529,10 +510,10 @@ RIVAL_LINE = {
 };
 
 
-RIVAL_KEYS = ['rv1', 'rv2', 'rv3', 'rv4'];
+export const RIVAL_KEYS = ['rv1', 'rv2', 'rv3', 'rv4'];
 
 
-RIVAL_STEPS = [
+export const RIVAL_STEPS = [
   {
     after: 2,
     lv: 20,
@@ -580,7 +561,7 @@ RIVAL_STEPS = [
 ];
 
 
-RIVAL_POS = [
+export const RIVAL_POS = [
   [6, 2],
   [7, 1],
   [6, 4],
@@ -589,29 +570,13 @@ RIVAL_POS = [
 ];
 
 
-rivalIdx = k => RIVAL_KEYS.indexOf(k);
+export const rivalIdx = k => RIVAL_KEYS.indexOf(k);
 
 
 /* =====================================================================
    4. Boss légendaires (après-jeu, jamais recrutables)
    ===================================================================== */
-Object.assign(MV, {
-  fatalfoudre: {
-    n: 'Fatal-Foudre',
-    t: 'Électrik',
-    p: 12,
-    r: 3,
-    sh: 'area',
-    mk: 'charge',
-    d: 'Zone de 7 cases, Chargé.'
-  },
-  feusacre: { n: 'Feu Sacré', t: 'Feu', p: 13, r: 3, sh: 'area', mk: 'brulant', d: 'Zone de 7 cases, Brûlant.' },
-  frappepsy: { n: 'Frappe Psy', t: 'Psy', p: 14, r: 3, sh: 'line', d: 'Ligne de 3 cases.' },
-  aeroblast: { n: 'Aéroblast', t: 'Vol', p: 13, r: 3, sh: 'line', fx: 'push', v: 1, d: 'Ligne de 3 cases, repousse.' }
-});
-
-
-LEGS = [
+export const LEGS = [
   {
     id: 'raikou',
     n: 'Raikou',
@@ -729,6 +694,74 @@ LEGS = [
 ];
 
 
+export const legKey = id => 'lg' + id;
+
+
+export const legOf = k => LEGS.find(L => legKey(L.id) === k) || null;
+
+
+/* =====================================================================
+   5. Tour de Résonance
+   ===================================================================== */
+const TDR_RULES = ['roche', 'eau', 'elec', 'plante', 'poison', 'psy', 'feu', 'sol'];
+
+
+const TDR_MAPS = [
+  { water: ['4,2', '4,3'], rock: ['3,0', '3,5'] },
+  { water: ['5,0', '5,1'], rock: ['3,4'] },
+  { water: [], rock: ['3,1', '4,4'] },
+  { water: ['3,2', '4,2', '3,3'], rock: [] },
+  { water: ['5,4', '5,5'], rock: ['2,2', '4,1'] }
+];
+
+
+const TDR_OBST = [
+  { grass: ['2,2', '2,3'] },
+  { pil: ['4,2'] },
+  { sand: ['2,1', '2,4', '5,2'] },
+  {},
+  { pil: ['4,1', '4,4'] }
+];
+
+
+export const tdrRun = () => (PROFILE.tdr && PROFILE.tdr.run) || null;
+
+
+const tdrPool = () => MON.filter(m => !m.leg && m.id !== 'eevee');
+
+
+/* fenêtre de la Tour : choix de l’équipe et récompenses (#tdrBox rendu par React, src/screens/overlays/TdrBox.jsx) */
+
+
+const TDR = { pick: [], cands: [], offer: [] };
+
+// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+export function __init() {
+
+wildShiny = false;
+
+
+['rempart', 'maree', 'chaine', 'ronces', 'usure', 'controle', 'assaut', 'seisme'].forEach((s, i) => {
+  if (SCEN[ARENAS[i].k]) SCEN[ARENAS[i].k].style = s;
+});
+
+
+Object.assign(MV, {
+  fatalfoudre: {
+    n: 'Fatal-Foudre',
+    t: 'Électrik',
+    p: 12,
+    r: 3,
+    sh: 'area',
+    mk: 'charge',
+    d: 'Zone de 7 cases, Chargé.'
+  },
+  feusacre: { n: 'Feu Sacré', t: 'Feu', p: 13, r: 3, sh: 'area', mk: 'brulant', d: 'Zone de 7 cases, Brûlant.' },
+  frappepsy: { n: 'Frappe Psy', t: 'Psy', p: 14, r: 3, sh: 'line', d: 'Ligne de 3 cases.' },
+  aeroblast: { n: 'Aéroblast', t: 'Vol', p: 13, r: 3, sh: 'line', fx: 'push', v: 1, d: 'Ligne de 3 cases, repousse.' }
+});
+
+
 LEGS.forEach(L => {
   const m = {
     id: L.id,
@@ -751,12 +784,6 @@ LEGS.forEach(L => {
   BY[L.id] = m;
   PKT.set(m.t, m.id);
 });
-
-
-legKey = id => 'lg' + id;
-
-
-legOf = k => LEGS.find(L => legKey(L.id) === k) || null;
 
 
 LEGS.forEach(L => {
@@ -785,51 +812,6 @@ LEGS.forEach(L => {
   };
   OBST[k] = { pil: ['4,0', '4,5'] };
 });
-
-
-/* =====================================================================
-   5. Tour de Résonance
-   ===================================================================== */
-TDR_RULES = ['roche', 'eau', 'elec', 'plante', 'poison', 'psy', 'feu', 'sol'];
-
-
-TDR_MAPS = [
-  { water: ['4,2', '4,3'], rock: ['3,0', '3,5'] },
-  { water: ['5,0', '5,1'], rock: ['3,4'] },
-  { water: [], rock: ['3,1', '4,4'] },
-  { water: ['3,2', '4,2', '3,3'], rock: [] },
-  { water: ['5,4', '5,5'], rock: ['2,2', '4,1'] }
-];
-
-
-TDR_OBST = [
-  { grass: ['2,2', '2,3'] },
-  { pil: ['4,2'] },
-  { sand: ['2,1', '2,4', '5,2'] },
-  {},
-  { pil: ['4,1', '4,4'] }
-];
-
-
-TDR_POS = [
-  [6, 2],
-  [7, 1],
-  [6, 4],
-  [7, 3],
-  [7, 5]
-];
-
-
-tdrRun = () => (PROFILE.tdr && PROFILE.tdr.run) || null;
-
-
-tdrPool = () => MON.filter(m => !m.leg && m.id !== 'eevee');
-
-
-/* fenêtre de la Tour : choix de l’équipe et récompenses (#tdrBox rendu par React, src/screens/overlays/TdrBox.jsx) */
-
-
-TDR = { pick: [], cands: [], offer: [] };
 
 
 $('#tdrBox').addEventListener('click', e => {

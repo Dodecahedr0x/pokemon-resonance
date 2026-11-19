@@ -1,16 +1,11 @@
 /* Section d'origine : v4.43 : plateau en grand sur téléphone, attaques à portée de pouce, faux messages d’erreur filtrés */
 
-import { __set_reportError, reportError } from './002-00-erreurs.js';
 import { MV } from './005-02-capacites.js';
 import { tc } from './014-08-outils.js';
-import { cur } from './016-09-navigation.js';
+import { CROCHETS } from './015-v4-8-00-crochets.js';
 import { byUid, mvType } from './021-14-moteur-combat.js';
-import { B, __set_launch, __set_renderAll, launch, renderAll, ui } from './024-17-interface-combat.js';
-import { NEWS416 } from './056-v4-16-1-01-finitions.js';
-import { MQ434, __set_calibre434, calibre434 } from './069-v4-34-01-calibrage-et-evoli.js';
+import { B, ui } from './024-17-interface-combat.js';
 import { footCls, pied, refreshBattle } from '../screens/combat/battle/battleStore.js';
-
-let launchOld443, QA443, renderAllOld443, reportErrorOld443;
 
 
 /** Cale la page : le bas du plateau (votre camp) juste au-dessus de « Fin du tour », sans couper son haut. */
@@ -56,7 +51,7 @@ function qa443() {
     const ft = document.querySelector('#cbBattle .bt-foot'),
       P = document.getElementById('bPanel');
     if (!ft || !P) return;
-    const u = typeof B !== 'undefined' && B && ui.sel && byUid(B, ui.sel);
+    const u = B && ui.sel && byUid(B, ui.sel);
     const on = !!(document.body.classList.contains('bt434') && B && !B.over && !B.dep430 && B.phase === 'player' && !ui.busy && u && u.side === 'a' && !u.ko);
     const bs = on ? [...P.querySelectorAll(QA443)].filter(b => b.dataset.mi != null || b.dataset.pv || !b.disabled) : [];
     const utile = bs.some(b => !b.disabled);
@@ -84,6 +79,9 @@ function qa443() {
   } catch (e) {}
 }
 
+/* ---------- 2. capacités à portée de pouce ---------- */
+const QA443 = '[data-pv],[data-mi],[data-evo="open"],[data-undo],[data-duo],[data-vx],[data-cap]';
+
 // Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
 export function __init() {
 
@@ -96,36 +94,9 @@ export function __init() {
       audio interrompue) n’ouvrent plus la boîte « Petit souci technique ». */
 
 /* ---------- 1. plateau ---------- */
-__set_calibre434(function () {
-  try {
-    const cb = document.getElementById('cbBattle'),
-      bd = document.getElementById('bBoard');
-    const on = !!(MQ434 && MQ434.matches && B && cur === 'combat' && cb && !cb.hidden);
-    document.body.classList.toggle('bt434', on);
-    if (!bd) return;
-    if (!on || !bd.classList.contains('vert')) {
-      bd.style.removeProperty('width');
-      return;
-    }
-    const bt = bd.closest('.bt') || bd.parentElement,
-      w = Math.max(220, bt.clientWidth - 8);
-    if (bd.style.width !== w + 'px') bd.style.width = w + 'px';
-  } catch (e) {}
+CROCHETS.lancement.push(nouveau => {
+  if (nouveau && !B.over) setTimeout(cadre443, 80);
 });
-
-
-launchOld443 = launch;
-
-
-__set_launch(function () {
-  const avant = B;
-  launchOld443.apply(this, arguments);
-  if (B && B !== avant && !B.over) setTimeout(cadre443, 80);
-});
-
-
-/* ---------- 2. capacités à portée de pouce ---------- */
-QA443 = '[data-pv],[data-mi],[data-evo="open"],[data-undo],[data-duo],[data-vx],[data-cap]';
 
 
 document.addEventListener('click', e => {
@@ -136,28 +107,6 @@ document.addEventListener('click', e => {
 });
 
 
-renderAllOld443 = renderAll;
+CROCHETS.rendu.push(qa443);
 
-
-__set_renderAll(function () {
-  renderAllOld443.apply(this, arguments);
-  qa443();
-});
-
-
-/* ---------- 3. faux messages d’erreur ---------- */
-reportErrorOld443 = reportError;
-
-
-__set_reportError(function (e, where) {
-  const msg = String((e && (e.message || (e.reason && e.reason.message))) || e || '').trim();
-  if (/ResizeObserver loop|^Script error\.?$|play\(\) request|NotAllowedError|AbortError|The operation was aborted|interrupted by a (new load|call to pause)/i.test(msg)) return;
-  return reportErrorOld443(e, where);
-});
-
-
-NEWS416.unshift(['i-fight', 'Combat sur téléphone', 'Le plateau reprend toute la largeur. Touchez votre Pokémon : ses capacités s’affichent au-dessus de « Fin du tour ». Touchez-en une, puis la cible.', null]);
-
-
-NEWS416.splice(8);
 }

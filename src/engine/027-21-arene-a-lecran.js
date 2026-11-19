@@ -1,10 +1,9 @@
 /* Section d'origine : 21-arene-a-lecran.js */
 
-import { ROLES } from './004-01-donnees.js';
-import { BY, MON, PRESETS, SCEN } from './009-03-pokemon.js';
+import { BY, MON, PRESETS } from './009-03-pokemon.js';
 import { BUDGET } from './010-04-evolution-en-combat.js';
 import { inBox } from './011-05-etat-de-partie.js';
-import { RC, ROLEFX, rIco, synOf } from './012-06-recrues-roles-synergies.js';
+import { RC, synOf } from './012-06-recrues-roles-synergies.js';
 import { hc, toast } from './014-08-outils.js';
 import { tokCl } from '../screens/combat/board/boardStore.js';
 import { TEAM_MAX, __set_squad, renderSquad, save, squad, toggle } from './020-13-equipe-cartes.js';
@@ -12,8 +11,7 @@ import { BH, BW, uk } from './021-14-moteur-combat.js';
 import { B, BG, L, VERT } from './024-17-interface-combat.js';
 import { TUTO, renderPrep } from './026-20-campagne-tutoriel-son.js';
 
-export let TEAM_BAK, teamBtns, STARS;
-let MPT;
+export let TEAM_BAK;
 export function __set_TEAM_BAK(v) { return (TEAM_BAK = v); }
 
 
@@ -132,7 +130,7 @@ function teamAct(a) {
     const s = synOf(t);
     toast(`Tirage : ${t.map(id => BY[id].n).join(', ')}${s.length ? ' · ' + s.map(x => x.n).join(', ') : ''}.`);
   }
-  if (typeof renderPrep === 'function' && !B) renderPrep();
+  if (!B) renderPrep();
 }
 
 
@@ -158,13 +156,20 @@ function loadPreset(k) {
   );
 }
 
-// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
-export function __init() {
-
 /* ===================== v1.1 : arène, obstacles, rôles et synergies à l’écran ===================== */
 /* --- plateau : lignes d’arène et obstacles --- */
-MPT = (x, y) => (VERT ? [y, 430 - x] : [x, y]);
+const MPT = (x, y) => (VERT ? [y, 430 - x] : [x, y]);
 
+
+export const teamBtns = () =>
+  `<div class="team-x"><button type="button" class="b b-sm" data-team="reset" ${squad.length ? '' : 'disabled'}>Réinitialiser l’équipe</button>${TEAM_BAK ? '<button type="button" class="b b-sm" data-team="undo">Rétablir</button>' : ''}<button type="button" class="b b-sm" data-team="rand">Tirage synergique</button></div>`;
+
+
+/* --- Pokédex : encart des recrues confirmées --- */
+export const STARS = ['dracaufeu', 'leviator', 'alakazam', 'tyranocif', 'cizayox', 'dracolosse', 'ectoplasma', 'florizarre'];
+
+// Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
+export function __init() {
 
 /* --- équipe : réinitialiser, rétablir, tirage --- */
 TEAM_BAK = null;
@@ -176,10 +181,6 @@ document.addEventListener('click', e => {
 });
 
 
-teamBtns = () =>
-  `<div class="team-x"><button type="button" class="b b-sm" data-team="reset" ${squad.length ? '' : 'disabled'}>Réinitialiser l’équipe</button>${TEAM_BAK ? '<button type="button" class="b b-sm" data-team="undo">Rétablir</button>' : ''}<button type="button" class="b b-sm" data-team="rand">Tirage synergique</button></div>`;
-
-
 /* --- tutoriel : une étape sur les obstacles --- */
 TUTO.splice(3, 0, {
   t: 'Lisez le terrain',
@@ -187,13 +188,6 @@ TUTO.splice(3, 0, {
   sel: '#bBoard',
   done: () => false
 });
-
-
-SCEN.tuto.lvl = 'Tutoriel · 7 étapes';
-
-
-/* --- Pokédex : encart des recrues confirmées --- */
-STARS = ['dracaufeu', 'leviator', 'alakazam', 'tyranocif', 'cizayox', 'dracolosse', 'ectoplasma', 'florizarre'];
 
 
 document.addEventListener('click', e => {

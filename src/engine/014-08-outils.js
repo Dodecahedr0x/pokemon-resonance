@@ -4,7 +4,7 @@ import { MK, RX, TYPES } from './004-01-donnees.js';
 import { BY, PKT, PK_ART } from './009-03-pokemon.js';
 import { showToast } from '../screens/overlays/shellOverlays.js';
 
-export let $, $$, NS, RM, tc, gp, INK, markOf, rxCat;
+export let RM;
 
 
 function lum(h) {
@@ -40,11 +40,6 @@ export function tb(t) {
   const c = tc(t),
     fg = lum(c) > 0.45 ? '#0C0E13' : '#FFFFFF';
   return `<span class="tb" style="--c:${c};--fg:${fg}"><i class="tb-s" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="${gp(t)}" fill="${fg}" fill-rule="evenodd"/></svg></i>${t}</span>`;
-}
-
-
-export function codeChip(c) {
-  return `<button class="chip code-link" type="button" data-code="${c}">${c}</button>`;
 }
 
 
@@ -100,33 +95,89 @@ export function zig(x1, y1, x2, y2, n = 6, amp = 5) {
   return pts.map(p => p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' ');
 }
 
+export function apres2images(f) {
+  requestAnimationFrame(() => requestAnimationFrame(f));
+}
+
+
+/** Promesse résolue après ms millisecondes. */
+export function attendre(ms) {
+  return new Promise(r => setTimeout(r, ms));
+}
+
+
+/** Valeur JSON rangée sous k dans localStorage ; d si elle manque, est fausse ou illisible. */
+export function lireLS(k, d) {
+  try {
+    const v = JSON.parse(localStorage.getItem(k) || 'null');
+    return v || d;
+  } catch (e) {
+    return d;
+  }
+}
+
+
+/** Range v en JSON sous k ; un stockage plein ou interdit est ignoré. */
+export function ecrireLS(k, v) {
+  try {
+    localStorage.setItem(k, JSON.stringify(v));
+  } catch (e) {}
+}
+
+
+/** Générateur mulberry32 partant de l'état a (la graine est préparée par l'appelant : la même graine rejoue la même suite). */
+export function mulberry32(a) {
+  return () => {
+    a = (a + 0x6d2b79f5) >>> 0;
+    let t = a;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+
+/** Bruit de valeur : nombre dans [0, 1[ fixé par la case (x, y) et la graine s. */
+export function hash2(x, y, s) {
+  let h = (Math.imul(x, 374761393) + Math.imul(y, 668265263) + Math.imul(s, 1274126177)) | 0;
+  h = Math.imul(h ^ (h >>> 13), 1274126177);
+  return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
+}
+
+
+/** Empreinte FNV-1a 32 bits d'une chaîne (entier non signé). */
+export function fnv(s) {
+  let h = 2166136261;
+  for (let i = 0; i < s.length; i++) h = Math.imul(h ^ s.charCodeAt(i), 16777619);
+  return h >>> 0;
+}
+
+/* ===================== OUTILS ===================== */
+export const $ = (s, r = document) => r.querySelector(s);
+
+
+export const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+
+
+export const NS = 'http://www.w3.org/2000/svg';
+
+
+export const tc = t => (TYPES[t] || TYPES.Normal)[0];
+
+
+export const gp = t => (TYPES[t] || TYPES.Normal)[1];
+
+
+export const INK = 'rgba(8,10,14,.82)';
+
+
+export const markOf = id => MK.find(m => m.id === id);
+
+
+export const rxCat = id => (RX[id] ? RX[id].k : 'ter');
+
 // Instructions exécutées au démarrage, dans l'ordre d'origine (voir index.js).
 export function __init() {
 
-/* ===================== OUTILS ===================== */
-$ = (s, r = document) => r.querySelector(s);
-
-
-$$ = (s, r = document) => [...r.querySelectorAll(s)];
-
-
-NS = 'http://www.w3.org/2000/svg';
-
-
 RM = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
-
-
-tc = t => (TYPES[t] || TYPES.Normal)[0];
-
-
-gp = t => (TYPES[t] || TYPES.Normal)[1];
-
-
-INK = 'rgba(8,10,14,.82)';
-
-
-markOf = id => MK.find(m => m.id === id);
-
-
-rxCat = id => (RX[id] ? RX[id].k : 'ter');
 }

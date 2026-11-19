@@ -4,6 +4,7 @@ import { parseStyle } from '../../../lib/html.jsx';
 // <SvgHtml html="…" /> : fragment SVG produit par une fonction du moteur (pièges, colosses,
 // attaques chargées, terrain des stades…), analysé dans un <svg> pour garder l'espace de
 // noms SVG, puis converti en éléments React sans enveloppe.
+// Pas Html (lib/html.jsx) : celui-ci analyse hors <svg> et convertit les attributs autrement (« : », booléens, onerror).
 
 const camel = s => s.replace(/[-:]([a-z])/g, (_, c) => c.toUpperCase());
 

@@ -1,4 +1,4 @@
-import { useSyncExternalStore } from 'react';
+import { canal } from '../../lib/store.js';
 
 // État du Guide, partagé entre React (<Guide>) et le moteur (setGuide, openRx, jump…).
 // Le moteur n'écrit plus dans le DOM du Guide : il passe par ces fonctions.
@@ -21,15 +21,14 @@ let state = {
   focusRule: null, // { code, n } : règle à faire défiler jusqu'à l'écran
   shown: 0, // incrémenté à chaque affichage de l'écran Guide : relit l'état de partie
 };
-const listeners = new Set();
+const { notify, use } = canal();
 const emit = patch => {
   state = { ...state, ...patch };
-  listeners.forEach(l => l());
+  notify();
 };
-const subscribe = l => (listeners.add(l), () => listeners.delete(l));
 
 export const getGuide = () => state;
-export const useGuide = () => useSyncExternalStore(subscribe, getGuide);
+export const useGuide = () => use(getGuide);
 
 export function setGuideTab(k) {
   if (!GUIDE_TABS.includes(k)) k = 'bases';

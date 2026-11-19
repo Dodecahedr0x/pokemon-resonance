@@ -1,7 +1,7 @@
 /* Moteur du jeu : sections d'origine, une par module.
    Les corps de modules ne font que déclarer ; le démarrage appelle chaque __init()
-   dans l'ordre du fichier d'origine, pour que l'ordre d'exécution reste identique. */
-import { __init as init000 } from './000-images-integrees.js';
+   dans l'ordre du fichier d'origine, pour que l'ordre d'exécution reste identique.
+   Un module sans __init (données seules, crochets) n'apparaît pas ici. */
 import { __init as init001 } from './001-moteur-tactique-noyau-tours.js';
 import { __init as init002 } from './002-00-erreurs.js';
 import { __init as init003 } from './003-00-images.js';
@@ -16,7 +16,6 @@ import { __init as init011 } from './011-05-etat-de-partie.js';
 import { __init as init012 } from './012-06-recrues-roles-synergies.js';
 import { __init as init013 } from './013-07-arenes.js';
 import { __init as init014 } from './014-08-outils.js';
-import { __init as init015 } from './015-v4-8-00-crochets.js';
 import { __init as init016 } from './016-09-navigation.js';
 import { __init as init017 } from './017-10-accueil-route.js';
 import { __init as init019 } from './019-12-ligue.js';
@@ -33,8 +32,6 @@ import { __init as init029 } from './029-23-guide-epure.js';
 import { __init as init030 } from './030-24-prestige-mise-en-scene.js';
 import { __init as init031 } from './031-25-v3-parcours-accueil.js';
 import { __init as init032 } from './032-v4-00-socle.js';
-import { __init as init033 } from './033-v4-01-donnees-pokedex.js';
-import { __init as init034 } from './034-v4-02-textes-pokedex.js';
 import { __init as init035 } from './035-v4-03-interface.js';
 import { __init as init036 } from './036-v4-04-accueil.js';
 import { __init as init037 } from './037-v4-05-carte.js';
@@ -61,8 +58,6 @@ import { __init as init057 } from './057-v4-17-01-compagnons-et-resonance.js';
 import { __init as init058 } from './058-v4-18-01-peche-safari-coop.js';
 import { __init as init059 } from './059-v4-19-01-hoenn.js';
 import { __init as init060 } from './060-v4-20-01-combat-intense.js';
-import { __init as init061 } from './061-v4-21-01-capture-partout.js';
-import { __init as init062 } from './062-v4-25-01-direction-artistique.js';
 import { __init as init063 } from './063-v4-28-01-captures-combat-accueil.js';
 import { __init as init064 } from './064-v4-29-01-qualite.js';
 import { __init as init065 } from './065-v4-30-01-camp-et-tactique.js';
@@ -72,13 +67,10 @@ import { __init as init068 } from './068-v4-33-01-duel-et-tutoriel.js';
 import { __init as init069 } from './069-v4-34-01-calibrage-et-evoli.js';
 import { __init as init070 } from './070-v4-35-musiques-par-theme-lecteur-de-pistes.js';
 import { __init as init071 } from './071-v4-38-les-legendaires-de-hoenn.js';
-import { __init as init072 } from './072-v4-39-import-de-sauvegarde-plus-tolerant.js';
-import { __init as init073 } from './073-v4-40-importer-un-fichier-quand-le-selecteur-est.js';
 import { __init as init074 } from './074-v4-41-telecharger-le-jeu-pour-le-modifier-avec-u.js';
 import { __init as init075 } from './075-v4-42-atelier-design-css-personnalise-brief-pour.js';
 import { __init as init076 } from './076-v4-43-plateau-en-grand-sur-telephone-attaques-a.js';
 import { __init as init077 } from './077-v4-44-plein-ecran-loupe-des-cases-plateau-contra.js';
-import { __init as init078 } from './078-v4-46-en-mode-libre-aussi-les-regions-s-ouvrent.js';
 import { __init as init079 } from './079-v4-48-immersion-sons-par-type-cris-vibrations-en.js';
 import { __init as init080 } from './080-v4-50-avatar-de-dresseur-rencontres-rares-heure.js';
 import { __init as init081 } from './081-v4-51-mode-nuzlocke-option.js';
@@ -114,5 +106,5 @@ import { __init as init110 } from './110-v4-74-v4-75-fluidite-animations-sur-la-
 import { __init as init111 } from './111-99-demarrage.js';
 import { __init as init112 } from './112-v4-77-graphismes-peints-decors-et-textures-du-do.js';
 
-const DEMARRAGE = [init000, init001, init002, init003, init004, init005, init006, init007, init008, init009, init010, init011, init012, init013, init014, init015, init016, init017, init019, init020, init021, init022, init023, init024, init025, init026, init027, init028, init029, init030, init031, init032, init033, init034, init035, init036, init037, init038, init039, init040, init041, init042, init043, init044, init045, init046, init047, init048, init049, init050, init051, init052, init053, init054, init055, init056, init057, init058, init059, init060, init061, init062, init063, init064, init065, init066, init067, init068, init069, init070, init071, init072, init073, init074, init075, init076, init077, init078, init079, init080, init081, init082, init083, init084, init085, init086, init087, init088, init089, init090, init091, init092, init093, init094, init095, init096, init097, init098, init099, init100, init101, init102, init103, init104, init105, init106, init107, init108, init109, init110, init111, init112];
+const DEMARRAGE = [init001, init002, init003, init004, init005, init006, init007, init008, init009, init010, init011, init012, init013, init014, init016, init017, init019, init020, init021, init022, init023, init024, init025, init026, init027, init028, init029, init030, init031, init032, init035, init036, init037, init038, init039, init040, init041, init042, init043, init044, init045, init046, init047, init048, init049, init050, init051, init052, init053, init054, init055, init056, init057, init058, init059, init060, init063, init064, init065, init066, init067, init068, init069, init070, init071, init074, init075, init076, init077, init079, init080, init081, init082, init083, init084, init085, init086, init087, init088, init089, init090, init091, init092, init093, init094, init095, init096, init097, init098, init099, init100, init101, init102, init103, init104, init105, init106, init107, init108, init109, init110, init111, init112];
 for (const init of DEMARRAGE) init();

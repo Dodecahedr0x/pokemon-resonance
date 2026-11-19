@@ -5738,7 +5738,7 @@ body{background:radial-gradient(ellipse at 50% -18%,rgba(47,112,145,.22),transpa
 .page .ph{position:relative;padding:8px 0 20px;margin-bottom:26px}
 .page .ph:after{content:"";display:block;width:110px;height:2px;margin-top:20px;background:linear-gradient(90deg,var(--r22-cyan),transparent);box-shadow:0 0 18px rgba(113,228,237,.35)}
 .page .kick,.v4-kick{letter-spacing:.2em!important;text-transform:uppercase!important;color:var(--r22-cyan)!important;font-weight:800!important;font-size:10px!important}
-.page .h1{font-size:clamp(30px,4vw,48px)!important;line-height:1.02!important;letter-spacing:-.045em!important;text-shadow:0 8px 30px #000}
+.page .h1{font-size:clamp(30px,4vw,48px)!important;line-height:1.02!important;letter-spacing:-.012em!important;text-shadow:0 8px 30px #000}
 .page .sub{color:#a9bfcb!important;max-width:720px;font-size:14px!important;line-height:1.7!important}
 /* ACCUEIL — tableau de bord d'aventure, lumière de région */
 #accueil{isolation:isolate}
@@ -5864,7 +5864,7 @@ body:before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opa
 @keyframes rx-page-in{from{opacity:.3;filter:blur(3px);transform:translateY(10px)}to{opacity:1;filter:none;transform:none}}
 .page .ph,.page .ph-sm{margin-bottom:24px}
 .page .kick,.page .v4-kick{color:var(--rx-cyan)!important;letter-spacing:.23em!important;font-weight:900!important}
-.page .h1{font-size:clamp(32px,4.5vw,54px)!important;line-height:.98!important;letter-spacing:-.055em!important}
+.page .h1{font-size:clamp(32px,4.5vw,54px)!important;line-height:.98!important;letter-spacing:-.012em!important}
 .page .sub{color:#b4c9d4!important;max-width:68ch;line-height:1.72!important}
 button,a{ -webkit-tap-highlight-color:transparent}
 button:focus-visible,a:focus-visible{outline:2px solid var(--rx-cyan)!important;outline-offset:3px}
@@ -6013,7 +6013,7 @@ body{
  background-size:44px 44px;mask-image:linear-gradient(#000,transparent 75%);
 }
 .content>.wrap{position:relative;z-index:1}
-.page .ph .h1{letter-spacing:-.055em!important;text-shadow:0 8px 30px rgba(0,0,0,.48)!important}
+.page .ph .h1{letter-spacing:-.012em!important;text-shadow:0 8px 30px rgba(0,0,0,.48)!important}
 .page .ph .kick{color:var(--r24-cyan)!important;letter-spacing:.22em!important;font-weight:900!important}
 .page .ph .sub{color:#b4cbd6!important;line-height:1.7!important}
 
@@ -7133,3 +7133,9 @@ html body.bt434 #bBoard.vert #bSvg{display:block;width:100%!important;height:aut
 html body.bt434 #cbBattle .bt-foot .fl478-pied:not([hidden]){display:flex;align-items:center;gap:6px;order:3;margin-left:auto;min-width:0;height:38px;padding:0 12px;border:1px solid rgba(255,214,102,.45);border-radius:12px;background:rgba(255,214,102,.08);font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 html body.bt434 #cbBattle .bt-foot .fl478-pied b{color:var(--gold)}
 
+
+/* ---------- en-têtes d'écran : une seule consigne à la fois ----------
+   Quand le conseil du Prof. Sorbier (.tip) suit l'en-tête, il dit déjà ce qu'il faut faire :
+   le sous-titre revient une fois le conseil fermé. Sur téléphone, le surtitre répète la barre de navigation. */
+.ph:has(+ .tip) .sub{display:none!important}
+@media (max-width:700px){.page .ph>.kick{display:none!important}}
