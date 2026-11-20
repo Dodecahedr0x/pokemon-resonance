@@ -84,8 +84,7 @@
   display: none;
 }
 .bdg svg,
-.scn-bdg,
-.res-bdg svg {
+.scn-bdg {
   filter: none;
 }
 .bdg:not(.won) svg {

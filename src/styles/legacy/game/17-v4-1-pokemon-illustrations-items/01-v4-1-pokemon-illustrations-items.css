@@ -86,12 +86,6 @@ html body .it-ic .it-img {
   width: 100%;
   height: 100%;
 }
-html body .rl .it-ic {
-  display: grid;
-  place-items: center;
-  width: 30px;
-  height: 30px;
-}
 /* toasts: at the top on phone, so they no longer pass under the "Fin du tour" (End turn) bar */
 /* battle intro in v4 colors */
 html body img.img-off.img-off.img-off {
@@ -125,9 +119,6 @@ html body #bSvg .tok.shiny .tok-halo {
   to {
     stroke-dashoffset: -70;
   }
-}
-.rl.shn b {
-  color: #ffe9a3;
 }
 
 /* --- legendary boss: golden edging on its token --- */

@@ -6,11 +6,8 @@ html body #combat .pt {
   background: linear-gradient(180deg, var(--v4-p1), var(--v4-p2)) !important;
   border-color: var(--v4-ln) !important;
 }
-.v4-gain .rl b {
-  color: #ffe17b;
-}
-.v4-gain .coin-icon,
-.v4-gain .gem-icon {
+.is-gains .coin-icon,
+.is-gains .gem-icon {
   margin-right: var(--space-3xs);
 }
 

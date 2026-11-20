@@ -440,7 +440,7 @@ export function init() {
   // resultFx / goldGlow classes and .resultBadge badge: rendered by React (Result.jsx); here, vibration and chime
   new MutationObserver(() => {
     const r = $('#cbResult'),
-      c = r && r.querySelector('.res-card.result-fx');
+      c = r && r.querySelector('.result-card.is-celebrating');
     if (!r || r.hidden || !c || !B || B._resultFxDone) {
       return;
     }

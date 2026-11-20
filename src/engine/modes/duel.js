@@ -803,7 +803,7 @@ export function init() {
       return '';
     }
     const mx = Math.max(1, ...X.rows.flat().map(x => x.d));
-    return `<div class="res-l duel-report-r"><h4>Rapport du duel</h4><div class="duel-report-rg">${[0, 1]
+    return `<div class="result-list duel-report-r"><h4>Rapport du duel</h4><div class="duel-report-rg">${[0, 1]
       .map(
         i =>
           `<div class="duel-report-rc dj${i + 1}${X.g === i + 1 ? ' g' : ''}"><b>${esc(X.names[i])}</b><em>${X.pv[i]} % PV restants</em>${X.rows[

@@ -19,49 +19,6 @@
 
 /* <style id="resonance-result-scroll"> */
 /* v4.69: result screen scrollable by finger (victory included) */
-#cbResult > .res-card {
-  margin-block: auto;
-  max-height: none;
-  overflow: visible;
-}
-#cbResult > .res-card.result-fx {
-  overflow: hidden;
-  overflow: clip;
-}
-#cbResult .res-card > .res-a {
-  position: sticky;
-  bottom: env(safe-area-inset-bottom, 0px);
-  z-index: 3;
-  margin: 0 calc(var(--space-md) * -1) calc(var(--space-md) * -1);
-  padding: var(--space-sm) var(--space-md) var(--space-md);
-  border-radius: 18px;
-  background: rgba(8, 20, 30, 0.96);
-  box-shadow: 0 -12px 24px -12px rgba(0, 0, 0, 0.8);
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-sm);
-}
-#cbResult .res-card > .res-a > * {
-  flex: 1 1 28%;
-  min-width: 0;
-  justify-content: center;
-  text-align: center;
-}
-#cbResult .res-card > .res-a > .button-primary:first-child {
-  flex-basis: 100%;
-}
-@media (max-width: 999px) {
-  #cbResult .res-card > .res-a {
-    bottom: -16px;
-  }
-  #cbResult .res-card > .res-a .button {
-    min-height: 44px;
-    padding: var(--space-sm) var(--space-sm);
-    font-size: 13px;
-    line-height: 1.2;
-    white-space: normal;
-  }
-}
 /* Home: Boss Rush and Defense Arena side by side */
 
 /* <style id="resonance-readable-sides"> */

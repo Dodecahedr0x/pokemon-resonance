@@ -376,7 +376,7 @@ export function init() {
       return '';
     }
     const T = JDIS[r.jdis - 1];
-    return `<div class="res-l"><h4>Néo-Dissonance</h4><div class="rl"><span>${T.who} ${T.pl ? 'sont battus' : 'est battu'} (${r.jdis} / 4). « ${T.w} »${r.jdis === 2 ? ' <b>Raikou, Entei et Suicune errent désormais sur la carte de Johto.</b>' : ''}${r.jdis === 4 ? ' <b>Le Plateau de Johto vous est ouvert.</b>' : ''}</span><b>${r.jdis} / 4</b></div></div>`;
+    return `<div class="result-list"><h4>Néo-Dissonance</h4><div class="result-row"><span>${T.who} ${T.pl ? 'sont battus' : 'est battu'} (${r.jdis} / 4). « ${T.w} »${r.jdis === 2 ? ' <b>Raikou, Entei et Suicune errent désormais sur la carte de Johto.</b>' : ''}${r.jdis === 4 ? ' <b>Le Plateau de Johto vous est ouvert.</b>' : ''}</span><b>${r.jdis} / 4</b></div></div>`;
   });
   /* ---------- achievements ---------- */
   ACHIEVEMENTS.push({

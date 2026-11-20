@@ -125,7 +125,7 @@ export function init() {
       return '';
     }
     const x = r.dom;
-    return `<div class="res-l"><h4>Trésor du Dominant</h4><div class="rl"><span>${
+    return `<div class="result-list"><h4>Trésor du Dominant</h4><div class="result-row"><span>${
       x.ct
         ? `${SHOP[x.ct].n} rejoint votre Sac`
         : x.item

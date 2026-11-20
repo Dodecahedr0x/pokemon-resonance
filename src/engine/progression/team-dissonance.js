@@ -167,6 +167,6 @@ export function init() {
       return '';
     }
     const T = DISSONANCE[r.dissonance - 1];
-    return `<div class="res-l"><h4>Team Dissonance</h4><div class="rl"><span>${T.who} ${T.pl ? 'sont battus' : 'est battu'} (${r.dissonance} / 4). « ${T.w} »${r.dissonance === 4 ? ' La Team Dissonance est dissoute.' : ''}</span><b>${r.dissonance} / 4</b></div></div>`;
+    return `<div class="result-list"><h4>Team Dissonance</h4><div class="result-row"><span>${T.who} ${T.pl ? 'sont battus' : 'est battu'} (${r.dissonance} / 4). « ${T.w} »${r.dissonance === 4 ? ' La Team Dissonance est dissoute.' : ''}</span><b>${r.dissonance} / 4</b></div></div>`;
   });
 }

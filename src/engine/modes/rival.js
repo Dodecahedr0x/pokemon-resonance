@@ -301,7 +301,7 @@ export function init() {
 
   HOOKS.battleResult.push(r =>
     r.rivalsMet
-      ? `<div class="res-l"><h4>${r.rivalsMet === 'hd429' ? 'Dissonance' : 'Rival'}</h4><div class="rl"><span>${r.rivalsMet === 'hd429' ? 'Les Échos de la Dissonance sont réduits au silence.' : `Kael est battu à ${FAMILY_REGION_NAMES[RIVAL_CHALLENGES[r.rivalsMet].reg]}.`}</span><b>+${fmt(RIVAL_CHALLENGES[r.rivalsMet].rew[0])} ₽ · +${RIVAL_CHALLENGES[r.rivalsMet].rew[1]} Éclats</b></div></div>`
+      ? `<div class="result-list"><h4>${r.rivalsMet === 'hd429' ? 'Dissonance' : 'Rival'}</h4><div class="result-row"><span>${r.rivalsMet === 'hd429' ? 'Les Échos de la Dissonance sont réduits au silence.' : `Kael est battu à ${FAMILY_REGION_NAMES[RIVAL_CHALLENGES[r.rivalsMet].reg]}.`}</span><b>+${fmt(RIVAL_CHALLENGES[r.rivalsMet].rew[0])} ₽ · +${RIVAL_CHALLENGES[r.rivalsMet].rew[1]} Éclats</b></div></div>`
       : ''
   );
 

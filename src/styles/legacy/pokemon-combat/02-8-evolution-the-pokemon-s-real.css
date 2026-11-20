@@ -241,7 +241,7 @@ html:not(#pkz) body:not(#pkz) .evofx.fast .efx::after {
 }
 
 @media (prefers-reduced-motion: reduce) {
-    #bSvg .pk73fx {
+  #bSvg .pk73fx {
     display: none;
   }
   #bSvg .tok.pk-wait {

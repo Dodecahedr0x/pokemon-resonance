@@ -202,7 +202,7 @@ export function init() {
   });
   HOOKS.battleResult.unshift(r =>
     r.talentTree
-      ? `<div class="res-l"><h4>Talents</h4><div class="rl"><span>Bonus de talents : ${esc(r.talentTree.join(', '))}</span></div></div>`
+      ? `<div class="result-list"><h4>Talents</h4><div class="result-row"><span>Bonus de talents : ${esc(r.talentTree.join(', '))}</span></div></div>`
       : ''
   );
   document.addEventListener('click', onTalentTreeClick, true);

@@ -104,7 +104,7 @@ export function init() {
 
   HOOKS.battleResult.push(r =>
     r.doctrineChoice && DOCTRINE_DEFS[r.doctrineChoice]
-      ? `<div class="res-l"><h4>Doctrine</h4><div class="rl"><span>${DOCTRINE_DEFS[r.doctrineChoice].n}${r.loot ? ' : butin de la victoire' : ''}</span><b>${r.loot ? '+' + fmt(r.loot) + ' ₽' : ''}</b></div></div>`
+      ? `<div class="result-list"><h4>Doctrine</h4><div class="result-row"><span>${DOCTRINE_DEFS[r.doctrineChoice].n}${r.loot ? ' : butin de la victoire' : ''}</span><b>${r.loot ? '+' + fmt(r.loot) + ' ₽' : ''}</b></div></div>`
       : ''
   );
 

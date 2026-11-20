@@ -431,7 +431,7 @@ export function init() {
     if (!r.ami) {
       return '';
     }
-    return `<div class="res-l"><h4>Défi entre amis</h4><div class="rl"><span>${r.ami.win ? 'Victoire' : 'Défaite'} contre l’équipe de ${esc(r.ami.n)} · ${r.ami.w} victoire${r.ami.w > 1 ? 's' : ''}, ${r.ami.l} défaite${r.ami.l > 1 ? 's' : ''}${r.ami.prem ? ' · première victoire du jour : +3 Éclats' : ''}.</span><b>${r.ami.w}–${r.ami.l}</b></div></div>`;
+    return `<div class="result-list"><h4>Défi entre amis</h4><div class="result-row"><span>${r.ami.win ? 'Victoire' : 'Défaite'} contre l’équipe de ${esc(r.ami.n)} · ${r.ami.w} victoire${r.ami.w > 1 ? 's' : ''}, ${r.ami.l} défaite${r.ami.l > 1 ? 's' : ''}${r.ami.prem ? ' · première victoire du jour : +3 Éclats' : ''}.</span><b>${r.ami.w}–${r.ami.l}</b></div></div>`;
   });
 
   /* ---------- achievements ---------- */

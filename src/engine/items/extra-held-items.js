@@ -100,7 +100,7 @@ export function init() {
 
   HOOKS.battleResult.unshift(r =>
     r.tmReward
-      ? `<div class="res-l"><h4>Récompense de rang S</h4><div class="rl"><span>${esc(SHOP[r.tmReward].n)} ajoutée au Sac</span><b>CT</b></div></div>`
+      ? `<div class="result-list"><h4>Récompense de rang S</h4><div class="result-row"><span>${esc(SHOP[r.tmReward].n)} ajoutée au Sac</span><b>CT</b></div></div>`
       : ''
   );
 

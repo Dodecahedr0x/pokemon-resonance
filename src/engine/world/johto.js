@@ -707,8 +707,8 @@ export function init() {
     }
     const it = j.item ? ` · ${ITEMS2[j.item].n} rejoint votre Sac` : '';
     return j.final
-      ? `<div class="res-l"><h4>Johto</h4><div class="rl"><span>Vous êtes Maître de Johto${it}.</span><b>★</b></div></div>`
-      : `<div class="res-l"><h4>Johto</h4><div class="rl"><span>Badge ${JGYMS[j.i]} de Johto obtenu${it}.</span><b>${(PROFILE.johto || []).length} / 8</b></div></div>`;
+      ? `<div class="result-list"><h4>Johto</h4><div class="result-row"><span>Vous êtes Maître de Johto${it}.</span><b>★</b></div></div>`
+      : `<div class="result-list"><h4>Johto</h4><div class="result-row"><span>Badge ${JGYMS[j.i]} de Johto obtenu${it}.</span><b>${(PROFILE.johto || []).length} / 8</b></div></div>`;
   });
   PLACES_J.forEach(p => (PL[p.id] = p));
   document.addEventListener('click', e => {

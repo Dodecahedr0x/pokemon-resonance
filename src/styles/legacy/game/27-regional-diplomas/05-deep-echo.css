@@ -4,12 +4,10 @@
 
 /* <style id="resonance-individuals-comfort"> */
 /* v4.32 · accessibility */
-html.a11y-t1 #sheet,
-html.a11y-t1 #cbResult {
+html.a11y-t1 #sheet {
   zoom: 1.1;
 }
-html.a11y-t2 #sheet,
-html.a11y-t2 #cbResult {
+html.a11y-t2 #sheet {
   zoom: 1.22;
 }
 html.a11y-hc {

@@ -198,7 +198,7 @@ export function init() {
       return '';
     }
     const mx = Math.max(1, ...j.rows.map(x => x.d));
-    return `<div class="res-l battle-report"><h4>Rapport tactique</h4>${j.rows
+    return `<div class="result-list battle-report"><h4>Rapport tactique</h4>${j.rows
       .map(x => {
         const m = BY[x.id] || BY[x.sp];
         return `<div class="battle-report-r${j.mvp === x.uid ? ' mvp' : ''}${x.ko ? ' ko' : ''}">${medal(m.t, 'is-small')}<span class="battle-report-n"><b>${m.n}</b>${j.mvp === x.uid ? '<em>MVP</em>' : ''}</span><span class="battle-report-b"><i style="width:${Math.round((x.d / mx) * 100)}%"></i></span><span class="battle-report-v" title="Dégâts infligés · subis · K.O.">${x.d} <small>/ ${x.t}${x.k ? ` · ${x.k} K.O.` : ''}</small></span></div>`;

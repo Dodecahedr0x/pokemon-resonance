@@ -140,10 +140,13 @@ export function init() {
 
   HOOKS.battleResult.push(r =>
     r.challenges
-      ? `<div class="res-l"><h4>Défis</h4><div class="rl"><span>${r.challenges.map(k => CHALLENGES[k][0]).join(', ')}${r.challengeBonus ? ` : +${r.challengeBonus} Éclats` : ''}</span><b>${r.challenges.length}</b></div>${(
+      ? `<div class="result-list"><h4>Défis</h4><div class="result-row"><span>${r.challenges.map(k => CHALLENGES[k][0]).join(', ')}${r.challengeBonus ? ` : +${r.challengeBonus} Éclats` : ''}</span><b>${r.challenges.length}</b></div>${(
           r.graves || []
         )
-          .map(b => `<div class="rl tombe">${medal(BY[b].t)}<span>${BY[b].n} est tombé au combat.</span><b>✝</b></div>`)
+          .map(
+            b =>
+              `<div class="result-row is-fallen">${medal(BY[b].t)}<span>${BY[b].n} est tombé au combat.</span><b>✝</b></div>`
+          )
           .join('')}</div>`
       : ''
   );

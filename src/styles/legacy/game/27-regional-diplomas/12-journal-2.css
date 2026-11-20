@@ -1,15 +1,12 @@
 /* journal */
 @media (prefers-reduced-motion: reduce) {
   .burst-particle,
-.screen-shake,
-.shake-big,
-.board-weather i,
-.res-card.result-fx::before,
-.res-card.result-fx::after,
-.result-badge {
+  .screen-shake,
+  .shake-big,
+  .board-weather i {
     animation: none !important;
   }
-  }
+}
 
 /* <style id="resonance-hidden-finds"> */
 /* v4.50 */
@@ -37,23 +34,6 @@
 }
 
 /* <style id="resonance-nuzlocke-ui"> */
-.nuzlocke-run {
-  padding: var(--space-md) var(--space-md);
-  border-radius: 14px;
-  background: rgba(190, 40, 40, 0.12);
-  border: 1px solid rgba(230, 90, 90, 0.45);
-}
-.nuzlocke-run h4 {
-  margin: 0 0 var(--space-2xs);
-  color: #ff9a9a;
-  font-size: 12px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-.nuzlocke-run p {
-  margin: var(--space-3xs) 0;
-  font-size: 13.5px;
-}
 /* <style id="resonance-hero-weather"> */
 /* v4.52 */
 @keyframes battle-help {

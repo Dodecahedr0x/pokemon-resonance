@@ -196,7 +196,7 @@ export function init() {
 
   HOOKS.battleResult.push(r =>
     r.mut
-      ? `<div class="res-l"><h4>Mutateur</h4><div class="rl"><span>${mutInfo(r.mut)[0]} : +50 % de Pokédollars</span><b>×1,5</b></div></div>`
+      ? `<div class="result-list"><h4>Mutateur</h4><div class="result-row"><span>${mutInfo(r.mut)[0]} : +50 % de Pokédollars</span><b>×1,5</b></div></div>`
       : ''
   );
 }

@@ -90,7 +90,7 @@ export function init() {
 
   HOOKS.battleResult.push(r =>
     r.masteryTrack
-      ? `<div class="res-l"><h4>Maîtrise</h4><div class="rl"><span>${r.masteryTrack.map(b => BY[b].n).join(', ')} : un bonus de maîtrise est à choisir (Camp › Maîtrise).</span><b>★</b></div></div>`
+      ? `<div class="result-list"><h4>Maîtrise</h4><div class="result-row"><span>${r.masteryTrack.map(b => BY[b].n).join(', ')} : un bonus de maîtrise est à choisir (Camp › Maîtrise).</span><b>★</b></div></div>`
       : ''
   );
 

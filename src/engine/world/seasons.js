@@ -180,7 +180,7 @@ export function init() {
 
   HOOKS.battleResult.push(r =>
     r.season
-      ? `<div class="res-l"><h4>${season() ? season().n : 'Saison'}</h4><div class="rl"><span>Capture de saison : +${r.season} Éclat${r.season > 1 ? 's' : ''}</span><b>✦</b></div></div>`
+      ? `<div class="result-list"><h4>${season() ? season().n : 'Saison'}</h4><div class="result-row"><span>Capture de saison : +${r.season} Éclat${r.season > 1 ? 's' : ''}</span><b>✦</b></div></div>`
       : ''
   );
 

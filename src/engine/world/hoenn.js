@@ -502,8 +502,8 @@ export function init() {
       return '';
     }
     return h.final
-      ? '<div class="res-l"><h4>Hoenn</h4><div class="rl"><span>Vous êtes Maître de Hoenn : trois régions conquises.</span><b>★</b></div></div>'
-      : `<div class="res-l"><h4>Hoenn</h4><div class="rl"><span>Badge ${HGYMS[h.i]} de Hoenn obtenu.</span><b>${(PROFILE.hoenn || []).length} / 8</b></div></div>`;
+      ? '<div class="result-list"><h4>Hoenn</h4><div class="result-row"><span>Vous êtes Maître de Hoenn : trois régions conquises.</span><b>★</b></div></div>'
+      : `<div class="result-list"><h4>Hoenn</h4><div class="result-row"><span>Badge ${HGYMS[h.i]} de Hoenn obtenu.</span><b>${(PROFILE.hoenn || []).length} / 8</b></div></div>`;
   });
   ACHIEVEMENTS.push(
     {

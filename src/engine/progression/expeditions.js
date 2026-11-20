@@ -191,7 +191,7 @@ export function init() {
 
   HOOKS.battleResult.push(r =>
     r.exp
-      ? `<div class="res-l"><h4>Expéditions</h4><div class="rl"><span>${r.exp} Pokémon ${r.exp > 1 ? 'sont revenus' : 'est revenu'} d’expédition : récupérez leurs trouvailles au Camp (Accueil).</span><b>${r.exp}</b></div></div>`
+      ? `<div class="result-list"><h4>Expéditions</h4><div class="result-row"><span>${r.exp} Pokémon ${r.exp > 1 ? 'sont revenus' : 'est revenu'} d’expédition : récupérez leurs trouvailles au Camp (Accueil).</span><b>${r.exp}</b></div></div>`
       : ''
   );
 }

@@ -25,7 +25,7 @@ export default function Result() {
   const v = useBattleVersion('result');
   const S = useKeyed(() => B, [v]); // the finished battle, frozen for this sheet
   const card = useRef(null);
-  // holographic edge, seal and burst (v4.72): applied on the next frame, once the sheet is visible
+  // holographic edge, seal and confetti: applied on the next frame, once the sheet is visible
   const [deco, setDeco] = useState(null);
   useLayoutEffect(() => {
     if (!v || !S) {
@@ -42,7 +42,7 @@ export default function Result() {
         v,
         relics: cs.position === 'static',
         holo: !scrolls,
-        confetti: c.classList.contains('win') && !calmMotion(),
+        confetti: c.classList.contains('is-win') && !calmMotion(),
       });
     });
     return () => cancelAnimationFrame(id);
@@ -67,10 +67,10 @@ function Sheet({ S, cardRef, decor: deco }) {
     ia = ARENAS.findIndex(a => a.k === S.sc),
     nz = S._nuzlockeDeaths; // Nuzlocke (v4.51)
   const cls =
-    `res-card ${win ? 'win' : 'lose'}` +
-    (fx ? ' result-fx' : '') +
-    (fx && /^(champ|jchamp|hchamp)$/.test(S.sc) ? ' gold-glow' : '') +
-    (nz ? ' nuzlocke-run-d' : '');
+    `result-card ${win ? 'is-win' : 'is-loss'}` +
+    (fx ? ' is-celebrating' : '') +
+    (fx && /^(champ|jchamp|hchamp)$/.test(S.sc) ? ' is-champion' : '') +
+    (nz ? ' is-nuzlocke' : '');
   // Resonance Tower: go up or start over; elsewhere, the rest of the campaign
   const tower = S.sc === 'tdr',
     run = tower && towerRun();
@@ -90,7 +90,7 @@ function Sheet({ S, cardRef, decor: deco }) {
         </div>
       ) : null}
       {S.rank ? (
-        <div className={`rk-st rk-${S.rank}`} aria-label={`Rang ${S.rank}`}>
+        <div className={`result-rank is-rank-${S.rank.toLowerCase()}`} aria-label={`Rang ${S.rank}`}>
           <b>{S.rank}</b>
           <span>
             {S.rank === 'S' ? 'Parfait' : S.rank === 'A' ? 'Maîtrisé' : 'Victoire'}
@@ -103,7 +103,7 @@ function Sheet({ S, cardRef, decor: deco }) {
         {du ? <Html html={duelTitle(S)} /> : win ? 'Victoire' : S.fled ? 'Il s’est enfui' : 'Défaite'}
       </h2>
       {L ? (
-        <blockquote className="res-q">
+        <blockquote className="result-quote">
           <q>
             <Html html={win ? L.w : L.l} />
           </q>
@@ -113,7 +113,7 @@ function Sheet({ S, cardRef, decor: deco }) {
         </blockquote>
       ) : null}
       {win && gy ? (
-        <div className={'res-bdg' + (nb ? ' new' : '')}>
+        <div className={'result-badge-row' + (nb ? ' is-new' : '')}>
           <Html html={badgeSvg(D.gym, D.at, 'rb' + D.gym)} />
           <span>
             <b>Badge {D.at}</b>
@@ -139,7 +139,7 @@ function Sheet({ S, cardRef, decor: deco }) {
         )}
       </p>
       {NL}
-      <div className="res-k">
+      <div className="result-stats">
         <div>
           <b>{S.round}</b>
           <span>Manches</span>
@@ -159,10 +159,10 @@ function Sheet({ S, cardRef, decor: deco }) {
       </div>
       {NL}
       {evl.length ? (
-        <div className="res-l">
+        <div className="result-list">
           <h4>Éveils décisifs</h4>
           {evl.map(([a, b, r], i) => (
-            <div key={i} className="rl">
+            <div key={i} className="result-row">
               <Html html={medal(BY[a].t)} />
               <Html html={medal(BY[b].t)} />
               <span>
@@ -191,7 +191,7 @@ function Sheet({ S, cardRef, decor: deco }) {
           {nz.spared ? <p>{nz.spared} est votre dernier compagnon : il est épargné.</p> : null}
         </div>
       ) : null}
-      <div className="res-a">
+      <div className="result-actions">
         {tower ? (
           run && run.reward ? (
             <Button variant="primary" data-tdrn="reward">
@@ -224,17 +224,17 @@ function Sheet({ S, cardRef, decor: deco }) {
           </Button>
         )}
       </div>
-      {deco && deco.holo ? <i className="pk-holo" aria-hidden="true" /> : null}
-      {deco ? <i className="pk-sceau" aria-hidden="true" /> : null}
+      {deco && deco.holo ? <i className="result-holo" aria-hidden="true" /> : null}
+      {deco ? <i className="result-seal" aria-hidden="true" /> : null}
       {deco && deco.confetti ? (
-        <span className="pk-gerbe" aria-hidden="true">
+        <span className="result-confetti" aria-hidden="true">
           {Array.from({ length: 16 }, (_, i) => (
             <i
               key={i}
               style={{
-                '--a': `${Math.round(i * 22.5 + (i % 2) * 9)}deg`,
-                '--r': `${-80 - (i % 3) * 26}px`,
-                '--d': `${(0.32 + (i % 4) * 0.05).toFixed(2)}s`,
+                '--confetti-angle': `${Math.round(i * 22.5 + (i % 2) * 9)}deg`,
+                '--confetti-distance': `${-80 - (i % 3) * 26}px`,
+                '--confetti-delay': `${(0.32 + (i % 4) * 0.05).toFixed(2)}s`,
               }}
             />
           ))}

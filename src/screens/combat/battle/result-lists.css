@@ -1,0 +1,109 @@
+/* Battle › end-of-battle sheet › the lists under the stats (.result-list, rows .result-row), built by Result.jsx and by
+   the engine's reward sections; .is-gains (money and shards), .is-champion, rows .is-shiny, .is-fallen, .is-achievement,
+   .is-replay; and the Nuzlocke note. */
+
+.result-list {
+  display: grid;
+  gap: var(--space-sm);
+}
+.result-list.is-champion {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  padding: clamp(22px, 4vw, 40px);
+  border: 1px solid transparent;
+  border-radius: var(--radius-card-large);
+  background: var(--surface-plate);
+  border-color: var(--color-line-plate);
+  box-shadow: var(--shadow-plate);
+}
+@media (max-width: 860px) {
+  .result-list.is-champion {
+    grid-template-columns: 1fr;
+  }
+}
+.result-list.is-champion p:not(:where(.kicker)) {
+  font-size: 15px;
+  color: var(--color-text-secondary);
+}
+.result-list h4 {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+.result-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: 13.5px;
+}
+.result-row .medal {
+  width: 28px;
+  height: 28px;
+  box-shadow: none;
+}
+.result-row .medal + .medal {
+  margin-left: calc(var(--space-sm) * -1);
+}
+.result-row b {
+  margin-left: auto;
+  color: var(--color-accent);
+  font-family: var(--font-numeric);
+  font-stretch: 72%;
+  font-variant-numeric: tabular-nums lining-nums;
+  letter-spacing: -0.01em;
+}
+.result-list .it-ic {
+  width: 30px;
+  height: 30px;
+}
+.is-gains .result-row b {
+  color: #ffe17b;
+}
+.result-row .it-ic {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+}
+.result-row.is-shiny b {
+  color: #ffe9a3;
+}
+.result-list .result-row.is-fallen {
+  opacity: 0.8;
+}
+.result-list .result-row.is-achievement b:last-child {
+  color: #ffd75e;
+}
+.result-list .result-row.is-replay {
+  align-items: center;
+}
+.result-list .result-row.is-replay span {
+  flex: 1;
+}
+.result-list .result-row > b:last-child {
+  white-space: nowrap;
+}
+.nuzlocke-run {
+  padding: var(--space-md) var(--space-md);
+  border-radius: 14px;
+  background: rgba(190, 40, 40, 0.12);
+  border: 1px solid rgba(230, 90, 90, 0.45);
+}
+.nuzlocke-run h4 {
+  margin: 0 0 var(--space-2xs);
+  color: #ff9a9a;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.nuzlocke-run p {
+  margin: var(--space-3xs) 0;
+  font-size: 13.5px;
+}

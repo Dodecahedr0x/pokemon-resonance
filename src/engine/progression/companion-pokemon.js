@@ -201,7 +201,7 @@ export function init() {
     }
     const h = affinityHearts(PROFILE.comp.aff || 0),
       B2 = COMP_BONUS.find(([n]) => n === c.up);
-    return `<div class="res-l"><h4>Compagnon</h4><div class="rl">${medal(BY[c.id].t)}<span>${BY[c.id].n} : +${c.n} d’affection${c.up ? ` · <b>${c.up} cœur${c.up > 1 ? 's' : ''} !</b>${B2 ? ` Nouveau bonus : ${B2[1]} (${B2[2]}).` : ''}` : ''}</span><b class="cp-h">${'♥'.repeat(h) || '♡'}</b></div></div>`;
+    return `<div class="result-list"><h4>Compagnon</h4><div class="result-row">${medal(BY[c.id].t)}<span>${BY[c.id].n} : +${c.n} d’affection${c.up ? ` · <b>${c.up} cœur${c.up > 1 ? 's' : ''} !</b>${B2 ? ` Nouveau bonus : ${B2[1]} (${B2[2]}).` : ''}` : ''}</span><b class="cp-h">${'♥'.repeat(h) || '♡'}</b></div></div>`;
   });
 
   // #compBox: rendered by React (src/screens/overlays/CompBox.jsx)

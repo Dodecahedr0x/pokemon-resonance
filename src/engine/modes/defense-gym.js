@@ -182,7 +182,7 @@ export function init() {
     if (!t) {
       return '';
     }
-    return `<div class="res-l"><h4>Arène de défense</h4><div class="rl"><span>${t.win ? `<b>Défense tenue !</b> ${DEF_WAVES} vagues repoussées, ${t.lives} vie${t.lives > 1 ? 's' : ''} restante${t.lives > 1 ? 's' : ''}.` : `Vous avez tenu jusqu’à la vague ${t.w} sur ${DEF_WAVES}.`}</span></div></div>`;
+    return `<div class="result-list"><h4>Arène de défense</h4><div class="result-row"><span>${t.win ? `<b>Défense tenue !</b> ${DEF_WAVES} vagues repoussées, ${t.lives} vie${t.lives > 1 ? 's' : ''} restante${t.lives > 1 ? 's' : ''}.` : `Vous avez tenu jusqu’à la vague ${t.w} sur ${DEF_WAVES}.`}</span></div></div>`;
   });
 
   // wave banner (#defenseGymHud): rendered by React (src/screens/combat/battle/Battle.jsx)

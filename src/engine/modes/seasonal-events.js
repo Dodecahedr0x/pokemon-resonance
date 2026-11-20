@@ -172,7 +172,7 @@ export function init() {
 
   HOOKS.battleResult.unshift(r =>
     r.seasonEvent
-      ? `<div class="res-l"><h4>${esc(eventSeason().n)}</h4><div class="rl"><span>Points de saison : +${r.seasonEvent.n}</span><b>${r.seasonEvent.tot}</b></div></div>`
+      ? `<div class="result-list"><h4>${esc(eventSeason().n)}</h4><div class="result-row"><span>Points de saison : +${r.seasonEvent.n}</span><b>${r.seasonEvent.tot}</b></div></div>`
       : ''
   );
 

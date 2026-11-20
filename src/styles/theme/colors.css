@@ -33,6 +33,8 @@
   --color-line-bright: var(--line3);
   /* base surface of panels and sheets */
   --color-surface: var(--s1);
+  /* a step above the surface: stat tiles, raised wells */
+  --color-surface-raised: var(--s3);
   /* "fine", "gained" (blue in this palette) */
   --color-positive: var(--ok);
   --color-warning: var(--warn);

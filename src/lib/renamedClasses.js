@@ -630,6 +630,25 @@ export const RENAMED_CLASSES = {
   'x2470-r': 'trainer-challenges-rivalry',
   'x2470-v': 'trainer-challenges-showcase',
   'x2470-c': 'trainer-challenges-relic',
+  // Result slice: the end-of-battle sheet (Result.jsx) and the engine's reward rows
+  'res-card': 'result-card',
+  'res-q': 'result-quote',
+  'res-bdg': 'result-badge-row',
+  'res-k': 'result-stats',
+  'res-l': 'result-list',
+  rl: 'result-row',
+  'res-a': 'result-actions',
+  'pk-holo': 'result-holo',
+  'pk-sceau': 'result-seal',
+  'pk-gerbe': 'result-confetti',
+  'result-fx': 'is-celebrating',
+  'gold-glow': 'is-champion',
+  'rk-st': 'result-rank',
+  'rk-S': 'is-rank-s',
+  'rk-A': 'is-rank-a',
+  'rk-B': 'is-rank-b',
+  'nuzlocke-run-d': 'is-nuzlocke',
+  'v4-gain': 'is-gains',
 };
 
 const OLD_CLASS = new RegExp(

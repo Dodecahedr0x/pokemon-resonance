@@ -347,7 +347,7 @@ export function init() {
   });
   HOOKS.battleResult.push(r =>
     r.hoennLegend
-      ? `<div class="res-l"><h4>Légende de Hoenn</h4><div class="rl">${medal(BY[r.hoennLegend].t)}<span>${BY[r.hoennLegend].n} vaincu · ${(PROFILE.hleg || []).length} / ${HOENN_LEGEND_DEFS.length} légendes de Hoenn. Sa capture est ouverte dans Quêtes › Légendes dès que sa quête est terminée.</span><b>★</b></div></div>`
+      ? `<div class="result-list"><h4>Légende de Hoenn</h4><div class="result-row">${medal(BY[r.hoennLegend].t)}<span>${BY[r.hoennLegend].n} vaincu · ${(PROFILE.hleg || []).length} / ${HOENN_LEGEND_DEFS.length} légendes de Hoenn. Sa capture est ouverte dans Quêtes › Légendes dès que sa quête est terminée.</span><b>★</b></div></div>`
       : ''
   );
 }

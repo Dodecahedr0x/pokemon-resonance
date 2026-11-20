@@ -74,10 +74,10 @@ export function init() {
 
   HOOKS.battleResult.push(r =>
     r.regionDiplomas
-      ? `<div class="res-l"><h4>Pokédex régional</h4>${r.regionDiplomas
+      ? `<div class="result-list"><h4>Pokédex régional</h4>${r.regionDiplomas
           .map(
             x =>
-              `<div class="rl"><span>${FAMILY_REGION_NAMES[x]} : les ${familyCaptureStats(x).t} familles sont capturées !</span><b>+${DIPLOMA_REWARDS[x][0]} ₽ · +${DIPLOMA_REWARDS[x][1]} Éclats</b></div>`
+              `<div class="result-row"><span>${FAMILY_REGION_NAMES[x]} : les ${familyCaptureStats(x).t} familles sont capturées !</span><b>+${DIPLOMA_REWARDS[x][0]} ₽ · +${DIPLOMA_REWARDS[x][1]} Éclats</b></div>`
           )
           .join('')}</div>`
       : ''

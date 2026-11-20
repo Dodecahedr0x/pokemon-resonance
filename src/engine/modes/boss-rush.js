@@ -321,12 +321,12 @@ export function init() {
       return '';
     }
     if (t.gagne) {
-      return `<div class="res-l"><h4>Boss Rush</h4><div class="rl"><span><b>Boss Rush terminé !</b> ${t.n} boss battus à la suite : +10 Éclats.</span><b>🏆</b></div></div>`;
+      return `<div class="result-list"><h4>Boss Rush</h4><div class="result-row"><span><b>Boss Rush terminé !</b> ${t.n} boss battus à la suite : +10 Éclats.</span><b>🏆</b></div></div>`;
     }
     if (t.fin) {
-      return `<div class="res-l"><h4>Boss Rush</h4><div class="rl"><span>Le run s’arrête au boss ${t.i + 1} sur ${t.n}. Record : ${bossRushState().best}.</span></div></div>`;
+      return `<div class="result-list"><h4>Boss Rush</h4><div class="result-row"><span>Le run s’arrête au boss ${t.i + 1} sur ${t.n}. Record : ${bossRushState().best}.</span></div></div>`;
     }
-    return `<div class="res-l"><h4>Boss Rush</h4><div class="rl"><span>Boss ${t.i} sur ${t.n}. Prochain : ${esc(t.displayName)}. Vos PV ne se régénèrent pas.</span><button type="button" class="button button-small button-primary" data-boss-rush="suite">Étape suivante</button></div></div>`;
+    return `<div class="result-list"><h4>Boss Rush</h4><div class="result-row"><span>Boss ${t.i} sur ${t.n}. Prochain : ${esc(t.displayName)}. Vos PV ne se régénèrent pas.</span><button type="button" class="button button-small button-primary" data-boss-rush="suite">Étape suivante</button></div></div>`;
   });
 
   document.addEventListener('click', onBossRushClick, true);

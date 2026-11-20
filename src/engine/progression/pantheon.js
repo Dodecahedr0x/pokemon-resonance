@@ -52,7 +52,7 @@ export function init() {
 
   HOOKS.battleResult.push(r =>
     r.pantheonlist
-      ? `<div class="res-l"><h4>Panthéon</h4><div class="rl"><span>Votre équipe est gravée au Panthéon : ${r.pantheonlist}.</span><b>★</b></div></div>`
+      ? `<div class="result-list"><h4>Panthéon</h4><div class="result-row"><span>Votre équipe est gravée au Panthéon : ${r.pantheonlist}.</span><b>★</b></div></div>`
       : ''
   );
 

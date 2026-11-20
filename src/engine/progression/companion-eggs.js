@@ -354,7 +354,7 @@ export function init() {
     return r.eggShop
       .map(
         x =>
-          `<div class="res-l"><h4>Élevage</h4><div class="rl">${medal(BY[x.id].t)}<span>Un œuf a éclos : ${BY[x.id].n}${x.sh ? ' chromatique !' : ''} rejoint votre Box !</span><b>🥚</b></div></div>`
+          `<div class="result-list"><h4>Élevage</h4><div class="result-row">${medal(BY[x.id].t)}<span>Un œuf a éclos : ${BY[x.id].n}${x.sh ? ' chromatique !' : ''} rejoint votre Box !</span><b>🥚</b></div></div>`
       )
       .join('');
   });

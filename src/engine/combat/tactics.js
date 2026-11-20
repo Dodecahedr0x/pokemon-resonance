@@ -637,7 +637,7 @@ export function init() {
       return '';
     }
     const C = colossusOf(r.colossus);
-    return `<div class="res-l"><h4>Colosse</h4><div class="rl">${medal(BY[C.id].t)}<span>${C.n} terrassé · ${PROFILE.colossi.length} / ${COLOSSI.length} colosses</span><b>★</b></div></div>`;
+    return `<div class="result-list"><h4>Colosse</h4><div class="result-row">${medal(BY[C.id].t)}<span>${C.n} terrassé · ${PROFILE.colossi.length} / ${COLOSSI.length} colosses</span><b>★</b></div></div>`;
   });
   /* ---------- TMs, DTs and HMs in the Shop ---------- */
   [

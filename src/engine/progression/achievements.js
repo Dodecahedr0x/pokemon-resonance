@@ -231,10 +231,10 @@ export function init() {
   });
   HOOKS.battleResult.push(r =>
     r.achievements
-      ? `<div class="res-l"><h4>Succès</h4>${r.achievements
+      ? `<div class="result-list"><h4>Succès</h4>${r.achievements
           .map(id => {
             const s = ACHIEVEMENTS.find(x => x.id === id);
-            return `<div class="rl succ"><span><b>${s.n}</b> · ${s.d}${s.t ? ` Titre gagné : « ${s.t} ».` : ''}</span><b>★</b></div>`;
+            return `<div class="result-row is-achievement"><span><b>${s.n}</b> · ${s.d}${s.t ? ` Titre gagné : « ${s.t} ».` : ''}</span><b>★</b></div>`;
           })
           .join('')}</div>`
       : ''

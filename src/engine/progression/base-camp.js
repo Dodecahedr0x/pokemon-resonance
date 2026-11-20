@@ -230,7 +230,7 @@ export function init() {
   HOOKS.progress.push(onProgress);
   HOOKS.battleResult.push(r =>
     r.oeuf
-      ? `<div class="res-l"><h4>Pension</h4><div class="rl">${medal(BY[r.oeuf].t)}<span>Un œuf a éclos : ${BY[r.oeuf].n} rejoint votre Box !</span><b>🥚</b></div></div>`
+      ? `<div class="result-list"><h4>Pension</h4><div class="result-row">${medal(BY[r.oeuf].t)}<span>Un œuf a éclos : ${BY[r.oeuf].n} rejoint votre Box !</span><b>🥚</b></div></div>`
       : ''
   );
 }

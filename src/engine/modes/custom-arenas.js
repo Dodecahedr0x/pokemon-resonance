@@ -200,7 +200,7 @@ function onCustomArenasClick(e) {
 export function init() {
   HOOKS.battleResult.push(r =>
     r.perso431
-      ? `<div class="res-l"><h4>Arène personnalisée</h4><div class="rl"><span>${r.perso431.win ? (r.perso431.m ? 'Victoire récompensée' : 'Victoire (déjà 3 récompenses aujourd’hui)') : 'Défaite'}</span><b>${r.perso431.m ? '+200 ₽' : ''}</b></div></div>`
+      ? `<div class="result-list"><h4>Arène personnalisée</h4><div class="result-row"><span>${r.perso431.win ? (r.perso431.m ? 'Victoire récompensée' : 'Victoire (déjà 3 récompenses aujourd’hui)') : 'Défaite'}</span><b>${r.perso431.m ? '+200 ₽' : ''}</b></div></div>`
       : ''
   );
 

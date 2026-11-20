@@ -315,20 +315,6 @@
   }
 }
 /* result */
-.res-card {
-  background:
-    radial-gradient(90% 60% at 50% 0%, rgba(227, 192, 122, 0.16), transparent 70%) padding-box,
-    var(--hatch) padding-box,
-    var(--surf) padding-box,
-    var(--gold-grad) border-box;
-}
-.res-card.lose {
-  background:
-    radial-gradient(90% 60% at 50% 0%, rgba(255, 103, 103, 0.14), transparent 70%) padding-box,
-    var(--hatch) padding-box,
-    var(--surf) padding-box,
-    var(--bevel) border-box;
-}
 @media (prefers-reduced-motion: reduce) {
   .efx,
   .efx * {

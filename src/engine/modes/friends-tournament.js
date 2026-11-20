@@ -149,12 +149,12 @@ export function init() {
       return '';
     }
     if (t.gagne) {
-      return `<div class="res-l"><h4>Tournoi entre amis</h4><div class="rl"><span><b>Tournoi remporté !</b> ${t.n} équipes battues à la suite : +10 Éclats.</span><b>🏆</b></div></div>`;
+      return `<div class="result-list"><h4>Tournoi entre amis</h4><div class="result-row"><span><b>Tournoi remporté !</b> ${t.n} équipes battues à la suite : +10 Éclats.</span><b>🏆</b></div></div>`;
     }
     if (t.fin) {
-      return `<div class="res-l"><h4>Tournoi entre amis</h4><div class="rl"><span>Le tournoi s’arrête au combat ${t.i + 1} sur ${t.n}. Record : ${PROFILE.tournoi.best} victoire${PROFILE.tournoi.best > 1 ? 's' : ''}.</span><b>${t.i} / ${t.n}</b></div></div>`;
+      return `<div class="result-list"><h4>Tournoi entre amis</h4><div class="result-row"><span>Le tournoi s’arrête au combat ${t.i + 1} sur ${t.n}. Record : ${PROFILE.tournoi.best} victoire${PROFILE.tournoi.best > 1 ? 's' : ''}.</span><b>${t.i} / ${t.n}</b></div></div>`;
     }
-    return `<div class="res-l"><h4>Tournoi entre amis</h4><div class="rl"><span>Victoire ${t.i} sur ${t.n}. Prochain adversaire : ${esc(t.displayName)}. Vos PV restent tels quels.</span><button type="button" class="button button-small button-primary" data-tournoi="suite">Combat suivant</button></div></div>`;
+    return `<div class="result-list"><h4>Tournoi entre amis</h4><div class="result-row"><span>Victoire ${t.i} sur ${t.n}. Prochain adversaire : ${esc(t.displayName)}. Vos PV restent tels quels.</span><button type="button" class="button button-small button-primary" data-tournoi="suite">Combat suivant</button></div></div>`;
   });
 
   document.addEventListener('click', e => {

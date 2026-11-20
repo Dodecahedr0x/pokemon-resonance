@@ -3,13 +3,6 @@
 .evofx.fast .efx * {
   animation-duration: 1.3s !important;
 }
-.res-l.champ {
-  box-shadow: inset 0 0 0 1px rgba(212, 175, 106, 0.5);
-}
-.res-l .it-ic {
-  width: 30px;
-  height: 30px;
-}
 /* tutorial */
 .coach-hl {
   outline: 2px solid rgba(242, 221, 168, 0.85) !important;

@@ -125,7 +125,7 @@ export function init() {
 
   HOOKS.battleResult.push(r =>
     r.fogOfWar
-      ? `<div class="res-l"><h4>Brouillard de guerre</h4><div class="rl"><span>${r.fogReward ? 'Victoire à l’aveugle' : 'Combat dans le brouillard'}</span><b>${r.fogReward ? '+' + fmt(r.fogReward) + ' ₽' : ''}</b></div></div>`
+      ? `<div class="result-list"><h4>Brouillard de guerre</h4><div class="result-row"><span>${r.fogReward ? 'Victoire à l’aveugle' : 'Combat dans le brouillard'}</span><b>${r.fogReward ? '+' + fmt(r.fogReward) + ' ₽' : ''}</b></div></div>`
       : ''
   );
 }

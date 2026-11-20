@@ -202,7 +202,7 @@ export function init() {
       return '';
     }
     const x = r.daycareEgg;
-    return `<div class="res-l"><h4>Pension</h4><div class="rl${x.sh ? ' shn' : ''}"${x.sh ? ` style="${shinyStyle(x.id)}"` : ''}>${medal(BY[x.id].t)}<span>Un œuf a éclos : un ${BY[x.id].n}${x.sh ? ' <b>chromatique</b>' : ''} !${x.mv ? ` Il hérite de <b>${MV[x.mv].n}</b> grâce à ${BY[x.father].n}.` : ''}</span><b><img class="res-egg" src="${ITM('oeuf')}" alt=""></b></div></div>`;
+    return `<div class="result-list"><h4>Pension</h4><div class="result-row${x.sh ? ' is-shiny' : ''}"${x.sh ? ` style="${shinyStyle(x.id)}"` : ''}>${medal(BY[x.id].t)}<span>Un œuf a éclos : un ${BY[x.id].n}${x.sh ? ' <b>chromatique</b>' : ''} !${x.mv ? ` Il hérite de <b>${MV[x.mv].n}</b> grâce à ${BY[x.father].n}.` : ''}</span><b><img class="res-egg" src="${ITM('oeuf')}" alt=""></b></div></div>`;
   });
 
   /* ---------- achievements ---------- */

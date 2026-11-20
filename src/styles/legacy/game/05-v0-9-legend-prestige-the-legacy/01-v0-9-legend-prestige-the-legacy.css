@@ -143,14 +143,12 @@ body {
 }
 
 .num,
-.res-k b,
 .st-right b,
 .st-no,
 .f-dmg,
 .f-heal,
 .fl,
-.mk-lv,
-.rl b {
+.mk-lv {
   font-family: var(--f-n);
   font-stretch: 72%;
   font-variant-numeric: tabular-nums lining-nums;
@@ -173,7 +171,6 @@ body {
 .scn,
 .mvc,
 .ptm,
-.res-card,
 .ep-card,
 .st-evo,
 .st-line,
@@ -181,8 +178,7 @@ body {
 .duo,
 .wx,
 .cs,
-.it,
-.champ {
+.it {
   border: 1px solid transparent;
   background:
     var(--veins) padding-box,
@@ -199,9 +195,7 @@ body {
 .scn,
 .qc,
 .duo,
-.res-card,
-.ep-card,
-.champ {
+.ep-card {
   border-radius: var(--rl);
 }
 .mvc,

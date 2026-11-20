@@ -975,7 +975,7 @@ export function init() {
       return '';
     }
     const et = n => '★'.repeat(n) + '☆'.repeat(3 - n);
-    return `<div class="res-l"><h4>Énigme n° ${e.i + 1}</h4><div class="rl"><span>${e.win ? `Résolue ${et(e.st)} · ${e.st === 3 ? 'du premier coup, sans Voix' : e.st === 2 ? (e.attempt === 1 ? 'du premier coup' : 'sans dépenser de Voix') : 'réussie'}${e.jour ? ' · énigme du jour : +3 Éclats' : ''}` : `Ratée (essai ${e.attempt}). Changez l’ordre de vos Pokémon et visez les mêmes cibles.`}</span><b>${e.win ? et(e.st) : ''}</b></div></div>`;
+    return `<div class="result-list"><h4>Énigme n° ${e.i + 1}</h4><div class="result-row"><span>${e.win ? `Résolue ${et(e.st)} · ${e.st === 3 ? 'du premier coup, sans Voix' : e.st === 2 ? (e.attempt === 1 ? 'du premier coup' : 'sans dépenser de Voix') : 'réussie'}${e.jour ? ' · énigme du jour : +3 Éclats' : ''}` : `Ratée (essai ${e.attempt}). Changez l’ordre de vos Pokémon et visez les mêmes cibles.`}</span><b>${e.win ? et(e.st) : ''}</b></div></div>`;
   });
 
   // in a riddle, ending your turn without having won means losing (opponents do not play)

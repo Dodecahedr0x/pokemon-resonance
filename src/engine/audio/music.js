@@ -375,7 +375,7 @@ export function init() {
   r = document.getElementById('cbResult');
   if (r && window.MutationObserver) {
     new MutationObserver(() => {
-      if (!r.hidden && r.querySelector('.res-card.win')) {
+      if (!r.hidden && r.querySelector('.result-card.is-win')) {
         if (!r._jinglePlayed) {
           r._jinglePlayed = true;
           playJingle(0, 'victoire', B && B.rew && B.rew.badgeNew ? 'badge' : '');

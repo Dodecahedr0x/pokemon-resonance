@@ -58,12 +58,6 @@ html body #evoPick .ep-card .section-title {
   font-size: 22px;
   letter-spacing: 0.03em;
 }
-html body #cbResult > .res-card {
-  width: min(640px, 100%);
-  padding: var(--space-xl);
-  gap: var(--space-md);
-  border-radius: 22px;
-}
 
 @media (max-width: 700px) {
   /* Awakening: sheet rising from the bottom, buttons under the thumb */
@@ -80,20 +74,6 @@ html body #cbResult > .res-card {
   }
   html body #evoPick .ep-card .section-title {
     font-size: 18px;
-  }
-  html body #cbResult {
-    padding: var(--space-sm) !important;
-  }
-  html body #cbResult > .res-card {
-    padding: var(--space-lg) var(--space-lg);
-  }
-  html body #cbResult .res-a {
-    display: flex;
-    flex-direction: column-reverse;
-    gap: var(--space-xs);
-  }
-  html body #cbResult .res-a .button {
-    width: 100%;
   }
 }
 @keyframes epUp {

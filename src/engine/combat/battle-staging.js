@@ -328,7 +328,7 @@ export function init() {
   if (res && window.MutationObserver) {
     new MutationObserver(() => {
       try {
-        if (!res.hidden && res.querySelector('.res-card')) {
+        if (!res.hidden && res.querySelector('.result-card')) {
           setTimeout(celebrateBadge, 250);
         }
       } catch {

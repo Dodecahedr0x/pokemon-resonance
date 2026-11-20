@@ -1,11 +1,5 @@
 /* --- Quests: achievements --- */
 /* --- result --- */
-html body .res-l .rl.tombe {
-  opacity: 0.8;
-}
-html body .res-l .rl.succ b:last-child {
-  color: #ffd75e;
-}
 /* --- Quests: 4 tabs that fit on a phone --- */
 
 /* ==== 26-v4.10-identite.css ==== */
@@ -45,12 +39,3 @@ html body .car-mvc .chip {
    ===================================================================== */
 /* the route takes on the colors of the season */
 /* result: the best move */
-html body .res-l .rl.rd {
-  align-items: center;
-}
-html body .res-l .rl.rd span {
-  flex: 1;
-}
-html body .res-l .rl > b:last-child {
-  white-space: nowrap;
-}

@@ -162,7 +162,7 @@ export function init() {
     l.push(
       `${b.rounds} manche${b.rounds > 1 ? 's' : ''}${b.kos ? `, ${b.kos} Pokémon tombé${b.kos > 1 ? 's' : ''}` : ''}`
     );
-    return `<div class="res-l"><h4>Journal des exploits</h4><div class="rl"><span>${l.join('<br>')}${b.ex.length ? `<br><em class="feats-journal-e">${b.ex.map(esc).join(' · ')}</em>` : ''}</span></div></div>`;
+    return `<div class="result-list"><h4>Journal des exploits</h4><div class="result-row"><span>${l.join('<br>')}${b.ex.length ? `<br><em class="feats-journal-e">${b.ex.map(esc).join(' · ')}</em>` : ''}</span></div></div>`;
   });
 
   HOOKS.combat.push(S => {

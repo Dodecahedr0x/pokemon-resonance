@@ -776,7 +776,7 @@ export function init() {
 
   HOOKS.battleResult.push(r =>
     r.resonant
-      ? `<div class="res-l"><h4>Résonance</h4><div class="rl"><span>Résonances déclenchées par votre équipe</span><b>${r.resonant}</b></div></div>`
+      ? `<div class="result-list"><h4>Résonance</h4><div class="result-row"><span>Résonances déclenchées par votre équipe</span><b>${r.resonant}</b></div></div>`
       : ''
   );
 

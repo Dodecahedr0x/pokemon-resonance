@@ -171,27 +171,27 @@ export function rewHtml(r) {
   const o = [];
   if (r.caught.length) {
     o.push(
-      `<div class="res-l"><h4>Capturés</h4>${r.caught.map(c => `<div class="rl">${medal(BY[c.id].t)}<span>${BY[c.id].n}${c.nw ? ` · ${BY[c.base].n} rejoint votre Box` : ''}</span><b>${c.nw ? 'Nouveau' : '✓'}</b></div>`).join('')}</div>`
+      `<div class="result-list"><h4>Capturés</h4>${r.caught.map(c => `<div class="result-row">${medal(BY[c.id].t)}<span>${BY[c.id].n}${c.nw ? ` · ${BY[c.base].n} rejoint votre Box` : ''}</span><b>${c.nw ? 'Nouveau' : '✓'}</b></div>`).join('')}</div>`
     );
   }
   if (r.items.length || r.gifts.length) {
     o.push(
-      `<div class="res-l"><h4>Récompenses d’arène</h4>${r.items.map(k => `<div class="rl"><span class="it-ic"><svg viewBox="0 0 24 24"><path d="${ITEMS2[k].i}"/></svg></span><span>${ITEMS2[k].n} · ${ITEMS2[k].d}</span><b>Objet</b></div>`).join('')}${r.gifts.map(id => `<div class="rl">${medal(BY[id].t)}<span>${BY[id].n} rejoint votre Box</span><b>Recrue</b></div>`).join('')}</div>`
+      `<div class="result-list"><h4>Récompenses d’arène</h4>${r.items.map(k => `<div class="result-row"><span class="it-ic"><svg viewBox="0 0 24 24"><path d="${ITEMS2[k].i}"/></svg></span><span>${ITEMS2[k].n} · ${ITEMS2[k].d}</span><b>Objet</b></div>`).join('')}${r.gifts.map(id => `<div class="result-row">${medal(BY[id].t)}<span>${BY[id].n} rejoint votre Box</span><b>Recrue</b></div>`).join('')}</div>`
     );
   }
   if (r.elite) {
     o.push(
-      `<div class="res-l"><h4>Conseil 4</h4><div class="rl"><span>${r.elite < 4 ? `${r.elite} membre${r.elite > 1 ? 's' : ''} sur 4 vaincu${r.elite > 1 ? 's' : ''}.` : 'Le Conseil 4 est vaincu. Le Champion vous attend.'}</span><b>${r.elite} / 4</b></div></div>`
+      `<div class="result-list"><h4>Conseil 4</h4><div class="result-row"><span>${r.elite < 4 ? `${r.elite} membre${r.elite > 1 ? 's' : ''} sur 4 vaincu${r.elite > 1 ? 's' : ''}.` : 'Le Conseil 4 est vaincu. Le Champion vous attend.'}</span><b>${r.elite} / 4</b></div></div>`
     );
   }
   if (r.champ) {
     o.push(
-      `<div class="res-l champ"><h4>Maître de la Ligue</h4><div class="rl"><span>Vous avez battu un Champion qui avait étudié vos combats.</span><b>★</b></div></div>`
+      `<div class="result-list is-champion"><h4>Maître de la Ligue</h4><div class="result-row"><span>Vous avez battu un Champion qui avait étudié vos combats.</span><b>★</b></div></div>`
     );
   }
   if (r.links.length) {
     o.push(
-      `<div class="res-l"><h4>Liens gagnés</h4>${r.links.map(l => `<div class="rl">${medal(BY[l.a].t)}${medal(BY[l.b].t)}<span>${BY[l.a].n} et ${BY[l.b].n}${l.x2 ? ' · ×2 sans évoluer' : ''}${l.to > l.from ? ` · palier ${LINK_N[l.to]} atteint` : ''}</span><b>+${l.pts}</b></div>`).join('')}</div>`
+      `<div class="result-list"><h4>Liens gagnés</h4>${r.links.map(l => `<div class="result-row">${medal(BY[l.a].t)}${medal(BY[l.b].t)}<span>${BY[l.a].n} et ${BY[l.b].n}${l.x2 ? ' · ×2 sans évoluer' : ''}${l.to > l.from ? ` · palier ${LINK_N[l.to]} atteint` : ''}</span><b>+${l.pts}</b></div>`).join('')}</div>`
     );
   }
   if (r.tired.length) {
@@ -202,7 +202,7 @@ export function rewHtml(r) {
   let h = o.join('') + aplusRewHtml(r);
   if (r.money != null) {
     h =
-      `<div class="res-l v4-gain"><h4>Gains</h4><div class="rl"><span class="coin-icon" aria-hidden="true">₽</span><span>${r.daily ? 'Défi du jour relevé : gains doublés' : 'Prime de combat'}</span><b>+${fmt(r.money)} ₽</b></div>${r.gems ? `<div class="rl"><span class="gem-icon" aria-hidden="true"><svg><use href="#i-gem"/></svg></span><span>Éclats de Résonance</span><b>+${r.gems}</b></div>` : ''}</div>` +
+      `<div class="result-list is-gains"><h4>Gains</h4><div class="result-row"><span class="coin-icon" aria-hidden="true">₽</span><span>${r.daily ? 'Défi du jour relevé : gains doublés' : 'Prime de combat'}</span><b>+${fmt(r.money)} ₽</b></div>${r.gems ? `<div class="result-row"><span class="gem-icon" aria-hidden="true"><svg><use href="#i-gem"/></svg></span><span>Éclats de Résonance</span><b>+${r.gems}</b></div>` : ''}</div>` +
       h;
   } // end-of-battle gains
   return itemize(h); // illustrated items

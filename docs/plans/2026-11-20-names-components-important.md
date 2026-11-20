@@ -267,4 +267,15 @@ Each step is one commit (or a few), on its own, playable at every point.
   encounter and its outcome, the keepsakes and a passerby at both widths, against the code from before the Windows
   slice: moving `.dialog-close` into the screens layer had let its `position: absolute` beat the legacy
   `.battle-help-c .dialog-close { position: static }`, pinning the × to the top of the screen; this slice restores it.
+- Result sheet: done. `src/screens/combat/battle/result.css` (card, rank stamp, quote, badge row, stats, actions),
+  `result-lists.css` (`.result-list` / `.result-row`, also used by about forty engine reward sections) and
+  `result-effects.css` (celebration, flying badge, holographic edge, seal, confetti). `.res-*` became `.result-*`,
+  `.rl` `.result-row` (`.is-replay`, `.is-achievement`, `.is-fallen`, `.is-shiny`), the card's `win` / `lose` /
+  `result-fx` / `gold-glow` `.is-win` / `.is-loss` / `.is-celebrating` / `.is-champion`, `.rk-st rk-S` `.result-rank
+  is-rank-s`; `#cbResult` rules now hang on `.modal.battle-result`. The generic legacy `.champ` (only ever on the
+  League master list) and `.new` declarations that styled the sheet were folded in; `.new` itself stays in legacy for
+  its other users. The result-only keyframes moved with readable names, and the confetti's `--a`, `--r`, `--d` became
+  `--confetti-angle`, `--confetti-distance`, `--confetti-delay`. New token `--color-surface-raised` (was `--s3`).
+  Checked with snapshots of seven sheets (win with rank, champion, new and old gym badge, loss, flight, Nuzlocke) at
+  both widths: identical apart from the renamed animations.
   Lesson for the next slices: after moving a shared class, look for legacy rules that still style it in context.

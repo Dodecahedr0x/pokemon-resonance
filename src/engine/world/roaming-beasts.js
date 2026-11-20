@@ -281,8 +281,8 @@ export function init() {
     }
     const L = findRoamLegend(r.roam.id);
     return r.roam.ok
-      ? `<div class="res-l"><h4>Bête errante</h4><div class="rl">${medal(L.t)}<span>${L.n} est apaisé. « ${L.w} » Il vous laisse son talisman : <b>${ITEMS2[r.roam.it].n}</b>.</span><b>✦</b></div></div>`
-      : `<div class="res-l"><h4>Bête errante</h4><div class="rl">${medal(L.t)}<span>${L.n} s’est enfui avec ${Math.round(r.roam.hp * 100)} % de ses PV. Il garde ses blessures : retrouvez-le sur la carte de Johto.</span><b>${Math.round(r.roam.hp * 100)} %</b></div></div>`;
+      ? `<div class="result-list"><h4>Bête errante</h4><div class="result-row">${medal(L.t)}<span>${L.n} est apaisé. « ${L.w} » Il vous laisse son talisman : <b>${ITEMS2[r.roam.it].n}</b>.</span><b>✦</b></div></div>`
+      : `<div class="result-list"><h4>Bête errante</h4><div class="result-row">${medal(L.t)}<span>${L.n} s’est enfui avec ${Math.round(r.roam.hp * 100)} % de ses PV. Il garde ses blessures : retrouvez-le sur la carte de Johto.</span><b>${Math.round(r.roam.hp * 100)} %</b></div></div>`;
   });
 
   /* ---------- achievements ---------- */

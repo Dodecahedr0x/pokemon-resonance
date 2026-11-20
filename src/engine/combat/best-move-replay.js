@@ -111,7 +111,7 @@ export function init() {
   HOOKS.battleResult.push(() => {
     const R = B && REPLAYS.get(B);
     return R && R.best
-      ? `<div class="res-l"><h4>Meilleur coup</h4><div class="rl rd"><span><b>${R.best.label}</b>${R.best.det ? ` · ${R.best.det}` : ''}</span><button type="button" class="button button-small" data-rediff>Revoir</button></div></div>`
+      ? `<div class="result-list"><h4>Meilleur coup</h4><div class="result-row is-replay"><span><b>${R.best.label}</b>${R.best.det ? ` · ${R.best.det}` : ''}</span><button type="button" class="button button-small" data-rediff>Revoir</button></div></div>`
       : '';
   });
 }

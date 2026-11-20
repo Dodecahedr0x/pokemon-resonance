@@ -425,9 +425,9 @@ export function init() {
       return '';
     }
     if (e.fin) {
-      return `<div class="res-l"><h4>Écho profond</h4><div class="rl"><span>${e.fin.gagne ? 'Le gardien est vaincu : expédition réussie !' : `Expédition terminée à l’étage ${e.fin.f + (e.fin.gagne ? 0 : 1)}.`} Récompense : ${fmt(e.fin.m)} ₽ · ${e.fin.g} Éclats.</span><b>${e.fin.gagne ? '★' : ''}</b></div></div>`;
+      return `<div class="result-list"><h4>Écho profond</h4><div class="result-row"><span>${e.fin.gagne ? 'Le gardien est vaincu : expédition réussie !' : `Expédition terminée à l’étage ${e.fin.f + (e.fin.gagne ? 0 : 1)}.`} Récompense : ${fmt(e.fin.m)} ₽ · ${e.fin.g} Éclats.</span><b>${e.fin.gagne ? '★' : ''}</b></div></div>`;
     }
-    return `<div class="res-l"><h4>Écho profond</h4><div class="rl"><span>Étage ${e.f} franchi${e.echoes ? ` · +${e.echoes} Échos` : ''}${e.type === 'elite' ? ' · une relique vous attend au Camp' : ''}. Vos PV sont conservés.</span><b>${e.f} / 8</b></div></div>`;
+    return `<div class="result-list"><h4>Écho profond</h4><div class="result-row"><span>Étage ${e.f} franchi${e.echoes ? ` · +${e.echoes} Échos` : ''}${e.type === 'elite' ? ' · une relique vous attend au Camp' : ''}. Vos PV sont conservés.</span><b>${e.f} / 8</b></div></div>`;
   });
 
   // after a Deep Echo battle: back to the expedition map (no « Rejouer » (Replay))
