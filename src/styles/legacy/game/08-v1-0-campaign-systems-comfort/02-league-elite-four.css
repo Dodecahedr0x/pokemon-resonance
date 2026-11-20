@@ -109,32 +109,3 @@
   background: linear-gradient(90deg, #8e6a2c, #f2dda8);
   box-shadow: 0 0 6px rgba(212, 175, 106, 0.6);
 }
-.lk-l {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: var(--space-sm);
-}
-.lk-l li {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  gap: var(--space-sm);
-  align-items: center;
-}
-.lk-l b {
-  display: block;
-  font-size: 13px;
-}
-.lk-l em {
-  display: block;
-  font-style: normal;
-  font-size: 11.5px;
-  color: var(--mut);
-}
-.lk-m {
-  display: inline-flex;
-}
-.lk-m .medal + .medal {
-  margin-left: calc(var(--space-xs) * -1);
-}

@@ -105,9 +105,7 @@ html body #resonance-launch .rl-meta strong {
   html body #accueil .tc-k span,
   html body .sel-tabs em,
   html body #combat .sel-tabs em,
-  html body .chip,
-  html body .ac h4,
-  html body .ac h4 span {
+  html body .chip {
     font-size: 11px !important;
   }
   html body #accueil .kick {

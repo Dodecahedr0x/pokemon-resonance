@@ -10,6 +10,8 @@
   --color-text-dim: var(--v4-mut);
   /* secondary copy: move lists, inactive tabs */
   --color-text-secondary: var(--tx2);
+  /* the faintest text: inactive radar labels */
+  --color-text-faint: var(--fnt);
   --color-accent: var(--gold);
   /* pale gold: badges and labels on dark plates */
   --color-accent-soft: var(--gold-l);
@@ -23,6 +25,8 @@
   --color-surface: var(--s1);
   /* "fine", "gained" (blue in this palette) */
   --color-positive: var(--ok);
+  --color-warning: var(--warn);
+  --color-negative: var(--bad);
   /* faint gold veins tiled over dark plates (560px tile) */
   --texture-veins: var(--veins);
   --ease-out: var(--ease);

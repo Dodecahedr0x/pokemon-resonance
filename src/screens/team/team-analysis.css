@@ -1,0 +1,382 @@
+/* Team analysis at the bottom of "Mon équipe" (#anaD, Analysis.jsx): a collapsible panel whose summary line
+   is "Indice · synergies · alertes", then a grid of cards: Resonance Index, formation, ranks, role radar,
+   synergies, reactions, chains, staff notes, bonds and preset teams.
+   Clicks (data-p, data-rx, data-form-picker): engine listeners on #ana and on the document.
+   Shared pieces: .lbl-s, .chip, .empty, .orn (corner ornaments), .syn-t (type diamonds), .rg (rank tags). */
+
+.team-analysis {
+  margin-top: var(--space-2xl);
+  padding: var(--space-md);
+  border: 1px solid rgba(126, 211, 224, 0.24);
+  border-radius: 20px;
+  background: linear-gradient(145deg, #122d3e, #081824);
+}
+.team-analysis > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding: var(--space-lg);
+  list-style: none;
+  cursor: pointer;
+}
+.team-analysis > summary::-webkit-details-marker {
+  display: none;
+}
+/* "Indice 72 · 2 synergies" */
+.team-analysis > summary em {
+  color: var(--color-accent-soft);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-style: normal;
+  letter-spacing: 0.08em;
+}
+/* chevron */
+.team-analysis > summary::after {
+  content: '';
+  flex: none;
+  width: 9px;
+  height: 9px;
+  border-right: 1.5px solid var(--color-accent);
+  border-bottom: 1.5px solid var(--color-accent);
+  transform: rotate(45deg);
+  transition: transform 0.2s;
+}
+.team-analysis[open] > summary {
+  border-bottom: 1px solid rgba(212, 175, 106, 0.12);
+}
+.team-analysis[open] > summary::after {
+  transform: rotate(-135deg);
+}
+
+.team-analysis-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-md);
+  padding: var(--space-lg);
+}
+.team-analysis-card {
+  display: grid;
+  align-content: start;
+  gap: var(--space-md);
+  min-width: 0;
+  padding: var(--space-xl);
+  border: 1px solid rgba(100, 210, 255, 0.24);
+  border-radius: 17px;
+  background: linear-gradient(145deg, rgba(10, 39, 56, 0.96), rgba(4, 20, 34, 0.98));
+  box-shadow:
+    0 16px 38px rgba(0, 0, 0, 0.23),
+    inset 0 1px rgba(255, 255, 255, 0.04);
+}
+/* card title, with its count on the right */
+.team-analysis-card h4 {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+.team-analysis-card h4 span {
+  color: var(--color-text);
+}
+/* a row of chips or buttons: chains, preset teams */
+.team-analysis-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+/* ---------- Resonance Index: circular gauge and breakdown ---------- */
+.team-analysis-index {
+  display: grid;
+  grid-template-columns: 118px minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-lg);
+}
+.team-analysis-index svg {
+  width: 118px;
+  height: 118px;
+}
+.team-analysis-index-track {
+  fill: none;
+  stroke: var(--color-track);
+  stroke-width: 8;
+}
+/* #gGold: the gold gradient in the page's shared SVG defs */
+.team-analysis-index-fill {
+  fill: none;
+  stroke: url(#gGold);
+  stroke-width: 8;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1s var(--ease-out);
+}
+.team-analysis-index-value {
+  fill: var(--color-text);
+  font-family: var(--font-numeric);
+  font-size: 30px;
+  font-weight: 850;
+  font-stretch: 72%;
+  font-variant-numeric: tabular-nums lining-nums;
+  letter-spacing: -0.01em;
+  text-anchor: middle;
+}
+.team-analysis-index-label {
+  fill: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-anchor: middle;
+}
+.team-analysis-breakdown {
+  display: grid;
+  gap: var(--space-sm);
+  color: var(--color-text-secondary);
+  font-size: 13px;
+}
+.team-analysis-breakdown div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  padding-bottom: var(--space-sm);
+  border-bottom: 1px solid var(--color-line);
+}
+.team-analysis-breakdown div:last-child {
+  padding: 0;
+  border: 0;
+}
+.team-analysis-breakdown b {
+  color: var(--color-text);
+  font-family: var(--font-numeric);
+  font-stretch: 72%;
+  font-variant-numeric: tabular-nums lining-nums;
+  letter-spacing: -0.01em;
+}
+
+/* ---------- Formation: one button per formation, its description ---------- */
+.team-analysis-formations {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin: var(--space-sm) 0;
+}
+.team-analysis-formation {
+  padding: var(--space-xs) var(--space-md);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #eaf2f8;
+  font: inherit;
+  cursor: pointer;
+}
+.team-analysis-formation.is-selected {
+  border-color: #ffd45b;
+  background: rgba(255, 212, 91, 0.16);
+}
+.team-analysis-formation-text {
+  margin: var(--space-2xs) 0;
+  color: #b8cddb;
+  font-size: 12px;
+}
+
+/* ---------- Ranks: rank tag and name per member, then the Harmony line ---------- */
+.team-analysis-ranks ul {
+  display: grid;
+  gap: var(--space-xs);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.team-analysis-ranks li {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-sm);
+  font-size: 13px;
+}
+.team-analysis-ranks li .rg {
+  min-width: 3.6em;
+}
+/* is-on: three different ranks reached */
+.team-analysis-harmony {
+  margin: var(--space-sm) 0 0;
+  color: var(--color-text-secondary);
+  font-size: 12.5px;
+}
+.team-analysis-harmony.is-on {
+  color: #e2bdff;
+  font-weight: 700;
+}
+
+/* ---------- Role radar ---------- */
+.team-analysis-radar svg {
+  display: block;
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+  margin-inline: auto;
+}
+.team-analysis-radar-ring {
+  fill: none;
+  stroke: var(--color-line-strong);
+  stroke-width: 1;
+}
+.team-analysis-radar-axis {
+  stroke: var(--color-line);
+  stroke-width: 1;
+}
+.team-analysis-radar-shape {
+  fill: rgba(227, 192, 122, 0.16);
+  stroke: var(--color-accent);
+  stroke-width: 1.6;
+}
+.team-analysis-radar-point {
+  fill: var(--color-accent);
+}
+/* role name; is-on when a member covers it */
+.team-analysis-radar-label {
+  fill: var(--color-text-faint);
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  letter-spacing: 0.04em;
+  text-anchor: middle;
+}
+.team-analysis-radar-label.is-on {
+  fill: var(--color-text-secondary);
+}
+
+/* ---------- Synergies: one row per type pair, dimmed unless active ---------- */
+.team-analysis-synergies {
+  display: grid;
+  gap: var(--space-xs);
+  margin-top: var(--space-xs);
+}
+.team-analysis-synergy {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: var(--space-sm);
+  opacity: 0.45;
+}
+.team-analysis-synergy b {
+  font-size: 13px;
+}
+.team-analysis-synergy em {
+  display: block;
+  color: var(--color-text-muted);
+  font-size: 11.5px;
+  font-style: normal;
+}
+.team-analysis-synergy.is-active {
+  opacity: 1;
+}
+.team-analysis-synergy.is-active b {
+  color: var(--color-accent-soft);
+}
+
+/* ---------- Notes: staff notes and synergy combos, with a coloured square (is-ok / is-warn / is-bad) ---------- */
+.team-analysis-notes {
+  display: grid;
+  gap: var(--space-sm);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.team-analysis-notes li {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr);
+  gap: var(--space-sm);
+  color: var(--color-text-secondary);
+  font-size: 13.5px;
+  line-height: 1.45;
+}
+.team-analysis-notes li::before {
+  content: '';
+  width: 18px;
+  height: 18px;
+  border: 1px solid color-mix(in srgb, var(--k, var(--color-warning)) 50%, transparent);
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--k, var(--color-warning)) 18%, transparent);
+}
+.team-analysis-notes li.is-ok {
+  --k: var(--color-positive);
+}
+.team-analysis-notes li.is-warn {
+  --k: var(--color-warning);
+}
+.team-analysis-notes li.is-bad {
+  --k: var(--color-negative);
+}
+
+/* ---------- Reactions: chip, then "who → trigger"; is-later once an Awakening opens it ---------- */
+.team-analysis-reactions {
+  display: grid;
+  gap: var(--space-sm);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.team-analysis-reactions li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+}
+.team-analysis-reactions li.is-later {
+  opacity: 0.72;
+}
+.team-analysis-reaction-source {
+  color: var(--color-text-muted);
+  font-size: 12px;
+}
+
+/* ---------- Bonds: the pair's two medals, names, level ---------- */
+.team-analysis-links {
+  display: grid;
+  gap: var(--space-sm);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.team-analysis-links li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-sm);
+}
+.team-analysis-links b {
+  display: block;
+  font-size: 13px;
+}
+.team-analysis-links em {
+  display: block;
+  color: var(--color-text-muted);
+  font-size: 11.5px;
+  font-style: normal;
+}
+.team-analysis-link-medals {
+  display: inline-flex;
+}
+.team-analysis-link-medals .medal + .medal {
+  margin-left: calc(var(--space-xs) * -1);
+}
+
+@media (max-width: 1100px) {
+  .team-analysis-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 999px) {
+  .team-analysis-card h4 {
+    font-size: 11px;
+  }
+}
+@media (max-width: 640px) {
+  .team-analysis-grid {
+    grid-template-columns: 1fr;
+  }
+}

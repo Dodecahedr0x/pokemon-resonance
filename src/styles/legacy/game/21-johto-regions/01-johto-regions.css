@@ -159,31 +159,6 @@
   stroke: #2a1640;
   stroke-width: 3px;
 }
-.ac-rg ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: var(--space-xs);
-}
-.ac-rg li {
-  display: flex;
-  gap: var(--space-sm);
-  align-items: baseline;
-  font-size: 13px;
-}
-.ac-rg li .rg {
-  min-width: 3.6em;
-}
-.ac-rg .harm {
-  margin: var(--space-sm) 0 0;
-  font-size: 12.5px;
-  color: var(--tx2);
-}
-.ac-rg .harm.on {
-  color: #e2bdff;
-  font-weight: 700;
-}
 .v4-off {
   display: inline-block;
   margin-left: var(--space-xs);

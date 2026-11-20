@@ -40,7 +40,6 @@ body {
 }
 /* beveled surfaces */
 .panel,
-.ac,
 .opt,
 .rule,
 .scn,
@@ -126,9 +125,6 @@ body {
   border-bottom-right-radius: 5px;
 }
 /* embossed buttons */
-.presets .b[aria-pressed='true'] {
-  text-shadow: none;
-}
 
 /* medals with metallic rims */
 .medal {

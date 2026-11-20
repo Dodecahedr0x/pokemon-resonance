@@ -10,22 +10,22 @@ import { RANKS, rankId, rankTag } from '../../engine/combat/resonance.js';
 import { duoTechnique } from '../../engine/combat/duo-techniques.js';
 import { FORMATIONS, formationKey, formationTeam, formationActive } from '../../engine/team/formations.js';
 
-// Collapsed analysis (#anaD): summary (#anaSum) and cards (#ana). Clicks (data-p, data-rx,
-// data-form-picker): engine listeners on #ana and on the document.
+// Collapsed analysis (#anaD): summary (#anaSum) and cards (#ana), styles in team-analysis.css. Clicks (data-p,
+// data-rx, data-form-picker): engine listeners on #ana and on the document.
 export default function Analysis({ A }) {
   return (
-    <details className="ana-d" id="anaD">
+    <details className="team-analysis" id="anaD">
       <summary>
         <span className="lbl-s">Analyse de l’équipe</span>
         <em id="anaSum">{A && recap(A)}</em>
       </summary>
-      <div className="ana-grid" id="ana">
+      <div className="team-analysis-grid" id="ana">
         {A && (
           <>
             <Hint A={A} />
             <Formation />
             <Ranks />
-            <div className="ac radar">
+            <div className="team-analysis-card team-analysis-radar">
               <h4>
                 Rôles de l’équipe<span>{A.covered} / 6</span>
               </h4>
@@ -33,15 +33,15 @@ export default function Analysis({ A }) {
             </div>
             <Synergies />
             <Reactions A={A} />
-            <div className="ac">
+            <div className="team-analysis-card">
               <h4>
                 Réactions en chaîne<span>{A.chains.length}</span>
               </h4>
               {A.chains.length ? (
-                <div className="presets">
+                <div className="team-analysis-row">
                   {A.chains.map((c, i) => (
                     <span key={i} className="chip">
-                      <i style={{ background: 'var(--gold)' }} />
+                      <i style={{ background: 'var(--color-accent)' }} />
                       {c.n}
                     </span>
                   ))}
@@ -50,25 +50,25 @@ export default function Analysis({ A }) {
                 <p className="empty">Aucune chaîne, même après Éveil. Essayez Ptitard, Salamèche et Pichu.</p>
               )}
             </div>
-            <div className="ac">
+            <div className="team-analysis-card">
               <h4>Note de l’état-major</h4>
-              <ul className="alerts">
+              <ul className="team-analysis-notes">
                 {A.al.map(([k, t], i) => (
-                  <li key={i} className={k}>
+                  <li key={i} className={'is-' + k}>
                     {t}
                   </li>
                 ))}
               </ul>
             </div>
             <Links />
-            <div className="ac">
+            <div className="team-analysis-card">
               <h4>Équipes types</h4>
-              <div className="presets">
+              <div className="team-analysis-row">
                 {Object.entries(PRESETS).map(([k, p]) => (
                   <button
                     key={k}
                     type="button"
-                    className={`b b-sm${p.f ? ' form' : ''}`}
+                    className="b b-sm"
                     data-p={k}
                     title={p.f ? 'Formation · recrues confirmées' : undefined}
                   >
@@ -101,15 +101,15 @@ function recap(A) {
 function Hint({ A }) {
   const L = 2 * Math.PI * 50;
   return (
-    <div className="ac orn">
+    <div className="team-analysis-card orn">
       <h4>
         Indice de Résonance<span>/ 100</span>
       </h4>
-      <div className="score">
+      <div className="team-analysis-index">
         <svg viewBox="0 0 118 118" role="img" aria-label={`Indice ${A.score} sur 100`}>
-          <circle className="sc-bg" cx="59" cy="59" r="50" />
+          <circle className="team-analysis-index-track" cx="59" cy="59" r="50" />
           <circle
-            className="sc-fg"
+            className="team-analysis-index-fill"
             cx="59"
             cy="59"
             r="50"
@@ -117,14 +117,14 @@ function Hint({ A }) {
             strokeDasharray={L.toFixed(1)}
             strokeDashoffset={(L * (1 - A.score / 100)).toFixed(1)}
           />
-          <text className="sc-n" x="59" y="66">
+          <text className="team-analysis-index-value" x="59" y="66">
             {A.score}
           </text>
-          <text className="sc-l" x="59" y="82">
+          <text className="team-analysis-index-label" x="59" y="82">
             INDICE
           </text>
         </svg>
-        <div className="brk">
+        <div className="team-analysis-breakdown">
           <div>
             <span>Réactions au départ</span>
             <b>{A.rx.size}</b>
@@ -161,21 +161,25 @@ function Radar({ v }) {
   return (
     <svg viewBox="0 0 300 208" role="img" aria-label="Couverture des six rôles">
       {[0.5, 1].map(f => (
-        <polygon key={f} className="rd-grid" points={[...Array(n)].map((_, i) => pt(i, R * f).join(',')).join(' ')} />
+        <polygon
+          key={f}
+          className="team-analysis-radar-ring"
+          points={[...Array(n)].map((_, i) => pt(i, R * f).join(',')).join(' ')}
+        />
       ))}
       {[...Array(n)].flatMap((_, i) => {
         const [x, y] = pt(i, R),
           [lx, ly] = pt(i, R + 17);
         return [
-          <line key={'a' + i} className="rd-axis" x1={cx} y1={cy} x2={x} y2={y} />,
-          <text key={'t' + i} className={`rd-lbl${v[i] > 0 ? ' on' : ''}`} x={lx} y={ly + 3}>
+          <line key={'a' + i} className="team-analysis-radar-axis" x1={cx} y1={cy} x2={x} y2={y} />,
+          <text key={'t' + i} className={`team-analysis-radar-label${v[i] > 0 ? ' is-on' : ''}`} x={lx} y={ly + 3}>
             {ROLES[i].n}
           </text>,
         ];
       })}
-      <polygon className="rd-shape" points={Pp.map(p => p.join(',')).join(' ')} />
+      <polygon className="team-analysis-radar-shape" points={Pp.map(p => p.join(',')).join(' ')} />
       {Pp.map((p, i) => (
-        <circle key={i} className="rd-pt" cx={p[0]} cy={p[1]} r="2.6" />
+        <circle key={i} className="team-analysis-radar-point" cx={p[0]} cy={p[1]} r="2.6" />
       ))}
     </svg>
   );
@@ -196,16 +200,16 @@ function Formation() {
     return null;
   }
   return (
-    <div className="ac ac-form-picker">
+    <div className="team-analysis-card">
       <h4>
         Formation<span>{F.n}</span>
       </h4>
-      <div className="form-picker-g">
+      <div className="team-analysis-formations">
         {Object.keys(FORMATIONS).map(x => (
           <button
             key={x}
             type="button"
-            className={`form-picker${x === k ? ' on' : ''}`}
+            className={`team-analysis-formation${x === k ? ' is-selected' : ''}`}
             data-form-picker={x}
             aria-pressed={x === k}
           >
@@ -213,18 +217,12 @@ function Formation() {
           </button>
         ))}
       </div>
-      <p className="form-picker-d">
+      <p className="team-analysis-formation-text">
         {k === 'libre'
           ? 'Choisissez une formation : un seul bonus, mais il faut composer l’équipe qui va avec. L’ordre de l’équipe compte : le 1er est l’avant-garde, le dernier l’éclaireur.'
           : F.d}
       </p>
-      {ms.length && k !== 'libre' ? (
-        ok ? (
-          <p className="harm on">Formation active : {F.d}</p>
-        ) : (
-          <p className="harm">Formation inactive. {F.need}</p>
-        )
-      ) : null}
+      {ms.length && k !== 'libre' ? ok ? <p>Formation active : {F.d}</p> : <p>Formation inactive. {F.need}</p> : null}
     </div>
   );
 }
@@ -235,7 +233,7 @@ function Ranks() {
     n = new Set(ms.map(m => rankId(m.id))).size,
     harm = ms.length >= 3 && n >= 3;
   return (
-    <div className="ac ac-rg">
+    <div className="team-analysis-card team-analysis-ranks">
       <h4>
         Rangs de l’équipe<span>{n} / 4</span>
       </h4>
@@ -256,7 +254,7 @@ function Ranks() {
       ) : (
         <p className="empty">Ajoutez des Pokémon pour voir leurs rangs.</p>
       )}
-      <p className={`harm${harm ? ' on' : ''}`}>
+      <p className={`team-analysis-harmony${harm ? ' is-on' : ''}`}>
         {harm
           ? 'Harmonie : chaque Pokémon commence le combat avec 1 losange.'
           : `Harmonie : réunissez 3 rangs différents (${n} pour l’instant).`}
@@ -291,7 +289,7 @@ function Synergies() {
     combos.push(`Gardiennage : ${displayNames(Rm)} s’interpose une fois par manche.`);
   }
   return (
-    <div className="ac syn-ac">
+    <div className="team-analysis-card">
       <h4>
         Synergies d’équipe
         <span>
@@ -299,17 +297,17 @@ function Synergies() {
         </span>
       </h4>
       {combos.length ? (
-        <ul className="alerts">
+        <ul className="team-analysis-notes">
           {combos.map((t, i) => (
-            <li key={i} className="ok">
+            <li key={i} className="is-ok">
               {t}
             </li>
           ))}
         </ul>
       ) : null}
-      <div className="syn-l">
+      <div className="team-analysis-synergies">
         {SYN.map(s => (
-          <div key={s.k} className={`syn-r${act.includes(s.k) ? ' on' : ''}`}>
+          <div key={s.k} className={`team-analysis-synergy${act.includes(s.k) ? ' is-active' : ''}`}>
             <span className="syn-t">
               {s.t.map((t, i) => (
                 <i key={i} style={{ background: tc(t) }} />
@@ -332,12 +330,12 @@ function Synergies() {
 // Starting reactions, then those opened by Awakenings.
 function Reactions({ A }) {
   const row = ([id, v], later) => (
-    <li key={(later ? 'l' : 'd') + id} className={later ? 'lat' : undefined}>
+    <li key={(later ? 'l' : 'd') + id} className={later ? 'is-later' : undefined}>
       <button type="button" className={`chip cat-${RX[id].k}`} data-rx={id}>
         <i />
         {RX[id].n}
       </button>
-      <span className="by">
+      <span className="team-analysis-reaction-source">
         {later ? 'après Éveil · ' : ''}
         {v.by} → {v.tr}
       </span>
@@ -348,7 +346,7 @@ function Reactions({ A }) {
     ...[...A.rxp].filter(([id]) => !A.rx.has(id)).map(x => row(x, true)),
   ];
   return (
-    <div className="ac">
+    <div className="team-analysis-card">
       <h4>
         Réactions
         <span>
@@ -356,7 +354,7 @@ function Reactions({ A }) {
         </span>
       </h4>
       {rows.length ? (
-        <ul className="rxl">{rows}</ul>
+        <ul className="team-analysis-reactions">{rows}</ul>
       ) : (
         <p className="empty">Aucune réaction : il faut une marque et un autre élément.</p>
       )}
@@ -378,7 +376,7 @@ function Links() {
   rows.sort((x, y) => y.v - x.v || (y.D ? 1 : 0) - (x.D ? 1 : 0));
   const act = rows.filter(r => r.l).length;
   return (
-    <div className="ac">
+    <div className="team-analysis-card">
       <h4>
         Liens de l’équipe
         <span>
@@ -386,10 +384,10 @@ function Links() {
         </span>
       </h4>
       {rows.length ? (
-        <ul className="lk-l">
+        <ul className="team-analysis-links">
           {rows.map(r => (
             <li key={r.a.id + '|' + r.b.id}>
-              <span className="lk-m">
+              <span className="team-analysis-link-medals">
                 <Html html={medal(r.a.t, 'sm')} />
                 <Html html={medal(r.b.t, 'sm')} />
               </span>

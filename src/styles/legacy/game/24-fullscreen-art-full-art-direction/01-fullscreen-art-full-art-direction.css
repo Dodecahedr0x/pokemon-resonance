@@ -235,10 +235,4 @@ a:focus-visible {
   backdrop-filter: blur(12px);
 }
 /* TEAM: make the roster feel like a collector's battle dossier */
-#pokedex .ana-d {
-  border: 1px solid var(--rx-edge) !important;
-  border-radius: 20px !important;
-  background: linear-gradient(145deg, #122d3e, #081824) !important;
-  padding: var(--space-md) !important;
-}
 /* DEX page — correct dynamic page id */
