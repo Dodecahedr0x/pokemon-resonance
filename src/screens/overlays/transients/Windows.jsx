@@ -1,29 +1,29 @@
 import Button from '../../../components/Button.jsx';
-// Small « battleHelp » windows (shared frame: title, × button, .battleHelp-b body).
+// Small info windows (shared frame .info-window: title, × button, .info-window-body).
 // Clicks stay in the engine (delegated listeners data-help-action, data-route-event…); the click
 // on the backdrop is set by the engine on the node returned by overlay().
 
 // Shared frame. `k`: name of the close button's data-… attribute.
 export function Window({ id, tid, k, titre: heading, children }) {
   return (
-    <div id={id} className="battle-help">
-      <div className="battle-help-c" role="dialog" aria-modal="true" aria-labelledby={tid}>
+    <div id={id} className="info-window">
+      <div className="info-window-card" role="dialog" aria-modal="true" aria-labelledby={tid}>
         <header>
           <h3 id={tid}>{heading}</h3>
           <button type="button" className="dialog-close" {...{ ['data-' + k]: 'close' }} aria-label="Fermer">
             ×
           </button>
         </header>
-        <div className="battle-help-b">{children}</div>
+        <div className="info-window-body">{children}</div>
       </div>
     </div>
   );
 }
 
-// Choice button (.routeEvent-c): label, detail (<small>) if `eff` is not null.
+// Choice button (.info-window-choice): label, detail (<small>) if `eff` is not null.
 function Choice({ k, v, ok = true, l, eff = null }) {
   return (
-    <button type="button" className="route-event-c" {...{ ['data-' + k]: v }} disabled={!ok}>
+    <button type="button" className="info-window-choice" {...{ ['data-' + k]: v }} disabled={!ok}>
       <b>{l}</b>
       {eff != null ? <small>{eff}</small> : null}
     </button>
@@ -156,7 +156,7 @@ export function CompanionKeepsakes({ d }) {
             <b>{'♥'.repeat(i)}</b> {t}
           </p>
         ) : (
-          <p key={i} className="buddy-l">
+          <p key={i} className="keepsake-locked">
             <b>{'♥'.repeat(i)}</b> Un souvenir se débloquera à {i} cœur{i > 1 ? 's' : ''}.
           </p>
         );
@@ -355,7 +355,7 @@ export function X2470({ d }) {
         <b>Rivalité</b>
       </p>
       {d.lines.map((t, i) => (
-        <p key={i} className="x2470-r">
+        <p key={i} className="trainer-challenges-rivalry">
           {t}
         </p>
       ))}
@@ -377,9 +377,13 @@ export function X2470({ d }) {
         {d.nb >= 3 ? ' · +1 Éclat par victoire' : ''}
       </p>
       {nl}
-      <div className="x2470-v">
+      <div className="trainer-challenges-showcase">
         {d.showcase.map((v, i) => (
-          <span key={i} className={'x2470-c' + (v.on ? ' on' : '')} title={v.on ? v.d : 'À trouver en Boss Rush'}>
+          <span
+            key={i}
+            className={'trainer-challenges-relic' + (v.on ? ' is-found' : '')}
+            title={v.on ? v.d : 'À trouver en Boss Rush'}
+          >
             {v.on ? v.n : '???'}
           </span>
         ))}

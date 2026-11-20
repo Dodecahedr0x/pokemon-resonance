@@ -45,6 +45,7 @@
 @import '../screens/overlays/versus.css' layer(screens);
 @import '../screens/overlays/battle-transients.css' layer(screens);
 @import '../screens/overlays/modal.css' layer(screens);
+@import '../screens/overlays/info-windows.css' layer(screens);
 @import '../screens/overlays/encounter.css' layer(screens);
 @import '../screens/overlays/window-boxes.css' layer(screens);
 @import '../screens/overlays/dialogue.css' layer(screens);

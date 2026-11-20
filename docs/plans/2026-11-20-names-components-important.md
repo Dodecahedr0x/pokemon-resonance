@@ -260,3 +260,11 @@ Each step is one commit (or a few), on its own, playable at every point.
   timed-catch results, both relay screens) at both widths. The page-entrance list in `pokemon-skin.js` named `.tip`,
   renamed to `.professor-tip` in the dialogue slice; fixed. Players' Workshop CSS written against `#pk-btr.go` and the
   like is not translated (the state classes are too generic to rename blindly).
+- Info windows: done. `src/screens/overlays/info-windows.css`: the shared frame of the small windows in
+  `transients/Windows.jsx` (`.info-window`, `-card`, `-body`, `-choice`, were `.battle-help*` and `.route-event-c`),
+  `.keepsake-locked` (was `.buddy-l`); the trainer challenges' `.x2470-*` became `.trainer-challenges-rivalry`,
+  `-showcase`, `-relic` (`is-found`, was `on`), which have no styles. Checked with snapshots of the battle help, a route
+  encounter and its outcome, the keepsakes and a passerby at both widths, against the code from before the Windows
+  slice: moving `.dialog-close` into the screens layer had let its `position: absolute` beat the legacy
+  `.battle-help-c .dialog-close { position: static }`, pinning the × to the top of the screen; this slice restores it.
+  Lesson for the next slices: after moving a shared class, look for legacy rules that still style it in context.

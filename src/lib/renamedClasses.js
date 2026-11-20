@@ -621,6 +621,15 @@ export const RENAMED_CLASSES = {
   'forfeit-dialog-c': 'duel-relay-card',
   'forfeit-dialog-a': 'duel-relay-actions',
   'forfeit-dialog-s': 'duel-relay-scores',
+  // Info windows slice: battle help and the other small windows from transients/Windows.jsx
+  'battle-help': 'info-window',
+  'battle-help-c': 'info-window-card',
+  'battle-help-b': 'info-window-body',
+  'route-event-c': 'info-window-choice',
+  'buddy-l': 'keepsake-locked',
+  'x2470-r': 'trainer-challenges-rivalry',
+  'x2470-v': 'trainer-challenges-showcase',
+  'x2470-c': 'trainer-challenges-relic',
 };
 
 const OLD_CLASS = new RegExp(

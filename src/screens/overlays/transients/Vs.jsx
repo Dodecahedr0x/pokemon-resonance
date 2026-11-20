@@ -8,7 +8,11 @@ import { badgeSvg } from '../../../engine/modes/league.js';
 // Version additions: trainer emblem before the name (v4.50, `av`), tip at the bottom (v4.48, `tip`).
 export default function Vs({ d }) {
   return (
-    <div id="vs" className={'versus' + d.cls + (d.out ? ' is-leaving' : '')} style={{ '--versus-duration': d.dur + 'ms' }}>
+    <div
+      id="vs"
+      className={'versus' + d.cls + (d.out ? ' is-leaving' : '')}
+      style={{ '--versus-duration': d.dur + 'ms' }}
+    >
       <div className="versus-player">
         <span className="versus-kicker">{d.k1}</span>
         <span className="versus-team">

@@ -136,23 +136,3 @@
 }
 
 /* <style id="resonance-event-cards"> */
-.route-event-c {
-  display: grid;
-  gap: var(--space-3xs);
-  text-align: left;
-  padding: var(--space-md) var(--space-md);
-  border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  background: rgba(255, 255, 255, 0.06);
-  color: #eaf2f8;
-  font: inherit;
-  cursor: pointer;
-}
-.route-event-c small {
-  color: #b8cddb;
-  font-size: 12px;
-}
-.route-event-c:disabled {
-  opacity: 0.45;
-  cursor: not-allowed;
-}

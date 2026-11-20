@@ -56,26 +56,6 @@
 }
 /* <style id="resonance-hero-weather"> */
 /* v4.52 */
-.battle-help {
-  position: fixed;
-  inset: 0;
-  z-index: 230;
-  display: grid;
-  align-items: end;
-  justify-items: center;
-  background: rgba(2, 8, 16, 0.6);
-}
-.battle-help-c {
-  width: min(560px, 100%);
-  max-height: 82vh;
-  display: grid;
-  grid-template-rows: auto minmax(0, 1fr);
-  border-radius: 22px 22px 0 0;
-  background: linear-gradient(160deg, #173a50, #0a1d2b);
-  border: 1px solid rgba(255, 215, 94, 0.35);
-  color: #eaf2f8;
-  animation: battle-help 0.28s cubic-bezier(0.2, 0.8, 0.3, 1);
-}
 @keyframes battle-help {
   from {
     transform: translateY(30px);
@@ -84,50 +64,5 @@
   to {
     transform: none;
     opacity: 1;
-  }
-}
-.battle-help-c header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: var(--space-md) var(--space-lg) var(--space-sm);
-}
-.battle-help-c .dialog-close {
-  position: static;
-}
-.battle-help-c h3 {
-  margin: 0;
-  font-size: 17px;
-}
-.battle-help-b {
-  overflow-y: auto;
-  padding: 0 var(--space-lg) var(--space-xl);
-  display: grid;
-  gap: var(--space-md);
-}
-.battle-help-b h4 {
-  margin: 0 0 var(--space-2xs);
-  font-size: 12px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #ffd45b;
-}
-.battle-help-b p {
-  margin: var(--space-3xs) 0;
-  font-size: 13.5px;
-  line-height: 1.45;
-  color: #cfe0ea;
-}
-.battle-help-b summary {
-  cursor: pointer;
-  font-size: 13.5px;
-  color: #9fd8ff;
-}
-.battle-help-b details p {
-  padding-left: var(--space-2xs);
-}
-@media (prefers-reduced-motion: reduce) {
-  .battle-help-c {
-    animation: none !important;
   }
 }
