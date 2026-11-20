@@ -29,10 +29,10 @@ export default function Sheet() {
   const { open, id, sheet } = useRoster();
   const content = useKeyed(() => (ready && id ? <Content id={id} /> : null), [ready, id, sheet]);
   return (
-    <div className="sheet" id="sheet" hidden={!open}>
-      <div className="scrim" data-close="" />
+    <div className="team-sheet" id="sheet" hidden={!open}>
+      <div className="team-sheet-scrim" data-close="" />
       <div
-        className="sh"
+        className="team-sheet-panel"
         id="sh"
         role="dialog"
         aria-modal="true"
@@ -82,25 +82,25 @@ function Content({ id }) {
   const pn = m.st > 1 ? branchNote(m.prev, id) : '';
   return (
     <>
-      <div className="sh-hero">
-        <div className="grab" />
-        <button className="sh-x" type="button" data-close="" aria-label="Fermer la fiche">
+      <div className="team-sheet-hero">
+        <div className="team-sheet-grab" />
+        <button className="team-sheet-close" type="button" data-close="" aria-label="Fermer la fiche">
           <svg>
             <use href="#i-x" />
           </svg>
         </button>
-        <span className="sh-no">
+        <span className="team-sheet-number">
           {dexNo(m.no)} · {REGION_NAMES[m.gen] || 'Johto'} · stade {m.st}
         </span>
-        <div className="sh-crest">{T(crestSmall(m))}</div>
-        <h2 className="sh-name" id="shName">
+        <div className="team-sheet-crest">{T(crestSmall(m))}</div>
+        <h2 className="team-sheet-title" id="shName">
           {m.n}
         </h2>
-        <p className="sh-epi">
+        <p className="team-sheet-subtitle">
           {m.r} · {m.r2}
         </p>
-        <p className="sh-role sh-rgp">
-          <span className={`rg-ic rg rg-${rg}`}>{stars(rg)}</span>
+        <p className="team-sheet-role">
+          <span className={`team-sheet-rank rg rg-${rg}`}>{stars(rg)}</span>
           <span>
             <b>
               Rang {RANKS[rg].n} · {RANKS[rg].k}
@@ -109,28 +109,28 @@ function Content({ id }) {
           </span>
         </p>
         {ROLEFX[m.r] ? (
-          <p className="sh-role">
+          <p className="team-sheet-role">
             {T(rIco(m.r))}
             <span>
               <b>{ROLEFX[m.r].k}</b> · {T(ROLEFX[m.r].d)}
             </span>
           </p>
         ) : null}
-        <div className="sh-tags">
+        <div className="team-sheet-types">
           {m.t.map(t => (
             <Html key={t} html={tb(t)} />
           ))}
         </div>
       </div>
-      <div className="sh-sec">
-        <div className="stabs" role="tablist" aria-label="Stades de la famille">
+      <div className="team-sheet-section">
+        <div className="team-sheet-stages" role="tablist" aria-label="Stades de la famille">
           {family.map(x => (
             <button
               key={x.id}
               type="button"
               role="tab"
               aria-selected={x.id === id}
-              className={`stab${x.id === id ? ' on' : ''}`}
+              className={`team-sheet-stage${x.id === id ? ' is-selected' : ''}`}
               data-open={x.id}
             >
               <Html html={medal(x.t, 'sm')} />
@@ -142,13 +142,13 @@ function Content({ id }) {
           ))}
         </div>
         {m.st === 1 ? (
-          <p className="how ok">
+          <p className="team-sheet-hint is-ok">
             Se recrute pour {m.c} PC.
             {nx.length ? ' Il évolue en combat ; ses formes évoluées se recrutent aussi directement, plus cher.' : ''}
           </p>
         ) : (
           <>
-            <p className="how">
+            <p className="team-sheet-hint">
               S’obtient en combat par l’Éveil de <b>{BY[m.prev].n}</b>
               {pn ? ' (' + pn + ')' : ''}.{' '}
               {inBox(id)
@@ -160,7 +160,7 @@ function Content({ id }) {
         )}
       </div>
       <Extras base={base} />
-      <div className="sh-sec">
+      <div className="team-sheet-section">
         <h4>
           Capacités<span>{m.mv.length}</span>
         </h4>
@@ -180,7 +180,7 @@ function Content({ id }) {
         ) : null}
       </div>
       {nx.length ? (
-        <div className="sh-sec">
+        <div className="team-sheet-section">
           <h4>
             Éveil suivant<span>{nx.length > 1 ? nx.length + ' voies' : 'irréversible'}</span>
           </h4>
@@ -203,15 +203,15 @@ function Content({ id }) {
           ))}
         </div>
       ) : null}
-      <div className="sh-sec">
+      <div className="team-sheet-section">
         <h4>
           Statistiques<span>PV en combat : {mhpOf(m.s)}</span>
         </h4>
-        <div className="stats">
+        <div className="team-sheet-stats">
           {m.s.map((v, i) => (
-            <div key={i} className="sr">
+            <div key={i} className="team-sheet-stat">
               <span>{STLN[i]}</span>
-              <div className="sbar">
+              <div className="team-sheet-stat-bar">
                 <i style={{ width: `${v * 20}%`, animationDelay: `${i * 60}ms` }} />
               </div>
               <b>{v}</b>
@@ -220,24 +220,24 @@ function Content({ id }) {
         </div>
       </div>
       {NOTES[id] || prep.length || trig.length ? (
-        <div className="sh-sec">
+        <div className="team-sheet-section">
           <h4>Lecture tactique</h4>
-          {NOTES[id] ? <p className="note">{T(NOTES[id])}</p> : null}
+          {NOTES[id] ? <p className="team-sheet-note">{T(NOTES[id])}</p> : null}
           {prep.length ? (
             <>
               <h4>Prépare</h4>
-              <div className="presets">{rl(prep)}</div>
+              <div className="team-sheet-reactions">{rl(prep)}</div>
             </>
           ) : null}
           {trig.length ? (
             <>
               <h4>Déclenche</h4>
-              <div className="presets">{rl(trig)}</div>
+              <div className="team-sheet-reactions">{rl(trig)}</div>
             </>
           ) : null}
         </div>
       ) : null}
-      <div className="sh-act">
+      <div className="team-sheet-actions">
         <Action m={m} base={base} id={id} />
       </div>
     </>
@@ -287,21 +287,25 @@ function Evd({ a, b, from }) {
     note = branchNote(a, b);
   const Tag = from ? 'div' : 'button';
   return (
-    <Tag type={from ? undefined : 'button'} className={from ? 'evd from' : 'evd'} data-open={b}>
-      <div className="evd-h">
+    <Tag
+      type={from ? undefined : 'button'}
+      className={from ? 'team-evolution is-origin' : 'team-evolution'}
+      data-open={b}
+    >
+      <div className="team-evolution-head">
         <Html html={medal(B2.t)} />
         <b>{B2.n}</b>
         {note ? <em>{note}</em> : null}
       </div>
       <ul>
         {D.gain.length ? (
-          <li className="gain">
+          <li className="is-gain">
             <span>Gagne</span>
             {D.gain.map(x => MV[x].n).join(', ')}
           </li>
         ) : null}
         {D.lose.length ? (
-          <li className="lose">
+          <li className="is-lose">
             <span>Perd</span>
             {D.lose.map(x => MV[x].n).join(', ')}
           </li>
@@ -331,7 +335,7 @@ function Evd({ a, b, from }) {
           {D.hp}
         </li>
         {ARR[b] ? (
-          <li className="arr">
+          <li className="is-arrival">
             <span>Arrivée</span>
             {T(ARR[b][1])}
           </li>
@@ -367,7 +371,7 @@ function Extras({ base }) {
     .slice(0, 6);
   return (
     <>
-      <div className="sh-sec">
+      <div className="team-sheet-section">
         <h4>
           Objet tenu
           <span>
@@ -376,14 +380,14 @@ function Extras({ base }) {
         </h4>
         {own ? (
           its.length ? (
-            <div className="eq-l">
+            <div className="team-sheet-items">
               {its.map(k => {
                 const holder = Object.keys(PROFILE.equipment).find(x => PROFILE.equipment[x] === k && x !== base.id);
                 return (
                   <button
                     key={k}
                     type="button"
-                    className={`eq${cur === k ? ' on' : ''}`}
+                    className={`team-sheet-item${cur === k ? ' is-selected' : ''}`}
                     data-eq={base.id}
                     data-it={cur === k ? '' : k}
                   >
@@ -408,7 +412,7 @@ function Extras({ base }) {
           <p className="empty">{base.n} doit d’abord être capturé.</p>
         )}
         {fat ? (
-          <p className={`how${fat >= 70 ? '' : ' ok'}`}>
+          <p className={`team-sheet-hint${fat >= 70 ? '' : ' is-ok'}`}>
             Fatigue {fat} %
             {fat >= 70
               ? ' : −1 Mouvement au prochain combat. Laissez-le se reposer un combat, ou faites-le évoluer.'
@@ -417,7 +421,7 @@ function Extras({ base }) {
         ) : null}
       </div>
       {mates.length ? (
-        <div className="sh-sec">
+        <div className="team-sheet-section">
           <h4>
             Liens<span>{mates.length}</span>
           </h4>
@@ -426,7 +430,7 @@ function Extras({ base }) {
               l = lvlOfPts(v),
               D = duoTechnique(k);
             return (
-              <div key={k} className="lk-row">
+              <div key={k} className="team-sheet-link">
                 <Html html={medal(BY[o].t, 'sm')} />
                 <span>
                   <b>{BY[o].n}</b>
@@ -435,7 +439,7 @@ function Extras({ base }) {
                     {D ? ` · duo : ${D.n}${l >= 3 ? '' : ' (palier Duo)'}` : ''}
                   </em>
                 </span>
-                <span className="lk-bar">
+                <span className="team-sheet-link-bar">
                   <i style={{ width: `${Math.min(100, (v / LINK_T[2]) * 100)}%` }} />
                 </span>
               </div>

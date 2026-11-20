@@ -100,7 +100,6 @@ body {
 .scn b,
 .howto b,
 .mvc b,
-.evd-h b,
 .eo-n b,
 .al b,
 .evb b,
@@ -166,7 +165,6 @@ body {
 .bud-h b,
 .bp-hp > span,
 .pl-s > span:first-child,
-.sh-no,
 .f-dmg,
 .f-heal,
 .fl,
@@ -203,7 +201,6 @@ body {
 }
 .lbl-s,
 .ac h4,
-.sh-sec h4,
 .bp-en .lbl-s,
 .case-h,
 .scn .lvl,
@@ -222,10 +219,8 @@ body {
 .an,
 .kpis,
 .howto > div,
-.evd,
 .mvc,
 .ptm,
-.stab,
 .bm,
 .vx,
 .plate,
@@ -246,9 +241,7 @@ body {
 .rxd,
 .it,
 .rp,
-.champ,
-.note,
-.sh {
+.champ {
   border: 1px solid transparent;
   background:
     var(--veins) padding-box,
@@ -276,10 +269,8 @@ body {
 .champ {
   border-radius: var(--rl);
 }
-.evd,
 .mvc,
 .ptm,
-.stab,
 .bm,
 .vx,
 .plate,
@@ -291,23 +282,8 @@ body {
 .cs,
 .it,
 .rp,
-.note,
 .arena {
   border-radius: var(--r);
-}
-.note {
-  background:
-    linear-gradient(180deg, rgba(212, 175, 106, 0.1), rgba(212, 175, 106, 0.03)) padding-box,
-    var(--slab) padding-box,
-    var(--brass) border-box;
-}
-.sh {
-  border-radius: 0;
-  border-left: 1px solid transparent;
-  background:
-    var(--veins) padding-box,
-    linear-gradient(180deg, #141519, #0c0d10) padding-box,
-    linear-gradient(180deg, rgba(212, 175, 106, 0.5), rgba(212, 175, 106, 0.08)) border-box;
 }
 .dock {
   background:
@@ -318,7 +294,6 @@ body {
 .rule[open],
 .scn.on,
 .ptm.on,
-.stab.on,
 .bm.on,
 .vx.on,
 .plate.act {

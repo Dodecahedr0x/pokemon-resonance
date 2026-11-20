@@ -102,20 +102,6 @@ html:not(#pkz) body:not(#pkz) #cbResult > .res-card > .pk-gerbe {
 }
 
 /* ---------- Pokémon sheet (bottom sheet) ---------- */
-html:not(#pkz) body:not(#pkz) #sheet .sh {
-  border-top: 0 !important;
-}
-html:not(#pkz) body:not(#pkz) #sheet .sh::before {
-  content: '';
-  position: sticky;
-  top: 0;
-  display: block;
-  height: 3px;
-  margin-bottom: calc(var(--space-3xs) * -1);
-  z-index: 6;
-  background: linear-gradient(90deg, #e3262f, #ffd35a 50%, #e3262f);
-  pointer-events: none;
-}
 
 /* ---------- Poké Ball opening between tabs ---------- */
 #pk-iris {

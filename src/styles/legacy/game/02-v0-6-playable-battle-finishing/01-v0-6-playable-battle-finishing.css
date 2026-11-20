@@ -14,9 +14,6 @@
   background: transparent;
   border-style: dashed;
 }
-.sh-sec .mvc + .mvc {
-  margin-top: 0;
-}
 .lbl-s {
   font-family: var(--f-m);
   font-size: 10.5px;

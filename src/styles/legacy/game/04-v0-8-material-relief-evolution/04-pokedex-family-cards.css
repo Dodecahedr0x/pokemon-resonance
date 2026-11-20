@@ -14,62 +14,6 @@
   gap: var(--space-lg);
 }
 /* sheet: stage tabs */
-.stabs {
-  display: flex;
-  gap: var(--space-xs);
-  flex-wrap: wrap;
-}
-.stab {
-  display: flex;
-  align-items: center;
-  gap: var(--space-sm);
-  padding: var(--space-xs) var(--space-md) var(--space-xs) var(--space-xs);
-  border-radius: 14px;
-  cursor: pointer;
-  color: inherit;
-  font: inherit;
-  text-align: left;
-}
-.stab b {
-  display: block;
-  font-size: 13px;
-}
-.stab em {
-  display: block;
-  font-style: normal;
-  font-family: var(--f-m);
-  font-size: 9.5px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--mut);
-}
-.stab.on em {
-  color: var(--gold);
-}
-.how {
-  font-size: 13.5px;
-  color: var(--tx2);
-}
-.how.ok {
-  color: var(--ok);
-}
-.evd {
-  width: 100%;
-  text-align: left;
-  color: inherit;
-  font: inherit;
-  cursor: pointer;
-}
-.evd.from {
-  cursor: default;
-}
-.evd li.arr {
-  color: var(--gold-l);
-}
-.sh-hero {
-  background:
-    radial-gradient(110% 95% at 50% 0%, color-mix(in srgb, var(--c) 42%, transparent), transparent 72%), var(--hatch);
-}
 .rxl li.lat {
   opacity: 0.72;
 }

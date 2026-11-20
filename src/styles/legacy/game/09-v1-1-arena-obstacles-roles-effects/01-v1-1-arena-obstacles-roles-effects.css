@@ -315,20 +315,6 @@
   color: var(--mut);
 }
 /* Pokédex */
-.sh-role {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  gap: var(--space-sm);
-  align-items: start;
-  max-width: 440px;
-  margin: var(--space-sm) auto 0;
-  text-align: left;
-  font-size: 13px;
-  color: var(--tx2);
-}
-.sh-role b {
-  color: var(--gold-l);
-}
 .gauge.g12 {
   grid-template-columns: repeat(12, minmax(0, 1fr));
 }

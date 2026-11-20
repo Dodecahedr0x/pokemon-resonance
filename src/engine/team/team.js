@@ -329,7 +329,7 @@ export function openSheet(id, refresh) {
     document.body.style.overflow = 'hidden';
     sh.scrollTop = 0;
     setTimeout(() => {
-      const x = sh.querySelector('.sh-x');
+      const x = sh.querySelector('.team-sheet-close');
       if (x) {
         x.focus();
       }

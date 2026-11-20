@@ -200,8 +200,7 @@ html:not(#pkz) body:not(#pkz) .v4-reg,
 html:not(#pkz) body:not(#pkz) .gd-tabs,
 html:not(#pkz) body:not(#pkz) .v4-cats,
 html:not(#pkz) body:not(#pkz) .v4-seg,
-html:not(#pkz) body:not(#pkz) .scn-tabs,
-html:not(#pkz) body:not(#pkz) .stabs {
+html:not(#pkz) body:not(#pkz) .scn-tabs {
   background: linear-gradient(180deg, rgba(2, 9, 18, 0.74), rgba(6, 16, 30, 0.62)) !important;
   border: 1px solid rgba(130, 185, 240, 0.16) !important;
   box-shadow:
@@ -216,8 +215,7 @@ html:not(#pkz) body:not(#pkz) .v4-reg > button,
 html:not(#pkz) body:not(#pkz) .gd-tabs > button,
 html:not(#pkz) body:not(#pkz) .v4-cats > button,
 html:not(#pkz) body:not(#pkz) .v4-seg > button,
-html:not(#pkz) body:not(#pkz) .scn-tabs > button,
-html:not(#pkz) body:not(#pkz) .stabs > .stab {
+html:not(#pkz) body:not(#pkz) .scn-tabs > button {
   position: relative;
   border-radius: 999px !important;
   border: 1px solid transparent !important;
@@ -234,8 +232,7 @@ html:not(#pkz) body:not(#pkz) .v4-reg > button:active,
 html:not(#pkz) body:not(#pkz) .gd-tabs > button:active,
 html:not(#pkz) body:not(#pkz) .v4-cats > button:active,
 html:not(#pkz) body:not(#pkz) .v4-seg > button:active,
-html:not(#pkz) body:not(#pkz) .scn-tabs > button:active,
-html:not(#pkz) body:not(#pkz) .stabs > .stab:active {
+html:not(#pkz) body:not(#pkz) .scn-tabs > button:active {
   transform: scale(0.95);
 }
 html:not(#pkz) body:not(#pkz) .v4-tabs > button:not(:has(svg))::before,
@@ -243,8 +240,7 @@ html:not(#pkz) body:not(#pkz) .v4-reg > button:not(:has(svg))::before,
 html:not(#pkz) body:not(#pkz) .gd-tabs > button:not(:has(svg))::before,
 html:not(#pkz) body:not(#pkz) .v4-cats > button:not(:has(svg))::before,
 html:not(#pkz) body:not(#pkz) .v4-seg > button:not(:has(svg))::before,
-html:not(#pkz) body:not(#pkz) .scn-tabs > button:not(:has(svg))::before,
-html:not(#pkz) body:not(#pkz) .stabs > .stab:not(:has(svg))::before {
+html:not(#pkz) body:not(#pkz) .scn-tabs > button:not(:has(svg))::before {
   content: '';
   display: inline-block;
   flex: none;
@@ -265,8 +261,7 @@ html:not(#pkz) body:not(#pkz) .v4-reg > button:is([aria-selected='true'], [aria-
 html:not(#pkz) body:not(#pkz) .gd-tabs > button:is([aria-selected='true'], [aria-pressed='true'], .on),
 html:not(#pkz) body:not(#pkz) .v4-cats > button:is([aria-selected='true'], [aria-pressed='true'], .on),
 html:not(#pkz) body:not(#pkz) .v4-seg > button:is([aria-selected='true'], [aria-pressed='true'], .on),
-html:not(#pkz) body:not(#pkz) .scn-tabs > button:is([aria-selected='true'], [aria-pressed='true'], .on),
-html:not(#pkz) body:not(#pkz) .stabs > .stab:is([aria-selected='true'], [aria-pressed='true'], .on) {
+html:not(#pkz) body:not(#pkz) .scn-tabs > button:is([aria-selected='true'], [aria-pressed='true'], .on) {
   background:
     radial-gradient(130% 120% at 50% -30%, rgba(255, 255, 255, 0.4), transparent 52%),
     linear-gradient(180deg, #ff676d 0%, #e3262f 52%, #b3141d 100%) !important;
@@ -285,8 +280,7 @@ html:not(#pkz) body:not(#pkz) .v4-reg > button:is([aria-selected='true'], [aria-
 html:not(#pkz) body:not(#pkz) .gd-tabs > button:is([aria-selected='true'], [aria-pressed='true'], .on) svg,
 html:not(#pkz) body:not(#pkz) .v4-cats > button:is([aria-selected='true'], [aria-pressed='true'], .on) svg,
 html:not(#pkz) body:not(#pkz) .v4-seg > button:is([aria-selected='true'], [aria-pressed='true'], .on) svg,
-html:not(#pkz) body:not(#pkz) .scn-tabs > button:is([aria-selected='true'], [aria-pressed='true'], .on) svg,
-html:not(#pkz) body:not(#pkz) .stabs > .stab:is([aria-selected='true'], [aria-pressed='true'], .on) svg {
+html:not(#pkz) body:not(#pkz) .scn-tabs > button:is([aria-selected='true'], [aria-pressed='true'], .on) svg {
   color: #fff !important;
 }
 html:not(#pkz)
@@ -312,11 +306,7 @@ html:not(#pkz)
 html:not(#pkz)
   body:not(#pkz)
   .scn-tabs
-  > button:is([aria-selected='true'], [aria-pressed='true'], .on):not(:has(svg))::before,
-html:not(#pkz)
-  body:not(#pkz)
-  .stabs
-  > .stab:is([aria-selected='true'], [aria-pressed='true'], .on):not(:has(svg))::before {
+  > button:is([aria-selected='true'], [aria-pressed='true'], .on):not(:has(svg))::before {
   opacity: 1;
   background:
     radial-gradient(circle, #fff 0 1.6px, #151a22 1.7px 2.8px, transparent 2.9px),
@@ -331,8 +321,7 @@ html:not(#pkz) body:not(#pkz) .v4-reg > button:is([aria-selected='true'], [aria-
 html:not(#pkz) body:not(#pkz) .gd-tabs > button:is([aria-selected='true'], [aria-pressed='true'], .on)::after,
 html:not(#pkz) body:not(#pkz) .v4-cats > button:is([aria-selected='true'], [aria-pressed='true'], .on)::after,
 html:not(#pkz) body:not(#pkz) .v4-seg > button:is([aria-selected='true'], [aria-pressed='true'], .on)::after,
-html:not(#pkz) body:not(#pkz) .scn-tabs > button:is([aria-selected='true'], [aria-pressed='true'], .on)::after,
-html:not(#pkz) body:not(#pkz) .stabs > .stab:is([aria-selected='true'], [aria-pressed='true'], .on)::after {
+html:not(#pkz) body:not(#pkz) .scn-tabs > button:is([aria-selected='true'], [aria-pressed='true'], .on)::after {
   content: '';
   position: absolute;
   inset: 0;

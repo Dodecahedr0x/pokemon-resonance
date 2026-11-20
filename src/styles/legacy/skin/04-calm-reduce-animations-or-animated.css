@@ -15,8 +15,7 @@ html.pk-calme .v4-reg > button::after,
 html.pk-calme .gd-tabs > button::after,
 html.pk-calme .v4-cats > button::after,
 html.pk-calme .v4-seg > button::after,
-html.pk-calme .scn-tabs > button::after,
-html.pk-calme .stabs > .stab::after {
+html.pk-calme .scn-tabs > button::after {
   animation: none !important;
   display: none;
 }

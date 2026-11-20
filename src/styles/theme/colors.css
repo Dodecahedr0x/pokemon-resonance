@@ -16,6 +16,16 @@
   /* empty gauge or pip */
   --color-track: var(--s4);
   --color-line: var(--line);
+  --color-line-strong: var(--line2);
+  /* grab handles */
+  --color-line-bright: var(--line3);
+  /* base surface of panels and sheets */
+  --color-surface: var(--s1);
+  /* "fine", "gained" (blue in this palette) */
+  --color-positive: var(--ok);
+  /* faint gold veins tiled over dark plates (560px tile) */
+  --texture-veins: var(--veins);
+  --ease-out: var(--ease);
 
   --font-display: var(--f-d);
   --font-body: var(--f-b);
