@@ -28,8 +28,7 @@
 .medal:not(.is-large):not(.is-huge)::before {
   display: none;
 }
-.bdg svg,
-.scn-bdg {
+.bdg svg {
   filter: none;
 }
 .bdg:not(.won) svg {

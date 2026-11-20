@@ -18,8 +18,7 @@ body {
 }
 /* engraved titles */
 .section-title,
-.sh-name,
-.st-name {
+.sh-name {
   background: linear-gradient(180deg, #ffffff 20%, #d9dde6 62%, #9ea6b6);
   -webkit-background-clip: text;
   background-clip: text;
@@ -28,7 +27,6 @@ body {
 /* beveled surfaces */
 .panel,
 .rule,
-.scn,
 .mvc {
   border: 1px solid transparent;
   background:
@@ -46,12 +44,6 @@ body {
     linear-gradient(180deg, #1a1f29, #11141b) padding-box,
     linear-gradient(165deg, rgba(227, 192, 122, 0.45), rgba(255, 255, 255, 0.04) 40%, rgba(227, 192, 122, 0.25))
       border-box;
-}
-.scn.on {
-  background:
-    linear-gradient(180deg, rgba(227, 192, 122, 0.12), rgba(227, 192, 122, 0.03)) padding-box,
-    var(--surf) padding-box,
-    var(--gold-grad) border-box;
 }
 /* corner ornaments */
 .orn {

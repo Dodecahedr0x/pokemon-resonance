@@ -84,6 +84,3 @@ body::before {
 .mono {
   font-family: var(--f-m);
 }
-.num {
-  font-variant-numeric: tabular-nums;
-}

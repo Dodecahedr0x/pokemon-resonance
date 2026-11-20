@@ -333,3 +333,6 @@ Each step is one commit (or a few), on its own, playable at every point.
   the lake (`.is-still`) and night haze (`.is-night`), and the Poké Ball layer (`.pokeball-layer`, `.pokeball-top`,
   `-bottom`, `-button`). Keyframes `fire-risk-flicker`, `lake-band-drift`, `lake-glint-drift`. Board snapshots identical
   at both widths apart from keyframe names.
+  A third pass that ignores one- to three-letter prefixes (a template such as `s${…}` no longer keeps every class
+  starting with « s » alive) removed 142 more parts: the old scenario cards (`.scn`), the splash screen (`.sp-*`,
+  `.splash`), the old Pokédex sheet (`.st-*`), `.seg`, `.frise`… and one more file.

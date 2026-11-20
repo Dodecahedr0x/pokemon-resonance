@@ -6,9 +6,6 @@ html body .card-header {
 
 /* Shiny states: real shiny artworks, subtler aura */
 /* Navigation and small finishing touches */
-html body .nav a.on {
-  text-shadow: 0 0 15px rgba(115, 217, 244, 0.35);
-}
 html body .chip,
 html body .card-count {
   border-color: rgba(150, 207, 230, 0.2) !important;

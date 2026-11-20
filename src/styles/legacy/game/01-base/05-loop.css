@@ -87,20 +87,6 @@
   background: var(--gold);
   border-color: var(--gold);
 }
-.feeds {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-xs);
-  align-items: center;
-}
-.feeds .lbl {
-  font-family: var(--f-m);
-  font-size: 10px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--mut);
-  margin-right: var(--space-2xs);
-}
 
 /* ---------- pokédex ---------- */
 .dex {

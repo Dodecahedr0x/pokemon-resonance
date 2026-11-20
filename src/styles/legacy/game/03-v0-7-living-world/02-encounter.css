@@ -14,70 +14,10 @@
 }
 
 /* Pokédex */
-.seg {
-  display: flex;
-  gap: var(--space-3xs);
-  padding: var(--space-3xs);
-  border-radius: 999px;
-  border: 1px solid var(--line2);
-  background: var(--s1);
-}
-.seg button {
-  border: 0;
-  background: transparent;
-  color: var(--tx2);
-  font: inherit;
-  font-size: 12.5px;
-  font-weight: 500;
-  padding: var(--space-xs) var(--space-md);
-  border-radius: 999px;
-  cursor: pointer;
-}
-.seg button[aria-pressed='true'] {
-  background: var(--tx);
-  color: var(--bg);
-}
 
-.fam {
-  display: flex;
-  gap: var(--space-xs);
-  flex-wrap: wrap;
-}
-
-.sm-slots.four {
-  grid-template-columns: repeat(4, 1fr);
-}
 /* preparation */
 .pt > .button {
   justify-self: start;
-}
-.scn {
-  overflow: hidden;
-}
-.scn::after {
-  content: '';
-  position: absolute;
-  right: -30px;
-  top: -30px;
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  opacity: 0.35;
-  filter: blur(20px);
-  background: var(--bc, #4f8a3c);
-  pointer-events: none;
-}
-.scn.bio-gue {
-  --bc: #3e8f4a;
-}
-.scn.bio-roche {
-  --bc: #b6853e;
-}
-.scn.bio-tour {
-  --bc: #7b5cc4;
-}
-.scn.bio-ligue {
-  --bc: #e3c07a;
 }
 /* boards by biome */
 .board {

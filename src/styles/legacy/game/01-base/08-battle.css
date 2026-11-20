@@ -50,64 +50,6 @@
   background: #f7d02c;
   color: #14120a;
 }
-.frise {
-  display: flex;
-  align-items: center;
-  gap: var(--space-xs);
-  padding: var(--space-sm) var(--space-md);
-  border-block: 1px solid var(--line);
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-.frise::-webkit-scrollbar {
-  display: none;
-}
-.frise .lbl {
-  font-family: var(--f-m);
-  font-size: 9.5px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--fnt);
-  flex: none;
-  margin-right: var(--space-2xs);
-}
-.ft {
-  flex: none;
-  display: flex;
-  align-items: center;
-  gap: var(--space-xs);
-  padding: var(--space-3xs) var(--space-sm) var(--space-3xs) var(--space-3xs);
-  border-radius: 999px;
-  border: 1px solid var(--line);
-  background: var(--s2);
-  font-size: 11px;
-  font-weight: 500;
-  transition:
-    background 0.35s,
-    color 0.35s,
-    opacity 0.35s,
-    border-color 0.35s;
-}
-.ft .medal {
-  width: 22px;
-  height: 22px;
-  box-shadow: none;
-}
-.ft.e {
-  border-color: rgba(255, 103, 103, 0.3);
-}
-.ft.cur {
-  background: var(--tx);
-  color: var(--bg);
-  border-color: var(--tx);
-}
-.ft.done {
-  opacity: 0.4;
-}
-.ft.par {
-  text-decoration: line-through;
-  color: var(--mut);
-}
 .board svg {
   display: block;
   width: 100%;

@@ -89,8 +89,6 @@ body {
 .section-title,
 .card-title,
 .sh-name,
-.st-name,
-.scn b,
 .mvc b,
 .al b,
 .log b {
@@ -109,8 +107,7 @@ body {
   font-size: 14.5px;
 }
 .section-title,
-.sh-name,
-.st-name {
+.sh-name {
   background: linear-gradient(180deg, #fff8e8 10%, #e9d9b0 48%, #b8975a 100%);
   -webkit-background-clip: text;
   background-clip: text;
@@ -118,9 +115,6 @@ body {
   text-shadow: none;
 }
 
-.num,
-.st-right b,
-.st-no,
 .f-dmg,
 .f-heal,
 .fl {
@@ -129,12 +123,7 @@ body {
   font-variant-numeric: tabular-nums lining-nums;
   letter-spacing: -0.01em;
 }
-.st-no {
-  font-weight: 800;
-  -webkit-text-stroke: 1px rgba(212, 175, 106, 0.22);
-}
 .caption,
-.scn .lvl,
 .bdg span {
   font-family: var(--f-m);
   letter-spacing: 0.24em;
@@ -143,10 +132,7 @@ body {
 /* ---------- surfaces: runic slabs ---------- */
 .panel,
 .rule,
-.scn,
 .mvc,
-.st-evo,
-.st-line,
 .duo,
 .wx,
 .it {
@@ -163,19 +149,15 @@ body {
 }
 .panel,
 .rule,
-.scn,
 .duo {
   border-radius: var(--rl);
 }
 .mvc,
-.st-evo,
-.st-line,
 .wx,
 .it {
   border-radius: var(--r);
 }
-.rule[open],
-.scn.on {
+.rule[open] {
   background:
     linear-gradient(180deg, rgba(212, 175, 106, 0.12), rgba(212, 175, 106, 0.02)) padding-box,
     var(--slab) padding-box,

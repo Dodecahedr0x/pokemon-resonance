@@ -101,7 +101,3 @@ button.chip:hover {
   box-shadow: var(--sh);
   min-width: 0;
 }
-.scroll-x {
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-}

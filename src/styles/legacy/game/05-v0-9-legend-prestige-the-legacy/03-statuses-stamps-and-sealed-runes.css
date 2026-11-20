@@ -96,20 +96,6 @@
   stroke: rgba(242, 221, 168, 0.6);
 }
 
-.st-line {
-  font-family: var(--f-b);
-  font-style: italic;
-  color: var(--tx2);
-}
-.st-dots button {
-  border-radius: 0;
-  height: 3px;
-  background: #2a2c33;
-}
-.st-dots button.on {
-  background: linear-gradient(90deg, #8e6a2c, #f2dda8, #8e6a2c);
-  box-shadow: 0 0 8px rgba(212, 175, 106, 0.6);
-}
 .rule summary .cd,
 .cd {
   font-family: var(--f-m);

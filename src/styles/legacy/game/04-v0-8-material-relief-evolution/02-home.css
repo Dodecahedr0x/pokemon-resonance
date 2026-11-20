@@ -5,31 +5,6 @@
   stroke-width: 4;
 }
 
-.st-vis::after {
-  content: '';
-  position: absolute;
-  inset: 14%;
-  border-radius: 50%;
-  box-shadow: 0 0 90px 10px color-mix(in srgb, var(--tint) 30%, transparent);
-  pointer-events: none;
-  z-index: -1;
-}
-.st-evo {
-  display: flex;
-  align-items: center;
-  gap: var(--space-sm);
-  flex-wrap: wrap;
-  padding: var(--space-md) var(--space-md);
-  border-radius: 14px;
-  border: 1px solid transparent;
-  background:
-    var(--surf) padding-box,
-    var(--bevel) border-box;
-  transition: opacity 0.4s;
-}
-.stage.swap .st-evo {
-  opacity: 0;
-}
 .se {
   display: inline-flex;
   align-items: center;

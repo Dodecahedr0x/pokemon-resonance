@@ -9,26 +9,6 @@
     0 32px 78px rgba(0, 0, 0, 0.48),
     inset 0 1px rgba(255, 255, 255, 0.1) !important;
 }
-#combat .scn {
-  border: 1px solid rgba(131, 221, 230, 0.2) !important;
-  border-radius: 17px !important;
-  background: linear-gradient(150deg, #15374a, #091b28) !important;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22) !important;
-  transition:
-    transform 0.2s,
-    border-color 0.2s,
-    box-shadow 0.2s !important;
-}
-#combat .scn:hover {
-  transform: translateY(-3px) !important;
-  border-color: rgba(131, 240, 239, 0.55) !important;
-}
-#combat .scn.on {
-  border-color: var(--r24-gold) !important;
-  box-shadow:
-    0 0 0 2px rgba(245, 207, 122, 0.14),
-    0 18px 35px rgba(0, 0, 0, 0.34) !important;
-}
 #combat .bt {
   border: 1px solid rgba(131, 226, 232, 0.42) !important;
   border-radius: 27px !important;

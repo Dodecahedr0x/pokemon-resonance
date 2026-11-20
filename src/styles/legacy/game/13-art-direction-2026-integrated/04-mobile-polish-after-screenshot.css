@@ -40,8 +40,7 @@ body {
   letter-spacing: -0.025em !important;
   text-shadow: 0 3px 22px rgba(0, 0, 0, 0.38) !important;
 }
-.lnk,
-.seg button {
+.lnk {
   transition:
     transform 0.2s,
     box-shadow 0.2s,
@@ -49,10 +48,7 @@ body {
 }
 .panel,
 .rule,
-.scn,
 .mvc,
-.st-evo,
-.st-line,
 .duo,
 .wx,
 .it,

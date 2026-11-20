@@ -18,19 +18,3 @@
 /* Guide */
 /* Team */
 /* Preparation */
-.scn:not(.on) .scn-art {
-  height: 30px;
-}
-.scn-gyms .scn:not(.on) .scn-art {
-  height: 30px;
-}
-.scn:not(.on) .scn-bdg {
-  width: 30px;
-  top: 2px;
-}
-.scn:not(.on) {
-  padding-bottom: var(--space-md);
-}
-.scn .lvl {
-  font-size: 9.5px;
-}

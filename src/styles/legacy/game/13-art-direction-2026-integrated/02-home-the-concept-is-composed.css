@@ -37,19 +37,6 @@
   min-height: 42px !important;
   font-weight: 850 !important;
 }
-.seg {
-  border-radius: 15px !important;
-  background: rgba(5, 23, 36, 0.78) !important;
-  border: 1px solid rgba(112, 211, 255, 0.2) !important;
-  padding: var(--space-sm) !important;
-  gap: var(--space-sm) !important;
-}
-.seg button {
-  min-height: 38px !important;
-}
-.seg button {
-  border-radius: 10px !important;
-}
 /* Battles: immersive arena frame, clear tactical hierarchy */
 #combat .pt,
 #combat .resume {

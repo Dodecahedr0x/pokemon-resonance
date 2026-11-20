@@ -1,38 +1,4 @@
 /* ---------- BATTLE: preparation ---------- */
-.scn-art {
-  display: block;
-  height: 58px;
-  margin: calc(var(--space-lg) * -1) calc(var(--space-xl) * -1) var(--space-2xs);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.6);
-  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.06);
-}
-.scn.bio-gue .scn-art {
-  background:
-    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='58'><path d='M0 46q10-6 20 0t20 0' fill='none' stroke='%23A8D4FF' stroke-opacity='.35'/><path d='M6 58l3-14 2 14M26 58l2-10 2 10' stroke='%2389C66B' stroke-opacity='.5' fill='none'/></svg>"),
-    linear-gradient(180deg, #2e5e3a, #1a3324 60%, #1d4f79);
-}
-.scn.bio-roche .scn-art {
-  background:
-    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='60' height='58'><path d='M0 30 20 12l14 12 12-8 14 14V58H0Z' fill='%23000' fill-opacity='.25'/><path d='M0 40h22l6 4h32M10 50h14l4-4h18' stroke='%23000' stroke-opacity='.35' fill='none'/></svg>"),
-    linear-gradient(180deg, #7a5a34, #4a3a28);
-}
-.scn.bio-tour .scn-art {
-  background:
-    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='80' height='58'><path d='M30 58V22l6-8 6 8v36M34 30h4M34 40h4' stroke='%23000' stroke-opacity='.45' fill='%23000' fill-opacity='.3'/><circle cx='64' cy='14' r='6' fill='%23E9E6FF' fill-opacity='.6'/><circle cx='12' cy='20' r='1' fill='white'/><circle cx='52' cy='34' r='1' fill='white' fill-opacity='.6'/></svg>"),
-    linear-gradient(180deg, #2b2147, #120e1f);
-}
-.scn.bio-ligue .scn-art {
-  background:
-    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='64' height='58'><path d='M-4 20C10 14 18 30 34 22S56 6 70 14M-4 48C14 40 24 56 40 46S60 34 70 40' stroke='%23E3C07A' stroke-opacity='.3' fill='none'/></svg>"),
-    linear-gradient(180deg, #26304a, #0e1322);
-}
-.scn .foes .fo {
-  position: relative;
-  display: inline-flex;
-}
-.scn::after {
-  z-index: 0;
-}
 /* ---------- BATTLE: arena ---------- */
 .bt {
   border: 1px solid transparent;

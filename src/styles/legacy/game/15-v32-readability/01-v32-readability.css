@@ -40,8 +40,7 @@ html body .hh-chips span {
     font-size: 11px !important;
   }
   /* informational text */
-  html body #bPhase,
-  html body .seg button {
+  html body #bPhase {
     font-size: 11.5px !important;
   }
   /* bottom navigation bar */

@@ -1,5 +1,0 @@
-/* fix: the generic .new class must not shift the badge card */
-.sp-go:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 4px rgba(212, 175, 106, 0.16);
-}
