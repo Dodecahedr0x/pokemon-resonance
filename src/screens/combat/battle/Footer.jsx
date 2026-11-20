@@ -28,7 +28,7 @@ function bar() {
         'Accéléré…'
       ) : (
         <>
-          Passer <span className="cnt">»</span>
+          Passer <span className="end-turn-count">»</span>
         </>
       )
     ) : (
@@ -36,11 +36,12 @@ function bar() {
     )
   ) : cur ? (
     <>
-      Terminer <span className="cnt">{cur.n}</span>
+      Terminer <span className="end-turn-count">{cur.n}</span>
     </>
   ) : B.coop ? (
     <>
-      {B.coop === 1 && isCoopPlayerAlive(B, 2) ? 'Passer au J2' : 'Fin du tour'} <span className="cnt">J{B.coop}</span>
+      {B.coop === 1 && isCoopPlayerAlive(B, 2) ? 'Passer au J2' : 'Fin du tour'}{' '}
+      <span className="end-turn-count">J{B.coop}</span>
     </>
   ) : (
     <>
@@ -48,7 +49,7 @@ function bar() {
       {ready ? (
         <>
           {' '}
-          <span className="cnt">
+          <span className="end-turn-count">
             {ready} prêt{ready > 1 ? 's' : ''}
           </span>
         </>
@@ -96,7 +97,7 @@ function bar() {
           {r ? (
             <>
               {' '}
-              <span className="cnt">
+              <span className="end-turn-count">
                 {r} prêt{r > 1 ? 's' : ''}
               </span>
             </>
@@ -178,22 +179,23 @@ export default function Footer() {
           x && x.phase
         )}
       </span>
-      {Q && Q.displayName ? <span className="thumb-reach-n">{Q.displayName}</span> : null}
+      {Q && Q.displayName ? <span className="thumb-reach-name">{Q.displayName}</span> : null}
       <Button
         variant="primary"
         id="bEnd"
+        className="end-turn-button"
         disabled={x ? x.disabled : undefined}
         style={x ? { display: x.g ? 'none' : '' } : undefined}
       >
         {x ? x.actionButton : 'Fin du tour'}
       </Button>
       {v > 0 && (
-        <span id="turn-guide-pied" className="turn-guide-pied" aria-live="polite" hidden={!(x && x.stepOf)}>
+        <span id="turn-guide-step" className="turn-guide-step" aria-live="polite" hidden={!(x && x.stepOf)}>
           {(x && x.stepOf) || (lastStep && lastStep.el)}
         </span>
       )}
       {v > 0 && (
-        <span className="kbd" aria-hidden="true">
+        <span className="keyboard-hints" aria-hidden="true">
           <i>1</i>
           <i>2</i> capacités · <i>Entrée</i> confirmer · <i>Échap</i> annuler · <i>←</i>
           <i>→</i> Pokémon · <i>Espace</i> étape suivante

@@ -98,14 +98,6 @@ html body a:focus-visible {
 /* Exploration: deeper scene, the game's SVG illustration stays intact */
 /* Gyms: each environment keeps its own colors and rules */
 /* Battle board: scene, floor and depth without touching the tactical SVG */
-html body .bt {
-  border-radius: 22px !important;
-  background: linear-gradient(145deg, rgba(12, 34, 51, 0.97), rgba(4, 15, 25, 0.99)) !important;
-  border: 1px solid rgba(145, 205, 230, 0.2) !important;
-  box-shadow:
-    0 25px 65px rgba(0, 0, 0, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.07);
-}
 html body #bSvg image {
   filter: drop-shadow(0 5px 8px rgba(0, 0, 0, 0.36));
 }

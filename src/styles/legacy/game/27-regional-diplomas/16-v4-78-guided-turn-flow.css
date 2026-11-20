@@ -1,28 +1,5 @@
 /* <style id="resonance-turn-flow"> */
 /* v4.78 : guided turn flow */
-#cbBattle .turn-guide-pied {
-  display: none;
-}
-html body.compact-battle #cbBattle .bt-foot .turn-guide-pied:not([hidden]) {
-  display: flex;
-  align-items: center;
-  gap: var(--space-xs);
-  order: 3;
-  margin-left: auto;
-  min-width: 0;
-  height: 38px;
-  padding: 0 var(--space-md);
-  border: 1px solid rgba(255, 214, 102, 0.45);
-  border-radius: 12px;
-  background: rgba(255, 214, 102, 0.08);
-  font-size: 12.5px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-html body.compact-battle #cbBattle .bt-foot .turn-guide-pied b {
-  color: var(--gold);
-}
 
 /* ---------- screen headers: one instruction at a time ----------
    When Prof. Sorbier's tip (.professor-tip) follows the header, it already says what to do:

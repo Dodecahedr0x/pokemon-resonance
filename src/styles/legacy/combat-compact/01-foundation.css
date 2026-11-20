@@ -13,20 +13,6 @@
 }
 
 /* scene tint according to the phase */
-.bt-stage {
-  position: relative;
-}
-.bt-stage::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 6;
-  pointer-events: none;
-  border-radius: inherit;
-  transition:
-    background 0.4s,
-    box-shadow 0.4s;
-}
 
 /* ================= desktop ================= */
 @media (min-width: 1121px) {
@@ -52,25 +38,8 @@
   }
 
   /* game column: one-line HUD, then the scene taking the full height */
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt {
-    display: grid !important;
-    grid-template-columns: minmax(0, 1fr) auto;
-    grid-template-rows: auto auto auto minmax(0, 1fr);
-    min-height: 0;
-    padding: 0 !important;
-    border-radius: 18px !important;
-    overflow: hidden !important;
-  }
 
   /* the scene: full-frame board, plates as cards placed at the top and bottom */
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-stage {
-    grid-row: 4;
-    grid-column: 1/-1;
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-    overflow: hidden;
-  }
   /* board tools and time badge: just below the opponent cards */
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bBoard > .board-tools {
     top: 66px !important;
@@ -78,33 +47,4 @@
   }
 
   /* command panel: it fills the column, only its content scrolls if needed */
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side {
-    position: static !important;
-    top: auto !important;
-    height: 100%;
-    max-height: none !important;
-    min-height: 0;
-    display: flex !important;
-    flex-direction: column;
-    gap: var(--space-sm) !important;
-    padding: 0 !important;
-    overflow: hidden !important;
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .bt-foot {
-    flex: none;
-    position: static !important;
-    order: 2;
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .bt-foot .kbd {
-    display: none !important;
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .blog {
-    flex: none;
-    order: 1;
-    margin: 0 !important;
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .blog #bLog {
-    max-height: 150px;
-    overflow-y: auto;
-  }
 }

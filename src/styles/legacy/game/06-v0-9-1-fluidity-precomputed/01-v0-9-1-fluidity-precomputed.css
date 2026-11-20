@@ -48,42 +48,6 @@
   .battle {
     gap: var(--space-sm);
   }
-  .bt {
-    overflow: clip;
-  }
-  .bt-foot {
-    position: sticky;
-    bottom: calc(var(--bn) + env(safe-area-inset-bottom, 0px));
-    z-index: 4;
-    background: rgba(10, 10, 12, 0.97);
-    padding: var(--space-sm) var(--space-md);
-  }
-  .bt-foot {
-    display: flex;
-    flex-wrap: nowrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-sm);
-    padding: var(--space-sm) var(--space-md);
-  }
-  .bt-foot .phase {
-    flex: 1;
-    min-width: 0;
-    font-size: 10.5px;
-    line-height: 1.35;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-  .bt-foot .button {
-    flex: none;
-    height: 46px;
-    padding: 0 var(--space-lg);
-  }
-  .blog {
-    max-height: 220px;
-  }
 }
 html,
 body {

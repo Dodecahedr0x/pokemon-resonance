@@ -90,6 +90,10 @@
 @import '../screens/combat/battle/result-lists.css' layer(screens);
 @import '../screens/combat/battle/result-effects.css' layer(screens);
 @import '../screens/combat/battle/evolution-choice.css' layer(screens);
+@import '../screens/combat/battle/battle-layout.css' layer(screens);
+@import '../screens/combat/battle/battle-footer.css' layer(screens);
+@import '../screens/combat/battle/thumb-reach.css' layer(screens);
+@import '../screens/combat/battle/battle-log.css' layer(screens);
 @import '../screens/combat/battle/tile-info.css' layer(screens);
 @import '../screens/combat/board/board-host.css' layer(screens);
 @import '../screens/combat/board/board-ambience.css' layer(screens);

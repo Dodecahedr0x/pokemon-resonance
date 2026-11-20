@@ -98,11 +98,11 @@
   }
 }
 /* the phase also tints the board and the command panel */
-.battle:has(.battle-phase[data-ph='enemy']) .bt-stage::after {
+.battle:has(.battle-phase[data-ph='enemy']) .battle-stage::after {
   background: linear-gradient(180deg, rgba(255, 60, 60, 0.14), rgba(255, 60, 60, 0.03) 55%, transparent);
   box-shadow: inset 0 0 0 2px rgba(255, 103, 103, 0.4);
 }
-.battle:has(.battle-phase[data-ph='deploy']) .bt-stage::after {
+.battle:has(.battle-phase[data-ph='deploy']) .battle-stage::after {
   background: radial-gradient(80% 45% at 50% 100%, rgba(79, 214, 156, 0.14), transparent 70%);
   box-shadow: inset 0 0 0 2px rgba(79, 214, 156, 0.35);
 }
@@ -283,10 +283,10 @@
   .battle-quit {
     order: 8;
   }
-  .battle:has(.battle-phase[data-ph='enemy']) .bt-side {
+  .battle:has(.battle-phase[data-ph='enemy']) .battle-side {
     border-top-color: rgba(255, 103, 103, 0.6);
   }
-  .battle:has(.battle-phase[data-ph='deploy']) .bt-side {
+  .battle:has(.battle-phase[data-ph='deploy']) .battle-side {
     border-top-color: rgba(79, 214, 156, 0.55);
   }
 }

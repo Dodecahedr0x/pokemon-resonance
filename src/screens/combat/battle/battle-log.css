@@ -1,0 +1,110 @@
+/* Battle › battle log (Log.jsx, .battle-log): a collapsed <details> showing the last line; system, arena and
+   evolution lines (.is-system, .is-arena, .is-evolution) are tinted. */
+
+.battle-log {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  max-height: none;
+  padding: 0;
+  border: 1px solid rgba(130, 213, 225, 0.16);
+  border-radius: 16px;
+  background: rgba(7, 22, 32, 0.92);
+}
+.battle-log h4 {
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  margin: 0 0 var(--space-sm);
+  font-family: var(--font-display);
+  letter-spacing: 0.2em;
+  color: var(--color-accent-soft);
+}
+.battle-log ol {
+  list-style: none;
+  margin: 0;
+  overflow-y: auto;
+  display: grid;
+  gap: var(--space-xs);
+  align-content: start;
+  max-height: 260px;
+  padding: 0 var(--space-md) var(--space-md);
+}
+.battle-log li {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr);
+  gap: var(--space-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.45;
+  font-size: 12.5px;
+}
+.battle-log li span {
+  font-size: 9.5px;
+  padding-top: var(--space-3xs);
+  font-family: var(--font-numeric);
+  font-stretch: 72%;
+  color: var(--color-accent);
+}
+.battle-log li.is-system {
+  color: var(--color-accent-soft);
+}
+.battle-log li.is-evolution {
+  color: var(--color-accent-soft);
+}
+.battle-log li.is-arena {
+  color: #f0b860;
+}
+.battle-log > summary {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-md);
+  cursor: pointer;
+  list-style: none;
+  min-width: 0;
+}
+.battle-log > summary::-webkit-details-marker {
+  display: none;
+}
+.battle-log > summary em {
+  flex: 1;
+  min-width: 0;
+  font-style: normal;
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.battle-log > summary::after {
+  content: '';
+  width: 8px;
+  height: 8px;
+  flex: none;
+  border-right: 1.5px solid var(--color-accent);
+  border-bottom: 1.5px solid var(--color-accent);
+  transform: rotate(45deg);
+}
+.battle-log[open] > summary::after {
+  transform: rotate(-135deg);
+}
+@media (max-width: 999px) {
+  :where(.battle-side) .battle-log {
+    order: 3;
+  }
+}
+@media (min-width: 1121px) {
+  :where(.battle) .battle-side .battle-log {
+    flex: none;
+    order: 1;
+    margin: 0;
+  }
+  :where(.battle) .battle-side .battle-log ol {
+    max-height: 150px;
+    overflow-y: auto;
+  }
+}
+@media (max-width: 700px) {
+  :where(.battle) .battle-side .battle-log {
+    display: none;
+  }
+}

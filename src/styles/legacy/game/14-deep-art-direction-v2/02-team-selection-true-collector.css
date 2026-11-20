@@ -4,15 +4,6 @@
   overflow: hidden !important;
   border-radius: 19px !important;
 }
-#combat .bt {
-  background: linear-gradient(180deg, rgba(6, 30, 45, 0.7), rgba(3, 17, 29, 0.95)) !important;
-  border: 1px solid rgba(102, 214, 255, 0.24) !important;
-  border-radius: 19px !important;
-  padding: var(--space-md) !important;
-}
-#combat .bt-side {
-  gap: var(--space-sm) !important;
-}
 /* Pokédex / type guide / league: visual hierarchy and rich panels */
 /* all dialogs and controls use the same tactile glass language (the Pokédex and team toolbars draw their own) */
 input:not(:where(.dex-search input, .team-search input, .intro-card input)),

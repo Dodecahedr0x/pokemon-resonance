@@ -71,7 +71,7 @@ function setFullscreen(on, viaButton) {
 // or in the bottom bar (Foot.jsx); the bottom bar's footTools class follows the same state
 function syncBoardTools() {
   const bd = document.getElementById('bBoard'),
-    ft = document.querySelector('#cbBattle .bt-foot');
+    ft = document.querySelector('#cbBattle .battle-footer');
   if (!bd) {
     return;
   }
@@ -87,7 +87,7 @@ function syncBoardTools() {
   if (!o || o.foot !== b.foot || o.fs !== b.fs || o.lp !== b.lp || o.ct !== b.ct) {
     hostSet({ boardTools: b });
   }
-  const chg = ft ? footCls('foot-tools', foot) : false;
+  const chg = ft ? footCls('has-tools', foot) : false;
   // the bottom bar follows: footTools class (move) or button contents
   if (chg || (foot && o && (o.fs !== b.fs || o.lp !== b.lp || o.ct !== b.ct))) {
     refreshBattle('foot');
@@ -295,7 +295,7 @@ function placeSheet(withoutRender) {
   if (!F.made || F.hidden) {
     return;
   }
-  const ft = document.querySelector('#cbBattle .bt-foot'),
+  const ft = document.querySelector('#cbBattle .battle-footer'),
     isFixed = ft && getComputedStyle(ft).position === 'fixed',
     bottomEdge = isFixed ? ft.getBoundingClientRect().top : innerHeight,
     k = inspectedTile(),

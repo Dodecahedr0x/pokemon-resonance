@@ -1,5 +1,5 @@
 // Board toolbar (v4.44): fullscreen, magnifier, high-contrast board, help.
-// Large screen: corner of the board (#bBoard); phone: in the bottom bar (.bt-foot).
+// Large screen: corner of the board (#bBoard); phone: in the bottom bar (.battle-footer).
 // State set by syncBoardTools (engine, 077) in getHost().boardTools; delegated engine clicks.
 
 const IC = {

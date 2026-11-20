@@ -37,9 +37,6 @@ html.a11y-cb {
   --bad: #ff9f1a !important;
   --warn: #ffe14a !important;
 }
-html.a11y-lh .bt-foot {
-  flex-direction: row-reverse;
-}
 html.a11y-rm *,
 html.a11y-rm *::before,
 html.a11y-rm *::after {

@@ -16,20 +16,20 @@ export default function Battle({ children }) {
   return (
     <div id="cbBattle" hidden>
       <div className="battle">
-        <div className="bt">
+        <div className="battle-main">
           <BtTop />
           <Synergies />
           <Rule />
           <Timeline />
           {/* scene (compact view): the board full-frame, the plates laid over the scenery */}
-          <div className="bt-stage">
+          <div className="battle-stage">
             <PlatesE />
             <Defense />
             {children}
             <PlatesA />
           </div>
         </div>
-        <aside className="bt-side" aria-label="Commandes">
+        <aside className="battle-side" aria-label="Commandes">
           <Panel />
           <Footer />
           <Log />

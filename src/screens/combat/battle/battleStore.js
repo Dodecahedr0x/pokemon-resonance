@@ -23,10 +23,10 @@ export const useBattleVersion = k => chan.use(() => versions[k]);
 // Evolution choice open: the Pokémon that is evolving.
 export const evoState = { u: null };
 
-// Bottom bar (.bt-foot): classes in the order classList placed them (qa-on v4.43, footTools v4.44),
+// Bottom bar (.battle-footer): classes in the order classList placed them (has-thumb-reach, has-tools),
 // thumb-reach attacks (#thumbReach and .thumbReach-n, v4.43): null until the bar has been used.
 //   qa : { hidden, displayName, items: [{ t, c, col, on, disabled }] }
-export const footPos = { cls: ['bt-foot'], qa: null };
+export const footPos = { cls: ['battle-footer'], qa: null };
 
 /** classList.toggle on the bottom bar; true if the class changed (to be followed by refreshBattle('foot')). */
 export function footCls(displayName, on) {

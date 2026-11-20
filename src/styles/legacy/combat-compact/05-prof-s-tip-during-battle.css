@@ -9,60 +9,18 @@
 
   /* drawer footer on two rows: quick actions (or the phase hint) get the full width,
      board tools and the end/launch button share the second row. */
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .bt-foot {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    align-items: center;
-    gap: var(--space-sm) !important;
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .bt-foot .phase {
-    order: 0 !important;
-    flex: 0 0 100% !important;
-    min-width: 0;
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .bt-foot #bEnd {
-    order: 3;
-    flex: 1 1 0 !important;
-    min-width: 0 !important;
-    padding: 0 var(--space-sm) !important;
-    height: 44px !important;
-    min-height: 44px !important;
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .bt-foot .turn-guide-pied {
-    display: none !important;
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .bt-foot #thumb-reach {
-    order: 1;
-    flex: 1 1 100%;
-    min-width: 0;
-    margin: 0 !important;
-    overflow-x: auto;
-    scrollbar-width: none;
-    -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 20px), transparent);
-    mask-image: linear-gradient(90deg, #000 calc(100% - 20px), transparent);
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .bt-foot #thumb-reach::-webkit-scrollbar {
-    display: none;
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .bt-foot #thumb-reach > button {
-    flex: none;
-    height: 40px;
-  }
-  html:not(#cc)
-    body:not(#cc):has(#cbBattle:not([hidden]))
-    #cbBattle
-    .bt-side
-    .bt-foot
-    #thumb-reach
-    > button:last-child {
-    margin-right: var(--space-lg);
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .bt-foot .board-tools.in-foot {
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .battle-side .battle-footer .board-tools.in-foot {
     order: 2;
     flex: none;
     gap: var(--space-2xs) !important;
   }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .bt-foot .board-tools.in-foot button {
+  html:not(#cc)
+    body:not(#cc):has(#cbBattle:not([hidden]))
+    #cbBattle
+    .battle-side
+    .battle-footer
+    .board-tools.in-foot
+    button {
     width: 44px !important;
     height: 44px !important;
   }

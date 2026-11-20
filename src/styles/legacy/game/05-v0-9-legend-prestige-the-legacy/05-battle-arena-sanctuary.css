@@ -1,15 +1,4 @@
 /* ---------- battle: arena / sanctuary ---------- */
-.bt {
-  border-radius: var(--rl);
-  background:
-    var(--veins) padding-box,
-    linear-gradient(180deg, #121317, #08080a) padding-box,
-    var(--edge) border-box;
-  background-size:
-    560px 560px,
-    auto,
-    auto;
-}
 @keyframes shock {
   20% {
     transform: translateX(-3px);

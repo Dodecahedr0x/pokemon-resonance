@@ -5,94 +5,9 @@
   gap: var(--space-md);
   align-items: start;
 }
-.bt-side {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-sm);
-  min-width: 0;
-}
-.bt-side .bt-foot {
-  border-radius: var(--rl);
-  border: 1px solid transparent;
-  background:
-    linear-gradient(180deg, #141519, #0b0b0e) padding-box,
-    var(--brass) border-box;
-  padding: var(--space-sm) var(--space-md);
-}
-.blog {
-  max-height: none;
-  padding: 0;
-}
-.blog > summary {
-  display: flex;
-  align-items: center;
-  gap: var(--space-md);
-  padding: var(--space-md) var(--space-md);
-  cursor: pointer;
-  list-style: none;
-  min-width: 0;
-}
-.blog > summary::-webkit-details-marker {
-  display: none;
-}
-.blog > summary em {
-  flex: 1;
-  min-width: 0;
-  font-style: normal;
-  font-size: 12px;
-  color: var(--tx2);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.blog > summary::after {
-  content: '';
-  width: 8px;
-  height: 8px;
-  flex: none;
-  border-right: 1.5px solid var(--gold);
-  border-bottom: 1.5px solid var(--gold);
-  transform: rotate(45deg);
-}
-.blog[open] > summary::after {
-  transform: rotate(-135deg);
-}
-.blog ol {
-  max-height: 260px;
-  padding: 0 var(--space-md) var(--space-md);
-}
 @media (min-width: 1000px) {
   .battle {
     grid-template-columns: minmax(0, 1fr) minmax(330px, 370px);
-  }
-  .bt-side {
-    position: sticky;
-    top: 12px;
-    max-height: calc(100vh - 24px);
-    overflow-y: auto;
-    overscroll-behavior: contain;
-    scrollbar-width: thin;
-  }
-  .bt-side .bt-foot {
-    position: sticky;
-    bottom: 0;
-    z-index: 3;
-  }
-}
-@media (max-width: 999px) {
-  .bt-side {
-    padding-bottom: 76px;
-  }
-  .bt-side .bt-foot {
-    position: fixed;
-    left: 8px;
-    right: 8px;
-    bottom: calc(var(--bn) + 6px + env(safe-area-inset-bottom, 0px));
-    z-index: 40;
-    box-shadow: 0 -10px 30px -10px #000;
-  }
-  .bt-side .blog {
-    order: 3;
   }
 }
 /* panel: role in a single badge, details on demand */

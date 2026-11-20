@@ -14,81 +14,8 @@
     overflow: visible !important;
   }
   /* screen-height game column, above the drawer: HUD, then the scene taking the rest */
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt {
-    display: flex !important;
-    flex-direction: column;
-    height: calc(100dvh - var(--dock));
-    box-sizing: border-box;
-    padding: var(--space-xs) var(--space-xs) var(--space-sm) !important;
-    gap: var(--space-xs);
-    border: 0 !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
-    overflow: hidden !important;
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt > * {
-    flex: none;
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-stage {
-    flex: 1 1 auto;
-    min-height: 0;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    border-radius: 14px;
-  }
   /* opponents placed on the board's sky (top margin of the drawing), team just below */
 
   /* command drawer */
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side {
-    position: fixed !important;
-    left: 0 !important;
-    right: 0 !important;
-    bottom: 0 !important;
-    top: auto !important;
-    z-index: 40;
-    max-height: var(--dock);
-    height: var(--dock);
-    display: flex !important;
-    flex-direction: column;
-    gap: var(--space-sm) !important;
-    padding: var(--space-sm) var(--space-sm) 0 !important;
-    overflow: hidden !important;
-    border-radius: 22px 22px 0 0;
-    border: 1px solid transparent;
-    border-bottom: 0;
-    background:
-      repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.014) 0 1px, transparent 1px 6px) padding-box,
-      linear-gradient(180deg, #171b24, #0f1219) padding-box,
-      linear-gradient(
-          165deg,
-          rgba(255, 255, 255, 0.17),
-          rgba(255, 255, 255, 0.035) 34%,
-          rgba(255, 255, 255, 0.02) 66%,
-          rgba(227, 192, 122, 0.2)
-        )
-        border-box;
-    box-shadow: 0 -20px 40px -20px #000;
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .bt-foot {
-    position: static !important;
-    left: auto !important;
-    right: auto !important;
-    bottom: auto !important;
-    flex: none;
-    margin: 0 calc(var(--space-sm) * -1) !important;
-    padding: var(--space-sm) var(--space-sm) calc(var(--space-sm) + env(safe-area-inset-bottom, 0px)) !important;
-    border-radius: 0 !important;
-    border: 0 !important;
-    border-top: 1px solid rgba(255, 255, 255, 0.07) !important;
-    background: rgba(10, 12, 16, 0.9) !important;
-    box-shadow: none !important;
-  }
   /* Pokémon header on one line: medal, name, HP */
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .blog {
-    display: none !important;
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .bt-foot .kbd {
-    display: none !important;
-  }
 }

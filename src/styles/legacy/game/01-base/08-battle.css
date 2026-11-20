@@ -10,14 +10,6 @@
     grid-template-columns: 1fr;
   }
 }
-.bt {
-  border-radius: var(--rl);
-  overflow: hidden;
-  border: 1px solid var(--line2);
-  background: linear-gradient(180deg, var(--s1), var(--s0));
-  box-shadow: var(--sh);
-  min-width: 0;
-}
 .hp {
   height: 5px;
   border-radius: 3px;

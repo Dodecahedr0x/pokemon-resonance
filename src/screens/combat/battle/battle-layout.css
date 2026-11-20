@@ -1,0 +1,157 @@
+/* Battle › frame of the battle screen (Battle.jsx): the main column (.battle-main) with the stage holding the board
+   (.battle-stage), and the side column (.battle-side) with the panel, footer and log; phone layout under
+   body.compact-battle. */
+
+.battle-main {
+  overflow: hidden;
+  min-width: 0;
+  padding: var(--space-lg);
+  border: 1px solid rgba(88, 186, 255, 0.34);
+  border-radius: 27px;
+  box-shadow:
+    0 34px 85px rgba(0, 0, 0, 0.5),
+    inset 0 1px rgba(255, 255, 255, 0.12);
+  background: var(--surface-card);
+}
+@media (max-width: 700px) {
+  .battle-main {
+    overflow: clip;
+  }
+}
+.battle-side {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: var(--space-sm);
+}
+@media (min-width: 1000px) {
+  .battle-side {
+    position: sticky;
+    top: 12px;
+    max-height: calc(100vh - 24px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+  }
+}
+@media (max-width: 999px) {
+  .battle-side {
+    padding-bottom: 76px; /* room for the fixed footer */
+  }
+}
+@media (max-width: 850px) {
+  .battle-main {
+    padding: var(--space-sm);
+  }
+}
+:where(body.compact-battle) .battle-main {
+  padding: var(--space-xs);
+  border-radius: 18px;
+}
+:where(body.compact-battle) .battle-side {
+  padding-bottom: 110px; /* room for the fixed footer and the thumb-reach row */
+}
+.battle-stage {
+  position: relative;
+}
+.battle-stage::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  pointer-events: none;
+  border-radius: inherit;
+  transition:
+    background 0.4s,
+    box-shadow 0.4s;
+}
+@media (min-width: 1121px) {
+  :where(.battle) .battle-main {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: auto auto auto minmax(0, 1fr);
+    min-height: 0;
+    display: grid;
+    padding: 0;
+    border-radius: 18px;
+    overflow: hidden;
+  }
+  :where(.battle) .battle-stage {
+    grid-row: 4;
+    grid-column: 1/-1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+  }
+  :where(.battle) .battle-side {
+    height: 100%;
+    min-height: 0;
+    flex-direction: column;
+    position: static;
+    top: auto;
+    display: flex;
+    gap: var(--space-sm);
+    padding: 0;
+    overflow: hidden;
+  }
+}
+@media (max-width: 700px) {
+  :where(.battle) .battle-main {
+    flex-direction: column;
+    height: calc(100dvh - var(--dock));
+    box-sizing: border-box;
+    gap: var(--space-xs);
+    display: flex;
+    padding: var(--space-xs) var(--space-xs) var(--space-sm);
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    overflow: hidden;
+  }
+  :where(.battle) .battle-main > * {
+    flex: none;
+  }
+  :where(.battle) .battle-stage {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: 14px;
+  }
+  :where(.battle) .battle-side {
+    z-index: 40;
+    max-height: var(--dock);
+    height: var(--dock);
+    flex-direction: column;
+    border-radius: 22px 22px 0 0;
+    border: 1px solid transparent;
+    border-bottom: 0;
+    background:
+      repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.014) 0 1px, transparent 1px 6px) padding-box,
+      linear-gradient(180deg, #171b24, #0f1219) padding-box,
+      linear-gradient(
+          165deg,
+          rgba(255, 255, 255, 0.17),
+          rgba(255, 255, 255, 0.035) 34%,
+          rgba(255, 255, 255, 0.02) 66%,
+          rgba(227, 192, 122, 0.2)
+        )
+        border-box;
+    box-shadow: 0 -20px 40px -20px #000;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: auto;
+    display: flex;
+    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-sm) 0;
+    overflow: hidden;
+  }
+}
+@media (min-width: 1121px) {
+  :where(.battle) .battle-side {
+    max-height: none;
+  }
+}

@@ -14,7 +14,7 @@ export function alignBoardFrame() {
       return;
     }
     const bd = document.getElementById('bBoard'),
-      ft = document.querySelector('#cbBattle .bt-foot');
+      ft = document.querySelector('#cbBattle .battle-footer');
     if (!bd || !ft) {
       return;
     }
@@ -34,7 +34,7 @@ export function alignBoardFrame() {
 function thumbActionLabel(b, u) {
   const d = b.dataset;
   if (d.pv) {
-    return { t: d.pv === 'ok' ? 'Confirmer' : 'Annuler', c: d.pv === 'ok' ? 'qa-ok' : 'qa-no' };
+    return { t: d.pv === 'ok' ? 'Confirmer' : 'Annuler', c: d.pv === 'ok' ? 'is-confirm' : 'is-cancel' };
   }
   if (d.mi != null) {
     const m = u && MV[u.mv[+d.mi]],
@@ -43,30 +43,30 @@ function thumbActionLabel(b, u) {
     return { t: m ? m.n : nb ? nb.firstChild && nb.firstChild.textContent : 'Capacité', col: ty ? tc(ty) : '' };
   }
   if (d.evo) {
-    return { t: 'Éveil', c: 'qa-evo' };
+    return { t: 'Éveil', c: 'is-awaken' };
   }
   if (d.undo) {
-    return { t: '↶ Annuler', c: 'qa-no' };
+    return { t: '↶ Annuler', c: 'is-cancel' };
   }
   if (d.duo) {
     const p = byUid(B, d.duo);
-    return { t: 'Duo' + (p ? ' · ' + p.n : ''), c: 'qa-duo' };
+    return { t: 'Duo' + (p ? ' · ' + p.n : ''), c: 'is-duo' };
   }
   if (d.vx) {
     return {
       t: d.vx === 'dodge' ? 'Esquive' : d.vx === 'relance' ? 'Relance' : (b.querySelector('b') || b).textContent.trim(),
-      c: 'qa-vx',
+      c: 'is-reaction',
     };
   }
   if (d.cap) {
-    return { t: 'Capturer', c: 'qa-cap' };
+    return { t: 'Capturer', c: 'is-capture' };
   }
   return { t: b.textContent.trim().slice(0, 18) };
 }
 
 function thumbReach() {
   try {
-    const ft = document.querySelector('#cbBattle .bt-foot'),
+    const ft = document.querySelector('#cbBattle .battle-footer'),
       P = document.getElementById('bPanel');
     if (!ft || !P) {
       return;
@@ -90,7 +90,7 @@ function thumbReach() {
     // #thumbReach and .thumbReach-n: rendered by React (src/screens/combat/battle/Foot.jsx) from footPos.qa
     const Q = footPos.qa;
     if (!useful) {
-      const chg = footCls('qa-on', false);
+      const chg = footCls('has-thumb-reach', false);
       if (Q && !Q.hidden) {
         footPos.qa = { ...Q, hidden: true, displayName: null };
       }
@@ -110,7 +110,7 @@ function thumbReach() {
       return { t: L.t || '', c: L.c || '', col: L.col || '', on: b.classList.contains('on'), disabled: !!b.disabled };
     });
     footPos.qa = { hidden: false, displayName: u.n + ' · à vous', items };
-    footCls('qa-on', true);
+    footCls('has-thumb-reach', true);
     refreshBattle('foot');
   } catch {
     /* Best effort: failure here is non-fatal. */

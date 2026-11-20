@@ -1,32 +1,4 @@
 /* banners and panel */
-.blog {
-  border-radius: var(--rl);
-}
-.blog h4 {
-  font-family: var(--f-d);
-  letter-spacing: 0.2em;
-  color: var(--gold-l);
-}
-.blog li {
-  font-size: 12.5px;
-}
-.blog li span {
-  font-family: var(--f-n);
-  font-stretch: 72%;
-  color: var(--gold);
-}
-.blog li.arn {
-  color: #f0b860;
-}
-.bt-foot {
-  border-top: 1px solid rgba(212, 175, 106, 0.15);
-  background: linear-gradient(0deg, rgba(212, 175, 106, 0.04), transparent);
-}
-.bt-foot .phase {
-  font-family: var(--f-m);
-  font-size: 11px;
-  letter-spacing: 0.06em;
-}
 /* evolution choice, cutscene, result */
 /* ---------- League: badge box ---------- */
 .bdg {

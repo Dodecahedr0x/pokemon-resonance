@@ -32,36 +32,11 @@ html body.compact-battle {
 html body.compact-battle #combat.page.on {
   padding-bottom: 0 !important;
 }
-html body.compact-battle #combat .bt {
-  padding: var(--space-xs) !important;
-  border-radius: 18px !important;
-}
-html body.compact-battle #cbBattle .bt-side .bt-foot {
-  bottom: calc(6px + env(safe-area-inset-bottom, 0px)) !important;
-  padding: var(--space-xs) var(--space-sm) !important;
-  row-gap: var(--space-xs) !important;
-  column-gap: var(--space-xs) !important;
-  flex-wrap: wrap !important;
-}
-html body.compact-battle #cbBattle .bt-foot .board-tools.in-foot {
+html body.compact-battle #cbBattle .battle-footer .board-tools.in-foot {
   gap: var(--space-2xs);
 }
-html body.compact-battle #cbBattle .bt-foot .board-tools.in-foot button {
+html body.compact-battle #cbBattle .battle-footer .board-tools.in-foot button {
   width: 36px;
   height: 36px;
-}
-html body.compact-battle #cbBattle .bt-foot #bEnd {
-  flex: 1 1 auto !important;
-  min-width: 0 !important;
-  height: 38px !important;
-  min-height: 38px !important;
-  padding: 0 var(--space-sm) !important;
-  white-space: nowrap;
-}
-html body.compact-battle #cbBattle .bt-foot .thumb-reach button {
-  min-height: 36px;
-}
-html body.compact-battle #cbBattle .bt-side {
-  padding-bottom: 110px;
 }
 /* the board keeps its shape but never exceeds the screen: banner + teams + bottom bar ≈ 335 px */

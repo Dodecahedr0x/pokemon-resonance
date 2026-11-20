@@ -1,12 +1,5 @@
 /* ---------- BATTLE: preparation ---------- */
 /* ---------- BATTLE: arena ---------- */
-.bt {
-  border: 1px solid transparent;
-  background:
-    var(--hatch) padding-box,
-    linear-gradient(180deg, #12161e, #0a0c11) padding-box,
-    var(--bevel) border-box;
-}
 @keyframes mkd {
   to {
     stroke-dashoffset: -60;

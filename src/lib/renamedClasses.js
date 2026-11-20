@@ -795,6 +795,21 @@ export const RENAMED_CLASSES = {
   'tile-info-leg': 'tile-info-legend',
   'lg-reach': 'legend-reach',
   'lg-danger': 'legend-danger',
+  bt: 'battle-main',
+  'bt-side': 'battle-side',
+  'bt-stage': 'battle-stage',
+  'bt-foot': 'battle-footer',
+  blog: 'battle-log',
+  'thumb-reach-n': 'thumb-reach-name',
+  cnt: 'end-turn-count',
+  kbd: 'keyboard-hints',
+  'turn-guide-pied': 'turn-guide-step',
+  'foot-tools': 'has-tools',
+  'qa-on': 'has-thumb-reach',
+  'qa-ok': 'is-confirm',
+  'qa-no': 'is-cancel',
+  'qa-evo': 'is-awaken',
+  'qa-cap': 'is-capture',
 };
 
 const OLD_CLASS = new RegExp(

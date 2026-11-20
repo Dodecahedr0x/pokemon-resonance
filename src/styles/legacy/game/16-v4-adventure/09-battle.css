@@ -1,6 +1,5 @@
 /* ---------- Battle ---------- */
 html body #combat .sel,
-html body #combat .bt,
 html body #combat .battle,
 html body #combat .pt {
   background: linear-gradient(180deg, var(--v4-p1), var(--v4-p2)) !important;

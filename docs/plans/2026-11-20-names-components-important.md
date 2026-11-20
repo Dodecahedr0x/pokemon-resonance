@@ -346,6 +346,13 @@ Each step is one commit (or a few), on its own, playable at every point.
   `-close`, `-body`, `-rules`, `-label`, `-reactions`, `-dangers`, `-context`, `-pokemon` (`.is-ally`, `.is-enemy`),
   `-pokemon-header`, `-pokemon-stats`, `-legend` (`.legend-reach`, `.legend-danger`). Its button keeps the 40 px phone
   tap target. Snapshots identical at both widths.
+- Battle frame: done. `src/screens/combat/battle/battle-layout.css`, `battle-footer.css`, `thumb-reach.css`,
+  `battle-log.css`. `.battle-main`, `.battle-stage`, `.battle-side`, `.battle-footer` (`.has-tools`, `.has-thumb-reach`)
+  with `.end-turn-button`, `.end-turn-count`, `.turn-guide-step`, `.keyboard-hints`, `.thumb-reach-name`; the thumb-reach
+  buttons `.is-confirm`, `.is-cancel`, `.is-awaken`, `.is-capture`, `.is-duo`, `.is-reaction`; `.battle-log` lines
+  `.is-system`, `.is-arena`, `.is-evolution` (mapped at render, the stored log keeps `sys` / `arn` / `evo`). The phone
+  footer rules that needed `!important` now win with `:where()` contexts; the legacy `#combat .button-primary` shadow
+  skips `.end-turn-button`, which used to beat it with its id. Snapshots identical at both widths.
   A third pass that ignores one- to three-letter prefixes (a template such as `s${…}` no longer keeps every class
   starting with « s » alive) removed 142 more parts: the old scenario cards (`.scn`), the splash screen (`.sp-*`,
   `.splash`), the old Pokédex sheet (`.st-*`), `.seg`, `.frise`… and one more file.

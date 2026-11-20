@@ -15,22 +15,7 @@
   gap: var(--space-xl) !important;
   align-items: start;
 }
-#combat .bt {
-  border: 1px solid rgba(124, 220, 230, 0.34) !important;
-  border-radius: 27px !important;
-  padding: var(--space-lg) !important;
-  background:
-    radial-gradient(ellipse at 50% 0%, rgba(62, 153, 174, 0.15), transparent 55%),
-    linear-gradient(145deg, #142f40, #06131f) !important;
-  box-shadow:
-    0 32px 80px rgba(0, 0, 0, 0.48),
-    inset 0 1px rgba(255, 255, 255, 0.1) !important;
-}
-#combat .bt-side {
-  gap: var(--space-md);
-}
-#combat #bLaunch,
-#combat #bEnd {
+#combat #bLaunch {
   border-radius: 14px !important;
   min-height: 48px !important;
   background: linear-gradient(135deg, #ffe6a0, #c38a3b) !important;
@@ -41,9 +26,6 @@
 @media (max-width: 850px) {
   #combat .battle {
     grid-template-columns: minmax(0, 1fr) !important;
-  }
-  #combat .bt {
-    padding: var(--space-sm) !important;
   }
 }
 @media (prefers-reduced-motion: reduce) {
