@@ -88,8 +88,7 @@ body {
   text-shadow: 0 3px 22px rgba(0, 0, 0, 0.38) !important;
 }
 .lnk,
-.seg button,
-.gd-t {
+.seg button {
   transition:
     transform 0.2s,
     box-shadow 0.2s,

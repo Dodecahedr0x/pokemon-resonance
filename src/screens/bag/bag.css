@@ -1,4 +1,4 @@
-/* Bag and Shop page (#sac, Bag.jsx): wallet, Shop / Bag tabs (shared .v4-tabs), the counter or pocket banner
+/* Bag and Shop page (#sac, Bag.jsx): wallet, Shop / Bag tabs (shared .page-tabs), the counter or pocket banner
    (bag-counter.css), daily offers (Shop), then the category list beside the item rows (.item-row, shared
    component). The engine sets is-shop or is-bag on the section (renderBag in progression/quests-shop.js). */
 

@@ -164,7 +164,7 @@
 }
 
 /* ---------- Panels ---------- */
-.accessibility-panel .v4-seg button {
+.accessibility-panel .segmented-control button {
   min-width: 0;
 }
 

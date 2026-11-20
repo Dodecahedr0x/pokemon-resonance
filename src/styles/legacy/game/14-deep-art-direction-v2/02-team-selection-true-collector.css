@@ -31,20 +31,6 @@
   gap: var(--space-sm) !important;
 }
 /* Pokédex / type guide / league: visual hierarchy and rich panels */
-#types .gd-tabs {
-  gap: var(--space-xs) !important;
-  margin-bottom: var(--space-md) !important;
-}
-#types .gd-t {
-  border-radius: 8px !important;
-  background: rgba(9, 38, 54, 0.85) !important;
-  border: 1px solid rgba(105, 214, 255, 0.2) !important;
-}
-#types .gd-t[aria-selected='true'] {
-  background: linear-gradient(120deg, #ffe17a, #efa92d) !important;
-  color: #142a38 !important;
-  border-color: #fff0a0 !important;
-}
 #types .gd-p {
   padding: clamp(15px, 2vw, 26px) !important;
 }
@@ -122,10 +108,6 @@ hr {
 @media (max-width: 560px) {
   #combat .board {
     min-height: 230px !important;
-  }
-  #types .gd-tabs {
-    overflow-x: auto !important;
-    flex-wrap: nowrap !important;
   }
 }
 @media (prefers-reduced-motion: reduce) {

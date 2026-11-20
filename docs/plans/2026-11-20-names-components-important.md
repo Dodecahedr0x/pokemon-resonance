@@ -133,3 +133,9 @@ Each step is one commit (or a few), on its own, playable at every point.
   the confirm prompt `.confirm-question` (was `.sv-q`). The engraved slab and brass / edge frames are now
   `--surface-slab`, `--border-edge`, `--border-brass`, `--shadow-engrave` and `--radius-card(-large)` in
   `theme/surfaces.css`.
+- Shared tabs: done. `src/styles/components/tabs.css`: `.tabs` is the Poké Ball tab look, written once instead of a
+  skin rule listing five class names; each bar adds its layout class: `.page-tabs` (Bag, Camp, Quests, was
+  `.v4-tabs`), `.segmented-control` (Settings, camp duel, was `.v4-seg`), `.guide-tabs` / `.guide-tab` (was `.gd-tabs`
+  / `.gd-t`, in the new `src/screens/guide/guide.css`), `.map-regions`, and `.camp-tabs` (was `.camp-tab`, in the new
+  `src/screens/camp/camp.css`). `.scn-tabs` had no element left and is gone. Because `components` sits below
+  `legacy`, the two global legacy button rules (transition and its easing) now skip `.tabs > button`.

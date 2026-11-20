@@ -16,7 +16,7 @@ export default function Accessibility() {
       <CardHeader icon="user" title="Accessibilité" />
       <div className="form-field">
         <span>Taille du texte</span>
-        <div className="v4-seg" role="group" aria-label="Taille du texte">
+        <div className="tabs segmented-control" role="group" aria-label="Taille du texte">
           {SIZES.map(([k, n]) => (
             <button key={k} type="button" data-text-size={k} aria-pressed={t === k}>
               {n}

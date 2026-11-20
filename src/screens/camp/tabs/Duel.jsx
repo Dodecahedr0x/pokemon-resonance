@@ -34,7 +34,7 @@ function Types({ T }) {
 // Toggle buttons for the settings (data-duel-report-s).
 function Seg({ k, L, v }) {
   return (
-    <div className="v4-seg" role="group">
+    <div className="tabs segmented-control" role="group">
       {L.map(([x, n]) => (
         <button key={x} type="button" data-duel-report-s={k} data-v={x} aria-pressed={String(v) === String(x)}>
           {n}

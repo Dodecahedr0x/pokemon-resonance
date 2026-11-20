@@ -115,42 +115,6 @@ html body .logo b {
   color: #bfe6ff;
   border-color: rgba(120, 200, 255, 0.35);
 }
-.v4-tabs {
-  display: flex;
-  gap: var(--space-xs);
-  padding: var(--space-2xs);
-  margin: 0 0 var(--space-md);
-  background: rgba(3, 14, 30, 0.7);
-  border: 1px solid rgba(120, 200, 255, 0.18);
-  border-radius: 13px;
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-.v4-tabs button {
-  flex: 1 0 auto;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-xs);
-  min-height: 42px;
-  padding: 0 var(--space-lg);
-  border: 1px solid transparent;
-  border-radius: 10px;
-  background: transparent;
-  color: var(--v4-tx2);
-  font: 800 14px/1 var(--f-d);
-  cursor: pointer;
-}
-.v4-tabs button svg {
-  width: 18px;
-  height: 18px;
-}
-.v4-tabs button[aria-selected='true'] {
-  background: linear-gradient(180deg, var(--v4-gold1), var(--v4-gold2));
-  color: var(--v4-ink);
-  border-color: #fff2a8;
-  box-shadow: 0 6px 16px -8px rgba(255, 190, 40, 0.7);
-}
 .v4-dot {
   display: inline-grid;
   place-items: center;

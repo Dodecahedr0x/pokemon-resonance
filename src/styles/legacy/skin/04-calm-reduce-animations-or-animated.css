@@ -8,14 +8,6 @@ html.pk-calme .pk-holo,
 html.pk-calme .pk-sceau::after {
   animation: none !important;
 }
-html.pk-calme .v4-tabs > button::after,
-html.pk-calme .map-regions > button::after,
-html.pk-calme .gd-tabs > button::after,
-html.pk-calme .v4-seg > button::after,
-html.pk-calme .scn-tabs > button::after {
-  animation: none !important;
-  display: none;
-}
 html.a11y-rm #pk-fond i,
 html.a11y-rm .page-header::before,
 html.a11y-rm .pk-holo,

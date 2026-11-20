@@ -1,0 +1,49 @@
+/* Camp screen (#camp, Camp.jsx). The rest of the screen is still styled in legacy. */
+
+/* duel report: the choices wrap on narrow cards */
+.duel-report .segmented-control {
+  flex-wrap: wrap;
+}
+
+/* section tabs (look: the shared .tabs): smaller wrapping pills; on phones one scrolling row, edge to edge */
+.camp-tabs {
+  flex-wrap: wrap;
+  margin: 0 0 var(--space-2xs);
+}
+.camp-tabs::-webkit-scrollbar {
+  display: none;
+}
+.camp-tabs > button {
+  flex: none;
+  height: 36px;
+  padding: 0 var(--space-md);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+}
+@media (max-width: 700px) {
+  .camp-tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    margin-inline: calc(var(--space-md) * -1);
+    padding: var(--space-xs) var(--space-md);
+    border-inline: 0;
+    border-radius: 0;
+    scrollbar-width: none;
+    mask-image: linear-gradient(90deg, transparent, #000 12px, #000 calc(100% - 24px), transparent);
+  }
+  .camp-tabs > button {
+    height: 40px;
+    padding: 0 var(--space-lg);
+    font-size: var(--font-size-sm);
+    white-space: nowrap;
+  }
+  .camp-tabs > button:last-child {
+    margin-right: var(--space-md);
+  }
+  .camp-tabs > button[aria-selected='false'] {
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.06);
+    color: #d5dee8;
+  }
+}

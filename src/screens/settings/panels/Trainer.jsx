@@ -23,7 +23,7 @@ export default function Trainer() {
       </label>
       <div className="form-field">
         <span>Difficulté</span>
-        <div className="v4-seg" role="group" aria-label="Difficulté">
+        <div className="tabs segmented-control" role="group" aria-label="Difficulté">
           {Object.entries(DIFFS).map(([k, n]) => (
             <button key={k} type="button" data-diff={k} aria-pressed={PROFILE.diff === k}>
               {n}

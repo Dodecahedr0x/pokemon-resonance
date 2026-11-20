@@ -78,33 +78,6 @@ p.v4-note {
   /* ---------- Camp: sub-tabs on a single scrolling line ----------
      The line bleeds to the screen edges: the bleed matches the page's 12 px side padding,
      otherwise the whole page scrolls sideways. */
-  html:not(#pkz) body:not(#pkz) #camp .camp-tab {
-    flex-wrap: nowrap !important;
-    overflow-x: auto;
-    scrollbar-width: none;
-    margin-inline: calc(var(--space-md) * -1) !important;
-    padding: var(--space-xs) var(--space-md) !important;
-    border-radius: 0 !important;
-    border-inline: 0 !important;
-    -webkit-mask-image: linear-gradient(90deg, transparent, #000 12px, #000 calc(100% - 24px), transparent);
-    mask-image: linear-gradient(90deg, transparent, #000 12px, #000 calc(100% - 24px), transparent);
-  }
-  html body .camp-tab button {
-    flex: none !important;
-    height: 40px !important;
-    padding: 0 var(--space-lg) !important;
-    border-radius: var(--r-p) !important;
-    font-size: var(--t-s) !important;
-    white-space: nowrap;
-  }
-  html body .camp-tab button:last-child {
-    margin-right: var(--space-md);
-  }
-  html:not(#pkz) body:not(#pkz) .camp-tab button[aria-selected='false'] {
-    background: rgba(255, 255, 255, 0.06) !important;
-    border: 1px solid rgba(255, 255, 255, 0.12) !important;
-    color: #d5dee8 !important;
-  }
 
   /* ---------- section headers: the hint goes under the title instead of squeezing it ---------- */
 
@@ -140,11 +113,6 @@ p.v4-note {
     border-radius: 8px;
   }
   /* the sticky guide tabs stay readable over the text scrolling under them */
-  html:not(#pkz) body:not(#pkz) .gd-tabs {
-    background: linear-gradient(180deg, rgba(4, 12, 22, 0.96), rgba(7, 17, 31, 0.94)) !important;
-    -webkit-backdrop-filter: blur(10px);
-    backdrop-filter: blur(10px);
-  }
 
   /* ---------- Home: the folding "Classement" line is a full-height tap target ---------- */
 

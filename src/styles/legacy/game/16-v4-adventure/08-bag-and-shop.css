@@ -21,28 +21,6 @@ html body .form-field input {
   border-radius: 10px !important;
   font: 600 15px var(--f-b);
 }
-.v4-seg {
-  display: flex;
-  gap: var(--space-2xs);
-  padding: var(--space-2xs);
-  border-radius: 11px;
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(120, 200, 255, 0.2);
-}
-.v4-seg button {
-  flex: 1;
-  min-height: 38px;
-  border-radius: 8px;
-  border: 0;
-  background: none;
-  color: var(--v4-tx2);
-  font: 800 13.5px/1 var(--f-d);
-  cursor: pointer;
-}
-.v4-seg button[aria-pressed='true'] {
-  background: linear-gradient(180deg, var(--v4-gold1), var(--v4-gold2));
-  color: var(--v4-ink);
-}
 .v4-ps-n {
   margin: 0;
   font-size: 13px;

@@ -110,7 +110,7 @@ function Content() {
         </div>
       </div>
       {NL}
-      <div className="v4-tabs" role="tablist">
+      <div className="tabs page-tabs" role="tablist">
         <button type="button" role="tab" data-sacv="boutique" aria-selected={v === 'boutique'}>
           <svg>
             <use href="#i-shop" />

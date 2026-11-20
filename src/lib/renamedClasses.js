@@ -182,6 +182,11 @@ export const RENAMED_CLASSES = {
   'sv-bt': 'saves-slot-battle',
   'sv-act': 'saves-slot-actions',
   'sv-code': 'saves-code',
+  'v4-tabs': 'page-tabs',
+  'v4-seg': 'segmented-control',
+  'gd-tabs': 'guide-tabs',
+  'gd-t': 'guide-tab',
+  'camp-tab': 'camp-tabs',
 };
 
 const OLD_CLASS = new RegExp(

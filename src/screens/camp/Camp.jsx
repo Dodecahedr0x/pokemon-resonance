@@ -18,7 +18,7 @@ const TAB_LIST = { enigmes: Puzzles, echo: Echo, arenes: Gyms, pantheon: Pantheo
 function Tabs({ t }) {
   const R = echoRun();
   return (
-    <nav className="v4-tabs camp-tab" id="camp-tab-list" role="tablist" aria-label="Camp">
+    <nav className="tabs page-tabs camp-tabs" id="camp-tab-list" role="tablist" aria-label="Camp">
       {CAMP_TABS.map(([k, n]) => (
         <button key={k} type="button" role="tab" aria-selected={t === k} data-camp-tab={k}>
           {n + (k === 'echo' && R ? ' •' : '')}

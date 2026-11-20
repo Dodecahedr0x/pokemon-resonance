@@ -1,0 +1,17 @@
+/* Quests screen (#quetes, Quests.jsx). The rest of the screen is still styled in legacy. */
+
+/* the four tabs share the row equally (two rows on small phones) */
+.quests-page .page-tabs {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  overflow: visible;
+}
+.quests-page .page-tabs > button {
+  min-width: 0;
+  white-space: nowrap;
+}
+@media (max-width: 520px) {
+  .quests-page .page-tabs {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

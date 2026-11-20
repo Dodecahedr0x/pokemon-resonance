@@ -14,7 +14,7 @@ function Deployment() {
   return (
     <div className="form-field deploy-phase-f">
       <span>Déploiement avant le combat</span>
-      <div className="v4-seg" role="group" aria-label="Déploiement">
+      <div className="tabs segmented-control" role="group" aria-label="Déploiement">
         {DEPLOYMENTS.map(([k, n]) => (
           <button key={k} type="button" data-deploy-phase={k} aria-pressed={v === k}>
             {n}

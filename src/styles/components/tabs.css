@@ -1,0 +1,153 @@
+/* Tab bars and segmented controls.
+   - .tabs: the shared look, a dark inset rail whose selected button ([aria-selected] or [aria-pressed]) is a red
+     Poké Ball pill that pops in with a shine; text-only buttons get a small Poké Ball before their label. Used by
+     .page-tabs, .segmented-control, the Map's region tabs (.map-regions) and the Guide's tabs (.guide-tabs).
+   - .page-tabs: full-width tabs with an icon, at the top of a page (Bag, Camp, Quests).
+   - .segmented-control: a row of equal choices inside a card (Settings, the camp duel report). */
+
+.tabs {
+  gap: var(--space-2xs);
+  padding: var(--space-2xs);
+  border: 1px solid rgba(130, 185, 240, 0.16);
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(2, 9, 18, 0.74), rgba(6, 16, 30, 0.62));
+  box-shadow:
+    inset 0 2px 9px rgba(0, 0, 0, 0.5),
+    0 1px 0 rgba(255, 255, 255, 0.04);
+}
+.tabs > button {
+  position: relative;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  box-shadow: none;
+  color: #b9cbe0;
+  transition:
+    color 0.2s,
+    transform 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.tabs > button:active {
+  transform: scale(0.95);
+}
+.tabs > button:not(:has(svg))::before {
+  content: '';
+  display: inline-block;
+  flex: none;
+  width: 11px;
+  height: 11px;
+  margin-right: var(--space-xs);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, #0f141c 0 1.5px, rgba(185, 203, 224, 0) 1.6px 2.6px, transparent 2.7px),
+    linear-gradient(180deg, rgba(185, 203, 224, 0.55) 0 42%, #0f141c 42% 58%, rgba(185, 203, 224, 0.3) 58%);
+  box-shadow: 0 0 0 1px rgba(185, 203, 224, 0.5);
+  vertical-align: -1px;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+.tabs > button:is([aria-selected='true'], [aria-pressed='true']) {
+  border-color: rgba(255, 175, 175, 0.6);
+  background:
+    radial-gradient(130% 120% at 50% -30%, rgba(255, 255, 255, 0.4), transparent 52%),
+    linear-gradient(180deg, #ff676d 0%, #e3262f 52%, #b3141d 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -2px 0 rgba(80, 0, 8, 0.35),
+    0 8px 18px -10px rgba(255, 40, 50, 0.95),
+    0 0 0 1px rgba(60, 0, 6, 0.45);
+  color: #fff;
+  text-shadow: 0 1px 1px rgba(90, 0, 10, 0.5);
+  animation: tabs-pop 0.45s cubic-bezier(0.2, 1.5, 0.4, 1) both;
+}
+.tabs > button:is([aria-selected='true'], [aria-pressed='true']) svg {
+  color: #fff;
+}
+.tabs > button:is([aria-selected='true'], [aria-pressed='true']):not(:has(svg))::before {
+  background:
+    radial-gradient(circle, #fff 0 1.6px, #151a22 1.7px 2.8px, transparent 2.9px),
+    linear-gradient(180deg, #fff 0 42%, #151a22 42% 58%, #efe9dc 58%);
+  box-shadow:
+    0 0 0 1px #151a22,
+    0 0 7px rgba(255, 255, 255, 0.7);
+  opacity: 1;
+  animation: tabs-ball-roll 0.6s ease-out both;
+}
+/* a light sweep across the pill once it is selected */
+.tabs > button:is([aria-selected='true'], [aria-pressed='true'])::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(105deg, transparent 38%, rgba(255, 255, 255, 0.42) 50%, transparent 62%) 140% 0 / 260%
+    100% no-repeat;
+  pointer-events: none;
+  animation: tabs-shine 1.1s ease-out 0.25s 1 both;
+}
+html.pk-calme .tabs > button::after {
+  display: none;
+  animation: none;
+}
+@keyframes tabs-pop {
+  0% {
+    transform: scale(0.9);
+  }
+  55% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: none;
+  }
+}
+@keyframes tabs-ball-roll {
+  0% {
+    transform: translateX(-8px) rotate(-200deg);
+    opacity: 0;
+  }
+  100% {
+    transform: none;
+    opacity: 1;
+  }
+}
+@keyframes tabs-shine {
+  0% {
+    background-position: 140% 0;
+  }
+  100% {
+    background-position: -40% 0;
+  }
+}
+
+/* ---------- page tabs ---------- */
+.page-tabs {
+  display: flex;
+  overflow-x: auto;
+  margin: 0 0 var(--space-md);
+  scrollbar-width: none;
+}
+.page-tabs > button {
+  display: inline-flex;
+  flex: 1 0 auto;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  min-height: 42px;
+  padding: 0 var(--space-lg);
+  font: 800 14px/1 var(--font-display);
+  cursor: pointer;
+}
+.page-tabs > button svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* ---------- segmented control ---------- */
+.segmented-control {
+  display: flex;
+}
+.segmented-control > button {
+  flex: 1;
+  min-height: 38px;
+  font: 800 13.5px/1 var(--font-display);
+  cursor: pointer;
+}

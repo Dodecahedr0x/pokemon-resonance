@@ -6,12 +6,6 @@
   background: linear-gradient(145deg, rgba(9, 35, 55, 0.98), rgba(4, 18, 31, 0.99)) !important;
   box-shadow: 0 22px 48px rgba(0, 0, 0, 0.28) !important;
 }
-#combat .gd-t[aria-selected='true'] {
-  background: linear-gradient(180deg, #ffe778, #f2b72e) !important;
-  color: #10263a !important;
-  border-color: rgba(255, 243, 174, 0.8) !important;
-  box-shadow: 0 6px 20px rgba(255, 196, 46, 0.16) !important;
-}
 #combat .battle {
   border: 1px solid rgba(104, 216, 248, 0.3) !important;
   border-radius: 22px !important;
@@ -52,16 +46,6 @@
   border-radius: 18px !important;
 }
 /* Guide, types and league: same graphic universe on all screens */
-#types .gd-tabs {
-  padding: var(--space-xs) !important;
-  gap: var(--space-xs) !important;
-  background: rgba(3, 18, 31, 0.75) !important;
-  border: 1px solid rgba(108, 216, 248, 0.2) !important;
-  border-radius: 16px !important;
-}
-#types .gd-t {
-  border-radius: 11px !important;
-}
 #types .gd-p {
   border-radius: 22px !important;
   border: 1px solid rgba(108, 216, 248, 0.28) !important;
@@ -102,10 +86,6 @@
   #combat .board {
     margin: var(--space-xs) !important;
     min-height: 220px !important;
-  }
-  #types .gd-tabs {
-    overflow-x: auto !important;
-    flex-wrap: nowrap !important;
   }
 }
 /* === END OF ART DIRECTION === */

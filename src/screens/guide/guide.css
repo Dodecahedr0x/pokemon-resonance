@@ -1,0 +1,47 @@
+/* Guide screen (#types, Guide.jsx). The rest of the guide is still styled in legacy. */
+
+/* rubric tabs (look: the shared .tabs), stuck to the top while the guide scrolls */
+.guide-tabs {
+  position: sticky;
+  top: 0;
+  z-index: 15;
+  display: flex;
+  overflow-x: auto;
+  margin: var(--space-2xs) 0 var(--space-md);
+  border-radius: 999px;
+  scrollbar-width: none;
+}
+.guide-tabs::-webkit-scrollbar {
+  display: none;
+}
+.guide-tab {
+  flex: 1 0 auto;
+  min-height: 40px;
+  padding: 0 var(--space-lg);
+  font-family: var(--font-display);
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.guide-tab:focus-visible {
+  outline-offset: 3px;
+  box-shadow: 0 0 0 5px rgba(212, 175, 106, 0.14);
+}
+@media (max-width: 999px) {
+  .guide-tabs {
+    top: calc(56px + env(safe-area-inset-top, 0px));
+    margin-inline: calc(var(--space-3xs) * -1);
+  }
+  .guide-tab {
+    padding: 0 var(--space-md);
+    font-size: 11.5px;
+  }
+}
+@media (max-width: 700px) {
+  .guide-tabs {
+    background: linear-gradient(180deg, rgba(4, 12, 22, 0.96), rgba(7, 17, 31, 0.94));
+  }
+}

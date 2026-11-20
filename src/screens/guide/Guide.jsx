@@ -54,13 +54,13 @@ export default function Guide() {
         lead="Commencez par « Débuter » : cinq étapes suffisent pour gagner votre premier combat."
       />
       <Tip t="types" />
-      <div className="gd-tabs" role="tablist" aria-label="Rubriques du guide">
+      <div className="tabs guide-tabs" role="tablist" aria-label="Rubriques du guide">
         {TAB_LIST.map(([k, label]) => (
           <button
             key={k}
             type="button"
             role="tab"
-            className="gd-t"
+            className="guide-tab"
             aria-selected={String(tab === k)}
             onClick={() => setGuideTab(k)}
           >

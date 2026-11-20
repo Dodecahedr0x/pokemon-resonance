@@ -44,7 +44,7 @@ function Content({ drawn, marksSel }) {
         wide
       >
         <div className="map-head-row">
-          <div className="map-regions" role="tablist" aria-label="Région">
+          <div className="tabs map-regions" role="tablist" aria-label="Région">
             {REGIONS.map(([k, n]) => (
               <button type="button" role="tab" data-reg={k} aria-selected={rg === k} key={k}>
                 {n}

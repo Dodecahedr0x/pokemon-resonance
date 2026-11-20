@@ -19,49 +19,6 @@
   color: #fff0c8;
 }
 /* Guide */
-.gd-tabs {
-  position: sticky;
-  top: 0;
-  z-index: 15;
-  display: flex;
-  gap: var(--space-2xs);
-  margin: var(--space-2xs) 0 var(--space-xl);
-  padding: var(--space-xs);
-  border-radius: var(--r);
-  border: 1px solid transparent;
-  background:
-    linear-gradient(180deg, rgba(18, 19, 23, 0.97), rgba(10, 10, 12, 0.97)) padding-box,
-    var(--edge) border-box;
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-.gd-tabs::-webkit-scrollbar {
-  display: none;
-}
-.gd-t {
-  flex: 1 0 auto;
-  min-height: 40px;
-  padding: 0 var(--space-lg);
-  border: 0;
-  border-radius: 3px;
-  background: none;
-  color: var(--tx2);
-  font-family: var(--f-d);
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  font-size: 12.5px;
-  cursor: pointer;
-  white-space: nowrap;
-}
-.gd-t[aria-selected='true'] {
-  color: #1a1205;
-  background: linear-gradient(135deg, #f6e6bc, #c9a15e 55%, #9c7735);
-}
-.gd-t:not([aria-selected='true']):hover {
-  color: var(--gold-l);
-  background: rgba(212, 175, 106, 0.08);
-}
 .gd-p[hidden] {
   display: none;
 }
@@ -79,62 +36,8 @@
 .gd-p .howto {
   margin-top: 0;
 }
-@media (max-width: 999px) {
-  .gd-tabs {
-    top: calc(56px + env(safe-area-inset-top, 0px));
-    margin-inline: calc(var(--space-3xs) * -1);
-  }
-  .gd-t {
-    padding: 0 var(--space-md);
-    font-size: 11.5px;
-  }
-}
 /* Team */
 /* Preparation */
-.scn-tabs {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--space-xs);
-  margin-bottom: var(--space-md);
-}
-.scn-tabs button {
-  display: grid;
-  gap: var(--space-3xs);
-  justify-items: start;
-  padding: var(--space-sm) var(--space-md);
-  border-radius: var(--r);
-  border: 1px solid transparent;
-  background:
-    var(--slab) padding-box,
-    var(--edge) border-box;
-  color: var(--tx2);
-  font: inherit;
-  text-align: left;
-  cursor: pointer;
-}
-.scn-tabs button b {
-  font-family: var(--f-d);
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  font-size: 13px;
-  color: var(--tx);
-}
-.scn-tabs button em {
-  font-style: normal;
-  font-family: var(--f-m);
-  font-size: 10px;
-  letter-spacing: 0.08em;
-  color: var(--mut);
-}
-.scn-tabs button[aria-selected='true'] {
-  background:
-    linear-gradient(180deg, rgba(212, 175, 106, 0.16), rgba(212, 175, 106, 0.03)) padding-box,
-    var(--slab) padding-box,
-    var(--brass) border-box;
-}
-.scn-tabs button[aria-selected='true'] b {
-  color: var(--gold-l);
-}
 .scn:not(.on) .scn-art {
   height: 30px;
 }

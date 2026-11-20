@@ -22,6 +22,7 @@
 @import './components/item-row.css' layer(components);
 @import './components/energy-pips.css' layer(components);
 @import './components/synergy.css' layer(components);
+@import './components/tabs.css' layer(components);
 
 @import '../screens/settings/settings.css' layer(screens);
 @import '../screens/dex/dex.css' layer(screens);
@@ -66,3 +67,6 @@
 @import '../screens/map/map-wild.css' layer(screens);
 @import '../screens/map/map-route-scene.css' layer(screens);
 @import '../screens/saves/saves.css' layer(screens);
+@import '../screens/guide/guide.css' layer(screens);
+@import '../screens/quests/quests.css' layer(screens);
+@import '../screens/camp/camp.css' layer(screens);

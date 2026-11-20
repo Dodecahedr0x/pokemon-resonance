@@ -26,9 +26,6 @@
 .duel-report select {
   width: 100%;
 }
-.duel-report .v4-seg {
-  flex-wrap: wrap;
-}
 .duel-report-h {
   margin: 0;
   font-size: 12.5px;

@@ -78,7 +78,7 @@ function canSwipeHere(t) {
   if (PREF.swipeNav === false || !t || !t.closest || !t.closest('main,.content,.page')) {
     return false;
   }
-  if (t.closest('input,textarea,select,#bBoard,.board,.map-panel,#mapMarks,.route,.v4-tabs,.v4-seg,[role="dialog"]')) {
+  if (t.closest('input,textarea,select,#bBoard,.board,.map-panel,#mapMarks,.route-scene,.tabs,[role="dialog"]')) {
     return false;
   }
   if (B && !B.over && document.querySelector('#cbBattle:not([hidden])')) {

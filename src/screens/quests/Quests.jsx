@@ -92,7 +92,7 @@ function Content() {
         </div>
       </div>
       {NL}
-      <div className="v4-tabs" role="tablist">
+      <div className="tabs page-tabs" role="tablist">
         {tabs.map(([k, n]) => (
           <button key={k} type="button" role="tab" data-qtab={k} aria-selected={V4.questTab === k}>
             {n}
@@ -114,7 +114,7 @@ export default function Quests() {
   const ready = useEngineReady();
   const version = useQuestsVersion();
   return (
-    <section className="page v4p" id="quetes" aria-labelledby="h-quetes">
+    <section className="page v4p quests-page" id="quetes" aria-labelledby="h-quetes">
       {ready && version > 0 && <Content key={version} />}
     </section>
   );

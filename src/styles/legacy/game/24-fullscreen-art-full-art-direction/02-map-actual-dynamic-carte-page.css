@@ -58,16 +58,6 @@
     0 25px 58px rgba(0, 0, 0, 0.34),
     inset 0 1px rgba(255, 255, 255, 0.07) !important;
 }
-#types .gd-tabs {
-  border: 1px solid var(--rx-edge) !important;
-  border-radius: 17px !important;
-  background: rgba(4, 17, 27, 0.82) !important;
-  padding: var(--space-xs) !important;
-}
-#types .gd-t[aria-selected='true'] {
-  background: linear-gradient(135deg, #267184, #14384c) !important;
-  color: #efffff !important;
-}
 #types .s5 li,
 #types .howto > div,
 #types .lex {

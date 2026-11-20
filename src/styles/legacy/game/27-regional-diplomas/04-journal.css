@@ -108,34 +108,6 @@
 
 /* <style id="resonance-tactical-challenges"> */
 /* v4.31 · Camp sub-tabs */
-.camp-tab {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-xs);
-  margin: 0 0 var(--space-2xs);
-  padding: var(--space-xs);
-}
-.camp-tab::-webkit-scrollbar {
-  display: none;
-}
-.camp-tab button {
-  flex: none;
-  height: 36px;
-  padding: 0 var(--space-md);
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: rgba(0, 0, 0, 0.25);
-  color: inherit;
-  font: inherit;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-}
-.camp-tab button[aria-selected='true'] {
-  background: linear-gradient(145deg, #ffd45b, #e59a1f);
-  color: #241500;
-  border-color: transparent;
-}
 #camp-tab-body > section {
   padding: var(--space-md);
 }

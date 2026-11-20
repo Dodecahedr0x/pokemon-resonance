@@ -53,8 +53,7 @@ const playSound = k => {
   }
 };
 
-const TAB_LIST =
-  '.v4-tabs>button,.map-regions>button,.gd-tabs>button,.bag-categories>button,.v4-seg>button,.scn-tabs>button,.team-sheet-stages>.team-sheet-stage,.prep-tabs>button';
+const TAB_LIST = '.tabs>button,.bag-categories>button,.team-sheet-stages>.team-sheet-stage,.prep-tabs>button';
 
 /* Shop counter and pocket bag: rendered by React (src/screens/bag/Counter.jsx) */
 
