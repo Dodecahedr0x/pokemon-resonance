@@ -1,0 +1,218 @@
+/* Battle screen, command panel (#bPanel, Panel.jsx) in the side column: the chosen Pokémon's header
+   (medal, name with rank, types, HP), its role row with the « Détails » toggle, then its blocks and, at the
+   bottom, the Bag. The move, Voice and Awakening buttons are in battle-actions.css. A card beside the board
+   (701 px and up, scrolling inside the column from 1121 px), bare and scrolling on phones. The engine sets
+   is-info-off on the panel when « Détails » is off. */
+
+.battle-panel {
+  display: grid;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  border: 1px solid rgba(131, 221, 230, 0.34);
+  border-radius: 23px;
+  background:
+    radial-gradient(ellipse at 100% 0%, rgba(222, 174, 86, 0.12), transparent 48%),
+    linear-gradient(155deg, #183b4d, #081925);
+  box-shadow: 0 25px 55px rgba(0, 0, 0, 0.38);
+}
+.battle-panel button {
+  min-height: 44px;
+}
+.battle-panel.is-info-off :is(.bp-tal, .bp-role) {
+  display: none;
+}
+
+/* ---------- Header: medal, name and types, HP ---------- */
+.battle-panel-head {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) 110px;
+  align-items: center;
+  gap: var(--space-md);
+}
+.battle-panel-head .medal {
+  width: 40px;
+  height: 40px;
+}
+.battle-panel-title b {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+/* the types line, and the rank tag inside the name */
+.battle-panel-title span {
+  display: block;
+  margin-top: var(--space-2xs);
+  color: var(--color-text-muted);
+  font-size: 12px;
+}
+.battle-panel-title b .rg {
+  margin-left: var(--space-3xs);
+}
+.battle-panel-hp {
+  display: grid;
+  gap: var(--space-2xs);
+  color: var(--color-text-secondary);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-align: right;
+}
+/* "HP / max" and the bar */
+.battle-panel-hp > span {
+  font-family: var(--font-numeric);
+  font-stretch: 72%;
+  font-variant-numeric: tabular-nums lining-nums;
+  letter-spacing: -0.01em;
+}
+
+/* ---------- Role row: role tag and « Détails » ---------- */
+.battle-panel-role {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-xs);
+}
+.battle-role-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-3xs) var(--space-sm) var(--space-3xs) var(--space-xs);
+  border: 1px solid rgba(212, 175, 106, 0.4);
+  border-radius: 2px;
+  background: rgba(212, 175, 106, 0.06);
+  color: var(--color-accent-soft);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+}
+.battle-role-tag .ri {
+  width: 14px;
+  height: 14px;
+}
+.battle-role-tag.is-enemy {
+  border-color: rgba(229, 72, 77, 0.45);
+  color: #ffb3b3;
+}
+.battle-role-tag.is-enemy .ri {
+  stroke: #ff9c9c;
+}
+.battle-panel-details {
+  margin-left: auto;
+  padding: var(--space-3xs) var(--space-sm);
+  border: 0;
+  background: none;
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.battle-panel-details:hover {
+  color: var(--color-accent-soft);
+}
+
+/* ---------- Bag: items usable in battle ---------- */
+.battle-bag {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-xs);
+  margin-top: var(--space-sm);
+  padding-top: var(--space-sm);
+  border-top: 1px solid rgba(120, 200, 255, 0.14);
+}
+.battle-bag .lbl-s {
+  width: 100%;
+}
+.battle-bag-item {
+  display: flex;
+  flex: 1 1 150px;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-2xs) var(--space-sm) var(--space-2xs) var(--space-2xs);
+  border: 1px solid rgba(127, 240, 173, 0.35);
+  border-radius: 11px;
+  background: linear-gradient(90deg, rgba(40, 140, 80, 0.25), rgba(10, 30, 58, 0.8));
+  color: #fff;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.battle-bag-item img {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+}
+.battle-bag-item b {
+  font: 800 13.5px/1.1 var(--font-display);
+}
+/* effect and quantity */
+.battle-bag-item span {
+  margin-left: auto;
+  color: #bff5d4;
+  font: 700 11.5px/1.2 var(--font-body);
+}
+.battle-bag-item:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+@media (max-width: 999px) {
+  .battle-role-tag,
+  .battle-panel-details {
+    font-size: 11.5px;
+  }
+}
+
+/* ---------- Wide screens: the panel scrolls inside the side column ---------- */
+@media (min-width: 1121px) {
+  .battle-panel {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+  }
+}
+
+/* ---------- Phones: no card, a tighter header ---------- */
+@media (max-width: 700px) {
+  .battle-panel {
+    flex: 1 1 auto;
+    min-height: 0;
+    padding: var(--space-3xs) var(--space-3xs) var(--space-sm);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    border: 0;
+    background: none;
+    box-shadow: none;
+  }
+  .battle-panel-head {
+    flex: none;
+    grid-template-columns: 40px minmax(0, 1fr) 112px;
+    gap: var(--space-sm);
+  }
+  .battle-panel-hp {
+    grid-row: 1;
+    grid-column: 3;
+    margin: 0;
+  }
+  .battle-panel-title b {
+    font-size: 16px;
+    line-height: 1.1;
+  }
+  .battle-panel-title > span {
+    font-size: 11px;
+  }
+}
+@media (max-width: 540px) {
+  .battle-panel-hp {
+    text-align: left;
+  }
+}

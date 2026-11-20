@@ -1,29 +1,6 @@
 /* ===== resonance-companion-garden layer ===== */
 /* ==== v4.17: companions and Resonance ==== */
 /* --- Resonant Form --- */
-html body .fres-b {
-  margin-top: var(--space-sm);
-  border-color: rgba(201, 166, 255, 0.55) !important;
-}
-html body .fres-b:not([disabled]) {
-  background: linear-gradient(180deg, rgba(150, 110, 255, 0.28), rgba(90, 60, 190, 0.22)) !important;
-  box-shadow:
-    0 0 0 1px rgba(201, 166, 255, 0.5),
-    0 0 18px rgba(170, 130, 255, 0.35);
-}
-html body .fres-m {
-  display: grid;
-  place-items: center;
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, #efe3ff, #8f63ff 70%);
-  color: #fff;
-}
-html body .fres-m svg {
-  width: 20px;
-  height: 20px;
-}
 html body .bp-fres {
   border-color: rgba(201, 166, 255, 0.6) !important;
   background: linear-gradient(180deg, rgba(150, 110, 255, 0.2), rgba(60, 40, 140, 0.18)) !important;

@@ -553,7 +553,7 @@ function renderTop() {
 
 /* panel */
 // Command panel (#bPanel): rendered by React (src/screens/combat/battle/Panel.jsx).
-// The engine keeps the container's « info-off » class (panelRoleInfo).
+// The engine keeps the container's « is-info-off » class (panelRoleInfo).
 export function renderPanel() {
   panelRoleInfo();
   refreshBattle('panel');

@@ -31,7 +31,7 @@ export function panelRoleInfo() {
   if (!p || !B) {
     return;
   }
-  p.classList.toggle('info-off', !PREF.info);
+  p.classList.toggle('is-info-off', !PREF.info);
 }
 
 // Startup statements, run in their original order (see index.js).

@@ -6,24 +6,6 @@ html body #combat .pt {
   background: linear-gradient(180deg, var(--v4-p1), var(--v4-p2)) !important;
   border-color: var(--v4-ln) !important;
 }
-html body #bPanel .bm {
-  border-radius: 12px !important;
-  border: 1px solid color-mix(in srgb, var(--c, #5aa0ff) 45%, transparent) !important;
-  background: linear-gradient(90deg, color-mix(in srgb, var(--c, #5aa0ff) 22%, #0b1f3d), #0a1830 70%) !important;
-}
-html body #bPanel .bm b {
-  font-family: var(--f-d) !important;
-  text-transform: none !important;
-  letter-spacing: 0 !important;
-  font-size: 16px !important;
-}
-html body #bPanel .bm.on {
-  border-color: #ffe17b !important;
-  box-shadow: 0 0 0 2px rgba(255, 215, 94, 0.4) !important;
-}
-html body #bPanel .vx {
-  border-radius: 12px !important;
-}
 .v4-balls {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -62,50 +44,6 @@ html body #bPanel .vx {
 }
 .v4-ball[disabled] {
   opacity: 0.35;
-  cursor: default;
-}
-.v4-bagbar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-xs);
-  margin-top: var(--space-sm);
-  padding-top: var(--space-sm);
-  border-top: 1px solid rgba(120, 200, 255, 0.14);
-}
-.v4-bagbar .lbl-s {
-  width: 100%;
-}
-.v4-use {
-  display: flex;
-  align-items: center;
-  gap: var(--space-sm);
-  flex: 1 1 150px;
-  min-height: 46px;
-  padding: var(--space-2xs) var(--space-sm) var(--space-2xs) var(--space-2xs);
-  border-radius: 11px;
-  border: 1px solid rgba(127, 240, 173, 0.35);
-  background: linear-gradient(90deg, rgba(40, 140, 80, 0.25), rgba(10, 30, 58, 0.8));
-  color: #fff;
-  cursor: pointer;
-  text-align: left;
-  font: inherit;
-}
-.v4-use img {
-  width: 34px;
-  height: 34px;
-  object-fit: contain;
-}
-.v4-use b {
-  font: 800 13.5px/1.1 var(--f-d);
-}
-.v4-use span {
-  margin-left: auto;
-  font: 700 11.5px/1.2 var(--f-b);
-  color: #bff5d4;
-}
-.v4-use[disabled] {
-  opacity: 0.4;
   cursor: default;
 }
 .v4-gain .rl b {

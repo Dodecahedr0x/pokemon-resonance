@@ -100,7 +100,7 @@ export function resonanceBlockHtml(u, gauge) {
           : B.voice < 1
             ? 'Plus de Voix'
             : 'Prêt · une fois par combat';
-  return `${gauge ? `<div class="bp-en${u.en >= EMAX ? ' full' : ''}"><div class="en-h"><span class="lbl-s">Résonance</span>${enPips(u.en, 'lg')}</div></div>` : ''}<button type="button" class="evb fres-b" data-resonance-burst ${ok ? '' : 'disabled'}><span class="evb-m fres-m"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.6 6.4L21 9l-5 4.4 1.6 6.6L12 16.6 6.4 20 8 13.4 3 9l6.4-.6Z" fill="currentColor"/></svg></span><span><b>Forme Résonante</b><em>${why}</em></span><span class="evb-c">1 Voix<br>+ jauge</span></button>`;
+  return `${gauge ? `<div class="bp-en${u.en >= EMAX ? ' full' : ''}"><div class="en-h"><span class="lbl-s">Résonance</span>${enPips(u.en, 'lg')}</div></div>` : ''}<button type="button" class="battle-awaken is-resonant" data-resonance-burst ${ok ? '' : 'disabled'}><span class="battle-awaken-medals"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.6 6.4L21 9l-5 4.4 1.6 6.6L12 16.6 6.4 20 8 13.4 3 9l6.4-.6Z" fill="currentColor"/></svg></span><span><b>Forme Résonante</b><em>${why}</em></span><span class="battle-awaken-cost">1 Voix<br>+ jauge</span></button>`;
 }
 
 async function onResonantFormClick(e) {

@@ -290,48 +290,6 @@
 }
 
 /* ---------- 3. HP bars as in the games ---------- */
-html:not(#pkz) body:not(#pkz) #cbBattle .bp-hp .hp.hseg {
-  position: relative;
-  height: 8px !important;
-  margin-left: var(--space-xl) !important;
-  border-radius: 6px !important;
-  overflow: visible !important;
-  border: 0 !important;
-  background: linear-gradient(180deg, #2a3443, #141a23) !important;
-  box-shadow:
-    0 0 0 1.5px #0a0e14,
-    inset 0 1px 2px rgba(0, 0, 0, 0.65) !important;
-}
-html:not(#pkz) body:not(#pkz) #cbBattle .bp-hp .hp.hseg::before {
-  content: 'PV';
-  position: absolute;
-  right: calc(100% + 3px);
-  top: 50%;
-  transform: translateY(-50%);
-  padding: 1px var(--space-3xs) 0;
-  border-radius: 3px;
-  background: linear-gradient(180deg, #ffd84d, #ef9f1c);
-  color: #3a2300;
-  font: 900 7.5px/1.25 var(--f-d);
-  letter-spacing: 0.02em;
-  box-shadow: 0 0 0 1px #0a0e14;
-  pointer-events: none;
-}
-html:not(#pkz) body:not(#pkz) #cbBattle .bp-hp .hp.hseg i {
-  height: 100%;
-  border-radius: 5px !important;
-  background: linear-gradient(180deg, #9df79a 0 34%, #3fca5c 35% 100%) !important;
-  box-shadow: inset 0 -1px 0 rgba(0, 70, 25, 0.35) !important;
-}
-html:not(#pkz) body:not(#pkz) #cbBattle .bp-hp .hp.hseg i.mid {
-  background: linear-gradient(180deg, #fff08a 0 34%, #e6b61d 35% 100%) !important;
-}
-html:not(#pkz) body:not(#pkz) #cbBattle .bp-hp .hp.hseg i.lo {
-  background: linear-gradient(180deg, #ff9c84 0 34%, #e3402c 35% 100%) !important;
-}
-html:not(#pkz) body:not(#pkz) #cbBattle .bp-hp .hp.hseg .lag {
-  border-radius: 5px;
-}
 html:not(#pkz) body:not(#pkz) #cbBattle .hp i.pk-dr {
   animation: pkDrain 0.8s cubic-bezier(0.35, 0.1, 0.3, 1) both;
 }

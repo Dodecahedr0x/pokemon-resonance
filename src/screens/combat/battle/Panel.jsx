@@ -54,11 +54,11 @@ const NL = '\n  ';
 const STATE = { GEL: 'gelé', SOM: 'endormi', PAR: 'paralysé' };
 
 // Command panel (#bPanel): sheet of the chosen Pokémon, an opponent, or a tile.
-// The container's « info-off » class is still set by the engine (panelRoleInfo).
+// The container's « is-info-off » class is still set by the engine (panelRoleInfo).
 export default function Panel() {
   const v = useBattleVersion('panel');
   return (
-    <div className="bp" id="bPanel" aria-live="polite">
+    <div className="battle-panel" id="bPanel" aria-live="polite">
       {v && B ? <Content /> : null}
     </div>
   );
@@ -192,14 +192,14 @@ function Role() {
   const r = roleOf(u),
     R = ROLEFX[r];
   return (
-    <div className="bp-tr">
+    <div className="battle-panel-role">
       {R ? (
-        <span className={'tr' + (u.side === 'e' ? ' en' : '')} title={R.d}>
+        <span className={'battle-role-tag' + (u.side === 'e' ? ' is-enemy' : '')} title={R.d}>
           <Html html={rIco(r)} />
           {r} · {R.k}
         </span>
       ) : null}
-      <button type="button" className="tr-i" data-info="" aria-pressed={!!PREF.info}>
+      <button type="button" className="battle-panel-details" data-info="" aria-pressed={!!PREF.info}>
         {PREF.info ? 'Moins' : 'Détails'}
       </button>
     </div>
@@ -208,15 +208,15 @@ function Role() {
 
 function Header({ u, underText: under }) {
   return (
-    <div className="bp-h">
+    <div className="battle-panel-head">
       <Html html={medal(u.t)} />
-      <div className="bp-id">
+      <div className="battle-panel-title">
         <b>
           {u.n} <Html html={rankTag(rankOfValue(u))} />
         </b>
         <span>{under}</span>
       </div>
-      <div className="bp-hp">
+      <div className="battle-panel-hp">
         <span>
           {u.hp} / {u.mhp}
         </span>
@@ -317,11 +317,11 @@ function OpponentSheet({ e }) {
       ) : null}
       <Hi html={foeResonanceNotes(e)} />
       <Html html={catchBlock(e)} />
-      <div className="bp-mv">
+      <div className="battle-moves">
         {e.mv.map((id, i) => {
           const m = MV[id];
           return (
-            <div key={i} className="bm ro" style={{ '--c': tc(m.t) }}>
+            <div key={i} className="battle-move is-static" style={{ '--c': tc(m.t) }}>
               <Html html={tb(m.t)} />
               <b>
                 {m.n}
@@ -486,8 +486,8 @@ function Awakening({ u, s }) {
         <Html html={enPips(u.en, 'lg')} />
       </div>
       {NL}
-      <button type="button" className="evb" data-evo="open" disabled={!ce}>
-        <span className="evb-m">
+      <button type="button" className="battle-awaken" data-evo="open" disabled={!ce}>
+        <span className="battle-awaken-medals">
           {o.map((id, i) => (
             <Html key={i} html={medal(BY[id].t, 'sm')} />
           ))}
@@ -496,7 +496,7 @@ function Awakening({ u, s }) {
           <b>Éveiller{o.length === 1 ? ' en ' + BY[o[0]].n : ` · ${o.length} voies`}</b>
           <em>{why}</em>
         </span>
-        <span className="evb-c">
+        <span className="battle-awaken-cost">
           1 Voix
           <br />+ action
         </span>
@@ -590,7 +590,7 @@ function Bag({ u }) {
     return null;
   }
   return (
-    <div className="v4-bagbar">
+    <div className="battle-bag">
       <span className="lbl-s">
         Sac · {B.itemsUsed || 0} / {BAG_MAX}
       </span>
@@ -598,7 +598,14 @@ function Bag({ u }) {
         const it = SHOP[k],
           info = it.heal ? `+${Math.round(it.heal * 100)} % PV` : it.voice ? `${it.voice} Voix` : 'Action';
         return (
-          <button key={k} type="button" className="v4-use" data-use={k} title={it.d} disabled={!canUseBagItem(B, u, k)}>
+          <button
+            key={k}
+            type="button"
+            className="battle-bag-item"
+            data-use={k}
+            title={it.d}
+            disabled={!canUseBagItem(B, u, k)}
+          >
             <img src={ITM(it.img)} alt="" loading="lazy" />
             <b>{it.sn || it.n}</b>
             <span>
@@ -667,7 +674,7 @@ function AllySheet({ u }) {
       {NL}
       <Awakening u={u} s={s} />
       {NL}
-      <div className="bp-mv">
+      <div className="battle-moves">
         {u.mv.map((id, i) => {
           const m = MV[id],
             typ = mvType(B, u, m),
@@ -676,7 +683,7 @@ function AllySheet({ u }) {
             <button
               key={i}
               type="button"
-              className={'bm' + (ui.mode === 'target' && ui.mi === i ? ' on' : '')}
+              className={'battle-move' + (ui.mode === 'target' && ui.mi === i ? ' is-selected' : '')}
               data-mi={i}
               disabled={!!(u.acted || !n)}
               style={{ '--c': tc(typ) }}
@@ -701,10 +708,10 @@ function AllySheet({ u }) {
       <Hi html={s(duoBlock(u))} />
       {hint}
       {NL}
-      <div className="bp-vx">
+      <div className="battle-voice-actions">
         <button
           type="button"
-          className={'vx' + (ui.mode === 'dodge' ? ' on' : '')}
+          className={'battle-voice-action' + (ui.mode === 'dodge' ? ' is-active' : '')}
           data-vx="dodge"
           disabled={!!(B.voice < 1 || u.sn)}
         >
@@ -713,7 +720,7 @@ function AllySheet({ u }) {
         </button>
         <button
           type="button"
-          className={'vx' + (relHi ? ' turn-guide-hi' : '')}
+          className={'battle-voice-action' + (relHi ? ' turn-guide-hi' : '')}
           data-vx="relance"
           disabled={!!(!u.acted || u.sn || B.retrigger || B.voice < 2)}
         >

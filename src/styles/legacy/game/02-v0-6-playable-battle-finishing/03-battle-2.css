@@ -1,28 +1,3 @@
-.bm:disabled {
-  opacity: 0.42;
-  cursor: default;
-}
-.bm b {
-  font-family: var(--f-d);
-  font-stretch: 112%;
-  font-weight: 750;
-  font-size: 15px;
-  text-transform: uppercase;
-}
-.bm span {
-  font-family: var(--f-m);
-  font-size: 10px;
-  color: var(--mut);
-}
-.bm em {
-  font-style: normal;
-  font-size: 12px;
-  color: var(--tx2);
-  line-height: 1.35;
-}
-.bm.ro {
-  cursor: default;
-}
 .bp-hint {
   font-size: 13px;
   color: var(--mut);
@@ -30,49 +5,6 @@
 .bp-int {
   font-size: 13.5px;
   color: var(--tx2);
-}
-.bp-vx {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--space-xs);
-}
-.vx {
-  display: grid;
-  gap: var(--space-3xs);
-  padding: var(--space-sm) var(--space-sm);
-  border-radius: 12px;
-  border: 1px solid rgba(227, 192, 122, 0.25);
-  background: rgba(227, 192, 122, 0.05);
-  cursor: pointer;
-  text-align: left;
-  color: inherit;
-  font: inherit;
-  transition:
-    background 0.2s,
-    border-color 0.2s;
-}
-.vx b {
-  font-size: 12.5px;
-  font-weight: 600;
-  color: var(--gold-l);
-}
-.vx span {
-  font-size: 10.5px;
-  color: var(--mut);
-}
-.vx:hover:not(:disabled),
-.vx.on {
-  background: var(--gold-s);
-  border-color: var(--gold);
-}
-.vx:disabled {
-  opacity: 0.38;
-  cursor: default;
-}
-.vx.ev:not(:disabled) {
-  border-color: var(--gold);
-  box-shadow: 0 0 0 3px var(--gold-s);
-  animation: evg 1.8s ease-in-out infinite;
 }
 @keyframes evg {
   50% {
@@ -341,19 +273,4 @@
   gap: var(--space-sm);
   justify-content: flex-end;
   flex-wrap: wrap;
-}
-@media (max-width: 540px) {
-  .bp-h {
-    grid-template-columns: auto minmax(0, 1fr);
-  }
-  .bp-h .bp-hp {
-    grid-column: 1/-1;
-    text-align: left;
-  }
-  .bp-vx {
-    grid-template-columns: 1fr 1fr;
-  }
-  .bp-vx .ev {
-    grid-column: 1/-1;
-  }
 }

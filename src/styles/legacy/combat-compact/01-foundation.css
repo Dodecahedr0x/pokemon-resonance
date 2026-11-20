@@ -161,13 +161,6 @@
     padding: 0 !important;
     overflow: hidden !important;
   }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side #bPanel {
-    flex: 1 1 auto;
-    min-height: 0;
-    overflow-y: auto;
-    overscroll-behavior: contain;
-    scrollbar-width: thin;
-  }
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .bt-foot {
     flex: none;
     position: static !important;

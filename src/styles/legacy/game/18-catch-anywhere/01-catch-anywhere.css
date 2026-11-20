@@ -67,9 +67,6 @@ html body .ux.phase-badge {
   border-color: rgba(255, 59, 59, 0.6) !important;
   color: #ffb4b4 !important;
 }
-html body .bp-vx {
-  flex-wrap: wrap;
-}
 html body #bSvg .tok.in-danger .tok-rim {
   stroke: #ef4444;
   stroke-width: 3.2;

@@ -44,3 +44,6 @@
 @import '../screens/combat/battle/battle-rule.css' layer(screens);
 @import '../screens/combat/battle/battle-plates.css' layer(screens);
 @import '../screens/combat/battle/battle-plate.css' layer(screens);
+@import '../screens/combat/battle/battle-hp.css' layer(screens);
+@import '../screens/combat/battle/battle-panel.css' layer(screens);
+@import '../screens/combat/battle/battle-actions.css' layer(screens);

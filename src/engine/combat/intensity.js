@@ -248,7 +248,7 @@ export function vigilButtonHtml(u) {
     return '';
   }
   const ok = canUseVigil(B, u);
-  return `<button type="button" class="vx${u.vigilance ? ' on' : ''}" data-vigil-strike ${ok ? '' : 'disabled'}><b>Vigilance</b><span>${u.vigilance ? 'en garde' : 'action · surveille'}</span></button>`;
+  return `<button type="button" class="battle-voice-action${u.vigilance ? ' is-active' : ''}" data-vigil-strike ${ok ? '' : 'disabled'}><b>Vigilance</b><span>${u.vigilance ? 'en garde' : 'action · surveille'}</span></button>`;
 }
 
 export function battleStatesHtml(u) {

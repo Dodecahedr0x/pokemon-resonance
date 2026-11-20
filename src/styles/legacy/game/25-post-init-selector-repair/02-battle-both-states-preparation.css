@@ -46,14 +46,6 @@
     inset 0 0 85px rgba(0, 0, 0, 0.45),
     0 22px 48px rgba(0, 0, 0, 0.42) !important;
 }
-#combat .bp {
-  border: 1px solid rgba(131, 221, 230, 0.34) !important;
-  border-radius: 23px !important;
-  background:
-    radial-gradient(ellipse at 100% 0%, rgba(222, 174, 86, 0.12), transparent 48%),
-    linear-gradient(155deg, #183b4d, #081925) !important;
-  box-shadow: 0 25px 55px rgba(0, 0, 0, 0.38) !important;
-}
 #combat .bt-side .panel {
   border: 1px solid rgba(131, 221, 230, 0.24) !important;
   border-radius: 19px !important;

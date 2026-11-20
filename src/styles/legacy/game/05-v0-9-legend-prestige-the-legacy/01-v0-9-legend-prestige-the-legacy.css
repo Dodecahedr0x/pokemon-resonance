@@ -102,8 +102,6 @@ body {
 .mvc b,
 .eo-n b,
 .al b,
-.evb b,
-.bp-id b,
 .rxd h3,
 .cs .who,
 .log b,
@@ -159,7 +157,6 @@ body {
 .st-right b,
 .an-k,
 .st-no,
-.bp-hp > span,
 .f-dmg,
 .f-heal,
 .fl,
@@ -213,8 +210,6 @@ body {
 .howto > div,
 .mvc,
 .ptm,
-.bm,
-.vx,
 .res-card,
 .ep-card,
 .enc .enc-card,
@@ -259,8 +254,6 @@ body {
 }
 .mvc,
 .ptm,
-.bm,
-.vx,
 .bp-en,
 .st-evo,
 .st-line,
@@ -274,9 +267,7 @@ body {
 }
 .rule[open],
 .scn.on,
-.ptm.on,
-.bm.on,
-.vx.on {
+.ptm.on {
   background:
     linear-gradient(180deg, rgba(212, 175, 106, 0.12), rgba(212, 175, 106, 0.02)) padding-box,
     var(--slab) padding-box,

@@ -108,12 +108,6 @@
 #combat #bSvg {
   filter: drop-shadow(0 10px 8px rgba(0, 0, 0, 0.3));
 }
-#combat .bp {
-  border: 1px solid rgba(124, 220, 230, 0.28) !important;
-  border-radius: 22px !important;
-  background: linear-gradient(155deg, #17394b, #081a27) !important;
-  box-shadow: 0 24px 55px rgba(0, 0, 0, 0.35) !important;
-}
 #combat .bt-side {
   gap: var(--space-md);
 }

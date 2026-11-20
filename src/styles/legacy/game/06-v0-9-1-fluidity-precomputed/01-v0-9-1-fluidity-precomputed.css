@@ -42,9 +42,7 @@
 .h-danger,
 .h-arena,
 .hp.hseg i::after,
-.enp i.on,
-.evb:not(:disabled),
-.vx.ev:not(:disabled) {
+.enp i.on {
   animation: none !important;
 }
 .sc-rustle .rs {
@@ -201,17 +199,6 @@
   }
   .battle {
     gap: var(--space-sm);
-  }
-  .bp {
-    padding: var(--space-2xs) var(--space-md) var(--space-md);
-  }
-  .bm {
-    min-height: 56px;
-    padding: var(--space-md) var(--space-md);
-  }
-  .vx,
-  .evb {
-    min-height: 56px;
   }
   .bt {
     overflow: clip;

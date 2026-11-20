@@ -48,8 +48,6 @@ body {
 .howto > div,
 .mvc,
 .ptm,
-.bm,
-.vx,
 .res-card,
 .ep-card,
 .enc .enc-card {
@@ -71,9 +69,7 @@ body {
       border-box;
 }
 .scn.on,
-.ptm.on,
-.bm.on,
-.vx.on {
+.ptm.on {
   background:
     linear-gradient(180deg, rgba(227, 192, 122, 0.12), rgba(227, 192, 122, 0.03)) padding-box,
     var(--surf) padding-box,

@@ -172,8 +172,8 @@
 .hp.hseg:has(i.lo) {
   --g: #ff7a3d;
 }
-/* the team plates' bars: src/screens/combat/battle/battle-plate.css */
-.hp.hseg:where(:not(.battle-plate .hp)) i {
+/* the team plates' and command panel's bars: src/screens/combat/battle/battle-hp.css */
+.hp.hseg:where(:not(:is(.battle-plate, .battle-panel-hp) .hp)) i {
   position: relative;
   border-radius: 0;
   background:

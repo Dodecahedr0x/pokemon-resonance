@@ -67,9 +67,6 @@
   color: #ddb0ff;
   text-shadow: 0 0 6px rgba(200, 140, 255, 0.55);
 }
-.bp-id b .rg {
-  margin-left: var(--space-3xs);
-}
 .mrg {
   display: inline-block;
   margin-left: var(--space-xs);

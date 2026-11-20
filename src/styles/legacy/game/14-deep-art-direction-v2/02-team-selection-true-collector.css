@@ -30,10 +30,6 @@
 #combat .bt-side {
   gap: var(--space-sm) !important;
 }
-#combat .bp {
-  border-radius: 15px !important;
-  background: linear-gradient(160deg, rgba(12, 46, 64, 0.98), rgba(4, 20, 34, 0.99)) !important;
-}
 /* Pokédex / type guide / league: visual hierarchy and rich panels */
 #types .gd-tabs {
   gap: var(--space-xs) !important;

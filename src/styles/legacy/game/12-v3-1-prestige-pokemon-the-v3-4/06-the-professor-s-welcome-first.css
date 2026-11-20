@@ -283,23 +283,6 @@
   }
 }
 /* battle: readable names, moves marked with their type */
-.bt-side .bm {
-  position: relative;
-}
-.bt-side .bm:not(.ro)::after {
-  content: '';
-  position: absolute;
-  left: -1px;
-  top: 12px;
-  bottom: 12px;
-  width: 2px;
-  background: var(--c, transparent);
-  box-shadow: 0 0 12px var(--c, transparent);
-  pointer-events: none;
-}
-.bt-side .bm:disabled::after {
-  opacity: 0.35;
-}
 /* shortcuts: one glow per destination */
 .qk {
   position: relative;

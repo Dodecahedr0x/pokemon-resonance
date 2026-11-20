@@ -239,7 +239,6 @@
 }
 /* Battles: immersive arena frame, clear tactical hierarchy */
 #combat .pt,
-#combat .bp,
 #combat .resume {
   background: linear-gradient(145deg, rgba(10, 39, 55, 0.95), rgba(3, 18, 30, 0.97)) !important;
   border-color: rgba(112, 211, 255, 0.24) !important;
@@ -272,10 +271,6 @@
   z-index: 1;
   filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.28));
 }
-#combat .bp {
-  border-radius: 20px !important;
-}
-#combat .bp button,
 #combat .pt button {
   min-height: 44px !important;
 }

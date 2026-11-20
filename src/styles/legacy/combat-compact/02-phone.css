@@ -101,16 +101,6 @@
         border-box;
     box-shadow: 0 -20px 40px -20px #000;
   }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side #bPanel {
-    flex: 1 1 auto;
-    min-height: 0;
-    overflow-y: auto;
-    overscroll-behavior: contain;
-    padding: var(--space-3xs) var(--space-3xs) var(--space-sm) !important;
-    border: 0 !important;
-    background: none !important;
-    box-shadow: none !important;
-  }
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .bt-foot {
     position: static !important;
     left: auto !important;
@@ -126,24 +116,6 @@
     box-shadow: none !important;
   }
   /* Pokémon header on one line: medal, name, HP */
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bPanel .bp-h {
-    grid-template-columns: 40px minmax(0, 1fr) 112px !important;
-    align-items: center;
-    gap: var(--space-sm) !important;
-    flex: none !important;
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bPanel .bp-h .bp-hp {
-    grid-column: 3 !important;
-    grid-row: 1 !important;
-    margin: 0 !important;
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bPanel .bp-id b {
-    font-size: 16px !important;
-    line-height: 1.1 !important;
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bPanel .bp-id > span {
-    font-size: 11px !important;
-  }
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side .blog {
     display: none !important;
   }
