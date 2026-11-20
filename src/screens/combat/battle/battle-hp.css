@@ -1,8 +1,8 @@
-/* Battle screen: the segmented HP bar (.hp.hseg from the engine's segHp) in the team plates
+/* Battle screen: the segmented HP bar (.hp-bar.is-segmented from the engine's segHp) in the team plates
    (battle-plate.css) and in the command panel's header (battle-panel.css): a dark track with a "PV"
-   badge on its left, filled green, then yellow (.mid) and red (.lo) as HP drop. */
+   badge on its left, filled green, then yellow (.is-half) and red (.is-low) as HP drop. */
 
-:is(.battle-plate, .battle-panel-hp) .hp.hseg {
+:is(.battle-plate, .battle-panel-hp) .hp-bar.is-segmented {
   position: relative;
   display: block;
   height: 8px;
@@ -15,7 +15,7 @@
     0 0 0 1.5px #0a0e14,
     inset 0 1px 2px rgba(0, 0, 0, 0.65);
 }
-:is(.battle-plate, .battle-panel-hp) .hp.hseg::before {
+:is(.battle-plate, .battle-panel-hp) .hp-bar.is-segmented::before {
   content: 'PV';
   position: absolute;
   top: 50%;
@@ -30,19 +30,19 @@
   transform: translateY(-50%);
   pointer-events: none;
 }
-:is(.battle-plate, .battle-panel-hp) .hp.hseg i {
+:is(.battle-plate, .battle-panel-hp) .hp-bar.is-segmented i {
   position: relative;
   height: 100%;
   border-radius: 5px;
   background: linear-gradient(180deg, #9df79a 0 34%, #3fca5c 35% 100%);
   box-shadow: inset 0 -1px 0 rgba(0, 70, 25, 0.35);
 }
-:is(.battle-plate, .battle-panel-hp) .hp.hseg i.mid {
+:is(.battle-plate, .battle-panel-hp) .hp-bar.is-segmented i.is-half {
   background: linear-gradient(180deg, #fff08a 0 34%, #e6b61d 35% 100%);
 }
-:is(.battle-plate, .battle-panel-hp) .hp.hseg i.lo {
+:is(.battle-plate, .battle-panel-hp) .hp-bar.is-segmented i.is-low {
   background: linear-gradient(180deg, #ff9c84 0 34%, #e3402c 35% 100%);
 }
-:is(.battle-plate, .battle-panel-hp) .hp.hseg .lag {
+:is(.battle-plate, .battle-panel-hp) .hp-bar.is-segmented .hp-bar-trail {
   border-radius: 5px;
 }

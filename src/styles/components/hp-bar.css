@@ -1,0 +1,112 @@
+/* HP bar (segHp() in engine/combat/ui.js, the Guide): a track (.hp-bar) with its fill (i), yellow at half HP
+   (.is-half) and red when low (.is-low); the segmented variant (.is-segmented) adds ten notches, a glow in the fill's
+   colour and a sheen, and a pale trail (.hp-bar-trail) shrinks behind the fill after a hit. The team plates and the
+   command panel restyle it in battle-hp.css. */
+
+.hp-bar {
+  height: 5px;
+  border-radius: 3px;
+  background: var(--color-track);
+  position: relative;
+  overflow: hidden;
+}
+.hp-bar i {
+  display: block;
+  height: 100%;
+  border-radius: 3px;
+  background: var(--color-positive);
+  transition:
+    width 1.1s var(--ease) 0.6s,
+    background 0.6s 0.6s;
+}
+.hp-bar.is-segmented {
+  --g: #4db8ff;
+  height: 8px;
+  border-radius: 1px;
+  background: linear-gradient(180deg, #050607, #0d0f12);
+  box-shadow:
+    inset 0 1px 2px rgba(0, 0, 0, 1),
+    0 0 0 1px rgba(212, 175, 106, 0.22),
+    0 0 12px -3px color-mix(in srgb, var(--g) 70%, transparent);
+}
+.hp-bar.is-segmented i {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+.hp-bar.is-segmented::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent 0 calc(10% - 1.5px),
+    rgba(5, 6, 7, 0.95) calc(10% - 1.5px) 10%
+  );
+}
+.hp-bar i.is-half {
+  background: var(--color-warning);
+}
+.hp-bar i.is-low {
+  background: var(--color-negative);
+}
+.hp-bar.is-segmented i {
+  border-radius: 2px;
+  background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0) 55%, rgba(0, 0, 0, 0.2));
+}
+.hp-bar.is-segmented:has(i.is-half) {
+  --g: #e8c26a;
+}
+.hp-bar.is-segmented:has(i.is-low) {
+  --g: #ff7a3d;
+}
+.hp-bar.is-segmented:where(:not(:is(.battle-plate, .battle-panel-hp) .hp-bar)) i {
+  position: relative;
+  border-radius: 0;
+  box-shadow: 0 0 10px var(--g);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.55) 0, rgba(255, 255, 255, 0) 45%, rgba(0, 0, 0, 0.25) 100%),
+    linear-gradient(90deg, color-mix(in srgb, var(--g) 45%, #000), var(--g) 70%, color-mix(in srgb, var(--g) 55%, #fff));
+}
+.hp-bar.is-segmented i::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  display: none;
+  will-change: transform;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent) no-repeat;
+  background-size: 100% 100%;
+  width: 36%;
+  right: auto;
+  animation: hp-bar-sheen 3.2s linear infinite;
+}
+.hp-bar .hp-bar-trail {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: var(--b);
+  background: linear-gradient(180deg, #fff0d0, #e8a86a);
+  animation: hp-bar-trail-shrink 0.8s linear both;
+}
+
+@keyframes hp-bar-sheen {
+  from {
+    transform: translateX(-170%);
+  }
+  to {
+    transform: translateX(450%);
+  }
+}
+@keyframes hp-bar-trail-shrink {
+  0%,
+  30% {
+    width: var(--a);
+    opacity: 1;
+  }
+  100% {
+    width: var(--b);
+    opacity: 0.6;
+  }
+}

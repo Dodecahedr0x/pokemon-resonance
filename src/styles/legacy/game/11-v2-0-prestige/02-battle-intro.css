@@ -68,28 +68,4 @@
   }
 }
 /* --- health bars: damage trail --- */
-.hp .lag {
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: var(--b);
-  background: linear-gradient(180deg, #fff0d0, #e8a86a);
-  animation: lag 0.8s linear both;
-}
-.hp.hseg i {
-  position: relative;
-  z-index: 1;
-}
-@keyframes lag {
-  0%,
-  30% {
-    width: var(--a);
-    opacity: 1;
-  }
-  100% {
-    width: var(--b);
-    opacity: 0.6;
-  }
-}
 /* --- impact words --- */

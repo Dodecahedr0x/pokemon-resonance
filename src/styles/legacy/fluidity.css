@@ -36,31 +36,3 @@
 }
 
 /* 4. HP bar shine: the shine slides instead of repainting the bar */
-.hp.hseg i {
-  overflow: hidden;
-}
-.hp.hseg i::after {
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent) no-repeat !important;
-  background-size: 100% 100% !important;
-  width: 36% !important;
-  right: auto !important;
-  animation: poke-fx-sheen 3.2s linear infinite !important;
-  will-change: transform;
-}
-@keyframes poke-fx-sheen {
-  from {
-    transform: translateX(-170%);
-  }
-  to {
-    transform: translateX(450%);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .hp.hseg i::after {
-    animation: none !important;
-  }
-}
-html.a11y-rm .hp.hseg i::after {
-  animation: none !important;
-}

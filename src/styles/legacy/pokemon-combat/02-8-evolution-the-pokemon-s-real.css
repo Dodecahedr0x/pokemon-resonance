@@ -61,7 +61,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  #cbBattle .hp i.pk-dr {
+  #cbBattle .hp-bar i.pk-dr {
     animation: none !important;
   }
 }

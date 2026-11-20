@@ -13,13 +13,8 @@
 }
 
 /* no permanent animation that forces a whole SVG to repaint */
-.cr-spin,
-.hp.hseg i::after,
-.energy-pips i.is-filled {
+.cr-spin {
   animation: none !important;
-}
-.hp.hseg i::after {
-  display: none;
 }
 /* no more filters in the board: halos drawn with a wide stroke */
 #bSvg * {
@@ -37,11 +32,6 @@
 .bdg.won svg,
 .bdg.on svg {
   opacity: 1;
-}
-.energy-pips i.is-filled {
-  box-shadow:
-    0 0 0 1px rgba(255, 241, 199, 0.7),
-    0 0 9px rgba(240, 190, 90, 0.9);
 }
 /* ---------- battle on phone ---------- */
 @media (max-width: 700px) {

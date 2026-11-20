@@ -164,10 +164,10 @@
   border-radius: 9px;
   background: #4ade80;
 }
-.tile-info-hp i.mid {
+.tile-info-hp i.is-half {
   background: #facc15;
 }
-.tile-info-hp i.lo {
+.tile-info-hp i.is-low {
   background: #f87171;
 }
 .tile-info-pokemon-stats {

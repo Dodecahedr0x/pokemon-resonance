@@ -825,6 +825,9 @@ export const RENAMED_CLASSES = {
   burst: 'unit-burst',
   arrfx: 'arrival-effect',
   'bdg-s': 'token-status-tag',
+  hp: 'hp-bar',
+  hseg: 'hp-bar.is-segmented',
+  lag: 'hp-bar-trail',
 };
 
 const OLD_CLASS = new RegExp(

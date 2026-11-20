@@ -511,7 +511,7 @@ export function segHp(u) {
 }
 
 function segHpBase(u) {
-  const h = `<span class="hp hseg"><i class="${hpc(u)}" style="width:${((u.hp / u.mhp) * 100).toFixed(0)}%"></i></span>`;
+  const h = `<span class="hp-bar is-segmented"><i class="${hpc(u)}" style="width:${((u.hp / u.mhp) * 100).toFixed(0)}%"></i></span>`;
   // trail of recent damage
   if (!B) {
     return h;
@@ -537,7 +537,7 @@ function segHpBase(u) {
   }
   return h.replace(
     '<i ',
-    `<b class="lag" style="--a:${m.a.toFixed(1)}%;--b:${m.b.toFixed(1)}%;animation-delay:-${dt | 0}ms"></b><i `
+    `<b class="hp-bar-trail" style="--a:${m.a.toFixed(1)}%;--b:${m.b.toFixed(1)}%;animation-delay:-${dt | 0}ms"></b><i `
   );
 }
 
@@ -1130,7 +1130,7 @@ export const L = {};
 
 export const hpc = u => {
   const r = u.hp / u.mhp;
-  return r > 0.5 ? '' : r > 0.2 ? 'mid' : 'lo';
+  return r > 0.5 ? '' : r > 0.2 ? 'is-half' : 'is-low';
 };
 
 export const DIA = 'M0 -3.4 2.5 0 0 3.4 -2.5 0Z';

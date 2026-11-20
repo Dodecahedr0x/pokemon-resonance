@@ -1,0 +1,16 @@
+/* HP bar without animation (reduced motion, « reduce animations »): no sheen, the trail jumps to its end. */
+
+@media (prefers-reduced-motion: reduce) {
+  .hp-bar.is-segmented i::after {
+    animation: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hp-bar .hp-bar-trail {
+    animation-duration: 1ms;
+    animation-delay: 0s;
+  }
+}
+html.a11y-rm .hp-bar.is-segmented i::after {
+  animation: none;
+}

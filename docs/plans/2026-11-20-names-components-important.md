@@ -360,6 +360,10 @@ Each step is one commit (or a few), on its own, playable at every point.
   `.token-status-tag` (`.is-shown`, `.token-status-tag-inner`; token fields `statusClass` / `statusText`). Keyframes
   `float-text-rise`, `float-text-stamp`, `chain-draw`, `chain-glow-fade`, `unit-burst-grow`, `arrival-effect-pulse`.
   Snapshots identical at both widths apart from keyframe names.
+- HP bar and energy pips: done. Shared components `src/styles/components/hp-bar.css` (+ `hp-bar-motion.css` in the
+  motion layer) and `energy-pips.css`. `.hp-bar` (`.is-segmented`, trail `.hp-bar-trail`), fill states `.is-half` /
+  `.is-low` (`hpc()` returns them). Keyframes `hp-bar-trail-shrink`, `hp-bar-sheen`. Snapshots identical at both
+  widths apart from keyframe names.
   A third pass that ignores one- to three-letter prefixes (a template such as `s${…}` no longer keeps every class
   starting with « s » alive) removed 142 more parts: the old scenario cards (`.scn`), the splash screen (`.sp-*`,
   `.splash`), the old Pokédex sheet (`.st-*`), `.seg`, `.frise`… and one more file.

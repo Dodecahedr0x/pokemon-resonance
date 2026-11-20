@@ -181,7 +181,7 @@
 }
 
 /* ---------- 3. HP bars as in the games ---------- */
-html:not(#pkz) body:not(#pkz) #cbBattle .hp i.pk-dr {
+html:not(#pkz) body:not(#pkz) #cbBattle .hp-bar i.pk-dr {
   animation: pkDrain 0.8s cubic-bezier(0.35, 0.1, 0.3, 1) both;
 }
 /* fix: "Évolue en fin de manche" (Evolves at end of round) no longer overflows the plate */

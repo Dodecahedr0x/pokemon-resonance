@@ -5,9 +5,3 @@
 /* --- Guide: the universe --- */
 /* --- keyboard shortcuts --- */
 /* --- reduced motion --- */
-@media (prefers-reduced-motion: reduce) {
-  .hp .lag {
-    animation-duration: 1ms !important;
-    animation-delay: 0s !important;
-  }
-}

@@ -117,8 +117,8 @@ export function Anatomy() {
         <span className="guide-anatomy-number">05</span>
         <h3 className="card-title">L’ennemi aussi</h3>
         <div className="guide-anatomy-foe">
-          <span className="hp hseg">
-            <i className="mid" style={{ width: '48%' }} />
+          <span className="hp-bar is-segmented">
+            <i className="is-half" style={{ width: '48%' }} />
           </span>
           <em>48 %</em>
         </div>

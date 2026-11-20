@@ -26,6 +26,7 @@
 @import './components/card.css' layer(components);
 @import './components/item-row.css' layer(components);
 @import './components/energy-pips.css' layer(components);
+@import './components/hp-bar.css' layer(components);
 @import './components/synergy.css' layer(components);
 @import './components/tabs.css' layer(components);
 @import './components/state-pill.css' layer(components);
@@ -150,3 +151,4 @@
 @import '../screens/combat/board/evolution-scene-motion.css' layer(motion);
 @import '../screens/combat/board/board-host-motion.css' layer(motion);
 @import '../screens/combat/board/board-effects-motion.css' layer(motion);
+@import './components/hp-bar-motion.css' layer(motion);
