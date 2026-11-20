@@ -363,7 +363,7 @@ export function buildBoard() {
     st = ['arene', 'ligue', 'roche'].includes(D.bio) || D.gym != null || !!D.elite || !!D.champ; // stadium terrain (v1.1)
   // container classes: reset here, then toggled by later versions
   // (#bBoard is rendered by React: classes and variables live in the « host » state of boardStore.js)
-  bdReset(['board', 'bio-' + bio, ...(VERT ? ['vert'] : [])]);
+  bdReset(['board', 'bio-' + bio, ...(VERT ? ['is-vertical'] : [])]);
   hostSet({ ac: D.at ? tc(D.at) : '' });
   L.t = {};
   L.tx = {};

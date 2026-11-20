@@ -4,10 +4,6 @@
     grid-template-columns: minmax(0, 1fr) 320px;
   }
 }
-#bSvg {
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
-}
 
 @keyframes lava {
   50% {

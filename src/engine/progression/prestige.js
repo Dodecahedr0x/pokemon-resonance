@@ -150,22 +150,22 @@ export function turnBanner(txt, sub) {
   if (!bd) {
     return;
   }
-  // .tbn banner: rendered by React (Board.jsx); a new banner replaces the old one
-  const n = ((getHost().tbn || {}).n || 0) + 1;
+  // .round-banner: rendered by React (Board.jsx); a new banner replaces the old one
+  const n = ((getHost().roundBanner || {}).n || 0) + 1;
   hostSet({
-    tbn: {
+    roundBanner: {
       n,
-      en: B.phase === 'enemy',
+      isEnemy: B.phase === 'enemy',
       fast: !!PREF.fast,
-      txt: txt || 'Manche ' + B.round,
+      title: txt || 'Manche ' + B.round,
       sub: sub || (B.duel433 ? B.duel433.names[B.duel433.j - 1] : B.phase === 'enemy' ? 'Tour adverse' : 'À vous'),
     },
   });
   setTimeout(
     () => {
-      const t = getHost().tbn;
+      const t = getHost().roundBanner;
       if (t && t.n === n) {
-        hostSet({ tbn: null });
+        hostSet({ roundBanner: null });
       }
     },
     PREF.fast ? 800 : 1300

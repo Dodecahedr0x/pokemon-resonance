@@ -1,0 +1,41 @@
+/* Board › host effects without animation (reduced motion, « reduce animations »): no shakes, banners appear at
+   once, no weather or ambient particles. */
+
+@media (prefers-reduced-motion: reduce) {
+  .board.impact {
+    animation: none;
+  }
+  .round-banner {
+    animation-duration: 1ms;
+    animation-delay: 0s;
+  }
+  :where(.board) .board-sky-tint {
+    transition: none;
+  }
+  :where(.board) .sky-banner-strip {
+    transition: none;
+    transform: translate(-50%, -50%);
+  }
+  .ambient-fx {
+    display: none;
+  }
+}
+:where(html.a11y-rm) .ambient-fx {
+  display: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .board-weather i {
+    animation: none;
+  }
+  :where(.board) .ambience {
+    display: none;
+  }
+}
+:where(html.a11y-rm) .board-weather i {
+  animation: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  :where(.board) .cloud-shade i {
+    animation: none;
+  }
+}

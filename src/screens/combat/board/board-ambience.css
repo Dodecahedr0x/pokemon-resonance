@@ -1,0 +1,286 @@
+/* Board › ambience drawn over the board (Board.jsx): sky tint, weather (.board-weather .is-rain/.is-hail/
+   .is-sandstorm/.is-sun), drifting cloud shade, the night ambience and the ambient particles (.ambient-particle
+   .is-soul, .is-ember, .is-firefly…). */
+
+:where(.board) .board-sky-tint {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 1.2s ease;
+}
+:where(.board[data-ph='nuit']) .board-sky-tint {
+  opacity: 1;
+  background: radial-gradient(ellipse at 50% 42%, rgba(14, 24, 70, 0.16), rgba(5, 9, 38, 0.52));
+}
+:where(.board[data-ph='crepuscule']) .board-sky-tint {
+  opacity: 1;
+  background: linear-gradient(180deg, rgba(255, 128, 64, 0.16), rgba(110, 48, 120, 0.28));
+}
+:where(.board[data-ph='aube']) .board-sky-tint {
+  opacity: 1;
+  background: linear-gradient(180deg, rgba(255, 204, 158, 0.14), rgba(122, 160, 232, 0.14));
+}
+.board-weather {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 4;
+  border-radius: inherit;
+  overflow: hidden;
+}
+.board-weather i {
+  position: absolute;
+  inset: -25%;
+  will-change: transform;
+}
+.board-weather.is-rain i:nth-child(1) {
+  background: repeating-linear-gradient(90deg, rgba(175, 205, 255, 0.55) 0 1.5px, transparent 1.5px 13px);
+  -webkit-mask-image: repeating-linear-gradient(to bottom, #000 0 14px, transparent 14px 38px);
+  mask-image: repeating-linear-gradient(to bottom, #000 0 14px, transparent 14px 38px);
+  transform: rotate(9deg);
+  animation: rain-fall 0.5s linear infinite;
+  opacity: 0.85;
+}
+.board-weather.is-rain i:nth-child(2) {
+  background: repeating-linear-gradient(90deg, rgba(175, 205, 255, 0.4) 0 1px, transparent 1px 19px);
+  -webkit-mask-image: repeating-linear-gradient(to bottom, #000 0 10px, transparent 10px 46px);
+  mask-image: repeating-linear-gradient(to bottom, #000 0 10px, transparent 10px 46px);
+  transform: rotate(9deg);
+  animation: rain-fall 0.8s linear infinite;
+  opacity: 0.4;
+}
+.board-weather.is-rain::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(40, 80, 140, 0.12);
+}
+.board-weather.is-sun i:nth-child(1) {
+  inset: 0;
+  background: radial-gradient(
+    circle at 88% 6%,
+    rgba(255, 214, 120, 0.55),
+    rgba(255, 214, 120, 0.12) 38%,
+    transparent 62%
+  );
+  animation: sun-drift 4s ease-in-out infinite alternate;
+}
+.board-weather.is-sun i:nth-child(2) {
+  inset: 0;
+  background: linear-gradient(125deg, rgba(255, 200, 90, 0.14), transparent 55%);
+  mix-blend-mode: soft-light;
+}
+.board-weather.is-hail i:nth-child(1) {
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.9) 0 1.6px, transparent 2.2px) 0 0/37px 41px;
+  animation: hail-fall 0.9s linear infinite;
+  opacity: 0.7;
+}
+.board-weather.is-hail i:nth-child(2) {
+  background: radial-gradient(circle, rgba(220, 240, 255, 0.8) 0 1.2px, transparent 1.8px) 0 0/53px 47px;
+  animation: hail-fall 1.3s linear infinite;
+  opacity: 0.55;
+}
+.board-weather.is-hail::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(140, 190, 230, 0.1);
+}
+.board-weather.is-sandstorm i:nth-child(1) {
+  background: repeating-linear-gradient(0deg, rgba(222, 186, 116, 0.4) 0 1.5px, transparent 1.5px 9px);
+  -webkit-mask-image: repeating-linear-gradient(90deg, #000 0 26px, transparent 26px 70px);
+  mask-image: repeating-linear-gradient(90deg, #000 0 26px, transparent 26px 70px);
+  animation: sand-drift 0.9s linear infinite;
+  opacity: 0.55;
+}
+.board-weather.is-sandstorm i:nth-child(2) {
+  background: repeating-linear-gradient(0deg, rgba(222, 186, 116, 0.3) 0 1px, transparent 1px 13px);
+  -webkit-mask-image: repeating-linear-gradient(90deg, #000 0 14px, transparent 14px 52px);
+  mask-image: repeating-linear-gradient(90deg, #000 0 14px, transparent 14px 52px);
+  animation: sand-drift 1.4s linear infinite;
+  opacity: 0.45;
+}
+.board-weather.is-sandstorm::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(214, 170, 100, 0.14);
+}
+:where(.board) .ambient-fx {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 2;
+  opacity: 0;
+  transition: opacity 0.8s;
+}
+:where(.board.paintedterrain) .ambient-fx {
+  opacity: 1;
+}
+.ambient-particle {
+  position: absolute;
+  display: block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  will-change: transform, opacity;
+  animation-name: ambient-float;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  opacity: 0;
+}
+.ambient-particle.is-leaf {
+  width: 6px;
+  height: 3px;
+  border-radius: 60% 0;
+  background: #d08a36;
+}
+.ambient-particle.is-petal {
+  width: 5px;
+  height: 3px;
+  border-radius: 60% 0;
+  background: #ffb4cc;
+}
+.ambient-particle.is-feather {
+  width: 7px;
+  height: 2px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.9);
+}
+.ambient-particle.is-dust {
+  width: 3px;
+  height: 3px;
+  background: rgba(255, 236, 200, 0.55);
+  animation-name: ambient-float;
+}
+.ambient-particle.is-snow {
+  width: 4px;
+  height: 4px;
+  background: #fff;
+  box-shadow: 0 0 4px rgba(255, 255, 255, 0.9);
+  animation-name: ambient-fall;
+}
+.ambient-particle.is-ember {
+  width: 3px;
+  height: 3px;
+  background: #ffb04a;
+  box-shadow: 0 0 6px #ff6a1a;
+  animation-name: ambient-rise;
+}
+.ambient-particle.is-soul {
+  width: 5px;
+  height: 5px;
+  background: rgba(190, 160, 255, 0.8);
+  box-shadow: 0 0 8px rgba(170, 130, 255, 0.9);
+  animation-name: ambient-rise;
+}
+.ambient-particle.is-spark {
+  width: 3px;
+  height: 3px;
+  background: #fff6a0;
+  box-shadow: 0 0 6px #ffe03a;
+  animation-name: ambient-twinkle;
+}
+.ambient-particle.is-bubble {
+  width: 5px;
+  height: 5px;
+  background: transparent;
+  border: 1px solid rgba(220, 245, 255, 0.8);
+  animation-name: ambient-rise;
+}
+.ambient-particle.is-poison-bubble {
+  width: 5px;
+  height: 5px;
+  background: transparent;
+  border: 1px solid rgba(220, 245, 255, 0.8);
+  animation-name: ambient-rise;
+  border-color: rgba(220, 180, 255, 0.85);
+}
+.ambient-particle.is-glitter {
+  width: 3px;
+  height: 3px;
+  background: #fff3c4;
+  box-shadow: 0 0 5px #ffd77a;
+  animation-name: ambient-twinkle;
+}
+.ambient-particle.is-firefly {
+  width: 4px;
+  height: 4px;
+  background: #f4ff9a;
+  box-shadow: 0 0 7px #e8ff6a;
+  animation-name: ambient-twinkle;
+}
+.ambient-particle.is-firefly.is-night {
+  display: none;
+}
+:where(.board[data-ph='nuit']) .ambient-particle.is-leaf {
+  display: none;
+}
+:where(.board[data-ph='nuit']) .ambient-particle.is-petal {
+  display: none;
+}
+:where(.board[data-ph='nuit']) .ambient-particle.is-firefly.is-night {
+  display: block;
+}
+:where(.board[data-ph='crepuscule']) .ambient-particle.is-firefly.is-night {
+  display: block;
+}
+:where(.board) .cloud-shade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+  border-radius: inherit;
+  mix-blend-mode: multiply;
+}
+:where(.board) .cloud-shade i {
+  position: absolute;
+  width: 70%;
+  height: 38%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(40, 48, 70, 0.32), rgba(40, 48, 70, 0));
+  will-change: transform;
+  animation: cloud-drift 46s linear infinite;
+}
+:where(.board) .cloud-shade i + i {
+  top: 48%;
+}
+:where(.board) .cloud-shade i:first-child {
+  top: 22%;
+}
+:where(.board) .ambience {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 2;
+  border-radius: inherit;
+}
+:where(.board) .ambience i {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--c);
+  box-shadow: 0 0 6px 1.5px var(--c);
+  opacity: 0;
+  will-change: transform, opacity;
+  animation: ambience 10s ease-in-out infinite;
+}
+:where(.board) .cloud-shade i + i {
+  width: 55%;
+  height: 30%;
+  animation-duration: 61s;
+  animation-delay: -30s;
+}
+:where(.board) .ambience.is-night i {
+  width: 4.5px;
+  height: 4.5px;
+  box-shadow: 0 0 10px 3px var(--c);
+  animation-name: firefly;
+}

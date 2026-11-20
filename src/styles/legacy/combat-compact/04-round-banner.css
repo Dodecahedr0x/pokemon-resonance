@@ -1,45 +1,4 @@
 /* ================= round banner ================= */
-html body #bBoard .tbn {
-  top: calc(50% - 52px);
-  padding: var(--space-xl) 0;
-  gap: var(--space-sm);
-  border-image: none;
-  background: linear-gradient(90deg, transparent, rgba(9, 11, 16, 0.9) 16%, rgba(9, 11, 16, 0.9) 84%, transparent);
-  border: 0;
-  box-shadow: none;
-}
-html body #bBoard .tbn::before,
-html body #bBoard .tbn::after {
-  content: '';
-  position: absolute;
-  left: 10%;
-  right: 10%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, #e3c07a, transparent);
-}
-html body #bBoard .tbn::before {
-  top: 0;
-}
-html body #bBoard .tbn::after {
-  bottom: 0;
-}
-html body #bBoard .tbn.en::before,
-html body #bBoard .tbn.en::after {
-  background: linear-gradient(90deg, transparent, #ff6767, transparent);
-}
-html body #bBoard .tbn b {
-  font-size: clamp(26px, 3.6vw, 44px);
-  font-weight: 900;
-  letter-spacing: 0.06em;
-  line-height: 1;
-  background: linear-gradient(180deg, #ffffff 20%, #f0d59c 62%, #b08e4e);
-  -webkit-background-clip: text;
-  background-clip: text;
-}
-html body #bBoard .tbn span {
-  font-size: 11px;
-  letter-spacing: 0.24em;
-}
 
 /* ================= Awakening, capture, end of battle ================= */
 

@@ -33,18 +33,6 @@
     0 28px 65px rgba(0, 0, 0, 0.4),
     inset 0 1px rgba(255, 255, 255, 0.08) !important;
 }
-#combat .board {
-  position: relative !important;
-  overflow: hidden !important;
-  border: 1px solid rgba(139, 220, 230, 0.32) !important;
-  border-radius: 19px !important;
-  box-shadow:
-    inset 0 0 70px rgba(0, 0, 0, 0.4),
-    0 12px 30px rgba(0, 0, 0, 0.25) !important;
-}
-#combat #bSvg {
-  filter: drop-shadow(0 8px 5px rgba(0, 0, 0, 0.25));
-}
 #combat .blog {
   border: 1px solid rgba(130, 213, 225, 0.16) !important;
   border-radius: 16px !important;

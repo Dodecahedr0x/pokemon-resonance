@@ -1,0 +1,177 @@
+/* Board › banners over the board: the round banner (.round-banner, .is-enemy on the opponent's turn), the sky
+   banner (.sky-banner-strip, .is-shown) with its chips and icon, and the backdrop fade between boards. */
+
+.round-banner {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 38%;
+  z-index: 6;
+  display: grid;
+  justify-items: center;
+  gap: var(--space-3xs);
+  padding: var(--space-md) 0;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(6, 6, 8, 0.88) 22%, rgba(6, 6, 8, 0.88) 78%, transparent);
+  border-block: 1px solid transparent;
+  border-image: linear-gradient(90deg, transparent, rgba(212, 175, 106, 0.7), transparent) 1;
+  animation: round-banner-enter 1.3s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+.round-banner b {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(20px, 3vw, 30px);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  background: linear-gradient(180deg, #fff6da, #c9a35e 70%, #8e6a2c);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.round-banner span {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: #9cc4ff;
+}
+.round-banner.is-enemy span {
+  color: #ff9c9c;
+}
+:where(.board) .sky-banner {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  padding: var(--space-3xs) var(--space-sm) var(--space-3xs) var(--space-2xs);
+  border-radius: 999px;
+  background: rgba(6, 14, 22, 0.74);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  font-size: 11.5px;
+  color: #eef5fb;
+  pointer-events: none;
+}
+.sky-chip {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--c) 24%, transparent);
+  color: var(--c);
+}
+.sky-chip svg {
+  width: 16px;
+  height: 16px;
+}
+.sky-chip.is-wind {
+  width: 20px;
+  height: 20px;
+  background: none;
+}
+:where(.board) .sky-banner b {
+  font-weight: 700;
+  margin-left: var(--space-3xs);
+  white-space: nowrap;
+}
+:where(.board) .sky-banner-strip {
+  position: absolute;
+  left: 50%;
+  top: 42%;
+  transform: translate(-50%, -50%) scale(0.92);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 7;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2xs);
+  padding: var(--space-md) var(--space-xl);
+  border-radius: 18px;
+  background: rgba(6, 14, 22, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  text-align: center;
+  width: max-content;
+  max-width: min(320px, 86%);
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+}
+:where(.board) .sky-banner-strip.is-shown {
+  opacity: 1;
+}
+.sky-banner-icon {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: var(--c);
+  background: color-mix(in srgb, var(--c) 20%, transparent);
+  box-shadow: 0 0 24px color-mix(in srgb, var(--c) 40%, transparent);
+}
+.sky-banner-icon svg {
+  width: 34px;
+  height: 34px;
+}
+:where(.board) .sky-banner-strip b {
+  font-size: 16px;
+  color: #fff;
+}
+:where(.board) .sky-banner-strip em {
+  font-style: normal;
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: #c9d6e0;
+}
+:where(.board) .sky-banner-strip.is-shown {
+  transform: translate(-50%, -50%) scale(1);
+}
+:where(.board) .round-banner {
+  top: calc(50% - 52px);
+  padding: var(--space-xl) 0;
+  gap: var(--space-sm);
+  background: linear-gradient(90deg, transparent, rgba(9, 11, 16, 0.9) 16%, rgba(9, 11, 16, 0.9) 84%, transparent);
+  border: 0;
+  box-shadow: none;
+}
+:where(.board) .round-banner::before {
+  content: '';
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #e3c07a, transparent);
+  top: 0;
+}
+:where(.board) .round-banner::after {
+  content: '';
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #e3c07a, transparent);
+  bottom: 0;
+}
+:where(.board) .round-banner.is-enemy::before {
+  background: linear-gradient(90deg, transparent, #ff6767, transparent);
+}
+:where(.board) .round-banner.is-enemy::after {
+  background: linear-gradient(90deg, transparent, #ff6767, transparent);
+}
+:where(.board) .round-banner b {
+  font-size: clamp(26px, 3.6vw, 44px);
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  background: linear-gradient(180deg, #ffffff 20%, #f0d59c 62%, #b08e4e);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+:where(.board) .round-banner span {
+  font-size: 11px;
+  letter-spacing: 0.24em;
+}

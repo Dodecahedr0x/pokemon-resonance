@@ -13,35 +13,8 @@
 /* =====================================================================
    v4.7: Living board (time-of-day tint, badge, grass about to burn)
    ===================================================================== */
-html body #bBoard .b-ciel {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  pointer-events: none;
-  border-radius: inherit;
-  opacity: 0;
-  transition: opacity 1.2s ease;
-}
-html body #bBoard[data-ph='nuit'] .b-ciel {
-  opacity: 1;
-  background: radial-gradient(ellipse at 50% 42%, rgba(14, 24, 70, 0.16), rgba(5, 9, 38, 0.52));
-}
-html body #bBoard[data-ph='crepuscule'] .b-ciel {
-  opacity: 1;
-  background: linear-gradient(180deg, rgba(255, 128, 64, 0.16), rgba(110, 48, 120, 0.28));
-}
-html body #bBoard[data-ph='aube'] .b-ciel {
-  opacity: 1;
-  background: linear-gradient(180deg, rgba(255, 204, 158, 0.14), rgba(122, 160, 232, 0.14));
-}
 html body .chip-heure {
   white-space: nowrap;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html body #bBoard .b-ciel {
-    transition: none;
-  }
 }
 
 /* ==== 24-v4.8-tactique.css ==== */

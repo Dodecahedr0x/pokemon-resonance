@@ -20,18 +20,3 @@
   justify-self: start;
 }
 /* boards by biome */
-.board {
-  transition: background 0.6s;
-}
-.board.bio-gue {
-  background: radial-gradient(120% 90% at 50% 0%, #1f3a22, #0e1a12);
-}
-.board.bio-roche {
-  background: radial-gradient(120% 90% at 50% 0%, #3a2d1f, #16110b);
-}
-.board.bio-tour {
-  background: radial-gradient(120% 90% at 50% 0%, #241c33, #0b0912);
-}
-.board.bio-ligue {
-  background: radial-gradient(120% 90% at 50% 0%, #1a2134, #090c14);
-}

@@ -82,7 +82,7 @@ let H = {
   ambientFx: null, // { k, items }
   fxc: false,
   skyBanner: null, // { ic, heading, text, on }
-  tbn: null, // { n, en, fast, txt, sub }
+  roundBanner: null, // { n, isEnemy, fast, title, sub }
   fade: null, // { n, bg, va }
 };
 

@@ -50,50 +50,7 @@
   }
 }
 /* --- round banner --- */
-.board {
-  position: relative;
-}
-.tbn {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 38%;
-  z-index: 6;
-  display: grid;
-  justify-items: center;
-  gap: var(--space-3xs);
-  padding: var(--space-md) 0;
-  pointer-events: none;
-  background: linear-gradient(90deg, transparent, rgba(6, 6, 8, 0.88) 22%, rgba(6, 6, 8, 0.88) 78%, transparent);
-  border-block: 1px solid transparent;
-  border-image: linear-gradient(90deg, transparent, rgba(212, 175, 106, 0.7), transparent) 1;
-  animation: tbn 1.3s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-}
-.tbn b {
-  font-family: var(--f-d);
-  font-weight: 800;
-  font-size: clamp(20px, 3vw, 30px);
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  background: linear-gradient(180deg, #fff6da, #c9a35e 70%, #8e6a2c);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-.tbn span {
-  font-family: var(--f-m);
-  font-size: 10.5px;
-  letter-spacing: 0.32em;
-  text-transform: uppercase;
-  color: #9cc4ff;
-}
-.tbn.en span {
-  color: #ff9c9c;
-}
-.tbn.en {
-  border-image: linear-gradient(90deg, transparent, rgba(229, 72, 77, 0.7), transparent) 1;
-}
-@keyframes tbn {
+@keyframes round-banner-enter {
   0% {
     opacity: 0;
     transform: scaleX(0.4);

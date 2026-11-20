@@ -333,6 +333,15 @@ Each step is one commit (or a few), on its own, playable at every point.
   the lake (`.is-still`) and night haze (`.is-night`), and the Poké Ball layer (`.pokeball-layer`, `.pokeball-top`,
   `-bottom`, `-button`). Keyframes `fire-risk-flicker`, `lake-band-drift`, `lake-glint-drift`. Board snapshots identical
   at both widths apart from keyframe names.
+- Board host: done. `src/screens/combat/board/board-host.css`, `board-ambience.css`, `board-banners.css`,
+  `board-host-layout.css`, `board-host-motion.css`. `.board-sky-tint`, `.attack-effects-canvas`, `.board-weather` with
+  `.is-rain`, `.is-hail`, `.is-sandstorm`, `.is-sun`, `.ambience` (`.is-night`), `.ambient-particle` with `.is-soul`,
+  `.is-ember`, `.is-bubble`, `.is-poison-bubble`, `.is-spark`, `.is-leaf`, `.is-firefly`, `.is-snow`, `.is-glitter`,
+  `.is-petal`, `.is-feather`, `.is-dust`, `.round-banner` (`.is-enemy`, host state `roundBanner`), `.sky-chip.is-wind`,
+  `.sky-banner-strip` (`.is-shown`), `.sky-banner-icon`, `.board-backdrop-fade` (`.is-leaving`) and the vertical board
+  `.board.is-vertical`. Keyframes `round-banner-enter`. The phone layout's `width: auto !important` had always cancelled
+  the board width that `fitPhoneBattle()` wrote inline, so that dead measuring code is gone and the board simply takes
+  its frame's width. Snapshots identical at both widths apart from keyframe names and token idle timing.
   A third pass that ignores one- to three-letter prefixes (a template such as `s${…}` no longer keeps every class
   starting with « s » alive) removed 142 more parts: the old scenario cards (`.scn`), the splash screen (`.sp-*`,
   `.splash`), the old Pokédex sheet (`.st-*`), `.seg`, `.frise`… and one more file.

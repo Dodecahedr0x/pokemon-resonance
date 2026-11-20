@@ -299,5 +299,5 @@ export function init() {
   });
 
   /* ---------- 3. On screen ---------- */
-  // the board's sky (.b-ciel) is rendered by <Board> (src/screens/combat/board/)
+  // the board's sky (.board-sky-tint) is rendered by <Board> (src/screens/combat/board/)
 }

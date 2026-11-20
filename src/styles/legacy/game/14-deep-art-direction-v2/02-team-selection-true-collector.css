@@ -10,23 +10,6 @@
   border-radius: 19px !important;
   padding: var(--space-md) !important;
 }
-#combat .board {
-  min-height: 360px !important;
-  margin: var(--space-md) 0 !important;
-  border: 1px solid rgba(110, 220, 255, 0.36) !important;
-  border-radius: 16px !important;
-  background:
-    linear-gradient(0deg, rgba(3, 19, 29, 0.18), rgba(3, 19, 29, 0.08)),
-    radial-gradient(ellipse at 50% 75%, rgba(54, 153, 177, 0.24), transparent 58%),
-    var(--resonance-landscape) center 60% / cover no-repeat !important;
-  box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.05),
-    0 18px 36px rgba(0, 0, 0, 0.3) !important;
-  overflow: hidden !important;
-}
-#combat #bSvg {
-  filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.55));
-}
 #combat .bt-side {
   gap: var(--space-sm) !important;
 }
@@ -45,16 +28,6 @@ summary {
 }
 hr {
   border-color: rgba(104, 214, 255, 0.16) !important;
-}
-@media (max-width: 999px) {
-  #combat .board {
-    min-height: 280px !important;
-  }
-}
-@media (max-width: 560px) {
-  #combat .board {
-    min-height: 230px !important;
-  }
 }
 @media (prefers-reduced-motion: reduce) {
   *,

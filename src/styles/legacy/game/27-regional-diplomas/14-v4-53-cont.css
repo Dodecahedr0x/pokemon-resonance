@@ -22,21 +22,6 @@
   font-size: 11px;
   color: #b8cddb;
 }
-body.board-theme-crepuscule .board {
-  background: radial-gradient(120% 90% at 50% 0%, #2a2046, #0b0812) !important;
-}
-body.board-theme-jardin .board {
-  background: radial-gradient(120% 90% at 50% 0%, #2a5a2a, #0d1f10) !important;
-}
-body.board-theme-givre .board {
-  background: radial-gradient(120% 90% at 50% 0%, #1d4a62, #0a1a24) !important;
-}
-body.board-theme-braise .board {
-  background: radial-gradient(120% 90% at 50% 0%, #4a1d12, #180806) !important;
-}
-body.board-theme-cristal .board {
-  background: radial-gradient(120% 90% at 50% 0%, #3a3478, #110f2c) !important;
-}
 
 /* <style id="resonance-daily-craft"> */
 

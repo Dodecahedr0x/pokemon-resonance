@@ -2,8 +2,7 @@
 @media (prefers-reduced-motion: reduce) {
   .burst-particle,
   .screen-shake,
-  .shake-big,
-  .board-weather i {
+  .shake-big {
     animation: none !important;
   }
 }

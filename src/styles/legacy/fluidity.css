@@ -10,9 +10,6 @@
    declared further up. */
 
 /* 2. Weather: we move the whole layer (already larger than the frame) */
-.board-weather i {
-  will-change: transform;
-}
 @keyframes hail-fall {
   from {
     transform: translate(0, 0);
@@ -60,12 +57,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .board-weather i,
   .hp.hseg i::after {
     animation: none !important;
   }
 }
-html.a11y-rm .board-weather i,
 html.a11y-rm .hp.hseg i::after {
   animation: none !important;
 }

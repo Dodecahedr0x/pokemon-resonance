@@ -24,11 +24,6 @@ html body.compact-battle #cbBattle .bt-foot.foot-tools #bEnd {
   border-color: transparent;
   color: #1d1406;
 }
-#bSvg {
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  user-select: none;
-}
 
 .tile-info {
   position: fixed;

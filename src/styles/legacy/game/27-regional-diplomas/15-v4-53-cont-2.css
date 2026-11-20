@@ -36,11 +36,6 @@ html body.compact-battle #combat .bt {
   padding: var(--space-xs) !important;
   border-radius: 18px !important;
 }
-html body.compact-battle #combat .board {
-  margin: var(--space-2xs) auto !important;
-  padding: var(--space-3xs) !important;
-  min-height: 0 !important;
-}
 html body.compact-battle #cbBattle .bt-side .bt-foot {
   bottom: calc(6px + env(safe-area-inset-bottom, 0px)) !important;
   padding: var(--space-xs) var(--space-sm) !important;
@@ -70,10 +65,3 @@ html body.compact-battle #cbBattle .bt-side {
   padding-bottom: 110px;
 }
 /* the board keeps its shape but never exceeds the screen: banner + teams + bottom bar ≈ 335 px */
-html body.compact-battle #bBoard.vert #bSvg {
-  display: block;
-  width: 100% !important;
-  height: auto !important;
-  max-height: max(300px, calc(100dvh - 334px - env(safe-area-inset-bottom, 0px))) !important;
-  margin: 0 auto;
-}

@@ -42,8 +42,3 @@ html body .shn-ic {
     transition-duration: 0.01ms !important;
   }
 }
-@media (max-width: 700px) {
-  html body #bBoard {
-    border-radius: 13px !important;
-  }
-}

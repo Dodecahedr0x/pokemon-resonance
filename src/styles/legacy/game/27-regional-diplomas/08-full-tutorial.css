@@ -7,9 +7,6 @@
     gap: var(--space-xs);
   }
   /* teams: all Pokémon visible at once, without sideways scrolling */
-  html body.compact-battle #bBoard.vert {
-    margin-inline: auto !important;
-  }
 }
 /* Awakening choice on phone: more compact cards (5 paths for Eevee) */
 

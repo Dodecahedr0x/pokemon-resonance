@@ -41,11 +41,11 @@ export function fxPrep() {
   if (!bd || !svg) {
     return false;
   }
-  // canvas.fxc canvas: rendered by React (Board.jsx) on the first effect; size and drawing here
+  // canvas.attack-effects-canvas: rendered by React (Board.jsx) on the first effect; size and drawing here
   if (!getHost().fxc) {
     hostSet({ fxc: true });
   }
-  const cv = bd.querySelector('canvas.fxc');
+  const cv = bd.querySelector('canvas.attack-effects-canvas');
   if (!cv) {
     return false;
   }

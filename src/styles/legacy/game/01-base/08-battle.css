@@ -50,11 +50,6 @@
   background: #f7d02c;
   color: #14120a;
 }
-.board svg {
-  display: block;
-  width: 100%;
-  height: auto;
-}
 .msg {
   position: relative;
   margin: var(--space-2xs) var(--space-md) var(--space-md);

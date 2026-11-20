@@ -58,16 +58,18 @@ const GameBoard = memo(function GameBoard() {
 });
 const Evo = memo(EvoFx);
 
+// weather shown over the board (#board-weather), by weather id
+const WEATHER_CLASS = { pluie: 'is-rain', grele: 'is-hail', sable: 'is-sandstorm', soleil: 'is-sun' };
+
 // #bBoard container: classes, variables and data-ph follow the « host » state (boardStore.js).
 // Children outside the SVG are in the order of a normal battle start (created on first use).
-// The width (style.width, fitPhoneBattle) is still set by the engine: React does not manage this property.
 function Board() {
   const H = useHost();
   return (
     <div className={H.cls.join(' ')} id="bBoard" data-ph={H.ph} style={{ '--ac': H.ac, '--boardBg': H.boardBg }}>
       <GameBoard />
       <Evo />
-      <div className="b-ciel" aria-hidden="true" />
+      <div className="board-sky-tint" aria-hidden="true" />
       {H.cloudShade && (
         <div className="cloud-shade" aria-hidden="true">
           <i />
@@ -77,7 +79,7 @@ function Board() {
       {H.ambience && (
         <div
           key={H.ambience.k}
-          className={'ambience ' + H.ambience.h}
+          className={'ambience' + (H.ambience.h === 'nuit' ? ' is-night' : '')}
           data-k={H.ambience.k}
           aria-hidden="true"
           style={{ '--c': H.ambience.c }}
@@ -94,7 +96,7 @@ function Board() {
           id="board-weather"
           aria-hidden="true"
           data-k={H.boardWeather}
-          className={'board-weather board-weather-' + H.boardWeather}
+          className={'board-weather' + (WEATHER_CLASS[H.boardWeather] ? ' ' + WEATHER_CLASS[H.boardWeather] : '')}
         >
           <i />
           <i />
@@ -108,22 +110,22 @@ function Board() {
         </div>
       )}
       {/* attack effects canvas: drawn and placed by the engine (028, fxPrep) */}
-      {H.fxc && <canvas className="fxc" aria-hidden="true" />}
+      {H.fxc && <canvas className="attack-effects-canvas" aria-hidden="true" />}
       {H.skyBanner && <SkyBanner b={H.skyBanner} />}
-      {H.tbn && (
+      {H.roundBanner && (
         <div
-          key={H.tbn.n}
-          className={'tbn' + (H.tbn.en ? ' en' : '')}
-          style={H.tbn.fast ? { animationDuration: '.8s' } : undefined}
+          key={H.roundBanner.n}
+          className={'round-banner' + (H.roundBanner.isEnemy ? ' is-enemy' : '')}
+          style={H.roundBanner.fast ? { animationDuration: '.8s' } : undefined}
         >
-          <b>{H.tbn.txt}</b>
-          <span>{H.tbn.sub}</span>
+          <b>{H.roundBanner.title}</b>
+          <span>{H.roundBanner.sub}</span>
         </div>
       )}
       {H.fade && (
         <div
           key={H.fade.n}
-          className={'bg-fade' + (H.fade.va ? ' va' : '')}
+          className={'board-backdrop-fade' + (H.fade.va ? ' is-leaving' : '')}
           aria-hidden="true"
           style={{ backgroundImage: H.fade.bg }}
         />
@@ -150,7 +152,7 @@ function Sky({ c }) {
       )}
       <b>{c.displayName}</b>
       {c.vent && (
-        <span className="sky-chip v" style={{ '--c': '#cfe6ff' }} title="Vent">
+        <span className="sky-chip is-wind" style={{ '--c': '#cfe6ff' }} title="Vent">
           <svg>
             <use href="#i-vent" />
           </svg>
@@ -163,8 +165,8 @@ function Sky({ c }) {
 // Sky announcement (v4.30): the time or weather changes.
 function SkyBanner({ b }) {
   return (
-    <div id="sky-banner-box" className={'sky-banner-strip' + (b.on ? ' on' : '')}>
-      <span className="banner-art-ic" style={{ '--c': b.ic[1] }}>
+    <div id="sky-banner-box" className={'sky-banner-strip' + (b.on ? ' is-shown' : '')}>
+      <span className="sky-banner-icon" style={{ '--c': b.ic[1] }}>
         <svg>
           <use href={'#' + b.ic[0]} />
         </svg>

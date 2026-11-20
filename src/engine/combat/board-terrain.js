@@ -1404,6 +1404,21 @@ const ensureLayers = () => {
 };
 
 // .ambientFx particles: rendered by React (Board.jsx), [class, style] per particle
+// class of each particle kind (KIND[…].part)
+const PARTICLE_CLASS = {
+  ame: 'is-soul',
+  braise: 'is-ember',
+  bulle: 'is-bubble',
+  bullePsn: 'is-poison-bubble',
+  etincelle: 'is-spark',
+  feuille: 'is-leaf',
+  luciole: 'is-firefly',
+  neige: 'is-snow',
+  paillette: 'is-glitter',
+  petale: 'is-petal',
+  plume: 'is-feather',
+  poussiere: 'is-dust',
+};
 const particles = kind => {
   if (!board()) {
     return;
@@ -1419,7 +1434,7 @@ const particles = kind => {
     const x = ((i * 37 + 11) % 97) + 1,
       y = ((i * 53 + 29) % 91) + 3;
     items.push([
-      'p ' + p,
+      'ambient-particle ' + PARTICLE_CLASS[p],
       {
         left: x + '%',
         top: y + '%',
@@ -1433,7 +1448,7 @@ const particles = kind => {
       const x = ((i * 41 + 7) % 95) + 2,
         y = ((i * 29 + 17) % 88) + 6;
       items.push([
-        'p luciole n',
+        'ambient-particle is-firefly is-night',
         {
           left: x + '%',
           top: y + '%',

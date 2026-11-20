@@ -71,32 +71,10 @@
     min-height: 0;
     overflow: hidden;
   }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bBoard {
-    flex: 1 1 auto;
-    min-height: 0 !important;
-    height: auto;
-    margin: 0 !important;
-    padding: 66px var(--space-md) 72px !important;
-    border: 0 !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bSvg {
-    width: 100% !important;
-    height: 100% !important;
-    max-height: 100%;
-  }
   /* board tools and time badge: just below the opponent cards */
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bBoard > .board-tools {
     top: 66px !important;
     left: 12px !important;
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bBoard > .sky-banner {
-    top: 66px !important;
-    right: 12px !important;
   }
 
   /* command panel: it fills the column, only its content scrolls if needed */

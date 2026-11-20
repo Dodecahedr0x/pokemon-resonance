@@ -90,6 +90,10 @@
 @import '../screens/combat/battle/result-lists.css' layer(screens);
 @import '../screens/combat/battle/result-effects.css' layer(screens);
 @import '../screens/combat/battle/evolution-choice.css' layer(screens);
+@import '../screens/combat/board/board-host.css' layer(screens);
+@import '../screens/combat/board/board-ambience.css' layer(screens);
+@import '../screens/combat/board/board-banners.css' layer(screens);
+@import '../screens/combat/board/board-host-layout.css' layer(screens);
 @import '../screens/combat/board/cell.css' layer(screens);
 @import '../screens/combat/board/cell-marks.css' layer(screens);
 @import '../screens/combat/board/cell-highlight.css' layer(screens);
@@ -138,3 +142,4 @@
 @import '../screens/combat/board/token-motion.css' layer(motion);
 @import '../screens/combat/board/board-decor-motion.css' layer(motion);
 @import '../screens/combat/board/evolution-scene-motion.css' layer(motion);
+@import '../screens/combat/board/board-host-motion.css' layer(motion);

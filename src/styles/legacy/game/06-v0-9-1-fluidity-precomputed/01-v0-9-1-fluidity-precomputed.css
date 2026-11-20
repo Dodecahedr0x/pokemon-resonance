@@ -45,15 +45,6 @@
 }
 /* ---------- battle on phone ---------- */
 @media (max-width: 700px) {
-  .board.vert {
-    margin: 0 var(--space-2xs);
-    padding: var(--space-2xs);
-  }
-  .board.vert::before,
-  .board.vert::after {
-    width: 18px;
-    height: 18px;
-  }
   .battle {
     gap: var(--space-sm);
   }

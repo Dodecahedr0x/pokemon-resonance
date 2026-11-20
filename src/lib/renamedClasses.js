@@ -771,6 +771,15 @@ export const RENAMED_CLASSES = {
   glint: 'terrain-glint',
   axl: 'axis-label',
   'arr-h': 'intent-arrow-head',
+  'b-ciel': 'board-sky-tint',
+  fxc: 'attack-effects-canvas',
+  tbn: 'round-banner',
+  'bg-fade': 'board-backdrop-fade',
+  'banner-art-ic': 'sky-banner-icon',
+  'board-weather-pluie': 'board-weather.is-rain',
+  'board-weather-grele': 'board-weather.is-hail',
+  'board-weather-sable': 'board-weather.is-sandstorm',
+  'board-weather-soleil': 'board-weather.is-sun',
 };
 
 const OLD_CLASS = new RegExp(
