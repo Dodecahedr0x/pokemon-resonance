@@ -49,7 +49,7 @@ function Content() {
         {ready ? (
           <>
             {' '}
-            <i className="v4-dot">{ready}</i>
+            <i className="quests-tab-count">{ready}</i>
           </>
         ) : null}
       </>,
@@ -68,15 +68,20 @@ function Content() {
         lead="Suivez les chapitres, relevez les défis et réclamez vos récompenses."
       />
       {NL}
-      <div className="v4-trophy card">
-        <div className="v4-tr-b">
+      <div className="quests-trophies card">
+        <div className="quests-badges">
           {GYMS.map((g, i) => (
-            <span key={i} className={'v4-tbg' + (BADGES.includes(i) ? ' on' : '')} title={`Badge ${g.t}`}>
+            <span
+              key={i}
+              className={'quests-badge' + (BADGES.includes(i) ? ' is-earned' : '')}
+              style={{ '--i': i }}
+              title={`Badge ${g.t}`}
+            >
               <Html html={badgeSvg(i, g.t, 'qt' + i)} />
             </span>
           ))}
         </div>
-        <div className="v4-tr-k">
+        <div className="quests-counts">
           <div>
             <b>{trophies()}</b>
             <span>Trophées / 31</span>
@@ -100,7 +105,7 @@ function Content() {
         ))}
       </div>
       {NL}
-      <div className="v4-qlist">
+      <div className="quests-list">
         <Tab />
       </div>
     </>

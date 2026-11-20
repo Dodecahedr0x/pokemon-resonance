@@ -1,0 +1,268 @@
+/* Quests screen, Legends tab (Legends.jsx), Journal tab (Journal.jsx: stat tiles, results by type of battle, MVPs,
+   latest battles) and Achievements tab (Achievements.jsx). */
+
+/* ---------- legends: one card per legendary Pokémon, tinted with its type (--type-color, inline) ---------- */
+.legend-quests {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
+  gap: var(--space-md);
+}
+.legend-quest {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-md);
+  overflow: hidden;
+  padding: var(--space-md);
+}
+.legend-quest::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(120% 90% at 0 0, color-mix(in srgb, var(--type-color) 28%, transparent), transparent 60%);
+  pointer-events: none;
+}
+.legend-quest img {
+  position: relative;
+  flex: none;
+  width: 76px;
+  height: 76px;
+  object-fit: contain;
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.45));
+}
+/* greyed until its quest is done */
+.legend-quest:not(.is-ready, .is-caught) img {
+  filter: grayscale(0.75) brightness(0.75) drop-shadow(0 6px 10px rgba(0, 0, 0, 0.45));
+}
+.legend-quest-text {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+.legend-quest-text small {
+  display: block;
+  color: var(--color-text-secondary);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.legend-quest-text > b {
+  display: block;
+  margin: 1px 0 var(--space-xs);
+  font-size: 16px;
+}
+.legend-quest-text ul {
+  display: grid;
+  gap: var(--space-3xs);
+  margin: 0 0 var(--space-sm);
+  padding: 0;
+  color: #b9cad6;
+  font-size: 12.5px;
+  list-style: none;
+}
+.legend-quest-text li.is-done,
+.legend-quest-caught {
+  color: #8fe3a8;
+}
+.legend-quest-caught {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* ---------- journal ---------- */
+.journal {
+  display: grid;
+  gap: var(--space-md);
+}
+.journal-tiles {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-sm);
+}
+.stat-tile {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3xs);
+  min-width: 0;
+  padding: var(--space-sm);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.04);
+}
+.stat-tile b {
+  color: var(--color-highlight);
+  font-size: 18px;
+}
+.stat-tile span {
+  color: #9fb3c2;
+  font-size: 11.5px;
+}
+.journal-section {
+  padding: var(--space-md);
+}
+.journal-section h3 {
+  margin: 0 0 var(--space-sm);
+  font-size: 14px;
+}
+/* type of battle, share of wins (green on red), count */
+.journal-category {
+  display: grid;
+  grid-template-columns: minmax(0, 7em) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-2xs) 0;
+  font-size: 13px;
+}
+.journal-category-bar {
+  overflow: hidden;
+  height: 6px;
+  border-radius: 4px;
+  background: rgba(255, 120, 120, 0.25);
+}
+.journal-category-bar i {
+  display: block;
+  height: 100%;
+  background: #6fdc8c;
+}
+.journal-mvp {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-2xs) var(--space-sm);
+  padding: var(--space-2xs) 0;
+  font-size: 13px;
+}
+.journal-mvp em {
+  grid-column: 2 / 4;
+  margin-top: calc(var(--space-2xs) * -1);
+  color: #9fb3c2;
+  font-size: 11.5px;
+  font-style: normal;
+}
+/* latest battles: V (green) or D (red), name, details */
+.journal-battle {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-3xs) var(--space-sm);
+  padding: var(--space-xs) 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  color: #b9cad6;
+  font-size: 12.5px;
+}
+.journal-battle-result {
+  display: grid;
+  grid-row: span 2;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  background: rgba(255, 110, 110, 0.18);
+  color: #ff9d9d;
+  font-weight: 800;
+}
+.journal-battle.is-won .journal-battle-result {
+  background: rgba(110, 220, 140, 0.18);
+  color: #8fe3a8;
+}
+.journal-battle-name {
+  overflow: hidden;
+  color: var(--color-text-bright);
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.journal-battle em {
+  grid-column: 2;
+  color: var(--color-highlight);
+  font-size: 11.5px;
+  font-style: normal;
+}
+/* colour-blind mode: blue for wins and done steps, orange for losses */
+html.a11y-cb .journal-category-bar {
+  background: rgba(255, 159, 26, 0.3);
+}
+html.a11y-cb .journal-battle-result {
+  background: rgba(255, 159, 26, 0.25);
+  color: #ffcf8a;
+}
+html.a11y-cb
+  :is(.journal-category-bar i, .legend-quest-text li.is-done, .journal-battle.is-won .journal-battle-result) {
+  background: #3aa0ff;
+  color: #fff;
+}
+
+/* ---------- achievements: dim until unlocked, then a gold trophy ---------- */
+.achievement {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  margin-bottom: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  opacity: 0.62;
+}
+.achievement.is-unlocked {
+  opacity: 1;
+}
+.achievement-icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+}
+.achievement-icon svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  color: var(--color-text-muted);
+}
+.achievement.is-unlocked .achievement-icon {
+  border-color: var(--color-accent);
+  background: rgba(255, 215, 94, 0.16);
+}
+.achievement.is-unlocked .achievement-icon svg,
+.achievement-check {
+  color: var(--color-accent);
+}
+.achievement-text {
+  display: grid;
+  flex: 1;
+  gap: var(--space-3xs);
+  min-width: 0;
+}
+.achievement-text b {
+  font-size: 14.5px;
+}
+.achievement-text em {
+  color: var(--color-text-muted);
+  font-size: 12.5px;
+  font-style: normal;
+}
+.achievement-text small {
+  color: var(--color-text-muted);
+  font-size: 11.5px;
+}
+.achievement-text .achievement-title {
+  color: var(--color-selected);
+}
+.achievement-progress {
+  display: block;
+  overflow: hidden;
+  height: 5px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.1);
+}
+.achievement-progress i {
+  display: block;
+  height: 100%;
+  background: var(--color-accent);
+}
+.achievement-check {
+  font-weight: 800;
+}

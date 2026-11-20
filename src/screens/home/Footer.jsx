@@ -106,7 +106,7 @@ function Event() {
   return (
     <button type="button" className={'home-daily-button' + (done ? ' is-done' : '')} data-v4fight={k}>
       <span className="home-daily-art">
-        <span className="v4t-scene" style={{ backgroundPosition: `${(k.charCodeAt(0) * 7) % 100}% 50%` }} />
+        <span className="landscape-scene" style={{ backgroundPosition: `${(k.charCodeAt(0) * 7) % 100}% 50%` }} />
       </span>
       <span className="home-daily-text">
         <small>{done ? 'Défi du jour relevé' : 'Événement · Défi du jour'}</small>

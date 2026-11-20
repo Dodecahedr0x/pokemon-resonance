@@ -92,12 +92,12 @@ export function johtoExtraLine(k) {
     if ((PROFILE.jdis || 0) >= D.jdis) {
       return '';
     } // already defeated: no second bounty
-    return `<div class="v4-rew"><span><span class="coin-icon" aria-hidden="true">₽</span>+${fmt(T.rew[0])}</span><span><span class="gem-icon"><svg><use href="#i-gem"/></svg></span>+${T.rew[1]}</span></div>`;
+    return `<div class="reward-line"><span><span class="coin-icon" aria-hidden="true">₽</span>+${fmt(T.rew[0])}</span><span><span class="gem-icon"><svg><use href="#i-gem"/></svg></span>+${T.rew[1]}</span></div>`;
   }
   if (D.roam) {
     const r = getRoamState(D.roam),
       it = TALIS[D.roam];
-    return `<div class="v4-rew"><span class="v4-rew-b rm-hp"><i style="width:${Math.round((r.hp || 1) * 100)}%"></i>PV ${Math.round((r.hp || 1) * 100)} %${r.seenFlags ? ` · vu ${r.seenFlags} fois` : ''}</span><span><img src="${ITM(HELD_IMG[it])}" alt="" loading="lazy">${ITEMS2[it].n}</span><span><span class="gem-icon"><svg><use href="#i-gem"/></svg></span>+12</span></div>`;
+    return `<div class="reward-line"><span class="reward-badge reward-hp"><i style="width:${Math.round((r.hp || 1) * 100)}%"></i>PV ${Math.round((r.hp || 1) * 100)} %${r.seenFlags ? ` · vu ${r.seenFlags} fois` : ''}</span><span><img src="${ITM(HELD_IMG[it])}" alt="" loading="lazy">${ITEMS2[it].n}</span><span><span class="gem-icon"><svg><use href="#i-gem"/></svg></span>+12</span></div>`;
   }
   return '';
 }

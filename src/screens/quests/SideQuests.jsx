@@ -10,19 +10,19 @@ function Quest({ q }) {
     done = v >= q.n,
     got = !!PROFILE.qc[q.id];
   return (
-    <article className={'v4-qs' + (got ? ' got' : done ? ' ready' : '')}>
-      <div className="v4-qs-t">
+    <article className={'quests-side' + (got ? ' is-claimed' : done ? ' is-ready' : '')}>
+      <div className="quests-side-text">
         <b>{q.t}</b>
         <em>{q.d}</em>
-        <span className="v4-prog">
+        <span className="quests-side-progress">
           <i style={{ width: `${(v / q.n) * 100}%` }} />
         </span>
         <small>
           {v} / {q.n}
         </small>
       </div>
-      <div className="v4-qs-r">
-        <div className="v4-rw">
+      <div className="quests-side-actions">
+        <div className="reward-list">
           <Rewards r={q.r} />
         </div>
         {got ? (

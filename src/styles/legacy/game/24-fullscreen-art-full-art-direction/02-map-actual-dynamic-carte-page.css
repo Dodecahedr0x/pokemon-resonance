@@ -48,7 +48,6 @@
   box-shadow: 0 10px 28px rgba(225, 172, 78, 0.22) !important;
 }
 /* Other systems: coherent premium panels, not generic flat boxes */
-#quetes .card,
 #types .gd-p,
 #ligue .case {
   border: 1px solid var(--rx-edge) !important;

@@ -20,21 +20,21 @@ function Weekly() {
       (a, b) => b.s - a.s
     );
   return (
-    <article className="weekly-card card">
+    <article className="weekly-challenge card">
       <CardHeader icon="trophy" title="Défi de la semaine" count={D.lvl} />
       {NL}
-      <p className="weekly-card-r">{D.d}</p>
+      <p className="weekly-challenge-rules">{D.d}</p>
       {NL}
-      <div className="weekly-card-t">
+      <div className="weekly-challenge-team">
         {H.team.map((id, i) => (
-          <span key={i} className="weekly-card-m" data-species-sheet={id} title={BY[id].n}>
+          <span key={i} className="weekly-challenge-member" data-species-sheet={id} title={BY[id].n}>
             <img src={ART(BY[id].no)} alt="" loading="lazy" />
             <em>{BY[id].n}</em>
           </span>
         ))}
       </div>
       {NL}
-      <div className="weekly-card-k">
+      <div className="weekly-challenge-facts">
         <span>
           Record <b>{h ? fmt(h.best) : '—'}</b>
         </span>
@@ -49,11 +49,11 @@ function Weekly() {
       </Button>
       {NL}
       {rows.length > 1 ? (
-        <table className="weekly-card-cl">
+        <table className="weekly-challenge-ranking">
           <caption>Classement entre amis</caption>
           <tbody>
             {rows.map((x, i) => (
-              <tr key={i} className={x.me ? 'me' : ''}>
+              <tr key={i} className={x.me ? 'is-me' : ''}>
                 <td>{i + 1}</td>
                 <td>{x.n}</td>
                 <td>
@@ -64,7 +64,7 @@ function Weekly() {
           </tbody>
         </table>
       ) : (
-        <p className="weekly-card-n">
+        <p className="weekly-challenge-hint">
           Partagez votre carte de dresseur après le défi : vos amis verront votre score de la semaine.
         </p>
       )}
@@ -83,13 +83,13 @@ export default function Event() {
       <Weekly />
       {S ? (
         <>
-          <article className={'v4-daily card' + (done ? ' done' : '')}>
-            <span className="v4t-scene" style={{ backgroundPosition: `${(dk.charCodeAt(0) * 7) % 100}% 50%` }} />
-            <div className="v4-daily-t">
+          <article className={'quests-daily card' + (done ? ' is-done' : '')}>
+            <span className="landscape-scene" style={{ backgroundPosition: `${(dk.charCodeAt(0) * 7) % 100}% 50%` }} />
+            <div className="quests-daily-text">
               <small>Défi du jour · se renouvelle dans {dailyLeft()}</small>
               <b>{S.n}</b>
               <em>{S.d || ''}</em>
-              <div className="v4-rw">
+              <div className="reward-list">
                 {done ? (
                   <span>Relevé aujourd’hui ✓</span>
                 ) : (

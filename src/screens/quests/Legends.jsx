@@ -14,23 +14,23 @@ function Legend({ L, et, isTaken: takenSet, fight, condition: cond }) {
     isReady = !takenSet && et.every(x => x.ok);
   return (
     <article
-      className={'legend-quest-c card' + (takenSet ? ' pris' : isReady ? ' pret' : '')}
-      style={{ '--c': tc(m.t[0]) }}
+      className={'legend-quest card' + (takenSet ? ' is-caught' : isReady ? ' is-ready' : '')}
+      style={{ '--type-color': tc(m.t[0]) }}
     >
       <img src={ART(m.no)} alt="" loading="lazy" />
-      <div className="legend-quest-t">
+      <div className="legend-quest-text">
         <small>{L.title}</small>
         <b>{m.n}</b>
         <ul>
           {et.map((x, i) => (
-            <li key={i} className={x.ok ? 'ok' : ''}>
+            <li key={i} className={x.ok ? 'is-done' : ''}>
               {x.ok ? '✓' : '○'} {x.t}
             </li>
           ))}
           {cond !== undefined ? <li className="capture-condition">Condition de capture : {cond}</li> : null}
         </ul>
         {takenSet ? (
-          <span className="legend-quest-ok">Dans votre Box ✓</span>
+          <span className="legend-quest-caught">Dans votre Box ✓</span>
         ) : (
           <Button size="small" variant={isReady ? 'primary' : 'ghost'} data-v4fight={fight} disabled={!isReady}>
             {isReady ? 'Tenter la capture' : 'Quête en cours'}
@@ -49,7 +49,7 @@ export default function Legends() {
         Une légende vaincue peut être capturée une fois sa quête terminée. Elle rejoint votre Box et coûte 8 PC dans
         l’équipe.
       </p>
-      <div className="legend-quest">
+      <div className="legend-quests">
         {LEGS.map(L => (
           <Legend key={L.id} L={L} et={legendSteps(L)} isTaken={PROFILE.box.includes(L.id)} fight={'lc' + L.id} />
         ))}
@@ -60,7 +60,7 @@ export default function Legends() {
             Légendes de Hoenn : vainquez-les d’abord (Combats › Après-jeu), puis remplissez leur quête. Chacune a une
             condition de capture propre.
           </p>
-          <div className="legend-quest">
+          <div className="legend-quests">
             {HOENN_LEGEND_DEFS.map(L => (
               <Legend
                 key={L.id}

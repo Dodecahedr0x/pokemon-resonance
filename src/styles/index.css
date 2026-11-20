@@ -28,6 +28,8 @@
 @import './components/pill-button.css' layer(components);
 @import './components/currency.css' layer(components);
 @import './components/progress-bar.css' layer(components);
+@import './components/reward-list.css' layer(components);
+@import './components/landscape-scene.css' layer(components);
 
 @import '../screens/settings/settings.css' layer(screens);
 @import '../screens/dex/dex.css' layer(screens);
@@ -74,4 +76,6 @@
 @import '../screens/saves/saves.css' layer(screens);
 @import '../screens/guide/guide.css' layer(screens);
 @import '../screens/quests/quests.css' layer(screens);
+@import '../screens/quests/quests-event.css' layer(screens);
+@import '../screens/quests/quests-journal.css' layer(screens);
 @import '../screens/camp/camp.css' layer(screens);

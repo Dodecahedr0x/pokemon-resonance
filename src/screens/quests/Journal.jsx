@@ -27,9 +27,9 @@ export default function Journal() {
   }
   const mvp = top(J.mvp, 5);
   return (
-    <div className="journal-report">
+    <div className="journal">
       {NL}
-      <div className="stat-tile-g">
+      <div className="journal-tiles">
         <Tile v={J.n} t="Combats suivis" />
         <Tile v={pct(J.w, J.n)} t="Victoires" />
         <Tile v={J.runStreak} t="Série en cours" />
@@ -38,14 +38,14 @@ export default function Journal() {
         <Tile v={J.ko} t="K.O. infligés" />
       </div>
       {NL}
-      <section className="card journal-report-s">
+      <section className="card journal-section">
         <h3>Par type de combat</h3>
         {Object.entries(J.category)
           .sort((a, b) => b[1][0] + b[1][1] - (a[1][0] + a[1][1]))
           .map(([k, [w, l]]) => (
-            <div key={k} className="category-row">
+            <div key={k} className="journal-category">
               <span>{CATEGORY_NAMES[k] || k}</span>
-              <span className="category-row-b">
+              <span className="journal-category-bar">
                 <i style={{ width: `${Math.round((w / Math.max(1, w + l)) * 100)}%` }} />
               </span>
               <b>
@@ -55,11 +55,11 @@ export default function Journal() {
           ))}
       </section>
       {NL}
-      <section className="card journal-report-s">
+      <section className="card journal-section">
         <h3>MVP les plus fréquents</h3>
         {mvp.length ? (
           mvp.map(([k, n]) => (
-            <div key={k} className="mvp-row">
+            <div key={k} className="journal-mvp">
               <Html html={medal(BY[k].t, 'is-small')} />
               <span>{BY[k].n}</span>
               <b>{n} × MVP</b>
@@ -71,15 +71,15 @@ export default function Journal() {
         )}
       </section>
       {NL}
-      <section className="card journal-report-s">
+      <section className="card journal-section">
         <h3>Derniers combats</h3>
         {J.last
           .slice()
           .reverse()
           .map((x, i) => (
-            <div key={i} className={'last-fight' + (x[1] ? ' w' : '')}>
-              <span className="last-fight-r">{x[1] ? 'V' : 'D'}</span>
-              <span className="last-fight-n">{x[0]}</span>
+            <div key={i} className={'journal-battle' + (x[1] ? ' is-won' : '')}>
+              <span className="journal-battle-result">{x[1] ? 'V' : 'D'}</span>
+              <span className="journal-battle-name">{x[0]}</span>
               <span>
                 {x[2] ? 'Rang ' + x[2] + ' · ' : ''}
                 {x[3]} manche{x[3] > 1 ? 's' : ''}

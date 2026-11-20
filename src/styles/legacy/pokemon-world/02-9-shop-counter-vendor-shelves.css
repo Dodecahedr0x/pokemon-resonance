@@ -5,8 +5,7 @@
 html.pk-calme .pk-dlg .pk-fl {
   animation: none !important;
 }
-html.a11y-rm .pk-dlg .pk-fl,
-html.a11y-rm :is(.tcb, .v4-tbg).on::after {
+html.a11y-rm .pk-dlg .pk-fl {
   animation: none !important;
 }
 @media (prefers-reduced-motion: reduce) {

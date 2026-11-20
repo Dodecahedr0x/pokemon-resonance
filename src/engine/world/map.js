@@ -137,7 +137,7 @@ export function rewardLine(k) {
     return johtoRewardLine(k);
   } // Johto (v4.15)
   const R = BADGE_REWARD[gi];
-  return `<div class="v4-rew"><span class="v4-rew-b">${badgeSvg(gi, GYMS[gi].t, 'mi' + gi)}Badge ${GYMS[gi].t}</span>${R.item ? `<span><img src="${ITM(HELD_IMG[R.item])}" alt="" loading="lazy">${ITEMS2[R.item].n}</span>` : ''}<span><span class="coin-icon" aria-hidden="true">₽</span>+500</span><span><span class="gem-icon"><svg><use href="#i-gem"/></svg></span>+10</span></div>`;
+  return `<div class="reward-line"><span class="reward-badge">${badgeSvg(gi, GYMS[gi].t, 'mi' + gi)}Badge ${GYMS[gi].t}</span>${R.item ? `<span><img src="${ITM(HELD_IMG[R.item])}" alt="" loading="lazy">${ITEMS2[R.item].n}</span>` : ''}<span><span class="coin-icon" aria-hidden="true">₽</span>+500</span><span><span class="gem-icon"><svg><use href="#i-gem"/></svg></span>+10</span></div>`;
 }
 
 export function centerMap() {

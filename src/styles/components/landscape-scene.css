@@ -1,0 +1,9 @@
+/* A slice of the Résonance landscape painting behind a tile (Home's activities, the Quests' daily challenge); the
+   engine picks the slice with an inline background-position. */
+
+.landscape-scene {
+  position: absolute;
+  inset: 0;
+  z-index: -3;
+  background: var(--resonance-landscape) center / 260% auto no-repeat;
+}

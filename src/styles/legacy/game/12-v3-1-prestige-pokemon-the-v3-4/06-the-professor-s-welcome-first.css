@@ -276,8 +276,7 @@
   .tip,
   .intro,
   .it-card,
-  .intro .dlgbox,
-  .tcb.on svg {
+  .intro .dlgbox {
     animation: none !important;
   }
 }

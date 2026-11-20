@@ -319,20 +319,12 @@ html.a11y-cb {
   --bad: #ff9f1a !important;
   --warn: #ffe14a !important;
 }
-html.a11y-cb .category-row-b i,
-html.a11y-cb .echo-tab-hp i,
-html.a11y-cb .legend-quest-t li.ok,
-html.a11y-cb .last-fight.w .last-fight-r {
+html.a11y-cb .echo-tab-hp i {
   background: #3aa0ff !important;
   color: #fff !important;
 }
-html.a11y-cb .category-row-b,
 html.a11y-cb .echo-tab-hp {
   background: rgba(255, 159, 26, 0.3) !important;
-}
-html.a11y-cb .last-fight-r {
-  background: rgba(255, 159, 26, 0.25) !important;
-  color: #ffcf8a !important;
 }
 html.a11y-cb #bSvg .in-danger .hx,
 html.a11y-cb #bSvg .h-danger {

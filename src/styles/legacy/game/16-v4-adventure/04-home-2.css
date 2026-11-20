@@ -3,12 +3,6 @@
   font-style: normal;
   color: var(--v4-tx2);
 }
-.v4t-scene {
-  position: absolute;
-  inset: 0;
-  z-index: -3;
-  background: var(--resonance-landscape) center/260% auto no-repeat;
-}
 .v4t-shade {
   position: absolute;
   inset: 0;
@@ -60,19 +54,19 @@
 .t-exp {
   border-color: rgba(127, 211, 107, 0.6);
 }
-.t-exp .v4t-scene {
+.t-exp .landscape-scene {
   filter: saturate(1.15) brightness(1.05);
 }
 .t-cb {
   border-color: rgba(255, 120, 90, 0.6);
 }
-.t-cb .v4t-scene {
+.t-cb .landscape-scene {
   filter: hue-rotate(-25deg) saturate(1.3) brightness(0.75);
 }
 .t-team {
   border-color: rgba(255, 215, 94, 0.6);
 }
-.t-team .v4t-scene {
+.t-team .landscape-scene {
   filter: saturate(1.1) brightness(0.9);
 }
 .t-shop {

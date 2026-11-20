@@ -109,7 +109,7 @@ export function johtoRewardLine(k) {
   const R = D.jfinal ? { item: 'metronome', g: 15 } : JREW[D.johto],
     gi = D.johto,
     it = R.item && ITEMS2[R.item];
-  return `<div class="v4-rew"><span class="v4-rew-b">${D.jfinal ? medal(['Dragon']) + 'Titre de Maître' : badgeSvg(gi, JGYMS[gi], 'mj' + gi) + 'Badge ' + JGYMS[gi]}</span>${it ? `<span><img src="${ITM(HELD_IMG[R.item])}" alt="" loading="lazy">${it.n}</span>` : ''}<span><span class="gem-icon"><svg><use href="#i-gem"/></svg></span>${R.g}</span></div>`;
+  return `<div class="reward-line"><span class="reward-badge">${D.jfinal ? medal(['Dragon']) + 'Titre de Maître' : badgeSvg(gi, JGYMS[gi], 'mj' + gi) + 'Badge ' + JGYMS[gi]}</span>${it ? `<span><img src="${ITM(HELD_IMG[R.item])}" alt="" loading="lazy">${it.n}</span>` : ''}<span><span class="gem-icon"><svg><use href="#i-gem"/></svg></span>${R.g}</span></div>`;
 }
 
 /* ---------- Johto gym rules ---------- */

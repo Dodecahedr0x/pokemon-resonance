@@ -1,4 +1,16 @@
-/* Quests screen (#quetes, Quests.jsx). The rest of the screen is still styled in legacy. */
+/* Quests screen (#quetes, Quests.jsx): the trophy case (badges and counters), the tabs, and the list of the chosen
+   tab: chapters of the main quest (MainQuest.jsx) and side quests (SideQuests.jsx). The Event tab is in
+   quests-event.css, the Legends, Journal and Achievements tabs in quests-journal.css. */
+
+/* every card of the screen is a dark teal plate */
+.quests-page .card {
+  border: 1px solid var(--color-line-card);
+  border-radius: 23px;
+  background: linear-gradient(145deg, rgba(19, 48, 65, 0.96), rgba(6, 20, 31, 0.98));
+  box-shadow:
+    0 25px 58px rgba(0, 0, 0, 0.34),
+    inset 0 1px rgba(255, 255, 255, 0.07);
+}
 
 /* the four tabs share the row equally (two rows on small phones) */
 .quests-page .page-tabs {
@@ -14,4 +26,233 @@
   .quests-page .page-tabs {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+}
+/* side quests ready to claim, on their tab */
+.quests-tab-count {
+  display: inline-grid;
+  place-items: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 var(--space-2xs);
+  border-radius: 9px;
+  background: #ff5f57;
+  color: #fff;
+  font: 800 11px/1 var(--font-display);
+  font-style: normal;
+}
+
+/* ---------- trophy case: the eight badges in a velvet tray, then three counters ---------- */
+.quests-trophies {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  margin-bottom: var(--space-md);
+  padding: var(--space-md);
+}
+.quests-page .quests-trophies {
+  position: relative;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 211, 90, 0.32),
+    inset 0 0 0 4px rgba(6, 16, 30, 0.55),
+    inset 0 0 0 5px rgba(255, 211, 90, 0.14),
+    0 18px 38px -18px rgba(0, 0, 0, 0.8);
+}
+.quests-badges {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  border-radius: 14px;
+  background:
+    radial-gradient(120% 90% at 50% 0%, rgba(255, 255, 255, 0.07), transparent 60%),
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.02) 0 2px, transparent 2px 4px),
+    linear-gradient(180deg, #43111f, #22070f);
+  box-shadow:
+    inset 0 3px 10px rgba(0, 0, 0, 0.8),
+    0 0 0 2px #120408,
+    0 0 0 4px rgba(200, 160, 80, 0.55),
+    0 10px 24px -12px rgba(0, 0, 0, 0.85);
+  outline: 1.5px dashed rgba(255, 215, 140, 0.38);
+  outline-offset: -7px;
+}
+/* a round hollow in the velvet; a badge not won yet is a faint shadow */
+.quests-badge {
+  position: relative;
+  display: grid;
+  place-items: center;
+  overflow: visible;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 42%, #14060b, #2b0c16 72%);
+  box-shadow:
+    inset 0 3px 6px rgba(0, 0, 0, 0.9),
+    0 1px 0 rgba(255, 220, 180, 0.12);
+}
+.quests-badge svg {
+  width: 28px;
+  height: 28px;
+}
+.quests-badge:not(.is-earned) svg {
+  opacity: 0.18;
+  filter: grayscale(1) brightness(0.6);
+}
+.quests-badge.is-earned svg {
+  filter: drop-shadow(0 2px 1.5px rgba(0, 0, 0, 0.8)) drop-shadow(0 0 5px rgba(255, 220, 140, 0.4));
+}
+/* won badges catch the light one after the other (--i: the badge's position, inline) */
+.quests-badge.is-earned::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: linear-gradient(115deg, transparent 38%, rgba(255, 255, 255, 0.85) 50%, transparent 62%) 170% 0 / 280%
+    100% no-repeat;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  animation: quests-badge-shine 1.1s ease-out calc(var(--i, 0) * 0.12s) both;
+}
+html.a11y-rm .quests-badge.is-earned::after {
+  animation: none;
+}
+@keyframes quests-badge-shine {
+  from {
+    background-position: 170% 0;
+  }
+  to {
+    background-position: -70% 0;
+  }
+}
+.quests-counts {
+  display: flex;
+  gap: var(--space-lg);
+}
+.quests-counts div {
+  display: grid;
+  text-align: center;
+}
+.quests-counts b {
+  color: var(--color-accent);
+  font: 850 20px/1 var(--font-display);
+}
+.quests-counts span {
+  color: var(--color-text-soft);
+  font: 600 11.5px/1.3 var(--font-body);
+}
+@media (max-width: 640px) {
+  .quests-counts {
+    width: 100%;
+    justify-content: space-around;
+  }
+}
+
+/* ---------- list: chapters and side quests ---------- */
+.quests-list {
+  display: grid;
+  gap: var(--space-sm);
+}
+.quests-chapter,
+.quests-side {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md);
+  border: 1px solid rgba(88, 186, 255, 0.34);
+  border-radius: 13px;
+  background: var(--surface-card);
+}
+/* the next chapter glows green; locked ones are dim */
+.quests-chapter.is-next {
+  border-color: #7ff0ad;
+  background: linear-gradient(90deg, rgba(40, 140, 80, 0.35), rgba(10, 30, 58, 0.95) 60%);
+  box-shadow:
+    0 0 0 1px rgba(127, 240, 173, 0.3),
+    0 12px 26px -16px rgba(60, 220, 130, 0.6);
+}
+.quests-chapter.is-locked {
+  opacity: 0.6;
+}
+.quests-chapter.is-done .quests-chapter-emblem {
+  filter: saturate(0.7);
+}
+.quests-chapter-emblem :is(.emb, .av) {
+  width: 48px;
+  height: 48px;
+}
+.quests-chapter-text,
+.quests-side-text {
+  display: grid;
+  flex: 1;
+  gap: var(--space-3xs);
+  min-width: 0;
+}
+.quests-chapter-text small {
+  color: var(--color-accent);
+  font: 800 11px/1.2 var(--font-display);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.quests-chapter-text b,
+.quests-side-text b {
+  font: 850 16px/1.2 var(--font-display);
+}
+.quests-chapter-text em,
+.quests-side-text em {
+  color: var(--color-text-soft);
+  font: 500 13px/1.35 var(--font-body);
+  font-style: normal;
+}
+/* state pill and button, on the right (under the text on phones) */
+.quests-chapter-side,
+.quests-side-actions {
+  display: grid;
+  flex: none;
+  justify-items: end;
+  gap: var(--space-sm);
+}
+@media (max-width: 640px) {
+  .quests-chapter,
+  .quests-side {
+    flex-wrap: wrap;
+  }
+  .quests-chapter-side,
+  .quests-side-actions {
+    width: 100%;
+    grid-auto-flow: column;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+/* side quest: gold progress bar (green once claimed) and counter; gold frame when ready to claim */
+.quests-side-progress {
+  display: block;
+  overflow: hidden;
+  height: 8px;
+  margin-top: var(--space-xs);
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.4);
+}
+.quests-side-progress i {
+  display: block;
+  height: 100%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #ffd75e, #ffb12f);
+}
+.quests-side small {
+  color: var(--color-text-dim);
+  font: 700 12px/1 var(--font-mono);
+}
+.quests-side.is-ready {
+  border-color: var(--color-selected);
+  box-shadow: 0 0 0 1px rgba(255, 215, 94, 0.3);
+}
+.quests-side.is-claimed {
+  opacity: 0.65;
+}
+.quests-side.is-claimed .quests-side-progress i {
+  background: linear-gradient(90deg, #3fd47e, #9af06a);
 }

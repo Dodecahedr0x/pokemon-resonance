@@ -149,3 +149,15 @@ Each step is one commit (or a few), on its own, playable at every point.
   `src/styles/components/currency.css` (`.coin-icon`, `.gem-icon`, were `.v4-coin`, `.v4-gemi`) and
   `src/styles/components/progress-bar.css` (`.progress-bar`, was `.cp-bar`). The dialogue box (`.dlgbox`,
   `.dlg-who`) goes with the overlays step, since the Pokémon-world skin restyles it in the tip and the intro.
+- Quests: done. `src/screens/quests/quests.css` (page cards, tabs and their ready count, trophy case, chapters, side
+  quests), `quests-event.css` (challenge of the week, daily challenge) and `quests-journal.css` (legends, journal,
+  achievements), with readable names: `.quests-trophies` / `.quests-badges` / `.quests-badge` (`is-earned`, its shine
+  staggered by an inline `--i`), `.quests-counts`, `.quests-list`, `.quests-chapter(-emblem, -text, -side)` with the
+  state classes of `StatePill`, `.quests-side(-text, -actions, -progress)` (`is-ready`, `is-claimed`),
+  `.quests-daily(-text)` (`is-done`), `.weekly-challenge-*`, `.legend-quests` / `.legend-quest(-text, -caught)`
+  (`is-ready`, `is-caught`, `--type-color`), `.journal`, `.journal-tiles`, `.stat-tile`, `.journal-section`,
+  `.journal-category(-bar)`, `.journal-mvp`, `.journal-battle(-result, -name)` (`is-won`) and `.achievement(-icon,
+  -text, -progress, -title, -check)` (`is-unlocked`). Shared pieces: `src/styles/components/reward-list.css`
+  (`.reward-list`, and `.reward-line` / `.reward-badge` / `.reward-hp` in the engine's reward lines) and
+  `landscape-scene.css` (`.landscape-scene`, also on Home). The old trainer-card badge rules (`.tcb`, `.tc-bdg`)
+  had no element and are gone.

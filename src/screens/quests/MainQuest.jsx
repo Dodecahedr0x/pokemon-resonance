@@ -10,7 +10,7 @@ import { rewardLine } from '../../engine/world/map.js';
 import { MAINQ } from '../../engine/progression/quests-shop.js';
 
 import Button from '../../components/Button.jsx';
-import StatePill from '../../components/StatePill.jsx';
+import StatePill, { STATE_CLASS } from '../../components/StatePill.jsx';
 // A chapter of the main quest (formerly mainRow).
 function Chapter({ k, gk }) {
   const C = CHAP(k) || { c: '', t: '' },
@@ -21,11 +21,11 @@ function Chapter({ k, gk }) {
     gi = ARENAS.findIndex(a => a.k === k),
     st = nx ? 'next' : won ? 'done' : lk ? 'lock' : 'open';
   return (
-    <article className={`v4-qm s-${st}`}>
-      <span className="v4-qm-ic">
+    <article className={`quests-chapter ${STATE_CLASS[st]}`}>
+      <span className="quests-chapter-emblem">
         <Html html={emblem(k, 'sm')} />
       </span>
-      <div className="v4-qm-t">
+      <div className="quests-chapter-text">
         <small>
           {C.c}
           {ELITE.includes(k) ? ' · ' + (ELITE.indexOf(k) + 1) + ' / 4' : ''}
@@ -34,7 +34,7 @@ function Chapter({ k, gk }) {
         <em>{L ? `Battre ${L.n}, ${L.t}` : 'Le combat guidé de la Professeure'}</em>
         {gi >= 0 && !won ? <Html html={rewardLine(k)} /> : null}
       </div>
-      <div className="v4-qm-r">
+      <div className="quests-chapter-side">
         <StatePill state={st} />
         {lk ? null : (
           <Button size="small" variant={nx ? 'primary' : undefined} data-v4fight={k}>
