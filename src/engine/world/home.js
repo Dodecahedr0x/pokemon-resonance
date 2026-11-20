@@ -20,7 +20,7 @@ export function renderHome() {
 // Statements run at startup, in the original order (see index.js).
 export function init() {
   /* ---------- Home: adventure hub ---------- */
-  /* the v4 Home grid (.v4-home) and its shortcuts are rendered by React (Home.jsx, Tiles.jsx) */
+  /* the Home grid (.home-layout) and its shortcuts are rendered by React (Home.jsx, Tiles.jsx) */
   document.addEventListener('click', e => {
     const f = e.target.closest('[data-v4fight]');
     if (f) {
