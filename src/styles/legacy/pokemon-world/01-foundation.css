@@ -87,19 +87,6 @@ html:not(#pkz) body:not(#pkz) .pk-typing .pk-c.v {
 }
 
 /* Prof. Sorbier on Home */
-html:not(#pkz) body:not(#pkz) .v4h-prof {
-  align-items: center !important;
-  background: transparent !important;
-  border: 0 !important;
-  padding: var(--space-sm) var(--space-2xs) var(--space-2xs) !important;
-}
-html:not(#pkz) body:not(#pkz) .v4h-prof > p.pk-dlg {
-  flex: 1;
-  margin: var(--space-sm) 0 0 !important;
-  padding: var(--space-md) var(--space-lg) var(--space-md) !important;
-  font-size: 13.5px !important;
-  line-height: 1.5 !important;
-}
 /* Professor's advice */
 html:not(#pkz) body:not(#pkz) .tip .dlgbox.pk-dlg {
   padding: var(--space-lg) var(--space-3xl) var(--space-md) var(--space-md) !important;

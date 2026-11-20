@@ -63,23 +63,6 @@ html body #combat .pt {
   }
 }
 @media (max-width: 640px) {
-  .v4-hero {
-    min-height: 500px;
-  }
-  .v4h-body {
-    justify-content: flex-end;
-    padding: var(--space-lg) var(--space-lg);
-  }
-  .v4h-title {
-    font-size: clamp(34px, 10.5vw, 46px);
-  }
-  .v4h-cta .v4-cta {
-    flex: 1 1 100%;
-    justify-content: center;
-  }
-  .v4h-cta .button-ghost {
-    flex: 1 1 100%;
-  }
   .v4-tiles {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: var(--space-sm);

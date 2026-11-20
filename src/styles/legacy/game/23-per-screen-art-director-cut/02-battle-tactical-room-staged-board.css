@@ -118,21 +118,6 @@ a:focus-visible {
   outline-offset: 3px;
 }
 @media (max-width: 760px) {
-  #accueil .v4-hero {
-    min-height: unset !important;
-  }
-  #accueil .v4-hero:after {
-    width: 220px;
-    height: 220px;
-    right: -75px;
-    top: 25%;
-  }
-  #accueil .v4h-body {
-    padding: var(--space-2xl) !important;
-  }
-  #accueil .v4h-title {
-    font-size: 36px !important;
-  }
   #carte .v4-map-wrap {
     gap: var(--space-md) !important;
   }
@@ -151,8 +136,7 @@ a:focus-visible {
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .page.on,
-  #accueil .v4-hero:after {
+  .page.on {
     animation: none !important;
   }
   * {

@@ -1,0 +1,19 @@
+/* Map screen. The rest of its styles are still in legacy/. */
+
+/* the selected place's goals and rank, under its description */
+.map-info-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin: var(--space-md) 0 0;
+}
+.map-info-chips span {
+  padding: var(--space-xs) var(--space-sm);
+  border: 1px solid rgba(120, 210, 255, 0.35);
+  border-radius: 7px;
+  background: rgba(3, 18, 36, 0.78);
+  color: #e3f3ff;
+  font: 700 11px/1 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}

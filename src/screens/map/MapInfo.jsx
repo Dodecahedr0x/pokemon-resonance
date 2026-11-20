@@ -197,7 +197,7 @@ export default function MapInfo() {
         <Html html={`${gi >= 0 ? GYMS[gi].r + ' ' : ''}${S.d || ''}`} />
       </p>
       {'\n  '}
-      <div className="v4h-chips">
+      <div className="map-info-chips">
         <Html html={goalChips(S)} />
         {r ? <span className={`rk-t rk-${r}`}>{`Rang ${r}`}</span> : null}
       </div>

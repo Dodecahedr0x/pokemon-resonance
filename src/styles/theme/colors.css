@@ -42,6 +42,8 @@
   --font-display: var(--f-d);
   --font-body: var(--f-b);
   --font-mono: var(--f-m);
+  /* brush lettering for big titles (Home hero) */
+  --font-script: var(--f-script);
   /* narrow tabular digits (Pokédex numbers, scores) */
   --font-numeric: var(--f-n);
   /* text sizes that follow the accessibility text-size setting */

@@ -85,3 +85,11 @@ Each step is one commit (or a few), on its own, playable at every point.
   `theme/colors.css` gains `--color-highlight`, `--color-selected`, `--color-text-bright` and `--color-text-pale`.
   The ability and role notes share one rule. The mono captions were left as they are: their sizes, spacing and
   colours differ from rule to rule, so one shared style would change some of them.
+- 2 Home, part A (hero): done. `src/screens/home/home-hero.css` (card, text, buttons, professor) and
+  `home-hero-backdrop.css` (landscape, time of day, season, weather, place tag, forecast, companion); ~750 legacy lines
+  and 102 `!important` gone. Classes are `.home-hero-*` (`has-backdrop`, season `is-spring`…`is-winter` mapped from
+  the French season ids in `Hero.jsx`, `is-petted` while the companion's heart pops); the keyframes moved with them.
+  The Map's goal chips used the hero's generic chip rule, now their own `.map-info-chips` in
+  `src/screens/map/map.css`. The corner brackets and entrance scan stay shared in legacy skin (`.card`, `.home-hero`,
+  `.case`). Next: Home part B (banners, resume slot, What's new, footer and radio, friends, the remaining `#accueil`
+  rules).

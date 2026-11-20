@@ -8,11 +8,15 @@ import { heroView } from '../../engine/world/living-home.js';
 import { homeSkyInfo } from '../../engine/world/home-weather.js';
 
 import Button from '../../components/Button.jsx';
+
+// season ids (French, from home-weather.js) → class modifier
+const SEASON_CLASS = { printemps: 'spring', ete: 'summer', automne: 'autumn', hiver: 'winter' };
+
 // Home hero (#hmHero): next step (old renderHome), living backdrop depending on the
 // region and time with the companion (v4.28), season and weather of the day (v4.52).
 export default function Hero({ on }) {
   if (!on) {
-    return <div className="v4-hero" id="hmHero" />;
+    return <div className="home-hero" id="hmHero" />;
   }
   const g = goalInfo(),
     S = g.S,
@@ -31,58 +35,58 @@ export default function Hero({ on }) {
     ) : null;
   return (
     <div
-      className="v4-hero hero-banner-on"
+      className="home-hero has-backdrop"
       id="hmHero"
       style={{ '--ac': g.type ? tc(g.type) : '#FFD45B' }}
       data-reg={V.reg}
       data-tod={V.tod}
     >
-      <div className="hero-banner" aria-hidden="true">
-        <span className="hero-banner-bg" />
-        <span className="hero-banner-tod" />
-        <span className="hero-banner-shade" />
-        {W && <span className={'heroenv-s heroenv-' + W.se} data-s={W.se} />}
+      <div className="home-hero-backdrop" aria-hidden="true">
+        <span className="home-hero-landscape" />
+        <span className="home-hero-daylight" />
+        <span className="home-hero-shade" />
+        {W && <span className={'home-hero-season is-' + SEASON_CLASS[W.se]} data-s={W.se} />}
         {W && W.wx && (
-          <span className={'heroenv-w board-weather board-weather-' + W.wx} data-k={W.wx}>
+          <span className={'home-hero-weather board-weather board-weather-' + W.wx} data-k={W.wx}>
             <i />
             <i />
           </span>
         )}
       </div>
-      <span className="hero-banner-tag">{V.tag}</span>
+      <span className="home-hero-place">{V.tag}</span>
       {m && (
         <button
           type="button"
-          className={'hero-banner-comp' + (V.sh ? ' shiny' : '')}
+          className={'home-hero-companion' + (V.sh ? ' shiny' : '')}
           data-hero-banner={V.comp ? 'calin' : 'choisir'}
           aria-label={V.comp ? `Câliner ${m.n}` : 'Choisir un compagnon'}
           style={V.sh ? parseStyle(shinyStyle(m.base)) : undefined}
         >
-          <span className="hero-banner-sol" />
+          <span className="home-hero-companion-shadow" />
           <img src={ART(m.no)} alt="" decoding="async" />
-          <span className="hero-banner-n">
+          <span className="home-hero-companion-name">
             {V.comp ? `${m.n} ${'♥'.repeat(Math.max(1, V.hearts))}` : 'Un compagnon ?'}
           </span>
         </button>
       )}
-      <div className="v4h-body">
-        <p className="v4-kick">
-          <span className="v4h-emb">
+      <div className="home-hero-body">
+        <p className="home-hero-kicker">
+          <span className="home-hero-emblem">
             <Html html={emblem(g.k, 'xs')} />
           </span>
           Prochaine étape{C ? ' · ' + C.c : ''}
         </p>
-        <h2 className="v4h-title">{title}</h2>
-        {sub && <p className="v4h-sub">{sub}</p>}
+        <h2 className="home-hero-title">{title}</h2>
+        {sub && <p className="home-hero-lead">{sub}</p>}
         {'\n  '}
-        <div className="v4h-chips">
+        <div className="home-hero-chips">
           <Html html={goalChips(S)} />
         </div>
         {'\n  '}
-        <div className="v4h-cta">
+        <div className="home-hero-actions">
           {squad.length ? (
-            <Button size="large" variant="primary" className="v4-cta" data-goal={g.k}>
-              <span className="v4-cta-ic">
+            <Button size="large" variant="primary" className="home-hero-start" data-goal={g.k}>
+              <span className="home-hero-start-icon">
                 <svg>
                   <use href="#i-play" />
                 </svg>
@@ -93,8 +97,8 @@ export default function Hero({ on }) {
               </svg>
             </Button>
           ) : (
-            <Button size="large" variant="primary" className="v4-cta" data-go="pokedex">
-              <span className="v4-cta-ic">
+            <Button size="large" variant="primary" className="home-hero-start" data-go="pokedex">
+              <span className="home-hero-start-icon">
                 <svg>
                   <use href="#i-team" />
                 </svg>
@@ -110,7 +114,7 @@ export default function Hero({ on }) {
           </Button>
         </div>
         {'\n  '}
-        <div className="v4h-prof">
+        <div className="home-hero-professor">
           <Html html={PROF_AV} />
           <p>
             <span className="dlg-who">Prof. Sorbier</span>
@@ -118,7 +122,7 @@ export default function Hero({ on }) {
           </p>
         </div>
       </div>
-      {W && <span className="heroenv-c">{W.txt}</span>}
+      {W && <span className="home-hero-forecast">{W.txt}</span>}
     </div>
   );
 }

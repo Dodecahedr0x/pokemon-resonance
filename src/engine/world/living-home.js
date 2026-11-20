@@ -66,9 +66,9 @@ export function init() {
         $('#compBox').hidden = false;
         return;
       }
-      b.classList.remove('pop');
+      b.classList.remove('is-petted');
       void b.offsetWidth;
-      b.classList.add('pop');
+      b.classList.add('is-petted');
       const n = BY[activeCompanionId()].n;
       if (PROFILE.comp.j === today()) {
         toast(`${n} est déjà tout content aujourd’hui.`);

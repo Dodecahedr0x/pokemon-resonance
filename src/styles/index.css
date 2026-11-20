@@ -53,3 +53,6 @@
 @import '../screens/combat/battle/battle-turn.css' layer(screens);
 @import '../screens/combat/battle/battle-preview.css' layer(screens);
 @import '../screens/combat/battle/battle-capture.css' layer(screens);
+@import '../screens/home/home-hero.css' layer(screens);
+@import '../screens/home/home-hero-backdrop.css' layer(screens);
+@import '../screens/map/map.css' layer(screens);

@@ -24,7 +24,7 @@ export default function Home() {
         Aventure
       </h1>
       <div className="v4-home">
-        <div className="v4-hero-slot">
+        <div className="home-hero-slot">
           <Hero on={on} />
           {on && <Banners />}
         </div>

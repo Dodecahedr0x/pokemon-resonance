@@ -109,90 +109,6 @@
 }
 /* <style id="resonance-hero-weather"> */
 /* v4.52 */
-.heroenv-s,
-.heroenv-w {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-.heroenv-c {
-  position: absolute;
-  z-index: 3;
-  top: 46px;
-  left: 16px;
-  padding: var(--space-2xs) var(--space-sm);
-  border-radius: 999px;
-  background: rgba(5, 12, 22, 0.55);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  font-size: 11px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: #e4eef6;
-}
-.heroenv-printemps {
-  background:
-    radial-gradient(ellipse, rgba(255, 186, 214, 0.95) 0 2.4px, transparent 3.2px) 0 0/61px 73px,
-    radial-gradient(ellipse, rgba(255, 216, 232, 0.8) 0 1.8px, transparent 2.6px) 24px 31px/83px 59px;
-  -webkit-mask-image: linear-gradient(#000 0 55%, transparent);
-  mask-image: linear-gradient(#000 0 55%, transparent);
-  animation: spring-petals 11s linear infinite;
-  opacity: 0.7;
-}
-.heroenv-automne {
-  background:
-    radial-gradient(ellipse, rgba(224, 138, 60, 0.95) 0 3px, transparent 3.8px) 0 0/67px 79px,
-    radial-gradient(ellipse, rgba(194, 85, 43, 0.85) 0 2.4px, transparent 3.2px) 30px 22px/89px 63px;
-  -webkit-mask-image: linear-gradient(#000 0 55%, transparent);
-  mask-image: linear-gradient(#000 0 55%, transparent);
-  animation: autumn-drift 13s linear infinite;
-  opacity: 0.65;
-}
-.heroenv-hiver {
-  background:
-    radial-gradient(circle, rgba(255, 255, 255, 0.95) 0 1.8px, transparent 2.5px) 0 0/43px 51px,
-    radial-gradient(circle, rgba(230, 244, 255, 0.8) 0 1.2px, transparent 1.9px) 17px 23px/59px 47px;
-  -webkit-mask-image: linear-gradient(#000 0 60%, transparent);
-  mask-image: linear-gradient(#000 0 60%, transparent);
-  animation: winter-snow 8s linear infinite;
-  opacity: 0.8;
-}
-.heroenv-ete {
-  background: linear-gradient(115deg, transparent 28%, rgba(255, 236, 160, 0.2) 40%, transparent 52%) 0 0/220% 100%;
-  animation: summer-glow 9s ease-in-out infinite alternate;
-  mix-blend-mode: screen;
-}
-@keyframes spring-petals {
-  to {
-    background-position:
-      90px 146px,
-      114px 177px;
-  }
-}
-@keyframes autumn-drift {
-  to {
-    background-position:
-      -70px 158px,
-      -40px 126px;
-  }
-}
-@keyframes winter-snow {
-  to {
-    background-position:
-      -20px 102px,
-      -30px 94px;
-  }
-}
-@keyframes summer-glow {
-  from {
-    background-position: 0 0;
-  }
-  to {
-    background-position: 100% 0;
-  }
-}
-.heroenv-w.board-weather {
-  z-index: 1;
-}
 .battle-help {
   position: fixed;
   inset: 0;
@@ -264,8 +180,6 @@
   padding-left: var(--space-2xs);
 }
 @media (prefers-reduced-motion: reduce) {
-  .heroenv-s,
-  .heroenv-w i,
   .battle-help-c {
     animation: none !important;
   }

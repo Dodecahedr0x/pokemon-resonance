@@ -31,13 +31,6 @@ body {
     transform: none;
   }
 }
-.v4-kick {
-  letter-spacing: 0.2em !important;
-  text-transform: uppercase !important;
-  color: var(--r22-cyan) !important;
-  font-weight: 800 !important;
-  font-size: 10px !important;
-}
 /* HOME — adventure dashboard, regional lighting */
 #accueil {
   isolation: isolate;
@@ -57,49 +50,10 @@ body {
 #accueil .v4-home {
   gap: var(--space-xl) !important;
 }
-#accueil .v4-hero {
-  position: relative !important;
-  isolation: isolate;
-  overflow: hidden !important;
-  border: 1px solid rgba(143, 220, 231, 0.32) !important;
-  border-radius: 28px !important;
-  box-shadow:
-    0 35px 90px rgba(0, 0, 0, 0.42),
-    inset 0 1px rgba(255, 255, 255, 0.12) !important;
-}
 @keyframes r22-orbit {
   to {
     transform: translateY(-50%) rotate(360deg);
   }
-}
-#accueil .v4h-body {
-  max-width: 690px !important;
-  padding: clamp(26px, 4vw, 52px) !important;
-}
-#accueil .v4h-title {
-  font-size: clamp(34px, 5vw, 58px) !important;
-  line-height: 0.99 !important;
-  letter-spacing: -0.055em !important;
-  text-shadow: 0 5px 28px #000 !important;
-}
-#accueil .v4h-sub {
-  max-width: 500px;
-  color: #c1d6df !important;
-  font-size: 15px !important;
-  line-height: 1.65 !important;
-}
-#accueil .v4h-chips span {
-  border: 1px solid rgba(135, 220, 230, 0.25) !important;
-  background: rgba(4, 18, 28, 0.55) !important;
-  backdrop-filter: blur(10px);
-}
-#accueil .v4h-cta .button {
-  min-height: 48px !important;
-  border-radius: 14px !important;
-}
-#accueil .v4h-prof {
-  border-top: 1px solid rgba(160, 220, 230, 0.18) !important;
-  color: #c2d6df !important;
 }
 #accueil .card,
 #accueil .v4-quest {

@@ -53,11 +53,6 @@ body:before {
     transform: none;
   }
 }
-.page .v4-kick {
-  color: var(--rx-cyan) !important;
-  letter-spacing: 0.23em !important;
-  font-weight: 900 !important;
-}
 button:focus-visible,
 a:focus-visible {
   outline: 2px solid var(--rx-cyan) !important;
@@ -136,27 +131,6 @@ a:focus-visible {
   }
 }
 
-#accueil .v4h-title {
-  font-size: clamp(38px, 5.3vw, 66px) !important;
-  text-shadow: 0 7px 35px rgba(0, 0, 0, 0.8) !important;
-}
-#accueil .v4h-sub {
-  font-size: clamp(14px, 1.2vw, 17px) !important;
-  max-width: 540px;
-}
-#accueil .v4h-chips span {
-  border: 1px solid rgba(124, 232, 238, 0.28) !important;
-  background: rgba(3, 17, 28, 0.62) !important;
-  backdrop-filter: blur(12px);
-}
-#accueil .v4-cta,
-#accueil .v4h-cta .button {
-  min-height: 52px !important;
-  border-radius: 15px !important;
-  box-shadow:
-    0 12px 30px rgba(0, 0, 0, 0.3),
-    0 0 24px rgba(245, 206, 120, 0.13) !important;
-}
 #accueil .tcard {
   border: 1px solid rgba(245, 206, 120, 0.25) !important;
   border-radius: 24px !important;
