@@ -1,7 +1,9 @@
 import { TNAME } from '../engine/core/navigation.js';
 import { useShell } from './shellStore.js';
 
-// Navigation (v4-03): 9 destinations on desktop, 5 and a menu on phone.
+// Navigation (v4-03): 9 destinations on desktop, 4 and a menu on phone.
+// Battles have no entry of their own: they are picked from the Map (« Tous les combats »),
+// the Home hero and its banners.
 // Clicks are still handled by the engine (delegation on [data-t], #bnMenu, [data-menux]);
 // the marked page (aria-current) comes from show() via shellStore.
 
@@ -11,7 +13,6 @@ const PAGES = [
   ['accueil', 'i-home'],
   ['pokedex', 'i-team'],
   ['dex', 'i-dex', '82 Pokémon de Kanto et Johto'],
-  ['combat', 'i-fight'],
   ['carte', 'i-map'],
   ['camp', 'i-camp'], // v4.30: right after « Carte » (Map), right before the Menu button
   ['quetes', 'i-quest', 'Chapitres, défis et récompenses'],

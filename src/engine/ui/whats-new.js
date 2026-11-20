@@ -93,6 +93,7 @@ function onWhatsNewClick(e) {
     return;
   }
   if (k === 'comp') {
+    go('pokedex');
     const c = document.getElementById('v4Comp');
     if (c && c.scrollIntoView) {
       c.scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'start' });

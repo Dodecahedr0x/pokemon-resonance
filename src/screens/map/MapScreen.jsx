@@ -40,13 +40,24 @@ function Content({ drawn, marksSel }) {
         <h1 className="h1" id="h-carte">
           Carte de la région
         </h1>
-        <p className="sub">Touchez un lieu pour voir son défi, puis préparez le combat.</p>
-        <div className="v4-reg" role="tablist" aria-label="Région">
-          {REGIONS.map(([k, n]) => (
-            <button type="button" role="tab" data-reg={k} aria-selected={rg === k} key={k}>
-              {n}
-            </button>
-          ))}
+        <p className="sub">
+          Touchez un lieu pour voir son défi, puis préparez le combat. Rivaux, Ligue et après-jeu sont dans « Tous les
+          combats ».
+        </p>
+        <div className="map-head-row">
+          <div className="v4-reg" role="tablist" aria-label="Région">
+            {REGIONS.map(([k, n]) => (
+              <button type="button" role="tab" data-reg={k} aria-selected={rg === k} key={k}>
+                {n}
+              </button>
+            ))}
+          </div>
+          <a className="b b-sm b-gold map-all-fights" data-t="combat" href="#combat">
+            <svg>
+              <use href="#i-fight" />
+            </svg>
+            Tous les combats
+          </a>
         </div>
       </div>
       {'\n '}

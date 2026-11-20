@@ -17,7 +17,7 @@ const LONG_PRESS = { t: 0, x: 0, y: 0, fait: 0 };
 const endLongPress = () => clearTimeout(LONG_PRESS.t);
 
 /* swipe to change tab */
-export const SWIPE_TABS = ['accueil', 'pokedex', 'combat', 'carte'];
+export const SWIPE_TABS = ['accueil', 'pokedex', 'carte'];
 
 const SWIPE_STATE = { x: 0, y: 0, t: 0, ok: false };
 

@@ -1,7 +1,7 @@
 /* ---------- Home ---------- */
 .v4-home {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(300px, 34%);
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-md);
   align-items: stretch;
 }

@@ -1,6 +1,6 @@
 /* =====================================================================
-   Companion Pokémon (added in v4.17): it waits for you on the Home
-   screen, its affection grows with your battles and grants bonuses.
+   Companion Pokémon (added in v4.17): it waits for you on the Team
+   page (and in the Home hero), its affection grows with your battles and grants bonuses.
    ===================================================================== */
 import { BY, MON, SCEN } from '../pokemon/pokemon.js';
 import { PROFILE, isCamp } from '../state/game-state.js';
@@ -53,7 +53,7 @@ export function gainCompanionAffinity(n) {
   return affinityHearts(c.aff) > previous ? affinityHearts(c.aff) : 0;
 }
 
-/** The Home screen companion (#v4Comp, rendered by src/screens/home/Companion.jsx). */
+/** The companion panel (#v4Comp, on the Team page, rendered by src/screens/team/Companion.jsx). */
 export function companionPanelData() {
   const id = activeCompanionId();
   if (!id) {

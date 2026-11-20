@@ -2,9 +2,8 @@ import { useEngineReady } from '../../engineReady.js';
 import { V4 } from '../../engine/ui/screen-state.js';
 import { CAMP_TABS } from '../../engine/modes/camp-challenges.js';
 import { echoRun } from '../../engine/modes/deep-echo.js';
-import { seenExits, useCampBase, useCampPage } from './campStore.js';
+import { useCampBase, useCampPage } from './campStore.js';
 import CampBase from './CampBase.jsx';
-import Outings from './Outings.jsx';
 import Puzzles from './tabs/Puzzles.jsx';
 import Echo from './tabs/Echo.jsx';
 import Gyms from './tabs/Gyms.jsx';
@@ -34,7 +33,7 @@ function CampBaseHost() {
   return <CampBase key={base} filled={base > 0} />;
 }
 
-// #campNews: before the first renderCampPage(), only the Base camp and the Outings (empty).
+// #campNews: before the first renderCampPage(), only the Base camp.
 function Content({ page }) {
   const t = V4.campTab; // already validated by renderCampPage()
   const Tab = page > 0 && t !== 'base' ? TAB_LIST[t] : null;
@@ -45,9 +44,6 @@ function Content({ page }) {
       <div id="camp-host" hidden={cache}>
         <CampBaseHost />
       </div>
-      <section className="v4-panel outings-panel" id="outings-panel" aria-label="Sorties" hidden={cache}>
-        {seenExits && <Outings />}
-      </section>
       {page > 0 && <div id="camp-tab-body">{Tab && <Tab />}</div>}
     </div>
   );
@@ -67,7 +63,7 @@ export default function Camp() {
             <h1 className="h1" id="h-camp">
               Camp
             </h1>
-            <p className="sub">Bâtiments, expéditions, Pension et Potager. Les sorties du dresseur.</p>
+            <p className="sub">Bâtiments, expéditions, Pension et Potager.</p>
           </div>
           <Content key={page} page={page} />
         </>

@@ -152,12 +152,12 @@ export function fixedTeam() {
   return null;
 }
 
-// The Camp page is rendered by React (src/screens/camp): sub-tabs, Base camp, Outings,
+// The Camp page is rendered by React (src/screens/camp): sub-tabs, Base camp,
 // open tab. Here, we validate the tab then rebuild the page.
 export function renderCampPage() {
   const t = CAMP_TABS.some(x => x[0] === V4.campTab) ? V4.campTab : 'base';
   V4.campTab = t;
-  refreshCampPage(t === 'base');
+  refreshCampPage();
 }
 
 /* ---------- at startup: special battles exist (resuming a saved battle) ---------- */

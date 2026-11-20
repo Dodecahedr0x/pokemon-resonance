@@ -1,4 +1,15 @@
 /* ===== resonance-johto-regions layer ===== */
+/* Map header: region tabs, then the link to every battle */
+.map-head-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--space-md);
+}
+.map-all-fights {
+  min-height: 40px;
+  text-decoration: none;
+}
 /* v4.15: Johto */
 .v4-reg {
   display: inline-flex;

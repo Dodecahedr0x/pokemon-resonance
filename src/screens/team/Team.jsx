@@ -10,6 +10,8 @@ import DexCall from './DexCall.jsx';
 import Grid from './Grid.jsx';
 import Analysis from './Analysis.jsx';
 import Tip from '../../components/Tip.jsx';
+import Guard from '../../components/Guard.jsx';
+import Companion from './Companion.jsx';
 
 // "My team" screen (#pokedex). The logic stays in the engine (team/team.js):
 // renderGrid, renderFilters, renderTeam increment the versions of teamStore.js.
@@ -36,6 +38,11 @@ export default function Team() {
         </p>
       </div>
       <Tip t="pokedex" />
+      {ready && (
+        <Guard>
+          <Companion />
+        </Guard>
+      )}
       <Dock A={A} />
       <div className="dexbar">
         <label className="srch">

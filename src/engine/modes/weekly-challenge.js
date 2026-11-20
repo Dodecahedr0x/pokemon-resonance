@@ -143,8 +143,6 @@ function weeklyScore(S, win) {
 
 // Quests › Event: challenge of the week rendered by React (src/screens/quests/Event.jsx)
 
-/* the Home screen #v4Hebdo button is rendered by React (src/screens/home/Footer.jsx) */
-
 const WEEKLY_PRESETS = [
   { k: 'location', n: 'Équipe de location', d: 'Tout le monde joue la même équipe, tirée au sort pour la semaine.' },
   { k: 'mono', n: 'Monotype', d: 'Une équipe de location d’un seul type.' },

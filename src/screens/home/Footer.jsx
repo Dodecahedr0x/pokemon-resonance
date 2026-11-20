@@ -1,17 +1,13 @@
 import { Html } from '../../lib/html.jsx';
-import { BY, MON, SCEN } from '../../engine/pokemon/pokemon.js';
-import { PROFILE } from '../../engine/state/game-state.js';
+import { SCEN } from '../../engine/pokemon/pokemon.js';
 import { medal } from '../../engine/core/utils.js';
 import { dailyDone, dailyKey, dailyLeft } from '../../engine/modes/daily-battle.js';
-import { familyOwned, trophies } from '../../engine/progression/trainer-stats.js';
-import { fmt } from '../../engine/state/economy.js';
-import { SQ } from '../../engine/progression/quests-shop.js';
 import { seasonData } from '../../engine/world/seasons.js';
 import { radioLines } from '../../engine/world/pokegear.js';
-import { buildWeeklyChallenge } from '../../engine/modes/weekly-challenge.js';
 
 // Bottom of the Home page (.v4-bottom): season (#v4Saison, v4.11), Pokématos (#v4Radio, v4.17),
-// daily challenge (#v4Event), counters (#v4Stats), weekly challenge (#v4Hebdo, v4.29).
+// daily challenge (#v4Event). Counters live in the Pokédex and Quests pages, the weekly
+// challenge in Quests (Event tab).
 export default function Footer({ on }) {
   return (
     <div className="v4-bottom">
@@ -20,10 +16,6 @@ export default function Footer({ on }) {
       <div className="v4-event" id="v4Event">
         {on && <Event />}
       </div>
-      <div className="v4-stats" id="v4Stats">
-        {on && <Stats />}
-      </div>
-      {on && <Weekly />}
     </div>
   );
 }
@@ -121,67 +113,6 @@ function Event() {
         <em>{done ? 'Revenez demain pour un nouveau défi.' : `Gains ×2 et +3 Éclats · encore ${dailyLeft()}`}</em>
       </span>
       <svg className="v4q-go">
-        <use href="#i-chevr" />
-      </svg>
-    </button>
-  );
-}
-
-function Stats() {
-  const sq = SQ.filter(q => PROFILE.qc[q.id]).length;
-  return (
-    <>
-      <a className="v4-st" data-t="dex" href="#dex">
-        <svg>
-          <use href="#i-dex" />
-        </svg>
-        <span>
-          <small>Pokédex</small>
-          <b>
-            {familyOwned()} / {MON.filter(m => m.st === 1 && !m.isEnemy && m.base === m.id).length}
-          </b>
-        </span>
-      </a>
-      <a className="v4-st" data-t="quetes" href="#quetes">
-        <svg>
-          <use href="#i-trophy" />
-        </svg>
-        <span>
-          <small>Trophées</small>
-          <b>{trophies()} / 31</b>
-        </span>
-      </a>
-      <a className="v4-st" data-t="quetes" href="#quetes">
-        <svg>
-          <use href="#i-medal" />
-        </svg>
-        <span>
-          <small>Succès</small>
-          <b>
-            {sq} / {SQ.length}
-          </b>
-        </span>
-      </a>
-    </>
-  );
-}
-
-function Weekly() {
-  const H = buildWeeklyChallenge(),
-    h = PROFILE.hebdo429 && PROFILE.hebdo429.w === H.w ? PROFILE.hebdo429 : null;
-  return (
-    <button type="button" id="v4Hebdo" className="v4-hebdo v4-panel" data-hebdo429="1">
-      <span className="weekly-card-ic">
-        <svg>
-          <use href="#i-trophy" />
-        </svg>
-      </span>
-      <span className="weekly-card-x">
-        <small>Défi de la semaine · {H.R.n}</small>
-        <b>{h ? `Record : ${fmt(h.best)}${h.rec ? ' ✓' : ''}` : 'Même équipe pour tous'}</b>
-        <em>{H.team.map(id => BY[id].n).join(' · ')}</em>
-      </span>
-      <svg className="weekly-card-go">
         <use href="#i-chevr" />
       </svg>
     </button>
