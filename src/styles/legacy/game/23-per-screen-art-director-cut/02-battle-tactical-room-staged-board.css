@@ -144,7 +144,6 @@
 /* Global consistency, focus and mobile adaptation (.b buttons: src/styles/components/button.css) */
 button:not(:where(.b)),
 a:not(:where(.b)),
-.v4-panel,
 .panel,
 .tcard {
   transition-timing-function: cubic-bezier(0.2, 0.75, 0.2, 1);

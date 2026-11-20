@@ -65,7 +65,6 @@ html body .v4-comp {
   flex-wrap: wrap;
   align-items: center;
   gap: var(--space-md);
-  border-color: color-mix(in srgb, var(--c, #ffd75e) 55%, transparent);
 }
 html body .cp-art {
   flex: none;

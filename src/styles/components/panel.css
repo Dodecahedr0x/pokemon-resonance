@@ -1,0 +1,34 @@
+/* Panel: the dark blue card most page sections sit in. <section class="v4-panel">…</section>
+   Corner brackets (cyan top-left, gold bottom-right) are drawn by ::before. Add .pk-scan for the scan-line
+   entry effect (still in legacy, shared with .v4-hero and .case).
+   Screen-specific panels (#accueil, #carte, #quetes, #sac) still live in legacy and win over these rules.
+   Values were read from what the old per-release rules resolved to, so the look is unchanged. */
+
+.v4-panel {
+  position: relative;
+  border: 1px solid rgba(126, 211, 224, 0.24);
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(17, 44, 78, 0.94), rgba(8, 23, 46, 0.96));
+  box-shadow:
+    0 26px 70px rgba(0, 0, 0, 0.42),
+    inset 0 1px rgba(255, 255, 255, 0.055);
+  transition-timing-function: cubic-bezier(0.2, 0.75, 0.2, 1);
+}
+.v4-panel::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  z-index: 2;
+  border: 2px solid;
+  border-color: var(--pk-cy) var(--pk-or) var(--pk-or) var(--pk-cy);
+  border-radius: inherit;
+  opacity: 0.8;
+  pointer-events: none;
+  /* show the border only near the top-left and bottom-right corners */
+  -webkit-mask:
+    radial-gradient(circle at 0 0, #000 0 18px, transparent 46px),
+    radial-gradient(circle at 100% 100%, #000 0 18px, transparent 46px);
+  mask:
+    radial-gradient(circle at 0 0, #000 0 18px, transparent 46px),
+    radial-gradient(circle at 100% 100%, #000 0 18px, transparent 46px);
+}

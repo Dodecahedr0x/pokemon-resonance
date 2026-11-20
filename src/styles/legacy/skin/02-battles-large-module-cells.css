@@ -50,7 +50,7 @@ html:not(#pkz) body:not(#pkz) .sel-tabs > button[aria-selected='true'] em {
 }
 
 /* ---------- panels: Pokédex chassis ---------- */
-html:not(#pkz) body:not(#pkz) :is(.v4-panel, .v4-hero, .case)::before {
+html:not(#pkz) body:not(#pkz) :is(.v4-hero, .case)::before {
   content: '';
   position: absolute;
   inset: -1px;
