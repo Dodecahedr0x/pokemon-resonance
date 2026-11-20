@@ -68,7 +68,6 @@ a:focus-visible {
 .resume,
 .tcard,
 .sel,
-.dock,
 .v4-map,
 .v4-map-side > * {
   border-color: var(--rx-edge) !important;
@@ -236,11 +235,6 @@ a:focus-visible {
   backdrop-filter: blur(12px);
 }
 /* TEAM: make the roster feel like a collector's battle dossier */
-#pokedex .dock {
-  border-radius: 22px !important;
-  background: linear-gradient(115deg, #15394b, #0a1c2a) !important;
-  padding: var(--space-md) !important;
-}
 #pokedex .ana-d {
   border: 1px solid var(--rx-edge) !important;
   border-radius: 20px !important;

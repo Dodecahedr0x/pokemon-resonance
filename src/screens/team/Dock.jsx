@@ -13,18 +13,18 @@ const N = () => Array.from({ length: TEAM_MAX }, (_, i) => i);
 // Team banner at the top of the screen (#dock): slots, budget, Voice, Awakenings, Hint.
 export function Dock({ A }) {
   return (
-    <div className="dock" id="dock" aria-live="polite">
+    <div className="team-dock" id="dock" aria-live="polite">
       {A && (
         <>
-          <div className="slots">
+          <div className="team-dock-slots">
             {N().map(i => (
-              <span key={i} className={`slot${A.ms[i] ? ' f' : ''}`}>
+              <span key={i} className={`team-dock-slot${A.ms[i] ? ' is-filled' : ''}`}>
                 {A.ms[i] ? <Html html={medal(A.ms[i].t)} /> : null}
               </span>
             ))}
           </div>
-          <div className="bud">
-            <div className="bud-h">
+          <div className="team-dock-budget">
+            <div className="team-dock-budget-head">
               <span>
                 Budget · {A.ms.length} / {TEAM_MAX} Pokémon
               </span>
@@ -32,14 +32,14 @@ export function Dock({ A }) {
                 {A.c} / {BUDGET} PC
               </b>
             </div>
-            <div className={`gauge g${BUDGET}`}>
+            <div className="team-dock-gauge" style={{ '--segments': BUDGET }}>
               {Array.from({ length: BUDGET }, (_, i) => (
-                <i key={i} className={i < A.c ? 'on' : ''} />
+                <i key={i} className={i < A.c ? 'is-on' : ''} />
               ))}
             </div>
           </div>
           <div
-            className="dk"
+            className="team-dock-stats"
             title="Voix : ordres par manche. Éveils : évolutions possibles. Indice : réactions, rôles couverts, Éveils et Voix réunis."
           >
             <div>

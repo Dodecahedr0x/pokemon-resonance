@@ -242,8 +242,3 @@ body {
   color: #c7e8df !important;
 }
 /* TEAM / POKÉDEX — collector's-Pokédex-style selection screen */
-#pokedex .dock {
-  border: 1px solid rgba(139, 214, 227, 0.2) !important;
-  background: linear-gradient(120deg, #122e3e, #0a1b28) !important;
-  border-radius: 20px !important;
-}

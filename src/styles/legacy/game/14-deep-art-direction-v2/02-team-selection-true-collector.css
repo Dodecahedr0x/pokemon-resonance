@@ -1,8 +1,4 @@
 /* Team selection: true collector cards with large artwork, rarity/status and tactile states */
-#pokedex .dock {
-  padding: var(--space-md) !important;
-  margin-bottom: var(--space-md) !important;
-}
 /* Combat: arena is the visual anchor; commands are a clean tactical panel */
 #combat .sel {
   overflow: hidden !important;

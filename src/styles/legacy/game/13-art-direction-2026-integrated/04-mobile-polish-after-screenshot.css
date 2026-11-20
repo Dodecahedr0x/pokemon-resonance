@@ -145,7 +145,6 @@ body {
 .res-card,
 .ep-card,
 .enc .enc-card,
-.dock,
 .bp-en,
 .st-evo,
 .st-line,
@@ -285,7 +284,3 @@ body {
   border-radius: 14px !important;
 }
 /* Pokémon selection: illustrated showcases, glowing outlines and readable active states */
-#pokedex .dock {
-  border: 1px solid rgba(104, 216, 248, 0.3) !important;
-  border-radius: 18px !important;
-}

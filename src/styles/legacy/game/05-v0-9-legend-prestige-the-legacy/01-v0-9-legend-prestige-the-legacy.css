@@ -154,7 +154,6 @@ body {
 
 .num,
 .kpi b,
-.dk b,
 #bRound b,
 .res-k b,
 .sc-n,
@@ -162,7 +161,6 @@ body {
 .an-k,
 .st-no,
 .pt-h b,
-.bud-h b,
 .bp-hp > span,
 .pl-s > span:first-child,
 .f-dmg,
@@ -227,7 +225,6 @@ body {
 .res-card,
 .ep-card,
 .enc .enc-card,
-.dock,
 .bp-en,
 .st-evo,
 .st-line,
@@ -265,7 +262,6 @@ body {
 .res-card,
 .ep-card,
 .enc .enc-card,
-.dock,
 .champ {
   border-radius: var(--rl);
 }
@@ -284,12 +280,6 @@ body {
 .rp,
 .arena {
   border-radius: var(--r);
-}
-.dock {
-  background:
-    var(--veins) padding-box,
-    linear-gradient(180deg, rgba(23, 24, 29, 0.94), rgba(12, 13, 16, 0.94)) padding-box,
-    var(--edge) border-box;
 }
 .rule[open],
 .scn.on,

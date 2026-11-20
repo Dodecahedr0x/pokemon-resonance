@@ -98,22 +98,6 @@
     grid-template-columns: 1fr;
   }
 }
-@media (max-width: 560px) {
-  .dock .bud {
-    grid-column: 1/-1;
-  }
-  .dock .dk {
-    grid-column: 1/-1;
-    justify-content: space-between;
-  }
-}
-@media (max-width: 560px) {
-  .dock .team-x .b {
-    flex: 1;
-    padding-inline: var(--space-sm);
-    font-size: 10px;
-  }
-}
 /* v1.1.1 · recruitable stages under each card and inset of confirmed recruits */
 .dex-call {
   display: grid;

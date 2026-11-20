@@ -1,0 +1,146 @@
+/* Team banner at the top of "Mon équipe" (#dock, Dock.jsx): team slots, budget gauge, Voice / Awakenings /
+   Index counters with the "Combattre" button, then the reset / restore / draw row (.team-x, HTML from the
+   engine's teamBtns(), shared with the battle preparation). Sticky on wide screens. */
+
+.team-dock {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+  padding: var(--space-md);
+  border: 1px solid rgba(139, 214, 227, 0.2);
+  border-radius: 22px;
+  background: linear-gradient(115deg, #15394b, #0a1c2a);
+  box-shadow:
+    0 26px 70px rgba(0, 0, 0, 0.42),
+    inset 0 1px rgba(255, 255, 255, 0.055);
+}
+
+/* ---------- Team slots: a medal per member, dashed circles for free places ---------- */
+.team-dock-slots {
+  display: flex;
+  gap: var(--space-xs);
+}
+.team-dock-slot {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 1px dashed var(--color-line-bright);
+  border-radius: 50%;
+  transition: border-color 0.3s;
+}
+.team-dock-slot .medal {
+  width: 42px;
+  height: 42px;
+}
+.team-dock-slot.is-filled {
+  border-color: transparent;
+}
+
+/* ---------- Budget: "Budget · n / 4 Pokémon", "x / 12 PC" and one segment per point ---------- */
+.team-dock-budget {
+  display: grid;
+  gap: var(--space-sm);
+  min-width: 0;
+}
+.team-dock-budget-head {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  color: var(--color-text-muted);
+  font-size: 12.5px;
+}
+.team-dock-budget-head b {
+  color: var(--color-text);
+  font-family: var(--font-numeric);
+  font-weight: 600;
+  font-stretch: 72%;
+  font-variant-numeric: tabular-nums lining-nums;
+  letter-spacing: -0.01em;
+}
+/* --segments: the budget (inline style) */
+.team-dock-gauge {
+  display: grid;
+  grid-template-columns: repeat(var(--segments), minmax(0, 1fr));
+  gap: var(--space-3xs);
+}
+.team-dock-gauge i {
+  height: 8px;
+  background: #0d0e11;
+  box-shadow: inset 0 0 0 1px rgba(212, 175, 106, 0.2);
+  transform: skewX(-18deg);
+  transition: background 0.35s;
+}
+.team-dock-gauge i.is-on {
+  background: linear-gradient(180deg, #fff0c8, #d4af6a 60%, #8e6a2c);
+  box-shadow: 0 0 10px rgba(212, 175, 106, 0.55);
+}
+
+/* ---------- Counters: Voice, Awakenings, Index ---------- */
+.team-dock-stats {
+  display: flex;
+  gap: var(--space-lg);
+}
+.team-dock-stats div {
+  display: grid;
+  gap: var(--space-3xs);
+  text-align: right;
+}
+.team-dock-stats b {
+  font-family: var(--font-numeric);
+  font-size: 24px;
+  font-weight: 800;
+  font-stretch: 72%;
+  font-variant-numeric: tabular-nums lining-nums;
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+.team-dock-stats span {
+  color: var(--color-text-muted);
+  font-size: 11px;
+}
+
+/* ---------- Reset / restore / draw row ---------- */
+.team-dock .team-x {
+  grid-column: 1 / -1;
+  padding-top: var(--space-sm);
+  border-top: 1px solid rgba(212, 175, 106, 0.12);
+}
+
+@media (min-width: 1000px) {
+  .team-dock {
+    position: sticky;
+    top: 16px;
+    z-index: 20;
+  }
+}
+@media (max-width: 760px) {
+  .team-dock {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  .team-dock-slots {
+    grid-column: 1 / -1;
+    justify-content: space-between;
+  }
+  .team-dock-slot,
+  .team-dock-slot .medal {
+    width: 40px;
+    height: 40px;
+  }
+}
+@media (max-width: 560px) {
+  .team-dock-budget {
+    grid-column: 1 / -1;
+  }
+  .team-dock-stats {
+    grid-column: 1 / -1;
+    justify-content: space-between;
+  }
+  .team-dock .team-x .b {
+    flex: 1;
+    padding-inline: var(--space-sm);
+  }
+}
