@@ -92,8 +92,10 @@
 }
 
 /* ---------- Collapsible part: saved teams and formations ---------- */
+/* one column as wide as the panel: the button rows scroll inside it instead of widening the page */
 .team-recruits-more {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-sm);
   min-width: 0;
 }
@@ -132,6 +134,7 @@
   flex-wrap: nowrap;
   align-items: center;
   gap: var(--space-xs);
+  min-width: 0;
   padding-bottom: var(--space-3xs);
   overflow-x: auto;
   scrollbar-width: thin;
