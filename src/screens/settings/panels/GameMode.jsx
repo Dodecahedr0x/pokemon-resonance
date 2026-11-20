@@ -17,11 +17,11 @@ export default function GameMode() {
           ? 'Campagne : les chapitres se suivent, la fatigue compte et les défis de campagne sont disponibles.'
           : 'Libre : tous les combats sont ouverts ; chaque Pokémon se capture dans sa région.'}
       </p>
-      <p className="v4-ps-n game-mode-w">
+      <p className="v4-ps-n game-mode-warning">
         Changer de mode commence une nouvelle partie. Une confirmation vous propose de ranger d’abord la partie en cours
         dans un emplacement.
       </p>
-      <div className="v4-ps-a">
+      <div className="settings-actions">
         {c ? (
           <button type="button" className="b b-sm" data-game-mode="libre">
             Passer en mode Libre…

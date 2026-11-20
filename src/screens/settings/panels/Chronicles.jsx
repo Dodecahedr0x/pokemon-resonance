@@ -21,7 +21,7 @@ export default function Chronicles() {
         </b>{' '}
         lus.
       </p>
-      <div className="chronicle-g">
+      <div className="chronicle-grid">
         {CHAPTERS.map((c, i) => {
           const lock = nb < c.min,
             isRead = s.read[i];
@@ -29,7 +29,7 @@ export default function Chronicles() {
             <button
               key={i}
               type="button"
-              className={`chronicle${isRead ? ' lu' : ''}${lock ? ' lock' : ''}`}
+              className={`chronicle${isRead ? ' is-read' : ''}${lock ? ' is-locked' : ''}`}
               data-chronicle={i}
               disabled={lock}
             >
@@ -46,9 +46,9 @@ export default function Chronicles() {
           <h4 className="h3" style={{ marginTop: space.md }}>
             Scènes déjà vues
           </h4>
-          <div className="chronicle-g">
+          <div className="chronicle-grid">
             {seenSet.map(k => (
-              <button key={k} type="button" className="chronicle lu" data-chronicle={`s${k}`}>
+              <button key={k} type="button" className="chronicle is-read" data-chronicle={`s${k}`}>
                 <b>{CHAPTER_NAMES[k]}</b>
                 <small>Revoir</small>
               </button>

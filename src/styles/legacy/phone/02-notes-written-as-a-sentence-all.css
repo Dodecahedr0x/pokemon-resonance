@@ -202,31 +202,6 @@ p.v4-note {
     text-align: center;
   }
 
-  /* ---------- Settings: every panel gets the same inner padding as the .v4-ps ones ---------- */
-  html body #params .v4-params > .v4-panel:not(.v4-ps) {
-    display: grid !important;
-    gap: var(--space-sm);
-    padding: var(--space-md) !important;
-  }
-  html body #params .v4-params > .v4-panel:not(.v4-ps) > * {
-    margin: 0 !important;
-  }
-  html body #params .v4-panel .sv-io {
-    display: grid !important;
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--space-sm) !important;
-  }
-  /* board variants: short names, two per row */
-  html body #params #gimmick-boards-panel .sv-io {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  html body #params .v4-panel .sv-io > .b {
-    width: 100% !important;
-    min-height: var(--tap);
-    margin: 0 !important;
-    justify-content: center;
-  }
-
   /* ---------- Guide: "Getting started" steps use the full card width ----------
      Number and title on the first line, the explanation below across the whole card. */
   html body .s5 li {

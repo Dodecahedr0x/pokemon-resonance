@@ -1,9 +1,4 @@
 /* <style id="resonance-workshop-ui"> */
-.board-theme-g {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--space-sm);
-}
 .board-theme-b {
   display: grid;
   gap: var(--space-3xs);
@@ -26,16 +21,6 @@
 .board-theme-b small {
   font-size: 11px;
   color: #b8cddb;
-}
-.board-theme-s {
-  display: flex;
-  border-radius: 8px;
-  overflow: hidden;
-  height: 22px;
-  width: 54px;
-}
-.board-theme-s i {
-  flex: 1;
 }
 body.board-theme-crepuscule .board .hx:not(.rock):not(.river):not(.mud):not(.lava) {
   fill: #3a2f4f;
@@ -260,13 +245,6 @@ body.board-theme-cristal .board {
     transform: translate(-50%, -50%) scale(1.14);
   }
 }
-.secret-places-l {
-  list-style: none;
-  margin: var(--space-sm) 0 0;
-  padding: 0;
-  display: grid;
-  gap: var(--space-xs);
-}
 .secret-places-r {
   display: grid;
   gap: 1px;
@@ -300,37 +278,6 @@ body.board-theme-cristal .board {
 }
 .egg-shop .cp-bar {
   margin-top: var(--space-xs);
-}
-
-/* <style id="resonance-chronicles-ui"> */
-.chronicle-g {
-  display: grid;
-  gap: var(--space-sm);
-  margin-top: var(--space-sm);
-}
-.chronicle {
-  display: grid;
-  gap: var(--space-3xs);
-  text-align: left;
-  padding: var(--space-md) var(--space-md);
-  border-radius: 14px;
-  border: 1px solid rgba(255, 212, 91, 0.4);
-  background: rgba(255, 255, 255, 0.06);
-  color: #eaf2f8;
-  font: inherit;
-  cursor: pointer;
-}
-.chronicle small {
-  color: #b8cddb;
-  font-size: 12px;
-}
-.chronicle.lu {
-  border-color: rgba(255, 255, 255, 0.18);
-}
-.chronicle.lock {
-  opacity: 0.5;
-  cursor: not-allowed;
-  border-color: rgba(255, 255, 255, 0.12);
 }
 
 /* <style id="resonance-forms-ui"> */

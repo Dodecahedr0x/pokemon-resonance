@@ -95,7 +95,7 @@ PAGES
 ${pages}
 
 COMPOSANTS CLÉS
-.b / .b-gold / .b-sm (boutons) · .v4-panel (cartes) · .v4-tabs (onglets) · .nv (navigation ordinateur) · .bn (navigation téléphone) · #combat .sel-card (fiche du combat) · #combat .pt (équipe) · .res-card (résultat de combat) · .bt-top (haut du combat) · #bArena (règle d’arène) · .v4-params (Paramètres) · .legend-quest-c (carte de légende) · .doctrine-choice-b (boutons de doctrine).
+.b / .b-gold / .b-sm (boutons) · .v4-panel (cartes) · .v4-tabs (onglets) · .nv (navigation ordinateur) · .bn (navigation téléphone) · #combat .sel-card (fiche du combat) · #combat .pt (équipe) · .res-card (résultat de combat) · .bt-top (haut du combat) · #bArena (règle d’arène) · .settings-grid (Paramètres) · .legend-quest-c (carte de légende) · .doctrine-choice-b (boutons de doctrine).
 
 Après ton CSS, propose-moi 3 variantes de palette que je peux tester en changeant seulement le bloc « :root ».`;
 }

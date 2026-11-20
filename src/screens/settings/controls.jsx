@@ -4,7 +4,7 @@
 // SW(k, on, lab, sub)
 export function Switch({ k, on, lab, sub }) {
   return (
-    <label className="v4-sw">
+    <label className="settings-switch">
       <span>
         <b>{lab}</b>
         {sub ? <em>{sub}</em> : null}
@@ -19,7 +19,7 @@ export function Switch({ k, on, lab, sub }) {
 export function Slider({ k, v, lab }) {
   const n = Math.round(v * 100);
   return (
-    <label className="v4-sl">
+    <label className="settings-slider">
       <span>{lab}</span>
       <input type="range" min="0" max="100" step="5" defaultValue={n} data-vol={k} aria-label={lab} />
       <b>{n} %</b>

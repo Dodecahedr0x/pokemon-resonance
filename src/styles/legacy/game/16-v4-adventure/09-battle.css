@@ -168,9 +168,6 @@ html body #bPanel .vx {
   .v4d-grid {
     grid-template-columns: minmax(0, 1fr);
   }
-  .v4-params {
-    grid-template-columns: minmax(0, 1fr);
-  }
   .v4-tr-t {
     display: none;
   }

@@ -7,7 +7,7 @@ import { readJournal } from '../../../engine/audio/immersion.js';
 
 // Settings › Trainer Journal (v4.48): statistics recorded on this device.
 const Cell = ({ n, l }) => (
-  <div className="trainer-journal-c">
+  <div className="trainer-journal-stat">
     <b>{n}</b>
     <span>{l}</span>
   </div>
@@ -36,7 +36,7 @@ export default function TrainerJournal() {
         <Cell n={own + ' / ' + DEXS.length} l="Pokédex" />
       </div>
       {fm && (
-        <p className="trainer-journal-f">
+        <p className="trainer-journal-summary">
           <img src={PIX(fm.no)} alt="" width="40" height="40" />
           <span>
             Pokémon le plus engagé<b>{fm.n}</b>

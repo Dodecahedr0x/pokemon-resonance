@@ -46,36 +46,6 @@
   gap: var(--space-sm);
   margin-top: var(--space-md);
 }
-.game-mode-w {
-  color: #ffd9a0 !important;
-}
-
-/* secret code and Creator's Workshop */
-.cheat-code-f {
-  display: flex;
-  gap: var(--space-sm);
-}
-.cheat-code-f input {
-  flex: 1;
-  min-width: 0;
-  height: 38px;
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  background: rgba(0, 0, 0, 0.3);
-  color: inherit;
-  padding: 0 var(--space-md);
-  font: inherit;
-  letter-spacing: 0.08em;
-}
-.cheat-code-g {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-sm);
-  margin: var(--space-sm) 0 var(--space-sm);
-}
-.cheat-code.on {
-  border-color: rgba(255, 215, 94, 0.5) !important;
-}
 
 /* battle sky */
 #bBoard {

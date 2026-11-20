@@ -348,9 +348,6 @@ html.a11y-rm *::after {
   transition: none !important;
   scroll-behavior: auto !important;
 }
-.a11y432 .v4-seg button {
-  min-width: 0;
-}
 
 /* nature and ability */
 .ability-card .chip {

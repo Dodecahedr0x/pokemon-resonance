@@ -12,7 +12,7 @@ export default function FeatsJournal() {
         <b>{st.rec.fast || '—'}</b> manche{st.rec.fast > 1 ? 's' : ''}.
       </p>
       {h8.length ? (
-        <ul className="secret-places-l">
+        <ul className="settings-list">
           {h8.map((h, i) => (
             <li key={i} className={`feats-journal-r${h.w ? '' : ' lose'}`}>
               <b>{h.sc}</b>

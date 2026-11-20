@@ -1,7 +1,6 @@
 import { TYPES } from '../../../engine/data/game-data.js';
 import { gp, tc } from '../../../engine/core/utils.js';
 import { TRAINER_AVATAR, RARE_ENABLED } from '../../../engine/world/rare-encounters.js';
-import { space } from '../../../lib/theme.js';
 
 // Settings › Trainer avatar and Rare encounters (v4.50): data-avatar-action buttons handled by the engine (engine/world/rare-encounters.js).
 export default function Avatar() {
@@ -15,7 +14,7 @@ export default function Avatar() {
         Choisissez l’emblème de votre type : il colore votre pastille en haut de l’écran et s’affiche sur l’écran « VS
         ».
       </p>
-      <div className="type-avatar-g">
+      <div className="avatar-grid">
         {types.map(t => {
           const sel = !!(a && a.e === t);
           return (
@@ -44,9 +43,7 @@ export default function Avatar() {
           Retirer l’avatar
         </button>
       </div>
-      <h3 className="h3" style={{ marginTop: space.lg }}>
-        Rencontres rares
-      </h3>
+      <h3 className="h3 settings-subhead">Rencontres rares</h3>
       <p className="v4-note">
         Certains Pokémon sortent plus souvent la nuit, le matin ou selon la météo du jour (pluie, soleil, grêle, sable).
         Des trouvailles scintillent aussi sur la carte, une fois par jour.

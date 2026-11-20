@@ -1,0 +1,317 @@
+/* Settings page (#params). Shared pieces it uses (.v4-panel, .v4-ph, .v4-ps, .v4-note, .b, .sv-io)
+   are still styled in legacy and move to src/styles/components/ later. */
+
+/* ---------- Page grid: two columns of panels, one below 1000px ---------- */
+.settings-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-md);
+}
+@media (max-width: 999px) {
+  .settings-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.settings-grid > .v4-panel {
+  border: 1px solid var(--rx-edge);
+  border-radius: 23px;
+  background: linear-gradient(145deg, rgba(19, 48, 65, 0.96), rgba(6, 20, 31, 0.98));
+  box-shadow:
+    0 25px 58px rgba(0, 0, 0, 0.34),
+    inset 0 1px rgba(255, 255, 255, 0.07);
+}
+
+/* Phone: every panel gets the same inner padding as the .v4-ps ones, and button rows stack. */
+@media (max-width: 700px) {
+  .settings-grid > .v4-panel:not(.v4-ps) {
+    display: grid;
+    gap: var(--space-sm);
+    padding: var(--space-md);
+  }
+  .settings-grid > .v4-panel:not(.v4-ps) > * {
+    margin: 0;
+  }
+  .settings-grid .sv-io {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-sm);
+  }
+  /* board variants: short names, two per row */
+  #gimmick-boards-panel .sv-io {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .settings-grid .sv-io > .b {
+    width: 100%;
+    min-height: var(--tap);
+    margin: 0;
+    justify-content: center;
+  }
+}
+
+/* A second heading inside a panel, and the Workshop's output box: spaced from the block above.
+   On phone the panel grid gap does it (margins are zeroed above). */
+.settings-subhead {
+  margin-top: var(--space-md);
+}
+.settings-output {
+  margin-top: var(--space-sm);
+}
+
+/* ---------- Controls ---------- */
+.settings-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+.settings-reset {
+  justify-self: start;
+  margin-top: var(--space-2xs);
+}
+
+/* Switch: label and hint on the left, toggle on the right. The checkbox is hidden; <i> draws the toggle. */
+.settings-switch {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-sm) 0;
+  cursor: pointer;
+}
+.settings-switch > span {
+  flex: 1;
+  display: grid;
+}
+.settings-switch b {
+  font: 800 14.5px/1.2 var(--font-display);
+}
+.settings-switch em {
+  font-size: 12.5px;
+  font-style: normal;
+  color: var(--color-text-soft);
+}
+.settings-switch input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+.settings-switch i {
+  position: relative;
+  width: 48px;
+  height: 28px;
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(120, 200, 255, 0.3);
+  flex: none;
+  transition: background 0.2s;
+}
+.settings-switch i::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #c9d8e8;
+  transition:
+    transform 0.2s var(--ease),
+    background 0.2s;
+}
+.settings-switch input:checked + i {
+  background: linear-gradient(90deg, #20b38a, #3fd4a0);
+  border-color: #9ff2d4;
+}
+.settings-switch input:checked + i::after {
+  transform: translateX(20px);
+  background: #fff;
+}
+.settings-switch input:focus-visible + i {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Volume slider: label on its own row, then the range and its percentage. */
+.settings-slider {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: var(--space-2xs) var(--space-sm);
+  padding: 0 0 var(--space-xs);
+}
+.settings-slider span {
+  grid-column: 1/-1;
+  font: 600 12.5px/1 var(--font-body);
+  color: var(--color-text-soft);
+}
+.settings-slider b {
+  font: 800 13px/1 var(--font-display);
+  min-width: 46px;
+  text-align: right;
+}
+.settings-slider input {
+  width: 100%;
+  accent-color: #3fd4a0;
+  height: 28px;
+}
+
+.settings-list {
+  list-style: none;
+  margin: var(--space-sm) 0 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-xs);
+}
+
+/* ---------- Panels ---------- */
+.accessibility-panel .v4-seg button {
+  min-width: 0;
+}
+
+.game-mode-warning {
+  color: #ffd9a0;
+}
+
+/* Nuzlocke: the switch row holds buttons instead of a toggle. */
+.settings-switch.nuzlocke-switch {
+  cursor: default;
+}
+.nuzlocke-confirm {
+  display: flex;
+  gap: var(--space-xs);
+}
+.nuzlocke-warning {
+  color: #ffb37a;
+}
+
+/* Secret codes */
+.cheat-code-form {
+  display: flex;
+  gap: var(--space-sm);
+}
+.cheat-code-form input {
+  flex: 1;
+  min-width: 0;
+  height: 38px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(0, 0, 0, 0.3);
+  color: inherit;
+  padding: 0 var(--space-md);
+  font: inherit;
+  letter-spacing: 0.08em;
+}
+.cheat-code-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin: var(--space-sm) 0 var(--space-sm);
+}
+.settings-grid > .cheat-code.is-active {
+  border-color: rgba(255, 215, 94, 0.5);
+}
+
+/* Trainer journal: three stat tiles, then a summary line. */
+.trainer-journal {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-sm);
+  margin: var(--space-sm) 0;
+}
+.trainer-journal-stat {
+  display: grid;
+  gap: var(--space-3xs);
+  padding: var(--space-sm) var(--space-xs);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--color-line);
+  text-align: center;
+}
+.trainer-journal-stat b {
+  font-size: 19px;
+  color: var(--color-accent);
+}
+.trainer-journal-stat span {
+  font-size: 11px;
+  color: var(--color-text-muted);
+}
+.trainer-journal-summary {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin: 0;
+}
+.trainer-journal-summary span {
+  display: grid;
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+.trainer-journal-summary b {
+  font-size: 15px;
+  color: var(--color-text);
+}
+.trainer-journal-summary em {
+  font-style: normal;
+  font-size: 12px;
+}
+
+/* Avatar: type icons, six per row (five on narrow phones). */
+.avatar-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: var(--space-sm);
+  margin: var(--space-sm) 0;
+}
+@media (max-width: 420px) {
+  .avatar-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+/* Board themes: three per row, each with a strip of colour swatches. */
+.board-theme-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-sm);
+}
+.board-theme-swatch {
+  display: flex;
+  border-radius: 8px;
+  overflow: hidden;
+  height: 22px;
+  width: 54px;
+}
+.board-theme-swatch i {
+  flex: 1;
+}
+
+/* Chronicles: story entries; read ones are dimmer-edged, locked ones faded. */
+.chronicle-grid {
+  display: grid;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
+}
+.chronicle {
+  display: grid;
+  gap: var(--space-3xs);
+  text-align: left;
+  padding: var(--space-md) var(--space-md);
+  border-radius: 14px;
+  border: 1px solid rgba(255, 212, 91, 0.4);
+  background: rgba(255, 255, 255, 0.06);
+  color: #eaf2f8;
+  font: inherit;
+  cursor: pointer;
+}
+.chronicle small {
+  color: #b8cddb;
+  font-size: 12px;
+}
+.chronicle.is-read {
+  border-color: rgba(255, 255, 255, 0.18);
+}
+.chronicle.is-locked {
+  opacity: 0.5;
+  cursor: not-allowed;
+  border-color: rgba(255, 255, 255, 0.12);
+}

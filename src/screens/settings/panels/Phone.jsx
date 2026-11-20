@@ -18,7 +18,7 @@ export default function Phone() {
         lab="Glisser entre les onglets"
         sub="Accueil, Équipe, Combat, Carte. Appui long sur un Pokémon : sa fiche."
       />
-      <div className="v4-ps-a">
+      <div className="settings-actions">
         <button type="button" className="b b-sm" data-hm="intro">
           Revoir l’accueil de la Professeure
         </button>
@@ -29,7 +29,7 @@ export default function Phone() {
           Tutoriel complet
         </button>
       </div>
-      <button type="button" className="b b-ghost b-sm v4-reset" data-v4reset="">
+      <button type="button" className="b b-ghost b-sm settings-reset" data-v4reset="">
         Réinitialiser les paramètres
       </button>
     </section>

@@ -332,13 +332,3 @@ html body .v4-fld select {
   color: inherit;
   font: 600 15px var(--f-b, system-ui, sans-serif);
 }
-html body .v4-sw.nz {
-  cursor: default;
-}
-html body .v4-sw.nz .nz-c {
-  display: flex;
-  gap: var(--space-xs);
-}
-html body .nz-w {
-  color: #ffb37a;
-}

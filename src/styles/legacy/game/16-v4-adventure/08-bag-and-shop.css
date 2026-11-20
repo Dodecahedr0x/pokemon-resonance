@@ -149,11 +149,6 @@
 }
 
 /* ---------- Settings ---------- */
-.v4-params {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-md);
-}
 .v4-ps {
   padding: var(--space-md);
   display: grid;
@@ -200,97 +195,6 @@ html body .v4-fld input {
   margin: 0;
   font-size: 13px;
   color: var(--v4-tx2);
-}
-.v4-ps-a {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-sm);
-}
-.v4-sw {
-  display: flex;
-  align-items: center;
-  gap: var(--space-md);
-  padding: var(--space-sm) 0;
-  cursor: pointer;
-}
-.v4-sw > span {
-  flex: 1;
-  display: grid;
-}
-.v4-sw b {
-  font: 800 14.5px/1.2 var(--f-d);
-}
-.v4-sw em {
-  font-size: 12.5px;
-  font-style: normal;
-  color: var(--v4-tx2);
-}
-.v4-sw input {
-  position: absolute;
-  opacity: 0;
-  width: 1px;
-  height: 1px;
-}
-.v4-sw i {
-  position: relative;
-  width: 48px;
-  height: 28px;
-  border-radius: 14px;
-  background: rgba(0, 0, 0, 0.45);
-  border: 1px solid rgba(120, 200, 255, 0.3);
-  flex: none;
-  transition: background 0.2s;
-}
-.v4-sw i::after {
-  content: '';
-  position: absolute;
-  top: 3px;
-  left: 3px;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: #c9d8e8;
-  transition:
-    transform 0.2s var(--ease),
-    background 0.2s;
-}
-.v4-sw input:checked + i {
-  background: linear-gradient(90deg, #20b38a, #3fd4a0);
-  border-color: #9ff2d4;
-}
-.v4-sw input:checked + i::after {
-  transform: translateX(20px);
-  background: #fff;
-}
-.v4-sw input:focus-visible + i {
-  outline: 2px solid #ffd75e;
-  outline-offset: 2px;
-}
-.v4-sl {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: center;
-  gap: var(--space-2xs) var(--space-sm);
-  padding: 0 0 var(--space-xs);
-}
-.v4-sl span {
-  grid-column: 1/-1;
-  font: 600 12.5px/1 var(--f-b);
-  color: var(--v4-tx2);
-}
-.v4-sl b {
-  font: 800 13px/1 var(--f-d);
-  min-width: 46px;
-  text-align: right;
-}
-.v4-sl input {
-  width: 100%;
-  accent-color: #3fd4a0;
-  height: 28px;
-}
-.v4-reset {
-  justify-self: start;
-  margin-top: var(--space-2xs);
 }
 
 /* ---------- Team: collection cards ---------- */

@@ -1,7 +1,6 @@
 import { PROFILE } from '../../../engine/state/game-state.js';
 import { PREF } from '../../../engine/ui/preferences.js';
 import { BOARD_THEMES, rivalState, isThemeUnlocked, dominantType } from '../../../engine/modes/rival-board-themes.js';
-import { space } from '../../../lib/theme.js';
 
 // Board themes (v4.55), bought with Shards, then the rival Kael's report.
 // Buttons handled by the engine (delegated click on data-board-theme-action).
@@ -16,7 +15,7 @@ export default function BoardThemes() {
     <section className="v4-panel" id="craft-bench">
       <h3 className="h3">Thèmes de plateau</h3>
       <p className="v4-note">Change seulement les couleurs du plateau. Éclats de Résonance : {PROFILE.gems}.</p>
-      <div className="board-theme-g">
+      <div className="board-theme-grid">
         {Object.keys(BOARD_THEMES).map(k => {
           const th = BOARD_THEMES[k],
             ok = isThemeUnlocked(k);
@@ -28,7 +27,7 @@ export default function BoardThemes() {
               data-board-theme-action={`${ok ? 'set' : 'buy'}:${k}`}
               aria-pressed={cur === k}
             >
-              <span className="board-theme-s">
+              <span className="board-theme-swatch">
                 <i style={{ background: th.c[0] }} />
                 <i style={{ background: th.c[1] }} />
               </span>
@@ -38,9 +37,7 @@ export default function BoardThemes() {
           );
         })}
       </div>
-      <h3 className="h3" style={{ marginTop: space.md }}>
-        Votre rival
-      </h3>
+      <h3 className="h3 settings-subhead">Votre rival</h3>
       <p className="v4-note">{`Kael : ${rv.w} défaite${rv.w > 1 ? 's' : ''} contre vous, ${rv.l} victoire${rv.l > 1 ? 's' : ''}.${rival}`}</p>
     </section>
   );

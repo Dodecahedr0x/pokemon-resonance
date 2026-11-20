@@ -1,0 +1,15 @@
+/* Semantic colour and type tokens. New code uses these names, never the per-release palettes
+   (--v4-*, --rx-*, --r22-*, --pr-*…).
+   For now each one points at the legacy token that currently wins, so accessibility modes that override
+   the legacy tokens (html.a11y-hc, html.a11y-cb) still apply. The values move here, and the legacy
+   palettes become aliases, in the token step of docs/plans/2026-11-20-style-cleanup.md. */
+:root {
+  --color-text: var(--tx);
+  --color-text-soft: var(--v4-tx2);
+  --color-text-muted: var(--mut);
+  --color-accent: var(--gold);
+  --color-line: var(--line);
+
+  --font-display: var(--f-d);
+  --font-body: var(--f-b);
+}

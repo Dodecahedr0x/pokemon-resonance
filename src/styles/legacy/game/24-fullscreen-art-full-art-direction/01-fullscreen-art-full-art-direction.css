@@ -88,7 +88,8 @@ a:focus-visible {
 .tcard,
 .sel,
 .dock,
-.v4-panel,
+/* Settings panels set their own edge and shadow (src/screens/settings/settings.css). */
+.v4-panel:not(:where(.settings-grid > *)),
 .v4-dexcard,
 .v4-dexlist,
 .v4-map,

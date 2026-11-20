@@ -41,7 +41,7 @@ export default function DesignWorkshop() {
           Brief pour ChatGPT
         </button>
       </div>
-      <textarea id="design-action-k" rows="8" readOnly hidden style={{ ...BOX, marginTop: space.sm }} defaultValue="" />
+      <textarea id="design-action-k" rows="8" readOnly hidden className="settings-output" style={BOX} defaultValue="" />
     </section>
   );
 }

@@ -15,7 +15,7 @@ export default function SecretPlaces() {
         </b>{' '}
         découverts. Un habitant itinérant passe aussi chaque jour sur la carte.
       </p>
-      <ul className="secret-places-l">
+      <ul className="settings-list">
         {SECRET_PLACES.map(s => {
           const f = st.found[s.id];
           return (

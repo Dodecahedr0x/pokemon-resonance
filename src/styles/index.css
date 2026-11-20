@@ -9,5 +9,8 @@
 @layer theme, legacy, base, components, screens;
 
 @import './theme/spacing.css' layer(theme);
+@import './theme/colors.css' layer(theme);
 @import './legacy/index.css' layer(legacy);
 @import './base/fonts.css' layer(base);
+
+@import '../screens/settings/settings.css' layer(screens);

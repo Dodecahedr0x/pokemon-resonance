@@ -11,7 +11,7 @@ const SIZES = [
 export default function Accessibility() {
   const t = PREF.textSize || 'normal';
   return (
-    <section className="v4-panel v4-ps a11y432">
+    <section className="v4-panel v4-ps accessibility-panel">
       <header className="v4-ph">
         <svg>
           <use href="#i-user" />

@@ -62,7 +62,7 @@ function Content() {
         </h1>
         <p className="sub">Réglages de cet appareil et de votre partie.</p>
       </div>
-      <div className="v4-params">
+      <div className="settings-grid">
         {PANELS.map((P, i) => (
           <P key={i} />
         ))}

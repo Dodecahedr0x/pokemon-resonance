@@ -6,7 +6,7 @@ import { CHALLENGES, CHALLENGE_CONF } from '../../../engine/progression/campaign
 // Challenge switch (data-defi, handled by the engine).
 function Challenge({ k, on }) {
   return (
-    <label className="v4-sw">
+    <label className="settings-switch">
       <span>
         <b>{CHALLENGES[k][0]}</b>
         <em>{CHALLENGES[k][1]}</em>
@@ -56,7 +56,7 @@ export default function CampaignChallenges() {
       </label>
       <Challenge k="trio" on={d.trio} />
       <Challenge k="sansEveil" on={d.sansEveil} />
-      <div className="v4-sw nz">
+      <div className="settings-switch nuzlocke-switch">
         <span>
           <b>Nuzlocke</b>
           <em>{CHALLENGES.nuzlocke[1]}</em>
@@ -66,7 +66,7 @@ export default function CampaignChallenges() {
             Abandonner
           </button>
         ) : CHALLENGE_CONF ? (
-          <span className="nz-c">
+          <span className="nuzlocke-confirm">
             <button type="button" className="b b-sm b-gold" data-nz="ok">
               Confirmer
             </button>
@@ -81,7 +81,7 @@ export default function CampaignChallenges() {
         )}
       </div>
       {CHALLENGE_CONF && !d.nuzlocke ? (
-        <p className="v4-ps-n nz-w">
+        <p className="v4-ps-n nuzlocke-warning">
           Attention : chaque Pokémon mis K.O. ne pourra plus combattre de toute la campagne. Confirmez pour commencer.
         </p>
       ) : null}

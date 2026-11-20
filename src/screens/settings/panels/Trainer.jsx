@@ -39,7 +39,7 @@ export default function Trainer() {
           ? `Campagne en cours · ${BADGES.length} badge${BADGES.length > 1 ? 's' : ''} · Nv. ${tLevel()}`
           : `Mode Libre : arènes ouvertes · ${boxCapacityLabel()}`}
       </p>
-      <div className="v4-ps-a">
+      <div className="settings-actions">
         <button type="button" className="b b-sm" data-v4saves="">
           Sauvegardes
         </button>

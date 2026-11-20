@@ -23,7 +23,7 @@ export default function ActionReplay() {
           </svg>
           <b>Action Replay</b>
         </header>
-        <div className="cheat-code-f">
+        <div className="cheat-code-form">
           <input
             type="password"
             id="cheat-code"
@@ -41,7 +41,7 @@ export default function ActionReplay() {
     );
   }
   return (
-    <section className="v4-panel v4-ps cheat-code on">
+    <section className="v4-panel v4-ps cheat-code is-active">
       <header className="v4-ph">
         <svg>
           <use href="#i-star" />
@@ -52,7 +52,7 @@ export default function ActionReplay() {
       <p className="v4-ps-n">
         Raccourcis de test. Ils modifient la partie en cours : rangez-la d’abord dans un emplacement si besoin.
       </p>
-      <div className="cheat-code-g">
+      <div className="cheat-code-grid">
         {CHEATS.map(([k, t]) => (
           <button key={k} type="button" className="b b-sm" data-cheat={k}>
             {t}
