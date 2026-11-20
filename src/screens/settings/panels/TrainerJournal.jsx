@@ -23,7 +23,7 @@ export default function TrainerJournal() {
   return (
     <section className="card" id="trainer-journal-panel">
       <h3 className="card-title">Journal de dresseur</h3>
-      <p className="v4-note">Vos exploits, tels qu’ils sont enregistrés sur cet appareil.</p>
+      <p className="note">Vos exploits, tels qu’ils sont enregistrés sur cet appareil.</p>
       <div className="trainer-journal">
         <Cell n={P.battles} l="Combats" />
         <Cell n={P.wins} l="Victoires" />

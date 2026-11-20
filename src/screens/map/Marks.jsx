@@ -11,9 +11,7 @@ import {
   secretState,
   visibleSecrets,
 } from '../../engine/world/secret-places.js';
-
-// state class of a place marker, from placeState()
-const MARK_STATE = { next: 'is-next', open: 'is-open', done: 'is-done', lock: 'is-locked' };
+import { STATE_CLASS } from '../../components/StatePill.jsx';
 
 // Map markers (#mapMarks): places, then hidden finds (v4.50), secret places
 // and the passing character (v4.60), in the order the versions added them.
@@ -27,7 +25,7 @@ export default function Marks({ marksSel }) {
         return (
           <button
             type="button"
-            className={`map-mark ${MARK_STATE[st]}${marksSel === p.id ? ' is-selected' : ''}${p.grp === 'entrainement' ? ' is-small' : ''}`}
+            className={`map-mark ${STATE_CLASS[st]}${marksSel === p.id ? ' is-selected' : ''}${p.grp === 'entrainement' ? ' is-small' : ''}`}
             data-place={p.id}
             style={{ left: `${p.x / 10}%`, top: `${p.y / 6.4}%` }}
             aria-label={`${placeName(p)} · ${STATE_N[st]}`}

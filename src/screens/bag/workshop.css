@@ -1,5 +1,5 @@
 /* Workshop tabs of the Shop (Workshop.jsx: recipes, draw, finds showcase, item quests, trophies, eggs, talents)
-   and the peddler (Peddler.jsx). Rows are shared .item-row components; buttons are the shared .v4-btn.
+   and the peddler (Peddler.jsx). Rows are shared .item-row components; buttons are the shared .pill-button.
    Clicks: engine listeners on data-craft-bench, data-quest-log, data-trophy-room, data-egg-shop,
    data-talent-tree and data-wanderer. */
 
@@ -20,7 +20,7 @@
   color: var(--color-text-pale);
   font-size: 12px;
 }
-.workshop-draw .v4-btn {
+.workshop-draw .pill-button {
   min-width: 180px;
 }
 

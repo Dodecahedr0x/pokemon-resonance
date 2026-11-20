@@ -6,10 +6,11 @@ import { ELITE, scenLock } from '../../engine/combat/items-bonds-ai.js';
 import { nextGoal } from '../../engine/progression/campaign.js';
 import { CHAP, leaderOf } from '../../engine/progression/prestige.js';
 import { emblem, wonOf } from '../../engine/world/home-journey.js';
-import { STATE_N, rewardLine } from '../../engine/world/map.js';
+import { rewardLine } from '../../engine/world/map.js';
 import { MAINQ } from '../../engine/progression/quests-shop.js';
 
 import Button from '../../components/Button.jsx';
+import StatePill from '../../components/StatePill.jsx';
 // A chapter of the main quest (formerly mainRow).
 function Chapter({ k, gk }) {
   const C = CHAP(k) || { c: '', t: '' },
@@ -34,7 +35,7 @@ function Chapter({ k, gk }) {
         {gi >= 0 && !won ? <Html html={rewardLine(k)} /> : null}
       </div>
       <div className="v4-qm-r">
-        <em className={`v4-pill s-${st}`}>{STATE_N[st]}</em>
+        <StatePill state={st} />
         {lk ? null : (
           <Button size="small" variant={nx ? 'primary' : undefined} data-v4fight={k}>
             {won ? 'Rejouer' : 'Y aller'}
@@ -51,7 +52,7 @@ export default function MainQuest() {
   return (
     <>
       {isCamp() ? null : (
-        <div className="v4-note">
+        <div className="note">
           Mode Libre : tous les combats sont ouverts et les Pokémon se capturent dans leur région. Les chapitres se
           suivent dans l’ordre en Campagne.{' '}
           <a className="button button-small" data-t="params" href="#params">

@@ -55,7 +55,7 @@ function Card({ M, m, families: families }) {
             );
           })
         ) : (
-          <p className="v4-empty">Aucun Pokémon dans votre Box.</p>
+          <p className="empty-state">Aucun Pokémon dans votre Box.</p>
         )}
       </div>
     </Dialogue>

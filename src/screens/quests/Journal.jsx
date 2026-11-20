@@ -23,7 +23,7 @@ export default function Journal() {
         .sort((a, b) => b[1] - a[1])
         .slice(0, n);
   if (!J.n) {
-    return <p className="v4-empty">Jouez un combat : son rapport et vos statistiques apparaîtront ici.</p>;
+    return <p className="empty-state">Jouez un combat : son rapport et vos statistiques apparaîtront ici.</p>;
   }
   const mvp = top(J.mvp, 5);
   return (
@@ -67,7 +67,7 @@ export default function Journal() {
             </div>
           ))
         ) : (
-          <p className="v4-note">Pas encore de MVP.</p>
+          <p className="note">Pas encore de MVP.</p>
         )}
       </section>
       {NL}

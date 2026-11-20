@@ -14,7 +14,7 @@ export default function Chronicles() {
   return (
     <section className="card" id="chronicles-panel">
       <h3 className="card-title">Chroniques</h3>
-      <p className="v4-note">
+      <p className="note">
         L’histoire de la Résonance, chapitre après chapitre, au fil de vos badges.{' '}
         <b>
           {n} / {CHAPTERS.length}

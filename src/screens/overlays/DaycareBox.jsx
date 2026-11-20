@@ -41,7 +41,7 @@ function Card({ L, ok }) {
             </button>
           ))
         ) : (
-          <p className="v4-empty">Aucun Pokémon disponible au camp.</p>
+          <p className="empty-state">Aucun Pokémon disponible au camp.</p>
         )}
       </div>
       <Button variant="primary" data-pens="ok" disabled={!ok}>

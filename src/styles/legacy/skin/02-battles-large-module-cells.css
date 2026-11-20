@@ -144,28 +144,6 @@ html:not(#pkz) body:not(#pkz) #v4Menu:not([hidden]) .v4-mi:nth-child(n + 7) {
 }
 
 /* ---------- Pokédex: list and mission buttons ---------- */
-html:not(#pkz) body:not(#pkz) .v4-btn {
-  border: 1px solid rgba(255, 236, 160, 0.75) !important;
-  border-radius: 999px !important;
-  padding: var(--space-sm) var(--space-md) !important;
-  background:
-    radial-gradient(120% 120% at 50% -30%, rgba(255, 255, 255, 0.55), transparent 55%),
-    linear-gradient(180deg, #ffe877, #ffc12f) !important;
-  color: #10213a !important;
-  font: 800 12px/1 var(--f-d) !important;
-  box-shadow:
-    inset 0 -2px 0 rgba(120, 70, 0, 0.25),
-    0 6px 14px -8px rgba(255, 190, 40, 0.8) !important;
-  cursor: pointer;
-  white-space: nowrap;
-}
-html:not(#pkz) body:not(#pkz) .v4-btn:active {
-  transform: scale(0.95);
-}
-html:not(#pkz) body:not(#pkz) .v4-btn:disabled {
-  filter: grayscale(0.8) brightness(0.75);
-  box-shadow: none !important;
-}
 
 /* ---------- messages: a small rolling Poké Ball ---------- */
 html:not(#pkz) body:not(#pkz) .toast::before {

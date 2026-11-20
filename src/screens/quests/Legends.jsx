@@ -45,7 +45,7 @@ function Legend({ L, et, isTaken: takenSet, fight, condition: cond }) {
 export default function Legends() {
   return (
     <>
-      <p className="v4-note">
+      <p className="note">
         Une légende vaincue peut être capturée une fois sa quête terminée. Elle rejoint votre Box et coûte 8 PC dans
         l’équipe.
       </p>
@@ -56,7 +56,7 @@ export default function Legends() {
       </div>
       {hoennOpen() ? (
         <>
-          <p className="v4-note">
+          <p className="note">
             Légendes de Hoenn : vainquez-les d’abord (Combats › Après-jeu), puis remplissez leur quête. Chacune a une
             condition de capture propre.
           </p>

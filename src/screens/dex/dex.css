@@ -54,9 +54,6 @@
   color: var(--color-text-pale);
   font-size: 11.5px;
 }
-.dex-mission-row.is-ready .v4-btn {
-  box-shadow: 0 0 0 2px rgba(255, 212, 91, 0.5);
-}
 .dex-mission-row.is-done {
   opacity: 0.55;
 }
@@ -316,7 +313,7 @@
     flex-basis: 100%;
     text-align: center;
   }
-  .dex-mission .v4-btn {
+  .dex-mission .pill-button {
     min-height: 40px;
   }
 }

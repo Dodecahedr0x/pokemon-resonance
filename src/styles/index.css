@@ -23,6 +23,9 @@
 @import './components/energy-pips.css' layer(components);
 @import './components/synergy.css' layer(components);
 @import './components/tabs.css' layer(components);
+@import './components/state-pill.css' layer(components);
+@import './components/note.css' layer(components);
+@import './components/pill-button.css' layer(components);
 
 @import '../screens/settings/settings.css' layer(screens);
 @import '../screens/dex/dex.css' layer(screens);

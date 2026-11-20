@@ -14,7 +14,7 @@ export default function PokemonSkin() {
   return (
     <section className="card" id="pokemon-skin">
       <h3 className="card-title">Habillage Pokémon</h3>
-      <p className="v4-note" data-poke-style-n="1">
+      <p className="note" data-poke-style-n="1">
         Ouverture en Poké Ball quand vous changez d’onglet, voyants du Pokédex, reflets holographiques et entrée animée
         des écrans. L’option « Réduire les animations » coupe aussi ces effets. « Effets animés » règle aussi l’entrée
         en combat, les Poké Balls et la cérémonie du badge.

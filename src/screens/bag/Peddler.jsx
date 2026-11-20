@@ -11,7 +11,7 @@ export default function Peddler() {
   const A = todaysPeddler();
   if (!A.present) {
     return (
-      <p className="v4-note">
+      <p className="note">
         Le colporteur n’est pas passé aujourd’hui. Il revient certains jours, avec des prix réduits.
       </p>
     );
@@ -39,7 +39,7 @@ export default function Peddler() {
         <div>
           <button
             type="button"
-            className="v4-btn"
+            className="pill-button"
             data-wanderer={k}
             disabled={left <= 0 || PROFILE.money < px || bagN(k) >= 99}
           >
@@ -68,7 +68,7 @@ export default function Peddler() {
         <div>
           <button
             type="button"
-            className="v4-btn"
+            className="pill-button"
             data-wanderer={'h:' + A.th}
             disabled={!!takenSet || PROFILE.money < px}
           >
@@ -80,7 +80,7 @@ export default function Peddler() {
   }
   return (
     <>
-      <p className="v4-note bag-peddler-intro">
+      <p className="note bag-peddler-intro">
         <b>{A.displayName}, le colporteur</b> a posé sa carriole aujourd’hui. Stock limité, il repart à minuit.
       </p>
       {A.pick.map(row)}

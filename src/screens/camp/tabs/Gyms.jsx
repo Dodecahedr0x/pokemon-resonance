@@ -170,7 +170,7 @@ export default function Gyms() {
         {A.length ? (
           A.map((a, i) => <Gym key={i} a={a} i={i} />)
         ) : (
-          <p className="v4-empty">Aucune arène pour l’instant.</p>
+          <p className="empty-state">Aucune arène pour l’instant.</p>
         )}
       </div>
     </section>

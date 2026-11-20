@@ -51,7 +51,7 @@ function OutfitForSale({ k }) {
 export default function HeldItems({ category: cat }) {
   if (cat === 'rares' && isCamp() && BADGES.length < 2) {
     return (
-      <p className="v4-empty">
+      <p className="empty-state">
         Le marchand rare s’installe après votre 2e badge. Il ne vend que contre des Éclats de Résonance.
       </p>
     );
@@ -59,9 +59,9 @@ export default function HeldItems({ category: cat }) {
   return (
     <>
       {cat === 'rares' ? (
-        <p className="v4-note">Le marchand rare n’accepte que les Éclats de Résonance.</p>
+        <p className="note">Le marchand rare n’accepte que les Éclats de Résonance.</p>
       ) : (
-        <p className="v4-note">
+        <p className="note">
           Un objet tenu s’achète une fois, puis se confie depuis la fiche d’un Pokémon. Un seul Pokémon le tient à la
           fois.
         </p>

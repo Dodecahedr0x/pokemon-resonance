@@ -54,7 +54,7 @@ function Workshop() {
   const fusionTargets = tmFusionTargets();
   return (
     <>
-      <p className="v4-note">
+      <p className="note">
         L’atelier du colporteur transforme vos objets. Les recettes, la fusion de CT et les commandes du jour s’y
         trouvent.
       </p>
@@ -66,7 +66,7 @@ function Workshop() {
           actionButton={
             <button
               type="button"
-              className="v4-btn"
+              className="pill-button"
               data-craft-bench={'rec:' + r.id}
               disabled={!(hasIngredients(r.in) && PROFILE.money >= r.m)}
             >
@@ -94,7 +94,7 @@ function Workshop() {
 
               before={<Disc it={SHOP[k]} />}
               actionButton={
-                <button type="button" className="v4-btn" data-craft-bench={'fus:' + k} disabled={!ok}>
+                <button type="button" className="pill-button" data-craft-bench={'fus:' + k} disabled={!ok}>
                   Fusionner
                 </button>
               }
@@ -109,7 +109,7 @@ function Workshop() {
           );
         })
       ) : (
-        <p className="v4-empty">Vous avez déjà toutes les CT.</p>
+        <p className="empty-state">Vous avez déjà toutes les CT.</p>
       )}
       <h3 className="card-title" style={{ marginTop: space.md }}>
         Commandes du jour
@@ -121,7 +121,7 @@ function Workshop() {
           actionButton={
             <button
               type="button"
-              className="v4-btn"
+              className="pill-button"
               data-craft-bench={'cmd:' + c.id}
               disabled={!(!c.done && hasIngredients(c.in))}
             >
@@ -148,19 +148,19 @@ function Draw() {
   return (
     <>
       <h3 className="card-title">Tirage du colporteur</h3>
-      <p className="v4-note">
+      <p className="note">
         Un tirage gratuit par jour. Ensuite, {fmt(FUSION_COST)} ₽ le tirage (4 par jour au maximum). Le résultat est
         fixé à l’avance : inutile de recharger la page.
       </p>
       {st.last ? (
-        <p className="v4-note workshop-draw-last">
+        <p className="note workshop-draw-last">
           Dernier lot : <b>{st.last}</b>
         </p>
       ) : null}
       <div className="workshop-draw">
         <button
           type="button"
-          className="v4-btn"
+          className="pill-button"
           data-craft-bench="spin"
           disabled={!(remainder > 0 && (freeOfCharge || PROFILE.money >= FUSION_COST))}
         >
@@ -182,7 +182,7 @@ function Showcase() {
   return (
     <section className="card workshop-showcase">
       <h3>Vitrine des trouvailles</h3>
-      <p className="v4-note">
+      <p className="note">
         Objets tenus :{' '}
         <b>
           {nh} / {held.length}
@@ -232,7 +232,7 @@ function QuestItems() {
   return (
     <>
       <h3 className="card-title">Quêtes d’objets</h3>
-      <p className="v4-note">
+      <p className="note">
         Les habitants vous confient des services en échange d’objets rares.{' '}
         <b>
           {n} / {QUESTS.length}
@@ -250,7 +250,7 @@ function QuestItems() {
             actionButton={
               <button
                 type="button"
-                className="v4-btn"
+                className="pill-button"
                 data-quest-log={q.id}
                 disabled={!!(done || lock || !questUnlocked(q))}
               >
@@ -287,7 +287,7 @@ function Trophies() {
             key={T.id}
             cls={done ? 'is-owned' : ''}
             actionButton={
-              <button type="button" className="v4-btn" data-trophy-room={T.id} disabled={!(ok && !done)}>
+              <button type="button" className="pill-button" data-trophy-room={T.id} disabled={!(ok && !done)}>
                 {done ? 'Récupéré' : ok ? 'Réclamer' : '—'}
               </button>
             }
@@ -316,7 +316,7 @@ function Eggs() {
   return (
     <>
       <h3 className="card-title">Élevage</h3>
-      <p className="v4-note">
+      <p className="note">
         Les œufs éclosent en combattant, en entraînement comme en aventure. Trois œufs au maximum à la fois. Éclos :{' '}
         <b>{s.n}</b>. {isFree ? '' : 'Vous possédez déjà toutes les familles.'}
       </p>
@@ -351,7 +351,7 @@ function Eggs() {
             key={k}
             cls="workshop-egg"
             actionButton={
-              <button type="button" className="v4-btn" data-egg-shop={k} disabled={!ok}>
+              <button type="button" className="pill-button" data-egg-shop={k} disabled={!ok}>
                 {O.price}
               </button>
             }
@@ -373,7 +373,7 @@ function Talents() {
   return (
     <>
       <h3 className="card-title">Talents du dresseur</h3>
-      <p className="v4-note">
+      <p className="note">
         Chaque niveau de dresseur donne 1 point. Niveau {tLevel()} : <b>{pts}</b> point{pts > 1 ? 's' : ''} à dépenser,{' '}
         {spent} dépensé{spent > 1 ? 's' : ''}. Les talents ne comptent pas dans les combats à règles fixes.
       </p>
@@ -387,7 +387,12 @@ function Talents() {
                 key={t.id}
                 cls="workshop-talent"
                 actionButton={
-                  <button type="button" className="v4-btn" data-talent-tree={t.id} disabled={r >= TALENT_MAX || !pts}>
+                  <button
+                    type="button"
+                    className="pill-button"
+                    data-talent-tree={t.id}
+                    disabled={r >= TALENT_MAX || !pts}
+                  >
                     {r >= TALENT_MAX ? 'Max' : '+1'}
                   </button>
                 }

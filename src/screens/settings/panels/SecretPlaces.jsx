@@ -8,7 +8,7 @@ export default function SecretPlaces() {
   return (
     <section className="card" id="secret-places-j">
       <h3 className="card-title">Lieux secrets</h3>
-      <p className="v4-note">
+      <p className="note">
         Des lieux n’apparaissent sur la carte qu’à certaines heures ou sous certaines météos.{' '}
         <b>
           {n} / {SECRET_PLACES.length}

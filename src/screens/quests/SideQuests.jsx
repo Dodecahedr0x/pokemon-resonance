@@ -3,6 +3,7 @@ import { SQ } from '../../engine/progression/quests-shop.js';
 import Rewards from './Rewards.jsx';
 
 import Button from '../../components/Button.jsx';
+import StatePill from '../../components/StatePill.jsx';
 // A side quest (formerly sideRow); "Réclamer" (Claim): data-claim, handled by the engine.
 function Quest({ q }) {
   const v = Math.min(q.v(), q.n),
@@ -25,7 +26,7 @@ function Quest({ q }) {
           <Rewards r={q.r} />
         </div>
         {got ? (
-          <span className="v4-pill s-done">Reçue</span>
+          <StatePill state="done">Reçue</StatePill>
         ) : (
           <Button size="small" variant={done ? 'primary' : undefined} data-claim={q.id} disabled={!done}>
             {done ? 'Réclamer' : 'En cours'}

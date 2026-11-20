@@ -81,40 +81,6 @@ html body .logo b {
   margin-left: var(--space-xs);
   color: #ffd75e;
 }
-.v4-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2xs);
-  font: 800 11px/1 var(--f-d);
-  letter-spacing: 0.04em;
-  padding: var(--space-2xs) var(--space-sm);
-  border-radius: 999px;
-  white-space: nowrap;
-  background: rgba(255, 255, 255, 0.06);
-  color: var(--v4-tx2);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-}
-.v4-pill svg {
-  width: 12px;
-  height: 12px;
-}
-.v4-pill.s-next {
-  background: linear-gradient(180deg, #4fe08e, #22a65c);
-  color: #05230f;
-  border-color: #9ff2c2;
-}
-.v4-pill.s-done {
-  background: rgba(69, 212, 131, 0.14);
-  color: #7ff0ad;
-  border-color: rgba(69, 212, 131, 0.4);
-}
-.v4-pill.s-lock {
-  color: #8ea8c4;
-}
-.v4-pill.s-open {
-  color: #bfe6ff;
-  border-color: rgba(120, 200, 255, 0.35);
-}
 .v4-dot {
   display: inline-grid;
   place-items: center;
@@ -151,24 +117,6 @@ html body .logo b {
   width: 20px;
   height: 20px;
   filter: drop-shadow(0 0 4px rgba(90, 220, 255, 0.6));
-}
-.v4-note {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-sm);
-  padding: var(--space-md) var(--space-md);
-  margin: 0 0 var(--space-md);
-  border-radius: 12px;
-  background: rgba(255, 215, 94, 0.08);
-  border: 1px solid rgba(255, 215, 94, 0.28);
-  color: #ffe7a3;
-  font-size: 13.5px;
-}
-.v4-empty {
-  padding: var(--space-xl);
-  text-align: center;
-  color: var(--v4-mut);
 }
 .v4-rw,
 .v4-rew {

@@ -23,7 +23,7 @@ export default function Missions() {
               </i>
               <small>{`${Math.min(n, k)} / ${k} · ${rewardText(r)}`}</small>
             </div>
-            <button type="button" className="v4-btn" data-dex-mission={`p:${k}`} disabled={!ok}>
+            <button type="button" className="pill-button" data-dex-mission={`p:${k}`} disabled={!ok}>
               {ok ? 'Réclamer' : '—'}
             </button>
           </div>
@@ -44,7 +44,7 @@ export default function Missions() {
               </i>
               <small>{`${Math.min(own, need)} / ${need} Pokémon de type ${t} · +1 Éclat`}</small>
             </div>
-            <button type="button" className="v4-btn" data-dex-mission={`t:${t}`} disabled={!(ok && !done)}>
+            <button type="button" className="pill-button" data-dex-mission={`t:${t}`} disabled={!(ok && !done)}>
               {done ? 'Fait' : ok ? 'Réclamer' : '—'}
             </button>
           </div>

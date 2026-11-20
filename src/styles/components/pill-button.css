@@ -1,0 +1,25 @@
+/* Pill button: the small round gold button of list rows (buy, craft, claim…) in the Bag's workshop and peddler,
+   the Pokédex missions and the season event. */
+
+.pill-button {
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid rgba(255, 236, 160, 0.75);
+  border-radius: 999px;
+  background:
+    radial-gradient(120% 120% at 50% -30%, rgba(255, 255, 255, 0.55), transparent 55%),
+    linear-gradient(180deg, #ffe877, #ffc12f);
+  box-shadow:
+    inset 0 -2px 0 rgba(120, 70, 0, 0.25),
+    0 6px 14px -8px rgba(255, 190, 40, 0.8);
+  color: #10213a;
+  font: 800 12px/1 var(--font-display);
+  white-space: nowrap;
+  cursor: pointer;
+}
+.pill-button:active {
+  transform: scale(0.95);
+}
+.pill-button:disabled {
+  box-shadow: none;
+  filter: grayscale(0.8) brightness(0.75);
+}

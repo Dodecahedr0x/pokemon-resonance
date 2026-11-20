@@ -139,3 +139,9 @@ Each step is one commit (or a few), on its own, playable at every point.
   / `.gd-t`, in the new `src/screens/guide/guide.css`), `.map-regions`, and `.camp-tabs` (was `.camp-tab`, in the new
   `src/screens/camp/camp.css`). `.scn-tabs` had no element left and is gone. Because `components` sits below
   `legacy`, the two global legacy button rules (transition and its easing) now skip `.tabs > button`.
+- Shared pill, note, empty state, gold button: done. `src/components/StatePill.jsx` (`<StatePill state="next|open|done|lock">`,
+  label from `STATE_N` unless children are given) and `src/styles/components/state-pill.css` replace `.v4-pill s-*`
+  (Map, Quests); its `STATE_CLASS` map is also the Map markers' state class. `src/styles/components/note.css` holds
+  `.note` (was `.v4-note`) and `.empty-state` (was `.v4-empty`); `src/styles/components/pill-button.css` holds
+  `.pill-button` (was `.v4-btn`, the round gold button of the Bag's workshop, the Pokédex missions and the season
+  event). The Pokédex's ready-mission ring on that button was always overridden and is gone.

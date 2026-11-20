@@ -7,7 +7,7 @@ export default function BattleDisplay() {
   return (
     <section className="card" id="battle-display-panel">
       <h3 className="card-title">Affichage du combat</h3>
-      <p className="v4-note">
+      <p className="note">
         Plein écran : le navigateur masque ses barres quand il l’autorise, et en combat sur téléphone la barre de
         navigation du bas s’efface. Plateau contrasté : contours de cases nets et terrains plus colorés. Sur le plateau,
         un appui long sur une case (ou la loupe) affiche son détail.

@@ -4,7 +4,7 @@ export default function DownloadGame() {
   return (
     <section className="card" id="download">
       <h3 className="card-title">Télécharger le jeu</h3>
-      <p className="v4-note">
+      <p className="note">
         Le fichier HTML complet de la version actuelle, pour le garder ou le modifier avec un autre outil (design,
         textes…). Les musiques restent hébergées avec le lien.
       </p>

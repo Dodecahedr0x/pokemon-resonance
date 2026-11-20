@@ -31,7 +31,7 @@ export default function Pantheon() {
             </article>
           ))
         ) : (
-          <p className="v4-empty">
+          <p className="empty-state">
             Le Panthéon attend sa première équipe : battez un Champion, un Maître ou le gardien de l’Écho profond.
           </p>
         )}

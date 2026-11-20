@@ -44,7 +44,7 @@ export default function Achievements() {
   const n = ACHIEVEMENTS.filter(s => PROFILE.achievements && PROFILE.achievements[s.id]).length;
   return (
     <>
-      <p className="v4-note">
+      <p className="note">
         {n} / {ACHIEVEMENTS.length} succès. Ceux qui donnent un titre peuvent être portés : il s’affiche à côté de votre
         nom.
       </p>

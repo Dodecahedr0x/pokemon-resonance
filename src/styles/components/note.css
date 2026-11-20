@@ -1,0 +1,26 @@
+/* Notes and empty states.
+   - .note: a short explanation in a gold-tinted box, at the top of a panel or under a list.
+   - .empty-state: the centred, muted line shown in place of an empty list. */
+
+.note {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+  margin: 0 0 var(--space-sm);
+  padding: var(--space-md);
+  border: 1px solid rgba(255, 215, 94, 0.28);
+  border-radius: 12px;
+  background: rgba(255, 215, 94, 0.08);
+  color: var(--color-text-secondary);
+  font-size: 12.5px;
+}
+p.note {
+  display: block;
+}
+
+.empty-state {
+  padding: var(--space-xl);
+  color: var(--color-text-dim);
+  text-align: center;
+}

@@ -15,7 +15,7 @@ export default function GimmickBoards() {
   return (
     <section className="card" id="gimmick-boards-panel">
       <h3 className="card-title">Plateaux à gimmick</h3>
-      <p className="v4-note">{`Ajoute une règle de terrain à vos combats (hors boss, tutoriel et défis à règles fixes). ${d}`}</p>
+      <p className="note">{`Ajoute une règle de terrain à vos combats (hors boss, tutoriel et défis à règles fixes). ${d}`}</p>
       <div className="button-row">
         {btn('off', 'Aucun')}
         {btn('rand', 'Aléatoire')}

@@ -10,7 +10,7 @@ export default function Nuzlocke() {
   return (
     <section className="card" id="nuzlocke-panel">
       <h3 className="card-title">Mode Nuzlocke</h3>
-      <p className="v4-note">
+      <p className="note">
         Pour les joueurs qui aiment le risque. Un Pokémon K.O. à la fin d’un combat est perdu pour de bon (le dernier
         compagnon est toujours épargné), et on ne peut tenter qu’une seule rencontre par région et par jour.
         Désactivable à tout moment, sans rien rendre.
@@ -37,7 +37,7 @@ export default function Nuzlocke() {
         )}
       </div>
       {s.fallen.length > 0 && (
-        <p className="v4-note" style={{ marginTop: space.sm }}>
+        <p className="note" style={{ marginTop: space.sm }}>
           <b>Tombés au combat ({s.fallen.length})</b> :{' '}
           {s.fallen
             .slice(-12)

@@ -7,7 +7,7 @@ export default function Immersion() {
   return (
     <section className="card" id="immersion-panel">
       <h3 className="card-title">Immersion</h3>
-      <p className="v4-note">
+      <p className="note">
         Bruitages par type d’attaque, cris, entrée en combat animée, particules, tremblement des gros coups, météo
         animée sur le plateau, cartes holographiques et musique plus vive quand un allié est presque K.O. Les vibrations
         et le son se règlent plus bas.

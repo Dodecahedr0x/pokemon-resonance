@@ -7,7 +7,7 @@ export default function FeatsJournal() {
   return (
     <section className="card" id="feats-journal">
       <h3 className="card-title">Journal des exploits</h3>
-      <p className="v4-note">
+      <p className="note">
         Exploits obtenus : <b>{st.n}</b> · meilleur coup : <b>{st.rec.best}</b> dégâts · victoire la plus rapide :{' '}
         <b>{st.rec.fast || '—'}</b> manche{st.rec.fast > 1 ? 's' : ''}.
       </p>
@@ -21,7 +21,7 @@ export default function FeatsJournal() {
           ))}
         </ul>
       ) : (
-        <p className="v4-note">Aucun combat enregistré pour l’instant.</p>
+        <p className="note">Aucun combat enregistré pour l’instant.</p>
       )}
     </section>
   );

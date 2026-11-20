@@ -11,7 +11,7 @@ import { ITM } from '../../engine/assets/item-icons.js';
 import { V4 } from '../../engine/ui/screen-state.js';
 import { bagN } from '../../engine/state/economy.js';
 import { dailyKey } from '../../engine/modes/daily-battle.js';
-import { PL, STATE_N, placeIcon, placeName, placeState, rewardLine } from '../../engine/world/map.js';
+import { PL, placeIcon, placeName, placeState, rewardLine } from '../../engine/world/map.js';
 import { johtoOpen, routeName } from '../../engine/world/johto.js';
 import { SAFARI_BALLS, SAFARI_STEPS, SAFARI_PRICE, safariLocked } from '../../engine/modes/safari.js';
 import { hoennOpen } from '../../engine/world/hoenn.js';
@@ -19,6 +19,7 @@ import { regionIndex } from '../../engine/world/catch-anywhere.js';
 import { familyCaptureStats } from '../../engine/progression/regional-dex.js';
 
 import Button from '../../components/Button.jsx';
+import StatePill from '../../components/StatePill.jsx';
 const Lock = ({ children }) => (
   <p className="map-info-lock">
     <svg>
@@ -50,7 +51,7 @@ export default function MapInfo() {
             <small>Route 32</small>
             <b>Hautes herbes de Johto</b>
           </span>
-          <em className="v4-pill s-lock">{STATE_N.lock}</em>
+          <StatePill state="lock" />
         </header>
         <p className="map-info-text">Vingt Pokémon de Johto vivent ici : Hoothoot, Marill, Granivol, Scarhino…</p>
         <div className="map-info-actions">
@@ -68,7 +69,7 @@ export default function MapInfo() {
             <small>Route 104</small>
             <b>Hautes herbes de Hoenn</b>
           </span>
-          <em className="v4-pill s-lock">{STATE_N.lock}</em>
+          <StatePill state="lock" />
         </header>
         <p className="map-info-text">Vingt Pokémon de Hoenn vivent ici : Arcko, Poussifeu, Gobou, Tarsal, Draby…</p>
         <div className="map-info-actions">
@@ -120,7 +121,7 @@ export default function MapInfo() {
             <small>Chapitre 9 · Plateau de la Ligue</small>
             <b>Le Conseil 4</b>
           </span>
-          <em className={`v4-pill s-${st}`}>{STATE_N[st]}</em>
+          <StatePill state={st} />
         </header>
         <p className="map-info-text">
           Quatre maîtres à battre dans l’ordre, avec les huit badges. Chacun lit le plateau à sa manière.
@@ -182,7 +183,7 @@ export default function MapInfo() {
             <Html html={placeName(p)} />
           </b>
         </span>
-        <em className={`v4-pill s-${st}`}>{STATE_N[st]}</em>
+        <StatePill state={st} />
       </header>
       {'\n  '}
       {L && (
@@ -238,7 +239,7 @@ function SafariInfo({ p }) {
           <small>Kanto · détente</small>
           <b>Parc Safari</b>
         </span>
-        <em className={`v4-pill s-${lk ? 'lock' : 'open'}`}>{STATE_N[lk ? 'lock' : 'open']}</em>
+        <StatePill state={lk ? 'lock' : 'open'} />
       </header>
       <p className="map-info-text">
         Ici, pas de combat : on avance dans les herbes, on lance des Safari Balls, des appâts (il reste plus longtemps)

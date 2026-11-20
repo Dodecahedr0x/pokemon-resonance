@@ -1,7 +1,7 @@
 /* ================= Notes written as a sentence (all sizes) =================
-   .v4-note is a flex row meant for icon + text; in a <p> it split the bold words
+   .note is a flex row meant for icon + text; in a <p> it split the bold words
    of a sentence onto their own line ("0 / 6" in Secret places). */
-p.v4-note {
+p.note {
   display: block;
 }
 

@@ -18,7 +18,7 @@ export default function DesignWorkshop() {
   return (
     <section className="card" id="design-action">
       <h3 className="card-title">Atelier design</h3>
-      <p className="v4-note">
+      <p className="note">
         Collez ici un bloc de CSS (écrit par exemple avec ChatGPT) : il s’applique tout de suite sur cet appareil. «
         Brief pour ChatGPT » donne à votre IA tout ce qu’il lui faut sans lui faire lire le fichier du jeu.
       </p>

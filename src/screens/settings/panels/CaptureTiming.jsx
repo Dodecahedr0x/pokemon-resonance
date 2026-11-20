@@ -7,7 +7,7 @@ export default function CaptureTiming() {
   return (
     <section className="card" id="capture-timing-panel">
       <h3 className="card-title">Capture avec timing</h3>
-      <p className="v4-note">
+      <p className="note">
         Quand les conditions de capture sont réunies, un anneau se resserre : touchez au bon moment. Parfait : la Ball
         vous est rendue. Bien : capture normale. Raté : la Ball rebondit et est perdue, mais l’allié n’a pas agi et vous
         gardez vos Voix. Un bouton permet toujours de passer le timing.

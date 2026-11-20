@@ -77,7 +77,7 @@ export function DexList() {
           );
         })
       ) : (
-        <p className="v4-empty">Aucun Pokémon ne correspond.</p>
+        <p className="empty-state">Aucun Pokémon ne correspond.</p>
       )}
     </div>
   );

@@ -186,13 +186,13 @@ export function SeasonEvent({ d }) {
             <p>{x.txt}</p>
           </div>
           <div>
-            <button type="button" className="v4-btn" data-season-event={i} disabled={!(x.ok && !x.got)}>
+            <button type="button" className="pill-button" data-season-event={i} disabled={!(x.ok && !x.got)}>
               {x.got ? 'Reçu' : x.ok ? 'Récupérer' : 'Verrouillé'}
             </button>
           </div>
         </article>
       ))}
-      <p className="v4-note">Saisons complétées : {d.won}. L’événement change chaque mois.</p>
+      <p className="note">Saisons complétées : {d.won}. L’événement change chaque mois.</p>
     </Window>
   );
 }

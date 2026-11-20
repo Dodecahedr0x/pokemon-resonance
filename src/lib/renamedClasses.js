@@ -187,6 +187,11 @@ export const RENAMED_CLASSES = {
   'gd-tabs': 'guide-tabs',
   'gd-t': 'guide-tab',
   'camp-tab': 'camp-tabs',
+  // shared pill, note, empty state and gold pill button
+  'v4-pill': 'state-pill',
+  'v4-note': 'note',
+  'v4-empty': 'empty-state',
+  'v4-btn': 'pill-button',
 };
 
 const OLD_CLASS = new RegExp(

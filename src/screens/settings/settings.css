@@ -1,4 +1,4 @@
-/* Settings page (#params). Shared pieces it uses (.card, .card-header, .v4-ps, .v4-note, .button, .button-row)
+/* Settings page (#params). Shared pieces it uses (.card, .card-header, .v4-ps, .note, .button, .button-row)
    are still styled in legacy and move to src/styles/components/ later. */
 
 /* ---------- Page grid: two columns of panels, one below 1000px ---------- */

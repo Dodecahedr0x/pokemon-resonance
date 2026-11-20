@@ -14,7 +14,7 @@ export default function BoardThemes() {
   return (
     <section className="card" id="craft-bench">
       <h3 className="card-title">Thèmes de plateau</h3>
-      <p className="v4-note">Change seulement les couleurs du plateau. Éclats de Résonance : {PROFILE.gems}.</p>
+      <p className="note">Change seulement les couleurs du plateau. Éclats de Résonance : {PROFILE.gems}.</p>
       <div className="board-theme-grid">
         {Object.keys(BOARD_THEMES).map(k => {
           const th = BOARD_THEMES[k],
@@ -38,7 +38,7 @@ export default function BoardThemes() {
         })}
       </div>
       <h3 className="card-title settings-subhead">Votre rival</h3>
-      <p className="v4-note">{`Kael : ${rv.w} défaite${rv.w > 1 ? 's' : ''} contre vous, ${rv.l} victoire${rv.l > 1 ? 's' : ''}.${rival}`}</p>
+      <p className="note">{`Kael : ${rv.w} défaite${rv.w > 1 ? 's' : ''} contre vous, ${rv.l} victoire${rv.l > 1 ? 's' : ''}.${rival}`}</p>
     </section>
   );
 }

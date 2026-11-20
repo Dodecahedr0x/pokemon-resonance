@@ -19,12 +19,12 @@ export default function Offline() {
   return (
     <section className="card" id="offline-panel">
       <h3 className="card-title">Mode hors ligne</h3>
-      <p className="v4-note">
+      <p className="note">
         Le jeu et votre progression sont déjà sur votre appareil. Ce mode enregistre aussi la musique pour qu’elle joue
         sans connexion. Pour rouvrir le jeu sans réseau, enregistrez la page ou ajoutez-la à l’écran d’accueil depuis le
         menu du navigateur.
       </p>
-      <p className="v4-note">
+      <p className="note">
         <b>{navigator.onLine === false ? 'Hors ligne' : 'En ligne'}</b>
         {` · ${state}${ok ? '' : ' Stockage indisponible sur cet appareil.'}`}
       </p>

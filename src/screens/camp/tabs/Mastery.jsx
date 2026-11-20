@@ -65,7 +65,7 @@ export default function Mastery() {
         {L.length ? (
           L.map(({ b, x }) => <Family key={b} b={b} x={x} />)
         ) : (
-          <p className="v4-empty">Votre Box est vide.</p>
+          <p className="empty-state">Votre Box est vide.</p>
         )}
       </div>
     </section>

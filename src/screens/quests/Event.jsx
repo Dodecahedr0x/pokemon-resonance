@@ -109,13 +109,13 @@ export default function Event() {
               </Button>
             )}
           </article>
-          <p className="v4-note">
+          <p className="note">
             Chaque jour, un terrain déjà ouvert devient le défi du jour. La première victoire double la prime et
             rapporte 3 Éclats.
           </p>
         </>
       ) : (
-        <p className="v4-empty">Aucun défi disponible.</p>
+        <p className="empty-state">Aucun défi disponible.</p>
       )}
     </>
   );

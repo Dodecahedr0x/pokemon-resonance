@@ -55,7 +55,7 @@ function Card({ destinationId: dest, available: available }) {
                 );
               })
             ) : (
-              <p className="v4-empty">Aucun Pokémon disponible : ceux de l’équipe restent au camp.</p>
+              <p className="empty-state">Aucun Pokémon disponible : ceux de l’équipe restent au camp.</p>
             )}
           </div>
           <Button size="small" variant="ghost" data-exp-d="">

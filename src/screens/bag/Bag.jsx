@@ -35,7 +35,7 @@ function List({ v, keys }) {
     return L.length ? (
       L.map(k => <Article key={k} k={k} mode="sac" />)
     ) : (
-      <p className="v4-empty">Rien ici pour l’instant. Faites un tour à la Boutique.</p>
+      <p className="empty-state">Rien ici pour l’instant. Faites un tour à la Boutique.</p>
     );
   }
   return keys.map(k => <Article key={k} k={k} mode="boutique" />);
@@ -45,7 +45,7 @@ function List({ v, keys }) {
 function TmVendor() {
   const J = dailyTm();
   return (
-    <p id="tm-vendor" className="v4-note">
+    <p id="tm-vendor" className="note">
       <b>Vendeur de CT de {J.reg}</b> : −20 % aujourd’hui sur {J.o.map(k => SHOP[k].n).join(' et ')}.
     </p>
   );

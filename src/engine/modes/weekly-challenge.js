@@ -212,7 +212,7 @@ export function init() {
 
   HOOKS.battleResult.push(r =>
     r.hebdo429
-      ? `<div class="res-l"><h4>Défi de la semaine</h4><div class="rl"><span>Score ${fmt(r.hebdo429.sc)}${r.hebdo429.record ? ' · nouveau record !' : ` · record ${fmt(r.hebdo429.best)}`}${r.hebdo429.prime ? ' · première victoire de la semaine : +2 500 ₽ · +25 Éclats' : ''}</span><b>${r.hebdo429.record ? '★' : ''}</b></div><p class="v4-note">Partagez votre carte de dresseur (Amis) : vos amis verront ce score.</p></div>`
+      ? `<div class="res-l"><h4>Défi de la semaine</h4><div class="rl"><span>Score ${fmt(r.hebdo429.sc)}${r.hebdo429.record ? ' · nouveau record !' : ` · record ${fmt(r.hebdo429.best)}`}${r.hebdo429.prime ? ' · première victoire de la semaine : +2 500 ₽ · +25 Éclats' : ''}</span><b>${r.hebdo429.record ? '★' : ''}</b></div><p class="note">Partagez votre carte de dresseur (Amis) : vos amis verront ce score.</p></div>`
       : ''
   );
 

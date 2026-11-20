@@ -1,6 +1,7 @@
 import { Fragment } from 'react';
 import { Html } from '../../lib/html.jsx';
 import { V4 } from '../../engine/ui/screen-state.js';
+import StatePill from '../../components/StatePill.jsx';
 import { STATE_N, placeIcon, placeName, placeState, placeSub } from '../../engine/world/map.js';
 import { placesR } from '../../engine/world/johto.js';
 
@@ -42,14 +43,14 @@ export default function MapList() {
                     <Html html={placeSub(p)} />
                   </em>
                 </span>
-                <em className={`v4-pill s-${st}`}>
+                <StatePill state={st}>
                   {st === 'lock' && (
                     <svg>
                       <use href="#i-lock" />
                     </svg>
                   )}
                   {STATE_N[st]}
-                </em>
+                </StatePill>
               </button>
             );
           })}
