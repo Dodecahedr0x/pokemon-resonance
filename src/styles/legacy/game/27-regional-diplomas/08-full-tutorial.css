@@ -12,33 +12,6 @@
   }
 }
 /* Awakening choice on phone: more compact cards (5 paths for Eevee) */
-@media (max-width: 700px) {
-  html body #evoPick .ep-card {
-    padding: var(--space-lg) var(--space-md) !important;
-    gap: var(--space-sm) !important;
-  }
-  html body #evoPick .ep-opts {
-    gap: var(--space-sm) !important;
-  }
-  html body #evoPick .eo {
-    padding: var(--space-sm) var(--space-md) !important;
-    gap: var(--space-xs) !important;
-  }
-  html body #evoPick .eo-art {
-    padding: 0 !important;
-  }
-  html body #evoPick .eo-art .medal {
-    width: 64px !important;
-    height: 64px !important;
-  }
-  html body #evoPick .eo ul {
-    font-size: 12px !important;
-    gap: var(--space-3xs) !important;
-  }
-  html body #evoPick .eo-go {
-    padding: var(--space-sm) !important;
-  }
-}
 
 /* <style id="resonance-battle-sheet"> */
 /* v4.37: chosen battle sheet, never wider than the screen (doctrines, team, opponents visible) */

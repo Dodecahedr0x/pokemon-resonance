@@ -28,32 +28,6 @@
   letter-spacing: 0.06em;
 }
 /* evolution choice, cutscene, result */
-.evopick {
-  background: radial-gradient(60% 50% at 50% 40%, rgba(212, 175, 106, 0.1), transparent 70%), rgba(4, 4, 5, 0.86);
-}
-.eo {
-  border-radius: 10px;
-  background:
-    radial-gradient(100% 70% at 50% 0%, color-mix(in srgb, var(--c) 24%, transparent), transparent 70%) padding-box,
-    var(--veins) padding-box,
-    var(--slab) padding-box,
-    var(--steel) border-box;
-}
-.eo:hover,
-.eo:focus-visible {
-  background:
-    radial-gradient(100% 70% at 50% 0%, color-mix(in srgb, var(--c) 30%, transparent), transparent 70%) padding-box,
-    var(--veins) padding-box,
-    var(--slab) padding-box,
-    var(--brass) border-box;
-}
-.eo-go {
-  border-radius: 2px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  font-size: 12px;
-  background: var(--brush), linear-gradient(180deg, #f6e6bc, #b38a43 56%, #d2ae69);
-}
 .efx {
   background: radial-gradient(circle at 50% 46%, color-mix(in srgb, var(--c0) 24%, #050506), #020203 70%);
 }

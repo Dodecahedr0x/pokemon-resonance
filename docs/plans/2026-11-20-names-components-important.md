@@ -278,4 +278,10 @@ Each step is one commit (or a few), on its own, playable at every point.
   `--confetti-angle`, `--confetti-distance`, `--confetti-delay`. New token `--color-surface-raised` (was `--s3`).
   Checked with snapshots of seven sheets (win with rank, champion, new and old gym badge, loss, flight, Nuzlocke) at
   both widths: identical apart from the renamed animations.
+- Evolution choice: done. `src/screens/combat/battle/evolution-choice.css`: `.evopick` / `.ep-*` became
+  `.evolution-choice` (`-card`, `-from`, `-arrow`, `-options`, `-actions`), `.eo*` `.evolution-option` (`-art`, `-body`,
+  `-name`, `-go`), its list items `.is-gain`, `.is-loss`, `.is-arrival`, and the inline `--c` `--evolution-color`.
+  `#evoPick` rules hang on `.evolution-choice`. The generic `button:not(…)` transition used to beat the option's own,
+  so the option now states it. New token `--border-steel`. Checked with snapshots of one path, Eevee's paths and a
+  branch at both widths.
   Lesson for the next slices: after moving a shared class, look for legacy rules that still style it in context.

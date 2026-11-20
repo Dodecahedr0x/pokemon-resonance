@@ -87,6 +87,7 @@
 @import '../screens/combat/battle/result.css' layer(screens);
 @import '../screens/combat/battle/result-lists.css' layer(screens);
 @import '../screens/combat/battle/result-effects.css' layer(screens);
+@import '../screens/combat/battle/evolution-choice.css' layer(screens);
 @import '../screens/home/home-hero.css' layer(screens);
 @import '../screens/home/home-hero-backdrop.css' layer(screens);
 @import '../screens/home/home.css' layer(screens);

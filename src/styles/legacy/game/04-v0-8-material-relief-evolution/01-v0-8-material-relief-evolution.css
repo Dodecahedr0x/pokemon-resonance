@@ -34,8 +34,7 @@ body {
 .rule,
 .scn,
 .mvc,
-.ptm,
-.ep-card {
+.ptm {
   border: 1px solid transparent;
   background:
     var(--hatch) padding-box,

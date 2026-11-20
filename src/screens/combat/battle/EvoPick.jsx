@@ -15,7 +15,7 @@ export default function EvoPick() {
   const v = useBattleVersion('evo');
   const u = evoState.u;
   return (
-    <div className="evopick" id="evoPick" hidden>
+    <div className="evolution-choice" id="evoPick" hidden>
       {v && u && B ? <Card u={u} /> : null}
     </div>
   );
@@ -37,12 +37,12 @@ function Path({ u, A, id }) {
             : 'Combattant'
           : '';
   return (
-    <button type="button" className="eo" data-pick={id} style={{ '--c': tc(E.t[0]) }}>
-      <span className="eo-art">
+    <button type="button" className="evolution-option" data-pick={id} style={{ '--evolution-color': tc(E.t[0]) }}>
+      <span className="evolution-option-art">
         <Html html={medal(E.t, 'is-huge')} />
       </span>
-      <span className="eo-b">
-        <span className="eo-n">
+      <span className="evolution-option-body">
+        <span className="evolution-option-name">
           <b>{E.n}</b>
           {why ? (
             <em>
@@ -58,13 +58,13 @@ function Path({ u, A, id }) {
         {'\n   '}
         <ul>
           {payout.length ? (
-            <li className="gain">
+            <li className="is-gain">
               <span>Gagne</span>
               {payout.map(x => MV[x].n).join(', ')}
             </li>
           ) : null}
           {lose.length ? (
-            <li className="lose">
+            <li className="is-loss">
               <span>Perd</span>
               {lose.map(x => MV[x].n).join(', ')} <i>pour toujours</i>
             </li>
@@ -85,14 +85,14 @@ function Path({ u, A, id }) {
             {u.mhp} → {nm}
           </li>
           {ARR[id] ? (
-            <li className="arr">
+            <li className="is-arrival">
               <span>Arrivée</span>
               <Html html={ARR[id][1]} />
             </li>
           ) : null}
         </ul>
       </span>
-      <span className="eo-go">Éveiller</span>
+      <span className="evolution-option-go">Éveiller</span>
     </button>
   );
 }
@@ -104,7 +104,7 @@ function Card({ u }) {
   }
   const A = BY[u.id];
   return (
-    <div className="ep-card" role="dialog" aria-modal="true" aria-labelledby="epT">
+    <div className="evolution-choice-card" role="dialog" aria-modal="true" aria-labelledby="epT">
       <p className="kicker">Éveil · choix irréversible</p>
       <h2 className="section-title" id="epT">
         {u.n} va évoluer
@@ -114,17 +114,17 @@ function Card({ u }) {
         perdues ne reviendront plus de ce combat. L’Éveil coûte 1 Voix et l’action de {u.n}.
       </p>
       {'\n  '}
-      <div className="ep-from">
+      <div className="evolution-choice-from">
         <Html html={medal(u.t, 'is-small')} />
         <span>{u.n}</span>
-        <span className="ep-ar">→</span>
+        <span className="evolution-choice-arrow">→</span>
       </div>
-      <div className="ep-opts">
+      <div className="evolution-choice-options">
         {o.map(id => (
           <Path key={id} u={u} A={A} id={id} />
         ))}
       </div>
-      <div className="ep-a">
+      <div className="evolution-choice-actions">
         <Button data-pick="">Pas maintenant</Button>
       </div>
     </div>

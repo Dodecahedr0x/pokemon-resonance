@@ -649,6 +649,18 @@ export const RENAMED_CLASSES = {
   'rk-B': 'is-rank-b',
   'nuzlocke-run-d': 'is-nuzlocke',
   'v4-gain': 'is-gains',
+  // Evolution choice slice (EvoPick.jsx)
+  evopick: 'evolution-choice',
+  'ep-card': 'evolution-choice-card',
+  'ep-from': 'evolution-choice-from',
+  'ep-ar': 'evolution-choice-arrow',
+  'ep-opts': 'evolution-choice-options',
+  'ep-a': 'evolution-choice-actions',
+  eo: 'evolution-option',
+  'eo-art': 'evolution-option-art',
+  'eo-b': 'evolution-option-body',
+  'eo-n': 'evolution-option-name',
+  'eo-go': 'evolution-option-go',
 };
 
 const OLD_CLASS = new RegExp(

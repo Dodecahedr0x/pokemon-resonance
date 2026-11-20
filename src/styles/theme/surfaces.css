@@ -1,7 +1,7 @@
 /* Surface tokens: the backgrounds, borders and shadows several components share, so a surface is defined once.
    - card: the dark blue page panel (.card, the battle choice panels, the item rows).
    - slab: the dark engraved tiles framed by a gradient border (save slots, league cases); the border is
-     --border-edge (faint) or --border-brass (bright), drawn as a border-box background under the slab.
+     --border-edge (faint), --border-steel (cool) or --border-brass (bright), drawn as a border-box background under the slab.
    - plate: the smaller raised tiles inside a panel (Voice actions, energy gauge, team sheet sections, Pokédex
      card sections, team plates). */
 :root {
@@ -15,6 +15,7 @@
   --surface-slab: var(--slab);
   --border-edge: var(--edge);
   --border-brass: var(--brass);
+  --border-steel: var(--steel);
   --shadow-engrave: var(--engrave);
   --radius-card: var(--r);
   --radius-card-large: var(--rl);

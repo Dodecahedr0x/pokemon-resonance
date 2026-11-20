@@ -93,7 +93,6 @@ body {
 .st-name,
 .scn b,
 .mvc b,
-.eo-n b,
 .al b,
 .cs .who,
 .log b,
@@ -171,7 +170,6 @@ body {
 .scn,
 .mvc,
 .ptm,
-.ep-card,
 .st-evo,
 .st-line,
 .qc,
@@ -194,8 +192,7 @@ body {
 .rule,
 .scn,
 .qc,
-.duo,
-.ep-card {
+.duo {
   border-radius: var(--rl);
 }
 .mvc,

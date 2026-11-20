@@ -42,48 +42,7 @@ html body #bBoard .tbn span {
 }
 
 /* ================= Awakening, capture, end of battle ================= */
-html body #evoPick .ep-card {
-  width: min(640px, 100%);
-  padding: var(--space-xl) !important;
-  gap: var(--space-md) !important;
-  border-radius: 20px !important;
-  border: 1px solid transparent !important;
-  background:
-    radial-gradient(120% 60% at 50% 0%, rgba(99, 144, 240, 0.16), transparent 60%) padding-box,
-    linear-gradient(180deg, #171b24, #0f1219) padding-box,
-    linear-gradient(135deg, #f7e1ac 0%, #c9a15a 30%, #f3dba6 50%, #9c7737 78%, #e3c07a 100%) border-box !important;
-  box-shadow: 0 40px 80px -30px #000 !important;
-}
-html body #evoPick .ep-card .section-title {
-  font-size: 22px;
-  letter-spacing: 0.03em;
-}
 
 @media (max-width: 700px) {
   /* Awakening: sheet rising from the bottom, buttons under the thumb */
-  html body #evoPick {
-    place-items: end center;
-    padding: 0 !important;
-  }
-  html body #evoPick .ep-card {
-    width: 100%;
-    max-height: 88dvh;
-    border-radius: 22px 22px 0 0 !important;
-    padding: var(--space-md) var(--space-md) calc(var(--space-lg) + env(safe-area-inset-bottom, 0px)) !important;
-    animation: epUp 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
-  }
-  html body #evoPick .ep-card .section-title {
-    font-size: 18px;
-  }
-}
-@keyframes epUp {
-  from {
-    transform: translateY(40px);
-    opacity: 0;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  html body #evoPick .ep-card {
-    animation: none;
-  }
 }

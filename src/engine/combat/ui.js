@@ -567,7 +567,7 @@ function openEvoPick(u) {
   evoState.u = u;
   refreshBattle('evo');
   $('#evoPick').hidden = false;
-  const f = $('#evoPick .eo');
+  const f = $('#evoPick .evolution-option');
   if (f) {
     f.focus();
   }

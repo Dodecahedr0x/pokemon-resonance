@@ -11,9 +11,6 @@
   -webkit-backdrop-filter: none !important;
   backdrop-filter: none !important;
 }
-.evopick {
-  background: rgba(4, 4, 5, 0.9);
-}
 
 /* no permanent animation that forces a whole SVG to repaint */
 .cr-spin,
