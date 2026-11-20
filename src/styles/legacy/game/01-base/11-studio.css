@@ -8,10 +8,4 @@
     transition: none !important;
     scroll-behavior: auto !important;
   }
-  .chainseg {
-    stroke-dashoffset: 0 !important;
-  }
-  .chainglow {
-    opacity: 0.15 !important;
-  }
 }

@@ -115,14 +115,6 @@ body {
   text-shadow: none;
 }
 
-.f-dmg,
-.f-heal,
-.fl {
-  font-family: var(--f-n);
-  font-stretch: 72%;
-  font-variant-numeric: tabular-nums lining-nums;
-  letter-spacing: -0.01em;
-}
 .caption,
 .bdg span {
   font-family: var(--f-m);

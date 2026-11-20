@@ -42,14 +42,6 @@ html body #bSvg .trap.web circle {
   stroke-width: 1;
 }
 /* --- charged attacks: targeted cells, in dotted gold --- */
-.bdg-s.status-charging rect,
-.bdg-s.status-flying rect {
-  stroke: #ffd75e;
-}
-.bdg-s.status-charging text,
-.bdg-s.status-flying text {
-  fill: #ffd75e;
-}
 /* --- wind --- */
 html body .chip-vent {
   white-space: nowrap;

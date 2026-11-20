@@ -111,6 +111,7 @@
 @import '../screens/combat/board/token-halo.css' layer(screens);
 @import '../screens/combat/board/token-status.css' layer(screens);
 @import '../screens/combat/board/token-tilted.css' layer(screens);
+@import '../screens/combat/board/board-effects.css' layer(screens);
 @import '../screens/home/home-hero.css' layer(screens);
 @import '../screens/home/home-hero-backdrop.css' layer(screens);
 @import '../screens/home/home.css' layer(screens);
@@ -148,3 +149,4 @@
 @import '../screens/combat/board/board-decor-motion.css' layer(motion);
 @import '../screens/combat/board/evolution-scene-motion.css' layer(motion);
 @import '../screens/combat/board/board-host-motion.css' layer(motion);
+@import '../screens/combat/board/board-effects-motion.css' layer(motion);

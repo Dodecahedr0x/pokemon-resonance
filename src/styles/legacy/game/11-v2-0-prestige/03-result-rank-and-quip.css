@@ -6,8 +6,6 @@
 /* --- keyboard shortcuts --- */
 /* --- reduced motion --- */
 @media (prefers-reduced-motion: reduce) {
-  .fl.f-se,
-  .fl.f-ko,
   .hp .lag {
     animation-duration: 1ms !important;
     animation-delay: 0s !important;

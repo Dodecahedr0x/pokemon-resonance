@@ -198,9 +198,9 @@ export function impactWords(ev) {
     if (e.e === 'dmg') {
       last = e.u;
     } else if (e.e === 'msg' && /super efficace/.test(e.s) && last) {
-      later.push(['Super efficace', 'f-se', last]);
+      later.push(['Super efficace', 'is-super-effective', last]);
     } else if (e.e === 'ko') {
-      later.push(['K.O.', 'f-ko', e.u]);
+      later.push(['K.O.', 'is-knockout', e.u]);
     }
   });
   const S0 = B;

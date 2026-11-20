@@ -810,6 +810,21 @@ export const RENAMED_CLASSES = {
   'qa-no': 'is-cancel',
   'qa-evo': 'is-awaken',
   'qa-cap': 'is-capture',
+  fl: 'float-text',
+  'f-dmg': 'float-text.is-damage',
+  'f-heal': 'float-text.is-heal',
+  'f-rx': 'float-text.is-reaction',
+  'f-ready': 'float-text.is-ready',
+  'f-note': 'float-text.is-note',
+  'f-reso': 'float-text.is-resonance',
+  'f-se': 'float-text.is-super-effective',
+  'f-ko': 'float-text.is-knockout',
+  chainseg: 'chain-segment',
+  chainglow: 'chain-glow',
+  beam: 'attack-beam',
+  burst: 'unit-burst',
+  arrfx: 'arrival-effect',
+  'bdg-s': 'token-status-tag',
 };
 
 const OLD_CLASS = new RegExp(

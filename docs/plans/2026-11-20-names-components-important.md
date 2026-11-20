@@ -353,6 +353,13 @@ Each step is one commit (or a few), on its own, playable at every point.
   `.is-system`, `.is-arena`, `.is-evolution` (mapped at render, the stored log keeps `sys` / `arn` / `evo`). The phone
   footer rules that needed `!important` now win with `:where()` contexts; the legacy `#combat .button-primary` shadow
   skips `.end-turn-button`, which used to beat it with its id. Snapshots identical at both widths.
+- Board effects: done. `src/screens/combat/board/board-effects.css`, `board-effects-motion.css`. `.float-text` with
+  `.is-damage`, `.is-heal`, `.is-reaction`, `.is-ready`, `.is-note`, `.is-resonance`, `.is-super-effective`,
+  `.is-knockout`; `.chain-segment` / `.chain-glow` (`.is-electric`, `.is-fire`, `.is-ice`, mapped from the event's
+  `el` / `fire` / `ice`), `.attack-beam`, `.unit-burst`, `.arrival-effect`, and the token status tag
+  `.token-status-tag` (`.is-shown`, `.token-status-tag-inner`; token fields `statusClass` / `statusText`). Keyframes
+  `float-text-rise`, `float-text-stamp`, `chain-draw`, `chain-glow-fade`, `unit-burst-grow`, `arrival-effect-pulse`.
+  Snapshots identical at both widths apart from keyframe names.
   A third pass that ignores one- to three-letter prefixes (a template such as `s${…}` no longer keeps every class
   starting with « s » alive) removed 142 more parts: the old scenario cards (`.scn`), the splash screen (`.sp-*`,
   `.splash`), the old Pokédex sheet (`.st-*`), `.seg`, `.frise`… and one more file.

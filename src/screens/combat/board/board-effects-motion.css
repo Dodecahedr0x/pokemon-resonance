@@ -1,0 +1,18 @@
+/* Board › short-lived effects without animation (reduced motion). */
+
+@media (prefers-reduced-motion: reduce) {
+  .chain-segment {
+    stroke-dashoffset: 0;
+  }
+  .chain-glow {
+    opacity: 0.15;
+  }
+  .float-text.is-super-effective {
+    animation-duration: 1ms;
+    animation-delay: 0s;
+  }
+  .float-text.is-knockout {
+    animation-duration: 1ms;
+    animation-delay: 0s;
+  }
+}

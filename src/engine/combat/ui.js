@@ -405,8 +405,8 @@ function mkTok(u) {
     tr: null, // transform (sliding: CSS transition)
     pc: [null, null, null], // diamonds: class of each diamond (null: no attribute)
     nc: [null, null, null], // Resonance notes (v4.14)
-    bdc: 'bdg-s',
-    bt: '',
+    statusClass: 'token-status-tag',
+    statusText: '',
     n: '',
   }); // animated group (v4.29)
 }
@@ -491,8 +491,8 @@ function updTokCore(u) {
                       : u.cogno > 0
                         ? 'x2'
                         : null);
-  T.bdc = 'bdg-s' + (b && !u.ko ? ' on status-' + (STC[b] || 'other') : '');
-  T.bt = b || '';
+  T.statusClass = 'token-status-tag' + (b && !u.ko ? ' is-shown status-' + (STC[b] || 'other') : '');
+  T.statusText = b || '';
   unitsDirty();
 }
 
@@ -631,12 +631,16 @@ function renderAllCore() {
 }
 
 /* effects */
+// floating text over a cell; cls is its kind (is-damage, is-heal, is-reaction, is-ready…)
 export function floatAt(k, txt, cls) {
   const [x, y] = HC(k);
-  const t = el('text', { class: 'fl ' + cls, x: x.toFixed(1), y: (y - 16).toFixed(1) }, L.fl);
+  const t = el('text', { class: 'float-text ' + cls, x: x.toFixed(1), y: (y - 16).toFixed(1) }, L.fl);
   t.textContent = txt;
   setTimeout(() => t.remove(), 1500);
 }
+
+// chain reaction kind (event .c) → class
+const CHAIN_CLASS = { el: 'is-electric', fire: 'is-fire', ice: 'is-ice' };
 
 function drawChain(e) {
   const g = el('g', {}, L.fx);
@@ -645,8 +649,8 @@ function drawChain(e) {
       C = HC(b),
       pts = zig(A[0], A[1], C[0], C[1], 4, 3.5),
       dl = 0.05 + d * 0.12 + 's';
-    el('polyline', { class: 'chainglow ' + e.c, points: pts, style: `--d:${dl}` }, g);
-    el('polyline', { class: 'chainseg ' + e.c, points: pts, style: `--d:${dl}` }, g);
+    el('polyline', { class: 'chain-glow ' + CHAIN_CLASS[e.c], points: pts, style: `--d:${dl}` }, g);
+    el('polyline', { class: 'chain-segment ' + CHAIN_CLASS[e.c], points: pts, style: `--d:${dl}` }, g);
   });
   setTimeout(() => g.remove(), 1800);
 }
@@ -659,7 +663,7 @@ function beam(a, b, typ) {
     C = HC(b);
   const l = el(
     'polyline',
-    { class: 'beam', points: zig(A[0], A[1], C[0], C[1], 5, 2.5), style: `stroke:${tc(typ)}` },
+    { class: 'attack-beam', points: zig(A[0], A[1], C[0], C[1], 5, 2.5), style: `stroke:${tc(typ)}` },
     L.fx
   );
   setTimeout(() => l.remove(), 700);
@@ -671,7 +675,7 @@ function burst(uid) {
     return;
   }
   const [x, y] = HC(uk(u));
-  const c = el('circle', { class: 'burst', cx: x, cy: y, r: 10 }, L.fx);
+  const c = el('circle', { class: 'unit-burst', cx: x, cy: y, r: 10 }, L.fx);
   setTimeout(() => c.remove(), 1100);
 }
 
@@ -681,7 +685,7 @@ function arrFx(uid) {
     return;
   }
   const [x, y] = HC(uk(u)),
-    g = el('g', { class: 'arrfx', style: `--c:${tc(u.t[0])}` }, L.fx);
+    g = el('g', { class: 'arrival-effect', style: `--c:${tc(u.t[0])}` }, L.fx);
   [0, 1].forEach(i =>
     el(
       'polygon',
@@ -713,16 +717,16 @@ export function playLog(ev) {
     } else if (e.e === 'dmg') {
       const u = byUid(B, e.u);
       if (u) {
-        floatAt(uk(u), '−' + e.v, 'f-dmg');
+        floatAt(uk(u), '−' + e.v, 'is-damage');
         hit(e.u);
       }
     } else if (e.e === 'heal') {
       const u = byUid(B, e.u);
       if (u) {
-        floatAt(uk(u), '+' + e.v, 'f-heal');
+        floatAt(uk(u), '+' + e.v, 'is-heal');
       }
     } else if (e.e === 'rx') {
-      floatAt(e.k, RX[e.rx].n, 'f-rx');
+      floatAt(e.k, RX[e.rx].n, 'is-reaction');
     } else if (e.e === 'chain') {
       drawChain(e);
     } else if (e.e === 'evo') {
@@ -735,7 +739,7 @@ export function playLog(ev) {
     } else if (e.e === 'ready') {
       const u = byUid(B, e.u);
       if (u && !u.ko) {
-        setTimeout(() => floatAt(uk(u), 'Éveil prêt', 'f-ready'), 380);
+        setTimeout(() => floatAt(uk(u), 'Éveil prêt', 'is-ready'), 380);
       }
     } else if (e.e === 'use') {
       const u = byUid(B, e.u);
@@ -745,7 +749,7 @@ export function playLog(ev) {
     } else if (e.e === 'catch') {
       const u = byUid(B, e.u);
       if (u) {
-        floatAt(uk(u), 'Capturé !', 'f-ready');
+        floatAt(uk(u), 'Capturé !', 'is-ready');
         burst(e.u);
       }
     } else if (e.e === 'duo') {
@@ -753,12 +757,12 @@ export function playLog(ev) {
     } else if (e.e === 'note') {
       const u = byUid(B, e.u); // Resonance notes (v4.14)
       if (u && !u.ko) {
-        floatAt(uk(u), '♪'.repeat(e.n), 'f-note');
+        floatAt(uk(u), '♪'.repeat(e.n), 'is-note');
       }
     } else if (e.e === 'reso') {
       const u = byUid(B, e.u);
       if (u) {
-        setTimeout(() => floatAt(uk(u), 'Résonance !', 'f-reso'), 260);
+        setTimeout(() => floatAt(uk(u), 'Résonance !', 'is-resonance'), 260);
         burst(e.u);
       }
     }

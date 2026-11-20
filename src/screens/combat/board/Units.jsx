@@ -131,10 +131,10 @@ function Token({ T }) {
           </g>
         )}
         {(T.imLoose || !T.artGrouped) && art}
-        <g className={T.bdc} transform="translate(0,-22) rotate(-7)">
+        <g className={T.statusClass} transform="translate(0,-22) rotate(-7)">
           <rect x="-12" y="-4.8" width="24" height="9" rx="1" />
-          <rect className="in" x="-10.6" y="-3.4" width="21.2" height="6.2" rx="0.5" />
-          <text y="1.7">{T.bt}</text>
+          <rect className="token-status-tag-inner" x="-10.6" y="-3.4" width="21.2" height="6.2" rx="0.5" />
+          <text y="1.7">{T.statusText}</text>
         </g>
         {!T.nmO && (
           <text className="token-name" y="27">

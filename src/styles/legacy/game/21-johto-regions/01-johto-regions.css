@@ -65,22 +65,3 @@
   letter-spacing: -0.06em;
   text-shadow: 0 0 6px rgba(190, 140, 255, 0.7);
 }
-.fl.f-note {
-  fill: #d6b8ff;
-  font-size: 12px;
-  font-weight: 800;
-  paint-order: stroke;
-  stroke: #0b0d12;
-  stroke-width: 3px;
-}
-.fl.f-reso {
-  fill: #f4e6ff;
-  font-family: var(--f-d);
-  font-weight: 800;
-  font-size: 11px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  paint-order: stroke;
-  stroke: #2a1640;
-  stroke-width: 3px;
-}

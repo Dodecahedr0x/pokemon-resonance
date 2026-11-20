@@ -26,21 +26,3 @@
   }
 }
 /* tokens */
-.f-dmg {
-  fill: #ff7a6e;
-  font-weight: 700;
-}
-.f-heal {
-  fill: #7fd8ff;
-  font-weight: 700;
-}
-.f-rx {
-  font-family: var(--f-d);
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  fill: #f2dda8;
-}
-.f-ready {
-  font-family: var(--f-d);
-  letter-spacing: 0.1em;
-}

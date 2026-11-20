@@ -20,108 +20,11 @@
     stroke: #fff;
   }
 }
-.bdg-s {
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-.bdg-s.on {
-  opacity: 1;
-}
-.bdg-s rect {
-  fill: #f7d02c;
-}
-.bdg-s text {
-  font-family: var(--f-d);
-  font-stretch: 112%;
-  font-weight: 800;
-  font-size: 5.6px;
-  fill: #14120a;
-  text-anchor: middle;
-  letter-spacing: 0.04em;
-}
-.fl {
-  font-family: var(--f-d);
-  font-stretch: 118%;
-  font-weight: 850;
-  text-anchor: middle;
-  paint-order: stroke;
-  stroke: #07080c;
-  stroke-width: 3px;
-  stroke-linejoin: round;
-  animation: fl 1.4s var(--ease) forwards;
-}
-.f-dmg {
-  font-size: 13px;
-  fill: #ff8a8a;
-}
-.f-heal {
-  font-size: 12px;
-  fill: var(--ok);
-}
-.f-rx {
-  font-size: 9px;
-  fill: var(--gold);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-}
-@keyframes fl {
-  0% {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-  15% {
-    opacity: 1;
-    transform: none;
-  }
-  75% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(-14px);
-  }
-}
-.beam {
-  fill: none;
-  stroke-width: 2.4;
-  stroke-linecap: round;
-  opacity: 0.9;
-  stroke-dasharray: 200;
-  stroke-dashoffset: 200;
-  animation:
-    draw 0.3s ease-out forwards,
-    beamo 0.7s ease forwards;
-}
 @keyframes beamo {
   60% {
     opacity: 0.9;
   }
   100% {
     opacity: 0;
-  }
-}
-.chainseg.fire {
-  stroke: #ffb36a;
-}
-.chainglow.fire {
-  stroke: #ee8130;
-}
-.chainseg.ice {
-  stroke: #d8fbfa;
-}
-.chainglow.ice {
-  stroke: #96d9d6;
-}
-.burst {
-  fill: none;
-  stroke: var(--gold);
-  stroke-width: 3;
-  animation: burst 1s var(--ease) forwards;
-}
-@keyframes burst {
-  to {
-    r: 46;
-    opacity: 0;
-    stroke-width: 0.5;
   }
 }

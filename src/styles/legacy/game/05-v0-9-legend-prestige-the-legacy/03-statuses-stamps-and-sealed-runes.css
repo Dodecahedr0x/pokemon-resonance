@@ -31,60 +31,6 @@
   color: #c9ced6;
   background: rgba(201, 206, 214, 0.07);
 }
-.bdg-s rect {
-  fill: #1a0a0b;
-  stroke: #e5484d;
-  stroke-width: 0.9;
-}
-.bdg-s rect.in {
-  fill: none;
-  stroke: rgba(229, 72, 77, 0.55);
-  stroke-width: 0.45;
-  stroke-dasharray: 1.2 0.8;
-}
-.bdg-s text {
-  font-family: var(--f-m);
-  font-weight: 700;
-  font-size: 5px;
-  letter-spacing: 0.14em;
-  fill: #ff8a80;
-  text-anchor: middle;
-}
-.bdg-s.status-paralysis rect {
-  stroke: #f2d45c;
-}
-.bdg-s.status-paralysis text {
-  fill: #f2d45c;
-}
-.bdg-s.status-frozen rect {
-  stroke: #9ce0ff;
-}
-.bdg-s.status-frozen text {
-  fill: #9ce0ff;
-}
-.bdg-s.status-asleep rect {
-  stroke: #c7a6ff;
-}
-.bdg-s.status-asleep text {
-  fill: #c7a6ff;
-}
-.bdg-s.status-rooted rect,
-.bdg-s.status-webbed rect {
-  stroke: #8fd18a;
-}
-.bdg-s.status-rooted text,
-.bdg-s.status-webbed text {
-  fill: #8fd18a;
-}
-.bdg-s.status-paralysis rect.in {
-  stroke: rgba(242, 212, 92, 0.5);
-}
-.bdg-s.status-frozen rect.in {
-  stroke: rgba(156, 224, 255, 0.5);
-}
-.bdg-s.status-asleep rect.in {
-  stroke: rgba(199, 166, 255, 0.5);
-}
 
 /* ---------- shell ---------- */
 
