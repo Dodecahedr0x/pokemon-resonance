@@ -244,3 +244,19 @@ Each step is one commit (or a few), on its own, playable at every point.
   dropped: the encounter crest's 150px size (`.crest-pk > svg` beat it) and the shiny and dominant glows on the
   encounter card (the card's plate shadow was `!important`). A global legacy `[hidden] { display: none !important }`
   still hides every window; it moves to `base/` when `legacy/` goes.
+- Effects: done. `src/screens/overlays/effects.css`: the backdrop `.pokeball-backdrop` (`#pk-fond`), the iris
+  `.pokeball-iris` (`.pokeball-iris-half.is-top` / `.is-bottom`, `.pokeball-iris-button`; `is-playing`, was `go`), the
+  battle entrance `.battle-entrance` (`-flash`, `-band`, `-ball`; `is-playing`, `is-boss`, `is-trainer`, `is-wild`,
+  `is-fast`, were `go`, `boss`, `dresseur`, `sauvage`, `vite`), the badge ceremony `.badge-ceremony` (`-content`, `-case`,
+  `-badge`, `-spray`, `-title`, `-count`, `-hint`; `is-leaving`, was `out`) and `.battle-transition(-flash, -iris)`; the
+  elements keep their ids for the engine, the styles use the classes. `versus.css`: the VS intro `.versus` (was `.vs`;
+  `-player`, `-opponent`, `-mark`, `-kicker`, `-team`, `-avatar`, `-badge`, `-foes`, `-rule`, `-tip`; `is-fast`,
+  `is-calm`, `is-leaving`, were `fast`, `rm`, `out`). `battle-transients.css`: `.timed-catch` (`-card`, `-text`,
+  `-rings`, `-target`, `-closing-ring`, `-center`, `-throw`, `-skip`; `is-perfect`, `is-miss`… were `res-*`) and the
+  local duel relay `.duel-relay` (`-card`, `-actions`, `-scores`, was `.forfeit-dialog*`). Local custom properties got
+  names (`--band-index`, `--entrance-delay`, `--entrance-exit-delay`, `--versus-duration`, `--versus-accent`); the
+  spray's `--a` stays until the result card and the evolution scene, which share its keyframes, move. Checked with
+  snapshots of every state (iris, three entrance kinds, badge shown and leaving, transition, three VS variants, three
+  timed-catch results, both relay screens) at both widths. The page-entrance list in `pokemon-skin.js` named `.tip`,
+  renamed to `.professor-tip` in the dialogue slice; fixed. Players' Workshop CSS written against `#pk-btr.go` and the
+  like is not translated (the state classes are too generic to rename blindly).

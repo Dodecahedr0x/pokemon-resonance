@@ -94,51 +94,6 @@ html body .rl .it-ic {
 }
 /* toasts: at the top on phone, so they no longer pass under the "Fin du tour" (End turn) bar */
 /* battle intro in v4 colors */
-html body .vs {
-  background: #061327 !important;
-}
-html body .vs-l {
-  background:
-    radial-gradient(80% 70% at 100% 50%, rgba(70, 160, 255, 0.3), transparent 70%),
-    linear-gradient(90deg, #071a33, #0d2c55) !important;
-}
-html body .vs-r {
-  background:
-    radial-gradient(80% 70% at 0% 50%, color-mix(in srgb, var(--ac) 40%, transparent), transparent 70%),
-    linear-gradient(270deg, #071a33, #14254a) !important;
-}
-html body .vs-c {
-  background: radial-gradient(circle at 35% 30%, #2b4f86, #0b1f3d 70%) !important;
-  box-shadow:
-    0 0 0 2px #ffd75e,
-    0 0 0 7px rgba(6, 19, 39, 0.9),
-    0 0 40px rgba(255, 200, 60, 0.35) !important;
-}
-html body .vs-c span {
-  background: linear-gradient(180deg, #fff, #ffe17b 55%, #f2a92c) !important;
-  -webkit-background-clip: text !important;
-  background-clip: text !important;
-}
-html body .vs-l b,
-html body .vs-r b {
-  background: linear-gradient(180deg, #ffffff, #ffe9a3 65%, #f5b92e) !important;
-  -webkit-background-clip: text !important;
-  background-clip: text !important;
-}
-html body .vs-k {
-  color: #ffd75e !important;
-}
-html body .vs .medal {
-  width: 56px !important;
-  height: 56px !important;
-}
-html body .vs .vs-foes .medal {
-  width: 46px !important;
-  height: 46px !important;
-}
-html body .vs::after {
-  background: linear-gradient(90deg, #f2a92c, #fff2a8, #f2a92c) !important;
-}
 html body img.img-off.img-off.img-off {
   display: none !important;
 }

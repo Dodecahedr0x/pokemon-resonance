@@ -13,7 +13,7 @@ const on = k => PREF[k] !== 0;
 const doApply = () => H.classList.toggle('pk-calme', !on('pokemonSkinA'));
 
 /* ---------- added elements: #pk-fond and #pk-iris are rendered by React
-     (src/screens/overlays/Effects.jsx); the iris's .go class is still set here ---------- */
+     (src/screens/overlays/Effects.jsx); the iris's .is-playing class is still set here ---------- */
 let iris;
 
 // top-bar logo lights (.topbar-leds): rendered by React (src/components/Shell.jsx)
@@ -25,16 +25,16 @@ const openOverlay = () => {
   if (calmMotion() || !on('pokemonSkinT')) {
     return;
   }
-  iris.classList.remove('go');
+  iris.classList.remove('is-playing');
   void iris.offsetWidth;
-  iris.classList.add('go');
+  iris.classList.add('is-playing');
   clearTimeout(tIris);
-  tIris = setTimeout(() => iris.classList.remove('go'), 700);
+  tIris = setTimeout(() => iris.classList.remove('is-playing'), 700);
 };
 
 /* ---------- screen entry: rise and scanner sweep ---------- */
 const CAND =
-  '.card,.home-hero,.league-case,.prep-card,.guide-panel,.guide-intro,.item-row,.quests-chapter,.camp-building,.dex-section,.tip';
+  '.card,.home-hero,.league-case,.prep-card,.guide-panel,.guide-intro,.item-row,.quests-chapter,.camp-building,.dex-section,.professor-tip';
 
 let tEntry;
 

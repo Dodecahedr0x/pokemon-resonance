@@ -3,15 +3,15 @@ import Button from '../../../components/Button.jsx';
 // abandon confirmation. The clicks (data-forfeit-dialog) stay in the engine.
 export default function DuelRelay({ d }) {
   return (
-    <div id="duel433r" className="forfeit-dialog">
+    <div id="duel433r" className="duel-relay">
       {d.mode === 'abandon' ? (
-        <div className={'forfeit-dialog-c dj' + d.j} role="dialog" aria-modal="true" aria-labelledby="forfeit-dialog-t">
+        <div className={'duel-relay-card dj' + d.j} role="dialog" aria-modal="true" aria-labelledby="forfeit-dialog-t">
           <p className="kicker">Duel local</p>
           <h2 className="title" id="forfeit-dialog-t">
             {d.displayName} abandonne ?
           </h2>
           <p className="lead">{d.other} remporte le duel.</p>
-          <div className="forfeit-dialog-a">
+          <div className="duel-relay-actions">
             <Button variant="primary" data-forfeit-dialog="forfait">
               Déclarer forfait
             </Button>
@@ -21,7 +21,7 @@ export default function DuelRelay({ d }) {
           </div>
         </div>
       ) : (
-        <div className={'forfeit-dialog-c dj' + d.j} role="dialog" aria-modal="true" aria-labelledby="forfeit-dialog-t">
+        <div className={'duel-relay-card dj' + d.j} role="dialog" aria-modal="true" aria-labelledby="forfeit-dialog-t">
           <p className="kicker">
             Manche {d.round} / {d.lim} · Joueur {d.j}
           </p>
@@ -29,7 +29,7 @@ export default function DuelRelay({ d }) {
             Au tour de {d.displayName}
           </h2>
           <p className="lead">{d.sub}</p>
-          <div className="forfeit-dialog-s">
+          <div className="duel-relay-scores">
             {d.s.map(x => (
               <span key={x.j} className={'dj' + x.j}>
                 <b>{x.displayName}</b>

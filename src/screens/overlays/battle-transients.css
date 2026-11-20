@@ -1,0 +1,152 @@
+/* Overlays › battle transients: the timed Poké Ball throw (transients/TimingGauge.jsx; .is-perfect, .is-miss…) and
+   the local duel relay between the two players (transients/DuelRelay.jsx). */
+
+.duel-relay {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  display: grid;
+  place-items: center;
+  padding: var(--space-lg);
+  background: rgba(6, 10, 18, 0.86);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  animation: forfeit-dialog-in 0.25s ease-out;
+}
+.duel-relay-card {
+  width: min(420px, 100%);
+  padding: var(--space-xl) var(--space-lg);
+  border-radius: 18px;
+  text-align: center;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02));
+  border: 2px solid var(--dj);
+  box-shadow: 0 0 40px -10px var(--dj);
+}
+.duel-relay-card .title {
+  margin: var(--space-2xs) 0 var(--space-xs);
+}
+.duel-relay-card .lead {
+  margin: 0 0 var(--space-md);
+}
+.duel-relay-scores {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-sm);
+  margin: 0 0 var(--space-lg);
+}
+.duel-relay-scores span {
+  padding: var(--space-sm);
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid var(--dj);
+  font-size: 12px;
+  line-height: 1.35;
+}
+.duel-relay-scores b {
+  display: block;
+  color: var(--dj);
+  font-size: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.duel-relay-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  justify-content: center;
+}
+.timed-catch {
+  position: fixed;
+  inset: 0;
+  z-index: 240;
+  display: grid;
+  place-items: center;
+  background: rgba(2, 8, 16, 0.62);
+}
+.timed-catch-card {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-md);
+  padding: var(--space-xl);
+  border-radius: 22px;
+  background: linear-gradient(160deg, #173a50, #0a1d2b);
+  border: 1px solid rgba(255, 215, 94, 0.4);
+  width: min(320px, calc(100vw - 32px));
+}
+.timed-catch-text {
+  margin: 0;
+  font-weight: 700;
+  text-align: center;
+  color: #eaf2f8;
+}
+.timed-catch-rings {
+  position: relative;
+  width: 200px;
+  height: 200px;
+}
+.timed-catch-rings i {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+.timed-catch-target {
+  width: 100px;
+  height: 100px;
+  border: 3px solid #ffd45b;
+  box-shadow: 0 0 14px rgba(255, 212, 91, 0.6);
+}
+.timed-catch-closing-ring {
+  width: 200px;
+  height: 200px;
+  border: 4px solid #7ad7ff;
+  transform: translate(-50%, -50%) scale(1.15);
+}
+.timed-catch-center {
+  width: 14px;
+  height: 14px;
+  background: #e3350d;
+}
+.timed-catch.is-perfect .timed-catch-text {
+  color: #7cffb0;
+}
+.timed-catch.is-miss .timed-catch-text {
+  color: #ff8d8d;
+}
+.timed-catch-skip {
+  background: none;
+  border: 0;
+  color: #9fb8c8;
+  text-decoration: underline;
+  font-size: 12.5px;
+  cursor: pointer;
+}
+.timed-catch .timed-catch-card {
+  gap: var(--space-md);
+  padding: var(--space-lg) var(--space-lg) var(--space-md);
+  border-radius: 20px;
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(227, 192, 122, 0.45);
+  box-shadow: 0 30px 60px -24px #000;
+  background: rgba(11, 13, 18, 0.92);
+}
+.timed-catch .timed-catch-target {
+  border-color: #f0d59c;
+}
+.timed-catch .timed-catch-closing-ring {
+  border-color: #ffffff;
+  box-shadow: 0 0 14px rgba(255, 255, 255, 0.45);
+}
+.timed-catch .timed-catch-throw {
+  width: 100%;
+  height: 48px;
+  font-size: 15px;
+  font-weight: 800;
+}
+.timed-catch .timed-catch-skip {
+  color: #e3c07a;
+  text-decoration: none;
+}

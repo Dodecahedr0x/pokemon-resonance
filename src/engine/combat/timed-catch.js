@@ -50,7 +50,7 @@ function statusKey(u) {
 export function startCatchTiming(cb) {
   // gauge rendered by React (src/screens/overlays/transients/Ct453.jsx); the ring is animated here
   const o = openOverlay('timed-catch', { q: null });
-  const g = o.querySelector('.timed-catch-g');
+  const g = o.querySelector('.timed-catch-closing-ring');
   const T0 = performance.now(),
     DUR = 1500;
   let done = false,
@@ -89,8 +89,8 @@ export function startCatchTiming(cb) {
       q === 'skip' ? 0 : 650
     );
   };
-  o.querySelector('.timed-catch-b').addEventListener('click', () => endStep(quality()));
-  o.querySelector('.timed-catch-s').addEventListener('click', () => endStep('skip'));
+  o.querySelector('.timed-catch-throw').addEventListener('click', () => endStep(quality()));
+  o.querySelector('.timed-catch-skip').addEventListener('click', () => endStep('skip'));
   o.addEventListener('keydown', e => {
     if (e.key === ' ' || e.key === 'Enter') {
       e.preventDefault();
@@ -98,7 +98,7 @@ export function startCatchTiming(cb) {
     }
   });
   raf = requestAnimationFrame(frame);
-  o.querySelector('.timed-catch-b').focus();
+  o.querySelector('.timed-catch-throw').focus();
 }
 
 const CATCH_TIMING_ON = () => PREF.catchTimingEnabled !== 0 && !RM && !AUTO;

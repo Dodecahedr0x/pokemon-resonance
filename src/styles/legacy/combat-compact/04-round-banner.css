@@ -58,33 +58,6 @@ html body #evoPick .ep-card .section-title {
   font-size: 22px;
   letter-spacing: 0.03em;
 }
-html body #timed-catch .timed-catch-c {
-  gap: var(--space-md);
-  padding: var(--space-lg) var(--space-lg) var(--space-md);
-  border-radius: 20px;
-  background: rgba(11, 13, 18, 0.92) !important;
-  -webkit-backdrop-filter: blur(14px);
-  backdrop-filter: blur(14px);
-  border: 1px solid rgba(227, 192, 122, 0.45);
-  box-shadow: 0 30px 60px -24px #000;
-}
-html body #timed-catch .timed-catch-z {
-  border-color: #f0d59c;
-}
-html body #timed-catch .timed-catch-g {
-  border-color: #ffffff;
-  box-shadow: 0 0 14px rgba(255, 255, 255, 0.45);
-}
-html body #timed-catch .timed-catch-b {
-  width: 100%;
-  height: 48px;
-  font-size: 15px;
-  font-weight: 800;
-}
-html body #timed-catch .timed-catch-s {
-  color: #e3c07a;
-  text-decoration: none;
-}
 html body #cbResult > .res-card {
   width: min(640px, 100%);
   padding: var(--space-xl);

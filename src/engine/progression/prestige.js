@@ -103,7 +103,7 @@ export function vsIntro() {
   const dur = RM ? 900 : PREF.fast ? 1400 : 2300;
   // rendered: src/screens/overlays/transients/Vs.jsx
   const o = overlay('vs', {
-    cls: (RM ? ' rm' : '') + (PREF.fast ? ' fast' : ''),
+    cls: (RM ? ' is-calm' : '') + (PREF.fast ? ' is-fast' : ''),
     dur,
     k1: B.duel433 ? 'Joueur 1' : 'Votre équipe',
     al: al.map(u => u.t),

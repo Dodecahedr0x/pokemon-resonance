@@ -1,19 +1,15 @@
 /* journal */
 @media (prefers-reduced-motion: reduce) {
   .burst-particle,
-  .screen-shake,
-  .shake-big,
-  #battle-transition,
-  .board-weather i,
-  .res-card.result-fx::before,
-  .res-card.result-fx::after,
-  .result-badge {
+.screen-shake,
+.shake-big,
+.board-weather i,
+.res-card.result-fx::before,
+.res-card.result-fx::after,
+.result-badge {
     animation: none !important;
   }
-  #battle-transition {
-    display: none;
   }
-}
 
 /* <style id="resonance-hidden-finds"> */
 /* v4.50 */
@@ -38,10 +34,6 @@
 }
 .av.hex-avatar {
   border-radius: 30%;
-}
-.vs-type-avatar {
-  display: inline-flex;
-  margin-bottom: var(--space-xs);
 }
 
 /* <style id="resonance-nuzlocke-ui"> */

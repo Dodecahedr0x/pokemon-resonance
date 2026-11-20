@@ -104,67 +104,6 @@ html:not(#pkz) body:not(#pkz) #cbResult > .res-card > .pk-gerbe {
 /* ---------- Pokémon sheet (bottom sheet) ---------- */
 
 /* ---------- Poké Ball opening between tabs ---------- */
-#pk-iris {
-  position: fixed;
-  inset: 0;
-  z-index: 2147483000;
-  pointer-events: none;
-  display: none;
-}
-#pk-iris.go {
-  display: block;
-}
-#pk-iris i {
-  position: absolute;
-  box-sizing: border-box;
-  display: block;
-  margin: 0;
-  padding: 0;
-  border-radius: 0;
-  opacity: 1;
-  box-shadow: none;
-  transform: none;
-}
-#pk-iris .pk-h {
-  left: 0;
-  right: 0;
-  height: 50.5%;
-}
-#pk-iris .pk-ht {
-  top: 0;
-  background:
-    radial-gradient(120% 90% at 28% 8%, rgba(255, 255, 255, 0.34), transparent 46%),
-    linear-gradient(180deg, #ff5b61, #d7212a 72%, #a3121a);
-  border-bottom: 7px solid #12161d;
-}
-#pk-iris .pk-hb {
-  bottom: 0;
-  background:
-    radial-gradient(120% 90% at 70% 100%, rgba(0, 0, 0, 0.12), transparent 50%),
-    linear-gradient(180deg, #fbf7ee, #d9d0bc);
-  border-top: 7px solid #12161d;
-}
-#pk-iris .pk-hc {
-  left: 50%;
-  top: 50%;
-  width: 86px;
-  height: 86px;
-  margin: -43px 0 0 -43px !important;
-  border-radius: 50% !important;
-  background: radial-gradient(circle, #fff 0 21px, #dcd5c5 22px 26px, #12161d 27px 34px, #fbf7ee 35px);
-  box-shadow:
-    0 0 0 7px #12161d,
-    0 0 34px rgba(255, 255, 255, 0.55) !important;
-}
-#pk-iris.go .pk-ht {
-  animation: pkHaut 0.44s cubic-bezier(0.65, 0, 0.35, 1) 0.14s both;
-}
-#pk-iris.go .pk-hb {
-  animation: pkBas 0.44s cubic-bezier(0.65, 0, 0.35, 1) 0.14s both;
-}
-#pk-iris.go .pk-hc {
-  animation: pkBouton 0.52s ease-out both;
-}
 
 /* ---------- animations ---------- */
 @keyframes pkTourne {

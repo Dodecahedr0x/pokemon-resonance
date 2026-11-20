@@ -39,18 +39,6 @@ html body #bSvg .tok.dj2 {
 }
 
 /* handover screen */
-.forfeit-dialog {
-  position: fixed;
-  inset: 0;
-  z-index: 9000;
-  display: grid;
-  place-items: center;
-  padding: var(--space-lg);
-  background: rgba(6, 10, 18, 0.86);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  animation: forfeit-dialog-in 0.25s ease-out;
-}
 @keyframes forfeit-dialog-in {
   from {
     opacity: 0;
@@ -58,47 +46,4 @@ html body #bSvg .tok.dj2 {
   to {
     opacity: 1;
   }
-}
-.forfeit-dialog-c {
-  width: min(420px, 100%);
-  padding: var(--space-xl) var(--space-lg);
-  border-radius: 18px;
-  text-align: center;
-  background: linear-gradient(160deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02));
-  border: 2px solid var(--dj);
-  box-shadow: 0 0 40px -10px var(--dj);
-}
-.forfeit-dialog-c .title {
-  margin: var(--space-2xs) 0 var(--space-xs);
-}
-.forfeit-dialog-c .lead {
-  margin: 0 0 var(--space-md);
-}
-.forfeit-dialog-s {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-sm);
-  margin: 0 0 var(--space-lg);
-}
-.forfeit-dialog-s span {
-  padding: var(--space-sm);
-  border-radius: 12px;
-  background: rgba(0, 0, 0, 0.28);
-  border: 1px solid var(--dj);
-  font-size: 12px;
-  line-height: 1.35;
-}
-.forfeit-dialog-s b {
-  display: block;
-  color: var(--dj);
-  font-size: 14px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.forfeit-dialog-a {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-sm);
-  justify-content: center;
 }

@@ -1,0 +1,253 @@
+/* Overlays › the « VS » presentation before a battle (transients/Vs.jsx): the player and the opponent side by side,
+   the rule and the tip; .is-fast, .is-calm (reduced motion), .is-leaving. */
+
+.versus {
+  position: fixed;
+  inset: 0;
+  z-index: 190;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  cursor: pointer;
+  overflow: hidden;
+  color: var(--color-text);
+  background: #061327;
+}
+.versus::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 3px;
+  width: 100%;
+  transform-origin: left;
+  animation: vsBar var(--versus-duration, 2.3s) linear both;
+  background: linear-gradient(90deg, #f2a92c, #fff2a8, #f2a92c);
+}
+.versus-player {
+  position: relative;
+  height: 100%;
+  display: grid;
+  align-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-4xl) clamp(18px, 5vw, 64px);
+  justify-items: end;
+  text-align: right;
+  clip-path: polygon(0 0, 100% 0, 88% 100%, 0 100%);
+  animation: vsL 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  background:
+    radial-gradient(80% 70% at 100% 50%, rgba(70, 160, 255, 0.3), transparent 70%),
+    linear-gradient(90deg, #071a33, #0d2c55);
+}
+.versus-opponent {
+  position: relative;
+  height: 100%;
+  display: grid;
+  align-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-4xl) clamp(18px, 5vw, 64px);
+  justify-items: start;
+  clip-path: polygon(12% 0, 100% 0, 100% 100%, 0 100%);
+  animation: vsR 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  background:
+    radial-gradient(80% 70% at 0% 50%, color-mix(in srgb, var(--versus-accent) 40%, transparent), transparent 70%),
+    linear-gradient(270deg, #071a33, #14254a);
+}
+.versus-kicker {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #ffd75e;
+}
+.versus-player b {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(22px, 3.4vw, 40px);
+  letter-spacing: 0.04em;
+  line-height: 1.05;
+  text-transform: uppercase;
+  color: transparent;
+  background: linear-gradient(180deg, #ffffff, #ffe9a3 65%, #f5b92e);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+.versus-opponent b {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(22px, 3.4vw, 40px);
+  letter-spacing: 0.04em;
+  line-height: 1.05;
+  text-transform: uppercase;
+  color: transparent;
+  background: linear-gradient(180deg, #ffffff, #ffe9a3 65%, #f5b92e);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+.versus-player em {
+  font-style: normal;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--color-text-secondary);
+}
+.versus-opponent em {
+  font-style: normal;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--color-text-secondary);
+}
+.versus-opponent q {
+  max-width: 360px;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 14.5px;
+  line-height: 1.45;
+  color: var(--color-text);
+  quotes: '« ' ' »';
+  animation: spUp 0.6s 0.55s ease-out both;
+}
+.versus-team {
+  display: flex;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+}
+.versus-foes {
+  display: flex;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+}
+.versus-player .versus-team {
+  justify-content: flex-end;
+}
+.versus-badge {
+  display: block;
+  width: clamp(64px, 9vw, 96px);
+  filter: drop-shadow(0 0 18px color-mix(in srgb, var(--versus-accent) 60%, transparent));
+  animation: vsBdg 0.7s 0.25s cubic-bezier(0.2, 1.4, 0.4, 1) both;
+}
+.versus-badge svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.versus-mark {
+  position: relative;
+  z-index: 2;
+  width: clamp(70px, 9vw, 110px);
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  margin: 0 -2vw;
+  border-radius: 50%;
+  animation: vsC 0.6s 0.3s cubic-bezier(0.2, 1.6, 0.4, 1) both;
+  background: radial-gradient(circle at 35% 30%, #2b4f86, #0b1f3d 70%);
+  box-shadow:
+    0 0 0 2px #ffd75e,
+    0 0 0 7px rgba(6, 19, 39, 0.9),
+    0 0 40px rgba(255, 200, 60, 0.35);
+}
+.versus-mark span {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(26px, 3.6vw, 44px);
+  letter-spacing: 0.02em;
+  color: transparent;
+  background: linear-gradient(180deg, #fff, #ffe17b 55%, #f2a92c);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+.versus-rule {
+  position: absolute;
+  left: 50%;
+  bottom: 22px;
+  transform: translateX(-50%);
+  margin: 0;
+  max-width: min(92vw, 620px);
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  animation: spUp 0.6s 0.7s ease-out both;
+}
+.versus.is-leaving {
+  animation: vsOut 0.35s ease-in forwards;
+  pointer-events: none;
+}
+.versus.is-calm * {
+  animation-duration: 1ms;
+  animation-delay: 0s;
+}
+.versus.is-calm::after {
+  animation-duration: 1ms;
+  animation-delay: 0s;
+}
+@media (max-width: 700px) {
+  .versus {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) auto minmax(0, 1fr);
+  }
+  .versus-player {
+    justify-items: center;
+    text-align: center;
+    padding: var(--space-2xl) var(--space-xl);
+    clip-path: polygon(0 0, 100% 0, 100% 88%, 0 100%);
+    animation-name: vsT;
+  }
+  .versus-opponent {
+    justify-items: center;
+    text-align: center;
+    padding: var(--space-2xl) var(--space-xl);
+    clip-path: polygon(0 12%, 100% 0, 100% 100%, 0 100%);
+    animation-name: vsB;
+  }
+  .versus-player .versus-team {
+    justify-content: center;
+  }
+  .versus-mark {
+    margin: -5vh auto;
+  }
+  .versus-rule {
+    bottom: 14px;
+  }
+}
+.versus .medal {
+  width: 56px;
+  height: 56px;
+}
+.versus .versus-foes .medal {
+  width: 46px;
+  height: 46px;
+}
+.versus-tip {
+  position: absolute;
+  left: 50%;
+  top: calc(2.5% + env(safe-area-inset-top, 0px));
+  transform: translateX(-50%);
+  width: min(520px, calc(100vw - 32px));
+  margin: 0;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: 14px;
+  background: rgba(5, 12, 22, 0.72);
+  border: 1px solid rgba(255, 215, 94, 0.35);
+  color: #d8e6f0;
+  font-size: 13px;
+  line-height: 1.45;
+  text-align: center;
+  pointer-events: none;
+  animation: tip-fade 0.5s 0.35s both;
+}
+.versus-tip b {
+  color: #ffd45b;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-right: var(--space-xs);
+}
+.versus-avatar {
+  display: inline-flex;
+  margin-bottom: var(--space-xs);
+}

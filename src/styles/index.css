@@ -41,6 +41,9 @@
 @import './shell/bottom-nav.css' layer(screens);
 @import './shell/phone-menu.css' layer(screens);
 @import './shell/launch-screen.css' layer(screens);
+@import '../screens/overlays/effects.css' layer(screens);
+@import '../screens/overlays/versus.css' layer(screens);
+@import '../screens/overlays/battle-transients.css' layer(screens);
 @import '../screens/overlays/modal.css' layer(screens);
 @import '../screens/overlays/encounter.css' layer(screens);
 @import '../screens/overlays/window-boxes.css' layer(screens);

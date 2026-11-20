@@ -59,15 +59,15 @@ const sparks = (n, cls) => {
 
 /* ---------- 1. battle entry ---------- */
 // #pk-btr is rendered by React (src/screens/overlays/Effects.jsx): its bands are
-// set by the store (paintOverlay('btr')), its class (go, boss, wildMon, isFast) here.
+// set by the store (paintOverlay('btr')), its state classes (is-playing, is-boss / is-trainer / is-wild, is-fast) here.
 let btr;
 
 let tBtr;
 
-const genre = b => {
+const entranceClass = b => {
   const D = SCEN[b.sc] || {};
   if (D.wild && !D.legend) {
-    return 'sauvage';
+    return 'is-wild';
   }
   let boss = !!(D.rival || D.legend || b.sc === 'champ' || D.gym != null);
   try {
@@ -75,22 +75,22 @@ const genre = b => {
   } catch {
     /* Best effort: failure here is non-fatal. */
   }
-  return boss ? 'boss' : 'dresseur';
+  return boss ? 'is-boss' : 'is-trainer';
 };
 
 const transition = b => {
   if (calmMotion() || auto()) {
     return;
   }
-  btr.className = '';
+  btr.className = 'battle-entrance';
   paintOverlay('btr', { on: true });
   void btr.offsetWidth;
-  btr.className = 'go ' + genre(b) + (isFast() ? ' vite' : '');
+  btr.className = 'battle-entrance is-playing ' + entranceClass(b) + (isFast() ? ' is-fast' : '');
   playSound('whoosh');
   clearTimeout(tBtr);
   tBtr = setTimeout(
     () => {
-      btr.className = '';
+      btr.className = 'battle-entrance';
       clearOverlay('btr');
     },
     isFast() ? 700 : 1500
@@ -205,20 +205,20 @@ let wasKo;
 /* ---------- 7. badge ceremony ---------- */
 let CELEBRATED;
 
-// #pk-badge is rendered by React (src/screens/overlays/Effects.jsx); hidden and .out stay set here
+// #pk-badge is rendered by React (src/screens/overlays/Effects.jsx); hidden and .is-leaving stay set here
 let bc;
 
 let tBc;
 
 const closeBadge = () => {
-  if (bc.hidden || bc.classList.contains('out')) {
+  if (bc.hidden || bc.classList.contains('is-leaving')) {
     return;
   }
   clearTimeout(tBc);
-  bc.classList.add('out');
+  bc.classList.add('is-leaving');
   setTimeout(() => {
     bc.hidden = true;
-    bc.classList.remove('out');
+    bc.classList.remove('is-leaving');
     clearOverlay('badge');
   }, 300);
 };
@@ -336,5 +336,5 @@ export function init() {
       }
     }).observe(res, { childList: true });
   }
-  window.__battleStyle = { transition, send, retour: recall, celebrateBadge, ENTREE: ENTRANCES, genre };
+  window.__battleStyle = { transition, send, retour: recall, celebrateBadge, ENTREE: ENTRANCES, entranceClass };
 }
