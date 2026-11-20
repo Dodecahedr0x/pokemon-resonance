@@ -1,0 +1,356 @@
+/* Family card, continued (Grid.jsx): name, types, moves, fatigue, holographic layers, shiny badge,
+   and the buttons: the invisible "open" button over the whole card, the stage picker and "Recruter". */
+
+/* ---------- Name, role, types, moves ---------- */
+.team-card-name {
+  display: grid;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3xs);
+  padding: 0 var(--space-3xs);
+  color: #f5fbff;
+  font-size: 18px;
+  font-weight: 900;
+  letter-spacing: 0.01em;
+}
+.team-card-name h3 {
+  overflow: hidden;
+  font: 850 17px/1.1 var(--font-display);
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow-wrap: anywhere;
+}
+.team-card-role {
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.16em;
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+/* "En équipe : <stage> · n PC" when another stage of the family is in the team */
+.team-card-squad {
+  display: block;
+  margin: calc(var(--space-3xs) * -1) 0 var(--space-xs);
+  color: var(--color-accent-soft);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+}
+.team-card-types {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2xs);
+  padding: 0 var(--space-3xs);
+}
+.team-card-types .tb {
+  font: 800 10.5px/1 var(--font-display);
+}
+.team-card-moves {
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: 2px;
+  background: rgba(0, 0, 0, 0.35);
+  box-shadow: inset 0 0 0 1px rgba(212, 175, 106, 0.12);
+  color: var(--color-text-secondary);
+  font-size: 11.5px;
+}
+/* "Stade unique · puissant d'emblée" */
+.team-card-single-stage {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  min-width: 0;
+  min-height: 20px;
+  padding: 0 var(--space-3xs);
+  color: var(--color-accent-soft);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+}
+.team-card-single-stage em {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  font-style: normal;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+/* keeps room at the bottom for the stage picker (one or two rows) */
+.team-card-stage-room {
+  height: 58px;
+}
+.team-card-stage-room.is-double {
+  height: 112px;
+}
+
+/* fatigue gauge (campaign) */
+.team-card-fatigue {
+  position: relative;
+  display: block;
+  height: 3px;
+  margin-top: calc(var(--space-xs) * -1);
+  background: #0a0b0e;
+  box-shadow: inset 0 0 0 1px rgba(212, 175, 106, 0.18);
+}
+.team-card-fatigue i {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: linear-gradient(90deg, #4db8ff, #e8c26a);
+}
+.team-card-fatigue.is-high i {
+  background: linear-gradient(90deg, #e8c26a, #ff7a3d);
+}
+
+/* ---------- Holographic layers: foil sheen and glare, both following the pointer ---------- */
+.team-card-foil,
+.team-card-glare {
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+  mix-blend-mode: soft-light;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s;
+}
+.team-card-foil {
+  background: linear-gradient(
+      115deg,
+      transparent 25%,
+      rgba(255, 240, 205, 0.5) 38%,
+      rgba(212, 175, 106, 0.35) 46%,
+      rgba(201, 206, 214, 0.45) 54%,
+      transparent 68%
+    )
+    var(--hx) var(--hy) / 260% 260%;
+}
+.team-card-glare {
+  background: radial-gradient(circle at var(--hx) var(--hy), rgba(255, 248, 230, 0.28), transparent 42%);
+}
+.team-card:hover .team-card-foil {
+  opacity: 0.75;
+}
+.team-card:hover .team-card-glare {
+  opacity: 1;
+}
+.team-card.is-in-team .team-card-foil {
+  opacity: 0.35;
+}
+/* expert rank and shinies: animated rainbow foil */
+.team-card:is([data-rank='expert'], .is-shiny) .team-card-foil {
+  background: linear-gradient(
+      115deg,
+      transparent 15%,
+      rgba(255, 120, 200, 0.45) 30%,
+      rgba(120, 220, 255, 0.45) 45%,
+      rgba(150, 255, 150, 0.4) 60%,
+      rgba(255, 220, 100, 0.45) 75%,
+      transparent 90%
+    )
+    0 0 / 250% 250%;
+  mix-blend-mode: color-dodge;
+  opacity: 0.5;
+  animation: pkHoloFoil 7s linear infinite;
+}
+html.pk-calme .team-card-foil {
+  animation: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .team-card-foil {
+    animation: none;
+  }
+}
+/* "✦ Chromatique" */
+.team-card-shiny {
+  position: absolute;
+  top: 30px;
+  right: 8px;
+  z-index: 6;
+  padding: var(--space-3xs) var(--space-xs);
+  border-radius: 999px;
+  background: linear-gradient(90deg, #ffd35a, #ff9ad5, #8fe3ff);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.4),
+    0 0 12px rgba(255, 180, 230, 0.6);
+  color: #2a1630;
+  font: 800 9px/1.4 var(--font-display);
+  letter-spacing: 0.06em;
+  pointer-events: none;
+}
+
+/* ---------- Buttons ---------- */
+.team-card button {
+  min-height: 42px;
+  border-radius: 8px;
+  font-weight: 850;
+}
+/* the whole card opens the detail sheet */
+.team-card-open {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+/* stage picker at the bottom: recruit the base form or an evolved one */
+.team-card-stage-picker {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  left: 12px;
+  z-index: 4;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-2xs);
+  border-top: 1px solid rgba(131, 240, 239, 0.2);
+  background: linear-gradient(180deg, rgba(6, 21, 32, 0.88), #06131e);
+}
+.team-stage {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-3xs);
+  min-width: 0;
+  margin-right: var(--space-xs);
+  padding: var(--space-xs) var(--space-3xs) var(--space-2xs);
+  border: 1px solid rgba(212, 175, 106, 0.22);
+  background: linear-gradient(180deg, #15161a, #0c0d10);
+  color: var(--color-text-secondary);
+  font: inherit;
+  cursor: pointer;
+}
+.team-stage b {
+  max-width: 100%;
+  overflow: hidden;
+  color: var(--color-text);
+  font-size: 10.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.team-stage em {
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-style: normal;
+}
+.team-stage.is-evolved {
+  border-color: rgba(212, 175, 106, 0.4);
+}
+.team-stage:hover:not(:disabled) {
+  border-color: #e9c97e;
+}
+.team-stage.is-selected {
+  border-color: #e9c97e;
+  background: linear-gradient(180deg, rgba(212, 175, 106, 0.3), rgba(212, 175, 106, 0.06));
+  box-shadow: 0 0 0 1px rgba(233, 201, 126, 0.45);
+}
+.team-stage.is-selected b {
+  color: #fff0c8;
+}
+.team-stage:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+/* "Recruter" / "Retirer" (the label is drawn by ::after; on phones only the icon stays) */
+.team-card-recruit {
+  position: absolute;
+  top: 50px;
+  right: 20px;
+  z-index: 4;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 0 var(--space-md) 0 var(--space-sm);
+  border: 1px solid rgba(255, 215, 94, 0.5);
+  background: rgba(4, 22, 38, 0.8);
+  box-shadow: 0 8px 18px -8px rgba(0, 0, 0, 0.8);
+  color: #ffd75e;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  backdrop-filter: blur(8px);
+  cursor: pointer;
+}
+.team-card-recruit::after {
+  content: 'Recruter';
+}
+.team-card-recruit svg {
+  width: 12px;
+  height: 12px;
+  color: #1a1205;
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.team-card-recruit[aria-pressed='true'] {
+  background: linear-gradient(180deg, #ffe778, #efb32a);
+  box-shadow: inset 0 0 0 1px rgba(212, 175, 106, 0.6);
+  color: #10263a;
+}
+.team-card-recruit[aria-pressed='true']::after {
+  content: 'Retirer';
+}
+.team-card-recruit[aria-pressed='true'] svg {
+  color: var(--color-accent-soft);
+  transform: rotate(45deg);
+}
+.team-card.is-locked .team-card-recruit {
+  opacity: 0.4;
+}
+
+/* ---------- Narrow screens ---------- */
+@media (max-width: 999px) {
+  .team-card {
+    min-height: 290px;
+  }
+  .team-card-number,
+  .team-card-single-stage em {
+    font-size: 11px;
+  }
+  .team-card-region,
+  .team-card-role,
+  .team-card-stages,
+  .team-card-lock,
+  .team-card-types .tb,
+  .team-stage b,
+  .team-stage em {
+    font-size: 10.5px;
+  }
+}
+@media (max-width: 700px) {
+  .team-card-region,
+  .team-card-stages,
+  .team-card-types .tb,
+  .team-stage b,
+  .team-stage em {
+    font-size: 11px;
+  }
+}
+@media (max-width: 560px) {
+  .team-card {
+    min-height: 265px;
+  }
+  .team-card-art {
+    height: 160px;
+  }
+  .team-card-stages {
+    padding: var(--space-sm);
+  }
+  .team-card-moves {
+    display: none;
+  }
+}
+@media (max-width: 540px) {
+  .team-card-role {
+    display: none;
+  }
+  .team-card-recruit {
+    top: 46px;
+    right: 16px;
+    padding: 0 var(--space-sm);
+  }
+  .team-card-recruit::after,
+  .team-card-recruit[aria-pressed='true']::after {
+    content: '';
+  }
+}

@@ -453,39 +453,27 @@ export function init() {
     }
   });
 
-  /* holographic shine and tilt */
+  /* holographic shine that follows the pointer (--hx / --hy, read by Grid's foil and glare) */
   if (!RM && window.matchMedia && matchMedia('(hover:hover)').matches) {
     $('#dexGrid').addEventListener('pointermove', e => {
-      const c = e.target.closest('.fcard');
+      const c = e.target.closest('.team-card');
       if (!c) {
         return;
       }
       const r = c.getBoundingClientRect(),
         x = (e.clientX - r.left) / r.width,
         y = (e.clientY - r.top) / r.height;
-      c.style.setProperty('--rx', ((0.5 - y) * 10).toFixed(2) + 'deg');
-      c.style.setProperty('--ry', ((x - 0.5) * 12).toFixed(2) + 'deg');
       c.style.setProperty('--hx', (x * 100).toFixed(1) + '%');
       c.style.setProperty('--hy', (y * 100).toFixed(1) + '%');
     });
     $('#dexGrid').addEventListener('pointerout', e => {
-      const c = e.target.closest('.fcard');
+      const c = e.target.closest('.team-card');
       if (!c || c.contains(e.relatedTarget)) {
         return;
       }
-      ['--rx', '--ry', '--hx', '--hy'].forEach(p => c.style.removeProperty(p));
+      ['--hx', '--hy'].forEach(p => c.style.removeProperty(p));
     });
   }
-
-  $('#filters').addEventListener('click', e => {
-    const b = e.target.closest('[data-f]');
-    if (!b) {
-      return;
-    }
-    filt = b.dataset.f;
-    renderFilters();
-    renderGrid();
-  });
 
   $('#genSeg').addEventListener('click', e => {
     const b = e.target.closest('[data-gen]');

@@ -41,12 +41,6 @@
   background: linear-gradient(180deg, #f2dda8, #c49c55);
   color: #1a1205;
 }
-.srch,
-#dexType {
-  border-radius: 4px;
-  background: linear-gradient(180deg, #121317, #0d0e11);
-  border-color: var(--line2);
-}
 .chip {
   border-radius: 3px;
   background: #0f1014;
@@ -58,22 +52,6 @@
 .chip i {
   border-radius: 1px;
   transform: rotate(45deg);
-}
-.qa {
-  border-radius: 3px;
-  transform: rotate(45deg);
-  background: rgba(10, 10, 12, 0.7);
-  border-color: rgba(212, 175, 106, 0.45);
-}
-.qa svg {
-  transform: rotate(-45deg);
-}
-.fcard.in .qa svg,
-.dex.in .qa svg {
-  transform: rotate(0deg);
-}
-.qa:hover {
-  transform: rotate(45deg) scale(1.08);
 }
 
 /* ---------- type seals ---------- */
@@ -265,14 +243,6 @@
   box-shadow:
     0 0 0 1px rgba(255, 241, 199, 0.6),
     0 0 12px rgba(240, 190, 90, 0.8);
-}
-.pc i {
-  border-radius: 0;
-  transform: skewX(-14deg);
-}
-.pc i.on {
-  background: linear-gradient(180deg, #f2dda8, #b38a43);
-  box-shadow: 0 0 6px rgba(212, 175, 106, 0.6);
 }
 .sbar {
   border-radius: 0;

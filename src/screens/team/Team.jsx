@@ -2,7 +2,7 @@ import { useEngineReady } from '../../engineReady.js';
 import { TYPES, ROLES } from '../../engine/data/game-data.js';
 import { RECRUIT } from '../../engine/pokemon/evolution.js';
 import { ROLEFX } from '../../engine/pokemon/roles-synergies.js';
-import { filt, gen, visible } from '../../engine/team/team.js';
+import { gen, visible } from '../../engine/team/team.js';
 import { useRosterKey } from './teamStore.js';
 import { analysis } from './analysis.js';
 import { Dock } from './Dock.jsx';
@@ -26,7 +26,7 @@ export default function Team() {
   const g = ready && gen ? gen : 'all';
   const v = ready && vGrid ? visible() : null;
   return (
-    <section className="page" id="pokedex" aria-labelledby="h-dex">
+    <section className="page team-page" id="pokedex" aria-labelledby="h-dex">
       <div className="ph">
         <p className="kick">Kanto et Johto</p>
         <h1 className="h1" id="h-dex">
@@ -44,8 +44,8 @@ export default function Team() {
         </Guard>
       )}
       <Dock A={A} />
-      <div className="dexbar">
-        <label className="srch">
+      <div className="team-toolbar">
+        <label className="team-search">
           <svg viewBox="0 0 20 20" aria-hidden="true">
             <circle cx={9} cy={9} r="5.5" fill="none" stroke="currentColor" strokeWidth="1.7" />
             <path d="m13.2 13.2 3.6 3.6" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
@@ -58,7 +58,7 @@ export default function Team() {
             aria-label="Rechercher un Pokémon ou une capacité"
           />
         </label>
-        <div className="seg" id="genSeg" role="group" aria-label="Génération">
+        <div className="team-generation" id="genSeg" role="group" aria-label="Génération">
           {[
             ['all', 'Tous'],
             ['1', 'Kanto'],
@@ -95,17 +95,9 @@ export default function Team() {
             </>
           )}
         </select>
-        <span className="cnt" id="dexCount">
+        <span className="team-count" id="dexCount">
           {v ? `${v.length} / ${RECRUIT.length} familles` : null}
         </span>
-      </div>
-      <div className="filters" id="filters" role="group" aria-label="Filtrer par rôle">
-        {ready &&
-          ['Tous', ...ROLES.map(r => r.n)].map(n => (
-            <button key={n} type="button" className="b b-sm" data-f={n} aria-pressed={n === filt}>
-              {n}
-            </button>
-          ))}
       </div>
       {ready && vGrid ? <DexCall v={vGrid} /> : null}
       <Grid v={v} />

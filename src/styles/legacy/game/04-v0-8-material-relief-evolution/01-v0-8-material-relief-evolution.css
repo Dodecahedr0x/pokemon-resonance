@@ -136,7 +136,6 @@ body {
   border-bottom-right-radius: 5px;
 }
 /* embossed buttons */
-.filters .b[aria-pressed='true'],
 .presets .b[aria-pressed='true'] {
   text-shadow: none;
 }

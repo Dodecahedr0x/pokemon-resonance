@@ -198,66 +198,20 @@ html body .v4-fld input {
 }
 
 /* ---------- Team: collection cards ---------- */
-html body #pokedex .fcard {
-  border-radius: 16px !important;
-  border: 1px solid color-mix(in srgb, var(--c) 55%, #9fd8ff 25%) !important;
-  background: linear-gradient(170deg, color-mix(in srgb, var(--c2) 30%, #0c2244), #081a36 55%) !important;
-}
-html body #pokedex .fcard .fc-in {
-  background: transparent !important;
-  border: 0 !important;
-}
-html body #pokedex .fc-art {
-  background:
-    radial-gradient(70% 60% at 50% 60%, color-mix(in srgb, var(--c) 65%, transparent), transparent 72%),
-    linear-gradient(165deg, color-mix(in srgb, var(--c) 40%, #123158), color-mix(in srgb, var(--c2) 30%, #0a1d3a)) !important;
-  border-bottom: 0 !important;
-  border-radius: 12px !important;
-  margin: 0 var(--space-sm) !important;
-}
-html body #pokedex .fc-art .orb {
-  display: none !important;
-}
-html body #pokedex .fc-art::after {
-  top: auto !important;
-  bottom: 10px !important;
-  left: 18% !important;
-  right: 18% !important;
-  width: auto !important;
-  height: 14px !important;
-  border-radius: 50% !important;
-}
-html body #pokedex .fc-art .pokemon-art-sprite {
-  position: relative !important;
-  z-index: 2 !important;
-  width: 88% !important;
-  height: auto !important;
-  max-height: 94% !important;
-  aspect-ratio: 1 !important;
-  object-fit: contain !important;
-}
-html body #pokedex .fc-name h3 {
-  font: 850 17px/1.1 var(--f-d) !important;
-  text-transform: none !important;
-  letter-spacing: -0.01em !important;
-}
 html body .tb {
   background: var(--c) !important;
   color: var(--fg) !important;
   border: 0 !important;
   border-radius: 999px !important;
-  font: 800 10.5px/1 var(--f-d) !important;
   letter-spacing: 0.06em !important;
   padding: var(--space-2xs) var(--space-sm) var(--space-2xs) var(--space-2xs) !important;
   box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.2);
 }
+/* the team cards size their own badges (screens/team) */
+html body .tb:not(:where(.team-card-types .tb)) {
+  font: 800 10.5px/1 var(--f-d) !important;
+}
 html body .tb .tb-s {
   background: rgba(0, 0, 0, 0.18) !important;
   border-radius: 50% !important;
-}
-html body #pokedex .fcard.in {
-  border-color: #ffe17b !important;
-  box-shadow:
-    0 0 0 2px rgba(255, 215, 94, 0.45),
-    0 16px 30px -14px rgba(255, 190, 40, 0.5) !important;
 }

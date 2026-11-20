@@ -236,54 +236,10 @@ a:focus-visible {
   backdrop-filter: blur(12px);
 }
 /* TEAM: make the roster feel like a collector's battle dossier */
-#pokedex .ph {
-  padding-bottom: var(--space-lg);
-}
 #pokedex .dock {
   border-radius: 22px !important;
   background: linear-gradient(115deg, #15394b, #0a1c2a) !important;
   padding: var(--space-md) !important;
-}
-#pokedex .dexbar {
-  padding: var(--space-md) !important;
-  border: 1px solid var(--rx-edge) !important;
-  border-radius: 18px !important;
-  background: rgba(8, 25, 38, 0.82) !important;
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.22) !important;
-}
-#pokedex .fam-grid {
-  gap: var(--space-lg) !important;
-  perspective: 1400px;
-}
-#pokedex .fcard {
-  border: 1px solid rgba(127, 213, 224, 0.24) !important;
-  border-radius: 20px !important;
-  background: linear-gradient(155deg, #173448 0%, #0b1d2a 72%) !important;
-  box-shadow:
-    0 20px 42px rgba(0, 0, 0, 0.34),
-    inset 0 1px rgba(255, 255, 255, 0.08) !important;
-  overflow: hidden;
-  transition:
-    transform 0.28s,
-    border-color 0.28s,
-    box-shadow 0.28s !important;
-}
-#pokedex .fcard:hover {
-  transform: translateY(-7px) rotateX(1deg) !important;
-  border-color: rgba(124, 232, 238, 0.65) !important;
-  box-shadow:
-    0 30px 55px rgba(0, 0, 0, 0.48),
-    0 0 25px rgba(72, 185, 204, 0.12) !important;
-}
-#pokedex .fcard .fc-art {
-  filter: drop-shadow(0 12px 13px rgba(0, 0, 0, 0.4));
-}
-#pokedex .fcard .fc-name {
-  color: #f5fbff !important;
-}
-#pokedex .fcard .fc-stg {
-  background: linear-gradient(180deg, rgba(6, 19, 29, 0.9), rgba(5, 15, 23, 0.98)) !important;
-  border-top: 1px solid rgba(124, 232, 238, 0.16) !important;
 }
 #pokedex .ana-d {
   border: 1px solid var(--rx-edge) !important;

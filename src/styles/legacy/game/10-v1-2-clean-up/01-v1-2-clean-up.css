@@ -93,12 +93,6 @@
   }
 }
 /* Team */
-#filters {
-  display: none;
-}
-.dexbar select#dexRole {
-  min-width: 0;
-}
 .ana-d {
   margin-top: var(--space-2xl);
   border-radius: var(--rl);

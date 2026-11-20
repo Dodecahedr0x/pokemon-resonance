@@ -167,34 +167,10 @@
 .page.on {
   animation-fill-mode: backwards;
 }
-#dexRole {
-  height: 40px;
-  padding: 0 var(--space-md);
-  border-radius: 4px;
-  border: 1px solid var(--line2);
-  background: linear-gradient(180deg, #121317, #0d0e11);
-  color: var(--tx);
-  font: inherit;
-  font-size: 13px;
-}
 .bp-fin {
   font-family: var(--f-m);
   font-size: 10.5px;
   letter-spacing: 0.06em;
   color: var(--mut);
   padding: var(--space-3xs) 0;
-}
-@media (max-width: 560px) {
-  .fc-art {
-    height: 100px;
-  }
-  .fc-art .orb {
-    transform: scale(0.82);
-  }
-  .fcard .fc-mv {
-    display: none;
-  }
-  .fc-name h3 {
-    font-size: 14px;
-  }
 }

@@ -3,91 +3,6 @@
   padding: var(--space-md) !important;
   margin-bottom: var(--space-md) !important;
 }
-#pokedex .dexbar {
-  display: flex !important;
-  gap: var(--space-sm) !important;
-  align-items: center !important;
-  padding: var(--space-sm) !important;
-  margin-bottom: var(--space-md) !important;
-}
-#pokedex .fam-grid {
-  grid-template-columns: repeat(auto-fill, minmax(205px, 1fr)) !important;
-  gap: var(--space-md) !important;
-}
-#pokedex .fcard {
-  position: relative !important;
-  overflow: hidden !important;
-  min-height: 325px !important;
-  border-radius: 16px !important;
-  background: linear-gradient(180deg, rgba(14, 50, 70, 0.97), rgba(5, 24, 39, 0.99)) !important;
-  border: 1px solid rgba(103, 210, 255, 0.25) !important;
-  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.23) !important;
-  transition:
-    transform 0.2s,
-    border-color 0.2s,
-    box-shadow 0.2s !important;
-}
-#pokedex .fcard:hover {
-  transform: translateY(-4px) !important;
-  border-color: rgba(255, 215, 91, 0.62) !important;
-  box-shadow: 0 18px 35px rgba(0, 0, 0, 0.32) !important;
-}
-#pokedex .fcard[aria-pressed='true'],
-#pokedex .fcard.selected {
-  border-color: #ffd45b !important;
-  box-shadow:
-    0 0 0 1px rgba(255, 212, 91, 0.32),
-    0 0 25px rgba(255, 190, 51, 0.12) !important;
-}
-#pokedex .fc-art {
-  height: 170px !important;
-  position: relative !important;
-  display: grid !important;
-  place-items: center !important;
-  background:
-    radial-gradient(ellipse at 50% 75%, rgba(58, 178, 225, 0.24), transparent 65%),
-    linear-gradient(135deg, rgba(20, 75, 100, 0.8), rgba(5, 24, 41, 0.8)) !important;
-  border-bottom: 1px solid rgba(112, 218, 255, 0.2) !important;
-  overflow: hidden !important;
-}
-#pokedex .fc-art::after {
-  content: '';
-  position: absolute;
-  inset: auto 12% 10px;
-  height: 13px;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.35);
-  filter: blur(8px);
-}
-#pokedex .fc-art .pokemon-art-sprite {
-  width: clamp(130px, 14vw, 170px) !important;
-  height: clamp(130px, 14vw, 170px) !important;
-  object-fit: contain !important;
-  position: relative !important;
-  z-index: 1 !important;
-  filter: drop-shadow(0 8px 9px rgba(0, 0, 0, 0.4)) !important;
-  transition: transform 0.25s !important;
-}
-#pokedex .fcard:hover .pokemon-art-sprite {
-  transform: translateY(-5px) scale(1.05) !important;
-}
-#pokedex .fc-st {
-  padding: var(--space-md) var(--space-md) var(--space-md) !important;
-}
-#pokedex .fc-st b,
-#pokedex .fc-st strong {
-  color: #f5fbff !important;
-  font-size: 15px !important;
-}
-#pokedex .fc-st .chip,
-#pokedex .fc-st .type {
-  border-radius: 5px !important;
-  font-size: 9px !important;
-  letter-spacing: 0.04em !important;
-}
-#pokedex .fcard button {
-  border-radius: 8px !important;
-}
 /* Combat: arena is the visual anchor; commands are a clean tactical panel */
 #combat .sel {
   overflow: hidden !important;
@@ -214,9 +129,9 @@
   padding: clamp(14px, 2vw, 25px) !important;
   margin-top: var(--space-md) !important;
 }
-/* all dialogs and controls use the same tactile glass language (the Pokédex toolbar draws its own) */
-input:not(:where(.dex-search input)),
-select:not(:where(.dex-toolbar select)),
+/* all dialogs and controls use the same tactile glass language (the Pokédex and team toolbars draw their own) */
+input:not(:where(.dex-search input, .team-search input)),
+select:not(:where(.dex-toolbar select, .team-toolbar select)),
 textarea {
   background: rgba(3, 22, 36, 0.9) !important;
   border: 1px solid rgba(105, 212, 255, 0.26) !important;
@@ -257,20 +172,6 @@ hr {
   #accueil .route {
     height: 250px !important;
   }
-  #pokedex .fam-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: var(--space-sm) !important;
-  }
-  #pokedex .fcard {
-    min-height: 290px !important;
-  }
-  #pokedex .fc-art {
-    height: 145px !important;
-  }
-  #pokedex .fc-art .pokemon-art-sprite {
-    width: 130px !important;
-    height: 130px !important;
-  }
   #combat .board {
     min-height: 280px !important;
   }
@@ -288,22 +189,6 @@ hr {
   }
   #accueil .qk {
     min-height: 82px !important;
-  }
-  #pokedex .fam-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  }
-  #pokedex .fcard {
-    min-height: 265px !important;
-  }
-  #pokedex .fc-art {
-    height: 125px !important;
-  }
-  #pokedex .fc-art .pokemon-art-sprite {
-    width: 112px !important;
-    height: 112px !important;
-  }
-  #pokedex .fc-st {
-    padding: var(--space-sm) !important;
   }
   #combat .board {
     min-height: 230px !important;

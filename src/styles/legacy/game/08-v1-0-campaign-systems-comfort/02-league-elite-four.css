@@ -81,62 +81,6 @@
   }
 }
 /* Pokédex */
-.fcard.locked .fc-in {
-  filter: grayscale(0.75) brightness(0.62);
-}
-.fcard.locked .qa {
-  opacity: 0.4;
-}
-.fc-lock {
-  position: absolute;
-  right: 8px;
-  top: 8px;
-  z-index: 1;
-  font-family: var(--f-m);
-  font-size: 9px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: #f2dda8;
-  padding: var(--space-3xs) var(--space-xs);
-  border: 1px solid rgba(212, 175, 106, 0.5);
-  background: rgba(6, 6, 8, 0.8);
-  border-radius: 1px;
-}
-.fc-it {
-  position: absolute;
-  right: 8px;
-  bottom: 7px;
-  z-index: 1;
-  width: 22px;
-  height: 22px;
-  display: grid;
-  place-items: center;
-  transform: rotate(45deg);
-  background: linear-gradient(135deg, #f6e6bc, #b38a43);
-  box-shadow: 0 0 8px rgba(212, 175, 106, 0.6);
-}
-.fc-it svg {
-  width: 13px;
-  height: 13px;
-  transform: rotate(-45deg);
-  color: #1a1205;
-}
-.fc-fat {
-  display: block;
-  height: 3px;
-  margin-top: calc(var(--space-xs) * -1);
-  background: #0a0b0e;
-  box-shadow: inset 0 0 0 1px rgba(212, 175, 106, 0.18);
-  position: relative;
-}
-.fc-fat i {
-  position: absolute;
-  inset: 0 auto 0 0;
-  background: linear-gradient(90deg, #4db8ff, #e8c26a);
-}
-.fc-fat.hi i {
-  background: linear-gradient(90deg, #e8c26a, #ff7a3d);
-}
 .it-ic {
   width: 28px;
   height: 28px;

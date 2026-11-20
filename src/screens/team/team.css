@@ -1,0 +1,149 @@
+/* "Mon équipe" page (#pokedex): search and filter toolbar, then the grid of family cards (team-card.css).
+   Markup: Team.jsx and Grid.jsx. The search field and the selects are uncontrolled; the engine (team/team.js)
+   listens to them. */
+
+.team-page .ph {
+  padding-bottom: var(--space-lg);
+}
+
+/* ---------- Toolbar: search, region, type, role, count ---------- */
+.team-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+  padding: var(--space-md);
+  border: 1px solid rgba(126, 211, 224, 0.24);
+  border-radius: 18px;
+  background: rgba(8, 25, 38, 0.82);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.22);
+}
+.team-search {
+  display: flex;
+  flex: 1 1 220px;
+  align-items: center;
+  gap: var(--space-sm);
+  height: 40px;
+  padding: 0 var(--space-md);
+  border: 1px solid rgba(120, 220, 255, 0.27);
+  border-radius: 4px;
+  background: linear-gradient(180deg, #121317, #0d0e11);
+  color: var(--color-text-muted);
+}
+.team-search svg {
+  flex: none;
+  width: 16px;
+  height: 16px;
+}
+.team-search input {
+  flex: 1;
+  min-width: 0;
+  border: 1px solid rgba(105, 212, 255, 0.26);
+  border-radius: 9px;
+  outline: none;
+  background: rgba(3, 22, 36, 0.9);
+  color: #f2f9ff;
+  font: inherit;
+  font-size: 14px;
+}
+/* region switch: Tous / Kanto / Johto / Hoenn */
+.team-generation {
+  display: flex;
+  gap: var(--space-sm);
+  padding: var(--space-sm);
+  border: 1px solid rgba(112, 211, 255, 0.2);
+  border-radius: 15px;
+  background: rgba(5, 23, 36, 0.78);
+}
+.team-generation button {
+  min-height: 38px;
+  padding: var(--space-xs) var(--space-md);
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--color-text-secondary);
+  font: inherit;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s,
+    background 0.2s;
+}
+.team-generation button[aria-pressed='true'] {
+  background: linear-gradient(180deg, #f2dda8, #c49c55);
+  color: #1a1205;
+}
+.team-toolbar select {
+  min-width: 0;
+  height: 40px;
+  padding: 0 var(--space-md);
+  border: 1px solid rgba(105, 212, 255, 0.26);
+  border-radius: 9px;
+  background: rgba(3, 22, 36, 0.9);
+  color: #f2f9ff;
+  font: inherit;
+  font-size: 13px;
+}
+.team-count {
+  margin-left: auto;
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+/* ---------- Grid of family cards ---------- */
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(205px, 1fr));
+  gap: var(--space-lg);
+  perspective: 1400px;
+}
+.team-grid-empty {
+  color: var(--color-text-muted);
+  font-size: 13.5px;
+}
+
+@media (max-width: 999px) {
+  .team-generation button {
+    font-size: 11.5px;
+  }
+  .team-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 850px) {
+  .team-grid {
+    grid-template-columns: repeat(auto-fill, minmax(165px, 1fr));
+  }
+}
+@media (max-width: 700px) {
+  /* two columns; search and region switch take a full row each */
+  .team-toolbar {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding: var(--space-sm);
+  }
+  .team-search,
+  .team-generation {
+    grid-column: 1 / -1;
+  }
+  .team-generation {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .team-toolbar select {
+    width: 100%;
+    height: 44px;
+    border-radius: 10px;
+    font-size: 12.5px;
+  }
+  .team-count {
+    display: none;
+  }
+}

@@ -159,13 +159,6 @@
   stroke: #2a1640;
   stroke-width: 3px;
 }
-.fc-rg {
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  margin-left: auto;
-  margin-right: var(--space-xs);
-}
 .sh-rgp .rg-ic {
   font-size: 13px;
   line-height: 1.4;

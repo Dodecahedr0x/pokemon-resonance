@@ -170,7 +170,6 @@ body {
 .pt,
 .battle,
 .dex,
-.fcard .fc-in,
 .gd-p,
 .gd-intro {
   background: linear-gradient(145deg, rgba(13, 43, 65, 0.96), rgba(5, 22, 37, 0.97)) !important;
@@ -293,52 +292,4 @@ body {
 #pokedex .dock {
   border: 1px solid rgba(104, 216, 248, 0.3) !important;
   border-radius: 18px !important;
-}
-#pokedex .dexbar {
-  padding: var(--space-md) !important;
-  background: rgba(7, 29, 46, 0.82) !important;
-  border: 1px solid rgba(104, 216, 248, 0.22) !important;
-  border-radius: 16px !important;
-  backdrop-filter: blur(12px) !important;
-}
-#pokedex .fam-grid {
-  grid-template-columns: repeat(auto-fill, minmax(225px, 1fr)) !important;
-  gap: var(--space-lg) !important;
-}
-#pokedex .fcard {
-  filter: drop-shadow(0 14px 22px rgba(0, 0, 0, 0.2)) !important;
-}
-#pokedex .fcard .fc-in {
-  border: 1px solid rgba(109, 221, 255, 0.24) !important;
-  border-radius: 18px !important;
-  overflow: hidden !important;
-  background: linear-gradient(180deg, rgba(15, 51, 75, 0.98), rgba(4, 22, 38, 0.99)) !important;
-}
-#pokedex .fcard.in .fc-in {
-  border-color: #ffdc62 !important;
-  box-shadow:
-    0 0 0 1px rgba(255, 221, 98, 0.7),
-    0 0 30px rgba(255, 207, 64, 0.17) !important;
-}
-#pokedex .fc-art {
-  height: 190px !important;
-  background:
-    radial-gradient(ellipse at 50% 72%, rgba(61, 183, 226, 0.22), transparent 62%),
-    linear-gradient(180deg, rgba(18, 68, 95, 0.72), rgba(5, 27, 45, 0.2)) !important;
-  border-bottom: 1px solid rgba(106, 216, 246, 0.17) !important;
-}
-#pokedex .fc-art .pokemon-art-sprite {
-  width: clamp(145px, 14vw, 190px) !important;
-  height: clamp(145px, 14vw, 190px) !important;
-  object-fit: contain !important;
-  filter: drop-shadow(0 12px 16px rgba(0, 0, 0, 0.42)) !important;
-}
-#pokedex .fcard .qa {
-  border: 1px solid rgba(121, 221, 255, 0.35) !important;
-  background: rgba(4, 22, 38, 0.8) !important;
-  color: #e7f8ff !important;
-}
-#pokedex .fcard.in .qa {
-  background: linear-gradient(180deg, #ffe778, #efb32a) !important;
-  color: #10263a !important;
 }

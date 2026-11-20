@@ -110,19 +110,3 @@ html body #resonance-launch .rl-kicker {
     margin-left: auto;
   }
 }
-
-/* ---------- performance: illustrations float only on hover ----------
-   The "artHover" animation looped on all 30 cards and repainted
-   the page 30 times per second (≈ 27 % of the CPU). */
-html body #pokedex .fc-art img.pokemon-art-sprite {
-  animation: none !important;
-}
-@media (hover: hover) and (prefers-reduced-motion: no-preference) {
-  html body #pokedex .fcard:hover .fc-art img.pokemon-art-sprite {
-    animation: artHover 2.4s ease-in-out infinite !important;
-  }
-}
-html body #pokedex .fcard .qa {
-  color: #ffd75e !important;
-  border-color: rgba(255, 215, 94, 0.5) !important;
-}

@@ -8,12 +8,20 @@
   --color-text-soft: var(--v4-tx2);
   --color-text-muted: var(--mut);
   --color-text-dim: var(--v4-mut);
+  /* secondary copy: move lists, inactive tabs */
+  --color-text-secondary: var(--tx2);
   --color-accent: var(--gold);
+  /* pale gold: badges and labels on dark plates */
+  --color-accent-soft: var(--gold-l);
+  /* empty gauge or pip */
+  --color-track: var(--s4);
   --color-line: var(--line);
 
   --font-display: var(--f-d);
   --font-body: var(--f-b);
   --font-mono: var(--f-m);
+  /* narrow tabular digits (Pokédex numbers, scores) */
+  --font-numeric: var(--f-n);
 
   /* hover lift on cards and rows */
   --ease-lift: cubic-bezier(0.2, 0.75, 0.25, 1);

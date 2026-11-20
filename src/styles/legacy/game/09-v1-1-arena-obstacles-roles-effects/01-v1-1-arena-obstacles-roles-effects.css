@@ -315,14 +315,6 @@
   color: var(--mut);
 }
 /* Pokédex */
-.fc-sq {
-  display: block;
-  font-family: var(--f-m);
-  font-size: 10px;
-  letter-spacing: 0.04em;
-  color: var(--gold-l);
-  margin: calc(var(--space-3xs) * -1) 0 var(--space-xs);
-}
 .sh-role {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);

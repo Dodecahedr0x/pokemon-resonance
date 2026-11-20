@@ -108,34 +108,6 @@ p.v4-note {
   }
 
   /* ---------- Team: tidy search bar ---------- */
-  html body #pokedex .dexbar {
-    display: grid !important;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--space-sm) !important;
-    padding: var(--space-sm) !important;
-  }
-  html body #pokedex .dexbar .srch,
-  html body #pokedex .dexbar #genSeg {
-    grid-column: 1/-1;
-  }
-  html body #pokedex .dexbar #genSeg {
-    display: grid !important;
-    grid-template-columns: repeat(4, 1fr);
-    width: auto !important;
-  }
-  html body #pokedex .dexbar #genSeg button {
-    min-height: 40px;
-  }
-  html body #pokedex .dexbar select {
-    width: 100% !important;
-    min-width: 0 !important;
-    height: var(--tap);
-    font-size: var(--t-s) !important;
-    border-radius: var(--r-s) !important;
-  }
-  html body #pokedex .dexbar .cnt {
-    display: none !important;
-  }
 
   /* ---------- Camp: sub-tabs on a single scrolling line ----------
      The line bleeds to the screen edges: the bleed matches the page's 12 px side padding,
@@ -261,7 +233,7 @@ p.v4-note {
   html body .page .lbl-s {
     font-size: var(--t-xs) !important;
   }
-  html body #pokedex :is(.stg b, .stg em, .types .tb, .fc-gen, .fc-st, .dc-s em) {
+  html body #pokedex .dc-s em {
     font-size: var(--t-xs) !important;
   }
 }

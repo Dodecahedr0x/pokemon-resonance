@@ -218,13 +218,13 @@ function scan() {
     // cards: shinies captured
     const sh = (PROFILE && PROFILE.shiny) || [];
     // only when the Pokédex is displayed (otherwise hundreds of cards re-read on every battle action)
-    // the React grid (Grid.jsx) renders pk-shiny and "✦ Chromatique" (Shiny): we redraw it if it has fallen behind
+    // the React grid (Grid.jsx) renders .is-shiny and "✦ Chromatique" (Shiny): we redraw it if it has fallen behind
     if (
       cur === 'pokedex' &&
-      [...document.querySelectorAll('#pokedex .fcard')].some(c => {
+      [...document.querySelectorAll('#pokedex .team-card')].some(c => {
         const b = c.querySelector('[data-open]');
         const id = b && b.dataset.open;
-        return c.classList.contains('pk-shiny') !== !!(id && sh.includes(id));
+        return c.classList.contains('is-shiny') !== !!(id && sh.includes(id));
       })
     ) {
       refreshGrid();

@@ -49,43 +49,6 @@
   margin-top: var(--space-2xs);
 }
 /* Pokédex */
-.dexbar {
-  display: flex;
-  align-items: center;
-  gap: var(--space-sm);
-  flex-wrap: wrap;
-  margin-bottom: var(--space-sm);
-}
-.srch {
-  flex: 1 1 220px;
-  display: flex;
-  align-items: center;
-  gap: var(--space-sm);
-  height: 40px;
-  padding: 0 var(--space-md);
-  border-radius: 999px;
-  border: 1px solid var(--line2);
-  background: var(--s1);
-  color: var(--mut);
-}
-.srch svg {
-  width: 16px;
-  height: 16px;
-  flex: none;
-}
-.srch input {
-  flex: 1;
-  min-width: 0;
-  border: 0;
-  background: transparent;
-  color: var(--tx);
-  font: inherit;
-  font-size: 14px;
-  outline: none;
-}
-.srch:focus-within {
-  border-color: var(--gold);
-}
 .seg {
   display: flex;
   gap: var(--space-3xs);
@@ -108,38 +71,6 @@
 .seg button[aria-pressed='true'] {
   background: var(--tx);
   color: var(--bg);
-}
-#dexType {
-  height: 40px;
-  padding: 0 var(--space-md);
-  border-radius: 999px;
-  border: 1px solid var(--line2);
-  background: var(--s1);
-  color: var(--tx);
-  font: inherit;
-  font-size: 13px;
-}
-.dexbar .cnt {
-  font-family: var(--f-m);
-  font-size: 11px;
-  color: var(--mut);
-  margin-left: auto;
-}
-.stg {
-  display: inline-flex;
-  gap: var(--space-3xs);
-  margin-right: var(--space-xs);
-  vertical-align: 1px;
-}
-.stg i {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  border: 1px solid var(--line3);
-}
-.stg i.on {
-  background: var(--gold);
-  border-color: var(--gold);
 }
 
 .fam {

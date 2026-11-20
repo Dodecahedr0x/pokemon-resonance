@@ -104,10 +104,6 @@
 
 /* 1. collection cards: the large rounding and inner frame
       wanted by v4.24 (the background keeps the type color) */
-html:is(:root, #r9) body #pokedex .fcard {
-  border-radius: 22px !important;
-  overflow: hidden !important;
-}
 
 /* 2. shinies: real shiny artwork (loaded by the game), without the artificial tint */
 html:is(:root, #r9) body .enc-card.shiny .enc-cr img.art-sh,

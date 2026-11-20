@@ -66,10 +66,6 @@ html body #accueil .qk-ic {
   color: #0b2236 !important;
 }
 /* team cards: "À capturer" (To capture) no longer slides under the quick button */
-html body .fc-art .fc-lock {
-  right: auto !important;
-  left: 8px !important;
-}
 
 /* ---------- 3. Desktop: no more text under 10 px ---------- */
 html body .hh-chips span,
@@ -109,9 +105,6 @@ html body #resonance-launch .rl-meta strong {
   html body #accueil .tc-k span,
   html body .sel-tabs em,
   html body #combat .sel-tabs em,
-  html body .fc-no,
-  html body #pokedex .fc-no,
-  html body .fc-chain em,
   html body .chip,
   html body .ac h4,
   html body .ac h4 span {
@@ -137,7 +130,6 @@ html body #resonance-launch .rl-meta strong {
   html body .vx span,
   html body #bPhase,
   html body .syn-c,
-  html body #genSeg button,
   html body .seg button {
     font-size: 11.5px !important;
   }
@@ -149,20 +141,8 @@ html body #resonance-launch .rl-meta strong {
     font-size: 11.5px !important;
   }
   /* team cards: dense, we gain a point without breaking the grid */
-  html body #pokedex .fc-role,
-  html body .fc-role,
-  html body #pokedex .fc-gen,
-  html body #pokedex .fc-st,
-  html body #pokedex .fc-lock,
   html body #pokedex .types .tb,
-  html body .fc-gen,
-  html body .fc-st,
-  html body .fc-lock,
-  html body .types .tb,
-  html body .stg b,
-  html body .stg em,
-  html body #pokedex .stg b,
-  html body #pokedex .stg em {
+  html body .types .tb {
     font-size: 10.5px !important;
   }
 }

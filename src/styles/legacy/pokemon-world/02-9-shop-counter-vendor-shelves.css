@@ -274,8 +274,7 @@ html:not(#pkz) body:not(#pkz) #sac.pk-bag .v4-cats > button::after {
 }
 
 html.pk-calme .pk-dlg .pk-fl,
-html.pk-calme .pk-front .pk-clerk,
-html.pk-calme #pokedex .fcard .fc-foil {
+html.pk-calme .pk-front .pk-clerk {
   animation: none !important;
 }
 html.a11y-rm .pk-dlg .pk-fl,
@@ -287,8 +286,7 @@ html.a11y-rm :is(.tcb, .v4-tbg).on::after {
 @media (prefers-reduced-motion: reduce) {
   .pk-dlg .pk-fl,
   .pk-front .pk-clerk,
-  .pk-bag-ban .pk-bagi,
-  #pokedex .fcard .fc-foil {
+  .pk-bag-ban .pk-bagi {
     animation: none !important;
   }
 }

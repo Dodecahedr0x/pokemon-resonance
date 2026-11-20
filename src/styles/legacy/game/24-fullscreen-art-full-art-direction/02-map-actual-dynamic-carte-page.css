@@ -220,9 +220,6 @@
   #combat .bt {
     padding: var(--space-sm) !important;
   }
-  #pokedex .fam-grid {
-    grid-template-columns: repeat(auto-fill, minmax(165px, 1fr)) !important;
-  }
 }
 @media (prefers-reduced-motion: reduce) {
   .page.on,

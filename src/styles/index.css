@@ -23,3 +23,6 @@
 @import '../screens/dex/dex.css' layer(screens);
 @import '../screens/dex/dex-card.css' layer(screens);
 @import '../screens/dex/dex-card-sections.css' layer(screens);
+@import '../screens/team/team.css' layer(screens);
+@import '../screens/team/team-card.css' layer(screens);
+@import '../screens/team/team-card-parts.css' layer(screens);

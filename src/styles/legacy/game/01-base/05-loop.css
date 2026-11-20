@@ -241,31 +241,6 @@
   font-size: 11px;
   color: var(--mut);
 }
-.filters {
-  display: flex;
-  gap: var(--space-xs);
-  overflow-x: auto;
-  scrollbar-width: none;
-  margin: 0 0 var(--space-lg);
-  padding-bottom: var(--space-3xs);
-}
-.filters::-webkit-scrollbar {
-  display: none;
-}
-.filters .b {
-  flex: none;
-}
-.dex-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(212px, 1fr));
-  gap: var(--space-md);
-}
-@media (max-width: 540px) {
-  .dex-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--space-sm);
-  }
-}
 .dex {
   --c: #888;
   position: relative;
@@ -293,16 +268,6 @@
   box-shadow: 0 26px 50px -30px color-mix(in srgb, var(--c) 70%, transparent);
 }
 
-.dex-open {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  border: 0;
-  background: transparent;
-  cursor: pointer;
-  border-radius: 20px;
-}
-
 .dex h3 {
   font-family: var(--f-d);
   font-stretch: 110%;
@@ -319,60 +284,9 @@
   flex-wrap: wrap;
 }
 
-.pc {
-  display: flex;
-  gap: var(--space-3xs);
-  flex: none;
-}
-.pc i {
-  width: 5px;
-  height: 12px;
-  border-radius: 2px;
-  background: var(--s4);
-}
-.pc i.on {
-  background: var(--gold);
-}
-.qa {
-  position: absolute;
-  z-index: 2;
-  top: 12px;
-  right: 12px;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  border: 1px solid var(--line2);
-  background: rgba(12, 14, 19, 0.6);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
-  display: grid;
-  place-items: center;
-  cursor: pointer;
-  transition:
-    background 0.25s,
-    border-color 0.25s,
-    transform 0.25s var(--ease);
-}
-.qa svg {
-  width: 14px;
-  height: 14px;
-  transition: transform 0.35s var(--ease);
-}
-.qa:hover {
-  border-color: var(--line3);
-  transform: scale(1.06);
-}
 .dex.in {
   border-color: rgba(227, 192, 122, 0.55);
   box-shadow: inset 0 0 0 1px rgba(227, 192, 122, 0.35);
-}
-.dex.in .qa {
-  background: var(--gold);
-  border-color: var(--gold);
-  color: #17120a;
-}
-.dex.in .qa svg {
-  transform: rotate(45deg);
 }
 .dex.dim {
   opacity: 0.5;

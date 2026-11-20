@@ -177,15 +177,6 @@
     height: 300px !important;
     background-position: 42% center !important;
   }
-  .dex-grid {
-    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)) !important;
-  }
-  .fam-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  }
-  .fam-grid .fcard {
-    min-height: 350px !important;
-  }
   #resonance-launch .rl-frame {
     grid-template-columns: 1fr !important;
     grid-template-rows: 1fr auto !important;
@@ -228,19 +219,6 @@
   }
 }
 @media (max-width: 560px) {
-  .fam-grid {
-    grid-template-columns: minmax(0, 1fr) !important;
-  }
-  .fam-grid .fcard {
-    min-height: 360px !important;
-  }
-  .fc-art {
-    min-height: 160px !important;
-  }
-  .dex-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: var(--space-sm) !important;
-  }
   .dex {
     padding: var(--space-md) !important;
     min-height: 240px !important;
@@ -316,52 +294,6 @@
   display: block !important;
   writing-mode: vertical-rl !important;
 }
-.fc-art {
-  isolation: isolate !important;
-}
-.fc-art > .orb {
-  display: grid !important;
-  opacity: 0.12 !important;
-  transform: scale(0.9);
-}
-.fc-art.sprite-fallback > .orb {
-  opacity: 0.78 !important;
-  transform: scale(1) !important;
-}
-.fc-art .pokemon-art-sprite {
-  position: relative !important;
-  z-index: 2 !important;
-  display: block !important;
-  width: clamp(126px, 13vw, 176px) !important;
-  height: clamp(126px, 13vw, 176px) !important;
-  max-width: 88% !important;
-  max-height: 100% !important;
-  object-fit: contain !important;
-  object-position: center !important;
-  filter: drop-shadow(0 10px 14px rgba(0, 0, 0, 0.5))
-    drop-shadow(0 0 16px color-mix(in srgb, var(--c) 25%, transparent)) !important;
-  animation: artHover 4.8s ease-in-out infinite !important;
-  transform-origin: 50% 65% !important;
-}
-@keyframes artHover {
-  0%,
-  100% {
-    transform: translateY(1px);
-  }
-  50% {
-    transform: translateY(-5px);
-  }
-}
-.fc-art .fc-st {
-  z-index: 5 !important;
-}
-.fc-art .fc-lock,
-.fc-art .fc-it {
-  z-index: 5 !important;
-}
-.fc-art .fc-burst {
-  opacity: 0.18 !important;
-}
 @media (max-width: 999px) {
   #resonance-launch .rl-copy {
     grid-column: 1 !important;
@@ -375,14 +307,5 @@
   #resonance-launch .rl-logo span {
     font-size: clamp(14px, 4vw, 20px) !important;
     letter-spacing: 0.12em !important;
-  }
-  .fc-art .pokemon-art-sprite {
-    width: clamp(132px, 38vw, 170px) !important;
-    height: clamp(132px, 38vw, 170px) !important;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .fc-art .pokemon-art-sprite {
-    animation: none !important;
   }
 }
