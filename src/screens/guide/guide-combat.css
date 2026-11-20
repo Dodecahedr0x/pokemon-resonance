@@ -1,0 +1,384 @@
+/* Guide › Combat (Basics.jsx): the four-beat turn (.guide-turn), the anatomy of an Awakening (.guide-anatomy-*, cards
+   is-wide / is-danger) and the eight rules (.guide-rule, a <details> with code, name, summary, points and the codes
+   it feeds). */
+
+.guide-rules {
+  display: grid;
+  gap: var(--space-sm);
+  background: linear-gradient(145deg, rgba(10, 39, 56, 0.96), rgba(4, 20, 34, 0.98));
+  border: 1px solid rgba(100, 210, 255, 0.24);
+  box-shadow:
+    0 16px 38px rgba(0, 0, 0, 0.23),
+    inset 0 1px rgba(255, 255, 255, 0.04);
+  border-radius: 17px;
+}
+.guide-rule {
+  transition:
+    border-color 0.25s,
+    background 0.25s;
+  border: 1px solid transparent;
+  border-radius: var(--radius-card-large);
+  background: var(--surface-plate);
+  border-color: var(--color-line-plate);
+  box-shadow: var(--shadow-plate);
+}
+.guide-rule summary {
+  list-style: none;
+  cursor: pointer;
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr) 22px;
+  gap: var(--space-md);
+  align-items: center;
+  padding: var(--space-lg) var(--space-lg);
+}
+.guide-rule summary::-webkit-details-marker {
+  display: none;
+}
+.guide-rule .guide-rule-code {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--color-accent);
+  letter-spacing: 0.06em;
+}
+.guide-rule .guide-rule-name {
+  display: block;
+  font-stretch: 112%;
+  font-size: 16.5px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.guide-rule .guide-rule-summary {
+  display: block;
+  font-size: 13.5px;
+  color: var(--color-text-muted);
+  margin-top: var(--space-3xs);
+}
+.guide-rule .guide-rule-chevron {
+  width: 20px;
+  height: 20px;
+  color: var(--color-text-muted);
+  transition: transform 0.35s var(--ease);
+}
+.guide-rule[open] .guide-rule-chevron {
+  transform: rotate(180deg);
+  color: var(--color-accent);
+}
+.guide-rule-body {
+  display: grid;
+  gap: var(--space-lg);
+  padding: 0 var(--space-lg) var(--space-xl) 88px;
+}
+@media (max-width: 600px) {
+  .guide-rule summary {
+    grid-template-columns: 42px minmax(0, 1fr) 20px;
+    gap: var(--space-sm);
+    padding: var(--space-lg) var(--space-md);
+  }
+  .guide-rule-body {
+    padding: 0 var(--space-md) var(--space-lg) 66px;
+  }
+}
+.guide-rule-points {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: var(--space-sm);
+  font-size: 14.5px;
+  color: var(--color-text-secondary);
+}
+.guide-rule-points li {
+  position: relative;
+  padding-left: var(--space-lg);
+}
+.guide-rule-points li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 6px;
+  height: 6px;
+  border-radius: 2px;
+  background: var(--color-track);
+  border: 1px solid var(--color-line-bright);
+}
+.guide-rule-points li.is-new::before {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+}
+.guide-rule-feeds {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  align-items: center;
+}
+.guide-rule-feeds .guide-rule-feeds-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin-right: var(--space-2xs);
+}
+.guide-anatomy {
+  display: grid;
+  gap: var(--space-md);
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  border-radius: 20px;
+  background: linear-gradient(145deg, rgba(10, 39, 55, 0.94), rgba(4, 19, 31, 0.96));
+  border: 1px solid rgba(112, 211, 255, 0.21);
+  box-shadow: 0 16px 38px rgba(0, 0, 0, 0.18);
+}
+@media (max-width: 1000px) {
+  .guide-anatomy {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 560px) {
+  .guide-anatomy {
+    grid-template-columns: 1fr;
+  }
+}
+.guide-anatomy-card {
+  display: grid;
+  gap: var(--space-sm);
+  align-content: start;
+  grid-column: span 2;
+  position: relative;
+  overflow: hidden;
+  padding: var(--space-xl);
+  border: 1px solid transparent;
+  border-radius: var(--radius-card-large);
+  background: var(--surface-plate);
+  border-color: var(--color-line-plate);
+  box-shadow: var(--shadow-plate);
+}
+.guide-anatomy-card p {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+}
+.guide-turn {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-sm);
+  margin-top: 0;
+}
+@media (max-width: 860px) {
+  .guide-turn {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+.guide-turn > div {
+  display: grid;
+  gap: var(--space-xs);
+  align-content: start;
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-plate);
+  border: 1px solid rgba(124, 220, 230, 0.18);
+  border-radius: 18px;
+  background: linear-gradient(145deg, #153447, #091b28);
+}
+.guide-turn .guide-turn-number {
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  font-size: 11px;
+  background: linear-gradient(180deg, #f6dda4, #c9a05a);
+  color: #1a1307;
+  border: 0;
+  font-weight: 600;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  border-radius: 1px;
+  transform: rotate(45deg);
+  font-family: var(--font-numeric);
+  font-stretch: 72%;
+}
+.guide-turn b {
+  font-weight: 720;
+  text-transform: uppercase;
+  font-size: 14px;
+  font-family: var(--font-display);
+  font-stretch: normal;
+}
+.guide-turn p {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+.guide-anatomy-card.is-wide {
+  grid-column: span 4;
+}
+.guide-anatomy-number {
+  font-size: 44px;
+  line-height: 0.8;
+  color: transparent;
+  position: absolute;
+  right: 16px;
+  top: 14px;
+  font-family: var(--font-numeric);
+  font-stretch: 72%;
+  font-variant-numeric: tabular-nums lining-nums;
+  letter-spacing: -0.01em;
+  font-weight: 800;
+  -webkit-text-stroke: 1px rgba(212, 175, 106, 0.35);
+}
+.guide-anatomy-sources {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-xs);
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+.guide-anatomy-sources b {
+  display: inline-grid;
+  place-items: center;
+  min-width: 26px;
+  height: 20px;
+  margin-right: var(--space-sm);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: #1a1307;
+  border-radius: 1px;
+  background: var(--brush), linear-gradient(180deg, #f2dda8, #b38a43);
+}
+.guide-anatomy-branch {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+.guide-anatomy-fork {
+  position: relative;
+  width: 30px;
+  height: 46px;
+}
+.guide-anatomy-fork i {
+  position: absolute;
+  left: 0;
+  width: 30px;
+  height: 1.5px;
+  background: linear-gradient(90deg, var(--color-accent), transparent);
+  transform-origin: left center;
+}
+.guide-anatomy-fork i:first-child {
+  top: 22px;
+  transform: rotate(-34deg);
+}
+.guide-anatomy-fork i:last-child {
+  top: 22px;
+  transform: rotate(34deg);
+}
+.guide-anatomy-options {
+  display: grid;
+  gap: var(--space-sm);
+  font-size: 13px;
+  font-weight: 600;
+}
+.guide-anatomy-options span {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+.guide-anatomy-line {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+.guide-anatomy-pokemon {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-xs);
+  text-align: center;
+  min-width: 98px;
+}
+.guide-anatomy-pokemon b {
+  font-weight: 750;
+  font-size: 14px;
+  text-transform: uppercase;
+  font-family: var(--font-display);
+  font-stretch: normal;
+}
+.guide-anatomy-moves {
+  display: grid;
+  gap: var(--space-2xs);
+}
+.guide-anatomy-move {
+  padding: var(--space-3xs) var(--space-sm);
+  border: 1px solid var(--color-line-strong);
+  color: var(--color-text-secondary);
+  border-radius: 2px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+}
+.guide-anatomy-move.is-lost {
+  color: #ff8a8a;
+  border-color: rgba(255, 106, 106, 0.35);
+  text-decoration: line-through;
+  text-decoration-color: rgba(255, 106, 106, 0.7);
+}
+.guide-anatomy-arrow {
+  align-self: center;
+  color: var(--color-accent);
+  font-size: 18px;
+  margin-top: -26px;
+}
+.guide-anatomy-arrival {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: 96px;
+}
+.guide-anatomy-arrival .guide-anatomy-ring {
+  position: absolute;
+  width: 66px;
+  height: 66px;
+  border-radius: 50%;
+  border: 1.5px solid color-mix(in srgb, #a8b820 70%, #fff);
+  animation: ring 2.4s ease-out infinite;
+  opacity: 0;
+}
+.guide-anatomy-arrival .guide-anatomy-ring.is-delayed {
+  animation-delay: 1.2s;
+}
+.guide-anatomy-foe {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+.guide-anatomy-foe .hp {
+  flex: 1;
+}
+.guide-anatomy-foe em {
+  font-style: normal;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--color-warning);
+}
+@media (max-width: 1000px) {
+  .guide-anatomy-card {
+    grid-column: span 1;
+  }
+  .guide-anatomy-card.is-wide {
+    grid-column: 1/-1;
+  }
+}
+@media (max-width: 560px) {
+  .guide-anatomy-card.is-wide {
+    grid-column: auto;
+  }
+}
+.guide-rule summary .guide-rule-code {
+  font-family: var(--font-mono);
+  letter-spacing: 0.14em;
+  color: var(--color-accent);
+}
+.guide-rule-code {
+  font-family: var(--font-mono);
+  letter-spacing: 0.14em;
+  color: var(--color-accent);
+}

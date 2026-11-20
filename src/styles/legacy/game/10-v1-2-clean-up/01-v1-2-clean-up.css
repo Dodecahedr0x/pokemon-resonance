@@ -19,23 +19,6 @@
   color: #fff0c8;
 }
 /* Guide */
-.gd-p[hidden] {
-  display: none;
-}
-.gd-intro {
-  margin-bottom: var(--space-lg);
-}
-.gd-intro .d {
-  max-width: 720px;
-  color: var(--tx2);
-  margin-top: var(--space-xs);
-}
-.gd-p .section {
-  margin-top: var(--space-5xl);
-}
-.gd-p .howto {
-  margin-top: 0;
-}
 /* Team */
 /* Preparation */
 .scn:not(.on) .scn-art {

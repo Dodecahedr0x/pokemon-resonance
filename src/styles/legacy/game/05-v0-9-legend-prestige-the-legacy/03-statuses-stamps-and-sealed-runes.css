@@ -145,12 +145,6 @@
     var(--brass) border-box;
   font-family: var(--f-b);
 }
-.kpis {
-  border-radius: var(--rl);
-}
-.kpi {
-  border-color: rgba(212, 175, 106, 0.1);
-}
 
 /* ---------- home ---------- */
 .hero {
@@ -190,32 +184,9 @@
   background: linear-gradient(90deg, #8e6a2c, #f2dda8, #8e6a2c);
   box-shadow: 0 0 8px rgba(212, 175, 106, 0.6);
 }
-.an.danger {
-  background:
-    radial-gradient(100% 80% at 100% 0%, rgba(229, 72, 77, 0.12), transparent 60%) padding-box,
-    var(--veins) padding-box,
-    var(--slab) padding-box,
-    linear-gradient(160deg, rgba(229, 72, 77, 0.55), rgba(255, 255, 255, 0.04) 40%, rgba(229, 72, 77, 0.25)) border-box;
-}
-.am {
-  border-radius: 2px;
-  font-family: var(--f-m);
-  font-size: 10.5px;
-  letter-spacing: 0.04em;
-}
-.an-src b {
-  border-radius: 1px;
-  background: var(--brush), linear-gradient(180deg, #f2dda8, #b38a43);
-}
 .rule summary .cd,
 .cd {
   font-family: var(--f-m);
   letter-spacing: 0.14em;
   color: var(--gold);
-}
-.rule .nm {
-  font-family: var(--f-d);
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
 }

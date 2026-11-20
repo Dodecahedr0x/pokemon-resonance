@@ -41,13 +41,13 @@ export default function Tutorial() {
 
   return (
     <>
-      <div className="gd-intro">
+      <div className="guide-intro">
         <h2 className="section-title">Tutoriel complet</h2>
         <p className="d">
           Toutes les mécaniques du jeu, chapitre par chapitre. Ouvrez un chapitre pour le lire, puis essayez-le.
         </p>
       </div>
-      <div className="tutorial-ch-p">
+      <div className="tutorial-progress">
         <span>
           <b>{n}</b> / {TUTORIAL_LIST.length} chapitres lus
         </span>
@@ -59,7 +59,7 @@ export default function Tutorial() {
         )}
       </div>
       {groupList.map(g => [
-        <h3 key={'g-' + g} className="tutorial-ch-g">
+        <h3 key={'g-' + g} className="tutorial-group">
           {g}
         </h3>,
         ...TUTORIAL_LIST.filter(c => c.g === g).map(c => {
@@ -67,18 +67,18 @@ export default function Tutorial() {
           return (
             <details
               key={c.k}
-              className={`tutorial-ch-c${isRead ? ' lu' : ''}`}
+              className={`tutorial-chapter${isRead ? ' is-read' : ''}`}
               data-tutorial-ch={c.k}
               onToggle={e => e.currentTarget.open && markRead(c.k)}
             >
               <summary>
-                <span className="tutorial-ch-i">
+                <span className="tutorial-chapter-icon">
                   <svg>
                     <use href={'#' + c.ic} />
                   </svg>
                 </span>
                 <b>{c.t}</b>
-                <span className="tutorial-ch-ok" aria-label={isRead ? 'lu' : 'à lire'}>
+                <span className="tutorial-chapter-check" aria-label={isRead ? 'lu' : 'à lire'}>
                   {isRead ? '✓' : ''}
                 </span>
               </summary>
@@ -86,7 +86,7 @@ export default function Tutorial() {
                 <Html html={typeof c.d === 'function' ? c.d() : c.d} />
               </p>
               {c.a.length > 0 && (
-                <div className="tutorial-ch-a">
+                <div className="tutorial-chapter-actions">
                   {c.a.map(([l, at], i) => (
                     <Html key={i} html={`<button type="button" class="button button-small" ${at}>${l}</button>`} />
                   ))}

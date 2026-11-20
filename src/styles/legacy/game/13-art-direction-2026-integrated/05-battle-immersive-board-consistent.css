@@ -46,16 +46,6 @@
   border-radius: 18px !important;
 }
 /* Guide, types and league: same graphic universe on all screens */
-#types .gd-p {
-  border-radius: 22px !important;
-  border: 1px solid rgba(108, 216, 248, 0.28) !important;
-  padding: clamp(18px, 3vw, 32px) !important;
-}
-#types .s5 li {
-  background: linear-gradient(120deg, rgba(15, 52, 73, 0.96), rgba(5, 23, 39, 0.98)) !important;
-  border: 1px solid rgba(108, 216, 248, 0.19) !important;
-  border-radius: 15px !important;
-}
 /* Soft motion: no interaction changes function */
 
 .bnav {

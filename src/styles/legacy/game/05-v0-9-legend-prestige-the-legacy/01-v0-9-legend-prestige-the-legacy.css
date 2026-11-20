@@ -98,11 +98,9 @@ body {
 .sh-name,
 .st-name,
 .scn b,
-.howto b,
 .mvc b,
 .eo-n b,
 .al b,
-.rxd h3,
 .cs .who,
 .log b,
 .efx-t1,
@@ -151,11 +149,9 @@ body {
 }
 
 .num,
-.kpi b,
 .res-k b,
 .sc-n,
 .st-right b,
-.an-k,
 .st-no,
 .f-dmg,
 .f-heal,
@@ -167,28 +163,9 @@ body {
   font-variant-numeric: tabular-nums lining-nums;
   letter-spacing: -0.01em;
 }
-.kpi b {
-  font-weight: 700;
-  font-size: clamp(30px, 3.6vw, 44px);
-  background: linear-gradient(180deg, #fff6df, #d4af6a 70%, #8e6a2c);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-.kpi span {
-  font-family: var(--f-m);
-  font-size: 10px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--mut);
-}
 .st-no {
   font-weight: 800;
   -webkit-text-stroke: 1px rgba(212, 175, 106, 0.22);
-}
-.an-k {
-  font-weight: 800;
-  -webkit-text-stroke: 1px rgba(212, 175, 106, 0.35);
 }
 .caption,
 .scn .lvl,
@@ -199,12 +176,8 @@ body {
 
 /* ---------- surfaces: runic slabs ---------- */
 .panel,
-.opt,
 .rule,
 .scn,
-.an,
-.kpis,
-.howto > div,
 .mvc,
 .ptm,
 .res-card,
@@ -216,10 +189,7 @@ body {
 .duo,
 .wx,
 .cs,
-.mx-wrap .rxd,
-.rxd,
 .it,
-.rp,
 .champ {
   border: 1px solid transparent;
   background:
@@ -233,8 +203,6 @@ body {
   box-shadow: var(--engrave);
 }
 .panel,
-.opt,
-.an,
 .rule,
 .scn,
 .qc,
@@ -249,11 +217,9 @@ body {
 .ptm,
 .st-evo,
 .st-line,
-.howto > div,
 .wx,
 .cs,
-.it,
-.rp {
+.it {
   border-radius: var(--r);
 }
 .rule[open],
@@ -263,29 +229,4 @@ body {
     linear-gradient(180deg, rgba(212, 175, 106, 0.12), rgba(212, 175, 106, 0.02)) padding-box,
     var(--slab) padding-box,
     var(--brass) border-box;
-}
-.opt {
-  background:
-    radial-gradient(120% 90% at 100% 0%, color-mix(in srgb, var(--c) 13%, transparent), transparent 62%) padding-box,
-    var(--veins) padding-box,
-    var(--slab) padding-box,
-    var(--edge) border-box;
-}
-.opt .ico {
-  border-radius: 4px;
-  transform: rotate(45deg);
-  width: 34px;
-  height: 34px;
-  margin: var(--space-2xs);
-  background: linear-gradient(135deg, color-mix(in srgb, var(--c) 34%, #0a0a0c), #0a0a0c);
-  border: 1px solid color-mix(in srgb, var(--c) 55%, transparent);
-  box-shadow:
-    0 0 14px -4px var(--c),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15);
-}
-.opt .ico svg {
-  transform: rotate(-45deg);
-}
-.opt .tg {
-  letter-spacing: 0.24em;
 }

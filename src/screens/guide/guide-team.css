@@ -1,0 +1,146 @@
+/* Guide › Équipe (Tactics.jsx): the tactical codex (roles, synergies lit is-active for the current team, obstacles
+   .guide-obstacle is-pil / is-rock / is-grass / is-sand / is-water) and the Resonance chords (.guide-chords). */
+
+.guide-codex {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-md);
+  margin-top: var(--space-lg);
+  border-radius: 20px;
+  background: linear-gradient(145deg, rgba(10, 39, 55, 0.94), rgba(4, 19, 31, 0.96));
+  border: 1px solid rgba(112, 211, 255, 0.21);
+  box-shadow: 0 16px 38px rgba(0, 0, 0, 0.18);
+}
+.guide-codex-card {
+  padding: var(--space-lg);
+  border-radius: var(--radius-card);
+  border: 1px solid transparent;
+  background:
+    var(--surface-slab) padding-box,
+    var(--border-edge) border-box;
+  box-shadow: var(--shadow-engrave);
+}
+.guide-codex-card h4 {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-sm);
+  margin: 0 0 var(--space-sm);
+  font-family: var(--font-display);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-size: 12.5px;
+  color: var(--color-accent-soft);
+}
+.guide-codex-card h4 span {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--color-text-muted);
+}
+.guide-codex-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--space-sm);
+  align-items: start;
+  padding: var(--space-sm) 0;
+  border-top: 1px solid rgba(212, 175, 106, 0.08);
+}
+.guide-codex-row b {
+  display: block;
+  font-size: 13px;
+}
+.guide-codex-row em {
+  display: block;
+  font-style: normal;
+  font-size: 11.5px;
+  line-height: 1.45;
+  color: var(--color-text-secondary);
+}
+.guide-codex-row.is-synergy {
+  opacity: 0.55;
+}
+.guide-codex-row.is-synergy.is-active {
+  opacity: 1;
+}
+.guide-codex-row.is-synergy.is-active b {
+  color: var(--color-accent-soft);
+}
+.guide-obstacle {
+  width: 22px;
+  height: 22px;
+  display: block;
+  border-radius: 3px;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.6);
+}
+.guide-obstacle.is-pil {
+  width: 12px;
+  margin: 0 var(--space-2xs);
+  border-radius: 1px;
+  background: linear-gradient(90deg, #24252b, #b0b0b7 50%, #17181c);
+  box-shadow:
+    0 -3px 0 #8d8e95,
+    0 3px 0 #3a3b41;
+}
+.guide-obstacle.is-rock {
+  border-radius: 50% 50% 42% 42%;
+  background: radial-gradient(circle at 38% 30%, #8a8f99, #22252c 80%);
+}
+.guide-obstacle.is-grass {
+  background:
+    linear-gradient(180deg, transparent 30%, rgba(0, 0, 0, 0.2)),
+    repeating-linear-gradient(100deg, #3d8642 0 2px, #1f4a24 2px 5px);
+}
+.guide-obstacle.is-sand {
+  background:
+    radial-gradient(rgba(240, 215, 160, 0.6) 1px, transparent 1.6px) 0 0/5px 5px,
+    #3a3122;
+}
+.guide-obstacle.is-water {
+  background: repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.22) 0 1px, transparent 1px 5px), #1e4e7a;
+}
+@media (max-width: 1100px) {
+  .guide-codex {
+    grid-template-columns: 1fr;
+  }
+}
+.guide-codex-row.is-active {
+  box-shadow:
+    0 0 0 1px rgba(255, 214, 94, 0.5),
+    0 0 18px rgba(255, 214, 94, 0.08);
+}
+.guide-chords {
+  margin-top: var(--space-lg);
+  display: grid;
+  gap: var(--space-sm);
+}
+.guide-chord {
+  display: flex;
+  gap: var(--space-sm);
+  align-items: flex-start;
+  padding: var(--space-sm) var(--space-sm);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.guide-chord em {
+  display: block;
+  font-style: normal;
+  font-size: 12.5px;
+  color: var(--color-text-muted, #9fb0c4);
+}
+.guide-chord-tag {
+  display: flex;
+  gap: var(--space-3xs);
+  padding-top: var(--space-2xs);
+  flex: none;
+}
+.guide-chord-tag i {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+.is-resonance .guide-chord-tag.rank-tag {
+  font-size: 13px;
+  min-width: 4.2em;
+}

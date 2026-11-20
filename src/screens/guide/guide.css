@@ -1,4 +1,4 @@
-/* Guide screen (#types, Guide.jsx). The rest of the guide is still styled in legacy. */
+/* Guide screen (#types, Guide.jsx): the rubric tabs. The panels are styled in guide-layout.css and one file per tab. */
 
 /* rubric tabs (look: the shared .tabs), stuck to the top while the guide scrolls */
 .guide-tabs {

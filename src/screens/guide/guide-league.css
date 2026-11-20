@@ -1,0 +1,330 @@
+/* Guide › Ligue (LeagueGuide.jsx): between battles (bonds, capture, fatigue, held items), the combined moves
+   (.guide-combo, is-unlocked at bond tier 3, tinted by --a / --b) and the League champion. */
+
+.guide-topics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-md);
+}
+@media (max-width: 1100px) {
+  .guide-topics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 600px) {
+  .guide-topics {
+    grid-template-columns: 1fr;
+  }
+}
+.guide-topic {
+  display: grid;
+  gap: var(--space-md);
+  align-content: start;
+  padding: var(--space-xl);
+  border: 1px solid transparent;
+  border-radius: var(--radius-card-large);
+  background: var(--surface-plate);
+  border-color: var(--color-line-plate);
+  box-shadow: var(--shadow-plate);
+}
+.guide-topic .guide-topic-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+.guide-topic p {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+}
+.guide-bond-tier {
+  display: grid;
+  grid-template-columns: 54px minmax(0, 1fr);
+  gap: var(--space-sm);
+  align-items: center;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+.guide-bond-tier .guide-bond-pips {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+.guide-bond-tier .guide-bond-pips i {
+  height: 7px;
+  border-radius: 2px;
+  background: var(--color-track);
+}
+.guide-bond-tier .guide-bond-pips i.is-filled {
+  background: var(--color-accent);
+}
+.guide-bond-tier b {
+  color: var(--color-text);
+}
+.guide-capture-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-sm);
+  counter-reset: c;
+}
+.guide-capture-steps li {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr);
+  gap: var(--space-sm);
+  font-size: 13.5px;
+  color: var(--color-text-secondary);
+}
+.guide-capture-steps li::before {
+  counter-increment: c;
+  content: counter(c);
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--color-accent);
+  border: 1px solid rgba(227, 192, 122, 0.4);
+}
+.guide-fatigue {
+  display: grid;
+  gap: var(--space-sm);
+}
+.guide-fatigue-row {
+  display: grid;
+  grid-template-columns: 82px minmax(0, 1fr) 34px;
+  gap: var(--space-sm);
+  align-items: center;
+  font-size: 12.5px;
+  color: var(--color-text-secondary);
+}
+.guide-fatigue-row .guide-fatigue-bar {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--color-track);
+  overflow: hidden;
+}
+.guide-fatigue-row .guide-fatigue-bar i {
+  display: block;
+  height: 100%;
+  background: var(--color-warning);
+  border-radius: 3px;
+}
+.guide-fatigue-row.is-high .guide-fatigue-bar i {
+  background: var(--color-negative);
+}
+.guide-fatigue-row.is-low .guide-fatigue-bar i {
+  background: var(--color-positive);
+}
+.guide-fatigue-row span:last-child {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.guide-items {
+  display: grid;
+  gap: var(--space-sm);
+  border-radius: 20px;
+  background: linear-gradient(145deg, rgba(10, 39, 55, 0.94), rgba(4, 19, 31, 0.96));
+  border: 1px solid rgba(112, 211, 255, 0.21);
+  box-shadow: 0 16px 38px rgba(0, 0, 0, 0.18);
+}
+.guide-item {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr);
+  gap: var(--space-sm);
+  align-items: start;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  border: 1px solid transparent;
+  border-radius: var(--radius-card);
+  background: var(--surface-plate);
+  border-color: var(--color-line-plate);
+  box-shadow: var(--shadow-plate);
+}
+.guide-item .guide-item-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+  background: var(--s3);
+  border: 1px solid var(--color-line-strong);
+}
+.guide-item .guide-item-icon svg {
+  width: 15px;
+  height: 15px;
+  color: var(--color-accent);
+}
+.guide-item b {
+  display: block;
+  color: var(--color-text);
+  font-weight: 600;
+  font-size: 13.5px;
+}
+.guide-combos {
+  display: grid;
+  gap: var(--space-md);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border-radius: 20px;
+  background: linear-gradient(145deg, rgba(10, 39, 55, 0.94), rgba(4, 19, 31, 0.96));
+  border: 1px solid rgba(112, 211, 255, 0.21);
+  box-shadow: 0 16px 38px rgba(0, 0, 0, 0.18);
+}
+.guide-combo {
+  position: relative;
+  display: grid;
+  gap: var(--space-md);
+  align-content: start;
+  overflow: hidden;
+  border: 1px solid transparent;
+  border-radius: var(--radius-card-large);
+  padding: var(--space-xl);
+  background: var(--surface-plate);
+  border-color: var(--color-line-plate);
+  box-shadow: var(--shadow-plate);
+}
+.guide-combo-header {
+  display: flex;
+  align-items: center;
+}
+.guide-combo-header .medal {
+  width: 48px;
+  height: 48px;
+  box-shadow: 0 0 0 3px var(--color-surface);
+}
+.guide-combo-header .medal + .medal {
+  margin-left: calc(var(--space-sm) * -1);
+}
+.guide-combo .guide-combo-pair {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+.guide-combo h3 {
+  font-family: var(--font-display);
+  font-stretch: 125%;
+  font-weight: 850;
+  text-transform: uppercase;
+  line-height: 0.95;
+  font-size: 21px;
+}
+.guide-combo p {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+}
+.guide-champion {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--space-3xl);
+  align-items: center;
+  padding: clamp(22px, 4vw, 40px);
+  border: 1px solid transparent;
+  border-radius: var(--radius-card-large);
+  background: var(--surface-plate);
+  border-color: var(--color-line-plate);
+  box-shadow: var(--shadow-plate);
+}
+@media (max-width: 860px) {
+  .guide-champion {
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
+  }
+}
+.guide-champion p:not(:where(.kicker)) {
+  font-size: 15px;
+  color: var(--color-text-secondary);
+}
+.guide-champion .guide-champion-stats {
+  display: flex;
+  gap: var(--space-xl);
+  margin-top: var(--space-lg);
+  flex-wrap: wrap;
+}
+.guide-champion .guide-champion-stats b {
+  display: block;
+  font-family: var(--font-display);
+  font-stretch: 125%;
+  font-weight: 850;
+  font-size: 26px;
+  color: var(--color-accent);
+}
+.guide-champion .guide-champion-stats span {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+.guide-bond-pips {
+  display: flex;
+  border-radius: 15px;
+  background: rgba(5, 23, 36, 0.78);
+  border: 1px solid rgba(112, 211, 255, 0.2);
+  padding: var(--space-sm);
+  gap: var(--space-sm);
+}
+.guide-combo-bar {
+  position: relative;
+  height: 4px;
+  background: #0a0b0e;
+  box-shadow: inset 0 0 0 1px rgba(212, 175, 106, 0.2);
+}
+.guide-combo-bar i {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: linear-gradient(90deg, #8e6a2c, #f2dda8);
+  box-shadow: 0 0 6px rgba(212, 175, 106, 0.6);
+}
+.guide-items .guide-item.is-missing {
+  opacity: 0.6;
+}
+.guide-item-source {
+  display: block;
+  font-style: normal;
+  margin-top: var(--space-3xs);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--color-accent);
+}
+.guide-items .guide-item.is-missing .guide-item-source {
+  color: var(--color-text-muted);
+}
+.guide-combo .guide-combo-status {
+  padding-top: var(--space-2xs);
+  display: grid;
+  gap: var(--space-xs);
+}
+@media (max-width: 1200px) {
+  .guide-combos {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 560px) {
+  .guide-combos {
+    grid-template-columns: 1fr;
+  }
+}
+.guide-combo .guide-combo-status em {
+  font-style: normal;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+}
+.guide-combo.is-unlocked .guide-combo-status em {
+  color: var(--color-accent-soft);
+}
+.guide-bond-pips i.is-filled {
+  box-shadow:
+    0 0 0 1px rgba(255, 214, 94, 0.5),
+    0 0 18px rgba(255, 214, 94, 0.08);
+}
+.guide-combo.is-unlocked {
+  box-shadow:
+    0 0 0 1px rgba(255, 214, 94, 0.5),
+    0 0 18px rgba(255, 214, 94, 0.08);
+}

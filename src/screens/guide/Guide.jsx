@@ -69,7 +69,7 @@ export default function Guide() {
         ))}
       </div>
       {PANELS.map(({ k, C, lazy }) => (
-        <div key={k} className="gd-p" data-gp={k} role="tabpanel" hidden={tab !== k}>
+        <div key={k} className="guide-panel" data-gp={k} role="tabpanel" hidden={tab !== k}>
           {ready && (!lazy || openItems.has(k) || tab === k) && <C />}
         </div>
       ))}

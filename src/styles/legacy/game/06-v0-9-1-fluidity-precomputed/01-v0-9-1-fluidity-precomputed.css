@@ -105,10 +105,6 @@
 .bdg.on svg {
   opacity: 1;
 }
-.page .section {
-  content-visibility: auto;
-  contain-intrinsic-size: auto 900px;
-}
 .energy-pips i.is-filled {
   box-shadow:
     0 0 0 1px rgba(255, 241, 199, 0.7),

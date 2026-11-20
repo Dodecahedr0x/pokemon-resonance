@@ -25,12 +25,12 @@ export function Codex() {
   const act = synOf(squad).map(s => s.k);
   return (
     <>
-      <div className="cx-c">
+      <div className="guide-codex-card">
         <h4>Rôles</h4>
         {ROLES.map(r => {
           const R = ROLEFX[r.n];
           return (
-            <div key={r.n} className="cx-r">
+            <div key={r.n} className="guide-codex-row">
               <Html html={rIco(r.n)} />
               <span>
                 <b>
@@ -44,7 +44,7 @@ export function Codex() {
           );
         })}
       </div>
-      <div className="cx-c">
+      <div className="guide-codex-card">
         <h4>
           Synergies de types
           <span>
@@ -52,7 +52,7 @@ export function Codex() {
           </span>
         </h4>
         {SYN.map(s => (
-          <div key={s.k} className={`cx-r syn${act.includes(s.k) ? ' on' : ''}`}>
+          <div key={s.k} className={`guide-codex-row is-synergy${act.includes(s.k) ? ' is-active' : ''}`}>
             <span className="synergy-types">
               {s.t.map(t => (
                 <i key={t} style={{ background: tc(t) }} />
@@ -67,11 +67,11 @@ export function Codex() {
           </div>
         ))}
       </div>
-      <div className="cx-c">
+      <div className="guide-codex-card">
         <h4>Obstacles d’arène</h4>
         {OBSTACLES.map(([k, n, d]) => (
-          <div key={k} className="cx-r">
-            <span className={`ob-i ob-${k}`} aria-hidden="true" />
+          <div key={k} className="guide-codex-row">
+            <span className={`guide-obstacle is-${k}`} aria-hidden="true" />
             <span>
               <b>{n}</b>
               <em>{d}</em>
@@ -86,15 +86,15 @@ export function Codex() {
 // Resonance Chords (v4.10): three types in the same round trigger a team effect.
 export function Chords() {
   return (
-    <section className="acc-codex" aria-label="Accords de Résonance">
+    <section className="guide-chords" aria-label="Accords de Résonance">
       <h3 className="card-title">Accords de Résonance</h3>
       <p className="d">
         Avec la Tactique avancée : dans une même manche, trois attaques de vos Pokémon dont les types forment un accord
         déclenchent un effet d’équipe. Un accord par manche.
       </p>
       {CHORDS.map(a => (
-        <div key={a.n} className="acc-row">
-          <span className="acc-t">
+        <div key={a.n} className="guide-chord">
+          <span className="guide-chord-tag">
             {a.t.map(t => (
               <i key={t} style={{ background: tc(t) }} title={t} />
             ))}
@@ -114,7 +114,7 @@ export function Chords() {
 // Resonance in battle (v4.14): ranks, Expert attacks, notes and type echoes.
 export function ResonanceInBattle() {
   return (
-    <section className="acc-codex reso-codex" aria-label="La Résonance en combat">
+    <section className="guide-chords is-resonance" aria-label="La Résonance en combat">
       <h3 className="card-title">La Résonance en combat</h3>
       <p className="d">
         Chaque Pokémon a un rang, selon son coût en PC : Faible (1), Moyen (2 et 3), Fort (4 et 5), Expert (6 et plus,
@@ -122,8 +122,8 @@ export function ResonanceInBattle() {
         l’équipe est en <b>Harmonie</b> et chaque Pokémon commence le combat avec 1 losange.
       </p>
       {Object.entries(RANKS).map(([k, r]) => (
-        <div key={k} className="acc-row">
-          <span className={`acc-t rank-tag rank-${k}`}>
+        <div key={k} className="guide-chord">
+          <span className={`guide-chord-tag rank-tag rank-${k}`}>
             <Html html={stars(k)} />
           </span>
           <span>
@@ -148,8 +148,8 @@ export function ResonanceInBattle() {
         type, sauf si une réaction du terrain vient d’avoir lieu sur cette case. Les notes s’effacent en fin de manche.
       </p>
       {Object.entries(ECHOS).map(([t, d]) => (
-        <div key={t} className="acc-row">
-          <span className="acc-t">
+        <div key={t} className="guide-chord">
+          <span className="guide-chord-tag">
             <i style={{ background: tc(t) }} title={t} />
           </span>
           <span>
@@ -171,14 +171,14 @@ export function ResonanceInBattle() {
 export default function Tactics() {
   return (
     <>
-      <div className="gd-intro">
+      <div className="guide-intro">
         <h2 className="section-title">Rôles, synergies, obstacles</h2>
         <p className="d">
           Chaque rôle a sa mécanique, deux types complémentaires ouvrent une synergie, et le terrain change la portée
           des tirs.
         </p>
       </div>
-      <div className="codex" id="codex">
+      <div className="guide-codex" id="codex">
         <Codex />
       </div>
       <Chords />

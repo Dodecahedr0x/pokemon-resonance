@@ -251,39 +251,3 @@
 .log li.cur p {
   display: block;
 }
-
-.anat {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: var(--space-md);
-}
-@media (max-width: 1000px) {
-  .anat {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-@media (max-width: 560px) {
-  .anat {
-    grid-template-columns: 1fr;
-  }
-}
-.an {
-  display: grid;
-  gap: var(--space-sm);
-  align-content: start;
-  padding: var(--space-xl);
-  border-radius: var(--r);
-  background: var(--s1);
-  border: 1px solid var(--line);
-}
-.an .lab {
-  font-family: var(--f-m);
-  font-size: 10px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--gold);
-}
-.an p {
-  font-size: 14px;
-  color: var(--tx2);
-}

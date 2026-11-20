@@ -5,30 +5,33 @@ import { Html } from '../../lib/html.jsx';
 import { selectReaction, useGuide } from './guideStore.js';
 import { space } from '../../lib/theme.js';
 
+// Each reaction kind's cell colour (CAT in game-data.js; « ren » is the same element twice).
+const KIND_CLASS = { deg: 'is-damage', ctl: 'is-control', ter: 'is-terrain', sou: 'is-support', ren: 'is-same-type' };
+
 // Mark × element matrix: each cell opens the reaction details.
 export function Matrix() {
   const { rx } = useGuide();
   return (
-    <div className="mx" id="mx" aria-label="Matrice des réactions">
-      <div className="corner">
+    <div className="guide-matrix" id="mx" aria-label="Matrice des réactions">
+      <div className="guide-matrix-corner">
         Marque ↓<br />
         Élément →
       </div>
       {EL.map(e => (
-        <div key={e} className="hd">
+        <div key={e} className="guide-matrix-head">
           <Html html={mini(e)} />
           <span>{e}</span>
         </div>
       ))}
       {MK.map(m => [
-        <div key={m.id} className="hd rh">
+        <div key={m.id} className="guide-matrix-head is-row">
           <Html html={mini(m.t)} />
           <span>{m.n}</span>
         </div>,
         ...MX[m.id].map((id, i) => {
           if (!id) {
             return (
-              <div key={m.id + i} className="cell nil" aria-hidden="true">
+              <div key={m.id + i} className="guide-matrix-cell is-empty" aria-hidden="true">
                 ·
               </div>
             );
@@ -39,7 +42,7 @@ export function Matrix() {
             <button
               key={m.id + i}
               type="button"
-              className={`cell k-${r.k}${sel ? ' sel' : ''}`}
+              className={`guide-matrix-cell ${KIND_CLASS[r.k]}${sel ? ' is-selected' : ''}`}
               data-m={m.id}
               data-e={i}
               aria-label={`${m.n} et ${EL[i]} : ${r.n}`}
@@ -62,37 +65,37 @@ export function DetailReaction() {
   const [a, b] = r.ex && BY[r.ex[0]] && BY[r.ex[1]] ? r.ex.map(x => BY[x]) : [];
   const cat = r.k === 'ren' ? 'ter' : r.k;
   return (
-    <div className="panel rxd" id="rxDetail" aria-live="polite">
-      <span className="eyb">{r.k === 'ren' ? 'Même élément' : 'Réaction · ' + CAT[r.k]}</span>
+    <div className="guide-frame guide-reaction" id="rxDetail" aria-live="polite">
+      <span className="guide-reaction-kicker">{r.k === 'ren' ? 'Même élément' : 'Réaction · ' + CAT[r.k]}</span>
       <h3>{r.n}</h3>
-      <div className="formula">
+      <div className="guide-formula">
         <Html html={tb(m.t)} />
         <span>{m.n}</span>
-        <span className="op">+</span>
+        <span className="guide-formula-operator">+</span>
         <Html html={tb(e)} />
-        <span className="op">=</span>
+        <span className="guide-formula-operator">=</span>
         <span className={`chip cat-${cat}`}>
           <i />
           {r.n}
         </span>
       </div>
-      <p className="eff">
+      <p className="guide-reaction-effect">
         <Html html={r.d} />
       </p>
-      <p className="tip">
+      <p className="guide-reaction-tip">
         <Html html={r.tip} />
       </p>
       {a && (
-        <div className="ex">
-          <span className="who">
+        <div className="guide-reaction-example">
+          <span className="guide-pokemon">
             <Html html={medal(a.t)} />
             {a.n}
           </span>
           <span>pose {m.n}</span>
-          <span className="formula">
-            <span className="op">→</span>
+          <span className="guide-formula">
+            <span className="guide-formula-operator">→</span>
           </span>
-          <span className="who">
+          <span className="guide-pokemon">
             <Html html={medal(b.t)} />
             {b.n}
           </span>
@@ -105,10 +108,10 @@ export function DetailReaction() {
 
 export function TypeTable() {
   return EFF.map(([a, b, x], i) => (
-    <div key={i} className="ef">
+    <div key={i} className="guide-effectiveness-item">
       <Html html={mini(a)} />
       <span>{a}</span>
-      <span className="ar">→</span>
+      <span className="guide-effectiveness-arrow">→</span>
       <Html html={mini(b)} />
       <span>{b}</span>
       <b>{x}</b>
@@ -144,9 +147,9 @@ export function Chain() {
   return CHAIN_STEPS.map((s, i) => {
     const m = BY[s.w];
     return (
-      <div key={i} className="cs">
-        <span className="k">{i + 1}</span>
-        <span className="who">
+      <div key={i} className="guide-chain-step">
+        <span className="guide-chain-number">{i + 1}</span>
+        <span className="guide-pokemon">
           <Html html={medal(m.t)} />
           {m.n}
         </span>
@@ -164,14 +167,14 @@ export function Chain() {
 
 export function Weathers() {
   return WEATHER.map(w => (
-    <article key={w.n} className="wx" style={{ '--c': tc(w.t) }}>
+    <article key={w.n} className="guide-weather" style={{ '--c': tc(w.t) }}>
       <Html html={medal([w.t])} />
-      <span className="mv">{w.mv}</span>
+      <span className="guide-weather-move">{w.mv}</span>
       <h3 className="card-title">{w.n}</h3>
       <p>
         <Html html={w.d} />
       </p>
-      <span className="dur">5 manches</span>
+      <span className="guide-weather-duration">5 manches</span>
     </article>
   ));
 }
@@ -215,34 +218,34 @@ export function Positions() {
 export default function Reactions() {
   return (
     <>
-      <div className="gd-intro">
+      <div className="guide-intro">
         <h2 className="section-title">Les types se répondent</h2>
         <p className="d">
           La table des types classique s’applique toujours. Une marque reste deux manches sur une case ; un autre
           élément la consomme et déclenche une réaction. Ligne : marque posée. Colonne : élément qui arrive.
         </p>
       </div>
-      <div className="mx-wrap">
-        <div className="panel">
+      <div className="guide-matrix-layout">
+        <div className="guide-frame">
           <Matrix />
-          <div className="legend">
-            <span className="lg">
+          <div className="guide-legend">
+            <span className="guide-legend-item">
               <i style={{ background: 'var(--enemy)' }} />
               Dégâts
             </span>
-            <span className="lg">
+            <span className="guide-legend-item">
               <i style={{ background: 'var(--ally)' }} />
               Contrôle
             </span>
-            <span className="lg">
+            <span className="guide-legend-item">
               <i style={{ background: 'var(--gold)' }} />
               Terrain
             </span>
-            <span className="lg">
+            <span className="guide-legend-item">
               <i style={{ background: 'var(--ok)' }} />
               Soutien
             </span>
-            <span className="lg">
+            <span className="guide-legend-item">
               <i style={{ border: '1px solid var(--mut)' }} />
               Renfort
             </span>
@@ -250,8 +253,8 @@ export default function Reactions() {
         </div>
         <DetailReaction />
       </div>
-      <div className="section">
-        <div className="section-header">
+      <div className="guide-section">
+        <div className="guide-section-header">
           <div>
             <p className="kicker">Table des types</p>
             <h2 className="section-title">Les repères restent intacts</h2>
@@ -261,12 +264,12 @@ export default function Reactions() {
             </p>
           </div>
         </div>
-        <div className="eff-row" id="effRow">
+        <div className="guide-effectiveness" id="effRow">
           <TypeTable />
         </div>
       </div>
-      <div className="section">
-        <div className="section-header">
+      <div className="guide-section">
+        <div className="guide-section-header">
           <div>
             <p className="kicker">Exemple de chaîne</p>
             <h2 className="section-title">Deux Pokémon, une capture d’eau</h2>
@@ -276,12 +279,12 @@ export default function Reactions() {
             </p>
           </div>
         </div>
-        <div className="chain" id="chain">
+        <div className="guide-chain" id="chain">
           <Chain />
         </div>
       </div>
-      <div className="section">
-        <div className="section-header">
+      <div className="guide-section">
+        <div className="guide-section-header">
           <div>
             <p className="kicker">Nouveau · Météo</p>
             <h2 className="section-title">Le ciel change les marques</h2>
@@ -290,12 +293,12 @@ export default function Reactions() {
             </p>
           </div>
         </div>
-        <div className="wx-grid" id="wxGrid">
+        <div className="guide-weathers" id="wxGrid">
           <Weathers />
         </div>
       </div>
-      <div className="section">
-        <div className="section-header">
+      <div className="guide-section">
+        <div className="guide-section-header">
           <div>
             <p className="kicker">Les 18 types</p>
             <h2 className="section-title">Marquer ou déplacer</h2>
@@ -305,9 +308,9 @@ export default function Reactions() {
             </p>
           </div>
         </div>
-        <div className="two">
-          <div className="panel scroll-x">
-            <table className="tbl" style={{ minWidth: 400 }}>
+        <div className="guide-columns">
+          <div className="guide-frame guide-scroll">
+            <table className="guide-table" style={{ minWidth: 400 }}>
               <thead>
                 <tr>
                   <th>Famille</th>
@@ -320,8 +323,8 @@ export default function Reactions() {
               </tbody>
             </table>
           </div>
-          <div className="panel scroll-x">
-            <table className="tbl" style={{ minWidth: 400 }}>
+          <div className="guide-frame guide-scroll">
+            <table className="guide-table" style={{ minWidth: 400 }}>
               <thead>
                 <tr>
                   <th>Type</th>

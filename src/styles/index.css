@@ -76,6 +76,14 @@
 @import '../screens/map/map-route-scene.css' layer(screens);
 @import '../screens/saves/saves.css' layer(screens);
 @import '../screens/guide/guide.css' layer(screens);
+@import '../screens/guide/guide-layout.css' layer(screens);
+@import '../screens/guide/guide-start.css' layer(screens);
+@import '../screens/guide/guide-combat.css' layer(screens);
+@import '../screens/guide/guide-types.css' layer(screens);
+@import '../screens/guide/guide-team.css' layer(screens);
+@import '../screens/guide/guide-league.css' layer(screens);
+@import '../screens/guide/guide-universe.css' layer(screens);
+@import '../screens/guide/guide-project.css' layer(screens);
 @import '../screens/quests/quests.css' layer(screens);
 @import '../screens/quests/quests-event.css' layer(screens);
 @import '../screens/quests/quests-journal.css' layer(screens);

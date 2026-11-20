@@ -85,14 +85,6 @@
   border-radius: 0;
   background: linear-gradient(135deg, #ffb08a, #e5484d);
 }
-.howto .hn {
-  border-radius: 1px;
-  transform: rotate(45deg);
-}
-.howto .hn {
-  font-family: var(--f-n);
-  font-stretch: 72%;
-}
 .ptm em.ch {
   font-family: var(--f-m);
   font-size: 10.5px;

@@ -181,3 +181,19 @@ Each step is one commit (or a few), on its own, playable at every point.
   `is-chosen`). `#camp-tab-body` also carries `.camp-tab-body`, so no id selector is left. Still in legacy: the
   battle's duel report (`.duel-report-r*`) and the player colours `.dj1` / `.dj2`, shared with the battle; the form
   field `.form-field` and the card intro `.v4-ps-n`, shared with Settings and Home; the fishing panel (`.pe-*`).
+- Guide: done. The panels' ~1,500 legacy lines (up to six competing `!important` layers per element) were folded to the
+  values that actually won, then checked against style snapshots of the eight tabs at both widths. Files:
+  `guide-layout.css` (`.guide-panel`, `.guide-intro`, `.guide-section` / `-header`, `.guide-frame`, `.guide-scroll`,
+  `.guide-table`, `.guide-columns`), `guide-start.css` (`.guide-steps`, `.guide-glossary`, `.tutorial-progress`,
+  `.tutorial-chapter` with `is-read`), `guide-combat.css` (`.guide-turn`, `.guide-anatomy-*`, `.guide-rule-*`),
+  `guide-types.css` (`.guide-matrix-*` with kind classes `is-damage` / `is-control` / `is-terrain` / `is-support` /
+  `is-same-type` from `KIND_CLASS` in `Reactions.jsx`, `.guide-reaction-*`, `.guide-formula`, `.guide-chain-*`,
+  `.guide-weather*`, `.guide-effectiveness*`), `guide-team.css` (`.guide-codex-*`, `.guide-obstacle is-<id>`,
+  `.guide-chords`), `guide-league.css` (`.guide-topic*`, `.guide-bond-*`, `.guide-fatigue-*`, `.guide-item*`,
+  `.guide-combo*`, `.guide-champion*`), `guide-universe.css` (`.guide-lore*`, `.guide-master*`, `.guide-chapters`)
+  and `guide-project.css` (`.guide-pillar*`, `.guide-figure*`, `.guide-studio*`, `.guide-layer*`, `.guide-roadmap*`,
+  `.guide-legal*`). The old short names were also used by other screens (`.rule`, `.panel`, `.it`, `.k`…), so they
+  were renamed only in the Guide's files; their legacy rules stay for those screens, and only the names nothing
+  else uses go in the Design Workshop map. Two shared legacy rules still reached Guide elements and are reproduced:
+  the generic `.sel` card look on the selected matrix cell and the professor-tip look on the reaction tip; the
+  legacy `.section-title` colour now skips the Guide's sections, whose titles are gold.

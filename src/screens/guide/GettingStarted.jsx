@@ -3,13 +3,13 @@ import Button from '../../components/Button.jsx';
 export default function GettingStarted() {
   return (
     <>
-      <div className="gd-intro">
+      <div className="guide-intro">
         <h2 className="section-title">Débuter en 5 étapes</h2>
         <p className="d">Tout ce qu’il faut savoir pour gagner votre premier combat. Le reste se découvre en jouant.</p>
       </div>
-      <ol className="s5">
+      <ol className="guide-steps">
         <li style={{ '--c': '#E3350D' }}>
-          <span className="s5-n" data-n={1}>
+          <span className="guide-step-number" data-n={1}>
             1
           </span>
           <div>
@@ -21,7 +21,7 @@ export default function GettingStarted() {
           </div>
         </li>
         <li style={{ '--c': '#2A75BB' }}>
-          <span className="s5-n" data-n={2}>
+          <span className="guide-step-number" data-n={2}>
             2
           </span>
           <div>
@@ -33,7 +33,7 @@ export default function GettingStarted() {
           </div>
         </li>
         <li style={{ '--c': '#E5484D' }}>
-          <span className="s5-n" data-n={3}>
+          <span className="guide-step-number" data-n={3}>
             3
           </span>
           <div>
@@ -45,7 +45,7 @@ export default function GettingStarted() {
           </div>
         </li>
         <li style={{ '--c': '#3FA34D' }}>
-          <span className="s5-n" data-n={4}>
+          <span className="guide-step-number" data-n={4}>
             4
           </span>
           <div>
@@ -57,7 +57,7 @@ export default function GettingStarted() {
           </div>
         </li>
         <li style={{ '--c': '#F2B807' }}>
-          <span className="s5-n" data-n={5}>
+          <span className="guide-step-number" data-n={5}>
             5
           </span>
           <div>
@@ -69,7 +69,7 @@ export default function GettingStarted() {
           </div>
         </li>
       </ol>
-      <div className="gd-cta">
+      <div className="guide-start-actions">
         <Button size="large" variant="primary" data-hm="tuto">
           Jouer le combat guidé
           <svg>
@@ -79,7 +79,7 @@ export default function GettingStarted() {
         <Button data-gt="tuto433">Tutoriel complet</Button>
         <Button data-hm="intro">Revoir l’accueil de la Professeure</Button>
       </div>
-      <div className="lex">
+      <div className="guide-glossary">
         <h3 className="card-title">Petit lexique</h3>
         <dl>
           <div>

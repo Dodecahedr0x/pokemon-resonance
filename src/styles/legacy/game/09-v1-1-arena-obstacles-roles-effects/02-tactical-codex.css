@@ -1,72 +1,4 @@
 /* tactical codex */
-.codex {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--space-md);
-  margin-top: var(--space-lg);
-}
-.cx-c {
-  padding: var(--space-lg);
-  border-radius: var(--r);
-  border: 1px solid transparent;
-  background:
-    var(--slab) padding-box,
-    var(--edge) border-box;
-  box-shadow: var(--engrave);
-}
-.cx-c h4 {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: var(--space-sm);
-  margin: 0 0 var(--space-sm);
-  font-family: var(--f-d);
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  font-size: 12.5px;
-  color: var(--gold-l);
-}
-.cx-c h4 span {
-  font-family: var(--f-m);
-  font-size: 10px;
-  letter-spacing: 0.12em;
-  color: var(--mut);
-}
-.cx-r {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  gap: var(--space-sm);
-  align-items: start;
-  padding: var(--space-sm) 0;
-  border-top: 1px solid rgba(212, 175, 106, 0.08);
-}
-.cx-r b {
-  display: block;
-  font-size: 13px;
-}
-.cx-r em {
-  display: block;
-  font-style: normal;
-  font-size: 11.5px;
-  line-height: 1.45;
-  color: var(--tx2);
-}
-.cx-r.syn {
-  opacity: 0.55;
-}
-.cx-r.syn.on {
-  opacity: 1;
-}
-.cx-r.syn.on b {
-  color: var(--gold-l);
-}
-.ob-i {
-  width: 22px;
-  height: 22px;
-  display: block;
-  border-radius: 3px;
-  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.6);
-}
 .ob-pil {
   width: 12px;
   margin: 0 var(--space-2xs);
@@ -92,10 +24,5 @@
 }
 .ob-water {
   background: repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.22) 0 1px, transparent 1px 5px), #1e4e7a;
-}
-@media (max-width: 1100px) {
-  .codex {
-    grid-template-columns: 1fr;
-  }
 }
 /* v1.1.1 · recruitable stages under each card and inset of confirmed recruits */

@@ -1,0 +1,119 @@
+/* Guide screen (#types): what the panels share. Each tab is a .guide-panel; the intro card (.guide-intro), the framed
+   sections (.guide-section with .guide-section-header), the framed boxes (.guide-frame), the scrolling tables
+   (.guide-scroll, .guide-table) and the two-column layout (.guide-columns). */
+
+.guide-section {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 900px;
+  margin-top: var(--space-5xl);
+  border-radius: 20px;
+  background: linear-gradient(145deg, rgba(10, 39, 55, 0.94), rgba(4, 19, 31, 0.96));
+  border: 1px solid rgba(112, 211, 255, 0.21);
+  box-shadow: 0 16px 38px rgba(0, 0, 0, 0.18);
+}
+.guide-section-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-lg);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-xl);
+  position: relative;
+  padding-bottom: var(--space-lg);
+  border-bottom: 1px solid transparent;
+  border-image: linear-gradient(90deg, rgba(212, 175, 106, 0.4), rgba(212, 175, 106, 0.05) 60%, transparent) 1;
+}
+.guide-section-header > div {
+  display: grid;
+  gap: var(--space-sm);
+  max-width: 640px;
+}
+.guide-section-header p.d {
+  color: var(--color-text-muted);
+  font-size: 14.5px;
+  max-width: 60ch;
+}
+.guide-frame {
+  min-width: 0;
+  transition-timing-function: cubic-bezier(0.2, 0.75, 0.2, 1);
+  border-radius: 20px;
+  background: linear-gradient(145deg, rgba(10, 39, 55, 0.94), rgba(4, 19, 31, 0.96));
+  border: 1px solid rgba(112, 211, 255, 0.21);
+  box-shadow: 0 16px 38px rgba(0, 0, 0, 0.18);
+}
+.guide-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.guide-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  min-width: 560px;
+}
+.guide-table th {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  text-align: left;
+  font-weight: 500;
+  padding: var(--space-md) var(--space-lg);
+  border-bottom: 1px solid var(--color-line-strong);
+}
+.guide-table td {
+  padding: var(--space-md) var(--space-lg);
+  border-bottom: 1px solid var(--color-line);
+  vertical-align: top;
+  color: var(--color-text-secondary);
+}
+.guide-table tr:last-child td {
+  border-bottom: 0;
+}
+.guide-table td:first-child {
+  color: var(--color-text);
+  font-weight: 600;
+}
+.guide-columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-md);
+  align-items: start;
+}
+@media (max-width: 880px) {
+  .guide-columns {
+    grid-template-columns: 1fr;
+  }
+}
+.guide-panel[hidden] {
+  display: none;
+}
+.guide-intro {
+  margin-bottom: var(--space-lg);
+  box-shadow: var(--shadow-plate);
+  padding: var(--space-lg);
+  border-radius: 13px;
+  background: linear-gradient(110deg, rgba(15, 69, 91, 0.8), rgba(4, 25, 41, 0.7));
+  border: 1px solid rgba(107, 215, 255, 0.18);
+}
+.guide-intro .d {
+  max-width: 720px;
+  color: var(--color-text-secondary);
+  margin-top: var(--space-xs);
+}
+.guide-section h2:not(:where(.title)) {
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.4);
+}
+.guide-section h2 {
+  color: #fff4c7;
+}
+.guide-panel {
+  padding: clamp(15px, 2vw, 26px);
+  border: 1px solid var(--rx-edge);
+  border-radius: 23px;
+  background: linear-gradient(145deg, rgba(19, 48, 65, 0.96), rgba(6, 20, 31, 0.98));
+  box-shadow:
+    0 25px 58px rgba(0, 0, 0, 0.34),
+    inset 0 1px rgba(255, 255, 255, 0.07);
+}

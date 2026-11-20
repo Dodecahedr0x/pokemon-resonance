@@ -86,32 +86,7 @@ p.note {
 
   /* ---------- Guide: "Getting started" steps use the full card width ----------
      Number and title on the first line, the explanation below across the whole card. */
-  html body .s5 li {
-    gap: var(--space-sm) var(--space-md) !important;
-    align-items: center !important;
-    padding: var(--space-md) !important;
-  }
-  html body .s5 li > div {
-    display: contents;
-  }
-  html body .s5 li > div > p {
-    grid-column: 1/-1;
-    margin: 0 !important;
-  }
   /* reaction matrix: the row names keep their text but lose the icon, the cells get the room */
-  html body .mx {
-    gap: var(--space-2xs) !important;
-    padding: var(--space-md) var(--space-sm) !important;
-  }
-  html body .mx .rh {
-    padding-right: var(--space-3xs) !important;
-  }
-  html body .mx .rh > .mini {
-    display: none;
-  }
-  html body .mx .cell {
-    border-radius: 8px;
-  }
   /* the sticky guide tabs stay readable over the text scrolling under them */
 
   /* ---------- Home: the folding "Classement" line is a full-height tap target ---------- */

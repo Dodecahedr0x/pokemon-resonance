@@ -130,10 +130,12 @@ body::before {
 .tb-sec {
   letter-spacing: 0.14em !important;
 }
-.section-title,
-.section h2:not(:where(.title)) {
-  color: #f8fbff !important;
+.section-title {
   text-shadow: 0 2px 18px rgba(0, 0, 0, 0.4);
+}
+/* the Guide's section titles are gold (guide-port.css) */
+.section-title:not(.guide-section .section-title) {
+  color: #f8fbff !important;
 }
 .d,
 .page-header .d {
@@ -141,15 +143,10 @@ body::before {
 }
 .resume,
 .panel,
-.section,
 .result,
 .coach,
 .pt,
-.rules,
-.codex,
-.items,
-.duos,
-.kpis > * {
+.items {
   background: linear-gradient(145deg, rgba(12, 42, 57, 0.92), rgba(5, 22, 34, 0.94)) !important;
   border: 1px solid rgba(112, 211, 255, 0.2) !important;
   box-shadow:

@@ -12,7 +12,7 @@ function Master({ className, style, mark, kicker, who }) {
     <article className={className} style={style}>
       {mark}
       <div>
-        <p className="uv-k">{kicker}</p>
+        <p className="guide-master-kicker">{kicker}</p>
         <b>{who.n}</b>
         <em>{who.t}</em>
         <q>
@@ -27,15 +27,15 @@ function Master({ className, style, mark, kicker, who }) {
 export default function Universe() {
   return (
     <>
-      <div className="gd-intro">
+      <div className="guide-intro">
         <h2 className="section-title">L’univers de Résonance</h2>
         <p className="d">
           Une Ligue, un règlement, des maîtres d’arène qui ont chacun leur façon de vous mettre à l’épreuve.
         </p>
       </div>
-      <div className="uv-lore">
+      <div className="guide-lore">
         {UNIV.map(([h, t]) => (
-          <article key={h} className="uv-c">
+          <article key={h} className="guide-lore-card">
             <h3 className="card-title">{h}</h3>
             <p>
               <Html html={t} />
@@ -43,20 +43,20 @@ export default function Universe() {
           </article>
         ))}
       </div>
-      <div className="section-header uv-h">
+      <div className="guide-section-header guide-cast-header">
         <div>
           <p className="kicker">Huit arènes</p>
           <h2 className="section-title">Les maîtres d’arène</h2>
         </div>
       </div>
-      <div className="uv-cast">
+      <div className="guide-cast">
         {GYMS.map((g, i) => (
           <Master
             key={i}
-            className="uv-m"
+            className="guide-master"
             style={{ '--ac': tc(g.t) }}
             mark={
-              <span className="uv-b">
+              <span className="guide-master-badge">
                 <Html html={badgeSvg(i, g.t, 'uv' + i)} />
               </span>
             }
@@ -65,37 +65,37 @@ export default function Universe() {
           />
         ))}
       </div>
-      <div className="section-header uv-h">
+      <div className="guide-section-header guide-cast-header">
         <div>
           <p className="kicker">Le sommet</p>
           <h2 className="section-title">Le Conseil 4 et la Championne</h2>
         </div>
       </div>
-      <div className="uv-cast">
+      <div className="guide-cast">
         {ELITE_L.map((L, i) => (
           <Master
             key={i}
-            className="uv-m el"
+            className="guide-master is-elite"
             style={{ '--ac': tc(SCEN[ELITE[i]].at || 'Normal') }}
-            mark={<span className="uv-e">{i + 1}</span>}
+            mark={<span className="guide-master-mark">{i + 1}</span>}
             kicker={SCEN[ELITE[i]].n}
             who={L}
           />
         ))}
         <Master
-          className="uv-m ch"
-          mark={<span className="uv-e">★</span>}
+          className="guide-master is-champion"
+          mark={<span className="guide-master-mark">★</span>}
           kicker="Ligue de la Résonance"
           who={CHAMP_L}
         />
       </div>
-      <div className="section-header uv-h">
+      <div className="guide-section-header guide-cast-header">
         <div>
           <p className="kicker">Campagne</p>
           <h2 className="section-title">Les chapitres</h2>
         </div>
       </div>
-      <ol className="uv-chap">
+      <ol className="guide-chapters">
         {['tuto', ...ARENAS.map(a => a.k), 'c1', 'champ'].map(k => {
           const C = CHAP(k);
           return (

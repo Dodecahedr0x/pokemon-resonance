@@ -9,11 +9,11 @@ import { space } from '../../lib/theme.js';
 import Button from '../../components/Button.jsx';
 export function Pillars() {
   return NEWS.map(o => (
-    <article key={o.n} className="opt" style={{ '--c': o.c }}>
-      <span className="ico">
+    <article key={o.n} className="guide-pillar" style={{ '--c': o.c }}>
+      <span className="guide-pillar-icon">
         <Html html={ico(o.i)} />
       </span>
-      <span className="tg">{o.tg}</span>
+      <span className="guide-pillar-tag">{o.tg}</span>
       <h3 className="card-title">{o.n}</h3>
       <p>
         <Html html={o.d} />
@@ -31,7 +31,7 @@ export function Digits() {
     [Object.keys(RX).length - 1, 'Réactions'],
     ['0 %', 'De hasard'],
   ].map(([n, l]) => (
-    <div key={l} className="kpi">
+    <div key={l} className="guide-figure">
       <b>{n}</b>
       <span>{l}</span>
     </div>
@@ -42,8 +42,8 @@ export function Digits() {
 export default function Project() {
   return (
     <>
-      <div className="section">
-        <div className="section-header">
+      <div className="guide-section">
+        <div className="guide-section-header">
           <div>
             <p className="kicker">Concept</p>
             <h2 className="section-title">Les piliers de Résonance</h2>
@@ -52,15 +52,15 @@ export default function Project() {
             Voir les familles
           </Button>
         </div>
-        <div className="opt-grid" id="newsGrid">
+        <div className="guide-pillars" id="newsGrid">
           <Pillars />
         </div>
       </div>
-      <div className="kpis" id="kpis">
+      <div className="guide-figures" id="kpis">
         <Digits />
       </div>
-      <div className="section" id="studio">
-        <div className="section-header">
+      <div className="guide-section" id="studio">
+        <div className="guide-section-header">
           <div>
             <p className="kicker">Studio</p>
             <h2 className="section-title">Du papier au prototype</h2>
@@ -69,11 +69,11 @@ export default function Project() {
             </p>
           </div>
         </div>
-        <div className="prod">
-          <div className="pc-card">
+        <div className="guide-studio">
+          <div className="guide-studio-card">
             <p className="kicker">Tranche verticale</p>
             <h3 className="card-title">Le contenu minimal</h3>
-            <ul className="scope">
+            <ul className="guide-scope">
               <li>
                 Pokémon jouables<b>82</b>
               </li>
@@ -94,69 +94,69 @@ export default function Project() {
               </li>
             </ul>
           </div>
-          <div className="pc-card">
+          <div className="guide-studio-card">
             <p className="kicker">Architecture · Godot 4</p>
             <h3 className="card-title">Les règles séparées de l’image</h3>
-            <div className="layers">
-              <div className="layer">
+            <div className="guide-layers">
+              <div className="guide-layer">
                 <div>
                   <b>Données</b>
                   <span>Espèces, capacités, matrice, météos</span>
                 </div>
-                <span className="t">JSON</span>
+                <span className="guide-layer-tag">JSON</span>
               </div>
-              <div className="layer core">
+              <div className="guide-layer is-core">
                 <div>
                   <b>Moteur de règles</b>
                   <span>Déterministe, testable, rejouable</span>
                 </div>
-                <span className="t">GDScript</span>
+                <span className="guide-layer-tag">GDScript</span>
               </div>
-              <div className="layer">
+              <div className="guide-layer">
                 <div>
                   <b>IA adverse</b>
                   <span>Choisit sa cible au moment d’agir</span>
                 </div>
-                <span className="t">Recherche</span>
+                <span className="guide-layer-tag">Recherche</span>
               </div>
-              <div className="layer">
+              <div className="guide-layer">
                 <div>
                   <b>Présentation</b>
                   <span>Plateau hex, animations, interface</span>
                 </div>
-                <span className="t">Scènes</span>
+                <span className="guide-layer-tag">Scènes</span>
               </div>
             </div>
           </div>
         </div>
-        <div className="road" style={{ marginTop: space.md }}>
-          <div className="rp">
-            <span className="k">1</span>
-            <span className="du">2 semaines</span>
+        <div className="guide-roadmap" style={{ marginTop: space.md }}>
+          <div className="guide-roadmap-step">
+            <span className="guide-roadmap-number">1</span>
+            <span className="guide-roadmap-duration">2 semaines</span>
             <h3 className="card-title">Papier</h3>
             <p>Plateau imprimé, jetons, 8 Pokémon. On valide que les réactions créent de vrais choix.</p>
           </div>
-          <div className="rp">
-            <span className="k">2</span>
-            <span className="du">6 semaines</span>
+          <div className="guide-roadmap-step">
+            <span className="guide-roadmap-number">2</span>
+            <span className="guide-roadmap-duration">6 semaines</span>
             <h3 className="card-title">Prototype gris</h3>
             <p>Moteur de règles sans graphismes. Tests automatiques de chaque réaction.</p>
           </div>
-          <div className="rp">
-            <span className="k">3</span>
-            <span className="du">3 mois</span>
+          <div className="guide-roadmap-step">
+            <span className="guide-roadmap-number">3</span>
+            <span className="guide-roadmap-duration">3 mois</span>
             <h3 className="card-title">Tranche verticale</h3>
             <p>Interface complète, 16 Pokémon, 2 Arènes, capture, Liens et météo.</p>
           </div>
-          <div className="rp">
-            <span className="k">4</span>
-            <span className="du">Ensuite</span>
+          <div className="guide-roadmap-step">
+            <span className="guide-roadmap-number">4</span>
+            <span className="guide-roadmap-duration">Ensuite</span>
             <h3 className="card-title">Contenu</h3>
             <p>Région complète, 8 Arènes, Ligue et Champion adaptatif.</p>
           </div>
         </div>
-        <div className="legal" style={{ marginTop: space.md }}>
-          <span className="ic">!</span>
+        <div className="guide-legal" style={{ marginTop: space.md }}>
+          <span className="guide-legal-icon">!</span>
           <p>
             <b>Point juridique.</b> Pokémon est une marque de Nintendo, Creatures Inc. et GAME FREAK. Un fangame avec
             noms et visuels officiels doit rester gratuit et non commercial, et peut tout de même recevoir une demande

@@ -31,37 +31,6 @@ html body .chip-acc.fait {
   color: #ffe17b;
 }
 /* --- Guide: the chord list --- */
-html body .acc-codex {
-  margin-top: var(--space-lg);
-  display: grid;
-  gap: var(--space-sm);
-}
-html body .acc-row {
-  display: flex;
-  gap: var(--space-sm);
-  align-items: flex-start;
-  padding: var(--space-sm) var(--space-sm);
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-html body .acc-row em {
-  display: block;
-  font-style: normal;
-  font-size: 12.5px;
-  color: var(--mut, #9fb0c4);
-}
-html body .acc-t {
-  display: flex;
-  gap: var(--space-3xs);
-  padding-top: var(--space-2xs);
-  flex: none;
-}
-html body .acc-t i {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-}
 /* --- sheet: character --- */
 html body .car-mvc .chip {
   background: rgba(150, 200, 255, 0.16);

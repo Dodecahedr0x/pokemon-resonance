@@ -88,27 +88,6 @@
   min-height: 44px !important;
 }
 /* Guide, type encyclopedia, league, settings — consistent premium materials */
-#types .section,
-#types .anat,
-#types .panel,
-#types .codex,
-#types .items,
-#types .duos,
-#types .studio {
-  border-radius: 20px !important;
-  background: linear-gradient(145deg, rgba(10, 39, 55, 0.94), rgba(4, 19, 31, 0.96)) !important;
-  border: 1px solid rgba(112, 211, 255, 0.21) !important;
-  box-shadow: 0 16px 38px rgba(0, 0, 0, 0.18) !important;
-}
-#types .section h2 {
-  color: #fff4c7 !important;
-}
-#types button[aria-pressed='true'],
-#types .on {
-  box-shadow:
-    0 0 0 1px rgba(255, 214, 94, 0.5),
-    0 0 18px rgba(255, 214, 94, 0.08) !important;
-}
 /* Existing first-run guide is retained functionally, but brought into the same art direction */
 .intro {
   background:

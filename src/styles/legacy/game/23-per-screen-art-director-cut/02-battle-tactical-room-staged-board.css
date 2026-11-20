@@ -60,13 +60,6 @@
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5) !important;
 }
 /* GUIDE & LEAGUE — strategy atlas and badge room */
-#types .s5 li,
-#types .howto > div,
-#types .lex {
-  border: 1px solid rgba(130, 213, 225, 0.16) !important;
-  border-radius: 17px !important;
-  background: linear-gradient(145deg, rgba(17, 45, 60, 0.86), rgba(7, 20, 30, 0.94)) !important;
-}
 /* Global consistency, focus and mobile adaptation (.button buttons: src/styles/components/button.css) */
 button:not(:where(.button, .tabs > button)),
 a:not(:where(.button)),

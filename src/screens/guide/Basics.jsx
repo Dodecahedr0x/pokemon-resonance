@@ -19,12 +19,12 @@ function Diamonds({ n }) {
 
 function Stadium({ mon, lost = [] }) {
   return (
-    <div className="al">
+    <div className="guide-anatomy-pokemon">
       <Html html={medal(mon.t)} />
       <b>{mon.n}</b>
-      <div className="amv">
+      <div className="guide-anatomy-moves">
         {mon.mv.map(id => (
-          <span key={id} className={lost.includes(id) ? 'am lost' : 'am'}>
+          <span key={id} className={lost.includes(id) ? 'guide-anatomy-move is-lost' : 'guide-anatomy-move'}>
             {MV[id].n}
           </span>
         ))}
@@ -41,12 +41,12 @@ export function Anatomy() {
     T = BY.tetarte;
   return (
     <>
-      <article className="an orn">
-        <span className="an-k">01</span>
+      <article className="guide-anatomy-card orn">
+        <span className="guide-anatomy-number">01</span>
         <h3 className="card-title">Remplir</h3>
         <Diamonds n={2} />
         <p>Trois losanges par Pokémon. Chacun se gagne en jouant.</p>
-        <ul className="an-src">
+        <ul className="guide-anatomy-sources">
           <li>
             <b>+1</b>fin de manche
           </li>
@@ -61,16 +61,16 @@ export function Anatomy() {
           </li>
         </ul>
       </article>
-      <article className="an orn">
-        <span className="an-k">02</span>
+      <article className="guide-anatomy-card orn">
+        <span className="guide-anatomy-number">02</span>
         <h3 className="card-title">Choisir</h3>
-        <div className="an-br">
+        <div className="guide-anatomy-branch">
           <Html html={medal(T.t)} />
-          <span className="an-fork">
+          <span className="guide-anatomy-fork">
             <i />
             <i />
           </span>
-          <span className="an-opts">
+          <span className="guide-anatomy-options">
             <span>
               <Html html={medal(BY.tartard.t, 'is-small')} />
               Tartard
@@ -86,26 +86,26 @@ export function Anatomy() {
           ont aussi plusieurs voies. Évoli lit la marque sous ses pieds et l’heure.
         </p>
       </article>
-      <article className="an orn">
-        <span className="an-k">03</span>
+      <article className="guide-anatomy-card orn">
+        <span className="guide-anatomy-number">03</span>
         <h3 className="card-title">Arrivée</h3>
-        <div className="an-arr">
+        <div className="guide-anatomy-arrival">
           <Html html={medal(Pp.t, 'is-large')} />
-          <span className="ring" />
-          <span className="ring r2" />
+          <span className="guide-anatomy-ring" />
+          <span className="guide-anatomy-ring is-delayed" />
         </div>
         <p>
           <b>Papilusion :</b> <Html html={ARR.papilusion[1]} /> <b>Léviator :</b> <Html html={ARR.leviator[1]} />
         </p>
       </article>
-      <article className="an orn wide">
-        <span className="an-k">04</span>
+      <article className="guide-anatomy-card orn is-wide">
+        <span className="guide-anatomy-number">04</span>
         <h3 className="card-title">Renoncer</h3>
-        <div className="an-line">
+        <div className="guide-anatomy-line">
           <Stadium mon={C} lost={['charge']} />
-          <span className="an-ar">→</span>
+          <span className="guide-anatomy-arrow">→</span>
           <Stadium mon={Y} lost={['armure', 'secretion']} />
-          <span className="an-ar">→</span>
+          <span className="guide-anatomy-arrow">→</span>
           <Stadium mon={Pp} />
         </div>
         <p>
@@ -113,10 +113,10 @@ export function Anatomy() {
           <b>Sécrétion est perdue pour toujours</b> : plus personne ne ralentit l’ennemi.
         </p>
       </article>
-      <article className="an orn danger">
-        <span className="an-k">05</span>
+      <article className="guide-anatomy-card orn is-danger">
+        <span className="guide-anatomy-number">05</span>
         <h3 className="card-title">L’ennemi aussi</h3>
-        <div className="an-foe">
+        <div className="guide-anatomy-foe">
           <span className="hp hseg">
             <i className="mid" style={{ width: '48%' }} />
           </span>
@@ -144,7 +144,7 @@ export function Rules() {
   return SYS3.map(s => (
     <details
       key={s.c}
-      className="rule"
+      className="guide-rule"
       id={'r-' + s.c}
       ref={el => {
         refs.current[s.c] = el;
@@ -153,27 +153,27 @@ export function Rules() {
       onToggle={e => setRuleOpen(s.c, e.currentTarget.open)}
     >
       <summary>
-        <span className="cd">{s.c}</span>
+        <span className="guide-rule-code">{s.c}</span>
         <span>
-          <span className="nm">{s.n}</span>
-          <span className="o1">
+          <span className="guide-rule-name">{s.n}</span>
+          <span className="guide-rule-summary">
             <Html html={s.one} />
           </span>
         </span>
-        <svg className="chev">
+        <svg className="guide-rule-chevron">
           <use href="#i-chev" />
         </svg>
       </summary>
-      <div className="rule-b">
-        <ul className="ticks">
+      <div className="guide-rule-body">
+        <ul className="guide-rule-points">
           {s.pts.map(([t, n], i) => (
-            <li key={i} className={n ? 'nw' : undefined}>
+            <li key={i} className={n ? 'is-new' : undefined}>
               <Html html={t} />
             </li>
           ))}
         </ul>
-        <div className="feeds">
-          <span className="lbl">Alimente</span>
+        <div className="guide-rule-feeds">
+          <span className="guide-rule-feeds-label">Alimente</span>
           {s.f.map(c => (
             <button key={c} className="chip code-link" type="button" data-code={c}>
               {c}
@@ -189,33 +189,33 @@ export function Rules() {
 export default function Basics() {
   return (
     <>
-      <div className="gd-intro">
+      <div className="guide-intro">
         <h2 className="section-title">Un tour en quatre temps</h2>
       </div>
-      <div className="howto">
+      <div className="guide-turn">
         <div>
-          <span className="hn">1</span>
+          <span className="guide-turn-number">1</span>
           <b>Lire</b>
           <p>Touchez un adversaire : la zone rouge montre sa portée.</p>
         </div>
         <div>
-          <span className="hn">2</span>
+          <span className="guide-turn-number">2</span>
           <b>Bouger</b>
           <p>Touchez un Pokémon, puis une case bleue.</p>
         </div>
         <div>
-          <span className="hn">3</span>
+          <span className="guide-turn-number">3</span>
           <b>Agir</b>
           <p>Capacité, case dorée, aperçu exact, confirmer.</p>
         </div>
         <div>
-          <span className="hn">4</span>
+          <span className="guide-turn-number">4</span>
           <b>Éveiller</b>
           <p>Trois losanges pleins : choisissez l’évolution. Il n’y a pas de retour.</p>
         </div>
       </div>
-      <div className="section">
-        <div className="section-header">
+      <div className="guide-section">
+        <div className="guide-section-header">
           <div>
             <p className="kicker">Le cœur du jeu</p>
             <h2 className="section-title">Anatomie d’un Éveil</h2>
@@ -225,19 +225,19 @@ export default function Basics() {
             </p>
           </div>
         </div>
-        <div className="anat" id="anat">
+        <div className="guide-anatomy" id="anat">
           <Anatomy />
         </div>
       </div>
-      <div className="section" id="regles">
-        <div className="section-header">
+      <div className="guide-section" id="regles">
+        <div className="guide-section-header">
           <div>
             <p className="kicker">Règles</p>
             <h2 className="section-title">Huit systèmes imbriqués</h2>
             <p className="d">Ouvrez une règle, touchez un code pour suivre le fil. Les points dorés sont nouveaux.</p>
           </div>
         </div>
-        <div className="rules" id="rules">
+        <div className="guide-rules" id="rules">
           <Rules />
         </div>
       </div>

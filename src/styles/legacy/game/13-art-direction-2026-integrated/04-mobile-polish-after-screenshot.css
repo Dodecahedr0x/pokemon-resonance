@@ -94,12 +94,8 @@ body {
     background 0.2s !important;
 }
 .panel,
-.opt,
 .rule,
 .scn,
-.an,
-.kpis,
-.howto > div,
 .mvc,
 .ptm,
 .res-card,
@@ -111,17 +107,12 @@ body {
 .duo,
 .wx,
 .cs,
-.mx-wrap .rxd,
-.rxd,
 .it,
-.rp,
 .champ,
 .qk,
 .pt,
 .battle,
-.dex,
-.gd-p,
-.gd-intro {
+.dex {
   background: linear-gradient(145deg, rgba(13, 43, 65, 0.96), rgba(5, 22, 37, 0.97)) !important;
   border-color: rgba(98, 207, 241, 0.24) !important;
   box-shadow:

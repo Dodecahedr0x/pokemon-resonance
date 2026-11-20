@@ -277,24 +277,3 @@
   line-height: 1.1;
   letter-spacing: 0.01em;
 }
-.section {
-  margin-top: 76px;
-}
-.section-header {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: var(--space-lg);
-  flex-wrap: wrap;
-  margin-bottom: var(--space-xl);
-}
-.section-header > div {
-  display: grid;
-  gap: var(--space-sm);
-  max-width: 640px;
-}
-.section-header p.d {
-  color: var(--mut);
-  font-size: 14.5px;
-  max-width: 60ch;
-}

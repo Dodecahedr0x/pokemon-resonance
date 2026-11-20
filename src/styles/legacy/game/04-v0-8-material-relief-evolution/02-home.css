@@ -84,15 +84,3 @@
   color: var(--gold);
 }
 /* kpis */
-.kpis {
-  background:
-    var(--hatch) padding-box,
-    var(--surf) padding-box,
-    var(--bevel) border-box;
-}
-.kpi b {
-  background: linear-gradient(180deg, #fff 30%, var(--gold-l));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
