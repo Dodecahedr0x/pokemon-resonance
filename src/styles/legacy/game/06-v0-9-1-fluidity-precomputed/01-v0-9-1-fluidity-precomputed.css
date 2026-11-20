@@ -15,10 +15,6 @@
 /* no permanent animation that forces a whole SVG to repaint */
 .cr-spin,
 .ember,
-.mk-edge,
-.hx.lava,
-.h-danger,
-.h-arena,
 .hp.hseg i::after,
 .energy-pips i.is-filled {
   animation: none !important;
@@ -29,36 +25,6 @@
 /* no more filters in the board: halos drawn with a wide stroke */
 #bSvg * {
   filter: none !important;
-}
-.gw {
-  fill: none !important;
-  stroke-width: 4.5 !important;
-  stroke-opacity: 0.22 !important;
-  stroke-dasharray: none !important;
-}
-.h-reach.gw {
-  stroke: #5b9bff;
-}
-.h-tgt.gw {
-  stroke: #f0c86e;
-}
-.h-danger.gw {
-  stroke: #e5484d;
-  stroke-opacity: 0.3 !important;
-}
-.h-dodge.gw {
-  stroke: #4dd6b4;
-}
-.h-arena.gw {
-  stroke: #f0a43a;
-}
-.h-aff.gw {
-  stroke: #f2dda8;
-  stroke-opacity: 0.15 !important;
-}
-.hx.lava {
-  fill: #5a1e0c !important;
-  stroke: #ff7a3d !important;
 }
 .medal:not(.is-large):not(.is-huge)::before {
   display: none;

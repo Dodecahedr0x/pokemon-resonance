@@ -41,6 +41,9 @@
   --color-negative: var(--bad);
   /* opposing side on the board; the two players of a local duel */
   --color-enemy: var(--enemy);
+  --color-cell: var(--tile);
+  --color-cell-river: var(--river);
+  --color-cell-wet: var(--wet);
   --color-duel-player-1: var(--dj1);
   --color-duel-player-2: var(--dj2);
   /* faint gold veins tiled over dark plates (560px tile) */

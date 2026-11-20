@@ -87,16 +87,6 @@ html body #bSvg .trap.web circle {
   stroke-width: 1;
 }
 /* --- charged attacks: targeted cells, in dotted gold --- */
-html body #bSvg .h-charge {
-  fill: rgba(255, 215, 94, 0.14);
-  stroke: #ffd75e;
-  stroke-width: 1.3;
-  stroke-dasharray: 4 3;
-  pointer-events: none;
-}
-html body #bSvg .h-charge.gw {
-  stroke: #ffd75e;
-}
 .bdg-s.status-charging rect,
 .bdg-s.status-flying rect {
   stroke: #ffd75e;

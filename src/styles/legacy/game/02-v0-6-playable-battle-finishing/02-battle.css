@@ -8,70 +8,11 @@
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
 }
-#bSvg .hx {
-  cursor: pointer;
-}
-.hx.rock {
-  fill: #1d222c;
-  stroke: rgba(255, 255, 255, 0.04);
-}
 
-.hx.mud {
-  fill: #3a2e20;
-}
-.hx.lava {
-  fill: #5c2414;
-  animation: lava 2.4s ease-in-out infinite;
-}
 @keyframes lava {
   50% {
     fill: #7a3116;
   }
-}
-.mk-fill {
-  opacity: 0.22;
-}
-.mk-lv {
-  font-family: var(--f-m);
-  font-size: 6.5px;
-  font-weight: 600;
-  fill: var(--gold);
-}
-.fogc2 {
-  fill: url(#fogP);
-  opacity: 0.9;
-}
-.h-reach {
-  fill: rgba(99, 164, 255, 0.18);
-  stroke: rgba(99, 164, 255, 0.75);
-  stroke-width: 1.2;
-}
-.h-tgt {
-  fill: rgba(227, 192, 122, 0.12);
-  stroke: rgba(227, 192, 122, 0.85);
-  stroke-width: 1.1;
-  stroke-dasharray: 3 2;
-}
-.h-tgt.on {
-  fill: rgba(227, 192, 122, 0.28);
-  stroke-width: 2;
-  stroke-dasharray: none;
-}
-.h-aff {
-  fill: rgba(227, 192, 122, 0.22);
-  stroke: var(--gold);
-  stroke-width: 1.6;
-}
-.h-danger {
-  fill: rgba(255, 103, 103, 0.13);
-  stroke: rgba(255, 103, 103, 0.7);
-  stroke-width: 1.2;
-  stroke-dasharray: 4 2.5;
-}
-.h-dodge {
-  fill: rgba(79, 214, 156, 0.2);
-  stroke: rgba(79, 214, 156, 0.8);
-  stroke-width: 1.2;
 }
 .intent {
   stroke: var(--enemy);

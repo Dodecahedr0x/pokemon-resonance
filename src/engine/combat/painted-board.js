@@ -53,7 +53,7 @@ export let turnFlow;
      Without that folder, or in « Léger » (Light) mode, nothing changes: flat board from v4.76. */
 const TEX = ['grass', 'stone', 'water', 'sand', 'ash', 'marble', 'rune', 'mud', 'lava'];
 
-const STATES = ['wet', 'mud', 'lava', 'deploy-phase-z', 'fog-of-war-t'];
+const STATES = ['wet', 'mud', 'lava', 'is-deploy-zone', 'is-fogged'];
 
 // cell states drawn on the cell: copied onto its texture
 const OK = new Set();
@@ -224,7 +224,7 @@ const dress = () => {
   // the opaque texture covers the cell: its states (mud, lava, fog…) go over the texture
   const copyText = k => {
     const c = STATES.filter(e => L.t[k].classList.contains(e)).join(' '),
-      v = c ? 'tx ' + c : 'tx';
+      v = c ? 'cell-texture ' + c : 'cell-texture';
     if (L.tx[k].getAttribute('class') !== v) {
       L.tx[k].setAttribute('class', v);
     }

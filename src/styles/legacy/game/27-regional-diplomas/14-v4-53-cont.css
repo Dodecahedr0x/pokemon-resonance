@@ -22,52 +22,17 @@
   font-size: 11px;
   color: #b8cddb;
 }
-body.board-theme-crepuscule .board .hx:not(.rock):not(.river):not(.mud):not(.lava) {
-  fill: #3a2f4f;
-  stroke: rgba(210, 190, 255, 0.12);
-}
-body.board-theme-crepuscule .board .hx.alt:not(.rock):not(.river):not(.mud):not(.lava) {
-  fill: #41355a;
-}
 body.board-theme-crepuscule .board {
   background: radial-gradient(120% 90% at 50% 0%, #2a2046, #0b0812) !important;
-}
-body.board-theme-jardin .board .hx:not(.rock):not(.river):not(.mud):not(.lava) {
-  fill: #3c6b3a;
-  stroke: rgba(220, 255, 200, 0.14);
-}
-body.board-theme-jardin .board .hx.alt:not(.rock):not(.river):not(.mud):not(.lava) {
-  fill: #437542;
 }
 body.board-theme-jardin .board {
   background: radial-gradient(120% 90% at 50% 0%, #2a5a2a, #0d1f10) !important;
 }
-body.board-theme-givre .board .hx:not(.rock):not(.river):not(.mud):not(.lava) {
-  fill: #3f6e86;
-  stroke: rgba(220, 245, 255, 0.18);
-}
-body.board-theme-givre .board .hx.alt:not(.rock):not(.river):not(.mud):not(.lava) {
-  fill: #467993;
-}
 body.board-theme-givre .board {
   background: radial-gradient(120% 90% at 50% 0%, #1d4a62, #0a1a24) !important;
 }
-body.board-theme-braise .board .hx:not(.rock):not(.river):not(.mud):not(.lava) {
-  fill: #6a3a2a;
-  stroke: rgba(255, 200, 150, 0.14);
-}
-body.board-theme-braise .board .hx.alt:not(.rock):not(.river):not(.mud):not(.lava) {
-  fill: #74422f;
-}
 body.board-theme-braise .board {
   background: radial-gradient(120% 90% at 50% 0%, #4a1d12, #180806) !important;
-}
-body.board-theme-cristal .board .hx:not(.rock):not(.river):not(.mud):not(.lava) {
-  fill: #4a4478;
-  stroke: rgba(230, 220, 255, 0.2);
-}
-body.board-theme-cristal .board .hx.alt:not(.rock):not(.river):not(.mud):not(.lava) {
-  fill: #524b84;
 }
 body.board-theme-cristal .board {
   background: radial-gradient(120% 90% at 50% 0%, #3a3478, #110f2c) !important;

@@ -5,18 +5,6 @@
 }
 
 /* ---------- hexagonal board ---------- */
-.hx {
-  fill: var(--tile);
-  stroke: var(--tile-l);
-  stroke-width: 1;
-  transition: fill 0.6s ease;
-}
-.hx.river {
-  fill: var(--river);
-}
-.hx.wet {
-  fill: var(--wet);
-}
 
 @keyframes zapf {
   0% {
@@ -41,10 +29,6 @@
   }
 }
 
-.fogline {
-  stroke: rgba(255, 255, 255, 0.1);
-  stroke-width: 1.2;
-}
 .axl {
   font-family: var(--f-m);
   font-size: 7px;

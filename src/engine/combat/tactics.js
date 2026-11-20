@@ -380,7 +380,7 @@ export function chargesOnBoard(S) {
     }
     const m = MV[u.chg.mv];
     (u.vole ? [u.chg.k] : affected(S, u, m, u.chg.k)).forEach(k => {
-      h += poly(k, 'h-charge');
+      h += poly(k, 'highlight-charge');
     });
   });
   return h;

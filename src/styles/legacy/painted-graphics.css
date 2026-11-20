@@ -17,46 +17,6 @@ html body #combat #bBoard.painted-tilt {
 html body #bBoard.painted-tilt #bSvg .texture-layer {
   display: inline !important;
 }
-html body #bBoard.painted-tilt #bSvg .tx {
-  opacity: 1 !important;
-}
-html body #bBoard.painted-tilt #bSvg .hx {
-  fill: #22301c !important;
-  stroke: rgba(20, 14, 6, 0.55) !important;
-  stroke-width: 0.9 !important;
-}
-html body #bBoard.painted-tilt #bSvg .hx.wet {
-  fill: #2b5c96 !important;
-}
-#bBoard.painted-tilt #bSvg .bv {
-  stroke: url(#bev);
-  stroke-width: 1.4;
-  opacity: 0.9;
-}
-html body #bBoard.painted-tilt #bSvg .tx.wet {
-  opacity: 0.5 !important;
-}
-html body #bBoard.painted-tilt #bSvg .tx.deploy-phase-z {
-  opacity: 0.45 !important;
-}
-html body #bBoard.painted-tilt #bSvg .tx.mud,
-html body #bBoard.painted-tilt #bSvg .tx.lava {
-  opacity: 0.35 !important;
-}
-html body #bBoard.painted-tilt.has-mud #bSvg .tx.mud {
-  fill: url(#tx-mud);
-  opacity: 1 !important;
-}
-html body #bBoard.painted-tilt.has-lava #bSvg .tx.lava {
-  fill: url(#tx-lava);
-  opacity: 1 !important;
-}
-#bBoard.painted-tilt #bSvg .tx.fog-of-war-t {
-  filter: brightness(0.42) saturate(0.5);
-}
-#bBoard.painted-tilt #bSvg .gl {
-  stroke: rgba(255, 248, 220, 0.1);
-}
 #bBoard.painted-tilt #bSvg .paintscape,
 #bBoard.painted-tilt #bSvg .tuft,
 #bBoard.painted-tilt #bSvg .pebble,

@@ -37,10 +37,6 @@ html.a11y-cb {
   --bad: #ff9f1a !important;
   --warn: #ffe14a !important;
 }
-html.a11y-cb #bSvg .in-danger .hx,
-html.a11y-cb #bSvg .h-danger {
-  stroke: #ff9f1a !important;
-}
 html.a11y-lh .bt-foot {
   flex-direction: row-reverse;
 }

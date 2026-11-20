@@ -75,7 +75,7 @@ export function Pedestals() {
 function tileClass(k) {
   const t = B.tiles[k],
     pp = P(k);
-  let c = 'hx' + ((pp[0] + pp[1]) % 2 ? ' alt' : '');
+  let c = 'cell' + ((pp[0] + pp[1]) % 2 ? ' is-alternate' : '');
   if (t.rock) {
     c += ' rock';
   } else if (t.w) {
@@ -124,7 +124,7 @@ function texFill(k) {
   return `url(#${t.w ? 'tx-water' : L.txId})`;
 }
 
-/* textures (the tx class is copied from the cell's states by the engine, v4.77) */
+/* textures (the cell-texture class is copied from the cell's states by the engine, v4.77) */
 export function Textures() {
   useBoard('tiles');
   const S = useBoard('pv');
@@ -135,9 +135,9 @@ export function Textures() {
           const [x, y] = HC(k);
           return (
             <Fragment key={k}>
-              <polygon ref={txRef(k)} points={HP(x, y, BG.S - 1.5)} className="tx" fill={texFill(k)} />
-              <polygon points={HP(x, y, BG.S - 2.2)} className="bv" />
-              <polygon points={HP(x, y, BG.S - 7)} className="gl" />
+              <polygon ref={txRef(k)} points={HP(x, y, BG.S - 1.5)} className="cell-texture" fill={texFill(k)} />
+              <polygon points={HP(x, y, BG.S - 2.2)} className="cell-bevel" />
+              <polygon points={HP(x, y, BG.S - 7)} className="cell-gloss" />
             </Fragment>
           );
         })}

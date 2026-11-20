@@ -89,7 +89,7 @@ export function foresightOnBoard(S) {
   S.presc.forEach(x =>
     [x.k, ...nbrK(x.k)].forEach(k => {
       if (S.tiles[k] && !S.tiles[k].rock) {
-        h += poly(k, 'h-presc' + (x.at <= S.round ? ' now' : ''));
+        h += poly(k, 'highlight-foresight' + (x.at <= S.round ? ' is-due' : ''));
       }
     })
   );

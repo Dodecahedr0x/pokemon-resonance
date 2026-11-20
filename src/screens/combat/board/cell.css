@@ -1,0 +1,274 @@
+/* Board › cells (Terrain.jsx, one <polygon class="cell"> per hex): base fill, alternate rows, terrain kinds (.river,
+   .wet, .mud, .lava, .rock, .grass, .sand, .pillar), deployment zone and fog of war, then the biome and board-theme
+   palettes, the high-contrast option and the painted boards (.paintedterrain, .painted-tilt) that hide the flat fill.
+   The texture overlay (.cell-texture), bevel and gloss sit on top of each cell. States are wrapped in :where() so
+   every rule weighs the same and the order below decides, as the overrides are meant to. */
+
+.cell {
+  fill: var(--color-cell);
+  transition: fill 0.6s ease;
+  cursor: pointer;
+  stroke: rgba(110, 160, 255, 0.26);
+  stroke-width: 0.9;
+}
+.cell:where(.river) {
+  fill: var(--color-cell-river);
+}
+.cell:where(.wet) {
+  fill: var(--color-cell-wet);
+}
+.cell:where(.lava) {
+  filter: drop-shadow(0 0 4px rgba(255, 110, 40, 0.7));
+  animation: none;
+}
+:where(.bio-gue) .cell {
+  fill: #141b17;
+}
+:where(.bio-roche) .cell {
+  fill: #1b1712;
+}
+:where(.bio-tour) .cell {
+  fill: #16131c;
+}
+:where(.bio-ligue) .cell {
+  fill: #12151d;
+}
+.cell-texture {
+  pointer-events: none;
+  opacity: 0.55;
+}
+.cell-bevel {
+  fill: none;
+  stroke: url(#bev);
+  stroke-width: 1.2;
+  opacity: 0.8;
+}
+:where(.bio-arene) .cell {
+  fill: #131418;
+}
+:where(.bio-gue) .cell:where(.wet) {
+  fill: #2b5c96;
+}
+:where(.bio-roche) .cell:where(.wet) {
+  fill: #2b5c96;
+}
+:where(.bio-tour) .cell:where(.wet) {
+  fill: #2b5c96;
+}
+:where(.bio-ligue) .cell:where(.wet) {
+  fill: #2b5c96;
+}
+:where(.bio-gue) .cell:where(.is-alternate) {
+  fill: #17201a;
+}
+:where(.bio-roche) .cell:where(.is-alternate) {
+  fill: #201b14;
+}
+:where(.bio-tour) .cell:where(.is-alternate) {
+  fill: #1a1622;
+}
+:where(.bio-ligue) .cell:where(.is-alternate) {
+  fill: #151925;
+}
+:where(.bio-arene) .cell:where(.is-alternate) {
+  fill: #16171c;
+}
+:where(.bio-gue) .cell:where(.river) {
+  fill: #0e2240;
+}
+:where(.bio-roche) .cell:where(.river) {
+  fill: #0e2240;
+}
+:where(.bio-tour) .cell:where(.river) {
+  fill: #0e2240;
+}
+:where(.bio-ligue) .cell:where(.river) {
+  fill: #0e2240;
+}
+:where(.bio-arene) .cell:where(.river) {
+  fill: #0e2240;
+}
+.cell-gloss {
+  fill: none;
+  stroke: rgba(212, 175, 106, 0.07);
+  stroke-width: 0.7;
+}
+.cell:where(.grass) {
+  fill: #132a18;
+}
+.cell:where(.sand) {
+  fill: #2c251a;
+}
+.cell:where(.is-deploy-zone) {
+  stroke-dasharray: 5 3;
+}
+.cell:where(.is-fogged) {
+  filter: brightness(0.42) saturate(0.5);
+}
+:where(body.board-contrast) .cell-texture {
+  opacity: 0.5;
+}
+:where(body.board-theme-crepuscule .board) .cell:where(:not(.rock, .river, .mud, .lava)) {
+  fill: #3a2f4f;
+  stroke: rgba(210, 190, 255, 0.12);
+}
+:where(body.board-theme-jardin .board) .cell:where(:not(.rock, .river, .mud, .lava)) {
+  fill: #3c6b3a;
+  stroke: rgba(220, 255, 200, 0.14);
+}
+:where(body.board-theme-givre .board) .cell:where(:not(.rock, .river, .mud, .lava)) {
+  fill: #3f6e86;
+  stroke: rgba(220, 245, 255, 0.18);
+}
+:where(body.board-theme-braise .board) .cell:where(:not(.rock, .river, .mud, .lava)) {
+  fill: #6a3a2a;
+  stroke: rgba(255, 200, 150, 0.14);
+}
+:where(body.board-theme-cristal .board) .cell:where(:not(.rock, .river, .mud, .lava)) {
+  fill: #4a4478;
+  stroke: rgba(230, 220, 255, 0.2);
+}
+:where(body.board-theme-crepuscule .board) .cell:where(.is-alternate:not(.rock, .river, .mud, .lava)) {
+  fill: #41355a;
+}
+:where(body.board-theme-jardin .board) .cell:where(.is-alternate:not(.rock, .river, .mud, .lava)) {
+  fill: #437542;
+}
+:where(body.board-theme-givre .board) .cell:where(.is-alternate:not(.rock, .river, .mud, .lava)) {
+  fill: #467993;
+}
+:where(body.board-theme-braise .board) .cell:where(.is-alternate:not(.rock, .river, .mud, .lava)) {
+  fill: #74422f;
+}
+:where(body.board-theme-cristal .board) .cell:where(.is-alternate:not(.rock, .river, .mud, .lava)) {
+  fill: #524b84;
+}
+:where(.board.paintedterrain) .cell {
+  fill: transparent;
+  pointer-events: all;
+}
+.cell:where(.rock) {
+  fill: #0a0a0c;
+}
+.cell:where(.mud) {
+  fill: #2a1f14;
+}
+.cell:where(.lava) {
+  fill: #5a1e0c;
+}
+.cell:where(.pillar) {
+  fill: #09090b;
+}
+.cell:where(.is-deploy-zone) {
+  fill: rgba(90, 190, 255, 0.4);
+}
+:where(body.board-contrast) .cell:where(.grass) {
+  fill: #1f6a30;
+}
+:where(body.board-contrast) .cell:where(.river) {
+  fill: #17508f;
+}
+:where(body.board-contrast) .cell:where(.sand) {
+  fill: #77602f;
+}
+:where(body.board-contrast) .cell:where(.mud) {
+  fill: #5a3d22;
+}
+:where(body.board-contrast) .cell:where(.lava) {
+  fill: #8a2a12;
+}
+:where(body.board-contrast) .cell:where(.rock) {
+  fill: #3b3f47;
+}
+:where(body:not(.board-contrast) .board.paintedterrain) .cell {
+  stroke: rgba(255, 250, 230, 0.2);
+  stroke-width: 0.8;
+}
+.cell:where(.lava) {
+  stroke: #ff7a3d;
+}
+:where(body.board-contrast) .cell {
+  stroke: rgba(214, 230, 255, 0.62);
+  stroke-width: 1.6;
+}
+.cell:where(.is-deploy-zone) {
+  stroke: #b5ecff;
+  stroke-width: 2.2;
+}
+:where(.board.painted-tilt) .cell-texture {
+  opacity: 1;
+}
+:where(.board.painted-tilt) .cell {
+  fill: #22301c;
+  stroke: rgba(20, 14, 6, 0.55);
+  stroke-width: 0.9;
+}
+:where(.board.paintedterrain) .cell:where(.rock) {
+  fill: transparent;
+}
+:where(.board.paintedterrain) .cell:where(.pillar) {
+  fill: transparent;
+}
+:where(.board.paintedterrain) .cell:where(.grass) {
+  fill: transparent;
+}
+:where(.board.paintedterrain) .cell:where(.sand) {
+  fill: transparent;
+}
+:where(.board.paintedterrain) .cell:where(.river) {
+  fill: transparent;
+}
+:where(.board.paintedterrain) .cell:where(.wet) {
+  fill: rgba(70, 150, 230, 0.32);
+}
+:where(.board.paintedterrain) .cell:where(.mud) {
+  fill: rgba(78, 52, 26, 0.62);
+}
+:where(.board.paintedterrain) .cell:where(.lava) {
+  fill: rgba(236, 86, 26, 0.5);
+}
+:where(body.board-contrast .board.paintedterrain) .cell {
+  stroke: rgba(255, 252, 236, 0.5);
+  stroke-width: 1.1;
+}
+:where(body.board-contrast .board.paintedterrain) .cell:where(.is-deploy-zone) {
+  stroke: #b5ecff;
+  stroke-width: 2.2;
+}
+:where(body.board-contrast .board.paintedterrain) .cell:where(.lava) {
+  stroke: #ff7a3d;
+}
+:where(.board.painted-tilt) .cell:where(.wet) {
+  fill: #2b5c96;
+}
+:where(.board.painted-tilt) .cell-bevel {
+  stroke: url(#bev);
+  stroke-width: 1.4;
+  opacity: 0.9;
+}
+:where(.board.painted-tilt) .cell-texture:where(.wet) {
+  opacity: 0.5;
+}
+:where(.board.painted-tilt) .cell-texture:where(.is-deploy-zone) {
+  opacity: 0.45;
+}
+:where(.board.painted-tilt) .cell-texture:where(.mud) {
+  opacity: 0.35;
+}
+:where(.board.painted-tilt) .cell-texture:where(.lava) {
+  opacity: 0.35;
+}
+:where(.board.painted-tilt.has-mud) .cell-texture:where(.mud) {
+  fill: url(#tx-mud);
+  opacity: 1;
+}
+:where(.board.painted-tilt.has-lava) .cell-texture:where(.lava) {
+  fill: url(#tx-lava);
+  opacity: 1;
+}
+:where(.board.painted-tilt) .cell-texture:where(.is-fogged) {
+  filter: brightness(0.42) saturate(0.5);
+}
+:where(.board.painted-tilt) .cell-gloss {
+  stroke: rgba(255, 248, 220, 0.1);
+}

@@ -74,17 +74,12 @@
   border-color: rgba(212, 175, 106, 0.4);
 }
 /* ---------- miscellaneous ---------- */
-.cell {
-  border-radius: 4px;
-}
 .wx {
   border-radius: var(--r);
 }
 @media (prefers-reduced-motion: reduce) {
   .hp.hseg i::after,
-  .energy-pips i.is-filled,
-  .h-danger,
-  .h-arena {
+  .energy-pips i.is-filled {
     animation: none !important;
   }
 }

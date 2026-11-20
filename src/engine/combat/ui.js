@@ -1156,7 +1156,7 @@ export const enPips = (n, cls = '') =>
 export const poly = (k, c) => {
   const [x, y] = HC(k),
     pt = HP(x, y, BG.S - 3);
-  return `<polygon points="${pt}" class="${c} gw"/><polygon points="${pt}" class="${c}"/>`;
+  return `<polygon points="${pt}" class="${c} highlight-glow"/><polygon points="${pt}" class="${c}"/>`;
 };
 
 async function onEvoPickClick(e) {

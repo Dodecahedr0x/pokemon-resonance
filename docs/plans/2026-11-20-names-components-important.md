@@ -301,3 +301,15 @@ Each step is one commit (or a few), on its own, playable at every point.
   both widths: what paints is identical (generic legacy `.ally` / `.enemy` / `.done` rules no longer put HTML borders on
   the SVG groups, which never showed); under reduced motion a shiny and resonant token's halo now stays still.
   Lesson for the next slices: after moving a shared class, look for legacy rules that still style it in context.
+- Board cells: done. `src/screens/combat/board/cell.css`, `cell-marks.css`, `cell-highlight.css`. `.hx` → `.cell`
+  (`.is-alternate`, `.is-fogged`, `.is-deploy-zone`; the terrain words `.river`, `.wet`, `.mud`, `.lava`, `.rock`,
+  `.grass`, `.sand`, `.pillar` stay), `.tx` / `.bv` / `.gl` → `.cell-texture` / `.cell-bevel` / `.cell-gloss`, the
+  `h-*` highlights → `.highlight-*` (`.highlight-glow` for the outline under each, `.is-picked`, `.is-due`), `mk-*` →
+  `.mark-*`, `.fogc2` → `.fog-cloud` (`.is-toxic`), and the pattern pieces in `Defs.jsx` → `.pattern-*`. The cell
+  rules mixed ids, `!important` and `:not()` chains so much that no ordering of readable selectors kept every winner:
+  states and contexts are now wrapped in `:where()` (`:where(.bio-gue) .cell:where(.wet)`), so every cell rule weighs
+  the same as `.cell` and the file order, taken from the legacy winners, decides; the cascade checker reports no
+  conflict. The glow rules come after the fills they outline. A dead legacy `.cell { border-radius }` rule was dropped.
+  New tokens `--color-cell`, `--color-cell-river`, `--color-cell-wet`. Snapshots with four groups (base, selection,
+  cell states, marks) are identical at 375 px; at 1280 px only the tokens' idle animation phase differs, from the
+  reload.

@@ -119,74 +119,8 @@
     border-radius: 14px;
   }
 }
-.tx {
-  pointer-events: none;
-}
-.tx-gr {
-  fill: none;
-  stroke: rgba(200, 245, 160, 0.2);
-  stroke-width: 1;
-  stroke-linecap: round;
-}
-.tx-gd {
-  fill: rgba(255, 240, 160, 0.3);
-}
-.tx-st {
-  fill: none;
-  stroke: rgba(0, 0, 0, 0.32);
-  stroke-width: 1;
-}
-.tx-sd {
-  fill: rgba(255, 230, 190, 0.16);
-}
-.tx-as {
-  fill: rgba(210, 190, 255, 0.2);
-}
-.tx-ac {
-  fill: none;
-  stroke: rgba(0, 0, 0, 0.4);
-  stroke-width: 0.8;
-}
-.tx-mv {
-  fill: none;
-  stroke: rgba(227, 192, 122, 0.2);
-  stroke-width: 1;
-}
-.tx-mv2 {
-  fill: none;
-  stroke: rgba(255, 255, 255, 0.07);
-}
-.tx-wv {
-  fill: none;
-  stroke: rgba(190, 225, 255, 0.32);
-  stroke-width: 1.1;
-  stroke-linecap: round;
-}
-.bv {
-  fill: none;
-  stroke: url(#bev);
-  stroke-width: 1.6;
-}
-.boulder {
-  fill: url(#rockG);
-  stroke: #07090d;
-  stroke-width: 1;
-}
-.boulder-h {
-  fill: none;
-  stroke: rgba(255, 255, 255, 0.4);
-  stroke-width: 1.4;
-  stroke-linecap: round;
-}
 .glint {
   fill: rgba(227, 192, 122, 0.35);
-}
-.mk-edge {
-  fill: none;
-  stroke-width: 1.3;
-  stroke-dasharray: 3 3;
-  opacity: 0.85;
-  animation: mkd 6s linear infinite;
 }
 @keyframes mkd {
   to {

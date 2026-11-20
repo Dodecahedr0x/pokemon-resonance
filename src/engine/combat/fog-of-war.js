@@ -51,7 +51,7 @@ function fogRender() {
   bdClass('fog-of-war', on); // class of #bBoard, rendered by React
   if (L.t) {
     for (const k in L.t) {
-      L.t[k].classList.toggle('fog-of-war-t', on && !vu.has(k));
+      L.t[k].classList.toggle('is-fogged', on && !vu.has(k));
     }
   }
   if (!B) {

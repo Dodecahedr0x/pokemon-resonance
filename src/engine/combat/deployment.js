@@ -96,7 +96,7 @@ export function deployRender() {
     z = on ? deployZone(B) : [];
   if (L.t) {
     for (const k in L.t) {
-      L.t[k].classList.toggle('deploy-phase-z', on && z.includes(k));
+      L.t[k].classList.toggle('is-deploy-zone', on && z.includes(k));
     }
   }
   if (L.u) {

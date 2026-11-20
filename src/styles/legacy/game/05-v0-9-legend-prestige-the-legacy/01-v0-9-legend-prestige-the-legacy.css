@@ -146,8 +146,7 @@ body {
 .st-no,
 .f-dmg,
 .f-heal,
-.fl,
-.mk-lv {
+.fl {
   font-family: var(--f-n);
   font-stretch: 72%;
   font-variant-numeric: tabular-nums lining-nums;

@@ -77,7 +77,7 @@ export default function Defs() {
   return (
     <defs>
       <pattern id="fogP" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-        <line className="fogline" x1="0" y1="0" x2="0" y2="6" />
+        <line className="pattern-fog-line" x1="0" y1="0" x2="0" y2="6" />
       </pattern>
       <marker
         id="iArr"
@@ -91,24 +91,24 @@ export default function Defs() {
         <path d="M0 0 10 5 0 10Z" className="arr-h" />
       </marker>
       <Pat id="tx-grass" t="grass" w="16" h="14" on={on('grass')}>
-        <path d="M2 13l1.6-6 1 6M8 12l1-7 1.4 7M12.5 13.5l1.2-5 .8 5" className="tx-gr" />
-        <circle cx="6" cy="4" r=".7" className="tx-gd" />
+        <path d="M2 13l1.6-6 1 6M8 12l1-7 1.4 7M12.5 13.5l1.2-5 .8 5" className="pattern-blade" />
+        <circle cx="6" cy="4" r=".7" className="pattern-seed" />
       </Pat>
       <Pat id="tx-stone" t="stone" w="30" h="22" on={on('stone')}>
-        <path d="M0 7h12l4 3h14M4 18h9l3-3h10M20 0v5M9 10v8" className="tx-st" />
-        <circle cx="25" cy="16" r="1" className="tx-sd" />
+        <path d="M0 7h12l4 3h14M4 18h9l3-3h10M20 0v5M9 10v8" className="pattern-crack" />
+        <circle cx="25" cy="16" r="1" className="pattern-speck" />
       </Pat>
       <Pat id="tx-ash" t="ash" w="12" h="12" on={on('ash')}>
-        <circle cx="3" cy="4" r=".8" className="tx-as" />
-        <circle cx="9" cy="9" r=".6" className="tx-as" />
-        <path d="M6 1l1 3-2 2" className="tx-ac" />
+        <circle cx="3" cy="4" r=".8" className="pattern-ash" />
+        <circle cx="9" cy="9" r=".6" className="pattern-ash" />
+        <path d="M6 1l1 3-2 2" className="pattern-ash-crack" />
       </Pat>
       <Pat id="tx-marble" t="marble" w="64" h="64" on={on('marble')}>
-        <path d="M-4 20C10 14 18 30 34 22S56 6 70 14M-4 52C14 44 24 60 40 50S60 38 70 44" className="tx-mv" />
-        <path d="M20 0C24 10 18 18 26 30" className="tx-mv2" />
+        <path d="M-4 20C10 14 18 30 34 22S56 6 70 14M-4 52C14 44 24 60 40 50S60 38 70 44" className="pattern-vein" />
+        <path d="M20 0C24 10 18 18 26 30" className="pattern-vein-faint" />
       </Pat>
       <Pat id="tx-water" t="water" w="22" h="10" on={on('water')}>
-        <path d="M0 5q2.75-3 5.5 0t5.5 0 5.5 0 5.5 0" className="tx-wv" />
+        <path d="M0 5q2.75-3 5.5 0t5.5 0 5.5 0 5.5 0" className="pattern-wave" />
       </Pat>
       <linearGradient id="bev" x1="0" y1="0" x2="0" y2="1">
         <stop offset="0" stopColor="rgba(255,255,255,.22)" />
@@ -121,15 +121,15 @@ export default function Defs() {
         <stop offset="1" stopColor="#22252C" />
       </radialGradient>
       <Pat id="tx-rune" t="rune" w="54" h="46.8" on={on('rune')}>
-        <path d="M27 4l6 6-6 6-6-6Z M27 9v12 M21 30h12 M24 34l3 4 3-4" className="tx-rn" />
-        <circle cx="6" cy="40" r=".8" className="tx-sd" />
+        <path d="M27 4l6 6-6 6-6-6Z M27 9v12 M21 30h12 M24 34l3 4 3-4" className="pattern-rune" />
+        <circle cx="6" cy="40" r=".8" className="pattern-speck" />
       </Pat>
       {/* v1.1 · sand and pillars */}
       <Pat id="tx-sand" t="sand" w="18" h="12" on={on('sand')}>
-        <rect width="18" height="12" className="sd-bg" />
-        <path d="M0 8q4.5-3 9 0t9 0" className="sd-rp" />
-        <circle cx="4" cy="3" r=".8" className="sd-dt" />
-        <circle cx="13" cy="4.5" r=".6" className="sd-dt" />
+        <rect width="18" height="12" className="pattern-sand" />
+        <path d="M0 8q4.5-3 9 0t9 0" className="pattern-sand-ripple" />
+        <circle cx="4" cy="3" r=".8" className="pattern-sand-grain" />
+        <circle cx="13" cy="4.5" r=".6" className="pattern-sand-grain" />
       </Pat>
       <linearGradient id="pilG" x1="0" y1="0" x2="1" y2="0">
         <stop offset="0" stopColor="#24252B" />

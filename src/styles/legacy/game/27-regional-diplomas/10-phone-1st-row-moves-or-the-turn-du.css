@@ -29,23 +29,6 @@ html body.compact-battle #cbBattle .bt-foot.foot-tools #bEnd {
   -webkit-user-select: none;
   user-select: none;
 }
-#bSvg .h-inspect-tile {
-  fill: rgba(255, 224, 138, 0.16);
-  stroke: #ffe08a;
-  stroke-width: 2.4;
-  stroke-dasharray: 5 3;
-  animation: inspect-tile 1.2s linear infinite;
-}
-@keyframes inspect-tile {
-  to {
-    stroke-dashoffset: -16;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  #bSvg .h-inspect-tile {
-    animation: none;
-  }
-}
 
 .tile-info {
   position: fixed;
@@ -294,31 +277,6 @@ html body.fullscreen-mode.compact-battle #cbBattle .bt-side .bt-foot {
 }
 
 /* contrasted board */
-body.board-contrast #bSvg .hx {
-  stroke: rgba(214, 230, 255, 0.62) !important;
-  stroke-width: 1.6 !important;
-}
-body.board-contrast #bSvg .tx {
-  opacity: 0.5;
-}
-body.board-contrast #bSvg .hx.grass {
-  fill: #1f6a30 !important;
-}
-body.board-contrast #bSvg .hx.river {
-  fill: #17508f !important;
-}
-body.board-contrast #bSvg .hx.sand {
-  fill: #77602f !important;
-}
-body.board-contrast #bSvg .hx.mud {
-  fill: #5a3d22 !important;
-}
-body.board-contrast #bSvg .hx.lava {
-  fill: #8a2a12 !important;
-}
-body.board-contrast #bSvg .hx.rock {
-  fill: #3b3f47 !important;
-}
 body.board-contrast #bSvg .axl {
   fill: #f2e6c8 !important;
   font-weight: 700;

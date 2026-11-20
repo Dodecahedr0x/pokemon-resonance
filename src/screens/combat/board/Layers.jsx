@@ -25,13 +25,13 @@ export function Poly({ k, c }) {
     pt = HP(x, y, BG.S - 3);
   return (
     <>
-      <polygon points={pt} className={c + ' gw'} />
+      <polygon points={pt} className={c + ' highlight-glow'} />
       <polygon points={pt} className={c} />
     </>
   );
 }
 // tiles to highlight: [tile, class] (React keys are added at the end, since a tile may come back)
-const polys = (ks, c, on) => ks.map(k => [k, on ? c + (k === ui.pk ? ' on' : '') : c]);
+const polys = (ks, c, on) => ks.map(k => [k, on ? c + (k === ui.pk ? ' is-picked' : '') : c]);
 const toPolys = (l, p) => l.map(([k, c], i) => <Poly key={p + i} k={k} c={c} />);
 
 /* marks, rocks, fog, traps, fire risk; colossus links (v4.8) */
@@ -52,11 +52,11 @@ export function Markers() {
           my = TILT.on ? y - 6 * ms - 12 * mz : y - 21,
           pt = HP(x, y, BG.S - 5);
         o.push(
-          <polygon key={k + 'mf'} points={pt} className="mk-fill" style={{ fill: col }} />,
-          <polygon key={k + 'me'} points={pt} className="mk-edge" style={{ stroke: col }} />,
+          <polygon key={k + 'mf'} points={pt} className="mark-fill" style={{ fill: col }} />,
+          <polygon key={k + 'me'} points={pt} className="mark-edge" style={{ stroke: col }} />,
           <g
             key={k + 'mb'}
-            className="mk-b"
+            className="mark-badge"
             transform={`translate(${mx.toFixed(1)},${my.toFixed(1)}) scale(${mz.toFixed(3)})`}
           >
             <circle cx="12" cy="12" r="12" fill={col} stroke="#0B0D12" strokeWidth="2" />
@@ -67,7 +67,7 @@ export function Markers() {
           o.push(
             <text
               key={k + 'ml'}
-              className="mk-lv"
+              className="mark-level"
               x={(TILT.on ? x - 14 * ms : x - 15).toFixed(1)}
               y={(TILT.on ? y - 3 * ms : y - 11).toFixed(1)}
             >
@@ -84,11 +84,21 @@ export function Markers() {
             className="boulder"
             d={`M${(x - 14).toFixed(1)} ${(y + 8).toFixed(1)}q-2-12 8-17q8-5 15 1q7 6 5 16q-14 6-28 0Z`}
           />,
-          <path key={k + 'bh'} className="boulder-h" d={`M${(x - 6).toFixed(1)} ${(y - 6).toFixed(1)}q5-4 11-1`} />
+          <path
+            key={k + 'bh'}
+            className="boulder-highlight"
+            d={`M${(x - 6).toFixed(1)} ${(y - 6).toFixed(1)}q5-4 11-1`}
+          />
         );
       }
       if (t.fog > 0) {
-        o.push(<polygon key={k + 'fg'} points={HP(x, y, BG.S - 1)} className={'fogc2' + (t.fog > 2 ? ' tox' : '')} />);
+        o.push(
+          <polygon
+            key={k + 'fg'}
+            points={HP(x, y, BG.S - 1)}
+            className={'fog-cloud' + (t.fog > 2 ? ' is-toxic' : '')}
+          />
+        );
       }
       o.push(<SvgHtml key={k + 'dt'} html={tacticalDrawing(B, k, x, y)} />); // traps (v4.8)
       if (B.livingBoard && fireHazard(B, k)) {
@@ -227,7 +237,7 @@ function extras() {
       }
     }
     if (u.hr && u.acted && !u.moved && !ui.mode) {
-      ex.push(...toPolys(polys(Object.keys(reach(B, u)), 'h-reach'), 'hr'));
+      ex.push(...toPolys(polys(Object.keys(reach(B, u)), 'highlight-reach'), 'hr'));
     }
   }
   if (!vl) {
@@ -259,38 +269,38 @@ export function Highlights() {
       vl = veiled(B),
       an = arenaNext(B);
     if (an) {
-      hl.push(...polys(an.tiles, 'h-arena'));
+      hl.push(...polys(an.tiles, 'highlight-arena'));
     }
     B.units.forEach(e => {
       if (!vl && e.side === 'e' && !e.ko && e.intent) {
-        hl.push(...polys(affected(B, e, MV[e.intent.mv], e.intent.k), 'h-danger'));
+        hl.push(...polys(affected(B, e, MV[e.intent.mv], e.intent.k), 'highlight-danger'));
       }
     });
     // v4.12: the hit opponent shows its threat zone (everything it can strike after moving)
     const eSel = B.jit && ui.selE && byUid(B, ui.selE);
     if (eSel && !eSel.ko && eSel.side === 'e' && !eSel.done && !B.over) {
-      hl.push(...polys(threatZone(B, eSel), 'h-menace'));
+      hl.push(...polys(threatZone(B, eSel), 'highlight-threat'));
     }
     if (u && !u.ko && B.phase === 'player' && !ui.busy && !B.over) {
       if (ui.mode === 'duo' && ui.duo) {
-        hl.push(...polys(duoTargets(B, u, byUid(B, ui.duo)), 'h-tgt', true));
+        hl.push(...polys(duoTargets(B, u, byUid(B, ui.duo)), 'highlight-target', true));
         if (ui.pv) {
-          hl.push(...polys(ui.pv.aff, 'h-aff'));
+          hl.push(...polys(ui.pv.aff, 'highlight-affected'));
         }
       } else if (ui.mode === 'target') {
-        hl.push(...polys(targets(B, u, MV[u.mv[ui.mi]]), 'h-tgt', true));
+        hl.push(...polys(targets(B, u, MV[u.mv[ui.mi]]), 'highlight-target', true));
         if (ui.pv) {
-          hl.push(...polys(ui.pv.aff, 'h-aff'));
+          hl.push(...polys(ui.pv.aff, 'highlight-affected'));
         }
       } else if (ui.mode === 'dodge') {
         hl.push(
           ...polys(
             nbrK(uk(u)).filter(k => !B.tiles[k].rock && !uAt(B, k)),
-            'h-dodge'
+            'highlight-dodge'
           )
         );
       } else if (!u.moved && !u.acted) {
-        hl.push(...polys(Object.keys(reach(B, u)), 'h-reach'));
+        hl.push(...polys(Object.keys(reach(B, u)), 'highlight-reach'));
       }
     }
   }
@@ -350,7 +360,7 @@ export function Magnifier() {
   }
   return (
     <g id="inspect-tile" style={PE}>
-      {S.insp != null && B && <Poly k={S.insp} c="h-inspect-tile" />}
+      {S.insp != null && B && <Poly k={S.insp} c="highlight-inspected" />}
     </g>
   );
 }

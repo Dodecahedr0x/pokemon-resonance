@@ -103,12 +103,6 @@
 }
 
 /* deployment */
-html body #bSvg .hx.deploy-phase-z {
-  fill: rgba(90, 190, 255, 0.4) !important;
-  stroke: #b5ecff !important;
-  stroke-width: 2.2 !important;
-  stroke-dasharray: 5 3 !important;
-}
 
 /* doctrines */
 .chip-doctrine-choice svg {

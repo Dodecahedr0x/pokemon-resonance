@@ -90,6 +90,9 @@
 @import '../screens/combat/battle/result-lists.css' layer(screens);
 @import '../screens/combat/battle/result-effects.css' layer(screens);
 @import '../screens/combat/battle/evolution-choice.css' layer(screens);
+@import '../screens/combat/board/cell.css' layer(screens);
+@import '../screens/combat/board/cell-marks.css' layer(screens);
+@import '../screens/combat/board/cell-highlight.css' layer(screens);
 @import '../screens/combat/board/token.css' layer(screens);
 @import '../screens/combat/board/token-states.css' layer(screens);
 @import '../screens/combat/board/token-halo.css' layer(screens);

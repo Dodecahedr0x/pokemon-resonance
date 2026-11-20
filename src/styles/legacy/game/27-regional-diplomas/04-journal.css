@@ -4,9 +4,6 @@
 /* v4.31 · Camp sub-tabs */
 
 /* fog of war */
-html body #bSvg .hx.fog-of-war-t {
-  filter: brightness(0.42) saturate(0.5);
-}
 
 /* riddles */
 

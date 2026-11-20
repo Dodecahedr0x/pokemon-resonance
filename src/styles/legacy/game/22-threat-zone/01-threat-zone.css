@@ -6,16 +6,6 @@
       keeps its buttons visible and its medallion adapts to the
       screen height (before: buttons cut off, impossible to scroll down).
    ===================================================================== */
-.h-presc {
-  fill: rgba(249, 85, 135, 0.1);
-  stroke: rgba(249, 85, 135, 0.75);
-  stroke-width: 1.1;
-  stroke-dasharray: 2 2.5;
-  pointer-events: none;
-}
-.h-presc.now {
-  fill: rgba(249, 85, 135, 0.2);
-}
 .bdg-s.status-poisoned rect {
   stroke: #c77dff;
 }
@@ -53,13 +43,6 @@
 }
 .bdg-s.status-countering text {
   fill: #ffc08f;
-}
-.h-menace {
-  fill: rgba(229, 72, 77, 0.11);
-  stroke: rgba(255, 107, 111, 0.6);
-  stroke-width: 1.1;
-  stroke-dasharray: 3.5 3;
-  pointer-events: none;
 }
 /* ===== resonance-startup layer ===== */
 /* Reload within the same session: no title screen, and the home page only appears
