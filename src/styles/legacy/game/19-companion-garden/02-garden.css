@@ -127,9 +127,3 @@ html body .tn-c em {
 html body .tn-c.on {
   border-color: #ffd75e;
 }
-
-html body .cp-t .cp-h {
-  display: flex;
-  gap: var(--space-3xs);
-  justify-content: flex-start;
-}

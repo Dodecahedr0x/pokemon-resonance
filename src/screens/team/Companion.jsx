@@ -6,7 +6,7 @@ import { companionPanelData } from '../../engine/progression/companion-pokemon.j
 import { buddyData } from '../../engine/progression/companion-eggs.js';
 import { useHomeVersion } from '../home/homeStore.js';
 
-// Companion (#v4Comp, v4.17) and its Berry, Gift and Memories buttons (.buddy, v4.61), on the Team page.
+// Companion (#v4Comp) and its Berry, Gift and Memories buttons, on the Team page (styles: team-companion.css).
 // Clicks (data-comp, data-buddy) are still handled by the engine, which redraws through refreshHome().
 export default function Companion() {
   useHomeVersion();
@@ -14,7 +14,7 @@ export default function Companion() {
   return (
     <section
       id="v4Comp"
-      className="v4-comp v4-panel"
+      className="team-companion v4-panel"
       aria-label="Compagnon"
       style={d ? { '--c': tc(d.m.t[0]) } : undefined}
     >
@@ -25,13 +25,13 @@ export default function Companion() {
 
 function Empty() {
   return (
-    <div className="cp-vide">
-      <span className="cp-ic">
+    <div className="team-companion-empty">
+      <span className="team-companion-icon">
         <svg>
           <use href="#i-team" />
         </svg>
       </span>
-      <span>
+      <span className="team-companion-empty-text">
         <b>Un compagnon ?</b>
         <em>
           Choisissez le Pokémon qui vous accompagne partout. Son affection grandit à chaque combat et lui donne des
@@ -50,26 +50,29 @@ function Sheet({ d }) {
     x = buddyData();
   return (
     <>
-      <div className={'cp-art' + (sh ? ' shiny' : '')} style={sh ? parseStyle(shinyStyle(m.base)) : undefined}>
+      <div
+        className={'team-companion-art' + (sh ? ' is-shiny' : '')}
+        style={sh ? parseStyle(shinyStyle(m.base)) : undefined}
+      >
         <img src={ART(m.no)} alt="" loading="lazy" />
       </div>
-      <div className="cp-t">
+      <div className="team-companion-text">
         <small>Compagnon</small>
         <b>{m.n}</b>
-        <span className="cp-h" aria-label={`${h} cœur${h > 1 ? 's' : ''} sur 5`}>
+        <span className="team-companion-hearts" aria-label={`${h} cœur${h > 1 ? 's' : ''} sur 5`}>
           {[1, 2, 3, 4, 5].map(i => (
-            <i key={i} className={i <= h ? 'on' : ''}>
+            <i key={i} className={i <= h ? 'is-on' : undefined}>
               ♥
             </i>
           ))}
         </span>
-        <span className="cp-bar">
+        <span className="team-companion-bar">
           <i style={{ width: `${pr}%` }} />
         </span>
         <em>{hum}</em>
-        <em className="cp-bn">{bonus || '2 cœurs : premier bonus en combat'}</em>
+        <em className="team-companion-bonus">{bonus || '2 cœurs : premier bonus en combat'}</em>
       </div>
-      <div className="cp-a">
+      <div className="team-companion-actions">
         <button
           type="button"
           className={`b b-sm ${petting ? 'b-ghost' : 'b-gold'}`}
@@ -83,7 +86,7 @@ function Sheet({ d }) {
         </button>
       </div>
       {x && (
-        <div className="buddy">
+        <div className="team-companion-buddy">
           <button type="button" className="b b-sm" data-buddy="baie" disabled={!!(x.feed || !x.baie)}>
             {x.feed ? 'Baie offerte ✓' : x.baie ? 'Offrir une Baie' : 'Pas de Baie'}
           </button>

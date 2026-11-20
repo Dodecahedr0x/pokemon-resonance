@@ -35,11 +35,6 @@
   color: var(--tx2);
   font-size: 14px;
 }
-.cp-a {
-  display: flex;
-  gap: var(--space-sm);
-  flex-wrap: wrap;
-}
 .cp-track {
   display: flex;
   align-items: center;
@@ -132,9 +127,6 @@
   .cp-k {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: var(--space-sm);
-  }
-  .cp-a .b {
-    flex: 1;
   }
 }
 /* campaign start */

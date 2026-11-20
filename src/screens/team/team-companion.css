@@ -1,0 +1,164 @@
+/* Companion panel on the Team page (#v4Comp, Companion.jsx): portrait, name, hearts, affection bar, mood and
+   bonus, Pet / Change buttons, then the Berry / Gift / Memories row. Without a companion: an invitation to
+   choose one. --c is the companion's first type colour (inline style). Clicks: engine listeners on
+   data-comp and data-buddy. The panel frame comes from the shared .v4-panel. */
+
+.team-companion {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-md);
+  margin: var(--space-md) 0;
+  padding: var(--space-md);
+}
+
+/* ---------- No companion yet ---------- */
+.team-companion-empty {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  width: 100%;
+}
+.team-companion-icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 122, 168, 0.16);
+  color: #ff9cbf;
+}
+.team-companion-icon svg {
+  width: 20px;
+  height: 20px;
+}
+.team-companion-empty-text {
+  display: grid;
+  flex: 1;
+  gap: var(--space-3xs);
+}
+.team-companion-empty em {
+  color: var(--color-text-soft);
+  font-size: 12.5px;
+  font-style: normal;
+}
+
+/* ---------- Portrait: breathing artwork on a glow of the type colour ---------- */
+.team-companion-art {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 40% 35%,
+    color-mix(in srgb, var(--c, #ffd75e) 55%, #fff),
+    color-mix(in srgb, var(--c, #ffd75e) 35%, #0d1b33) 72%
+  );
+  box-shadow: 0 0 22px color-mix(in srgb, var(--c, #ffd75e) 45%, transparent);
+}
+.team-companion-art img {
+  width: 92%;
+  height: 92%;
+  object-fit: contain;
+  animation: team-companion-breathe 3.2s ease-in-out infinite;
+}
+/* --sh: the shiny hue shift (inline style) */
+.team-companion-art.is-shiny img {
+  filter: hue-rotate(var(--sh, 120deg)) saturate(1.25);
+}
+@keyframes team-companion-breathe {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-3px) scale(1.03);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .team-companion-art img {
+    animation: none;
+  }
+}
+
+/* ---------- Text: "Compagnon", name, hearts, affection bar, mood, bonus ---------- */
+.team-companion-text {
+  display: grid;
+  flex: 1;
+  gap: var(--space-3xs);
+  min-width: 170px;
+}
+.team-companion-text small {
+  color: var(--color-text-soft);
+  font: 800 11px/1 var(--font-display);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.team-companion-text b {
+  font-size: 18px;
+}
+.team-companion-text em {
+  color: var(--color-text-soft);
+  font-size: 13px;
+  font-style: normal;
+}
+.team-companion-text em.team-companion-bonus {
+  color: #ffd2e4;
+  font-size: 12px;
+}
+.team-companion-hearts {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: flex-start;
+  gap: var(--space-3xs);
+}
+.team-companion-hearts i {
+  margin-right: var(--space-3xs);
+  color: rgba(255, 255, 255, 0.2);
+  font-size: 15px;
+  font-style: normal;
+}
+.team-companion-hearts i.is-on {
+  color: #ff7aa8;
+}
+/* affection towards the next heart */
+.team-companion-bar {
+  display: block;
+  height: 5px;
+  overflow: hidden;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.1);
+}
+.team-companion-bar i {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #ff7aa8, #ffc1d6);
+}
+
+/* ---------- Buttons: Pet / Change, then Berry / Gift / Memories on their own row ---------- */
+.team-companion-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+.team-companion-buddy {
+  display: flex;
+  flex-basis: 100%;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  width: 100%;
+  margin-top: var(--space-sm);
+}
+.team-companion-buddy .b {
+  flex: 1 1 auto;
+}
+
+@media (max-width: 560px) {
+  .team-companion-actions .b {
+    flex: 1;
+  }
+}

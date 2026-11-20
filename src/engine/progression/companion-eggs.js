@@ -19,7 +19,7 @@ import { badgeTotal } from './item-quests.js';
 
 export { EGG_SHOP, eggState, eggPool }; // read by Shop › Eggs (React, src/screens/bag/Workshop.jsx)
 
-/** Companion's Berry, Gift and Memories buttons (.buddy in #v4Comp, rendering: src/screens/team/Companion.jsx). */
+/** Companion's Berry, Gift and Memories buttons (.team-companion-buddy in #v4Comp, rendering: src/screens/team/Companion.jsx). */
 export function buddyData() {
   const id = activeCompanionId();
   if (!id) {

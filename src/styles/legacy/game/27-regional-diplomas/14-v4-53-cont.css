@@ -262,17 +262,6 @@ body.board-theme-cristal .board {
 }
 
 /* <style id="resonance-keepsakes-ui"> */
-.buddy {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-sm);
-  margin-top: var(--space-sm);
-  width: 100%;
-  flex-basis: 100%;
-}
-.buddy .b {
-  flex: 1 1 auto;
-}
 .buddy-l {
   opacity: 0.55;
 }
