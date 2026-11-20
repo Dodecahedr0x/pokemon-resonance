@@ -283,9 +283,6 @@
   }
 }
 /* battle: readable names, moves marked with their type */
-.pl-h .n {
-  letter-spacing: 0.04em !important;
-}
 .bt-side .bm {
   position: relative;
 }

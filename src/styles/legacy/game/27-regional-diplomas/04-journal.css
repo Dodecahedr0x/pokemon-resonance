@@ -152,14 +152,6 @@ html body #bSvg .tok.fog-of-war {
 html body #bSvg .hx.fog-of-war-t {
   filter: brightness(0.42) saturate(0.5);
 }
-#bPlE .plate.fog-of-war .pl-b {
-  filter: blur(4px);
-  opacity: 0.5;
-}
-#bPlE .plate.fog-of-war .medal,
-#bPlE .plate.fog-of-war svg {
-  filter: grayscale(1) brightness(0.4);
-}
 
 /* riddles */
 .puzzle-tab-h {

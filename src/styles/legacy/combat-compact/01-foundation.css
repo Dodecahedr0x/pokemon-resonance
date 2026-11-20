@@ -138,50 +138,6 @@
     height: 100% !important;
     max-height: 100%;
   }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .plates {
-    position: absolute;
-    left: 12px;
-    right: 12px;
-    z-index: 7;
-    margin: 0 !important;
-    padding: 0 !important;
-    gap: var(--space-xs) !important;
-    filter: none !important;
-    pointer-events: none;
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bPlE {
-    top: 10px;
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bPlA {
-    bottom: 10px;
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .plates {
-    grid-template-columns: repeat(var(--n), minmax(0, 190px)) !important;
-    justify-content: center;
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .plates .plate {
-    pointer-events: auto;
-    min-height: 0 !important;
-    padding: var(--space-xs) var(--space-sm) !important;
-    border-radius: 12px !important;
-    -webkit-backdrop-filter: blur(12px);
-    backdrop-filter: blur(12px);
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bPlE .plate {
-    background: rgba(40, 10, 16, 0.66) !important;
-    border-color: rgba(255, 103, 103, 0.4) !important;
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bPlA .plate {
-    background: rgba(8, 22, 44, 0.66) !important;
-    border-color: rgba(99, 164, 255, 0.4) !important;
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bPlE .plate.act,
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bPlA .plate.act {
-    border-color: #e3c07a !important;
-    box-shadow:
-      0 0 0 1px #e3c07a,
-      0 0 18px -4px rgba(227, 192, 122, 0.7) !important;
-  }
   /* board tools and time badge: just below the opponent cards */
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bBoard > .board-tools {
     top: 66px !important;

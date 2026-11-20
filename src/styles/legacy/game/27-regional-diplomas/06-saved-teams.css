@@ -78,12 +78,6 @@ html body #bSvg .tok.dj1 {
 html body #bSvg .tok.dj2 {
   --dj: var(--dj2);
 }
-#cbBattle .plates[data-duel-player='1'] .plate {
-  box-shadow: inset 3px 0 0 var(--dj1);
-}
-#cbBattle .plates[data-duel-player='2'] .plate {
-  box-shadow: inset 3px 0 0 var(--dj2);
-}
 #bPhase b.dj1,
 #bPhase b.dj2 {
   font-weight: 800;

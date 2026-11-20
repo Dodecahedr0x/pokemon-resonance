@@ -272,9 +272,6 @@
   z-index: 1;
   filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.28));
 }
-#combat .plates {
-  filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.24));
-}
 #combat .bp {
   border-radius: 20px !important;
 }

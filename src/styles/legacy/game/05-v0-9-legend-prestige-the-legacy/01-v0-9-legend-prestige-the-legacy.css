@@ -160,7 +160,6 @@ body {
 .an-k,
 .st-no,
 .bp-hp > span,
-.pl-s > span:first-child,
 .f-dmg,
 .f-heal,
 .fl,
@@ -216,7 +215,6 @@ body {
 .ptm,
 .bm,
 .vx,
-.plate,
 .res-card,
 .ep-card,
 .enc .enc-card,
@@ -263,7 +261,6 @@ body {
 .ptm,
 .bm,
 .vx,
-.plate,
 .bp-en,
 .st-evo,
 .st-line,
@@ -279,8 +276,7 @@ body {
 .scn.on,
 .ptm.on,
 .bm.on,
-.vx.on,
-.plate.act {
+.vx.on {
   background:
     linear-gradient(180deg, rgba(212, 175, 106, 0.12), rgba(212, 175, 106, 0.02)) padding-box,
     var(--slab) padding-box,

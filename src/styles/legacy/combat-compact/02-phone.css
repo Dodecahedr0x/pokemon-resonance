@@ -66,39 +66,6 @@
     height: 100% !important;
   }
   /* opponents placed on the board's sky (top margin of the drawing), team just below */
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .plates {
-    margin: 0 !important;
-    filter: none !important;
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bPlE {
-    position: absolute !important;
-    left: 6px;
-    right: 6px;
-    z-index: 7;
-    padding: 0 !important;
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bPlA {
-    flex: none;
-    padding: var(--space-xs) !important;
-    background: rgba(9, 11, 16, 0.6);
-    border-radius: 0 0 14px 14px;
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .plates::before {
-    display: none !important;
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bPlE {
-    top: 6px;
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .plates .plate {
-    -webkit-backdrop-filter: blur(10px);
-    backdrop-filter: blur(10px);
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bPlE .plate {
-    background: rgba(40, 10, 16, 0.7) !important;
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bPlA .plate {
-    background: rgba(8, 22, 44, 0.7) !important;
-  }
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bBoard > .sky-banner {
     top: 66px !important;
   }

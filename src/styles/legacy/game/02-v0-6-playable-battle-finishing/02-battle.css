@@ -4,39 +4,6 @@
     grid-template-columns: minmax(0, 1fr) 320px;
   }
 }
-.plate {
-  font: inherit;
-  color: inherit;
-  text-align: left;
-  cursor: pointer;
-  display: grid;
-}
-.plate .pl-h,
-.plate .pl-s {
-  display: flex;
-}
-.plate .hp {
-  display: block;
-}
-.plate.ko {
-  opacity: 0.32;
-  cursor: default;
-}
-.plate.now {
-  border-color: var(--enemy);
-  box-shadow: 0 0 0 3px rgba(255, 103, 103, 0.15);
-}
-.pl-s .it {
-  color: var(--tx2);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-family: var(--f-b);
-  font-size: 10.5px;
-}
-#bPlE .plate {
-  border-color: rgba(255, 103, 103, 0.18);
-}
 #bSvg {
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;

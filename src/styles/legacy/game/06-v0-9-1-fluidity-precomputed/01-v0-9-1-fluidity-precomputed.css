@@ -43,7 +43,6 @@
 .h-arena,
 .hp.hseg i::after,
 .enp i.on,
-.plate.fev,
 .evb:not(:disabled),
 .vx.ev:not(:disabled) {
   animation: none !important;
@@ -133,12 +132,6 @@
     0 0 0 1px rgba(255, 241, 199, 0.7),
     0 0 9px rgba(240, 190, 90, 0.9);
 }
-.plate.fev {
-  box-shadow:
-    inset 2px 0 0 var(--crim),
-    0 0 0 2px rgba(229, 72, 77, 0.35),
-    var(--engrave);
-}
 /* route "!" bubble: HTML element animated by the compositor */
 .rt-alert {
   position: absolute;
@@ -208,40 +201,6 @@
   }
   .battle {
     gap: var(--space-sm);
-  }
-  .plates {
-    display: flex;
-    gap: var(--space-sm);
-    padding: var(--space-sm) var(--space-md);
-    overflow-x: auto;
-    overscroll-behavior-x: contain;
-    scroll-snap-type: x proximity;
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
-  }
-  .plates::-webkit-scrollbar {
-    display: none;
-  }
-  .plates .plate {
-    flex: 0 0 auto;
-    min-width: 136px;
-    min-height: 58px;
-    scroll-snap-align: start;
-    grid-template-columns: auto minmax(0, 1fr);
-  }
-  .plates .plate .medal.pm {
-    display: grid;
-    width: 30px;
-    height: 30px;
-  }
-  .plates .plate .enp {
-    display: inline-flex;
-  }
-  .plates.many .plate {
-    grid-template-columns: auto minmax(0, 1fr);
-  }
-  .plates.many .medal.pm {
-    display: grid;
   }
   .bp {
     padding: var(--space-2xs) var(--space-md) var(--space-md);

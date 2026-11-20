@@ -34,12 +34,6 @@
   border-radius: 15px !important;
   background: linear-gradient(160deg, rgba(12, 46, 64, 0.98), rgba(4, 20, 34, 0.99)) !important;
 }
-#combat .plates > *,
-#combat .plate {
-  border-radius: 11px !important;
-  background: rgba(8, 37, 54, 0.92) !important;
-  border: 1px solid rgba(104, 215, 255, 0.25) !important;
-}
 /* Pokédex / type guide / league: visual hierarchy and rich panels */
 #types .gd-tabs {
   gap: var(--space-xs) !important;

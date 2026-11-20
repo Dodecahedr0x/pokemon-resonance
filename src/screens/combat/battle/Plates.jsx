@@ -12,7 +12,7 @@ import { useBattleVersion } from './battleStore.js';
 export function PlatesE() {
   const v = useBattleVersion('top');
   if (!v || !B) {
-    return <div className="plates" id="bPlE" />;
+    return <div className="battle-plates is-enemy" id="bPlE" />;
   }
   const foes = B.units.filter(u => u.side === 'e'),
     D = B.duel433;
@@ -21,7 +21,7 @@ export function PlatesE() {
     vu = fog ? fogVision(B) : null;
   return (
     <div
-      className={'plates' + (foes.length >= 5 ? ' many' : '')}
+      className={'battle-plates is-enemy' + (foes.length >= 5 ? ' is-many' : '')}
       id="bPlE"
       style={{ '--n': foes.length }}
       data-duel-player={D ? 3 - D.j : undefined}
@@ -36,12 +36,17 @@ export function PlatesE() {
 export function PlatesA() {
   const v = useBattleVersion('top');
   if (!v || !B) {
-    return <div className="plates" id="bPlA" />;
+    return <div className="battle-plates is-ally" id="bPlA" />;
   }
   const al = B.units.filter(u => u.side === 'a'),
     D = B.duel433;
   return (
-    <div className="plates" id="bPlA" style={{ '--n': al.length }} data-duel-player={D ? D.j : undefined}>
+    <div
+      className="battle-plates is-ally"
+      id="bPlA"
+      style={{ '--n': al.length }}
+      data-duel-player={D ? D.j : undefined}
+    >
       {al.map(u => (
         <Plate key={u.uid} u={u} />
       ))}
@@ -53,11 +58,11 @@ export function PlatesA() {
 function state(u, fe, nx) {
   if (u.side === 'e') {
     return u.caught ? (
-      <span className="rdy">Capturé</span>
+      <span className="battle-plate-ready">Capturé</span>
     ) : u.ko ? (
       ''
     ) : fe ? (
-      <span className="evw">Évolue en fin de manche</span>
+      <span className="battle-plate-evolves">Évolue en fin de manche</span>
     ) : B.jit ? (
       u.done ? (
         'A agi'
@@ -83,13 +88,13 @@ function state(u, fe, nx) {
   return u.ko ? (
     ''
   ) : u.fat && !u.acted ? (
-    <span className="fatg">Fatigué</span>
+    <span className="battle-plate-tired">Fatigué</span>
   ) : u.sn ? (
     'Immobilisé'
   ) : u.acted ? (
     'A joué'
   ) : u.en >= EMAX && nx ? (
-    <span className="rdy">Éveil !</span>
+    <span className="battle-plate-ready">Éveil !</span>
   ) : (
     'Prêt'
   );
@@ -99,25 +104,25 @@ function Plate({ u, fog }) {
   const fe = foeEvo(B, u),
     nx = hasNx(u) ? awakeningInfo(B, u) : null;
   const cls =
-    `plate ${u.side === 'e' ? 'pe' : 'pa'}${u.ko ? ' ko' : ''}${ui.sel === u.uid || ui.selE === u.uid ? ' act' : ''}` +
-    `${ui.act === u.uid ? ' now' : ''}${fe ? ' fev' : ''}${u.side === 'a' && u.en >= EMAX && nx && !u.ko ? ' rd' : ''}${fog ? ' fog-of-war' : ''}`;
+    `battle-plate ${u.side === 'e' ? 'is-enemy' : 'is-ally'}${u.ko ? ' is-ko' : ''}${ui.sel === u.uid || ui.selE === u.uid ? ' is-selected' : ''}` +
+    `${ui.act === u.uid ? ' is-current' : ''}${fe ? ' is-evolving' : ''}${u.side === 'a' && u.en >= EMAX && nx && !u.ko ? ' is-ready' : ''}${fog ? ' is-veiled' : ''}`;
   const pips = u.side === 'a' ? hasNx(u) || hasXp(u) : bossScene(B) && hasXp(u);
   return (
     <button type="button" className={cls} data-u={u.uid}>
       <Html html={medal(u.t, 'pm')} />
-      <span className="pl-b">
-        <span className="pl-h">
-          <span className="n">{u.n}</span>
+      <span className="battle-plate-body">
+        <span className="battle-plate-head">
+          <span className="battle-plate-name">{u.n}</span>
           <Html html={plateRankHtml(u)} />
-          {pips ? <Html html={enPips(u.en)} /> : u.lv ? <span className="lv">N.{u.lv}</span> : null}
+          {pips ? <Html html={enPips(u.en)} /> : u.lv ? <span className="battle-plate-level">N.{u.lv}</span> : null}
         </span>
         <Html html={segHp(u)} />
-        <span className="pl-s">
+        <span className="battle-plate-status">
           <span>{u.ko ? 'K.O.' : u.hp + ' / ' + u.mhp}</span>
           {u.badge && !u.ko ? (
             <span className={`stt st-${STC[u.badge] || 'x'}`}>{u.badge}</span>
           ) : (
-            <span className="it">{state(u, fe, nx)}</span>
+            <span className="battle-plate-state">{state(u, fe, nx)}</span>
           )}
         </span>
       </span>

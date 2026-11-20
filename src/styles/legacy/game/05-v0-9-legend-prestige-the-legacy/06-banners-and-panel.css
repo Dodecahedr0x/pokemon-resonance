@@ -1,40 +1,4 @@
 /* banners and panel */
-.plate {
-  border-radius: 6px;
-}
-.plate .pl-h .n {
-  font-family: var(--f-d);
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  font-size: 12px;
-}
-.plate .lv {
-  font-family: var(--f-m);
-  letter-spacing: 0.1em;
-  color: var(--gold);
-}
-.plate.pe {
-  box-shadow:
-    inset 2px 0 0 var(--crim),
-    inset 6px 0 14px -8px rgba(229, 72, 77, 0.6),
-    var(--engrave);
-}
-.plate.pa {
-  box-shadow:
-    inset 2px 0 0 var(--sapph),
-    inset 6px 0 14px -8px rgba(91, 155, 255, 0.6),
-    var(--engrave);
-}
-.plate.rd {
-  background:
-    linear-gradient(180deg, rgba(240, 190, 90, 0.14), rgba(240, 190, 90, 0.02)) padding-box,
-    var(--slab) padding-box,
-    var(--brass) border-box;
-}
-.pl-s {
-  font-family: var(--f-m);
-  font-size: 10.5px;
-}
 .bp-id b {
   font-weight: 800;
   letter-spacing: 0.08em;
@@ -316,11 +280,4 @@
   .h-arena {
     animation: none !important;
   }
-}
-
-.plates.many .medal.pm {
-  display: none;
-}
-.plates.many .plate {
-  grid-template-columns: 1fr;
 }

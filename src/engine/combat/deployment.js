@@ -163,7 +163,7 @@ export function init() {
         e.preventDefault();
         e.stopPropagation();
         endDeployment();
-      } else if (e.target.closest('#bPanel button,.plate')) {
+      } else if (e.target.closest('#bPanel button,.battle-plate')) {
         e.preventDefault();
         e.stopPropagation();
         toast('Déploiement : placez vos Pokémon, puis « Lancer le combat ».');

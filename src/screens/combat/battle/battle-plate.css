@@ -1,0 +1,195 @@
+/* Battle screen, inside a team plate (Plates.jsx; the rows are in battle-plates.css): name with rank and
+   level or Awakening pips, segmented HP bar with its "PV" badge, then "HP / max" and a state pill
+   (Prêt, A joué, Fatigué, Éveil !…) or a status badge (shared .stt). On phones only the name, the bar and
+   the numbers stay, plus the state when it is Éveil, Capturé or an evolution. */
+
+.battle-plate-body {
+  display: grid;
+  gap: var(--space-2xs);
+  min-width: 0;
+  max-width: 100%;
+}
+.battle-plate-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-xs);
+  min-width: 0;
+  font-size: 11.5px;
+  font-weight: 600;
+}
+.battle-plate-name {
+  overflow: hidden;
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.battle-plate-level {
+  flex: none;
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+}
+/* Awakening pips (shared .enp) */
+.battle-plate .enp {
+  gap: var(--space-2xs);
+}
+.battle-plate .enp i {
+  width: 6px;
+  height: 6px;
+}
+
+/* ---------- HP bar (shared .hp.hseg from segHp) ---------- */
+.battle-plate .hp.hseg {
+  position: relative;
+  display: block;
+  height: 8px;
+  margin-left: var(--space-xl);
+  overflow: visible;
+  border: 0;
+  border-radius: 6px;
+  background: linear-gradient(180deg, #2a3443, #141a23);
+  box-shadow:
+    0 0 0 1.5px #0a0e14,
+    inset 0 1px 2px rgba(0, 0, 0, 0.65);
+}
+.battle-plate .hp.hseg::before {
+  content: 'PV';
+  position: absolute;
+  top: 50%;
+  right: calc(100% + 3px);
+  padding: 1px var(--space-3xs) 0;
+  border-radius: 3px;
+  background: linear-gradient(180deg, #ffd84d, #ef9f1c);
+  box-shadow: 0 0 0 1px #0a0e14;
+  color: #3a2300;
+  font: 900 7.5px/1.25 var(--font-display);
+  letter-spacing: 0.02em;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+.battle-plate .hp.hseg i {
+  position: relative;
+  height: 100%;
+  border-radius: 5px;
+  background: linear-gradient(180deg, #9df79a 0 34%, #3fca5c 35% 100%);
+  box-shadow: inset 0 -1px 0 rgba(0, 70, 25, 0.35);
+}
+.battle-plate .hp.hseg i.mid {
+  background: linear-gradient(180deg, #fff08a 0 34%, #e6b61d 35% 100%);
+}
+.battle-plate .hp.hseg i.lo {
+  background: linear-gradient(180deg, #ff9c84 0 34%, #e3402c 35% 100%);
+}
+.battle-plate .hp.hseg .lag {
+  border-radius: 5px;
+}
+
+/* ---------- Status line: "HP / max", then the state pill or a status badge ---------- */
+.battle-plate-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2xs);
+  min-height: 14px;
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+}
+.battle-plate-status > span:first-child {
+  font-family: var(--font-numeric);
+  font-stretch: 72%;
+  font-variant-numeric: tabular-nums lining-nums;
+  letter-spacing: -0.01em;
+}
+.battle-plate-state {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr);
+  align-items: start;
+  gap: var(--space-sm);
+  overflow: hidden;
+  border: 1px solid rgba(98, 207, 241, 0.24);
+  border-radius: 18px;
+  background: linear-gradient(145deg, rgba(13, 43, 65, 0.96), rgba(5, 22, 37, 0.97));
+  box-shadow:
+    0 18px 38px rgba(0, 0, 0, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.055);
+  color: var(--color-text-secondary);
+  font-family: var(--font-body);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.battle-plate-ready {
+  color: var(--color-accent-soft);
+  font-weight: 600;
+}
+.battle-plate-evolves {
+  color: #ff9a8a;
+  font-weight: 600;
+}
+.battle-plate-tired {
+  color: #ffb08a;
+}
+
+@media (max-width: 999px) {
+  .battle-plate-status span {
+    font-size: 11.5px;
+  }
+}
+@media (max-width: 540px) {
+  .battle-plate-head {
+    font-size: 10.5px;
+  }
+  .battle-plate-level {
+    display: none;
+  }
+}
+
+/* ---------- Phones ---------- */
+@media (max-width: 700px) {
+  .battle-plate-body {
+    width: 100%;
+    gap: var(--space-3xs);
+  }
+  .battle-plate-head {
+    justify-content: center;
+    line-height: 1.15;
+  }
+  /* only the name: no rank, level or pips */
+  .battle-plate-head > :not(.battle-plate-name) {
+    display: none;
+  }
+  .battle-plate-name {
+    font-size: 9.5px;
+    letter-spacing: 0;
+    line-height: 1.15;
+  }
+  .battle-plate-status {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-3xs);
+  }
+  .battle-plate-status,
+  .battle-plate-status > span {
+    font-size: 9px;
+    line-height: 1.15;
+  }
+  .battle-plate-state {
+    display: none;
+  }
+  .battle-plate-state:has(.battle-plate-ready, .battle-plate-evolves) {
+    display: block;
+    max-width: 100%;
+    overflow: visible;
+    white-space: normal;
+    text-align: center;
+  }
+  .battle-plate-status .stt {
+    padding: 0 var(--space-3xs);
+  }
+}

@@ -1,83 +1,9 @@
 /* banners */
-.plate {
-  grid-template-columns: auto minmax(0, 1fr);
-  gap: var(--space-sm);
-  align-items: center;
-  padding: var(--space-sm) var(--space-sm);
-  border-radius: 14px;
-}
-.plate .pl-b {
-  display: grid;
-  gap: var(--space-2xs);
-  min-width: 0;
-}
-.plate .pl-h {
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-xs);
-}
-.plate .pl-h .n {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.plate.pe {
-  box-shadow:
-    inset 3px 0 0 var(--enemy),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05),
-    0 14px 30px -24px #000;
-}
-.plate.pa {
-  box-shadow:
-    inset 3px 0 0 var(--ally),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05),
-    0 14px 30px -24px #000;
-}
-.plate.rd {
-  background:
-    linear-gradient(180deg, rgba(227, 192, 122, 0.14), rgba(227, 192, 122, 0.03)) padding-box,
-    var(--surf) padding-box,
-    var(--gold-grad) border-box;
-}
-.plate.fev {
-  animation: fevp 1.3s ease-in-out infinite;
-  background:
-    linear-gradient(180deg, rgba(255, 103, 103, 0.16), rgba(255, 103, 103, 0.03)) padding-box,
-    var(--surf) padding-box,
-    linear-gradient(165deg, #ff8a6a, rgba(255, 255, 255, 0.05) 50%, #ff6767) border-box;
-}
 @keyframes fevp {
   50% {
     box-shadow:
       inset 3px 0 0 var(--enemy),
       0 0 0 3px rgba(255, 103, 103, 0.18);
-  }
-}
-.plate .it .evw {
-  color: #ff9a8a;
-  font-weight: 600;
-}
-.plate .it .rdy {
-  color: var(--gold-l);
-  font-weight: 600;
-}
-.plate .enp {
-  gap: var(--space-2xs);
-}
-.plate .enp i {
-  width: 6px;
-  height: 6px;
-}
-@media (max-width: 640px) {
-  .plate {
-    grid-template-columns: 1fr;
-    padding: var(--space-xs) var(--space-sm);
-  }
-  .plate .medal.pm {
-    display: none;
-  }
-  .plate .enp {
-    display: none;
   }
 }
 /* panel */
