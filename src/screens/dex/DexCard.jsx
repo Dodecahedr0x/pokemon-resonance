@@ -51,7 +51,14 @@ export default function DexCard() {
         <div className="dex-art">
           <span className="dex-art-shadow" aria-hidden="true" />
           {/* one image per Pokémon: the shiny illustration (v4.25) is set by the engine */}
-          <img key={m.id} src={ART(m.no)} alt={m.n} decoding="async" />
+          <img
+            key={m.id}
+            src={ART(m.no)}
+            alt={m.n}
+            decoding="async"
+            className={fr ? 'is-regional-form' : undefined}
+            style={fr ? { '--form-hue': fr.hue + 'deg' } : undefined}
+          />
           <span className="dex-art-number">{`N° ${no3(m.no)}`}</span>
           {sh && (
             <span className="dex-art-shiny">

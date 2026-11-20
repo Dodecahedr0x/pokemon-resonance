@@ -56,6 +56,10 @@
     transform 0.45s var(--ease-lift),
     filter 0.45s var(--ease-lift);
 }
+/* regional form: the artwork is recoloured (--form-hue, inline style) */
+.dex-art img.is-regional-form {
+  filter: hue-rotate(var(--form-hue)) drop-shadow(0 22px 20px rgba(0, 0, 0, 0.48));
+}
 @media (hover: hover) {
   .dex-art:hover img {
     transform: translateY(-5px) scale(1.07);
