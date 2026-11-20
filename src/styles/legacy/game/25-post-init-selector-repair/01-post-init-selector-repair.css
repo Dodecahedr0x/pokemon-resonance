@@ -45,19 +45,6 @@ body {
   position: relative;
   z-index: 1;
 }
-.page .ph .h1 {
-  letter-spacing: -0.012em !important;
-  text-shadow: 0 8px 30px rgba(0, 0, 0, 0.48) !important;
-}
-.page .ph .kick {
-  color: var(--r24-cyan) !important;
-  letter-spacing: 0.22em !important;
-  font-weight: 900 !important;
-}
-.page .ph .sub {
-  color: #b4cbd6 !important;
-  line-height: 1.7 !important;
-}
 
 /* HOME — real container after JS move: .v4-hero */
 #accueil .v4-home {

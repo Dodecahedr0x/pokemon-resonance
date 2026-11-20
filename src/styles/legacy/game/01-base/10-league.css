@@ -338,10 +338,7 @@
     gap: var(--space-lg);
   }
 }
-.champ .h1 {
-  font-size: clamp(28px, 4.6vw, 48px);
-}
-.champ p {
+.champ p:not(:where(.kick)) {
   font-size: 15px;
   color: var(--tx2);
 }

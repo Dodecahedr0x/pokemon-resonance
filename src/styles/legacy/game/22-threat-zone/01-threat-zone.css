@@ -129,26 +129,9 @@ html body .ambient {
 html body .page {
   isolation: isolate;
 }
-html body .page .ph,
-html body .page .ph-sm {
-  position: relative;
-  padding-bottom: clamp(14px, 2vw, 24px);
-}
-html body .page .kick {
-  color: var(--pr-cyan) !important;
-  letter-spacing: 0.2em !important;
-  font-weight: 850 !important;
-  text-transform: uppercase;
-  text-shadow: 0 0 18px rgba(93, 207, 242, 0.25);
-}
-html body .h1,
 html body .h2 {
   letter-spacing: -0.045em !important;
   text-shadow: 0 5px 24px rgba(0, 0, 0, 0.38);
-}
-html body .sub {
-  max-width: 70ch;
-  line-height: 1.65;
 }
 html body .case,
 html body .resume,

@@ -3,6 +3,8 @@
 // Builds <button> and <a> samples at the end of <body>, forces :hover / :active / :focus-visible by copying every
 // rule that uses them onto a class (same specificity, same layer, same position), adds disabled and
 // aria-pressed variants, and saves each sample's computed style (and ::before / ::after) like styleSnapshot.
+//   await styleProbeHtml('header-before', '<section class="page"><div class="ph">…</div></section>')
+// does the same for any markup (add __hover / __active / __focus classes yourself to force states).
 // Compare two probes with diff.js. Reload the page afterwards: the copied rules stay in the stylesheets.
 const FORCED = { ':hover': '.__hover', ':active': '.__active', ':focus-visible': '.__focus' };
 
@@ -27,7 +29,7 @@ function forcePseudoClasses(list) {
   }
 }
 
-async function styleProbe(name, baseClass, variants) {
+function probeHost() {
   if (!window.__pseudoForced) {
     for (const sheet of document.styleSheets) {
       try {
@@ -42,6 +44,16 @@ async function styleProbe(name, baseClass, variants) {
   const host = document.createElement('div');
   host.id = '__probe';
   document.body.append(host);
+  return host;
+}
+
+async function styleProbeHtml(name, html) {
+  probeHost().innerHTML = html;
+  return window.styleSnapshot(name, '#__probe');
+}
+
+async function styleProbe(name, baseClass, variants) {
+  const host = probeHost();
   const states = {
     base: [],
     hover: ['__hover'],
@@ -76,3 +88,4 @@ async function styleProbe(name, baseClass, variants) {
 }
 
 window.styleProbe = styleProbe;
+window.styleProbeHtml = styleProbeHtml;

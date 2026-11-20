@@ -277,12 +277,6 @@
     radial-gradient(90% 60% at 50% 0%, rgba(255, 103, 103, 0.12), transparent 70%),
     linear-gradient(180deg, var(--s2), var(--s1));
 }
-.res-card .h1 {
-  font-size: clamp(40px, 10vw, 64px);
-}
-.res-card.win .h1 {
-  color: var(--gold-l);
-}
 .res-k {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));

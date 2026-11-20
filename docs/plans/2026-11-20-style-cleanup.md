@@ -25,10 +25,14 @@ src/styles/
 src/screens/<screen>/<screen>.css   everything specific to that screen, imported by the screen
 ```
 
-- **Layers** make the order explicit: `@layer theme, legacy, base, components, screens;`. Later layers win over
+- **Layers** make the order explicit: `@layer theme, base, components, legacy, screens;`. Later layers win over
   earlier ones regardless of selector specificity, so new code needs no `!important` and no id chains to beat legacy
-  rules. (Caveat: `!important` inside `legacy` beats normal rules in later layers. Delete such legacy rules while
-  migrating the element they target.)
+  rules. Components sit below legacy so the screen-specific tweaks still in legacy (`#pokedex .ph`) keep winning
+  until their screen moves; screens sit above it. (Caveat: `!important` inside `legacy` beats normal rules in later
+  layers. Delete such legacy rules while migrating the element they target.)
+- **Revived rules**: when a component's old global `!important` rules leave legacy, scoped legacy rules they used to
+  override (`.champ .h1 { font-size }`) start to apply. Delete those dead declarations in the same commit, or fence an
+  element rule off with `:not(:where(.kick))`; the page snapshots show which ones came back.
 - **Tokens** have semantic names (`--color-text`, `--color-surface`, `--color-accent`, `--radius-md`,
   `--shadow-raised`, `--text-sm`, `--ease-out`) next to the existing `--space-*` scale.
 - **Names** say what the thing is: `.settings-switch`, not `.v4-sw`. Engine HTML strings use the same names.

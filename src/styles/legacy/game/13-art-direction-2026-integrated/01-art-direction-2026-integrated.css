@@ -129,7 +129,6 @@ body::before {
     transform: none;
   }
 }
-.kick,
 .sg-k,
 .hh-chips,
 .cp-track,
@@ -137,8 +136,7 @@ body::before {
   letter-spacing: 0.14em !important;
 }
 .h2,
-.ph h1,
-.sec h2 {
+.sec h2:not(:where(.h1)) {
   color: #f8fbff !important;
   text-shadow: 0 2px 18px rgba(0, 0, 0, 0.4);
 }

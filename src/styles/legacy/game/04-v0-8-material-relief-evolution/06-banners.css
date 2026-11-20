@@ -231,10 +231,6 @@
   border-radius: 26px;
   animation: encIn 0.5s var(--ease) both;
 }
-.ep-card .sub {
-  font-size: 14px;
-  color: var(--tx2);
-}
 .ep-from {
   display: flex;
   align-items: center;

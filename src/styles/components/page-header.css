@@ -1,0 +1,164 @@
+/* Page header and title text.
+     <div class="ph"><p class="kick">Réglages</p><h1 class="h1">Paramètres</h1><p class="sub">…</p></div>
+   .kick (small uppercase label with a red LED and a gold diamond), .h1 (title) and .sub (lead paragraph) are
+   also used on their own, in panels and dialogs; inside a page (.page) and inside its header (.ph) they change
+   colour and size. Screen-specific tweaks still live in legacy (e.g. #pokedex .ph) and win over these rules.
+   Values were read from what the old per-release rules resolved to, so the look is unchanged. */
+
+/* Header block: a faint Poké Ball behind the text and a short glowing rule under it. */
+.ph {
+  position: relative;
+  display: grid;
+  gap: var(--space-sm);
+  max-width: 780px;
+  margin-bottom: var(--space-xl);
+  padding: var(--space-sm) 0 clamp(14px, 2vw, 24px);
+  overflow-x: clip;
+}
+.ph::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  right: 4px;
+  z-index: 0;
+  width: 128px;
+  height: 128px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cg fill='none' stroke='%23ffffff' stroke-opacity='0.1' stroke-width='2.6'%3E%3Ccircle cx='50' cy='50' r='46'/%3E%3Cpath d='M4 50h31M65 50h31'/%3E%3Ccircle cx='50' cy='50' r='15'/%3E%3Ccircle cx='50' cy='50' r='7'/%3E%3C/g%3E%3C/svg%3E")
+    center / contain no-repeat;
+  transform: rotate(-15deg);
+  pointer-events: none;
+}
+.page .ph::after {
+  content: '';
+  display: block;
+  width: 110px;
+  height: 2px;
+  margin-top: var(--space-xl);
+  background: linear-gradient(90deg, var(--r22-cyan), transparent);
+  box-shadow: 0 0 18px rgba(113, 228, 237, 0.35);
+}
+.ph > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Kicker: the label above a title. */
+.kick {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  color: var(--color-accent);
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 800;
+  font-stretch: 90%;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.kick::before {
+  content: '';
+  flex: none;
+  display: inline-block;
+  width: 7px;
+  min-width: 7px;
+  height: 7px;
+  margin-right: var(--space-xs);
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 32%, #ffc2c5, #ff3b44 55%, #9c0f17);
+  box-shadow: 0 0 8px rgba(255, 60, 70, 0.95);
+  vertical-align: 1px;
+  animation: pkLed 2.4s ease-in-out infinite;
+}
+.kick::after {
+  content: '';
+  flex: none;
+  order: -1;
+  display: block;
+  width: 5px;
+  height: 5px;
+  margin-right: calc(var(--space-2xs) * -1);
+  margin-left: calc(var(--space-xs) * -1);
+  background: var(--color-accent);
+  box-shadow: 0 0 6px rgba(212, 175, 106, 0.8);
+  transform: rotate(45deg);
+}
+.page .kick {
+  color: var(--pr-cyan);
+  font-weight: 850;
+  letter-spacing: 0.2em;
+  text-shadow: 0 0 18px rgba(93, 207, 242, 0.25);
+}
+.page .ph .kick {
+  color: var(--r24-cyan);
+  font-weight: 900;
+  letter-spacing: 0.22em;
+}
+
+/* Title. The text is drawn white; the gold gradient shows only where a screen makes the text transparent. */
+.h1 {
+  background: linear-gradient(180deg, #fff8e8 10%, #e9d9b0 48%, #b8975a 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: clamp(26px, 3vw, 38px);
+  font-weight: 850;
+  line-height: 1.05;
+  letter-spacing: -0.045em;
+  text-shadow: 0 2px 18px rgba(0, 30, 70, 0.6);
+  text-wrap: balance;
+}
+.page .h1 {
+  font-size: clamp(32px, 4.5vw, 54px);
+  line-height: 0.98;
+  letter-spacing: -0.012em;
+}
+.page .ph .h1 {
+  text-shadow: 0 8px 30px rgba(0, 0, 0, 0.48);
+}
+
+/* Lead paragraph. */
+.sub {
+  max-width: 70ch;
+  color: var(--color-text-soft);
+  font-size: 13px;
+  line-height: 1.55;
+}
+.page .sub {
+  max-width: 68ch;
+  color: #b4c9d4;
+  font-size: 14px;
+  line-height: 1.72;
+}
+.page .ph .sub {
+  color: #b4cbd6;
+  line-height: 1.7;
+}
+
+@media (max-width: 999px) {
+  .kick {
+    font-size: 11px;
+  }
+  .page .kick {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 700px) {
+  .page .ph {
+    gap: var(--space-xs);
+    margin-bottom: var(--space-lg);
+  }
+  .page .ph::after {
+    width: 84px;
+    margin-top: var(--space-md);
+  }
+  /* the screen title already shows in the top bar */
+  .page .ph > .kick {
+    display: none;
+  }
+  .page .ph .sub {
+    font-size: var(--t-s);
+    line-height: 1.5;
+  }
+}

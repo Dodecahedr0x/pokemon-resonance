@@ -1,7 +1,4 @@
 /* ---------- Battles: a selection frame ---------- */
-.ph-sm {
-  margin-bottom: var(--space-lg);
-}
 .sel {
   position: relative;
   overflow: hidden;

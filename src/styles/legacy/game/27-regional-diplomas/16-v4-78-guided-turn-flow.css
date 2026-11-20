@@ -95,8 +95,3 @@ html body.compact-battle #cbBattle .bt-foot .turn-guide-pied b {
 .ph:has(+ .tip) .sub {
   display: none !important;
 }
-@media (max-width: 700px) {
-  .page .ph > .kick {
-    display: none !important;
-  }
-}

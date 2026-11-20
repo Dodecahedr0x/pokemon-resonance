@@ -154,10 +154,6 @@ html:is(:root, #r9) body #accueil .v4t-item.i2 {
 
 /* 3. mobile: more compact headers, the cyan rule stays */
 @media (max-width: 700px) {
-  html body .page .ph:after {
-    margin-top: var(--space-md);
-    width: 84px;
-  }
   html body #carte .v4-reg {
     margin: var(--space-md) 0 var(--space-lg);
   }

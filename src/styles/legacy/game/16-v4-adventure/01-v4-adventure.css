@@ -35,33 +35,11 @@ html body {
 html body .ambient {
   opacity: 0.55 !important;
 }
-html body .h1,
-html body .ph h1 {
-  font-family: var(--f-d) !important;
-  font-weight: 850 !important;
-  font-stretch: 100%;
-  letter-spacing: -0.02em !important;
-  text-transform: none !important;
-  font-size: clamp(26px, 3vw, 38px) !important;
-  line-height: 1.05 !important;
-  color: #fff !important;
-  text-shadow: 0 2px 18px rgba(0, 30, 70, 0.6) !important;
-}
 html body .h2 {
   font-family: var(--f-d) !important;
   font-weight: 800 !important;
   text-transform: none !important;
   letter-spacing: -0.01em !important;
-}
-html body .kick {
-  font-family: var(--f-d) !important;
-  font-weight: 800 !important;
-  font-stretch: 90%;
-  letter-spacing: 0.16em !important;
-  color: #ffd75e !important;
-}
-html body .sub {
-  color: var(--v4-tx2) !important;
 }
 html body .logo b {
   font-family: var(--f-logo) !important;

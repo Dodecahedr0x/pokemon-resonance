@@ -92,7 +92,6 @@ body {
 }
 
 /* ---------- typography ---------- */
-.h1,
 .h2,
 .h3,
 .hero h1,
@@ -107,7 +106,6 @@ body {
 .al b,
 .evb b,
 .bp-id b,
-.res-card .h1,
 .rxd h3,
 .cs .who,
 .log b,
@@ -115,12 +113,6 @@ body {
 .efx-t2 {
   font-family: var(--f-d);
   font-stretch: normal;
-}
-.h1 {
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  font-size: clamp(30px, 4.6vw, 54px);
-  line-height: 1.02;
 }
 .h2 {
   font-weight: 700;
@@ -133,7 +125,6 @@ body {
   letter-spacing: 0.1em;
   font-size: 14.5px;
 }
-.h1,
 .h2,
 .hero h1,
 .sh-name,
@@ -161,28 +152,6 @@ body {
   .hero h1 {
     font-size: clamp(34px, 10.5vw, 74px);
   }
-}
-.kick {
-  font-family: var(--f-m);
-  font-size: 10.5px;
-  letter-spacing: 0.3em;
-  color: var(--gold);
-}
-.kick::before {
-  width: 22px;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--gold));
-}
-.kick::after {
-  content: '';
-  display: block;
-  order: -1;
-  width: 5px;
-  height: 5px;
-  margin-right: calc(var(--space-2xs) * -1);
-  transform: rotate(45deg);
-  background: var(--gold);
-  box-shadow: 0 0 6px rgba(212, 175, 106, 0.8);
 }
 
 .num,

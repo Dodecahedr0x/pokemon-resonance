@@ -26,7 +26,6 @@ body {
   opacity: 0.75;
 }
 /* engraved titles */
-.h1,
 .h2,
 .hero h1,
 .sh-name,
@@ -38,22 +37,6 @@ body {
 }
 .hero h1 span {
   -webkit-text-fill-color: var(--tx2);
-}
-.kick::before {
-  width: 26px;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, currentColor);
-}
-.kick::after {
-  content: '';
-  width: 5px;
-  height: 5px;
-  transform: rotate(45deg);
-  background: currentColor;
-  margin-left: calc(var(--space-xs) * -1);
-  flex: none;
-  order: -1;
-  display: none;
 }
 /* beveled surfaces */
 .panel,

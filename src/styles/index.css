@@ -16,5 +16,6 @@
 @import './base/fonts.css' layer(base);
 @import './base/elements.css' layer(base);
 @import './components/button.css' layer(components);
+@import './components/page-header.css' layer(components);
 
 @import '../screens/settings/settings.css' layer(screens);

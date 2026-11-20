@@ -32,7 +32,6 @@ html.pk-calme .pk-gerbe {
 }
 @media (prefers-reduced-motion: reduce) {
   #pk-fond i,
-  .ph::before,
   .pk-leds i,
   .pk-holo,
   .pk-sceau,

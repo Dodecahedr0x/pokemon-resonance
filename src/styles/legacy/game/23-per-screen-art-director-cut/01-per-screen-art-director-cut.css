@@ -31,39 +31,12 @@ body {
     transform: none;
   }
 }
-.page .ph {
-  position: relative;
-  padding: var(--space-sm) 0 var(--space-xl);
-  margin-bottom: var(--space-2xl);
-}
-.page .ph:after {
-  content: '';
-  display: block;
-  width: 110px;
-  height: 2px;
-  margin-top: var(--space-xl);
-  background: linear-gradient(90deg, var(--r22-cyan), transparent);
-  box-shadow: 0 0 18px rgba(113, 228, 237, 0.35);
-}
-.page .kick,
 .v4-kick {
   letter-spacing: 0.2em !important;
   text-transform: uppercase !important;
   color: var(--r22-cyan) !important;
   font-weight: 800 !important;
   font-size: 10px !important;
-}
-.page .h1 {
-  font-size: clamp(30px, 4vw, 48px) !important;
-  line-height: 1.02 !important;
-  letter-spacing: -0.012em !important;
-  text-shadow: 0 8px 30px #000;
-}
-.page .sub {
-  color: #a9bfcb !important;
-  max-width: 720px;
-  font-size: 14px !important;
-  line-height: 1.7 !important;
 }
 /* HOME — adventure dashboard, regional lighting */
 #accueil {

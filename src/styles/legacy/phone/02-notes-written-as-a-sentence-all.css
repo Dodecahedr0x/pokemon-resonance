@@ -265,14 +265,6 @@ p.v4-note {
   }
 
   /* ---------- screen headers: same rhythm everywhere ---------- */
-  html body .page .ph {
-    gap: var(--space-xs) !important;
-    margin-bottom: var(--space-lg) !important;
-  }
-  html body .page .ph .sub {
-    font-size: var(--t-s) !important;
-    line-height: 1.5 !important;
-  }
 
   /* ---------- shared floors: buttons and small text ---------- */
   html body .page :is(.b-sm, .b.b-sm) {

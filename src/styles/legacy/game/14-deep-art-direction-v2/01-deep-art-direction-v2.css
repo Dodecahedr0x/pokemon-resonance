@@ -93,27 +93,8 @@ body {
     transform: none;
   }
 }
-.kick {
-  color: #ffdc70 !important;
-  font-size: 10px !important;
-  letter-spacing: 0.19em !important;
-}
-.h1 {
-  font-size: clamp(28px, 3vw, 43px) !important;
-  line-height: 1.02 !important;
-  letter-spacing: -0.035em !important;
-}
 .h2 {
   font-size: clamp(20px, 2vw, 28px) !important;
-}
-.sub {
-  font-size: 13px !important;
-  line-height: 1.55 !important;
-  color: #bad0de !important;
-}
-.ph {
-  gap: var(--space-sm) !important;
-  margin-bottom: var(--space-xl) !important;
 }
 .tcard,
 .resume,

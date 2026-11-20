@@ -112,17 +112,11 @@ body {
 .wrap {
   max-width: 1540px !important;
 }
-.ph {
-  margin-bottom: var(--space-xl) !important;
-}
-.kick,
 .lbl-s,
 .case-h {
   color: #ffdf68 !important;
 }
-.h1,
-.h2,
-.ph h1 {
+.h2 {
   letter-spacing: -0.025em !important;
   text-shadow: 0 3px 22px rgba(0, 0, 0, 0.38) !important;
 }
