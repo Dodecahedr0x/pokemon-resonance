@@ -98,7 +98,6 @@ body {
 .resume,
 .panel,
 .section,
-.case,
 .pt,
 .rules,
 .codex,
@@ -106,9 +105,7 @@ body {
 .duos,
 .kpis > *,
 .sel,
-.gd-p,
-.arena,
-.elite-case {
+.gd-p {
   background: linear-gradient(145deg, rgba(10, 39, 56, 0.96), rgba(4, 20, 34, 0.98)) !important;
   border: 1px solid rgba(100, 210, 255, 0.24) !important;
   box-shadow:

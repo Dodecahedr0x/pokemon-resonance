@@ -59,7 +59,6 @@ a:focus-visible {
   outline-offset: 3px;
 }
 .panel,
-.case,
 .resume,
 .sel {
   border-color: var(--rx-edge) !important;

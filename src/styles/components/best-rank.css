@@ -1,0 +1,30 @@
+/* Best rank: the best rank (S, A, B, C) won on a battle, a small metal disc in the corner of its card (Elite Four
+   cards, battle preparation rows, the Map's place sheet). .is-S / .is-A / .is-B colour it gold, silver, bronze. */
+
+.best-rank {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 2px rgba(5, 5, 6, 0.85),
+    0 0 0 3px rgba(212, 175, 106, 0.45);
+  color: #1a1205;
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 900;
+}
+.best-rank.is-S {
+  background: radial-gradient(circle at 35% 30%, #fff8de, #c9a35e 70%);
+}
+.best-rank.is-A {
+  background: radial-gradient(circle at 35% 30%, #fff, #a7b0bc 70%);
+}
+.best-rank.is-B {
+  background: radial-gradient(circle at 35% 30%, #ffe2c4, #a86e43 70%);
+}

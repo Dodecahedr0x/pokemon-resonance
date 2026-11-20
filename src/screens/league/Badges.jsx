@@ -3,7 +3,7 @@ import { GYMS } from '../../engine/data/game-data.js';
 import { BADGES } from '../../engine/modes/gyms.js';
 import { badgeSvg, gymSel } from '../../engine/modes/league.js';
 
-// The eight badges (#badges): the chosen one is "on", the won ones "won".
+// The eight badges (#badges): the chosen one is-selected, the won ones is-won.
 export default function Badges() {
   return GYMS.map((g, i) => {
     const won = BADGES.includes(i);
@@ -11,7 +11,7 @@ export default function Badges() {
       <button
         type="button"
         key={i}
-        className={`bdg${i === gymSel ? ' on' : ''}${won ? ' won' : ''}`}
+        className={`league-badge${i === gymSel ? ' is-selected' : ''}${won ? ' is-won' : ''}`}
         data-g={i}
         aria-pressed={i === gymSel}
       >

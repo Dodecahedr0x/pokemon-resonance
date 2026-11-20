@@ -206,7 +206,7 @@ export default function MapInfo() {
       {'\n  '}
       <div className="map-info-chips">
         <Html html={goalChips(S)} />
-        {r ? <span className={`rk-t rk-${r}`}>{`Rang ${r}`}</span> : null}
+        {r ? <span className={`best-rank is-${r}`}>{`Rang ${r}`}</span> : null}
       </div>
       <Html html={rewardLine(k)} />
       {'\n  '}

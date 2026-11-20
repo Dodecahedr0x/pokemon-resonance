@@ -201,7 +201,7 @@ html.pk-calme .prep-tabs > button::before {
   align-items: center;
   gap: var(--space-xs);
 }
-.prep-row-side .rk-t {
+.prep-row-side .best-rank {
   position: static;
 }
 .prep-row-lock,

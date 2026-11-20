@@ -21,19 +21,19 @@ export default function League() {
         titleId="h-lg"
         lead="Les badges dans l’ordre, puis le Conseil 4 et le Champion. Touchez un badge pour lire la règle de son arène."
       />
-      <div className="case">
-        <div className="case-h">
+      <div className="league-case">
+        <div className="league-case-header">
           <span>Boîte à badges</span>
           <span id="caseCount">{on ? `${BADGES.length} / 8 badges` : '8 Arènes'}</span>
         </div>
-        <div className="badges" id="badges">
+        <div className="league-badges" id="badges">
           {on && <Badges key={v} />}
         </div>
-        <div className="arena" id="arena">
+        <div className="league-gym" id="arena">
           {on && <Arena key={v} />}
         </div>
       </div>
-      <div className="case elite-case" id="eliteCase">
+      <div className="league-case league-elite" id="eliteCase">
         {on && <EliteCell key={v} />}
       </div>
     </section>

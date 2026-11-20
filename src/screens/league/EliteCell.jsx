@@ -11,11 +11,11 @@ import Button from '../../components/Button.jsx';
 export default function EliteCell() {
   return (
     <>
-      <div className="case-h">
+      <div className="league-case-header">
         <span>Conseil 4 et Champion</span>
         <span>{`${Math.min(PROFILE.elite, 4)} / 4 · ${PROFILE.elite >= 5 ? 'Champion battu' : 'Champion à défier'}`}</span>
       </div>
-      <div className="el-grid">
+      <div className="league-elite-grid">
         {[...ELITE, 'champ'].map((k, i) => (
           <Card key={k} k={k} L={i < 4 ? ELITE_L[i] : CHAMP_L} />
         ))}
@@ -31,17 +31,17 @@ function Card({ k, L }) {
     r = (PROFILE.ranks || {})[k];
   return (
     <article
-      className={`el-c${won ? ' won' : ''}${lk ? ' locked' : ''}`}
-      style={{ '--ac': s.at ? tc(s.at) : 'var(--gold)' }}
+      className={`league-elite-card${won ? ' is-won' : ''}${lk ? ' is-locked' : ''}`}
+      style={{ '--type-color': s.at ? tc(s.at) : 'var(--color-accent)' }}
     >
-      <span className="el-k">{k === 'champ' ? '★' : s.elite}</span>
+      <span className="league-elite-number">{k === 'champ' ? '★' : s.elite}</span>
       <b>
         <Html html={s.n.replace('Conseil 4 · ', '')} />
       </b>
-      <span className="el-ld">
+      <span className="league-elite-leader">
         <Html html={L.n} />
       </span>
-      <span className="el-f">
+      <span className="league-elite-foes">
         {s.foes.map(([f], j) => (
           <Html key={j} html={medal(BY[f].t, 'is-small')} />
         ))}
@@ -53,7 +53,7 @@ function Card({ k, L }) {
         {won ? 'Rejouer' : 'Défier'}
       </Button>
       {r && (
-        <span className={`rk-t rk-${r}`} title={`Meilleur rang : ${r}`}>
+        <span className={`best-rank is-${r}`} title={`Meilleur rang : ${r}`}>
           {r}
         </span>
       )}

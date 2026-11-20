@@ -1,7 +1,7 @@
 /* Battles: large module cells */
 
 /* ---------- panels: Pokédex chassis ---------- */
-html:not(#pkz) body:not(#pkz) :is(.home-hero, .case)::before {
+html:not(#pkz) body:not(#pkz) :is(.home-hero, .league-case)::before {
   content: '';
   position: absolute;
   inset: -1px;
@@ -26,7 +26,7 @@ html:not(#pkz) body:not(#pkz) :is(.home-hero, .case)::before {
   animation: pkFondu 0.45s ease-out both !important;
   animation-delay: calc(var(--pk-i, 0) * 50ms) !important;
 }
-html:not(#pkz) body:not(#pkz) :is(.card, .home-hero, .case).pk-scan::after {
+html:not(#pkz) body:not(#pkz) :is(.card, .home-hero, .league-case).pk-scan::after {
   content: '';
   position: absolute;
   inset: 0;

@@ -161,3 +161,12 @@ Each step is one commit (or a few), on its own, playable at every point.
   (`.reward-list`, and `.reward-line` / `.reward-badge` / `.reward-hp` in the engine's reward lines) and
   `landscape-scene.css` (`.landscape-scene`, also on Home). The old trainer-card badge rules (`.tcb`, `.tc-bdg`)
   had no element and are gone.
+- League: done. `src/screens/league/league.css`, its values read from what the six competing `!important` layers
+  resolved to: `.league-case` (was `.case`), `.league-case-header` (`.case-h`), `.league-badges` / `.league-badge`
+  (`.badges` / `.bdg` on this screen, `is-selected`, `is-won`; the Map and Home emblems keep `.bdg` for now),
+  `.league-gym(-badge, -text, -foes, -action)` (`.arena`, `.ar-*`), `.league-leader(-name)` (`.ld`), `.league-elite`,
+  `.league-elite-grid`, `.league-elite-card` (`is-won`, `is-locked`, `--type-color`), `.league-elite-number`,
+  `.league-elite-leader`, `.league-elite-foes`. The best-rank disc (`.rk-t rk-S`) is the shared
+  `src/styles/components/best-rank.css` (`.best-rank is-S`), since `.rank-tag` already names the move-rank stars.
+  The cases keep the shared corner and scan effects in the skin. The page entrance animation's selector list in
+  `pokemon-skin.js` now names `.league-case` and `.quests-chapter`.

@@ -33,7 +33,8 @@ const openOverlay = () => {
 };
 
 /* ---------- screen entry: rise and scanner sweep ---------- */
-const CAND = '.card,.home-hero,.case,.prep-card,.gd-p,.gd-intro,.item-row,.quests-chapter,.cb-b,.dex-section,.tip';
+const CAND =
+  '.card,.home-hero,.league-case,.prep-card,.gd-p,.gd-intro,.item-row,.quests-chapter,.cb-b,.dex-section,.tip';
 
 let tEntry;
 
@@ -59,7 +60,7 @@ const entrance = () => {
   L.slice(0, 12).forEach((x, i) => {
     x.style.setProperty('--pk-i', i);
     x.classList.add(isFixed ? 'pk-fade' : 'pk-rise');
-    if (x.matches('.card,.home-hero,.case')) {
+    if (x.matches('.card,.home-hero,.league-case')) {
       x.classList.add('pk-scan');
     }
   });

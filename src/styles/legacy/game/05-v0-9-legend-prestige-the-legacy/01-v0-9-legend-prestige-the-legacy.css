@@ -191,10 +191,8 @@ body {
   -webkit-text-stroke: 1px rgba(212, 175, 106, 0.35);
 }
 .caption,
-.case-h,
 .scn .lvl,
-.bdg span,
-.arena dt {
+.bdg span {
   font-family: var(--f-m);
   letter-spacing: 0.24em;
 }
@@ -217,8 +215,6 @@ body {
 .qc,
 .duo,
 .wx,
-.case,
-.arena,
 .cs,
 .mx-wrap .rxd,
 .rxd,
@@ -243,7 +239,6 @@ body {
 .scn,
 .qc,
 .duo,
-.case,
 .res-card,
 .ep-card,
 .enc .enc-card,
@@ -258,8 +253,7 @@ body {
 .wx,
 .cs,
 .it,
-.rp,
-.arena {
+.rp {
   border-radius: var(--r);
 }
 .rule[open],

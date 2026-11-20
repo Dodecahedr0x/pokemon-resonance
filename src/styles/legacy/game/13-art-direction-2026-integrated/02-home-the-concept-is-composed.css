@@ -94,24 +94,17 @@
 #types .codex,
 #types .items,
 #types .duos,
-#types .studio,
-#ligue .arena,
-#ligue .case,
-#ligue .sheet,
-#ligue .badges,
-#ligue .result {
+#types .studio {
   border-radius: 20px !important;
   background: linear-gradient(145deg, rgba(10, 39, 55, 0.94), rgba(4, 19, 31, 0.96)) !important;
   border: 1px solid rgba(112, 211, 255, 0.21) !important;
   box-shadow: 0 16px 38px rgba(0, 0, 0, 0.18) !important;
 }
-#types .section h2,
-#ligue h2 {
+#types .section h2 {
   color: #fff4c7 !important;
 }
 #types button[aria-pressed='true'],
-#types .on,
-#ligue .on {
+#types .on {
   box-shadow:
     0 0 0 1px rgba(255, 214, 94, 0.5),
     0 0 18px rgba(255, 214, 94, 0.08) !important;

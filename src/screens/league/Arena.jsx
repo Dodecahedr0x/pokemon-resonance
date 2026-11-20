@@ -16,7 +16,7 @@ export default function Arena() {
     L = LEAD[gymSel];
   return (
     <>
-      <div className="ar-b">
+      <div className="league-gym-badge">
         <Html html={badgeSvg(gymSel, g.t, 'bx')} />
       </div>
       <div>
@@ -25,8 +25,8 @@ export default function Arena() {
           <Html html={g.n} />
         </h3>
         {L && (
-          <div className="ld ar">
-            <span className="ld-n">
+          <div className="league-leader">
+            <span className="league-leader-name">
               <b>
                 <Html html={L.n} />
               </b>
@@ -39,10 +39,10 @@ export default function Arena() {
             </q>
           </div>
         )}
-        <p className="ar-d">
+        <p className="league-gym-text">
           <Html html={D.d} />
         </p>
-        <div className="ar-foes">
+        <div className="league-gym-foes">
           {D.foes.map(([f], i) => (
             <span key={i}>
               <Html html={medal(BY[f].t, 'is-small')} />
@@ -71,7 +71,7 @@ export default function Arena() {
           <dt>Conditions</dt>
           <dd>{`${D.time === 'nuit' ? 'Nuit' : 'Jour'} · ${D.lim} manches · ${D.foes.length} adversaires`}</dd>
         </div>
-        <div className="ar-go">
+        <div className="league-gym-action">
           <Button size="large" variant="primary" data-arena={a.k}>
             {won ? 'Rejouer l’arène' : 'Défier l’arène'}
             <svg>

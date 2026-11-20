@@ -47,7 +47,7 @@ function Row({ k, gk }) {
   ) : k === gk ? (
     <span className="pill nx">Prochaine étape</span>
   ) : r ? (
-    <span className={`rk-t rk-${r}`} title="Meilleur rang">
+    <span className={`best-rank is-${r}`} title="Meilleur rang">
       {r}
     </span>
   ) : won ? (

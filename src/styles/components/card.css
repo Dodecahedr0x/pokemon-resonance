@@ -2,7 +2,7 @@
      <section class="card"><header class="card-header"><svg>…</svg><b>Titre</b><span class="card-count">3</span></header>…</section>
    (src/components/CardHeader.jsx renders the header).
    Corner brackets (cyan top-left, gold bottom-right) are drawn by ::before. Add .pk-scan for the scan-line
-   entry effect (still in legacy, shared with .home-hero and .case).
+   entry effect (still in legacy, shared with .home-hero and .league-case).
    Screen-specific panels (#accueil, #carte, #quetes, #sac) still live in legacy and win over these rules.
    Values were read from what the old per-release rules resolved to, so the look is unchanged. */
 

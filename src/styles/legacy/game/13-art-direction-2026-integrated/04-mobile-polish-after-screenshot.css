@@ -79,8 +79,7 @@ body {
 .wrap {
   max-width: 1540px !important;
 }
-.caption,
-.case-h {
+.caption {
   color: #ffdf68 !important;
 }
 .section-title {
@@ -111,8 +110,6 @@ body {
 .qc,
 .duo,
 .wx,
-.case,
-.arena,
 .cs,
 .mx-wrap .rxd,
 .rxd,

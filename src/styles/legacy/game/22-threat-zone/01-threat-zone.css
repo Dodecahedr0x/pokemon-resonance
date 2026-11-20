@@ -133,7 +133,6 @@ html body .section-title {
   letter-spacing: -0.045em !important;
   text-shadow: 0 5px 24px rgba(0, 0, 0, 0.38);
 }
-html body .case,
 html body .resume,
 html body .sel,
 html body .v4-mi,
@@ -144,7 +143,6 @@ html body .ana {
     var(--pr-shadow),
     inset 0 1px 0 rgba(255, 255, 255, 0.055);
 }
-html body .case,
 html body .sel,
 html body .resume,
 html body .v4-mi,
@@ -176,21 +174,6 @@ html body a:focus-visible {
 /* Home: adventure dashboard feel */
 /* Exploration: deeper scene, the game's SVG illustration stays intact */
 /* Gyms: each environment keeps its own colors and rules */
-html body .arena {
-  border-radius: 18px !important;
-  overflow: hidden;
-  background: linear-gradient(145deg, rgba(17, 48, 68, 0.95), rgba(6, 21, 34, 0.98)) !important;
-  border: 1px solid var(--pr-line) !important;
-}
-html body .badges > * {
-  transition:
-    transform 0.2s var(--pr-ease),
-    filter 0.2s var(--pr-ease);
-}
-html body .badges > *:hover {
-  transform: translateY(-3px);
-  filter: brightness(1.12);
-}
 /* Battle board: scene, floor and depth without touching the tactical SVG */
 html body .bt {
   border-radius: 22px !important;

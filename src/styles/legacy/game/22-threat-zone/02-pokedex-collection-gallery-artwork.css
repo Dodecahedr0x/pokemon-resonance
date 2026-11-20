@@ -1,7 +1,6 @@
 /* Pokédex: collection gallery, artwork showcased */
 /* Sheets, lists, panels: readability and relief */
-html body .card-header,
-html body .case-h {
+html body .card-header {
   border-color: rgba(150, 205, 228, 0.16) !important;
 }
 
@@ -57,9 +56,6 @@ html body .shn-ic {
   }
 }
 @media (max-width: 700px) {
-  html body .arena {
-    border-radius: 16px !important;
-  }
   html body #bBoard {
     border-radius: 13px !important;
   }

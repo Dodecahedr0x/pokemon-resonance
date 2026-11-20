@@ -1,6 +1,6 @@
 /* Home hero (#hmHero, Hero.jsx): the « Prochaine étape » card at the top of Home. Its painted backdrop, place tag,
    companion, season and weather are in home-hero-backdrop.css; the corner brackets and the entrance scan are the
-   shared skin effects (still in legacy, with .card and .case). Values were read from what the old rules resolved to
+   shared skin effects (still in legacy, with .card and .league-case). Values were read from what the old rules resolved to
    at phone, tablet and desktop widths. */
 
 .home-hero-slot {

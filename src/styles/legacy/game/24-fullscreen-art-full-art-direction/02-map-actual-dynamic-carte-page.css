@@ -48,8 +48,7 @@
   box-shadow: 0 10px 28px rgba(225, 172, 78, 0.22) !important;
 }
 /* Other systems: coherent premium panels, not generic flat boxes */
-#types .gd-p,
-#ligue .case {
+#types .gd-p {
   border: 1px solid var(--rx-edge) !important;
   border-radius: 23px !important;
   background: linear-gradient(145deg, rgba(19, 48, 65, 0.96), rgba(6, 20, 31, 0.98)) !important;
@@ -63,21 +62,6 @@
   border: 1px solid rgba(124, 220, 230, 0.18) !important;
   border-radius: 18px !important;
   background: linear-gradient(145deg, #153447, #091b28) !important;
-}
-#ligue .case {
-  background:
-    radial-gradient(ellipse at 50% 0%, rgba(245, 206, 120, 0.15), transparent 60%),
-    linear-gradient(155deg, #1a3342, #081923) !important;
-}
-#ligue .badges > * {
-  filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.3));
-  transition:
-    transform 0.25s,
-    filter 0.25s;
-}
-#ligue .badges > *:hover {
-  transform: translateY(-6px) scale(1.04);
-  filter: drop-shadow(0 12px 16px rgba(245, 206, 120, 0.28));
 }
 @media (max-width: 850px) {
   #combat .battle {

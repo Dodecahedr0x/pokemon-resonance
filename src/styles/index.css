@@ -30,6 +30,7 @@
 @import './components/progress-bar.css' layer(components);
 @import './components/reward-list.css' layer(components);
 @import './components/landscape-scene.css' layer(components);
+@import './components/best-rank.css' layer(components);
 
 @import '../screens/settings/settings.css' layer(screens);
 @import '../screens/dex/dex.css' layer(screens);
@@ -78,4 +79,5 @@
 @import '../screens/quests/quests.css' layer(screens);
 @import '../screens/quests/quests-event.css' layer(screens);
 @import '../screens/quests/quests-journal.css' layer(screens);
+@import '../screens/league/league.css' layer(screens);
 @import '../screens/camp/camp.css' layer(screens);

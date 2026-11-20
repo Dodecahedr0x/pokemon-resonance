@@ -243,6 +243,24 @@ export const RENAMED_CLASSES = {
   'legend-quest-c': 'legend-quest',
   'legend-quest-t': 'legend-quest-text',
   'legend-quest-ok': 'legend-quest-caught',
+  // League screen, best rank disc
+  case: 'league-case',
+  'case-h': 'league-case-header',
+  badges: 'league-badges',
+  arena: 'league-gym',
+  'ar-b': 'league-gym-badge',
+  ld: 'league-leader',
+  'ld-n': 'league-leader-name',
+  'ar-d': 'league-gym-text',
+  'ar-foes': 'league-gym-foes',
+  'ar-go': 'league-gym-action',
+  'elite-case': 'league-elite',
+  'el-grid': 'league-elite-grid',
+  'el-c': 'league-elite-card',
+  'el-k': 'league-elite-number',
+  'el-ld': 'league-elite-leader',
+  'el-f': 'league-elite-foes',
+  'rk-t': 'best-rank',
 };
 
 const OLD_CLASS = new RegExp(
