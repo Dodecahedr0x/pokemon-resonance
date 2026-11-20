@@ -28,15 +28,6 @@
   letter-spacing: 0.06em;
 }
 /* evolution choice, cutscene, result */
-.efx {
-  background: radial-gradient(circle at 50% 46%, color-mix(in srgb, var(--c0) 24%, #050506), #020203 70%);
-}
-.efx-rays {
-  background: repeating-conic-gradient(from 0deg, rgba(242, 221, 168, 0.4) 0 3deg, transparent 3deg 15deg);
-}
-.efx-t2 b {
-  color: #f2dda8;
-}
 /* ---------- League: badge box ---------- */
 .bdg {
   border-radius: 6px;

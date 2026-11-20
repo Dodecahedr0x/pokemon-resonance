@@ -731,6 +731,17 @@ export const RENAMED_CLASSES = {
   'sd-rp': 'pattern-sand-ripple',
   'sd-dt': 'pattern-sand-grain',
   fogline: 'pattern-fog-line',
+  // evolution cutscene
+  evofx: 'evolution-scene',
+  efx: 'evolution-scene-burst',
+  'efx-rays': 'evolution-scene-rays',
+  'efx-ring': 'evolution-scene-ring',
+  'efx-orb': 'evolution-scene-orb',
+  'efx-a': 'evolution-scene-from',
+  'efx-b': 'evolution-scene-to',
+  'efx-t1': 'evolution-scene-title',
+  'efx-t2': 'evolution-scene-caption',
+  'efx-flash': 'evolution-scene-flash',
 };
 
 const OLD_CLASS = new RegExp(

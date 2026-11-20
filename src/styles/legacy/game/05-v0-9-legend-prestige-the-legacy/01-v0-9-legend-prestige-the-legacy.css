@@ -95,9 +95,7 @@ body {
 .mvc b,
 .al b,
 .cs .who,
-.log b,
-.efx-t1,
-.efx-t2 {
+.log b {
   font-family: var(--f-d);
   font-stretch: normal;
 }

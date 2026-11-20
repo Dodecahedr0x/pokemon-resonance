@@ -1,8 +1,4 @@
 /* battle */
-.evofx.fast .efx,
-.evofx.fast .efx * {
-  animation-duration: 1.3s !important;
-}
 /* tutorial */
 .coach-hl {
   outline: 2px solid rgba(242, 221, 168, 0.85) !important;

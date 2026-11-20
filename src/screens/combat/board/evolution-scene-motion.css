@@ -1,0 +1,34 @@
+/* Board › evolution cutscene under reduced motion: no animation, the scene shows its last frame (new name, no flash). */
+
+@media (prefers-reduced-motion: reduce) {
+  .evolution-scene-burst {
+    animation: none;
+  }
+  .evolution-scene-burst * {
+    animation: none;
+  }
+  .evolution-scene-from {
+    opacity: 0;
+  }
+  .evolution-scene-title {
+    opacity: 0;
+  }
+  .evolution-scene-rays {
+    opacity: 0;
+  }
+  .evolution-scene-ring {
+    opacity: 0;
+  }
+  .evolution-scene-flash {
+    opacity: 0;
+  }
+  .evolution-scene-to {
+    opacity: 1;
+  }
+  .evolution-scene-caption {
+    opacity: 1;
+  }
+  .evolution-scene-burst::after {
+    display: none;
+  }
+}

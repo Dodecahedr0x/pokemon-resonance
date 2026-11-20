@@ -148,7 +148,3 @@ html body #bSvg {
 html body #bSvg image {
   filter: drop-shadow(0 5px 8px rgba(0, 0, 0, 0.36));
 }
-html body .evofx {
-  backdrop-filter: blur(8px);
-  background: radial-gradient(ellipse, rgba(255, 246, 190, 0.2), rgba(4, 14, 24, 0.88)) !important;
-}

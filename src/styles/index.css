@@ -93,6 +93,8 @@
 @import '../screens/combat/board/cell.css' layer(screens);
 @import '../screens/combat/board/cell-marks.css' layer(screens);
 @import '../screens/combat/board/cell-highlight.css' layer(screens);
+@import '../screens/combat/board/evolution-scene.css' layer(screens);
+@import '../screens/combat/board/evolution-scene-keyframes.css' layer(screens);
 @import '../screens/combat/board/token.css' layer(screens);
 @import '../screens/combat/board/token-states.css' layer(screens);
 @import '../screens/combat/board/token-halo.css' layer(screens);
@@ -132,3 +134,4 @@
 @import '../screens/overlays/typed-dialogue-skin.css' layer(skin);
 /* motion: calm and reduced motion switches, stronger than any screen state */
 @import '../screens/combat/board/token-motion.css' layer(motion);
+@import '../screens/combat/board/evolution-scene-motion.css' layer(motion);

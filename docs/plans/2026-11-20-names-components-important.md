@@ -317,3 +317,9 @@ Each step is one commit (or a few), on its own, playable at every point.
   (every word in the JS, JSX and `index.html`, plus the prefixes of class names built by concatenation such as
   `'bio-' + …`) found 136 selector parts that need a class nothing produces any more (`ptm`, `tc-*`, `cp-*`, `v4t-*`,
   `v4q-*`, `ob-*`, `qk-*`…). They are gone, and so are the 11 legacy files left empty.
+- Evolution cutscene: done. `src/screens/combat/board/evolution-scene.css`, `evolution-scene-keyframes.css` and
+  `evolution-scene-motion.css` (reduced motion, in the `motion` layer). `.evofx` → `.evolution-scene` (`.is-fast`),
+  `.efx` → `.evolution-scene-burst` (`.is-foe`), `.efx-*` → `.evolution-scene-rays`, `-ring`, `-orb`, `-from`, `-to`,
+  `-title`, `-caption`, `-flash`; keyframes `evolution-scene-*`. The old `fa` / `fb` keyframes were always replaced by
+  the later `pkFa` / `pkFb` through `!important`, so only those remain, as `evolution-scene-from-flicker` and
+  `-to-flicker`. Snapshots of five frames (ally, foe, fast) are identical at both widths apart from keyframe names.

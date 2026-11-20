@@ -1,0 +1,190 @@
+/* Board › evolution cutscene (EvoFx.jsx, #evoFx over the board): rays, ring and the orb where the old silhouette
+   flickers into the new one, the title and caption, the sparkles and the final flash. .is-fast (quick battles) plays
+   it in 1.3 s; .evolution-scene-burst.is-foe tints it red for an opponent. Reduced motion: evolution-scene-motion.css. */
+
+.evolution-scene {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  border-radius: 16px;
+  overflow: hidden;
+  pointer-events: none;
+  backdrop-filter: blur(8px);
+  background: radial-gradient(ellipse, rgba(255, 246, 190, 0.2), rgba(4, 14, 24, 0.88));
+}
+.evolution-scene[hidden] {
+  display: none;
+}
+.evolution-scene-burst {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: var(--space-sm);
+  animation: evolution-scene-in 2.5s ease both;
+  background: radial-gradient(circle at 50% 46%, color-mix(in srgb, var(--c0) 24%, #050506), #020203 70%);
+}
+.evolution-scene-burst.is-foe {
+  background: radial-gradient(circle at 50% 46%, rgba(140, 30, 30, 0.55), #030407 70%);
+}
+.evolution-scene-rays {
+  position: absolute;
+  left: 50%;
+  top: 44%;
+  width: 240%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  animation: evolution-scene-rays-turn 2.5s ease both;
+  -webkit-mask: radial-gradient(circle, #000 0, transparent 55%);
+  mask: radial-gradient(circle, #000 0, transparent 55%);
+  background: repeating-conic-gradient(from 0deg, rgba(242, 221, 168, 0.4) 0 3deg, transparent 3deg 15deg);
+}
+.evolution-scene-ring {
+  position: absolute;
+  left: 50%;
+  top: 44%;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  border: 2px solid #fff;
+  opacity: 0;
+  animation: evolution-scene-ring-burst 2.5s ease-out both;
+}
+.evolution-scene-orb {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  animation: evolution-scene-silhouette 2.5s ease both;
+  width: 150px;
+  height: 150px;
+  left: calc(50% - 75px);
+  top: calc(44% - 75px);
+}
+.evolution-scene-orb > span {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+}
+.evolution-scene-from {
+  animation: evolution-scene-from-flicker 2.5s linear both;
+}
+.evolution-scene-to {
+  animation: evolution-scene-to-flicker 2.5s linear both;
+}
+.evolution-scene-title {
+  font-weight: 800;
+  font-size: clamp(14px, 3vw, 20px);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  text-align: center;
+  color: #fff;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.8);
+  padding: 0 var(--space-lg);
+  animation: evolution-scene-title-in 2.5s ease both;
+  position: absolute;
+  top: calc(44% - 112px);
+  left: 0;
+  right: 0;
+  font-family: var(--font-display);
+  font-stretch: normal;
+}
+.evolution-scene-caption {
+  font-weight: 800;
+  font-size: clamp(14px, 3vw, 20px);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  text-align: center;
+  color: #fff;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.8);
+  padding: 0 var(--space-lg);
+  position: absolute;
+  top: calc(44% + 76px);
+  left: 0;
+  right: 0;
+  animation: evolution-scene-caption-in 2.5s ease both;
+  font-family: var(--font-display);
+  font-stretch: normal;
+}
+.evolution-scene-caption b {
+  color: #f2dda8;
+}
+.evolution-scene-burst.is-foe .evolution-scene-caption b {
+  color: #ff9a8a;
+}
+.evolution-scene-flash {
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  opacity: 0;
+  animation: evolution-scene-flash 2.5s ease both;
+}
+.evolution-scene-orb .medal.is-huge {
+  width: 100px;
+  height: 100px;
+}
+@media (max-width: 540px) {
+  .evolution-scene-orb {
+    width: 130px;
+    height: 130px;
+    left: calc(50% - 65px);
+    top: calc(44% - 65px);
+  }
+  .evolution-scene-orb .medal.is-huge {
+    width: 78px;
+    height: 78px;
+  }
+  .evolution-scene-caption {
+    top: calc(44% + 60px);
+  }
+  .evolution-scene-title {
+    top: calc(44% - 112px);
+  }
+}
+.evolution-scene.is-fast .evolution-scene-burst {
+  animation-duration: 1.3s;
+}
+.evolution-scene.is-fast .evolution-scene-burst * {
+  animation-duration: 1.3s;
+}
+.evolution-scene-orb .medal.has-art {
+  width: 124px;
+  height: 124px;
+  background: transparent;
+  box-shadow: none;
+  border-color: transparent;
+}
+.evolution-scene-orb .medal.has-art::before {
+  display: none;
+}
+.evolution-scene-orb .medal.has-art::after {
+  display: none;
+}
+.evolution-scene-orb .medal.has-art .medal-art {
+  width: 120%;
+  height: 120%;
+  transform: translate(-50%, -52%);
+}
+.evolution-scene-burst::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background:
+    radial-gradient(circle, #fff 0 1.4px, transparent 2px) 0 0/38px 44px,
+    radial-gradient(circle, rgba(255, 240, 180, 0.95) 0 1px, transparent 1.6px) 19px 22px/52px 37px;
+  animation: evolution-scene-sparkles-rise 2.5s linear both;
+}
+.evolution-scene.is-fast .evolution-scene-burst::after {
+  animation-duration: 1.3s;
+}
+@media (max-width: 540px) {
+  .evolution-scene-orb .medal.has-art {
+    width: 108px;
+    height: 108px;
+  }
+}
