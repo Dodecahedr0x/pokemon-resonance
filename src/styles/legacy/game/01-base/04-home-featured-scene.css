@@ -1,38 +1,4 @@
 /* ---------- home: featured scene ---------- */
-.hero {
-  display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
-  gap: var(--space-3xl);
-  align-items: center;
-}
-@media (max-width: 880px) {
-  .hero {
-    grid-template-columns: 1fr;
-    gap: var(--space-3xl);
-  }
-}
-.hero h1 {
-  font-family: var(--f-d);
-  font-stretch: 125%;
-  font-weight: 850;
-  text-transform: uppercase;
-  font-size: clamp(40px, 9.2vw, 112px);
-  line-height: 0.86;
-  letter-spacing: -0.02em;
-  margin-top: var(--space-lg);
-}
-.hero h1 span {
-  display: block;
-  font-size: 0.34em;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  color: var(--tx2);
-  margin-bottom: 0.35em;
-}
-
-.hero .lead {
-  margin-top: var(--space-md);
-}
 
 .stage {
   position: relative;
@@ -71,12 +37,6 @@
   letter-spacing: -0.03em;
   font-variant-numeric: tabular-nums;
   transition: opacity 0.5s;
-}
-.crest {
-  position: relative;
-  width: 86%;
-  height: auto;
-  overflow: visible;
 }
 
 .cr-tick {

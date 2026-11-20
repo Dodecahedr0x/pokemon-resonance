@@ -323,3 +323,5 @@ Each step is one commit (or a few), on its own, playable at every point.
   `-title`, `-caption`, `-flash`; keyframes `evolution-scene-*`. The old `fa` / `fb` keyframes were always replaced by
   the later `pkFa` / `pkFb` through `!important`, so only those remain, as `evolution-scene-from-flicker` and
   `-to-flicker`. Snapshots of five frames (ally, foe, fast) are identical at both widths apart from keyframe names.
+  A second pass that only counts words inside string literals (so `dataset.qk` or a comment no longer keeps `.qk`
+  alive) removed 68 more parts (`.hero`, `.qk`, `.qc`, `.tbl`, `.quad`, `.pal`, `.xl` sizes…) and one more file.

@@ -61,16 +61,6 @@
   color: transparent;
   -webkit-text-stroke: 1px var(--gold);
 }
-.cs .who {
-  display: flex;
-  align-items: center;
-  gap: var(--space-sm);
-  font-family: var(--f-d);
-  font-stretch: 112%;
-  font-weight: 750;
-  font-size: 17px;
-  text-transform: uppercase;
-}
 .cs p {
   font-size: 14px;
   color: var(--tx2);

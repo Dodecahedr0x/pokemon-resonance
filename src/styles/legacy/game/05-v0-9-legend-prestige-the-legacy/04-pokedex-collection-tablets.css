@@ -78,7 +78,3 @@
 .scn::after {
   opacity: 0.18;
 }
-.scn .foes .fo.gr::after {
-  border-radius: 0;
-  background: linear-gradient(135deg, #ffb08a, #e5484d);
-}

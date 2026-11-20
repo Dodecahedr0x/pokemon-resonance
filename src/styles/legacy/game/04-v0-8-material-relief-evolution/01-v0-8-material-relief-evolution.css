@@ -18,16 +18,12 @@ body {
 }
 /* engraved titles */
 .section-title,
-.hero h1,
 .sh-name,
 .st-name {
   background: linear-gradient(180deg, #ffffff 20%, #d9dde6 62%, #9ea6b6);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-}
-.hero h1 span {
-  -webkit-text-fill-color: var(--tx2);
 }
 /* beveled surfaces */
 .panel,

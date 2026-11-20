@@ -138,23 +138,6 @@
 .av i svg path {
   fill: #fff;
 }
-.av.xl {
-  width: 120px;
-  height: 120px;
-}
-.av.xl b {
-  font-size: 40px;
-}
-.av.xl i {
-  width: 34px;
-  height: 34px;
-  right: 2px;
-  bottom: 2px;
-}
-.av.xl i svg {
-  width: 20px;
-  height: 20px;
-}
 .av.lg {
   width: 76px;
   height: 76px;
@@ -211,13 +194,6 @@
   height: auto;
   filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.7));
 }
-.emb.bdg.xl {
-  width: 132px;
-}
-.emb.bdg.xl svg {
-  filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.8))
-    drop-shadow(0 0 22px color-mix(in srgb, var(--ac) 55%, transparent));
-}
 .emb.bdg.lg {
   width: 74px;
 }
@@ -247,14 +223,6 @@
 .emb.ter svg {
   width: 20px;
   height: 20px;
-}
-.emb.ter.xl {
-  width: 120px;
-  height: 120px;
-}
-.emb.ter.xl svg {
-  width: 50px;
-  height: 50px;
 }
 .emb.ter.lg {
   width: 74px;

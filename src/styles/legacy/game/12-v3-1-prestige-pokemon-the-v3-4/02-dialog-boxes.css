@@ -20,17 +20,6 @@
 }
 
 @media (max-width: 720px) {
-  .emb.bdg.xl {
-    width: 96px;
-  }
-  .av.xl,
-  .emb.ter.xl {
-    width: 92px;
-    height: 92px;
-  }
-  .av.xl b {
-    font-size: 30px;
-  }
   .hh-chips {
     justify-content: center;
   }
