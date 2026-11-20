@@ -160,6 +160,9 @@ export const RENAMED_CLASSES = {
   'region-dex-bar': 'map-captures-bar',
   'region-dex-l': 'map-captures-list',
   'region-dex-m': 'map-captures-pokemon',
+  'syn-c': 'synergy-chip',
+  'syn-t': 'synergy-types',
+  'team-x': 'team-actions',
 };
 
 const OLD_CLASS = new RegExp(

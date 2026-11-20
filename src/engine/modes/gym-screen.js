@@ -178,7 +178,7 @@ function loadPreset(k) {
 const MPT = (x, y) => (VERT ? [y, 430 - x] : [x, y]);
 
 export const teamBtns = () =>
-  `<div class="team-x"><button type="button" class="button button-small" data-team="reset" ${squad.length ? '' : 'disabled'}>Réinitialiser l’équipe</button>${TEAM_BAK ? '<button type="button" class="button button-small" data-team="undo">Rétablir</button>' : ''}<button type="button" class="button button-small" data-team="rand">Tirage synergique</button></div>`;
+  `<div class="team-actions"><button type="button" class="button button-small" data-team="reset" ${squad.length ? '' : 'disabled'}>Réinitialiser l’équipe</button>${TEAM_BAK ? '<button type="button" class="button button-small" data-team="undo">Rétablir</button>' : ''}<button type="button" class="button button-small" data-team="rand">Tirage synergique</button></div>`;
 
 /* --- Pokédex: box of confirmed recruits --- */
 export const STARS = [

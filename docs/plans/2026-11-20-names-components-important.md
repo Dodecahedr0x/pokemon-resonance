@@ -121,3 +121,8 @@ Each step is one commit (or a few), on its own, playable at every point.
   performance rules had switched off. Also never visible, and deleted: the season tints of the route (beaten by an
   `!important` shadow) and the `.scene` rules (no such element). The dialogue box loses its background blur, which a
   global performance rule already removed everywhere else. ~950 legacy lines and 28 `!important` gone.
+- 2 Team: done. The screen already had its own files from the style plan; what was left: the sidebar and top bar
+  team widgets (`SideTeam`, `TbTeam` in `Dock.jsx`, `.steam`, `.tb-team`), hidden at every width by legacy rules,
+  are deleted; the type-synergy diamonds and chip shared with the Guide, the battle preparation and the battle's top
+  bar are `src/styles/components/synergy.css` (`.synergy-types`, `.synergy-chip`, were `.syn-t`, `.syn-c`); the
+  engine's reset / restore / draw row is `.team-actions` (was `.team-x`), styled in `team-dock.css`.

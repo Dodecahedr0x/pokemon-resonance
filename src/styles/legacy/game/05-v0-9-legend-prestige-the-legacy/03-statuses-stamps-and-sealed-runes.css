@@ -125,13 +125,6 @@
     inset 0 0 0 1px rgba(212, 175, 106, 0.16);
 }
 
-.steam {
-  border-radius: var(--r);
-  border: 1px solid transparent;
-  background:
-    var(--slab) padding-box,
-    var(--edge) border-box;
-}
 .topbar {
   background: rgba(8, 8, 10, 0.86);
   border-bottom: 1px solid transparent;

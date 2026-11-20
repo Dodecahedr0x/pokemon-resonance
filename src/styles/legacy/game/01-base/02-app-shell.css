@@ -94,29 +94,6 @@
   color: var(--gold);
 }
 
-.steam {
-  display: grid;
-  gap: var(--space-md);
-  padding: var(--space-md);
-  border-radius: 16px;
-  background: var(--s1);
-  border: 1px solid var(--line);
-  text-decoration: none;
-  transition: border-color 0.2s;
-}
-.steam:hover {
-  border-color: var(--line2);
-}
-.steam-h {
-  display: flex;
-  justify-content: space-between;
-  font-size: 12px;
-  color: var(--mut);
-}
-.steam-h b {
-  color: var(--tx);
-  font-weight: 600;
-}
 .sm-slots {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
@@ -204,33 +181,6 @@
     color: var(--mut);
     padding-left: var(--space-md);
     border-left: 1px solid var(--line2);
-  }
-  .tb-team {
-    margin-left: auto;
-    display: flex;
-    align-items: center;
-    gap: var(--space-sm);
-    height: 32px;
-    padding: 0 var(--space-sm) 0 var(--space-xs);
-    border-radius: 999px;
-    background: var(--s2);
-    border: 1px solid var(--line);
-    text-decoration: none;
-    font-size: 12px;
-    font-weight: 600;
-  }
-  .tb-team .dots {
-    display: flex;
-    gap: var(--space-3xs);
-  }
-  .tb-team .dots i {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--s4);
-  }
-  .tb-team .dots i.on {
-    background: var(--gold);
   }
   .bnav {
     display: grid;

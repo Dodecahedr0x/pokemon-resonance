@@ -158,7 +158,7 @@ export function Synergies() {
         <>
           <span className="caption">Synergies</span>
           {L2.map(x => (
-            <span key={x.k} className="syn-c" title={x.d}>
+            <span key={x.k} className="synergy-chip" title={x.d}>
               {x.t.map((t, i) => (
                 <i key={i} style={{ background: tc(t) }} />
               ))}

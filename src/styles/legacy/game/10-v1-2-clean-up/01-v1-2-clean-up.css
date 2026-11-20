@@ -1,8 +1,5 @@
 /* ===================== v1.2 · clean-up ===================== */
 /* navigation: no counters or team in the sidebar */
-.side .steam {
-  display: none;
-}
 .nv .k:not(#sideSaveK) {
   display: none;
 }

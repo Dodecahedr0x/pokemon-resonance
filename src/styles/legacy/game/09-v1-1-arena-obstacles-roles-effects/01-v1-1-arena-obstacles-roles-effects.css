@@ -205,38 +205,7 @@
   stroke-linejoin: round;
 }
 /* synergies */
-.syn-c {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2xs);
-  font-family: var(--f-m);
-  font-size: 10.5px;
-  letter-spacing: 0.06em;
-  padding: var(--space-3xs) var(--space-sm);
-  border: 1px solid rgba(212, 175, 106, 0.35);
-  border-radius: 2px;
-  color: var(--gold-l);
-  background: rgba(212, 175, 106, 0.06);
-}
-.syn-c i,
-.syn-t i {
-  width: 8px;
-  height: 8px;
-  transform: rotate(45deg);
-  display: inline-block;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.6);
-}
-.syn-t {
-  display: inline-flex;
-  gap: var(--space-2xs);
-  padding-top: var(--space-2xs);
-}
 /* Pokédex */
-.team-x {
-  display: flex;
-  gap: var(--space-xs);
-  flex-wrap: wrap;
-}
 .pcs .pt-role {
   display: inline-flex;
   vertical-align: -3px;

@@ -49,7 +49,6 @@ html body #resonance-launch .rl-meta strong {
   html body .it-skip,
   html body .co-n,
   html body .co-a .button-small,
-  html body .team-x .button-small,
   html body .cnt,
   html body dt,
   html body .tc-k span,
@@ -66,7 +65,6 @@ html body #resonance-launch .rl-meta strong {
   /* informational text */
   html body #qkTeam,
   html body #bPhase,
-  html body .syn-c,
   html body .seg button {
     font-size: 11.5px !important;
   }

@@ -53,7 +53,7 @@ function Places() {
       {S.length ? (
         <div className="prep-team-synergies">
           {S.map((x, i) => (
-            <span key={i} className="syn-c" title={x.d}>
+            <span key={i} className="synergy-chip" title={x.d}>
               {x.t.map((t, j) => (
                 <i key={j} style={{ background: tc(t) }} />
               ))}

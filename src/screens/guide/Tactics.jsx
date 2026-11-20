@@ -53,7 +53,7 @@ export function Codex() {
         </h4>
         {SYN.map(s => (
           <div key={s.k} className={`cx-r syn${act.includes(s.k) ? ' on' : ''}`}>
-            <span className="syn-t">
+            <span className="synergy-types">
               {s.t.map(t => (
                 <i key={t} style={{ background: tc(t) }} />
               ))}

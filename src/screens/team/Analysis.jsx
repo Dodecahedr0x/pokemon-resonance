@@ -303,7 +303,7 @@ function Synergies() {
       <div className="team-analysis-synergies">
         {SYN.map(s => (
           <div key={s.k} className={`team-analysis-synergy${act.includes(s.k) ? ' is-active' : ''}`}>
-            <span className="syn-t">
+            <span className="synergy-types">
               {s.t.map((t, i) => (
                 <i key={i} style={{ background: tc(t) }} />
               ))}

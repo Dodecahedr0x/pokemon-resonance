@@ -1,5 +1,5 @@
 /* Team banner at the top of "Mon équipe" (#dock, Dock.jsx): team slots, budget gauge, Voice / Awakenings /
-   Index counters with the "Combattre" button, then the reset / restore / draw row (.team-x, HTML from the
+   Index counters with the "Combattre" button, then the reset / restore / draw row (.team-actions, HTML from the
    engine's teamBtns(), shared with the battle preparation). Sticky on wide screens. */
 
 .team-dock {
@@ -103,8 +103,18 @@
   font-size: 11px;
 }
 
-/* ---------- Reset / restore / draw row ---------- */
-.team-dock .team-x {
+/* ---------- Reset / restore / draw row (also in the battle preparation, hidden there) ---------- */
+.team-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+@media (max-width: 999px) {
+  .team-actions .button-small {
+    font-size: 11px;
+  }
+}
+.team-dock .team-actions {
   grid-column: 1 / -1;
   padding-top: var(--space-sm);
   border-top: 1px solid rgba(212, 175, 106, 0.12);
@@ -139,7 +149,7 @@
     grid-column: 1 / -1;
     justify-content: space-between;
   }
-  .team-dock .team-x .button {
+  .team-dock .team-actions .button {
     flex: 1;
     padding-inline: var(--space-sm);
   }

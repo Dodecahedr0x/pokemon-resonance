@@ -52,8 +52,7 @@ html body .topbar-in {
   padding: var(--space-xs) var(--space-md) !important;
   max-width: none !important;
 }
-html body .tb-sec,
-html body .tb-team {
+html body .tb-sec {
   display: none !important;
 }
 .v4-tb {

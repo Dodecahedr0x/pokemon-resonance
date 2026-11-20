@@ -7,7 +7,6 @@ import MapScreen from '../screens/map/MapScreen.jsx';
 import Pokedex from '../screens/dex/Pokedex.jsx';
 import Team from '../screens/team/Team.jsx';
 import Sheet from '../screens/team/Sheet.jsx';
-import { SideTeam, TbTeam } from '../screens/team/Dock.jsx';
 import Quests from '../screens/quests/Quests.jsx';
 import Bag from '../screens/bag/Bag.jsx';
 import Camp from '../screens/camp/Camp.jsx';
@@ -63,9 +62,6 @@ export default function Shell() {
           <Guard>
             <SideObjective />
           </Guard>
-          <Guard>
-            <SideTeam />
-          </Guard>
           <p className="side-foot">
             Fangame non officiel, sans affiliation.
             <br />
@@ -87,9 +83,6 @@ export default function Shell() {
               </Guard>
               <Guard>
                 <TbSave />
-              </Guard>
-              <Guard>
-                <TbTeam />
               </Guard>
               <Guard>
                 <TopTrainer />

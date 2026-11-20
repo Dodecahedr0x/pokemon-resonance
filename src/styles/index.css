@@ -21,6 +21,7 @@
 @import './components/card.css' layer(components);
 @import './components/item-row.css' layer(components);
 @import './components/energy-pips.css' layer(components);
+@import './components/synergy.css' layer(components);
 
 @import '../screens/settings/settings.css' layer(screens);
 @import '../screens/dex/dex.css' layer(screens);
