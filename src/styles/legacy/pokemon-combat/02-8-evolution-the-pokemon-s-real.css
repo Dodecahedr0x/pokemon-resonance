@@ -244,9 +244,6 @@ html:not(#pkz) body:not(#pkz) .evofx.fast .efx::after {
   #bSvg .pk73fx {
     display: none;
   }
-  #bSvg .tok.pk-wait {
-    opacity: 1 !important;
-  }
   #cbBattle .hp i.pk-dr {
     animation: none !important;
   }
@@ -256,7 +253,4 @@ html:not(#pkz) body:not(#pkz) .evofx.fast .efx::after {
 }
 html.a11y-rm #bSvg .pk73fx {
   display: none !important;
-}
-html.a11y-rm #bSvg .tok.pk-wait {
-  opacity: 1 !important;
 }

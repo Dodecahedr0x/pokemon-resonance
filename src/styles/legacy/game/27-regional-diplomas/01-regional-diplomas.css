@@ -11,9 +11,6 @@
 
 /* <style id="resonance-quality-pass"> */
 /* v4.29 · Expressive Pokémon: the token's inner group moves, the cell stays in place */
-#bSvg .tok-b {
-  animation: breathe 3.4s ease-in-out infinite;
-}
 @keyframes breathe {
   0%,
   100% {
@@ -22,9 +19,6 @@
   50% {
     transform: translateY(-1.3px);
   }
-}
-#bSvg .tok.lunge-hit .tok-b {
-  animation: bond-hop calc(0.52s * var(--anim-scale, 1)) cubic-bezier(0.3, 0.7, 0.4, 1) 1;
 }
 @keyframes bond-hop {
   0% {
@@ -36,9 +30,6 @@
   100% {
     transform: translate(0, 0);
   }
-}
-#bSvg .tok.hurt-flash .tok-b {
-  animation: hurt-body calc(0.44s * var(--anim-scale, 1)) ease-out 1;
 }
 @keyframes hurt-body {
   0%,
@@ -58,30 +49,11 @@
     transform: translateX(1px);
   }
 }
-#bSvg .tok.hurt-flash .tok-im {
-  animation: flash-burst calc(0.44s * var(--anim-scale, 1)) ease-out 1;
-}
 @keyframes flash-burst {
   0% {
     filter: brightness(2.1) saturate(0.3);
   }
   100% {
     filter: none;
-  }
-}
-#bSvg .tok.ko .tok-b {
-  animation: none;
-  transform: translateY(7px);
-  transition: transform 0.6s ease-in;
-}
-.calm-motion #bSvg .tok-b,
-.calm-motion #bSvg .tok-im {
-  animation: none !important;
-}
-@media (prefers-reduced-motion: reduce) {
-  #bSvg .tok-b,
-  #bSvg .tok-im {
-    animation: none !important;
-    transition: none !important;
   }
 }

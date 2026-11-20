@@ -29,9 +29,6 @@
 }
 
 /* ---------- 2. Poké Balls: sent out at the start, returned on K.O. ---------- */
-#bSvg .tok.pk-wait {
-  opacity: 0 !important;
-}
 #bSvg .pk73fx {
   pointer-events: none;
 }
@@ -84,9 +81,6 @@
   fill: #5fcf6a;
   opacity: 0;
   animation: pkSpk 0.55s ease-out var(--d, 0s) forwards;
-}
-#bSvg .tok.pk-rouge {
-  filter: sepia(1) saturate(6) hue-rotate(-38deg) brightness(0.92);
 }
 #bSvg .pk-ko-r {
   fill: rgba(255, 60, 70, 0.45);

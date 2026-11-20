@@ -1,0 +1,55 @@
+/* Board › Pokémon tokens on the tilted painted board (.board.painted-tilt): flatter rings and halos lying on the ground. */
+
+:where(.board.painted-tilt) .token .token-ready-ring {
+  transform: translateY(8px) scale(1.12, 0.52);
+}
+:where(.board.painted-tilt) .token .token-halo {
+  transform: translateY(8px) scale(1.12, 0.52);
+}
+:where(.board.painted-tilt) .token .hp-bg {
+  transform: translateY(8px) scale(1.12, 0.52);
+}
+:where(.board.painted-tilt) .token .token-ring {
+  transform: translateY(8px) scale(1.12, 0.52);
+  fill-opacity: 0.38;
+}
+:where(.board.painted-tilt) .token .token-rim {
+  transform: translateY(8px) scale(1.12, 0.52);
+}
+:where(.board.painted-tilt) .token .hp-arc {
+  transform: translateY(8px) scale(1.12, 0.52) rotate(-90deg);
+}
+:where(.board.painted-tilt) .token .token-shadow {
+  transform: translateY(-5px) scale(1.25, 1.4);
+  opacity: 0.85;
+}
+:where(.board.painted-tilt) .token.has-image .token-gloss {
+  display: none;
+}
+:where(.board.painted-tilt) .token.has-image .token-body > path {
+  display: none;
+}
+:where(.board.painted-tilt) .token .token-evolution-mark {
+  transform: translate(19px, -28px);
+}
+.board.painted-tilt .token .token-image {
+  filter: drop-shadow(0 1.5px 1.2px rgba(0, 0, 0, 0.45));
+}
+:where(.board.painted-tilt) .token:not(.lunge-hit):not(.hurt-flash):not(.is-ko) .token-body {
+  animation: none;
+}
+:where(.board.painted-tilt) .token-stand {
+  transform-origin: 0 11px;
+  animation: stand-breathe 3.4s ease-in-out infinite;
+}
+:where(.board.painted-tilt) .token.hop .token-stand {
+  animation: hop calc(0.85s * var(--anim-scale, 1)) cubic-bezier(0.3, 0.6, 0.4, 1) 1;
+}
+:where(.board.painted-tilt) .token.is-ko .token-stand {
+  animation: none;
+  opacity: 0.55;
+  transform: translateY(5px) scale(1, 0.8);
+  transition:
+    transform 0.6s ease-in,
+    opacity 0.6s;
+}

@@ -109,15 +109,6 @@ html body #bSvg .hx.deploy-phase-z {
   stroke-width: 2.2 !important;
   stroke-dasharray: 5 3 !important;
 }
-html body #bSvg .tok.deploy-phase-s .tok-halo {
-  stroke: #7fd0ff !important;
-  stroke-width: 2.8 !important;
-  opacity: 1 !important;
-  stroke-dasharray: none !important;
-}
-.board.deploy-phase #bSvg .tok.ally {
-  cursor: pointer;
-}
 
 /* doctrines */
 .chip-doctrine-choice svg {

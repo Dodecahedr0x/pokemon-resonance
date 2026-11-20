@@ -9,9 +9,11 @@
                  (src/screens/<screen>/<screen>.css)
    - skin:       the classic look the dialogue engine puts on every typed dialogue (white bubble, blue frame,
                  dark text); it wins over the screens' own colours for those boxes
+   - motion:     calm motion, « reduce animations » and the system's reduced motion switching animations off; they
+                 win over every screen state (a selected or shiny token keeps still)
    Caveat: for !important declarations the order is reversed (an earlier layer wins), which is one more reason
    new code does not use them. The Workshop's user CSS is unlayered, so it overrides every normal rule. */
-@layer theme, base, components, legacy, screens, skin;
+@layer theme, base, components, legacy, screens, skin, motion;
 
 @import './theme/spacing.css' layer(theme);
 @import './theme/colors.css' layer(theme);
@@ -88,6 +90,11 @@
 @import '../screens/combat/battle/result-lists.css' layer(screens);
 @import '../screens/combat/battle/result-effects.css' layer(screens);
 @import '../screens/combat/battle/evolution-choice.css' layer(screens);
+@import '../screens/combat/board/token.css' layer(screens);
+@import '../screens/combat/board/token-states.css' layer(screens);
+@import '../screens/combat/board/token-halo.css' layer(screens);
+@import '../screens/combat/board/token-status.css' layer(screens);
+@import '../screens/combat/board/token-tilted.css' layer(screens);
 @import '../screens/home/home-hero.css' layer(screens);
 @import '../screens/home/home-hero-backdrop.css' layer(screens);
 @import '../screens/home/home.css' layer(screens);
@@ -120,3 +127,5 @@
 @import '../screens/camp/camp-modes.css' layer(screens);
 @import '../screens/overlays/typed-dialogue.css' layer(screens);
 @import '../screens/overlays/typed-dialogue-skin.css' layer(skin);
+/* motion: calm and reduced motion switches, stronger than any screen state */
+@import '../screens/combat/board/token-motion.css' layer(motion);

@@ -99,7 +99,4 @@
     animation-duration: 1ms !important;
     animation-delay: 0s !important;
   }
-  .hp-arc {
-    transition: none;
-  }
 }

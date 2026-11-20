@@ -59,21 +59,6 @@ html body .crest-pk .crest-a {
   pointer-events: none;
 }
 /* board */
-html body #bSvg .tok-im {
-  pointer-events: none;
-}
-html body #bSvg .tok.has-im > path {
-  opacity: 0;
-}
-html body #bSvg .tok.has-im .tok-gloss {
-  opacity: 0;
-}
-html body #bSvg .tok.ko .tok-im {
-  opacity: 0.35;
-}
-html body #bSvg .tok.enemy .tok-im {
-  transform: scaleX(-1);
-}
 /* held items */
 html body .it-img {
   width: 24px;
@@ -106,15 +91,6 @@ html body img.img-off.img-off.img-off {
   filter: drop-shadow(0 0 4px rgba(255, 225, 120, 0.85));
   flex: none;
 }
-html body #bSvg .tok.shiny .tok-im {
-  filter: hue-rotate(var(--sh, 120deg)) saturate(1.25) drop-shadow(0 0 6px rgba(255, 233, 160, 0.55));
-}
-html body #bSvg .tok.shiny .tok-halo {
-  stroke: #ffe9a3;
-  stroke-width: 2;
-  stroke-dasharray: 3 4;
-  animation: shnSpin 6s linear infinite;
-}
 @keyframes shnSpin {
   to {
     stroke-dashoffset: -70;
@@ -122,24 +98,11 @@ html body #bSvg .tok.shiny .tok-halo {
 }
 
 /* --- legendary boss: golden edging on its token --- */
-html body #bSvg .tok.boss .tok-halo {
-  stroke: #ffd75e;
-  stroke-width: 2.4;
-  filter: drop-shadow(0 0 5px rgba(255, 215, 94, 0.8));
-}
-html body #bSvg .tok.boss .tok-rim {
-  stroke: #ffd75e;
-}
 .emb.lgd {
   filter: drop-shadow(0 0 6px rgba(255, 215, 94, 0.55));
 }
 
 /* --- Resonance Tower --- */
-@media (prefers-reduced-motion: reduce) {
-  html body #bSvg .tok.shiny .tok-halo {
-    animation: none;
-  }
-}
 
 /* --- battle choice tabs: a fourth, "Après-jeu" (Postgame) --- */
 @media (max-width: 560px) {

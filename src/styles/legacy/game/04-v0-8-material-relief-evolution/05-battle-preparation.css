@@ -193,83 +193,16 @@
     stroke-dashoffset: -60;
   }
 }
-.tok-rim {
-  fill: none;
-  stroke: rgba(255, 255, 255, 0.4);
-  stroke-width: 0.8;
-}
-.tok-gloss {
-  fill: rgba(255, 255, 255, 0.2);
-  pointer-events: none;
-}
-.tok-en {
-  display: none;
-}
-.tok.has-en .tok-en {
-  display: block;
-}
-.tok-en path {
-  fill: #141922;
-  stroke: rgba(255, 255, 255, 0.35);
-  stroke-width: 0.7;
-}
-.tok-en path.on {
-  fill: #e3c07a;
-  stroke: #fff3cf;
-  filter: drop-shadow(0 0 2px rgba(227, 192, 122, 0.9));
-}
-.tok-rdy {
-  fill: none;
-  stroke: #f0d59c;
-  stroke-width: 1.6;
-  opacity: 0;
-  stroke-dasharray: 4 3;
-}
-.tok.ready .tok-rdy {
-  opacity: 1;
-  animation: rdy 1.8s ease-in-out infinite;
-}
 @keyframes rdy {
   50% {
     stroke-width: 2.8;
     stroke: #fff3cf;
   }
 }
-.tok.ready .tok-ring {
-  filter: drop-shadow(0 0 5px rgba(240, 213, 156, 0.85));
-}
-.tok-ew {
-  display: none;
-}
-.tok.evw .tok-ew {
-  display: block;
-}
-.tok-ew circle {
-  fill: #ff6767;
-  stroke: #0b0d12;
-  stroke-width: 1.2;
-}
-.tok-ew path {
-  fill: none;
-  stroke: #fff;
-  stroke-width: 1.5;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-.tok.evw .tok-halo {
-  stroke: #ff8a6a;
-  stroke-width: 2;
-  opacity: 1;
-  animation: evp 1.2s ease-in-out infinite;
-}
 @keyframes evp {
   50% {
     opacity: 0.3;
   }
-}
-.tok.evolved .tok-rim {
-  stroke: #f0d59c;
-  stroke-width: 1.2;
 }
 .f-ready {
   fill: #f0d59c;

@@ -679,7 +679,7 @@ export function init() {
     const T = L.u && L.u[u.uid];
     // token template, rendered by Units.jsx
     if (T && T.imOn && !T.artGrouped && T.b) {
-      // only the illustration breathes and jumps (.tok-stand group): the ring stays on the ground
+      // only the illustration breathes and jumps (.token-stand group): the ring stays on the ground
       T.artGrouped = true;
       unitsDirty();
     }

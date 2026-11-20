@@ -580,8 +580,8 @@ export function afterRenderDuel() {
     if (!T || !u) {
       continue;
     }
-    tokCl(T, 'dj1', u.duelPlayer === 1); // token classes: Units.jsx
-    tokCl(T, 'dj2', u.duelPlayer === 2);
+    tokCl(T, 'is-duel-player-1', u.duelPlayer === 1); // token classes: Units.jsx
+    tokCl(T, 'is-duel-player-2', u.duelPlayer === 2);
   }
   // plates (data-duel-player), end-of-turn button, phase and player name: rendered by React (src/screens/combat/battle)
 }

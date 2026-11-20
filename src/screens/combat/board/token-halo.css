@@ -1,0 +1,104 @@
+/* Board › Pokémon tokens › the halo around each token, by side and state (selected, acting, can evolve, shiny, boss,
+   Resonance…). Kept in one file because these states overlap and their order decides which halo shows. */
+
+.token.is-enemy .token-halo {
+  stroke-dasharray: 3 2.4;
+}
+.token.is-acting .token-halo {
+  stroke: var(--color-enemy);
+  stroke-width: 2.6;
+}
+.token.is-ally .token-halo {
+  stroke: rgba(91, 155, 255, 0.55);
+}
+.token.is-enemy .token-halo {
+  stroke: rgba(229, 72, 77, 0.5);
+}
+.token.is-selected .token-halo {
+  opacity: 1;
+  stroke-dasharray: none;
+  stroke: #f2dda8;
+  stroke-width: 2.4;
+}
+.token.is-acting .token-halo {
+  opacity: 1;
+  stroke-dasharray: none;
+}
+.token.can-evolve .token-halo {
+  stroke: #ff8a6a;
+  stroke-width: 2.4;
+  opacity: 1;
+}
+.token.is-shiny .token-halo {
+  stroke: #ffe9a3;
+  stroke-width: 2;
+  stroke-dasharray: 3 4;
+  animation: shnSpin 6s linear infinite;
+}
+.token.is-boss .token-halo {
+  stroke: #ffd75e;
+  stroke-width: 2.4;
+  filter: drop-shadow(0 0 5px rgba(255, 215, 94, 0.8));
+}
+.token.is-colossus .token-halo {
+  stroke-width: 3.2;
+}
+.token.is-vigilant .token-halo {
+  stroke: #7fe3ff;
+  stroke-width: 2.6;
+  stroke-dasharray: 3 3;
+}
+.token.is-phase-2 .token-halo {
+  stroke: #ff7a3d;
+  stroke-width: 3.4;
+  filter: drop-shadow(0 0 6px rgba(255, 122, 61, 0.9));
+}
+.token.is-phase-3 .token-halo {
+  stroke: #ff3b3b;
+  stroke-width: 4;
+  filter: drop-shadow(0 0 9px rgba(255, 59, 59, 0.95));
+}
+.token.is-resonant .token-halo {
+  stroke: #c9a6ff;
+  stroke-width: 3.6;
+  filter: drop-shadow(0 0 8px rgba(190, 150, 255, 0.95));
+  animation: companion-garden-fres 1.6s ease-in-out infinite;
+}
+.token.is-dominant .token-halo {
+  stroke: #ffb02e;
+  stroke-width: 3.4;
+  filter: drop-shadow(0 0 7px rgba(255, 170, 40, 0.95));
+}
+.token.is-duel-player-1 .token-halo {
+  stroke: var(--duel-color);
+}
+.token.is-duel-player-2 .token-halo {
+  stroke: var(--duel-color);
+}
+.token.is-enemy:not(.is-selected, .is-acting, .can-evolve, .is-deploy-selected) .token-halo {
+  stroke: #ff4d57;
+  stroke-width: 2.6;
+  opacity: 1;
+  stroke-dasharray: none;
+}
+.token.is-ally:not(.is-selected, .is-acting, .can-evolve, .is-deploy-selected) .token-halo {
+  stroke: #5aa8ff;
+  stroke-width: 2.2;
+  opacity: 1;
+  stroke-dasharray: none;
+}
+.token.is-deploy-selected .token-halo {
+  stroke: #7fd0ff;
+  stroke-width: 2.8;
+  opacity: 1;
+  stroke-dasharray: none;
+}
+.token.is-acting .token-halo {
+  animation: none;
+}
+.token.is-selected .token-halo {
+  animation: none;
+}
+.token.can-evolve .token-halo {
+  animation: none;
+}

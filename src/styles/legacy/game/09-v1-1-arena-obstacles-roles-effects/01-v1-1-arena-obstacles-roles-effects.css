@@ -112,12 +112,6 @@
 .grf {
   opacity: 0.92;
 }
-.tok.hid .tok-ring {
-  stroke-dasharray: 3 2;
-}
-.tok.hid .tok-nm {
-  fill: #9fd8a4;
-}
 /* sand */
 #bSvg .hx.sand {
   fill: #2c251a;

@@ -154,7 +154,7 @@ export function init() {
     }
     T.st = true; // token's .statusFx group (Units.jsx)
     T.statusMark = effectsEnabled() ? statusKey(u) : ''; // data-status-mark
-    tokCl(T, 'low-hp', effectsEnabled() && !u.ko && u.hp / u.mhp <= 0.25);
+    tokCl(T, 'is-low-hp', effectsEnabled() && !u.ko && u.hp / u.mhp <= 0.25);
     unitsDirty();
   });
 

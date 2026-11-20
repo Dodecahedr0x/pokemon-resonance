@@ -162,12 +162,8 @@ html body #bBoard:before {
 html body #bSvg {
   filter: drop-shadow(0 7px 12px rgba(0, 0, 0, 0.24));
 }
-html body #bSvg .tok-im,
 html body #bSvg image {
   filter: drop-shadow(0 5px 8px rgba(0, 0, 0, 0.36));
-}
-html body #bSvg .tok-halo {
-  filter: drop-shadow(0 0 7px currentColor);
 }
 html body .evofx {
   backdrop-filter: blur(8px);

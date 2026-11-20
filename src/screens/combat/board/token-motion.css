@@ -1,0 +1,59 @@
+/* Board › Pokémon tokens › motion switches: calm motion (.calm-motion), « reduce animations » (html.a11y-rm) and the
+   system's reduced motion stop the token animations. In the motion layer, so they beat every token state. */
+
+@media (prefers-reduced-motion: reduce) {
+  .hp-arc {
+    transition: none;
+  }
+  .token.is-shiny .token-halo {
+    animation: none;
+  }
+  .token.is-in-danger .token-rim {
+    animation: none;
+  }
+  .token.is-resonant .token-halo {
+    animation: none;
+  }
+  .token-body {
+    transition: none;
+  }
+  .token-image {
+    transition: none;
+  }
+  .token.is-waiting:not(.is-fogged) {
+    opacity: 1;
+  }
+}
+:where(html.a11y-rm) .token.is-waiting:not(.is-fogged) {
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .token .status-fx * {
+    animation: none;
+  }
+  .token-body {
+    animation: none;
+  }
+}
+:where(.calm-motion) .token-body {
+  animation: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .token-image {
+    animation: none;
+  }
+}
+:where(.calm-motion) .token-image {
+  animation: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .token .token-ring {
+    animation: none;
+  }
+  :where(.board.painted-tilt) .token-stand {
+    animation: none;
+  }
+}
+:where(.calm-motion .board.painted-tilt) .token-stand {
+  animation: none;
+}

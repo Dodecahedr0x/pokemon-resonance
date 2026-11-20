@@ -128,15 +128,6 @@ html body #bSvg .col-lien {
   stroke-linecap: round;
   pointer-events: none;
 }
-html body #bSvg .tok.seg .tok-ring {
-  stroke-dasharray: 3 2;
-}
-html body #bSvg .tok.seg .tok-rim {
-  stroke: #c9a35a;
-}
-html body #bSvg .tok.colosse .tok-halo {
-  stroke-width: 3.2;
-}
 
 /* ==== 25-v4.9-rejouabilite.css ==== */
 /* =====================================================================

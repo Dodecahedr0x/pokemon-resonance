@@ -1,0 +1,196 @@
+/* Board › Pokémon tokens (Units.jsx, one <g class="token"> per unit): shadow, ready ring, halo, HP ring, rim, gloss,
+   energy diamonds, evolution mark, illustration and name; side (.is-ally, .is-enemy) and the common states (.is-selected,
+   .is-acting, .is-done, .is-ko, .is-ready, .has-energy, .can-evolve, .is-evolved, .is-shiny, .is-in-grass, .has-image). */
+
+.token {
+  transition:
+    transform 0.85s var(--ease-out),
+    opacity 0.6s ease;
+}
+.token.is-in-grass {
+  opacity: 0;
+}
+.token-shadow {
+  fill: rgba(0, 0, 0, 0.45);
+}
+.token-ring {
+  stroke-width: 1.4;
+}
+.token-halo {
+  fill: none;
+  stroke-width: 1;
+  opacity: 0.6;
+  stroke: rgba(212, 175, 106, 0.25);
+  filter: drop-shadow(0 0 7px currentColor);
+}
+.token-name {
+  font-size: 6.2px;
+  font-weight: 500;
+  text-anchor: middle;
+  text-transform: uppercase;
+  paint-order: stroke;
+  stroke-width: 2.6px;
+  stroke-linejoin: round;
+  font-family: var(--font-mono);
+  letter-spacing: 0.14em;
+  fill: #e9e2d2;
+  stroke: #08080a;
+}
+.hp-bg {
+  fill: none;
+  stroke-width: 2.2;
+  stroke: rgba(0, 0, 0, 0.7);
+}
+.hp-arc {
+  fill: none;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 1.6px rgba(120, 190, 255, 0.9));
+  transition:
+    stroke-dasharray 0.45s cubic-bezier(0.2, 0.8, 0.2, 1),
+    stroke 0.3s;
+}
+.token.is-done {
+  opacity: 0.55;
+}
+.token.is-ko {
+  opacity: 0;
+  transition: opacity 0.6s ease 0.3s;
+}
+.token-ring.hit {
+  animation: hitf 0.45s ease;
+}
+.token-rim {
+  fill: none;
+  stroke-width: 0.8;
+  stroke: rgba(212, 175, 106, 0.55);
+}
+.token-gloss {
+  fill: rgba(255, 255, 255, 0.2);
+  pointer-events: none;
+}
+.token-energy {
+  display: none;
+}
+.token.has-energy .token-energy {
+  display: block;
+}
+.token-energy path {
+  fill: #141922;
+  stroke: rgba(255, 255, 255, 0.35);
+  stroke-width: 0.7;
+}
+.token-energy path.on {
+  filter: drop-shadow(0 0 2px rgba(240, 190, 90, 1));
+}
+.token-ready-ring {
+  fill: none;
+  stroke: #f0d59c;
+  stroke-width: 1.6;
+  opacity: 0;
+  stroke-dasharray: 4 3;
+}
+.token.is-ready .token-ready-ring {
+  opacity: 1;
+  stroke: #f2dda8;
+  stroke-width: 2;
+}
+.token.is-ready .token-ring {
+  filter: drop-shadow(0 0 5px rgba(240, 213, 156, 0.85));
+}
+.token-evolution-mark {
+  display: none;
+}
+.token.can-evolve .token-evolution-mark {
+  display: block;
+}
+.token-evolution-mark circle {
+  fill: #ff6767;
+  stroke: #0b0d12;
+  stroke-width: 1.2;
+}
+.token-evolution-mark path {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.token-energy path.on {
+  stroke: #fff3cf;
+  fill: #f0c766;
+}
+.token.is-evolved .token-rim {
+  stroke: #f0d59c;
+  stroke-width: 1.2;
+}
+.token.is-in-grass .token-ring {
+  stroke-dasharray: 3 2;
+}
+.token.is-in-grass .token-name {
+  fill: #9fd8a4;
+}
+@media (max-width: 640px) {
+  .token-name {
+    font-size: 8px;
+    letter-spacing: 0.06em;
+  }
+}
+.token-image {
+  pointer-events: none;
+  filter: drop-shadow(0 5px 8px rgba(0, 0, 0, 0.36));
+}
+.token.has-image > path {
+  opacity: 0;
+}
+.token.has-image .token-gloss {
+  opacity: 0;
+}
+.token.is-ko .token-image {
+  opacity: 0.35;
+}
+.token.is-enemy .token-image {
+  transform: scaleX(-1);
+}
+.token.is-shiny .token-image {
+  filter: hue-rotate(var(--sh, 120deg)) saturate(1.25) drop-shadow(0 0 6px rgba(255, 233, 160, 0.55));
+}
+.token-body {
+  animation: breathe 3.4s ease-in-out infinite;
+}
+.token.is-selected .token-image {
+  animation: token-bob 1.1s ease-in-out infinite;
+}
+.token.is-enemy .token-shadow {
+  fill: rgba(255, 64, 72, 0.55);
+}
+.token.is-ally .token-shadow {
+  fill: rgba(80, 160, 255, 0.5);
+}
+.token.is-enemy .token-name {
+  fill: #ff9ba0;
+}
+.token.is-ally .token-name {
+  fill: #a9d0ff;
+}
+.name-wrap {
+  transition:
+    transform 0.85s var(--ease-out),
+    opacity 0.6s ease;
+}
+.name-wrap.is-ko {
+  opacity: 0;
+  transition: opacity 0.6s ease 0.3s;
+}
+.name-wrap.is-in-grass {
+  opacity: 0;
+}
+:where(.name-wrap.is-enemy) .token-name {
+  fill: #ff9ba0;
+}
+:where(.name-wrap.is-ally) .token-name {
+  fill: #a9d0ff;
+}
+.token.is-ready .token-ready-ring {
+  animation: none;
+}

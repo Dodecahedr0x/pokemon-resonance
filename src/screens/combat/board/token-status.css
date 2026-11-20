@@ -1,0 +1,66 @@
+/* Board › Pokémon tokens › status marks drawn over the token (.status-fx: poison bubbles, paralysis spark, frost,
+   sleep « z »), chosen by data-status-mark. */
+
+.token .status-fx {
+  pointer-events: none;
+  opacity: 0;
+}
+.token[data-status-mark] .status-fx {
+  opacity: 1;
+}
+.status-fx .b1 {
+  display: none;
+}
+.status-fx .b2 {
+  display: none;
+  animation-delay: 0.45s;
+}
+.status-fx .b3 {
+  display: none;
+  animation-delay: 0.9s;
+}
+.status-fx .zap {
+  display: none;
+}
+.status-fx .ice {
+  display: none;
+}
+.status-fx .zz {
+  display: none;
+}
+.token[data-status-mark='psn'] .status-fx circle {
+  display: block;
+  fill: #c470e6;
+  opacity: 0.85;
+  animation: catch-action 1.4s ease-in infinite;
+}
+.token[data-status-mark='par'] .status-fx .zap {
+  display: block;
+  fill: #ffe14d;
+  filter: drop-shadow(0 0 2px #ffb400);
+  animation: zap-flicker 0.5s steps(2, end) infinite;
+}
+.token[data-status-mark='gel'] .status-fx .ice {
+  display: block;
+  fill: rgba(170, 230, 255, 0.85);
+  stroke: #fff;
+  stroke-width: 0.6;
+}
+.token[data-status-mark='som'] .status-fx .zz {
+  display: block;
+  fill: #bfe0ff;
+  font: 800 9px var(--font-display, sans-serif);
+  animation: sleep-float 2s ease-in-out infinite;
+}
+.token[data-status-mark='bru'] .token-ring {
+  animation: burn-flicker 0.5s ease-in-out infinite alternate;
+}
+.token[data-status-mark='psn'] .token-ring {
+  filter: drop-shadow(0 0 5px #c470e6);
+}
+.token[data-status-mark='gel'] .token-ring {
+  filter: saturate(0.5) brightness(1.15) drop-shadow(0 0 4px #9fe3ff);
+}
+.token[data-status-mark='rac'] .token-ring {
+  stroke-dasharray: 3 2;
+}

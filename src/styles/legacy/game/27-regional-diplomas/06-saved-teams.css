@@ -18,21 +18,6 @@ b.dj1,
 b.dj2 {
   color: var(--dj);
 }
-html body #bSvg .tok.dj1 .tok-rim,
-html body #bSvg .tok.dj2 .tok-rim {
-  stroke: var(--dj);
-  stroke-width: 2.6;
-}
-html body #bSvg .tok.dj1 .tok-halo,
-html body #bSvg .tok.dj2 .tok-halo {
-  stroke: var(--dj);
-}
-html body #bSvg .tok.dj1 {
-  --dj: var(--dj1);
-}
-html body #bSvg .tok.dj2 {
-  --dj: var(--dj2);
-}
 #bPhase b.dj1,
 #bPhase b.dj2 {
   font-weight: 800;

@@ -4,7 +4,7 @@ import { tokArtErr, tokArtOk } from '../../../engine/assets/illustrations.js';
 import { useBoard } from './boardStore.js';
 import { PE, lref } from './shared.js';
 
-// Pokémon tokens (L.units layer): one <g class="tok"> per unit, read from the model the
+// Pokémon tokens (L.units layer): one <g class="token"> per unit, read from the model the
 // engine keeps up to date (L.u[uid], see mkTok / updTokCore). Order follows L.uo (sort() of the
 // tilted board v4.77: back ones first). Names on the tilted board go through the .namesHigh layer.
 // References kept by the engine: T.g (token), T.b (animated group), T.ring, T.im.
@@ -42,7 +42,7 @@ function Art({ T, r }) {
         im.current = n;
         r.im(n);
       }}
-      className="tok-im"
+      className="token-image"
       x={x}
       y={y}
       width={w}
@@ -91,10 +91,10 @@ function Token({ T }) {
   const art = T.imOn && <Art T={T} r={r} />;
   return (
     <g ref={setG} className={T.c.join(' ')} style={sty} data-status-mark={T.statusMark || undefined}>
-      <g ref={setB} className="tok-b" style={{ animationDelay: T.dl }}>
-        <ellipse className="tok-sh" cx="0" cy="14" rx="12" ry="3.6" />
-        <circle className="tok-rdy" r="21" />
-        <circle className="tok-halo" r="19" />
+      <g ref={setB} className="token-body" style={{ animationDelay: T.dl }}>
+        <ellipse className="token-shadow" cx="0" cy="14" rx="12" ry="3.6" />
+        <circle className="token-ready-ring" r="21" />
+        <circle className="token-halo" r="19" />
         <circle className="hp-bg" r="16" />
         <circle
           className="hp-arc"
@@ -104,29 +104,29 @@ function Token({ T }) {
         />
         <circle
           ref={setRing}
-          className={'tok-ring' + (T.hit ? ' hit' : '')}
+          className={'token-ring' + (T.hit ? ' hit' : '')}
           r="12.5"
           style={T.rs != null ? { stroke: T.rs, fill: T.rf } : undefined}
         />
-        <circle className="tok-rim" r="12.5" />
+        <circle className="token-rim" r="12.5" />
         <path
           transform="translate(-7,-7) scale(.5833)"
           fillRule="evenodd"
           d={T.gd}
           style={T.gf != null ? { fill: T.gf } : undefined}
         />
-        <ellipse className="tok-gloss" cx="-3.5" cy="-6" rx="6" ry="3.2" />
-        <g className="tok-en">
+        <ellipse className="token-gloss" cx="-3.5" cy="-6" rx="6" ry="3.2" />
+        <g className="token-energy">
           {T.pc.map((c, i) => (
             <path key={i} d={DIA} transform={`translate(-21,${-8 + i * 8})`} className={cls(c)} />
           ))}
         </g>
-        <g className="tok-ew" transform="translate(18,-14)">
+        <g className="token-evolution-mark" transform="translate(18,-14)">
           <circle r="5.6" />
           <path d="M-2.6 1.4 0 -1.6 2.6 1.4" />
         </g>
         {T.artGrouped && (
-          <g className="tok-stand" style={{ animationDelay: T.dl }}>
+          <g className="token-stand" style={{ animationDelay: T.dl }}>
             {!T.imLoose && art}
           </g>
         )}
@@ -137,11 +137,11 @@ function Token({ T }) {
           <text y="1.7">{T.bt}</text>
         </g>
         {!T.nmO && (
-          <text className="tok-nm" y="27">
+          <text className="token-name" y="27">
             {T.n}
           </text>
         )}
-        <g className="tok-nt">
+        <g className="token-notes">
           {T.nc.map((c, i) => (
             <circle key={i} cx="22" cy={-2 + i * 8} r="2.9" className={cls(c)} />
           ))}
@@ -166,7 +166,7 @@ export function Units() {
 }
 
 /* v4.77: names above all Pokémon (tilted board), in the order they were passed in */
-const NMW = ['enemy', 'ally', 'ko', 'hid', 'fog-of-war', 'pk-wait'];
+const NMW = ['is-enemy', 'is-ally', 'is-ko', 'is-in-grass', 'is-fogged', 'is-waiting'];
 export function NamesHigh() {
   useBoard('units');
   return ordering()
@@ -178,7 +178,7 @@ export function NamesHigh() {
         className={'name-wrap' + NMW.map(n => (T.c.includes(n) ? ' ' + n : '')).join('')}
         style={T.tr != null ? { transform: T.tr } : undefined}
       >
-        <text className="tok-nm" y="27">
+        <text className="token-name" y="27">
           {T.n}
         </text>
       </g>

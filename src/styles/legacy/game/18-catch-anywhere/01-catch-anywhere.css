@@ -36,35 +36,6 @@ html body #bSvg .danger-zone .dg-x {
     animation: none;
   }
 }
-html body #bSvg .tok.vigil-strike .tok-halo {
-  stroke: #7fe3ff;
-  stroke-width: 2.6;
-  stroke-dasharray: 3 3;
-}
-html body #bSvg .tok.encircled .tok-rim {
-  stroke: #ff9a3d;
-  stroke-width: 2.8;
-}
-html body #bSvg .tok.ph2 .tok-halo {
-  stroke: #ff7a3d;
-  stroke-width: 3.4;
-  filter: drop-shadow(0 0 6px rgba(255, 122, 61, 0.9));
-}
-html body #bSvg .tok.ph3 .tok-halo {
-  stroke: #ff3b3b;
-  stroke-width: 4;
-  filter: drop-shadow(0 0 9px rgba(255, 59, 59, 0.95));
-}
-html body #bSvg .tok.in-danger .tok-rim {
-  stroke: #ef4444;
-  stroke-width: 3.2;
-  animation: intensity-dg 1.2s ease-in-out infinite;
-}
-@media (prefers-reduced-motion: reduce) {
-  html body #bSvg .tok.in-danger .tok-rim {
-    animation: none;
-  }
-}
 /* ===== resonance-hoenn-region layer ===== */
 /* ==== v4.19: Hoenn ==== */
 /* ===== resonance-fishing-safari layer ===== */
@@ -90,14 +61,3 @@ html body #bSvg .tok.in-danger .tok-rim {
   }
 }
 /* co-op: the tokens of both players */
-html body #bSvg .tok.cj1 .tok-rim {
-  stroke: #5fb8ff;
-  stroke-width: 2.6;
-}
-html body #bSvg .tok.cj2 .tok-rim {
-  stroke: #ff9a5f;
-  stroke-width: 2.6;
-}
-html body #bSvg .tok.cjoff {
-  opacity: 0.55;
-}

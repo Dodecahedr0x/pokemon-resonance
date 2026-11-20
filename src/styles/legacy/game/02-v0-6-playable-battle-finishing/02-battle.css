@@ -87,47 +87,6 @@
 .arr-h {
   fill: var(--enemy);
 }
-.hp-bg {
-  fill: none;
-  stroke: rgba(255, 255, 255, 0.08);
-  stroke-width: 2.2;
-}
-.hp-arc {
-  fill: none;
-  stroke-width: 2.2;
-  stroke-linecap: round;
-  transition:
-    stroke-dasharray 0.8s var(--ease),
-    stroke 0.6s;
-}
-.tok-halo {
-  fill: none;
-  stroke-width: 1;
-  opacity: 0.6;
-}
-.tok.sel .tok-halo {
-  stroke: var(--gold);
-  stroke-width: 2.2;
-  opacity: 1;
-  stroke-dasharray: none;
-  animation: act 1.6s ease-in-out infinite;
-}
-.tok.act .tok-halo {
-  stroke: var(--enemy);
-  stroke-width: 2.6;
-  opacity: 1;
-  stroke-dasharray: none;
-}
-.tok.done {
-  opacity: 0.55;
-}
-.tok.ko {
-  opacity: 0;
-  transition: opacity 0.6s ease 0.3s;
-}
-.tok-ring.hit {
-  animation: hitf 0.45s ease;
-}
 @keyframes hitf {
   0%,
   100% {

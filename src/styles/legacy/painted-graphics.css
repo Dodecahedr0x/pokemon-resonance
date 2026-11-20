@@ -69,58 +69,8 @@ html body #bBoard.painted-tilt.has-lava #bSvg .tx.lava {
   stroke-width: 0.6;
 }
 /* standing tokens: rings lying on the ground, the illustration stands on them */
-#bBoard.painted-tilt #bSvg .tok .tok-rdy,
-#bBoard.painted-tilt #bSvg .tok .tok-halo,
-#bBoard.painted-tilt #bSvg .tok .hp-bg,
-#bBoard.painted-tilt #bSvg .tok .tok-ring,
-#bBoard.painted-tilt #bSvg .tok .tok-rim {
-  transform: translateY(8px) scale(1.12, 0.52);
-}
-#bBoard.painted-tilt #bSvg .tok .hp-arc {
-  transform: translateY(8px) scale(1.12, 0.52) rotate(-90deg);
-}
-#bBoard.painted-tilt #bSvg .tok .tok-ring {
-  fill-opacity: 0.38;
-}
-#bBoard.painted-tilt #bSvg .tok .tok-sh {
-  transform: translateY(-5px) scale(1.25, 1.4);
-  opacity: 0.85;
-}
-#bBoard.painted-tilt #bSvg .tok.has-im .tok-gloss,
-#bBoard.painted-tilt #bSvg .tok.has-im .tok-b > path {
-  display: none;
-}
-#bBoard.painted-tilt #bSvg .tok .bdg-s {
+#bBoard.painted-tilt #bSvg .token .bdg-s {
   transform: translate(0, -40px) rotate(-7deg);
-}
-#bBoard.painted-tilt #bSvg .tok .tok-ew {
-  transform: translate(19px, -28px);
-}
-#bSvg .name-wrap {
-  transition:
-    transform 0.85s var(--ease),
-    opacity 0.6s ease;
-}
-#bSvg .name-wrap.ko {
-  opacity: 0;
-  transition: opacity 0.6s ease 0.3s;
-}
-#bSvg .name-wrap.hid,
-#bSvg .name-wrap.pk-wait {
-  opacity: 0;
-}
-html body #bSvg .name-wrap.fog-of-war {
-  opacity: 0 !important;
-  transition: opacity 0.3s;
-}
-html body #bSvg .name-wrap.enemy .tok-nm {
-  fill: #ff9ba0 !important;
-}
-html body #bSvg .name-wrap.ally .tok-nm {
-  fill: #a9d0ff !important;
-}
-#bBoard.painted-tilt #bSvg .tok .tok-im {
-  filter: drop-shadow(0 1.5px 1.2px rgba(0, 0, 0, 0.45));
 }
 #bBoard.painted-tilt .haze-light .night-tint {
   fill: #2a3a78;
@@ -149,13 +99,6 @@ html body #bSvg .name-wrap.ally .tok-nm {
   opacity: 0;
 }
 /* animations of the standing Pokémon */
-#bBoard.painted-tilt #bSvg .tok:not(.lunge-hit):not(.hurt-flash):not(.ko) .tok-b {
-  animation: none;
-}
-#bBoard.painted-tilt #bSvg .tok-stand {
-  transform-origin: 0 11px;
-  animation: stand-breathe 3.4s ease-in-out infinite;
-}
 @keyframes stand-breathe {
   0%,
   100% {
@@ -164,9 +107,6 @@ html body #bSvg .name-wrap.ally .tok-nm {
   50% {
     transform: translateY(-1.4px) scale(0.985, 1.03);
   }
-}
-#bBoard.painted-tilt #bSvg .tok.hop .tok-stand {
-  animation: hop calc(0.85s * var(--anim-scale, 1)) cubic-bezier(0.3, 0.6, 0.4, 1) 1;
 }
 @keyframes hop {
   0% {
@@ -184,17 +124,6 @@ html body #bSvg .name-wrap.ally .tok-nm {
   100% {
     transform: translateY(0) scale(1, 1);
   }
-}
-#bBoard.painted-tilt #bSvg .tok.ko .tok-stand {
-  animation: none;
-  opacity: 0.55;
-  transform: translateY(5px) scale(1, 0.8);
-  transition:
-    transform 0.6s ease-in,
-    opacity 0.6s;
-}
-.calm-motion #bBoard.painted-tilt #bSvg .tok-stand {
-  animation: none !important;
 }
 #bBoard .cloud-shade {
   position: absolute;
@@ -351,7 +280,6 @@ html body #bBoard.painted-tilt.entrance-fx #bSvg {
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  #bBoard.painted-tilt #bSvg .tok-stand,
   #bBoard .cloud-shade i {
     animation: none !important;
   }

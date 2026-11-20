@@ -73,7 +73,7 @@ export function drawObstacles() {
   B.units.forEach(u => {
     const T = L.u[u.uid];
     if (T) {
-      tokCl(T, 'hid', !u.ko && !!B.tiles[uk(u)].grass);
+      tokCl(T, 'is-in-grass', !u.ko && !!B.tiles[uk(u)].grass);
     }
   });
 }

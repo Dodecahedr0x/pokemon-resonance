@@ -1,16 +1,6 @@
 /* ===== resonance-companion-garden layer ===== */
 /* ==== v4.17: companions and Resonance ==== */
 /* --- Resonant Form --- */
-html body #bSvg .tok.fres .tok-halo {
-  stroke: #c9a6ff;
-  stroke-width: 3.6;
-  filter: drop-shadow(0 0 8px rgba(190, 150, 255, 0.95));
-  animation: companion-garden-fres 1.6s ease-in-out infinite;
-}
-html body #bSvg .tok.fres .tok-rim {
-  stroke: #e7dbff;
-  stroke-width: 2.4;
-}
 @keyframes companion-garden-fres {
   0%,
   100% {
@@ -18,11 +8,6 @@ html body #bSvg .tok.fres .tok-rim {
   }
   50% {
     stroke-opacity: 0.45;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  html body #bSvg .tok.fres .tok-halo {
-    animation: none;
   }
 }
 

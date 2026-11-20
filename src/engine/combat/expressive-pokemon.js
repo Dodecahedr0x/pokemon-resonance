@@ -14,7 +14,7 @@ export function animEnabled() {
   return !RM && PREF.animEnabled !== false;
 }
 
-/** All the token's parts sit in an inner .tok-b group (Units.jsx): it moves without
+/** All the token's parts sit in an inner .token-body group (Units.jsx): it moves without
     shifting the tile. Each token breathes with a different offset. */
 export function liveToken(T) {
   liveToken.n = (liveToken.n || 0) + 1;

@@ -21,7 +21,7 @@ export function itemize(h) {
   return h;
 }
 
-// Token illustration (.tok-im image before the badge, in the v4.29 animated group): rendered by
+// Token illustration (.token-image image before the badge, in the v4.29 animated group): rendered by
 // Units.jsx from the token template (imOn, geo, href).
 export function tokenArt(u) {
   const T = L.u && L.u[u.uid];
@@ -35,7 +35,7 @@ export function tokenArt(u) {
   }
   if (T.imOn && T.imId !== u.id && BY[u.id]) {
     T.imId = u.id;
-    tokCl(T, 'has-im', false);
+    tokCl(T, 'has-image', false);
     T.href = ART(BY[u.id].no);
     unitsDirty();
   }
@@ -43,12 +43,12 @@ export function tokenArt(u) {
 
 /** the token image is loaded */
 export function tokArtOk(T) {
-  tokCl(T, 'has-im', true);
+  tokCl(T, 'has-image', true);
 }
 
 /** the token image is missing: removed; the next one (without a URL) sits outside its v4.77 group */
 export function tokArtErr(T) {
-  tokCl(T, 'has-im', false);
+  tokCl(T, 'has-image', false);
   T.imOn = false;
   T.imBad = true;
   if (T.artGrouped) {

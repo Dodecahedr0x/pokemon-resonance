@@ -15,15 +15,6 @@ html body .dom-cr {
   color: #ffd75e;
   filter: drop-shadow(0 0 4px rgba(255, 200, 60, 0.8));
 }
-html body #bSvg .tok.dom .tok-halo {
-  stroke: #ffb02e;
-  stroke-width: 3.4;
-  filter: drop-shadow(0 0 7px rgba(255, 170, 40, 0.95));
-}
-html body #bSvg .tok.dom .tok-rim {
-  stroke: #ffcf4a;
-  stroke-width: 2.6;
-}
 
 /* legend medallion in a small emblem (map markers, place list, location sheet) */
 html body .emb.lgd.xs .medal {

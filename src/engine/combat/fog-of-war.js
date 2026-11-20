@@ -64,7 +64,7 @@ function fogRender() {
       const c = on && fogHidden(B, u, vu),
         T = L.u && L.u[u.uid];
       if (T) {
-        tokCl(T, 'fog-of-war', c);
+        tokCl(T, 'is-fogged', c);
       } // token classes: Units.jsx
     });
 }

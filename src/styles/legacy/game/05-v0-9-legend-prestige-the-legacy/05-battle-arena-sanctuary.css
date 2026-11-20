@@ -266,41 +266,6 @@
   filter: drop-shadow(0 0 2px currentColor);
 }
 /* tokens */
-.tok-ring {
-  stroke-width: 1.4;
-}
-.tok-rim {
-  stroke: rgba(212, 175, 106, 0.55);
-}
-.hp-arc {
-  filter: drop-shadow(0 0 1.6px rgba(120, 190, 255, 0.9));
-}
-.hp-bg {
-  stroke: rgba(0, 0, 0, 0.7);
-}
-.tok-halo {
-  stroke: rgba(212, 175, 106, 0.25);
-}
-.tok.ally .tok-halo {
-  stroke: rgba(91, 155, 255, 0.55);
-}
-.tok.enemy .tok-halo {
-  stroke: rgba(229, 72, 77, 0.5);
-}
-.tok.sel .tok-halo {
-  stroke: #f2dda8;
-  filter: drop-shadow(0 0 3px rgba(242, 221, 168, 0.9));
-}
-.tok-nm {
-  font-family: var(--f-m);
-  letter-spacing: 0.14em;
-  fill: #e9e2d2;
-  stroke: #08080a;
-}
-.tok-en path.on {
-  fill: #f0c766;
-  filter: drop-shadow(0 0 2px rgba(240, 190, 90, 1));
-}
 .f-dmg {
   fill: #ff7a6e;
   font-weight: 700;

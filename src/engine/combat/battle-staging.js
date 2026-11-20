@@ -113,7 +113,7 @@ const showIt = _b => {
     if (!L || !L.u) {
       return;
     }
-    unitsBatch(() => Object.values(L.u).forEach(T => tokCl(T, 'pk-wait', false))); // token classes: Units.jsx
+    unitsBatch(() => Object.values(L.u).forEach(T => tokCl(T, 'is-waiting', false))); // token classes: Units.jsx
   } catch {
     /* Best effort: failure here is non-fatal. */
   }
@@ -127,7 +127,7 @@ const prepare = b => {
   b.units.forEach(u => {
     const T = L.u[u.uid];
     if (T && !u.ko) {
-      tokCl(T, 'pk-wait', true);
+      tokCl(T, 'is-waiting', true);
     }
   });
   setTimeout(() => {
@@ -154,7 +154,7 @@ const send = b => {
     try {
       [x, y] = HC(uk(u));
     } catch (e) {
-      tokCl(T, 'pk-wait', false);
+      tokCl(T, 'is-waiting', false);
       return;
     }
     const d = i * stepSize,
@@ -164,7 +164,7 @@ const send = b => {
     w.innerHTML = wildMon
       ? `<circle class="pk-wl-r" r="15"/>${sparks(6, 'pk-lf')}`
       : `<circle class="pk-so-fl" r="17"/>${sparks(6, 'pk-spk')}<g class="pk-so">${ballSvg(7)}</g>`;
-    setTimeout(() => tokCl(T, 'pk-wait', false), (d + (wildMon ? 0.12 : 0.36)) * 1000);
+    setTimeout(() => tokCl(T, 'is-waiting', false), (d + (wildMon ? 0.12 : 0.36)) * 1000);
     setTimeout(() => w.remove(), (d + 1.1) * 1000);
   });
   if (listItems.length) {
@@ -192,8 +192,8 @@ const recall = u => {
     w.innerHTML = '<circle class="pk-poof" r="14"/>';
   } else {
     w.innerHTML = `<circle class="pk-ko-r" r="15"/><rect class="pk-ko-bm" x="-2" y="-42" width="4" height="42" rx="2"/><g transform="translate(0,-46)"><g class="pk-ko-b">${ballSvg(7.5)}</g></g>`;
-    tokCl(T, 'pk-rouge', true);
-    setTimeout(() => tokCl(T, 'pk-rouge', false), 800);
+    tokCl(T, 'is-flashing', true);
+    setTimeout(() => tokCl(T, 'is-flashing', false), 800);
     playSound('retour');
   }
   setTimeout(() => w.remove(), 1300);
@@ -290,7 +290,7 @@ export function init() {
   HOOKS.beforeToken.push(u => {
     wasKo = null;
     const T = L.u && L.u[u.uid];
-    wasKo = T ? tokHas(T, 'ko') : null;
+    wasKo = T ? tokHas(T, 'is-ko') : null;
   });
   HOOKS.afterToken.push(u => {
     if (wasKo === false && u.ko && !u.caught && !calmMotion() && !auto()) {

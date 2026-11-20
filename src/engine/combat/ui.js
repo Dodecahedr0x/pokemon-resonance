@@ -382,21 +382,21 @@ export function buildBoard() {
 
 /** Token model (rendered by Units.jsx): what the old DOM carried, in the same order. */
 function mkTok(u) {
-  const c = ['tok', u.side === 'e' ? 'enemy' : 'ally'];
+  const c = ['token', u.side === 'e' ? 'is-enemy' : 'is-ally'];
   if (u.shiny) {
-    c.push('shiny');
+    c.push('is-shiny');
   }
   if (u.boss) {
-    c.push('boss');
+    c.push('is-boss');
   }
   if (u.dom) {
-    c.push('dom');
+    c.push('is-dominant');
   }
   if (u.seg) {
-    c.push('seg');
+    c.push('is-segment');
   }
   if (u.colossus) {
-    c.push('colosse');
+    c.push('is-colossus');
   }
   return liveToken({
     uid: u.uid,
@@ -443,30 +443,30 @@ function updTokCore(u) {
   const nx = hasNx(u);
   T.pc = T.pc.map((p, i) => on1(p, i < u.en));
   const cl = (k, v) => tokCl(T, k, v);
-  cl('ko', u.ko);
-  cl('sel', ui.sel === u.uid || ui.selE === u.uid);
-  cl('done', u.side === 'a' && u.acted && !u.ko && B.phase === 'player');
-  cl('act', ui.act === u.uid);
+  cl('is-ko', u.ko);
+  cl('is-selected', ui.sel === u.uid || ui.selE === u.uid);
+  cl('is-done', u.side === 'a' && u.acted && !u.ko && B.phase === 'player');
+  cl('is-acting', ui.act === u.uid);
   cl(
-    'has-en',
+    'has-energy',
     !u.ko && (u.side === 'a' || B.duel433 ? nx || hasXp(u) || resonanceCandidate(B, u) : bossScene(B) && hasXp(u))
   ); // v4.14: diamonds of Expert attacks
-  cl('ready', u.side === 'a' && (nx || resonanceCandidate(B, u)) && u.en >= EMAX && !u.ko);
-  cl('fres', u.resonant > 0 && !u.ko); // Resonant Form (v4.17)
-  cl('cj1', !!B.coop && u.side === 'a' && coopPlayer(u) === 1); // co-op (v4.18)
-  cl('cj2', !!B.coop && u.side === 'a' && coopPlayer(u) === 2);
-  cl('cjoff', !!B.coop && u.side === 'a' && coopPlayer(u) !== B.coop && B.phase === 'player');
-  cl('vigil-strike', !!u.vigilance && !u.ko); // v4.20
-  cl('encircled', isSurrounded(B, u));
-  cl('ph2', u.bossPhase === 2 && !u.ko);
-  cl('ph3', u.bossPhase === 3 && !u.ko);
-  cl('in-danger', !u.ko && !!(B.dangerZone && B.dangerZone.k.includes(uk(u)))); // inside an announced zone
-  cl('evw', foeEvo(B, u));
-  cl('evolved', !!u.evo);
+  cl('is-ready', u.side === 'a' && (nx || resonanceCandidate(B, u)) && u.en >= EMAX && !u.ko);
+  cl('is-resonant', u.resonant > 0 && !u.ko); // Resonant Form (v4.17)
+  cl('is-coop-player-1', !!B.coop && u.side === 'a' && coopPlayer(u) === 1); // co-op (v4.18)
+  cl('is-coop-player-2', !!B.coop && u.side === 'a' && coopPlayer(u) === 2);
+  cl('is-coop-waiting', !!B.coop && u.side === 'a' && coopPlayer(u) !== B.coop && B.phase === 'player');
+  cl('is-vigilant', !!u.vigilance && !u.ko); // v4.20
+  cl('is-encircled', isSurrounded(B, u));
+  cl('is-phase-2', u.bossPhase === 2 && !u.ko);
+  cl('is-phase-3', u.bossPhase === 3 && !u.ko);
+  cl('is-in-danger', !u.ko && !!(B.dangerZone && B.dangerZone.k.includes(uk(u)))); // inside an announced zone
+  cl('can-evolve', foeEvo(B, u));
+  cl('is-evolved', !!u.evo);
   const nN = notesOf(B, u); // Resonance notes (v4.14)
   T.nc = T.nc.map((p, i) => on1(p, i < nN));
-  cl('has-nt', nN > 0 && !u.ko);
-  cl('reso', nN >= 3 && !u.ko);
+  cl('has-notes', nN > 0 && !u.ko);
+  cl('is-resonating', nN >= 3 && !u.ko);
   const b =
     u.badge ||
     (u.vole ? 'VOL' : u.chg ? 'CHARGE' : null) || // charged attacks (v4.8)
@@ -695,7 +695,7 @@ function arrFx(uid) {
 function hit(uid) {
   const T = L.u[uid];
   if (T) {
-    T.hit = true; // blinking ring (« hit » class of .tok-ring, Units.jsx)
+    T.hit = true; // blinking ring (« hit » class of .token-ring, Units.jsx)
     unitsDirty();
     setTimeout(() => {
       T.hit = false;

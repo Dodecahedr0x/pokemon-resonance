@@ -63,10 +63,6 @@ html body .hh-chips span {
   /* Battles: "Prochaine étape" (Next step) becomes a tab placed on the card,
      the battle name gets the whole line back */
   /* board: readable Pokémon names and markers */
-  html body #bSvg .tok-nm {
-    font-size: 8px !important;
-    letter-spacing: 0.06em !important;
-  }
   html body #bSvg .axl {
     font-size: 8.5px !important;
   }

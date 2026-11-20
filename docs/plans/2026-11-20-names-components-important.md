@@ -284,4 +284,20 @@ Each step is one commit (or a few), on its own, playable at every point.
   `#evoPick` rules hang on `.evolution-choice`. The generic `button:not(…)` transition used to beat the option's own,
   so the option now states it. New token `--border-steel`. Checked with snapshots of one path, Eevee's paths and a
   branch at both widths.
+- Board tokens: done. `src/screens/combat/board/token.css`, `token-states.css`, `token-halo.css`, `token-status.css`,
+  `token-tilted.css` and `token-motion.css`. `.tok*` became `.token` (`-halo`, `-rim`, `-ring`, `-image`, `-name`, `-body`,
+  `-stand`, `-ready-ring`, `-evolution-mark`, `-energy`, `-shadow`, `-notes`, `-gloss`), and the states the engine toggles
+  with `tokCl` got readable names: `.is-ally` / `.is-enemy`, `.is-selected`, `.is-acting`, `.is-done`, `.is-ko`,
+  `.is-ready`, `.has-energy`, `.can-evolve` (was `evw`), `.is-resonant` (`fres`), `.is-resonating` (`reso`),
+  `.has-notes`, `.is-coop-player-1/2`, `.is-coop-waiting`, `.is-phase-2/3`, `.is-duel-player-1/2`, `.is-in-grass`
+  (`hid`), `.is-waiting` (`pk-wait`), `.is-flashing` (`pk-rouge`), `.is-fogged`, `.has-image`, `.is-colossus`… The
+  board SVG got a `.board-svg` class. Many of these rules used to win through `#bSvg` and `!important`; once folded,
+  overlapping states (a token can be selected, shiny and resonant at once) need their original order, so the resolver
+  now orders declarations, not rules, and a cascade checker compares every pair of declarations that can hit the same
+  element with the legacy winner. Contexts are written `:where(.board.painted-tilt)` so they add no weight, the halo
+  rules share one file to keep their order, and the motion switches (calm motion, « reduce animations », reduced
+  motion) moved to a new `motion` cascade layer after `skin`, so they beat every state without `!important`. New
+  tokens `--color-enemy`, `--color-duel-player-1/2`. Checked with snapshots of the board with six groups of states at
+  both widths: what paints is identical (generic legacy `.ally` / `.enemy` / `.done` rules no longer put HTML borders on
+  the SVG groups, which never showed); under reduced motion a shiny and resonant token's halo now stays still.
   Lesson for the next slices: after moving a shared class, look for legacy rules that still style it in context.

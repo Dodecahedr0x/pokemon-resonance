@@ -103,7 +103,7 @@ export function deployRender() {
     for (const id in L.u) {
       const T = L.u[id];
       if (T) {
-        tokCl(T, 'deploy-phase-s', on && ui.deploySel === id);
+        tokCl(T, 'is-deploy-selected', on && ui.deploySel === id);
       } // token classes: Units.jsx
     }
   }

@@ -1,0 +1,114 @@
+/* Board › Pokémon tokens › rarer states: boss and its phases, Dominant, segments and colossi, vigilance, encircled,
+   danger zone, co-op and duel players (--duel-color), Resonance (.is-resonant, .is-resonating, notes), fog of war,
+   entrance (.is-waiting, .is-flashing), deployment, low HP and the hit reactions (.lunge-hit, .hurt-flash). */
+
+.token.is-boss .token-rim {
+  stroke: #ffd75e;
+}
+.token.is-segment .token-rim {
+  stroke: #c9a35a;
+}
+.token.is-encircled .token-rim {
+  stroke: #ff9a3d;
+  stroke-width: 2.8;
+}
+.token.is-in-danger .token-rim {
+  stroke: #ef4444;
+  stroke-width: 3.2;
+  animation: intensity-dg 1.2s ease-in-out infinite;
+}
+.token.is-coop-player-1 .token-rim {
+  stroke: #5fb8ff;
+  stroke-width: 2.6;
+}
+.token.is-coop-player-2 .token-rim {
+  stroke: #ff9a5f;
+  stroke-width: 2.6;
+}
+.token.is-coop-waiting {
+  opacity: 0.55;
+}
+.token.is-resonant .token-rim {
+  stroke: #e7dbff;
+  stroke-width: 2.4;
+}
+.token.is-dominant .token-rim {
+  stroke: #ffcf4a;
+  stroke-width: 2.6;
+}
+.token-notes circle {
+  fill: #141922;
+  stroke: rgba(214, 184, 255, 0.5);
+  stroke-width: 0.8;
+  opacity: 0;
+  transition:
+    opacity 0.25s,
+    fill 0.25s;
+}
+.token.has-notes .token-notes circle {
+  opacity: 1;
+}
+.token-notes circle.on {
+  fill: #c9a6ff;
+  stroke: #f3e8ff;
+  filter: drop-shadow(0 0 2px rgba(190, 140, 255, 0.95));
+}
+.token.is-resonating .token-ring {
+  filter: drop-shadow(0 0 6px rgba(200, 150, 255, 0.95));
+}
+.token.lunge-hit .token-body {
+  animation: bond-hop calc(0.52s * var(--anim-scale, 1)) cubic-bezier(0.3, 0.7, 0.4, 1) 1;
+}
+.token.hurt-flash .token-body {
+  animation: hurt-body calc(0.44s * var(--anim-scale, 1)) ease-out 1;
+}
+.token.is-ko .token-body {
+  animation: none;
+  transform: translateY(7px);
+  transition: transform 0.6s ease-in;
+}
+:where(.board.deploy-phase) .token.is-ally {
+  cursor: pointer;
+}
+.token.is-fogged {
+  transition: opacity 0.3s;
+}
+.token.is-duel-player-1 .token-rim {
+  stroke: var(--duel-color);
+  stroke-width: 2.6;
+}
+.token.is-duel-player-2 .token-rim {
+  stroke: var(--duel-color);
+  stroke-width: 2.6;
+}
+.token.is-duel-player-1 {
+  --duel-color: var(--color-duel-player-1);
+}
+.token.is-duel-player-2 {
+  --duel-color: var(--color-duel-player-2);
+}
+.token.is-segment .token-ring {
+  stroke-dasharray: 3 2;
+}
+.token.is-low-hp .token-image {
+  animation: low-shiver 0.38s linear infinite;
+}
+.token.hurt-flash .token-image {
+  animation: flash-burst calc(0.44s * var(--anim-scale, 1)) ease-out 1;
+}
+.token.is-waiting {
+  opacity: 0;
+}
+.token.is-flashing {
+  filter: sepia(1) saturate(6) hue-rotate(-38deg) brightness(0.92);
+}
+.token.is-fogged {
+  opacity: 0;
+}
+.name-wrap.is-waiting {
+  opacity: 0;
+}
+.name-wrap.is-fogged {
+  transition: opacity 0.3s;
+  opacity: 0;
+}

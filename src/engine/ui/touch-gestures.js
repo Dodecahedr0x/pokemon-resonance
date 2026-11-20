@@ -30,7 +30,7 @@ function longPressAction(t) {
     const u = uAt(B, hx.dataset.k);
     return u ? () => openSpeciesSheet(u.sp) : null;
   }
-  const tok = t.closest('#bSvg .tok');
+  const tok = t.closest('#bSvg .token');
   if (tok && B && L.u) {
     for (const id in L.u) {
       if (L.u[id].g === tok) {
