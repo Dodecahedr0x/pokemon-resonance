@@ -92,7 +92,7 @@ function Body({ status: state, id, sh, dom, known: known }) {
 
 function Card({ route, catches: catches, ...p }) {
   return (
-    <Dialogue className="sv-card exp-card pe-card" titre="peT" closeAttrs={{ 'data-fishingPanel': 'x' }}>
+    <Dialogue className="dialog-card exp-card pe-card" titre="peT" closeAttrs={{ 'data-fishingPanel': 'x' }}>
       <p className="kicker">{route} · pêche</p>
       <h2 className="section-title" id="peT">
         Pêche

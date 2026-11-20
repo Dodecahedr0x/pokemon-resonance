@@ -126,3 +126,10 @@ Each step is one commit (or a few), on its own, playable at every point.
   are deleted; the type-synergy diamonds and chip shared with the Guide, the battle preparation and the battle's top
   bar are `src/styles/components/synergy.css` (`.synergy-types`, `.synergy-chip`, were `.syn-t`, `.syn-c`); the
   engine's reset / restore / draw row is `.team-actions` (was `.team-x`), styled in `team-dock.css`.
+- 2 Saves: done. `src/screens/saves/saves.css` (status, profile and counters, game settings, slots with `is-auto` /
+  `is-empty`); classes `.saves-*`. The pieces it shared with other windows got shared names, their rules still in
+  legacy until the overlays step: the dialog card `.dialog-card` (was `.sv-card`, every `Dialogue` box), its close
+  button `.dialog-close` (was `.sh-x`), the button row `.button-row` (was `.sv-io`, also Settings and the Workshop) and
+  the confirm prompt `.confirm-question` (was `.sv-q`). The engraved slab and brass / edge frames are now
+  `--surface-slab`, `--border-edge`, `--border-brass`, `--shadow-engrave` and `--radius-card(-large)` in
+  `theme/surfaces.css`.

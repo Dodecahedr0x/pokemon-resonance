@@ -36,7 +36,7 @@ export default function Avatar() {
           );
         })}
       </div>
-      <div className="sv-io">
+      <div className="button-row">
         <Button size="small" variant={a && a.hex ? 'primary' : undefined} data-avatar-action="hex">
           {a && a.hex ? 'Cadre carré arrondi : activé' : 'Cadre carré arrondi : désactivé'}
         </Button>
@@ -49,7 +49,7 @@ export default function Avatar() {
         Certains Pokémon sortent plus souvent la nuit, le matin ou selon la météo du jour (pluie, soleil, grêle, sable).
         Des trouvailles scintillent aussi sur la carte, une fois par jour.
       </p>
-      <div className="sv-io">
+      <div className="button-row">
         <Button size="small" variant={on ? 'primary' : undefined} data-avatar-action="rare">
           {on ? 'Rencontres rares : activées' : 'Rencontres rares : désactivées'}
         </Button>

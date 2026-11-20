@@ -12,7 +12,7 @@ export default function CaptureTiming() {
         vous est rendue. Bien : capture normale. Raté : la Ball rebondit et est perdue, mais l’allié n’a pas agi et vous
         gardez vos Voix. Un bouton permet toujours de passer le timing.
       </p>
-      <div className="sv-io">
+      <div className="button-row">
         <Button size="small" variant={on ? 'primary' : undefined} data-catch-action="cap">
           {on ? 'Timing de capture : activé' : 'Timing de capture : désactivé'}
         </Button>

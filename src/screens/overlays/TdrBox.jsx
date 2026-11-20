@@ -23,7 +23,7 @@ export default function TdrBox() {
 function Choice({ cands, pick }) {
   const n = pick.length;
   return (
-    <Dialogue className="sv-card st-card tdr-card" titre="tdrT" closeAttrs={{ 'data-tdr': 'x' }}>
+    <Dialogue className="dialog-card st-card tdr-card" titre="tdrT" closeAttrs={{ 'data-tdr': 'x' }}>
       <p className="kicker">Après-jeu</p>
       <h2 className="section-title" id="tdrT">
         Tour de Résonance
@@ -65,7 +65,7 @@ function Choice({ cands, pick }) {
 // Reward after a floor is cleared.
 function Reward({ floor, offer }) {
   return (
-    <Dialogue className="sv-card st-card tdr-card" titre="tdrT">
+    <Dialogue className="dialog-card st-card tdr-card" titre="tdrT">
       <p className="kicker">Tour de Résonance · étage {floor - 1} franchi</p>
       <h2 className="section-title" id="tdrT">
         Choisissez une récompense

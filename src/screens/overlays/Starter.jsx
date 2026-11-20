@@ -23,7 +23,7 @@ export default function Starter() {
 
 function Card() {
   return (
-    <Dialogue className="sv-card st-card" titre="stT" closeAttrs={{ 'data-st': 'x' }}>
+    <Dialogue className="dialog-card st-card" titre="stT" closeAttrs={{ 'data-st': 'x' }}>
       <p className="kicker">Nouvelle campagne</p>
       <h2 className="section-title" id="stT">
         Choisissez votre partenaire

@@ -12,7 +12,7 @@ export default function Immersion() {
         animée sur le plateau, cartes holographiques et musique plus vive quand un allié est presque K.O. Les vibrations
         et le son se règlent plus bas.
       </p>
-      <div className="sv-io">
+      <div className="button-row">
         <Button size="small" variant={on ? 'primary' : undefined} data-immersion-action="im">
           {on ? 'Immersion : activée' : 'Immersion : désactivée'}
         </Button>

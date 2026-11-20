@@ -12,7 +12,7 @@ export default function BattleDisplay() {
         navigation du bas s’efface. Plateau contrasté : contours de cases nets et terrains plus colorés. Sur le plateau,
         un appui long sur une case (ou la loupe) affiche son détail.
       </p>
-      <div className="sv-io">
+      <div className="button-row">
         <Button size="small" variant={fs ? 'primary' : undefined} data-tool-action="pfs">
           {fs ? 'Plein écran : activé' : 'Plein écran : désactivé'}
         </Button>

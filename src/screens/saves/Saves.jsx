@@ -29,7 +29,7 @@ export default function Saves() {
   }, [open]);
 
   return (
-    <div className="result saves" id="saves" hidden={!open}>
+    <div className="result saves-overlay" id="saves" hidden={!open}>
       {open && ready && <Card key={version} xRef={x} />}
     </div>
   );
@@ -39,18 +39,18 @@ export default function Saves() {
 function Summary({ s }) {
   const P = cleanProfile(s.profile);
   return (
-    <div className="sv-sum">
-      <span className="sv-meds">
+    <div className="saves-slot-summary">
+      <span className="saves-slot-medals">
         {s.squad.map((id, i) => (
           <Html key={i} html={medal(BY[id].t, 'is-small')} />
         ))}
       </span>
-      <span className="sv-facts">
+      <span className="saves-slot-facts">
         <b>{s.badges.length} / 8</b> badges · <b>{P.wins}</b> victoire{P.wins > 1 ? 's' : ''} · <b>{P.awakenings}</b>{' '}
         Éveil
         {P.awakenings > 1 ? 's' : ''}
       </span>
-      {validBattle(s.battle) && <span className="sv-bt">Combat en cours : {battleLine(s.battle)}</span>}
+      {validBattle(s.battle) && <span className="saves-slot-battle">Combat en cours : {battleLine(s.battle)}</span>}
     </div>
   );
 }
@@ -62,12 +62,12 @@ function Slot({ k }) {
     cf = SV.confirm && SV.confirm.k === k ? SV.confirm.a : null;
   if (!s) {
     return (
-      <article className="sv-slot empty">
+      <article className="saves-slot is-empty">
         <header>
           <b>Emplacement {n}</b>
           <em>vide</em>
         </header>
-        <div className="sv-act">
+        <div className="saves-slot-actions">
           <Button size="small" data-sv="put" data-k={k}>
             Sauvegarder ici
           </Button>
@@ -76,7 +76,7 @@ function Slot({ k }) {
     );
   }
   return (
-    <article className="sv-slot">
+    <article className="saves-slot">
       <header>
         <b>
           Emplacement {n}
@@ -85,10 +85,10 @@ function Slot({ k }) {
         <em>{fmtD(s.savedAt)}</em>
       </header>
       <Summary s={s} />
-      <div className="sv-act">
+      <div className="saves-slot-actions">
         {cf ? (
           <>
-            <span className="sv-q">
+            <span className="confirm-question">
               {cf === 'load'
                 ? 'Remplacer la partie en cours ?'
                 : cf === 'put'
@@ -127,7 +127,7 @@ function Code() {
   }
   const copy = SV.code.mode === 'copy';
   return (
-    <div className="sv-code" style={{ marginTop: space.md, display: 'grid', gap: space.sm }}>
+    <div className="saves-code" style={{ marginTop: space.md, display: 'grid', gap: space.sm }}>
       <b>{copy ? 'Votre code de sauvegarde' : 'Collez votre code de sauvegarde'}</b>
       <span style={{ opacity: '.8', fontSize: '13px' }}>
         {copy
@@ -175,8 +175,8 @@ function Card({ xRef }) {
     busy = Object.values(SV.busy).some(Boolean),
     rs = SV.confirm && SV.confirm.k === 'reset';
   return (
-    <div className="sv-card" role="dialog" aria-modal="true" aria-labelledby="svTitle">
-      <button ref={xRef} className="sh-x" type="button" data-sv="close" aria-label="Fermer">
+    <div className="dialog-card" role="dialog" aria-modal="true" aria-labelledby="svTitle">
+      <button ref={xRef} className="dialog-close" type="button" data-sv="close" aria-label="Fermer">
         <svg>
           <use href="#i-x" />
         </svg>
@@ -185,7 +185,7 @@ function Card({ xRef }) {
       <h2 className="section-title" id="svTitle">
         Partie et réglages
       </h2>
-      <p className={'sv-st ' + (SV.cloud ? 'cloud' : 'local')}>
+      <p className={'saves-status' + (SV.cloud ? ' is-cloud' : '')}>
         <i />
         {SV.cloud
           ? 'Synchronisées avec votre compte Claude : reprenez votre partie sur n’importe quel appareil.'
@@ -197,7 +197,7 @@ function Card({ xRef }) {
           </>
         )}
       </p>
-      <div className="sv-prof">
+      <div className="saves-profile">
         <label>
           <span>Nom du dresseur</span>
           <input
@@ -209,7 +209,7 @@ function Card({ xRef }) {
             defaultValue={P.name}
           />
         </label>
-        <div className="sv-k">
+        <div className="saves-stats">
           <div>
             <b>{P.battles}</b>
             <span>Combats</span>
@@ -228,8 +228,8 @@ function Card({ xRef }) {
           </div>
         </div>
       </div>
-      <div className="sv-set">
-        <div className="ss-row">
+      <div className="saves-settings">
+        <div className="saves-setting">
           <span>Mode</span>
           <b>
             {isCamp()
@@ -237,9 +237,9 @@ function Card({ xRef }) {
               : `Libre · combats ouverts · ${boxCapacityLabel()}`}
           </b>
         </div>
-        <div className="ss-row">
+        <div className="saves-setting">
           <span>Difficulté</span>
-          <span className="ss-seg">
+          <span className="saves-setting-options">
             {Object.entries(DIFFS).map(([k, n]) => (
               <Button
                 key={k}
@@ -254,9 +254,9 @@ function Card({ xRef }) {
             ))}
           </span>
         </div>
-        <div className="ss-row">
+        <div className="saves-setting">
           <span>Confort</span>
-          <span className="ss-seg">
+          <span className="saves-setting-options">
             <Button size="small" data-sv="set" data-f="sound" aria-pressed={String(!!PREF.sound)}>
               Son
             </Button>
@@ -275,26 +275,26 @@ function Card({ xRef }) {
           </span>
         </div>
       </div>
-      <article className="sv-slot auto">
+      <article className="saves-slot is-auto">
         <header>
           <b>Sauvegarde automatique</b>
           <em>{a.savedAt ? fmtD(a.savedAt) : ''}</em>
         </header>
         <Summary s={a} />
         {validBattle(a.battle) && !B && (
-          <div className="sv-act">
+          <div className="saves-slot-actions">
             <Button size="small" variant="primary" data-resume="1">
               Reprendre le combat
             </Button>
           </div>
         )}
       </article>
-      <div className="sv-list">
+      <div className="saves-list">
         {SLOTS.map(k => (
           <Slot key={k} k={k} />
         ))}
       </div>
-      <div className="sv-io">
+      <div className="button-row">
         <Button size="small" data-sv="export">
           Exporter un fichier
         </Button>
@@ -317,7 +317,7 @@ function Card({ xRef }) {
         </Button>
         {rs ? (
           <>
-            <span className="sv-q">Nouvelle partie : les emplacements restent intacts.</span>
+            <span className="confirm-question">Nouvelle partie : les emplacements restent intacts.</span>
             <Button size="small" variant="primary" data-sv="camp">
               Campagne
             </Button>

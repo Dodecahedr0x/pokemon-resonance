@@ -414,7 +414,7 @@ function Talents() {
           })}
         </Fragment>
       ))}
-      <div className="sv-io">
+      <div className="button-row">
         <Button
           size="small"
           variant="ghost"

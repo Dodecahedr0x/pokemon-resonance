@@ -14,7 +14,7 @@ export default function ExpBox() {
 
 function Card({ destinationId: dest, available: available }) {
   return (
-    <Dialogue className="sv-card exp-card" titre="expT" closeAttrs={{ 'data-exp-x': '' }}>
+    <Dialogue className="dialog-card exp-card" titre="expT" closeAttrs={{ 'data-exp-x': '' }}>
       <p className="kicker">Expédition</p>
       <h2 className="section-title" id="expT">
         {dest ? DESTINATIONS[dest].n : 'Où partir ?'}

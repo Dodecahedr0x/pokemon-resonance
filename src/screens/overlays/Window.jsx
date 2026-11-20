@@ -11,13 +11,13 @@ export function Box({ displayName: displayName, className, id, cardComponent: Ca
   );
 }
 
-// ".sv-card" dialog card and its close button; `shut`: the data-* attribute that
+// ".dialog-card" dialog card and its close button; `shut`: the data-* attribute that
 // the engine's listener recognizes (e.g. { 'data-ct': 'x' }), absent when it cannot be closed.
 export function Dialogue({ className, titre: heading, closeAttrs: shut, children }) {
   return (
     <div className={className} role="dialog" aria-modal="true" aria-labelledby={heading}>
       {shut && (
-        <button className="sh-x" type="button" {...shut} aria-label="Fermer">
+        <button className="dialog-close" type="button" {...shut} aria-label="Fermer">
           <svg>
             <use href="#i-x" />
           </svg>

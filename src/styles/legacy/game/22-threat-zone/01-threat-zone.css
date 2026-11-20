@@ -137,7 +137,7 @@ html body .case,
 html body .resume,
 html body .sel,
 html body .v4-mi,
-html body .sv-card,
+html body .dialog-card,
 html body .ana {
   border-color: var(--pr-line) !important;
   box-shadow:
@@ -148,7 +148,7 @@ html body .case,
 html body .sel,
 html body .resume,
 html body .v4-mi,
-html body .sv-card {
+html body .dialog-card {
   background: linear-gradient(145deg, rgba(19, 48, 68, 0.94), rgba(7, 22, 35, 0.96)) !important;
 }
 html body button.qk {

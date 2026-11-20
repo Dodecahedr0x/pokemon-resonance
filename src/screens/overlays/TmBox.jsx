@@ -12,7 +12,7 @@ export default function TmBox() {
 
 function Card({ M, m, families: families }) {
   return (
-    <Dialogue className="sv-card ct-card" titre="ctT" closeAttrs={{ 'data-ct': 'x' }}>
+    <Dialogue className="dialog-card ct-card" titre="ctT" closeAttrs={{ 'data-ct': 'x' }}>
       <p className="kicker">{M.cs ? 'CS · réutilisable' : 'CT · usage unique'}</p>
       <h2 className="section-title" id="ctT">
         {M.num} · {m.n}

@@ -28,7 +28,7 @@ export default function Offline() {
         <b>{navigator.onLine === false ? 'Hors ligne' : 'En ligne'}</b>
         {` · ${state}${ok ? '' : ' Stockage indisponible sur cet appareil.'}`}
       </p>
-      <div className="sv-io">
+      <div className="button-row">
         <Button
           size="small"
           variant={isReady ? undefined : 'primary'}

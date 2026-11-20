@@ -19,7 +19,7 @@ const CLOSE = { 'data-ami': 'x' };
 
 function MyCard({ displayName: displayName, code, teamNames: team, canShare: sharing }) {
   return (
-    <Dialogue className="sv-card exp-card am-card" titre="amiT" closeAttrs={CLOSE}>
+    <Dialogue className="dialog-card exp-card am-card" titre="amiT" closeAttrs={CLOSE}>
       <p className="kicker">Défis entre amis</p>
       <h2 className="section-title" id="amiT">
         Ma carte de dresseur
@@ -61,7 +61,7 @@ function MyCard({ displayName: displayName, code, teamNames: team, canShare: sha
 
 function Addition() {
   return (
-    <Dialogue className="sv-card exp-card am-card" titre="amiT" closeAttrs={CLOSE}>
+    <Dialogue className="dialog-card exp-card am-card" titre="amiT" closeAttrs={CLOSE}>
       <p className="kicker">Défis entre amis</p>
       <h2 className="section-title" id="amiT">
         Ajouter un ami

@@ -15,14 +15,14 @@ export default function Nuzlocke() {
         compagnon est toujours épargné), et on ne peut tenter qu’une seule rencontre par région et par jour.
         Désactivable à tout moment, sans rien rendre.
       </p>
-      <div className="sv-io">
+      <div className="button-row">
         {on ? (
           <Button size="small" variant="primary" data-nuzlocke-action="off">
             Nuzlocke : activé
           </Button>
         ) : nuzlockeConfirm ? (
           <>
-            <span className="sv-q">Activer ? Les prochains K.O. seront définitifs.</span>
+            <span className="confirm-question">Activer ? Les prochains K.O. seront définitifs.</span>
             <Button size="small" variant="primary" data-nuzlocke-action="yes">
               Oui, activer
             </Button>

@@ -10,7 +10,7 @@
     opacity: 0.2;
   }
 }
-.sh-x {
+.dialog-close {
   position: absolute;
   top: calc(16px + env(safe-area-inset-top, 0px));
   right: 16px;
@@ -24,11 +24,11 @@
   cursor: pointer;
 }
 @media (max-width: 700px) {
-  .sh-x {
+  .dialog-close {
     top: 16px;
   }
 }
-.sh-x svg {
+.dialog-close svg {
   width: 14px;
   height: 14px;
 }

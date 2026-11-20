@@ -10,7 +10,7 @@ export default function CompanionBox() {
 
 function Card({ L, cur, bonus }) {
   return (
-    <Dialogue className="sv-card exp-card" titre="compT" closeAttrs={{ 'data-comp': 'x' }}>
+    <Dialogue className="dialog-card exp-card" titre="compT" closeAttrs={{ 'data-comp': 'x' }}>
       <p className="kicker">Compagnon</p>
       <h2 className="section-title" id="compT">
         Qui vous accompagne ?

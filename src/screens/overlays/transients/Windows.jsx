@@ -10,7 +10,7 @@ export function Window({ id, tid, k, titre: heading, children }) {
       <div className="battle-help-c" role="dialog" aria-modal="true" aria-labelledby={tid}>
         <header>
           <h3 id={tid}>{heading}</h3>
-          <button type="button" className="sh-x" {...{ ['data-' + k]: 'close' }} aria-label="Fermer">
+          <button type="button" className="dialog-close" {...{ ['data-' + k]: 'close' }} aria-label="Fermer">
             ×
           </button>
         </header>

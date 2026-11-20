@@ -31,7 +31,7 @@ export default function DesignWorkshop() {
         style={{ ...BOX, resize: 'vertical' }}
         defaultValue={customCss()}
       />
-      <div className="sv-io">
+      <div className="button-row">
         <Button size="small" variant="primary" id="design-action-a">
           Appliquer
         </Button>

@@ -149,13 +149,6 @@ p.v4-note {
   /* ---------- Home: the folding "Classement" line is a full-height tap target ---------- */
 
   /* ---------- Saves sheet: options and close button at a tappable size ---------- */
-  html body #saves .button-small {
-    min-height: 40px !important;
-  }
-  html body #saves .sh-x {
-    width: var(--tap) !important;
-    height: var(--tap) !important;
-  }
 
   /* ---------- Bag: daily offers one per row (names and prices no longer cut) ---------- */
   /* shop categories scroll sideways: the right edge fades so the hidden ones are hinted */

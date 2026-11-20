@@ -16,7 +16,7 @@ export default function GimmickBoards() {
     <section className="card" id="gimmick-boards-panel">
       <h3 className="card-title">Plateaux à gimmick</h3>
       <p className="v4-note">{`Ajoute une règle de terrain à vos combats (hors boss, tutoriel et défis à règles fixes). ${d}`}</p>
-      <div className="sv-io">
+      <div className="button-row">
         {btn('off', 'Aucun')}
         {btn('rand', 'Aléatoire')}
         {Object.keys(GIMMICKS).map(k => btn(k, GIMMICKS[k].n))}

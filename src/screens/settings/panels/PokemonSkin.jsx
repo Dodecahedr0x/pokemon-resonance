@@ -19,7 +19,7 @@ export default function PokemonSkin() {
         des écrans. L’option « Réduire les animations » coupe aussi ces effets. « Effets animés » règle aussi l’entrée
         en combat, les Poké Balls et la cérémonie du badge.
       </p>
-      <div className="sv-io">
+      <div className="button-row">
         <Button size="small" variant={t ? 'primary' : undefined} data-pokemon-skin="t">
           Ouverture Poké Ball : {t ? 'activée' : 'désactivée'}
         </Button>
