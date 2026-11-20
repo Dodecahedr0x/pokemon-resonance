@@ -38,7 +38,7 @@ function Card({
 }) {
   const m = x && BY[x.id];
   return (
-    <Dialogue className="dialog-card is-compact safari-card" titre="sfT" closeAttrs={{ 'data-safariPanel': 'x' }}>
+    <Dialogue className="dialog-card is-compact safari-card" titre="sfT" closeAttrs={{ 'data-safari-panel': 'x' }}>
       <p className="kicker">Parc Safari</p>
       <h2 className="section-title" id="sfT">
         {x ? m.n : 'Les herbes du Parc'}
