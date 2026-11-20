@@ -6,3 +6,4 @@ art/gen-*.log
 node_modules/
 dist/
 .impeccable/hook.cache.json
+.style-snapshots/
