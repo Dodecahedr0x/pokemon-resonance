@@ -202,7 +202,7 @@ export function rewHtml(r) {
   let h = o.join('') + aplusRewHtml(r);
   if (r.money != null) {
     h =
-      `<div class="res-l v4-gain"><h4>Gains</h4><div class="rl"><span class="v4-coin" aria-hidden="true">₽</span><span>${r.daily ? 'Défi du jour relevé : gains doublés' : 'Prime de combat'}</span><b>+${fmt(r.money)} ₽</b></div>${r.gems ? `<div class="rl"><span class="v4-gemi" aria-hidden="true"><svg><use href="#i-gem"/></svg></span><span>Éclats de Résonance</span><b>+${r.gems}</b></div>` : ''}</div>` +
+      `<div class="res-l v4-gain"><h4>Gains</h4><div class="rl"><span class="coin-icon" aria-hidden="true">₽</span><span>${r.daily ? 'Défi du jour relevé : gains doublés' : 'Prime de combat'}</span><b>+${fmt(r.money)} ₽</b></div>${r.gems ? `<div class="rl"><span class="gem-icon" aria-hidden="true"><svg><use href="#i-gem"/></svg></span><span>Éclats de Résonance</span><b>+${r.gems}</b></div>` : ''}</div>` +
       h;
   } // end-of-battle gains
   return itemize(h); // illustrated items

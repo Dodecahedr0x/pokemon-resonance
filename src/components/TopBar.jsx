@@ -84,13 +84,13 @@ export function TopTrainer() {
         </span>
       </a>
       <a className="v4-wal" data-t="sac" href="#sac" aria-label="Pokédollars">
-        <span className="v4-coin" aria-hidden="true">
+        <span className="coin-icon" aria-hidden="true">
           ₽
         </span>
         <b id="v4Money">{on ? fmt(PROFILE.money || 0) : '0'}</b>
       </a>
       <a className="v4-wal gem" data-t="sac" href="#sac" aria-label="Éclats de Résonance">
-        <span className="v4-gemi" aria-hidden="true">
+        <span className="gem-icon" aria-hidden="true">
           <svg>
             <use href="#i-gem" />
           </svg>

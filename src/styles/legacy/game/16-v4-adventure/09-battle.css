@@ -9,8 +9,8 @@ html body #combat .pt {
 .v4-gain .rl b {
   color: #ffe17b;
 }
-.v4-gain .v4-coin,
-.v4-gain .v4-gemi {
+.v4-gain .coin-icon,
+.v4-gain .gem-icon {
   margin-right: var(--space-3xs);
 }
 

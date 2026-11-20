@@ -7,7 +7,7 @@ export default function Rewards({ r }) {
   if (r.money) {
     o.push(
       <span key="m">
-        <span className="v4-coin" aria-hidden="true">
+        <span className="coin-icon" aria-hidden="true">
           ₽
         </span>
         {fmt(r.money)}
@@ -17,7 +17,7 @@ export default function Rewards({ r }) {
   if (r.gems) {
     o.push(
       <span key="g">
-        <span className="v4-gemi">
+        <span className="gem-icon">
           <svg>
             <use href="#i-gem" />
           </svg>

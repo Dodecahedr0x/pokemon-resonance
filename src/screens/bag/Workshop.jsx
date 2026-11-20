@@ -333,7 +333,7 @@ function Eggs() {
                   <p>
                     Éclosion dans {e.left} combat{e.left > 1 ? 's' : ''}.
                   </p>
-                  <div className="cp-bar">
+                  <div className="progress-bar">
                     <i style={{ width: `${p}%` }} />
                   </div>
                 </div>

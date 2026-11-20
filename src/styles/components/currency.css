@@ -1,0 +1,26 @@
+/* Currency icons next to an amount: .coin-icon (Poké Dollars, a gold coin with ₽) and .gem-icon (Resonance shards,
+   the cyan gem symbol). Top bar, Bag, rewards, battle gains. */
+
+.coin-icon,
+.gem-icon {
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+}
+.coin-icon {
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fff3b0, #ffcd3c 45%, #c98a12);
+  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.25);
+  color: #6b4300;
+  font: 900 12px/1 var(--font-display);
+}
+.gem-icon {
+  color: #7fe6ff;
+}
+.gem-icon svg {
+  width: 20px;
+  height: 20px;
+  filter: drop-shadow(0 0 4px rgba(90, 220, 255, 0.6));
+}

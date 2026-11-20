@@ -145,3 +145,7 @@ Each step is one commit (or a few), on its own, playable at every point.
   `.note` (was `.v4-note`) and `.empty-state` (was `.v4-empty`); `src/styles/components/pill-button.css` holds
   `.pill-button` (was `.v4-btn`, the round gold button of the Bag's workshop, the Pokédex missions and the season
   event). The Pokédex's ready-mission ring on that button was always overridden and is gone.
+- Bag: its own classes were already out of legacy. Shared pieces it uses moved to components:
+  `src/styles/components/currency.css` (`.coin-icon`, `.gem-icon`, were `.v4-coin`, `.v4-gemi`) and
+  `src/styles/components/progress-bar.css` (`.progress-bar`, was `.cp-bar`). The dialogue box (`.dlgbox`,
+  `.dlg-who`) goes with the overlays step, since the Pokémon-world skin restyles it in the tip and the intro.

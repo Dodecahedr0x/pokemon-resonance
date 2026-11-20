@@ -104,7 +104,7 @@ export function hoennChapter(k) {
 export function hoennRewardLine(k) {
   const D = SCEN[k];
   const g = D.hfinal ? 20 : HREW[D.hoenn];
-  return `<div class="v4-rew"><span class="v4-rew-b">${D.hfinal ? medal(['Dragon']) + 'Titre de Maître de Hoenn' : badgeSvg(D.hoenn, HGYMS[D.hoenn], 'mh' + D.hoenn) + 'Badge ' + HGYMS[D.hoenn]}</span><span><span class="v4-coin" aria-hidden="true">₽</span>+${fmt(D.hfinal ? 8000 : 3500 + 300 * D.hoenn)}</span><span><span class="v4-gemi"><svg><use href="#i-gem"/></svg></span>+${g}</span></div>`;
+  return `<div class="v4-rew"><span class="v4-rew-b">${D.hfinal ? medal(['Dragon']) + 'Titre de Maître de Hoenn' : badgeSvg(D.hoenn, HGYMS[D.hoenn], 'mh' + D.hoenn) + 'Badge ' + HGYMS[D.hoenn]}</span><span><span class="coin-icon" aria-hidden="true">₽</span>+${fmt(D.hfinal ? 8000 : 3500 + 300 * D.hoenn)}</span><span><span class="gem-icon"><svg><use href="#i-gem"/></svg></span>+${g}</span></div>`;
 }
 
 export function hoennProfessor(g) {

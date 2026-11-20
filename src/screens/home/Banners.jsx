@@ -25,7 +25,7 @@ export default function Banners() {
           <small>
             {sa.pts} / {sa.top} points de saison
           </small>
-          <span className="cp-bar">
+          <span className="progress-bar">
             <i style={{ width: `${sa.pc}%` }} />
           </span>
         </span>

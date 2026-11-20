@@ -26,6 +26,8 @@
 @import './components/state-pill.css' layer(components);
 @import './components/note.css' layer(components);
 @import './components/pill-button.css' layer(components);
+@import './components/currency.css' layer(components);
+@import './components/progress-bar.css' layer(components);
 
 @import '../screens/settings/settings.css' layer(screens);
 @import '../screens/dex/dex.css' layer(screens);

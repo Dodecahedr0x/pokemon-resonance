@@ -192,6 +192,9 @@ export const RENAMED_CLASSES = {
   'v4-note': 'note',
   'v4-empty': 'empty-state',
   'v4-btn': 'pill-button',
+  'v4-coin': 'coin-icon',
+  'v4-gemi': 'gem-icon',
+  'cp-bar': 'progress-bar',
 };
 
 const OLD_CLASS = new RegExp(

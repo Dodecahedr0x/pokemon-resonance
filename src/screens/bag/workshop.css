@@ -104,8 +104,8 @@
   text-decoration: none;
 }
 
-/* ---------- Eggs: incubation bar (shared .cp-bar) ---------- */
-.workshop-egg .cp-bar {
+/* ---------- Eggs: incubation bar (shared .progress-bar) ---------- */
+.workshop-egg .progress-bar {
   margin-top: var(--space-xs);
 }
 

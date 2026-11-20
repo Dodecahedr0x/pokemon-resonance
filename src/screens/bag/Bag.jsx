@@ -89,7 +89,7 @@ function Content() {
       {NL}
       <div className="bag-wallet card">
         <div>
-          <span className="v4-coin" aria-hidden="true">
+          <span className="coin-icon" aria-hidden="true">
             ₽
           </span>
           <span>
@@ -98,7 +98,7 @@ function Content() {
           </span>
         </div>
         <div>
-          <span className="v4-gemi">
+          <span className="gem-icon">
             <svg>
               <use href="#i-gem" />
             </svg>
