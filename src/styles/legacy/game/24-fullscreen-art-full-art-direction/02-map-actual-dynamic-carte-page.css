@@ -78,24 +78,6 @@
   background: linear-gradient(145deg, #15384a, #081a27) !important;
   box-shadow: 0 32px 78px rgba(0, 0, 0, 0.43) !important;
 }
-#combat .sel-tabs {
-  padding: var(--space-md) !important;
-  background: rgba(3, 14, 23, 0.65) !important;
-  border-bottom: 1px solid var(--rx-edge) !important;
-}
-#combat .sel-tabs button {
-  border-radius: 13px !important;
-}
-#combat .sel-body {
-  gap: var(--space-xl) !important;
-  padding: var(--space-xl) !important;
-}
-#combat .sel-list {
-  border: 1px solid var(--rx-edge) !important;
-  border-radius: 19px !important;
-  background: rgba(4, 17, 27, 0.76) !important;
-}
-#combat .sel-card,
 #combat .pt {
   border: 1px solid rgba(124, 220, 230, 0.22) !important;
   border-radius: 20px !important;

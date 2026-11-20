@@ -1,14 +1,4 @@
 /* saved teams */
-.saved-squads {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-xs);
-  margin: var(--space-xs) 0 var(--space-2xs);
-}
-.saved-squads[hidden] {
-  display: none;
-}
 
 /* Pantheon */
 .pantheon-tab-l {

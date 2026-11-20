@@ -324,22 +324,6 @@ html body #bSvg .tok.boss .tok-rim {
 }
 
 /* --- battle choice tabs: a fourth, "Après-jeu" (Postgame) --- */
-.sel-tabs {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-}
 @media (max-width: 560px) {
   /* two rows of two on phone: labels stay readable */
-  .sel-tabs {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .sel-tabs button {
-    flex-direction: row;
-    justify-content: flex-start;
-    gap: var(--space-sm);
-    min-height: 48px;
-    text-align: left;
-  }
-  .sel-tabs button span {
-    justify-items: start;
-  }
 }

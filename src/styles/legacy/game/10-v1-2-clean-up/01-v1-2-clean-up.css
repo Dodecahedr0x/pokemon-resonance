@@ -138,11 +138,6 @@
 .scn-tabs button[aria-selected='true'] b {
   color: var(--gold-l);
 }
-#scenList {
-  display: grid;
-  gap: var(--space-sm);
-  align-content: start;
-}
 .scn:not(.on) .scn-art {
   height: 30px;
 }
@@ -158,16 +153,4 @@
 }
 .scn .lvl {
   font-size: 9.5px;
-}
-.pt-syn {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-xs);
-  align-items: center;
-  padding-top: var(--space-sm);
-  border-top: 1px solid rgba(212, 175, 106, 0.12);
-}
-.pt-syn .lnk {
-  font-size: 11.5px;
-  margin-left: auto;
 }

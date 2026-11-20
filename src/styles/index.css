@@ -37,3 +37,6 @@
 @import '../screens/bag/bag-categories.css' layer(screens);
 @import '../screens/bag/bag-counter.css' layer(screens);
 @import '../screens/bag/workshop.css' layer(screens);
+@import '../screens/combat/prep/prep.css' layer(screens);
+@import '../screens/combat/prep/prep-card.css' layer(screens);
+@import '../screens/combat/prep/prep-team.css' layer(screens);

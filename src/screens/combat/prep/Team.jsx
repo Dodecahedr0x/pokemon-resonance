@@ -18,12 +18,18 @@ function Places() {
   const S = synOf(squad);
   return (
     <>
-      <div className="ptc">
+      <div className="prep-team-slots">
         {Array.from({ length: 4 }, (_, i) => {
           const id = squad[i];
           if (!id) {
             return (
-              <button key={i} type="button" className="ptc-m add" data-go="pokedex" aria-label="Ajouter un Pokémon">
+              <button
+                key={i}
+                type="button"
+                className="prep-team-slot is-empty"
+                data-go="pokedex"
+                aria-label="Ajouter un Pokémon"
+              >
                 <i>+</i>
                 <em>Libre</em>
               </button>
@@ -31,7 +37,7 @@ function Places() {
           }
           const m = BY[id];
           return (
-            <div key={i} className="ptc-m">
+            <div key={i} className="prep-team-slot">
               <Html html={medal(m.t, 'sm')} />
               <b>
                 <Html html={m.n} />
@@ -44,7 +50,7 @@ function Places() {
         })}
       </div>
       {S.length ? (
-        <div className="pt-syn">
+        <div className="prep-team-synergies">
           {S.map((x, i) => (
             <span key={i} className="syn-c" title={x.d}>
               {x.t.map((t, j) => (
@@ -71,21 +77,21 @@ function Doctrine({ docSeen }) {
   const k = DOCTRINE_DEFS[PROFILE.doctrineChoice] ? PROFILE.doctrineChoice : '',
     X = DOCTRINE_DEFS[k];
   return (
-    <div className="doctrine-choice" id="doctrine-choice" hidden={hidden}>
+    <div className="prep-doctrine" id="doctrine-choice" hidden={hidden}>
       {docSeen && (
         <>
-          <div className="doctrine-choice-h">
+          <div className="prep-doctrine-head">
             <svg>
               <use href="#i-doctrine" />
             </svg>
             <span className="lbl-s">Doctrine</span>
           </div>
-          <div className="doctrine-choice-c" role="group" aria-label="Doctrine">
+          <div className="prep-doctrine-options" role="group" aria-label="Doctrine">
             {[['', 'Aucune'], ...Object.entries(DOCTRINE_DEFS).map(([x, o]) => [x, o.n])].map(([x, n]) => (
               <button
                 key={x}
                 type="button"
-                className="doctrine-choice-b"
+                className="prep-doctrine-option"
                 data-doctrine-choice={x}
                 aria-pressed={k === x}
               >
@@ -93,7 +99,7 @@ function Doctrine({ docSeen }) {
               </button>
             ))}
           </div>
-          <p className="doctrine-choice-d">
+          <p className="prep-doctrine-text">
             {X ? (
               <>
                 <b>
@@ -115,7 +121,7 @@ function Doctrine({ docSeen }) {
 function Squads() {
   const T = PROFILE.savedTeams || [];
   return (
-    <div className="saved-squads" id="saved-squads-box" hidden={!T.length}>
+    <div className="prep-saved-teams" id="saved-squads-box" hidden={!T.length}>
       {T.length ? (
         <>
           <span className="lbl-s">Mes équipes</span>
@@ -147,19 +153,21 @@ export default function Team({ v }) {
     setDocSeen(true);
   }
   return (
-    <div className="pt" id="ptBox">
-      <div className="pt-h">
+    <div className="prep-team" id="ptBox">
+      <div className="prep-team-head">
         <span className="lbl-s">Votre équipe</span>
-        <b id="ptCount">{on ? `${squad.length} / 4 · ${cost()} / ${BUDGET} PC` : '0 / 4'}</b>
+        <b id="ptCount" className="prep-team-count">
+          {on ? `${squad.length} / 4 · ${cost()} / ${BUDGET} PC` : '0 / 4'}
+        </b>
         <button className="lnk" type="button" data-go="pokedex">
           Modifier
         </button>
       </div>
       {on && <Squads key={'e' + v} />}
-      <div className="pt-list" id="ptList">
+      <div className="prep-team-list" id="ptList">
         {on && <Places key={v} />}
       </div>
-      <div className="champ-why" id="champWhy" hidden={!champ}>
+      <div className="prep-champion-notes" id="champWhy" hidden={!champ}>
         {champWhy && (
           <Fragment key={v}>
             <b>Ce que le Champion a lu</b>
@@ -171,12 +179,12 @@ export default function Team({ v }) {
           </Fragment>
         )}
       </div>
-      <div className="pt-x" hidden>
+      <div className="prep-team-extra" hidden>
         <div id="ptTeamX">{on && <Html key={v} html={teamBtns()} />}</div>
       </div>
       {on && <Doctrine key={'d' + v} docSeen={docSeen || docShown} />}
-      <div className="pt-go">
-        <span id="ptVoix">
+      <div className="prep-launch">
+        <span id="ptVoix" className="prep-launch-summary">
           {on && (
             <Fragment key={v}>
               <b>

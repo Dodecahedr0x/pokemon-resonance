@@ -2,14 +2,9 @@
 html body #combat .sel,
 html body #combat .bt,
 html body #combat .battle,
-html body #combat .pt,
-html body #combat .sel-card {
+html body #combat .pt {
   background: linear-gradient(180deg, var(--v4-p1), var(--v4-p2)) !important;
   border-color: var(--v4-ln) !important;
-}
-html body #combat .sel-tabs [aria-selected='true'] {
-  background: linear-gradient(180deg, var(--v4-gold1), var(--v4-gold2)) !important;
-  color: var(--v4-ink) !important;
 }
 html body #bPanel .bm {
   border-radius: 12px !important;

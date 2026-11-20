@@ -253,30 +253,6 @@
     repeating-linear-gradient(90deg, rgba(212, 175, 106, 0.06) 0 1px, transparent 1px 22px),
     linear-gradient(180deg, #141519, #0b0b0e);
 }
-.champ-why {
-  margin-top: var(--space-md);
-  display: grid;
-  gap: var(--space-xs);
-  padding: var(--space-md);
-  border-radius: var(--r);
-  border: 1px solid transparent;
-  background:
-    radial-gradient(90% 140% at 0% 0%, rgba(229, 72, 77, 0.12), transparent 60%) padding-box,
-    linear-gradient(#0d0e11, #0d0e11) padding-box,
-    linear-gradient(160deg, rgba(229, 72, 77, 0.5), rgba(212, 175, 106, 0.2)) border-box;
-  font-size: 13px;
-  color: var(--tx2);
-}
-.champ-why[hidden] {
-  display: none;
-}
-.champ-why b {
-  font-family: var(--f-d);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--gold-l);
-  font-size: 12.5px;
-}
 .ptm em.ch2 {
   display: flex;
   align-items: center;

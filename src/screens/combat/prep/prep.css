@@ -1,0 +1,277 @@
+/* Battle choice (#cbPrep, CombatPrep.jsx): a framed panel with the battle type tabs on top (#selTabs:
+   Entraînement, Arènes, Ligue, Après), then the battle list (#scenList), the selected battle's card
+   (prep-card.css) and the team box with the launch button (prep-team.css), in one column.
+   Clicks: engine listeners on #selTabs (data-pg), #scenList (data-sc), #bLaunch and data-* buttons. */
+
+.prep-layout {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(88, 186, 255, 0.34);
+  border-radius: 27px;
+  background: linear-gradient(180deg, rgba(17, 44, 78, 0.94), rgba(8, 23, 46, 0.96));
+  box-shadow:
+    0 32px 78px rgba(0, 0, 0, 0.48),
+    inset 0 1px rgba(255, 255, 255, 0.1);
+}
+
+/* ---------- Battle type tabs: icon, name and progress; the open one is a red plate ---------- */
+.prep-tabs {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  border-bottom: 1px solid rgba(126, 211, 224, 0.24);
+  background: rgba(3, 14, 23, 0.65);
+}
+.prep-tabs > button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  min-height: 56px;
+  padding: var(--space-xs) var(--space-sm);
+  overflow: hidden;
+  border: 1px solid rgba(130, 185, 240, 0.2);
+  border-radius: 16px;
+  background: linear-gradient(160deg, rgba(19, 42, 68, 0.95), rgba(8, 20, 36, 0.96));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  color: #c9d9ea;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+.prep-tabs > button:active {
+  transform: scale(0.97);
+}
+/* faint Poké Ball watermark on the right */
+.prep-tabs > button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: -16px;
+  width: 64px;
+  height: 64px;
+  margin-top: -32px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cg fill='none' stroke='%238fd3ff' stroke-opacity='0.14' stroke-width='2.6'%3E%3Ccircle cx='50' cy='50' r='46'/%3E%3Cpath d='M4 50h31M65 50h31'/%3E%3Ccircle cx='50' cy='50' r='15'/%3E%3Ccircle cx='50' cy='50' r='7'/%3E%3C/g%3E%3C/svg%3E")
+    center / contain no-repeat;
+  pointer-events: none;
+}
+.prep-tabs > button svg {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  color: var(--color-text-muted);
+}
+.prep-tabs > button span {
+  display: grid;
+  gap: var(--space-3xs);
+  line-height: 1;
+}
+.prep-tabs b {
+  font-family: var(--font-display);
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.prep-tabs em {
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-style: normal;
+  letter-spacing: 0.08em;
+}
+.prep-tabs > button[aria-selected='true'] {
+  border-color: rgba(255, 180, 180, 0.6);
+  background:
+    radial-gradient(120% 90% at 30% -20%, rgba(255, 255, 255, 0.32), transparent 55%),
+    linear-gradient(165deg, #f0444b, #c0161f 60%, #8e0e16);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.45),
+    0 10px 22px -12px rgba(255, 40, 50, 0.95);
+  color: #fff;
+  animation: pkPop 0.45s cubic-bezier(0.2, 1.5, 0.4, 1) both;
+}
+.prep-tabs > button[aria-selected='true']::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cg fill='none' stroke='%23ffffff' stroke-opacity='0.32' stroke-width='2.6'%3E%3Ccircle cx='50' cy='50' r='46'/%3E%3Cpath d='M4 50h31M65 50h31'/%3E%3Ccircle cx='50' cy='50' r='15'/%3E%3Ccircle cx='50' cy='50' r='7'/%3E%3C/g%3E%3C/svg%3E");
+  animation: pkTourne 9s linear infinite;
+}
+.prep-tabs > button[aria-selected='true'] :is(svg, b, em) {
+  color: #fff;
+}
+.prep-tabs > button[aria-selected='true'] em {
+  opacity: 0.85;
+}
+html.pk-calme .prep-tabs > button::before {
+  animation: none;
+}
+
+/* ---------- Body: list, then card and team ---------- */
+.prep-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-xl);
+  max-width: 100%;
+  padding: var(--space-xl);
+}
+.prep-body > * {
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* ---------- Battle list: one row per battle ---------- */
+.prep-list {
+  display: grid;
+  align-content: start;
+  gap: var(--space-xs);
+  padding: var(--space-sm);
+  border: 1px solid rgba(126, 211, 224, 0.24);
+  border-radius: 19px;
+  background: rgba(4, 17, 27, 0.76);
+}
+/* emblem, name and leader, then lock / next step / rank / level; --ac: the battle's type colour */
+.prep-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-md);
+  min-height: 60px;
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid rgba(103, 211, 255, 0.17);
+  border-radius: 10px;
+  background: rgba(6, 28, 43, 0.8);
+  color: var(--color-text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    transform 0.18s,
+    filter 0.18s,
+    box-shadow 0.18s;
+}
+.prep-row.is-selected {
+  border-color: #ffd45b;
+  background: linear-gradient(100deg, rgba(255, 207, 77, 0.17), rgba(12, 60, 81, 0.8));
+}
+/* gold bar on the left of the selected row */
+.prep-row.is-selected::before {
+  content: '';
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  left: -1px;
+  width: 2px;
+  background: var(--color-accent-soft);
+  box-shadow: 0 0 12px var(--color-accent);
+}
+.prep-row.is-locked {
+  opacity: 0.5;
+}
+.prep-row-text {
+  display: grid;
+  gap: var(--space-3xs);
+  min-width: 0;
+}
+.prep-row-text b {
+  overflow: hidden;
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.prep-row-text em {
+  overflow: hidden;
+  color: var(--color-text-muted);
+  font-size: 12.5px;
+  font-style: normal;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.prep-row.is-selected .prep-row-text em {
+  color: var(--color-accent-soft);
+}
+.prep-row-side {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+.prep-row-side .rk-t {
+  position: static;
+}
+.prep-row-lock,
+.prep-row-won {
+  width: 16px;
+  height: 16px;
+}
+.prep-row-lock {
+  color: var(--color-text-muted);
+}
+.prep-row-won {
+  color: var(--color-accent);
+}
+
+@media (max-width: 999px) {
+  .prep-tabs em,
+  .prep-row .pill {
+    font-size: 11px;
+  }
+}
+@media (max-width: 899px) {
+  .prep-tabs > button {
+    flex-direction: column;
+    gap: var(--space-2xs);
+    min-height: 64px;
+    text-align: center;
+  }
+  .prep-tabs > button span {
+    justify-items: center;
+  }
+  .prep-tabs b {
+    font-size: 11.5px;
+    letter-spacing: 0.1em;
+  }
+}
+@media (max-width: 700px) {
+  /* "Prochaine étape" pill: wraps beside the row instead of overflowing */
+  .prep-row .pill.nx {
+    position: static;
+    max-width: 72px;
+    padding: var(--space-3xs) var(--space-xs);
+    font-size: 10px;
+    line-height: 1.15;
+    text-align: center;
+    white-space: normal;
+    transform: none;
+  }
+}
+@media (max-width: 640px) {
+  /* room above the row for the pill's top edge */
+  .prep-row:has(.pill.nx) {
+    margin-top: var(--space-sm);
+  }
+  .prep-row .pill.nx {
+    z-index: 2;
+    letter-spacing: 0.12em;
+  }
+}
+@media (max-width: 560px) {
+  .prep-tabs {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .prep-tabs > button {
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: var(--space-sm);
+    min-height: 48px;
+    text-align: left;
+  }
+  .prep-tabs > button span {
+    justify-items: start;
+  }
+}

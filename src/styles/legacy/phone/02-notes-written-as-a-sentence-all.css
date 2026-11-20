@@ -71,41 +71,7 @@ p.v4-note {
   }
 
   /* ---------- Battles: the "Launch" bar fits on one line ---------- */
-  html body #cbPrep .pt-go {
-    flex-wrap: nowrap !important;
-    gap: var(--space-sm) !important;
-    padding: var(--space-sm) var(--space-sm) var(--space-sm) var(--space-md) !important;
-  }
-  html body #cbPrep .pt-go #ptVoix {
-    flex: 1;
-    min-width: 0;
-  }
-  html body #cbPrep .pt-go #ptVoix b {
-    font-size: var(--t-s) !important;
-    letter-spacing: 0.06em !important;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  html body #cbPrep .pt-go #ptVoix span {
-    font-size: var(--t-xs) !important;
-  }
-  html body #cbPrep .pt-go #bLaunch {
-    flex: none;
-    height: var(--tap) !important;
-    padding: 0 var(--space-lg) !important;
-  }
   /* "Next step": placed in the right column instead of overlapping the title */
-  html body #cbPrep .srw .pill.nx {
-    position: static !important;
-    transform: none !important;
-    white-space: normal;
-    text-align: center;
-    line-height: 1.15;
-    max-width: 72px;
-    font-size: 10px !important;
-    padding: var(--space-3xs) var(--space-xs) !important;
-  }
 
   /* ---------- Team: tidy search bar ---------- */
 

@@ -41,7 +41,7 @@ function Row({ k, gk }) {
     r = (PROFILE.ranks || {})[k],
     gi = ARENAS.findIndex(a => a.k === k);
   const right = lk ? (
-    <svg className="srw-lk" aria-label="Verrouillé">
+    <svg className="prep-row-lock" aria-label="Verrouillé">
       <use href="#i-lock" />
     </svg>
   ) : k === gk ? (
@@ -51,7 +51,7 @@ function Row({ k, gk }) {
       {r}
     </span>
   ) : won ? (
-    <svg className="srw-ok" aria-label="Réussi">
+    <svg className="prep-row-won" aria-label="Réussi">
       <use href="#i-check" />
     </svg>
   ) : (
@@ -61,13 +61,13 @@ function Row({ k, gk }) {
     <button
       type="button"
       role="option"
-      className={`srw${scSel === k ? ' on' : ''}${lk ? ' locked' : ''}${won ? ' won' : ''}`}
+      className={`prep-row${scSel === k ? ' is-selected' : ''}${lk ? ' is-locked' : ''}${won ? ' is-won' : ''}`}
       data-sc={k}
       aria-selected={scSel === k}
       style={{ '--ac': s.at ? tc(s.at) : '#E3350D' }}
     >
       <Html html={emblem(k, 'sm' + (gi >= 0 && !won ? ' dim' : ''))} />
-      <span className="srw-t">
+      <span className="prep-row-text">
         <b>
           <Html html={k === 'champ' ? FINALE_N : s.n} />
         </b>
@@ -75,7 +75,7 @@ function Row({ k, gk }) {
           <Html html={L ? L.n : s.tuto ? 'Combat guidé · 7 étapes' : s.lvl || ''} />
         </em>
       </span>
-      <span className="srw-r">{right}</span>
+      <span className="prep-row-side">{right}</span>
     </button>
   );
 }

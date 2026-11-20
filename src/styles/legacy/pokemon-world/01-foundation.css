@@ -156,10 +156,6 @@ html:not(#pkz) body:not(#pkz) #tip-card.pk-dlg > div > b {
   color: #1d4ea8 !important;
 }
 /* the champion's line before the battle */
-html:not(#pkz) body:not(#pkz) .sel-card .dlgbox.pk-dlg {
-  padding: var(--space-md) var(--space-3xl) var(--space-md) var(--space-md) !important;
-  margin: var(--space-xs) var(--space-3xs);
-}
 /* introduction */
 html:not(#pkz) body:not(#pkz) .intro .dlgbox.pk-dlg {
   padding: var(--space-xl) var(--space-xl) var(--space-xl) !important;

@@ -9,24 +9,6 @@
   box-shadow: 0 28px 65px rgba(0, 0, 0, 0.34) !important;
   overflow: hidden;
 }
-#combat .sel-tabs {
-  padding: var(--space-md) !important;
-  background: rgba(3, 13, 21, 0.48) !important;
-  border-bottom: 1px solid rgba(130, 213, 225, 0.15);
-}
-#combat .sel-tabs button {
-  border-radius: 12px !important;
-}
-#combat .sel-body {
-  gap: var(--space-lg) !important;
-  padding: var(--space-lg) !important;
-}
-#combat .sel-list {
-  border: 1px solid rgba(130, 213, 225, 0.17) !important;
-  border-radius: 17px !important;
-  background: rgba(4, 16, 25, 0.58) !important;
-}
-#combat .sel-card,
 #combat .pt {
   border: 1px solid rgba(130, 213, 225, 0.18) !important;
   border-radius: 18px !important;

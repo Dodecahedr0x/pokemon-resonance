@@ -122,8 +122,7 @@ body {
 }
 .lnk,
 .seg button,
-.gd-t,
-.sel-tabs button {
+.gd-t {
   transition:
     transform 0.2s,
     box-shadow 0.2s,
@@ -160,7 +159,6 @@ body {
 .champ,
 .tcard,
 .qk,
-.sel-card,
 .pt,
 .battle,
 .dex,

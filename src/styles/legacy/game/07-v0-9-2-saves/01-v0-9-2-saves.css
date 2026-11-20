@@ -108,9 +108,6 @@ button.nv {
   flex-wrap: wrap;
   justify-content: flex-end;
 }
-#cbPrep .resume {
-  margin: 0 0 var(--space-lg);
-}
 @media (max-width: 560px) {
   .resume {
     grid-template-columns: auto minmax(0, 1fr);

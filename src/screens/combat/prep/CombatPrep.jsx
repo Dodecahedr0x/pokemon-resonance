@@ -21,7 +21,7 @@ function BattlePrep() {
   const on = v > 0 && !!SCEN[scSel];
   const G = on ? (PREPG && PREPG.sc === scSel ? PREPG.g : groupOf(scSel)) : null;
   return (
-    <div id="cbPrep">
+    <div id="cbPrep" className="prep-page">
       <div className="ph ph-sm">
         <p className="kick">Combats</p>
         <h1 className="h1" id="h-cb">
@@ -33,16 +33,16 @@ function BattlePrep() {
       </div>
       <Tip t="combat" />
       <SummaryBox id="resumePrep" />
-      <div className="sel">
-        <div className="sel-tabs" id="selTabs" role="tablist" aria-label="Type de combat">
+      <div className="prep-layout">
+        <div className="prep-tabs" id="selTabs" role="tablist" aria-label="Type de combat">
           {on && <SelTabs key={v} G={G} />}
         </div>
-        <div className="sel-body">
-          <div className="sel-list" id="scenList" role="listbox" aria-label="Combats">
+        <div className="prep-body">
+          <div className="prep-list" id="scenList" role="listbox" aria-label="Combats">
             {on && <SelList key={v} G={G} gk={nextGoal()[0]} />}
           </div>
-          <div className="sel-det">
-            <div className="sel-card" id="selDet" aria-live="polite">
+          <div className="prep-side">
+            <div className="prep-card" id="selDet" aria-live="polite">
               {on && <Detail key={v} k={scSel} />}
             </div>
             <Team v={on ? v : 0} />

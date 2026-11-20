@@ -165,65 +165,6 @@ html body #bSvg .tok.deploy-phase-s .tok-halo {
 }
 
 /* doctrines */
-.doctrine-choice {
-  margin: var(--space-sm) 0;
-  padding: var(--space-sm) var(--space-md);
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.035);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-}
-.doctrine-choice[hidden] {
-  display: none;
-}
-.doctrine-choice-h {
-  display: flex;
-  align-items: center;
-  gap: var(--space-xs);
-  margin-bottom: var(--space-sm);
-}
-.doctrine-choice-h svg {
-  width: 16px;
-  height: 16px;
-  color: #ffd45b;
-}
-.doctrine-choice-c {
-  display: flex;
-  gap: var(--space-xs);
-  overflow-x: auto;
-  scrollbar-width: none;
-  padding-bottom: var(--space-3xs);
-}
-.doctrine-choice-c::-webkit-scrollbar {
-  display: none;
-}
-.doctrine-choice-b {
-  flex: none;
-  height: 32px;
-  padding: 0 var(--space-md);
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  background: rgba(0, 0, 0, 0.25);
-  color: inherit;
-  font: inherit;
-  font-size: 12.5px;
-  cursor: pointer;
-}
-.doctrine-choice-b[aria-pressed='true'] {
-  background: linear-gradient(145deg, #ffd45b, #e59a1f);
-  color: #241500;
-  border-color: transparent;
-  font-weight: 700;
-}
-.doctrine-choice-d {
-  margin: var(--space-sm) 0 0;
-  font-size: 12.5px;
-  line-height: 1.45;
-  color: #b9cad6;
-}
-.doctrine-choice-d b {
-  color: #eaf2f8;
-  font-weight: 600;
-}
 .chip-doctrine-choice svg {
   width: 12px;
   height: 12px;

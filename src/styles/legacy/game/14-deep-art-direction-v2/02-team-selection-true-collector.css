@@ -4,30 +4,6 @@
   overflow: hidden !important;
   border-radius: 19px !important;
 }
-#combat .sel-tabs {
-  background: rgba(2, 16, 28, 0.55) !important;
-  border-bottom: 1px solid rgba(105, 214, 255, 0.2) !important;
-  padding: var(--space-sm) !important;
-}
-#combat .sel-tabs button {
-  border-radius: 8px !important;
-}
-#combat .sel-body {
-  gap: var(--space-md) !important;
-  padding: var(--space-md) !important;
-}
-#combat .sel-list {
-  gap: var(--space-xs) !important;
-}
-#combat .sel-list [role='option'] {
-  border-radius: 10px !important;
-  background: rgba(6, 28, 43, 0.8) !important;
-  border: 1px solid rgba(103, 211, 255, 0.17) !important;
-}
-#combat .sel-list [aria-selected='true'] {
-  border-color: #ffd45b !important;
-  background: linear-gradient(100deg, rgba(255, 207, 77, 0.17), rgba(12, 60, 81, 0.8)) !important;
-}
 #combat .bt {
   background: linear-gradient(180deg, rgba(6, 30, 45, 0.7), rgba(3, 17, 29, 0.95)) !important;
   border: 1px solid rgba(102, 214, 255, 0.24) !important;
@@ -188,9 +164,6 @@ hr {
   }
   #combat .board {
     min-height: 230px !important;
-  }
-  #combat .sel-body {
-    padding: var(--space-sm) !important;
   }
   #types .gd-tabs {
     overflow-x: auto !important;

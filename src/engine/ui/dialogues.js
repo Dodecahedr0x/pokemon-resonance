@@ -54,7 +54,7 @@ const playSound = k => {
 };
 
 const TAB_LIST =
-  '.v4-tabs>button,.v4-reg>button,.gd-tabs>button,.bag-categories>button,.v4-seg>button,.scn-tabs>button,.team-sheet-stages>.team-sheet-stage,.sel-tabs>button';
+  '.v4-tabs>button,.v4-reg>button,.gd-tabs>button,.bag-categories>button,.v4-seg>button,.scn-tabs>button,.team-sheet-stages>.team-sheet-stage,.prep-tabs>button';
 
 /* Shop counter and pocket bag: rendered by React (src/screens/bag/Counter.jsx) */
 
@@ -67,7 +67,7 @@ const DLG = [
   ['.tip .dlgbox', e => e, true],
   ['.v4h-prof > p', e => e, false],
   ['.intro .dlgbox', e => e, true],
-  ['.sel-card .dlgbox', e => e, true],
+  ['.prep-card .dlgbox', e => e, true],
   ['.bag-counter-dialogue', e => e, true],
 ];
 

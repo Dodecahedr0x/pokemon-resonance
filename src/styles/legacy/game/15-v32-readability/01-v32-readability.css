@@ -87,9 +87,7 @@ html body #resonance-launch .rl-meta strong {
   html body #accueil .hh-chips span,
   html body .hh-chips span,
   html body .srw-lv,
-  html body .pill,
-  html body #ptVoix span,
-  html body .ptc-m em,
+  html body .pill:not(.prep-row .pill),
   html body .tod button,
   html body #todBtns button,
   html body .it-skip,
@@ -103,8 +101,6 @@ html body #resonance-launch .rl-meta strong {
   html body dt,
   html body .tc-k span,
   html body #accueil .tc-k span,
-  html body .sel-tabs em,
-  html body #combat .sel-tabs em,
   html body .chip {
     font-size: 11px !important;
   }
@@ -166,17 +162,6 @@ html body #resonance-launch .rl-meta strong {
   }
   /* Battles: "Prochaine étape" (Next step) becomes a tab placed on the card,
      the battle name gets the whole line back */
-  html body #combat .srw .pill.nx {
-    position: absolute !important;
-    top: -9px !important;
-    right: 12px !important;
-    z-index: 2 !important;
-    padding: var(--space-3xs) var(--space-sm) !important;
-    letter-spacing: 0.12em !important;
-  }
-  html body #combat .srw:has(.pill.nx) {
-    margin-top: var(--space-sm) !important;
-  }
   /* board: readable Pokémon names and markers */
   html body #bSvg .tok-nm {
     font-size: 8px !important;

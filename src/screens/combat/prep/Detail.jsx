@@ -45,7 +45,7 @@ export default function Detail({ k }) {
     r = (PROFILE.ranks || {})[k],
     st = styleOf(k);
   const blocks = [
-    <div key="h" className="sx-h" style={{ '--ac': s.at ? tc(s.at) : '#E3350D' }}>
+    <div key="h" className="prep-card-head" style={{ '--ac': s.at ? tc(s.at) : '#E3350D' }}>
       <Html html={emblem(k, 'lg')} />
       <div>
         <p className="kick">
@@ -57,7 +57,7 @@ export default function Detail({ k }) {
           <Html html={k === 'champ' ? 'Finale de la Ligue' : s.n} />
         </h2>
         {L && (
-          <p className="sx-who">
+          <p className="prep-card-leader">
             <b>
               <Html html={L.n} />
             </b>
@@ -74,29 +74,29 @@ export default function Detail({ k }) {
       </div>
     ),
     gi >= 0 && (
-      <p key="r" className="sx-rule">
+      <p key="r" className="prep-card-rule">
         <b>Règle de l’arène</b>
         <Html html={GYMS[gi].r} />
       </p>
     ),
     st && (
-      <p key="s" className="sx-rule">
+      <p key="s" className="prep-card-rule">
         <b>
           <Html html={'Style · ' + st.n} />
         </b>
         <Html html={st.d} />
       </p>
     ),
-    <p key="d" className="sx-d">
+    <p key="d" className="prep-card-text">
       <Html html={s.d} />
     </p>,
     <div key="c" className="hh-chips">
       <Html html={goalChips(s)} />
       {s.catch ? <span>Capture possible</span> : null}
     </div>,
-    <div key="f" className="sx-foes">
+    <div key="f" className="prep-card-foes">
       {s.foes.map(([f], i) => (
-        <span key={i} className="sx-f">
+        <span key={i} className="prep-card-foe">
           <Html html={medal(BY[f].t, 'sm')} />
           <em>
             <Html html={BY[f].n} />
@@ -105,7 +105,7 @@ export default function Detail({ k }) {
       ))}
     </div>,
     lk && (
-      <p key="l" className="sx-lock">
+      <p key="l" className="prep-card-lock">
         <svg>
           <use href="#i-lock" />
         </svg>

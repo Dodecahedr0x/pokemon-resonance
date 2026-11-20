@@ -6,20 +6,11 @@
   background: linear-gradient(145deg, rgba(9, 35, 55, 0.98), rgba(4, 18, 31, 0.99)) !important;
   box-shadow: 0 22px 48px rgba(0, 0, 0, 0.28) !important;
 }
-#combat .sel-tabs {
-  background: rgba(3, 17, 29, 0.8) !important;
-  border-bottom: 1px solid rgba(108, 216, 248, 0.18) !important;
-}
-#combat .sel-tabs [aria-selected='true'],
 #combat .gd-t[aria-selected='true'] {
   background: linear-gradient(180deg, #ffe778, #f2b72e) !important;
   color: #10263a !important;
   border-color: rgba(255, 243, 174, 0.8) !important;
   box-shadow: 0 6px 20px rgba(255, 196, 46, 0.16) !important;
-}
-#combat .sel-card {
-  border: 1px solid rgba(108, 216, 248, 0.28) !important;
-  border-radius: 18px !important;
 }
 #combat .battle {
   border: 1px solid rgba(104, 216, 248, 0.3) !important;

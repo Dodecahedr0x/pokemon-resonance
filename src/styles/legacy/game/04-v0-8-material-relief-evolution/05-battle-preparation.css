@@ -51,9 +51,6 @@
 .ptm em.st {
   color: var(--mut);
 }
-.pt-h b {
-  font-variant-numeric: tabular-nums;
-}
 .howto .hn {
   background: linear-gradient(180deg, #f6dda4, #c9a05a);
   color: #1a1307;

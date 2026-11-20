@@ -274,7 +274,6 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .hm-hero *,
-  .sel-card,
   .tip,
   .intro,
   .it-card,

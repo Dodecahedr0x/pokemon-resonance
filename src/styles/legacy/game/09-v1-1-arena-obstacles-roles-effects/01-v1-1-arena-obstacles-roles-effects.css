@@ -293,12 +293,6 @@
   gap: var(--space-xs);
   flex-wrap: wrap;
 }
-.pt-x {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-sm);
-  align-items: stretch;
-}
 .pcs .pt-role {
   display: inline-flex;
   vertical-align: -3px;
