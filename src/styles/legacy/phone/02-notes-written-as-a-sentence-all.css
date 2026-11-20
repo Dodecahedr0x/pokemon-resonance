@@ -107,22 +107,8 @@ p.v4-note {
   }
 
   /* ---------- section headers: the hint goes under the title instead of squeezing it ---------- */
-  html body .v4-sec-h {
-    flex-wrap: wrap;
-    row-gap: var(--space-2xs);
-  }
-  html body .v4-sec-h > span {
-    flex-basis: 100%;
-    margin-left: 0;
-    font-size: var(--t-s);
-    line-height: 1.4;
-  }
 
   /* ---------- Map: time-of-day switch and Pokédex buttons reach a tappable height ---------- */
-  html body .tod button {
-    min-height: 40px;
-    padding-inline: var(--space-md) !important;
-  }
   /* Pokédex filters: the two lists fill their row */
 
   /* ---------- Guide: "Getting started" steps use the full card width ----------

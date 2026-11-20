@@ -1,0 +1,167 @@
+/* The drawing of the route (Route.jsx, #routeSvg): sky, sun and moon, clouds, mountains, hills, forest, field,
+   path and tall grass, coloured by the time of day (data-time on #route: matin, jour, nuit). The drawing does
+   not move, except the grass that rustles under the pointer. */
+
+.route-scene {
+  --route-sky-top: #4c8fe6;
+  --route-sky-middle: #8ec1f2;
+  --route-sky-bottom: #dceffb;
+  --route-sun: #fff3c4;
+  --route-mountain: #7e95ba;
+  --route-snow: #f4f7fb;
+  --route-hill: #5a9852;
+  --route-tree: #3e7c44;
+  --route-tree-light: #5fa25c;
+  --route-trunk: #5b4330;
+  --route-field: #6caa4c;
+  --route-path: #e3cd9c;
+  --route-grass-light: #5a9e3e;
+  --route-grass-dark: #468839;
+}
+.route-scene[data-time='matin'] {
+  --route-sky-top: #f2a77f;
+  --route-sky-middle: #f7cfa6;
+  --route-sky-bottom: #d6e6f0;
+  --route-sun: #ffd48a;
+  --route-mountain: #9a8fb3;
+  --route-snow: #fbefe6;
+  --route-hill: #4e7c55;
+  --route-tree: #3d6a47;
+  --route-tree-light: #5a8c5e;
+  --route-field: #5e8f4a;
+  --route-path: #dcc59c;
+  --route-grass-light: #4f8a3c;
+  --route-grass-dark: #3f7531;
+}
+.route-scene[data-time='nuit'] {
+  --route-sky-top: #060a18;
+  --route-sky-middle: #121a38;
+  --route-sky-bottom: #2b2f57;
+  --route-sun: #e9e6ff;
+  --route-mountain: #232b4a;
+  --route-snow: #9ba3c6;
+  --route-hill: #182c29;
+  --route-tree: #12251e;
+  --route-tree-light: #1c3a2c;
+  --route-trunk: #2a2230;
+  --route-field: #1b3423;
+  --route-path: #4a4a62;
+  --route-grass-light: #24452c;
+  --route-grass-dark: #1a3622;
+}
+
+.route-drawing {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 11px;
+  filter: saturate(0.62) brightness(0.78) contrast(1.12) sepia(0.12);
+}
+/* the colours fade when the time of day changes */
+.route-drawing * {
+  transition:
+    fill 1.2s ease,
+    stop-color 1.2s ease,
+    opacity 1.2s ease;
+}
+
+.route-stars circle {
+  fill: #fff;
+  opacity: 0;
+}
+.route-scene[data-time='nuit'] .route-stars circle {
+  opacity: 0.85;
+}
+.route-sun {
+  fill: var(--route-sun);
+}
+/* the moon is a disc of sky colour that turns the sun into a crescent */
+.route-moon {
+  fill: var(--route-sky-top);
+  opacity: 0;
+}
+.route-scene[data-time='nuit'] .route-moon {
+  opacity: 1;
+}
+.route-cloud {
+  fill: #fff;
+  opacity: 0.85;
+}
+.route-scene[data-time='matin'] .route-cloud {
+  fill: #ffe9da;
+}
+.route-scene[data-time='nuit'] .route-cloud {
+  fill: #3a4170;
+  opacity: 0.55;
+}
+
+.route-mountains {
+  fill: var(--route-mountain);
+}
+.route-snow {
+  fill: var(--route-snow);
+  opacity: 0.9;
+}
+.route-hills {
+  fill: var(--route-hill);
+}
+.route-forest circle {
+  fill: var(--route-tree);
+}
+.route-forest .route-tree-light {
+  fill: var(--route-tree-light);
+  opacity: 0.55;
+}
+.route-forest .route-trunk {
+  fill: var(--route-trunk);
+}
+.route-field {
+  fill: var(--route-field);
+}
+.route-path {
+  fill: var(--route-path);
+  opacity: 0.85;
+}
+.route-grass-light {
+  fill: var(--route-grass-light);
+}
+.route-grass-dark {
+  fill: var(--route-grass-dark);
+}
+
+/* the tall grass that starts an encounter: it shakes while pointed at or focused */
+.route-rustle {
+  outline: none;
+  cursor: pointer;
+}
+.route-rustle-tufts {
+  transform-origin: 50% 100%;
+  transform-box: fill-box;
+}
+.route-rustle:is(:hover, :focus-visible) .route-rustle-tufts {
+  animation: route-rustle 0.8s ease-in-out infinite;
+}
+@keyframes route-rustle {
+  0%,
+  58%,
+  100% {
+    transform: none;
+  }
+  62% {
+    transform: skewX(9deg);
+  }
+  66% {
+    transform: skewX(-9deg);
+  }
+  70% {
+    transform: skewX(7deg);
+  }
+  74% {
+    transform: skewX(-5deg);
+  }
+  78% {
+    transform: none;
+  }
+}

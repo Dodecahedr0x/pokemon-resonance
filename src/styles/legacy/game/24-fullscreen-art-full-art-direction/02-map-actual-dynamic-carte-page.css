@@ -1,11 +1,4 @@
 /* MAP — actual dynamic #carte page */
-#carte .v4-wild {
-  border: 1px solid rgba(91, 196, 147, 0.27) !important;
-  border-radius: 24px !important;
-  background: linear-gradient(110deg, rgba(18, 70, 56, 0.46), rgba(7, 25, 31, 0.94)) !important;
-  box-shadow: 0 22px 55px rgba(0, 0, 0, 0.3) !important;
-  padding: var(--space-xl) !important;
-}
 /* BATTLE: tactical command chamber */
 #combat .sel {
   border: 1px solid rgba(124, 220, 230, 0.3) !important;

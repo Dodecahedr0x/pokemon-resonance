@@ -27,11 +27,6 @@
 
 /* no permanent animation that forces a whole SVG to repaint */
 .cr-spin,
-.sc-stars circle,
-.sc-cloud,
-.sway,
-.sc-fire circle,
-.route[data-time='nuit'] .sc-fire circle,
 .ember,
 .mk-edge,
 .hx.lava,
@@ -45,17 +40,7 @@
 .energy-pips i.is-filled {
   animation: none !important;
 }
-.sc-rustle .rs {
-  animation: none;
-}
-.sc-rustle:hover .rs,
-.sc-rustle:focus-visible .rs {
-  animation: rustle 0.8s ease-in-out infinite;
-}
 .hp.hseg i::after {
-  display: none;
-}
-.sc-alert {
   display: none;
 }
 /* no more filters in the board: halos drawn with a wide stroke */
@@ -130,62 +115,6 @@
     0 0 0 1px rgba(255, 241, 199, 0.7),
     0 0 9px rgba(240, 190, 90, 0.9);
 }
-/* route "!" bubble: HTML element animated by the compositor */
-.rt-alert {
-  position: absolute;
-  z-index: 3;
-  left: 72%;
-  top: 58%;
-  width: 34px;
-  height: 38px;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  background: none;
-  cursor: pointer;
-  transform: translate(-50%, -100%);
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-.rt-alert.on {
-  opacity: 1;
-}
-.rt-alert span {
-  display: grid;
-  place-items: center;
-  width: 100%;
-  height: 100%;
-  border-radius: 6px;
-  font-family: var(--f-d);
-  font-weight: 900;
-  font-size: 22px;
-  line-height: 1;
-  color: #fff3d0;
-  background: linear-gradient(180deg, #1a1b20, #0b0b0e);
-  border: 1.5px solid #e9c97e;
-  box-shadow:
-    0 0 14px rgba(240, 200, 110, 0.55),
-    0 8px 16px -6px #000;
-  animation: rtb 1.4s ease-in-out infinite;
-  will-change: transform;
-}
-.rt-alert::after {
-  content: '';
-  position: absolute;
-  left: -30px;
-  right: -30px;
-  top: -8px;
-  bottom: -60px;
-}
-.rt-alert:focus-visible span {
-  outline: 2px solid #fff3d0;
-  outline-offset: 2px;
-}
-@keyframes rtb {
-  50% {
-    transform: translateY(-6px);
-  }
-}
 /* ---------- battle on phone ---------- */
 @media (max-width: 700px) {
   .board.vert {
@@ -235,11 +164,6 @@
   }
   .blog {
     max-height: 220px;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .rt-alert span {
-    animation: none;
   }
 }
 html,

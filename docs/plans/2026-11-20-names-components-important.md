@@ -109,4 +109,15 @@ Each step is one commit (or a few), on its own, playable at every point.
   disappear with the old names: the global sidebar rule `.side` hid the branch routes (`rt side`) below desktop
   width, and the text rule `.d` greyed the east scroll arrow; both now look like their desktop / west twin.
   Still shared in legacy: the state pill `.v4-pill` (Quests), the rank badge `.rk-t`, the tab skin (now listing
-  `.map-regions`). Part B (the « hautes herbes » section, Route.jsx, captures) is next.
+  `.map-regions`).
+- 2 Map, part B (« hautes herbes »): done. `src/screens/map/map-wild.css` (section, header, the route's frame,
+  rare-encounter banner, « ! » alert, sign, time-of-day buttons, dialogue box, captured families) and
+  `map-route-scene.css` (the drawing, coloured by `--route-*` properties per time of day). `Route.jsx` moved from
+  `home/` to `map/`; its classes are `.route-scene` (`is-shaking`), `.route-alert` (`is-shown`), `.route-overlay`,
+  `.route-sign`, `.route-time`, `.route-dialogue`, `.route-stars`, `.route-mountains`… and the captures are
+  `.map-captures-*` (`is-caught`). Ids the engine reads (`#route`, `#routeSvg`, `#rtAlert`, `#todBtns`, `#dlgTxt`,
+  `#rustle`) stay. The drawing lost parts that never showed: the fireflies (always transparent), the SVG « ! » (hidden
+  since the HTML alert replaced it) and the animation delays of the stars, clouds and grass, whose animations the
+  performance rules had switched off. Also never visible, and deleted: the season tints of the route (beaten by an
+  `!important` shadow) and the `.scene` rules (no such element). The dialogue box loses its background blur, which a
+  global performance rule already removed everywhere else. ~950 legacy lines and 28 `!important` gone.

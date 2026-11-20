@@ -38,14 +38,4 @@ body {
   }
 }
 /* MAP — regional atlas, cartographic panel */
-#carte .v4-wild {
-  margin-top: var(--space-2xl);
-  padding: var(--space-lg);
-  border-radius: 22px;
-  border: 1px solid rgba(123, 208, 222, 0.18);
-  background: linear-gradient(110deg, rgba(20, 59, 55, 0.45), rgba(8, 25, 32, 0.8));
-}
-#carte .v4-sec-h {
-  color: #c7e8df !important;
-}
 /* TEAM / POKÉDEX — collector's-Pokédex-style selection screen */

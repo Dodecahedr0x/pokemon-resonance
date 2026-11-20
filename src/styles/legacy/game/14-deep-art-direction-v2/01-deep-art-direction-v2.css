@@ -163,18 +163,3 @@ body {
   border: 1px solid rgba(108, 218, 255, 0.18) !important;
   padding: var(--space-sm) !important;
 }
-.rt-sign {
-  background: rgba(4, 25, 39, 0.85) !important;
-  border: 1px solid rgba(255, 213, 85, 0.45) !important;
-  border-radius: 7px !important;
-  color: #ffe17b !important;
-}
-.dlg {
-  background: rgba(3, 20, 33, 0.83) !important;
-  border: 1px solid rgba(106, 218, 255, 0.24) !important;
-  border-radius: 11px !important;
-  backdrop-filter: blur(12px) !important;
-}
-.dlg p {
-  color: #e8f5ff !important;
-}

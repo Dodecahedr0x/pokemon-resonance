@@ -56,18 +56,3 @@ body {
 /* TEAM / DEX — collection cards with frame and depth */
 
 /* MAP — route actually moved into #carte by buildMap() */
-#carte .v4-wild {
-  border: 1px solid rgba(103, 211, 160, 0.35) !important;
-  border-radius: 24px !important;
-  background: linear-gradient(115deg, rgba(18, 74, 56, 0.42), rgba(6, 22, 29, 0.97)) !important;
-  box-shadow: 0 22px 52px rgba(0, 0, 0, 0.35) !important;
-}
-#carte .route {
-  border: 1px solid rgba(131, 221, 230, 0.32) !important;
-  border-radius: 24px !important;
-  box-shadow: 0 28px 65px rgba(0, 0, 0, 0.42) !important;
-  overflow: hidden !important;
-}
-#carte .route .rt-ui {
-  filter: drop-shadow(0 5px 12px rgba(0, 0, 0, 0.4));
-}

@@ -105,9 +105,9 @@ export function encounter() {
   __set_wildDominant(rollDominant(pick.id)); // Dominant Pokémon (v4.16)
   __set_wildShiny(Math.random() < SHINY_RATE * multChroma()); // rare: a shiny Pokémon (×2 on Shiny Weekend, v4.11)
   const path = evoPath(pick.id);
-  $('#route').classList.remove('shake');
+  $('#route').classList.remove('is-shaking');
   void $('#route').offsetWidth;
-  $('#route').classList.add('shake');
+  $('#route').classList.add('is-shaking');
   setTimeout(
     () => {
       // encounter sheet (#enc): rendered by React (src/screens/overlays/Enc.jsx)
@@ -154,7 +154,7 @@ export function placeAlert() {
   }
   al.style.left = (sp.x - r.left).toFixed(0) + 'px';
   al.style.top = (sp.y - r.top).toFixed(0) + 'px';
-  al.classList.add('on');
+  al.classList.add('is-shown');
 }
 
 const TODTXT = {

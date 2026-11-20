@@ -4,7 +4,7 @@ import MapInfo from './MapInfo.jsx';
 import MapList from './MapList.jsx';
 import EvBar from './EvBar.jsx';
 import Captures from './Captures.jsx';
-import Route from '../home/Route.jsx';
+import Route from './Route.jsx';
 import { V4 } from '../../engine/ui/screen-state.js';
 import { routeName } from '../../engine/world/johto.js';
 
@@ -102,17 +102,15 @@ function Content({ drawn, marksSel }) {
         </aside>
       </div>
       {'\n '}
-      <section className="v4-wild">
-        <header className="v4-sec-h">
+      <section className="map-wild">
+        <header className="map-wild-header">
           <svg>
             <use href="#i-grass" />
           </svg>
           <b>{drawn ? `${routeName()} · hautes herbes` : 'Route 29 · hautes herbes'}</b>
           <span>Touchez « ! » quand l’herbe bouge</span>
         </header>
-        <div className="v4-route-slot">
-          <Route />
-        </div>
+        <Route />
         {drawn && <Captures />}
       </section>
     </>

@@ -206,25 +206,6 @@ html body .logo b {
   text-align: center;
   color: var(--v4-mut);
 }
-.v4-sec-h {
-  display: flex;
-  align-items: center;
-  gap: var(--space-sm);
-  margin: var(--space-xl) 0 var(--space-sm);
-}
-.v4-sec-h svg {
-  width: 20px;
-  height: 20px;
-  color: #7fd36b;
-}
-.v4-sec-h b {
-  font: 800 17px/1.1 var(--f-d);
-}
-.v4-sec-h span {
-  margin-left: auto;
-  color: var(--v4-mut);
-  font-size: 13px;
-}
 .v4-rw,
 .v4-rew {
   display: flex;

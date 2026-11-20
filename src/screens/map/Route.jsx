@@ -1,19 +1,18 @@
 import { memo, useEffect } from 'react';
 import { placeAlert } from '../../engine/world/home-route.js';
-import { useRoute } from './homeStore.js';
+import { useRoute } from '../home/homeStore.js';
 
-// Route 29 (#route), mounted under the map (Map page, .v4-route-slot): tall grass backdrop, « ! » alert, time of day.
-// The backdrop is fixed (formerly buildRoute): its animations (grass, clouds, stars,
-// fireflies) are in CSS, nothing is redrawn frame by frame. The engine keeps:
+// Route 29 (#route), in the Map's « hautes herbes » section: tall grass scene, « ! » alert, time of day.
+// The drawing is fixed (styles in map-route-scene.css); only the grass under the pointer moves. The engine keeps:
 // - the delegated listeners (#rustle, #rtAlert, #todBtns);
-// - placeAlert(), which places #rtAlert (style left/top, « on » class);
-// - the « shake » class of #route on each encounter;
+// - placeAlert(), which places #rtAlert (style left/top, « is-shown » class);
+// - the « is-shaking » class of #route on each encounter;
 // - the text written letter by letter in #dlgTxt (never rendered with children here);
-// The rest (data-time, data-saison, pressed buttons, #routeRates banner, route name)
+// The rest (data-time, data-saison, pressed buttons, #route-rates banner, route name)
 // is pushed by the engine into the store (setRoute).
 
 const W = 1200;
-const TODB = [
+const TIMES_OF_DAY = [
   ['matin', 'Matin'],
   ['jour', 'Jour'],
   ['nuit', 'Nuit'],
@@ -26,7 +25,6 @@ const STARS = Array.from({ length: 60 }, (_, i) => ({
   cx: ((i * 137.5) % W).toFixed(0),
   cy: ((i * 41.3) % 100).toFixed(0),
   r: i % 5 === 0 ? 1.4 : 0.8,
-  d: `${(i % 9) * 0.45}s`,
 }));
 
 const CLOUDS = [
@@ -48,6 +46,8 @@ const TREES = Array.from({ length: 42 }, (_, i) => {
   return { x, y, r };
 });
 
+const LIGHT = 'route-grass-light',
+  DARK = 'route-grass-dark';
 const GRASS = [];
 for (let row = 0; row < 2; row++) {
   const y = 196 + row * 22,
@@ -59,30 +59,21 @@ for (let row = 0; row < 2; row++) {
     if (x > 760 && x < 960) {
       continue;
     }
-    GRASS.push({
-      d: `${((((x * 7 + row * 13) % 30) + 30) % 30) / 10}s`,
-      path: tuftD(x, y, s),
-      c: row % 2 ? 'g2' : 'g1',
-    });
+    GRASS.push({ path: tuftD(x, y, s), shade: row % 2 ? DARK : LIGHT });
   }
 }
 
 const RUSTLE = [
-  ...Array.from({ length: 8 }, (_, i) => [tuftD(762 + i * 24, 206, 1.25), i % 2 ? 'g2' : 'g1']),
-  ...Array.from({ length: 7 }, (_, i) => [tuftD(774 + i * 25, 222, 1.4), i % 2 ? 'g1' : 'g2']),
+  ...Array.from({ length: 8 }, (_, i) => [tuftD(762 + i * 24, 206, 1.25), i % 2 ? DARK : LIGHT]),
+  ...Array.from({ length: 7 }, (_, i) => [tuftD(774 + i * 25, 222, 1.4), i % 2 ? LIGHT : DARK]),
 ];
-
-const FIRE = Array.from({ length: 16 }, (_, i) => ({
-  cx: (i * 71) % W,
-  cy: 150 + ((i * 37) % 60),
-  d: `${(i % 7) * 0.7}s`,
-}));
 
 // Fixed backdrop: never redrawn (the engine has attached its listeners to #rustle).
 const RouteSvg = memo(function RouteSvg() {
   return (
     <svg
       id="routeSvg"
+      className="route-drawing"
       viewBox="0 0 1200 220"
       preserveAspectRatio="xMidYMax slice"
       role="img"
@@ -90,30 +81,30 @@ const RouteSvg = memo(function RouteSvg() {
     >
       <defs>
         <linearGradient id="rSky" x1={0} y1={0} x2={0} y2={1}>
-          <stop offset="0" style={{ stopColor: 'var(--sk1)' }} />
-          <stop offset=".7" style={{ stopColor: 'var(--sk2)' }} />
-          <stop offset="1" style={{ stopColor: 'var(--sk3)' }} />
+          <stop offset="0" style={{ stopColor: 'var(--route-sky-top)' }} />
+          <stop offset=".7" style={{ stopColor: 'var(--route-sky-middle)' }} />
+          <stop offset="1" style={{ stopColor: 'var(--route-sky-bottom)' }} />
         </linearGradient>
         <radialGradient id="rSun">
-          <stop offset="0" style={{ stopColor: 'var(--sun)', stopOpacity: 1 }} />
-          <stop offset="1" style={{ stopColor: 'var(--sun)', stopOpacity: 0 }} />
+          <stop offset="0" style={{ stopColor: 'var(--route-sun)', stopOpacity: 1 }} />
+          <stop offset="1" style={{ stopColor: 'var(--route-sun)', stopOpacity: 0 }} />
         </radialGradient>
       </defs>
       <rect width={W} height={220} fill="url(#rSky)" />
-      <g className="sc-stars">
+      <g className="route-stars">
         {STARS.map((s, i) => (
-          <circle key={i} cx={s.cx} cy={s.cy} r={s.r} style={{ animationDelay: s.d }} />
+          <circle key={i} cx={s.cx} cy={s.cy} r={s.r} />
         ))}
       </g>
       <g>
         <circle cx={1010} cy={52} r={80} fill="url(#rSun)" />
-        <circle className="sc-sun" cx={1010} cy={52} r={20} />
-        <circle className="sc-moonc" cx={1019} cy={45} r={18} />
+        <circle className="route-sun" cx={1010} cy={52} r={20} />
+        <circle className="route-moon" cx={1019} cy={45} r={18} />
       </g>
-      <g className="sc-clouds">
+      <g>
         {CLOUDS.map(([x, y, s], i) => (
           <g key={i} transform={`translate(${x} ${y}) scale(${s})`}>
-            <g className="sc-cloud" style={{ animationDuration: `${70 + i * 16}s`, animationDelay: `${-i * 13}s` }}>
+            <g className="route-cloud">
               {PUFFS.map(([cx, cy, r], j) => (
                 <circle key={j} cx={cx} cy={cy} r={r} />
               ))}
@@ -122,63 +113,48 @@ const RouteSvg = memo(function RouteSvg() {
         ))}
       </g>
       <path
-        className="sc-m1"
+        className="route-mountains"
         d="M0 120 L110 70 L190 98 L300 48 L392 92 L470 66 L560 104 L660 60 L760 96 L860 52 L960 100 L1060 72 L1200 104 V220 H0Z"
       />
       <path
-        className="sc-snow"
+        className="route-snow"
         d="M282 56 L300 48 L318 60 L306 58 L298 64 L290 58Z M845 60 L860 52 L876 62 L866 60 L858 66 L852 61Z"
       />
-      <path className="sc-h1" d="M0 140 Q160 108 330 132 T700 126 T1200 118 V220 H0Z" />
-      <g className="sc-forest">
+      <path className="route-hills" d="M0 140 Q160 108 330 132 T700 126 T1200 118 V220 H0Z" />
+      <g className="route-forest">
         {TREES.flatMap(({ x, y, r }, i) => [
-          <rect key={'t' + i} className="trunk" x={x - 2} y={y} width={4} height={10} />,
+          <rect key={'t' + i} className="route-trunk" x={x - 2} y={y} width={4} height={10} />,
           <circle key={'c' + i} cx={x} cy={y - 5} r={r} />,
-          <circle key={'h' + i} className="hl" cx={x - r * 0.3} cy={y - 5 - r * 0.38} r={r * 0.42} />,
+          <circle key={'h' + i} className="route-tree-light" cx={x - r * 0.3} cy={y - 5 - r * 0.38} r={r * 0.42} />,
         ])}
       </g>
-      <path className="sc-field" d="M0 168 Q300 150 600 170 T1200 160 V220 H0Z" />
-      <path className="sc-path" d="M300 220 C330 196 280 184 360 172 L392 170 C340 182 380 198 360 220Z" />
-      <g className="sc-grass">
+      <path className="route-field" d="M0 168 Q300 150 600 170 T1200 160 V220 H0Z" />
+      <path className="route-path" d="M300 220 C330 196 280 184 360 172 L392 170 C340 182 380 198 360 220Z" />
+      <g>
         {GRASS.map((g, i) => (
-          <g key={i} className="sway" style={{ animationDelay: g.d }}>
-            <path className={g.c} d={g.path} />
-          </g>
+          <path key={i} className={g.shade} d={g.path} />
         ))}
       </g>
       <g
-        className="sc-rustle"
+        className="route-rustle"
         id="rustle"
         tabIndex={0}
         role="button"
         aria-label="Les hautes herbes bougent : rencontrer un Pokémon sauvage"
       >
         <rect x={760} y={140} width={200} height={80} fill="transparent" />
-        <g className="rs">
+        <g className="route-rustle-tufts">
           {RUSTLE.map(([d, c], i) => (
             <path key={i} className={c} d={d} />
           ))}
         </g>
-        <g transform="translate(860 132)">
-          <g className="sc-alert">
-            <rect x={-13} y={-15} width={26} height={28} rx={6} />
-            <text y={6} textAnchor="middle">
-              !
-            </text>
-          </g>
-        </g>
-      </g>
-      <g className="sc-fire">
-        {FIRE.map((f, i) => (
-          <circle key={i} cx={f.cx} cy={f.cy} r={1.8} style={{ animationDelay: f.d }} />
-        ))}
       </g>
     </svg>
   );
 });
 
 export default function Route() {
-  const { tod, pressed, season: season, sign, rr } = useRoute();
+  const { tod, pressed, season, sign, rr } = useRoute();
   // repositions the « ! » alert when the route changes size
   useEffect(() => {
     const r = document.getElementById('route');
@@ -190,7 +166,7 @@ export default function Route() {
     return () => o.disconnect();
   }, []);
   return (
-    <div className="route" id="route" data-time={tod} data-saison={season ?? undefined}>
+    <div className="route-scene" id="route" data-time={tod} data-saison={season ?? undefined}>
       {rr && (
         <p id="route-rates" className="route-rates">
           <b>{rr.head}</b>
@@ -200,25 +176,25 @@ export default function Route() {
       <RouteSvg />
       <button
         type="button"
-        className="rt-alert"
+        className="route-alert"
         id="rtAlert"
         aria-label="Les hautes herbes bougent : rencontrer un Pokémon sauvage"
       >
         <span>!</span>
       </button>
-      <div className="rt-ui">
-        <div className="rt-top">
-          <span className="rt-sign">{sign}</span>
-          <div className="tod" id="todBtns" role="group" aria-label="Moment de la journée">
-            {TODB.map(([k, n]) => (
+      <div className="route-overlay">
+        <div className="route-top">
+          <span className="route-sign">{sign}</span>
+          <div className="route-time" id="todBtns" role="group" aria-label="Moment de la journée">
+            {TIMES_OF_DAY.map(([k, n]) => (
               <button key={k} type="button" data-tod={k} aria-pressed={pressed ? String(tod === k) : undefined}>
                 {n}
               </button>
             ))}
           </div>
         </div>
-        <div className="dlg" aria-live="polite">
-          <span className="dlg-n">Hautes herbes</span>
+        <div className="route-dialogue" aria-live="polite">
+          <span className="route-dialogue-name">Hautes herbes</span>
           <p id="dlgTxt" />
         </div>
       </div>

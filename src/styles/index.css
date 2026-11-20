@@ -62,3 +62,5 @@
 @import '../screens/map/map-marks.css' layer(screens);
 @import '../screens/map/map-painting.css' layer(screens);
 @import '../screens/map/map-info.css' layer(screens);
+@import '../screens/map/map-wild.css' layer(screens);
+@import '../screens/map/map-route-scene.css' layer(screens);

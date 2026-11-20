@@ -279,18 +279,6 @@ html body .exp-d em {
    v4.11: seasons, rebroadcast, Team Dissonance
    ===================================================================== */
 /* the route takes on the colors of the season */
-html body #route[data-saison='halloween'] {
-  box-shadow: inset 0 0 140px rgba(120, 60, 200, 0.45);
-}
-html body #route[data-saison='hiver'] {
-  box-shadow: inset 0 0 140px rgba(190, 230, 255, 0.4);
-}
-html body #route[data-saison='printemps'] {
-  box-shadow: inset 0 0 140px rgba(255, 170, 210, 0.3);
-}
-html body #route[data-saison='ete'] {
-  box-shadow: inset 0 0 140px rgba(255, 170, 60, 0.3);
-}
 /* result: the best move */
 html body .res-l .rl.rd {
   align-items: center;

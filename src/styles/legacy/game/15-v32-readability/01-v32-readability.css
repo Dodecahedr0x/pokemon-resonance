@@ -42,13 +42,10 @@ html body #resonance-launch .rl-meta strong {
   /* spaced capital labels */
   html body .caption,
   html body .dlg-who,
-  html body .dlg-n,
   html body .case-h,
   html body .hh-chips span,
   html body .srw-lv,
   html body .pill:not(.prep-row .pill),
-  html body .tod button,
-  html body #todBtns button,
   html body .it-skip,
   html body .co-n,
   html body .co-a .button-small,
@@ -112,15 +109,6 @@ html body #resonance-launch .rl-scene {
 }
 @media (prefers-reduced-motion: no-preference) {
   /* the dialog cursor still blinks, but on its own layer */
-  html body .dlg::after {
-    animation: resBlink 1.1s step-end infinite !important;
-    will-change: opacity;
-  }
-}
-@keyframes resBlink {
-  50% {
-    opacity: 0;
-  }
 }
 
 /* ---------- 6 bis. Fixed bars on phone ----------
