@@ -4,6 +4,7 @@ import { V4 } from '../../engine/ui/screen-state.js';
 import { STATE_N, placeIcon, placeName, placeState, placeSub } from '../../engine/world/map.js';
 import { placesR } from '../../engine/world/johto.js';
 
+import CardHeader from '../../components/CardHeader.jsx';
 const G = [
   ['aventure', 'Aventure'],
   ['route', 'Hautes herbes'],
@@ -15,13 +16,11 @@ export default function MapList() {
   const P = placesR();
   return (
     <>
-      <header className="v4-ph">
-        <svg>
-          <use href="#i-map" />
-        </svg>
-        <b>Lieux</b>
-        <span className="v4-cnt">{`${P.filter(p => placeState(p) === 'done').length} / ${P.length - 1}`}</span>
-      </header>
+      <CardHeader
+        icon="map"
+        title="Lieux"
+        count={`${P.filter(p => placeState(p) === 'done').length} / ${P.length - 1}`}
+      />
       {G.map(([g, n]) => (
         <Fragment key={g}>
           <p className="v4-lg">{n}</p>

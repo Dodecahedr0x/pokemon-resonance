@@ -43,7 +43,7 @@ export function Anatomy() {
     <>
       <article className="an orn">
         <span className="an-k">01</span>
-        <h3 className="h3">Remplir</h3>
+        <h3 className="card-title">Remplir</h3>
         <Diamonds n={2} />
         <p>Trois losanges par Pokémon. Chacun se gagne en jouant.</p>
         <ul className="an-src">
@@ -63,7 +63,7 @@ export function Anatomy() {
       </article>
       <article className="an orn">
         <span className="an-k">02</span>
-        <h3 className="h3">Choisir</h3>
+        <h3 className="card-title">Choisir</h3>
         <div className="an-br">
           <Html html={medal(T.t)} />
           <span className="an-fork">
@@ -88,7 +88,7 @@ export function Anatomy() {
       </article>
       <article className="an orn">
         <span className="an-k">03</span>
-        <h3 className="h3">Arrivée</h3>
+        <h3 className="card-title">Arrivée</h3>
         <div className="an-arr">
           <Html html={medal(Pp.t, 'lg')} />
           <span className="ring" />
@@ -100,7 +100,7 @@ export function Anatomy() {
       </article>
       <article className="an orn wide">
         <span className="an-k">04</span>
-        <h3 className="h3">Renoncer</h3>
+        <h3 className="card-title">Renoncer</h3>
         <div className="an-line">
           <Stadium mon={C} lost={['charge']} />
           <span className="an-ar">→</span>
@@ -115,7 +115,7 @@ export function Anatomy() {
       </article>
       <article className="an orn danger">
         <span className="an-k">05</span>
-        <h3 className="h3">L’ennemi aussi</h3>
+        <h3 className="card-title">L’ennemi aussi</h3>
         <div className="an-foe">
           <span className="hp hseg">
             <i className="mid" style={{ width: '48%' }} />
@@ -190,7 +190,7 @@ export default function Basics() {
   return (
     <>
       <div className="gd-intro">
-        <h2 className="h2">Un tour en quatre temps</h2>
+        <h2 className="section-title">Un tour en quatre temps</h2>
       </div>
       <div className="howto">
         <div>
@@ -214,11 +214,11 @@ export default function Basics() {
           <p>Trois losanges pleins : choisissez l’évolution. Il n’y a pas de retour.</p>
         </div>
       </div>
-      <div className="sec">
-        <div className="sec-h">
+      <div className="section">
+        <div className="section-header">
           <div>
             <p className="kicker">Le cœur du jeu</p>
-            <h2 className="h2">Anatomie d’un Éveil</h2>
+            <h2 className="section-title">Anatomie d’un Éveil</h2>
             <p className="d">
               Chenipan sait entraver. Papilusion frappe fort. Aucun des deux ne fait les deux. Tout le combat tient dans
               ce choix.
@@ -229,11 +229,11 @@ export default function Basics() {
           <Anatomy />
         </div>
       </div>
-      <div className="sec" id="regles">
-        <div className="sec-h">
+      <div className="section" id="regles">
+        <div className="section-header">
           <div>
             <p className="kicker">Règles</p>
-            <h2 className="h2">Huit systèmes imbriqués</h2>
+            <h2 className="section-title">Huit systèmes imbriqués</h2>
             <p className="d">Ouvrez une règle, touchez un code pour suivre le fil. Les points dorés sont nouveaux.</p>
           </div>
         </div>

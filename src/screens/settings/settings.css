@@ -1,4 +1,4 @@
-/* Settings page (#params). Shared pieces it uses (.v4-panel, .v4-ph, .v4-ps, .v4-note, .button, .sv-io)
+/* Settings page (#params). Shared pieces it uses (.card, .card-header, .v4-ps, .v4-note, .button, .sv-io)
    are still styled in legacy and move to src/styles/components/ later. */
 
 /* ---------- Page grid: two columns of panels, one below 1000px ---------- */
@@ -13,7 +13,7 @@
   }
 }
 
-.settings-grid > .v4-panel {
+.settings-grid > .card {
   border: 1px solid var(--rx-edge);
   border-radius: 23px;
   background: linear-gradient(145deg, rgba(19, 48, 65, 0.96), rgba(6, 20, 31, 0.98));
@@ -24,12 +24,12 @@
 
 /* Phone: every panel gets the same inner padding as the .v4-ps ones, and button rows stack. */
 @media (max-width: 700px) {
-  .settings-grid > .v4-panel:not(.v4-ps) {
+  .settings-grid > .card:not(.v4-ps) {
     display: grid;
     gap: var(--space-sm);
     padding: var(--space-md);
   }
-  .settings-grid > .v4-panel:not(.v4-ps) > * {
+  .settings-grid > .card:not(.v4-ps) > * {
     margin: 0;
   }
   .settings-grid .sv-io {

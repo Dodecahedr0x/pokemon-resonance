@@ -44,7 +44,7 @@ export function DexCount() {
 export function DexList() {
   const L = dexList();
   return (
-    <div className="dex-list v4-panel" id="dex4List" role="listbox" aria-label="Liste du Pokédex">
+    <div className="dex-list card" id="dex4List" role="listbox" aria-label="Liste du Pokédex">
       {L.length ? (
         L.map(m => {
           const own = ownedFam(m.id),

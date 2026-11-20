@@ -5,8 +5,8 @@ import Button from '../../../components/Button.jsx';
 export default function Immersion() {
   const on = IMMERSION_ON();
   return (
-    <section className="v4-panel" id="immersion-panel">
-      <h3 className="h3">Immersion</h3>
+    <section className="card" id="immersion-panel">
+      <h3 className="card-title">Immersion</h3>
       <p className="v4-note">
         Bruitages par type d’attaque, cris, entrée en combat animée, particules, tremblement des gros coups, météo
         animée sur le plateau, cartes holographiques et musique plus vive quand un allié est presque K.O. Les vibrations

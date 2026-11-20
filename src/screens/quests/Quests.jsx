@@ -68,7 +68,7 @@ function Content() {
         lead="Suivez les chapitres, relevez les défis et réclamez vos récompenses."
       />
       {NL}
-      <div className="v4-trophy v4-panel">
+      <div className="v4-trophy card">
         <div className="v4-tr-b">
           {GYMS.map((g, i) => (
             <span key={i} className={'v4-tbg' + (BADGES.includes(i) ? ' on' : '')} title={`Badge ${g.t}`}>

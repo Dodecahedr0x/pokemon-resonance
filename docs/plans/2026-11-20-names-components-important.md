@@ -41,11 +41,13 @@ Each step is one commit (or a few), on its own, playable at every point.
       `.button-primary`, `.button-ghost`; a `Button` React component for JSX; the legacy rules that target the old
       names are renamed with them, and their `!important` removed where the new layer order makes it unnecessary.
    2. page header: `.ph`, `.kick`, `.h1`, `.sub` → `.page-header`, `.kicker`, `.title`, `.lead`; a `PageHeader`
-      component. (`.h2`, `.h3`, `.sec`, `.sec-h` go with the panel in 1.3.)
-   3. panel `.v4-panel`, form fields `.v4-fld`, counters `.v4-cnt`, labels `.lbl-s`, chips `.chip`, type badges
-      `.tb` (`typeBadge()` in the engine), status badges `.stt`, medals `.medal`, energy pips `.enp`, rank tags `.rg`,
-      role icons `.ri`.
-   4. repeated declarations become tokens or components: the dark card surface (gradient + border + shadow), the
+      component.
+   3. card and text: `.v4-panel`, `.v4-ph`, `.v4-cnt`, `.v4-fld`, `.lbl-s`, `.h2`, `.h3`, `.sec`, `.sec-h` →
+      `.card`, `.card-header`, `.card-count`, `.form-field`, `.caption`, `.section-title`, `.card-title`, `.section`,
+      `.section-header`; a `CardHeader` component.
+   4. badges: type badges `.tb` (`typeBadge()` in the engine), status badges `.stt`, medals `.medal`, energy pips
+      `.enp`, rank tags `.rg`, role icons `.ri`, with their modifier classes (`st-par`, `rg-…`, `ri-…`).
+   5. repeated declarations become tokens or components: the dark card surface (gradient + border + shadow), the
       left-rule note, the mono caption.
 2. **Screens**, continuing the style plan's order: each screen's remaining legacy rules move to its own file; its
    classes, its JSX and the engine strings that build it are renamed; the `!important` that targeted it disappear
@@ -68,3 +70,6 @@ Each step is one commit (or a few), on its own, playable at every point.
   `.v4-ph-page` any rule still reads: map and battle choice). Renames are done with
   `node tools/rename-classes/rename-classes.mjs '{"old":"new"}'`, which rewrites CSS selectors, JSX `className`, engine
   `class="…"` strings, `classList` calls and selector strings in `querySelector` / `closest` / `matches` / `$`.
+- 1.3 card and text: done. `src/styles/components/card.css` (was `panel.css`); the card headers of Settings, Camp,
+  Quests, Map and Home render `src/components/CardHeader.jsx` (`icon`, `title`, optional `count`, extra children),
+  except the radio card on Home, which draws its own icon.

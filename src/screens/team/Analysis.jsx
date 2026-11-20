@@ -17,7 +17,7 @@ export default function Analysis({ A }) {
   return (
     <details className="team-analysis" id="anaD">
       <summary>
-        <span className="lbl-s">Analyse de l’équipe</span>
+        <span className="caption">Analyse de l’équipe</span>
         <em id="anaSum">{A && recap(A)}</em>
       </summary>
       <div className="team-analysis-grid" id="ana">

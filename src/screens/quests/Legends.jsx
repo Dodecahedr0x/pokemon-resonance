@@ -14,7 +14,7 @@ function Legend({ L, et, isTaken: takenSet, fight, condition: cond }) {
     isReady = !takenSet && et.every(x => x.ok);
   return (
     <article
-      className={'legend-quest-c v4-panel' + (takenSet ? ' pris' : isReady ? ' pret' : '')}
+      className={'legend-quest-c card' + (takenSet ? ' pris' : isReady ? ' pret' : '')}
       style={{ '--c': tc(m.t[0]) }}
     >
       <img src={ART(m.no)} alt="" loading="lazy" />

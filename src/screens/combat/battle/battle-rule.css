@@ -15,7 +15,7 @@
 .battle-synergies[hidden] {
   display: none;
 }
-.battle-synergies .lbl-s {
+.battle-synergies .caption {
   margin-right: var(--space-2xs);
 }
 
@@ -202,7 +202,7 @@
     white-space: nowrap;
   }
   .battle-synergies[hidden],
-  .battle-synergies .lbl-s {
+  .battle-synergies .caption {
     display: none;
   }
   .battle-rule {

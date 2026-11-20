@@ -87,7 +87,7 @@ function Content() {
         lead="Les Pokédollars se gagnent en combat, les Éclats avec les rangs S, les badges et les quêtes."
       />
       {NL}
-      <div className="bag-wallet v4-panel">
+      <div className="bag-wallet card">
         <div>
           <span className="v4-coin" aria-hidden="true">
             ₽

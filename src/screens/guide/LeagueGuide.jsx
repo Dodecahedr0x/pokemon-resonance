@@ -83,11 +83,11 @@ export function Duos() {
 export default function League() {
   return (
     <>
-      <div className="sec">
-        <div className="sec-h">
+      <div className="section">
+        <div className="section-header">
           <div>
             <p className="kicker">Entre les combats</p>
-            <h2 className="h2">Liens, capture, fatigue, objets</h2>
+            <h2 className="section-title">Liens, capture, fatigue, objets</h2>
             <p className="d">
               Quatre systèmes de campagne qui obligent à faire tourner tout le Box, petits Pokémon compris.
             </p>
@@ -96,7 +96,7 @@ export default function League() {
         <div className="quad">
           <div className="qc">
             <span className="lab">Liens</span>
-            <h3 className="h3">Trois paliers</h3>
+            <h3 className="card-title">Trois paliers</h3>
             <p>
               Une réaction préparée par un allié et déclenchée par un autre donne +1 Lien au duo. Si aucun des deux n’a
               évolué pendant le combat, les points comptent double.
@@ -134,7 +134,7 @@ export default function League() {
           </div>
           <div className="qc">
             <span className="lab">Capture</span>
-            <h3 className="h3">Convaincre sans assommer</h3>
+            <h3 className="card-title">Convaincre sans assommer</h3>
             <p>Dans les hautes herbes et sur les terrains d’entraînement. Un Pokémon K.O. s’enfuit.</p>
             <ol className="cap">
               <li>Affaiblir sous 25 % des PV.</li>
@@ -144,7 +144,7 @@ export default function League() {
           </div>
           <div className="qc">
             <span className="lab">Fatigue · campagne</span>
-            <h3 className="h3">Faire tourner le Box</h3>
+            <h3 className="card-title">Faire tourner le Box</h3>
             <p>
               Chaque combat ajoute 30 % à ceux qui y ont pris part, les autres récupèrent 25 %. À 70 %, un Pokémon perd
               1 Mouvement. L’Éveil efface la fatigue sur-le-champ.
@@ -175,7 +175,7 @@ export default function League() {
           </div>
           <div className="qc">
             <span className="lab">Objets tenus</span>
-            <h3 className="h3">Un objet par Pokémon</h3>
+            <h3 className="card-title">Un objet par Pokémon</h3>
             <p>Gagnés avec les badges d’arène, équipés depuis la fiche du Pokémon dans le Pokédex.</p>
             <div className="items" id="items">
               <Items />
@@ -183,11 +183,11 @@ export default function League() {
           </div>
         </div>
       </div>
-      <div className="sec">
-        <div className="sec-h">
+      <div className="section">
+        <div className="section-header">
           <div>
             <p className="kicker">Palier 3</p>
-            <h2 className="h2">Techniques combinées</h2>
+            <h2 className="section-title">Techniques combinées</h2>
             <p className="d">
               Propres à un duo précis, débloquées au palier Duo (9 points de Lien). En combat : les deux Pokémon à 2
               cases au plus, aucun n’a encore agi, 2 Voix. Ils frappent l’un après l’autre.
@@ -198,7 +198,7 @@ export default function League() {
           <Duos />
         </div>
       </div>
-      <div className="sec">
+      <div className="section">
         <div className="champ">
           <div>
             <p className="kicker">Ligue Pokémon</p>

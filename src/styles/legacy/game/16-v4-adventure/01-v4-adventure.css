@@ -35,7 +35,7 @@ html body {
 html body .ambient {
   opacity: 0.55 !important;
 }
-html body .h2 {
+html body .section-title {
   font-family: var(--f-d) !important;
   font-weight: 800 !important;
   text-transform: none !important;
@@ -47,7 +47,7 @@ html body .logo b {
 }
 
 /* ---------- components ---------- */
-.v4-ph {
+.card-header {
   display: flex;
   align-items: center;
   gap: var(--space-sm);
@@ -55,19 +55,19 @@ html body .logo b {
   margin-bottom: var(--space-sm);
   border-bottom: 1px solid rgba(120, 200, 255, 0.14);
 }
-.v4-ph > svg {
+.card-header > svg {
   width: 20px;
   height: 20px;
   color: #ffd75e;
   flex: none;
 }
-.v4-ph b {
+.card-header b {
   font-family: var(--f-d);
   font-weight: 800;
   font-size: 15px;
   color: #fff;
 }
-.v4-cnt,
+.card-count,
 .v4-pcs {
   margin-left: auto;
   font: 700 12px/1 var(--f-d);

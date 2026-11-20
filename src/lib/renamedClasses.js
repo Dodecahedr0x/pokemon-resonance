@@ -13,6 +13,15 @@ export const RENAMED_CLASSES = {
   kick: 'kicker',
   h1: 'title',
   sub: 'lead',
+  'v4-panel': 'card',
+  'v4-ph': 'card-header',
+  'v4-cnt': 'card-count',
+  'v4-fld': 'form-field',
+  'lbl-s': 'caption',
+  h2: 'section-title',
+  h3: 'card-title',
+  sec: 'section',
+  'sec-h': 'section-header',
 };
 
 const OLD_CLASS = new RegExp(

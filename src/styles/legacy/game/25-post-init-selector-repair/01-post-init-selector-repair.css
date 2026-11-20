@@ -133,10 +133,10 @@ body {
 #accueil .v4-team {
   padding: var(--space-lg) !important;
 }
-#accueil .v4-ph {
+#accueil .card-header {
   color: #effcff !important;
 }
-#accueil .v4-ph > svg {
+#accueil .card-header > svg {
   color: var(--r24-cyan) !important;
   filter: drop-shadow(0 0 9px rgba(131, 240, 239, 0.35));
 }

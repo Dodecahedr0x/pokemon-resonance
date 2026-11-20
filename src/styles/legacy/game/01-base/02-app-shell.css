@@ -308,7 +308,7 @@
     transform: none;
   }
 }
-.h2 {
+.section-title {
   font-family: var(--f-d);
   font-stretch: 120%;
   font-weight: 750;
@@ -318,7 +318,7 @@
   letter-spacing: -0.005em;
   text-wrap: balance;
 }
-.h3 {
+.card-title {
   font-family: var(--f-d);
   font-stretch: 112%;
   font-weight: 700;
@@ -327,10 +327,10 @@
   line-height: 1.1;
   letter-spacing: 0.01em;
 }
-.sec {
+.section {
   margin-top: 76px;
 }
-.sec-h {
+.section-header {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
@@ -338,12 +338,12 @@
   flex-wrap: wrap;
   margin-bottom: var(--space-xl);
 }
-.sec-h > div {
+.section-header > div {
   display: grid;
   gap: var(--space-sm);
   max-width: 640px;
 }
-.sec-h p.d {
+.section-header p.d {
   color: var(--mut);
   font-size: 14.5px;
   max-width: 60ch;

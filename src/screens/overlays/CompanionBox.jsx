@@ -12,7 +12,7 @@ function Card({ L, cur, bonus }) {
   return (
     <Dialogue className="sv-card exp-card" titre="compT" closeAttrs={{ 'data-comp': 'x' }}>
       <p className="kicker">Compagnon</p>
-      <h2 className="h2" id="compT">
+      <h2 className="section-title" id="compT">
         Qui vous accompagne ?
       </h2>
       <p className="d">

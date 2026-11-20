@@ -4,6 +4,7 @@ import { today } from '../../../engine/state/economy.js';
 import { PUZZLES, puzzleOfDay, puzzleState } from '../../../engine/modes/riddles.js';
 import { Html } from '../../../lib/html.jsx';
 
+import CardHeader from '../../../components/CardHeader.jsx';
 function Stars({ n }) {
   return (
     <span className="puzzle-tab-st" aria-label={`${n} étoile${n > 1 ? 's' : ''} sur 3`}>
@@ -20,14 +21,8 @@ export default function Puzzles() {
     total = Object.values(E.s).reduce((a, b) => a + b, 0),
     doneFlag = jd => E.j === today() && (E.jd || []).includes(jd);
   return (
-    <section className="v4-panel puzzle-tab">
-      <header className="v4-ph">
-        <svg>
-          <use href="#i-quest" />
-        </svg>
-        <b>Énigmes tactiques</b>
-        <span className="v4-cnt">{`${total} / ${PUZZLES.length * 3} ★`}</span>
-      </header>
+    <section className="card puzzle-tab">
+      <CardHeader icon="quest" title="Énigmes tactiques" count={`${total} / ${PUZZLES.length * 3} ★`} />
       <p className="v4-ps-n">
         Positions figées, PV au plus juste : mettez tous les adversaires K.O. <b>en une seule manche</b>. Ils ne jouent
         pas, tout se décide pendant votre tour. ★ réussie · ★★ sans dépenser de Voix ou du premier coup · ★★★ les deux.

@@ -21,7 +21,7 @@ function MyCard({ displayName: displayName, code, teamNames: team, canShare: sha
   return (
     <Dialogue className="sv-card exp-card am-card" titre="amiT" closeAttrs={CLOSE}>
       <p className="kicker">Défis entre amis</p>
-      <h2 className="h2" id="amiT">
+      <h2 className="section-title" id="amiT">
         Ma carte de dresseur
       </h2>
       <label className="am-lb">
@@ -63,7 +63,7 @@ function Addition() {
   return (
     <Dialogue className="sv-card exp-card am-card" titre="amiT" closeAttrs={CLOSE}>
       <p className="kicker">Défis entre amis</p>
-      <h2 className="h2" id="amiT">
+      <h2 className="section-title" id="amiT">
         Ajouter un ami
       </h2>
       <p className="d">

@@ -80,7 +80,7 @@ html body #resonance-launch .rl-meta strong {
 /* ---------- 4. Phone and tablet: minimum text size ---------- */
 @media (max-width: 999px) {
   /* spaced capital labels */
-  html body .lbl-s,
+  html body .caption,
   html body .dlg-who,
   html body .dlg-n,
   html body .case-h,

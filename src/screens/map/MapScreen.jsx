@@ -61,7 +61,7 @@ function Content({ drawn, marksSel }) {
       </PageHeader>
       {'\n '}
       <div className="v4-map-wrap">
-        <div className="v4-map v4-panel">
+        <div className="v4-map card">
           <div className="v4-map-sc" id="mapSc">
             <Stage drawn={drawn} marksSel={marksSel} />
           </div>
@@ -83,10 +83,10 @@ function Content({ drawn, marksSel }) {
         {'\n '}
         <aside className="v4-map-side">
           {drawn && <EvBar />}
-          <div className="v4-panel v4-mapinfo" id="mapInfo" aria-live="polite">
+          <div className="card v4-mapinfo" id="mapInfo" aria-live="polite">
             {drawn && <MapInfo />}
           </div>
-          <div className="v4-panel v4-maplist" id="mapList">
+          <div className="card v4-maplist" id="mapList">
             {drawn && <MapList />}
           </div>
         </aside>

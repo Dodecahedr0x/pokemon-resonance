@@ -1,6 +1,6 @@
 /* Pokédex: collection gallery, artwork showcased */
 /* Sheets, lists, panels: readability and relief */
-html body .v4-ph,
+html body .card-header,
 html body .case-h {
   border-color: rgba(150, 205, 228, 0.16) !important;
 }
@@ -22,7 +22,7 @@ html body .nav a.on {
 }
 html body .v4-pill,
 html body .chip,
-html body .v4-cnt {
+html body .card-count {
   border-color: rgba(150, 207, 230, 0.2) !important;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }

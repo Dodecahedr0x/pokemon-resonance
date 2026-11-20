@@ -54,7 +54,7 @@ html body #evoPick .ep-card {
     linear-gradient(135deg, #f7e1ac 0%, #c9a15a 30%, #f3dba6 50%, #9c7737 78%, #e3c07a 100%) border-box !important;
   box-shadow: 0 40px 80px -30px #000 !important;
 }
-html body #evoPick .ep-card .h2 {
+html body #evoPick .ep-card .section-title {
   font-size: 22px;
   letter-spacing: 0.03em;
 }
@@ -105,7 +105,7 @@ html body #cbResult > .res-card {
     padding: var(--space-md) var(--space-md) calc(var(--space-lg) + env(safe-area-inset-bottom, 0px)) !important;
     animation: epUp 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
-  html body #evoPick .ep-card .h2 {
+  html body #evoPick .ep-card .section-title {
     font-size: 18px;
   }
   html body #cbResult {

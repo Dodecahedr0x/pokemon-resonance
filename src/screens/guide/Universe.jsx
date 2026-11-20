@@ -28,7 +28,7 @@ export default function Universe() {
   return (
     <>
       <div className="gd-intro">
-        <h2 className="h2">L’univers de Résonance</h2>
+        <h2 className="section-title">L’univers de Résonance</h2>
         <p className="d">
           Une Ligue, un règlement, des maîtres d’arène qui ont chacun leur façon de vous mettre à l’épreuve.
         </p>
@@ -36,17 +36,17 @@ export default function Universe() {
       <div className="uv-lore">
         {UNIV.map(([h, t]) => (
           <article key={h} className="uv-c">
-            <h3 className="h3">{h}</h3>
+            <h3 className="card-title">{h}</h3>
             <p>
               <Html html={t} />
             </p>
           </article>
         ))}
       </div>
-      <div className="sec-h uv-h">
+      <div className="section-header uv-h">
         <div>
           <p className="kicker">Huit arènes</p>
-          <h2 className="h2">Les maîtres d’arène</h2>
+          <h2 className="section-title">Les maîtres d’arène</h2>
         </div>
       </div>
       <div className="uv-cast">
@@ -65,10 +65,10 @@ export default function Universe() {
           />
         ))}
       </div>
-      <div className="sec-h uv-h">
+      <div className="section-header uv-h">
         <div>
           <p className="kicker">Le sommet</p>
-          <h2 className="h2">Le Conseil 4 et la Championne</h2>
+          <h2 className="section-title">Le Conseil 4 et la Championne</h2>
         </div>
       </div>
       <div className="uv-cast">
@@ -89,10 +89,10 @@ export default function Universe() {
           who={CHAMP_L}
         />
       </div>
-      <div className="sec-h uv-h">
+      <div className="section-header uv-h">
         <div>
           <p className="kicker">Campagne</p>
-          <h2 className="h2">Les chapitres</h2>
+          <h2 className="section-title">Les chapitres</h2>
         </div>
       </div>
       <ol className="uv-chap">

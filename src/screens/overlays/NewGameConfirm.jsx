@@ -14,9 +14,9 @@ export default function NewGameConfirm() {
   return (
     <div id="new-game" className="new-game">
       <div className="new-game-s" data-new-game="non" key={'s' + s.v} />
-      <div className="new-game-c v4-panel" role="dialog" aria-modal="true" aria-labelledby="new-game-t" key={'c' + s.v}>
+      <div className="new-game-c card" role="dialog" aria-modal="true" aria-labelledby="new-game-t" key={'c' + s.v}>
         <p className="kicker">Attention</p>
-        <h2 className="h2" id="new-game-t">
+        <h2 className="section-title" id="new-game-t">
           <Html html={heading} />
         </h2>
         <p>

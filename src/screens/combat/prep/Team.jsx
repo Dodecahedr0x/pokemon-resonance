@@ -85,7 +85,7 @@ function Doctrine({ docSeen }) {
             <svg>
               <use href="#i-doctrine" />
             </svg>
-            <span className="lbl-s">Doctrine</span>
+            <span className="caption">Doctrine</span>
           </div>
           <div className="prep-doctrine-options" role="group" aria-label="Doctrine">
             {[['', 'Aucune'], ...Object.entries(DOCTRINE_DEFS).map(([x, o]) => [x, o.n])].map(([x, n]) => (
@@ -125,7 +125,7 @@ function Squads() {
     <div className="prep-saved-teams" id="saved-squads-box" hidden={!T.length}>
       {T.length ? (
         <>
-          <span className="lbl-s">Mes équipes</span>
+          <span className="caption">Mes équipes</span>
           {T.map((t, i) => (
             <Button key={i} size="small" data-team-save="charger" data-i={i}>
               {t.n}
@@ -156,7 +156,7 @@ export default function Team({ v }) {
   return (
     <div className="prep-team" id="ptBox">
       <div className="prep-team-head">
-        <span className="lbl-s">Votre équipe</span>
+        <span className="caption">Votre équipe</span>
         <b id="ptCount" className="prep-team-count">
           {on ? `${squad.length} / 4 · ${cost()} / ${BUDGET} PC` : '0 / 4'}
         </b>

@@ -135,8 +135,8 @@ body::before {
 .tb-sec {
   letter-spacing: 0.14em !important;
 }
-.h2,
-.sec h2:not(:where(.title)) {
+.section-title,
+.section h2:not(:where(.title)) {
   color: #f8fbff !important;
   text-shadow: 0 2px 18px rgba(0, 0, 0, 0.4);
 }
@@ -147,7 +147,7 @@ body::before {
 .tcard,
 .resume,
 .panel,
-.sec,
+.section,
 .case,
 .result,
 .coach,

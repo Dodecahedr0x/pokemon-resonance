@@ -58,7 +58,7 @@ function Workshop() {
         L’atelier du colporteur transforme vos objets. Les recettes, la fusion de CT et les commandes du jour s’y
         trouvent.
       </p>
-      <h3 className="h3">Livre de recettes</h3>
+      <h3 className="card-title">Livre de recettes</h3>
       {RECIPES.map(r => (
         <Line
           key={r.id}
@@ -81,7 +81,7 @@ function Workshop() {
           </p>
         </Line>
       ))}
-      <h3 className="h3" style={{ marginTop: space.md }}>
+      <h3 className="card-title" style={{ marginTop: space.md }}>
         Fusion de CT
       </h3>
       {fusionTargets.length ? (
@@ -111,7 +111,7 @@ function Workshop() {
       ) : (
         <p className="v4-empty">Vous avez déjà toutes les CT.</p>
       )}
-      <h3 className="h3" style={{ marginTop: space.md }}>
+      <h3 className="card-title" style={{ marginTop: space.md }}>
         Commandes du jour
       </h3>
       {dailyOrders().map(c => (
@@ -147,7 +147,7 @@ function Draw() {
     remainder = Math.max(0, 4 - st.spin);
   return (
     <>
-      <h3 className="h3">Tirage du colporteur</h3>
+      <h3 className="card-title">Tirage du colporteur</h3>
       <p className="v4-note">
         Un tirage gratuit par jour. Ensuite, {fmt(FUSION_COST)} ₽ le tirage (4 par jour au maximum). Le résultat est
         fixé à l’avance : inutile de recharger la page.
@@ -180,7 +180,7 @@ function Showcase() {
     all = [...cts, ...cs],
     nc = all.filter(k => seen[k]).length;
   return (
-    <section className="v4-panel workshop-showcase">
+    <section className="card workshop-showcase">
       <h3>Vitrine des trouvailles</h3>
       <p className="v4-note">
         Objets tenus :{' '}
@@ -231,7 +231,7 @@ function QuestItems() {
     n = QUESTS.filter(q => S.done[q.id]).length;
   return (
     <>
-      <h3 className="h3">Quêtes d’objets</h3>
+      <h3 className="card-title">Quêtes d’objets</h3>
       <p className="v4-note">
         Les habitants vous confient des services en échange d’objets rares.{' '}
         <b>
@@ -277,7 +277,7 @@ function Trophies() {
   const S = trophyState();
   return (
     <>
-      <h3 className="h3">Boîte de trophées</h3>
+      <h3 className="card-title">Boîte de trophées</h3>
       {TROPHIES.map(T => {
         const v = Math.min(T.v(), T.n),
           ok = T.v() >= T.n,
@@ -315,14 +315,14 @@ function Eggs() {
     isFree = eggPool().length;
   return (
     <>
-      <h3 className="h3">Élevage</h3>
+      <h3 className="card-title">Élevage</h3>
       <p className="v4-note">
         Les œufs éclosent en combattant, en entraînement comme en aventure. Trois œufs au maximum à la fois. Éclos :{' '}
         <b>{s.n}</b>. {isFree ? '' : 'Vous possédez déjà toutes les familles.'}
       </p>
       {s.list.length ? (
         <>
-          <h4 className="h3">En incubation ({s.list.length} / 3)</h4>
+          <h4 className="card-title">En incubation ({s.list.length} / 3)</h4>
           {s.list.map((e, i) => {
             const O = EGG_SHOP[e.k],
               p = Math.round(((e.tot - e.left) / e.tot) * 100);
@@ -342,7 +342,7 @@ function Eggs() {
           })}
         </>
       ) : null}
-      <h4 className="h3">Acheter un œuf</h4>
+      <h4 className="card-title">Acheter un œuf</h4>
       {Object.keys(EGG_SHOP).map(k => {
         const O = EGG_SHOP[k],
           ok = s.list.length < 3 && canAfford(O.cost) && isFree;
@@ -372,14 +372,14 @@ function Talents() {
     spent = talentSpent();
   return (
     <>
-      <h3 className="h3">Talents du dresseur</h3>
+      <h3 className="card-title">Talents du dresseur</h3>
       <p className="v4-note">
         Chaque niveau de dresseur donne 1 point. Niveau {tLevel()} : <b>{pts}</b> point{pts > 1 ? 's' : ''} à dépenser,{' '}
         {spent} dépensé{spent > 1 ? 's' : ''}. Les talents ne comptent pas dans les combats à règles fixes.
       </p>
       {TALENTS.map(B => (
         <Fragment key={B.b}>
-          <h4 className="h3">{B.n}</h4>
+          <h4 className="card-title">{B.n}</h4>
           {B.t.map(t => {
             const r = st[t.id];
             return (

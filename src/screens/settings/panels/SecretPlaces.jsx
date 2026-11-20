@@ -6,8 +6,8 @@ export default function SecretPlaces() {
   const st = secretState();
   const n = SECRET_PLACES.filter(s => st.found[s.id]).length;
   return (
-    <section className="v4-panel" id="secret-places-j">
-      <h3 className="h3">Lieux secrets</h3>
+    <section className="card" id="secret-places-j">
+      <h3 className="card-title">Lieux secrets</h3>
       <p className="v4-note">
         Des lieux n’apparaissent sur la carte qu’à certaines heures ou sous certaines météos.{' '}
         <b>

@@ -8,8 +8,8 @@ export default function Nuzlocke() {
   const s = nuzlockeState(),
     on = NUZLOCKE_ON();
   return (
-    <section className="v4-panel" id="nuzlocke-panel">
-      <h3 className="h3">Mode Nuzlocke</h3>
+    <section className="card" id="nuzlocke-panel">
+      <h3 className="card-title">Mode Nuzlocke</h3>
       <p className="v4-note">
         Pour les joueurs qui aiment le risque. Un Pokémon K.O. à la fin d’un combat est perdu pour de bon (le dernier
         compagnon est toujours épargné), et on ne peut tenter qu’une seule rencontre par région et par jour.

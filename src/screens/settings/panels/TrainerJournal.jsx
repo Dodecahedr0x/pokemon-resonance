@@ -21,8 +21,8 @@ export default function TrainerJournal() {
     rate = P.battles ? Math.round((100 * P.wins) / P.battles) : 0,
     own = DEXS.filter(m => ownedFam(m.id)).length;
   return (
-    <section className="v4-panel" id="trainer-journal-panel">
-      <h3 className="h3">Journal de dresseur</h3>
+    <section className="card" id="trainer-journal-panel">
+      <h3 className="card-title">Journal de dresseur</h3>
       <p className="v4-note">Vos exploits, tels qu’ils sont enregistrés sur cet appareil.</p>
       <div className="trainer-journal">
         <Cell n={P.battles} l="Combats" />

@@ -16,7 +16,7 @@ function Card({ destinationId: dest, available: available }) {
   return (
     <Dialogue className="sv-card exp-card" titre="expT" closeAttrs={{ 'data-exp-x': '' }}>
       <p className="kicker">Expédition</p>
-      <h2 className="h2" id="expT">
+      <h2 className="section-title" id="expT">
         {dest ? DESTINATIONS[dest].n : 'Où partir ?'}
       </h2>
       {!dest ? (

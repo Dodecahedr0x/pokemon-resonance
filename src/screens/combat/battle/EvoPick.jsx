@@ -106,7 +106,7 @@ function Card({ u }) {
   return (
     <div className="ep-card" role="dialog" aria-modal="true" aria-labelledby="epT">
       <p className="kicker">Éveil · choix irréversible</p>
-      <h2 className="h2" id="epT">
+      <h2 className="section-title" id="epT">
         {u.n} va évoluer
       </h2>
       <p className="lead">

@@ -1,16 +1,12 @@
 import { PREF } from '../../../engine/ui/preferences.js';
 import { Slider, Switch } from '../controls.jsx';
 
+import CardHeader from '../../../components/CardHeader.jsx';
 // Sound: music and effects, each with its own volume.
 export default function Sound() {
   return (
-    <section className="v4-panel v4-ps">
-      <header className="v4-ph">
-        <svg>
-          <use href="#i-sound" />
-        </svg>
-        <b>Son</b>
-      </header>
+    <section className="card v4-ps">
+      <CardHeader icon="sound" title="Son" />
       <Switch
         k="music"
         on={PREF.music}

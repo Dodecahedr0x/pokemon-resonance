@@ -1,6 +1,6 @@
 /* Panel above the family grid (#dexCall, DexCall.jsx): confirmed recruits and captured legends as pills,
    then a collapsible part (open by default except on phones) with saved teams and formations.
-   Each row is a label (.lbl-s) and a horizontally scrolling list. Clicks: engine listeners on data-*. */
+   Each row is a label (.caption) and a horizontally scrolling list. Clicks: engine listeners on data-*. */
 
 .team-recruits {
   display: grid;
@@ -31,7 +31,7 @@
   gap: var(--space-md);
   min-width: 0;
 }
-.team-recruits-row > .lbl-s {
+.team-recruits-row > .caption {
   flex: none;
   width: 150px;
 }
@@ -188,7 +188,7 @@
     align-items: stretch;
     gap: var(--space-xs);
   }
-  .team-recruits-row > .lbl-s {
+  .team-recruits-row > .caption {
     width: auto;
   }
   .team-recruit {

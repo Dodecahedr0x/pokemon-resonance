@@ -17,8 +17,8 @@ export default function Offline() {
           ? 'Le téléchargement a échoué.'
           : 'Musique non téléchargée.';
   return (
-    <section className="v4-panel" id="offline-panel">
-      <h3 className="h3">Mode hors ligne</h3>
+    <section className="card" id="offline-panel">
+      <h3 className="card-title">Mode hors ligne</h3>
       <p className="v4-note">
         Le jeu et votre progression sont déjà sur votre appareil. Ce mode enregistre aussi la musique pour qu’elle joue
         sans connexion. Pour rouvrir le jeu sans réseau, enregistrez la page ou ajoutez-la à l’écran d’accueil depuis le

@@ -5,7 +5,7 @@ html body .v4-news {
   padding: var(--space-md) var(--space-md);
   border-color: rgba(255, 215, 94, 0.45);
 }
-html body .v4-news .v4-ph {
+html body .v4-news .card-header {
   display: flex;
   align-items: center;
   gap: var(--space-sm);

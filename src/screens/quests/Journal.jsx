@@ -38,7 +38,7 @@ export default function Journal() {
         <Tile v={J.ko} t="K.O. infligés" />
       </div>
       {NL}
-      <section className="v4-panel journal-report-s">
+      <section className="card journal-report-s">
         <h3>Par type de combat</h3>
         {Object.entries(J.category)
           .sort((a, b) => b[1][0] + b[1][1] - (a[1][0] + a[1][1]))
@@ -55,7 +55,7 @@ export default function Journal() {
           ))}
       </section>
       {NL}
-      <section className="v4-panel journal-report-s">
+      <section className="card journal-report-s">
         <h3>MVP les plus fréquents</h3>
         {mvp.length ? (
           mvp.map(([k, n]) => (
@@ -71,7 +71,7 @@ export default function Journal() {
         )}
       </section>
       {NL}
-      <section className="v4-panel journal-report-s">
+      <section className="card journal-report-s">
         <h3>Derniers combats</h3>
         {J.last
           .slice()

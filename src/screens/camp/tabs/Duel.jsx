@@ -15,6 +15,7 @@ import {
 } from '../../../engine/modes/duel.js';
 
 import Button from '../../../components/Button.jsx';
+import CardHeader from '../../../components/CardHeader.jsx';
 const Options = ({ L }) =>
   L.map(([k, n]) => (
     <option key={k} value={k}>
@@ -48,16 +49,16 @@ function Preferences({ C }) {
   return (
     <div className="duel-report-cfg">
       <div className="duel-report-row">
-        <label className="v4-fld duel-report-n dj1">
+        <label className="form-field duel-report-n dj1">
           <span>Joueur 1 · commence</span>
           <input type="text" data-duel-report-n="0" maxLength={14} defaultValue={C.names[0]} autoComplete="off" />
         </label>
-        <label className="v4-fld duel-report-n dj2">
+        <label className="form-field duel-report-n dj2">
           <span>Joueur 2</span>
           <input type="text" data-duel-report-n="1" maxLength={14} defaultValue={C.names[1]} autoComplete="off" />
         </label>
       </div>
-      <div className="v4-fld">
+      <div className="form-field">
         <span>Formes</span>
         <Seg
           k="mode"
@@ -68,7 +69,7 @@ function Preferences({ C }) {
           v={C.mode}
         />
       </div>
-      <div className="v4-fld">
+      <div className="form-field">
         <span>Pokémon par joueur</span>
         <Seg
           k="sizeValue"
@@ -80,13 +81,13 @@ function Preferences({ C }) {
         />
       </div>
       <div className="duel-report-row">
-        <label className="v4-fld">
+        <label className="form-field">
           <span>Terrain</span>
           <select data-duel-report-c="terrain" defaultValue={String(C.terrain)}>
             <Options L={Object.entries(DUEL_TERRAINS).map(([k, t]) => [k, t.n])} />
           </select>
         </label>
-        <label className="v4-fld">
+        <label className="form-field">
           <span>Heure</span>
           <select data-duel-report-c="heure" defaultValue={String(C.timeOfDay)}>
             <Options
@@ -97,7 +98,7 @@ function Preferences({ C }) {
             />
           </select>
         </label>
-        <label className="v4-fld">
+        <label className="form-field">
           <span>Manches</span>
           <select data-duel-report-c="lim" defaultValue={String(C.lim)}>
             <Options L={[8, 10, 12].map(x => [x, String(x)])} />
@@ -280,14 +281,8 @@ export default function Duel() {
     P0 = PROFILE.duel433 || DUEL_TUTORIAL_0().duel433,
     H = (P0.h || []).slice(-5).reverse();
   return (
-    <section className="v4-panel duel-report">
-      <header className="v4-ph">
-        <svg>
-          <use href="#i-fight" />
-        </svg>
-        <b>Duel local</b>
-        <span className="v4-cnt">{`${P0.n || 0} duel${(P0.n || 0) > 1 ? 's' : ''}`}</span>
-      </header>
+    <section className="card duel-report">
+      <CardHeader icon="fight" title="Duel local" count={`${P0.n || 0} duel${(P0.n || 0) > 1 ? 's' : ''}`} />
       <p className="v4-ps-n">
         Deux joueurs, un téléphone. Chacun dirige son équipe à son tour, avec les mêmes règles : ni objets, ni natures,
         ni doctrines, terrain symétrique. Aucune récompense : seulement l’honneur.

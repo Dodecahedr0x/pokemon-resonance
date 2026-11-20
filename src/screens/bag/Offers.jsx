@@ -8,7 +8,7 @@ import { Disc } from './Items.jsx';
 // Daily offers (v4.14): −30% until midnight; data-offre opens the category (engine).
 export default function Offers() {
   return (
-    <section className="bag-offers v4-panel" aria-label="Offres du jour">
+    <section className="bag-offers card" aria-label="Offres du jour">
       <h3>
         <svg>
           <use href="#i-shop" />

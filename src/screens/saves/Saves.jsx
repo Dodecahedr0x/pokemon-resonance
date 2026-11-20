@@ -182,7 +182,7 @@ function Card({ xRef }) {
         </svg>
       </button>
       <p className="kicker">Archives du dresseur</p>
-      <h2 className="h2" id="svTitle">
+      <h2 className="section-title" id="svTitle">
         Partie et réglages
       </h2>
       <p className={'sv-st ' + (SV.cloud ? 'cloud' : 'local')}>

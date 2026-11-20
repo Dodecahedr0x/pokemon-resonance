@@ -7,6 +7,7 @@ import { buildWeeklyChallenge } from '../../engine/modes/weekly-challenge.js';
 import Rewards from './Rewards.jsx';
 
 import Button from '../../components/Button.jsx';
+import CardHeader from '../../components/CardHeader.jsx';
 const NL = '\n ';
 
 // Challenge of the week (v4.29): same rental team for everyone, ranking among friends.
@@ -19,14 +20,8 @@ function Weekly() {
       (a, b) => b.s - a.s
     );
   return (
-    <article className="weekly-card v4-panel">
-      <header className="v4-ph">
-        <svg>
-          <use href="#i-trophy" />
-        </svg>
-        <b>Défi de la semaine</b>
-        <span className="v4-cnt">{D.lvl}</span>
-      </header>
+    <article className="weekly-card card">
+      <CardHeader icon="trophy" title="Défi de la semaine" count={D.lvl} />
       {NL}
       <p className="weekly-card-r">{D.d}</p>
       {NL}
@@ -88,7 +83,7 @@ export default function Event() {
       <Weekly />
       {S ? (
         <>
-          <article className={'v4-daily v4-panel' + (done ? ' done' : '')}>
+          <article className={'v4-daily card' + (done ? ' done' : '')}>
             <span className="v4t-scene" style={{ backgroundPosition: `${(dk.charCodeAt(0) * 7) % 100}% 50%` }} />
             <div className="v4-daily-t">
               <small>Défi du jour · se renouvelle dans {dailyLeft()}</small>

@@ -10,7 +10,7 @@ export default function Missions() {
   const pals = MISSION_TIERS.filter(p => !S.pal[p[0]]).slice(0, 2);
   const w = weekKey();
   return (
-    <section id="dex-mission" className="dex-mission v4-panel">
+    <section id="dex-mission" className="dex-mission card">
       <h3>Missions du Pokédex</h3>
       {pals.map(([k, r]) => {
         const ok = n >= k;

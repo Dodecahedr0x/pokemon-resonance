@@ -487,7 +487,7 @@ function Awakening({ u, s }) {
   return (
     <div className={'battle-energy' + (full ? ' is-full' : '')}>
       <div className="battle-energy-head">
-        <span className="lbl-s">Énergie d’Éveil</span>
+        <span className="caption">Énergie d’Éveil</span>
         <Html html={enPips(u.en, 'lg')} />
       </div>
       {NL}
@@ -596,7 +596,7 @@ function Bag({ u }) {
   }
   return (
     <div className="battle-bag">
-      <span className="lbl-s">
+      <span className="caption">
         Sac · {B.itemsUsed || 0} / {BAG_MAX}
       </span>
       {own.map(k => {

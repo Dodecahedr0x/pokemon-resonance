@@ -93,13 +93,13 @@ body {
     transform: none;
   }
 }
-.h2 {
+.section-title {
   font-size: clamp(20px, 2vw, 28px) !important;
 }
 .tcard,
 .resume,
 .panel,
-.sec,
+.section,
 .case,
 .pt,
 .rules,
@@ -174,7 +174,7 @@ body {
   background: linear-gradient(145deg, #ffd65b, #9d6d25) !important;
   color: #122331 !important;
 }
-.tc-n .h2 {
+.tc-n .section-title {
   font-size: 20px !important;
 }
 .tc-bdg {

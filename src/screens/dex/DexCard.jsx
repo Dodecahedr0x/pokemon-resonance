@@ -43,7 +43,7 @@ export default function DexCard() {
   }
   return (
     <article
-      className={`dex-card v4-panel${sh ? ' shiny' : ''}${own ? ' dex-owned' : ''}`}
+      className={`dex-card card${sh ? ' shiny' : ''}${own ? ' dex-owned' : ''}`}
       id="dex4Card"
       aria-live="polite"
       style={style}

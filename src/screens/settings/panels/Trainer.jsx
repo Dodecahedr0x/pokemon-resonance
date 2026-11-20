@@ -4,17 +4,13 @@ import { tLevel } from '../../../engine/progression/trainer-stats.js';
 import { boxCapacityLabel } from '../../../engine/world/catch-anywhere.js';
 
 import Button from '../../../components/Button.jsx';
+import CardHeader from '../../../components/CardHeader.jsx';
 // Trainer: first name, difficulty, game state. The engine handles #v4Nm, data-diff and data-v4saves.
 export default function Trainer() {
   return (
-    <section className="v4-panel v4-ps">
-      <header className="v4-ph">
-        <svg>
-          <use href="#i-user" />
-        </svg>
-        <b>Dresseur</b>
-      </header>
-      <label className="v4-fld">
+    <section className="card v4-ps">
+      <CardHeader icon="user" title="Dresseur" />
+      <label className="form-field">
         <span>Prénom</span>
         <input
           type="text"
@@ -25,7 +21,7 @@ export default function Trainer() {
           placeholder="Votre prénom"
         />
       </label>
-      <div className="v4-fld">
+      <div className="form-field">
         <span>Difficulté</span>
         <div className="v4-seg" role="group" aria-label="Difficulté">
           {Object.entries(DIFFS).map(([k, n]) => (

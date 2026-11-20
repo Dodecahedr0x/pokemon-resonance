@@ -15,7 +15,7 @@ export default function Companion() {
   return (
     <section
       id="v4Comp"
-      className="team-companion v4-panel"
+      className="team-companion card"
       aria-label="Compagnon"
       style={d ? { '--c': tc(d.m.t[0]) } : undefined}
     >

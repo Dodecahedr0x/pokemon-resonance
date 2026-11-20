@@ -7,15 +7,15 @@
   gap: var(--space-sm);
   align-content: start;
 }
-.v4-fld {
+.form-field {
   display: grid;
   gap: var(--space-xs);
 }
-.v4-fld > span {
+.form-field > span {
   font: 700 12.5px/1 var(--f-d);
   color: var(--v4-tx2);
 }
-html body .v4-fld input {
+html body .form-field input {
   min-height: 44px;
   padding: 0 var(--space-md);
   border-radius: 10px !important;

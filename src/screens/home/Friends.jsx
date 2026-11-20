@@ -8,11 +8,12 @@ import { friendsPanelData } from '../../engine/modes/friend-challenges.js';
 import { tournamentPanelHtml } from '../../engine/modes/friends-tournament.js';
 
 import Button from '../../components/Button.jsx';
+import CardHeader from '../../components/CardHeader.jsx';
 // Friend challenges (#v4Amis, v4.16), under the hidden Home shortcuts.
 // data-ami, data-ami-fight, data-ami-del and tournoi buttons: handled by the engine.
 export default function Friends({ on }) {
   return (
-    <section className="v4-amis v4-panel" id="v4Amis" aria-label="Défis entre amis">
+    <section className="v4-amis card" id="v4Amis" aria-label="Défis entre amis">
       {on && <Content />}
     </section>
   );
@@ -22,13 +23,7 @@ function Content() {
   const { L, rows, jour: dayKey, del } = friendsPanelData();
   return (
     <>
-      <header className="v4-ph">
-        <svg>
-          <use href="#i-team" />
-        </svg>
-        <b>Défis entre amis</b>
-        <span className="v4-cnt">{L.length}</span>
-      </header>
+      <CardHeader icon="team" title="Défis entre amis" count={L.length} />
       {'\n  '}
       <p className="v4-ps-n">
         Partagez votre carte de dresseur (un code à coller), ajoutez celles de vos amis, et affrontez leurs équipes. Le

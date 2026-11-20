@@ -9,8 +9,8 @@ export default function Avatar() {
     types = Object.keys(TYPES),
     on = RARE_ENABLED();
   return (
-    <section className="v4-panel" id="avatar-panel">
-      <h3 className="h3">Avatar de dresseur</h3>
+    <section className="card" id="avatar-panel">
+      <h3 className="card-title">Avatar de dresseur</h3>
       <p className="v4-note">
         Choisissez l’emblème de votre type : il colore votre pastille en haut de l’écran et s’affiche sur l’écran « VS
         ».
@@ -44,7 +44,7 @@ export default function Avatar() {
           Retirer l’avatar
         </Button>
       </div>
-      <h3 className="h3 settings-subhead">Rencontres rares</h3>
+      <h3 className="card-title settings-subhead">Rencontres rares</h3>
       <p className="v4-note">
         Certains Pokémon sortent plus souvent la nuit, le matin ou selon la météo du jour (pluie, soleil, grêle, sable).
         Des trouvailles scintillent aussi sur la carte, une fois par jour.

@@ -2,18 +2,13 @@ import { BY } from '../../../engine/pokemon/pokemon.js';
 import { DIFFS, PROFILE } from '../../../engine/state/game-state.js';
 import { ART } from '../../../engine/assets/item-icons.js';
 
+import CardHeader from '../../../components/CardHeader.jsx';
 // Camp › Pantheon (v4.32): teams engraved after a Champion, a Master or the Echo guardian.
 export default function Pantheon() {
   const L = PROFILE.pantheonlist || [];
   return (
-    <section className="v4-panel pantheon-tab">
-      <header className="v4-ph">
-        <svg>
-          <use href="#i-trophy" />
-        </svg>
-        <b>Panthéon</b>
-        <span className="v4-cnt">{L.length}</span>
-      </header>
+    <section className="card pantheon-tab">
+      <CardHeader icon="trophy" title="Panthéon" count={L.length} />
       <p className="v4-ps-n">
         Chaque équipe qui bat un Champion ou un Maître, ou le gardien de l’Écho profond, est gravée ici.
       </p>

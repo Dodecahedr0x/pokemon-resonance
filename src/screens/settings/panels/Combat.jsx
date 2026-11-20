@@ -1,6 +1,7 @@
 import { PREF } from '../../../engine/ui/preferences.js';
 import { Switch } from '../controls.jsx';
 
+import CardHeader from '../../../components/CardHeader.jsx';
 const DEPLOYMENTS = [
   ['grands', 'Grands combats'],
   ['tous', 'Tous'],
@@ -11,7 +12,7 @@ const DEPLOYMENTS = [
 function Deployment() {
   const v = PREF.deployPhase || 'grands';
   return (
-    <div className="v4-fld deploy-phase-f">
+    <div className="form-field deploy-phase-f">
       <span>Déploiement avant le combat</span>
       <div className="v4-seg" role="group" aria-label="Déploiement">
         {DEPLOYMENTS.map(([k, n]) => (
@@ -27,13 +28,8 @@ function Deployment() {
 // Battle: board rules and comfort.
 export default function Combat() {
   return (
-    <section className="v4-panel v4-ps">
-      <header className="v4-ph">
-        <svg>
-          <use href="#i-bolt" />
-        </svg>
-        <b>Combat</b>
-      </header>
+    <section className="card v4-ps">
+      <CardHeader icon="bolt" title="Combat" />
       <Switch
         k="livingBoard"
         on={PREF.livingBoard !== false}

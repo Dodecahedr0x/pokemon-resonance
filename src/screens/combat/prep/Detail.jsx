@@ -53,7 +53,7 @@ export default function Detail({ k }) {
             html={`${C ? C.c : groupOf(k) === 'terrains' ? 'Entraînement' : 'Ligue'}${won ? ' · réussi' : ''}${r ? ` · rang ${r}` : ''}`}
           />
         </p>
-        <h2 className="h2">
+        <h2 className="section-title">
           <Html html={k === 'champ' ? 'Finale de la Ligue' : s.n} />
         </h2>
         {L && (

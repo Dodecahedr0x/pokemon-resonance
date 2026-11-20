@@ -1,6 +1,7 @@
 import { isCreator } from '../../../engine/tools/action-replay.js';
 
 import Button from '../../../components/Button.jsx';
+import CardHeader from '../../../components/CardHeader.jsx';
 const CHEATS = [
   ['argent', '+10 000 ₽'],
   ['eclats', '+100 Éclats'],
@@ -17,13 +18,8 @@ const CHEATS = [
 export default function ActionReplay() {
   if (!isCreator()) {
     return (
-      <section className="v4-panel v4-ps cheat-code">
-        <header className="v4-ph">
-          <svg>
-            <use href="#i-lock" />
-          </svg>
-          <b>Action Replay</b>
-        </header>
+      <section className="card v4-ps cheat-code">
+        <CardHeader icon="lock" title="Action Replay" />
         <div className="cheat-code-form">
           <input
             type="password"
@@ -42,14 +38,8 @@ export default function ActionReplay() {
     );
   }
   return (
-    <section className="v4-panel v4-ps cheat-code is-active">
-      <header className="v4-ph">
-        <svg>
-          <use href="#i-star" />
-        </svg>
-        <b>Action Replay</b>
-        <span className="v4-cnt">actif sur cet appareil</span>
-      </header>
+    <section className="card v4-ps cheat-code is-active">
+      <CardHeader icon="star" title="Action Replay" count="actif sur cet appareil" />
       <p className="v4-ps-n">
         Raccourcis de test. Ils modifient la partie en cours : rangez-la d’abord dans un emplacement si besoin.
       </p>

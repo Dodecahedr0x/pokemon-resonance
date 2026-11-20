@@ -21,7 +21,7 @@ export default function Arena() {
       </div>
       <div>
         <p className="kicker">{`Arène ${gymSel + 1} sur 8 · N.${D.lv}${won ? ' · badge obtenu' : ''}`}</p>
-        <h3 className="h2">
+        <h3 className="section-title">
           <Html html={g.n} />
         </h3>
         {L && (

@@ -47,7 +47,7 @@
 .prep-card-head .kicker {
   margin: 0 0 var(--space-xs);
 }
-.prep-card-head .h2 {
+.prep-card-head .section-title {
   margin: 0;
 }
 .prep-card-leader {

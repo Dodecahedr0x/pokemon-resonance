@@ -1,5 +1,5 @@
 /* ===================== v0.6: playable battle & finishing touches ===================== */
-.h2 {
+.section-title {
   font-stretch: 114%;
   font-weight: 720;
 }
@@ -14,7 +14,7 @@
   background: transparent;
   border-style: dashed;
 }
-.lbl-s {
+.caption {
   font-family: var(--f-m);
   font-size: 10.5px;
   letter-spacing: 0.16em;

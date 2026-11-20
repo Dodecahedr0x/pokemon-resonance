@@ -6,6 +6,7 @@ import { MASTERY_DEFS, MASTERY_THRESHOLD, masteryChoice } from '../../../engine/
 import { Html } from '../../../lib/html.jsx';
 
 import Button from '../../../components/Button.jsx';
+import CardHeader from '../../../components/CardHeader.jsx';
 // A family: progression, then the choice between two masteries (data-mastery-track).
 function Family({ b, x }) {
   const m = BY[b],
@@ -57,14 +58,8 @@ export default function Mastery() {
       .sort((a, c) => !!c.x.p - !!a.x.p || c.x.n - a.x.n);
   const priceAmount = 500;
   return (
-    <section className="v4-panel mastery-tab">
-      <header className="v4-ph">
-        <svg>
-          <use href="#i-star" />
-        </svg>
-        <b>Maîtrise des familles</b>
-        <span className="v4-cnt">{`${L.filter(y => y.x.p).length} / ${L.length}`}</span>
-      </header>
+    <section className="card mastery-tab">
+      <CardHeader icon="star" title="Maîtrise des familles" count={`${L.filter(y => y.x.p).length} / ${L.length}`} />
       <p className="v4-ps-n">{`Après ${MASTERY_THRESHOLD} combats dans l’équipe, une famille débloque un bonus permanent, à choisir entre deux. Vous pouvez en changer pour ${fmt(priceAmount)} ₽.`}</p>
       <div className="mastery-tab-l">
         {L.length ? (

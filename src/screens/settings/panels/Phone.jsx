@@ -2,16 +2,12 @@ import { PREF } from '../../../engine/ui/preferences.js';
 import { Switch } from '../controls.jsx';
 
 import Button from '../../../components/Button.jsx';
+import CardHeader from '../../../components/CardHeader.jsx';
 // Phone: vibrations, gestures, aids. The engine handles data-hm, data-guide and data-v4reset.
 export default function Phone() {
   return (
-    <section className="v4-panel v4-ps">
-      <header className="v4-ph">
-        <svg>
-          <use href="#i-phone" />
-        </svg>
-        <b>Téléphone</b>
-      </header>
+    <section className="card v4-ps">
+      <CardHeader icon="phone" title="Téléphone" />
       <Switch k="vibe" on={PREF.vibe} lab="Vibrations" sub="Coups encaissés, K.O. et récompenses" />
       <Switch
         k="swipeNav"

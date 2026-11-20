@@ -12,8 +12,8 @@ export default function BoardThemes() {
     ? ` Il apprend de ses défaites${T ? ` et prépare des Pokémon contre le type ${T}, le plus présent dans votre équipe` : ''}.`
     : ' Battez-le : il s’adaptera à votre style.';
   return (
-    <section className="v4-panel" id="craft-bench">
-      <h3 className="h3">Thèmes de plateau</h3>
+    <section className="card" id="craft-bench">
+      <h3 className="card-title">Thèmes de plateau</h3>
       <p className="v4-note">Change seulement les couleurs du plateau. Éclats de Résonance : {PROFILE.gems}.</p>
       <div className="board-theme-grid">
         {Object.keys(BOARD_THEMES).map(k => {
@@ -37,7 +37,7 @@ export default function BoardThemes() {
           );
         })}
       </div>
-      <h3 className="h3 settings-subhead">Votre rival</h3>
+      <h3 className="card-title settings-subhead">Votre rival</h3>
       <p className="v4-note">{`Kael : ${rv.w} défaite${rv.w > 1 ? 's' : ''} contre vous, ${rv.l} victoire${rv.l > 1 ? 's' : ''}.${rival}`}</p>
     </section>
   );

@@ -156,7 +156,7 @@ export function Synergies() {
     <div className="battle-synergies" id="bSyn" hidden={!L2.length}>
       {L2.length > 0 && (
         <>
-          <span className="lbl-s">Synergies</span>
+          <span className="caption">Synergies</span>
           {L2.map(x => (
             <span key={x.k} className="syn-c" title={x.d}>
               {x.t.map((t, i) => (

@@ -275,7 +275,7 @@
   min-height: 44px !important;
 }
 /* Guide, type encyclopedia, league, settings — consistent premium materials */
-#types .sec,
+#types .section,
 #types .anat,
 #types .panel,
 #types .codex,
@@ -292,7 +292,7 @@
   border: 1px solid rgba(112, 211, 255, 0.21) !important;
   box-shadow: 0 16px 38px rgba(0, 0, 0, 0.18) !important;
 }
-#types .sec h2,
+#types .section h2,
 #ligue h2 {
   color: #fff4c7 !important;
 }

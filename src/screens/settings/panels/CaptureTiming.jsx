@@ -5,8 +5,8 @@ import Button from '../../../components/Button.jsx';
 export default function CaptureTiming() {
   const on = PREF.catchTimingEnabled !== 0;
   return (
-    <section className="v4-panel" id="capture-timing-panel">
-      <h3 className="h3">Capture avec timing</h3>
+    <section className="card" id="capture-timing-panel">
+      <h3 className="card-title">Capture avec timing</h3>
       <p className="v4-note">
         Quand les conditions de capture sont réunies, un anneau se resserre : touchez au bon moment. Parfait : la Ball
         vous est rendue. Bien : capture normale. Raté : la Ball rebondit et est perdue, mais l’allié n’a pas agi et vous

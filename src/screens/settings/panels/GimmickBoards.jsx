@@ -13,8 +13,8 @@ export default function GimmickBoards() {
   const d =
     c !== 'off' && c !== 'rand' ? GIMMICKS[c].d : c === 'rand' ? 'Un gimmick différent est tiré à chaque combat.' : '';
   return (
-    <section className="v4-panel" id="gimmick-boards-panel">
-      <h3 className="h3">Plateaux à gimmick</h3>
+    <section className="card" id="gimmick-boards-panel">
+      <h3 className="card-title">Plateaux à gimmick</h3>
       <p className="v4-note">{`Ajoute une règle de terrain à vos combats (hors boss, tutoriel et défis à règles fixes). ${d}`}</p>
       <div className="sv-io">
         {btn('off', 'Aucun')}

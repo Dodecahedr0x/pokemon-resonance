@@ -129,7 +129,7 @@ html body .ambient {
 html body .page {
   isolation: isolate;
 }
-html body .h2 {
+html body .section-title {
   letter-spacing: -0.045em !important;
   text-shadow: 0 5px 24px rgba(0, 0, 0, 0.38);
 }

@@ -29,7 +29,7 @@ function Season() {
   const { s, isTaken: takenSet } = d;
   return (
     <div className="v4-saison" id="v4Saison" style={{ '--c': s.c }}>
-      <div className="v4-panel sa-card">
+      <div className="card sa-card">
         <span className="sa-ic" aria-hidden="true">
           <svg>
             <use href="#i-star" />
@@ -61,8 +61,8 @@ function Season() {
 
 function Radio() {
   return (
-    <section id="v4Radio" className="v4-radio v4-panel" aria-label="Pokématos">
-      <header className="v4-ph">
+    <section id="v4Radio" className="v4-radio card" aria-label="Pokématos">
+      <header className="card-header">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path
             d="M5 9h14v11H5zM8 9l9-5M9 14a2 2 0 1 0 0 .1M14 13h3M14 16h3"
@@ -73,7 +73,7 @@ function Radio() {
           />
         </svg>
         <b>Pokématos</b>
-        <span className="v4-cnt">Radio du jour</span>
+        <span className="card-count">Radio du jour</span>
       </header>
       <ul className="rd-l">
         {radioLines().map(([t, x, go], i) => (

@@ -87,7 +87,7 @@ export function Codex() {
 export function Chords() {
   return (
     <section className="acc-codex" aria-label="Accords de Résonance">
-      <h3 className="h3">Accords de Résonance</h3>
+      <h3 className="card-title">Accords de Résonance</h3>
       <p className="d">
         Avec la Tactique avancée : dans une même manche, trois attaques de vos Pokémon dont les types forment un accord
         déclenchent un effet d’équipe. Un accord par manche.
@@ -115,7 +115,7 @@ export function Chords() {
 export function ResonanceInBattle() {
   return (
     <section className="acc-codex reso-codex" aria-label="La Résonance en combat">
-      <h3 className="h3">La Résonance en combat</h3>
+      <h3 className="card-title">La Résonance en combat</h3>
       <p className="d">
         Chaque Pokémon a un rang, selon son coût en PC : Faible (1), Moyen (2 et 3), Fort (4 et 5), Expert (6 et plus,
         et les légendaires). Un Éveil le fait monter de rang. Chaque rang a son rôle : avec trois rangs différents,
@@ -172,7 +172,7 @@ export default function Tactics() {
   return (
     <>
       <div className="gd-intro">
-        <h2 className="h2">Rôles, synergies, obstacles</h2>
+        <h2 className="section-title">Rôles, synergies, obstacles</h2>
         <p className="d">
           Chaque rôle a sa mécanique, deux types complémentaires ouvrent une synergie, et le terrain change la portée
           des tirs.

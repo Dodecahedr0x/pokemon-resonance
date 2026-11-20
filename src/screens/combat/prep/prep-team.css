@@ -34,7 +34,7 @@
   justify-content: space-between;
   gap: var(--space-md);
 }
-.prep-team-head .lbl-s {
+.prep-team-head .caption {
   margin: 0;
 }
 /* "n / 4 · x / 12 PC" */

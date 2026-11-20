@@ -91,7 +91,7 @@
     gap: var(--space-lg);
   }
 }
-.arena .h2 {
+.arena .section-title {
   margin-top: var(--space-xs);
 }
 .arena dt {

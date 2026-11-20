@@ -12,8 +12,8 @@ export default function Chronicles() {
     n = CHAPTERS.filter((c, i) => s.read[i]).length;
   const seenSet = Object.keys(CHAPTER_NAMES).filter(k => SCENES[k] && PROFILE.scenes && PROFILE.scenes[k]);
   return (
-    <section className="v4-panel" id="chronicles-panel">
-      <h3 className="h3">Chroniques</h3>
+    <section className="card" id="chronicles-panel">
+      <h3 className="card-title">Chroniques</h3>
       <p className="v4-note">
         L’histoire de la Résonance, chapitre après chapitre, au fil de vos badges.{' '}
         <b>
@@ -43,7 +43,7 @@ export default function Chronicles() {
       </div>
       {seenSet.length > 0 && (
         <>
-          <h4 className="h3" style={{ marginTop: space.md }}>
+          <h4 className="card-title" style={{ marginTop: space.md }}>
             Scènes déjà vues
           </h4>
           <div className="chronicle-grid">

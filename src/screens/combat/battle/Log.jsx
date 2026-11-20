@@ -10,7 +10,7 @@ export default function Log() {
   return (
     <details className="panel blog" id="bLogD">
       <summary>
-        <span className="lbl-s">Journal</span>
+        <span className="caption">Journal</span>
         <em id="bLogLast">{L.length ? L[0].s : ''}</em>
       </summary>
       <ol id="bLog">

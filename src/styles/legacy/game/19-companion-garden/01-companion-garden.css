@@ -57,7 +57,7 @@ html body .v4-radio {
   margin: var(--space-md) 0;
   padding: var(--space-md) var(--space-md);
 }
-html body .v4-radio .v4-ph svg {
+html body .v4-radio .card-header svg {
   width: 20px;
   height: 20px;
 }

@@ -6,15 +6,14 @@ import { ECHO_EVENTS, ECHO_NODES, RELIC_DEFS, randomRelic } from '../../../engin
 import { Html } from '../../../lib/html.jsx';
 
 import Button from '../../../components/Button.jsx';
+import CardHeader from '../../../components/CardHeader.jsx';
 function Head({ X }) {
   return (
-    <header className="v4-ph">
-      <svg>
-        <use href="#i-compass" />
-      </svg>
-      <b>Écho profond</b>
-      <span className="v4-cnt">{`record ${X.best || 0} / 8${X.wins ? ` · ${X.wins} victoire${X.wins > 1 ? 's' : ''}` : ''}`}</span>
-    </header>
+    <CardHeader
+      icon="compass"
+      title="Écho profond"
+      count={`record ${X.best || 0} / 8${X.wins ? ` · ${X.wins} victoire${X.wins > 1 ? 's' : ''}` : ''}`}
+    />
   );
 }
 
@@ -117,7 +116,7 @@ export default function Echo() {
     R = X.run;
   if (!R) {
     return (
-      <section className="v4-panel echo-tab">
+      <section className="card echo-tab">
         <Head X={X} />
         <p className="v4-ps-n">
           Une expédition de 8 étages. À chaque étage, choisissez votre chemin : combat, élite (une relique à la clé),
@@ -146,7 +145,7 @@ export default function Echo() {
     );
   }
   return (
-    <section className="v4-panel echo-tab">
+    <section className="card echo-tab">
       <Head X={X} />
       <div className="echo-tab-k">
         <span>

@@ -298,7 +298,7 @@ html.a11y-hc {
   --fnt: #aeb6c4 !important;
   --line2: rgba(255, 255, 255, 0.32) !important;
 }
-html.a11y-hc .v4-panel,
+html.a11y-hc .card,
 html.a11y-hc .v4-ps,
 html.a11y-hc .button {
   border-color: rgba(255, 255, 255, 0.45) !important;

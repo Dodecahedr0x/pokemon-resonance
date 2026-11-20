@@ -21,7 +21,7 @@ export default function DexCall({ v }) {
     <div className="team-recruits" id="dexCall">
       <div className="team-recruits-row">
         <span
-          className="lbl-s"
+          className="caption"
           title="Formes déjà évoluées, recrutées directement : plus puissantes tout de suite, mais plus chères."
         >
           Recrues confirmées
@@ -55,7 +55,7 @@ export default function DexCall({ v }) {
         {/* rebuilt on every render, like the old innerHTML: « Sûr ? » (Sure?) is written by the engine */}
         <SavedSquads key={v} />
         <div className="team-recruits-row">
-          <span className="lbl-s">Formations</span>
+          <span className="caption">Formations</span>
           <div className="team-recruits-buttons">
             {Object.entries(PRESETS).map(([k, p]) => (
               <Button key={k} size="small" data-pf={k} title={p.synergyText ? 'Synergies : ' + p.synergyText : ''}>
@@ -77,7 +77,7 @@ function Legends() {
   }
   return (
     <div className="team-recruits-row">
-      <span className="lbl-s" title="Légendes capturées : 8 PC chacune.">
+      <span className="caption" title="Légendes capturées : 8 PC chacune.">
         Légendes
       </span>
       <div className="team-recruits-list">
@@ -110,7 +110,7 @@ function SavedSquads() {
   const T = PROFILE.savedTeams || [];
   return (
     <div className="team-recruits-row team-saved-teams">
-      <span className="lbl-s">Mes équipes</span>
+      <span className="caption">Mes équipes</span>
       <div className="team-recruits-buttons">
         {T.map((t, i) => (
           <span key={i} className="team-saved-team">

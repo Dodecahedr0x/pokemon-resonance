@@ -8,7 +8,7 @@ function AchievementRow({ s }) {
     pr = !ok && s.p ? s.p() : null,
     equipped = ok && PROFILE.titre === s.id;
   return (
-    <article className={'v4-panel su-row' + (ok ? ' ok' : '')}>
+    <article className={'card su-row' + (ok ? ' ok' : '')}>
       <span className="su-ic" aria-hidden="true">
         <svg>
           <use href="#i-trophy" />

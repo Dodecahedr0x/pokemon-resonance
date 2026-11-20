@@ -5,8 +5,8 @@ export default function FeatsJournal() {
   const st = featsState();
   const h8 = st.h.slice(0, 8);
   return (
-    <section className="v4-panel" id="feats-journal">
-      <h3 className="h3">Journal des exploits</h3>
+    <section className="card" id="feats-journal">
+      <h3 className="card-title">Journal des exploits</h3>
       <p className="v4-note">
         Exploits obtenus : <b>{st.n}</b> · meilleur coup : <b>{st.rec.best}</b> dégâts · victoire la plus rapide :{' '}
         <b>{st.rec.fast || '—'}</b> manche{st.rec.fast > 1 ? 's' : ''}.

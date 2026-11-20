@@ -127,7 +127,7 @@
   padding-top: var(--space-sm);
   border-top: 1px solid rgba(120, 200, 255, 0.14);
 }
-.battle-bag .lbl-s {
+.battle-bag .caption {
   width: 100%;
 }
 .battle-bag-item {

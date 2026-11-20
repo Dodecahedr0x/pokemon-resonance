@@ -1,7 +1,7 @@
 /* Companion panel on the Team page (#v4Comp, Companion.jsx): portrait, name, hearts, affection bar, mood and
    bonus, Pet / Change buttons, then the Berry / Gift / Memories row. Without a companion: an invitation to
    choose one. --c is the companion's first type colour (inline style). Clicks: engine listeners on
-   data-comp and data-buddy. The panel frame comes from the shared .v4-panel. */
+   data-comp and data-buddy. The panel frame comes from the shared .card. */
 
 .team-companion {
   display: flex;

@@ -40,7 +40,7 @@ function Card({
   return (
     <Dialogue className="sv-card exp-card sf-card" titre="sfT" closeAttrs={{ 'data-safariPanel': 'x' }}>
       <p className="kicker">Parc Safari</p>
-      <h2 className="h2" id="sfT">
+      <h2 className="section-title" id="sfT">
         {x ? m.n : 'Les herbes du Parc'}
       </h2>
       <div className="sf-k">

@@ -25,7 +25,7 @@ export default function Pokedex() {
           />
           {'\n '}
           <Missions />
-          <div className="dex-toolbar v4-panel">
+          <div className="dex-toolbar card">
             <label className="dex-search">
               <svg viewBox="0 0 20 20" aria-hidden="true">
                 <circle cx="9" cy="9" r="5.5" fill="none" stroke="currentColor" strokeWidth="1.7" />

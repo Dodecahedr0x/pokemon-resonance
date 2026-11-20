@@ -101,7 +101,7 @@ body {
   border-top: 1px solid rgba(160, 220, 230, 0.18) !important;
   color: #c2d6df !important;
 }
-#accueil .v4-panel,
+#accueil .card,
 #accueil .v4-quest {
   border: 1px solid var(--r22-line) !important;
   background: linear-gradient(145deg, rgba(19, 47, 64, 0.94), rgba(8, 23, 35, 0.96)) !important;
@@ -113,7 +113,7 @@ body {
 #accueil .v4-team {
   padding: var(--space-xl) !important;
 }
-#accueil .v4-ph {
+#accueil .card-header {
   color: #eaf7fa !important;
   letter-spacing: 0.04em;
 }
@@ -225,7 +225,7 @@ body {
   transform: translate(-50%, -50%) scale(1.12) !important;
   filter: drop-shadow(0 0 12px rgba(113, 228, 237, 0.75));
 }
-#carte .v4-map-side .v4-panel {
+#carte .v4-map-side .card {
   border: 1px solid rgba(123, 208, 222, 0.22) !important;
   border-radius: 20px !important;
   background: linear-gradient(155deg, #132e3d, #0a1925) !important;

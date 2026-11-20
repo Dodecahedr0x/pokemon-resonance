@@ -4,6 +4,7 @@ import { PROFILE, isCamp } from '../../../engine/state/game-state.js';
 import { CHALLENGES, CHALLENGE_CONF } from '../../../engine/progression/campaign-challenges.js';
 
 import Button from '../../../components/Button.jsx';
+import CardHeader from '../../../components/CardHeader.jsx';
 // Challenge switch (data-defi, handled by the engine).
 function Challenge({ k, on }) {
   return (
@@ -22,13 +23,8 @@ function Challenge({ k, on }) {
 export default function CampaignChallenges() {
   if (!isCamp()) {
     return (
-      <section className="v4-panel v4-ps">
-        <header className="v4-ph">
-          <svg>
-            <use href="#i-trophy" />
-          </svg>
-          <b>Défis de campagne</b>
-        </header>
+      <section className="card v4-ps">
+        <CardHeader icon="trophy" title="Défis de campagne" />
         <p className="v4-ps-n">Les défis se jouent en Campagne.</p>
       </section>
     );
@@ -36,15 +32,10 @@ export default function CampaignChallenges() {
   const d = PROFILE.challenges || {},
     tomb = (PROFILE.graves || []).filter(b => BY[b]);
   return (
-    <section className="v4-panel v4-ps">
-      <header className="v4-ph">
-        <svg>
-          <use href="#i-trophy" />
-        </svg>
-        <b>Défis de campagne</b>
-      </header>
+    <section className="card v4-ps">
+      <CardHeader icon="trophy" title="Défis de campagne" />
       <p className="v4-ps-n">Chaque défi actif rapporte 1 Éclat par victoire, 4 par nouveau badge.</p>
-      <label className="v4-fld">
+      <label className="form-field">
         <span>Mono-type</span>
         <select data-defi="mono" aria-label="Mono-type" defaultValue={d.mono || ''}>
           <option value="">Aucun</option>

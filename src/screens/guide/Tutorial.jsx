@@ -42,7 +42,7 @@ export default function Tutorial() {
   return (
     <>
       <div className="gd-intro">
-        <h2 className="h2">Tutoriel complet</h2>
+        <h2 className="section-title">Tutoriel complet</h2>
         <p className="d">
           Toutes les mécaniques du jeu, chapitre par chapitre. Ouvrez un chapitre pour le lire, puis essayez-le.
         </p>

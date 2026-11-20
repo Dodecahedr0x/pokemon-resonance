@@ -226,7 +226,7 @@
   gap: var(--space-sm);
 }
 /* Expert attack diamonds (rank Experte) */
-.battle-energy.is-expert .lbl-s {
+.battle-energy.is-expert .caption {
   color: #e2bdff;
 }
 .battle-energy.is-expert .battle-hint {

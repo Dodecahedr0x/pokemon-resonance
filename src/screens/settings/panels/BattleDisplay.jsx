@@ -5,8 +5,8 @@ import Button from '../../../components/Button.jsx';
 export default function BattleDisplay() {
   const fs = document.body.classList.contains('fullscreen-mode');
   return (
-    <section className="v4-panel" id="battle-display-panel">
-      <h3 className="h3">Affichage du combat</h3>
+    <section className="card" id="battle-display-panel">
+      <h3 className="card-title">Affichage du combat</h3>
       <p className="v4-note">
         Plein écran : le navigateur masque ses barres quand il l’autorise, et en combat sur téléphone la barre de
         navigation du bas s’efface. Plateau contrasté : contours de cases nets et terrains plus colorés. Sur le plateau,

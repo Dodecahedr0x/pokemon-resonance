@@ -1,6 +1,7 @@
 import { PREF } from '../../../engine/ui/preferences.js';
 import { Switch } from '../controls.jsx';
 
+import CardHeader from '../../../components/CardHeader.jsx';
 const SIZES = [
   ['normal', 'Normale'],
   ['grand', 'Grande'],
@@ -11,14 +12,9 @@ const SIZES = [
 export default function Accessibility() {
   const t = PREF.textSize || 'normal';
   return (
-    <section className="v4-panel v4-ps accessibility-panel">
-      <header className="v4-ph">
-        <svg>
-          <use href="#i-user" />
-        </svg>
-        <b>Accessibilité</b>
-      </header>
-      <div className="v4-fld">
+    <section className="card v4-ps accessibility-panel">
+      <CardHeader icon="user" title="Accessibilité" />
+      <div className="form-field">
         <span>Taille du texte</span>
         <div className="v4-seg" role="group" aria-label="Taille du texte">
           {SIZES.map(([k, n]) => (

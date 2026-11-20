@@ -5,6 +5,7 @@ import { GYM_EDITOR, GYM_RULES, GYM_TERRAINS, gymShareCode } from '../../../engi
 import { Html } from '../../../lib/html.jsx';
 
 import Button from '../../../components/Button.jsx';
+import CardHeader from '../../../components/CardHeader.jsx';
 const Options = ({ L }) =>
   L.map(([k, n]) => (
     <option key={k} value={k}>
@@ -25,24 +26,24 @@ function Editor() {
   return (
     <div className="gym-tab-ed">
       <h3>{GYM_EDITOR.i >= 0 ? 'Modifier l’arène' : 'Nouvelle arène'}</h3>
-      <label className="v4-fld">
+      <label className="form-field">
         <span>Nom</span>
         <input type="text" data-ar="n" maxLength={22} defaultValue={E.n} />
       </label>
-      <label className="v4-fld">
+      <label className="form-field">
         <span>Terrain</span>
         <select data-ar="t" defaultValue={E.t}>
           <Options L={GYM_TERRAINS()} />
         </select>
       </label>
-      <label className="v4-fld">
+      <label className="form-field">
         <span>Règle</span>
         <select data-ar="r" defaultValue={E.r}>
           <Options L={GYM_RULES()} />
         </select>
       </label>
       <div className="gym-tab-row">
-        <label className="v4-fld">
+        <label className="form-field">
           <span>Heure</span>
           <select data-ar="h" defaultValue={E.h}>
             <Options
@@ -53,13 +54,13 @@ function Editor() {
             />
           </select>
         </label>
-        <label className="v4-fld">
+        <label className="form-field">
           <span>Manches</span>
           <select data-ar="lim" defaultValue={String(E.lim)}>
             <Options L={[6, 8, 10, 12].map(x => [String(x), String(x)])} />
           </select>
         </label>
-        <label className="v4-fld">
+        <label className="form-field">
           <span>Robustesse</span>
           <select data-ar="hb" defaultValue={String(E.hb)}>
             <Options
@@ -74,7 +75,7 @@ function Editor() {
         </label>
       </div>
       {[0, 1, 2, 3, 4].map(i => (
-        <label key={i} className="v4-fld">
+        <label key={i} className="form-field">
           <span>{`Adversaire ${i + 1}`}</span>
           <select data-ar={`f${i}`} defaultValue={E.f[i] || ''}>
             <option value="">—</option>
@@ -141,14 +142,8 @@ function Gym({ a, i }) {
 export default function Gyms() {
   const A = PROFILE.customGyms || [];
   return (
-    <section className="v4-panel gym-tab">
-      <header className="v4-ph">
-        <svg>
-          <use href="#i-league" />
-        </svg>
-        <b>Arènes personnalisées</b>
-        <span className="v4-cnt">{`${A.length} / 12`}</span>
-      </header>
+    <section className="card gym-tab">
+      <CardHeader icon="league" title="Arènes personnalisées" count={`${A.length} / 12`} />
       <p className="v4-ps-n">
         Composez un combat (terrain, règle, adversaires), testez-le, puis envoyez son code à un ami.
       </p>

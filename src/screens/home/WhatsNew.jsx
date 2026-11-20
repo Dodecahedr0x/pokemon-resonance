@@ -1,6 +1,7 @@
 import { NEWS_ENTRIES, hasNewsToView } from '../../engine/ui/whats-new.js';
 
 import Button from '../../components/Button.jsx';
+import CardHeader from '../../components/CardHeader.jsx';
 // "Nouveau" (New) panel on the Home page (#v4News, v4.16.1), before the shortcuts.
 // Removed once the player has tapped "Compris" (Understood) (data-news="ok", handled by the engine).
 export default function WhatsNew() {
@@ -8,16 +9,12 @@ export default function WhatsNew() {
     return null;
   }
   return (
-    <section id="v4News" className="v4-news v4-panel" aria-label="Nouveautés">
-      <header className="v4-ph">
-        <svg>
-          <use href="#i-star" />
-        </svg>
-        <b>Nouveau</b>
+    <section id="v4News" className="v4-news card" aria-label="Nouveautés">
+      <CardHeader icon="star" title="Nouveau">
         <Button size="small" variant="ghost" className="nw-x" data-news="ok">
           Compris
         </Button>
-      </header>
+      </CardHeader>
       <ul className="nw-l">
         {NEWS_ENTRIES.map(([ic, t, d, go], i) => {
           const body = (

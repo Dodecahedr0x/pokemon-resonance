@@ -10,6 +10,7 @@ import { POTAGER, POT_I, plotSprout } from '../../engine/progression/camp-garden
 import { Html } from '../../lib/html.jsx';
 
 import Button from '../../components/Button.jsx';
+import CardHeader from '../../components/CardHeader.jsx';
 const pl = (n, token) => `${n} ${token}${n > 1 ? 's' : ''}`;
 
 // A building: level, effect, Build / Upgrade button (data-camp-b).
@@ -190,15 +191,10 @@ export default function CampBase({ filled: filled }) {
   const exp = PROFILE.exp || [],
     places = filled ? placesExp() : 0;
   return (
-    <section className="camp4 v4-panel" id="v4Camp" aria-label="Camp de base">
+    <section className="camp4 card" id="v4Camp" aria-label="Camp de base">
       {filled && (
         <>
-          <header className="v4-ph">
-            <svg>
-              <use href="#i-map" />
-            </svg>
-            <b>Camp de base</b>
-          </header>
+          <CardHeader icon="map" title="Camp de base" />
           <div className="cb-grid">
             {Object.keys(BUILDINGS).map(k => (
               <Building key={k} k={k} />

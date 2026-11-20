@@ -4,7 +4,7 @@ export default function GettingStarted() {
   return (
     <>
       <div className="gd-intro">
-        <h2 className="h2">Débuter en 5 étapes</h2>
+        <h2 className="section-title">Débuter en 5 étapes</h2>
         <p className="d">Tout ce qu’il faut savoir pour gagner votre premier combat. Le reste se découvre en jouant.</p>
       </div>
       <ol className="s5">
@@ -80,7 +80,7 @@ export default function GettingStarted() {
         <Button data-hm="intro">Revoir l’accueil de la Professeure</Button>
       </div>
       <div className="lex">
-        <h3 className="h3">Petit lexique</h3>
+        <h3 className="card-title">Petit lexique</h3>
         <dl>
           <div>
             <dt>PC</dt>

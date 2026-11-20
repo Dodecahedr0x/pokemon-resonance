@@ -14,7 +14,7 @@ export function Pillars() {
         <Html html={ico(o.i)} />
       </span>
       <span className="tg">{o.tg}</span>
-      <h3 className="h3">{o.n}</h3>
+      <h3 className="card-title">{o.n}</h3>
       <p>
         <Html html={o.d} />
       </p>
@@ -42,11 +42,11 @@ export function Digits() {
 export default function Project() {
   return (
     <>
-      <div className="sec">
-        <div className="sec-h">
+      <div className="section">
+        <div className="section-header">
           <div>
             <p className="kicker">Concept</p>
-            <h2 className="h2">Les piliers de Résonance</h2>
+            <h2 className="section-title">Les piliers de Résonance</h2>
           </div>
           <Button size="small" data-go="pokedex">
             Voir les familles
@@ -59,11 +59,11 @@ export default function Project() {
       <div className="kpis" id="kpis">
         <Digits />
       </div>
-      <div className="sec" id="studio">
-        <div className="sec-h">
+      <div className="section" id="studio">
+        <div className="section-header">
           <div>
             <p className="kicker">Studio</p>
-            <h2 className="h2">Du papier au prototype</h2>
+            <h2 className="section-title">Du papier au prototype</h2>
             <p className="d">
               Le cœur du jeu est déterministe : il se teste d’abord sur papier, avec des jetons et un plateau imprimé.
             </p>
@@ -72,7 +72,7 @@ export default function Project() {
         <div className="prod">
           <div className="pc-card">
             <p className="kicker">Tranche verticale</p>
-            <h3 className="h3">Le contenu minimal</h3>
+            <h3 className="card-title">Le contenu minimal</h3>
             <ul className="scope">
               <li>
                 Pokémon jouables<b>82</b>
@@ -96,7 +96,7 @@ export default function Project() {
           </div>
           <div className="pc-card">
             <p className="kicker">Architecture · Godot 4</p>
-            <h3 className="h3">Les règles séparées de l’image</h3>
+            <h3 className="card-title">Les règles séparées de l’image</h3>
             <div className="layers">
               <div className="layer">
                 <div>
@@ -133,25 +133,25 @@ export default function Project() {
           <div className="rp">
             <span className="k">1</span>
             <span className="du">2 semaines</span>
-            <h3 className="h3">Papier</h3>
+            <h3 className="card-title">Papier</h3>
             <p>Plateau imprimé, jetons, 8 Pokémon. On valide que les réactions créent de vrais choix.</p>
           </div>
           <div className="rp">
             <span className="k">2</span>
             <span className="du">6 semaines</span>
-            <h3 className="h3">Prototype gris</h3>
+            <h3 className="card-title">Prototype gris</h3>
             <p>Moteur de règles sans graphismes. Tests automatiques de chaque réaction.</p>
           </div>
           <div className="rp">
             <span className="k">3</span>
             <span className="du">3 mois</span>
-            <h3 className="h3">Tranche verticale</h3>
+            <h3 className="card-title">Tranche verticale</h3>
             <p>Interface complète, 16 Pokémon, 2 Arènes, capture, Liens et météo.</p>
           </div>
           <div className="rp">
             <span className="k">4</span>
             <span className="du">Ensuite</span>
-            <h3 className="h3">Contenu</h3>
+            <h3 className="card-title">Contenu</h3>
             <p>Région complète, 8 Arènes, Ligue et Champion adaptatif.</p>
           </div>
         </div>
