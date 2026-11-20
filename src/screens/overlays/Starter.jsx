@@ -37,7 +37,7 @@ function Card() {
           const m = BY[id];
           return (
             <button key={id} type="button" className="st-o" data-st={id} style={{ '--c': tc(m.t[0]) }}>
-              <Html html={medal(m.t, 'lg')} />
+              <Html html={medal(m.t, 'is-large')} />
               <b>{m.n}</b>
               <em>
                 {m.r} · {m.c} PC

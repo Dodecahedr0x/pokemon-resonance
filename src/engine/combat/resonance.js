@@ -276,7 +276,7 @@ export function afterDamageItems(S, v, real, o, ev) {
 /* ---------- display ---------- */
 export function plateRankHtml(u) {
   const n = notesOf(B, u);
-  return `<span class="pl-rg rg-${rankOfValue(u)}">${stars(rankOfValue(u))}</span>${n && !u.ko ? `<span class="pl-nt" title="${n} note${n > 1 ? 's' : ''} de Résonance">${'♪'.repeat(n)}</span>` : ''}`;
+  return `<span class="pl-rg rank-${rankOfValue(u)}">${stars(rankOfValue(u))}</span>${n && !u.ko ? `<span class="pl-nt" title="${n} note${n > 1 ? 's' : ''} de Résonance">${'♪'.repeat(n)}</span>` : ''}`;
 }
 
 export function foeResonanceNotes(e) {
@@ -490,7 +490,7 @@ export const rankOfValue = u => rankId(u.id);
 export const stars = r => '★'.repeat(RANKS[r].i);
 
 export const rankTag = r =>
-  `<span class="rg rg-${r}" title="Rang ${RANKS[r].n} · ${RANKS[r].k} : ${RANKS[r].d}">${stars(r)}</span>`;
+  `<span class="rank-tag rank-${r}" title="Rang ${RANKS[r].n} · ${RANKS[r].k} : ${RANKS[r].d}">${stars(r)}</span>`;
 
 /* ---------- 2. ranked attacks, Expert attacks ---------- */
 const XP_LEG = ['fatalfoudre', 'feusacre', 'frappepsy', 'aeroblast'];

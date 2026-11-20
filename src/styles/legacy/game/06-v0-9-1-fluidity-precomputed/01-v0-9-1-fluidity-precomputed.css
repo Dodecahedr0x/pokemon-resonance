@@ -42,7 +42,7 @@
 .h-danger,
 .h-arena,
 .hp.hseg i::after,
-.enp i.on {
+.energy-pips i.is-filled {
   animation: none !important;
 }
 .sc-rustle .rs {
@@ -105,7 +105,7 @@
   fill: #5a1e0c !important;
   stroke: #ff7a3d !important;
 }
-.medal:not(.lg):not(.xl)::before {
+.medal:not(.is-large):not(.is-huge)::before {
   display: none;
 }
 .bdg svg,
@@ -125,7 +125,7 @@
   content-visibility: auto;
   contain-intrinsic-size: auto 900px;
 }
-.enp i.on {
+.energy-pips i.is-filled {
   box-shadow:
     0 0 0 1px rgba(255, 241, 199, 0.7),
     0 0 9px rgba(240, 190, 90, 0.9);

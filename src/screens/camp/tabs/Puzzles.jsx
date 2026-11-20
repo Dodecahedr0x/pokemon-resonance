@@ -38,7 +38,7 @@ export default function Puzzles() {
               <span className="puzzle-tab-n">{`n° ${i + 1}`}</span>
               <span className="puzzle-tab-m">
                 {P[2].map((f, j) => (
-                  <Html key={j} html={medal(BY[f[0]].t, 'xs')} />
+                  <Html key={j} html={medal(BY[f[0]].t, 'is-tiny')} />
                 ))}
               </span>
               <em>{P[1].map(a => BY[a[0]].n).join(' · ')}</em>

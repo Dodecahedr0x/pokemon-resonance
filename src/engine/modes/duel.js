@@ -811,7 +811,7 @@ export function init() {
           ]
             .map(x => {
               const m = BY[x.id];
-              return `<div class="duel-report-rl${x.ko ? ' ko' : ''}">${medal(m.t, 'xs')}<span>${m.n}</span><i style="--w:${Math.round((x.d / mx) * 100)}%"></i><small>${x.d}${x.k ? ` · ${x.k} K.O.` : ''}</small></div>`;
+              return `<div class="duel-report-rl${x.ko ? ' ko' : ''}">${medal(m.t, 'is-tiny')}<span>${m.n}</span><i style="--w:${Math.round((x.d / mx) * 100)}%"></i><small>${x.d}${x.k ? ` · ${x.k} K.O.` : ''}</small></div>`;
             })
             .join('')}</div>`
       )

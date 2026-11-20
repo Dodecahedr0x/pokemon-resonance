@@ -383,8 +383,8 @@ function Links() {
           {rows.map(r => (
             <li key={r.a.id + '|' + r.b.id}>
               <span className="team-analysis-link-medals">
-                <Html html={medal(r.a.t, 'sm')} />
-                <Html html={medal(r.b.t, 'sm')} />
+                <Html html={medal(r.a.t, 'is-small')} />
+                <Html html={medal(r.b.t, 'is-small')} />
               </span>
               <span>
                 <b>

@@ -97,7 +97,7 @@ export default function Detail({ k }) {
     <div key="f" className="prep-card-foes">
       {s.foes.map(([f], i) => (
         <span key={i} className="prep-card-foe">
-          <Html html={medal(BY[f].t, 'sm')} />
+          <Html html={medal(BY[f].t, 'is-small')} />
           <em>
             <Html html={BY[f].n} />
           </em>

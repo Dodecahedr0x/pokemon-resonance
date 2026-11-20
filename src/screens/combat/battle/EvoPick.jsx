@@ -39,7 +39,7 @@ function Path({ u, A, id }) {
   return (
     <button type="button" className="eo" data-pick={id} style={{ '--c': tc(E.t[0]) }}>
       <span className="eo-art">
-        <Html html={medal(E.t, 'xl')} />
+        <Html html={medal(E.t, 'is-huge')} />
       </span>
       <span className="eo-b">
         <span className="eo-n">
@@ -115,7 +115,7 @@ function Card({ u }) {
       </p>
       {'\n  '}
       <div className="ep-from">
-        <Html html={medal(u.t, 'sm')} />
+        <Html html={medal(u.t, 'is-small')} />
         <span>{u.n}</span>
         <span className="ep-ar">→</span>
       </div>

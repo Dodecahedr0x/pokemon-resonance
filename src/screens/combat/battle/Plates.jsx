@@ -109,7 +109,7 @@ function Plate({ u, fog }) {
   const pips = u.side === 'a' ? hasNx(u) || hasXp(u) : bossScene(B) && hasXp(u);
   return (
     <button type="button" className={cls} data-u={u.uid}>
-      <Html html={medal(u.t, 'pm')} />
+      <Html html={medal(u.t, 'is-plate')} />
       <span className="battle-plate-body">
         <span className="battle-plate-head">
           <span className="battle-plate-name">{u.n}</span>
@@ -120,7 +120,7 @@ function Plate({ u, fog }) {
         <span className="battle-plate-status">
           <span>{u.ko ? 'K.O.' : u.hp + ' / ' + u.mhp}</span>
           {u.badge && !u.ko ? (
-            <span className={`stt st-${STC[u.badge] || 'x'}`}>{u.badge}</span>
+            <span className={`status-badge status-${STC[u.badge] || 'other'}`}>{u.badge}</span>
           ) : (
             <span className="battle-plate-state">{state(u, fe, nx)}</span>
           )}

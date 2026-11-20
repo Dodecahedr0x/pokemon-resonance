@@ -45,7 +45,7 @@ export default function Arena() {
         <div className="ar-foes">
           {D.foes.map(([f], i) => (
             <span key={i}>
-              <Html html={medal(BY[f].t, 'sm')} />
+              <Html html={medal(BY[f].t, 'is-small')} />
               <em>
                 <Html html={BY[f].n} />
               </em>

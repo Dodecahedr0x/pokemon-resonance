@@ -24,7 +24,7 @@ function Card({ L, cur, bonus }) {
           const m = BY[id];
           return (
             <button key={id} type="button" className={'exp-d' + (cur === id ? ' on' : '')} data-comp-p={id}>
-              <Html html={medal(m.t, 'sm')} />
+              <Html html={medal(m.t, 'is-small')} />
               <b>{m.n}</b>
               <em>{m.t.join(' · ')}</em>
             </button>

@@ -129,26 +129,26 @@ body {
     inset 0 -6px 14px rgba(0, 0, 0, 0.32),
     0 8px 22px -10px var(--glow, rgba(0, 0, 0, 0.6));
 }
-.medal.xs {
+.medal.is-tiny {
   width: 18px;
   height: 18px;
   box-shadow:
     0 0 0 1px #090b10,
     0 0 0 2px rgba(227, 192, 122, 0.35);
 }
-.medal.sm {
+.medal.is-small {
   width: 28px;
   height: 28px;
 }
-.medal.pm {
+.medal.is-plate {
   width: 34px;
   height: 34px;
 }
-.medal.lg {
+.medal.is-large {
   width: 66px;
   height: 66px;
 }
-.medal.xl {
+.medal.is-huge {
   width: 104px;
   height: 104px;
   box-shadow:
@@ -196,13 +196,13 @@ body {
   pointer-events: none;
 }
 /* Awakening energy */
-.enp {
+.energy-pips {
   display: inline-flex;
   gap: var(--space-2xs);
   align-items: center;
   padding: 0 var(--space-3xs);
 }
-.enp i {
+.energy-pips i {
   width: 8px;
   height: 8px;
   transform: rotate(45deg);
@@ -213,16 +213,16 @@ body {
     background 0.4s,
     box-shadow 0.4s;
 }
-.enp i.on {
+.energy-pips i.is-filled {
   background: linear-gradient(135deg, #fff3cf, #e3c07a 45%, #a9843f);
   box-shadow:
     0 0 0 1px rgba(255, 241, 199, 0.6),
     0 0 9px rgba(227, 192, 122, 0.75);
 }
-.enp.lg {
+.energy-pips.is-large {
   gap: var(--space-sm);
 }
-.enp.lg i {
+.energy-pips.is-large i {
   width: 12px;
   height: 12px;
   border-radius: 2px;

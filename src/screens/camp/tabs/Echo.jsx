@@ -130,7 +130,7 @@ export default function Echo() {
             .filter(id => BY[id])
             .map(id => (
               <span key={id} className="echo-tab-m">
-                <Html html={medal(BY[id].t, 'sm')} />
+                <Html html={medal(BY[id].t, 'is-small')} />
                 <b>{BY[id].n}</b>
               </span>
             ))}
@@ -159,7 +159,7 @@ export default function Echo() {
       <div className="echo-tab-t">
         {R.team.map(([id, h], i) => (
           <span key={i} className={`echo-tab-m${h <= 0 ? ' ko' : ''}`}>
-            <Html html={medal(BY[id].t, 'sm')} />
+            <Html html={medal(BY[id].t, 'is-small')} />
             <b>{BY[id].n}</b>
             <span className="echo-tab-hp">
               <i style={{ width: `${Math.round(h * 100)}%` }} />

@@ -251,7 +251,7 @@ export function Timeline() {
           <span className="battle-order-label">Ordre · manche {F.round}</span>
           {F.rows.map(r => (
             <span key={r.i} className={r.cls} title={r.title}>
-              <Html html={medal(r.t, 'sm')} />
+              <Html html={medal(r.t, 'is-small')} />
               <b>{r.n}</b>
               {r.prio ? <em>{r.prio > 0 ? 'Priorité' : 'En dernier'}</em> : null}
             </span>

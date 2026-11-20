@@ -39,7 +39,7 @@
 .hp i.lo {
   background: var(--bad);
 }
-.stt {
+.status-badge {
   font-family: var(--f-d);
   font-stretch: 112%;
   font-weight: 800;

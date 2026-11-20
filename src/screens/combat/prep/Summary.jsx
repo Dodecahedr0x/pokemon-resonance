@@ -15,7 +15,7 @@ export function SummaryCard({ id, c }) {
   return (
     <>
       <span className="rs-ic">
-        <Html html={c.gym != null ? badgeSvg(c.gym, c.at, 'rs' + id) : medal(['Normal'], 'sm')} />
+        <Html html={c.gym != null ? badgeSvg(c.gym, c.at, 'rs' + id) : medal(['Normal'], 'is-small')} />
       </span>
       <span className="rs-tx">
         <b>Combat en cours</b>

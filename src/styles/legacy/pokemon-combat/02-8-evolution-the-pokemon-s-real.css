@@ -5,18 +5,18 @@ html:not(#pkz) body:not(#pkz) .efx-orb {
   left: calc(50% - 75px) !important;
   top: calc(44% - 75px) !important;
 }
-html:not(#pkz) body:not(#pkz) .efx-orb .medal.pk {
+html:not(#pkz) body:not(#pkz) .efx-orb .medal.has-art {
   width: 124px !important;
   height: 124px !important;
   background: transparent !important;
   box-shadow: none !important;
   border-color: transparent !important;
 }
-html:not(#pkz) body:not(#pkz) .efx-orb .medal.pk::before,
-html:not(#pkz) body:not(#pkz) .efx-orb .medal.pk::after {
+html:not(#pkz) body:not(#pkz) .efx-orb .medal.has-art::before,
+html:not(#pkz) body:not(#pkz) .efx-orb .medal.has-art::after {
   display: none !important;
 }
-html:not(#pkz) body:not(#pkz) .efx-orb .medal.pk .mdl-a {
+html:not(#pkz) body:not(#pkz) .efx-orb .medal.has-art .medal-art {
   width: 120% !important;
   height: 120% !important;
   transform: translate(-50%, -52%) !important;
@@ -174,7 +174,7 @@ html:not(#pkz) body:not(#pkz) .evofx.fast .efx::after {
     left: calc(50% - 65px) !important;
     top: calc(44% - 65px) !important;
   }
-  html:not(#pkz) body:not(#pkz) .efx-orb .medal.pk {
+  html:not(#pkz) body:not(#pkz) .efx-orb .medal.has-art {
     width: 108px !important;
     height: 108px !important;
   }

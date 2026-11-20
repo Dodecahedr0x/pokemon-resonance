@@ -15,10 +15,10 @@ export default function EvoFx() {
           <div className="efx-ring" />
           <div className="efx-orb">
             <span className="efx-a">
-              <Html html={medal(f.fromT, 'xl')} />
+              <Html html={medal(f.fromT, 'is-huge')} />
             </span>
             <span className="efx-b">
-              <Html html={medal(f.toT, 'xl')} />
+              <Html html={medal(f.toT, 'is-huge')} />
             </span>
           </div>
           <p className="efx-t1">{(f.side === 'e' ? 'L’adversaire : ' : 'Quoi ? ') + f.fromN + ' évolue !'}</p>

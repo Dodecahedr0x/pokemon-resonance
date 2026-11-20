@@ -39,7 +39,7 @@ function Places() {
           const m = BY[id];
           return (
             <div key={i} className="prep-team-slot">
-              <Html html={medal(m.t, 'sm')} />
+              <Html html={medal(m.t, 'is-small')} />
               <b>
                 <Html html={m.n} />
               </b>

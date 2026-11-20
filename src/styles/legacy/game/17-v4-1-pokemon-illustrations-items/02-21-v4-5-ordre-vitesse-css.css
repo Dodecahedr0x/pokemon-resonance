@@ -177,12 +177,12 @@ html body #bSvg .h-charge {
 html body #bSvg .h-charge.gw {
   stroke: #ffd75e;
 }
-.bdg-s.st-chg rect,
-.bdg-s.st-vol rect {
+.bdg-s.status-charging rect,
+.bdg-s.status-flying rect {
   stroke: #ffd75e;
 }
-.bdg-s.st-chg text,
-.bdg-s.st-vol text {
+.bdg-s.status-charging text,
+.bdg-s.status-flying text {
   fill: #ffd75e;
 }
 /* --- wind --- */

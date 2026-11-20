@@ -21,10 +21,10 @@ export function medal(types, cls = '') {
     return h;
   }
   return h
-    .replace('<span class="medal ', '<span class="medal pk ')
+    .replace('<span class="medal ', '<span class="medal has-art ')
     .replace(
       '<svg viewBox',
-      `<img class="mdl-a" src="${PK_ART(BY[id].no)}" alt="" loading="lazy" decoding="async" draggable="false" onerror="this.parentNode&&this.parentNode.classList.remove('pk');this.remove()"><svg viewBox`
+      `<img class="medal-art" src="${PK_ART(BY[id].no)}" alt="" loading="lazy" decoding="async" draggable="false" onerror="this.parentNode&&this.parentNode.classList.remove('has-art');this.remove()"><svg viewBox`
     );
 }
 
@@ -35,7 +35,7 @@ export function mini(t) {
 export function tb(t) {
   const c = tc(t),
     fg = lum(c) > 0.45 ? '#0C0E13' : '#FFFFFF';
-  return `<span class="tb" style="--c:${c};--fg:${fg}"><i class="tb-s" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="${gp(t)}" fill="${fg}" fill-rule="evenodd"/></svg></i>${t}</span>`;
+  return `<span class="type-badge" style="--c:${c};--fg:${fg}"><i class="type-badge-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="${gp(t)}" fill="${fg}" fill-rule="evenodd"/></svg></i>${t}</span>`;
 }
 
 export function ico(d) {

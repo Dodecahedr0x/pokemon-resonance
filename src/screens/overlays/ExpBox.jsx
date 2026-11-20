@@ -48,7 +48,7 @@ function Card({ destinationId: dest, available: available }) {
                 const bon = BY[id].t.some(t => DESTINATIONS[dest].types.includes(t));
                 return (
                   <button key={id} type="button" className="exp-d" data-exp-p={id}>
-                    <Html html={medal(BY[id].t, 'sm')} />
+                    <Html html={medal(BY[id].t, 'is-small')} />
                     <b>{BY[id].n}</b>
                     <em>{bon ? 'Terrain idéal · ×2' : 'Gains normaux'}</em>
                   </button>

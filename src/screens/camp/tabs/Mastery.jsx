@@ -26,7 +26,7 @@ function Family({ b, x }) {
     );
   return (
     <article className={`mastery-tab-r${x.p ? ' on' : ''}`}>
-      <Html html={medal(m.t, 'sm')} />
+      <Html html={medal(m.t, 'is-small')} />
       <div className="mastery-tab-t">
         <b>{m.n}</b>
         <span className="mastery-tab-b">

@@ -42,7 +42,7 @@ function Summary({ s }) {
     <div className="sv-sum">
       <span className="sv-meds">
         {s.squad.map((id, i) => (
-          <Html key={i} html={medal(BY[id].t, 'sm')} />
+          <Html key={i} html={medal(BY[id].t, 'is-small')} />
         ))}
       </span>
       <span className="sv-facts">

@@ -16,16 +16,16 @@
 .h-presc.now {
   fill: rgba(249, 85, 135, 0.2);
 }
-.bdg-s.st-psn rect {
+.bdg-s.status-poisoned rect {
   stroke: #c77dff;
 }
-.bdg-s.st-psn text {
+.bdg-s.status-poisoned text {
   fill: #d9a3ff;
 }
-.bdg-s.st-aide rect {
+.bdg-s.status-helped rect {
   stroke: #ffd75e;
 }
-.bdg-s.st-aide text {
+.bdg-s.status-helped text {
   fill: #ffe17b;
 }
 .chip-412 {
@@ -36,22 +36,22 @@
   border-color: rgba(255, 107, 111, 0.5) !important;
   color: #ffb3b5 !important;
 }
-.bdg-s.st-maud rect {
+.bdg-s.status-cursed rect {
   stroke: #9b7bd4;
 }
-.bdg-s.st-maud text {
+.bdg-s.status-cursed text {
   fill: #c5abf0;
 }
-.bdg-s.st-req rect {
+.bdg-s.status-doomed rect {
   stroke: #7fd3ff;
 }
-.bdg-s.st-req text {
+.bdg-s.status-doomed text {
   fill: #a9e4ff;
 }
-.bdg-s.st-ripo rect {
+.bdg-s.status-countering rect {
   stroke: #ff9f5a;
 }
-.bdg-s.st-ripo text {
+.bdg-s.status-countering text {
   fill: #ffc08f;
 }
 .h-menace {

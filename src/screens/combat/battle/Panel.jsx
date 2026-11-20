@@ -127,7 +127,7 @@ function Placement() {
       <ul className="battle-placement-list">
         {al.map(u => (
           <li key={u.uid} className={sel === u ? 'is-selected' : ''}>
-            <Html html={medal(u.t, 'sm')} />
+            <Html html={medal(u.t, 'is-small')} />
             <b>{u.n}</b>
             <span>{tileOf(u)}</span>
           </li>
@@ -165,7 +165,7 @@ function OpponentTurn() {
             v = m && uAt(B, u.intent.k);
           return (
             <li key={u.uid} className={st && 'is-' + st}>
-              <Html html={medal(u.t, 'sm')} />
+              <Html html={medal(u.t, 'is-small')} />
               <span className="battle-foe-turn-name">
                 <b>{u.n}</b>
                 {m
@@ -304,7 +304,7 @@ function OpponentSheet({ e }) {
       <Intention e={e} />
       {nx ? (
         <div className={'battle-foe-evolution' + (fe ? ' is-imminent' : '')}>
-          <Html html={medal(nx.t, 'sm')} />
+          <Html html={medal(nx.t, 'is-small')} />
           <p>
             {fe ? (
               <>
@@ -386,7 +386,7 @@ function Preview({ v }) {
                 {d.st ? (
                   <>
                     {' '}
-                    <em className="stt">{d.st}</em>
+                    <em className="status-badge">{d.st}</em>
                   </>
                 ) : null}
                 {d.can ? (
@@ -488,13 +488,13 @@ function Awakening({ u, s }) {
     <div className={'battle-energy' + (full ? ' is-full' : '')}>
       <div className="battle-energy-head">
         <span className="caption">Énergie d’Éveil</span>
-        <Html html={enPips(u.en, 'lg')} />
+        <Html html={enPips(u.en, 'is-large')} />
       </div>
       {NL}
       <button type="button" className="battle-awaken" data-evo="open" disabled={!ce}>
         <span className="battle-awaken-medals">
           {o.map((id, i) => (
-            <Html key={i} html={medal(BY[id].t, 'sm')} />
+            <Html key={i} html={medal(BY[id].t, 'is-small')} />
           ))}
         </span>
         <span>

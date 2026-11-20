@@ -237,7 +237,7 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .hp.hseg i::after,
-  .enp i.on,
+  .energy-pips i.is-filled,
   .h-danger,
   .h-arena {
     animation: none !important;

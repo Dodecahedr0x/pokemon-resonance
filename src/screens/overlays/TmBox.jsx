@@ -38,7 +38,7 @@ function Card({ M, m, families: families }) {
                 disabled={!(ok && already !== M.mv)}
                 style={{ '--c': tc(f.t[0]) }}
               >
-                <Html html={medal(f.t, 'sm')} />
+                <Html html={medal(f.t, 'is-small')} />
                 <span>
                   <b>{f.n}</b>
                   <em>

@@ -60,7 +60,7 @@ function FamCard({ m }) {
         <div className="team-card-top">
           <span className="team-card-number">{dexNo(m.no)}</span>
           <span className="team-card-region">{REGION_NAMES[m.gen] || 'Johto'}</span>
-          <span className={`team-card-rank rg-${rg}`} title={`Rang ${RANKS[rg].n} · ${RANKS[rg].k}`}>
+          <span className={`team-card-rank rank-${rg}`} title={`Rang ${RANKS[rg].n} · ${RANKS[rg].k}`}>
             {stars(rg)}
           </span>
           <span className="team-card-cost" title={`${m.c} PC`}>
@@ -145,7 +145,7 @@ function FamCard({ m }) {
                 disabled={!inBox(x.id)}
                 title={`${x.n} · ${RC(x.id)} PC${x.st > 1 ? ' · recrue confirmée' : ''}`}
               >
-                <Html html={medal(x.t, 'xs')} />
+                <Html html={medal(x.t, 'is-tiny')} />
                 <b>{x.n}</b>
                 <em>{RC(x.id)} PC</em>
               </button>

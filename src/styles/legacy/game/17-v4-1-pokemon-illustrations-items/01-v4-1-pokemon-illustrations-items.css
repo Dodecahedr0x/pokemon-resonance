@@ -1,16 +1,16 @@
 /* =====================================================================
    v4.1 — Pokémon illustrations everywhere, items as images
    ===================================================================== */
-html body .medal.pk {
+html body .medal.has-art {
   overflow: visible !important;
 }
-html body .medal.pk > svg {
+html body .medal.has-art > svg {
   opacity: 0 !important;
 }
-html body .medal.pk::after {
+html body .medal.has-art::after {
   z-index: 1;
 }
-html body .medal .mdl-a {
+html body .medal .medal-art {
   position: absolute;
   left: 50%;
   top: 50%;
@@ -23,12 +23,12 @@ html body .medal .mdl-a {
   filter: drop-shadow(0 1px 1.5px rgba(0, 0, 0, 0.6));
   -webkit-user-drag: none;
 }
-html body .medal.xs .mdl-a {
+html body .medal.is-tiny .medal-art {
   width: 130%;
   height: 130%;
 }
-html body .medal.lg .mdl-a,
-html body .medal.xl .mdl-a {
+html body .medal.is-large .medal-art,
+html body .medal.is-huge .medal-art {
   width: 112%;
   height: 112%;
   filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.55));

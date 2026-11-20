@@ -44,7 +44,7 @@
   gap: var(--space-2xs);
   padding: 0 var(--space-3xs);
 }
-.team-card-types .tb {
+.team-card-types .type-badge {
   font: 800 10.5px/1 var(--font-display);
 }
 .team-card-moves {
@@ -311,7 +311,7 @@ html.pk-calme .team-card-foil {
   .team-card-role,
   .team-card-stages,
   .team-card-lock,
-  .team-card-types .tb,
+  .team-card-types .type-badge,
   .team-stage b,
   .team-stage em {
     font-size: 10.5px;
@@ -320,7 +320,7 @@ html.pk-calme .team-card-foil {
 @media (max-width: 700px) {
   .team-card-region,
   .team-card-stages,
-  .team-card-types .tb,
+  .team-card-types .type-badge,
   .team-stage b,
   .team-stage em {
     font-size: 11px;

@@ -41,7 +41,7 @@ function Season() {
           <em>{s.d}</em>
           {s.types.length ? (
             <span className="sa-ty">
-              <Html html={s.types.map(t => medal([t], 'sm')).join('')} />
+              <Html html={s.types.map(t => medal([t], 'is-small')).join('')} />
             </span>
           ) : null}
         </span>

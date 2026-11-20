@@ -22,6 +22,17 @@ export const RENAMED_CLASSES = {
   h3: 'card-title',
   sec: 'section',
   'sec-h': 'section-header',
+  tb: 'type-badge',
+  'tb-s': 'type-badge-icon',
+  stt: 'status-badge',
+  enp: 'energy-pips',
+  rg: 'rank-tag',
+  ri: 'role-icon',
+  'mdl-a': 'medal-art',
+  'rg-faible': 'rank-faible',
+  'rg-moyen': 'rank-moyen',
+  'rg-fort': 'rank-fort',
+  'rg-expert': 'rank-expert',
 };
 
 const OLD_CLASS = new RegExp(

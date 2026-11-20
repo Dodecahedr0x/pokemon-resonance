@@ -73,3 +73,10 @@ Each step is one commit (or a few), on its own, playable at every point.
 - 1.3 card and text: done. `src/styles/components/card.css` (was `panel.css`); the card headers of Settings, Camp,
   Quests, Map and Home render `src/components/CardHeader.jsx` (`icon`, `title`, optional `count`, extra children),
   except the radio card on Home, which draws its own icon.
+- 1.4 badges: done. `.tb`, `.tb-s`, `.stt`, `.enp`, `.rg`, `.ri`, `.mdl-a` → `.type-badge`, `.type-badge-icon`,
+  `.status-badge`, `.energy-pips`, `.rank-tag`, `.role-icon`, `.medal-art`. Modifiers: status codes in English
+  (`STC` in `engine/combat/ui.js`: `status-paralysis`, `status-frozen`…, shared by the board badges), `rank-<rank>`,
+  `role-icon-<role>`, medal sizes `is-tiny` / `is-small` / `is-large` / `is-huge` / `is-plate` and `has-art`, energy
+  pips `is-filled` / `is-large`. The large pips used to borrow the types legend's `.lg` look; that is now
+  `src/styles/components/energy-pips.css`. The helpers keep their short names (`tb()`, `medal()`, `enPips()`) until
+  step 3.

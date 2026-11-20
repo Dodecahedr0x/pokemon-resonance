@@ -118,7 +118,7 @@ function Body({ i }) {
                 data-in-st={id}
                 style={{ '--c': tc(m.t[0]) }}
               >
-                <Html html={medal(m.t, 'lg')} />
+                <Html html={medal(m.t, 'is-large')} />
                 <b>{m.n}</b>
                 <em>{m.t.join(' / ')}</em>
               </button>

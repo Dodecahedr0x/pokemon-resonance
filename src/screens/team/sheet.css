@@ -149,7 +149,7 @@
 .team-sheet-role b {
   color: var(--color-accent-soft);
 }
-/* rank stars; the colour comes from the shared .rg-* rank classes */
+/* rank stars; the colour comes from the shared .rank-* classes */
 .team-sheet-rank {
   font-size: 13px;
   line-height: 1.4;

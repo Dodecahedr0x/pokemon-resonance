@@ -65,7 +65,7 @@ const RICON = {
 
 export const rIco = r => {
   const s = RSLUG[r] || 'rel';
-  return `<svg class="ri ri-${s}" viewBox="0 0 24 24" aria-hidden="true"><path d="${RICON[s]}"/></svg>`;
+  return `<svg class="role-icon role-icon-${s}" viewBox="0 0 24 24" aria-hidden="true"><path d="${RICON[s]}"/></svg>`;
 };
 
 // Statements run at startup, in the original order (see index.js).

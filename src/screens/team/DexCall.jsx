@@ -40,7 +40,7 @@ export default function DexCall({ v }) {
                 disabled={!inBox(id)}
                 title={`${m.n} · ${m.r} · ${RC(id)} PC`}
               >
-                <Html html={medal(m.t, 'xs')} />
+                <Html html={medal(m.t, 'is-tiny')} />
                 <b>{m.n}</b>
                 <em>{RC(id)}</em>
               </button>
@@ -94,7 +94,7 @@ function Legends() {
               aria-pressed={sel}
               title={`${m.n} · ${RC(x.id)} PC`}
             >
-              <Html html={medal(m.t, 'xs')} />
+              <Html html={medal(m.t, 'is-tiny')} />
               <b>{m.n}</b>
               <em>{RC(x.id)}</em>
             </button>

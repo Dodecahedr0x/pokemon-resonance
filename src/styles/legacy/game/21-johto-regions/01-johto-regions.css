@@ -45,7 +45,7 @@
 }
 /* ===== resonance-ranks-shop layer ===== */
 /* v4.14: ranks, Expert attacks, Resonance notes, shop */
-.rg {
+.rank-tag {
   display: inline-block;
   font-size: 0.72em;
   letter-spacing: -0.02em;
@@ -54,16 +54,16 @@
   font-weight: 800;
   white-space: nowrap;
 }
-.rg-faible {
+.rank-faible {
   color: #9fd8a0;
 }
-.rg-moyen {
+.rank-moyen {
   color: #7ec4ff;
 }
-.rg-fort {
+.rank-fort {
   color: #ffb25e;
 }
-.rg-expert {
+.rank-expert {
   color: #ddb0ff;
   text-shadow: 0 0 6px rgba(200, 140, 255, 0.55);
 }
@@ -152,7 +152,7 @@
   color: var(--tx2);
   margin: 0 0 var(--space-sm);
 }
-.reso-codex .acc-t.rg {
+.reso-codex .acc-t.rank-tag {
   font-size: 13px;
   min-width: 4.2em;
 }

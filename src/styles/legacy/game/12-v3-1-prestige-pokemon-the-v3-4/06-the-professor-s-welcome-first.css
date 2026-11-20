@@ -209,7 +209,7 @@
   letter-spacing: 0.08em;
   color: var(--mut);
 }
-.it-o .medal.lg {
+.it-o .medal.is-large {
   width: 58px;
   height: 58px;
 }

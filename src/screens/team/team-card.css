@@ -119,7 +119,7 @@
   letter-spacing: 0.24em;
   text-transform: uppercase;
 }
-/* stars; the colour comes from the shared .rg-* rank classes */
+/* stars; the colour comes from the shared .rank-* classes */
 .team-card-rank {
   margin-right: var(--space-xs);
   margin-left: auto;

@@ -491,7 +491,7 @@ function updTokCore(u) {
                       : u.cogno > 0
                         ? 'x2'
                         : null);
-  T.bdc = 'bdg-s' + (b && !u.ko ? ' on st-' + (STC[b] || 'x') : '');
+  T.bdc = 'bdg-s' + (b && !u.ko ? ' on status-' + (STC[b] || 'other') : '');
   T.bt = b || '';
   unitsDirty();
 }
@@ -1132,26 +1132,26 @@ export const hpc = u => {
 export const DIA = 'M0 -3.4 2.5 0 0 3.4 -2.5 0Z';
 
 export const STC = {
-  PAR: 'par',
-  GEL: 'gel',
-  SOM: 'som',
-  REC: 'rec',
-  BRÛ: 'bru',
-  RAC: 'rac',
-  TOILE: 'toile',
-  CHARGE: 'chg',
-  VOL: 'vol',
-  PSN: 'psn',
-  AIDE: 'aide',
-  MAUD: 'maud',
-  REQ: 'req',
-  RIPO: 'ripo',
-  MIR: 'ripo',
-  x2: 'aide',
+  PAR: 'paralysis',
+  GEL: 'frozen',
+  SOM: 'asleep',
+  REC: 'recharging',
+  BRÛ: 'burned',
+  RAC: 'rooted',
+  TOILE: 'webbed',
+  CHARGE: 'charging',
+  VOL: 'flying',
+  PSN: 'poisoned',
+  AIDE: 'helped',
+  MAUD: 'cursed',
+  REQ: 'doomed',
+  RIPO: 'countering',
+  MIR: 'countering',
+  x2: 'helped',
 };
 
 export const enPips = (n, cls = '') =>
-  `<span class="enp ${cls}" aria-label="Énergie d’Éveil ${n} sur 3">${[0, 1, 2].map(i => `<i class="${i < n ? 'on' : ''}"></i>`).join('')}</span>`;
+  `<span class="energy-pips ${cls}" aria-label="Énergie d’Éveil ${n} sur 3">${[0, 1, 2].map(i => `<i class="${i < n ? 'is-filled' : ''}"></i>`).join('')}</span>`;
 
 export const poly = (k, c) => {
   const [x, y] = HC(k),

@@ -50,7 +50,7 @@ button.chip:hover {
 .cat-sou {
   --c: var(--ok);
 }
-.tb {
+.type-badge {
   display: inline-flex;
   align-items: center;
   gap: var(--space-2xs);
@@ -70,7 +70,7 @@ button.chip:hover {
     inset 0 1px 0 rgba(255, 255, 255, 0.28),
     inset 0 -1px 0 rgba(0, 0, 0, 0.18);
 }
-.tb svg {
+.type-badge svg {
   width: 14px;
   height: 14px;
   padding: var(--space-3xs);

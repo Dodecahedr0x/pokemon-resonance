@@ -127,7 +127,7 @@ export function duoBlock(u) {
           : B.voice < 2
             ? 'il faut 2 Voix'
             : '';
-    return `<button type="button" class="battle-duo${ui.mode === 'duo' && ui.duo === p.uid ? ' is-selected' : ''}" data-duo="${p.uid}" ${ok ? '' : 'disabled'}><span class="battle-duo-medals">${medal(u.t, 'sm')}${medal(p.t, 'sm')}</span><span><b>${D.n}</b><em>${ok ? D.d + ' 2 Voix, les deux agissent.' : why}</em></span></button>`;
+    return `<button type="button" class="battle-duo${ui.mode === 'duo' && ui.duo === p.uid ? ' is-selected' : ''}" data-duo="${p.uid}" ${ok ? '' : 'disabled'}><span class="battle-duo-medals">${medal(u.t, 'is-small')}${medal(p.t, 'is-small')}</span><span><b>${D.n}</b><em>${ok ? D.d + ' 2 Voix, les deux agissent.' : why}</em></span></button>`;
   }).join('')}</div>`;
 }
 

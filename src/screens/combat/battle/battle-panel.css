@@ -49,7 +49,7 @@
   color: var(--color-text-muted);
   font-size: 12px;
 }
-.battle-panel-title b .rg {
+.battle-panel-title b .rank-tag {
   margin-left: var(--space-3xs);
 }
 .battle-panel-hp {
@@ -88,7 +88,7 @@
   font-size: 10.5px;
   letter-spacing: 0.04em;
 }
-.battle-role-tag .ri {
+.battle-role-tag .role-icon {
   width: 14px;
   height: 14px;
 }
@@ -96,7 +96,7 @@
   border-color: rgba(229, 72, 77, 0.45);
   color: #ffb3b3;
 }
-.battle-role-tag.is-enemy .ri {
+.battle-role-tag.is-enemy .role-icon {
   stroke: #ff9c9c;
 }
 .battle-panel-details {

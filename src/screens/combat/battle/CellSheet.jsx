@@ -112,7 +112,7 @@ function Pokemon({ v }) {
       <div className="tile-info-ul">
         <span>{v.ko ? 'K.O.' : v.hp + ' / ' + v.mhp + ' PV'}</span>
         <Html html={v.t.map(tb).join('')} />
-        {v.badge && <span className={'stt st-' + v.stc}>{v.badge}</span>}
+        {v.badge && <span className={'status-badge status-' + v.stc}>{v.badge}</span>}
         {v.it ? <em>{v.it}</em> : null}
       </div>
       {v.canAct && (

@@ -11,7 +11,7 @@ export function init() {
       }
       const p = t.parentNode;
       if (p && p.classList) {
-        p.classList.remove('pk');
+        p.classList.remove('pk', 'has-art');
       }
       t.style.setProperty('display', 'none', 'important');
       t.classList.add('img-off');

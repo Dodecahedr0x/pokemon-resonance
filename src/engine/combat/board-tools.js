@@ -191,7 +191,7 @@ function unitInfo(v) {
     mhp: v.mhp,
     t: v.t || [],
     badge: v.badge && !v.ko ? v.badge : null,
-    stc: STC[v.badge] || 'x',
+    stc: STC[v.badge] || 'other',
     it,
     canAct: canDo,
     uid: v.uid,

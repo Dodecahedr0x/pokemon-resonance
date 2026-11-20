@@ -101,7 +101,7 @@ function Content({ id }) {
           {m.r} · {m.r2}
         </p>
         <p className="team-sheet-role">
-          <span className={`team-sheet-rank rg rg-${rg}`}>{stars(rg)}</span>
+          <span className={`team-sheet-rank rank-tag rank-${rg}`}>{stars(rg)}</span>
           <span>
             <b>
               Rang {RANKS[rg].n} · {RANKS[rg].k}
@@ -134,7 +134,7 @@ function Content({ id }) {
               className={`team-sheet-stage${x.id === id ? ' is-selected' : ''}`}
               data-open={x.id}
             >
-              <Html html={medal(x.t, 'sm')} />
+              <Html html={medal(x.t, 'is-small')} />
               <span>
                 <b>{x.n}</b>
                 <em>{x.st === 1 ? 'Recrue' : 'Éveil ' + (x.st - 1)}</em>
@@ -432,7 +432,7 @@ function Extras({ base }) {
               D = duoTechnique(k);
             return (
               <div key={k} className="team-sheet-link">
-                <Html html={medal(BY[o].t, 'sm')} />
+                <Html html={medal(BY[o].t, 'is-small')} />
                 <span>
                   <b>{BY[o].n}</b>
                   <em>

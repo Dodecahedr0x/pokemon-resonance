@@ -35,7 +35,7 @@ export default function Vs({ d }) {
           </span>
         ) : (
           <span className="vs-foes">
-            <Html html={d.foes.map(t => medal(t, 'sm')).join('')} />
+            <Html html={d.foes.map(t => medal(t, 'is-small')).join('')} />
           </span>
         )}
         <b>{d.name2}</b>

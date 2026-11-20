@@ -113,7 +113,7 @@ export function emblem(k, cls = '') {
     L = leaderOf(k),
     legendInfo = s.hoennLegend || s.captureHoennLegend || s.legend || s.colossus || s.roam;
   if (legendInfo) {
-    return `<span class="emb lgd ${cls}" style="--ac:${tc(s.at)}">${medal(BY[legendInfo].t, 'lg')}</span>`;
+    return `<span class="emb lgd ${cls}" style="--ac:${tc(s.at)}">${medal(BY[legendInfo].t, 'is-large')}</span>`;
   }
   if (s.johto != null) {
     return `<span class="emb bdg ${cls}" style="--ac:${tc(s.at)}">${badgeSvg(s.johto, s.at, 'ej' + cls + s.johto)}</span>`;

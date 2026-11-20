@@ -25,7 +25,7 @@ function Card({ L, ok }) {
         {L.length ? (
           L.map(({ id, i, cp }) => (
             <button key={id} type="button" className={'exp-d' + (i >= 0 ? ' on' : '')} data-pens-p={id}>
-              <Html html={medal(BY[id].t, 'sm')} />
+              <Html html={medal(BY[id].t, 'is-small')} />
               <b>{BY[id].n}</b>
               <em>
                 {i === 0

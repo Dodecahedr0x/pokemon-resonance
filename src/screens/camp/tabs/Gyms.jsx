@@ -107,7 +107,7 @@ function Gym({ a, i }) {
       <div className="gym-tab-f">
         {a.f.map((id, j) => (
           <span key={j} title={BY[id].n}>
-            <Html html={medal(BY[id].t, 'xs')} />
+            <Html html={medal(BY[id].t, 'is-tiny')} />
             {BY[id].n}
           </span>
         ))}

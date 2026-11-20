@@ -50,7 +50,7 @@ function Expedition({ x, i }) {
     m = BY[x.id];
   return (
     <div className="cb-x">
-      <Html html={medal(m.t, 'sm')} />
+      <Html html={medal(m.t, 'is-small')} />
       <span>
         <b>{m.n}</b>
         <em>{DESTINATIONS[x.destinationId].n + (x.ideal ? ' · terrain idéal' : '')}</em>
@@ -78,7 +78,7 @@ function Daycare() {
     slot = id =>
       id ? (
         <span className="pe-s on">
-          <Html html={medal(BY[id].t, 'sm')} />
+          <Html html={medal(BY[id].t, 'is-small')} />
           <b>{BY[id].n}</b>
         </span>
       ) : (

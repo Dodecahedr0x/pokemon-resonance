@@ -51,7 +51,7 @@ function Content() {
                     className={'am-m' + (x[3] ? ' shn' : '')}
                     style={x[3] ? parseStyle(shinyStyle(BY[x[0]].base)) : undefined}
                   >
-                    <Html html={medal(BY[x[0]].t, 'sm')} />
+                    <Html html={medal(BY[x[0]].t, 'is-small')} />
                   </span>
                 ))}
               </span>

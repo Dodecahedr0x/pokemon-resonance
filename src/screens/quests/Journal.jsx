@@ -60,7 +60,7 @@ export default function Journal() {
         {mvp.length ? (
           mvp.map(([k, n]) => (
             <div key={k} className="mvp-row">
-              <Html html={medal(BY[k].t, 'sm')} />
+              <Html html={medal(BY[k].t, 'is-small')} />
               <span>{BY[k].n}</span>
               <b>{n} × MVP</b>
               <em>{J.use[k] || 0} combats</em>

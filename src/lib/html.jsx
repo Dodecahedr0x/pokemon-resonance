@@ -53,7 +53,7 @@ export function parseStyle(css) {
 // Medal image (medal): without an illustration, the medal keeps its type pictogram.
 function onImgError(e) {
   const img = e.currentTarget;
-  img.parentNode?.classList.remove('pk');
+  img.parentNode?.classList.remove('has-art');
   img.remove();
 }
 

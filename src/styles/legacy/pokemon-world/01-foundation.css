@@ -16,9 +16,9 @@ html:not(#pkz) body:not(#pkz) .pk-dlg {
 html:not(#pkz)
   body:not(#pkz)
   .pk-dlg
-  :is(p, em, q, small, span:not(.pav):not(.dlg-who):not(.tb):not(.pk-c):not(.pk-tw)):not(.pav *):not(.tb *):not(
-    button *
-  ):not(.it-cards *) {
+  :is(p, em, q, small, span:not(.pav):not(.dlg-who):not(.type-badge):not(.pk-c):not(.pk-tw)):not(.pav *):not(
+    .type-badge *
+  ):not(button *):not(.it-cards *) {
   color: #273142 !important;
   text-shadow: none !important;
 }

@@ -9,9 +9,9 @@ import { setRuleOpen, useGuide } from './guideStore.js';
 // Awakening energy diamonds.
 function Diamonds({ n }) {
   return (
-    <span className="enp lg">
+    <span className="energy-pips is-large">
       {[0, 1, 2].map(i => (
-        <i key={i} className={i < n ? 'on' : ''} />
+        <i key={i} className={i < n ? 'is-filled' : ''} />
       ))}
     </span>
   );
@@ -72,11 +72,11 @@ export function Anatomy() {
           </span>
           <span className="an-opts">
             <span>
-              <Html html={medal(BY.tartard.t, 'sm')} />
+              <Html html={medal(BY.tartard.t, 'is-small')} />
               Tartard
             </span>
             <span>
-              <Html html={medal(BY.tarpaud.t, 'sm')} />
+              <Html html={medal(BY.tarpaud.t, 'is-small')} />
               Tarpaud
             </span>
           </span>
@@ -90,7 +90,7 @@ export function Anatomy() {
         <span className="an-k">03</span>
         <h3 className="card-title">Arrivée</h3>
         <div className="an-arr">
-          <Html html={medal(Pp.t, 'lg')} />
+          <Html html={medal(Pp.t, 'is-large')} />
           <span className="ring" />
           <span className="ring r2" />
         </div>

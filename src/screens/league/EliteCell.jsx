@@ -43,7 +43,7 @@ function Card({ k, L }) {
       </span>
       <span className="el-f">
         {s.foes.map(([f], j) => (
-          <Html key={j} html={medal(BY[f].t, 'sm')} />
+          <Html key={j} html={medal(BY[f].t, 'is-small')} />
         ))}
       </span>
       <em>

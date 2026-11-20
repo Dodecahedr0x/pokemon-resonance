@@ -2,7 +2,7 @@
    is "Indice · synergies · alertes", then a grid of cards: Resonance Index, formation, ranks, role radar,
    synergies, reactions, chains, staff notes, bonds and preset teams.
    Clicks (data-p, data-rx, data-form-picker): engine listeners on #ana and on the document.
-   Shared pieces: .caption, .chip, .empty, .orn (corner ornaments), .syn-t (type diamonds), .rg (rank tags). */
+   Shared pieces: .caption, .chip, .empty, .orn (corner ornaments), .syn-t (type diamonds), .rank-tag (rank tags). */
 
 .team-analysis {
   margin-top: var(--space-2xl);
@@ -197,7 +197,7 @@
   gap: var(--space-sm);
   font-size: 13px;
 }
-.team-analysis-ranks li .rg {
+.team-analysis-ranks li .rank-tag {
   min-width: 3.6em;
 }
 /* is-on: three different ranks reached */

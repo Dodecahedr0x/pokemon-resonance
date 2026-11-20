@@ -194,7 +194,7 @@
   }
 }
 /* roles */
-.ri {
+.role-icon {
   width: 18px;
   height: 18px;
   flex: none;
@@ -242,7 +242,7 @@
   vertical-align: -3px;
   margin-right: var(--space-2xs);
 }
-.pcs .pt-role .ri {
+.pcs .pt-role .role-icon {
   width: 14px;
   height: 14px;
 }

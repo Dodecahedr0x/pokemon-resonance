@@ -18,7 +18,7 @@ export default function Banners() {
     <div className="activity-bar" role="group" aria-label="Activités">
       <button type="button" id="season-event" data-season-event="open" className="season-event">
         <span className="season-event-i" style={{ '--c': tc(sa.S0.t) }}>
-          <Html html={medal([sa.S0.t], 'sm')} />
+          <Html html={medal([sa.S0.t], 'is-small')} />
         </span>
         <span className="season-event-t">
           <b>{sa.S0.n}</b>

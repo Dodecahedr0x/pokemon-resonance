@@ -55,7 +55,7 @@
 }
 
 /* ---------- type seals ---------- */
-.tb {
+.type-badge {
   height: 22px;
   padding: 0 var(--space-sm) 0 var(--space-3xs);
   gap: var(--space-xs);
@@ -70,7 +70,7 @@
   text-transform: uppercase;
   box-shadow: inset 0 0 12px -6px var(--c);
 }
-.tb-s {
+.type-badge-icon {
   display: grid;
   place-items: center;
   flex: none;
@@ -84,12 +84,12 @@
     0 0 0 2px color-mix(in srgb, var(--c) 70%, transparent),
     0 0 9px color-mix(in srgb, var(--c) 60%, transparent);
 }
-.tb-s svg {
+.type-badge-icon svg {
   width: 9px;
   height: 9px;
   transform: rotate(-45deg);
 }
-.tb > svg {
+.type-badge > svg {
   display: none;
 }
 /* medals: seal with a crown of glyphs */
@@ -102,7 +102,7 @@
     inset 0 -7px 14px rgba(0, 0, 0, 0.4),
     0 8px 22px -10px var(--glow, rgba(0, 0, 0, 0.6));
 }
-.medal:not(.xs):not(.sm)::before {
+.medal:not(.is-tiny):not(.is-small)::before {
   content: '';
   position: absolute;
   inset: -8px;
@@ -124,18 +124,18 @@
     transparent 50%
   );
 }
-.medal.xs {
+.medal.is-tiny {
   box-shadow:
     0 0 0 1px #08080a,
     0 0 0 1.8px rgba(212, 175, 106, 0.5);
 }
-.medal.sm {
+.medal.is-small {
   box-shadow:
     0 0 0 1px #08080a,
     0 0 0 2px rgba(212, 175, 106, 0.55),
     inset 0 1px 0 rgba(255, 255, 255, 0.4);
 }
-.medal.xl {
+.medal.is-huge {
   box-shadow:
     0 0 0 3px #08080a,
     0 0 0 5px #d4af6a,
@@ -146,7 +146,7 @@
     inset 0 -14px 28px rgba(0, 0, 0, 0.4),
     0 20px 60px -14px var(--glow);
 }
-.medal.xl::before {
+.medal.is-huge::before {
   inset: -18px;
 }
 .mini {
@@ -204,11 +204,11 @@
     rgba(5, 6, 7, 0.95) calc(10% - 1.5px) 10%
   );
 }
-.enp i {
+.energy-pips i {
   background: #0c0d10;
   box-shadow: inset 0 0 0 1px rgba(212, 175, 106, 0.35);
 }
-.enp i.on {
+.energy-pips i.is-filled {
   background: radial-gradient(circle at 35% 30%, #fff6da, #f0c766 45%, #b07f2a);
   box-shadow:
     0 0 0 1px rgba(255, 241, 199, 0.7),

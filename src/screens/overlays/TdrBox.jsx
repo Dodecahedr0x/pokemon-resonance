@@ -44,7 +44,7 @@ function Choice({ cands, pick }) {
               aria-pressed={on}
               style={{ '--c': tc(m.t[0]) }}
             >
-              <Html html={medal(m.t, 'lg')} />
+              <Html html={medal(m.t, 'is-large')} />
               <b>{m.n}</b>
               <em>
                 {m.t.join(' / ')} · {m.r}
@@ -80,7 +80,7 @@ function Reward({ floor, offer }) {
                 <img src={ITM(HELD_IMG[x.it])} alt="" />
               </span>
             ) : (
-              <Html html={medal(BY[x.to].t, 'sm')} />
+              <Html html={medal(BY[x.to].t, 'is-small')} />
             )}
             <span>
               <b>{x.t}</b>

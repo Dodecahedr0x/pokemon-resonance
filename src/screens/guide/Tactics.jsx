@@ -123,7 +123,7 @@ export function ResonanceInBattle() {
       </p>
       {Object.entries(RANKS).map(([k, r]) => (
         <div key={k} className="acc-row">
-          <span className={`acc-t rg rg-${k}`}>
+          <span className={`acc-t rank-tag rank-${k}`}>
             <Html html={stars(k)} />
           </span>
           <span>
