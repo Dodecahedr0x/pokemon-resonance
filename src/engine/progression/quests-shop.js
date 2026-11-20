@@ -62,8 +62,8 @@ export function renderBag() {
   }
   // Shop or Bag styling (v4.73): classes of the section, which stays mounted
   const shop = V4.bagView !== 'sac';
-  pg.classList.toggle('pk-mart', shop);
-  pg.classList.toggle('pk-bag', !shop);
+  pg.classList.toggle('is-shop', shop);
+  pg.classList.toggle('is-bag', !shop);
   refreshBag(shop);
 }
 

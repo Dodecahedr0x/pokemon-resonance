@@ -6,11 +6,11 @@ import { HELD_IMG, SHOP, bagN, fmt } from '../../engine/state/economy.js';
 import { ITM } from '../../engine/assets/item-icons.js';
 import { V4 } from '../../engine/ui/screen-state.js';
 import { costOf } from '../../engine/progression/base-camp.js';
-import { HELD_SHOP, isDailyOffer } from '../../engine/combat/resonance.js';
+import { HELD_SHOP } from '../../engine/combat/resonance.js';
 
 // TM / HM disc: initials on the color of the move's type.
 export const Disc = ({ it }) => (
-  <span className="v4-it-im ct-disc" style={{ '--c': tc(MV[it.mv].t) }}>
+  <span className="item-row-icon item-row-disc" style={{ '--c': tc(MV[it.mv].t) }}>
     <b>{it.sn.slice(0, 2)}</b>
   </span>
 );
@@ -35,31 +35,23 @@ export function Article({ k, mode }) {
     can = it.g ? PROFILE.gems >= price : PROFILE.money >= price,
     full = cs ? n > 0 : n + q > 99;
   return (
-    <article className="v4-it">
+    <article className="item-row">
       {it.mv ? (
         <Disc it={it} />
       ) : (
-        <span className="v4-it-im">
+        <span className="item-row-icon">
           <img src={ITM(it.img)} alt="" loading="lazy" />
         </span>
       )}
-      <div className="v4-it-t">
-        <b>
-          {it.n}
-          {isDailyOffer(k) ? (
-            <>
-              {' '}
-              <span className="v4-off">−30 %</span>
-            </>
-          ) : null}
-        </b>
+      <div className="item-row-text">
+        <b>{it.n}</b>
         <p>{it.d}</p>
         <em>{cs && n ? 'Dans le Sac' : `Dans le Sac : ${n}`}</em>
       </div>
       {mode === 'boutique' ? (
-        <div className="v4-it-b">
+        <div className="item-row-actions">
           {cs ? null : (
-            <div className="v4-qty" role="group" aria-label="Quantité">
+            <div className="item-row-quantity" role="group" aria-label="Quantité">
               <button type="button" data-qk={k} data-qd="-1" aria-label="Moins" disabled={q <= 1}>
                 −
               </button>
@@ -83,7 +75,7 @@ export function Article({ k, mode }) {
           </button>
         </div>
       ) : it.mv ? (
-        <div className="v4-it-b">
+        <div className="item-row-actions">
           <button type="button" className="b b-gold b-sm" data-apprendre={k}>
             Apprendre
           </button>
@@ -99,11 +91,11 @@ export function HeldItem({ k }) {
     own = ownedItems().includes(k),
     holder = Object.keys(PROFILE.equipment).find(id => PROFILE.equipment[id] === k);
   return (
-    <article className={'v4-it' + (own ? '' : ' off')}>
-      <span className="v4-it-im">
+    <article className={'item-row' + (own ? '' : ' is-locked')}>
+      <span className="item-row-icon">
         <img src={ITM(HELD_IMG[k])} alt="" loading="lazy" />
       </span>
-      <div className="v4-it-t">
+      <div className="item-row-text">
         <b>{it.n}</b>
         <p>{it.d}</p>
         <em>
@@ -119,7 +111,7 @@ export function HeldItem({ k }) {
         </em>
       </div>
       {own && holder ? (
-        <div className="v4-it-b">
+        <div className="item-row-actions">
           <button type="button" className="b b-sm" data-v4sheet={holder}>
             Voir {BY[holder].n}
           </button>

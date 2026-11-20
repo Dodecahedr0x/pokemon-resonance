@@ -154,7 +154,6 @@
 }
 /* Other systems: coherent premium panels, not generic flat boxes */
 #quetes .v4-panel,
-#sac .v4-panel,
 #types .gd-p,
 #ligue .case {
   border: 1px solid var(--rx-edge) !important;

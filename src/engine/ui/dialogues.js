@@ -54,7 +54,7 @@ const playSound = k => {
 };
 
 const TAB_LIST =
-  '.v4-tabs>button,.v4-reg>button,.gd-tabs>button,.v4-cats>button,.v4-seg>button,.scn-tabs>button,.team-sheet-stages>.team-sheet-stage,.sel-tabs>button';
+  '.v4-tabs>button,.v4-reg>button,.gd-tabs>button,.bag-categories>button,.v4-seg>button,.scn-tabs>button,.team-sheet-stages>.team-sheet-stage,.sel-tabs>button';
 
 /* Shop counter and pocket bag: rendered by React (src/screens/bag/Counter.jsx) */
 
@@ -68,7 +68,7 @@ const DLG = [
   ['.v4h-prof > p', e => e, false],
   ['.intro .dlgbox', e => e, true],
   ['.sel-card .dlgbox', e => e, true],
-  ['.pk-mart-dlg', e => e, true],
+  ['.bag-counter-dialogue', e => e, true],
 ];
 
 const SKIP = '.dlg-who,button,input,select,textarea,label,svg,.pk-fl,.pav,.b';
@@ -303,7 +303,7 @@ export function init() {
   }
   HOOKS.page.push(schedule);
   /* ---------- 9. Shop and Bag ---------- */
-  // counter, pocket bag and pk-mart / pk-bag classes: React (src/screens/bag) and renderBag()
+  // counter, pocket bag and is-shop / is-bag classes: React (src/screens/bag) and renderBag()
   HOOKS.purchase.push(() => {
     markPurchase();
     playSound('caisse');

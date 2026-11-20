@@ -2,7 +2,7 @@ import { ITEMS2, PROFILE, isCamp, ownedItems } from '../../engine/state/game-sta
 import { BADGES } from '../../engine/modes/gyms.js';
 import { HELD_IMG, SHOP, fmt } from '../../engine/state/economy.js';
 import { ITM } from '../../engine/assets/item-icons.js';
-import { HELD_SHOP, isDailyOffer, heldItemCost } from '../../engine/combat/resonance.js';
+import { HELD_SHOP, heldItemCost } from '../../engine/combat/resonance.js';
 import { Article, Shards } from './Items.jsx';
 
 // Held item for sale (v4.14): one-time purchase, data-buyh (engine).
@@ -13,20 +13,12 @@ function OutfitForSale({ k }) {
     price = H.g || heldItemCost(k),
     can = H.g ? PROFILE.gems >= price : PROFILE.money >= price;
   return (
-    <article className={'v4-it' + (own ? ' own' : '')}>
-      <span className="v4-it-im">
+    <article className={'item-row' + (own ? ' is-owned' : '')}>
+      <span className="item-row-icon">
         <img src={ITM(HELD_IMG[k])} alt="" loading="lazy" />
       </span>
-      <div className="v4-it-t">
-        <b>
-          {it.n}
-          {!own && isDailyOffer(k) ? (
-            <>
-              {' '}
-              <span className="v4-off">−30 %</span>
-            </>
-          ) : null}
-        </b>
+      <div className="item-row-text">
+        <b>{it.n}</b>
         <p>{it.d}</p>
         <em>
           {own
@@ -36,7 +28,7 @@ function OutfitForSale({ k }) {
             : 'Objet tenu · un seul exemplaire'}
         </em>
       </div>
-      <div className="v4-it-b">
+      <div className="item-row-actions">
         {own ? null : (
           <button type="button" className="b b-gold b-sm" data-buyh={k} disabled={!can}>
             {H.g ? (

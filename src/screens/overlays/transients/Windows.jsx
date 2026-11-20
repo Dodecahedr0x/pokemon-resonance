@@ -177,8 +177,8 @@ export function SeasonEvent({ d }) {
         <b>Points :</b> 1 par victoire, +1 avec un Pokémon {d.t} dans l’équipe, +2 dans le combat vedette : {d.arene}.
       </p>
       {d.tiers.map((x, i) => (
-        <article key={i} className="v4-it">
-          <div className="v4-it-t">
+        <article key={i} className="item-row">
+          <div className="item-row-text">
             <b>
               {x.n} · {x.p} pts
             </b>

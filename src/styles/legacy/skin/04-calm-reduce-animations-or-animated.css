@@ -7,13 +7,12 @@ html.pk-calme .kick::before,
 html.pk-calme .sel-tabs > button::before,
 html.pk-calme .pk-holo,
 html.pk-calme .pk-sceau::after,
-html.pk-calme :is(.v4-stats, .v4-walbig)::after {
+html.pk-calme .v4-stats::after {
   animation: none !important;
 }
 html.pk-calme .v4-tabs > button::after,
 html.pk-calme .v4-reg > button::after,
 html.pk-calme .gd-tabs > button::after,
-html.pk-calme .v4-cats > button::after,
 html.pk-calme .v4-seg > button::after,
 html.pk-calme .scn-tabs > button::after {
   animation: none !important;

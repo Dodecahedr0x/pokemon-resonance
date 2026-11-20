@@ -18,6 +18,7 @@
 @import './components/button.css' layer(components);
 @import './components/page-header.css' layer(components);
 @import './components/panel.css' layer(components);
+@import './components/item-row.css' layer(components);
 
 @import '../screens/settings/settings.css' layer(screens);
 @import '../screens/dex/dex.css' layer(screens);
@@ -32,3 +33,6 @@
 @import '../screens/team/team-analysis.css' layer(screens);
 @import '../screens/team/sheet.css' layer(screens);
 @import '../screens/team/sheet-sections.css' layer(screens);
+@import '../screens/bag/bag.css' layer(screens);
+@import '../screens/bag/bag-categories.css' layer(screens);
+@import '../screens/bag/bag-counter.css' layer(screens);

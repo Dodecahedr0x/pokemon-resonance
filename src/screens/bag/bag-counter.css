@@ -1,0 +1,218 @@
+/* Banner under the Shop / Bag tabs (Counter.jsx). Shop: a counter scene (awning, sign, shelves, the waving
+   clerk, the desk) above the clerk's line, typed letter by letter by the engine (ui/dialogues.js). Bag: the
+   backpack with the open pocket's name and item count. */
+
+/* ---------- Shop counter ---------- */
+.bag-counter {
+  position: relative;
+  display: grid;
+  gap: var(--space-md);
+  margin: var(--space-3xs) 0 var(--space-lg);
+}
+.bag-counter-scene {
+  position: relative;
+  height: 172px;
+  overflow: hidden;
+  border-radius: 18px;
+  background: linear-gradient(180deg, #e9f1fb 0 38%, #d3e1f2 38% 100%);
+  box-shadow:
+    0 0 0 2px #0d1f3c,
+    0 0 0 4px rgba(120, 180, 255, 0.35),
+    0 18px 34px -16px rgba(0, 0, 0, 0.85);
+}
+/* blue and white scalloped awning */
+.bag-counter-awning {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 3;
+  height: 30px;
+  background: repeating-linear-gradient(90deg, #2f6fd6 0 24px, #f4f7fc 24px 48px);
+  filter: drop-shadow(0 3px 2px rgba(0, 0, 0, 0.25));
+  mask:
+    radial-gradient(12px 10px at 12px 20px, #000 98%, transparent) 0 0 / 24px 30px repeat-x,
+    linear-gradient(#000 0 0) 0 0 / 100% 20px no-repeat;
+}
+/* "BOUTIQUE" sign with a Poké Ball */
+.bag-counter-sign {
+  position: absolute;
+  top: 38px;
+  right: 12px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-2xs) var(--space-md) var(--space-2xs) var(--space-xs);
+  border-radius: 9px;
+  background: linear-gradient(180deg, #3b7fe0, #1d4ea8);
+  box-shadow:
+    0 0 0 2px #0d1f3c,
+    0 4px 10px rgba(0, 0, 0, 0.35);
+  color: #fff;
+  font: 900 12px/1 var(--font-display);
+  letter-spacing: 0.14em;
+}
+.bag-counter-sign i {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, #fff 0 2.4px, #151a22 2.6px 3.8px, transparent 4px),
+    linear-gradient(180deg, #ff6a70 0 46%, #151a22 46% 54%, #fff 54%);
+  box-shadow: 0 0 0 1.5px #151a22;
+}
+/* wooden shelves with balls (upper) and bottles (lower) on them */
+.bag-counter-shelf {
+  position: absolute;
+  right: 14px;
+  left: 14px;
+  z-index: 1;
+  height: 7px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, #b8834f, #7c5226);
+  box-shadow: 0 3px 4px rgba(0, 0, 0, 0.25);
+}
+.bag-counter-shelf::before {
+  content: '';
+  position: absolute;
+  right: 4px;
+  bottom: 7px;
+  left: 4px;
+  height: 18px;
+  background:
+    radial-gradient(circle at 50% 60%, #e3262f 0 5px, transparent 5.5px) 0 0 / 30px 18px repeat-x,
+    radial-gradient(circle at 50% 60%, #5fb3ff 0 4.5px, transparent 5px) 15px 0 / 30px 18px repeat-x;
+  mask: linear-gradient(90deg, #000 0 30%, transparent 30% 70%, #000 70%);
+}
+.bag-counter-shelf.is-upper {
+  top: 72px;
+}
+.bag-counter-shelf.is-lower {
+  top: 112px;
+}
+.bag-counter-shelf.is-lower::before {
+  background:
+    linear-gradient(180deg, transparent 4px, #9b59d0 4px 16px, transparent 16px) 3px 0 / 26px 18px repeat-x,
+    linear-gradient(180deg, transparent 7px, #4fc46b 7px 16px, transparent 16px) 16px 0 / 26px 18px repeat-x;
+}
+.bag-counter-clerk {
+  position: absolute;
+  bottom: 40px;
+  left: 36%;
+  z-index: 2;
+  width: 112px;
+  height: 112px;
+  margin-left: -56px;
+  transform-origin: 50% 100%;
+  animation: bag-counter-wave 3.6s ease-in-out infinite;
+}
+@keyframes bag-counter-wave {
+  0%,
+  78%,
+  100% {
+    transform: rotate(0);
+  }
+  84% {
+    transform: rotate(-3deg);
+  }
+  90% {
+    transform: rotate(2.5deg);
+  }
+  95% {
+    transform: rotate(-1deg);
+  }
+}
+/* the desk, with the till on it */
+.bag-counter-desk {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 3;
+  height: 46px;
+  background: linear-gradient(180deg, #f7fbff 0 7px, #2f6fd6 7px 11px, #c9d8ee 11px 100%);
+  box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.18);
+}
+.bag-counter-desk::after {
+  content: '';
+  position: absolute;
+  top: -12px;
+  left: 36%;
+  width: 40px;
+  height: 14px;
+  margin-left: -82px;
+  border-radius: 5px 5px 2px 2px;
+  background: linear-gradient(180deg, #4b5563, #2b313b);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.25);
+}
+/* the clerk's line (a shared .dlgbox) */
+.bag-counter-dialogue {
+  margin: 0 var(--space-2xs);
+  padding: var(--space-md) var(--space-3xl) var(--space-md) var(--space-md);
+}
+.bag-counter-dialogue p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* ---------- Bag: backpack and pocket ---------- */
+.bag-pocket {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  margin: var(--space-3xs) 0 var(--space-lg);
+  padding: var(--space-md) var(--space-lg);
+  border-radius: 18px;
+  background:
+    radial-gradient(120% 100% at 0% 50%, rgba(240, 167, 58, 0.22), transparent 60%),
+    linear-gradient(160deg, #3a2414, #1d120a);
+  box-shadow:
+    0 0 0 2px #120a05,
+    0 0 0 4px rgba(214, 150, 70, 0.45),
+    0 16px 30px -16px rgba(0, 0, 0, 0.85);
+}
+.bag-pocket-icon {
+  flex: none;
+  width: 76px;
+  height: 76px;
+  filter: drop-shadow(0 6px 6px rgba(0, 0, 0, 0.45));
+  transform-origin: 50% 90%;
+  animation: bag-pocket-bounce 0.6s cubic-bezier(0.3, 1.5, 0.5, 1) both;
+}
+@keyframes bag-pocket-bounce {
+  0% {
+    transform: scale(0.8) rotate(-8deg);
+  }
+  60% {
+    transform: scale(1.06) rotate(4deg);
+  }
+  100% {
+    transform: none;
+  }
+}
+.bag-pocket b {
+  display: block;
+  color: #ffe2b0;
+  font: 800 17px/1.2 var(--font-display);
+}
+.bag-pocket em {
+  display: block;
+  margin-top: var(--space-3xs);
+  color: #d9b48a;
+  font: 600 12.5px/1.35 var(--font-body);
+  font-style: normal;
+}
+
+html.pk-calme .bag-counter-clerk,
+html.a11y-rm .bag-counter-clerk,
+html.a11y-rm .bag-pocket-icon {
+  animation: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .bag-counter-clerk,
+  .bag-pocket-icon {
+    animation: none;
+  }
+}

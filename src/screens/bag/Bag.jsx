@@ -89,9 +89,9 @@ function Content() {
         </p>
       </div>
       {NL}
-      <div className="v4-walbig v4-panel">
+      <div className="bag-wallet v4-panel">
         <div>
-          <span className="v4-coin big" aria-hidden="true">
+          <span className="v4-coin" aria-hidden="true">
             ₽
           </span>
           <span>
@@ -100,7 +100,7 @@ function Content() {
           </span>
         </div>
         <div>
-          <span className="v4-gemi big">
+          <span className="v4-gemi">
             <svg>
               <use href="#i-gem" />
             </svg>
@@ -130,9 +130,9 @@ function Content() {
       {'\n'}
       {v === 'boutique' ? <Offers /> : null}
       {NL}
-      <div className="v4-sac">
+      <div className="bag-shelf">
         {v === 'boutique' && V4.bagCategory === 'machines' ? <TmVendor /> : null}
-        <nav className="v4-cats" aria-label="Catégories">
+        <nav className="bag-categories" aria-label="Catégories">
           {cats.map(([k, displayName, i]) => (
             <button key={k} type="button" data-sacc={k} aria-pressed={V4.bagCategory === k}>
               <svg>
@@ -142,7 +142,7 @@ function Content() {
             </button>
           ))}
         </nav>
-        <div className="v4-items">
+        <div className="bag-items">
           <List v={v} keys={keys} />
         </div>
       </div>
@@ -153,12 +153,13 @@ function Content() {
 // Bag and Shop page (#sac). Nothing is rendered before the engine's first renderBag(); each
 // renderBag() rebuilds the content (delegated handlers in the engine: data-sacv,
 // data-sacc, data-qk, data-buy, data-buyh, data-offre, data-wanderer, data-craft-bench…). The
-// pk-mart / pk-bag classes of the section are set by the engine (renderBag).
+// is-shop / is-bag classes of the section are set by the engine (renderBag). Styles: bag.css, bag-categories.css,
+// bag-counter.css and the shared item row (styles/components/item-row.css).
 export default function Bag() {
   const ready = useEngineReady();
   const version = useBagVersion();
   return (
-    <section className="page v4p" id="sac" aria-labelledby="h-sac">
+    <section className="page v4p bag-page" id="sac" aria-labelledby="h-sac">
       {ready && version > 0 && <Content key={version} />}
     </section>
   );

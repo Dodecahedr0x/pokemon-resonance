@@ -40,9 +40,9 @@ import { space } from '../../lib/theme.js';
 
 // Workshop row: text on the left, engine button on the right (data-craft-bench, data-quest-log…).
 const Line = ({ cls = '', before: previous = null, children, actionButton: button }) => (
-  <article className={'v4-it ' + cls}>
+  <article className={'item-row ' + cls}>
     {previous}
-    <div className="v4-it-t">{children}</div>
+    <div className="item-row-text">{children}</div>
     <div className="v4-buy">{button}</div>
   </article>
 );
@@ -325,8 +325,8 @@ function Eggs() {
             const O = EGG_SHOP[e.k],
               p = Math.round(((e.tot - e.left) / e.tot) * 100);
             return (
-              <article key={i} className="v4-it egg-shop">
-                <div className="v4-it-t">
+              <article key={i} className="item-row egg-shop">
+                <div className="item-row-text">
                   <b>{O.n}</b>
                   <p>
                     Éclosion dans {e.left} combat{e.left > 1 ? 's' : ''}.

@@ -21,18 +21,16 @@ export default function Peddler() {
       px = Math.max(50, Math.round((costOf0(k) * 0.75) / 50) * 50),
       left = (it.mv ? 1 : 3) - (A.st.got[k] || 0);
     return (
-      <article key={k} className="v4-it">
+      <article key={k} className="item-row">
         {it.mv ? (
           <Disc it={it} />
         ) : (
-          <span className="v4-it-im">
+          <span className="item-row-icon">
             <img src={ITM(it.img)} alt="" loading="lazy" />
           </span>
         )}
-        <div className="v4-it-t">
-          <b>
-            {it.n} <span className="v4-off">−25 %</span>
-          </b>
+        <div className="item-row-text">
+          <b>{it.n}</b>
           <p>{it.d}</p>
           <em>
             Reste {left} · Dans le Sac : {bagN(k)}
@@ -56,16 +54,14 @@ export default function Peddler() {
     const px = Math.round((heldItemCost(A.th) * 0.8) / 50) * 50,
       takenSet = A.st.got['h:' + A.th];
     th = (
-      <article className="v4-it">
-        <span className="v4-it-im">
+      <article className="item-row">
+        <span className="item-row-icon">
           <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" strokeWidth="1.6">
             <path d={ITEMS2[A.th].i} />
           </svg>
         </span>
-        <div className="v4-it-t">
-          <b>
-            {ITEMS2[A.th].n} <span className="v4-off">−20 %</span>
-          </b>
+        <div className="item-row-text">
+          <b>{ITEMS2[A.th].n}</b>
           <p>{ITEMS2[A.th].d}</p>
           <em>Objet tenu, un seul exemplaire</em>
         </div>

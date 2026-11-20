@@ -2,11 +2,11 @@ import { V4 } from '../../engine/ui/screen-state.js';
 import { thanksShown } from './bagStore.js';
 
 // "Pokémon world" skin (v4.73): counter with its vendor in the Shop, pocketed bag
-// in the Bag. The vendor's line is written letter by letter (engine, engine/ui/dialogues.js: .pk-mart-dlg).
+// in the Bag. The vendor's line is written letter by letter (engine, engine/ui/dialogues.js: .bag-counter-dialogue).
 
 /* original drawings */
 const Vendor = () => (
-  <svg className="pk-clerk" viewBox="0 0 120 120" aria-hidden="true">
+  <svg className="bag-counter-clerk" viewBox="0 0 120 120" aria-hidden="true">
     <path d="M26 122C26 94 40 82 60 82s34 12 34 40Z" fill="#2f6fd6" />
     <path d="M45 122V95h30v27Z" fill="#f2f5fb" />
     <path d="M51 103h18v8H51Z" fill="#d6dff0" />
@@ -27,7 +27,7 @@ const Vendor = () => (
   </svg>
 );
 const Backpack = () => (
-  <svg className="pk-bagi" viewBox="0 0 120 120" aria-hidden="true">
+  <svg className="bag-pocket-icon" viewBox="0 0 120 120" aria-hidden="true">
     <path d="M38 34c0-14 10-22 22-22s22 8 22 22" fill="none" stroke="#8a4b1c" strokeWidth="7" strokeLinecap="round" />
     <rect x="22" y="30" width="76" height="80" rx="20" fill="#f0a73a" />
     <rect x="22" y="30" width="76" height="80" rx="20" fill="none" stroke="#7a3f12" strokeWidth="3" />
@@ -65,19 +65,19 @@ export default function Counter({ n }) {
       ? 'Merci pour votre achat ! Autre chose ?'
       : LINES_BY_ROLE[V4.bagCategory] || 'Bienvenue ! Que puis-je pour vous ?';
     return (
-      <section className="pk-mart-ban" aria-label="Comptoir de la Boutique">
-        <div className="pk-front" aria-hidden="true">
-          <i className="pk-aw" />
-          <span className="pk-sign">
+      <section className="bag-counter" aria-label="Comptoir de la Boutique">
+        <div className="bag-counter-scene" aria-hidden="true">
+          <i className="bag-counter-awning" />
+          <span className="bag-counter-sign">
             <i />
             BOUTIQUE
           </span>
-          <i className="pk-sh s1" />
-          <i className="pk-sh s2" />
+          <i className="bag-counter-shelf is-upper" />
+          <i className="bag-counter-shelf is-lower" />
           <Vendor />
-          <i className="pk-cnt" />
+          <i className="bag-counter-desk" />
         </div>
-        <div className="dlgbox pk-mart-dlg">
+        <div className="dlgbox bag-counter-dialogue">
           <span className="dlg-who">Vendeur</span>
           <p>{rowLine}</p>
         </div>
@@ -86,7 +86,7 @@ export default function Counter({ n }) {
   }
   const pocket = POCKETS[V4.bagCategory] || 'Objets';
   return (
-    <section className="pk-bag-ban" aria-label="Sac">
+    <section className="bag-pocket" aria-label="Sac">
       <Backpack />
       <span>
         <b>Poche : {pocket}</b>

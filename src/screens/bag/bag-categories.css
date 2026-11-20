@@ -1,0 +1,139 @@
+/* Category list of the Bag and Shop page (.bag-categories in Bag.jsx, data-sacc): a column of pills on wide
+   screens, a sideways-scrolling row on phones. The open category is a red pill (Shop) or a leather tab in
+   the Bag (.is-bag on the page). */
+
+.bag-categories {
+  display: grid;
+  gap: var(--space-2xs);
+  padding: var(--space-2xs);
+  border: 1px solid rgba(130, 185, 240, 0.16);
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(2, 9, 18, 0.74), rgba(6, 16, 30, 0.62));
+  box-shadow:
+    inset 0 2px 9px rgba(0, 0, 0, 0.5),
+    0 1px 0 rgba(255, 255, 255, 0.04);
+}
+.bag-categories > button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  min-height: 44px;
+  padding: 0 var(--space-md);
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  box-shadow: none;
+  color: #b9cbe0;
+  font: 800 14px/1 var(--font-display);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    color 0.2s,
+    transform 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.bag-categories > button:active {
+  transform: scale(0.95);
+}
+.bag-categories > button svg {
+  width: 18px;
+  height: 18px;
+}
+.bag-categories > button[aria-pressed='true'] {
+  border-color: rgba(255, 175, 175, 0.6);
+  background:
+    radial-gradient(130% 120% at 50% -30%, rgba(255, 255, 255, 0.4), transparent 52%),
+    linear-gradient(180deg, #ff676d 0%, #e3262f 52%, #b3141d 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -2px 0 rgba(80, 0, 8, 0.35),
+    0 8px 18px -10px rgba(255, 40, 50, 0.95),
+    0 0 0 1px rgba(60, 0, 6, 0.45);
+  color: #fff;
+  text-shadow: 0 1px 1px rgba(90, 0, 10, 0.5);
+  animation: pkPop 0.45s cubic-bezier(0.2, 1.5, 0.4, 1) both;
+}
+.bag-categories > button[aria-pressed='true'] svg {
+  color: #fff;
+}
+/* sweep of light over the open category */
+.bag-categories > button[aria-pressed='true']::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(105deg, transparent 38%, rgba(255, 255, 255, 0.42) 50%, transparent 62%) 140% 0 / 260%
+    100% no-repeat;
+  pointer-events: none;
+  animation: pkReflet 1.1s ease-out 0.25s 1 both;
+}
+html.pk-calme .bag-categories > button::after {
+  display: none;
+  animation: none;
+}
+
+/* ---------- Bag: leather pockets ---------- */
+.is-bag .bag-categories {
+  padding: var(--space-xs);
+  border: 0;
+  border-radius: 16px;
+  background: linear-gradient(180deg, #5a3a20, #3a2414);
+  box-shadow:
+    inset 0 2px 6px rgba(0, 0, 0, 0.6),
+    0 0 0 2px #1d120a;
+  outline: 1.5px dashed rgba(255, 214, 150, 0.45);
+  outline-offset: -5px;
+}
+.is-bag .bag-categories > button {
+  border: 0;
+  border-radius: 12px 12px 8px 8px;
+  background: linear-gradient(180deg, #8a5a30, #6b4322);
+  box-shadow:
+    inset 0 -3px 0 rgba(0, 0, 0, 0.25),
+    inset 0 2px 0 rgba(255, 220, 170, 0.2);
+  color: #ffe6c4;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
+}
+.is-bag .bag-categories > button[aria-pressed='true'] {
+  background: linear-gradient(180deg, #f3b65a, #d98a2b);
+  box-shadow:
+    inset 0 2px 0 rgba(255, 240, 200, 0.6),
+    0 0 0 2px #ffe08a,
+    0 6px 14px -6px rgba(255, 170, 60, 0.8);
+  color: #3a1d06;
+  text-shadow: none;
+}
+.is-bag .bag-categories > button[aria-pressed='true'] svg {
+  color: #3a1d06;
+}
+.is-bag .bag-categories > button::after {
+  display: none;
+}
+
+@media (max-width: 700px) {
+  /* fade out the right edge: more categories to scroll to */
+  .bag-categories {
+    mask-image: linear-gradient(90deg, #000 calc(100% - 28px), transparent);
+  }
+  .bag-categories > button:last-child {
+    margin-right: var(--space-2xl);
+  }
+  .bag-offers-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-width: 640px) {
+  .bag-shelf {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .bag-categories {
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .bag-categories > button {
+    flex: 1 0 auto;
+    justify-content: center;
+  }
+}

@@ -45,10 +45,6 @@ html body .logo b {
   font-family: var(--f-logo) !important;
   letter-spacing: 0.14em !important;
 }
-html body #accueil .v4-off,
-.v4-off {
-  display: none !important;
-}
 
 /* ---------- components ---------- */
 .v4-ph {
@@ -191,13 +187,6 @@ html body #accueil .v4-off,
   width: 20px;
   height: 20px;
   filter: drop-shadow(0 0 4px rgba(90, 220, 255, 0.6));
-}
-.v4-coin.big,
-.v4-gemi.big,
-.v4-gemi.big svg {
-  width: 38px;
-  height: 38px;
-  font-size: 20px;
 }
 .v4-note {
   display: flex;

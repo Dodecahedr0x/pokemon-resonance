@@ -95,7 +95,7 @@ html:not(#pkz) body:not(#pkz) :is(.v4-panel, .v4-hero, .case).pk-scan::after {
 }
 
 /* trainer cards: statistics, trophies, wallet */
-html:not(#pkz) body:not(#pkz) :is(.v4-stats, .v4-trophy, .v4-walbig) {
+html:not(#pkz) body:not(#pkz) :is(.v4-stats, .v4-trophy) {
   position: relative;
   box-shadow:
     inset 0 0 0 1px rgba(255, 211, 90, 0.32),
@@ -119,7 +119,7 @@ html:not(#pkz) body:not(#pkz) .v4-stats::before {
   pointer-events: none;
   z-index: 2;
 }
-html:not(#pkz) body:not(#pkz) :is(.v4-stats, .v4-walbig)::after {
+html:not(#pkz) body:not(#pkz) .v4-stats::after {
   content: '';
   position: absolute;
   inset: 0;
