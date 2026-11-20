@@ -214,14 +214,6 @@
   #carte .v4-map-wrap {
     grid-template-columns: 1fr !important;
   }
-  #dex .v4-dex {
-    grid-template-columns: 1fr !important;
-  }
-  #dex .v4-dexlist {
-    position: relative;
-    top: auto;
-    max-height: 340px;
-  }
   #combat .battle {
     grid-template-columns: minmax(0, 1fr) !important;
   }

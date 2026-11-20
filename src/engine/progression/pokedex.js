@@ -34,7 +34,7 @@ function renderDexList() {
     return;
   }
   refreshDex();
-  $$('#dex4List .v4-dl.shiny').forEach(
+  $$('#dex4List .dex-row.shiny').forEach(
     b => BY[b.dataset.dex] && applyShinyArt(b.querySelector('img'), BY[b.dataset.dex].no)
   ); // v4.25
 }
@@ -44,7 +44,7 @@ export function renderDexCard() {
     const m = BY[V4.dexSel] || DEXS[0];
     V4.dexSel = m.id;
     refreshDex();
-    setTimeout(() => isShinyOwned(m.id) && applyShinyArt($('#dex4Card .v4d-art img'), m.no), 0); // v4.25
+    setTimeout(() => isShinyOwned(m.id) && applyShinyArt($('#dex4Card .dex-art img'), m.no), 0); // v4.25
   }
   scanPokedex();
 }

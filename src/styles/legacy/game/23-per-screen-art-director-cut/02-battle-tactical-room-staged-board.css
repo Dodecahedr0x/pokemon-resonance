@@ -185,12 +185,6 @@ a:focus-visible {
   #combat .bt {
     padding: var(--space-sm) !important;
   }
-  #pokedex .v4d-top {
-    padding: var(--space-lg) !important;
-  }
-  #pokedex .v4d-art {
-    min-height: 220px !important;
-  }
 }
 @media (prefers-reduced-motion: reduce) {
   .page.on,

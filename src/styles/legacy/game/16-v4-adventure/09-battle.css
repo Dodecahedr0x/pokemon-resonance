@@ -152,22 +152,6 @@ html body #bPanel .vx {
   .v4-map-st {
     min-width: 760px;
   }
-  .v4-dex {
-    grid-template-columns: minmax(0, 1fr);
-  }
-  .v4-dexlist {
-    position: static;
-    max-height: none;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: var(--space-2xs);
-  }
-  .v4-dl {
-    margin: 0;
-  }
-  .v4d-grid {
-    grid-template-columns: minmax(0, 1fr);
-  }
   .v4-tr-t {
     display: none;
   }
@@ -239,17 +223,6 @@ html body #bPanel .vx {
   }
   .v4-team-g {
     grid-template-columns: 1fr 1fr;
-  }
-  .v4d-top {
-    grid-template-columns: minmax(0, 1fr);
-  }
-  .v4d-art {
-    max-width: 300px;
-    width: 100%;
-    justify-self: center;
-  }
-  .v4d-hw {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .v4-sac {
     grid-template-columns: minmax(0, 1fr);

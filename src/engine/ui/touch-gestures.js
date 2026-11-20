@@ -51,7 +51,7 @@ function longPressAction(t) {
       }
     };
   }
-  const c = t.closest('[data-open],.v4-dl[data-dex],[data-species-sheet]');
+  const c = t.closest('[data-open],.dex-row[data-dex],[data-species-sheet]');
   if (!c) {
     return null;
   }

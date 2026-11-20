@@ -25,8 +25,8 @@ export default function Pokedex() {
           </div>
           {'\n '}
           <Missions />
-          <div className="v4-dexbar v4-panel">
-            <label className="v4-srch">
+          <div className="dex-toolbar v4-panel">
+            <label className="dex-search">
               <svg viewBox="0 0 20 20" aria-hidden="true">
                 <circle cx="9" cy="9" r="5.5" fill="none" stroke="currentColor" strokeWidth="1.7" />
                 <path d="m13.2 13.2 3.6 3.6" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
@@ -56,7 +56,7 @@ export default function Pokedex() {
             <DexCount />
           </div>
           {'\n '}
-          <div className="v4-dex">
+          <div className="dex-layout">
             <DexCard />
             <DexList />
           </div>

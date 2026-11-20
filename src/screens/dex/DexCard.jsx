@@ -42,44 +42,38 @@ export default function DexCard() {
   }
   return (
     <article
-      className={`v4-dexcard v4-panel${sh ? ' shiny' : ''}${own ? ' dex-owned' : ''}`}
+      className={`dex-card v4-panel${sh ? ' shiny' : ''}${own ? ' dex-owned' : ''}`}
       id="dex4Card"
       aria-live="polite"
       style={style}
     >
-      <div className="v4d-top">
-        <div className="v4d-art">
-          <span className="v4d-glow" aria-hidden="true" />
+      <div className="dex-card-top">
+        <div className="dex-art">
+          <span className="dex-art-shadow" aria-hidden="true" />
           {/* one image per Pokémon: the shiny illustration (v4.25) is set by the engine */}
-          <img
-            key={m.id}
-            src={ART(m.no)}
-            alt={m.n}
-            decoding="async"
-            style={fr ? { filter: 'hue-rotate(' + fr.hue + 'deg)' } : undefined}
-          />
-          <span className="v4d-no">{`N° ${no3(m.no)}`}</span>
+          <img key={m.id} src={ART(m.no)} alt={m.n} decoding="async" />
+          <span className="dex-art-number">{`N° ${no3(m.no)}`}</span>
           {sh && (
-            <span className="v4d-shn">
+            <span className="dex-art-shiny">
               <Html html={SPARK} />
               Chromatique capturé
             </span>
           )}
-          {!own && <span className="v4d-own">{`Non capturé${placeLabel ? ' · ' + placeLabel : ''}`}</span>}
+          {!own && <span className="dex-art-missing">{`Non capturé${placeLabel ? ' · ' + placeLabel : ''}`}</span>}
         </div>
         {'\n  '}
-        <div className="v4d-info">
-          <p className="v4d-cat">{`Pokémon ${dm[2]} · ${REGION_NAMES[m.gen] || 'Johto'}`}</p>
-          <h2 className="v4d-n">{m.n}</h2>
-          <div className="v4d-types">
+        <div className="dex-info">
+          <p className="dex-category">{`Pokémon ${dm[2]} · ${REGION_NAMES[m.gen] || 'Johto'}`}</p>
+          <h2 className="dex-name">{m.n}</h2>
+          <div className="dex-types">
             {m.t.map((t, k) => (
               <Html key={k} html={tb(t)} />
             ))}
           </div>
           {'\n   '}
-          <p className="v4d-lore">{LORE[m.id] || ''}</p>
+          <p className="dex-lore">{LORE[m.id] || ''}</p>
           {'\n   '}
-          <dl className="v4d-hw">
+          <dl className="dex-facts">
             <div>
               <dt>Taille</dt>
               <dd>{`${String(dm[0]).replace('.', ',')} m`}</dd>
@@ -100,26 +94,26 @@ export default function DexCard() {
         </div>
       </div>
       {'\n  '}
-      <div className="v4d-grid">
-        <section className="v4d-sec">
+      <div className="dex-sections">
+        <section className="dex-section">
           <h3>Rôle</h3>
-          <div className="v4d-roles">
+          <div className="dex-roles">
             {roles.map(r => (
-              <span className="v4d-role" key={r}>
+              <span className="dex-role" key={r}>
                 <b>{r}</b>
                 {ROLEFX[r] ? ` · ${ROLEFX[r].k}` : null}
               </span>
             ))}
           </div>
-          {ROLEFX[m.r] ? <p className="v4d-p">{ROLEFX[m.r].d}</p> : null}
-          {note ? <p className="v4d-p note">{note}</p> : null}
+          {ROLEFX[m.r] ? <p className="dex-note">{ROLEFX[m.r].d}</p> : null}
+          {note ? <p className="dex-note is-highlight">{note}</p> : null}
         </section>
         {'\n   '}
-        <section className="v4d-sec">
+        <section className="dex-section">
           <h3>Statistiques</h3>
-          <div className="v4d-stats">
+          <div className="dex-stats">
             {STLN.map((n, k) => (
-              <div className="v4-sb" key={k}>
+              <div className="dex-stat" key={k}>
                 <span>{n}</span>
                 <i>
                   <b style={{ width: m.s[k] * 20 + '%' }} />
@@ -130,13 +124,13 @@ export default function DexCard() {
           </div>
         </section>
         {'\n   '}
-        <section className="v4d-sec">
+        <section className="dex-section">
           <h3>Capacités</h3>
-          <div className="v4d-mv">
+          <div className="dex-moves">
             {m.mv.map((id, k) => {
               const v = MV[id];
               return (
-                <div className="v4d-m" key={k}>
+                <div className="dex-move" key={k}>
                   <Html html={tb(v.t)} />
                   <b>
                     {v.n}
@@ -149,7 +143,7 @@ export default function DexCard() {
             })}
           </div>
           {tl ? (
-            <p className="v4d-p">
+            <p className="dex-note">
               <b>{`Talent · ${tl[0]}.`}</b>
               {` ${tl[1]}`}
             </p>
@@ -157,23 +151,28 @@ export default function DexCard() {
         </section>
       </div>
       {'\n  '}
-      <div className="v4d-fam">
-        <button type="button" className="v4d-arr" data-dex={prev.id} aria-label={`Pokémon précédent : ${prev.n}`}>
+      <div className="dex-family">
+        <button
+          type="button"
+          className="dex-family-arrow"
+          data-dex={prev.id}
+          aria-label={`Pokémon précédent : ${prev.n}`}
+        >
           <svg>
             <use href="#i-chevl" />
           </svg>
         </button>
         {'\n   '}
-        <div className="v4d-chain">
+        <div className="dex-family-chain">
           {family.map((x, k) => [
             k > 0 && (
-              <svg className="v4d-to" aria-hidden="true" key={'to' + k}>
+              <svg className="dex-family-step" aria-hidden="true" key={'to' + k}>
                 <use href="#i-chevr" />
               </svg>
             ),
             <button
               type="button"
-              className={`v4d-f${x.id === m.id ? ' on' : ''}`}
+              className={`dex-family-member${x.id === m.id ? ' is-current' : ''}`}
               data-dex={x.id}
               style={{ '--c': tc(x.t[0]) }}
               key={x.id}
@@ -185,14 +184,19 @@ export default function DexCard() {
           ])}
         </div>
         {'\n   '}
-        <button type="button" className="v4d-arr" data-dex={next.id} aria-label={`Pokémon suivant : ${next.n}`}>
+        <button
+          type="button"
+          className="dex-family-arrow"
+          data-dex={next.id}
+          aria-label={`Pokémon suivant : ${next.n}`}
+        >
           <svg>
             <use href="#i-chevr" />
           </svg>
         </button>
       </div>
       {'\n  '}
-      <div className="v4d-act">
+      <div className="dex-actions">
         <button type="button" className="b" data-v4sheet={m.id}>
           Fiche tactique complète
         </button>

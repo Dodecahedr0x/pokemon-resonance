@@ -13,22 +13,22 @@ import { familyCaptureStats } from '../../engine/progression/regional-dex.js';
 export function DexCount() {
   const n = PROFILE.shiny.length;
   return (
-    <span className="v4-dexcnt" id="dex4Cnt">
+    <span className="dex-count" id="dex4Cnt">
       <b>{DEXS.filter(m => ownedFam(m.id)).length}</b>
       {` / ${DEXS.length} obtenus`}
       {n ? ' · ' : null}
       {n ? (
-        <span className="v4-shc">
+        <span className="dex-count-shiny">
           <Html html={SPARK} />
           {`${n} chromatique${n > 1 ? 's' : ''}`}
         </span>
       ) : null}
-      <span className="diploma-count">
+      <span className="dex-count-regions">
         {[1, 2, 3].map(r => {
           const c = familyCaptureStats(r),
             ok = (PROFILE.regionDiplomas || []).includes(r);
           return (
-            <span className={ok ? 'ok' : ''} key={r}>
+            <span className={ok ? 'is-complete' : undefined} key={r}>
               {`${FAMILY_REGION_NAMES[r]} `}
               <b>{c.n}</b>
               {`/${c.t}${ok ? ' ✓' : ''}`}
@@ -44,7 +44,7 @@ export function DexCount() {
 export function DexList() {
   const L = dexList();
   return (
-    <div className="v4-dexlist v4-panel" id="dex4List" role="listbox" aria-label="Liste du Pokédex">
+    <div className="dex-list v4-panel" id="dex4List" role="listbox" aria-label="Liste du Pokédex">
       {L.length ? (
         L.map(m => {
           const own = ownedFam(m.id),
@@ -57,7 +57,7 @@ export function DexList() {
           return (
             <button
               type="button"
-              className={`v4-dl${own ? '' : ' unk'}${sh ? ' shiny' : ''}${on ? ' on' : ''}`}
+              className={`dex-row${own ? '' : ' is-unknown'}${sh ? ' shiny' : ''}${on ? ' is-selected' : ''}`}
               data-dex={m.id}
               role="option"
               aria-selected={on}
@@ -66,10 +66,10 @@ export function DexList() {
             >
               {sh ? <Html html={SPARK} /> : null}
               <img src={PIX(m.no)} alt="" loading="lazy" width="48" height="48" />
-              <span className="v4-dl-no">{String(m.no).padStart(3, '0')}</span>
+              <span className="dex-row-number">{String(m.no).padStart(3, '0')}</span>
               <b>{m.n}</b>
               {own ? null : (
-                <svg className="v4-dl-lk">
+                <svg className="dex-row-lock">
                   <use href="#i-lock" />
                 </svg>
               )}

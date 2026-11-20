@@ -7,15 +7,11 @@
   .board-weather i,
   .res-card.result-fx::before,
   .res-card.result-fx::after,
-  .result-badge,
-  #dex4Card.scan-sweep .v4d-art::before {
+  .result-badge {
     animation: none !important;
   }
   #battle-transition {
     display: none;
-  }
-  #dex4Card .v4d-art {
-    transform: none;
   }
 }
 

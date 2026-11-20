@@ -7,9 +7,14 @@
   --color-text: var(--tx);
   --color-text-soft: var(--v4-tx2);
   --color-text-muted: var(--mut);
+  --color-text-dim: var(--v4-mut);
   --color-accent: var(--gold);
   --color-line: var(--line);
 
   --font-display: var(--f-d);
   --font-body: var(--f-b);
+  --font-mono: var(--f-m);
+
+  /* hover lift on cards and rows */
+  --ease-lift: cubic-bezier(0.2, 0.75, 0.25, 1);
 }

@@ -185,22 +185,10 @@ p.v4-note {
     min-height: 40px;
     padding-inline: var(--space-md) !important;
   }
-  html body #dex .v4-btn {
-    min-height: 40px;
-  }
   html body #pokedex .dc-s {
     min-height: 40px;
   }
   /* Pokédex filters: the two lists fill their row */
-  html body #dex .v4-dexbar > select {
-    flex: 1 1 auto !important;
-    min-width: 0 !important;
-    min-height: var(--tap);
-  }
-  html body #dex .v4-dexbar > :is(.v4-srch, .v4-dexcnt) {
-    flex-basis: 100%;
-    text-align: center;
-  }
 
   /* ---------- Guide: "Getting started" steps use the full card width ----------
      Number and title on the first line, the explanation below across the whole card. */

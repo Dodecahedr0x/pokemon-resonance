@@ -20,3 +20,6 @@
 @import './components/panel.css' layer(components);
 
 @import '../screens/settings/settings.css' layer(screens);
+@import '../screens/dex/dex.css' layer(screens);
+@import '../screens/dex/dex-card.css' layer(screens);
+@import '../screens/dex/dex-card-sections.css' layer(screens);

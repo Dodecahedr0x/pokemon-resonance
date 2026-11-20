@@ -403,7 +403,7 @@ export function init() {
       if (e.pointerType === 'touch' || RM) {
         return;
       }
-      const a = e.target.closest && e.target.closest('.v4d-art');
+      const a = e.target.closest && e.target.closest('.dex-art');
       if (a) {
         tiltArt(a, e.clientX, e.clientY);
       }
@@ -423,7 +423,7 @@ export function init() {
         return;
       }
       lastTiltAt = t;
-      const a = document.querySelector('#dex4Card .v4d-art');
+      const a = document.querySelector('#dex4Card .dex-art');
       if (!a || !a.offsetParent) {
         return;
       }

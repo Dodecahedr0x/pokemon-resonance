@@ -262,47 +262,6 @@
   }
 }
 /* holographic cards */
-#dex4Card .v4d-art {
-  --hx: 50%;
-  --hy: 50%;
-  transform: perspective(700px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
-  transition: transform 0.15s ease-out;
-}
-#dex4Card.dex-owned .v4d-art::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  pointer-events: none;
-  background: linear-gradient(
-      115deg,
-      transparent 16%,
-      rgba(255, 255, 255, 0.3) 34%,
-      rgba(120, 255, 225, 0.24) 45%,
-      rgba(255, 130, 225, 0.24) 56%,
-      rgba(255, 230, 120, 0.22) 66%,
-      transparent 84%
-    )
-    var(--hx) var(--hy) / 260% 260%;
-  mix-blend-mode: color-dodge;
-  opacity: 0.42;
-  transition: opacity 0.3s;
-}
-#dex4Card.dex-owned.shiny .v4d-art::after {
-  opacity: 0.9;
-}
-#dex4Card.scan-sweep .v4d-art::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  height: 22%;
-  z-index: 3;
-  pointer-events: none;
-  background: linear-gradient(to bottom, transparent, rgba(120, 230, 255, 0.35), transparent);
-  animation: scan-sweep-anim 0.8s ease-out both;
-}
 @keyframes scan-sweep-anim {
   from {
     transform: translateY(-100%);
@@ -312,9 +271,6 @@
     transform: translateY(520%);
     opacity: 0;
   }
-}
-#dex4Card.dex-new .v4d-art {
-  animation: new-flash 1.2s ease-out;
 }
 @keyframes new-flash {
   0% {

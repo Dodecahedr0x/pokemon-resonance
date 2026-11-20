@@ -1,0 +1,264 @@
+/* Pokédex card (#dex4Card): artwork, identity, facts, role / stats / moves, evolution family and actions.
+   --c and --c2 are the Pokémon's type colours (inline style). The artwork tilts with the pointer (--rx / --ry,
+   set by engine/audio/immersion.js). */
+
+.dex-card {
+  --c: #e3350d;
+  --c2: #e3350d;
+  overflow: hidden;
+  padding: var(--space-lg);
+  border: 1px solid rgba(127, 213, 224, 0.34);
+  border-radius: 27px;
+  background:
+    radial-gradient(ellipse at 28% 12%, color-mix(in srgb, var(--c, #69d5d5) 21%, transparent), transparent 48%),
+    linear-gradient(155deg, #17374a, #091a27 78%);
+  box-shadow:
+    0 30px 75px rgba(0, 0, 0, 0.42),
+    inset 0 1px rgba(255, 255, 255, 0.1);
+}
+.dex-card-top {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  align-items: center;
+  gap: var(--space-lg);
+  box-shadow:
+    0 18px 48px rgba(0, 0, 0, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.055);
+}
+
+/* ---------- Artwork ---------- */
+.dex-art {
+  --hx: 50%;
+  --hy: 50%;
+  position: relative;
+  isolation: isolate;
+  aspect-ratio: 1;
+  min-height: 300px;
+  overflow: hidden;
+  border: 1px solid rgba(148, 225, 231, 0.24);
+  border-radius: 22px;
+  background:
+    radial-gradient(ellipse at 50% 58%, color-mix(in srgb, var(--c, #73d9f4) 32%, transparent), transparent 55%),
+    linear-gradient(145deg, rgba(24, 58, 79, 0.88), rgba(6, 24, 39, 0.94));
+  transform: perspective(700px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transition: transform 0.15s ease-out;
+}
+.dex-art img {
+  position: relative;
+  z-index: 1;
+  width: 88%;
+  height: 88%;
+  margin: 6%;
+  object-fit: contain;
+  filter: drop-shadow(0 22px 20px rgba(0, 0, 0, 0.48));
+  transform: translateY(0) scale(1.02);
+  transition:
+    transform 0.45s var(--ease-lift),
+    filter 0.45s var(--ease-lift);
+}
+@media (hover: hover) {
+  .dex-art:hover img {
+    transform: translateY(-5px) scale(1.07);
+  }
+}
+/* soft shadow under the Pokémon */
+.dex-art-shadow {
+  position: absolute;
+  inset: auto 15% 8% 15%;
+  height: 12%;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.45);
+  opacity: 0.9;
+  filter: blur(8px);
+  animation: prGlow 4.8s ease-in-out infinite;
+}
+/* badges in the corners: number, "not caught", "shiny caught" */
+.dex-art-number,
+.dex-art-missing:not(:empty),
+.dex-art-shiny {
+  position: absolute;
+  padding: var(--space-2xs) var(--space-sm);
+  border-radius: 7px;
+}
+.dex-art-number {
+  top: 10px;
+  left: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(3, 16, 32, 0.75);
+  font: 800 13px/1 var(--font-mono);
+}
+.dex-art-missing:not(:empty) {
+  top: 10px;
+  right: 10px;
+  border: 1px solid rgba(255, 215, 94, 0.4);
+  background: rgba(3, 16, 32, 0.8);
+  color: var(--color-accent);
+  font: 800 11px/1 var(--font-display);
+}
+.dex-art-shiny {
+  bottom: 10px;
+  left: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  border: 1px solid rgba(255, 225, 145, 0.45);
+  background: rgba(47, 36, 15, 0.86);
+  box-shadow: 0 0 18px rgba(255, 214, 112, 0.18);
+  color: #ffe9a3;
+  font: 800 11px/1 var(--font-display);
+}
+/* caught: holographic sheen that follows the pointer (--hx / --hy) */
+.dex-owned .dex-art::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+      115deg,
+      transparent 16%,
+      rgba(255, 255, 255, 0.3) 34%,
+      rgba(120, 255, 225, 0.24) 45%,
+      rgba(255, 130, 225, 0.24) 56%,
+      rgba(255, 230, 120, 0.22) 66%,
+      transparent 84%
+    )
+    var(--hx) var(--hy) / 260% 260%;
+  mix-blend-mode: color-dodge;
+  opacity: 0.42;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+.dex-owned.shiny .dex-art::after {
+  opacity: 0.9;
+}
+/* not caught: black silhouette and a big red question mark */
+.dex-card:not(.dex-owned) .dex-art img {
+  filter: brightness(0) drop-shadow(0 0 2px rgba(150, 205, 255, 0.85)) drop-shadow(0 0 16px rgba(111, 220, 255, 0.3));
+}
+.dex-card:not(.dex-owned) .dex-art::after {
+  content: '?';
+  position: absolute;
+  inset: auto 12px 12px auto;
+  z-index: 4;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #e3262f;
+  box-shadow:
+    0 0 0 2.5px #151a22,
+    0 6px 14px rgba(0, 0, 0, 0.5);
+  color: #fff;
+  font: 900 24px/1 var(--font-display);
+}
+/* shiny: warm backdrop, recoloured artwork (or the shiny artwork itself, .art-sh) */
+.dex-card.shiny .dex-art {
+  background:
+    radial-gradient(ellipse at 50% 55%, rgba(255, 221, 128, 0.28), transparent 58%),
+    linear-gradient(145deg, rgba(65, 55, 37, 0.72), rgba(11, 25, 38, 0.96));
+  box-shadow:
+    inset 0 0 35px rgba(255, 216, 117, 0.12),
+    0 0 30px rgba(255, 216, 117, 0.08);
+}
+.dex-card.shiny .dex-art img {
+  filter: hue-rotate(var(--sh, 120deg)) saturate(1.25) drop-shadow(0 0 8px rgba(255, 233, 160, 0.55))
+    drop-shadow(0 10px 12px rgba(0, 0, 0, 0.35));
+}
+.dex-card.shiny .dex-art img.art-sh {
+  filter: drop-shadow(0 0 12px rgba(255, 224, 139, 0.52)) drop-shadow(0 10px 12px rgba(0, 0, 0, 0.35));
+}
+/* engine effects: scanner sweep on every change, flash on a first discovery */
+.dex-card.scan-sweep .dex-art::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 3;
+  height: 22%;
+  background: linear-gradient(to bottom, transparent, rgba(120, 230, 255, 0.35), transparent);
+  pointer-events: none;
+  animation: scan-sweep-anim 0.8s ease-out both;
+}
+.dex-card.dex-new .dex-art {
+  animation: new-flash 1.2s ease-out;
+}
+
+/* ---------- Identity and facts ---------- */
+.dex-info {
+  padding: var(--space-sm) var(--space-xs);
+}
+.dex-category {
+  margin: 0;
+  color: var(--color-accent);
+  font: 700 12px/1.2 var(--font-display);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.dex-name {
+  margin: var(--space-3xs) 0 var(--space-sm);
+  font: 850 clamp(34px, 4vw, 52px) / 1 var(--font-display);
+  letter-spacing: -0.02em;
+}
+.dex-types {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+.dex-lore {
+  margin: var(--space-md) 0;
+  color: #e6f1fb;
+  font-size: 14.5px;
+  line-height: 1.55;
+}
+/* height, weight, recruit cost, stage */
+.dex-facts {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-xs);
+  margin: 0;
+}
+.dex-facts div {
+  padding: var(--space-sm);
+  border: 1px solid rgba(120, 200, 255, 0.16);
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.25);
+}
+.dex-facts dt {
+  color: var(--color-text-dim);
+  font: 700 11px/1 var(--font-display);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.dex-facts dd {
+  margin: var(--space-2xs) 0 0;
+  font: 850 16px/1 var(--font-display);
+}
+
+@media (max-width: 700px) {
+  .dex-art {
+    min-height: 210px;
+  }
+}
+@media (max-width: 640px) {
+  .dex-card-top {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .dex-art {
+    justify-self: center;
+    width: 100%;
+    max-width: 300px;
+  }
+  .dex-facts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dex-art {
+    transform: none;
+  }
+  .dex-card.scan-sweep .dex-art::before {
+    animation: none;
+  }
+}

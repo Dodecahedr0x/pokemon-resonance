@@ -214,9 +214,9 @@
   padding: clamp(14px, 2vw, 25px) !important;
   margin-top: var(--space-md) !important;
 }
-/* all dialogs and controls use the same tactile glass language */
-input,
-select,
+/* all dialogs and controls use the same tactile glass language (the Pokédex toolbar draws its own) */
+input:not(:where(.dex-search input)),
+select:not(:where(.dex-toolbar select)),
 textarea {
   background: rgba(3, 22, 36, 0.9) !important;
   border: 1px solid rgba(105, 212, 255, 0.26) !important;

@@ -160,11 +160,6 @@ html body .vs::after {
 html body img.img-off.img-off.img-off {
   display: none !important;
 }
-html body .v4-dl img,
-html body .v4d-f img {
-  image-rendering: auto !important;
-  object-fit: contain;
-}
 
 /* ==== 20-v4.4-aventure-plus.css ==== */
 /* =====================================================================
@@ -182,9 +177,7 @@ html body .v4d-f img {
 }
 html body #bSvg .tok.shiny .tok-im,
 .enc-card.shiny .enc-cr img,
-.enc-card.shiny .enc-cr image,
-.v4-dl.shiny img,
-#dex4Card.shiny .v4d-art img {
+.enc-card.shiny .enc-cr image {
   filter: hue-rotate(var(--sh, 120deg)) saturate(1.25) drop-shadow(0 0 6px rgba(255, 233, 160, 0.55));
 }
 html body #bSvg .tok.shiny .tok-halo {
@@ -205,31 +198,6 @@ html body #bSvg .tok.shiny .tok-halo {
 }
 .enc-card.shiny .enc-t {
   color: #ffe9a3;
-}
-.v4-dl.shiny {
-  gap: var(--space-2xs);
-}
-.v4-dl.shiny > .shn-ic {
-  order: 3;
-  margin-left: auto;
-}
-.v4-shc {
-  color: #ffe9a3;
-  white-space: nowrap;
-}
-.v4d-shn {
-  position: absolute;
-  left: 10px;
-  bottom: 10px;
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2xs);
-  font: 800 11px/1 var(--f-d);
-  padding: var(--space-2xs) var(--space-sm);
-  border-radius: 7px;
-  color: #ffe9a3;
-  background: rgba(3, 16, 32, 0.78);
-  border: 1px solid rgba(255, 233, 160, 0.5);
 }
 .rl.shn b {
   color: #ffe9a3;

@@ -15,7 +15,7 @@ export default function Missions() {
       {pals.map(([k, r]) => {
         const ok = n >= k;
         return (
-          <div className={`dex-mission-r${ok ? ' ok' : ''}`} key={'p' + k}>
+          <div className={`dex-mission-row${ok ? ' is-ready' : ''}`} key={'p' + k}>
             <div>
               <b>{`Capturer ${k} espèces`}</b>
               <i>
@@ -33,7 +33,7 @@ export default function Missions() {
         const done = S.ty[w + t],
           ok = own >= need;
         return (
-          <div className={`dex-mission-r${ok && !done ? ' ok' : ''}${done ? ' done' : ''}`} key={'t' + t}>
+          <div className={`dex-mission-row${ok && !done ? ' is-ready' : ''}${done ? ' is-done' : ''}`} key={'t' + t}>
             <div>
               <b>
                 {`Spécialiste ${t} `}

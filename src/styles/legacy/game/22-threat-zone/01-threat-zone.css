@@ -139,9 +139,6 @@ html body .tcard,
 html body .sel,
 html body .v4-mi,
 html body .sv-card,
-html body .v4d-sec,
-html body .v4d-top,
-html body .v4-dl,
 html body .bt-side .bp,
 html body .dock,
 html body .ana,
@@ -160,10 +157,7 @@ html body .sv-card {
   background: linear-gradient(145deg, rgba(19, 48, 68, 0.94), rgba(7, 22, 35, 0.96)) !important;
 }
 html body button.qk,
-html body .mk,
-html body .v4-dl,
-html body .v4d-f,
-html body .v4d-arr {
+html body .mk {
   transition:
     transform 0.22s var(--pr-ease),
     box-shadow 0.22s var(--pr-ease),
@@ -172,9 +166,7 @@ html body .v4d-arr {
 }
 @media (hover: hover) {
   html body .qk:hover,
-  html body .mk:hover,
-  html body .v4-dl:hover,
-  html body .v4d-f:hover {
+  html body .mk:hover {
     transform: translateY(-2px);
     filter: brightness(1.09);
     box-shadow:

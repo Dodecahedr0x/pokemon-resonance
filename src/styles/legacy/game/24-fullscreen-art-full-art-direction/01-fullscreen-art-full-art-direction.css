@@ -69,8 +69,6 @@ a:focus-visible {
 .tcard,
 .sel,
 .dock,
-.v4-dexcard,
-.v4-dexlist,
 .v4-map,
 .v4-map-side > * {
   border-color: var(--rx-edge) !important;
@@ -294,60 +292,3 @@ a:focus-visible {
   padding: var(--space-md) !important;
 }
 /* DEX page — correct dynamic page id */
-#dex .v4-dex {
-  grid-template-columns: minmax(0, 1fr) minmax(285px, 34%) !important;
-  gap: var(--space-lg) !important;
-}
-#dex .v4-dexcard {
-  padding: var(--space-lg) !important;
-  border: 1px solid rgba(127, 213, 224, 0.34) !important;
-  border-radius: 27px !important;
-  background:
-    radial-gradient(ellipse at 28% 12%, color-mix(in srgb, var(--c, #69d5d5) 21%, transparent), transparent 48%),
-    linear-gradient(155deg, #17374a, #091a27 78%) !important;
-  box-shadow:
-    0 30px 75px rgba(0, 0, 0, 0.42),
-    inset 0 1px rgba(255, 255, 255, 0.1) !important;
-}
-#dex .v4d-art {
-  min-height: 300px;
-  border-radius: 22px !important;
-  border: 1px solid rgba(148, 225, 231, 0.24) !important;
-  background:
-    radial-gradient(ellipse at 50% 55%, color-mix(in srgb, var(--c, #69d5d5) 38%, transparent), transparent 60%),
-    linear-gradient(145deg, #071824, #17384a) !important;
-}
-#dex .v4d-art img {
-  filter: drop-shadow(0 22px 20px rgba(0, 0, 0, 0.48)) !important;
-}
-#dex .v4d-info {
-  padding: var(--space-sm) var(--space-xs);
-}
-#dex .v4d-n {
-  font-size: clamp(34px, 4vw, 52px) !important;
-}
-#dex .v4d-sec {
-  border: 1px solid rgba(128, 214, 224, 0.18) !important;
-  border-radius: 18px !important;
-  background: rgba(3, 17, 27, 0.55) !important;
-}
-#dex .v4-dexlist {
-  border: 1px solid rgba(127, 213, 224, 0.26) !important;
-  border-radius: 22px !important;
-  background: linear-gradient(180deg, #112f41, #081a27) !important;
-  box-shadow: 0 22px 50px rgba(0, 0, 0, 0.3) !important;
-}
-#dex .v4-dl {
-  min-height: 60px !important;
-  border-radius: 12px !important;
-}
-#dex .v4-dl img {
-  width: 52px !important;
-  height: 52px !important;
-  image-rendering: auto !important;
-  filter: drop-shadow(0 5px 5px rgba(0, 0, 0, 0.3));
-}
-#dex .v4-dl.on {
-  border-color: var(--rx-gold) !important;
-  background: linear-gradient(90deg, rgba(245, 206, 120, 0.2), rgba(124, 232, 238, 0.06)) !important;
-}

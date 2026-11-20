@@ -279,62 +279,6 @@
 .wanderer b {
   color: #ffd45b;
 }
-.dex-mission {
-  margin: 0 0 var(--space-md);
-  padding: var(--space-md) var(--space-md);
-  display: grid;
-  gap: var(--space-sm);
-}
-.dex-mission h3 {
-  margin: 0;
-  font-size: 13px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #ffd45b;
-}
-.dex-mission-r {
-  display: flex;
-  gap: var(--space-md);
-  align-items: center;
-  justify-content: space-between;
-}
-.dex-mission-r > div {
-  flex: 1;
-  min-width: 0;
-}
-.dex-mission-r b {
-  font-size: 13.5px;
-}
-.dex-mission-r em {
-  font-style: normal;
-  font-size: 11px;
-  color: #9fd8ff;
-  margin-left: var(--space-2xs);
-}
-.dex-mission-r i {
-  display: block;
-  height: 6px;
-  border-radius: 4px;
-  background: rgba(255, 255, 255, 0.12);
-  margin: var(--space-2xs) 0 var(--space-3xs);
-  overflow: hidden;
-}
-.dex-mission-r u {
-  display: block;
-  height: 100%;
-  background: linear-gradient(90deg, #43c0ff, #ffd45b);
-  text-decoration: none;
-}
-.dex-mission-r small {
-  font-size: 11.5px;
-  color: #b8cddb;
-}
-.dex-mission-r.done {
-  opacity: 0.55;
-}
-.dex-mission-r.ok .v4-btn {
-  box-shadow: 0 0 0 2px rgba(255, 212, 91, 0.5);
-}
 @media (prefers-reduced-motion: reduce) {
   .route-event:not(.done) {
     animation: none;

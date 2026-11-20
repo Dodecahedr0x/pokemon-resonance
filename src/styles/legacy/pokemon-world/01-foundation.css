@@ -177,49 +177,6 @@ html:not(#pkz) body:not(#pkz) .intro .dlgbox.pk-dlg {
 }
 
 /* ---------- 5. silhouettes of Pokémon not yet caught ---------- */
-html:not(#pkz) body:not(#pkz) .v4-dl.unk img {
-  filter: brightness(0) drop-shadow(0 0 1.5px rgba(150, 205, 255, 0.85)) !important;
-  opacity: 1 !important;
-}
-html:not(#pkz) body:not(#pkz) .v4-dl.unk::before {
-  content: '?';
-  position: absolute;
-  left: 34px;
-  top: 5px;
-  z-index: 2;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  background: #e3262f;
-  color: #fff;
-  font: 900 11px/1 var(--f-d);
-  box-shadow: 0 0 0 1.5px #151a22;
-  pointer-events: none;
-}
-html:not(#pkz) body:not(#pkz) #dex4Card:not(.dex-owned) .v4d-art img {
-  filter: brightness(0) drop-shadow(0 0 2px rgba(150, 205, 255, 0.85)) drop-shadow(0 0 16px rgba(111, 220, 255, 0.3)) !important;
-}
-html:not(#pkz) body:not(#pkz) #dex4Card:not(.dex-owned) .v4d-art::after {
-  content: '?' !important;
-  position: absolute !important;
-  display: grid !important;
-  place-items: center;
-  inset: auto 12px 12px auto !important;
-  width: 38px !important;
-  height: 38px !important;
-  border-radius: 50% !important;
-  background: #e3262f !important;
-  color: #fff !important;
-  font: 900 24px/1 var(--f-d) !important;
-  box-shadow:
-    0 0 0 2.5px #151a22,
-    0 6px 14px rgba(0, 0, 0, 0.5) !important;
-  opacity: 1 !important;
-  animation: none !important;
-  z-index: 4;
-}
 html:not(#pkz) body:not(#pkz) .fcard.locked .pokemon-art-sprite {
   filter: brightness(0) drop-shadow(0 0 2px rgba(150, 205, 255, 0.8)) !important;
 }

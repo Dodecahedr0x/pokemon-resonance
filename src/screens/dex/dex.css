@@ -1,0 +1,339 @@
+/* Pokédex page (#dex): missions, toolbar, the selected Pokémon's card and the list.
+   Markup: Pokedex.jsx, Missions.jsx, DexList.jsx, DexCard.jsx. The engine adds .shiny, .scan-sweep and .dex-new
+   to the card and .shiny to list rows. */
+
+/* ---------- Missions ---------- */
+.dex-mission {
+  display: grid;
+  gap: var(--space-sm);
+  margin: 0 0 var(--space-md);
+  padding: var(--space-md);
+}
+.dex-mission h3 {
+  margin: 0;
+  color: #ffd45b;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.dex-mission-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+.dex-mission-row > div {
+  flex: 1;
+  min-width: 0;
+}
+.dex-mission-row b {
+  font-size: 13.5px;
+}
+.dex-mission-row em {
+  margin-left: var(--space-2xs);
+  color: #9fd8ff;
+  font-size: 11px;
+  font-style: normal;
+}
+/* progress bar */
+.dex-mission-row i {
+  display: block;
+  height: 6px;
+  margin: var(--space-2xs) 0 var(--space-3xs);
+  overflow: hidden;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.12);
+}
+.dex-mission-row u {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #43c0ff, #ffd45b);
+  text-decoration: none;
+}
+.dex-mission-row small {
+  color: #b8cddb;
+  font-size: 11.5px;
+}
+.dex-mission-row.is-ready .v4-btn {
+  box-shadow: 0 0 0 2px rgba(255, 212, 91, 0.5);
+}
+.dex-mission-row.is-done {
+  opacity: 0.55;
+}
+
+/* ---------- Toolbar: search, region, sort, counters ---------- */
+.dex-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+  padding: var(--space-sm);
+}
+.dex-search {
+  display: flex;
+  flex: 1 1 220px;
+  align-items: center;
+  gap: var(--space-sm);
+  min-height: 42px;
+  padding: 0 var(--space-md);
+  border: 1px solid rgba(120, 200, 255, 0.28);
+  border-radius: 10px;
+  background: rgba(3, 16, 32, 0.8);
+}
+.dex-search svg {
+  width: 18px;
+  height: 18px;
+  color: var(--color-text-dim);
+}
+.dex-search input {
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  outline: none;
+  background: none;
+  color: #fff;
+  font: 500 15px var(--font-body);
+}
+.dex-toolbar select {
+  min-height: 42px;
+  padding: 0 var(--space-sm);
+  border: 1px solid rgba(105, 212, 255, 0.26);
+  border-radius: 10px;
+  background: rgba(3, 22, 36, 0.9);
+  color: #f2f9ff;
+  font: 700 14px var(--font-display);
+}
+.dex-count {
+  margin-left: auto;
+  color: var(--color-text-soft);
+  font: 700 13px/1 var(--font-display);
+}
+.dex-count b {
+  color: var(--color-accent);
+  font-size: 16px;
+}
+.dex-count-shiny {
+  color: #ffe9a3;
+  white-space: nowrap;
+}
+/* captured / total per region; a finished region gets its diploma tick */
+.dex-count-regions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-3xs) var(--space-sm);
+  width: 100%;
+  margin-top: var(--space-2xs);
+  color: #a9c1ce;
+  font: 600 11.5px/1.3 var(--font-body);
+}
+.dex-count-regions b {
+  color: #ffe17b;
+}
+.dex-count-regions .is-complete {
+  color: #9fe7c4;
+}
+
+/* ---------- Layout: card on the left, list on the right ---------- */
+.dex-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(285px, 34%);
+  align-items: start;
+  gap: var(--space-lg);
+}
+
+/* ---------- List of Pokémon ---------- */
+.dex-list {
+  position: sticky;
+  top: 76px;
+  max-height: calc(100vh - 220px);
+  overflow: auto;
+  padding: var(--space-xs);
+  border: 1px solid rgba(127, 213, 224, 0.26);
+  border-radius: 22px;
+  background: linear-gradient(180deg, #112f41, #081a27);
+  box-shadow: 0 22px 50px rgba(0, 0, 0, 0.3);
+  scrollbar-width: thin;
+}
+.dex-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  width: 100%;
+  min-height: 60px;
+  margin-bottom: var(--space-2xs);
+  padding: var(--space-3xs) var(--space-sm) var(--space-3xs) var(--space-3xs);
+  border: 1px solid rgba(164, 205, 226, 0.17);
+  border-radius: 12px;
+  background: linear-gradient(145deg, rgba(17, 47, 67, 0.92), rgba(7, 23, 37, 0.95));
+  box-shadow:
+    0 18px 48px rgba(0, 0, 0, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.055);
+  color: #fff;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.dex-row img {
+  flex: none;
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
+  background: radial-gradient(circle, color-mix(in srgb, var(--c) 35%, transparent), transparent 70%);
+  filter: drop-shadow(0 5px 5px rgba(0, 0, 0, 0.3));
+}
+.dex-row-number {
+  width: 30px;
+  color: var(--color-text-dim);
+  font: 700 12px/1 var(--font-mono);
+}
+.dex-row b {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  font: 800 14px/1.1 var(--font-display);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+/* padlock in the corner of a Pokémon not caught yet */
+.dex-row-lock {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  width: 11px;
+  height: 11px;
+  color: var(--color-text-dim);
+  opacity: 0.85;
+}
+/* the brightness on hover comes from the shared button rule */
+@media (hover: hover) {
+  .dex-row:hover,
+  .dex-family-member:hover {
+    transform: translateY(-2px);
+    box-shadow:
+      0 12px 28px rgba(0, 0, 0, 0.28),
+      0 0 0 1px rgba(115, 217, 244, 0.18);
+  }
+}
+/* selected row: red edge and a blinking LED */
+.dex-row.is-selected {
+  border-color: rgba(255, 120, 125, 0.6);
+  background:
+    radial-gradient(90% 120% at 0% 50%, rgba(227, 38, 47, 0.28), transparent 70%),
+    linear-gradient(160deg, rgba(26, 48, 76, 0.95), rgba(10, 22, 40, 0.95));
+  box-shadow:
+    inset 3px 0 0 #ff4b53,
+    0 0 14px -4px rgba(255, 60, 70, 0.6);
+}
+.dex-row.is-selected::after {
+  content: '';
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ff4b53;
+  box-shadow: 0 0 8px #ff4b53;
+  pointer-events: none;
+  animation: pkLed 1.6s ease-in-out infinite;
+}
+/* not caught yet: black silhouette with a red question mark */
+.dex-row.is-unknown img {
+  opacity: 1;
+  filter: brightness(0) drop-shadow(0 0 1.5px rgba(150, 205, 255, 0.85));
+}
+.dex-row.is-unknown b {
+  color: #aebfd2;
+}
+.dex-row.is-unknown::before {
+  content: '?';
+  position: absolute;
+  top: 5px;
+  left: 34px;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #e3262f;
+  box-shadow: 0 0 0 1.5px #151a22;
+  color: #fff;
+  font: 900 11px/1 var(--font-display);
+  pointer-events: none;
+}
+/* shiny caught: recoloured sprite (or the shiny artwork, .art-sh) and a sparkle icon at the end */
+.dex-row.shiny {
+  gap: var(--space-2xs);
+}
+.dex-row.shiny > .shn-ic {
+  order: 3;
+  margin-left: auto;
+}
+.dex-row.shiny img {
+  filter: hue-rotate(var(--sh, 120deg)) saturate(1.25) drop-shadow(0 0 8px rgba(255, 233, 160, 0.55))
+    drop-shadow(0 10px 12px rgba(0, 0, 0, 0.35));
+}
+.dex-row.shiny img.art-sh {
+  filter: drop-shadow(0 0 12px rgba(255, 224, 139, 0.52)) drop-shadow(0 10px 12px rgba(0, 0, 0, 0.35));
+}
+
+/* ---------- Narrow screens ---------- */
+@media (max-width: 999px) {
+  /* the list becomes a grid of tiles under the card */
+  .dex-list {
+    position: static;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: var(--space-2xs);
+    max-height: none;
+  }
+  .dex-row {
+    margin: 0;
+  }
+}
+@media (max-width: 850px) {
+  .dex-layout {
+    grid-template-columns: 1fr;
+  }
+  .dex-list {
+    position: relative;
+    top: auto;
+    max-height: 340px;
+  }
+}
+@media (max-width: 700px) {
+  .dex-toolbar > select {
+    flex: 1 1 auto;
+    min-width: 0;
+    min-height: 44px;
+  }
+  .dex-toolbar > :is(.dex-search, .dex-count) {
+    flex-basis: 100%;
+    text-align: center;
+  }
+  .dex-mission .v4-btn {
+    min-height: 40px;
+  }
+}
+@media (max-width: 480px) {
+  .dex-row {
+    gap: var(--space-2xs);
+    padding-right: var(--space-xs);
+  }
+  .dex-row img {
+    width: 42px;
+    height: 42px;
+  }
+  .dex-row b {
+    font-size: 13px;
+    letter-spacing: -0.01em;
+  }
+  .dex-row-number {
+    font-size: 11px;
+  }
+}
