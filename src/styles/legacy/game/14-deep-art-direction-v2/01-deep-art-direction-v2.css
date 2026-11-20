@@ -142,21 +142,6 @@ body {
     inset 0 1px rgba(255, 255, 255, 0.04) !important;
   border-radius: 17px !important;
 }
-.b,
-.b-ghost {
-  border-radius: 10px !important;
-}
-.b-gold,
-.b.b-gold {
-  background: linear-gradient(110deg, #fff1a0, #ffd04c 53%, #f2a92c) !important;
-  color: #152b36 !important;
-  border: 1px solid #fff1a2 !important;
-  border-radius: 11px !important;
-  box-shadow:
-    0 4px 0 #9b681d,
-    0 10px 20px rgba(0, 0, 0, 0.22) !important;
-  font-weight: 850 !important;
-}
 /* HOME: cinematic banner + actual progress/party column + illustrated action cards */
 #accueil.page.on {
   display: block !important;

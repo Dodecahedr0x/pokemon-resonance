@@ -21,14 +21,6 @@
 .sh-sec .mvc + .mvc {
   margin-top: 0;
 }
-.b-lg {
-  height: 52px;
-  padding: 0 var(--space-2xl);
-  font-size: 15.5px;
-}
-.b-ghost {
-  background: transparent;
-}
 .lbl-s {
   font-family: var(--f-m);
   font-size: 10.5px;

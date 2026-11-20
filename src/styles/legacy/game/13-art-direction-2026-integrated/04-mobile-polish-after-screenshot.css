@@ -126,7 +126,6 @@ body {
   letter-spacing: -0.025em !important;
   text-shadow: 0 3px 22px rgba(0, 0, 0, 0.38) !important;
 }
-.b,
 .lnk,
 .seg button,
 .gd-t,
@@ -135,22 +134,6 @@ body {
     transform 0.2s,
     box-shadow 0.2s,
     background 0.2s !important;
-}
-.b-gold,
-.b.b-gold,
-.b-lg {
-  background: linear-gradient(180deg, #ffe778, #f7b927) !important;
-  color: #142537 !important;
-  border: 1px solid rgba(255, 248, 190, 0.8) !important;
-  box-shadow:
-    0 8px 24px rgba(255, 190, 39, 0.19),
-    inset 0 1px 0 rgba(255, 255, 255, 0.65) !important;
-  font-weight: 900 !important;
-}
-.b-gold:hover,
-.b-lg:hover {
-  transform: translateY(-2px) !important;
-  box-shadow: 0 12px 28px rgba(255, 190, 39, 0.28) !important;
 }
 .panel,
 .ac,

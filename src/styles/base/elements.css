@@ -1,0 +1,22 @@
+/* Element defaults. They sit below components and legacy, so any class rule overrides them. */
+* {
+  box-sizing: border-box;
+}
+a {
+  color: inherit;
+}
+button {
+  font: inherit;
+  color: inherit;
+}
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+h1,
+h2,
+h3,
+h4,
+p {
+  margin: 0;
+}

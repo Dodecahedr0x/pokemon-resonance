@@ -304,7 +304,6 @@ html body .diploma-count .ok {
 /* --- quick battle --- */
 html body #bFast {
   min-width: 40px;
-  font-weight: 900;
 }
 html body #bFast[aria-pressed='true'] {
   background: linear-gradient(135deg, #ffe6a0, #c38a3b) !important;

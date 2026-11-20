@@ -12,13 +12,23 @@ export default function styleSnapshot() {
     name: 'style-snapshot',
     apply: 'serve',
     transformIndexHtml() {
-      return [{ tag: 'script', attrs: { type: 'module', src: '/__style-snapshot/client.js' }, injectTo: 'body' }];
+      return ['client.js', 'probe.js'].map(file => ({
+        tag: 'script',
+        attrs: { type: 'module', src: '/__style-snapshot/' + file },
+        injectTo: 'body',
+      }));
     },
     configureServer(server) {
       server.middlewares.use('/__style-snapshot', (req, res) => {
         if (req.method === 'GET') {
+          const file = req.url.replace(/^\//, '');
+          if (!['client.js', 'probe.js'].includes(file)) {
+            res.statusCode = 404;
+            res.end();
+            return;
+          }
           res.setHeader('Content-Type', 'text/javascript');
-          res.end(readFileSync(join(here, 'client.js')));
+          res.end(readFileSync(join(here, file)));
           return;
         }
         const name = new URL(req.url, 'http://x').searchParams.get('name') || '';

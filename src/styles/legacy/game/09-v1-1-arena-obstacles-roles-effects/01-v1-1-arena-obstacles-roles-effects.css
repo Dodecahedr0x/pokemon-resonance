@@ -337,11 +337,6 @@
 .sh-role b {
   color: var(--gold-l);
 }
-.presets .b.form {
-  border-color: rgba(212, 175, 106, 0.6);
-  color: var(--gold-l);
-  background: linear-gradient(180deg, rgba(212, 175, 106, 0.12), rgba(212, 175, 106, 0.02));
-}
 .gauge.g12 {
   grid-template-columns: repeat(12, minmax(0, 1fr));
 }

@@ -3,7 +3,6 @@
   outline: 2px solid var(--gold-l);
   outline-offset: 2px;
 }
-.b:focus-visible,
 .nv:focus-visible,
 .bn:focus-visible,
 .gd-t:focus-visible {

@@ -153,85 +153,11 @@ body {
   border-bottom-right-radius: 5px;
 }
 /* embossed buttons */
-.b {
-  border: 1px solid transparent;
-  background:
-    linear-gradient(180deg, #222937, #151a23) padding-box,
-    linear-gradient(180deg, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0.05) 60%, rgba(0, 0, 0, 0.3)) border-box;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.09),
-    inset 0 -2px 0 rgba(0, 0, 0, 0.25),
-    0 8px 18px -12px #000;
-}
-.b:hover {
-  border-color: transparent;
-  background:
-    linear-gradient(180deg, #283041, #181e28) padding-box,
-    linear-gradient(180deg, rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0.08) 60%, rgba(0, 0, 0, 0.3)) border-box;
-}
-.b[aria-pressed='true'] {
-  background:
-    linear-gradient(180deg, rgba(227, 192, 122, 0.2), rgba(227, 192, 122, 0.06)) padding-box,
-    var(--gold-grad) border-box;
-  color: var(--gold-l);
-}
-.b-gold {
-  position: relative;
-  overflow: hidden;
-  color: #1a1307;
-  text-shadow: 0 1px 0 rgba(255, 244, 214, 0.5);
-  background:
-    linear-gradient(180deg, #fbe7b8 0%, #e8c682 42%, #c9a05a 58%, #ddb672 100%) padding-box,
-    linear-gradient(180deg, #fff3d6, #7e5e28) border-box;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.7),
-    inset 0 -2px 0 rgba(110, 80, 30, 0.4),
-    0 14px 30px -14px rgba(227, 192, 122, 0.8);
-}
-.b-gold:hover {
-  background:
-    linear-gradient(180deg, #fff0c8 0%, #edcd8e 42%, #cfa862 58%, #e3be7c 100%) padding-box,
-    linear-gradient(180deg, #fff3d6, #7e5e28) border-box;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.7),
-    inset 0 -2px 0 rgba(110, 80, 30, 0.4),
-    0 18px 36px -14px rgba(227, 192, 122, 0.95);
-}
-.b-gold::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(105deg, transparent 30%, rgba(255, 255, 255, 0.6) 48%, transparent 62%);
-  transform: translateX(-130%);
-  transition: transform 0.8s var(--ease);
-  pointer-events: none;
-}
-.b-gold:hover::after {
-  transform: translateX(130%);
-}
-.b-gold:disabled {
-  filter: saturate(0.3);
-}
 .filters .b[aria-pressed='true'],
 .presets .b[aria-pressed='true'] {
-  color: #1a1307;
   text-shadow: none;
-  background:
-    linear-gradient(180deg, #fbe7b8, #e8c682 42%, #c9a05a 58%, #ddb672) padding-box,
-    linear-gradient(180deg, #fff3d6, #7e5e28) border-box;
-}
-.b-ghost {
-  background:
-    transparent padding-box,
-    linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.03)) border-box;
-  box-shadow: none;
 }
 
-.b-lg {
-  height: 52px;
-  padding: 0 var(--space-2xl);
-  font-size: 15px;
-}
 /* medals with metallic rims */
 .medal {
   box-shadow:

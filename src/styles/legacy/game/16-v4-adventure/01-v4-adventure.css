@@ -117,33 +117,6 @@ html body #accueil .v4-off,
   margin-left: var(--space-xs);
   color: #ffd75e;
 }
-html body .b {
-  border-radius: 11px !important;
-  font-family: var(--f-d) !important;
-  font-weight: 800 !important;
-  letter-spacing: 0.02em !important;
-  text-transform: none !important;
-}
-html body .b-gold,
-html body .b.b-gold {
-  background: linear-gradient(180deg, var(--v4-gold1), var(--v4-gold2) 60%, var(--v4-gold3)) !important;
-  color: var(--v4-ink) !important;
-  border: 1px solid #fff2a8 !important;
-  box-shadow:
-    0 3px 0 #a86a12,
-    0 10px 22px -8px rgba(255, 180, 40, 0.55),
-    inset 0 1px 0 rgba(255, 255, 255, 0.7) !important;
-}
-html body .b-gold:active {
-  transform: translateY(2px) !important;
-  box-shadow:
-    0 1px 0 #a86a12,
-    0 6px 14px -8px rgba(255, 180, 40, 0.5) !important;
-}
-html body .b-gold[disabled] {
-  filter: saturate(0.25) brightness(0.7) !important;
-  box-shadow: none !important;
-}
 .v4-pill {
   display: inline-flex;
   align-items: center;

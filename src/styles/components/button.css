@@ -1,0 +1,123 @@
+/* Button: <button class="b"> or <a class="b">.
+   Variants: .b-gold (main action), .b-sm / .b-lg (sizes), .b-ghost (currently drawn like the base button).
+   Screen-specific tweaks still live in legacy (e.g. #combat .b-gold) and win over these rules.
+   Values were read from what the old per-release rules resolved to, so the look is unchanged. */
+
+.b {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  height: 44px;
+  padding: 0 var(--space-xl);
+  border: 1px solid rgba(119, 218, 255, 0.26);
+  border-radius: 13px;
+  background: linear-gradient(145deg, rgba(24, 67, 88, 0.94), rgba(6, 29, 45, 0.96));
+  color: #e6f6ff;
+  font-family: var(--font-display);
+  font-size: 12.5px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.6);
+  /* cut corners (top-left, bottom-right) on top of the rounding */
+  clip-path: polygon(9px 0, 100% 0, 100% calc(100% - 9px), calc(100% - 9px) 100%, 0 100%, 0 9px);
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s,
+    background 0.2s;
+}
+.b svg {
+  width: 16px;
+  height: 16px;
+}
+
+.b-sm {
+  height: 34px;
+  padding: 0 var(--space-md);
+  font-size: 11px;
+  clip-path: polygon(7px 0, 100% 0, 100% calc(100% - 7px), calc(100% - 7px) 100%, 0 100%, 0 7px);
+}
+.b-lg {
+  height: 52px;
+  padding: 0 var(--space-2xl);
+  font-size: 13px;
+}
+
+/* States. Order matters: on a mouse device the hover lift (below, in the media query) also wins while pressing. */
+.b:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.08);
+}
+.b:active {
+  transform: translateY(0) scale(0.98);
+}
+.b:disabled {
+  opacity: 0.4;
+  cursor: default;
+  transform: none;
+}
+@media (hover: hover) {
+  .b:hover {
+    transform: translateY(-2px);
+    box-shadow:
+      0 12px 28px rgba(0, 0, 0, 0.28),
+      0 0 0 1px rgba(115, 217, 244, 0.18);
+  }
+}
+
+/* Gold: the main call to action, with a shine that sweeps across on hover. */
+.b-gold {
+  position: relative;
+  overflow: hidden;
+  border-color: #fff2a8;
+  border-radius: 11px;
+  background: linear-gradient(180deg, var(--v4-gold1), var(--v4-gold2) 60%, var(--v4-gold3));
+  color: var(--v4-ink);
+  font-weight: 850;
+  text-shadow: 0 1px 0 rgba(255, 246, 222, 0.45);
+  box-shadow:
+    0 3px 0 #a86a12,
+    0 10px 22px -8px rgba(255, 180, 40, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+.b-gold::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.55) 50%, transparent 64%);
+  transform: translateX(-130%);
+  transition: transform 0.8s var(--ease);
+  pointer-events: none;
+}
+.b-gold:hover {
+  border-color: rgba(255, 235, 180, 0.72);
+  background: linear-gradient(135deg, #ffe5a0, #d69d3c);
+  color: #241b0d;
+  transform: translateY(-2px);
+  box-shadow:
+    0 3px 0 #a86a12,
+    0 10px 22px -8px rgba(255, 180, 40, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+.b-gold:hover::after {
+  transform: translateX(130%);
+}
+.b-gold:active {
+  transform: translateY(2px);
+  box-shadow: 0 3px 0 #865c20;
+}
+.b-gold:disabled {
+  filter: saturate(0.25) brightness(0.7);
+  box-shadow: none;
+}
+
+.b:focus-visible {
+  outline: 2px solid var(--pr-cyan);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 5px rgba(115, 217, 244, 0.15);
+}

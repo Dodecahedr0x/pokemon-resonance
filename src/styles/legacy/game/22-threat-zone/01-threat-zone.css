@@ -176,11 +176,6 @@ html body .v4-mi,
 html body .sv-card {
   background: linear-gradient(145deg, rgba(19, 48, 68, 0.94), rgba(7, 22, 35, 0.96)) !important;
 }
-html body button,
-html body a {
-  -webkit-tap-highlight-color: transparent;
-}
-html body .b,
 html body button.qk,
 html body .mk,
 html body .v4-dl,
@@ -193,7 +188,6 @@ html body .v4d-arr {
     filter 0.22s var(--pr-ease);
 }
 @media (hover: hover) {
-  html body .b:hover,
   html body .qk:hover,
   html body .mk:hover,
   html body .v4-dl:hover,
@@ -205,16 +199,6 @@ html body .v4d-arr {
       0 0 0 1px rgba(115, 217, 244, 0.18);
   }
 }
-html body .b-gold,
-html body .b-gold:hover {
-  background: linear-gradient(135deg, #ffe5a0, #d69d3c) !important;
-  color: #241b0d !important;
-  border: 1px solid rgba(255, 235, 180, 0.72) !important;
-  box-shadow:
-    0 7px 22px rgba(206, 151, 54, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.6);
-}
-html body .b:focus-visible,
 html body button:focus-visible,
 html body a:focus-visible {
   outline: 2px solid var(--pr-cyan) !important;

@@ -112,7 +112,6 @@
     flex: 1;
     padding-inline: var(--space-sm);
     font-size: 10px;
-    letter-spacing: 0.08em;
   }
 }
 /* v1.1.1 · recruitable stages under each card and inset of confirmed recruits */
@@ -255,11 +254,6 @@
 }
 .dc-f .lbl-s {
   margin-right: var(--space-2xs);
-}
-.dc-f .b.form {
-  border-color: rgba(212, 175, 106, 0.6);
-  color: var(--gold-l);
-  background: linear-gradient(180deg, rgba(212, 175, 106, 0.12), rgba(212, 175, 106, 0.02));
 }
 @media (max-width: 900px) {
   .dc-stars {
