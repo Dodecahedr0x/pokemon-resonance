@@ -1,0 +1,147 @@
+/* Desktop sidebar (Shell.jsx, Nav.jsx SideNav): the page links, the Saves button and its state badge. */
+
+.sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  -webkit-backdrop-filter: blur(22px);
+  overflow-y: auto;
+  border-image: linear-gradient(
+      180deg,
+      rgba(212, 175, 106, 0.35),
+      rgba(212, 175, 106, 0.04) 50%,
+      rgba(212, 175, 106, 0.25)
+    )
+    1;
+  backdrop-filter: blur(18px) saturate(1.25);
+  box-shadow: 12px 0 40px rgba(0, 0, 0, 0.18);
+  padding: var(--space-2xl) var(--space-md) var(--space-lg);
+  gap: var(--space-2xl);
+  background: linear-gradient(180deg, #0a1f3d, #071630 60%, #06122a);
+  border-right: 1px solid rgba(88, 186, 255, 0.25);
+}
+.sidebar-nav {
+  display: grid;
+  gap: var(--space-3xs);
+}
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  transition:
+    background 0.25s,
+    border-color 0.25s,
+    transform 0.25s;
+  min-height: 44px;
+  border-radius: 10px;
+  font: 700 14px/1 var(--font-display);
+  color: #d6e6f7;
+  border: 1px solid transparent;
+  padding: 0 var(--space-md);
+  gap: var(--space-md);
+}
+.sidebar-link svg {
+  flex: none;
+  color: var(--color-text-muted);
+  transition: color 0.2s;
+  opacity: 0.9;
+  width: 20px;
+  height: 20px;
+}
+.sidebar-link:hover {
+  border-color: rgba(255, 219, 98, 0.35);
+  color: #fff0a0;
+  background: rgba(120, 200, 255, 0.08);
+  transform: none;
+}
+.sidebar-link[aria-current='page'] {
+  border: 1px solid rgba(255, 211, 85, 0.34);
+  background: linear-gradient(180deg, #ffe877, #ffc12f);
+  color: var(--color-ink);
+  border-color: #fff2a8;
+  box-shadow: 0 8px 18px -10px rgba(255, 190, 40, 0.8);
+}
+.sidebar-link[aria-current='page'] svg {
+  color: var(--color-ink);
+}
+.sidebar-link .sidebar-save-state {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--color-text-faint);
+}
+.sidebar-link[aria-current='page'] .sidebar-save-state {
+  color: var(--color-accent);
+}
+.sidebar-footer {
+  margin-top: auto;
+  font-size: 11px;
+  color: var(--color-text-faint);
+  line-height: 1.5;
+  padding: 0 var(--space-xs);
+}
+@media (max-width: 999px) {
+  .sidebar {
+    display: none;
+  }
+}
+button.sidebar-link {
+  width: 100%;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+}
+.sidebar-save {
+  margin-top: var(--space-xs);
+}
+.sidebar-save .sidebar-save-state {
+  color: var(--color-accent);
+}
+.sidebar-link:focus-visible {
+  outline-offset: 3px;
+  box-shadow: 0 0 0 5px rgba(212, 175, 106, 0.14);
+}
+@media (min-width: 1121px) {
+  body:has(#cbBattle:not([hidden])) .sidebar {
+    align-items: center;
+    padding: var(--space-md) var(--space-sm);
+    gap: var(--space-lg);
+    overflow: hidden;
+  }
+  body:has(#cbBattle:not([hidden])) .sidebar > :not(.app-logo):not(.sidebar-nav) {
+    display: none;
+  }
+  body:has(#cbBattle:not([hidden])) .sidebar .app-logo > span:not(.app-logo-icon) {
+    display: none;
+  }
+  body:has(#cbBattle:not([hidden])) .sidebar .app-logo {
+    justify-content: center;
+    gap: 0;
+    padding: 0;
+  }
+  body:has(#cbBattle:not([hidden])) .sidebar-nav {
+    align-items: center;
+    gap: var(--space-2xs);
+  }
+  body:has(#cbBattle:not([hidden])) .sidebar-link {
+    font-size: 0;
+    width: 44px;
+    height: 44px;
+    min-height: 0;
+    padding: 0;
+    gap: 0;
+    justify-content: center;
+    border-radius: 12px;
+  }
+  body:has(#cbBattle:not([hidden])) .sidebar-link svg {
+    width: 20px;
+    height: 20px;
+    margin: 0;
+  }
+  body:has(#cbBattle:not([hidden])) .sidebar-link .sidebar-save-state {
+    display: none;
+  }
+}

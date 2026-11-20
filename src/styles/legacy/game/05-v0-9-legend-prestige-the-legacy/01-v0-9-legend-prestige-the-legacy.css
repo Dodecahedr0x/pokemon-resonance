@@ -76,12 +76,6 @@ body {
     27.71px 48px;
   color: var(--tx);
 }
-.ambient {
-  background:
-    radial-gradient(900px 520px at 85% -12%, color-mix(in srgb, var(--tint) 14%, transparent), transparent 66%),
-    radial-gradient(700px 480px at -10% 110%, rgba(212, 175, 106, 0.07), transparent 70%),
-    radial-gradient(150% 110% at 50% 35%, transparent 50%, rgba(0, 0, 0, 0.7) 100%);
-}
 ::selection {
   background: var(--gold);
   color: #140f06;

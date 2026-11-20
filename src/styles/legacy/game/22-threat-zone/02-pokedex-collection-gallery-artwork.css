@@ -10,12 +10,6 @@ html body .pe-prise.shiny img.art-sh {
   filter: drop-shadow(0 0 12px rgba(255, 224, 139, 0.52)) !important;
 }
 /* Navigation and small finishing touches */
-html body .bnav,
-html body .side,
-html body .topbar {
-  backdrop-filter: blur(18px) saturate(1.25);
-}
-html body .bn.on,
 html body .nav a.on {
   text-shadow: 0 0 15px rgba(115, 217, 244, 0.35);
 }

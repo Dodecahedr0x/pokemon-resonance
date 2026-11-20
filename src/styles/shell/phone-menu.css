@@ -1,0 +1,184 @@
+/* Phone menu (Nav.jsx Menu, #v4Menu): the scrim and the sheet with the pages that are not in the bottom bar. */
+
+.menu-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.menu-layer[hidden] {
+  display: none;
+}
+.menu-scrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(2, 8, 18, 0.62);
+}
+.menu-sheet {
+  position: relative;
+  width: min(560px, 100%);
+  margin: 0 0 calc(var(--bn) + env(safe-area-inset-bottom, 0px));
+  padding: var(--space-md) var(--space-md) var(--space-lg);
+  border-radius: 20px 20px 0 0;
+  background: linear-gradient(180deg, #10305a, #081a36);
+  border: 1px solid rgba(120, 210, 255, 0.55);
+  border-bottom: 0;
+  box-shadow: 0 -20px 50px rgba(0, 0, 0, 0.5);
+  animation: v4Up 0.22s var(--ease-out) both;
+}
+.menu-sheet-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 var(--space-3xs) var(--space-sm);
+}
+.menu-sheet-header b {
+  font: 850 18px/1 var(--font-display);
+}
+.menu-sheet-close {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  border: 1px solid rgba(120, 200, 255, 0.25);
+  background: rgba(0, 0, 0, 0.25);
+  color: #fff;
+}
+.menu-sheet-close svg {
+  width: 16px;
+  height: 16px;
+}
+.menu-sheet-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-sm);
+}
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  min-height: 64px;
+  padding: var(--space-sm);
+  border-radius: 13px;
+  border: 1px solid rgba(120, 200, 255, 0.2);
+  text-decoration: none;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  box-shadow:
+    0 18px 48px rgba(0, 0, 0, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.055);
+  border-color: rgba(164, 205, 226, 0.17);
+  background: linear-gradient(145deg, rgba(19, 48, 68, 0.94), rgba(7, 22, 35, 0.96));
+}
+.menu-item-icon {
+  flex: none;
+  min-width: 42px;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 0;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(circle at 50% 50%, #fff 0 10px, #151a22 10.6px 12.5px, transparent 13.1px),
+    radial-gradient(circle at 32% 20%, rgba(255, 255, 255, 0.72) 0 3.2px, transparent 5px),
+    linear-gradient(180deg, #ff7076 0%, #e3262f 45%, #151a22 45% 55%, #f7f2e6 55%, #d4cab3 100%);
+  box-shadow:
+    0 0 0 1.5px #151a22,
+    0 6px 14px -6px rgba(0, 0, 0, 0.8);
+  color: #151a22;
+}
+.menu-item-icon svg {
+  width: 12px;
+  height: 12px;
+  color: #151a22;
+}
+.menu-item b {
+  display: block;
+  font: 800 14px/1.15 var(--font-display);
+}
+.menu-item em {
+  display: block;
+  font: 500 12px/1.3 var(--font-body);
+  font-style: normal;
+  color: var(--color-text-soft);
+}
+@media (max-width: 640px) {
+  .menu-sheet-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .menu-sheet {
+    animation: none;
+  }
+}
+.menu-item[data-t='quetes'] .menu-item-icon {
+  background:
+    radial-gradient(circle at 50% 50%, #fff 0 10px, #151a22 10.6px 12.5px, transparent 13.1px),
+    radial-gradient(circle at 32% 20%, rgba(255, 255, 255, 0.72) 0 3.2px, transparent 5px),
+    radial-gradient(24% 13% at 22% 25%, #e3262f 96%, transparent 100%),
+    radial-gradient(24% 13% at 78% 25%, #e3262f 96%, transparent 100%),
+    linear-gradient(180deg, #6aa6ff 0%, #2a62e0 45%, #151a22 45% 55%, #f7f2e6 55%, #d4cab3 100%);
+}
+.menu-item[data-t='sac'] .menu-item-icon {
+  background:
+    radial-gradient(circle at 50% 50%, #fff 0 10px, #151a22 10.6px 12.5px, transparent 13.1px),
+    radial-gradient(circle at 32% 20%, rgba(255, 255, 255, 0.72) 0 3.2px, transparent 5px),
+    linear-gradient(90deg, transparent 20%, #ffcc2e 20% 33%, transparent 33% 67%, #ffcc2e 67% 80%, transparent 80%)
+      center top/100% 45% no-repeat,
+    linear-gradient(180deg, #33363d 0%, #121418 45%, #151a22 45% 55%, #f7f2e6 55%, #d4cab3 100%);
+}
+.menu-item[data-t='types'] .menu-item-icon {
+  background:
+    radial-gradient(circle at 50% 50%, #fff 0 10px, #e8b938 10.6px 12.5px, transparent 13.1px),
+    radial-gradient(circle at 32% 20%, rgba(255, 255, 255, 0.72) 0 3.2px, transparent 5px),
+    linear-gradient(180deg, transparent 27%, #e8b938 27% 35%, transparent 35%) center top/100% 100% no-repeat,
+    linear-gradient(180deg, #30333a 0%, #14161a 45%, #151a22 45% 55%, #30333a 55%, #14161a 100%);
+  box-shadow:
+    0 0 0 1.5px #e8b938,
+    0 6px 14px -6px rgba(0, 0, 0, 0.8);
+}
+.menu-item[data-t='params'] .menu-item-icon {
+  background:
+    radial-gradient(circle at 50% 50%, #fff 0 10px, #e3262f 10.6px 12.5px, transparent 13.1px),
+    radial-gradient(circle at 32% 20%, rgba(255, 255, 255, 0.72) 0 3.2px, transparent 5px),
+    linear-gradient(180deg, #ffffff 0%, #ebe5d8 45%, #e3262f 45% 55%, #f7f2e6 55%, #d4cab3 100%);
+}
+.menu-item[data-v4saves] .menu-item-icon {
+  background:
+    radial-gradient(circle at 50% 50%, #fff 0 10px, #151a22 10.6px 12.5px, transparent 13.1px),
+    radial-gradient(circle at 32% 20%, rgba(255, 255, 255, 0.72) 0 3.2px, transparent 5px),
+    radial-gradient(circle at 25% 29%, #ff86cc 0 3.4px, transparent 3.9px),
+    radial-gradient(circle at 75% 29%, #ff86cc 0 3.4px, transparent 3.9px),
+    linear-gradient(180deg, #a65ae0 0%, #6a27a3 45%, #151a22 45% 55%, #f7f2e6 55%, #d4cab3 100%);
+}
+.menu-item:active .menu-item-icon {
+  animation: pkSecoue 0.6s cubic-bezier(0.3, 1.4, 0.5, 1);
+}
+#v4Menu:not([hidden]) .menu-item {
+  animation: pkMonte 0.4s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+}
+#v4Menu:not([hidden]) .menu-item:nth-child(2) {
+  animation-delay: 0.04s;
+}
+#v4Menu:not([hidden]) .menu-item:nth-child(3) {
+  animation-delay: 0.08s;
+}
+#v4Menu:not([hidden]) .menu-item:nth-child(4) {
+  animation-delay: 0.12s;
+}
+#v4Menu:not([hidden]) .menu-item:nth-child(5) {
+  animation-delay: 0.16s;
+}
+#v4Menu:not([hidden]) .menu-item:nth-child(6) {
+  animation-delay: 0.2s;
+}
+#v4Menu:not([hidden]) .menu-item:nth-child(n + 7) {
+  animation-delay: 0.24s;
+}

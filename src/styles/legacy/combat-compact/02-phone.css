@@ -1,18 +1,6 @@
 /* ================= phone ================= */
 @media (max-width: 700px) {
   /* no navigation bar during battle: the command drawer takes the bottom of the screen */
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) .bnav {
-    display: none !important;
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) .topbar {
-    display: none !important;
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) .content {
-    padding: 0 !important;
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) .wrap {
-    padding-inline: 0 !important;
-  }
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) {
     --dock: 36dvh;
   }

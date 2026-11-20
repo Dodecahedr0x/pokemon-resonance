@@ -16,7 +16,7 @@ const doApply = () => H.classList.toggle('pk-calme', !on('pokemonSkinA'));
      (src/screens/overlays/Effects.jsx); the iris's .go class is still set here ---------- */
 let iris;
 
-// top-bar logo lights (.pk-leds): rendered by React (src/components/Shell.jsx)
+// top-bar logo lights (.topbar-leds): rendered by React (src/components/Shell.jsx)
 
 /* ---------- Poké Ball opening (bottom bar and menu) ---------- */
 let tIris;
@@ -78,7 +78,7 @@ export function init() {
   document.addEventListener(
     'click',
     e => {
-      const a = e.target.closest && e.target.closest('.bnav [data-t],#v4Menu [data-t]');
+      const a = e.target.closest && e.target.closest('.bottom-nav [data-t],#v4Menu [data-t]');
       if (!a) {
         return;
       }

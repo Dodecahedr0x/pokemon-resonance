@@ -69,34 +69,34 @@ export default function LaunchScreen() {
         }
       }}
     >
-      <div className="rl-scene" aria-hidden="true" />
-      <div className="rl-shade" aria-hidden="true" />
-      <div className="rl-frame">
-        <span className="rl-scroll">UNE NOUVELLE AVENTURE VOUS ATTEND</span>
-        <div className="rl-copy">
-          <p className="rl-kicker">KANTO · JOHTO · UNE AVENTURE VIVANTE</p>
-          <h1 className="rl-logo">
-            <span className="v4-rl-pk">Pokémon</span>
-            <span className="v4-rl-res">Résonance</span>
-            <span className="v4-rl-live">Live your adventure</span>
+      <div className="launch-scene" aria-hidden="true" />
+      <div className="launch-shade" aria-hidden="true" />
+      <div className="launch-frame">
+        <span className="launch-scroll">UNE NOUVELLE AVENTURE VOUS ATTEND</span>
+        <div className="launch-copy">
+          <p className="launch-kicker">KANTO · JOHTO · UNE AVENTURE VIVANTE</p>
+          <h1 className="launch-logo">
+            <span className="launch-logo-pokemon">Pokémon</span>
+            <span className="launch-logo-title">Résonance</span>
+            <span className="launch-logo-tagline">Live your adventure</span>
           </h1>
-          <p className="rl-desc">
+          <p className="launch-description">
             Partez à la découverte d’un monde vivant. Composez votre équipe, explorez les routes, maîtrisez les combats
             et écrivez votre propre légende.
           </p>
-          <button className="rl-enter" id="resonance-enter" type="button" onClick={enter}>
-            <span className="v4-rl-ic" aria-hidden="true">
+          <button className="launch-enter" id="resonance-enter" type="button" onClick={enter}>
+            <span className="launch-enter-icon" aria-hidden="true">
               <svg>
                 <use href="#i-play" />
               </svg>
             </span>
             <span>Toucher pour commencer</span>
-            <svg className="v4-rl-ch" aria-hidden="true">
+            <svg className="launch-enter-chevron" aria-hidden="true">
               <use href="#i-chevr" />
             </svg>
           </button>
         </div>
-        <div className="rl-meta">
+        <div className="launch-meta">
           <strong>LIVE YOUR ADVENTURE</strong>Pokémon Résonance · Édition cinématique
         </div>
       </div>

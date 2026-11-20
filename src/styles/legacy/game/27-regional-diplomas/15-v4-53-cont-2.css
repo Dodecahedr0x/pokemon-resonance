@@ -107,14 +107,8 @@ html body #bSvg .tok.ally .tok-nm {
 html body.compact-battle {
   --bn: 0px;
 }
-html body.compact-battle .bnav {
-  display: none !important;
-}
 html body.compact-battle #combat.page.on {
   padding-bottom: 0 !important;
-}
-html body.compact-battle .content {
-  padding-top: var(--space-xs) !important;
 }
 html body.compact-battle #combat .bt {
   padding: var(--space-xs) !important;

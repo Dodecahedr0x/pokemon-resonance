@@ -95,9 +95,6 @@
 /* ===== resonance-startup layer ===== */
 /* Reload within the same session: no title screen, and the home page only appears
    once built (otherwise the old layout was visible for a moment). */
-.rl-seen:not(.rl-pret) .app {
-  visibility: hidden;
-}
 /* ===== resonance-catch-anywhere-premium layer ===== */
 /* ==========================================================
    POKÉMON RÉSONANCE v4.21 — art direction layer only.
@@ -120,12 +117,6 @@ html body {
     radial-gradient(ellipse at 50% -15%, rgba(40, 111, 145, 0.23), transparent 48%),
     radial-gradient(ellipse at 100% 55%, rgba(35, 84, 119, 0.13), transparent 42%), var(--bg, #06111b) !important;
 }
-html body .ambient {
-  opacity: 0.8;
-  background:
-    radial-gradient(ellipse at 15% 20%, rgba(69, 173, 211, 0.12), transparent 32%),
-    radial-gradient(ellipse at 85% 78%, rgba(245, 195, 95, 0.07), transparent 30%);
-}
 html body .page {
   isolation: isolate;
 }
@@ -135,7 +126,6 @@ html body .section-title {
 }
 html body .resume,
 html body .sel,
-html body .v4-mi,
 html body .dialog-card,
 html body .ana {
   border-color: var(--pr-line) !important;
@@ -145,7 +135,6 @@ html body .ana {
 }
 html body .sel,
 html body .resume,
-html body .v4-mi,
 html body .dialog-card {
   background: linear-gradient(145deg, rgba(19, 48, 68, 0.94), rgba(7, 22, 35, 0.96)) !important;
 }

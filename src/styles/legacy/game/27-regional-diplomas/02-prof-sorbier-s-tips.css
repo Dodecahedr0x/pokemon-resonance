@@ -68,12 +68,3 @@
 /* <style id="resonance-camp-tactics"> */
 
 /* bottom bar: 6 tabs */
-@media (max-width: 999px) {
-  html body .bnav.n6430 {
-    grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
-  }
-  html body .bnav.n6430 .bn {
-    font-size: 10.5px;
-    letter-spacing: 0;
-  }
-}

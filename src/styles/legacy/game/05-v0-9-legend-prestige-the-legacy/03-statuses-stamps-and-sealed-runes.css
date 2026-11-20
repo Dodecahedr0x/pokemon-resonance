@@ -87,56 +87,7 @@
 }
 
 /* ---------- shell ---------- */
-.side {
-  background: var(--veins), linear-gradient(180deg, rgba(14, 14, 17, 0.94), rgba(8, 8, 10, 0.96));
-  background-size:
-    560px 560px,
-    auto;
-  border-right: 1px solid transparent;
-  border-image: linear-gradient(
-      180deg,
-      rgba(212, 175, 106, 0.35),
-      rgba(212, 175, 106, 0.04) 50%,
-      rgba(212, 175, 106, 0.25)
-    )
-    1;
-}
-.logo b {
-  font-family: var(--f-d);
-  font-weight: 800;
-  letter-spacing: 0.2em;
-  font-size: 16px;
-}
-.logo small {
-  font-family: var(--f-m);
-  letter-spacing: 0.12em;
-  font-size: 9.5px;
-  text-transform: uppercase;
-}
-.nv {
-  border-radius: 3px;
-  font-family: var(--f-b);
-  letter-spacing: 0.02em;
-}
-.nv[aria-current='page'] {
-  background: linear-gradient(90deg, rgba(212, 175, 106, 0.14), rgba(212, 175, 106, 0.02));
-  box-shadow:
-    inset 2px 0 0 var(--gold),
-    inset 0 0 0 1px rgba(212, 175, 106, 0.16);
-}
 
-.topbar {
-  background: rgba(8, 8, 10, 0.86);
-  border-bottom: 1px solid transparent;
-  border-image: linear-gradient(90deg, transparent, rgba(212, 175, 106, 0.4), transparent) 1;
-}
-.bnav {
-  background: rgba(8, 8, 10, 0.92) !important;
-  border-top: 1px solid rgba(212, 175, 106, 0.22) !important;
-}
-.bn[aria-current='page'] {
-  color: var(--gold-l);
-}
 .toast {
   border-radius: 4px;
   border: 1px solid transparent;

@@ -7,7 +7,7 @@ export function init() {
      underneath are paused: nothing to draw that cannot be seen. They resume on touch. */
     try {
       const L = document.getElementById('resonance-launch');
-      if (L && !document.documentElement.classList.contains('rl-seen')) {
+      if (L && !document.documentElement.classList.contains('launch-seen')) {
         let pausedList = [];
         const freezeUnit = () => {
           pausedList = document.getAnimations().filter(a => {

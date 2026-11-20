@@ -197,3 +197,18 @@ Each step is one commit (or a few), on its own, playable at every point.
   else uses go in the Design Workshop map. Two shared legacy rules still reached Guide elements and are reproduced:
   the generic `.sel` card look on the selected matrix cell and the professor-tip look on the reaction tip; the
   legacy `.section-title` colour now skips the Guide's sections, whose titles are gold.
+- App shell: done. `src/styles/shell/` (imported first in the `screens` layer, since legacy still has generic rules that
+  reach these elements): `app-layout.css` (`.app-ambient`, `.app-layout`, `.app-main`, `.app-content`,
+  `.app-container`, `.app-footer`, `.app-logo` / `-icon`, were `.ambient`, `.app`, `.main`, `.content`, `.wrap`,
+  `.foot`, `.logo`, `.lg-ic`), `sidebar.css` (`.sidebar`, `.sidebar-nav`, `.sidebar-link`, `.sidebar-save` and its
+  `.sidebar-save-state`, `.sidebar-footer`), `topbar.css` (`.topbar-inner`, `.topbar-leds`, `.topbar-section`,
+  `.topbar-save` with `is-busy` / `is-cloud`, `.topbar-profile`, `.topbar-trainer(-text)`, `.trainer-avatar`,
+  `.topbar-wallet` with `is-gems`, `.topbar-settings`), `bottom-nav.css` (`.bottom-nav`, `.bottom-nav-link`,
+  `.bottom-nav-icon`, `.bottom-nav-menu`), `phone-menu.css` (`.menu-layer`, `.menu-scrim`, `.menu-sheet(-header,
+  -close, -grid)`, `.menu-item(-icon)`) and `launch-screen.css` (`.launch-*`, were `.rl-*` / `.v4-rl-*`). The
+  `<html>` classes `rl-seen` / `rl-pret` are `launch-seen` / `engine-ready`; the components are `PhoneMenu`,
+  `TopbarSection`, `TopbarSave`. ~1,800 legacy lines (about 350 `!important`) were folded to the values that won,
+  checked with snapshots of the sidebar, top bar, bottom bar, footer, menu, launch screen and Map page at both widths,
+  and of the battle states (`#cbBattle` shown, `compact-battle`, `fullscreen-mode`). The global performance rule that
+  removes every backdrop blur now skips the top and bottom bars, whose blur used to beat it. The resolver orders the
+  folded rules so that a rule that won a property over another one able to match the same element comes after it.

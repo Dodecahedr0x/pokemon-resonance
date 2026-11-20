@@ -1,0 +1,277 @@
+/* Launch screen (LaunchScreen.jsx, #resonance-launch): shown once per session, before the intro. */
+
+.launch-scene {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background-image: var(--resonance-landscape);
+  background-size: cover;
+  background-position: center 54%;
+  transform: scale(1.005);
+  animation: none;
+  will-change: auto;
+}
+.launch-shade {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(0deg, rgba(3, 12, 26, 0.92) 0%, rgba(3, 14, 30, 0.45) 38%, transparent 62%),
+    linear-gradient(90deg, rgba(3, 14, 30, 0.55), transparent 55%);
+}
+.launch-frame {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  min-height: 100svh;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-rows: 1fr auto;
+  align-items: end;
+  gap: var(--space-3xl);
+  padding: clamp(24px, 5vw, 76px);
+  max-width: none;
+}
+.launch-copy {
+  max-width: 720px;
+  padding-bottom: clamp(12px, 3vh, 42px);
+  grid-column: 1;
+  grid-row: 1;
+  justify-self: start;
+  align-self: end;
+  width: min(760px, 100%);
+}
+.launch-kicker {
+  font-size: 11px;
+  letter-spacing: 0.28em;
+  color: #ffe17b;
+  text-transform: uppercase;
+  font-weight: 900;
+  font-family: var(--font-display);
+}
+.launch-logo {
+  justify-items: start;
+  gap: var(--space-3xs);
+  font-family: var(--font-display);
+  letter-spacing: -0.035em;
+  white-space: normal;
+  max-width: 100%;
+  display: grid;
+  margin: var(--space-xs) 0 var(--space-md);
+  font-size: inherit;
+  line-height: 1;
+  text-shadow: none;
+  color: inherit;
+}
+.launch-logo span {
+  color: #f6fbff;
+  display: block;
+  font-size: clamp(16px, 2.6vw, 30px);
+  line-height: 1.45;
+  letter-spacing: 0.16em;
+  white-space: nowrap;
+  margin-top: var(--space-md);
+  max-width: 100%;
+}
+.launch-description {
+  font-size: clamp(15px, 1.4vw, 19px);
+  line-height: 1.6;
+  max-width: 510px;
+  color: #e3f2fb;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.9);
+  margin: var(--space-xl) 0 var(--space-3xl);
+}
+.launch-enter {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-md);
+  min-height: 58px;
+  padding: 0 var(--space-lg) 0 var(--space-xs);
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(14, 40, 78, 0.94), rgba(6, 20, 42, 0.96));
+  color: #fff;
+  border: 2px solid #f2c94c;
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.4),
+    0 10px 30px rgba(0, 0, 0, 0.45),
+    0 0 26px -6px rgba(255, 210, 80, 0.55);
+  font: 800 15px/1 var(--font-display);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.launch-enter:active {
+  transform: translateY(4px);
+  box-shadow:
+    0 3px 0 #81551b,
+    0 9px 20px rgba(0, 0, 0, 0.3);
+}
+.launch-meta {
+  align-self: end;
+  justify-self: end;
+  text-align: right;
+  color: #e0eff8;
+  letter-spacing: 0.18em;
+  line-height: 1.8;
+  grid-column: 2;
+  grid-row: 2;
+  position: relative;
+  font-size: 10.5px;
+}
+.launch-meta strong {
+  color: #ffe17b;
+  margin-bottom: var(--space-xs);
+  font-size: 10.5px;
+  display: none;
+}
+.launch-scroll {
+  letter-spacing: 0.25em;
+  color: rgba(241, 250, 255, 0.85);
+  position: absolute;
+  left: auto;
+  right: clamp(22px, 4vw, 56px);
+  top: clamp(22px, 4vw, 56px);
+  bottom: auto;
+  display: block;
+  writing-mode: vertical-rl;
+}
+@media (max-width: 999px) {
+  .launch-frame {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr auto;
+    gap: var(--space-md);
+    padding: var(--space-2xl) var(--space-xl) max(var(--space-2xl), env(safe-area-inset-bottom));
+  }
+  .launch-scene {
+    background-size: auto 78%;
+    background-position: 43% 0;
+    background-repeat: no-repeat;
+  }
+  .launch-copy {
+    padding-bottom: 0;
+    grid-column: 1;
+    grid-row: 1;
+    align-self: end;
+  }
+  .launch-description {
+    font-size: 14px;
+    margin: var(--space-md) 0 var(--space-xl);
+    max-width: 520px;
+  }
+  .launch-meta {
+    justify-self: start;
+    text-align: left;
+    grid-column: 1;
+    grid-row: 2;
+    font-size: 11px;
+  }
+  .launch-logo span {
+    font-size: clamp(14px, 4vw, 20px);
+    letter-spacing: 0.12em;
+  }
+  .launch-meta strong {
+    font-size: 11px;
+  }
+}
+.launch-seen #resonance-launch {
+  display: none;
+}
+.launch-logo .launch-logo-pokemon {
+  display: block;
+  margin: 0;
+  font: italic 900 clamp(50px, 8.5vw, 108px)/0.92 var(--font-display);
+  letter-spacing: -0.03em;
+  text-transform: none;
+  background: linear-gradient(180deg, #ffffff 10%, #fff3c4 55%, #ffd35a);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 3px 0 #0b2347) drop-shadow(0 10px 22px rgba(0, 8, 24, 0.7));
+  white-space: nowrap;
+}
+.launch-logo .launch-logo-title {
+  display: block;
+  margin: var(--space-3xs) 0 0;
+  font: 700 clamp(24px, 3.8vw, 46px)/1.1 var(--font-logo);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  background: linear-gradient(180deg, #ffffff, #d3dceb 55%, #93a7c2);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 2px 8px rgba(0, 10, 30, 0.85));
+  white-space: nowrap;
+}
+.launch-logo .launch-logo-tagline {
+  display: block;
+  margin: var(--space-sm) 0 0 var(--space-3xs);
+  font: 800 clamp(11px, 1.2vw, 14px)/1 var(--font-display);
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: #ffd75e;
+  -webkit-text-fill-color: #ffd75e;
+  background: none;
+  text-shadow: 0 1px 8px rgba(0, 10, 24, 0.9);
+  white-space: nowrap;
+}
+.launch-enter-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fff3b0, #ffcd3c 50%, #c98a12);
+  color: #10213a;
+  box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.25);
+}
+.launch-enter-icon svg {
+  width: 18px;
+  height: 18px;
+}
+.launch-enter-chevron {
+  width: 18px;
+  height: 18px;
+  color: #f2c94c;
+}
+@media (max-width: 640px) {
+  .launch-enter {
+    width: 100%;
+    justify-content: flex-start;
+    font-size: 14px;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+  }
+  .launch-enter > span:not(.launch-enter-icon) {
+    white-space: nowrap;
+  }
+  .launch-enter-chevron {
+    margin-left: auto;
+  }
+}
+.launch-seen:not(.engine-ready) .app-layout {
+  visibility: hidden;
+}
+@media (max-width: 700px) {
+  .launch-frame {
+    box-sizing: border-box;
+    min-width: 0;
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .launch-enter {
+    gap: var(--space-sm);
+    padding-right: var(--space-md);
+    font-size: clamp(12px, 3.4vw, 14px);
+    letter-spacing: 0.04em;
+  }
+  .launch-enter > :is(.launch-enter-icon, .launch-enter-chevron) {
+    flex: none;
+  }
+  .launch-enter > span:not(.launch-enter-icon) {
+    flex: 1;
+    min-width: 0;
+    line-height: 1.2;
+    white-space: normal;
+  }
+  .launch-scroll {
+    display: none;
+  }
+}

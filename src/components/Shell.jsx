@@ -15,8 +15,8 @@ import BattlePrep from '../screens/combat/prep/CombatPrep.jsx';
 import Board from '../screens/combat/board/Board.jsx';
 import Battle from '../screens/combat/battle/Battle.jsx';
 import Result from '../screens/combat/battle/Result.jsx';
-import { BottomNav, SideNav, V4Menu } from './Nav.jsx';
-import { TbSave, TbSec, TopTrainer } from './TopBar.jsx';
+import { BottomNav, SideNav, PhoneMenu } from './Nav.jsx';
+import { TopbarSave, TopbarSection, TopTrainer } from './TopBar.jsx';
 import Toast from '../screens/overlays/Toast.jsx';
 import Coach from '../screens/overlays/Coach.jsx';
 import Starter from '../screens/overlays/Starter.jsx';
@@ -31,8 +31,8 @@ import Guard from './Guard.jsx';
 // Logo (sidebar, header); `children`: additions after the name (header indicators).
 function Logo({ sizeValue: size, children }) {
   return (
-    <a className="logo" href="#accueil">
-      <span className="lg-ic">
+    <a className="app-logo" href="#accueil">
+      <span className="app-logo-icon">
         <svg width={size} height={size}>
           <use href="#i-logo" />
         </svg>
@@ -52,9 +52,9 @@ export default function Shell() {
   return (
     <>
       <PkBackground />
-      <div className="ambient" aria-hidden="true" />
-      <div className="app">
-        <aside className="side" aria-label="Navigation principale">
+      <div className="app-ambient" aria-hidden="true" />
+      <div className="app-layout">
+        <aside className="sidebar" aria-label="Navigation principale">
           <Logo sizeValue={30} />
           <Guard>
             <SideNav />
@@ -62,35 +62,35 @@ export default function Shell() {
           <Guard>
             <SideObjective />
           </Guard>
-          <p className="side-foot">
+          <p className="sidebar-footer">
             Fangame non officiel, sans affiliation.
             <br />
             Pokémon © Nintendo · Creatures · GAME FREAK.
           </p>
         </aside>
-        <div className="main">
+        <div className="app-main">
           <header className="topbar">
-            <div className="topbar-in">
+            <div className="topbar-inner">
               <Logo sizeValue={24}>
-                <span className="pk-leds" aria-hidden="true">
+                <span className="topbar-leds" aria-hidden="true">
                   <i />
                   <i />
                   <i />
                 </span>
               </Logo>
               <Guard>
-                <TbSec />
+                <TopbarSection />
               </Guard>
               <Guard>
-                <TbSave />
+                <TopbarSave />
               </Guard>
               <Guard>
                 <TopTrainer />
               </Guard>
             </div>
           </header>
-          <main className="content">
-            <div className="wrap">
+          <main className="app-content">
+            <div className="app-container">
               {/* ================= HOME ================= */}
               <Guard>
                 <Home />
@@ -141,8 +141,8 @@ export default function Shell() {
               </Guard>
             </div>
           </main>
-          <footer className="foot">
-            <div className="wrap">
+          <footer className="app-footer">
+            <div className="app-container">
               <span>Pokémon Résonance · fangame non officiel · v4.77</span>
               <span>Pokémon © Nintendo · Creatures Inc. · GAME FREAK · fangame sans affiliation</span>
             </div>
@@ -172,7 +172,7 @@ export default function Shell() {
       </Guard>
       {/* overlays added at the end of <body> by the engine, in their order of appearance */}
       <Guard>
-        <V4Menu />
+        <PhoneMenu />
       </Guard>
       <Guard>
         <Intro />

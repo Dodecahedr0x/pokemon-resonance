@@ -31,21 +31,21 @@ const cur = (page, k) => (page === k ? 'page' : undefined);
 export function SideNav() {
   const { page, saveBusy: svBusy, saveCloud: svCloud } = useShell();
   return (
-    <nav className="side-nav">
+    <nav className="sidebar-nav">
       {PAGES.map(([k, i, n]) => (
-        <a key={k} className="nv" data-t={k} href={'#' + k} aria-current={cur(page, k)}>
+        <a key={k} className="sidebar-link" data-t={k} href={'#' + k} aria-current={cur(page, k)}>
           <svg>
             <use href={'#' + i} />
           </svg>
           {n}
         </a>
       ))}
-      <button type="button" className="nv nv-save" id="sideSave">
+      <button type="button" className="sidebar-link sidebar-save" id="sideSave">
         <svg>
           <use href="#i-save" />
         </svg>
         Sauvegardes
-        <span className="k" id="sideSaveK">
+        <span className="sidebar-save-state" id="sideSaveK">
           {svBusy ? '…' : svCloud ? 'COMPTE' : 'AUTO'}
         </span>
       </button>
@@ -56,10 +56,10 @@ export function SideNav() {
 export function BottomNav() {
   const { page, menu } = useShell();
   return (
-    <nav className="bnav n6430" aria-label="Navigation">
+    <nav className="bottom-nav" aria-label="Navigation">
       {BOTTOM.map(([k, i, n]) => (
-        <a key={k} className="bn" data-t={k} href={'#' + k} aria-current={cur(page, k)}>
-          <span className="ic">
+        <a key={k} className="bottom-nav-link" data-t={k} href={'#' + k} aria-current={cur(page, k)}>
+          <span className="bottom-nav-icon">
             <svg>
               <use href={'#' + i} />
             </svg>
@@ -69,13 +69,13 @@ export function BottomNav() {
       ))}
       <button
         type="button"
-        className="bn bn-menu"
+        className="bottom-nav-link bottom-nav-menu"
         id="bnMenu"
         aria-haspopup="dialog"
         aria-expanded={menu ? 'true' : 'false'}
         aria-current={IN_MENU.includes(page) ? 'page' : undefined}
       >
-        <span className="ic">
+        <span className="bottom-nav-icon">
           <svg>
             <use href="#i-menu" />
           </svg>
@@ -87,24 +87,24 @@ export function BottomNav() {
 }
 
 // Phone menu (#v4Menu): opened and closed by the engine's menu().
-export function V4Menu() {
+export function PhoneMenu() {
   const { menu } = useShell();
   return (
-    <div className="v4-menu" id="v4Menu" hidden={!menu}>
-      <div className="v4-scrim" data-menux="" />
-      <div className="v4-ms" role="dialog" aria-modal="true" aria-label="Menu">
-        <div className="v4-ms-h">
+    <div className="menu-layer" id="v4Menu" hidden={!menu}>
+      <div className="menu-scrim" data-menux="" />
+      <div className="menu-sheet" role="dialog" aria-modal="true" aria-label="Menu">
+        <div className="menu-sheet-header">
           <b>Menu</b>
-          <button type="button" className="v4-x" data-menux="" aria-label="Fermer">
+          <button type="button" className="menu-sheet-close" data-menux="" aria-label="Fermer">
             <svg>
               <use href="#i-x" />
             </svg>
           </button>
         </div>
-        <div className="v4-ms-g">
+        <div className="menu-sheet-grid">
           {MENU.map(([k, i, n, d]) => (
-            <a key={k} className="v4-mi" data-t={k} href={'#' + k}>
-              <span className="v4-mi-ic">
+            <a key={k} className="menu-item" data-t={k} href={'#' + k}>
+              <span className="menu-item-icon">
                 <svg>
                   <use href={'#' + i} />
                 </svg>
@@ -115,8 +115,8 @@ export function V4Menu() {
               </span>
             </a>
           ))}
-          <button type="button" className="v4-mi" data-v4saves="">
-            <span className="v4-mi-ic">
+          <button type="button" className="menu-item" data-v4saves="">
+            <span className="menu-item-icon">
               <svg>
                 <use href="#i-save" />
               </svg>

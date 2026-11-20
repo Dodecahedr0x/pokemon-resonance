@@ -21,6 +21,8 @@
   --color-highlight: #ffd45b;
   /* pale gold border of a selected card or move */
   --color-selected: #ffe17b;
+  /* dark text on gold (active sidebar link, save state) */
+  --color-ink: var(--v4-ink);
   /* pale gold: badges and labels on dark plates */
   --color-accent-soft: var(--gold-l);
   /* empty gauge or pip */
@@ -42,6 +44,8 @@
   --font-display: var(--f-d);
   --font-body: var(--f-b);
   --font-mono: var(--f-m);
+  /* engraved capitals for the logo and the launch title */
+  --font-logo: var(--f-logo);
   /* brush lettering for big titles (Home hero) */
   --font-script: var(--f-script);
   /* narrow tabular digits (Pokédex numbers, scores) */

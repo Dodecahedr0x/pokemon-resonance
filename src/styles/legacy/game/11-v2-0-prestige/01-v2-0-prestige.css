@@ -3,11 +3,6 @@
   outline: 2px solid var(--gold-l);
   outline-offset: 2px;
 }
-.nv:focus-visible,
-.bn:focus-visible {
-  outline-offset: 3px;
-  box-shadow: 0 0 0 5px rgba(212, 175, 106, 0.14);
-}
 :focus:not(:focus-visible) {
   outline: none;
 }

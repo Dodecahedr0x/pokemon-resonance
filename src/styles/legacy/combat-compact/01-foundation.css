@@ -31,57 +31,8 @@
 /* ================= desktop ================= */
 @media (min-width: 1121px) {
   /* navigation collapsed into an icon rail */
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) .app {
-    grid-template-columns: 64px minmax(0, 1fr) !important;
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) .side {
-    padding: var(--space-md) var(--space-sm) !important;
-    gap: var(--space-lg) !important;
-    align-items: center;
-    overflow: hidden !important;
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) .side > :not(.logo):not(.side-nav) {
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) :is(.topbar, .app-main > .app-footer) {
     display: none !important;
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) .side .logo > span:not(.lg-ic) {
-    display: none !important;
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) .side .logo {
-    gap: 0 !important;
-    padding: 0 !important;
-    justify-content: center;
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) .side-nav {
-    gap: var(--space-2xs) !important;
-    align-items: center;
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) .side .nv {
-    font-size: 0 !important;
-    width: 44px !important;
-    height: 44px !important;
-    min-height: 0 !important;
-    padding: 0 !important;
-    gap: 0 !important;
-    justify-content: center !important;
-    border-radius: 12px !important;
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) .side .nv svg {
-    width: 20px !important;
-    height: 20px !important;
-    margin: 0 !important;
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) .side .nv .k {
-    display: none !important;
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) :is(.topbar, .main > .foot) {
-    display: none !important;
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) .content {
-    padding: var(--space-md) !important;
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) .wrap {
-    max-width: none !important;
-    padding-inline: 0 !important;
   }
 
   /* two screen-height columns: scene, panel */

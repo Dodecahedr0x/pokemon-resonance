@@ -75,7 +75,7 @@ function openSpeciesSheet(id) {
 }
 
 function canSwipeHere(t) {
-  if (PREF.swipeNav === false || !t || !t.closest || !t.closest('main,.content,.page')) {
+  if (PREF.swipeNav === false || !t || !t.closest || !t.closest('main,.app-content,.page')) {
     return false;
   }
   if (t.closest('input,textarea,select,#bBoard,.board,.map-panel,#mapMarks,.route-scene,.tabs,[role="dialog"]')) {

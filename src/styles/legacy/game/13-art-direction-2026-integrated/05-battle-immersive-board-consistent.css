@@ -48,14 +48,6 @@
 /* Guide, types and league: same graphic universe on all screens */
 /* Soft motion: no interaction changes function */
 
-.bnav {
-  background: rgba(3, 17, 29, 0.96) !important;
-  border-top: 1px solid rgba(108, 216, 248, 0.23) !important;
-  backdrop-filter: blur(22px) !important;
-}
-.bn.on {
-  color: #ffe478 !important;
-}
 @media (max-width: 999px) {
   #combat .board {
     min-height: 260px !important;

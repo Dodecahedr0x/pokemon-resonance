@@ -16,15 +16,6 @@ body {
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='27.71' height='48' viewBox='0 0 27.71 48'><path d='M13.86 0 27.71 8V24L13.86 32 0 24V8ZM13.86 32V48' fill='none' stroke='white' stroke-opacity='.028' stroke-width='1'/></svg>");
   background-size: 27.71px 48px;
 }
-.ambient {
-  background:
-    radial-gradient(1000px 560px at 82% -10%, color-mix(in srgb, var(--tint) 19%, transparent), transparent 68%),
-    radial-gradient(760px 520px at -12% 112%, rgba(227, 192, 122, 0.07), transparent 70%),
-    radial-gradient(140% 100% at 50% 40%, transparent 55%, rgba(0, 0, 0, 0.55) 100%);
-}
-.ambient::after {
-  opacity: 0.75;
-}
 /* engraved titles */
 .section-title,
 .hero h1,

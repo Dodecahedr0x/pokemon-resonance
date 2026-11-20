@@ -47,18 +47,6 @@ hr {
   border-color: rgba(104, 214, 255, 0.16) !important;
 }
 @media (max-width: 999px) {
-  .app {
-    grid-template-columns: minmax(0, 1fr) !important;
-  }
-  .side {
-    display: none !important;
-  }
-  .content {
-    padding: var(--space-md) var(--space-md) 84px !important;
-  }
-  .wrap {
-    padding: 0 !important;
-  }
   #combat .board {
     min-height: 280px !important;
   }

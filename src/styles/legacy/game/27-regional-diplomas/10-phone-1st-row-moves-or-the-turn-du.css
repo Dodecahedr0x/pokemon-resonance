@@ -289,9 +289,6 @@ html body.compact-battle #cbBattle .bt-foot.foot-tools #bEnd {
 html body.fullscreen-mode.compact-battle {
   --bn: 0px;
 }
-html body.fullscreen-mode.compact-battle .bnav {
-  display: none !important;
-}
 html body.fullscreen-mode.compact-battle #cbBattle .bt-side .bt-foot {
   bottom: calc(6px + env(safe-area-inset-bottom, 0px)) !important;
 }

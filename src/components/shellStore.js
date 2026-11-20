@@ -3,7 +3,7 @@ import { makeStore } from '../lib/store.js';
 // Shell state pushed by the engine: displayed page (show), top bar title,
 // phone menu, save indicator, wallet and trainer (renderWallet).
 // Synchronous render: the engine re-reads the navigation bar and the menu right after
-// (fitPhoneBattle measures .bnav, menu() focuses the first link).
+// (fitPhoneBattle measures .bottom-nav, menu() focuses the first link).
 const shell = makeStore({
   page: null, // no page marked before the first show()
   sec: 'Accueil',

@@ -1,8 +1,5 @@
 /* ===================== v1.2 · clean-up ===================== */
 /* navigation: no counters or team in the sidebar */
-.nv .k:not(#sideSaveK) {
-  display: none;
-}
 .lnk {
   display: inline;
   padding: 0;

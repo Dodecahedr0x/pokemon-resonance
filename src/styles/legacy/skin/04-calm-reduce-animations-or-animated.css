@@ -1,8 +1,6 @@
 /* ---------- calm: Reduce animations or animated effects turned off ---------- */
 html.pk-calme #pk-fond i,
 html.pk-calme .page-header::before,
-html.pk-calme .pk-leds i,
-html.pk-calme a.logo .lg-ic::after,
 html.pk-calme .kicker::before,
 html.pk-calme .pk-holo,
 html.pk-calme .pk-sceau::after {
@@ -20,7 +18,6 @@ html.pk-calme .pk-gerbe {
 }
 @media (prefers-reduced-motion: reduce) {
   #pk-fond i,
-  .pk-leds i,
   .pk-holo,
   .pk-sceau,
   .pk-sceau::after,

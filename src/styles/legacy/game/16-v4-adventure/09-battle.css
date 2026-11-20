@@ -15,33 +15,9 @@ html body #combat .pt {
 }
 
 /* ---------- phone and tablet ---------- */
-@media (min-width: 1000px) {
-  html body .topbar .logo {
-    display: none !important;
-  }
-  html body .topbar-in {
-    padding: var(--space-sm) var(--space-xl) !important;
-  }
-}
 @media (max-width: 999px) {
   .v4-aside {
     grid-column: 1;
-  }
-  .v4-tr-t {
-    display: none;
-  }
-  .v4-trainer {
-    padding: var(--space-3xs);
-  }
-  html body .topbar-in {
-    padding: var(--space-xs) var(--space-sm) !important;
-    min-height: 56px !important;
-  }
-  html body .topbar .logo small {
-    display: none !important;
-  }
-  html body .tb-save {
-    display: none !important;
   }
 }
 @media (max-width: 640px) {
@@ -63,50 +39,5 @@ html body #combat .pt {
   .v4-st svg {
     width: 22px;
     height: 22px;
-  }
-  .v4-wal {
-    height: 36px;
-    padding: 0 var(--space-sm) 0 var(--space-xs);
-  }
-  .v4-wal b {
-    font-size: 13.5px;
-  }
-  .v4-tb {
-    gap: var(--space-xs);
-  }
-  .v4-gear {
-    width: 36px;
-    height: 36px;
-  }
-  html body .topbar .logo b {
-    font-size: 13px !important;
-    letter-spacing: 0.1em !important;
-  }
-  html body .tb-save {
-    display: none !important;
-  }
-  html body .topbar .logo {
-    flex: 0 1 auto !important;
-    min-width: 0 !important;
-    width: auto !important;
-    padding-right: var(--space-sm) !important;
-  }
-  .v4-ms-g {
-    grid-template-columns: minmax(0, 1fr);
-  }
-}
-@media (max-width: 480px) {
-  .v4-trainer {
-    display: none;
-  }
-}
-@media (max-width: 360px) {
-  .v4-wal.gem {
-    display: none;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .v4-ms {
-    animation: none;
   }
 }

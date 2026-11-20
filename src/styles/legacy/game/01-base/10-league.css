@@ -172,20 +172,6 @@
   font-size: 13px;
   color: var(--tx2);
 }
-.it .ic {
-  width: 30px;
-  height: 30px;
-  border-radius: 9px;
-  display: grid;
-  place-items: center;
-  background: var(--s3);
-  border: 1px solid var(--line2);
-}
-.it .ic svg {
-  width: 15px;
-  height: 15px;
-  color: var(--gold);
-}
 .it b {
   display: block;
   color: var(--tx);

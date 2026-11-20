@@ -9,7 +9,7 @@ function menu(open) {
   V4.menu = open;
   setMenuOpen(open); // #v4Menu and #bnMenu (aria-expanded): src/components/Nav.jsx
   if (open) {
-    const f = $('#v4Menu .v4-mi');
+    const f = $('#v4Menu .menu-item');
     if (f) {
       f.focus();
     }

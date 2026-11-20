@@ -5,7 +5,8 @@
    - components: shared pieces (src/styles/components/), styled once
    - legacy:     the old per-release files, being emptied (see docs/plans/2026-11-20-style-cleanup.md); it still
                  holds screen-specific overrides of components, so it sits above them
-   - screens:    per-screen files next to each screen (src/screens/<screen>/<screen>.css)
+   - screens:    the app shell (src/styles/shell/), then per-screen files next to each screen
+                 (src/screens/<screen>/<screen>.css)
    Caveat: for !important declarations the order is reversed (an earlier layer wins), which is one more reason
    new code does not use them. The Workshop's user CSS is unlayered, so it overrides every normal rule. */
 @layer theme, base, components, legacy, screens;
@@ -32,6 +33,12 @@
 @import './components/landscape-scene.css' layer(components);
 @import './components/best-rank.css' layer(components);
 
+@import './shell/app-layout.css' layer(screens);
+@import './shell/sidebar.css' layer(screens);
+@import './shell/topbar.css' layer(screens);
+@import './shell/bottom-nav.css' layer(screens);
+@import './shell/phone-menu.css' layer(screens);
+@import './shell/launch-screen.css' layer(screens);
 @import '../screens/settings/settings.css' layer(screens);
 @import '../screens/dex/dex.css' layer(screens);
 @import '../screens/dex/dex-card.css' layer(screens);

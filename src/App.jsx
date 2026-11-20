@@ -10,7 +10,7 @@ export default function App() {
   useEffect(() => {
     import('./engine/index.js').then(() => {
       signalEngineReady();
-      document.documentElement.classList.add('rl-pret');
+      document.documentElement.classList.add('engine-ready');
     });
   }, []);
 

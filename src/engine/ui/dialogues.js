@@ -243,7 +243,7 @@ export function init() {
       if (!t || !t.closest) {
         return;
       }
-      const nav = t.closest('.bnav [data-t],#v4Menu [data-t]');
+      const nav = t.closest('.bottom-nav [data-t],#v4Menu [data-t]');
       if (nav) {
         let k = nav.dataset.t;
         if (k === 'ligue') {

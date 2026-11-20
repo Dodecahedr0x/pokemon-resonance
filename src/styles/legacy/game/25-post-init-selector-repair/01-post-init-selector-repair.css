@@ -25,26 +25,6 @@ body {
     linear-gradient(180deg, #071a29 0%, #07111d 58%, #040a12 100%) !important;
   color: var(--r24-white) !important;
 }
-.content {
-  position: relative;
-}
-.content:before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0.17;
-  background-image:
-    linear-gradient(rgba(134, 225, 232, 0.07) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(134, 225, 232, 0.07) 1px, transparent 1px);
-  background-size: 44px 44px;
-  mask-image: linear-gradient(#000, transparent 75%);
-}
-.content > .wrap {
-  position: relative;
-  z-index: 1;
-}
 
 /* HOME — real container after JS move: .home-hero */
 @keyframes r24-orbit {

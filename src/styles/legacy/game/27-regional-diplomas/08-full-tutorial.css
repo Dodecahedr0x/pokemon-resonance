@@ -3,12 +3,6 @@
 /* <style id="resonance-phone-battle"> */
 /* v4.34 · battle on phone: everything fits on screen */
 @media (max-width: 700px) {
-  html body.compact-battle header.topbar {
-    display: none !important;
-  }
-  html body.compact-battle main.content {
-    padding-top: var(--space-xs) !important;
-  }
   html body.compact-battle .battle {
     gap: var(--space-xs);
   }

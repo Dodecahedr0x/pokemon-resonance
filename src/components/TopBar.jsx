@@ -7,22 +7,22 @@ import { displayedTitle } from '../engine/progression/achievements.js';
 import { TRAINER_AVATAR } from '../engine/world/rare-encounters.js';
 
 // Title of the displayed page (show()).
-export function TbSec() {
+export function TopbarSection() {
   const { sec } = useShell();
   return (
-    <span className="tb-sec" id="tbSec">
+    <span className="topbar-section" id="tbSec">
       {sec}
     </span>
   );
 }
 
 // Saves button: "in progress" indicator and "account" (svIndicator).
-export function TbSave() {
+export function TopbarSave() {
   const { saveBusy: svBusy, saveCloud: svCloud } = useShell();
   return (
     <button
       type="button"
-      className={'tb-save' + (svBusy ? ' busy' : '') + (svCloud ? ' cloud' : '')}
+      className={'topbar-save' + (svBusy ? ' is-busy' : '') + (svCloud ? ' is-cloud' : '')}
       id="tbSave"
       aria-label="Sauvegardes"
     >
@@ -40,7 +40,7 @@ function Avatar() {
   const a = TRAINER_AVATAR();
   if (!a) {
     return (
-      <span className="v4-av" id="v4Av">
+      <span className="trainer-avatar" id="v4Av">
         {ini}
       </span>
     );
@@ -54,7 +54,7 @@ function Avatar() {
   }
   style.position = 'relative';
   return (
-    <span className="v4-av" id="v4Av" data-avatar-key={a.e + ini + (a.hex ? 'h' : '')} style={style}>
+    <span className="trainer-avatar" id="v4Av" data-avatar-key={a.e + ini + (a.hex ? 'h' : '')} style={style}>
       <b style={{ font: '900 15px/1 var(--f-d)' }}>{ini}</b>
       <svg
         viewBox="0 0 24 24"
@@ -73,23 +73,23 @@ export function TopTrainer() {
   const { wallet } = useShell();
   const on = wallet > 0; // before the first renderWallet: empty template, like the old engine
   return (
-    <div className="v4-tb">
-      <a className="v4-trainer" data-t="params" href="#params" aria-label="Profil du dresseur">
-        {on ? <Avatar /> : <span className="v4-av" id="v4Av" />}
-        <span className="v4-tr-t">
+    <div className="topbar-profile">
+      <a className="topbar-trainer" data-t="params" href="#params" aria-label="Profil du dresseur">
+        {on ? <Avatar /> : <span className="trainer-avatar" id="v4Av" />}
+        <span className="topbar-trainer-text">
           <b id="v4Name">{on ? PROFILE.name || 'Dresseur' : null}</b>
           <em id="v4Lvl">
             {on ? `${displayedTitle() || (isCamp() ? 'Campagne' : 'Mode Libre')} · Nv. ${tLevel()}` : null}
           </em>
         </span>
       </a>
-      <a className="v4-wal" data-t="sac" href="#sac" aria-label="Pokédollars">
+      <a className="topbar-wallet" data-t="sac" href="#sac" aria-label="Pokédollars">
         <span className="coin-icon" aria-hidden="true">
           ₽
         </span>
         <b id="v4Money">{on ? fmt(PROFILE.money || 0) : '0'}</b>
       </a>
-      <a className="v4-wal gem" data-t="sac" href="#sac" aria-label="Éclats de Résonance">
+      <a className="topbar-wallet is-gems" data-t="sac" href="#sac" aria-label="Éclats de Résonance">
         <span className="gem-icon" aria-hidden="true">
           <svg>
             <use href="#i-gem" />
@@ -97,7 +97,7 @@ export function TopTrainer() {
         </span>
         <b id="v4Gems">{on ? fmt(PROFILE.gems || 0) : '0'}</b>
       </a>
-      <a className="v4-gear" data-t="params" href="#params" aria-label="Paramètres">
+      <a className="topbar-settings" data-t="params" href="#params" aria-label="Paramètres">
         <svg>
           <use href="#i-gear" />
         </svg>

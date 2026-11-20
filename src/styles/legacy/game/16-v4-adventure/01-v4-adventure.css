@@ -32,18 +32,11 @@ html body {
     linear-gradient(180deg, #071a33, #061327 45%, #050f20) !important;
   color: var(--v4-tx) !important;
 }
-html body .ambient {
-  opacity: 0.55 !important;
-}
 html body .section-title {
   font-family: var(--f-d) !important;
   font-weight: 800 !important;
   text-transform: none !important;
   letter-spacing: -0.01em !important;
-}
-html body .logo b {
-  font-family: var(--f-logo) !important;
-  letter-spacing: 0.14em !important;
 }
 
 /* ---------- components ---------- */
