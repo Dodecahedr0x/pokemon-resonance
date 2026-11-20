@@ -1,0 +1,146 @@
+/* Home, friend challenges (#v4Amis, Friends.jsx): the buttons to share and add trainer cards, the friends'
+   tournament (built by engine/modes/friends-tournament.js), one row per friend, and the ranking table. */
+
+.home-friends {
+  display: grid;
+  gap: var(--space-sm);
+  margin: var(--space-lg) 0;
+  padding: var(--space-md);
+}
+.home-friends-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+/* tournament: gold box, brighter while one is running */
+.home-tournament {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm);
+  border: 1px solid rgba(255, 215, 94, 0.35);
+  border-radius: 12px;
+  background: rgba(255, 215, 94, 0.07);
+}
+.home-tournament.is-running {
+  border-color: #ffd75e;
+}
+.home-tournament > span:first-child {
+  display: grid;
+  flex: 1;
+  gap: var(--space-3xs);
+  min-width: 0;
+}
+.home-tournament em {
+  color: var(--color-text-soft);
+  font-size: 12.5px;
+  font-style: normal;
+}
+
+/* one row per friend: team medals, name and record, buttons */
+.home-friends-list {
+  display: grid;
+  gap: var(--space-xs);
+}
+.home-friends-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm);
+  border: 1px solid rgba(120, 200, 255, 0.14);
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.22);
+}
+.home-friends-team {
+  display: grid;
+  flex: none;
+  grid-template-columns: repeat(2, 18px);
+  gap: var(--space-3xs);
+}
+.home-friends-team :is(.medal, svg) {
+  width: 18px;
+  height: 18px;
+}
+.home-friends-pokemon.is-shiny {
+  filter: drop-shadow(0 0 3px rgba(255, 225, 120, 0.9));
+}
+.home-friends-name {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+}
+.home-friends-name :is(b, em) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.home-friends-name em {
+  color: var(--color-text-soft);
+  font-size: 12px;
+  font-style: normal;
+}
+.home-friends-buttons {
+  display: flex;
+  flex: none;
+  gap: var(--space-xs);
+}
+.home-friends-remove {
+  min-width: 34px;
+}
+/* « Retirer ? »: the second tap removes the friend */
+.home-friends-remove.is-confirming {
+  border-color: #ff8a7a;
+  color: #ffb4a8;
+}
+
+/* ranking */
+.home-friends-ranking summary {
+  padding: var(--space-2xs) 0;
+  color: var(--color-text-soft);
+  font: 800 13px/1.2 var(--font-display);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.home-friends-ranking table {
+  width: 100%;
+  margin-top: var(--space-xs);
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.home-friends-ranking :is(th, td) {
+  padding: var(--space-xs) var(--space-2xs);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  text-align: left;
+}
+.home-friends-ranking th {
+  color: var(--color-text-soft);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.home-friends-ranking td:nth-child(2) {
+  max-width: 110px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.home-friends-ranking tr.is-me td {
+  color: var(--color-selected);
+}
+.home-friends-ranking tr:first-child td:first-child {
+  color: #ffd75e;
+  font-weight: 800;
+}
+.home-friends-note {
+  margin: var(--space-xs) 0 0;
+  color: var(--color-text-soft);
+  font-size: 12px;
+}
+@media (max-width: 700px) {
+  .home-friends-ranking > summary {
+    padding-block: var(--space-md);
+  }
+}

@@ -1,23 +1,4 @@
 /* trainer card */
-.tcard {
-  display: grid;
-  gap: var(--space-md);
-  align-content: start;
-  padding: var(--space-xl);
-  border-radius: var(--rl);
-  border: 1px solid transparent;
-  background:
-    radial-gradient(90% 60% at 100% 0%, rgba(212, 175, 106, 0.08), transparent 60%) padding-box,
-    var(--veins) padding-box,
-    var(--slab) padding-box,
-    var(--edge) border-box;
-  background-size:
-    auto,
-    560px 560px,
-    auto,
-    auto;
-  box-shadow: 0 30px 60px -36px #000;
-}
 .tc-h .button {
   grid-column: 1/-1;
   justify-self: stretch;
@@ -225,12 +206,6 @@
   }
 }
 /* shortcuts */
-.hm-quick {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--space-md);
-  margin: var(--space-lg) 0;
-}
 .qk {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
@@ -292,10 +267,6 @@
   color: var(--mut);
 }
 @media (max-width: 760px) {
-  .hm-quick {
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--space-sm);
-  }
   .qk {
     padding: var(--space-md) var(--space-md);
   }

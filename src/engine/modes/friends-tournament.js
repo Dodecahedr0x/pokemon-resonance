@@ -87,9 +87,9 @@ export function tournamentPanelHtml() {
   }
   if (run) {
     const A = L.find(a => a.id === run.order[run.i]);
-    return `<div class="tn-c on"><span><b>Tournoi en cours · ${run.i} / ${run.order.length}</b><em>Prochain : ${A ? esc(A.n) : '?'} · votre équipe : ${run.team.map(id => BY[id].n).join(', ')}</em></span><span class="am-b"><button type="button" class="button button-small button-primary" data-tournoi="suite">Continuer</button><button type="button" class="button button-small button-ghost" data-tournoi="abandon">Abandonner</button></span></div>`;
+    return `<div class="home-tournament is-running"><span><b>Tournoi en cours · ${run.i} / ${run.order.length}</b><em>Prochain : ${A ? esc(A.n) : '?'} · votre équipe : ${run.team.map(id => BY[id].n).join(', ')}</em></span><span class="home-friends-buttons"><button type="button" class="button button-small button-primary" data-tournoi="suite">Continuer</button><button type="button" class="button button-small button-ghost" data-tournoi="abandon">Abandonner</button></span></div>`;
   }
-  return `<div class="tn-c"><span><b>Tournoi entre amis</b><em>${Math.min(5, L.length)} équipes à la suite, sans soin entre les combats. Record : ${T.best || 0}${T.winCount ? ` · remporté ${T.winCount} fois` : ''}.</em></span><button type="button" class="button button-small button-primary" data-tournoi="lancer">Lancer</button></div>`;
+  return `<div class="home-tournament"><span><b>Tournoi entre amis</b><em>${Math.min(5, L.length)} équipes à la suite, sans soin entre les combats. Record : ${T.best || 0}${T.winCount ? ` · remporté ${T.winCount} fois` : ''}.</em></span><button type="button" class="button button-small button-primary" data-tournoi="lancer">Lancer</button></div>`;
 }
 
 // Statements run at startup, in the original order (see index.js).

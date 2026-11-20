@@ -7,7 +7,7 @@ import WhatsNew from './WhatsNew.jsx';
 import Footer from './Footer.jsx';
 import Friends from './Friends.jsx';
 
-// Home page (#accueil): hero (next step), activity banners, battle in progress,
+// Home page (#accueil, home.css): hero (next step), activity banners, battle in progress,
 // what's new, the daily news (Footer) and the Friend Challenges.
 // The team, the companion and the main quest have their own pages (Team, Quests), and the
 // navigation bar already links every page, so Home does not repeat them.
@@ -19,16 +19,16 @@ export default function Home() {
     v = useHomeVersion(),
     on = ready || v > 0;
   return (
-    <section className="page on" id="accueil" aria-labelledby="h-acc">
+    <section className="page on home-screen" id="accueil" aria-labelledby="h-acc">
       <h1 className="vh" id="h-acc">
         Aventure
       </h1>
-      <div className="v4-home">
+      <div className="home-layout">
         <div className="home-hero-slot">
           <Hero on={on} />
           {on && <Banners />}
         </div>
-        <div className="v4-resume-slot">
+        <div className="home-resume-slot">
           <SummaryBox id="resumeHome" />
         </div>
         {on && <WhatsNew />}

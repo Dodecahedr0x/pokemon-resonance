@@ -1,0 +1,135 @@
+/* Home activities (Banners.jsx): the grid of six buttons under the hero (season event, Boss Rush, defense gym,
+   daily challenges, trainer challenges, daily gift). One design for all; only the round badge keeps the
+   activity's colour. The season event and the daily gift take the full width. */
+
+.activity-bar {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-sm);
+  margin: var(--space-md) 0;
+}
+.activity {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  min-width: 0;
+  min-height: 60px;
+  margin: 0;
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(20, 30, 44, 0.92), rgba(11, 17, 26, 0.92));
+  box-shadow: none;
+  color: var(--color-text-bright);
+  font: inherit;
+  text-align: left;
+  vertical-align: top;
+  cursor: pointer;
+}
+.activity-season,
+.activity-daily-gift {
+  grid-column: 1 / -1;
+}
+
+/* the round badge on the left (the season event shows the season's type medal instead) */
+.activity-medal {
+  flex: none;
+}
+.activity-badge {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  font-size: 13px;
+  font-weight: 900;
+}
+.activity-boss-rush .activity-badge {
+  background: #ff8a7a;
+  color: #2a0a0a;
+}
+.activity-defense-gym .activity-badge,
+.activity-daily-challenges .activity-badge {
+  background: #7be0a0;
+  color: #062010;
+}
+.activity-trainer-challenges .activity-badge {
+  background: #8fbfff;
+  color: #06142a;
+}
+.activity-daily-gift .activity-badge {
+  background: var(--color-highlight);
+  color: #0a1d2b;
+}
+
+/* name and one or two lines of detail */
+.activity-text {
+  flex: 1;
+  min-width: 0;
+}
+.activity-season .activity-text,
+.activity-boss-rush .activity-text,
+.activity-defense-gym .activity-text,
+.activity-daily-challenges .activity-text,
+.activity-trainer-challenges .activity-text {
+  display: grid;
+  gap: var(--space-3xs);
+}
+.activity b {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+.activity small {
+  display: -webkit-box;
+  overflow: hidden;
+  color: #afc2d2;
+  font-size: 11px;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.activity-boss-rush small,
+.activity-defense-gym small {
+  line-height: 1.3;
+}
+
+/* daily gift: gold until collected, with a slow pulsing halo */
+.activity-daily-gift:not(.is-done) {
+  position: relative;
+  border-color: rgba(255, 212, 91, 0.55);
+  background: linear-gradient(135deg, rgba(255, 212, 91, 0.14), rgba(11, 17, 26, 0.92));
+}
+.activity-daily-gift:not(.is-done)::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  box-shadow:
+    0 0 0 5px rgba(255, 212, 91, 0.28),
+    0 0 16px 2px rgba(255, 212, 91, 0.22);
+  opacity: 0;
+  pointer-events: none;
+  will-change: opacity;
+  animation: activity-halo 2.4s ease-in-out infinite;
+}
+.activity-daily-gift.is-done {
+  opacity: 0.72;
+  cursor: default;
+}
+@media (prefers-reduced-motion: reduce) {
+  .activity-daily-gift::after {
+    animation: none;
+  }
+}
+html.a11y-rm .activity-daily-gift::after {
+  animation: none;
+}
+@keyframes activity-halo {
+  50% {
+    opacity: 1;
+  }
+}

@@ -8,7 +8,7 @@ import { defenseBannerText } from '../../engine/modes/defense-gym.js';
 // Banners under the hero, in the old DOM's order (each was inserted right after
 // the hero or after the previous one): season (v4.65), Boss Rush (v4.66), Defense Gym
 // (v4.68), Challenges (v4.71), More challenges (v4.71), daily gift (v4.57).
-// Grouped in .activityBar (a grid of activities with the same design).
+// Grouped in .activity-bar (a grid of activities with the same design, home-activities.css).
 // Clicks (data-season-event, data-boss-rush, data-defense-gym, data-daily-challenges, data-x2470, data-dailygift) stay with the engine.
 export default function Banners() {
   const sa = seasonBannerData(),
@@ -16,11 +16,11 @@ export default function Banners() {
     cd = dailyGiftData();
   return (
     <div className="activity-bar" role="group" aria-label="Activités">
-      <button type="button" id="season-event" data-season-event="open" className="season-event">
-        <span className="season-event-i" style={{ '--c': tc(sa.S0.t) }}>
+      <button type="button" id="season-event" data-season-event="open" className="activity activity-season">
+        <span className="activity-medal" style={{ '--c': tc(sa.S0.t) }}>
           <Html html={medal([sa.S0.t], 'is-small')} />
         </span>
-        <span className="season-event-t">
+        <span className="activity-text">
           <b>{sa.S0.n}</b>
           <small>
             {sa.pts} / {sa.top} points de saison
@@ -30,37 +30,47 @@ export default function Banners() {
           </span>
         </span>
       </button>
-      <button type="button" id="boss-rush" data-boss-rush="open" className="boss-rush">
-        <span className="boss-rush-i">{br.i}</span>
-        <span className="boss-rush-t">
+      <button type="button" id="boss-rush" data-boss-rush="open" className="activity activity-boss-rush">
+        <span className="activity-badge">{br.i}</span>
+        <span className="activity-text">
           <b>Boss Rush</b>
           <small>{br.txt}</small>
         </span>
       </button>
-      <button type="button" id="defense-gym" data-defense-gym="open" className="defense-gym">
-        <span className="defense-gym-i">5</span>
-        <span className="defense-gym-t">
+      <button type="button" id="defense-gym" data-defense-gym="open" className="activity activity-defense-gym">
+        <span className="activity-badge">5</span>
+        <span className="activity-text">
           <b>Arène de défense</b>
           <small>{defenseBannerText()}</small>
         </span>
       </button>
-      <button type="button" id="daily-challenges" data-daily-challenges="open" className="defense-gym">
-        <span className="defense-gym-i">★</span>
-        <span className="defense-gym-t">
+      <button
+        type="button"
+        id="daily-challenges"
+        data-daily-challenges="open"
+        className="activity activity-daily-challenges"
+      >
+        <span className="activity-badge">★</span>
+        <span className="activity-text">
           <b>Défis du jour</b>
           <small>Quotidien · Laboratoire · Prestige</small>
         </span>
       </button>
-      <button type="button" id="x2470" data-x2470="open" className="defense-gym">
-        <span className="defense-gym-i">+</span>
-        <span className="defense-gym-t">
+      <button type="button" id="x2470" data-x2470="open" className="activity activity-trainer-challenges">
+        <span className="activity-badge">+</span>
+        <span className="activity-text">
           <b>Défis de dresseur</b>
           <small>Rivalité · Dresseur · Vitrine · Entraînement</small>
         </span>
       </button>
-      <button type="button" id="dailygift" data-dailygift="1" className={'dailygift' + (cd.fait ? ' done' : '')}>
-        <span className="dailygift-i">{cd.fait ? '✓' : '★'}</span>
-        <span>
+      <button
+        type="button"
+        id="dailygift"
+        data-dailygift="1"
+        className={'activity activity-daily-gift' + (cd.fait ? ' is-done' : '')}
+      >
+        <span className="activity-badge">{cd.fait ? '✓' : '★'}</span>
+        <span className="activity-text">
           <b>{cd.fait ? 'Cadeau du jour récupéré' : 'Cadeau du jour'}</b>
           <small>{cd.fait ? `Jour ${cd.j + 1} sur 7 · revenez demain` : `Jour ${cd.j + 1} sur 7 : ${cd.txt}`}</small>
         </span>

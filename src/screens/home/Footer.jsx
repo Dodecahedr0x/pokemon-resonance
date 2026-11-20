@@ -6,15 +6,15 @@ import { seasonData } from '../../engine/world/seasons.js';
 import { radioLines } from '../../engine/world/pokegear.js';
 
 import Button from '../../components/Button.jsx';
-// Bottom of the Home page (.v4-bottom): season (#v4Saison, v4.11), Pokématos (#v4Radio, v4.17),
+// Bottom of the Home page (.home-footer, home.css): season (#v4Saison, v4.11), Pokématos (#v4Radio, v4.17),
 // daily challenge (#v4Event). Counters live in the Pokédex and Quests pages, the weekly
 // challenge in Quests (Event tab).
 export default function Footer({ on }) {
   return (
-    <div className="v4-bottom">
+    <div className="home-footer">
       {on && <Season />}
       {on && <Radio />}
-      <div className="v4-event" id="v4Event">
+      <div className="home-daily" id="v4Event">
         {on && <Event />}
       </div>
     </div>
@@ -24,30 +24,30 @@ export default function Footer({ on }) {
 function Season() {
   const d = seasonData();
   if (!d) {
-    return <div className="v4-saison" id="v4Saison" hidden />;
+    return <div className="home-season" id="v4Saison" hidden />;
   }
   const { s, isTaken: takenSet } = d;
   return (
-    <div className="v4-saison" id="v4Saison" style={{ '--c': s.c }}>
-      <div className="card sa-card">
-        <span className="sa-ic" aria-hidden="true">
+    <div className="home-season" id="v4Saison" style={{ '--c': s.c }}>
+      <div className="card home-season-card">
+        <span className="home-season-icon" aria-hidden="true">
           <svg>
             <use href="#i-star" />
           </svg>
         </span>
-        <span className="sa-t">
+        <span className="home-season-text">
           <small>Événement de saison</small>
           <b>{s.n}</b>
           <em>{s.d}</em>
           {s.types.length ? (
-            <span className="sa-ty">
+            <span className="home-season-types">
               <Html html={s.types.map(t => medal([t], 'is-small')).join('')} />
             </span>
           ) : null}
         </span>
         {s.giftFlag ? (
           takenSet ? (
-            <span className="sa-ok">Cadeau reçu ✓</span>
+            <span className="home-season-received">Cadeau reçu ✓</span>
           ) : (
             <Button size="small" variant="primary" data-cadeau="">
               Ouvrir le cadeau
@@ -61,7 +61,7 @@ function Season() {
 
 function Radio() {
   return (
-    <section id="v4Radio" className="v4-radio card" aria-label="Pokématos">
+    <section id="v4Radio" className="home-radio card" aria-label="Pokématos">
       <header className="card-header">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path
@@ -75,16 +75,16 @@ function Radio() {
         <b>Pokématos</b>
         <span className="card-count">Radio du jour</span>
       </header>
-      <ul className="rd-l">
+      <ul className="home-radio-list">
         {radioLines().map(([t, x, go], i) => (
           <li key={i}>
             {go ? (
-              <button type="button" className="rd-i" data-news={go}>
+              <button type="button" className="home-radio-item" data-news={go}>
                 <b>{t}</b>
                 <em>{x}</em>
               </button>
             ) : (
-              <div className="rd-i">
+              <div className="home-radio-item">
                 <b>{t}</b>
                 <em>{x}</em>
               </div>
@@ -104,16 +104,16 @@ function Event() {
   const S = SCEN[k],
     done = dailyDone();
   return (
-    <button type="button" className={'v4-ev' + (done ? ' done' : '')} data-v4fight={k}>
-      <span className="v4-ev-art">
+    <button type="button" className={'home-daily-button' + (done ? ' is-done' : '')} data-v4fight={k}>
+      <span className="home-daily-art">
         <span className="v4t-scene" style={{ backgroundPosition: `${(k.charCodeAt(0) * 7) % 100}% 50%` }} />
       </span>
-      <span className="v4-ev-t">
+      <span className="home-daily-text">
         <small>{done ? 'Défi du jour relevé' : 'Événement · Défi du jour'}</small>
         <b>{S.n}</b>
         <em>{done ? 'Revenez demain pour un nouveau défi.' : `Gains ×2 et +3 Éclats · encore ${dailyLeft()}`}</em>
       </span>
-      <svg className="v4q-go">
+      <svg className="home-daily-chevron">
         <use href="#i-chevr" />
       </svg>
     </button>

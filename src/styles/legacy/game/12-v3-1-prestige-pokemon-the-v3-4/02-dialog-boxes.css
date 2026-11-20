@@ -74,77 +74,6 @@
   }
 }
 /* ---------- Adventure: chapter screen ---------- */
-.hm-top {
-  display: grid;
-  gap: var(--space-lg);
-  grid-template-columns: minmax(0, 1fr);
-}
-@media (min-width: 1000px) {
-  #accueil.page.on {
-    display: grid;
-    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
-    gap: var(--space-lg);
-    align-items: stretch;
-  }
-  #accueil .hm-top {
-    display: contents;
-  }
-  #accueil .hm-hero,
-  #accueil .resume,
-  #accueil .route {
-    grid-column: 1/-1;
-  }
-  #accueil .tcard {
-    grid-column: 1;
-  }
-  #accueil .hm-quick {
-    grid-column: 2;
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: repeat(3, minmax(0, 1fr));
-    margin: 0;
-  }
-  #accueil .qk {
-    padding: var(--space-lg) var(--space-xl);
-  }
-}
-.hm-hero {
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  gap: clamp(18px, 3vw, 40px);
-  align-items: center;
-  padding: clamp(22px, 3vw, 40px) clamp(20px, 3vw, 40px) 0;
-  border-radius: var(--rl);
-  border: 1px solid transparent;
-  background:
-    radial-gradient(55% 85% at 16% 42%, color-mix(in srgb, var(--ac, #d4af6a) 26%, transparent), transparent 70%)
-      padding-box,
-    radial-gradient(70% 60% at 100% 0%, rgba(212, 175, 106, 0.07), transparent 60%) padding-box,
-    var(--veins) padding-box,
-    linear-gradient(160deg, #16171c, #0a0a0c 72%) padding-box,
-    var(--brass) border-box;
-  background-size:
-    auto,
-    auto,
-    560px 560px,
-    auto,
-    auto;
-  box-shadow:
-    0 40px 80px -42px #000,
-    inset 0 1px 0 rgba(255, 255, 255, 0.04);
-}
-.hm-hero::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background: repeating-linear-gradient(115deg, rgba(212, 175, 106, 0.025) 0 1px, transparent 1px 16px);
-  mask-image: linear-gradient(90deg, #000, transparent 70%);
-  -webkit-mask-image: linear-gradient(90deg, #000, transparent 70%);
-}
 
 .hh-chips {
   display: flex;
@@ -164,12 +93,6 @@
 }
 
 @media (max-width: 720px) {
-  .hm-hero {
-    grid-template-columns: minmax(0, 1fr);
-    justify-items: center;
-    text-align: center;
-    padding: var(--space-xl) var(--space-lg) 0;
-  }
   .emb.bdg.xl {
     width: 96px;
   }

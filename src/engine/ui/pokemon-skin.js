@@ -33,7 +33,7 @@ const openOverlay = () => {
 };
 
 /* ---------- screen entry: rise and scanner sweep ---------- */
-const CAND = '.card,.home-hero,.case,.prep-card,.gd-p,.gd-intro,.item-row,.v4-qm,.cb-b,.v4-stats,.dex-section,.tip';
+const CAND = '.card,.home-hero,.case,.prep-card,.gd-p,.gd-intro,.item-row,.v4-qm,.cb-b,.dex-section,.tip';
 
 let tEntry;
 

@@ -9,11 +9,11 @@ import { tournamentPanelHtml } from '../../engine/modes/friends-tournament.js';
 
 import Button from '../../components/Button.jsx';
 import CardHeader from '../../components/CardHeader.jsx';
-// Friend challenges (#v4Amis, v4.16), under the hidden Home shortcuts.
+// Friend challenges (#v4Amis, home-friends.css), under the hidden Home shortcuts.
 // data-ami, data-ami-fight, data-ami-del and tournoi buttons: handled by the engine.
 export default function Friends({ on }) {
   return (
-    <section className="v4-amis card" id="v4Amis" aria-label="Défis entre amis">
+    <section className="home-friends card" id="v4Amis" aria-label="Défis entre amis">
       {on && <Content />}
     </section>
   );
@@ -30,7 +30,7 @@ function Content() {
         classement compare vos progrès.
       </p>
       {'\n  '}
-      <div className="am-a">
+      <div className="home-friends-actions">
         <Button size="small" variant="primary" data-ami="carte">
           Ma carte de dresseur
         </Button>
@@ -41,34 +41,34 @@ function Content() {
       <Html html={tournamentPanelHtml()} />
       {'\n  '}
       {L.length ? (
-        <div className="am-l">
+        <div className="home-friends-list">
           {L.map((a, i) => (
-            <div key={i} className="am-r">
-              <span className="am-t">
+            <div key={i} className="home-friends-row">
+              <span className="home-friends-team">
                 {a.t.map((x, j) => (
                   <span
                     key={j}
-                    className={'am-m' + (x[3] ? ' shn' : '')}
+                    className={'home-friends-pokemon' + (x[3] ? ' is-shiny' : '')}
                     style={x[3] ? parseStyle(shinyStyle(BY[x[0]].base)) : undefined}
                   >
                     <Html html={medal(BY[x[0]].t, 'is-small')} />
                   </span>
                 ))}
               </span>
-              <span className="am-n">
+              <span className="home-friends-name">
                 <b>{a.n}</b>
                 <em>
                   {a.t.map(x => BY[x[0]].n).join(', ')} · {a.w}–{a.l}
                 </em>
               </span>
-              <span className="am-b">
+              <span className="home-friends-buttons">
                 <Button size="small" variant="primary" data-ami-fight={i}>
                   Affronter
                 </Button>
                 <Button
                   size="small"
                   variant="ghost"
-                  className={'am-del' + (del === i ? ' on' : '')}
+                  className={'home-friends-remove' + (del === i ? ' is-confirming' : '')}
                   data-ami-del={i}
                   aria-label={`Retirer ${a.n}`}
                 >
@@ -80,7 +80,7 @@ function Content() {
         </div>
       ) : null}
       {'\n  '}
-      <details className="am-cl" open={!!L.length}>
+      <details className="home-friends-ranking" open={!!L.length}>
         <summary>Classement</summary>
         <table>
           <thead>
@@ -95,7 +95,7 @@ function Content() {
           </thead>
           <tbody>
             {rows.map((a, i) => (
-              <tr key={i} className={a.me ? 'me' : ''}>
+              <tr key={i} className={a.me ? 'is-me' : ''}>
                 <td>{i + 1}</td>
                 <td>{a.me ? (PROFILE.name ? PROFILE.name + ' (vous)' : 'Vous') : a.n}</td>
                 <td>
@@ -111,7 +111,7 @@ function Content() {
             ))}
           </tbody>
         </table>
-        <p className="am-nt">
+        <p className="home-friends-note">
           Score : badges, Ligue, Johto, Pokédex, Tour de Résonance et chromatiques. « Jour » : Défi du jour relevé
           aujourd’hui (rang, manches). Le classement d’un ami se met à jour quand il vous renvoie sa carte.
         </p>

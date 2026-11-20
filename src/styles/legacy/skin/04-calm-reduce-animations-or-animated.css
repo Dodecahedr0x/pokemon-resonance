@@ -5,8 +5,7 @@ html.pk-calme .pk-leds i,
 html.pk-calme a.logo .lg-ic::after,
 html.pk-calme .kicker::before,
 html.pk-calme .pk-holo,
-html.pk-calme .pk-sceau::after,
-html.pk-calme .v4-stats::after {
+html.pk-calme .pk-sceau::after {
   animation: none !important;
 }
 html.pk-calme .v4-tabs > button::after,

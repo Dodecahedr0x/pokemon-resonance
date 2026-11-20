@@ -156,27 +156,6 @@
     padding-inline: var(--space-2xs) !important;
     max-width: 100% !important;
   }
-  #accueil.page.on {
-    grid-template-columns: minmax(0, 1fr) !important;
-    gap: var(--space-md) !important;
-  }
-  #accueil .hm-hero {
-    min-height: clamp(430px, 70vh, 640px) !important;
-    background-position: 43% center !important;
-  }
-  #accueil .tcard#campBox,
-  #accueil .hm-quick,
-  #accueil .route {
-    grid-column: 1 !important;
-  }
-  #accueil .hm-quick {
-    grid-template-columns: 1fr !important;
-    grid-template-rows: repeat(3, minmax(88px, auto)) !important;
-  }
-  #accueil .route {
-    height: 300px !important;
-    background-position: 42% center !important;
-  }
   #resonance-launch .rl-frame {
     grid-template-columns: 1fr !important;
     grid-template-rows: 1fr auto !important;
@@ -223,16 +202,6 @@
     padding: var(--space-md) !important;
     min-height: 240px !important;
   }
-  #accueil .hh-chips {
-    gap: var(--space-2xs) !important;
-  }
-  #accueil .hh-chips > * {
-    font-size: 9px !important;
-  }
-  #accueil .qk {
-    min-height: 90px !important;
-    padding: var(--space-lg) !important;
-  }
   .bnav {
     background: rgba(3, 16, 27, 0.96) !important;
     border-top: 1px solid rgba(111, 226, 255, 0.24) !important;
@@ -246,8 +215,7 @@
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  #resonance-launch .rl-scene,
-  #accueil .hm-hero::before {
+  #resonance-launch .rl-scene {
     animation: none !important;
   }
   *,

@@ -55,4 +55,7 @@
 @import '../screens/combat/battle/battle-capture.css' layer(screens);
 @import '../screens/home/home-hero.css' layer(screens);
 @import '../screens/home/home-hero-backdrop.css' layer(screens);
+@import '../screens/home/home.css' layer(screens);
+@import '../screens/home/home-activities.css' layer(screens);
+@import '../screens/home/home-friends.css' layer(screens);
 @import '../screens/map/map.css' layer(screens);

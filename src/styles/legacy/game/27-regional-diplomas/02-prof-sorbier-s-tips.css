@@ -221,23 +221,6 @@
   font-size: 12.5px;
   color: #9fb3c2;
 }
-.v4-bottom .v4-hebdo {
-  grid-column: 1/-1;
-}
-.v4-hebdo {
-  display: flex;
-  align-items: center;
-  gap: var(--space-md);
-  width: 100%;
-  min-width: 0;
-  padding: var(--space-md) var(--space-md);
-  border-radius: 18px;
-  text-align: left;
-  color: inherit;
-  font: inherit;
-  cursor: pointer;
-  border: 1px solid rgba(255, 215, 94, 0.4) !important;
-}
 .weekly-card-ic {
   flex: none;
   display: grid;

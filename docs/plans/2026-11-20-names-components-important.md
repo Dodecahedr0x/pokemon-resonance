@@ -91,5 +91,11 @@ Each step is one commit (or a few), on its own, playable at every point.
   the French season ids in `Hero.jsx`, `is-petted` while the companion's heart pops); the keyframes moved with them.
   The Map's goal chips used the hero's generic chip rule, now their own `.map-info-chips` in
   `src/screens/map/map.css`. The corner brackets and entrance scan stay shared in legacy skin (`.card`, `.home-hero`,
-  `.case`). Next: Home part B (banners, resume slot, What's new, footer and radio, friends, the remaining `#accueil`
-  rules).
+  `.case`).
+- 2 Home, part B: done. Home is out of legacy except the shared « Combat en cours » card (`.resume`, with the
+  Battles screen). `src/screens/home/home.css` (page glow, layout, Home's card look, « Nouveau », season, radio, daily
+  challenge), `home-activities.css` (`.activity` buttons with `activity-season`, `activity-boss-rush`… and
+  `.activity-badge` / `.activity-text`) and `home-friends.css` (`.home-friends-*`, `.home-tournament`). About 1,300
+  legacy lines targeted Home elements that no longer exist (`.hm-hero`, `.hm-quick`, `.qk`, `.tcard`, `#campBox`,
+  `.v4-mon`, `.v4-tile`, `.route` inside Home…) and were deleted with their keyframes; with the moved rules, ~2,000
+  lines and 415 `!important` are gone. FriendBox keeps the shared `.am-a` / `.am-nt` rules in legacy.

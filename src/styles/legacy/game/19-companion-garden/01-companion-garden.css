@@ -53,48 +53,6 @@ html body .cp-bl span {
 }
 
 /* --- Pokégear --- */
-html body .v4-radio {
-  margin: var(--space-md) 0;
-  padding: var(--space-md) var(--space-md);
-}
-html body .v4-radio .card-header svg {
-  width: 20px;
-  height: 20px;
-}
-html body .rd-l {
-  list-style: none;
-  margin: var(--space-sm) 0 0;
-  padding: 0;
-  display: grid;
-  gap: var(--space-xs);
-}
-html body .rd-i {
-  width: 100%;
-  display: grid;
-  gap: var(--space-3xs);
-  padding: var(--space-sm) var(--space-sm);
-  border-radius: 10px;
-  border: 1px solid rgba(120, 200, 255, 0.12);
-  border-left: 3px solid #7fd4ff;
-  background: rgba(0, 0, 0, 0.2);
-  color: inherit;
-  font: inherit;
-  text-align: left;
-}
-html body button.rd-i {
-  cursor: pointer;
-}
-html body .rd-i b {
-  font-size: 12px;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: #9fe1ff;
-}
-html body .rd-i em {
-  font-style: normal;
-  font-size: 13px;
-  line-height: 1.4;
-}
 
 /* --- story scenes --- */
 html body .story-scene {

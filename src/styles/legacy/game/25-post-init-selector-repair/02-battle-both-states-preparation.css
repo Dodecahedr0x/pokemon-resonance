@@ -57,9 +57,6 @@
     inset 0 1px rgba(255, 255, 255, 0.25) !important;
 }
 @media (max-width: 850px) {
-  #accueil .v4-tiles {
-    gap: var(--space-sm) !important;
-  }
   #carte .v4-map-wrap {
     grid-template-columns: 1fr !important;
   }
@@ -95,30 +92,8 @@ html:is(:root, #r9) body .enc-card.shiny .enc-cr img:not(.art-sh) {
 }
 
 /*    home: the v4.22 halo overflowed by 5 % on the right (the page slid sideways on phone) */
-html:is(:root, #r9) body #accueil:before {
-  left: 0 !important;
-  right: 0 !important;
-}
 
 /* 4. Home: each illustration whole inside its card (no more Pokémon cut off at the edge) */
-html:is(:root, #r9) body #accueil .v4-mon {
-  min-height: 124px;
-}
-html:is(:root, #r9) body #accueil .v4-mon img {
-  right: 4px;
-  top: 4px;
-  width: 78px;
-  height: 78px;
-}
-html:is(:root, #r9) body #accueil .v4t-art {
-  right: 6px;
-  top: 6px;
-  width: min(58%, 132px);
-}
-html:is(:root, #r9) body #accueil .v4t-item.i2 {
-  right: 12px;
-  top: 14px;
-}
 
 /* 3. mobile: more compact headers, the cyan rule stays */
 @media (max-width: 700px) {

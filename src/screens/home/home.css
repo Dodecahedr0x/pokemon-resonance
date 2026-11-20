@@ -1,0 +1,301 @@
+/* Home screen (#accueil, Home.jsx): the page glow, the column of blocks, the look of Home's cards, and the blocks
+   that are not the hero, the activities or the friends: « Nouveau » (WhatsNew.jsx), and the footer (Footer.jsx)
+   with the season event, the Pokématos radio and the daily challenge. The « Combat en cours » card is the shared
+   .resume (still in legacy, with the Battles screen). */
+
+.home-screen {
+  isolation: isolate;
+}
+/* soft teal and amber glow behind the top of the page */
+.home-screen::before {
+  content: '';
+  position: absolute;
+  inset: -30px 0 35%;
+  z-index: -1;
+  background:
+    radial-gradient(ellipse at 16% 12%, rgba(48, 147, 167, 0.22), transparent 42%),
+    radial-gradient(ellipse at 82% 20%, rgba(227, 166, 76, 0.13), transparent 36%),
+    linear-gradient(135deg, transparent 40%, rgba(105, 183, 197, 0.035) 40.2%, transparent 40.5%);
+  mask-image: linear-gradient(#000, transparent);
+  pointer-events: none;
+}
+.home-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-xl);
+  align-items: stretch;
+}
+.home-resume-slot {
+  grid-column: 1 / -1;
+}
+.home-resume-slot > .resume {
+  margin: 0;
+}
+
+/* Home's cards are a little rounder and greener than the shared card */
+.home-screen .card {
+  border: 1px solid rgba(153, 211, 231, 0.19);
+  border-radius: 20px;
+  background: linear-gradient(145deg, rgba(19, 47, 64, 0.94), rgba(8, 23, 35, 0.96));
+  box-shadow:
+    0 20px 45px rgba(0, 0, 0, 0.25),
+    inset 0 1px rgba(255, 255, 255, 0.07);
+}
+.home-screen .card-header {
+  color: #effcff;
+  letter-spacing: 0.04em;
+}
+.home-screen .card-header > svg {
+  color: #83f0ef;
+  filter: drop-shadow(0 0 9px rgba(131, 240, 239, 0.35));
+}
+
+/* ---------- « Nouveau »: what changed in the last release ---------- */
+.home-news {
+  margin: var(--space-md) 0;
+  padding: var(--space-md);
+}
+.home-news-dismiss {
+  margin-left: auto;
+}
+.home-news-list,
+.home-radio-list {
+  display: grid;
+  gap: var(--space-xs);
+  margin: var(--space-sm) 0 0;
+  padding: 0;
+  list-style: none;
+}
+.home-news-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  width: 100%;
+  padding: var(--space-sm);
+  border: 1px solid rgba(120, 200, 255, 0.14);
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.22);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+}
+button.home-news-item {
+  cursor: pointer;
+}
+button.home-news-item:is(:hover, :focus-visible) {
+  border-color: var(--color-selected);
+}
+.home-news-icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 215, 94, 0.14);
+  color: #ffd75e;
+}
+.home-news-icon svg {
+  width: 18px;
+  height: 18px;
+}
+.home-news-text {
+  display: grid;
+  flex: 1;
+  gap: var(--space-3xs);
+  min-width: 0;
+}
+.home-news-text em {
+  color: var(--color-text-soft);
+  font-size: 12.5px;
+  font-style: normal;
+  line-height: 1.35;
+}
+.home-news-chevron {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  opacity: 0.7;
+}
+
+/* ---------- Footer: season and radio, then the daily challenge ---------- */
+.home-footer {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: var(--space-md);
+}
+@media (max-width: 999px) {
+  .home-footer {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* season event (its colour is --c, set by Footer.jsx) */
+.home-season {
+  margin-bottom: var(--space-md);
+}
+.home-season[hidden] {
+  display: none;
+}
+.home-season-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md);
+}
+.home-season-icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--c);
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--c) 28%, #0b1622);
+}
+.home-season-icon svg {
+  width: 20px;
+  height: 20px;
+  fill: var(--c);
+}
+.home-season-text {
+  display: grid;
+  flex: 1;
+  gap: var(--space-3xs);
+  min-width: 0;
+}
+.home-season-text small {
+  color: var(--c);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.home-season-text em {
+  color: var(--color-text-muted);
+  font-size: 12.5px;
+  font-style: normal;
+}
+.home-season-types {
+  display: flex;
+  gap: var(--space-2xs);
+}
+.home-season-received {
+  color: var(--c);
+  font-size: 12.5px;
+  white-space: nowrap;
+}
+@media (max-width: 520px) {
+  .home-season-card {
+    flex-wrap: wrap;
+  }
+}
+
+/* Pokématos: the day's radio lines */
+.home-radio {
+  margin: var(--space-md) 0;
+  padding: var(--space-md);
+}
+.home-radio .card-header svg {
+  width: 20px;
+  height: 20px;
+}
+.home-radio-item {
+  display: grid;
+  gap: var(--space-3xs);
+  width: 100%;
+  padding: var(--space-sm);
+  border: 1px solid rgba(120, 200, 255, 0.12);
+  border-left: 3px solid #7fd4ff;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.2);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+}
+button.home-radio-item {
+  cursor: pointer;
+}
+.home-radio-item b {
+  color: #9fe1ff;
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.home-radio-item em {
+  font-size: 13px;
+  font-style: normal;
+  line-height: 1.4;
+}
+
+/* daily challenge: pink until won, green after */
+.home-daily {
+  border: 1px solid rgba(128, 221, 230, 0.34);
+  border-radius: 21px;
+  background: linear-gradient(145deg, #143346, #081925);
+  box-shadow: 0 18px 38px rgba(0, 0, 0, 0.3);
+}
+.home-daily-button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  width: 100%;
+  height: 100%;
+  min-height: 112px;
+  overflow: hidden;
+  padding: var(--space-sm) var(--space-md) var(--space-sm) var(--space-sm);
+  border: 1px solid rgba(255, 120, 200, 0.5);
+  border-radius: 14px;
+  background: linear-gradient(90deg, rgba(120, 40, 120, 0.55), rgba(20, 40, 90, 0.85));
+  color: #fff;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.home-daily-button.is-done {
+  border-color: rgba(69, 212, 131, 0.5);
+  background: linear-gradient(90deg, rgba(20, 90, 60, 0.55), rgba(14, 34, 66, 0.9));
+}
+.home-daily-art {
+  position: relative;
+  flex: none;
+  width: 76px;
+  height: 52px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 9px;
+}
+.home-daily-art .v4t-scene {
+  z-index: 0;
+  background-size: 300% auto;
+}
+.home-daily-text {
+  display: grid;
+  gap: var(--space-3xs);
+  min-width: 0;
+}
+.home-daily-text small {
+  color: #ffb3e6;
+  font: 800 11px/1.2 var(--font-display);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.home-daily-button.is-done small {
+  color: #8ff0b8;
+}
+.home-daily-text b {
+  font: 850 16px/1.2 var(--font-display);
+}
+.home-daily-text em {
+  color: #e2d9f3;
+  font: 500 12.5px/1.3 var(--font-body);
+  font-style: normal;
+}
+.home-daily-chevron {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  margin-left: auto;
+  color: #ffd75e;
+}

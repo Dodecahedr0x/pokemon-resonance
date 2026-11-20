@@ -278,66 +278,6 @@ html body .exp-d em {
 /* =====================================================================
    v4.11: seasons, rebroadcast, Team Dissonance
    ===================================================================== */
-html body .v4-saison[hidden] {
-  display: none;
-}
-html body .v4-saison {
-  margin-bottom: var(--space-md);
-}
-html body .sa-card {
-  display: flex;
-  align-items: center;
-  gap: var(--space-md);
-  padding: var(--space-md) var(--space-md);
-  border-color: color-mix(in srgb, var(--c) 60%, transparent);
-  background: linear-gradient(120deg, color-mix(in srgb, var(--c) 22%, transparent), transparent 70%);
-}
-html body .sa-ic {
-  flex: none;
-  display: grid;
-  place-items: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: color-mix(in srgb, var(--c) 28%, #0b1622);
-  border: 1px solid var(--c);
-}
-html body .sa-ic svg {
-  width: 20px;
-  height: 20px;
-  fill: var(--c);
-}
-html body .sa-t {
-  flex: 1;
-  display: grid;
-  gap: var(--space-3xs);
-  min-width: 0;
-}
-html body .sa-t small {
-  font-size: 11px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--c);
-}
-html body .sa-t em {
-  font-style: normal;
-  font-size: 12.5px;
-  color: var(--mut, #9fb0c4);
-}
-html body .sa-ty {
-  display: flex;
-  gap: var(--space-2xs);
-}
-html body .sa-ok {
-  font-size: 12.5px;
-  color: var(--c);
-  white-space: nowrap;
-}
-@media (max-width: 520px) {
-  html body .sa-card {
-    flex-wrap: wrap;
-  }
-}
 /* the route takes on the colors of the season */
 html body #route[data-saison='halloween'] {
   box-shadow: inset 0 0 140px rgba(120, 60, 200, 0.45);

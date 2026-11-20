@@ -9,22 +9,22 @@ export default function WhatsNew() {
     return null;
   }
   return (
-    <section id="v4News" className="v4-news card" aria-label="Nouveautés">
+    <section id="v4News" className="home-news card" aria-label="Nouveautés">
       <CardHeader icon="star" title="Nouveau">
-        <Button size="small" variant="ghost" className="nw-x" data-news="ok">
+        <Button size="small" variant="ghost" className="home-news-dismiss" data-news="ok">
           Compris
         </Button>
       </CardHeader>
-      <ul className="nw-l">
+      <ul className="home-news-list">
         {NEWS_ENTRIES.map(([ic, t, d, go], i) => {
           const body = (
             <>
-              <span className="nw-ic">
+              <span className="home-news-icon">
                 <svg>
                   <use href={`#${ic}`} />
                 </svg>
               </span>
-              <span>
+              <span className="home-news-text">
                 <b>{t}</b>
                 <em>{d}</em>
               </span>
@@ -33,14 +33,14 @@ export default function WhatsNew() {
           return (
             <li key={i}>
               {go ? (
-                <button type="button" className="nw-i" data-news={go}>
+                <button type="button" className="home-news-item" data-news={go}>
                   {body}
-                  <svg className="nw-go">
+                  <svg className="home-news-chevron">
                     <use href="#i-chevr" />
                   </svg>
                 </button>
               ) : (
-                <div className="nw-i">{body}</div>
+                <div className="home-news-item">{body}</div>
               )}
             </li>
           );

@@ -24,17 +24,8 @@ html body #combat .pt {
   }
 }
 @media (max-width: 999px) {
-  .v4-home {
-    grid-template-columns: minmax(0, 1fr);
-  }
   .v4-aside {
     grid-column: 1;
-  }
-  .v4-tiles {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-  .v4-bottom {
-    grid-template-columns: minmax(0, 1fr);
   }
   .v4-map-wrap {
     grid-template-columns: minmax(0, 1fr);
@@ -63,18 +54,6 @@ html body #combat .pt {
   }
 }
 @media (max-width: 640px) {
-  .v4-tiles {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--space-sm);
-  }
-  .v4-tile {
-    min-height: 138px;
-    padding: var(--space-sm);
-  }
-  .v4-tile:first-child {
-    grid-column: 1/-1;
-    min-height: 120px;
-  }
   .v4t-tx b {
     font-size: 16px;
   }
@@ -83,9 +62,6 @@ html body #combat .pt {
   }
   .v4t-art {
     width: 62%;
-  }
-  .v4-stats {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
   .v4-st {
     flex-direction: column;
@@ -96,9 +72,6 @@ html body #combat .pt {
   .v4-st svg {
     width: 22px;
     height: 22px;
-  }
-  .v4-team-g {
-    grid-template-columns: 1fr 1fr;
   }
   .v4-qm,
   .v4-qs {
@@ -174,8 +147,5 @@ html body #combat .pt {
   }
   .v4-ms {
     animation: none;
-  }
-  .v4-tile {
-    transition: none;
   }
 }

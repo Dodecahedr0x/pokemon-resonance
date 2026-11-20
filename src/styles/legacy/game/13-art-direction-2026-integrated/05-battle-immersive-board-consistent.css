@@ -84,19 +84,6 @@
   background: linear-gradient(145deg, rgba(15, 52, 73, 0.95), rgba(5, 23, 39, 0.98)) !important;
 }
 /* Soft motion: no interaction changes function */
-@keyframes resonanceGlow {
-  0%,
-  100% {
-    box-shadow: 0 0 0 rgba(83, 202, 255, 0);
-  }
-  50% {
-    box-shadow: 0 0 26px rgba(83, 202, 255, 0.11);
-  }
-}
-#accueil .tcard,
-#accueil .route {
-  animation: resonanceGlow 7s ease-in-out infinite;
-}
 
 .bnav {
   background: rgba(3, 17, 29, 0.96) !important;
@@ -107,39 +94,11 @@
   color: #ffe478 !important;
 }
 @media (max-width: 999px) {
-  #accueil .hm-top {
-    grid-template-columns: minmax(0, 1fr) !important;
-  }
-  #accueil .hm-hero {
-    grid-column: 1 !important;
-    min-height: clamp(440px, 72vh, 650px) !important;
-  }
-  #accueil .tcard#campBox {
-    grid-column: 1 !important;
-    min-height: auto !important;
-  }
-  #accueil .hm-quick {
-    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-  }
-  #accueil .qk {
-    padding: var(--space-md) !important;
-    gap: var(--space-sm) !important;
-    min-height: 100px !important;
-  }
-  #accueil .route {
-    height: 300px !important;
-  }
   #combat .board {
     min-height: 260px !important;
   }
 }
 @media (max-width: 600px) {
-  #accueil .hm-quick {
-    grid-template-columns: 1fr !important;
-  }
-  #accueil .qk {
-    min-height: 78px !important;
-  }
   #combat .board {
     margin: var(--space-xs) !important;
     min-height: 220px !important;
@@ -149,54 +108,5 @@
     flex-wrap: nowrap !important;
   }
 }
-@media (prefers-reduced-motion: reduce) {
-  #accueil .tcard,
-  #accueil .route {
-    animation: none !important;
-  }
-}
 /* === END OF ART DIRECTION === */
 /* ===== resonance-home-layout-correction layer ===== */
-#accueil.page.on {
-  display: block !important;
-  grid-template-columns: none !important;
-  gap: 0 !important;
-}
-#accueil .hm-top {
-  display: grid !important;
-  grid-template-columns: minmax(0, 1fr) minmax(270px, 31%) !important;
-  gap: var(--space-lg) !important;
-  align-items: stretch !important;
-}
-#accueil .hm-hero {
-  width: 100% !important;
-  min-width: 0 !important;
-  min-height: clamp(370px, 36vw, 510px) !important;
-  grid-column: auto !important;
-}
-#accueil #campBox {
-  width: 100% !important;
-  min-width: 0 !important;
-  grid-column: auto !important;
-}
-#accueil .hm-quick,
-#accueil .route {
-  width: 100% !important;
-  margin-top: var(--space-lg) !important;
-}
-#accueil .hm-quick {
-  display: grid !important;
-  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-}
-@media (max-width: 999px) {
-  #accueil .hm-top {
-    grid-template-columns: minmax(0, 1fr) !important;
-  }
-  #accueil .hm-hero,
-  #accueil #campBox {
-    grid-column: auto !important;
-  }
-  #accueil .hm-quick {
-    grid-template-columns: 1fr !important;
-  }
-}

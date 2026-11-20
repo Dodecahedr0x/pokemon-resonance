@@ -96,7 +96,6 @@ body {
 .section-title {
   font-size: clamp(20px, 2vw, 28px) !important;
 }
-.tcard,
 .resume,
 .panel,
 .section,
@@ -119,36 +118,6 @@ body {
   border-radius: 17px !important;
 }
 /* HOME: cinematic banner + actual progress/party column + illustrated action cards */
-#accueil.page.on {
-  display: block !important;
-}
-#accueil .hm-top {
-  display: grid !important;
-  grid-template-columns: minmax(0, 1.72fr) minmax(260px, 0.78fr) !important;
-  gap: var(--space-md) !important;
-  align-items: stretch !important;
-}
-#accueil .hm-hero {
-  grid-column: auto !important;
-  min-height: clamp(330px, 31vw, 430px) !important;
-  border-radius: 20px !important;
-  border: 1px solid rgba(111, 220, 255, 0.48) !important;
-  background:
-    linear-gradient(90deg, rgba(2, 16, 29, 0.83) 0%, rgba(2, 18, 31, 0.42) 48%, rgba(2, 18, 31, 0.03) 82%),
-    linear-gradient(0deg, rgba(2, 14, 24, 0.83), transparent 58%),
-    var(--resonance-landscape) center 52% / cover no-repeat !important;
-  box-shadow:
-    0 22px 55px rgba(0, 0, 0, 0.38),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.05) !important;
-}
-#accueil .hm-hero::after {
-  content: 'KANTO  /  JOHTO  •  TON AVENTURE COMMENCE ICI' !important;
-  top: 16px !important;
-  right: 18px !important;
-  font-size: 8px !important;
-  letter-spacing: 0.17em !important;
-  color: #e7f8ff !important;
-}
 .hh-chips span {
   background: rgba(5, 26, 41, 0.78) !important;
   border: 1px solid rgba(122, 218, 255, 0.35) !important;
@@ -156,18 +125,6 @@ body {
   color: #e7f7ff !important;
   padding: var(--space-2xs) var(--space-sm) !important;
   font-size: 10px !important;
-}
-#accueil #campBox {
-  grid-column: auto !important;
-  min-height: 100% !important;
-  padding: var(--space-lg) !important;
-  background: linear-gradient(180deg, rgba(10, 45, 65, 0.97), rgba(4, 21, 35, 0.98)) !important;
-  border: 1px solid rgba(106, 220, 255, 0.34) !important;
-  border-radius: 19px !important;
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28) !important;
-}
-#accueil .tc-h {
-  gap: var(--space-sm) !important;
 }
 .tc-av {
   border: 1px solid rgba(255, 218, 94, 0.6) !important;
@@ -205,75 +162,6 @@ body {
   background: rgba(5, 23, 37, 0.7) !important;
   border: 1px solid rgba(108, 218, 255, 0.18) !important;
   padding: var(--space-sm) !important;
-}
-#accueil .hm-quick {
-  display: grid !important;
-  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-  gap: var(--space-md) !important;
-  margin: var(--space-md) 0 !important;
-}
-#accueil .qk {
-  position: relative !important;
-  overflow: hidden !important;
-  min-height: 112px !important;
-  display: flex !important;
-  align-items: flex-end !important;
-  padding: var(--space-lg) !important;
-  border-radius: 15px !important;
-  border: 1px solid rgba(104, 211, 255, 0.3) !important;
-  background:
-    linear-gradient(0deg, rgba(3, 18, 29, 0.98), rgba(4, 28, 43, 0.68)),
-    var(--resonance-landscape) center/cover !important;
-  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2) !important;
-  transition:
-    transform 0.22s,
-    border-color 0.22s !important;
-}
-#accueil .qk::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: linear-gradient(120deg, rgba(70, 198, 255, 0.13), transparent 60%);
-  opacity: 0.9;
-}
-#accueil .qk:hover {
-  transform: translateY(-3px) !important;
-  border-color: rgba(255, 215, 93, 0.6) !important;
-}
-#accueil .qk-ic {
-  position: absolute !important;
-  right: 12px !important;
-  top: 9px !important;
-  opacity: 0.65 !important;
-  color: #9ce8ff !important;
-}
-#accueil .qk > span:last-child {
-  position: relative !important;
-  z-index: 1 !important;
-}
-#accueil .qk b {
-  display: block !important;
-  font-size: 14px !important;
-  color: #fff !important;
-}
-#accueil .qk em {
-  font-size: 10px !important;
-  color: #c4dbe8 !important;
-}
-#accueil .route {
-  height: clamp(210px, 22vw, 290px) !important;
-  margin: 0 !important;
-  border-radius: 17px !important;
-  border: 1px solid rgba(104, 215, 255, 0.3) !important;
-  overflow: hidden !important;
-  background:
-    linear-gradient(0deg, rgba(3, 17, 27, 0.24), rgba(3, 17, 27, 0.03)),
-    var(--resonance-landscape) center 65% / cover no-repeat !important;
-  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.27) !important;
-}
-#accueil .rt-ui {
-  padding: var(--space-lg) !important;
 }
 .rt-sign {
   background: rgba(4, 25, 39, 0.85) !important;

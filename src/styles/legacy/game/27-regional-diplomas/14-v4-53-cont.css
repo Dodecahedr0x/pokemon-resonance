@@ -74,56 +74,6 @@ body.board-theme-cristal .board {
 }
 
 /* <style id="resonance-daily-craft"> */
-.dailygift {
-  display: flex;
-  gap: var(--space-md);
-  align-items: center;
-  width: 100%;
-  margin: var(--space-sm) 0;
-  padding: var(--space-md) var(--space-md);
-  border-radius: 16px;
-  border: 1px solid rgba(255, 212, 91, 0.45);
-  background: linear-gradient(135deg, rgba(255, 212, 91, 0.16), rgba(20, 50, 70, 0.7));
-  color: #eaf2f8;
-  text-align: left;
-  cursor: pointer;
-  font: inherit;
-}
-.dailygift:not(.done) {
-  animation: route-event 2.4s ease-in-out infinite;
-}
-.dailygift.done {
-  opacity: 0.72;
-  border-color: rgba(255, 255, 255, 0.15);
-  background: rgba(20, 50, 70, 0.5);
-  cursor: default;
-}
-.dailygift-i {
-  flex: none;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  font-weight: 900;
-  background: #ffd45b;
-  color: #0a1d2b;
-}
-.dailygift b {
-  display: block;
-  font-size: 14px;
-}
-.dailygift small {
-  display: block;
-  color: #b8cddb;
-  font-size: 12px;
-  line-height: 1.35;
-}
-@media (prefers-reduced-motion: reduce) {
-  .dailygift:not(.done) {
-    animation: none;
-  }
-}
 
 /* <style id="resonance-quest-locks"> */
 

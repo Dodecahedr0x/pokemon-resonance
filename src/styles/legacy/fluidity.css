@@ -10,13 +10,11 @@
    declared further up. */
 
 /* 1. Route encounter / daily encounter: halo in opacity */
-.route-event:not(.done),
-.dailygift:not(.done) {
+.route-event:not(.done) {
   animation: none !important;
   position: relative;
 }
-.route-event:not(.done)::after,
-.dailygift:not(.done)::after {
+.route-event:not(.done)::after {
   content: '';
   position: absolute;
   inset: -1px;
@@ -87,14 +85,12 @@
 
 @media (prefers-reduced-motion: reduce) {
   .route-event::after,
-  .dailygift::after,
   .board-weather i,
   .hp.hseg i::after {
     animation: none !important;
   }
 }
 html.a11y-rm .route-event::after,
-html.a11y-rm .dailygift::after,
 html.a11y-rm .board-weather i,
 html.a11y-rm .hp.hseg i::after {
   animation: none !important;

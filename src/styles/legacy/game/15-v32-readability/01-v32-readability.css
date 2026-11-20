@@ -13,43 +13,7 @@
    The old pseudo-elements covered the whole card (inset:0, z-index:-1,
    mask). The text added on top inherited those settings: label clipped
    on the home page, dark veil and blur over the whole Route 29. */
-html body #accueil .hm-hero::after {
-  left: auto !important;
-  bottom: auto !important;
-  width: auto !important;
-  height: auto !important;
-  z-index: 3 !important;
-  white-space: nowrap !important;
-  line-height: 1.2 !important;
-  -webkit-mask-image: none !important;
-  mask-image: none !important;
-  pointer-events: none !important;
-  font-size: 10px !important;
-  font-weight: 800 !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-  background: rgba(4, 20, 34, 0.72) !important;
-  border: 1px solid rgba(123, 221, 255, 0.28) !important;
-  border-radius: 999px !important;
-  padding: var(--space-sm) var(--space-md) !important;
-}
-html body #accueil .route::before {
-  right: auto !important;
-  bottom: auto !important;
-  width: auto !important;
-  height: auto !important;
-  box-shadow: none !important;
-  white-space: nowrap !important;
-  line-height: 1.2 !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-  background: rgba(4, 22, 32, 0.86) !important;
-  font-size: 11px !important;
-}
 /* the original "Route 29" panel duplicated the new label */
-html body #accueil .route .rt-sign {
-  visibility: hidden !important;
-}
 
 /* ---------- 2. Visible selected state (first-launch difficulty) ---------- */
 html body .it-diff .button[aria-pressed='true'] {
@@ -62,14 +26,10 @@ html body .it-diff .button[aria-pressed='true'] {
 /* ---------- 2 bis. Contrast ----------
    shortcut icons: light blue on gold became invisible,
    we reuse the midnight blue used on all the other gold buttons */
-html body #accueil .qk-ic {
-  color: #0b2236 !important;
-}
 /* team cards: "À capturer" (To capture) no longer slides under the quick button */
 
 /* ---------- 3. Desktop: no more text under 10 px ---------- */
-html body .hh-chips span,
-html body #accueil .hh-chips span {
+html body .hh-chips span {
   font-size: 10px !important;
 }
 html body #resonance-launch .rl-meta,
@@ -84,7 +44,6 @@ html body #resonance-launch .rl-meta strong {
   html body .dlg-who,
   html body .dlg-n,
   html body .case-h,
-  html body #accueil .hh-chips span,
   html body .hh-chips span,
   html body .srw-lv,
   html body .pill:not(.prep-row .pill),
@@ -97,11 +56,7 @@ html body #resonance-launch .rl-meta strong {
   html body .cnt,
   html body dt,
   html body .tc-k span,
-  html body #accueil .tc-k span,
   html body .chip {
-    font-size: 11px !important;
-  }
-  html body #accueil .kicker {
     font-size: 11px !important;
   }
   html body #resonance-launch .rl-meta,
@@ -112,15 +67,11 @@ html body #resonance-launch .rl-meta strong {
     font-size: 10px !important;
   }
   /* informational text */
-  html body #accueil .qk em,
   html body #qkTeam,
   html body #bPhase,
   html body .syn-c,
   html body .seg button {
     font-size: 11.5px !important;
-  }
-  html body #accueil .qk em {
-    line-height: 1.35 !important;
   }
   /* bottom navigation bar */
   html body .bnav .bn {
@@ -136,22 +87,9 @@ html body #resonance-launch .rl-meta strong {
 /* ---------- 5. Home on phone: no more overlap ---------- */
 @media (max-width: 640px) {
   /* the label centers at the top, in short form */
-  html body #accueil .hm-hero::after {
-    content: 'KANTO  /  JOHTO  •  TON AVENTURE' !important;
-    top: 14px !important;
-    right: auto !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    font-size: 10px !important;
-    letter-spacing: 0.16em !important;
-    padding: var(--space-xs) var(--space-md) !important;
-  }
   /* the medallion goes above the title instead of covering it */
 
   /* Route 29: the label no longer hides the Morning / Day / Night buttons */
-  html body #accueil .rt-top {
-    margin-top: var(--space-4xl) !important;
-  }
   /* Battles: "Prochaine étape" (Next step) becomes a tab placed on the card,
      the battle name gets the whole line back */
   /* board: readable Pokémon names and markers */
@@ -165,15 +103,7 @@ html body #resonance-launch .rl-meta strong {
 }
 
 /* ---------- 6. Performance: same effects, without looping repaints ---------- */
-/* "resonanceGlow" animated the shadow of the trainer card and Route 29,
-   but a fixed shadow marked !important overrides any animation:
-   the glow never appeared (0 pixels of difference, verified) while
-   repainting these two large cards 60 times per second. We stop it. */
-html body #accueil .tcard,
-html body #accueil .route {
-  animation: none !important;
-}
-/* same case on the launch screen: "launchDrift" is overridden by
+/* the launch screen: "launchDrift" is overridden by
    transform:scale(1.005)!important, the landscape does not move
    (0 pixels) but the animation cost ~93 % of the CPU on phone. */
 html body #resonance-launch .rl-scene {

@@ -161,9 +161,6 @@ p.v4-note {
   }
 
   /* ---------- Home: the folding "Classement" line is a full-height tap target ---------- */
-  html body #accueil .am-cl > summary {
-    padding-block: var(--space-md);
-  }
 
   /* ---------- Saves sheet: options and close button at a tappable size ---------- */
   html body #saves .button-small {

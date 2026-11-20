@@ -163,20 +163,6 @@
   filter: drop-shadow(0 12px 16px rgba(245, 206, 120, 0.28));
 }
 @media (max-width: 850px) {
-  #accueil .hm-hero {
-    grid-template-columns: 1fr !important;
-    min-height: unset !important;
-    padding: var(--space-xl) !important;
-  }
-
-  #accueil .hm-hero:after {
-    width: 190px;
-    right: -75px;
-    top: 24%;
-  }
-  #accueil .hm-quick {
-    grid-template-columns: 1fr !important;
-  }
   #carte .v4-map-wrap {
     grid-template-columns: 1fr !important;
   }
@@ -188,8 +174,7 @@
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .page.on,
-  #accueil .hm-hero:after {
+  .page.on {
     animation: none !important;
   }
   *,
