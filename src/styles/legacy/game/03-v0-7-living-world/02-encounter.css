@@ -95,19 +95,3 @@
 .board.bio-ligue {
   background: radial-gradient(120% 90% at 50% 0%, #1a2134, #090c14);
 }
-.tuft {
-  fill: #4f8a3c;
-  opacity: 0.7;
-}
-.pebble {
-  fill: #6e5a40;
-  opacity: 0.8;
-}
-.ember {
-  fill: #b48cff;
-  opacity: 0.7;
-  animation: tw 2.6s ease-in-out infinite;
-}
-.axl {
-  fill: rgba(255, 255, 255, 0.35);
-}

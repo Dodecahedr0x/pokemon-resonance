@@ -325,3 +325,11 @@ Each step is one commit (or a few), on its own, playable at every point.
   `-to-flicker`. Snapshots of five frames (ally, foe, fast) are identical at both widths apart from keyframe names.
   A second pass that only counts words inside string literals (so `dataset.qk` or a comment no longer keeps `.qk`
   alive) removed 68 more parts (`.hero`, `.qk`, `.qc`, `.tbl`, `.quad`, `.pal`, `.xl` sizes…) and one more file.
+- Board decor: done. `src/screens/combat/board/board-decor.css`, `board-decor-painted.css`, `board-decor-motion.css`.
+  Pillars (`.pillar-obstacle`, `.pillar-shadow`, `-base`, `-shaft`, `-flutes`, `-ring`, `-capital`, `-top`), tall grass
+  (`.grass-back` / `.grass-front` with `.grass-blade-back` / `.grass-blade-front`, `.is-alternate`), `.cover-shield`
+  (`.is-enemy`, `.is-ally`), `.ricochet-line` (`.is-picked`) and `.ricochet-point`, `.intent-arrow` (`.is-selected`) and
+  `.intent-arrow-head`, biome decor `.terrain-tuft`, `-ember`, `-pebble`, `-glint`, `.terrain-field`, `.axis-label`, `.wave`,
+  the lake (`.is-still`) and night haze (`.is-night`), and the Poké Ball layer (`.pokeball-layer`, `.pokeball-top`,
+  `-bottom`, `-button`). Keyframes `fire-risk-flicker`, `lake-band-drift`, `lake-glint-drift`. Board snapshots identical
+  at both widths apart from keyframe names.

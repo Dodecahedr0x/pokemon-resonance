@@ -117,17 +117,17 @@ export function Markers() {
 /* obstacles: pillars and tall grass (behind, then in front of the Pokémon) */
 function Pillar({ x, y }) {
   return (
-    <g className="pil">
-      <ellipse className="pil-sh" cx={f1(x)} cy={f1(y + 12)} rx="16" ry="4.6" />
-      <path className="pil-ba" d={`M${f1(x - 14)} ${f1(y + 13)}h28l-2.4-5.4h-23.2Z`} />
-      <rect className="pil-sf" x={f1(x - 9)} y={f1(y - 21)} width="18" height="29.5" />
+    <g className="pillar-obstacle">
+      <ellipse className="pillar-shadow" cx={f1(x)} cy={f1(y + 12)} rx="16" ry="4.6" />
+      <path className="pillar-base" d={`M${f1(x - 14)} ${f1(y + 13)}h28l-2.4-5.4h-23.2Z`} />
+      <rect className="pillar-shaft" x={f1(x - 9)} y={f1(y - 21)} width="18" height="29.5" />
       <path
-        className="pil-fl"
+        className="pillar-flutes"
         d={`M${f1(x - 4.5)} ${f1(y - 20)}v27M${f1(x)} ${f1(y - 20)}v27M${f1(x + 4.5)} ${f1(y - 20)}v27`}
       />
-      <rect className="pil-rn" x={f1(x - 9)} y={f1(y - 7)} width="18" height="2.6" />
-      <path className="pil-ca" d={`M${f1(x - 12.5)} ${f1(y - 20.5)}h25l2.2-5.2h-29.4Z`} />
-      <ellipse className="pil-tp" cx={f1(x)} cy={f1(y - 25.8)} rx="14.8" ry="3.6" />
+      <rect className="pillar-ring" x={f1(x - 9)} y={f1(y - 7)} width="18" height="2.6" />
+      <path className="pillar-capital" d={`M${f1(x - 12.5)} ${f1(y - 20.5)}h25l2.2-5.2h-29.4Z`} />
+      <ellipse className="pillar-top" cx={f1(x)} cy={f1(y - 25.8)} rx="14.8" ry="3.6" />
     </g>
   );
 }
@@ -140,12 +140,12 @@ function BackGrass({ x, y }) {
     s.push(
       <path
         key={i}
-        className={'gb' + (i % 2 ? ' g2' : '')}
+        className={'grass-blade-back' + (i % 2 ? ' is-alternate' : '')}
         d={`M${f1(bx)} ${f1(y + 9)}L${f1(bx + 1.6 + lean)} ${f1(y + 9 - h)}L${f1(bx + 3.3)} ${f1(y + 9)}Z`}
       />
     );
   }
-  return <g className="grs">{s}</g>;
+  return <g className="grass-back">{s}</g>;
 }
 function FrontGrass({ x, y }) {
   const s = [];
@@ -156,12 +156,12 @@ function FrontGrass({ x, y }) {
     s.push(
       <path
         key={i}
-        className={'gf' + (i % 2 ? ' g2' : '')}
+        className={'grass-blade-front' + (i % 2 ? ' is-alternate' : '')}
         d={`M${f1(bx)} ${f1(y + 15)}L${f1(bx + 1.5 + lean)} ${f1(y + 15 - h)}L${f1(bx + 3)} ${f1(y + 15)}Z`}
       />
     );
   }
-  return <g className="grf">{s}</g>;
+  return <g className="grass-front">{s}</g>;
 }
 
 export function Obstacles({ front }) {
@@ -194,7 +194,7 @@ export function Obstacles({ front }) {
 function Shield({ k, cls }) {
   const [x, y] = HC(k);
   return (
-    <g className={'cov ' + cls} transform={`translate(${f1(x - 18)},${f1(y - 15)})`}>
+    <g className={'cover-shield ' + cls} transform={`translate(${f1(x - 18)},${f1(y - 15)})`}>
       <path d="M0 -5.5 5 -3.4V1c0 3.4-2.2 5.4-5 6.6C-2.8 6.4-5 4.4-5 1V-3.4Z" />
     </g>
   );
@@ -208,7 +208,7 @@ function extras() {
   if (u && !u.ko && B.phase === 'player' && !ui.busy && !B.over) {
     B.units.forEach(e => {
       if (e.side === 'e' && !e.ko && coverOf(B, u.pos, e.pos)) {
-        ex.push(<Shield key={'ce' + e.uid} k={uk(e)} cls="en" />);
+        ex.push(<Shield key={'ce' + e.uid} k={uk(e)} cls="is-enemy" />);
       }
     });
     if (ui.mode === 'target') {
@@ -228,10 +228,10 @@ function extras() {
           ex.push(
             <polyline
               key={'ri' + k}
-              className={'rico' + (ui.pk === k ? ' on' : '')}
+              className={'ricochet-line' + (ui.pk === k ? ' is-picked' : '')}
               points={`${f1(A[0])},${f1(A[1])} ${f1(R[0])},${f1(R[1])} ${f1(T[0])},${f1(T[1])}`}
             />,
-            <circle key={'rp' + k} className="rico-p" cx={f1(R[0])} cy={f1(R[1] - 4)} r="2.6" />
+            <circle key={'rp' + k} className="ricochet-point" cx={f1(R[0])} cy={f1(R[1] - 4)} r="2.6" />
           );
         });
       }
@@ -252,7 +252,7 @@ function extras() {
       affected(B, e, m, e.intent.k).forEach(k => {
         const v = uAt(B, k);
         if (v && v.side === 'a' && coverOf(B, e.pos, v.pos)) {
-          ex.push(<Shield key={'ca' + e.uid + k} k={k} cls="al" />);
+          ex.push(<Shield key={'ca' + e.uid + k} k={k} cls="is-ally" />);
         }
       });
     });
@@ -338,7 +338,7 @@ export function Intentions() {
       o.push(
         <path
           key={e.uid}
-          className={'intent' + (ui.selE === e.uid ? ' on' : '')}
+          className={'intent-arrow' + (ui.selE === e.uid ? ' is-selected' : '')}
           d={`M${sx.toFixed(1)} ${sy.toFixed(1)}Q${mx.toFixed(1)} ${my.toFixed(1)} ${ex.toFixed(1)} ${ey.toFixed(1)}`}
           markerEnd="url(#iArr)"
         />
@@ -368,7 +368,7 @@ export function Magnifier() {
 /* v4.73: entry and recall Poké Balls (one-off effects placed by the engine) */
 export function PkLayer() {
   const S = useBoard('pk');
-  return S.pk ? <g className="pk73fx" ref={lref('pk73')} /> : null;
+  return S.pk ? <g className="pokeball-layer" ref={lref('pk73')} /> : null;
 }
 
 /* v4.77: Pokémon names above all tokens (NamesHigh, Units.jsx) */

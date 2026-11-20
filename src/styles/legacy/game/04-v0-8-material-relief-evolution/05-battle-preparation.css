@@ -101,9 +101,6 @@
     border-radius: 14px;
   }
 }
-.glint {
-  fill: rgba(227, 192, 122, 0.35);
-}
 @keyframes mkd {
   to {
     stroke-dashoffset: -60;

@@ -88,7 +88,7 @@ export default function Defs() {
         markerHeight="5"
         orient="auto-start-reverse"
       >
-        <path d="M0 0 10 5 0 10Z" className="arr-h" />
+        <path d="M0 0 10 5 0 10Z" className="intent-arrow-head" />
       </marker>
       <Pat id="tx-grass" t="grass" w="16" h="14" on={on('grass')}>
         <path d="M2 13l1.6-6 1 6M8 12l1-7 1.4 7M12.5 13.5l1.2-5 .8 5" className="pattern-blade" />

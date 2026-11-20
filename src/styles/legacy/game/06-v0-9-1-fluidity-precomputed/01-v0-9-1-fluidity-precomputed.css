@@ -14,7 +14,6 @@
 
 /* no permanent animation that forces a whole SVG to repaint */
 .cr-spin,
-.ember,
 .hp.hseg i::after,
 .energy-pips i.is-filled {
   animation: none !important;

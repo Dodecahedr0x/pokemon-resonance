@@ -82,25 +82,6 @@
   }
 }
 /* slabs */
-.tuft {
-  fill: #2d5a33;
-  opacity: 0.45;
-}
-.pebble {
-  fill: #4a3d2c;
-  opacity: 0.6;
-}
-.ember {
-  fill: #9b7bff;
-}
-.glint {
-  fill: rgba(242, 221, 168, 0.45);
-}
-.axl {
-  font-family: var(--f-m);
-  fill: rgba(212, 175, 106, 0.5);
-  letter-spacing: 0.1em;
-}
 /* range glows */
 @keyframes dgr {
   50% {
@@ -111,13 +92,6 @@
   50% {
     fill: rgba(240, 164, 58, 0.2);
   }
-}
-.intent {
-  stroke: #ff6b6f;
-  filter: drop-shadow(0 0 2px rgba(229, 72, 77, 0.9));
-}
-.arr-h {
-  fill: #ff6b6f;
 }
 /* tokens */
 .f-dmg {

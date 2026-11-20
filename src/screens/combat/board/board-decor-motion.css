@@ -1,0 +1,22 @@
+/* Board › decor without animation (reduced motion, « reduce animations »). */
+
+@media (prefers-reduced-motion: reduce) {
+  :where(.board) .fire-risk {
+    animation: none;
+  }
+  .pokeball-layer {
+    display: none;
+  }
+}
+:where(html.a11y-rm) .pokeball-layer {
+  display: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  :where(.board.painted-tilt) .lake .water-glint {
+    animation: none;
+    opacity: 0.35;
+  }
+  :where(.board.painted-tilt) .lake .water-band {
+    animation: none;
+  }
+}

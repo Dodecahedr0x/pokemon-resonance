@@ -10,36 +10,12 @@ html body #combat #bBoard.painted-tilt {
 #bBoard.painted-tilt #bSvg {
   filter: drop-shadow(0 10px 14px rgba(0, 0, 0, 0.45)) !important;
 }
-#bBoard.painted-tilt #bSvg image.paintedterrain,
-#bBoard.painted-tilt #bSvg .waves-layer {
+#bBoard.painted-tilt #bSvg image.paintedterrain {
   display: none !important;
-}
-html body #bBoard.painted-tilt #bSvg .texture-layer {
-  display: inline !important;
-}
-#bBoard.painted-tilt #bSvg .paintscape,
-#bBoard.painted-tilt #bSvg .tuft,
-#bBoard.painted-tilt #bSvg .pebble,
-#bBoard.painted-tilt #bSvg .field {
-  display: none;
-}
-#bBoard.painted-tilt .slab-lip polygon {
-  fill: #2a1d12;
-  stroke: rgba(0, 0, 0, 0.35);
-  stroke-width: 0.6;
 }
 /* standing tokens: rings lying on the ground, the illustration stands on them */
 #bBoard.painted-tilt #bSvg .token .bdg-s {
   transform: translate(0, -40px) rotate(-7deg);
-}
-#bBoard.painted-tilt .haze-light .night-tint {
-  fill: #2a3a78;
-  mix-blend-mode: multiply;
-  opacity: 0;
-  transition: opacity 1.8s ease;
-}
-#bBoard.painted-tilt .haze-light.n .night-tint {
-  opacity: 0.55;
 }
 #bBoard.painted-tilt {
   isolation: isolate;
@@ -113,42 +89,7 @@ html body #bBoard.painted-tilt #bSvg .texture-layer {
 #bBoard .cloud-shade i:first-child {
   top: 22%;
 }
-#bBoard.painted-tilt .lake .water-band {
-  animation: water-band 4.5s linear infinite;
-}
-#bBoard.painted-tilt .lake.fixe .water-band {
-  animation: none;
-}
-@keyframes water-band {
-  to {
-    transform: translate(var(--dx), var(--dy));
-  }
-}
-#bBoard.painted-tilt .lake .water-glint {
-  fill: #f4fbff;
-  opacity: 0;
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: water-glint 3s ease-in-out infinite;
-}
-#bBoard.painted-tilt .lake.fixe .water-glint {
-  animation: none;
-  opacity: 0.35;
-}
-@keyframes water-glint {
-  0% {
-    opacity: 0;
-    transform: scaleX(0.3);
-  }
-  50% {
-    opacity: 1;
-    transform: scaleX(1);
-  }
-  100% {
-    opacity: 0;
-    transform: scaleX(1.25);
-  }
-}
+
 #bBoard .ambience {
   position: absolute;
   inset: 0;
@@ -246,21 +187,4 @@ html body #bBoard.painted-tilt.entrance-fx #bSvg {
   #bBoard .ambience {
     display: none;
   }
-  #bBoard.painted-tilt .lake .water-glint {
-    animation: none;
-    opacity: 0.35;
-  }
-  #bBoard.painted-tilt .lake .water-band {
-    animation: none;
-  }
-}
-#bBoard.painted-tilt.bio-roche .slab-lip polygon {
-  fill: #4a2e18;
-}
-#bBoard.painted-tilt.bio-ligue .slab-lip polygon,
-#bBoard.painted-tilt.bio-arene .slab-lip polygon {
-  fill: #8c7a5e;
-}
-#bBoard.painted-tilt.bio-tour .slab-lip polygon {
-  fill: #2a2236;
 }

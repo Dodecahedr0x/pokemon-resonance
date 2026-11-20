@@ -47,7 +47,7 @@ const playSound = k => {
 
 /* ---------- drawings: SVG Poké Ball ---------- */
 const ballSvg = r =>
-  `<path class="pk-sbt" d="M${-r} 0A${r} ${r} 0 0 1 ${r} 0Z"/><path class="pk-sbb" d="M${-r} 0A${r} ${r} 0 0 0 ${r} 0Z"/><circle class="pk-sbn" r="${(r * 0.32).toFixed(2)}"/>`;
+  `<path class="pokeball-top" d="M${-r} 0A${r} ${r} 0 0 1 ${r} 0Z"/><path class="pokeball-bottom" d="M${-r} 0A${r} ${r} 0 0 0 ${r} 0Z"/><circle class="pokeball-button" r="${(r * 0.32).toFixed(2)}"/>`;
 
 const sparks = (n, cls) => {
   let h = '';

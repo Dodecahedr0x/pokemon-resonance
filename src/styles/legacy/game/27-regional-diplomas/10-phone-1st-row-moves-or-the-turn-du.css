@@ -277,7 +277,3 @@ html body.fullscreen-mode.compact-battle #cbBattle .bt-side .bt-foot {
 }
 
 /* contrasted board */
-body.board-contrast #bSvg .axl {
-  fill: #f2e6c8 !important;
-  font-weight: 700;
-}

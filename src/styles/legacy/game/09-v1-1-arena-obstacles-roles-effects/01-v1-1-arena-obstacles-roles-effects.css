@@ -58,78 +58,9 @@
   stroke-width: 1;
 }
 /* pillars */
-.pil-sh {
-  fill: rgba(0, 0, 0, 0.6);
-}
-.pil-ba {
-  fill: #3a3b41;
-  stroke: #0b0b0e;
-  stroke-width: 0.8;
-}
-.pil-sf {
-  fill: url(#pilG);
-  stroke: #0b0b0e;
-  stroke-width: 0.8;
-}
-.pil-fl {
-  stroke: rgba(0, 0, 0, 0.35);
-  stroke-width: 0.8;
-  fill: none;
-}
-.pil-rn {
-  fill: #d4af6a;
-  opacity: 0.85;
-}
-.pil-ca {
-  fill: #55565d;
-  stroke: #0b0b0e;
-  stroke-width: 0.8;
-}
-.pil-tp {
-  fill: #8d8e95;
-  stroke: #0b0b0e;
-  stroke-width: 0.6;
-}
 /* tall grass */
-.gb {
-  fill: #2b6431;
-}
-.gb.g2 {
-  fill: #3d8642;
-}
-.gf {
-  fill: #245a2a;
-}
-.gf.g2 {
-  fill: #4a9a4e;
-}
-.grf {
-  opacity: 0.92;
-}
 /* sand */
 /* cover and ricochet */
-.cov path {
-  fill: #e9c97e;
-  stroke: #0b0b0e;
-  stroke-width: 1;
-}
-.cov.al path {
-  fill: #9cc4ff;
-}
-.rico {
-  fill: none;
-  stroke: #f2dda8;
-  stroke-width: 1.2;
-  stroke-dasharray: 3 3;
-  opacity: 0.65;
-}
-.rico.on {
-  opacity: 1;
-  stroke-width: 1.8;
-}
-.rico-p {
-  fill: #fff0c8;
-}
 /* visual effects */
 .fxc {
   position: absolute;

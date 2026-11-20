@@ -20,41 +20,12 @@
 #bBoard.paintedterrain #bSvg image.paintedterrain {
   opacity: 1;
 }
-#bBoard.paintedterrain #bSvg .texture-layer,
-#bBoard.paintedterrain #bSvg .paintscape {
-  display: none;
-}
-#bBoard.paintedterrain #bSvg .axl {
-  fill: #fff4d8 !important;
-  paint-order: stroke;
-  stroke: rgba(10, 8, 4, 0.75);
-  stroke-width: 2.2px;
-  font-weight: 700;
-}
-#bBoard.paintedterrain #bSvg .gb {
-  fill: #3a8a3a;
-}
-#bBoard.paintedterrain #bSvg .gb.g2 {
-  fill: #58aa4a;
-}
-#bBoard.paintedterrain #bSvg .gf {
-  fill: #2f7a32;
-}
-#bBoard.paintedterrain #bSvg .gf.g2 {
-  fill: #6cbc58;
-}
 #bBoard.paintedterrain #bSvg .fd-out {
   stroke: rgba(255, 246, 220, 0.55);
 }
 #bBoard.paintedterrain #bSvg .fd-mid,
 #bBoard.paintedterrain #bSvg .fd-ring {
   stroke: rgba(255, 246, 220, 0.42);
-}
-#bSvg .waves-layer .wv {
-  fill: none;
-  stroke: rgba(230, 248, 255, 0.55);
-  stroke-width: 0.9;
-  stroke-linecap: round;
 }
 .ambient-fx .p {
   position: absolute;

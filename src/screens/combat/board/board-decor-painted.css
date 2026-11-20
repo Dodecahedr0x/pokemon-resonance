@@ -1,0 +1,93 @@
+/* Board › decor on the painted boards (.board.paintedterrain, .board.painted-tilt) and in high contrast: the flat
+   decor gives way to the painting, lakes and the night haze come in, the slab edge takes the biome colour. */
+
+:where(body.board-contrast) .axis-label {
+  font-weight: 700;
+  fill: #f2e6c8;
+}
+:where(.board.paintedterrain) .texture-layer {
+  display: none;
+}
+:where(.board.paintedterrain) .paintscape {
+  display: none;
+}
+:where(.board.paintedterrain) .axis-label {
+  paint-order: stroke;
+  stroke: rgba(10, 8, 4, 0.75);
+  stroke-width: 2.2px;
+  font-weight: 700;
+  fill: #fff4d8;
+}
+:where(.board.paintedterrain) .grass-blade-back {
+  fill: #3a8a3a;
+}
+:where(.board.paintedterrain) .grass-blade-back:where(.is-alternate) {
+  fill: #58aa4a;
+}
+:where(.board.paintedterrain) .grass-blade-front {
+  fill: #2f7a32;
+}
+:where(.board.paintedterrain) .grass-blade-front:where(.is-alternate) {
+  fill: #6cbc58;
+}
+:where(.board.painted-tilt) .waves-layer {
+  display: none;
+}
+:where(.board.painted-tilt) .texture-layer {
+  display: inline;
+}
+:where(.board.painted-tilt) .paintscape {
+  display: none;
+}
+:where(.board.painted-tilt) .terrain-tuft {
+  display: none;
+}
+:where(.board.painted-tilt) .terrain-pebble {
+  display: none;
+}
+:where(.board.painted-tilt) .terrain-field {
+  display: none;
+}
+:where(.board.painted-tilt) .slab-lip polygon {
+  fill: #2a1d12;
+  stroke: rgba(0, 0, 0, 0.35);
+  stroke-width: 0.6;
+}
+:where(.board.painted-tilt) .haze-light .night-tint {
+  fill: #2a3a78;
+  mix-blend-mode: multiply;
+  opacity: 0;
+  transition: opacity 1.8s ease;
+}
+:where(.board.painted-tilt) .haze-light.is-night .night-tint {
+  opacity: 0.55;
+}
+:where(.board.painted-tilt) .lake .water-band {
+  animation: lake-band-drift 4.5s linear infinite;
+}
+:where(.board.painted-tilt) .lake .water-glint {
+  fill: #f4fbff;
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: lake-glint-drift 3s ease-in-out infinite;
+}
+:where(.board.painted-tilt) .lake.is-still .water-glint {
+  animation: none;
+  opacity: 0.35;
+}
+:where(.board.painted-tilt) .lake.is-still .water-band {
+  animation: none;
+}
+:where(.board.painted-tilt.bio-roche) .slab-lip polygon {
+  fill: #4a2e18;
+}
+:where(.board.painted-tilt.bio-ligue) .slab-lip polygon {
+  fill: #8c7a5e;
+}
+:where(.board.painted-tilt.bio-arene) .slab-lip polygon {
+  fill: #8c7a5e;
+}
+:where(.board.painted-tilt.bio-tour) .slab-lip polygon {
+  fill: #2a2236;
+}

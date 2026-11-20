@@ -14,20 +14,6 @@
     fill: #7a3116;
   }
 }
-.intent {
-  stroke: var(--enemy);
-  stroke-width: 1.6;
-  stroke-dasharray: 4.5 3;
-  fill: none;
-  opacity: 0.85;
-}
-.intent.on {
-  stroke-width: 2.4;
-  opacity: 1;
-}
-.arr-h {
-  fill: var(--enemy);
-}
 @keyframes hitf {
   0%,
   100% {

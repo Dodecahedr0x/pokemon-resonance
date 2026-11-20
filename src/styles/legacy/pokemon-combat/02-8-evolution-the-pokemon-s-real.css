@@ -61,13 +61,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  #bSvg .pk73fx {
-    display: none;
-  }
   #cbBattle .hp i.pk-dr {
     animation: none !important;
   }
-}
-html.a11y-rm #bSvg .pk73fx {
-  display: none !important;
 }

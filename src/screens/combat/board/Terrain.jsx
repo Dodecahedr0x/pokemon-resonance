@@ -40,12 +40,12 @@ export function Painting() {
         {S.waves.map(([x, y], i) => (
           <Fragment key={i}>
             <path
-              className="wv"
+              className="wave"
               style={{ animationDelay: (-i * 0.9).toFixed(1) + 's' }}
               d={`M${(x - 9).toFixed(1)} ${(y - 2).toFixed(1)}q3-2.4 6 0t6 0`}
             />
             <path
-              className="wv"
+              className="wave"
               style={{ animationDelay: (-i * 0.9 - 1.6).toFixed(1) + 's' }}
               d={`M${(x - 3).toFixed(1)} ${(y + 7).toFixed(1)}q3-2.4 6 0t6 0`}
             />
@@ -150,7 +150,7 @@ export function Terrain() {
   const S = useBoard('svg');
   const h = useKeyed(() => (S.stadium ? fieldSvg() : ''), [S.n]);
   return (
-    <g className="field" style={PE}>
+    <g className="terrain-field" style={PE}>
       <SvgHtml html={h} />
     </g>
   );
@@ -175,21 +175,25 @@ export function Decor() {
         o.push(
           <path
             key={k}
-            className="tuft"
+            className="terrain-tuft"
             d={`M${(x - 7).toFixed(1)} ${(y + 14).toFixed(1)} l3 -9 l2 9 l3 -12 l3 12 l2 -8 l2 8Z`}
           />
         );
       } else if (S.bio === 'tour') {
-        o.push(<circle key={k} className="ember" cx={(x + 8).toFixed(1)} cy={(y + 10).toFixed(1)} r="1.6" />);
+        o.push(<circle key={k} className="terrain-ember" cx={(x + 8).toFixed(1)} cy={(y + 10).toFixed(1)} r="1.6" />);
       } else if (S.bio === 'roche') {
         o.push(
-          <path key={k} className="pebble" d={`M${(x - 8).toFixed(1)} ${(y + 13).toFixed(1)} q3 -4 6 0 q3 -3 5 0Z`} />
+          <path
+            key={k}
+            className="terrain-pebble"
+            d={`M${(x - 8).toFixed(1)} ${(y + 13).toFixed(1)} q3 -4 6 0 q3 -3 5 0Z`}
+          />
         );
       } else {
         o.push(
           <path
             key={k}
-            className="glint"
+            className="terrain-glint"
             d={`M${(x + 9).toFixed(1)} ${(y - 12).toFixed(1)}l1 3 3 1-3 1-1 3-1-3-3-1 3-1Z`}
           />
         );
@@ -242,7 +246,7 @@ export function Water() {
   });
   return (
     <g
-      className={'lake' + (E.fixed ? ' fixe' : '')}
+      className={'lake' + (E.fixed ? ' is-still' : '')}
       style={E.keyList.length ? PE : { ...PE, display: 'none' }}
       aria-hidden="true"
       data-k={E.id}
@@ -271,7 +275,7 @@ export function Light() {
   }
   const [W, H] = S.vb;
   return (
-    <g className={'haze-light' + (S.night ? ' n' : '')} style={PE} clipPath="url(#lip-clip)">
+    <g className={'haze-light' + (S.night ? ' is-night' : '')} style={PE} clipPath="url(#lip-clip)">
       <rect className="night-tint" x="0" y="0" width={W} height={H} />
       <rect x="0" y="0" width={W} height={H} fill="url(#haze-gradient)" />
     </g>
@@ -303,7 +307,7 @@ export function Landmarks() {
   return (
     <g style={PE}>
       {(S.ax || base).map(([t, x, y], i) => (
-        <text key={i} className="axl" x={x} y={y}>
+        <text key={i} className="axis-label" x={x} y={y}>
           {t}
         </text>
       ))}
