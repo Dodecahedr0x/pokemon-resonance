@@ -209,10 +209,6 @@
   .battle {
     gap: var(--space-sm);
   }
-  .bt-top {
-    padding: var(--space-sm) var(--space-md);
-    gap: var(--space-sm);
-  }
   .plates {
     display: flex;
     gap: var(--space-sm);

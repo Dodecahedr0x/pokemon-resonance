@@ -1,0 +1,292 @@
+/* Battle screen, top bar (TopBar.jsx): phase, battle name, round, weather and board chips, Voice, ×2 and
+   Abandonner. Three layouts: a tall wrapping bar beside the board (701–1120 px), one 48 px strip above
+   the board (≥ 1121 px), and a two-line floating bar on phones (≤ 700 px). The rows under it are in
+   battle-rule.css. */
+
+.battle-topbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-md);
+  min-height: 48px;
+  padding: var(--space-sm) var(--space-md) var(--space-lg);
+  border-bottom: 1px solid rgba(124, 220, 230, 0.18);
+  background: linear-gradient(90deg, rgba(11, 49, 71, 0.96), rgba(4, 22, 38, 0.96));
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04);
+  color: #eafaff;
+  font-size: 12.5px;
+}
+.battle-topbar-name {
+  color: #ffe478;
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+/* duel: the name of the player whose turn it is */
+.battle-topbar-name b {
+  color: var(--color-text);
+  font-weight: 800;
+}
+.battle-topbar-round {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.battle-topbar-round b {
+  color: var(--color-accent-soft);
+  font-family: var(--font-numeric);
+  font-size: 17px;
+  font-weight: 600;
+  font-stretch: 72%;
+  font-variant-numeric: tabular-nums lining-nums;
+  letter-spacing: -0.01em;
+}
+
+/* ---------- Phase: Placement, À vous, Tour adverse, Résolution, Éveil ---------- */
+.battle-phase {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: var(--space-xs);
+  height: 24px;
+  padding: 0 var(--space-sm);
+  border: 1px solid rgba(227, 192, 122, 0.4);
+  border-radius: 999px;
+  background: rgba(227, 192, 122, 0.1);
+  color: #f0d59c;
+  font: 600 10.5px/1 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.battle-phase[hidden] {
+  display: none;
+}
+.battle-phase i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 8px currentColor;
+}
+.battle-phase[data-ph='deploy'] {
+  border-color: rgba(79, 214, 156, 0.45);
+  background: rgba(79, 214, 156, 0.1);
+  color: #6be3ae;
+}
+.battle-phase[data-ph='enemy'] {
+  border-color: rgba(255, 103, 103, 0.5);
+  background: rgba(255, 103, 103, 0.1);
+  color: #ff8c8c;
+}
+.battle-phase[data-ph='busy'] {
+  border-color: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.05);
+  color: #c2c7d2;
+}
+.battle-phase[data-ph='evo'] {
+  border-color: rgba(99, 164, 255, 0.45);
+  background: rgba(99, 164, 255, 0.1);
+  color: #8fbfff;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .battle-phase[data-ph='enemy'] i {
+    animation: btPh 1.2s ease-in-out infinite;
+  }
+}
+/* the phase also tints the board and the command panel */
+.battle:has(.battle-phase[data-ph='enemy']) .bt-stage::after {
+  background: linear-gradient(180deg, rgba(255, 60, 60, 0.14), rgba(255, 60, 60, 0.03) 55%, transparent);
+  box-shadow: inset 0 0 0 2px rgba(255, 103, 103, 0.4);
+}
+.battle:has(.battle-phase[data-ph='deploy']) .bt-stage::after {
+  background: radial-gradient(80% 45% at 50% 100%, rgba(79, 214, 156, 0.14), transparent 70%);
+  box-shadow: inset 0 0 0 2px rgba(79, 214, 156, 0.35);
+}
+
+/* ---------- Chips: weather, time, wind, mutator, chord, doctrine… (shared .chip) ---------- */
+.battle-topbar-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+.battle-topbar-chips:empty {
+  display: none;
+}
+
+/* ---------- Voice: one diamond per point ---------- */
+.battle-voice {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.battle-voice span {
+  margin-right: var(--space-3xs);
+}
+.battle-voice i {
+  width: 12px;
+  height: 12px;
+  border-radius: 1px;
+  background: #0c0d10;
+  box-shadow: inset 0 0 0 1px rgba(212, 175, 106, 0.5);
+  transform: rotate(45deg);
+  transition: background 0.3s;
+}
+.battle-voice i.is-on {
+  background: radial-gradient(circle at 35% 30%, #fff6da, #f0c766 45%, #b07f2a);
+  box-shadow:
+    0 0 0 1px rgba(255, 241, 199, 0.6),
+    0 0 12px rgba(240, 190, 90, 0.8);
+}
+
+/* ---------- ×2 and Abandonner ---------- */
+.battle-speed {
+  min-width: 40px;
+}
+.battle-speed[aria-pressed='true'] {
+  border-color: rgba(255, 233, 177, 0.8);
+  background: linear-gradient(135deg, #ffe6a0, #c38a3b);
+  color: #1a2025;
+}
+
+@media (max-width: 999px) {
+  .battle-topbar-round,
+  .battle-voice span {
+    font-size: 11px;
+  }
+}
+
+/* ---------- Wide screens: one strip above the board ---------- */
+@media (min-width: 1121px) {
+  .battle-topbar {
+    grid-row: 1;
+    grid-column: 1;
+    flex-wrap: nowrap;
+    gap: var(--space-sm);
+    height: 48px;
+    min-height: 0;
+    padding: 0 var(--space-md);
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .battle-topbar-name {
+    flex: none;
+    font-size: 12.5px;
+  }
+  .battle-topbar-round,
+  .battle-voice,
+  .battle-topbar .b {
+    flex: none;
+  }
+  .battle-topbar-chips {
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    gap: var(--space-xs);
+    overflow: hidden;
+    mask-image: linear-gradient(90deg, #000 calc(100% - 24px), transparent);
+  }
+  .battle-topbar-chips > * {
+    flex: none;
+    white-space: nowrap;
+  }
+  .battle-voice span {
+    display: none;
+  }
+}
+
+/* ---------- Phones: phase, name and Voice, then round, chips, ×2 and Abandonner ---------- */
+@media (max-width: 700px) {
+  .battle-topbar {
+    gap: var(--space-xs) var(--space-sm);
+    min-height: 0;
+    padding: var(--space-xs) var(--space-sm);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 13px;
+    background: rgba(9, 11, 16, 0.72);
+  }
+  /* line break after the Voice */
+  .battle-topbar::after {
+    content: '';
+    flex: 0 0 100%;
+    order: 4;
+    height: 0;
+  }
+  .battle-phase {
+    order: 1;
+  }
+  .battle-topbar-name {
+    flex: 1 1 0;
+    order: 2;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .battle-voice {
+    flex: none;
+    order: 3;
+    margin: 0;
+  }
+  .battle-voice span {
+    display: none;
+  }
+  .battle-topbar-round {
+    flex: none;
+    order: 5;
+    white-space: nowrap;
+  }
+  .battle-topbar-chips {
+    flex: 1 1 0;
+    flex-wrap: nowrap;
+    order: 6;
+    min-width: 0;
+    display: flex;
+    gap: var(--space-2xs);
+    overflow-x: auto;
+    scrollbar-width: none;
+    mask-image: linear-gradient(90deg, #000 calc(100% - 18px), transparent);
+  }
+  .battle-topbar-chips::-webkit-scrollbar {
+    display: none;
+  }
+  .battle-topbar-chips > * {
+    flex: none;
+    padding: var(--space-3xs) var(--space-xs);
+    font-size: 11px;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+  /* the sky banner on the board already shows the time and weather */
+  .battle:has(.board > .sky-banner) .battle-topbar-chips .chip:not(.chip-vent):not(.chip-acc) {
+    display: none;
+  }
+  .battle-speed,
+  .battle-quit {
+    flex: none;
+    height: 36px;
+    min-height: 28px;
+    padding: 0 var(--space-sm);
+    font-size: 11.5px;
+  }
+  .battle-speed {
+    order: 7;
+  }
+  .battle-quit {
+    order: 8;
+  }
+  .battle:has(.battle-phase[data-ph='enemy']) .bt-side {
+    border-top-color: rgba(255, 103, 103, 0.6);
+  }
+  .battle:has(.battle-phase[data-ph='deploy']) .bt-side {
+    border-top-color: rgba(79, 214, 156, 0.55);
+  }
+}

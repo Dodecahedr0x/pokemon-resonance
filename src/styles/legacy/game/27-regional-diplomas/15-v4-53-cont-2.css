@@ -114,28 +114,6 @@
   color: #b8d8c8;
   font-size: 12px;
 }
-#defense-gym-hud {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2xs) var(--space-sm);
-  align-items: center;
-  padding: var(--space-xs) var(--space-sm);
-  margin: var(--space-2xs) 0;
-  border-radius: 12px;
-  background: rgba(10, 40, 30, 0.7);
-  border: 1px solid rgba(120, 220, 160, 0.4);
-  color: #eaf2f8;
-  font-size: 13px;
-}
-#defense-gym-hud span {
-  color: #ff8a9a;
-  letter-spacing: 2px;
-}
-#defense-gym-hud small {
-  flex-basis: 100%;
-  color: #b8d8c8;
-  font-size: 11px;
-}
 
 /* <style id="resonance-result-scroll"> */
 /* v4.69: result screen scrollable by finger (victory included) */
@@ -308,11 +286,6 @@ html body.compact-battle .content {
 html body.compact-battle #combat .bt {
   padding: var(--space-xs) !important;
   border-radius: 18px !important;
-}
-html body.compact-battle #combat .bt-top {
-  padding: var(--space-2xs) var(--space-xs) var(--space-xs) !important;
-  min-height: 0 !important;
-  row-gap: var(--space-2xs) !important;
 }
 html body.compact-battle #cbBattle .plates {
   padding: var(--space-sm) var(--space-3xs) var(--space-3xs) !important;

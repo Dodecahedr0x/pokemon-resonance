@@ -81,7 +81,7 @@ export function init() {
   document.addEventListener('click', e => {
     const a = e.target.closest('#bArena');
     if (a && document.body.classList.contains('compact-battle')) {
-      a.classList.toggle('arena-open');
+      a.classList.toggle('is-open');
     }
   });
   if (window.visualViewport) {
@@ -101,7 +101,7 @@ export function init() {
           ro.observe(x);
         }
       });
-      ['#cbBattle .bt-top', '#cbBattle .bt-foot'].forEach(q => {
+      ['#cbBattle .battle-topbar', '#cbBattle .bt-foot'].forEach(q => {
         const x = document.querySelector(q);
         if (x) {
           ro.observe(x);

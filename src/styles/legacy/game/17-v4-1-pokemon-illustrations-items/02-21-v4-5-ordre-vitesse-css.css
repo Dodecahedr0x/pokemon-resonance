@@ -2,81 +2,6 @@
 /* =====================================================================
    v4.5: Speed order timeline (who plays, in what order, this round)
    ===================================================================== */
-html body #bOrdre[hidden] {
-  display: none;
-}
-html body #bOrdre {
-  display: flex;
-  align-items: center;
-  gap: var(--space-xs);
-  overflow-x: auto;
-  padding: var(--space-xs) var(--space-3xs);
-  scrollbar-width: none;
-}
-html body #bOrdre::-webkit-scrollbar {
-  display: none;
-}
-html body #bOrdre .bo-k {
-  flex: none;
-  font: 700 10px/1 var(--f-m, monospace);
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--mut, #9fb0c4);
-  white-space: nowrap;
-  margin-right: var(--space-3xs);
-}
-html body #bOrdre .bo {
-  flex: none;
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2xs);
-  padding: var(--space-3xs) var(--space-sm) var(--space-3xs) var(--space-3xs);
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: rgba(255, 255, 255, 0.04);
-  font-size: 12px;
-  white-space: nowrap;
-  transition: opacity 0.3s;
-}
-html body #bOrdre .bo .medal {
-  width: 22px;
-  height: 22px;
-  min-width: 22px;
-  flex: none;
-}
-html body #bOrdre .bo b {
-  font: 700 12px/1 var(--f-b, system-ui, sans-serif);
-  letter-spacing: 0;
-  text-transform: none;
-}
-html body #bOrdre .bo.al {
-  border-color: rgba(255, 215, 94, 0.45);
-}
-html body #bOrdre .bo.en {
-  border-color: rgba(239, 111, 108, 0.5);
-}
-html body #bOrdre .bo.now {
-  background: linear-gradient(90deg, rgba(255, 215, 94, 0.3), rgba(255, 215, 94, 0.08));
-  border-color: #ffe17b;
-  box-shadow: 0 0 0 2px rgba(255, 225, 123, 0.25);
-}
-html body #bOrdre .bo.en.now {
-  background: linear-gradient(90deg, rgba(239, 111, 108, 0.32), rgba(239, 111, 108, 0.08));
-  border-color: #ef6f6c;
-  box-shadow: 0 0 0 2px rgba(239, 111, 108, 0.25);
-}
-html body #bOrdre .bo.fait {
-  opacity: 0.42;
-}
-html body #bOrdre .bo.ko b {
-  text-decoration: line-through;
-}
-html body #bOrdre .bo em {
-  font-style: normal;
-  font-size: 10px;
-  font-weight: 700;
-  color: #ffe17b;
-}
 
 /* ==== 22-v4.6-ct-cs.css ==== */
 /* =====================================================================
@@ -191,11 +116,6 @@ html body #bBoard[data-ph='aube'] .b-ciel {
 }
 html body .chip-heure {
   white-space: nowrap;
-}
-html body #bWx {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-xs);
 }
 html body #bBoard svg .fire-risk {
   fill: rgba(255, 122, 44, 0.2);

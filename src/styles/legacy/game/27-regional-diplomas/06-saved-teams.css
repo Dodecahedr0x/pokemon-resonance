@@ -85,9 +85,7 @@ html body #bSvg .tok.dj2 {
   box-shadow: inset 3px 0 0 var(--dj2);
 }
 #bPhase b.dj1,
-#bPhase b.dj2,
-#bScen b.dj1,
-#bScen b.dj2 {
+#bPhase b.dj2 {
   font-weight: 800;
 }
 

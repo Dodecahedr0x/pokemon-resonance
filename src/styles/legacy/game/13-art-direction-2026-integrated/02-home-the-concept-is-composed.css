@@ -244,12 +244,6 @@
   background: linear-gradient(145deg, rgba(10, 39, 55, 0.95), rgba(3, 18, 30, 0.97)) !important;
   border-color: rgba(112, 211, 255, 0.24) !important;
 }
-#combat .bt-arena {
-  border-radius: 20px !important;
-  border: 1px solid rgba(112, 211, 255, 0.3) !important;
-  background: linear-gradient(135deg, rgba(9, 37, 53, 0.95), rgba(4, 19, 31, 0.96)) !important;
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.24) !important;
-}
 #combat .board {
   position: relative !important;
   overflow: hidden !important;

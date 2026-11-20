@@ -247,20 +247,6 @@
   background: rgba(212, 175, 106, 0.06);
 }
 /* synergies */
-.bt-syn {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-xs);
-  align-items: center;
-  padding: var(--space-sm) var(--space-md);
-  border-bottom: 1px solid rgba(212, 175, 106, 0.12);
-}
-.bt-syn[hidden] {
-  display: none;
-}
-.bt-syn .lbl-s {
-  margin-right: var(--space-2xs);
-}
 .syn-c {
   display: inline-flex;
   align-items: center;

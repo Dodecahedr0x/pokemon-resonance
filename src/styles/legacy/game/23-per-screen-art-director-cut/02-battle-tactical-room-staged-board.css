@@ -33,15 +33,6 @@
     0 28px 65px rgba(0, 0, 0, 0.4),
     inset 0 1px rgba(255, 255, 255, 0.08) !important;
 }
-#combat .bt-top {
-  padding: var(--space-sm) var(--space-md) var(--space-lg) !important;
-  color: #c5e3e9 !important;
-  border-bottom: 1px solid rgba(130, 213, 225, 0.16) !important;
-}
-#combat .bt-arena {
-  border-radius: 16px !important;
-  overflow: hidden;
-}
 #combat .board {
   position: relative !important;
   overflow: hidden !important;

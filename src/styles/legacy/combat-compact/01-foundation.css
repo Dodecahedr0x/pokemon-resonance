@@ -6,57 +6,6 @@
    and take precedence over the previous layers of game.css (same properties, often with !important). */
 
 /* ---------- phase badge (all sizes) ---------- */
-.bt-ph {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-xs);
-  flex: none;
-  height: 24px;
-  padding: 0 var(--space-sm);
-  border-radius: 999px;
-  font: 600 10.5px/1 var(--f-m, ui-monospace, monospace);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  color: #f0d59c;
-  background: rgba(227, 192, 122, 0.1);
-  border: 1px solid rgba(227, 192, 122, 0.4);
-}
-.bt-ph[hidden] {
-  display: none !important;
-}
-.bt-ph i {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: currentColor;
-  box-shadow: 0 0 8px currentColor;
-}
-.bt-ph[data-ph='deploy'] {
-  color: #6be3ae;
-  background: rgba(79, 214, 156, 0.1);
-  border-color: rgba(79, 214, 156, 0.45);
-}
-.bt-ph[data-ph='enemy'] {
-  color: #ff8c8c;
-  background: rgba(255, 103, 103, 0.1);
-  border-color: rgba(255, 103, 103, 0.5);
-}
-.bt-ph[data-ph='busy'] {
-  color: #c2c7d2;
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.15);
-}
-.bt-ph[data-ph='evo'] {
-  color: #8fbfff;
-  background: rgba(99, 164, 255, 0.1);
-  border-color: rgba(99, 164, 255, 0.45);
-}
-@media (prefers-reduced-motion: no-preference) {
-  .bt-ph[data-ph='enemy'] i {
-    animation: btPh 1.2s ease-in-out infinite;
-  }
-}
 @keyframes btPh {
   50% {
     opacity: 0.35;
@@ -77,14 +26,6 @@
   transition:
     background 0.4s,
     box-shadow 0.4s;
-}
-#cbBattle:has(.bt-ph[data-ph='enemy']) .bt-stage::after {
-  background: linear-gradient(180deg, rgba(255, 60, 60, 0.14), rgba(255, 60, 60, 0.03) 55%, transparent);
-  box-shadow: inset 0 0 0 2px rgba(255, 103, 103, 0.4);
-}
-#cbBattle:has(.bt-ph[data-ph='deploy']) .bt-stage::after {
-  background: radial-gradient(80% 45% at 50% 100%, rgba(79, 214, 156, 0.14), transparent 70%);
-  box-shadow: inset 0 0 0 2px rgba(79, 214, 156, 0.35);
 }
 
 /* ================= desktop ================= */
@@ -169,77 +110,6 @@
     border-radius: 18px !important;
     overflow: hidden !important;
   }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-top {
-    grid-row: 1;
-    grid-column: 1;
-    display: flex !important;
-    flex-wrap: nowrap !important;
-    align-items: center;
-    gap: var(--space-sm) !important;
-    height: 48px;
-    min-height: 0 !important;
-    padding: 0 var(--space-md) !important;
-    overflow: hidden;
-    white-space: nowrap;
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-top #bScen {
-    flex: none;
-    font-size: 12.5px !important;
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-top #bRound {
-    flex: none;
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-top #bWx {
-    flex: 1 1 0;
-    min-width: 0;
-    display: flex !important;
-    gap: var(--space-xs);
-    overflow: hidden;
-    -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 24px), transparent);
-    mask-image: linear-gradient(90deg, #000 calc(100% - 24px), transparent);
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-top #bWx > *,
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-top #bWx .chip {
-    flex: none;
-    white-space: nowrap;
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-top .voix,
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-top .b {
-    flex: none;
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-top .voix > span {
-    display: none;
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bSyn {
-    grid-row: 1;
-    grid-column: 2;
-    display: flex;
-    align-items: center;
-    gap: var(--space-xs);
-    height: 48px;
-    margin: 0 !important;
-    padding: 0 var(--space-md) 0 0 !important;
-    border: 0 !important;
-    border-bottom: inherit;
-    background: none !important;
-    white-space: nowrap;
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bSyn[hidden] {
-    display: none !important;
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bSyn .lbl-s {
-    display: none;
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bArena {
-    grid-row: 2;
-    grid-column: 1/-1;
-    margin: 0 !important;
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bOrdre {
-    grid-row: 3;
-    grid-column: 1/-1;
-    margin: 0 !important;
-  }
 
   /* the scene: full-frame board, plates as cards placed at the top and bottom */
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-stage {
@@ -320,14 +190,6 @@
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bBoard > .sky-banner {
     top: 66px !important;
     right: 12px !important;
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #defense-gym-hud {
-    position: absolute;
-    left: 50%;
-    top: 70px;
-    transform: translateX(-50%);
-    z-index: 7;
-    margin: 0 !important;
   }
 
   /* command panel: it fills the column, only its content scrolls if needed */

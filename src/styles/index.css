@@ -40,3 +40,5 @@
 @import '../screens/combat/prep/prep.css' layer(screens);
 @import '../screens/combat/prep/prep-card.css' layer(screens);
 @import '../screens/combat/prep/prep-team.css' layer(screens);
+@import '../screens/combat/battle/battle-topbar.css' layer(screens);
+@import '../screens/combat/battle/battle-rule.css' layer(screens);

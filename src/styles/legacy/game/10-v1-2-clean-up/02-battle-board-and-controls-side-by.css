@@ -160,9 +160,6 @@
 .tr-i:hover {
   color: var(--gold-l);
 }
-.bt-syn {
-  padding: var(--space-xs) var(--space-md);
-}
 /* pages keep no transform: fixed elements stay fixed */
 .page.on {
   animation-fill-mode: backwards;

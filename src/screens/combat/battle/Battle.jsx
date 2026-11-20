@@ -49,7 +49,7 @@ function Defense() {
     return null;
   }
   return (
-    <div id="defense-gym-hud">
+    <div id="defense-gym-hud" className="battle-defense">
       <b>
         Vague {D.w} / {DEF_WAVES}
       </b>

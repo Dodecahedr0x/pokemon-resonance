@@ -10,10 +10,6 @@
   border-radius: 19px !important;
   padding: var(--space-md) !important;
 }
-#combat .bt-top {
-  border-bottom: 1px solid rgba(102, 214, 255, 0.2) !important;
-  padding-bottom: var(--space-sm) !important;
-}
 #combat .board {
   min-height: 360px !important;
   margin: var(--space-md) 0 !important;

@@ -286,14 +286,6 @@ html body .region-dex-m.on img {
 /* --- Pokédex: counters per region --- */
 
 /* --- quick battle --- */
-html body #bFast {
-  min-width: 40px;
-}
-html body #bFast[aria-pressed='true'] {
-  background: linear-gradient(135deg, #ffe6a0, #c38a3b) !important;
-  color: #1a2025 !important;
-  border-color: rgba(255, 233, 177, 0.8) !important;
-}
 
 /* <style id="resonance-quality-pass"> */
 /* v4.29 · Expressive Pokémon: the token's inner group moves, the cell stays in place */

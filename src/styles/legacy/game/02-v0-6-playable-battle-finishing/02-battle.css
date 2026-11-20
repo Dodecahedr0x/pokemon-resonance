@@ -4,12 +4,6 @@
     grid-template-columns: minmax(0, 1fr) 320px;
   }
 }
-.bt-top .voix span {
-  margin-right: var(--space-3xs);
-}
-.bt-top #bWx:empty {
-  display: none;
-}
 .plate {
   font: inherit;
   color: inherit;

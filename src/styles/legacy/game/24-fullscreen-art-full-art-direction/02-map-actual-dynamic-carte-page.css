@@ -98,15 +98,6 @@
     0 32px 80px rgba(0, 0, 0, 0.48),
     inset 0 1px rgba(255, 255, 255, 0.1) !important;
 }
-#combat .bt-top {
-  min-height: 48px;
-  border-bottom: 1px solid rgba(124, 220, 230, 0.18) !important;
-}
-#combat .bt-arena {
-  border: 1px solid rgba(124, 220, 230, 0.24) !important;
-  border-radius: 18px !important;
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.28) !important;
-}
 #combat .board {
   border: 1px solid rgba(124, 232, 238, 0.42) !important;
   border-radius: 22px !important;

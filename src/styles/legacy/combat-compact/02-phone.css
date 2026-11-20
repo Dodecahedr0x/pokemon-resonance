@@ -41,15 +41,6 @@
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt > * {
     flex: none;
   }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-top {
-    padding: var(--space-xs) var(--space-sm) !important;
-    border-radius: 13px;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    background: rgba(9, 11, 16, 0.72) !important;
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bSyn {
-    display: none !important;
-  }
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-stage {
     flex: 1 1 auto;
     min-height: 0;
@@ -142,12 +133,6 @@
         )
         border-box;
     box-shadow: 0 -20px 40px -20px #000;
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle:has(.bt-ph[data-ph='enemy']) .bt-side {
-    border-top-color: rgba(255, 103, 103, 0.6);
-  }
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle:has(.bt-ph[data-ph='deploy']) .bt-side {
-    border-top-color: rgba(79, 214, 156, 0.55);
   }
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .bt-side #bPanel {
     flex: 1 1 auto;

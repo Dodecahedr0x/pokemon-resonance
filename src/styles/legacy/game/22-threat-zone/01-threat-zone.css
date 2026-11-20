@@ -244,36 +244,6 @@ html body #route .rt-sign {
   backdrop-filter: blur(8px);
 }
 /* Gyms: each environment keeps its own colors and rules */
-html body #bArena {
-  position: relative;
-  overflow: hidden;
-  isolation: isolate;
-  border: 1px solid rgba(244, 204, 112, 0.35) !important;
-  border-radius: 15px !important;
-  background:
-    radial-gradient(ellipse at 15% 0%, rgba(115, 217, 244, 0.16), transparent 50%),
-    linear-gradient(115deg, rgba(14, 42, 61, 0.98), rgba(7, 20, 32, 0.96)) !important;
-  box-shadow:
-    0 12px 30px rgba(0, 0, 0, 0.28),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-}
-html body #bArena:after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0.3;
-  background: repeating-linear-gradient(
-    135deg,
-    transparent 0 18px,
-    rgba(255, 255, 255, 0.045) 19px,
-    transparent 20px 38px
-  );
-}
-html body #bArena > * {
-  position: relative;
-  z-index: 1;
-}
 html body .arena {
   border-radius: 18px !important;
   overflow: hidden;

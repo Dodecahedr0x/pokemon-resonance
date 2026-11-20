@@ -27,8 +27,8 @@ export function BtTop() {
   const on = v > 0 && B;
   const D = B && B.duel433;
   return (
-    <div className="bt-top">
-      <b id="bScen">
+    <div className="battle-topbar">
+      <b id="bScen" className="battle-topbar-name">
         {!on ? null : D && !B.over ? (
           <>
             Duel · <b className={'dj' + D.j}>{D.names[D.j - 1]}</b>
@@ -37,7 +37,7 @@ export function BtTop() {
           SCEN[B.sc].n
         )}
       </b>
-      <span id="bRound">
+      <span id="bRound" className="battle-topbar-round">
         {on && (
           <>
             Manche <b>{B.round}</b> / {B.lim}
@@ -45,19 +45,21 @@ export function BtTop() {
         )}
       </span>
       <Phase />
-      <span id="bWx">{on && <Chips />}</span>
-      <span className="voix" id="bVoix">
+      <span id="bWx" className="battle-topbar-chips">
+        {on && <Chips />}
+      </span>
+      <span className="battle-voice" id="bVoix">
         {on && (
           <>
             <span>Voix</span>
             {Array.from({ length: B.vmax }, (_, i) => (
-              <i key={i} className={i < B.voice ? 'on' : ''} />
+              <i key={i} className={i < B.voice ? 'is-on' : ''} />
             ))}
           </>
         )}
       </span>
       <Quick />
-      <button className="b b-sm b-ghost" id="bQuit" type="button">
+      <button className="b b-sm b-ghost battle-quit" id="bQuit" type="button">
         Abandonner
       </button>
     </div>
@@ -87,7 +89,7 @@ function Phase() {
   useBattleVersion('top');
   const ph = phaseOf(B);
   return (
-    <span className="bt-ph" data-ph={ph || 'none'} hidden={!ph}>
+    <span className="battle-phase" data-ph={ph || 'none'} hidden={!ph}>
       <i aria-hidden="true" />
       {ph ? (B.duel433 && ph === 'own' ? B.duel433.names[B.duel433.j - 1] : PHASE_T[ph]) : null}
     </span>
@@ -99,7 +101,7 @@ function Quick() {
   const v = useBattleVersion('fast');
   return (
     <button
-      className="b b-sm b-ghost bfast"
+      className="b b-sm b-ghost battle-speed"
       id="bFast"
       type="button"
       aria-pressed={v > 0 ? !!PREF.fast : false}
@@ -149,7 +151,7 @@ export function Synergies() {
   }
   const L2 = B ? (B.syn || []).map(k => SYN.find(x => x.k === k)).filter(Boolean) : [];
   return (
-    <div className="bt-syn" id="bSyn" hidden={!L2.length}>
+    <div className="battle-synergies" id="bSyn" hidden={!L2.length}>
       {L2.length > 0 && (
         <>
           <span className="lbl-s">Synergies</span>
@@ -186,10 +188,10 @@ export function Rule() {
   }
   const R = cur || last;
   return (
-    <div className="bt-arena" id="bArena" hidden={!cur}>
+    <div className="battle-rule" id="bArena" hidden={!cur}>
       {v && R ? (
         <>
-          <span className="ba-b">
+          <span className="battle-rule-badge">
             <Html html={badgeSvg(R.gi, GYMS[R.gi].t, 'ba' + R.gi)} />
           </span>
           <span>
@@ -227,7 +229,7 @@ export function Timeline() {
         prio = u.side === 'e' && u.intent && MV[u.intent.mv].prio;
       rows.push({
         i,
-        cls: `bo ${u.side === 'a' ? 'al' : 'en'}${u === now ? ' now' : ''}${doneFlag ? ' fait' : ''}${u.ko ? ' ko' : ''}`,
+        cls: `battle-order-unit ${u.side === 'a' ? 'is-ally' : 'is-enemy'}${u === now ? ' is-current' : ''}${doneFlag ? ' is-done' : ''}${u.ko ? ' is-ko' : ''}`,
         title: 'Vitesse ' + String(B.queueSpeeds[i]).replace('.', ','),
         t: u.t,
         n: u.n,
@@ -241,10 +243,10 @@ export function Timeline() {
   }
   const F = cur || last;
   return (
-    <div className="b-ordre" id="bOrdre" hidden={!vis} aria-label="Ordre de jeu de la manche">
+    <div className="battle-order" id="bOrdre" hidden={!vis} aria-label="Ordre de jeu de la manche">
       {v && F ? (
         <>
-          <span className="bo-k">Ordre · manche {F.round}</span>
+          <span className="battle-order-label">Ordre · manche {F.round}</span>
           {F.rows.map(r => (
             <span key={r.i} className={r.cls} title={r.title}>
               <Html html={medal(r.t, 'sm')} />

@@ -19,15 +19,6 @@
   background: linear-gradient(145deg, rgba(8, 32, 51, 0.98), rgba(3, 16, 28, 0.99)) !important;
   box-shadow: 0 28px 60px rgba(0, 0, 0, 0.34) !important;
 }
-#combat .bt-top {
-  background: linear-gradient(90deg, rgba(11, 49, 71, 0.96), rgba(4, 22, 38, 0.96)) !important;
-  border-bottom: 1px solid rgba(108, 216, 248, 0.2) !important;
-  padding: var(--space-lg) var(--space-lg) !important;
-}
-#combat .bt-top b#bScen {
-  color: #ffe478 !important;
-  letter-spacing: 0.08em !important;
-}
 #combat .board {
   margin: var(--space-md) !important;
   padding: var(--space-sm) !important;
@@ -55,10 +46,6 @@
   position: relative;
   z-index: 1;
   filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.28));
-}
-#combat .bt-arena {
-  border-color: rgba(109, 221, 255, 0.28) !important;
-  background: linear-gradient(100deg, rgba(14, 58, 79, 0.88), rgba(5, 24, 40, 0.9)) !important;
 }
 #combat .pt {
   border: 1px solid rgba(108, 216, 248, 0.24) !important;
