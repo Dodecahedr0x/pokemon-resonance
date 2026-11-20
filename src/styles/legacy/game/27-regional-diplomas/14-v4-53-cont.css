@@ -119,70 +119,6 @@ body.board-theme-cristal .board {
   font-size: 12px;
   line-height: 1.35;
 }
-.last-batch {
-  display: grid;
-  gap: var(--space-xs);
-  justify-items: start;
-  margin: var(--space-sm) 0 var(--space-md);
-}
-.last-batch small {
-  color: #b8cddb;
-  font-size: 12px;
-}
-.last-batch .v4-btn {
-  min-width: 180px;
-}
-.tm-showcase {
-  padding: var(--space-md) var(--space-md);
-  display: grid;
-  gap: var(--space-sm);
-  margin-top: var(--space-sm);
-}
-.tm-showcase h3 {
-  margin: 0;
-  font-size: 13px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #ffd45b;
-}
-.item-chip-g,
-.tm-chip-g {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-xs);
-}
-.item-chip {
-  width: 34px;
-  height: 34px;
-  display: grid;
-  place-items: center;
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: #586a78;
-  background: rgba(255, 255, 255, 0.03);
-}
-.item-chip.on {
-  color: #ffd45b;
-  border-color: rgba(255, 212, 91, 0.55);
-  background: rgba(255, 212, 91, 0.1);
-}
-.tm-chip {
-  min-width: 34px;
-  height: 26px;
-  padding: 0 var(--space-xs);
-  display: grid;
-  place-items: center;
-  border-radius: 8px;
-  font: 800 11px/1 var(--f-d);
-  color: #6d7f8c;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.03);
-}
-.tm-chip.on {
-  color: #0a1d2b;
-  background: var(--c);
-  border-color: transparent;
-}
 @media (prefers-reduced-motion: reduce) {
   .dailygift:not(.done) {
     animation: none;
@@ -190,30 +126,6 @@ body.board-theme-cristal .board {
 }
 
 /* <style id="resonance-quest-locks"> */
-.quest-log.lock {
-  opacity: 0.55;
-}
-.quest-log em {
-  display: block;
-  margin-top: var(--space-2xs);
-  font-style: normal;
-  font-size: 12px;
-  color: #9fd8ff;
-}
-.trophy-room-b {
-  display: block;
-  height: 6px;
-  border-radius: 4px;
-  background: rgba(255, 255, 255, 0.12);
-  margin: var(--space-xs) 0 var(--space-2xs);
-  overflow: hidden;
-}
-.trophy-room-b u {
-  display: block;
-  height: 100%;
-  background: linear-gradient(90deg, #43c0ff, #ffd45b);
-  text-decoration: none;
-}
 
 /* <style id="resonance-secret-places-ui"> */
 .mk.secret-places {
@@ -265,34 +177,7 @@ body.board-theme-cristal .board {
 .buddy-l {
   opacity: 0.55;
 }
-.egg-shop .cp-bar {
-  margin-top: var(--space-xs);
-}
 
 /* <style id="resonance-forms-ui"> */
 
 /* <style id="resonance-talents-ui"> */
-.talent-tree-p {
-  display: inline-flex;
-  gap: var(--space-2xs);
-  margin-left: var(--space-sm);
-  vertical-align: middle;
-}
-.talent-tree-p i {
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  display: inline-block;
-}
-.talent-tree-p i.on {
-  background: #ffd45b;
-  border-color: #ffd45b;
-}
-.talent-tree em {
-  display: block;
-  color: #9fe8ff;
-  font-size: 12px;
-  font-style: normal;
-  margin-top: var(--space-3xs);
-}

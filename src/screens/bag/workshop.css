@@ -1,0 +1,136 @@
+/* Workshop tabs of the Shop (Workshop.jsx: recipes, draw, finds showcase, item quests, trophies, eggs, talents)
+   and the peddler (Peddler.jsx). Rows are shared .item-row components; buttons are the shared .v4-btn.
+   Clicks: engine listeners on data-craft-bench, data-quest-log, data-trophy-room, data-egg-shop,
+   data-talent-tree and data-wanderer. */
+
+/* peddler's line: "<b>Name</b>, le colporteur a posé sa carriole…" */
+.bag-peddler-intro b {
+  color: #ffd45b;
+}
+
+/* ---------- Draw: last batch won, draw button and draws left ---------- */
+.workshop-draw,
+.workshop-draw-last {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-xs);
+  margin: var(--space-sm) 0 var(--space-md);
+}
+.workshop-draw small {
+  color: #b8cddb;
+  font-size: 12px;
+}
+.workshop-draw .v4-btn {
+  min-width: 180px;
+}
+
+/* ---------- Finds showcase: held items found, TMs and HMs seen ---------- */
+.workshop-showcase {
+  display: grid;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
+  padding: var(--space-md);
+}
+.workshop-showcase h3 {
+  margin: 0;
+  color: #ffd45b;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.workshop-showcase-items,
+.workshop-showcase-tms {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+/* a held item's icon, lit once found */
+.workshop-showcase-item {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.03);
+  color: #586a78;
+}
+.workshop-showcase-item.is-on {
+  border-color: rgba(255, 212, 91, 0.55);
+  background: rgba(255, 212, 91, 0.1);
+  color: #ffd45b;
+}
+/* a TM / HM number, in its type colour (--c, inline style) once seen */
+.workshop-showcase-tm {
+  display: grid;
+  place-items: center;
+  min-width: 34px;
+  height: 26px;
+  padding: 0 var(--space-xs);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  color: #6d7f8c;
+  font: 800 11px/1 var(--font-display);
+}
+.workshop-showcase-tm.is-on {
+  border-color: transparent;
+  background: var(--c);
+  color: #0a1d2b;
+}
+
+/* ---------- Item quests: what to bring ---------- */
+.workshop-quest em {
+  display: block;
+  margin-top: var(--space-2xs);
+  color: #9fd8ff;
+  font-size: 12px;
+  font-style: normal;
+}
+
+/* ---------- Trophies: progress bar ---------- */
+.workshop-trophy-bar {
+  display: block;
+  height: 6px;
+  margin: var(--space-xs) 0 var(--space-2xs);
+  overflow: hidden;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.12);
+}
+.workshop-trophy-bar u {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #43c0ff, #ffd45b);
+  text-decoration: none;
+}
+
+/* ---------- Eggs: incubation bar (shared .cp-bar) ---------- */
+.workshop-egg .cp-bar {
+  margin-top: var(--space-xs);
+}
+
+/* ---------- Talents: rank pips, next rank ---------- */
+.workshop-talent-pips {
+  display: inline-flex;
+  gap: var(--space-2xs);
+  margin-left: var(--space-sm);
+  vertical-align: middle;
+}
+.workshop-talent-pips i {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+}
+.workshop-talent-pips i.is-on {
+  border-color: #ffd45b;
+  background: #ffd45b;
+}
+.workshop-talent em {
+  display: block;
+  margin-top: var(--space-3xs);
+  color: #9fe8ff;
+  font-size: 12px;
+  font-style: normal;
+}

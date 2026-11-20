@@ -36,7 +36,7 @@ export default function Peddler() {
             Reste {left} · Dans le Sac : {bagN(k)}
           </em>
         </div>
-        <div className="v4-buy">
+        <div>
           <button
             type="button"
             className="v4-btn"
@@ -65,7 +65,7 @@ export default function Peddler() {
           <p>{ITEMS2[A.th].d}</p>
           <em>Objet tenu, un seul exemplaire</em>
         </div>
-        <div className="v4-buy">
+        <div>
           <button
             type="button"
             className="v4-btn"
@@ -80,7 +80,7 @@ export default function Peddler() {
   }
   return (
     <>
-      <p className="v4-note wanderer">
+      <p className="v4-note bag-peddler-intro">
         <b>{A.displayName}, le colporteur</b> a posé sa carriole aujourd’hui. Stock limité, il repart à minuit.
       </p>
       {A.pick.map(row)}

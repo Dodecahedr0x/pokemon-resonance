@@ -184,7 +184,7 @@ export function SeasonEvent({ d }) {
             </b>
             <p>{x.txt}</p>
           </div>
-          <div className="v4-buy">
+          <div>
             <button type="button" className="v4-btn" data-season-event={i} disabled={!(x.ok && !x.got)}>
               {x.got ? 'Reçu' : x.ok ? 'Récupérer' : 'Verrouillé'}
             </button>

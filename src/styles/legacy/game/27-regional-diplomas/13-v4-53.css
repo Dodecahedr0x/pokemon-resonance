@@ -276,9 +276,6 @@
   opacity: 0.45;
   cursor: not-allowed;
 }
-.wanderer b {
-  color: #ffd45b;
-}
 @media (prefers-reduced-motion: reduce) {
   .route-event:not(.done) {
     animation: none;

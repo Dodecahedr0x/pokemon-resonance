@@ -36,3 +36,4 @@
 @import '../screens/bag/bag.css' layer(screens);
 @import '../screens/bag/bag-categories.css' layer(screens);
 @import '../screens/bag/bag-counter.css' layer(screens);
+@import '../screens/bag/workshop.css' layer(screens);

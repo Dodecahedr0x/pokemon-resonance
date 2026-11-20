@@ -39,11 +39,12 @@ import { Disc } from './Items.jsx';
 import { space } from '../../lib/theme.js';
 
 // Workshop row: text on the left, engine button on the right (data-craft-bench, data-quest-log…).
+// Styles: workshop.css and the shared item row.
 const Line = ({ cls = '', before: previous = null, children, actionButton: button }) => (
-  <article className={'item-row ' + cls}>
+  <article className={('item-row ' + cls).trim()}>
     {previous}
     <div className="item-row-text">{children}</div>
-    <div className="v4-buy">{button}</div>
+    <div>{button}</div>
   </article>
 );
 
@@ -60,7 +61,7 @@ function Workshop() {
       {RECIPES.map(r => (
         <Line
           key={r.id}
-          cls="craft-bench-r"
+
           actionButton={
             <button
               type="button"
@@ -89,7 +90,7 @@ function Workshop() {
           return (
             <Line
               key={k}
-              cls="craft-bench-r"
+
               before={<Disc it={SHOP[k]} />}
               actionButton={
                 <button type="button" className="v4-btn" data-craft-bench={'fus:' + k} disabled={!ok}>
@@ -115,7 +116,7 @@ function Workshop() {
       {dailyOrders().map(c => (
         <Line
           key={c.id}
-          cls={'craft-bench-r' + (c.done ? ' own' : '')}
+          cls={c.done ? 'is-owned' : ''}
           actionButton={
             <button
               type="button"
@@ -151,11 +152,11 @@ function Draw() {
         fixé à l’avance : inutile de recharger la page.
       </p>
       {st.last ? (
-        <p className="v4-note last-batch">
+        <p className="v4-note workshop-draw-last">
           Dernier lot : <b>{st.last}</b>
         </p>
       ) : null}
-      <div className="last-batch">
+      <div className="workshop-draw">
         <button
           type="button"
           className="v4-btn"
@@ -178,7 +179,7 @@ function Showcase() {
     all = [...cts, ...cs],
     nc = all.filter(k => seen[k]).length;
   return (
-    <section className="v4-panel tm-showcase">
+    <section className="v4-panel workshop-showcase">
       <h3>Vitrine des trouvailles</h3>
       <p className="v4-note">
         Objets tenus :{' '}
@@ -190,13 +191,13 @@ function Showcase() {
           {nc} / {cts.length + cs.length}
         </b>
       </p>
-      <div className="item-chip-g">
+      <div className="workshop-showcase-items">
         {held.map(k => {
           const own = PROFILE.items.includes(k);
           return (
             <span
               key={k}
-              className={'item-chip' + (own ? ' on' : '')}
+              className={'workshop-showcase-item' + (own ? ' is-on' : '')}
               title={ITEMS2[k].n + (own ? '' : ' (à trouver)')}
             >
               <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.6">
@@ -206,11 +207,11 @@ function Showcase() {
           );
         })}
       </div>
-      <div className="tm-chip-g">
+      <div className="workshop-showcase-tms">
         {all.map((k, i) => (
           <span
             key={i}
-            className={'tm-chip' + (seen[k] ? ' on' : '')}
+            className={'workshop-showcase-tm' + (seen[k] ? ' is-on' : '')}
             title={SHOP[k].n + (seen[k] ? '' : ' (à trouver)')}
             style={{ '--c': tc(MV[SHOP[k].mv].t) }}
           >
@@ -244,7 +245,7 @@ function QuestItems() {
         return (
           <Line
             key={q.id}
-            cls={'quest-log' + (done ? ' own' : '') + (lock ? ' lock' : '')}
+            cls={'workshop-quest' + (done ? ' is-owned' : '') + (lock ? ' is-locked' : '')}
             actionButton={
               <button
                 type="button"
@@ -283,7 +284,7 @@ function Trophies() {
         return (
           <Line
             key={T.id}
-            cls={'trophy-room' + (done ? ' own' : '')}
+            cls={done ? 'is-owned' : ''}
             actionButton={
               <button type="button" className="v4-btn" data-trophy-room={T.id} disabled={!(ok && !done)}>
                 {done ? 'Récupéré' : ok ? 'Réclamer' : '—'}
@@ -293,7 +294,7 @@ function Trophies() {
             <b>
               {T.t} · {T.n}
             </b>
-            <i className="trophy-room-b">
+            <i className="workshop-trophy-bar">
               <u style={{ width: `${Math.round((v / T.n) * 100)}%` }} />
             </i>
             <p>
@@ -325,7 +326,7 @@ function Eggs() {
             const O = EGG_SHOP[e.k],
               p = Math.round(((e.tot - e.left) / e.tot) * 100);
             return (
-              <article key={i} className="item-row egg-shop">
+              <article key={i} className="item-row workshop-egg">
                 <div className="item-row-text">
                   <b>{O.n}</b>
                   <p>
@@ -347,7 +348,7 @@ function Eggs() {
         return (
           <Line
             key={k}
-            cls="egg-shop"
+            cls="workshop-egg"
             actionButton={
               <button type="button" className="v4-btn" data-egg-shop={k} disabled={!ok}>
                 {O.price}
@@ -383,7 +384,7 @@ function Talents() {
             return (
               <Line
                 key={t.id}
-                cls="talent-tree"
+                cls="workshop-talent"
                 actionButton={
                   <button type="button" className="v4-btn" data-talent-tree={t.id} disabled={r >= TALENT_MAX || !pts}>
                     {r >= TALENT_MAX ? 'Max' : '+1'}
@@ -392,9 +393,9 @@ function Talents() {
               >
                 <b>
                   {t.n}{' '}
-                  <span className="talent-tree-p">
+                  <span className="workshop-talent-pips">
                     {[1, 2, 3].map(i => (
-                      <i key={i} className={i <= r ? 'on' : ''} />
+                      <i key={i} className={i <= r ? 'is-on' : undefined} />
                     ))}
                   </span>
                 </b>
