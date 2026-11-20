@@ -257,13 +257,13 @@ export function battleStatesHtml(u) {
   }
   const o = [];
   if (u.vigilance) {
-    o.push('<span class="ux vigil-hint">Vigilance : frappe le premier adversaire à sa portée</span>');
+    o.push('<span class="battle-unit-tag is-vigilant">Vigilance : frappe le premier adversaire à sa portée</span>');
   }
   if (isSurrounded(B, u)) {
-    o.push('<span class="ux encircled">Encerclé : −1 Mouvement, +20 % de dégâts reçus</span>');
+    o.push('<span class="battle-unit-tag is-encircled">Encerclé : −1 Mouvement, +20 % de dégâts reçus</span>');
   }
   if (u.bossPhase > 1) {
-    o.push(`<span class="ux phase-badge">Phase ${u.bossPhase}</span>`);
+    o.push(`<span class="battle-unit-tag is-boss-phase">Phase ${u.bossPhase}</span>`);
   }
   return o.join('');
 }

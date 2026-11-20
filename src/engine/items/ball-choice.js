@@ -42,7 +42,7 @@ const ballReqOk = (k, e) => {
 
 /* Ball choice in the capture panel */
 export const ballChips = () =>
-  `<div class="v4-balls" role="group" aria-label="Choisir une Ball">${BALLS.map(k => `<button type="button" class="v4-ball${k === CAP_K ? ' on' : ''}" data-ball="${k}" aria-pressed="${k === CAP_K}" ${bagN(k) ? '' : 'disabled'}><img src="${ITM(SHOP[k].img)}" alt="" loading="lazy"><b>${SHOP[k].sn}</b><em>×${bagN(k)}</em></button>`).join('')}</div>${BALLS.some(k => bagN(k)) ? '' : '<p class="bp-hint">Plus aucune Ball : passez à la Boutique.</p>'}`;
+  `<div class="battle-balls" role="group" aria-label="Choisir une Ball">${BALLS.map(k => `<button type="button" class="battle-ball${k === CAP_K ? ' is-selected' : ''}" data-ball="${k}" aria-pressed="${k === CAP_K}" ${bagN(k) ? '' : 'disabled'}><img src="${ITM(SHOP[k].img)}" alt="" loading="lazy"><b>${SHOP[k].sn}</b><em>×${bagN(k)}</em></button>`).join('')}</div>${BALLS.some(k => bagN(k)) ? '' : '<p class="battle-hint">Plus aucune Ball : passez à la Boutique.</p>'}`;
 
 export const BALLS = ['poke', 'super', 'hyper', 'master'];
 

@@ -204,48 +204,6 @@
   stroke-linecap: round;
   stroke-linejoin: round;
 }
-.bp-role {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  gap: var(--space-sm);
-  align-items: start;
-  font-size: 12.5px;
-  line-height: 1.45;
-  color: var(--tx2);
-  padding: var(--space-sm) var(--space-sm);
-  border-left: 2px solid var(--gold);
-  background: linear-gradient(90deg, rgba(212, 175, 106, 0.08), transparent);
-}
-.bp-role b {
-  color: var(--gold-l);
-  font-weight: 600;
-}
-.bp-role.en {
-  border-left-color: #e5484d;
-  background: linear-gradient(90deg, rgba(229, 72, 77, 0.08), transparent);
-}
-.bp-role.en .ri {
-  stroke: #ff9c9c;
-}
-.bp-hint.hr {
-  color: #9ce0ff;
-}
-.pv-notes {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-xs);
-  margin: var(--space-2xs) 0 var(--space-sm);
-}
-.pv-notes span {
-  font-family: var(--f-m);
-  font-size: 10.5px;
-  letter-spacing: 0.02em;
-  padding: var(--space-3xs) var(--space-sm);
-  border: 1px solid rgba(212, 175, 106, 0.4);
-  color: var(--gold-l);
-  border-radius: 2px;
-  background: rgba(212, 175, 106, 0.06);
-}
 /* synergies */
 .syn-c {
   display: inline-flex;

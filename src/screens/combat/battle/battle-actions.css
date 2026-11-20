@@ -1,7 +1,8 @@
 /* Battle screen, the command panel's buttons (Panel.jsx; the panel itself is in battle-panel.css): the
    Awakening button (and the Forme Résonante one the engine builds, is-resonant), the move cards tinted with
-   their type colour (--c, inline style), and the Voice actions (Esquive, Relance and the engine's
-   Vigilance). Every panel button is at least 44 px tall (battle-panel.css). */
+   their type colour (--c, inline style), the Voice actions (Esquive, Relance and the engine's Vigilance), the
+   energy gauge above the Awakening button and the engine's combined techniques (Duo). Every panel button is
+   at least 44 px tall (battle-panel.css). */
 
 /* ---------- Awakening: target medals, "Éveiller…" and why, cost ---------- */
 .battle-awaken {
@@ -204,6 +205,95 @@
 .battle-voice-action:disabled {
   opacity: 0.38;
   cursor: default;
+}
+
+/* ---------- Awakening and Resonance energy: label and diamonds, then the button ---------- */
+.battle-energy {
+  display: grid;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  border: 1px solid rgba(98, 207, 241, 0.24);
+  border-radius: 18px;
+  background: linear-gradient(145deg, rgba(13, 43, 65, 0.96), rgba(5, 22, 37, 0.97));
+  box-shadow:
+    0 18px 38px rgba(0, 0, 0, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.055);
+}
+.battle-energy-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+}
+/* Expert attack diamonds (rank Experte) */
+.battle-energy.is-expert .lbl-s {
+  color: #e2bdff;
+}
+.battle-energy.is-expert .battle-hint {
+  margin: var(--space-xs) 0 0;
+}
+/* Forme Résonante under way: rounds left */
+.battle-energy.is-resonant {
+  border-color: rgba(201, 166, 255, 0.6);
+  background: linear-gradient(180deg, rgba(150, 110, 255, 0.2), rgba(60, 40, 140, 0.18));
+}
+.battle-energy-turns {
+  color: #e2d2ff;
+  font-size: 13px;
+}
+
+/* ---------- Combined techniques (Duo): both medals, name and why, 2 Voix ---------- */
+.battle-duos {
+  display: grid;
+  gap: var(--space-sm);
+}
+.battle-duo {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-md);
+  width: 100%;
+  padding: var(--space-md);
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background:
+    radial-gradient(120% 140% at 0% 0%, rgba(91, 155, 255, 0.18), transparent 60%) padding-box,
+    linear-gradient(#0e0f12, #0e0f12) padding-box,
+    linear-gradient(135deg, #e8ecf2 0%, #8d939c 26%, #4a4f58 48%, #c9ced6 66%, #6e737c 84%, #dde2ea 100%) border-box;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.battle-duo.is-selected,
+.battle-duo:not(:disabled):hover {
+  background:
+    radial-gradient(120% 140% at 0% 0%, rgba(212, 175, 106, 0.24), transparent 60%) padding-box,
+    linear-gradient(#0e0f12, #0e0f12) padding-box,
+    linear-gradient(135deg, #4b9dbb, #f9d86a 48%, #4d8fa9) border-box;
+}
+.battle-duo:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+.battle-duo b {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.battle-duo em {
+  display: block;
+  color: var(--color-text-secondary);
+  font-size: 12px;
+  font-style: normal;
+}
+.battle-duo-medals {
+  display: inline-flex;
+}
+.battle-duo-medals .medal + .medal {
+  margin-left: calc(var(--space-sm) * -1);
 }
 
 @media (max-width: 999px) {

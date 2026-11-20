@@ -1,0 +1,116 @@
+/* Battle screen, the exact preview of an aimed action (Panel.jsx, Preview): reactions it triggers, notes, one
+   line per Pokémon hit (blue dot for yours, red for opponents) with damage, K.O., status and effects, the
+   warnings, then Annuler / Confirmer. */
+
+.battle-preview {
+  display: grid;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  border: 1px solid rgba(227, 192, 122, 0.35);
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(227, 192, 122, 0.07), rgba(227, 192, 122, 0.02));
+}
+.battle-preview-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-xs);
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+/* "Aperçu exact" */
+.battle-preview-head > span:first-child {
+  margin-right: var(--space-2xs);
+}
+.battle-preview-notes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin: var(--space-2xs) 0 var(--space-sm);
+}
+.battle-preview-notes span {
+  padding: var(--space-3xs) var(--space-sm);
+  border: 1px solid rgba(212, 175, 106, 0.4);
+  border-radius: 2px;
+  background: rgba(212, 175, 106, 0.06);
+  color: var(--color-accent-soft);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.02em;
+}
+
+/* ---------- One line per Pokémon hit ---------- */
+.battle-preview ul {
+  display: grid;
+  gap: var(--space-2xs);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.battle-preview li {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  color: var(--color-text-secondary);
+  font-size: 13px;
+}
+/* your Pokémon's lines keep a centred look from an old shared rule */
+.battle-preview li.is-ally {
+  min-width: 98px;
+  text-align: center;
+}
+.battle-preview li.is-ally b {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 750;
+  text-transform: uppercase;
+}
+.battle-preview li > span:first-child::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: var(--space-xs);
+  border-radius: 50%;
+  background: #5b9bff;
+  vertical-align: 1px;
+}
+.battle-preview li.is-foe > span:first-child::before {
+  background: #e5484d;
+}
+.battle-preview em {
+  color: var(--color-text-muted);
+  font-size: 11.5px;
+  font-style: normal;
+}
+.battle-preview em.is-energy {
+  color: var(--color-accent-soft);
+}
+.battle-preview em.is-evolving {
+  color: #ff9a8a;
+  font-weight: 600;
+}
+
+/* ---------- Warnings and the two buttons ---------- */
+.battle-preview-warning,
+.battle-preview-evolution,
+.battle-preview-win {
+  font-size: 12.5px;
+}
+.battle-preview-warning {
+  color: var(--color-warning);
+}
+.battle-preview-evolution {
+  color: #ff9a8a;
+}
+.battle-preview-win {
+  color: var(--color-positive);
+}
+.battle-preview-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-sm);
+}

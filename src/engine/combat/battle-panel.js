@@ -73,7 +73,7 @@ export function tileCard() {
       row[i] && row[i] !== 'ren' ? `<span class="chip cat-${rxCat(row[i])}"><i></i>${e} → ${RX[row[i]].n}</span>` : ''
     ).join('');
   }
-  return `<div class="tile-i"><div class="ti-h"><b>Case ${'ABCDEFGH'[c]}${r + 1}</b><button type="button" class="b b-sm b-ghost" data-tile="x">Fermer</button></div><p>${tileTip(k)}</p>${rx ? `<div class="ti-rx">${rx}</div>` : ''}</div>`;
+  return `<div class="battle-tile"><div class="battle-tile-head"><b>Case ${'ABCDEFGH'[c]}${r + 1}</b><button type="button" class="b b-sm b-ghost" data-tile="x">Fermer</button></div><p>${tileTip(k)}</p>${rx ? `<div class="battle-tile-reactions">${rx}</div>` : ''}</div>`;
 }
 
 export function unitExtras(u) {
@@ -83,30 +83,30 @@ export function unitExtras(u) {
   }
   if (u.item) {
     o.push(
-      `<span class="ux it" title="${ITEMS2[u.item].d}"><svg viewBox="0 0 24 24"><path d="${ITEMS2[u.item].i}"/></svg>${ITEMS2[u.item].n}${u.item === 'ceinture' && !u.belt ? ' · utilisée' : ''}</span>`
+      `<span class="battle-unit-tag is-item" title="${ITEMS2[u.item].d}"><svg viewBox="0 0 24 24"><path d="${ITEMS2[u.item].i}"/></svg>${ITEMS2[u.item].n}${u.item === 'ceinture' && !u.belt ? ' · utilisée' : ''}</span>`
     );
   }
   if (u.fat) {
-    o.push(`<span class="ux fa">Fatigué · −1 Mouvement</span>`);
+    o.push(`<span class="battle-unit-tag is-tired">Fatigué · −1 Mouvement</span>`);
   }
   const mates = B.units.filter(x => x !== u && !x.ko && x.side === 'a' && linkLvl(B, u.sp, x.sp) > 0);
   mates.forEach(x => {
     const l = linkLvl(B, u.sp, x.sp),
       adj = hdist(x.pos, u.pos) === 1;
     o.push(
-      `<span class="ux lk${adj && l >= 1 ? ' on' : ''}" title="Soutien : −1 dégât côte à côte. Synchro : +25 % sur les réactions préparées l’un pour l’autre. Duo : technique combinée.">Lien ${LINK_N[l]} · ${BY[x.sp].n}${adj ? ' · côte à côte' : ''}</span>`
+      `<span class="battle-unit-tag is-link${adj && l >= 1 ? ' is-active' : ''}" title="Soutien : −1 dégât côte à côte. Synchro : +25 % sur les réactions préparées l’un pour l’autre. Duo : technique combinée.">Lien ${LINK_N[l]} · ${BY[x.sp].n}${adj ? ' · côte à côte' : ''}</span>`
     );
   });
   const role = roleOf(u),
     RF = ROLEFX[role],
     head = RF
-      ? `<p class="bp-role">${rIco(role)}<span><b>${role} · ${RF.k}.</b> ${RF.d.replace(/^[^:]+ : /, '')}</span></p>`
+      ? `<p class="battle-role-note">${rIco(role)}<span><b>${role} · ${RF.k}.</b> ${RF.d.replace(/^[^:]+ : /, '')}</span></p>`
       : '',
     hr =
       u.hr && u.acted && !u.moved
-        ? `<p class="bp-hint hr">Frappe et repli : touchez une case bleue pour vous replier.</p>`
+        ? `<p class="battle-hint is-retreat">Frappe et repli : touchez une case bleue pour vous replier.</p>`
         : '';
-  return head + hr + (o.length ? `<div class="bp-ux">${o.join('')}</div>` : '');
+  return head + hr + (o.length ? `<div class="battle-unit-tags">${o.join('')}</div>` : '');
 }
 
 export function duoBlock(u) {
@@ -117,7 +117,7 @@ export function duoBlock(u) {
   if (!L2.length) {
     return '';
   }
-  return `<div class="bp-duo">${L2.map(p => {
+  return `<div class="battle-duos">${L2.map(p => {
     const D = duoOf(B, u, p),
       ok = canDuo(B, u, p),
       why = p.acted
@@ -127,7 +127,7 @@ export function duoBlock(u) {
           : B.voice < 2
             ? 'il faut 2 Voix'
             : '';
-    return `<button type="button" class="duo-b${ui.mode === 'duo' && ui.duo === p.uid ? ' on' : ''}" data-duo="${p.uid}" ${ok ? '' : 'disabled'}><span class="duo-m">${medal(u.t, 'sm')}${medal(p.t, 'sm')}</span><span><b>${D.n}</b><em>${ok ? D.d + ' 2 Voix, les deux agissent.' : why}</em></span></button>`;
+    return `<button type="button" class="battle-duo${ui.mode === 'duo' && ui.duo === p.uid ? ' is-selected' : ''}" data-duo="${p.uid}" ${ok ? '' : 'disabled'}><span class="battle-duo-medals">${medal(u.t, 'sm')}${medal(p.t, 'sm')}</span><span><b>${D.n}</b><em>${ok ? D.d + ' 2 Voix, les deux agissent.' : why}</em></span></button>`;
   }).join('')}</div>`;
 }
 
@@ -139,10 +139,10 @@ export function catchBlock(e) {
   const al = ui.sel && byUid(B, ui.sel),
     req = captureReq(B, al, e),
     ok = al && canCapture(B, al, e);
-  return `<div class="bp-cap"><div class="cap-h"><b>Capture</b><span>${al ? `avec ${al.n}` : 'sélectionnez un allié'}</span></div>${ballChips()}<ul>${req
+  return `<div class="battle-capture"><div class="battle-capture-head"><b>Capture</b><span>${al ? `avec ${al.n}` : 'sélectionnez un allié'}</span></div>${ballChips()}<ul>${req
     .slice(1)
-    .map(r => `<li class="${r.ok ? 'ok' : ''}">${r.t}</li>`)
+    .map(r => `<li class="${r.ok ? 'is-met' : ''}">${r.t}</li>`)
     .join(
       ''
-    )}</ul><button type="button" class="b b-sm ${ok ? 'b-gold' : ''}" data-cap="${e.uid}" ${ok ? '' : 'disabled'}>${SHOP[CAP_K].n} sur ${e.n}</button>${B.stats.caught.length ? '' : '<p class="bp-hint">Un Pokémon K.O. ne peut plus être capturé.</p>'}</div>`;
+    )}</ul><button type="button" class="b b-sm ${ok ? 'b-gold' : ''}" data-cap="${e.uid}" ${ok ? '' : 'disabled'}>${SHOP[CAP_K].n} sur ${e.n}</button>${B.stats.caught.length ? '' : '<p class="battle-hint">Un Pokémon K.O. ne peut plus être capturé.</p>'}</div>`;
 }

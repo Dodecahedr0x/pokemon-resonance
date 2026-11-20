@@ -55,18 +55,6 @@ html body #bSvg .tok.ph3 .tok-halo {
   stroke-width: 4;
   filter: drop-shadow(0 0 9px rgba(255, 59, 59, 0.95));
 }
-html body .ux.vigil-hint {
-  border-color: rgba(127, 227, 255, 0.6) !important;
-  color: #bff1ff !important;
-}
-html body .ux.encircled {
-  border-color: rgba(255, 154, 61, 0.6) !important;
-  color: #ffd2a8 !important;
-}
-html body .ux.phase-badge {
-  border-color: rgba(255, 59, 59, 0.6) !important;
-  color: #ffb4b4 !important;
-}
 html body #bSvg .tok.in-danger .tok-rim {
   stroke: #ef4444;
   stroke-width: 3.2;

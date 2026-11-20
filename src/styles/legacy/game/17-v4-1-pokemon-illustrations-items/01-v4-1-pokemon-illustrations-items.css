@@ -86,11 +86,6 @@ html body .it-ic .it-img {
   width: 100%;
   height: 100%;
 }
-html body .ux.it .it-img {
-  width: 18px;
-  height: 18px;
-  margin-right: var(--space-2xs);
-}
 html body .rl .it-ic {
   display: grid;
   place-items: center;

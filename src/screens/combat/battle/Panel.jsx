@@ -76,7 +76,7 @@ function Content() {
   }
   if (ui.busy) {
     return (
-      <div className="bp-wait">
+      <div className="battle-panel-wait">
         <span className="spin" />
         {ui.cutscene ? 'Évolution en cours…' : 'Les adversaires agissent…'}
       </div>
@@ -91,7 +91,9 @@ function Content() {
     return (
       <>
         <Hi html={tileCard()} />
-        <p className="bp-hint">Touchez un de vos Pokémon pour le commander, ou un adversaire pour voir sa portée.</p>
+        <p className="battle-hint">
+          Touchez un de vos Pokémon pour le commander, ou un adversaire pour voir sa portée.
+        </p>
       </>
     );
   }
@@ -106,9 +108,9 @@ function Placement() {
   const al = B.units.filter(u => u.side === 'a' && !u.ko),
     sel = ui.deploySel && byUid(B, ui.deploySel);
   return (
-    <div className="dep-p">
-      <div className="dep-h">
-        <span className="dep-ic" aria-hidden="true">
+    <div className="battle-placement">
+      <div className="battle-placement-head">
+        <span className="battle-placement-icon" aria-hidden="true">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z" />
             <path d="M12 8v8M8 12h8" />
@@ -121,16 +123,16 @@ function Placement() {
           </span>
         </div>
       </div>
-      <ul className="dep-l">
+      <ul className="battle-placement-list">
         {al.map(u => (
-          <li key={u.uid} className={sel === u ? 'on' : ''}>
+          <li key={u.uid} className={sel === u ? 'is-selected' : ''}>
             <Html html={medal(u.t, 'sm')} />
             <b>{u.n}</b>
             <span>{tileOf(u)}</span>
           </li>
         ))}
       </ul>
-      <p className="bp-hint">
+      <p className="battle-hint">
         Les deux premières colonnes sont à vous. Posé sur un allié, un Pokémon échange sa place avec lui.
       </p>
     </div>
@@ -147,23 +149,23 @@ function OpponentTurn() {
     doneFlag = foes.filter(u => u.done && u !== cur).length,
     veil = veiled(B);
   return (
-    <div className="ta-p">
-      <div className="ta-h">
+    <div className="battle-foe-turn">
+      <div className="battle-foe-turn-head">
         <i aria-hidden="true" />
         <b>Tour adverse</b>
         <span>
           {Math.min(doneFlag + (cur ? 1 : 0), foes.length)} / {foes.length}
         </span>
       </div>
-      <ol className="ta-l">
+      <ol className="battle-foe-turn-list">
         {foes.map(u => {
-          const st = u === cur ? 'now' : u.done ? 'done' : '';
+          const st = u === cur ? 'acting' : u.done ? 'done' : '';
           const m = u.intent && !veil ? MV[u.intent.mv] : null,
             v = m && uAt(B, u.intent.k);
           return (
-            <li key={u.uid} className={st}>
+            <li key={u.uid} className={st && 'is-' + st}>
               <Html html={medal(u.t, 'sm')} />
-              <span className="ta-t">
+              <span className="battle-foe-turn-name">
                 <b>{u.n}</b>
                 {m
                   ? ` · ${m.n} → ${v ? v.n : 'case vide'}`
@@ -173,12 +175,12 @@ function OpponentTurn() {
                       ? ' · intention voilée'
                       : ''}
               </span>
-              <em>{st === 'now' ? 'en cours' : st === 'done' ? 'a agi' : ''}</em>
+              <em>{st === 'acting' ? 'en cours' : st === 'done' ? 'a agi' : ''}</em>
             </li>
           );
         })}
       </ol>
-      <p className="bp-hint">« Passer » joue le reste du tour adverse en accéléré.</p>
+      <p className="battle-hint">« Passer » joue le reste du tour adverse en accéléré.</p>
     </div>
   );
 }
@@ -233,11 +235,11 @@ function Intention({ e }) {
   if (B.jit) {
     const F = e.force && forcedTarget(B, e);
     return e.done ? (
-      <p className="bp-hint">Il a déjà joué cette manche.</p>
+      <p className="battle-hint">Il a déjà joué cette manche.</p>
     ) : e.badge || e.isLost ? (
-      <p className="bp-int">Neutralisé : il ne jouera pas cette manche.</p>
+      <p className="battle-intent">Neutralisé : il ne jouera pas cette manche.</p>
     ) : (
-      <p className="bp-int">
+      <p className="battle-intent">
         Il choisira sa cible à son tour, selon vos positions. <b>Zone rouge</b> : tout ce qu’il peut frapper après
         s’être déplacé.
         {F ? (
@@ -251,7 +253,9 @@ function Intention({ e }) {
   }
   if (e.intent && veiled(B)) {
     return (
-      <p className="bp-int">Intention voilée par l’Arène Psy. Elle reste fixée : lisez sa position et sa portée.</p>
+      <p className="battle-intent">
+        Intention voilée par l’Arène Psy. Elle reste fixée : lisez sa position et sa portée.
+      </p>
     );
   }
   if (e.intent) {
@@ -259,7 +263,7 @@ function Intention({ e }) {
       v = uAt(B, e.intent.k);
     const est = v ? dmgOf(B, e, m, v, mvType(B, e, m), 1) : 0;
     return (
-      <p className="bp-int">
+      <p className="battle-intent">
         Vise <b>{v ? v.n : 'une case vide'}</b> avec <b>{m.n}</b>
         {v && est ? (
           <>
@@ -271,7 +275,7 @@ function Intention({ e }) {
       </p>
     );
   }
-  return <p className="bp-hint">Aucune attaque annoncée.</p>;
+  return <p className="battle-hint">Aucune attaque annoncée.</p>;
 }
 
 function OpponentSheet({ e }) {
@@ -286,7 +290,7 @@ function OpponentSheet({ e }) {
       <Role />
       {NL}
       {RF ? (
-        <p className="bp-role en">
+        <p className="battle-role-note is-enemy">
           <Html html={rIco(role)} />
           <span>
             <b>
@@ -298,7 +302,7 @@ function OpponentSheet({ e }) {
       ) : null}
       <Intention e={e} />
       {nx ? (
-        <div className={'bp-evw' + (fe ? ' on' : '')}>
+        <div className={'battle-foe-evolution' + (fe ? ' is-imminent' : '')}>
           <Html html={medal(nx.t, 'sm')} />
           <p>
             {fe ? (
@@ -346,8 +350,8 @@ function OpponentSheet({ e }) {
 function Preview({ v }) {
   const ew = v.diff.filter(d => d.evw);
   return (
-    <div className="bp-pv">
-      <div className="pv-h">
+    <div className="battle-preview">
+      <div className="battle-preview-head">
         <span>Aperçu exact</span>
         {v.rxs.map((r, i) => (
           <span key={i} className={`chip cat-${rxCat(r)}`}>
@@ -357,7 +361,7 @@ function Preview({ v }) {
         ))}
       </div>
       {v.notes && v.notes.length ? (
-        <div className="pv-notes">
+        <div className="battle-preview-notes">
           {v.notes.map((n, i) => (
             <span key={i}>
               <Html html={n} />
@@ -368,7 +372,7 @@ function Preview({ v }) {
       {v.diff.length ? (
         <ul>
           {v.diff.map((d, i) => (
-            <li key={i} className={d.side === 'a' ? 'al' : 'fo'}>
+            <li key={i} className={d.side === 'a' ? 'is-ally' : 'is-foe'}>
               <span>{d.n}</span>
               <span>
                 {d.dh < 0 ? <b className="neg">{d.dh}</b> : d.dh > 0 ? <b className="pos">+{d.dh}</b> : null}
@@ -405,13 +409,13 @@ function Preview({ v }) {
                 {d.en > 0 ? (
                   <>
                     {' '}
-                    <em className="enx">+{d.en} énergie</em>
+                    <em className="is-energy">+{d.en} énergie</em>
                   </>
                 ) : null}
                 {d.evw ? (
                   <>
                     {' '}
-                    <em className="evx">évoluera</em>
+                    <em className="is-evolving">évoluera</em>
                   </>
                 ) : null}
               </span>
@@ -419,21 +423,21 @@ function Preview({ v }) {
           ))}
         </ul>
       ) : (
-        <p className="bp-hint">
+        <p className="battle-hint">
           {v.wx ? 'La météo change pour 5 manches.' : 'Pas de dégâts directs : la marque ou l’effet est appliqué.'}
         </p>
       )}
       {v.diff.some(d => d.side === 'a' && d.dh < 0) ? (
-        <p className="warn-ff">Attention : un de vos Pokémon est touché.</p>
+        <p className="battle-preview-warning">Attention : un de vos Pokémon est touché.</p>
       ) : null}
       {ew.length ? (
-        <p className="warn-ev">
+        <p className="battle-preview-evolution">
           {ew.map(d => d.n).join(', ')} passe{ew.length > 1 ? 'nt' : ''} sous 50 % sans tomber : évolution en fin de
           manche.
         </p>
       ) : null}
-      {v.over === 'win' ? <p className="win-ff">Cette action termine le combat.</p> : null}
-      <div className="pv-act">
+      {v.over === 'win' ? <p className="battle-preview-win">Cette action termine le combat.</p> : null}
+      <div className="battle-preview-actions">
         <button type="button" className="b b-sm" data-pv="no">
           Annuler
         </button>
@@ -458,7 +462,7 @@ function Awakening({ u, s }) {
     }
     const m = BY[u.id];
     return (
-      <p className="bp-fin">
+      <p className="battle-final-stage">
         {u.evo
           ? 'Stade final atteint en combat.'
           : m && m.st > 1
@@ -480,8 +484,8 @@ function Awakening({ u, s }) {
           ? 'Plus de Voix cette manche.'
           : 'Prêt. Choix irréversible.';
   return (
-    <div className={'bp-en' + (full ? ' full' : '')}>
-      <div className="en-h">
+    <div className={'battle-energy' + (full ? ' is-full' : '')}>
+      <div className="battle-energy-head">
         <span className="lbl-s">Énergie d’Éveil</span>
         <Html html={enPips(u.en, 'lg')} />
       </div>
@@ -553,26 +557,26 @@ function Step({ u, st }) {
   }
   return (
     <div className="turn-guide" data-st={st}>
-      <div className="turn-guide-h">
-        <ol className="turn-guide-p">
+      <div className="turn-guide-head">
+        <ol className="turn-guide-steps">
           {[STEP.deplacer, STEP.agir, STEP.extra].flatMap((l, i) => [
             ...(i
               ? [
-                  <li key={'s' + i} className="sep" aria-hidden="true">
+                  <li key={'s' + i} className="is-separator" aria-hidden="true">
                     ›
                   </li>,
                 ]
               : []),
-            <li key={i} className={i < cur ? 'ok' : i === cur ? 'on' : ''}>
+            <li key={i} className={i < cur ? 'is-done' : i === cur ? 'is-current' : ''}>
               {l}
             </li>,
           ])}
         </ol>
-        <span className="turn-guide-n">
+        <span className="turn-guide-count">
           {B.order === 'vitesse' ? 'Ordre par Vitesse' : n ? `Encore ${n} à jouer` : 'Manche terminée'}
         </span>
       </div>
-      <div className="turn-guide-r">
+      <div className="turn-guide-row">
         <p>{txt}</p>
         {bt}
       </div>
@@ -632,30 +636,30 @@ function AllySheet({ u }) {
     hint = ui.pv ? (
       <Preview v={ui.pv} />
     ) : (
-      <p className="bp-hint">Technique combinée : touchez une case dorée pour voir le résultat exact.</p>
+      <p className="battle-hint">Technique combinée : touchez une case dorée pour voir le résultat exact.</p>
     );
   } else if (ui.mode === 'target') {
     hint = ui.pv ? (
       <Preview v={ui.pv} />
     ) : (
-      <p className="bp-hint">Touchez une case dorée : l’aperçu affiche le résultat exact.</p>
+      <p className="battle-hint">Touchez une case dorée : l’aperçu affiche le résultat exact.</p>
     );
   } else if (without) {
     hint = null;
   } else if (ui.mode === 'dodge') {
-    hint = <p className="bp-hint">Esquive : touchez une case verte voisine.</p>;
+    hint = <p className="battle-hint">Esquive : touchez une case verte voisine.</p>;
   } else if (u.sn) {
     hint = (
-      <p className="bp-hint">
+      <p className="battle-hint">
         {u.n} est {STATE[u.badge] || STATE.PAR} : il ne peut pas agir cette manche.
       </p>
     );
   } else if (!u.acted && !u.moved) {
-    hint = <p className="bp-hint">Cases bleues : déplacement. Ou choisissez directement une capacité.</p>;
+    hint = <p className="battle-hint">Cases bleues : déplacement. Ou choisissez directement une capacité.</p>;
   } else if (!u.acted) {
-    hint = <p className="bp-hint">Choisissez une capacité, ou éveillez-le depuis cette case.</p>;
+    hint = <p className="battle-hint">Choisissez une capacité, ou éveillez-le depuis cette case.</p>;
   } else {
-    hint = <p className="bp-hint">{u.n} a joué. Esquive et Relance restent possibles.</p>;
+    hint = <p className="battle-hint">{u.n} a joué. Esquive et Relance restent possibles.</p>;
   }
   const relHi = st === 'extra' && F.retrigger(B);
   return (
@@ -666,7 +670,7 @@ function AllySheet({ u }) {
       {NL}
       <Hi html={s(tileCard())} />
       {tl ? (
-        <p className="bp-tal">
+        <p className="battle-ability">
           <b>{tl[0]}.</b> <Html html={tl[1]} />
         </p>
       ) : null}

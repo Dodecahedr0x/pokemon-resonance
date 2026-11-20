@@ -1,0 +1,108 @@
+/* Battle screen, the capture block on an opponent's sheet (engine catchBlock and ballChips): title and the ally
+   who throws, the Ball choice, the conditions (a diamond that lights up once met), the throw button. */
+
+.battle-capture {
+  display: grid;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  border: 1px solid transparent;
+  border-radius: 18px;
+  background:
+    linear-gradient(180deg, #17181d 0%, #111216 55%, #0d0e11 100%) padding-box,
+    linear-gradient(
+        160deg,
+        rgba(242, 221, 168, 0.42),
+        rgba(212, 175, 106, 0.08) 30%,
+        rgba(201, 206, 214, 0.06) 62%,
+        rgba(212, 175, 106, 0.3)
+      )
+      border-box;
+}
+.battle-capture-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-sm);
+}
+.battle-capture-head b {
+  color: var(--color-accent-soft);
+  font-family: var(--font-display);
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.battle-capture-head span {
+  color: var(--color-text-muted);
+  font-size: 12px;
+}
+
+/* ---------- Ball choice ---------- */
+.battle-balls {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-xs);
+  margin: var(--space-sm) 0;
+}
+.battle-ball {
+  display: grid;
+  justify-items: center;
+  gap: 1px;
+  padding: var(--space-xs) var(--space-3xs);
+  border: 1px solid rgba(120, 200, 255, 0.25);
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.25);
+  color: #fff;
+  font: inherit;
+  cursor: pointer;
+}
+.battle-ball img {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+}
+.battle-ball b {
+  font: 800 11px/1.1 var(--font-display);
+}
+/* how many are left */
+.battle-ball em {
+  color: var(--color-text-soft);
+  font: 700 11px/1 var(--font-mono);
+  font-style: normal;
+}
+.battle-ball.is-selected {
+  border-color: #ffe17b;
+  background: rgba(255, 215, 94, 0.14);
+  box-shadow: 0 0 0 1px rgba(255, 215, 94, 0.4);
+}
+.battle-ball:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+/* ---------- Conditions ---------- */
+.battle-capture ul {
+  display: grid;
+  gap: var(--space-2xs);
+  margin: 0;
+  padding: 0;
+  color: var(--color-text-muted);
+  font-size: 12.5px;
+  list-style: none;
+}
+.battle-capture li::before {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-right: var(--space-sm);
+  border: 1px solid var(--color-text-muted);
+  transform: rotate(45deg);
+}
+.battle-capture li.is-met {
+  color: var(--color-text);
+}
+.battle-capture li.is-met::before {
+  border-color: #5fe0c0;
+  background: #5fe0c0;
+  box-shadow: 0 0 6px rgba(95, 224, 192, 0.7);
+}

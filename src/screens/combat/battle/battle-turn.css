@@ -1,0 +1,239 @@
+/* Battle screen, the command panel between turns and during yours (Panel.jsx): placement before the battle
+   (who is where), the opponent turn (who acted, who is acting, who follows) and the guided turn (steps
+   Déplacer › Agir › Terminer, what to do now and the skip button). */
+
+/* ---------- Placement and opponent turn: a title row and a list ---------- */
+.battle-placement,
+.battle-foe-turn {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+.battle-placement-head,
+.battle-foe-turn-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+.battle-placement-head > div {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.battle-placement-head b,
+.battle-foe-turn-head b {
+  color: #f2f3f6;
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+/* the instruction under the title, and the icon */
+.battle-placement-head span {
+  color: #c2c7d2;
+  font-size: 12px;
+}
+.battle-placement-icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border: 1px solid rgba(79, 214, 156, 0.4);
+  border-radius: 11px;
+  background: rgba(79, 214, 156, 0.1);
+}
+.battle-placement-icon svg {
+  width: 18px;
+  height: 18px;
+}
+.battle-placement-list,
+.battle-foe-turn-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.battle-placement-list li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  min-height: 44px;
+  padding: 0 var(--space-md) 0 var(--space-sm);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+}
+.battle-placement-list li.is-selected {
+  border-color: rgba(227, 192, 122, 0.55);
+  background: rgba(227, 192, 122, 0.08);
+}
+.battle-placement-list li b {
+  flex: 1;
+  min-width: 0;
+  color: #f2f3f6;
+  font-size: 13px;
+  font-weight: 600;
+}
+/* the start tile (and the medal, which takes its colour) */
+.battle-placement-list li span {
+  color: #6be3ae;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+}
+
+/* opponent turn: a red dot, "Tour adverse", "n / total" */
+.battle-foe-turn-head i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ff6767;
+  box-shadow: 0 0 8px #ff6767;
+}
+.battle-foe-turn-head b {
+  color: #ffb0b0;
+}
+.battle-foe-turn-head span {
+  margin-left: auto;
+  color: #868ea0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+.battle-foe-turn-list li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  min-height: 36px;
+  padding: 0 var(--space-sm) 0 var(--space-xs);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.02);
+  color: #c2c7d2;
+  font-size: 12px;
+}
+.battle-foe-turn-list .medal {
+  flex: none;
+}
+.battle-foe-turn-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.battle-foe-turn-name b {
+  color: #f2f3f6;
+  font-weight: 600;
+}
+.battle-foe-turn-list em {
+  color: #868ea0;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-style: normal;
+}
+.battle-foe-turn-list li.is-acting {
+  border-color: rgba(255, 103, 103, 0.45);
+  background: rgba(255, 103, 103, 0.09);
+}
+.battle-foe-turn-list li.is-acting em {
+  color: #ff8c8c;
+}
+.battle-foe-turn-list li.is-done {
+  opacity: 0.55;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .battle-foe-turn-list li.is-acting {
+    animation: battle-foe-acting 1.4s ease-in-out infinite;
+  }
+}
+@keyframes battle-foe-acting {
+  50% {
+    border-color: rgba(255, 103, 103, 0.2);
+  }
+}
+
+/* ---------- Guided turn ---------- */
+.turn-guide {
+  margin: var(--space-sm) 0;
+  padding: var(--space-sm);
+  border: 1px solid rgba(255, 214, 102, 0.35);
+  border-radius: 10px;
+  background: rgba(255, 214, 102, 0.07);
+}
+.turn-guide-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-xs);
+}
+.turn-guide-steps {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  margin: 0;
+  padding: 0;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  list-style: none;
+}
+.turn-guide-steps li {
+  color: var(--color-text-muted);
+  opacity: 0.7;
+}
+.turn-guide-steps li.is-done {
+  opacity: 1;
+}
+.turn-guide-steps li.is-done::before {
+  content: '✓ ';
+  color: var(--color-accent);
+}
+.turn-guide-steps li.is-current {
+  color: var(--color-accent);
+  font-weight: 700;
+  opacity: 1;
+}
+.turn-guide-steps li.is-separator {
+  opacity: 0.4;
+}
+/* "Encore n à jouer" */
+.turn-guide-count {
+  margin-left: auto;
+  color: var(--color-text-muted);
+  font-size: 12px;
+  white-space: nowrap;
+}
+.turn-guide-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+.turn-guide-row p {
+  flex: 1;
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.35;
+}
+.turn-guide-row .b {
+  flex: none;
+}
+/* « Terminer » step: the button takes the full width, who plays next is announced below */
+.turn-guide[data-st='extra'] .turn-guide-row {
+  flex-wrap: wrap;
+}
+.turn-guide[data-st='extra'] .turn-guide-row > p {
+  flex: 1 1 100%;
+}
+.turn-guide[data-st='extra'] .turn-guide-row > [data-vx='finished-round'] {
+  flex: 1 1 100%;
+  height: 44px;
+  font-size: 14px;
+}
+.turn-guide-suite {
+  flex: 1 1 100%;
+  color: #868ea0;
+  font-size: 11.5px;
+  text-align: center;
+}

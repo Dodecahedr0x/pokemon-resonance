@@ -6,46 +6,6 @@ html body #combat .pt {
   background: linear-gradient(180deg, var(--v4-p1), var(--v4-p2)) !important;
   border-color: var(--v4-ln) !important;
 }
-.v4-balls {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: var(--space-xs);
-  margin: var(--space-sm) 0;
-}
-.v4-ball {
-  display: grid;
-  justify-items: center;
-  gap: 1px;
-  padding: var(--space-xs) var(--space-3xs);
-  border-radius: 10px;
-  border: 1px solid rgba(120, 200, 255, 0.25);
-  background: rgba(0, 0, 0, 0.25);
-  color: #fff;
-  cursor: pointer;
-  font: inherit;
-}
-.v4-ball img {
-  width: 30px;
-  height: 30px;
-  object-fit: contain;
-}
-.v4-ball b {
-  font: 800 11px/1.1 var(--f-d);
-}
-.v4-ball em {
-  font: 700 11px/1 var(--f-m);
-  font-style: normal;
-  color: var(--v4-tx2);
-}
-.v4-ball.on {
-  border-color: #ffe17b;
-  background: rgba(255, 215, 94, 0.14);
-  box-shadow: 0 0 0 1px rgba(255, 215, 94, 0.4);
-}
-.v4-ball[disabled] {
-  opacity: 0.35;
-  cursor: default;
-}
 .v4-gain .rl b {
   color: #ffe17b;
 }

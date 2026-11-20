@@ -1,14 +1,6 @@
 /* ===== resonance-companion-garden layer ===== */
 /* ==== v4.17: companions and Resonance ==== */
 /* --- Resonant Form --- */
-html body .bp-fres {
-  border-color: rgba(201, 166, 255, 0.6) !important;
-  background: linear-gradient(180deg, rgba(150, 110, 255, 0.2), rgba(60, 40, 140, 0.18)) !important;
-}
-html body .fres-n {
-  color: #e2d2ff;
-  font-size: 13px;
-}
 html body #bSvg .tok.fres .tok-halo {
   stroke: #c9a6ff;
   stroke-width: 3.6;

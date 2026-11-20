@@ -1,14 +1,4 @@
 /* banners and panel */
-.bp-tal {
-  font-size: 13px;
-  color: var(--tx2);
-  padding: var(--space-sm) var(--space-md);
-  border-left: 2px solid var(--gold);
-  background: linear-gradient(90deg, rgba(212, 175, 106, 0.08), transparent);
-}
-.bp-evw {
-  border-radius: 4px;
-}
 .blog {
   border-radius: var(--rl);
 }

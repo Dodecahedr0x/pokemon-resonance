@@ -35,10 +35,10 @@ export function bossResonanceHtml(e) {
   }
   if (hasBossPhases(B)) {
     const ph = e.bossPhase || 1;
-    return `<p class="bp-reso">${ph >= 3 ? 'Phase 3 : dernier souffle.' : ph === 2 ? 'Phase 2 : renforcé. La phase 3 arrive sous 33 % de PV.' : 'Phase 1. La phase 2 arrive sous 66 % de PV.'}</p>`;
+    return `<p class="battle-resonance-note">${ph >= 3 ? 'Phase 3 : dernier souffle.' : ph === 2 ? 'Phase 2 : renforcé. La phase 3 arrive sous 33 % de PV.' : 'Phase 1. La phase 2 arrive sous 66 % de PV.'}</p>`;
   }
   if (leaderOf(B.sc)) {
-    return `<p class="bp-reso">${e.enraged ? 'Il se déchaîne : renforcé.' : 'Il se déchaînera sous 50 % de PV.'}</p>`;
+    return `<p class="battle-resonance-note">${e.enraged ? 'Il se déchaîne : renforcé.' : 'Il se déchaînera sous 50 % de PV.'}</p>`;
   }
   return '';
 }

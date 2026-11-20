@@ -191,7 +191,6 @@ body {
   -webkit-text-stroke: 1px rgba(212, 175, 106, 0.35);
 }
 .lbl-s,
-.bp-en .lbl-s,
 .case-h,
 .scn .lvl,
 .bdg span,
@@ -213,7 +212,6 @@ body {
 .res-card,
 .ep-card,
 .enc .enc-card,
-.bp-en,
 .st-evo,
 .st-line,
 .qc,
@@ -254,7 +252,6 @@ body {
 }
 .mvc,
 .ptm,
-.bp-en,
 .st-evo,
 .st-line,
 .howto > div,

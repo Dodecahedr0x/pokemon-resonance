@@ -18,7 +18,7 @@
 .battle-panel button {
   min-height: 44px;
 }
-.battle-panel.is-info-off :is(.bp-tal, .bp-role) {
+.battle-panel.is-info-off :is(.battle-ability, .battle-role-note) {
   display: none;
 }
 

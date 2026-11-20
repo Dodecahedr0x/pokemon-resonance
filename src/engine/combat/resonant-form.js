@@ -86,7 +86,7 @@ export function resonanceBlockHtml(u, gauge) {
     return '';
   }
   if (u.resonant > 0) {
-    return `<div class="bp-en bp-fres full"><div class="en-h"><span class="lbl-s">Forme Résonante</span><b class="fres-n">${u.resonant} manche${u.resonant > 1 ? 's' : ''}</b></div><p class="bp-hint">+2 Puissance, +1 Mouvement, +20 % de dégâts, entraves dissipées en fin de manche.</p></div>`;
+    return `<div class="battle-energy is-resonant is-full"><div class="battle-energy-head"><span class="lbl-s">Forme Résonante</span><b class="battle-energy-turns">${u.resonant} manche${u.resonant > 1 ? 's' : ''}</b></div><p class="battle-hint">+2 Puissance, +1 Mouvement, +20 % de dégâts, entraves dissipées en fin de manche.</p></div>`;
   }
   if (!resonanceCandidate(B, u)) {
     return '';
@@ -100,7 +100,7 @@ export function resonanceBlockHtml(u, gauge) {
           : B.voice < 1
             ? 'Plus de Voix'
             : 'Prêt · une fois par combat';
-  return `${gauge ? `<div class="bp-en${u.en >= EMAX ? ' full' : ''}"><div class="en-h"><span class="lbl-s">Résonance</span>${enPips(u.en, 'lg')}</div></div>` : ''}<button type="button" class="battle-awaken is-resonant" data-resonance-burst ${ok ? '' : 'disabled'}><span class="battle-awaken-medals"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.6 6.4L21 9l-5 4.4 1.6 6.6L12 16.6 6.4 20 8 13.4 3 9l6.4-.6Z" fill="currentColor"/></svg></span><span><b>Forme Résonante</b><em>${why}</em></span><span class="battle-awaken-cost">1 Voix<br>+ jauge</span></button>`;
+  return `${gauge ? `<div class="battle-energy${u.en >= EMAX ? ' is-full' : ''}"><div class="battle-energy-head"><span class="lbl-s">Résonance</span>${enPips(u.en, 'lg')}</div></div>` : ''}<button type="button" class="battle-awaken is-resonant" data-resonance-burst ${ok ? '' : 'disabled'}><span class="battle-awaken-medals"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.6 6.4L21 9l-5 4.4 1.6 6.6L12 16.6 6.4 20 8 13.4 3 9l6.4-.6Z" fill="currentColor"/></svg></span><span><b>Forme Résonante</b><em>${why}</em></span><span class="battle-awaken-cost">1 Voix<br>+ jauge</span></button>`;
 }
 
 async function onResonantFormClick(e) {

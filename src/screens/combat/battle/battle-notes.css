@@ -1,0 +1,195 @@
+/* Battle screen, the command panel's text blocks (Panel.jsx and the engine's fragments): tips, the wait line,
+   the ability and rank lines, the role note, an opponent's intention, Resonance and evolution warnings, the
+   tile card and the unit tags (held item, fatigue, links, Vigilance…). « Détails » off hides the ability and
+   role lines (battle-panel.css). */
+
+/* ---------- Tips and waiting ---------- */
+.battle-hint {
+  color: var(--color-text-muted);
+  font-size: 13px;
+}
+/* hit and run: the retreat is still possible */
+.battle-hint.is-retreat {
+  color: #9ce0ff;
+}
+.battle-panel-wait {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) 0;
+  color: var(--color-text-secondary);
+  font-size: 13.5px;
+}
+
+/* ---------- Ability, rank and role lines: a gold rule on the left ---------- */
+.battle-ability {
+  padding: var(--space-sm) var(--space-md);
+  border-left: 2px solid var(--color-accent);
+  background: linear-gradient(90deg, rgba(212, 175, 106, 0.08), transparent);
+  color: var(--color-text-secondary);
+  font-size: 13px;
+}
+.battle-ability b {
+  color: var(--color-text);
+}
+.battle-ability.is-rank b {
+  color: #e2bdff;
+}
+.battle-role-note {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: var(--space-sm);
+  padding: var(--space-sm);
+  border-left: 2px solid var(--color-accent);
+  background: linear-gradient(90deg, rgba(212, 175, 106, 0.08), transparent);
+  color: var(--color-text-secondary);
+  font-size: 12.5px;
+  line-height: 1.45;
+}
+.battle-role-note b {
+  color: var(--color-accent-soft);
+  font-weight: 600;
+}
+.battle-role-note.is-enemy {
+  border-left-color: #e5484d;
+  background: linear-gradient(90deg, rgba(229, 72, 77, 0.08), transparent);
+}
+.battle-role-note.is-enemy .ri {
+  stroke: #ff9c9c;
+}
+
+/* ---------- Opponent: intention, Resonance, evolution ---------- */
+.battle-intent {
+  color: var(--color-text-secondary);
+  font-size: 13.5px;
+}
+.battle-resonance-note {
+  margin: var(--space-sm) 0;
+  padding: var(--space-sm) var(--space-md);
+  border-left: 2px solid #b48cff;
+  background: linear-gradient(90deg, rgba(180, 140, 255, 0.12), transparent);
+  color: #e6d2ff;
+  font-size: 13px;
+}
+.battle-foe-evolution {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  border: 1px dashed rgba(255, 138, 106, 0.35);
+  border-radius: 4px;
+  color: var(--color-text-secondary);
+  font-size: 13px;
+}
+/* it evolves at the end of this round */
+.battle-foe-evolution.is-imminent {
+  border-style: solid;
+  border-color: rgba(255, 103, 103, 0.7);
+  background: rgba(255, 103, 103, 0.08);
+  color: var(--color-text);
+}
+/* a Pokémon that no longer evolves */
+.battle-final-stage {
+  padding: var(--space-3xs) 0;
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+}
+
+/* ---------- Tile card: name, close, what the tile does, its reactions ---------- */
+.battle-tile {
+  display: grid;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: 18px;
+  background: rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 0 0 1px rgba(212, 175, 106, 0.2);
+}
+.battle-tile-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.battle-tile-head b {
+  color: var(--color-accent-soft);
+  font-family: var(--font-display);
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.battle-tile p {
+  color: var(--color-text-secondary);
+  font-size: 13px;
+}
+.battle-tile-reactions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2xs);
+}
+
+/* ---------- Unit tags: held item, fatigue, links, Vigilance, encircled, boss phase ---------- */
+.battle-unit-tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-xs);
+}
+.battle-unit-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-3xs) var(--space-sm);
+  border: 1px solid rgba(212, 175, 106, 0.3);
+  border-radius: 2px;
+  color: var(--color-text-secondary);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+}
+.battle-unit-tag svg {
+  width: 12px;
+  height: 12px;
+  color: var(--color-accent-soft);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+.battle-unit-tag .it-img {
+  width: 18px;
+  height: 18px;
+  margin-right: var(--space-2xs);
+}
+.battle-unit-tag.is-item {
+  border-color: rgba(98, 207, 241, 0.24);
+  background: linear-gradient(145deg, rgba(13, 43, 65, 0.96), rgba(5, 22, 37, 0.97));
+  box-shadow:
+    0 18px 38px rgba(0, 0, 0, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.055);
+  color: var(--color-accent-soft);
+}
+.battle-unit-tag.is-tired {
+  border-color: rgba(255, 122, 61, 0.45);
+  color: #ffb08a;
+}
+/* a linked ally standing next to it */
+.battle-unit-tag.is-link.is-active {
+  border-color: rgba(91, 155, 255, 0.5);
+  color: #9ce0ff;
+}
+.battle-unit-tag.is-vigilant {
+  border-color: rgba(127, 227, 255, 0.6);
+  color: #bff1ff;
+}
+.battle-unit-tag.is-encircled {
+  border-color: rgba(255, 154, 61, 0.6);
+  color: #ffd2a8;
+}
+.battle-unit-tag.is-boss-phase {
+  border-color: rgba(255, 59, 59, 0.6);
+  color: #ffb4b4;
+}

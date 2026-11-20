@@ -94,15 +94,6 @@
   color: #e6c6ff;
   background: rgba(170, 110, 255, 0.18);
 }
-.bp-rg b {
-  color: #e2bdff;
-}
-.bp-xp .lbl-s {
-  color: #e2bdff;
-}
-.bp-xp .bp-hint {
-  margin: var(--space-xs) 0 0;
-}
 .pl-rg {
   font-size: 9px;
   margin-left: var(--space-2xs);
@@ -164,12 +155,4 @@
 .reso-codex .acc-t.rg {
   font-size: 13px;
   min-width: 4.2em;
-}
-.bp-reso {
-  font-size: 13px;
-  color: #e6d2ff;
-  padding: var(--space-sm) var(--space-md);
-  margin: var(--space-sm) 0;
-  border-left: 2px solid #b48cff;
-  background: linear-gradient(90deg, rgba(180, 140, 255, 0.12), transparent);
 }

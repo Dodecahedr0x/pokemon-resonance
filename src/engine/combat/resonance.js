@@ -110,7 +110,7 @@ export function moveBlockedMessage(S, u, m) {
 export function expertBlockHtml(u) {
   const c = xpCost(u),
     ok = u.en >= c;
-  return `<div class="bp-en bp-xp${ok ? ' full' : ''}"><div class="en-h"><span class="lbl-s">Résonance</span>${enPips(u.en, 'lg')}</div><p class="bp-hint">Attaque Experte : ${c} losange${c > 1 ? 's' : ''}. ${ok ? 'Elle est prête.' : `Encore ${c - u.en} : fin de manche, réaction, coup encaissé, allié K.O.`}</p></div>`;
+  return `<div class="battle-energy is-expert${ok ? ' is-full' : ''}"><div class="battle-energy-head"><span class="lbl-s">Résonance</span>${enPips(u.en, 'lg')}</div><p class="battle-hint">Attaque Experte : ${c} losange${c > 1 ? 's' : ''}. ${ok ? 'Elle est prête.' : `Encore ${c - u.en} : fin de manche, réaction, coup encaissé, allié K.O.`}</p></div>`;
 }
 
 function gainDiamond(S, u, ev) {
@@ -292,7 +292,7 @@ export function foeResonanceNotes(e) {
   if (bossScene(B) && hasXp(e)) {
     o.push(`Il accumule la Résonance : ${e.en || 0} / ${EMAX} losanges, ${xpCost(e)} pour son attaque Experte.`);
   }
-  return (o.length ? `<p class="bp-reso">${o.join(' ')}</p>` : '') + bossResonanceHtml(e);
+  return (o.length ? `<p class="battle-resonance-note">${o.join(' ')}</p>` : '') + bossResonanceHtml(e);
 }
 
 // Team ranks and Harmony: card rendered by React (src/screens/team/Analysis.jsx).
@@ -507,7 +507,7 @@ const resoOn = (S, u) => !!u && (u.side === 'a' || bossScene(S));
 
 export const rankLineHtml = u => {
   const r = rankOfValue(u);
-  return `<p class="bp-tal bp-rg"><b>${RANKS[r].n} · ${RANKS[r].k}.</b> ${RANKS[r].d}</p>`;
+  return `<p class="battle-ability is-rank"><b>${RANKS[r].n} · ${RANKS[r].k}.</b> ${RANKS[r].d}</p>`;
 };
 
 /* ---------- 3. Resonance notes and type echoes ---------- */
