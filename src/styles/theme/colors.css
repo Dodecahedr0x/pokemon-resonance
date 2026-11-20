@@ -12,7 +12,15 @@
   --color-text-secondary: var(--tx2);
   /* the faintest text: inactive radar labels */
   --color-text-faint: var(--fnt);
+  /* near-white text on dark plates */
+  --color-text-bright: #eaf2f8;
+  /* blue-grey secondary text on dark plates */
+  --color-text-pale: #b8cddb;
   --color-accent: var(--gold);
+  /* bright gold for highlights: selected borders, values, progress ends */
+  --color-highlight: #ffd45b;
+  /* pale gold border of a selected card or move */
+  --color-selected: #ffe17b;
   /* pale gold: badges and labels on dark plates */
   --color-accent-soft: var(--gold-l);
   /* empty gauge or pip */

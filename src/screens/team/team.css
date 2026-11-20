@@ -14,7 +14,7 @@
   gap: var(--space-sm);
   margin-bottom: var(--space-md);
   padding: var(--space-md);
-  border: 1px solid rgba(126, 211, 224, 0.24);
+  border: 1px solid var(--color-line-card);
   border-radius: 18px;
   background: rgba(8, 25, 38, 0.82);
   box-shadow: 0 16px 36px rgba(0, 0, 0, 0.22);

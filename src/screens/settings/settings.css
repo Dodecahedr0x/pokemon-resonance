@@ -299,12 +299,12 @@
   border-radius: 14px;
   border: 1px solid rgba(255, 212, 91, 0.4);
   background: rgba(255, 255, 255, 0.06);
-  color: #eaf2f8;
+  color: var(--color-text-bright);
   font: inherit;
   cursor: pointer;
 }
 .chronicle small {
-  color: #b8cddb;
+  color: var(--color-text-pale);
   font-size: 12px;
 }
 .chronicle.is-read {

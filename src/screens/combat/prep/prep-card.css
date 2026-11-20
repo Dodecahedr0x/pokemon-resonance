@@ -22,7 +22,7 @@
   gap: var(--space-md);
   border: 1px solid rgba(88, 186, 255, 0.34);
   border-radius: 20px;
-  background: linear-gradient(180deg, rgba(17, 44, 78, 0.94), rgba(8, 23, 46, 0.96));
+  background: var(--surface-card);
   box-shadow:
     0 16px 38px rgba(0, 0, 0, 0.23),
     inset 0 1px rgba(255, 255, 255, 0.04);

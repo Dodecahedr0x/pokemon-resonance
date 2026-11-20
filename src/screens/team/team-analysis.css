@@ -7,7 +7,7 @@
 .team-analysis {
   margin-top: var(--space-2xl);
   padding: var(--space-md);
-  border: 1px solid rgba(126, 211, 224, 0.24);
+  border: 1px solid var(--color-line-card);
   border-radius: 20px;
   background: linear-gradient(145deg, #122d3e, #081824);
 }
@@ -169,17 +169,17 @@
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 12px;
   background: rgba(255, 255, 255, 0.06);
-  color: #eaf2f8;
+  color: var(--color-text-bright);
   font: inherit;
   cursor: pointer;
 }
 .team-analysis-formation.is-selected {
-  border-color: #ffd45b;
+  border-color: var(--color-highlight);
   background: rgba(255, 212, 91, 0.16);
 }
 .team-analysis-formation-text {
   margin: var(--space-2xs) 0;
-  color: #b8cddb;
+  color: var(--color-text-pale);
   font-size: 12px;
 }
 

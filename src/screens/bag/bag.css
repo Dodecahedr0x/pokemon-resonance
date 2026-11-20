@@ -5,7 +5,7 @@
 /* every panel of the page (wallet, daily offers, Workshop showcases): this page's frame; :where() keeps it as
    specific as a single class, so the wallet's own shadow below wins */
 :where(.bag-page) .card {
-  border: 1px solid rgba(126, 211, 224, 0.24);
+  border: 1px solid var(--color-line-card);
   border-radius: 23px;
   background: linear-gradient(145deg, rgba(19, 48, 65, 0.96), rgba(6, 20, 31, 0.98));
   box-shadow:

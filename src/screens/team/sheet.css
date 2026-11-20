@@ -33,12 +33,10 @@
   width: min(470px, 100%);
   overflow-y: auto;
   overscroll-behavior: contain;
-  border: 1px solid rgba(98, 207, 241, 0.24);
+  border: 1px solid var(--color-line-plate);
   border-top: 0;
-  background: linear-gradient(145deg, rgba(13, 43, 65, 0.96), rgba(5, 22, 37, 0.97));
-  box-shadow:
-    0 18px 38px rgba(0, 0, 0, 0.24),
-    inset 0 1px 0 rgba(255, 255, 255, 0.055);
+  background: var(--surface-plate);
+  box-shadow: var(--shadow-plate);
   animation: team-sheet-slide-in 0.5s var(--ease-out) both;
 }
 /* red and gold line pinned to the top while scrolling */

@@ -130,7 +130,7 @@
   text-transform: none;
 }
 .battle-order-unit em {
-  color: #ffe17b;
+  color: var(--color-selected);
   font-size: 10px;
   font-style: normal;
   font-weight: 700;
@@ -146,7 +146,7 @@
 }
 /* the Pokémon playing now */
 .battle-order-unit.is-current {
-  border-color: #ffe17b;
+  border-color: var(--color-selected);
   background: linear-gradient(90deg, rgba(255, 215, 94, 0.3), rgba(255, 215, 94, 0.08));
   box-shadow: 0 0 0 2px rgba(255, 225, 123, 0.25);
 }
@@ -173,7 +173,7 @@
   border: 1px solid rgba(120, 220, 160, 0.4);
   border-radius: 12px;
   background: rgba(10, 40, 30, 0.7);
-  color: #eaf2f8;
+  color: var(--color-text-bright);
   font-size: 13px;
 }
 .battle-defense span {

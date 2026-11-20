@@ -5,7 +5,7 @@
 
 /* peddler's line: "<b>Name</b>, le colporteur a posé sa carriole…" */
 .bag-peddler-intro b {
-  color: #ffd45b;
+  color: var(--color-highlight);
 }
 
 /* ---------- Draw: last batch won, draw button and draws left ---------- */
@@ -17,7 +17,7 @@
   margin: var(--space-sm) 0 var(--space-md);
 }
 .workshop-draw small {
-  color: #b8cddb;
+  color: var(--color-text-pale);
   font-size: 12px;
 }
 .workshop-draw .v4-btn {
@@ -33,7 +33,7 @@
 }
 .workshop-showcase h3 {
   margin: 0;
-  color: #ffd45b;
+  color: var(--color-highlight);
   font-size: 13px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -58,7 +58,7 @@
 .workshop-showcase-item.is-on {
   border-color: rgba(255, 212, 91, 0.55);
   background: rgba(255, 212, 91, 0.1);
-  color: #ffd45b;
+  color: var(--color-highlight);
 }
 /* a TM / HM number, in its type colour (--c, inline style) once seen */
 .workshop-showcase-tm {
@@ -100,7 +100,7 @@
 .workshop-trophy-bar u {
   display: block;
   height: 100%;
-  background: linear-gradient(90deg, #43c0ff, #ffd45b);
+  background: linear-gradient(90deg, #43c0ff, var(--color-highlight));
   text-decoration: none;
 }
 
@@ -124,8 +124,8 @@
   border-radius: 50%;
 }
 .workshop-talent-pips i.is-on {
-  border-color: #ffd45b;
-  background: #ffd45b;
+  border-color: var(--color-highlight);
+  background: var(--color-highlight);
 }
 .workshop-talent em {
   display: block;

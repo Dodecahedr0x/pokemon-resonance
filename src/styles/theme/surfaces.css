@@ -1,0 +1,12 @@
+/* Surface tokens: the backgrounds, borders and shadows several components share, so a surface is defined once.
+   - card: the dark blue page panel (.card, the battle choice panels, the item rows).
+   - plate: the smaller raised tiles inside a panel (Voice actions, energy gauge, team sheet sections, Pokédex
+     card sections, team plates). */
+:root {
+  --surface-card: linear-gradient(180deg, rgba(17, 44, 78, 0.94), rgba(8, 23, 46, 0.96));
+  --color-line-card: rgba(126, 211, 224, 0.24);
+
+  --surface-plate: linear-gradient(145deg, rgba(13, 43, 65, 0.96), rgba(5, 22, 37, 0.97));
+  --color-line-plate: rgba(98, 207, 241, 0.24);
+  --shadow-plate: 0 18px 38px rgba(0, 0, 0, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.055);
+}

@@ -13,7 +13,7 @@
   padding: var(--space-sm) var(--space-md);
   border: 1px solid rgba(88, 186, 255, 0.34);
   border-radius: 13px;
-  background: linear-gradient(180deg, rgba(17, 44, 78, 0.94), rgba(8, 23, 46, 0.96));
+  background: var(--surface-card);
 }
 /* bought already (held items for sale) */
 .item-row.is-owned {

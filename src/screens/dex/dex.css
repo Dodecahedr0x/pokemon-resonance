@@ -11,7 +11,7 @@
 }
 .dex-mission h3 {
   margin: 0;
-  color: #ffd45b;
+  color: var(--color-highlight);
   font-size: 13px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -47,11 +47,11 @@
 .dex-mission-row u {
   display: block;
   height: 100%;
-  background: linear-gradient(90deg, #43c0ff, #ffd45b);
+  background: linear-gradient(90deg, #43c0ff, var(--color-highlight));
   text-decoration: none;
 }
 .dex-mission-row small {
-  color: #b8cddb;
+  color: var(--color-text-pale);
   font-size: 11.5px;
 }
 .dex-mission-row.is-ready .v4-btn {
@@ -130,7 +130,7 @@
   font: 600 11.5px/1.3 var(--font-body);
 }
 .dex-count-regions b {
-  color: #ffe17b;
+  color: var(--color-selected);
 }
 .dex-count-regions .is-complete {
   color: #9fe7c4;

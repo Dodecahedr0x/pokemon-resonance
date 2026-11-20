@@ -70,7 +70,7 @@
   font-style: normal;
 }
 .battle-ball.is-selected {
-  border-color: #ffe17b;
+  border-color: var(--color-selected);
   background: rgba(255, 215, 94, 0.14);
   box-shadow: 0 0 0 1px rgba(255, 215, 94, 0.4);
 }

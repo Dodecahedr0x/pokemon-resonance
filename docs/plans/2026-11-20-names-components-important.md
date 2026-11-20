@@ -80,3 +80,8 @@ Each step is one commit (or a few), on its own, playable at every point.
   pips `is-filled` / `is-large`. The large pips used to borrow the types legend's `.lg` look; that is now
   `src/styles/components/energy-pips.css`. The helpers keep their short names (`tb()`, `medal()`, `enPips()`) until
   step 3.
+- 1.5 repeated declarations: done. `src/styles/theme/surfaces.css` holds the card surface (`--surface-card`,
+  `--color-line-card`) and the plate surface (`--surface-plate`, `--color-line-plate`, `--shadow-plate`);
+  `theme/colors.css` gains `--color-highlight`, `--color-selected`, `--color-text-bright` and `--color-text-pale`.
+  The ability and role notes share one rule. The mono captions were left as they are: their sizes, spacing and
+  colours differ from rule to rule, so one shared style would change some of them.
