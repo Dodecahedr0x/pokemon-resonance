@@ -45,12 +45,12 @@ html body .pt-p.choix {
   justify-items: stretch;
   gap: var(--space-xs);
 }
-html body .pt-p.choix .b {
+html body .pt-p.choix .button {
   display: grid;
   gap: var(--space-3xs);
   text-align: left;
 }
-html body .pt-p.choix .b em {
+html body .pt-p.choix .button em {
   font-weight: 400;
 }
 html body .pt-pl {

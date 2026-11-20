@@ -9,6 +9,7 @@ import { daycarePair, inheritableMoves, daycareParents } from '../../engine/prog
 import { POTAGER, POT_I, plotSprout } from '../../engine/progression/camp-garden.js';
 import { Html } from '../../lib/html.jsx';
 
+import Button from '../../components/Button.jsx';
 const pl = (n, token) => `${n} ${token}${n > 1 ? 's' : ''}`;
 
 // A building: level, effect, Build / Upgrade button (data-camp-b).
@@ -31,12 +32,12 @@ function Building({ k }) {
       {lk ? (
         <em className="cb-lk">{lk}</em>
       ) : (
-        <button
-          type="button"
-          className="b b-sm b-gold"
+        <Button
+          size="small"
+          variant="primary"
           data-camp-b={k}
           disabled={!(PROFILE.money >= c[0] && PROFILE.gems >= c[1])}
-        >{`${n ? 'Améliorer' : 'Construire'} · ${fmt(c[0])} ₽${c[1] ? ` + ${c[1]} Éclats` : ''}`}</button>
+        >{`${n ? 'Améliorer' : 'Construire'} · ${fmt(c[0])} ₽${c[1] ? ` + ${c[1]} Éclats` : ''}`}</Button>
       )}
     </article>
   );
@@ -54,9 +55,9 @@ function Expedition({ x, i }) {
         <em>{DESTINATIONS[x.destinationId].n + (x.ideal ? ' · terrain idéal' : '')}</em>
       </span>
       {remainder <= 0 ? (
-        <button type="button" className="b b-sm b-gold" data-exp-r={i}>
+        <Button size="small" variant="primary" data-exp-r={i}>
           Récupérer
-        </button>
+        </Button>
       ) : (
         <small>{`Retour dans ${pl(remainder, 'combat')}`}</small>
       )}
@@ -107,13 +108,13 @@ function Daycare() {
       </div>
       <p className="v4-ps-n">{txt}</p>
       {c.length ? (
-        <button type="button" className="b b-sm" data-pens="rendre">
+        <Button size="small" data-pens="rendre">
           Reprendre le couple
-        </button>
+        </Button>
       ) : (
-        <button type="button" className="b b-sm b-gold" data-pens="ouvrir">
+        <Button size="small" variant="primary" data-pens="ouvrir">
           Déposer un couple
-        </button>
+        </Button>
       )}
     </>
   );
@@ -125,14 +126,14 @@ function Plot({ x, i }) {
     return POT_I === i ? (
       <div className="pt-p choix">
         {Object.entries(POTAGER).map(([g, G]) => (
-          <button key={g} type="button" className="b b-sm" data-pot-g={g} disabled={!(PROFILE.money >= G.p)}>
+          <Button key={g} size="small" data-pot-g={g} disabled={!(PROFILE.money >= G.p)}>
             {`${G.n} · ${fmt(G.p)} ₽`}
             <em>{`${G.duration} combats : ${G.d}`}</em>
-          </button>
+          </Button>
         ))}
-        <button type="button" className="b b-sm b-ghost" data-pot-x="">
+        <Button size="small" variant="ghost" data-pot-x="">
           Annuler
-        </button>
+        </Button>
       </div>
     ) : (
       <button type="button" className="pt-p vide" data-pot-i={i}>
@@ -175,9 +176,9 @@ function Garden() {
         ))}
       </div>
       {P2.some(x => x && plotSprout(x) > 0) ? (
-        <button type="button" className="b b-sm" data-pot-eau="" disabled={watered}>
+        <Button size="small" data-pot-eau="" disabled={watered}>
           {watered ? 'Arrosé aujourd’hui ✓' : 'Arroser (une fois par jour)'}
-        </button>
+        </Button>
       ) : null}
     </>
   );
@@ -210,9 +211,9 @@ export default function CampBase({ filled: filled }) {
                 <Expedition key={i} x={x} i={i} />
               ))}
               {places - exp.length > 0 ? (
-                <button type="button" className="b b-sm" data-exp-new="">
+                <Button size="small" data-exp-new="">
                   Envoyer un Pokémon en expédition
-                </button>
+                </Button>
               ) : null}
             </>
           ) : (

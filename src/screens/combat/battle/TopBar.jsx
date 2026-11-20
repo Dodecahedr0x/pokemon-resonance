@@ -21,6 +21,7 @@ import { DOCTRINE_DEFS } from '../../../engine/combat/doctrines.js';
 import { RELIC_DEFS } from '../../../engine/modes/deep-echo.js';
 import { useBattleVersion } from './battleStore.js';
 
+import Button from '../../../components/Button.jsx';
 // Top banner: battle name, round, chips (weather, time, wind…), Voice, ×2, Abandon.
 export function BtTop() {
   const v = useBattleVersion('top');
@@ -59,9 +60,9 @@ export function BtTop() {
         )}
       </span>
       <Quick />
-      <button className="b b-sm b-ghost battle-quit" id="bQuit" type="button">
+      <Button size="small" variant="ghost" className="battle-quit" id="bQuit">
         Abandonner
-      </button>
+      </Button>
     </div>
   );
 }
@@ -100,15 +101,16 @@ function Phase() {
 function Quick() {
   const v = useBattleVersion('fast');
   return (
-    <button
-      className="b b-sm b-ghost battle-speed"
+    <Button
+      size="small"
+      variant="ghost"
+      className="battle-speed"
       id="bFast"
-      type="button"
       aria-pressed={v > 0 ? !!PREF.fast : false}
       aria-label="Combat rapide, animations deux fois plus courtes"
     >
       ×2
-    </button>
+    </Button>
   );
 }
 

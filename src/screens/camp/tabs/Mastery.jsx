@@ -5,22 +5,23 @@ import { fmt } from '../../../engine/state/economy.js';
 import { MASTERY_DEFS, MASTERY_THRESHOLD, masteryChoice } from '../../../engine/progression/family-mastery.js';
 import { Html } from '../../../lib/html.jsx';
 
+import Button from '../../../components/Button.jsx';
 // A family: progression, then the choice between two masteries (data-mastery-track).
 function Family({ b, x }) {
   const m = BY[b],
     [c1, c2] = masteryChoice(b),
     isReady = x.n >= MASTERY_THRESHOLD,
     bt = k => (
-      <button
-        type="button"
-        className={`b b-sm${x.p === k ? ' b-gold' : ''}`}
+      <Button
+        size="small"
+        variant={x.p === k ? 'primary' : undefined}
         data-mastery-track={b}
         data-k={k}
         disabled={x.p === k}
       >
         {MASTERY_DEFS[k][0]}
         <em>{MASTERY_DEFS[k][1]}</em>
-      </button>
+      </Button>
     );
   return (
     <article className={`mastery-tab-r${x.p ? ' on' : ''}`}>

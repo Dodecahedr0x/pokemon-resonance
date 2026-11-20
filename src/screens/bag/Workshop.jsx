@@ -38,6 +38,7 @@ import {
 import { Disc } from './Items.jsx';
 import { space } from '../../lib/theme.js';
 
+import Button from '../../components/Button.jsx';
 // Workshop row: text on the left, engine button on the right (data-craft-bench, data-quest-log…).
 // Styles: workshop.css and the shared item row.
 const Line = ({ cls = '', before: previous = null, children, actionButton: button }) => (
@@ -414,14 +415,14 @@ function Talents() {
         </Fragment>
       ))}
       <div className="sv-io">
-        <button
-          type="button"
-          className="b b-sm b-ghost"
+        <Button
+          size="small"
+          variant="ghost"
           data-talent-tree="reset"
           disabled={!(spent && PROFILE.money >= TALENT_RESET_COST)}
         >
           Réinitialiser · {TALENT_RESET_COST} ₽
-        </button>
+        </Button>
       </div>
     </>
   );

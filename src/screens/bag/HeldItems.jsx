@@ -5,6 +5,7 @@ import { ITM } from '../../engine/assets/item-icons.js';
 import { HELD_SHOP, heldItemCost } from '../../engine/combat/resonance.js';
 import { Article, Shards } from './Items.jsx';
 
+import Button from '../../components/Button.jsx';
 // Held item for sale (v4.14): one-time purchase, data-buyh (engine).
 function OutfitForSale({ k }) {
   const it = ITEMS2[k],
@@ -30,7 +31,7 @@ function OutfitForSale({ k }) {
       </div>
       <div className="item-row-actions">
         {own ? null : (
-          <button type="button" className="b b-gold b-sm" data-buyh={k} disabled={!can}>
+          <Button size="small" variant="primary" data-buyh={k} disabled={!can}>
             {H.g ? (
               <>
                 <Shards />
@@ -39,7 +40,7 @@ function OutfitForSale({ k }) {
             ) : (
               `${fmt(price)} ₽`
             )}
-          </button>
+          </Button>
         )}
       </div>
     </article>

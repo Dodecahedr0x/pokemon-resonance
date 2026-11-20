@@ -5,6 +5,7 @@ import { dailyDone, dailyKey, dailyLeft } from '../../engine/modes/daily-battle.
 import { seasonData } from '../../engine/world/seasons.js';
 import { radioLines } from '../../engine/world/pokegear.js';
 
+import Button from '../../components/Button.jsx';
 // Bottom of the Home page (.v4-bottom): season (#v4Saison, v4.11), Pokématos (#v4Radio, v4.17),
 // daily challenge (#v4Event). Counters live in the Pokédex and Quests pages, the weekly
 // challenge in Quests (Event tab).
@@ -48,9 +49,9 @@ function Season() {
           takenSet ? (
             <span className="sa-ok">Cadeau reçu ✓</span>
           ) : (
-            <button type="button" className="b b-gold b-sm" data-cadeau="">
+            <Button size="small" variant="primary" data-cadeau="">
               Ouvrir le cadeau
-            </button>
+            </Button>
           )
         ) : null}
       </div>

@@ -203,7 +203,7 @@
   padding: var(--space-lg) var(--space-xl) calc(var(--space-lg) + env(safe-area-inset-bottom, 0px));
   background: linear-gradient(180deg, rgba(15, 18, 24, 0), var(--color-surface) 34%);
 }
-.team-sheet-actions .b {
+.team-sheet-actions .button {
   flex: 1;
 }
 

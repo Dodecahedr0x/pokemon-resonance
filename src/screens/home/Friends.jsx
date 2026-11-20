@@ -7,6 +7,7 @@ import { shinyStyle } from '../../engine/pokemon/shiny.js';
 import { friendsPanelData } from '../../engine/modes/friend-challenges.js';
 import { tournamentPanelHtml } from '../../engine/modes/friends-tournament.js';
 
+import Button from '../../components/Button.jsx';
 // Friend challenges (#v4Amis, v4.16), under the hidden Home shortcuts.
 // data-ami, data-ami-fight, data-ami-del and tournoi buttons: handled by the engine.
 export default function Friends({ on }) {
@@ -35,12 +36,12 @@ function Content() {
       </p>
       {'\n  '}
       <div className="am-a">
-        <button type="button" className="b b-gold b-sm" data-ami="carte">
+        <Button size="small" variant="primary" data-ami="carte">
           Ma carte de dresseur
-        </button>
-        <button type="button" className="b b-sm" data-ami="ajout">
+        </Button>
+        <Button size="small" data-ami="ajout">
           Ajouter un ami
-        </button>
+        </Button>
       </div>
       <Html html={tournamentPanelHtml()} />
       {'\n  '}
@@ -66,17 +67,18 @@ function Content() {
                 </em>
               </span>
               <span className="am-b">
-                <button type="button" className="b b-sm b-gold" data-ami-fight={i}>
+                <Button size="small" variant="primary" data-ami-fight={i}>
                   Affronter
-                </button>
-                <button
-                  type="button"
-                  className={'b b-sm b-ghost am-del' + (del === i ? ' on' : '')}
+                </Button>
+                <Button
+                  size="small"
+                  variant="ghost"
+                  className={'am-del' + (del === i ? ' on' : '')}
                   data-ami-del={i}
                   aria-label={`Retirer ${a.n}`}
                 >
                   {del === i ? 'Retirer ?' : '×'}
-                </button>
+                </Button>
               </span>
             </div>
           ))}

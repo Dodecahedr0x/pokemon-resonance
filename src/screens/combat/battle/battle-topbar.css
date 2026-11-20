@@ -183,7 +183,7 @@
   }
   .battle-topbar-round,
   .battle-voice,
-  .battle-topbar .b {
+  .battle-topbar .button {
     flex: none;
   }
   .battle-topbar-chips {

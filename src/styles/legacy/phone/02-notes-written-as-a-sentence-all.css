@@ -45,7 +45,7 @@ p.v4-note {
   html body .it-diff > span {
     grid-column: 1/-1;
   }
-  html body .it-diff > .b {
+  html body .it-diff > .button {
     min-width: 0 !important;
     min-height: var(--tap);
     margin: 0 !important;
@@ -56,7 +56,7 @@ p.v4-note {
     align-items: stretch !important;
     gap: var(--space-sm) !important;
   }
-  html body .it-a > .b {
+  html body .it-a > .button {
     width: 100% !important;
     min-height: var(--tap);
     margin: 0 !important;
@@ -64,7 +64,7 @@ p.v4-note {
   }
 
   /* ---------- Battle tutorial card: full-size buttons ---------- */
-  html body #coach .co-a .b {
+  html body #coach .co-a .button {
     min-height: var(--tap) !important;
     padding: 0 var(--space-md) !important;
     font-size: var(--t-s) !important;
@@ -166,7 +166,7 @@ p.v4-note {
   }
 
   /* ---------- Saves sheet: options and close button at a tappable size ---------- */
-  html body #saves .b-sm {
+  html body #saves .button-small {
     min-height: 40px !important;
   }
   html body #saves .sh-x {
@@ -180,7 +180,7 @@ p.v4-note {
   /* ---------- screen headers: same rhythm everywhere ---------- */
 
   /* ---------- shared floors: buttons and small text ---------- */
-  html body .page :is(.b-sm, .b.b-sm) {
+  html body .page :is(.button-small, .button.button-small) {
     min-height: 40px;
   }
   html body .page .lbl-s {

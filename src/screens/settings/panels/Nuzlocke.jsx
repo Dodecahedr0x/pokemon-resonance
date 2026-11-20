@@ -1,6 +1,7 @@
 import { NUZLOCKE_ON, nuzlockeConfirm, nuzlockeState } from '../../../engine/modes/nuzlocke.js';
 import { space } from '../../../lib/theme.js';
 
+import Button from '../../../components/Button.jsx';
 // Settings › Nuzlocke Mode (v4.51): data-nuzlocke-action buttons handled by the engine (engine/modes/nuzlocke.js),
 // which toggles nuzlockeConfirm (confirmation) then calls renderParams().
 export default function Nuzlocke() {
@@ -16,23 +17,23 @@ export default function Nuzlocke() {
       </p>
       <div className="sv-io">
         {on ? (
-          <button type="button" className="b b-sm b-gold" data-nuzlocke-action="off">
+          <Button size="small" variant="primary" data-nuzlocke-action="off">
             Nuzlocke : activé
-          </button>
+          </Button>
         ) : nuzlockeConfirm ? (
           <>
             <span className="sv-q">Activer ? Les prochains K.O. seront définitifs.</span>
-            <button type="button" className="b b-sm b-gold" data-nuzlocke-action="yes">
+            <Button size="small" variant="primary" data-nuzlocke-action="yes">
               Oui, activer
-            </button>
-            <button type="button" className="b b-sm" data-nuzlocke-action="no">
+            </Button>
+            <Button size="small" data-nuzlocke-action="no">
               Annuler
-            </button>
+            </Button>
           </>
         ) : (
-          <button type="button" className="b b-sm" data-nuzlocke-action="ask">
+          <Button size="small" data-nuzlocke-action="ask">
             Nuzlocke : désactivé
-          </button>
+          </Button>
         )}
       </div>
       {s.fallen.length > 0 && (

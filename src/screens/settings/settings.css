@@ -1,4 +1,4 @@
-/* Settings page (#params). Shared pieces it uses (.v4-panel, .v4-ph, .v4-ps, .v4-note, .b, .sv-io)
+/* Settings page (#params). Shared pieces it uses (.v4-panel, .v4-ph, .v4-ps, .v4-note, .button, .sv-io)
    are still styled in legacy and move to src/styles/components/ later. */
 
 /* ---------- Page grid: two columns of panels, one below 1000px ---------- */
@@ -41,7 +41,7 @@
   #gimmick-boards-panel .sv-io {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  .settings-grid .sv-io > .b {
+  .settings-grid .sv-io > .button {
     width: 100%;
     min-height: var(--tap);
     margin: 0;

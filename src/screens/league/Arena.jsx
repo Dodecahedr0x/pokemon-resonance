@@ -6,6 +6,7 @@ import { medal } from '../../engine/core/utils.js';
 import { badgeSvg, gymSel } from '../../engine/modes/league.js';
 import { LEAD } from '../../engine/progression/prestige.js';
 
+import Button from '../../components/Button.jsx';
 // Sheet of the chosen gym (#arena), with its gym Champion's line (v4.24).
 export default function Arena() {
   const g = GYMS[gymSel],
@@ -71,12 +72,12 @@ export default function Arena() {
           <dd>{`${D.time === 'nuit' ? 'Nuit' : 'Jour'} · ${D.lim} manches · ${D.foes.length} adversaires`}</dd>
         </div>
         <div className="ar-go">
-          <button type="button" className="b b-gold b-lg" data-arena={a.k}>
+          <Button size="large" variant="primary" data-arena={a.k}>
             {won ? 'Rejouer l’arène' : 'Défier l’arène'}
             <svg>
               <use href="#i-arrow" />
             </svg>
-          </button>
+          </Button>
         </div>
       </dl>
     </>

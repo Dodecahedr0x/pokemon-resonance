@@ -4,6 +4,7 @@ import { medal } from '../../../engine/core/utils.js';
 import { GYM_EDITOR, GYM_RULES, GYM_TERRAINS, gymShareCode } from '../../../engine/modes/custom-arenas.js';
 import { Html } from '../../../lib/html.jsx';
 
+import Button from '../../../components/Button.jsx';
 const Options = ({ L }) =>
   L.map(([k, n]) => (
     <option key={k} value={k}>
@@ -82,12 +83,12 @@ function Editor() {
         </label>
       ))}
       <div className="gym-tab-b">
-        <button type="button" className="b b-gold" data-gym-arena="save">
+        <Button variant="primary" data-gym-arena="save">
           Enregistrer
-        </button>
-        <button type="button" className="b b-ghost" data-gym-arena="annuler">
+        </Button>
+        <Button variant="ghost" data-gym-arena="annuler">
           Annuler
-        </button>
+        </Button>
       </div>
     </div>
   );
@@ -111,25 +112,25 @@ function Gym({ a, i }) {
         ))}
       </div>
       <div className="gym-tab-b">
-        <button type="button" className="b b-sm b-gold" data-gym-arena="jouer" data-i={i}>
+        <Button size="small" variant="primary" data-gym-arena="jouer" data-i={i}>
           Jouer
-        </button>
-        <button type="button" className="b b-sm" data-gym-arena="code" data-i={i}>
+        </Button>
+        <Button size="small" data-gym-arena="code" data-i={i}>
           Partager
-        </button>
-        <button type="button" className="b b-sm" data-gym-arena="edit" data-i={i}>
+        </Button>
+        <Button size="small" data-gym-arena="edit" data-i={i}>
           Modifier
-        </button>
-        <button type="button" className="b b-sm b-ghost" data-gym-arena="suppr" data-i={i}>
+        </Button>
+        <Button size="small" variant="ghost" data-gym-arena="suppr" data-i={i}>
           Supprimer
-        </button>
+        </Button>
       </div>
       {GYM_EDITOR && GYM_EDITOR.code === i ? (
         <div className="gym-tab-code">
           <textarea readOnly rows={3} aria-label="Code de l’arène" defaultValue={gymShareCode(a)} />
-          <button type="button" className="b b-sm" data-gym-arena="copier" data-i={i}>
+          <Button size="small" data-gym-arena="copier" data-i={i}>
             Copier
-          </button>
+          </Button>
         </div>
       ) : null}
     </article>
@@ -152,9 +153,9 @@ export default function Gyms() {
         Composez un combat (terrain, règle, adversaires), testez-le, puis envoyez son code à un ami.
       </p>
       <div className="gym-tab-a">
-        <button type="button" className="b b-gold b-sm" data-gym-arena="new">
+        <Button size="small" variant="primary" data-gym-arena="new">
           Créer une arène
-        </button>
+        </Button>
       </div>
       <div className="gym-tab-i">
         <input
@@ -165,9 +166,9 @@ export default function Gyms() {
           spellCheck="false"
           aria-label="Code d’arène"
         />
-        <button type="button" className="b b-sm" data-gym-arena="import">
+        <Button size="small" data-gym-arena="import">
           Importer
-        </button>
+        </Button>
       </div>
       {GYM_EDITOR ? <Editor /> : null}
       <div className="gym-tab-l">

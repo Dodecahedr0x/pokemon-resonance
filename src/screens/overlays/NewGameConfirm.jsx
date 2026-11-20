@@ -1,6 +1,7 @@
 import { Html } from '../../lib/html.jsx';
 import { useOverlay } from './dialogsStore.js';
 
+import Button from '../../components/Button.jsx';
 // Confirmation before a new game (#newGame). As before, the window only exists
 // from the first call of confirmDialog (065); the engine then keeps its hidden attribute
 // (React doesn't render it), the clicks (data-new-game) and the focus on "Annuler" (Cancel).
@@ -26,20 +27,16 @@ export default function NewGameConfirm() {
         </p>
         <div className="new-game-a">
           {sl ? (
-            <button type="button" className="b b-gold" data-new-game="ranger">
+            <Button variant="primary" data-new-game="ranger">
               Ranger dans l’emplacement {sl.slice(1)}, puis continuer
-            </button>
+            </Button>
           ) : (
-            <button type="button" className="b" data-new-game="saves">
-              Emplacements pleins : ouvrir les Sauvegardes
-            </button>
+            <Button data-new-game="saves">Emplacements pleins : ouvrir les Sauvegardes</Button>
           )}
-          <button type="button" className="b" data-new-game="oui">
-            Continuer sans ranger
-          </button>
-          <button type="button" className="b b-ghost" data-new-game="non">
+          <Button data-new-game="oui">Continuer sans ranger</Button>
+          <Button variant="ghost" data-new-game="non">
             Annuler
-          </button>
+          </Button>
         </div>
       </div>
     </div>

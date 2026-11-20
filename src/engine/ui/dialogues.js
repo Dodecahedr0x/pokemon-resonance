@@ -71,7 +71,7 @@ const DLG = [
   ['.bag-counter-dialogue', e => e, true],
 ];
 
-const SKIP = '.dlg-who,button,input,select,textarea,label,svg,.pk-fl,.pav,.b';
+const SKIP = '.dlg-who,button,input,select,textarea,label,svg,.pk-fl,.pav,.button';
 
 const SEEN = new Set();
 

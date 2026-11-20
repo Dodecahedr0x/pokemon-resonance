@@ -52,7 +52,7 @@ html body #accueil .route .rt-sign {
 }
 
 /* ---------- 2. Visible selected state (first-launch difficulty) ---------- */
-html body .it-diff .b[aria-pressed='true'] {
+html body .it-diff .button[aria-pressed='true'] {
   background: linear-gradient(180deg, #ffe778, #f2b72e) !important;
   color: #10263a !important;
   border-color: rgba(255, 243, 174, 0.8) !important;
@@ -92,8 +92,8 @@ html body #resonance-launch .rl-meta strong {
   html body #todBtns button,
   html body .it-skip,
   html body .co-n,
-  html body .co-a .b-sm,
-  html body .team-x .b-sm,
+  html body .co-a .button-small,
+  html body .team-x .button-small,
   html body .cnt,
   html body dt,
   html body .tc-k span,

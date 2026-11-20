@@ -3,6 +3,7 @@ import { BY } from '../../../engine/pokemon/pokemon.js';
 import { PROFILE, isCamp } from '../../../engine/state/game-state.js';
 import { CHALLENGES, CHALLENGE_CONF } from '../../../engine/progression/campaign-challenges.js';
 
+import Button from '../../../components/Button.jsx';
 // Challenge switch (data-defi, handled by the engine).
 function Challenge({ k, on }) {
   return (
@@ -62,22 +63,22 @@ export default function CampaignChallenges() {
           <em>{CHALLENGES.nuzlocke[1]}</em>
         </span>
         {d.nuzlocke ? (
-          <button type="button" className="b b-sm b-ghost" data-nz="stop">
+          <Button size="small" variant="ghost" data-nz="stop">
             Abandonner
-          </button>
+          </Button>
         ) : CHALLENGE_CONF ? (
           <span className="nuzlocke-confirm">
-            <button type="button" className="b b-sm b-gold" data-nz="ok">
+            <Button size="small" variant="primary" data-nz="ok">
               Confirmer
-            </button>
-            <button type="button" className="b b-sm b-ghost" data-nz="non">
+            </Button>
+            <Button size="small" variant="ghost" data-nz="non">
               Annuler
-            </button>
+            </Button>
           </span>
         ) : (
-          <button type="button" className="b b-sm" data-nz="on">
+          <Button size="small" data-nz="on">
             Activer
-          </button>
+          </Button>
         )}
       </div>
       {CHALLENGE_CONF && !d.nuzlocke ? (

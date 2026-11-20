@@ -227,7 +227,7 @@ html body.compact-battle #cbBattle .bt-foot.foot-tools #bEnd {
   font-style: normal;
   color: #ffd9a8;
 }
-.tile-info-u .b {
+.tile-info-u .button {
   justify-self: start;
   min-height: 38px;
 }

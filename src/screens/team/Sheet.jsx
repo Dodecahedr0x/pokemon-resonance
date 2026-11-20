@@ -21,6 +21,7 @@ import { RANKS, stars, rankId } from '../../engine/combat/resonance.js';
 import { duoTechnique } from '../../engine/combat/duo-techniques.js';
 import { captureSite } from '../../engine/world/catch-anywhere.js';
 
+import Button from '../../components/Button.jsx';
 // Pokémon sheet (#sheet / #sh). Opening, closing, focus and scrolling: the engine's openSheet /
 // closeSheet; clicks (data-close, data-open, data-rx, data-qa, data-eq): the engine's
 // listener on #sheet, which stays mounted. When closed, the sheet keeps its last content (old DOM).
@@ -250,7 +251,7 @@ function Action({ m, base, id }) {
     onM = cur === id,
     ok = inBox(id);
   return (
-    <button className={`b ${onM ? '' : 'b-gold'}`} type="button" data-qa={id} disabled={!onM && !ok}>
+    <Button variant={onM ? undefined : 'primary'} data-qa={id} disabled={!onM && !ok}>
       {onM
         ? `Retirer ${m.n} de l’équipe`
         : ok
@@ -258,7 +259,7 @@ function Action({ m, base, id }) {
           : m.st > 1 && isCamp() && inBox(base.id)
             ? `${m.n} : à éveiller en combat d’abord`
             : `${base.n} : à capturer${captureSite(base.id) ? ' · ' + captureSite(base.id) : ''}`}
-    </button>
+    </Button>
   );
 }
 

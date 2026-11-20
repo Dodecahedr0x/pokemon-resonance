@@ -1,5 +1,6 @@
 import { NEWS_ENTRIES, hasNewsToView } from '../../engine/ui/whats-new.js';
 
+import Button from '../../components/Button.jsx';
 // "Nouveau" (New) panel on the Home page (#v4News, v4.16.1), before the shortcuts.
 // Removed once the player has tapped "Compris" (Understood) (data-news="ok", handled by the engine).
 export default function WhatsNew() {
@@ -13,9 +14,9 @@ export default function WhatsNew() {
           <use href="#i-star" />
         </svg>
         <b>Nouveau</b>
-        <button type="button" className="b b-sm b-ghost nw-x" data-news="ok">
+        <Button size="small" variant="ghost" className="nw-x" data-news="ok">
           Compris
-        </button>
+        </Button>
       </header>
       <ul className="nw-l">
         {NEWS_ENTRIES.map(([ic, t, d, go], i) => {

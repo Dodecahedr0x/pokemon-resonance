@@ -18,6 +18,7 @@ import { captureSite } from '../../engine/world/catch-anywhere.js';
 import { REGIONAL_FORM_LIST } from '../../engine/pokemon/regional-forms.js';
 import { space } from '../../lib/theme.js';
 
+import Button from '../../components/Button.jsx';
 const no3 = n => String(n).padStart(3, '0');
 
 // Sheet of the selected Pokémon (#dex4Card). The transient classes scanSweep / dexNew
@@ -204,15 +205,13 @@ export default function DexCard() {
       </div>
       {'\n  '}
       <div className="dex-actions">
-        <button type="button" className="b" data-v4sheet={m.id}>
-          Fiche tactique complète
-        </button>
-        <button type="button" className="b b-gold" data-go="pokedex">
+        <Button data-v4sheet={m.id}>Fiche tactique complète</Button>
+        <Button variant="primary" data-go="pokedex">
           {squad.some(id => BY[id].base === m.base) ? 'Dans l’équipe · voir' : 'Recruter dans l’équipe'}
           <svg>
             <use href="#i-arrow" />
           </svg>
-        </button>
+        </Button>
       </div>
       {fr && (
         <p

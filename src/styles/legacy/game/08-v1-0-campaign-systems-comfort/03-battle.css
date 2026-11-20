@@ -148,7 +148,7 @@ body:not(:has(#combat.on)) .coach {
     font-size: 12.5px;
     line-height: 1.4;
   }
-  .co-a .b {
+  .co-a .button {
     min-height: 32px;
     padding: 0 var(--space-sm);
     font-size: 10px;

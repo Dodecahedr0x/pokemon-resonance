@@ -6,6 +6,7 @@ import { companionPanelData } from '../../engine/progression/companion-pokemon.j
 import { buddyData } from '../../engine/progression/companion-eggs.js';
 import { useHomeVersion } from '../home/homeStore.js';
 
+import Button from '../../components/Button.jsx';
 // Companion (#v4Comp) and its Berry, Gift and Memories buttons, on the Team page (styles: team-companion.css).
 // Clicks (data-comp, data-buddy) are still handled by the engine, which redraws through refreshHome().
 export default function Companion() {
@@ -38,9 +39,9 @@ function Empty() {
           bonus.
         </em>
       </span>
-      <button type="button" className="b b-sm b-gold" data-comp="choisir">
+      <Button size="small" variant="primary" data-comp="choisir">
         Choisir
-      </button>
+      </Button>
     </div>
   );
 }
@@ -73,39 +74,29 @@ function Sheet({ d }) {
         <em className="team-companion-bonus">{bonus || '2 cœurs : premier bonus en combat'}</em>
       </div>
       <div className="team-companion-actions">
-        <button
-          type="button"
-          className={`b b-sm ${petting ? 'b-ghost' : 'b-gold'}`}
-          data-comp="caresser"
-          disabled={petting}
-        >
+        <Button size="small" variant={petting ? 'ghost' : 'primary'} data-comp="caresser" disabled={petting}>
           {petting ? 'Câliné ✓' : 'Câliner'}
-        </button>
-        <button type="button" className="b b-sm b-ghost" data-comp="choisir">
+        </Button>
+        <Button size="small" variant="ghost" data-comp="choisir">
           Changer
-        </button>
+        </Button>
       </div>
       {x && (
         <div className="team-companion-buddy">
-          <button type="button" className="b b-sm" data-buddy="baie" disabled={!!(x.feed || !x.baie)}>
+          <Button size="small" data-buddy="baie" disabled={!!(x.feed || !x.baie)}>
             {x.feed ? 'Baie offerte ✓' : x.baie ? 'Offrir une Baie' : 'Pas de Baie'}
-          </button>
-          <button
-            type="button"
-            className={'b b-sm' + (x.h >= 3 && !x.gift ? ' b-gold' : ' b-ghost')}
+          </Button>
+          <Button
+            size="small"
+            variant={x.h >= 3 && !x.gift ? 'primary' : 'ghost'}
             data-buddy="cadeau"
             disabled={!(x.h >= 3 && !x.gift)}
           >
             {x.h < 3 ? 'Cadeau à 3 ♥' : x.gift ? 'Cadeau reçu ✓' : 'Cadeau du jour'}
-          </button>
-          <button
-            type="button"
-            className={'b b-sm' + (x.isNew ? ' b-gold' : ' b-ghost')}
-            data-buddy="souv"
-            disabled={!x.h}
-          >
+          </Button>
+          <Button size="small" variant={x.isNew ? 'primary' : 'ghost'} data-buddy="souv" disabled={!x.h}>
             Souvenirs{x.isNew ? ' · nouveau' : ''}
-          </button>
+          </Button>
         </div>
       )}
     </>

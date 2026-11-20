@@ -93,7 +93,7 @@ body {
   background: rgba(4, 18, 28, 0.55) !important;
   backdrop-filter: blur(10px);
 }
-#accueil .v4h-cta .b {
+#accueil .v4h-cta .button {
   min-height: 48px !important;
   border-radius: 14px !important;
 }

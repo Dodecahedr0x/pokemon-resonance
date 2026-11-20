@@ -50,6 +50,9 @@ npm run preview   # serve dist/
 - Use `useKeyed(compute, keys)` instead of `useMemo` when the inputs live in engine modules.
 - Engine HTML fragments are rendered with `<Html html="…" />`, not `dangerouslySetInnerHTML`.
 - Wrap independent blocks in `Guard` so one render error doesn't blank the screen.
+- Buttons are `<Button size="small" variant="primary">` (`src/components/Button.jsx`), not hand-written class lists.
+  When a shared class is renamed, add old → new to `src/lib/renamedClasses.js` so players' Design Workshop CSS keeps
+  working.
 
 ## Saves and persisted data
 

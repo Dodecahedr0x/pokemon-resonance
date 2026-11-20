@@ -1,6 +1,7 @@
 import { useOverlay } from './dialogsStore.js';
 import { Dialogue } from './Window.jsx';
 
+import Button from '../../components/Button.jsx';
 // Friend challenges (#amiBox): my trainer card, or adding a friend.
 // The engine (055) keeps the clicks (data-ami), the input (#amiNom updates #amiCode),
 // the error message (#amiErr.textContent) and the hidden attribute.
@@ -42,14 +43,10 @@ function MyCard({ displayName: displayName, code, teamNames: team, canShare: sha
           </p>
           <textarea id="amiCode" className="am-code" readOnly rows={4} defaultValue={code} />
           <div className="am-a">
-            <button type="button" className="b b-gold" data-ami="copier">
+            <Button variant="primary" data-ami="copier">
               Copier le code
-            </button>
-            {sharing && (
-              <button type="button" className="b" data-ami="partager">
-                Partager
-              </button>
-            )}
+            </Button>
+            {sharing && <Button data-ami="partager">Partager</Button>}
           </div>
           <p className="am-nt">
             Changez d’équipe ou progressez, puis renvoyez une nouvelle carte : vos amis verront la mise à jour.
@@ -76,9 +73,9 @@ function Addition() {
       <textarea id="amiColle" className="am-code" rows={4} placeholder="RES-…" />
       <p className="am-err" id="amiErr" aria-live="polite" />
       <div className="am-a">
-        <button type="button" className="b b-gold" data-ami="valider">
+        <Button variant="primary" data-ami="valider">
           Ajouter
-        </button>
+        </Button>
       </div>
     </Dialogue>
   );

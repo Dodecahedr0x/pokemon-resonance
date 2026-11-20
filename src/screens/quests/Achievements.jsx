@@ -1,6 +1,7 @@
 import { PROFILE } from '../../engine/state/game-state.js';
 import { ACHIEVEMENTS } from '../../engine/progression/achievements.js';
 
+import Button from '../../components/Button.jsx';
 // « Succès » (Achievements) tab (v4.9): an achievement that grants a title can be worn (data-titre, engine).
 function AchievementRow({ s }) {
   const ok = !!(PROFILE.achievements && PROFILE.achievements[s.id]),
@@ -29,14 +30,9 @@ function AchievementRow({ s }) {
         {s.t ? <small className="su-ti">Titre : « {s.t} »</small> : null}
       </div>
       {s.t && ok ? (
-        <button
-          type="button"
-          className={'b b-sm' + (equipped ? ' b-gold' : '')}
-          data-titre={s.id}
-          aria-pressed={equipped}
-        >
+        <Button size="small" variant={equipped ? 'primary' : undefined} data-titre={s.id} aria-pressed={equipped}>
           {equipped ? 'Porté' : 'Porter'}
-        </button>
+        </Button>
       ) : ok ? (
         <span className="su-ok">✓</span>
       ) : null}

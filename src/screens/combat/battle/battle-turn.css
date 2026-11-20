@@ -216,7 +216,7 @@
   font-size: 13px;
   line-height: 1.35;
 }
-.turn-guide-row .b {
+.turn-guide-row .button {
   flex: none;
 }
 /* « Terminer » step: the button takes the full width, who plays next is announced below */

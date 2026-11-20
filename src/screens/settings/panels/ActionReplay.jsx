@@ -1,5 +1,6 @@
 import { isCreator } from '../../../engine/tools/action-replay.js';
 
+import Button from '../../../components/Button.jsx';
 const CHEATS = [
   ['argent', '+10 000 ₽'],
   ['eclats', '+100 Éclats'],
@@ -33,9 +34,9 @@ export default function ActionReplay() {
             placeholder="Code Action Replay"
             aria-label="Code Action Replay"
           />
-          <button type="button" className="b b-sm" data-cheat-code="ok">
+          <Button size="small" data-cheat-code="ok">
             Valider
-          </button>
+          </Button>
         </div>
       </section>
     );
@@ -54,14 +55,14 @@ export default function ActionReplay() {
       </p>
       <div className="cheat-code-grid">
         {CHEATS.map(([k, t]) => (
-          <button key={k} type="button" className="b b-sm" data-cheat={k}>
+          <Button key={k} size="small" data-cheat={k}>
             {t}
-          </button>
+          </Button>
         ))}
       </div>
-      <button type="button" className="b b-sm b-ghost" data-cheat="off">
+      <Button size="small" variant="ghost" data-cheat="off">
         Désactiver Action Replay sur cet appareil
-      </button>
+      </Button>
     </section>
   );
 }

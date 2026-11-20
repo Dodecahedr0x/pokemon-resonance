@@ -2,6 +2,7 @@ import { TYPES } from '../../../engine/data/game-data.js';
 import { gp, tc } from '../../../engine/core/utils.js';
 import { TRAINER_AVATAR, RARE_ENABLED } from '../../../engine/world/rare-encounters.js';
 
+import Button from '../../../components/Button.jsx';
 // Settings › Trainer avatar and Rare encounters (v4.50): data-avatar-action buttons handled by the engine (engine/world/rare-encounters.js).
 export default function Avatar() {
   const a = TRAINER_AVATAR(),
@@ -36,12 +37,12 @@ export default function Avatar() {
         })}
       </div>
       <div className="sv-io">
-        <button type="button" className={`b b-sm${a && a.hex ? ' b-gold' : ''}`} data-avatar-action="hex">
+        <Button size="small" variant={a && a.hex ? 'primary' : undefined} data-avatar-action="hex">
           {a && a.hex ? 'Cadre carré arrondi : activé' : 'Cadre carré arrondi : désactivé'}
-        </button>
-        <button type="button" className="b b-sm" data-avatar-action="avreset">
+        </Button>
+        <Button size="small" data-avatar-action="avreset">
           Retirer l’avatar
-        </button>
+        </Button>
       </div>
       <h3 className="h3 settings-subhead">Rencontres rares</h3>
       <p className="v4-note">
@@ -49,9 +50,9 @@ export default function Avatar() {
         Des trouvailles scintillent aussi sur la carte, une fois par jour.
       </p>
       <div className="sv-io">
-        <button type="button" className={`b b-sm${on ? ' b-gold' : ''}`} data-avatar-action="rare">
+        <Button size="small" variant={on ? 'primary' : undefined} data-avatar-action="rare">
           {on ? 'Rencontres rares : activées' : 'Rencontres rares : désactivées'}
-        </button>
+        </Button>
       </div>
     </section>
   );

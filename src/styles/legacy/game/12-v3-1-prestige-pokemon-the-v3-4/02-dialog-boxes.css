@@ -68,7 +68,7 @@
   .tip {
     grid-template-columns: auto minmax(0, 1fr);
   }
-  .tip .b {
+  .tip .button {
     grid-column: 1/-1;
     justify-self: end;
   }

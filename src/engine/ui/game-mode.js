@@ -34,7 +34,7 @@ export function confirmDialog(heading, text, next) {
   const el = document.getElementById('new-game');
   el.hidden = false;
   confirmDialog.suite = next;
-  const f = el.querySelector('[data-new-game="non"].b');
+  const f = el.querySelector('[data-new-game="non"].button');
   if (f) {
     f.focus();
   }

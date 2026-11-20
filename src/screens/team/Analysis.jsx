@@ -10,6 +10,7 @@ import { RANKS, rankId, rankTag } from '../../engine/combat/resonance.js';
 import { duoTechnique } from '../../engine/combat/duo-techniques.js';
 import { FORMATIONS, formationKey, formationTeam, formationActive } from '../../engine/team/formations.js';
 
+import Button from '../../components/Button.jsx';
 // Collapsed analysis (#anaD): summary (#anaSum) and cards (#ana), styles in team-analysis.css. Clicks (data-p,
 // data-rx, data-form-picker): engine listeners on #ana and on the document.
 export default function Analysis({ A }) {
@@ -65,19 +66,13 @@ export default function Analysis({ A }) {
               <h4>Équipes types</h4>
               <div className="team-analysis-row">
                 {Object.entries(PRESETS).map(([k, p]) => (
-                  <button
-                    key={k}
-                    type="button"
-                    className="b b-sm"
-                    data-p={k}
-                    title={p.f ? 'Formation · recrues confirmées' : undefined}
-                  >
+                  <Button key={k} size="small" data-p={k} title={p.f ? 'Formation · recrues confirmées' : undefined}>
                     {p.n}
-                  </button>
+                  </Button>
                 ))}
-                <button type="button" className="b b-sm" data-p="clear">
+                <Button size="small" data-p="clear">
                   Vider
-                </button>
+                </Button>
               </div>
               <p className="empty">Chargez une équipe, puis lancez un combat avec elle.</p>
             </div>

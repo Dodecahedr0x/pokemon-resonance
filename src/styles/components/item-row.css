@@ -79,7 +79,7 @@
   align-items: center;
   gap: var(--space-sm);
 }
-.item-row-actions .b {
+.item-row-actions .button {
   display: inline-flex;
   align-items: center;
   justify-content: center;

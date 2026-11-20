@@ -17,6 +17,7 @@ import { duelUnder, duelTitle } from '../../../engine/modes/duel.js';
 import { IMMERSION_ON } from '../../../engine/audio/immersion.js';
 import { useBattleVersion } from './battleStore.js';
 
+import Button from '../../../components/Button.jsx';
 const NL = '\n  ';
 
 // End-of-battle sheet (#cbResult), shown by finish() via the hidden attribute.
@@ -193,40 +194,34 @@ function Sheet({ S, cardRef, decor: deco }) {
       <div className="res-a">
         {tower ? (
           run && run.reward ? (
-            <button className="b b-gold" type="button" data-tdrn="reward">
+            <Button variant="primary" data-tdrn="reward">
               Récompense · étage {run.floor}
               <svg>
                 <use href="#i-arrow" />
               </svg>
-            </button>
+            </Button>
           ) : (
-            <button className="b b-gold" type="button" data-tdrn="new">
+            <Button variant="primary" data-tdrn="new">
               Nouvelle ascension
               <svg>
                 <use href="#i-arrow" />
               </svg>
-            </button>
+            </Button>
           )
         ) : gk && gk !== S.sc ? (
-          <button className="b b-gold" type="button" data-next={gk}>
+          <Button variant="primary" data-next={gk}>
             Suite : {gn}
             <svg>
               <use href="#i-arrow" />
             </svg>
-          </button>
+          </Button>
         ) : null}
-        <button className="b" data-res="prep" type="button">
-          {du ? 'Nouveau duel' : 'Changer d’équipe'}
-        </button>
-        {gy ? (
-          <button className="b" data-res="ligue" type="button">
-            Voir les arènes
-          </button>
-        ) : null}
+        <Button data-res="prep">{du ? 'Nouveau duel' : 'Changer d’équipe'}</Button>
+        {gy ? <Button data-res="ligue">Voir les arènes</Button> : null}
         {tower ? null : (
-          <button className="b b-gold" data-res="again" type="button">
+          <Button variant="primary" data-res="again">
             {du ? 'Revanche' : 'Rejouer'}
-          </button>
+          </Button>
         )}
       </div>
       {deco && deco.holo ? <i className="pk-holo" aria-hidden="true" /> : null}

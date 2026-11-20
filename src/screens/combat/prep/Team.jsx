@@ -13,6 +13,7 @@ import { teamBtns } from '../../../engine/modes/gym-screen.js';
 import { k2n } from '../../../engine/world/home-journey.js';
 import { DOCTRINE_DEFS } from '../../../engine/combat/doctrines.js';
 
+import Button from '../../../components/Button.jsx';
 // The four team slots, then the active synergies (#ptList).
 function Places() {
   const S = synOf(squad);
@@ -126,9 +127,9 @@ function Squads() {
         <>
           <span className="lbl-s">Mes équipes</span>
           {T.map((t, i) => (
-            <button key={i} type="button" className="b b-sm" data-team-save="charger" data-i={i}>
+            <Button key={i} size="small" data-team-save="charger" data-i={i}>
               {t.n}
-            </button>
+            </Button>
           ))}
         </>
       ) : null}
@@ -194,7 +195,7 @@ export default function Team({ v }) {
             </Fragment>
           )}
         </span>
-        <button className="b b-gold b-lg" id="bLaunch" type="button" disabled={on && (!squad.length || !!lk)}>
+        <Button size="large" variant="primary" id="bLaunch" disabled={on && (!squad.length || !!lk)}>
           {on && lk ? (
             'Verrouillé'
           ) : on && !squad.length ? (
@@ -207,7 +208,7 @@ export default function Team({ v }) {
               </svg>
             </>
           )}
-        </button>
+        </Button>
       </div>
     </div>
   );

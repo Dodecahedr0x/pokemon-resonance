@@ -6,6 +6,7 @@ import { crestSmall } from '../../engine/team/team.js';
 import { SPARK, shinyStyle } from '../../engine/pokemon/shiny.js';
 import { DOMINANT_CROWN_SVG } from '../../engine/world/dominant-pokemon.js';
 
+import Button from '../../components/Button.jsx';
 // Fishing (#fishingPanel): waiting, bite, catch. The engine (058) keeps the timers,
 // the clicks (data-fishing-panel) and the hidden attribute; after a shiny catch, it
 // recolors the illustration (.pe-prise img, applyShinyArt) right after rendering.
@@ -21,9 +22,9 @@ function Body({ status: state, id, sh, dom, known: known }) {
           <span className="pe-bouchon" />
         </div>
         <p className="d">La ligne est à l’eau… Attendez que ça morde, puis ferrez vite !</p>
-        <button type="button" className="b b-lg" disabled>
+        <Button size="large" disabled>
           Ça ne mord pas encore…
-        </button>
+        </Button>
       </>
     );
   }
@@ -34,9 +35,9 @@ function Body({ status: state, id, sh, dom, known: known }) {
           <span className="pe-bouchon" />
         </div>
         <p className="pe-alerte">Ça mord !</p>
-        <button type="button" className="b b-gold b-lg" data-fishing-panel="ferrer">
+        <Button size="large" variant="primary" data-fishing-panel="ferrer">
           Ferrer !
-        </button>
+        </Button>
       </>
     );
   }
@@ -45,9 +46,9 @@ function Body({ status: state, id, sh, dom, known: known }) {
       <>
         <div className="pe-eau" />
         <p className="d">Trop tard : il s’est échappé.</p>
-        <button type="button" className="b b-gold" data-fishing-panel="lancer">
+        <Button variant="primary" data-fishing-panel="lancer">
           Relancer la ligne
-        </button>
+        </Button>
       </>
     );
   }
@@ -80,12 +81,10 @@ function Body({ status: state, id, sh, dom, known: known }) {
         ))}
       </div>
       <div className="enc-a">
-        <button type="button" className="b" data-fishing-panel="relacher">
-          Relâcher
-        </button>
-        <button type="button" className="b b-gold" data-fishing-panel="combat">
+        <Button data-fishing-panel="relacher">Relâcher</Button>
+        <Button variant="primary" data-fishing-panel="combat">
           {known ? 'Combattre' : 'Combattre pour le capturer'}
-        </button>
+        </Button>
       </div>
     </>
   );

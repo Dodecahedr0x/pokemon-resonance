@@ -101,7 +101,7 @@ export function init() {
   document.addEventListener(
     'pointerdown',
     e => {
-      const b = e.target.closest && e.target.closest('.b-gold,.v4-cta');
+      const b = e.target.closest && e.target.closest('.button-primary,.v4-cta');
       if (!b || calmMotion()) {
         return;
       }

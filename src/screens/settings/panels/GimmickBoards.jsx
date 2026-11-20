@@ -1,19 +1,14 @@
 import { GIMMICKS, gimmickKey } from '../../../engine/modes/feats-gimmicks.js';
 
+import Button from '../../../components/Button.jsx';
 // Gimmick boards (v4.67): a terrain rule added to battles.
 // Buttons handled by the engine (delegated click on data-gimmick-board).
 export default function GimmickBoards() {
   const c = gimmickKey();
   const btn = (k, l) => (
-    <button
-      key={k}
-      type="button"
-      className={`b b-sm${c === k ? ' b-gold' : ' b-ghost'}`}
-      data-gimmick-board={k}
-      aria-pressed={c === k}
-    >
+    <Button key={k} size="small" variant={c === k ? 'primary' : 'ghost'} data-gimmick-board={k} aria-pressed={c === k}>
       {l}
-    </button>
+    </Button>
   );
   const d =
     c !== 'off' && c !== 'rand' ? GIMMICKS[c].d : c === 'rand' ? 'Un gimmick différent est tiré à chaque combat.' : '';

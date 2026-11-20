@@ -73,13 +73,13 @@ export function tileCard() {
       row[i] && row[i] !== 'ren' ? `<span class="chip cat-${rxCat(row[i])}"><i></i>${e} → ${RX[row[i]].n}</span>` : ''
     ).join('');
   }
-  return `<div class="battle-tile"><div class="battle-tile-head"><b>Case ${'ABCDEFGH'[c]}${r + 1}</b><button type="button" class="b b-sm b-ghost" data-tile="x">Fermer</button></div><p>${tileTip(k)}</p>${rx ? `<div class="battle-tile-reactions">${rx}</div>` : ''}</div>`;
+  return `<div class="battle-tile"><div class="battle-tile-head"><b>Case ${'ABCDEFGH'[c]}${r + 1}</b><button type="button" class="button button-small button-ghost" data-tile="x">Fermer</button></div><p>${tileTip(k)}</p>${rx ? `<div class="battle-tile-reactions">${rx}</div>` : ''}</div>`;
 }
 
 export function unitExtras(u) {
   const o = [];
   if (ui.undo && ui.undo.uid === u.uid && u.moved && !u.acted) {
-    o.push(`<button type="button" class="b b-sm" data-undo="1">Annuler le déplacement</button>`);
+    o.push(`<button type="button" class="button button-small" data-undo="1">Annuler le déplacement</button>`);
   }
   if (u.item) {
     o.push(
@@ -144,5 +144,5 @@ export function catchBlock(e) {
     .map(r => `<li class="${r.ok ? 'is-met' : ''}">${r.t}</li>`)
     .join(
       ''
-    )}</ul><button type="button" class="b b-sm ${ok ? 'b-gold' : ''}" data-cap="${e.uid}" ${ok ? '' : 'disabled'}>${SHOP[CAP_K].n} sur ${e.n}</button>${B.stats.caught.length ? '' : '<p class="battle-hint">Un Pokémon K.O. ne peut plus être capturé.</p>'}</div>`;
+    )}</ul><button type="button" class="button button-small ${ok ? 'button-primary' : ''}" data-cap="${e.uid}" ${ok ? '' : 'disabled'}>${SHOP[CAP_K].n} sur ${e.n}</button>${B.stats.caught.length ? '' : '<p class="battle-hint">Un Pokémon K.O. ne peut plus être capturé.</p>'}</div>`;
 }

@@ -48,6 +48,7 @@ import { isEnemyTurn } from '../../../engine/combat/quick-battle.js';
 import { useBattleVersion } from './battleStore.js';
 import { STEP, Hi, withoutTip } from './frag.jsx';
 
+import Button from '../../../components/Button.jsx';
 const NL = '\n  ';
 
 // Statuses that make the round pass (u.sn), based on the Pokémon's badge.
@@ -339,9 +340,9 @@ function OpponentSheet({ e }) {
         })}
       </div>
       {NL}
-      <button type="button" className="b b-sm" data-fc="1">
+      <Button size="small" data-fc="1">
         Fermer
-      </button>
+      </Button>
     </>
   );
 }
@@ -438,12 +439,12 @@ function Preview({ v }) {
       ) : null}
       {v.over === 'win' ? <p className="battle-preview-win">Cette action termine le combat.</p> : null}
       <div className="battle-preview-actions">
-        <button type="button" className="b b-sm" data-pv="no">
+        <Button size="small" data-pv="no">
           Annuler
-        </button>
-        <button type="button" className="b b-sm b-gold" data-pv="ok">
+        </Button>
+        <Button size="small" variant="primary" data-pv="ok">
           Confirmer
-        </button>
+        </Button>
       </div>
     </div>
   );
@@ -518,9 +519,9 @@ function Step({ u, st }) {
   if (st === 'deplacer') {
     txt = `Touchez une case bleue pour déplacer ${u.n}, ou attaquez d’ici.`;
     bt = (
-      <button type="button" className="b b-sm" data-vx="stay-put">
+      <Button size="small" data-vx="stay-put">
         <b>Rester ici</b>
-      </button>
+      </Button>
     );
   } else if (st === 'agir') {
     const target = u.mv.some(id => targets(B, u, MV[id]).length);
@@ -528,9 +529,9 @@ function Step({ u, st }) {
       ? `Choisissez une capacité${canAwaken(B, u) ? ', ou éveillez-le' : ''}.`
       : `Aucune cible à portée${canAwaken(B, u) ? ' : éveillez-le, ou passez' : ''}.`;
     bt = (
-      <button type="button" className="b b-sm" data-vx="skip-action">
+      <Button size="small" data-vx="skip-action">
         <b>Passer l’action</b>
-      </button>
+      </Button>
     );
   } else if (st === 'extra') {
     txt = [
@@ -542,9 +543,9 @@ function Step({ u, st }) {
     const next = turnFlow.remaining(B).find(x => x !== u);
     bt = (
       <>
-        <button type="button" className="b b-sm b-gold" data-vx="finished-round">
+        <Button size="small" variant="primary" data-vx="finished-round">
           <b>Terminer {u.n}</b>
-        </button>
+        </Button>
         {B.order !== 'vitesse' ? (
           <span className="turn-guide-suite">{next ? `Ensuite : ${next.n}` : 'Dernier Pokémon de la manche'}</span>
         ) : null}

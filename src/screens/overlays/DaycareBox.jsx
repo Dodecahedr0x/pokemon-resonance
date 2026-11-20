@@ -3,6 +3,7 @@ import { Box, Dialogue } from './Window.jsx';
 import { BY } from '../../engine/pokemon/pokemon.js';
 import { medal } from '../../engine/core/utils.js';
 
+import Button from '../../components/Button.jsx';
 // Camp Daycare (#pensBox): choice of a pair. The engine (055) computes the list and
 // the compatibility, and keeps the clicks (data-pens, data-pens-p) and the hidden attribute.
 export default function DaycareBox() {
@@ -43,9 +44,9 @@ function Card({ L, ok }) {
           <p className="v4-empty">Aucun Pokémon disponible au camp.</p>
         )}
       </div>
-      <button type="button" className="b b-gold" data-pens="ok" disabled={!ok}>
+      <Button variant="primary" data-pens="ok" disabled={!ok}>
         Confier le couple
-      </button>
+      </Button>
     </Dialogue>
   );
 }

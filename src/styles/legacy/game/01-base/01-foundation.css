@@ -92,8 +92,8 @@ body::before {
   background: var(--gold);
   color: #16120a;
 }
-/* .b buttons keep their own radius when focused */
-:focus-visible:not(:where(.b)) {
+/* .button buttons keep their own radius when focused */
+:focus-visible:not(:where(.button)) {
   outline: 2px solid var(--gold);
   outline-offset: 3px;
   border-radius: 8px;

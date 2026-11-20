@@ -228,7 +228,7 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
-  .bt-foot .b {
+  .bt-foot .button {
     flex: none;
     height: 46px;
     padding: 0 var(--space-lg);

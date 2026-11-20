@@ -326,7 +326,7 @@ export function init() {
     if (t.fin) {
       return `<div class="res-l"><h4>Boss Rush</h4><div class="rl"><span>Le run s’arrête au boss ${t.i + 1} sur ${t.n}. Record : ${bossRushState().best}.</span></div></div>`;
     }
-    return `<div class="res-l"><h4>Boss Rush</h4><div class="rl"><span>Boss ${t.i} sur ${t.n}. Prochain : ${esc(t.displayName)}. Vos PV ne se régénèrent pas.</span><button type="button" class="b b-sm b-gold" data-boss-rush="suite">Étape suivante</button></div></div>`;
+    return `<div class="res-l"><h4>Boss Rush</h4><div class="rl"><span>Boss ${t.i} sur ${t.n}. Prochain : ${esc(t.displayName)}. Vos PV ne se régénèrent pas.</span><button type="button" class="button button-small button-primary" data-boss-rush="suite">Étape suivante</button></div></div>`;
   });
 
   document.addEventListener('click', onBossRushClick, true);

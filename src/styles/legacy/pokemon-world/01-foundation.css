@@ -124,7 +124,7 @@ html:not(#pkz) body:not(#pkz) #story-scene .sc-card.pk-dlg .sc-tx {
 html:not(#pkz) body:not(#pkz) #story-scene .sc-card.pk-dlg .sc-n {
   color: #6a7688 !important;
 }
-html:not(#pkz) body:not(#pkz) .pk-dlg .b-ghost {
+html:not(#pkz) body:not(#pkz) .pk-dlg .button-ghost {
   color: #2c5fae !important;
   background: transparent !important;
   border: 1.5px solid rgba(44, 95, 174, 0.45) !important;

@@ -1,3 +1,4 @@
+import Button from '../../../components/Button.jsx';
 // Local duel (#duel433r, v4.33 · 068): relay screen between the two players, or
 // abandon confirmation. The clicks (data-forfeit-dialog) stay in the engine.
 export default function DuelRelay({ d }) {
@@ -11,12 +12,12 @@ export default function DuelRelay({ d }) {
           </h2>
           <p className="sub">{d.other} remporte le duel.</p>
           <div className="forfeit-dialog-a">
-            <button type="button" className="b b-gold" data-forfeit-dialog="forfait">
+            <Button variant="primary" data-forfeit-dialog="forfait">
               Déclarer forfait
-            </button>
-            <button type="button" className="b b-ghost" data-forfeit-dialog="non">
+            </Button>
+            <Button variant="ghost" data-forfeit-dialog="non">
               Continuer le duel
-            </button>
+            </Button>
           </div>
         </div>
       ) : (
@@ -36,9 +37,9 @@ export default function DuelRelay({ d }) {
               </span>
             ))}
           </div>
-          <button type="button" className="b b-gold b-lg" data-forfeit-dialog="go">
+          <Button size="large" variant="primary" data-forfeit-dialog="go">
             C’est parti
-          </button>
+          </Button>
         </div>
       )}
     </div>

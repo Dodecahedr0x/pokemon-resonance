@@ -18,7 +18,7 @@
     auto;
   box-shadow: 0 30px 60px -36px #000;
 }
-.tc-h .b {
+.tc-h .button {
   grid-column: 1/-1;
   justify-self: stretch;
 }
@@ -219,7 +219,7 @@
   .tc-h {
     grid-template-columns: auto minmax(0, 1fr);
   }
-  .tc-h .b {
+  .tc-h .button {
     grid-column: 1/-1;
     justify-self: stretch;
   }

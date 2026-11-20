@@ -1,3 +1,4 @@
+import Button from '../../components/Button.jsx';
 // « Débuter » (Getting started) tab: five steps and a glossary (fixed content).
 export default function GettingStarted() {
   return (
@@ -69,18 +70,14 @@ export default function GettingStarted() {
         </li>
       </ol>
       <div className="gd-cta">
-        <button type="button" className="b b-gold b-lg" data-hm="tuto">
+        <Button size="large" variant="primary" data-hm="tuto">
           Jouer le combat guidé
           <svg>
             <use href="#i-arrow" />
           </svg>
-        </button>
-        <button type="button" className="b" data-gt="tuto433">
-          Tutoriel complet
-        </button>
-        <button type="button" className="b" data-hm="intro">
-          Revoir l’accueil de la Professeure
-        </button>
+        </Button>
+        <Button data-gt="tuto433">Tutoriel complet</Button>
+        <Button data-hm="intro">Revoir l’accueil de la Professeure</Button>
       </div>
       <div className="lex">
         <h3 className="h3">Petit lexique</h3>

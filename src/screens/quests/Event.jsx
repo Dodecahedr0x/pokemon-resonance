@@ -6,6 +6,7 @@ import { fmt } from '../../engine/state/economy.js';
 import { buildWeeklyChallenge } from '../../engine/modes/weekly-challenge.js';
 import Rewards from './Rewards.jsx';
 
+import Button from '../../components/Button.jsx';
 const NL = '\n ';
 
 // Challenge of the week (v4.29): same rental team for everyone, ranking among friends.
@@ -48,9 +49,9 @@ function Weekly() {
         <span>{h && h.rec ? 'Récompense reçue ✓' : 'Première victoire : +2 500 ₽ · +25 Éclats'}</span>
       </div>
       {NL}
-      <button type="button" className="b b-gold" data-v4fight="hebdo429">
+      <Button variant="primary" data-v4fight="hebdo429">
         Relever le défi
-      </button>
+      </Button>
       {NL}
       {rows.length > 1 ? (
         <table className="weekly-card-cl">
@@ -105,12 +106,12 @@ export default function Event() {
               </div>
             </div>
             {done ? null : (
-              <button type="button" className="b b-gold" data-v4fight={dk}>
+              <Button variant="primary" data-v4fight={dk}>
                 Relever le défi
                 <svg>
                   <use href="#i-arrow" />
                 </svg>
-              </button>
+              </Button>
             )}
           </article>
           <p className="v4-note">

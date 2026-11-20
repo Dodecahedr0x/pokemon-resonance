@@ -9,6 +9,7 @@ import { STARS } from '../../engine/modes/gym-screen.js';
 import { LEGS } from '../../engine/modes/legendaries.js';
 import { TEAM_NAME_EDIT } from '../../engine/team/saved-teams.js';
 
+import Button from '../../components/Button.jsx';
 // Panel above the grid (#dexCall, old renderDexCall): confirmed recruits,
 // captured legends (v4.29), saved teams (v4.32), formations.
 // Clicks: engine listeners (#dexCall [data-stg], data-pf, data-team-save, data-species-sheet).
@@ -57,15 +58,9 @@ export default function DexCall({ v }) {
           <span className="lbl-s">Formations</span>
           <div className="team-recruits-buttons">
             {Object.entries(PRESETS).map(([k, p]) => (
-              <button
-                key={k}
-                type="button"
-                className="b b-sm"
-                data-pf={k}
-                title={p.synergyText ? 'Synergies : ' + p.synergyText : ''}
-              >
+              <Button key={k} size="small" data-pf={k} title={p.synergyText ? 'Synergies : ' + p.synergyText : ''}>
                 {p.n}
-              </button>
+              </Button>
             ))}
           </div>
         </div>
@@ -119,15 +114,14 @@ function SavedSquads() {
       <div className="team-recruits-buttons">
         {T.map((t, i) => (
           <span key={i} className="team-saved-team">
-            <button
-              type="button"
-              className="b b-sm"
+            <Button
+              size="small"
               data-team-save="charger"
               data-i={i}
               title={t.ids.map(id => (BY[id] ? BY[id].n : id)).join(', ')}
             >
               {t.n}
-            </button>
+            </Button>
             <button
               type="button"
               className="team-saved-team-delete"
@@ -148,19 +142,14 @@ function SavedSquads() {
               placeholder="Nom de l’équipe"
               aria-label="Nom de l’équipe"
             />
-            <button type="button" className="b b-sm b-gold" data-team-save="ok">
+            <Button size="small" variant="primary" data-team-save="ok">
               OK
-            </button>
+            </Button>
           </span>
         ) : (
-          <button
-            type="button"
-            className="b b-sm b-ghost"
-            data-team-save="nouv"
-            disabled={!(squad.length && T.length < 8)}
-          >
+          <Button size="small" variant="ghost" data-team-save="nouv" disabled={!(squad.length && T.length < 8)}>
             + Enregistrer l’équipe
-          </button>
+          </Button>
         )}
       </div>
     </div>

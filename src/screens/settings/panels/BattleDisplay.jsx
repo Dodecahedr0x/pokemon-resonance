@@ -1,5 +1,6 @@
 import { PREF } from '../../../engine/ui/preferences.js';
 
+import Button from '../../../components/Button.jsx';
 // Settings › Battle display (v4.44): data-tool-action buttons handled by the engine (engine/combat/board-tools.js).
 export default function BattleDisplay() {
   const fs = document.body.classList.contains('fullscreen-mode');
@@ -12,12 +13,12 @@ export default function BattleDisplay() {
         un appui long sur une case (ou la loupe) affiche son détail.
       </p>
       <div className="sv-io">
-        <button type="button" className={`b b-sm${fs ? ' b-gold' : ''}`} data-tool-action="pfs">
+        <Button size="small" variant={fs ? 'primary' : undefined} data-tool-action="pfs">
           {fs ? 'Plein écran : activé' : 'Plein écran : désactivé'}
-        </button>
-        <button type="button" className={`b b-sm${PREF.boardContrast ? ' b-gold' : ''}`} data-tool-action="pct">
+        </Button>
+        <Button size="small" variant={PREF.boardContrast ? 'primary' : undefined} data-tool-action="pct">
           {PREF.boardContrast ? 'Plateau contrasté : activé' : 'Plateau contrasté : désactivé'}
-        </button>
+        </Button>
       </div>
     </section>
   );

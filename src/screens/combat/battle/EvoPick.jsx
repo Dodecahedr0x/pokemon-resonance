@@ -8,6 +8,7 @@ import { B } from '../../../engine/combat/ui.js';
 import { eeveeWhy } from '../../../engine/pokemon/eevee.js';
 import { evoState, useBattleVersion } from './battleStore.js';
 
+import Button from '../../../components/Button.jsx';
 // Evolution choice (#evoPick). Opened and closed by the engine (hidden attribute);
 // the content is that of the Pokémon passed to openEvoPick and stays in place once closed.
 export default function EvoPick() {
@@ -124,9 +125,7 @@ function Card({ u }) {
         ))}
       </div>
       <div className="ep-a">
-        <button type="button" className="b" data-pick="">
-          Pas maintenant
-        </button>
+        <Button data-pick="">Pas maintenant</Button>
       </div>
     </div>
   );

@@ -9,6 +9,7 @@ import { SPARK, shinyStyle } from '../../engine/pokemon/shiny.js';
 import { DOMINANT_CROWN_SVG } from '../../engine/world/dominant-pokemon.js';
 import { RARE_ENABLED, rareInfo } from '../../engine/world/rare-encounters.js';
 
+import Button from '../../components/Button.jsx';
 // Wild encounter (#enc), opened by encounter() (017) with a snapshot of the
 // encounter. The buttons (data-enc), the click on the backdrop and Esc are still handled by the engine.
 // The sheet stays in the DOM once closed, like the old innerHTML.
@@ -79,20 +80,14 @@ const Card = memo(function Card({ pick, shiny, dom, route, tod, inBox, camp, pat
         )}
       </p>
       <div className="enc-a">
-        <button type="button" className="b" data-enc="run">
-          Fuir
-        </button>
-        <button type="button" className="b" data-enc="dex">
-          Voir la carte
-        </button>
+        <Button data-enc="run">Fuir</Button>
+        <Button data-enc="dex">Voir la carte</Button>
         {inBox ? (
-          <button type="button" className="b" data-enc="fight">
-            Combattre quand même
-          </button>
+          <Button data-enc="fight">Combattre quand même</Button>
         ) : (
-          <button type="button" className="b b-gold" data-enc="fight">
+          <Button variant="primary" data-enc="fight">
             Combattre pour le capturer
-          </button>
+          </Button>
         )}
       </div>
       {camp || inBox ? null : (

@@ -7,6 +7,7 @@ import { DIFFS, PROFILE, STARTERS } from '../../engine/state/game-state.js';
 import { medal, tc } from '../../engine/core/utils.js';
 import { evoPath } from '../../engine/world/home-route.js';
 
+import Button from '../../components/Button.jsx';
 // New campaign: partner choice (#starter). openStarter() (026) opens it;
 // clicks (data-st, data-sd) and closing are still handled by the engine.
 // The content stays in the DOM once the window is closed, like the old innerHTML.
@@ -51,9 +52,9 @@ function Card() {
       <div className="st-diff">
         <span>Difficulté</span>
         {Object.entries(DIFFS).map(([k, n]) => (
-          <button key={k} type="button" className="b b-sm" data-sd={k} aria-pressed={PROFILE.diff === k}>
+          <Button key={k} size="small" data-sd={k} aria-pressed={PROFILE.diff === k}>
             {n}
-          </button>
+          </Button>
         ))}
       </div>
     </Dialogue>

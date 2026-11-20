@@ -3,6 +3,7 @@ import { Html } from '../lib/html.jsx';
 import { useTip } from './tipStore.js';
 import { PROF_AV, TIPS } from '../engine/world/home-journey.js';
 
+import Button from './Button.jsx';
 // Professor's tip (.tip), right after the .ph header of the `t` screen (pokedex, battle, types).
 function Tip({ t }) {
   const on = useTip(t);
@@ -18,9 +19,9 @@ function Tip({ t }) {
           <Html html={TIPS[t]} />
         </p>
       </div>
-      <button type="button" className="b b-sm" data-tipok={t}>
+      <Button size="small" data-tipok={t}>
         Compris
-      </button>
+      </Button>
     </div>
   );
 }

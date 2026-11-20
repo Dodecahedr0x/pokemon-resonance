@@ -6,6 +6,7 @@ import { ico } from '../../engine/core/utils.js';
 import { Html } from '../../lib/html.jsx';
 import { space } from '../../lib/theme.js';
 
+import Button from '../../components/Button.jsx';
 export function Pillars() {
   return NEWS.map(o => (
     <article key={o.n} className="opt" style={{ '--c': o.c }}>
@@ -47,9 +48,9 @@ export default function Project() {
             <p className="kick">Concept</p>
             <h2 className="h2">Les piliers de Résonance</h2>
           </div>
-          <button className="b b-sm" type="button" data-go="pokedex">
+          <Button size="small" data-go="pokedex">
             Voir les familles
-          </button>
+          </Button>
         </div>
         <div className="opt-grid" id="newsGrid">
           <Pillars />

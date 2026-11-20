@@ -6,6 +6,7 @@ import { medal, tc } from '../../engine/core/utils.js';
 import { HELD_IMG } from '../../engine/state/economy.js';
 import { ITM } from '../../engine/assets/item-icons.js';
 
+import Button from '../../components/Button.jsx';
 // Resonance Tower (#tdrBox): team choice, then reward between two floors.
 // The engine (043) keeps the clicks (listener on #tdrBox) and the hidden attribute: React only
 // renders `hidden` at mount and no longer changes it.
@@ -53,9 +54,9 @@ function Choice({ cands, pick }) {
         })}
       </div>
       <div className="tdr-a">
-        <button type="button" className="b b-gold" data-tdr="go" disabled={n !== 4}>
+        <Button variant="primary" data-tdr="go" disabled={n !== 4}>
           Commencer l’ascension · {n} / 4
-        </button>
+        </Button>
       </div>
     </Dialogue>
   );

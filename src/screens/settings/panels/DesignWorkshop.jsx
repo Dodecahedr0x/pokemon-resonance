@@ -1,6 +1,7 @@
 import { customCss } from '../../../engine/tools/design-workshop.js';
 import { space } from '../../../lib/theme.js';
 
+import Button from '../../../components/Button.jsx';
 // Settings › Design workshop (v4.42): buttons #designActionA/r/b handled by the engine (engine/tools/design-workshop.js).
 const BOX = {
   width: '100%',
@@ -31,15 +32,15 @@ export default function DesignWorkshop() {
         defaultValue={customCss()}
       />
       <div className="sv-io">
-        <button type="button" className="b b-sm b-gold" id="design-action-a">
+        <Button size="small" variant="primary" id="design-action-a">
           Appliquer
-        </button>
-        <button type="button" className="b b-sm" id="design-action-r">
+        </Button>
+        <Button size="small" id="design-action-r">
           Retirer mon CSS
-        </button>
-        <button type="button" className="b b-sm" id="design-action-b">
+        </Button>
+        <Button size="small" id="design-action-b">
           Brief pour ChatGPT
-        </button>
+        </Button>
       </div>
       <textarea id="design-action-k" rows="8" readOnly hidden className="settings-output" style={BOX} defaultValue="" />
     </section>

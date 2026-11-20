@@ -252,7 +252,7 @@ function renderIntro() {
 }
 
 function focusIntro(o) {
-  const f = o.querySelector('#inName') || o.querySelector('.it-a .b-gold:not([disabled])');
+  const f = o.querySelector('#inName') || o.querySelector('.it-a .button-primary:not([disabled])');
   if (f) {
     setTimeout(() => f.focus(), 40);
   }

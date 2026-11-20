@@ -119,7 +119,7 @@ html body #cbResult > .res-card {
     flex-direction: column-reverse;
     gap: var(--space-xs);
   }
-  html body #cbResult .res-a .b {
+  html body #cbResult .res-a .button {
     width: 100%;
   }
 }

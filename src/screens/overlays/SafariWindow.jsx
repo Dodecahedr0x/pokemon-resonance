@@ -5,6 +5,7 @@ import { tb } from '../../engine/core/utils.js';
 import { crestSmall } from '../../engine/team/team.js';
 import { shinyStyle } from '../../engine/pokemon/shiny.js';
 
+import Button from '../../components/Button.jsx';
 // Safari Park (#safariPanel). The engine (058) computes the visit state (catch and
 // flee chances, message) and keeps the clicks (data-safari-panel) and the hidden attribute.
 export default function SafariWindow() {
@@ -75,32 +76,32 @@ function Card({
       </p>
       <div className="sf-a">
         {isFinished ? (
-          <button type="button" className="b b-gold" data-safari-panel="sortir">
+          <Button variant="primary" data-safari-panel="sortir">
             Quitter le Parc
-          </button>
+          </Button>
         ) : x ? (
           <>
-            <button type="button" className="b b-sm b-gold" data-safari-panel="ball" disabled={!balls}>
+            <Button size="small" variant="primary" data-safari-panel="ball" disabled={!balls}>
               Safari Ball
-            </button>
-            <button type="button" className="b b-sm" data-safari-panel="appat">
+            </Button>
+            <Button size="small" data-safari-panel="appat">
               Appât
-            </button>
-            <button type="button" className="b b-sm" data-safari-panel="caillou">
+            </Button>
+            <Button size="small" data-safari-panel="caillou">
               Caillou
-            </button>
-            <button type="button" className="b b-sm b-ghost" data-safari-panel="fuir">
+            </Button>
+            <Button size="small" variant="ghost" data-safari-panel="fuir">
               Fuir
-            </button>
+            </Button>
           </>
         ) : (
           <>
-            <button type="button" className="b b-gold" data-safari-panel="marcher">
+            <Button variant="primary" data-safari-panel="marcher">
               Avancer dans les herbes
-            </button>
-            <button type="button" className="b b-ghost" data-safari-panel="sortir">
+            </Button>
+            <Button variant="ghost" data-safari-panel="sortir">
               Quitter le Parc
-            </button>
+            </Button>
           </>
         )}
       </div>

@@ -1,5 +1,6 @@
 import { IMMERSION_ON } from '../../../engine/audio/immersion.js';
 
+import Button from '../../../components/Button.jsx';
 // Settings › Immersion (v4.48): data-immersion-action button handled by the engine (engine/audio/immersion.js).
 export default function Immersion() {
   const on = IMMERSION_ON();
@@ -12,9 +13,9 @@ export default function Immersion() {
         et le son se règlent plus bas.
       </p>
       <div className="sv-io">
-        <button type="button" className={`b b-sm${on ? ' b-gold' : ''}`} data-immersion-action="im">
+        <Button size="small" variant={on ? 'primary' : undefined} data-immersion-action="im">
           {on ? 'Immersion : activée' : 'Immersion : désactivée'}
-        </button>
+        </Button>
       </div>
     </section>
   );

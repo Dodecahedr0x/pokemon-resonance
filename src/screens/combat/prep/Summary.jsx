@@ -7,6 +7,7 @@ import { badgeSvg } from '../../../engine/modes/league.js';
 import { B } from '../../../engine/combat/ui.js';
 import { SV, battleLine, validBattle } from '../../../engine/state/saves.js';
 
+import Button from '../../../components/Button.jsx';
 // "Combat en cours" (Battle in progress) card (formerly renderResume), shared by #resumePrep (Battles) and
 // #resumeHome (Home). The data-resume / data-drop buttons are still handled by the engine.
 
@@ -23,12 +24,12 @@ export function SummaryCard({ id, c }) {
         </em>
       </span>
       <span className="rs-a">
-        <button type="button" className="b b-gold b-sm" data-resume="1">
+        <Button size="small" variant="primary" data-resume="1">
           Reprendre
-        </button>
-        <button type="button" className="b b-sm" data-drop="1">
+        </Button>
+        <Button size="small" data-drop="1">
           Abandonner
-        </button>
+        </Button>
       </span>
     </>
   );

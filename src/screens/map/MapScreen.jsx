@@ -52,7 +52,7 @@ function Content({ drawn, marksSel }) {
               </button>
             ))}
           </div>
-          <a className="b b-sm b-gold map-all-fights" data-t="combat" href="#combat">
+          <a className="button button-small button-primary map-all-fights" data-t="combat" href="#combat">
             <svg>
               <use href="#i-fight" />
             </svg>

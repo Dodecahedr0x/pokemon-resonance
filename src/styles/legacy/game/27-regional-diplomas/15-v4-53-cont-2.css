@@ -153,7 +153,7 @@
   justify-content: center;
   text-align: center;
 }
-#cbResult .res-card > .res-a > .b-gold:first-child {
+#cbResult .res-card > .res-a > .button-primary:first-child {
   flex-basis: 100%;
 }
 @media (max-width: 999px) {
@@ -163,7 +163,7 @@
   #cbResult .res-card > .res-a {
     bottom: -16px;
   }
-  #cbResult .res-card > .res-a .b {
+  #cbResult .res-card > .res-a .button {
     min-height: 44px;
     padding: var(--space-sm) var(--space-sm);
     font-size: 13px;

@@ -259,7 +259,7 @@
   flex-wrap: wrap;
   gap: var(--space-sm);
 }
-.v4-mi-a .b {
+.v4-mi-a .button {
   min-height: 46px;
 }
 .v4-lock {

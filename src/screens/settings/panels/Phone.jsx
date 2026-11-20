@@ -1,6 +1,7 @@
 import { PREF } from '../../../engine/ui/preferences.js';
 import { Switch } from '../controls.jsx';
 
+import Button from '../../../components/Button.jsx';
 // Phone: vibrations, gestures, aids. The engine handles data-hm, data-guide and data-v4reset.
 export default function Phone() {
   return (
@@ -19,19 +20,19 @@ export default function Phone() {
         sub="Accueil, Équipe, Combat, Carte. Appui long sur un Pokémon : sa fiche."
       />
       <div className="settings-actions">
-        <button type="button" className="b b-sm" data-hm="intro">
+        <Button size="small" data-hm="intro">
           Revoir l’accueil de la Professeure
-        </button>
-        <button type="button" className="b b-sm" data-guide="debuter">
+        </Button>
+        <Button size="small" data-guide="debuter">
           Comment jouer
-        </button>
-        <button type="button" className="b b-sm" data-guide="tuto433">
+        </Button>
+        <Button size="small" data-guide="tuto433">
           Tutoriel complet
-        </button>
+        </Button>
       </div>
-      <button type="button" className="b b-ghost b-sm settings-reset" data-v4reset="">
+      <Button size="small" variant="ghost" className="settings-reset" data-v4reset="">
         Réinitialiser les paramètres
-      </button>
+      </Button>
     </section>
   );
 }

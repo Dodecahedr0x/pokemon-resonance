@@ -9,6 +9,7 @@ import { emblem, wonOf } from '../../engine/world/home-journey.js';
 import { STATE_N, rewardLine } from '../../engine/world/map.js';
 import { MAINQ } from '../../engine/progression/quests-shop.js';
 
+import Button from '../../components/Button.jsx';
 // A chapter of the main quest (formerly mainRow).
 function Chapter({ k, gk }) {
   const C = CHAP(k) || { c: '', t: '' },
@@ -35,9 +36,9 @@ function Chapter({ k, gk }) {
       <div className="v4-qm-r">
         <em className={`v4-pill s-${st}`}>{STATE_N[st]}</em>
         {lk ? null : (
-          <button type="button" className={'b b-sm' + (nx ? ' b-gold' : '')} data-v4fight={k}>
+          <Button size="small" variant={nx ? 'primary' : undefined} data-v4fight={k}>
             {won ? 'Rejouer' : 'Y aller'}
-          </button>
+          </Button>
         )}
       </div>
     </article>
@@ -53,7 +54,7 @@ export default function MainQuest() {
         <div className="v4-note">
           Mode Libre : tous les combats sont ouverts et les Pokémon se capturent dans leur région. Les chapitres se
           suivent dans l’ordre en Campagne.{' '}
-          <a className="b b-sm" data-t="params" href="#params">
+          <a className="button button-small" data-t="params" href="#params">
             Changer de mode : Paramètres
           </a>
         </div>

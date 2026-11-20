@@ -3,6 +3,7 @@ import { BADGES } from '../../../engine/modes/gyms.js';
 import { tLevel } from '../../../engine/progression/trainer-stats.js';
 import { boxCapacityLabel } from '../../../engine/world/catch-anywhere.js';
 
+import Button from '../../../components/Button.jsx';
 // Trainer: first name, difficulty, game state. The engine handles #v4Nm, data-diff and data-v4saves.
 export default function Trainer() {
   return (
@@ -40,9 +41,9 @@ export default function Trainer() {
           : `Mode Libre : arènes ouvertes · ${boxCapacityLabel()}`}
       </p>
       <div className="settings-actions">
-        <button type="button" className="b b-sm" data-v4saves="">
+        <Button size="small" data-v4saves="">
           Sauvegardes
-        </button>
+        </Button>
       </div>
     </section>
   );

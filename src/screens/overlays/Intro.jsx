@@ -7,6 +7,7 @@ import { medal, tc } from '../../engine/core/utils.js';
 import { reportError } from '../../engine/core/errors.js';
 import { INTRO, PROF_AV } from '../../engine/world/home-journey.js';
 
+import Button from '../../components/Button.jsx';
 // The Professor's welcome (#intro): showIntro() (031) opens it, renderIntro() redraws
 // the step (INTRO.i), closeIntro() removes it. Clicks and Enter: engine listeners on #intro.
 export default function Intro() {
@@ -127,9 +128,9 @@ function Body({ i }) {
         <div className="it-diff">
           <span>Difficulté</span>
           {Object.entries(DIFFS).map(([k, n]) => (
-            <button key={k} type="button" className="b b-sm" data-in-d={k} aria-pressed={INTRO.diff === k}>
+            <Button key={k} size="small" data-in-d={k} aria-pressed={INTRO.diff === k}>
               {n}
-            </button>
+            </Button>
           ))}
         </div>
       </>
@@ -151,35 +152,35 @@ function Body({ i }) {
 function Actions({ i }) {
   if (i === 0) {
     return (
-      <button type="button" className="b b-gold b-lg" data-in="next">
+      <Button size="large" variant="primary" data-in="next">
         Enchanté !<Fl />
-      </button>
+      </Button>
     );
   }
   if (i === 1) {
     return (
-      <button type="button" className="b b-gold b-lg" data-in="next">
+      <Button size="large" variant="primary" data-in="next">
         Compris
         <Fl />
-      </button>
+      </Button>
     );
   }
   if (i === 2) {
     return (
-      <button type="button" className="b b-gold b-lg" data-in="name">
+      <Button size="large" variant="primary" data-in="name">
         Valider
         <Fl />
-      </button>
+      </Button>
     );
   }
   if (i === 3) {
     const st = INTRO.st && BY[INTRO.st];
     return (
       <>
-        <button type="button" className="b b-gold b-lg" data-in="start" disabled={!st}>
+        <Button size="large" variant="primary" data-in="start" disabled={!st}>
           {st ? 'Choisir ' + st.n : 'Choisissez un Pokémon'}
           <Fl />
-        </button>
+        </Button>
         <button type="button" className="it-libre" data-in="libre">
           Jouer plutôt en mode Libre : tous les combats ouverts{st ? ', avec ' + st.n : ''}
         </button>
@@ -188,13 +189,11 @@ function Actions({ i }) {
   }
   return (
     <>
-      <button type="button" className="b" data-in="later">
-        Plus tard
-      </button>
-      <button type="button" className="b b-gold b-lg" data-in="go">
+      <Button data-in="later">Plus tard</Button>
+      <Button size="large" variant="primary" data-in="go">
         Lancer le combat guidé
         <Fl />
-      </button>
+      </Button>
     </>
   );
 }

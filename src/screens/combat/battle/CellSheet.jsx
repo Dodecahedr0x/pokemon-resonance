@@ -2,6 +2,7 @@ import { tb } from '../../../engine/core/utils.js';
 import { Html } from '../../../lib/html.jsx';
 import { tileSheet, useBattleVersion } from './battleStore.js';
 
+import Button from '../../../components/Button.jsx';
 // Cell sheet (#tileInfo, v4.44): long press or magnifier on a cell. Reading taken by tileSheet (077),
 // position (top / bottom) by placeSheet. Created on first opening, then hidden (hidden attribute).
 export default function CellSheet() {
@@ -115,9 +116,9 @@ function Pokemon({ v }) {
         {v.it ? <em>{v.it}</em> : null}
       </div>
       {v.canAct && (
-        <button type="button" className="b b-sm" data-tile-info="u" data-uid={v.uid}>
+        <Button size="small" data-tile-info="u" data-uid={v.uid}>
           {v.e ? 'Voir sa portée' : 'Le commander'}
-        </button>
+        </Button>
       )}
     </div>
   );

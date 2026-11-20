@@ -137,7 +137,7 @@
   width: 16px;
   height: 16px;
 }
-html body .v4h-cta .b-ghost {
+html body .v4h-cta .button-ghost {
   min-height: 46px;
   border-radius: 999px !important;
   background: rgba(3, 18, 36, 0.7) !important;

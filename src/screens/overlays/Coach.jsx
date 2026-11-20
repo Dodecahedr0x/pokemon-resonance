@@ -2,6 +2,7 @@ import { Html } from '../../lib/html.jsx';
 import { useCoach } from './shellOverlays.js';
 import { PROF_AV } from '../../engine/world/home-journey.js';
 
+import Button from '../../components/Button.jsx';
 // Guided battle coach (#coach): the Professor gives the step's instruction.
 // renderCoach() (026) picks the step; the buttons (data-co) are still handled by the engine.
 // A new block per step (key): the letter-by-letter text (v4.73) replaces the
@@ -23,12 +24,12 @@ export default function Coach() {
             <Html html={step.d} />
           </p>
           <div className="co-a">
-            <button type="button" className="b b-sm b-ghost" data-co="skip">
+            <Button size="small" variant="ghost" data-co="skip">
               Passer le tutoriel
-            </button>
-            <button type="button" className="b b-sm b-gold" data-co="next">
+            </Button>
+            <Button size="small" variant="primary" data-co="next">
               {step.last ? 'Terminer' : 'Suivant'}
-            </button>
+            </Button>
           </div>
         </div>
       )}

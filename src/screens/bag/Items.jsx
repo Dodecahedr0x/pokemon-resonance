@@ -8,6 +8,7 @@ import { V4 } from '../../engine/ui/screen-state.js';
 import { costOf } from '../../engine/progression/base-camp.js';
 import { HELD_SHOP } from '../../engine/combat/resonance.js';
 
+import Button from '../../components/Button.jsx';
 // TM / HM disc: initials on the color of the move's type.
 export const Disc = ({ it }) => (
   <span className="item-row-icon item-row-disc" style={{ '--c': tc(MV[it.mv].t) }}>
@@ -61,7 +62,7 @@ export function Article({ k, mode }) {
               </button>
             </div>
           )}
-          <button type="button" className="b b-gold b-sm" data-buy={k} disabled={!(can && !full)}>
+          <Button size="small" variant="primary" data-buy={k} disabled={!(can && !full)}>
             {cs && n ? (
               'Déjà achetée'
             ) : it.g ? (
@@ -72,13 +73,13 @@ export function Article({ k, mode }) {
             ) : (
               `${fmt(price)} ₽`
             )}
-          </button>
+          </Button>
         </div>
       ) : it.mv ? (
         <div className="item-row-actions">
-          <button type="button" className="b b-gold b-sm" data-apprendre={k}>
+          <Button size="small" variant="primary" data-apprendre={k}>
             Apprendre
-          </button>
+          </Button>
         </div>
       ) : null}
     </article>
@@ -112,9 +113,9 @@ export function HeldItem({ k }) {
       </div>
       {own && holder ? (
         <div className="item-row-actions">
-          <button type="button" className="b b-sm" data-v4sheet={holder}>
+          <Button size="small" data-v4sheet={holder}>
             Voir {BY[holder].n}
-          </button>
+          </Button>
         </div>
       ) : null}
     </article>

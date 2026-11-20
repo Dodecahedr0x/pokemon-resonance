@@ -1,5 +1,6 @@
 import { OFFLINE_STATE, offlineSupported, chapterTracks } from '../../../engine/progression/chronicles.js';
 
+import Button from '../../../components/Button.jsx';
 // Offline mode (v4.62): music cached on the device.
 // Buttons handled by the engine (delegated click on data-offline-pack).
 export default function Offline() {
@@ -28,20 +29,20 @@ export default function Offline() {
         {` · ${state}${ok ? '' : ' Stockage indisponible sur cet appareil.'}`}
       </p>
       <div className="sv-io">
-        <button
-          type="button"
-          className={`b b-sm${isReady ? '' : ' b-gold'}`}
+        <Button
+          size="small"
+          variant={isReady ? undefined : 'primary'}
           data-offline-pack="dl"
           disabled={!(ok && OFFLINE_STATE.status !== 'chargement')}
         >
           {isReady ? 'Mettre à jour la musique' : 'Télécharger la musique'}
-        </button>
-        <button type="button" className="b b-sm b-ghost" data-offline-pack="rm" disabled={!isReady}>
+        </Button>
+        <Button size="small" variant="ghost" data-offline-pack="rm" disabled={!isReady}>
           Supprimer
-        </button>
-        <button type="button" className="b b-sm b-ghost" data-offline-pack="jeu">
+        </Button>
+        <Button size="small" variant="ghost" data-offline-pack="jeu">
           Enregistrer le jeu
-        </button>
+        </Button>
       </div>
     </section>
   );

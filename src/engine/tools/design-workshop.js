@@ -3,6 +3,7 @@
 import { $, toast } from '../core/utils.js';
 import { TABS, TNAME } from '../core/navigation.js';
 import { PREF, savePref } from '../ui/preferences.js';
+import { renameClassesInCss } from '../../lib/renamedClasses.js';
 
 /* Settings › Design Workshop: paste a CSS block (e.g. written by ChatGPT), it applies immediately on this device.
    The brief gives ChatGPT the game's variables, pages and components without making it read the file's 3.7 MB. */
@@ -31,7 +32,7 @@ function applyCustomCss() {
     el = document.createElement('style');
     el.id = 'custom-css';
   }
-  el.textContent = t;
+  el.textContent = renameClassesInCss(t);
   document.head.appendChild(el); // always last: it overrides the other stylesheets
 }
 
@@ -95,7 +96,7 @@ PAGES
 ${pages}
 
 COMPOSANTS CLÉS
-.b / .b-gold / .b-sm (boutons) · .v4-panel (cartes) · .v4-tabs (onglets) · .nv (navigation ordinateur) · .bn (navigation téléphone) · .prep-card (fiche du combat) · .prep-team (équipe) · .res-card (résultat de combat) · .battle-topbar (haut du combat) · .battle-rule (règle d’arène) · .settings-grid (Paramètres) · .legend-quest-c (carte de légende) · .prep-doctrine-option (boutons de doctrine).
+.button / .button-primary / .button-small (boutons) · .v4-panel (cartes) · .v4-tabs (onglets) · .nv (navigation ordinateur) · .bn (navigation téléphone) · .prep-card (fiche du combat) · .prep-team (équipe) · .res-card (résultat de combat) · .battle-topbar (haut du combat) · .battle-rule (règle d’arène) · .settings-grid (Paramètres) · .legend-quest-c (carte de légende) · .prep-doctrine-option (boutons de doctrine).
 
 Après ton CSS, propose-moi 3 variantes de palette que je peux tester en changeant seulement le bloc « :root ».`;
 }

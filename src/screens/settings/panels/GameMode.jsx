@@ -1,5 +1,6 @@
 import { isCamp } from '../../../engine/state/game-state.js';
 
+import Button from '../../../components/Button.jsx';
 // Game mode. The engine handles data-game-mode (with confirmation) and data-v4saves.
 export default function GameMode() {
   const c = isCamp();
@@ -23,17 +24,17 @@ export default function GameMode() {
       </p>
       <div className="settings-actions">
         {c ? (
-          <button type="button" className="b b-sm" data-game-mode="libre">
+          <Button size="small" data-game-mode="libre">
             Passer en mode Libre…
-          </button>
+          </Button>
         ) : (
-          <button type="button" className="b b-sm b-gold" data-game-mode="camp">
+          <Button size="small" variant="primary" data-game-mode="camp">
             Commencer une campagne…
-          </button>
+          </Button>
         )}
-        <button type="button" className="b b-sm" data-v4saves="">
+        <Button size="small" data-v4saves="">
           Sauvegardes
-        </button>
+        </Button>
       </div>
     </section>
   );

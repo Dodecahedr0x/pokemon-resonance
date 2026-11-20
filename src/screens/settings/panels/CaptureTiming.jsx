@@ -1,5 +1,6 @@
 import { PREF } from '../../../engine/ui/preferences.js';
 
+import Button from '../../../components/Button.jsx';
 // Settings › Timed capture (v4.53): data-catch-action button handled by the engine (engine/combat/timed-catch.js).
 export default function CaptureTiming() {
   const on = PREF.catchTimingEnabled !== 0;
@@ -12,9 +13,9 @@ export default function CaptureTiming() {
         gardez vos Voix. Un bouton permet toujours de passer le timing.
       </p>
       <div className="sv-io">
-        <button type="button" className={`b b-sm${on ? ' b-gold' : ''}`} data-catch-action="cap">
+        <Button size="small" variant={on ? 'primary' : undefined} data-catch-action="cap">
           {on ? 'Timing de capture : activé' : 'Timing de capture : désactivé'}
-        </button>
+        </Button>
       </div>
     </section>
   );

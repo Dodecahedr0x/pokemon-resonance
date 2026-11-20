@@ -8,6 +8,7 @@ import { useEngineReady } from '../../engineReady.js';
 import { useRosterKey } from './teamStore.js';
 import { analysis } from './analysis.js';
 
+import Button from '../../components/Button.jsx';
 const N = () => Array.from({ length: TEAM_MAX }, (_, i) => i);
 
 // Team banner at the top of the screen (#dock): slots, budget, Voice, Awakenings, Hint.
@@ -54,9 +55,9 @@ export function Dock({ A }) {
               <b>{A.score}</b>
               <span>Indice</span>
             </div>
-            <button className="b b-sm b-gold" type="button" data-go="combat">
+            <Button size="small" variant="primary" data-go="combat">
               Combattre
-            </button>
+            </Button>
           </div>
           {/* reset, restore, draw (v1.1): generator shared with the preparation */}
           <Html html={teamBtns()} />

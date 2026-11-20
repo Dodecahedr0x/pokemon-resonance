@@ -88,7 +88,7 @@ export default function Tutorial() {
               {c.a.length > 0 && (
                 <div className="tutorial-ch-a">
                   {c.a.map(([l, at], i) => (
-                    <Html key={i} html={`<button type="button" class="b b-sm" ${at}>${l}</button>`} />
+                    <Html key={i} html={`<button type="button" class="button button-small" ${at}>${l}</button>`} />
                   ))}
                 </div>
               )}

@@ -1,3 +1,4 @@
+import Button from '../../../components/Button.jsx';
 // Small « battleHelp » windows (shared frame: title, × button, .battleHelp-b body).
 // Clicks stay in the engine (delegated listeners data-help-action, data-route-event…); the click
 // on the backdrop is set by the engine on the node returned by overlay().
@@ -237,9 +238,9 @@ export function BossRush({ d }) {
           ) : (
             <Choice k="boss-rush" v="go" l={`Lancer le boss ${d.i + 1} : ${d.boss}`} />
           )}
-          <button type="button" className="b b-sm b-ghost" data-boss-rush="abandon">
+          <Button size="small" variant="ghost" data-boss-rush="abandon">
             Abandonner le run
-          </button>
+          </Button>
         </>
       )}
     </Window>

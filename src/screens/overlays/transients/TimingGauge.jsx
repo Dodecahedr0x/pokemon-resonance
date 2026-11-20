@@ -1,3 +1,4 @@
+import Button from '../../../components/Button.jsx';
 // Capture gauge with timing (#timedCatch, v4.53 · startCatchTiming in 083). The engine animates
 // the ring (.timedCatch-g, style.transform at each frame) and attaches its listeners to the node;
 // `q` (result) changes the text and the class.
@@ -18,9 +19,9 @@ export default function TimingGauge({ d }) {
           <i className="timed-catch-g" />
           <i className="timed-catch-d" />
         </div>
-        <button type="button" className="b b-gold timed-catch-b">
+        <Button variant="primary" className="timed-catch-b">
           Lancer !
-        </button>
+        </Button>
         <button type="button" className="timed-catch-s">
           Passer le timing
         </button>

@@ -14,6 +14,7 @@ import { boxCapacityLabel } from '../../engine/world/catch-anywhere.js';
 import { boxCount } from '../../engine/modes/legendary-captures.js';
 import { space } from '../../lib/theme.js';
 
+import Button from '../../components/Button.jsx';
 // "Sauvegardes" (Saves) window (#saves). Clicks, input and import are still handled by
 // the engine (listeners on #saves, data-sv, data-resume): here, display only.
 export default function Saves() {
@@ -67,9 +68,9 @@ function Slot({ k }) {
           <em>vide</em>
         </header>
         <div className="sv-act">
-          <button type="button" className="b b-sm" data-sv="put" data-k={k}>
+          <Button size="small" data-sv="put" data-k={k}>
             Sauvegarder ici
-          </button>
+          </Button>
         </div>
       </article>
     );
@@ -94,24 +95,24 @@ function Slot({ k }) {
                   ? 'Écraser cet emplacement ?'
                   : 'Supprimer définitivement ?'}
             </span>
-            <button type="button" className="b b-sm b-gold" data-sv="ok" data-k={k}>
+            <Button size="small" variant="primary" data-sv="ok" data-k={k}>
               Confirmer
-            </button>
-            <button type="button" className="b b-sm" data-sv="no">
+            </Button>
+            <Button size="small" data-sv="no">
               Annuler
-            </button>
+            </Button>
           </>
         ) : (
           <>
-            <button type="button" className="b b-sm b-gold" data-sv="load" data-k={k}>
+            <Button size="small" variant="primary" data-sv="load" data-k={k}>
               Charger
-            </button>
-            <button type="button" className="b b-sm" data-sv="put" data-k={k}>
+            </Button>
+            <Button size="small" data-sv="put" data-k={k}>
               Écraser
-            </button>
-            <button type="button" className="b b-sm b-ghost" data-sv="del" data-k={k}>
+            </Button>
+            <Button size="small" variant="ghost" data-sv="del" data-k={k}>
               Supprimer
-            </button>
+            </Button>
           </>
         )}
       </div>
@@ -155,13 +156,13 @@ function Code() {
       />
       <span style={{ display: 'flex', gap: space.sm, flexWrap: 'wrap' }}>
         {!copy && (
-          <button type="button" className="b b-sm b-gold" data-sv="importcode">
+          <Button size="small" variant="primary" data-sv="importcode">
             Importer ce code
-          </button>
+          </Button>
         )}
-        <button type="button" className="b b-sm" data-sv="closecode">
+        <Button size="small" data-sv="closecode">
           Fermer
-        </button>
+        </Button>
       </span>
     </div>
   );
@@ -240,38 +241,37 @@ function Card({ xRef }) {
           <span>Difficulté</span>
           <span className="ss-seg">
             {Object.entries(DIFFS).map(([k, n]) => (
-              <button
+              <Button
                 key={k}
-                type="button"
-                className="b b-sm"
+                size="small"
                 data-sv="set"
                 data-f="diff"
                 data-v={k}
                 aria-pressed={String(PROFILE.diff === k)}
               >
                 {n}
-              </button>
+              </Button>
             ))}
           </span>
         </div>
         <div className="ss-row">
           <span>Confort</span>
           <span className="ss-seg">
-            <button type="button" className="b b-sm" data-sv="set" data-f="sound" aria-pressed={String(!!PREF.sound)}>
+            <Button size="small" data-sv="set" data-f="sound" aria-pressed={String(!!PREF.sound)}>
               Son
-            </button>
-            <button type="button" className="b b-sm" data-sv="set" data-f="vibe" aria-pressed={String(!!PREF.vibe)}>
+            </Button>
+            <Button size="small" data-sv="set" data-f="vibe" aria-pressed={String(!!PREF.vibe)}>
               Vibrations
-            </button>
-            <button type="button" className="b b-sm" data-sv="set" data-f="music" aria-pressed={String(!!PREF.music)}>
+            </Button>
+            <Button size="small" data-sv="set" data-f="music" aria-pressed={String(!!PREF.music)}>
               Musique
-            </button>
-            <button type="button" className="b b-sm" data-sv="set" data-f="fast" aria-pressed={String(!!PREF.fast)}>
+            </Button>
+            <Button size="small" data-sv="set" data-f="fast" aria-pressed={String(!!PREF.fast)}>
               Adversaires ×2
-            </button>
-            <button type="button" className="b b-sm" data-sv="tuto">
+            </Button>
+            <Button size="small" data-sv="tuto">
               Combat guidé
-            </button>
+            </Button>
           </span>
         </div>
       </div>
@@ -283,9 +283,9 @@ function Card({ xRef }) {
         <Summary s={a} />
         {validBattle(a.battle) && !B && (
           <div className="sv-act">
-            <button type="button" className="b b-sm b-gold" data-resume="1">
+            <Button size="small" variant="primary" data-resume="1">
               Reprendre le combat
-            </button>
+            </Button>
           </div>
         )}
       </article>
@@ -295,12 +295,12 @@ function Card({ xRef }) {
         ))}
       </div>
       <div className="sv-io">
-        <button type="button" className="b b-sm" data-sv="export">
+        <Button size="small" data-sv="export">
           Exporter un fichier
-        </button>
-        <button type="button" className="b b-sm" data-sv="importfile">
+        </Button>
+        <Button size="small" data-sv="importfile">
           Importer un fichier
-        </button>
+        </Button>
         <input
           id="svFile"
           type="file"
@@ -309,29 +309,29 @@ function Card({ xRef }) {
           aria-hidden="true"
           style={{ position: 'absolute', width: '1px', height: '1px', opacity: '0', pointerEvents: 'none' }}
         />
-        <button type="button" className="b b-sm" data-sv="copycode">
+        <Button size="small" data-sv="copycode">
           Copier le code
-        </button>
-        <button type="button" className="b b-sm" data-sv="pastecode">
+        </Button>
+        <Button size="small" data-sv="pastecode">
           Coller un code
-        </button>
+        </Button>
         {rs ? (
           <>
             <span className="sv-q">Nouvelle partie : les emplacements restent intacts.</span>
-            <button type="button" className="b b-sm b-gold" data-sv="camp">
+            <Button size="small" variant="primary" data-sv="camp">
               Campagne
-            </button>
-            <button type="button" className="b b-sm" data-sv="ok" data-k="reset">
+            </Button>
+            <Button size="small" data-sv="ok" data-k="reset">
               Mode Libre
-            </button>
-            <button type="button" className="b b-sm" data-sv="no">
+            </Button>
+            <Button size="small" data-sv="no">
               Annuler
-            </button>
+            </Button>
           </>
         ) : (
-          <button type="button" className="b b-sm b-ghost" data-sv="reset">
+          <Button size="small" variant="ghost" data-sv="reset">
             Nouvelle partie
-          </button>
+          </Button>
         )}
       </div>
       <Code />

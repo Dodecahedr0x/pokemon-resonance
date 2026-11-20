@@ -11,6 +11,7 @@ import BoardTools from '../board/BoardTools.jsx';
 import { footPos as barBottom, useBattleVersion } from './battleStore.js';
 import { STEP } from './frag.jsx';
 
+import Button from '../../../components/Button.jsx';
 // End-of-turn button, phase and step: renderTop, then the versions that rewrote them
 // (deployment v4.30, riddle v4.31, duel v4.33, guided tour v4.78), in the same order.
 function bar() {
@@ -178,15 +179,14 @@ export default function Footer() {
         )}
       </span>
       {Q && Q.displayName ? <span className="thumb-reach-n">{Q.displayName}</span> : null}
-      <button
-        className="b b-gold"
+      <Button
+        variant="primary"
         id="bEnd"
-        type="button"
         disabled={x ? x.disabled : undefined}
         style={x ? { display: x.g ? 'none' : '' } : undefined}
       >
         {x ? x.actionButton : 'Fin du tour'}
-      </button>
+      </Button>
       {v > 0 && (
         <span id="turn-guide-pied" className="turn-guide-pied" aria-live="polite" hidden={!(x && x.stepOf)}>
           {(x && x.stepOf) || (lastStep && lastStep.el)}

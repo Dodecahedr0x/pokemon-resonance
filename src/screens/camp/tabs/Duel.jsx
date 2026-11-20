@@ -14,6 +14,7 @@ import {
   duelOrder,
 } from '../../../engine/modes/duel.js';
 
+import Button from '../../../components/Button.jsx';
 const Options = ({ L }) =>
   L.map(([k, n]) => (
     <option key={k} value={k}>
@@ -105,9 +106,9 @@ function Preferences({ C }) {
       </div>
       <p className="duel-report-h">{`${C.sizeValue * 2 + 4} Pokémon tirés au hasard, un bannissement chacun, puis le choix en serpent : ${C.sizeValue === 3 ? 'J1, J2, J2, J1, J1, J2' : 'J1, J2, J2, J1, J1, J2, J2, J1'}. Le Joueur 2 joue en second : il choisit deux fois d’affilée en premier.`}</p>
       <div className="duel-report-a">
-        <button type="button" className="b b-gold" data-duel-report="tirer">
+        <Button variant="primary" data-duel-report="tirer">
           Tirer les Pokémon
-        </button>
+        </Button>
       </div>
     </div>
   );
@@ -253,25 +254,21 @@ function Draw({ C }) {
       ) : null}
       <div className="duel-report-a">
         {st ? (
-          <button type="button" className="b b-gold" data-duel-report="ok" disabled={!C.sel}>
+          <Button variant="primary" data-duel-report="ok" disabled={!C.sel}>
             {C.sel ? (st.a === 'ban' ? 'Bannir ' : 'Choisir ') + BY[C.sel].n : st.a === 'ban' ? 'Bannir…' : 'Choisir…'}
-          </button>
+          </Button>
         ) : (
-          <button type="button" className="b b-gold b-lg" data-duel-report="lancer">
+          <Button size="large" variant="primary" data-duel-report="lancer">
             Lancer le duel
-          </button>
+          </Button>
         )}
-        {C.stepCount ? (
-          <button type="button" className="b" data-duel-report="annuler">
-            Annuler le dernier choix
-          </button>
-        ) : null}
-        <button type="button" className="b b-ghost" data-duel-report="tirer">
+        {C.stepCount ? <Button data-duel-report="annuler">Annuler le dernier choix</Button> : null}
+        <Button variant="ghost" data-duel-report="tirer">
           Nouveau tirage
-        </button>
-        <button type="button" className="b b-ghost" data-duel-report="reglages">
+        </Button>
+        <Button variant="ghost" data-duel-report="reglages">
           Réglages
-        </button>
+        </Button>
       </div>
     </>
   );

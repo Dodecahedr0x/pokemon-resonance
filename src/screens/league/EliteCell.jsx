@@ -6,6 +6,7 @@ import { ELITE, scenLock } from '../../engine/combat/items-bonds-ai.js';
 import { CHAMP_L, ELITE_L } from '../../engine/progression/prestige.js';
 import { wonOf } from '../../engine/world/home-journey.js';
 
+import Button from '../../components/Button.jsx';
 // Elite 4 and Champion (#eliteCase): trainer name (v4.20) and best rank (v4.24).
 export default function EliteCell() {
   return (
@@ -48,9 +49,9 @@ function Card({ k, L }) {
       <em>
         <Html html={lk || (won ? 'Vaincu' : `N.${s.lv} · ${s.lim} manches`)} />
       </em>
-      <button type="button" className={`b b-sm${lk ? '' : ' b-gold'}`} data-chal={k} disabled={!!lk}>
+      <Button size="small" variant={lk ? undefined : 'primary'} data-chal={k} disabled={!!lk}>
         {won ? 'Rejouer' : 'Défier'}
-      </button>
+      </Button>
       {r && (
         <span className={`rk-t rk-${r}`} title={`Meilleur rang : ${r}`}>
           {r}

@@ -164,13 +164,13 @@ body::before {
     inset 0 1px rgba(255, 255, 255, 0.035) !important;
   border-radius: 20px !important;
 }
-/* .b buttons have their own transition (src/styles/components/button.css) */
-button:not(.nv):not(.bn):not(.rt-alert):not(.tod button):not(:where(.b)) {
+/* .button buttons have their own transition (src/styles/components/button.css) */
+button:not(.nv):not(.bn):not(.rt-alert):not(.tod button):not(:where(.button)) {
   transition:
     transform 0.18s ease,
     filter 0.18s ease,
     box-shadow 0.18s ease;
 }
-button:not(.nv):not(.bn):not(.rt-alert):not(.tod button):not(:where(.b)):hover {
+button:not(.nv):not(.bn):not(.rt-alert):not(.tod button):not(:where(.button)):hover {
   filter: brightness(1.08);
 }

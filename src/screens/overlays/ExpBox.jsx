@@ -5,6 +5,7 @@ import { medal } from '../../engine/core/utils.js';
 import { DESTINATIONS } from '../../engine/progression/expeditions.js';
 import { lockedByBadges } from '../../engine/progression/companion-eggs.js';
 
+import Button from '../../components/Button.jsx';
 // Camp expedition window (#expBox): choice of location, then of Pokémon.
 // Clicks (data-exp-*) and hidden attribute: engine (049).
 export default function ExpBox() {
@@ -57,9 +58,9 @@ function Card({ destinationId: dest, available: available }) {
               <p className="v4-empty">Aucun Pokémon disponible : ceux de l’équipe restent au camp.</p>
             )}
           </div>
-          <button type="button" className="b b-sm b-ghost" data-exp-d="">
+          <Button size="small" variant="ghost" data-exp-d="">
             Choisir un autre lieu
-          </button>
+          </Button>
         </>
       )}
     </Dialogue>

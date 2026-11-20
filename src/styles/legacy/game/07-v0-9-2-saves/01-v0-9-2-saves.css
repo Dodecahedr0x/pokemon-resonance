@@ -116,7 +116,7 @@ button.nv {
     grid-column: 1/-1;
     justify-content: stretch;
   }
-  .rs-a .b {
+  .rs-a .button {
     flex: 1;
   }
 }

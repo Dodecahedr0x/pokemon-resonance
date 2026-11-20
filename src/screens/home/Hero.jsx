@@ -7,6 +7,7 @@ import { shinyStyle } from '../../engine/pokemon/shiny.js';
 import { heroView } from '../../engine/world/living-home.js';
 import { homeSkyInfo } from '../../engine/world/home-weather.js';
 
+import Button from '../../components/Button.jsx';
 // Home hero (#hmHero): next step (old renderHome), living backdrop depending on the
 // region and time with the companion (v4.28), season and weather of the day (v4.52).
 export default function Hero({ on }) {
@@ -80,7 +81,7 @@ export default function Hero({ on }) {
         {'\n  '}
         <div className="v4h-cta">
           {squad.length ? (
-            <button type="button" className="b b-gold b-lg v4-cta" data-goal={g.k}>
+            <Button size="large" variant="primary" className="v4-cta" data-goal={g.k}>
               <span className="v4-cta-ic">
                 <svg>
                   <use href="#i-play" />
@@ -90,9 +91,9 @@ export default function Hero({ on }) {
               <svg>
                 <use href="#i-arrow" />
               </svg>
-            </button>
+            </Button>
           ) : (
-            <button type="button" className="b b-gold b-lg v4-cta" data-go="pokedex">
+            <Button size="large" variant="primary" className="v4-cta" data-go="pokedex">
               <span className="v4-cta-ic">
                 <svg>
                   <use href="#i-team" />
@@ -102,11 +103,11 @@ export default function Hero({ on }) {
               <svg>
                 <use href="#i-arrow" />
               </svg>
-            </button>
+            </Button>
           )}
-          <button type="button" className="b b-ghost" data-guide="debuter">
+          <Button variant="ghost" data-guide="debuter">
             Comment jouer
-          </button>
+          </Button>
         </div>
         {'\n  '}
         <div className="v4h-prof">

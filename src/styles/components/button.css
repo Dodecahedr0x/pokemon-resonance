@@ -1,9 +1,10 @@
-/* Button: <button class="b"> or <a class="b">.
-   Variants: .b-gold (main action), .b-sm / .b-lg (sizes), .b-ghost (currently drawn like the base button).
-   Screen-specific tweaks still live in legacy (e.g. #combat .b-gold) and win over these rules.
+/* Button: <button class="button"> or <a class="button"> (the Button component in JSX).
+   Variants: .button-primary (main action), .button-small / .button-large (sizes), .button-ghost (currently drawn
+   like the base button).
+   Screen-specific tweaks still live in legacy (e.g. #combat .button-primary) and win over these rules.
    Values were read from what the old per-release rules resolved to, so the look is unchanged. */
 
-.b {
+.button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -31,38 +32,38 @@
     box-shadow 0.2s,
     background 0.2s;
 }
-.b svg {
+.button svg {
   width: 16px;
   height: 16px;
 }
 
-.b-sm {
+.button-small {
   height: 34px;
   padding: 0 var(--space-md);
   font-size: 11px;
   clip-path: polygon(7px 0, 100% 0, 100% calc(100% - 7px), calc(100% - 7px) 100%, 0 100%, 0 7px);
 }
-.b-lg {
+.button-large {
   height: 52px;
   padding: 0 var(--space-2xl);
   font-size: 13px;
 }
 
 /* States. Order matters: on a mouse device the hover lift (below, in the media query) also wins while pressing. */
-.b:hover {
+.button:hover {
   transform: translateY(-1px);
   filter: brightness(1.08);
 }
-.b:active {
+.button:active {
   transform: translateY(0) scale(0.98);
 }
-.b:disabled {
+.button:disabled {
   opacity: 0.4;
   cursor: default;
   transform: none;
 }
 @media (hover: hover) {
-  .b:hover {
+  .button:hover {
     transform: translateY(-2px);
     box-shadow:
       0 12px 28px rgba(0, 0, 0, 0.28),
@@ -71,7 +72,7 @@
 }
 
 /* Gold: the main call to action, with a shine that sweeps across on hover. */
-.b-gold {
+.button-primary {
   position: relative;
   overflow: hidden;
   border-color: #fff2a8;
@@ -85,7 +86,7 @@
     0 10px 22px -8px rgba(255, 180, 40, 0.55),
     inset 0 1px 0 rgba(255, 255, 255, 0.7);
 }
-.b-gold::after {
+.button-primary::after {
   content: '';
   position: absolute;
   inset: 0;
@@ -94,7 +95,7 @@
   transition: transform 0.8s var(--ease);
   pointer-events: none;
 }
-.b-gold:hover {
+.button-primary:hover {
   border-color: rgba(255, 235, 180, 0.72);
   background: linear-gradient(135deg, #ffe5a0, #d69d3c);
   color: #241b0d;
@@ -104,19 +105,19 @@
     0 10px 22px -8px rgba(255, 180, 40, 0.55),
     inset 0 1px 0 rgba(255, 255, 255, 0.7);
 }
-.b-gold:hover::after {
+.button-primary:hover::after {
   transform: translateX(130%);
 }
-.b-gold:active {
+.button-primary:active {
   transform: translateY(2px);
   box-shadow: 0 3px 0 #865c20;
 }
-.b-gold:disabled {
+.button-primary:disabled {
   filter: saturate(0.25) brightness(0.7);
   box-shadow: none;
 }
 
-.b:focus-visible {
+.button:focus-visible {
   outline: 2px solid var(--pr-cyan);
   outline-offset: 3px;
   box-shadow: 0 0 0 5px rgba(115, 217, 244, 0.15);

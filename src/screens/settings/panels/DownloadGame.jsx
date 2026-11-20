@@ -1,3 +1,4 @@
+import Button from '../../../components/Button.jsx';
 // Settings › « Télécharger le jeu » (Download the game) (v4.41): the click on #downloadB is handled by the engine (engine/tools/download-game.js).
 export default function DownloadGame() {
   return (
@@ -7,9 +8,9 @@ export default function DownloadGame() {
         Le fichier HTML complet de la version actuelle, pour le garder ou le modifier avec un autre outil (design,
         textes…). Les musiques restent hébergées avec le lien.
       </p>
-      <button type="button" className="b b-sm b-gold" id="download-b">
+      <Button size="small" variant="primary" id="download-b">
         Télécharger le fichier HTML
-      </button>
+      </Button>
     </section>
   );
 }

@@ -18,6 +18,7 @@ import { hoennOpen } from '../../engine/world/hoenn.js';
 import { regionIndex } from '../../engine/world/catch-anywhere.js';
 import { familyCaptureStats } from '../../engine/progression/regional-dex.js';
 
+import Button from '../../components/Button.jsx';
 const Lock = ({ children }) => (
   <p className="v4-lock">
     <svg>
@@ -101,13 +102,11 @@ export default function MapInfo() {
           <span>{`${PROFILE.caught} capture${PROFILE.caught > 1 ? 's' : ''}`}</span>
         </div>
         <div className="v4-mi-a">
-          <button type="button" className="b b-gold" data-v4wild="">
+          <Button variant="primary" data-v4wild="">
             Explorer les hautes herbes
             <Arrow />
-          </button>
-          <button type="button" className="b" data-fishing-start="">
-            Pêcher
-          </button>
+          </Button>
+          <Button data-fishing-start="">Pêcher</Button>
         </div>
       </>
     );
@@ -210,10 +209,10 @@ export default function MapInfo() {
             <Html html={lk} />
           </Lock>
         ) : (
-          <button type="button" className="b b-gold" data-v4fight={k}>
+          <Button variant="primary" data-v4fight={k}>
             {st === 'done' ? 'Rejouer' : 'Préparer le combat'}
             <Arrow />
-          </button>
+          </Button>
         )}
       </div>
     </>
@@ -251,10 +250,10 @@ function SafariInfo({ p }) {
             <Html html={lk} />
           </Lock>
         ) : (
-          <button type="button" className="b b-gold" data-safari-panel-entrer="">
+          <Button variant="primary" data-safari-panel-entrer="">
             {S2 ? 'Reprendre la visite' : `Entrer · ${SAFARI_PRICE} ₽`}
             <Arrow />
-          </button>
+          </Button>
         )}
       </div>
     </>

@@ -5,6 +5,7 @@ import { squad } from '../../../engine/team/team.js';
 import { ECHO_EVENTS, ECHO_NODES, RELIC_DEFS, randomRelic } from '../../../engine/modes/deep-echo.js';
 import { Html } from '../../../lib/html.jsx';
 
+import Button from '../../../components/Button.jsx';
 function Head({ X }) {
   return (
     <header className="v4-ph">
@@ -24,10 +25,10 @@ function Event({ R }) {
       <div className="echo-tab-ev">
         <h3>Choisissez une relique</h3>
         {randomRelic(R, 3).map(k => (
-          <button key={k} type="button" className="b" data-echo431={`rel-${k}`}>
+          <Button key={k} data-echo431={`rel-${k}`}>
             <b>{RELIC_DEFS[k][0]}</b>
             <em>{RELIC_DEFS[k][1]}</em>
-          </button>
+          </Button>
         ))}
       </div>
     );
@@ -38,21 +39,21 @@ function Event({ R }) {
         <h3>
           Le Marchand <em>{`${R.echoes} Échos`}</em>
         </h3>
-        <button type="button" className="b" data-echo431="achat-potion">
+        <Button data-echo431="achat-potion">
           <b>Potion d’équipe · 20</b>
           <em>+30 % de PV pour tous.</em>
-        </button>
-        <button type="button" className="b" data-echo431="achat-relique">
+        </Button>
+        <Button data-echo431="achat-relique">
           <b>Relique · 45</b>
           <em>Une relique au hasard.</em>
-        </button>
-        <button type="button" className="b" data-echo431="achat-rappel">
+        </Button>
+        <Button data-echo431="achat-rappel">
           <b>Rappel · 60</b>
           <em>Un Pokémon K.O. revient à 30 % de PV.</em>
-        </button>
-        <button type="button" className="b b-gold" data-echo431="passer">
+        </Button>
+        <Button variant="primary" data-echo431="passer">
           Reprendre la route
-        </button>
+        </Button>
       </div>
     );
   }
@@ -63,9 +64,9 @@ function Event({ R }) {
         <h3>{t}</h3>
         <p>{d}</p>
         {C.map(([l, k]) => (
-          <button key={k} type="button" className="b" data-echo431={k}>
+          <Button key={k} data-echo431={k}>
             {l}
-          </button>
+          </Button>
         ))}
       </div>
     );
@@ -138,9 +139,9 @@ export default function Echo() {
         <p className="v4-ps-n">
           Récompense : 300 ₽ et 2 Éclats par étage franchi, 2 500 ₽ et 20 Éclats de plus si le gardien tombe.
         </p>
-        <button type="button" className="b b-gold" data-echo431="partir">
+        <Button variant="primary" data-echo431="partir">
           Partir avec cette équipe
-        </button>
+        </Button>
       </section>
     );
   }
@@ -181,9 +182,9 @@ export default function Echo() {
       </div>
       <Event R={R} />
       <Card R={R} />
-      <button type="button" className="b b-sm b-ghost" data-echo431="abandon">
+      <Button size="small" variant="ghost" data-echo431="abandon">
         Abandonner l’expédition
-      </button>
+      </Button>
     </section>
   );
 }

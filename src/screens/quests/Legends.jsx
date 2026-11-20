@@ -7,6 +7,7 @@ import { hoennOpen } from '../../engine/world/hoenn.js';
 import { legendSteps } from '../../engine/modes/legendary-captures.js';
 import { HOENN_LEGEND_DEFS, hoennLegendSteps, isInBox } from '../../engine/world/hoenn-legendaries.js';
 
+import Button from '../../components/Button.jsx';
 // Card of a legend: steps of its quest, then capture (data-v4fight lc… / hc…).
 function Legend({ L, et, isTaken: takenSet, fight, condition: cond }) {
   const m = BY[L.id],
@@ -31,14 +32,9 @@ function Legend({ L, et, isTaken: takenSet, fight, condition: cond }) {
         {takenSet ? (
           <span className="legend-quest-ok">Dans votre Box ✓</span>
         ) : (
-          <button
-            type="button"
-            className={`b b-sm ${isReady ? 'b-gold' : 'b-ghost'}`}
-            data-v4fight={fight}
-            disabled={!isReady}
-          >
+          <Button size="small" variant={isReady ? 'primary' : 'ghost'} data-v4fight={fight} disabled={!isReady}>
             {isReady ? 'Tenter la capture' : 'Quête en cours'}
-          </button>
+          </Button>
         )}
       </div>
     </article>

@@ -1,6 +1,7 @@
 import { Html } from '../../lib/html.jsx';
 import { useOverlay } from './dialogsStore.js';
 
+import Button from '../../components/Button.jsx';
 // Story scene (#storyScene): one line at a time. Clicks (data-scene) and hidden:
 // engine (057, 064, 093). The text is then typed letter by letter by the engine
 // (v4.73, 109), which adds .pk-dlg, .pk-fl and <span>s in the card: each line
@@ -27,15 +28,15 @@ function Card({ av, n, txt, i, nb, suite: next }) {
         <Html html={txt} />
       </p>
       <div className="sc-a">
-        <button type="button" className="b b-sm b-ghost" data-scene="passer">
+        <Button size="small" variant="ghost" data-scene="passer">
           Passer
-        </button>
+        </Button>
         <span className="sc-n">
           {i + 1} / {nb}
         </span>
-        <button type="button" className="b b-sm b-gold" data-scene="suite">
+        <Button size="small" variant="primary" data-scene="suite">
           {next}
-        </button>
+        </Button>
       </div>
     </div>
   );
