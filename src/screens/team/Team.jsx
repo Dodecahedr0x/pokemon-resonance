@@ -13,6 +13,7 @@ import Tip from '../../components/Tip.jsx';
 import Guard from '../../components/Guard.jsx';
 import Companion from './Companion.jsx';
 
+import PageHeader from '../../components/PageHeader.jsx';
 // "My team" screen (#pokedex). The logic stays in the engine (team/team.js):
 // renderGrid, renderFilters, renderTeam increment the versions of teamStore.js.
 // The #dexQ, #dexType, #dexRole fields are uncontrolled: the engine listens to them and re-reads them,
@@ -27,16 +28,12 @@ export default function Team() {
   const v = ready && vGrid ? visible() : null;
   return (
     <section className="page team-page" id="pokedex" aria-labelledby="h-dex">
-      <div className="ph">
-        <p className="kick">Kanto et Johto</p>
-        <h1 className="h1" id="h-dex">
-          Mon équipe
-        </h1>
-        <p className="sub">
-          Choisissez 4 Pokémon avec 12 points de commandement (PC). Touchez « Recruter » sous une carte ; les premiers
-          stades coûtent moins cher et évoluent en combat.
-        </p>
-      </div>
+      <PageHeader
+        kicker="Kanto et Johto"
+        title="Mon équipe"
+        titleId="h-dex"
+        lead="Choisissez 4 Pokémon avec 12 points de commandement (PC). Touchez « Recruter » sous une carte ; les premiers stades coûtent moins cher et évoluent en combat."
+      />
       <Tip t="pokedex" />
       {ready && (
         <Guard>

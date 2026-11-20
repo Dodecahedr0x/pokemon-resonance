@@ -105,11 +105,11 @@ function Card({ u }) {
   const A = BY[u.id];
   return (
     <div className="ep-card" role="dialog" aria-modal="true" aria-labelledby="epT">
-      <p className="kick">Éveil · choix irréversible</p>
+      <p className="kicker">Éveil · choix irréversible</p>
       <h2 className="h2" id="epT">
         {u.n} va évoluer
       </h2>
-      <p className="sub">
+      <p className="lead">
         {o.length > 1 ? 'Plusieurs voies s’ouvrent. Une seule sera prise, ' : 'Il n’y a pas de retour : '}les capacités
         perdues ne reviendront plus de ce combat. L’Éveil coûte 1 Voix et l’action de {u.n}.
       </p>

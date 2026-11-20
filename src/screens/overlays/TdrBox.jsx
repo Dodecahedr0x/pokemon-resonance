@@ -24,7 +24,7 @@ function Choice({ cands, pick }) {
   const n = pick.length;
   return (
     <Dialogue className="sv-card st-card tdr-card" titre="tdrT" closeAttrs={{ 'data-tdr': 'x' }}>
-      <p className="kick">Après-jeu</p>
+      <p className="kicker">Après-jeu</p>
       <h2 className="h2" id="tdrT">
         Tour de Résonance
       </h2>
@@ -66,7 +66,7 @@ function Choice({ cands, pick }) {
 function Reward({ floor, offer }) {
   return (
     <Dialogue className="sv-card st-card tdr-card" titre="tdrT">
-      <p className="kick">Tour de Résonance · étage {floor - 1} franchi</p>
+      <p className="kicker">Tour de Résonance · étage {floor - 1} franchi</p>
       <h2 className="h2" id="tdrT">
         Choisissez une récompense
       </h2>

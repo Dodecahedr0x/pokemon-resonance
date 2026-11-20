@@ -6,11 +6,11 @@ export default function DuelRelay({ d }) {
     <div id="duel433r" className="forfeit-dialog">
       {d.mode === 'abandon' ? (
         <div className={'forfeit-dialog-c dj' + d.j} role="dialog" aria-modal="true" aria-labelledby="forfeit-dialog-t">
-          <p className="kick">Duel local</p>
-          <h2 className="h1" id="forfeit-dialog-t">
+          <p className="kicker">Duel local</p>
+          <h2 className="title" id="forfeit-dialog-t">
             {d.displayName} abandonne ?
           </h2>
-          <p className="sub">{d.other} remporte le duel.</p>
+          <p className="lead">{d.other} remporte le duel.</p>
           <div className="forfeit-dialog-a">
             <Button variant="primary" data-forfeit-dialog="forfait">
               Déclarer forfait
@@ -22,13 +22,13 @@ export default function DuelRelay({ d }) {
         </div>
       ) : (
         <div className={'forfeit-dialog-c dj' + d.j} role="dialog" aria-modal="true" aria-labelledby="forfeit-dialog-t">
-          <p className="kick">
+          <p className="kicker">
             Manche {d.round} / {d.lim} · Joueur {d.j}
           </p>
-          <h2 className="h1" id="forfeit-dialog-t">
+          <h2 className="title" id="forfeit-dialog-t">
             Au tour de {d.displayName}
           </h2>
-          <p className="sub">{d.sub}</p>
+          <p className="lead">{d.sub}</p>
           <div className="forfeit-dialog-s">
             {d.s.map(x => (
               <span key={x.j} className={'dj' + x.j}>

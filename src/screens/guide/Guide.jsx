@@ -11,6 +11,7 @@ import Tutorial from './Tutorial.jsx';
 import Universe from './Universe.jsx';
 import Tip from '../../components/Tip.jsx';
 
+import PageHeader from '../../components/PageHeader.jsx';
 // Visible tabs, in bar order ("Projet" (Project) has no tab: it is opened via a link).
 const TAB_LIST = [
   ['debuter', 'Débuter'],
@@ -46,13 +47,12 @@ export default function Guide() {
 
   return (
     <section className="page" id="types" aria-labelledby="h-ty">
-      <div className="ph">
-        <p className="kick">Guide du dresseur</p>
-        <h1 className="h1" id="h-ty">
-          Guide du dresseur
-        </h1>
-        <p className="sub">Commencez par « Débuter » : cinq étapes suffisent pour gagner votre premier combat.</p>
-      </div>
+      <PageHeader
+        kicker="Guide du dresseur"
+        title="Guide du dresseur"
+        titleId="h-ty"
+        lead="Commencez par « Débuter » : cinq étapes suffisent pour gagner votre premier combat."
+      />
       <Tip t="types" />
       <div className="gd-tabs" role="tablist" aria-label="Rubriques du guide">
         {TAB_LIST.map(([k, label]) => (

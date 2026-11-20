@@ -7,6 +7,12 @@ export const RENAMED_CLASSES = {
   'b-lg': 'button-large',
   'b-gold': 'button-primary',
   'b-ghost': 'button-ghost',
+  ph: 'page-header',
+  'ph-sm': 'page-header-wide',
+  'v4-ph-page': 'page-header-wide',
+  kick: 'kicker',
+  h1: 'title',
+  sub: 'lead',
 };
 
 const OLD_CLASS = new RegExp(

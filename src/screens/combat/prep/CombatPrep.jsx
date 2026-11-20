@@ -11,6 +11,7 @@ import { PREPG } from '../../../engine/combat/battle-prep.js';
 import { nextGoal } from '../../../engine/progression/campaign.js';
 import { groupOf } from '../../../engine/world/home-journey.js';
 
+import PageHeader from '../../../components/PageHeader.jsx';
 // Battles: battle choice (#cbPrep). The engine keeps the logic (renderPrep, listeners
 // on #selTabs, #scenList, #bLaunch, data-…) and hides #cbPrep during a battle
 // (hidden attribute set by the engine: React does not render it, the element stays mounted).
@@ -22,15 +23,13 @@ function BattlePrep() {
   const G = on ? (PREPG && PREPG.sc === scSel ? PREPG.g : groupOf(scSel)) : null;
   return (
     <div id="cbPrep" className="prep-page">
-      <div className="ph ph-sm">
-        <p className="kick">Combats</p>
-        <h1 className="h1" id="h-cb">
-          Choisir un combat
-        </h1>
-        <p className="sub">
-          Un onglet, un combat dans la liste, puis « Lancer ». Votre prochaine étape est déjà sélectionnée.
-        </p>
-      </div>
+      <PageHeader
+        kicker="Combats"
+        title="Choisir un combat"
+        titleId="h-cb"
+        lead="Un onglet, un combat dans la liste, puis « Lancer ». Votre prochaine étape est déjà sélectionnée."
+        wide
+      />
       <Tip t="combat" />
       <SummaryBox id="resumePrep" />
       <div className="prep-layout">

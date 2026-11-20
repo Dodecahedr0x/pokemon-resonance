@@ -45,7 +45,7 @@ export default function Project() {
       <div className="sec">
         <div className="sec-h">
           <div>
-            <p className="kick">Concept</p>
+            <p className="kicker">Concept</p>
             <h2 className="h2">Les piliers de Résonance</h2>
           </div>
           <Button size="small" data-go="pokedex">
@@ -62,7 +62,7 @@ export default function Project() {
       <div className="sec" id="studio">
         <div className="sec-h">
           <div>
-            <p className="kick">Studio</p>
+            <p className="kicker">Studio</p>
             <h2 className="h2">Du papier au prototype</h2>
             <p className="d">
               Le cœur du jeu est déterministe : il se teste d’abord sur papier, avec des jetons et un plateau imprimé.
@@ -71,7 +71,7 @@ export default function Project() {
         </div>
         <div className="prod">
           <div className="pc-card">
-            <p className="kick">Tranche verticale</p>
+            <p className="kicker">Tranche verticale</p>
             <h3 className="h3">Le contenu minimal</h3>
             <ul className="scope">
               <li>
@@ -95,7 +95,7 @@ export default function Project() {
             </ul>
           </div>
           <div className="pc-card">
-            <p className="kick">Architecture · Godot 4</p>
+            <p className="kicker">Architecture · Godot 4</p>
             <h3 className="h3">Les règles séparées de l’image</h3>
             <div className="layers">
               <div className="layer">

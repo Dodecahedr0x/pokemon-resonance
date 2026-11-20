@@ -48,7 +48,7 @@ export default function Detail({ k }) {
     <div key="h" className="prep-card-head" style={{ '--ac': s.at ? tc(s.at) : '#E3350D' }}>
       <Html html={emblem(k, 'lg')} />
       <div>
-        <p className="kick">
+        <p className="kicker">
           <Html
             html={`${C ? C.c : groupOf(k) === 'terrains' ? 'Entraînement' : 'Ligue'}${won ? ' · réussi' : ''}${r ? ` · rang ${r}` : ''}`}
           />

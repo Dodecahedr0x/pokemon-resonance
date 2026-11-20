@@ -338,7 +338,7 @@
     gap: var(--space-lg);
   }
 }
-.champ p:not(:where(.kick)) {
+.champ p:not(:where(.kicker)) {
   font-size: 15px;
   color: var(--tx2);
 }

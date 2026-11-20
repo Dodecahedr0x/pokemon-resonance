@@ -98,8 +98,8 @@ function Sheet({ S, cardRef, decor: deco }) {
           </span>
         </div>
       ) : null}
-      <p className="kick">{SCEN[S.sc].n}</p>
-      <h2 className="h1" id="resT">
+      <p className="kicker">{SCEN[S.sc].n}</p>
+      <h2 className="title" id="resT">
         {du ? <Html html={duelTitle(S)} /> : win ? 'Victoire' : S.fled ? 'Il s’est enfui' : 'Défaite'}
       </h2>
       {L ? (
@@ -121,7 +121,7 @@ function Sheet({ S, cardRef, decor: deco }) {
           </span>
         </div>
       ) : null}
-      <p className="sub">
+      <p className="lead">
         {du ? (
           <Html html={duelUnder(S)} />
         ) : win ? (

@@ -34,7 +34,7 @@ const Card = memo(function Card({ pick, shiny, dom, route, tod, inBox, camp, pat
       aria-labelledby="encN"
       style={style}
     >
-      <p className="kick">
+      <p className="kicker">
         {route} · {tod === 'nuit' ? 'nuit' : tod === 'matin' ? 'matin' : 'jour'}
       </p>
       <p className="enc-t">

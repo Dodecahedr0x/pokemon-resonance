@@ -8,6 +8,7 @@ import Route from '../home/Route.jsx';
 import { V4 } from '../../engine/ui/screen-state.js';
 import { routeName } from '../../engine/world/johto.js';
 
+import PageHeader from '../../components/PageHeader.jsx';
 const REGIONS = [
   ['kanto', 'Kanto'],
   ['johto', 'Johto'],
@@ -35,15 +36,13 @@ function Content({ drawn, marksSel }) {
   const rg = drawn ? regionMap() : 'kanto';
   return (
     <>
-      <div className="ph v4-ph-page">
-        <p className="kick">Explorer</p>
-        <h1 className="h1" id="h-carte">
-          Carte de la région
-        </h1>
-        <p className="sub">
-          Touchez un lieu pour voir son défi, puis préparez le combat. Rivaux, Ligue et après-jeu sont dans « Tous les
-          combats ».
-        </p>
+      <PageHeader
+        kicker="Explorer"
+        title="Carte de la région"
+        titleId="h-carte"
+        lead="Touchez un lieu pour voir son défi, puis préparez le combat. Rivaux, Ligue et après-jeu sont dans « Tous les combats »."
+        wide
+      >
         <div className="map-head-row">
           <div className="v4-reg" role="tablist" aria-label="Région">
             {REGIONS.map(([k, n]) => (
@@ -59,7 +58,7 @@ function Content({ drawn, marksSel }) {
             Tous les combats
           </a>
         </div>
-      </div>
+      </PageHeader>
       {'\n '}
       <div className="v4-map-wrap">
         <div className="v4-map v4-panel">

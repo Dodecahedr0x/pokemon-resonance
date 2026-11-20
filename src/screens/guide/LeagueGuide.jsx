@@ -86,7 +86,7 @@ export default function League() {
       <div className="sec">
         <div className="sec-h">
           <div>
-            <p className="kick">Entre les combats</p>
+            <p className="kicker">Entre les combats</p>
             <h2 className="h2">Liens, capture, fatigue, objets</h2>
             <p className="d">
               Quatre systèmes de campagne qui obligent à faire tourner tout le Box, petits Pokémon compris.
@@ -186,7 +186,7 @@ export default function League() {
       <div className="sec">
         <div className="sec-h">
           <div>
-            <p className="kick">Palier 3</p>
+            <p className="kicker">Palier 3</p>
             <h2 className="h2">Techniques combinées</h2>
             <p className="d">
               Propres à un duo précis, débloquées au palier Duo (9 points de Lien). En combat : les deux Pokémon à 2
@@ -201,8 +201,8 @@ export default function League() {
       <div className="sec">
         <div className="champ">
           <div>
-            <p className="kick">Ligue Pokémon</p>
-            <h2 className="h1" style={{ marginTop: space.md }}>
+            <p className="kicker">Ligue Pokémon</p>
+            <h2 className="title" style={{ marginTop: space.md }}>
               Un Champion qui a vu vos combats
             </h2>
           </div>

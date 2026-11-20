@@ -11,6 +11,7 @@ import Mastery from './tabs/Mastery.jsx';
 import Pantheon from './tabs/Pantheon.jsx';
 import Duel from './tabs/Duel.jsx';
 
+import PageHeader from '../../components/PageHeader.jsx';
 const TAB_LIST = { enigmes: Puzzles, echo: Echo, arenes: Gyms, pantheon: Pantheon, duel: Duel, maitrise: Mastery };
 
 // Camp sub-tabs (v4.31): the bar, then the content of the open tab (except « Base »).
@@ -58,13 +59,12 @@ export default function Camp() {
     <section className="page v4p" id="camp" aria-labelledby="h-camp">
       {ready && (
         <>
-          <div className="ph v4-ph-page">
-            <p className="kick">Votre base</p>
-            <h1 className="h1" id="h-camp">
-              Camp
-            </h1>
-            <p className="sub">Bâtiments, expéditions, Pension et Potager.</p>
-          </div>
+          <PageHeader
+            kicker="Votre base"
+            title="Camp"
+            titleId="h-camp"
+            lead="Bâtiments, expéditions, Pension et Potager."
+          />
           <Content key={page} page={page} />
         </>
       )}

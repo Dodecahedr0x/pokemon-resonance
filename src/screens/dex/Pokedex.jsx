@@ -5,6 +5,7 @@ import DexCard from './DexCard.jsx';
 import { DexCount, DexList } from './DexList.jsx';
 import Missions from './Missions.jsx';
 
+import PageHeader from '../../components/PageHeader.jsx';
 // "Pokédex" page (#dex, v4). Empty until the first display (the engine's renderDex),
 // then redrawn on every renderDex / renderDexCard / renderDexList.
 // Search, region and sort are uncontrolled fields: the engine listens to them
@@ -16,13 +17,12 @@ export default function Pokedex() {
     <section className="page v4p" id="dex" aria-labelledby="h-dex">
       {ready && dexBuilt && (
         <>
-          <div className="ph v4-ph-page">
-            <p className="kick">Kanto, Johto et Hoenn</p>
-            <h1 className="h1" id="h-dex4">
-              Pokédex
-            </h1>
-            <p className="sub">{`Les ${DEXS.length} Pokémon du jeu, leurs mesures, leur rôle et leurs capacités.`}</p>
-          </div>
+          <PageHeader
+            kicker="Kanto, Johto et Hoenn"
+            title="Pokédex"
+            titleId="h-dex4"
+            lead={`Les ${DEXS.length} Pokémon du jeu, leurs mesures, leur rôle et leurs capacités.`}
+          />
           {'\n '}
           <Missions />
           <div className="dex-toolbar v4-panel">

@@ -13,7 +13,7 @@ export default function DaycareBox() {
 function Card({ L, ok }) {
   return (
     <Dialogue className="sv-card exp-card" titre="pensT" closeAttrs={{ 'data-pens': 'x' }}>
-      <p className="kick">Pension</p>
+      <p className="kicker">Pension</p>
       <h2 className="h2" id="pensT">
         Choisissez un couple
       </h2>

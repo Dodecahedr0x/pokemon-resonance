@@ -2,7 +2,7 @@
    Markup: Team.jsx and Grid.jsx. The search field and the selects are uncontrolled; the engine (team/team.js)
    listens to them. */
 
-.team-page .ph {
+.team-page .page-header {
   padding-bottom: var(--space-lg);
 }
 

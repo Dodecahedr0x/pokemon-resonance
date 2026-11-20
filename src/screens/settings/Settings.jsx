@@ -24,6 +24,7 @@ import ActionReplay from './panels/ActionReplay.jsx';
 import DownloadGame from './panels/DownloadGame.jsx';
 import DesignWorkshop from './panels/DesignWorkshop.jsx';
 
+import PageHeader from '../../components/PageHeader.jsx';
 // Panels, in the order the old game displayed them: first those added by the
 // successive versions (inserted at the top), then the base settings, then the tools.
 const PANELS = [
@@ -55,13 +56,12 @@ const PANELS = [
 function Content() {
   return (
     <>
-      <div className="ph v4-ph-page">
-        <p className="kick">Réglages</p>
-        <h1 className="h1" id="h-params">
-          Paramètres
-        </h1>
-        <p className="sub">Réglages de cet appareil et de votre partie.</p>
-      </div>
+      <PageHeader
+        kicker="Réglages"
+        title="Paramètres"
+        titleId="h-params"
+        lead="Réglages de cet appareil et de votre partie."
+      />
       <div className="settings-grid">
         {PANELS.map((P, i) => (
           <P key={i} />

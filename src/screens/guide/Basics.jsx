@@ -217,7 +217,7 @@ export default function Basics() {
       <div className="sec">
         <div className="sec-h">
           <div>
-            <p className="kick">Le cœur du jeu</p>
+            <p className="kicker">Le cœur du jeu</p>
             <h2 className="h2">Anatomie d’un Éveil</h2>
             <p className="d">
               Chenipan sait entraver. Papilusion frappe fort. Aucun des deux ne fait les deux. Tout le combat tient dans
@@ -232,7 +232,7 @@ export default function Basics() {
       <div className="sec" id="regles">
         <div className="sec-h">
           <div>
-            <p className="kick">Règles</p>
+            <p className="kicker">Règles</p>
             <h2 className="h2">Huit systèmes imbriqués</h2>
             <p className="d">Ouvrez une règle, touchez un code pour suivre le fil. Les points dorés sont nouveaux.</p>
           </div>

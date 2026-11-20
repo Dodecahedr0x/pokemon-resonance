@@ -253,7 +253,7 @@ export default function Reactions() {
       <div className="sec">
         <div className="sec-h">
           <div>
-            <p className="kick">Table des types</p>
+            <p className="kicker">Table des types</p>
             <h2 className="h2">Les repères restent intacts</h2>
             <p className="d">
               Les multiplicateurs ×2, ×½ et ×0 s’appliquent avant toute réaction. Un joueur de la série retrouve ses
@@ -268,7 +268,7 @@ export default function Reactions() {
       <div className="sec">
         <div className="sec-h">
           <div>
-            <p className="kick">Exemple de chaîne</p>
+            <p className="kicker">Exemple de chaîne</p>
             <h2 className="h2">Deux Pokémon, une capture d’eau</h2>
             <p className="d">
               Magnéti charge, attire l’ennemi dans la rivière, Pikachu frappe l’eau. Chaque case parcourue retire 15 %
@@ -283,7 +283,7 @@ export default function Reactions() {
       <div className="sec">
         <div className="sec-h">
           <div>
-            <p className="kick">Nouveau · Météo</p>
+            <p className="kicker">Nouveau · Météo</p>
             <h2 className="h2">Le ciel change les marques</h2>
             <p className="d">
               Une capacité de météo dure 5 manches et modifie la durée des marques sur tout le plateau.
@@ -297,7 +297,7 @@ export default function Reactions() {
       <div className="sec">
         <div className="sec-h">
           <div>
-            <p className="kick">Les 18 types</p>
+            <p className="kicker">Les 18 types</p>
             <h2 className="h2">Marquer ou déplacer</h2>
             <p className="d">
               Six familles posent des marques. Les neuf autres types agissent sur les positions : les 18 ont un rôle sur

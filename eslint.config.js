@@ -50,7 +50,12 @@ export default [
     },
   },
   {
-    files: ['vite.config.js', 'eslint.config.js', 'tools/style-snapshot/{plugin,diff}.js'],
+    files: [
+      'vite.config.js',
+      'eslint.config.js',
+      'tools/style-snapshot/{plugin,diff}.js',
+      'tools/rename-classes/*.mjs',
+    ],
     languageOptions: { globals: { ...globals.node } },
   },
   // Layout belongs to Prettier; re-enable the one rule it turns off that still matters.

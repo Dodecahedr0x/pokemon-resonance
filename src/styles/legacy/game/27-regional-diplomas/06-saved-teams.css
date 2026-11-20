@@ -113,10 +113,10 @@ html body #bSvg .tok.dj2 {
   border: 2px solid var(--dj);
   box-shadow: 0 0 40px -10px var(--dj);
 }
-.forfeit-dialog-c .h1 {
+.forfeit-dialog-c .title {
   margin: var(--space-2xs) 0 var(--space-xs);
 }
-.forfeit-dialog-c .sub {
+.forfeit-dialog-c .lead {
   margin: 0 0 var(--space-md);
 }
 .forfeit-dialog-s {

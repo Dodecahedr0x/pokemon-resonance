@@ -1,6 +1,6 @@
 import { channel } from '../lib/store.js';
 
-// The Professor's tip on a screen's first visit (.tip after the .ph header):
+// The Professor's tip on a screen's first visit (.tip after the .page-header):
 // pages where it is displayed. The engine (tipFor, 031) opens it, the "Compris" (Got it) button closes it.
 let openItems = new Set();
 const { emit, use } = channel();

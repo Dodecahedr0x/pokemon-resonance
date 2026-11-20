@@ -181,7 +181,7 @@ function Card({ xRef }) {
           <use href="#i-x" />
         </svg>
       </button>
-      <p className="kick">Archives du dresseur</p>
+      <p className="kicker">Archives du dresseur</p>
       <h2 className="h2" id="svTitle">
         Partie et réglages
       </h2>

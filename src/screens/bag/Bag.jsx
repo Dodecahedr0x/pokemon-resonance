@@ -11,6 +11,7 @@ import Peddler from './Peddler.jsx';
 import WorkshopTab from './Workshop.jsx';
 import Counter from './Counter.jsx';
 
+import PageHeader from '../../components/PageHeader.jsx';
 const NL = '\n ';
 const WORKSHOP = ['ate', 'jeux', 'quetes', 'trophees', 'oeufs', 'talents'];
 
@@ -79,15 +80,12 @@ function Content() {
   const n = v === 'sac' ? (V4.bagCategory === 'held' ? keys.length : keys.filter(k => bagN(k)).length) : 0;
   return (
     <>
-      <div className="ph v4-ph-page">
-        <p className="kick">Objets</p>
-        <h1 className="h1" id="h-sac">
-          Sac et Boutique
-        </h1>
-        <p className="sub">
-          Les Pokédollars se gagnent en combat, les Éclats avec les rangs S, les badges et les quêtes.
-        </p>
-      </div>
+      <PageHeader
+        kicker="Objets"
+        title="Sac et Boutique"
+        titleId="h-sac"
+        lead="Les Pokédollars se gagnent en combat, les Éclats avec les rangs S, les badges et les quêtes."
+      />
       {NL}
       <div className="bag-wallet v4-panel">
         <div>

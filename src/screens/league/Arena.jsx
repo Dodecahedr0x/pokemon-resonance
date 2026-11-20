@@ -20,7 +20,7 @@ export default function Arena() {
         <Html html={badgeSvg(gymSel, g.t, 'bx')} />
       </div>
       <div>
-        <p className="kick">{`Arène ${gymSel + 1} sur 8 · N.${D.lv}${won ? ' · badge obtenu' : ''}`}</p>
+        <p className="kicker">{`Arène ${gymSel + 1} sur 8 · N.${D.lv}${won ? ' · badge obtenu' : ''}`}</p>
         <h3 className="h2">
           <Html html={g.n} />
         </h3>

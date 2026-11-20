@@ -44,7 +44,7 @@
   align-items: center;
   gap: var(--space-lg);
 }
-.prep-card-head .kick {
+.prep-card-head .kicker {
   margin: 0 0 var(--space-xs);
 }
 .prep-card-head .h2 {

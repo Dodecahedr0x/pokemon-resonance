@@ -24,11 +24,11 @@ export default function Starter() {
 function Card() {
   return (
     <Dialogue className="sv-card st-card" titre="stT" closeAttrs={{ 'data-st': 'x' }}>
-      <p className="kick">Nouvelle campagne</p>
+      <p className="kicker">Nouvelle campagne</p>
       <h2 className="h2" id="stT">
         Choisissez votre partenaire
       </h2>
-      <p className="sub">
+      <p className="lead">
         Il rejoint Magicarpe, Métamorph et Chenipan dans votre Box. Les autres se capturent dans les hautes herbes et
         sur les terrains. Vos emplacements de sauvegarde restent intacts.
       </p>

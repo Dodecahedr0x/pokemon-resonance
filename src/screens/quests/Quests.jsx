@@ -15,6 +15,7 @@ import Legends from './Legends.jsx';
 import Journal from './Journal.jsx';
 import Achievements from './Achievements.jsx';
 
+import PageHeader from '../../components/PageHeader.jsx';
 const NL = '\n ';
 
 // Content of the chosen tab (V4.qTab); any other value shows the Event tab.
@@ -60,13 +61,12 @@ function Content() {
   ];
   return (
     <>
-      <div className="ph v4-ph-page">
-        <p className="kick">Aventure</p>
-        <h1 className="h1" id="h-quetes">
-          Quêtes
-        </h1>
-        <p className="sub">Suivez les chapitres, relevez les défis et réclamez vos récompenses.</p>
-      </div>
+      <PageHeader
+        kicker="Aventure"
+        title="Quêtes"
+        titleId="h-quetes"
+        lead="Suivez les chapitres, relevez les défis et réclamez vos récompenses."
+      />
       {NL}
       <div className="v4-trophy v4-panel">
         <div className="v4-tr-b">

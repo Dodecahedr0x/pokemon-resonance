@@ -136,12 +136,12 @@ body::before {
   letter-spacing: 0.14em !important;
 }
 .h2,
-.sec h2:not(:where(.h1)) {
+.sec h2:not(:where(.title)) {
   color: #f8fbff !important;
   text-shadow: 0 2px 18px rgba(0, 0, 0, 0.4);
 }
 .d,
-.ph .d {
+.page-header .d {
   color: #c3d8e5 !important;
 }
 .tcard,

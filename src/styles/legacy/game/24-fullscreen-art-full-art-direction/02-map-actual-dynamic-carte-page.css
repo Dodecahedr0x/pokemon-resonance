@@ -1,5 +1,5 @@
 /* MAP — actual dynamic #carte page */
-#carte .v4-ph-page {
+#carte .page-header-wide {
   padding-bottom: var(--space-2xl);
 }
 #carte .v4-reg {

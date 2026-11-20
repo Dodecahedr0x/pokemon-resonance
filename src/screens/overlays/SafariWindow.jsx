@@ -39,7 +39,7 @@ function Card({
   const m = x && BY[x.id];
   return (
     <Dialogue className="sv-card exp-card sf-card" titre="sfT" closeAttrs={{ 'data-safariPanel': 'x' }}>
-      <p className="kick">Parc Safari</p>
+      <p className="kicker">Parc Safari</p>
       <h2 className="h2" id="sfT">
         {x ? m.n : 'Les herbes du Parc'}
       </h2>

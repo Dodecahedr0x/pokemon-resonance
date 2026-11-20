@@ -157,7 +157,7 @@ body {
   gap: var(--space-lg) !important;
 }
 /* MAP — regional atlas, cartographic panel */
-#carte .v4-ph-page {
+#carte .page-header-wide {
   max-width: 850px;
 }
 #carte .v4-reg {

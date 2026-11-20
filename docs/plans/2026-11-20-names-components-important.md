@@ -40,8 +40,8 @@ Each step is one commit (or a few), on its own, playable at every point.
    1. button: `.b`, `.b-sm`, `.b-lg`, `.b-gold`, `.b-ghost` → `.button`, `.button-small`, `.button-large`,
       `.button-primary`, `.button-ghost`; a `Button` React component for JSX; the legacy rules that target the old
       names are renamed with them, and their `!important` removed where the new layer order makes it unnecessary.
-   2. page header: `.ph`, `.kick`, `.h1`, `.h2`, `.h3`, `.sub`, `.sec`, `.sec-h` → `page-header`, `page-kicker`,
-      `page-title`, `section-title`…; a `PageHeader` component.
+   2. page header: `.ph`, `.kick`, `.h1`, `.sub` → `.page-header`, `.kicker`, `.title`, `.lead`; a `PageHeader`
+      component. (`.h2`, `.h3`, `.sec`, `.sec-h` go with the panel in 1.3.)
    3. panel `.v4-panel`, form fields `.v4-fld`, counters `.v4-cnt`, labels `.lbl-s`, chips `.chip`, type badges
       `.tb` (`typeBadge()` in the engine), status badges `.stt`, medals `.medal`, energy pips `.enp`, rank tags `.rg`,
       role icons `.ri`.
@@ -63,3 +63,8 @@ Each step is one commit (or a few), on its own, playable at every point.
   Workshop CSS is translated through `src/lib/renamedClasses.js`, where every later rename of a shared class is added.
   The legacy `!important` rules that target buttons are screen tweaks (home call to action, coach, saves, result);
   they go with their screens in step 2.
+- 1.2 page header: done. `.ph`, `.kick`, `.h1`, `.sub` → `.page-header`, `.kicker`, `.title`, `.lead`; the ten screen
+  headers render `src/components/PageHeader.jsx` (`wide` adds `.page-header-wide`, the only part of `.ph-sm` /
+  `.v4-ph-page` any rule still reads: map and battle choice). Renames are done with
+  `node tools/rename-classes/rename-classes.mjs '{"old":"new"}'`, which rewrites CSS selectors, JSX `className`, engine
+  `class="…"` strings, `classList` calls and selector strings in `querySelector` / `closest` / `matches` / `$`.

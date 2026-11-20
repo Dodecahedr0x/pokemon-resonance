@@ -5,6 +5,7 @@ import Badges from './Badges.jsx';
 import Arena from './Arena.jsx';
 import EliteCell from './EliteCell.jsx';
 
+import PageHeader from '../../components/PageHeader.jsx';
 // "League" page (#ligue): badge case, chosen gym's sheet, Elite Four and Champion.
 // Clicks are still handled by the engine (listeners on #badges, #arena, data-chal).
 export default function League() {
@@ -14,15 +15,12 @@ export default function League() {
   const on = ready && v > 0;
   return (
     <section className="page" id="ligue" aria-labelledby="h-lg">
-      <div className="ph">
-        <p className="kick">Campagne · Arènes, Conseil 4, Champion</p>
-        <h1 className="h1" id="h-lg">
-          Huit badges, huit leçons
-        </h1>
-        <p className="sub">
-          Les badges dans l’ordre, puis le Conseil 4 et le Champion. Touchez un badge pour lire la règle de son arène.
-        </p>
-      </div>
+      <PageHeader
+        kicker="Campagne · Arènes, Conseil 4, Champion"
+        title="Huit badges, huit leçons"
+        titleId="h-lg"
+        lead="Les badges dans l’ordre, puis le Conseil 4 et le Champion. Touchez un badge pour lire la règle de son arène."
+      />
       <div className="case">
         <div className="case-h">
           <span>Boîte à badges</span>

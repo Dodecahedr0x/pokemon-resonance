@@ -45,7 +45,7 @@ export default function Universe() {
       </div>
       <div className="sec-h uv-h">
         <div>
-          <p className="kick">Huit arènes</p>
+          <p className="kicker">Huit arènes</p>
           <h2 className="h2">Les maîtres d’arène</h2>
         </div>
       </div>
@@ -67,7 +67,7 @@ export default function Universe() {
       </div>
       <div className="sec-h uv-h">
         <div>
-          <p className="kick">Le sommet</p>
+          <p className="kicker">Le sommet</p>
           <h2 className="h2">Le Conseil 4 et la Championne</h2>
         </div>
       </div>
@@ -91,7 +91,7 @@ export default function Universe() {
       </div>
       <div className="sec-h uv-h">
         <div>
-          <p className="kick">Campagne</p>
+          <p className="kicker">Campagne</p>
           <h2 className="h2">Les chapitres</h2>
         </div>
       </div>
