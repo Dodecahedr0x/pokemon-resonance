@@ -13,7 +13,7 @@ import Button from '../../components/Button.jsx';
 export default function TdrBox() {
   const s = useOverlay('tdr');
   return (
-    <div className="result tdr-box" id="tdrBox" hidden>
+    <div className="result tower-box" id="tdrBox" hidden>
       {s && (s.mode === 'reward' ? <Reward key={s.v} {...s} /> : <Choice key={s.v} {...s} />)}
     </div>
   );
@@ -23,7 +23,7 @@ export default function TdrBox() {
 function Choice({ cands, pick }) {
   const n = pick.length;
   return (
-    <Dialogue className="dialog-card st-card tdr-card" titre="tdrT" closeAttrs={{ 'data-tdr': 'x' }}>
+    <Dialogue className="dialog-card starter-card tower-card" titre="tdrT" closeAttrs={{ 'data-tdr': 'x' }}>
       <p className="kicker">Après-jeu</p>
       <h2 className="section-title" id="tdrT">
         Tour de Résonance
@@ -31,7 +31,7 @@ function Choice({ cands, pick }) {
       <p className="d">
         Choisissez 4 Pokémon pour cette ascension. Pas de budget ici : à vous de trouver les bonnes synergies.
       </p>
-      <div className="st-grid tdr-grid">
+      <div className="starter-grid tower-grid">
         {cands.map(id => {
           const m = BY[id],
             on = pick.includes(id);
@@ -39,7 +39,7 @@ function Choice({ cands, pick }) {
             <button
               key={id}
               type="button"
-              className={'st-o tdr-o' + (on ? ' on' : '')}
+              className={'starter-option tower-option' + (on ? ' is-selected' : '')}
               data-tdrp={id}
               aria-pressed={on}
               style={{ '--c': tc(m.t[0]) }}
@@ -53,7 +53,7 @@ function Choice({ cands, pick }) {
           );
         })}
       </div>
-      <div className="tdr-a">
+      <div className="tower-actions">
         <Button variant="primary" data-tdr="go" disabled={n !== 4}>
           Commencer l’ascension · {n} / 4
         </Button>
@@ -65,18 +65,18 @@ function Choice({ cands, pick }) {
 // Reward after a floor is cleared.
 function Reward({ floor, offer }) {
   return (
-    <Dialogue className="dialog-card st-card tdr-card" titre="tdrT">
+    <Dialogue className="dialog-card starter-card tower-card" titre="tdrT">
       <p className="kicker">Tour de Résonance · étage {floor - 1} franchi</p>
       <h2 className="section-title" id="tdrT">
         Choisissez une récompense
       </h2>
-      <div className="tdr-rw">
+      <div className="tower-rewards">
         {offer.map((x, i) => (
-          <button key={i} type="button" className="tdr-r" data-tdrr={i}>
+          <button key={i} type="button" className="tower-reward" data-tdrr={i}>
             {x.k === 'voix' ? (
-              <span className="tdr-ic">+1</span>
+              <span className="tower-reward-icon">+1</span>
             ) : x.k === 'item' ? (
-              <span className="tdr-ic">
+              <span className="tower-reward-icon">
                 <img src={ITM(HELD_IMG[x.it])} alt="" />
               </span>
             ) : (

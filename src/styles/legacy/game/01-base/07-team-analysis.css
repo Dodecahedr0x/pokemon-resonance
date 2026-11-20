@@ -1,12 +1,4 @@
 /* team analysis */
-.sc-n {
-  font-family: var(--f-d);
-  font-stretch: 125%;
-  font-weight: 850;
-  font-size: 30px;
-  fill: var(--tx);
-  text-anchor: middle;
-}
 .empty {
   font-size: 13.5px;
   color: var(--mut);

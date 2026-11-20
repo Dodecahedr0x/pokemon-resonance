@@ -60,7 +60,7 @@ function Body({ i }) {
           Ici, les Pokémon n’évoluent pas dans un menu : ils évoluent <b>en plein combat</b>, quand leur énergie de
           Résonance est pleine. Retenez trois choses :
         </p>
-        <div className="it-cards">
+        <div className="intro-rules">
           <div style={{ '--c': '#2A75BB' }}>
             <b data-n="1">1</b>
             <span>
@@ -87,7 +87,7 @@ function Body({ i }) {
     return (
       <>
         <p>Et vous, comment vous appelez-vous ?</p>
-        <label className="it-name">
+        <label className="intro-name">
           <input
             id="inName"
             type="text"
@@ -107,14 +107,14 @@ function Body({ i }) {
           Enchantée, <b>{INTRO.name || 'Dresseur'}</b> ! Choisissez votre <b>partenaire</b>. Il vous suivra toute
           l’aventure ; les autres Pokémon se capturent dans les hautes herbes.
         </p>
-        <div className="it-st">
+        <div className="intro-starters">
           {STARTERS.map(id => {
             const m = BY[id];
             return (
               <button
                 key={id}
                 type="button"
-                className={'it-o' + (INTRO.st === id ? ' on' : '')}
+                className={'intro-starter' + (INTRO.st === id ? ' is-selected' : '')}
                 data-in-st={id}
                 style={{ '--c': tc(m.t[0]) }}
               >
@@ -125,7 +125,7 @@ function Body({ i }) {
             );
           })}
         </div>
-        <div className="it-diff">
+        <div className="intro-difficulty">
           <span>Difficulté</span>
           {Object.entries(DIFFS).map(([k, n]) => (
             <Button key={k} size="small" data-in-d={k} aria-pressed={INTRO.diff === k}>
@@ -181,7 +181,7 @@ function Actions({ i }) {
           {st ? 'Choisir ' + st.n : 'Choisissez un Pokémon'}
           <Fl />
         </Button>
-        <button type="button" className="it-libre" data-in="libre">
+        <button type="button" className="intro-free-mode" data-in="libre">
           Jouer plutôt en mode Libre : tous les combats ouverts{st ? ', avec ' + st.n : ''}
         </button>
       </>
@@ -201,25 +201,25 @@ function Actions({ i }) {
 function Card() {
   const i = INTRO.i;
   return (
-    <div className="it-card" role="dialog" aria-modal="true" aria-label="Accueil de la Professeure">
+    <div className="intro-card" role="dialog" aria-modal="true" aria-label="Accueil de la Professeure">
       {i < 3 && (
-        <button type="button" className="it-skip" data-in="skip">
+        <button type="button" className="intro-skip" data-in="skip">
           Passer l’introduction
         </button>
       )}
-      <div className="it-prof">
+      <div className="intro-professor">
         <Html html={PROF_AV} />
-        <div className="it-dots">
+        <div className="intro-progress">
           {[0, 1, 2, 3, 4].map(k => (
-            <i key={k} className={k <= i ? 'on' : ''} />
+            <i key={k} className={k <= i ? 'is-done' : ''} />
           ))}
         </div>
       </div>
-      <div className="dlgbox lg">
-        <span className="dlg-who">Prof. Sorbier</span>
+      <div className="dialogue-box is-large">
+        <span className="dialogue-speaker">Prof. Sorbier</span>
         <Body i={i} />
       </div>
-      <div className="it-a">
+      <div className="intro-actions">
         <Actions i={i} />
       </div>
     </div>

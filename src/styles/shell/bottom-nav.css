@@ -1,5 +1,9 @@
 /* Phone bottom bar (Nav.jsx BottomNav): five pages and the Menu button. */
 
+/* its height, for what sits above it; read on body, where battle and full screen set the legacy --bn to 0 */
+body {
+  --bottom-nav-height: var(--bn);
+}
 .bottom-nav {
   display: none;
   backdrop-filter: blur(22px);

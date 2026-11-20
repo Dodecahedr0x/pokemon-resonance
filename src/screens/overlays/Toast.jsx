@@ -4,7 +4,7 @@ import { useToast } from './shellOverlays.js';
 export default function Toast() {
   const { msg, on } = useToast();
   return (
-    <div className={on ? 'toast on' : 'toast'} id="toast" role="status" aria-live="polite">
+    <div className={on ? 'toast is-shown' : 'toast'} id="toast" role="status" aria-live="polite">
       {msg}
     </div>
   );

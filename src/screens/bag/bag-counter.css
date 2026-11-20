@@ -146,7 +146,7 @@
   background: linear-gradient(180deg, #4b5563, #2b313b);
   box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.25);
 }
-/* the clerk's line (a shared .dlgbox) */
+/* the clerk's line (a shared .dialogue-box) */
 .bag-counter-dialogue {
   margin: 0 var(--space-2xs);
   padding: var(--space-md) var(--space-3xl) var(--space-md) var(--space-md);

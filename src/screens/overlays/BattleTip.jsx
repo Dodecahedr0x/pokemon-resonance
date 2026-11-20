@@ -12,8 +12,8 @@ export default function BattleTip() {
     return null;
   }
   return (
-    <aside className="tip-card" id="tip-card" role="status" aria-live="polite" key={v}>
-      <span className="tip-card-av">
+    <aside className="battle-tip" id="tip-card" role="status" aria-live="polite" key={v}>
+      <span className="battle-tip-avatar">
         <Html html={PROF_AV} />
       </span>
       <div>
@@ -24,7 +24,7 @@ export default function BattleTip() {
         <p>
           <Html html={tip.d} />
         </p>
-        <div className="tip-card-a">
+        <div className="battle-tip-actions">
           <Button size="small" variant="primary" data-tip-card="ok">
             Compris
           </Button>

@@ -67,7 +67,7 @@ export default function Detail({ k }) {
       </div>
     </div>,
     L && (
-      <div key="q" className="dlgbox sm">
+      <div key="q" className="dialogue-box is-small">
         <p>
           <Html html={L.q} />
         </p>

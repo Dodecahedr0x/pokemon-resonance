@@ -64,19 +64,6 @@
 .ct-mvc .button {
   margin-top: var(--space-xs);
 }
-.it-libre {
-  display: block;
-  margin: var(--space-sm) auto 0;
-  padding: var(--space-xs) var(--space-2xs);
-  border: 0;
-  background: none;
-  color: var(--mut, #9fb0c4);
-  font: inherit;
-  font-size: 13px;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  cursor: pointer;
-}
 .enc-lib {
   margin: var(--space-sm) 0 0;
   font-size: 12.5px;

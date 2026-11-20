@@ -1,0 +1,112 @@
+/* Overlays › the classic dialogue skin (white box, dark text) laid over typed dialogues. In the skin layer, after
+   the screens layer, so it beats the screen rules without !important. */
+
+.typed-dialogue {
+  position: relative;
+  background: linear-gradient(180deg, #ffffff, #edf1f7);
+  color: #273142;
+  border: 0;
+  border-radius: 12px;
+  box-shadow:
+    0 0 0 2.5px #f8fafc,
+    0 0 0 5.5px #3a72c4,
+    0 0 0 7px #0d1f3c,
+    0 16px 30px -14px rgba(0, 0, 0, 0.85);
+  text-shadow: none;
+  backdrop-filter: none;
+}
+.typed-dialogue
+  :is(
+    p,
+    em,
+    q,
+    small,
+    span:not(.professor-avatar):not(.dialogue-speaker):not(.type-badge):not(.typed-letter):not(.typed-word)
+  ):not(.professor-avatar *):not(.type-badge *):not(button *):not(.intro-rules *) {
+  color: #273142;
+  text-shadow: none;
+}
+.typed-dialogue :is(b, strong):not(.professor-avatar *):not(button *):not(.intro-rules *) {
+  color: #cf2f2b;
+  text-shadow: none;
+}
+.typed-dialogue .dialogue-speaker {
+  position: absolute;
+  display: inline-block;
+  margin: 0;
+  padding: var(--space-3xs) var(--space-sm) var(--space-3xs);
+  border-radius: 6px;
+  background: linear-gradient(180deg, #5a93e6, #2c5fae);
+  color: #fff;
+  font: 800 9.5px/1.25 var(--font-display);
+  letter-spacing: 0.1em;
+  box-shadow: 0 0 0 2px #0d1f3c;
+  opacity: 1;
+}
+.typed-dialogue .dialogue-speaker::before {
+  display: none;
+}
+.typed-dialogue .dialogue-speaker::after {
+  display: none;
+}
+.professor-tip .dialogue-box.typed-dialogue {
+  padding: var(--space-lg) var(--space-3xl) var(--space-md) var(--space-md);
+}
+#story-scene .story-scene-card.typed-dialogue {
+  padding: var(--space-lg) var(--space-lg) var(--space-md);
+  animation: pkDlgIn 0.32s cubic-bezier(0.2, 1, 0.4, 1) both;
+}
+#story-scene .story-scene-card.typed-dialogue .story-scene-speaker > b {
+  color: #1d4ea8;
+  font-family: var(--font-display);
+}
+#story-scene .story-scene-card.typed-dialogue .story-scene-text {
+  font-size: 16.5px;
+  line-height: 1.55;
+  color: #1f2836;
+}
+#story-scene .story-scene-card.typed-dialogue .story-scene-step {
+  color: #6a7688;
+}
+.typed-dialogue .button-ghost {
+  color: #2c5fae;
+  background: transparent;
+  border: 1.5px solid rgba(44, 95, 174, 0.45);
+  box-shadow: none;
+}
+#coach .coach-card.typed-dialogue {
+  padding: var(--space-md) var(--space-md);
+}
+#coach .coach-card.typed-dialogue > b {
+  color: #1d4ea8;
+}
+#coach .coach-card.typed-dialogue .coach-step {
+  color: #6a7688;
+}
+#coach .coach-card.typed-dialogue p {
+  color: #273142;
+}
+#tip-card.typed-dialogue {
+  padding: var(--space-md) var(--space-md);
+  position: fixed;
+}
+#tip-card.typed-dialogue small {
+  color: #2c5fae;
+}
+#tip-card.typed-dialogue > div > b {
+  color: #1d4ea8;
+}
+.intro .dialogue-box.typed-dialogue {
+  padding: var(--space-xl) var(--space-xl) var(--space-xl);
+}
+@media (prefers-reduced-motion: reduce) {
+  .typed-dialogue .typed-dialogue-arrow {
+    animation: none;
+  }
+}
+html.pk-calme .typed-dialogue .typed-dialogue-arrow {
+  animation: none;
+}
+html.a11y-rm .typed-dialogue .typed-dialogue-arrow {
+  animation: none;
+}

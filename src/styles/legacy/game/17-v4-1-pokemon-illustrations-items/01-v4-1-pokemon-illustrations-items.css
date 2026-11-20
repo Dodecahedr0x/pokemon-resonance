@@ -93,19 +93,6 @@ html body .rl .it-ic {
   height: 30px;
 }
 /* toasts: at the top on phone, so they no longer pass under the "Fin du tour" (End turn) bar */
-@media (max-width: 999px) {
-  html body .toast {
-    top: calc(64px + env(safe-area-inset-top, 0px)) !important;
-    bottom: auto !important;
-  }
-}
-html body .toast {
-  background: linear-gradient(180deg, #123462, #0a1f40) !important;
-  border: 1px solid rgba(120, 210, 255, 0.45) !important;
-  border-radius: 12px !important;
-  color: #fff !important;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45) !important;
-}
 /* battle intro in v4 colors */
 html body .vs {
   background: #061327 !important;
@@ -212,106 +199,6 @@ html body #bSvg .tok.boss .tok-rim {
 }
 
 /* --- Resonance Tower --- */
-.tdr-box {
-  z-index: 92;
-}
-.tdr-card {
-  width: min(760px, 100%);
-}
-.tdr-grid {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-}
-.tdr-o {
-  padding: var(--space-md) var(--space-xs);
-  position: relative;
-}
-.tdr-o b {
-  font-size: 13px;
-}
-.tdr-o.on {
-  background:
-    radial-gradient(90% 70% at 50% 0%, color-mix(in srgb, var(--c) 40%, transparent), transparent 70%) padding-box,
-    var(--slab) padding-box,
-    linear-gradient(135deg, #ffe17b, #b8862b) border-box;
-  box-shadow: 0 0 0 2px rgba(255, 225, 123, 0.35);
-}
-.tdr-o.on::after {
-  content: '✓';
-  position: absolute;
-  top: 6px;
-  right: 8px;
-  font: 800 14px/1 var(--f-d);
-  color: #ffe17b;
-}
-.tdr-a {
-  /* the button stays visible while the 8 Pokémon are scrolled */
-  position: sticky;
-  bottom: -26px; /* up to the edge of the card (its inner margin is 26 px) */
-  margin-bottom: -26px;
-  z-index: 9; /* above the illustrations that overflow their medallion */
-  display: flex;
-  justify-content: center;
-  margin-top: var(--space-md);
-  padding: var(--space-md) 0 var(--space-2xl);
-  background: linear-gradient(180deg, rgba(6, 14, 26, 0), rgba(6, 14, 26, 0.97) 35%);
-}
-.tdr-rw {
-  display: grid;
-  gap: var(--space-sm);
-}
-.tdr-r {
-  display: flex;
-  align-items: center;
-  gap: var(--space-md);
-  width: 100%;
-  padding: var(--space-sm) var(--space-md);
-  border-radius: var(--r, 12px);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: rgba(255, 255, 255, 0.04);
-  color: inherit;
-  font: inherit;
-  text-align: left;
-  cursor: pointer;
-}
-.tdr-r:hover,
-.tdr-r:focus-visible {
-  border-color: #ffe17b;
-  background: rgba(255, 215, 94, 0.1);
-}
-.tdr-r > span:last-child {
-  display: grid;
-  gap: var(--space-3xs);
-}
-.tdr-r b {
-  font: 800 14px/1.2 var(--f-d);
-}
-.tdr-r em {
-  font-style: normal;
-  font-size: 12px;
-  color: var(--mut, #9fb0c4);
-}
-.tdr-ic {
-  display: grid;
-  place-items: center;
-  width: 40px;
-  height: 40px;
-  flex: none;
-  border-radius: 50%;
-  font: 800 15px/1 var(--f-d);
-  color: #ffe17b;
-  background: rgba(255, 215, 94, 0.12);
-  border: 1px solid rgba(255, 215, 94, 0.4);
-}
-.tdr-ic img {
-  width: 28px;
-  height: 28px;
-  object-fit: contain;
-}
-@media (max-width: 560px) {
-  .tdr-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
 @media (prefers-reduced-motion: reduce) {
   html body #bSvg .tok.shiny .tok-halo {
     animation: none;

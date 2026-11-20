@@ -1,0 +1,79 @@
+/* Overlays › the starter choice for a new game (Starter.jsx). */
+
+.starter {
+  z-index: 89;
+}
+.starter-card {
+  width: min(720px, 100%);
+}
+.starter-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-sm);
+}
+.starter-option {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-lg) var(--space-sm);
+  border-radius: var(--radius-card);
+  border: 1px solid transparent;
+  background:
+    radial-gradient(90% 70% at 50% 0%, color-mix(in srgb, var(--c) 26%, transparent), transparent 70%) padding-box,
+    var(--surface-slab) padding-box,
+    var(--border-edge) border-box;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  text-align: center;
+}
+.starter-option:hover {
+  transform: translateY(-3px);
+  background:
+    radial-gradient(90% 70% at 50% 0%, color-mix(in srgb, var(--c) 34%, transparent), transparent 70%) padding-box,
+    var(--surface-slab) padding-box,
+    var(--border-brass) border-box;
+}
+.starter-option:focus-visible {
+  transform: translateY(-3px);
+  background:
+    radial-gradient(90% 70% at 50% 0%, color-mix(in srgb, var(--c) 34%, transparent), transparent 70%) padding-box,
+    var(--surface-slab) padding-box,
+    var(--border-brass) border-box;
+}
+.starter-option b {
+  font-family: var(--font-display);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 15px;
+}
+.starter-option em {
+  font-style: normal;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--color-text-muted);
+}
+.starter-option span {
+  font-size: 11.5px;
+  color: var(--color-accent-soft);
+}
+.starter-difficulty {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+.starter-difficulty > span {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin-right: var(--space-2xs);
+}
+@media (max-width: 560px) {
+  .starter-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

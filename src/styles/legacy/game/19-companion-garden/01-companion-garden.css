@@ -43,56 +43,9 @@ html body .cp-bl span {
 /* --- Pokégear --- */
 
 /* --- story scenes --- */
-html body .story-scene {
-  position: fixed;
-  inset: 0;
-  z-index: 9000;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  padding: var(--space-lg) var(--space-lg) calc(84px + env(safe-area-inset-bottom, 0px));
-  background: linear-gradient(180deg, rgba(4, 10, 24, 0.35), rgba(4, 10, 24, 0.85));
-}
-html body .story-scene[hidden] {
-  display: none;
-}
-html body .sc-card {
-  width: min(560px, 100%);
-  padding: var(--space-lg);
-  border-radius: 18px;
-  background: linear-gradient(180deg, #13284a, #0b1830);
-  border: 1px solid rgba(255, 215, 94, 0.5);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
-  animation: companion-garden-monte 0.25s ease-out;
-}
 @keyframes companion-garden-monte {
   from {
     transform: translateY(16px);
     opacity: 0;
   }
-}
-html body .sc-who {
-  display: flex;
-  align-items: center;
-  gap: var(--space-sm);
-  margin-bottom: var(--space-sm);
-}
-html body .sc-who b {
-  color: #ffd75e;
-  font-size: 16px;
-}
-html body .sc-tx {
-  margin: 0 0 var(--space-md);
-  font-size: 16px;
-  line-height: 1.5;
-}
-html body .sc-a {
-  display: flex;
-  align-items: center;
-  gap: var(--space-sm);
-}
-html body .sc-a .sc-n {
-  margin-left: auto;
-  font-size: 12px;
-  color: var(--v4-tx2, #9fb0c4);
 }

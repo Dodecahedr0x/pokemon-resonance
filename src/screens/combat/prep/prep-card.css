@@ -1,5 +1,5 @@
 /* Selected battle's card (#selDet, Detail.jsx): emblem with chapter, name and leader, the leader's quote
-   (.dlgbox), gym rule and leader style, description, goal chips, opponents, and why it is locked.
+   (.dialogue-box), gym rule and leader style, description, goal chips, opponents, and why it is locked.
    --ac: the battle's type colour (inline style on the head). */
 
 .prep-side {
@@ -64,7 +64,7 @@
 }
 
 /* ---------- Leader's quote ---------- */
-.prep-card .dlgbox {
+.prep-card .dialogue-box {
   color: var(--color-text);
   font-family: var(--font-display);
   font-size: 15px;
@@ -72,14 +72,14 @@
   overflow-wrap: anywhere;
   quotes: '« ' ' »';
 }
-.prep-card .dlgbox.pk-dlg {
+.prep-card .dialogue-box.typed-dialogue {
   margin: var(--space-xs) var(--space-3xs);
   padding: var(--space-md) var(--space-3xl) var(--space-md) var(--space-md);
 }
-.prep-card .dlgbox p::before {
+.prep-card .dialogue-box p::before {
   content: open-quote;
 }
-.prep-card .dlgbox p::after {
+.prep-card .dialogue-box p::after {
   content: close-quote;
 }
 

@@ -1,0 +1,54 @@
+/* Overlays › typed dialogues (engine/ui/dialogues.js): the words and letters that appear one by one, and the
+   blinking arrow. Imported last in the screens layer. */
+
+.typed-dialogue .dialogue-speaker {
+  left: 12px;
+  top: -12px;
+  z-index: 2;
+  text-transform: uppercase;
+}
+.typed-dialogue .typed-dialogue-arrow {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+  margin-left: var(--space-xs);
+  vertical-align: middle;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 8px solid #e3262f;
+  filter: drop-shadow(0 1px 0 #7a0d12);
+  animation: pkFleche 0.9s ease-in-out infinite;
+  pointer-events: none;
+}
+.typed-dialogue .typed-dialogue-arrow.is-floating {
+  position: absolute;
+  right: 12px;
+  bottom: 10px;
+  margin: 0;
+}
+.typed-dialogue.is-typing .typed-dialogue-arrow {
+  visibility: hidden;
+}
+.is-typing .typed-letter {
+  visibility: hidden;
+}
+.is-typing .typed-letter.is-shown {
+  visibility: visible;
+}
+.professor-tip .dialogue-box.typed-dialogue {
+  margin-top: var(--space-sm);
+}
+#story-scene .story-scene-card.typed-dialogue .story-scene-speaker > b {
+  letter-spacing: 0.04em;
+}
+#story-scene .story-scene-card.typed-dialogue .story-scene-text {
+  font-weight: 500;
+}
+#tip-card.typed-dialogue small {
+  font-weight: 800;
+  letter-spacing: 0.06em;
+}
+.intro .dialogue-box.typed-dialogue {
+  margin-top: var(--space-sm);
+}

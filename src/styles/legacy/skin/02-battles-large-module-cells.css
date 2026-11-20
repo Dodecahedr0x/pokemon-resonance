@@ -52,26 +52,6 @@ html:not(#pkz) body:not(#pkz) :is(.card, .home-hero, .league-case).pk-scan::afte
 /* ---------- Pokédex: list and mission buttons ---------- */
 
 /* ---------- messages: a small rolling Poké Ball ---------- */
-html:not(#pkz) body:not(#pkz) .toast::before {
-  content: '' !important;
-  display: inline-block !important;
-  flex: none !important;
-  width: 14px !important;
-  height: 14px !important;
-  min-width: 14px;
-  border-radius: 50% !important;
-  border: 0 !important;
-  background:
-    radial-gradient(circle at 50% 50%, #fff 0 2.6px, #151a22 3.2px 3.7px, transparent 4.3px),
-    radial-gradient(circle at 32% 20%, rgba(255, 255, 255, 0.72) 0 0.8px, transparent 1.3px),
-    linear-gradient(180deg, #ff7076 0%, #e3262f 45%, #151a22 45% 55%, #f7f2e6 55%, #d4cab3 100%) !important;
-  box-shadow:
-    0 0 0 1px #151a22,
-    0 0 8px rgba(255, 80, 90, 0.5) !important;
-}
-html:not(#pkz) body:not(#pkz) .toast.on::before {
-  animation: pkRoule 0.55s ease-out both;
-}
 
 /* ---------- gold buttons: ripple on touch ---------- */
 .pk-onde {

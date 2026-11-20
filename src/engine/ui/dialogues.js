@@ -60,17 +60,17 @@ const TAB_LIST = '.tabs>button,.bag-categories>button,.team-sheet-stages>.team-s
 /* ---------- 4. text typed letter by letter ---------- */
 // [typed element, framed box, absolute arrow?]
 const DLG = [
-  ['#story-scene .sc-tx', e => e.closest('.sc-card'), false],
-  ['#coach .co-in p', e => e.closest('.co-in'), false],
+  ['#story-scene .story-scene-text', e => e.closest('.story-scene-card'), false],
+  ['#coach .coach-card p', e => e.closest('.coach-card'), false],
   ['#tip-card p', e => e.closest('#tip-card'), false],
-  ['.tip .dlgbox', e => e, true],
+  ['.professor-tip .dialogue-box', e => e, true],
   ['.home-hero-professor > p', e => e, false],
-  ['.intro .dlgbox', e => e, true],
-  ['.prep-card .dlgbox', e => e, true],
+  ['.intro .dialogue-box', e => e, true],
+  ['.prep-card .dialogue-box', e => e, true],
   ['.bag-counter-dialogue', e => e, true],
 ];
 
-const SKIP = '.dlg-who,button,input,select,textarea,label,svg,.pk-fl,.pav,.button';
+const SKIP = '.dialogue-speaker,button,input,select,textarea,label,svg,.typed-dialogue-arrow,.professor-avatar,.button';
 
 const SEEN = new Set();
 
@@ -92,7 +92,7 @@ const finishUp = j => {
     }
   });
   if (j.box) {
-    j.box.classList.remove('pk-typing');
+    j.box.classList.remove('is-typing');
   }
   JOBS.delete(j.el);
 };
@@ -129,11 +129,11 @@ const write = (e, box) => {
     wraps = [];
   nodes.forEach(t => {
     const w = document.createElement('span');
-    w.className = 'pk-tw';
+    w.className = 'typed-word';
     const txt = t.data;
     for (const ch of txt) {
       const c = document.createElement('span');
-      c.className = 'pk-c';
+      c.className = 'typed-letter';
       c.textContent = ch;
       w.appendChild(c);
       spans.push(c);
@@ -153,7 +153,7 @@ const write = (e, box) => {
     raf: 0,
   };
   if (box) {
-    box.classList.add('pk-typing');
+    box.classList.add('is-typing');
   }
   JOBS.set(e, j);
   const tick = now => {
@@ -171,7 +171,7 @@ const write = (e, box) => {
     j.last = now;
     const k2 = Math.min(spans.length, Math.floor((now - j.t0) / j.ms) + 1);
     for (let i = j.k; i < k2; i++) {
-      spans[i].classList.add('v');
+      spans[i].classList.add('is-shown');
     }
     j.k = k2;
     if (k2 >= spans.length) {
@@ -200,12 +200,15 @@ function scan() {
         if (!box) {
           return;
         }
-        if (!box.classList.contains('pk-dlg')) {
-          box.classList.add('pk-dlg');
+        if (!box.classList.contains('typed-dialogue')) {
+          box.classList.add('typed-dialogue');
         }
         const hostName = abs ? box : e;
-        if (!hostName.querySelector(':scope > .pk-fl')) {
-          hostName.insertAdjacentHTML('beforeend', `<i class="pk-fl${abs ? ' abs' : ''}" aria-hidden="true"></i>`);
+        if (!hostName.querySelector(':scope > .typed-dialogue-arrow')) {
+          hostName.insertAdjacentHTML(
+            'beforeend',
+            `<i class="typed-dialogue-arrow${abs ? ' is-floating' : ''}" aria-hidden="true"></i>`
+          );
         }
         // text already written once: we do not read the layout (avoids a forced recalculation on every DOM change)
         if (JOBS.has(e) || SEEN.has(key(e)) || !visible(e)) {

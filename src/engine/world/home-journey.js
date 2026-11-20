@@ -252,7 +252,7 @@ function renderIntro() {
 }
 
 function focusIntro(o) {
-  const f = o.querySelector('#inName') || o.querySelector('.it-a .button-primary:not([disabled])');
+  const f = o.querySelector('#inName') || o.querySelector('.intro-actions .button-primary:not([disabled])');
   if (f) {
     setTimeout(() => f.focus(), 40);
   }
@@ -379,7 +379,7 @@ function startCampaign(id, name, diff) {
   renderHome();
 }
 
-export const PROF_AV = `<span class="pav" aria-hidden="true"><b>MS</b><i><svg viewBox="0 0 24 24"><path d="M2.5 12.5h4l2.2-5.2 3.4 10.4 3.2-10.4 2.2 5.2h4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></i></span>`;
+export const PROF_AV = `<span class="professor-avatar" aria-hidden="true"><b>MS</b><i><svg viewBox="0 0 24 24"><path d="M2.5 12.5h4l2.2-5.2 3.4 10.4 3.2-10.4 2.2 5.2h4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></i></span>`;
 
 export const S2n = g => (g.gi >= 0 ? `Arène ${g.gi + 1} · ${GYMS[g.gi].t}` : g.S.n || g.n);
 

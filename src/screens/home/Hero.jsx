@@ -117,7 +117,7 @@ export default function Hero({ on }) {
         <div className="home-hero-professor">
           <Html html={PROF_AV} />
           <p>
-            <span className="dlg-who">Prof. Sorbier</span>
+            <span className="dialogue-speaker">Prof. Sorbier</span>
             <Html html={professorMsg()} />
           </p>
         </div>

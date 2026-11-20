@@ -12,9 +12,9 @@ export default function Coach() {
   return (
     <div className="coach" id="coach" hidden={hidden} data-k={k}>
       {step && (
-        <div className="co-in" key={v}>
+        <div className="coach-card" key={v}>
           <Html html={PROF_AV} />
-          <span className="co-n">
+          <span className="coach-step">
             {step.n} / {step.total}
           </span>
           <b>
@@ -23,7 +23,7 @@ export default function Coach() {
           <p>
             <Html html={step.d} />
           </p>
-          <div className="co-a">
+          <div className="coach-actions">
             <Button size="small" variant="ghost" data-co="skip">
               Passer le tutoriel
             </Button>

@@ -18,4 +18,8 @@
   --shadow-engrave: var(--engrave);
   --radius-card: var(--r);
   --radius-card-large: var(--rl);
+  /* near-black glass behind the dialogue boxes */
+  --surface-glass: var(--glass);
+  /* the painted Resonance landscape (title and intro backdrops) */
+  --image-landscape: var(--resonance-landscape);
 }

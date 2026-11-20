@@ -1,0 +1,148 @@
+/* Overlays › the shared dialogue box (.dialogue-box, with its .dialogue-speaker), the professor's avatar and the
+   page tips (Tip.jsx). */
+
+.professor-avatar {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: none;
+  border-radius: 50%;
+  border: 1.5px solid transparent;
+  background:
+    radial-gradient(circle at 50% 30%, color-mix(in srgb, var(--c, #d4af6a) 38%, #14151a), #08090b 74%) padding-box,
+    var(--border-brass) border-box;
+  box-shadow:
+    0 0 0 4px rgba(10, 10, 12, 0.92),
+    0 0 0 5px rgba(212, 175, 106, 0.2),
+    0 16px 30px -14px #000,
+    0 0 30px -10px color-mix(in srgb, var(--c, #d4af6a) 70%, transparent);
+  --c: #5b9bff;
+  width: 56px;
+  height: 56px;
+}
+.professor-avatar::after {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  border: 1px solid rgba(242, 221, 168, 0.22);
+  pointer-events: none;
+}
+.professor-avatar b {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--color-accent-soft);
+  text-shadow:
+    0 1px 0 #000,
+    0 0 14px color-mix(in srgb, var(--c, #d4af6a) 60%, transparent);
+  font-size: 17px;
+}
+.professor-avatar i {
+  position: absolute;
+  right: -5px;
+  bottom: -5px;
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid transparent;
+  color: #fff;
+  background:
+    radial-gradient(circle at 35% 30%, color-mix(in srgb, var(--c, #5b9bff) 60%, #fff), var(--c, #5b9bff) 70%)
+      padding-box,
+    var(--border-brass) border-box;
+  box-shadow: 0 0 0 2px #0a0a0c;
+}
+.professor-avatar i svg {
+  width: 13px;
+  height: 13px;
+  color: #fff;
+}
+.dialogue-box {
+  position: relative;
+  display: block;
+  padding: var(--space-md) var(--space-lg) var(--space-lg);
+  border-radius: 10px;
+  border: 1px solid transparent;
+  background:
+    var(--surface-glass) padding-box,
+    var(--border-edge) border-box;
+  color: var(--color-text);
+  font-size: 15px;
+  line-height: 1.6;
+  box-shadow: 0 22px 44px -26px #000;
+}
+.dialogue-box p {
+  margin: 0;
+}
+.dialogue-box p + p {
+  margin-top: var(--space-sm);
+}
+.dialogue-box b {
+  color: var(--color-accent-soft);
+  font-weight: 600;
+}
+.dialogue-box strong {
+  color: var(--color-accent-soft);
+  font-weight: 600;
+}
+.dialogue-box.is-small {
+  padding: var(--space-md) var(--space-lg) var(--space-md);
+  font-size: 14px;
+}
+.dialogue-box.is-large {
+  padding: var(--space-xl) var(--space-2xl) var(--space-xl);
+  font-size: 16.5px;
+}
+.dialogue-speaker {
+  display: block;
+  margin-bottom: var(--space-xs);
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-style: normal;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+.professor-tip {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: var(--space-lg);
+  align-items: center;
+  margin: 0 0 var(--space-xl);
+  padding: var(--space-md) var(--space-lg);
+  border-radius: var(--radius-card-large);
+  border: 1px solid transparent;
+  background:
+    radial-gradient(100% 140% at 0% 50%, rgba(91, 155, 255, 0.1), transparent 60%) padding-box,
+    var(--surface-slab) padding-box,
+    var(--border-edge) border-box;
+  animation: qUp 0.5s var(--ease-rise) both;
+}
+.professor-tip .dialogue-box {
+  background: none;
+  border: 0;
+  padding: 0;
+  box-shadow: none;
+}
+@media (max-width: 640px) {
+  .professor-tip {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+  .professor-tip .button {
+    grid-column: 1/-1;
+    justify-self: end;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .professor-tip {
+    animation: none;
+  }
+}
+@media (max-width: 999px) {
+  .dialogue-speaker {
+    font-size: 11px;
+  }
+}

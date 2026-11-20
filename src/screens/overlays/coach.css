@@ -1,0 +1,285 @@
+/* Overlays › the coach's guided steps (Coach.jsx), the battle tip (BattleTip.jsx), the story scene (StoryScene.jsx)
+   and the toast (Toast.jsx). */
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+  transform: translate(-50%, 24px);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  max-width: min(92vw, 440px);
+  padding: var(--space-md) var(--space-lg);
+  font-size: 13.5px;
+  transition:
+    opacity 0.25s,
+    transform 0.35s var(--ease-out);
+  font-family: var(--font-body);
+  background: linear-gradient(180deg, #123462, #0a1f40);
+  border: 1px solid rgba(120, 210, 255, 0.45);
+  border-radius: 12px;
+  color: #fff;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+}
+.toast::before {
+  min-width: 14px;
+  content: '';
+  display: inline-block;
+  flex: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 0;
+  background:
+    radial-gradient(circle at 50% 50%, #fff 0 2.6px, #151a22 3.2px 3.7px, transparent 4.3px),
+    radial-gradient(circle at 32% 20%, rgba(255, 255, 255, 0.72) 0 0.8px, transparent 1.3px),
+    linear-gradient(180deg, #ff7076 0%, #e3262f 45%, #151a22 45% 55%, #f7f2e6 55%, #d4cab3 100%);
+  box-shadow:
+    0 0 0 1px #151a22,
+    0 0 8px rgba(255, 80, 90, 0.5);
+}
+.toast.is-shown {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+@media (max-width: 999px) {
+  .toast {
+    top: calc(64px + env(safe-area-inset-top, 0px));
+    bottom: auto;
+  }
+}
+.story-scene-step {
+  font-weight: 850;
+  font-size: 30px;
+  fill: var(--color-text);
+  text-anchor: middle;
+  font-family: var(--font-numeric);
+  font-stretch: 72%;
+  font-variant-numeric: tabular-nums lining-nums;
+  letter-spacing: -0.01em;
+}
+.coach {
+  position: fixed;
+  z-index: 70;
+  left: 50%;
+  bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+  transform: translateX(-50%);
+  width: min(560px, calc(100% - 24px));
+  background: linear-gradient(145deg, rgba(12, 42, 57, 0.92), rgba(5, 22, 34, 0.94));
+  border: 1px solid rgba(112, 211, 255, 0.2);
+  box-shadow:
+    0 20px 48px rgba(0, 0, 0, 0.18),
+    inset 0 1px rgba(255, 255, 255, 0.035);
+  border-radius: 20px;
+}
+.coach[hidden] {
+  display: none;
+}
+.coach-card {
+  display: grid;
+  gap: var(--space-sm);
+  padding: var(--space-lg) var(--space-lg);
+  border-radius: var(--radius-card-large);
+  border: 1px solid transparent;
+  background:
+    radial-gradient(90% 120% at 0% 0%, rgba(212, 175, 106, 0.18), transparent 60%) padding-box,
+    linear-gradient(#0e0f12, #0e0f12) padding-box,
+    var(--border-brass) border-box;
+  box-shadow:
+    0 24px 60px -20px #000,
+    0 0 0 1px #000;
+  animation: encIn 0.4s var(--ease-out) both;
+}
+.coach-step {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  color: var(--color-accent);
+}
+.coach-card b {
+  font-family: var(--font-display);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-size: 16px;
+  color: var(--color-accent-soft);
+}
+.coach-card p {
+  font-size: 13.5px;
+  color: var(--color-text-secondary);
+}
+.coach-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-sm);
+}
+@media (max-width: 999px) {
+  .coach {
+    bottom: calc(var(--bottom-nav-height) + 78px + env(safe-area-inset-bottom, 0px));
+  }
+}
+body:not(:has(#combat.on)) .coach {
+  display: none;
+}
+@media (max-width: 700px) {
+  .coach {
+    top: calc(62px + env(safe-area-inset-top, 0px));
+    bottom: auto;
+    width: calc(100% - 16px);
+  }
+  .coach-card {
+    padding: var(--space-sm) var(--space-md);
+    gap: var(--space-2xs);
+    border-radius: 8px;
+  }
+  .coach-card b {
+    font-size: 13px;
+  }
+  .coach-card p {
+    font-size: 12.5px;
+    line-height: 1.4;
+  }
+  .coach-actions .button {
+    min-height: 32px;
+    padding: 0 var(--space-sm);
+    font-size: 10px;
+  }
+}
+.coach .coach-card {
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--space-2xs) var(--space-md);
+  align-items: start;
+  display: grid;
+}
+.coach .coach-card > .professor-avatar {
+  grid-row: 1 / span 4;
+  width: 48px;
+  height: 48px;
+  margin-top: var(--space-3xs);
+}
+.coach .coach-card > .professor-avatar b {
+  font-size: 14px;
+  letter-spacing: 0.08em;
+}
+.coach .coach-card > *:not(.professor-avatar) {
+  grid-column: 2;
+}
+@media (max-width: 999px) {
+  .coach-step {
+    font-size: 11px;
+  }
+  .coach-actions .button-small {
+    font-size: 11px;
+  }
+}
+.story-scene {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: var(--space-lg) var(--space-lg) calc(84px + env(safe-area-inset-bottom, 0px));
+  background: linear-gradient(180deg, rgba(4, 10, 24, 0.35), rgba(4, 10, 24, 0.85));
+}
+.story-scene[hidden] {
+  display: none;
+}
+.story-scene-card {
+  width: min(560px, 100%);
+  padding: var(--space-lg);
+  border-radius: 18px;
+  background: linear-gradient(180deg, #13284a, #0b1830);
+  border: 1px solid rgba(255, 215, 94, 0.5);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+  animation: companion-garden-monte 0.25s ease-out;
+}
+.story-scene-speaker {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+.story-scene-speaker b {
+  color: #ffd75e;
+  font-size: 16px;
+}
+.story-scene-text {
+  margin: 0 0 var(--space-md);
+  font-size: 16px;
+  line-height: 1.5;
+}
+.story-scene-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+.story-scene-actions .story-scene-step {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--color-text-soft);
+}
+.battle-tip {
+  position: fixed;
+  left: 50%;
+  top: calc(12px + env(safe-area-inset-top, 0px));
+  transform: translateX(-50%);
+  z-index: 80;
+  display: flex;
+  gap: var(--space-md);
+  align-items: flex-start;
+  width: min(440px, calc(100vw - 24px));
+  padding: var(--space-md) var(--space-md);
+  border-radius: 16px;
+  background: linear-gradient(145deg, #173a50, #0a1d2b);
+  border: 1px solid rgba(255, 215, 94, 0.5);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5);
+  color: #eaf2f8;
+  animation: tip-card 0.32s cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+.battle-tip-avatar {
+  flex: none;
+  display: flex;
+}
+.battle-tip small {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #ffd45b;
+}
+.battle-tip b {
+  display: block;
+  font-size: 15px;
+  margin: 1px 0 var(--space-3xs);
+}
+.battle-tip p {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: #cfe0ea;
+}
+.battle-tip-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
+}
+@media (prefers-reduced-motion: reduce) {
+  .battle-tip {
+    animation: none;
+  }
+}
+.toast.is-shown::before {
+  animation: pkRoule 0.55s ease-out both;
+}
+@media (max-width: 700px) {
+  #coach .coach-actions .button {
+    min-height: var(--tap-target);
+    padding: 0 var(--space-md);
+    font-size: var(--font-size-sm);
+  }
+}

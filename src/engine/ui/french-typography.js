@@ -46,7 +46,7 @@ export function init() {
         // v4.76: the letters of the typed-out text (already fixed) are not reprocessed one by one
         else {
           m.addedNodes.forEach(x => {
-            if (x.nodeType === 1 && x.classList && x.classList.contains('pk-tw')) {
+            if (x.nodeType === 1 && x.classList && x.classList.contains('typed-word')) {
               return;
             }
             q.add(x);

@@ -1,0 +1,345 @@
+/* Overlays › the first-launch introduction (Intro.jsx): professor, rules, name, starter and difficulty. */
+
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 195;
+  display: grid;
+  place-items: center;
+  padding: var(--space-2xl) var(--space-lg);
+  overflow-y: auto;
+  color: var(--color-text);
+  animation: qFade 0.6s ease-out both;
+  backdrop-filter: blur(8px);
+  background:
+    linear-gradient(0deg, rgba(2, 13, 22, 0.94), rgba(3, 18, 30, 0.72)),
+    var(--image-landscape) center/cover fixed;
+}
+.intro::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(70% 65% at 50% 25%, transparent 0, rgba(1, 10, 18, 0.3) 72%, rgba(1, 8, 14, 0.86));
+}
+.intro-card {
+  position: relative;
+  display: grid;
+  gap: var(--space-lg);
+  animation: qUp 0.6s var(--ease-rise) both;
+  width: min(760px, 100%);
+  padding: clamp(18px, 3vw, 30px);
+  border-radius: 26px;
+  border: 1px solid rgba(122, 220, 255, 0.32);
+  background: linear-gradient(145deg, rgba(8, 35, 51, 0.96), rgba(3, 18, 30, 0.97));
+  box-shadow:
+    0 30px 100px rgba(0, 0, 0, 0.6),
+    inset 0 1px rgba(255, 255, 255, 0.08);
+}
+.intro-skip {
+  justify-self: end;
+  margin-bottom: calc(var(--space-xs) * -1);
+  border: 0;
+  background: none;
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.intro-skip:hover {
+  color: var(--color-accent-soft);
+}
+.intro-professor {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-lg);
+}
+.intro-professor .professor-avatar {
+  width: 84px;
+  height: 84px;
+}
+.intro-professor .professor-avatar b {
+  font-size: 26px;
+}
+.intro-professor .professor-avatar i {
+  width: 28px;
+  height: 28px;
+}
+.intro-professor .professor-avatar i svg {
+  width: 17px;
+  height: 17px;
+}
+.intro-progress {
+  display: flex;
+  gap: var(--space-sm);
+}
+.intro-progress i {
+  width: 8px;
+  height: 8px;
+  transform: rotate(45deg);
+  border: 1px solid rgba(212, 175, 106, 0.5);
+}
+.intro-progress i.is-done {
+  background: var(--color-accent);
+  box-shadow: 0 0 10px rgba(212, 175, 106, 0.7);
+}
+.intro .dialogue-box {
+  animation: qUp 0.5s 0.1s var(--ease-rise) both;
+}
+.intro-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  justify-content: flex-end;
+}
+.intro-rules {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  margin-top: var(--space-md);
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  background: rgba(212, 175, 106, 0.14);
+}
+.intro-rules div {
+  display: grid;
+  gap: var(--space-sm);
+  align-content: start;
+  padding: var(--space-md);
+  background: #0b0c0f;
+}
+.intro-rules b {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  transform: rotate(45deg);
+  border: 1px solid var(--c);
+  font-size: 0;
+}
+.intro-rules b::before {
+  content: attr(data-n);
+  font-size: 12px;
+  font-family: var(--font-display);
+  font-weight: 800;
+  color: var(--color-text);
+  transform: rotate(-45deg);
+}
+.intro-rules span {
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: var(--color-text-secondary);
+}
+.intro-rules strong {
+  color: var(--color-text);
+  font-weight: 600;
+}
+@media (max-width: 560px) {
+  .intro-rules {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.intro-name {
+  display: block;
+  margin-top: var(--space-md);
+}
+.intro-name input {
+  width: 100%;
+  height: 56px;
+  padding: 0 var(--space-2xs);
+  border: 0;
+  border-bottom: 1px solid rgba(212, 175, 106, 0.45);
+  background: transparent;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 26px;
+  letter-spacing: 0.08em;
+  color: var(--color-accent-soft);
+  caret-color: var(--color-accent-soft);
+}
+.intro-name input::placeholder {
+  color: rgba(190, 183, 168, 0.35);
+}
+.intro-name input:focus {
+  outline: none;
+  border-bottom-color: var(--color-accent-soft);
+  box-shadow: 0 10px 20px -16px rgba(212, 175, 106, 0.8);
+}
+.intro-starters {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+}
+.intro-starter {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-md) var(--space-xs) var(--space-md);
+  border-radius: var(--radius-card);
+  border: 1px solid transparent;
+  background:
+    radial-gradient(90% 70% at 50% 0%, color-mix(in srgb, var(--c) 16%, transparent), transparent 70%) padding-box,
+    linear-gradient(180deg, #15161a, #0b0c0f) padding-box,
+    var(--border-edge) border-box;
+  color: var(--color-text);
+  font: inherit;
+  cursor: pointer;
+}
+.intro-starter:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 30px -18px #000;
+}
+.intro-starter.is-selected {
+  background:
+    radial-gradient(90% 80% at 50% 0%, color-mix(in srgb, var(--c) 30%, transparent), transparent 70%) padding-box,
+    linear-gradient(180deg, #191a1f, #0c0d10) padding-box,
+    var(--border-brass) border-box;
+  box-shadow: 0 0 30px -10px var(--c);
+}
+.intro-starter b {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.intro-starter em {
+  font-style: normal;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+}
+.intro-starter .medal.is-large {
+  width: 58px;
+  height: 58px;
+}
+.intro-difficulty {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-xs);
+  margin-top: var(--space-md);
+}
+.intro-difficulty span {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin-right: var(--space-xs);
+}
+@media (max-width: 560px) {
+  .intro-professor .professor-avatar {
+    width: 64px;
+    height: 64px;
+  }
+  .intro-professor .professor-avatar b {
+    font-size: 20px;
+  }
+  .intro-starters {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .intro-name input {
+    font-size: 22px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .intro {
+    animation: none;
+  }
+  .intro-card {
+    animation: none;
+  }
+  .intro .dialogue-box {
+    animation: none;
+  }
+}
+@media (min-width: 900px) {
+  .intro .dialogue-box.is-large {
+    font-size: 17.5px;
+    padding: var(--space-2xl) var(--space-2xl);
+  }
+}
+.intro-card h1 {
+  color: #fff0b9;
+}
+.intro-card h2 {
+  color: #fff0b9;
+}
+.intro-card h3 {
+  color: #fff0b9;
+}
+.intro-card input {
+  background: #061b29;
+  color: #f2f8ff;
+  border: 1px solid rgba(112, 211, 255, 0.34);
+  border-radius: 12px;
+  min-height: 46px;
+}
+.intro-card select {
+  background: #061b29;
+  color: #f2f8ff;
+  border: 1px solid rgba(112, 211, 255, 0.34);
+  border-radius: 12px;
+  min-height: 46px;
+}
+.intro-card button {
+  min-height: 44px;
+  border-radius: 12px;
+}
+.intro-difficulty .button[aria-pressed='true'] {
+  background: linear-gradient(180deg, #ffe778, #f2b72e);
+  color: #10263a;
+  border-color: rgba(255, 243, 174, 0.8);
+  box-shadow: 0 6px 20px rgba(255, 196, 46, 0.16);
+}
+@media (max-width: 999px) {
+  .intro-skip {
+    font-size: 11px;
+  }
+}
+.intro-free-mode {
+  display: block;
+  margin: var(--space-sm) auto 0;
+  padding: var(--space-xs) var(--space-2xs);
+  border: 0;
+  background: none;
+  color: var(--color-text-muted, #9fb0c4);
+  font: inherit;
+  font-size: 13px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+@media (max-width: 700px) {
+  .intro-difficulty {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    display: grid;
+    gap: var(--space-sm);
+  }
+  .intro-difficulty > span {
+    grid-column: 1/-1;
+  }
+  .intro-difficulty > .button {
+    min-height: var(--tap-target);
+    min-width: 0;
+    margin: 0;
+  }
+  .intro-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-sm);
+  }
+  .intro-actions > .button {
+    min-height: var(--tap-target);
+    justify-content: center;
+    width: 100%;
+    margin: 0;
+  }
+}

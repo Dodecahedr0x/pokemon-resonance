@@ -2,21 +2,3 @@
 /* ---------- Team: an explicit button to recruit ---------- */
 /* ---------- Guide: getting started ---------- */
 /* ---------- tutorial: the Professor as coach ---------- */
-.coach .co-in {
-  display: grid !important;
-  grid-template-columns: auto minmax(0, 1fr);
-  gap: var(--space-2xs) var(--space-md);
-  align-items: start;
-}
-.coach .co-in > .pav {
-  grid-row: 1 / span 4;
-  width: 48px;
-  height: 48px;
-  margin-top: var(--space-3xs);
-}
-.coach .co-in > .pav b {
-  font-size: 14px;
-}
-.coach .co-in > *:not(.pav) {
-  grid-column: 2;
-}

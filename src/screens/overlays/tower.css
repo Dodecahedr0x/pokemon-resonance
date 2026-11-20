@@ -1,0 +1,104 @@
+/* Overlays › the Resonance Tower window (TdrBox.jsx): the draft choice and the floor rewards. */
+
+.tower-box {
+  z-index: 92;
+}
+.tower-card {
+  width: min(760px, 100%);
+}
+.tower-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.tower-option {
+  padding: var(--space-md) var(--space-xs);
+  position: relative;
+}
+.tower-option b {
+  font-size: 13px;
+}
+.tower-option.is-selected {
+  background:
+    radial-gradient(90% 70% at 50% 0%, color-mix(in srgb, var(--c) 40%, transparent), transparent 70%) padding-box,
+    var(--surface-slab) padding-box,
+    linear-gradient(135deg, #ffe17b, #b8862b) border-box;
+  box-shadow: 0 0 0 2px rgba(255, 225, 123, 0.35);
+}
+.tower-option.is-selected::after {
+  content: '✓';
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  font: 800 14px/1 var(--font-display);
+  color: #ffe17b;
+}
+.tower-actions {
+  position: sticky;
+  bottom: -26px;
+  margin-bottom: -26px;
+  z-index: 9;
+  display: flex;
+  justify-content: center;
+  margin-top: var(--space-md);
+  padding: var(--space-md) 0 var(--space-2xl);
+  background: linear-gradient(180deg, rgba(6, 14, 26, 0), rgba(6, 14, 26, 0.97) 35%);
+}
+.tower-rewards {
+  display: grid;
+  gap: var(--space-sm);
+}
+.tower-reward {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  width: 100%;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-card, 12px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.04);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.tower-reward:hover {
+  border-color: #ffe17b;
+  background: rgba(255, 215, 94, 0.1);
+}
+.tower-reward:focus-visible {
+  border-color: #ffe17b;
+  background: rgba(255, 215, 94, 0.1);
+}
+.tower-reward > span:last-child {
+  display: grid;
+  gap: var(--space-3xs);
+}
+.tower-reward b {
+  font: 800 14px/1.2 var(--font-display);
+}
+.tower-reward em {
+  font-style: normal;
+  font-size: 12px;
+  color: var(--color-text-muted, #9fb0c4);
+}
+.tower-reward-icon {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  flex: none;
+  border-radius: 50%;
+  font: 800 15px/1 var(--font-display);
+  color: #ffe17b;
+  background: rgba(255, 215, 94, 0.12);
+  border: 1px solid rgba(255, 215, 94, 0.4);
+}
+.tower-reward-icon img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+@media (max-width: 560px) {
+  .tower-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

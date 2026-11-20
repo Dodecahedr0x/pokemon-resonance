@@ -11,63 +11,10 @@
   height: 30px;
 }
 /* tutorial */
-.coach {
-  position: fixed;
-  z-index: 70;
-  left: 50%;
-  bottom: calc(18px + env(safe-area-inset-bottom, 0px));
-  transform: translateX(-50%);
-  width: min(560px, calc(100% - 24px));
-}
-.coach[hidden] {
-  display: none;
-}
-.co-in {
-  display: grid;
-  gap: var(--space-sm);
-  padding: var(--space-lg) var(--space-lg);
-  border-radius: var(--rl);
-  border: 1px solid transparent;
-  background:
-    radial-gradient(90% 120% at 0% 0%, rgba(212, 175, 106, 0.18), transparent 60%) padding-box,
-    linear-gradient(#0e0f12, #0e0f12) padding-box,
-    var(--brass) border-box;
-  box-shadow:
-    0 24px 60px -20px #000,
-    0 0 0 1px #000;
-  animation: encIn 0.4s var(--ease) both;
-}
-.co-n {
-  font-family: var(--f-m);
-  font-size: 10px;
-  letter-spacing: 0.24em;
-  color: var(--gold);
-}
-.co-in b {
-  font-family: var(--f-d);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  font-size: 16px;
-  color: var(--gold-l);
-}
-.co-in p {
-  font-size: 13.5px;
-  color: var(--tx2);
-}
-.co-a {
-  display: flex;
-  justify-content: flex-end;
-  gap: var(--space-sm);
-}
 .coach-hl {
   outline: 2px solid rgba(242, 221, 168, 0.85) !important;
   outline-offset: 3px;
   box-shadow: 0 0 0 6px rgba(212, 175, 106, 0.18) !important;
-}
-@media (max-width: 999px) {
-  .coach {
-    bottom: calc(var(--bn) + 78px + env(safe-area-inset-bottom, 0px));
-  }
 }
 
 .it-ic svg {
@@ -126,31 +73,4 @@
 }
 .duo.on .duo-st em {
   color: var(--gold-l);
-}
-body:not(:has(#combat.on)) .coach {
-  display: none;
-}
-@media (max-width: 700px) {
-  .coach {
-    top: calc(62px + env(safe-area-inset-top, 0px));
-    bottom: auto;
-    width: calc(100% - 16px);
-  }
-  .co-in {
-    padding: var(--space-sm) var(--space-md);
-    gap: var(--space-2xs);
-    border-radius: 8px;
-  }
-  .co-in b {
-    font-size: 13px;
-  }
-  .co-in p {
-    font-size: 12.5px;
-    line-height: 1.4;
-  }
-  .co-a .button {
-    min-height: 32px;
-    padding: 0 var(--space-sm);
-    font-size: 10px;
-  }
 }

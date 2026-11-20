@@ -40,6 +40,8 @@
   /* faint gold veins tiled over dark plates (560px tile) */
   --texture-veins: var(--veins);
   --ease-out: var(--ease);
+  /* entrance of cards and dialogue boxes */
+  --ease-rise: var(--rise);
 
   --font-display: var(--f-d);
   --font-body: var(--f-b);

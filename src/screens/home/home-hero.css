@@ -152,7 +152,7 @@
   border-radius: 12px;
   color: #c2d6df;
 }
-.home-hero-professor .pav {
+.home-hero-professor .professor-avatar {
   flex: none;
   width: 40px;
   height: 40px;
@@ -164,13 +164,13 @@
   line-height: 1.45;
 }
 /* once the dialogue engine has dressed it as a speech bubble */
-.home-hero-professor > p.pk-dlg {
+.home-hero-professor > p.typed-dialogue {
   flex: 1;
   margin: var(--space-sm) 0 0;
   padding: var(--space-md) var(--space-lg);
   line-height: 1.5;
 }
-.home-hero-professor .dlg-who {
+.home-hero-professor .dialogue-speaker {
   display: block;
   margin-bottom: var(--space-3xs);
 }

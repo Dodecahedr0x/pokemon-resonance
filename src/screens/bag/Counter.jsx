@@ -77,8 +77,8 @@ export default function Counter({ n }) {
           <Vendor />
           <i className="bag-counter-desk" />
         </div>
-        <div className="dlgbox bag-counter-dialogue">
-          <span className="dlg-who">Vendeur</span>
+        <div className="dialogue-box bag-counter-dialogue">
+          <span className="dialogue-speaker">Vendeur</span>
           <p>{rowLine}</p>
         </div>
       </section>

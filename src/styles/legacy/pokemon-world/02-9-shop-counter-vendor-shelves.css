@@ -1,15 +1,3 @@
 /* ---------- 9. Shop: counter, vendor, shelves ---------- */
 
 /* ---------- 9. Bag: backpack and pockets ---------- */
-
-html.pk-calme .pk-dlg .pk-fl {
-  animation: none !important;
-}
-html.a11y-rm .pk-dlg .pk-fl {
-  animation: none !important;
-}
-@media (prefers-reduced-motion: reduce) {
-  .pk-dlg .pk-fl {
-    animation: none !important;
-  }
-}

@@ -1,9 +1,6 @@
 /* ================= Prof.'s tip during battle =================
-   .pk-dlg forces position:relative: the tip fell into the flow, under the command drawer,
+   .typed-dialogue forces position:relative: the tip fell into the flow, under the command drawer,
    and stretched the page with a big empty gap. It stays floating, at the top, above the board. */
-html:not(#pkz) body:not(#pkz) #tip-card.pk-dlg {
-  position: fixed !important;
-}
 
 /* ================= phone: decluttered HUD and drawer ================= */
 @media (max-width: 700px) {

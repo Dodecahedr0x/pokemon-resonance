@@ -212,3 +212,19 @@ Each step is one commit (or a few), on its own, playable at every point.
   and of the battle states (`#cbBattle` shown, `compact-battle`, `fullscreen-mode`). The global performance rule that
   removes every backdrop blur now skips the top and bottom bars, whose blur used to beat it. The resolver orders the
   folded rules so that a rule that won a property over another one able to match the same element comes after it.
+- Dialogues: done. `src/screens/overlays/`: `dialogue.css` (`.dialogue-box` with `is-large` / `is-small` and its
+  `.dialogue-speaker`, were `.dlgbox` / `lg` / `sm` / `.dlg-who`; `.professor-avatar`, was `.pav`; the page tips
+  `.professor-tip`, was `.tip`), `intro.css` (`.intro-card`, `-skip`, `-professor`, `-progress` with `is-done`,
+  `-rules`, `-name`, `-starters`, `-starter` with `is-selected`, `-difficulty`, `-actions`, `-free-mode`, were
+  `.it-*`), `starter.css` (`.starter-card`, `-grid`, `-option`, `-difficulty`, were `.st-*`), `tower.css` (`.tower-box`,
+  `-card`, `-grid`, `-option`, `-actions`, `-rewards`, `-reward`, `-reward-icon`, were `.tdr-*`), `coach.css` (coach
+  `.coach-card` / `-step` / `-actions`, battle tip `.battle-tip(-avatar, -actions)`, story scene `.story-scene-*`, the
+  toast with `is-shown`), `typed-dialogue.css` (`.typed-dialogue`, `.typed-dialogue-arrow` with `is-floating`,
+  `.typed-word`, `.typed-letter` with `is-shown`, `is-typing`, were `.pk-*`). The classic white dialogue skin was all
+  `!important` over the screens; it is now normal rules in a new `skin` layer after `screens`
+  (`typed-dialogue-skin.css`). Checked with snapshots of the five intro steps, the starter choice, the coach, the
+  battle and page tips, the story scene, the toast, the Home hero and the Tower draft and reward, at both widths, with
+  the typing finished. One accepted change: the intro box's old `lg` class also matched the types legend's `.lg`
+  rules (alignment, gap, the arrow's radius); `is-large` does not. The legacy rule that restyles every input now skips
+  `.intro-card`. New tokens: `--ease-rise`, `--surface-glass`, `--image-landscape`, and `--bottom-nav-height` (set on
+  `body`, where battle and full screen zero the legacy `--bn`).

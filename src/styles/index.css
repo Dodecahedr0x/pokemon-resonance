@@ -7,9 +7,11 @@
                  holds screen-specific overrides of components, so it sits above them
    - screens:    the app shell (src/styles/shell/), then per-screen files next to each screen
                  (src/screens/<screen>/<screen>.css)
+   - skin:       the classic look the dialogue engine puts on every typed dialogue (white bubble, blue frame,
+                 dark text); it wins over the screens' own colours for those boxes
    Caveat: for !important declarations the order is reversed (an earlier layer wins), which is one more reason
    new code does not use them. The Workshop's user CSS is unlayered, so it overrides every normal rule. */
-@layer theme, base, components, legacy, screens;
+@layer theme, base, components, legacy, screens, skin;
 
 @import './theme/spacing.css' layer(theme);
 @import './theme/colors.css' layer(theme);
@@ -39,6 +41,11 @@
 @import './shell/bottom-nav.css' layer(screens);
 @import './shell/phone-menu.css' layer(screens);
 @import './shell/launch-screen.css' layer(screens);
+@import '../screens/overlays/dialogue.css' layer(screens);
+@import '../screens/overlays/intro.css' layer(screens);
+@import '../screens/overlays/starter.css' layer(screens);
+@import '../screens/overlays/tower.css' layer(screens);
+@import '../screens/overlays/coach.css' layer(screens);
 @import '../screens/settings/settings.css' layer(screens);
 @import '../screens/dex/dex.css' layer(screens);
 @import '../screens/dex/dex-card.css' layer(screens);
@@ -100,3 +107,5 @@
 @import '../screens/camp/camp-duel.css' layer(screens);
 @import '../screens/camp/camp-echo.css' layer(screens);
 @import '../screens/camp/camp-modes.css' layer(screens);
+@import '../screens/overlays/typed-dialogue.css' layer(screens);
+@import '../screens/overlays/typed-dialogue-skin.css' layer(skin);

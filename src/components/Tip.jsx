@@ -11,10 +11,10 @@ function Tip({ t }) {
     return null;
   }
   return (
-    <div className="tip" data-tip={t}>
+    <div className="professor-tip" data-tip={t}>
       <Html html={PROF_AV} />
-      <div className="dlgbox sm">
-        <span className="dlg-who">Prof. Sorbier</span>
+      <div className="dialogue-box is-small">
+        <span className="dialogue-speaker">Prof. Sorbier</span>
         <p>
           <Html html={TIPS[t]} />
         </p>

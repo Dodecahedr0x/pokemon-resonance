@@ -14,38 +14,9 @@ p.note {
   /* the vertical tagline ran over the artwork */
 
   /* ---------- Starter choice: the three difficulties on one row ---------- */
-  html body .it-diff {
-    display: grid !important;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: var(--space-sm) !important;
-  }
-  html body .it-diff > span {
-    grid-column: 1/-1;
-  }
-  html body .it-diff > .button {
-    min-width: 0 !important;
-    min-height: var(--tap);
-    margin: 0 !important;
-  }
   /* intro actions: full-width buttons stacked, the main one last, under the thumb */
-  html body .it-a {
-    flex-direction: column;
-    align-items: stretch !important;
-    gap: var(--space-sm) !important;
-  }
-  html body .it-a > .button {
-    width: 100% !important;
-    min-height: var(--tap);
-    margin: 0 !important;
-    justify-content: center;
-  }
 
   /* ---------- Battle tutorial card: full-size buttons ---------- */
-  html body #coach .co-a .button {
-    min-height: var(--tap) !important;
-    padding: 0 var(--space-md) !important;
-    font-size: var(--t-s) !important;
-  }
 
   /* ---------- Battles: the "Launch" bar fits on one line ---------- */
   /* "Next step": placed in the right column instead of overlapping the title */

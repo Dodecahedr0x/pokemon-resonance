@@ -23,7 +23,7 @@ export default function Starter() {
 
 function Card() {
   return (
-    <Dialogue className="dialog-card st-card" titre="stT" closeAttrs={{ 'data-st': 'x' }}>
+    <Dialogue className="dialog-card starter-card" titre="stT" closeAttrs={{ 'data-st': 'x' }}>
       <p className="kicker">Nouvelle campagne</p>
       <h2 className="section-title" id="stT">
         Choisissez votre partenaire
@@ -32,11 +32,11 @@ function Card() {
         Il rejoint Magicarpe, Métamorph et Chenipan dans votre Box. Les autres se capturent dans les hautes herbes et
         sur les terrains. Vos emplacements de sauvegarde restent intacts.
       </p>
-      <div className="st-grid">
+      <div className="starter-grid">
         {STARTERS.map(id => {
           const m = BY[id];
           return (
-            <button key={id} type="button" className="st-o" data-st={id} style={{ '--c': tc(m.t[0]) }}>
+            <button key={id} type="button" className="starter-option" data-st={id} style={{ '--c': tc(m.t[0]) }}>
               <Html html={medal(m.t, 'is-large')} />
               <b>{m.n}</b>
               <em>
@@ -49,7 +49,7 @@ function Card() {
           );
         })}
       </div>
-      <div className="st-diff">
+      <div className="starter-difficulty">
         <span>Difficulté</span>
         {Object.entries(DIFFS).map(([k, n]) => (
           <Button key={k} size="small" data-sd={k} aria-pressed={PROFILE.diff === k}>

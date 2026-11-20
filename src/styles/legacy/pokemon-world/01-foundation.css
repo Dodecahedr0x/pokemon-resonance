@@ -1,81 +1,4 @@
 /* ---------- 4. classic dialog boxes ---------- */
-html:not(#pkz) body:not(#pkz) .pk-dlg {
-  position: relative !important;
-  background: linear-gradient(180deg, #ffffff, #edf1f7) !important;
-  color: #273142 !important;
-  border: 0 !important;
-  border-radius: 12px !important;
-  box-shadow:
-    0 0 0 2.5px #f8fafc,
-    0 0 0 5.5px #3a72c4,
-    0 0 0 7px #0d1f3c,
-    0 16px 30px -14px rgba(0, 0, 0, 0.85) !important;
-  text-shadow: none !important;
-  backdrop-filter: none !important;
-}
-html:not(#pkz)
-  body:not(#pkz)
-  .pk-dlg
-  :is(p, em, q, small, span:not(.pav):not(.dlg-who):not(.type-badge):not(.pk-c):not(.pk-tw)):not(.pav *):not(
-    .type-badge *
-  ):not(button *):not(.it-cards *) {
-  color: #273142 !important;
-  text-shadow: none !important;
-}
-html:not(#pkz) body:not(#pkz) .pk-dlg :is(b, strong):not(.pav *):not(button *):not(.it-cards *) {
-  color: #cf2f2b !important;
-  text-shadow: none !important;
-}
-html:not(#pkz) body:not(#pkz) .pk-dlg .dlg-who {
-  position: absolute !important;
-  left: 12px;
-  top: -12px;
-  z-index: 2;
-  display: inline-block !important;
-  margin: 0 !important;
-  padding: var(--space-3xs) var(--space-sm) var(--space-3xs) !important;
-  border-radius: 6px !important;
-  background: linear-gradient(180deg, #5a93e6, #2c5fae) !important;
-  color: #fff !important;
-  font: 800 9.5px/1.25 var(--f-d) !important;
-  letter-spacing: 0.1em !important;
-  text-transform: uppercase;
-  box-shadow: 0 0 0 2px #0d1f3c !important;
-  opacity: 1 !important;
-}
-html:not(#pkz) body:not(#pkz) .pk-dlg .dlg-who::before,
-html:not(#pkz) body:not(#pkz) .pk-dlg .dlg-who::after {
-  display: none !important;
-}
-html:not(#pkz) body:not(#pkz) .pk-dlg .pk-fl {
-  display: inline-block;
-  position: relative;
-  width: 0;
-  height: 0;
-  margin-left: var(--space-xs);
-  vertical-align: middle;
-  border-left: 6px solid transparent;
-  border-right: 6px solid transparent;
-  border-top: 8px solid #e3262f;
-  filter: drop-shadow(0 1px 0 #7a0d12);
-  animation: pkFleche 0.9s ease-in-out infinite;
-  pointer-events: none;
-}
-html:not(#pkz) body:not(#pkz) .pk-dlg .pk-fl.abs {
-  position: absolute;
-  right: 12px;
-  bottom: 10px;
-  margin: 0;
-}
-html:not(#pkz) body:not(#pkz) .pk-dlg.pk-typing .pk-fl {
-  visibility: hidden;
-}
-html:not(#pkz) body:not(#pkz) .pk-typing .pk-c {
-  visibility: hidden;
-}
-html:not(#pkz) body:not(#pkz) .pk-typing .pk-c.v {
-  visibility: visible;
-}
 @keyframes pkFleche {
   0%,
   100% {
@@ -88,66 +11,11 @@ html:not(#pkz) body:not(#pkz) .pk-typing .pk-c.v {
 
 /* Prof. Sorbier on Home */
 /* Professor's advice */
-html:not(#pkz) body:not(#pkz) .tip .dlgbox.pk-dlg {
-  padding: var(--space-lg) var(--space-3xl) var(--space-md) var(--space-md) !important;
-  margin-top: var(--space-sm);
-}
 /* story scenes */
-html:not(#pkz) body:not(#pkz) #story-scene .sc-card.pk-dlg {
-  padding: var(--space-lg) var(--space-lg) var(--space-md) !important;
-  animation: pkDlgIn 0.32s cubic-bezier(0.2, 1, 0.4, 1) both !important;
-}
-html:not(#pkz) body:not(#pkz) #story-scene .sc-card.pk-dlg .sc-who > b {
-  color: #1d4ea8 !important;
-  font-family: var(--f-d) !important;
-  letter-spacing: 0.04em;
-}
-html:not(#pkz) body:not(#pkz) #story-scene .sc-card.pk-dlg .sc-tx {
-  font-size: 16.5px !important;
-  line-height: 1.55 !important;
-  font-weight: 500;
-  color: #1f2836 !important;
-}
-html:not(#pkz) body:not(#pkz) #story-scene .sc-card.pk-dlg .sc-n {
-  color: #6a7688 !important;
-}
-html:not(#pkz) body:not(#pkz) .pk-dlg .button-ghost {
-  color: #2c5fae !important;
-  background: transparent !important;
-  border: 1.5px solid rgba(44, 95, 174, 0.45) !important;
-  box-shadow: none !important;
-}
 /* tutorial coach */
-html:not(#pkz) body:not(#pkz) #coach .co-in.pk-dlg {
-  padding: var(--space-md) var(--space-md) !important;
-}
-html:not(#pkz) body:not(#pkz) #coach .co-in.pk-dlg > b {
-  color: #1d4ea8 !important;
-}
-html:not(#pkz) body:not(#pkz) #coach .co-in.pk-dlg .co-n {
-  color: #6a7688 !important;
-}
-html:not(#pkz) body:not(#pkz) #coach .co-in.pk-dlg p {
-  color: #273142 !important;
-}
 /* tips in battle */
-html:not(#pkz) body:not(#pkz) #tip-card.pk-dlg {
-  padding: var(--space-md) var(--space-md) !important;
-}
-html:not(#pkz) body:not(#pkz) #tip-card.pk-dlg small {
-  color: #2c5fae !important;
-  font-weight: 800;
-  letter-spacing: 0.06em;
-}
-html:not(#pkz) body:not(#pkz) #tip-card.pk-dlg > div > b {
-  color: #1d4ea8 !important;
-}
 /* the champion's line before the battle */
 /* introduction */
-html:not(#pkz) body:not(#pkz) .intro .dlgbox.pk-dlg {
-  padding: var(--space-xl) var(--space-xl) var(--space-xl) !important;
-  margin-top: var(--space-sm);
-}
 @keyframes pkDlgIn {
   from {
     opacity: 0;

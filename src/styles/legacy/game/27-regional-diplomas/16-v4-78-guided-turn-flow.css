@@ -25,8 +25,8 @@ html body.compact-battle #cbBattle .bt-foot .turn-guide-pied b {
 }
 
 /* ---------- screen headers: one instruction at a time ----------
-   When Prof. Sorbier's tip (.tip) follows the header, it already says what to do:
+   When Prof. Sorbier's tip (.professor-tip) follows the header, it already says what to do:
    the subtitle returns once the tip is closed. On phone, the overline repeats the navigation bar. */
-.page-header:has(+ .tip) .lead {
+.page-header:has(+ .professor-tip) .lead {
   display: none !important;
 }
