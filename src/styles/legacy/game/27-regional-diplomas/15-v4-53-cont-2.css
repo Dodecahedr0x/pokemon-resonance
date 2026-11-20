@@ -19,14 +19,6 @@
 
 /* <style id="resonance-result-scroll"> */
 /* v4.69: result screen scrollable by finger (victory included) */
-#cbResult {
-  place-items: start center;
-  overflow-y: auto;
-  overflow-x: hidden;
-  overscroll-behavior: contain;
-  -webkit-overflow-scrolling: touch;
-  touch-action: pan-y;
-}
 #cbResult > .res-card {
   margin-block: auto;
   max-height: none;
@@ -59,9 +51,6 @@
   flex-basis: 100%;
 }
 @media (max-width: 999px) {
-  #cbResult {
-    padding-bottom: calc(var(--bn) + var(--space-lg) + env(safe-area-inset-bottom, 0px));
-  }
   #cbResult .res-card > .res-a {
     bottom: -16px;
   }

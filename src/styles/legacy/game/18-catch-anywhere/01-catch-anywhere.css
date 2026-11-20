@@ -69,35 +69,6 @@ html body #bSvg .tok.in-danger .tok-rim {
 /* ==== v4.19: Hoenn ==== */
 /* ===== resonance-fishing-safari layer ===== */
 /* ==== v4.18: fishing, Safari Park, co-op ==== */
-html body .pe-card,
-html body .sf-card {
-  text-align: center;
-}
-html body .pe-eau {
-  position: relative;
-  height: 120px;
-  margin: var(--space-sm) 0;
-  border-radius: 16px;
-  background:
-    repeating-radial-gradient(ellipse at 50% 60%, rgba(191, 233, 255, 0.18) 0 2px, transparent 3px 18px),
-    linear-gradient(180deg, #2d84c4, #144a86);
-  overflow: hidden;
-}
-html body .pe-bouchon {
-  position: absolute;
-  left: 50%;
-  top: 48%;
-  width: 22px;
-  height: 22px;
-  margin-left: calc(var(--space-md) * -1);
-  border-radius: 50%;
-  background: linear-gradient(180deg, #ff5a4f 0 50%, #fff 50%);
-  box-shadow: 0 0 0 2px #1b2a44;
-  animation: fishing-safari-flotte 2s ease-in-out infinite;
-}
-html body .pe-eau.mord .pe-bouchon {
-  animation: fishing-safari-mord 0.25s linear infinite;
-}
 @keyframes fishing-safari-flotte {
   0%,
   100% {
@@ -117,90 +88,6 @@ html body .pe-eau.mord .pe-bouchon {
   100% {
     transform: translate(-3px, 6px);
   }
-}
-@media (prefers-reduced-motion: reduce) {
-  html body .pe-bouchon,
-  html body .pe-eau.mord .pe-bouchon {
-    animation: none;
-  }
-}
-html body .pe-alerte {
-  margin: var(--space-2xs) 0 var(--space-sm);
-  font: 800 24px/1.1 var(--f-d, inherit);
-  color: #ffd75e;
-}
-html body .pe-prise,
-html body .sf-poke {
-  display: grid;
-  place-items: center;
-  margin: var(--space-sm) auto;
-}
-html body .pe-n {
-  margin: var(--space-sm) 0 0;
-  font-size: 12px;
-  color: var(--v4-tx2, #9fb0c4);
-}
-html body .pe-card .enc-a,
-html body .sf-a {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: var(--space-sm);
-  margin-top: var(--space-sm);
-}
-html body .sf-k {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: var(--space-xs);
-  margin: var(--space-xs) 0;
-}
-html body .sf-k span {
-  padding: var(--space-2xs) var(--space-sm);
-  border-radius: 999px;
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(120, 200, 255, 0.2);
-  font: 700 12px/1.1 var(--f-d, inherit);
-}
-html body .sf-herbe {
-  height: 120px;
-  margin: var(--space-sm) 0;
-  border-radius: 16px;
-  background:
-    repeating-linear-gradient(100deg, transparent 0 10px, rgba(40, 110, 50, 0.6) 10px 13px),
-    repeating-linear-gradient(80deg, transparent 0 14px, rgba(70, 150, 70, 0.55) 14px 17px),
-    linear-gradient(180deg, #8fd36b, #3f8a3c);
-}
-html body .sf-h {
-  margin: var(--space-xs) 0;
-  font-weight: 700;
-}
-html body .sf-m {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: var(--space-xs) var(--space-sm);
-  align-items: center;
-  max-width: 320px;
-  margin: var(--space-xs) auto;
-  font-size: 12px;
-  text-align: left;
-}
-html body .sf-j {
-  display: block;
-  min-width: 120px;
-  height: 8px;
-  border-radius: 9px;
-  background: rgba(255, 255, 255, 0.1);
-  overflow: hidden;
-}
-html body .sf-j i {
-  display: block;
-  height: 100%;
-}
-html body .sf-msg {
-  min-height: 2.6em;
-  margin: var(--space-sm) 0 0;
-  font-size: 14px;
 }
 /* co-op: the tokens of both players */
 html body #bSvg .tok.cj1 .tok-rim {

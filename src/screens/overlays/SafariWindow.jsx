@@ -9,7 +9,7 @@ import Button from '../../components/Button.jsx';
 // Safari Park (#safariPanel). The engine (058) computes the visit state (catch and
 // flee chances, message) and keeps the clicks (data-safari-panel) and the hidden attribute.
 export default function SafariWindow() {
-  return <Box displayName="safari" className="result exp-box" id="safari-panel" cardComponent={Card} />;
+  return <Box displayName="safari" className="modal is-raised" id="safari-panel" cardComponent={Card} />;
 }
 
 // Percentage gauge (catch, flee).
@@ -17,7 +17,7 @@ function Gauge({ v, c }) {
   const p = Math.round(v * 100);
   return (
     <span
-      className="sf-j"
+      className="safari-gauge"
       style={{ background: `linear-gradient(90deg,${c} 0 ${p}%,rgba(255,255,255,.12) ${p}% 100%)` }}
       role="img"
       aria-label={`${p} %`}
@@ -38,12 +38,12 @@ function Card({
 }) {
   const m = x && BY[x.id];
   return (
-    <Dialogue className="dialog-card exp-card sf-card" titre="sfT" closeAttrs={{ 'data-safariPanel': 'x' }}>
+    <Dialogue className="dialog-card is-compact safari-card" titre="sfT" closeAttrs={{ 'data-safariPanel': 'x' }}>
       <p className="kicker">Parc Safari</p>
       <h2 className="section-title" id="sfT">
         {x ? m.n : 'Les herbes du Parc'}
       </h2>
-      <div className="sf-k">
+      <div className="safari-counters">
         <span>{stepSize} pas</span>
         <span>{balls} Safari Balls</span>
         <span>
@@ -52,7 +52,10 @@ function Card({
       </div>
       {x ? (
         <>
-          <div className={'sf-poke' + (x.sh ? ' shiny' : '')} style={x.sh ? parseStyle(shinyStyle(x.id)) : undefined}>
+          <div
+            className={'safari-pokemon' + (x.sh ? ' shiny' : '')}
+            style={x.sh ? parseStyle(shinyStyle(x.id)) : undefined}
+          >
             <Html html={crestSmall(m)} />
           </div>
           <div className="sh-tags">
@@ -60,8 +63,8 @@ function Card({
               <Html key={t} html={tb(t)} />
             ))}
           </div>
-          <p className="sf-h">{hum}</p>
-          <div className="sf-m">
+          <p className="safari-mood">{hum}</p>
+          <div className="safari-gauges">
             <span>Capture</span>
             <Gauge v={capt} c="#7ac74c" />
             <span>Fuite</span>
@@ -69,12 +72,12 @@ function Card({
           </div>
         </>
       ) : (
-        <div className="sf-herbe" aria-hidden="true" />
+        <div className="safari-grass" aria-hidden="true" />
       )}
-      <p className="sf-msg" aria-live="polite">
+      <p className="safari-message" aria-live="polite">
         <Html html={msg} />
       </p>
-      <div className="sf-a">
+      <div className="safari-actions">
         {isFinished ? (
           <Button variant="primary" data-safari-panel="sortir">
             Quitter le Parc

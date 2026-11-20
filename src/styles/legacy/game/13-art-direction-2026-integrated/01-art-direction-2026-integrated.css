@@ -72,7 +72,6 @@ body::before {
 }
 .resume,
 .panel,
-.result,
 .pt,
 .items {
   background: linear-gradient(145deg, rgba(12, 42, 57, 0.92), rgba(5, 22, 34, 0.94)) !important;

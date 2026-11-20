@@ -29,7 +29,7 @@ export default function Saves() {
   }, [open]);
 
   return (
-    <div className="result saves-overlay" id="saves" hidden={!open}>
+    <div className="modal saves-overlay" id="saves" hidden={!open}>
       {open && ready && <Card key={version} xRef={x} />}
     </div>
   );

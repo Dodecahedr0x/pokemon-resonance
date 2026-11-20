@@ -9,17 +9,17 @@ import { DOMINANT_CROWN_SVG } from '../../engine/world/dominant-pokemon.js';
 import Button from '../../components/Button.jsx';
 // Fishing (#fishingPanel): waiting, bite, catch. The engine (058) keeps the timers,
 // the clicks (data-fishing-panel) and the hidden attribute; after a shiny catch, it
-// recolors the illustration (.pe-prise img, applyShinyArt) right after rendering.
+// recolors the illustration (.fishing-catch img, applyShinyArt) right after rendering.
 export default function FishingWindow() {
-  return <Box displayName="peche" className="result exp-box fishing-box" id="fishing-panel" cardComponent={Card} />;
+  return <Box displayName="peche" className="modal is-raised fishing-box" id="fishing-panel" cardComponent={Card} />;
 }
 
 function Body({ status: state, id, sh, dom, known: known }) {
   if (state === 'attente') {
     return (
       <>
-        <div className="pe-eau">
-          <span className="pe-bouchon" />
+        <div className="fishing-water">
+          <span className="fishing-float" />
         </div>
         <p className="d">La ligne est à l’eau… Attendez que ça morde, puis ferrez vite !</p>
         <Button size="large" disabled>
@@ -31,10 +31,10 @@ function Body({ status: state, id, sh, dom, known: known }) {
   if (state === 'mord') {
     return (
       <>
-        <div className="pe-eau mord">
-          <span className="pe-bouchon" />
+        <div className="fishing-water is-biting">
+          <span className="fishing-float" />
         </div>
-        <p className="pe-alerte">Ça mord !</p>
+        <p className="fishing-alert">Ça mord !</p>
         <Button size="large" variant="primary" data-fishing-panel="ferrer">
           Ferrer !
         </Button>
@@ -44,7 +44,7 @@ function Body({ status: state, id, sh, dom, known: known }) {
   if (state === 'rate') {
     return (
       <>
-        <div className="pe-eau" />
+        <div className="fishing-water" />
         <p className="d">Trop tard : il s’est échappé.</p>
         <Button variant="primary" data-fishing-panel="lancer">
           Relancer la ligne
@@ -58,10 +58,10 @@ function Body({ status: state, id, sh, dom, known: known }) {
   const m = BY[id];
   return (
     <>
-      <div className={'pe-prise' + (sh ? ' shiny' : '')} style={sh ? parseStyle(shinyStyle(id)) : undefined}>
+      <div className={'fishing-catch' + (sh ? ' shiny' : '')} style={sh ? parseStyle(shinyStyle(id)) : undefined}>
         <Html html={crestSmall(m)} />
       </div>
-      <p className="enc-t">
+      <p className="encounter-title">
         {dom ? (
           <>
             <Html html={DOMINANT_CROWN_SVG} />
@@ -80,7 +80,7 @@ function Body({ status: state, id, sh, dom, known: known }) {
           <Html key={t} html={tb(t)} />
         ))}
       </div>
-      <div className="enc-a">
+      <div className="encounter-actions">
         <Button data-fishing-panel="relacher">Relâcher</Button>
         <Button variant="primary" data-fishing-panel="combat">
           {known ? 'Combattre' : 'Combattre pour le capturer'}
@@ -92,13 +92,13 @@ function Body({ status: state, id, sh, dom, known: known }) {
 
 function Card({ route, catches: catches, ...p }) {
   return (
-    <Dialogue className="dialog-card exp-card pe-card" titre="peT" closeAttrs={{ 'data-fishingPanel': 'x' }}>
+    <Dialogue className="dialog-card is-compact fishing-card" titre="peT" closeAttrs={{ 'data-fishingPanel': 'x' }}>
       <p className="kicker">{route} · pêche</p>
       <h2 className="section-title" id="peT">
         Pêche
       </h2>
       <Body {...p} />
-      <p className="pe-n">
+      <p className="fishing-total">
         {catches} prise{catches > 1 ? 's' : ''} au total
       </p>
     </Dialogue>

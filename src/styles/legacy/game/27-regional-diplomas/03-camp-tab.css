@@ -1,43 +1,5 @@
 /* Camp tab */
 /* confirmation before a new game */
-.new-game {
-  position: fixed;
-  inset: 0;
-  z-index: 400;
-  display: grid;
-  place-items: center;
-  padding: var(--space-lg);
-}
-.new-game[hidden] {
-  display: none;
-}
-.new-game-s {
-  position: absolute;
-  inset: 0;
-  background: rgba(2, 6, 10, 0.72);
-}
-.new-game-c {
-  position: relative;
-  width: min(440px, 100%);
-  padding: var(--space-lg);
-  border-radius: 18px;
-  background: linear-gradient(145deg, #173a50, #0a1d2b) !important;
-  border: 1px solid rgba(255, 215, 94, 0.45) !important;
-}
-.new-game-c p {
-  margin: var(--space-sm) 0 0;
-  font-size: 14px;
-  line-height: 1.5;
-  color: #d4e2ec;
-}
-.new-game-c .new-game-w {
-  color: #ffd9a0;
-}
-.new-game-a {
-  display: grid;
-  gap: var(--space-sm);
-  margin-top: var(--space-md);
-}
 
 /* battle sky */
 #bBoard {

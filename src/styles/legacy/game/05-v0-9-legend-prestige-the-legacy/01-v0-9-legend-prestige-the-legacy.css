@@ -175,7 +175,6 @@ body {
 .ptm,
 .res-card,
 .ep-card,
-.enc .enc-card,
 .st-evo,
 .st-line,
 .qc,
@@ -202,7 +201,6 @@ body {
 .duo,
 .res-card,
 .ep-card,
-.enc .enc-card,
 .champ {
   border-radius: var(--rl);
 }

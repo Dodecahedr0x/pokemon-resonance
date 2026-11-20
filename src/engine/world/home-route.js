@@ -122,7 +122,7 @@ export function encounter() {
         path,
       });
       if (wildShiny) {
-        applyShinyArt($('#enc .enc-cr img'), pick.no);
+        applyShinyArt($('#enc .encounter-crest img'), pick.no);
       } // v4.25
       const f = $('#enc [data-enc="take"]');
       if (f) {

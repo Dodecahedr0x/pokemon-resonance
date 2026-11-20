@@ -5,10 +5,6 @@ html body .card-header {
 }
 
 /* Shiny states: real shiny artworks, subtler aura */
-html body .enc-card.shiny .enc-cr img.art-sh,
-html body .pe-prise.shiny img.art-sh {
-  filter: drop-shadow(0 0 12px rgba(255, 224, 139, 0.52)) !important;
-}
 /* Navigation and small finishing touches */
 html body .nav a.on {
   text-shadow: 0 0 15px rgba(115, 217, 244, 0.35);

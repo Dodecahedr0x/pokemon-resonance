@@ -228,3 +228,19 @@ Each step is one commit (or a few), on its own, playable at every point.
   rules (alignment, gap, the arrow's radius); `is-large` does not. The legacy rule that restyles every input now skips
   `.intro-card`. New tokens: `--ease-rise`, `--surface-glass`, `--image-landscape`, and `--bottom-nav-height` (set on
   `body`, where battle and full screen zero the legacy `--bn`).
+- Windows: done. `src/screens/overlays/modal.css`: the backdrop layer `.modal` (was `.result`; `.is-raised` above the
+  others, was `.exp-box` / `.ct-box`), `.dialog-card` (`.is-compact`, was `.exp-card`) and `.dialog-close`, and the
+  battle result's scrolling (`.modal.battle-result`, was `#cbResult`). `encounter.css`: `.encounter` / `.encounter-card`
+  (`is-dominant`, `shiny`) / `-title` / `-dominant` / `-crest` / `-evolution` / `-actions` / `-note` (were `.enc-*`),
+  `.rare-encounter`, fishing `.fishing-card` / `-water` (`is-biting`) / `-float` / `-alert` / `-catch` / `-total` (were
+  `.pe-*`), Safari `.safari-card` / `-counters` / `-pokemon` / `-mood` / `-gauges` / `-gauge` / `-message` / `-grass` /
+  `-actions` (were `.sf-*`). `window-boxes.css`: `.picker-list` / `.picker-option` (`is-selected`) for the expedition,
+  Daycare and companion choices (were `.exp-list` / `.exp-d`), `.companion-bonuses`, TM `.tm-card` / `-list` /
+  `-option` (`is-incompatible`) / `.tm-move`, `.inherited-move`, friend card `.friend-card` / `-label` / `-code`
+  (`is-paste`, was `#amiColle`) / `-actions` / `-note` / `-error` (were `.am-*`), and the new-game warning
+  `.new-game-scrim` / `-card` / `-warning` / `-actions`. Checked with snapshots of every window state (encounter normal,
+  dominant and shiny; the four fishing steps and a shiny catch; Safari walking, encounter and shiny; expedition,
+  Daycare, companion, TM, both friend cards, new game, Saves) at both widths. Three declarations that never applied were
+  dropped: the encounter crest's 150px size (`.crest-pk > svg` beat it) and the shiny and dominant glows on the
+  encounter card (the card's plate shadow was `!important`). A global legacy `[hidden] { display: none !important }`
+  still hides every window; it moves to `base/` when `legacy/` goes.

@@ -1,0 +1,99 @@
+/* Overlays › the shared modal: the backdrop layer (.modal; .is-raised above the others), its dialog card
+   (.dialog-card; .is-compact is narrower) and the round close button (.dialog-close). */
+
+.dialog-close {
+  position: absolute;
+  top: calc(16px + env(safe-area-inset-top, 0px));
+  right: 16px;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--color-line-strong);
+  background: rgba(12, 14, 19, 0.55);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+@media (max-width: 700px) {
+  .dialog-close {
+    top: 16px;
+  }
+}
+.dialog-close svg {
+  width: 14px;
+  height: 14px;
+}
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 85;
+  display: grid;
+  place-items: center;
+  padding: var(--space-xl) max(var(--space-lg), env(safe-area-inset-right, 0px)) var(--space-xl)
+    max(var(--space-lg), env(safe-area-inset-left, 0px));
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  animation: fade 0.35s ease both;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  background: linear-gradient(145deg, rgba(12, 42, 57, 0.92), rgba(5, 22, 34, 0.94));
+  border: 1px solid rgba(112, 211, 255, 0.2);
+  box-shadow:
+    0 20px 48px rgba(0, 0, 0, 0.18),
+    inset 0 1px rgba(255, 255, 255, 0.035);
+  border-radius: 20px;
+}
+.dialog-card {
+  position: relative;
+  width: min(640px, 100%);
+  max-height: 92vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  display: grid;
+  gap: var(--space-md);
+  padding: var(--space-2xl);
+  border-radius: var(--radius-card-large);
+  border: 1px solid transparent;
+  animation: encIn 0.45s var(--ease-out) both;
+  min-width: 0;
+  box-shadow:
+    0 18px 48px rgba(0, 0, 0, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.055);
+  border-color: rgba(164, 205, 226, 0.17);
+  background: linear-gradient(145deg, rgba(19, 48, 68, 0.94), rgba(7, 22, 35, 0.96));
+}
+.dialog-card .dialog-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+}
+@media (max-width: 560px) {
+  .dialog-card {
+    padding: var(--space-xl) var(--space-lg);
+  }
+}
+.dialog-card > * {
+  min-width: 0;
+}
+.modal.is-raised {
+  z-index: 92;
+}
+.dialog-card.is-compact {
+  width: min(520px, 100%);
+}
+
+/* the battle result (Result.jsx) scrolls by finger from the top, above the phone bottom bar */
+.modal.battle-result {
+  place-items: start center;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+}
+@media (max-width: 999px) {
+  .modal.battle-result {
+    padding-bottom: calc(var(--bottom-nav-height) + var(--space-lg) + env(safe-area-inset-bottom, 0px));
+  }
+}

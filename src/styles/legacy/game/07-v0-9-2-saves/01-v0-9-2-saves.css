@@ -63,33 +63,6 @@
   }
 }
 /* saves window */
-.dialog-card {
-  position: relative;
-  width: min(640px, 100%);
-  max-height: 92vh;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  display: grid;
-  gap: var(--space-md);
-  padding: var(--space-2xl);
-  border-radius: var(--rl);
-  border: 1px solid transparent;
-  background:
-    var(--veins) padding-box,
-    var(--slab) padding-box,
-    var(--brass) border-box;
-  background-size:
-    560px 560px,
-    auto,
-    auto;
-  box-shadow: var(--engrave);
-  animation: encIn 0.45s var(--ease) both;
-}
-.dialog-card .dialog-close {
-  position: absolute;
-  top: 14px;
-  right: 14px;
-}
 .confirm-question {
   font-size: 12.5px;
   color: var(--gold-l);
@@ -104,18 +77,6 @@
   border-top: 1px solid rgba(212, 175, 106, 0.14);
 }
 
-@media (max-width: 560px) {
-  .dialog-card {
-    padding: var(--space-xl) var(--space-lg);
-  }
-}
-
-.dialog-card {
-  min-width: 0;
-}
-.dialog-card > * {
-  min-width: 0;
-}
 @media (max-width: 560px) {
   .rs-tx b {
     font-size: 12.5px;

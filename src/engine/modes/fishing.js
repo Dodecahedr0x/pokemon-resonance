@@ -91,7 +91,10 @@ function renderFishingPanel() {
   const el = $('#fishing-panel'),
     P2 = FISHING || {};
   // the shiny artwork is recolored after rendering (v4.25)
-  setTimeout(() => P2.status === 'prise' && P2.sh && applyShinyArt(el.querySelector('.pe-prise img'), BY[P2.id].no), 0);
+  setTimeout(
+    () => P2.status === 'prise' && P2.sh && applyShinyArt(el.querySelector('.fishing-catch img'), BY[P2.id].no),
+    0
+  );
   paintOverlay('peche', {
     status: P2.status,
     id: P2.id,

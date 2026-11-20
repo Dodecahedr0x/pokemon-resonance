@@ -94,7 +94,7 @@ export function inheritedMoveHtml(b) {
   if (!k || !MV[k]) {
     return '';
   }
-  return `<div class="mvc ct-mvc her-mvc"><div class="t"><b>${MV[k].n}</b><span class="chip">Héritée</span></div><p>${MV[k].t} · ${MV[k].p ? 'Puissance ' + MV[k].p + ' · ' : ''}${MV[k].d || ''} Capacité transmise à la Pension.</p></div>`;
+  return `<div class="mvc tm-move inherited-move"><div class="t"><b>${MV[k].n}</b><span class="chip">Héritée</span></div><p>${MV[k].t} · ${MV[k].p ? 'Puissance ' + MV[k].p + ' · ' : ''}${MV[k].d || ''} Capacité transmise à la Pension.</p></div>`;
 }
 
 // the base Camp's Daycare is rendered by React: src/screens/camp/CampBase.jsx

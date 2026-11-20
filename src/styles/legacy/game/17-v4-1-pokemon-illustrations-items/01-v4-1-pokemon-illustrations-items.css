@@ -157,9 +157,7 @@ html body img.img-off.img-off.img-off {
   filter: drop-shadow(0 0 4px rgba(255, 225, 120, 0.85));
   flex: none;
 }
-html body #bSvg .tok.shiny .tok-im,
-.enc-card.shiny .enc-cr img,
-.enc-card.shiny .enc-cr image {
+html body #bSvg .tok.shiny .tok-im {
   filter: hue-rotate(var(--sh, 120deg)) saturate(1.25) drop-shadow(0 0 6px rgba(255, 233, 160, 0.55));
 }
 html body #bSvg .tok.shiny .tok-halo {
@@ -172,14 +170,6 @@ html body #bSvg .tok.shiny .tok-halo {
   to {
     stroke-dashoffset: -70;
   }
-}
-.enc-card.shiny {
-  box-shadow:
-    0 0 0 1px rgba(255, 233, 160, 0.55),
-    0 0 40px rgba(255, 220, 120, 0.25);
-}
-.enc-card.shiny .enc-t {
-  color: #ffe9a3;
 }
 .rl.shn b {
   color: #ffe9a3;

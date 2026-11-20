@@ -1,0 +1,244 @@
+/* Overlays › wild Pokémon windows: the encounter card (Enc.jsx; .is-dominant, .shiny), fishing (FishingWindow.jsx)
+   and the Safari Park (SafariWindow.jsx). Fishing reuses the encounter title and actions. */
+
+.encounter .encounter-card {
+  width: min(440px, 100%);
+  display: grid;
+  gap: var(--space-md);
+  justify-items: center;
+  text-align: center;
+  padding: var(--space-2xl) var(--space-2xl);
+  animation: encIn 0.6s var(--ease-out) both;
+  border: 1px solid transparent;
+  border-radius: var(--radius-card-large);
+  margin: auto 0;
+  max-height: none;
+  overflow: visible;
+  flex: none;
+  background: var(--surface-plate);
+  border-color: var(--color-line-plate);
+  box-shadow: var(--shadow-plate);
+}
+.encounter-title {
+  font-family: var(--font-display);
+  font-stretch: 112%;
+  font-weight: 750;
+  font-size: 18px;
+}
+.encounter-crest svg {
+  overflow: visible;
+}
+.encounter-actions {
+  display: flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: var(--space-2xs);
+}
+.encounter-evolution {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  display: grid;
+  gap: var(--space-3xs);
+}
+.encounter-evolution span {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+.encounter-card.shiny .encounter-crest image {
+  filter: hue-rotate(var(--sh, 120deg)) saturate(1.25) drop-shadow(0 0 6px rgba(255, 233, 160, 0.55));
+}
+.encounter-card.shiny .encounter-title {
+  color: #ffe9a3;
+}
+.encounter-note {
+  margin: var(--space-sm) 0 0;
+  font-size: 12.5px;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+.fishing-card {
+  text-align: center;
+}
+.safari-card {
+  text-align: center;
+}
+.fishing-water {
+  position: relative;
+  height: 120px;
+  margin: var(--space-sm) 0;
+  border-radius: 16px;
+  background:
+    repeating-radial-gradient(ellipse at 50% 60%, rgba(191, 233, 255, 0.18) 0 2px, transparent 3px 18px),
+    linear-gradient(180deg, #2d84c4, #144a86);
+  overflow: hidden;
+}
+.fishing-float {
+  position: absolute;
+  left: 50%;
+  top: 48%;
+  width: 22px;
+  height: 22px;
+  margin-left: calc(var(--space-md) * -1);
+  border-radius: 50%;
+  background: linear-gradient(180deg, #ff5a4f 0 50%, #fff 50%);
+  box-shadow: 0 0 0 2px #1b2a44;
+  animation: fishing-safari-flotte 2s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .fishing-float {
+    animation: none;
+  }
+}
+.fishing-water.is-biting .fishing-float {
+  animation: fishing-safari-mord 0.25s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .fishing-water.is-biting .fishing-float {
+    animation: none;
+  }
+}
+.fishing-alert {
+  margin: var(--space-2xs) 0 var(--space-sm);
+  font: 800 24px/1.1 var(--font-display);
+  color: #ffd75e;
+}
+.fishing-catch {
+  display: grid;
+  place-items: center;
+  margin: var(--space-sm) auto;
+}
+.safari-pokemon {
+  display: grid;
+  place-items: center;
+  margin: var(--space-sm) auto;
+}
+.fishing-total {
+  margin: var(--space-sm) 0 0;
+  font-size: 12px;
+  color: var(--color-text-soft);
+}
+.fishing-card .encounter-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
+}
+.safari-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
+}
+.safari-counters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-xs);
+  margin: var(--space-xs) 0;
+}
+.safari-counters span {
+  padding: var(--space-2xs) var(--space-sm);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(120, 200, 255, 0.2);
+  font: 700 12px/1.1 var(--font-display);
+}
+.safari-grass {
+  height: 120px;
+  margin: var(--space-sm) 0;
+  border-radius: 16px;
+  background:
+    repeating-linear-gradient(100deg, transparent 0 10px, rgba(40, 110, 50, 0.6) 10px 13px),
+    repeating-linear-gradient(80deg, transparent 0 14px, rgba(70, 150, 70, 0.55) 14px 17px),
+    linear-gradient(180deg, #8fd36b, #3f8a3c);
+}
+.safari-mood {
+  margin: var(--space-xs) 0;
+  font-weight: 700;
+}
+.safari-gauges {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-xs) var(--space-sm);
+  align-items: center;
+  max-width: 320px;
+  margin: var(--space-xs) auto;
+  font-size: 12px;
+  text-align: left;
+}
+.safari-gauge {
+  display: block;
+  min-width: 120px;
+  height: 8px;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+.safari-gauge i {
+  display: block;
+  height: 100%;
+}
+.safari-message {
+  min-height: 2.6em;
+  margin: var(--space-sm) 0 0;
+  font-size: 14px;
+}
+.encounter-card.is-dominant .encounter-crest {
+  transform: scale(1.18);
+  filter: drop-shadow(0 0 14px rgba(255, 190, 60, 0.75));
+}
+.encounter-card.is-dominant .encounter-title {
+  color: #ffd75e;
+}
+.encounter-dominant {
+  margin: var(--space-2xs) 0 0;
+  font-size: 13px;
+  color: #ffe6a8;
+}
+.modal.encounter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+.encounter .encounter-crest {
+  width: min(100%, max(130px, calc(100dvh - 470px)));
+}
+.encounter .encounter-actions {
+  position: sticky;
+  bottom: -20px;
+  z-index: 2;
+  width: calc(100% + 24px);
+  margin: var(--space-2xs) calc(var(--space-md) * -1) calc(var(--space-md) * -1);
+  padding: var(--space-md) var(--space-md) var(--space-md);
+  border-radius: 0 0 22px 22px;
+  background: linear-gradient(180deg, rgba(6, 24, 38, 0), rgba(6, 24, 38, 0.94) 26%, rgba(5, 20, 33, 0.98));
+}
+.encounter-card.shiny .encounter-crest img.art-sh {
+  filter: drop-shadow(0 0 12px rgba(255, 224, 139, 0.52)) drop-shadow(0 10px 12px rgba(0, 0, 0, 0.35));
+}
+.fishing-catch.shiny img.art-sh {
+  filter: drop-shadow(0 0 12px rgba(255, 224, 139, 0.52)) drop-shadow(0 10px 12px rgba(0, 0, 0, 0.35));
+}
+.encounter-card.shiny .encounter-crest img:not(.art-sh) {
+  filter: hue-rotate(var(--sh, 120deg)) saturate(1.25) drop-shadow(0 0 8px rgba(255, 233, 160, 0.55))
+    drop-shadow(0 10px 12px rgba(0, 0, 0, 0.35));
+}
+.rare-encounter {
+  margin: 0 0 var(--space-xs);
+  padding: var(--space-2xs) var(--space-sm);
+  border-radius: 999px;
+  justify-self: center;
+  background: linear-gradient(90deg, rgba(255, 215, 94, 0.2), rgba(255, 140, 200, 0.2));
+  border: 1px solid rgba(255, 215, 94, 0.5);
+  color: #ffe9a8;
+  font-size: 11.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}

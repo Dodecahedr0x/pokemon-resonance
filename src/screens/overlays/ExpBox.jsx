@@ -9,23 +9,23 @@ import Button from '../../components/Button.jsx';
 // Camp expedition window (#expBox): choice of location, then of Pokémon.
 // Clicks (data-exp-*) and hidden attribute: engine (049).
 export default function ExpBox() {
-  return <Box displayName="exp" className="result exp-box" id="expBox" cardComponent={Card} />;
+  return <Box displayName="exp" className="modal is-raised" id="expBox" cardComponent={Card} />;
 }
 
 function Card({ destinationId: dest, available: available }) {
   return (
-    <Dialogue className="dialog-card exp-card" titre="expT" closeAttrs={{ 'data-exp-x': '' }}>
+    <Dialogue className="dialog-card is-compact" titre="expT" closeAttrs={{ 'data-exp-x': '' }}>
       <p className="kicker">Expédition</p>
       <h2 className="section-title" id="expT">
         {dest ? DESTINATIONS[dest].n : 'Où partir ?'}
       </h2>
       {!dest ? (
-        <div className="exp-list">
+        <div className="picker-list">
           {Object.entries(DESTINATIONS).map(([k, D]) => {
             // location locked until N badges (v4.61)
             const lk = !!lockedByBadges && lockedByBadges(D);
             return (
-              <button key={k} type="button" className="exp-d" data-exp-d={k} disabled={lk}>
+              <button key={k} type="button" className="picker-option" data-exp-d={k} disabled={lk}>
                 <b>{D.n}</b>
                 <em>
                   {lk
@@ -42,12 +42,12 @@ function Card({ destinationId: dest, available: available }) {
             Qui part ? Les Pokémon dont un type convient au lieu rapportent le double. Les membres de l’équipe ne
             peuvent pas partir.
           </p>
-          <div className="exp-list">
+          <div className="picker-list">
             {available.length ? (
               available.map(id => {
                 const bon = BY[id].t.some(t => DESTINATIONS[dest].types.includes(t));
                 return (
-                  <button key={id} type="button" className="exp-d" data-exp-p={id}>
+                  <button key={id} type="button" className="picker-option" data-exp-p={id}>
                     <Html html={medal(BY[id].t, 'is-small')} />
                     <b>{BY[id].n}</b>
                     <em>{bon ? 'Terrain idéal · ×2' : 'Gains normaux'}</em>

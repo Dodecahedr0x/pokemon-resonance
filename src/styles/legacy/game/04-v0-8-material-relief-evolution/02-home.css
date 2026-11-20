@@ -70,17 +70,4 @@
 }
 
 /* route 29 */
-.enc-evo {
-  font-size: 13px;
-  color: var(--tx2);
-  display: grid;
-  gap: var(--space-3xs);
-}
-.enc-evo span {
-  font-family: var(--f-m);
-  font-size: 10px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--gold);
-}
 /* kpis */

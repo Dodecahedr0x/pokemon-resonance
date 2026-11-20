@@ -5,12 +5,12 @@ import { medal } from '../../engine/core/utils.js';
 
 // Companion choice (#compBox). Clicks (data-comp, data-comp-p) and hidden: engine (057).
 export default function CompanionBox() {
-  return <Box displayName="comp" className="result exp-box" id="compBox" cardComponent={Card} />;
+  return <Box displayName="comp" className="modal is-raised" id="compBox" cardComponent={Card} />;
 }
 
 function Card({ L, cur, bonus }) {
   return (
-    <Dialogue className="dialog-card exp-card" titre="compT" closeAttrs={{ 'data-comp': 'x' }}>
+    <Dialogue className="dialog-card is-compact" titre="compT" closeAttrs={{ 'data-comp': 'x' }}>
       <p className="kicker">Compagnon</p>
       <h2 className="section-title" id="compT">
         Qui vous accompagne ?
@@ -19,11 +19,16 @@ function Card({ L, cur, bonus }) {
         Son affection grandit quand il combat avec vous (+2, +1 de plus en cas de victoire) et quand vous le câlinez
         (une fois par jour). En changer remet l’affection à zéro.
       </p>
-      <div className="exp-list">
+      <div className="picker-list">
         {L.map(id => {
           const m = BY[id];
           return (
-            <button key={id} type="button" className={'exp-d' + (cur === id ? ' on' : '')} data-comp-p={id}>
+            <button
+              key={id}
+              type="button"
+              className={'picker-option' + (cur === id ? ' is-selected' : '')}
+              data-comp-p={id}
+            >
               <Html html={medal(m.t, 'is-small')} />
               <b>{m.n}</b>
               <em>{m.t.join(' · ')}</em>
@@ -31,7 +36,7 @@ function Card({ L, cur, bonus }) {
           );
         })}
       </div>
-      <div className="cp-bl">
+      <div className="companion-bonuses">
         <b>Bonus d’affection</b>
         {bonus.map(([n, t, d]) => (
           <span key={n}>

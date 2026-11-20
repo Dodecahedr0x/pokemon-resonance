@@ -61,37 +61,6 @@
   stroke-dasharray: 3.5 3;
   pointer-events: none;
 }
-.result {
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  -webkit-overflow-scrolling: touch;
-}
-.result.enc {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-}
-.enc .enc-card {
-  margin: auto 0;
-  max-height: none;
-  overflow: visible;
-  flex: none;
-}
-.enc .enc-cr {
-  width: min(100%, max(130px, calc(100vh - 470px)));
-  width: min(100%, max(130px, calc(100dvh - 470px)));
-}
-.enc .enc-a {
-  position: sticky;
-  bottom: -20px;
-  z-index: 2;
-  width: calc(100% + 24px);
-  margin: var(--space-2xs) calc(var(--space-md) * -1) calc(var(--space-md) * -1);
-  padding: var(--space-md) var(--space-md) var(--space-md);
-  border-radius: 0 0 22px 22px;
-  background: linear-gradient(180deg, rgba(6, 24, 38, 0), rgba(6, 24, 38, 0.94) 26%, rgba(5, 20, 33, 0.98));
-}
 /* ===== resonance-startup layer ===== */
 /* Reload within the same session: no title screen, and the home page only appears
    once built (otherwise the old layout was visible for a moment). */
@@ -126,7 +95,6 @@ html body .section-title {
 }
 html body .resume,
 html body .sel,
-html body .dialog-card,
 html body .ana {
   border-color: var(--pr-line) !important;
   box-shadow:
@@ -134,8 +102,7 @@ html body .ana {
     inset 0 1px 0 rgba(255, 255, 255, 0.055);
 }
 html body .sel,
-html body .resume,
-html body .dialog-card {
+html body .resume {
   background: linear-gradient(145deg, rgba(19, 48, 68, 0.94), rgba(7, 22, 35, 0.96)) !important;
 }
 html body button.qk {

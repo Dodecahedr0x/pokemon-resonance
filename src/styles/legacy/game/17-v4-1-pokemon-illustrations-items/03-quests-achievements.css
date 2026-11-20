@@ -38,45 +38,6 @@ html body .car-mvc .chip {
 }
 /* --- Home: base camp --- */
 /* --- expedition window --- */
-html body .exp-box {
-  z-index: 92;
-}
-html body .exp-card {
-  width: min(520px, 100%);
-}
-html body .exp-list {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-sm);
-  margin: var(--space-sm) 0;
-}
-html body .exp-d {
-  display: grid;
-  gap: var(--space-3xs);
-  justify-items: start;
-  padding: var(--space-sm);
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: rgba(255, 255, 255, 0.04);
-  color: inherit;
-  font: inherit;
-  text-align: left;
-  cursor: pointer;
-}
-html body .exp-d:hover,
-html body .exp-d:focus-visible {
-  border-color: #ffe17b;
-}
-html body .exp-d em {
-  font-style: normal;
-  font-size: 12px;
-  color: var(--mut, #9fb0c4);
-}
-@media (max-width: 420px) {
-  html body .exp-list {
-    grid-template-columns: minmax(0, 1fr);
-  }
-}
 
 /* ==== 27-v4.11-monde.css ==== */
 /* =====================================================================

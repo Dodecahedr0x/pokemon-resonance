@@ -83,22 +83,6 @@
 .blog li.sys {
   color: var(--gold-l);
 }
-.result {
-  position: fixed;
-  inset: 0;
-  z-index: 85;
-  display: grid;
-  place-items: center;
-  padding: var(--space-xl) max(var(--space-lg), env(safe-area-inset-right, 0px)) var(--space-xl)
-    max(var(--space-lg), env(safe-area-inset-left, 0px));
-  background: rgba(3, 4, 7, 0.72);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
-  animation: fade 0.35s ease both;
-}
-.result[hidden] {
-  display: none !important;
-}
 .res-card {
   width: min(520px, 100%);
   max-height: 90vh;

@@ -15,7 +15,7 @@ export default function Starter() {
   const ready = useEngineReady();
   const { open, v } = useStarter();
   return (
-    <div className="result starter" id="starter" hidden={!open}>
+    <div className="modal starter" id="starter" hidden={!open}>
       {ready && v > 0 && <Card />}
     </div>
   );

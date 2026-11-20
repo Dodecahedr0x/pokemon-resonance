@@ -48,7 +48,7 @@ export default function Result() {
     return () => cancelAnimationFrame(id);
   }, [v, S]);
   return (
-    <div className="result" id="cbResult" hidden>
+    <div className="modal battle-result" id="cbResult" hidden>
       {v && S ? <Sheet S={S} cardRef={card} decor={deco && deco.v === v ? deco : null} /> : null}
     </div>
   );

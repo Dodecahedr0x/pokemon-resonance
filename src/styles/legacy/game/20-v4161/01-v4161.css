@@ -3,72 +3,8 @@
 /* ===== resonance-living-johto layer ===== */
 /* ==== v4.16: living Johto ==== */
 /* --- Home: challenges between friends --- */
-html body .am-card .am-a {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-sm);
-}
-html body .am-nt {
-  margin: var(--space-xs) 0 0;
-  font-size: 12px;
-  color: var(--v4-tx2, #9fb0c4);
-}
-html body .am-card .am-lb {
-  display: grid;
-  gap: var(--space-2xs);
-  font-size: 13px;
-  font-weight: 700;
-  margin: var(--space-xs) 0 var(--space-sm);
-}
-html body .am-card input[type='text'] {
-  font: inherit;
-  font-size: 16px;
-  padding: var(--space-sm) var(--space-md);
-  border-radius: 10px;
-  border: 1px solid rgba(120, 200, 255, 0.3);
-  background: rgba(0, 0, 0, 0.3);
-  color: inherit;
-}
-html body .am-code {
-  width: 100%;
-  box-sizing: border-box;
-  font:
-    12px/1.35 ui-monospace,
-    Menlo,
-    Consolas,
-    monospace;
-  word-break: break-all;
-  padding: var(--space-sm);
-  margin: var(--space-sm) 0 var(--space-sm);
-  border-radius: 10px;
-  border: 1px solid rgba(255, 215, 94, 0.45);
-  background: rgba(0, 0, 0, 0.35);
-  color: #fff3c4;
-  resize: vertical;
-  user-select: all;
-  -webkit-user-select: all;
-}
-html body #amiColle.am-code {
-  user-select: text;
-  -webkit-user-select: text;
-  font-size: 16px;
-}
-html body .am-err {
-  min-height: 1em;
-  margin: 0 0 var(--space-sm);
-  font-size: 13px;
-  color: #ffb4a8;
-}
 
 /* --- Day Care: the couple --- */
-html body .exp-d.on {
-  border-color: #7ac74c;
-  background: rgba(122, 199, 76, 0.14);
-}
-html body .her-mvc .chip {
-  background: rgba(122, 199, 76, 0.2);
-  color: #b8f08f;
-}
 html body .res-egg {
   width: 22px;
   height: 22px;
@@ -83,23 +19,6 @@ html body .dom-cr {
   margin-right: 0.25em;
   color: #ffd75e;
   filter: drop-shadow(0 0 4px rgba(255, 200, 60, 0.8));
-}
-html body .enc-card.dom {
-  box-shadow:
-    0 0 0 2px rgba(255, 196, 64, 0.7),
-    0 0 50px rgba(255, 170, 40, 0.35);
-}
-html body .enc-card.dom .enc-cr {
-  transform: scale(1.18);
-  filter: drop-shadow(0 0 14px rgba(255, 190, 60, 0.75));
-}
-html body .enc-card.dom .enc-t {
-  color: #ffd75e;
-}
-html body .enc-dom {
-  margin: var(--space-2xs) 0 0;
-  font-size: 13px;
-  color: #ffe6a8;
 }
 html body #bSvg .tok.dom .tok-halo {
   stroke: #ffb02e;

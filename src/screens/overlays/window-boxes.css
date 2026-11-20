@@ -1,0 +1,208 @@
+/* Overlays › the small picker windows: expedition, Daycare and companion choice (.picker-list / .picker-option), TM
+   learning (TmBox.jsx, .tm-*), friend card (FriendBox.jsx, .friend-*), the new-game warning (NewGameConfirm.jsx) and
+   the move cards for a TM or an inherited move. */
+
+.tm-card {
+  width: min(560px, 100%);
+}
+.tm-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-sm);
+}
+.tm-option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-sm);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.04);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  min-width: 0;
+}
+.tm-option:not([disabled]):hover {
+  border-color: #ffe17b;
+  background: rgba(255, 215, 94, 0.1);
+}
+.tm-option:not([disabled]):focus-visible {
+  border-color: #ffe17b;
+  background: rgba(255, 215, 94, 0.1);
+}
+.tm-option[disabled] {
+  cursor: default;
+}
+.tm-option.is-incompatible {
+  opacity: 0.45;
+}
+.tm-option span {
+  display: grid;
+  gap: var(--space-3xs);
+  min-width: 0;
+}
+.tm-option b {
+  font-size: 14px;
+}
+.tm-option em {
+  font-style: normal;
+  font-size: 11.5px;
+  color: var(--color-text-muted);
+}
+.tm-move .chip {
+  background: rgba(255, 215, 94, 0.18);
+  color: #ffe17b;
+}
+.tm-move .button {
+  margin-top: var(--space-xs);
+}
+@media (max-width: 420px) {
+  .tm-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.picker-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-sm);
+  margin: var(--space-sm) 0;
+}
+.picker-option {
+  display: grid;
+  gap: var(--space-3xs);
+  justify-items: start;
+  padding: var(--space-sm);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.04);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.picker-option:hover {
+  border-color: #ffe17b;
+}
+.picker-option:focus-visible {
+  border-color: #ffe17b;
+}
+.picker-option em {
+  font-style: normal;
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+@media (max-width: 420px) {
+  .picker-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.companion-bonuses {
+  display: grid;
+  gap: var(--space-2xs);
+  margin-top: var(--space-md);
+  font-size: 13px;
+}
+.companion-bonuses span {
+  color: var(--color-text-soft);
+}
+.friend-card .friend-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+.friend-note {
+  margin: var(--space-xs) 0 0;
+  font-size: 12px;
+  color: var(--color-text-soft);
+}
+.friend-card .friend-label {
+  display: grid;
+  gap: var(--space-2xs);
+  font-size: 13px;
+  font-weight: 700;
+  margin: var(--space-xs) 0 var(--space-sm);
+}
+.friend-card input[type='text'] {
+  font: inherit;
+  font-size: 16px;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: 10px;
+  border: 1px solid rgba(120, 200, 255, 0.3);
+  background: rgba(0, 0, 0, 0.3);
+  color: inherit;
+}
+.friend-code {
+  width: 100%;
+  box-sizing: border-box;
+  font:
+    12px/1.35 ui-monospace,
+    Menlo,
+    Consolas,
+    monospace;
+  word-break: break-all;
+  padding: var(--space-sm);
+  margin: var(--space-sm) 0 var(--space-sm);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 215, 94, 0.45);
+  background: rgba(0, 0, 0, 0.35);
+  color: #fff3c4;
+  resize: vertical;
+  user-select: all;
+  -webkit-user-select: all;
+}
+.friend-code.is-paste {
+  user-select: text;
+  -webkit-user-select: text;
+  font-size: 16px;
+}
+.friend-error {
+  min-height: 1em;
+  margin: 0 0 var(--space-sm);
+  font-size: 13px;
+  color: #ffb4a8;
+}
+.picker-option.is-selected {
+  border-color: #7ac74c;
+  background: rgba(122, 199, 76, 0.14);
+}
+.inherited-move .chip {
+  background: rgba(122, 199, 76, 0.2);
+  color: #b8f08f;
+}
+.new-game {
+  position: fixed;
+  inset: 0;
+  z-index: 400;
+  display: grid;
+  place-items: center;
+  padding: var(--space-lg);
+}
+.new-game-scrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(2, 6, 10, 0.72);
+}
+.new-game-card {
+  position: relative;
+  width: min(440px, 100%);
+  padding: var(--space-lg);
+  border-radius: 18px;
+  background: linear-gradient(145deg, #173a50, #0a1d2b);
+  border: 1px solid rgba(255, 215, 94, 0.45);
+}
+.new-game-card p {
+  margin: var(--space-sm) 0 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #d4e2ec;
+}
+.new-game-card .new-game-warning {
+  color: #ffd9a0;
+}
+.new-game-actions {
+  display: grid;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+}

@@ -1,21 +1,4 @@
 /* encounter */
-.enc .enc-card {
-  width: min(440px, 100%);
-  max-height: 92vh;
-  overflow-y: auto;
-  display: grid;
-  gap: var(--space-md);
-  justify-items: center;
-  text-align: center;
-  padding: var(--space-2xl) var(--space-2xl);
-  border-radius: 26px;
-  border: 1px solid var(--line2);
-  background:
-    radial-gradient(90% 70% at 50% 0%, color-mix(in srgb, var(--c) 34%, transparent), transparent 70%),
-    linear-gradient(180deg, var(--s2), var(--s1));
-  box-shadow: var(--sh);
-  animation: encIn 0.6s var(--ease) both;
-}
 @keyframes encIn {
   0% {
     transform: scale(0.6);
@@ -29,25 +12,7 @@
     opacity: 1;
   }
 }
-.enc-t {
-  font-family: var(--f-d);
-  font-stretch: 112%;
-  font-weight: 750;
-  font-size: 18px;
-}
-.enc-cr svg {
-  width: 150px;
-  height: 150px;
-  overflow: visible;
-}
 
-.enc-a {
-  display: flex;
-  gap: var(--space-sm);
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-top: var(--space-2xs);
-}
 /* Pokédex */
 .seg {
   display: flex;

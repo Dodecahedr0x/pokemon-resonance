@@ -13,7 +13,7 @@ import Button from '../../components/Button.jsx';
 export default function TdrBox() {
   const s = useOverlay('tdr');
   return (
-    <div className="result tower-box" id="tdrBox" hidden>
+    <div className="modal tower-box" id="tdrBox" hidden>
       {s && (s.mode === 'reward' ? <Reward key={s.v} {...s} /> : <Choice key={s.v} {...s} />)}
     </div>
   );

@@ -30,15 +30,6 @@ html body #bSvg .tok.fres .tok-rim {
 html body b.cp-h {
   color: #ff7aa8;
 }
-html body .cp-bl {
-  display: grid;
-  gap: var(--space-2xs);
-  margin-top: var(--space-md);
-  font-size: 13px;
-}
-html body .cp-bl span {
-  color: var(--v4-tx2, #9fb0c4);
-}
 
 /* --- Pokégear --- */
 

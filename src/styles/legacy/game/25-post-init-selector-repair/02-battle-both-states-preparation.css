@@ -76,17 +76,9 @@
       wanted by v4.24 (the background keeps the type color) */
 
 /* 2. shinies: real shiny artwork (loaded by the game), without the artificial tint */
-html:is(:root, #r9) body .enc-card.shiny .enc-cr img.art-sh,
-html:is(:root, #r9) body .pe-prise.shiny img.art-sh {
-  filter: drop-shadow(0 0 12px rgba(255, 224, 139, 0.52)) drop-shadow(0 10px 12px rgba(0, 0, 0, 0.35)) !important;
-}
 
 /*    offline or while loading: the game's shiny tint stays visible
       (the v4.23 layers put a lone shadow on these images and erased the tint) */
-html:is(:root, #r9) body .enc-card.shiny .enc-cr img:not(.art-sh) {
-  filter: hue-rotate(var(--sh, 120deg)) saturate(1.25) drop-shadow(0 0 8px rgba(255, 233, 160, 0.55))
-    drop-shadow(0 10px 12px rgba(0, 0, 0, 0.35)) !important;
-}
 
 /*    home: the v4.22 halo overflowed by 5 % on the right (the page slid sideways on phone) */
 

@@ -41,6 +41,9 @@
 @import './shell/bottom-nav.css' layer(screens);
 @import './shell/phone-menu.css' layer(screens);
 @import './shell/launch-screen.css' layer(screens);
+@import '../screens/overlays/modal.css' layer(screens);
+@import '../screens/overlays/encounter.css' layer(screens);
+@import '../screens/overlays/window-boxes.css' layer(screens);
 @import '../screens/overlays/dialogue.css' layer(screens);
 @import '../screens/overlays/intro.css' layer(screens);
 @import '../screens/overlays/starter.css' layer(screens);

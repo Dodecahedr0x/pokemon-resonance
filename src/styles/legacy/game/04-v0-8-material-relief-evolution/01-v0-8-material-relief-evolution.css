@@ -36,8 +36,7 @@ body {
 .mvc,
 .ptm,
 .res-card,
-.ep-card,
-.enc .enc-card {
+.ep-card {
   border: 1px solid transparent;
   background:
     var(--hatch) padding-box,
