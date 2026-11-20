@@ -48,14 +48,6 @@
   grid-template-columns: repeat(4, 1fr);
 }
 /* preparation */
-.ptm {
-  cursor: default;
-}
-.ptm .pcs {
-  font-family: var(--f-m);
-  font-size: 11px;
-  color: var(--gold);
-}
 .pt > .button {
   justify-self: start;
 }

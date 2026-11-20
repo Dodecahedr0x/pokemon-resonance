@@ -60,8 +60,7 @@ html body .section-title {
   font-size: 15px;
   color: #fff;
 }
-.card-count,
-.v4-pcs {
+.card-count {
   margin-left: auto;
   font: 700 12px/1 var(--f-d);
   color: var(--v4-tx2);
@@ -69,8 +68,4 @@ html body .section-title {
   border: 1px solid rgba(120, 200, 255, 0.2);
   padding: var(--space-2xs) var(--space-sm);
   border-radius: 999px;
-}
-.v4-pcs {
-  margin-left: var(--space-xs);
-  color: #ffd75e;
 }

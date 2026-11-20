@@ -82,8 +82,3 @@
   border-radius: 0;
   background: linear-gradient(135deg, #ffb08a, #e5484d);
 }
-.ptm em.ch {
-  font-family: var(--f-m);
-  font-size: 10.5px;
-  letter-spacing: 0.04em;
-}

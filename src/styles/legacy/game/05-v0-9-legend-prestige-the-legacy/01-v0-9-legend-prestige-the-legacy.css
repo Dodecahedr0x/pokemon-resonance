@@ -168,7 +168,6 @@ body {
 .rule,
 .scn,
 .mvc,
-.ptm,
 .st-evo,
 .st-line,
 .qc,
@@ -195,7 +194,6 @@ body {
   border-radius: var(--rl);
 }
 .mvc,
-.ptm,
 .st-evo,
 .st-line,
 .wx,
@@ -204,8 +202,7 @@ body {
   border-radius: var(--r);
 }
 .rule[open],
-.scn.on,
-.ptm.on {
+.scn.on {
   background:
     linear-gradient(180deg, rgba(212, 175, 106, 0.12), rgba(212, 175, 106, 0.02)) padding-box,
     var(--slab) padding-box,

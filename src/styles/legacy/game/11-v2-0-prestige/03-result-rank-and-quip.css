@@ -2,60 +2,6 @@
 /* ranks on cards */
 /* --- League faces --- */
 /* campaign: the current chapter */
-.cp-ch {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  gap: var(--space-lg);
-  align-items: center;
-  margin: var(--space-lg) 0 var(--space-2xs);
-  padding: var(--space-md) var(--space-lg);
-  border-radius: var(--r);
-  border: 1px solid transparent;
-  background:
-    radial-gradient(70% 140% at 0% 50%, rgba(212, 175, 106, 0.14), transparent 70%) padding-box,
-    linear-gradient(180deg, #121317, #0b0b0e) padding-box,
-    var(--edge) border-box;
-}
-.cp-chn {
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
-  font-family: var(--f-m);
-  font-size: 10px;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--gold);
-  padding: var(--space-3xs) 0;
-  border-right: 1px solid rgba(212, 175, 106, 0.35);
-  padding-right: var(--space-sm);
-}
-.cp-ch div {
-  display: grid;
-  gap: var(--space-3xs);
-  min-width: 0;
-}
-.cp-ch b {
-  font-family: var(--f-d);
-  font-weight: 700;
-  font-size: 18px;
-  letter-spacing: 0.04em;
-}
-.cp-ch em {
-  font-style: normal;
-  font-family: var(--f-m);
-  font-size: 10.5px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--mut);
-}
-.cp-ch q {
-  margin-top: var(--space-2xs);
-  font-family: var(--f-d);
-  font-style: italic;
-  font-size: 14px;
-  line-height: 1.45;
-  color: var(--tx2);
-  quotes: '« ' ' »';
-}
 /* --- Guide: the universe --- */
 /* --- keyboard shortcuts --- */
 .kbd {

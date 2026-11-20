@@ -46,12 +46,3 @@
   opacity: 0.5;
   background: radial-gradient(circle, var(--qg), transparent 65%);
 }
-.qk-grass {
-  --qg: rgba(120, 200, 80, 0.16);
-}
-.qk-team {
-  --qg: rgba(229, 72, 77, 0.14);
-}
-.qk-guide {
-  --qg: rgba(91, 155, 255, 0.16);
-}

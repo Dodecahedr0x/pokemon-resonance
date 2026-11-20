@@ -33,8 +33,7 @@ body {
 .panel,
 .rule,
 .scn,
-.mvc,
-.ptm {
+.mvc {
   border: 1px solid transparent;
   background:
     var(--hatch) padding-box,
@@ -52,8 +51,7 @@ body {
     linear-gradient(165deg, rgba(227, 192, 122, 0.45), rgba(255, 255, 255, 0.04) 40%, rgba(227, 192, 122, 0.25))
       border-box;
 }
-.scn.on,
-.ptm.on {
+.scn.on {
   background:
     linear-gradient(180deg, rgba(227, 192, 122, 0.12), rgba(227, 192, 122, 0.03)) padding-box,
     var(--surf) padding-box,

@@ -55,8 +55,7 @@ body::before {
   }
 }
 .sg-k,
-.hh-chips,
-.cp-track {
+.hh-chips {
   letter-spacing: 0.14em !important;
 }
 .section-title {

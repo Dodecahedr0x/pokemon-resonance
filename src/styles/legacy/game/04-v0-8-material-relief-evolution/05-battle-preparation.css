@@ -45,12 +45,6 @@
 .scn::after {
   z-index: 0;
 }
-.ptm em.ch {
-  color: var(--gold-l);
-}
-.ptm em.st {
-  color: var(--mut);
-}
 /* ---------- BATTLE: arena ---------- */
 .bt {
   border: 1px solid transparent;

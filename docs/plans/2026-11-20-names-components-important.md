@@ -313,3 +313,7 @@ Each step is one commit (or a few), on its own, playable at every point.
   New tokens `--color-cell`, `--color-cell-river`, `--color-cell-wet`. Snapshots with four groups (base, selection,
   cell states, marks) are identical at 375 px; at 1280 px only the tokens' idle animation phase differs, from the
   reload.
+- Dead legacy rules: removed. A scan of every legacy selector against the class and id names the code can produce
+  (every word in the JS, JSX and `index.html`, plus the prefixes of class names built by concatenation such as
+  `'bio-' + …`) found 136 selector parts that need a class nothing produces any more (`ptm`, `tc-*`, `cp-*`, `v4t-*`,
+  `v4q-*`, `ob-*`, `qk-*`…). They are gone, and so are the 11 legacy files left empty.

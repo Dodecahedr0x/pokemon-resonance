@@ -180,12 +180,3 @@
 }
 /* synergies */
 /* Pokédex */
-.pcs .pt-role {
-  display: inline-flex;
-  vertical-align: -3px;
-  margin-right: var(--space-2xs);
-}
-.pcs .pt-role .role-icon {
-  width: 14px;
-  height: 14px;
-}

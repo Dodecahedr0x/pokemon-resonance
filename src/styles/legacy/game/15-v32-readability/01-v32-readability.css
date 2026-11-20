@@ -36,12 +36,10 @@ html body .hh-chips span {
   html body .pill:not(.prep-row .pill),
   html body .cnt,
   html body dt,
-  html body .tc-k span,
   html body .chip {
     font-size: 11px !important;
   }
   /* informational text */
-  html body #qkTeam,
   html body #bPhase,
   html body .seg button {
     font-size: 11.5px !important;
