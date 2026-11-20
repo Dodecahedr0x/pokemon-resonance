@@ -342,6 +342,10 @@ Each step is one commit (or a few), on its own, playable at every point.
   `.board.is-vertical`. Keyframes `round-banner-enter`. The phone layout's `width: auto !important` had always cancelled
   the board width that `fitPhoneBattle()` wrote inline, so that dead measuring code is gone and the board simply takes
   its frame's width. Snapshots identical at both widths apart from keyframe names and token idle timing.
+- Tile sheet: done. `src/screens/combat/battle/tile-info.css`. `.tile-info` (`.is-top`) with `-header`, `-swatch`,
+  `-close`, `-body`, `-rules`, `-label`, `-reactions`, `-dangers`, `-context`, `-pokemon` (`.is-ally`, `.is-enemy`),
+  `-pokemon-header`, `-pokemon-stats`, `-legend` (`.legend-reach`, `.legend-danger`). Its button keeps the 40 px phone
+  tap target. Snapshots identical at both widths.
   A third pass that ignores one- to three-letter prefixes (a template such as `s${…}` no longer keeps every class
   starting with « s » alive) removed 142 more parts: the old scenario cards (`.scn`), the splash screen (`.sp-*`,
   `.splash`), the old Pokédex sheet (`.st-*`), `.seg`, `.frise`… and one more file.

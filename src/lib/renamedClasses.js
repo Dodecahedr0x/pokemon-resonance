@@ -780,6 +780,21 @@ export const RENAMED_CLASSES = {
   'board-weather-grele': 'board-weather.is-hail',
   'board-weather-sable': 'board-weather.is-sandstorm',
   'board-weather-soleil': 'board-weather.is-sun',
+  'tile-info-h': 'tile-info-header',
+  'tile-info-sw': 'tile-info-swatch',
+  'tile-info-x': 'tile-info-close',
+  'tile-info-b': 'tile-info-body',
+  'tile-info-r': 'tile-info-rules',
+  'tile-info-k': 'tile-info-label',
+  'tile-info-rx': 'tile-info-reactions',
+  'tile-info-d': 'tile-info-dangers',
+  'tile-info-c': 'tile-info-context',
+  'tile-info-u': 'tile-info-pokemon',
+  'tile-info-uh': 'tile-info-pokemon-header',
+  'tile-info-ul': 'tile-info-pokemon-stats',
+  'tile-info-leg': 'tile-info-legend',
+  'lg-reach': 'legend-reach',
+  'lg-danger': 'legend-danger',
 };
 
 const OLD_CLASS = new RegExp(

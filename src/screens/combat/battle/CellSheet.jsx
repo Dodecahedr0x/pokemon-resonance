@@ -3,7 +3,7 @@ import { Html } from '../../../lib/html.jsx';
 import { tileSheet, useBattleVersion } from './battleStore.js';
 
 import Button from '../../../components/Button.jsx';
-// Cell sheet (#tileInfo, v4.44): long press or magnifier on a cell. Reading taken by tileSheet (077),
+// Cell sheet (#tile-info): long press or magnifier on a cell. Reading taken by tileSheet (077),
 // position (top / bottom) by placeSheet. Created on first opening, then hidden (hidden attribute).
 export default function CellSheet() {
   useBattleVersion('tileInfo');
@@ -15,30 +15,30 @@ export default function CellSheet() {
   return (
     <aside
       id="tile-info"
-      className={'tile-info' + (F.isTop ? ' haut' : '')}
+      className={'tile-info' + (F.isTop ? ' is-top' : '')}
       role="dialog"
       aria-label="Détail de la case"
       hidden={F.hidden}
       style={{ top: F.top, bottom: F.bottom }}
     >
-      <header className="tile-info-h">
-        <i className="tile-info-sw" style={{ background: c.sw }} />
+      <header className="tile-info-header">
+        <i className="tile-info-swatch" style={{ background: c.sw }} />
         <b>Case {c.displayName}</b>
         <span>{c.terrain}</span>
-        <button type="button" className="tile-info-x" data-tile-info="x" aria-label="Fermer">
+        <button type="button" className="tile-info-close" data-tile-info="x" aria-label="Fermer">
           ×
         </button>
       </header>
-      <div className="tile-info-b">
-        <ul className="tile-info-r">
+      <div className="tile-info-body">
+        <ul className="tile-info-rules">
           {c.seg.map((s, i) => (
             <li key={i}>{s}</li>
           ))}
         </ul>
         {c.rx.length > 0 && (
           <>
-            <p className="tile-info-k">Réactions sur cette case</p>
-            <div className="tile-info-rx">
+            <p className="tile-info-label">Réactions sur cette case</p>
+            <div className="tile-info-reactions">
               {c.rx.map(([cat, t], i) => (
                 <span key={i} className={'chip cat-' + cat}>
                   <i />
@@ -49,14 +49,14 @@ export default function CellSheet() {
           </>
         )}
         {c.dg.length > 0 && (
-          <ul className="tile-info-d">
+          <ul className="tile-info-dangers">
             {c.dg.map((s, i) => (
               <li key={i}>{s}</li>
             ))}
           </ul>
         )}
         {c.cx.length > 0 && (
-          <ul className="tile-info-c">
+          <ul className="tile-info-context">
             {c.cx.map((s, i) => (
               <li key={i}>{s}</li>
             ))}
@@ -65,7 +65,7 @@ export default function CellSheet() {
         {c.u && <Pokemon v={c.u} />}
         {c.leg && (
           // new sheet: the legend restarts collapsed, like the old innerHTML
-          <details key={F.n} className="tile-info-leg">
+          <details key={F.n} className="tile-info-legend">
             <summary>Légende du plateau</summary>
             <ul>
               {c.leg.map(([col, displayName, ruleDef], i) => (
@@ -76,12 +76,12 @@ export default function CellSheet() {
                 </li>
               ))}
               <li>
-                <i className="lg-reach" />
+                <i className="legend-reach" />
                 <b>Contour bleu</b>
                 <span>Votre Pokémon choisi peut s’y déplacer.</span>
               </li>
               <li>
-                <i className="lg-danger" />
+                <i className="legend-danger" />
                 <b>Contour orange</b>
                 <span>Visée par une attaque adverse annoncée.</span>
               </li>
@@ -101,15 +101,15 @@ export default function CellSheet() {
 // Pokémon present on the cell.
 function Pokemon({ v }) {
   return (
-    <div className={'tile-info-u ' + (v.e ? 'pe' : 'pa')}>
-      <div className="tile-info-uh">
+    <div className={'tile-info-pokemon ' + (v.e ? 'is-enemy' : 'is-ally')}>
+      <div className="tile-info-pokemon-header">
         <b>{v.n}</b>
         <span className="tile-info-side">{v.e ? 'Adversaire' : 'Allié'}</span>
       </div>
       <div className="tile-info-hp">
         <i className={v.hpc} style={{ width: v.pv + '%' }} />
       </div>
-      <div className="tile-info-ul">
+      <div className="tile-info-pokemon-stats">
         <span>{v.ko ? 'K.O.' : v.hp + ' / ' + v.mhp + ' PV'}</span>
         <Html html={v.t.map(tb).join('')} />
         {v.badge && <span className={'status-badge status-' + v.stc}>{v.badge}</span>}
