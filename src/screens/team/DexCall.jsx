@@ -17,15 +17,15 @@ export default function DexCall({ v }) {
     () => !(typeof matchMedia === 'function' && matchMedia('(max-width:700px)').matches)
   );
   return (
-    <div className="dex-call" id="dexCall">
-      <div className="dc-row">
+    <div className="team-recruits" id="dexCall">
+      <div className="team-recruits-row">
         <span
           className="lbl-s"
           title="Formes déjà évoluées, recrutées directement : plus puissantes tout de suite, mais plus chères."
         >
           Recrues confirmées
         </span>
-        <div className="dc-stars">
+        <div className="team-recruits-list">
           {STARS.map(id => {
             const m = BY[id],
               sel = squad.includes(id);
@@ -33,7 +33,7 @@ export default function DexCall({ v }) {
               <button
                 key={id}
                 type="button"
-                className={`dc-s${sel ? ' on' : ''}`}
+                className={`team-recruit${sel ? ' is-selected' : ''}`}
                 data-stg={id}
                 aria-pressed={sel}
                 disabled={!inBox(id)}
@@ -49,18 +49,18 @@ export default function DexCall({ v }) {
       </div>
       <Legends />
       {/* Saved teams and formations: collapsed on phone, where they pushed the grid below the screen */}
-      <details className="dc-more" open={isOpen} onToggle={e => setOpen(e.currentTarget.open)}>
+      <details className="team-recruits-more" open={isOpen} onToggle={e => setOpen(e.currentTarget.open)}>
         <summary>Équipes enregistrées et formations</summary>
         {/* rebuilt on every render, like the old innerHTML: « Sûr ? » (Sure?) is written by the engine */}
         <SavedSquads key={v} />
-        <div className="dc-row">
+        <div className="team-recruits-row">
           <span className="lbl-s">Formations</span>
-          <div className="dc-f">
+          <div className="team-recruits-buttons">
             {Object.entries(PRESETS).map(([k, p]) => (
               <button
                 key={k}
                 type="button"
-                className={`b b-sm${p.f ? ' form' : ''}`}
+                className="b b-sm"
                 data-pf={k}
                 title={p.synergyText ? 'Synergies : ' + p.synergyText : ''}
               >
@@ -81,11 +81,11 @@ function Legends() {
     return null;
   }
   return (
-    <div className="dc-row">
+    <div className="team-recruits-row">
       <span className="lbl-s" title="Légendes capturées : 8 PC chacune.">
         Légendes
       </span>
-      <div className="dc-stars">
+      <div className="team-recruits-list">
         {L.map(x => {
           const m = BY[x.id],
             sel = squad.includes(x.id);
@@ -93,7 +93,7 @@ function Legends() {
             <button
               key={x.id}
               type="button"
-              className={`dc-s${sel ? ' on' : ''}`}
+              className={`team-recruit${sel ? ' is-selected' : ''}`}
               data-stg={x.id}
               data-species-sheet={x.id}
               aria-pressed={sel}
@@ -114,11 +114,11 @@ function Legends() {
 function SavedSquads() {
   const T = PROFILE.savedTeams || [];
   return (
-    <div className="dc-row team-save">
+    <div className="team-recruits-row team-saved-teams">
       <span className="lbl-s">Mes équipes</span>
-      <div className="dc-f">
+      <div className="team-recruits-buttons">
         {T.map((t, i) => (
-          <span key={i} className="team-save-c">
+          <span key={i} className="team-saved-team">
             <button
               type="button"
               className="b b-sm"
@@ -130,7 +130,7 @@ function SavedSquads() {
             </button>
             <button
               type="button"
-              className="team-save-x"
+              className="team-saved-team-delete"
               data-team-save="suppr"
               data-i={i}
               aria-label={`Supprimer ${t.n}`}
@@ -140,7 +140,7 @@ function SavedSquads() {
           </span>
         ))}
         {TEAM_NAME_EDIT ? (
-          <span className="team-save-n">
+          <span className="team-saved-team-new">
             <input
               type="text"
               id="team-name"

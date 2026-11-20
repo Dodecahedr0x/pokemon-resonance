@@ -32,6 +32,11 @@
   --font-mono: var(--f-m);
   /* narrow tabular digits (Pokédex numbers, scores) */
   --font-numeric: var(--f-n);
+  /* text sizes that follow the accessibility text-size setting */
+  --font-size-sm: var(--t-s);
+  --font-size-xs: var(--t-xs);
+  /* minimum touch target */
+  --tap-target: var(--tap);
 
   /* hover lift on cards and rows */
   --ease-lift: cubic-bezier(0.2, 0.75, 0.25, 1);

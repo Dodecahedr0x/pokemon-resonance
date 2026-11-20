@@ -1,0 +1,197 @@
+/* Panel above the family grid (#dexCall, DexCall.jsx): confirmed recruits and captured legends as pills,
+   then a collapsible part (open by default except on phones) with saved teams and formations.
+   Each row is a label (.lbl-s) and a horizontally scrolling list. Clicks: engine listeners on data-*. */
+
+.team-recruits {
+  display: grid;
+  gap: var(--space-sm);
+  margin: 0 0 var(--space-md);
+  padding: var(--space-md);
+  border: 1px solid transparent;
+  border-radius: 20px;
+  background:
+    linear-gradient(180deg, #17181d 0%, #111216 55%, #0d0e11 100%) padding-box,
+    linear-gradient(
+        160deg,
+        rgba(242, 221, 168, 0.42),
+        rgba(212, 175, 106, 0.08) 30%,
+        rgba(201, 206, 214, 0.06) 62%,
+        rgba(212, 175, 106, 0.3)
+      )
+      border-box;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.55),
+    inset 0 0 0 2px rgba(212, 175, 106, 0.05),
+    0 26px 50px -32px #000;
+}
+.team-recruits-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  min-width: 0;
+}
+.team-recruits-row > .lbl-s {
+  flex: none;
+  width: 150px;
+}
+
+/* ---------- Recruit pills: medal, name, cost ---------- */
+.team-recruits-list {
+  display: flex;
+  gap: var(--space-xs);
+  min-width: 0;
+  padding-bottom: var(--space-3xs);
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+.team-recruit {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: var(--space-xs);
+  min-width: 0;
+  padding: var(--space-2xs) var(--space-sm) var(--space-2xs) var(--space-xs);
+  border: 1px solid rgba(212, 175, 106, 0.28);
+  border-radius: 999px;
+  background: #0e0f12;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.team-recruit b {
+  display: block;
+  overflow: hidden;
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+/* cost in PC */
+.team-recruit em {
+  display: block;
+  padding: 1px var(--space-xs);
+  border-radius: 999px;
+  background: rgba(212, 175, 106, 0.12);
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-style: normal;
+}
+/* in the team */
+.team-recruit.is-selected {
+  border-color: #e9c97e;
+  background: linear-gradient(180deg, rgba(212, 175, 106, 0.24), rgba(212, 175, 106, 0.06));
+}
+/* not caught yet */
+.team-recruit:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ---------- Collapsible part: saved teams and formations ---------- */
+.team-recruits-more {
+  display: grid;
+  gap: var(--space-sm);
+  min-width: 0;
+}
+.team-recruits-more > summary {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  min-height: var(--tap-target);
+  padding-top: var(--space-2xs);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  list-style: none;
+  cursor: pointer;
+}
+.team-recruits-more > summary::-webkit-details-marker {
+  display: none;
+}
+/* chevron */
+.team-recruits-more > summary::after {
+  content: '';
+  width: 8px;
+  height: 8px;
+  margin-left: auto;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg) translateY(-2px);
+  transition: transform 0.2s;
+}
+.team-recruits-more[open] > summary::after {
+  transform: rotate(-135deg) translateY(-2px);
+}
+/* a row of buttons: saved teams, formations */
+.team-recruits-buttons {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: var(--space-xs);
+  padding-bottom: var(--space-3xs);
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+.team-recruits-buttons .b {
+  flex: none;
+}
+
+/* ---------- Saved teams: load button with a delete cross, then "+ Enregistrer" or the name field ---------- */
+.team-saved-teams .team-recruits-buttons {
+  flex-wrap: wrap;
+}
+.team-saved-team {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3xs);
+}
+.team-saved-team-delete {
+  flex: none;
+  width: 26px;
+  height: 26px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.3);
+  color: inherit;
+  font: inherit;
+  line-height: 1;
+  cursor: pointer;
+}
+.team-saved-team-new {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+.team-saved-team-new input {
+  width: 150px;
+  max-width: 50vw;
+  height: 32px;
+  padding: 0 var(--space-sm);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 9px;
+  background: rgba(0, 0, 0, 0.3);
+  color: inherit;
+  font: inherit;
+  font-size: 13px;
+}
+
+@media (max-width: 700px) {
+  .team-recruits-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-xs);
+  }
+  .team-recruits-row > .lbl-s {
+    width: auto;
+  }
+  .team-recruit {
+    min-height: 40px;
+  }
+  .team-recruit em {
+    font-size: var(--font-size-xs);
+  }
+}

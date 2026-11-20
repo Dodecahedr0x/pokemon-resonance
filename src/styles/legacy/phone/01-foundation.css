@@ -93,37 +93,3 @@ html body .activity-bar > #x2470 .defense-gym-i {
 }
 
 /* ================= Team: saved teams and collapsible formations ================= */
-.dex-call .dc-more {
-  display: grid;
-  gap: var(--space-sm);
-  min-width: 0;
-}
-.dex-call .dc-more > summary {
-  display: flex;
-  align-items: center;
-  gap: var(--space-sm);
-  min-height: var(--tap);
-  cursor: pointer;
-  list-style: none;
-  font-size: var(--t-s);
-  font-weight: 600;
-  color: #c9d6e2;
-  border-top: 1px solid var(--act-line);
-  padding-top: var(--space-2xs);
-}
-.dex-call .dc-more > summary::-webkit-details-marker {
-  display: none;
-}
-.dex-call .dc-more > summary::after {
-  content: '';
-  margin-left: auto;
-  width: 8px;
-  height: 8px;
-  border-right: 2px solid currentColor;
-  border-bottom: 2px solid currentColor;
-  transform: rotate(45deg) translateY(-2px);
-  transition: transform 0.2s;
-}
-.dex-call .dc-more[open] > summary::after {
-  transform: rotate(-135deg) translateY(-2px);
-}

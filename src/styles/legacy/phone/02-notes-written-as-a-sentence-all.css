@@ -157,9 +157,6 @@ p.v4-note {
     min-height: 40px;
     padding-inline: var(--space-md) !important;
   }
-  html body #pokedex .dc-s {
-    min-height: 40px;
-  }
   /* Pokédex filters: the two lists fill their row */
 
   /* ---------- Guide: "Getting started" steps use the full card width ----------
@@ -231,9 +228,6 @@ p.v4-note {
     min-height: 40px;
   }
   html body .page .lbl-s {
-    font-size: var(--t-xs) !important;
-  }
-  html body #pokedex .dc-s em {
     font-size: var(--t-xs) !important;
   }
 }

@@ -1,41 +1,4 @@
 /* saved teams */
-.team-save .dc-f {
-  flex-wrap: wrap;
-}
-.team-save-c {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-3xs);
-}
-.team-save-x {
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  background: rgba(0, 0, 0, 0.3);
-  color: inherit;
-  font: inherit;
-  line-height: 1;
-  cursor: pointer;
-  flex: none;
-}
-.team-save-n {
-  display: inline-flex;
-  gap: var(--space-xs);
-  align-items: center;
-}
-.team-save-n input {
-  width: 150px;
-  max-width: 50vw;
-  height: 32px;
-  border-radius: 9px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  background: rgba(0, 0, 0, 0.3);
-  color: inherit;
-  padding: 0 var(--space-sm);
-  font: inherit;
-  font-size: 13px;
-}
 .saved-squads {
   display: flex;
   flex-wrap: wrap;
