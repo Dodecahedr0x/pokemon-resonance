@@ -61,9 +61,7 @@ a:focus-visible {
 .panel,
 .case,
 .resume,
-.sel,
-.v4-map,
-.v4-map-side > * {
+.sel {
   border-color: var(--rx-edge) !important;
   box-shadow:
     var(--rx-shadow),

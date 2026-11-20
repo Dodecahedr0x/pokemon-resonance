@@ -269,50 +269,6 @@
 }
 
 /* <style id="resonance-camp-tactics"> */
-/* v4.30 · regional maps: scrolling works again */
-html body #carte .v4-map-sc {
-  overflow-x: auto !important;
-  overflow-y: hidden !important;
-  -webkit-overflow-scrolling: touch;
-  touch-action: pan-x pan-y;
-  overscroll-behavior-x: contain;
-  scrollbar-width: none;
-}
-html body #carte .v4-map-sc::-webkit-scrollbar {
-  display: none;
-}
-html body #carte .v4-map {
-  position: relative;
-}
-.map-scroll {
-  position: absolute;
-  bottom: 12px;
-  z-index: 6;
-  width: 38px;
-  height: 38px;
-  opacity: 0.92;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  background: rgba(6, 20, 30, 0.86);
-  border: 1px solid rgba(120, 220, 255, 0.55);
-  color: #dff6ff;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
-  cursor: pointer;
-}
-.map-scroll.g {
-  left: 10px;
-}
-.map-scroll.d {
-  right: 10px;
-}
-.map-scroll[hidden] {
-  display: none;
-}
-.map-scroll svg {
-  width: 18px;
-  height: 18px;
-}
 
 /* bottom bar: 6 tabs */
 @media (max-width: 999px) {

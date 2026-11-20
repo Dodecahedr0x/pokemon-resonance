@@ -25,7 +25,7 @@ export default function Stage({ drawn, marksSel }) {
   }
   return (
     <div
-      className={'v4-map-st' + (ok ? ' paintmap-on' : '')}
+      className={'map-stage' + (ok ? ' has-painting' : '')}
       id="mapSt"
       data-reg={drawn ? rg : undefined}
       data-tod={drawn ? TOD : undefined}
@@ -45,28 +45,28 @@ export default function Stage({ drawn, marksSel }) {
           draggable={false}
           data-r={ok ? rg : undefined}
           src={ok ? Pt.url : undefined}
-          onLoad={e => e.currentTarget.classList.add('in')}
+          onLoad={e => e.currentTarget.classList.add('is-loaded')}
         />
       )}
       {drawn && (
         <div className="map-fx-wrap" aria-hidden="true">
           <div className="map-fx-svg">{ok && <Html html={LIVING_MAP.fxSvg(Pt)} />}</div>
           <div className="map-fx-anim">{ok && <Html html={LIVING_MAP.fxHtml(Pt)} />}</div>
-          <div className="map-fx-tint t-matin" />
-          <div className="map-fx-tint t-nuit" />
+          <div className="map-fx-tint is-morning" />
+          <div className="map-fx-tint is-night" />
           <div className="map-fx-wx" />
         </div>
       )}
       <div id="mapRoutes">{drawn && <Routes />}</div>
       {drawn && LIVING_MAP && (
-        <div className="fogveil-wrap" aria-hidden="true">
+        <div className="map-fog" aria-hidden="true">
           <Html html={LIVING_MAP.fogSvg(rg)} />
         </div>
       )}
       <div className="map-marks" id="mapMarks">
         {drawn && <Marks marksSel={marksSel} />}
       </div>
-      <svg className="map-comp" aria-hidden="true">
+      <svg className="map-compass" aria-hidden="true">
         <use href="#i-compass" />
       </svg>
       <span className="map-title">
@@ -112,12 +112,16 @@ function Routes() {
     <svg className="map-routes" viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
       <g fill="none" strokeLinecap="round">
         {pts.slice(1).map((b, i) => (
-          <path d={curvePath(pts[i], b, i)} className={`rt ${placeState(b) === 'lock' ? 'lk' : 'ok'}`} key={'c' + i} />
+          <path
+            d={curvePath(pts[i], b, i)}
+            className={'map-route' + (placeState(b) === 'lock' ? ' is-locked' : '')}
+            key={'c' + i}
+          />
         ))}
         {side.map(([a, b], i) => (
           <path
             d={curvePath(PL[a], PL[b], i + 1)}
-            className={`rt side ${placeState(PL[b]) === 'lock' ? 'lk' : 'ok'}`}
+            className={'map-route is-branch' + (placeState(PL[b]) === 'lock' ? ' is-locked' : '')}
             key={'s' + i}
           />
         ))}

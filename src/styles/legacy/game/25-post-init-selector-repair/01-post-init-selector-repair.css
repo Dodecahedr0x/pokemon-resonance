@@ -56,44 +56,6 @@ body {
 /* TEAM / DEX — collection cards with frame and depth */
 
 /* MAP — route actually moved into #carte by buildMap() */
-#carte .v4-map-wrap {
-  gap: var(--space-xl) !important;
-}
-#carte .v4-map {
-  border: 1px solid rgba(131, 226, 232, 0.42) !important;
-  border-radius: 28px !important;
-  padding: var(--space-md) !important;
-  background: linear-gradient(145deg, #1b4253, #071824) !important;
-  box-shadow:
-    0 32px 82px rgba(0, 0, 0, 0.48),
-    inset 0 1px rgba(255, 255, 255, 0.12) !important;
-}
-#carte .v4-map-sc {
-  overflow: hidden !important;
-  border-radius: 19px !important;
-}
-#carte .v4-map-st {
-  filter: drop-shadow(0 20px 26px rgba(0, 0, 0, 0.48)) !important;
-}
-#carte .map-comp {
-  filter: drop-shadow(0 0 10px rgba(131, 240, 239, 0.4));
-}
-#carte .map-title {
-  padding: var(--space-sm) var(--space-md) !important;
-  border: 1px solid rgba(131, 240, 239, 0.2) !important;
-  border-radius: 999px !important;
-  background: rgba(4, 18, 28, 0.72) !important;
-  backdrop-filter: blur(12px);
-}
-#carte .v4-mapinfo,
-#carte .v4-maplist {
-  border: 1px solid rgba(131, 221, 230, 0.3) !important;
-  border-radius: 22px !important;
-  background:
-    radial-gradient(ellipse at 100% 0%, rgba(222, 174, 86, 0.1), transparent 45%),
-    linear-gradient(150deg, #16384b, #081a27) !important;
-  box-shadow: 0 22px 48px rgba(0, 0, 0, 0.36) !important;
-}
 #carte .v4-wild {
   border: 1px solid rgba(103, 211, 160, 0.35) !important;
   border-radius: 24px !important;

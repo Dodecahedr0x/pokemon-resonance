@@ -99,3 +99,14 @@ Each step is one commit (or a few), on its own, playable at every point.
   legacy lines targeted Home elements that no longer exist (`.hm-hero`, `.hm-quick`, `.qk`, `.tcard`, `#campBox`,
   `.v4-mon`, `.v4-tile`, `.route` inside Home…) and were deleted with their keyframes; with the moved rules, ~2,000
   lines and 415 `!important` are gone. FriendBox keeps the shared `.am-a` / `.am-nt` rules in legacy.
+- 2 Map, part A (map panel): done. `src/screens/map/map.css` (header row, region tabs, layout, panel, scrolling
+  stage, arrows, compass, title plate), `map-marks.css` (routes, markers, finds, secret places, passer-by, roaming
+  beasts), `map-painting.css` (the painted map and its time-of-day, weather and fog layers, formerly
+  `legacy/living-map.css`, now deleted) and `map-info.css` (side column: encounter banner, place card, Elite Four
+  rows, place list). Classes are `.map-*` with `is-*` states (`is-next`, `is-locked`, `is-selected`, `is-branch`…);
+  the region SVGs are `.map-svg.is-kanto|is-johto|is-hoenn` and the effect layers `.map-fx-shadow`, `-cloud`,
+  `-sparkle`, `-puff`, `-birds`, `-lights`. ~1,200 legacy lines and 115 `!important` gone. Two accidental matches
+  disappear with the old names: the global sidebar rule `.side` hid the branch routes (`rt side`) below desktop
+  width, and the text rule `.d` greyed the east scroll arrow; both now look like their desktop / west twin.
+  Still shared in legacy: the state pill `.v4-pill` (Quests), the rank badge `.rk-t`, the tab skin (now listing
+  `.map-regions`). Part B (the « hautes herbes » section, Route.jsx, captures) is next.

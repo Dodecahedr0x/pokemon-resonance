@@ -17,26 +17,6 @@
 
 /* <style id="resonance-hidden-finds"> */
 /* v4.50 */
-.mk.find-spot {
-  z-index: 3;
-  color: #ffe27a;
-  filter: drop-shadow(0 0 6px rgba(255, 214, 90, 0.9));
-  animation: find-spot 1.6s ease-in-out infinite;
-}
-.mk.find-spot svg {
-  display: block;
-}
-@keyframes find-spot {
-  0%,
-  100% {
-    transform: translate(-50%, -50%) scale(0.85);
-    opacity: 0.75;
-  }
-  50% {
-    transform: translate(-50%, -50%) scale(1.15);
-    opacity: 1;
-  }
-}
 .rare-encounter {
   margin: 0 0 var(--space-xs);
   padding: var(--space-2xs) var(--space-sm);

@@ -207,7 +207,7 @@ export const PL = Object.fromEntries(PLACES.map(p => [p.id, p]));
 
 // Instructions run at startup, in the original order (see index.js).
 export function init() {
-  MAP_SVG = `<svg class="map-svg" viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+  MAP_SVG = `<svg class="map-svg is-kanto" viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
  <defs>
   <radialGradient id="mSea" cx="50%" cy="45%" r="75%"><stop offset="0" stop-color="#2a8fd0"/><stop offset=".55" stop-color="#1a62a6"/><stop offset="1" stop-color="#0c2e5e"/></radialGradient>
   <linearGradient id="mLand" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5fae55"/><stop offset=".55" stop-color="#4f9d4b"/><stop offset="1" stop-color="#3f8a44"/></linearGradient>

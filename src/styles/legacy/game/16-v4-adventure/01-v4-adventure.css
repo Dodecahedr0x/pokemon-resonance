@@ -226,15 +226,13 @@ html body .logo b {
   font-size: 13px;
 }
 .v4-rw,
-.v4-rew,
-.v4-mi-k {
+.v4-rew {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-xs);
 }
 .v4-rw > span,
-.v4-rew > span,
-.v4-mi-k > span {
+.v4-rew > span {
   display: inline-flex;
   align-items: center;
   gap: var(--space-xs);
@@ -246,8 +244,7 @@ html body .logo b {
   color: #e7f4ff;
 }
 .v4-rw img,
-.v4-rew img,
-.v4-mi-k img {
+.v4-rew img {
   width: 20px;
   height: 20px;
   object-fit: contain;

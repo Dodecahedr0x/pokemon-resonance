@@ -1,48 +1,5 @@
 /* ===== resonance-johto-regions layer ===== */
-/* Map header: region tabs, then the link to every battle */
-.map-head-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  gap: var(--space-md);
-}
-.map-all-fights {
-  min-height: 40px;
-  text-decoration: none;
-}
 /* v4.15: Johto */
-.v4-reg {
-  display: inline-flex;
-  gap: var(--space-2xs);
-  margin-top: var(--space-md);
-  padding: var(--space-2xs);
-  border-radius: 999px;
-  background: rgba(0, 0, 0, 0.28);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-.v4-reg button {
-  font: inherit;
-  font-size: 13px;
-  font-weight: 800;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  padding: var(--space-xs) var(--space-lg);
-  border-radius: 999px;
-  border: 0;
-  background: transparent;
-  color: var(--tx2);
-  cursor: pointer;
-}
-.v4-reg button[aria-selected='true'] {
-  background: linear-gradient(180deg, #f3d27e, #d9a945);
-  color: #1a1405;
-}
-.v4-map-st:not([data-reg='johto']) .map-svg.map-j {
-  display: none;
-}
-.v4-map-st[data-reg='johto'] .map-svg:not(.map-j) {
-  display: none;
-}
 /* ===== resonance-ranks-shop layer ===== */
 /* v4.14: ranks, Expert attacks, Resonance notes, shop */
 .rank-tag {

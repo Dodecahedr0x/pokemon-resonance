@@ -1,19 +1,183 @@
-/* Map screen. The rest of its styles are still in legacy/. */
+/* Map screen (#carte, MapScreen.jsx): the header row with the region tabs, the two columns (the map panel and
+   the side column), the scrolling map stage with its three drawn regions, the scroll arrows, the compass and
+   the title plate. Markers and routes are in map-marks.css, the painted map and its effects in
+   map-painting.css, the side column's cards in map-info.css. */
 
-/* the selected place's goals and rank, under its description */
-.map-info-chips {
+.map-screen .page-header-wide {
+  max-width: 850px;
+  padding-bottom: var(--space-2xl);
+}
+.map-head-row {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-xs);
-  margin: var(--space-md) 0 0;
+  align-items: flex-end;
+  gap: var(--space-md);
 }
-.map-info-chips span {
-  padding: var(--space-xs) var(--space-sm);
-  border: 1px solid rgba(120, 210, 255, 0.35);
-  border-radius: 7px;
-  background: rgba(3, 18, 36, 0.78);
-  color: #e3f3ff;
-  font: 700 11px/1 var(--font-mono);
-  letter-spacing: 0.08em;
+.map-all-fights {
+  min-height: 40px;
+  text-decoration: none;
+}
+
+/* region tabs (their look is the shared tab skin) */
+.map-regions {
+  display: flex;
+  width: max-content;
+  max-width: 100%;
+  margin: var(--space-lg) 0 var(--space-2xl);
+}
+.map-regions button {
+  padding: var(--space-md) var(--space-2xl);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
+  cursor: pointer;
+}
+@media (max-width: 760px) {
+  .map-regions {
+    justify-content: space-between;
+    width: 100%;
+  }
+}
+@media (max-width: 700px) {
+  .map-regions {
+    margin: var(--space-md) 0 var(--space-lg);
+  }
+}
+
+/* map panel and side column; one column on phones */
+.map-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(285px, 0.65fr);
+  gap: var(--space-xl);
+  align-items: stretch;
+}
+@media (max-width: 850px) {
+  .map-layout {
+    grid-template-columns: 1fr;
+  }
+}
+.map-panel {
+  position: relative;
+  overflow: hidden;
+  padding: var(--space-md);
+  border: 1px solid rgba(131, 226, 232, 0.42);
+  border-radius: 28px;
+  background: linear-gradient(145deg, #1b4253, #071824);
+  box-shadow:
+    0 32px 82px rgba(0, 0, 0, 0.48),
+    inset 0 1px rgba(255, 255, 255, 0.12);
+}
+
+/* the stage scrolls sideways when the panel is narrower than 760px */
+.map-scroller {
+  position: relative;
+  overflow: auto hidden;
+  border-radius: 19px;
+  background: linear-gradient(145deg, rgba(13, 45, 57, 0.4), rgba(5, 18, 28, 0.5));
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x pan-y;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+.map-scroller::-webkit-scrollbar {
+  display: none;
+}
+.map-stage {
+  position: relative;
+  min-width: 100%;
+  aspect-ratio: 1000/640;
+}
+@media (max-width: 999px) {
+  .map-stage {
+    min-width: 760px;
+  }
+}
+
+/* the three drawn regions: only the one in data-reg shows (Kanto when none is set) */
+.map-svg,
+.map-routes {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.map-stage:not([data-reg='johto']) .map-svg.is-johto,
+.map-stage:not([data-reg='hoenn']) .map-svg.is-hoenn,
+.map-stage:is([data-reg='johto'], [data-reg='hoenn']) .map-svg.is-kanto {
+  display: none;
+}
+
+/* west and east arrows (hidden by the engine at either end) */
+.map-scroll {
+  position: absolute;
+  bottom: 12px;
+  z-index: 6;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border: 1px solid rgba(120, 220, 255, 0.55);
+  border-radius: 50%;
+  background: rgba(6, 20, 30, 0.86);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+  color: #dff6ff;
+  opacity: 0.92;
+  cursor: pointer;
+}
+.map-scroll.is-west {
+  left: 10px;
+}
+.map-scroll.is-east {
+  right: 10px;
+}
+.map-scroll[hidden] {
+  display: none;
+}
+.map-scroll svg {
+  width: 18px;
+  height: 18px;
+}
+
+.map-compass {
+  position: absolute;
+  top: 3%;
+  left: 2%;
+  width: clamp(36px, 6%, 58px);
+  height: auto;
+  aspect-ratio: 1;
+  color: #f5e6b0;
+  filter: drop-shadow(0 0 10px rgba(131, 240, 239, 0.4));
+  pointer-events: none;
+}
+
+/* parchment plate with the region's name, next to the compass */
+.map-title {
+  position: absolute;
+  top: 12px;
+  left: clamp(52px, 7.5%, 74px);
+  z-index: 3;
+  display: grid;
+  gap: 1px;
+  max-width: 60%;
+  padding: var(--space-xs) var(--space-md);
+  border: 1px solid rgba(120, 84, 30, 0.55);
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(251, 243, 220, 0.94), rgba(234, 216, 176, 0.94));
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+  color: #3a2a14;
+  font: 400 11px/1 var(--font-script);
+  letter-spacing: 0.04em;
+  pointer-events: none;
+}
+.map-title b {
+  font: 800 13px/1.1 var(--font-display);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.map-title small {
+  font: 600 10px/1.1 var(--font-display);
+  letter-spacing: 0.06em;
+  opacity: 0.75;
 }

@@ -67,12 +67,6 @@ html body #bSvg .tok.in-danger .tok-rim {
 }
 /* ===== resonance-hoenn-region layer ===== */
 /* ==== v4.19: Hoenn ==== */
-.v4-map-st:not([data-reg='hoenn']) .map-svg.map-h {
-  display: none;
-}
-.v4-map-st[data-reg='hoenn'] .map-svg:not(.map-h) {
-  display: none;
-}
 /* ===== resonance-fishing-safari layer ===== */
 /* ==== v4.18: fishing, Safari Park, co-op ==== */
 html body .pe-card,

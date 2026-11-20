@@ -2149,7 +2149,7 @@ const generate = async reg => {
 
 /* ---------- animated layer: clouds, birds, reflections, smoke, night ---------- */
 const fxSvg = F =>
-  `<svg class="map-fx" viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><radialGradient id="map-fx-lum"><stop offset="0" stop-color="#fff2b8" stop-opacity="1"/><stop offset=".3" stop-color="#ffc35a" stop-opacity=".55"/><stop offset="1" stop-color="#ffb040" stop-opacity="0"/></radialGradient></defs><g class="fx-lums">${F.lights.map(([x, y]) => `<circle cx="${x.toFixed(0)}" cy="${y.toFixed(0)}" r="10" fill="url(#map-fx-lum)"/>`).join('')}</g></svg>`;
+  `<svg class="map-fx" viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><radialGradient id="map-fx-lum"><stop offset="0" stop-color="#fff2b8" stop-opacity="1"/><stop offset=".3" stop-color="#ffc35a" stop-opacity=".55"/><stop offset="1" stop-color="#ffb040" stop-opacity="0"/></radialGradient></defs><g class="map-fx-lights">${F.lights.map(([x, y]) => `<circle cx="${x.toFixed(0)}" cy="${y.toFixed(0)}" r="10" fill="url(#map-fx-lum)"/>`).join('')}</g></svg>`;
 
 const fxHtml = F => {
   const pc = (x, y) => `left:${(x / 10).toFixed(2)}%;top:${(y / 6.4).toFixed(2)}%`;
@@ -2160,7 +2160,7 @@ const fxHtml = F => {
     [40, 24, 110, -30],
   ].forEach(
     ([t, w, d, l]) =>
-      (h += `<i class="fa-sh" style="top:${t}%;width:${w}%;--to:${Math.round(10000 / w + 100)}%;animation-duration:${d}s;animation-delay:${l}s"></i>`)
+      (h += `<i class="map-fx-shadow" style="top:${t}%;width:${w}%;--to:${Math.round(10000 / w + 100)}%;animation-duration:${d}s;animation-delay:${l}s"></i>`)
   );
   [
     [4, 20, 150, 0],
@@ -2168,17 +2168,18 @@ const fxHtml = F => {
     [34, 15, 170, -50],
   ].forEach(
     ([t, w, d, l]) =>
-      (h += `<i class="fa-cl" style="top:${t}%;width:${w}%;--to:${Math.round(10000 / w + 100)}%;animation-duration:${d}s;animation-delay:${l}s"></i>`)
+      (h += `<i class="map-fx-cloud" style="top:${t}%;width:${w}%;--to:${Math.round(10000 / w + 100)}%;animation-duration:${d}s;animation-delay:${l}s"></i>`)
   );
   F.sparks.forEach(
-    ([x, y], i) => (h += `<i class="fa-sp" style="${pc(x, y)};animation-delay:${(-i * 0.61).toFixed(2)}s"></i>`)
+    ([x, y], i) =>
+      (h += `<i class="map-fx-sparkle" style="${pc(x, y)};animation-delay:${(-i * 0.61).toFixed(2)}s"></i>`)
   );
   F.smoke.forEach(([x, y]) =>
-    [0, 1, 2].forEach(k => (h += `<i class="fa-pf" style="${pc(x, y)};animation-delay:${-k * 2}s"></i>`))
+    [0, 1, 2].forEach(k => (h += `<i class="map-fx-puff" style="${pc(x, y)};animation-delay:${-k * 2}s"></i>`))
   );
   const birds = c =>
     `<svg viewBox="-16 -8 50 22"><path d="M0 0q4-5 8 0q4-5 8 0M20 8q3-4 6 0q3-4 6 0M-14 10q3-4 6 0q3-4 6 0" fill="none" stroke="${c}" stroke-width="1.6" stroke-linecap="round"/></svg>`;
-  h += `<i class="fa-bd b1" style="top:20%;--to:2700%">${birds('#1e2a30')}</i><i class="fa-bd b2" style="top:58%;--to:-2700%">${birds('#ffffff')}</i>`;
+  h += `<i class="map-fx-birds" style="top:20%;--to:2700%">${birds('#1e2a30')}</i><i class="map-fx-birds is-reversed" style="top:58%;--to:-2700%">${birds('#ffffff')}</i>`;
   return h;
 };
 
@@ -2205,7 +2206,7 @@ const fogSvg = reg => {
   } catch {
     /* Best effort: failure here is non-fatal. */
   }
-  return `<svg class="fogveil" viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><radialGradient id="fog-gradient"><stop offset="0" stop-color="#eef2f6" stop-opacity=".62"/><stop offset=".55" stop-color="#dfe6ee" stop-opacity=".34"/><stop offset="1" stop-color="#dfe6ee" stop-opacity="0"/></radialGradient></defs><g class="fog-g">${puffs}</g></svg>`;
+  return `<svg class="map-fog-veil" viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><radialGradient id="fog-gradient"><stop offset="0" stop-color="#eef2f6" stop-opacity=".62"/><stop offset=".55" stop-color="#dfe6ee" stop-opacity=".34"/><stop offset="1" stop-color="#dfe6ee" stop-opacity="0"/></radialGradient></defs><g class="fog-g">${puffs}</g></svg>`;
 };
 
 /* ---------- integration into the map ---------- */

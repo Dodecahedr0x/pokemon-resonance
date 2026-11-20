@@ -1,69 +1,4 @@
 /* MAP — actual dynamic #carte page */
-#carte .page-header-wide {
-  padding-bottom: var(--space-2xl);
-}
-#carte .v4-reg {
-  background: rgba(4, 17, 27, 0.85) !important;
-  border: 1px solid var(--rx-edge) !important;
-  border-radius: 17px !important;
-  padding: var(--space-xs) !important;
-}
-#carte .v4-reg button {
-  border-radius: 11px !important;
-  padding: var(--space-md) var(--space-2xl) !important;
-  letter-spacing: 0.12em !important;
-}
-#carte .v4-reg button[aria-selected='true'] {
-  background: linear-gradient(135deg, #267b8c, #174158) !important;
-  color: #f2feff !important;
-  box-shadow:
-    0 8px 22px rgba(32, 153, 168, 0.24),
-    inset 0 1px rgba(255, 255, 255, 0.18) !important;
-}
-#carte .v4-map-wrap {
-  grid-template-columns: minmax(0, 1.45fr) minmax(285px, 0.65fr) !important;
-  gap: var(--space-xl) !important;
-}
-#carte .v4-map {
-  padding: var(--space-md) !important;
-  border: 1px solid rgba(124, 220, 228, 0.34) !important;
-  border-radius: 27px !important;
-  background: linear-gradient(145deg, #173b4a, #071824) !important;
-  box-shadow:
-    0 30px 80px rgba(0, 0, 0, 0.43),
-    inset 0 1px rgba(255, 255, 255, 0.1) !important;
-}
-#carte .v4-map-sc {
-  border-radius: 17px !important;
-}
-#carte .v4-map-st {
-  filter: drop-shadow(0 18px 24px rgba(0, 0, 0, 0.4));
-}
-#carte .map-title {
-  top: 16px !important;
-  left: 18px !important;
-  font-size: 11px !important;
-  letter-spacing: 0.24em !important;
-  color: #d5f8f5 !important;
-  text-shadow: 0 2px 15px #000 !important;
-}
-#carte .mk-ic {
-  border: 2px solid rgba(222, 250, 255, 0.9) !important;
-  background: radial-gradient(circle at 30% 25%, #3e8eaa, #12334b) !important;
-  box-shadow:
-    0 8px 20px rgba(0, 0, 0, 0.55),
-    0 0 0 5px rgba(124, 232, 238, 0.1) !important;
-}
-#carte .mk.sel .mk-ic,
-#carte .mk:hover .mk-ic {
-  box-shadow:
-    0 0 0 7px rgba(124, 232, 238, 0.14),
-    0 0 26px rgba(124, 232, 238, 0.55) !important;
-}
-#carte .v4-map-side .card {
-  border-radius: 22px !important;
-  background: linear-gradient(155deg, #17374a, #091b29) !important;
-}
 #carte .v4-wild {
   border: 1px solid rgba(91, 196, 147, 0.27) !important;
   border-radius: 24px !important;
@@ -163,9 +98,6 @@
   filter: drop-shadow(0 12px 16px rgba(245, 206, 120, 0.28));
 }
 @media (max-width: 850px) {
-  #carte .v4-map-wrap {
-    grid-template-columns: 1fr !important;
-  }
   #combat .battle {
     grid-template-columns: minmax(0, 1fr) !important;
   }

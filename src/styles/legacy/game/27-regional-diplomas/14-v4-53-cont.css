@@ -78,35 +78,6 @@ body.board-theme-cristal .board {
 /* <style id="resonance-quest-locks"> */
 
 /* <style id="resonance-secret-places-ui"> */
-.mk.secret-places {
-  z-index: 3;
-  color: #9fe8ff;
-  filter: drop-shadow(0 0 6px rgba(120, 220, 255, 0.9));
-  animation: secret-places 1.8s ease-in-out infinite;
-}
-.mk.secret-places.vu {
-  opacity: 0.55;
-  animation: none;
-}
-.mk.passerby {
-  z-index: 3;
-  color: #ffb86b;
-  filter: drop-shadow(0 0 6px rgba(255, 170, 80, 0.9));
-  animation: secret-places 1.4s ease-in-out infinite;
-}
-.mk.secret-places svg,
-.mk.passerby svg {
-  display: block;
-}
-@keyframes secret-places {
-  0%,
-  100% {
-    transform: translate(-50%, -50%) scale(0.88);
-  }
-  50% {
-    transform: translate(-50%, -50%) scale(1.14);
-  }
-}
 .secret-places-r {
   display: grid;
   gap: 1px;

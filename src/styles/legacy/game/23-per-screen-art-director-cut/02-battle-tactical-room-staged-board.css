@@ -117,16 +117,6 @@ a:focus-visible {
   outline-offset: 3px;
 }
 @media (max-width: 760px) {
-  #carte .v4-map-wrap {
-    gap: var(--space-md) !important;
-  }
-  #carte .v4-reg {
-    width: 100%;
-    justify-content: space-between;
-  }
-  #carte .v4-reg button {
-    padding: var(--space-sm) var(--space-md) !important;
-  }
   #combat .battle {
     grid-template-columns: minmax(0, 1fr) !important;
   }

@@ -712,7 +712,7 @@ export function init() {
   });
   PLACES_J.forEach(p => (PL[p.id] = p));
   document.addEventListener('click', e => {
-    const b = e.target.closest('.v4-reg [data-reg]');
+    const b = e.target.closest('.map-regions [data-reg]');
     if (!b) {
       return;
     }
@@ -721,7 +721,7 @@ export function init() {
     renderMap();
     setTod(TOD);
   });
-  JMAP_SVG = `<svg class="map-svg map-j" viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+  JMAP_SVG = `<svg class="map-svg is-johto" viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
  <defs>
   <radialGradient id="jSea" cx="50%" cy="45%" r="75%"><stop offset="0" stop-color="#2d84c4"/><stop offset=".55" stop-color="#1b5c9c"/><stop offset="1" stop-color="#0b2a57"/></radialGradient>
   <linearGradient id="jLand" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6aa95a"/><stop offset=".55" stop-color="#58994e"/><stop offset="1" stop-color="#477f44"/></linearGradient>

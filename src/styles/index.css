@@ -59,3 +59,6 @@
 @import '../screens/home/home-activities.css' layer(screens);
 @import '../screens/home/home-friends.css' layer(screens);
 @import '../screens/map/map.css' layer(screens);
+@import '../screens/map/map-marks.css' layer(screens);
+@import '../screens/map/map-painting.css' layer(screens);
+@import '../screens/map/map-info.css' layer(screens);

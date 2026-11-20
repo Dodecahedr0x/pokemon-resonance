@@ -1,0 +1,246 @@
+/* Map markers (Marks.jsx, #mapMarks) and the routes between places (Stage.jsx, .map-routes). A marker is a round
+   emblem with its name on a parchment label; its state is is-next, is-open, is-done or is-locked, and
+   is-small marks a training place. Today's hidden finds, the secret places and the passing character are
+   glowing pins (map-find, map-secret, map-passerby). */
+
+/* routes: dotted lines, paler for branches, grey when the place at the end is locked */
+.map-route {
+  stroke-width: 4;
+  stroke: #fff2b0;
+  stroke-dasharray: 2 10;
+  opacity: 0.95;
+  filter: drop-shadow(0 1px 0 rgba(0, 0, 0, 0.4));
+}
+.map-route.is-branch {
+  stroke-width: 3;
+  stroke: #cfefff;
+  opacity: 0.75;
+}
+.map-route.is-locked {
+  stroke: #9fb4c9;
+  opacity: 0.45;
+}
+
+.map-marks {
+  position: absolute;
+  inset: 0;
+}
+.map-mark {
+  position: absolute;
+  z-index: 2;
+  display: grid;
+  justify-items: center;
+  gap: var(--space-3xs);
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #fff;
+  filter: drop-shadow(0 5px 7px rgba(0, 0, 0, 0.6));
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  transition:
+    transform 0.2s,
+    filter 0.2s;
+}
+.map-mark.is-selected {
+  filter: drop-shadow(0 0 12px rgba(113, 228, 237, 0.75));
+  transform: translate(-50%, -50%) scale(1.12);
+}
+@media (hover: hover) {
+  .map-mark:hover {
+    box-shadow:
+      0 12px 28px rgba(0, 0, 0, 0.28),
+      0 0 0 1px rgba(115, 217, 244, 0.18);
+    filter: drop-shadow(0 0 12px rgba(113, 228, 237, 0.75));
+    transform: translate(-50%, -50%) scale(1.12);
+  }
+}
+
+/* the round emblem */
+.map-mark-icon {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 2px solid rgba(222, 250, 255, 0.9);
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 25%, #3e8eaa, #12334b);
+  box-shadow:
+    0 8px 20px rgba(0, 0, 0, 0.55),
+    0 0 0 5px rgba(124, 232, 238, 0.1);
+}
+.map-mark-icon :is(.emb, .av) {
+  width: 30px;
+  height: 30px;
+}
+.map-mark.is-small .map-mark-icon {
+  width: 32px;
+  height: 32px;
+}
+.map-mark.is-small .map-mark-icon .emb {
+  width: 24px;
+  height: 24px;
+}
+.map-mark.is-selected .map-mark-icon {
+  outline: 3px solid #fff;
+  outline-offset: 2px;
+}
+.map-mark:is(.is-selected, :hover) .map-mark-icon {
+  box-shadow:
+    0 0 0 7px rgba(124, 232, 238, 0.14),
+    0 0 26px rgba(124, 232, 238, 0.55);
+}
+.map-mark.is-locked .map-mark-icon {
+  filter: grayscale(0.85) brightness(0.7);
+}
+
+/* the name label */
+.map-mark-name {
+  padding: var(--space-3xs) var(--space-xs);
+  border: 1px solid rgba(120, 84, 30, 0.6);
+  border-radius: 6px;
+  background: linear-gradient(180deg, #fbf3dc, #ead8b0);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.35);
+  color: #3a2a14;
+  font: 800 11px/1.1 var(--font-display);
+  white-space: nowrap;
+}
+.map-mark.is-next .map-mark-name {
+  border-color: #fff1a8;
+  background: linear-gradient(180deg, #ffe48a, #f0b42a);
+  color: #2a1a04;
+}
+.map-mark.is-locked .map-mark-name {
+  background: linear-gradient(180deg, #e6e1d6, #cfc8b8);
+  color: #5c564a;
+}
+.map-mark.is-done .map-mark-name {
+  border-color: rgba(60, 120, 60, 0.55);
+  background: linear-gradient(180deg, #f2f8e6, #d4e8c2);
+  color: #22421e;
+}
+
+/* the next place pulses */
+.map-mark-pulse {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 40px;
+  height: 40px;
+  margin-left: calc(var(--space-xl) * -1);
+  border: 2px solid var(--color-selected);
+  border-radius: 50%;
+  pointer-events: none;
+  will-change: transform, opacity;
+  animation: map-mark-pulse 1.8s ease-out infinite;
+}
+@keyframes map-mark-pulse {
+  from {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.9);
+  }
+}
+
+/* small lock or check badge on the emblem, and the « ×2 » of the daily challenge */
+.map-mark-lock,
+.map-mark-check {
+  position: absolute;
+  top: -4px;
+  right: -6px;
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid #cfe9ff;
+  border-radius: 50%;
+  background: #0d244a;
+}
+.map-mark-check {
+  border-color: #bff5d4;
+  background: #1f9e57;
+}
+.map-mark-lock svg,
+.map-mark-check svg {
+  width: 10px;
+  height: 10px;
+  color: #fff;
+}
+.map-mark-daily {
+  position: absolute;
+  top: -8px;
+  left: -12px;
+  padding: var(--space-3xs) var(--space-2xs);
+  border-radius: 6px;
+  background: #ff5fb0;
+  color: #fff;
+  font: 900 10px/1 var(--font-display);
+}
+
+/* roaming legendary beasts float on the map */
+.map-mark:is([data-place='rraikou'], [data-place='rentei'], [data-place='rsuicune']) .map-mark-icon {
+  animation: map-mark-roam 2.2s ease-in-out infinite;
+}
+@keyframes map-mark-roam {
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+/* hidden finds, secret places and the passing character */
+.map-mark:is(.map-find, .map-secret, .map-passerby) {
+  z-index: 3;
+}
+.map-mark:is(.map-find, .map-secret, .map-passerby) svg {
+  display: block;
+}
+.map-find {
+  color: #ffe27a;
+  animation: map-find-glow 1.6s ease-in-out infinite;
+}
+.map-secret {
+  color: #9fe8ff;
+  animation: map-pin-bounce 1.8s ease-in-out infinite;
+}
+.map-secret.is-found {
+  opacity: 0.55;
+  animation: none;
+}
+.map-passerby {
+  color: #ffb86b;
+  animation: map-pin-bounce 1.4s ease-in-out infinite;
+}
+@keyframes map-find-glow {
+  0%,
+  100% {
+    opacity: 0.75;
+    transform: translate(-50%, -50%) scale(0.85);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.15);
+  }
+}
+@keyframes map-pin-bounce {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scale(0.88);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.14);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .map-mark-pulse {
+    opacity: 0.6;
+    animation: none;
+  }
+  .map-mark-icon {
+    animation: none;
+  }
+}

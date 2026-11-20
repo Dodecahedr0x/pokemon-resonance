@@ -196,7 +196,7 @@ html:not(#pkz) body:not(#pkz) nav.bnav .bn[aria-current='page'] .ic::after {
 
 /* ---------- tabs: Poké Ball capsules ---------- */
 html:not(#pkz) body:not(#pkz) .v4-tabs,
-html:not(#pkz) body:not(#pkz) .v4-reg,
+html:not(#pkz) body:not(#pkz) .map-regions,
 html:not(#pkz) body:not(#pkz) .gd-tabs,
 html:not(#pkz) body:not(#pkz) .v4-seg,
 html:not(#pkz) body:not(#pkz) .scn-tabs {
@@ -210,7 +210,7 @@ html:not(#pkz) body:not(#pkz) .scn-tabs {
   gap: var(--space-2xs) !important;
 }
 html:not(#pkz) body:not(#pkz) .v4-tabs > button,
-html:not(#pkz) body:not(#pkz) .v4-reg > button,
+html:not(#pkz) body:not(#pkz) .map-regions > button,
 html:not(#pkz) body:not(#pkz) .gd-tabs > button,
 html:not(#pkz) body:not(#pkz) .v4-seg > button,
 html:not(#pkz) body:not(#pkz) .scn-tabs > button {
@@ -226,14 +226,14 @@ html:not(#pkz) body:not(#pkz) .scn-tabs > button {
   -webkit-tap-highlight-color: transparent;
 }
 html:not(#pkz) body:not(#pkz) .v4-tabs > button:active,
-html:not(#pkz) body:not(#pkz) .v4-reg > button:active,
+html:not(#pkz) body:not(#pkz) .map-regions > button:active,
 html:not(#pkz) body:not(#pkz) .gd-tabs > button:active,
 html:not(#pkz) body:not(#pkz) .v4-seg > button:active,
 html:not(#pkz) body:not(#pkz) .scn-tabs > button:active {
   transform: scale(0.95);
 }
 html:not(#pkz) body:not(#pkz) .v4-tabs > button:not(:has(svg))::before,
-html:not(#pkz) body:not(#pkz) .v4-reg > button:not(:has(svg))::before,
+html:not(#pkz) body:not(#pkz) .map-regions > button:not(:has(svg))::before,
 html:not(#pkz) body:not(#pkz) .gd-tabs > button:not(:has(svg))::before,
 html:not(#pkz) body:not(#pkz) .v4-seg > button:not(:has(svg))::before,
 html:not(#pkz) body:not(#pkz) .scn-tabs > button:not(:has(svg))::before {
@@ -253,7 +253,7 @@ html:not(#pkz) body:not(#pkz) .scn-tabs > button:not(:has(svg))::before {
   transition: opacity 0.2s;
 }
 html:not(#pkz) body:not(#pkz) .v4-tabs > button:is([aria-selected='true'], [aria-pressed='true'], .on),
-html:not(#pkz) body:not(#pkz) .v4-reg > button:is([aria-selected='true'], [aria-pressed='true'], .on),
+html:not(#pkz) body:not(#pkz) .map-regions > button:is([aria-selected='true'], [aria-pressed='true'], .on),
 html:not(#pkz) body:not(#pkz) .gd-tabs > button:is([aria-selected='true'], [aria-pressed='true'], .on),
 html:not(#pkz) body:not(#pkz) .v4-seg > button:is([aria-selected='true'], [aria-pressed='true'], .on),
 html:not(#pkz) body:not(#pkz) .scn-tabs > button:is([aria-selected='true'], [aria-pressed='true'], .on) {
@@ -271,7 +271,7 @@ html:not(#pkz) body:not(#pkz) .scn-tabs > button:is([aria-selected='true'], [ari
   animation: pkPop 0.45s cubic-bezier(0.2, 1.5, 0.4, 1) both;
 }
 html:not(#pkz) body:not(#pkz) .v4-tabs > button:is([aria-selected='true'], [aria-pressed='true'], .on) svg,
-html:not(#pkz) body:not(#pkz) .v4-reg > button:is([aria-selected='true'], [aria-pressed='true'], .on) svg,
+html:not(#pkz) body:not(#pkz) .map-regions > button:is([aria-selected='true'], [aria-pressed='true'], .on) svg,
 html:not(#pkz) body:not(#pkz) .gd-tabs > button:is([aria-selected='true'], [aria-pressed='true'], .on) svg,
 html:not(#pkz) body:not(#pkz) .v4-seg > button:is([aria-selected='true'], [aria-pressed='true'], .on) svg,
 html:not(#pkz) body:not(#pkz) .scn-tabs > button:is([aria-selected='true'], [aria-pressed='true'], .on) svg {
@@ -283,7 +283,7 @@ html:not(#pkz)
   > button:is([aria-selected='true'], [aria-pressed='true'], .on):not(:has(svg))::before,
 html:not(#pkz)
   body:not(#pkz)
-  .v4-reg
+  .map-regions
   > button:is([aria-selected='true'], [aria-pressed='true'], .on):not(:has(svg))::before,
 html:not(#pkz)
   body:not(#pkz)
@@ -307,7 +307,7 @@ html:not(#pkz)
   animation: pkRoule 0.6s ease-out both;
 }
 html:not(#pkz) body:not(#pkz) .v4-tabs > button:is([aria-selected='true'], [aria-pressed='true'], .on)::after,
-html:not(#pkz) body:not(#pkz) .v4-reg > button:is([aria-selected='true'], [aria-pressed='true'], .on)::after,
+html:not(#pkz) body:not(#pkz) .map-regions > button:is([aria-selected='true'], [aria-pressed='true'], .on)::after,
 html:not(#pkz) body:not(#pkz) .gd-tabs > button:is([aria-selected='true'], [aria-pressed='true'], .on)::after,
 html:not(#pkz) body:not(#pkz) .v4-seg > button:is([aria-selected='true'], [aria-pressed='true'], .on)::after,
 html:not(#pkz) body:not(#pkz) .scn-tabs > button:is([aria-selected='true'], [aria-pressed='true'], .on)::after {

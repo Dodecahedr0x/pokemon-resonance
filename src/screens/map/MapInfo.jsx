@@ -20,7 +20,7 @@ import { familyCaptureStats } from '../../engine/progression/regional-dex.js';
 
 import Button from '../../components/Button.jsx';
 const Lock = ({ children }) => (
-  <p className="v4-lock">
+  <p className="map-info-lock">
     <svg>
       <use href="#i-lock" />
     </svg>
@@ -44,7 +44,7 @@ export default function MapInfo() {
   if (p.id === 'jwild' && !johtoOpen()) {
     return (
       <>
-        <header className="v4-mi-h">
+        <header className="map-info-header">
           <Html html={placeIcon(p)} />
           <span>
             <small>Route 32</small>
@@ -52,8 +52,8 @@ export default function MapInfo() {
           </span>
           <em className="v4-pill s-lock">{STATE_N.lock}</em>
         </header>
-        <p className="v4-mi-d">Vingt Pokémon de Johto vivent ici : Hoothoot, Marill, Granivol, Scarhino…</p>
-        <div className="v4-mi-a">
+        <p className="map-info-text">Vingt Pokémon de Johto vivent ici : Hoothoot, Marill, Granivol, Scarhino…</p>
+        <div className="map-info-actions">
           <Lock>Johto s’ouvre après votre victoire sur la Championne Auriane Vale.</Lock>
         </div>
       </>
@@ -62,7 +62,7 @@ export default function MapInfo() {
   if (p.id === 'hwild' && !hoennOpen()) {
     return (
       <>
-        <header className="v4-mi-h">
+        <header className="map-info-header">
           <Html html={placeIcon(p)} />
           <span>
             <small>Route 104</small>
@@ -70,8 +70,8 @@ export default function MapInfo() {
           </span>
           <em className="v4-pill s-lock">{STATE_N.lock}</em>
         </header>
-        <p className="v4-mi-d">Vingt Pokémon de Hoenn vivent ici : Arcko, Poussifeu, Gobou, Tarsal, Draby…</p>
-        <div className="v4-mi-a">
+        <p className="map-info-text">Vingt Pokémon de Hoenn vivent ici : Arcko, Poussifeu, Gobou, Tarsal, Draby…</p>
+        <div className="map-info-actions">
           <Lock>Hoenn s’ouvre après votre titre de Maître de Johto.</Lock>
         </div>
       </>
@@ -82,18 +82,18 @@ export default function MapInfo() {
       family = familyCaptureStats(regionIndex());
     return (
       <>
-        <header className="v4-mi-h">
+        <header className="map-info-header">
           <Html html={placeIcon(p)} />
           <span>
             <small>{`${routeName()} · ${TOD === 'nuit' ? 'nuit' : TOD === 'matin' ? 'matin' : 'jour'}`}</small>
             <b>Hautes herbes</b>
           </span>
         </header>
-        <p className="v4-mi-d">
+        <p className="map-info-text">
           Des Pokémon sauvages s’y cachent. Selon l’heure, ce ne sont pas les mêmes types. Affaiblissez-les,
           immobilisez-les, puis lancez une Ball au contact.
         </p>
-        <div className="v4-mi-k">
+        <div className="map-info-stats">
           <span>
             <img src={ITM('poke-ball')} alt="" />
             {`${balls} Poké Ball${balls > 1 ? 's' : ''}`}
@@ -101,7 +101,7 @@ export default function MapInfo() {
           <span>{`${family.n} / ${family.t} familles`}</span>
           <span>{`${PROFILE.caught} capture${PROFILE.caught > 1 ? 's' : ''}`}</span>
         </div>
-        <div className="v4-mi-a">
+        <div className="map-info-actions">
           <Button variant="primary" data-v4wild="">
             Explorer les hautes herbes
             <Arrow />
@@ -114,7 +114,7 @@ export default function MapInfo() {
   if (p.id === 'elite') {
     return (
       <>
-        <header className="v4-mi-h">
+        <header className="map-info-header">
           <Html html={placeIcon(p)} />
           <span>
             <small>Chapitre 9 · Plateau de la Ligue</small>
@@ -122,16 +122,22 @@ export default function MapInfo() {
           </span>
           <em className={`v4-pill s-${st}`}>{STATE_N[st]}</em>
         </header>
-        <p className="v4-mi-d">
+        <p className="map-info-text">
           Quatre maîtres à battre dans l’ordre, avec les huit badges. Chacun lit le plateau à sa manière.
         </p>
-        <div className="v4-elite">
+        <div className="map-elite">
           {ELITE.map((k, i) => {
             const L = ELITE_L[i],
               lk = scenLock(k),
               won = PROFILE.elite >= i + 1;
             return (
-              <button type="button" className={'v4-el' + (won ? ' won' : '')} data-v4fight={k} disabled={!!lk} key={k}>
+              <button
+                type="button"
+                className={'map-elite-member' + (won ? ' is-won' : '')}
+                data-v4fight={k}
+                disabled={!!lk}
+                key={k}
+              >
                 <Html html={avatar(L.n, SCEN[k].at || 'Dragon', 'xs')} />
                 <span>
                   <b>
@@ -142,11 +148,11 @@ export default function MapInfo() {
                   </em>
                 </span>
                 {won ? (
-                  <svg className="ok">
+                  <svg className="map-elite-won">
                     <use href="#i-check" />
                   </svg>
                 ) : lk ? (
-                  <svg className="lk">
+                  <svg className="map-elite-lock">
                     <use href="#i-lock" />
                   </svg>
                 ) : (
@@ -168,7 +174,7 @@ export default function MapInfo() {
     gi = ARENAS.findIndex(a => a.k === k);
   return (
     <>
-      <header className="v4-mi-h">
+      <header className="map-info-header">
         <Html html={placeIcon(p)} />
         <span>
           <small>{`${C ? C.c : 'Entraînement'}${k === dailyKey() ? ' · Défi du jour' : ''}`}</small>
@@ -181,19 +187,19 @@ export default function MapInfo() {
       {'\n  '}
       {L && (
         <>
-          <p className="v4-mi-who">
+          <p className="map-info-leader">
             <b>
               <Html html={L.n} />
             </b>
             , <Html html={L.t} />
           </p>
-          <blockquote className="v4-mi-q">
+          <blockquote className="map-info-quote">
             <Html html={L.q} />
           </blockquote>
         </>
       )}
       {'\n  '}
-      <p className="v4-mi-d">
+      <p className="map-info-text">
         <Html html={`${gi >= 0 ? GYMS[gi].r + ' ' : ''}${S.d || ''}`} />
       </p>
       {'\n  '}
@@ -203,7 +209,7 @@ export default function MapInfo() {
       </div>
       <Html html={rewardLine(k)} />
       {'\n  '}
-      <div className="v4-mi-a">
+      <div className="map-info-actions">
         {lk ? (
           <Lock>
             <Html html={lk} />
@@ -226,7 +232,7 @@ function SafariInfo({ p }) {
     takenSet = PROFILE.safariTaken || 0;
   return (
     <>
-      <header className="v4-mi-h">
+      <header className="map-info-header">
         <Html html={placeIcon(p)} />
         <span>
           <small>Kanto · détente</small>
@@ -234,17 +240,17 @@ function SafariInfo({ p }) {
         </span>
         <em className={`v4-pill s-${lk ? 'lock' : 'open'}`}>{STATE_N[lk ? 'lock' : 'open']}</em>
       </header>
-      <p className="v4-mi-d">
+      <p className="map-info-text">
         Ici, pas de combat : on avance dans les herbes, on lance des Safari Balls, des appâts (il reste plus longtemps)
         et des cailloux (plus facile à attraper, mais il s’agace). Les Pokémon rares y sont plus fréquents, et les
         chromatiques deux fois plus.
       </p>
-      <div className="v4-mi-k">
+      <div className="map-info-stats">
         <span>{`${SAFARI_STEPS} pas`}</span>
         <span>{`${SAFARI_BALLS} Safari Balls`}</span>
         <span>{`${takenSet} capture${takenSet > 1 ? 's' : ''} au Parc`}</span>
       </div>
-      <div className="v4-mi-a">
+      <div className="map-info-actions">
         {lk ? (
           <Lock>
             <Html html={lk} />

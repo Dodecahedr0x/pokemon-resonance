@@ -27,15 +27,6 @@ html body #combat .pt {
   .v4-aside {
     grid-column: 1;
   }
-  .v4-map-wrap {
-    grid-template-columns: minmax(0, 1fr);
-  }
-  .v4-map-side {
-    grid-template-columns: minmax(0, 1fr);
-  }
-  .v4-map-st {
-    min-width: 760px;
-  }
   .v4-tr-t {
     display: none;
   }
@@ -141,10 +132,6 @@ html body #combat .pt {
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .mk-pulse {
-    animation: none;
-    opacity: 0.6;
-  }
   .v4-ms {
     animation: none;
   }

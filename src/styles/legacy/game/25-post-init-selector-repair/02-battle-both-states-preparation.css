@@ -57,9 +57,6 @@
     inset 0 1px rgba(255, 255, 255, 0.25) !important;
 }
 @media (max-width: 850px) {
-  #carte .v4-map-wrap {
-    grid-template-columns: 1fr !important;
-  }
   #combat .battle {
     grid-template-columns: minmax(0, 1fr) !important;
   }
@@ -96,8 +93,3 @@ html:is(:root, #r9) body .enc-card.shiny .enc-cr img:not(.art-sh) {
 /* 4. Home: each illustration whole inside its card (no more Pokémon cut off at the edge) */
 
 /* 3. mobile: more compact headers, the cyan rule stays */
-@media (max-width: 700px) {
-  html body #carte .v4-reg {
-    margin: var(--space-md) 0 var(--space-lg);
-  }
-}

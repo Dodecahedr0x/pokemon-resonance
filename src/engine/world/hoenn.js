@@ -419,7 +419,7 @@ export const PLACES_H = [
 
 export const HCHAIN = PLACES_H.map(p => p.id);
 
-export const HMAP_SVG = `<svg class="map-svg map-h" viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+export const HMAP_SVG = `<svg class="map-svg is-hoenn" viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
  <defs>
   <radialGradient id="hSea" cx="50%" cy="50%" r="80%"><stop offset="0" stop-color="#2fa3d6"/><stop offset=".6" stop-color="#1873b0"/><stop offset="1" stop-color="#0b3466"/></radialGradient>
   <linearGradient id="hLand" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#78b85c"/><stop offset="1" stop-color="#4f8f45"/></linearGradient>

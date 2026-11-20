@@ -12,6 +12,9 @@ import {
   visibleSecrets,
 } from '../../engine/world/secret-places.js';
 
+// state class of a place marker, from placeState()
+const MARK_STATE = { next: 'is-next', open: 'is-open', done: 'is-done', lock: 'is-locked' };
+
 // Map markers (#mapMarks): places, then hidden finds (v4.50), secret places
 // and the passing character (v4.60), in the order the versions added them.
 // marksSel: place chosen at drawing time (before renderMap's default choice).
@@ -24,31 +27,31 @@ export default function Marks({ marksSel }) {
         return (
           <button
             type="button"
-            className={`mk mk-${st}${marksSel === p.id ? ' sel' : ''}${p.grp === 'entrainement' ? ' small' : ''}`}
+            className={`map-mark ${MARK_STATE[st]}${marksSel === p.id ? ' is-selected' : ''}${p.grp === 'entrainement' ? ' is-small' : ''}`}
             data-place={p.id}
             style={{ left: `${p.x / 10}%`, top: `${p.y / 6.4}%` }}
             aria-label={`${placeName(p)} · ${STATE_N[st]}`}
             key={p.id}
           >
-            {st === 'next' && <span className="mk-pulse" aria-hidden="true" />}
-            <span className="mk-ic">
+            {st === 'next' && <span className="map-mark-pulse" aria-hidden="true" />}
+            <span className="map-mark-icon">
               <Html html={placeIcon(p)} />
             </span>
             {st === 'lock' ? (
-              <span className="mk-lk">
+              <span className="map-mark-lock">
                 <svg>
                   <use href="#i-lock" />
                 </svg>
               </span>
             ) : st === 'done' ? (
-              <span className="mk-ok">
+              <span className="map-mark-check">
                 <svg>
                   <use href="#i-check" />
                 </svg>
               </span>
             ) : null}
-            {p.id === dk && !dailyDone() && <span className="mk-day">×2</span>}
-            <span className="mk-n">{placeName(p)}</span>
+            {p.id === dk && !dailyDone() && <span className="map-mark-daily">×2</span>}
+            <span className="map-mark-name">{placeName(p)}</span>
           </button>
         );
       })}
@@ -70,7 +73,7 @@ function Finds() {
   return spots.map(sp => (
     <button
       type="button"
-      className="mk find-spot"
+      className="map-mark map-find"
       data-treasure-spot={sp.id}
       style={{ left: sp.x / 10 + '%', top: sp.y / 10 + '%' }}
       aria-label={'Trouvaille cachée : ' + TREASURE_NAMES[sp.th]}
@@ -103,7 +106,7 @@ function Secrets() {
       {sc.map(({ s, p, f }) => (
         <button
           type="button"
-          className={'mk secret-places' + (f ? ' vu' : '')}
+          className={'map-mark map-secret' + (f ? ' is-found' : '')}
           data-secret-places={s.id}
           style={{ left: p.x / 10 + '%', top: p.y / 10 + '%' }}
           aria-label={'Lieu secret : ' + s.n}
@@ -120,7 +123,7 @@ function Secrets() {
       {pn && (
         <button
           type="button"
-          className="mk passerby"
+          className="map-mark map-passerby"
           data-passerby="o"
           style={{ left: pn.p.x / 10 + '%', top: pn.p.y / 10 + '%' }}
           aria-label={'Personnage de passage : ' + pn.n}

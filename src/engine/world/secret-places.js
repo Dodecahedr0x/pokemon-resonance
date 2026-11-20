@@ -361,7 +361,7 @@ export const SECRET_PLACES = [
 
 // Instructions run at startup, in the original order (see index.js).
 export function init() {
-  // secret places (.secretPlaces) and passing character (.passerby) on the map: rendered by React
+  // secret places (.map-secret) and passing character (.map-passerby) on the map: rendered by React
   // (src/screens/map/Marks.jsx)
 
   document.addEventListener(

@@ -23,13 +23,13 @@ export default function MapList() {
       />
       {G.map(([g, n]) => (
         <Fragment key={g}>
-          <p className="v4-lg">{n}</p>
+          <p className="map-list-group">{n}</p>
           {P.filter(p => p.grp === g).map(p => {
             const st = placeState(p);
             return (
               <button
                 type="button"
-                className={'v4-pl' + (V4.mapSel === p.id ? ' on' : '')}
+                className={'map-place' + (V4.mapSel === p.id ? ' is-selected' : '')}
                 data-place={p.id}
                 key={p.id}
               >

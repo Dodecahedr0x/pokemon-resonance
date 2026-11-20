@@ -153,38 +153,6 @@ html body #bSvg .tok.dom .tok-rim {
   stroke-width: 2.6;
 }
 
-/* --- map: roaming beasts --- */
-html body .mk[data-place='rraikou'] .mk-ic,
-html body .mk[data-place='rentei'] .mk-ic,
-html body .mk[data-place='rsuicune'] .mk-ic {
-  border-color: #c9a6ff;
-  box-shadow:
-    0 0 0 3px rgba(180, 140, 255, 0.35),
-    0 0 18px rgba(180, 140, 255, 0.55);
-  animation: living-johto-roam 2.2s ease-in-out infinite;
-}
-html body .mk[data-place='rraikou'] .mk-n,
-html body .mk[data-place='rentei'] .mk-n,
-html body .mk[data-place='rsuicune'] .mk-n {
-  border-color: #c9a6ff;
-  color: #ead9ff;
-}
-@keyframes living-johto-roam {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-4px);
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  html body .mk[data-place='rraikou'] .mk-ic,
-  html body .mk[data-place='rentei'] .mk-ic,
-  html body .mk[data-place='rsuicune'] .mk-ic {
-    animation: none;
-  }
-}
 html body .v4-rew .rm-hp {
   position: relative;
   overflow: hidden;
@@ -197,9 +165,8 @@ html body .v4-rew .rm-hp i {
   z-index: -1;
 }
 
-/* legend medallion in a small emblem (map, location sheet) */
-html body .emb.lgd.xs .medal,
-html body .mk-ic .emb.lgd .medal {
+/* legend medallion in a small emblem (map markers, place list, location sheet) */
+html body .emb.lgd.xs .medal {
   width: 100% !important;
   height: 100% !important;
 }

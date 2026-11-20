@@ -26,7 +26,7 @@ export const regionMap = () => (V4.region === 'hoenn' ? 'hoenn' : V4.region === 
 export default function MapScreen() {
   const { built, drawn, marksSel } = useMap();
   return (
-    <section className="page v4p" id="carte" aria-labelledby="h-carte">
+    <section className="page v4p map-screen" id="carte" aria-labelledby="h-carte">
       {built && <Content drawn={drawn} marksSel={marksSel} />}
     </section>
   );
@@ -44,7 +44,7 @@ function Content({ drawn, marksSel }) {
         wide
       >
         <div className="map-head-row">
-          <div className="v4-reg" role="tablist" aria-label="Région">
+          <div className="map-regions" role="tablist" aria-label="Région">
             {REGIONS.map(([k, n]) => (
               <button type="button" role="tab" data-reg={k} aria-selected={rg === k} key={k}>
                 {n}
@@ -60,19 +60,29 @@ function Content({ drawn, marksSel }) {
         </div>
       </PageHeader>
       {'\n '}
-      <div className="v4-map-wrap">
-        <div className="v4-map card">
-          <div className="v4-map-sc" id="mapSc">
+      <div className="map-layout">
+        <div className="map-panel card">
+          <div className="map-scroller" id="mapSc">
             <Stage drawn={drawn} marksSel={marksSel} />
           </div>
           {drawn && (
             <>
-              <button type="button" className="map-scroll g" data-map-scroll="-1" aria-label="Voir l’ouest de la carte">
+              <button
+                type="button"
+                className="map-scroll is-west"
+                data-map-scroll="-1"
+                aria-label="Voir l’ouest de la carte"
+              >
                 <svg>
                   <use href="#i-chevl" />
                 </svg>
               </button>
-              <button type="button" className="map-scroll d" data-map-scroll="1" aria-label="Voir l’est de la carte">
+              <button
+                type="button"
+                className="map-scroll is-east"
+                data-map-scroll="1"
+                aria-label="Voir l’est de la carte"
+              >
                 <svg>
                   <use href="#i-chevr" />
                 </svg>
@@ -81,12 +91,12 @@ function Content({ drawn, marksSel }) {
           )}
         </div>
         {'\n '}
-        <aside className="v4-map-side">
+        <aside className="map-side">
           {drawn && <EvBar />}
-          <div className="card v4-mapinfo" id="mapInfo" aria-live="polite">
+          <div className="card map-info" id="mapInfo" aria-live="polite">
             {drawn && <MapInfo />}
           </div>
-          <div className="card v4-maplist" id="mapList">
+          <div className="card map-list" id="mapList">
             {drawn && <MapList />}
           </div>
         </aside>
