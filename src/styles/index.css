@@ -81,3 +81,7 @@
 @import '../screens/quests/quests-journal.css' layer(screens);
 @import '../screens/league/league.css' layer(screens);
 @import '../screens/camp/camp.css' layer(screens);
+@import '../screens/camp/camp-base.css' layer(screens);
+@import '../screens/camp/camp-duel.css' layer(screens);
+@import '../screens/camp/camp-echo.css' layer(screens);
+@import '../screens/camp/camp-modes.css' layer(screens);

@@ -24,7 +24,7 @@ function Editor() {
     .sort((a, b) => a.n.localeCompare(b.n, 'fr'))
     .map(m => [m.id, m.n]);
   return (
-    <div className="gym-tab-ed">
+    <div className="camp-gym-editor">
       <h3>{GYM_EDITOR.i >= 0 ? 'Modifier l’arène' : 'Nouvelle arène'}</h3>
       <label className="form-field">
         <span>Nom</span>
@@ -42,7 +42,7 @@ function Editor() {
           <Options L={GYM_RULES()} />
         </select>
       </label>
-      <div className="gym-tab-row">
+      <div className="camp-gym-editor-row">
         <label className="form-field">
           <span>Heure</span>
           <select data-ar="h" defaultValue={E.h}>
@@ -83,7 +83,7 @@ function Editor() {
           </select>
         </label>
       ))}
-      <div className="gym-tab-b">
+      <div className="camp-gym-actions">
         <Button variant="primary" data-gym-arena="save">
           Enregistrer
         </Button>
@@ -99,12 +99,12 @@ function Editor() {
 function Gym({ a, i }) {
   const ruleDef = a.r ? ' · règle ' + (GYM_RULES().find(x => x[0] === a.r) || ['', ''])[1] : '';
   return (
-    <article className="gym-tab-c">
-      <div className="gym-tab-h">
+    <article className="camp-gym">
+      <div className="camp-gym-header">
         <b>{a.n}</b>
         <em>{`${(SCEN[a.t] || {}).n || a.t}${ruleDef} · ${a.h === 'nuit' ? 'nuit' : 'jour'} · ${a.lim} manches${a.author ? ' · par ' + a.author : ''}`}</em>
       </div>
-      <div className="gym-tab-f">
+      <div className="camp-gym-foes">
         {a.f.map((id, j) => (
           <span key={j} title={BY[id].n}>
             <Html html={medal(BY[id].t, 'is-tiny')} />
@@ -112,7 +112,7 @@ function Gym({ a, i }) {
           </span>
         ))}
       </div>
-      <div className="gym-tab-b">
+      <div className="camp-gym-actions">
         <Button size="small" variant="primary" data-gym-arena="jouer" data-i={i}>
           Jouer
         </Button>
@@ -127,7 +127,7 @@ function Gym({ a, i }) {
         </Button>
       </div>
       {GYM_EDITOR && GYM_EDITOR.code === i ? (
-        <div className="gym-tab-code">
+        <div className="camp-gym-code">
           <textarea readOnly rows={3} aria-label="Code de l’arène" defaultValue={gymShareCode(a)} />
           <Button size="small" data-gym-arena="copier" data-i={i}>
             Copier
@@ -142,17 +142,17 @@ function Gym({ a, i }) {
 export default function Gyms() {
   const A = PROFILE.customGyms || [];
   return (
-    <section className="card gym-tab">
+    <section className="card camp-gyms">
       <CardHeader icon="league" title="Arènes personnalisées" count={`${A.length} / 12`} />
       <p className="v4-ps-n">
         Composez un combat (terrain, règle, adversaires), testez-le, puis envoyez son code à un ami.
       </p>
-      <div className="gym-tab-a">
+      <div className="camp-gyms-actions">
         <Button size="small" variant="primary" data-gym-arena="new">
           Créer une arène
         </Button>
       </div>
-      <div className="gym-tab-i">
+      <div className="camp-gyms-import">
         <input
           type="text"
           id="gym-code"
@@ -166,7 +166,7 @@ export default function Gyms() {
         </Button>
       </div>
       {GYM_EDITOR ? <Editor /> : null}
-      <div className="gym-tab-l">
+      <div className="camp-gyms-list">
         {A.length ? (
           A.map((a, i) => <Gym key={i} a={a} i={i} />)
         ) : (

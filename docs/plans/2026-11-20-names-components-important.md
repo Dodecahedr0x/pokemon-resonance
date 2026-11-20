@@ -170,3 +170,14 @@ Each step is one commit (or a few), on its own, playable at every point.
   `src/styles/components/best-rank.css` (`.best-rank is-S`), since `.rank-tag` already names the move-rank stars.
   The cases keep the shared corner and scan effects in the skin. The page entrance animation's selector list in
   `pokemon-skin.js` now names `.league-case` and `.quests-chapter`.
+- Camp: done. `src/screens/camp/camp.css` (tabs, page), `camp-base.css` (`.camp-base`, `.camp-buildings` /
+  `.camp-building(-header, -level, -lock)` with `is-built` / `is-reached`, `.camp-subtitle`, `.camp-expedition`,
+  `.camp-daycare-pair` / `-egg` / `-slot` (`is-filled`) / `-plus`, `.camp-garden`, `.camp-plot` (`is-choosing`,
+  `is-empty`, `is-growing`, `is-ripe`), `.camp-plant is-stage-N`), `camp-duel.css` (`.camp-duel-*`, was
+  `.duel-report-*`; order chips `is-ban` / `is-done` / `is-current`, picks `is-selected` / `is-banned` / `is-picked`,
+  history `is-winner`, type tint `--type-color`), `camp-echo.css` (`.camp-echo-*`, was `.echo-tab-*`; floors
+  `is-done` / `is-current`, nodes `is-taken` / `is-boss`, members `is-fainted`) and `camp-modes.css` (Puzzles
+  `.camp-puzzle*` with `is-solved`, Gyms `.camp-gym*`, Pantheon `.camp-pantheon-*`, Mastery `.camp-mastery-*` with
+  `is-chosen`). `#camp-tab-body` also carries `.camp-tab-body`, so no id selector is left. Still in legacy: the
+  battle's duel report (`.duel-report-r*`) and the player colours `.dj1` / `.dj2`, shared with the battle; the form
+  field `.form-field` and the card intro `.v4-ps-n`, shared with Settings and Home; the fishing panel (`.pe-*`).

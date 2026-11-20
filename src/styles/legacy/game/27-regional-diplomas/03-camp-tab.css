@@ -1,11 +1,4 @@
 /* Camp tab */
-.camp-news {
-  display: grid;
-  gap: var(--space-lg);
-}
-#camp .camp4 {
-  margin: 0;
-}
 /* confirmation before a new game */
 .new-game {
   position: fixed;

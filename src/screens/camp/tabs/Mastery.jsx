@@ -25,11 +25,11 @@ function Family({ b, x }) {
       </Button>
     );
   return (
-    <article className={`mastery-tab-r${x.p ? ' on' : ''}`}>
+    <article className={`camp-mastery-row${x.p ? ' is-chosen' : ''}`}>
       <Html html={medal(m.t, 'is-small')} />
-      <div className="mastery-tab-t">
+      <div className="camp-mastery-text">
         <b>{m.n}</b>
-        <span className="mastery-tab-b">
+        <span className="camp-mastery-bar">
           <i style={{ width: `${Math.min(100, Math.round((x.n / MASTERY_THRESHOLD) * 100))}%` }} />
         </span>
         <em>
@@ -41,7 +41,7 @@ function Family({ b, x }) {
         </em>
       </div>
       {isReady ? (
-        <div className="mastery-tab-c">
+        <div className="camp-mastery-choices">
           {bt(c1)}
           {bt(c2)}
         </div>
@@ -58,10 +58,10 @@ export default function Mastery() {
       .sort((a, c) => !!c.x.p - !!a.x.p || c.x.n - a.x.n);
   const priceAmount = 500;
   return (
-    <section className="card mastery-tab">
+    <section className="card camp-mastery">
       <CardHeader icon="star" title="Maîtrise des familles" count={`${L.filter(y => y.x.p).length} / ${L.length}`} />
       <p className="v4-ps-n">{`Après ${MASTERY_THRESHOLD} combats dans l’équipe, une famille débloque un bonus permanent, à choisir entre deux. Vous pouvez en changer pour ${fmt(priceAmount)} ₽.`}</p>
-      <div className="mastery-tab-l">
+      <div className="camp-mastery-list">
         {L.length ? (
           L.map(({ b, x }) => <Family key={b} b={b} x={x} />)
         ) : (

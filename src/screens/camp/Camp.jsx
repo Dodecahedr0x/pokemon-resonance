@@ -40,12 +40,16 @@ function Content({ page }) {
   const Tab = page > 0 && t !== 'base' ? TAB_LIST[t] : null;
   const cache = page > 0 ? t !== 'base' : undefined;
   return (
-    <div className="camp-news" id="camp-news">
+    <div className="camp-content" id="camp-news">
       {page > 0 && <Tabs t={t} />}
       <div id="camp-host" hidden={cache}>
         <CampBaseHost />
       </div>
-      {page > 0 && <div id="camp-tab-body">{Tab && <Tab />}</div>}
+      {page > 0 && (
+        <div className="camp-tab-body" id="camp-tab-body">
+          {Tab && <Tab />}
+        </div>
+      )}
     </div>
   );
 }

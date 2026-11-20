@@ -1,8 +1,16 @@
-/* Camp screen (#camp, Camp.jsx). The rest of the screen is still styled in legacy. */
+/* Camp screen (#camp, Camp.jsx): the section tabs and the page around them. Each section has its own file:
+   camp-base.css, camp-duel.css, camp-echo.css, camp-modes.css. */
 
-/* duel report: the choices wrap on narrow cards */
-.duel-report .segmented-control {
-  flex-wrap: wrap;
+.camp-content {
+  display: grid;
+  gap: var(--space-lg);
+}
+.camp-tab-body > section {
+  padding: var(--space-md);
+}
+.camp-tab-body h3 {
+  margin: var(--space-md) 0 var(--space-sm);
+  font-size: 14px;
 }
 
 /* section tabs (look: the shared .tabs): smaller wrapping pills; on phones one scrolling row, edge to edge */

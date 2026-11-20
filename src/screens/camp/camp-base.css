@@ -1,0 +1,233 @@
+/* Camp › Base camp (CampBase.jsx, #v4Camp): the buildings, the expeditions, the Daycare pair and the vegetable
+   garden. */
+
+.camp-base {
+  margin: 0;
+  padding: var(--space-md);
+}
+.camp-subtitle {
+  margin: var(--space-2xs) 0 var(--space-sm);
+  color: var(--color-text-muted);
+  font: 800 13px/1.2 var(--font-display);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* ---------- buildings: three level dots each, gold once built ---------- */
+.camp-buildings {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: var(--space-sm);
+  margin: var(--space-sm) 0 var(--space-md);
+}
+.camp-building {
+  display: grid;
+  align-content: start;
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+}
+.camp-building.is-built {
+  border-color: rgba(255, 215, 94, 0.45);
+}
+.camp-building p {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 12.5px;
+}
+.camp-building-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+}
+.camp-building-level {
+  display: flex;
+  gap: var(--space-2xs);
+}
+.camp-building-level i {
+  width: 9px;
+  height: 9px;
+  border: 1px solid rgba(255, 215, 94, 0.6);
+  border-radius: 50%;
+}
+.camp-building-level i.is-reached {
+  background: #ffd75e;
+}
+.camp-building-lock {
+  color: #ffb37a;
+  font-size: 12px;
+  font-style: normal;
+}
+
+/* ---------- expeditions ---------- */
+.camp-expedition {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.camp-expedition > span {
+  flex: 1;
+  display: grid;
+  min-width: 0;
+}
+.camp-expedition em,
+.camp-expedition small {
+  color: var(--color-text-muted);
+  font-size: 12px;
+  font-style: normal;
+}
+
+/* ---------- Daycare: egg, then the two parents' slots ---------- */
+.camp-daycare-pair {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin: var(--space-3xs) 0 var(--space-sm);
+}
+.camp-daycare-egg {
+  flex: none;
+  width: 34px;
+  height: 34px;
+}
+.camp-daycare-slot {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  min-width: 0;
+  padding: var(--space-sm);
+  border: 1px dashed rgba(255, 255, 255, 0.22);
+  border-radius: 10px;
+  color: var(--color-text-soft);
+  font-size: 13px;
+}
+.camp-daycare-slot svg {
+  width: 16px;
+  height: 16px;
+}
+.camp-daycare-slot.is-filled {
+  border-style: solid;
+  border-color: rgba(122, 199, 76, 0.6);
+  background: rgba(122, 199, 76, 0.1);
+  color: inherit;
+}
+.camp-daycare-slot b {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.camp-daycare-plus {
+  color: var(--color-text-soft);
+  font-weight: 800;
+}
+
+/* ---------- vegetable garden: three plots of earth ---------- */
+.camp-garden {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+.camp-plot {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: var(--space-3xs);
+  min-height: 96px;
+  padding: var(--space-sm) var(--space-xs);
+  border: 1px solid rgba(160, 120, 70, 0.55);
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(110, 72, 40, 0.35), rgba(70, 44, 24, 0.5));
+  color: inherit;
+  font: inherit;
+  text-align: center;
+}
+.camp-plot b {
+  font-size: 13px;
+}
+.camp-plot em {
+  color: #e9d6b5;
+  font-size: 11.5px;
+  font-style: normal;
+}
+.camp-plot.is-empty {
+  border-style: dashed;
+  cursor: pointer;
+}
+.camp-plot.is-empty svg {
+  width: 18px;
+  height: 18px;
+}
+.camp-plot.is-ripe {
+  border-color: #ffd75e;
+  box-shadow: 0 0 14px rgba(255, 215, 94, 0.35);
+  cursor: pointer;
+}
+/* the seed choice spans the whole row */
+.camp-plot.is-choosing {
+  grid-column: 1 / -1;
+  justify-items: stretch;
+  gap: var(--space-xs);
+}
+.camp-plot.is-choosing .button {
+  display: grid;
+  gap: var(--space-3xs);
+  text-align: left;
+}
+.camp-plot.is-choosing .button em {
+  font-weight: 400;
+}
+
+/* the plant: a stem that grows with each stage, leaves from stage 2, berries when ripe (stage 4) */
+.camp-plant {
+  position: relative;
+  width: 34px;
+  height: 34px;
+  background:
+    radial-gradient(circle at 50% 100%, #5b3a1f 0 40%, transparent 41%), linear-gradient(transparent 60%, transparent);
+}
+.camp-plant::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 8px;
+  width: 3px;
+  height: 8px;
+  margin-left: -1.5px;
+  border-radius: 2px;
+  background: #5fae4a;
+}
+.camp-plant.is-stage-2::before {
+  height: 14px;
+}
+.camp-plant:is(.is-stage-3, .is-stage-4)::before {
+  height: 20px;
+}
+.camp-plant::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 6px;
+  width: 16px;
+  height: 10px;
+  margin-left: calc(var(--space-sm) * -1);
+  border-radius: 50% 50% 40% 40%;
+  background: #6cc24a;
+  opacity: 0;
+}
+.camp-plant:is(.is-stage-2, .is-stage-3)::after {
+  opacity: 1;
+}
+.camp-plant.is-stage-4::after {
+  width: 22px;
+  margin-left: calc(var(--space-md) * -1);
+  background:
+    radial-gradient(circle at 25% 60%, #3d7be0 0 3.5px, transparent 4px),
+    radial-gradient(circle at 70% 45%, #3d7be0 0 3.5px, transparent 4px), #6cc24a;
+  opacity: 1;
+}

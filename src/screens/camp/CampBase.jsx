@@ -20,18 +20,18 @@ function Building({ k }) {
     lk = buildingBlocked(k),
     c = n < 3 ? B2.upgradeCost[n] : null;
   return (
-    <article className={`cb-b${n ? ' on' : ''}`}>
-      <div className="cb-h">
+    <article className={`camp-building${n ? ' is-built' : ''}`}>
+      <div className="camp-building-header">
         <b>{B2.n}</b>
-        <span className="cb-lv" aria-label={`Niveau ${n} sur 3`}>
+        <span className="camp-building-level" aria-label={`Niveau ${n} sur 3`}>
           {[1, 2, 3].map(i => (
-            <i key={i} className={i <= n ? 'on' : ''} />
+            <i key={i} className={i <= n ? 'is-reached' : undefined} />
           ))}
         </span>
       </div>
       <p>{n ? B2.d(n) : B2.d(1)}</p>
       {lk ? (
-        <em className="cb-lk">{lk}</em>
+        <em className="camp-building-lock">{lk}</em>
       ) : (
         <Button
           size="small"
@@ -49,7 +49,7 @@ function Expedition({ x, i }) {
   const remainder = x.fin - PROFILE.battles,
     m = BY[x.id];
   return (
-    <div className="cb-x">
+    <div className="camp-expedition">
       <Html html={medal(m.t, 'is-small')} />
       <span>
         <b>{m.n}</b>
@@ -77,12 +77,12 @@ function Daycare() {
     remainder = Math.max(0, [8, 6, 4][pe - 1] - (PROFILE.camp.oeuf || 0)),
     slot = id =>
       id ? (
-        <span className="pe-s on">
+        <span className="camp-daycare-slot is-filled">
           <Html html={medal(BY[id].t, 'is-small')} />
           <b>{BY[id].n}</b>
         </span>
       ) : (
-        <span className="pe-s">
+        <span className="camp-daycare-slot">
           <svg>
             <use href="#i-plus" />
           </svg>
@@ -100,11 +100,11 @@ function Daycare() {
   }
   return (
     <>
-      <h3 className="cb-st">Pension · couple</h3>
-      <div className="pe-row">
-        <img className="pe-egg" src={ITM('oeuf')} alt="" loading="lazy" />
+      <h3 className="camp-subtitle">Pension · couple</h3>
+      <div className="camp-daycare-pair">
+        <img className="camp-daycare-egg" src={ITM('oeuf')} alt="" loading="lazy" />
         {slot(c[0])}
-        <span className="pe-x">+</span>
+        <span className="camp-daycare-plus">+</span>
         {slot(c[1])}
       </div>
       <p className="v4-ps-n">{txt}</p>
@@ -125,7 +125,7 @@ function Daycare() {
 function Plot({ x, i }) {
   if (!x) {
     return POT_I === i ? (
-      <div className="pt-p choix">
+      <div className="camp-plot is-choosing">
         {Object.entries(POTAGER).map(([g, G]) => (
           <Button key={g} size="small" data-pot-g={g} disabled={!(PROFILE.money >= G.p)}>
             {`${G.n} · ${fmt(G.p)} ₽`}
@@ -137,7 +137,7 @@ function Plot({ x, i }) {
         </Button>
       </div>
     ) : (
-      <button type="button" className="pt-p vide" data-pot-i={i}>
+      <button type="button" className="camp-plot is-empty" data-pot-i={i}>
         <svg>
           <use href="#i-plus" />
         </svg>
@@ -148,17 +148,17 @@ function Plot({ x, i }) {
   const r = plotSprout(x),
     G = POTAGER[x.g];
   return r ? (
-    <div className="pt-p pousse">
+    <div className="camp-plot is-growing">
       <span
-        className={`pt-pl s${Math.min(3, 1 + Math.floor(((G.duration - r) / G.duration) * 3))}`}
+        className={`camp-plant is-stage-${Math.min(3, 1 + Math.floor(((G.duration - r) / G.duration) * 3))}`}
         aria-hidden="true"
       />
       <b>{G.n}</b>
       <em>{`Encore ${pl(r, 'combat')}`}</em>
     </div>
   ) : (
-    <button type="button" className="pt-p mur" data-pot-r={i}>
-      <span className="pt-pl s4" aria-hidden="true" />
+    <button type="button" className="camp-plot is-ripe" data-pot-r={i}>
+      <span className="camp-plant is-stage-4" aria-hidden="true" />
       <b>{G.n}</b>
       <em>Récolter !</em>
     </button>
@@ -170,8 +170,8 @@ function Garden() {
     watered = PROFILE.watered === today();
   return (
     <>
-      <h3 className="cb-st">Potager</h3>
-      <div className="pt-g">
+      <h3 className="camp-subtitle">Potager</h3>
+      <div className="camp-garden">
         {P2.map((x, i) => (
           <Plot key={i} x={x} i={i} />
         ))}
@@ -191,16 +191,16 @@ export default function CampBase({ filled: filled }) {
   const exp = PROFILE.exp || [],
     places = filled ? placesExp() : 0;
   return (
-    <section className="camp4 card" id="v4Camp" aria-label="Camp de base">
+    <section className="camp-base card" id="v4Camp" aria-label="Camp de base">
       {filled && (
         <>
           <CardHeader icon="map" title="Camp de base" />
-          <div className="cb-grid">
+          <div className="camp-buildings">
             {Object.keys(BUILDINGS).map(k => (
               <Building key={k} k={k} />
             ))}
           </div>
-          <h3 className="cb-st">{'Expéditions' + (places ? ` · ${exp.length} / ${places}` : '')}</h3>
+          <h3 className="camp-subtitle">{'Expéditions' + (places ? ` · ${exp.length} / ${places}` : '')}</h3>
           {places ? (
             <>
               {exp.map((x, i) => (

@@ -713,7 +713,7 @@ function onDuelClick(e) {
     return launchDuel(C);
   }
   duelRender();
-  const box = a === 'tirer' && document.querySelector('.duel-report-o');
+  const box = a === 'tirer' && document.querySelector('.camp-duel-order');
   if (box) {
     window.scrollTo({
       top: Math.max(0, box.getBoundingClientRect().top + window.scrollY - 160),

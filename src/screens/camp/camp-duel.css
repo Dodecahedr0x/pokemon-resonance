@@ -1,0 +1,337 @@
+/* Camp › Duel (tabs/Duel.jsx): two players on one phone. Settings, then the draw order (bans, then a snake pick),
+   both teams, the pool of drawn Pokémon and the chosen one's sheet, and the past duels. Each player's colour is
+   --dj, set by .dj1 / .dj2 (still in legacy, shared with the battle's duel report). */
+
+/* the choices wrap on narrow cards */
+.camp-duel .segmented-control {
+  flex-wrap: wrap;
+}
+.camp-duel .camp-duel-fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: var(--space-sm);
+}
+.camp-duel .camp-duel-settings {
+  display: grid;
+  gap: var(--space-sm);
+}
+.camp-duel .camp-duel-name span {
+  color: var(--dj);
+}
+.camp-duel .camp-duel-name input {
+  width: 100%;
+  height: 38px;
+  border-radius: 10px;
+  border: 1px solid var(--dj);
+  background: rgba(0, 0, 0, 0.3);
+  color: inherit;
+  padding: 0 var(--space-sm);
+  font: inherit;
+  font-size: 15px;
+  box-sizing: border-box;
+}
+.camp-duel select {
+  width: 100%;
+}
+.camp-duel-hint {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--color-text-muted);
+  line-height: 1.45;
+}
+.camp-duel-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
+}
+.camp-duel-order {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2xs);
+  margin: var(--space-2xs) 0 var(--space-sm);
+}
+.camp-duel-order span {
+  min-width: 30px;
+  height: 24px;
+  display: inline-grid;
+  place-items: center;
+  padding: 0 var(--space-xs);
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  border: 1px solid var(--dj);
+  color: var(--dj);
+  opacity: 0.55;
+}
+.camp-duel-order span.is-ban {
+  border-style: dashed;
+}
+.camp-duel-order span.is-done {
+  opacity: 0.35;
+  text-decoration: line-through;
+}
+.camp-duel-order span.is-current {
+  opacity: 1;
+  background: var(--dj);
+  color: #0b1220;
+  box-shadow: 0 0 12px -2px var(--dj);
+}
+.camp-duel-step {
+  margin: 0 0 var(--space-sm);
+  font-size: 14px;
+}
+.camp-duel-step b {
+  font-size: 15px;
+}
+.camp-duel-teams {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+.camp-duel-team {
+  padding: var(--space-sm);
+  border-radius: 12px;
+  border: 1px solid var(--dj);
+  background: rgba(0, 0, 0, 0.22);
+  min-width: 0;
+}
+.camp-duel-team > b {
+  display: block;
+  color: var(--dj);
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.camp-duel-team em {
+  display: block;
+  font-style: normal;
+  font-size: 11px;
+  color: var(--color-text-muted);
+  margin-top: var(--space-2xs);
+}
+.camp-duel-team-slots {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-3xs);
+  margin-top: var(--space-2xs);
+}
+.camp-duel-team-slots span {
+  aspect-ratio: 1;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+.camp-duel-team-slots span.is-empty {
+  border: 1px dashed rgba(255, 255, 255, 0.18);
+  background: none;
+}
+.camp-duel-team-slots img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.camp-duel-pool {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(98px, 1fr));
+  gap: var(--space-xs);
+}
+.camp-duel-pick {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3xs);
+  padding: var(--space-sm) var(--space-2xs) var(--space-xs);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.04);
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  min-width: 0;
+  text-align: center;
+}
+.camp-duel-pick img {
+  width: 54px;
+  height: 54px;
+  object-fit: contain;
+}
+.camp-duel-pick > b {
+  font-size: 12.5px;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.camp-duel-pick > em {
+  font-style: normal;
+  font-size: 10.5px;
+  color: var(--color-text-muted);
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.camp-duel-pick small {
+  font-size: 10px;
+  color: var(--color-highlight);
+}
+.camp-duel-types {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3xs);
+  justify-content: center;
+}
+.camp-duel-type {
+  font-style: normal;
+  font-size: 9.5px;
+  font-weight: 700;
+  line-height: 1;
+  padding: var(--space-3xs) var(--space-2xs);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--type-color) 30%, transparent);
+  border: 1px solid var(--type-color);
+  color: #fff;
+}
+.camp-duel-detail-header .camp-duel-type {
+  font-size: 11px;
+}
+.camp-duel-stats {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: var(--space-3xs);
+  width: 100%;
+  padding: 0 var(--space-2xs);
+  box-sizing: border-box;
+  margin-top: var(--space-3xs);
+}
+.camp-duel-stats i {
+  display: block;
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--color-highlight) var(--v), rgba(255, 255, 255, 0.12) var(--v));
+}
+.camp-duel-pick.is-selected {
+  border-color: var(--color-highlight);
+  box-shadow: 0 0 0 2px rgba(255, 212, 91, 0.5);
+  background: rgba(255, 212, 91, 0.1);
+}
+.camp-duel-pick.is-banned {
+  opacity: 0.38;
+  filter: grayscale(1);
+}
+.camp-duel-pick.is-picked {
+  border-color: var(--dj);
+  background: rgba(0, 0, 0, 0.25);
+  opacity: 0.75;
+}
+.camp-duel-pick[disabled] {
+  cursor: default;
+}
+.camp-duel-pick-tag {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  font-size: 9.5px;
+  font-weight: 800;
+  padding: 1px var(--space-2xs);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.6);
+  color: var(--dj, #ff7a7a);
+}
+.camp-duel-pick.is-banned .camp-duel-pick-tag {
+  color: #ff7a7a;
+}
+.camp-duel-detail {
+  margin-top: var(--space-sm);
+  padding: var(--space-sm);
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 212, 91, 0.35);
+}
+.camp-duel-detail-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+.camp-duel-detail-header em {
+  font-style: normal;
+  font-size: 12px;
+  color: var(--color-text-muted);
+  margin-left: auto;
+}
+.camp-duel-moves {
+  display: grid;
+  gap: var(--space-2xs);
+  margin: var(--space-sm) 0 var(--space-xs);
+}
+.camp-duel-moves span {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: 12.5px;
+}
+.camp-duel-moves i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex: none;
+}
+.camp-duel-moves em {
+  font-style: normal;
+  color: var(--color-text-muted);
+  font-size: 11.5px;
+  margin-left: auto;
+}
+.camp-duel-lineage {
+  margin: 0;
+  font-size: 11.5px;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+.camp-duel-history {
+  margin-top: var(--space-md);
+}
+.camp-duel-history h3 {
+  font-size: 14px;
+  margin: 0 0 var(--space-xs);
+}
+.camp-duel-history-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: var(--space-xs);
+  align-items: center;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  margin-bottom: var(--space-2xs);
+  font-size: 13px;
+}
+.camp-duel-history-row span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.camp-duel-history-row span:nth-child(3) {
+  text-align: right;
+}
+.camp-duel-history-row span.is-winner {
+  color: var(--color-highlight);
+  font-weight: 800;
+}
+.camp-duel-history-row em {
+  font-style: normal;
+  font-size: 11px;
+  color: var(--color-text-muted);
+}
+.camp-duel-history-row small {
+  grid-column: 1/-1;
+  font-size: 11px;
+  color: var(--color-text-muted);
+  text-align: center;
+}

@@ -21,7 +21,7 @@ function Head({ X }) {
 function Event({ R }) {
   if (R.ev === 'relique') {
     return (
-      <div className="echo-tab-ev">
+      <div className="camp-echo-event">
         <h3>Choisissez une relique</h3>
         {randomRelic(R, 3).map(k => (
           <Button key={k} data-echo431={`rel-${k}`}>
@@ -34,7 +34,7 @@ function Event({ R }) {
   }
   if (R.ev === 'marchand') {
     return (
-      <div className="echo-tab-ev">
+      <div className="camp-echo-event">
         <h3>
           Le Marchand <em>{`${R.echoes} Échos`}</em>
         </h3>
@@ -59,7 +59,7 @@ function Event({ R }) {
   if (ECHO_EVENTS[R.ev]) {
     const [t, d, C] = ECHO_EVENTS[R.ev];
     return (
-      <div className="echo-tab-ev">
+      <div className="camp-echo-event">
         <h3>{t}</h3>
         <p>{d}</p>
         {C.map(([l, k]) => (
@@ -76,21 +76,21 @@ function Event({ R }) {
 // The expedition map, from the guardian (top) to the first floor.
 function Card({ R }) {
   return (
-    <div className="echo-tab-c">
+    <div className="camp-echo-map">
       {R.map
         .map((L, f) => {
           const doneFlag = f < R.f,
             hereNow = f === R.f && !R.ev;
           return (
-            <div key={f} className={`echo-tab-f${doneFlag ? ' fait' : ''}${hereNow ? ' ici' : ''}`}>
-              <span className="echo-tab-fn">{f + 1}</span>
+            <div key={f} className={`camp-echo-floor${doneFlag ? ' is-done' : ''}${hereNow ? ' is-current' : ''}`}>
+              <span className="camp-echo-floor-number">{f + 1}</span>
               {L.map((t, i) => {
                 const takenSet = doneFlag && R.path[f] === i;
                 return (
                   <button
                     key={i}
                     type="button"
-                    className={`echo-tab-n t-${t}${takenSet ? ' pris' : ''}`}
+                    className={`camp-echo-node${t === 'boss' ? ' is-boss' : ''}${takenSet ? ' is-taken' : ''}`}
                     data-echo431={hereNow ? `n${i}` : undefined}
                     disabled={!hereNow}
                     aria-label={`${ECHO_NODES[t][0]}, étage ${f + 1}`}
@@ -116,7 +116,7 @@ export default function Echo() {
     R = X.run;
   if (!R) {
     return (
-      <section className="card echo-tab">
+      <section className="card camp-echo">
         <Head X={X} />
         <p className="v4-ps-n">
           Une expédition de 8 étages. À chaque étage, choisissez votre chemin : combat, élite (une relique à la clé),
@@ -124,12 +124,12 @@ export default function Echo() {
           <b>Les PV sont conservés d’un combat à l’autre et un Pokémon K.O. quitte l’expédition.</b> Au bout : le
           gardien.
         </p>
-        <div className="echo-tab-t">
+        <div className="camp-echo-team">
           {squad
             .slice(0, 4)
             .filter(id => BY[id])
             .map(id => (
-              <span key={id} className="echo-tab-m">
+              <span key={id} className="camp-echo-member">
                 <Html html={medal(BY[id].t, 'is-small')} />
                 <b>{BY[id].n}</b>
               </span>
@@ -145,9 +145,9 @@ export default function Echo() {
     );
   }
   return (
-    <section className="card echo-tab">
+    <section className="card camp-echo">
       <Head X={X} />
-      <div className="echo-tab-k">
+      <div className="camp-echo-status">
         <span>
           Étage <b>{`${Math.min(8, R.f + 1)} / 8`}</b>
         </span>
@@ -156,22 +156,22 @@ export default function Echo() {
         </span>
         {R.pv ? <span>{`PV max +${Math.round(R.pv * 100)} %`}</span> : null}
       </div>
-      <div className="echo-tab-t">
+      <div className="camp-echo-team">
         {R.team.map(([id, h], i) => (
-          <span key={i} className={`echo-tab-m${h <= 0 ? ' ko' : ''}`}>
+          <span key={i} className={`camp-echo-member${h <= 0 ? ' is-fainted' : ''}`}>
             <Html html={medal(BY[id].t, 'is-small')} />
             <b>{BY[id].n}</b>
-            <span className="echo-tab-hp">
+            <span className="camp-echo-hp">
               <i style={{ width: `${Math.round(h * 100)}%` }} />
             </span>
             <em>{h <= 0 ? 'K.O.' : Math.round(h * 100) + ' %'}</em>
           </span>
         ))}
       </div>
-      <div className="echo-tab-rl">
+      <div className="camp-echo-relics">
         {R.relics.length ? (
           R.relics.map(k => (
-            <span key={k} className="echo-tab-r" title={RELIC_DEFS[k][1]}>
+            <span key={k} className="camp-echo-relic" title={RELIC_DEFS[k][1]}>
               {RELIC_DEFS[k][0]}
             </span>
           ))

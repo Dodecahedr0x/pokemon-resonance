@@ -25,7 +25,7 @@ const Options = ({ L }) =>
 
 function Types({ T }) {
   return T.map((t, i) => (
-    <i key={i} className="duel-report-ty" style={{ '--c': tc(t) }}>
+    <i key={i} className="camp-duel-type" style={{ '--type-color': tc(t) }}>
       {t}
     </i>
   ));
@@ -47,13 +47,13 @@ function Seg({ k, L, v }) {
 // Duel settings: names (input reread by the engine), forms, size, terrain, time of day, rounds.
 function Preferences({ C }) {
   return (
-    <div className="duel-report-cfg">
-      <div className="duel-report-row">
-        <label className="form-field duel-report-n dj1">
+    <div className="camp-duel-settings">
+      <div className="camp-duel-fields">
+        <label className="form-field camp-duel-name dj1">
           <span>Joueur 1 · commence</span>
           <input type="text" data-duel-report-n="0" maxLength={14} defaultValue={C.names[0]} autoComplete="off" />
         </label>
-        <label className="form-field duel-report-n dj2">
+        <label className="form-field camp-duel-name dj2">
           <span>Joueur 2</span>
           <input type="text" data-duel-report-n="1" maxLength={14} defaultValue={C.names[1]} autoComplete="off" />
         </label>
@@ -80,7 +80,7 @@ function Preferences({ C }) {
           v={C.sizeValue}
         />
       </div>
-      <div className="duel-report-row">
+      <div className="camp-duel-fields">
         <label className="form-field">
           <span>Terrain</span>
           <select data-duel-report-c="terrain" defaultValue={String(C.terrain)}>
@@ -105,8 +105,8 @@ function Preferences({ C }) {
           </select>
         </label>
       </div>
-      <p className="duel-report-h">{`${C.sizeValue * 2 + 4} Pokémon tirés au hasard, un bannissement chacun, puis le choix en serpent : ${C.sizeValue === 3 ? 'J1, J2, J2, J1, J1, J2' : 'J1, J2, J2, J1, J1, J2, J2, J1'}. Le Joueur 2 joue en second : il choisit deux fois d’affilée en premier.`}</p>
-      <div className="duel-report-a">
+      <p className="camp-duel-hint">{`${C.sizeValue * 2 + 4} Pokémon tirés au hasard, un bannissement chacun, puis le choix en serpent : ${C.sizeValue === 3 ? 'J1, J2, J2, J1, J1, J2' : 'J1, J2, J2, J1, J1, J2, J2, J1'}. Le Joueur 2 joue en second : il choisit deux fois d’affilée en premier.`}</p>
+      <div className="camp-duel-actions">
         <Button variant="primary" data-duel-report="tirer">
           Tirer les Pokémon
         </Button>
@@ -122,31 +122,31 @@ function Card({ C, id }) {
     pk = C.picks[0].includes(id) ? 1 : C.picks[1].includes(id) ? 2 : 0,
     family = familyOf(id),
     nEv = C.mode === 'final' ? 0 : Math.max(0, ...family.map(x => (x.st || 1) - (m.st || 1)));
-  const cls = ban ? ' ban' : pk ? ' pk dj' + pk : C.sel === id ? ' sel' : '';
+  const cls = ban ? ' is-banned' : pk ? ' is-picked dj' + pk : C.sel === id ? ' is-selected' : '';
   return (
     <button
       type="button"
-      className={`duel-report-c${cls}`}
+      className={`camp-duel-pick${cls}`}
       data-duel-report-p={id}
       disabled={!!(ban || pk)}
       aria-pressed={C.sel === id}
     >
       <img src={ART(m.no)} alt="" loading="lazy" />
       <b>{m.n}</b>
-      <span className="duel-report-t">
+      <span className="camp-duel-types">
         <Types T={m.t} />
       </span>
       <em>{m.r || ''}</em>
-      <span className="duel-report-s" aria-label={STLN.map((n, i) => n + ' ' + m.s[i]).join(', ')}>
+      <span className="camp-duel-stats" aria-label={STLN.map((n, i) => n + ' ' + m.s[i]).join(', ')}>
         {m.s.map((v, i) => (
           <i key={i} title={`${STLN[i]} ${v}`} style={{ '--v': `${Math.round((v / STAT_MAX) * 100)}%` }} />
         ))}
       </span>
       {nEv ? <small>{`${nEv} Éveil${nEv > 1 ? 's' : ''}`}</small> : null}
       {ban ? (
-        <span className="duel-report-x">{`Banni · J${ban}`}</span>
+        <span className="camp-duel-pick-tag">{`Banni · J${ban}`}</span>
       ) : pk ? (
-        <span className="duel-report-x">{`J${pk}`}</span>
+        <span className="camp-duel-pick-tag">{`J${pk}`}</span>
       ) : null}
     </button>
   );
@@ -156,18 +156,18 @@ function Card({ C, id }) {
 function Detail({ C }) {
   const id = C.sel;
   if (!id || !BY[id]) {
-    return <p className="duel-report-h">Touchez un Pokémon pour voir ses capacités.</p>;
+    return <p className="camp-duel-hint">Touchez un Pokémon pour voir ses capacités.</p>;
   }
   const m = BY[id],
     family = familyOf(id).map(x => x.n);
   return (
-    <div className="duel-report-d">
-      <div className="duel-report-dh">
+    <div className="camp-duel-detail">
+      <div className="camp-duel-detail-header">
         <b>{m.n}</b>
         <Types T={m.t} />
         <em>{[m.r, m.r2].filter(Boolean).join(' · ')}</em>
       </div>
-      <div className="duel-report-mv">
+      <div className="camp-duel-moves">
         {m.mv
           .filter(k => MV[k])
           .map((k, i) => {
@@ -181,7 +181,7 @@ function Detail({ C }) {
             );
           })}
       </div>
-      <p className="duel-report-dl">
+      <p className="camp-duel-lineage">
         {STLN.map((n, i) => `${n} ${m.s[i]}`).join(' · ')}
         {family.length > 1 && C.mode !== 'final' ? (
           <>
@@ -199,16 +199,16 @@ function Team({ C, j }) {
   const L = C.picks[j],
     B0 = C.bans[j];
   return (
-    <div className={`duel-report-eq dj${j + 1}`}>
+    <div className={`camp-duel-team dj${j + 1}`}>
       <b>{C.names[j]}</b>
-      <div className="duel-report-eqm">
+      <div className="camp-duel-team-slots">
         {Array.from({ length: C.sizeValue }, (_, i) =>
           L[i] ? (
             <span key={i} title={BY[L[i]].n}>
               <img src={ART(BY[L[i]].no)} alt={BY[L[i]].n} />
             </span>
           ) : (
-            <span key={i} className="v" />
+            <span key={i} className="is-empty" />
           )
         )}
       </div>
@@ -223,29 +223,29 @@ function Draw({ C }) {
     ord = duelOrder(C.sizeValue);
   return (
     <>
-      <div className="duel-report-o" aria-label="Ordre du tirage">
+      <div className="camp-duel-order" aria-label="Ordre du tirage">
         {ord.map((x, i) => (
           <span
             key={i}
-            className={`dj${x.j + 1}${i < C.stepCount ? ' fait' : i === C.stepCount ? ' now' : ''}${x.a === 'ban' ? ' bn' : ''}`}
+            className={`dj${x.j + 1}${i < C.stepCount ? ' is-done' : i === C.stepCount ? ' is-current' : ''}${x.a === 'ban' ? ' is-ban' : ''}`}
           >{`${x.a === 'ban' ? '✕' : ''}J${x.j + 1}`}</span>
         ))}
       </div>
       {st ? (
-        <p className="duel-report-st">
+        <p className="camp-duel-step">
           <b className={`dj${st.j + 1}`}>{C.names[st.j]}</b>
           {' ' + (st.a === 'ban' ? 'bannit un Pokémon : personne ne pourra le prendre.' : 'choisit un Pokémon.')}
         </p>
       ) : (
-        <p className="duel-report-st">Les équipes sont prêtes.</p>
+        <p className="camp-duel-step">Les équipes sont prêtes.</p>
       )}
-      <div className="duel-report-eqs">
+      <div className="camp-duel-teams">
         <Team C={C} j={0} />
         <Team C={C} j={1} />
       </div>
       {st ? (
         <>
-          <div className="duel-report-pool">
+          <div className="camp-duel-pool">
             {C.pool.map(id => (
               <Card key={id} C={C} id={id} />
             ))}
@@ -253,7 +253,7 @@ function Draw({ C }) {
           <Detail C={C} />
         </>
       ) : null}
-      <div className="duel-report-a">
+      <div className="camp-duel-actions">
         {st ? (
           <Button variant="primary" data-duel-report="ok" disabled={!C.sel}>
             {C.sel ? (st.a === 'ban' ? 'Bannir ' : 'Choisir ') + BY[C.sel].n : st.a === 'ban' ? 'Bannir…' : 'Choisir…'}
@@ -281,7 +281,7 @@ export default function Duel() {
     P0 = PROFILE.duel433 || DUEL_TUTORIAL_0().duel433,
     H = (P0.h || []).slice(-5).reverse();
   return (
-    <section className="card duel-report">
+    <section className="card camp-duel">
       <CardHeader icon="fight" title="Duel local" count={`${P0.n || 0} duel${(P0.n || 0) > 1 ? 's' : ''}`} />
       <p className="v4-ps-n">
         Deux joueurs, un téléphone. Chacun dirige son équipe à son tour, avec les mêmes règles : ni objets, ni natures,
@@ -289,13 +289,13 @@ export default function Duel() {
       </p>
       {C.e === 'reglages' ? <Preferences C={C} /> : <Draw C={C} />}
       {H.length ? (
-        <div className="duel-report-hi">
+        <div className="camp-duel-history">
           <h3>Derniers duels</h3>
           {H.map((x, i) => (
-            <div key={i} className="duel-report-hl">
-              <span className={x.g === 1 ? 'g' : ''}>{x.n[0]}</span>
+            <div key={i} className="camp-duel-history-row">
+              <span className={x.g === 1 ? 'is-winner' : undefined}>{x.n[0]}</span>
               <em>{x.g ? 'contre' : 'nul ·'}</em>
-              <span className={x.g === 2 ? 'g' : ''}>{x.n[1]}</span>
+              <span className={x.g === 2 ? 'is-winner' : undefined}>{x.n[1]}</span>
               <small>{`${x.d ? x.d.split('-').reverse().join('/') + ' · ' : ''}${x.r} manche${x.r > 1 ? 's' : ''}${x.w === 'temps' ? ' · aux PV' : x.w === 'forfait' ? ' · forfait' : ''}`}</small>
             </div>
           ))}

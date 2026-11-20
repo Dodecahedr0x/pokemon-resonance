@@ -1,0 +1,311 @@
+/* Camp › Puzzles, Gyms, Pantheon and Mastery tabs (tabs/Puzzles.jsx, Gyms.jsx, Pantheon.jsx, Mastery.jsx). */
+
+/* ---------- Puzzles: today's three, then the whole grid; gold stars once solved ---------- */
+.camp-puzzles-heading {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-sm);
+}
+.camp-puzzles-heading em {
+  color: var(--color-highlight);
+  font-size: 11.5px;
+  font-style: normal;
+  font-weight: 500;
+}
+.camp-puzzles-daily {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-sm);
+}
+.camp-puzzle-daily {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2xs);
+  min-width: 0;
+  padding: var(--space-sm);
+  border: 1px solid rgba(255, 215, 94, 0.35);
+  border-radius: 14px;
+  background: rgba(255, 215, 94, 0.06);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.camp-puzzle-daily.is-solved {
+  border-color: rgba(110, 220, 140, 0.5);
+  background: rgba(110, 220, 140, 0.07);
+}
+.camp-puzzle-daily em {
+  max-width: 100%;
+  overflow: hidden;
+  color: #9fb3c2;
+  font-size: 11px;
+  font-style: normal;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.camp-puzzle-number {
+  font-size: 15px;
+  font-weight: 800;
+}
+.camp-puzzle-foes {
+  display: flex;
+  gap: var(--space-3xs);
+}
+.camp-puzzle-stars {
+  color: var(--color-highlight);
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+.camp-puzzles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(54px, 1fr));
+  gap: var(--space-xs);
+}
+.camp-puzzle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  padding: var(--space-xs) var(--space-3xs);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+.camp-puzzle.is-solved {
+  border-color: rgba(255, 215, 94, 0.45);
+}
+.camp-puzzle b {
+  font-size: 14px;
+}
+.camp-puzzle .camp-puzzle-stars {
+  font-size: 9.5px;
+  letter-spacing: 0;
+}
+
+/* ---------- Gyms: create / import, the editor, one card per custom gym ---------- */
+.camp-gyms-actions {
+  margin-bottom: var(--space-sm);
+}
+.camp-gyms-import {
+  display: flex;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+.camp-gyms-import input {
+  flex: 1;
+  min-width: 0;
+  height: 36px;
+  padding: 0 var(--space-sm);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.3);
+  color: inherit;
+  font: inherit;
+  font-size: 13px;
+}
+.camp-gym-editor {
+  display: grid;
+  gap: var(--space-sm);
+  margin: 0 0 var(--space-md);
+  padding: var(--space-md);
+  border: 1px solid rgba(79, 195, 255, 0.3);
+  border-radius: 14px;
+  background: rgba(79, 195, 255, 0.06);
+}
+.camp-tab-body .camp-gym-editor h3 {
+  margin: 0;
+}
+.camp-gym-editor :is(select, input) {
+  width: 100%;
+  min-width: 0;
+  height: 36px;
+  padding: 0 var(--space-sm);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 10px;
+  background: #0b1b27;
+  color: inherit;
+  font: inherit;
+  font-size: 13px;
+}
+.camp-gym-editor-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-sm);
+}
+.camp-gyms-list {
+  display: grid;
+  gap: var(--space-sm);
+}
+.camp-gym {
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.03);
+}
+.camp-gym-header b {
+  display: block;
+  font-size: 14.5px;
+}
+.camp-gym-header em {
+  color: #9fb3c2;
+  font-size: 12px;
+  font-style: normal;
+}
+.camp-gym-foes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin: var(--space-sm) 0;
+  font-size: 12px;
+}
+.camp-gym-foes span {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+}
+.camp-gym-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+.camp-gym-code {
+  display: grid;
+  gap: var(--space-xs);
+  margin-top: var(--space-sm);
+}
+.camp-gym-code textarea {
+  width: 100%;
+  padding: var(--space-sm);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.3);
+  color: inherit;
+  font:
+    12px/1.4 ui-monospace,
+    monospace;
+  word-break: break-all;
+  resize: none;
+}
+
+/* ---------- Pantheon: each team that beat a Champion, a Master or the Deep Echo guardian ---------- */
+.camp-pantheon-list {
+  display: grid;
+  gap: var(--space-sm);
+}
+.camp-pantheon-team {
+  padding: var(--space-md);
+  border: 1px solid rgba(255, 215, 94, 0.35);
+  border-radius: 14px;
+  background: linear-gradient(145deg, rgba(255, 215, 94, 0.1), rgba(255, 255, 255, 0.02));
+}
+.camp-pantheon-header b {
+  display: block;
+  color: var(--color-highlight);
+  font-size: 15px;
+}
+.camp-pantheon-header em {
+  color: #b9cad6;
+  font-size: 12px;
+  font-style: normal;
+}
+.camp-pantheon-members {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-xs);
+  margin-top: var(--space-sm);
+}
+.camp-pantheon-member {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 0;
+}
+.camp-pantheon-member img {
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
+}
+.camp-pantheon-member em {
+  max-width: 100%;
+  overflow: hidden;
+  font-size: 11px;
+  font-style: normal;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---------- Mastery: one row per family, a progress bar, then a choice of two bonuses ---------- */
+.camp-mastery-list {
+  display: grid;
+  gap: var(--space-xs);
+}
+.camp-mastery-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-xs) var(--space-sm);
+  padding: var(--space-sm) 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+.camp-mastery-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3xs);
+  min-width: 0;
+}
+.camp-mastery-text b {
+  font-size: 14px;
+}
+.camp-mastery-text em {
+  color: #9fb3c2;
+  font-size: 12px;
+  font-style: normal;
+}
+.camp-mastery-row.is-chosen .camp-mastery-text em {
+  color: var(--color-highlight);
+}
+.camp-mastery-bar {
+  height: 5px;
+  overflow: hidden;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.08);
+}
+.camp-mastery-bar i {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #4fc3ff, #ffd45b);
+}
+.camp-mastery-choices {
+  grid-column: 1/-1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-xs);
+}
+.camp-mastery-choices .button {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  height: auto;
+  min-height: 44px;
+  padding: var(--space-xs) var(--space-sm);
+  text-align: left;
+  white-space: normal;
+}
+.camp-mastery-choices .button em {
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 500;
+  opacity: 0.85;
+}
+/* the chosen bonus: a disabled primary button, kept gold */
+.camp-mastery-choices .button.button-primary[disabled] {
+  border-color: transparent;
+  background: linear-gradient(145deg, #ffd45b, #e59a1f);
+  color: #241500;
+  opacity: 1;
+}

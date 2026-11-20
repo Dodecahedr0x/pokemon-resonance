@@ -61,48 +61,6 @@ html body .am-err {
 }
 
 /* --- Day Care: the couple --- */
-html body .pe-row {
-  display: flex;
-  align-items: center;
-  gap: var(--space-sm);
-  margin: var(--space-3xs) 0 var(--space-sm);
-}
-html body .pe-egg {
-  width: 34px;
-  height: 34px;
-  flex: none;
-}
-html body .pe-s {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  align-items: center;
-  gap: var(--space-xs);
-  padding: var(--space-sm);
-  border-radius: 10px;
-  border: 1px dashed rgba(255, 255, 255, 0.22);
-  color: var(--v4-tx2, #9fb0c4);
-  font-size: 13px;
-}
-html body .pe-s svg {
-  width: 16px;
-  height: 16px;
-}
-html body .pe-s.on {
-  border-style: solid;
-  border-color: rgba(122, 199, 76, 0.6);
-  background: rgba(122, 199, 76, 0.1);
-  color: inherit;
-}
-html body .pe-s b {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-html body .pe-x {
-  font-weight: 800;
-  color: var(--v4-tx2, #9fb0c4);
-}
 html body .exp-d.on {
   border-color: #7ac74c;
   background: rgba(122, 199, 76, 0.14);
