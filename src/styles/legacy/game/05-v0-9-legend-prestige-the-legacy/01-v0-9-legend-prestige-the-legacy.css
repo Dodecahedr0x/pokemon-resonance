@@ -149,7 +149,6 @@ body {
 .st-line,
 .duo,
 .wx,
-.cs,
 .it {
   border: 1px solid transparent;
   background:
@@ -172,7 +171,6 @@ body {
 .st-evo,
 .st-line,
 .wx,
-.cs,
 .it {
   border-radius: var(--r);
 }

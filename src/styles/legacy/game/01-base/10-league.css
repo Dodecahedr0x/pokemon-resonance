@@ -139,18 +139,6 @@
     radial-gradient(90% 80% at 0% 0%, color-mix(in srgb, var(--a) 22%, transparent), transparent 60%),
     radial-gradient(90% 80% at 100% 100%, color-mix(in srgb, var(--b) 18%, transparent), transparent 60%), var(--s1);
 }
-.duo-h {
-  display: flex;
-  align-items: center;
-}
-.duo-h .medal {
-  width: 48px;
-  height: 48px;
-  box-shadow: 0 0 0 3px var(--s1);
-}
-.duo-h .medal + .medal {
-  margin-left: calc(var(--space-sm) * -1);
-}
 .duo .pair {
   font-size: 12px;
   color: var(--mut);

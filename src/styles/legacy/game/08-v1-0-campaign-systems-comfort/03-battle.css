@@ -17,18 +17,6 @@
 .items .it.off {
   opacity: 0.6;
 }
-.it-src {
-  display: block;
-  font-style: normal;
-  margin-top: var(--space-3xs);
-  font-family: var(--f-m);
-  font-size: 10px;
-  letter-spacing: 0.06em;
-  color: var(--gold);
-}
-.items .it.off .it-src {
-  color: var(--mut);
-}
 .duos {
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
@@ -37,11 +25,6 @@
 }
 .duo h3 {
   font-size: 21px;
-}
-.duo .duo-st {
-  padding-top: var(--space-2xs);
-  display: grid;
-  gap: var(--space-xs);
 }
 @media (max-width: 1200px) {
   .duos {
@@ -52,14 +35,4 @@
   .duos {
     grid-template-columns: 1fr;
   }
-}
-.duo .duo-st em {
-  font-style: normal;
-  font-family: var(--f-m);
-  font-size: 10.5px;
-  letter-spacing: 0.06em;
-  color: var(--mut);
-}
-.duo.on .duo-st em {
-  color: var(--gold-l);
 }

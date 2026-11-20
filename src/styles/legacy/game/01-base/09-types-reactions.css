@@ -42,46 +42,6 @@
     grid-template-columns: 1fr;
   }
 }
-.cs {
-  position: relative;
-  display: grid;
-  gap: var(--space-md);
-  align-content: start;
-  padding: var(--space-xl);
-  border-radius: var(--r);
-  background: linear-gradient(180deg, var(--s2), var(--s1));
-  border: 1px solid var(--line);
-}
-.cs .k {
-  font-family: var(--f-d);
-  font-stretch: 125%;
-  font-weight: 900;
-  font-size: 40px;
-  line-height: 0.8;
-  color: transparent;
-  -webkit-text-stroke: 1px var(--gold);
-}
-.cs p {
-  font-size: 14px;
-  color: var(--tx2);
-}
-.cs + .cs::before {
-  content: '';
-  position: absolute;
-  left: -12px;
-  top: 50%;
-  width: 12px;
-  height: 1px;
-  background: var(--gold);
-}
-@media (max-width: 780px) {
-  .cs + .cs::before {
-    left: 50%;
-    top: -12px;
-    width: 1px;
-    height: 12px;
-  }
-}
 .wx {
   --c: #888;
   position: relative;
