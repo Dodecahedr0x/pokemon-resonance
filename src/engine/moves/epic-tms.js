@@ -118,28 +118,28 @@ export function fieldEffectChips(S) {
   }
   let h = '';
   if (S.arriere && S.arriere.a > 0) {
-    h += `<span class="chip chip-412" title="+2 Mouvement pour votre équipe">Vent Arrière · ${S.arriere.a}</span>`;
+    h += `<span class="chip chip-field-effect" title="+2 Mouvement pour votre équipe">Vent Arrière · ${S.arriere.a}</span>`;
   }
   if (S.arriere && S.arriere.e > 0) {
-    h += `<span class="chip chip-412 en" title="+2 Mouvement pour l’équipe adverse">Vent Arrière adverse · ${S.arriere.e}</span>`;
+    h += `<span class="chip chip-field-effect is-foe" title="+2 Mouvement pour l’équipe adverse">Vent Arrière adverse · ${S.arriere.e}</span>`;
   }
   if (S.distorsion > 0) {
-    h += `<span class="chip chip-412" title="Vitesse 2 ou moins : ×1,3 et +1 Mouvement">Distorsion · ${S.distorsion}</span>`;
+    h += `<span class="chip chip-field-effect" title="Vitesse 2 ou moins : ×1,3 et +1 Mouvement">Distorsion · ${S.distorsion}</span>`;
   }
   if (S.presc && S.presc.length) {
-    h += `<span class="chip chip-412" title="Onde Psy à venir">Prescience · ${S.presc.length}</span>`;
+    h += `<span class="chip chip-field-effect" title="Onde Psy à venir">Prescience · ${S.presc.length}</span>`;
   }
   if (S.gravite > 0) {
-    h += `<span class="chip chip-412" title="Personne ne vole, −1 Mouvement">Gravité · ${S.gravite}</span>`;
+    h += `<span class="chip chip-field-effect" title="Personne ne vole, −1 Mouvement">Gravité · ${S.gravite}</span>`;
   }
   if (S.rune && S.rune.a > 0) {
-    h += `<span class="chip chip-412" title="Vos Pokémon sont protégés des statuts">Rune Protect · ${S.rune.a}</span>`;
+    h += `<span class="chip chip-field-effect" title="Vos Pokémon sont protégés des statuts">Rune Protect · ${S.rune.a}</span>`;
   }
   if (S.champ && S.champ.a > 0) {
-    h += `<span class="chip chip-412" title="Cases Enracinées : +4 PV par manche">Champ Herbu · ${S.champ.a}</span>`;
+    h += `<span class="chip chip-field-effect" title="Cases Enracinées : +4 PV par manche">Champ Herbu · ${S.champ.a}</span>`;
   }
   if (S.harmonie) {
-    h += `<span class="chip chip-412" title="Trois rangs différents : chaque Pokémon a commencé avec 1 losange">Harmonie</span>`;
+    h += `<span class="chip chip-field-effect" title="Trois rangs différents : chaque Pokémon a commencé avec 1 losange">Harmonie</span>`;
   } // v4.14
   return h;
 }

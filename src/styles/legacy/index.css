@@ -2,7 +2,6 @@
    Being emptied screen by screen into src/screens/<screen>/<screen>.css and src/styles/components/
    (see docs/plans/2026-11-20-style-cleanup.md). Add nothing new here. */
 @import './game/index.css';
-@import './living-board.css';
 @import './skin/index.css';
 @import './pokemon-combat/index.css';
 @import './pokemon-world/index.css';

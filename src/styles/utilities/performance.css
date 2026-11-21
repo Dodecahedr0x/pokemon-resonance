@@ -1,0 +1,11 @@
+/* Performance switches: no backdrop blur outside the top bar and the bottom bar, and no SVG filters on the board,
+   whatever a screen asks for (both were too slow on phones). */
+*:not(.topbar, .bottom-nav),
+*::before,
+*::after {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+#bSvg * {
+  filter: none;
+}

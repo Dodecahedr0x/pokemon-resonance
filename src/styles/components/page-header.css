@@ -135,6 +135,10 @@
   color: #b4cbd6;
   line-height: 1.7;
 }
+/* a professor tip right under the header takes the lead's place */
+.page-header:has(+ .professor-tip) .lead {
+  display: none;
+}
 
 @media (max-width: 999px) {
   .kicker {

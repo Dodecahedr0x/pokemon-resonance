@@ -26,11 +26,6 @@ html body.compact-battle #combat.page.on {
   padding-bottom: 0;
 }
 
-/* from legacy/game/27-regional-diplomas/16-v4-78-guided-turn-flow.css */
-.page-header:has(+ .professor-tip) .lead {
-  display: none;
-}
-
 /* from legacy/skin/02-battles-large-module-cells.css */
 .pk-rise {
   animation: pkMonte 0.55s cubic-bezier(0.2, 0.9, 0.3, 1) both;
@@ -39,9 +34,4 @@ html body.compact-battle #combat.page.on {
 .pk-fade {
   animation: pkFondu 0.45s ease-out both;
   animation-delay: calc(var(--pk-i, 0) * 50ms);
-}
-
-/* from legacy/painted-graphics.css */
-#bBoard.painted-tilt #bSvg image.paintedterrain {
-  display: none;
 }

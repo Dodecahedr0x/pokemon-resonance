@@ -1,0 +1,24 @@
+/* Global state classes and attributes that win over every screen rule (the utilities layer comes after the
+   screens): hidden elements, visually hidden labels, images that failed to load and the coach's highlight. */
+[hidden] {
+  display: none;
+}
+/* visually hidden, still read by screen readers */
+.vh {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+/* an image that failed to load (engine/ui/image-fallback.js) */
+img.img-off {
+  display: none;
+}
+/* the element the coach's guided step points at (engine/progression/tutorial.js) */
+.coach-hl {
+  outline: 2px solid rgba(242, 221, 168, 0.85);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 6px rgba(212, 175, 106, 0.18);
+}

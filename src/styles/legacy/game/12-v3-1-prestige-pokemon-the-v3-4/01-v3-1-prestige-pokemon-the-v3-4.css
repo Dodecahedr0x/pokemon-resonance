@@ -7,12 +7,5 @@
   --glass: linear-gradient(180deg, rgba(23, 24, 29, 0.94), rgba(11, 12, 15, 0.94));
   --rise: cubic-bezier(0.2, 0.8, 0.2, 1);
 }
-.vh {
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  white-space: nowrap;
-}
 /* ---------- logo and navigation ---------- */
 /* ---------- engraved medallions (Professor, masters, emblems) ---------- */

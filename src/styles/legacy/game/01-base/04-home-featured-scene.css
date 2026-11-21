@@ -11,7 +11,6 @@
 .cr-spin {
   transform-box: view-box;
   transform-origin: 160px 160px;
-  animation: spin 80s linear infinite;
 }
 
 @keyframes spin {

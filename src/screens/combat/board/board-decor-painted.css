@@ -91,3 +91,22 @@
 :where(.board.painted-tilt.biome-tour) .slab-lip polygon {
   fill: #2a2236;
 }
+
+/* the painting itself (Terrain.jsx, image.paintedterrain) fades in once loaded and gives way to the tilted board */
+.board image.paintedterrain {
+  opacity: 0;
+  transition: opacity 0.45s;
+}
+.board.paintedterrain image.paintedterrain {
+  opacity: 1;
+}
+.board.painted-tilt image.paintedterrain {
+  display: none;
+}
+/* the fog rings turn warm white over the painting */
+.board.paintedterrain .fd-out {
+  stroke: rgba(255, 246, 220, 0.55);
+}
+.board.paintedterrain :is(.fd-mid, .fd-ring) {
+  stroke: rgba(255, 246, 220, 0.42);
+}

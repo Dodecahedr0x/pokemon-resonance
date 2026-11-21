@@ -121,6 +121,15 @@
 .battle-topbar-chips:empty {
   display: none;
 }
+/* field effects (Vent Arrière, Distorsion, Gravité…: fieldEffectChips), red on the opponent's side */
+.chip-field-effect {
+  border-color: rgba(255, 215, 94, 0.45);
+  color: #ffe9a8;
+}
+.chip-field-effect.is-foe {
+  border-color: rgba(255, 107, 111, 0.5);
+  color: #ffb3b5;
+}
 
 /* ---------- Voice: one diamond per point ---------- */
 .battle-voice {
