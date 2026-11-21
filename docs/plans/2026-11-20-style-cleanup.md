@@ -73,12 +73,17 @@ deliberate visual change (merging two near-identical colours) is listed in the c
 5. **Screens**, one per commit, smallest first: saves, guide, settings (finish), quests, bag, league, dex, home, camp,
    team, map, combat (prep, board, battle), overlays. The engine's HTML strings for that screen are renamed together.
 6. **Delete `legacy/`** once nothing is left in it, and update `AGENTS.md` / `README.md` with the new layout.
+   Done on 2026-11-21: the last rules moved out (tokens to `theme/tokens.css`, document defaults to
+   `base/document.css`, keyframes next to the rules that play them or into `base/keyframes.css`, the rest to screen
+   and component files), and the `legacy` folder and layer were deleted. A rule that moved up from `legacy` into
+   `screens` and must still lose to every screen rule is wrapped in `:where()` (e.g. `#combat .button-primary` in
+   `prep.css`).
 
 Each step is its own branch and merge, playable at every point.
 
 ## Rules going forward
 
-- New styles go in the screen's own file or a component file, never in `legacy/`.
+- New styles go in the screen's own file or a component file.
 - No `!important` anywhere: a rule that must win goes in a later layer (`utilities`, `accessibility`).
 - Colours, radii, shadows and type sizes come from tokens; raw values only for one-off art (painted gradients).
 - Files stay ≤ ~400 lines; a screen that needs more splits by block (`team/team-card.css`).

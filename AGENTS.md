@@ -31,7 +31,7 @@ npm run preview   # serve dist/
 | `src/screens/<screen>/` | One folder per screen (`home`, `team`, `dex`, `map`, `quests`, `bag`, `camp`, `league`, `guide`, `settings`, `saves`, `combat/{prep,battle,board}`, `overlays`), each with a `…Store.js` |
 | `src/lib/` | `store.js` (`version` / `makeStore` / `channel`), `useKeyed.js`, `html.jsx` (`<Html>`), `saveMigration.js` |
 | `src/engine/` | Game logic, one folder per area (`core`, `data`, `state`, `pokemon`, `team`, `combat`, `moves`, `items`, `modes`, `world`, `progression`, `ui`, `audio`, `assets`, `tools`); `index.js` calls every module's `init()` in order |
-| `src/styles/` | CSS entry `index.css` with cascade layers: `theme/` (tokens), `legacy/` (old per-release files, being emptied), `base/`, `components/`; screen styles live in `src/screens/<screen>/<screen>.css` |
+| `src/styles/` | CSS entry `index.css` with cascade layers: `theme/` (tokens), `base/` (element defaults, shared keyframes), `components/`, `shell/`, `utilities/`, `accessibility/`; screen styles live in `src/screens/<screen>/<screen>.css` |
 | `public/img`, `public/audio` | Served as-is. `art/` holds the Python pipeline that produces `public/img/*.webp` (not linted) |
 | `docs/plans/` | Design docs for past larger changes; add one for a large new change |
 
@@ -61,11 +61,11 @@ npm run preview   # serve dist/
 
 ## Styles
 
-- The styles are being moved out of `src/styles/legacy/` (see `docs/plans/2026-11-20-style-cleanup.md`). **Add nothing to `legacy/`.** Rules that must beat every screen (global states such as `[hidden]` and `.vh`, the focus ring, the shared entrance animations, performance switches) go in `src/styles/utilities/` (layer `utilities`); reduced motion and high contrast in `src/styles/accessibility/`. Screen-specific CSS goes in `src/screens/<screen>/<screen>.css`, imported from `styles/index.css` with `layer(screens)`; shared pieces go in `src/styles/components/`. Later layers beat earlier ones whatever the specificity, so no `!important` and no id chains in new code.
+- Cascade layers, lowest first: `theme, base, components, screens, skin, motion, utilities, accessibility` (the list and what each holds is at the top of `src/styles/index.css`). Rules that must beat every screen (global states such as `[hidden]` and `.vh`, the focus ring, the shared entrance animations, performance switches) go in `src/styles/utilities/` (layer `utilities`); reduced motion and high contrast in `src/styles/accessibility/`. Screen-specific CSS goes in `src/screens/<screen>/<screen>.css`, imported from `styles/index.css` with `layer(screens)`; shared pieces go in `src/styles/components/`. Later layers beat earlier ones whatever the specificity, so no `!important` and no id chains in new code.
 - Class names say what the thing is (`.settings-switch`, not `.v4-sw`); no release numbers. Colours and fonts come from the semantic tokens in `theme/colors.css` (`--color-text`, `--color-accent`…), and shared backgrounds, borders and shadows from `theme/surfaces.css` (`--surface-card`, `--surface-plate`…), not the per-release palettes (`--v4-*`, `--rx-*`…).
 - Prove a style refactor changes nothing with the style snapshots (`tools/style-snapshot/`): `await styleSnapshot('name', '#screen')` in the dev page, then `node tools/style-snapshot/diff.js before after`. Capture at 375 px and desktop width.
 - Every padding, margin and gap uses the `--space-*` scale from `src/styles/theme/spacing.css` (2, 4, 6, 8, 12, 16, 20, 24, 32, 40, 48, 64 px). Pick the nearest step; only `0`, `1px` hairlines, fluid values (`clamp`, `vw`) and layout offsets stay literal. This applies to inline styles in JSX too.
-- Keep each CSS file **≤ ~400 lines**. Folders such as `game/`, `skin/`, `phone/` are split into numbered files imported by their `index.css`; add a new numbered file rather than growing one. Order is cascade order.
+- Keep each CSS file **≤ ~400 lines**: split a screen's styles by block (`team/team-card.css`, `team/team-card-parts.css`), and put a file's keyframes in a sibling `…-keyframes.css` if they push it over. Keyframes used by several screens go in `base/keyframes.css`. Within a layer, import order is cascade order.
 - Phone layout matters most: check changes at ~375 px wide, with 40–44 px tap targets and no horizontal page scroll.
 - The engine does not inject `<style>` (except the Workshop's user CSS).
 
