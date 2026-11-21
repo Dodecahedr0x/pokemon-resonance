@@ -1,4 +1,4 @@
-import { ITEMS2, PROFILE, isCamp, ownedItems } from '../../engine/state/game-state.js';
+import { HELD_ITEMS, PROFILE, isCamp, ownedItems } from '../../engine/state/game-state.js';
 import { BADGES } from '../../engine/modes/gyms.js';
 import { HELD_IMG, SHOP, formatNumber } from '../../engine/state/economy.js';
 import { itemIcon } from '../../engine/assets/item-icons.js';
@@ -8,7 +8,7 @@ import { Article, Shards } from './Items.jsx';
 import Button from '../../components/Button.jsx';
 // Held item for sale (v4.14): one-time purchase, data-buyh (engine).
 function OutfitForSale({ k }) {
-  const it = ITEMS2[k],
+  const it = HELD_ITEMS[k],
     H = HELD_SHOP[k],
     own = ownedItems().includes(k),
     price = H.g || heldItemCost(k),

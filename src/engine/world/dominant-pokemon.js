@@ -4,7 +4,7 @@
    ===================================================================== */
 import { POKEMON, SCENARIOS } from '../pokemon/pokemon.js';
 import { RECRUIT } from '../pokemon/evolution.js';
-import { ITEMS2, PROFILE, isCamp } from '../state/game-state.js';
+import { HELD_ITEMS, PROFILE, isCamp } from '../state/game-state.js';
 import { BADGES } from '../modes/gyms.js';
 import { HOOKS } from '../core/hooks.js';
 import { timeOfDay } from './home-route.js';
@@ -129,7 +129,7 @@ export function init() {
       x.ct
         ? `${SHOP[x.ct].n} rejoint votre Sac`
         : x.item
-          ? `${ITEMS2[x.item].n} rejoint votre Sac (objet tenu)`
+          ? `${HELD_ITEMS[x.item].n} rejoint votre Sac (objet tenu)`
           : `${formatNumber(x.m || 0)} ₽ et des Éclats`
     }</span><b>${DOMINANT_CROWN_SVG}</b></div></div>`;
   });

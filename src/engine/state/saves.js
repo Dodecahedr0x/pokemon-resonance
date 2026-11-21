@@ -3,8 +3,8 @@ import { POKEMON, PRESETS, SCENARIOS } from '../pokemon/pokemon.js';
 import { BUDGET } from '../pokemon/evolution.js';
 import {
   CAMP_START,
-  DIFFS,
-  ITEMS2,
+  DIFFICULTY_NAMES,
+  HELD_ITEMS,
   PROFILE,
   PROFILE_SECTIONS,
   __set_PROFILE,
@@ -144,7 +144,7 @@ export function cleanProfile(p) {
   if (p.mode === 'campagne') {
     o.mode = 'campagne';
   }
-  if (DIFFS[p.diff]) {
+  if (DIFFICULTY_NAMES[p.diff]) {
     o.diff = p.diff;
   }
   const ids = a => (Array.isArray(a) ? [...new Set(a.filter(id => POKEMON[id] && POKEMON[id].st === 1))] : []);
@@ -159,10 +159,10 @@ export function cleanProfile(p) {
       }
     }
   }
-  o.items = Array.isArray(p.items) ? [...new Set(p.items.filter(k => ITEMS2[k]))] : [];
+  o.items = Array.isArray(p.items) ? [...new Set(p.items.filter(k => HELD_ITEMS[k]))] : [];
   if (p.equipment && typeof p.equipment === 'object') {
     for (const k in p.equipment) {
-      if (POKEMON[k] && ITEMS2[p.equipment[k]]) {
+      if (POKEMON[k] && HELD_ITEMS[p.equipment[k]]) {
         o.equipment[k] = p.equipment[k];
       }
     }

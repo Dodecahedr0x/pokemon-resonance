@@ -4,7 +4,7 @@ import { SCENARIOS } from '../pokemon/pokemon.js';
 import { HOOKS } from '../core/hooks.js';
 import { OBSTACLES } from '../combat/synergies-obstacles.js';
 import { today } from '../state/economy.js';
-import { mkFoes } from './challenge-scenes.js';
+import { makeFoes } from './challenge-scenes.js';
 import { readMoreChallenges, writeMoreChallenges } from './more-challenges.js';
 
 // Statements run at startup, in the original order (see index.js).
@@ -22,7 +22,7 @@ export function init() {
       hb: 8,
       pb: 2,
       lv: 44,
-      foes: mkFoes(['absol', 'demolosse', 'tyranocif', 'noctali']),
+      foes: makeFoes(['absol', 'demolosse', 'tyranocif', 'noctali']),
     },
     {}
   );

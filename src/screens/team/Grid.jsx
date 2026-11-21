@@ -4,8 +4,8 @@ import { dexNo } from '../../engine/data/game-data.js';
 import { MOVES } from '../../engine/data/moves.js';
 import { REGION_NAMES } from '../../engine/data/hoenn.js';
 import { POKEMON, familyOf } from '../../engine/pokemon/pokemon.js';
-import { ITEMS2, PROFILE, inBox, isCamp, ownedItems } from '../../engine/state/game-state.js';
-import { rosterCost, ROLEFX } from '../../engine/pokemon/roles-synergies.js';
+import { HELD_ITEMS, PROFILE, inBox, isCamp, ownedItems } from '../../engine/state/game-state.js';
+import { rosterCost, ROLE_EFFECTS } from '../../engine/pokemon/roles-synergies.js';
 import { medal, typeBadge, typeColor } from '../../engine/core/utils.js';
 import { squad } from '../../engine/team/team.js';
 import { RANKS, stars, rankId } from '../../engine/combat/resonance.js';
@@ -46,7 +46,7 @@ function FamCard({ m }) {
     fat = isCamp() && !lock ? PROFILE.fatigue[m.id] || 0 : 0,
     it =
       PROFILE.equipment[m.id] && ownedItems().includes(PROFILE.equipment[m.id])
-        ? ITEMS2[PROFILE.equipment[m.id]]
+        ? HELD_ITEMS[PROFILE.equipment[m.id]]
         : null,
     maxSt = Math.max(...family.map(x => x.st)),
     rg = rankId(m.id),
@@ -99,7 +99,7 @@ function FamCard({ m }) {
         ) : null}
         <div className="team-card-name">
           <h3>{m.n}</h3>
-          <span className="team-card-role" title={ROLEFX[m.r] ? ROLEFX[m.r].d : ''}>
+          <span className="team-card-role" title={ROLE_EFFECTS[m.r] ? ROLE_EFFECTS[m.r].d : ''}>
             {m.r}
           </span>
         </div>

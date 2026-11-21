@@ -1,4 +1,4 @@
-import { ITEMS2 } from '../../engine/state/game-state.js';
+import { HELD_ITEMS } from '../../engine/state/game-state.js';
 import { HELD_IMG, SHOP, formatNumber } from '../../engine/state/economy.js';
 import { itemIcon } from '../../engine/assets/item-icons.js';
 import { costOf0 } from '../../engine/progression/base-camp.js';
@@ -18,7 +18,7 @@ export default function Offers() {
       <div className="bag-offers-list">
         {dailyOffers().map((k, i) => {
           const h = !!HELD_SHOP[k],
-            it = h ? ITEMS2[k] : SHOP[k],
+            it = h ? HELD_ITEMS[k] : SHOP[k],
             p0 = h ? HELD_SHOP[k].p : costOf0(k);
           return (
             <button key={i} type="button" className="bag-offer" data-offre={h ? 'held' : it.category}>

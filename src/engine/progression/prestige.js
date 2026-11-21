@@ -15,7 +15,7 @@ import { __set_PREPG, renderPrep } from '../combat/battle-prep.js';
 import { effectsEnabled } from '../combat/move-effects.js';
 import { musStart } from '../audio/music.js';
 import { RIVAL, RIVAL_STEPS, rivalIdx, scenarioLeader } from '../modes/rival.js';
-import { legOf } from '../modes/legendaries.js';
+import { legendaryOf } from '../modes/legendaries.js';
 import { styleOf } from '../combat/leader-styles.js';
 import { dissonanceOf } from './team-dissonance.js';
 import { johtoChapter, johtoLeader } from '../world/johto.js';
@@ -50,7 +50,7 @@ export function leaderOf(sc) {
   if (ri >= 0) {
     return Object.assign({}, RIVAL, { q: RIVAL_STEPS[ri].q, w: RIVAL_STEPS[ri].w, l: RIVAL_STEPS[ri].l });
   }
-  const lg = legOf(sc);
+  const lg = legendaryOf(sc);
   if (lg) {
     return { n: lg.n, t: lg.title, q: lg.q, w: lg.w, l: lg.l };
   }
@@ -491,7 +491,7 @@ export const chapterOf = k => {
   if (rivalIdx(k) >= 0) {
     return { c: 'Interlude', t: 'Le rival', who: RIVAL.n, L: leaderOf(k) };
   }
-  const lg = legOf(k);
+  const lg = legendaryOf(k);
   if (lg) {
     return { c: 'Après-jeu', t: lg.n, who: lg.n, L: leaderOf(k) };
   }

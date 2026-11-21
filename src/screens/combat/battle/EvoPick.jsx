@@ -3,7 +3,7 @@ import { MOVES, ABILITIES } from '../../../engine/data/moves.js';
 import { POKEMON } from '../../../engine/pokemon/pokemon.js';
 import { ARRIVAL_EFFECTS } from '../../../engine/pokemon/evolution.js';
 import { medal, typeBadge, typeColor } from '../../../engine/core/utils.js';
-import { BRANCHES, branchWhy, evoOpts, mhpOf } from '../../../engine/combat/engine.js';
+import { BRANCHES, branchWhy, evoOpts, maxHpOf } from '../../../engine/combat/engine.js';
 import { battle } from '../../../engine/combat/ui.js';
 import { eeveeWhy } from '../../../engine/pokemon/eevee.js';
 import { evoState, useBattleVersion } from './battleStore.js';
@@ -26,7 +26,7 @@ function Path({ u, A, id }) {
     payout = E.mv.filter(x => !u.mv.includes(x)),
     lose = u.mv.filter(x => !E.mv.includes(x) && x !== u.ctm), // the learned move is kept
     tg = E.t.filter(t => !u.t.includes(t)),
-    nm = mhpOf(E.s) + (u.hb || 0),
+    nm = maxHpOf(E.s) + (u.hb || 0),
     why = BRANCHES[A.id]
       ? branchWhy(battle, u, id)
       : A.nx === 'eevee'

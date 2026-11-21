@@ -3,7 +3,7 @@
 import { PROFILE } from '../state/game-state.js';
 import { byUid, endStep, heal, pushMessage } from '../combat/engine.js';
 import { battle, finish, renderAll, ui } from '../combat/ui.js';
-import { playEv } from '../combat/move-effects.js';
+import { playEvent } from '../combat/move-effects.js';
 import { renderWallet } from '../ui/wallet.js';
 import { BAG_MAX, useCombatItem } from '../combat/resonance.js';
 import { SHOP, bagCount } from '../state/economy.js';
@@ -60,7 +60,7 @@ export function init() {
       }
       ui.undo = null;
       renderAll();
-      playEv(ev);
+      playEvent(ev);
       if (battle.over) {
         finish();
         return;

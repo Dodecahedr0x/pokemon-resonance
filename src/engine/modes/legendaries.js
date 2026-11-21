@@ -123,7 +123,7 @@ export const LEGENDARIES = [
 
 export const legKey = id => 'lg' + id;
 
-export const legOf = k => LEGENDARIES.find(L => legKey(L.id) === k) || null;
+export const legendaryOf = k => LEGENDARIES.find(L => legKey(L.id) === k) || null;
 
 // Statements run at startup, in the original order (see index.js).
 export function init() {

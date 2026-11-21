@@ -68,7 +68,7 @@ function typeDlg(s) {
   }, 22);
 }
 
-export function setTod(t) {
+export function setTimeOfDay(t) {
   timeOfDay = t;
   setRoute({ tod: t, pressed: true }); // data-time of #route, pressed button (Route.jsx)
   typeDlg(TODTXT[t].replace('Route 29', routeName()));
@@ -219,11 +219,11 @@ export function init() {
   document.addEventListener('click', e => {
     const b = e.target.closest('#todBtns [data-tod]');
     if (b) {
-      setTod(b.dataset.tod);
+      setTimeOfDay(b.dataset.tod);
     }
   });
 
-  setTod(timeOfDay);
+  setTimeOfDay(timeOfDay);
 
   wildId = null;
 

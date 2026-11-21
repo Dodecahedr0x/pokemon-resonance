@@ -1,6 +1,6 @@
 import { GYMS } from '../data/game-data.js';
 import { POKEMON, EEVEE, POKEMON_LIST, SCENARIOS } from '../pokemon/pokemon.js';
-import { ITEMS2, PROFILE } from '../state/game-state.js';
+import { HELD_ITEMS, PROFILE } from '../state/game-state.js';
 import { paintOverlay } from '../../screens/overlays/dialogsStore.js';
 import { $, mulberry32 } from '../core/utils.js';
 import { OBSTACLES } from '../combat/synergies-obstacles.js';
@@ -196,8 +196,8 @@ function towerOffer(run) {
   const free = run.team.filter(id => !run.items[id]);
   if (free.length) {
     const id = pickOf(r, free),
-      it = pickOf(r, Object.keys(ITEMS2));
-    o.push({ k: 'item', id, it, t: `${ITEMS2[it].n} pour ${POKEMON[id].n}`, d: ITEMS2[it].d });
+      it = pickOf(r, Object.keys(HELD_ITEMS));
+    o.push({ k: 'item', id, it, t: `${HELD_ITEMS[it].n} pour ${POKEMON[id].n}`, d: HELD_ITEMS[it].d });
   }
   const evo = run.team.filter(id => POKEMON[id].nx);
   if (evo.length) {

@@ -14,7 +14,15 @@ import {
 } from '../../../engine/combat/engine.js';
 import { duoTargets } from '../../../engine/combat/items-bonds-ai.js';
 import { coverOf, ricoTgt } from '../../../engine/combat/synergies-obstacles.js';
-import { battle, BOARD_GEOMETRY, cellCenter, cellPoints, BOARD_TILT, tiltS, ui } from '../../../engine/combat/ui.js';
+import {
+  battle,
+  BOARD_GEOMETRY,
+  cellCenter,
+  cellPoints,
+  BOARD_TILT,
+  tiltScale,
+  ui,
+} from '../../../engine/combat/ui.js';
 import { fireHazard } from '../../../engine/combat/living-board.js';
 import { chargesOnBoard, tacticalDrawing, linksColossi } from '../../../engine/combat/tactics.js';
 import { foresightOnBoard } from '../../../engine/moves/epic-tms.js';
@@ -55,7 +63,7 @@ export function Markers() {
         const tt = MARK_TYPE[t.mark.k],
           col = typeColor(tt);
         // tilted board (v4.77): the badge shrinks toward the back and stays within its tile, instead of biting into the tile behind
-        const ms = BOARD_TILT.on ? tiltS(x, y) : 0,
+        const ms = BOARD_TILT.on ? tiltScale(x, y) : 0,
           mz = BOARD_TILT.on ? 0.37 * ms : 0.46,
           mx = BOARD_TILT.on ? x + 11.5 * ms - 12 * mz : x + 11,
           my = BOARD_TILT.on ? y - 6 * ms - 12 * mz : y - 21,

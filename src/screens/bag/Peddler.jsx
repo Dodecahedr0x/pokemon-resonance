@@ -1,4 +1,4 @@
-import { ITEMS2, PROFILE } from '../../engine/state/game-state.js';
+import { HELD_ITEMS, PROFILE } from '../../engine/state/game-state.js';
 import { itemIcon } from '../../engine/assets/item-icons.js';
 import { SHOP, bagCount, formatNumber } from '../../engine/state/economy.js';
 import { costOf0 } from '../../engine/progression/base-camp.js';
@@ -57,12 +57,12 @@ export default function Peddler() {
       <article className="item-row">
         <span className="item-row-icon">
           <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" strokeWidth="1.6">
-            <path d={ITEMS2[A.th].i} />
+            <path d={HELD_ITEMS[A.th].i} />
           </svg>
         </span>
         <div className="item-row-text">
-          <b>{ITEMS2[A.th].n}</b>
-          <p>{ITEMS2[A.th].d}</p>
+          <b>{HELD_ITEMS[A.th].n}</b>
+          <p>{HELD_ITEMS[A.th].d}</p>
           <em>Objet tenu, un seul exemplaire</em>
         </div>
         <div>

@@ -1,4 +1,4 @@
-import { TNAME } from '../engine/core/navigation.js';
+import { PAGE_TITLES } from '../engine/core/navigation.js';
 import { useShell } from './shellStore.js';
 
 // Navigation (v4-03): 9 destinations on desktop, 4 and a menu on phone.
@@ -19,7 +19,7 @@ const PAGES = [
   ['sac', 'i-bag', 'Poké Balls, Potions, objets'],
   ['types', 'i-book', 'Règles, types et réactions'],
   ['params', 'i-gear', 'Son, vibrations, difficulté'],
-].map(([k, i, d]) => [k, i, TNAME[k], d]);
+].map(([k, i, d]) => [k, i, PAGE_TITLES[k], d]);
 const BOTTOM = PAGES.filter(p => !p[3]);
 const MENU = PAGES.filter(p => p[3]);
 

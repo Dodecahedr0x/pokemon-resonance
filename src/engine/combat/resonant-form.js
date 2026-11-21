@@ -8,8 +8,8 @@ import { POKEMON, SCENARIOS } from '../pokemon/pokemon.js';
 import { toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { MAX_ENERGY, byUid, endStep, hasNx, heal, pushMessage } from './engine.js';
-import { battle, cinematic, clearAim, enPips, finish, renderAll, ui } from './ui.js';
-import { playEv } from './move-effects.js';
+import { battle, cinematic, clearAim, energyPips, finish, renderAll, ui } from './ui.js';
+import { playEvent } from './move-effects.js';
 import { DAMAGE_PROVIDERS } from './tactical-engine.js';
 import { ACHIEVEMENTS } from '../progression/achievements.js';
 
@@ -100,7 +100,7 @@ export function resonanceBlockHtml(u, gauge) {
           : battle.voice < 1
             ? 'Plus de Voix'
             : 'Prêt · une fois par combat';
-  return `${gauge ? `<div class="battle-energy${u.en >= MAX_ENERGY ? ' is-full' : ''}"><div class="battle-energy-head"><span class="caption">Résonance</span>${enPips(u.en, 'lg')}</div></div>` : ''}<button type="button" class="battle-awaken is-resonant" data-resonance-burst ${ok ? '' : 'disabled'}><span class="battle-awaken-medals"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.6 6.4L21 9l-5 4.4 1.6 6.6L12 16.6 6.4 20 8 13.4 3 9l6.4-.6Z" fill="currentColor"/></svg></span><span><b>Forme Résonante</b><em>${why}</em></span><span class="battle-awaken-cost">1 Voix<br>+ jauge</span></button>`;
+  return `${gauge ? `<div class="battle-energy${u.en >= MAX_ENERGY ? ' is-full' : ''}"><div class="battle-energy-head"><span class="caption">Résonance</span>${energyPips(u.en, 'lg')}</div></div>` : ''}<button type="button" class="battle-awaken is-resonant" data-resonance-burst ${ok ? '' : 'disabled'}><span class="battle-awaken-medals"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.6 6.4L21 9l-5 4.4 1.6 6.6L12 16.6 6.4 20 8 13.4 3 9l6.4-.6Z" fill="currentColor"/></svg></span><span><b>Forme Résonante</b><em>${why}</em></span><span class="battle-awaken-cost">1 Voix<br>+ jauge</span></button>`;
 }
 
 async function onResonantFormClick(e) {
@@ -127,7 +127,7 @@ async function onResonantFormClick(e) {
   if (!ev) {
     return;
   }
-  playEv(ev);
+  playEvent(ev);
   if (battle.over) {
     return void finish();
   }

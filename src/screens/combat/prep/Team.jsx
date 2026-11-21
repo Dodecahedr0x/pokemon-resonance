@@ -2,8 +2,8 @@ import { Fragment, useState } from 'react';
 import { Html } from '../../../lib/html.jsx';
 import { POKEMON, SCENARIOS } from '../../../engine/pokemon/pokemon.js';
 import { BUDGET } from '../../../engine/pokemon/evolution.js';
-import { DIFFS, PROFILE } from '../../../engine/state/game-state.js';
-import { rosterCost, synOf } from '../../../engine/pokemon/roles-synergies.js';
+import { DIFFICULTY_NAMES, PROFILE } from '../../../engine/state/game-state.js';
+import { rosterCost, synergiesOf } from '../../../engine/pokemon/roles-synergies.js';
 import { medal, typeColor } from '../../../engine/core/utils.js';
 import { squadCost, squad, vBonus } from '../../../engine/team/team.js';
 import { startVoice } from '../../../engine/combat/engine.js';
@@ -16,7 +16,7 @@ import { DOCTRINE_DEFS } from '../../../engine/combat/doctrines.js';
 import Button from '../../../components/Button.jsx';
 // The four team slots, then the active synergies (#ptList).
 function Places() {
-  const S = synOf(squad);
+  const S = synergiesOf(squad);
   return (
     <>
       <div className="prep-team-slots">
@@ -191,7 +191,9 @@ export default function Team({ v }) {
               <b>
                 <Html html={scenarioName(selectedScenario)} />
               </b>
-              <span>{squad.length ? `${startVoice(vBonus())} Voix · ${DIFFS[PROFILE.diff]}` : 'Équipe vide'}</span>
+              <span>
+                {squad.length ? `${startVoice(vBonus())} Voix · ${DIFFICULTY_NAMES[PROFILE.diff]}` : 'Équipe vide'}
+              </span>
             </Fragment>
           )}
         </span>

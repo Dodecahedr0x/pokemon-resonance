@@ -1,5 +1,3 @@
-import { pokemonArtUrl } from '../assets/images.js';
-
 export let SPECIES_BY_TYPES;
 
 export function familyOf(id) {
@@ -103,8 +101,6 @@ const OPPONENT_ONLY_FAMILIES = [
 ];
 
 export const EEVEE = { trempe: 'aquali', charge: 'voltali', brulant: 'pyroli', jour: 'mentali', nuit: 'noctali' };
-
-export const PK_ART = no => pokemonArtUrl(no);
 
 export const NOTES = {
   // v4.19
@@ -2278,7 +2274,7 @@ export const POKEMON_LIST = [
 
 export const POKEMON = Object.fromEntries(POKEMON_LIST.map(m => [m.id, m]));
 
-export const FAMS30 = [...new Set(POKEMON_LIST.filter(m => !m.isEnemy).map(m => m.base))];
+export const FAMILY_BASES = [...new Set(POKEMON_LIST.filter(m => !m.isEnemy).map(m => m.base))];
 
 // Statements executed at startup, in the original order (see index.js).
 export function init() {

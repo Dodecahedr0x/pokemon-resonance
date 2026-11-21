@@ -11,7 +11,7 @@ import { sfx, vibrate } from '../audio/sound-effects.js';
 import { today } from '../state/economy.js';
 import { renderHome } from './home.js';
 import { isShinyOwned } from '../pokemon/shiny.js';
-import { JCHAIN } from './johto.js';
+import { JOHTO_ROUTE_ORDER } from './johto.js';
 import {
   affinityHearts,
   gainCompanionAffinity,
@@ -19,7 +19,7 @@ import {
   renderCompanionBox,
 } from '../progression/companion-pokemon.js';
 import { refreshHome } from '../../screens/home/homeStore.js';
-import { HCHAIN } from './hoenn.js';
+import { HOENN_ROUTE_ORDER } from './hoenn.js';
 import { FAMILY_REGION_NAMES, regionIndex } from './catch-anywhere.js';
 
 function heroRegionInfo(g) {
@@ -28,10 +28,10 @@ function heroRegionInfo(g) {
   }
   const k = g.k,
     S = SCENARIOS[k] || {};
-  if (HCHAIN.includes(k) || S.hoenn != null) {
+  if (HOENN_ROUTE_ORDER.includes(k) || S.hoenn != null) {
     return 3;
   }
-  if (JCHAIN.includes(k) || /^j/.test(k) || S.johto != null || S.roam) {
+  if (JOHTO_ROUTE_ORDER.includes(k) || /^j/.test(k) || S.johto != null || S.roam) {
     return 2;
   }
   return 1;

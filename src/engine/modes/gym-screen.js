@@ -1,7 +1,7 @@
 import { POKEMON, POKEMON_LIST, PRESETS } from '../pokemon/pokemon.js';
 import { BUDGET } from '../pokemon/evolution.js';
 import { inBox } from '../state/game-state.js';
-import { rosterCost, synOf } from '../pokemon/roles-synergies.js';
+import { rosterCost, synergiesOf } from '../pokemon/roles-synergies.js';
 import { hexCenter, toast } from '../core/utils.js';
 import { tokCl } from '../../screens/combat/board/boardStore.js';
 import { TEAM_MAX, __set_squad, renderSquad, save, squad, toggle } from '../team/team.js';
@@ -105,7 +105,12 @@ function randomTeam() {
       continue;
     }
     const rs = new Set(t.map(id => POKEMON[id].r)),
-      sc = synOf(t).length * 3 + rs.size + (rs.has('Rempart') ? 2 : 0) + (rs.has('Frappeur') ? 1 : 0) + Math.random();
+      sc =
+        synergiesOf(t).length * 3 +
+        rs.size +
+        (rs.has('Rempart') ? 2 : 0) +
+        (rs.has('Frappeur') ? 1 : 0) +
+        Math.random();
     if (!best || sc > best.sc) {
       best = { t, sc };
     }
@@ -141,7 +146,7 @@ function teamAct(a) {
     __set_squad(t);
     save();
     renderSquad();
-    const s = synOf(t);
+    const s = synergiesOf(t);
     toast(`Tirage : ${t.map(id => POKEMON[id].n).join(', ')}${s.length ? ' · ' + s.map(x => x.n).join(', ') : ''}.`);
   }
   if (!battle) {

@@ -2,7 +2,7 @@ import { MT } from './turn-core.js';
 import { MOVES, ABILITIES } from '../data/moves.js';
 import { SCENARIOS } from '../pokemon/pokemon.js';
 import { toast } from '../core/utils.js';
-import { byUid, execFoe, flies, hdist, markAt, unitKey } from './engine.js';
+import { byUid, execFoe, flies, hexDistance, markAt, unitKey } from './engine.js';
 import { currentAction, STATUSED, coverOf, ignObst, noteAdd, roleOf } from './synergies-obstacles.js';
 import {
   battle,
@@ -17,7 +17,7 @@ import {
   ui,
 } from './ui.js';
 import { PREFERENCES } from '../ui/preferences.js';
-import { playEv } from './move-effects.js';
+import { playEvent } from './move-effects.js';
 import { coopPlayer } from '../modes/coop.js';
 import { battleDelay } from './quick-battle.js';
 
@@ -201,7 +201,7 @@ export function unrollSpeed() {
     } // v4.12: it positions itself first, in front of you
     const ev = playCurrentEnemy(battle);
     renderAll();
-    playEv(ev);
+    playEvent(ev);
     setTimeout(step, battleDelay(200, 380, 900));
   };
   setTimeout(step, battleDelay(60, 160, 420));
@@ -344,7 +344,7 @@ export const ROLE_PROVIDERS = [
     provide: (c, { S, u }) =>
       roleOf(u) === 'Frappeur' &&
       S.units.some(
-        o => !o.ko && o.side === u.side && o.uid !== u.uid && roleOf(o) === 'Rempart' && hdist(o.pos, u.pos) === 1
+        o => !o.ko && o.side === u.side && o.uid !== u.uid && roleOf(o) === 'Rempart' && hexDistance(o.pos, u.pos) === 1
       ) && {
         mul: 1.25,
         labelText: 'Frappeur couvert par un Rempart',
@@ -371,7 +371,7 @@ export const ROLE_PROVIDERS = [
       if (s.includes('tempete') && typ === 'Électrik' && markAt(S, unitKey(t)) === 'trempe') {
         out.push({ mul: 1.25, labelText: 'Tempête' });
       }
-      if (s.includes('dojo') && hdist(u.pos, t.pos) === 1) {
+      if (s.includes('dojo') && hexDistance(u.pos, t.pos) === 1) {
         out.push({ add: 2, labelText: 'Dojo' });
       }
       if (s.includes('banquise') && typ === 'Glace') {

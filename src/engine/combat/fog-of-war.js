@@ -3,7 +3,7 @@ import { bdClass, tokCl } from '../../screens/combat/board/boardStore.js';
 import { SCENARIOS } from '../pokemon/pokemon.js';
 import { $, toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
-import { parseCellKey, hdist, unitAt, unitKey } from './engine.js';
+import { parseCellKey, hexDistance, unitAt, unitKey } from './engine.js';
 import { battle, BOARD_LAYERS, selectedScenario, ui } from './ui.js';
 import { PREFERENCES } from '../ui/preferences.js';
 import { formatNumber } from '../state/economy.js';
@@ -25,7 +25,7 @@ export function fogVision(S) {
         2 + (a.t.includes('Vol') || a.t.includes('Psy') ? 1 : 0) - (isNight && !seesAtNight(a) ? 1 : 0)
       );
       for (const k in S.tiles) {
-        if (hdist(a.pos, parseCellKey(k)) <= r) {
+        if (hexDistance(a.pos, parseCellKey(k)) <= r) {
           vu.add(k);
         }
       }
@@ -42,7 +42,11 @@ export function fogHidden(S, e, vu) {
     return true;
   }
   // in tall grass: you have to be in contact
-  return !!(S.tiles[k] && S.tiles[k].grass && !S.units.some(a => a.side === 'a' && !a.ko && hdist(a.pos, e.pos) <= 1));
+  return !!(
+    S.tiles[k] &&
+    S.tiles[k].grass &&
+    !S.units.some(a => a.side === 'a' && !a.ko && hexDistance(a.pos, e.pos) <= 1)
+  );
 }
 
 function fogRender() {

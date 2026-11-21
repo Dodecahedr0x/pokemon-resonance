@@ -8,16 +8,25 @@ import { MOVES, SHAPE, ABILITIES } from '../../engine/data/moves.js';
 import { REGION_NAMES } from '../../engine/data/hoenn.js';
 import { POKEMON, NOTES, familyOf } from '../../engine/pokemon/pokemon.js';
 import { ARRIVAL_EFFECTS } from '../../engine/pokemon/evolution.js';
-import { ITEMS2, LINK_N, LINK_T, PROFILE, inBox, isCamp, lvlOfPts, ownedItems } from '../../engine/state/game-state.js';
-import { rosterCost, ROLEFX, roleIcon } from '../../engine/pokemon/roles-synergies.js';
+import {
+  HELD_ITEMS,
+  LINK_N,
+  LINK_T,
+  PROFILE,
+  inBox,
+  isCamp,
+  lvlOfPts,
+  ownedItems,
+} from '../../engine/state/game-state.js';
+import { rosterCost, ROLE_EFFECTS, roleIcon } from '../../engine/pokemon/roles-synergies.js';
 import { markOf, medal, typeBadge, typeColor } from '../../engine/core/utils.js';
-import { BRANCHES, mhpOf } from '../../engine/combat/engine.js';
+import { BRANCHES, maxHpOf } from '../../engine/combat/engine.js';
 import {
   STAT_NAMES,
   branchNote,
   crestSmall,
   evoDiff,
-  monEls,
+  pokemonElements,
   monMarks,
   nextOf,
   squad,
@@ -69,7 +78,7 @@ function Content({ id }) {
       }
     })
   );
-  monEls(m).forEach(e => {
+  pokemonElements(m).forEach(e => {
     const i = ELEMENT_TYPES.indexOf(e);
     MARKS.forEach(k => {
       const r = MARK_REACTIONS[k.id][i];
@@ -118,11 +127,11 @@ function Content({ id }) {
             · {T(RANKS[rg].d)}
           </span>
         </p>
-        {ROLEFX[m.r] ? (
+        {ROLE_EFFECTS[m.r] ? (
           <p className="team-sheet-role">
             {T(roleIcon(m.r))}
             <span>
-              <b>{ROLEFX[m.r].k}</b> · {T(ROLEFX[m.r].d)}
+              <b>{ROLE_EFFECTS[m.r].k}</b> · {T(ROLE_EFFECTS[m.r].d)}
             </span>
           </p>
         ) : null}
@@ -215,7 +224,7 @@ function Content({ id }) {
       ) : null}
       <div className="team-sheet-section">
         <h4>
-          Statistiques<span>PV en combat : {mhpOf(m.s)}</span>
+          Statistiques<span>PV en combat : {maxHpOf(m.s)}</span>
         </h4>
         <div className="team-sheet-stats">
           {m.s.map((v, i) => (
@@ -357,7 +366,7 @@ function Evd({ a, b, from }) {
 
 // Illustrated item icon (old itemizeDom on the sheet); without an image, it is hidden.
 function ItemImg({ k }) {
-  const k2 = Object.keys(ITEMS2).find(x => ITEMS2[x].i === ITEMS2[k].i) || k;
+  const k2 = Object.keys(HELD_ITEMS).find(x => HELD_ITEMS[x].i === HELD_ITEMS[k].i) || k;
   return (
     <img
       className="it-img"
@@ -405,9 +414,9 @@ function Extras({ base }) {
                       <ItemImg k={k} />
                     </span>
                     <span>
-                      <b>{ITEMS2[k].n}</b>
+                      <b>{HELD_ITEMS[k].n}</b>
                       <em>
-                        {T(ITEMS2[k].d)}
+                        {T(HELD_ITEMS[k].d)}
                         {holder ? ` · tenu par ${POKEMON[holder].n}` : ''}
                       </em>
                     </span>

@@ -1,7 +1,7 @@
 import { REACTIONS } from '../data/game-data.js';
 import { MOVES } from '../data/moves.js';
 import { POKEMON, SCENARIOS, WEATHER_NAME } from '../pokemon/pokemon.js';
-import { ITEMS2, PROFILE, isCamp, ownedItems } from '../state/game-state.js';
+import { HELD_ITEMS, PROFILE, isCamp, ownedItems } from '../state/game-state.js';
 import { arenaSetup, arenaTick } from '../modes/gyms.js';
 import {
   $,
@@ -32,9 +32,9 @@ import {
   hasNx,
   newBattle,
   playerAction,
-  pDodge,
+  playerDodge,
   pAwaken,
-  pMove,
+  playerMove,
   pReroll,
   prepareEnemy,
   preview,
@@ -50,9 +50,9 @@ import { PREFERENCES } from '../ui/preferences.js';
 import { __set_PREPG, renderPrep } from './battle-prep.js';
 import { __set_tutorialI, renderCoach } from '../progression/tutorial.js';
 import { applyProgress } from '../progression/battle-rewards.js';
-import { sfx, sfxEv, vibrate } from '../audio/sound-effects.js';
+import { sfx, playEventSound, vibrate } from '../audio/sound-effects.js';
 import { drawObstacles } from '../modes/gym-screen.js';
-import { fxReset, playEv } from './move-effects.js';
+import { fxReset, playEvent } from './move-effects.js';
 import { panelRoleInfo } from '../ui/guide.js';
 import {
   isAutomatedRun,
@@ -123,7 +123,7 @@ export function __set_selectedScenario(v) {
   return (selectedScenario = v);
 }
 
-export function tiltP(x, y) {
+export function tiltPoint(x, y) {
   const T = BOARD_TILT,
     d = T.Hb - y,
     s = T.f / (T.f + d * T.sn);
@@ -139,7 +139,7 @@ function tiltU(X, Y) {
 }
 
 /** apparent size (1 = flat tile) at screen point X,Y */
-export function tiltS(X, Y) {
+export function tiltScale(X, Y) {
   const g = tiltU(X, Y);
   return (BOARD_TILT.f / (BOARD_TILT.f + (BOARD_TILT.Hb - g[1]) * BOARD_TILT.sn)) * BOARD_TILT.k;
 }
@@ -149,7 +149,7 @@ function tiltHP(X, Y, s) {
     o = [];
   for (let i = 0; i < 6; i++) {
     const a = (Math.PI / 180) * (60 * i - (isVerticalBoard ? 0 : 30)),
-      q = tiltP(x + s * Math.cos(a), y + s * Math.sin(a));
+      q = tiltPoint(x + s * Math.cos(a), y + s * Math.sin(a));
     o.push(q[0].toFixed(1) + ',' + q[1].toFixed(1));
   }
   return o.join(' ');
@@ -313,7 +313,7 @@ function launchCore() {
       addLog(`${u.n} est fatigué : −1 Mouvement (un Éveil efface la fatigue).`, 'sys');
     }
     if (u.side === 'a' && u.item) {
-      addLog(`${u.n} tient ${ITEMS2[u.item].n}.`, 'sys');
+      addLog(`${u.n} tient ${HELD_ITEMS[u.item].n}.`, 'sys');
     }
   });
   if (battle.harmonie) {
@@ -433,7 +433,7 @@ function mkTok(u) {
 // lone « on » class of an element (classList.toggle('on', v)): null → no attribute, '' → emptied class
 const on1 = (cur, v) => (v ? 'on' : cur === 'on' ? '' : cur);
 
-export function updTok(u) {
+export function updateToken(u) {
   hook('beforeToken', u);
   updTokCore(u);
   hook('token', u);
@@ -521,14 +521,14 @@ function updTokCore(u) {
 export function renderBoard() {
   boardRender(); // tiles, marks, highlights, intents, obstacles (React layers)
   unitsBatch(() => {
-    battle.units.forEach(updTok); // tokens (Units.jsx): redrawn once at the end of the batch
+    battle.units.forEach(updateToken); // tokens (Units.jsx): redrawn once at the end of the batch
     drawObstacles();
   });
   hook('boardRendered');
 }
 
 /* banners */
-export function segHp(u) {
+export function segmentedHpBar(u) {
   return HOOKS.hpBar.reduce((h, f) => f(h, u), segHpBase(u));
 }
 
@@ -797,7 +797,7 @@ export function playLog(ev) {
       }
     }
   });
-  sfxEv(ev);
+  playEventSound(ev);
   hook('journal', ev);
 }
 
@@ -853,7 +853,7 @@ function confirmActCore() {
     return;
   }
   renderAll();
-  playEv(ev);
+  playEvent(ev);
   if (battle.over) {
     finish();
     return;
@@ -877,12 +877,12 @@ function tapTile(k) {
     v = unitAt(battle, k);
   if (u && u.hr && u.acted && !u.moved && !ui.mode && !v && reach(battle, u)[k] !== undefined) {
     // Scout: after striking, a blue tile is used to fall back
-    const ev = pMove(battle, u, k);
+    const ev = playerMove(battle, u, k);
     clearAim();
     ui.tile = null;
     renderAll();
     if (ev) {
-      playEv(ev);
+      playEvent(ev);
     }
     if (u.ko) {
       autoSel();
@@ -921,12 +921,12 @@ function tapTile(k) {
     }
   }
   if (u && ui.mode === 'dodge') {
-    const ev = pDodge(battle, u, k);
+    const ev = playerDodge(battle, u, k);
     if (ev) {
       ui.undo = null;
       clearAim();
       renderAll();
-      playEv(ev);
+      playEvent(ev);
       return;
     }
   }
@@ -946,11 +946,11 @@ function tapTile(k) {
   }
   if (u && !u.moved && !u.acted && reach(battle, u)[k] !== undefined) {
     ui.undo = { uid: u.uid, snap: JSON.stringify(battle), log: battleLog.length };
-    const ev = pMove(battle, u, k);
+    const ev = playerMove(battle, u, k);
     clearAim();
     renderAll();
     if (ev) {
-      playEv(ev);
+      playEvent(ev);
     }
     if (u.ko) {
       autoSel();
@@ -1012,7 +1012,7 @@ function endTurn() {
     } // v4.12: it positions itself first, before your eyes
     const ev = execFoe(battle, uid);
     renderAll();
-    playEv(ev);
+    playEvent(ev);
     setTimeout(step, battleDelay(200, 380, 900));
   };
   setTimeout(step, battleDelay(60, 160, 420));
@@ -1028,7 +1028,7 @@ export async function placeEnemy(S0, uid) {
     return false;
   }
   renderAll();
-  playEv(pre);
+  playEvent(pre);
   if (pre.some(x => x.e === 'mv')) {
     await new Promise(r => setTimeout(r, battleDelay(60, 240, 460)));
   }
@@ -1052,7 +1052,7 @@ export async function endOfRound(S0) {
   }
   ui.busy = false;
   renderAll();
-  playEv(ev);
+  playEvent(ev);
   if (battle.over) {
     finish();
     return false;
@@ -1143,7 +1143,7 @@ export const flatCellCenter = k => {
   return isVerticalBoard ? [q[1], 430 - q[0]] : q;
 };
 
-export const cellCenter = k => (BOARD_TILT.on ? tiltP(...flatCellCenter(k)) : flatCellCenter(k));
+export const cellCenter = k => (BOARD_TILT.on ? tiltPoint(...flatCellCenter(k)) : flatCellCenter(k));
 
 export const cellPoints = (x, y, s) =>
   BOARD_TILT.on ? tiltHP(x, y, s) : isVerticalBoard ? hpf(x, y, s) : hexPoints(x, y, s);
@@ -1188,7 +1188,7 @@ export const STATUS_CLASS = {
   x2: 'helped',
 };
 
-export const enPips = (n, cls = '') =>
+export const energyPips = (n, cls = '') =>
   `<span class="energy-pips ${cls}" aria-label="Énergie d’Éveil ${n} sur 3">${[0, 1, 2].map(i => `<i class="${i < n ? 'is-filled' : ''}"></i>`).join('')}</span>`;
 
 export const cellPolygon = (k, c) => {
@@ -1224,7 +1224,7 @@ async function onEvoPickClick(e) {
     return;
   }
   renderAll();
-  playEv(ev);
+  playEvent(ev);
   if (battle.over) {
     finish();
     return;
@@ -1271,7 +1271,7 @@ function onBattlePanelClick(e) {
       ui.undo = null;
       ui.selE = null;
       renderAll();
-      playEv(ev);
+      playEvent(ev);
       if (battle.over) {
         finish();
         return;
@@ -1337,7 +1337,7 @@ function onBattlePanelClick(e) {
     if (ev) {
       ui.undo = null;
       renderAll();
-      playEv(ev);
+      playEvent(ev);
     }
   }
 }

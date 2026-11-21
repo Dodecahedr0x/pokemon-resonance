@@ -4,7 +4,7 @@
    ===================================================================== */
 import { MOVES } from '../data/moves.js';
 import { POKEMON, SCENARIOS } from '../pokemon/pokemon.js';
-import { ITEMS2, PROFILE, isCamp, ownedItems } from '../state/game-state.js';
+import { HELD_ITEMS, PROFILE, isCamp, ownedItems } from '../state/game-state.js';
 import { BADGES } from './gyms.js';
 import { paintOverlay } from '../../screens/overlays/dialogsStore.js';
 import { $, fnvHash, toast } from '../core/utils.js';
@@ -41,7 +41,7 @@ export function sanitizeFriend(a) {
   const t = (Array.isArray(a.t) ? a.t : [])
     .filter(x => Array.isArray(x) && POKEMON[x[0]] && !POKEMON[x[0]].isEnemy)
     .slice(0, 4)
-    .map(x => [x[0], MOVES[x[1]] ? x[1] : 0, ITEMS2[x[2]] ? x[2] : 0, x[3] ? 1 : 0, MOVES[x[4]] ? x[4] : 0]);
+    .map(x => [x[0], MOVES[x[1]] ? x[1] : 0, HELD_ITEMS[x[2]] ? x[2] : 0, x[3] ? 1 : 0, MOVES[x[4]] ? x[4] : 0]);
   if (!t.length) {
     return null;
   }
@@ -294,7 +294,7 @@ function onCombat(S, opt, D0) {
           u.hm = x[4];
         }
         const it = x[2];
-        if (it && ITEMS2[it]) {
+        if (it && HELD_ITEMS[it]) {
           u.item = it;
           if (it === 'ceinture') {
             u.belt = true;

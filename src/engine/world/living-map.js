@@ -3,12 +3,12 @@
 import { GYMS } from '../data/game-data.js';
 import { SCENARIOS } from '../pokemon/pokemon.js';
 import { ARENAS } from '../modes/gyms.js';
-import { hash2, mulberry32, typeColor } from '../core/utils.js';
+import { valueNoise, mulberry32, typeColor } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { SCREEN_STATE } from '../ui/screen-state.js';
 import { CHAIN, MAP_SVG, curvePath, placeState } from './map.js';
-import { JCHAIN, JMAP_SVG, placesR } from './johto.js';
-import { HCHAIN, HMAP_SVG } from './hoenn.js';
+import { JOHTO_ROUTE_ORDER, JMAP_SVG, placesR } from './johto.js';
+import { HOENN_ROUTE_ORDER, HMAP_SVG } from './hoenn.js';
 import { refreshMap } from '../../screens/map/mapStore.js';
 
 // Map painting, layers and fog (v4.71), read by React (src/screens/map/Stage.jsx):
@@ -35,10 +35,10 @@ const vnoise = (x, y, s) => {
     yi = Math.floor(y),
     xf = x - xi,
     yf = y - yi;
-  const a = hash2(xi, yi, s),
-    b = hash2(xi + 1, yi, s),
-    c = hash2(xi, yi + 1, s),
-    d = hash2(xi + 1, yi + 1, s);
+  const a = valueNoise(xi, yi, s),
+    b = valueNoise(xi + 1, yi, s),
+    c = valueNoise(xi, yi + 1, s),
+    d = valueNoise(xi + 1, yi + 1, s);
   const u = xf * xf * (3 - 2 * xf),
     v = yf * yf * (3 - 2 * yf);
   return a + (b - a) * u + (c - a) * v + (a - b - c + d) * u * v;
@@ -287,7 +287,7 @@ const REG = {
       [90, 560],
     ],
     side: [['j7', 'jlac']],
-    chain: () => JCHAIN,
+    chain: () => JOHTO_ROUTE_ORDER,
     title: 'Johto',
     sub: 'Terres des traditions',
   },
@@ -339,7 +339,7 @@ const REG = {
       [110, 430],
     ],
     side: [],
-    chain: () => HCHAIN,
+    chain: () => HOENN_ROUTE_ORDER,
     title: 'Hoenn',
     sub: 'Archipel des légendes',
   },
@@ -1483,7 +1483,7 @@ const paintTerrainPixels = async st => {
         lr *= 1 + sh;
         lg *= 1 + sh;
         lb *= 1 + sh * 0.8;
-        const gr = (hash2(gx, gy, seed) - 0.5) * 7 + (n3 - 0.5) * 16;
+        const gr = (valueNoise(gx, gy, seed) - 0.5) * 7 + (n3 - 0.5) * 16;
         lr += gr * 0.8;
         lg += gr;
         lb += gr * 0.6;
@@ -1523,7 +1523,7 @@ const paintTerrainPixels = async st => {
         sr += (246 - sr) * f;
         sg += (252 - sg) * f;
         sb += (255 - sb) * f;
-        const gr = (hash2(gx, gy, seed + 3) - 0.5) * 3;
+        const gr = (valueNoise(gx, gy, seed + 3) - 0.5) * 3;
         sr += gr;
         sg += gr;
         sb += gr;

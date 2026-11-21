@@ -1,14 +1,14 @@
 import { SCENARIOS } from '../pokemon/pokemon.js';
-import { ITEMS2, PROFILE, isCamp } from '../state/game-state.js';
+import { HELD_ITEMS, PROFILE, isCamp } from '../state/game-state.js';
 import { medal } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
-import { timeOfDay, setTod } from './home-route.js';
+import { timeOfDay, setTimeOfDay } from './home-route.js';
 import { setRoute } from '../../screens/home/homeStore.js';
 import { badgeSvg } from '../modes/league.js';
 import {
   MAX_ENERGY,
   parseCellKey,
-  hdist,
+  hexDistance,
   heal,
   neighborKeys,
   pushMessage,
@@ -56,7 +56,7 @@ export function lockJohto(k, D) {
     return l16;
   }
   if (D.johto > 0 && !(PROFILE.johto || []).includes(D.johto - 1)) {
-    return `Gagnez d’abord le badge ${JGYMS[D.johto - 1]} de Johto.`;
+    return `Gagnez d’abord le badge ${JOHTO_GYM_TYPES[D.johto - 1]} de Johto.`;
   }
   if (D.jfinal && (PROFILE.johto || []).length < 8) {
     return 'Il faut les 8 badges de Johto.';
@@ -119,8 +119,8 @@ export function johtoRewardLine(k) {
   }
   const R = D.jfinal ? { item: 'metronome', g: 15 } : JREW[D.johto],
     gi = D.johto,
-    it = R.item && ITEMS2[R.item];
-  return `<div class="reward-line"><span class="reward-badge">${D.jfinal ? medal(['Dragon']) + 'Titre de Maître' : badgeSvg(gi, JGYMS[gi], 'mj' + gi) + 'Badge ' + JGYMS[gi]}</span>${it ? `<span><img src="${itemIcon(HELD_IMG[R.item])}" alt="" loading="lazy">${it.n}</span>` : ''}<span><span class="gem-icon"><svg><use href="#i-gem"/></svg></span>${R.g}</span></div>`;
+    it = R.item && HELD_ITEMS[R.item];
+  return `<div class="reward-line"><span class="reward-badge">${D.jfinal ? medal(['Dragon']) + 'Titre de Maître' : badgeSvg(gi, JOHTO_GYM_TYPES[gi], 'mj' + gi) + 'Badge ' + JOHTO_GYM_TYPES[gi]}</span>${it ? `<span><img src="${itemIcon(HELD_IMG[R.item])}" alt="" loading="lazy">${it.n}</span>` : ''}<span><span class="gem-icon"><svg><use href="#i-gem"/></svg></span>${R.g}</span></div>`;
 }
 
 /* ---------- Johto gym rules ---------- */
@@ -231,7 +231,7 @@ export function johtoGymTick(S, r, ev) {
   }
   if (r === 'jcombat') {
     es.forEach(e => {
-      if (!e.ko && al.some(a => hdist(a.pos, e.pos) === 1)) {
+      if (!e.ko && al.some(a => hexDistance(a.pos, e.pos) === 1)) {
         e.boost = Math.max(e.boost, 2);
       }
     });
@@ -290,7 +290,7 @@ export function updateRouteSign() {
    ===================================================================== */
 
 /* ---------- Johto: gyms, masters, rewards ---------- */
-export const JGYMS = ['Vol', 'Insecte', 'Normal', 'Spectre', 'Combat', 'Acier', 'Glace', 'Dragon'];
+export const JOHTO_GYM_TYPES = ['Vol', 'Insecte', 'Normal', 'Spectre', 'Combat', 'Acier', 'Glace', 'Dragon'];
 
 const JLEAD = [
   {
@@ -520,7 +520,7 @@ const JARENAS = [
 
 export const johtoOpen = () => PROFILE.elite >= 5;
 
-export const JCHAIN = ['jwild', 'j1', 'j2', 'j3', 'j4', 'j5', 'j6', 'j7', 'j8', 'jchamp'];
+export const JOHTO_ROUTE_ORDER = ['jwild', 'j1', 'j2', 'j3', 'j4', 'j5', 'j6', 'j7', 'j8', 'jchamp'];
 
 export const placesR = () =>
   SCREEN_STATE.region === 'hoenn'
@@ -637,11 +637,11 @@ export function init() {
   JARENAS.forEach((a, i) => {
     SCENARIOS[a.k] = Object.assign(
       {
-        n: `Arène ${JGYMS[i]}`,
-        lvl: `Johto · Arène ${i + 1} · Badge ${JGYMS[i]}`,
+        n: `Arène ${JOHTO_GYM_TYPES[i]}`,
+        lvl: `Johto · Arène ${i + 1} · Badge ${JOHTO_GYM_TYPES[i]}`,
         bio: 'arene',
         johto: i,
-        at: JGYMS[i],
+        at: JOHTO_GYM_TYPES[i],
       },
       a
     );
@@ -722,10 +722,10 @@ export function init() {
     if (!j) {
       return '';
     }
-    const it = j.item ? ` · ${ITEMS2[j.item].n} rejoint votre Sac` : '';
+    const it = j.item ? ` · ${HELD_ITEMS[j.item].n} rejoint votre Sac` : '';
     return j.final
       ? `<div class="result-list"><h4>Johto</h4><div class="result-row"><span>Vous êtes Maître de Johto${it}.</span><b>★</b></div></div>`
-      : `<div class="result-list"><h4>Johto</h4><div class="result-row"><span>Badge ${JGYMS[j.i]} de Johto obtenu${it}.</span><b>${(PROFILE.johto || []).length} / 8</b></div></div>`;
+      : `<div class="result-list"><h4>Johto</h4><div class="result-row"><span>Badge ${JOHTO_GYM_TYPES[j.i]} de Johto obtenu${it}.</span><b>${(PROFILE.johto || []).length} / 8</b></div></div>`;
   });
   PLACES_J.forEach(p => (PLACE_BY_ID[p.id] = p));
   document.addEventListener('click', e => {
@@ -736,7 +736,7 @@ export function init() {
     SCREEN_STATE.region = b.dataset.reg;
     SCREEN_STATE.mapSel = null;
     renderMap();
-    setTod(timeOfDay);
+    setTimeOfDay(timeOfDay);
   });
   JMAP_SVG = `<svg class="map-svg is-johto" viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
  <defs>

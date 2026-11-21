@@ -14,7 +14,7 @@ const POS = [
 ];
 
 /** Opponents placed on the right side of the board. */
-export const mkFoes = ids => existingSpecies(ids).map((id, i) => [id, POS[i % POS.length]]);
+export const makeFoes = ids => existingSpecies(ids).map((id, i) => [id, POS[i % POS.length]]);
 
 /** Night ford arena used by the Shadows battles and the daily challenge. */
 export const baseScene = (n, lvl, d, lv, hb, foes) => ({

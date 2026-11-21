@@ -12,10 +12,10 @@ import {
   damage,
   flies,
   fromCube,
-  hdist,
+  hexDistance,
   inBoard,
   landed,
-  mkUnit,
+  makeUnit,
   neighborKeys,
   pushMessage,
   stun,
@@ -137,11 +137,11 @@ export function trapPlan(S, e, best, al) {
   let bk = null,
     bs = -1e9;
   targets(S, e, m).forEach(k => {
-    const d = Math.min(...al.map(a => hdist(a.pos, parseCellKey(k))));
+    const d = Math.min(...al.map(a => hexDistance(a.pos, parseCellKey(k))));
     if (d < 1) {
       return;
     }
-    const s = -d * 3 - hdist(e.pos, parseCellKey(k)) * 0.5;
+    const s = -d * 3 - hexDistance(e.pos, parseCellKey(k)) * 0.5;
     if (s > bs) {
       bs = s;
       bk = k;
@@ -206,7 +206,7 @@ export function unloadCharges(S, ev) {
         // it dives onto its target and lands on a free neighboring cell, the closest to where it started
         const freeOnes = neighborKeys(c.k)
           .filter(x => S.tiles[x] && !S.tiles[x].rock && (!unitAt(S, x) || unitAt(S, x) === u))
-          .sort((a, b) => hdist(parseCellKey(a), u.pos) - hdist(parseCellKey(b), u.pos));
+          .sort((a, b) => hexDistance(parseCellKey(a), u.pos) - hexDistance(parseCellKey(b), u.pos));
         if (freeOnes.length && freeOnes[0] !== unitKey(u)) {
           u.pos = parseCellKey(freeOnes[0]);
           ev.push({ e: 'mv', u: u.uid });
@@ -227,7 +227,7 @@ function controlZone(S, u, k) {
     return false;
   }
   const p = parseCellKey(k);
-  return S.units.some(o => !o.ko && o.side !== u.side && hdist(o.pos, p) === 1);
+  return S.units.some(o => !o.ko && o.side !== u.side && hexDistance(o.pos, p) === 1);
 }
 
 /** Movement stops on this cell (you can go there, but not through it). */
@@ -294,7 +294,7 @@ function makeColossus(S, u, x, D) {
     if (!k) {
       return;
     }
-    const s = mkUnit(
+    const s = makeUnit(
       u.id,
       'e',
       parseCellKey(k),

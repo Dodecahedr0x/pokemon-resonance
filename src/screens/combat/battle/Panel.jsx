@@ -4,25 +4,25 @@ import { REACTIONS } from '../../../engine/data/game-data.js';
 import { MOVES, SHAPE, ABILITIES } from '../../../engine/data/moves.js';
 import { POKEMON, SCENARIOS } from '../../../engine/pokemon/pokemon.js';
 import { ARRIVAL_EFFECTS } from '../../../engine/pokemon/evolution.js';
-import { ROLEFX, roleIcon } from '../../../engine/pokemon/roles-synergies.js';
+import { ROLE_EFFECTS, roleIcon } from '../../../engine/pokemon/roles-synergies.js';
 import { veiled } from '../../../engine/modes/gyms.js';
-import { markOf, medal, rxCat, typeBadge, typeColor } from '../../../engine/core/utils.js';
+import { markOf, medal, reactionCategory, typeBadge, typeColor } from '../../../engine/core/utils.js';
 import {
   MAX_ENERGY,
   byUid,
   canAwaken,
   forcedTarget,
-  dmgOf,
+  damageOf,
   awakeningInfo,
   evoOpts,
   foeEvo,
   hasNx,
-  mvType,
+  moveType,
   targets,
   unitAt,
 } from '../../../engine/combat/engine.js';
 import { roleOf } from '../../../engine/combat/synergies-obstacles.js';
-import { battle, enPips, segHp, ui } from '../../../engine/combat/ui.js';
+import { battle, energyPips, segmentedHpBar, ui } from '../../../engine/combat/ui.js';
 import { PREFERENCES } from '../../../engine/ui/preferences.js';
 import { catchBlock, duoBlock, tileCard, unitExtras } from '../../../engine/combat/battle-panel.js';
 import { HEALS } from '../../../engine/items/battle-potions.js';
@@ -194,7 +194,7 @@ function Role() {
     return null;
   }
   const r = roleOf(u),
-    R = ROLEFX[r];
+    R = ROLE_EFFECTS[r];
   return (
     <div className="battle-panel-role">
       {R ? (
@@ -224,7 +224,7 @@ function Header({ u, underText: under }) {
         <span>
           {u.hp} / {u.mhp}
         </span>
-        <Html html={segHp(u)} />
+        <Html html={segmentedHpBar(u)} />
       </div>
     </div>
   );
@@ -263,7 +263,7 @@ function Intention({ e }) {
   if (e.intent) {
     const m = MOVES[e.intent.mv],
       v = unitAt(battle, e.intent.k);
-    const est = v ? dmgOf(battle, e, m, v, mvType(battle, e, m), 1) : 0;
+    const est = v ? damageOf(battle, e, m, v, moveType(battle, e, m), 1) : 0;
     return (
       <p className="battle-intent">
         Vise <b>{v ? v.n : 'une case vide'}</b> avec <b>{m.n}</b>
@@ -285,7 +285,7 @@ function OpponentSheet({ e }) {
     nx = hasNx(e) ? awakeningInfo(battle, e) : null,
     fe = foeEvo(battle, e);
   const role = roleOf(e),
-    RF = ROLEFX[role];
+    RF = ROLE_EFFECTS[role];
   return (
     <>
       <Header u={e} underText={`N.${e.lv} · ${e.t.join(' / ')}${tl ? ' · ' + tl[0] : ''}`} />
@@ -356,7 +356,7 @@ function Preview({ v }) {
       <div className="battle-preview-head">
         <span>Aperçu exact</span>
         {v.rxs.map((r, i) => (
-          <span key={i} className={`chip cat-${rxCat(r)}`}>
+          <span key={i} className={`chip cat-${reactionCategory(r)}`}>
             <i />
             {REACTIONS[r].n}
           </span>
@@ -489,7 +489,7 @@ function Awakening({ u, s }) {
     <div className={'battle-energy' + (full ? ' is-full' : '')}>
       <div className="battle-energy-head">
         <span className="caption">Énergie d’Éveil</span>
-        <Html html={enPips(u.en, 'is-large')} />
+        <Html html={energyPips(u.en, 'is-large')} />
       </div>
       {NL}
       <button type="button" className="battle-awaken" data-evo="open" disabled={!ce}>
@@ -683,7 +683,7 @@ function AllySheet({ u }) {
       <div className="battle-moves">
         {u.mv.map((id, i) => {
           const m = MOVES[id],
-            typ = mvType(battle, u, m),
+            typ = moveType(battle, u, m),
             n = targets(battle, u, m).length;
           return (
             <button

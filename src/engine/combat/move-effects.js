@@ -11,7 +11,7 @@ import {
   buildBoard,
   playLog,
   renderAll,
-  tiltS,
+  tiltScale,
   ui,
 } from './ui.js';
 import { PREFERENCES } from '../ui/preferences.js';
@@ -46,7 +46,7 @@ export function fxReset() {
   }
 }
 
-export function fxPrep() {
+export function prepareEffects() {
   const bd = $('#bBoard'),
     svg = $('#bSvg');
   if (!bd || !svg) {
@@ -121,7 +121,7 @@ function fxLoop(now) {
   }
 }
 
-export function fxAdd(d, f, delay) {
+export function addEffect(d, f, delay) {
   EFFECTS_CANVAS.items.push({ t0: performance.now() + (delay || 0), d, f });
   if (!EFFECTS_CANVAS.raf) {
     EFFECTS_CANVAS.raf = requestAnimationFrame(fxLoop);
@@ -253,7 +253,7 @@ function depth(k) {
     return 1;
   }
   const [x, y] = cellCenter(k);
-  return Math.max(0.6, Math.min(1.4, tiltS(x, y)));
+  return Math.max(0.6, Math.min(1.4, tiltScale(x, y)));
 }
 
 function withDepth(k, f, topEdge) {
@@ -327,7 +327,7 @@ function fxPath(atk, t) {
 // Schedules the hexagon aura shown on each tile of a status or self-targeted move; returns the hit delay.
 function fxSelfAura(atk) {
   const { dur, T } = atk;
-  T.forEach((t, i) => fxAdd(dur * 0.9, (c, p) => drawSelfAura(c, p, atk, t), i * 40));
+  T.forEach((t, i) => addEffect(dur * 0.9, (c, p) => drawSelfAura(c, p, atk, t), i * 40));
   return dur * 0.3;
 }
 
@@ -367,7 +367,7 @@ function fxTrajectory(atk) {
 // Schedules a lightning bolt from the attacker to each target.
 function fxBoltTrail(atk) {
   const { dur, ti, T } = atk;
-  T.forEach(t => fxAdd(dur * (ti + 0.28), (c, p) => drawBoltTrail(c, p, atk, t)));
+  T.forEach(t => addEffect(dur * (ti + 0.28), (c, p) => drawBoltTrail(c, p, atk, t)));
 }
 
 // Draws one flickering frame of the lightning bolt.
@@ -387,7 +387,7 @@ function drawBoltTrail(c, p, atk, t) {
 // Schedules a water jet from the attacker to each target.
 function fxJetTrail(atk) {
   const { dur, ti, T } = atk;
-  T.forEach(t => fxAdd(dur * (ti + 0.25), (c, p) => drawJetTrail(c, p, atk, t)));
+  T.forEach(t => addEffect(dur * (ti + 0.25), (c, p) => drawJetTrail(c, p, atk, t)));
 }
 
 // Draws one frame of the water jet: a layered stream with droplets at its head.
@@ -416,7 +416,7 @@ function drawJetTrail(c, p, atk, t) {
 function fxWave(atk) {
   const { e, dur, A } = atk;
   const C = e.sh === 'ring' ? A : fxP(e.k);
-  fxAdd(dur, (c, p) => drawWave(c, p, atk, C));
+  addEffect(dur, (c, p) => drawWave(c, p, atk, C));
 }
 
 // Draws one frame of the expanding wave: a filled ellipse, two rings and bobbing droplets.
@@ -448,7 +448,7 @@ function drawWave(c, p, atk, C) {
 // Schedules a psychic sine beam from the attacker to each target.
 function fxPsyTrail(atk) {
   const { dur, ti, T } = atk;
-  T.forEach(t => fxAdd(dur * (ti + 0.05), (c, p) => drawPsyTrail(c, p, atk, t)));
+  T.forEach(t => addEffect(dur * (ti + 0.05), (c, p) => drawPsyTrail(c, p, atk, t)));
 }
 
 // Draws one frame of the psychic beam, waving across the travel direction.
@@ -483,7 +483,7 @@ function fxProjectiles(atk) {
 // Schedules a flame stream (line moves) or a fireball toward each target.
 function fxFlameTrail(atk) {
   const { dur, ti, T } = atk;
-  T.forEach(t => fxAdd(dur * (ti + 0.2), (c, p) => drawFlameTrail(c, p, atk, t)));
+  T.forEach(t => addEffect(dur * (ti + 0.2), (c, p) => drawFlameTrail(c, p, atk, t)));
 }
 
 // Draws one frame of the flame stream or fireball.
@@ -520,7 +520,7 @@ function fxParticleVolley(atk) {
       ps.push({ t, b: R0() * 0.22, j: R0() - 0.5, r: 0.6 + R0() * 0.7, rot: R0() * 6.28, ti: ti2 });
     }
   });
-  fxAdd(dur * (ti + 0.12), (c, p) => drawParticles(c, p, atk, ps));
+  addEffect(dur * (ti + 0.12), (c, p) => drawParticles(c, p, atk, ps));
 }
 
 // Returns the total number of particles thrown for an effect kind.
@@ -665,7 +665,7 @@ function paintParticle(c, atk, pt) {
 // Schedules the spark burst on the rock a ricochet bounces off.
 function fxRicochet(atk) {
   const { dur, ti } = atk;
-  fxAdd(dur * 0.3, (c, p) => drawRicochet(c, p, atk), dur * ti * 0.5);
+  addEffect(dur * 0.3, (c, p) => drawRicochet(c, p, atk), dur * ti * 0.5);
 }
 
 // Draws one frame of the ricochet spark: a fading glow and seven rays.
@@ -692,7 +692,7 @@ function drawRicochet(c, p, atk) {
 function fxTileImpact(atk, t, i) {
   const { e, dur, ti, T } = atk;
   const delay = dur * ti * (e.sh === 'line' ? 0.65 + (0.35 * i) / Math.max(1, T.length - 1) : 1);
-  fxAdd(dur * 0.62, (c, p) => drawTileImpact(c, p, atk, t, i), delay);
+  addEffect(dur * 0.62, (c, p) => drawTileImpact(c, p, atk, t, i), delay);
 }
 
 // Draws one frame of the impact burst on a tile, dispatching on the effect kind.
@@ -987,7 +987,7 @@ function fxBigHit(atk) {
   const { e, dur, ti } = atk;
   const hitAt = dur * ti;
   if (e.big) {
-    fxAdd(dur * 0.16, drawImpactFlash, hitAt);
+    addEffect(dur * 0.16, drawImpactFlash, hitAt);
     setTimeout(shakeBoard, hitAt);
   }
   return hitAt;
@@ -1048,7 +1048,7 @@ function fxGuardPlat(e, dur) {
   const G = fxP(unitKey(g)),
     V = fxP(unitKey(v)),
     z = EFFECTS_CANVAS.s * (EFFECTS_CANVAS.zk || 1);
-  fxAdd(dur * 0.7, (c, p) => {
+  addEffect(dur * 0.7, (c, p) => {
     c.globalCompositeOperation = 'lighter';
     const q = eo(p);
     hexAt(c, G[0], G[1], (16 + 10 * q) * z, '#F2DDA8', 1 - p, 2.6 * z);
@@ -1059,7 +1059,7 @@ function fxGuardPlat(e, dur) {
 }
 
 /* hook into event playback */
-export function playEv(ev) {
+export function playEvent(ev) {
   liveEvent(ev); // lunge toward the target, vibrations (v4.29)
   // the board changed (grass cut down): redraw it after the animation
   if (ev.some(x => x.e === 'terrain')) {
@@ -1074,7 +1074,7 @@ export function playEv(ev) {
     );
   }
   const fx = ev.filter(x => x.e === 'fx');
-  if (!fx.length || !battle || !effectsEnabled() || !fxPrep()) {
+  if (!fx.length || !battle || !effectsEnabled() || !prepareEffects()) {
     playLog(ev.filter(x => x.e !== 'fx'));
     impactWords(ev);
     return;

@@ -1,5 +1,5 @@
 import { POKEMON, SCENARIOS } from '../pokemon/pokemon.js';
-import { ITEMS2, PROFILE } from '../state/game-state.js';
+import { HELD_ITEMS, PROFILE } from '../state/game-state.js';
 import { medal } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { SPARK, shinyStyle } from '../pokemon/shiny.js';
@@ -9,12 +9,12 @@ import { towerIdle, towerRun } from './resonance-tower.js';
 /* Adventure+ save fields and battle rewards: shinies, rival, legendary bosses and Resonance Tower (added in v4.4). */
 
 /* ---------- profile: new fields (all optional in old saves) ---------- */
-export function APLUS0() {
+export function defaultAdventureProfile() {
   return { shiny: [], rival: 0, legends: [], tdr: { best: 0, run: null }, johto: [], jchamp: 0, lac: 0 };
 }
 
 export function aplusClean(p) {
-  const o = APLUS0();
+  const o = defaultAdventureProfile();
   if (!p || typeof p !== 'object') {
     return o;
   }
@@ -57,7 +57,7 @@ export function aplusClean(p) {
       };
       if (r.items && typeof r.items === 'object') {
         for (const k in r.items) {
-          if (POKEMON[k] && ITEMS2[r.items[k]]) {
+          if (POKEMON[k] && HELD_ITEMS[r.items[k]]) {
             o.tdr.run.items[k] = r.items[k];
           }
         }

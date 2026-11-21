@@ -1,5 +1,5 @@
 import { POKEMON, SPECIES_BY_TYPES } from '../pokemon/pokemon.js';
-import { ITEMS2 } from '../state/game-state.js';
+import { HELD_ITEMS } from '../state/game-state.js';
 import { tokCl, unitsDirty } from '../../screens/combat/board/boardStore.js';
 import { BOARD_LAYERS } from '../combat/ui.js';
 import { pokemonArtUrl } from './images.js';
@@ -101,7 +101,7 @@ const pre = new Set();
 export function init() {
   /* held items: real image in place of the pictogram */
   ITEM_SVG = Object.fromEntries(
-    Object.keys(ITEMS2).map(k => [k, `<svg viewBox="0 0 24 24"><path d="${ITEMS2[k].i}"/></svg>`])
+    Object.keys(HELD_ITEMS).map(k => [k, `<svg viewBox="0 0 24 24"><path d="${HELD_ITEMS[k].i}"/></svg>`])
   );
 
   /* board: the Pokémon standing on its token (tokenArt, Units.jsx) */

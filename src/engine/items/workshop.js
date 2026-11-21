@@ -1,6 +1,6 @@
 /* Workshop, recipes, orders, draw, showcase, daily gift (added in v4.57). */
 
-import { ITEMS2, PROFILE } from '../state/game-state.js';
+import { HELD_ITEMS, PROFILE } from '../state/game-state.js';
 import { writeLS, toast } from '../core/utils.js';
 import { sfx, vibrate } from '../audio/sound-effects.js';
 import { SHOP, bagCount, savePurse, today } from '../state/economy.js';
@@ -13,7 +13,7 @@ export { loadToday, RECIPES, FUSION_COST }; // read by Shop › Workshop and Dra
 /* ---------- TM fusion ---------- */
 export function fusionDonors(target) {
   const d = [];
-  tmKeys()
+  tmShopKeys()
     .filter(k => k !== target && bagCount(k) > 0)
     .sort((a, b) => SHOP[a].p - SHOP[b].p)
     .forEach(k => {
@@ -26,7 +26,7 @@ export function fusionDonors(target) {
 
 export function tmFusionTargets() {
   const r = seededRng('tm-fusion'),
-    pool = tmKeys().filter(k => !bagCount(k)),
+    pool = tmShopKeys().filter(k => !bagCount(k)),
     out = [];
   while (out.length < 4 && pool.length) {
     out.push(pool.splice(Math.floor(r() * pool.length), 1)[0]);
@@ -70,7 +70,7 @@ function dailySpin() {
   }
   let t = lot.t;
   if (lot.ct) {
-    const cts = tmKeys(),
+    const cts = tmShopKeys(),
       k = cts[Math.floor(seededRng('daily-spin-tm' + st.spin)() * cts.length)];
     PROFILE.bag[k] = Math.min(99, bagCount(k) + 1);
     t = SHOP[k].n;
@@ -96,7 +96,7 @@ export function tmShowcase() {
     seen = {};
   }
   const learned = Object.values((PROFILE.ct && PROFILE.ct.learnedTms) || {});
-  const cts = tmKeys(),
+  const cts = tmShopKeys(),
     cs = Object.keys(SHOP).filter(k => SHOP[k].cs);
   [...cts, ...cs].forEach(k => {
     if (bagCount(k) > 0 || learned.includes(SHOP[k].mv)) {
@@ -149,9 +149,10 @@ const loadToday = (k, d) => {
   return s && s.d === today() ? s : d;
 };
 
-const itemName = k => (SHOP[k] ? SHOP[k].n : (ITEMS2[k] || {}).n || k);
+const itemName = k => (SHOP[k] ? SHOP[k].n : (HELD_ITEMS[k] || {}).n || k);
 
-export const tmKeys = () => Object.keys(SHOP).filter(k => SHOP[k].category === 'machines' && !SHOP[k].cs && !SHOP[k].g);
+export const tmShopKeys = () =>
+  Object.keys(SHOP).filter(k => SHOP[k].category === 'machines' && !SHOP[k].cs && !SHOP[k].g);
 
 export const ingredientsText = o =>
   Object.keys(o)
@@ -226,7 +227,7 @@ function onWorkshopClick(e) {
     toast('Préparé : ' + ingredientsText(r.out));
   } else if (a === 'fus') {
     const d = fusionDonors(k);
-    if (!tmKeys().includes(k) || bagCount(k) || !d || PROFILE.money < 1000) {
+    if (!tmShopKeys().includes(k) || bagCount(k) || !d || PROFILE.money < 1000) {
       return;
     }
     d.forEach(x => addItems({ [x]: 1 }, -1));
@@ -274,7 +275,7 @@ export function init() {
     applyReward(R);
     let extra = '';
     if (R.ct) {
-      const cts = tmKeys(),
+      const cts = tmShopKeys(),
         k = cts[Math.floor(seededRng('daily-gift-tm')() * cts.length)];
       PROFILE.bag[k] = Math.min(99, bagCount(k) + 1);
       extra = ' + ' + SHOP[k].n;

@@ -6,7 +6,7 @@
    the story, the roaming beasts, the Dominant Pokémon and the Hoenn gyms.
    ===================================================================== */
 import { POKEMON, SCENARIOS } from '../pokemon/pokemon.js';
-import { ITEMS2, PROFILE } from '../state/game-state.js';
+import { HELD_ITEMS, PROFILE } from '../state/game-state.js';
 import { HOOKS } from '../core/hooks.js';
 import { parseCellKey, hasNx, nextId, pushMessage, setMark, transform } from '../combat/engine.js';
 import { OBSTACLES } from '../combat/synergies-obstacles.js';
@@ -14,10 +14,10 @@ import { HELD_IMG, formatNumber } from '../state/economy.js';
 import { itemIcon } from '../assets/item-icons.js';
 import { PLACE_BY_ID } from './map.js';
 import { ACHIEVEMENTS } from '../progression/achievements.js';
-import { JCHAIN, JGYMS, PLACES_J } from './johto.js';
+import { JOHTO_ROUTE_ORDER, JOHTO_GYM_TYPES, PLACES_J } from './johto.js';
 import { hoennSetup, hoennTick } from './hoenn.js';
 import {
-  TALIS,
+  BEAST_TALISMANS,
   findRoamLegend,
   getRoamState,
   isRoamingActive,
@@ -36,7 +36,7 @@ export function nextJohtoStep() {
       return [T.k, `Néo-Dissonance · ${T.n}`];
     }
     if (!J.includes(i)) {
-      return ['j' + (i + 1), `Johto · Arène ${JGYMS[i]}`];
+      return ['j' + (i + 1), `Johto · Arène ${JOHTO_GYM_TYPES[i]}`];
     }
   }
   if (T) {
@@ -96,8 +96,8 @@ export function johtoExtraLine(k) {
   }
   if (D.roam) {
     const r = getRoamState(D.roam),
-      it = TALIS[D.roam];
-    return `<div class="reward-line"><span class="reward-badge reward-hp"><i style="width:${Math.round((r.hp || 1) * 100)}%"></i>PV ${Math.round((r.hp || 1) * 100)} %${r.seenFlags ? ` · vu ${r.seenFlags} fois` : ''}</span><span><img src="${itemIcon(HELD_IMG[it])}" alt="" loading="lazy">${ITEMS2[it].n}</span><span><span class="gem-icon"><svg><use href="#i-gem"/></svg></span>+12</span></div>`;
+      it = BEAST_TALISMANS[D.roam];
+    return `<div class="reward-line"><span class="reward-badge reward-hp"><i style="width:${Math.round((r.hp || 1) * 100)}%"></i>PV ${Math.round((r.hp || 1) * 100)} %${r.seenFlags ? ` · vu ${r.seenFlags} fois` : ''}</span><span><img src="${itemIcon(HELD_IMG[it])}" alt="" loading="lazy">${HELD_ITEMS[it].n}</span><span><span class="gem-icon"><svg><use href="#i-gem"/></svg></span>+12</span></div>`;
   }
   return '';
 }
@@ -353,10 +353,10 @@ export function init() {
     OBSTACLES[T.k] = i === 0 ? { grass: ['2,2', '3,2', '2,3'] } : {};
     PLACES_J.push({ id: T.k, x: T.x, y: T.y, n: T.lieu, s: `Néo-Dissonance · ${T.who}`, grp: 'aventure', j: 1 });
   });
-  JCHAIN.splice(JCHAIN.indexOf('j3'), 0, 'jd1');
-  JCHAIN.splice(JCHAIN.indexOf('j5'), 0, 'jd2');
-  JCHAIN.splice(JCHAIN.indexOf('j7'), 0, 'jd3');
-  JCHAIN.splice(JCHAIN.indexOf('jchamp'), 0, 'jd4');
+  JOHTO_ROUTE_ORDER.splice(JOHTO_ROUTE_ORDER.indexOf('j3'), 0, 'jd1');
+  JOHTO_ROUTE_ORDER.splice(JOHTO_ROUTE_ORDER.indexOf('j5'), 0, 'jd2');
+  JOHTO_ROUTE_ORDER.splice(JOHTO_ROUTE_ORDER.indexOf('j7'), 0, 'jd3');
+  JOHTO_ROUTE_ORDER.splice(JOHTO_ROUTE_ORDER.indexOf('jchamp'), 0, 'jd4');
   PLACES_J.forEach(p => (PLACE_BY_ID[p.id] = p));
   /* ---------- hooks: after the battle ---------- */
   HOOKS.progress.push((S, rew, win) => {

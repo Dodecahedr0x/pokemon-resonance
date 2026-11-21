@@ -1,7 +1,7 @@
 /* Companion, breeding eggs, expeditions (added in v4.61). */
 
 import { POKEMON, POKEMON_LIST, SCENARIOS } from '../pokemon/pokemon.js';
-import { ITEMS2, PROFILE } from '../state/game-state.js';
+import { HELD_ITEMS, PROFILE } from '../state/game-state.js';
 import { writeLS, readLS, medal, toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { sfx, vibrate } from '../audio/sound-effects.js';
@@ -14,7 +14,7 @@ import { renderCampBase } from './base-camp.js';
 import { affinityHearts, gainCompanionAffinity, activeCompanionId } from './companion-pokemon.js';
 import { refreshHome } from '../../screens/home/homeStore.js';
 import { applyReward, canAfford, seededRng, rewardText } from '../world/route-events.js';
-import { tmKeys } from '../items/workshop.js';
+import { tmShopKeys } from '../items/workshop.js';
 import { badgeTotal } from './item-quests.js';
 
 export { EGG_SHOP, eggState, eggPool }; // read by Shop › Eggs (React, src/screens/bag/Workshop.jsx)
@@ -105,18 +105,18 @@ export function expeditionStory(x) {
       PROFILE.gems += 3;
       rare = '3 Éclats rares';
     } else if (v < 0.7) {
-      const lib = Object.keys(ITEMS2).filter(k => !PROFILE.items.includes(k));
+      const lib = Object.keys(HELD_ITEMS).filter(k => !PROFILE.items.includes(k));
       if (lib.length) {
         const k = lib[Math.floor(Math.random() * lib.length)];
         PROFILE.items.push(k);
-        rare = `l’objet « ${ITEMS2[k].n} »`;
+        rare = `l’objet « ${HELD_ITEMS[k].n} »`;
       } else {
         PROFILE.money += 1500;
         rare = '1 500 ₽';
       }
     } else {
-      const pool = tmKeys().filter(k => !bagCount(k)),
-        all = pool.length ? pool : tmKeys();
+      const pool = tmShopKeys().filter(k => !bagCount(k)),
+        all = pool.length ? pool : tmShopKeys();
       if (all.length) {
         const k = all[Math.floor(Math.random() * all.length)];
         PROFILE.bag[k] = Math.min(99, bagCount(k) + 1);

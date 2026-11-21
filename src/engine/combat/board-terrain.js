@@ -1,7 +1,7 @@
 /* Living board (overhaul of the battlefield) (added in v4.71). */
 
 import { SCENARIOS } from '../pokemon/pokemon.js';
-import { fnvHash, hash2, mulberry32 } from '../core/utils.js';
+import { fnvHash, valueNoise, mulberry32 } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { neighborKeys } from './engine.js';
 import { battle, BOARD_GEOMETRY, cellCenter, cellPoints, BOARD_LAYERS, boardViewBox, isVerticalBoard } from './ui.js';
@@ -23,10 +23,10 @@ const pn = (x, y, per, s) => {
     xf = x - xi,
     yf = y - yi;
   const w = v => ((v % per) + per) % per;
-  const a = hash2(w(xi), w(yi), s),
-    b = hash2(w(xi + 1), w(yi), s),
-    c = hash2(w(xi), w(yi + 1), s),
-    d = hash2(w(xi + 1), w(yi + 1), s);
+  const a = valueNoise(w(xi), w(yi), s),
+    b = valueNoise(w(xi + 1), w(yi), s),
+    c = valueNoise(w(xi), w(yi + 1), s),
+    d = valueNoise(w(xi + 1), w(yi + 1), s);
   const u = xf * xf * (3 - 2 * xf),
     v = yf * yf * (3 - 2 * yf);
   return a + (b - a) * u + (c - a) * v + (a - b - c + d) * u * v;
@@ -425,7 +425,7 @@ const fillTextureBase = (D, name, cols, seed) => {
   for (let j = 0; j < TS; j++) {
     for (let i = 0; i < TS; i++) {
       let v = pf(i / 32, j / 32, 8, seed, 4);
-      const g = (hash2(i, j, seed) - 0.5) * 0.12;
+      const g = (valueNoise(i, j, seed) - 0.5) * 0.12;
       if (shape) {
         v = shape(v, i, j, seed);
       }

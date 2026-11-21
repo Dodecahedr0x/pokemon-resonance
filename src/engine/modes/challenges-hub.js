@@ -7,8 +7,8 @@ import { overlay } from '../progression/prestige.js';
 import { shut } from '../../screens/overlays/tempStore.js';
 import { today } from '../state/economy.js';
 import { existingSpecies } from './challenge-scenes.js';
-import { dqDef, dqMake, dqViol } from './daily-challenge.js';
-import { adjustPrestige, preOk } from './challenge-prestige.js';
+import { dailyChallengeSetup, buildDailyChallenge, dailyChallengeViolation } from './daily-challenge.js';
+import { adjustPrestige, prestigeUnlocked } from './challenge-prestige.js';
 import { freeSpecimens, reviveSpecimen } from './ancient-specimens.js';
 
 const KEY = 'res-daily-challenges';
@@ -44,7 +44,7 @@ export const openChallengesHub = () => {
   const X = readChallengeState(),
     D = X.dq,
     doneFlag = D.d === today() && D.done,
-    di = dqDef();
+    di = dailyChallengeSetup();
   const freeOnes = freeSpecimens();
   const O = window.__shadowEpisodes,
     e = O.readValue().stepOf,
@@ -68,7 +68,7 @@ export const openChallengesHub = () => {
     fossils: X.fossils,
     freeSlots: freeOnes.length,
     pre: { n: X.pre.n, on: !!X.pre.on },
-    preOk: !!preOk(),
+    preOk: !!prestigeUnlocked(),
   });
   o.addEventListener('click', evt => {
     if (evt.target === o) {
@@ -107,7 +107,7 @@ function onChallengesHubClick(e) {
     if (!squad.length) {
       return toast('Composez d’abord une équipe.');
     }
-    dqMake();
+    buildDailyChallenge();
     shut('daily-challenges-o');
     if (battle) {
       backToPrep();
@@ -130,8 +130,8 @@ export function init() {
     readValue: readChallengeState,
     write: writeChallengeState,
     hub: openChallengesHub,
-    makeDailyChallenge: dqMake,
-    dailyViolation: dqViol,
+    makeDailyChallenge: buildDailyChallenge,
+    dailyViolation: dailyChallengeViolation,
     ok: existingSpecies,
   };
 }

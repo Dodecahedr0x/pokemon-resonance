@@ -1,5 +1,5 @@
 import { refreshSettings } from '../../screens/settings/settingsStore.js';
-import { DIFFS, PROFILE } from '../state/game-state.js';
+import { DIFFICULTY_NAMES, PROFILE } from '../state/game-state.js';
 import { toast } from '../core/utils.js';
 import { placeAlert } from '../world/home-route.js';
 import { battle, renderAll } from '../combat/ui.js';
@@ -112,7 +112,7 @@ export function init() {
       PROFILE.diff = d.dataset.diff;
       queueSave();
       renderParams();
-      toast(`Difficulté : ${DIFFS[PROFILE.diff]}`);
+      toast(`Difficulté : ${DIFFICULTY_NAMES[PROFILE.diff]}`);
       return;
     }
     if (e.target.closest('[data-v4reset]')) {

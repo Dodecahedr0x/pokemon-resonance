@@ -2,7 +2,7 @@
 
 import { MOVES } from '../data/moves.js';
 import { SCENARIOS } from '../pokemon/pokemon.js';
-import { ITEMS2 } from '../state/game-state.js';
+import { HELD_ITEMS } from '../state/game-state.js';
 import { HOOKS } from '../core/hooks.js';
 import { timeOfDay } from '../world/home-route.js';
 import { MAX_ENERGY, parseCellKey, rewardIn, hasNx, heal, pushMessage, typeEffectiveness } from '../combat/engine.js';
@@ -332,7 +332,7 @@ export function init() {
   BALLS.push('rapide', 'sombre', 'filet', 'faiblo');
   HEALS.push('hyperpotion');
   COMBAT_ITEMS.push('antigel', 'antidote', 'baiemepo', 'gelee', 'rappelmax');
-  Object.assign(ITEMS2, TYPE_HELD_ITEMS);
+  Object.assign(HELD_ITEMS, TYPE_HELD_ITEMS);
   Object.assign(HELD_IMG, {
     charbon: 'charcoal',
     eaumystique: 'mystic-water',
@@ -366,7 +366,7 @@ export function init() {
         !!u &&
         TYPE_ITEMS[u.item] &&
         TYPE_ITEMS[u.item] === typ &&
-        (m.p > 0 || m.fix > 0) && { mul: 1.2, labelText: ITEMS2[u.item].n },
+        (m.p > 0 || m.fix > 0) && { mul: 1.2, labelText: HELD_ITEMS[u.item].n },
     },
     {
       id: 'filter-guard',

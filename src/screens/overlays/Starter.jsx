@@ -3,7 +3,7 @@ import { Html } from '../../lib/html.jsx';
 import { useStarter } from './shellOverlays.js';
 import { Dialogue } from './Window.jsx';
 import { POKEMON } from '../../engine/pokemon/pokemon.js';
-import { DIFFS, PROFILE, STARTERS } from '../../engine/state/game-state.js';
+import { DIFFICULTY_NAMES, PROFILE, STARTERS } from '../../engine/state/game-state.js';
 import { medal, typeColor } from '../../engine/core/utils.js';
 import { evoPath } from '../../engine/world/home-route.js';
 
@@ -51,7 +51,7 @@ function Card() {
       </div>
       <div className="starter-difficulty">
         <span>Difficulté</span>
-        {Object.entries(DIFFS).map(([k, n]) => (
+        {Object.entries(DIFFICULTY_NAMES).map(([k, n]) => (
           <Button key={k} size="small" data-sd={k} aria-pressed={PROFILE.diff === k}>
             {n}
           </Button>

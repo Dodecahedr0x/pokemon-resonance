@@ -4,7 +4,7 @@ import { POKEMON, SCENARIOS } from '../pokemon/pokemon.js';
 import { HOOKS } from '../core/hooks.js';
 import { OBSTACLES } from '../combat/synergies-obstacles.js';
 import { DEX_SPECIES } from '../progression/pokedex.js';
-import { mkFoes, existingSpecies } from './challenge-scenes.js';
+import { makeFoes, existingSpecies } from './challenge-scenes.js';
 import { readMoreChallenges, writeMoreChallenges } from './more-challenges.js';
 
 const hash = s => {
@@ -30,7 +30,7 @@ export const weekDef = () => {
 };
 
 /** (Re)builds this week's scenario `wk470`. */
-export const wkMake = () => {
+export const buildWeeklyChallenge = () => {
   const D = weekDef();
   SCENARIOS.wk470 = Object.assign(
     {
@@ -45,7 +45,7 @@ export const wkMake = () => {
       hb: 4,
       pb: 1,
       lv: D.lv,
-      foes: mkFoes(D.ids),
+      foes: makeFoes(D.ids),
     },
     {}
   );
@@ -59,7 +59,7 @@ export const wkMake = () => {
 
 // Statements run at startup, in the original order (see index.js).
 export function init() {
-  wkMake();
+  buildWeeklyChallenge();
 
   /* ---- victory: only one rewarded victory per week ---- */
   HOOKS.progress.unshift((S, rew, win) => {

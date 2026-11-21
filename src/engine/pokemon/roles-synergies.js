@@ -1,6 +1,6 @@
 import { POKEMON, PRESETS } from './pokemon.js';
 
-export function synOf(ids) {
+export function synergiesOf(ids) {
   const T = ids.filter(id => POKEMON[id]).map(id => POKEMON[id].t);
   return SYNERGIES.filter(s => T.some((a, i) => a.includes(s.t[0]) && T.some((b, j) => j !== i && b.includes(s.t[1]))));
 }
@@ -11,7 +11,7 @@ export const rosterCost = id => {
   return m.st === 1 ? m.c : m.c + m.st - 1;
 };
 
-export const ROLEFX = {
+export const ROLE_EFFECTS = {
   Rempart: {
     k: 'Protecteur',
     d: 'Gardiennage : une fois par manche, s’interpose devant un allié au contact visé par une attaque à cible unique et encaisse 75 % du coup.',

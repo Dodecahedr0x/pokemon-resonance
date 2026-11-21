@@ -1,7 +1,7 @@
 import { useEngineReady } from '../../engineReady.js';
 import { TYPES, ROLES } from '../../engine/data/game-data.js';
 import { RECRUIT } from '../../engine/pokemon/evolution.js';
-import { ROLEFX } from '../../engine/pokemon/roles-synergies.js';
+import { ROLE_EFFECTS } from '../../engine/pokemon/roles-synergies.js';
 import { gen, visible } from '../../engine/team/team.js';
 import { useRosterKey } from './teamStore.js';
 import { analysis } from './analysis.js';
@@ -86,7 +86,7 @@ export default function Team() {
               <option value="Tous">Tous les rôles</option>
               {ROLES.map(x => (
                 <option key={x.n} value={x.n}>
-                  {`${x.n} · ${ROLEFX[x.n].k}`}
+                  {`${x.n} · ${ROLE_EFFECTS[x.n].k}`}
                 </option>
               ))}
             </>

@@ -6,7 +6,7 @@ import { BADGES } from './gyms.js';
 import { writeLS, toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { squad } from '../team/team.js';
-import { cellKey, mkUnit, plan, pushMessage, unitAt } from '../combat/engine.js';
+import { cellKey, makeUnit, plan, pushMessage, unitAt } from '../combat/engine.js';
 import { OBSTACLES } from '../combat/synergies-obstacles.js';
 import { battle, backToPrep, goFight } from '../combat/ui.js';
 import { overlay } from '../progression/prestige.js';
@@ -39,7 +39,7 @@ function defenseWave(S, ev) {
     const p = freeOnes[Math.floor(Math.random() * freeOnes.length)],
       m = pool[Math.floor(Math.random() * pool.length)];
     D.n++;
-    S.units.push(mkUnit(m.id, 'e', p, 'd' + D.n, Dx));
+    S.units.push(makeUnit(m.id, 'e', p, 'd' + D.n, Dx));
     made++;
   }
   if (made) {

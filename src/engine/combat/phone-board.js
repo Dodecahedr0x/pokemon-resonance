@@ -3,7 +3,7 @@
 import { MOVES } from '../data/moves.js';
 import { typeColor } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
-import { byUid, mvType } from './engine.js';
+import { byUid, moveType } from './engine.js';
 import { battle, ui } from './ui.js';
 import { footCls, footPos, refreshBattle } from '../../screens/combat/battle/battleStore.js';
 
@@ -38,7 +38,7 @@ function thumbActionLabel(b, u) {
   }
   if (d.mi != null) {
     const m = u && MOVES[u.mv[+d.mi]],
-      ty = m ? mvType(battle, u, m) : null,
+      ty = m ? moveType(battle, u, m) : null,
       nb = b.querySelector('b');
     return { t: m ? m.n : nb ? nb.firstChild && nb.firstChild.textContent : 'Capacité', col: ty ? typeColor(ty) : '' };
   }

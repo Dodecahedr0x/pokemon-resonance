@@ -1,6 +1,6 @@
 import { MOVES } from '../../engine/data/moves.js';
 import { REACTIONS } from '../../engine/data/game-data.js';
-import { FAMS30, POKEMON_LIST, NEWS } from '../../engine/pokemon/pokemon.js';
+import { FAMILY_BASES, POKEMON_LIST, NEWS } from '../../engine/pokemon/pokemon.js';
 import { ARRIVAL_EFFECTS } from '../../engine/pokemon/evolution.js';
 import { strokeIcon } from '../../engine/core/utils.js';
 import { Html } from '../../lib/html.jsx';
@@ -24,7 +24,7 @@ export function Pillars() {
 
 export function Digits() {
   return [
-    [FAMS30.length, 'Familles à recruter'],
+    [FAMILY_BASES.length, 'Familles à recruter'],
     [POKEMON_LIST.filter(m => !m.isEnemy).length, 'Pokémon en combat'],
     [Object.keys(ARRIVAL_EFFECTS).length, 'Arrivées uniques'],
     [Object.keys(MOVES).length, 'Capacités'],

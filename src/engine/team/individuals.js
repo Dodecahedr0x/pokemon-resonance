@@ -1,5 +1,5 @@
 import { POKEMON, familyOf } from '../pokemon/pokemon.js';
-import { DIFFS, ITEMS2, PROFILE } from '../state/game-state.js';
+import { DIFFICULTY_NAMES, HELD_ITEMS, PROFILE } from '../state/game-state.js';
 import { fnvHash } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { MAX_ENERGY, pushMessage } from '../combat/engine.js';
@@ -39,7 +39,7 @@ export function individualsComfortClean(p) {
         const it = {};
         if (t.it && typeof t.it === 'object') {
           Object.keys(t.it).forEach(
-            b => POKEMON[b] && typeof t.it[b] === 'string' && ITEMS2[t.it[b]] && (it[b] = t.it[b])
+            b => POKEMON[b] && typeof t.it[b] === 'string' && HELD_ITEMS[t.it[b]] && (it[b] = t.it[b])
           );
         }
         return {
@@ -66,7 +66,7 @@ export function individualsComfortClean(p) {
         t: x.t.filter(id => POKEMON[id]).slice(0, 4),
         r: Number.isFinite(x.r) ? Math.max(0, Math.min(99, Math.floor(x.r))) : 0,
         rk: typeof x.rk === 'string' ? x.rk.slice(0, 2) : '',
-        df: DIFFS[x.df] ? x.df : 'normal',
+        df: DIFFICULTY_NAMES[x.df] ? x.df : 'normal',
         md: typeof x.md === 'string' ? x.md.slice(0, 10) : '',
       }));
   }

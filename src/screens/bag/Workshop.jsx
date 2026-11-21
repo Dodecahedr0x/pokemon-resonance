@@ -1,9 +1,9 @@
 import { Fragment } from 'react';
-import { ITEMS2, PROFILE } from '../../engine/state/game-state.js';
+import { HELD_ITEMS, PROFILE } from '../../engine/state/game-state.js';
 import { typeColor } from '../../engine/core/utils.js';
 import { MOVES } from '../../engine/data/moves.js';
 import { SHOP, formatNumber, today } from '../../engine/state/economy.js';
-import { tLevel } from '../../engine/progression/trainer-stats.js';
+import { trainerLevel } from '../../engine/progression/trainer-stats.js';
 import { canAfford, rewardText } from '../../engine/world/route-events.js';
 import {
   FUSION_COST,
@@ -179,7 +179,7 @@ function Draw() {
 /* ---------- Finds showcase (v4.57) ---------- */
 function Showcase() {
   const { seen, tms: cts, cs } = tmShowcase(),
-    held = Object.keys(ITEMS2),
+    held = Object.keys(HELD_ITEMS),
     nh = held.filter(k => PROFILE.items.includes(k)).length,
     all = [...cts, ...cs],
     nc = all.filter(k => seen[k]).length;
@@ -203,10 +203,10 @@ function Showcase() {
             <span
               key={k}
               className={'workshop-showcase-item' + (own ? ' is-on' : '')}
-              title={ITEMS2[k].n + (own ? '' : ' (à trouver)')}
+              title={HELD_ITEMS[k].n + (own ? '' : ' (à trouver)')}
             >
               <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.6">
-                <path d={ITEMS2[k].i} />
+                <path d={HELD_ITEMS[k].i} />
               </svg>
             </span>
           );
@@ -378,8 +378,8 @@ function Talents() {
     <>
       <h3 className="card-title">Talents du dresseur</h3>
       <p className="note">
-        Chaque niveau de dresseur donne 1 point. Niveau {tLevel()} : <b>{pts}</b> point{pts > 1 ? 's' : ''} à dépenser,{' '}
-        {spent} dépensé{spent > 1 ? 's' : ''}. Les talents ne comptent pas dans les combats à règles fixes.
+        Chaque niveau de dresseur donne 1 point. Niveau {trainerLevel()} : <b>{pts}</b> point{pts > 1 ? 's' : ''} à
+        dépenser, {spent} dépensé{spent > 1 ? 's' : ''}. Les talents ne comptent pas dans les combats à règles fixes.
       </p>
       {TALENTS.map(B => (
         <Fragment key={B.b}>

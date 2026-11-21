@@ -1,7 +1,7 @@
 import { SCENARIOS } from '../pokemon/pokemon.js';
 import { PROFILE } from '../state/game-state.js';
 import { ARENAS } from '../modes/gyms.js';
-import { MAX_ENERGY, affected, dmgOf, hasNx, markAt, mvType, unitAt, unitKey } from './engine.js';
+import { MAX_ENERGY, affected, damageOf, hasNx, markAt, moveType, unitAt, unitKey } from './engine.js';
 
 /* Leader play styles: each gym leader, the rival and legendary bosses steer the AI their own way (added in v4.4). */
 
@@ -102,7 +102,7 @@ export function aiStyleBonus(S, e, m, k, sim) {
       if (v.sp === (PROFILE.box && PROFILE.box[0])) {
         b += 5;
       }
-      if (dmgOf(S, sim, m, v, mvType(S, sim, m), 1) >= v.hp) {
+      if (damageOf(S, sim, m, v, moveType(S, sim, m), 1) >= v.hp) {
         b += 4;
       }
     });

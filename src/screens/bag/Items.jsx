@@ -1,6 +1,6 @@
 import { MOVES } from '../../engine/data/moves.js';
 import { POKEMON } from '../../engine/pokemon/pokemon.js';
-import { ITEMS2, PROFILE, ownedItems } from '../../engine/state/game-state.js';
+import { HELD_ITEMS, PROFILE, ownedItems } from '../../engine/state/game-state.js';
 import { typeColor } from '../../engine/core/utils.js';
 import { HELD_IMG, SHOP, bagCount, formatNumber } from '../../engine/state/economy.js';
 import { itemIcon } from '../../engine/assets/item-icons.js';
@@ -88,7 +88,7 @@ export function Article({ k, mode }) {
 
 // A held item in the Bag (old heldRow): who holds it, or where to find it.
 export function HeldItem({ k }) {
-  const it = ITEMS2[k],
+  const it = HELD_ITEMS[k],
     own = ownedItems().includes(k),
     holder = Object.keys(PROFILE.equipment).find(id => PROFILE.equipment[id] === k);
   return (

@@ -4,7 +4,7 @@ import {
   byUid,
   damage,
   endStep,
-  hdist,
+  hexDistance,
   heal,
   neighborKeys,
   markNetwork,
@@ -158,7 +158,7 @@ export const SELF_MOVE_EFFECTS = {
     pushMessage(ev, 'Distorsion : pendant 4 manches, les Pokémon lents frappent ×1,3 et gagnent +1 Mouvement.');
   },
   glas(S, u, ev) {
-    const healed = S.units.filter(o => !o.ko && o.side === u.side && hdist(o.pos, u.pos) <= 2);
+    const healed = S.units.filter(o => !o.ko && o.side === u.side && hexDistance(o.pos, u.pos) <= 2);
     healed.forEach(o => {
       const had = !!(o.badge || o.skip || o.burn || o.poisoned || o.web || o.root);
       if (o.sn && o !== u && o.side === 'a' && S.phase === 'player') {

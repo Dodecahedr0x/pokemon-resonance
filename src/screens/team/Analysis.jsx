@@ -2,7 +2,7 @@ import { Html } from '../../lib/html.jsx';
 import { ROLES, REACTIONS } from '../../engine/data/game-data.js';
 import { POKEMON, PRESETS } from '../../engine/pokemon/pokemon.js';
 import { LINK_N, LINK_T, PROFILE, lvlOfPts, pairKey } from '../../engine/state/game-state.js';
-import { SYNERGIES, synOf } from '../../engine/pokemon/roles-synergies.js';
+import { SYNERGIES, synergiesOf } from '../../engine/pokemon/roles-synergies.js';
 import { medal, typeColor } from '../../engine/core/utils.js';
 import { squad } from '../../engine/team/team.js';
 import { startVoice } from '../../engine/combat/engine.js';
@@ -85,7 +85,7 @@ export default function Analysis({ A }) {
 
 // Collapsed summary (formerly teamSummary).
 function recap(A) {
-  const n = synOf(squad).length,
+  const n = synergiesOf(squad).length,
     bad = A.al.filter(a => a[0] === 'bad').length;
   return squad.length
     ? `Indice ${A.score} · ${n} synergie${n > 1 ? 's' : ''}${bad ? ` · ${bad} alerte${bad > 1 ? 's' : ''}` : ''}`
@@ -260,7 +260,7 @@ function Ranks() {
 
 // Team synergies (formerly synCard, v1.1).
 function Synergies() {
-  const act = synOf(squad).map(s => s.k),
+  const act = synergiesOf(squad).map(s => s.k),
     ms = squad.map(id => POKEMON[id]),
     has = r => ms.filter(m => m.r === r),
     displayNames = l => l.map(m => m.n).join(', ');

@@ -3,7 +3,7 @@ import { MOVES } from '../../../engine/data/moves.js';
 import { veiled } from '../../../engine/modes/gyms.js';
 import { medal } from '../../../engine/core/utils.js';
 import { MAX_ENERGY, awakeningInfo, foeEvo, hasNx } from '../../../engine/combat/engine.js';
-import { battle, STATUS_CLASS, enPips, segHp, ui } from '../../../engine/combat/ui.js';
+import { battle, STATUS_CLASS, energyPips, segmentedHpBar, ui } from '../../../engine/combat/ui.js';
 import { hasXp, bossScene, plateRankHtml } from '../../../engine/combat/resonance.js';
 import { fogHidden, fogVision } from '../../../engine/combat/fog-of-war.js';
 import { useBattleVersion } from './battleStore.js';
@@ -114,9 +114,9 @@ function Plate({ u, fog }) {
         <span className="battle-plate-head">
           <span className="battle-plate-name">{u.n}</span>
           <Html html={plateRankHtml(u)} />
-          {pips ? <Html html={enPips(u.en)} /> : u.lv ? <span className="battle-plate-level">N.{u.lv}</span> : null}
+          {pips ? <Html html={energyPips(u.en)} /> : u.lv ? <span className="battle-plate-level">N.{u.lv}</span> : null}
         </span>
-        <Html html={segHp(u)} />
+        <Html html={segmentedHpBar(u)} />
         <span className="battle-plate-status">
           <span>{u.ko ? 'K.O.' : u.hp + ' / ' + u.mhp}</span>
           {u.badge && !u.ko ? (

@@ -1,7 +1,7 @@
 /* Trainer avatar · rare encounters (time, weather) · hidden finds on the map (added in v4.50). */
 
 import { TYPES } from '../data/game-data.js';
-import { ITEMS2, PROFILE } from '../state/game-state.js';
+import { HELD_ITEMS, PROFILE } from '../state/game-state.js';
 import { writeLS, toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { timeOfDay } from './home-route.js';
@@ -128,11 +128,11 @@ function harvestSpot(sp) {
     money = 80 + rnd(240);
   let extra = '';
   if (rnd(100) < 12) {
-    const freeOnes = Object.keys(ITEMS2).filter(k => !PROFILE.items.includes(k));
+    const freeOnes = Object.keys(HELD_ITEMS).filter(k => !PROFILE.items.includes(k));
     if (freeOnes.length) {
       const k = freeOnes[rnd(freeOnes.length)];
       PROFILE.items.push(k);
-      extra = ` et l’objet « ${ITEMS2[k].n} »`;
+      extra = ` et l’objet « ${HELD_ITEMS[k].n} »`;
     }
   } else if (rnd(100) < 35) {
     PROFILE.bag = PROFILE.bag || {};

@@ -3,7 +3,7 @@ import { strength } from '../../lib/power.js';
 import { MOVES, SHAPE, ABILITIES } from '../../engine/data/moves.js';
 import { REGION_NAMES } from '../../engine/data/hoenn.js';
 import { POKEMON, NOTES, familyOf } from '../../engine/pokemon/pokemon.js';
-import { rosterCost, ROLEFX } from '../../engine/pokemon/roles-synergies.js';
+import { rosterCost, ROLE_EFFECTS } from '../../engine/pokemon/roles-synergies.js';
 import { typeBadge, typeColor } from '../../engine/core/utils.js';
 import { STAT_NAMES, squad } from '../../engine/team/team.js';
 import { pokemonArtUrl } from '../../engine/assets/images.js';
@@ -109,11 +109,11 @@ export default function DexCard() {
             {roles.map(r => (
               <span className="dex-role" key={r}>
                 <b>{r}</b>
-                {ROLEFX[r] ? ` · ${ROLEFX[r].k}` : null}
+                {ROLE_EFFECTS[r] ? ` · ${ROLE_EFFECTS[r].k}` : null}
               </span>
             ))}
           </div>
-          {ROLEFX[m.r] ? <p className="dex-note">{ROLEFX[m.r].d}</p> : null}
+          {ROLE_EFFECTS[m.r] ? <p className="dex-note">{ROLE_EFFECTS[m.r].d}</p> : null}
           {note ? <p className="dex-note is-highlight">{note}</p> : null}
         </section>
         {'\n   '}

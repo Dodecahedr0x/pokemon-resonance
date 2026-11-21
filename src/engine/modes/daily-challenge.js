@@ -8,7 +8,7 @@ import { selectedScenario } from '../combat/ui.js';
 import { today } from '../state/economy.js';
 import { DEX_SPECIES } from '../progression/pokedex.js';
 import { teamSize } from '../progression/campaign-challenges.js';
-import { baseScene, mkFoes, existingSpecies } from './challenge-scenes.js';
+import { baseScene, makeFoes, existingSpecies } from './challenge-scenes.js';
 import { readChallengeState, writeChallengeState } from './challenges-hub.js';
 
 const TYPES = ['Feu', 'Eau', 'Plante', 'Électrik', 'Psy', 'Combat', 'Insecte', 'Sol'];
@@ -21,7 +21,7 @@ const seedValue = sel => {
 };
 
 /** Today's challenge: opponents, forbidden type, Bonus HP and level. */
-export const dqDef = () => {
+export const dailyChallengeSetup = () => {
   const pool = existingSpecies(DEX_SPECIES.map(m => m.id));
   const nb = 3 + (seedValue('n') % 2);
   const ids = [];
@@ -34,8 +34,8 @@ export const dqDef = () => {
 };
 
 /** (Re)builds today's scenario `dq470`. */
-export const dqMake = () => {
-  const D = dqDef();
+export const buildDailyChallenge = () => {
+  const D = dailyChallengeSetup();
   SCENARIOS.dq470 = Object.assign(
     baseScene(
       'Défi quotidien',
@@ -43,7 +43,7 @@ export const dqMake = () => {
       'Aucun Pokémon de type ' + D.forbidden + ' dans votre équipe. Adversaires renforcés.',
       D.lv,
       D.hb,
-      mkFoes(D.ids)
+      makeFoes(D.ids)
     ),
     { dq470: D.forbidden }
   );
@@ -56,7 +56,7 @@ export const dqMake = () => {
 };
 
 /** The first team member of the forbidden type, or null. */
-export const dqViol = () => {
+export const dailyChallengeViolation = () => {
   const D = SCENARIOS.dq470 && SCENARIOS.dq470.dq470;
   return D ? squad.slice(0, teamSize()).find(id => POKEMON[id] && POKEMON[id].t.includes(D)) : null;
 };
@@ -100,10 +100,10 @@ function onProgress(S, rew, win) {
 
 // Statements run at startup, in the original order (see index.js).
 export function init() {
-  dqMake();
+  buildDailyChallenge();
 
   HOOKS.launchRefusal.push(() => {
-    const v = selectedScenario === 'dq470' && dqViol();
+    const v = selectedScenario === 'dq470' && dailyChallengeViolation();
     return v ? POKEMON[v].n + ' est de type ' + SCENARIOS.dq470.dq470 + ' : retirez-le de l’équipe.' : null;
   });
 

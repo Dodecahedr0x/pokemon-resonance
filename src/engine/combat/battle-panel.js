@@ -2,10 +2,10 @@
 
 import { ELEMENT_TYPES, MARK_REACTIONS, REACTIONS } from '../data/game-data.js';
 import { POKEMON } from '../pokemon/pokemon.js';
-import { ITEMS2, LINK_N } from '../state/game-state.js';
-import { ROLEFX, roleIcon } from '../pokemon/roles-synergies.js';
-import { markOf, medal, rxCat } from '../core/utils.js';
-import { parseCellKey, byUid, hdist, markAt } from './engine.js';
+import { HELD_ITEMS, LINK_N } from '../state/game-state.js';
+import { ROLE_EFFECTS, roleIcon } from '../pokemon/roles-synergies.js';
+import { markOf, medal, reactionCategory } from '../core/utils.js';
+import { parseCellKey, byUid, hexDistance, markAt } from './engine.js';
 import { canCapture, canDuo, captureReq, duoOf, linkLvl } from './items-bonds-ai.js';
 import { roleOf } from './synergies-obstacles.js';
 import { battle, ui } from './ui.js';
@@ -71,7 +71,7 @@ export function tileCard() {
     const row = MARK_REACTIONS[mk];
     rx = ELEMENT_TYPES.map((e, i) =>
       row[i] && row[i] !== 'ren'
-        ? `<span class="chip cat-${rxCat(row[i])}"><i></i>${e} → ${REACTIONS[row[i]].n}</span>`
+        ? `<span class="chip cat-${reactionCategory(row[i])}"><i></i>${e} → ${REACTIONS[row[i]].n}</span>`
         : ''
     ).join('');
   }
@@ -85,7 +85,7 @@ export function unitExtras(u) {
   }
   if (u.item) {
     o.push(
-      `<span class="battle-unit-tag is-item" title="${ITEMS2[u.item].d}"><svg viewBox="0 0 24 24"><path d="${ITEMS2[u.item].i}"/></svg>${ITEMS2[u.item].n}${u.item === 'ceinture' && !u.belt ? ' · utilisée' : ''}</span>`
+      `<span class="battle-unit-tag is-item" title="${HELD_ITEMS[u.item].d}"><svg viewBox="0 0 24 24"><path d="${HELD_ITEMS[u.item].i}"/></svg>${HELD_ITEMS[u.item].n}${u.item === 'ceinture' && !u.belt ? ' · utilisée' : ''}</span>`
     );
   }
   if (u.fat) {
@@ -94,13 +94,13 @@ export function unitExtras(u) {
   const mates = battle.units.filter(x => x !== u && !x.ko && x.side === 'a' && linkLvl(battle, u.sp, x.sp) > 0);
   mates.forEach(x => {
     const l = linkLvl(battle, u.sp, x.sp),
-      adj = hdist(x.pos, u.pos) === 1;
+      adj = hexDistance(x.pos, u.pos) === 1;
     o.push(
       `<span class="battle-unit-tag is-link${adj && l >= 1 ? ' is-active' : ''}" title="Soutien : −1 dégât côte à côte. Synchro : +25 % sur les réactions préparées l’un pour l’autre. Duo : technique combinée.">Lien ${LINK_N[l]} · ${POKEMON[x.sp].n}${adj ? ' · côte à côte' : ''}</span>`
     );
   });
   const role = roleOf(u),
-    RF = ROLEFX[role],
+    RF = ROLE_EFFECTS[role],
     head = RF
       ? `<p class="battle-role-note">${roleIcon(role)}<span><b>${role} · ${RF.k}.</b> ${RF.d.replace(/^[^:]+ : /, '')}</span></p>`
       : '',
@@ -124,7 +124,7 @@ export function duoBlock(u) {
       ok = canDuo(battle, u, p),
       why = p.acted
         ? `${p.n} a déjà agi`
-        : hdist(u.pos, p.pos) > 2
+        : hexDistance(u.pos, p.pos) > 2
           ? `${p.n} est trop loin (2 cases max)`
           : battle.voice < 2
             ? 'il faut 2 Voix'

@@ -293,7 +293,7 @@ export const EFFECTIVENESS_EXAMPLES = [
   ['Électrik', 'Sol', '×0'],
 ];
 
-export const BSHAPE = [
+export const BADGE_SHAPES = [
   'M32 4 56 18v28L32 60 8 46V18Z',
   'M32 4c14 16 22 27 22 37a22 22 0 0 1-44 0c0-10 8-21 22-37Z',
   'M32 3 61 32 32 61 3 32Z',

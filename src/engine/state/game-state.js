@@ -1,6 +1,6 @@
 import { POKEMON } from '../pokemon/pokemon.js';
 import { defaultEconomyProfile, ecoClean } from './economy.js';
-import { APLUS0, aplusClean } from '../modes/adventure-profile.js';
+import { defaultAdventureProfile, aplusClean } from '../modes/adventure-profile.js';
 import { emptyTmState, tmClean } from '../moves/tms.js';
 import { defaultColossiProfile, tacClean } from '../combat/tactics.js';
 import { REPLAY0, replayClean } from '../progression/replayability-profile.js';
@@ -29,7 +29,7 @@ export function __set_PROFILE(v) {
    (hoisted functions: the table can be built before their modules are evaluated) */
 export const PROFILE_SECTIONS = [
   [defaultEconomyProfile, ecoClean], // wallet, Bag, quests
-  [APLUS0, aplusClean], // shinies, rival, legends, Tower (v4.4)
+  [defaultAdventureProfile, aplusClean], // shinies, rival, legends, Tower (v4.4)
   [emptyTmState, tmClean], // moves learned through TM and HM (v4.6)
   [defaultColossiProfile, tacClean], // colossi defeated (v4.8)
   [REPLAY0, replayClean], // achievements, title, challenges (v4.9)
@@ -79,7 +79,7 @@ export function defProfile() {
 }
 
 /* ===================== GAME STATE (v1.0) ===================== */
-export const ITEMS2 = {
+export const HELD_ITEMS = {
   ceinture: { n: 'Ceinture Force', d: 'Survit une fois à un coup fatal avec 1 PV.', i: 'M3 10h18v4H3ZM10 8.5h4v7h-4Z' },
   restes: {
     n: 'Restes',
@@ -121,7 +121,7 @@ export const CAMP_START = ['magicarpe', 'metamorph', 'chenipan'];
 
 // v4.13: Ditto replaces Pidgey
 
-export const DIFFS = { facile: 'Facile', normal: 'Normal', expert: 'Expert' };
+export const DIFFICULTY_NAMES = { facile: 'Facile', normal: 'Normal', expert: 'Expert' };
 
 export const isCamp = () => PROFILE.mode === 'campagne';
 
@@ -133,7 +133,7 @@ export const inBox = id => {
   return PROFILE.box.includes(m.base); // Also free: we catch (v4.21)
 };
 
-export const ownedItems = () => (isCamp() ? PROFILE.items.filter(k => ITEMS2[k]) : Object.keys(ITEMS2));
+export const ownedItems = () => (isCamp() ? PROFILE.items.filter(k => HELD_ITEMS[k]) : Object.keys(HELD_ITEMS));
 
 export const pairKey = (a, b) => [a, b].sort().join('|');
 

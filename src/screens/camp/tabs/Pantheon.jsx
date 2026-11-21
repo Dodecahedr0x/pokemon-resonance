@@ -1,5 +1,5 @@
 import { POKEMON } from '../../../engine/pokemon/pokemon.js';
-import { DIFFS, PROFILE } from '../../../engine/state/game-state.js';
+import { DIFFICULTY_NAMES, PROFILE } from '../../../engine/state/game-state.js';
 import { pokemonArtUrl } from '../../../engine/assets/images.js';
 
 import CardHeader from '../../../components/CardHeader.jsx';
@@ -18,7 +18,7 @@ export default function Pantheon() {
             <article key={i} className="camp-pantheon-team">
               <div className="camp-pantheon-header">
                 <b>{x.n}</b>
-                <em>{`${x.d ? x.d.split('-').reverse().join('/') : ''} · ${DIFFS[x.df] || ''}${x.r ? ` · ${x.r} manche${x.r > 1 ? 's' : ''}` : ''}${x.rk ? ` · rang ${x.rk}` : ''}${x.md ? ' · ' + (x.md === 'campagne' ? 'Campagne' : 'Libre') : ''}`}</em>
+                <em>{`${x.d ? x.d.split('-').reverse().join('/') : ''} · ${DIFFICULTY_NAMES[x.df] || ''}${x.r ? ` · ${x.r} manche${x.r > 1 ? 's' : ''}` : ''}${x.rk ? ` · rang ${x.rk}` : ''}${x.md ? ' · ' + (x.md === 'campagne' ? 'Campagne' : 'Libre') : ''}`}</em>
               </div>
               <div className="camp-pantheon-members">
                 {x.t.map((id, j) => (

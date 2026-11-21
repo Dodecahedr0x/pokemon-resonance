@@ -1,5 +1,5 @@
 import { POKEMON, PRESETS } from '../pokemon/pokemon.js';
-import { synOf } from '../pokemon/roles-synergies.js';
+import { synergiesOf } from '../pokemon/roles-synergies.js';
 
 const SYNERGY_PRESETS = {
   grandorage: {
@@ -53,7 +53,7 @@ export function init() {
     const P = PRESETS[k];
     P.ids = P.ids.filter(id => POKEMON[id]);
     if (!P.synergyText) {
-      P.synergyText = synOf(P.ids)
+      P.synergyText = synergiesOf(P.ids)
         .map(x => x.n)
         .join(', ');
     }

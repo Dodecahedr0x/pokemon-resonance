@@ -1,6 +1,6 @@
 import { MOVES } from '../data/moves.js';
 import { POKEMON, SCENARIOS } from '../pokemon/pokemon.js';
-import { ITEMS2, PROFILE, isCamp } from '../state/game-state.js';
+import { HELD_ITEMS, PROFILE, isCamp } from '../state/game-state.js';
 import { rosterCost } from '../pokemon/roles-synergies.js';
 import { toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
@@ -12,7 +12,7 @@ import {
   endStep,
   rewardIn,
   hasNx,
-  hdist,
+  hexDistance,
   heal,
   neighborKeys,
   retarget,
@@ -25,7 +25,7 @@ import {
   unitKey,
 } from './engine.js';
 import { noteAdd } from './synergies-obstacles.js';
-import { battle, enPips } from './ui.js';
+import { battle, energyPips } from './ui.js';
 import { queueSave } from '../state/saves.js';
 import { sfx, vibrate } from '../audio/sound-effects.js';
 import { HEALS } from '../items/battle-potions.js';
@@ -110,7 +110,7 @@ export function moveBlockedMessage(S, u, m) {
 export function expertBlockHtml(u) {
   const c = xpCost(u),
     ok = u.en >= c;
-  return `<div class="battle-energy is-expert${ok ? ' is-full' : ''}"><div class="battle-energy-head"><span class="caption">Résonance</span>${enPips(u.en, 'lg')}</div><p class="battle-hint">Attaque Experte : ${c} losange${c > 1 ? 's' : ''}. ${ok ? 'Elle est prête.' : `Encore ${c - u.en} : fin de manche, réaction, coup encaissé, allié K.O.`}</p></div>`;
+  return `<div class="battle-energy is-expert${ok ? ' is-full' : ''}"><div class="battle-energy-head"><span class="caption">Résonance</span>${energyPips(u.en, 'lg')}</div><p class="battle-hint">Attaque Experte : ${c} losange${c > 1 ? 's' : ''}. ${ok ? 'Elle est prête.' : `Encore ${c - u.en} : fin de manche, réaction, coup encaissé, allié K.O.`}</p></div>`;
 }
 
 function gainDiamond(S, u, ev) {
@@ -195,7 +195,7 @@ function resonanceEcho(S, u, v, typ, x, ev) {
       return 'l’écho draconique frappe encore';
     case 'Fée': {
       const a = S.units
-        .filter(o => !o.ko && o.side === u.side && hdist(o.pos, u.pos) <= 3 && o.hp < o.mhp)
+        .filter(o => !o.ko && o.side === u.side && hexDistance(o.pos, u.pos) <= 3 && o.hp < o.mhp)
         .sort((p, q) => p.hp / p.mhp - q.hp / q.mhp)[0];
       if (!a) {
         return '';
@@ -261,7 +261,7 @@ export function afterMoveHeldItems(S, u, m, dealt, ev) {
 export function afterDamageItems(S, v, real, o, ev) {
   if (!o.ind && !o.reflect && v.item === 'casquebrut') {
     const a = S.lastAtk && byUid(S, S.lastAtk);
-    if (a && a !== v && !a.ko && a.side !== v.side && hdist(a.pos, v.pos) === 1) {
+    if (a && a !== v && !a.ko && a.side !== v.side && hexDistance(a.pos, v.pos) === 1) {
       pushMessage(ev, `Casque Brut : ${a.n} se blesse sur ${v.n}.`);
       damage(S, a, Math.max(1, Math.round(a.mhp * 0.1)), ev, { ind: true, reflect: true });
     }
@@ -451,7 +451,7 @@ function buyHeldItem(k) {
   PROFILE.items.push(k);
   sfx('ui');
   vibrate(15);
-  toast(`Acheté : ${ITEMS2[k].n}. Confiez-le depuis la fiche d’un Pokémon.`);
+  toast(`Acheté : ${HELD_ITEMS[k].n}. Confiez-le depuis la fiche d’un Pokémon.`);
   queueSave();
   renderWallet();
   renderBag();
@@ -515,7 +515,7 @@ export const notesOf = (S, v) => (S && v && v.notes && v.notes.r === S.round ? v
 
 const weightNote = u => (rankOfValue(u) === 'moyen' ? 2 : 1) + (u.item === 'metronome' ? 1 : 0);
 
-export const ECHOS = {
+export const TYPE_ECHOES = {
   Feu: 'La cible est brûlée.',
   Eau: 'Sa case devient Trempée : de quoi préparer une réaction.',
   Électrik: 'La cible est paralysée (sauf type Sol).',
@@ -782,7 +782,7 @@ export function init() {
       : ''
   );
 
-  Object.assign(ITEMS2, COMPETITIVE_HELD_ITEMS);
+  Object.assign(HELD_ITEMS, COMPETITIVE_HELD_ITEMS);
 
   Object.assign(HELD_IMG, {
     orbevie: 'life-orb',

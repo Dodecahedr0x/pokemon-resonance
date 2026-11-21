@@ -6,13 +6,13 @@ import { BADGES } from '../modes/gyms.js';
 import {
   parseCellKey,
   byUid,
-  dmgOf,
+  damageOf,
   effectiveRange,
   endStep,
   hasNx,
-  hdist,
-  movPts,
-  mvType,
+  hexDistance,
+  movePoints,
+  moveType,
   pushMessage,
   targets,
   typeEffectiveness,
@@ -47,7 +47,9 @@ export function dmgItemsLinks(S, u, t, d, mult) {
     }
     if (
       S.links &&
-      S.units.some(o => o !== t && !o.ko && o.side === 'a' && hdist(o.pos, t.pos) === 1 && linkLvl(S, t.sp, o.sp) >= 1)
+      S.units.some(
+        o => o !== t && !o.ko && o.side === 'a' && hexDistance(o.pos, t.pos) === 1 && linkLvl(S, t.sp, o.sp) >= 1
+      )
     ) {
       red++;
     }
@@ -73,7 +75,7 @@ export function captureReq(S, u, e) {
     { ok: !S.noCatch, t: 'Pokémon sauvage' },
     { ok: e.hp <= e.mhp * 0.25, t: 'PV sous 25 %' },
     { ok: immobilize(e), t: 'immobilisé : Gel, Paralysie, Sommeil, Racines ou Toile' },
-    { ok: !!u && !u.ko && hdist(u.pos, e.pos) === 1, t: 'un allié au contact' },
+    { ok: !!u && !u.ko && hexDistance(u.pos, e.pos) === 1, t: 'un allié au contact' },
     { ok: !!u && !u.acted && !u.sn, t: 'cet allié n’a pas encore agi' },
     { ok: S.voice >= 2, t: '2 Voix' },
   ];
@@ -179,7 +181,7 @@ export function canDuo(S, u, p) {
     !u.sn &&
     !p.sn &&
     S.voice >= 2 &&
-    hdist(u.pos, p.pos) <= 2
+    hexDistance(u.pos, p.pos) <= 2
   );
 }
 
@@ -197,7 +199,7 @@ export function duoTargets(S, u, p) {
     if (S.tiles[k].rock) {
       continue;
     }
-    const d = hdist(A.pos, parseCellKey(k));
+    const d = hexDistance(A.pos, parseCellKey(k));
     if (d >= 1 && d <= D.r) {
       o.push(k);
     }
@@ -271,9 +273,9 @@ export function threatAt(S, e, pos) {
         return;
       }
       mr = Math.max(mr, m.sh === 'ring' ? 1 : effectiveRange(a, m, S));
-      best = Math.max(best, dmgOf(S, a, m, e, mvType(S, a, m), 1));
+      best = Math.max(best, damageOf(S, a, m, e, moveType(S, a, m), 1));
     });
-    if (mr && hdist(a.pos, pos) <= movPts(S, a) + mr) {
+    if (mr && hexDistance(a.pos, pos) <= movePoints(S, a) + mr) {
       t += best;
     }
   });
@@ -297,7 +299,7 @@ export function aiFallback(S, e, opts, al, here) {
   let bk = here,
     bd = 1e9;
   for (const pk in opts) {
-    const d = Math.min(...al.map(a => hdist(parseCellKey(pk), a.pos)));
+    const d = Math.min(...al.map(a => hexDistance(parseCellKey(pk), a.pos)));
     if (d < bd) {
       bd = d;
       bk = pk;

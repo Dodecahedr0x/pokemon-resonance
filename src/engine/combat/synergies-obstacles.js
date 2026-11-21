@@ -1,6 +1,6 @@
 import { MT } from './turn-core.js';
 import { POKEMON } from '../pokemon/pokemon.js';
-import { synOf } from '../pokemon/roles-synergies.js';
+import { synergiesOf } from '../pokemon/roles-synergies.js';
 import {
   cellKey,
   parseCellKey,
@@ -9,10 +9,10 @@ import {
   damage,
   flies,
   fromCube,
-  hdist,
+  hexDistance,
   heal,
   landed,
-  mvType,
+  moveType,
   neighbors,
   reach,
   resolveMove,
@@ -57,7 +57,7 @@ export function applyObst(S) {
       }
     });
   }
-  S.syn = synOf(S.units.filter(u => u.side === 'a').map(u => u.id)).map(s => s.k);
+  S.syn = synergiesOf(S.units.filter(u => u.side === 'a').map(u => u.id)).map(s => s.k);
 }
 
 /* --- line of sight (pillars) and cover (rocks and pillars) --- */
@@ -81,7 +81,7 @@ function cubeRound(x, y, z) {
 function hexLine(a, b, e) {
   const A = toCube(a[0], a[1]),
     C = toCube(b[0], b[1]),
-    n = hdist(a, b),
+    n = hexDistance(a, b),
     o = [];
   for (let i = 1; i < n; i++) {
     const t = i / n,
@@ -98,14 +98,14 @@ export function losBlocked(S, a, b) {
 }
 
 export function coverOf(S, a, b) {
-  if (hdist(a, b) < 2) {
+  if (hexDistance(a, b) < 2) {
     return null;
   }
-  const d = hdist(a, b);
+  const d = hexDistance(a, b);
   for (const q of neighbors(b)) {
     const k = cellKey(q[0], q[1]),
       t = S.tiles[k];
-    if (t && t.rock && hdist(a, q) === d - 1) {
+    if (t && t.rock && hexDistance(a, q) === d - 1) {
       return k;
     }
   }
@@ -119,8 +119,8 @@ export function ricoTgt(S, u, k) {
   }
   const R = parseCellKey(k);
   const c = S.units
-    .filter(o => !o.ko && o.side !== u.side && hdist(o.pos, R) <= 2 && !losBlocked(S, R, o.pos))
-    .sort((a, b) => hdist(a.pos, R) - hdist(b.pos, R) || a.hp - b.hp || (a.uid < b.uid ? -1 : 1));
+    .filter(o => !o.ko && o.side !== u.side && hexDistance(o.pos, R) <= 2 && !losBlocked(S, R, o.pos))
+    .sort((a, b) => hexDistance(a.pos, R) - hexDistance(b.pos, R) || a.hp - b.hp || (a.uid < b.uid ? -1 : 1));
   return c.length ? unitKey(c[0]) : null;
 }
 
@@ -146,7 +146,7 @@ function guardOf(S, v) {
           roleOf(x) === 'Rempart' &&
           !x.gdu &&
           !['SOM', 'GEL', 'PAR'].includes(x.badge) &&
-          hdist(x.pos, v.pos) === 1
+          hexDistance(x.pos, v.pos) === 1
       )
       .sort((a, b) => b.hp - a.hp)[0] || null
   );
@@ -154,7 +154,7 @@ function guardOf(S, v) {
 
 /* --- resolution: context, burning grass, visual effect signal --- */
 export function resolve(S, u, m, k) {
-  const typ = mvType(S, u, m),
+  const typ = moveType(S, u, m),
     t0 = S.tiles[k],
     rico = !!(t0 && t0.rock && !t0.pil && m.sh === 'one'),
     from = unitKey(u);
@@ -246,7 +246,7 @@ export function foeRetreat(S, e, ev) {
     return;
   }
   const R = reach(S, e),
-    sc = k => Math.min(...al.map(a => hdist(a.pos, parseCellKey(k)))) - (S.tiles[k].lava > 0 ? 5 : 0);
+    sc = k => Math.min(...al.map(a => hexDistance(a.pos, parseCellKey(k)))) - (S.tiles[k].lava > 0 ? 5 : 0);
   let best = unitKey(e),
     bs = sc(best);
   for (const k in R) {
@@ -272,7 +272,9 @@ export function roundSupport(S) {
       if (u.ko || roleOf(u) !== 'Relais') {
         return;
       }
-      const m = S.units.filter(o => o !== u && !o.ko && o.side === u.side && hdist(o.pos, u.pos) === 1 && o.hp < o.mhp);
+      const m = S.units.filter(
+        o => o !== u && !o.ko && o.side === u.side && hexDistance(o.pos, u.pos) === 1 && o.hp < o.mhp
+      );
       if (m.length) {
         pushMessage(pre, `Soutien : ${u.n} soigne ${m.map(o => o.n).join(', ')}.`);
         m.forEach(o => heal(S, o, 3, pre));
@@ -322,7 +324,7 @@ export const roleOf = u => (POKEMON[u.id] || {}).r;
 
 export const STATUSED = t => ['PAR', 'GEL', 'SOM'].includes(t.badge) || t.root > 0 || t.web > 0 || t.burn > 0;
 
-export const SANDOK = u => flies(u) || u.t.some(t => t === 'Sol' || t === 'Roche' || t === 'Acier');
+export const resistsSand = u => flies(u) || u.t.some(t => t === 'Sol' || t === 'Roche' || t === 'Acier');
 
 export const noteAdd = s => {
   if (battleNotes && !battleNotes.includes(s)) {
@@ -330,9 +332,9 @@ export const noteAdd = s => {
   }
 };
 
-export const hasSyn = (S, u, k) => !!(u && u.side === 'a' && S.syn && S.syn.includes(k));
+export const hasSynergy = (S, u, k) => !!(u && u.side === 'a' && S.syn && S.syn.includes(k));
 
-export const ignObst = (S, u, typ) => hasSyn(S, u, 'esprit') && (typ === 'Psy' || typ === 'Spectre');
+export const ignObst = (S, u, typ) => hasSynergy(S, u, 'esprit') && (typ === 'Psy' || typ === 'Spectre');
 
 // Instructions run at startup, in the original order (see index.js).
 export function init() {

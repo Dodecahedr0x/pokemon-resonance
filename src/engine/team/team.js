@@ -2,7 +2,7 @@ import { CHAINS, ELEMENT_TYPES, MARK_REACTIONS, ROLES } from '../data/game-data.
 import { MOVES } from '../data/moves.js';
 import { POKEMON, EEVEE, FAMT, MARK_TYPE, PRESETS, familyOf } from '../pokemon/pokemon.js';
 import { BUDGET, RECRUIT } from '../pokemon/evolution.js';
-import { ITEMS2, PROFILE, inBox, ownedItems } from '../state/game-state.js';
+import { HELD_ITEMS, PROFILE, inBox, ownedItems } from '../state/game-state.js';
 import { rosterCost } from '../pokemon/roles-synergies.js';
 import { $, GLYPH_INK, reducedMotion, writeLS, typeGlyphPath, markOf, typeColor, toast } from '../core/utils.js';
 import { currentScreen } from '../core/navigation.js';
@@ -36,7 +36,7 @@ export function monMarks(m) {
   return [...new Set(m.mv.map(id => MOVES[id].mk).filter(Boolean))];
 }
 
-export function monEls(m) {
+export function pokemonElements(m) {
   return [
     ...new Set(
       m.mv
@@ -81,7 +81,7 @@ function rxOf(ms) {
     };
   ms.forEach(m => {
     monMarks(m).forEach(k => add(marks, k, m.n));
-    monEls(m).forEach(e => add(els, e, m.n));
+    pokemonElements(m).forEach(e => add(els, e, m.n));
   });
   if (ms.some(m => m.ability === 'adaptabilite')) {
     [...marks.keys()].forEach(k => add(els, MARK_TYPE[k], 'Évoli'));
@@ -365,7 +365,7 @@ function equip(id, it) {
   }
   save();
   renderSquad();
-  toast(it ? `${POKEMON[id].n} tient ${ITEMS2[it].n}.` : `${POKEMON[id].n} ne tient plus d’objet.`);
+  toast(it ? `${POKEMON[id].n} tient ${HELD_ITEMS[it].n}.` : `${POKEMON[id].n} ne tient plus d’objet.`);
 }
 
 /* ===================== POKÉDEX & TEAM v0.8: family cards ===================== */

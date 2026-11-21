@@ -4,7 +4,7 @@ import { Html } from '../../lib/html.jsx';
 import { useSaves } from './savesStore.js';
 import { RECRUIT } from '../../engine/pokemon/evolution.js';
 import { POKEMON } from '../../engine/pokemon/pokemon.js';
-import { DIFFS, PROFILE, isCamp } from '../../engine/state/game-state.js';
+import { DIFFICULTY_NAMES, PROFILE, isCamp } from '../../engine/state/game-state.js';
 import { BADGES } from '../../engine/modes/gyms.js';
 import { medal } from '../../engine/core/utils.js';
 import { battle } from '../../engine/combat/ui.js';
@@ -248,7 +248,7 @@ function Card({ xRef }) {
         <div className="saves-setting">
           <span>Difficulté</span>
           <span className="saves-setting-options">
-            {Object.entries(DIFFS).map(([k, n]) => (
+            {Object.entries(DIFFICULTY_NAMES).map(([k, n]) => (
               <Button
                 key={k}
                 size="small"

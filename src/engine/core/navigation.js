@@ -23,7 +23,7 @@ export function show(t, scroll) {
   }
   currentScreen = t;
   $$('.page').forEach(p => p.classList.toggle('on', p.id === t));
-  setShellPage(t, TNAME[t]); // marked links (aria-current) and #tbSec title: src/components
+  setShellPage(t, PAGE_TITLES[t]); // marked links (aria-current) and #tbSec title: src/components
   if (scroll) {
     window.scrollTo({ top: 0, behavior: 'auto' });
   }
@@ -69,7 +69,7 @@ export const NAV_TABS = [
 ];
 
 // page titles (top bar); « ligue » opens inside Battles (see show())
-export const TNAME = {
+export const PAGE_TITLES = {
   accueil: 'Accueil',
   pokedex: 'Équipe',
   combat: 'Combats',

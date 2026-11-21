@@ -2,7 +2,7 @@
 
 import { MOVES } from '../data/moves.js';
 import { POKEMON, SCENARIOS } from '../pokemon/pokemon.js';
-import { BADGE_REWARD, ITEMS2, LINK_N, PROFILE, isCamp, lvlOfPts } from '../state/game-state.js';
+import { BADGE_REWARD, HELD_ITEMS, LINK_N, PROFILE, isCamp, lvlOfPts } from '../state/game-state.js';
 import { winBadge } from '../modes/gyms.js';
 import { medal } from '../core/utils.js';
 import { renderLeague } from '../modes/league.js';
@@ -176,7 +176,7 @@ export function rewHtml(r) {
   }
   if (r.items.length || r.gifts.length) {
     o.push(
-      `<div class="result-list"><h4>Récompenses d’arène</h4>${r.items.map(k => `<div class="result-row"><span class="it-ic"><svg viewBox="0 0 24 24"><path d="${ITEMS2[k].i}"/></svg></span><span>${ITEMS2[k].n} · ${ITEMS2[k].d}</span><b>Objet</b></div>`).join('')}${r.gifts.map(id => `<div class="result-row">${medal(POKEMON[id].t)}<span>${POKEMON[id].n} rejoint votre Box</span><b>Recrue</b></div>`).join('')}</div>`
+      `<div class="result-list"><h4>Récompenses d’arène</h4>${r.items.map(k => `<div class="result-row"><span class="it-ic"><svg viewBox="0 0 24 24"><path d="${HELD_ITEMS[k].i}"/></svg></span><span>${HELD_ITEMS[k].n} · ${HELD_ITEMS[k].d}</span><b>Objet</b></div>`).join('')}${r.gifts.map(id => `<div class="result-row">${medal(POKEMON[id].t)}<span>${POKEMON[id].n} rejoint votre Box</span><b>Recrue</b></div>`).join('')}</div>`
     );
   }
   if (r.elite) {

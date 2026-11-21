@@ -3,11 +3,11 @@ import {
   damage,
   endStep,
   flies,
-  hdist,
+  hexDistance,
   heal,
   markDuration,
   markAt,
-  mvType,
+  moveType,
   neighborKeys,
   pushMessage,
   setMark,
@@ -32,7 +32,7 @@ export function chordAfter(S, u, m, ev) {
   if (!S.acc || S.acc.r !== S.round) {
     S.acc = { r: S.round, t: [], fait: null };
   }
-  const typ = mvType(S, u, m);
+  const typ = moveType(S, u, m);
   if (!S.acc.t.includes(typ)) {
     S.acc.t.push(typ);
   }
@@ -102,7 +102,7 @@ function playChord(S, id, u, ev) {
   } else if (id === 'eclipse') {
     foes
       .filter(o => (S.jit ? !o.isLost && !o.badge : o.intent) && !o.done)
-      .sort((a, b) => hdist(a.pos, u.pos) - hdist(b.pos, u.pos))
+      .sort((a, b) => hexDistance(a.pos, u.pos) - hexDistance(b.pos, u.pos))
       .slice(0, 2)
       .forEach(o => {
         o.intent = null;
@@ -135,7 +135,7 @@ function playChord(S, id, u, ev) {
     foes.forEach(o => damage(S, o, 8, ev, { ind: true }));
   } else if (id === 'venin') {
     foes
-      .filter(o => mates.some(a => hdist(a.pos, o.pos) <= 2))
+      .filter(o => mates.some(a => hexDistance(a.pos, o.pos) <= 2))
       .forEach(o => {
         damage(S, o, 4, ev, { ind: true });
         if (!o.ko && o.ability !== 'regardvif') {

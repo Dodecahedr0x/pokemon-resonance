@@ -1,5 +1,6 @@
 import { MARKS, REACTIONS, TYPES } from '../data/game-data.js';
-import { POKEMON, SPECIES_BY_TYPES, PK_ART } from '../pokemon/pokemon.js';
+import { POKEMON, SPECIES_BY_TYPES } from '../pokemon/pokemon.js';
+import { pokemonArtUrl } from '../assets/images.js';
 import { showToast } from '../../screens/overlays/shellOverlays.js';
 
 export let reducedMotion;
@@ -24,7 +25,7 @@ export function medal(types, cls = '') {
     .replace('<span class="medal ', '<span class="medal has-art ')
     .replace(
       '<svg viewBox',
-      `<img class="medal-art" src="${PK_ART(POKEMON[id].no)}" alt="" loading="lazy" decoding="async" draggable="false" onerror="this.parentNode&&this.parentNode.classList.remove('has-art');this.remove()"><svg viewBox`
+      `<img class="medal-art" src="${pokemonArtUrl(POKEMON[id].no)}" alt="" loading="lazy" decoding="async" draggable="false" onerror="this.parentNode&&this.parentNode.classList.remove('has-art');this.remove()"><svg viewBox`
     );
 }
 
@@ -129,7 +130,7 @@ export function mulberry32(a) {
 }
 
 /** Value noise: number in [0, 1[ fixed by tile (x, y) and seed s. */
-export function hash2(x, y, s) {
+export function valueNoise(x, y, s) {
   let h = (Math.imul(x, 374761393) + Math.imul(y, 668265263) + Math.imul(s, 1274126177)) | 0;
   h = Math.imul(h ^ (h >>> 13), 1274126177);
   return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
@@ -159,7 +160,7 @@ export const GLYPH_INK = 'rgba(8,10,14,.82)';
 
 export const markOf = id => MARKS.find(m => m.id === id);
 
-export const rxCat = id => (REACTIONS[id] ? REACTIONS[id].k : 'ter');
+export const reactionCategory = id => (REACTIONS[id] ? REACTIONS[id].k : 'ter');
 
 // Statements run at startup, in the original order (see index.js).
 export function init() {

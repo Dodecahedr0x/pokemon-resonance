@@ -8,7 +8,7 @@ import {
   cellPoints,
   BOARD_LAYERS,
   isVerticalBoard,
-  tiltS,
+  tiltScale,
 } from '../../../engine/combat/ui.js';
 import { tileTip } from '../../../engine/combat/battle-panel.js';
 import { fieldSvg } from '../../../engine/modes/gym-screen.js';
@@ -240,7 +240,7 @@ export function Water() {
   const gl = [];
   E.keyList.forEach(k => {
     const [x, y] = cellCenter(k),
-      s = tiltS(x, y),
+      s = tiltScale(x, y),
       n = parseInt(k.replace(/\D/g, ''), 10) || 0;
     for (let i = 0; i < 2; i++) {
       const r = j => (((Math.sin(n * 91.3 + i * 47.7 + j * 13.1) * 43758.5453) % 1) + 1) % 1,

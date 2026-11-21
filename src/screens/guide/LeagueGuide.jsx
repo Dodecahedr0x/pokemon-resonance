@@ -2,7 +2,7 @@ import { GYMS } from '../../engine/data/game-data.js';
 import { POKEMON } from '../../engine/pokemon/pokemon.js';
 import {
   BADGE_REWARD,
-  ITEMS2,
+  HELD_ITEMS,
   LINK_N,
   LINK_T,
   isCamp,
@@ -25,7 +25,7 @@ function sourceObject(k) {
 export function Items() {
   useGuide();
   const own = ownedItems();
-  return Object.entries(ITEMS2).map(([k, it]) => {
+  return Object.entries(HELD_ITEMS).map(([k, it]) => {
     const has = own.includes(k);
     return (
       <div key={k} className={`guide-item${has ? '' : ' is-missing'}`}>

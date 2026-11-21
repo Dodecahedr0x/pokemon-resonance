@@ -1,6 +1,6 @@
 import { useEngineReady } from '../../engineReady.js';
 import { useBagVersion } from './bagStore.js';
-import { ITEMS2, PROFILE } from '../../engine/state/game-state.js';
+import { HELD_ITEMS, PROFILE } from '../../engine/state/game-state.js';
 import { SHOP, bagCount, formatNumber } from '../../engine/state/economy.js';
 import { SCREEN_STATE } from '../../engine/ui/screen-state.js';
 import { dailyTm } from '../../engine/items/extra-held-items.js';
@@ -74,7 +74,7 @@ function Content() {
   ]; // v4.14: battle items, held items for sale, rare merchant
   const keys =
     SCREEN_STATE.bagCategory === 'held'
-      ? Object.keys(ITEMS2)
+      ? Object.keys(HELD_ITEMS)
       : Object.keys(SHOP).filter(k => SHOP[k].category === SCREEN_STATE.bagCategory);
   // items of the open pocket, for the Bag banner
   const n =

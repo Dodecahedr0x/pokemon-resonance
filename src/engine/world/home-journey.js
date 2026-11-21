@@ -15,7 +15,7 @@ import { __set_PREPG, renderPrep } from '../combat/battle-prep.js';
 import { nextGoal } from '../progression/campaign.js';
 import { isAutomatedRun, chapterOf, leaderOf } from '../progression/prestige.js';
 import { renderHome } from './home.js';
-import { LEGENDARIES, legKey, legOf } from '../modes/legendaries.js';
+import { LEGENDARIES, legKey, legendaryOf } from '../modes/legendaries.js';
 import { RIVAL, RIVAL_KEYS, rivalIdx } from '../modes/rival.js';
 import { styleOf } from '../combat/leader-styles.js';
 import { COLOSSI } from '../combat/tactics.js';
@@ -199,7 +199,7 @@ export function selItems(g) {
 
 export function groupOf(k) {
   const D = SCENARIOS[k] || {};
-  if (D.hoennLegend || D.captureHoennLegend || k === 'tdr' || legOf(k) || D.captureLegend) {
+  if (D.hoennLegend || D.captureHoennLegend || k === 'tdr' || legendaryOf(k) || D.captureLegend) {
     return 'apres';
   }
   if (rivalIdx(k) >= 0 || /^td\d$/.test(k)) {

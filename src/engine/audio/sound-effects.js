@@ -99,7 +99,7 @@ export function vibrate(p) {
   }
 }
 
-export function sfxEv(ev) {
+export function playEventSound(ev) {
   if (!PREFERENCES.sound && !PREFERENCES.vibe) {
     return;
   }

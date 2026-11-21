@@ -2,7 +2,7 @@ import { useShell } from './shellStore.js';
 import { PROFILE, isCamp } from '../engine/state/game-state.js';
 import { typeGlyphPath, typeColor } from '../engine/core/utils.js';
 import { formatNumber } from '../engine/state/economy.js';
-import { tLevel } from '../engine/progression/trainer-stats.js';
+import { trainerLevel } from '../engine/progression/trainer-stats.js';
 import { displayedTitle } from '../engine/progression/achievements.js';
 import { TRAINER_AVATAR } from '../engine/world/rare-encounters.js';
 
@@ -79,7 +79,7 @@ export function TopTrainer() {
         <span className="topbar-trainer-text">
           <b id="v4Name">{on ? PROFILE.name || 'Dresseur' : null}</b>
           <em id="v4Lvl">
-            {on ? `${displayedTitle() || (isCamp() ? 'Campagne' : 'Mode Libre')} · Nv. ${tLevel()}` : null}
+            {on ? `${displayedTitle() || (isCamp() ? 'Campagne' : 'Mode Libre')} · Nv. ${trainerLevel()}` : null}
           </em>
         </span>
       </a>

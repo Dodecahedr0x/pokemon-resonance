@@ -7,7 +7,7 @@
    DUEL_TUTORIAL_0 / duelTutorialClean also sanitize the saved tutorial progress (ui/tutorial-chapters.js). */
 import { POKEMON, DEPLOY, POKEMON_LIST, SCENARIOS, familyOf } from '../pokemon/pokemon.js';
 import { PROFILE } from '../state/game-state.js';
-import { synOf } from '../pokemon/roles-synergies.js';
+import { synergiesOf } from '../pokemon/roles-synergies.js';
 import { $, reducedMotion, medal } from '../core/utils.js';
 import { tokCl } from '../../screens/combat/board/boardStore.js';
 import { HOOKS } from '../core/hooks.js';
@@ -23,7 +23,7 @@ import {
   endStep,
   rewardIn,
   hasNx,
-  mkUnit,
+  makeUnit,
   pushMessage,
   unitKey,
 } from '../combat/engine.js';
@@ -46,7 +46,7 @@ import {
 } from '../combat/ui.js';
 import { escapeHtml, queueSave } from '../state/saves.js';
 import { PREFERENCES } from '../ui/preferences.js';
-import { playEv } from '../combat/move-effects.js';
+import { playEvent } from '../combat/move-effects.js';
 import { isAutomatedRun, overlay, turnBanner } from '../progression/prestige.js';
 import { shut } from '../../screens/overlays/tempStore.js';
 import { SCREEN_STATE } from '../ui/screen-state.js';
@@ -423,7 +423,7 @@ export function duelPassTurn() {
       endStep(S, ev);
     }
     renderAll();
-    playEv(ev);
+    playEvent(ev);
     if (S.over) {
       finish();
       return true;
@@ -643,7 +643,7 @@ function onCombat(S, opt, D0) {
     if (u.duelPlayer !== 2) {
       return;
     }
-    const n = mkUnit(u.id, 'a', u.pos, u.uid, D0);
+    const n = makeUnit(u.id, 'a', u.pos, u.uid, D0);
     Object.keys(u).forEach(k => delete u[k]);
     Object.assign(u, n, { side: 'e', duelPlayer: 2 });
   });
@@ -666,7 +666,7 @@ function onCombat(S, opt, D0) {
     lastAtk: null,
   };
   D.status[1] = {
-    syn: synOf(p2.map(u => u.id)).map(s => s.k),
+    syn: synergiesOf(p2.map(u => u.id)).map(s => s.k),
     harmonie: h2,
     resonantUnit: null,
     acc: null,

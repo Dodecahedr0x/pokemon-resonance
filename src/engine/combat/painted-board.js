@@ -19,14 +19,14 @@ import {
   buildBoard,
   clearAim,
   renderAll,
-  tiltP,
-  tiltS,
+  tiltPoint,
+  tiltScale,
   ui,
 } from './ui.js';
 import { PREFERENCES, savePref } from '../ui/preferences.js';
 import { TUTORIAL_STEPS } from '../progression/tutorial.js';
 import { sfx } from '../audio/sound-effects.js';
-import { EFFECTS_CANVAS, fxAdd, effectsEnabled, fxPrep } from './move-effects.js';
+import { EFFECTS_CANVAS, addEffect, effectsEnabled, prepareEffects } from './move-effects.js';
 import { renderParams } from '../ui/settings.js';
 import { currentActor } from './tactical-engine.js';
 import { hourOf } from './living-board.js';
@@ -116,7 +116,7 @@ const tune = () => {
     ox: 0,
     oy: 0,
   });
-  const pr = pts.map(p => tiltP(p[0], p[1])),
+  const pr = pts.map(p => tiltPoint(p[0], p[1])),
     xs = pr.map(p => p[0]),
     ys = pr.map(p => p[1]),
     x0 = Math.min(...xs),
@@ -218,7 +218,7 @@ const dress = () => {
   const lip = [];
   for (const k in battle.tiles) {
     const [x, y] = cellCenter(k),
-      s = tiltS(x, y);
+      s = tiltScale(x, y);
     lip.push(cellPoints(x, y + LIP * s, BOARD_GEOMETRY.S - 1));
   }
   // the opaque texture covers the cell: its states (mud, lava, fog…) go over the texture
@@ -251,7 +251,7 @@ const dress = () => {
   for (let r = 0; r < BOARD_ROWS; r++) {
     // in portrait, rows are read at the far end of the board (above the last column)
     const [x, y] = cellCenter(cellKey(isVerticalBoard ? BOARD_COLS - 1 : 0, r)),
-      s = tiltS(x, y);
+      s = tiltScale(x, y);
     if (isVerticalBoard) {
       lab(r + 1, x, y - BOARD_GEOMETRY.S * s - 3);
     } else {
@@ -260,7 +260,7 @@ const dress = () => {
   }
   for (let c = 0; c < BOARD_COLS; c++) {
     const [x, y] = cellCenter(cellKey(c, 0)),
-      s = tiltS(x, y);
+      s = tiltScale(x, y);
     if (isVerticalBoard) {
       lab('ABCDEFGH'[c], x - BOARD_GEOMETRY.S * s - 5, y + 2.5);
     } else {
@@ -304,13 +304,13 @@ const skip = (T, x, y, s) => {
   }
   const ms = 850 * tempo();
   replayAnimation(T, 'hop', ms);
-  if (!effectsEnabled() || !fxPrep()) {
+  if (!effectsEnabled() || !prepareEffects()) {
     return;
   }
   const px = EFFECTS_CANVAS.ox + x * EFFECTS_CANVAS.s,
     py = EFFECTS_CANVAS.oy + (y + 9 * s) * EFFECTS_CANVAS.s,
     R = 15 * s * EFFECTS_CANVAS.s;
-  fxAdd(
+  addEffect(
     420,
     (c, p) => {
       const e = 1 - Math.pow(1 - p, 3);
@@ -338,7 +338,7 @@ const skip = (T, x, y, s) => {
 /* shockwave lying on the ground under the hit Pokémon, stronger dust on a KO */
 const footPos = u => {
   const [x, y] = cellCenter(unitKey(u)),
-    s = Math.max(0.6, Math.min(1.4, tiltS(x, y)));
+    s = Math.max(0.6, Math.min(1.4, tiltScale(x, y)));
   return [
     EFFECTS_CANVAS.ox + x * EFFECTS_CANVAS.s,
     EFFECTS_CANVAS.oy + (y + 9 * s) * EFFECTS_CANVAS.s,
@@ -347,11 +347,11 @@ const footPos = u => {
 };
 
 const ripple = (u, col) => {
-  if (!BOARD_TILT.on || !animEnabled() || !effectsEnabled() || !fxPrep()) {
+  if (!BOARD_TILT.on || !animEnabled() || !effectsEnabled() || !prepareEffects()) {
     return;
   }
   const [px, py, k] = footPos(u);
-  fxAdd(520, (c, p) => {
+  addEffect(520, (c, p) => {
     const e = 1 - Math.pow(1 - p, 3),
       r = k * (10 + 22 * e);
     c.globalAlpha = 0.75 * (1 - p);
@@ -369,7 +369,7 @@ const ripple = (u, col) => {
 };
 
 const fall = u => {
-  if (!BOARD_TILT.on || !animEnabled() || !effectsEnabled() || !fxPrep()) {
+  if (!BOARD_TILT.on || !animEnabled() || !effectsEnabled() || !prepareEffects()) {
     return;
   }
   const [px, py, k] = footPos(u),
@@ -377,7 +377,7 @@ const fall = u => {
       (Math.PI * 2 * i) / 14 + Math.random() * 0.4,
       0.6 + Math.random() * 0.6,
     ]);
-  fxAdd(
+  addEffect(
     700,
     (c, p) => {
       const e = 1 - Math.pow(1 - p, 2.4);
@@ -661,7 +661,7 @@ export function init() {
     if (T) {
       const k = unitKey(u),
         [x, y] = cellCenter(k),
-        s = Math.max(0.6, Math.min(1.4, tiltS(x, y)));
+        s = Math.max(0.6, Math.min(1.4, tiltScale(x, y)));
       T.tr = `translate(${x}px,${y}px) scale(${s.toFixed(3)})`; // token: Units.jsx (sliding: CSS transition)
       unitsDirty();
       if (T.lastKind && T.lastKind !== k && !u.ko) {

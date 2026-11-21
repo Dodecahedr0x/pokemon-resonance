@@ -15,16 +15,16 @@ export function ecoClean(p) {
     return o;
   }
   if (Number.isFinite(p.money)) {
-    o.money = clampI(p.money, 0, 999999);
+    o.money = clampInt(p.money, 0, 999999);
   }
   if (Number.isFinite(p.gems)) {
-    o.gems = clampI(p.gems, 0, 99999);
+    o.gems = clampInt(p.gems, 0, 99999);
   }
   if (p.bag && typeof p.bag === 'object') {
     o.bag = {};
     for (const k in SHOP) {
       if (Number.isFinite(p.bag[k]) && p.bag[k] > 0) {
-        o.bag[k] = clampI(p.bag[k], 0, 99);
+        o.bag[k] = clampInt(p.bag[k], 0, 99);
       }
     }
   }
@@ -53,7 +53,7 @@ export function savePurse() {
 
 export const formatNumber = n => Math.round(n).toLocaleString('fr-FR');
 
-export const clampI = (v, a, b) => Math.max(a, Math.min(b, Math.floor(v)));
+export const clampInt = (v, a, b) => Math.max(a, Math.min(b, Math.floor(v)));
 
 export const today = () => {
   const d = new Date();

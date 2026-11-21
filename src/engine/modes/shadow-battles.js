@@ -8,7 +8,7 @@ import { OBSTACLES } from '../combat/synergies-obstacles.js';
 import { battle, backToPrep, goFight } from '../combat/ui.js';
 import { shut } from '../../screens/overlays/tempStore.js';
 import { routeEvent } from '../world/route-events.js';
-import { baseScene, mkFoes } from './challenge-scenes.js';
+import { baseScene, makeFoes } from './challenge-scenes.js';
 import { readChallengeState, writeChallengeState } from './challenges-hub.js';
 
 const SHADOWS = [
@@ -61,7 +61,7 @@ export function init() {
         'Repoussez les Ombres de Résonance.',
         o.lv,
         o.hb,
-        mkFoes(o.ids)
+        makeFoes(o.ids)
       ),
       { shadowStep: i + 1 }
     );

@@ -8,7 +8,7 @@ import { overlay } from '../progression/prestige.js';
 import { shut } from '../../screens/overlays/tempStore.js';
 import { today } from '../state/economy.js';
 import { RELICS } from './boss-rush.js';
-import { weekKey, weekDef, wkMake } from './trainer-of-the-week.js';
+import { weekKey, weekDef, buildWeeklyChallenge } from './trainer-of-the-week.js';
 import { WEATHER_NAME, weatherKind } from './challenge-weather.js';
 import { trainingSession } from './ball-training.js';
 
@@ -87,7 +87,7 @@ function onMoreChallengesClick(e) {
     return toast('Composez d’abord une équipe.');
   }
   if (v === 'wk') {
-    wkMake();
+    buildWeeklyChallenge();
     shut('x2470o');
     if (battle) {
       backToPrep();
@@ -118,6 +118,6 @@ export function init() {
     write: writeMoreChallenges,
     hub: openMoreChallenges,
     weekDef,
-    wkMake,
+    wkMake: buildWeeklyChallenge,
   };
 }

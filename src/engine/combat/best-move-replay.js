@@ -4,7 +4,7 @@ import { $, reducedMotion, wait } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { byUid } from './engine.js';
 import { battle, __set_battle, buildBoard, addLog, renderAll, ui } from './ui.js';
-import { playEv } from './move-effects.js';
+import { playEvent } from './move-effects.js';
 import { isAutomatedRun } from '../progression/prestige.js';
 
 export let REPLAYS;
@@ -84,7 +84,7 @@ async function rebroadcast() {
     await wait(900 * isSlow);
     __set_battle(Object.assign(JSON.parse(R.best.apres), { over: null }));
     renderAll();
-    playEv(R.best.ev);
+    playEvent(R.best.ev);
     await wait(3200 * isSlow);
   } finally {
     __set_battle(endStep);

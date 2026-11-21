@@ -2,7 +2,7 @@ import { Component } from 'react';
 import { Html } from '../../lib/html.jsx';
 import { useIntro } from './shellOverlays.js';
 import { POKEMON } from '../../engine/pokemon/pokemon.js';
-import { DIFFS, STARTERS } from '../../engine/state/game-state.js';
+import { DIFFICULTY_NAMES, STARTERS } from '../../engine/state/game-state.js';
 import { medal, typeColor } from '../../engine/core/utils.js';
 import { reportError } from '../../engine/core/errors.js';
 import { INTRO, PROF_AV } from '../../engine/world/home-journey.js';
@@ -127,7 +127,7 @@ function Body({ i }) {
         </div>
         <div className="intro-difficulty">
           <span>Difficulté</span>
-          {Object.entries(DIFFS).map(([k, n]) => (
+          {Object.entries(DIFFICULTY_NAMES).map(([k, n]) => (
             <Button key={k} size="small" data-in-d={k} aria-pressed={INTRO.diff === k}>
               {n}
             </Button>

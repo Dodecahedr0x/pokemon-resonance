@@ -1,6 +1,6 @@
 import { GYMS } from '../data/game-data.js';
 import { SCENARIOS } from '../pokemon/pokemon.js';
-import { BADGE_REWARD, ITEMS2, PROFILE } from '../state/game-state.js';
+import { BADGE_REWARD, HELD_ITEMS, PROFILE } from '../state/game-state.js';
 import { ARENAS } from '../modes/gyms.js';
 import { $, reducedMotion } from '../core/utils.js';
 import { hook } from '../core/hooks.js';
@@ -141,7 +141,7 @@ export function rewardLine(k) {
     return johtoRewardLine(k);
   } // Johto (v4.15)
   const R = BADGE_REWARD[gi];
-  return `<div class="reward-line"><span class="reward-badge">${badgeSvg(gi, GYMS[gi].t, 'mi' + gi)}Badge ${GYMS[gi].t}</span>${R.item ? `<span><img src="${itemIcon(HELD_IMG[R.item])}" alt="" loading="lazy">${ITEMS2[R.item].n}</span>` : ''}<span><span class="coin-icon" aria-hidden="true">₽</span>+500</span><span><span class="gem-icon"><svg><use href="#i-gem"/></svg></span>+10</span></div>`;
+  return `<div class="reward-line"><span class="reward-badge">${badgeSvg(gi, GYMS[gi].t, 'mi' + gi)}Badge ${GYMS[gi].t}</span>${R.item ? `<span><img src="${itemIcon(HELD_IMG[R.item])}" alt="" loading="lazy">${HELD_ITEMS[R.item].n}</span>` : ''}<span><span class="coin-icon" aria-hidden="true">₽</span>+500</span><span><span class="gem-icon"><svg><use href="#i-gem"/></svg></span>+10</span></div>`;
 }
 
 export function centerMap() {

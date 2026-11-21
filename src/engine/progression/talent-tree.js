@@ -8,7 +8,7 @@ import { heal, pushMessage } from '../combat/engine.js';
 import { escapeHtml, queueSave } from '../state/saves.js';
 import { sfx, vibrate } from '../audio/sound-effects.js';
 import { bagCount } from '../state/economy.js';
-import { tLevel } from './trainer-stats.js';
+import { trainerLevel } from './trainer-stats.js';
 import { renderWallet } from '../ui/wallet.js';
 import { renderBag } from './quests-shop.js';
 import { DAMAGE_PROVIDERS } from '../combat/tactical-engine.js';
@@ -41,7 +41,7 @@ const talentSave = o => {
 
 const talentSpent = () => Object.values(talentState()).reduce((a, b) => a + b, 0);
 
-const talentPoints = () => Math.max(0, tLevel() - 1 - talentSpent());
+const talentPoints = () => Math.max(0, trainerLevel() - 1 - talentSpent());
 
 const talentTree = id => talentState()[id] || 0;
 

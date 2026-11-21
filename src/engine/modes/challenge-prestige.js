@@ -6,7 +6,7 @@ import { HOOKS } from '../core/hooks.js';
 import { readChallengeState, writeChallengeState } from './challenges-hub.js';
 
 /** Prestige unlocks after the 8 badges (or the League) in Campaign. */
-export const preOk = () => (isCamp() ? BADGES.length >= 8 || (PROFILE.elite || 0) > 0 : true);
+export const prestigeUnlocked = () => (isCamp() ? BADGES.length >= 8 || (PROFILE.elite || 0) > 0 : true);
 
 /** Hub buttons: `pre+` raises the level (max 5) and turns it on, `pre` toggles it. */
 export const adjustPrestige = (v, X) => {

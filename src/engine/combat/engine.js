@@ -13,17 +13,17 @@ import {
   WEATHER_NAME,
 } from '../pokemon/pokemon.js';
 import { ARRIVAL_EFFECTS } from '../pokemon/evolution.js';
-import { ITEMS2, pairKey } from '../state/game-state.js';
+import { HELD_ITEMS, pairKey } from '../state/game-state.js';
 import { HOOKS } from '../core/hooks.js';
 import { DIFFICULTY, aiFallback, dmgItemsLinks, threatAt } from './items-bonds-ai.js';
 import {
   battleNotes,
-  SANDOK,
+  resistsSand,
   __set_battleNotes,
   applyObst,
   dmgRolesField,
   foeRetreat,
-  hasSyn,
+  hasSynergy,
   ignObst,
   losBlocked,
   resolve,
@@ -97,7 +97,7 @@ export function fromCube(x, y, z) {
   return [x + (z - (z & 1)) / 2, z];
 }
 
-export function hdist(a, b) {
+export function hexDistance(a, b) {
   const A = toCube(a[0], a[1]),
     C = toCube(b[0], b[1]);
   return (Math.abs(A[0] - C[0]) + Math.abs(A[1] - C[1]) + Math.abs(A[2] - C[2])) / 2;
@@ -131,10 +131,10 @@ function specOf(id) {
   return { id, n: m.n, t: m.t, s: m.s, mv: m.mv, ability: m.ability };
 }
 
-export function mkUnit(id, side, pos, uid, D) {
+export function makeUnit(id, side, pos, uid, D) {
   const sp = specOf(id),
     hb = side === 'e' ? D.hb || 0 : 0,
-    mhp = mhpOf(sp.s) + hb;
+    mhp = maxHpOf(sp.s) + hb;
   const u = {
     uid,
     // allies keep their family identity (Bonds, items, fatigue, duos) even when recruited already evolved
@@ -244,7 +244,7 @@ export function newBattle(sc, team, bonus, opt) {
     }
   }
   team.slice(0, 4).forEach((id, i) => {
-    const u = mkUnit(id, 'a', DEPLOY[i], 'a' + i, D);
+    const u = makeUnit(id, 'a', DEPLOY[i], 'a' + i, D);
     if (POKEMON[id] && isShinyOwned(POKEMON[id].base)) {
       u.shiny = true;
     } // your shinies stay shiny in battle (v4.15)
@@ -268,7 +268,7 @@ export function newBattle(sc, team, bonus, opt) {
             x.pb != null ? { pb: Math.max(0, Math.round(x.pb * JIT_PBM) + JIT_PB) } : {}
           )
         : D,
-      u = mkUnit(id, 'e', p, 'e' + i, Dx);
+      u = makeUnit(id, 'e', p, 'e' + i, Dx);
     if (x && x.shiny) {
       u.shiny = true;
     }
@@ -304,7 +304,7 @@ export function newBattle(sc, team, bonus, opt) {
   }
   al.forEach(u => {
     const it = (opt.items || {})[u.sp];
-    if (it && ITEMS2[it]) {
+    if (it && HELD_ITEMS[it]) {
       u.item = it;
       if (it === 'ceinture') {
         u.belt = true;
@@ -325,7 +325,7 @@ export function newBattle(sc, team, bonus, opt) {
 }
 
 // colossus: +2 range (v4.8) // at night: −1 range (v4.7-01) // Shock Wave in the Rain (v4.12)
-export function movPts(S, u) {
+export function movePoints(S, u) {
   if (u.colossus || u.seg) {
     return 0;
   } // colossi do not move (v4.8)
@@ -345,7 +345,7 @@ export function movPts(S, u) {
   }
   m = Math.max(0, m);
   m = Math.max(0, m + (u.item === 'grelot' ? 1 : 0) - (u.fat ? 1 : 0)); // Grelot Vif +1, fatigue −1
-  if (hasSyn(S, u, 'escadrille') && (u.t.includes('Vol') || u.t.includes('Insecte'))) {
+  if (hasSynergy(S, u, 'escadrille') && (u.t.includes('Vol') || u.t.includes('Insecte'))) {
     m++;
   } // Squadron synergy
   if (S.mutatorMove) {
@@ -359,12 +359,12 @@ export function movPts(S, u) {
 }
 
 export function reach(S, u) {
-  const m = movPts(S, u),
+  const m = movePoints(S, u),
     st = unitKey(u),
     best = { [st]: 0 },
     q = [[st, 0]],
     fl = flies(u),
-    ok = SANDOK(u); // sand costs 2 Movement, except for Ground, Rock and Steel types and flyers
+    ok = resistsSand(u); // sand costs 2 Movement, except for Ground, Rock and Steel types and flyers
   while (q.length) {
     const [k, c0] = q.shift();
     for (const nk of neighborKeys(k)) {
@@ -385,7 +385,7 @@ export function reach(S, u) {
   return best;
 }
 
-export function mvType(S, u, m) {
+export function moveType(S, u, m) {
   if (u.ability === 'adaptabilite' && m.t === 'Normal') {
     const k = markAt(S, unitKey(u));
     if (k) {
@@ -413,7 +413,7 @@ function canSee(S, u, k) {
   if (!v || u.ability === 'echolocation') {
     return true;
   }
-  const d = hdist(u.pos, parseCellKey(k));
+  const d = hexDistance(u.pos, parseCellKey(k));
   if (S.tiles[k].fog > 0 && d > 1) {
     return false;
   } // fog
@@ -431,7 +431,7 @@ export function targets(S, u, m) {
   if (m.sh === 'self' || m.sh === 'ring') {
     return [unitKey(u)];
   }
-  const ign = ignObst(S, u, mvType(S, u, m)); // Spirit synergy: Psychic and Ghost ignore obstacles
+  const ign = ignObst(S, u, moveType(S, u, m)); // Spirit synergy: Psychic and Ghost ignore obstacles
   if (m.sh === 'line') {
     const o = [];
     CUBE_DIRECTIONS.forEach(d => {
@@ -451,7 +451,7 @@ export function targets(S, u, m) {
     if (S.tiles[k].rock) {
       continue;
     }
-    const d = hdist(u.pos, parseCellKey(k));
+    const d = hexDistance(u.pos, parseCellKey(k));
     if (d < 1 || d > R) {
       continue;
     }
@@ -479,7 +479,7 @@ export function targets(S, u, m) {
   if (m.sh === 'one') {
     // a pillar blocks ranged shots
     if (!ign) {
-      o = o.filter(k => hdist(u.pos, parseCellKey(k)) < 2 || !losBlocked(S, u.pos, parseCellKey(k)));
+      o = o.filter(k => hexDistance(u.pos, parseCellKey(k)) < 2 || !losBlocked(S, u.pos, parseCellKey(k)));
     }
     // ricochet: aim at a rock to hit the nearest enemy behind it
     if (m.p && R >= 2 && u.side === 'a') {
@@ -488,7 +488,7 @@ export function targets(S, u, m) {
         if (!t.rock || t.pil) {
           continue;
         }
-        const d = hdist(u.pos, parseCellKey(k));
+        const d = hexDistance(u.pos, parseCellKey(k));
         if (d < 1 || d > R) {
           continue;
         }
@@ -518,7 +518,7 @@ export function affected(S, u, m, k) {
   } else if (m.sh === 'ring') {
     a = neighborKeys(unitKey(u));
   } else if (m.sh === 'line') {
-    const stop = !ignObst(S, u, mvType(S, u, m));
+    const stop = !ignObst(S, u, moveType(S, u, m));
     a = null;
     for (const d of CUBE_DIRECTIONS) {
       const L = lineK(u.pos, d, R);
@@ -556,8 +556,8 @@ export function inReach(S, u, m, k) {
     return true;
   }
   const R = effectiveRange(u, m, S),
-    ign = ignObst(S, u, mvType(S, u, m)),
-    d = hdist(u.pos, parseCellKey(k));
+    ign = ignObst(S, u, moveType(S, u, m)),
+    d = hexDistance(u.pos, parseCellKey(k));
   if (m.sh === 'line') {
     const L = CUBE_DIRECTIONS.map(dd => lineK(u.pos, dd, R)).find(line => line.includes(k));
     if (!L) {
@@ -580,11 +580,13 @@ export function inReach(S, u, m, k) {
 }
 
 function intimidate(S, u) {
-  return S.units.some(o => !o.ko && o.side !== u.side && o.ability === 'intimidation' && hdist(o.pos, u.pos) === 1);
+  return S.units.some(
+    o => !o.ko && o.side !== u.side && o.ability === 'intimidation' && hexDistance(o.pos, u.pos) === 1
+  );
 }
 
 /* damage of a move: base formula, then items and Bonds, then roles, synergies and terrain */
-export function dmgOf(S, u, m, t, typ, mult) {
+export function damageOf(S, u, m, t, typ, mult) {
   let d = dmgBase(S, u, m, t, typ, mult);
   if (d <= 0 || m.fix) {
     return d;
@@ -843,7 +845,7 @@ export function markNetwork(S, k, mk) {
 }
 
 function moist(S, k) {
-  return S.units.some(o => !o.ko && o.ability === 'moiteur' && hdist(o.pos, parseCellKey(k)) <= 2);
+  return S.units.some(o => !o.ko && o.ability === 'moiteur' && hexDistance(o.pos, parseCellKey(k)) <= 2);
 }
 
 function linkRef(S, a, b) {
@@ -894,7 +896,7 @@ export function shove(S, v, from, n, ev, pull) {
   });
   let moved = false;
   for (let i = 0; i < n; i++) {
-    if (pull && hdist(v.pos, from) <= 1) {
+    if (pull && hexDistance(v.pos, from) <= 1) {
       break;
     }
     const c = toCube(v.pos[0], v.pos[1]),
@@ -1170,7 +1172,7 @@ export function retarget(S, e, src, fx, ev) {
     tgt = src;
   } else {
     const pool = S.units.filter(o => !o.ko && o !== e && (fx === 'turn' ? o.side === e.side : true));
-    pool.sort((a, b) => hdist(a.pos, e.pos) - hdist(b.pos, e.pos));
+    pool.sort((a, b) => hexDistance(a.pos, e.pos) - hexDistance(b.pos, e.pos));
     tgt = pool[0] || null;
   }
   if (!tgt) {
@@ -1218,7 +1220,7 @@ function applySelfMove(S, u, m, ev) {
     pushMessage(ev, `${u.n} s’endort.`);
   } else if (m.fx === 'reflect') {
     S.units.forEach(o => {
-      if (!o.ko && o.side === u.side && hdist(o.pos, u.pos) <= 1) {
+      if (!o.ko && o.side === u.side && hexDistance(o.pos, u.pos) <= 1) {
         o.guard = 2;
       }
     });
@@ -1320,8 +1322,8 @@ function tileReaction(S, m, family, t, x, mk, ev) {
 function strikeTarget(S, u, m, v, typ, mult, base, ev) {
   let dealt = 0,
     reactionBase = base;
-  const dmg = dmgOf(S, u, m, v, typ, mult),
-    b0 = dmgOf(S, u, m, v, typ, 1);
+  const dmg = damageOf(S, u, m, v, typ, mult),
+    b0 = damageOf(S, u, m, v, typ, 1);
   if (b0 > 0) {
     reactionBase = b0;
   }
@@ -1469,7 +1471,7 @@ export function resolveMove(S, u, m, k) {
   if (u.ko) {
     return ev;
   }
-  const typ = mvType(S, u, m);
+  const typ = moveType(S, u, m);
   announceMove(S, u, m, k, typ, ev);
   if (m.wx) {
     applyWeatherMove(S, u, m, ev);
@@ -1503,7 +1505,7 @@ export function resolveMove(S, u, m, k) {
 }
 
 /* player actions */
-export function pMove(S, u, k) {
+export function playerMove(S, u, k) {
   const retreat = !!(u && u.hr && u.acted && !u.moved); // a Scout that has struck can still fall back
   if (retreat) {
     u.acted = false;
@@ -1682,8 +1684,8 @@ function arrive(S, u, ev) {
   }
   ev.push({ e: 'arr', u: u.uid });
   pushMessage(ev, `Arrivée de ${u.n} : ${A[1]}`);
-  const foes = r => S.units.filter(o => !o.ko && o.side !== u.side && hdist(o.pos, u.pos) <= r),
-    mates = r => S.units.filter(o => !o.ko && o.side === u.side && o !== u && hdist(o.pos, u.pos) <= r);
+  const foes = r => S.units.filter(o => !o.ko && o.side !== u.side && hexDistance(o.pos, u.pos) <= r),
+    mates = r => S.units.filter(o => !o.ko && o.side === u.side && o !== u && hexDistance(o.pos, u.pos) <= r);
   A[0].forEach(f => {
     if (f.k === 'ring') {
       neighborKeys(unitKey(u)).forEach(x => setMark(S, x, f.mk, u.uid));
@@ -1744,7 +1746,7 @@ export function transform(S, u, id, ev) {
   u.mv = withLearned(u, E.mv); // the move learned by TM or HM is kept (v4.6-01)
   u.ability = E.ability;
   u.sturdy = E.ability === 'fermete';
-  const nm = mhpOf(E.s) + (u.hb || 0);
+  const nm = maxHpOf(E.s) + (u.hb || 0);
   u.mhp = nm;
   u.hp = Math.min(nm, u.hp + Math.max(0, nm - om) + Math.round(nm * 0.3));
   u.burn = 0;
@@ -1807,7 +1809,7 @@ export function pAwaken(S, u, id) {
   return r;
 }
 
-export function pDodge(S, u, k) {
+export function playerDodge(S, u, k) {
   if (S.phase !== 'player' || S.voice < 1 || u.ko || u.sn) {
     return null;
   }
@@ -1847,7 +1849,7 @@ function aiScore(S, e, m, k, pos) {
     if (!v || v === e) {
       continue;
     }
-    const d = dmgOf(S, sim, m, v, mvType(S, sim, m), 1);
+    const d = damageOf(S, sim, m, v, moveType(S, sim, m), 1);
     if (v.side === 'a') {
       sc += d + (d >= v.hp ? 30 : 0);
       if (d > 0) {
@@ -1872,12 +1874,12 @@ function aiScore(S, e, m, k, pos) {
     if (!v || v.side !== 'a' || v === e) {
       continue;
     }
-    const d = dmgOf(S, sim, m, v, mvType(S, sim, m), 1);
+    const d = damageOf(S, sim, m, v, moveType(S, sim, m), 1);
     if (d <= 0) {
       continue;
     }
     sc += (Math.min(d, v.hp) / v.mhp) * (lv > 1 ? 14 : 8);
-    if (movPts(S, v) === 0 || v.root > 0) {
+    if (movePoints(S, v) === 0 || v.root > 0) {
       sc += lv > 1 ? 8 : 5;
     }
   }
@@ -1950,7 +1952,7 @@ export function forcedTarget(S, e) {
     return s && !s.ko ? s : null;
   }
   const pool = S.units.filter(o => !o.ko && o !== e && (f.fx === 'turn' ? o.side === e.side : true));
-  pool.sort((a, b) => hdist(a.pos, e.pos) - hdist(b.pos, e.pos));
+  pool.sort((a, b) => hexDistance(a.pos, e.pos) - hexDistance(b.pos, e.pos));
   return pool[0] || null;
 }
 
@@ -1961,7 +1963,7 @@ function targetScore(S, e, m, k, pos, F) {
   for (const x of affected(S, sim, m, k)) {
     const v = unitAt(S, x);
     if (v === F) {
-      sc += dmgOf(S, sim, m, v, mvType(S, sim, m), 1) + 0.5;
+      sc += damageOf(S, sim, m, v, moveType(S, sim, m), 1) + 0.5;
     }
   }
   return sc;
@@ -1970,9 +1972,9 @@ function targetScore(S, e, m, k, pos, F) {
 /** Out of range of its imposed target: it moves closer. */
 function approach(S, e, opts, F, here) {
   let bk = here,
-    bd = hdist(e.pos, F.pos);
+    bd = hexDistance(e.pos, F.pos);
   for (const pk in opts) {
-    const d = hdist(parseCellKey(pk), F.pos);
+    const d = hexDistance(parseCellKey(pk), F.pos);
     if (d < bd) {
       bd = d;
       bk = pk;
@@ -2010,7 +2012,7 @@ function chooseAction(S, e, ev, inPlace) {
       } else {
         (F ? [F] : al).forEach(a => {
           const ak = unitKey(a);
-          if (S.tiles[ak].fog > 0 && hdist(pos, a.pos) > 1) {
+          if (S.tiles[ak].fog > 0 && hexDistance(pos, a.pos) > 1) {
             return;
           }
           if (inReach(S, sim, m, ak)) {
@@ -2175,7 +2177,7 @@ export function execFoe(S, uid) {
     if (m.sh === 'one' && !tgt) {
       r.push({ e: 'msg', s: 'La case visée est vide : l’attaque se perd.' });
     }
-    if (tgt && !tgt.ko && tgt.ability === 'statik' && !e.ko && hdist(e.pos, tgt.pos) === 1) {
+    if (tgt && !tgt.ko && tgt.ability === 'statik' && !e.ko && hexDistance(e.pos, tgt.pos) === 1) {
       setMark(S, unitKey(e), 'charge', tgt.uid);
       r.push({ e: 'msg', s: `Statik : ${e.n} est Chargé.` });
     }
@@ -2401,7 +2403,7 @@ export const CUBE_DIRECTIONS = [
 
 export const neighborKeys = k => neighbors(parseCellKey(k)).map(q => cellKey(q[0], q[1]));
 
-export const mhpOf = s => 20 + s[0] * 8;
+export const maxHpOf = s => 20 + s[0] * 8;
 
 export const unitKey = u => cellKey(u.pos[0], u.pos[1]);
 
@@ -2445,7 +2447,8 @@ export const hasNx = u => !!(POKEMON[u.id] && POKEMON[u.id].nx);
 /* v4.13 · Branching Awakenings: each path has its own condition; the "default" path always stays open */
 const onContact = (S, u, camp) =>
   S.units.filter(
-    o => !o.ko && o !== u && (camp === 'allie' ? o.side === u.side : o.side !== u.side) && hdist(o.pos, u.pos) === 1
+    o =>
+      !o.ko && o !== u && (camp === 'allie' ? o.side === u.side : o.side !== u.side) && hexDistance(o.pos, u.pos) === 1
   ).length;
 
 /** v4.12: every cell an opponent can reach this turn (movement + range of its attacks). */

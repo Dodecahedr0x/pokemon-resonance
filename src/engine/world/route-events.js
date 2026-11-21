@@ -1,6 +1,6 @@
 /* Peddler, route encounters, Pokédex missions (added in v4.54). */
 
-import { ITEMS2, PROFILE } from '../state/game-state.js';
+import { HELD_ITEMS, PROFILE } from '../state/game-state.js';
 import { writeLS, mulberry32, toast } from '../core/utils.js';
 import { HOOKS, hook } from '../core/hooks.js';
 import { sfx, vibrate } from '../audio/sound-effects.js';
@@ -379,7 +379,7 @@ function onWandererClick(e) {
     PROFILE.money -= px;
     PROFILE.items.push(h);
     A.st.got[k] = 1;
-    toast(`Acheté : ${ITEMS2[h].n}. Confiez-le depuis la fiche d’un Pokémon.`);
+    toast(`Acheté : ${HELD_ITEMS[h].n}. Confiez-le depuis la fiche d’un Pokémon.`);
   } else {
     if (!A.pick.includes(k) || (A.st.got[k] || 0) >= (SHOP[k].mv ? 1 : 3) || bagCount(k) >= 99) {
       return;

@@ -1,7 +1,7 @@
 /* Design Workshop (custom CSS, brief for ChatGPT) (added in v4.42). */
 
 import { $, toast } from '../core/utils.js';
-import { NAV_TABS, TNAME } from '../core/navigation.js';
+import { NAV_TABS, PAGE_TITLES } from '../core/navigation.js';
 import { PREFERENCES, savePref } from '../ui/preferences.js';
 import { renameClassesInCss } from '../../lib/renamedClasses.js';
 
@@ -71,7 +71,7 @@ function designBrief() {
           ';'
       )
       .join('\n');
-  const pages = NAV_TABS.map(id => `#${id} (${TNAME[id] || id})`).join(', ');
+  const pages = NAV_TABS.map(id => `#${id} (${PAGE_TITLES[id] || id})`).join(', ');
   return `Tu es designer UI/CSS. Je te confie le design d’un jeu mobile : « Pokémon Résonance » (fangame non officiel, stratégie tactique sur plateau hexagonal, thème Pokémon, un seul fichier HTML, joué surtout sur téléphone Android de 360 à 412 px de large).
 Le fichier fait 3,7 Mo : tu ne le vois pas en entier. Voici le brief.
 

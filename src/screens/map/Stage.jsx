@@ -4,9 +4,9 @@ import { regionMap } from './MapScreen.jsx';
 import { timeOfDay } from '../../engine/world/home-route.js';
 import { SCREEN_STATE } from '../../engine/ui/screen-state.js';
 import { CHAIN, MAP_SVG, PLACE_BY_ID, curvePath, placeState } from '../../engine/world/map.js';
-import { JCHAIN, JMAP_SVG } from '../../engine/world/johto.js';
+import { JOHTO_ROUTE_ORDER, JMAP_SVG } from '../../engine/world/johto.js';
 import { todayWeather } from '../../engine/world/pokegear.js';
-import { HCHAIN, HMAP_SVG } from '../../engine/world/hoenn.js';
+import { HOENN_ROUTE_ORDER, HMAP_SVG } from '../../engine/world/hoenn.js';
 import { LIVING_MAP } from '../../engine/world/living-map.js';
 
 // Map stage (#mapSt): the three drawn maps, the painting and its layers (v4.71),
@@ -96,7 +96,7 @@ function Title({ drawn, rg }) {
 function Routes() {
   const J = SCREEN_STATE.region === 'johto', // v4.15: two regions
     H = SCREEN_STATE.region === 'hoenn'; // v4.19: three
-  const pts = (H ? HCHAIN : J ? JCHAIN : CHAIN).map(id => PLACE_BY_ID[id]);
+  const pts = (H ? HOENN_ROUTE_ORDER : J ? JOHTO_ROUTE_ORDER : CHAIN).map(id => PLACE_BY_ID[id]);
   const side = H
     ? []
     : J

@@ -1,9 +1,9 @@
 import { ROLES } from '../../engine/data/game-data.js';
-import { ROLEFX, SYNERGIES, roleIcon, synOf } from '../../engine/pokemon/roles-synergies.js';
+import { ROLE_EFFECTS, SYNERGIES, roleIcon, synergiesOf } from '../../engine/pokemon/roles-synergies.js';
 import { typeColor } from '../../engine/core/utils.js';
 import { squad } from '../../engine/team/team.js';
 import { CHORDS } from '../../engine/combat/resonance-chords.js';
-import { ECHOS, RANKS, stars } from '../../engine/combat/resonance.js';
+import { TYPE_ECHOES, RANKS, stars } from '../../engine/combat/resonance.js';
 import { Html } from '../../lib/html.jsx';
 import { useGuide } from './guideStore.js';
 
@@ -22,13 +22,13 @@ const OBSTACLES = [
 // Tactical codex: roles, synergies (those of the current team are lit), obstacles.
 export function Codex() {
   useGuide(); // re-read each time the Guide is shown: the team may have changed
-  const act = synOf(squad).map(s => s.k);
+  const act = synergiesOf(squad).map(s => s.k);
   return (
     <>
       <div className="guide-codex-card">
         <h4>Rôles</h4>
         {ROLES.map(r => {
-          const R = ROLEFX[r.n];
+          const R = ROLE_EFFECTS[r.n];
           return (
             <div key={r.n} className="guide-codex-row">
               <Html html={roleIcon(r.n)} />
@@ -147,7 +147,7 @@ export function ResonanceInBattle() {
         (deux pour un Pokémon Moyen). À la troisième : « Résonance ! » Ce coup fait ×1,5 et déclenche l’écho de son
         type, sauf si une réaction du terrain vient d’avoir lieu sur cette case. Les notes s’effacent en fin de manche.
       </p>
-      {Object.entries(ECHOS).map(([t, d]) => (
+      {Object.entries(TYPE_ECHOES).map(([t, d]) => (
         <div key={t} className="guide-chord">
           <span className="guide-chord-tag">
             <i style={{ background: typeColor(t) }} title={t} />

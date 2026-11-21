@@ -7,7 +7,7 @@ import { nextGoal } from '../../engine/progression/campaign.js';
 import { chapterOf, leaderOf } from '../../engine/progression/prestige.js';
 import { emblem, wonOf } from '../../engine/world/home-journey.js';
 import { rewardLine } from '../../engine/world/map.js';
-import { MAINQ } from '../../engine/progression/quests-shop.js';
+import { mainQuestSteps } from '../../engine/progression/quests-shop.js';
 
 import Button from '../../components/Button.jsx';
 import StatePill, { STATE_CLASS } from '../../components/StatePill.jsx';
@@ -60,7 +60,7 @@ export default function MainQuest() {
           </a>
         </div>
       )}
-      {MAINQ().map(k => (
+      {mainQuestSteps().map(k => (
         <Chapter key={k} k={k} gk={gk} />
       ))}
     </>

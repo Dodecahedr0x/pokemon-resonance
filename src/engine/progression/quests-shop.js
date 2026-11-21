@@ -7,9 +7,9 @@ import { $, toast } from '../core/utils.js';
 import { hook } from '../core/hooks.js';
 import { queueSave } from '../state/saves.js';
 import { sfx, vibrate } from '../audio/sound-effects.js';
-import { SHOP, bagCount, clampI } from '../state/economy.js';
+import { SHOP, bagCount, clampInt } from '../state/economy.js';
 import { SCREEN_STATE } from '../ui/screen-state.js';
-import { countS, familyOwned, maxLink } from './trainer-stats.js';
+import { countSRanks, familyOwned, maxLink } from './trainer-stats.js';
 import { renderWallet } from '../ui/wallet.js';
 import { costOf } from './base-camp.js';
 
@@ -102,7 +102,7 @@ export function buyShopItem(k) {
   }
 }
 
-export const MAINQ = () => ['tuto', ...ARENAS.map(a => a.k), ...ELITE, 'champ'];
+export const mainQuestSteps = () => ['tuto', ...ARENAS.map(a => a.k), ...ELITE, 'champ'];
 
 // Statements run at startup, in the original order (see index.js).
 export function init() {
@@ -133,7 +133,7 @@ export function init() {
       n: 20,
       r: { money: 600 },
     },
-    { id: 'rankS', t: 'Sans faute', d: 'Obtenez un rang S.', v: countS, n: 1, r: { gems: 5 } },
+    { id: 'rankS', t: 'Sans faute', d: 'Obtenez un rang S.', v: countSRanks, n: 1, r: { gems: 5 } },
     {
       id: 'cap5',
       t: 'Chasseur des hautes herbes',
@@ -154,7 +154,14 @@ export function init() {
     { id: 'link3', t: 'Lien Duo', d: 'Amenez deux Pokémon au palier Duo.', v: maxLink, n: 3, r: { gems: 10 } },
     { id: 'badge4', t: 'Mi-parcours', d: 'Obtenez 4 badges.', v: () => BADGES.length, n: 4, r: { bag: { hyper: 2 } } },
     { id: 'win15', t: 'Vétéran', d: 'Gagnez 15 combats.', v: () => PROFILE.wins, n: 15, r: { money: 1500 } },
-    { id: 'rankS5', t: 'Perfectionniste', d: 'Obtenez le rang S sur 5 terrains.', v: countS, n: 5, r: { gems: 15 } },
+    {
+      id: 'rankS5',
+      t: 'Perfectionniste',
+      d: 'Obtenez le rang S sur 5 terrains.',
+      v: countSRanks,
+      n: 5,
+      r: { gems: 15 },
+    },
     {
       id: 'badge8',
       t: 'Huit badges',
@@ -195,7 +202,7 @@ export function init() {
     const q = e.target.closest('[data-qk]');
     if (q) {
       const k = q.dataset.qk;
-      SCREEN_STATE.qty[k] = clampI((SCREEN_STATE.qty[k] || 1) + +q.dataset.qd, 1, 10);
+      SCREEN_STATE.qty[k] = clampInt((SCREEN_STATE.qty[k] || 1) + +q.dataset.qd, 1, 10);
       renderBag();
       return;
     }

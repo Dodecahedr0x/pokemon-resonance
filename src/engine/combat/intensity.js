@@ -8,7 +8,7 @@ import {
   byUid,
   damage,
   endStep,
-  hdist,
+  hexDistance,
   heal,
   inReach,
   neighborKeys,
@@ -296,7 +296,7 @@ const canUseVigil = (S, u) =>
 
 /* ---------- 2. Encirclement ---------- */
 const countAdjacent = (S, t, side) =>
-  S.units.filter(o => !o.ko && o.side === side && !o.seg && hdist(o.pos, t.pos) === 1).length;
+  S.units.filter(o => !o.ko && o.side === side && !o.seg && hexDistance(o.pos, t.pos) === 1).length;
 
 export const isSurrounded = (S, u) =>
   !!(S && u && !u.ko && !u.seg && !u.colossus && countAdjacent(S, u, u.side === 'a' ? 'e' : 'a') >= 2);

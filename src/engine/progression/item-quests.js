@@ -1,6 +1,6 @@
 /* Item quests and trophies (added in v4.59). */
 
-import { ITEMS2, PROFILE } from '../state/game-state.js';
+import { HELD_ITEMS, PROFILE } from '../state/game-state.js';
 import { BADGES } from '../modes/gyms.js';
 import { toast } from '../core/utils.js';
 import { sfx, vibrate } from '../audio/sound-effects.js';
@@ -8,7 +8,7 @@ import { SHOP, bagCount, savePurse } from '../state/economy.js';
 import { renderBag } from './quests-shop.js';
 import { dailySeed } from '../world/pokegear.js';
 import { applyReward, rewardText } from '../world/route-events.js';
-import { addItems, dailyGiftState, tmKeys, hasIngredients } from '../items/workshop.js';
+import { addItems, dailyGiftState, tmShopKeys, hasIngredients } from '../items/workshop.js';
 
 export { QUESTS, TROPHIES }; // read by Shop › Quests and Trophies (React, src/screens/bag/Workshop.jsx)
 
@@ -44,7 +44,7 @@ export function questRewardText(r) {
     a.push(rewardText({ m: r.m, g: r.g, b: r.b }));
   }
   if (r.item) {
-    a.push(ITEMS2[r.item].n + (PROFILE.items.includes(r.item) ? ' (déjà en votre possession : 2 500 ₽)' : ''));
+    a.push(HELD_ITEMS[r.item].n + (PROFILE.items.includes(r.item) ? ' (déjà en votre possession : 2 500 ₽)' : ''));
   }
   if (r.ct) {
     a.push('une CT');
@@ -161,7 +161,7 @@ const QUESTS = [
 
 export const badgeTotal = () => BADGES.length;
 
-const ownedTmKey = () => tmKeys().find(k => bagCount(k) > 0);
+const ownedTmKey = () => tmShopKeys().find(k => bagCount(k) > 0);
 
 /* ---------- trophy box ---------- */
 const TROPHIES = [
@@ -203,11 +203,11 @@ function onItemQuestsClick(e) {
     } else {
       PROFILE.items = [...PROFILE.items, r.item];
     }
-    extra = ITEMS2[r.item].n;
+    extra = HELD_ITEMS[r.item].n;
   }
   if (r.ct) {
-    const pool = tmKeys().filter(k => !bagCount(k)),
-      all = pool.length ? pool : tmKeys(),
+    const pool = tmShopKeys().filter(k => !bagCount(k)),
+      all = pool.length ? pool : tmShopKeys(),
       k = all[dailySeed('qo' + q.id) % all.length];
     PROFILE.bag[k] = Math.min(99, bagCount(k) + 1);
     extra = (extra ? extra + ' + ' : '') + SHOP[k].n;

@@ -6,7 +6,7 @@
    legendaries, they cannot be recruited.
    ===================================================================== */
 import { SCENARIOS } from '../pokemon/pokemon.js';
-import { ITEMS2, PROFILE, isCamp } from '../state/game-state.js';
+import { HELD_ITEMS, PROFILE, isCamp } from '../state/game-state.js';
 import { medal } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { heal, pushMessage } from '../combat/engine.js';
@@ -24,7 +24,7 @@ export const ROAMING_BEASTS = ['raikou', 'entei', 'suicune'];
 
 const ROAM_H = ['j1', 'j2', 'j3', 'j4', 'j5', 'j6', 'j7', 'j8', 'jwild', 'jlac'];
 
-export const TALIS = { raikou: 'crinorage', entei: 'braisesacree', suicune: 'cristalboreal' };
+export const BEAST_TALISMANS = { raikou: 'crinorage', entei: 'braisesacree', suicune: 'cristalboreal' };
 
 /* ---------- original icons ---------- */
 export const svgDataUri = s =>
@@ -164,7 +164,7 @@ export function init() {
     ),
   });
 
-  Object.assign(ITEMS2, {
+  Object.assign(HELD_ITEMS, {
     crinorage: {
       n: 'Crin d’Orage',
       d: 'Talisman de Raikou : +1 Mouvement et +1 Puissance sur toutes ses attaques.',
@@ -257,7 +257,7 @@ export function init() {
       } else if (u && u.ko) {
         r.ok = 1;
         r.hp = 0.05;
-        const it = TALIS[D.roam];
+        const it = BEAST_TALISMANS[D.roam];
         if (it && !PROFILE.items.includes(it)) {
           PROFILE.items.push(it);
         }
@@ -281,7 +281,7 @@ export function init() {
     }
     const L = findRoamLegend(r.roam.id);
     return r.roam.ok
-      ? `<div class="result-list"><h4>Bête errante</h4><div class="result-row">${medal(L.t)}<span>${L.n} est apaisé. « ${L.w} » Il vous laisse son talisman : <b>${ITEMS2[r.roam.it].n}</b>.</span><b>✦</b></div></div>`
+      ? `<div class="result-list"><h4>Bête errante</h4><div class="result-row">${medal(L.t)}<span>${L.n} est apaisé. « ${L.w} » Il vous laisse son talisman : <b>${HELD_ITEMS[r.roam.it].n}</b>.</span><b>✦</b></div></div>`
       : `<div class="result-list"><h4>Bête errante</h4><div class="result-row">${medal(L.t)}<span>${L.n} s’est enfui avec ${Math.round(r.roam.hp * 100)} % de ses PV. Il garde ses blessures : retrouvez-le sur la carte de Johto.</span><b>${Math.round(r.roam.hp * 100)} %</b></div></div>`;
   });
 

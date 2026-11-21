@@ -419,7 +419,7 @@ export const PLACES_H = [
   { id: 'hchamp', x: 760, y: 120, n: 'Plateau de Hoenn', s: 'Final · ' + HCHAMP_L.n, grp: 'aventure', j: 1 },
 ].filter(p => SCENARIOS[p.id] || p.id === 'hwild');
 
-export const HCHAIN = PLACES_H.map(p => p.id);
+export const HOENN_ROUTE_ORDER = PLACES_H.map(p => p.id);
 
 export const HMAP_SVG = `<svg class="map-svg is-hoenn" viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
  <defs>

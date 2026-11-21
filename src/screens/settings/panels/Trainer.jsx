@@ -1,6 +1,6 @@
-import { DIFFS, PROFILE, isCamp } from '../../../engine/state/game-state.js';
+import { DIFFICULTY_NAMES, PROFILE, isCamp } from '../../../engine/state/game-state.js';
 import { BADGES } from '../../../engine/modes/gyms.js';
-import { tLevel } from '../../../engine/progression/trainer-stats.js';
+import { trainerLevel } from '../../../engine/progression/trainer-stats.js';
 import { boxCapacityLabel } from '../../../engine/world/catch-anywhere.js';
 
 import Button from '../../../components/Button.jsx';
@@ -24,7 +24,7 @@ export default function Trainer() {
       <div className="form-field">
         <span>Difficulté</span>
         <div className="tabs segmented-control" role="group" aria-label="Difficulté">
-          {Object.entries(DIFFS).map(([k, n]) => (
+          {Object.entries(DIFFICULTY_NAMES).map(([k, n]) => (
             <button key={k} type="button" data-diff={k} aria-pressed={PROFILE.diff === k}>
               {n}
             </button>
@@ -33,7 +33,7 @@ export default function Trainer() {
       </div>
       <p className="v4-ps-n">
         {isCamp()
-          ? `Campagne en cours · ${BADGES.length} badge${BADGES.length > 1 ? 's' : ''} · Nv. ${tLevel()}`
+          ? `Campagne en cours · ${BADGES.length} badge${BADGES.length > 1 ? 's' : ''} · Nv. ${trainerLevel()}`
           : `Mode Libre : arènes ouvertes · ${boxCapacityLabel()}`}
       </p>
       <div className="settings-actions">

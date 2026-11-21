@@ -8,10 +8,10 @@ import {
   parseCellKey,
   byUid,
   damage,
-  dmgOf,
+  damageOf,
   flies,
   rewardIn,
-  hdist,
+  hexDistance,
   heal,
   inReach,
   landed,
@@ -41,7 +41,7 @@ export function afterHitSignatures(S, u, m, v, x, mk, typ, ev) {
   if (m.fx === 'triple' && !v.ko && v.side !== u.side) {
     let n = 1;
     for (let i = 0; i < 2 && !v.ko; i++) {
-      const d = dmgOf(S, u, m, v, typ, 1);
+      const d = damageOf(S, u, m, v, typ, 1);
       if (d > 0) {
         damage(S, v, d, ev, {});
         n++;
@@ -51,7 +51,7 @@ export function afterHitSignatures(S, u, m, v, x, mk, typ, ev) {
       pushMessage(ev, `Triple Pied : ${n} coups !`);
     }
   }
-  if (v.ability === 'corpsmaudit' && v.side !== u.side && !u.ko && hdist(u.pos, v.pos) === 1) {
+  if (v.ability === 'corpsmaudit' && v.side !== u.side && !u.ko && hexDistance(u.pos, v.pos) === 1) {
     if (u.ability === 'regardvif' || hasRune(S, u)) {
       return;
     }
@@ -89,7 +89,14 @@ export function afterMoveSignatures(S, u, m, k, v0, v1, dealt, ev) {
   if (m.fx === 'changeeclair' && !u.ko) {
     const a = S.units
       .filter(
-        o => !o.ko && o !== u && o.side === u.side && hdist(o.pos, u.pos) <= 4 && o.hp < o.mhp && !o.colossus && !o.seg
+        o =>
+          !o.ko &&
+          o !== u &&
+          o.side === u.side &&
+          hexDistance(o.pos, u.pos) <= 4 &&
+          o.hp < o.mhp &&
+          !o.colossus &&
+          !o.seg
       )
       .sort((p, q) => p.hp / p.mhp - q.hp / q.mhp)[0];
     if (a) {
@@ -113,7 +120,7 @@ export function afterMoveSignatures(S, u, m, k, v0, v1, dealt, ev) {
     retarget(S, v1, u, 'confuse', ev);
   }
   if (m.fx === 'tourrapide' && !u.ko) {
-    const lib = [u, ...S.units.filter(o => !o.ko && o.side === u.side && o !== u && hdist(o.pos, u.pos) === 1)];
+    const lib = [u, ...S.units.filter(o => !o.ko && o.side === u.side && o !== u && hexDistance(o.pos, u.pos) === 1)];
     lib.forEach(o => {
       o.web = 0;
       o.root = 0;
@@ -156,7 +163,7 @@ export function reflectEffects(S, v, real, ev) {
   if (!a || a === v || a.ko || a.side === v.side) {
     return;
   }
-  const d = hdist(a.pos, v.pos);
+  const d = hexDistance(a.pos, v.pos);
   if (!v.ko && ((v.riposte > 0 && d === 1) || (v.miroir > 0 && d >= 2))) {
     pushMessage(ev, `${v.riposte > 0 && d === 1 ? 'Riposte' : 'Voile Miroir'} : ${v.n} renvoie le coup à ${a.n} !`);
     damage(S, a, Math.max(1, Math.round(real * 2)), ev, { reflect: true });
@@ -180,7 +187,7 @@ export function statusMoveBonus(S, u) {
   if (u.ability === 'surfcaudal' && markAt(S, unitKey(u)) === 'charge') {
     b += 2;
   }
-  if (S.units.some(o => !o.ko && o.side !== u.side && o.ability === 'marqueombre' && hdist(o.pos, u.pos) === 1)) {
+  if (S.units.some(o => !o.ko && o.side !== u.side && o.ability === 'marqueombre' && hexDistance(o.pos, u.pos) === 1)) {
     b -= 2;
   }
   return b;
@@ -260,8 +267,8 @@ export function aiSupportMove(S, e, opts, al, here) {
     }
   };
   const hp = e.hp / e.mhp,
-    contact = al.filter(a => hdist(a.pos, e.pos) === 1).length,
-    nearby = al.filter(a => hdist(a.pos, e.pos) <= 3).length;
+    contact = al.filter(a => hexDistance(a.pos, e.pos) === 1).length,
+    nearby = al.filter(a => hexDistance(a.pos, e.pos) <= 3).length;
   e.mv.forEach(mid => {
     const m = MOVES[mid];
     if (!m || m.p || m.fix || m.wx) {
@@ -281,7 +288,7 @@ export function aiSupportMove(S, e, opts, al, here) {
           runeprotect: !(S.rune && S.rune[e.side] > 0) ? 3 : 0,
           champherbu: !(S.champ && S.champ[e.side] > 0) ? 3 : 0,
           gravite: !(S.gravite > 0) && al.some(flies) ? 4 : 0,
-          requiem: al.some(a => hdist(a.pos, e.pos) <= 2 && !(a.requiem > 0)) ? 5 : 0,
+          requiem: al.some(a => hexDistance(a.pos, e.pos) <= 2 && !(a.requiem > 0)) ? 5 : 0,
           conversion2: e.dtype && typeEffectiveness(e.dtype, e.t) >= 1 ? 4 : 0,
         }[m.fx] || 0;
       prend(v, here, mid, here);
@@ -412,7 +419,7 @@ const ROSTER_SELF_EFFECTS = {
     pushMessage(ev, `Cognobidon : ${u.n} sacrifie ${c} PV, ses attaques font ×2 pendant 3 manches.`);
   },
   requiem(S, u, ev) {
-    const t = S.units.filter(o => !o.ko && o.side !== u.side && hdist(o.pos, u.pos) <= 2 && !(o.requiem > 0));
+    const t = S.units.filter(o => !o.ko && o.side !== u.side && hexDistance(o.pos, u.pos) <= 2 && !(o.requiem > 0));
     t.forEach(o => (o.requiem = 3));
     pushMessage(
       ev,
@@ -533,7 +540,7 @@ export function init() {
     id: 'gardeami',
     provide: (c, { S, t }) =>
       S.units.some(
-        o => !o.ko && o !== t && o.side === t.side && o.ability === 'gardeami' && hdist(o.pos, t.pos) === 1
+        o => !o.ko && o !== t && o.side === t.side && o.ability === 'gardeami' && hexDistance(o.pos, t.pos) === 1
       ) && { add: -2, labelText: 'Garde-Ami' },
   });
   /* Download (Téléchargement): enters battle with +2 Guard */

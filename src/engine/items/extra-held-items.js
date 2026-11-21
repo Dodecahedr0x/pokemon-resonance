@@ -1,6 +1,6 @@
 /* Extra held items, TMs to win (added in v4.58). */
 
-import { ITEMS2, PROFILE } from '../state/game-state.js';
+import { HELD_ITEMS, PROFILE } from '../state/game-state.js';
 import { HOOKS } from '../core/hooks.js';
 import { escapeHtml } from '../state/saves.js';
 import { HELD_IMG, SHOP, bagCount, today } from '../state/economy.js';
@@ -10,11 +10,11 @@ import { HELD_SHOP } from '../combat/resonance.js';
 import { dailySeed } from '../world/pokegear.js';
 import { seededRng } from '../world/route-events.js';
 import { berryIcon, orbIcon, wrapSvg } from './balls-held-items.js';
-import { tmKeys } from './workshop.js';
+import { tmShopKeys } from './workshop.js';
 
 export function dailyTm() {
   const r = seededRng('tm-daily'),
-    pool = tmKeys().slice(),
+    pool = tmShopKeys().slice(),
     o = [];
   while (o.length < 2 && pool.length) {
     o.push(pool.splice(Math.floor(r() * pool.length), 1)[0]);
@@ -35,7 +35,7 @@ export function init() {
   });
 
   /* ---------- extra held items ---------- */
-  Object.assign(ITEMS2, {
+  Object.assign(HELD_ITEMS, {
     baielum: {
       n: 'Baie Lum',
       d: 'Annule le premier Sommeil, la première Paralysie ou le premier Gel subi dans le combat.',
@@ -62,7 +62,7 @@ export function init() {
     provide: (c, { u, m }) =>
       !!u &&
       ((u.item === 'orbeflamme' && u.burn > 0) || (u.item === 'orbetoxik' && u.poisoned > 0)) &&
-      (m.p > 0 || m.fix > 0) && { mul: 1.25, labelText: ITEMS2[u.item].n },
+      (m.p > 0 || m.fix > 0) && { mul: 1.25, labelText: HELD_ITEMS[u.item].n },
   });
 
   HOOKS.combat.push(S => {
@@ -83,8 +83,8 @@ export function init() {
   HOOKS.progress.unshift((S, rew) => {
     try {
       if (S && S.rank === 'S' && S.rankNew && S.sc !== 'sauvage' && S.sc !== 'tuto') {
-        const cts = tmKeys().filter(k => !bagCount(k)),
-          pool = cts.length ? cts : tmKeys();
+        const cts = tmShopKeys().filter(k => !bagCount(k)),
+          pool = cts.length ? cts : tmShopKeys();
         let h = 5;
         for (const ch of S.sc + today()) {
           h = (h * 31 + ch.charCodeAt(0)) >>> 0;

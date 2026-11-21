@@ -3,7 +3,7 @@
 import { REACTIONS, WEATHER } from '../data/game-data.js';
 import { ABILITIES } from '../data/moves.js';
 import { POKEMON, WEATHER_NAME } from '../pokemon/pokemon.js';
-import { ROLEFX } from '../pokemon/roles-synergies.js';
+import { ROLE_EFFECTS } from '../pokemon/roles-synergies.js';
 import { byUid } from '../combat/engine.js';
 import { battle, ui } from '../combat/ui.js';
 import { tileTip } from '../combat/battle-panel.js';
@@ -39,7 +39,7 @@ function battleHelpData() {
       tl = ABILITIES[u.ability];
     out.sel = {
       n: u.n,
-      roles: roles.map(r => [r, ROLEFX[r] ? [ROLEFX[r].k, ROLEFX[r].d] : null]),
+      roles: roles.map(r => [r, ROLE_EFFECTS[r] ? [ROLE_EFFECTS[r].k, ROLE_EFFECTS[r].d] : null]),
       ability: tl ? [tl[0], tl[1]] : null,
     };
   }

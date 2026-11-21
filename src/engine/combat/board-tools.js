@@ -3,7 +3,7 @@
 import { ELEMENT_TYPES, MARK_REACTIONS, REACTIONS } from '../data/game-data.js';
 import { MOVES } from '../data/moves.js';
 import { arenaNext, veiled } from '../modes/gyms.js';
-import { rxCat, toast } from '../core/utils.js';
+import { reactionCategory, toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { parseCellKey, affected, byUid, markAt, reach, targets, unitAt } from './engine.js';
 import { battle, STATUS_CLASS, clearAim, hpClass, renderAll, ui } from './ui.js';
@@ -265,7 +265,9 @@ function tileSheet() {
     if (mk && MARK_REACTIONS[mk]) {
       const row = MARK_REACTIONS[mk];
       rx = ELEMENT_TYPES.map((e, i) =>
-        row[i] && row[i] !== 'ren' && REACTIONS[row[i]] ? [rxCat(row[i]), e + ' → ' + REACTIONS[row[i]].n] : null
+        row[i] && row[i] !== 'ren' && REACTIONS[row[i]]
+          ? [reactionCategory(row[i]), e + ' → ' + REACTIONS[row[i]].n]
+          : null
       ).filter(Boolean);
     }
   } catch {
