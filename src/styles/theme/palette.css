@@ -1,5 +1,5 @@
 /* Base palette (the short legacy names that colors.css maps to semantic tokens): the final art-direction values,
-   and the high-contrast overrides. Edit the semantic tokens in colors.css rather than these. */
+   and the high-contrast and colour-blind overrides. Edit the semantic tokens in colors.css rather than these. */
 :root {
   --bg: #04101d;
   --s0: #071827;
@@ -13,6 +13,10 @@
   --tx: #f3f8ff;
   --tx2: #b7cddd;
   --mut: #8ca8bc;
+  --fnt: #5f5a50;
+  --ok: #4db8ff;
+  --warn: #e8c26a;
+  --bad: #ff7a3d;
   --gold: #ffd75e;
   --gold2: #d6a82d;
   --gold-s: rgba(255, 215, 94, 0.14);
@@ -27,4 +31,11 @@ html.a11y-hc {
   --tx2: #eef2f7;
   --mut: #d3d9e2;
   --line2: rgba(255, 255, 255, 0.32);
+  --fnt: #aeb6c4;
+}
+/* colour-blind mode: blue / orange / yellow states */
+html.a11y-cb {
+  --ok: #3aa0ff;
+  --bad: #ff9f1a;
+  --warn: #ffe14a;
 }

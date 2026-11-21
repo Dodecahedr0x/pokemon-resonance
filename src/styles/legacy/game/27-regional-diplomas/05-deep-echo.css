@@ -10,9 +10,6 @@ html.a11y-t1 #sheet {
 html.a11y-t2 #sheet {
   zoom: 1.22;
 }
-html.a11y-hc {
-  --fnt: #aeb6c4 !important;
-}
 html.a11y-hc .card,
 html.a11y-hc .v4-ps,
 html.a11y-hc .button {
@@ -28,11 +25,6 @@ html.a11y-hc .d {
 html.a11y-hc :focus-visible {
   outline: 3px solid #ffd45b !important;
   outline-offset: 2px;
-}
-html.a11y-cb {
-  --ok: #3aa0ff !important;
-  --bad: #ff9f1a !important;
-  --warn: #ffe14a !important;
 }
 html.a11y-rm *,
 html.a11y-rm *::before,

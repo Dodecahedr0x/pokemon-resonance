@@ -10,12 +10,8 @@
 }
 :root {
   color-scheme: dark;
-  --fnt: #585f70;
   --ally: #63a4ff;
   --enemy: #ff6767;
-  --ok: #4fd69c;
-  --warn: #f2c35a;
-  --bad: #ff6a6a;
   --river: #132b4a;
   --wet: #244a8a;
   --tint: #6390f0;

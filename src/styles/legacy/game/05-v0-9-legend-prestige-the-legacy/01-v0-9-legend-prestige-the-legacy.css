@@ -9,7 +9,6 @@
   initial-value: #4f8cff;
 }
 :root {
-  --fnt: #5f5a50;
   --silver: #c9ced6;
   --sapph: #5b9bff;
   --sapph-l: #9cc4ff;
@@ -17,9 +16,6 @@
   --crim: #e5484d;
   --ally: #5b9bff;
   --enemy: #e5484d;
-  --ok: #4db8ff;
-  --warn: #e8c26a;
-  --bad: #ff7a3d;
   --f-d: 'Cinzel', 'Trajan Pro', Georgia, 'Times New Roman', serif;
   --f-n: 'Archivo', 'Arial Narrow', Arial, sans-serif;
   --r: 9px;
