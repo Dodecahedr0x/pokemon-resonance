@@ -11,7 +11,7 @@ export default function Log() {
   const v = useBattleVersion('log');
   const L = v && battleLog ? battleLog : [];
   return (
-    <details className="panel battle-log" id="bLogD">
+    <details className="battle-log" id="bLogD">
       <summary>
         <span className="caption">Journal</span>
         <em id="bLogLast">{L.length ? L[0].s : ''}</em>

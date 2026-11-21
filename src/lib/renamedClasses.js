@@ -2,6 +2,11 @@
 // target the old names, so its selectors are translated before it is applied. Add an entry for each renamed shared
 // class a player is likely to have styled.
 export const RENAMED_CLASSES = {
+  resume: 'battle-summary',
+  'rs-ic': 'battle-summary-icon',
+  'rs-tx': 'battle-summary-text',
+  'rs-a': 'battle-summary-actions',
+  panel: 'battle-log',
   b: 'button',
   'b-sm': 'button-small',
   'b-lg': 'button-large',

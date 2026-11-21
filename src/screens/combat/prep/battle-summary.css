@@ -1,0 +1,65 @@
+/* « Combat en cours » card (Summary.jsx, .battle-summary): the saved battle shown on Battles (#resumePrep) and
+   Home (#resumeHome), with its badge, its line and the « Reprendre » / « Abandonner » buttons. */
+
+.battle-summary {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: var(--space-md);
+  align-items: center;
+  margin-top: var(--space-lg);
+  padding: var(--space-md);
+  border: 1px solid rgba(164, 205, 226, 0.17);
+  border-radius: 17px;
+  background: linear-gradient(145deg, rgba(19, 48, 68, 0.94), rgba(7, 22, 35, 0.96));
+  box-shadow: var(--shadow-panel);
+}
+.battle-summary[hidden] {
+  display: none;
+}
+.battle-summary-icon {
+  width: 38px;
+  display: grid;
+  place-items: center;
+}
+.battle-summary-icon svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.battle-summary-text b {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-size: 13.5px;
+  color: var(--color-accent-soft);
+}
+.battle-summary-text em {
+  display: block;
+  font-style: normal;
+  font-size: 12.5px;
+  color: var(--color-text-secondary);
+  margin-top: var(--space-3xs);
+}
+.battle-summary-actions {
+  display: flex;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+@media (max-width: 560px) {
+  .battle-summary {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+  .battle-summary-text b {
+    font-size: 12.5px;
+  }
+  .battle-summary-actions {
+    grid-column: 1/-1;
+    justify-content: stretch;
+  }
+  .battle-summary-actions .button {
+    flex: 1;
+  }
+}

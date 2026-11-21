@@ -14,16 +14,16 @@ import Button from '../../../components/Button.jsx';
 export function SummaryCard({ id, c }) {
   return (
     <>
-      <span className="rs-ic">
+      <span className="battle-summary-icon">
         <Html html={c.gym != null ? badgeSvg(c.gym, c.at, 'rs' + id) : medal(['Normal'], 'is-small')} />
       </span>
-      <span className="rs-tx">
+      <span className="battle-summary-text">
         <b>Combat en cours</b>
         <em>
           <Html html={c.line} />
         </em>
       </span>
-      <span className="rs-a">
+      <span className="battle-summary-actions">
         <Button size="small" variant="primary" data-resume="1">
           Reprendre
         </Button>
@@ -51,7 +51,7 @@ export default function SummaryBox({ id }) {
   }
   const c = cur || last;
   return (
-    <div className="resume" id={id} hidden={!b}>
+    <div className="battle-summary" id={id} hidden={!b}>
       {c && <SummaryCard key={c.v} id={id} c={c} />}
     </div>
   );

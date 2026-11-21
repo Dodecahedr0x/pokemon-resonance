@@ -5,10 +5,13 @@
   display: grid;
   grid-template-rows: auto 1fr;
   max-height: none;
+  min-width: 0;
   padding: 0;
-  border: 1px solid rgba(130, 213, 225, 0.16);
-  border-radius: 16px;
-  background: rgba(7, 22, 32, 0.92);
+  border: 1px solid rgba(131, 221, 230, 0.24);
+  border-radius: 19px;
+  background: linear-gradient(150deg, #143346, #081925);
+  box-shadow: var(--shadow-panel);
+  transition-timing-function: cubic-bezier(0.2, 0.75, 0.2, 1);
 }
 .battle-log h4 {
   font-size: 10px;

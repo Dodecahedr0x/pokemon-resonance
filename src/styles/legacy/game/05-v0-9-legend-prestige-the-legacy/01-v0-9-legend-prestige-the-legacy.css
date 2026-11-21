@@ -85,7 +85,6 @@
 }
 
 /* ---------- surfaces: runic slabs ---------- */
-.panel,
 .mvc {
   border: 1px solid transparent;
   background:
@@ -97,9 +96,6 @@
     auto,
     auto;
   box-shadow: var(--engrave);
-}
-.panel {
-  border-radius: var(--rl);
 }
 .mvc {
   border-radius: var(--r);

@@ -3,8 +3,10 @@
    (fixed above the bottom navigation on phones and tablets). */
 
 /* the saved-battle summary above the battle choice */
-.prep-page .resume {
+.prep-page .battle-summary {
   margin: 0 0 var(--space-lg);
+  border-color: rgba(112, 211, 255, 0.24);
+  background: linear-gradient(145deg, rgba(10, 39, 55, 0.95), rgba(3, 18, 30, 0.97));
 }
 
 .prep-team {

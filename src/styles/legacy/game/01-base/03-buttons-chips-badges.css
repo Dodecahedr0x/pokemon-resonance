@@ -50,10 +50,3 @@ button.chip:hover {
 .cat-sou {
   --c: var(--ok);
 }
-.panel {
-  background: linear-gradient(180deg, var(--s2), var(--s1));
-  border: 1px solid var(--line);
-  border-radius: var(--rl);
-  box-shadow: var(--sh);
-  min-width: 0;
-}

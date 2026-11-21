@@ -22,13 +22,6 @@ button:focus-visible,
 a:focus-visible {
   outline: 2px solid var(--rx-cyan);
 }
-.panel,
-.resume {
-  border-color: var(--rx-edge);
-  box-shadow:
-    var(--rx-shadow),
-    inset 0 1px rgba(255, 255, 255, 0.055);
-}
 
 /* from legacy/game/24-fullscreen-art-full-art-direction/02-map-actual-dynamic-carte-page.css */
 #combat #bLaunch {
@@ -38,11 +31,6 @@ a:focus-visible {
 }
 
 /* from legacy/game/25-post-init-selector-repair/02-battle-both-states-preparation.css */
-#combat .battle-side .panel {
-  border: 1px solid rgba(131, 221, 230, 0.24);
-  border-radius: 19px;
-  background: linear-gradient(150deg, #143346, #081925);
-}
 
 /* from legacy/game/27-regional-diplomas/05-deep-echo.css */
 .ability-card .chip {

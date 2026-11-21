@@ -1,7 +1,7 @@
 /* Home screen (#accueil, Home.jsx): the page glow, the column of blocks, the look of Home's cards, and the blocks
    that are not the hero, the activities or the friends: « Nouveau » (WhatsNew.jsx), and the footer (Footer.jsx)
    with the season event, the Pokématos radio and the daily challenge. The « Combat en cours » card is the shared
-   .resume (still in legacy, with the Battles screen). */
+   .battle-summary (combat/prep/battle-summary.css). */
 
 .home-screen {
   isolation: isolate;
@@ -28,7 +28,7 @@
 .home-resume-slot {
   grid-column: 1 / -1;
 }
-.home-resume-slot > .resume {
+.home-resume-slot > .battle-summary {
   margin: 0;
 }
 

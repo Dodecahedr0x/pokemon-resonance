@@ -40,21 +40,8 @@
 .page-header .d {
   color: #c3d8e5;
 }
-.resume,
-.panel {
-  background: linear-gradient(145deg, rgba(12, 42, 57, 0.92), rgba(5, 22, 34, 0.94));
-  border: 1px solid rgba(112, 211, 255, 0.2);
-  box-shadow:
-    0 20px 48px rgba(0, 0, 0, 0.18),
-    inset 0 1px rgba(255, 255, 255, 0.035);
-  border-radius: 20px;
-}
 
 /* from legacy/game/13-art-direction-2026-integrated/02-home-the-concept-is-composed.css */
-#combat .resume {
-  background: linear-gradient(145deg, rgba(10, 39, 55, 0.95), rgba(3, 18, 30, 0.97));
-  border-color: rgba(112, 211, 255, 0.24);
-}
 
 /* from legacy/game/13-art-direction-2026-integrated/04-mobile-polish-after-screenshot.css */
 .section-title {
@@ -66,7 +53,6 @@
     box-shadow 0.2s,
     background 0.2s;
 }
-.panel,
 .mvc {
   background: linear-gradient(145deg, rgba(13, 43, 65, 0.96), rgba(5, 22, 37, 0.97));
   border-color: rgba(98, 207, 241, 0.24);
@@ -83,15 +69,6 @@
 }
 .page.on {
   animation: resPageIn 0.35s ease-out both;
-}
-.resume,
-.panel {
-  background: linear-gradient(145deg, rgba(10, 39, 56, 0.96), rgba(4, 20, 34, 0.98));
-  border: 1px solid rgba(100, 210, 255, 0.24);
-  box-shadow:
-    0 16px 38px rgba(0, 0, 0, 0.23),
-    inset 0 1px rgba(255, 255, 255, 0.04);
-  border-radius: 17px;
 }
 .hh-chips span {
   background: rgba(5, 26, 41, 0.78);
@@ -165,12 +142,6 @@ html body img.img-off.img-off.img-off {
 }
 html body .section-title {
   letter-spacing: -0.045em;
-}
-html body .resume {
-  border-color: var(--pr-line);
-}
-html body .resume {
-  background: linear-gradient(145deg, rgba(19, 48, 68, 0.94), rgba(7, 22, 35, 0.96));
 }
 html body button:focus-visible,
 html body a:focus-visible {
