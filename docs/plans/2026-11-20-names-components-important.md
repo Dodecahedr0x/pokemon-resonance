@@ -377,3 +377,17 @@ Each step is one commit (or a few), on its own, playable at every point.
   A third pass that ignores one- to three-letter prefixes (a template such as `s${…}` no longer keeps every class
   starting with « s » alive) removed 142 more parts: the old scenario cards (`.scn`), the splash screen (`.sp-*`,
   `.splash`), the old Pokédex sheet (`.st-*`), `.seg`, `.frise`… and one more file.
+- `!important` probe: done. `.claude/important-probe.js` turns each legacy `!important` off and compares the computed
+  styles of the visible elements it matches, on every screen at both widths. 30 flags that changed nothing were
+  dropped; 28 more that the probe called redundant changed a snapshot (battle layout at desktop width, the battle
+  frame, home chips, `.vh`, the entry animation) and were kept.
+- Page and tokens: done. The bare `html` / `body` rules are one page rule in `base/elements.css` (body text is the new
+  `--color-text-page`). `--fnt`, `--ok`, `--warn`, `--bad` and their high-contrast and colour-blind values live in
+  `theme/palette.css`.
+- Last `!important`: done. The 199 remaining `!important` declarations were moved, unchanged and in their original
+  order, into `src/styles/overrides/` (layer `overrides`, after `motion`). Between themselves they cascade exactly as
+  before, and being in the last layer they still beat every normal rule. The two differences from `!important`:
+  inline styles and the Workshop's unlayered CSS now win over them (`.claude/inline-probe.js` found one conflict, the
+  code textareas' inline style, now the shared `.code-field` class), and running animations can override them (none
+  showed in the snapshots). The Workshop brief no longer tells players' AI to add `!important`. Next: fold each
+  overrides block into its screen or component file and delete the folder, then delete `legacy/`.

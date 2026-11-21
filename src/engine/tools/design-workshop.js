@@ -83,7 +83,7 @@ RÈGLES
 - Garde l’esprit Pokémon : arrondis, dégradés, badges, couleurs vives par type. Pas de personnages ni logos officiels.
 - Aucun défilement horizontal à 360 px. Cibles tactiles d’au moins 40 px. Texte lisible (contraste suffisant).
 - Pas de @import, pas d’image ni de police externe : formes, dégradés CSS, ombres, variables.
-- La feuille de base utilise beaucoup de « !important » : mets « !important » quand une règle n’a pas d’effet.
+- Les feuilles du jeu sont rangées en couches (@layer) et ton bloc n’est dans aucune : tes règles passent devant les siennes, sans « !important ».
 - Commence par redéfinir les variables dans « :root{…} », puis ajoute des règles précises préfixées par l’id de la page (#accueil, #combat…).
 - Donne-moi le CSS complet en un seul bloc, commenté par zone.
 
