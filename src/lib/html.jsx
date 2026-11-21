@@ -1,7 +1,7 @@
 import { createElement, Fragment } from 'react';
 
 // Converts a trusted HTML fragment (game texts with <b>, icons produced by
-// the engine: medal(), tb(), badgeSvg()…) into real React elements, with no wrapper
+// the engine: medal(), typeBadge(), badgeSvg()…) into real React elements, with no wrapper
 // element: the DOM structure stays the engine's, so the CSS applies the same.
 
 const RENAME = {

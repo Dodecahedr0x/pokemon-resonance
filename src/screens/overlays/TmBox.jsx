@@ -2,7 +2,7 @@ import { Html } from '../../lib/html.jsx';
 import { Box, Dialogue } from './Window.jsx';
 import { MV } from '../../engine/data/moves.js';
 import { BY } from '../../engine/pokemon/pokemon.js';
-import { medal, tb, tc } from '../../engine/core/utils.js';
+import { medal, typeBadge, tc } from '../../engine/core/utils.js';
 
 // Learn a TM or HM (#ctBox, opened from the Bag). The engine (045) computes
 // the list of families and keeps the clicks (data-ct, data-ctf) and the hidden attribute.
@@ -18,7 +18,7 @@ function Card({ M, m, families: families }) {
         {M.num} · {m.n}
       </h2>
       <p className="d">
-        <Html html={tb(m.t)} /> {m.p ? `Puissance ${m.p} · ` : ''}
+        <Html html={typeBadge(m.t)} /> {m.p ? `Puissance ${m.p} · ` : ''}
         <Html html={m.d} />
       </p>
       <p className="d">

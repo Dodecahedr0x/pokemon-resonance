@@ -371,6 +371,9 @@ Each step is one commit (or a few), on its own, playable at every point.
   emblems; their effect is folded into `.journey-emblem.is-badge`. The legend rule `.lg` no longer leaks its muted
   colour onto large avatars and emblems (inherited only, nothing visible). The board's `bio-<id>` classes are now
   `biome-<id>` too (`#bBoard`, `#bSvg`).
+- Type badge and type icon: done. `src/styles/components/type-badge.css`, no `!important` left. Helpers `tb()` →
+  `typeBadge()`, `mini()` → `typeIcon()` (class `.mini` → `.type-icon`). The badge now sets its whole look in one rule;
+  `.dex-move span` became `.dex-move span:not(.type-badge)` since the old `!important` was what kept it off the badge.
   A third pass that ignores one- to three-letter prefixes (a template such as `s${…}` no longer keeps every class
   starting with « s » alive) removed 142 more parts: the old scenario cards (`.scn`), the splash screen (`.sp-*`,
   `.splash`), the old Pokédex sheet (`.st-*`), `.seg`, `.frise`… and one more file.

@@ -1,6 +1,6 @@
 import { CAT, EFF, EL, FAMS, MK, MX, POS, RX, WEATHER } from '../../engine/data/game-data.js';
 import { BY } from '../../engine/pokemon/pokemon.js';
-import { markOf, medal, mini, tb, tc } from '../../engine/core/utils.js';
+import { markOf, medal, typeIcon, typeBadge, tc } from '../../engine/core/utils.js';
 import { Html } from '../../lib/html.jsx';
 import { selectReaction, useGuide } from './guideStore.js';
 import { space } from '../../lib/theme.js';
@@ -19,13 +19,13 @@ export function Matrix() {
       </div>
       {EL.map(e => (
         <div key={e} className="guide-matrix-head">
-          <Html html={mini(e)} />
+          <Html html={typeIcon(e)} />
           <span>{e}</span>
         </div>
       ))}
       {MK.map(m => [
         <div key={m.id} className="guide-matrix-head is-row">
-          <Html html={mini(m.t)} />
+          <Html html={typeIcon(m.t)} />
           <span>{m.n}</span>
         </div>,
         ...MX[m.id].map((id, i) => {
@@ -69,10 +69,10 @@ export function DetailReaction() {
       <span className="guide-reaction-kicker">{r.k === 'ren' ? 'Même élément' : 'Réaction · ' + CAT[r.k]}</span>
       <h3>{r.n}</h3>
       <div className="guide-formula">
-        <Html html={tb(m.t)} />
+        <Html html={typeBadge(m.t)} />
         <span>{m.n}</span>
         <span className="guide-formula-operator">+</span>
-        <Html html={tb(e)} />
+        <Html html={typeBadge(e)} />
         <span className="guide-formula-operator">=</span>
         <span className={`chip cat-${cat}`}>
           <i />
@@ -109,10 +109,10 @@ export function DetailReaction() {
 export function TypeTable() {
   return EFF.map(([a, b, x], i) => (
     <div key={i} className="guide-effectiveness-item">
-      <Html html={mini(a)} />
+      <Html html={typeIcon(a)} />
       <span>{a}</span>
       <span className="guide-effectiveness-arrow">→</span>
-      <Html html={mini(b)} />
+      <Html html={typeIcon(b)} />
       <span>{b}</span>
       <b>{x}</b>
     </div>
@@ -186,7 +186,7 @@ export function Families() {
     <tr key={f.e}>
       <td>
         <span style={typeCell}>
-          <Html html={mini(f.e)} />
+          <Html html={typeIcon(f.e)} />
           {f.e}
         </span>
       </td>
@@ -203,7 +203,7 @@ export function Positions() {
     <tr key={p.t}>
       <td>
         <span style={typeCell}>
-          <Html html={mini(p.t)} />
+          <Html html={typeIcon(p.t)} />
           {p.t}
         </span>
       </td>

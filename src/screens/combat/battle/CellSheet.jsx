@@ -1,4 +1,4 @@
-import { tb } from '../../../engine/core/utils.js';
+import { typeBadge } from '../../../engine/core/utils.js';
 import { Html } from '../../../lib/html.jsx';
 import { tileSheet, useBattleVersion } from './battleStore.js';
 
@@ -111,7 +111,7 @@ function Pokemon({ v }) {
       </div>
       <div className="tile-info-pokemon-stats">
         <span>{v.ko ? 'K.O.' : v.hp + ' / ' + v.mhp + ' PV'}</span>
-        <Html html={v.t.map(tb).join('')} />
+        <Html html={v.t.map(typeBadge).join('')} />
         {v.badge && <span className={'status-badge status-' + v.stc}>{v.badge}</span>}
         {v.it ? <em>{v.it}</em> : null}
       </div>

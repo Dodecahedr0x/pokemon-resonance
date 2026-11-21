@@ -6,7 +6,7 @@ import { REGION_NAMES } from '../../engine/data/hoenn.js';
 import { BY, familyOf } from '../../engine/pokemon/pokemon.js';
 import { ITEMS2, PROFILE, inBox, isCamp, ownedItems } from '../../engine/state/game-state.js';
 import { RC, ROLEFX } from '../../engine/pokemon/roles-synergies.js';
-import { medal, tb, tc } from '../../engine/core/utils.js';
+import { medal, typeBadge, tc } from '../../engine/core/utils.js';
 import { squad } from '../../engine/team/team.js';
 import { RANKS, stars, rankId } from '../../engine/combat/resonance.js';
 import { captureSite } from '../../engine/world/catch-anywhere.js';
@@ -110,7 +110,7 @@ function FamCard({ m }) {
         )}
         <div className="team-card-types">
           {m.t.map(t => (
-            <Html key={t} html={tb(t)} />
+            <Html key={t} html={typeBadge(t)} />
           ))}
         </div>
         <p className="team-card-moves">{m.mv.map(id => MV[id].n).join(' · ')}</p>

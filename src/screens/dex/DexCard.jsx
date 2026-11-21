@@ -4,7 +4,7 @@ import { MV, SHAPE, TAL } from '../../engine/data/moves.js';
 import { REGION_NAMES } from '../../engine/data/hoenn.js';
 import { BY, NOTES, familyOf } from '../../engine/pokemon/pokemon.js';
 import { RC, ROLEFX } from '../../engine/pokemon/roles-synergies.js';
-import { tb, tc } from '../../engine/core/utils.js';
+import { typeBadge, tc } from '../../engine/core/utils.js';
 import { STLN, squad } from '../../engine/team/team.js';
 import { ART, PIX } from '../../engine/assets/item-icons.js';
 import { V4 } from '../../engine/ui/screen-state.js';
@@ -75,7 +75,7 @@ export default function DexCard() {
           <h2 className="dex-name">{m.n}</h2>
           <div className="dex-types">
             {m.t.map((t, k) => (
-              <Html key={k} html={tb(t)} />
+              <Html key={k} html={typeBadge(t)} />
             ))}
           </div>
           {'\n   '}
@@ -139,7 +139,7 @@ export default function DexCard() {
               const v = MV[id];
               return (
                 <div className="dex-move" key={k}>
-                  <Html html={tb(v.t)} />
+                  <Html html={typeBadge(v.t)} />
                   <b>
                     {v.n}
                     <Html html={roleBadgeHtml(v)} />

@@ -380,7 +380,7 @@
   .guide-matrix .guide-matrix-head.is-row {
     padding-right: var(--space-3xs);
   }
-  .guide-matrix .guide-matrix-head.is-row > .mini {
+  .guide-matrix .guide-matrix-head.is-row > .type-icon {
     display: none;
   }
   .guide-matrix .guide-matrix-cell:not(.is-selected) {

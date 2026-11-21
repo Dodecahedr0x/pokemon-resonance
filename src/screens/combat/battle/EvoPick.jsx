@@ -2,7 +2,7 @@ import { Html } from '../../../lib/html.jsx';
 import { MV, TAL } from '../../../engine/data/moves.js';
 import { BY } from '../../../engine/pokemon/pokemon.js';
 import { ARR } from '../../../engine/pokemon/evolution.js';
-import { medal, tb, tc } from '../../../engine/core/utils.js';
+import { medal, typeBadge, tc } from '../../../engine/core/utils.js';
 import { BRANCHES, branchWhy, evoOpts, mhpOf } from '../../../engine/combat/engine.js';
 import { B } from '../../../engine/combat/ui.js';
 import { eeveeWhy } from '../../../engine/pokemon/eevee.js';
@@ -52,7 +52,7 @@ function Path({ u, A, id }) {
         </span>
         <span className="types">
           {E.t.map((t, i) => (
-            <Html key={i} html={tb(t)} />
+            <Html key={i} html={typeBadge(t)} />
           ))}
         </span>
         {'\n   '}

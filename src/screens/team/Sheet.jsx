@@ -10,7 +10,7 @@ import { BY, NOTES, familyOf } from '../../engine/pokemon/pokemon.js';
 import { ARR } from '../../engine/pokemon/evolution.js';
 import { ITEMS2, LINK_N, LINK_T, PROFILE, inBox, isCamp, lvlOfPts, ownedItems } from '../../engine/state/game-state.js';
 import { RC, ROLEFX, rIco } from '../../engine/pokemon/roles-synergies.js';
-import { markOf, medal, tb, tc } from '../../engine/core/utils.js';
+import { markOf, medal, typeBadge, tc } from '../../engine/core/utils.js';
 import { BRANCHES, mhpOf } from '../../engine/combat/engine.js';
 import { STLN, branchNote, crestSmall, evoDiff, monEls, monMarks, nextOf, squad } from '../../engine/team/team.js';
 import { HELD_IMG } from '../../engine/state/economy.js';
@@ -119,7 +119,7 @@ function Content({ id }) {
         ) : null}
         <div className="team-sheet-types">
           {m.t.map(t => (
-            <Html key={t} html={tb(t)} />
+            <Html key={t} html={typeBadge(t)} />
           ))}
         </div>
       </div>
@@ -273,7 +273,7 @@ function MvCard({ id }) {
     <div className="mvc">
       <div className="t">
         <b>{m.n}</b>
-        {T(tb(m.t))}
+        {T(typeBadge(m.t))}
       </div>
       <span className="mvs">{sp}</span>
       <p>{T(m.d)}</p>

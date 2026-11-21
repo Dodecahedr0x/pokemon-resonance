@@ -112,6 +112,7 @@
 .dex-move .type-badge {
   display: inline-flex;
   width: auto;
+  margin-top: var(--space-3xs);
   margin-right: var(--space-xs);
   vertical-align: middle;
 }
@@ -119,7 +120,7 @@
   font: 800 14.5px/1.2 var(--font-display);
   vertical-align: middle;
 }
-.dex-move span {
+.dex-move span:not(.type-badge) {
   display: block;
   margin-top: var(--space-3xs);
   color: #bfe6ff;

@@ -1,7 +1,7 @@
 import { Html, parseStyle } from '../../lib/html.jsx';
 import { Box, Dialogue } from './Window.jsx';
 import { BY } from '../../engine/pokemon/pokemon.js';
-import { tb } from '../../engine/core/utils.js';
+import { typeBadge } from '../../engine/core/utils.js';
 import { crestSmall } from '../../engine/team/team.js';
 import { shinyStyle } from '../../engine/pokemon/shiny.js';
 
@@ -60,7 +60,7 @@ function Card({
           </div>
           <div className="sh-tags">
             {m.t.map(t => (
-              <Html key={t} html={tb(t)} />
+              <Html key={t} html={typeBadge(t)} />
             ))}
           </div>
           <p className="safari-mood">{hum}</p>

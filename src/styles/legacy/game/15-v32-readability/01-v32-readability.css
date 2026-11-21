@@ -41,10 +41,6 @@ html body .hh-chips span {
   /* informational text */
   /* bottom navigation bar */
   /* team cards: dense, we gain a point without breaking the grid */
-  html body #pokedex .types .type-badge,
-  html body .types .type-badge {
-    font-size: 10.5px !important;
-  }
 }
 
 /* ---------- 5. Home on phone: no more overlap ---------- */

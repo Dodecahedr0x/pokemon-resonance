@@ -30,6 +30,7 @@
 @import './components/medal.css' layer(components);
 @import './components/initials-avatar.css' layer(components);
 @import './components/journey-emblem.css' layer(components);
+@import './components/type-badge.css' layer(components);
 @import './components/synergy.css' layer(components);
 @import './components/tabs.css' layer(components);
 @import './components/state-pill.css' layer(components);

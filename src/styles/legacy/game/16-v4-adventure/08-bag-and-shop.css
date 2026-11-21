@@ -28,20 +28,4 @@ html body .form-field input {
 }
 
 /* ---------- Team: collection cards ---------- */
-html body .type-badge {
-  background: var(--c) !important;
-  color: var(--fg) !important;
-  border: 0 !important;
-  border-radius: 999px !important;
-  letter-spacing: 0.06em !important;
-  padding: var(--space-2xs) var(--space-sm) var(--space-2xs) var(--space-2xs) !important;
-  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.2);
-}
 /* the team cards and the battle move cards size their own badges (screens/team, screens/combat/battle) */
-html body .type-badge:not(:where(.team-card-types .type-badge, .battle-move .type-badge)) {
-  font: 800 10.5px/1 var(--f-d) !important;
-}
-html body .type-badge .type-badge-icon {
-  background: rgba(0, 0, 0, 0.18) !important;
-  border-radius: 50% !important;
-}

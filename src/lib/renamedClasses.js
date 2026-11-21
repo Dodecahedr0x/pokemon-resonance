@@ -837,6 +837,7 @@ export const RENAMED_CLASSES = {
   'bio-tour': 'biome-tour',
   'bio-ligue': 'biome-ligue',
   'bio-arene': 'biome-arene',
+  mini: 'type-icon',
 };
 
 const OLD_CLASS = new RegExp(

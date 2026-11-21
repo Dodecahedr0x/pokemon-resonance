@@ -28,11 +28,11 @@ export function medal(types, cls = '') {
     );
 }
 
-export function mini(t) {
-  return `<span class="mini" style="background:${tc(t)}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="${gp(t)}" fill="${INK}" fill-rule="evenodd"/></svg></span>`;
+export function typeIcon(t) {
+  return `<span class="type-icon" style="background:${tc(t)}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="${gp(t)}" fill="${INK}" fill-rule="evenodd"/></svg></span>`;
 }
 
-export function tb(t) {
+export function typeBadge(t) {
   const c = tc(t),
     fg = lum(c) > 0.45 ? '#0C0E13' : '#FFFFFF';
   return `<span class="type-badge" style="--c:${c};--fg:${fg}"><i class="type-badge-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="${gp(t)}" fill="${fg}" fill-rule="evenodd"/></svg></i>${t}</span>`;

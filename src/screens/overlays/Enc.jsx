@@ -3,7 +3,7 @@ import { Html, parseStyle } from '../../lib/html.jsx';
 import { useEnc } from './shellOverlays.js';
 import { dexNo } from '../../engine/data/game-data.js';
 import { REGION_NAMES } from '../../engine/data/hoenn.js';
-import { tb, tc } from '../../engine/core/utils.js';
+import { typeBadge, tc } from '../../engine/core/utils.js';
 import { crestSmall } from '../../engine/team/team.js';
 import { SPARK, shinyStyle } from '../../engine/pokemon/shiny.js';
 import { DOMINANT_CROWN_SVG } from '../../engine/world/dominant-pokemon.js';
@@ -68,7 +68,7 @@ const Card = memo(function Card({ pick, shiny, dom, route, tod, inBox, camp, pat
       {r.m > 1 && RARE_ENABLED() && <p className="rare-encounter">Apparition rare · {r.w.join(' + ')}</p>}
       <div className="sh-tags">
         {pick.t.map(t => (
-          <Html key={t} html={tb(t)} />
+          <Html key={t} html={typeBadge(t)} />
         ))}
       </div>
       <p className="encounter-evolution">
