@@ -24,3 +24,11 @@
   height: 20px;
   filter: drop-shadow(0 0 4px rgba(90, 220, 255, 0.6));
 }
+
+/* coins and gems in the battle rewards */
+.is-gains .coin-icon {
+  margin-right: var(--space-3xs);
+}
+.is-gains .gem-icon {
+  margin-right: var(--space-3xs);
+}

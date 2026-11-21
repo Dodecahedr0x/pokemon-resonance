@@ -4,55 +4,5 @@
    deep midnight blue, glass panels ringed in cyan, bright gold,
    large illustrations, titles in Archivo, logo in Cinzel.
    ===================================================================== */
-:root {
-  --f-d: 'Archivo', 'Arial Black', 'Helvetica Neue', Arial, sans-serif;
-  --f-logo: 'Cinzel', 'Trajan Pro', Georgia, serif;
-  --f-script: 'Kaushan Script', 'Brush Script MT', cursive;
-  --v4-bg: #061327;
-  --v4-p1: rgba(17, 44, 78, 0.94);
-  --v4-p2: rgba(8, 23, 46, 0.96);
-  --v4-ln: rgba(88, 186, 255, 0.34);
-  --v4-ln2: rgba(120, 210, 255, 0.55);
-  --v4-glow: rgba(70, 180, 255, 0.28);
-  --v4-gold1: #ffe877;
-  --v4-gold2: #ffc12f;
-  --v4-gold3: #e89a17;
-  --v4-ink: #10213a;
-  --v4-tx: #f4f8ff;
-  --v4-tx2: #c3d6ea;
-  --v4-mut: #8ea8c4;
-  --v4-ok: #45d483;
-  --v4-red: #ff5f57;
-  --v4-r: 14px;
-}
 
 /* ---------- components ---------- */
-.card-header {
-  display: flex;
-  align-items: center;
-  gap: var(--space-sm);
-  padding: 0 0 var(--space-sm);
-  margin-bottom: var(--space-sm);
-  border-bottom: 1px solid rgba(120, 200, 255, 0.14);
-}
-.card-header > svg {
-  width: 20px;
-  height: 20px;
-  color: #ffd75e;
-  flex: none;
-}
-.card-header b {
-  font-family: var(--f-d);
-  font-weight: 800;
-  font-size: 15px;
-  color: #fff;
-}
-.card-count {
-  margin-left: auto;
-  font: 700 12px/1 var(--f-d);
-  color: var(--v4-tx2);
-  background: rgba(0, 0, 0, 0.25);
-  border: 1px solid rgba(120, 200, 255, 0.2);
-  padding: var(--space-2xs) var(--space-sm);
-  border-radius: 999px;
-}

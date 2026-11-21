@@ -22,9 +22,11 @@
 @import './theme/palette.css' layer(theme);
 @import './theme/colors.css' layer(theme);
 @import './theme/surfaces.css' layer(theme);
+@import './theme/tokens.css' layer(theme);
 @import './legacy/index.css' layer(legacy);
 @import './base/fonts.css' layer(base);
 @import './base/elements.css' layer(base);
+@import './base/document.css' layer(base);
 @import './base/forms.css' layer(base);
 @import './components/button.css' layer(components);
 @import './components/page-header.css' layer(components);
@@ -54,6 +56,16 @@
 @import './components/caption.css' layer(components);
 @import './components/pill.css' layer(components);
 @import './components/duel-player.css' layer(components);
+@import './components/card-title.css' layer(components);
+@import './components/code-link.css' layer(components);
+@import './components/status-badge.css' layer(components);
+@import './components/button-row.css' layer(components);
+@import './components/item-icon.css' layer(components);
+@import './components/role-icon.css' layer(components);
+@import './components/card-header.css' layer(components);
+@import './components/shiny-icon.css' layer(components);
+@import './components/dominant-crown.css' layer(components);
+@import './components/resonance-rank.css' layer(components);
 @import './components/scenario-level.css' layer(components);
 
 @import './shell/app-layout.css' layer(screens);

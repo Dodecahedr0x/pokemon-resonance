@@ -1,0 +1,10 @@
+/* Shiny icon (.shn-ic, engine/pokemon/shiny.js): the glowing star next to a shiny Pokémon's name. */
+.shn-ic {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.12em;
+  fill: #ffe9a3;
+  filter: drop-shadow(0 0 4px rgba(255, 225, 120, 0.85));
+  flex: none;
+  animation: prGlow 2.8s ease-in-out infinite;
+}

@@ -3,62 +3,11 @@
    Obsidian, polished runic slabs, brushed brass and silver, smoked glass,
    controlled energy glows. Purely visual layer.
    ===================================================================== */
-@property --tint {
-  syntax: '<color>';
-  inherits: true;
-  initial-value: #4f8cff;
-}
-:root {
-  --silver: #c9ced6;
-  --sapph: #5b9bff;
-  --sapph-l: #9cc4ff;
-  --amber: #f0a43a;
-  --crim: #e5484d;
-  --ally: #5b9bff;
-  --enemy: #e5484d;
-  --f-d: 'Cinzel', 'Trajan Pro', Georgia, 'Times New Roman', serif;
-  --f-n: 'Archivo', 'Arial Narrow', Arial, sans-serif;
-  --r: 9px;
-  --rs: 6px;
-  --steel: linear-gradient(135deg, #e8ecf2 0%, #8d939c 26%, #4a4f58 48%, #c9ced6 66%, #6e737c 84%, #dde2ea 100%);
-  --brush: repeating-linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0.045) 0 1px,
-    rgba(0, 0, 0, 0.035) 1px 2px,
-    transparent 2px 4px
-  );
-  --veins: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='560' height='560'><filter id='v' x='0' y='0' width='100%25' height='100%25'><feTurbulence type='fractalNoise' baseFrequency='.0035 .009' numOctaves='4' seed='3' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 .83 0 0 0 0 .69 0 0 0 0 .42 4 0 0 0 -1.9'/><feComponentTransfer><feFuncA type='table' tableValues='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .9 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0'/></feComponentTransfer></filter><rect width='100%25' height='100%25' filter='url(%23v)' opacity='.2'/></svg>");
-  --slab: linear-gradient(180deg, #17181d 0%, #111216 55%, #0d0e11 100%);
-  --edge: linear-gradient(
-    160deg,
-    rgba(242, 221, 168, 0.42),
-    rgba(212, 175, 106, 0.08) 30%,
-    rgba(201, 206, 214, 0.06) 62%,
-    rgba(212, 175, 106, 0.3)
-  );
-  --engrave:
-    inset 0 1px 0 rgba(255, 255, 255, 0.05), inset 0 0 0 1px rgba(0, 0, 0, 0.55),
-    inset 0 0 0 2px rgba(212, 175, 106, 0.05), 0 26px 50px -32px rgba(0, 0, 0, 1);
-}
-::selection {
-  background: var(--gold);
-  color: #140f06;
-}
-:focus-visible {
-  outline: 1.5px solid var(--gold-l);
-  outline-offset: 3px;
-}
 
 /* ---------- typography ---------- */
-.card-title,
 .sh-name {
   font-family: var(--f-d);
   font-stretch: normal;
-}
-.card-title {
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  font-size: 14.5px;
 }
 .sh-name {
   background: linear-gradient(180deg, #fff8e8 10%, #e9d9b0 48%, #b8975a 100%);

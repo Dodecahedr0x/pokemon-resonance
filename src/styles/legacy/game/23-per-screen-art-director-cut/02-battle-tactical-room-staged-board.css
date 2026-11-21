@@ -5,11 +5,3 @@
 
 /* GUIDE & LEAGUE — strategy atlas and badge room */
 /* Global consistency, focus and mobile adaptation (.button buttons: src/styles/components/button.css) */
-button:not(:where(.button, .text-link, .tabs > button)),
-a:not(:where(.button)) {
-  transition-timing-function: cubic-bezier(0.2, 0.75, 0.2, 1);
-}
-button:focus-visible,
-a:focus-visible {
-  outline-offset: 3px;
-}

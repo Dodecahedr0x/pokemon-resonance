@@ -7,21 +7,6 @@
    v4.10: Resonance Chords, character, base camp, expeditions
    ===================================================================== */
 /* --- chord badge --- */
-html body .chip-acc {
-  max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-html body .chip-acc i {
-  margin-right: var(--space-3xs);
-}
-html body .chip-acc i:last-of-type {
-  margin-right: var(--space-xs);
-}
-html body .chip-acc.fait {
-  background: rgba(255, 215, 94, 0.16);
-  color: #ffe17b;
-}
 /* --- Guide: the chord list --- */
 /* --- sheet: character --- */
 /* --- Home: base camp --- */

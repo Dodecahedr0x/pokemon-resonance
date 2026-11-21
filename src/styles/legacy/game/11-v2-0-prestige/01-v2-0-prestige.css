@@ -1,11 +1,4 @@
 /* ===================== v2.0 · Prestige ===================== */
-:focus-visible {
-  outline: 2px solid var(--gold-l);
-  outline-offset: 2px;
-}
-:focus:not(:focus-visible) {
-  outline: none;
-}
 
 /* --- opening screen --- */
 

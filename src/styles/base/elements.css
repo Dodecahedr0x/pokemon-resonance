@@ -2,6 +2,9 @@
 * {
   box-sizing: border-box;
 }
+:root {
+  color-scheme: dark;
+}
 a {
   color: inherit;
 }

@@ -1,12 +1,6 @@
 /* ---------- app shell ---------- */
 
 /* ---------- pages ---------- */
-.page {
-  display: none;
-}
-.page.on {
-  display: block;
-}
 @keyframes pg {
   from {
     opacity: 0.3;
@@ -16,10 +10,4 @@
     opacity: 1;
     transform: none;
   }
-}
-.card-title {
-  text-transform: uppercase;
-  font-size: 17px;
-  line-height: 1.1;
-  letter-spacing: 0.01em;
 }

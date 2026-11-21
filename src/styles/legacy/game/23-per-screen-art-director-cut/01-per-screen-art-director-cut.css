@@ -1,17 +1,5 @@
 /* ===== resonance-per-screen-art-director-cut layer ===== */
 /* RESONANCE 4.22 — per-screen art direction: no change to rules or data */
-:root {
-  --r22-ink: #07121d;
-  --r22-deep: #091b2a;
-  --r22-panel: #102638;
-  --r22-line: rgba(153, 211, 231, 0.19);
-  --r22-cyan: #71e4ed;
-  --r22-gold: #f3c66d;
-  --r22-white: #f2f7fa;
-}
-.page {
-  position: relative;
-}
 
 /* HOME — adventure dashboard, regional lighting */
 

@@ -1,0 +1,4 @@
+/* Code link (.code-link): a rule code in the Guide's text that opens its definition. */
+.code-link {
+  color: var(--gold);
+}

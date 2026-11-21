@@ -15,23 +15,7 @@
    POKÉMON RÉSONANCE v4.21 — art direction layer only.
    No state, rule, calculation, event or game mechanism modified.
    ========================================================== */
-:root {
-  --pr-ink: #07121d;
-  --pr-deep: #091b2b;
-  --pr-panel: rgba(11, 31, 48, 0.88);
-  --pr-glass: rgba(18, 47, 67, 0.72);
-  --pr-line: rgba(164, 205, 226, 0.17);
-  --pr-cyan: #73d9f4;
-  --pr-gold: #f4cc70;
-  --pr-white: #f3f8fb;
-  --pr-shadow: 0 18px 48px rgba(0, 0, 0, 0.34);
-  --pr-ease: cubic-bezier(0.2, 0.75, 0.25, 1);
-}
 
-html body button:focus-visible,
-html body a:focus-visible {
-  outline-offset: 3px;
-}
 /* Home: adventure dashboard feel */
 /* Exploration: deeper scene, the game's SVG illustration stays intact */
 /* Gyms: each environment keeps its own colors and rules */

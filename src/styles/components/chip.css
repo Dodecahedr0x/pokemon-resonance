@@ -17,3 +17,67 @@
   letter-spacing: 0.08em;
   white-space: nowrap;
 }
+
+/* the chip's diamond marker (its colour from --c: .cat-deg, .cat-ctl, .cat-ter, .cat-sou), chips that are buttons, and the battle top bar's field chips (.chip-acc chord, .chip-vent wind, .chip-mut mutator, .chip-doctrine-choice) */
+.chip i {
+  width: 7px;
+  height: 7px;
+  background: var(--c, var(--mut));
+  flex: none;
+  border-radius: 1px;
+  transform: rotate(45deg);
+}
+button.chip {
+  cursor: pointer;
+}
+button.chip:hover {
+  border-color: var(--line3);
+  color: var(--tx);
+}
+.cat-deg {
+  --c: var(--enemy);
+}
+.cat-ctl {
+  --c: var(--ally);
+}
+.cat-ter {
+  --c: var(--gold);
+}
+.cat-sou {
+  --c: var(--ok);
+}
+.chip-vent .vent-fl {
+  width: 14px;
+  height: 14px;
+  margin-right: var(--space-2xs);
+  vertical-align: -2px;
+  fill: none;
+  stroke: #9fd8ff;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.chip-mut {
+  white-space: nowrap;
+}
+.chip-acc {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.chip-acc i {
+  margin-right: var(--space-3xs);
+}
+.chip-acc i:last-of-type {
+  margin-right: var(--space-xs);
+}
+.chip-acc.fait {
+  background: rgba(255, 215, 94, 0.16);
+  color: #ffe17b;
+}
+.chip-doctrine-choice svg {
+  width: 12px;
+  height: 12px;
+  margin-right: var(--space-2xs);
+  vertical-align: -2px;
+}

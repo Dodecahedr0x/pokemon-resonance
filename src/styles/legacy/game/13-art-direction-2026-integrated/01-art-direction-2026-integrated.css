@@ -1,35 +1,5 @@
 /* ===== RESONANCE ART DIRECTION 2026 — integrated redesign ===== */
-:root {
-  --ink: #071522;
-  --ink2: #0a2030;
-  --panel: rgba(7, 25, 39, 0.82);
-  --panel2: rgba(10, 37, 53, 0.86);
-  --cyan: #6fe2ff;
-  --r: 18px;
-}
-body::before {
-  z-index: 0;
-  opacity: 0.17;
-  background-image: radial-gradient(circle at 1px 1px, rgba(163, 222, 255, 0.24) 1px, transparent 0);
-  background-size: 34px 34px;
-}
-.page {
-  animation: resPageIn 0.42s cubic-bezier(0.2, 0.7, 0.2, 1) both;
-}
 
 /* the Guide's section titles are gold (guide-port.css) */
 
 /* .button and .text-link have their own transition (src/styles/components/) */
-button:not(.sidebar-link):not(.bottom-nav-link):not(.route-alert):not(.route-time button):not(.tabs > button):not(
-    :where(.button, .text-link)
-  ) {
-  transition:
-    transform 0.18s ease,
-    filter 0.18s ease,
-    box-shadow 0.18s ease;
-}
-button:not(.sidebar-link):not(.bottom-nav-link):not(.route-alert):not(.route-time button):not(.tabs > button):not(
-    :where(.button)
-  ):hover {
-  filter: brightness(1.08);
-}

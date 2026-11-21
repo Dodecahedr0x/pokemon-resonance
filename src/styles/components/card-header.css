@@ -1,0 +1,32 @@
+/* Card header (CardHeader.jsx: .card-header with an icon, a title and a .card-count). */
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 0 0 var(--space-sm);
+  margin-bottom: var(--space-sm);
+  border-bottom: 1px solid;
+  border-color: rgba(150, 205, 228, 0.16);
+}
+.card-header > svg {
+  width: 20px;
+  height: 20px;
+  color: #ffd75e;
+  flex: none;
+}
+.card-header b {
+  font-family: var(--f-d);
+  font-weight: 800;
+  font-size: 15px;
+  color: #fff;
+}
+.card-count {
+  margin-left: auto;
+  font: 700 12px/1 var(--f-d);
+  color: var(--v4-tx2);
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(150, 207, 230, 0.2);
+  padding: var(--space-2xs) var(--space-sm);
+  border-radius: 999px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}

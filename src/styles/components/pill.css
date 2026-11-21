@@ -11,3 +11,10 @@
   text-transform: uppercase;
   white-space: nowrap;
 }
+
+/* the next step (.pill.nx), in gold */
+.pill.nx {
+  color: #1a1205;
+  background: linear-gradient(135deg, #f6e6bc, #c9a15e 60%, #9c7735);
+  box-shadow: 0 0 14px -4px rgba(212, 175, 106, 0.7);
+}

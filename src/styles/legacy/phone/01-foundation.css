@@ -3,15 +3,4 @@
    text 11 / 12.5 / 14 / 16 px, radii 10 / 14 / 999 px, 44 px touch targets.
    The rules of the previous layers are often !important: we take them up again here. */
 
-:root {
-  --t-xs: 11px;
-  --t-s: 12.5px;
-  --t-m: 14px;
-  --t-l: 16px;
-  --r-s: 10px;
-  --r-m: 14px;
-  --r-p: 999px;
-  --tap: 44px;
-}
-
 /* ================= Team: saved teams and collapsible formations ================= */

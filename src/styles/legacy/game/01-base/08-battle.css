@@ -1,12 +1,1 @@
 /* ---------- battle ---------- */
-.status-badge {
-  font-family: var(--f-d);
-  font-stretch: 112%;
-  font-weight: 800;
-  font-size: 8.5px;
-  letter-spacing: 0.06em;
-  padding: 1px var(--space-2xs);
-  border-radius: 4px;
-  background: #f7d02c;
-  color: #14120a;
-}

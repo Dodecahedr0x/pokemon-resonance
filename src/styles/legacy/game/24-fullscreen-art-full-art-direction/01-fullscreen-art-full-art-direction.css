@@ -1,36 +1,5 @@
 /* ===== resonance-fullscreen-art-full-art-direction layer ===== */
 /* POKEMON RESONANCE 4.23 — full-screen art direction. Visual layer only. */
-:root {
-  --rx-bg: #06111c;
-  --rx-panel: #0d2232;
-  --rx-panel2: #132e40;
-  --rx-edge: rgba(126, 211, 224, 0.24);
-  --rx-cyan: #7ce8ee;
-  --rx-blue: #4a9ac1;
-  --rx-gold: #f5ce78;
-  --rx-text: #f3f8fb;
-  --rx-muted: #a9c1ce;
-  --rx-shadow: 0 26px 70px rgba(0, 0, 0, 0.42);
-}
-body:before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  opacity: 0.2;
-  background-image:
-    linear-gradient(rgba(129, 214, 226, 0.045) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(129, 214, 226, 0.045) 1px, transparent 1px);
-  background-size: 48px 48px;
-  mask-image: linear-gradient(#000, transparent 82%);
-}
-.page {
-  isolation: isolate;
-}
-.page.on {
-  animation: rx-page-in 0.42s cubic-bezier(0.2, 0.75, 0.2, 1) both;
-}
 @keyframes rx-page-in {
   from {
     opacity: 0.3;
@@ -42,10 +11,6 @@ body:before {
     filter: none;
     transform: none;
   }
-}
-button:focus-visible,
-a:focus-visible {
-  outline-offset: 3px;
 }
 
 /* HOME: dramatic expedition command centre */

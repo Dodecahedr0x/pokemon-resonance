@@ -6,9 +6,3 @@
 /* deployment */
 
 /* doctrines */
-.chip-doctrine-choice svg {
-  width: 12px;
-  height: 12px;
-  margin-right: var(--space-2xs);
-  vertical-align: -2px;
-}

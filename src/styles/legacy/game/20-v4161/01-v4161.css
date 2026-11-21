@@ -7,13 +7,5 @@
 /* --- Day Care: the couple --- */
 
 /* --- Dominant Pokémon --- */
-html body .dom-cr {
-  width: 1.1em;
-  height: 1.1em;
-  vertical-align: -0.15em;
-  margin-right: 0.25em;
-  color: #ffd75e;
-  filter: drop-shadow(0 0 4px rgba(255, 200, 60, 0.8));
-}
 
 /* legend medallion in a small emblem (map markers, place list, location sheet) */

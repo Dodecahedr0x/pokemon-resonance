@@ -6,14 +6,6 @@
   This stylesheet targets the classes actually present after initialization.
   Presentation only: no data, rule or interaction modified.
 */
-:root {
-  --r24-bg: #06111c;
-  --r24-panel: #102b3d;
-  --r24-edge: rgba(128, 221, 230, 0.34);
-  --r24-cyan: #83f0ef;
-  --r24-gold: #f5cf7a;
-  --r24-white: #f4fbff;
-}
 
 /* HOME — real container after JS move: .home-hero */
 

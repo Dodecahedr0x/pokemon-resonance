@@ -19,11 +19,6 @@
   background: radial-gradient(circle at 100% 100%, rgba(212, 175, 106, 0.9) 0 1.6px, transparent 2.2px);
 }
 
-.chip i {
-  border-radius: 1px;
-  transform: rotate(45deg);
-}
-
 /* ---------- type seals ---------- */
 /* medals: seal with a crown of glyphs */
 

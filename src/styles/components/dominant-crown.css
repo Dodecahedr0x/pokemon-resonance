@@ -1,0 +1,9 @@
+/* Dominant crown (.dom-cr, engine/world/dominant-pokemon.js): the crown in front of a Dominant Pokémon's name. */
+.dom-cr {
+  width: 1.1em;
+  height: 1.1em;
+  vertical-align: -0.15em;
+  margin-right: 0.25em;
+  color: #ffd75e;
+  filter: drop-shadow(0 0 4px rgba(255, 200, 60, 0.8));
+}
