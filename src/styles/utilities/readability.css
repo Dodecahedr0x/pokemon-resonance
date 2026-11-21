@@ -1,0 +1,10 @@
+/* Phone readability floor: below 1000 px the small labels (captions, pills, chips, definition terms) are 11 px,
+   whatever size a screen gives them. The pills of the battle list keep their own size. */
+@media (max-width: 999px) {
+  .caption,
+  .pill:not(.prep-row .pill),
+  dt,
+  .chip {
+    font-size: 11px;
+  }
+}

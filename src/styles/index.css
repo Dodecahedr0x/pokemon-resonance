@@ -175,5 +175,6 @@
 @import './utilities/performance.css' layer(utilities);
 @import './utilities/focus.css' layer(utilities);
 @import './utilities/entrance.css' layer(utilities);
+@import './utilities/readability.css' layer(utilities);
 @import './accessibility/reduced-motion.css' layer(accessibility);
 @import './accessibility/high-contrast.css' layer(accessibility);

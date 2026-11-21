@@ -21,14 +21,6 @@ hr {
 }
 
 /* from legacy/game/15-v32-readability/01-v32-readability.css */
-@media (max-width: 999px) {
-  html body .caption,
-  html body .pill:not(.prep-row .pill),
-  html body dt,
-  html body .chip {
-    font-size: 11px;
-  }
-}
 
 /* from legacy/game/16-v4-adventure/01-v4-adventure.css */
 
