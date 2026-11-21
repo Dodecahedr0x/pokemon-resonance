@@ -5,23 +5,3 @@
     opacity: 0.25;
   }
 }
-
-@keyframes fly {
-  from {
-    transform: translate(-80px, 0);
-  }
-  to {
-    transform: translate(1300px, -60px);
-  }
-}
-
-@keyframes shim {
-  40% {
-    opacity: 0.6;
-  }
-  80%,
-  100% {
-    opacity: 0;
-    stroke-dashoffset: -58;
-  }
-}

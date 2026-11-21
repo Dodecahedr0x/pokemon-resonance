@@ -15,11 +15,7 @@
 }
 /* slabs */
 /* range glows */
-@keyframes dgr {
-  50% {
-    fill: rgba(229, 72, 77, 0.24);
-  }
-}
+
 @keyframes arn {
   50% {
     fill: rgba(240, 164, 58, 0.2);

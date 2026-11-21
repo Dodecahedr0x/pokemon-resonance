@@ -37,11 +37,3 @@
 }
 
 /* ---------- 7. velvet badge case ---------- */
-@keyframes pkLueur {
-  from {
-    background-position: 170% 0;
-  }
-  to {
-    background-position: -70% 0;
-  }
-}

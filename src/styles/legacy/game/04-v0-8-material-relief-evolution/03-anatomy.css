@@ -1,18 +1,4 @@
 /* anatomy */
-.al {
-  display: grid;
-  justify-items: center;
-  gap: var(--space-xs);
-  text-align: center;
-  min-width: 98px;
-}
-.al b {
-  font-family: var(--f-d);
-  font-stretch: 112%;
-  font-weight: 750;
-  font-size: 14px;
-  text-transform: uppercase;
-}
 @keyframes ring {
   0% {
     transform: scale(0.9);

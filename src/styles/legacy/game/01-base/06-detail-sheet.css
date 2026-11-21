@@ -32,19 +32,3 @@
   flex-wrap: wrap;
   margin-top: var(--space-md);
 }
-
-.evo {
-  display: flex;
-  align-items: center;
-  gap: var(--space-md);
-  flex-wrap: wrap;
-  font-size: 14px;
-  color: var(--tx2);
-}
-.evo .arr {
-  color: var(--gold);
-  font-family: var(--f-m);
-}
-.evo b {
-  color: var(--tx);
-}

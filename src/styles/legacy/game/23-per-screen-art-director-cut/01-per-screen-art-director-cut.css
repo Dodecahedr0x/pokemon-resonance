@@ -13,21 +13,7 @@
   position: relative;
 }
 
-@keyframes r22-enter {
-  from {
-    opacity: 0.35;
-    transform: translateY(9px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
 /* HOME — adventure dashboard, regional lighting */
-@keyframes r22-orbit {
-  to {
-    transform: translateY(-50%) rotate(360deg);
-  }
-}
+
 /* MAP — regional atlas, cartographic panel */
 /* TEAM / POKÉDEX — collector's-Pokédex-style selection screen */

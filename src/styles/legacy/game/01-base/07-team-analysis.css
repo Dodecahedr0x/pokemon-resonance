@@ -6,35 +6,8 @@
 
 /* ---------- hexagonal board ---------- */
 
-@keyframes zapf {
-  0% {
-    fill: var(--wet);
-  }
-  12% {
-    fill: #8c7a25;
-  }
-  100% {
-    fill: var(--wet);
-  }
-}
-@keyframes zapr {
-  0% {
-    fill: var(--river);
-  }
-  12% {
-    fill: #7d6e26;
-  }
-  100% {
-    fill: var(--river);
-  }
-}
-
 @keyframes act {
   50% {
     stroke-opacity: 0.3;
   }
-}
-
-.off {
-  opacity: 0;
 }

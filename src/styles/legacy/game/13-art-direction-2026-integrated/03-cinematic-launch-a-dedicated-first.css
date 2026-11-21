@@ -1,12 +1,5 @@
 /* Cinematic launch: a dedicated first screen; image stays fully inside the scene */
-@keyframes launchDrift {
-  from {
-    transform: scale(1.005) translate3d(0, 0, 0);
-  }
-  to {
-    transform: scale(1.055) translate3d(-0.5%, 0.4%, 0);
-  }
-}
+
 /* Responsive: preserve the composition instead of shrinking the desktop layout */
 
 /* Final visual QA fixes: launch logo layout and real creature art */

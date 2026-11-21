@@ -41,9 +41,3 @@
 .cr-tick.mj {
   stroke: rgba(242, 221, 168, 0.6);
 }
-
-.cd {
-  font-family: var(--f-m);
-  letter-spacing: 0.14em;
-  color: var(--gold);
-}

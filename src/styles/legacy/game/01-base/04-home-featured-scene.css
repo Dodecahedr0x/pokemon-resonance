@@ -32,16 +32,3 @@
 }
 
 /* optimizations */
-.new {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  font-family: var(--f-m);
-  font-size: 9.5px;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  color: #17120a;
-  background: var(--gold);
-  padding: var(--space-3xs) var(--space-xs);
-  border-radius: 5px;
-}

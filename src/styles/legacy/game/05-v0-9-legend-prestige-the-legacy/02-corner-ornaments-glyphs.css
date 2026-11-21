@@ -29,19 +29,3 @@
 
 /* ---------- glowing energy gauges ---------- */
 /* the team plates' and command panel's bars: src/screens/combat/battle/battle-hp.css */
-@keyframes sheen {
-  from {
-    background-position: -60% 0;
-  }
-  to {
-    background-position: 160% 0;
-  }
-}
-@keyframes enpl {
-  50% {
-    box-shadow:
-      0 0 0 1px rgba(255, 241, 199, 0.9),
-      0 0 14px rgba(255, 205, 110, 1),
-      0 0 26px rgba(240, 170, 60, 0.6);
-  }
-}

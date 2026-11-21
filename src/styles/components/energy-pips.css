@@ -1,4 +1,4 @@
-/* Energy pips (enPips() in engine/combat/ui.js): three diamonds, filled ones marked is-filled. The large variant (battle panel, Guide) used to share the types legend's .lg class and took its
+/* Energy pips (energyPips() in engine/combat/ui.js): three diamonds, filled ones marked is-filled. The large variant (battle panel, Guide) used to share the types legend's .lg class and took its
    muted text and fixed-size pips; is-large keeps that look. */
 .energy-pips.is-large {
   color: var(--color-text-muted);
@@ -38,4 +38,17 @@
   width: 12px;
   height: 12px;
   border-radius: 2px;
+}
+/* the medium variant (the Expert Resonance gauge in the battle panel) */
+.energy-pips.is-medium {
+  display: flex;
+  gap: var(--space-xs);
+  color: var(--color-text-muted);
+  font-size: 11.5px;
+}
+.energy-pips.is-medium i {
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
 }

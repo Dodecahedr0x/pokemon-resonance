@@ -16,11 +16,6 @@
 }
 
 /* HOME — real container after JS move: .home-hero */
-@keyframes r24-orbit {
-  to {
-    transform: translateY(-50%) rotate(360deg);
-  }
-}
 
 /* TEAM / DEX — collection cards with frame and depth */
 

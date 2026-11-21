@@ -1,10 +1,6 @@
 /* loop */
 
 /* accordion rules */
-.rules {
-  display: grid;
-  gap: var(--space-sm);
-}
 
 @keyframes flash {
   30% {
@@ -12,34 +8,6 @@
       0 0 0 1px var(--gold),
       0 0 0 6px var(--gold-s);
   }
-}
-.ticks {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  display: grid;
-  gap: var(--space-sm);
-  font-size: 14.5px;
-  color: var(--tx2);
-}
-.ticks li {
-  position: relative;
-  padding-left: var(--space-lg);
-}
-.ticks li::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0.62em;
-  width: 6px;
-  height: 6px;
-  border-radius: 2px;
-  background: var(--s4);
-  border: 1px solid var(--line3);
-}
-.ticks li.nw::before {
-  background: var(--gold);
-  border-color: var(--gold);
 }
 
 /* ---------- pokédex ---------- */

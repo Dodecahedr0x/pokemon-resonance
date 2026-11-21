@@ -51,9 +51,7 @@
 
 /* ---------- typography ---------- */
 .card-title,
-.sh-name,
-.al b,
-.log b {
+.sh-name {
   font-family: var(--f-d);
   font-stretch: normal;
 }

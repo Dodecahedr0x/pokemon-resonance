@@ -8,45 +8,10 @@
 }
 
 /* --- opening screen --- */
-@keyframes spIn {
-  from {
-    opacity: 0;
-  }
-}
-@keyframes spOut {
-  to {
-    opacity: 0;
-    transform: scale(1.04);
-    filter: blur(3px);
-  }
-}
-@keyframes spDraw {
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-@keyframes spSpin {
-  from {
-    transform: rotate(-40deg);
-    opacity: 0;
-  }
-}
+
 @keyframes spUp {
   from {
     opacity: 0;
     transform: translateY(10px);
-  }
-}
-@keyframes spTitle {
-  from {
-    opacity: 0;
-    letter-spacing: 0.5em;
-    filter: blur(8px);
-  }
-}
-@keyframes spPulse {
-  50% {
-    box-shadow: 0 0 0 8px rgba(212, 175, 106, 0.08);
-    border-color: #f2dda8;
   }
 }

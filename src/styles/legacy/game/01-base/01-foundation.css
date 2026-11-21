@@ -37,6 +37,3 @@ body::before {
   outline-offset: 3px;
   border-radius: 8px;
 }
-.mono {
-  font-family: var(--f-m);
-}

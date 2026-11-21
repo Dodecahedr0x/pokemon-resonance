@@ -110,7 +110,7 @@ export function moveBlockedMessage(S, u, m) {
 export function expertBlockHtml(u) {
   const c = xpCost(u),
     ok = u.en >= c;
-  return `<div class="battle-energy is-expert${ok ? ' is-full' : ''}"><div class="battle-energy-head"><span class="caption">Résonance</span>${energyPips(u.en, 'lg')}</div><p class="battle-hint">Attaque Experte : ${c} losange${c > 1 ? 's' : ''}. ${ok ? 'Elle est prête.' : `Encore ${c - u.en} : fin de manche, réaction, coup encaissé, allié K.O.`}</p></div>`;
+  return `<div class="battle-energy is-expert${ok ? ' is-full' : ''}"><div class="battle-energy-head"><span class="caption">Résonance</span>${energyPips(u.en, 'is-medium')}</div><p class="battle-hint">Attaque Experte : ${c} losange${c > 1 ? 's' : ''}. ${ok ? 'Elle est prête.' : `Encore ${c - u.en} : fin de manche, réaction, coup encaissé, allié K.O.`}</p></div>`;
 }
 
 function gainDiamond(S, u, ev) {

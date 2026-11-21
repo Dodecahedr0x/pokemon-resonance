@@ -1,18 +1,9 @@
 /* ---------- BATTLE: preparation ---------- */
 /* ---------- BATTLE: arena ---------- */
-@keyframes mkd {
-  to {
-    stroke-dashoffset: -60;
-  }
-}
+
 @keyframes rdy {
   50% {
     stroke-width: 2.8;
     stroke: #fff3cf;
-  }
-}
-@keyframes evp {
-  50% {
-    opacity: 0.3;
   }
 }

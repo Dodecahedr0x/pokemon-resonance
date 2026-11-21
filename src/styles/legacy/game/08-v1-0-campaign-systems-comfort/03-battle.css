@@ -9,16 +9,3 @@
   stroke-linecap: round;
 }
 /* League: items, duos */
-.duos {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-}
-@media (max-width: 1200px) {
-  .duos {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-@media (max-width: 560px) {
-  .duos {
-    grid-template-columns: 1fr;
-  }
-}

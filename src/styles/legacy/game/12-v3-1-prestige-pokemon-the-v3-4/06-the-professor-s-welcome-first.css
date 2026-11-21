@@ -6,27 +6,12 @@
     transform: translateY(12px);
   }
 }
-@keyframes qIn {
-  from {
-    opacity: 0;
-    transform: scale(0.82);
-  }
-}
+
 @keyframes qFade {
   from {
     opacity: 0;
   }
 }
-@keyframes qDraw {
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-@keyframes qSpin {
-  from {
-    transform: rotate(-30deg);
-    opacity: 0;
-  }
-}
+
 /* battle: readable names, moves marked with their type */
 /* shortcuts: one glow per destination */
