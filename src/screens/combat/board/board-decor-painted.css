@@ -79,15 +79,15 @@
 :where(.board.painted-tilt) .lake.is-still .water-band {
   animation: none;
 }
-:where(.board.painted-tilt.bio-roche) .slab-lip polygon {
+:where(.board.painted-tilt.biome-roche) .slab-lip polygon {
   fill: #4a2e18;
 }
-:where(.board.painted-tilt.bio-ligue) .slab-lip polygon {
+:where(.board.painted-tilt.biome-ligue) .slab-lip polygon {
   fill: #8c7a5e;
 }
-:where(.board.painted-tilt.bio-arene) .slab-lip polygon {
+:where(.board.painted-tilt.biome-arene) .slab-lip polygon {
   fill: #8c7a5e;
 }
-:where(.board.painted-tilt.bio-tour) .slab-lip polygon {
+:where(.board.painted-tilt.biome-tour) .slab-lip polygon {
   fill: #2a2236;
 }

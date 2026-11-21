@@ -50,7 +50,7 @@ const GameBoard = memo(function GameBoard() {
       viewBox={'0 0 ' + S.vb.join(' ')}
       role="img"
       aria-label="Plateau de combat"
-      className={'board-svg' + (S.bio ? ' bio-' + S.bio : '')}
+      className={'board-svg' + (S.bio ? ' biome-' + S.bio : '')}
     >
       {S.n > 0 && <Layers key={S.n} />}
     </svg>

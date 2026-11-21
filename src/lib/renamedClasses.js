@@ -832,6 +832,11 @@ export const RENAMED_CLASSES = {
   emb: 'journey-emblem',
   lgd: 'journey-emblem.is-legend',
   bdg: 'journey-emblem.is-badge',
+  'bio-gue': 'biome-gue',
+  'bio-roche': 'biome-roche',
+  'bio-tour': 'biome-tour',
+  'bio-ligue': 'biome-ligue',
+  'bio-arene': 'biome-arene',
 };
 
 const OLD_CLASS = new RegExp(

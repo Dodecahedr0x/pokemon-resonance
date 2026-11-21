@@ -21,16 +21,16 @@
   filter: drop-shadow(0 0 4px rgba(255, 110, 40, 0.7));
   animation: none;
 }
-:where(.bio-gue) .cell {
+:where(.biome-gue) .cell {
   fill: #141b17;
 }
-:where(.bio-roche) .cell {
+:where(.biome-roche) .cell {
   fill: #1b1712;
 }
-:where(.bio-tour) .cell {
+:where(.biome-tour) .cell {
   fill: #16131c;
 }
-:where(.bio-ligue) .cell {
+:where(.biome-ligue) .cell {
   fill: #12151d;
 }
 .cell-texture {
@@ -43,49 +43,49 @@
   stroke-width: 1.2;
   opacity: 0.8;
 }
-:where(.bio-arene) .cell {
+:where(.biome-arene) .cell {
   fill: #131418;
 }
-:where(.bio-gue) .cell:where(.wet) {
+:where(.biome-gue) .cell:where(.wet) {
   fill: #2b5c96;
 }
-:where(.bio-roche) .cell:where(.wet) {
+:where(.biome-roche) .cell:where(.wet) {
   fill: #2b5c96;
 }
-:where(.bio-tour) .cell:where(.wet) {
+:where(.biome-tour) .cell:where(.wet) {
   fill: #2b5c96;
 }
-:where(.bio-ligue) .cell:where(.wet) {
+:where(.biome-ligue) .cell:where(.wet) {
   fill: #2b5c96;
 }
-:where(.bio-gue) .cell:where(.is-alternate) {
+:where(.biome-gue) .cell:where(.is-alternate) {
   fill: #17201a;
 }
-:where(.bio-roche) .cell:where(.is-alternate) {
+:where(.biome-roche) .cell:where(.is-alternate) {
   fill: #201b14;
 }
-:where(.bio-tour) .cell:where(.is-alternate) {
+:where(.biome-tour) .cell:where(.is-alternate) {
   fill: #1a1622;
 }
-:where(.bio-ligue) .cell:where(.is-alternate) {
+:where(.biome-ligue) .cell:where(.is-alternate) {
   fill: #151925;
 }
-:where(.bio-arene) .cell:where(.is-alternate) {
+:where(.biome-arene) .cell:where(.is-alternate) {
   fill: #16171c;
 }
-:where(.bio-gue) .cell:where(.river) {
+:where(.biome-gue) .cell:where(.river) {
   fill: #0e2240;
 }
-:where(.bio-roche) .cell:where(.river) {
+:where(.biome-roche) .cell:where(.river) {
   fill: #0e2240;
 }
-:where(.bio-tour) .cell:where(.river) {
+:where(.biome-tour) .cell:where(.river) {
   fill: #0e2240;
 }
-:where(.bio-ligue) .cell:where(.river) {
+:where(.biome-ligue) .cell:where(.river) {
   fill: #0e2240;
 }
-:where(.bio-arene) .cell:where(.river) {
+:where(.biome-arene) .cell:where(.river) {
   fill: #0e2240;
 }
 .cell-gloss {

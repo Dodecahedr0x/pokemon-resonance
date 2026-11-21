@@ -369,8 +369,8 @@ Each step is one commit (or a few), on its own, playable at every point.
   `.is-place` (+ `biome-<id>`) and sizes `.is-large` / `.is-small` / `.is-tiny` / `.is-dim` (callers of `avatar()` and
   `emblem()` pass these instead of `lg` / `sm` / `xs` / `dim`). The league `.bdg` rules were dead except on badge
   emblems; their effect is folded into `.journey-emblem.is-badge`. The legend rule `.lg` no longer leaks its muted
-  colour onto large avatars and emblems (inherited only, nothing visible). The board's `bio-<id>` classes still need
-  the same `biome-<id>` rename.
+  colour onto large avatars and emblems (inherited only, nothing visible). The board's `bio-<id>` classes are now
+  `biome-<id>` too (`#bBoard`, `#bSvg`).
   A third pass that ignores one- to three-letter prefixes (a template such as `s${…}` no longer keeps every class
   starting with « s » alive) removed 142 more parts: the old scenario cards (`.scn`), the splash screen (`.sp-*`,
   `.splash`), the old Pokédex sheet (`.st-*`), `.seg`, `.frise`… and one more file.
