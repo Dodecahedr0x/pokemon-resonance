@@ -1,6 +1,6 @@
 /* Campaign challenges (Settings): Mono-type, Team of 3, No Awakening, Nuzlocke; each active one earns extra Shards (added in v4.9). */
 
-import { POKEMON, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCENARIOS } from '../pokemon/pokemon.js';
 import { PROFILE, isCamp } from '../state/game-state.js';
 import { medal, toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
@@ -67,7 +67,7 @@ export function challengeLaunch() {
   if (armedBossRush()) {
     return null;
   }
-  const D = SCEN[scSel];
+  const D = SCENARIOS[scSel];
   if (!isCamp() || !D || D.tuto || D.tower) {
     return null;
   }
@@ -93,7 +93,7 @@ function updateChallenges() {
 }
 
 function onProgress(S, rew, win) {
-  const D = SCEN[S.sc] || {};
+  const D = SCENARIOS[S.sc] || {};
   let g = 0;
   const df = D.tuto || D.tower ? [] : activeChallenges();
   if (df.length) {

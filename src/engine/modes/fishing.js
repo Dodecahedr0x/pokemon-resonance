@@ -11,9 +11,9 @@ import { squad, toggle } from '../team/team.js';
 import { wildScen } from '../combat/items-bonds-ai.js';
 import { __set_scSel, launch } from '../combat/ui.js';
 import { queueSave } from '../state/saves.js';
-import { PREF } from '../ui/preferences.js';
+import { PREFERENCES } from '../ui/preferences.js';
 import { renderPrep } from '../combat/battle-prep.js';
-import { sfx, vibe } from '../audio/sound-effects.js';
+import { sfx, vibrate } from '../audio/sound-effects.js';
 import { SHINY_RATE } from '../pokemon/shiny.js';
 import { multChroma } from '../world/seasons.js';
 import { routeName } from '../world/johto.js';
@@ -53,7 +53,7 @@ function castFishingLine() {
         return;
       }
       FISHING.status = 'mord';
-      vibe(60);
+      vibrate(60);
       sfx('ui');
       renderFishingPanel();
       FISHING.t = setTimeout(
@@ -64,7 +64,7 @@ function castFishingLine() {
           FISHING.status = 'rate';
           renderFishingPanel();
         },
-        PREF.fast ? 1400 : 1150
+        PREFERENCES.fast ? 1400 : 1150
       );
     },
     1200 + Math.random() * 2200

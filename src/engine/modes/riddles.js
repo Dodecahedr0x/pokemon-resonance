@@ -1,10 +1,10 @@
 // Tactical riddles (Camp › Énigmes, added in v4.31): frozen positions, KO every opponent in one round.
 // Each riddle was built and verified with the game engine.
-import { POKEMON, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCENARIOS } from '../pokemon/pokemon.js';
 import { PROFILE } from '../state/game-state.js';
 import { HOOKS } from '../core/hooks.js';
-import { EMAX } from '../combat/engine.js';
-import { OBST } from '../combat/synergies-obstacles.js';
+import { MAX_ENERGY } from '../combat/engine.js';
+import { OBSTACLES } from '../combat/synergies-obstacles.js';
 import { B, chooseBattle, finish, launch, ui } from '../combat/ui.js';
 import { today } from '../state/economy.js';
 import { fingerprintRandom } from './weekly-challenge.js';
@@ -15,7 +15,7 @@ export let PUZZLE_CURRENT;
 export { puzzleState, puzzleOfDay };
 
 function puzzleScen(puzzle) {
-  const b = SCEN[puzzle.b] || SCEN.gue;
+  const b = SCENARIOS[puzzle.b] || SCENARIOS.gue;
   return {
     n: `Énigme · ${puzzle.t}`,
     lvl: 'Énigme tactique',
@@ -57,8 +57,8 @@ export function puzzleOpts() {
 
 export function puzzlePrepare(puzzle) {
   PUZZLE_CURRENT = puzzle;
-  SCEN.enigme431 = puzzleScen(puzzle);
-  OBST.enigme431 = {};
+  SCENARIOS.enigme431 = puzzleScen(puzzle);
+  OBSTACLES.enigme431 = {};
 }
 
 function puzzleState() {
@@ -98,7 +98,7 @@ function puzzleLaunch(i) {
 
 export function puzzleAfter(S, rew, win) {
   const E = puzzleState(),
-    i = SCEN[S.sc].enigme431,
+    i = SCENARIOS[S.sc].enigme431,
     k = String(i);
   E.n[k] = (E.n[k] || 0) + 1;
   rew.riddleButton = { i, win, attempt: E.n[k] };
@@ -954,7 +954,7 @@ export function init() {
         return;
       }
       u.pos = [c, r];
-      u.en = Math.max(0, Math.min(EMAX, en || 0));
+      u.en = Math.max(0, Math.min(MAX_ENERGY, en || 0));
     });
     puzzle.f.forEach(([, c, r, hp], i) => {
       const u = fo[i];

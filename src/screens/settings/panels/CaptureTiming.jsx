@@ -1,9 +1,9 @@
-import { PREF } from '../../../engine/ui/preferences.js';
+import { PREFERENCES } from '../../../engine/ui/preferences.js';
 
 import Button from '../../../components/Button.jsx';
 // Settings › Timed capture (v4.53): data-catch-action button handled by the engine (engine/combat/timed-catch.js).
 export default function CaptureTiming() {
-  const on = PREF.catchTimingEnabled !== 0;
+  const on = PREFERENCES.catchTimingEnabled !== 0;
   return (
     <section className="card" id="capture-timing-panel">
       <h3 className="card-title">Capture avec timing</h3>

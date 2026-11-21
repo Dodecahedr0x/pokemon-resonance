@@ -3,7 +3,7 @@
 import { ELEMENT_TYPES, MARK_REACTIONS, REACTIONS } from '../data/game-data.js';
 import { POKEMON } from '../pokemon/pokemon.js';
 import { ITEMS2, LINK_N } from '../state/game-state.js';
-import { ROLEFX, rIco } from '../pokemon/roles-synergies.js';
+import { ROLEFX, roleIcon } from '../pokemon/roles-synergies.js';
 import { markOf, medal, rxCat } from '../core/utils.js';
 import { parseCellKey, byUid, hdist, markAt } from './engine.js';
 import { canCapture, canDuo, captureReq, duoOf, linkLvl } from './items-bonds-ai.js';
@@ -102,7 +102,7 @@ export function unitExtras(u) {
   const role = roleOf(u),
     RF = ROLEFX[role],
     head = RF
-      ? `<p class="battle-role-note">${rIco(role)}<span><b>${role} · ${RF.k}.</b> ${RF.d.replace(/^[^:]+ : /, '')}</span></p>`
+      ? `<p class="battle-role-note">${roleIcon(role)}<span><b>${role} · ${RF.k}.</b> ${RF.d.replace(/^[^:]+ : /, '')}</span></p>`
       : '',
     hr =
       u.hr && u.acted && !u.moved

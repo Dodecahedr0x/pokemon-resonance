@@ -3,7 +3,7 @@ import { bdClass, bdReplay, getHost, hostSet } from '../../screens/combat/board/
 import { $, reducedMotion } from '../core/utils.js';
 import { byUid, unitKey } from './engine.js';
 import { B, cellCenter, TILT, boardViewBox, VERT, buildBoard, playLog, renderAll, tiltS, ui } from './ui.js';
-import { PREF } from '../ui/preferences.js';
+import { PREFERENCES } from '../ui/preferences.js';
 import { impactWords } from '../progression/prestige.js';
 import { liveEvent } from './expressive-pokemon.js';
 
@@ -1059,7 +1059,7 @@ export function playEv(ev) {
           renderAll();
         }
       },
-      PREF.fast || ui.skipSpeedup ? 500 : 900
+      PREFERENCES.fast || ui.skipSpeedup ? 500 : 900
     );
   }
   const fx = ev.filter(x => x.e === 'fx');
@@ -1068,7 +1068,7 @@ export function playEv(ev) {
     impactWords(ev);
     return;
   }
-  const dur = ui.skipSpeedup ? 300 : PREF.fast ? 440 : 720;
+  const dur = ui.skipSpeedup ? 300 : PREFERENCES.fast ? 440 : 720;
   let hit = 0;
   fx.forEach((x, i) => {
     hit = Math.max(hit, fxAttack(x, dur) + i * 90);

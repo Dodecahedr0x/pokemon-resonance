@@ -1,5 +1,5 @@
 import { ROLES } from '../../engine/data/game-data.js';
-import { ROLEFX, SYNERGIES, rIco, synOf } from '../../engine/pokemon/roles-synergies.js';
+import { ROLEFX, SYNERGIES, roleIcon, synOf } from '../../engine/pokemon/roles-synergies.js';
 import { typeColor } from '../../engine/core/utils.js';
 import { squad } from '../../engine/team/team.js';
 import { CHORDS } from '../../engine/combat/resonance-chords.js';
@@ -31,7 +31,7 @@ export function Codex() {
           const R = ROLEFX[r.n];
           return (
             <div key={r.n} className="guide-codex-row">
-              <Html html={rIco(r.n)} />
+              <Html html={roleIcon(r.n)} />
               <span>
                 <b>
                   {r.n} · {R.k}

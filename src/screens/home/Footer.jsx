@@ -1,5 +1,5 @@
 import { Html } from '../../lib/html.jsx';
-import { SCEN } from '../../engine/pokemon/pokemon.js';
+import { SCENARIOS } from '../../engine/pokemon/pokemon.js';
 import { medal } from '../../engine/core/utils.js';
 import { dailyDone, dailyKey, dailyLeft } from '../../engine/modes/daily-battle.js';
 import { seasonData } from '../../engine/world/seasons.js';
@@ -101,7 +101,7 @@ function Event() {
   if (!k) {
     return null;
   }
-  const S = SCEN[k],
+  const S = SCENARIOS[k],
     done = dailyDone();
   return (
     <button type="button" className={'home-daily-button' + (done ? ' is-done' : '')} data-v4fight={k}>

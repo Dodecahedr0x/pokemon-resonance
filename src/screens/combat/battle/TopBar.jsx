@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Html } from '../../../lib/html.jsx';
 import { GYMS } from '../../../engine/data/game-data.js';
 import { MOVES } from '../../../engine/data/moves.js';
-import { SCEN, WEATHER_NAME, WEATHER_TYPE } from '../../../engine/pokemon/pokemon.js';
+import { SCENARIOS, WEATHER_NAME, WEATHER_TYPE } from '../../../engine/pokemon/pokemon.js';
 import { SYNERGIES } from '../../../engine/pokemon/roles-synergies.js';
 import { ARENAS, arenaNext } from '../../../engine/modes/gyms.js';
 import { medal, typeColor } from '../../../engine/core/utils.js';
@@ -16,7 +16,7 @@ import { chipWind } from '../../../engine/combat/tactics.js';
 import { chipMut } from '../../../engine/combat/mutators.js';
 import { chipChord } from '../../../engine/combat/resonance-chords.js';
 import { fieldEffectChips } from '../../../engine/moves/epic-tms.js';
-import { PREF } from '../../../engine/ui/preferences.js';
+import { PREFERENCES } from '../../../engine/ui/preferences.js';
 import { DOCTRINE_DEFS } from '../../../engine/combat/doctrines.js';
 import { RELIC_DEFS } from '../../../engine/modes/deep-echo.js';
 import { useBattleVersion } from './battleStore.js';
@@ -35,7 +35,7 @@ export function BtTop() {
             Duel · <b className={'dj' + D.j}>{D.names[D.j - 1]}</b>
           </>
         ) : (
-          SCEN[B.sc].n
+          SCENARIOS[B.sc].n
         )}
       </b>
       <span id="bRound" className="battle-topbar-round">
@@ -106,7 +106,7 @@ function Quick() {
       variant="ghost"
       className="battle-speed"
       id="bFast"
-      aria-pressed={v > 0 ? !!PREF.fast : false}
+      aria-pressed={v > 0 ? !!PREFERENCES.fast : false}
       aria-label="Combat rapide, animations deux fois plus courtes"
     >
       ×2
@@ -178,7 +178,7 @@ export function Rule() {
   const [last, setLast] = useState(null);
   let cur = null;
   if (v && B) {
-    const D = SCEN[B.sc],
+    const D = SCENARIOS[B.sc],
       an = arenaNext(B),
       gi = D.gym != null ? D.gym : ARENAS.findIndex(a => a.rule === D.rule);
     if (D.rule && gi >= 0) {

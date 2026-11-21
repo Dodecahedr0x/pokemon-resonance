@@ -1,4 +1,4 @@
-import { SCEN } from '../pokemon/pokemon.js';
+import { SCENARIOS } from '../pokemon/pokemon.js';
 import { ITEMS2, PROFILE, isCamp } from '../state/game-state.js';
 import { medal } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
@@ -6,11 +6,11 @@ import { TOD, setTod } from './home-route.js';
 import { setRoute } from '../../screens/home/homeStore.js';
 import { badgeSvg } from '../modes/league.js';
 import {
-  EMAX,
+  MAX_ENERGY,
   parseCellKey,
   hdist,
   heal,
-  nbrK,
+  neighborKeys,
   pushMessage,
   setMark,
   shove,
@@ -68,7 +68,7 @@ export function lockJohto(k, D) {
 }
 
 export function johtoLeader(sc) {
-  const D = SCEN[sc];
+  const D = SCENARIOS[sc];
   if (!D) {
     return null;
   }
@@ -86,7 +86,7 @@ export function johtoLeader(sc) {
 }
 
 export function johtoChapter(k) {
-  const D = SCEN[k];
+  const D = SCENARIOS[k];
   if (!D) {
     return null;
   }
@@ -107,7 +107,7 @@ export function johtoChapter(k) {
 }
 
 export function johtoRewardLine(k) {
-  const D = SCEN[k];
+  const D = SCENARIOS[k];
   if (D && (D.roam || D.jdis)) {
     return johtoExtraLine(k);
   } // v4.16
@@ -209,7 +209,7 @@ export function johtoGymTick(S, r, ev) {
         return;
       } // only one revenant per battle
       const x = unitAt(S, unitKey(e))
-        ? nbrK(unitKey(e)).find(y => S.tiles[y] && !S.tiles[y].rock && !unitAt(S, y))
+        ? neighborKeys(unitKey(e)).find(y => S.tiles[y] && !S.tiles[y].rock && !unitAt(S, y))
         : unitKey(e);
       if (!x) {
         return;
@@ -247,7 +247,7 @@ export function johtoGymTick(S, r, ev) {
   if (r === 'jdragon') {
     es.forEach(e => {
       if (!e.ko && hasXp(e)) {
-        e.en = Math.min(EMAX, (e.en || 0) + 1);
+        e.en = Math.min(MAX_ENERGY, (e.en || 0) + 1);
       }
     });
   }
@@ -597,7 +597,7 @@ export function init() {
   Object.assign(SELF_MOVE_EFFECTS, {
     carapace(S, u, ev) {
       u.guard = Math.max(u.guard, 3);
-      nbrK(unitKey(u)).forEach(x => {
+      neighborKeys(unitKey(u)).forEach(x => {
         if (S.tiles[x] && !S.tiles[x].rock) {
           setMark(S, x, 'brulant', u.uid);
         }
@@ -635,7 +635,7 @@ export function init() {
     keyItem: 1,
   };
   JARENAS.forEach((a, i) => {
-    SCEN[a.k] = Object.assign(
+    SCENARIOS[a.k] = Object.assign(
       {
         n: `Arène ${JGYMS[i]}`,
         lvl: `Johto · Arène ${i + 1} · Badge ${JGYMS[i]}`,
@@ -646,7 +646,7 @@ export function init() {
       a
     );
   });
-  SCEN.jchamp = {
+  SCENARIOS.jchamp = {
     n: 'Maître de Johto',
     lvl: 'Johto · Final',
     lim: 11,
@@ -667,7 +667,7 @@ export function init() {
     ],
     d: 'Pas de règle d’arène : un adversaire complet, qui se sert des notes de Résonance et des attaques Expertes.',
   };
-  SCEN.jlac = {
+  SCENARIOS.jlac = {
     n: 'Lac Colère',
     lvl: 'Johto · Léviator rouge',
     lim: 10,
@@ -689,7 +689,7 @@ export function init() {
     d: 'Un Léviator rouge sème la panique sur le lac. Affaiblissez-le sous 25 % de ses PV, immobilisez-le, puis capturez-le au contact : il rejoindra votre Box en chromatique.',
   };
   HOOKS.progress.push((S, rew, win) => {
-    const D = SCEN[S.sc] || {};
+    const D = SCENARIOS[S.sc] || {};
     if (!win || !isCamp()) {
       return null;
     }

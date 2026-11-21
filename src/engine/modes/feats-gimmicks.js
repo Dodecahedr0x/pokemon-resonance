@@ -1,11 +1,11 @@
 /* Feats journal and gimmick boards (added in v4.67). */
 
-import { SCEN } from '../pokemon/pokemon.js';
+import { SCENARIOS } from '../pokemon/pokemon.js';
 import { writeLS } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { byUid, setMark, unitAt } from '../combat/engine.js';
 import { escapeHtml } from '../state/saves.js';
-import { PREF, savePref } from '../ui/preferences.js';
+import { PREFERENCES, savePref } from '../ui/preferences.js';
 import { sfx } from '../audio/sound-effects.js';
 import { today } from '../state/economy.js';
 import { renderParams } from '../ui/settings.js';
@@ -102,11 +102,11 @@ export const GIMMICKS = {
 };
 
 export const gimmickKey = () =>
-  PREF.gimmickBoard === 'rand' || GIMMICKS[PREF.gimmickBoard] ? PREF.gimmickBoard : 'off';
+  PREFERENCES.gimmickBoard === 'rand' || GIMMICKS[PREFERENCES.gimmickBoard] ? PREFERENCES.gimmickBoard : 'off';
 
 function onProgress(S, rew, win) {
   try {
-    if (!S.stats || (SCEN[S.sc] && SCEN[S.sc].tuto)) {
+    if (!S.stats || (SCENARIOS[S.sc] && SCENARIOS[S.sc].tuto)) {
       return null;
     }
     const b = featsSummary(S, win),
@@ -118,7 +118,7 @@ function onProgress(S, rew, win) {
     }
     st.h.unshift({
       d: today(),
-      sc: (SCEN[S.sc] && SCEN[S.sc].n) || S.sc,
+      sc: (SCENARIOS[S.sc] && SCENARIOS[S.sc].n) || S.sc,
       w: win ? 1 : 0,
       mvp: b.mvp ? b.mvp.n : '',
       mdmg: b.mvp ? b.mvp.d : 0,
@@ -173,7 +173,7 @@ export function init() {
 
   HOOKS.combat.push(S => {
     const c = gimmickKey();
-    if (c === 'off' || !S || S.restricted || S.bossRush || bossScene(S) || (SCEN[S.sc] && SCEN[S.sc].tuto)) {
+    if (c === 'off' || !S || S.restricted || S.bossRush || bossScene(S) || (SCENARIOS[S.sc] && SCENARIOS[S.sc].tuto)) {
       return;
     }
     S.gimmickBoard = c === 'rand' ? Object.keys(GIMMICKS)[Math.floor(Math.random() * Object.keys(GIMMICKS).length)] : c;
@@ -197,7 +197,7 @@ export function init() {
       }
       e.stopPropagation();
       e.preventDefault();
-      PREF.gimmickBoard = b.dataset.gimmickBoard;
+      PREFERENCES.gimmickBoard = b.dataset.gimmickBoard;
       savePref();
       sfx('ui');
       try {

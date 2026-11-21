@@ -3,10 +3,10 @@
 import { ITEMS2, PROFILE } from '../state/game-state.js';
 import { writeLS, mulberry32, toast } from '../core/utils.js';
 import { HOOKS, hook } from '../core/hooks.js';
-import { sfx, vibe } from '../audio/sound-effects.js';
+import { sfx, vibrate } from '../audio/sound-effects.js';
 import { overlay } from '../progression/prestige.js';
 import { shut, updateTemp } from '../../screens/overlays/tempStore.js';
-import { SHOP, bagN, formatNumber, savePurse, today } from '../state/economy.js';
+import { SHOP, bagCount, formatNumber, savePurse, today } from '../state/economy.js';
 import { ownedFam } from '../progression/trainer-stats.js';
 import { refreshMap } from '../../screens/map/mapStore.js';
 import { DEXS } from '../progression/pokedex.js';
@@ -104,7 +104,7 @@ function resolveChoice(j) {
   const res = t + (g && rewardText(g) ? ' (' + rewardText(g) + ')' : '');
   writeLS('res-route-event', { d: st.d, done: true, res });
   sfx(issue === 'ok' ? 'ui' : 'hit');
-  vibe(issue === 'ok' ? 20 : 40);
+  vibrate(issue === 'ok' ? 20 : 40);
   savePurse();
   updateTemp('event-choice', { res: { ok: issue === 'ok', txt: res } });
   refreshMap(); // "Rencontre sur la route" (Route encounter) banner (#routeEvent, src/screens/map/EvBar.jsx)
@@ -177,7 +177,7 @@ export const applyReward = (o, _t) => {
   }
   if (o.b) {
     for (const k in o.b) {
-      PROFILE.bag[k] = Math.max(0, bagN(k) + o.b[k]);
+      PROFILE.bag[k] = Math.max(0, bagCount(k) + o.b[k]);
     }
   }
 };
@@ -194,7 +194,7 @@ export const canAfford = c => {
   }
   if (c.b) {
     for (const k in c.b) {
-      if (bagN(k) + c.b[k] < 0) {
+      if (bagCount(k) + c.b[k] < 0) {
         return false;
       }
     }
@@ -381,7 +381,7 @@ function onWandererClick(e) {
     A.st.got[k] = 1;
     toast(`Acheté : ${ITEMS2[h].n}. Confiez-le depuis la fiche d’un Pokémon.`);
   } else {
-    if (!A.pick.includes(k) || (A.st.got[k] || 0) >= (SHOP[k].mv ? 1 : 3) || bagN(k) >= 99) {
+    if (!A.pick.includes(k) || (A.st.got[k] || 0) >= (SHOP[k].mv ? 1 : 3) || bagCount(k) >= 99) {
       return;
     }
     const px = Math.max(50, Math.round((costOf0(k) * 0.75) / 50) * 50);
@@ -389,13 +389,13 @@ function onWandererClick(e) {
       return;
     }
     PROFILE.money -= px;
-    PROFILE.bag[k] = bagN(k) + 1;
+    PROFILE.bag[k] = bagCount(k) + 1;
     A.st.got[k] = (A.st.got[k] || 0) + 1;
     toast(`Acheté : 1 × ${SHOP[k].n}`);
   }
   writeLS('res-wanderer', A.st);
   sfx('ui');
-  vibe(15);
+  vibrate(15);
   savePurse();
   renderBag();
 }
@@ -426,7 +426,7 @@ function onDexMissionClick(e) {
   }
   writeLS('res-dex-mission', S);
   sfx('ui');
-  vibe(20);
+  vibrate(20);
   savePurse();
   refreshDex(); // missions (#dexMission) rendered by React: src/screens/dex/Missions.jsx
 }

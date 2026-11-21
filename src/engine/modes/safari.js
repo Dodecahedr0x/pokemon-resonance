@@ -7,7 +7,7 @@ import { BADGES } from './gyms.js';
 import { paintOverlay } from '../../screens/overlays/dialogsStore.js';
 import { $, toast } from '../core/utils.js';
 import { queueSave } from '../state/saves.js';
-import { sfx, vibe } from '../audio/sound-effects.js';
+import { sfx, vibrate } from '../audio/sound-effects.js';
 import { renderWallet } from '../ui/wallet.js';
 import { PLACE_BY_ID, PLACES } from '../world/map.js';
 import { refreshMap } from '../../screens/map/mapStore.js';
@@ -245,7 +245,7 @@ function onSafariClick(e) {
   SAF_MSG = performSafariAction(k);
   if (/Gotcha/.test(SAF_MSG)) {
     sfx('win');
-    vibe(40);
+    vibrate(40);
   }
   renderSafariPanel();
 }

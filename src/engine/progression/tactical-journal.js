@@ -1,4 +1,4 @@
-import { POKEMON, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCENARIOS } from '../pokemon/pokemon.js';
 import { PROFILE } from '../state/game-state.js';
 import { medal } from '../core/utils.js';
 import { HOOKS, hook } from '../core/hooks.js';
@@ -133,7 +133,7 @@ const CATEGORY_NAMES = {
 };
 
 function onProgress(S, rew, win) {
-  const D = SCEN[S.sc] || {};
+  const D = SCENARIOS[S.sc] || {};
   if (D.tuto) {
     return null;
   }
@@ -176,7 +176,7 @@ function onProgress(S, rew, win) {
   J.category[c] = J.category[c] || [0, 0];
   J.category[c][win ? 0 : 1]++;
   J.last.push([
-    (SCEN[S.sc] && SCEN[S.sc].n) || S.sc,
+    (SCENARIOS[S.sc] && SCENARIOS[S.sc].n) || S.sc,
     win ? 1 : 0,
     S.rank || '',
     S.round || 0,

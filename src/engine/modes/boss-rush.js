@@ -1,6 +1,6 @@
 /* Boss Rush and run relics (added in v4.66). */
 
-import { POKEMON, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCENARIOS } from '../pokemon/pokemon.js';
 import { isCamp } from '../state/game-state.js';
 import { ARENAS, BADGES } from './gyms.js';
 import { $, writeLS, readLS, toast } from '../core/utils.js';
@@ -9,7 +9,7 @@ import { squad } from '../team/team.js';
 import { heal } from '../combat/engine.js';
 import { B, backToPrep, goFight, launch } from '../combat/ui.js';
 import { escapeHtml } from '../state/saves.js';
-import { sfx, vibe } from '../audio/sound-effects.js';
+import { sfx, vibrate } from '../audio/sound-effects.js';
 import { overlay } from '../progression/prestige.js';
 import { shut } from '../../screens/overlays/tempStore.js';
 import { refreshHome } from '../../screens/home/homeStore.js';
@@ -149,7 +149,7 @@ const bossRushUnlocked = () => (isCamp() ? BADGES.length >= 5 : true);
 
 const runRelics = run => (run && run.relics ? run.relics : []);
 
-const bossName = k => (SCEN[k] ? SCEN[k].n : k);
+const bossName = k => (SCENARIOS[k] ? SCENARIOS[k].n : k);
 
 function onCombat(S) {
   const run = currentRun();
@@ -278,7 +278,7 @@ function onBossRushClick(e) {
     st.run.pend = null;
     bossRushSave(st);
     sfx('win');
-    vibe(25);
+    vibrate(25);
     toast('Relique obtenue : ' + RELICS.find(r => r.id === id).n + '.');
     return bossRushHub();
   }

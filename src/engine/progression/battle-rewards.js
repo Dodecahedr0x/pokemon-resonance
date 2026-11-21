@@ -1,7 +1,7 @@
 /* End-of-battle progression: Bonds, captures, badges, League, fatigue, forms, gains, and the rewards summary. */
 
 import { MOVES } from '../data/moves.js';
-import { POKEMON, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCENARIOS } from '../pokemon/pokemon.js';
 import { BADGE_REWARD, ITEMS2, LINK_N, PROFILE, isCamp, lvlOfPts } from '../state/game-state.js';
 import { winBadge } from '../modes/gyms.js';
 import { medal } from '../core/utils.js';
@@ -18,7 +18,7 @@ import { aplusProgress, aplusRewHtml } from '../modes/adventure-profile.js';
 export function applyProgress(S) {
   const e0 = PROFILE.elite,
     forms0 = [...(PROFILE.forms || [])],
-    D = SCEN[S.sc] || {},
+    D = SCENARIOS[S.sc] || {},
     win = S.over === 'win',
     rew = { links: [], caught: [], items: [], gifts: [], tired: [], badgeNew: false };
   if (D.tuto) {

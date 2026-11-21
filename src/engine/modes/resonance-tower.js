@@ -1,9 +1,9 @@
 import { GYMS } from '../data/game-data.js';
-import { POKEMON, EEVEE, POKEMON_LIST, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, EEVEE, POKEMON_LIST, SCENARIOS } from '../pokemon/pokemon.js';
 import { ITEMS2, PROFILE } from '../state/game-state.js';
 import { paintOverlay } from '../../screens/overlays/dialogsStore.js';
 import { $, mulberry32 } from '../core/utils.js';
-import { OBST } from '../combat/synergies-obstacles.js';
+import { OBSTACLES } from '../combat/synergies-obstacles.js';
 import { B, __set_scSel, backToPrep, chooseBattle, launch } from '../combat/ui.js';
 import { queueSave } from '../state/saves.js';
 import { __set_PREPG, renderPrep } from '../combat/battle-prep.js';
@@ -12,7 +12,7 @@ import { chosenAlive } from '../combat/living-board.js';
 import { chosenTactic } from '../combat/tactics.js';
 import { mutOfTurn, mutInfo } from '../combat/mutators.js';
 import { charactersChosen } from '../team/characters.js';
-import { LEGS } from './legendaries.js';
+import { LEGENDARIES } from './legendaries.js';
 import { RIVAL_POS } from './rival.js';
 
 /* Resonance Tower: endlessly replayable post-game ascent with a drafted team (added in v4.4). */
@@ -51,7 +51,7 @@ function rng(seed) {
 const pickOf = (r, a) => a[Math.floor(r() * a.length)];
 
 export function towerIdle() {
-  SCEN.tdr = {
+  SCENARIOS.tdr = {
     n: 'Tour de Résonance',
     lvl: 'Après-jeu · ascension',
     lim: 10,
@@ -66,7 +66,7 @@ export function towerIdle() {
     d: `Choisissez 4 Pokémon parmi 8 tirés au hasard, puis montez le plus haut possible. Chaque étage est plus dur, une légende garde tous les 5 étages, et une récompense vous attend entre deux étages. Record : étage ${(PROFILE.tdr && PROFILE.tdr.best) || 0}.`,
     foes: [],
   };
-  return SCEN.tdr;
+  return SCENARIOS.tdr;
 }
 
 function towerBuild(run) {
@@ -78,7 +78,7 @@ function towerBuild(run) {
     rule = null,
     at;
   if (boss) {
-    const L = LEGS[(f / 5 - 1) % LEGS.length];
+    const L = LEGENDARIES[(f / 5 - 1) % LEGENDARIES.length];
     foes = [
       [L.id, [6, 2], { boss: true, hb: 30 + f * 5, pb: Math.min(10, 3 + Math.floor(f / 3)) }],
       [L.minions[0], [7, 1]],
@@ -105,8 +105,8 @@ function towerBuild(run) {
     }
     at = POKEMON[foes[0][0]].t[0];
   }
-  OBST.tdr = pickOf(r, TOWER_OBST);
-  SCEN.tdr = {
+  OBSTACLES.tdr = pickOf(r, TOWER_OBST);
+  SCENARIOS.tdr = {
     n: `Tour · étage ${f}`,
     lvl: `Tour de Résonance · étage ${f}${boss ? ' · légende' : ''}`,
     lim: boss ? 11 : 10,
@@ -126,7 +126,7 @@ function towerBuild(run) {
     d: `${mutOfTurn(run, f) ? `Mutateur · ${mutInfo(mutOfTurn(run, f))[0]} : ${mutInfo(mutOfTurn(run, f))[1]} ` : ''}${boss ? `Étage de légende : ${POKEMON[foes[0][0]].n} garde le passage.` : `${foes.length} adversaires.`}${rule ? ` Règle du plateau : ${GYMS[TOWER_RULES.indexOf(rule)].r}` : ''} Votre équipe : ${run.team.map(id => POKEMON[id].n).join(', ')}${run.voice ? ` · +${run.voice} Voix` : ''}.`,
     foes,
   };
-  return SCEN.tdr;
+  return SCENARIOS.tdr;
 }
 
 export function towerRestore() {

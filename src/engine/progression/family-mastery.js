@@ -1,9 +1,9 @@
 // Family mastery (Camp › Maîtrise, added in v4.31): after 10 battles, a permanent bonus of your choice out of two.
-import { POKEMON, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCENARIOS } from '../pokemon/pokemon.js';
 import { PROFILE } from '../state/game-state.js';
 import { toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
-import { EMAX } from '../combat/engine.js';
+import { MAX_ENERGY } from '../combat/engine.js';
 import { queueSave } from '../state/saves.js';
 import { renderWallet } from '../ui/wallet.js';
 import { renderCampPage } from '../modes/camp-challenges.js';
@@ -67,7 +67,7 @@ export const MASTERY_THRESHOLD = 10;
 // Statements run at startup, in the original order (see index.js).
 export function init() {
   HOOKS.progress.push((S, rew) => {
-    const D = SCEN[S.sc] || {};
+    const D = SCENARIOS[S.sc] || {};
     if (D.tuto || D.rentalTeam) {
       return null;
     }
@@ -111,7 +111,7 @@ export function init() {
           u.mhp = Math.round(u.mhp * 1.1);
           u.hp = Math.min(u.mhp, Math.round(u.hp * 1.1));
         } else if (p === 'eveil') {
-          u.en = Math.min(EMAX, (u.en || 0) + 1);
+          u.en = Math.min(MAX_ENERGY, (u.en || 0) + 1);
         }
       });
   });

@@ -6,8 +6,8 @@ import { writeLS, toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { TOD } from './home-route.js';
 import { queueSave } from '../state/saves.js';
-import { PREF, savePref } from '../ui/preferences.js';
-import { sfx, vibe } from '../audio/sound-effects.js';
+import { PREFERENCES, savePref } from '../ui/preferences.js';
+import { sfx, vibrate } from '../audio/sound-effects.js';
 import { avatar } from './home-journey.js';
 import { SCREEN_STATE } from '../ui/screen-state.js';
 import { today } from '../state/economy.js';
@@ -144,17 +144,18 @@ function harvestSpot(sp) {
   queueSave();
   renderWallet();
   sfx('win');
-  vibe([30, 40, 30]);
+  vibrate([30, 40, 30]);
   toast(`${TREASURE_NAMES[sp.th]} trouvé : +${gems} éclats, +${money} ₽${extra}.`);
   renderMap();
 }
 
 /* ---------- 1. trainer avatar ---------- */
-export const TRAINER_AVATAR = () => (PREF.typeAvatar && TYPES[PREF.typeAvatar.e] ? PREF.typeAvatar : null);
+export const TRAINER_AVATAR = () =>
+  PREFERENCES.typeAvatar && TYPES[PREFERENCES.typeAvatar.e] ? PREFERENCES.typeAvatar : null;
 
 export const rareWeight = mon => (RARE_ENABLED() ? rareInfo(mon.id).m : 1);
 
-export const RARE_ENABLED = () => PREF.rareEncounter !== 0;
+export const RARE_ENABLED = () => PREFERENCES.rareEncounter !== 0;
 
 /* ---------- 3. hidden finds on the map ---------- */
 export const TREASURE_NAMES = {
@@ -239,16 +240,16 @@ export function init() {
     }
     const k = b.dataset.avatarAction;
     if (k === 'av') {
-      PREF.typeAvatar = { e: b.dataset.t, hex: !!(TRAINER_AVATAR() && TRAINER_AVATAR().hex) };
+      PREFERENCES.typeAvatar = { e: b.dataset.t, hex: !!(TRAINER_AVATAR() && TRAINER_AVATAR().hex) };
     } else if (k === 'hex') {
-      PREF.typeAvatar = {
+      PREFERENCES.typeAvatar = {
         e: (TRAINER_AVATAR() || { e: 'Normal' }).e,
         hex: !(TRAINER_AVATAR() && TRAINER_AVATAR().hex),
       };
     } else if (k === 'avreset') {
-      delete PREF.typeAvatar;
+      delete PREFERENCES.typeAvatar;
     } else if (k === 'rare') {
-      PREF.rareEncounter = RARE_ENABLED() ? 0 : 1;
+      PREFERENCES.rareEncounter = RARE_ENABLED() ? 0 : 1;
     } else {
       return;
     }

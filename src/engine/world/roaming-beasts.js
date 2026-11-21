@@ -5,22 +5,22 @@
    Each one leaves a talisman (a unique held item). Like all
    legendaries, they cannot be recruited.
    ===================================================================== */
-import { SCEN } from '../pokemon/pokemon.js';
+import { SCENARIOS } from '../pokemon/pokemon.js';
 import { ITEMS2, PROFILE, isCamp } from '../state/game-state.js';
 import { medal } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { heal, pushMessage } from '../combat/engine.js';
-import { OBST } from '../combat/synergies-obstacles.js';
+import { OBSTACLES } from '../combat/synergies-obstacles.js';
 import { HELD_IMG } from '../state/economy.js';
 import { ITEM_ICONS } from '../assets/item-icons.js';
 import { PLACE_BY_ID, placeName } from './map.js';
-import { LEGS } from '../modes/legendaries.js';
+import { LEGENDARIES } from '../modes/legendaries.js';
 import { DAMAGE_PROVIDERS } from '../combat/tactical-engine.js';
 import { ACHIEVEMENTS } from '../progression/achievements.js';
 import { PLACES_J, johtoOpen } from './johto.js';
 import { placeWithArticle } from './pokegear.js';
 
-export const ROAM = ['raikou', 'entei', 'suicune'];
+export const ROAMING_BEASTS = ['raikou', 'entei', 'suicune'];
 
 const ROAM_H = ['j1', 'j2', 'j3', 'j4', 'j5', 'j6', 'j7', 'j8', 'jwild', 'jlac'];
 
@@ -31,7 +31,7 @@ export const svgDataUri = s =>
   'data:image/svg+xml;charset=utf-8,' +
   encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">' + s + '</svg>');
 
-export const findRoamLegend = id => LEGS.find(L => L.id === id);
+export const findRoamLegend = id => LEGENDARIES.find(L => L.id === id);
 
 export const roamLegendInfo = id => {
   const L = findRoamLegend(id);
@@ -43,7 +43,7 @@ export const isRoamingActive = () => johtoOpen() && (!isCamp() || (PROFILE.jdis 
 export const roamerCaught = id => !!(PROFILE.roam && PROFILE.roam[id] && PROFILE.roam[id].ok);
 
 export const fleeMessage = S => {
-  const D = SCEN[S.sc] || {},
+  const D = SCENARIOS[S.sc] || {},
     L = D.roam && findRoamLegend(D.roam);
   return `${L ? L.n : 'La bête'} bondit hors du plateau et disparaît : il s’est enfui !`;
 };
@@ -51,18 +51,18 @@ export const fleeMessage = S => {
 export function getRoamState(id) {
   PROFILE.roam = PROFILE.roam || {};
   if (!PROFILE.roam[id]) {
-    PROFILE.roam[id] = { at: ROAM_H[(ROAM.indexOf(id) * 3 + 2) % ROAM_H.length], hp: 1, ok: 0, seenFlags: 0 };
+    PROFILE.roam[id] = { at: ROAM_H[(ROAMING_BEASTS.indexOf(id) * 3 + 2) % ROAM_H.length], hp: 1, ok: 0, seenFlags: 0 };
   }
   return PROFILE.roam[id];
 }
 
 function moveRoamers() {
-  ROAM.forEach(id => {
+  ROAMING_BEASTS.forEach(id => {
     const r = getRoamState(id);
     if (r.ok) {
       return;
     }
-    const takenSet = ROAM.filter(x => x !== id).map(x => getRoamState(x).at),
+    const takenSet = ROAMING_BEASTS.filter(x => x !== id).map(x => getRoamState(x).at),
       pool = ROAM_H.filter(h => h !== r.at && !takenSet.includes(h));
     if (pool.length) {
       r.at = pool[Math.floor(Math.random() * pool.length)];
@@ -75,7 +75,7 @@ export function roamingPlaces() {
     return [];
   }
   const takenSet = [];
-  return ROAM.filter(id => !roamerCaught(id)).map(id => {
+  return ROAMING_BEASTS.filter(id => !roamerCaught(id)).map(id => {
     const h = PLACE_BY_ID[getRoamState(id).at] || PLACE_BY_ID.j1,
       L = findRoamLegend(id),
       [x, y] = pickRoamSpot(h, takenSet), // v4.16.1: the clearest spot
@@ -96,7 +96,7 @@ export function roamingPlaces() {
 }
 
 export function setupRoaming(S, ev) {
-  const D = SCEN[S.sc] || {},
+  const D = SCENARIOS[S.sc] || {},
     u = S.units.find(e => e.side === 'e' && e.id === D.roam);
   S.lim = D.flee || 4;
   if (!u) {
@@ -184,12 +184,12 @@ export function init() {
 
   Object.assign(HELD_IMG, { crinorage: 'crin-orage', braisesacree: 'braise-sacree', cristalboreal: 'cristal-boreal' });
 
-  ROAM.forEach(id => {
+  ROAMING_BEASTS.forEach(id => {
     const L = findRoamLegend(id);
     if (!L) {
       return;
     }
-    SCEN['r' + id] = {
+    SCENARIOS['r' + id] = {
       n: `${L.n} errant`,
       lvl: `Johto · ${L.title}`,
       lim: 10,
@@ -208,7 +208,7 @@ export function init() {
       d: `${L.n} rôde dans Johto. Il s’enfuit au bout de 4 manches, mais ses blessures restent d’une rencontre à l’autre : usez-le, retrouvez-le sur la carte, puis apaisez-le (PV à 0). Il laisse alors son talisman. Comme toutes les légendes, il ne se recrute pas.`,
       foes: [[id, [6, 2], { boss: true, hb: 320, pb: 8 }]],
     };
-    OBST['r' + id] = { pil: ['4,0', '4,5'] };
+    OBSTACLES['r' + id] = { pil: ['4,0', '4,5'] };
   });
 
   /* talisman effects */
@@ -246,7 +246,7 @@ export function init() {
 
   /* ---------- hooks: after the battle ---------- */
   HOOKS.progress.push((S, rew) => {
-    const D = SCEN[S.sc] || {},
+    const D = SCENARIOS[S.sc] || {},
       o = [0, 0];
     if (D.roam) {
       const r = getRoamState(D.roam),
@@ -291,7 +291,7 @@ export function init() {
     n: 'Trois bêtes',
     d: 'Apaiser Raikou, Entei et Suicune.',
     t: 'Ami des bêtes',
-    ok: () => ROAM.every(roamerCaught),
-    p: () => [ROAM.filter(roamerCaught).length, 3],
+    ok: () => ROAMING_BEASTS.every(roamerCaught),
+    p: () => [ROAMING_BEASTS.filter(roamerCaught).length, 3],
   });
 }

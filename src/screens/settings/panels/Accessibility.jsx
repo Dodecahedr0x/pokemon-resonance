@@ -1,4 +1,4 @@
-import { PREF } from '../../../engine/ui/preferences.js';
+import { PREFERENCES } from '../../../engine/ui/preferences.js';
 import { Switch } from '../controls.jsx';
 
 import CardHeader from '../../../components/CardHeader.jsx';
@@ -10,7 +10,7 @@ const SIZES = [
 
 // Accessibility. The engine handles data-text-size and applies the a11y-* classes.
 export default function Accessibility() {
-  const t = PREF.textSize || 'normal';
+  const t = PREFERENCES.textSize || 'normal';
   return (
     <section className="card v4-ps accessibility-panel">
       <CardHeader icon="user" title="Accessibilité" />
@@ -26,20 +26,20 @@ export default function Accessibility() {
       </div>
       <Switch
         k="highContrast"
-        on={PREF.highContrast}
+        on={PREFERENCES.highContrast}
         lab="Contraste renforcé"
         sub="Textes plus clairs, bordures plus nettes"
       />
       <Switch
         k="colorBlind"
-        on={PREF.colorBlind}
+        on={PREFERENCES.colorBlind}
         lab="Couleurs pour daltonisme"
         sub="Vert et rouge remplacés par bleu et orange (PV, dangers, résultats)"
       />
-      <Switch k="leftHand" on={PREF.leftHand} lab="Mode gaucher" sub="Le bouton de fin de tour passe à gauche" />
+      <Switch k="leftHand" on={PREFERENCES.leftHand} lab="Mode gaucher" sub="Le bouton de fin de tour passe à gauche" />
       <Switch
         k="reduceMotion"
-        on={PREF.reduceMotion}
+        on={PREFERENCES.reduceMotion}
         lab="Réduire les animations"
         sub="Supprime les mouvements décoratifs"
       />

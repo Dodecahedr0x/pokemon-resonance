@@ -1,11 +1,11 @@
 /* Team formations (added in v4.63). */
 
-import { POKEMON, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCENARIOS } from '../pokemon/pokemon.js';
 import { HOOKS } from '../core/hooks.js';
 import { renderSquad, squad } from './team.js';
 import { heal, pushMessage } from '../combat/engine.js';
-import { PREF, savePref } from '../ui/preferences.js';
-import { sfx, vibe } from '../audio/sound-effects.js';
+import { PREFERENCES, savePref } from '../ui/preferences.js';
+import { sfx, vibrate } from '../audio/sound-effects.js';
 import { DAMAGE_PROVIDERS } from '../combat/tactical-engine.js';
 import { teamSize } from '../progression/campaign-challenges.js';
 
@@ -13,7 +13,7 @@ let DEFENSIVE_TYPES, OFFENSIVE_TYPES, SCOUT_TYPES, SUPPORT_TYPES;
 
 const hasAnyType = (m, L) => !!m && m.t.some(t => L.includes(t));
 
-export const formationKey = () => (FORMATIONS[PREF.activeFormation] ? PREF.activeFormation : 'libre');
+export const formationKey = () => (FORMATIONS[PREFERENCES.activeFormation] ? PREFERENCES.activeFormation : 'libre');
 
 export const formationTeam = () =>
   squad
@@ -27,7 +27,7 @@ export const formationActive = () => {
 };
 
 const formationBonus = S => {
-  if (!S || S.restricted || (SCEN[S.sc] && SCEN[S.sc].tuto)) {
+  if (!S || S.restricted || (SCENARIOS[S.sc] && SCENARIOS[S.sc].tuto)) {
     return null;
   }
   const al = S.units.filter(u => u.side === 'a'),
@@ -119,10 +119,10 @@ export function init() {
       }
       e.stopPropagation();
       e.preventDefault();
-      PREF.activeFormation = b.dataset.formPicker;
+      PREFERENCES.activeFormation = b.dataset.formPicker;
       savePref();
       sfx('ui');
-      vibe(15);
+      vibrate(15);
       try {
         renderSquad();
       } catch {

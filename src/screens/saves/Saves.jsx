@@ -8,8 +8,16 @@ import { DIFFS, PROFILE, isCamp } from '../../engine/state/game-state.js';
 import { BADGES } from '../../engine/modes/gyms.js';
 import { medal } from '../../engine/core/utils.js';
 import { B } from '../../engine/combat/ui.js';
-import { SLOTS, SV, battleLine, cleanProfile, fmtD, snapshot, validBattle } from '../../engine/state/saves.js';
-import { PREF } from '../../engine/ui/preferences.js';
+import {
+  SLOTS,
+  CLOUD_SAVE,
+  battleLine,
+  cleanProfile,
+  formatDate,
+  snapshot,
+  validBattle,
+} from '../../engine/state/saves.js';
+import { PREFERENCES } from '../../engine/ui/preferences.js';
 import { boxCapacityLabel } from '../../engine/world/catch-anywhere.js';
 import { boxCount } from '../../engine/modes/legendary-captures.js';
 import { space } from '../../lib/theme.js';
@@ -57,9 +65,9 @@ function Summary({ s }) {
 
 // A slot (s1, s2, s3), empty or filled, with its confirmation question.
 function Slot({ k }) {
-  const s = SV.local[k],
+  const s = CLOUD_SAVE.local[k],
     n = k.slice(1),
-    cf = SV.confirm && SV.confirm.k === k ? SV.confirm.a : null;
+    cf = CLOUD_SAVE.confirm && CLOUD_SAVE.confirm.k === k ? CLOUD_SAVE.confirm.a : null;
   if (!s) {
     return (
       <article className="saves-slot is-empty">
@@ -82,7 +90,7 @@ function Slot({ k }) {
           Emplacement {n}
           {s.profile && s.profile.name ? ' · ' + s.profile.name : ''}
         </b>
-        <em>{fmtD(s.savedAt)}</em>
+        <em>{formatDate(s.savedAt)}</em>
       </header>
       <Summary s={s} />
       <div className="saves-slot-actions">
@@ -122,10 +130,10 @@ function Slot({ k }) {
 
 // "Save code" area: to copy, or to paste.
 function Code() {
-  if (!SV.code) {
+  if (!CLOUD_SAVE.code) {
     return null;
   }
-  const copy = SV.code.mode === 'copy';
+  const copy = CLOUD_SAVE.code.mode === 'copy';
   return (
     <div className="saves-code" style={{ marginTop: space.md, display: 'grid', gap: space.sm }}>
       <b>{copy ? 'Votre code de sauvegarde' : 'Collez votre code de sauvegarde'}</b>
@@ -141,7 +149,7 @@ function Code() {
         autoComplete="off"
         readOnly={copy}
         placeholder={copy ? undefined : 'RES1…'}
-        defaultValue={copy ? SV.code.text : ''}
+        defaultValue={copy ? CLOUD_SAVE.code.text : ''}
         style={{
           width: '100%',
           boxSizing: 'border-box',
@@ -170,10 +178,10 @@ function Code() {
 
 // The card, recreated at each version (like the old innerHTML): the fields re-read the state.
 function Card({ xRef }) {
-  const a = SV.local.auto || snapshot(),
+  const a = CLOUD_SAVE.local.auto || snapshot(),
     P = PROFILE,
-    busy = Object.values(SV.busy).some(Boolean),
-    rs = SV.confirm && SV.confirm.k === 'reset';
+    busy = Object.values(CLOUD_SAVE.busy).some(Boolean),
+    rs = CLOUD_SAVE.confirm && CLOUD_SAVE.confirm.k === 'reset';
   return (
     <div className="dialog-card" role="dialog" aria-modal="true" aria-labelledby="svTitle">
       <button ref={xRef} className="dialog-close" type="button" data-sv="close" aria-label="Fermer">
@@ -185,9 +193,9 @@ function Card({ xRef }) {
       <h2 className="section-title" id="svTitle">
         Partie et réglages
       </h2>
-      <p className={'saves-status' + (SV.cloud ? ' is-cloud' : '')}>
+      <p className={'saves-status' + (CLOUD_SAVE.cloud ? ' is-cloud' : '')}>
         <i />
-        {SV.cloud
+        {CLOUD_SAVE.cloud
           ? 'Synchronisées avec votre compte Claude : reprenez votre partie sur n’importe quel appareil.'
           : 'Enregistrées dans ce navigateur. Exportez un fichier pour les garder ailleurs.'}
         {busy && (
@@ -257,16 +265,16 @@ function Card({ xRef }) {
         <div className="saves-setting">
           <span>Confort</span>
           <span className="saves-setting-options">
-            <Button size="small" data-sv="set" data-f="sound" aria-pressed={String(!!PREF.sound)}>
+            <Button size="small" data-sv="set" data-f="sound" aria-pressed={String(!!PREFERENCES.sound)}>
               Son
             </Button>
-            <Button size="small" data-sv="set" data-f="vibe" aria-pressed={String(!!PREF.vibe)}>
+            <Button size="small" data-sv="set" data-f="vibe" aria-pressed={String(!!PREFERENCES.vibe)}>
               Vibrations
             </Button>
-            <Button size="small" data-sv="set" data-f="music" aria-pressed={String(!!PREF.music)}>
+            <Button size="small" data-sv="set" data-f="music" aria-pressed={String(!!PREFERENCES.music)}>
               Musique
             </Button>
-            <Button size="small" data-sv="set" data-f="fast" aria-pressed={String(!!PREF.fast)}>
+            <Button size="small" data-sv="set" data-f="fast" aria-pressed={String(!!PREFERENCES.fast)}>
               Adversaires ×2
             </Button>
             <Button size="small" data-sv="tuto">
@@ -278,7 +286,7 @@ function Card({ xRef }) {
       <article className="saves-slot is-auto">
         <header>
           <b>Sauvegarde automatique</b>
-          <em>{a.savedAt ? fmtD(a.savedAt) : ''}</em>
+          <em>{a.savedAt ? formatDate(a.savedAt) : ''}</em>
         </header>
         <Summary s={a} />
         {validBattle(a.battle) && !B && (

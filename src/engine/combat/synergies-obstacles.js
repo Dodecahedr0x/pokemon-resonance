@@ -33,7 +33,7 @@ export function applyObst(S) {
     return;
   }
   S._obs = 1;
-  const O = OBST[S.sc];
+  const O = OBSTACLES[S.sc];
   if (O) {
     (O.pil || []).forEach(k => {
       const t = S.tiles[k];
@@ -296,7 +296,7 @@ export function roundSupport(S) {
 
 /* ===================== v1.1: roles, synergies, obstacles (additive module, no DOM) ===================== */
 /* --- obstacles per terrain: pillars (block direct shots), tall grass (hides beyond 2 cells), sand (2 Movement) --- */
-export const OBST = {
+export const OBSTACLES = {
   tuto: { grass: ['2,4', '3,4', '3,5'] },
   gue: { grass: ['2,2', '2,3', '3,2'], sand: ['5,0', '5,4'] },
   roche: { pil: ['5,2'], sand: ['2,1', '2,4'] },

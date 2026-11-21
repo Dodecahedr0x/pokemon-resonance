@@ -1,8 +1,8 @@
 import { GYMS } from '../data/game-data.js';
-import { SCEN } from '../pokemon/pokemon.js';
+import { SCENARIOS } from '../pokemon/pokemon.js';
 import { writeLS } from '../core/utils.js';
 import { BOARD_ROWS, BOARD_COLS, cellKey, parseCellKey, pushMessage, setMark, unitAt } from '../combat/engine.js';
-import { LEAD } from '../progression/prestige.js';
+import { LEAGUE_MASTERS } from '../progression/prestige.js';
 import { johtoGymSetup, johtoGymTick } from '../world/johto.js';
 
 export let TERR, BADGES;
@@ -11,7 +11,7 @@ export function __set_BADGES(v) {
 }
 
 function arenaOf(S) {
-  return (SCEN[S.sc] && SCEN[S.sc].rule) || null;
+  return (SCENARIOS[S.sc] && SCENARIOS[S.sc].rule) || null;
 }
 
 function tideRow(S) {
@@ -461,10 +461,13 @@ export const veiled = S => !!(S && S.jit) || (arenaOf(S) === 'psy' && S.round % 
 export function init() {
   ARENAS.forEach((a, i) => {
     const g = GYMS[i];
-    SCEN[a.k] = Object.assign({ n: g.n, lvl: `Arène ${i + 1} · ${LEAD[i].n}`, bio: 'arene', gym: i, at: g.t }, a);
+    SCENARIOS[a.k] = Object.assign(
+      { n: g.n, lvl: `Arène ${i + 1} · ${LEAGUE_MASTERS[i].n}`, bio: 'arene', gym: i, at: g.t },
+      a
+    );
   });
 
-  TERR = Object.keys(SCEN).filter(k => !SCEN[k].rule);
+  TERR = Object.keys(SCENARIOS).filter(k => !SCENARIOS[k].rule);
 
   // training grounds (no gym rule)
 

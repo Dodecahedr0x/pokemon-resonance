@@ -1,13 +1,13 @@
 /* Defense Gym (added in v4.68). */
 
-import { POKEMON_LIST, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON_LIST, SCENARIOS } from '../pokemon/pokemon.js';
 import { isCamp } from '../state/game-state.js';
 import { BADGES } from './gyms.js';
 import { writeLS, toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { squad } from '../team/team.js';
 import { cellKey, mkUnit, plan, pushMessage, unitAt } from '../combat/engine.js';
-import { OBST } from '../combat/synergies-obstacles.js';
+import { OBSTACLES } from '../combat/synergies-obstacles.js';
 import { B, backToPrep, goFight } from '../combat/ui.js';
 import { overlay } from '../progression/prestige.js';
 import { shut } from '../../screens/overlays/tempStore.js';
@@ -60,7 +60,7 @@ function defenseWave(S, ev) {
 function defenseOpen() {
   const st = defenseState();
   // render: src/screens/overlays/transients/Windows.jsx (DefenseGym)
-  const o = overlay('defense-gym-o', { d: SCEN.def468.d, best: st.best, won: st.won, ok: !!defenseUnlocked() });
+  const o = overlay('defense-gym-o', { d: SCENARIOS.def468.d, best: st.best, won: st.won, ok: !!defenseUnlocked() });
   o.addEventListener('click', e => {
     if (e.target === o) {
       shut('defense-gym-o');
@@ -91,7 +91,7 @@ const defensePool = () => POKEMON_LIST.filter(m => m.st === 1 && !m.leg && !m.is
 
 // Statements run at startup, in the original order (see index.js).
 export function init() {
-  SCEN.def468 = {
+  SCENARIOS.def468 = {
     n: 'Arène de défense',
     lvl: 'Défi · 5 vagues',
     lim: 16,
@@ -110,7 +110,7 @@ export function init() {
     def468: true,
   };
 
-  OBST.def468 = { pil: ['4,2'], grass: ['4,4', '5,1'] };
+  OBSTACLES.def468 = { pil: ['4,2'], grass: ['4,4', '5,1'] };
 
   ((DEF_WAVES = 5), (DEF_LIVES = 3));
 

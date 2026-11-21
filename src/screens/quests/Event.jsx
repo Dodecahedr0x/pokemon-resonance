@@ -1,4 +1,4 @@
-import { POKEMON, SCEN } from '../../engine/pokemon/pokemon.js';
+import { POKEMON, SCENARIOS } from '../../engine/pokemon/pokemon.js';
 import { PROFILE } from '../../engine/state/game-state.js';
 import { pokemonArtUrl } from '../../engine/assets/images.js';
 import { dailyDone, dailyKey, dailyLeft } from '../../engine/modes/daily-battle.js';
@@ -13,7 +13,7 @@ const NL = '\n ';
 // Challenge of the week (v4.29): same rental team for everyone, ranking among friends.
 function Weekly() {
   const H = buildWeeklyChallenge(),
-    D = SCEN.hebdo429,
+    D = SCENARIOS.hebdo429,
     h = PROFILE.hebdo429 && PROFILE.hebdo429.w === H.w ? PROFILE.hebdo429 : null,
     friends = (PROFILE.friends || []).filter(a => a.wk && a.wk.w === H.w).map(a => ({ n: a.n, s: a.wk.s })),
     rows = [...(h ? [{ n: (PROFILE.name || 'Vous') + ' (vous)', s: h.best, me: 1 }] : []), ...friends].sort(
@@ -76,7 +76,7 @@ function Weekly() {
 // "Événement" (Event) tab: challenge of the week first (v4.29), then the daily challenge.
 export default function Event() {
   const dk = dailyKey(),
-    S = dk && SCEN[dk],
+    S = dk && SCENARIOS[dk],
     done = dailyDone();
   return (
     <>

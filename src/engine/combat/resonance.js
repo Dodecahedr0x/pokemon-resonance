@@ -1,11 +1,11 @@
 import { MOVES } from '../data/moves.js';
-import { POKEMON, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCENARIOS } from '../pokemon/pokemon.js';
 import { ITEMS2, PROFILE, isCamp } from '../state/game-state.js';
 import { RC } from '../pokemon/roles-synergies.js';
 import { toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import {
-  EMAX,
+  MAX_ENERGY,
   parseCellKey,
   byUid,
   damage,
@@ -14,26 +14,26 @@ import {
   hasNx,
   hdist,
   heal,
-  nbrK,
+  neighborKeys,
   retarget,
   pushMessage,
   setMark,
   shove,
   stun,
-  teff,
+  typeEffectiveness,
   unitAt,
   unitKey,
 } from './engine.js';
 import { noteAdd } from './synergies-obstacles.js';
 import { B, enPips } from './ui.js';
 import { queueSave } from '../state/saves.js';
-import { sfx, vibe } from '../audio/sound-effects.js';
+import { sfx, vibrate } from '../audio/sound-effects.js';
 import { HEALS } from '../items/battle-potions.js';
-import { HELD_IMG, SHOP, bagN, today } from '../state/economy.js';
+import { HELD_IMG, SHOP, bagCount, today } from '../state/economy.js';
 import { SCREEN_STATE } from '../ui/screen-state.js';
 import { renderWallet } from '../ui/wallet.js';
 import { renderBag } from '../progression/quests-shop.js';
-import { LEGS } from '../modes/legendaries.js';
+import { LEGENDARIES } from '../modes/legendaries.js';
 import { DAMAGE_PROVIDERS } from './tactical-engine.js';
 import { withDe } from './tactics.js';
 import { applyPoison } from '../moves/epic-tms.js';
@@ -61,7 +61,7 @@ export function bossScene(S) {
   if (!S) {
     return false;
   }
-  const D = SCEN[S.sc] || {};
+  const D = SCENARIOS[S.sc] || {};
   return (
     D.gym != null ||
     D.johto != null ||
@@ -117,7 +117,7 @@ function gainDiamond(S, u, ev) {
   if (u.side === 'a') {
     rewardIn(S, u, 1, ev);
   } else if (hasXp(u)) {
-    u.en = Math.min(EMAX, (u.en || 0) + 1);
+    u.en = Math.min(MAX_ENERGY, (u.en || 0) + 1);
   }
 }
 
@@ -217,7 +217,7 @@ export function afterHitResonance(S, u, m, v, x, typ, ev) {
   if (!v || v === u || v.side === u.side || v.seg || !(m.p || m.fix) || !resoOn(S, u)) {
     return;
   }
-  if (teff(typ, v.t) === 0 && !(v.pinned && typ === 'Sol')) {
+  if (typeEffectiveness(typ, v.t) === 0 && !(v.pinned && typ === 'Sol')) {
     return;
   }
   if (!v.notes || v.notes.r !== S.round) {
@@ -290,7 +290,7 @@ export function foeResonanceNotes(e) {
     );
   }
   if (bossScene(B) && hasXp(e)) {
-    o.push(`Il accumule la Résonance : ${e.en || 0} / ${EMAX} losanges, ${xpCost(e)} pour son attaque Experte.`);
+    o.push(`Il accumule la Résonance : ${e.en || 0} / ${MAX_ENERGY} losanges, ${xpCost(e)} pour son attaque Experte.`);
   }
   return (o.length ? `<p class="battle-resonance-note">${o.join(' ')}</p>` : '') + bossResonanceHtml(e);
 }
@@ -307,7 +307,7 @@ export function canUseBagItem(S, u, k) {
     S.phase !== 'player' ||
     (S.itemsUsed || 0) >= BAG_MAX ||
     S.duel433 ||
-    bagN(k) < 1
+    bagCount(k) < 1
   ) {
     return false;
   }
@@ -337,7 +337,7 @@ export function canUseBagItem(S, u, k) {
         u.weakened > 0
       );
     case 'cristal':
-      return (hasNx(u) || hasXp(u)) && u.en < EMAX;
+      return (hasNx(u) || hasXp(u)) && u.en < MAX_ENERGY;
     default:
       return true;
   }
@@ -403,7 +403,7 @@ export function useCombatItem(S, u, k) {
     u.moved = true;
   }
   S.itemsUsed = (S.itemsUsed || 0) + 1;
-  PROFILE.bag[k] = bagN(k) - 1;
+  PROFILE.bag[k] = bagCount(k) - 1;
   if (!PROFILE.bag[k]) {
     delete PROFILE.bag[k];
   }
@@ -450,7 +450,7 @@ function buyHeldItem(k) {
   }
   PROFILE.items.push(k);
   sfx('ui');
-  vibe(15);
+  vibrate(15);
   toast(`Acheté : ${ITEMS2[k].n}. Confiez-le depuis la fiche d’un Pokémon.`);
   queueSave();
   renderWallet();
@@ -563,7 +563,7 @@ export const koAllyOf = S =>
   S.units.filter(o => o.side === 'a' && o.ko && !o.seg).sort((a, b) => RC(b.id) - RC(a.id) || b.mhp - a.mhp)[0];
 
 export const freeTileFor = (S, u) =>
-  nbrK(unitKey(u)).find(x => S.tiles[x] && !S.tiles[x].rock && !unitAt(S, x) && !(S.tiles[x].lava > 0));
+  neighborKeys(unitKey(u)).find(x => S.tiles[x] && !S.tiles[x].rock && !unitAt(S, x) && !(S.tiles[x].lava > 0));
 
 export const isDailyOffer = k => dailyOffers().includes(k);
 
@@ -686,7 +686,7 @@ const CONSUMABLE_SHOP_ITEMS = {
 
 // Statements executed at startup, in the original order (see index.js).
 export function init() {
-  LEGENDARY_IDS = new Set(LEGS.map(l => l.id));
+  LEGENDARY_IDS = new Set(LEGENDARIES.map(l => l.id));
 
   for (const k in MOVES) {
     const m = MOVES[k];
@@ -763,7 +763,7 @@ export function init() {
     }
     S.units.forEach(e => {
       if (e.side === 'e' && !e.ko && hasXp(e)) {
-        e.en = Math.min(EMAX, (e.en || 0) + 1);
+        e.en = Math.min(MAX_ENERGY, (e.en || 0) + 1);
       }
     });
   });

@@ -1,9 +1,9 @@
 /* Living board (overhaul of the battlefield) (added in v4.71). */
 
-import { SCEN } from '../pokemon/pokemon.js';
+import { SCENARIOS } from '../pokemon/pokemon.js';
 import { fnvHash, hash2, mulberry32 } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
-import { nbrK } from './engine.js';
+import { neighborKeys } from './engine.js';
 import { B, BOARD_GEOMETRY, cellCenter, cellPoints, L, boardViewBox, VERT } from './ui.js';
 import { bdClass, boardSet, getBoard, getHost, hostSet } from '../../screens/combat/board/boardStore.js';
 
@@ -383,7 +383,7 @@ const kindOf = () => {
   } catch {
     /* Best effort: failure here is non-fatal. */
   }
-  const D = (B && SCEN[B.sc]) || {};
+  const D = (B && SCENARIOS[B.sc]) || {};
   if (D.bio === 'gue') {
     return 'prairie';
   }
@@ -1230,7 +1230,7 @@ const paintCell = (bd, k) => {
 // Neighbors of a water cell, or none when the lookup fails.
 const waterNeighbors = k => {
   try {
-    return nbrK(k);
+    return neighborKeys(k);
   } catch (e) {
     return [];
   }

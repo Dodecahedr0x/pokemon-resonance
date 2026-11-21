@@ -1,10 +1,10 @@
 import { MOVES } from '../data/moves.js';
-import { POKEMON, PKT, SCEN } from '../pokemon/pokemon.js';
-import { OBST } from '../combat/synergies-obstacles.js';
+import { POKEMON, PKT, SCENARIOS } from '../pokemon/pokemon.js';
+import { OBSTACLES } from '../combat/synergies-obstacles.js';
 
 /* Legendary bosses: six post-game boss battles, their signature moves and species (added in v4.4). */
 
-export const LEGS = [
+export const LEGENDARIES = [
   {
     id: 'raikou',
     n: 'Raikou',
@@ -123,7 +123,7 @@ export const LEGS = [
 
 export const legKey = id => 'lg' + id;
 
-export const legOf = k => LEGS.find(L => legKey(L.id) === k) || null;
+export const legOf = k => LEGENDARIES.find(L => legKey(L.id) === k) || null;
 
 // Statements run at startup, in the original order (see index.js).
 export function init() {
@@ -151,7 +151,7 @@ export function init() {
     },
   });
 
-  LEGS.forEach(L => {
+  LEGENDARIES.forEach(L => {
     const m = {
       id: L.id,
       n: L.n,
@@ -174,9 +174,9 @@ export function init() {
     PKT.set(m.t, m.id);
   });
 
-  LEGS.forEach(L => {
+  LEGENDARIES.forEach(L => {
     const k = legKey(L.id);
-    SCEN[k] = {
+    SCENARIOS[k] = {
       n: L.n,
       lvl: `Légende · ${L.title}`,
       lim: 11,
@@ -198,6 +198,6 @@ export function init() {
         [L.minions[1], [7, 4]],
       ],
     };
-    OBST[k] = { pil: ['4,0', '4,5'] };
+    OBSTACLES[k] = { pil: ['4,0', '4,5'] };
   });
 }

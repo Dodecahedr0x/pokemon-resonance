@@ -3,15 +3,15 @@ import { bdClass, tokCl, tokHas } from '../../screens/combat/board/boardStore.js
 import { reducedMotion, after2images } from '../core/utils.js';
 import { byUid, unitKey } from './engine.js';
 import { B, cellCenter, L, ui } from './ui.js';
-import { PREF } from '../ui/preferences.js';
-import { vibe } from '../audio/sound-effects.js';
+import { PREFERENCES } from '../ui/preferences.js';
+import { vibrate } from '../audio/sound-effects.js';
 import { endTooltip, seenTips } from '../ui/battle-tips.js';
 
 /* Expressive Pokémon: idle breathing, lunge toward the target, recoil under hits, vibration on strong hits
    ("Pokémon animés" setting, added in v4.29). */
 
 export function animEnabled() {
-  return !reducedMotion && PREF.animEnabled !== false;
+  return !reducedMotion && PREFERENCES.animEnabled !== false;
 }
 
 /** All the token's parts sit in an inner .token-body group (Units.jsx): it moves without
@@ -78,7 +78,7 @@ export function liveEvent(ev) {
   }
   const sv = document.getElementById('bSvg');
   if (sv) {
-    sv.style.setProperty('--anim-scale', PREF.fast || ui.skipSpeedup ? '0.6' : '1');
+    sv.style.setProperty('--anim-scale', PREFERENCES.fast || ui.skipSpeedup ? '0.6' : '1');
   }
   ev.forEach(x => {
     if (x.e === 'use' && x.u && x.k) {
@@ -95,7 +95,7 @@ export function liveEvent(ev) {
       return v && v.side === 'a' && x.v >= v.mhp * 0.3;
     });
   if (ko || strongSpot) {
-    vibe(ko ? [18, 40, 22] : 28);
+    vibrate(ko ? [18, 40, 22] : 28);
   }
 }
 

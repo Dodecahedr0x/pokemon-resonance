@@ -1,10 +1,10 @@
 import { GYMS } from '../../engine/data/game-data.js';
-import { SCEN } from '../../engine/pokemon/pokemon.js';
+import { SCENARIOS } from '../../engine/pokemon/pokemon.js';
 import { ARENAS } from '../../engine/modes/gyms.js';
 import { typeColor } from '../../engine/core/utils.js';
 import { badgeSvg } from '../../engine/modes/league.js';
 import { ELITE } from '../../engine/combat/items-bonds-ai.js';
-import { CHAMP_L, CHAP, ELITE_L, LEAD, UNIV } from '../../engine/progression/prestige.js';
+import { CHAMP_L, chapterOf, ELITE_L, LEAGUE_MASTERS, UNIVERSE_PAGES } from '../../engine/progression/prestige.js';
 import { Html } from '../../lib/html.jsx';
 
 function Master({ className, style, mark, kicker, who }) {
@@ -34,7 +34,7 @@ export default function Universe() {
         </p>
       </div>
       <div className="guide-lore">
-        {UNIV.map(([h, t]) => (
+        {UNIVERSE_PAGES.map(([h, t]) => (
           <article key={h} className="guide-lore-card">
             <h3 className="card-title">{h}</h3>
             <p>
@@ -61,7 +61,7 @@ export default function Universe() {
               </span>
             }
             kicker={`Arène ${i + 1} · Badge ${g.t}`}
-            who={LEAD[i]}
+            who={LEAGUE_MASTERS[i]}
           />
         ))}
       </div>
@@ -76,9 +76,9 @@ export default function Universe() {
           <Master
             key={i}
             className="guide-master is-elite"
-            style={{ '--ac': typeColor(SCEN[ELITE[i]].at || 'Normal') }}
+            style={{ '--ac': typeColor(SCENARIOS[ELITE[i]].at || 'Normal') }}
             mark={<span className="guide-master-mark">{i + 1}</span>}
-            kicker={SCEN[ELITE[i]].n}
+            kicker={SCENARIOS[ELITE[i]].n}
             who={L}
           />
         ))}
@@ -97,7 +97,7 @@ export default function Universe() {
       </div>
       <ol className="guide-chapters">
         {['tuto', ...ARENAS.map(a => a.k), 'c1', 'champ'].map(k => {
-          const C = CHAP(k);
+          const C = chapterOf(k);
           return (
             <li key={k}>
               <span>{C.c}</span>

@@ -1,10 +1,10 @@
 import { Html } from '../../lib/html.jsx';
-import { SCEN } from '../../engine/pokemon/pokemon.js';
+import { SCENARIOS } from '../../engine/pokemon/pokemon.js';
 import { PROFILE, isCamp } from '../../engine/state/game-state.js';
 import { ARENAS } from '../../engine/modes/gyms.js';
 import { ELITE, scenLock } from '../../engine/combat/items-bonds-ai.js';
 import { nextGoal } from '../../engine/progression/campaign.js';
-import { CHAP, leaderOf } from '../../engine/progression/prestige.js';
+import { chapterOf, leaderOf } from '../../engine/progression/prestige.js';
 import { emblem, wonOf } from '../../engine/world/home-journey.js';
 import { rewardLine } from '../../engine/world/map.js';
 import { MAINQ } from '../../engine/progression/quests-shop.js';
@@ -13,7 +13,7 @@ import Button from '../../components/Button.jsx';
 import StatePill, { STATE_CLASS } from '../../components/StatePill.jsx';
 // A chapter of the main quest (formerly mainRow).
 function Chapter({ k, gk }) {
-  const C = CHAP(k) || { c: '', t: '' },
+  const C = chapterOf(k) || { c: '', t: '' },
     L = leaderOf(k),
     lk = scenLock(k),
     won = k === 'tuto' ? !!PROFILE.tuto : wonOf(k),
@@ -30,7 +30,7 @@ function Chapter({ k, gk }) {
           {C.c}
           {ELITE.includes(k) ? ' · ' + (ELITE.indexOf(k) + 1) + ' / 4' : ''}
         </small>
-        <b>{k === 'tuto' || k === 'champ' ? C.t : SCEN[k].n}</b>
+        <b>{k === 'tuto' || k === 'champ' ? C.t : SCENARIOS[k].n}</b>
         <em>{L ? `Battre ${L.n}, ${L.t}` : 'Le combat guidé de la Professeure'}</em>
         {gi >= 0 && !won ? <Html html={rewardLine(k)} /> : null}
       </div>

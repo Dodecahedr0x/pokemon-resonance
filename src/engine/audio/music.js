@@ -1,9 +1,9 @@
 /* Music per theme (track player) (added in v4.35). */
 
 import { $ } from '../core/utils.js';
-import { cur } from '../core/navigation.js';
+import { currentScreen } from '../core/navigation.js';
 import { B } from '../combat/ui.js';
-import { PREF } from '../ui/preferences.js';
+import { PREFERENCES } from '../ui/preferences.js';
 import { MUS, musPadLevel, musPadStop, musStartCore } from '../progression/prestige.js';
 import { SCREEN_STATE } from '../ui/screen-state.js';
 import { IMMERSION_ON } from './immersion.js';
@@ -46,7 +46,7 @@ function bgmEl(k) {
 }
 
 function bgmVol() {
-  return Math.max(0, Math.min(1, 0.85 * (PREF.musVol === undefined ? 0.7 : PREF.musVol)));
+  return Math.max(0, Math.min(1, 0.85 * (PREFERENCES.musVol === undefined ? 0.7 : PREFERENCES.musVol)));
 }
 
 function bgmFade(a, to, ms, done) {
@@ -116,25 +116,25 @@ function bgmScene() {
     }
     return B._lowHpPlayed && IMMERSION_ON() ? 'pvbas' : c;
   }
-  if (cur === 'accueil') {
+  if (currentScreen === 'accueil') {
     return 'accueil';
   }
-  if (cur === 'combat') {
+  if (currentScreen === 'combat') {
     return 'combats';
   } // v4.47: Battles menu = Cycling
-  if (cur === 'carte') {
+  if (currentScreen === 'carte') {
     return 'carte';
   } // Route 1
-  if (cur === 'types') {
+  if (currentScreen === 'types') {
     return 'guide';
   } // Prof. Chen's Laboratory
-  if (cur === 'sac' && SCREEN_STATE.bagView === 'boutique') {
+  if (currentScreen === 'sac' && SCREEN_STATE.bagView === 'boutique') {
     return 'boutique';
   }
-  if (cur === 'pokedex' || cur === 'dex') {
+  if (currentScreen === 'pokedex' || currentScreen === 'dex') {
     return 'centre';
   }
-  if (cur === 'camp') {
+  if (currentScreen === 'camp') {
     const t = SCREEN_STATE.campTab;
     if (t === 'enigmes' || t === 'echo') {
       return 'ruines';
@@ -153,7 +153,7 @@ function bgmScene() {
 }
 
 function bgmSync() {
-  if (!MUSIC.on || !PREF.music) {
+  if (!MUSIC.on || !PREFERENCES.music) {
     return;
   }
   const sc = bgmScene();
@@ -196,7 +196,7 @@ function bgmSync() {
 }
 
 export function musStart() {
-  if (!PREF.music) {
+  if (!PREFERENCES.music) {
     return;
   }
   if (!bgmOk()) {
@@ -240,7 +240,7 @@ function bgmStop() {
 /* jingle (victory, badge, evolution) over the current music. max = duration in seconds (0 = in full), suite = chained jingle */
 function playJingle(max, k, next) {
   k = k || 'victoire';
-  if (!PREF.music || !MUSIC.on || !bgmOk() || MUSIC.jingle) {
+  if (!PREFERENCES.music || !MUSIC.on || !bgmOk() || MUSIC.jingle) {
     return;
   }
   const j = bgmEl(k);
@@ -367,8 +367,8 @@ export const MUSIC = {
 
 // Statements run at startup, in the original order (see index.js).
 export function init() {
-  if (PREF.music === undefined) {
-    PREF.music = false;
+  if (PREFERENCES.music === undefined) {
+    PREFERENCES.music = false;
   }
   // fresh install: music off (adjustable in Settings)
   /* victory: result sheet won, capture succeeded, quest reward */

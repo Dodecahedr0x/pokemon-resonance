@@ -1,13 +1,13 @@
 /* Trainer talent tree (added in v4.64). */
 
-import { SCEN } from '../pokemon/pokemon.js';
+import { SCENARIOS } from '../pokemon/pokemon.js';
 import { PROFILE } from '../state/game-state.js';
 import { writeLS, toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { heal, pushMessage } from '../combat/engine.js';
 import { escapeHtml, queueSave } from '../state/saves.js';
-import { sfx, vibe } from '../audio/sound-effects.js';
-import { bagN } from '../state/economy.js';
+import { sfx, vibrate } from '../audio/sound-effects.js';
+import { bagCount } from '../state/economy.js';
 import { tLevel } from './trainer-stats.js';
 import { renderWallet } from '../ui/wallet.js';
 import { renderBag } from './quests-shop.js';
@@ -19,7 +19,7 @@ export { TALENTS, TALENT_MAX, TALENT_RESET_COST, talentState, talentSpent, talen
 
 /** The battle counts for talents and the season (4.65): neither frozen team nor tutorial. */
 export function isCountedBattle(S) {
-  return S && !S.restricted && !(SCEN[S.sc] && SCEN[S.sc].tuto);
+  return S && !S.restricted && !(SCENARIOS[S.sc] && SCENARIOS[S.sc].tuto);
 }
 
 const talentState = () => {
@@ -106,7 +106,7 @@ function onTalentTreeClick(e) {
     st[k]++;
     talentSave(st);
     sfx('ui');
-    vibe(20);
+    vibrate(20);
   } else {
     return;
   }
@@ -185,7 +185,7 @@ export function init() {
         out.push(`+${e1 * 40} ₽`);
       }
       if (e2 && Math.random() < e2 * 0.08) {
-        PROFILE.bag.poke = Math.min(99, bagN('poke') + 1);
+        PROFILE.bag.poke = Math.min(99, bagCount('poke') + 1);
         out.push('1 Poké Ball');
       }
       if (e3 && Math.random() < e3 * 0.08) {

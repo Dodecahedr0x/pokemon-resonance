@@ -1,19 +1,19 @@
 import { Html } from '../../lib/html.jsx';
 import { GYMS } from '../../engine/data/game-data.js';
-import { POKEMON, SCEN } from '../../engine/pokemon/pokemon.js';
+import { POKEMON, SCENARIOS } from '../../engine/pokemon/pokemon.js';
 import { ARENAS, BADGES } from '../../engine/modes/gyms.js';
 import { medal } from '../../engine/core/utils.js';
 import { badgeSvg, gymSel } from '../../engine/modes/league.js';
-import { LEAD } from '../../engine/progression/prestige.js';
+import { LEAGUE_MASTERS } from '../../engine/progression/prestige.js';
 
 import Button from '../../components/Button.jsx';
 // Sheet of the chosen gym (#arena), with its gym Champion's line (v4.24).
 export default function Arena() {
   const g = GYMS[gymSel],
     a = ARENAS[gymSel],
-    D = SCEN[a.k],
+    D = SCENARIOS[a.k],
     won = BADGES.includes(gymSel),
-    L = LEAD[gymSel];
+    L = LEAGUE_MASTERS[gymSel];
   return (
     <>
       <div className="league-gym-badge">

@@ -8,7 +8,7 @@ import { overlay } from '../progression/prestige.js';
 import { shut } from '../../screens/overlays/tempStore.js';
 import { today } from '../state/economy.js';
 import { RELICS } from './boss-rush.js';
-import { week, weekDef, wkMake } from './trainer-of-the-week.js';
+import { weekKey, weekDef, wkMake } from './trainer-of-the-week.js';
 import { WEATHER_NAME, weatherKind } from './challenge-weather.js';
 import { trainingSession } from './ball-training.js';
 
@@ -38,7 +38,7 @@ export const openMoreChallenges = () => {
   const X = readMoreChallenges(),
     W = weekDef(),
     w = weatherKind(),
-    isFinished = X.wk.k === week() && X.wk.done,
+    isFinished = X.wk.k === weekKey() && X.wk.done,
     dayInv = X.inv.d === today() && X.inv.done,
     storyFinished = window.__shadowEpisodes && window.__shadowEpisodes.readValue().stepOf >= 4,
     showcase = RELICS.map(r => ({ r, on: X.relics.includes(r.id) })),

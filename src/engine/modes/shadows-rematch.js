@@ -1,15 +1,15 @@
 /* Inverted Shadows: Vaskar's harder rematch, rewarded once a day (added in v4.71). */
 
-import { SCEN } from '../pokemon/pokemon.js';
+import { SCENARIOS } from '../pokemon/pokemon.js';
 import { HOOKS } from '../core/hooks.js';
-import { OBST } from '../combat/synergies-obstacles.js';
+import { OBSTACLES } from '../combat/synergies-obstacles.js';
 import { today } from '../state/economy.js';
 import { mkFoes } from './challenge-scenes.js';
 import { readMoreChallenges, writeMoreChallenges } from './more-challenges.js';
 
 // Statements run at startup, in the original order (see index.js).
 export function init() {
-  SCEN.inv470 = Object.assign(
+  SCENARIOS.inv470 = Object.assign(
     {
       n: 'Ombres inversées',
       lvl: 'Revanche · Vaskar',
@@ -27,7 +27,7 @@ export function init() {
     {}
   );
   try {
-    OBST.inv470 = { pil: ['4,2'], grass: ['4,4', '5,1'] };
+    OBSTACLES.inv470 = { pil: ['4,2'], grass: ['4,4', '5,1'] };
   } catch {
     /* Best effort: failure here is non-fatal. */
   }

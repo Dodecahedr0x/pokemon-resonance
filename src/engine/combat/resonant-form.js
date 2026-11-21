@@ -4,10 +4,10 @@
    +1 Movement, +20 % damage, statuses cleared at the end of the round).
    Masters (Champion, Johto Master) and your friends' teams can use it too.
    ===================================================================== */
-import { POKEMON, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCENARIOS } from '../pokemon/pokemon.js';
 import { toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
-import { EMAX, byUid, endStep, hasNx, heal, pushMessage } from './engine.js';
+import { MAX_ENERGY, byUid, endStep, hasNx, heal, pushMessage } from './engine.js';
 import { B, cinematic, clearAim, enPips, finish, renderAll, ui } from './ui.js';
 import { playEv } from './move-effects.js';
 import { DAMAGE_PROVIDERS } from './tactical-engine.js';
@@ -31,7 +31,7 @@ export function resonanceCandidate(S, u) {
 }
 
 function canTriggerResonance(S, u) {
-  return !!(resonanceCandidate(S, u) && S.phase === 'player' && !u.sn && u.en >= EMAX && S.voice >= 1);
+  return !!(resonanceCandidate(S, u) && S.phase === 'player' && !u.sn && u.en >= MAX_ENERGY && S.voice >= 1);
 }
 
 function startResonantForm(S, u, ev, strongSpot) {
@@ -66,7 +66,7 @@ function playerResonance(S, u) {
 
 /** Masters and your friends' teams use it too, once, when their best Pokémon starts to fade. */
 function opponentResonance(S, ev) {
-  const D = SCEN[S.sc] || {};
+  const D = SCENARIOS[S.sc] || {};
   if (S.resonantUnitE || !(D.champ || D.jfinal || D.hfinal || D.ami)) {
     return;
   }
@@ -93,14 +93,14 @@ export function resonanceBlockHtml(u, gauge) {
   }
   const ok = canTriggerResonance(B, u),
     why =
-      u.en < EMAX
-        ? `Encore ${EMAX - u.en} losange${EMAX - u.en > 1 ? 's' : ''}`
+      u.en < MAX_ENERGY
+        ? `Encore ${MAX_ENERGY - u.en} losange${MAX_ENERGY - u.en > 1 ? 's' : ''}`
         : u.sn
           ? 'Immobilisé cette manche'
           : B.voice < 1
             ? 'Plus de Voix'
             : 'Prêt · une fois par combat';
-  return `${gauge ? `<div class="battle-energy${u.en >= EMAX ? ' is-full' : ''}"><div class="battle-energy-head"><span class="caption">Résonance</span>${enPips(u.en, 'lg')}</div></div>` : ''}<button type="button" class="battle-awaken is-resonant" data-resonance-burst ${ok ? '' : 'disabled'}><span class="battle-awaken-medals"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.6 6.4L21 9l-5 4.4 1.6 6.6L12 16.6 6.4 20 8 13.4 3 9l6.4-.6Z" fill="currentColor"/></svg></span><span><b>Forme Résonante</b><em>${why}</em></span><span class="battle-awaken-cost">1 Voix<br>+ jauge</span></button>`;
+  return `${gauge ? `<div class="battle-energy${u.en >= MAX_ENERGY ? ' is-full' : ''}"><div class="battle-energy-head"><span class="caption">Résonance</span>${enPips(u.en, 'lg')}</div></div>` : ''}<button type="button" class="battle-awaken is-resonant" data-resonance-burst ${ok ? '' : 'disabled'}><span class="battle-awaken-medals"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.6 6.4L21 9l-5 4.4 1.6 6.6L12 16.6 6.4 20 8 13.4 3 9l6.4-.6Z" fill="currentColor"/></svg></span><span><b>Forme Résonante</b><em>${why}</em></span><span class="battle-awaken-cost">1 Voix<br>+ jauge</span></button>`;
 }
 
 async function onResonantFormClick(e) {

@@ -1,10 +1,10 @@
-import { POKEMON, SCEN, familyOf } from '../pokemon/pokemon.js';
+import { POKEMON, SCENARIOS, familyOf } from '../pokemon/pokemon.js';
 import { RECRUIT } from '../pokemon/evolution.js';
 import { PROFILE } from '../state/game-state.js';
 import { mulberry32 } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { goTo } from '../core/navigation.js';
-import { OBST } from '../combat/synergies-obstacles.js';
+import { OBSTACLES } from '../combat/synergies-obstacles.js';
 import { battleOpts, scSel } from '../combat/ui.js';
 import { SCREEN_STATE } from '../ui/screen-state.js';
 import { formatNumber } from '../state/economy.js';
@@ -43,14 +43,14 @@ export function fingerprintRandom(w) {
 
 export function buildWeeklyChallenge() {
   const w = weekNumber();
-  if (WEEK_CACHE && WEEK_CACHE.w === w && SCEN.hebdo429) {
+  if (WEEK_CACHE && WEEK_CACHE.w === w && SCENARIOS.hebdo429) {
     return WEEK_CACHE;
   }
   const r = fingerprintRandom(w),
     pick = L0 => L0[Math.floor(r() * L0.length)],
     R = Object.assign({}, WEEKLY_PRESETS[Math.floor(r() * WEEKLY_PRESETS.length)]),
     bases = ['a4', 'a5', 'a6', 'a7', 'a8', 'j3', 'j5', 'j6', 'j7', 'h3', 'h5', 'h6'].filter(
-      k => SCEN[k] && SCEN[k].foes
+      k => SCENARIOS[k] && SCENARIOS[k].foes
     ),
     bk = pick(bases),
     family = RECRUIT.map(m => familyOf(m.id)).filter(f => f.length),
@@ -83,7 +83,7 @@ export function buildWeeklyChallenge() {
       .slice(0, 4)
       .map(f => endStep(f).id);
   }
-  const b = SCEN[bk],
+  const b = SCENARIOS[bk],
     D = Object.assign({}, b, {
       n: 'Défi de la semaine',
       lvl: `Semaine ${w.slice(-2)} · ${R.n}`,
@@ -95,15 +95,15 @@ export function buildWeeklyChallenge() {
       catch: false,
     });
   PROGRESS_KEYS.forEach(x => delete D[x]);
-  SCEN.hebdo429 = D;
-  OBST.hebdo429 = OBST[bk] || {};
+  SCENARIOS.hebdo429 = D;
+  OBSTACLES.hebdo429 = OBSTACLES[bk] || {};
   WEEK_CACHE = { w, R, bk, team };
   return WEEK_CACHE;
 }
 
 /** The challenge's rental team, with identical settings for everyone. */
 export function weeklyTeam() {
-  const D = SCEN[scSel];
+  const D = SCENARIOS[scSel];
   if (scSel !== 'hebdo429' || !D || !D.rentalTeam) {
     return null;
   }
@@ -134,7 +134,7 @@ function weeklyScore(S, win) {
   const al = S.units.filter(u => u.side === 'a'),
     livingUnits = al.filter(u => !u.ko).length,
     hp = al.reduce((a, u) => a + (u.ko ? 0 : u.hp / u.mhp), 0) / Math.max(1, al.length),
-    lim = (SCEN[S.sc] || {}).lim || 10,
+    lim = (SCENARIOS[S.sc] || {}).lim || 10,
     ko = S.units.filter(u => u.side === 'e' && u.ko).length;
   return win
     ? 1000 + Math.max(0, lim - S.round) * 60 + Math.round(hp * 400) + livingUnits * 50
@@ -183,7 +183,7 @@ export function init() {
   WEEK_CACHE = null;
 
   HOOKS.progress.push((S, rew, win) => {
-    const D = SCEN[S.sc] || {};
+    const D = SCENARIOS[S.sc] || {};
     if (!D.hebdo429) {
       return null;
     }

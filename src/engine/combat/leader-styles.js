@@ -1,7 +1,7 @@
-import { SCEN } from '../pokemon/pokemon.js';
+import { SCENARIOS } from '../pokemon/pokemon.js';
 import { PROFILE } from '../state/game-state.js';
 import { ARENAS } from '../modes/gyms.js';
-import { EMAX, affected, dmgOf, hasNx, markAt, mvType, unitAt, unitKey } from './engine.js';
+import { MAX_ENERGY, affected, dmgOf, hasNx, markAt, mvType, unitAt, unitKey } from './engine.js';
 
 /* Leader play styles: each gym leader, the rival and legendary bosses steer the AI their own way (added in v4.4). */
 
@@ -23,11 +23,11 @@ const IMMOBILE = ['root', 'web', 'sleep'];
 
 const CTRL = ['push', 'pull', 'confuse', 'turn', 'taunt', 'swap'];
 
-export const styleOf = k => STYLES[(SCEN[k] || {}).style] || null;
+export const styleOf = k => STYLES[(SCENARIOS[k] || {}).style] || null;
 
 /* AI bonus according to the leader's style (added to the score of an attack that hits your Pokémon) */
 export function aiStyleBonus(S, e, m, k, sim) {
-  const sty = (SCEN[S.sc] || {}).style;
+  const sty = (SCENARIOS[S.sc] || {}).style;
   if (!sty) {
     return 0;
   }
@@ -93,7 +93,7 @@ export function aiStyleBonus(S, e, m, k, sim) {
       b += 6;
     }
     hit.forEach(v => {
-      if (hasNx(v) && v.en >= EMAX - 1) {
+      if (hasNx(v) && v.en >= MAX_ENERGY - 1) {
         b += 6;
       }
     });
@@ -116,8 +116,8 @@ export function aiStyleBonus(S, e, m, k, sim) {
 // Statements run at startup, in the original order (see index.js).
 export function init() {
   ['rempart', 'maree', 'chaine', 'ronces', 'usure', 'controle', 'assaut', 'seisme'].forEach((s, i) => {
-    if (SCEN[ARENAS[i].k]) {
-      SCEN[ARENAS[i].k].style = s;
+    if (SCENARIOS[ARENAS[i].k]) {
+      SCENARIOS[ARENAS[i].k].style = s;
     }
   });
 }

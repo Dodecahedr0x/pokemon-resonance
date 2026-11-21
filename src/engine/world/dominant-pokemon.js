@@ -2,7 +2,7 @@
    Dominant Pokémon (added in v4.16): rare, bigger, stronger, escorted.
    Defeated or captured, they leave a treasure (TM, held item, Shards).
    ===================================================================== */
-import { POKEMON, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCENARIOS } from '../pokemon/pokemon.js';
 import { RECRUIT } from '../pokemon/evolution.js';
 import { ITEMS2, PROFILE, isCamp } from '../state/game-state.js';
 import { BADGES } from '../modes/gyms.js';
@@ -10,7 +10,7 @@ import { HOOKS } from '../core/hooks.js';
 import { TOD } from './home-route.js';
 import { pushMessage } from '../combat/engine.js';
 import { wildScen } from '../combat/items-bonds-ai.js';
-import { SHOP, bagN, formatNumber } from '../state/economy.js';
+import { SHOP, bagCount, formatNumber } from '../state/economy.js';
 import { MACHINES } from '../moves/tms.js';
 import { ACHIEVEMENTS } from '../progression/achievements.js';
 import { HELD_SHOP } from '../combat/resonance.js';
@@ -79,12 +79,12 @@ function dominantReward(rew) {
   const r = Math.random(),
     o = { g: 2 };
   const cts = Object.keys(MACHINES).filter(k => SHOP[k] && !MACHINES[k].cs),
-    newTms = cts.filter(k => !bagN(k)),
+    newTms = cts.filter(k => !bagCount(k)),
     held = Object.keys(HELD_SHOP).filter(k => HELD_SHOP[k].p && !PROFILE.items.includes(k));
   if (r < 0.45 && cts.length) {
     const L = newTms.length ? newTms : cts,
       k = L[Math.floor(Math.random() * L.length)];
-    PROFILE.bag[k] = Math.min(99, bagN(k) + 1);
+    PROFILE.bag[k] = Math.min(99, bagCount(k) + 1);
     o.ct = k;
   } else if (r < 0.7 && isCamp() && held.length) {
     const k = held[Math.floor(Math.random() * held.length)];
@@ -105,7 +105,7 @@ export function init() {
 
   /* ---------- hooks: after the battle ---------- */
   HOOKS.progress.push((S, rew, win) => {
-    const D = SCEN[S.sc] || {},
+    const D = SCENARIOS[S.sc] || {},
       o = [0, 0];
     if (D.dom) {
       if (win) {

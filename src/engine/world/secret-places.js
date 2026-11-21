@@ -4,7 +4,7 @@ import { TOD } from './home-route.js';
 import { pushMessage } from '../combat/engine.js';
 import { B } from '../combat/ui.js';
 import { writeLS, readLS, mulberry32 } from '../core/utils.js';
-import { sfx, vibe } from '../audio/sound-effects.js';
+import { sfx, vibrate } from '../audio/sound-effects.js';
 import { leaderOf, overlay } from '../progression/prestige.js';
 import { shut, updateTemp } from '../../screens/overlays/tempStore.js';
 import { SCREEN_STATE } from '../ui/screen-state.js';
@@ -89,7 +89,7 @@ function secretOpen(id) {
     applyReward(s.rew);
     savePurse();
     sfx('win');
-    vibe([30, 40, 30]);
+    vibrate([30, 40, 30]);
   }
   // rendering: src/screens/overlays/transients/Windows.jsx (SecretPlace)
   const o = overlay('secret-places', {
@@ -161,7 +161,7 @@ function npcPickChoice(j) {
   writeLS('res-passerby', all);
   savePurse();
   sfx(c.ok ? 'ui' : 'hit');
-  vibe(20);
+  vibrate(20);
   updateTemp('passerby', { res: c.t + (c.ok ? ' (' + rewardText(c.ok) + ')' : '') });
   renderMap();
 }

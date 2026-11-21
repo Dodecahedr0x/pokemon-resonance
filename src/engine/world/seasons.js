@@ -6,20 +6,20 @@ import { toast } from '../core/utils.js';
 import { refreshHome, setRoute } from '../../screens/home/homeStore.js';
 import { HOOKS } from '../core/hooks.js';
 import { queueSave } from '../state/saves.js';
-import { sfx, vibe } from '../audio/sound-effects.js';
-import { SHOP, bagN } from '../state/economy.js';
+import { sfx, vibrate } from '../audio/sound-effects.js';
+import { SHOP, bagCount } from '../state/economy.js';
 
 /* The season's types appear more often in tall grass, capturing them yields
    1 Shard, weather shows up in wild battles, and a gift awaits on the Home
    screen (once per season). */
 
 /* ---------- profile: Team Dissonance progress and seasonal gifts (declared functions: called as soon as the file loads) ---------- */
-export function MON0() {
+export function defaultSeasonProfile() {
   return { dissonance: 0, giftsClaimed: {} };
 }
 
 export function monClean(p) {
-  const o = MON0();
+  const o = defaultSeasonProfile();
   if (!p || typeof p !== 'object') {
     return o;
   }
@@ -67,7 +67,7 @@ export function seasonWeight(m) {
 /** Shiny chance, depending on the season. */
 export function multChroma() {
   const s = season();
-  return ((s && s.shiny) || 1) * (bagN('charme') ? 3 : 1); // Shiny Charm (v4.15)
+  return ((s && s.shiny) || 1) * (bagCount('charme') ? 3 : 1); // Shiny Charm (v4.15)
 }
 
 function giftTaken() {
@@ -86,11 +86,11 @@ function takeGift() {
     if (!SHOP[k]) {
       continue;
     }
-    PROFILE.bag[k] = Math.min(99, bagN(k) + s.giftFlag[k]);
+    PROFILE.bag[k] = Math.min(99, bagCount(k) + s.giftFlag[k]);
     txt.push(`${s.giftFlag[k]} × ${SHOP[k].n}`);
   }
   sfx('ui');
-  vibe(30);
+  vibrate(30);
   toast(`Cadeau de la saison : ${txt.join(', ')} !`);
   queueSave();
   renderSeason();

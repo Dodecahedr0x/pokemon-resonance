@@ -6,8 +6,8 @@ import { PROFILE } from '../state/game-state.js';
 import { $, toast } from '../core/utils.js';
 import { hook } from '../core/hooks.js';
 import { queueSave } from '../state/saves.js';
-import { sfx, vibe } from '../audio/sound-effects.js';
-import { SHOP, bagN, clampI } from '../state/economy.js';
+import { sfx, vibrate } from '../audio/sound-effects.js';
+import { SHOP, bagCount, clampI } from '../state/economy.js';
 import { SCREEN_STATE } from '../ui/screen-state.js';
 import { countS, familyOwned, maxLink } from './trainer-stats.js';
 import { renderWallet } from '../ui/wallet.js';
@@ -31,11 +31,11 @@ function claim(id) {
   }
   if (r.bag) {
     for (const k in r.bag) {
-      PROFILE.bag[k] = Math.min(99, bagN(k) + r.bag[k]);
+      PROFILE.bag[k] = Math.min(99, bagCount(k) + r.bag[k]);
     }
   }
   sfx('win');
-  vibe(30);
+  vibrate(30);
   toast(`Récompense reçue : ${q.t}`);
   queueSave();
   renderWallet();
@@ -74,7 +74,7 @@ export function buyShopItem(k) {
     return;
   }
   const price = it.g ? it.g * q : costOf(k) * q; // Workshop (v4.10)
-  if (bagN(k) + q > 99 || ((it.cs || it.keyItem) && bagN(k))) {
+  if (bagCount(k) + q > 99 || ((it.cs || it.keyItem) && bagCount(k))) {
     return;
   }
   const previous = PROFILE.money + ':' + PROFILE.gems;
@@ -89,10 +89,10 @@ export function buyShopItem(k) {
     }
     PROFILE.money -= price;
   }
-  PROFILE.bag[k] = bagN(k) + q;
+  PROFILE.bag[k] = bagCount(k) + q;
   SCREEN_STATE.qty[k] = 1;
   sfx('ui');
-  vibe(15);
+  vibrate(15);
   toast(`Acheté : ${q} × ${it.n}`);
   queueSave();
   renderWallet();

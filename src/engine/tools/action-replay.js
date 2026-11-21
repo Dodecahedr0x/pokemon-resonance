@@ -5,12 +5,12 @@ import { toast } from '../core/utils.js';
 import { goTo } from '../core/navigation.js';
 import { renderSquad, save } from '../team/team.js';
 import { B, finish } from '../combat/ui.js';
-import { PREF, savePref } from '../ui/preferences.js';
+import { PREFERENCES, savePref } from '../ui/preferences.js';
 import { SHOP } from '../state/economy.js';
 import { renderWallet } from '../ui/wallet.js';
 import { renderHome } from '../world/home.js';
 import { renderParams } from '../ui/settings.js';
-import { LEGS } from '../modes/legendaries.js';
+import { LEGENDARIES } from '../modes/legendaries.js';
 
 /* =====================================================================
    Action Replay (secret code, added in v4.30 as the Creator's Workshop):
@@ -86,7 +86,7 @@ function applyCheat(k) {
     PROFILE.rivalsMet = ['rv5', 'rv6', 'hd429'];
     m = 'Kanto, Johto et Hoenn débloqués.';
   } else if (k === 'legendes') {
-    PROFILE.legends = LEGS.map(leg => leg.id);
+    PROFILE.legends = LEGENDARIES.map(leg => leg.id);
     PROFILE.regionDiplomas = [1, 2, 3];
     PROFILE.hchamp = 1;
     m = 'Quêtes légendaires terminées : Quêtes › Légendes.';
@@ -110,7 +110,7 @@ function applyCheat(k) {
     finish();
     return;
   } else if (k === 'off') {
-    delete PREF.devKey;
+    delete PREFERENCES.devKey;
     savePref();
     renderParams();
     return toast('Action Replay désactivé.');
@@ -130,7 +130,7 @@ function applyCheat(k) {
 // only the code's fingerprint is in the game, never the code itself
 const CREATOR_KEY = 'agg9t7xer71nts93h0hym';
 
-export const isCreator = () => PREF.devKey === CREATOR_KEY;
+export const isCreator = () => PREFERENCES.devKey === CREATOR_KEY;
 
 // Startup statements, run in their original order (see index.js).
 export function init() {
@@ -139,7 +139,7 @@ export function init() {
     if (v) {
       const i = document.getElementById('cheat-code');
       if (isCodeValid(i && i.value)) {
-        PREF.devKey = CREATOR_KEY;
+        PREFERENCES.devKey = CREATOR_KEY;
         savePref();
         toast('Action Replay activé sur cet appareil.');
         renderParams();

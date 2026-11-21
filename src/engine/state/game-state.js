@@ -1,11 +1,11 @@
 import { POKEMON } from '../pokemon/pokemon.js';
-import { ECO0, ecoClean } from './economy.js';
+import { defaultEconomyProfile, ecoClean } from './economy.js';
 import { APLUS0, aplusClean } from '../modes/adventure-profile.js';
 import { emptyTmState, tmClean } from '../moves/tms.js';
-import { TAC0, tacClean } from '../combat/tactics.js';
+import { defaultColossiProfile, tacClean } from '../combat/tactics.js';
 import { REPLAY0, replayClean } from '../progression/replayability-profile.js';
-import { IDP0, idpClean } from '../progression/base-camp.js';
-import { MON0, monClean } from '../world/seasons.js';
+import { defaultCampProfile, idpClean } from '../progression/base-camp.js';
+import { defaultSeasonProfile, monClean } from '../world/seasons.js';
 import { LIVING_JOHTO_0, livingJohtoClean } from '../world/johto-profile.js';
 import { COMPANIONS_0, companionGardenClean } from '../progression/companions-profile.js';
 import { FISHING_SAFARI_0, fishingSafariClean } from '../modes/safari.js';
@@ -28,13 +28,13 @@ export function __set_PROFILE(v) {
    cleanup]. The order fixes the key order in the save: only append at the end.
    (hoisted functions: the table can be built before their modules are evaluated) */
 export const PROFILE_SECTIONS = [
-  [ECO0, ecoClean], // wallet, Bag, quests
+  [defaultEconomyProfile, ecoClean], // wallet, Bag, quests
   [APLUS0, aplusClean], // shinies, rival, legends, Tower (v4.4)
   [emptyTmState, tmClean], // moves learned through TM and HM (v4.6)
-  [TAC0, tacClean], // colossi defeated (v4.8)
+  [defaultColossiProfile, tacClean], // colossi defeated (v4.8)
   [REPLAY0, replayClean], // achievements, title, challenges (v4.9)
-  [IDP0, idpClean], // camp and expeditions (v4.10)
-  [MON0, monClean], // Team Dissonance, seasonal gifts (v4.11)
+  [defaultCampProfile, idpClean], // camp and expeditions (v4.10)
+  [defaultSeasonProfile, monClean], // Team Dissonance, seasonal gifts (v4.11)
   [LIVING_JOHTO_0, livingJohtoClean], // living Johto: story, beasts, Daycare, friends (v4.16)
   [COMPANIONS_0, companionGardenClean], // companion, scenes, vegetable garden, tournament (v4.17)
   [FISHING_SAFARI_0, fishingSafariClean], // fishing, Safari Park (v4.18)

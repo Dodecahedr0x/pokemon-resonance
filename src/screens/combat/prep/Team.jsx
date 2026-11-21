@@ -1,11 +1,11 @@
 import { Fragment, useState } from 'react';
 import { Html } from '../../../lib/html.jsx';
-import { POKEMON, SCEN } from '../../../engine/pokemon/pokemon.js';
+import { POKEMON, SCENARIOS } from '../../../engine/pokemon/pokemon.js';
 import { BUDGET } from '../../../engine/pokemon/evolution.js';
 import { DIFFS, PROFILE } from '../../../engine/state/game-state.js';
 import { RC, synOf } from '../../../engine/pokemon/roles-synergies.js';
 import { medal, typeColor } from '../../../engine/core/utils.js';
-import { cost, squad, vBonus } from '../../../engine/team/team.js';
+import { squadCost, squad, vBonus } from '../../../engine/team/team.js';
 import { startVoice } from '../../../engine/combat/engine.js';
 import { scenLock } from '../../../engine/combat/items-bonds-ai.js';
 import { scSel } from '../../../engine/combat/ui.js';
@@ -68,7 +68,7 @@ function Places() {
 
 // Doctrine (v4.30): #doctrineChoice, before the Start button.
 const doctrineHidden = () => {
-  const D = SCEN[scSel] || {};
+  const D = SCENARIOS[scSel] || {};
   return !!(D.tuto || D.hebdo429 || D.enigme431);
 };
 
@@ -144,7 +144,7 @@ export default function Team({ v }) {
   const champ = on && scSel === 'champ';
   // As with the old innerHTML, a hidden block keeps its last content.
   const [champWhy, setChampWhy] = useState(null);
-  const why = champ ? SCEN.champ.why : null;
+  const why = champ ? SCENARIOS.champ.why : null;
   if (why && (!champWhy || champWhy.join('\n') !== why.join('\n'))) {
     setChampWhy(why.slice());
   }
@@ -158,7 +158,7 @@ export default function Team({ v }) {
       <div className="prep-team-head">
         <span className="caption">Votre équipe</span>
         <b id="ptCount" className="prep-team-count">
-          {on ? `${squad.length} / 4 · ${cost()} / ${BUDGET} PC` : '0 / 4'}
+          {on ? `${squad.length} / 4 · ${squadCost()} / ${BUDGET} PC` : '0 / 4'}
         </b>
         <button className="lnk" type="button" data-go="pokedex">
           Modifier

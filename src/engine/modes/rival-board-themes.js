@@ -1,13 +1,13 @@
 /* Adaptive rival, board themes (added in v4.55). */
 
-import { POKEMON, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCENARIOS } from '../pokemon/pokemon.js';
 import { PROFILE } from '../state/game-state.js';
 import { toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { squad } from '../team/team.js';
-import { teff } from '../combat/engine.js';
+import { typeEffectiveness } from '../combat/engine.js';
 import { B } from '../combat/ui.js';
-import { PREF, savePref } from '../ui/preferences.js';
+import { PREFERENCES, savePref } from '../ui/preferences.js';
 import { sfx } from '../audio/sound-effects.js';
 import { savePurse } from '../state/economy.js';
 import { DEXS } from '../progression/pokedex.js';
@@ -48,7 +48,7 @@ function pickCounter(T, rem, used) {
     if (m.c !== POKEMON[rem].c || used.includes(m.id) || !POKEMON[m.id] || m.id === rem) {
       return;
     }
-    const e = Math.max(...m.t.map(t => teff(t, [T])));
+    const e = Math.max(...m.t.map(t => typeEffectiveness(t, [T])));
     const d = Math.abs(pw(m.id) - target);
     if (e < 2 || d > 3) {
       return;
@@ -71,7 +71,7 @@ export function adaptRival() {
   }
   const keys = [...RIVAL_KEYS, ...Object.keys(RIVAL_CHALLENGES).filter(k => k !== 'hd429')];
   keys.forEach(k => {
-    const D = SCEN[k];
+    const D = SCENARIOS[k];
     if (!D || !D.foes || D._rivalDone) {
       return;
     }
@@ -96,7 +96,7 @@ export function adaptRival() {
 }
 
 function applyBoardTheme() {
-  const k = BOARD_THEMES[PREF.boardTheme] ? PREF.boardTheme : 'classique';
+  const k = BOARD_THEMES[PREFERENCES.boardTheme] ? PREFERENCES.boardTheme : 'classique';
   Object.keys(BOARD_THEMES).forEach(x =>
     document.body.classList.toggle('board-theme-' + x, x === k && k !== 'classique')
   );
@@ -112,12 +112,12 @@ export const BOARD_THEMES = {
   cristal: { n: 'Cristal', p: 8, c: ['#4A4478', '#524B84'] },
 };
 
-export const isThemeUnlocked = k => !BOARD_THEMES[k].p || (PREF.unlockedThemes || []).includes(k);
+export const isThemeUnlocked = k => !BOARD_THEMES[k].p || (PREFERENCES.unlockedThemes || []).includes(k);
 
 // Instructions run at startup, in the original order (see index.js).
 export function init() {
   HOOKS.battleEnd.push(() => {
-    if (B && B.over && !B._rivalDone && SCEN[B.sc] && (rivalIdx(B.sc) >= 0 || SCEN[B.sc].rivalFight)) {
+    if (B && B.over && !B._rivalDone && SCENARIOS[B.sc] && (rivalIdx(B.sc) >= 0 || SCENARIOS[B.sc].rivalFight)) {
       B._rivalDone = 1;
       const s = rivalState();
       if (B.over === 'win') {
@@ -146,12 +146,12 @@ export function init() {
         return;
       }
       PROFILE.gems -= BOARD_THEMES[k].p;
-      PREF.unlockedThemes = [...(PREF.unlockedThemes || []), k];
-      PREF.boardTheme = k;
+      PREFERENCES.unlockedThemes = [...(PREFERENCES.unlockedThemes || []), k];
+      PREFERENCES.boardTheme = k;
       toast('Thème « ' + BOARD_THEMES[k].n + ' » débloqué');
       savePurse();
     } else if (isThemeUnlocked(k)) {
-      PREF.boardTheme = k;
+      PREFERENCES.boardTheme = k;
     }
     savePref();
     applyBoardTheme();

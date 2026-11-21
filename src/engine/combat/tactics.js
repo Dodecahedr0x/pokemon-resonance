@@ -1,10 +1,10 @@
 import { MOVES } from '../data/moves.js';
-import { POKEMON, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCENARIOS } from '../pokemon/pokemon.js';
 import { PROFILE } from '../state/game-state.js';
 import { medal } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import {
-  CDIR,
+  CUBE_DIRECTIONS,
   cellKey,
   parseCellKey,
   affected,
@@ -16,18 +16,18 @@ import {
   inBoard,
   landed,
   mkUnit,
-  nbrK,
+  neighborKeys,
   pushMessage,
   stun,
   targets,
-  teff,
+  typeEffectiveness,
   toCube,
   unitAt,
   unitKey,
 } from './engine.js';
-import { OBST, resolve, roleOf } from './synergies-obstacles.js';
-import { cellCenter, poly, scSel } from './ui.js';
-import { PREF } from '../ui/preferences.js';
+import { OBSTACLES, resolve, roleOf } from './synergies-obstacles.js';
+import { cellCenter, cellPolygon, scSel } from './ui.js';
+import { PREFERENCES } from '../ui/preferences.js';
 import { SHOP } from '../state/economy.js';
 import { DAMAGE_PROVIDERS, ROLE_PROVIDERS } from './tactical-engine.js';
 import { MACHINES } from '../moves/tms.js';
@@ -66,16 +66,16 @@ import { duelCanCharge } from '../modes/duel.js';
 
 /** "Tactique avancée" setting (Settings). The guided prologue battle stays classic. */
 export function chosenTactic() {
-  return PREF.tactics !== false && !(SCEN[scSel] && SCEN[scSel].tuto);
+  return PREFERENCES.tactics !== false && !(SCENARIOS[scSel] && SCENARIOS[scSel].tuto);
 }
 
 /** Profile: defeated colossi. Declared functions: called as soon as the game loads. */
-export function TAC0() {
+export function defaultColossiProfile() {
   return { colossi: [] };
 }
 
 export function tacClean(p) {
-  const o = TAC0();
+  const o = defaultColossiProfile();
   if (p && Array.isArray(p.colossi)) {
     o.colossi = [...new Set(p.colossi.filter(k => /^co\d$/.test(k)))];
   }
@@ -107,7 +107,7 @@ export function trapArrival(S, v, ev) {
   const n = TRAPS[p.k].n;
   if (p.k === 'roc') {
     pushMessage(ev, `${n} : des pierres s’abattent sur ${v.n}.`);
-    damage(S, v, Math.max(1, Math.round(4 * teff('Roche', v.t))), ev, { ind: true });
+    damage(S, v, Math.max(1, Math.round(4 * typeEffectiveness('Roche', v.t))), ev, { ind: true });
   } else if (flies(v)) {
     pushMessage(ev, `${v.n} survole ${n}.`);
     return; // the trap stays
@@ -204,7 +204,7 @@ export function unloadCharges(S, ev) {
       }
       if (flying) {
         // it dives onto its target and lands on a free neighboring cell, the closest to where it started
-        const freeOnes = nbrK(c.k)
+        const freeOnes = neighborKeys(c.k)
           .filter(x => S.tiles[x] && !S.tiles[x].rock && (!unitAt(S, x) || unitAt(S, x) === u))
           .sort((a, b) => hdist(parseCellKey(a), u.pos) - hdist(parseCellKey(b), u.pos));
         if (freeOnes.length && freeOnes[0] !== unitKey(u)) {
@@ -240,7 +240,7 @@ export function forceStop(S, u, k) {
 export function noWind(k, d) {
   const p = parseCellKey(k),
     c = toCube(p[0], p[1]),
-    D = CDIR[d],
+    D = CUBE_DIRECTIONS[d],
     q = fromCube(c[0] + D[0], c[1] + D[1], c[2] + D[2]);
   return inBoard(q[0], q[1]) ? cellKey(q[0], q[1]) : null;
 }
@@ -255,7 +255,7 @@ function dirToward(a, b) {
   }
   let best = -1,
     bs = -1e9;
-  CDIR.forEach((d, i) => {
+  CUBE_DIRECTIONS.forEach((d, i) => {
     const s = d[0] * v[0] + d[1] * v[1] + d[2] * v[2];
     if (s > bs) {
       bs = s;
@@ -284,7 +284,7 @@ function makeColossus(S, u, x, D) {
   u.boss = true;
   let cur = unitKey(u);
   x.parts.forEach((displayName, i) => {
-    const k = nbrK(cur)
+    const k = neighborKeys(cur)
       .filter(n => S.tiles[n] && !S.tiles[n].rock && !unitAt(S, n))
       .sort(
         (a, b) =>
@@ -387,7 +387,7 @@ export function chargesOnBoard(S) {
     }
     const m = MOVES[u.chg.mv];
     (u.vole ? [u.chg.k] : affected(S, u, m, u.chg.k)).forEach(k => {
-      h += poly(k, 'highlight-charge');
+      h += cellPolygon(k, 'highlight-charge');
     });
   });
   return h;
@@ -575,7 +575,7 @@ export function init() {
   });
   COLOSSI.forEach(C => {
     C.escort.forEach(([, , x]) => x && x.mv && (x.mv = x.mv.filter(m => MOVES[m]))); // missing moves: ignored
-    SCEN[C.k] = {
+    SCENARIOS[C.k] = {
       n: C.n,
       lvl: `Colosse · ${C.title}`,
       lim: C.lim,
@@ -596,7 +596,7 @@ export function init() {
         ...C.escort,
       ],
     };
-    OBST[C.k] = {};
+    OBSTACLES[C.k] = {};
   });
   ROLE_PROVIDERS.push({
     id: 'carapace',

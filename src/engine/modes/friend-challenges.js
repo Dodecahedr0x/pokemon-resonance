@@ -3,7 +3,7 @@
    code), friends' teams to fight, a shared leaderboard on the Home screen.
    ===================================================================== */
 import { MOVES } from '../data/moves.js';
-import { POKEMON, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCENARIOS } from '../pokemon/pokemon.js';
 import { ITEMS2, PROFILE, isCamp, ownedItems } from '../state/game-state.js';
 import { BADGES } from './gyms.js';
 import { paintOverlay } from '../../screens/overlays/dialogsStore.js';
@@ -11,7 +11,7 @@ import { $, fnvHash, toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { squad } from '../team/team.js';
 import { hasNx } from '../combat/engine.js';
-import { OBST } from '../combat/synergies-obstacles.js';
+import { OBSTACLES } from '../combat/synergies-obstacles.js';
 import { B, backToPrep, goFight } from '../combat/ui.js';
 import { escapeHtml, queueSave } from '../state/saves.js';
 import { familyOwned } from '../progression/trainer-stats.js';
@@ -185,7 +185,7 @@ export function buildFriendTeam(i) {
   }
   const s = A.s,
     pw = s.b + s.j + s.e + (s.c ? 2 : 0);
-  SCEN.ami = {
+  SCENARIOS.ami = {
     n: `Défi · ${A.n}`,
     lvl: `Défi entre amis · ${A.n}`,
     lim: 10,
@@ -201,7 +201,7 @@ export function buildFriendTeam(i) {
     d: `L’équipe de ${A.n}, telle qu’elle était sur sa carte${A.dt ? ' du ' + A.dt.split('-').reverse().join('/') : ''}. L’ordinateur la joue comme un vrai dresseur : capacités apprises, objets tenus, Résonance et attaques Expertes compris.`,
     foes: A.t.map((x, j) => (x[3] ? [x[0], FRIEND_POS[j], { shiny: true }] : [x[0], FRIEND_POS[j]])),
   };
-  OBST.ami = {};
+  OBSTACLES.ami = {};
   return true;
 }
 
@@ -276,7 +276,7 @@ function onCombat(S, opt, D0) {
   if (S.restricted) {
     return;
   } // fixed-rule battles (v4.31)
-  D0 = D0 || SCEN[S.sc] || {};
+  D0 = D0 || SCENARIOS[S.sc] || {};
   // a friend's team: its learned moves and its items
   if (D0.ami) {
     const A = (PROFILE.friends || [])[D0.ami - 1];
@@ -394,14 +394,14 @@ function onFriendChallengesClick(e) {
 // Instructions run at startup, in the original order (see index.js).
 export function init() {
   // a safe value as long as no challenge is running
-  SCEN.ami = Object.assign({}, SCEN.gue, { n: 'Défi entre amis', ami: 0 });
+  SCENARIOS.ami = Object.assign({}, SCENARIOS.gue, { n: 'Défi entre amis', ami: 0 });
 
   /* ---------- hooks: battle creation ---------- */
   HOOKS.combat.push(onCombat);
 
   /* ---------- hooks: after the battle ---------- */
   HOOKS.progress.push((S, rew, win) => {
-    const D = SCEN[S.sc] || {},
+    const D = SCENARIOS[S.sc] || {},
       o = [0, 0];
     // Daily challenge: your result, for the friends leaderboard
     if (rew.daily) {

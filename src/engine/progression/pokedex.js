@@ -1,6 +1,6 @@
 import { POKEMON, POKEMON_LIST } from '../pokemon/pokemon.js';
 import { $, $$, reducedMotion } from '../core/utils.js';
-import { norm, openSheet, squad } from '../team/team.js';
+import { normalizeText, openSheet, squad } from '../team/team.js';
 import { SCREEN_STATE } from '../ui/screen-state.js';
 import { isShinyOwned } from '../pokemon/shiny.js';
 import { applyShinyArt } from '../assets/art-direction.js';
@@ -13,11 +13,11 @@ export let dexBuilt;
 
 // v4.13
 export function dexList() {
-  const q = norm(SCREEN_STATE.dexQ || '');
+  const q = normalizeText(SCREEN_STATE.dexQ || '');
   let L = DEXS.filter(
     m =>
       (SCREEN_STATE.dexGen === 'all' || String(m.gen) === SCREEN_STATE.dexGen) &&
-      (!q || norm(m.n).includes(q) || String(m.no).includes(q) || m.t.some(t => norm(t).includes(q)))
+      (!q || normalizeText(m.n).includes(q) || String(m.no).includes(q) || m.t.some(t => normalizeText(t).includes(q)))
   );
   if (SCREEN_STATE.dexSort === 'nom') {
     L = [...L].sort((a, b) => a.n.localeCompare(b.n, 'fr'));

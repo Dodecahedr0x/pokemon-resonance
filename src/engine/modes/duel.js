@@ -5,7 +5,7 @@
    round chord and Resonant Form; burns, durations and Vigilance follow the turn
    of their owner, so that neither is advantaged.
    DUEL_TUTORIAL_0 / duelTutorialClean also sanitize the saved tutorial progress (ui/tutorial-chapters.js). */
-import { POKEMON, DEPLOY, POKEMON_LIST, SCEN, familyOf } from '../pokemon/pokemon.js';
+import { POKEMON, DEPLOY, POKEMON_LIST, SCENARIOS, familyOf } from '../pokemon/pokemon.js';
 import { PROFILE } from '../state/game-state.js';
 import { synOf } from '../pokemon/roles-synergies.js';
 import { $, reducedMotion, medal } from '../core/utils.js';
@@ -27,7 +27,7 @@ import {
   pushMessage,
   unitKey,
 } from '../combat/engine.js';
-import { OBST, resolve } from '../combat/synergies-obstacles.js';
+import { OBSTACLES, resolve } from '../combat/synergies-obstacles.js';
 import {
   B,
   L,
@@ -45,7 +45,7 @@ import {
   ui,
 } from '../combat/ui.js';
 import { escapeHtml, queueSave } from '../state/saves.js';
-import { PREF } from '../ui/preferences.js';
+import { PREFERENCES } from '../ui/preferences.js';
 import { playEv } from '../combat/move-effects.js';
 import { AUTO, overlay, turnBanner } from '../progression/prestige.js';
 import { shut } from '../../screens/overlays/tempStore.js';
@@ -248,8 +248,8 @@ function launchDuel(C) {
     return;
   }
   const X = duelScene(C);
-  SCEN.duel433 = X.D;
-  OBST.duel433 = X.O;
+  SCENARIOS.duel433 = X.D;
+  OBSTACLES.duel433 = X.O;
   DUEL_CURRENT = JSON.parse(JSON.stringify(C));
   const P0 = (PROFILE.duel433 = PROFILE.duel433 || DUEL_TUTORIAL_0().duel433);
   P0.names = C.names.map(duelName);
@@ -266,7 +266,7 @@ function launchDuel(C) {
 function leaveDuel() {
   const hp = launchDuel.prev;
   __set_B(null);
-  __set_scSel(hp && SCEN[hp] && !SCEN[hp].noProgress ? hp : 'gue');
+  __set_scSel(hp && SCENARIOS[hp] && !SCENARIOS[hp].noProgress ? hp : 'gue');
   backToPrep();
   SCREEN_STATE.campTab = 'duel';
   goTo('camp');
@@ -460,7 +460,7 @@ function handoff(j, force) {
   if (!D) {
     return;
   }
-  if ((AUTO && !force) || PREF.handoff === false) {
+  if ((AUTO && !force) || PREFERENCES.handoff === false) {
     turnBanner('Manche ' + B.round, D.names[j - 1]);
     return;
   }
@@ -742,7 +742,7 @@ export function init() {
       discard: 1,
       ready: 0,
       D: JSON.parse(JSON.stringify(D0)),
-      O: JSON.parse(JSON.stringify(OBST.duel433 || {})),
+      O: JSON.parse(JSON.stringify(OBSTACLES.duel433 || {})),
     };
     S.units.forEach(u => (u.duelPlayer = u.side === 'a' ? 1 : 2));
     S.jit = true;
@@ -901,8 +901,8 @@ export function init() {
         ['germignon', 'hericendre', 'kaiminus', 'wattouat'],
       ].map(team => team.filter(id => POKEMON[id]));
       const X = duelScene(C);
-      SCEN.duel433 = X.D;
-      OBST.duel433 = X.O;
+      SCENARIOS.duel433 = X.D;
+      OBSTACLES.duel433 = X.O;
       DUEL_STATE = null;
     } catch {
       /* Best effort: failure here is non-fatal. */

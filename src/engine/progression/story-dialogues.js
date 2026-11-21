@@ -1,7 +1,7 @@
 /* =====================================================================
    Story dialogues (added in v4.17): scenes before the big Johto battles.
    ===================================================================== */
-import { SCEN } from '../pokemon/pokemon.js';
+import { SCENARIOS } from '../pokemon/pokemon.js';
 import { PROFILE } from '../state/game-state.js';
 import { $ } from '../core/utils.js';
 import { launch } from '../combat/ui.js';
@@ -65,7 +65,7 @@ export const SCENES = {
   ],
 };
 
-const sceneKeyOf = k => (SCEN[k] && SCEN[k].roam ? 'roam' : k);
+const sceneKeyOf = k => (SCENARIOS[k] && SCENARIOS[k].roam ? 'roam' : k);
 
 function npcScene(who, k) {
   if (who === 'prof') {
@@ -79,7 +79,7 @@ function npcScene(who, k) {
     return storyNpc;
   }
   const L = leaderOf(who) || leaderOf(k);
-  const S = SCEN[who] || SCEN[k] || {};
+  const S = SCENARIOS[who] || SCENARIOS[k] || {};
   return L ? { n: L.n, av: avatar(L.n, S.at || 'Normal', 'is-small') } : { n: '…', av: PROF_AV };
 }
 

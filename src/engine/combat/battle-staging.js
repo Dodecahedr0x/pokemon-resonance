@@ -2,15 +2,15 @@
 
 import { clearOverlay, paintOverlay } from '../../screens/overlays/dialogsStore.js';
 import { GYMS } from '../data/game-data.js';
-import { SCEN } from '../pokemon/pokemon.js';
+import { SCENARIOS } from '../pokemon/pokemon.js';
 import { ARENAS, BADGES } from '../modes/gyms.js';
 import { $, reducedMotion, svgElement } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { badgeSvg } from '../modes/league.js';
 import { unitKey } from './engine.js';
 import { B, cellCenter, L } from './ui.js';
-import { PREF, calmMotion } from '../ui/preferences.js';
-import { noise, tone, vibe } from '../audio/sound-effects.js';
+import { PREFERENCES, calmMotion } from '../ui/preferences.js';
+import { noise, playTone, vibrate } from '../audio/sound-effects.js';
 import { AUTO, leaderOf } from '../progression/prestige.js';
 import { boardSet, getBoard, tokCl, tokHas, unitsBatch } from '../../screens/combat/board/boardStore.js';
 
@@ -18,7 +18,7 @@ const auto = () => !!AUTO;
 
 const isFast = () => {
   try {
-    return !!PREF.fast;
+    return !!PREFERENCES.fast;
   } catch (e) {
     return false;
   }
@@ -29,14 +29,14 @@ const SOUNDS = {
   whoosh: () => noise(0, 0.32, 0.05, 1600),
   envoi: () => {
     noise(0, 0.04, 0.05, 4200);
-    tone(620, 0.02, 0.09, 'square', 0.022, 1320);
+    playTone(620, 0.02, 0.09, 'square', 0.022, 1320);
   },
-  retour: () => tone(1500, 0, 0.26, 'sine', 0.035, 320),
+  retour: () => playTone(1500, 0, 0.26, 'sine', 0.035, 320),
 };
 
 const playSound = k => {
   try {
-    if (!PREF.sound || reducedMotion || PREF.pokeStyleS === 0) {
+    if (!PREFERENCES.sound || reducedMotion || PREFERENCES.pokeStyleS === 0) {
       return;
     }
     SOUNDS[k] && SOUNDS[k]();
@@ -65,7 +65,7 @@ let btr;
 let tBtr;
 
 const entranceClass = b => {
-  const D = SCEN[b.sc] || {};
+  const D = SCENARIOS[b.sc] || {};
   if (D.wild && !D.legend) {
     return 'is-wild';
   }
@@ -143,7 +143,7 @@ const send = b => {
   if (!g || calmMotion()) {
     return showIt(b);
   }
-  const D = SCEN[b.sc] || {},
+  const D = SCENARIOS[b.sc] || {},
     wild = !!D.wild;
   const listItems = b.units.filter(u => !u.ko && L.u[u.uid]);
   listItems.sort((x, y) => (x.side === 'e' ? 0 : 1) - (y.side === 'e' ? 0 : 1));
@@ -185,7 +185,7 @@ const recall = u => {
   } catch (e) {
     return;
   }
-  const D = (B && SCEN[B.sc]) || {},
+  const D = (B && SCENARIOS[B.sc]) || {},
     wildMon = !!D.wild && u.side === 'e';
   const w = svgElement('g', { transform: `translate(${x.toFixed(1)},${y.toFixed(1)})` }, g);
   if (wildMon) {
@@ -227,7 +227,7 @@ const celebrateBadge = () => {
   if (!B || !B.rew || !B.rew.badgeNew || CELEBRATED.has(B) || calmMotion() || auto()) {
     return;
   }
-  const D = SCEN[B.sc] || {};
+  const D = SCENARIOS[B.sc] || {};
   let i = typeof D.gym === 'number' ? D.gym : -1;
   if (i < 0) {
     i = ARENAS.findIndex(a => a.k === B.sc);
@@ -254,7 +254,7 @@ const celebrateBadge = () => {
   });
   bc.hidden = false;
   try {
-    vibe([20, 40, 20, 40, 90]);
+    vibrate([20, 40, 20, 40, 90]);
   } catch {
     /* Best effort: failure here is non-fatal. */
   }

@@ -6,7 +6,7 @@ import { RC } from '../../engine/pokemon/roles-synergies.js';
 import { medal } from '../../engine/core/utils.js';
 import { squad } from '../../engine/team/team.js';
 import { STARS } from '../../engine/modes/gym-screen.js';
-import { LEGS } from '../../engine/modes/legendaries.js';
+import { LEGENDARIES } from '../../engine/modes/legendaries.js';
 import { TEAM_NAME_EDIT } from '../../engine/team/saved-teams.js';
 
 import Button from '../../components/Button.jsx';
@@ -71,7 +71,7 @@ export default function DexCall({ v }) {
 
 // Captured legends.
 function Legends() {
-  const L = LEGS.filter(x => PROFILE.box.includes(x.id));
+  const L = LEGENDARIES.filter(x => PROFILE.box.includes(x.id));
   if (!L.length) {
     return null;
   }

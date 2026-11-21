@@ -1,7 +1,19 @@
 import { MOVES } from '../data/moves.js';
 import { HOOKS } from '../core/hooks.js';
-import { byUid, damage, endStep, hdist, heal, nbrK, net, pushMessage, stun, teff, unitAt } from '../combat/engine.js';
-import { poly } from '../combat/ui.js';
+import {
+  byUid,
+  damage,
+  endStep,
+  hdist,
+  heal,
+  neighborKeys,
+  markNetwork,
+  pushMessage,
+  stun,
+  typeEffectiveness,
+  unitAt,
+} from '../combat/engine.js';
+import { cellPolygon } from '../combat/ui.js';
 import { SHOP } from '../state/economy.js';
 import { DAMAGE_PROVIDERS, SPEED_PROVIDERS } from '../combat/tactical-engine.js';
 import { MACHINES } from './tms.js';
@@ -63,14 +75,14 @@ export function placeForesight(S, u, m, k, ev) {
 
 function strikePrescience(S, P0, ev) {
   const u = byUid(S, P0.by),
-    zone = [P0.k, ...nbrK(P0.k)].filter(x => S.tiles[x] && !S.tiles[x].rock),
+    zone = [P0.k, ...neighborKeys(P0.k)].filter(x => S.tiles[x] && !S.tiles[x].rock),
     keys = zone.map(x => unitAt(S, x)).filter(v => v && !v.ko && v.side !== P0.side);
   pushMessage(
     ev,
     `Prescience : l’onde Psy ${u ? withDe(u.n) + ' ' : ''}s’abat${keys.length ? '' : ' sur une zone vide'} !`
   );
   keys.forEach(v => {
-    const e = teff('Psy', v.t);
+    const e = typeEffectiveness('Psy', v.t);
     if (!e) {
       pushMessage(ev, `Ça n’affecte pas ${v.n}.`);
       return;
@@ -90,9 +102,9 @@ export function foresightOnBoard(S) {
   }
   let h = '';
   S.presc.forEach(x =>
-    [x.k, ...nbrK(x.k)].forEach(k => {
+    [x.k, ...neighborKeys(x.k)].forEach(k => {
       if (S.tiles[k] && !S.tiles[k].rock) {
-        h += poly(k, 'highlight-foresight' + (x.at <= S.round ? ' is-due' : ''));
+        h += cellPolygon(k, 'highlight-foresight' + (x.at <= S.round ? ' is-due' : ''));
       }
     })
   );
@@ -191,7 +203,7 @@ export const TARGET_MOVE_EFFECTS = {
     if (mk !== 'trempe') {
       return;
     }
-    const N = net(S, k, 'trempe');
+    const N = markNetwork(S, k, 'trempe');
     const others = Object.keys(N.seen)
       .map(x => unitAt(S, x))
       .filter(o => o && o !== v && !o.ko && o.side !== u.side && !(o.poisoned > 0));

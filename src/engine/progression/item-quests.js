@@ -3,8 +3,8 @@
 import { ITEMS2, PROFILE } from '../state/game-state.js';
 import { BADGES } from '../modes/gyms.js';
 import { toast } from '../core/utils.js';
-import { sfx, vibe } from '../audio/sound-effects.js';
-import { SHOP, bagN, savePurse } from '../state/economy.js';
+import { sfx, vibrate } from '../audio/sound-effects.js';
+import { SHOP, bagCount, savePurse } from '../state/economy.js';
 import { renderBag } from './quests-shop.js';
 import { dailySeed } from '../world/pokegear.js';
 import { applyReward, rewardText } from '../world/route-events.js';
@@ -61,7 +61,7 @@ function tmSeenCount() {
   }
   const learned = Object.values((PROFILE.ct && PROFILE.ct.learnedTms) || {});
   const all = Object.keys(SHOP).filter(k => SHOP[k].category === 'machines' && !SHOP[k].g === !SHOP[k].g);
-  return all.filter(k => seen[k] || bagN(k) > 0 || learned.includes(SHOP[k].mv)).length;
+  return all.filter(k => seen[k] || bagCount(k) > 0 || learned.includes(SHOP[k].mv)).length;
 }
 
 export function trophyState() {
@@ -161,7 +161,7 @@ const QUESTS = [
 
 export const badgeTotal = () => BADGES.length;
 
-const ownedTmKey = () => tmKeys().find(k => bagN(k) > 0);
+const ownedTmKey = () => tmKeys().find(k => bagCount(k) > 0);
 
 /* ---------- trophy box ---------- */
 const TROPHIES = [
@@ -206,16 +206,16 @@ function onItemQuestsClick(e) {
     extra = ITEMS2[r.item].n;
   }
   if (r.ct) {
-    const pool = tmKeys().filter(k => !bagN(k)),
+    const pool = tmKeys().filter(k => !bagCount(k)),
       all = pool.length ? pool : tmKeys(),
       k = all[dailySeed('qo' + q.id) % all.length];
-    PROFILE.bag[k] = Math.min(99, bagN(k) + 1);
+    PROFILE.bag[k] = Math.min(99, bagCount(k) + 1);
     extra = (extra ? extra + ' + ' : '') + SHOP[k].n;
   }
   S.done[q.id] = 1;
   localStorage.setItem('res-quest-log', JSON.stringify(S));
   sfx('win');
-  vibe(25);
+  vibrate(25);
   toast(`${q.giver} : merci ! ${extra || rewardText({ m: r.m, g: r.g, b: r.b })}`);
   savePurse();
   renderBag();
@@ -242,7 +242,7 @@ export function init() {
       localStorage.setItem('res-trophy-room', JSON.stringify(S));
       applyReward({ g: T.g });
       sfx('win');
-      vibe(25);
+      vibrate(25);
       toast(`Trophée : +${T.g} Éclat${T.g > 1 ? 's' : ''}`);
       savePurse();
       renderBag();

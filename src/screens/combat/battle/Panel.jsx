@@ -2,13 +2,13 @@ import { Html } from '../../../lib/html.jsx';
 import { strength } from '../../../lib/power.js';
 import { REACTIONS } from '../../../engine/data/game-data.js';
 import { MOVES, SHAPE, ABILITIES } from '../../../engine/data/moves.js';
-import { POKEMON, SCEN } from '../../../engine/pokemon/pokemon.js';
+import { POKEMON, SCENARIOS } from '../../../engine/pokemon/pokemon.js';
 import { ARRIVAL_EFFECTS } from '../../../engine/pokemon/evolution.js';
-import { ROLEFX, rIco } from '../../../engine/pokemon/roles-synergies.js';
+import { ROLEFX, roleIcon } from '../../../engine/pokemon/roles-synergies.js';
 import { veiled } from '../../../engine/modes/gyms.js';
 import { markOf, medal, rxCat, typeBadge, typeColor } from '../../../engine/core/utils.js';
 import {
-  EMAX,
+  MAX_ENERGY,
   byUid,
   canAwaken,
   forcedTarget,
@@ -23,11 +23,11 @@ import {
 } from '../../../engine/combat/engine.js';
 import { roleOf } from '../../../engine/combat/synergies-obstacles.js';
 import { B, enPips, segHp, ui } from '../../../engine/combat/ui.js';
-import { PREF } from '../../../engine/ui/preferences.js';
+import { PREFERENCES } from '../../../engine/ui/preferences.js';
 import { catchBlock, duoBlock, tileCard, unitExtras } from '../../../engine/combat/battle-panel.js';
 import { HEALS } from '../../../engine/items/battle-potions.js';
 import { itemIcon } from '../../../engine/assets/item-icons.js';
-import { SHOP, bagN } from '../../../engine/state/economy.js';
+import { SHOP, bagCount } from '../../../engine/state/economy.js';
 import {
   COMBAT_ITEMS,
   BAG_MAX,
@@ -198,12 +198,12 @@ function Role() {
     <div className="battle-panel-role">
       {R ? (
         <span className={'battle-role-tag' + (u.side === 'e' ? ' is-enemy' : '')} title={R.d}>
-          <Html html={rIco(r)} />
+          <Html html={roleIcon(r)} />
           {r} · {R.k}
         </span>
       ) : null}
-      <button type="button" className="battle-panel-details" data-info="" aria-pressed={!!PREF.info}>
-        {PREF.info ? 'Moins' : 'Détails'}
+      <button type="button" className="battle-panel-details" data-info="" aria-pressed={!!PREFERENCES.info}>
+        {PREFERENCES.info ? 'Moins' : 'Détails'}
       </button>
     </div>
   );
@@ -292,7 +292,7 @@ function OpponentSheet({ e }) {
       {NL}
       {RF ? (
         <p className="battle-role-note is-enemy">
-          <Html html={rIco(role)} />
+          <Html html={roleIcon(role)} />
           <span>
             <b>
               {role} · {RF.k}.
@@ -474,9 +474,9 @@ function Awakening({ u, s }) {
   }
   const o = evoOpts(B, u),
     ce = canAwaken(B, u),
-    full = u.en >= EMAX;
+    full = u.en >= MAX_ENERGY;
   const why = !full
-    ? `Encore ${EMAX - u.en} : fin de manche, réaction, coup encaissé, allié K.O.`
+    ? `Encore ${MAX_ENERGY - u.en} : fin de manche, réaction, coup encaissé, allié K.O.`
     : u.sn
       ? 'Immobilisé cette manche.'
       : u.acted
@@ -587,10 +587,10 @@ function Step({ u, st }) {
 
 /* ---------- Bag: items usable in battle (v4.0, v4.14) ---------- */
 function Bag({ u }) {
-  if ((SCEN[B.sc] || {}).tuto || B.duel433 || ui.selE || u.side !== 'a') {
+  if ((SCENARIOS[B.sc] || {}).tuto || B.duel433 || ui.selE || u.side !== 'a') {
     return null;
   }
-  const own = [...HEALS, ...COMBAT_ITEMS].filter(k => bagN(k));
+  const own = [...HEALS, ...COMBAT_ITEMS].filter(k => bagCount(k));
   if (!own.length) {
     return null;
   }
@@ -614,7 +614,7 @@ function Bag({ u }) {
             <img src={itemIcon(it.img)} alt="" loading="lazy" />
             <b>{it.sn || it.n}</b>
             <span>
-              {info} · ×{bagN(k)}
+              {info} · ×{bagCount(k)}
             </span>
           </button>
         );

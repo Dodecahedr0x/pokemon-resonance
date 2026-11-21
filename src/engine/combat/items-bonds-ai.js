@@ -1,13 +1,13 @@
 import { GYMS, REACTIONS } from '../data/game-data.js';
 import { MOVES } from '../data/moves.js';
-import { POKEMON, POKEMON_LIST, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, POKEMON_LIST, SCENARIOS } from '../pokemon/pokemon.js';
 import { PROFILE, isCamp, lvlOfPts, pairKey } from '../state/game-state.js';
 import { BADGES } from '../modes/gyms.js';
 import {
   parseCellKey,
   byUid,
   dmgOf,
-  effR,
+  effectiveRange,
   endStep,
   hasNx,
   hdist,
@@ -15,14 +15,14 @@ import {
   mvType,
   pushMessage,
   targets,
-  teff,
+  typeEffectiveness,
   unitKey,
 } from './engine.js';
 import { resolve } from './synergies-obstacles.js';
 import { B } from './ui.js';
 import { CHAMP_L, ELITE_L } from '../progression/prestige.js';
 import { CAP_K, __set_BALL_SEL } from '../items/ball-choice.js';
-import { SHOP, bagN } from '../state/economy.js';
+import { SHOP, bagCount } from '../state/economy.js';
 import { renderWallet } from '../ui/wallet.js';
 import { lockRival, RIVAL_STEPS } from '../modes/rival.js';
 import { lockJohto, isJohtoRegion, routeName } from '../world/johto.js';
@@ -77,11 +77,11 @@ export function captureReq(S, u, e) {
     { ok: !!u && !u.acted && !u.sn, t: 'cet allié n’a pas encore agi' },
     { ok: S.voice >= 2, t: '2 Voix' },
   ];
-  if ((SCEN[S.sc] || {}).captureLegend) {
-    r.push({ ok: e.sp === SCEN[S.sc].captureLegend, t: 'la légende elle-même, pas son escorte' });
+  if ((SCENARIOS[S.sc] || {}).captureLegend) {
+    r.push({ ok: e.sp === SCENARIOS[S.sc].captureLegend, t: 'la légende elle-même, pas son escorte' });
   } // v4.29
-  if ((SCEN[S.sc] || {}).captureHoennLegend) {
-    const L = HOENN_LEGEND_DEFS.find(x => x.id === SCEN[S.sc].captureHoennLegend); // Hoenn legends (v4.38)
+  if ((SCENARIOS[S.sc] || {}).captureHoennLegend) {
+    const L = HOENN_LEGEND_DEFS.find(x => x.id === SCENARIOS[S.sc].captureHoennLegend); // Hoenn legends (v4.38)
     r.push({ ok: e.sp === L.id, t: 'la légende elle-même, pas son escorte' }, { ok: !!L.cap.f(S, L, e), t: L.cap.t });
   }
   // the chosen Ball changes the conditions
@@ -102,7 +102,7 @@ export function captureReq(S, u, e) {
     r[1] = { ok: special.pv(S, e), t: special.hpText };
     r[2] = { ok: special.im(S, e), t: special.tim };
   }
-  r.push({ ok: bagN(k) > 0, t: `une ${SHOP[k].n} dans le Sac` });
+  r.push({ ok: bagCount(k) > 0, t: `une ${SHOP[k].n} dans le Sac` });
   return r;
 }
 
@@ -140,7 +140,7 @@ export function pCapture(S, u, e) {
   endStep(S, ev);
   if (S === B) {
     // a Ball from the Bag is consumed
-    PROFILE.bag[k] = Math.max(0, bagN(k) - 1);
+    PROFILE.bag[k] = Math.max(0, bagCount(k) - 1);
     if (!PROFILE.bag[k]) {
       delete PROFILE.bag[k];
     }
@@ -205,7 +205,7 @@ export function duoTargets(S, u, p) {
   return o;
 }
 
-export function pDuo(S, u, p, k) {
+export function playDuo(S, u, p, k) {
   if (!canDuo(S, u, p) || !duoTargets(S, u, p).includes(k)) {
     return null;
   }
@@ -270,7 +270,7 @@ export function threatAt(S, e, pos) {
       if (!(m.p || m.fix) || m.sh === 'self') {
         return;
       }
-      mr = Math.max(mr, m.sh === 'ring' ? 1 : effR(a, m, S));
+      mr = Math.max(mr, m.sh === 'ring' ? 1 : effectiveRange(a, m, S));
       best = Math.max(best, dmgOf(S, a, m, e, mvType(S, a, m), 1));
     });
     if (mr && hdist(a.pos, pos) <= movPts(S, a) + mr) {
@@ -281,7 +281,7 @@ export function threatAt(S, e, pos) {
 }
 
 export function aiFallback(S, e, opts, al, here) {
-  const lv = (DIFF[S.diff] || DIFF.normal).ai;
+  const lv = (DIFFICULTY[S.diff] || DIFFICULTY.normal).ai;
   if (lv && hasNx(e) && e.hp <= e.mhp * 0.5) {
     let bk = here,
       bt = threatAt(S, e, e.pos);
@@ -309,7 +309,7 @@ export function aiFallback(S, e, opts, al, here) {
 export function wildScen(id, tod, shiny, dom) {
   const m = POKEMON[id],
     b = BADGES.length;
-  SCEN.sauvage = {
+  SCENARIOS.sauvage = {
     n: `${m.n}${dom ? ' Dominant' : ''}${shiny ? ' chromatique' : ''}${dom ? '' : ' sauvage'}`,
     lvl: routeName() + ' · rencontre',
     lim: 8,
@@ -326,9 +326,9 @@ export function wildScen(id, tod, shiny, dom) {
     foes: [shiny ? [id, [6, 2], { shiny: true }] : [id, [6, 2]]],
   };
   if (dom) {
-    makeDominantScenario(SCEN.sauvage, id, shiny);
+    makeDominantScenario(SCENARIOS.sauvage, id, shiny);
   } // Dominant Pokémon (v4.16)
-  return SCEN.sauvage;
+  return SCENARIOS.sauvage;
 }
 
 export function champBuild() {
@@ -347,11 +347,11 @@ export function champBuild() {
   const score = m => {
     let s = m.s[0] + m.s[1] + m.s[2];
     for (const t in atk) {
-      const e = teff(t, m.t);
+      const e = typeEffectiveness(t, m.t);
       s += atk[t] * (e === 0 ? 2.5 : e < 1 ? 1.2 : e > 1 ? -1.4 : 0);
     }
     for (const t in def) {
-      if (m.mv.some(id => MOVES[id].p && teff(MOVES[id].t, [t]) > 1)) {
+      if (m.mv.some(id => MOVES[id].p && typeEffectiveness(MOVES[id].t, [t]) > 1)) {
         s += def[t] * 0.8;
       }
     }
@@ -406,7 +406,7 @@ export function champBuild() {
     [7, 4],
     [6, 5],
   ];
-  SCEN.champ = {
+  SCENARIOS.champ = {
     n: 'Champion de la Ligue',
     lvl: `Final · ${CHAMP_L.n}`,
     lim: 10,
@@ -423,7 +423,7 @@ export function champBuild() {
     lv: 55,
     foes: pick.slice(0, 5).map((m, i) => [m.id, POS[i]]),
   };
-  return SCEN.champ;
+  return SCENARIOS.champ;
 }
 
 /* --- availability of a battle depending on the mode --- */
@@ -440,7 +440,7 @@ export function scenLock(k) {
 }
 
 function lockCampaign(k) {
-  const D = SCEN[k];
+  const D = SCENARIOS[k];
   if (D && (D.hoennLegend || D.captureHoennLegend)) {
     return lockHoennLegend(k, D);
   } // Hoenn Legendaries (v4.38)
@@ -467,7 +467,7 @@ function lockCampaign(k) {
       return 'Il faut les 8 badges.';
     }
     if (PROFILE.elite < D.elite - 1) {
-      return `Battez d’abord ${SCEN[ELITE[D.elite - 2]].n}.`;
+      return `Battez d’abord ${SCENARIOS[ELITE[D.elite - 2]].n}.`;
     }
   }
   if (D.champ && PROFILE.elite < 4) {
@@ -496,7 +496,7 @@ function lockCampaign(k) {
 }
 
 /* ===================== SYSTEMS v1.0: items, Bonds, duos, capture, fatigue, difficulty, AI ===================== */
-export const DIFF = {
+export const DIFFICULTY = {
   facile: { hb: 0.4, pb: -1, lim: 2, ai: 0 },
   normal: { hb: 1, pb: 0, lim: 0, ai: 1 },
   expert: { hb: 1.3, hbAdd: 4, pb: 1, lim: -1, ai: 2 },
@@ -506,7 +506,7 @@ export const DIFF = {
 export const immobilize = e => ['GEL', 'PAR', 'SOM'].includes(e.badge) || e.root > 0 || e.web > 0;
 
 /* --- combined techniques (Bond tier 3) --- */
-export const DUOT = {
+export const BOND_TECHNIQUES = {
   'magicarpe|pichu': {
     n: 'Pluie d’Orage',
     first: 'magicarpe',
@@ -593,7 +593,7 @@ const RX_COUNTER = {
 // Statements run at startup, in the original order (see index.js).
 export function init() {
   /* --- Council 4, guided battle, wild encounters --- */
-  Object.assign(SCEN, {
+  Object.assign(SCENARIOS, {
     tuto: {
       n: 'Combat guidé',
       lvl: 'Tutoriel · 7 étapes',

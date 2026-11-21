@@ -1,5 +1,5 @@
 import { reducedMotion } from '../core/utils.js';
-import { cur } from '../core/navigation.js';
+import { currentScreen } from '../core/navigation.js';
 
 /* =====================================================================
    Regional map scrolling (added in v4.30): the maps can be scrolled
@@ -49,7 +49,7 @@ export function init() {
   window.addEventListener('resize', () => setTimeout(updateScrollArrows, 100));
 
   document.addEventListener('click', () => {
-    if (cur === 'carte') {
+    if (currentScreen === 'carte') {
       setTimeout(updateScrollArrows, 90);
     }
   });

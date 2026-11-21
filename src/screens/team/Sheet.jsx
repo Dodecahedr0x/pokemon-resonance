@@ -9,10 +9,19 @@ import { REGION_NAMES } from '../../engine/data/hoenn.js';
 import { POKEMON, NOTES, familyOf } from '../../engine/pokemon/pokemon.js';
 import { ARRIVAL_EFFECTS } from '../../engine/pokemon/evolution.js';
 import { ITEMS2, LINK_N, LINK_T, PROFILE, inBox, isCamp, lvlOfPts, ownedItems } from '../../engine/state/game-state.js';
-import { RC, ROLEFX, rIco } from '../../engine/pokemon/roles-synergies.js';
+import { RC, ROLEFX, roleIcon } from '../../engine/pokemon/roles-synergies.js';
 import { markOf, medal, typeBadge, typeColor } from '../../engine/core/utils.js';
 import { BRANCHES, mhpOf } from '../../engine/combat/engine.js';
-import { STLN, branchNote, crestSmall, evoDiff, monEls, monMarks, nextOf, squad } from '../../engine/team/team.js';
+import {
+  STAT_NAMES,
+  branchNote,
+  crestSmall,
+  evoDiff,
+  monEls,
+  monMarks,
+  nextOf,
+  squad,
+} from '../../engine/team/team.js';
 import { HELD_IMG } from '../../engine/state/economy.js';
 import { itemIcon } from '../../engine/assets/item-icons.js';
 import { moveLearned } from '../../engine/moves/tms.js';
@@ -111,7 +120,7 @@ function Content({ id }) {
         </p>
         {ROLEFX[m.r] ? (
           <p className="team-sheet-role">
-            {T(rIco(m.r))}
+            {T(roleIcon(m.r))}
             <span>
               <b>{ROLEFX[m.r].k}</b> · {T(ROLEFX[m.r].d)}
             </span>
@@ -211,7 +220,7 @@ function Content({ id }) {
         <div className="team-sheet-stats">
           {m.s.map((v, i) => (
             <div key={i} className="team-sheet-stat">
-              <span>{STLN[i]}</span>
+              <span>{STAT_NAMES[i]}</span>
               <div className="team-sheet-stat-bar">
                 <i style={{ width: `${v * 20}%`, animationDelay: `${i * 60}ms` }} />
               </div>

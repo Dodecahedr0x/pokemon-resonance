@@ -1,16 +1,16 @@
 import { getHost, hostSet } from '../../screens/combat/board/boardStore.js';
 
 import { GYMS } from '../data/game-data.js';
-import { SCEN } from '../pokemon/pokemon.js';
+import { SCENARIOS } from '../pokemon/pokemon.js';
 import { PROFILE } from '../state/game-state.js';
 import { ARENAS } from '../modes/gyms.js';
 import { $, reducedMotion, typeColor } from '../core/utils.js';
 import { hook } from '../core/hooks.js';
-import { cur } from '../core/navigation.js';
+import { currentScreen } from '../core/navigation.js';
 import { byUid, unitKey } from '../combat/engine.js';
 import { ELITE } from '../combat/items-bonds-ai.js';
 import { B, __set_scSel, backToPrep, clearAim, floatAt, renderAll, ui } from '../combat/ui.js';
-import { PREF } from '../ui/preferences.js';
+import { PREFERENCES } from '../ui/preferences.js';
 import { __set_PREPG, renderPrep } from '../combat/battle-prep.js';
 import { fxOn } from '../combat/move-effects.js';
 import { musStart } from '../audio/music.js';
@@ -37,7 +37,7 @@ export function leaderOf(sc) {
   }
   const i = ARENAS.findIndex(a => a.k === sc);
   if (i >= 0) {
-    return LEAD[i];
+    return LEAGUE_MASTERS[i];
   }
   const e = ELITE.indexOf(sc);
   if (e >= 0) {
@@ -74,7 +74,7 @@ export function vsIntro() {
   if (!B) {
     return;
   }
-  const D = SCEN[B.sc],
+  const D = SCENARIOS[B.sc],
     L = leaderOf(B.sc),
     i = ARENAS.findIndex(a => a.k === B.sc),
     al = B.units.filter(u => u.side === 'a'),
@@ -100,10 +100,10 @@ export function vsIntro() {
                     ? 'Duel local'
                     : 'Terrain d’entraînement';
   const ri = i >= 0 ? i : ARENAS.findIndex(a => a.rule === D.rule); // board rule carried over (legends, Tower)
-  const dur = reducedMotion ? 900 : PREF.fast ? 1400 : 2300;
+  const dur = reducedMotion ? 900 : PREFERENCES.fast ? 1400 : 2300;
   // rendered: src/screens/overlays/transients/Vs.jsx
   const o = overlay('vs', {
-    cls: (reducedMotion ? ' is-calm' : '') + (PREF.fast ? ' is-fast' : ''),
+    cls: (reducedMotion ? ' is-calm' : '') + (PREFERENCES.fast ? ' is-fast' : ''),
     dur,
     k1: B.duel433 ? 'Joueur 1' : 'Votre équipe',
     al: al.map(u => u.t),
@@ -156,7 +156,7 @@ export function turnBanner(txt, sub) {
     roundBanner: {
       n,
       isEnemy: B.phase === 'enemy',
-      fast: !!PREF.fast,
+      fast: !!PREFERENCES.fast,
       title: txt || 'Manche ' + B.round,
       sub: sub || (B.duel433 ? B.duel433.names[B.duel433.j - 1] : B.phase === 'enemy' ? 'Tour adverse' : 'À vous'),
     },
@@ -168,7 +168,7 @@ export function turnBanner(txt, sub) {
         hostSet({ roundBanner: null });
       }
     },
-    PREF.fast ? 800 : 1300
+    PREFERENCES.fast ? 800 : 1300
   );
 }
 
@@ -262,7 +262,7 @@ function musTick() {
   }
   const t = MUS.ac.currentTime + 0.08,
     ch = MPROG[MUS.step % 4],
-    bat = !!B && cur === 'combat' && !B.over;
+    bat = !!B && currentScreen === 'combat' && !B.over;
   ch.forEach((n, i) => {
     musVoice(musNote(n - 12), t, 7.8, 'triangle', i ? 0.05 : 0.07);
     musVoice(musNote(n - 12) * 1.003, t, 7.8, 'sine', 0.03);
@@ -335,7 +335,7 @@ export function musPadLevel() {
         g = MUS.out.gain;
       g.cancelScheduledValues(t);
       g.setValueAtTime(g.value, t);
-      g.linearRampToValueAtTime(0.55 * PREF.musVol, t + 0.4);
+      g.linearRampToValueAtTime(0.55 * PREFERENCES.musVol, t + 0.4);
     }
   } catch {
     /* Best effort: failure here is non-fatal. */
@@ -344,7 +344,7 @@ export function musPadLevel() {
 
 /* ===================== v2.0 PRESTIGE: universe, staging, finishing touches ===================== */
 /* --- Universe: the Resonance League and its masters (original characters) --- */
-export const LEAD = [
+export const LEAGUE_MASTERS = [
   {
     n: 'Bastien Grès',
     t: 'le Tailleur de la Faille',
@@ -444,7 +444,7 @@ export const CHAMP_L = {
 
 const PROF = { n: 'Professeure Maëlle Sorbier', t: 'chercheuse en Résonance' };
 
-export const UNIV = [
+export const UNIVERSE_PAGES = [
   [
     'La Résonance',
     'À Kanto et à Johto, les dresseurs l’ont constaté depuis longtemps : quand un Pokémon et son dresseur agissent au même tempo, une énergie monte entre eux. Trois pulsations, et le Pokémon franchit un stade, en plein combat, sans retour possible. Les chercheurs l’ont appelée la Résonance.',
@@ -463,7 +463,7 @@ export const UNIV = [
   ],
 ];
 
-export const CHAP = k => {
+export const chapterOf = k => {
   const jc = johtoChapter(k); // Johto (v4.15)
   if (jc) {
     return jc;
@@ -473,7 +473,7 @@ export const CHAP = k => {
     return { c: 'Prologue', t: 'Le premier éveil', who: PROF.n };
   }
   if (i >= 0) {
-    return { c: `Chapitre ${i + 1}`, t: SCEN[k].n, who: LEAD[i].n, L: LEAD[i] };
+    return { c: `Chapitre ${i + 1}`, t: SCENARIOS[k].n, who: LEAGUE_MASTERS[i].n, L: LEAGUE_MASTERS[i] };
   }
   const e = ELITE.indexOf(k);
   if (e >= 0) {
@@ -515,7 +515,7 @@ const MPROG = [
 ];
 
 function onBattleShortcutKeydown(e) {
-  if (cur !== 'combat' || !B || B.over || ui.busy || e.altKey || e.ctrlKey || e.metaKey) {
+  if (currentScreen !== 'combat' || !B || B.over || ui.busy || e.altKey || e.ctrlKey || e.metaKey) {
     return;
   }
   const tg = e.target;
@@ -623,7 +623,7 @@ export function init() {
   document.addEventListener(
     'pointerdown',
     () => {
-      if (PREF.music && !MUS.on) {
+      if (PREFERENCES.music && !MUS.on) {
         musStart();
       }
     },

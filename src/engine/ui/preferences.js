@@ -6,11 +6,11 @@ import { musStart, musStop } from '../audio/music.js';
 // Pokémon-style reduced animations (v4.72): system preference, accessibility setting or
 // theme animations turned off. Same test as the local copies in engine/combat/battle-staging.js and 109.
 export const calmMotion = () =>
-  !!reducedMotion || document.documentElement.classList.contains('a11y-rm') || PREF.pokemonSkinA === 0;
+  !!reducedMotion || document.documentElement.classList.contains('a11y-rm') || PREFERENCES.pokemonSkinA === 0;
 
 export function savePref() {
-  writeLS('res-pref', PREF);
-  if (PREF.music) {
+  writeLS('res-pref', PREFERENCES);
+  if (PREFERENCES.music) {
     musStart();
   } else {
     musStop();
@@ -19,7 +19,7 @@ export function savePref() {
 
 const p = { sound: false, vibe: false, fast: false };
 
-export const PREF = p;
+export const PREFERENCES = p;
 
 // Instructions run at startup, in the original order (see index.js).
 export function init() {

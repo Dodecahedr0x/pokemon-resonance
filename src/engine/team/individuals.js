@@ -2,7 +2,7 @@ import { POKEMON, familyOf } from '../pokemon/pokemon.js';
 import { DIFFS, ITEMS2, PROFILE } from '../state/game-state.js';
 import { fnvHash } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
-import { EMAX, pushMessage } from '../combat/engine.js';
+import { MAX_ENERGY, pushMessage } from '../combat/engine.js';
 import { queueSave } from '../state/saves.js';
 import { CHARACTERS } from './characters.js';
 
@@ -219,7 +219,7 @@ export function init() {
         if (I.ability === 'fermete') {
           u.sturdy = true;
         } else if (I.ability === 'focus') {
-          u.en = Math.min(EMAX, (u.en || 0) + 1);
+          u.en = Math.min(MAX_ENERGY, (u.en || 0) + 1);
         } else if (I.ability === 'robuste') {
           u.mhp = Math.round(u.mhp * 1.1);
           u.hp = Math.min(u.mhp, Math.round(u.hp * 1.1));

@@ -186,7 +186,7 @@ export const NOTES = {
   tarpaud: 'Crachin : la pluie tombe dès son arrivée.',
 };
 
-export const SCEN = {
+export const SCENARIOS = {
   gue: {
     n: 'Gué de la Brume',
     lvl: 'Initiation',

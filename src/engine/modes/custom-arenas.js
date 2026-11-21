@@ -1,11 +1,11 @@
 // Custom arenas (Camp › Arènes, added in v4.31): create a battle, share it through an ARN-… code.
 import { GYMS } from '../data/game-data.js';
-import { POKEMON, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCENARIOS } from '../pokemon/pokemon.js';
 import { PROFILE } from '../state/game-state.js';
 import { ARENAS, TERR } from './gyms.js';
 import { toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
-import { OBST } from '../combat/synergies-obstacles.js';
+import { OBSTACLES } from '../combat/synergies-obstacles.js';
 import { openBattle } from '../combat/ui.js';
 import { queueSave } from '../state/saves.js';
 import { today } from '../state/economy.js';
@@ -25,7 +25,7 @@ export function gymClean(a) {
   const f = Array.isArray(a.f)
     ? a.f.filter(id => typeof id === 'string' && POKEMON[id] && !POKEMON[id].leg).slice(0, 5)
     : [];
-  if (!f.length || !SCEN[a.t] || !SCEN[a.t].foes) {
+  if (!f.length || !SCENARIOS[a.t] || !SCENARIOS[a.t].foes) {
     return null;
   }
   return {
@@ -53,12 +53,14 @@ function GYM_RULES() {
 }
 
 function GYM_TERRAINS() {
-  return [...new Set([...TERR, ...ARENAS.map(A => A.k)])].filter(k => SCEN[k] && SCEN[k].foes).map(k => [k, SCEN[k].n]);
+  return [...new Set([...TERR, ...ARENAS.map(A => A.k)])]
+    .filter(k => SCENARIOS[k] && SCENARIOS[k].foes)
+    .map(k => [k, SCENARIOS[k].n]);
 }
 
 export function gymScene(a) {
-  const b = SCEN[a.t];
-  SCEN.perso431 = {
+  const b = SCENARIOS[a.t];
+  SCENARIOS.perso431 = {
     n: a.n,
     lvl: `Arène personnalisée${a.author ? ' · ' + a.author : ''}`,
     lim: a.lim,
@@ -77,7 +79,7 @@ export function gymScene(a) {
     noProgress: 1,
     d: `Arène créée${a.author ? ' par ' + a.author : ''}. Ni progression ni capture : 200 ₽ par victoire (3 par jour).`,
   };
-  OBST.perso431 = OBST[a.t] || {};
+  OBSTACLES.perso431 = OBSTACLES[a.t] || {};
 }
 
 export function gymAfter(S, rew, win) {

@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { Html } from '../../../lib/html.jsx';
 import { useResumeVersion } from './prepStore.js';
-import { SCEN } from '../../../engine/pokemon/pokemon.js';
+import { SCENARIOS } from '../../../engine/pokemon/pokemon.js';
 import { medal } from '../../../engine/core/utils.js';
 import { badgeSvg } from '../../../engine/modes/league.js';
 import { B } from '../../../engine/combat/ui.js';
-import { SV, battleLine, validBattle } from '../../../engine/state/saves.js';
+import { CLOUD_SAVE, battleLine, validBattle } from '../../../engine/state/saves.js';
 
 import Button from '../../../components/Button.jsx';
 // "Combat en cours" (Battle in progress) card (formerly renderResume), shared by #resumePrep (Battles) and
@@ -38,12 +38,12 @@ export function SummaryCard({ id, c }) {
 // <SummaryBox id="resumePrep" />: the container and its card, redrawn on every renderSummary().
 export default function SummaryBox({ id }) {
   const v = useResumeVersion();
-  const b = v && !B && validBattle(SV.lastBattle) ? SV.lastBattle : null;
+  const b = v && !B && validBattle(CLOUD_SAVE.lastBattle) ? CLOUD_SAVE.lastBattle : null;
   // As with the old innerHTML, a hidden card keeps its last content.
   const [last, setLast] = useState(null);
   let cur = null;
   if (b) {
-    const D = SCEN[b.sc];
+    const D = SCENARIOS[b.sc];
     cur = { gym: D.gym, at: D.at, line: battleLine(b), v };
   }
   if (cur && (!last || last.v !== cur.v)) {

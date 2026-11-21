@@ -9,19 +9,19 @@ import { afterShow } from '../world/home-journey.js';
 import { v4After } from '../ui/settings.js';
 import { fitPhoneBattle } from '../combat/compact-battle.js';
 
-export let cur;
+export let currentScreen;
 
 export function show(t, scroll) {
-  const previous = cur;
+  const previous = currentScreen;
   if (t === 'ligue') {
     // the League is integrated into Battles (Gyms and League tabs)
     __set_PREPG({ g: 'arenes', sc: scSel });
     t = 'combat';
   }
-  if (!TABS.includes(t)) {
+  if (!NAV_TABS.includes(t)) {
     t = 'accueil';
   }
-  cur = t;
+  currentScreen = t;
   $$('.page').forEach(p => p.classList.toggle('on', p.id === t));
   setShellPage(t, TNAME[t]); // marked links (aria-current) and #tbSec title: src/components
   if (scroll) {
@@ -39,7 +39,7 @@ export function show(t, scroll) {
     guideShown();
   }
   afterShow(t);
-  v4After(cur);
+  v4After(currentScreen);
   fitPhoneBattle(); // battle on phone (v4.34)
   hook('page', previous);
 }
@@ -54,7 +54,7 @@ export function goTo(t) {
 }
 
 /* ===================== NAVIGATION ===================== */
-export const TABS = [
+export const NAV_TABS = [
   'accueil',
   'pokedex',
   'combat',
@@ -85,7 +85,7 @@ export const TNAME = {
 
 // Statements run at startup, in the original order (see index.js).
 export function init() {
-  cur = 'accueil';
+  currentScreen = 'accueil';
 
   document.addEventListener('click', e => {
     const a = e.target.closest('[data-t],[data-go]');
@@ -104,7 +104,7 @@ export function init() {
 
   window.addEventListener('hashchange', () => {
     const t = location.hash.slice(1);
-    if (TABS.includes(t) && t !== cur) {
+    if (NAV_TABS.includes(t) && t !== currentScreen) {
       show(t, true);
     }
   });

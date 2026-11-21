@@ -2,7 +2,7 @@ import { useLayoutEffect, useRef, useState } from 'react';
 import { useKeyed } from '../../../lib/useKeyed.js';
 import { Html } from '../../../lib/html.jsx';
 import { GYMS } from '../../../engine/data/game-data.js';
-import { POKEMON, SCEN } from '../../../engine/pokemon/pokemon.js';
+import { POKEMON, SCENARIOS } from '../../../engine/pokemon/pokemon.js';
 import { isCamp } from '../../../engine/state/game-state.js';
 import { ARENAS, BADGES } from '../../../engine/modes/gyms.js';
 import { medal } from '../../../engine/core/utils.js';
@@ -57,7 +57,7 @@ export default function Result() {
 function Sheet({ S, cardRef, decor: deco }) {
   const win = S.over === 'win',
     evl = S.stats.evl || [],
-    D = SCEN[S.sc],
+    D = SCENARIOS[S.sc],
     gy = D.gym != null,
     nb = !!(S.rew && S.rew.badgeNew),
     du = !!S.duel433;
@@ -98,7 +98,7 @@ function Sheet({ S, cardRef, decor: deco }) {
           </span>
         </div>
       ) : null}
-      <p className="kicker">{SCEN[S.sc].n}</p>
+      <p className="kicker">{SCENARIOS[S.sc].n}</p>
       <h2 className="title" id="resT">
         {du ? <Html html={duelTitle(S)} /> : win ? 'Victoire' : S.fled ? 'Il s’est enfui' : 'Défaite'}
       </h2>

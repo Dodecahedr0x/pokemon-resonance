@@ -2,7 +2,7 @@
 
 import { immobilize } from '../combat/items-bonds-ai.js';
 import { B, renderAll } from '../combat/ui.js';
-import { SHOP, bagN } from '../state/economy.js';
+import { SHOP, bagCount } from '../state/economy.js';
 import { itemIcon } from '../assets/item-icons.js';
 import { BALL_CAPTURE_CHECKS } from './balls-held-items.js';
 
@@ -16,10 +16,10 @@ export function __set_BALL_SEL(v) {
 }
 
 export function ballFor(e) {
-  if (BALL_SEL && bagN(BALL_SEL)) {
+  if (BALL_SEL && bagCount(BALL_SEL)) {
     return BALL_SEL;
   }
-  const own = BALLS.filter(k => bagN(k));
+  const own = BALLS.filter(k => bagCount(k));
   return own.find(k => k !== 'master' && ballReqOk(k, e)) || own.find(k => k !== 'master') || own[0] || 'poke';
 }
 
@@ -42,7 +42,7 @@ const ballReqOk = (k, e) => {
 
 /* Ball choice in the capture panel */
 export const ballChips = () =>
-  `<div class="battle-balls" role="group" aria-label="Choisir une Ball">${BALLS.map(k => `<button type="button" class="battle-ball${k === CAP_K ? ' is-selected' : ''}" data-ball="${k}" aria-pressed="${k === CAP_K}" ${bagN(k) ? '' : 'disabled'}><img src="${itemIcon(SHOP[k].img)}" alt="" loading="lazy"><b>${SHOP[k].sn}</b><em>×${bagN(k)}</em></button>`).join('')}</div>${BALLS.some(k => bagN(k)) ? '' : '<p class="battle-hint">Plus aucune Ball : passez à la Boutique.</p>'}`;
+  `<div class="battle-balls" role="group" aria-label="Choisir une Ball">${BALLS.map(k => `<button type="button" class="battle-ball${k === CAP_K ? ' is-selected' : ''}" data-ball="${k}" aria-pressed="${k === CAP_K}" ${bagCount(k) ? '' : 'disabled'}><img src="${itemIcon(SHOP[k].img)}" alt="" loading="lazy"><b>${SHOP[k].sn}</b><em>×${bagCount(k)}</em></button>`).join('')}</div>${BALLS.some(k => bagCount(k)) ? '' : '<p class="battle-hint">Plus aucune Ball : passez à la Boutique.</p>'}`;
 
 export const BALLS = ['poke', 'super', 'hyper', 'master'];
 

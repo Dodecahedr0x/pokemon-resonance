@@ -3,7 +3,7 @@
 import { ITEMS2, PROFILE } from '../state/game-state.js';
 import { HOOKS } from '../core/hooks.js';
 import { escapeHtml } from '../state/saves.js';
-import { HELD_IMG, SHOP, bagN, today } from '../state/economy.js';
+import { HELD_IMG, SHOP, bagCount, today } from '../state/economy.js';
 import { ITEM_ICONS } from '../assets/item-icons.js';
 import { DAMAGE_PROVIDERS } from '../combat/tactical-engine.js';
 import { HELD_SHOP } from '../combat/resonance.js';
@@ -83,14 +83,14 @@ export function init() {
   HOOKS.progress.unshift((S, rew) => {
     try {
       if (S && S.rank === 'S' && S.rankNew && S.sc !== 'sauvage' && S.sc !== 'tuto') {
-        const cts = tmKeys().filter(k => !bagN(k)),
+        const cts = tmKeys().filter(k => !bagCount(k)),
           pool = cts.length ? cts : tmKeys();
         let h = 5;
         for (const ch of S.sc + today()) {
           h = (h * 31 + ch.charCodeAt(0)) >>> 0;
         }
         const k = pool[h % pool.length];
-        PROFILE.bag[k] = Math.min(99, bagN(k) + 1);
+        PROFILE.bag[k] = Math.min(99, bagCount(k) + 1);
         rew.tmReward = k;
       }
     } catch {

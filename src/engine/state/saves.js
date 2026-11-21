@@ -1,5 +1,5 @@
 import { REACTIONS, TYPES } from '../data/game-data.js';
-import { POKEMON, PRESETS, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, PRESETS, SCENARIOS } from '../pokemon/pokemon.js';
 import { BUDGET } from '../pokemon/evolution.js';
 import {
   CAMP_START,
@@ -15,12 +15,12 @@ import { BADGES, __set_BADGES } from '../modes/gyms.js';
 import { RC } from '../pokemon/roles-synergies.js';
 import { $, wait, writeLS, toast } from '../core/utils.js';
 import { setSaveIndicator } from '../../components/shellStore.js';
-import { cur, goTo } from '../core/navigation.js';
+import { currentScreen, goTo } from '../core/navigation.js';
 import { renderLeague } from '../modes/league.js';
 import { TEAM_MAX, __set_squad, renderSquad, save, squad, validSquad } from '../team/team.js';
 import { BOARD_ROWS, BOARD_COLS } from '../combat/engine.js';
 import { wildScen } from '../combat/items-bonds-ai.js';
-import { OBST } from '../combat/synergies-obstacles.js';
+import { OBSTACLES } from '../combat/synergies-obstacles.js';
 import {
   B,
   LOG,
@@ -34,10 +34,10 @@ import {
   renderAll,
   ui,
 } from '../combat/ui.js';
-import { PREF, savePref } from '../ui/preferences.js';
+import { PREFERENCES, savePref } from '../ui/preferences.js';
 import { openStarter } from '../progression/campaign.js';
 import { renderPrep } from '../combat/battle-prep.js';
-import { sfx, vibe } from '../audio/sound-effects.js';
+import { sfx, vibrate } from '../audio/sound-effects.js';
 import { renderWallet } from '../ui/wallet.js';
 import { renderHome } from '../world/home.js';
 import { v4After } from '../ui/settings.js';
@@ -76,7 +76,7 @@ function lsSet(k, v) {
 
 function ensureScen(b) {
   try {
-    if (b && b.sc === 'sauvage' && !SCEN.sauvage && b.state) {
+    if (b && b.sc === 'sauvage' && !SCENARIOS.sauvage && b.state) {
       const f = b.state.units.find(u => u.side === 'e');
       if (f && POKEMON[f.sp]) {
         wildScen(f.sp, b.state.time, !!f.shiny, !!f.dom);
@@ -86,8 +86,8 @@ function ensureScen(b) {
       towerRestore();
     }
     if (b && b.sc === 'duel433' && b.state && b.state.duel433 && b.state.duel433.D) {
-      SCEN.duel433 = b.state.duel433.D; // duel in progress: its terrain and teams (v4.33)
-      OBST.duel433 = b.state.duel433.O || {};
+      SCENARIOS.duel433 = b.state.duel433.D; // duel in progress: its terrain and teams (v4.33)
+      OBSTACLES.duel433 = b.state.duel433.O || {};
     }
   } catch {
     /* Best effort: failure here is non-fatal. */
@@ -99,7 +99,7 @@ export function validBattle(b) {
   try {
     return !!(
       b &&
-      SCEN[b.sc] &&
+      SCENARIOS[b.sc] &&
       b.state &&
       b.state.sc === b.sc &&
       Array.isArray(b.state.units) &&
@@ -207,14 +207,14 @@ export function cleanProfile(p) {
 function battleNow() {
   if (B && !B.over) {
     if (B.phase === 'player' && !ui.busy) {
-      SV.lastBattle = { sc: B.sc, state: JSON.parse(JSON.stringify(B)), log: LOG.slice(0, 40) };
+      CLOUD_SAVE.lastBattle = { sc: B.sc, state: JSON.parse(JSON.stringify(B)), log: LOG.slice(0, 40) };
     }
-    return SV.lastBattle;
+    return CLOUD_SAVE.lastBattle;
   }
   if (B && B.over) {
-    SV.lastBattle = null;
+    CLOUD_SAVE.lastBattle = null;
   }
-  return SV.lastBattle;
+  return CLOUD_SAVE.lastBattle;
 }
 
 export function snapshot() {
@@ -229,7 +229,7 @@ export function snapshot() {
 }
 
 export function queueSave() {
-  if (!SV.boot) {
+  if (!CLOUD_SAVE.boot) {
     return;
   }
   clearTimeout(svT);
@@ -239,41 +239,41 @@ export function queueSave() {
 export function autoSave(force) {
   const s = snapshot(),
     g = sigOf(s);
-  if (!force && g === SV.lastSig) {
+  if (!force && g === CLOUD_SAVE.lastSig) {
     return;
   }
-  SV.lastSig = g;
-  SV.local.auto = s;
+  CLOUD_SAVE.lastSig = g;
+  CLOUD_SAVE.local.auto = s;
   lsSet('auto', s);
   pushRemote('auto', s, force);
-  SV.at = Date.now();
+  CLOUD_SAVE.at = Date.now();
   svIndicator();
   renderSummary();
 }
 
 function ref(k) {
-  return SV.db.collection('data/users/' + SV.uid).doc(k);
+  return CLOUD_SAVE.db.collection('data/users/' + CLOUD_SAVE.uid).doc(k);
 }
 
 async function pushRemote(k, s, now) {
-  if (!SV.db || !SV.uid) {
+  if (!CLOUD_SAVE.db || !CLOUD_SAVE.uid) {
     return;
   }
-  SV.pend[k] = s;
-  if (SV.busy[k]) {
+  CLOUD_SAVE.pend[k] = s;
+  if (CLOUD_SAVE.busy[k]) {
     return;
   }
-  SV.busy[k] = true;
+  CLOUD_SAVE.busy[k] = true;
   svIndicator();
   try {
-    while (SV.pend[k]) {
-      const x = SV.pend[k];
-      SV.pend[k] = null;
+    while (CLOUD_SAVE.pend[k]) {
+      const x = CLOUD_SAVE.pend[k];
+      CLOUD_SAVE.pend[k] = null;
       let ok = false;
       for (let a = 0; a < 2 && !ok; a++) {
         try {
           await ref(k).set(JSON.parse(JSON.stringify(x)));
-          SV.remote[k] = x;
+          CLOUD_SAVE.remote[k] = x;
           ok = true;
         } catch (e) {
           const c = e && e.code;
@@ -284,18 +284,18 @@ async function pushRemote(k, s, now) {
           if (c === 'quota_exceeded') {
             toast('Espace de sauvegarde du compte plein : la partie reste enregistrée sur cet appareil.');
           } else if (c !== 'resource_exhausted') {
-            SV.db = null;
-            SV.cloud = false;
+            CLOUD_SAVE.db = null;
+            CLOUD_SAVE.cloud = false;
           }
           break;
         }
       }
-      if (k === 'auto' && !now && SV.pend[k]) {
+      if (k === 'auto' && !now && CLOUD_SAVE.pend[k]) {
         await wait(5000);
       }
     }
   } finally {
-    SV.busy[k] = false;
+    CLOUD_SAVE.busy[k] = false;
     svIndicator();
     if (!$('#saves').hidden) {
       renderSaves();
@@ -304,8 +304,8 @@ async function pushRemote(k, s, now) {
 }
 
 async function delRemote(k) {
-  delete SV.remote[k];
-  if (!SV.db) {
+  delete CLOUD_SAVE.remote[k];
+  if (!CLOUD_SAVE.db) {
     return;
   }
   try {
@@ -336,12 +336,12 @@ export function applySave(s, opt) {
       .sort((a, b) => a - b)
   );
   writeLS('res9-badges', BADGES);
-  SV.lastBattle = validBattle(s.battle) ? JSON.parse(JSON.stringify(s.battle)) : null;
+  CLOUD_SAVE.lastBattle = validBattle(s.battle) ? JSON.parse(JSON.stringify(s.battle)) : null;
   renderSquad();
   renderLeague();
   renderSummary();
   renderHome();
-  if (opt.resume && SV.lastBattle) {
+  if (opt.resume && CLOUD_SAVE.lastBattle) {
     resumeBattle();
   } else if (opt.leaveBattle && B) {
     __set_B(null);
@@ -352,13 +352,13 @@ export function applySave(s, opt) {
     renderPrep();
   }
   renderWallet();
-  if (cur !== 'combat') {
-    v4After(cur);
+  if (currentScreen !== 'combat') {
+    v4After(currentScreen);
   }
 }
 
 function resumeBattle() {
-  const b = SV.lastBattle;
+  const b = CLOUD_SAVE.lastBattle;
   if (!validBattle(b)) {
     return;
   }
@@ -381,7 +381,7 @@ function resumeBattle() {
     });
   }
   if (B.noCatch === undefined) {
-    B.noCatch = !SCEN[B.sc].catch;
+    B.noCatch = !SCENARIOS[B.sc].catch;
   }
   __set_LOG(Array.isArray(b.log) ? b.log.filter(x => x && typeof x.s === 'string').slice(0, 70) : []);
   __set_scSel(b.sc);
@@ -418,12 +418,12 @@ export function battleLine(b) {
   const S = b.state,
     al = S.units.filter(u => u.side === 'a' && !u.ko).length,
     fo = S.units.filter(u => u.side === 'e' && !u.ko).length;
-  return `${SCEN[b.sc].n} · manche ${S.round} / ${S.lim} · ${al} contre ${fo}`;
+  return `${SCENARIOS[b.sc].n} · manche ${S.round} / ${S.lim} · ${al} contre ${fo}`;
 }
 
 function svIndicator() {
   // #sideSaveK and #tbSave: src/components (Nav.jsx, TopBar.jsx)
-  setSaveIndicator(Object.values(SV.busy).some(Boolean), !!SV.cloud);
+  setSaveIndicator(Object.values(CLOUD_SAVE.busy).some(Boolean), !!CLOUD_SAVE.cloud);
 }
 
 // "Battle in progress" card: #resumePrep is rendered by React (src/screens/combat/prep/Summary.jsx,
@@ -446,28 +446,28 @@ export function renderSaves() {
 }
 
 export function openSaves() {
-  SV.confirm = null;
-  SV.code = null;
+  CLOUD_SAVE.confirm = null;
+  CLOUD_SAVE.code = null;
   autoSave();
   showSaves(); // React rereads the state and puts focus on "Fermer" (Close)
 }
 
 export function closeSaves() {
   hideSaves();
-  SV.confirm = null;
+  CLOUD_SAVE.confirm = null;
 }
 
 /* ---- actions ---- */
 export function putSlot(k) {
   const s = snapshot();
-  SV.local[k] = s;
+  CLOUD_SAVE.local[k] = s;
   lsSet(k, s);
   pushRemote(k, s, true);
   toast(`Partie sauvegardée dans l’emplacement ${k.slice(1)}.`);
 }
 
 function loadSlot(k) {
-  const s = SV.local[k];
+  const s = CLOUD_SAVE.local[k];
   if (!validSave(s)) {
     toast('Cette sauvegarde est illisible.');
     return;
@@ -480,7 +480,7 @@ function loadSlot(k) {
 }
 
 function delSlot(k) {
-  delete SV.local[k];
+  delete CLOUD_SAVE.local[k];
   lsSet(k, null);
   delRemote(k);
   toast(`Emplacement ${k.slice(1)} supprimé.`);
@@ -511,9 +511,9 @@ async function exportSave() {
     d = new Date(),
     fn = `resonance-sauvegarde-${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}.json`,
     data = JSON.stringify(s, null, 1);
-  if (SV.dl) {
+  if (CLOUD_SAVE.dl) {
     try {
-      await SV.dl.save({ filename: fn, data });
+      await CLOUD_SAVE.dl.save({ filename: fn, data });
       toast('Fichier de sauvegarde exporté.');
       return;
     } catch (e) {
@@ -614,7 +614,9 @@ function importData(s) {
     applySave(n, { leaveBattle: true });
     closeSaves();
     autoSave(true);
-    toast(validBattle(SV.lastBattle) ? 'Partie importée : un combat en cours vous attend.' : 'Partie importée.');
+    toast(
+      validBattle(CLOUD_SAVE.lastBattle) ? 'Partie importée : un combat en cours vous attend.' : 'Partie importée.'
+    );
     return true;
   } catch (e) {
     toast('Import impossible : ' + String((e && e.message) || 'sauvegarde invalide').slice(0, 80));
@@ -627,16 +629,16 @@ export function bootSaves() {
   SLOTS.forEach(k => {
     const s = lsGet(k);
     if (validSave(s)) {
-      SV.local[k] = s;
+      CLOUD_SAVE.local[k] = s;
     }
   });
   const a = lsGet('auto');
   if (validSave(a)) {
-    SV.local.auto = a;
+    CLOUD_SAVE.local.auto = a;
     applySave(a);
-    SV.lastSig = sigOf(a);
+    CLOUD_SAVE.lastSig = sigOf(a);
   }
-  SV.boot = true;
+  CLOUD_SAVE.boot = true;
   renderSummary();
   svIndicator();
   if (!validSave(a)) {
@@ -644,7 +646,7 @@ export function bootSaves() {
   }
 }
 
-export const SV = {
+export const CLOUD_SAVE = {
   db: null,
   uid: null,
   dl: null,
@@ -664,7 +666,7 @@ export const SV = {
 const sigOf = s => JSON.stringify([s.squad, s.badges, s.profile, s.battle]);
 
 /* ---- display ---- */
-export const fmtD = iso => {
+export const formatDate = iso => {
   try {
     return new Date(iso).toLocaleString('fr-FR', {
       day: 'numeric',
@@ -720,7 +722,7 @@ function onSavesOverlayClick(e) {
   }
   if (a === 'copycode') {
     autoSave();
-    SV.code = { mode: 'copy', text: saveCode(snapshot()) };
+    CLOUD_SAVE.code = { mode: 'copy', text: saveCode(snapshot()) };
     renderSaves();
     const t = $('#svCode');
     if (t) {
@@ -728,7 +730,7 @@ function onSavesOverlayClick(e) {
       t.select();
     }
     try {
-      navigator.clipboard.writeText(SV.code.text).then(
+      navigator.clipboard.writeText(CLOUD_SAVE.code.text).then(
         () => toast('Code de sauvegarde copié.'),
         () => {}
       );
@@ -738,7 +740,7 @@ function onSavesOverlayClick(e) {
     return;
   }
   if (a === 'pastecode') {
-    SV.code = { mode: 'paste' };
+    CLOUD_SAVE.code = { mode: 'paste' };
     renderSaves();
     const t = $('#svCode');
     if (t) {
@@ -747,7 +749,7 @@ function onSavesOverlayClick(e) {
     return;
   }
   if (a === 'closecode') {
-    SV.code = null;
+    CLOUD_SAVE.code = null;
     renderSaves();
     return;
   }
@@ -759,18 +761,18 @@ function onSavesOverlayClick(e) {
       /* Best effort: failure here is non-fatal. */
     }
     if (importData(s)) {
-      SV.code = null;
+      CLOUD_SAVE.code = null;
     }
     return;
   }
   if (a === 'no') {
-    SV.confirm = null;
+    CLOUD_SAVE.confirm = null;
     renderSaves();
     return;
   }
-  if (a === 'ok' && SV.confirm) {
-    const c = SV.confirm;
-    SV.confirm = null;
+  if (a === 'ok' && CLOUD_SAVE.confirm) {
+    const c = CLOUD_SAVE.confirm;
+    CLOUD_SAVE.confirm = null;
     if (c.k === 'reset') {
       newGame();
     } else if (c.a === 'load') {
@@ -784,18 +786,18 @@ function onSavesOverlayClick(e) {
     }
     return;
   }
-  if (a === 'put' && !SV.local[k]) {
+  if (a === 'put' && !CLOUD_SAVE.local[k]) {
     putSlot(k);
     renderSaves();
     return;
   }
   if (a === 'reset') {
-    SV.confirm = { k: 'reset', a: 'reset' };
+    CLOUD_SAVE.confirm = { k: 'reset', a: 'reset' };
     renderSaves();
     return;
   }
   if (a === 'camp') {
-    SV.confirm = null;
+    CLOUD_SAVE.confirm = null;
     closeSaves();
     openStarter();
     return;
@@ -808,13 +810,13 @@ function onSavesOverlayClick(e) {
       queueSave();
       renderHome();
     } else {
-      PREF[f] = !PREF[f];
+      PREFERENCES[f] = !PREFERENCES[f];
       savePref();
-      if (f === 'sound' && PREF.sound) {
+      if (f === 'sound' && PREFERENCES.sound) {
         sfx('ui');
       }
-      if (f === 'vibe' && PREF.vibe) {
-        vibe(30);
+      if (f === 'vibe' && PREFERENCES.vibe) {
+        vibrate(30);
       }
     }
     renderSaves();
@@ -831,7 +833,7 @@ function onSavesOverlayClick(e) {
     return;
   }
   if (['load', 'put', 'del'].includes(a)) {
-    SV.confirm = { k, a };
+    CLOUD_SAVE.confirm = { k, a };
     renderSaves();
   }
 }
@@ -861,7 +863,7 @@ function onImportFileClick(e) {
       return;
     }
     toast('Le sélecteur de fichiers est bloqué ici : collez le texte de votre sauvegarde ci-dessous.');
-    SV.code = { mode: 'paste' };
+    CLOUD_SAVE.code = { mode: 'paste' };
     renderSaves();
     const t = $('#svCode');
     if (t) {
@@ -885,21 +887,21 @@ export function init() {
     document.addEventListener(
       t,
       () => {
-        SV.acted = true;
+        CLOUD_SAVE.acted = true;
       },
       { capture: true, passive: true }
     )
   );
 
   document.addEventListener('visibilitychange', () => {
-    if (document.hidden && SV.boot) {
+    if (document.hidden && CLOUD_SAVE.boot) {
       clearTimeout(svT);
       autoSave();
     }
   });
 
   window.addEventListener('pagehide', () => {
-    if (SV.boot) {
+    if (CLOUD_SAVE.boot) {
       clearTimeout(svT);
       autoSave();
     }
@@ -944,7 +946,7 @@ export function init() {
     }
     const d = e.target.closest('#resumeHome [data-drop],#resumePrep [data-drop]');
     if (d) {
-      SV.lastBattle = null;
+      CLOUD_SAVE.lastBattle = null;
       autoSave(true);
       renderSummary();
       toast('Combat abandonné.');
@@ -959,7 +961,7 @@ export function init() {
     let db = null,
       user = null;
     try {
-      [db, user, SV.dl] = await Promise.all([C.use('db'), C.use('user'), C.use('downloads')]);
+      [db, user, CLOUD_SAVE.dl] = await Promise.all([C.use('db'), C.use('user'), C.use('downloads')]);
     } catch (e) {
       return;
     }
@@ -975,43 +977,43 @@ export function init() {
     if (!uid) {
       return;
     }
-    SV.db = db;
-    SV.uid = uid;
+    CLOUD_SAVE.db = db;
+    CLOUD_SAVE.uid = uid;
     for (const k of ['auto', ...SLOTS]) {
       try {
         const sn = await ref(k).get();
         if (sn.exists) {
           const d = migrateKeys(JSON.parse(JSON.stringify(sn.data())));
           if (validSave(d)) {
-            SV.remote[k] = d;
+            CLOUD_SAVE.remote[k] = d;
           }
         }
       } catch (e) {
         const c = e && e.code;
         if (c && c !== 'unavailable') {
-          SV.db = null;
+          CLOUD_SAVE.db = null;
           svIndicator();
           return;
         }
       }
     }
-    SV.cloud = true;
-    const r = SV.remote.auto,
-      l = SV.local.auto;
-    if (r && (!l || r.savedAt > l.savedAt) && !SV.acted && !B) {
+    CLOUD_SAVE.cloud = true;
+    const r = CLOUD_SAVE.remote.auto,
+      l = CLOUD_SAVE.local.auto;
+    if (r && (!l || r.savedAt > l.savedAt) && !CLOUD_SAVE.acted && !B) {
       applySave(r);
-      SV.local.auto = r;
+      CLOUD_SAVE.local.auto = r;
       lsSet('auto', r);
-      SV.lastSig = sigOf(r);
+      CLOUD_SAVE.lastSig = sigOf(r);
       toast('Partie synchronisée depuis votre compte.');
     } else if (l && (!r || l.savedAt > r.savedAt)) {
       pushRemote('auto', l, true);
     }
     for (const k of SLOTS) {
-      const rr = SV.remote[k],
-        ll = SV.local[k];
+      const rr = CLOUD_SAVE.remote[k],
+        ll = CLOUD_SAVE.local[k];
       if (rr && (!ll || rr.savedAt >= ll.savedAt)) {
-        SV.local[k] = rr;
+        CLOUD_SAVE.local[k] = rr;
         lsSet(k, rr);
       } else if (ll && (!rr || ll.savedAt > rr.savedAt)) {
         pushRemote(k, ll, true);

@@ -2,14 +2,14 @@
 
 import { $, reducedMotion } from '../core/utils.js';
 import { goTo } from '../core/navigation.js';
-import { PREF, savePref } from './preferences.js';
+import { PREFERENCES, savePref } from './preferences.js';
 import { SCREEN_STATE } from './screen-state.js';
 import { renderMap } from '../world/map.js';
 import { refreshHome } from '../../screens/home/homeStore.js';
 
 /** The « Nouveau » (New) panel of Home (#v4News, src/screens/home/News.jsx) has been read. */
 export function hasNewsToView() {
-  return PREF.news === '471';
+  return PREFERENCES.news === '471';
 }
 
 /* ---------- Home: what's new ---------- */
@@ -65,7 +65,7 @@ function onWhatsNewClick(e) {
   }
   const k = b.dataset.news;
   if (k === 'ok') {
-    PREF.news = '471';
+    PREFERENCES.news = '471';
     savePref();
     refreshHome();
     return;

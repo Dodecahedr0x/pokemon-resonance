@@ -1,5 +1,5 @@
 import { GYMS } from '../data/game-data.js';
-import { SCEN } from '../pokemon/pokemon.js';
+import { SCENARIOS } from '../pokemon/pokemon.js';
 import { BADGE_REWARD, ITEMS2, PROFILE } from '../state/game-state.js';
 import { ARENAS } from '../modes/gyms.js';
 import { $, reducedMotion } from '../core/utils.js';
@@ -31,7 +31,7 @@ export function placeName(p) {
   if (p.id === 'champ') {
     return FINALE_N;
   }
-  return SCEN[p.id] ? SCEN[p.id].n : p.id;
+  return SCENARIOS[p.id] ? SCENARIOS[p.id].n : p.id;
 }
 
 export function placeSub(p) {
@@ -46,7 +46,7 @@ export function placeSub(p) {
   if (L) {
     return L.n;
   }
-  return SCEN[p.id] ? SCEN[p.id].lvl : '';
+  return SCENARIOS[p.id] ? SCENARIOS[p.id].lvl : '';
 }
 
 export function placeState(p) {
@@ -92,7 +92,7 @@ export function placeIcon(p) {
   if (p.id === 'elite') {
     return avatar(
       ELITE_L[Math.min(3, PROFILE.elite)].n,
-      SCEN[ELITE[Math.min(3, PROFILE.elite)]].at || 'Dragon',
+      SCENARIOS[ELITE[Math.min(3, PROFILE.elite)]].at || 'Dragon',
       'is-tiny'
     );
   }

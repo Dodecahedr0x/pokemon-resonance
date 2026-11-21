@@ -3,8 +3,8 @@
 import { HOOKS } from '../core/hooks.js';
 import { B, clearAim, addLog, renderAll, ui } from '../combat/ui.js';
 import { toast } from '../core/utils.js';
-import { PREF } from '../ui/preferences.js';
-import { vibe } from '../audio/sound-effects.js';
+import { PREFERENCES } from '../ui/preferences.js';
+import { vibrate } from '../audio/sound-effects.js';
 
 /** End of the co-op turn: Player 1 hands over to Player 2. Returns true if control was handed over. */
 export function coopPassTurn() {
@@ -20,7 +20,7 @@ export function coopPassTurn() {
   ui.sel = nx ? nx.uid : null;
   addLog('Au tour du Joueur 2.', 'sys');
   toast('Au tour du Joueur 2 !');
-  vibe(30);
+  vibrate(30);
   renderAll();
   return true;
 }
@@ -33,7 +33,7 @@ export const isCoopPlayerAlive = (S, j) => S.units.some(u => u.side === 'a' && !
 // Statements run at startup, in the original order (see index.js).
 export function init() {
   HOOKS.combat.push((S, opt, D0) => {
-    if (!PREF.coop || S.order === 'vitesse' || (D0 && (D0.tuto || D0.duel433))) {
+    if (!PREFERENCES.coop || S.order === 'vitesse' || (D0 && (D0.tuto || D0.duel433))) {
       return;
     }
     if (S.units.filter(u => u.side === 'a').length < 2 || !opt || opt.robot) {

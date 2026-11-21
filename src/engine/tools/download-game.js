@@ -1,7 +1,7 @@
 /* Download the game (to edit it with another tool) (added in v4.41). */
 
 import { toast } from '../core/utils.js';
-import { SV } from '../state/saves.js';
+import { CLOUD_SAVE } from '../state/saves.js';
 
 async function onDownloadGameClick(e) {
   const b = e.target.closest('#download-b');
@@ -17,9 +17,9 @@ async function onDownloadGameClick(e) {
       throw new Error('indisponible');
     }
     const data = await r.text();
-    if (SV.dl) {
+    if (CLOUD_SAVE.dl) {
       try {
-        await SV.dl.save({ filename: 'Pokemon_Resonance.html', data });
+        await CLOUD_SAVE.dl.save({ filename: 'Pokemon_Resonance.html', data });
         toast('Fichier du jeu téléchargé.');
         return;
       } catch (er) {

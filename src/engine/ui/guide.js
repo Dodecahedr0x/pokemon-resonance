@@ -2,7 +2,7 @@ import { $ } from '../core/utils.js';
 import { goTo } from '../core/navigation.js';
 import { __set_filt, renderFilters, renderGrid } from '../team/team.js';
 import { B, renderPanel, scSel } from '../combat/ui.js';
-import { PREF, savePref } from './preferences.js';
+import { PREFERENCES, savePref } from './preferences.js';
 import { __set_PREPG, renderPrep } from '../combat/battle-prep.js';
 import { openRule, setGuideTab } from '../../screens/guide/guideStore.js';
 
@@ -31,7 +31,7 @@ export function panelRoleInfo() {
   if (!p || !B) {
     return;
   }
-  p.classList.toggle('is-info-off', !PREF.info);
+  p.classList.toggle('is-info-off', !PREFERENCES.info);
 }
 
 // Startup statements, run in their original order (see index.js).
@@ -74,13 +74,13 @@ export function init() {
     }
   }
 
-  if (PREF.info === undefined) {
-    PREF.info = false;
+  if (PREFERENCES.info === undefined) {
+    PREFERENCES.info = false;
   }
 
   $('#bPanel').addEventListener('click', e => {
     if (e.target.closest('[data-info]')) {
-      PREF.info = !PREF.info;
+      PREFERENCES.info = !PREFERENCES.info;
       savePref();
       renderPanel();
     }

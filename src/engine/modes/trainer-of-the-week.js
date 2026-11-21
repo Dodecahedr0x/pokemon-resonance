@@ -1,8 +1,8 @@
 /* Trainer of the week: a trainer whose team changes every week, one rewarded victory per week (added in v4.71). */
 
-import { POKEMON, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCENARIOS } from '../pokemon/pokemon.js';
 import { HOOKS } from '../core/hooks.js';
-import { OBST } from '../combat/synergies-obstacles.js';
+import { OBSTACLES } from '../combat/synergies-obstacles.js';
 import { DEXS } from '../progression/pokedex.js';
 import { mkFoes, existingSpecies } from './challenge-scenes.js';
 import { readMoreChallenges, writeMoreChallenges } from './more-challenges.js';
@@ -16,14 +16,14 @@ const hash = s => {
 };
 
 /** Current week key. */
-export const week = () => 'S' + Math.floor(Date.now() / (7 * 864e5));
+export const weekKey = () => 'S' + Math.floor(Date.now() / (7 * 864e5));
 
 const NAMES = ['Léa Ferrand', 'Marc Dalbert', 'Inès Montarbre', 'Tom Lacrête', 'Sana Verdier', 'Hugo Brisemare'];
 const pool = () => existingSpecies(DEXS.map(m => m.id)).filter(id => POKEMON[id] && !POKEMON[id].isEnemy);
 
 /** This week's trainer: name, team and level. */
 export const weekDef = () => {
-  const h = hash(week());
+  const h = hash(weekKey());
   const p = pool();
   const ids = [0, 1, 2].map(i => p[(h + i * 977) % p.length]);
   return { n: NAMES[h % NAMES.length], ids, lv: 24 + (h % 6) };
@@ -32,7 +32,7 @@ export const weekDef = () => {
 /** (Re)builds this week's scenario `wk470`. */
 export const wkMake = () => {
   const D = weekDef();
-  SCEN.wk470 = Object.assign(
+  SCENARIOS.wk470 = Object.assign(
     {
       n: 'Dresseur de la semaine',
       lvl: 'Semaine · ' + D.n,
@@ -50,7 +50,7 @@ export const wkMake = () => {
     {}
   );
   try {
-    OBST.wk470 = { pil: ['4,2'], grass: ['4,4'] };
+    OBSTACLES.wk470 = { pil: ['4,2'], grass: ['4,4'] };
   } catch {
     /* Best effort: failure here is non-fatal. */
   }
@@ -69,8 +69,8 @@ export function init() {
       let m = 0,
         g = 0;
       if (win && k === 'wk470') {
-        if (X.wk.k !== week() || !X.wk.done) {
-          X.wk = { k: week(), done: true, best: Math.max(X.wk.best || 0, 1) };
+        if (X.wk.k !== weekKey() || !X.wk.done) {
+          X.wk = { k: weekKey(), done: true, best: Math.max(X.wk.best || 0, 1) };
           m += 2000;
           g += 5;
         }

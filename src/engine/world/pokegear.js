@@ -8,7 +8,7 @@ import { HOOKS } from '../core/hooks.js';
 import { today } from '../state/economy.js';
 import { PLACE_BY_ID, placeName } from './map.js';
 import { isJohtoRegion, routeName } from './johto.js';
-import { ROAM, isRoamingActive, getRoamState, findRoamLegend, roamerCaught } from './roaming-beasts.js';
+import { ROAMING_BEASTS, isRoamingActive, getRoamState, findRoamLegend, roamerCaught } from './roaming-beasts.js';
 import { isHoennRegion } from './hoenn.js';
 import { regionPool } from './catch-anywhere.js';
 
@@ -69,7 +69,7 @@ export function radioLines() {
     d = dailyDominant(),
     w = todayWeather();
   if (isRoamingActive()) {
-    const b = ROAM.filter(id => !roamerCaught(id)).map(
+    const b = ROAMING_BEASTS.filter(id => !roamerCaught(id)).map(
       id => `${findRoamLegend(id).n} près ${placeWithArticle(placeName(PLACE_BY_ID[getRoamState(id).at]))}`
     );
     if (b.length) {

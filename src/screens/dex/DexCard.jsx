@@ -5,7 +5,7 @@ import { REGION_NAMES } from '../../engine/data/hoenn.js';
 import { POKEMON, NOTES, familyOf } from '../../engine/pokemon/pokemon.js';
 import { RC, ROLEFX } from '../../engine/pokemon/roles-synergies.js';
 import { typeBadge, typeColor } from '../../engine/core/utils.js';
-import { STLN, squad } from '../../engine/team/team.js';
+import { STAT_NAMES, squad } from '../../engine/team/team.js';
 import { pokemonArtUrl } from '../../engine/assets/images.js';
 import { SCREEN_STATE } from '../../engine/ui/screen-state.js';
 import { ownedFam } from '../../engine/progression/trainer-stats.js';
@@ -120,7 +120,7 @@ export default function DexCard() {
         <section className="dex-section">
           <h3>Statistiques</h3>
           <div className="dex-stats">
-            {STLN.map((n, k) => (
+            {STAT_NAMES.map((n, k) => (
               <div className="dex-stat" key={k}>
                 <span>{n}</span>
                 <i>

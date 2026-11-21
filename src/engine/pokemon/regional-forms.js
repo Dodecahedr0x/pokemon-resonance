@@ -1,6 +1,6 @@
 /* Regional forms (Pokédex) (added in v4.70). */
 
-import { POKEMON, SCEN } from './pokemon.js';
+import { POKEMON, SCENARIOS } from './pokemon.js';
 import { HOOKS } from '../core/hooks.js';
 import { SCREEN_STATE } from '../ui/screen-state.js';
 import { renderDexCard } from '../progression/pokedex.js';
@@ -34,7 +34,7 @@ const REGIONAL_FORMS = [
 
 // .regionalForm banner and illustration tint: rendered by React
 const regionOf = sc => {
-  const c = SCEN[sc] || {};
+  const c = SCENARIOS[sc] || {};
   return c.hoenn != null ? 3 : c.johto != null ? 2 : 1;
 };
 

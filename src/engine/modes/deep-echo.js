@@ -1,13 +1,13 @@
 // Deep Echo (Camp › Écho profond, added in v4.31): 8-floor branching expedition, HP carried over,
 // a single life, relics, merchant and events.
-import { POKEMON, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCENARIOS } from '../pokemon/pokemon.js';
 import { PROFILE } from '../state/game-state.js';
 import { toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { goTo } from '../core/navigation.js';
 import { squad } from '../team/team.js';
-import { EMAX } from '../combat/engine.js';
-import { OBST } from '../combat/synergies-obstacles.js';
+import { MAX_ENERGY } from '../combat/engine.js';
+import { OBSTACLES } from '../combat/synergies-obstacles.js';
 import { B, __set_scSel, backToPrep, chooseBattle, launch } from '../combat/ui.js';
 import { queueSave } from '../state/saves.js';
 import { SCREEN_STATE } from '../ui/screen-state.js';
@@ -77,9 +77,9 @@ function echoLeave() {
 
 export function echoScene(R, type) {
   const r = fingerprintRandom('echo-f' + R.seed + '-' + R.f + '-' + R.path.length),
-    pool = ECHO_POOL[Math.min(7, R.f)].filter(k => SCEN[k] && SCEN[k].foes),
+    pool = ECHO_POOL[Math.min(7, R.f)].filter(k => SCENARIOS[k] && SCENARIOS[k].foes),
     bk = pool[Math.floor(r() * pool.length)] || 'gue',
-    b = SCEN[bk],
+    b = SCENARIOS[bk],
     el = type === 'elite',
     D = Object.assign({}, b, {
       n: `Écho profond · étage ${R.f + 1}`,
@@ -92,8 +92,8 @@ export function echoScene(R, type) {
       pb: (b.pb || 3) + (el ? 1 : 0),
     });
   PROGRESS_KEYS.forEach(x => delete D[x]);
-  SCEN.echo431 = D;
-  OBST.echo431 = OBST[bk] || {};
+  SCENARIOS.echo431 = D;
+  OBSTACLES.echo431 = OBSTACLES[bk] || {};
 }
 
 function echoNode(i) {
@@ -371,7 +371,7 @@ function onCombat(S) {
     }
     u.hp = Math.max(1, Math.round(u.mhp * t[1]));
     if (S.relicBag.includes('diapason')) {
-      u.en = Math.min(EMAX, (u.en || 0) + 1);
+      u.en = Math.min(MAX_ENERGY, (u.en || 0) + 1);
     }
     if (S.relicBag.includes('talisman')) {
       u.sturdy = true;

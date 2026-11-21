@@ -1,11 +1,11 @@
 /* Balls, healing, battle items, held items and extra TMs (added in v4.56). */
 
 import { MOVES } from '../data/moves.js';
-import { SCEN } from '../pokemon/pokemon.js';
+import { SCENARIOS } from '../pokemon/pokemon.js';
 import { ITEMS2 } from '../state/game-state.js';
 import { HOOKS } from '../core/hooks.js';
 import { TOD } from '../world/home-route.js';
-import { EMAX, parseCellKey, rewardIn, hasNx, heal, pushMessage, teff } from '../combat/engine.js';
+import { MAX_ENERGY, parseCellKey, rewardIn, hasNx, heal, pushMessage, typeEffectiveness } from '../combat/engine.js';
 import { immobilize } from '../combat/items-bonds-ai.js';
 import { BALLS } from './ball-choice.js';
 import { HEALS } from './battle-potions.js';
@@ -35,7 +35,7 @@ export const wrapSvg = s =>
   encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">${s}</svg>`);
 
 /* ---------- Balls ---------- */
-const isNightTime = S => ((SCEN[S.sc] || {}).time || TOD) === 'nuit';
+const isNightTime = S => ((SCENARIOS[S.sc] || {}).time || TOD) === 'nuit';
 
 const isWaterOrBug = e => e.t.includes('Eau') || e.t.includes('Insecte');
 
@@ -129,7 +129,7 @@ export const ITEM_CAN_USE = {
   antigel: (S, u) => u.skip > 0 || ['GEL', 'PAR', 'SOM'].includes(u.badge),
   antidote: (S, u) => u.burn > 0 || u.poisoned > 0,
   baiemepo: (S, u) => u.hp < u.mhp,
-  gelee: (S, u) => (hasNx(u) || hasXp(u)) && u.en < EMAX,
+  gelee: (S, u) => (hasNx(u) || hasXp(u)) && u.en < MAX_ENERGY,
   rappelmax: (S, u) => !u.acted && !u.sn && !!koAllyOf(S) && !!freeTileFor(S, u),
 };
 
@@ -376,7 +376,7 @@ export function init() {
         !!u &&
         t.side !== u.side &&
         (m.p > 0 || m.fix > 0) &&
-        teff(typ, t.t) > 1 && { mul: 0.75, labelText: 'Lunettes Filtre' },
+        typeEffectiveness(typ, t.t) > 1 && { mul: 0.75, labelText: 'Lunettes Filtre' },
     },
     {
       id: 'cape-guard',

@@ -5,10 +5,10 @@ import {
   flies,
   hdist,
   heal,
-  mDur,
+  markDuration,
   markAt,
   mvType,
-  nbrK,
+  neighborKeys,
   pushMessage,
   setMark,
   stun,
@@ -69,7 +69,7 @@ function playChord(S, id, u, ev) {
   } else if (id === 'forge') {
     mates.forEach(o => (o.guard = 2));
     foes.forEach(o => {
-      if ([unitKey(o), ...nbrK(unitKey(o))].some(k => S.tiles[k].mark && S.tiles[k].mark.k === 'brulant')) {
+      if ([unitKey(o), ...neighborKeys(unitKey(o))].some(k => S.tiles[k].mark && S.tiles[k].mark.k === 'brulant')) {
         damage(S, o, 5, ev, { ind: true });
       }
     });
@@ -92,7 +92,7 @@ function playChord(S, id, u, ev) {
         continue;
       }
       if (t.mark && t.mark.k === 'trempe') {
-        t.mark = { k: 'givre', d: mDur(S, 'givre'), lv: 1, by: u.uid };
+        t.mark = { k: 'givre', d: markDuration(S, 'givre'), lv: 1, by: u.uid };
       }
       const o = unitAt(S, k);
       if (o && o.side === 'e' && !o.t.includes('Glace')) {
@@ -123,7 +123,7 @@ function playChord(S, id, u, ev) {
         continue;
       }
       t.grass = false;
-      t.mark = { k: 'brulant', d: mDur(S, 'brulant'), lv: 1, by: u.uid };
+      t.mark = { k: 'brulant', d: markDuration(S, 'brulant'), lv: 1, by: u.uid };
       const o = unitAt(S, k);
       if (o && o.side === 'e' && onGround(o) && !o.t.includes('Feu')) {
         o.burn = Math.max(o.burn, 2);

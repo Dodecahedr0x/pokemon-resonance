@@ -1,7 +1,7 @@
 /* Living map (deep overhaul of the map) (added in v4.71). */
 
 import { GYMS } from '../data/game-data.js';
-import { SCEN } from '../pokemon/pokemon.js';
+import { SCENARIOS } from '../pokemon/pokemon.js';
 import { ARENAS } from '../modes/gyms.js';
 import { hash2, mulberry32, typeColor } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
@@ -394,7 +394,7 @@ const placesOf = reg => {
   try {
     SCREEN_STATE.region = reg;
     return placesR().map(p => {
-      const S = SCEN[p.id] || {};
+      const S = SCENARIOS[p.id] || {};
       let t = S.at || '';
       try {
         const arenaIdx = ARENAS.findIndex(a => a.k === p.id);

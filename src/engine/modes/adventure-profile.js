@@ -1,9 +1,9 @@
-import { POKEMON, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCENARIOS } from '../pokemon/pokemon.js';
 import { ITEMS2, PROFILE } from '../state/game-state.js';
 import { medal } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { SPARK, shinyStyle } from '../pokemon/shiny.js';
-import { LEGS } from './legendaries.js';
+import { LEGENDARIES } from './legendaries.js';
 import { towerIdle, towerRun } from './resonance-tower.js';
 
 /* Adventure+ save fields and battle rewards: shinies, rival, legendary bosses and Resonance Tower (added in v4.4). */
@@ -30,7 +30,7 @@ export function aplusClean(p) {
   o.jchamp = p.jchamp ? 1 : 0;
   o.lac = p.lac ? 1 : 0;
   if (Array.isArray(p.legends)) {
-    o.legends = [...new Set(p.legends.filter(id => LEGS.some(L => L.id === id)))];
+    o.legends = [...new Set(p.legends.filter(id => LEGENDARIES.some(L => L.id === id)))];
   }
   const t = p.tdr;
   if (t && typeof t === 'object') {
@@ -71,7 +71,7 @@ export function aplusClean(p) {
    Progression: rewards for the new battles (called by applyProgress)
    ===================================================================== */
 export function aplusProgress(S, rew) {
-  const D = SCEN[S.sc] || {},
+  const D = SCENARIOS[S.sc] || {},
     win = S.over === 'win';
   let m = 0,
     g = 0;

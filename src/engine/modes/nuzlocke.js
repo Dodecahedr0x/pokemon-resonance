@@ -1,6 +1,6 @@
 /* Nuzlocke mode (option) (added in v4.51). */
 
-import { POKEMON, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCENARIOS } from '../pokemon/pokemon.js';
 import { BUDGET } from '../pokemon/evolution.js';
 import { PROFILE } from '../state/game-state.js';
 import { writeLS, toast } from '../core/utils.js';
@@ -8,7 +8,7 @@ import { HOOKS } from '../core/hooks.js';
 import { __set_squad, squad } from '../team/team.js';
 import { B } from '../combat/ui.js';
 import { queueSave } from '../state/saves.js';
-import { PREF, savePref } from '../ui/preferences.js';
+import { PREFERENCES, savePref } from '../ui/preferences.js';
 import { SCREEN_STATE } from '../ui/screen-state.js';
 import { today } from '../state/economy.js';
 import { renderParams } from '../ui/settings.js';
@@ -49,15 +49,15 @@ export function nuzlockeEncounter() {
   return true;
 }
 
-export const NUZLOCKE_ON = () => !!PREF.nuzlockeOn;
+export const NUZLOCKE_ON = () => !!PREFERENCES.nuzlockeOn;
 
 function onBattleEnd() {
   if (!NUZLOCKE_ON() || !B || !B.over || B._nuzlockeDone) {
     return;
   }
   B._nuzlockeDone = 1;
-  const D = SCEN[B.sc] || {};
-  if (D.noProgress || B.duel433 || D.tuto || D.duel433 || SCEN.ami === D) {
+  const D = SCENARIOS[B.sc] || {};
+  if (D.noProgress || B.duel433 || D.tuto || D.duel433 || SCENARIOS.ami === D) {
     return;
   }
   const bases = [];
@@ -121,10 +121,10 @@ export function init() {
       nuzlockeConfirm = false;
     } else if (k === 'yes') {
       nuzlockeConfirm = false;
-      PREF.nuzlockeOn = 1;
+      PREFERENCES.nuzlockeOn = 1;
       savePref();
     } else if (k === 'off') {
-      PREF.nuzlockeOn = 0;
+      PREFERENCES.nuzlockeOn = 0;
       savePref();
     }
     renderParams();

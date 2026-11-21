@@ -1,4 +1,4 @@
-import { PREF, savePref } from './preferences.js';
+import { PREFERENCES, savePref } from './preferences.js';
 import { renderParams } from './settings.js';
 
 // Accessibility switches (Settings › Accessibility): toggling one re-applies the a11y-* classes.
@@ -10,13 +10,13 @@ const ACCESSIBILITY_PREFS = new Set(['highContrast', 'colorBlind', 'leftHand', '
    ===================================================================== */
 function applyAccessibility() {
   const h = document.documentElement,
-    t = PREF.textSize || 'normal';
+    t = PREFERENCES.textSize || 'normal';
   h.classList.toggle('a11y-t1', t === 'grand');
   h.classList.toggle('a11y-t2', t === 'tgrand');
-  h.classList.toggle('a11y-hc', !!PREF.highContrast);
-  h.classList.toggle('a11y-cb', !!PREF.colorBlind);
-  h.classList.toggle('a11y-lh', !!PREF.leftHand);
-  h.classList.toggle('a11y-rm', !!PREF.reduceMotion);
+  h.classList.toggle('a11y-hc', !!PREFERENCES.highContrast);
+  h.classList.toggle('a11y-cb', !!PREFERENCES.colorBlind);
+  h.classList.toggle('a11y-lh', !!PREFERENCES.leftHand);
+  h.classList.toggle('a11y-rm', !!PREFERENCES.reduceMotion);
 }
 
 // Startup statements, run in their original order (see index.js).
@@ -28,7 +28,7 @@ export function init() {
     if (!b) {
       return;
     }
-    PREF.textSize = b.dataset.textSize;
+    PREFERENCES.textSize = b.dataset.textSize;
     savePref();
     applyAccessibility();
     renderParams();
@@ -38,7 +38,7 @@ export function init() {
     const p = e.target.closest('[data-pref]');
     if (p && ACCESSIBILITY_PREFS.has(p.dataset.pref)) {
       if (p.dataset.pref === 'reduceMotion') {
-        PREF.animEnabled = !p.checked;
+        PREFERENCES.animEnabled = !p.checked;
       }
       savePref();
       applyAccessibility();

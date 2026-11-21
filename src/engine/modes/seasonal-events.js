@@ -1,11 +1,11 @@
 /* Monthly seasonal events (added in v4.65). */
 
-import { POKEMON, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCENARIOS } from '../pokemon/pokemon.js';
 import { ARENAS } from './gyms.js';
 import { writeLS, toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { escapeHtml } from '../state/saves.js';
-import { sfx, vibe } from '../audio/sound-effects.js';
+import { sfx, vibrate } from '../audio/sound-effects.js';
 import { overlay } from '../progression/prestige.js';
 import { shut } from '../../screens/overlays/tempStore.js';
 import { savePurse, today } from '../state/economy.js';
@@ -28,7 +28,7 @@ function seasonOpen() {
     s = seasonState(),
     vd = featuredGym();
   const tiers = TIER_POINTS.map(([p, n, R], i) => ({ p, n, txt: rewardText(R), ok: s.pts >= p, got: !!s.got[i] }));
-  const gym = SCEN[vd] ? SCEN[vd].n : vd;
+  const gym = SCENARIOS[vd] ? SCENARIOS[vd].n : vd;
   // rendering: src/screens/overlays/transients/Windows.jsx (SeasonEvent)
   const o = overlay('season-event-o', { n: S0.n, d: S0.d, t: S0.t, arene: gym, tiers, won: s.won || 0 });
   o.addEventListener('click', e => {
@@ -121,7 +121,7 @@ function onSeasonalEventsClick(e) {
   seasonSave(s);
   applyReward(T[2]);
   sfx('win');
-  vibe([30, 40, 30]);
+  vibrate([30, 40, 30]);
   toast('Récompense de saison : ' + rewardText(T[2]) + '.');
   savePurse();
   seasonOpen();

@@ -7,11 +7,11 @@ import { tokCl, unitsDirty } from '../../screens/combat/board/boardStore.js';
 import { byUid } from './engine.js';
 import { canCapture } from './items-bonds-ai.js';
 import { B, L, renderAll, ui } from './ui.js';
-import { PREF, savePref } from '../ui/preferences.js';
-import { sfx, vibe } from '../audio/sound-effects.js';
+import { PREFERENCES, savePref } from '../ui/preferences.js';
+import { sfx, vibrate } from '../audio/sound-effects.js';
 import { AUTO } from '../progression/prestige.js';
 import { CAP_K } from '../items/ball-choice.js';
-import { bagN } from '../state/economy.js';
+import { bagCount } from '../state/economy.js';
 import { renderWallet } from '../ui/wallet.js';
 import { renderParams } from '../ui/settings.js';
 import { shut, updateTemp, openOverlay } from '../../screens/overlays/tempStore.js';
@@ -80,7 +80,7 @@ export function startCatchTiming(cb) {
       updateTemp('timed-catch', { q });
     } // text and res-… class
     sfx(q === 'miss' ? 'lose' : 'rx');
-    vibe(q === 'perfect' ? [30, 40, 60] : q === 'miss' ? [60] : 25);
+    vibrate(q === 'perfect' ? [30, 40, 60] : q === 'miss' ? [60] : 25);
     setTimeout(
       () => {
         shut(o);
@@ -101,7 +101,7 @@ export function startCatchTiming(cb) {
   o.querySelector('.timed-catch-throw').focus();
 }
 
-const CATCH_TIMING_ON = () => PREF.catchTimingEnabled !== 0 && !reducedMotion && !AUTO;
+const CATCH_TIMING_ON = () => PREFERENCES.catchTimingEnabled !== 0 && !reducedMotion && !AUTO;
 
 function onTimedCatchClick(e) {
   const b = e.target.closest && e.target.closest('[data-cap]');
@@ -120,7 +120,7 @@ function onTimedCatchClick(e) {
     if (q === 'miss') {
       // the Ball bounces off: it is lost, but the ally did not act and the Voices are kept
       const k = CAP_K;
-      PROFILE.bag[k] = Math.max(0, bagN(k) - 1);
+      PROFILE.bag[k] = Math.max(0, bagCount(k) - 1);
       if (!PROFILE.bag[k]) {
         delete PROFILE.bag[k];
       }
@@ -138,7 +138,7 @@ function onTimedCatchClick(e) {
     }
     CATCH_TIMED_OK = false;
     if (q === 'perfect') {
-      PROFILE.bag[k] = bagN(k) + 1; // Ball returned
+      PROFILE.bag[k] = bagCount(k) + 1; // Ball returned
       renderWallet();
       toast('Lancer parfait : la Ball vous est rendue.');
     }
@@ -172,7 +172,7 @@ export function init() {
       return;
     }
     if (b.dataset.catchAction === 'cap') {
-      PREF.catchTimingEnabled = PREF.catchTimingEnabled === 0 ? 1 : 0;
+      PREFERENCES.catchTimingEnabled = PREFERENCES.catchTimingEnabled === 0 ? 1 : 0;
       savePref();
       renderParams();
     }

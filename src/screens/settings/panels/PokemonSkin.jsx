@@ -1,16 +1,16 @@
-import { PREF } from '../../../engine/ui/preferences.js';
+import { PREFERENCES } from '../../../engine/ui/preferences.js';
 
 import Button from '../../../components/Button.jsx';
 // Pokémon Skin (v4.72), completed by v4.73 (text, sounds) and v4.77 (graphics).
 // Buttons handled by the engine (delegated clicks on data-pokemon-skin, data-poke-style, data-gfx-toggle).
-const on = k => PREF[k] !== 0; // same rule as on() in engine/ui/pokemon-skin.js and 109
+const on = k => PREFERENCES[k] !== 0; // same rule as on() in engine/ui/pokemon-skin.js and 109
 
 export default function PokemonSkin() {
   const t = on('pokemonSkinT'),
     a = on('pokemonSkinA'),
     t3 = on('pokeStyleT'),
     s3 = on('pokeStyleS'),
-    l = PREF.graphicsMode === 'leger';
+    l = PREFERENCES.graphicsMode === 'leger';
   return (
     <section className="card" id="pokemon-skin">
       <h3 className="card-title">Habillage Pokémon</h3>

@@ -1,12 +1,12 @@
 /* The Hoenn legendaries (added in v4.38). */
 
 import { PKIMG } from '../assets/images.js';
-import { POKEMON, PKT, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, PKT, SCENARIOS } from '../pokemon/pokemon.js';
 import { PROFILE, isCamp } from '../state/game-state.js';
 import { medal } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { unitKey } from '../combat/engine.js';
-import { OBST } from '../combat/synergies-obstacles.js';
+import { OBSTACLES } from '../combat/synergies-obstacles.js';
 import { CAP_K } from '../items/ball-choice.js';
 import { hoennOpen } from './hoenn.js';
 
@@ -76,7 +76,7 @@ const onMarkedTile = (S, e, mk) => {
 };
 
 const legendOf = k => {
-  const D = SCEN[k];
+  const D = SCENARIOS[k];
   return D && (D.hoennLegend || D.captureHoennLegend)
     ? HOENN_LEGEND_DEFS.find(L => L.id === (D.hoennLegend || D.captureHoennLegend))
     : null;
@@ -300,7 +300,7 @@ export function init() {
     };
     PKT.set(POKEMON[L.id].t, L.id);
     const k = 'hl' + L.id;
-    SCEN[k] = {
+    SCENARIOS[k] = {
       n: L.n,
       lvl: `Légende de Hoenn · ${L.title}`,
       lim: 11,
@@ -322,9 +322,9 @@ export function init() {
         [L.minions[1], [7, 4]],
       ],
     };
-    OBST[k] = { pil: ['4,0', '4,5'] };
+    OBSTACLES[k] = { pil: ['4,0', '4,5'] };
     const c = 'hc' + L.id;
-    SCEN[c] = Object.assign({}, SCEN[k], {
+    SCENARIOS[c] = Object.assign({}, SCENARIOS[k], {
       n: `${L.n} · capture`,
       lvl: `Légende de Hoenn · ${L.title}`,
       catch: true,
@@ -332,12 +332,12 @@ export function init() {
       hoennLegend: undefined,
       d: `${L.n} vous attend. Condition de capture : ${L.cap.t}. Affaiblissez-le sous 25 %, immobilisez-le, puis capturez-le avec un allié à son contact. Son escorte ne se capture pas.`,
     });
-    delete SCEN[c].hoennLegend;
-    OBST[c] = OBST[k];
+    delete SCENARIOS[c].hoennLegend;
+    OBSTACLES[c] = OBSTACLES[k];
   });
   /* victory: the battle is graded, rewards the first time */
   HOOKS.progress.push((S, rew, win) => {
-    const D = SCEN[S.sc] || {};
+    const D = SCENARIOS[S.sc] || {};
     if (!win || !D.hoennLegend || hasDefeatedLegend(D.hoennLegend)) {
       return null;
     }

@@ -1,4 +1,4 @@
-import { POKEMON, POKEMON_LIST, SCEN } from '../../../engine/pokemon/pokemon.js';
+import { POKEMON, POKEMON_LIST, SCENARIOS } from '../../../engine/pokemon/pokemon.js';
 import { PROFILE } from '../../../engine/state/game-state.js';
 import { medal } from '../../../engine/core/utils.js';
 import { GYM_EDITOR, GYM_RULES, GYM_TERRAINS, gymShareCode } from '../../../engine/modes/custom-arenas.js';
@@ -102,7 +102,7 @@ function Gym({ a, i }) {
     <article className="camp-gym">
       <div className="camp-gym-header">
         <b>{a.n}</b>
-        <em>{`${(SCEN[a.t] || {}).n || a.t}${ruleDef} · ${a.h === 'nuit' ? 'nuit' : 'jour'} · ${a.lim} manches${a.author ? ' · par ' + a.author : ''}`}</em>
+        <em>{`${(SCENARIOS[a.t] || {}).n || a.t}${ruleDef} · ${a.h === 'nuit' ? 'nuit' : 'jour'} · ${a.lim} manches${a.author ? ' · par ' + a.author : ''}`}</em>
       </div>
       <div className="camp-gym-foes">
         {a.f.map((id, j) => (

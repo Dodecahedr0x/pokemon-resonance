@@ -1,6 +1,6 @@
 /* Painted graphics (backgrounds and textures from the img/ folder, tilted board in perspective) (added in v4.77). */
 
-import { SCEN } from '../pokemon/pokemon.js';
+import { SCENARIOS } from '../pokemon/pokemon.js';
 import { $, reducedMotion, toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { BOARD_ROWS, BOARD_COLS, cellKey, byUid, unitKey } from './engine.js';
@@ -23,7 +23,7 @@ import {
   tiltS,
   ui,
 } from './ui.js';
-import { PREF, savePref } from '../ui/preferences.js';
+import { PREFERENCES, savePref } from '../ui/preferences.js';
 import { TUTORIAL_STEPS } from '../progression/tutorial.js';
 import { sfx } from '../audio/sound-effects.js';
 import { EFFECTS_CANVAS, fxAdd, fxOn, fxPrep } from './move-effects.js';
@@ -60,7 +60,7 @@ const OK = new Set();
 
 let artOk;
 
-const richText = () => artOk && PREF.graphicsMode !== 'leger';
+const richText = () => artOk && PREFERENCES.graphicsMode !== 'leger';
 
 const inBattle = () => B && L.tiles && !$('#cbBattle').hidden;
 
@@ -148,7 +148,7 @@ const AT = {
 };
 
 const placeLabel = () => {
-  const D = SCEN[B.sc];
+  const D = SCENARIOS[B.sc];
   return D.bio === 'arene' ? AT[D.at] || 'ligue' : D.bio;
 };
 
@@ -205,7 +205,7 @@ const dress = () => {
     return;
   }
   hostSet({ boardBg: bgFill() });
-  if (SCEN[B.sc].bio === 'arene') {
+  if (SCENARIOS[B.sc].bio === 'arene') {
     const t = { roche: 'stone', tour: 'rune', ligue: 'marble' }[placeLabel()];
     if (OK.has(t)) {
       L.txId = 'tx-' + t;
@@ -291,7 +291,7 @@ let lastFight;
 let endEntry;
 
 /* ---------- animations: jump while moving, dust on landing ---------- */
-const tempo = () => (PREF.fast || ui.skipSpeedup ? 0.6 : 1);
+const tempo = () => (PREFERENCES.fast || ui.skipSpeedup ? 0.6 : 1);
 
 // same rule as --animScale (quick battle)
 const skip = (T, x, y, s) => {
@@ -701,7 +701,7 @@ export function init() {
     if (!(e.target.closest && e.target.closest('[data-gfx-toggle]'))) {
       return;
     }
-    PREF.graphicsMode = PREF.graphicsMode === 'leger' ? 'riche' : 'leger';
+    PREFERENCES.graphicsMode = PREFERENCES.graphicsMode === 'leger' ? 'riche' : 'leger';
     savePref();
     renderParams();
     rebuildAll();

@@ -2,7 +2,16 @@ import { MOVES } from '../../../engine/data/moves.js';
 import { MARK_TYPE } from '../../../engine/pokemon/pokemon.js';
 import { arenaNext, veiled } from '../../../engine/modes/gyms.js';
 import { GLYPH_INK, typeGlyphPath, typeColor } from '../../../engine/core/utils.js';
-import { affected, byUid, nbrK, reach, targets, unitAt, unitKey, threatZone } from '../../../engine/combat/engine.js';
+import {
+  affected,
+  byUid,
+  neighborKeys,
+  reach,
+  targets,
+  unitAt,
+  unitKey,
+  threatZone,
+} from '../../../engine/combat/engine.js';
 import { duoTargets } from '../../../engine/combat/items-bonds-ai.js';
 import { coverOf, ricoTgt } from '../../../engine/combat/synergies-obstacles.js';
 import { B, BOARD_GEOMETRY, cellCenter, cellPoints, TILT, tiltS, ui } from '../../../engine/combat/ui.js';
@@ -295,7 +304,7 @@ export function Highlights() {
       } else if (ui.mode === 'dodge') {
         hl.push(
           ...polys(
-            nbrK(unitKey(u)).filter(k => !B.tiles[k].rock && !unitAt(B, k)),
+            neighborKeys(unitKey(u)).filter(k => !B.tiles[k].rock && !unitAt(B, k)),
             'highlight-dodge'
           )
         );

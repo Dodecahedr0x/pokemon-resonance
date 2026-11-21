@@ -6,7 +6,7 @@
 import { ELEMENT_TYPES, MARK_REACTIONS } from '../data/game-data.js';
 import { POKEMON } from '../pokemon/pokemon.js';
 import { PROFILE, lvlOfPts, pairKey } from '../state/game-state.js';
-import { DUOT } from './items-bonds-ai.js';
+import { BOND_TECHNIQUES } from './items-bonds-ai.js';
 
 export const MARK_BY_TYPE = {
   Eau: 'trempe',
@@ -127,8 +127,8 @@ function generateDuo(x, y) {
 }
 
 export function duoTechnique(k) {
-  if (DUOT[k]) {
-    return DUOT[k];
+  if (BOND_TECHNIQUES[k]) {
+    return BOND_TECHNIQUES[k];
   }
   const [x, y] = String(k).split('|');
   return generateDuo(x, y);
@@ -136,10 +136,10 @@ export function duoTechnique(k) {
 
 /** The Guide: the fixed techniques, then those of your most advanced duos. */
 export function listDuos() {
-  const o = Object.assign({}, DUOT);
+  const o = Object.assign({}, BOND_TECHNIQUES);
   try {
     Object.entries(PROFILE.links || {})
-      .filter(([k, v]) => !DUOT[k] && lvlOfPts(v) >= 2)
+      .filter(([k, v]) => !BOND_TECHNIQUES[k] && lvlOfPts(v) >= 2)
       .sort((a, b) => b[1] - a[1])
       .slice(0, 8)
       .forEach(([k]) => {
@@ -191,5 +191,5 @@ const DUO_TECHNIQUES = {
 
 // Instructions run at startup, in the original order (see index.js).
 export function init() {
-  Object.assign(DUOT, DUO_TECHNIQUES);
+  Object.assign(BOND_TECHNIQUES, DUO_TECHNIQUES);
 }

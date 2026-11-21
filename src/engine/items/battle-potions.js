@@ -6,7 +6,7 @@ import { B, finish, renderAll, ui } from '../combat/ui.js';
 import { playEv } from '../combat/move-effects.js';
 import { renderWallet } from '../ui/wallet.js';
 import { BAG_MAX, useCombatItem } from '../combat/resonance.js';
-import { SHOP, bagN } from '../state/economy.js';
+import { SHOP, bagCount } from '../state/economy.js';
 
 function pUse(S, u, k) {
   const it = SHOP[k];
@@ -18,7 +18,7 @@ function pUse(S, u, k) {
     u.ko ||
     u.sn ||
     u.acted ||
-    bagN(k) < 1 ||
+    bagCount(k) < 1 ||
     u.hp >= u.mhp ||
     (S.itemsUsed || 0) >= BAG_MAX ||
     S.duel433
@@ -31,7 +31,7 @@ function pUse(S, u, k) {
   u.acted = true;
   u.moved = true;
   S.itemsUsed = (S.itemsUsed || 0) + 1; // Battle Bag (v4.14)
-  PROFILE.bag[k] = bagN(k) - 1;
+  PROFILE.bag[k] = bagCount(k) - 1;
   if (!PROFILE.bag[k]) {
     delete PROFILE.bag[k];
   }

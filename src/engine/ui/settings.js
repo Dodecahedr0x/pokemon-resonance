@@ -4,8 +4,8 @@ import { toast } from '../core/utils.js';
 import { placeAlert } from '../world/home-route.js';
 import { B, renderAll } from '../combat/ui.js';
 import { queueSave } from '../state/saves.js';
-import { PREF, savePref } from './preferences.js';
-import { sfx, vibe } from '../audio/sound-effects.js';
+import { PREFERENCES, savePref } from './preferences.js';
+import { sfx, vibrate } from '../audio/sound-effects.js';
 import { musLevel } from '../audio/music.js';
 import { SCREEN_STATE } from './screen-state.js';
 import { renderWallet } from './wallet.js';
@@ -49,12 +49,12 @@ export function v4After(t) {
 // Statements run at startup, in the original order (see index.js).
 export function init() {
   /* ---------- Settings: sound, vibrations, game ---------- */
-  if (PREF.musVol === undefined) {
-    PREF.musVol = 0.7;
+  if (PREFERENCES.musVol === undefined) {
+    PREFERENCES.musVol = 0.7;
   }
 
-  if (PREF.sfxVol === undefined) {
-    PREF.sfxVol = 0.8;
+  if (PREFERENCES.sfxVol === undefined) {
+    PREFERENCES.sfxVol = 0.8;
   }
 
   document.addEventListener('change', e => {
@@ -62,10 +62,10 @@ export function init() {
     if (!p) {
       return;
     }
-    PREF[p.dataset.pref] = p.checked;
+    PREFERENCES[p.dataset.pref] = p.checked;
     savePref();
     if (p.dataset.pref === 'vibe' && p.checked) {
-      vibe(40);
+      vibrate(40);
     }
     if (p.dataset.pref === 'sound' && p.checked) {
       setTimeout(() => sfx('ui'), 30);
@@ -82,7 +82,7 @@ export function init() {
   document.addEventListener('input', e => {
     const v = e.target.closest('[data-vol]');
     if (v) {
-      PREF[v.dataset.vol] = +v.value / 100;
+      PREFERENCES[v.dataset.vol] = +v.value / 100;
       const b = v.parentElement.querySelector('b');
       if (b) {
         b.textContent = v.value + ' %';
@@ -116,7 +116,7 @@ export function init() {
       return;
     }
     if (e.target.closest('[data-v4reset]')) {
-      Object.assign(PREF, {
+      Object.assign(PREFERENCES, {
         sound: false,
         vibe: false,
         fast: false,

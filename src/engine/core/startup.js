@@ -3,12 +3,12 @@ import { POKEMON } from '../pokemon/pokemon.js';
 import { BUDGET } from '../pokemon/evolution.js';
 import { PROFILE, inBox } from '../state/game-state.js';
 import { BADGES } from '../modes/gyms.js';
-import { TABS, show } from './navigation.js';
+import { NAV_TABS, show } from './navigation.js';
 import { renderLeague } from '../modes/league.js';
 import { __set_squad, renderFilters, renderSquad, save, squad } from '../team/team.js';
 import { champBuild } from '../combat/items-bonds-ai.js';
 import { B, __set_scSel } from '../combat/ui.js';
-import { SV, bootSaves, queueSave } from '../state/saves.js';
+import { CLOUD_SAVE, bootSaves, queueSave } from '../state/saves.js';
 import { __set_PREPG, renderPrep } from '../combat/battle-prep.js';
 import { nextGoal } from '../progression/campaign.js';
 import { renderHome } from '../world/home.js';
@@ -44,7 +44,7 @@ export function init() {
   // the Champion exists from the start (restoring the game displays them)…
   bootStep('sauvegarde', () => {
     bootSaves(); // device save (the Claude account follows in the background)
-    Object.assign(PROFILE, ecoClean(SV.local.auto && SV.local.auto.profile));
+    Object.assign(PROFILE, ecoClean(CLOUD_SAVE.local.auto && CLOUD_SAVE.local.auto.profile));
   });
 
   bootStep('captures Libre', () => {
@@ -127,14 +127,14 @@ export function init() {
   bootStep('onglet', () => {
     // tab: the one from the address, otherwise the last one opened
     let t = location.hash.slice(1);
-    if (!TABS.includes(t)) {
+    if (!NAV_TABS.includes(t)) {
       try {
         t = localStorage.getItem('res8-tab');
       } catch (e) {
         t = null;
       }
     }
-    show(TABS.includes(t) ? t : 'accueil', false);
+    show(NAV_TABS.includes(t) ? t : 'accueil', false);
   });
 
   // v4.76: home is already drawn by show() just above (no second identical render)

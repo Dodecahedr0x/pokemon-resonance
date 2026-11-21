@@ -3,7 +3,7 @@
 import { reducedMotion, toast } from '../core/utils.js';
 import { byUid } from './engine.js';
 import { B, renderAll, ui } from './ui.js';
-import { PREF, savePref } from '../ui/preferences.js';
+import { PREFERENCES, savePref } from '../ui/preferences.js';
 import { evoSet } from '../../screens/combat/board/boardStore.js';
 import { refreshBattle } from '../../screens/combat/battle/battleStore.js';
 
@@ -17,7 +17,7 @@ export function endSkipSpeedup() {
   refreshBattle('fast'); // #bFast (aria-pressed): rendered by React (TopBar.jsx)
 }
 
-export const battleDelay = (rm, fast, slow) => (reducedMotion || ui.skipSpeedup ? rm : PREF.fast ? fast : slow);
+export const battleDelay = (rm, fast, slow) => (reducedMotion || ui.skipSpeedup ? rm : PREFERENCES.fast ? fast : slow);
 
 export const isEnemyTurn = () =>
   !!(
@@ -32,10 +32,10 @@ export const isEnemyTurn = () =>
 export function init() {
   document.addEventListener('click', e => {
     if (e.target.closest('#bFast')) {
-      PREF.fast = !PREF.fast;
+      PREFERENCES.fast = !PREFERENCES.fast;
       savePref();
       endSkipSpeedup();
-      toast(PREF.fast ? 'Combat rapide : animations ×2' : 'Vitesse normale');
+      toast(PREFERENCES.fast ? 'Combat rapide : animations ×2' : 'Vitesse normale');
       return;
     }
     if (e.target.closest('#bEnd') && isEnemyTurn() && !ui.skipSpeedup) {

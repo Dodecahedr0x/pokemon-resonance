@@ -2,7 +2,7 @@ import { WEATHER } from '../data/game-data.js';
 import { WEATHER_NAME } from '../pokemon/pokemon.js';
 import { getHost, hostSet } from '../../screens/combat/board/boardStore.js';
 import { B, ui } from './ui.js';
-import { PREF } from '../ui/preferences.js';
+import { PREFERENCES } from '../ui/preferences.js';
 import { LIVING_DESC, LIVING_STATE, LIVING_NAME } from './living-board.js';
 import { deployRender } from './deployment.js';
 
@@ -72,7 +72,7 @@ export function announceSky(ic, heading, text) {
         hostSet({ skyBanner: { ...c, on: false } });
       }
     },
-    PREF.fast || ui.skipSpeedup ? 1300 : 2400
+    PREFERENCES.fast || ui.skipSpeedup ? 1300 : 2400
   );
 }
 

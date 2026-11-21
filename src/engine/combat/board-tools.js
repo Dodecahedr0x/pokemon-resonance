@@ -7,7 +7,7 @@ import { rxCat, toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { parseCellKey, affected, byUid, markAt, reach, targets, unitAt } from './engine.js';
 import { B, STATUS_CLASS, clearAim, hpClass, renderAll, ui } from './ui.js';
-import { PREF, savePref } from '../ui/preferences.js';
+import { PREFERENCES, savePref } from '../ui/preferences.js';
 import { tileTip } from './battle-panel.js';
 import { renderParams } from '../ui/settings.js';
 import { canSelect } from './tactical-engine.js';
@@ -29,7 +29,7 @@ function isFullscreen() {
 
 function setFullscreen(on, viaButton) {
   document.body.classList.toggle('fullscreen-mode', on);
-  PREF.fullscreenMode = on ? 1 : 0;
+  PREFERENCES.fullscreenMode = on ? 1 : 0;
   savePref();
   const el = document.documentElement;
   try {
@@ -81,7 +81,7 @@ function syncBoardTools() {
       foot,
       fs: document.body.classList.contains('fullscreen-mode'),
       lp: !!MAGNIFIER_ON,
-      ct: !!PREF.boardContrast,
+      ct: !!PREFERENCES.boardContrast,
     },
     o = getHost().boardTools;
   if (!o || o.foot !== b.foot || o.fs !== b.fs || o.lp !== b.lp || o.ct !== b.ct) {
@@ -95,7 +95,7 @@ function syncBoardTools() {
 }
 
 function applyContrast() {
-  document.body.classList.toggle('board-contrast', !!PREF.boardContrast);
+  document.body.classList.toggle('board-contrast', !!PREFERENCES.boardContrast);
 }
 
 function tileLabel(k) {
@@ -381,7 +381,7 @@ function onBoardToolsClick(e) {
     syncBoardTools();
     tileSheet();
   } else if (a === 'ct') {
-    PREF.boardContrast = PREF.boardContrast ? 0 : 1;
+    PREFERENCES.boardContrast = PREFERENCES.boardContrast ? 0 : 1;
     savePref();
     applyContrast();
     syncBoardTools();
@@ -389,7 +389,7 @@ function onBoardToolsClick(e) {
     setFullscreen(!document.body.classList.contains('fullscreen-mode'), true);
     renderParams();
   } else if (a === 'pct') {
-    PREF.boardContrast = PREF.boardContrast ? 0 : 1;
+    PREFERENCES.boardContrast = PREFERENCES.boardContrast ? 0 : 1;
     savePref();
     applyContrast();
     renderParams();
@@ -414,7 +414,7 @@ export function init() {
       if (!isFullscreen() && document.body.classList.contains('fullscreen-mode') && FULLSCREEN_SEEN) {
         FULLSCREEN_SEEN = false;
         document.body.classList.remove('fullscreen-mode');
-        PREF.fullscreenMode = 0;
+        PREFERENCES.fullscreenMode = 0;
         savePref();
         syncBoardTools();
         fitPhoneBattle();
@@ -545,7 +545,7 @@ export function init() {
   });
   HOOKS.beforeLaunch.push(rangerLens);
   HOOKS.launch.push(isNew => {
-    if (isNew && PREF.fullscreenMode) {
+    if (isNew && PREFERENCES.fullscreenMode) {
       setFullscreen(true, false);
     } // tapping « Lancer » (Start) allows fullscreen
   });
@@ -555,12 +555,12 @@ export function init() {
   addEventListener('scroll', () => placeSheet(), { passive: true });
   // « Affichage du combat » (Battle display) panel: rendered by React (src/screens/settings/panels/CombatDisplay.jsx)
 
-  if (PREF.fullscreenMode) {
+  if (PREFERENCES.fullscreenMode) {
     document.body.classList.add('fullscreen-mode');
   }
   // immersive mode comes back; browser fullscreen waits for a tap
-  if (PREF.boardContrast === undefined) {
-    PREF.boardContrast = 1;
+  if (PREFERENCES.boardContrast === undefined) {
+    PREFERENCES.boardContrast = 1;
   }
   // v4.45: high-contrast board enabled by default (can be disabled)
   applyContrast();

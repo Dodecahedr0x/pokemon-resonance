@@ -1,11 +1,11 @@
 /* Battle mutators: a drawn rule changes the whole battle (Tower floors, optional in Training) (added in v4.9). */
 
-import { SCEN } from '../pokemon/pokemon.js';
+import { SCENARIOS } from '../pokemon/pokemon.js';
 import { typeColor } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { parseCellKey, hasNx, unitAt } from './engine.js';
 import { scSel } from './ui.js';
-import { PREF } from '../ui/preferences.js';
+import { PREFERENCES } from '../ui/preferences.js';
 import { ROLE_PROVIDERS } from './tactical-engine.js';
 
 /* Mutators: Déluge, Nuit éternelle, Gravité, Canons de verre, Champ de pièges…
@@ -68,9 +68,9 @@ export function mutOfTurn(run, f) {
 
 /** Optional: a random mutator for Training battles. */
 export function mutTraining() {
-  const D = SCEN[scSel];
+  const D = SCENARIOS[scSel];
   if (
-    !PREF.trainingMutators ||
+    !PREFERENCES.trainingMutators ||
     !D ||
     D.tuto ||
     D.tower ||
@@ -185,7 +185,7 @@ export function init() {
 
   // mutator in Training: +50% Pokédollars
   HOOKS.progress.push((S, rew, win) => {
-    const D = SCEN[S.sc] || {};
+    const D = SCENARIOS[S.sc] || {};
     if (win && S.mut && !D.tower) {
       const m = Math.round(((rew.money || 0) * 0.5) / 10) * 10;
       rew.mut = S.mut;

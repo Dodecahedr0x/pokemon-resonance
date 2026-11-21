@@ -5,7 +5,7 @@ import { BUDGET, RECRUIT } from '../pokemon/evolution.js';
 import { ITEMS2, PROFILE, inBox, ownedItems } from '../state/game-state.js';
 import { RC } from '../pokemon/roles-synergies.js';
 import { $, GLYPH_INK, reducedMotion, writeLS, typeGlyphPath, markOf, typeColor, toast } from '../core/utils.js';
-import { cur } from '../core/navigation.js';
+import { currentScreen } from '../core/navigation.js';
 import { openRx } from '../data/types.js';
 import { BRANCHES } from '../combat/engine.js';
 import { B } from '../combat/ui.js';
@@ -112,7 +112,7 @@ export function analyze() {
     )
   );
   const chains = CHAINS.filter(c => c.need.every(n => rxp.has(n)) && (!c.mon || all.some(m => m.id === c.mon)));
-  const c = cost(),
+  const c = squadCost(),
     free = BUDGET - c,
     bonus = vBonus(),
     covered = roles.filter(v => v > 0).length;
@@ -194,14 +194,14 @@ export function analyze() {
 
 // Families visible with the current filters (read by the React grid).
 export function visible() {
-  const qq = norm(q);
+  const qq = normalizeText(q);
   return RECRUIT.filter(m => {
     const f = familyOf(m.id);
     return (
       (filt === 'Tous' || f.some(x => x.r === filt || x.r2 === filt)) &&
       (gen === 'all' || String(m.gen) === gen) &&
       (!ftype || f.some(x => x.t.includes(ftype))) &&
-      (!qq || f.some(x => norm(x.n).includes(qq) || x.mv.some(id => norm(MOVES[id].n).includes(qq))))
+      (!qq || f.some(x => normalizeText(x.n).includes(qq) || x.mv.some(id => normalizeText(MOVES[id].n).includes(qq))))
     );
   });
 }
@@ -231,10 +231,10 @@ export function renderSquad() {
   if (openId) {
     openSheet(openId, true);
   }
-  if (cur === 'combat' && !B) {
+  if (currentScreen === 'combat' && !B) {
     renderPrep();
   }
-  if (cur === 'accueil') {
+  if (currentScreen === 'accueil') {
     renderHome();
   }
 }
@@ -263,7 +263,7 @@ export function toggle(id, card) {
     toast(dr);
     return;
   }
-  const rest = same ? cost() - RC(same) : cost();
+  const rest = same ? squadCost() - RC(same) : squadCost();
   if (!same && squad.length >= TEAM_MAX) {
     toast(`Équipe complète : ${TEAM_MAX} Pokémon par combat. Retirez-en un d’abord.`);
     return;
@@ -369,7 +369,7 @@ function equip(id, it) {
 }
 
 /* ===================== POKÉDEX & TEAM v0.8: family cards ===================== */
-export const STLN = ['PV', 'Puissance', 'Garde', 'Vitesse', 'Mouvement', 'Portée'];
+export const STAT_NAMES = ['PV', 'Puissance', 'Garde', 'Vitesse', 'Mouvement', 'Portée'];
 
 export const TEAM_MAX = 4;
 
@@ -380,11 +380,11 @@ export const validSquad = s =>
   new Set(s.map(id => POKEMON[id].base)).size === s.length &&
   s.reduce((a, id) => a + RC(id), 0) <= BUDGET;
 
-export const cost = () => squad.reduce((a, id) => a + RC(id), 0);
+export const squadCost = () => squad.reduce((a, id) => a + RC(id), 0);
 
-export const vBonus = () => Math.min(2, Math.floor((BUDGET - cost()) / 4));
+export const vBonus = () => Math.min(2, Math.floor((BUDGET - squadCost()) / 4));
 
-export const norm = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+export const normalizeText = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 
 // Instructions run at startup, in the original order (see index.js).
 export function init() {

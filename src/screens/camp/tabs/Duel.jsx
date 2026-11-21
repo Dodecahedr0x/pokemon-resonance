@@ -2,7 +2,7 @@ import { MOVES } from '../../../engine/data/moves.js';
 import { POKEMON, familyOf } from '../../../engine/pokemon/pokemon.js';
 import { PROFILE } from '../../../engine/state/game-state.js';
 import { typeColor } from '../../../engine/core/utils.js';
-import { STLN } from '../../../engine/team/team.js';
+import { STAT_NAMES } from '../../../engine/team/team.js';
 import { pokemonArtUrl } from '../../../engine/assets/images.js';
 import {
   DUEL_STATE,
@@ -137,9 +137,9 @@ function Card({ C, id }) {
         <Types T={m.t} />
       </span>
       <em>{m.r || ''}</em>
-      <span className="camp-duel-stats" aria-label={STLN.map((n, i) => n + ' ' + m.s[i]).join(', ')}>
+      <span className="camp-duel-stats" aria-label={STAT_NAMES.map((n, i) => n + ' ' + m.s[i]).join(', ')}>
         {m.s.map((v, i) => (
-          <i key={i} title={`${STLN[i]} ${v}`} style={{ '--v': `${Math.round((v / STAT_MAX) * 100)}%` }} />
+          <i key={i} title={`${STAT_NAMES[i]} ${v}`} style={{ '--v': `${Math.round((v / STAT_MAX) * 100)}%` }} />
         ))}
       </span>
       {nEv ? <small>{`${nEv} Éveil${nEv > 1 ? 's' : ''}`}</small> : null}
@@ -182,7 +182,7 @@ function Detail({ C }) {
           })}
       </div>
       <p className="camp-duel-lineage">
-        {STLN.map((n, i) => `${n} ${m.s[i]}`).join(' · ')}
+        {STAT_NAMES.map((n, i) => `${n} ${m.s[i]}`).join(' · ')}
         {family.length > 1 && C.mode !== 'final' ? (
           <>
             <br />

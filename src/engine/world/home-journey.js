@@ -1,5 +1,5 @@
 import { GYMS } from '../data/game-data.js';
-import { POKEMON, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCENARIOS } from '../pokemon/pokemon.js';
 import { CAMP_START, PROFILE, defProfile, isCamp } from '../state/game-state.js';
 import { ARENAS, BADGES, TERR } from '../modes/gyms.js';
 import { $, reducedMotion, writeLS, typeGlyphPath, medal, typeColor, toast } from '../core/utils.js';
@@ -13,9 +13,9 @@ import { SAVE_V, applySave, autoSave, escapeHtml } from '../state/saves.js';
 import { TUTORIAL_STEPS } from '../progression/tutorial.js';
 import { __set_PREPG, renderPrep } from '../combat/battle-prep.js';
 import { nextGoal } from '../progression/campaign.js';
-import { AUTO, CHAP, leaderOf } from '../progression/prestige.js';
+import { AUTO, chapterOf, leaderOf } from '../progression/prestige.js';
 import { renderHome } from './home.js';
-import { LEGS, legKey, legOf } from '../modes/legendaries.js';
+import { LEGENDARIES, legKey, legOf } from '../modes/legendaries.js';
 import { RIVAL, RIVAL_KEYS, rivalIdx } from '../modes/rival.js';
 import { styleOf } from '../combat/leader-styles.js';
 import { COLOSSI } from '../combat/tactics.js';
@@ -45,7 +45,7 @@ export function avatar(name, type, cls = '') {
 
 /* --- next step --- */
 export function wonOf(k) {
-  const s = SCEN[k];
+  const s = SCENARIOS[k];
   if (!s) {
     return false;
   }
@@ -102,13 +102,13 @@ export function wonOf(k) {
 
 export function goalInfo() {
   const [k, n] = nextGoal(),
-    S = SCEN[k] || {},
+    S = SCENARIOS[k] || {},
     gi = ARENAS.findIndex(a => a.k === k);
-  return { k, n, S, C: CHAP(k), L: leaderOf(k), gi, type: gi >= 0 ? GYMS[gi].t : S.at };
+  return { k, n, S, C: chapterOf(k), L: leaderOf(k), gi, type: gi >= 0 ? GYMS[gi].t : S.at };
 }
 
 export function emblem(k, cls = '') {
-  const s = SCEN[k] || {},
+  const s = SCENARIOS[k] || {},
     gi = ARENAS.findIndex(a => a.k === k),
     L = leaderOf(k),
     legendInfo = s.hoennLegend || s.captureHoennLegend || s.legend || s.colossus || s.roam;
@@ -155,7 +155,7 @@ export function professorMsg() {
     return hoennProfessor(g);
   } // Hoenn (v4.19)
   if (/^jd\d$/.test(g.k)) {
-    return `${g.k === 'jd1' ? 'Des ondes étranges brouillent Johto. ' : ''}La Néo-Dissonance refait surface : <b>${g.L.n}</b>, ${g.L.t}. ${SCEN[g.k].d}`;
+    return `${g.k === 'jd1' ? 'Des ondes étranges brouillent Johto. ' : ''}La Néo-Dissonance refait surface : <b>${g.L.n}</b>, ${g.L.t}. ${SCENARIOS[g.k].d}`;
   }
   if (/^j[1-8]$|^jchamp$/.test(g.k)) {
     return g.k === 'jchamp'
@@ -181,20 +181,24 @@ export function selItems(g) {
   }
   // the Hoenn Legendaries (v4.38) stay hidden while Hoenn is closed
   if (g === 'apres') {
-    return ['tdr', ...LEGS.map(L => legKey(L.id)), ...(hoennOpen() ? HOENN_LEGEND_DEFS.map(L => 'hl' + L.id) : [])];
+    return [
+      'tdr',
+      ...LEGENDARIES.map(L => legKey(L.id)),
+      ...(hoennOpen() ? HOENN_LEGEND_DEFS.map(L => 'hl' + L.id) : []),
+    ];
   }
   if (g === 'ligue') {
     return [...ELITE, 'champ'];
   }
   return [
     'tuto',
-    ...TERR.filter(k => !['tuto', 'sauvage', 'champ'].includes(k) && !SCEN[k].elite),
+    ...TERR.filter(k => !['tuto', 'sauvage', 'champ'].includes(k) && !SCENARIOS[k].elite),
     ...COLOSSI.map(C => C.k), // colossi (v4.8)
   ];
 }
 
 export function groupOf(k) {
-  const D = SCEN[k] || {};
+  const D = SCENARIOS[k] || {};
   if (D.hoennLegend || D.captureHoennLegend || k === 'tdr' || legOf(k) || D.captureLegend) {
     return 'apres';
   }
@@ -216,7 +220,7 @@ function pickIn(g) {
 /* selection frame: tabs, list, battle sheet, team, doctrine (v4.30) and
    saved teams (v4.32): rendered by React (src/screens/combat/prep) */
 export function renderSelection() {
-  if (!$('#scenList') || !SCEN[scSel]) {
+  if (!$('#scenList') || !SCENARIOS[scSel]) {
     return;
   }
   refreshPrep();
@@ -385,14 +389,15 @@ export const goalName = g => (g.gi >= 0 ? `Arène ${g.gi + 1} · ${GYMS[g.gi].t}
 
 /* --- Battles: a single frame (tab → list → sheet) --- */
 // SELG and k2n: read by the battle selection (React)
-export const SELG = [
+export const BATTLE_GROUPS = [
   ['terrains', 'Entraînement', 'i-fight'],
   ['arenes', 'Arènes', 'i-league'],
   ['ligue', 'Ligue', 'i-star'],
   ['apres', 'Après-jeu', 'i-trophy'],
 ];
 
-export const scenarioName = k => (k === 'champ' ? 'Finale' : k === 'tuto' ? 'Combat guidé' : (SCEN[k] || {}).n || '');
+export const scenarioName = k =>
+  k === 'champ' ? 'Finale' : k === 'tuto' ? 'Combat guidé' : (SCENARIOS[k] || {}).n || '';
 
 /* --- first visit to a screen: a tip from the Professor --- */
 // read by src/components/Tip.jsx

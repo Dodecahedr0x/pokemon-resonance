@@ -5,12 +5,12 @@ import { queueSave } from './saves.js';
 import { renderWallet } from '../ui/wallet.js';
 
 /* ---------- profile: Pokédollars, Shards, Bag, quests ---------- */
-export function ECO0() {
+export function defaultEconomyProfile() {
   return { money: 500, gems: 0, bag: { poke: 5, potion: 2 }, qc: {}, daily: { d: '', w: 0 } };
 }
 
 export function ecoClean(p) {
-  const o = ECO0();
+  const o = defaultEconomyProfile();
   if (!p || typeof p !== 'object') {
     return o;
   }
@@ -123,4 +123,4 @@ export const HELD_IMG = {
   bandeau: 'muscle-band',
 };
 
-export const bagN = k => (PROFILE.bag && PROFILE.bag[k]) || 0;
+export const bagCount = k => (PROFILE.bag && PROFILE.bag[k]) || 0;

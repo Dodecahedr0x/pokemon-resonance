@@ -16,13 +16,13 @@ import {
   inReach,
   landed,
   markAt,
-  nbrK,
+  neighborKeys,
   retarget,
   pushMessage,
   setMark,
   shove,
   stun,
-  teff,
+  typeEffectiveness,
   unitKey,
 } from '../combat/engine.js';
 import { DAMAGE_PROVIDERS, ROLE_PROVIDERS } from '../combat/tactical-engine.js';
@@ -119,7 +119,7 @@ export function afterMoveSignatures(S, u, m, k, v0, v1, dealt, ev) {
       o.root = 0;
     });
     let n = 0;
-    [unitKey(u), ...nbrK(unitKey(u))].forEach(x => {
+    [unitKey(u), ...neighborKeys(unitKey(u))].forEach(x => {
       const t = S.tiles[x];
       if (t && t.trap && t.trap.side !== u.side) {
         t.trap = null;
@@ -282,7 +282,7 @@ export function aiSupportMove(S, e, opts, al, here) {
           champherbu: !(S.champ && S.champ[e.side] > 0) ? 3 : 0,
           gravite: !(S.gravite > 0) && al.some(flies) ? 4 : 0,
           requiem: al.some(a => hdist(a.pos, e.pos) <= 2 && !(a.requiem > 0)) ? 5 : 0,
-          conversion2: e.dtype && teff(e.dtype, e.t) >= 1 ? 4 : 0,
+          conversion2: e.dtype && typeEffectiveness(e.dtype, e.t) >= 1 ? 4 : 0,
         }[m.fx] || 0;
       prend(v, here, mid, here);
       return;
@@ -372,7 +372,7 @@ export const PRE_MOVE_EFFECTS = {
 
 const ROSTER_SELF_EFFECTS = {
   champherbu(S, u, ev) {
-    nbrK(unitKey(u)).forEach(x => setMark(S, x, 'enracine', u.uid));
+    neighborKeys(unitKey(u)).forEach(x => setMark(S, x, 'enracine', u.uid));
     S.champ = Object.assign({}, S.champ, { [u.side]: 3 });
     pushMessage(ev, 'Champ Herbu : les cases Enracinées soignent votre équipe pendant 3 manches.');
   },
@@ -387,7 +387,7 @@ const ROSTER_SELF_EFFECTS = {
     pushMessage(ev, `${u.n} danse : Renforcé et +1 Mouvement pendant 2 manches.`);
   },
   anneauhydro(S, u, ev) {
-    nbrK(unitKey(u)).forEach(x => setMark(S, x, 'trempe', u.uid));
+    neighborKeys(unitKey(u)).forEach(x => setMark(S, x, 'trempe', u.uid));
     u.ringTurns = 4;
     pushMessage(ev, `${u.n} s’entoure d’un anneau d’eau.`);
   },
@@ -441,7 +441,7 @@ const ROSTER_SELF_EFFECTS = {
     let best = null,
       bv = 9;
     Object.keys(TYPES).forEach(t => {
-      const e = teff(u.dtype, [t]);
+      const e = typeEffectiveness(u.dtype, [t]);
       if (e < bv) {
         bv = e;
         best = t;

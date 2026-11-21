@@ -1,15 +1,15 @@
 import { getHost, hostSet } from '../../screens/combat/board/boardStore.js';
 
-import { SCEN } from '../pokemon/pokemon.js';
-import { flies, mDur, nbrK, pushMessage, unitAt } from './engine.js';
+import { SCENARIOS } from '../pokemon/pokemon.js';
+import { flies, markDuration, neighborKeys, pushMessage, unitAt } from './engine.js';
 import { scSel } from './ui.js';
-import { PREF } from '../ui/preferences.js';
+import { PREFERENCES } from '../ui/preferences.js';
 import { DAMAGE_PROVIDERS } from './tactical-engine.js';
 import { noWind } from './tactics.js';
 
 /** The player's setting. The guided prologue battle always stays classic. */
 export function chosenAlive() {
-  return PREF.livingBoard !== false && !(SCEN[scSel] && SCEN[scSel].tuto);
+  return PREFERENCES.livingBoard !== false && !(SCENARIOS[scSel] && SCENARIOS[scSel].tuto);
 }
 
 /** At the start of a battle: the scenario's time becomes the first time of the cycle. */
@@ -45,7 +45,7 @@ export function fireHazard(S, k) {
   if (t.mark && t.mark.k === 'trempe') {
     return false;
   } // soaked grass
-  return nbrK(k).some(n => onFire(S, n));
+  return neighborKeys(k).some(n => onFire(S, n));
 }
 
 /** A tall grass that can burn (without looking at its neighbors). */
@@ -79,7 +79,7 @@ export function aliveRound(S, ev) {
     for (const k in S.tiles) {
       const t = S.tiles[k];
       if (t.mark && t.mark.k === 'trempe') {
-        t.mark = { k: 'givre', d: mDur(S, 'givre'), lv: t.mark.lv, by: t.mark.by };
+        t.mark = { k: 'givre', d: markDuration(S, 'givre'), lv: t.mark.lv, by: t.mark.by };
         n++;
       }
     }
@@ -92,7 +92,7 @@ export function aliveRound(S, ev) {
   const hasWon = [];
   for (const k in S.tiles) {
     if (fireHazard(S, k)) {
-      hasWon.push([k, nbrK(k).find(n => onFire(S, n))]);
+      hasWon.push([k, neighborKeys(k).find(n => onFire(S, n))]);
     }
   }
   // downwind (v4.8), the fire jumps one more cell in the tall grass
@@ -120,7 +120,7 @@ export function aliveRound(S, ev) {
     hasWon.forEach(([k, de]) => {
       const t = S.tiles[k];
       t.grass = false;
-      t.mark = { k: 'brulant', d: mDur(S, 'brulant'), lv: 1, by: S.tiles[de].mark.by };
+      t.mark = { k: 'brulant', d: markDuration(S, 'brulant'), lv: 1, by: S.tiles[de].mark.by };
       edges.push([de, k, 1]);
     });
     ev.push({ e: 'chain', edges, c: 'fire' });

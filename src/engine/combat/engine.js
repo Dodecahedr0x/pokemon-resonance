@@ -1,11 +1,21 @@
 import { MT } from './turn-core.js';
 import { ELEMENT_TYPES, MARKS, MARK_REACTIONS } from '../data/game-data.js';
 import { MOVES } from '../data/moves.js';
-import { POKEMON, DEPLOY, EEVEE, FAMT, MARK_TYPE, PKT, SCEN, TYPE_CHART, WEATHER_NAME } from '../pokemon/pokemon.js';
+import {
+  POKEMON,
+  DEPLOY,
+  EEVEE,
+  FAMT,
+  MARK_TYPE,
+  PKT,
+  SCENARIOS,
+  TYPE_CHART,
+  WEATHER_NAME,
+} from '../pokemon/pokemon.js';
 import { ARRIVAL_EFFECTS } from '../pokemon/evolution.js';
 import { ITEMS2, pairKey } from '../state/game-state.js';
 import { HOOKS } from '../core/hooks.js';
-import { DIFF, aiFallback, dmgItemsLinks, threatAt } from './items-bonds-ai.js';
+import { DIFFICULTY, aiFallback, dmgItemsLinks, threatAt } from './items-bonds-ai.js';
 import {
   NOTE,
   SANDOK,
@@ -95,10 +105,10 @@ export function hdist(a, b) {
 
 export function neighbors(p) {
   const [x, y, z] = toCube(p[0], p[1]);
-  return CDIR.map(d => fromCube(x + d[0], y + d[1], z + d[2])).filter(q => inBoard(q[0], q[1]));
+  return CUBE_DIRECTIONS.map(d => fromCube(x + d[0], y + d[1], z + d[2])).filter(q => inBoard(q[0], q[1]));
 }
 
-export function teff(at, def) {
+export function typeEffectiveness(at, def) {
   const e = TYPE_CHART[at];
   if (!e) {
     return 1;
@@ -191,8 +201,8 @@ export const startVoice = bonus => 3 + bonus;
 
 export function newBattle(sc, team, bonus, opt) {
   opt = opt || {};
-  const D0 = SCEN[sc],
-    df = DIFF[opt.diff] || DIFF.normal,
+  const D0 = SCENARIOS[sc],
+    df = DIFFICULTY[opt.diff] || DIFFICULTY.normal,
     // difficulty: opponents' HP and power, number of rounds
     D = Object.assign({}, D0, {
       hb: Math.max(0, Math.round((D0.hb || 0) * df.hb * hpOrder(opt) + (df.hbAdd || 0))),
@@ -272,7 +282,7 @@ export function newBattle(sc, team, bonus, opt) {
   HOOKS.creation.forEach(h => h(S, opt, D0)); // colossi, Advanced Tactics… (v4.8)
   plan(S, []);
   // difficulty, Bonds, held items and fatigue (applied after the opponents' first intentions)
-  S.diff = DIFF[opt.diff] ? opt.diff : 'normal';
+  S.diff = DIFFICULTY[opt.diff] ? opt.diff : 'normal';
   if (opt.order === 'vitesse') {
     S.order = 'vitesse';
   } // turn order by Speed (v4.5-01)
@@ -357,7 +367,7 @@ export function reach(S, u) {
     ok = SANDOK(u); // sand costs 2 Movement, except for Ground, Rock and Steel types and flyers
   while (q.length) {
     const [k, c0] = q.shift();
-    for (const nk of nbrK(k)) {
+    for (const nk of neighborKeys(k)) {
       const t = S.tiles[nk];
       if (t.rock || unitAt(S, nk)) {
         continue;
@@ -417,14 +427,14 @@ export function targets(S, u, m) {
   ) {
     return [];
   } // v4.14
-  const R = effR(u, m, S);
+  const R = effectiveRange(u, m, S);
   if (m.sh === 'self' || m.sh === 'ring') {
     return [unitKey(u)];
   }
   const ign = ignObst(S, u, mvType(S, u, m)); // Spirit synergy: Psychic and Ghost ignore obstacles
   if (m.sh === 'line') {
     const o = [];
-    CDIR.forEach(d => {
+    CUBE_DIRECTIONS.forEach(d => {
       for (const k of lineK(u.pos, d, R)) {
         if (S.tiles[k].pil && !ign) {
           break;
@@ -496,7 +506,7 @@ export function targets(S, u, m) {
 
 export function affected(S, u, m, k) {
   let a;
-  const R = effR(u, m, S),
+  const R = effectiveRange(u, m, S),
     t = S.tiles[k];
   if (m.sh === 'one' && t && t.rock && !t.pil) {
     // ricochet off a rock
@@ -506,11 +516,11 @@ export function affected(S, u, m, k) {
   if (m.sh === 'self') {
     a = [unitKey(u)];
   } else if (m.sh === 'ring') {
-    a = nbrK(unitKey(u));
+    a = neighborKeys(unitKey(u));
   } else if (m.sh === 'line') {
     const stop = !ignObst(S, u, mvType(S, u, m));
     a = null;
-    for (const d of CDIR) {
+    for (const d of CUBE_DIRECTIONS) {
       const L = lineK(u.pos, d, R);
       if (L.includes(k)) {
         a = [];
@@ -527,16 +537,16 @@ export function affected(S, u, m, k) {
       a = [k];
     }
   } else if (m.sh === 'cone') {
-    const n1 = nbrK(unitKey(u)),
-      n2 = nbrK(k);
+    const n1 = neighborKeys(unitKey(u)),
+      n2 = neighborKeys(k);
     a = [k, ...n1.filter(x => n2.includes(x))];
   } else if (m.sh === 'area') {
-    a = [k, ...nbrK(k)];
+    a = [k, ...neighborKeys(k)];
   } else {
     a = [k];
   }
   if (m.pluie && m.sh === 'one' && S.wx && S.wx.k === 'pluie') {
-    a = [k, ...nbrK(k)];
+    a = [k, ...neighborKeys(k)];
   } // Shock Wave in the Rain (v4.12)
   return a.filter(x => S.tiles[x] && !S.tiles[x].rock);
 }
@@ -545,11 +555,11 @@ export function inReach(S, u, m, k) {
   if (m.sh === 'ring' || m.sh === 'self') {
     return true;
   }
-  const R = effR(u, m, S),
+  const R = effectiveRange(u, m, S),
     ign = ignObst(S, u, mvType(S, u, m)),
     d = hdist(u.pos, parseCellKey(k));
   if (m.sh === 'line') {
-    const L = CDIR.map(dd => lineK(u.pos, dd, R)).find(line => line.includes(k));
+    const L = CUBE_DIRECTIONS.map(dd => lineK(u.pos, dd, R)).find(line => line.includes(k));
     if (!L) {
       return false;
     }
@@ -584,11 +594,11 @@ export function dmgOf(S, u, m, t, typ, mult) {
 }
 
 function dmgBase(S, u, m, t, typ, mult) {
-  let e = teff(typ, t.t);
+  let e = typeEffectiveness(typ, t.t);
   if (e === 0 && typ === 'Sol' && t.pinned && t.t.includes('Vol')) {
     e =
       t.t.length > 1
-        ? teff(
+        ? typeEffectiveness(
             typ,
             t.t.filter(z => z !== 'Vol')
           ) || 1
@@ -781,7 +791,7 @@ export function stun(S, v, lab, ev, noSync) {
   }
 }
 
-export function mDur(S, mk) {
+export function markDuration(S, mk) {
   const w = S.wx && S.wx.k;
   if (
     (w === 'pluie' && mk === 'trempe') ||
@@ -803,7 +813,7 @@ export function mDur(S, mk) {
 export function setMark(S, k, mk, by) {
   const t = S.tiles[k];
   if (t && !t.rock) {
-    t.mark = { k: mk, d: mDur(S, mk), lv: 1, by };
+    t.mark = { k: mk, d: markDuration(S, mk), lv: 1, by };
   }
   // Primer: a Trigger's marks last one more round
   if (t && t.mark && by) {
@@ -814,13 +824,13 @@ export function setMark(S, k, mk, by) {
   }
 }
 
-export function net(S, k, mk) {
+export function markNetwork(S, k, mk) {
   const seen = { [k]: 0 },
     q = [k],
     edges = [];
   while (q.length) {
     const x = q.shift();
-    for (const n of nbrK(x)) {
+    for (const n of neighborKeys(x)) {
       if (seen[n] !== undefined || markAt(S, n) !== mk) {
         continue;
       }
@@ -873,9 +883,9 @@ export function shove(S, v, from, n, ev, pull) {
   const A = toCube(from[0], from[1]),
     C = toCube(v.pos[0], v.pos[1]);
   const dv = pull ? [A[0] - C[0], A[1] - C[1], A[2] - C[2]] : [C[0] - A[0], C[1] - A[1], C[2] - A[2]];
-  let dir = CDIR[0],
+  let dir = CUBE_DIRECTIONS[0],
     best = -1e9;
-  CDIR.forEach(d => {
+  CUBE_DIRECTIONS.forEach(d => {
     const s = d[0] * dv[0] + d[1] * dv[1] + d[2] * dv[2];
     if (s > best) {
       best = s;
@@ -939,7 +949,7 @@ function recordReaction(S, rx, k, u, by, ev) {
 
 // Short circuit: the current runs through the Soaked network, damaging and paralysing.
 function reactShortCircuit(S, k, base, ev) {
-  const N = net(S, k, 'trempe');
+  const N = markNetwork(S, k, 'trempe');
   ev.push({ e: 'chain', edges: N.edges, c: 'el' });
   let n = 0;
   for (const x in N.seen) {
@@ -973,7 +983,7 @@ function reactShortCircuit(S, k, base, ev) {
 
 // Bloom: heals nearby allies and roots the tile.
 function reactBloom(S, k, u, ev) {
-  [k, ...nbrK(k)].forEach(x => {
+  [k, ...neighborKeys(k)].forEach(x => {
     const w = unitAt(S, x);
     if (w && w.side === u.side) {
       heal(S, w, Math.round(w.mhp * 0.2), ev);
@@ -986,7 +996,7 @@ function reactBloom(S, k, u, ev) {
 // Surge: clears the mark and damages every unit around the tile.
 function reactSurge(S, k, t, base, ev) {
   t.mark = null;
-  nbrK(k).forEach(x => {
+  neighborKeys(k).forEach(x => {
     const w = unitAt(S, x);
     if (w && w.ability !== 'ecranpoudre') {
       damage(S, w, Math.max(2, Math.round(base * 0.5)), ev, { ind: true });
@@ -997,7 +1007,7 @@ function reactSurge(S, k, t, base, ev) {
 
 // Wildfire: fire spreads through the Rooted network, burning the units on it.
 function reactWildfire(S, k, u, ev) {
-  const N = net(S, k, 'enracine');
+  const N = markNetwork(S, k, 'enracine');
   ev.push({ e: 'chain', edges: N.edges, c: 'fire' });
   for (const x in N.seen) {
     setMark(S, x, 'brulant', u.uid);
@@ -1031,7 +1041,7 @@ function reactAnchor(S, t, u, v, ev) {
 
 // Ice floe: the whole Soaked network freezes.
 function reactIceFloe(S, k, u, ev) {
-  const N = net(S, k, 'trempe');
+  const N = markNetwork(S, k, 'trempe');
   ev.push({ e: 'chain', edges: N.edges, c: 'ice' });
   for (const x in N.seen) {
     setMark(S, x, 'givre', u.uid);
@@ -1050,7 +1060,7 @@ function applyReactionEffect(S, rx, k, t, u, v, base, ev) {
       reactShortCircuit(S, k, base, ev);
       break;
     case 'vap':
-      [k, ...nbrK(k)].forEach(x => {
+      [k, ...neighborKeys(k)].forEach(x => {
         S.tiles[x].fog = 2;
       });
       t.mark = null;
@@ -1102,7 +1112,7 @@ function applyReactionEffect(S, rx, k, t, u, v, base, ev) {
       reactIceFloe(S, k, u, ev);
       break;
     case 'sei':
-      nbrK(k).forEach(x => setMark(S, x, 'fissure', u.uid));
+      neighborKeys(k).forEach(x => setMark(S, x, 'fissure', u.uid));
       setMark(S, k, 'fissure', u.uid);
       pushMessage(ev, 'Onde sismique : le sol se fissure.');
       break;
@@ -1329,7 +1339,7 @@ function strikeTarget(S, u, m, v, typ, mult, base, ev) {
       pushMessage(ev, `Torche : ${v.n} absorbe les flammes et renforce ses attaques.`);
       v.boost = 2;
     } else {
-      const e = teff(typ, v.t) || 1; // 0 only under Gravity (v4.13)
+      const e = typeEffectiveness(typ, v.t) || 1; // 0 only under Gravity (v4.13)
       dealt += damage(S, v, dmg, ev, {});
       if (e > 1) {
         pushMessage(ev, 'C’est super efficace !');
@@ -1337,7 +1347,7 @@ function strikeTarget(S, u, m, v, typ, mult, base, ev) {
         pushMessage(ev, 'Ce n’est pas très efficace.');
       }
     }
-  } else if (teff(typ, v.t) === 0 || (typ === 'Sol' && v.ability === 'levitation')) {
+  } else if (typeEffectiveness(typ, v.t) === 0 || (typ === 'Sol' && v.ability === 'levitation')) {
     pushMessage(ev, `Ça n’affecte pas ${v.n}.`);
   } else if (m.fx === 'devoreve') {
     pushMessage(ev, `${v.n} ne dort pas : Dévorêve échoue.`);
@@ -1527,7 +1537,7 @@ export function pMove(S, u, k) {
   return ev;
 }
 
-export function pAct(S, u, mi, k) {
+export function playerAction(S, u, mi, k) {
   if (S.phase !== 'player' || u.acted || u.ko) {
     return null;
   }
@@ -1577,12 +1587,12 @@ export function rewardIn(S, u, n, ev) {
     return;
   } // v4.14: Expert attacks; v4.17: Resonant Form
   const b = u.en;
-  u.en = Math.min(EMAX, u.en + n);
+  u.en = Math.min(MAX_ENERGY, u.en + n);
   if (u.en > b && ev) {
     ev.push({ e: 'en', u: u.uid, v: u.en - b });
-    if (u.en === EMAX && hasNx(u)) {
+    if (u.en === MAX_ENERGY && hasNx(u)) {
       ev.push({ e: 'ready', u: u.uid }, { e: 'msg', s: `${u.n} est prêt à s’éveiller.` });
-    } else if (u.en === EMAX && !u.resonanceMsg && resonanceCandidate(S, u)) {
+    } else if (u.en === MAX_ENERGY && !u.resonanceMsg && resonanceCandidate(S, u)) {
       u.resonanceMsg = 1;
       ev.push({ e: 'ready', u: u.uid }, { e: 'msg', s: `${u.n} peut entrer en Forme Résonante.` });
     }
@@ -1655,7 +1665,7 @@ export function canAwaken(S, u) {
     S.phase === 'player' &&
     !u.acted &&
     !u.sn &&
-    u.en >= EMAX &&
+    u.en >= MAX_ENERGY &&
     S.voice >= 1 &&
     evoOpts(S, u).length > 0
   );
@@ -1676,7 +1686,7 @@ function arrive(S, u, ev) {
     mates = r => S.units.filter(o => !o.ko && o.side === u.side && o !== u && hdist(o.pos, u.pos) <= r);
   A[0].forEach(f => {
     if (f.k === 'ring') {
-      nbrK(unitKey(u)).forEach(x => setMark(S, x, f.mk, u.uid));
+      neighborKeys(unitKey(u)).forEach(x => setMark(S, x, f.mk, u.uid));
     } else if (f.k === 'wx') {
       S.wx = { k: f.w, n: u.item === 'rochemeteo' ? 8 : 5 }; // Weather Rock (v4.14)
       pushMessage(ev, `Météo ${WEATHER_NAME[f.w]} pendant 5 manches.`);
@@ -1685,7 +1695,7 @@ function arrive(S, u, ev) {
     } else if (f.k === 'heal') {
       mates(f.r).forEach(o => heal(S, o, Math.round(o.mhp * f.p), ev));
     } else if (f.k === 'fog') {
-      [unitKey(u), ...nbrK(unitKey(u))].forEach(x => {
+      [unitKey(u), ...neighborKeys(unitKey(u))].forEach(x => {
         S.tiles[x].fog = 2;
       });
     } else if (f.k === 'sleep') {
@@ -1785,7 +1795,7 @@ export function pAwaken(S, u, id) {
   S.eveil = true;
   transform(S, u, id, ev);
   if (inHarmony && !u.ko) {
-    u.en = Math.min(EMAX, (u.en || 0) + 1);
+    u.en = Math.min(MAX_ENERGY, (u.en || 0) + 1);
     pushMessage(ev, `En harmonie : ${u.n} garde 1 losange.`);
   }
   u.acted = true;
@@ -1801,7 +1811,7 @@ export function pDodge(S, u, k) {
   if (S.phase !== 'player' || S.voice < 1 || u.ko || u.sn) {
     return null;
   }
-  if (!nbrK(unitKey(u)).includes(k) || S.tiles[k].rock || unitAt(S, k)) {
+  if (!neighborKeys(unitKey(u)).includes(k) || S.tiles[k].rock || unitAt(S, k)) {
     return null;
   }
   const ev = [];
@@ -1853,7 +1863,7 @@ function aiScore(S, e, m, k, pos) {
   sc += m.mk ? 1 : 0;
   sc += aiStyleBonus(S, e, m, k, sim); // each gym leader has their own style (v4.4)
   // depending on difficulty: targets fragile or immobile Pokémon, shelters those about to evolve
-  const lv = (DIFF[S.diff] || DIFF.normal).ai;
+  const lv = (DIFFICULTY[S.diff] || DIFFICULTY.normal).ai;
   if (sc <= 0 || !lv) {
     return sc;
   }
@@ -2097,7 +2107,7 @@ export function threatZone(S, e) {
           return;
         }
         if (m.sh === 'ring') {
-          nbrK(pk).forEach(k => z.add(k));
+          neighborKeys(pk).forEach(k => z.add(k));
           return;
         }
         for (const k in S.tiles) {
@@ -2284,7 +2294,7 @@ function roundEffects(S) {
   if (S.round >= S.lim) {
     S.over = 'lose';
     S.timeout = true;
-    if ((SCEN[S.sc] || {}).roam) {
+    if ((SCENARIOS[S.sc] || {}).roam) {
       S.fled = true;
     } // wandering beast (v4.16)
     pushMessage(
@@ -2343,7 +2353,7 @@ export function preview(S, uid, mi, k) {
 function previewCore(S, uid, mi, k) {
   const C = JSON.parse(JSON.stringify(S)),
     u = byUid(C, uid),
-    ev = pAct(C, u, mi, k) || [],
+    ev = playerAction(C, u, mi, k) || [],
     diff = [];
   C.units.forEach(x => {
     const o = byUid(S, x.uid),
@@ -2380,7 +2390,7 @@ export const parseCellKey = k => k.split(',').map(Number);
 
 export const inBoard = (c, r) => c >= 0 && c < BOARD_COLS && r >= 0 && r < BOARD_ROWS;
 
-export const CDIR = [
+export const CUBE_DIRECTIONS = [
   [1, -1, 0],
   [1, 0, -1],
   [0, 1, -1],
@@ -2389,7 +2399,7 @@ export const CDIR = [
   [0, -1, 1],
 ];
 
-export const nbrK = k => neighbors(parseCellKey(k)).map(q => cellKey(q[0], q[1]));
+export const neighborKeys = k => neighbors(parseCellKey(k)).map(q => cellKey(q[0], q[1]));
 
 export const mhpOf = s => 20 + s[0] * 8;
 
@@ -2401,7 +2411,7 @@ export const byUid = (S, id) => S.units.find(u => u.uid === id);
 
 export const flies = u => !u.pinned && (u.t.includes('Vol') || u.ability === 'levitation');
 
-export const effR = (u, m, S) =>
+export const effectiveRange = (u, m, S) =>
   m.r +
   (u.ability === 'oeilcompose' && m.r > 0 ? 1 : 0) +
   (u.colossus && m.r > 0 ? 2 : 0) -
@@ -2428,7 +2438,7 @@ export const HOSTILE = ['confuse', 'turn', 'taunt', 'push', 'pull', 'web', 'parc
 
 const RXM = { fon: 1.5, bri: 2, sur: 1.3 };
 
-export const EMAX = 3;
+export const MAX_ENERGY = 3;
 
 export const hasNx = u => !!(POKEMON[u.id] && POKEMON[u.id].nx);
 

@@ -1,13 +1,13 @@
 /* Living Home: the illustration follows the adventure region and the time of day; the companion waits there, a hug with one gesture (added in v4.28). */
 
-import { POKEMON, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCENARIOS } from '../pokemon/pokemon.js';
 import { PROFILE, isCamp } from '../state/game-state.js';
 import { $, toast } from '../core/utils.js';
-import { cur } from '../core/navigation.js';
+import { currentScreen } from '../core/navigation.js';
 import { TOD } from './home-route.js';
 import { squad } from '../team/team.js';
 import { queueSave } from '../state/saves.js';
-import { sfx, vibe } from '../audio/sound-effects.js';
+import { sfx, vibrate } from '../audio/sound-effects.js';
 import { today } from '../state/economy.js';
 import { renderHome } from './home.js';
 import { isShinyOwned } from '../pokemon/shiny.js';
@@ -27,7 +27,7 @@ function heroRegionInfo(g) {
     return regionIndex();
   }
   const k = g.k,
-    S = SCEN[k] || {};
+    S = SCENARIOS[k] || {};
   if (HCHAIN.includes(k) || S.hoenn != null) {
     return 3;
   }
@@ -77,14 +77,14 @@ export function init() {
       PROFILE.comp.j = today();
       const up = gainCompanionAffinity(3);
       sfx('ui');
-      vibe(25);
+      vibrate(25);
       toast(up ? `${n} est ravi : ${up} cœur${up > 1 ? 's' : ''} !` : `${n} ferme les yeux de bonheur.`);
       queueSave();
       refreshHome();
       return;
     }
     if (e.target.closest('[data-comp-p]')) {
-      setTimeout(() => cur === 'accueil' && renderHome(), 0);
+      setTimeout(() => currentScreen === 'accueil' && renderHome(), 0);
     }
   });
 }

@@ -1,6 +1,6 @@
 import { REACTIONS } from '../data/game-data.js';
 import { MOVES } from '../data/moves.js';
-import { POKEMON, SCEN, WEATHER_NAME } from '../pokemon/pokemon.js';
+import { POKEMON, SCENARIOS, WEATHER_NAME } from '../pokemon/pokemon.js';
 import { ITEMS2, PROFILE, isCamp, ownedItems } from '../state/game-state.js';
 import { arenaSetup, arenaTick } from '../modes/gyms.js';
 import {
@@ -20,7 +20,7 @@ import { goTo } from '../core/navigation.js';
 import { renderLeague } from '../modes/league.js';
 import { squad, vBonus } from '../team/team.js';
 import {
-  EMAX,
+  MAX_ENERGY,
   parseCellKey,
   affected,
   byUid,
@@ -31,7 +31,7 @@ import {
   foeEvo,
   hasNx,
   newBattle,
-  pAct,
+  playerAction,
   pDodge,
   pAwaken,
   pMove,
@@ -44,13 +44,13 @@ import {
   unitAt,
   unitKey,
 } from './engine.js';
-import { champBuild, duoParts, duoTargets, pCapture, pDuo, previewRun, scenLock } from './items-bonds-ai.js';
-import { SV, autoSave, queueSave, renderSummary } from '../state/saves.js';
-import { PREF } from '../ui/preferences.js';
+import { champBuild, duoParts, duoTargets, pCapture, playDuo, previewRun, scenLock } from './items-bonds-ai.js';
+import { CLOUD_SAVE, autoSave, queueSave, renderSummary } from '../state/saves.js';
+import { PREFERENCES } from '../ui/preferences.js';
 import { __set_PREPG, renderPrep } from './battle-prep.js';
 import { __set_tutorialI, renderCoach } from '../progression/tutorial.js';
 import { applyProgress } from '../progression/battle-rewards.js';
-import { sfx, sfxEv, vibe } from '../audio/sound-effects.js';
+import { sfx, sfxEv, vibrate } from '../audio/sound-effects.js';
 import { drawObstacles } from '../modes/gym-screen.js';
 import { fxReset, playEv } from './move-effects.js';
 import { panelRoleInfo } from '../ui/guide.js';
@@ -174,7 +174,7 @@ export function openBattle(k) {
 
 /** Like openBattle, for a key coming from the interface: no effect if the scenario does not exist (yet). */
 export function goFight(k) {
-  if (SCEN[k]) {
+  if (SCENARIOS[k]) {
     openBattle(k);
   }
 }
@@ -227,7 +227,7 @@ export function launch() {
   const previous = B;
   // story scenes (v4.17): the scene replaces the battle
   if (!storyScene(scSel)) {
-    __set_tutorialI(SCEN[scSel] && SCEN[scSel].tuto ? 0 : -1);
+    __set_tutorialI(SCENARIOS[scSel] && SCENARIOS[scSel].tuto ? 0 : -1);
     launchCore();
     if (B && !AUTO) {
       vsIntro();
@@ -237,7 +237,7 @@ export function launch() {
     }
     // Speed order: if an opponent is faster, it opens the round (after the introduction)
     if (B && B.order === 'vitesse') {
-      setTimeout(unrollSpeed, AUTO || reducedMotion ? 950 : PREF.fast ? 1500 : 2400);
+      setTimeout(unrollSpeed, AUTO || reducedMotion ? 950 : PREFERENCES.fast ? 1500 : 2400);
     }
   }
   hook('launch', !!B && B !== previous);
@@ -253,7 +253,7 @@ function launchCore() {
   const lk =
     scenLock(scSel) ||
     lockLegendaryCapture(scSel) ||
-    (scSel === 'hebdo429' || (SCEN[scSel] || {}).noProgress ? null : challengeLaunch()); // campaign challenges (v4.9-01), legendary quests (v4.29)
+    (scSel === 'hebdo429' || (SCENARIOS[scSel] || {}).noProgress ? null : challengeLaunch()); // campaign challenges (v4.9-01), legendary quests (v4.29)
   if (lk) {
     toast(lk);
     renderPrep();
@@ -294,7 +294,7 @@ function launchCore() {
   $('#evoPick').hidden = true;
   const aev = [...arenaSetup(B), ...announceGimmick(B)];
   buildBoard();
-  addLog(`${SCEN[scSel].n} : à vous de jouer. Touchez un adversaire pour voir sa portée.`, 'sys');
+  addLog(`${SCENARIOS[scSel].n} : à vous de jouer. Touchez un adversaire pour voir sa portée.`, 'sys');
   aev.forEach(x => {
     if (x.e === 'msg') {
       addLog(x.s, 'arn');
@@ -369,7 +369,7 @@ export function backToPrep() {
 export function buildBoard() {
   hook('beforeBoard');
   VERT = !!(MQV && MQV.matches);
-  const D = SCEN[B.sc],
+  const D = SCENARIOS[B.sc],
     bio = D.bio,
     st = ['arene', 'ligue', 'roche'].includes(D.bio) || D.gym != null || !!D.elite || !!D.champ; // stadium terrain (v1.1)
   // container classes: reset here, then toggled by later versions
@@ -462,7 +462,7 @@ function updTokCore(u) {
     'has-energy',
     !u.ko && (u.side === 'a' || B.duel433 ? nx || hasXp(u) || resonanceCandidate(B, u) : bossScene(B) && hasXp(u))
   ); // v4.14: diamonds of Expert attacks
-  cl('is-ready', u.side === 'a' && (nx || resonanceCandidate(B, u)) && u.en >= EMAX && !u.ko);
+  cl('is-ready', u.side === 'a' && (nx || resonanceCandidate(B, u)) && u.en >= MAX_ENERGY && !u.ko);
   cl('is-resonant', u.resonant > 0 && !u.ko); // Resonant Form (v4.17)
   cl('is-coop-player-1', !!B.coop && u.side === 'a' && coopPlayer(u) === 1); // co-op (v4.18)
   cl('is-coop-player-2', !!B.coop && u.side === 'a' && coopPlayer(u) === 2);
@@ -592,13 +592,13 @@ export function cinematic(fromN, fromT, toN, toT, side, uid) {
     o.ox = ((x / boardViewBox()[0]) * 100).toFixed(1) + '%';
     o.oy = ((y / boardViewBox()[1]) * 100).toFixed(1) + '%';
   }
-  evoSet({ ...o, on: true, fx: { fromN, fromT, toN, toT, side }, fast: !!(PREF.fast || ui.skipSpeedup) });
+  evoSet({ ...o, on: true, fx: { fromN, fromT, toN, toT, side }, fast: !!(PREFERENCES.fast || ui.skipSpeedup) });
   ui.cutscene = true;
   if (B) {
     renderAll();
   }
   sfx('evo');
-  vibe([15, 25, 15, 25, 70]);
+  vibrate([15, 25, 15, 25, 70]);
   return wait(battleDelay(650, 1300, 2500)).then(() => {
     evoSet({ on: false, fx: null });
     ui.cutscene = false;
@@ -828,7 +828,7 @@ function confirmActCore() {
   }
   ui.undo = null;
   ui.tile = null;
-  const ev = ui.mode === 'duo' ? pDuo(B, u, byUid(B, ui.duo), ui.pk) : pAct(B, u, ui.mi, ui.pk);
+  const ev = ui.mode === 'duo' ? playDuo(B, u, byUid(B, ui.duo), ui.pk) : playerAction(B, u, ui.mi, ui.pk);
   clearAim();
   if (!ev) {
     renderAll();
@@ -882,7 +882,7 @@ function tapTile(k) {
       }
       ui.pk = k;
       const X = duoParts(B, u, p);
-      ui.pv = previewRun(B, C => pDuo(C, byUid(C, u.uid), byUid(C, p.uid), k), [
+      ui.pv = previewRun(B, C => playDuo(C, byUid(C, u.uid), byUid(C, p.uid), k), [
         ...new Set([...affected(B, X.A, X.D.a, k), ...affected(B, X.Bu, X.D.b, k)]),
       ]);
       renderAll();
@@ -1052,7 +1052,7 @@ export function finish() {
     B._rk = 1;
     const r = rankOf(B);
     B.rank = r;
-    if (r && SCEN[B.sc] && B.sc !== 'sauvage' && !SCEN[B.sc].noProgress) {
+    if (r && SCENARIOS[B.sc] && B.sc !== 'sauvage' && !SCENARIOS[B.sc].noProgress) {
       PROFILE.ranks = PROFILE.ranks || {};
       const o = PROFILE.ranks[B.sc];
       B.rankNew = !o || RANKS.indexOf(r) > RANKS.indexOf(o);
@@ -1065,9 +1065,9 @@ export function finish() {
   // statistics and progression
   if (B && B.over && !B._counted) {
     B._counted = true;
-    if ((SCEN[B.sc] || {}).noProgress) {
+    if ((SCENARIOS[B.sc] || {}).noProgress) {
       // riddle, custom arena, Deep Echo: neither counters nor ordinary progression (v4.31)
-      SV.lastBattle = null;
+      CLOUD_SAVE.lastBattle = null;
       B.rew = noProgressResult(B);
     } else {
       PROFILE.battles++;
@@ -1079,7 +1079,7 @@ export function finish() {
       PROFILE.awakenings += B.stats.evo || 0;
       PROFILE.rx += B.stats.rx || 0;
       PROFILE.kos += B.stats.ko || 0;
-      SV.lastBattle = null;
+      CLOUD_SAVE.lastBattle = null;
       B.rew = applyProgress(B);
     }
   }
@@ -1092,7 +1092,7 @@ export function finish() {
         return;
       }
       const win = B.over === 'win';
-      if (SCEN[B.sc].gym != null) {
+      if (SCENARIOS[B.sc].gym != null) {
         renderLeague();
       }
       sfx(win ? 'win' : 'lose');
@@ -1172,7 +1172,7 @@ export const STATUS_CLASS = {
 export const enPips = (n, cls = '') =>
   `<span class="energy-pips ${cls}" aria-label="Énergie d’Éveil ${n} sur 3">${[0, 1, 2].map(i => `<i class="${i < n ? 'is-filled' : ''}"></i>`).join('')}</span>`;
 
-export const poly = (k, c) => {
+export const cellPolygon = (k, c) => {
   const [x, y] = cellCenter(k),
     pt = cellPoints(x, y, BOARD_GEOMETRY.S - 3);
   return `<polygon points="${pt}" class="${c} highlight-glow"/><polygon points="${pt}" class="${c}"/>`;

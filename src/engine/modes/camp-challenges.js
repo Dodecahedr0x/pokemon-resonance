@@ -1,6 +1,6 @@
 // Camp challenges (added in v4.31): the Camp sub-tabs, and what the « no progression » battles share
 // (riddles, Deep Echo, custom arenas, local duel): profile data, imposed team, result, restoring at startup.
-import { POKEMON, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCENARIOS } from '../pokemon/pokemon.js';
 import { PROFILE } from '../state/game-state.js';
 import { HOOKS } from '../core/hooks.js';
 import { goTo } from '../core/navigation.js';
@@ -97,7 +97,7 @@ export function tacticalChallengesClean(p) {
 
 /** A « no progression » victory (riddle, custom arena, Deep Echo): neither counters nor ordinary rewards. */
 export function noProgressResult(S) {
-  const D = SCEN[S.sc] || {},
+  const D = SCENARIOS[S.sc] || {},
     win = S.over === 'win',
     rew = { links: [], caught: [], items: [], gifts: [], tired: [], forms: [], badgeNew: false };
   let r = [0, 0];
@@ -128,8 +128,8 @@ export function noProgressResult(S) {
 
 /** Imposed team: riddle (the riddle's team) or Deep Echo (the expedition's team). */
 export function fixedTeam() {
-  if (scSel === 'duel433' && SCEN.duel433 && SCEN.duel433.t1) {
-    return { team: SCEN.duel433.t1.slice(), voice: 0, opts: duelOpts() };
+  if (scSel === 'duel433' && SCENARIOS.duel433 && SCENARIOS.duel433.t1) {
+    return { team: SCENARIOS.duel433.t1.slice(), voice: 0, opts: duelOpts() };
   } // local duel (v4.33)
   if (scSel === 'enigme431' && PUZZLE_CURRENT) {
     return { team: PUZZLE_CURRENT.a.map(x => x[0]), voice: 0, opts: puzzleOpts() };
@@ -167,7 +167,7 @@ export function challengeSetBoot() {
   const R = echoRun();
   if (R && R.cur >= 0 && R.map[R.f]) {
     echoScene(R, R.map[R.f][R.cur]);
-  } else if (!SCEN.echo431) {
+  } else if (!SCENARIOS.echo431) {
     echoScene({ seed: 1, f: 0, path: [] }, 'combat');
   }
   const A = PROFILE.customGyms || [];

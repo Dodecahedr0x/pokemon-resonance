@@ -1,12 +1,12 @@
 import { Html } from '../../../lib/html.jsx';
 import { PROFILE } from '../../../engine/state/game-state.js';
-import { SCEN } from '../../../engine/pokemon/pokemon.js';
+import { SCENARIOS } from '../../../engine/pokemon/pokemon.js';
 import { ARENAS, BADGES } from '../../../engine/modes/gyms.js';
 import { typeColor } from '../../../engine/core/utils.js';
 import { scenLock } from '../../../engine/combat/items-bonds-ai.js';
 import { scSel } from '../../../engine/combat/ui.js';
 import { leaderOf } from '../../../engine/progression/prestige.js';
-import { SELG, emblem, selItems, wonOf } from '../../../engine/world/home-journey.js';
+import { BATTLE_GROUPS, emblem, selItems, wonOf } from '../../../engine/world/home-journey.js';
 import { FINALE_N } from '../../../engine/world/map.js';
 
 // Tabs (#selTabs): Training, Gyms, League, Postgame. Clicks: engine (data-pg).
@@ -19,7 +19,7 @@ export function SelTabs({ G }) {
     ligue: `${nL} / 4${PROFILE.elite >= 5 ? ' · ★' : ''}`,
     apres: `${PROFILE.legends.length} / 6 · étage ${PROFILE.tdr.best}`,
   };
-  return SELG.map(([g, n, ic]) => (
+  return BATTLE_GROUPS.map(([g, n, ic]) => (
     <button key={g} type="button" role="tab" data-pg={g} aria-selected={G === g}>
       <svg>
         <use href={'#' + ic} />
@@ -34,7 +34,7 @@ export function SelTabs({ G }) {
 
 // A row of the list (#scenList): emblem, name, and on the right lock, step, rank or level.
 function Row({ k, gk }) {
-  const s = SCEN[k],
+  const s = SCENARIOS[k],
     lk = scenLock(k),
     won = wonOf(k),
     L = leaderOf(k),

@@ -1,6 +1,6 @@
 import { ITEMS2, PROFILE } from '../../engine/state/game-state.js';
 import { itemIcon } from '../../engine/assets/item-icons.js';
-import { SHOP, bagN, formatNumber } from '../../engine/state/economy.js';
+import { SHOP, bagCount, formatNumber } from '../../engine/state/economy.js';
 import { costOf0 } from '../../engine/progression/base-camp.js';
 import { heldItemCost } from '../../engine/combat/resonance.js';
 import { todaysPeddler } from '../../engine/world/route-events.js';
@@ -33,7 +33,7 @@ export default function Peddler() {
           <b>{it.n}</b>
           <p>{it.d}</p>
           <em>
-            Reste {left} · Dans le Sac : {bagN(k)}
+            Reste {left} · Dans le Sac : {bagCount(k)}
           </em>
         </div>
         <div>
@@ -41,7 +41,7 @@ export default function Peddler() {
             type="button"
             className="pill-button"
             data-wanderer={k}
-            disabled={left <= 0 || PROFILE.money < px || bagN(k) >= 99}
+            disabled={left <= 0 || PROFILE.money < px || bagCount(k) >= 99}
           >
             {formatNumber(px)} ₽
           </button>

@@ -2,7 +2,7 @@ import { MOVES } from '../../engine/data/moves.js';
 import { POKEMON } from '../../engine/pokemon/pokemon.js';
 import { ITEMS2, PROFILE, ownedItems } from '../../engine/state/game-state.js';
 import { typeColor } from '../../engine/core/utils.js';
-import { HELD_IMG, SHOP, bagN, formatNumber } from '../../engine/state/economy.js';
+import { HELD_IMG, SHOP, bagCount, formatNumber } from '../../engine/state/economy.js';
 import { itemIcon } from '../../engine/assets/item-icons.js';
 import { SCREEN_STATE } from '../../engine/ui/screen-state.js';
 import { costOf } from '../../engine/progression/base-camp.js';
@@ -31,7 +31,7 @@ export function Article({ k, mode }) {
   const it = SHOP[k],
     cs = it.cs, // an HM is bought once and kept
     q = cs ? 1 : SCREEN_STATE.qty[k] || 1,
-    n = bagN(k),
+    n = bagCount(k),
     price = it.g ? it.g * q : costOf(k) * q, // Workshop (v4.10)
     can = it.g ? PROFILE.gems >= price : PROFILE.money >= price,
     full = cs ? n > 0 : n + q > 99;

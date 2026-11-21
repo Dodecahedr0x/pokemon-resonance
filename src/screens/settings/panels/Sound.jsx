@@ -1,4 +1,4 @@
-import { PREF } from '../../../engine/ui/preferences.js';
+import { PREFERENCES } from '../../../engine/ui/preferences.js';
 import { Slider, Switch } from '../controls.jsx';
 
 import CardHeader from '../../../components/CardHeader.jsx';
@@ -9,13 +9,13 @@ export default function Sound() {
       <CardHeader icon="sound" title="Son" />
       <Switch
         k="music"
-        on={PREF.music}
+        on={PREFERENCES.music}
         lab="Musique"
         sub="Un thème par écran : accueil, camp, combat, boutique, victoire"
       />
-      <Slider k="musVol" v={PREF.musVol} lab="Volume de la musique" />
-      <Switch k="sound" on={PREF.sound} lab="Effets sonores" sub="Coups, réactions, évolutions, captures" />
-      <Slider k="sfxVol" v={PREF.sfxVol} lab="Volume des effets" />
+      <Slider k="musVol" v={PREFERENCES.musVol} lab="Volume de la musique" />
+      <Switch k="sound" on={PREFERENCES.sound} lab="Effets sonores" sub="Coups, réactions, évolutions, captures" />
+      <Slider k="sfxVol" v={PREFERENCES.sfxVol} lab="Volume des effets" />
     </section>
   );
 }

@@ -1,10 +1,10 @@
-import { SCEN } from '../pokemon/pokemon.js';
+import { SCENARIOS } from '../pokemon/pokemon.js';
 import { PROFILE } from '../state/game-state.js';
 import { toast } from '../core/utils.js';
-import { EMAX, canAwaken } from '../combat/engine.js';
+import { MAX_ENERGY, canAwaken } from '../combat/engine.js';
 import { B, ui } from '../combat/ui.js';
 import { queueSave } from '../state/saves.js';
-import { PREF, savePref } from './preferences.js';
+import { PREFERENCES, savePref } from './preferences.js';
 import { AUTO } from '../progression/prestige.js';
 import { hideTooltip, showTooltip } from '../../screens/overlays/shellOverlays.js';
 import { notesOf } from '../combat/resonance.js';
@@ -50,10 +50,18 @@ const TIP_TEXTS = {
 };
 
 export function seenTips(force) {
-  if (!B || B.over || ui.busy || ui.cutscene || B.phase !== 'player' || (AUTO && !force) || PREF.seenTips === false) {
+  if (
+    !B ||
+    B.over ||
+    ui.busy ||
+    ui.cutscene ||
+    B.phase !== 'player' ||
+    (AUTO && !force) ||
+    PREFERENCES.seenTips === false
+  ) {
     return;
   }
-  if ((SCEN[B.sc] || {}).tuto || document.getElementById('tip-card')) {
+  if ((SCENARIOS[B.sc] || {}).tuto || document.getElementById('tip-card')) {
     return;
   }
   const seenSet = (PROFILE.seenTips = PROFILE.seenTips || {}),
@@ -69,7 +77,7 @@ export function seenTips(force) {
   if (en.some(u => notesOf(B, u) > 0)) {
     c.push('reso');
   }
-  if (al.some(u => u.en >= EMAX && resonanceCandidate(B, u))) {
+  if (al.some(u => u.en >= MAX_ENERGY && resonanceCandidate(B, u))) {
     c.push('forme');
   }
   if (al.some(u => isSurrounded(B, u))) {
@@ -108,7 +116,7 @@ export function init() {
       return;
     }
     if (b.dataset.tipCard === 'off') {
-      PREF.seenTips = false;
+      PREFERENCES.seenTips = false;
       savePref();
       toast('Astuces désactivées. Réactivez-les dans les Paramètres.');
     }

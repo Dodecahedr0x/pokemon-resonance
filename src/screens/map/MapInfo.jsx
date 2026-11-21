@@ -1,15 +1,15 @@
 import { Html } from '../../lib/html.jsx';
 import { GYMS } from '../../engine/data/game-data.js';
-import { SCEN } from '../../engine/pokemon/pokemon.js';
+import { SCENARIOS } from '../../engine/pokemon/pokemon.js';
 import { PROFILE } from '../../engine/state/game-state.js';
 import { ARENAS } from '../../engine/modes/gyms.js';
 import { TOD } from '../../engine/world/home-route.js';
 import { ELITE, scenLock } from '../../engine/combat/items-bonds-ai.js';
-import { CHAP, ELITE_L, leaderOf } from '../../engine/progression/prestige.js';
+import { chapterOf, ELITE_L, leaderOf } from '../../engine/progression/prestige.js';
 import { avatar, goalChips } from '../../engine/world/home-journey.js';
 import { itemIcon } from '../../engine/assets/item-icons.js';
 import { SCREEN_STATE } from '../../engine/ui/screen-state.js';
-import { bagN } from '../../engine/state/economy.js';
+import { bagCount } from '../../engine/state/economy.js';
 import { dailyKey } from '../../engine/modes/daily-battle.js';
 import { PLACE_BY_ID, placeIcon, placeName, placeState, rewardLine } from '../../engine/world/map.js';
 import { johtoOpen, routeName } from '../../engine/world/johto.js';
@@ -79,7 +79,7 @@ export default function MapInfo() {
     );
   }
   if (p.id === 'wild' || p.id === 'jwild' || p.id === 'hwild') {
-    const balls = bagN('poke'),
+    const balls = bagCount('poke'),
       family = familyCaptureStats(regionIndex());
     return (
       <>
@@ -139,7 +139,7 @@ export default function MapInfo() {
                 disabled={!!lk}
                 key={k}
               >
-                <Html html={avatar(L.n, SCEN[k].at || 'Dragon', 'is-tiny')} />
+                <Html html={avatar(L.n, SCENARIOS[k].at || 'Dragon', 'is-tiny')} />
                 <span>
                   <b>
                     <Html html={L.n} />
@@ -157,7 +157,7 @@ export default function MapInfo() {
                     <use href="#i-lock" />
                   </svg>
                 ) : (
-                  <span className="srw-lv">{`N.${SCEN[k].lv}`}</span>
+                  <span className="srw-lv">{`N.${SCENARIOS[k].lv}`}</span>
                 )}
               </button>
             );
@@ -167,9 +167,9 @@ export default function MapInfo() {
     );
   }
   const k = p.id,
-    S = SCEN[k],
+    S = SCENARIOS[k],
     L = leaderOf(k),
-    C = CHAP(k),
+    C = chapterOf(k),
     lk = scenLock(k),
     r = (PROFILE.ranks || {})[k],
     gi = ARENAS.findIndex(a => a.k === k);

@@ -63,7 +63,7 @@ const RICON = {
   relics: 'M12 5v14M5 12h14',
 };
 
-export const rIco = r => {
+export const roleIcon = r => {
   const s = RSLUG[r] || 'rel';
   return `<svg class="role-icon role-icon-${s}" viewBox="0 0 24 24" aria-hidden="true"><path d="${RICON[s]}"/></svg>`;
 };

@@ -5,11 +5,11 @@
    reward line, lead) and the Johto battle-rule dispatchers, which cover
    the story, the roaming beasts, the Dominant Pokémon and the Hoenn gyms.
    ===================================================================== */
-import { POKEMON, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCENARIOS } from '../pokemon/pokemon.js';
 import { ITEMS2, PROFILE } from '../state/game-state.js';
 import { HOOKS } from '../core/hooks.js';
 import { parseCellKey, hasNx, nextId, pushMessage, setMark, transform } from '../combat/engine.js';
-import { OBST } from '../combat/synergies-obstacles.js';
+import { OBSTACLES } from '../combat/synergies-obstacles.js';
 import { HELD_IMG, formatNumber } from '../state/economy.js';
 import { itemIcon } from '../assets/item-icons.js';
 import { PLACE_BY_ID } from './map.js';
@@ -69,7 +69,7 @@ export function johtoLock(k, D) {
 }
 
 export function johtoChapterLive(k) {
-  const D = SCEN[k];
+  const D = SCENARIOS[k];
   if (!D) {
     return null;
   }
@@ -86,7 +86,7 @@ export function johtoChapterLive(k) {
 
 /** Under a location's description: story rewards, state of a roaming beast. */
 export function johtoExtraLine(k) {
-  const D = SCEN[k];
+  const D = SCENARIOS[k];
   if (D.jdis) {
     const T = JDIS[D.jdis - 1];
     if ((PROFILE.jdis || 0) >= D.jdis) {
@@ -103,7 +103,7 @@ export function johtoExtraLine(k) {
 }
 
 export function johtoLead(sc) {
-  const D = SCEN[sc];
+  const D = SCENARIOS[sc];
   if (!D) {
     return null;
   }
@@ -330,7 +330,7 @@ const JDIS = [
 export function init() {
   JDIS.forEach((T, i) => {
     T.L = { n: T.who, t: T.t, q: T.q, w: T.w, l: T.l };
-    SCEN[T.k] = {
+    SCENARIOS[T.k] = {
       n: T.n,
       lvl: `Néo-Dissonance · combat ${i + 1} sur 4`,
       lim: 11,
@@ -350,7 +350,7 @@ export function init() {
       d: T.d,
       foes: T.foes,
     };
-    OBST[T.k] = i === 0 ? { grass: ['2,2', '3,2', '2,3'] } : {};
+    OBSTACLES[T.k] = i === 0 ? { grass: ['2,2', '3,2', '2,3'] } : {};
     PLACES_J.push({ id: T.k, x: T.x, y: T.y, n: T.lieu, s: `Néo-Dissonance · ${T.who}`, grp: 'aventure', j: 1 });
   });
   JCHAIN.splice(JCHAIN.indexOf('j3'), 0, 'jd1');
@@ -360,7 +360,7 @@ export function init() {
   PLACES_J.forEach(p => (PLACE_BY_ID[p.id] = p));
   /* ---------- hooks: after the battle ---------- */
   HOOKS.progress.push((S, rew, win) => {
-    const D = SCEN[S.sc] || {},
+    const D = SCENARIOS[S.sc] || {},
       o = [0, 0];
     if (win && D.jdis && (PROFILE.jdis || 0) < D.jdis) {
       PROFILE.jdis = D.jdis;

@@ -1,9 +1,9 @@
 /* Daily challenge: a seeded battle with one forbidden type, streaks and fossils (added in v4.71). */
 
-import { POKEMON, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCENARIOS } from '../pokemon/pokemon.js';
 import { HOOKS } from '../core/hooks.js';
 import { squad } from '../team/team.js';
-import { OBST } from '../combat/synergies-obstacles.js';
+import { OBSTACLES } from '../combat/synergies-obstacles.js';
 import { scSel } from '../combat/ui.js';
 import { today } from '../state/economy.js';
 import { DEXS } from '../progression/pokedex.js';
@@ -36,7 +36,7 @@ export const dqDef = () => {
 /** (Re)builds today's scenario `dq470`. */
 export const dqMake = () => {
   const D = dqDef();
-  SCEN.dq470 = Object.assign(
+  SCENARIOS.dq470 = Object.assign(
     baseScene(
       'Défi quotidien',
       'Défi · type interdit : ' + D.forbidden,
@@ -48,7 +48,7 @@ export const dqMake = () => {
     { dq470: D.forbidden }
   );
   try {
-    OBST.dq470 = { pil: ['4,2'], grass: ['4,4', '5,1'] };
+    OBSTACLES.dq470 = { pil: ['4,2'], grass: ['4,4', '5,1'] };
   } catch {
     /* Best effort: failure here is non-fatal. */
   }
@@ -57,7 +57,7 @@ export const dqMake = () => {
 
 /** The first team member of the forbidden type, or null. */
 export const dqViol = () => {
-  const D = SCEN.dq470 && SCEN.dq470.dq470;
+  const D = SCENARIOS.dq470 && SCENARIOS.dq470.dq470;
   return D ? squad.slice(0, teamSize()).find(id => POKEMON[id] && POKEMON[id].t.includes(D)) : null;
 };
 
@@ -104,7 +104,7 @@ export function init() {
 
   HOOKS.launchRefusal.push(() => {
     const v = scSel === 'dq470' && dqViol();
-    return v ? POKEMON[v].n + ' est de type ' + SCEN.dq470.dq470 + ' : retirez-le de l’équipe.' : null;
+    return v ? POKEMON[v].n + ' est de type ' + SCENARIOS.dq470.dq470 + ' : retirez-le de l’équipe.' : null;
   });
 
   /* ---- victory: once a day, streak, a fossil, Pokédollars and Shards ---- */

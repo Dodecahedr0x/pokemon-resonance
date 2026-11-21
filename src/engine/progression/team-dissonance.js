@@ -1,10 +1,10 @@
 /* Team Dissonance: 4 story battles in the Campaign after badges 1, 3, 5 and 7 (Grunts, Admin Vesper, Admin Cobalt, then their leader Orphée Valcourt), each with its own rule (added in v4.11). */
 
 import { MOVES } from '../data/moves.js';
-import { POKEMON, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCENARIOS } from '../pokemon/pokemon.js';
 import { PROFILE, isCamp } from '../state/game-state.js';
 import { HOOKS } from '../core/hooks.js';
-import { OBST } from '../combat/synergies-obstacles.js';
+import { OBSTACLES } from '../combat/synergies-obstacles.js';
 
 /** The Dissonance battles to place after badge n (declared function, no constant: safe at load time). */
 export function dissonanceAfter(n) {
@@ -131,7 +131,7 @@ const DISSONANCE = [
 export function init() {
   DISSONANCE.forEach((T, i) => {
     T.foes.forEach(([, , x]) => x && x.mv && (x.mv = x.mv.filter(m => MOVES[m])));
-    SCEN[T.k] = {
+    SCENARIOS[T.k] = {
       n: T.n,
       lvl: `Team Dissonance · combat ${i + 1} sur 4`,
       lim: 11,
@@ -150,10 +150,10 @@ export function init() {
       d: T.d,
       foes: T.foes,
     };
-    OBST[T.k] = i === 0 ? { grass: ['2,2', '3,2', '2,3'] } : {};
+    OBSTACLES[T.k] = i === 0 ? { grass: ['2,2', '3,2', '2,3'] } : {};
   });
   HOOKS.progress.push((S, rew, win) => {
-    const D = SCEN[S.sc] || {};
+    const D = SCENARIOS[S.sc] || {};
     if (win && D.dissonance && (PROFILE.dissonance || 0) < D.dissonance) {
       PROFILE.dissonance = D.dissonance;
       const T = DISSONANCE[D.dissonance - 1];

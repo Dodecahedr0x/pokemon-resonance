@@ -4,12 +4,12 @@ import { reducedMotion } from '../core/utils.js';
 import { byUid } from '../combat/engine.js';
 import { B } from '../combat/ui.js';
 import { sfxJingle } from './music.js';
-import { PREF } from '../ui/preferences.js';
+import { PREFERENCES } from '../ui/preferences.js';
 
 let AC;
 
 function ac() {
-  if (!PREF.sound) {
+  if (!PREFERENCES.sound) {
     return null;
   }
   try {
@@ -29,9 +29,9 @@ function ac() {
   }
 }
 
-export function tone(f, t0, dur, type, flying, f2) {
+export function playTone(f, t0, dur, type, flying, f2) {
   const a = ac(),
-    v = (flying || 0.08) * PREF.sfxVol; // adjustable effects volume (0 = muted)
+    v = (flying || 0.08) * PREFERENCES.sfxVol; // adjustable effects volume (0 = muted)
   if (!a || !(v > 0)) {
     return;
   }
@@ -54,7 +54,7 @@ export function tone(f, t0, dur, type, flying, f2) {
 
 export function noise(t0, dur, flying, lp) {
   const a = ac(),
-    v = (flying || 0.12) * PREF.sfxVol;
+    v = (flying || 0.12) * PREFERENCES.sfxVol;
   if (!a || !(v > 0)) {
     return;
   }
@@ -79,7 +79,7 @@ export function noise(t0, dur, flying, lp) {
 }
 
 export function sfx(n) {
-  if (PREF.sound && !reducedMotion) {
+  if (PREFERENCES.sound && !reducedMotion) {
     try {
       SOUND_EFFECTS[n] && SOUND_EFFECTS[n]();
     } catch {
@@ -89,8 +89,8 @@ export function sfx(n) {
   sfxJingle(n);
 }
 
-export function vibe(p) {
-  if (PREF.vibe && navigator.vibrate) {
+export function vibrate(p) {
+  if (PREFERENCES.vibe && navigator.vibrate) {
     try {
       navigator.vibrate(p);
     } catch {
@@ -100,7 +100,7 @@ export function vibe(p) {
 }
 
 export function sfxEv(ev) {
-  if (!PREF.sound && !PREF.vibe) {
+  if (!PREFERENCES.sound && !PREFERENCES.vibe) {
     return;
   }
   let h = 0,
@@ -138,36 +138,36 @@ export function sfxEv(ev) {
     sfx('hit');
   }
   if (k) {
-    vibe([40, 30, 40]);
+    vibrate([40, 30, 40]);
   } else if (al) {
-    vibe(25);
+    vibrate(25);
   }
 }
 
 export const SOUND_EFFECTS = {
-  ui: () => tone(880, 0, 0.06, 'triangle', 0.04),
+  ui: () => playTone(880, 0, 0.06, 'triangle', 0.04),
   hit: () => {
     noise(0, 0.14, 0.14, 700);
-    tone(140, 0, 0.12, 'sine', 0.08, 70);
+    playTone(140, 0, 0.12, 'sine', 0.08, 70);
   },
-  rx: () => [1046, 1318, 1568].forEach((f, i) => tone(f, i * 0.05, 0.18, 'triangle', 0.05)),
+  rx: () => [1046, 1318, 1568].forEach((f, i) => playTone(f, i * 0.05, 0.18, 'triangle', 0.05)),
   ko: () => {
-    tone(392, 0, 0.18, 'square', 0.04, 196);
-    tone(196, 0.16, 0.3, 'square', 0.035, 98);
+    playTone(392, 0, 0.18, 'square', 0.04, 196);
+    playTone(196, 0.16, 0.3, 'square', 0.035, 98);
   },
   evo: () => {
-    [523, 659, 784, 1046, 1318].forEach((f, i) => tone(f, i * 0.11, 0.4, 'triangle', 0.05));
+    [523, 659, 784, 1046, 1318].forEach((f, i) => playTone(f, i * 0.11, 0.4, 'triangle', 0.05));
     noise(0.55, 0.5, 0.05, 4000);
   },
   catch: () => {
-    tone(660, 0, 0.08, 'square', 0.04);
-    tone(660, 0.18, 0.08, 'square', 0.04);
-    tone(990, 0.36, 0.3, 'triangle', 0.06);
+    playTone(660, 0, 0.08, 'square', 0.04);
+    playTone(660, 0.18, 0.08, 'square', 0.04);
+    playTone(990, 0.36, 0.3, 'triangle', 0.06);
   },
-  win: () => [523, 659, 784, 1046].forEach((f, i) => tone(f, i * 0.13, i === 3 ? 0.6 : 0.16, 'triangle', 0.06)),
-  lose: () => [392, 349, 311, 262].forEach((f, i) => tone(f, i * 0.18, 0.3, 'sine', 0.05)),
+  win: () => [523, 659, 784, 1046].forEach((f, i) => playTone(f, i * 0.13, i === 3 ? 0.6 : 0.16, 'triangle', 0.06)),
+  lose: () => [392, 349, 311, 262].forEach((f, i) => playTone(f, i * 0.18, 0.3, 'sine', 0.05)),
   duo: () => {
-    [392, 523, 659, 784, 1046].forEach((f, i) => tone(f, i * 0.06, 0.25, 'sawtooth', 0.03));
+    [392, 523, 659, 784, 1046].forEach((f, i) => playTone(f, i * 0.06, 0.25, 'sawtooth', 0.03));
     noise(0.3, 0.4, 0.06, 2500);
   },
 };

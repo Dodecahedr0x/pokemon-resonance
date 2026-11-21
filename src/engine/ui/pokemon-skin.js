@@ -2,13 +2,13 @@
 
 import { $, $$ } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
-import { cur } from '../core/navigation.js';
-import { PREF, calmMotion, savePref } from './preferences.js';
+import { currentScreen } from '../core/navigation.js';
+import { PREFERENCES, calmMotion, savePref } from './preferences.js';
 import { renderParams } from './settings.js';
 
 let H;
 
-const on = k => PREF[k] !== 0;
+const on = k => PREFERENCES[k] !== 0;
 
 const doApply = () => H.classList.toggle('pk-calme', !on('pokemonSkinA'));
 
@@ -86,7 +86,7 @@ export function init() {
       if (t === 'ligue') {
         t = 'combat';
       }
-      if (t && t !== cur) {
+      if (t && t !== currentScreen) {
         openOverlay();
       }
     },
@@ -94,7 +94,7 @@ export function init() {
   );
   tEntry = 0;
   HOOKS.page.push(previous => {
-    if (cur !== previous) {
+    if (currentScreen !== previous) {
       requestAnimationFrame(entrance);
     }
   });
@@ -130,7 +130,7 @@ export function init() {
       return;
     }
     const k = b.dataset.pokemonSkin === 't' ? 'pokemon-skin-t' : 'pokemon-skin-a';
-    PREF[k] = on(k) ? 0 : 1;
+    PREFERENCES[k] = on(k) ? 0 : 1;
     savePref();
     doApply();
     renderParams();

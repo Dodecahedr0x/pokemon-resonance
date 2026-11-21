@@ -5,8 +5,8 @@ import { goTo } from '../core/navigation.js';
 import { openSheet } from '../team/team.js';
 import { byUid, unitAt } from '../combat/engine.js';
 import { B, L } from '../combat/ui.js';
-import { PREF } from './preferences.js';
-import { vibe } from '../audio/sound-effects.js';
+import { PREFERENCES } from './preferences.js';
+import { vibrate } from '../audio/sound-effects.js';
 import { SCREEN_STATE } from './screen-state.js';
 import { renderMap } from '../world/map.js';
 
@@ -75,7 +75,7 @@ function openSpeciesSheet(id) {
 }
 
 function canSwipeHere(t) {
-  if (PREF.swipeNav === false || !t || !t.closest || !t.closest('main,.app-content,.page')) {
+  if (PREFERENCES.swipeNav === false || !t || !t.closest || !t.closest('main,.app-content,.page')) {
     return false;
   }
   if (t.closest('input,textarea,select,#bBoard,.board,.map-panel,#mapMarks,.route-scene,.tabs,[role="dialog"]')) {
@@ -114,7 +114,7 @@ export function init() {
       LONG_PRESS.y = e.clientY;
       LONG_PRESS.t = setTimeout(() => {
         LONG_PRESS.fait = Date.now();
-        vibe(15);
+        vibrate(15);
         a();
       }, 480);
     },

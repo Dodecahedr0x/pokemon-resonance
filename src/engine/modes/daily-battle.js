@@ -1,6 +1,6 @@
 /* Daily battle: one terrain or gym a day, with doubled gains. */
 
-import { SCEN } from '../pokemon/pokemon.js';
+import { SCENARIOS } from '../pokemon/pokemon.js';
 import { PROFILE } from '../state/game-state.js';
 import { ARENAS, TERR } from './gyms.js';
 import { scenLock } from '../combat/items-bonds-ai.js';
@@ -9,9 +9,9 @@ import { today } from '../state/economy.js';
 /* ---------- daily challenge ---------- */
 function dailyPool() {
   return [
-    ...TERR.filter(k => !['tuto', 'sauvage', 'champ'].includes(k) && !SCEN[k].elite),
+    ...TERR.filter(k => !['tuto', 'sauvage', 'champ'].includes(k) && !SCENARIOS[k].elite),
     ...ARENAS.map(a => a.k),
-  ].filter(k => SCEN[k] && !scenLock(k));
+  ].filter(k => SCENARIOS[k] && !scenLock(k));
 }
 
 export function dailyKey() {

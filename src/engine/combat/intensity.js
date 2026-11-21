@@ -1,9 +1,9 @@
 import { MOVES } from '../data/moves.js';
-import { SCEN } from '../pokemon/pokemon.js';
+import { SCENARIOS } from '../pokemon/pokemon.js';
 import { toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import {
-  EMAX,
+  MAX_ENERGY,
   parseCellKey,
   byUid,
   damage,
@@ -11,7 +11,7 @@ import {
   hdist,
   heal,
   inReach,
-  nbrK,
+  neighborKeys,
   pushMessage,
   setMark,
   unitAt,
@@ -86,7 +86,7 @@ export function vigilanceStrike(S, e, ev) {
 
 /* ---------- 3. Phase bosses ---------- */
 export function hasBossPhases(S) {
-  const D = SCEN[S.sc] || {};
+  const D = SCENARIOS[S.sc] || {};
   return !!(
     D.champ ||
     D.jfinal ||
@@ -141,7 +141,7 @@ function changeBossPhase(S, ev) {
     if (t) {
       S.wx = { k: WEATHER_BY_TYPE[t], n: 4 };
     } else if (mk) {
-      nbrK(unitKey(b)).forEach(x => S.tiles[x] && !S.tiles[x].rock && setMark(S, x, mk, b.uid));
+      neighborKeys(unitKey(b)).forEach(x => S.tiles[x] && !S.tiles[x].rock && setMark(S, x, mk, b.uid));
     }
     pushMessage(
       ev,
@@ -155,7 +155,7 @@ function changeBossPhase(S, ev) {
     const ko = S.units.filter(x => x.side === 'e' && x.ko && !x.seg && !x.colossus && !x.caught && x !== b)[0];
     let x = null;
     if (ko) {
-      x = [unitKey(b), ...nbrK(unitKey(b))].find(y => S.tiles[y] && !S.tiles[y].rock && !unitAt(S, y));
+      x = [unitKey(b), ...neighborKeys(unitKey(b))].find(y => S.tiles[y] && !S.tiles[y].rock && !unitAt(S, y));
     }
     if (ko && x) {
       Object.assign(ko, {
@@ -175,7 +175,7 @@ function changeBossPhase(S, ev) {
     }
     S.units.forEach(e2 => {
       if (e2.side === 'e' && !e2.ko && hasXp(e2)) {
-        e2.en = Math.min(EMAX, (e2.en || 0) + 1);
+        e2.en = Math.min(MAX_ENERGY, (e2.en || 0) + 1);
       }
     });
     ev.push({ e: 'arena', r: 'phase3' });
@@ -183,7 +183,7 @@ function changeBossPhase(S, ev) {
 }
 
 function pickTypeDanger(S) {
-  const t = (SCEN[S.sc] || {}).at || 'Normal';
+  const t = (SCENARIOS[S.sc] || {}).at || 'Normal';
   if (['Électrik'].includes(t)) {
     return 'foudre';
   }
@@ -200,7 +200,7 @@ function pickTypeDanger(S) {
 }
 
 function hasActiveDangers(S) {
-  const D = SCEN[S.sc] || {};
+  const D = SCENARIOS[S.sc] || {};
   return !!(S && !D.tuto && !D.ami && !D.wild && !D.tower && (bossScene(S) || D.jdis));
 }
 
@@ -235,7 +235,7 @@ function runDangerTurn(S, ev) {
       return;
     }
     const c = unitKey(al[Math.floor(Math.random() * al.length)]),
-      v = nbrK(c).filter(k => S.tiles[k] && !S.tiles[k].rock),
+      v = neighborKeys(c).filter(k => S.tiles[k] && !S.tiles[k].rock),
       k = [c];
     while (k.length < 3 && v.length) {
       k.push(v.splice(Math.floor(Math.random() * v.length), 1)[0]);

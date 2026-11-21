@@ -1,10 +1,10 @@
-import { SCEN } from '../pokemon/pokemon.js';
+import { SCENARIOS } from '../pokemon/pokemon.js';
 import { $, toast } from '../core/utils.js';
 import { bdClass, tokCl } from '../../screens/combat/board/boardStore.js';
 import { HOOKS } from '../core/hooks.js';
 import { BOARD_ROWS, cellKey, parseCellKey, byUid, unitAt } from './engine.js';
 import { B, L, addLog, renderAll, ui } from './ui.js';
-import { PREF, savePref } from '../ui/preferences.js';
+import { PREFERENCES, savePref } from '../ui/preferences.js';
 import { sfx } from '../audio/sound-effects.js';
 import { AUTO } from '../progression/prestige.js';
 import { renderParams } from '../ui/settings.js';
@@ -114,8 +114,8 @@ export function deployRender() {
 // Startup statements, run in their original order (see index.js).
 export function init() {
   HOOKS.combat.push((S, opt, D0) => {
-    D0 = D0 || SCEN[S.sc] || {};
-    const pr = PREF.deployPhase || 'grands';
+    D0 = D0 || SCENARIOS[S.sc] || {};
+    const pr = PREFERENCES.deployPhase || 'grands';
     if (pr === 'jamais' || D0.tuto || D0.enigme431 != null || D0.duel433 || S.coop || S.order === 'vitesse') {
       return;
     }
@@ -133,7 +133,7 @@ export function init() {
     if (!b) {
       return;
     }
-    PREF.deployPhase = b.dataset.deployPhase;
+    PREFERENCES.deployPhase = b.dataset.deployPhase;
     savePref();
     renderParams();
   });

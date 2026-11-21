@@ -5,8 +5,8 @@
 import { PROFILE } from '../state/game-state.js';
 import { toast } from '../core/utils.js';
 import { queueSave } from '../state/saves.js';
-import { sfx, vibe } from '../audio/sound-effects.js';
-import { SHOP, bagN, today } from '../state/economy.js';
+import { sfx, vibrate } from '../audio/sound-effects.js';
+import { SHOP, bagCount, today } from '../state/economy.js';
 import { renderWallet } from '../ui/wallet.js';
 import { MACHINES } from '../moves/tms.js';
 import { renderCampBase } from './base-camp.js';
@@ -45,7 +45,7 @@ function harvestPlot(i) {
   if (!x || plotSprout(x) > 0) {
     return;
   }
-  const add = (k, n) => SHOP[k] && (PROFILE.bag[k] = Math.min(99, bagN(k) + n));
+  const add = (k, n) => SHOP[k] && (PROFILE.bag[k] = Math.min(99, bagCount(k) + n));
   let txt = '';
   if (x.g === 'oran') {
     add('baieoran', 3);
@@ -77,7 +77,7 @@ function harvestPlot(i) {
   }
   PROFILE.garden[i] = null;
   sfx('ui');
-  vibe(20);
+  vibrate(20);
   toast(`Récolte : ${txt} !`);
   queueSave();
   renderWallet();

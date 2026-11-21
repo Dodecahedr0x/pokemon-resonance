@@ -1,11 +1,11 @@
-import { POKEMON, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCENARIOS } from '../pokemon/pokemon.js';
 import { PROFILE, inBox } from '../state/game-state.js';
 import { $, toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { __set_squad, renderSquad, save, squad } from '../team/team.js';
 import { queueSave } from '../state/saves.js';
 import { sfx } from '../audio/sound-effects.js';
-import { SHOP, bagN, formatNumber } from '../state/economy.js';
+import { SHOP, bagCount, formatNumber } from '../state/economy.js';
 import { renderWallet } from '../ui/wallet.js';
 import { isFallen } from './campaign-challenges.js';
 import { isInDaycare } from './daycare.js';
@@ -31,7 +31,7 @@ export function expRefusal(id) {
   return onExpedition(id) ? `${POKEMON[POKEMON[id].base].n} est en expédition : il reviendra bientôt.` : null;
 }
 
-export function send(id, dest) {
+export function sendExpedition(id, dest) {
   const D = DESTINATIONS[dest];
   if (D && lockedByBadges(D)) {
     return toast(`${D.n} : accessible après ${D.min} badges.`);
@@ -73,7 +73,7 @@ export function retrieve(i) {
   PROFILE.money = Math.min(999999, PROFILE.money + x.gain.m);
   PROFILE.gems = Math.min(99999, PROFILE.gems + x.gain.g);
   if (x.gain.o) {
-    PROFILE.bag[x.gain.o] = Math.min(99, bagN(x.gain.o) + x.gain.q);
+    PROFILE.bag[x.gain.o] = Math.min(99, bagCount(x.gain.o) + x.gain.q);
   }
   PROFILE.exp.splice(i, 1);
   sfx('ui');
@@ -161,7 +161,7 @@ function onExpeditionsClick(e) {
   }
   const p = e.target.closest('[data-exp-p]');
   if (p && EXP_DEST) {
-    send(p.dataset.expP, EXP_DEST);
+    sendExpedition(p.dataset.expP, EXP_DEST);
     $('#expBox').hidden = true;
     return;
   }
@@ -178,7 +178,7 @@ export function init() {
   document.addEventListener('click', onExpeditionsClick);
 
   HOOKS.progress.push((S, rew) => {
-    const D = SCEN[S.sc] || {};
+    const D = SCENARIOS[S.sc] || {};
     if (!campOpen() || D.tuto || D.tower) {
       return null;
     }

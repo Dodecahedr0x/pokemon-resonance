@@ -1,6 +1,6 @@
 /* Battle preparation: the selection screen (terrains, gyms, League) and its challenge buttons (added in v1.0). */
 
-import { SCEN } from '../pokemon/pokemon.js';
+import { SCENARIOS } from '../pokemon/pokemon.js';
 import { squad } from '../team/team.js';
 import { champBuild } from './items-bonds-ai.js';
 import { __set_scSel, challenge, scSel } from './ui.js';
@@ -18,7 +18,7 @@ export function __set_PREPG(v) {
 // Battles: the selection is rendered by React (src/screens/combat/prep), via renderSelection().
 export function renderPrep() {
   rivalBuild();
-  if (scSel === 'sauvage' && !SCEN.sauvage) {
+  if (scSel === 'sauvage' && !SCENARIOS.sauvage) {
     __set_scSel(nextGoal()[0]);
   }
   if (scSel === 'champ') {
@@ -28,7 +28,7 @@ export function renderPrep() {
   renderSelection();
   try {
     // team and opponent illustrations preloaded
-    const S = SCEN[scSel];
+    const S = SCENARIOS[scSel];
     preload([...squad, ...(S && S.foes ? S.foes.map(f => f[0]) : [])]);
   } catch {
     /* Best effort: failure here is non-fatal. */

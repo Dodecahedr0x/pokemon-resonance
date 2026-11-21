@@ -1,7 +1,7 @@
 /* Campaign path: the next goal on the home screen, starting a campaign and the starter choice (added in v1.0). */
 
 import { GYMS } from '../data/game-data.js';
-import { POKEMON, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCENARIOS } from '../pokemon/pokemon.js';
 import { CAMP_START, PROFILE, defProfile, isCamp } from '../state/game-state.js';
 import { ARENAS, BADGES } from '../modes/gyms.js';
 import { $, toast } from '../core/utils.js';
@@ -41,7 +41,7 @@ export function nextGoal() {
   }
   for (let i = 0; i < 4; i++) {
     if (PROFILE.elite < i + 1) {
-      return [ELITE[i], SCEN[ELITE[i]].n];
+      return [ELITE[i], SCENARIOS[ELITE[i]].n];
     }
   }
   if (PROFILE.elite >= 5) {

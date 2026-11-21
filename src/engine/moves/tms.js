@@ -5,8 +5,8 @@ import { paintOverlay } from '../../screens/overlays/dialogsStore.js';
 import { $, toast } from '../core/utils.js';
 import { openId, openSheet } from '../team/team.js';
 import { queueSave } from '../state/saves.js';
-import { sfx, vibe } from '../audio/sound-effects.js';
-import { SHOP, bagN } from '../state/economy.js';
+import { sfx, vibrate } from '../audio/sound-effects.js';
+import { SHOP, bagCount } from '../state/economy.js';
 import { renderBag } from '../progression/quests-shop.js';
 import { inheritedMoveHtml } from '../progression/daycare.js';
 
@@ -83,19 +83,19 @@ function renderLearning() {
 
 function learnTm(k, b) {
   const M = MACHINES[k];
-  if (!M || !compatible(k, b) || !bagN(k)) {
+  if (!M || !compatible(k, b) || !bagCount(k)) {
     return;
   }
   const previous = PROFILE.learnedTms[b];
   PROFILE.learnedTms[b] = M.mv;
   if (!M.cs) {
-    PROFILE.bag[k] = bagN(k) - 1;
+    PROFILE.bag[k] = bagCount(k) - 1;
     if (!PROFILE.bag[k]) {
       delete PROFILE.bag[k];
     }
   }
   sfx('ui');
-  vibe(20);
+  vibrate(20);
   toast(`${POKEMON[b].n} apprend ${MOVES[M.mv].n}${previous ? ` à la place de ${MOVES[previous].n}` : ''} !`);
   queueSave();
   $('#ctBox').hidden = true;

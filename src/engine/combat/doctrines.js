@@ -1,7 +1,7 @@
-import { SCEN } from '../pokemon/pokemon.js';
+import { SCENARIOS } from '../pokemon/pokemon.js';
 import { PROFILE } from '../state/game-state.js';
 import { HOOKS } from '../core/hooks.js';
-import { EMAX } from './engine.js';
+import { MAX_ENERGY } from './engine.js';
 import { scSel } from './ui.js';
 import { queueSave } from '../state/saves.js';
 import { formatNumber } from '../state/economy.js';
@@ -12,7 +12,7 @@ import { refreshPrep } from '../../screens/combat/prep/prepStore.js';
    the battle.
    ===================================================================== */
 export function chosenDoctrine() {
-  const D = SCEN[scSel] || {};
+  const D = SCENARIOS[scSel] || {};
   if (D.tuto || D.hebdo429 || D.enigme431) {
     return '';
   }
@@ -69,7 +69,7 @@ export function init() {
     S.doctrineChoice = d;
     const al = S.units.filter(u => u.side === 'a');
     if (d === 'resonance') {
-      al.forEach(u => (u.en = Math.min(EMAX, (u.en || 0) + 1)));
+      al.forEach(u => (u.en = Math.min(MAX_ENERGY, (u.en || 0) + 1)));
       if (S.vmax > 1) {
         S.vmax -= 1;
         S.voice = Math.min(S.voice, S.vmax);

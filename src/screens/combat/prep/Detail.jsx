@@ -1,11 +1,11 @@
 import { Html } from '../../../lib/html.jsx';
 import { GYMS } from '../../../engine/data/game-data.js';
-import { POKEMON, SCEN } from '../../../engine/pokemon/pokemon.js';
+import { POKEMON, SCENARIOS } from '../../../engine/pokemon/pokemon.js';
 import { PROFILE } from '../../../engine/state/game-state.js';
 import { ARENAS } from '../../../engine/modes/gyms.js';
 import { medal, typeColor } from '../../../engine/core/utils.js';
 import { scenLock } from '../../../engine/combat/items-bonds-ai.js';
-import { CHAP, leaderOf } from '../../../engine/progression/prestige.js';
+import { chapterOf, leaderOf } from '../../../engine/progression/prestige.js';
 import { emblem, goalChips, groupOf, wonOf } from '../../../engine/world/home-journey.js';
 import { styleOf } from '../../../engine/combat/leader-styles.js';
 
@@ -36,10 +36,10 @@ function joinBlocks(blocks) {
 
 // Selected battle's sheet (#selDet).
 export default function Detail({ k }) {
-  const s = SCEN[k],
+  const s = SCENARIOS[k],
     lk = scenLock(k),
     L = leaderOf(k),
-    C = CHAP(k),
+    C = chapterOf(k),
     gi = ARENAS.findIndex(a => a.k === k),
     won = wonOf(k),
     r = (PROFILE.ranks || {})[k],

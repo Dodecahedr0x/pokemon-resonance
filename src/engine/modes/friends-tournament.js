@@ -2,7 +2,7 @@
    Friends tournament (added in v4.17): your friends' teams back to back,
    no healing between battles.
    ===================================================================== */
-import { POKEMON, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCENARIOS } from '../pokemon/pokemon.js';
 import { BUDGET } from '../pokemon/evolution.js';
 import { PROFILE } from '../state/game-state.js';
 import { RC } from '../pokemon/roles-synergies.js';
@@ -50,14 +50,14 @@ function startTournamentBattle() {
     return void toast('Un ami a quitté le carnet : le tournoi s’arrête.');
   }
   buildFriendTeam(i);
-  Object.assign(SCEN.ami, {
+  Object.assign(SCENARIOS.ami, {
     tournoi: run.order[run.i],
     n: `Tournoi · ${PROFILE.friends[i].n}`,
     lvl: `Tournoi entre amis · combat ${run.i + 1} sur ${run.order.length}`,
   });
-  SCEN.ami.d =
+  SCENARIOS.ami.d =
     `Combat ${run.i + 1} sur ${run.order.length}. Vos Pokémon gardent leurs PV d’un combat à l’autre, et ceux qui tombent ne reviennent pas. ` +
-    SCEN.ami.d;
+    SCENARIOS.ami.d;
   if (B) {
     backToPrep();
   }
@@ -70,7 +70,7 @@ export function tournamentTeam() {
     return { team: armedBossRush().team, voice: vBonus(), opts: battleOpts() };
   } // Boss Rush: frozen team
   const run = getTournamentRun(),
-    D = SCEN.ami || {};
+    D = SCENARIOS.ami || {};
   if (scSel !== 'ami' || !run || D.tournoi !== run.order[run.i]) {
     return null;
   }
@@ -119,8 +119,8 @@ export function init() {
     if (!S.tournamentScene || !run || S.tournamentScene !== run.order[run.i]) {
       return null;
     }
-    if (SCEN.ami) {
-      SCEN.ami.tournoi = null;
+    if (SCENARIOS.ami) {
+      SCENARIOS.ami.tournoi = null;
     } // "Rejouer" (Replay): an ordinary friendly challenge
     const T = PROFILE.tournoi;
     if (!win) {

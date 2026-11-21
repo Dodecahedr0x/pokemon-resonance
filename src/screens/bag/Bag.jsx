@@ -1,7 +1,7 @@
 import { useEngineReady } from '../../engineReady.js';
 import { useBagVersion } from './bagStore.js';
 import { ITEMS2, PROFILE } from '../../engine/state/game-state.js';
-import { SHOP, bagN, formatNumber } from '../../engine/state/economy.js';
+import { SHOP, bagCount, formatNumber } from '../../engine/state/economy.js';
 import { SCREEN_STATE } from '../../engine/ui/screen-state.js';
 import { dailyTm } from '../../engine/items/extra-held-items.js';
 import { Article, HeldItem } from './Items.jsx';
@@ -31,7 +31,7 @@ function List({ v, keys }) {
     return keys.map(k => <HeldItem key={k} k={k} />);
   }
   if (v === 'sac') {
-    const L = keys.filter(k => bagN(k));
+    const L = keys.filter(k => bagCount(k));
     return L.length ? (
       L.map(k => <Article key={k} k={k} mode="sac" />)
     ) : (
@@ -77,7 +77,8 @@ function Content() {
       ? Object.keys(ITEMS2)
       : Object.keys(SHOP).filter(k => SHOP[k].category === SCREEN_STATE.bagCategory);
   // items of the open pocket, for the Bag banner
-  const n = v === 'sac' ? (SCREEN_STATE.bagCategory === 'held' ? keys.length : keys.filter(k => bagN(k)).length) : 0;
+  const n =
+    v === 'sac' ? (SCREEN_STATE.bagCategory === 'held' ? keys.length : keys.filter(k => bagCount(k)).length) : 0;
   return (
     <>
       <PageHeader

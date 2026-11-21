@@ -1,11 +1,11 @@
 import { MT } from './turn-core.js';
 import { MOVES, ABILITIES } from '../data/moves.js';
-import { SCEN } from '../pokemon/pokemon.js';
+import { SCENARIOS } from '../pokemon/pokemon.js';
 import { toast } from '../core/utils.js';
 import { byUid, execFoe, flies, hdist, markAt, unitKey } from './engine.js';
 import { ACT, STATUSED, coverOf, ignObst, noteAdd, roleOf } from './synergies-obstacles.js';
 import { B, autoSel, clearAim, endOfRound, finish, addLog, placeEnemy, renderAll, scSel, ui } from './ui.js';
-import { PREF } from '../ui/preferences.js';
+import { PREFERENCES } from '../ui/preferences.js';
 import { playEv } from './move-effects.js';
 import { coopPlayer } from '../modes/coop.js';
 import { battleDelay } from './quick-battle.js';
@@ -142,7 +142,7 @@ function endAllyTurn(S) {
 /* ---------- 5. Speed mode interface ---------- */
 /** The player's setting (Settings). The prologue's guided battle always stays classic. */
 export function chosenOrder() {
-  return PREF.vitesse && !(SCEN[scSel] && SCEN[scSel].tuto) ? 'vitesse' : 'equipe';
+  return PREFERENCES.vitesse && !(SCENARIOS[scSel] && SCENARIOS[scSel].tuto) ? 'vitesse' : 'equipe';
 }
 
 // The timeline (#bOrdre): who plays, in what order, this round. Rendered by React

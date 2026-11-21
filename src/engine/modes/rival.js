@@ -1,7 +1,7 @@
-import { POKEMON, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCENARIOS } from '../pokemon/pokemon.js';
 import { PROFILE } from '../state/game-state.js';
 import { HOOKS } from '../core/hooks.js';
-import { OBST } from '../combat/synergies-obstacles.js';
+import { OBSTACLES } from '../combat/synergies-obstacles.js';
 import { formatNumber } from '../state/economy.js';
 import { PLACE_BY_ID } from '../world/map.js';
 import { PLACES_J } from '../world/johto.js';
@@ -9,7 +9,7 @@ import { PLACES_H } from '../world/hoenn.js';
 import { SCENES } from '../progression/story-dialogues.js';
 import { FAMILY_REGION_NAMES } from '../world/catch-anywhere.js';
 import { adaptRival } from './rival-board-themes.js';
-import { LEGS } from './legendaries.js';
+import { LEGENDARIES } from './legendaries.js';
 
 /* The rival Kael Ferrand: four Kanto battles (added in v4.4), his return in Johto and Hoenn
    and the Echoes of Dissonance (added in v4.29). */
@@ -98,7 +98,7 @@ export function rivalBuild() {
   RIVAL_STEPS.forEach((R, i) => {
     const ace = line[R.st],
       k = RIVAL_KEYS[i];
-    SCEN[k] = {
+    SCENARIOS[k] = {
       n: `Rival · ${RIVAL.n}`,
       lvl: `Rival · combat ${i + 1} sur 4`,
       lim: 10,
@@ -115,7 +115,7 @@ export function rivalBuild() {
       d: `Kael revient avec ${POKEMON[ace].n}, qui a l’avantage du type sur votre partenaire de départ. Son équipe grandit en même temps que la vôtre.`,
       foes: [ace, ...R.team].map((id, j) => [id, RIVAL_POS[j]]),
     };
-    OBST[k] = i < 2 ? { grass: ['2,2', '2,3'] } : { pil: ['4,2'], sand: ['2,1', '2,4'] };
+    OBSTACLES[k] = i < 2 ? { grass: ['2,2', '2,3'] } : { pil: ['4,2'], sand: ['2,1', '2,4'] };
   });
   try {
     adaptRival(); // Kael adapts to your team (v4.55)
@@ -185,13 +185,13 @@ export function rivalAce() {
 
 export function buildRival() {
   Object.entries(RIVAL_CHALLENGES).forEach(([k, R]) => {
-    const b = SCEN[R.base];
+    const b = SCENARIOS[R.base];
     if (!b) {
       return;
     }
     const dis = k === 'hd429',
       team = (dis ? R.team : [rivalAce(), ...R.team]).filter(id => POKEMON[id]);
-    SCEN[k] = {
+    SCENARIOS[k] = {
       n: R.n,
       lvl: dis ? 'Hoenn · Dissonance' : `Rival · ${FAMILY_REGION_NAMES[R.reg]}`,
       lim: 11,
@@ -211,7 +211,7 @@ export function buildRival() {
         : `Kael revient avec ${POKEMON[team[0]].n} et une équipe de ${FAMILY_REGION_NAMES[R.reg]}. Il a progressé autant que vous.`,
       foes: team.map((id, j) => [id, RIVAL_POS[j]]),
     };
-    OBST[k] = R.obstacles;
+    OBSTACLES[k] = R.obstacles;
   });
 }
 
@@ -234,12 +234,12 @@ export function scenarioLeader(sc) {
   if (!RIVAL_CHALLENGES) {
     return null;
   }
-  const D = SCEN[sc];
+  const D = SCENARIOS[sc];
   if (!D) {
     return null;
   }
   if (D.captureLegend) {
-    const lg = LEGS.find(x => x.id === D.captureLegend);
+    const lg = LEGENDARIES.find(x => x.id === D.captureLegend);
     return lg
       ? { n: lg.n, t: lg.title, q: `${lg.n} ne fuit plus. Il vous observe… et vous attend.`, w: lg.w, l: lg.l }
       : null;
@@ -290,7 +290,7 @@ export function init() {
   [...PLACES_J, ...PLACES_H].forEach(p => (PLACE_BY_ID[p.id] = p));
 
   HOOKS.progress.push((S, rew, win) => {
-    const D = SCEN[S.sc] || {};
+    const D = SCENARIOS[S.sc] || {};
     if (!win || !D.rivalFight || (PROFILE.rivalsMet || []).includes(D.rivalFight)) {
       return null;
     }

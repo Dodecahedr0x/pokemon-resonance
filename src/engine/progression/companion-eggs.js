@@ -1,13 +1,13 @@
 /* Companion, breeding eggs, expeditions (added in v4.61). */
 
-import { POKEMON, POKEMON_LIST, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, POKEMON_LIST, SCENARIOS } from '../pokemon/pokemon.js';
 import { ITEMS2, PROFILE } from '../state/game-state.js';
 import { writeLS, readLS, medal, toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
-import { sfx, vibe } from '../audio/sound-effects.js';
+import { sfx, vibrate } from '../audio/sound-effects.js';
 import { overlay } from './prestige.js';
 import { shut } from '../../screens/overlays/tempStore.js';
-import { SHOP, bagN, savePurse, today } from '../state/economy.js';
+import { SHOP, bagCount, savePurse, today } from '../state/economy.js';
 import { renderBag } from './quests-shop.js';
 import { DESTINATIONS } from './expeditions.js';
 import { renderCampBase } from './base-camp.js';
@@ -27,7 +27,7 @@ export function buddyData() {
   }
   const h = affinityHearts((PROFILE.comp && PROFILE.comp.aff) || 0),
     st = companionState();
-  return { h, feed: st.feed, gift: st.gift, baie: bagN('baiemepo') > 0, isNew: h > (st.seen[id] || 0) };
+  return { h, feed: st.feed, gift: st.gift, baie: bagCount('baiemepo') > 0, isNew: h > (st.seen[id] || 0) };
 }
 
 function keepsakeOpenOverlay() {
@@ -61,7 +61,7 @@ function eggBuy(k) {
   s.list.push({ k, left: O.batt, tot: O.batt });
   writeLS('res-egg-shop', s);
   sfx('ui');
-  vibe(25);
+  vibrate(25);
   toast(`${O.n} acheté. Il éclora après ${O.batt} combats.`);
   savePurse();
   try {
@@ -115,11 +115,11 @@ export function expeditionStory(x) {
         rare = '1 500 ₽';
       }
     } else {
-      const pool = tmKeys().filter(k => !bagN(k)),
+      const pool = tmKeys().filter(k => !bagCount(k)),
         all = pool.length ? pool : tmKeys();
       if (all.length) {
         const k = all[Math.floor(Math.random() * all.length)];
-        PROFILE.bag[k] = Math.min(99, bagN(k) + 1);
+        PROFILE.bag[k] = Math.min(99, bagCount(k) + 1);
         rare = `une CT : ${SHOP[k].n}`;
       }
     }
@@ -274,13 +274,13 @@ function onCompanionEggsClick(e) {
   if (k === 'souv') {
     return keepsakeOpenOverlay();
   }
-  if (k === 'baie' && !st.feed && bagN('baiemepo') > 0) {
-    PROFILE.bag.baiemepo = bagN('baiemepo') - 1;
+  if (k === 'baie' && !st.feed && bagCount('baiemepo') > 0) {
+    PROFILE.bag.baiemepo = bagCount('baiemepo') - 1;
     st.feed = 1;
     companionSave(st);
     const up = gainCompanionAffinity(5);
     sfx('ui');
-    vibe(25);
+    vibrate(25);
     toast(
       up
         ? `${m.n} adore cette baie : ${up} cœur${up > 1 ? 's' : ''} !`
@@ -298,7 +298,7 @@ function onCompanionEggsClick(e) {
     companionSave(st);
     applyReward(g);
     sfx('win');
-    vibe([20, 30, 20]);
+    vibrate([20, 30, 20]);
     toast(`${m.n} vous rapporte un cadeau : ${rewardText(g)}.`);
     savePurse();
     refreshHome();
@@ -307,7 +307,7 @@ function onCompanionEggsClick(e) {
 
 function onProgress(S, rew) {
   try {
-    const D = SCEN[S.sc] || {};
+    const D = SCENARIOS[S.sc] || {};
     if (D.tuto) {
       return null;
     }

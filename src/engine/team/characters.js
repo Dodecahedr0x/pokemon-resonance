@@ -1,9 +1,9 @@
-import { POKEMON, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCENARIOS } from '../pokemon/pokemon.js';
 import { isCamp } from '../state/game-state.js';
 import { HOOKS } from '../core/hooks.js';
 import { hasNx, pushMessage } from '../combat/engine.js';
 import { scSel } from '../combat/ui.js';
-import { PREF } from '../ui/preferences.js';
+import { PREFERENCES } from '../ui/preferences.js';
 import { ROLE_PROVIDERS } from '../combat/tactical-engine.js';
 import { individualOf, individualHtml } from './individuals.js';
 
@@ -64,9 +64,10 @@ export const CHARACTERS = {
   tetu: ['Têtu', '+3 dégâts infligés, mais désobéit plus souvent (si la désobéissance est activée).'],
 };
 
-export const charactersChosen = () => PREF.characters !== false && !(SCEN[scSel] && SCEN[scSel].tuto);
+export const charactersChosen = () => PREFERENCES.characters !== false && !(SCENARIOS[scSel] && SCENARIOS[scSel].tuto);
 
-export const disobedienceChosen = () => !!PREF.disobedience && isCamp() && !(SCEN[scSel] && SCEN[scSel].tuto);
+export const disobedienceChosen = () =>
+  !!PREFERENCES.disobedience && isCamp() && !(SCENARIOS[scSel] && SCENARIOS[scSel].tuto);
 
 // Startup statements, run in their original order (see index.js).
 export function init() {

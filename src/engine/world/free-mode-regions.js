@@ -1,6 +1,6 @@
 /* In Free Mode too, regions open in order (added in v4.46). */
 
-import { SCEN } from '../pokemon/pokemon.js';
+import { SCENARIOS } from '../pokemon/pokemon.js';
 import { PROFILE } from '../state/game-state.js';
 import { johtoOpen } from './johto.js';
 import { hoennOpen } from './hoenn.js';
@@ -8,7 +8,7 @@ import { hoennOpen } from './hoenn.js';
 const JOHTO_LEGENDARIES = ['raikou', 'entei', 'suicune', 'lugia', 'hooh'];
 
 function regionOfKey(k) {
-  const D = SCEN[k];
+  const D = SCENARIOS[k];
   if (!D) {
     return null;
   }

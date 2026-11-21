@@ -2,13 +2,13 @@
    Companion Pokémon (added in v4.17): it waits for you on the Team
    page (and in the Home hero), its affection grows with your battles and grants bonuses.
    ===================================================================== */
-import { POKEMON, POKEMON_LIST, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, POKEMON_LIST, SCENARIOS } from '../pokemon/pokemon.js';
 import { PROFILE, isCamp } from '../state/game-state.js';
 import { $, medal, toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { hasNx, pushMessage } from '../combat/engine.js';
 import { queueSave } from '../state/saves.js';
-import { sfx, vibe } from '../audio/sound-effects.js';
+import { sfx, vibrate } from '../audio/sound-effects.js';
 import { today } from '../state/economy.js';
 import { isShinyOwned } from '../pokemon/shiny.js';
 import { DAMAGE_PROVIDERS } from '../combat/tactical-engine.js';
@@ -103,7 +103,7 @@ function onCompanionPokemonClick(e) {
       PROFILE.comp.j = today();
       const up = gainCompanionAffinity(3);
       sfx('ui');
-      vibe(25);
+      vibrate(25);
       toast(
         up
           ? `${POKEMON[activeCompanionId()].n} est ravi : ${up} cœur${up > 1 ? 's' : ''} !`
@@ -183,7 +183,7 @@ export function init() {
 
   HOOKS.progress.push((S, rew, win) => {
     const id = activeCompanionId(),
-      D = SCEN[S.sc] || {};
+      D = SCENARIOS[S.sc] || {};
     if (!id || D.tuto) {
       return null;
     }

@@ -2,7 +2,7 @@
 
 import { bdClass } from '../../screens/combat/board/boardStore.js';
 
-import { SCEN } from '../pokemon/pokemon.js';
+import { SCENARIOS } from '../pokemon/pokemon.js';
 import { PROFILE } from '../state/game-state.js';
 import { $, $$ } from '../core/utils.js';
 import { getCoach, hideCoach, showCoach } from '../../screens/overlays/shellOverlays.js';
@@ -15,7 +15,7 @@ export function __set_tutorialI(v) {
 }
 
 function tutorialOn() {
-  return B && SCEN[B.sc] && SCEN[B.sc].tuto && tutorialI >= 0 && tutorialI < TUTORIAL_STEPS.length;
+  return B && SCENARIOS[B.sc] && SCENARIOS[B.sc].tuto && tutorialI >= 0 && tutorialI < TUTORIAL_STEPS.length;
 }
 
 // Guided-battle coach: #coach is rendered by React (src/screens/overlays/Coach.jsx,

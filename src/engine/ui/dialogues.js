@@ -3,9 +3,9 @@
 import { PROFILE } from '../state/game-state.js';
 import { reducedMotion } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
-import { cur } from '../core/navigation.js';
-import { PREF, savePref } from './preferences.js';
-import { noise, tone } from '../audio/sound-effects.js';
+import { currentScreen } from '../core/navigation.js';
+import { PREFERENCES, savePref } from './preferences.js';
+import { noise, playTone } from '../audio/sound-effects.js';
 import { AUTO } from '../progression/prestige.js';
 import { renderBag } from '../progression/quests-shop.js';
 import { markPurchase } from '../../screens/bag/bagStore.js';
@@ -14,7 +14,7 @@ import { refreshGrid } from '../../screens/team/teamStore.js';
 
 let H;
 
-const on = k => PREF[k] !== 0;
+const on = k => PREFERENCES[k] !== 0;
 
 const directText = () => {
   try {
@@ -27,24 +27,24 @@ const directText = () => {
 /* ---------- 10. house UI sounds (synthesized) ---------- */
 const SOUNDS = {
   bip: () => {
-    tone(1760, 0, 0.035, 'square', 0.016);
-    tone(2349, 0.045, 0.04, 'square', 0.016);
+    playTone(1760, 0, 0.035, 'square', 0.016);
+    playTone(2349, 0.045, 0.04, 'square', 0.016);
   },
   ball: () => {
     noise(0, 0.03, 0.045, 5200);
-    tone(540, 0, 0.04, 'square', 0.02, 270);
-    tone(880, 0.06, 0.07, 'triangle', 0.03, 1320);
+    playTone(540, 0, 0.04, 'square', 0.02, 270);
+    playTone(880, 0.06, 0.07, 'triangle', 0.03, 1320);
   },
   caisse: () => {
-    tone(1318, 0, 0.07, 'triangle', 0.04);
-    tone(1760, 0.08, 0.18, 'triangle', 0.04);
+    playTone(1318, 0, 0.07, 'triangle', 0.04);
+    playTone(1760, 0.08, 0.18, 'triangle', 0.04);
   },
-  suite: () => tone(1175, 0, 0.05, 'square', 0.015),
+  suite: () => playTone(1175, 0, 0.05, 'square', 0.015),
 };
 
 const playSound = k => {
   try {
-    if (!PREF.sound || reducedMotion || !on('pokeStyleS')) {
+    if (!PREFERENCES.sound || reducedMotion || !on('pokeStyleS')) {
       return;
     }
     SOUNDS[k] && SOUNDS[k]();
@@ -148,7 +148,7 @@ const write = (e, box) => {
     wraps,
     k: 0,
     t0: performance.now(),
-    ms: PREF.fast ? 11 : Math.max(8, Math.min(26, 2600 / spans.length)),
+    ms: PREFERENCES.fast ? 11 : Math.max(8, Math.min(26, 2600 / spans.length)),
     fini: false,
     raf: 0,
   };
@@ -222,7 +222,7 @@ function scan() {
     // only when the Pokédex is displayed (otherwise hundreds of cards re-read on every battle action)
     // the React grid (Grid.jsx) renders .is-shiny and "✦ Chromatique" (Shiny): we redraw it if it has fallen behind
     if (
-      cur === 'pokedex' &&
+      currentScreen === 'pokedex' &&
       [...document.querySelectorAll('#pokedex .team-card')].some(c => {
         const b = c.querySelector('[data-open]');
         const id = b && b.dataset.open;
@@ -252,7 +252,7 @@ export function init() {
         if (k === 'ligue') {
           k = 'combat';
         }
-        if (k && k !== cur) {
+        if (k && k !== currentScreen) {
           playSound('ball');
         }
         return;
@@ -309,7 +309,7 @@ export function init() {
   HOOKS.purchase.push(() => {
     markPurchase();
     playSound('caisse');
-    if (cur === 'sac') {
+    if (currentScreen === 'sac') {
       renderBag();
     }
   });
@@ -321,7 +321,7 @@ export function init() {
       return;
     }
     const k = b.dataset.pokeStyle === 't' ? 'poke-style-t' : 'poke-style-s';
-    PREF[k] = on(k) ? 0 : 1;
+    PREFERENCES[k] = on(k) ? 0 : 1;
     savePref();
     renderParams();
     if (k === 'pokeStyleS' && on(k)) {

@@ -1,10 +1,10 @@
-import { POKEMON, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCENARIOS } from '../pokemon/pokemon.js';
 import { PROFILE, isCamp } from '../state/game-state.js';
 import { medal } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { goTo } from '../core/navigation.js';
 import { badgeSvg } from '../modes/league.js';
-import { nbrK, pushMessage, setMark, unitKey } from '../combat/engine.js';
+import { neighborKeys, pushMessage, setMark, unitKey } from '../combat/engine.js';
 import { SCREEN_STATE } from '../ui/screen-state.js';
 import { formatNumber } from '../state/economy.js';
 import { PLACE_BY_ID, renderMap } from './map.js';
@@ -74,7 +74,7 @@ export function lockHoenn(k, D) {
 }
 
 export function hoennLead(sc) {
-  const D = SCEN[sc];
+  const D = SCENARIOS[sc];
   if (!D) {
     return null;
   }
@@ -88,7 +88,7 @@ export function hoennLead(sc) {
 }
 
 export function hoennChapter(k) {
-  const D = SCEN[k];
+  const D = SCENARIOS[k];
   if (!D) {
     return null;
   }
@@ -102,7 +102,7 @@ export function hoennChapter(k) {
 }
 
 export function hoennRewardLine(k) {
-  const D = SCEN[k];
+  const D = SCENARIOS[k];
   const g = D.hfinal ? 20 : HREW[D.hoenn];
   return `<div class="reward-line"><span class="reward-badge">${D.hfinal ? medal(['Dragon']) + 'Titre de Maître de Hoenn' : badgeSvg(D.hoenn, HGYMS[D.hoenn], 'mh' + D.hoenn) + 'Badge ' + HGYMS[D.hoenn]}</span><span><span class="coin-icon" aria-hidden="true">₽</span>+${formatNumber(D.hfinal ? 8000 : 3500 + 300 * D.hoenn)}</span><span><span class="gem-icon"><svg><use href="#i-gem"/></svg></span>+${g}</span></div>`;
 }
@@ -133,7 +133,9 @@ export function hoennSetup(S, r, ev) {
     S.units
       .filter(u => u.side === 'e')
       .forEach(e =>
-        nbrK(unitKey(e)).forEach(x => S.tiles[x] && !S.tiles[x].rock && !S.tiles[x].w && setMark(S, x, 'brulant', null))
+        neighborKeys(unitKey(e)).forEach(
+          x => S.tiles[x] && !S.tiles[x].rock && !S.tiles[x].w && setMark(S, x, 'brulant', null)
+        )
       );
     pushMessage(ev, 'Arène Feu : grand soleil, et le sol brûle autour des adversaires.');
   }
@@ -247,7 +249,7 @@ const HCHAMP_L = {
 const HREW = [4, 4, 5, 5, 6, 6, 7, 8];
 
 /* ---------- Hoenn gym rules ---------- */
-const sceneRule = S => (S && SCEN[S.sc] && SCEN[S.sc].rule) || '';
+const sceneRule = S => (S && SCENARIOS[S.sc] && SCENARIOS[S.sc].rule) || '';
 
 const HARENAS = [
   {
@@ -415,7 +417,7 @@ export const PLACES_H = [
   { id: 'h7', x: 830, y: 480, s: 'Arène 7 · ' + HLEAD[6].n, grp: 'aventure', j: 1 },
   { id: 'h8', x: 870, y: 260, s: 'Arène 8 · ' + HLEAD[7].n, grp: 'aventure', j: 1 },
   { id: 'hchamp', x: 760, y: 120, n: 'Plateau de Hoenn', s: 'Final · ' + HCHAMP_L.n, grp: 'aventure', j: 1 },
-].filter(p => SCEN[p.id] || p.id === 'hwild');
+].filter(p => SCENARIOS[p.id] || p.id === 'hwild');
 
 export const HCHAIN = PLACES_H.map(p => p.id);
 
@@ -445,7 +447,7 @@ export const HMAP_SVG = `<svg class="map-svg is-hoenn" viewBox="0 0 1000 640" pr
 // Startup statements, run in their original order (see index.js).
 export function init() {
   HARENAS.forEach((a, i) => {
-    SCEN[a.k] = Object.assign(
+    SCENARIOS[a.k] = Object.assign(
       {
         n: `Arène ${HGYMS[i]}`,
         lvl: `Hoenn · Arène ${i + 1} · Badge ${HGYMS[i]}`,
@@ -457,7 +459,7 @@ export function init() {
       a
     );
   });
-  SCEN.hchamp = {
+  SCENARIOS.hchamp = {
     n: 'Maître de Hoenn',
     lvl: 'Hoenn · Final',
     lim: 11,
@@ -480,7 +482,7 @@ export function init() {
     d: 'Pas de règle d’arène : un adversaire complet, qui se sert de la Résonance, des attaques Expertes et de la Forme Résonante.',
   };
   HOOKS.progress.push((S, rew, win) => {
-    const D = SCEN[S.sc] || {};
+    const D = SCENARIOS[S.sc] || {};
     if (!win || !isCamp()) {
       return null;
     }

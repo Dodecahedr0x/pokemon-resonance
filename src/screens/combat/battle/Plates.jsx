@@ -2,7 +2,7 @@ import { Html } from '../../../lib/html.jsx';
 import { MOVES } from '../../../engine/data/moves.js';
 import { veiled } from '../../../engine/modes/gyms.js';
 import { medal } from '../../../engine/core/utils.js';
-import { EMAX, awakeningInfo, foeEvo, hasNx } from '../../../engine/combat/engine.js';
+import { MAX_ENERGY, awakeningInfo, foeEvo, hasNx } from '../../../engine/combat/engine.js';
 import { B, STATUS_CLASS, enPips, segHp, ui } from '../../../engine/combat/ui.js';
 import { hasXp, bossScene, plateRankHtml } from '../../../engine/combat/resonance.js';
 import { fogHidden, fogVision } from '../../../engine/combat/fog-of-war.js';
@@ -93,7 +93,7 @@ function state(u, fe, nx) {
     'Immobilisé'
   ) : u.acted ? (
     'A joué'
-  ) : u.en >= EMAX && nx ? (
+  ) : u.en >= MAX_ENERGY && nx ? (
     <span className="battle-plate-ready">Éveil !</span>
   ) : (
     'Prêt'
@@ -105,7 +105,7 @@ function Plate({ u, fog }) {
     nx = hasNx(u) ? awakeningInfo(B, u) : null;
   const cls =
     `battle-plate ${u.side === 'e' ? 'is-enemy' : 'is-ally'}${u.ko ? ' is-ko' : ''}${ui.sel === u.uid || ui.selE === u.uid ? ' is-selected' : ''}` +
-    `${ui.act === u.uid ? ' is-current' : ''}${fe ? ' is-evolving' : ''}${u.side === 'a' && u.en >= EMAX && nx && !u.ko ? ' is-ready' : ''}${fog ? ' is-veiled' : ''}`;
+    `${ui.act === u.uid ? ' is-current' : ''}${fe ? ' is-evolving' : ''}${u.side === 'a' && u.en >= MAX_ENERGY && nx && !u.ko ? ' is-ready' : ''}${fog ? ' is-veiled' : ''}`;
   const pips = u.side === 'a' ? hasNx(u) || hasXp(u) : bossScene(B) && hasXp(u);
   return (
     <button type="button" className={cls} data-u={u.uid}>

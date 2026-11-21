@@ -1,4 +1,4 @@
-import { PREF } from '../../../engine/ui/preferences.js';
+import { PREFERENCES } from '../../../engine/ui/preferences.js';
 import { Switch } from '../controls.jsx';
 
 import Button from '../../../components/Button.jsx';
@@ -8,10 +8,10 @@ export default function Phone() {
   return (
     <section className="card v4-ps">
       <CardHeader icon="phone" title="Téléphone" />
-      <Switch k="vibe" on={PREF.vibe} lab="Vibrations" sub="Coups encaissés, K.O. et récompenses" />
+      <Switch k="vibe" on={PREFERENCES.vibe} lab="Vibrations" sub="Coups encaissés, K.O. et récompenses" />
       <Switch
         k="swipeNav"
-        on={PREF.swipeNav !== false}
+        on={PREFERENCES.swipeNav !== false}
         lab="Glisser entre les onglets"
         sub="Accueil, Équipe, Combat, Carte. Appui long sur un Pokémon : sa fiche."
       />

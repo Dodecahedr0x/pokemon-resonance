@@ -1,14 +1,14 @@
 /* Design Workshop (custom CSS, brief for ChatGPT) (added in v4.42). */
 
 import { $, toast } from '../core/utils.js';
-import { TABS, TNAME } from '../core/navigation.js';
-import { PREF, savePref } from '../ui/preferences.js';
+import { NAV_TABS, TNAME } from '../core/navigation.js';
+import { PREFERENCES, savePref } from '../ui/preferences.js';
 import { renameClassesInCss } from '../../lib/renamedClasses.js';
 
 /* Settings › Design Workshop: paste a CSS block (e.g. written by ChatGPT), it applies immediately on this device.
    The brief gives ChatGPT the game's variables, pages and components without making it read the file's 3.7 MB. */
 export function customCss() {
-  return String(PREF.customCss || '');
+  return String(PREFERENCES.customCss || '');
 }
 
 function sanitizeCss(t) {
@@ -71,7 +71,7 @@ function designBrief() {
           ';'
       )
       .join('\n');
-  const pages = TABS.map(id => `#${id} (${TNAME[id] || id})`).join(', ');
+  const pages = NAV_TABS.map(id => `#${id} (${TNAME[id] || id})`).join(', ');
   return `Tu es designer UI/CSS. Je te confie le design d’un jeu mobile : « Pokémon Résonance » (fangame non officiel, stratégie tactique sur plateau hexagonal, thème Pokémon, un seul fichier HTML, joué surtout sur téléphone Android de 360 à 412 px de large).
 Le fichier fait 3,7 Mo : tu ne le vois pas en entier. Voici le brief.
 
@@ -107,12 +107,12 @@ function onDesignWorkshopClick(e) {
     return;
   }
   if (a.id === 'design-action-a') {
-    PREF.customCss = sanitizeCss(($('#design-action-t') || {}).value);
+    PREFERENCES.customCss = sanitizeCss(($('#design-action-t') || {}).value);
     savePref();
     applyCustomCss();
-    toast(PREF.customCss ? 'Style appliqué.' : 'Aucun CSS : style d’origine.');
+    toast(PREFERENCES.customCss ? 'Style appliqué.' : 'Aucun CSS : style d’origine.');
   } else if (a.id === 'design-action-r') {
-    PREF.customCss = '';
+    PREFERENCES.customCss = '';
     savePref();
     applyCustomCss();
     const t = $('#design-action-t');

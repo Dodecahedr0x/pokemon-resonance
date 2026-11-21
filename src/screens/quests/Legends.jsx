@@ -2,7 +2,7 @@ import { POKEMON } from '../../engine/pokemon/pokemon.js';
 import { PROFILE } from '../../engine/state/game-state.js';
 import { typeColor } from '../../engine/core/utils.js';
 import { pokemonArtUrl } from '../../engine/assets/images.js';
-import { LEGS } from '../../engine/modes/legendaries.js';
+import { LEGENDARIES } from '../../engine/modes/legendaries.js';
 import { hoennOpen } from '../../engine/world/hoenn.js';
 import { legendSteps } from '../../engine/modes/legendary-captures.js';
 import { HOENN_LEGEND_DEFS, hoennLegendSteps, isInBox } from '../../engine/world/hoenn-legendaries.js';
@@ -50,7 +50,7 @@ export default function Legends() {
         l’équipe.
       </p>
       <div className="legend-quests">
-        {LEGS.map(L => (
+        {LEGENDARIES.map(L => (
           <Legend key={L.id} L={L} et={legendSteps(L)} isTaken={PROFILE.box.includes(L.id)} fight={'lc' + L.id} />
         ))}
       </div>

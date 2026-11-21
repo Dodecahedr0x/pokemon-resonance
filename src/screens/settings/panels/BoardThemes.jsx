@@ -1,11 +1,11 @@
 import { PROFILE } from '../../../engine/state/game-state.js';
-import { PREF } from '../../../engine/ui/preferences.js';
+import { PREFERENCES } from '../../../engine/ui/preferences.js';
 import { BOARD_THEMES, rivalState, isThemeUnlocked, dominantType } from '../../../engine/modes/rival-board-themes.js';
 
 // Board themes (v4.55), bought with Shards, then the rival Kael's report.
 // Buttons handled by the engine (delegated click on data-board-theme-action).
 export default function BoardThemes() {
-  const cur = BOARD_THEMES[PREF.boardTheme] ? PREF.boardTheme : 'classique';
+  const cur = BOARD_THEMES[PREFERENCES.boardTheme] ? PREFERENCES.boardTheme : 'classique';
   const rv = rivalState();
   const T = dominantType();
   const rival = rv.w

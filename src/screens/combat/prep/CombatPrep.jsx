@@ -5,7 +5,7 @@ import Tip from '../../../components/Tip.jsx';
 import { SelList, SelTabs } from './Selection.jsx';
 import Detail from './Detail.jsx';
 import Team from './Team.jsx';
-import { SCEN } from '../../../engine/pokemon/pokemon.js';
+import { SCENARIOS } from '../../../engine/pokemon/pokemon.js';
 import { scSel } from '../../../engine/combat/ui.js';
 import { PREPG } from '../../../engine/combat/battle-prep.js';
 import { nextGoal } from '../../../engine/progression/campaign.js';
@@ -19,7 +19,7 @@ import PageHeader from '../../../components/PageHeader.jsx';
 // (key = version), like the old innerHTML.
 function BattlePrep() {
   const v = usePrepVersion();
-  const on = v > 0 && !!SCEN[scSel];
+  const on = v > 0 && !!SCENARIOS[scSel];
   const G = on ? (PREPG && PREPG.sc === scSel ? PREPG.g : groupOf(scSel)) : null;
   return (
     <div id="cbPrep" className="prep-page">

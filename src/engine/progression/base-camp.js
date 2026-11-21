@@ -1,11 +1,11 @@
-import { POKEMON, POKEMON_LIST, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, POKEMON_LIST, SCENARIOS } from '../pokemon/pokemon.js';
 import { PROFILE } from '../state/game-state.js';
 import { BADGES } from '../modes/gyms.js';
 import { medal, toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { hasNx } from '../combat/engine.js';
 import { queueSave } from '../state/saves.js';
-import { sfx, vibe } from '../audio/sound-effects.js';
+import { sfx, vibrate } from '../audio/sound-effects.js';
 import { SHOP } from '../state/economy.js';
 import { renderWallet } from '../ui/wallet.js';
 import { dailyDiscount } from '../combat/resonance.js';
@@ -24,12 +24,12 @@ export { BUILDINGS, buildingBlocked }; // read by the base Camp (src/screens/cam
    ===================================================================== */
 
 /* ---------- profile (declared functions: called as soon as the file loads) ---------- */
-export function IDP0() {
+export function defaultCampProfile() {
   return { camp: { inf: 0, ate: 0, dojo: 0, guet: 0, pens: 0, oeuf: 0 }, exp: [] };
 }
 
 export function idpClean(p) {
-  const o = IDP0();
+  const o = defaultCampProfile();
   if (!p || typeof p !== 'object') {
     return o;
   }
@@ -78,10 +78,10 @@ function build(k) {
   }
   PROFILE.money -= m;
   PROFILE.gems -= g;
-  PROFILE.camp = PROFILE.camp || IDP0().camp;
+  PROFILE.camp = PROFILE.camp || defaultCampProfile().camp;
   PROFILE.camp[k] = level(k) + 1;
   sfx('ui');
-  vibe(20);
+  vibrate(20);
   toast(`${BUILDINGS[k].n} niveau ${level(k)} : ${BUILDINGS[k].d(level(k))}`);
   queueSave();
   renderWallet();
@@ -165,7 +165,7 @@ const BUILDINGS = {
 };
 
 function onProgress(S, rew) {
-  const D = SCEN[S.sc] || {};
+  const D = SCENARIOS[S.sc] || {};
   if (!campOpen() || D.tuto || D.tower) {
     return null;
   }

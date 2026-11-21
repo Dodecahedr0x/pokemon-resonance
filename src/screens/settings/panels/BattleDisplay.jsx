@@ -1,4 +1,4 @@
-import { PREF } from '../../../engine/ui/preferences.js';
+import { PREFERENCES } from '../../../engine/ui/preferences.js';
 
 import Button from '../../../components/Button.jsx';
 // Settings › Battle display (v4.44): data-tool-action buttons handled by the engine (engine/combat/board-tools.js).
@@ -16,8 +16,8 @@ export default function BattleDisplay() {
         <Button size="small" variant={fs ? 'primary' : undefined} data-tool-action="pfs">
           {fs ? 'Plein écran : activé' : 'Plein écran : désactivé'}
         </Button>
-        <Button size="small" variant={PREF.boardContrast ? 'primary' : undefined} data-tool-action="pct">
-          {PREF.boardContrast ? 'Plateau contrasté : activé' : 'Plateau contrasté : désactivé'}
+        <Button size="small" variant={PREFERENCES.boardContrast ? 'primary' : undefined} data-tool-action="pct">
+          {PREFERENCES.boardContrast ? 'Plateau contrasté : activé' : 'Plateau contrasté : désactivé'}
         </Button>
       </div>
     </section>

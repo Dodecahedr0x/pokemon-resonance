@@ -1,5 +1,5 @@
 import { Html } from '../../lib/html.jsx';
-import { POKEMON, SCEN } from '../../engine/pokemon/pokemon.js';
+import { POKEMON, SCENARIOS } from '../../engine/pokemon/pokemon.js';
 import { PROFILE } from '../../engine/state/game-state.js';
 import { medal, typeColor } from '../../engine/core/utils.js';
 import { ELITE, scenLock } from '../../engine/combat/items-bonds-ai.js';
@@ -25,7 +25,7 @@ export default function EliteCell() {
 }
 
 function Card({ k, L }) {
-  const s = SCEN[k],
+  const s = SCENARIOS[k],
     lk = scenLock(k),
     won = wonOf(k),
     r = (PROFILE.ranks || {})[k];

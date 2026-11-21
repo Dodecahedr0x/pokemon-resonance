@@ -2,7 +2,7 @@ import { paintOverlay } from '../../screens/overlays/dialogsStore.js';
 import { PROFILE } from '../state/game-state.js';
 import { BADGES } from '../modes/gyms.js';
 import { toast } from '../core/utils.js';
-import { SLOTS, SV, newGame, openSaves, putSlot } from '../state/saves.js';
+import { SLOTS, CLOUD_SAVE, newGame, openSaves, putSlot } from '../state/saves.js';
 import { openStarter } from '../progression/campaign.js';
 import { renderParams } from './settings.js';
 
@@ -15,7 +15,7 @@ export function gameInProgress() {
 }
 
 function freeOverlaySlot() {
-  return SLOTS.find(k => !SV.local[k]) || null;
+  return SLOTS.find(k => !CLOUD_SAVE.local[k]) || null;
 }
 
 /** A confirmation before any new game. suite() is only called once the player agrees. */

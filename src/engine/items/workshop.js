@@ -2,8 +2,8 @@
 
 import { ITEMS2, PROFILE } from '../state/game-state.js';
 import { writeLS, toast } from '../core/utils.js';
-import { sfx, vibe } from '../audio/sound-effects.js';
-import { SHOP, bagN, savePurse, today } from '../state/economy.js';
+import { sfx, vibrate } from '../audio/sound-effects.js';
+import { SHOP, bagCount, savePurse, today } from '../state/economy.js';
 import { refreshHome } from '../../screens/home/homeStore.js';
 import { renderBag } from '../progression/quests-shop.js';
 import { applyReward, seededRng, rewardText } from '../world/route-events.js';
@@ -14,10 +14,10 @@ export { loadToday, RECIPES, FUSION_COST }; // read by Shop › Workshop and Dra
 export function fusionDonors(target) {
   const d = [];
   tmKeys()
-    .filter(k => k !== target && bagN(k) > 0)
+    .filter(k => k !== target && bagCount(k) > 0)
     .sort((a, b) => SHOP[a].p - SHOP[b].p)
     .forEach(k => {
-      for (let i = 0; i < bagN(k) && d.length < 2; i++) {
+      for (let i = 0; i < bagCount(k) && d.length < 2; i++) {
         d.push(k);
       }
     });
@@ -26,7 +26,7 @@ export function fusionDonors(target) {
 
 export function tmFusionTargets() {
   const r = seededRng('tm-fusion'),
-    pool = tmKeys().filter(k => !bagN(k)),
+    pool = tmKeys().filter(k => !bagCount(k)),
     out = [];
   while (out.length < 4 && pool.length) {
     out.push(pool.splice(Math.floor(r() * pool.length), 1)[0]);
@@ -72,7 +72,7 @@ function dailySpin() {
   if (lot.ct) {
     const cts = tmKeys(),
       k = cts[Math.floor(seededRng('daily-spin-tm' + st.spin)() * cts.length)];
-    PROFILE.bag[k] = Math.min(99, bagN(k) + 1);
+    PROFILE.bag[k] = Math.min(99, bagCount(k) + 1);
     t = SHOP[k].n;
   } else {
     applyReward(lot.o);
@@ -81,7 +81,7 @@ function dailySpin() {
   st.last = t;
   writeLS('res-craft-bench', st);
   sfx('win');
-  vibe(25);
+  vibrate(25);
   toast('Tirage : ' + t);
   savePurse();
 }
@@ -99,7 +99,7 @@ export function tmShowcase() {
   const cts = tmKeys(),
     cs = Object.keys(SHOP).filter(k => SHOP[k].cs);
   [...cts, ...cs].forEach(k => {
-    if (bagN(k) > 0 || learned.includes(SHOP[k].mv)) {
+    if (bagCount(k) > 0 || learned.includes(SHOP[k].mv)) {
       seen[k] = 1;
     }
   });
@@ -160,14 +160,14 @@ export const ingredientsText = o =>
 
 export const addItems = (o, direction) => {
   for (const k in o) {
-    PROFILE.bag[k] = Math.max(0, Math.min(99, bagN(k) + direction * o[k]));
+    PROFILE.bag[k] = Math.max(0, Math.min(99, bagCount(k) + direction * o[k]));
     if (!PROFILE.bag[k]) {
       delete PROFILE.bag[k];
     }
   }
 };
 
-export const hasIngredients = o => Object.keys(o).every(k => bagN(k) >= o[k]);
+export const hasIngredients = o => Object.keys(o).every(k => bagCount(k) >= o[k]);
 
 /* ---------- recipe book ---------- */
 const RECIPES = [
@@ -226,7 +226,7 @@ function onWorkshopClick(e) {
     toast('Préparé : ' + ingredientsText(r.out));
   } else if (a === 'fus') {
     const d = fusionDonors(k);
-    if (!tmKeys().includes(k) || bagN(k) || !d || PROFILE.money < 1000) {
+    if (!tmKeys().includes(k) || bagCount(k) || !d || PROFILE.money < 1000) {
       return;
     }
     d.forEach(x => addItems({ [x]: 1 }, -1));
@@ -252,7 +252,7 @@ function onWorkshopClick(e) {
     return;
   }
   sfx('ui');
-  vibe(15);
+  vibrate(15);
   savePurse();
   renderBag();
 }
@@ -276,14 +276,14 @@ export function init() {
     if (R.ct) {
       const cts = tmKeys(),
         k = cts[Math.floor(seededRng('daily-gift-tm')() * cts.length)];
-      PROFILE.bag[k] = Math.min(99, bagN(k) + 1);
+      PROFILE.bag[k] = Math.min(99, bagCount(k) + 1);
       extra = ' + ' + SHOP[k].n;
     }
     s.n++;
     s.last = today();
     writeLS('res-dailygift', s);
     sfx('win');
-    vibe(25);
+    vibrate(25);
     toast('Cadeau du jour : ' + rewardText(R) + extra);
     savePurse();
     refreshHome(); // #dailygift button

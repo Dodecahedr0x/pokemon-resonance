@@ -1,4 +1,4 @@
-import { affected, hdist, mvType, teff, unitAt } from './engine.js';
+import { affected, hdist, mvType, typeEffectiveness, unitAt } from './engine.js';
 import { notesOf } from './resonance.js';
 
 /* Expert difficulty: opponents coordinate, finish off the most damaged, chain effective types, protect their leader
@@ -13,7 +13,7 @@ export function expertCoordination(S, e, m, k, pos, sim) {
       continue;
     }
     b += (1 - v.hp / v.mhp) * 20; // finish off the most damaged one
-    if (teff(typ, v.t) > 1) {
+    if (typeEffectiveness(typ, v.t) > 1) {
       b += 10;
     } // chain effective types
     if (notesOf(S, v) > 0) {

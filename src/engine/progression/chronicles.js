@@ -1,7 +1,7 @@
 /* Chronicles (story in chapters) and offline mode (added in v4.62). */
 
 import { $, writeLS, readLS, toast } from '../core/utils.js';
-import { PREF, savePref } from '../ui/preferences.js';
+import { PREFERENCES, savePref } from '../ui/preferences.js';
 import { savePurse } from '../state/economy.js';
 import { renderParams } from '../ui/settings.js';
 import { SCENES, __set_SCN, renderStoryScene } from './story-dialogues.js';
@@ -106,7 +106,7 @@ async function offlineDownload() {
   }
   await offlineLoad();
   OFFLINE_STATE.status = ok ? 'prêt' : 'erreur';
-  PREF.offlinePack = ok ? 1 : 0;
+  PREFERENCES.offlinePack = ok ? 1 : 0;
   savePref();
   toast(
     ok
@@ -136,7 +136,7 @@ async function offlineClear() {
   OFFLINE_STATE.urls = {};
   OFFLINE_STATE.n = 0;
   OFFLINE_STATE.status = '';
-  PREF.offlinePack = 0;
+  PREFERENCES.offlinePack = 0;
   savePref();
   toast('Musique hors ligne supprimée.');
   try {

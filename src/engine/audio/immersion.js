@@ -2,13 +2,13 @@
 
 import { clearOverlay, paintOverlay } from '../../screens/overlays/dialogsStore.js';
 import { bdClass, getHost, hostSet } from '../../screens/combat/board/boardStore.js';
-import { POKEMON, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCENARIOS } from '../pokemon/pokemon.js';
 import { $, reducedMotion, after2images, writeLS, svgElement, typeColor } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { byUid } from '../combat/engine.js';
 import { B, cellCenter, L } from '../combat/ui.js';
-import { PREF, savePref } from '../ui/preferences.js';
-import { SOUND_EFFECTS, noise, tone, vibe } from './sound-effects.js';
+import { PREFERENCES, savePref } from '../ui/preferences.js';
+import { SOUND_EFFECTS, noise, playTone, vibrate } from './sound-effects.js';
 import { AUTO } from '../progression/prestige.js';
 import { SCREEN_STATE } from '../ui/screen-state.js';
 import { ownedFam } from '../progression/trainer-stats.js';
@@ -19,11 +19,11 @@ let tipIndex, lastTiltAt;
 
 /** Immersion on and animations not reduced (same test as IMMERSION_ON() && !RM, hoisted for 082 and 083). */
 export function effectsEnabled() {
-  return PREF.immersionOn !== 0 && !reducedMotion;
+  return PREFERENCES.immersionOn !== 0 && !reducedMotion;
 }
 
 function playTypeSfx(ty) {
-  if (!PREF.sound || reducedMotion || !IMMERSION_ON()) {
+  if (!PREFERENCES.sound || reducedMotion || !IMMERSION_ON()) {
     return;
   }
   try {
@@ -34,11 +34,11 @@ function playTypeSfx(ty) {
 }
 
 function playStep() {
-  if (!PREF.sound || reducedMotion || !IMMERSION_ON()) {
+  if (!PREFERENCES.sound || reducedMotion || !IMMERSION_ON()) {
     return;
   }
   try {
-    tone(210 + Math.random() * 70, 0, 0.045, 'triangle', 0.03, 150);
+    playTone(210 + Math.random() * 70, 0, 0.045, 'triangle', 0.03, 150);
   } catch {
     /* Best effort: failure here is non-fatal. */
   }
@@ -46,7 +46,7 @@ function playStep() {
 
 /** Synthesized cry: the pitch depends on the national number, so each species has its own. */
 function playCry(u, ko) {
-  if (!PREF.sound || reducedMotion || !IMMERSION_ON() || !u) {
+  if (!PREFERENCES.sound || reducedMotion || !IMMERSION_ON() || !u) {
     return;
   }
   try {
@@ -54,11 +54,11 @@ function playCry(u, ko) {
       f = 300 + ((no * 53) % 380),
       big = (u.mhp || 20) > 30 ? 0.75 : 1;
     if (ko) {
-      tone(f * 0.9 * big, 0, 0.3, 'sawtooth', 0.04, f * 0.35 * big);
-      tone(f * 0.45 * big, 0.2, 0.3, 'square', 0.025, f * 0.2 * big);
+      playTone(f * 0.9 * big, 0, 0.3, 'sawtooth', 0.04, f * 0.35 * big);
+      playTone(f * 0.45 * big, 0.2, 0.3, 'square', 0.025, f * 0.2 * big);
     } else {
-      tone(f * big, 0, 0.12, 'sawtooth', 0.035, f * 1.35 * big);
-      tone(f * 1.35 * big, 0.1, 0.2, 'square', 0.025, f * 0.85 * big);
+      playTone(f * big, 0, 0.12, 'sawtooth', 0.035, f * 1.35 * big);
+      playTone(f * 1.35 * big, 0.1, 0.2, 'square', 0.025, f * 0.85 * big);
     }
   } catch {
     /* Best effort: failure here is non-fatal. */
@@ -66,11 +66,11 @@ function playCry(u, ko) {
 }
 
 function lowHpAlarm() {
-  if (!PREF.sound || reducedMotion || !IMMERSION_ON()) {
+  if (!PREFERENCES.sound || reducedMotion || !IMMERSION_ON()) {
     return;
   }
   try {
-    [0, 0.16, 0.32].forEach(t => tone(1568, t, 0.07, 'square', 0.035));
+    [0, 0.16, 0.32].forEach(t => playTone(1568, t, 0.07, 'square', 0.035));
   } catch {
     /* Best effort: failure here is non-fatal. */
   }
@@ -150,12 +150,12 @@ function showTransition() {
   // #battleTransition: rendered by React (src/screens/overlays/Effects.jsx) for the duration of the transition
   paintOverlay('battle-transition', {});
   try {
-    [330, 440, 554, 740].forEach((f, i) => tone(f, i * 0.07, 0.16, 'square', 0.03, f * 1.3));
+    [330, 440, 554, 740].forEach((f, i) => playTone(f, i * 0.07, 0.16, 'square', 0.03, f * 1.3));
     noise(0.3, 0.45, 0.07, 2200);
   } catch {
     /* Best effort: failure here is non-fatal. */
   }
-  vibe([40, 40, 60]);
+  vibrate([40, 40, 60]);
   clearTimeout(showTransition.t);
   showTransition.t = setTimeout(() => clearOverlay('battle-transition'), 1250);
   const fo = B.units.find(u => u.side === 'e');
@@ -236,7 +236,7 @@ export function scanPokedex() {
         card.classList.add('dex-new');
         setTimeout(() => card.classList.remove('dex-new'), 1800);
         try {
-          [784, 988, 1318].forEach((f, i) => tone(f, i * 0.09, 0.22, 'triangle', 0.045));
+          [784, 988, 1318].forEach((f, i) => playTone(f, i * 0.09, 0.22, 'triangle', 0.045));
         } catch {
           /* Best effort: failure here is non-fatal. */
         }
@@ -247,7 +247,7 @@ export function scanPokedex() {
   }
 }
 
-export const IMMERSION_ON = () => PREF.immersionOn !== 0;
+export const IMMERSION_ON = () => PREFERENCES.immersionOn !== 0;
 
 /* ---------- 5. battle entrance: flash, iris, cry, tip ---------- */
 const IMMERSION_TIPS = [
@@ -269,61 +269,61 @@ const IMMERSION_TIPS = [
 const TYPE_SOUNDS = {
   Normal: () => {
     noise(0, 0.1, 0.12, 1400);
-    tone(190, 0, 0.1, 'sine', 0.07, 90);
+    playTone(190, 0, 0.1, 'sine', 0.07, 90);
   },
   Feu: () => {
     noise(0, 0.4, 0.13, 2600);
-    tone(320, 0, 0.35, 'sawtooth', 0.04, 110);
+    playTone(320, 0, 0.35, 'sawtooth', 0.04, 110);
   },
-  Eau: () => [520, 700, 900].forEach((f, i) => tone(f, i * 0.07, 0.14, 'sine', 0.05, f * 1.5)),
+  Eau: () => [520, 700, 900].forEach((f, i) => playTone(f, i * 0.07, 0.14, 'sine', 0.05, f * 1.5)),
   Plante: () => {
-    tone(392, 0, 0.16, 'triangle', 0.05, 523);
-    tone(523, 0.12, 0.2, 'triangle', 0.04, 659);
+    playTone(392, 0, 0.16, 'triangle', 0.05, 523);
+    playTone(523, 0.12, 0.2, 'triangle', 0.04, 659);
     noise(0, 0.18, 0.05, 3200);
   },
-  Électrik: () => [1200, 520, 1500, 480, 1300].forEach((f, i) => tone(f, i * 0.04, 0.05, 'square', 0.035)),
-  Glace: () => [2093, 2637, 3136].forEach((f, i) => tone(f, i * 0.06, 0.22, 'triangle', 0.035)),
+  Électrik: () => [1200, 520, 1500, 480, 1300].forEach((f, i) => playTone(f, i * 0.04, 0.05, 'square', 0.035)),
+  Glace: () => [2093, 2637, 3136].forEach((f, i) => playTone(f, i * 0.06, 0.22, 'triangle', 0.035)),
   Combat: () => {
     noise(0, 0.08, 0.16, 900);
-    tone(110, 0, 0.14, 'sine', 0.1, 50);
-    tone(90, 0.1, 0.14, 'sine', 0.08, 45);
+    playTone(110, 0, 0.14, 'sine', 0.1, 50);
+    playTone(90, 0.1, 0.14, 'sine', 0.08, 45);
   },
   Poison: () => {
-    tone(200, 0, 0.3, 'sawtooth', 0.035, 330);
+    playTone(200, 0, 0.3, 'sawtooth', 0.035, 330);
     noise(0.05, 0.25, 0.06, 1800);
   },
   Sol: () => {
     noise(0, 0.35, 0.16, 320);
-    tone(62, 0, 0.35, 'sine', 0.1, 40);
+    playTone(62, 0, 0.35, 'sine', 0.1, 40);
   },
   Vol: () => noise(0, 0.32, 0.1, 4200),
   Psy: () => {
-    tone(600, 0, 0.35, 'sine', 0.05, 920);
-    tone(920, 0.3, 0.3, 'sine', 0.04, 560);
+    playTone(600, 0, 0.35, 'sine', 0.05, 920);
+    playTone(920, 0.3, 0.3, 'sine', 0.04, 560);
   },
-  Insecte: () => [0, 0.05, 0.1, 0.15, 0.2].forEach(t => tone(760 + Math.random() * 120, t, 0.06, 'sawtooth', 0.03)),
+  Insecte: () => [0, 0.05, 0.1, 0.15, 0.2].forEach(t => playTone(760 + Math.random() * 120, t, 0.06, 'sawtooth', 0.03)),
   Roche: () => {
     noise(0, 0.2, 0.15, 520);
-    tone(95, 0, 0.18, 'sine', 0.09, 60);
+    playTone(95, 0, 0.18, 'sine', 0.09, 60);
   },
   Spectre: () => {
-    tone(320, 0, 0.5, 'sine', 0.05, 140);
-    tone(326, 0, 0.5, 'sine', 0.04, 146);
+    playTone(320, 0, 0.5, 'sine', 0.05, 140);
+    playTone(326, 0, 0.5, 'sine', 0.04, 146);
   },
   Dragon: () => {
-    tone(120, 0, 0.45, 'sawtooth', 0.05, 66);
+    playTone(120, 0, 0.45, 'sawtooth', 0.05, 66);
     noise(0, 0.4, 0.08, 1500);
   },
   Ténèbres: () => {
-    tone(160, 0, 0.38, 'triangle', 0.07, 76);
+    playTone(160, 0, 0.38, 'triangle', 0.07, 76);
     noise(0.05, 0.25, 0.06, 600);
   },
   Acier: () => {
-    tone(1760, 0, 0.12, 'square', 0.03);
-    tone(2349, 0.02, 0.22, 'triangle', 0.04);
+    playTone(1760, 0, 0.12, 'square', 0.03);
+    playTone(2349, 0.02, 0.22, 'triangle', 0.04);
     noise(0, 0.06, 0.1, 5000);
   },
-  Fée: () => [1318, 1760, 2093, 2637].forEach((f, i) => tone(f, i * 0.07, 0.24, 'sine', 0.04)),
+  Fée: () => [1318, 1760, 2093, 2637].forEach((f, i) => playTone(f, i * 0.07, 0.24, 'sine', 0.04)),
 };
 
 function onJournal(ev) {
@@ -356,11 +356,11 @@ function onJournal(ev) {
       boom = true;
     } else if (e.e === 'msg' && /super efficace/.test(e.s || '')) {
       boom = true;
-      vibe([18, 30, 40]);
+      vibrate([18, 30, 40]);
     } else if (e.e === 'catch') {
-      vibe([30, 40, 30, 40, 90]);
+      vibrate([30, 40, 30, 40, 90]);
     } else if (e.e === 'rx' || e.e === 'reso') {
-      vibe(22);
+      vibrate(22);
     }
   });
   if (boom) {
@@ -368,7 +368,7 @@ function onJournal(ev) {
   }
   if (low) {
     setTimeout(lowHpAlarm, 380);
-    vibe([30, 60, 30]);
+    vibrate([30, 60, 30]);
   }
   adaptMusicTempo();
 }
@@ -445,17 +445,17 @@ export function init() {
       return;
     }
     B._resultFxDone = 1;
-    vibe([60, 40, 60, 40, 140]);
+    vibrate([60, 40, 60, 40, 140]);
     try {
       if (c.querySelector('.result-badge')) {
-        [659, 784, 1046, 1318, 1568].forEach((f, j) => tone(f, j * 0.1, 0.3, 'triangle', 0.05));
+        [659, 784, 1046, 1318, 1568].forEach((f, j) => playTone(f, j * 0.1, 0.3, 'triangle', 0.05));
       }
     } catch {
       /* Best effort: failure here is non-fatal. */
     }
   }).observe($('#cbResult'), { childList: true, attributes: true, attributeFilter: ['hidden'] });
   HOOKS.battleEnd.push(() => {
-    if (B && B.over && !B._journalDone && !(SCEN[B.sc] || {}).noProgress) {
+    if (B && B.over && !B._journalDone && !(SCENARIOS[B.sc] || {}).noProgress) {
       B._journalDone = 1;
       const j = readJournal(),
         win = B.over === 'win';
@@ -478,7 +478,7 @@ export function init() {
       return;
     }
     if (b.dataset.immersionAction === 'im') {
-      PREF.immersionOn = IMMERSION_ON() ? 0 : 1;
+      PREFERENCES.immersionOn = IMMERSION_ON() ? 0 : 1;
       savePref();
       boardWeather();
       adaptMusicTempo();
