@@ -125,6 +125,7 @@
 @import '../screens/combat/board/cell-marks.css' layer(screens);
 @import '../screens/combat/board/cell-highlight.css' layer(screens);
 @import '../screens/combat/board/board-decor.css' layer(screens);
+@import '../screens/combat/board/terrain-field.css' layer(screens);
 @import '../screens/combat/board/board-decor-painted.css' layer(screens);
 @import '../screens/combat/board/evolution-scene.css' layer(screens);
 @import '../screens/combat/board/evolution-scene-keyframes.css' layer(screens);

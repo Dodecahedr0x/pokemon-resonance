@@ -45,12 +45,12 @@ export function fieldSvg() {
   const z1 = hexCenter(1, 0, S, BOARD_GEOMETRY.OX, BOARD_GEOMETRY.OY)[0] + w * 0.75,
     z2 = hexCenter(BOARD_COLS - 2, 0, S, BOARD_GEOMETRY.OX, BOARD_GEOMETRY.OY)[0] - w * 0.25;
   const [cx, cy] = MPT(mx, my);
-  return `<polygon class="fd-out" points="${rect(x0, y0, x1, y1)}"/><polygon class="fd-in" points="${rect(x0 + 5, y0 + 5, x1 - 5, y1 - 5)}"/>
-  <polygon class="fd-zone al" points="${rect(x0 + 5, y0 + 5, z1, y1 - 5)}"/><polygon class="fd-zone en" points="${rect(z2, y0 + 5, x1 - 5, y1 - 5)}"/>
-  <polyline class="fd-mid" points="${pl([
+  return `<polygon class="field-outline" points="${rect(x0, y0, x1, y1)}"/><polygon class="field-inner-line" points="${rect(x0 + 5, y0 + 5, x1 - 5, y1 - 5)}"/>
+  <polygon class="field-half is-ally" points="${rect(x0 + 5, y0 + 5, z1, y1 - 5)}"/><polygon class="field-half is-foe" points="${rect(z2, y0 + 5, x1 - 5, y1 - 5)}"/>
+  <polyline class="field-midline" points="${pl([
     [mx, y0 + 5],
     [mx, y1 - 5],
-  ])}"/><circle class="fd-ring" cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="30"/><circle class="fd-ring2" cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="5"/>
+  ])}"/><circle class="field-circle" cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="30"/><circle class="field-center-spot" cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="5"/>
   ${[
     [x0 + 5, y0 + 5],
     [x1 - 5, y0 + 5],
@@ -59,7 +59,7 @@ export function fieldSvg() {
   ]
     .map(([a, b]) => {
       const [p, q] = MPT(a, b);
-      return `<circle class="fd-pyl" cx="${p.toFixed(1)}" cy="${q.toFixed(1)}" r="3.2"/>`;
+      return `<circle class="field-corner-post" cx="${p.toFixed(1)}" cy="${q.toFixed(1)}" r="3.2"/>`;
     })
     .join('')}`;
 }

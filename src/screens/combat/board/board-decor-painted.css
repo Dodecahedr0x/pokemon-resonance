@@ -103,10 +103,10 @@
 .board.painted-tilt image.paintedterrain {
   display: none;
 }
-/* the fog rings turn warm white over the painting */
-.board.paintedterrain .fd-out {
+/* the field markings turn warm white over the painting */
+.board.paintedterrain .field-outline {
   stroke: rgba(255, 246, 220, 0.55);
 }
-.board.paintedterrain :is(.fd-mid, .fd-ring) {
+.board.paintedterrain :is(.field-midline, .field-circle) {
   stroke: rgba(255, 246, 220, 0.42);
 }
