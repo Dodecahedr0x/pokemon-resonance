@@ -1,7 +1,7 @@
 import { GYMS } from '../../engine/data/game-data.js';
 import { SCEN } from '../../engine/pokemon/pokemon.js';
 import { ARENAS } from '../../engine/modes/gyms.js';
-import { tc } from '../../engine/core/utils.js';
+import { typeColor } from '../../engine/core/utils.js';
 import { badgeSvg } from '../../engine/modes/league.js';
 import { ELITE } from '../../engine/combat/items-bonds-ai.js';
 import { CHAMP_L, CHAP, ELITE_L, LEAD, UNIV } from '../../engine/progression/prestige.js';
@@ -54,7 +54,7 @@ export default function Universe() {
           <Master
             key={i}
             className="guide-master"
-            style={{ '--ac': tc(g.t) }}
+            style={{ '--ac': typeColor(g.t) }}
             mark={
               <span className="guide-master-badge">
                 <Html html={badgeSvg(i, g.t, 'uv' + i)} />
@@ -76,7 +76,7 @@ export default function Universe() {
           <Master
             key={i}
             className="guide-master is-elite"
-            style={{ '--ac': tc(SCEN[ELITE[i]].at || 'Normal') }}
+            style={{ '--ac': typeColor(SCEN[ELITE[i]].at || 'Normal') }}
             mark={<span className="guide-master-mark">{i + 1}</span>}
             kicker={SCEN[ELITE[i]].n}
             who={L}

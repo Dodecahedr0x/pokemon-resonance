@@ -1,7 +1,7 @@
 import { MV } from '../../engine/data/moves.js';
 import { BY } from '../../engine/pokemon/pokemon.js';
 import { ITEMS2, PROFILE, ownedItems } from '../../engine/state/game-state.js';
-import { tc } from '../../engine/core/utils.js';
+import { typeColor } from '../../engine/core/utils.js';
 import { HELD_IMG, SHOP, bagN, fmt } from '../../engine/state/economy.js';
 import { ITM } from '../../engine/assets/item-icons.js';
 import { V4 } from '../../engine/ui/screen-state.js';
@@ -11,7 +11,7 @@ import { HELD_SHOP } from '../../engine/combat/resonance.js';
 import Button from '../../components/Button.jsx';
 // TM / HM disc: initials on the color of the move's type.
 export const Disc = ({ it }) => (
-  <span className="item-row-icon item-row-disc" style={{ '--c': tc(MV[it.mv].t) }}>
+  <span className="item-row-icon item-row-disc" style={{ '--c': typeColor(MV[it.mv].t) }}>
     <b>{it.sn.slice(0, 2)}</b>
   </span>
 );

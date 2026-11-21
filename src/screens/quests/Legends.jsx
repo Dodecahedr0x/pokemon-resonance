@@ -1,6 +1,6 @@
 import { BY } from '../../engine/pokemon/pokemon.js';
 import { PROFILE } from '../../engine/state/game-state.js';
-import { tc } from '../../engine/core/utils.js';
+import { typeColor } from '../../engine/core/utils.js';
 import { ART } from '../../engine/assets/item-icons.js';
 import { LEGS } from '../../engine/modes/legendaries.js';
 import { hoennOpen } from '../../engine/world/hoenn.js';
@@ -15,7 +15,7 @@ function Legend({ L, et, isTaken: takenSet, fight, condition: cond }) {
   return (
     <article
       className={'legend-quest card' + (takenSet ? ' is-caught' : isReady ? ' is-ready' : '')}
-      style={{ '--type-color': tc(m.t[0]) }}
+      style={{ '--type-color': typeColor(m.t[0]) }}
     >
       <img src={ART(m.no)} alt="" loading="lazy" />
       <div className="legend-quest-text">

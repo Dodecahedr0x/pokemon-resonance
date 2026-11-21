@@ -1,6 +1,6 @@
 import { Fragment } from 'react';
 import { ITEMS2, PROFILE } from '../../engine/state/game-state.js';
-import { tc } from '../../engine/core/utils.js';
+import { typeColor } from '../../engine/core/utils.js';
 import { MV } from '../../engine/data/moves.js';
 import { SHOP, fmt, today } from '../../engine/state/economy.js';
 import { tLevel } from '../../engine/progression/trainer-stats.js';
@@ -214,7 +214,7 @@ function Showcase() {
             key={i}
             className={'workshop-showcase-tm' + (seen[k] ? ' is-on' : '')}
             title={SHOP[k].n + (seen[k] ? '' : ' (à trouver)')}
-            style={{ '--c': tc(MV[SHOP[k].mv].t) }}
+            style={{ '--c': typeColor(MV[SHOP[k].mv].t) }}
           >
             {SHOP[k].sn.replace(/^(CT|CS|DT)/, '')}
           </span>

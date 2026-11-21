@@ -1,7 +1,7 @@
 import { Html } from '../../lib/html.jsx';
 import { BY, SCEN } from '../../engine/pokemon/pokemon.js';
 import { PROFILE } from '../../engine/state/game-state.js';
-import { medal, tc } from '../../engine/core/utils.js';
+import { medal, typeColor } from '../../engine/core/utils.js';
 import { ELITE, scenLock } from '../../engine/combat/items-bonds-ai.js';
 import { CHAMP_L, ELITE_L } from '../../engine/progression/prestige.js';
 import { wonOf } from '../../engine/world/home-journey.js';
@@ -32,7 +32,7 @@ function Card({ k, L }) {
   return (
     <article
       className={`league-elite-card${won ? ' is-won' : ''}${lk ? ' is-locked' : ''}`}
-      style={{ '--type-color': s.at ? tc(s.at) : 'var(--color-accent)' }}
+      style={{ '--type-color': s.at ? typeColor(s.at) : 'var(--color-accent)' }}
     >
       <span className="league-elite-number">{k === 'champ' ? '★' : s.elite}</span>
       <b>

@@ -10,7 +10,7 @@ import { BY, NOTES, familyOf } from '../../engine/pokemon/pokemon.js';
 import { ARR } from '../../engine/pokemon/evolution.js';
 import { ITEMS2, LINK_N, LINK_T, PROFILE, inBox, isCamp, lvlOfPts, ownedItems } from '../../engine/state/game-state.js';
 import { RC, ROLEFX, rIco } from '../../engine/pokemon/roles-synergies.js';
-import { markOf, medal, typeBadge, tc } from '../../engine/core/utils.js';
+import { markOf, medal, typeBadge, typeColor } from '../../engine/core/utils.js';
 import { BRANCHES, mhpOf } from '../../engine/combat/engine.js';
 import { STLN, branchNote, crestSmall, evoDiff, monEls, monMarks, nextOf, squad } from '../../engine/team/team.js';
 import { HELD_IMG } from '../../engine/state/economy.js';
@@ -38,7 +38,7 @@ export default function Sheet() {
         role="dialog"
         aria-modal="true"
         aria-labelledby="shName"
-        style={ready && id ? { '--c': tc(BY[id].t[0]) } : undefined}
+        style={ready && id ? { '--c': typeColor(BY[id].t[0]) } : undefined}
       >
         {content}
       </div>

@@ -3,7 +3,7 @@ import { MV } from '../data/moves.js';
 import { BY, SCEN, WXN } from '../pokemon/pokemon.js';
 import { ITEMS2, PROFILE, isCamp, ownedItems } from '../state/game-state.js';
 import { arenaSetup, arenaTick } from '../modes/gyms.js';
-import { $, RM, wait, el, gp, hc, hp, tc, toast, zig } from '../core/utils.js';
+import { $, RM, wait, el, typeGlyphPath, hc, hp, typeColor, toast, zig } from '../core/utils.js';
 import { HOOKS, hook } from '../core/hooks.js';
 import { go } from '../core/navigation.js';
 import { renderLeague } from '../modes/league.js';
@@ -364,7 +364,7 @@ export function buildBoard() {
   // container classes: reset here, then toggled by later versions
   // (#bBoard is rendered by React: classes and variables live in the « host » state of boardStore.js)
   bdReset(['board', 'biome-' + bio, ...(VERT ? ['is-vertical'] : [])]);
-  hostSet({ ac: D.at ? tc(D.at) : '' });
+  hostSet({ ac: D.at ? typeColor(D.at) : '' });
   L.t = {};
   L.tx = {};
   L.u = {};
@@ -430,10 +430,10 @@ function updTokCore(u) {
   }
   const [x, y] = HC(uk(u));
   T.tr = `translate(${x}px,${y}px)`;
-  const c = tc(u.t[0]);
+  const c = typeColor(u.t[0]);
   T.rs = c;
   T.rf = `color-mix(in srgb,${c} 26%,#0F131A)`;
-  T.gd = gp(u.t[0]);
+  T.gd = typeGlyphPath(u.t[0]);
   T.gf = c;
   const C = 2 * Math.PI * 16,
     r = u.hp / u.mhp;
@@ -663,7 +663,7 @@ function beam(a, b, typ) {
     C = HC(b);
   const l = el(
     'polyline',
-    { class: 'attack-beam', points: zig(A[0], A[1], C[0], C[1], 5, 2.5), style: `stroke:${tc(typ)}` },
+    { class: 'attack-beam', points: zig(A[0], A[1], C[0], C[1], 5, 2.5), style: `stroke:${typeColor(typ)}` },
     L.fx
   );
   setTimeout(() => l.remove(), 700);
@@ -685,7 +685,7 @@ function arrFx(uid) {
     return;
   }
   const [x, y] = HC(uk(u)),
-    g = el('g', { class: 'arrival-effect', style: `--c:${tc(u.t[0])}` }, L.fx);
+    g = el('g', { class: 'arrival-effect', style: `--c:${typeColor(u.t[0])}` }, L.fx);
   [0, 1].forEach(i =>
     el(
       'polygon',

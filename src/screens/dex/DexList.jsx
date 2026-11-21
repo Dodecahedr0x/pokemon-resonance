@@ -1,6 +1,6 @@
 import { Html } from '../../lib/html.jsx';
 import { PROFILE } from '../../engine/state/game-state.js';
-import { tc } from '../../engine/core/utils.js';
+import { typeColor } from '../../engine/core/utils.js';
 import { PIX } from '../../engine/assets/item-icons.js';
 import { V4 } from '../../engine/ui/screen-state.js';
 import { ownedFam } from '../../engine/progression/trainer-stats.js';
@@ -50,7 +50,7 @@ export function DexList() {
           const own = ownedFam(m.id),
             sh = isShinyOwned(m.id),
             on = V4.dexSel === m.id;
-          const style = { '--c': tc(m.t[0]) };
+          const style = { '--c': typeColor(m.t[0]) };
           if (sh) {
             style['--sh'] = shinyHue(m.id) + 'deg';
           }

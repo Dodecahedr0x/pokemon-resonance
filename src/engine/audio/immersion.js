@@ -3,7 +3,7 @@
 import { clearOverlay, paintOverlay } from '../../screens/overlays/dialogsStore.js';
 import { bdClass, getHost, hostSet } from '../../screens/combat/board/boardStore.js';
 import { BY, SCEN } from '../pokemon/pokemon.js';
-import { $, RM, after2images, writeLS, el, tc } from '../core/utils.js';
+import { $, RM, after2images, writeLS, el, typeColor } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { byUid } from '../combat/engine.js';
 import { B, HC, L } from '../combat/ui.js';
@@ -100,7 +100,7 @@ function spawnParticles(k, ty) {
     return;
   }
   const [x, y] = HC(k),
-    c = tc(ty || 'Normal'),
+    c = typeColor(ty || 'Normal'),
     n = 9;
   for (let i = 0; i < n; i++) {
     const a = (i / n) * Math.PI * 2 + Math.random() * 0.5,

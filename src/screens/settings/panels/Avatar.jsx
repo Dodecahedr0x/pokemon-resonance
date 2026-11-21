@@ -1,5 +1,5 @@
 import { TYPES } from '../../../engine/data/game-data.js';
-import { gp, tc } from '../../../engine/core/utils.js';
+import { typeGlyphPath, typeColor } from '../../../engine/core/utils.js';
 import { TRAINER_AVATAR, RARE_ENABLED } from '../../../engine/world/rare-encounters.js';
 
 import Button from '../../../components/Button.jsx';
@@ -25,12 +25,12 @@ export default function Avatar() {
               className={`type-avatar-b${sel ? ' on' : ''}`}
               data-avatar-action="av"
               data-t={t}
-              style={{ '--c': tc(t) }}
+              style={{ '--c': typeColor(t) }}
               aria-label={t}
               aria-pressed={sel}
             >
               <svg viewBox="0 0 24 24" width="20" height="20">
-                <path d={gp(t)} fill="currentColor" fillRule="evenodd" />
+                <path d={typeGlyphPath(t)} fill="currentColor" fillRule="evenodd" />
               </svg>
             </button>
           );

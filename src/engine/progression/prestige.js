@@ -4,7 +4,7 @@ import { GYMS } from '../data/game-data.js';
 import { SCEN } from '../pokemon/pokemon.js';
 import { PROFILE } from '../state/game-state.js';
 import { ARENAS } from '../modes/gyms.js';
-import { $, RM, tc } from '../core/utils.js';
+import { $, RM, typeColor } from '../core/utils.js';
 import { hook } from '../core/hooks.js';
 import { cur } from '../core/navigation.js';
 import { byUid, uk } from '../combat/engine.js';
@@ -110,7 +110,7 @@ export function vsIntro() {
     av: versusAvatar(), // trainer emblem (v4.50)
     name1: B.duel433 ? B.duel433.names[0] : PROFILE.name || 'Dresseur',
     em1: al.map(u => u.n).join(' · '),
-    ac: D.at ? tc(D.at) : 'var(--gold)',
+    ac: D.at ? typeColor(D.at) : 'var(--gold)',
     kick,
     badge: i >= 0 ? i : null,
     foes: fo.slice(0, 5).map(u => u.t),

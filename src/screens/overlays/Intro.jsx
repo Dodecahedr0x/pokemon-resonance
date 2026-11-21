@@ -3,7 +3,7 @@ import { Html } from '../../lib/html.jsx';
 import { useIntro } from './shellOverlays.js';
 import { BY } from '../../engine/pokemon/pokemon.js';
 import { DIFFS, STARTERS } from '../../engine/state/game-state.js';
-import { medal, tc } from '../../engine/core/utils.js';
+import { medal, typeColor } from '../../engine/core/utils.js';
 import { reportError } from '../../engine/core/errors.js';
 import { INTRO, PROF_AV } from '../../engine/world/home-journey.js';
 
@@ -116,7 +116,7 @@ function Body({ i }) {
                 type="button"
                 className={'intro-starter' + (INTRO.st === id ? ' is-selected' : '')}
                 data-in-st={id}
-                style={{ '--c': tc(m.t[0]) }}
+                style={{ '--c': typeColor(m.t[0]) }}
               >
                 <Html html={medal(m.t, 'is-large')} />
                 <b>{m.n}</b>

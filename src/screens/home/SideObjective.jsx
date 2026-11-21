@@ -1,7 +1,7 @@
 import { Html } from '../../lib/html.jsx';
 import { useEngineReady } from '../../engineReady.js';
 import { useHomeVersion } from './homeStore.js';
-import { tc } from '../../engine/core/utils.js';
+import { typeColor } from '../../engine/core/utils.js';
 import { squad } from '../../engine/team/team.js';
 import { S2n, emblem, goalInfo } from '../../engine/world/home-journey.js';
 
@@ -27,7 +27,7 @@ function Content() {
         className="sg-b"
         data-goal={squad.length ? g.k : undefined}
         data-go={squad.length ? undefined : 'pokedex'}
-        style={{ '--ac': g.type ? tc(g.type) : '#FFCB05' }}
+        style={{ '--ac': g.type ? typeColor(g.type) : '#FFCB05' }}
       >
         <Html html={emblem(g.k, 'is-tiny')} />
         <span>

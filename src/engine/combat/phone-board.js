@@ -1,7 +1,7 @@
 /* Large board on phone, attacks within thumb reach, bogus error messages filtered (added in v4.43). */
 
 import { MV } from '../data/moves.js';
-import { tc } from '../core/utils.js';
+import { typeColor } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { byUid, mvType } from './engine.js';
 import { B, ui } from './ui.js';
@@ -40,7 +40,7 @@ function thumbActionLabel(b, u) {
     const m = u && MV[u.mv[+d.mi]],
       ty = m ? mvType(B, u, m) : null,
       nb = b.querySelector('b');
-    return { t: m ? m.n : nb ? nb.firstChild && nb.firstChild.textContent : 'Capacité', col: ty ? tc(ty) : '' };
+    return { t: m ? m.n : nb ? nb.firstChild && nb.firstChild.textContent : 'Capacité', col: ty ? typeColor(ty) : '' };
   }
   if (d.evo) {
     return { t: 'Éveil', c: 'is-awaken' };

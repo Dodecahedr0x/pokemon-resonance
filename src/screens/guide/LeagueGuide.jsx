@@ -10,7 +10,7 @@ import {
   lvlOfPts,
   ownedItems,
 } from '../../engine/state/game-state.js';
-import { ico, medal, tc } from '../../engine/core/utils.js';
+import { ico, medal, typeColor } from '../../engine/core/utils.js';
 import { listDuos } from '../../engine/combat/duo-techniques.js';
 import { Html } from '../../lib/html.jsx';
 import { useGuide } from './guideStore.js';
@@ -61,7 +61,7 @@ export function Duos() {
       <article
         key={k}
         className={`guide-combo${l >= 3 ? ' is-unlocked' : ''}`}
-        style={{ '--a': tc(a.t[0]), '--b': tc(b.t[0]) }}
+        style={{ '--a': typeColor(a.t[0]), '--b': typeColor(b.t[0]) }}
       >
         <div className="guide-combo-header">
           <Html html={medal(a.t)} />

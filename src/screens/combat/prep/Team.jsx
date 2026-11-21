@@ -4,7 +4,7 @@ import { BY, SCEN } from '../../../engine/pokemon/pokemon.js';
 import { BUDGET } from '../../../engine/pokemon/evolution.js';
 import { DIFFS, PROFILE } from '../../../engine/state/game-state.js';
 import { RC, synOf } from '../../../engine/pokemon/roles-synergies.js';
-import { medal, tc } from '../../../engine/core/utils.js';
+import { medal, typeColor } from '../../../engine/core/utils.js';
 import { cost, squad, vBonus } from '../../../engine/team/team.js';
 import { startVoice } from '../../../engine/combat/engine.js';
 import { scenLock } from '../../../engine/combat/items-bonds-ai.js';
@@ -55,7 +55,7 @@ function Places() {
           {S.map((x, i) => (
             <span key={i} className="synergy-chip" title={x.d}>
               {x.t.map((t, j) => (
-                <i key={j} style={{ background: tc(t) }} />
+                <i key={j} style={{ background: typeColor(t) }} />
               ))}
               <Html html={x.n} />
             </span>

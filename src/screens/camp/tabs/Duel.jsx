@@ -1,7 +1,7 @@
 import { MV } from '../../../engine/data/moves.js';
 import { BY, familyOf } from '../../../engine/pokemon/pokemon.js';
 import { PROFILE } from '../../../engine/state/game-state.js';
-import { tc } from '../../../engine/core/utils.js';
+import { typeColor } from '../../../engine/core/utils.js';
 import { STLN } from '../../../engine/team/team.js';
 import { ART } from '../../../engine/assets/item-icons.js';
 import {
@@ -25,7 +25,7 @@ const Options = ({ L }) =>
 
 function Types({ T }) {
   return T.map((t, i) => (
-    <i key={i} className="camp-duel-type" style={{ '--type-color': tc(t) }}>
+    <i key={i} className="camp-duel-type" style={{ '--type-color': typeColor(t) }}>
       {t}
     </i>
   ));
@@ -174,7 +174,7 @@ function Detail({ C }) {
             const v = MV[k];
             return (
               <span key={i}>
-                <i style={{ background: tc(v.t) }} />
+                <i style={{ background: typeColor(v.t) }} />
                 <b>{v.n}</b>
                 <em>{`${v.p ? 'Puissance ' + v.p : 'Effet'}${v.r ? ' · portée ' + v.r : ''}`}</em>
               </span>

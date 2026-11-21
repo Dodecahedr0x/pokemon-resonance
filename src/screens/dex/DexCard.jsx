@@ -4,7 +4,7 @@ import { MV, SHAPE, TAL } from '../../engine/data/moves.js';
 import { REGION_NAMES } from '../../engine/data/hoenn.js';
 import { BY, NOTES, familyOf } from '../../engine/pokemon/pokemon.js';
 import { RC, ROLEFX } from '../../engine/pokemon/roles-synergies.js';
-import { typeBadge, tc } from '../../engine/core/utils.js';
+import { typeBadge, typeColor } from '../../engine/core/utils.js';
 import { STLN, squad } from '../../engine/team/team.js';
 import { ART, PIX } from '../../engine/assets/item-icons.js';
 import { V4 } from '../../engine/ui/screen-state.js';
@@ -37,7 +37,7 @@ export default function DexCard() {
     placeLabel = captureSite(m.id),
     fr = REGIONAL_FORM_LIST.find(x => x.id === m.id); // regional form (v4.70)
   const roles = [m.r, m.r2].filter((r, k, a) => r && a.indexOf(r) === k);
-  const style = { '--c': tc(m.t[0]), '--c2': tc(m.t[1] || m.t[0]) };
+  const style = { '--c': typeColor(m.t[0]), '--c2': typeColor(m.t[1] || m.t[0]) };
   if (sh) {
     style['--sh'] = shinyHue(m.id) + 'deg';
   }
@@ -182,7 +182,7 @@ export default function DexCard() {
               type="button"
               className={`dex-family-member${x.id === m.id ? ' is-current' : ''}`}
               data-dex={x.id}
-              style={{ '--c': tc(x.t[0]) }}
+              style={{ '--c': typeColor(x.t[0]) }}
               key={x.id}
             >
               <img src={PIX(x.no)} alt="" loading="lazy" width="56" height="56" />

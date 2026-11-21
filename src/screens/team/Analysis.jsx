@@ -3,7 +3,7 @@ import { ROLES, RX } from '../../engine/data/game-data.js';
 import { BY, PRESETS } from '../../engine/pokemon/pokemon.js';
 import { LINK_N, LINK_T, PROFILE, lvlOfPts, pairKey } from '../../engine/state/game-state.js';
 import { SYN, synOf } from '../../engine/pokemon/roles-synergies.js';
-import { medal, tc } from '../../engine/core/utils.js';
+import { medal, typeColor } from '../../engine/core/utils.js';
 import { squad } from '../../engine/team/team.js';
 import { startVoice } from '../../engine/combat/engine.js';
 import { RANKS, rankId, rankTag } from '../../engine/combat/resonance.js';
@@ -305,7 +305,7 @@ function Synergies() {
           <div key={s.k} className={`team-analysis-synergy${act.includes(s.k) ? ' is-active' : ''}`}>
             <span className="synergy-types">
               {s.t.map((t, i) => (
-                <i key={i} style={{ background: tc(t) }} />
+                <i key={i} style={{ background: typeColor(t) }} />
               ))}
             </span>
             <span>

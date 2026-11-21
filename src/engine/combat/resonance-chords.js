@@ -1,4 +1,4 @@
-import { tc } from '../core/utils.js';
+import { typeColor } from '../core/utils.js';
 import {
   damage,
   endStep,
@@ -164,7 +164,7 @@ export function chipChord(S) {
       best = a;
     }
   });
-  const dots = t.map(x => `<i style="background:${tc(x)}" title="${x}"></i>`).join('');
+  const dots = t.map(x => `<i style="background:${typeColor(x)}" title="${x}"></i>`).join('');
   const hint = best ? `${best.n} : il manque ${best.t.filter(x => !t.includes(x)).join(' et ')}` : 'enchaînez 3 types';
   return `<span class="chip chip-acc" title="${CHORDS.map(a => `${a.n} = ${a.t.join(' + ')}`).join(' · ')}">${dots}Accord · ${hint}</span>`;
 }

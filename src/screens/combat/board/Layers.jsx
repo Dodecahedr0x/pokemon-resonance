@@ -1,7 +1,7 @@
 import { MV } from '../../../engine/data/moves.js';
 import { MKT } from '../../../engine/pokemon/pokemon.js';
 import { arenaNext, veiled } from '../../../engine/modes/gyms.js';
-import { INK, gp, tc } from '../../../engine/core/utils.js';
+import { INK, typeGlyphPath, typeColor } from '../../../engine/core/utils.js';
 import { affected, byUid, nbrK, reach, targets, uAt, uk, threatZone } from '../../../engine/combat/engine.js';
 import { duoTargets } from '../../../engine/combat/items-bonds-ai.js';
 import { coverOf, ricoTgt } from '../../../engine/combat/synergies-obstacles.js';
@@ -44,7 +44,7 @@ export function Markers() {
         [x, y] = HC(k);
       if (t.mark) {
         const tt = MKT[t.mark.k],
-          col = tc(tt);
+          col = typeColor(tt);
         // tilted board (v4.77): the badge shrinks toward the back and stays within its tile, instead of biting into the tile behind
         const ms = TILT.on ? tiltS(x, y) : 0,
           mz = TILT.on ? 0.37 * ms : 0.46,
@@ -60,7 +60,7 @@ export function Markers() {
             transform={`translate(${mx.toFixed(1)},${my.toFixed(1)}) scale(${mz.toFixed(3)})`}
           >
             <circle cx="12" cy="12" r="12" fill={col} stroke="#0B0D12" strokeWidth="2" />
-            <path d={gp(tt)} fill={INK} fillRule="evenodd" transform="translate(4.8 4.8) scale(.6)" />
+            <path d={typeGlyphPath(tt)} fill={INK} fillRule="evenodd" transform="translate(4.8 4.8) scale(.6)" />
           </g>
         );
         if (t.mark.lv === 2) {

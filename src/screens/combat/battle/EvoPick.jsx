@@ -2,7 +2,7 @@ import { Html } from '../../../lib/html.jsx';
 import { MV, TAL } from '../../../engine/data/moves.js';
 import { BY } from '../../../engine/pokemon/pokemon.js';
 import { ARR } from '../../../engine/pokemon/evolution.js';
-import { medal, typeBadge, tc } from '../../../engine/core/utils.js';
+import { medal, typeBadge, typeColor } from '../../../engine/core/utils.js';
 import { BRANCHES, branchWhy, evoOpts, mhpOf } from '../../../engine/combat/engine.js';
 import { B } from '../../../engine/combat/ui.js';
 import { eeveeWhy } from '../../../engine/pokemon/eevee.js';
@@ -37,7 +37,12 @@ function Path({ u, A, id }) {
             : 'Combattant'
           : '';
   return (
-    <button type="button" className="evolution-option" data-pick={id} style={{ '--evolution-color': tc(E.t[0]) }}>
+    <button
+      type="button"
+      className="evolution-option"
+      data-pick={id}
+      style={{ '--evolution-color': typeColor(E.t[0]) }}
+    >
       <span className="evolution-option-art">
         <Html html={medal(E.t, 'is-huge')} />
       </span>

@@ -2,7 +2,7 @@ import { Html } from '../../lib/html.jsx';
 import { useOverlay } from './dialogsStore.js';
 import { Dialogue } from './Window.jsx';
 import { BY } from '../../engine/pokemon/pokemon.js';
-import { medal, tc } from '../../engine/core/utils.js';
+import { medal, typeColor } from '../../engine/core/utils.js';
 import { HELD_IMG } from '../../engine/state/economy.js';
 import { ITM } from '../../engine/assets/item-icons.js';
 
@@ -42,7 +42,7 @@ function Choice({ cands, pick }) {
               className={'starter-option tower-option' + (on ? ' is-selected' : '')}
               data-tdrp={id}
               aria-pressed={on}
-              style={{ '--c': tc(m.t[0]) }}
+              style={{ '--c': typeColor(m.t[0]) }}
             >
               <Html html={medal(m.t, 'is-large')} />
               <b>{m.n}</b>

@@ -5,7 +5,7 @@ import { MV } from '../../../engine/data/moves.js';
 import { SCEN, WXN, WXT } from '../../../engine/pokemon/pokemon.js';
 import { SYN } from '../../../engine/pokemon/roles-synergies.js';
 import { ARENAS, arenaNext } from '../../../engine/modes/gyms.js';
-import { medal, tc } from '../../../engine/core/utils.js';
+import { medal, typeColor } from '../../../engine/core/utils.js';
 import { badgeSvg } from '../../../engine/modes/league.js';
 import { byUid } from '../../../engine/combat/engine.js';
 import { B, ui } from '../../../engine/combat/ui.js';
@@ -122,7 +122,7 @@ function Chips() {
     <>
       {B.wx && (
         <span className="chip">
-          <i style={{ background: tc(WXT[B.wx.k]) }} />
+          <i style={{ background: typeColor(WXT[B.wx.k]) }} />
           {WXN[B.wx.k]} · {B.wx.n}
         </span>
       )}
@@ -160,7 +160,7 @@ export function Synergies() {
           {L2.map(x => (
             <span key={x.k} className="synergy-chip" title={x.d}>
               {x.t.map((t, i) => (
-                <i key={i} style={{ background: tc(t) }} />
+                <i key={i} style={{ background: typeColor(t) }} />
               ))}
               {x.n}
             </span>

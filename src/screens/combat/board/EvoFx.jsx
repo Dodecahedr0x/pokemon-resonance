@@ -1,4 +1,4 @@
-import { medal, tc } from '../../../engine/core/utils.js';
+import { medal, typeColor } from '../../../engine/core/utils.js';
 import { Html } from '../../../lib/html.jsx';
 import { useEvo } from './boardStore.js';
 
@@ -18,7 +18,7 @@ export default function EvoFx() {
       {f && (
         <div
           className={'evolution-scene-burst' + (f.side === 'e' ? ' is-foe' : '')}
-          style={{ '--c': tc(f.toT[0]), '--c0': tc(f.fromT[0]) }}
+          style={{ '--c': typeColor(f.toT[0]), '--c0': typeColor(f.fromT[0]) }}
         >
           <div className="evolution-scene-rays" />
           <div className="evolution-scene-ring" />

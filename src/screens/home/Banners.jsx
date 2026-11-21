@@ -1,5 +1,5 @@
 import { Html } from '../../lib/html.jsx';
-import { medal, tc } from '../../engine/core/utils.js';
+import { medal, typeColor } from '../../engine/core/utils.js';
 import { dailyGiftData } from '../../engine/items/workshop.js';
 import { seasonBannerData } from '../../engine/modes/seasonal-events.js';
 import { bossRushData } from '../../engine/modes/boss-rush.js';
@@ -17,7 +17,7 @@ export default function Banners() {
   return (
     <div className="activity-bar" role="group" aria-label="Activités">
       <button type="button" id="season-event" data-season-event="open" className="activity activity-season">
-        <span className="activity-medal" style={{ '--c': tc(sa.S0.t) }}>
+        <span className="activity-medal" style={{ '--c': typeColor(sa.S0.t) }}>
           <Html html={medal([sa.S0.t], 'is-small')} />
         </span>
         <span className="activity-text">

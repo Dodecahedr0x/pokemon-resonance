@@ -2,7 +2,7 @@ import { Html } from '../../lib/html.jsx';
 import { Box, Dialogue } from './Window.jsx';
 import { MV } from '../../engine/data/moves.js';
 import { BY } from '../../engine/pokemon/pokemon.js';
-import { medal, typeBadge, tc } from '../../engine/core/utils.js';
+import { medal, typeBadge, typeColor } from '../../engine/core/utils.js';
 
 // Learn a TM or HM (#ctBox, opened from the Bag). The engine (045) computes
 // the list of families and keeps the clicks (data-ct, data-ctf) and the hidden attribute.
@@ -36,7 +36,7 @@ function Card({ M, m, families: families }) {
                 className={'tm-option' + (ok ? '' : ' is-incompatible')}
                 data-ctf={b}
                 disabled={!(ok && already !== M.mv)}
-                style={{ '--c': tc(f.t[0]) }}
+                style={{ '--c': typeColor(f.t[0]) }}
               >
                 <Html html={medal(f.t, 'is-small')} />
                 <span>

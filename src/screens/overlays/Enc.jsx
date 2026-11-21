@@ -3,7 +3,7 @@ import { Html, parseStyle } from '../../lib/html.jsx';
 import { useEnc } from './shellOverlays.js';
 import { dexNo } from '../../engine/data/game-data.js';
 import { REGION_NAMES } from '../../engine/data/hoenn.js';
-import { typeBadge, tc } from '../../engine/core/utils.js';
+import { typeBadge, typeColor } from '../../engine/core/utils.js';
 import { crestSmall } from '../../engine/team/team.js';
 import { SPARK, shinyStyle } from '../../engine/pokemon/shiny.js';
 import { DOMINANT_CROWN_SVG } from '../../engine/world/dominant-pokemon.js';
@@ -24,7 +24,7 @@ export default function Enc() {
 
 // memo: closing does not redraw the sheet (crestSmall numbers its gradients on every call).
 const Card = memo(function Card({ pick, shiny, dom, route, tod, inBox, camp, path }) {
-  const style = { '--c': tc(pick.t[0]), ...(shiny ? parseStyle(shinyStyle(pick.id)) : {}) };
+  const style = { '--c': typeColor(pick.t[0]), ...(shiny ? parseStyle(shinyStyle(pick.id)) : {}) };
   const r = rareInfo(pick.id); // v4.50: rare appearance depending on time and weather
   return (
     <div

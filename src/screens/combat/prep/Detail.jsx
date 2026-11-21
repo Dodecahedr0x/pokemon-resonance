@@ -3,7 +3,7 @@ import { GYMS } from '../../../engine/data/game-data.js';
 import { BY, SCEN } from '../../../engine/pokemon/pokemon.js';
 import { PROFILE } from '../../../engine/state/game-state.js';
 import { ARENAS } from '../../../engine/modes/gyms.js';
-import { medal, tc } from '../../../engine/core/utils.js';
+import { medal, typeColor } from '../../../engine/core/utils.js';
 import { scenLock } from '../../../engine/combat/items-bonds-ai.js';
 import { CHAP, leaderOf } from '../../../engine/progression/prestige.js';
 import { emblem, goalChips, groupOf, wonOf } from '../../../engine/world/home-journey.js';
@@ -45,7 +45,7 @@ export default function Detail({ k }) {
     r = (PROFILE.ranks || {})[k],
     st = styleOf(k);
   const blocks = [
-    <div key="h" className="prep-card-head" style={{ '--ac': s.at ? tc(s.at) : '#E3350D' }}>
+    <div key="h" className="prep-card-head" style={{ '--ac': s.at ? typeColor(s.at) : '#E3350D' }}>
       <Html html={emblem(k, 'is-large')} />
       <div>
         <p className="kicker">

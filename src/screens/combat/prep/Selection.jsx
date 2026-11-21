@@ -2,7 +2,7 @@ import { Html } from '../../../lib/html.jsx';
 import { PROFILE } from '../../../engine/state/game-state.js';
 import { SCEN } from '../../../engine/pokemon/pokemon.js';
 import { ARENAS, BADGES } from '../../../engine/modes/gyms.js';
-import { tc } from '../../../engine/core/utils.js';
+import { typeColor } from '../../../engine/core/utils.js';
 import { scenLock } from '../../../engine/combat/items-bonds-ai.js';
 import { scSel } from '../../../engine/combat/ui.js';
 import { leaderOf } from '../../../engine/progression/prestige.js';
@@ -64,7 +64,7 @@ function Row({ k, gk }) {
       className={`prep-row${scSel === k ? ' is-selected' : ''}${lk ? ' is-locked' : ''}${won ? ' is-won' : ''}`}
       data-sc={k}
       aria-selected={scSel === k}
-      style={{ '--ac': s.at ? tc(s.at) : '#E3350D' }}
+      style={{ '--ac': s.at ? typeColor(s.at) : '#E3350D' }}
     >
       <Html html={emblem(k, 'is-small' + (gi >= 0 && !won ? ' is-dim' : ''))} />
       <span className="prep-row-text">

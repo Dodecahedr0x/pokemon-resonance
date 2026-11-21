@@ -4,7 +4,7 @@ import { useStarter } from './shellOverlays.js';
 import { Dialogue } from './Window.jsx';
 import { BY } from '../../engine/pokemon/pokemon.js';
 import { DIFFS, PROFILE, STARTERS } from '../../engine/state/game-state.js';
-import { medal, tc } from '../../engine/core/utils.js';
+import { medal, typeColor } from '../../engine/core/utils.js';
 import { evoPath } from '../../engine/world/home-route.js';
 
 import Button from '../../components/Button.jsx';
@@ -36,7 +36,7 @@ function Card() {
         {STARTERS.map(id => {
           const m = BY[id];
           return (
-            <button key={id} type="button" className="starter-option" data-st={id} style={{ '--c': tc(m.t[0]) }}>
+            <button key={id} type="button" className="starter-option" data-st={id} style={{ '--c': typeColor(m.t[0]) }}>
               <Html html={medal(m.t, 'is-large')} />
               <b>{m.n}</b>
               <em>

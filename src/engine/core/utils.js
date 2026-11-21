@@ -10,11 +10,11 @@ function lum(h) {
 }
 
 export function medal(types, cls = '') {
-  const a = tc(types[0]),
-    b = tc(types[1] || types[0]);
+  const a = typeColor(types[0]),
+    b = typeColor(types[1] || types[0]);
   const shine = 'radial-gradient(circle at 34% 26%,rgba(255,255,255,.42),rgba(255,255,255,0) 52%)';
   const bg = types[1] ? `${shine},conic-gradient(from 225deg,${a} 0 50%,${b} 50% 100%)` : `${shine},${a}`;
-  const h = `<span class="medal ${cls}" style="background:${bg};--glow:${a}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="${gp(types[0])}" fill="${INK}" fill-rule="evenodd"/></svg></span>`;
+  const h = `<span class="medal ${cls}" style="background:${bg};--glow:${a}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="${typeGlyphPath(types[0])}" fill="${INK}" fill-rule="evenodd"/></svg></span>`;
   // the Pokémon's artwork in its type medallion
   const id = PKT.get(types);
   if (!id || !BY[id]) {
@@ -29,13 +29,13 @@ export function medal(types, cls = '') {
 }
 
 export function typeIcon(t) {
-  return `<span class="type-icon" style="background:${tc(t)}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="${gp(t)}" fill="${INK}" fill-rule="evenodd"/></svg></span>`;
+  return `<span class="type-icon" style="background:${typeColor(t)}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="${typeGlyphPath(t)}" fill="${INK}" fill-rule="evenodd"/></svg></span>`;
 }
 
 export function typeBadge(t) {
-  const c = tc(t),
+  const c = typeColor(t),
     fg = lum(c) > 0.45 ? '#0C0E13' : '#FFFFFF';
-  return `<span class="type-badge" style="--c:${c};--fg:${fg}"><i class="type-badge-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="${gp(t)}" fill="${fg}" fill-rule="evenodd"/></svg></i>${t}</span>`;
+  return `<span class="type-badge" style="--c:${c};--fg:${fg}"><i class="type-badge-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="${typeGlyphPath(t)}" fill="${fg}" fill-rule="evenodd"/></svg></i>${t}</span>`;
 }
 
 export function ico(d) {
@@ -151,9 +151,9 @@ export const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 
 export const NS = 'http://www.w3.org/2000/svg';
 
-export const tc = t => (TYPES[t] || TYPES.Normal)[0];
+export const typeColor = t => (TYPES[t] || TYPES.Normal)[0];
 
-export const gp = t => (TYPES[t] || TYPES.Normal)[1];
+export const typeGlyphPath = t => (TYPES[t] || TYPES.Normal)[1];
 
 export const INK = 'rgba(8,10,14,.82)';
 

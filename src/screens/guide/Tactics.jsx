@@ -1,6 +1,6 @@
 import { ROLES } from '../../engine/data/game-data.js';
 import { ROLEFX, SYN, rIco, synOf } from '../../engine/pokemon/roles-synergies.js';
-import { tc } from '../../engine/core/utils.js';
+import { typeColor } from '../../engine/core/utils.js';
 import { squad } from '../../engine/team/team.js';
 import { CHORDS } from '../../engine/combat/resonance-chords.js';
 import { ECHOS, RANKS, stars } from '../../engine/combat/resonance.js';
@@ -55,7 +55,7 @@ export function Codex() {
           <div key={s.k} className={`guide-codex-row is-synergy${act.includes(s.k) ? ' is-active' : ''}`}>
             <span className="synergy-types">
               {s.t.map(t => (
-                <i key={t} style={{ background: tc(t) }} />
+                <i key={t} style={{ background: typeColor(t) }} />
               ))}
             </span>
             <span>
@@ -96,7 +96,7 @@ export function Chords() {
         <div key={a.n} className="guide-chord">
           <span className="guide-chord-tag">
             {a.t.map(t => (
-              <i key={t} style={{ background: tc(t) }} title={t} />
+              <i key={t} style={{ background: typeColor(t) }} title={t} />
             ))}
           </span>
           <span>
@@ -150,7 +150,7 @@ export function ResonanceInBattle() {
       {Object.entries(ECHOS).map(([t, d]) => (
         <div key={t} className="guide-chord">
           <span className="guide-chord-tag">
-            <i style={{ background: tc(t) }} title={t} />
+            <i style={{ background: typeColor(t) }} title={t} />
           </span>
           <span>
             <b>Écho {t}</b>

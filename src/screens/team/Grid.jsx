@@ -6,7 +6,7 @@ import { REGION_NAMES } from '../../engine/data/hoenn.js';
 import { BY, familyOf } from '../../engine/pokemon/pokemon.js';
 import { ITEMS2, PROFILE, inBox, isCamp, ownedItems } from '../../engine/state/game-state.js';
 import { RC, ROLEFX } from '../../engine/pokemon/roles-synergies.js';
-import { medal, typeBadge, tc } from '../../engine/core/utils.js';
+import { medal, typeBadge, typeColor } from '../../engine/core/utils.js';
 import { squad } from '../../engine/team/team.js';
 import { RANKS, stars, rankId } from '../../engine/combat/resonance.js';
 import { captureSite } from '../../engine/world/catch-anywhere.js';
@@ -55,7 +55,7 @@ function FamCard({ m }) {
     shiny = ((PROFILE && PROFILE.shiny) || []).includes(m.id);
   const cls = 'team-card' + (on ? ' is-in-team' : '') + (lock ? ' is-locked' : '') + (shiny ? ' is-shiny' : '');
   return (
-    <article className={cls} data-rank={rg} style={{ '--c': tc(m.t[0]), '--c2': tc(m.t[1] || m.t[0]) }}>
+    <article className={cls} data-rank={rg} style={{ '--c': typeColor(m.t[0]), '--c2': typeColor(m.t[1] || m.t[0]) }}>
       <div className="team-card-body">
         <div className="team-card-top">
           <span className="team-card-number">{dexNo(m.no)}</span>

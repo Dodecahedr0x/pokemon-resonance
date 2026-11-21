@@ -6,7 +6,7 @@ import { BY, SCEN } from '../../../engine/pokemon/pokemon.js';
 import { ARR } from '../../../engine/pokemon/evolution.js';
 import { ROLEFX, rIco } from '../../../engine/pokemon/roles-synergies.js';
 import { veiled } from '../../../engine/modes/gyms.js';
-import { markOf, medal, rxCat, typeBadge, tc } from '../../../engine/core/utils.js';
+import { markOf, medal, rxCat, typeBadge, typeColor } from '../../../engine/core/utils.js';
 import {
   EMAX,
   byUid,
@@ -326,7 +326,7 @@ function OpponentSheet({ e }) {
         {e.mv.map((id, i) => {
           const m = MV[id];
           return (
-            <div key={i} className="battle-move is-static" style={{ '--c': tc(m.t) }}>
+            <div key={i} className="battle-move is-static" style={{ '--c': typeColor(m.t) }}>
               <Html html={typeBadge(m.t)} />
               <b>
                 {m.n}
@@ -691,7 +691,7 @@ function AllySheet({ u }) {
               className={'battle-move' + (ui.mode === 'target' && ui.mi === i ? ' is-selected' : '')}
               data-mi={i}
               disabled={!!(u.acted || !n)}
-              style={{ '--c': tc(typ) }}
+              style={{ '--c': typeColor(typ) }}
             >
               <Html html={typeBadge(typ)} />
               <b>

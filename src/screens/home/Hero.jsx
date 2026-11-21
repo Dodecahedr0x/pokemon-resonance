@@ -1,5 +1,5 @@
 import { Html, parseStyle } from '../../lib/html.jsx';
-import { tc } from '../../engine/core/utils.js';
+import { typeColor } from '../../engine/core/utils.js';
 import { squad } from '../../engine/team/team.js';
 import { PROF_AV, emblem, goalChips, goalInfo, professorMsg } from '../../engine/world/home-journey.js';
 import { ART } from '../../engine/assets/item-icons.js';
@@ -37,7 +37,7 @@ export default function Hero({ on }) {
     <div
       className="home-hero has-backdrop"
       id="hmHero"
-      style={{ '--ac': g.type ? tc(g.type) : '#FFD45B' }}
+      style={{ '--ac': g.type ? typeColor(g.type) : '#FFD45B' }}
       data-reg={V.reg}
       data-tod={V.tod}
     >

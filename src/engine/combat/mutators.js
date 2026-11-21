@@ -1,7 +1,7 @@
 /* Battle mutators: a drawn rule changes the whole battle (Tower floors, optional in Training) (added in v4.9). */
 
 import { SCEN } from '../pokemon/pokemon.js';
-import { tc } from '../core/utils.js';
+import { typeColor } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { P, hasNx, uAt } from './engine.js';
 import { scSel } from './ui.js';
@@ -137,7 +137,7 @@ export function chipMut(S) {
     return '';
   }
   const I = mutInfo(S.mut);
-  return `<span class="chip chip-mut" title="${I[1]}"><i style="background:${tc(I[2])}"></i>${I[0]}</span>`;
+  return `<span class="chip chip-mut" title="${I[1]}"><i style="background:${typeColor(I[2])}"></i>${I[0]}</span>`;
 }
 
 const MUT_IDS = [

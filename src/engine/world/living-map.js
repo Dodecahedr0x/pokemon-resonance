@@ -3,7 +3,7 @@
 import { GYMS } from '../data/game-data.js';
 import { SCEN } from '../pokemon/pokemon.js';
 import { ARENAS } from '../modes/gyms.js';
-import { hash2, mulberry32, tc } from '../core/utils.js';
+import { hash2, mulberry32, typeColor } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { V4 } from '../ui/screen-state.js';
 import { CHAIN, MAP_SVG, curvePath, placeState } from './map.js';
@@ -383,7 +383,7 @@ const PROPS = {
 
 const typeCol = t => {
   try {
-    return t ? tc(t) : '#c94a3a';
+    return t ? typeColor(t) : '#c94a3a';
   } catch (e) {
     return '#c94a3a';
   }

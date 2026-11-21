@@ -1,5 +1,5 @@
 import { parseStyle } from '../../lib/html.jsx';
-import { tc } from '../../engine/core/utils.js';
+import { typeColor } from '../../engine/core/utils.js';
 import { ART } from '../../engine/assets/item-icons.js';
 import { shinyStyle } from '../../engine/pokemon/shiny.js';
 import { companionPanelData } from '../../engine/progression/companion-pokemon.js';
@@ -17,7 +17,7 @@ export default function Companion() {
       id="v4Comp"
       className="team-companion card"
       aria-label="Compagnon"
-      style={d ? { '--c': tc(d.m.t[0]) } : undefined}
+      style={d ? { '--c': typeColor(d.m.t[0]) } : undefined}
     >
       {d ? <Sheet d={d} /> : <Empty />}
     </section>

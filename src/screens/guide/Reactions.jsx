@@ -1,6 +1,6 @@
 import { CAT, EFF, EL, FAMS, MK, MX, POS, RX, WEATHER } from '../../engine/data/game-data.js';
 import { BY } from '../../engine/pokemon/pokemon.js';
-import { markOf, medal, typeIcon, typeBadge, tc } from '../../engine/core/utils.js';
+import { markOf, medal, typeIcon, typeBadge, typeColor } from '../../engine/core/utils.js';
 import { Html } from '../../lib/html.jsx';
 import { selectReaction, useGuide } from './guideStore.js';
 import { space } from '../../lib/theme.js';
@@ -167,7 +167,7 @@ export function Chain() {
 
 export function Weathers() {
   return WEATHER.map(w => (
-    <article key={w.n} className="guide-weather" style={{ '--c': tc(w.t) }}>
+    <article key={w.n} className="guide-weather" style={{ '--c': typeColor(w.t) }}>
       <Html html={medal([w.t])} />
       <span className="guide-weather-move">{w.mv}</span>
       <h3 className="card-title">{w.n}</h3>

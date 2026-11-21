@@ -1,6 +1,6 @@
 import { useShell } from './shellStore.js';
 import { PROFILE, isCamp } from '../engine/state/game-state.js';
-import { gp, tc } from '../engine/core/utils.js';
+import { typeGlyphPath, typeColor } from '../engine/core/utils.js';
 import { fmt } from '../engine/state/economy.js';
 import { tLevel } from '../engine/progression/trainer-stats.js';
 import { displayedTitle } from '../engine/progression/achievements.js';
@@ -45,7 +45,7 @@ function Avatar() {
       </span>
     );
   }
-  const c = tc(a.e);
+  const c = typeColor(a.e);
   const style = {
     background: `radial-gradient(circle at 35% 30%,color-mix(in srgb,${c} 55%,#fff),${c} 62%,color-mix(in srgb,${c} 45%,#000))`,
   };
@@ -62,7 +62,7 @@ function Avatar() {
         height={11}
         style={{ position: 'absolute', right: '-1px', bottom: '-1px', filter: 'drop-shadow(0 1px 2px #000)' }}
       >
-        <path d={gp(a.e)} fill="#fff" fillRule="evenodd" />
+        <path d={typeGlyphPath(a.e)} fill="#fff" fillRule="evenodd" />
       </svg>
     </span>
   );
