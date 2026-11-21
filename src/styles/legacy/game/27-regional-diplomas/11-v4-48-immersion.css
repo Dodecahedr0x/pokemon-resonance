@@ -7,6 +7,16 @@
   animation: burst-particle 0.75s cubic-bezier(0.15, 0.7, 0.3, 1) forwards;
   pointer-events: none;
 }
+.screen-shake {
+  animation: shake-short 0.34s linear;
+}
+.shake-big {
+  animation: shake-big-anim 0.5s linear;
+}
+/* weather */
+/* holographic cards */
+/* victory */
+
 @keyframes burst-particle {
   0% {
     opacity: 0.95;
@@ -17,30 +27,7 @@
     transform: translate(var(--dx), var(--dy)) scale(0.2);
   }
 }
-.screen-shake {
-  animation: shake-short 0.34s linear;
-}
-.shake-big {
-  animation: shake-big-anim 0.5s linear;
-}
-@keyframes shake-short {
-  0%,
-  100% {
-    transform: none;
-  }
-  20% {
-    transform: translate(-2px, 1px);
-  }
-  40% {
-    transform: translate(2px, -1px);
-  }
-  60% {
-    transform: translate(-1px, -1px);
-  }
-  80% {
-    transform: translate(1px, 1px);
-  }
-}
+
 @keyframes shake-big-anim {
   0%,
   100% {
@@ -65,84 +52,22 @@
     transform: translate(2px, -1px);
   }
 }
-@keyframes transition-flash {
-  0% {
-    opacity: 0.95;
-  }
-  25% {
-    opacity: 0;
-  }
-  50% {
-    opacity: 0.95;
-  }
-  75% {
-    opacity: 0;
-  }
+
+@keyframes shake-short {
+  0%,
   100% {
-    opacity: 0;
+    transform: none;
+  }
+  20% {
+    transform: translate(-2px, 1px);
+  }
+  40% {
+    transform: translate(2px, -1px);
+  }
+  60% {
+    transform: translate(-1px, -1px);
+  }
+  80% {
+    transform: translate(1px, 1px);
   }
 }
-@keyframes transition-iris {
-  0% {
-    transform: scale(0);
-  }
-  100% {
-    transform: scale(160);
-  }
-}
-@keyframes tip-fade {
-  from {
-    opacity: 0;
-    transform: translate(-50%, -8px);
-  }
-  to {
-    opacity: 1;
-    transform: translate(-50%, 0);
-  }
-}
-/* weather */
-@keyframes rain-fall {
-  to {
-    -webkit-mask-position: 0 38px;
-    mask-position: 0 38px;
-  }
-}
-@keyframes sun-drift {
-  from {
-    opacity: 0.7;
-  }
-  to {
-    opacity: 1;
-  }
-}
-@keyframes hail-fall {
-  to {
-    background-position: -14px 82px;
-  }
-}
-@keyframes sand-drift {
-  to {
-    -webkit-mask-position: -70px 0;
-    mask-position: -70px 0;
-  }
-}
-/* holographic cards */
-@keyframes scan-sweep-anim {
-  from {
-    transform: translateY(-100%);
-    opacity: 1;
-  }
-  to {
-    transform: translateY(520%);
-    opacity: 0;
-  }
-}
-@keyframes new-flash {
-  0% {
-    box-shadow: 0 0 0 0 rgba(255, 215, 94, 0.9);
-  }
-  100% {
-    box-shadow: 0 0 0 26px rgba(255, 215, 94, 0);
-  }
-}
-/* victory */

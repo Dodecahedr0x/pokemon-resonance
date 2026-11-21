@@ -266,3 +266,22 @@
     animation: none;
   }
 }
+
+@keyframes new-flash {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 215, 94, 0.9);
+  }
+  100% {
+    box-shadow: 0 0 0 26px rgba(255, 215, 94, 0);
+  }
+}
+@keyframes scan-sweep-anim {
+  from {
+    transform: translateY(-100%);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(520%);
+    opacity: 0;
+  }
+}

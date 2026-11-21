@@ -1,7 +1,1 @@
 /* ---------- shell: sidebar, top bar, bottom navigation ---------- */
-@keyframes v4Up {
-  from {
-    transform: translateY(30px);
-    opacity: 0;
-  }
-}

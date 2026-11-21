@@ -13,11 +13,6 @@
   transform-origin: 160px 160px;
 }
 
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
 .cr-cost {
   fill: none;
   stroke: var(--gold);

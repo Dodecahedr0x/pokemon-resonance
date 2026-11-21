@@ -354,3 +354,9 @@ html.pk-calme .team-card-foil {
     content: '';
   }
 }
+
+@keyframes pkHoloFoil {
+  to {
+    background-position: 250% 250%;
+  }
+}

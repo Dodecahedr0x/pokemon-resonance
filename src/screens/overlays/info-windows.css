@@ -89,3 +89,14 @@
 .keepsake-locked {
   opacity: 0.55;
 }
+
+@keyframes battle-help {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}

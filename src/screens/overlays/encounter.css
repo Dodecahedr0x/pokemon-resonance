@@ -242,3 +242,24 @@
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
+
+@keyframes fishing-safari-flotte {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(4px);
+  }
+}
+@keyframes fishing-safari-mord {
+  0% {
+    transform: translate(-3px, 6px);
+  }
+  50% {
+    transform: translate(3px, 12px);
+  }
+  100% {
+    transform: translate(-3px, 6px);
+  }
+}

@@ -150,3 +150,12 @@
   color: #e3c07a;
   text-decoration: none;
 }
+
+@keyframes forfeit-dialog-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

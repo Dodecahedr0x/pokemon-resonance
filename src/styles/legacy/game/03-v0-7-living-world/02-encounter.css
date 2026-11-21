@@ -1,17 +1,4 @@
 /* encounter */
-@keyframes encIn {
-  0% {
-    transform: scale(0.6);
-    opacity: 0;
-  }
-  60% {
-    transform: scale(1.04);
-  }
-  100% {
-    transform: none;
-    opacity: 1;
-  }
-}
 
 /* Pokédex */
 

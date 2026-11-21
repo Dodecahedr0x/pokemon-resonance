@@ -28,6 +28,7 @@
 @import './base/elements.css' layer(base);
 @import './base/document.css' layer(base);
 @import './base/forms.css' layer(base);
+@import './base/keyframes.css' layer(base);
 @import './components/button.css' layer(components);
 @import './components/page-header.css' layer(components);
 @import './components/card.css' layer(components);
@@ -75,6 +76,7 @@
 @import './shell/phone-menu.css' layer(screens);
 @import './shell/launch-screen.css' layer(screens);
 @import '../screens/overlays/effects.css' layer(screens);
+@import '../screens/overlays/effects-keyframes.css' layer(screens);
 @import '../screens/overlays/versus.css' layer(screens);
 @import '../screens/overlays/battle-transients.css' layer(screens);
 @import '../screens/overlays/modal.css' layer(screens);
@@ -131,6 +133,7 @@
 @import '../screens/combat/battle/tile-info.css' layer(screens);
 @import '../screens/combat/board/board-host.css' layer(screens);
 @import '../screens/combat/board/board-ambience.css' layer(screens);
+@import '../screens/combat/board/board-ambience-keyframes.css' layer(screens);
 @import '../screens/combat/board/board-banners.css' layer(screens);
 @import '../screens/combat/board/board-host-layout.css' layer(screens);
 @import '../screens/combat/board/cell.css' layer(screens);

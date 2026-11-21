@@ -37,11 +37,6 @@ html body .crest-pk .crest-a {
    ===================================================================== */
 
 /* --- shiny Pokémon: the tint (--sh) is specific to each species --- */
-@keyframes shnSpin {
-  to {
-    stroke-dashoffset: -70;
-  }
-}
 
 /* --- legendary boss: golden edging on its token --- */
 

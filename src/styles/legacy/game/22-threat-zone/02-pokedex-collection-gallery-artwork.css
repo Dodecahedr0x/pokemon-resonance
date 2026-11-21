@@ -3,13 +3,3 @@
 
 /* Shiny states: real shiny artworks, subtler aura */
 /* Navigation and small finishing touches */
-
-@keyframes prGlow {
-  0%,
-  100% {
-    opacity: 0.55;
-  }
-  50% {
-    opacity: 1;
-  }
-}

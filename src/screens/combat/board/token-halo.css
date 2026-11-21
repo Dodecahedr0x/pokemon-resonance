@@ -102,3 +102,18 @@
 .token.can-evolve .token-halo {
   animation: none;
 }
+
+@keyframes companion-garden-fres {
+  0%,
+  100% {
+    stroke-opacity: 1;
+  }
+  50% {
+    stroke-opacity: 0.45;
+  }
+}
+@keyframes shnSpin {
+  to {
+    stroke-dashoffset: -70;
+  }
+}

@@ -22,15 +22,6 @@ html body #bSvg .danger-zone .dg-x {
   stroke-width: 2.4;
   stroke-linecap: round;
 }
-@keyframes intensity-dg {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.45;
-  }
-}
 @media (prefers-reduced-motion: reduce) {
   html body #bSvg .danger-zone circle {
     animation: none;
@@ -40,24 +31,4 @@ html body #bSvg .danger-zone .dg-x {
 /* ==== v4.19: Hoenn ==== */
 /* ===== resonance-fishing-safari layer ===== */
 /* ==== v4.18: fishing, Safari Park, co-op ==== */
-@keyframes fishing-safari-flotte {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(4px);
-  }
-}
-@keyframes fishing-safari-mord {
-  0% {
-    transform: translate(-3px, 6px);
-  }
-  50% {
-    transform: translate(3px, 12px);
-  }
-  100% {
-    transform: translate(-3px, 6px);
-  }
-}
 /* co-op: the tokens of both players */

@@ -1,15 +1,6 @@
 /* ===== resonance-companion-garden layer ===== */
 /* ==== v4.17: companions and Resonance ==== */
 /* --- Resonant Form --- */
-@keyframes companion-garden-fres {
-  0%,
-  100% {
-    stroke-opacity: 1;
-  }
-  50% {
-    stroke-opacity: 0.45;
-  }
-}
 
 /* --- companion --- */
 html body b.cp-h {
@@ -19,9 +10,3 @@ html body b.cp-h {
 /* --- Pokégear --- */
 
 /* --- story scenes --- */
-@keyframes companion-garden-monte {
-  from {
-    transform: translateY(16px);
-    opacity: 0;
-  }
-}

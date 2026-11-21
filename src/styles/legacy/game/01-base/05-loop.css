@@ -2,12 +2,4 @@
 
 /* accordion rules */
 
-@keyframes flash {
-  30% {
-    box-shadow:
-      0 0 0 1px var(--gold),
-      0 0 0 6px var(--gold-s);
-  }
-}
-
 /* ---------- pokédex ---------- */

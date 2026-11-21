@@ -1,9 +1,2 @@
 /* ---------- BATTLE: preparation ---------- */
 /* ---------- BATTLE: arena ---------- */
-
-@keyframes rdy {
-  50% {
-    stroke-width: 2.8;
-    stroke: #fff3cf;
-  }
-}

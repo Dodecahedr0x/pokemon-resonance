@@ -1,24 +1,5 @@
 /* ---------- battle: arena / sanctuary ---------- */
-@keyframes shock {
-  20% {
-    transform: translateX(-3px);
-  }
-  40% {
-    transform: translateX(3px);
-  }
-  60% {
-    transform: translateX(-2px);
-  }
-  80% {
-    transform: translateX(1px);
-  }
-}
 /* slabs */
 /* range glows */
 
-@keyframes arn {
-  50% {
-    fill: rgba(240, 164, 58, 0.2);
-  }
-}
 /* tokens */

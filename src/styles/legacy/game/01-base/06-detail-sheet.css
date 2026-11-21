@@ -1,15 +1,4 @@
 /* shared by the overlay windows (close button, title, subtitle, type row) and move cards */
-@keyframes fade {
-  from {
-    opacity: 0;
-  }
-}
-@keyframes inU {
-  from {
-    transform: translateY(60px);
-    opacity: 0.2;
-  }
-}
 .sh-name {
   font-family: var(--f-d);
   font-stretch: 125%;

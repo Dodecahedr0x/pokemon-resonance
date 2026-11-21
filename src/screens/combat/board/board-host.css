@@ -134,3 +134,51 @@
   will-change: transform, opacity;
   filter: none;
 }
+
+@keyframes entrance-fx {
+  from {
+    transform: perspective(900px) rotateX(24deg) translateY(-18px) scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+@keyframes impact {
+  0% {
+    transform: none;
+  }
+  15% {
+    transform: translate(-4px, 2px);
+  }
+  30% {
+    transform: translate(4px, -2px);
+  }
+  45% {
+    transform: translate(-3px, -1px);
+  }
+  60% {
+    transform: translate(2px, 2px);
+  }
+  80% {
+    transform: translate(-1px, 0);
+  }
+  100% {
+    transform: none;
+  }
+}
+@keyframes shock {
+  20% {
+    transform: translateX(-3px);
+  }
+  40% {
+    transform: translateX(3px);
+  }
+  60% {
+    transform: translateX(-2px);
+  }
+  80% {
+    transform: translateX(1px);
+  }
+}

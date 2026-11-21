@@ -1,17 +1,5 @@
 /* ---------- the Professor's welcome (first launch) ---------- */
 /* ---------- brief animations ---------- */
-@keyframes qUp {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-}
-
-@keyframes qFade {
-  from {
-    opacity: 0;
-  }
-}
 
 /* battle: readable names, moves marked with their type */
 /* shortcuts: one glow per destination */

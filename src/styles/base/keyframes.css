@@ -1,0 +1,113 @@
+/* Keyframes used by several screens and components. */
+
+@keyframes encIn {
+  0% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.04);
+  }
+  100% {
+    transform: none;
+    opacity: 1;
+  }
+}
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes inU {
+  from {
+    transform: translateY(60px);
+    opacity: 0.2;
+  }
+}
+@keyframes intensity-dg {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+@keyframes pkHalo {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(1.35);
+    opacity: 0;
+  }
+}
+@keyframes pkLed {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+@keyframes pkPop {
+  0% {
+    transform: scale(0.9);
+  }
+  55% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: none;
+  }
+}
+@keyframes pkReflet {
+  0% {
+    background-position: 140% 0;
+  }
+  100% {
+    background-position: -40% 0;
+  }
+}
+@keyframes pkSecoue {
+  0% {
+    transform: scale(0.55) rotate(0);
+  }
+  30% {
+    transform: scale(1.14) rotate(-16deg);
+  }
+  50% {
+    transform: scale(1) rotate(11deg);
+  }
+  70% {
+    transform: rotate(-6deg);
+  }
+  86% {
+    transform: rotate(3deg);
+  }
+  100% {
+    transform: scale(1) rotate(0);
+  }
+}
+@keyframes pkTourne {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes prGlow {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+@keyframes qUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}

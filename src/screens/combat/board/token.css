@@ -194,3 +194,32 @@
 .token.is-ready .token-ready-ring {
   animation: none;
 }
+
+@keyframes breathe {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-1.3px);
+  }
+}
+@keyframes hitf {
+  0%,
+  100% {
+    stroke-width: 2.4;
+  }
+  30% {
+    stroke-width: 6;
+    stroke: #fff;
+  }
+}
+@keyframes token-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-2.5px);
+  }
+}

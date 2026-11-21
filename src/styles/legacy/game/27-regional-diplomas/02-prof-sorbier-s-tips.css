@@ -1,14 +1,4 @@
 /* Prof. Sorbier's tips */
-@keyframes tip-card {
-  from {
-    opacity: 0;
-    transform: translate(-50%, -12px);
-  }
-  to {
-    opacity: 1;
-    transform: translate(-50%, 0);
-  }
-}
 
 /* legendary quests */
 

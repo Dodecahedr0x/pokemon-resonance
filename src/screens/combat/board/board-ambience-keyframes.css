@@ -1,0 +1,144 @@
+/* Board › ambience: the keyframes of the weather and terrain layers in board-ambience.css. */
+
+@keyframes ambient-float {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) rotate(0);
+  }
+  12% {
+    opacity: 0.85;
+  }
+  88% {
+    opacity: 0.85;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(46px, 70px) rotate(300deg);
+  }
+}
+@keyframes ambient-rise {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.6);
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(14px, -90px) scale(1.2);
+  }
+}
+@keyframes ambient-fall {
+  0% {
+    opacity: 0;
+    transform: translate(0, -10px);
+  }
+  10% {
+    opacity: 0.95;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-20px, 110px);
+  }
+}
+@keyframes ambient-twinkle {
+  0%,
+  100% {
+    opacity: 0;
+    transform: translate(0, 0);
+  }
+  30% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+    transform: translate(10px, -8px);
+  }
+  70% {
+    opacity: 1;
+    transform: translate(-6px, -14px);
+  }
+}
+@keyframes ambience {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(var(--s));
+  }
+  25% {
+    opacity: 0.9;
+  }
+  75% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--dx), var(--dy)) scale(var(--s));
+  }
+}
+@keyframes cloud-drift {
+  from {
+    transform: translateX(-80%);
+  }
+  to {
+    transform: translateX(190%);
+  }
+}
+@keyframes firefly {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(var(--s));
+  }
+  20% {
+    opacity: 0.95;
+  }
+  35% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 0.9;
+    transform: translate(calc(var(--dx) * 0.6), calc(var(--dy) * -0.3)) scale(var(--s));
+  }
+  70% {
+    opacity: 0.2;
+  }
+  85% {
+    opacity: 0.85;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--dx), calc(var(--dy) * 0.4)) scale(var(--s));
+  }
+}
+@keyframes hail-fall {
+  from {
+    transform: translate(0, 0);
+  }
+  to {
+    transform: translate(-14px, 82px);
+  }
+}
+@keyframes rain-fall {
+  from {
+    transform: rotate(9deg) translateY(0);
+  }
+  to {
+    transform: rotate(9deg) translateY(38px);
+  }
+}
+@keyframes sand-drift {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-70px);
+  }
+}
+@keyframes sun-drift {
+  from {
+    opacity: 0.7;
+  }
+  to {
+    opacity: 1;
+  }
+}

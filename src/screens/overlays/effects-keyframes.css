@@ -1,0 +1,136 @@
+/* Overlays › full-screen effects: the keyframes the rules of effects.css play (battle entry, Poké Ball transitions, evolution fade). */
+
+@keyframes pkBadgeVol {
+  0% {
+    opacity: 0;
+    transform: perspective(600px) translateY(-140px) scale(0.25) rotateY(-720deg);
+  }
+  70% {
+    opacity: 1;
+    transform: perspective(600px) translateY(6px) scale(1.12) rotateY(10deg);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes pkBand {
+  to {
+    transform: none;
+  }
+}
+@keyframes pkBas {
+  to {
+    transform: translateY(104%);
+  }
+}
+@keyframes pkBouton {
+  0% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.12);
+    filter: brightness(1.35);
+  }
+  100% {
+    transform: scale(0.25);
+    opacity: 0;
+  }
+}
+@keyframes pkBtrBall {
+  to {
+    transform: none;
+  }
+}
+@keyframes pkBtrOut {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes pkFlash3 {
+  0%,
+  33%,
+  66%,
+  100% {
+    opacity: 0;
+  }
+  16%,
+  50%,
+  83% {
+    opacity: 0.9;
+  }
+}
+@keyframes pkFonduIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes pkFonduOut {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes pkHaut {
+  to {
+    transform: translateY(-104%);
+  }
+}
+@keyframes pkMonteIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes poke-glint {
+  0% {
+    background-position: 160% 0;
+  }
+  100% {
+    background-position: -60% 0;
+  }
+}
+@keyframes poke-spray {
+  0% {
+    opacity: 0;
+    transform: rotate(var(--a)) translateY(0) scale(0.4);
+  }
+  12% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: rotate(var(--a)) translateY(-130px) scale(1);
+  }
+}
+@keyframes transition-flash {
+  0% {
+    opacity: 0.95;
+  }
+  25% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.95;
+  }
+  75% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes transition-iris {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(160);
+  }
+}

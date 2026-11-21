@@ -52,3 +52,13 @@
 .intro .dialogue-box.typed-dialogue {
   margin-top: var(--space-sm);
 }
+
+@keyframes pkFleche {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(3px);
+  }
+}

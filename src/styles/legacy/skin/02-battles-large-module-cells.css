@@ -59,3 +59,24 @@ html:not(#pkz) body:not(#pkz) :is(.card, .home-hero, .league-case).pk-scan::afte
   animation: pkOnde 0.6s ease-out forwards;
   z-index: 3;
 }
+
+@keyframes pkOnde {
+  to {
+    transform: scale(13);
+    opacity: 0;
+  }
+}
+
+@keyframes pkScan {
+  0% {
+    background-position: 0 100%;
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    background-position: 0 0;
+    opacity: 0;
+  }
+}

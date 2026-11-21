@@ -110,3 +110,14 @@ html.pk-calme .typed-dialogue .typed-dialogue-arrow {
 html.a11y-rm .typed-dialogue .typed-dialogue-arrow {
   animation: none;
 }
+
+@keyframes pkDlgIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

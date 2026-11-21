@@ -3,11 +3,3 @@
 /* Pantheon */
 
 /* handover screen */
-@keyframes forfeit-dialog-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}

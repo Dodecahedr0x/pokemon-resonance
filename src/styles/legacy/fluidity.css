@@ -10,29 +10,5 @@
    declared further up. */
 
 /* 2. Weather: we move the whole layer (already larger than the frame) */
-@keyframes hail-fall {
-  from {
-    transform: translate(0, 0);
-  }
-  to {
-    transform: translate(-14px, 82px);
-  }
-}
-@keyframes rain-fall {
-  from {
-    transform: rotate(9deg) translateY(0);
-  }
-  to {
-    transform: rotate(9deg) translateY(38px);
-  }
-}
-@keyframes sand-drift {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-70px);
-  }
-}
 
 /* 4. HP bar shine: the shine slides instead of repainting the bar */

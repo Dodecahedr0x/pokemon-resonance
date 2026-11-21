@@ -382,3 +382,14 @@
   letter-spacing: 0.14em;
   color: var(--color-accent);
 }
+
+@keyframes ring {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(1.9);
+    opacity: 0;
+  }
+}

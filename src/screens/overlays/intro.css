@@ -343,3 +343,9 @@
     margin: 0;
   }
 }
+
+@keyframes qFade {
+  from {
+    opacity: 0;
+  }
+}

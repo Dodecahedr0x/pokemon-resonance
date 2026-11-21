@@ -182,3 +182,10 @@
 #v4Menu:not([hidden]) .menu-item:nth-child(n + 7) {
   animation-delay: 0.24s;
 }
+
+@keyframes v4Up {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+}

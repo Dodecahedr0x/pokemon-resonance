@@ -1,13 +1,4 @@
 /* ---------- 4. classic dialog boxes ---------- */
-@keyframes pkFleche {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(3px);
-  }
-}
 
 /* Prof. Sorbier on Home */
 /* Professor's advice */
@@ -16,24 +7,9 @@
 /* tips in battle */
 /* the champion's line before the battle */
 /* introduction */
-@keyframes pkDlgIn {
-  from {
-    opacity: 0;
-    transform: translateY(14px) scale(0.98);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
 
 /* ---------- 5. silhouettes of Pokémon not yet caught ---------- */
 
 /* ---------- 6. collectible cards ---------- */
-@keyframes pkHoloFoil {
-  to {
-    background-position: 250% 250%;
-  }
-}
 
 /* ---------- 7. velvet badge case ---------- */

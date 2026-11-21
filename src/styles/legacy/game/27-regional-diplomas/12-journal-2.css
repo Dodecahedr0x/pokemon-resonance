@@ -25,13 +25,3 @@
 /* <style id="resonance-nuzlocke-ui"> */
 /* <style id="resonance-hero-weather"> */
 /* v4.52 */
-@keyframes battle-help {
-  from {
-    transform: translateY(30px);
-    opacity: 0;
-  }
-  to {
-    transform: none;
-    opacity: 1;
-  }
-}
