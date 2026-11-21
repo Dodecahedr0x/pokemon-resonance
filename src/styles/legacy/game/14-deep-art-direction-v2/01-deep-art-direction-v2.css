@@ -1,16 +1,6 @@
 /* ===== resonance-deep-art-direction-v2 layer ===== */
 /* FINAL PASS — integrated cinematic Pokémon UI, not a static mockup */
 
-@keyframes resPageIn {
-  from {
-    opacity: 0;
-    transform: translateY(5px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
 .section-title {
   font-size: clamp(20px, 2vw, 28px);
 }

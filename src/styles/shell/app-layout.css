@@ -191,6 +191,15 @@ body.compact-battle .app-content {
     padding-top: var(--space-xs);
   }
 }
+/* on phone the Battles page leaves room for the fixed launch / end-turn bar, except in the compact battle */
+@media (max-width: 999px) {
+  .page.on#combat {
+    padding-bottom: 84px;
+  }
+}
+body.compact-battle .page.on#combat {
+  padding-bottom: 0;
+}
 .app-logo .app-logo-icon::after {
   content: '';
   position: absolute;

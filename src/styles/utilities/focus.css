@@ -1,0 +1,6 @@
+/* The keyboard focus ring of buttons and links, over every screen's own outline and shadow. */
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--color-focus);
+  box-shadow: 0 0 0 5px rgba(115, 217, 244, 0.15);
+}

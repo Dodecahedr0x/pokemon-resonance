@@ -33,17 +33,4 @@
    transform:scale(1.005)!important, the landscape does not move
    (0 pixels) but the animation cost ~93 % of the CPU on phone. */
 
-/* ---------- 6 bis. Fixed bars on phone ----------
-   The "resPageIn" page entry kept a transform afterwards
-   (fill mode "both"): the "Commencer" (Start) and "Fin du tour" (End turn) bars
-   scrolled with the page instead of staying at the bottom of the screen.
-   Same entry motion, but nothing is kept at the end. */
-
 /* ---------- 7. Launch screen: once per session ---------- */
-
-/* ---------- 8. Battles on phone: the footer goes above the fixed bar ---------- */
-@media (max-width: 999px) {
-  html body #combat.page.on {
-    padding-bottom: 84px;
-  }
-}

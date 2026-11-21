@@ -1,37 +1,6 @@
 /* Continued from 01-art-direction.css (same order). */
-/* from legacy/game/23-per-screen-art-director-cut/02-battle-tactical-room-staged-board.css */
-button:focus-visible,
-a:focus-visible {
-  outline: 2px solid var(--r22-cyan);
-}
-
-/* from legacy/game/24-fullscreen-art-full-art-direction/01-fullscreen-art-full-art-direction.css */
-button:focus-visible,
-a:focus-visible {
-  outline: 2px solid var(--rx-cyan);
-}
-
-/* from legacy/game/24-fullscreen-art-full-art-direction/02-map-actual-dynamic-carte-page.css */
-
-/* from legacy/game/25-post-init-selector-repair/02-battle-both-states-preparation.css */
-
 /* from legacy/game/27-regional-diplomas/05-deep-echo.css */
 .ability-card .chip {
   background: rgba(79, 195, 255, 0.18);
   color: #bfe9ff;
-}
-
-/* from legacy/game/27-regional-diplomas/15-v4-53-cont-2.css */
-html body.compact-battle #combat.page.on {
-  padding-bottom: 0;
-}
-
-/* from legacy/skin/02-battles-large-module-cells.css */
-.pk-rise {
-  animation: pkMonte 0.55s cubic-bezier(0.2, 0.9, 0.3, 1) both;
-  animation-delay: calc(var(--pk-i, 0) * 60ms);
-}
-.pk-fade {
-  animation: pkFondu 0.45s ease-out both;
-  animation-delay: calc(var(--pk-i, 0) * 50ms);
 }

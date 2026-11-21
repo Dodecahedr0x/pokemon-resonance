@@ -12,8 +12,8 @@
    - motion:     calm motion, « reduce animations » and the system's reduced motion switching animations off; they
                  win over every screen state (a selected or shiny token keeps still)
    - overrides:  the declarations the legacy files marked !important, waiting to be folded into their screens
-   - utilities:  global states that win over every screen ([hidden], .vh, the coach highlight) and the
-                 performance switches (src/styles/utilities/)
+   - utilities:  what wins over every screen (src/styles/utilities/): global states ([hidden], .vh, the coach
+                 highlight), the focus ring, the shared entrance animations and the performance switches
    - accessibility: reduced motion and high contrast, which win over everything
    Caveat: for !important declarations the order is reversed (an earlier layer wins), which is one more reason
    new code does not use them. The Workshop's user CSS is unlayered, so it overrides every normal rule. */
@@ -170,5 +170,7 @@
 @import './overrides/index.css' layer(overrides);
 @import './utilities/states.css' layer(utilities);
 @import './utilities/performance.css' layer(utilities);
+@import './utilities/focus.css' layer(utilities);
+@import './utilities/entrance.css' layer(utilities);
 @import './accessibility/reduced-motion.css' layer(accessibility);
 @import './accessibility/high-contrast.css' layer(accessibility);
