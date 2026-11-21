@@ -1,16 +1,4 @@
 /* Cinematic launch: a dedicated first screen; image stays fully inside the scene */
-#resonance-launch {
-  opacity: 1;
-  visibility: visible;
-  transition:
-    opacity 0.72s ease,
-    visibility 0.72s ease;
-}
-#resonance-launch.is-leaving {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-}
 @keyframes launchDrift {
   from {
     transform: scale(1.005) translate3d(0, 0, 0);

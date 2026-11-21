@@ -58,7 +58,7 @@ export default function LaunchScreen() {
     <div
       id="resonance-launch"
       ref={rootRef}
-      className={phase === 'leaving' ? 'is-leaving' : undefined}
+      className={phase === 'leaving' ? 'launch-screen is-leaving' : 'launch-screen'}
       role="dialog"
       aria-modal="true"
       aria-label="Pokémon Résonance — écran de lancement"

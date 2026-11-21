@@ -187,10 +187,3 @@ html body.compact-battle #combat.page.on {
     height: 44px;
   }
 }
-
-/* from legacy/phone/02-notes-written-as-a-sentence-all.css */
-@media (max-width: 700px) {
-  html body #resonance-launch {
-    grid-template-columns: minmax(0, 1fr);
-  }
-}
