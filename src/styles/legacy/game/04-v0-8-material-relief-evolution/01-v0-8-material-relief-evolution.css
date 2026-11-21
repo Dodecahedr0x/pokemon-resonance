@@ -12,7 +12,6 @@
   --surf: linear-gradient(180deg, #171b24, #0f1219);
 }
 /* engraved titles */
-.section-title,
 .sh-name {
   background: linear-gradient(180deg, #ffffff 20%, #d9dde6 62%, #9ea6b6);
   -webkit-background-clip: text;

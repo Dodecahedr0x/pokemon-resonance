@@ -30,9 +30,6 @@
 html body .page {
   isolation: isolate;
 }
-html body .section-title {
-  text-shadow: 0 5px 24px rgba(0, 0, 0, 0.38);
-}
 
 html body button:focus-visible,
 html body a:focus-visible {

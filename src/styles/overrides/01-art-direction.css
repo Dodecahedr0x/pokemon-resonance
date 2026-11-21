@@ -8,9 +8,6 @@
 }
 
 /* from legacy/game/13-art-direction-2026-integrated/04-mobile-polish-after-screenshot.css */
-.section-title {
-  text-shadow: 0 3px 22px rgba(0, 0, 0, 0.38);
-}
 
 /* from legacy/game/14-deep-art-direction-v2/02-team-selection-true-collector.css */
 input:not(:where(.dex-search input, .team-search input, .intro-card input)),
@@ -39,9 +36,6 @@ hr {
 }
 
 /* from legacy/game/16-v4-adventure/01-v4-adventure.css */
-html body .section-title {
-  letter-spacing: -0.01em;
-}
 
 /* from legacy/game/16-v4-adventure/08-bag-and-shop.css */
 html body .form-field input {
@@ -49,6 +43,3 @@ html body .form-field input {
 }
 
 /* from legacy/game/22-threat-zone/01-threat-zone.css */
-html body .section-title {
-  letter-spacing: -0.045em;
-}

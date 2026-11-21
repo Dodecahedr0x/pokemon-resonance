@@ -18,16 +18,6 @@
     transform: none;
   }
 }
-.section-title {
-  font-family: var(--f-d);
-  font-stretch: 120%;
-  font-weight: 750;
-  text-transform: uppercase;
-  font-size: clamp(23px, 3.2vw, 34px);
-  line-height: 1;
-  letter-spacing: -0.005em;
-  text-wrap: balance;
-}
 .card-title {
   font-family: var(--f-d);
   font-stretch: 112%;

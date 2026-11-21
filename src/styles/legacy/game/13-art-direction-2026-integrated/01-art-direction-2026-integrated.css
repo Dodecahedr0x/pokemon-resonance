@@ -22,13 +22,7 @@ body::before {
   animation: resPageIn 0.42s cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
 
-.section-title {
-  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.4);
-}
 /* the Guide's section titles are gold (guide-port.css) */
-.section-title:not(.guide-section .section-title) {
-  color: #f8fbff;
-}
 
 /* .button and .text-link have their own transition (src/styles/components/) */
 button:not(.sidebar-link):not(.bottom-nav-link):not(.route-alert):not(.route-time button):not(.tabs > button):not(
