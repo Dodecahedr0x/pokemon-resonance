@@ -1,5 +1,5 @@
 import { Html, parseStyle } from '../../lib/html.jsx';
-import { BY } from '../../engine/pokemon/pokemon.js';
+import { POKEMON } from '../../engine/pokemon/pokemon.js';
 import { PROFILE } from '../../engine/state/game-state.js';
 import { medal } from '../../engine/core/utils.js';
 import { formatNumber } from '../../engine/state/economy.js';
@@ -49,16 +49,16 @@ function Content() {
                   <span
                     key={j}
                     className={'home-friends-pokemon' + (x[3] ? ' is-shiny' : '')}
-                    style={x[3] ? parseStyle(shinyStyle(BY[x[0]].base)) : undefined}
+                    style={x[3] ? parseStyle(shinyStyle(POKEMON[x[0]].base)) : undefined}
                   >
-                    <Html html={medal(BY[x[0]].t, 'is-small')} />
+                    <Html html={medal(POKEMON[x[0]].t, 'is-small')} />
                   </span>
                 ))}
               </span>
               <span className="home-friends-name">
                 <b>{a.n}</b>
                 <em>
-                  {a.t.map(x => BY[x[0]].n).join(', ')} · {a.w}–{a.l}
+                  {a.t.map(x => POKEMON[x[0]].n).join(', ')} · {a.w}–{a.l}
                 </em>
               </span>
               <span className="home-friends-buttons">

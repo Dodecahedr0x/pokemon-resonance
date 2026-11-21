@@ -1,6 +1,6 @@
 /* Fishing: cast the line from the tall grass, hook at the right moment, then fight the catch (added in v4.18). */
 
-import { BY } from '../pokemon/pokemon.js';
+import { POKEMON } from '../pokemon/pokemon.js';
 import { RECRUIT } from '../pokemon/evolution.js';
 import { PROFILE } from '../state/game-state.js';
 import { paintOverlay } from '../../screens/overlays/dialogsStore.js';
@@ -92,7 +92,7 @@ function renderFishingPanel() {
     P2 = FISHING || {};
   // the shiny artwork is recolored after rendering (v4.25)
   setTimeout(
-    () => P2.status === 'prise' && P2.sh && applyShinyArt(el.querySelector('.fishing-catch img'), BY[P2.id].no),
+    () => P2.status === 'prise' && P2.sh && applyShinyArt(el.querySelector('.fishing-catch img'), POKEMON[P2.id].no),
     0
   );
   paintOverlay('peche', {

@@ -1,5 +1,5 @@
 import { TYPES } from '../../../engine/data/game-data.js';
-import { BY } from '../../../engine/pokemon/pokemon.js';
+import { POKEMON } from '../../../engine/pokemon/pokemon.js';
 import { PROFILE, isCamp } from '../../../engine/state/game-state.js';
 import { CHALLENGES, CHALLENGE_CONF } from '../../../engine/progression/campaign-challenges.js';
 
@@ -30,7 +30,7 @@ export default function CampaignChallenges() {
     );
   }
   const d = PROFILE.challenges || {},
-    tomb = (PROFILE.graves || []).filter(b => BY[b]);
+    tomb = (PROFILE.graves || []).filter(b => POKEMON[b]);
   return (
     <section className="card v4-ps">
       <CardHeader icon="trophy" title="Défis de campagne" />
@@ -79,7 +79,7 @@ export default function CampaignChallenges() {
       ) : null}
       {tomb.length ? (
         <p className="v4-ps-n">
-          Tombés au combat : {tomb.map(b => BY[b].n).join(', ')}
+          Tombés au combat : {tomb.map(b => POKEMON[b].n).join(', ')}
           {d.nuzlocke ? '' : ' (le Nuzlocke est abandonné : ils peuvent revenir)'}.
         </p>
       ) : null}

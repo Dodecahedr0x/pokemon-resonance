@@ -1,6 +1,6 @@
 import { Html } from '../../lib/html.jsx';
 import { Box, Dialogue } from './Window.jsx';
-import { BY } from '../../engine/pokemon/pokemon.js';
+import { POKEMON } from '../../engine/pokemon/pokemon.js';
 import { medal } from '../../engine/core/utils.js';
 import { DESTINATIONS } from '../../engine/progression/expeditions.js';
 import { lockedByBadges } from '../../engine/progression/companion-eggs.js';
@@ -45,11 +45,11 @@ function Card({ destinationId: dest, available: available }) {
           <div className="picker-list">
             {available.length ? (
               available.map(id => {
-                const bon = BY[id].t.some(t => DESTINATIONS[dest].types.includes(t));
+                const bon = POKEMON[id].t.some(t => DESTINATIONS[dest].types.includes(t));
                 return (
                   <button key={id} type="button" className="picker-option" data-exp-p={id}>
-                    <Html html={medal(BY[id].t, 'is-small')} />
-                    <b>{BY[id].n}</b>
+                    <Html html={medal(POKEMON[id].t, 'is-small')} />
+                    <b>{POKEMON[id].n}</b>
                     <em>{bon ? 'Terrain idéal · ×2' : 'Gains normaux'}</em>
                   </button>
                 );

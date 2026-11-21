@@ -1,6 +1,6 @@
 import { Html } from '../../../lib/html.jsx';
-import { MV, TAL } from '../../../engine/data/moves.js';
-import { BY } from '../../../engine/pokemon/pokemon.js';
+import { MOVES, ABILITIES } from '../../../engine/data/moves.js';
+import { POKEMON } from '../../../engine/pokemon/pokemon.js';
 import { ARR } from '../../../engine/pokemon/evolution.js';
 import { medal, typeBadge, typeColor } from '../../../engine/core/utils.js';
 import { BRANCHES, branchWhy, evoOpts, mhpOf } from '../../../engine/combat/engine.js';
@@ -22,7 +22,7 @@ export default function EvoPick() {
 }
 
 function Path({ u, A, id }) {
-  const E = BY[id],
+  const E = POKEMON[id],
     payout = E.mv.filter(x => !u.mv.includes(x)),
     lose = u.mv.filter(x => !E.mv.includes(x) && x !== u.ctm), // the learned move is kept
     tg = E.t.filter(t => !u.t.includes(t)),
@@ -65,13 +65,13 @@ function Path({ u, A, id }) {
           {payout.length ? (
             <li className="is-gain">
               <span>Gagne</span>
-              {payout.map(x => MV[x].n).join(', ')}
+              {payout.map(x => MOVES[x].n).join(', ')}
             </li>
           ) : null}
           {lose.length ? (
             <li className="is-loss">
               <span>Perd</span>
-              {lose.map(x => MV[x].n).join(', ')} <i>pour toujours</i>
+              {lose.map(x => MOVES[x].n).join(', ')} <i>pour toujours</i>
             </li>
           ) : null}
           {tg.length ? (
@@ -79,10 +79,10 @@ function Path({ u, A, id }) {
               <span>Type</span>+ {tg.join(', ')}
             </li>
           ) : null}
-          {E.ability !== u.ability && TAL[E.ability] ? (
+          {E.ability !== u.ability && ABILITIES[E.ability] ? (
             <li>
               <span>Talent</span>
-              {TAL[E.ability][0]}
+              {ABILITIES[E.ability][0]}
             </li>
           ) : null}
           <li>
@@ -107,7 +107,7 @@ function Card({ u }) {
   if (!o.length) {
     return null;
   }
-  const A = BY[u.id];
+  const A = POKEMON[u.id];
   return (
     <div className="evolution-choice-card" role="dialog" aria-modal="true" aria-labelledby="epT">
       <p className="kicker">Éveil · choix irréversible</p>

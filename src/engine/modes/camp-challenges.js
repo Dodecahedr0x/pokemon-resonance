@@ -1,6 +1,6 @@
 // Camp challenges (added in v4.31): the Camp sub-tabs, and what the « no progression » battles share
 // (riddles, Deep Echo, custom arenas, local duel): profile data, imposed team, result, restoring at startup.
-import { BY, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCEN } from '../pokemon/pokemon.js';
 import { PROFILE } from '../state/game-state.js';
 import { HOOKS } from '../core/hooks.js';
 import { goTo } from '../core/navigation.js';
@@ -46,7 +46,7 @@ export function tacticalChallengesClean(p) {
   if (p.masteryTrack && typeof p.masteryTrack === 'object') {
     Object.keys(p.masteryTrack).forEach(k => {
       const m = p.masteryTrack[k];
-      if (BY[k] && m && typeof m === 'object') {
+      if (POKEMON[k] && m && typeof m === 'object') {
         o.masteryTrack[k] = {
           n: clampInt(m.n, 0, 99999),
           p: typeof m.p === 'string' && /^[a-z]{3,10}$/.test(m.p) ? m.p : '',
@@ -60,7 +60,7 @@ export function tacticalChallengesClean(p) {
     const R = X.run;
     if (R && typeof R === 'object' && Array.isArray(R.team) && Array.isArray(R.map)) {
       const team = R.team
-        .filter(t => Array.isArray(t) && BY[t[0]])
+        .filter(t => Array.isArray(t) && POKEMON[t[0]])
         .slice(0, 4)
         .map(t => [t[0], Math.max(0, Math.min(1, +t[1] || 0))]);
       const map = R.map

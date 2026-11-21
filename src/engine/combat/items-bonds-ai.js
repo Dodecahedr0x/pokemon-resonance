@@ -1,6 +1,6 @@
-import { GYMS, RX } from '../data/game-data.js';
-import { MV } from '../data/moves.js';
-import { BY, MON, SCEN } from '../pokemon/pokemon.js';
+import { GYMS, REACTIONS } from '../data/game-data.js';
+import { MOVES } from '../data/moves.js';
+import { POKEMON, POKEMON_LIST, SCEN } from '../pokemon/pokemon.js';
 import { PROFILE, isCamp, lvlOfPts, pairKey } from '../state/game-state.js';
 import { BADGES } from '../modes/gyms.js';
 import {
@@ -266,7 +266,7 @@ export function threatAt(S, e, pos) {
     let mr = 0,
       best = 0;
     a.mv.forEach(id => {
-      const m = MV[id];
+      const m = MOVES[id];
       if (!(m.p || m.fix) || m.sh === 'self') {
         return;
       }
@@ -307,7 +307,7 @@ export function aiFallback(S, e, opts, al, here) {
 }
 
 export function wildScen(id, tod, shiny, dom) {
-  const m = BY[id],
+  const m = POKEMON[id],
     b = BADGES.length;
   SCEN.sauvage = {
     n: `${m.n}${dom ? ' Dominant' : ''}${shiny ? ' chromatique' : ''}${dom ? '' : ' sauvage'}`,
@@ -343,7 +343,7 @@ export function champBuild() {
   });
   const topRx = Object.entries(rx).sort((a, b) => b[1] - a[1])[0],
     cnt = RX_COUNTER[topRx && topRx[0]];
-  const pool = MON.filter(m => m.st >= 2 || !m.nx);
+  const pool = POKEMON_LIST.filter(m => m.st >= 2 || !m.nx);
   const score = m => {
     let s = m.s[0] + m.s[1] + m.s[2];
     for (const t in atk) {
@@ -351,7 +351,7 @@ export function champBuild() {
       s += atk[t] * (e === 0 ? 2.5 : e < 1 ? 1.2 : e > 1 ? -1.4 : 0);
     }
     for (const t in def) {
-      if (m.mv.some(id => MV[id].p && teff(MV[id].t, [t]) > 1)) {
+      if (m.mv.some(id => MOVES[id].p && teff(MOVES[id].t, [t]) > 1)) {
         s += def[t] * 0.8;
       }
     }
@@ -396,7 +396,7 @@ export function champBuild() {
     }
     if (cnt) {
       const c = pick.find(m => (cnt.t || []).some(t => m.t.includes(t)) || (cnt.ability || []).includes(m.ability));
-      why.push(`Votre réaction préférée : ${RX[topRx[0]].n}.${c ? ` ${c.n} est là : ${cnt.why}.` : ''}`);
+      why.push(`Votre réaction préférée : ${REACTIONS[topRx[0]].n}.${c ? ` ${c.n} est là : ${cnt.why}.` : ''}`);
     }
   }
   const POS = [

@@ -1,5 +1,5 @@
-import { MV } from '../data/moves.js';
-import { BY, SCEN } from '../pokemon/pokemon.js';
+import { MOVES } from '../data/moves.js';
+import { POKEMON, SCEN } from '../pokemon/pokemon.js';
 import { ITEMS2, PROFILE, isCamp } from '../state/game-state.js';
 import { RC } from '../pokemon/roles-synergies.js';
 import { toast } from '../core/utils.js';
@@ -46,7 +46,7 @@ export let COMBAT_ITEMS;
 let LEGENDARY_IDS, DAILY_OFFERS_CACHE;
 
 export function rankId(id) {
-  const m = BY[id];
+  const m = POKEMON[id];
   if (!m) {
     return 'moyen';
   }
@@ -97,8 +97,8 @@ export function roleBadgeHtml(m, u) {
 }
 
 export function moveBlockedMessage(S, u, m) {
-  if (u && u.item === 'mouchoir' && u.choice && MV[u.choice] && MV[u.choice] !== m) {
-    return `Mouchoir Choix : il ne peut plus lancer que ${MV[u.choice].n}.`;
+  if (u && u.item === 'mouchoir' && u.choice && MOVES[u.choice] && MOVES[u.choice] !== m) {
+    return `Mouchoir Choix : il ne peut plus lancer que ${MOVES[u.choice].n}.`;
   }
   if (m && m.xp && !canXP(S, u, m)) {
     const c = xpCost(u);
@@ -499,7 +499,7 @@ const XP_LEG = ['fatalfoudre', 'feusacre', 'frappepsy', 'aeroblast'];
 
 const MRG = { soutien: 'Soutien', faible: 'Faible', moyen: 'Moyenne', fort: 'Forte', expert: 'Experte' };
 
-export const hasXp = u => !!(u && u.mv && u.mv.some(x => MV[x] && MV[x].xp));
+export const hasXp = u => !!(u && u.mv && u.mv.some(x => MOVES[x] && MOVES[x].xp));
 
 export const xpCost = u => (rankOfValue(u) === 'expert' ? 1 : 2);
 
@@ -688,8 +688,8 @@ const CONSUMABLE_SHOP_ITEMS = {
 export function init() {
   LEGENDARY_IDS = new Set(LEGS.map(l => l.id));
 
-  for (const k in MV) {
-    const m = MV[k];
+  for (const k in MOVES) {
+    const m = MOVES[k];
     if (!m || typeof m !== 'object') {
       continue;
     }

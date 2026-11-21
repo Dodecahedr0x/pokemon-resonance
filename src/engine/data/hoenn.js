@@ -1,4 +1,4 @@
-import { MV } from './moves.js';
+import { MOVES } from './moves.js';
 
 /* v4.19: signature moves of the Hoenn Pokémon, region names */
 export const REGION_NAMES = ['', 'Kanto', 'Johto', 'Hoenn'];
@@ -94,5 +94,5 @@ const HOENN_MOVES = {
 
 // Statements run at startup, in the original order (see index.js).
 export function init() {
-  Object.assign(MV, HOENN_MOVES);
+  Object.assign(MOVES, HOENN_MOVES);
 }

@@ -1,7 +1,7 @@
 /* Campaign path: the next goal on the home screen, starting a campaign and the starter choice (added in v1.0). */
 
 import { GYMS } from '../data/game-data.js';
-import { BY, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCEN } from '../pokemon/pokemon.js';
 import { CAMP_START, PROFILE, defProfile, isCamp } from '../state/game-state.js';
 import { ARENAS, BADGES } from '../modes/gyms.js';
 import { $, toast } from '../core/utils.js';
@@ -100,7 +100,7 @@ function onStarterClick(e) {
   autoSave(true);
   goTo('accueil');
   renderHome();
-  toast(`Campagne lancée avec ${BY[id].n}. Commencez par le combat guidé ou la Route 29.`);
+  toast(`Campagne lancée avec ${POKEMON[id].n}. Commencez par le combat guidé ou la Route 29.`);
 }
 
 // Instructions run at startup, in the original order (see index.js).

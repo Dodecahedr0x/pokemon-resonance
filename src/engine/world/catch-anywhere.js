@@ -1,4 +1,4 @@
-import { BY, PRESETS, familyOf } from '../pokemon/pokemon.js';
+import { POKEMON, PRESETS, familyOf } from '../pokemon/pokemon.js';
 import { RECRUIT } from '../pokemon/evolution.js';
 import { BADGE_REWARD, PROFILE, isCamp } from '../state/game-state.js';
 import { isJohtoRegion } from './johto.js';
@@ -26,7 +26,7 @@ export function catchAnywhereClean(p) {
 
 /** Region of a family: 1 Kanto, 2 Johto, 3 Hoenn (first known member). */
 export function familyRegion(id) {
-  const m = BY[id];
+  const m = POKEMON[id];
   if (!m) {
     return 1;
   }
@@ -48,7 +48,7 @@ export function fillFreeBox(sq, badges) {
   }
   const box = PROFILE.box,
     add = id => {
-      const m = BY[id],
+      const m = POKEMON[id],
         b = m && m.base;
       if (b && isRecruitable(b) && !box.includes(b)) {
         box.push(b);
@@ -86,7 +86,7 @@ export const ROUTE_NAMES = ['', 'Route 29', 'Route 32', 'Route 104'];
 
 export const FAMILY_REGION_NAMES = ['', 'Kanto', 'Johto', 'Hoenn'];
 
-const isRecruitable = id => !!BY[id] && RECRUIT.some(x => x.id === BY[id].base);
+const isRecruitable = id => !!POKEMON[id] && RECRUIT.some(x => x.id === POKEMON[id].base);
 
 /** Where to catch a family (empty for legends, never recruitable). */
 export const captureSite = id => (isRecruitable(id) ? ROUTE_NAMES[familyRegion(id)] : '');

@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import { Html } from '../../lib/html.jsx';
 import { useIntro } from './shellOverlays.js';
-import { BY } from '../../engine/pokemon/pokemon.js';
+import { POKEMON } from '../../engine/pokemon/pokemon.js';
 import { DIFFS, STARTERS } from '../../engine/state/game-state.js';
 import { medal, typeColor } from '../../engine/core/utils.js';
 import { reportError } from '../../engine/core/errors.js';
@@ -109,7 +109,7 @@ function Body({ i }) {
         </p>
         <div className="intro-starters">
           {STARTERS.map(id => {
-            const m = BY[id];
+            const m = POKEMON[id];
             return (
               <button
                 key={id}
@@ -136,7 +136,7 @@ function Body({ i }) {
       </>
     );
   }
-  const m = BY[INTRO.st] || { n: 'votre partenaire' };
+  const m = POKEMON[INTRO.st] || { n: 'votre partenaire' };
   return (
     <>
       <p>
@@ -174,7 +174,7 @@ function Actions({ i }) {
     );
   }
   if (i === 3) {
-    const st = INTRO.st && BY[INTRO.st];
+    const st = INTRO.st && POKEMON[INTRO.st];
     return (
       <>
         <Button size="large" variant="primary" data-in="start" disabled={!st}>

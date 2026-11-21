@@ -1,4 +1,4 @@
-import { MON, NOTES } from './pokemon.js';
+import { POKEMON_LIST, NOTES } from './pokemon.js';
 
 export let RECRUIT;
 
@@ -183,13 +183,13 @@ export const ARR = {
 
 // Statements run at startup, in the original order (see index.js).
 export function init() {
-  MON.forEach(m => {
+  POKEMON_LIST.forEach(m => {
     if (BASECOST[m.id] != null) {
       m.c = BASECOST[m.id];
     }
   });
 
-  RECRUIT = MON.filter(m => m.st === 1 && !m.isEnemy);
+  RECRUIT = POKEMON_LIST.filter(m => m.st === 1 && !m.isEnemy);
   // v4.13: without the families that became opponents
 
   Object.assign(NOTES, {

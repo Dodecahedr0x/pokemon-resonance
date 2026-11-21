@@ -1,6 +1,6 @@
 /* Boss Rush and run relics (added in v4.66). */
 
-import { BY, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCEN } from '../pokemon/pokemon.js';
 import { isCamp } from '../state/game-state.js';
 import { ARENAS, BADGES } from './gyms.js';
 import { $, writeLS, readLS, toast } from '../core/utils.js';
@@ -39,7 +39,7 @@ function bossRushHub() {
       teamNames: squad.length
         ? squad
             .slice(0, teamSize())
-            .map(id => BY[id].n)
+            .map(id => POKEMON[id].n)
             .join(', ')
         : 'aucun Pokémon',
     };
@@ -50,7 +50,7 @@ function bossRushHub() {
     const eq = run.team
       .map(
         id =>
-          `${BY[id].n} ${Math.round((run.hp[BY[id].base] != null ? run.hp[BY[id].base] : run.hp[id] != null ? run.hp[id] : 1) * 100)} %`
+          `${POKEMON[id].n} ${Math.round((run.hp[POKEMON[id].base] != null ? run.hp[POKEMON[id].base] : run.hp[id] != null ? run.hp[id] : 1) * 100)} %`
       )
       .join(' · ');
     d = {

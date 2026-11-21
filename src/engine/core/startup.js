@@ -1,5 +1,5 @@
 import { reportError } from './errors.js';
-import { BY } from '../pokemon/pokemon.js';
+import { POKEMON } from '../pokemon/pokemon.js';
 import { BUDGET } from '../pokemon/evolution.js';
 import { PROFILE, inBox } from '../state/game-state.js';
 import { BADGES } from '../modes/gyms.js';
@@ -55,7 +55,7 @@ export function init() {
     __set_squad(squad.filter(id => inBox(id)));
     if (!squad.length) {
       __set_squad(
-        PROFILE.box.slice(0, 4).filter((id, i, a) => a.slice(0, i + 1).reduce((t, x) => t + BY[x].c, 0) <= BUDGET)
+        PROFILE.box.slice(0, 4).filter((id, i, a) => a.slice(0, i + 1).reduce((t, x) => t + POKEMON[x].c, 0) <= BUDGET)
       );
     }
     save();

@@ -1,4 +1,4 @@
-import { MV, TAL } from './moves.js';
+import { MOVES, ABILITIES } from './moves.js';
 
 const SIGNATURE_MOVES = {
   vegeattak: {
@@ -448,9 +448,9 @@ export function init() {
    change at each stage, roles are settled, and branching
    Awakenings multiply (Politoed, Slowking, Debugant).
    ===================================================================== */
-  Object.assign(MV, SIGNATURE_MOVES);
+  Object.assign(MOVES, SIGNATURE_MOVES);
 
-  Object.assign(TAL, {
+  Object.assign(ABILITIES, {
     souplesse: ['Souplesse', 'Ne peut pas être paralysé.'],
     marqueombre: ['Marque Ombre', 'Les adversaires à son contact perdent 2 Mouvement.'],
     regeforce: ['Régé-Force', 'Récupère 3 PV à chaque fin de manche.'],

@@ -1,6 +1,6 @@
 import { TYPES } from '../data/game-data.js';
-import { MV } from '../data/moves.js';
-import { MKT, PKT } from '../pokemon/pokemon.js';
+import { MOVES } from '../data/moves.js';
+import { MARK_TYPE, PKT } from '../pokemon/pokemon.js';
 import { HOOKS } from '../core/hooks.js';
 import {
   HOSTILE,
@@ -263,7 +263,7 @@ export function aiSupportMove(S, e, opts, al, here) {
     contact = al.filter(a => hdist(a.pos, e.pos) === 1).length,
     nearby = al.filter(a => hdist(a.pos, e.pos) <= 3).length;
   e.mv.forEach(mid => {
-    const m = MV[mid];
+    const m = MOVES[mid];
     if (!m || m.p || m.fix || m.wx) {
       return;
     }
@@ -358,7 +358,7 @@ export const PRE_MOVE_EFFECTS = {
     }
     u.t = [...v.t];
     u.s = [u.s[0], ...v.s.slice(1)];
-    u.mv = v.mv.filter(x => x !== 'morphing' && MV[x]);
+    u.mv = v.mv.filter(x => x !== 'morphing' && MOVES[x]);
     if (u.ctm && !u.mv.includes(u.ctm)) {
       u.mv.push(u.ctm);
     }
@@ -428,7 +428,7 @@ const ROSTER_SELF_EFFECTS = {
   },
   conversion(S, u, ev) {
     const mk = markAt(S, unitKey(u)),
-      t = mk ? MKT[mk] : 'Normal';
+      t = mk ? MARK_TYPE[mk] : 'Normal';
     u.t = [t];
     PKT.set(u.t, u.id);
     pushMessage(ev, `Conversion : ${u.n} devient de type ${t}.`);

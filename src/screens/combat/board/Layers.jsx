@@ -1,5 +1,5 @@
-import { MV } from '../../../engine/data/moves.js';
-import { MKT } from '../../../engine/pokemon/pokemon.js';
+import { MOVES } from '../../../engine/data/moves.js';
+import { MARK_TYPE } from '../../../engine/pokemon/pokemon.js';
 import { arenaNext, veiled } from '../../../engine/modes/gyms.js';
 import { INK, typeGlyphPath, typeColor } from '../../../engine/core/utils.js';
 import { affected, byUid, nbrK, reach, targets, unitAt, unitKey, threatZone } from '../../../engine/combat/engine.js';
@@ -43,7 +43,7 @@ export function Markers() {
       const t = B.tiles[k],
         [x, y] = HC(k);
       if (t.mark) {
-        const tt = MKT[t.mark.k],
+        const tt = MARK_TYPE[t.mark.k],
           col = typeColor(tt);
         // tilted board (v4.77): the badge shrinks toward the back and stays within its tile, instead of biting into the tile behind
         const ms = TILT.on ? tiltS(x, y) : 0,
@@ -212,7 +212,7 @@ function extras() {
       }
     });
     if (ui.mode === 'target') {
-      const m = MV[u.mv[ui.mi]];
+      const m = MOVES[u.mv[ui.mi]];
       if (m.sh === 'one') {
         targets(B, u, m).forEach(k => {
           if (!B.tiles[k].rock) {
@@ -245,7 +245,7 @@ function extras() {
       if (e.side !== 'e' || e.ko || !e.intent) {
         return;
       }
-      const m = MV[e.intent.mv];
+      const m = MOVES[e.intent.mv];
       if (m.sh !== 'one' && m.sh !== 'line') {
         return;
       }
@@ -273,7 +273,7 @@ export function Highlights() {
     }
     B.units.forEach(e => {
       if (!vl && e.side === 'e' && !e.ko && e.intent) {
-        hl.push(...polys(affected(B, e, MV[e.intent.mv], e.intent.k), 'highlight-danger'));
+        hl.push(...polys(affected(B, e, MOVES[e.intent.mv], e.intent.k), 'highlight-danger'));
       }
     });
     // v4.12: the hit opponent shows its threat zone (everything it can strike after moving)
@@ -288,7 +288,7 @@ export function Highlights() {
           hl.push(...polys(ui.pv.aff, 'highlight-affected'));
         }
       } else if (ui.mode === 'target') {
-        hl.push(...polys(targets(B, u, MV[u.mv[ui.mi]]), 'highlight-target', true));
+        hl.push(...polys(targets(B, u, MOVES[u.mv[ui.mi]]), 'highlight-target', true));
         if (ui.pv) {
           hl.push(...polys(ui.pv.aff, 'highlight-affected'));
         }

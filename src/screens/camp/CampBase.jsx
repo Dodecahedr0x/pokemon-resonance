@@ -1,4 +1,4 @@
-import { BY } from '../../engine/pokemon/pokemon.js';
+import { POKEMON } from '../../engine/pokemon/pokemon.js';
 import { PROFILE } from '../../engine/state/game-state.js';
 import { medal } from '../../engine/core/utils.js';
 import { ITM } from '../../engine/assets/item-icons.js';
@@ -47,7 +47,7 @@ function Building({ k }) {
 // An expedition in progress (data-exp-r to collect).
 function Expedition({ x, i }) {
   const remainder = x.fin - PROFILE.battles,
-    m = BY[x.id];
+    m = POKEMON[x.id];
   return (
     <div className="camp-expedition">
       <Html html={medal(m.t, 'is-small')} />
@@ -78,8 +78,8 @@ function Daycare() {
     slot = id =>
       id ? (
         <span className="camp-daycare-slot is-filled">
-          <Html html={medal(BY[id].t, 'is-small')} />
-          <b>{BY[id].n}</b>
+          <Html html={medal(POKEMON[id].t, 'is-small')} />
+          <b>{POKEMON[id].n}</b>
         </span>
       ) : (
         <span className="camp-daycare-slot">
@@ -92,7 +92,7 @@ function Daycare() {
   let txt;
   if (P2) {
     const L = inheritableMoves(P2.mother, P2.father);
-    txt = `Prochain œuf dans ${pl(remainder, 'combat')} : un ${BY[P2.mother].n}${L.length ? `, qui héritera d’une attaque de ${BY[P2.father].n}` : ''}${P2.meta ? ' (Métamorph : deux fois plus de chances de chromatique)' : ''}.`;
+    txt = `Prochain œuf dans ${pl(remainder, 'combat')} : un ${POKEMON[P2.mother].n}${L.length ? `, qui héritera d’une attaque de ${POKEMON[P2.father].n}` : ''}${P2.meta ? ' (Métamorph : deux fois plus de chances de chromatique)' : ''}.`;
   } else if (c.length === 2) {
     txt = 'Ces deux-là ne s’entendent pas : il faut un type en commun, ou Métamorph.';
   } else {

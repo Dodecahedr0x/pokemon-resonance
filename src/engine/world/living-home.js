@@ -1,6 +1,6 @@
 /* Living Home: the illustration follows the adventure region and the time of day; the companion waits there, a hug with one gesture (added in v4.28). */
 
-import { BY, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCEN } from '../pokemon/pokemon.js';
 import { PROFILE, isCamp } from '../state/game-state.js';
 import { $, toast } from '../core/utils.js';
 import { cur } from '../core/navigation.js';
@@ -41,7 +41,7 @@ function heroRegionInfo(g) {
 export function heroView(g) {
   const r = heroRegionInfo(g),
     id = activeCompanionId() || squad[0] || '',
-    m = BY[id],
+    m = POKEMON[id],
     comp = !!activeCompanionId();
   return {
     reg: ['', 'kanto', 'johto', 'hoenn'][r],
@@ -69,7 +69,7 @@ export function init() {
       b.classList.remove('is-petted');
       void b.offsetWidth;
       b.classList.add('is-petted');
-      const n = BY[activeCompanionId()].n;
+      const n = POKEMON[activeCompanionId()].n;
       if (PROFILE.comp.j === today()) {
         toast(`${n} est déjà tout content aujourd’hui.`);
         return;

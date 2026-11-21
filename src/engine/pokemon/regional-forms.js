@@ -1,6 +1,6 @@
 /* Regional forms (Pokédex) (added in v4.70). */
 
-import { BY, SCEN } from './pokemon.js';
+import { POKEMON, SCEN } from './pokemon.js';
 import { HOOKS } from '../core/hooks.js';
 import { V4 } from '../ui/screen-state.js';
 import { renderDexCard } from '../progression/pokedex.js';
@@ -30,7 +30,7 @@ const REGIONAL_FORMS = [
   { id: 'absol', reg: 'Hoenn mentale', plus: 'Psy', hue: 300, g: 3 },
   { id: 'draby', reg: 'Hoenn céleste', plus: 'Vol', hue: 200, g: 3 },
   { id: 'massko', reg: 'Hoenn des dunes', plus: 'Dragon', hue: 90, g: 3 },
-].filter(f => BY[f.id]);
+].filter(f => POKEMON[f.id]);
 
 // .regionalForm banner and illustration tint: rendered by React
 const regionOf = sc => {

@@ -1,7 +1,7 @@
 import { Html } from '../../lib/html.jsx';
 import { useOverlay } from './dialogsStore.js';
 import { Dialogue } from './Window.jsx';
-import { BY } from '../../engine/pokemon/pokemon.js';
+import { POKEMON } from '../../engine/pokemon/pokemon.js';
 import { medal, typeColor } from '../../engine/core/utils.js';
 import { HELD_IMG } from '../../engine/state/economy.js';
 import { ITM } from '../../engine/assets/item-icons.js';
@@ -33,7 +33,7 @@ function Choice({ cands, pick }) {
       </p>
       <div className="starter-grid tower-grid">
         {cands.map(id => {
-          const m = BY[id],
+          const m = POKEMON[id],
             on = pick.includes(id);
           return (
             <button
@@ -80,7 +80,7 @@ function Reward({ floor, offer }) {
                 <img src={ITM(HELD_IMG[x.it])} alt="" />
               </span>
             ) : (
-              <Html html={medal(BY[x.to].t, 'is-small')} />
+              <Html html={medal(POKEMON[x.to].t, 'is-small')} />
             )}
             <span>
               <b>{x.t}</b>

@@ -1,4 +1,4 @@
-import { BY, PKT } from '../pokemon/pokemon.js';
+import { POKEMON, PKT } from '../pokemon/pokemon.js';
 import { ITEMS2 } from '../state/game-state.js';
 import { tokCl, unitsDirty } from '../../screens/combat/board/boardStore.js';
 import { L } from '../combat/ui.js';
@@ -33,10 +33,10 @@ export function tokenArt(u) {
     T.geo = ['-17', '-22', '34']; // x, y, width = height
     unitsDirty();
   }
-  if (T.imOn && T.imId !== u.id && BY[u.id]) {
+  if (T.imOn && T.imId !== u.id && POKEMON[u.id]) {
     T.imId = u.id;
     tokCl(T, 'has-image', false);
-    T.href = ART(BY[u.id].no);
+    T.href = ART(POKEMON[u.id].no);
     unitsDirty();
   }
 }
@@ -60,7 +60,7 @@ export function tokArtErr(T) {
 
 export function preload(ids) {
   ids.forEach(id => {
-    const m = BY[id];
+    const m = POKEMON[id];
     if (!m || pre.has(m.no)) {
       return;
     }
@@ -81,7 +81,7 @@ export function preload(ids) {
 export const tagUnits = S => {
   if (S && Array.isArray(S.units)) {
     S.units.forEach(u => {
-      if (u && Array.isArray(u.t) && BY[u.id]) {
+      if (u && Array.isArray(u.t) && POKEMON[u.id]) {
         PKT.set(u.t, u.id);
       } // types → species
     });

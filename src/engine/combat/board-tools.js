@@ -1,7 +1,7 @@
 /* Fullscreen, cell magnifier, high-contrast board (added in v4.44). */
 
-import { EL, MX, RX } from '../data/game-data.js';
-import { MV } from '../data/moves.js';
+import { ELEMENT_TYPES, MARK_REACTIONS, REACTIONS } from '../data/game-data.js';
+import { MOVES } from '../data/moves.js';
 import { arenaNext, veiled } from '../modes/gyms.js';
 import { rxCat, toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
@@ -120,7 +120,7 @@ function tileDangers(k) {
         if (e.side !== 'e' || e.ko || !e.intent) {
           return;
         }
-        const m = MV[e.intent.mv];
+        const m = MOVES[e.intent.mv];
         if (m && affected(B, e, m, e.intent.k).includes(k)) {
           o.push(`${e.n} vise cette case avec ${m.n}.`);
         }
@@ -147,7 +147,7 @@ function tileContext(k) {
       return o;
     }
     if (ui.mode === 'target') {
-      const m = MV[u.mv[ui.mi]];
+      const m = MOVES[u.mv[ui.mi]];
       if (m && targets(B, u, m).includes(k)) {
         o.push(`À portée de ${m.n} (${u.n}).`);
       }
@@ -169,8 +169,8 @@ function unitInfo(v) {
     v.side === 'e'
       ? v.ko
         ? 'K.O.'
-        : v.intent && !veiled(B) && MV[v.intent.mv]
-          ? `Prépare ${MV[v.intent.mv].n}`
+        : v.intent && !veiled(B) && MOVES[v.intent.mv]
+          ? `Prépare ${MOVES[v.intent.mv].n}`
           : v.intent
             ? 'Intention voilée'
             : ''
@@ -261,10 +261,10 @@ function tileSheet() {
   let rx = [];
   try {
     const mk = t.mark ? markAt(B, k) : t.w ? 'trempe' : null;
-    if (mk && MX[mk]) {
-      const row = MX[mk];
-      rx = EL.map((e, i) =>
-        row[i] && row[i] !== 'ren' && RX[row[i]] ? [rxCat(row[i]), e + ' → ' + RX[row[i]].n] : null
+    if (mk && MARK_REACTIONS[mk]) {
+      const row = MARK_REACTIONS[mk];
+      rx = ELEMENT_TYPES.map((e, i) =>
+        row[i] && row[i] !== 'ren' && REACTIONS[row[i]] ? [rxCat(row[i]), e + ' → ' + REACTIONS[row[i]].n] : null
       ).filter(Boolean);
     }
   } catch {

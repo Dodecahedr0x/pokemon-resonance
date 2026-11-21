@@ -1,4 +1,4 @@
-import { MV } from '../data/moves.js';
+import { MOVES } from '../data/moves.js';
 import { SCEN } from '../pokemon/pokemon.js';
 import { toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
@@ -43,7 +43,7 @@ import { bossEnrage, bossLine } from '../world/secret-places.js';
 /** The best watch attack: the most powerful one that hits the tile. */
 export function vigilStrike(S, u, k) {
   return u.mv
-    .map(id => MV[id])
+    .map(id => MOVES[id])
     .filter(m => m && m.p > 0 && !m.xp && m.sh !== 'self' && m.sh !== 'ally' && m.sh !== 'ring' && inReach(S, u, m, k))
     .sort((a, b) => b.p - a.p)[0];
 }
@@ -291,7 +291,7 @@ const canUseVigil = (S, u) =>
     !u.acted &&
     !u.sn &&
     S.phase === 'player' &&
-    u.mv.some(id => MV[id] && MV[id].p > 0)
+    u.mv.some(id => MOVES[id] && MOVES[id].p > 0)
   );
 
 /* ---------- 2. Encirclement ---------- */

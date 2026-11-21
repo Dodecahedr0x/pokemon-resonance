@@ -1,6 +1,6 @@
 import { Html, parseStyle } from '../../lib/html.jsx';
 import { Box, Dialogue } from './Window.jsx';
-import { BY } from '../../engine/pokemon/pokemon.js';
+import { POKEMON } from '../../engine/pokemon/pokemon.js';
 import { typeBadge } from '../../engine/core/utils.js';
 import { crestSmall } from '../../engine/team/team.js';
 import { shinyStyle } from '../../engine/pokemon/shiny.js';
@@ -36,7 +36,7 @@ function Card({
   flee: flee,
   msg,
 }) {
-  const m = x && BY[x.id];
+  const m = x && POKEMON[x.id];
   return (
     <Dialogue className="dialog-card is-compact safari-card" titre="sfT" closeAttrs={{ 'data-safari-panel': 'x' }}>
       <p className="kicker">Parc Safari</p>

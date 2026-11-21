@@ -3,7 +3,7 @@
    Pokémon, the story scenes, the Camp Garden and the friends tournament
    (defaults and sanitizer, called by state/game-state.js).
    ===================================================================== */
-import { BY } from '../pokemon/pokemon.js';
+import { POKEMON } from '../pokemon/pokemon.js';
 import { POTAGER } from './camp-garden.js';
 
 /* ---------- profile (declared functions: called as soon as the file loads) ---------- */
@@ -24,7 +24,7 @@ export function companionGardenClean(p) {
   }
   const c = p.comp;
   if (c && typeof c === 'object') {
-    if (BY[c.id]) {
+    if (POKEMON[c.id]) {
       o.comp.id = c.id;
     }
     if (Number.isFinite(c.aff)) {
@@ -60,13 +60,13 @@ export function companionGardenClean(p) {
     }
     const r = t.run;
     if (r && Array.isArray(r.order) && Array.isArray(r.team) && Number.isFinite(r.i)) {
-      const team = r.team.filter(id => BY[id]).slice(0, 4),
+      const team = r.team.filter(id => POKEMON[id]).slice(0, 4),
         ordering = r.order.filter(id => typeof id === 'string' && /^[a-z0-9]{6,12}$/.test(id)).slice(0, 5);
       if (team.length && ordering.length && r.i >= 0 && r.i < ordering.length) {
         const hp = {};
         if (r.hp && typeof r.hp === 'object') {
           for (const k in r.hp) {
-            if (BY[k] && Number.isFinite(r.hp[k])) {
+            if (POKEMON[k] && Number.isFinite(r.hp[k])) {
               hp[k] = Math.max(0, Math.min(1, r.hp[k]));
             }
           }

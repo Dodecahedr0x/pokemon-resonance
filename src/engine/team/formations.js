@@ -1,6 +1,6 @@
 /* Team formations (added in v4.63). */
 
-import { BY, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCEN } from '../pokemon/pokemon.js';
 import { HOOKS } from '../core/hooks.js';
 import { renderSquad, squad } from './team.js';
 import { heal, pushMessage } from '../combat/engine.js';
@@ -18,7 +18,7 @@ export const formationKey = () => (FORMATIONS[PREF.activeFormation] ? PREF.activ
 export const formationTeam = () =>
   squad
     .slice(0, teamSize())
-    .map(id => BY[id])
+    .map(id => POKEMON[id])
     .filter(Boolean);
 
 export const formationActive = () => {
@@ -32,7 +32,7 @@ const formationBonus = S => {
   }
   const al = S.units.filter(u => u.side === 'a'),
     k = formationKey();
-  if (k === 'libre' || !al.length || !FORMATIONS[k].condition(al.map(u => BY[u.id]).filter(Boolean))) {
+  if (k === 'libre' || !al.length || !FORMATIONS[k].condition(al.map(u => POKEMON[u.id]).filter(Boolean))) {
     return null;
   }
   return { k, al };

@@ -1,6 +1,6 @@
 /* Trainer statistics: trainer level, families owned, S ranks, best Bond, trophies. */
 
-import { BY } from '../pokemon/pokemon.js';
+import { POKEMON } from '../pokemon/pokemon.js';
 import { PROFILE, lvlOfPts } from '../state/game-state.js';
 import { BADGES } from '../modes/gyms.js';
 
@@ -13,7 +13,7 @@ export const tLevel = () => {
 export const familyOwned = () => new Set([...PROFILE.box, ...PROFILE.dex]).size;
 
 // Free mode too (v4.21)
-export const ownedFam = id => PROFILE.box.includes(BY[id].base) || PROFILE.dex.includes(BY[id].base);
+export const ownedFam = id => PROFILE.box.includes(POKEMON[id].base) || PROFILE.dex.includes(POKEMON[id].base);
 
 // Free mode too (v4.21)
 export const countS = () => Object.values(PROFILE.ranks || {}).filter(r => r === 'S').length;

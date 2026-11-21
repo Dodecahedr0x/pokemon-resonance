@@ -1,6 +1,6 @@
 import { Html, parseStyle } from '../../lib/html.jsx';
 import { Box, Dialogue } from './Window.jsx';
-import { BY } from '../../engine/pokemon/pokemon.js';
+import { POKEMON } from '../../engine/pokemon/pokemon.js';
 import { typeBadge } from '../../engine/core/utils.js';
 import { crestSmall } from '../../engine/team/team.js';
 import { SPARK, shinyStyle } from '../../engine/pokemon/shiny.js';
@@ -55,7 +55,7 @@ function Body({ status: state, id, sh, dom, known: known }) {
   if (state !== 'prise') {
     return null;
   }
-  const m = BY[id];
+  const m = POKEMON[id];
   return (
     <>
       <div className={'fishing-catch' + (sh ? ' shiny' : '')} style={sh ? parseStyle(shinyStyle(id)) : undefined}>

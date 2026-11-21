@@ -1,8 +1,8 @@
 import { Html } from '../../../lib/html.jsx';
 import { strength } from '../../../lib/power.js';
-import { RX } from '../../../engine/data/game-data.js';
-import { MV, SHAPE, TAL } from '../../../engine/data/moves.js';
-import { BY, SCEN } from '../../../engine/pokemon/pokemon.js';
+import { REACTIONS } from '../../../engine/data/game-data.js';
+import { MOVES, SHAPE, ABILITIES } from '../../../engine/data/moves.js';
+import { POKEMON, SCEN } from '../../../engine/pokemon/pokemon.js';
 import { ARR } from '../../../engine/pokemon/evolution.js';
 import { ROLEFX, rIco } from '../../../engine/pokemon/roles-synergies.js';
 import { veiled } from '../../../engine/modes/gyms.js';
@@ -161,7 +161,7 @@ function OpponentTurn() {
       <ol className="battle-foe-turn-list">
         {foes.map(u => {
           const st = u === cur ? 'acting' : u.done ? 'done' : '';
-          const m = u.intent && !veil ? MV[u.intent.mv] : null,
+          const m = u.intent && !veil ? MOVES[u.intent.mv] : null,
             v = m && unitAt(B, u.intent.k);
           return (
             <li key={u.uid} className={st && 'is-' + st}>
@@ -260,7 +260,7 @@ function Intention({ e }) {
     );
   }
   if (e.intent) {
-    const m = MV[e.intent.mv],
+    const m = MOVES[e.intent.mv],
       v = unitAt(B, e.intent.k);
     const est = v ? dmgOf(B, e, m, v, mvType(B, e, m), 1) : 0;
     return (
@@ -280,7 +280,7 @@ function Intention({ e }) {
 }
 
 function OpponentSheet({ e }) {
-  const tl = TAL[e.ability],
+  const tl = ABILITIES[e.ability],
     nx = hasNx(e) ? awakeningInfo(B, e) : null,
     fe = foeEvo(B, e);
   const role = roleOf(e),
@@ -324,7 +324,7 @@ function OpponentSheet({ e }) {
       <Html html={catchBlock(e)} />
       <div className="battle-moves">
         {e.mv.map((id, i) => {
-          const m = MV[id];
+          const m = MOVES[id];
           return (
             <div key={i} className="battle-move is-static" style={{ '--c': typeColor(m.t) }}>
               <Html html={typeBadge(m.t)} />
@@ -357,7 +357,7 @@ function Preview({ v }) {
         {v.rxs.map((r, i) => (
           <span key={i} className={`chip cat-${rxCat(r)}`}>
             <i />
-            {RX[r].n}
+            {REACTIONS[r].n}
           </span>
         ))}
       </div>
@@ -461,7 +461,7 @@ function Awakening({ u, s }) {
     if (resonanceHtml) {
       return <Hi html={s(resonanceHtml)} />;
     }
-    const m = BY[u.id];
+    const m = POKEMON[u.id];
     return (
       <p className="battle-final-stage">
         {u.evo
@@ -494,11 +494,11 @@ function Awakening({ u, s }) {
       <button type="button" className="battle-awaken" data-evo="open" disabled={!ce}>
         <span className="battle-awaken-medals">
           {o.map((id, i) => (
-            <Html key={i} html={medal(BY[id].t, 'is-small')} />
+            <Html key={i} html={medal(POKEMON[id].t, 'is-small')} />
           ))}
         </span>
         <span>
-          <b>Éveiller{o.length === 1 ? ' en ' + BY[o[0]].n : ` · ${o.length} voies`}</b>
+          <b>Éveiller{o.length === 1 ? ' en ' + POKEMON[o[0]].n : ` · ${o.length} voies`}</b>
           <em>{why}</em>
         </span>
         <span className="battle-awaken-cost">
@@ -524,7 +524,7 @@ function Step({ u, st }) {
       </Button>
     );
   } else if (st === 'agir') {
-    const target = u.mv.some(id => targets(B, u, MV[id]).length);
+    const target = u.mv.some(id => targets(B, u, MOVES[id]).length);
     txt = target
       ? `Choisissez une capacité${canAwaken(B, u) ? ', ou éveillez-le' : ''}.`
       : `Aucune cible à portée${canAwaken(B, u) ? ' : éveillez-le, ou passez' : ''}.`;
@@ -625,7 +625,7 @@ function Bag({ u }) {
 
 /* ---------- Pokémon of your team ---------- */
 function AllySheet({ u }) {
-  const tl = TAL[u.ability];
+  const tl = ABILITIES[u.ability];
   // guided walkthrough: the step replaces the tips when no mode is active
   const F = turnFlow,
     guide = F.active() && !ui.busy && !ui.selE && u.side === 'a' && F.toPlay(B).includes(u),
@@ -681,7 +681,7 @@ function AllySheet({ u }) {
       {NL}
       <div className="battle-moves">
         {u.mv.map((id, i) => {
-          const m = MV[id],
+          const m = MOVES[id],
             typ = mvType(B, u, m),
             n = targets(B, u, m).length;
           return (

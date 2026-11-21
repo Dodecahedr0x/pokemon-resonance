@@ -1,7 +1,7 @@
 /* Battle panel details: cell info, held items, fatigue, Bonds, combined techniques and capture. */
 
-import { EL, MX, RX } from '../data/game-data.js';
-import { BY } from '../pokemon/pokemon.js';
+import { ELEMENT_TYPES, MARK_REACTIONS, REACTIONS } from '../data/game-data.js';
+import { POKEMON } from '../pokemon/pokemon.js';
 import { ITEMS2, LINK_N } from '../state/game-state.js';
 import { ROLEFX, rIco } from '../pokemon/roles-synergies.js';
 import { markOf, medal, rxCat } from '../core/utils.js';
@@ -68,9 +68,11 @@ export function tileCard() {
     mk = t.mark ? markAt(B, k) : t.w ? 'trempe' : null;
   let rx = '';
   if (mk) {
-    const row = MX[mk];
-    rx = EL.map((e, i) =>
-      row[i] && row[i] !== 'ren' ? `<span class="chip cat-${rxCat(row[i])}"><i></i>${e} → ${RX[row[i]].n}</span>` : ''
+    const row = MARK_REACTIONS[mk];
+    rx = ELEMENT_TYPES.map((e, i) =>
+      row[i] && row[i] !== 'ren'
+        ? `<span class="chip cat-${rxCat(row[i])}"><i></i>${e} → ${REACTIONS[row[i]].n}</span>`
+        : ''
     ).join('');
   }
   return `<div class="battle-tile"><div class="battle-tile-head"><b>Case ${'ABCDEFGH'[c]}${r + 1}</b><button type="button" class="button button-small button-ghost" data-tile="x">Fermer</button></div><p>${tileTip(k)}</p>${rx ? `<div class="battle-tile-reactions">${rx}</div>` : ''}</div>`;
@@ -94,7 +96,7 @@ export function unitExtras(u) {
     const l = linkLvl(B, u.sp, x.sp),
       adj = hdist(x.pos, u.pos) === 1;
     o.push(
-      `<span class="battle-unit-tag is-link${adj && l >= 1 ? ' is-active' : ''}" title="Soutien : −1 dégât côte à côte. Synchro : +25 % sur les réactions préparées l’un pour l’autre. Duo : technique combinée.">Lien ${LINK_N[l]} · ${BY[x.sp].n}${adj ? ' · côte à côte' : ''}</span>`
+      `<span class="battle-unit-tag is-link${adj && l >= 1 ? ' is-active' : ''}" title="Soutien : −1 dégât côte à côte. Synchro : +25 % sur les réactions préparées l’un pour l’autre. Duo : technique combinée.">Lien ${LINK_N[l]} · ${POKEMON[x.sp].n}${adj ? ' · côte à côte' : ''}</span>`
     );
   });
   const role = roleOf(u),

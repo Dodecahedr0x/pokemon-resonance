@@ -1,5 +1,5 @@
-import { MV } from '../data/moves.js';
-import { BY, SCEN } from '../pokemon/pokemon.js';
+import { MOVES } from '../data/moves.js';
+import { POKEMON, SCEN } from '../pokemon/pokemon.js';
 import { PROFILE } from '../state/game-state.js';
 import { medal } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
@@ -129,11 +129,11 @@ export function trapArrival(S, v, ev) {
 
 /** The AI: lay a trap when it has nothing better, or right at the start of the battle. */
 export function trapPlan(S, e, best, al) {
-  const id = e.mv.find(x => MV[x] && MV[x].fx === 'piege');
+  const id = e.mv.find(x => MOVES[x] && MOVES[x].fx === 'piege');
   if (!id || e.seg || (best && !(S.round <= 2 && best.sc < 12))) {
     return null;
   }
-  const m = MV[id];
+  const m = MOVES[id];
   let bk = null,
     bs = -1e9;
   targets(S, e, m).forEach(k => {
@@ -159,7 +159,7 @@ export function deferredCharge(S, u, m) {
 }
 
 export function launchCharge(S, u, mi, k) {
-  const m = MV[u.mv[mi]],
+  const m = MOVES[u.mv[mi]],
     ev = [];
   u.chg = { mv: u.mv[mi], k };
   if (m.charge === 'vol') {
@@ -191,7 +191,7 @@ export function unloadCharges(S, ev) {
     .filter(u => u.chg && duelCanCharge(S, u)) // duel: after the opponent's turn (v4.33)
     .forEach(u => {
       const c = u.chg,
-        m = MV[c.mv],
+        m = MOVES[c.mv],
         flying = u.vole;
       u.chg = null;
       u.vole = 0;
@@ -381,7 +381,7 @@ export function chargesOnBoard(S) {
     if (!u.chg || u.ko) {
       return;
     }
-    const m = MV[u.chg.mv];
+    const m = MOVES[u.chg.mv];
     (u.vole ? [u.chg.k] : affected(S, u, m, u.chg.k)).forEach(k => {
       h += poly(k, 'highlight-charge');
     });
@@ -490,7 +490,7 @@ export const COLOSSI = [
     rew: [2000, 16],
     d: 'Léviator surgit du lac, le corps déroulé sur quatre cases. Ses nageoires et sa queue frappent tout ce qui s’approche ; Crustabri sème des Picots sur la rive.',
   },
-].filter(C => BY[C.id] && C.escort.every(([e]) => BY[e]));
+].filter(C => POKEMON[C.id] && C.escort.every(([e]) => POKEMON[e]));
 
 const TACTICAL_MOVES = {
   picots: {
@@ -538,9 +538,9 @@ const TACTICAL_MOVES = {
 // Statements run at startup, in the original order (see index.js).
 export function init() {
   /* ---------- moves ---------- */
-  Object.assign(MV, TACTICAL_MOVES);
-  MV.lancesoleil.charge = 'soleil';
-  MV.lancesoleil.d =
+  Object.assign(MOVES, TACTICAL_MOVES);
+  MOVES.lancesoleil.charge = 'soleil';
+  MOVES.lancesoleil.d =
     'Ligne de 3. ×1,5 sous le Soleil. Tactique avancée : part en fin de manche (×1,3), tout de suite sous le Soleil.';
   HOOKS.beforeRoundEnd.push((S, ev) => {
     unloadCharges(S, ev);
@@ -570,7 +570,7 @@ export function init() {
     },
   });
   COLOSSI.forEach(C => {
-    C.escort.forEach(([, , x]) => x && x.mv && (x.mv = x.mv.filter(m => MV[m]))); // missing moves: ignored
+    C.escort.forEach(([, , x]) => x && x.mv && (x.mv = x.mv.filter(m => MOVES[m]))); // missing moves: ignored
     SCEN[C.k] = {
       n: C.n,
       lvl: `Colosse · ${C.title}`,
@@ -615,7 +615,7 @@ export function init() {
         return;
       }
       if (x.mv) {
-        u.mv = x.mv.filter(m => MV[m]);
+        u.mv = x.mv.filter(m => MOVES[m]);
       }
       if (x.colossus) {
         makeColossus(S, u, x, D0);
@@ -640,7 +640,7 @@ export function init() {
       return '';
     }
     const C = colossusOf(r.colossus);
-    return `<div class="result-list"><h4>Colosse</h4><div class="result-row">${medal(BY[C.id].t)}<span>${C.n} terrassé · ${PROFILE.colossi.length} / ${COLOSSI.length} colosses</span><b>★</b></div></div>`;
+    return `<div class="result-list"><h4>Colosse</h4><div class="result-row">${medal(POKEMON[C.id].t)}<span>${C.n} terrassé · ${PROFILE.colossi.length} / ${COLOSSI.length} colosses</span><b>★</b></div></div>`;
   });
   /* ---------- TMs, DTs and HMs in the Shop ---------- */
   [
@@ -650,7 +650,7 @@ export function init() {
     ['cs02', { num: 'CS02', mv: 'volcs', g: 12, cs: true, types: ['Vol', 'Dragon'] }],
   ].forEach(([k, M]) => {
     MACHINES[k] = M;
-    const m = MV[M.mv];
+    const m = MOVES[M.mv];
     SHOP[k] = {
       n: `${M.num} · ${m.n}`,
       sn: M.num,

@@ -1,6 +1,6 @@
 import { Html } from '../../lib/html.jsx';
 import { GYMS } from '../../engine/data/game-data.js';
-import { BY, SCEN } from '../../engine/pokemon/pokemon.js';
+import { POKEMON, SCEN } from '../../engine/pokemon/pokemon.js';
 import { ARENAS, BADGES } from '../../engine/modes/gyms.js';
 import { medal } from '../../engine/core/utils.js';
 import { badgeSvg, gymSel } from '../../engine/modes/league.js';
@@ -45,9 +45,9 @@ export default function Arena() {
         <div className="league-gym-foes">
           {D.foes.map(([f], i) => (
             <span key={i}>
-              <Html html={medal(BY[f].t, 'is-small')} />
+              <Html html={medal(POKEMON[f].t, 'is-small')} />
               <em>
-                <Html html={BY[f].n} />
+                <Html html={POKEMON[f].n} />
               </em>
             </span>
           ))}

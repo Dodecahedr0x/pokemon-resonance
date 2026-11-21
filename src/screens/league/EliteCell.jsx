@@ -1,5 +1,5 @@
 import { Html } from '../../lib/html.jsx';
-import { BY, SCEN } from '../../engine/pokemon/pokemon.js';
+import { POKEMON, SCEN } from '../../engine/pokemon/pokemon.js';
 import { PROFILE } from '../../engine/state/game-state.js';
 import { medal, typeColor } from '../../engine/core/utils.js';
 import { ELITE, scenLock } from '../../engine/combat/items-bonds-ai.js';
@@ -43,7 +43,7 @@ function Card({ k, L }) {
       </span>
       <span className="league-elite-foes">
         {s.foes.map(([f], j) => (
-          <Html key={j} html={medal(BY[f].t, 'is-small')} />
+          <Html key={j} html={medal(POKEMON[f].t, 'is-small')} />
         ))}
       </span>
       <em>

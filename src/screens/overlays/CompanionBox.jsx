@@ -1,6 +1,6 @@
 import { Html } from '../../lib/html.jsx';
 import { Box, Dialogue } from './Window.jsx';
-import { BY } from '../../engine/pokemon/pokemon.js';
+import { POKEMON } from '../../engine/pokemon/pokemon.js';
 import { medal } from '../../engine/core/utils.js';
 
 // Companion choice (#compBox). Clicks (data-comp, data-comp-p) and hidden: engine (057).
@@ -21,7 +21,7 @@ function Card({ L, cur, bonus }) {
       </p>
       <div className="picker-list">
         {L.map(id => {
-          const m = BY[id];
+          const m = POKEMON[id];
           return (
             <button
               key={id}

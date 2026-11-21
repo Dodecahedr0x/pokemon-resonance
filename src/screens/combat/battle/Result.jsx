@@ -2,7 +2,7 @@ import { useLayoutEffect, useRef, useState } from 'react';
 import { useKeyed } from '../../../lib/useKeyed.js';
 import { Html } from '../../../lib/html.jsx';
 import { GYMS } from '../../../engine/data/game-data.js';
-import { BY, SCEN } from '../../../engine/pokemon/pokemon.js';
+import { POKEMON, SCEN } from '../../../engine/pokemon/pokemon.js';
 import { isCamp } from '../../../engine/state/game-state.js';
 import { ARENAS, BADGES } from '../../../engine/modes/gyms.js';
 import { medal } from '../../../engine/core/utils.js';
@@ -163,10 +163,10 @@ function Sheet({ S, cardRef, decor: deco }) {
           <h4>Éveils décisifs</h4>
           {evl.map(([a, b, r], i) => (
             <div key={i} className="result-row">
-              <Html html={medal(BY[a].t)} />
-              <Html html={medal(BY[b].t)} />
+              <Html html={medal(POKEMON[a].t)} />
+              <Html html={medal(POKEMON[b].t)} />
               <span>
-                {BY[a].n} → {BY[b].n}
+                {POKEMON[a].n} → {POKEMON[b].n}
               </span>
               <b>M{r}</b>
             </div>

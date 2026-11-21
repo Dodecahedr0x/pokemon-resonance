@@ -1,6 +1,6 @@
 /* Companion, breeding eggs, expeditions (added in v4.61). */
 
-import { BY, MON, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, POKEMON_LIST, SCEN } from '../pokemon/pokemon.js';
 import { ITEMS2, PROFILE } from '../state/game-state.js';
 import { writeLS, readLS, medal, toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
@@ -35,7 +35,7 @@ function keepsakeOpenOverlay() {
   if (!id) {
     return;
   }
-  const m = BY[id],
+  const m = POKEMON[id],
     h = affinityHearts((PROFILE.comp && PROFILE.comp.aff) || 0),
     st = companionState();
   st.seen[id] = h;
@@ -96,7 +96,7 @@ function eggHatch(e) {
 export function expeditionStory(x) {
   const D = DESTINATIONS[x.destinationId],
     h = DESTINATION_HISTORY[x.destinationId] || [],
-    m = BY[x.id],
+    m = POKEMON[x.id],
     hist = h.length ? `${m.n} ${h[Math.floor(Math.random() * h.length)]}.` : '';
   let rare = '';
   if (Math.random() < (x.ideal ? 0.35 : 0.12)) {
@@ -231,7 +231,7 @@ const eggState = () => {
 };
 
 const eggPool = () =>
-  MON.filter(m => m.st === 1 && !m.leg && !m.isEnemy && m.base === m.id && !PROFILE.box.includes(m.id));
+  POKEMON_LIST.filter(m => m.st === 1 && !m.leg && !m.isEnemy && m.base === m.id && !PROFILE.box.includes(m.id));
 
 const DESTINATION_HISTORY = {
   foret: ['a suivi un sentier couvert de mousse', 'a trouvé un tronc creux plein de baies'],
@@ -269,7 +269,7 @@ function onCompanionEggsClick(e) {
   if (!id || b.disabled) {
     return;
   }
-  const m = BY[id],
+  const m = POKEMON[id],
     st = companionState();
   if (k === 'souv') {
     return keepsakeOpenOverlay();
@@ -354,7 +354,7 @@ export function init() {
     return r.eggShop
       .map(
         x =>
-          `<div class="result-list"><h4>Élevage</h4><div class="result-row">${medal(BY[x.id].t)}<span>Un œuf a éclos : ${BY[x.id].n}${x.sh ? ' chromatique !' : ''} rejoint votre Box !</span><b>🥚</b></div></div>`
+          `<div class="result-list"><h4>Élevage</h4><div class="result-row">${medal(POKEMON[x.id].t)}<span>Un œuf a éclos : ${POKEMON[x.id].n}${x.sh ? ' chromatique !' : ''} rejoint votre Box !</span><b>🥚</b></div></div>`
       )
       .join('');
   });

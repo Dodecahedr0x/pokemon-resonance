@@ -1,4 +1,4 @@
-import { BY, PRESETS } from '../pokemon/pokemon.js';
+import { POKEMON, PRESETS } from '../pokemon/pokemon.js';
 import { synOf } from '../pokemon/roles-synergies.js';
 
 const SYNERGY_PRESETS = {
@@ -51,7 +51,7 @@ export function init() {
 
   Object.keys(PRESETS).forEach(k => {
     const P = PRESETS[k];
-    P.ids = P.ids.filter(id => BY[id]);
+    P.ids = P.ids.filter(id => POKEMON[id]);
     if (!P.synergyText) {
       P.synergyText = synOf(P.ids)
         .map(x => x.n)

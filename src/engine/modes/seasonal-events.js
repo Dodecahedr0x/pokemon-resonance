@@ -1,6 +1,6 @@
 /* Monthly seasonal events (added in v4.65). */
 
-import { BY, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCEN } from '../pokemon/pokemon.js';
 import { ARENAS } from './gyms.js';
 import { writeLS, toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
@@ -143,8 +143,8 @@ export function init() {
       u.side === 'a' &&
       !!S &&
       !!S.seasonEvent &&
-      BY[u.id] &&
-      BY[u.id].t.includes(S.seasonEvent) && { mul: 1.05, labelText: 'Saison : ' + S.seasonEvent },
+      POKEMON[u.id] &&
+      POKEMON[u.id].t.includes(S.seasonEvent) && { mul: 1.05, labelText: 'Saison : ' + S.seasonEvent },
   });
 
   HOOKS.progress.unshift((S, rew, win) => {
@@ -155,7 +155,7 @@ export function init() {
       const t = eventSeason().t,
         s = seasonState();
       let n = 1;
-      if (S.units.some(u => u.side === 'a' && BY[u.id] && BY[u.id].t.includes(t))) {
+      if (S.units.some(u => u.side === 'a' && POKEMON[u.id] && POKEMON[u.id].t.includes(t))) {
         n += 1;
       }
       if (S.sc === featuredGym()) {

@@ -1,5 +1,5 @@
 import { Html } from '../../lib/html.jsx';
-import { BY } from '../../engine/pokemon/pokemon.js';
+import { POKEMON } from '../../engine/pokemon/pokemon.js';
 import { PROFILE } from '../../engine/state/game-state.js';
 import { medal } from '../../engine/core/utils.js';
 import { formatNumber } from '../../engine/state/economy.js';
@@ -19,7 +19,7 @@ export default function Journal() {
     pct = (a, b) => (b ? Math.round((a / b) * 100) + ' %' : '—'),
     top = (m, n) =>
       Object.entries(m)
-        .filter(([k]) => BY[k])
+        .filter(([k]) => POKEMON[k])
         .sort((a, b) => b[1] - a[1])
         .slice(0, n);
   if (!J.n) {
@@ -60,8 +60,8 @@ export default function Journal() {
         {mvp.length ? (
           mvp.map(([k, n]) => (
             <div key={k} className="journal-mvp">
-              <Html html={medal(BY[k].t, 'is-small')} />
-              <span>{BY[k].n}</span>
+              <Html html={medal(POKEMON[k].t, 'is-small')} />
+              <span>{POKEMON[k].n}</span>
               <b>{n} × MVP</b>
               <em>{J.use[k] || 0} combats</em>
             </div>
@@ -84,7 +84,7 @@ export default function Journal() {
                 {x[2] ? 'Rang ' + x[2] + ' · ' : ''}
                 {x[3]} manche{x[3] > 1 ? 's' : ''}
               </span>
-              {x[4] && BY[x[4]] ? <em>MVP {BY[x[4]].n}</em> : null}
+              {x[4] && POKEMON[x[4]] ? <em>MVP {POKEMON[x[4]].n}</em> : null}
             </div>
           ))}
       </section>

@@ -1,4 +1,4 @@
-import { BY } from '../../../engine/pokemon/pokemon.js';
+import { POKEMON } from '../../../engine/pokemon/pokemon.js';
 import { PROFILE } from '../../../engine/state/game-state.js';
 import { PIX } from '../../../engine/assets/item-icons.js';
 import { ownedFam } from '../../../engine/progression/trainer-stats.js';
@@ -17,7 +17,7 @@ export default function TrainerJournal() {
   const j = readJournal(),
     P = PROFILE,
     fav = Object.entries(j.use).sort((a, b) => b[1] - a[1])[0],
-    fm = fav && BY[fav[0]],
+    fm = fav && POKEMON[fav[0]],
     rate = P.battles ? Math.round((100 * P.wins) / P.battles) : 0,
     own = DEXS.filter(m => ownedFam(m.id)).length;
   return (

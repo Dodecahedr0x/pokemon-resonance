@@ -3,9 +3,9 @@ import { PKA } from '../assets/images.js';
 export let PKT;
 
 export function familyOf(id) {
-  const b = BY[id].base;
-  const f = MON.filter(m => m.base === b);
-  return f.length ? f : [BY[b] || BY[id]]; // a legend is its own family (v4.29)
+  const b = POKEMON[id].base;
+  const f = POKEMON_LIST.filter(m => m.base === b);
+  return f.length ? f : [POKEMON[b] || POKEMON[id]]; // a legend is its own family (v4.29)
 }
 
 /* =====================================================================
@@ -286,9 +286,9 @@ export const PRESETS = {
   technique: { n: 'Technique', ids: ['metamorph', 'qulbutoke', 'porygon', 'ramoloss'] },
 };
 
-export const WXN = { pluie: 'Pluie', soleil: 'Soleil', grele: 'Grêle', sable: 'Sable' };
+export const WEATHER_NAME = { pluie: 'Pluie', soleil: 'Soleil', grele: 'Grêle', sable: 'Sable' };
 
-export const WXT = { pluie: 'Eau', soleil: 'Feu', grele: 'Glace', sable: 'Sol' };
+export const WEATHER_TYPE = { pluie: 'Eau', soleil: 'Feu', grele: 'Glace', sable: 'Sol' };
 
 export const FAMT = {
   Eau: 'Eau',
@@ -302,7 +302,7 @@ export const FAMT = {
   Combat: 'Sol',
 };
 
-export const MKT = {
+export const MARK_TYPE = {
   trempe: 'Eau',
   charge: 'Électrik',
   brulant: 'Feu',
@@ -311,7 +311,7 @@ export const MKT = {
   fissure: 'Sol',
 };
 
-export const TCH = {
+export const TYPE_CHART = {
   Normal: [[], ['Roche', 'Acier'], ['Spectre']],
   Feu: [['Plante', 'Glace', 'Insecte', 'Acier'], ['Feu', 'Eau', 'Roche', 'Dragon'], []],
   Eau: [['Feu', 'Sol', 'Roche'], ['Eau', 'Plante', 'Dragon'], []],
@@ -489,7 +489,7 @@ export const SYS3 = [
 const prev = {};
 
 /* ===================== POKÉDEX v0.7: Kanto + Johto ===================== */
-export const MON = [
+export const POKEMON_LIST = [
   [
     'bulbizarre',
     'Bulbizarre',
@@ -2276,33 +2276,33 @@ export const MON = [
   no: a[10],
 }));
 
-export const BY = Object.fromEntries(MON.map(m => [m.id, m]));
+export const POKEMON = Object.fromEntries(POKEMON_LIST.map(m => [m.id, m]));
 
-export const FAMS30 = [...new Set(MON.filter(m => !m.isEnemy).map(m => m.base))];
+export const FAMS30 = [...new Set(POKEMON_LIST.filter(m => !m.isEnemy).map(m => m.base))];
 
 // Statements executed at startup, in the original order (see index.js).
 export function init() {
   for (const id in BALANCING) {
-    if (BY[id]) {
-      Object.assign(BY[id], BALANCING[id]);
+    if (POKEMON[id]) {
+      Object.assign(POKEMON[id], BALANCING[id]);
     }
   }
   for (const id in TECHNICAL_KITS) {
-    if (BY[id]) {
-      Object.assign(BY[id], TECHNICAL_KITS[id]);
+    if (POKEMON[id]) {
+      Object.assign(POKEMON[id], TECHNICAL_KITS[id]);
     }
   }
   OPPONENT_ONLY_FAMILIES.forEach(id => {
-    if (BY[id]) {
-      BY[id].isEnemy = true;
+    if (POKEMON[id]) {
+      POKEMON[id].isEnemy = true;
     }
   });
   /* families, stages, generations */
-  MON.forEach(m => {
+  POKEMON_LIST.forEach(m => {
     const nx = m.nx === 'eevee' ? Object.values(EEVEE) : Array.isArray(m.nx) ? m.nx : m.nx ? [m.nx] : [];
     nx.forEach(x => (prev[x] = m.id));
   });
-  MON.forEach(m => {
+  POKEMON_LIST.forEach(m => {
     let b = m.id,
       st = 1;
     while (prev[b]) {
@@ -2317,5 +2317,5 @@ export function init() {
   // v4.13: playable families
   /* v4.1 · Pokémon illustrations in the medallions, from the first display */
   PKT = new WeakMap();
-  MON.forEach(m => PKT.set(m.t, m.id));
+  POKEMON_LIST.forEach(m => PKT.set(m.t, m.id));
 }

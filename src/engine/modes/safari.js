@@ -1,6 +1,6 @@
 /* Safari Park: capture without fighting, with bait and rocks (added in v4.18). */
 
-import { BY } from '../pokemon/pokemon.js';
+import { POKEMON } from '../pokemon/pokemon.js';
 import { PROFILE, isCamp } from '../state/game-state.js';
 import { RC } from '../pokemon/roles-synergies.js';
 import { BADGES } from './gyms.js';
@@ -41,7 +41,7 @@ export function fishingSafariClean(p) {
     o.safari = {
       stepCount: Math.max(0, Math.min(12, Math.floor(s.stepCount))),
       balls: Math.max(0, Math.min(20, Math.floor(s.balls))),
-      isTaken: Array.isArray(s.isTaken) ? s.isTaken.filter(id => BY[id]).slice(0, 20) : [],
+      isTaken: Array.isArray(s.isTaken) ? s.isTaken.filter(id => POKEMON[id]).slice(0, 20) : [],
       enc: null,
     };
     if (!o.safari.stepCount && !o.safari.balls) {
@@ -59,7 +59,7 @@ export function fishingSafariClean(p) {
 
 /** Out-of-battle capture (Safari): Box, Pokédex, shiny. */
 function addCaughtMon(id, sh) {
-  const b = BY[id].base;
+  const b = POKEMON[id].base;
   PROFILE.caught++;
   if (!PROFILE.dex.includes(b)) {
     PROFILE.dex.push(b);
@@ -120,7 +120,7 @@ function performSafariAction(a) {
     }
     S2.stepCount--;
     S2.enc = rollSafariEncounter();
-    const m = BY[S2.enc.id];
+    const m = POKEMON[S2.enc.id];
     msg = S2.enc.sh ? `${SPARK} Un ${m.n} chromatique sort des herbes !` : `Un ${m.n} sauvage apparaît !`;
   } else if (x && a === 'ball') {
     if (S2.balls <= 0) {
@@ -131,19 +131,19 @@ function performSafariAction(a) {
       const nw = addCaughtMon(x.id, x.sh);
       S2.isTaken.push(x.id);
       PROFILE.safariTaken = (PROFILE.safariTaken || 0) + 1;
-      msg = `Gotcha ! ${BY[x.id].n} est capturé${nw ? ' et rejoint votre Box' : ''}.`;
+      msg = `Gotcha ! ${POKEMON[x.id].n} est capturé${nw ? ' et rejoint votre Box' : ''}.`;
       S2.enc = null;
     } else {
-      msg = `Raté ! ${BY[x.id].n} s’est libéré.`;
+      msg = `Raté ! ${POKEMON[x.id].n} s’est libéré.`;
     }
   } else if (x && a === 'appat') {
     x.bait = 2;
     x.caillou = 0;
-    msg = `${BY[x.id].n} grignote l’appât : il est moins pressé de partir.`;
+    msg = `${POKEMON[x.id].n} grignote l’appât : il est moins pressé de partir.`;
   } else if (x && a === 'caillou') {
     x.caillou = 2;
     x.bait = 0;
-    msg = `${BY[x.id].n} est sonné : plus facile à attraper, mais il s’agace.`;
+    msg = `${POKEMON[x.id].n} est sonné : plus facile à attraper, mais il s’agace.`;
   } else if (x && a === 'fuir') {
     S2.enc = null;
     msg = 'Vous laissez le Pokémon tranquille.';
@@ -151,7 +151,7 @@ function performSafariAction(a) {
   // the Pokémon may flee after an action
   if (S2.enc && x && a !== 'marcher' && a !== 'fuir') {
     if (Math.random() < fleeChance(x)) {
-      msg += ` ${BY[x.id].n} s’enfuit !`;
+      msg += ` ${POKEMON[x.id].n} s’enfuit !`;
       S2.enc = null;
     } else {
       if (x.bait > 0 && a !== 'appat') {
@@ -210,7 +210,7 @@ const catchChance = x => {
 };
 
 const fleeChance = x => {
-  const base = Math.max(0.08, Math.min(0.35, 0.06 + 0.04 * BY[x.id].s[3]));
+  const base = Math.max(0.08, Math.min(0.35, 0.06 + 0.04 * POKEMON[x.id].s[3]));
   return Math.min(0.85, base * (x.bait ? 0.5 : 1) * (x.caillou ? 1.6 : 1));
 };
 

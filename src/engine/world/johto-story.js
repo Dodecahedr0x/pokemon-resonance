@@ -5,7 +5,7 @@
    reward line, lead) and the Johto battle-rule dispatchers, which cover
    the story, the roaming beasts, the Dominant Pokémon and the Hoenn gyms.
    ===================================================================== */
-import { BY, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCEN } from '../pokemon/pokemon.js';
 import { ITEMS2, PROFILE } from '../state/game-state.js';
 import { HOOKS } from '../core/hooks.js';
 import { P, hasNx, nextId, pushMessage, setMark, transform } from '../combat/engine.js';
@@ -324,7 +324,7 @@ const JDIS = [
     l: 'Plus de notes, plus de Résonance. Juste du bruit.',
     d: 'Le Relais brouille la Résonance : en fin de manche, toutes les notes posées sur les adversaires s’effacent. Enchaînez vos coups dans la même manche.',
   },
-].filter(T => T.foes.every(([id]) => BY[id]));
+].filter(T => T.foes.every(([id]) => POKEMON[id]));
 
 // Instructions run at startup, in the original order (see index.js).
 export function init() {

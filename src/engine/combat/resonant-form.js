@@ -4,7 +4,7 @@
    +1 Movement, +20 % damage, statuses cleared at the end of the round).
    Masters (Champion, Johto Master) and your friends' teams can use it too.
    ===================================================================== */
-import { BY, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCEN } from '../pokemon/pokemon.js';
 import { toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { EMAX, byUid, endStep, hasNx, heal, pushMessage } from './engine.js';
@@ -23,7 +23,7 @@ export function resonanceCandidate(S, u) {
     u.side === 'a' &&
     !u.ko &&
     !hasNx(u) &&
-    !(BY[u.id] && (BY[u.id].leg || BY[u.id].isEnemy)) &&
+    !(POKEMON[u.id] && (POKEMON[u.id].leg || POKEMON[u.id].isEnemy)) &&
     !u.seg &&
     !u.colossus &&
     !S.resonantUnit

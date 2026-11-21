@@ -1,6 +1,6 @@
-import { RX } from '../data/game-data.js';
-import { MV } from '../data/moves.js';
-import { BY, SCEN, WXN } from '../pokemon/pokemon.js';
+import { REACTIONS } from '../data/game-data.js';
+import { MOVES } from '../data/moves.js';
+import { POKEMON, SCEN, WEATHER_NAME } from '../pokemon/pokemon.js';
 import { ITEMS2, PROFILE, isCamp, ownedItems } from '../state/game-state.js';
 import { arenaSetup, arenaTick } from '../modes/gyms.js';
 import {
@@ -191,7 +191,7 @@ export function challenge(k) {
 export function battleOpts() {
   const items = {};
   squad.slice(0, 4).forEach(id => {
-    const b = BY[id].base, // held items belong to the family, whatever the stage
+    const b = POKEMON[id].base, // held items belong to the family, whatever the stage
       it = PROFILE.equipment[b];
     if (it && ownedItems().includes(it)) {
       items[b] = it;
@@ -315,7 +315,7 @@ function launchCore() {
     addLog('Combat de prestige : vos adversaires accumulent eux aussi la Résonance (notes, attaques Expertes).', 'arn');
   }
   if (B.wx) {
-    addLog(`Météo ${WXN[B.wx.k]} dès le début du combat.`, 'sys');
+    addLog(`Météo ${WEATHER_NAME[B.wx.k]} dès le début du combat.`, 'sys');
   }
   if (B.disobedience) {
     addLog('Désobéissance : un Pokémon épuisé ou têtu peut ignorer un ordre.', 'sys');
@@ -737,7 +737,7 @@ export function playLog(ev) {
         floatAt(unitKey(u), '+' + e.v, 'is-heal');
       }
     } else if (e.e === 'rx') {
-      floatAt(e.k, RX[e.rx].n, 'is-reaction');
+      floatAt(e.k, REACTIONS[e.rx].n, 'is-reaction');
     } else if (e.e === 'chain') {
       drawChain(e);
     } else if (e.e === 'evo') {
@@ -886,7 +886,7 @@ function tapTile(k) {
     }
   }
   if (u && ui.mode === 'target') {
-    const m = MV[u.mv[ui.mi]];
+    const m = MOVES[u.mv[ui.mi]];
     if (targets(B, u, m).includes(k)) {
       if (ui.pk === k) {
         confirmAct();
@@ -1189,7 +1189,7 @@ async function onEvoPickClick(e) {
     return;
   }
   ui.undo = null;
-  const E = BY[id];
+  const E = POKEMON[id];
   ui.busy = true;
   clearAim();
   renderAll();
@@ -1284,7 +1284,7 @@ function onBattlePanelClick(e) {
       ui.mi = i;
       ui.pk = null;
       ui.pv = null;
-      const m = MV[u.mv[i]];
+      const m = MOVES[u.mv[i]];
       if (m.sh === 'self' || m.sh === 'ring') {
         ui.pk = unitKey(u);
         ui.pv = preview(B, u.uid, i, ui.pk);

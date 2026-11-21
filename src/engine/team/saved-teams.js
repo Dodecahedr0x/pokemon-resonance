@@ -1,4 +1,4 @@
-import { BY } from '../pokemon/pokemon.js';
+import { POKEMON } from '../pokemon/pokemon.js';
 import { PROFILE, inBox, ownedItems } from '../state/game-state.js';
 import { toast } from '../core/utils.js';
 import { __set_squad, renderSquad, save, squad, validSquad } from './team.js';
@@ -32,7 +32,7 @@ function loadTeam(i) {
   });
   __set_squad(s);
   Object.entries(t.it || {}).forEach(([b, it]) => {
-    if (!ownedItems().includes(it) || !BY[b]) {
+    if (!ownedItems().includes(it) || !POKEMON[b]) {
       return;
     }
     for (const k in PROFILE.equipment) {
@@ -49,7 +49,9 @@ function loadTeam(i) {
   } catch {
     /* Best effort: failure here is non-fatal. */
   }
-  toast(miss.length ? `« ${t.n} » chargée sans ${miss.map(id => BY[id].n).join(', ')}.` : `Équipe « ${t.n} » chargée.`);
+  toast(
+    miss.length ? `« ${t.n} » chargée sans ${miss.map(id => POKEMON[id].n).join(', ')}.` : `Équipe « ${t.n} » chargée.`
+  );
 }
 
 function onSavedTeamsClick(e) {
@@ -76,7 +78,7 @@ function onSavedTeamsClick(e) {
           .slice(0, 20) || `Équipe ${T.length + 1}`,
       it = {};
     squad.forEach(id => {
-      const bb = BY[id].base;
+      const bb = POKEMON[id].base;
       if (PROFILE.equipment[bb]) {
         it[bb] = PROFILE.equipment[bb];
       }

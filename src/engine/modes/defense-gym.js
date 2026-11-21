@@ -1,6 +1,6 @@
 /* Defense Gym (added in v4.68). */
 
-import { MON, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON_LIST, SCEN } from '../pokemon/pokemon.js';
 import { isCamp } from '../state/game-state.js';
 import { BADGES } from './gyms.js';
 import { writeLS, toast } from '../core/utils.js';
@@ -84,7 +84,7 @@ const defenseSave = s => {
 
 const defenseUnlocked = () => (isCamp() ? BADGES.length >= 3 : true);
 
-const defensePool = () => MON.filter(m => m.st === 1 && !m.leg && !m.isEnemy && m.base === m.id);
+const defensePool = () => POKEMON_LIST.filter(m => m.st === 1 && !m.leg && !m.isEnemy && m.base === m.id);
 
 // Statements run at startup, in the original order (see index.js).
 export function init() {

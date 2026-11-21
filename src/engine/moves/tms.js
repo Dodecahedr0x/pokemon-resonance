@@ -1,5 +1,5 @@
-import { MV } from '../data/moves.js';
-import { BY, familyOf } from '../pokemon/pokemon.js';
+import { MOVES } from '../data/moves.js';
+import { POKEMON, familyOf } from '../pokemon/pokemon.js';
 import { PROFILE } from '../state/game-state.js';
 import { paintOverlay } from '../../screens/overlays/dialogsStore.js';
 import { $, toast } from '../core/utils.js';
@@ -23,7 +23,7 @@ export function tmClean(p) {
     a = p && p.learnedTms;
   if (a && typeof a === 'object') {
     for (const b in a) {
-      if (BY[b] && MV[a[b]]) {
+      if (POKEMON[b] && MOVES[a[b]]) {
         o.learnedTms[b] = a[b];
       }
     }
@@ -33,13 +33,13 @@ export function tmClean(p) {
 
 function compatible(k, base) {
   const M = MACHINES[k];
-  if (!M || !BY[base]) {
+  if (!M || !POKEMON[base]) {
     return false;
   }
   if (M.forAll) {
     return true;
   }
-  if ((M.familles || []).some(f => BY[f] && BY[f].base === base)) {
+  if ((M.familles || []).some(f => POKEMON[f] && POKEMON[f].base === base)) {
     return true;
   }
   return familyTypes(base).some(t => M.types.includes(t));
@@ -52,7 +52,7 @@ export function addLearned(S, learned) {
   }
   S.units.forEach(u => {
     const m = u.side === 'a' && learned[u.sp];
-    if (!m || !MV[m]) {
+    if (!m || !MOVES[m]) {
       return;
     }
     u.ctm = m;
@@ -71,7 +71,7 @@ function openLearning(k) {
 function renderLearning() {
   const k = TM_K,
     M = MACHINES[k],
-    m = MV[M.mv],
+    m = MOVES[M.mv],
     families = raisedFamilies().sort((a, b) => compatible(k, b) - compatible(k, a));
   // rendering: src/screens/overlays/TmBox.jsx
   paintOverlay('ct', {
@@ -96,7 +96,7 @@ function learnTm(k, b) {
   }
   sfx('ui');
   vibe(20);
-  toast(`${BY[b].n} apprend ${MV[M.mv].n}${previous ? ` à la place de ${MV[previous].n}` : ''} !`);
+  toast(`${POKEMON[b].n} apprend ${MOVES[M.mv].n}${previous ? ` à la place de ${MOVES[previous].n}` : ''} !`);
   queueSave();
   $('#ctBox').hidden = true;
   renderBag();
@@ -106,21 +106,21 @@ function forgetTM(b) {
   if (!PROFILE.learnedTms[b]) {
     return;
   }
-  toast(`${BY[b].n} oublie ${MV[PROFILE.learnedTms[b]].n}.`);
+  toast(`${POKEMON[b].n} oublie ${MOVES[PROFILE.learnedTms[b]].n}.`);
   delete PROFILE.learnedTms[b];
   queueSave();
 }
 
 /** In a Pokémon's sheet: its learned move. */
 export function moveLearned(id) {
-  const b = BY[id] && BY[id].base,
+  const b = POKEMON[id] && POKEMON[id].base,
     a = b && PROFILE.learnedTms[b];
   if (!a) {
     return inheritedMoveHtml(b);
   } // inherited move (v4.16)
   const M = Object.values(MACHINES).find(x => x.mv === a);
   return (
-    `<div class="mvc tm-move"><div class="t"><b>${MV[a].n}</b><span class="chip">${M ? M.num : 'Apprise'}</span></div><p>${MV[a].d}</p><button type="button" class="button button-small button-ghost" data-ctoubli="${b}">Oublier</button></div>` +
+    `<div class="mvc tm-move"><div class="t"><b>${MOVES[a].n}</b><span class="chip">${M ? M.num : 'Apprise'}</span></div><p>${MOVES[a].d}</p><button type="button" class="button button-small button-ghost" data-ctoubli="${b}">Oublier</button></div>` +
     inheritedMoveHtml(b)
   );
 }
@@ -186,13 +186,13 @@ const familyTypes = base => [...new Set(familyOf(base).flatMap(m => m.t))];
 
 /** The families that can be taught: in Campaign those in the Box, in Free mode all of them. */
 const raisedFamilies = () => [
-  ...new Set(PROFILE.box.map(id => BY[id] && BY[id].base).filter(Boolean)), // Free mode too: the captured families (v4.21)
+  ...new Set(PROFILE.box.map(id => POKEMON[id] && POKEMON[id].base).filter(Boolean)), // Free mode too: the captured families (v4.21)
 ];
 
 /** After an Awakening, the new form's moves, plus the learned move. */
 export const withLearned = (u, mv) => {
   const o = u.ctm && !mv.includes(u.ctm) ? [...mv, u.ctm] : [...mv];
-  if (u.hm && MV[u.hm] && !o.includes(u.hm)) {
+  if (u.hm && MOVES[u.hm] && !o.includes(u.hm)) {
     o.push(u.hm);
   } // inherited move (v4.16)
   return o;
@@ -201,7 +201,7 @@ export const withLearned = (u, mv) => {
 // Startup statements, run in their original order (see index.js).
 export function init() {
   /* ---------- HM moves that did not exist yet ---------- */
-  Object.assign(MV, {
+  Object.assign(MOVES, {
     coupe: {
       n: 'Coupe',
       t: 'Normal',
@@ -218,7 +218,7 @@ export function init() {
   // they are stored in the Shop and the Bag like the other items
   for (const k in MACHINES) {
     const M = MACHINES[k],
-      m = MV[M.mv];
+      m = MOVES[M.mv];
     SHOP[k] = {
       n: `${M.num} · ${m.n}`,
       sn: M.num,

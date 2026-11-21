@@ -32,7 +32,7 @@ export const TYPES = {
   Fée: ['#D685AD', 'M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4Z'],
 };
 
-export const MK = [
+export const MARKS = [
   { id: 'trempe', n: 'Trempé', t: 'Eau' },
   { id: 'charge', n: 'Chargé', t: 'Électrik' },
   { id: 'brulant', n: 'Brûlant', t: 'Feu' },
@@ -41,9 +41,9 @@ export const MK = [
   { id: 'fissure', n: 'Fissuré', t: 'Sol' },
 ];
 
-export const EL = ['Eau', 'Électrik', 'Feu', 'Plante', 'Glace', 'Sol'];
+export const ELEMENT_TYPES = ['Eau', 'Électrik', 'Feu', 'Plante', 'Glace', 'Sol'];
 
-export const MX = {
+export const MARK_REACTIONS = {
   trempe: ['ren', 'cc', 'vap', 'flo', 'gel', 'bou'],
   charge: ['cc', 'ren', 'sur', 0, 0, 'ter'],
   brulant: ['vap', 'sur', 'ren', 'emb', 'fon', 'cou'],
@@ -52,9 +52,9 @@ export const MX = {
   fissure: ['bou', 'ter', 'cou', 'anc', 0, 'sei'],
 };
 
-export const CAT = { deg: 'Dégâts', ctl: 'Contrôle', ter: 'Terrain', sou: 'Soutien' };
+export const MOVE_CATEGORY_NAMES = { deg: 'Dégâts', ctl: 'Contrôle', ter: 'Terrain', sou: 'Soutien' };
 
-export const RX = {
+export const REACTIONS = {
   cc: {
     n: 'Court-circuit',
     a: 'Circ',
@@ -204,7 +204,7 @@ export const FAMS = [
   { e: 'Sol', from: ['Sol', 'Roche', 'Combat'], m: 'Fissuré' },
 ];
 
-export const POS = [
+export const POSITIONAL_EFFECTS = [
   { t: 'Normal', n: 'Couverture', d: 'Prend un coup à la place d’un allié adjacent.' },
   { t: 'Vol', n: 'Courant', d: 'Pousse la cible d’une case dans l’axe de l’attaque.' },
   { t: 'Psy', n: 'Déplacement', d: 'Échange deux unités à portée.' },
@@ -287,7 +287,7 @@ export const WEATHER = [
   },
 ];
 
-export const EFF = [
+export const EFFECTIVENESS_EXAMPLES = [
   ['Eau', 'Feu', '×2'],
   ['Feu', 'Eau', '×½'],
   ['Électrik', 'Sol', '×0'],
@@ -308,6 +308,6 @@ export const dexNo = n => '#' + String(n).padStart(4, '0');
 
 // Statements run at startup, in the original order (see index.js).
 export function init() {
-  RX.cc.tip =
+  REACTIONS.cc.tip =
     'Sortez vos Pokémon de l’eau avant de frapper. Les Pokémon Sol y sont insensibles, comme dans la table des types.';
 }

@@ -1,4 +1,4 @@
-import { BY, MON } from '../pokemon/pokemon.js';
+import { POKEMON, POKEMON_LIST } from '../pokemon/pokemon.js';
 import { $, $$, RM } from '../core/utils.js';
 import { norm, openSheet, squad } from '../team/team.js';
 import { V4 } from '../ui/screen-state.js';
@@ -35,13 +35,13 @@ function renderDexList() {
   }
   refreshDex();
   $$('#dex4List .dex-row.shiny').forEach(
-    b => BY[b.dataset.dex] && applyShinyArt(b.querySelector('img'), BY[b.dataset.dex].no)
+    b => POKEMON[b.dataset.dex] && applyShinyArt(b.querySelector('img'), POKEMON[b.dataset.dex].no)
   ); // v4.25
 }
 
 export function renderDexCard() {
   if (dexBuilt) {
-    const m = BY[V4.dexSel] || DEXS[0];
+    const m = POKEMON[V4.dexSel] || DEXS[0];
     V4.dexSel = m.id;
     refreshDex();
     setTimeout(() => isShinyOwned(m.id) && applyShinyArt($('#dex4Card .dex-art img'), m.no), 0); // v4.25
@@ -54,7 +54,7 @@ export function renderDex() {
     dexBuilt = true;
   }
   if (!V4.dexSel) {
-    V4.dexSel = (squad[0] && BY[squad[0]].id) || 'bulbizarre';
+    V4.dexSel = (squad[0] && POKEMON[squad[0]].id) || 'bulbizarre';
   }
   renderDexCard();
   renderDexList();
@@ -63,7 +63,7 @@ export function renderDex() {
 // Statements executed at startup, in the original order (see index.js).
 export function init() {
   /* ---------- Detailed Pokédex ---------- */
-  DEXS = MON.filter(m => !m.isEnemy).sort((a, b) => a.no - b.no);
+  DEXS = POKEMON_LIST.filter(m => !m.isEnemy).sort((a, b) => a.no - b.no);
 
   dexBuilt = false;
 

@@ -1,5 +1,5 @@
 import { MT } from './turn-core.js';
-import { MV, TAL } from '../data/moves.js';
+import { MOVES, ABILITIES } from '../data/moves.js';
 import { SCEN } from '../pokemon/pokemon.js';
 import { toast } from '../core/utils.js';
 import { byUid, execFoe, flies, hdist, markAt, unitKey } from './engine.js';
@@ -64,7 +64,7 @@ function turnAdapter(S, mode) {
             ? 20 - effSpeed(S, v.ref).amountValue
             : effSpeed(S, v.ref).amountValue
           : v.ref.s[3], // Distortion: slowest first (v4.12)
-    priority: v => (speedMode && v.ref.side === 'e' && v.ref.intent ? MV[v.ref.intent.mv].prio || 0 : 0),
+    priority: v => (speedMode && v.ref.side === 'e' && v.ref.intent ? MOVES[v.ref.intent.mv].prio || 0 : 0),
     // on equal Speed: arrival order (classic); by Speed, your Pokémon first, then the round's draw
     rankIndex: v =>
       speedMode && S.tiebreak ? (v.camp === 'a' ? 0 : 1) + (S.tiebreak[v.id] || 0) : S.units.indexOf(v.ref),
@@ -305,7 +305,7 @@ export const DAMAGE_PROVIDERS = [
         (u.ability === 'essaim' && typ === 'Insecte' && lowHp(u, 0.34)) ||
         (u.ability === 'engrais' && typ === 'Plante' && lowHp(u, 0.5))
       ) {
-        return { mul: 1.5, labelText: TAL[u.ability].n };
+        return { mul: 1.5, labelText: ABILITIES[u.ability].n };
       }
     },
   },

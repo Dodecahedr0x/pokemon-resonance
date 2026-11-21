@@ -1,7 +1,7 @@
 /* End-of-battle progression: Bonds, captures, badges, League, fatigue, forms, gains, and the rewards summary. */
 
-import { MV } from '../data/moves.js';
-import { BY, SCEN } from '../pokemon/pokemon.js';
+import { MOVES } from '../data/moves.js';
+import { POKEMON, SCEN } from '../pokemon/pokemon.js';
 import { BADGE_REWARD, ITEMS2, LINK_N, PROFILE, isCamp, lvlOfPts } from '../state/game-state.js';
 import { winBadge } from '../modes/gyms.js';
 import { medal } from '../core/utils.js';
@@ -37,7 +37,7 @@ export function applyProgress(S) {
     rew.links.push({ a, b, pts, x2, from: before, to: lvlOfPts(PROFILE.links[k]) });
   });
   (S.stats.caught || []).forEach(id => {
-    const base = BY[id].base;
+    const base = POKEMON[id].base;
     PROFILE.caught++;
     if (!PROFILE.dex.includes(base)) {
       PROFILE.dex.push(base);
@@ -87,7 +87,7 @@ export function applyProgress(S) {
         ...new Set(
           al.flatMap(u =>
             u.mv
-              .map(id => MV[id])
+              .map(id => MOVES[id])
               .filter(m => m.p || m.fix)
               .map(m => m.t)
           )
@@ -109,7 +109,7 @@ export function applyProgress(S) {
   if (isCamp() && !D.rentalTeam) {
     PROFILE.forms = PROFILE.forms || [];
     (S.stats.evl || []).forEach(([, id]) => {
-      if (BY[id] && BY[id].st > 1 && !PROFILE.forms.includes(id)) {
+      if (POKEMON[id] && POKEMON[id].st > 1 && !PROFILE.forms.includes(id)) {
         PROFILE.forms.push(id);
         if (!forms0.includes(id)) {
           rew.forms.push(id);
@@ -171,12 +171,12 @@ export function rewHtml(r) {
   const o = [];
   if (r.caught.length) {
     o.push(
-      `<div class="result-list"><h4>Capturés</h4>${r.caught.map(c => `<div class="result-row">${medal(BY[c.id].t)}<span>${BY[c.id].n}${c.nw ? ` · ${BY[c.base].n} rejoint votre Box` : ''}</span><b>${c.nw ? 'Nouveau' : '✓'}</b></div>`).join('')}</div>`
+      `<div class="result-list"><h4>Capturés</h4>${r.caught.map(c => `<div class="result-row">${medal(POKEMON[c.id].t)}<span>${POKEMON[c.id].n}${c.nw ? ` · ${POKEMON[c.base].n} rejoint votre Box` : ''}</span><b>${c.nw ? 'Nouveau' : '✓'}</b></div>`).join('')}</div>`
     );
   }
   if (r.items.length || r.gifts.length) {
     o.push(
-      `<div class="result-list"><h4>Récompenses d’arène</h4>${r.items.map(k => `<div class="result-row"><span class="it-ic"><svg viewBox="0 0 24 24"><path d="${ITEMS2[k].i}"/></svg></span><span>${ITEMS2[k].n} · ${ITEMS2[k].d}</span><b>Objet</b></div>`).join('')}${r.gifts.map(id => `<div class="result-row">${medal(BY[id].t)}<span>${BY[id].n} rejoint votre Box</span><b>Recrue</b></div>`).join('')}</div>`
+      `<div class="result-list"><h4>Récompenses d’arène</h4>${r.items.map(k => `<div class="result-row"><span class="it-ic"><svg viewBox="0 0 24 24"><path d="${ITEMS2[k].i}"/></svg></span><span>${ITEMS2[k].n} · ${ITEMS2[k].d}</span><b>Objet</b></div>`).join('')}${r.gifts.map(id => `<div class="result-row">${medal(POKEMON[id].t)}<span>${POKEMON[id].n} rejoint votre Box</span><b>Recrue</b></div>`).join('')}</div>`
     );
   }
   if (r.elite) {
@@ -191,12 +191,12 @@ export function rewHtml(r) {
   }
   if (r.links.length) {
     o.push(
-      `<div class="result-list"><h4>Liens gagnés</h4>${r.links.map(l => `<div class="result-row">${medal(BY[l.a].t)}${medal(BY[l.b].t)}<span>${BY[l.a].n} et ${BY[l.b].n}${l.x2 ? ' · ×2 sans évoluer' : ''}${l.to > l.from ? ` · palier ${LINK_N[l.to]} atteint` : ''}</span><b>+${l.pts}</b></div>`).join('')}</div>`
+      `<div class="result-list"><h4>Liens gagnés</h4>${r.links.map(l => `<div class="result-row">${medal(POKEMON[l.a].t)}${medal(POKEMON[l.b].t)}<span>${POKEMON[l.a].n} et ${POKEMON[l.b].n}${l.x2 ? ' · ×2 sans évoluer' : ''}${l.to > l.from ? ` · palier ${LINK_N[l.to]} atteint` : ''}</span><b>+${l.pts}</b></div>`).join('')}</div>`
     );
   }
   if (r.tired.length) {
     o.push(
-      `<p class="empty">Fatigués : ${r.tired.map(id => BY[id].n).join(', ')}. Ils perdront 1 Mouvement au prochain combat : faites tourner votre Box.</p>`
+      `<p class="empty">Fatigués : ${r.tired.map(id => POKEMON[id].n).join(', ')}. Ils perdront 1 Mouvement au prochain combat : faites tourner votre Box.</p>`
     );
   }
   let h = o.join('') + aplusRewHtml(r);

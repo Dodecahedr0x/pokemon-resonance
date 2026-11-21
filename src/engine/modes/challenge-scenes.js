@@ -1,9 +1,9 @@
 /* Shared builders for the challenge battle scenes: opponents and arena (added in v4.71). */
 
-import { BY } from '../pokemon/pokemon.js';
+import { POKEMON } from '../pokemon/pokemon.js';
 
 /** Keeps only the species that exist. */
-export const existingSpecies = ids => ids.filter(i => BY[i]);
+export const existingSpecies = ids => ids.filter(i => POKEMON[i]);
 
 const POS = [
   [6, 1],

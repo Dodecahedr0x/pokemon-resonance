@@ -2,7 +2,7 @@
 
 import { clearOverlay, paintOverlay } from '../../screens/overlays/dialogsStore.js';
 import { bdClass, getHost, hostSet } from '../../screens/combat/board/boardStore.js';
-import { BY, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCEN } from '../pokemon/pokemon.js';
 import { $, RM, after2images, writeLS, svgElement, typeColor } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { byUid } from '../combat/engine.js';
@@ -50,7 +50,7 @@ function playCry(u, ko) {
     return;
   }
   try {
-    const no = (BY[u.id] && BY[u.id].no) || 1,
+    const no = (POKEMON[u.id] && POKEMON[u.id].no) || 1,
       f = 300 + ((no * 53) % 380),
       big = (u.mhp || 20) > 30 ? 0.75 : 1;
     if (ko) {
@@ -464,7 +464,7 @@ export function init() {
       B.units
         .filter(u => u.side === 'a')
         .forEach(u => {
-          const b = BY[u.id] ? BY[u.id].base : u.id;
+          const b = POKEMON[u.id] ? POKEMON[u.id].base : u.id;
           j.use[b] = (j.use[b] || 0) + 1;
         });
       saveJournal(j);

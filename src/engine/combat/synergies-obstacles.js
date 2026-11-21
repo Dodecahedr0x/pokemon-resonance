@@ -1,5 +1,5 @@
 import { MT } from './turn-core.js';
-import { BY } from '../pokemon/pokemon.js';
+import { POKEMON } from '../pokemon/pokemon.js';
 import { synOf } from '../pokemon/roles-synergies.js';
 import {
   K,
@@ -318,7 +318,7 @@ export const OBST = {
   sauvage: { grass: ['2,1', '3,1', '2,3', '4,3', '4,4', '5,3'] },
 };
 
-export const roleOf = u => (BY[u.id] || {}).r;
+export const roleOf = u => (POKEMON[u.id] || {}).r;
 
 export const STATUSED = t => ['PAR', 'GEL', 'SOM'].includes(t.badge) || t.root > 0 || t.web > 0 || t.burn > 0;
 

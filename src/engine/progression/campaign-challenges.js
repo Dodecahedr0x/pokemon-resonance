@@ -1,6 +1,6 @@
 /* Campaign challenges (Settings): Mono-type, Team of 3, No Awakening, Nuzlocke; each active one earns extra Shards (added in v4.9). */
 
-import { BY, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCEN } from '../pokemon/pokemon.js';
 import { PROFILE, isCamp } from '../state/game-state.js';
 import { medal, toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
@@ -35,8 +35,8 @@ export function isFallen(id) {
     isCamp() &&
     PROFILE.challenges &&
     PROFILE.challenges.nuzlocke &&
-    BY[id] &&
-    (PROFILE.graves || []).includes(BY[id].base)
+    POKEMON[id] &&
+    (PROFILE.graves || []).includes(POKEMON[id].base)
   );
 }
 
@@ -45,18 +45,18 @@ export function challengeRefusal(id) {
   if (!isCamp() || !PROFILE.challenges) {
     return null;
   }
-  const m = BY[id],
+  const m = POKEMON[id],
     d = PROFILE.challenges;
   if (!m) {
     return null;
   }
   if (isFallen(id)) {
-    return `${BY[m.base].n} est tombé au combat (Nuzlocke) : il ne combat plus.`;
+    return `${POKEMON[m.base].n} est tombé au combat (Nuzlocke) : il ne combat plus.`;
   }
   if (d.mono && !m.t.includes(d.mono)) {
     return `Défi Mono-type ${d.mono} : ${m.n} n’est pas de ce type.`;
   }
-  if (d.trio && squad.length >= 3 && !squad.some(x => BY[x].base === m.base)) {
+  if (d.trio && squad.length >= 3 && !squad.some(x => POKEMON[x].base === m.base)) {
     return 'Défi Équipe de 3 : trois Pokémon au plus.';
   }
   return null;
@@ -75,12 +75,12 @@ export function challengeLaunch() {
     eq = squad.slice(0, teamSize());
   const t = eq.find(isFallen);
   if (t) {
-    return `${BY[t].n} est tombé au combat (Nuzlocke) : retirez-le de l’équipe.`;
+    return `${POKEMON[t].n} est tombé au combat (Nuzlocke) : retirez-le de l’équipe.`;
   }
   if (d.mono) {
-    const x = eq.find(id => !BY[id].t.includes(d.mono));
+    const x = eq.find(id => !POKEMON[id].t.includes(d.mono));
     if (x) {
-      return `Défi Mono-type ${d.mono} : ${BY[x].n} n’est pas de ce type. Retirez-le de l’équipe.`;
+      return `Défi Mono-type ${d.mono} : ${POKEMON[x].n} n’est pas de ce type. Retirez-le de l’équipe.`;
     }
   }
   return null;
@@ -105,7 +105,7 @@ function onProgress(S, rew, win) {
     }
     if (df.includes('nuzlocke')) {
       PROFILE.graves = PROFILE.graves || [];
-      const deadList = S.units.filter(u => u.side === 'a' && u.ko && BY[u.sp]).map(u => BY[u.sp].base);
+      const deadList = S.units.filter(u => u.side === 'a' && u.ko && POKEMON[u.sp]).map(u => POKEMON[u.sp].base);
       deadList.forEach(b => {
         if (!PROFILE.graves.includes(b)) {
           PROFILE.graves.push(b);
@@ -145,7 +145,7 @@ export function init() {
         )
           .map(
             b =>
-              `<div class="result-row is-fallen">${medal(BY[b].t)}<span>${BY[b].n} est tombé au combat.</span><b>✝</b></div>`
+              `<div class="result-row is-fallen">${medal(POKEMON[b].t)}<span>${POKEMON[b].n} est tombé au combat.</span><b>✝</b></div>`
           )
           .join('')}</div>`
       : ''

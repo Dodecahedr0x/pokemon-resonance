@@ -1,13 +1,13 @@
-import { BY, PRESETS } from './pokemon.js';
+import { POKEMON, PRESETS } from './pokemon.js';
 
 export function synOf(ids) {
-  const T = ids.filter(id => BY[id]).map(id => BY[id].t);
+  const T = ids.filter(id => POKEMON[id]).map(id => POKEMON[id].t);
   return SYN.filter(s => T.some((a, i) => a.includes(s.t[0]) && T.some((b, j) => j !== i && b.includes(s.t[1]))));
 }
 
 /* ===================== v1.1: confirmed recruits, roles, synergies ===================== */
 export const RC = id => {
-  const m = BY[id];
+  const m = POKEMON[id];
   return m.st === 1 ? m.c : m.c + m.st - 1;
 };
 

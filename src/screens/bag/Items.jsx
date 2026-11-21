@@ -1,5 +1,5 @@
-import { MV } from '../../engine/data/moves.js';
-import { BY } from '../../engine/pokemon/pokemon.js';
+import { MOVES } from '../../engine/data/moves.js';
+import { POKEMON } from '../../engine/pokemon/pokemon.js';
 import { ITEMS2, PROFILE, ownedItems } from '../../engine/state/game-state.js';
 import { typeColor } from '../../engine/core/utils.js';
 import { HELD_IMG, SHOP, bagN, formatNumber } from '../../engine/state/economy.js';
@@ -11,7 +11,7 @@ import { HELD_SHOP } from '../../engine/combat/resonance.js';
 import Button from '../../components/Button.jsx';
 // TM / HM disc: initials on the color of the move's type.
 export const Disc = ({ it }) => (
-  <span className="item-row-icon item-row-disc" style={{ '--c': typeColor(MV[it.mv].t) }}>
+  <span className="item-row-icon item-row-disc" style={{ '--c': typeColor(MOVES[it.mv].t) }}>
     <b>{it.sn.slice(0, 2)}</b>
   </span>
 );
@@ -102,7 +102,7 @@ export function HeldItem({ k }) {
         <em>
           {own
             ? holder
-              ? `Tenu par ${BY[holder].n}`
+              ? `Tenu par ${POKEMON[holder].n}`
               : 'Libre · à confier depuis la fiche d’un Pokémon'
             : HELD_SHOP[k]
               ? HELD_SHOP[k].g
@@ -114,7 +114,7 @@ export function HeldItem({ k }) {
       {own && holder ? (
         <div className="item-row-actions">
           <Button size="small" data-v4sheet={holder}>
-            Voir {BY[holder].n}
+            Voir {POKEMON[holder].n}
           </Button>
         </div>
       ) : null}

@@ -1,4 +1,4 @@
-import { MV, TAL } from './moves.js';
+import { MOVES, ABILITIES } from './moves.js';
 
 const JOHTO_MOVES = {
   extrasenseur: {
@@ -101,9 +101,9 @@ const JOHTO_MOVES = {
 // Statements run at startup, in the original order (see index.js).
 export function init() {
   /* v4.15: twenty Johto Pokémon (ten families), their signature moves and three abilities. */
-  Object.assign(MV, JOHTO_MOVES);
+  Object.assign(MOVES, JOHTO_MOVES);
 
-  Object.assign(TAL, {
+  Object.assign(ABILITIES, {
     nocturne: ['Nocturne', 'La nuit, ses attaques font ×1,25.'],
     forcepure: ['Force Pure', 'Ses attaques au contact font ×1,3.'],
     armuremagma: ['Armumagma', 'Ne peut pas être gelé.'],

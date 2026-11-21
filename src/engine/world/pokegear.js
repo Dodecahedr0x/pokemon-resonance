@@ -3,7 +3,7 @@
    beasts, Dominant sighted, weather, tip); its announcements really
    change the day's gameplay (daily seed, Dominant of the day, weather).
    ===================================================================== */
-import { BY } from '../pokemon/pokemon.js';
+import { POKEMON } from '../pokemon/pokemon.js';
 import { HOOKS } from '../core/hooks.js';
 import { today } from '../state/economy.js';
 import { PL, placeName } from './map.js';
@@ -79,7 +79,7 @@ export function radioLines() {
   if (d) {
     L.push([
       'Dominant signalé',
-      `Un ${BY[d].n} Dominant rôderait sur la ${routeName()}. Il y est plus fréquent aujourd’hui, surtout la nuit.`,
+      `Un ${POKEMON[d].n} Dominant rôderait sur la ${routeName()}. Il y est plus fréquent aujourd’hui, surtout la nuit.`,
       'herbes',
     ]);
   }

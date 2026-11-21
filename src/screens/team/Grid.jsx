@@ -1,9 +1,9 @@
 import { Html } from '../../lib/html.jsx';
 import { PKA } from '../../engine/assets/images.js';
 import { dexNo } from '../../engine/data/game-data.js';
-import { MV } from '../../engine/data/moves.js';
+import { MOVES } from '../../engine/data/moves.js';
 import { REGION_NAMES } from '../../engine/data/hoenn.js';
-import { BY, familyOf } from '../../engine/pokemon/pokemon.js';
+import { POKEMON, familyOf } from '../../engine/pokemon/pokemon.js';
 import { ITEMS2, PROFILE, inBox, isCamp, ownedItems } from '../../engine/state/game-state.js';
 import { RC, ROLEFX } from '../../engine/pokemon/roles-synergies.js';
 import { medal, typeBadge, typeColor } from '../../engine/core/utils.js';
@@ -40,7 +40,7 @@ function onArtError(e) {
 function FamCard({ m }) {
   const family = familyOf(m.id),
     later = family.filter(x => x.st > 1),
-    inS = squad.find(id => BY[id].base === m.id),
+    inS = squad.find(id => POKEMON[id].base === m.id),
     on = !!inS,
     lock = !inBox(m.id),
     fat = isCamp() && !lock ? PROFILE.fatigue[m.id] || 0 : 0,
@@ -105,7 +105,7 @@ function FamCard({ m }) {
         </div>
         {inS && inS !== m.id && (
           <span className="team-card-squad">
-            En équipe : {BY[inS].n} · {RC(inS)} PC
+            En équipe : {POKEMON[inS].n} · {RC(inS)} PC
           </span>
         )}
         <div className="team-card-types">
@@ -113,7 +113,7 @@ function FamCard({ m }) {
             <Html key={t} html={typeBadge(t)} />
           ))}
         </div>
-        <p className="team-card-moves">{m.mv.map(id => MV[id].n).join(' · ')}</p>
+        <p className="team-card-moves">{m.mv.map(id => MOVES[id].n).join(' · ')}</p>
         {later.length ? null : (
           <div className="team-card-single-stage">
             <em>Stade unique · puissant d’emblée</em>

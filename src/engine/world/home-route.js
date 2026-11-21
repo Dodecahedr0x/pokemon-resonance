@@ -1,4 +1,4 @@
-import { BY } from '../pokemon/pokemon.js';
+import { POKEMON } from '../pokemon/pokemon.js';
 import { PROFILE, isCamp } from '../state/game-state.js';
 import { $, RM, toast } from '../core/utils.js';
 import { hook } from '../core/hooks.js';
@@ -27,16 +27,16 @@ export function __set_wildId(v) {
 
 /* ===================== HOME v0.8: crest, route, anatomy ===================== */
 export function evoPath(id) {
-  const m = BY[id],
+  const m = POKEMON[id],
     n = nextOf(m);
   if (!n.length) {
     return '';
   }
   if (n.length === 1) {
     const r = evoPath(n[0]);
-    return BY[n[0]].n + (r ? ' → ' + r : '');
+    return POKEMON[n[0]].n + (r ? ' → ' + r : '');
   }
-  const ns = n.map(x => BY[x].n);
+  const ns = n.map(x => POKEMON[x].n);
   return ns.slice(0, -1).join(', ') + ' ou ' + ns[ns.length - 1];
 }
 
@@ -195,7 +195,7 @@ function onEncounterClick(e) {
     launch();
     if (B && !B.noCatch) {
       addLog(
-        `Capture : touchez ${BY[wildId].n} pour voir les conditions (PV bas, immobilisé, un allié au contact, 2 Voix, une Ball).`,
+        `Capture : touchez ${POKEMON[wildId].n} pour voir les conditions (PV bas, immobilisé, un allié au contact, 2 Voix, une Ball).`,
         'sys'
       );
     }

@@ -1,4 +1,4 @@
-import { BY, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCEN } from '../pokemon/pokemon.js';
 import { PROFILE, isCamp } from '../state/game-state.js';
 import { medal } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
@@ -386,7 +386,7 @@ const HARENAS = [
     ],
     d: 'Déluge : la pluie tombe pendant tout le combat et l’eau couvre une bonne partie du plateau.',
   },
-].filter(a => a.foes.every(([id]) => BY[id]));
+].filter(a => a.foes.every(([id]) => POKEMON[id]));
 
 const palm = (x, y, s = 1) =>
   `<g transform="translate(${x} ${y}) scale(${s})"><path d="M0 0q2-10 0-20" stroke="#7a5a32" stroke-width="2.5" fill="none"/><path d="M0-20q-9-4-14 2M0-20q9-4 14 2M0-20q-4-9-11-9M0-20q4-9 11-9" stroke="#2f8a4a" stroke-width="3" fill="none" stroke-linecap="round"/></g>`;

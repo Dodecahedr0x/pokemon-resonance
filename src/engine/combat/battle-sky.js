@@ -1,5 +1,5 @@
 import { WEATHER } from '../data/game-data.js';
-import { WXN } from '../pokemon/pokemon.js';
+import { WEATHER_NAME } from '../pokemon/pokemon.js';
 import { getHost, hostSet } from '../../screens/combat/board/boardStore.js';
 import { B, ui } from './ui.js';
 import { PREF } from '../ui/preferences.js';
@@ -15,7 +15,7 @@ function skyState(S) {
 }
 
 function weatherInfo(k) {
-  const w = WEATHER.find(x => x.n === WXN[k]);
+  const w = WEATHER.find(x => x.n === WEATHER_NAME[k]);
   return w ? w.d : '';
 }
 
@@ -32,8 +32,8 @@ function renderSky() {
     ic,
     co,
     ti: LIVING_NAME[E.ph] || '',
-    w: w ? [w[0], w[1], WXN[E.wx]] : null,
-    displayName: (LIVING_NAME[E.ph] || 'Jour') + (w ? ' · ' + WXN[E.wx] + ' ' + B.wx.n : ''),
+    w: w ? [w[0], w[1], WEATHER_NAME[E.wx]] : null,
+    displayName: (LIVING_NAME[E.ph] || 'Jour') + (w ? ' · ' + WEATHER_NAME[E.wx] + ' ' + B.wx.n : ''),
     vent: !!B.vent,
   };
   if (JSON.stringify(sky) !== JSON.stringify(getHost().ciel)) {
@@ -49,7 +49,7 @@ function renderSky() {
     announceSky(SKY_STYLES[E.ph], LIVING_STATE[E.ph] || LIVING_NAME[E.ph], LIVING_DESC[E.ph] || '');
   } else if (prevSky.wx !== E.wx) {
     E.wx
-      ? announceSky(SKY_STYLES[E.wx], `${WXN[E.wx]} · ${B.wx.n} manches`, weatherInfo(E.wx))
+      ? announceSky(SKY_STYLES[E.wx], `${WEATHER_NAME[E.wx]} · ${B.wx.n} manches`, weatherInfo(E.wx))
       : announceSky(['i-sol', '#cfe6ff'], 'Le ciel se dégage', 'La météo est terminée.');
   }
 }

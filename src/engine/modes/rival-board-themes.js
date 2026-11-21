@@ -1,6 +1,6 @@
 /* Adaptive rival, board themes (added in v4.55). */
 
-import { BY, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCEN } from '../pokemon/pokemon.js';
 import { PROFILE } from '../state/game-state.js';
 import { toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
@@ -30,7 +30,7 @@ export function rivalState() {
 export function dominantType() {
   const c = {};
   (squad || []).forEach(id => {
-    const m = BY[id];
+    const m = POKEMON[id];
     if (m) {
       m.t.forEach(t => (c[t] = (c[t] || 0) + 1));
     }
@@ -40,12 +40,12 @@ export function dominantType() {
 }
 
 function pickCounter(T, rem, used) {
-  const pw = id => BY[id].s.reduce((a, b) => a + b, 0),
+  const pw = id => POKEMON[id].s.reduce((a, b) => a + b, 0),
     target = pw(rem);
   let best = null,
     bs = -1;
   DEXS.forEach(m => {
-    if (m.c !== BY[rem].c || used.includes(m.id) || !BY[m.id] || m.id === rem) {
+    if (m.c !== POKEMON[rem].c || used.includes(m.id) || !POKEMON[m.id] || m.id === rem) {
       return;
     }
     const e = Math.max(...m.t.map(t => teff(t, [T])));
@@ -84,7 +84,7 @@ export function adaptRival() {
       const used = D.foes.map(f => f[0]),
         c = pickCounter(T, D.foes[j][0], used);
       if (c) {
-        done.push(BY[c].n);
+        done.push(POKEMON[c].n);
         D.foes[j] = [c, D.foes[j][1]];
       }
     }

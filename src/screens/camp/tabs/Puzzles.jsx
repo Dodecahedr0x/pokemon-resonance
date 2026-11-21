@@ -1,4 +1,4 @@
-import { BY } from '../../../engine/pokemon/pokemon.js';
+import { POKEMON } from '../../../engine/pokemon/pokemon.js';
 import { medal } from '../../../engine/core/utils.js';
 import { today } from '../../../engine/state/economy.js';
 import { PUZZLES, puzzleOfDay, puzzleState } from '../../../engine/modes/riddles.js';
@@ -43,10 +43,10 @@ export default function Puzzles() {
               <span className="camp-puzzle-number">{`n° ${i + 1}`}</span>
               <span className="camp-puzzle-foes">
                 {P[2].map((f, j) => (
-                  <Html key={j} html={medal(BY[f[0]].t, 'is-tiny')} />
+                  <Html key={j} html={medal(POKEMON[f[0]].t, 'is-tiny')} />
                 ))}
               </span>
-              <em>{P[1].map(a => BY[a[0]].n).join(' · ')}</em>
+              <em>{P[1].map(a => POKEMON[a[0]].n).join(' · ')}</em>
               {et(i)}
             </button>
           );

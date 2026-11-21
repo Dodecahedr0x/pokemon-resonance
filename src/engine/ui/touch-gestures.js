@@ -1,5 +1,5 @@
-import { MV } from '../data/moves.js';
-import { BY, MON } from '../pokemon/pokemon.js';
+import { MOVES } from '../data/moves.js';
+import { POKEMON, POKEMON_LIST } from '../pokemon/pokemon.js';
 import { RM, toast } from '../core/utils.js';
 import { goTo } from '../core/navigation.js';
 import { openSheet } from '../team/team.js';
@@ -56,18 +56,18 @@ function longPressAction(t) {
     return null;
   }
   const id = c.dataset.open || c.dataset.dex || c.dataset.speciesSheet;
-  return id && BY[id] ? () => openSpeciesSheet(id) : null;
+  return id && POKEMON[id] ? () => openSpeciesSheet(id) : null;
 }
 
 /** A Pokémon's sheet; for a legend or an opponent with no sheet, a summary. */
 function openSpeciesSheet(id) {
-  const m = BY[id];
+  const m = POKEMON[id];
   if (!m) {
     return;
   }
-  if (m.leg || m.isEnemy || !MON.includes(m)) {
+  if (m.leg || m.isEnemy || !POKEMON_LIST.includes(m)) {
     toast(
-      `${m.n} · ${m.t.join(' / ')}${m.leg ? ' · légende' : ''} : ${m.mv.map(x => (MV[x] ? MV[x].n : x)).join(', ')}.`
+      `${m.n} · ${m.t.join(' / ')}${m.leg ? ' · légende' : ''} : ${m.mv.map(x => (MOVES[x] ? MOVES[x].n : x)).join(', ')}.`
     );
     return;
   }

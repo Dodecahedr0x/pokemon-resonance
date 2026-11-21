@@ -1,5 +1,15 @@
-import { CAT, EFF, EL, FAMS, MK, MX, POS, RX, WEATHER } from '../../engine/data/game-data.js';
-import { BY } from '../../engine/pokemon/pokemon.js';
+import {
+  MOVE_CATEGORY_NAMES,
+  EFFECTIVENESS_EXAMPLES,
+  ELEMENT_TYPES,
+  FAMS,
+  MARKS,
+  MARK_REACTIONS,
+  POSITIONAL_EFFECTS,
+  REACTIONS,
+  WEATHER,
+} from '../../engine/data/game-data.js';
+import { POKEMON } from '../../engine/pokemon/pokemon.js';
 import { markOf, medal, typeIcon, typeBadge, typeColor } from '../../engine/core/utils.js';
 import { Html } from '../../lib/html.jsx';
 import { selectReaction, useGuide } from './guideStore.js';
@@ -17,18 +27,18 @@ export function Matrix() {
         Marque ↓<br />
         Élément →
       </div>
-      {EL.map(e => (
+      {ELEMENT_TYPES.map(e => (
         <div key={e} className="guide-matrix-head">
           <Html html={typeIcon(e)} />
           <span>{e}</span>
         </div>
       ))}
-      {MK.map(m => [
+      {MARKS.map(m => [
         <div key={m.id} className="guide-matrix-head is-row">
           <Html html={typeIcon(m.t)} />
           <span>{m.n}</span>
         </div>,
-        ...MX[m.id].map((id, i) => {
+        ...MARK_REACTIONS[m.id].map((id, i) => {
           if (!id) {
             return (
               <div key={m.id + i} className="guide-matrix-cell is-empty" aria-hidden="true">
@@ -36,7 +46,7 @@ export function Matrix() {
               </div>
             );
           }
-          const r = RX[id];
+          const r = REACTIONS[id];
           const sel = rx.m === m.id && rx.e === i;
           return (
             <button
@@ -45,7 +55,7 @@ export function Matrix() {
               className={`guide-matrix-cell ${KIND_CLASS[r.k]}${sel ? ' is-selected' : ''}`}
               data-m={m.id}
               data-e={i}
-              aria-label={`${m.n} et ${EL[i]} : ${r.n}`}
+              aria-label={`${m.n} et ${ELEMENT_TYPES[i]} : ${r.n}`}
               onClick={() => selectReaction(m.id, i)}
             >
               {r.a}
@@ -60,13 +70,15 @@ export function Matrix() {
 export function DetailReaction() {
   const { rx } = useGuide();
   const m = markOf(rx.m),
-    e = EL[rx.e],
-    r = RX[MX[rx.m][rx.e]];
-  const [a, b] = r.ex && BY[r.ex[0]] && BY[r.ex[1]] ? r.ex.map(x => BY[x]) : [];
+    e = ELEMENT_TYPES[rx.e],
+    r = REACTIONS[MARK_REACTIONS[rx.m][rx.e]];
+  const [a, b] = r.ex && POKEMON[r.ex[0]] && POKEMON[r.ex[1]] ? r.ex.map(x => POKEMON[x]) : [];
   const cat = r.k === 'ren' ? 'ter' : r.k;
   return (
     <div className="guide-frame guide-reaction" id="rxDetail" aria-live="polite">
-      <span className="guide-reaction-kicker">{r.k === 'ren' ? 'Même élément' : 'Réaction · ' + CAT[r.k]}</span>
+      <span className="guide-reaction-kicker">
+        {r.k === 'ren' ? 'Même élément' : 'Réaction · ' + MOVE_CATEGORY_NAMES[r.k]}
+      </span>
       <h3>{r.n}</h3>
       <div className="guide-formula">
         <Html html={typeBadge(m.t)} />
@@ -107,7 +119,7 @@ export function DetailReaction() {
 }
 
 export function TypeTable() {
-  return EFF.map(([a, b, x], i) => (
+  return EFFECTIVENESS_EXAMPLES.map(([a, b, x], i) => (
     <div key={i} className="guide-effectiveness-item">
       <Html html={typeIcon(a)} />
       <span>{a}</span>
@@ -145,7 +157,7 @@ const CHAIN_STEPS = [
 
 export function Chain() {
   return CHAIN_STEPS.map((s, i) => {
-    const m = BY[s.w];
+    const m = POKEMON[s.w];
     return (
       <div key={i} className="guide-chain-step">
         <span className="guide-chain-number">{i + 1}</span>
@@ -199,7 +211,7 @@ export function Families() {
 }
 
 export function Positions() {
-  return POS.map(p => (
+  return POSITIONAL_EFFECTS.map(p => (
     <tr key={p.t}>
       <td>
         <span style={typeCell}>

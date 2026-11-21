@@ -1,5 +1,5 @@
 import { GYMS } from '../../engine/data/game-data.js';
-import { BY } from '../../engine/pokemon/pokemon.js';
+import { POKEMON } from '../../engine/pokemon/pokemon.js';
 import {
   BADGE_REWARD,
   ITEMS2,
@@ -49,8 +49,8 @@ export function Duos() {
   useGuide();
   return Object.entries(listDuos()).map(([k, d]) => {
     const [x, y] = k.split('|'),
-      a = BY[x],
-      b = BY[y];
+      a = POKEMON[x],
+      b = POKEMON[y];
     if (!a || !b) {
       return null;
     }

@@ -1,6 +1,6 @@
 /* Ancient specimens: spend a fossil to revive a rare Pokémon into the Box (added in v4.71). */
 
-import { BY } from '../pokemon/pokemon.js';
+import { POKEMON } from '../pokemon/pokemon.js';
 import { PROFILE } from '../state/game-state.js';
 import { toast } from '../core/utils.js';
 import { save } from '../team/team.js';
@@ -33,6 +33,6 @@ export const reviveSpecimen = X => {
     /* Best effort: failure here is non-fatal. */
   }
   sfx('win');
-  toast(BY[id].n + ' rejoint votre Boîte !');
+  toast(POKEMON[id].n + ' rejoint votre Boîte !');
   return true;
 };

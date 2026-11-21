@@ -1,4 +1,4 @@
-import { BY, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCEN } from '../pokemon/pokemon.js';
 import { ITEMS2, PROFILE } from '../state/game-state.js';
 import { medal } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
@@ -19,7 +19,7 @@ export function aplusClean(p) {
     return o;
   }
   if (Array.isArray(p.shiny)) {
-    o.shiny = [...new Set(p.shiny.filter(id => BY[id] && !BY[id].leg))];
+    o.shiny = [...new Set(p.shiny.filter(id => POKEMON[id] && !POKEMON[id].leg))];
   }
   if (Number.isFinite(p.rival)) {
     o.rival = Math.max(0, Math.min(4, Math.floor(p.rival)));
@@ -45,7 +45,7 @@ export function aplusClean(p) {
       Number.isFinite(r.floor) &&
       Array.isArray(r.team) &&
       r.team.length === 4 &&
-      r.team.every(id => BY[id] && !BY[id].leg)
+      r.team.every(id => POKEMON[id] && !POKEMON[id].leg)
     ) {
       o.tdr.run = {
         seed: Math.floor(r.seed) % 1e9,
@@ -57,7 +57,7 @@ export function aplusClean(p) {
       };
       if (r.items && typeof r.items === 'object') {
         for (const k in r.items) {
-          if (BY[k] && ITEMS2[r.items[k]]) {
+          if (POKEMON[k] && ITEMS2[r.items[k]]) {
             o.tdr.run.items[k] = r.items[k];
           }
         }
@@ -77,7 +77,7 @@ export function aplusProgress(S, rew) {
     g = 0;
   /* shinies captured */
   (S.stats.shiny || []).forEach(id => {
-    const b = BY[id] ? BY[id].id : null;
+    const b = POKEMON[id] ? POKEMON[id].id : null;
     if (!b) {
       return;
     }
@@ -139,7 +139,7 @@ export function aplusRewHtml(r) {
   const o = [];
   if (r.shiny && r.shiny.length) {
     o.push(
-      `<div class="result-list"><h4>Chromatique</h4>${r.shiny.map(id => `<div class="result-row is-shiny" style="${shinyStyle(id)}">${medal(BY[id].t)}<span>${BY[id].n} chromatique rejoint votre collection</span><b>${SPARK}</b></div>`).join('')}</div>`
+      `<div class="result-list"><h4>Chromatique</h4>${r.shiny.map(id => `<div class="result-row is-shiny" style="${shinyStyle(id)}">${medal(POKEMON[id].t)}<span>${POKEMON[id].n} chromatique rejoint votre collection</span><b>${SPARK}</b></div>`).join('')}</div>`
     );
   }
   if (r.rival) {
@@ -149,7 +149,7 @@ export function aplusRewHtml(r) {
   }
   if (r.legend) {
     o.push(
-      `<div class="result-list"><h4>Légende</h4><div class="result-row">${medal(BY[r.legend].t)}<span>${BY[r.legend].n} vaincu · ${PROFILE.legends.length} / 6 légendes</span><b>★</b></div></div>`
+      `<div class="result-list"><h4>Légende</h4><div class="result-row">${medal(POKEMON[r.legend].t)}<span>${POKEMON[r.legend].n} vaincu · ${PROFILE.legends.length} / 6 légendes</span><b>★</b></div></div>`
     );
   }
   if (r.tdr) {

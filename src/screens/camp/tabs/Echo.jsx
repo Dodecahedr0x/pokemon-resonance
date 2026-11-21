@@ -1,4 +1,4 @@
-import { BY } from '../../../engine/pokemon/pokemon.js';
+import { POKEMON } from '../../../engine/pokemon/pokemon.js';
 import { PROFILE } from '../../../engine/state/game-state.js';
 import { medal } from '../../../engine/core/utils.js';
 import { squad } from '../../../engine/team/team.js';
@@ -127,11 +127,11 @@ export default function Echo() {
         <div className="camp-echo-team">
           {squad
             .slice(0, 4)
-            .filter(id => BY[id])
+            .filter(id => POKEMON[id])
             .map(id => (
               <span key={id} className="camp-echo-member">
-                <Html html={medal(BY[id].t, 'is-small')} />
-                <b>{BY[id].n}</b>
+                <Html html={medal(POKEMON[id].t, 'is-small')} />
+                <b>{POKEMON[id].n}</b>
               </span>
             ))}
         </div>
@@ -159,8 +159,8 @@ export default function Echo() {
       <div className="camp-echo-team">
         {R.team.map(([id, h], i) => (
           <span key={i} className={`camp-echo-member${h <= 0 ? ' is-fainted' : ''}`}>
-            <Html html={medal(BY[id].t, 'is-small')} />
-            <b>{BY[id].n}</b>
+            <Html html={medal(POKEMON[id].t, 'is-small')} />
+            <b>{POKEMON[id].n}</b>
             <span className="camp-echo-hp">
               <i style={{ width: `${Math.round(h * 100)}%` }} />
             </span>

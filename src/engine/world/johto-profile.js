@@ -3,8 +3,8 @@
    the roaming beasts, the Daycare, the Dominant Pokémon and the friend
    challenges (defaults and sanitizer, called by state/game-state.js).
    ===================================================================== */
-import { MV } from '../data/moves.js';
-import { BY } from '../pokemon/pokemon.js';
+import { MOVES } from '../data/moves.js';
+import { POKEMON } from '../pokemon/pokemon.js';
 import { sanitizeFriend } from '../modes/friend-challenges.js';
 
 /* ---------- profile (declared functions: called as soon as the file loads) ---------- */
@@ -36,13 +36,13 @@ export function livingJohtoClean(p) {
   }
   if (p.inherited && typeof p.inherited === 'object') {
     for (const b in p.inherited) {
-      if (BY[b] && MV[p.inherited[b]]) {
+      if (POKEMON[b] && MOVES[p.inherited[b]]) {
         o.inherited[b] = p.inherited[b];
       }
     }
   }
   if (Array.isArray(p.pair)) {
-    o.pair = [...new Set(p.pair.filter(id => BY[id]))].slice(0, 2);
+    o.pair = [...new Set(p.pair.filter(id => POKEMON[id]))].slice(0, 2);
   }
   if (typeof p.tid === 'string' && /^[a-z0-9]{6,12}$/.test(p.tid)) {
     o.tid = p.tid;

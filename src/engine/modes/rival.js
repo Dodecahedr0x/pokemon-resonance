@@ -1,4 +1,4 @@
-import { BY, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCEN } from '../pokemon/pokemon.js';
 import { PROFILE } from '../state/game-state.js';
 import { HOOKS } from '../core/hooks.js';
 import { OBST } from '../combat/synergies-obstacles.js';
@@ -111,8 +111,8 @@ export function rivalBuild() {
       lv: R.lv,
       rival: i + 1,
       style: 'rival',
-      at: BY[ace].t[0],
-      d: `Kael revient avec ${BY[ace].n}, qui a l’avantage du type sur votre partenaire de départ. Son équipe grandit en même temps que la vôtre.`,
+      at: POKEMON[ace].t[0],
+      d: `Kael revient avec ${POKEMON[ace].n}, qui a l’avantage du type sur votre partenaire de départ. Son équipe grandit en même temps que la vôtre.`,
       foes: [ace, ...R.team].map((id, j) => [id, RIVAL_POS[j]]),
     };
     OBST[k] = i < 2 ? { grass: ['2,2', '2,3'] } : { pil: ['4,2'], sand: ['2,1', '2,4'] };
@@ -190,7 +190,7 @@ export function buildRival() {
       return;
     }
     const dis = k === 'hd429',
-      team = (dis ? R.team : [rivalAce(), ...R.team]).filter(id => BY[id]);
+      team = (dis ? R.team : [rivalAce(), ...R.team]).filter(id => POKEMON[id]);
     SCEN[k] = {
       n: R.n,
       lvl: dis ? 'Hoenn · Dissonance' : `Rival · ${FAMILY_REGION_NAMES[R.reg]}`,
@@ -204,11 +204,11 @@ export function buildRival() {
       pb: (b.pb || 3) + 1,
       lv: (b.lv || 50) + 2,
       style: dis ? 'boss' : 'rival',
-      at: BY[team[0]].t[0],
+      at: POKEMON[team[0]].t[0],
       rivalFight: k,
       d: dis
         ? 'Une cellule oubliée de la Dissonance brouille Hoenn : en fin de manche, votre Pokémon le plus chargé perd 1 losange. Éveillez vite vos Pokémon !'
-        : `Kael revient avec ${BY[team[0]].n} et une équipe de ${FAMILY_REGION_NAMES[R.reg]}. Il a progressé autant que vous.`,
+        : `Kael revient avec ${POKEMON[team[0]].n} et une équipe de ${FAMILY_REGION_NAMES[R.reg]}. Il a progressé autant que vous.`,
       foes: team.map((id, j) => [id, RIVAL_POS[j]]),
     };
     OBST[k] = R.obstacles;

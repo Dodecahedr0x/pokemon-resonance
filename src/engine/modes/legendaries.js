@@ -1,5 +1,5 @@
-import { MV } from '../data/moves.js';
-import { BY, PKT, SCEN } from '../pokemon/pokemon.js';
+import { MOVES } from '../data/moves.js';
+import { POKEMON, PKT, SCEN } from '../pokemon/pokemon.js';
 import { OBST } from '../combat/synergies-obstacles.js';
 
 /* Legendary bosses: six post-game boss battles, their signature moves and species (added in v4.4). */
@@ -127,7 +127,7 @@ export const legOf = k => LEGS.find(L => legKey(L.id) === k) || null;
 
 // Statements run at startup, in the original order (see index.js).
 export function init() {
-  Object.assign(MV, {
+  Object.assign(MOVES, {
     fatalfoudre: {
       n: 'Fatal-Foudre',
       t: 'Électrik',
@@ -170,7 +170,7 @@ export function init() {
       gen: L.no <= 151 ? 1 : 2,
       leg: true,
     };
-    BY[L.id] = m;
+    POKEMON[L.id] = m;
     PKT.set(m.t, m.id);
   });
 

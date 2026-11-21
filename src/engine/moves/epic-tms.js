@@ -1,4 +1,4 @@
-import { MV } from '../data/moves.js';
+import { MOVES } from '../data/moves.js';
 import { HOOKS } from '../core/hooks.js';
 import { byUid, damage, endStep, hdist, heal, nbrK, net, pushMessage, stun, teff, unitAt } from '../combat/engine.js';
 import { poly } from '../combat/ui.js';
@@ -328,7 +328,7 @@ export function init() {
      Oracle       Future Sight    + Roots / Web / Mean Look
      Infirmary    Heal Bell       + against Psychic, Poison and Ghost
    ===================================================================== */
-  Object.assign(MV, EPIC_TM_MOVES);
+  Object.assign(MOVES, EPIC_TM_MOVES);
   [
     ['ct34', { num: 'CT34', mv: 'ondedechoc', p: 4500, types: ['Électrik', 'Eau', 'Dragon'] }],
     ['ct38', { num: 'CT38', mv: 'deflagration', p: 4500, types: ['Feu', 'Dragon'], familles: ['ronflex', 'embrylex'] }],
@@ -361,7 +361,7 @@ export function init() {
     ['ct55', { num: 'CT55', mv: 'glasdesoin', p: 2500, types: ['Normal', 'Fée'], familles: ['germignon', 'chenipan'] }],
   ].forEach(([k, M]) => {
     MACHINES[k] = M;
-    const m = MV[M.mv];
+    const m = MOVES[M.mv];
     SHOP[k] = {
       n: `${M.num} · ${m.n}`,
       sn: M.num,

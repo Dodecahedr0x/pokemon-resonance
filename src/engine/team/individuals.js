@@ -1,4 +1,4 @@
-import { BY, familyOf } from '../pokemon/pokemon.js';
+import { POKEMON, familyOf } from '../pokemon/pokemon.js';
 import { DIFFS, ITEMS2, PROFILE } from '../state/game-state.js';
 import { fnvHash } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
@@ -25,7 +25,7 @@ export function individualsComfortClean(p) {
   if (p.traits && typeof p.traits === 'object') {
     Object.keys(p.traits).forEach(b => {
       const x = p.traits[b];
-      if (BY[b] && x && typeof x === 'object' && CHARACTERS[x.temperament] && ABILITY_DEFS[x.ability]) {
+      if (POKEMON[b] && x && typeof x === 'object' && CHARACTERS[x.temperament] && ABILITY_DEFS[x.ability]) {
         o.traits[b] = { temperament: x.temperament, ability: x.ability };
       }
     });
@@ -38,14 +38,16 @@ export function individualsComfortClean(p) {
       .map(t => {
         const it = {};
         if (t.it && typeof t.it === 'object') {
-          Object.keys(t.it).forEach(b => BY[b] && typeof t.it[b] === 'string' && ITEMS2[t.it[b]] && (it[b] = t.it[b]));
+          Object.keys(t.it).forEach(
+            b => POKEMON[b] && typeof t.it[b] === 'string' && ITEMS2[t.it[b]] && (it[b] = t.it[b])
+          );
         }
         return {
           n:
             String(t.n || 'Équipe')
               .replace(/[<>&"]/g, '')
               .slice(0, 20) || 'Équipe',
-          ids: t.ids.filter(id => BY[id]).slice(0, 4),
+          ids: t.ids.filter(id => POKEMON[id]).slice(0, 4),
           it,
         };
       })
@@ -61,7 +63,7 @@ export function individualsComfortClean(p) {
         n: String(x.n || '')
           .replace(/[<>&"]/g, '')
           .slice(0, 40),
-        t: x.t.filter(id => BY[id]).slice(0, 4),
+        t: x.t.filter(id => POKEMON[id]).slice(0, 4),
         r: Number.isFinite(x.r) ? Math.max(0, Math.min(99, Math.floor(x.r))) : 0,
         rk: typeof x.rk === 'string' ? x.rk.slice(0, 2) : '',
         df: DIFFS[x.df] ? x.df : 'normal',
@@ -85,7 +87,7 @@ function familyTalents(b) {
 /** The three natures that suit a family: based on the last evolution. */
 function familyNatures(b) {
   const f = familyOf(b),
-    m = f.slice().sort((x, y) => y.st - x.st)[0] || BY[b],
+    m = f.slice().sort((x, y) => y.st - x.st)[0] || POKEMON[b],
     s = m.s || [3, 3, 3, 3, 3, 3],
     sc = {
       brave: s[1] * 2,
@@ -111,15 +113,15 @@ function characterHash(b) {
 
 /** Nature and ability of a family in your Box (rolled on its first appearance). */
 export function individualOf(id) {
-  const b = BY[id] ? BY[id].base : id;
-  if (!BY[b] || !PROFILE.box.includes(b)) {
+  const b = POKEMON[id] ? POKEMON[id].base : id;
+  if (!POKEMON[b] || !PROFILE.box.includes(b)) {
     return null;
   }
   const I = (PROFILE.traits = PROFILE.traits || {});
   if (!PROFILE.traitsInit) {
     // families already present keep their pre-v4.32 character
     PROFILE.box.forEach(x => {
-      if (!I[x] && BY[x]) {
+      if (!I[x] && POKEMON[x]) {
         I[x] = { temperament: characterHash(x), ability: familyTalents(x)[fnvHash(x) % 3] };
       }
     });

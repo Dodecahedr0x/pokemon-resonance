@@ -2,8 +2,8 @@
    Friend challenges (added in v4.16): a trainer card to share (a text
    code), friends' teams to fight, a shared leaderboard on the Home screen.
    ===================================================================== */
-import { MV } from '../data/moves.js';
-import { BY, SCEN } from '../pokemon/pokemon.js';
+import { MOVES } from '../data/moves.js';
+import { POKEMON, SCEN } from '../pokemon/pokemon.js';
 import { ITEMS2, PROFILE, isCamp, ownedItems } from '../state/game-state.js';
 import { BADGES } from './gyms.js';
 import { paintOverlay } from '../../screens/overlays/dialogsStore.js';
@@ -39,9 +39,9 @@ export function sanitizeFriend(a) {
     return null;
   }
   const t = (Array.isArray(a.t) ? a.t : [])
-    .filter(x => Array.isArray(x) && BY[x[0]] && !BY[x[0]].isEnemy)
+    .filter(x => Array.isArray(x) && POKEMON[x[0]] && !POKEMON[x[0]].isEnemy)
     .slice(0, 4)
-    .map(x => [x[0], MV[x[1]] ? x[1] : 0, ITEMS2[x[2]] ? x[2] : 0, x[3] ? 1 : 0, MV[x[4]] ? x[4] : 0]);
+    .map(x => [x[0], MOVES[x[1]] ? x[1] : 0, ITEMS2[x[2]] ? x[2] : 0, x[3] ? 1 : 0, MOVES[x[4]] ? x[4] : 0]);
   if (!t.length) {
     return null;
   }
@@ -103,7 +103,7 @@ function exportSquadCode() {
       .slice(0, 10);
   }
   const T = squad.slice(0, 4).map(id => {
-    const b = BY[id].base,
+    const b = POKEMON[id].base,
       it = PROFILE.equipment[b];
     return [
       id,
@@ -192,7 +192,7 @@ export function buildFriendTeam(i) {
     time: i % 2 ? 'nuit' : 'jour',
     bio: 'arene',
     ami: i + 1,
-    at: BY[A.t[0][0]].t[0],
+    at: POKEMON[A.t[0][0]].t[0],
     water: ['4,0'],
     rock: ['3,2', '4,4'],
     hb: 4 + Math.round(pw * 1.3),
@@ -237,7 +237,7 @@ function renderFriendBox() {
       mode: 'carte',
       displayName: PROFILE.name || '',
       code: squad.length ? exportSquadCode() : '',
-      teamNames: squad.slice(0, 4).map(id => BY[id].n),
+      teamNames: squad.slice(0, 4).map(id => POKEMON[id].n),
       canShare: !!navigator.share,
     });
   } else if (FRIEND_MODE === 'ajout') {
@@ -286,7 +286,7 @@ function onCombat(S, opt, D0) {
         if (!u) {
           return;
         }
-        [x[1], x[4]].forEach(k => k && MV[k] && !u.mv.includes(k) && u.mv.push(k));
+        [x[1], x[4]].forEach(k => k && MOVES[k] && !u.mv.includes(k) && u.mv.push(k));
         if (x[1]) {
           u.ctm = x[1];
         }

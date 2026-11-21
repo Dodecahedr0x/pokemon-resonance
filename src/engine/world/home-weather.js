@@ -1,8 +1,8 @@
 /* Living home (season, weather of the day) · contextual help in battle (added in v4.52). */
 
-import { RX, WEATHER } from '../data/game-data.js';
-import { TAL } from '../data/moves.js';
-import { BY, WXN } from '../pokemon/pokemon.js';
+import { REACTIONS, WEATHER } from '../data/game-data.js';
+import { ABILITIES } from '../data/moves.js';
+import { POKEMON, WEATHER_NAME } from '../pokemon/pokemon.js';
 import { ROLEFX } from '../pokemon/roles-synergies.js';
 import { byUid } from '../combat/engine.js';
 import { B, ui } from '../combat/ui.js';
@@ -33,10 +33,10 @@ export function homeSkyInfo() {
 function battleHelpData() {
   const u = ui.sel != null ? byUid(B, ui.sel) : null,
     out = { sel: null, terrainList: [], wx: null, rx: [] };
-  if (u && BY[u.id]) {
-    const m = BY[u.id],
+  if (u && POKEMON[u.id]) {
+    const m = POKEMON[u.id],
       roles = [m.r, m.r2].filter((r, k, a) => r && a.indexOf(r) === k),
-      tl = TAL[u.ability];
+      tl = ABILITIES[u.ability];
     out.sel = {
       n: u.n,
       roles: roles.map(r => [r, ROLEFX[r] ? [ROLEFX[r].k, ROLEFX[r].d] : null]),
@@ -85,12 +85,12 @@ function battleHelpData() {
   };
   out.terrainList = seen.map(([kd, k]) => [displayName[kd], tileTip(k)]);
   if (B.wx && B.wx.k) {
-    const W = WEATHER.find(x => (WXN[B.wx.k] || '').toLowerCase().startsWith(x.n.toLowerCase().slice(0, 4)));
+    const W = WEATHER.find(x => (WEATHER_NAME[B.wx.k] || '').toLowerCase().startsWith(x.n.toLowerCase().slice(0, 4)));
     if (W) {
       out.wx = { n: W.n, roundCount: B.wx.n, d: W.d };
     }
   }
-  out.rx = Object.keys(RX).map(k => [RX[k].n, RX[k].d]);
+  out.rx = Object.keys(REACTIONS).map(k => [REACTIONS[k].n, REACTIONS[k].d]);
   return out;
 }
 

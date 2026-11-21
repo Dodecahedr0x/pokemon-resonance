@@ -1,5 +1,5 @@
-import { MV } from '../../../engine/data/moves.js';
-import { BY, familyOf } from '../../../engine/pokemon/pokemon.js';
+import { MOVES } from '../../../engine/data/moves.js';
+import { POKEMON, familyOf } from '../../../engine/pokemon/pokemon.js';
 import { PROFILE } from '../../../engine/state/game-state.js';
 import { typeColor } from '../../../engine/core/utils.js';
 import { STLN } from '../../../engine/team/team.js';
@@ -117,7 +117,7 @@ function Preferences({ C }) {
 
 // A draw card (data-duel-report-p): banned, taken or selected.
 function Card({ C, id }) {
-  const m = BY[id],
+  const m = POKEMON[id],
     ban = C.bans[0].includes(id) ? 1 : C.bans[1].includes(id) ? 2 : 0,
     pk = C.picks[0].includes(id) ? 1 : C.picks[1].includes(id) ? 2 : 0,
     family = familyOf(id),
@@ -155,10 +155,10 @@ function Card({ C, id }) {
 // The selected Pokémon: moves, stats, lineage.
 function Detail({ C }) {
   const id = C.sel;
-  if (!id || !BY[id]) {
+  if (!id || !POKEMON[id]) {
     return <p className="camp-duel-hint">Touchez un Pokémon pour voir ses capacités.</p>;
   }
-  const m = BY[id],
+  const m = POKEMON[id],
     family = familyOf(id).map(x => x.n);
   return (
     <div className="camp-duel-detail">
@@ -169,9 +169,9 @@ function Detail({ C }) {
       </div>
       <div className="camp-duel-moves">
         {m.mv
-          .filter(k => MV[k])
+          .filter(k => MOVES[k])
           .map((k, i) => {
-            const v = MV[k];
+            const v = MOVES[k];
             return (
               <span key={i}>
                 <i style={{ background: typeColor(v.t) }} />
@@ -204,15 +204,15 @@ function Team({ C, j }) {
       <div className="camp-duel-team-slots">
         {Array.from({ length: C.sizeValue }, (_, i) =>
           L[i] ? (
-            <span key={i} title={BY[L[i]].n}>
-              <img src={ART(BY[L[i]].no)} alt={BY[L[i]].n} />
+            <span key={i} title={POKEMON[L[i]].n}>
+              <img src={ART(POKEMON[L[i]].no)} alt={POKEMON[L[i]].n} />
             </span>
           ) : (
             <span key={i} className="is-empty" />
           )
         )}
       </div>
-      {B0.length ? <em>{`Banni : ${B0.map(x => BY[x].n).join(', ')}`}</em> : null}
+      {B0.length ? <em>{`Banni : ${B0.map(x => POKEMON[x].n).join(', ')}`}</em> : null}
     </div>
   );
 }
@@ -256,7 +256,11 @@ function Draw({ C }) {
       <div className="camp-duel-actions">
         {st ? (
           <Button variant="primary" data-duel-report="ok" disabled={!C.sel}>
-            {C.sel ? (st.a === 'ban' ? 'Bannir ' : 'Choisir ') + BY[C.sel].n : st.a === 'ban' ? 'Bannir…' : 'Choisir…'}
+            {C.sel
+              ? (st.a === 'ban' ? 'Bannir ' : 'Choisir ') + POKEMON[C.sel].n
+              : st.a === 'ban'
+                ? 'Bannir…'
+                : 'Choisir…'}
           </Button>
         ) : (
           <Button size="large" variant="primary" data-duel-report="lancer">

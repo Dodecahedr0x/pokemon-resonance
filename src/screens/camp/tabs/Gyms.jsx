@@ -1,4 +1,4 @@
-import { BY, MON, SCEN } from '../../../engine/pokemon/pokemon.js';
+import { POKEMON, POKEMON_LIST, SCEN } from '../../../engine/pokemon/pokemon.js';
 import { PROFILE } from '../../../engine/state/game-state.js';
 import { medal } from '../../../engine/core/utils.js';
 import { GYM_EDITOR, GYM_RULES, GYM_TERRAINS, gymShareCode } from '../../../engine/modes/custom-arenas.js';
@@ -19,7 +19,7 @@ function Editor() {
   if (!E) {
     return null;
   }
-  const sp = MON.filter(m => !m.leg)
+  const sp = POKEMON_LIST.filter(m => !m.leg)
     .slice()
     .sort((a, b) => a.n.localeCompare(b.n, 'fr'))
     .map(m => [m.id, m.n]);
@@ -106,9 +106,9 @@ function Gym({ a, i }) {
       </div>
       <div className="camp-gym-foes">
         {a.f.map((id, j) => (
-          <span key={j} title={BY[id].n}>
-            <Html html={medal(BY[id].t, 'is-tiny')} />
-            {BY[id].n}
+          <span key={j} title={POKEMON[id].n}>
+            <Html html={medal(POKEMON[id].t, 'is-tiny')} />
+            {POKEMON[id].n}
           </span>
         ))}
       </div>

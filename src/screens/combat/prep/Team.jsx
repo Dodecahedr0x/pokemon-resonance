@@ -1,6 +1,6 @@
 import { Fragment, useState } from 'react';
 import { Html } from '../../../lib/html.jsx';
-import { BY, SCEN } from '../../../engine/pokemon/pokemon.js';
+import { POKEMON, SCEN } from '../../../engine/pokemon/pokemon.js';
 import { BUDGET } from '../../../engine/pokemon/evolution.js';
 import { DIFFS, PROFILE } from '../../../engine/state/game-state.js';
 import { RC, synOf } from '../../../engine/pokemon/roles-synergies.js';
@@ -36,7 +36,7 @@ function Places() {
               </button>
             );
           }
-          const m = BY[id];
+          const m = POKEMON[id];
           return (
             <div key={i} className="prep-team-slot">
               <Html html={medal(m.t, 'is-small')} />

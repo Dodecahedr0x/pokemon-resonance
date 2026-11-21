@@ -3,7 +3,7 @@ import { useEngineReady } from '../../engineReady.js';
 import { Html } from '../../lib/html.jsx';
 import { useSaves } from './savesStore.js';
 import { RECRUIT } from '../../engine/pokemon/evolution.js';
-import { BY } from '../../engine/pokemon/pokemon.js';
+import { POKEMON } from '../../engine/pokemon/pokemon.js';
 import { DIFFS, PROFILE, isCamp } from '../../engine/state/game-state.js';
 import { BADGES } from '../../engine/modes/gyms.js';
 import { medal } from '../../engine/core/utils.js';
@@ -42,7 +42,7 @@ function Summary({ s }) {
     <div className="saves-slot-summary">
       <span className="saves-slot-medals">
         {s.squad.map((id, i) => (
-          <Html key={i} html={medal(BY[id].t, 'is-small')} />
+          <Html key={i} html={medal(POKEMON[id].t, 'is-small')} />
         ))}
       </span>
       <span className="saves-slot-facts">

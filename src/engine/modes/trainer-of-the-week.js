@@ -1,6 +1,6 @@
 /* Trainer of the week: a trainer whose team changes every week, one rewarded victory per week (added in v4.71). */
 
-import { BY, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCEN } from '../pokemon/pokemon.js';
 import { HOOKS } from '../core/hooks.js';
 import { OBST } from '../combat/synergies-obstacles.js';
 import { DEXS } from '../progression/pokedex.js';
@@ -19,7 +19,7 @@ const hash = s => {
 export const week = () => 'S' + Math.floor(Date.now() / (7 * 864e5));
 
 const NAMES = ['Léa Ferrand', 'Marc Dalbert', 'Inès Montarbre', 'Tom Lacrête', 'Sana Verdier', 'Hugo Brisemare'];
-const pool = () => existingSpecies(DEXS.map(m => m.id)).filter(id => BY[id] && !BY[id].isEnemy);
+const pool = () => existingSpecies(DEXS.map(m => m.id)).filter(id => POKEMON[id] && !POKEMON[id].isEnemy);
 
 /** This week's trainer: name, team and level. */
 export const weekDef = () => {

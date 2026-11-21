@@ -3,8 +3,8 @@
    at the Duo tier has its own combined technique (based on its types);
    4 hand-written Johto techniques.
    ===================================================================== */
-import { EL, MX } from '../data/game-data.js';
-import { BY } from '../pokemon/pokemon.js';
+import { ELEMENT_TYPES, MARK_REACTIONS } from '../data/game-data.js';
+import { POKEMON } from '../pokemon/pokemon.js';
 import { PROFILE, lvlOfPts, pairKey } from '../state/game-state.js';
 import { DUOT } from './items-bonds-ai.js';
 
@@ -75,15 +75,15 @@ function generateDuo(x, y) {
   if (DUO_CACHE[k]) {
     return DUO_CACHE[k];
   }
-  const a = BY[x],
-    b = BY[y];
+  const a = POKEMON[x],
+    b = POKEMON[y];
   if (!a || !b || x === y) {
     return null;
   }
   // first look for a real chain: a mark, then the type that makes it react
   const reacts = (mk, t) => {
-    const i = EL.indexOf(t),
-      id = MX[mk] && i >= 0 ? MX[mk][i] : null;
+    const i = ELEMENT_TYPES.indexOf(t),
+      id = MARK_REACTIONS[mk] && i >= 0 ? MARK_REACTIONS[mk][i] : null;
     return !!id && id !== 'ren';
   };
   let A = null,

@@ -1,4 +1,4 @@
-import { BY, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCEN } from '../pokemon/pokemon.js';
 import { isCamp } from '../state/game-state.js';
 import { HOOKS } from '../core/hooks.js';
 import { hasNx, pushMessage } from '../combat/engine.js';
@@ -20,7 +20,7 @@ function characterOf(id) {
   if (individualInfo && CHARACTERS[individualInfo.temperament]) {
     return individualInfo.temperament;
   }
-  const b = BY[id] ? BY[id].base : id,
+  const b = POKEMON[id] ? POKEMON[id].base : id,
     ks = Object.keys(CHARACTERS);
   let h = 7;
   for (const c of String(b)) {

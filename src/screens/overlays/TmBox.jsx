@@ -1,7 +1,7 @@
 import { Html } from '../../lib/html.jsx';
 import { Box, Dialogue } from './Window.jsx';
-import { MV } from '../../engine/data/moves.js';
-import { BY } from '../../engine/pokemon/pokemon.js';
+import { MOVES } from '../../engine/data/moves.js';
+import { POKEMON } from '../../engine/pokemon/pokemon.js';
 import { medal, typeBadge, typeColor } from '../../engine/core/utils.js';
 
 // Learn a TM or HM (#ctBox, opened from the Bag). The engine (045) computes
@@ -28,7 +28,7 @@ function Card({ M, m, families: families }) {
       <div className="tm-list">
         {families.length ? (
           families.map(({ b, ok, already: already }) => {
-            const f = BY[b];
+            const f = POKEMON[b];
             return (
               <button
                 key={b}
@@ -47,7 +47,7 @@ function Card({ M, m, families: families }) {
                       : already === M.mv
                         ? 'La connaît déjà'
                         : already
-                          ? `Remplace ${MV[already].n}`
+                          ? `Remplace ${MOVES[already].n}`
                           : 'Compatible'}
                   </em>
                 </span>

@@ -2,7 +2,7 @@
    Dominant Pokémon (added in v4.16): rare, bigger, stronger, escorted.
    Defeated or captured, they leave a treasure (TM, held item, Shards).
    ===================================================================== */
-import { BY, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCEN } from '../pokemon/pokemon.js';
 import { RECRUIT } from '../pokemon/evolution.js';
 import { ITEMS2, PROFILE, isCamp } from '../state/game-state.js';
 import { BADGES } from '../modes/gyms.js';
@@ -34,7 +34,7 @@ export function rollDominant(id) {
 }
 
 export function makeDominantScenario(D, id, shiny) {
-  const m = BY[id],
+  const m = POKEMON[id],
     neighbors = RECRUIT.filter(
       x => x.id !== id && x.t.some(t => m.t.includes(t)) && familyRegion(x.id) === regionIndex()
     ), // region escort (v4.21)

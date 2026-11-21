@@ -1,4 +1,4 @@
-import { BY } from '../pokemon/pokemon.js';
+import { POKEMON } from '../pokemon/pokemon.js';
 import { PROFILE, isCamp } from '../state/game-state.js';
 import { $ } from '../core/utils.js';
 import { B } from '../combat/ui.js';
@@ -35,7 +35,7 @@ const POST_BATTLE_DIALOGUE = {
 
 export function npcProfile(who) {
   if (who === 'kael') {
-    const ace = BY[rivalAce()];
+    const ace = POKEMON[rivalAce()];
     return { n: 'Kael Ferrand', av: avatar('Kael Ferrand', ace ? ace.t[0] : 'Normal', 'is-small') };
   }
   if (who === 'sirene') {

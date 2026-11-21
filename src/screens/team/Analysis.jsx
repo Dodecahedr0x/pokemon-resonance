@@ -1,6 +1,6 @@
 import { Html } from '../../lib/html.jsx';
-import { ROLES, RX } from '../../engine/data/game-data.js';
-import { BY, PRESETS } from '../../engine/pokemon/pokemon.js';
+import { ROLES, REACTIONS } from '../../engine/data/game-data.js';
+import { POKEMON, PRESETS } from '../../engine/pokemon/pokemon.js';
 import { LINK_N, LINK_T, PROFILE, lvlOfPts, pairKey } from '../../engine/state/game-state.js';
 import { SYN, synOf } from '../../engine/pokemon/roles-synergies.js';
 import { medal, typeColor } from '../../engine/core/utils.js';
@@ -224,7 +224,7 @@ function Formation() {
 
 // Team ranks and Harmony (v4.14).
 function Ranks() {
-  const ms = squad.map(id => BY[id]).filter(Boolean),
+  const ms = squad.map(id => POKEMON[id]).filter(Boolean),
     n = new Set(ms.map(m => rankId(m.id))).size,
     harm = ms.length >= 3 && n >= 3;
   return (
@@ -261,7 +261,7 @@ function Ranks() {
 // Team synergies (formerly synCard, v1.1).
 function Synergies() {
   const act = synOf(squad).map(s => s.k),
-    ms = squad.map(id => BY[id]),
+    ms = squad.map(id => POKEMON[id]),
     has = r => ms.filter(m => m.r === r),
     displayNames = l => l.map(m => m.n).join(', ');
   const combos = [];
@@ -326,9 +326,9 @@ function Synergies() {
 function Reactions({ A }) {
   const row = ([id, v], later) => (
     <li key={(later ? 'l' : 'd') + id} className={later ? 'is-later' : undefined}>
-      <button type="button" className={`chip cat-${RX[id].k}`} data-rx={id}>
+      <button type="button" className={`chip cat-${REACTIONS[id].k}`} data-rx={id}>
         <i />
-        {RX[id].n}
+        {REACTIONS[id].n}
       </button>
       <span className="team-analysis-reaction-source">
         {later ? 'après Éveil · ' : ''}
@@ -359,7 +359,7 @@ function Reactions({ A }) {
 
 // Team Bonds (formerly linksCard, v1.0).
 function Links() {
-  const T = squad.map(id => BY[BY[id].base]),
+  const T = squad.map(id => POKEMON[POKEMON[id].base]),
     rows = [];
   for (let i = 0; i < T.length; i++) {
     for (let j = i + 1; j < T.length; j++) {

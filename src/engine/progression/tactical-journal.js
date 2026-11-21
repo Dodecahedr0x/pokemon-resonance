@@ -1,4 +1,4 @@
-import { BY, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCEN } from '../pokemon/pokemon.js';
 import { PROFILE } from '../state/game-state.js';
 import { medal } from '../core/utils.js';
 import { HOOKS, hook } from '../core/hooks.js';
@@ -33,7 +33,7 @@ export function campTacticsClean(p) {
         if (m && typeof m === 'object') {
           Object.keys(m)
             .slice(0, lim)
-            .forEach(k => BY[k] && (r[k] = n(m[k])));
+            .forEach(k => POKEMON[k] && (r[k] = n(m[k])));
         }
         return r;
       },
@@ -66,7 +66,7 @@ export function campTacticsClean(p) {
               x[1] ? 1 : 0,
               typeof x[2] === 'string' ? x[2].slice(0, 2) : '',
               n(x[3]),
-              BY[x[4]] ? x[4] : '',
+              POKEMON[x[4]] ? x[4] : '',
             ])
         : [],
     };
@@ -165,11 +165,11 @@ function onProgress(S, rew, win) {
     J.dealt += r.d;
     J.taken += r.t;
     J.ko += r.k;
-    if (BY[r.sp]) {
+    if (POKEMON[r.sp]) {
       J.use[r.sp] = (J.use[r.sp] || 0) + 1;
     }
   });
-  if (mvp && mvp.d > 0 && BY[mvp.sp]) {
+  if (mvp && mvp.d > 0 && POKEMON[mvp.sp]) {
     J.mvp[mvp.sp] = (J.mvp[mvp.sp] || 0) + 1;
   }
   const c = scenarioCategory(S.sc, D);
@@ -200,7 +200,7 @@ export function init() {
     const mx = Math.max(1, ...j.rows.map(x => x.d));
     return `<div class="result-list battle-report"><h4>Rapport tactique</h4>${j.rows
       .map(x => {
-        const m = BY[x.id] || BY[x.sp];
+        const m = POKEMON[x.id] || POKEMON[x.sp];
         return `<div class="battle-report-r${j.mvp === x.uid ? ' mvp' : ''}${x.ko ? ' ko' : ''}">${medal(m.t, 'is-small')}<span class="battle-report-n"><b>${m.n}</b>${j.mvp === x.uid ? '<em>MVP</em>' : ''}</span><span class="battle-report-b"><i style="width:${Math.round((x.d / mx) * 100)}%"></i></span><span class="battle-report-v" title="Dégâts infligés · subis · K.O.">${x.d} <small>/ ${x.t}${x.k ? ` · ${x.k} K.O.` : ''}</small></span></div>`;
       })
       .join(

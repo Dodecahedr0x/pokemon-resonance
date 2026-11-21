@@ -2,7 +2,7 @@
    Companion Pokémon (added in v4.17): it waits for you on the Team
    page (and in the Home hero), its affection grows with your battles and grants bonuses.
    ===================================================================== */
-import { BY, MON, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, POKEMON_LIST, SCEN } from '../pokemon/pokemon.js';
 import { PROFILE, isCamp } from '../state/game-state.js';
 import { $, medal, toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
@@ -24,7 +24,7 @@ export const affinityHearts = a => AFF_T.filter(t => a >= t).length;
 
 export const activeCompanionId = () => {
   const c = PROFILE.comp;
-  return c && BY[c.id] && PROFILE.box.includes(BY[c.id].base) ? c.id : ''; // Free mode too (v4.21)
+  return c && POKEMON[c.id] && PROFILE.box.includes(POKEMON[c.id].base) ? c.id : ''; // Free mode too (v4.21)
 };
 
 const COMP_MOOD = [
@@ -59,7 +59,7 @@ export function companionPanelData() {
   if (!id) {
     return null;
   }
-  const m = BY[id],
+  const m = POKEMON[id],
     a = PROFILE.comp.aff || 0,
     h = affinityHearts(a);
   return {
@@ -80,7 +80,7 @@ export function companionPanelData() {
 
 /* companion choice: rendered by React (src/screens/overlays/CompBox.jsx) */
 export function renderCompanionBox() {
-  const L = MON.filter(
+  const L = POKEMON_LIST.filter(
     m =>
       !m.isEnemy &&
       !m.leg &&
@@ -106,8 +106,8 @@ function onCompanionPokemonClick(e) {
       vibe(25);
       toast(
         up
-          ? `${BY[activeCompanionId()].n} est ravi : ${up} cœur${up > 1 ? 's' : ''} !`
-          : `${BY[activeCompanionId()].n} ferme les yeux de bonheur.`
+          ? `${POKEMON[activeCompanionId()].n} est ravi : ${up} cœur${up > 1 ? 's' : ''} !`
+          : `${POKEMON[activeCompanionId()].n} ferme les yeux de bonheur.`
       );
       queueSave();
       refreshHome();
@@ -120,12 +120,15 @@ function onCompanionPokemonClick(e) {
     if (PROFILE.comp.id !== id) {
       PROFILE.comp = {
         id,
-        aff: PROFILE.comp.id && BY[PROFILE.comp.id] && BY[PROFILE.comp.id].base === BY[id].base ? PROFILE.comp.aff : 0,
+        aff:
+          PROFILE.comp.id && POKEMON[PROFILE.comp.id] && POKEMON[PROFILE.comp.id].base === POKEMON[id].base
+            ? PROFILE.comp.aff
+            : 0,
         j: PROFILE.comp.j,
       };
     }
     $('#compBox').hidden = true;
-    toast(`${BY[id].n} devient votre compagnon.`);
+    toast(`${POKEMON[id].n} devient votre compagnon.`);
     queueSave();
     refreshHome();
     return;
@@ -145,7 +148,7 @@ export function init() {
     if (!id) {
       return;
     }
-    const u = S.units.find(x => x.side === 'a' && x.sp === BY[id].base);
+    const u = S.units.find(x => x.side === 'a' && x.sp === POKEMON[id].base);
     if (!u) {
       return;
     }
@@ -184,7 +187,7 @@ export function init() {
     if (!id || D.tuto) {
       return null;
     }
-    const u = S.units.find(x => x.side === 'a' && x.sp === BY[id].base);
+    const u = S.units.find(x => x.side === 'a' && x.sp === POKEMON[id].base);
     if (!u) {
       return null;
     }
@@ -201,7 +204,7 @@ export function init() {
     }
     const h = affinityHearts(PROFILE.comp.aff || 0),
       B2 = COMP_BONUS.find(([n]) => n === c.up);
-    return `<div class="result-list"><h4>Compagnon</h4><div class="result-row">${medal(BY[c.id].t)}<span>${BY[c.id].n} : +${c.n} d’affection${c.up ? ` · <b>${c.up} cœur${c.up > 1 ? 's' : ''} !</b>${B2 ? ` Nouveau bonus : ${B2[1]} (${B2[2]}).` : ''}` : ''}</span><b class="cp-h">${'♥'.repeat(h) || '♡'}</b></div></div>`;
+    return `<div class="result-list"><h4>Compagnon</h4><div class="result-row">${medal(POKEMON[c.id].t)}<span>${POKEMON[c.id].n} : +${c.n} d’affection${c.up ? ` · <b>${c.up} cœur${c.up > 1 ? 's' : ''} !</b>${B2 ? ` Nouveau bonus : ${B2[1]} (${B2[2]}).` : ''}` : ''}</span><b class="cp-h">${'♥'.repeat(h) || '♡'}</b></div></div>`;
   });
 
   // #compBox: rendered by React (src/screens/overlays/CompBox.jsx)

@@ -1,6 +1,6 @@
 /* Nuzlocke mode (option) (added in v4.51). */
 
-import { BY, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCEN } from '../pokemon/pokemon.js';
 import { BUDGET } from '../pokemon/evolution.js';
 import { PROFILE } from '../state/game-state.js';
 import { writeLS, toast } from '../core/utils.js';
@@ -64,7 +64,7 @@ function onBattleEnd() {
   B.units
     .filter(u => u.side === 'a' && u.ko)
     .forEach(u => {
-      const b = (BY[u.id] && BY[u.id].base) || u.sp;
+      const b = (POKEMON[u.id] && POKEMON[u.id].base) || u.sp;
       if (b && PROFILE.box.includes(b) && !bases.includes(b)) {
         bases.push(b);
       }
@@ -80,17 +80,17 @@ function onBattleEnd() {
     displayNames = [];
   bases.forEach(b => {
     PROFILE.box = PROFILE.box.filter(x => x !== b);
-    PROFILE.forms = (PROFILE.forms || []).filter(x => !BY[x] || BY[x].base !== b);
-    __set_squad(squad.filter(x => !BY[x] || BY[x].base !== b));
-    displayNames.push(BY[b].n);
-    s.fallen.push({ id: b, n: BY[b].n, d: today(), sc: B.sc });
+    PROFILE.forms = (PROFILE.forms || []).filter(x => !POKEMON[x] || POKEMON[x].base !== b);
+    __set_squad(squad.filter(x => !POKEMON[x] || POKEMON[x].base !== b));
+    displayNames.push(POKEMON[b].n);
+    s.fallen.push({ id: b, n: POKEMON[b].n, d: today(), sc: B.sc });
   });
   s.fallen = s.fallen.slice(-60);
   saveNuzlocke(s);
-  B._nuzlockeDeaths = { names: displayNames, spared: spared ? BY[spared].n : '' };
+  B._nuzlockeDeaths = { names: displayNames, spared: spared ? POKEMON[spared].n : '' };
   if (!squad.length) {
     __set_squad(
-      PROFILE.box.filter((id, i, a) => a.slice(0, i + 1).reduce((t, x) => t + BY[x].c, 0) <= BUDGET).slice(0, 4)
+      PROFILE.box.filter((id, i, a) => a.slice(0, i + 1).reduce((t, x) => t + POKEMON[x].c, 0) <= BUDGET).slice(0, 4)
     );
   }
   writeLS('res8-squad', squad);

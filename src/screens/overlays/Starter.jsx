@@ -2,7 +2,7 @@ import { useEngineReady } from '../../engineReady.js';
 import { Html } from '../../lib/html.jsx';
 import { useStarter } from './shellOverlays.js';
 import { Dialogue } from './Window.jsx';
-import { BY } from '../../engine/pokemon/pokemon.js';
+import { POKEMON } from '../../engine/pokemon/pokemon.js';
 import { DIFFS, PROFILE, STARTERS } from '../../engine/state/game-state.js';
 import { medal, typeColor } from '../../engine/core/utils.js';
 import { evoPath } from '../../engine/world/home-route.js';
@@ -34,7 +34,7 @@ function Card() {
       </p>
       <div className="starter-grid">
         {STARTERS.map(id => {
-          const m = BY[id];
+          const m = POKEMON[id];
           return (
             <button key={id} type="button" className="starter-option" data-st={id} style={{ '--c': typeColor(m.t[0]) }}>
               <Html html={medal(m.t, 'is-large')} />

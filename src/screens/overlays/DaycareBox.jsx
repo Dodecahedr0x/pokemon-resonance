@@ -1,6 +1,6 @@
 import { Html } from '../../lib/html.jsx';
 import { Box, Dialogue } from './Window.jsx';
-import { BY } from '../../engine/pokemon/pokemon.js';
+import { POKEMON } from '../../engine/pokemon/pokemon.js';
 import { medal } from '../../engine/core/utils.js';
 
 import Button from '../../components/Button.jsx';
@@ -30,8 +30,8 @@ function Card({ L, ok }) {
               className={'picker-option' + (i >= 0 ? ' is-selected' : '')}
               data-pens-p={id}
             >
-              <Html html={medal(BY[id].t, 'is-small')} />
-              <b>{BY[id].n}</b>
+              <Html html={medal(POKEMON[id].t, 'is-small')} />
+              <b>{POKEMON[id].n}</b>
               <em>
                 {i === 0
                   ? 'Mère : donne la famille'
@@ -41,7 +41,7 @@ function Card({ L, ok }) {
                       ? 'Compatible'
                       : cp === false
                         ? 'Pas de type commun'
-                        : BY[id].t.join(' · ')}
+                        : POKEMON[id].t.join(' · ')}
               </em>
             </button>
           ))

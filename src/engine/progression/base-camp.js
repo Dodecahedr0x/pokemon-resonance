@@ -1,4 +1,4 @@
-import { BY, MON, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, POKEMON_LIST, SCEN } from '../pokemon/pokemon.js';
 import { PROFILE } from '../state/game-state.js';
 import { BADGES } from '../modes/gyms.js';
 import { medal, toast } from '../core/utils.js';
@@ -46,7 +46,7 @@ export function idpClean(p) {
       .filter(
         x =>
           x &&
-          BY[x.id] &&
+          POKEMON[x.id] &&
           typeof x.destinationId === 'string' &&
           Number.isFinite(x.fin) &&
           x.gain &&
@@ -189,7 +189,7 @@ function onProgress(S, rew) {
     PROFILE.camp.oeuf = (PROFILE.camp.oeuf || 0) + 1;
     if (PROFILE.camp.oeuf >= [8, 6, 4][pe - 1] && !hatchDaycareEgg(rew)) {
       // without a pair: an unknown family (v4.10); with a pair: their egg (v4.16)
-      const pool = MON.filter(
+      const pool = POKEMON_LIST.filter(
         m => m.st === 1 && !m.leg && !m.isEnemy && m.base === m.id && !PROFILE.box.includes(m.id)
       );
       if (pool.length) {
@@ -230,7 +230,7 @@ export function init() {
   HOOKS.progress.push(onProgress);
   HOOKS.battleResult.push(r =>
     r.oeuf
-      ? `<div class="result-list"><h4>Pension</h4><div class="result-row">${medal(BY[r.oeuf].t)}<span>Un œuf a éclos : ${BY[r.oeuf].n} rejoint votre Box !</span><b>🥚</b></div></div>`
+      ? `<div class="result-list"><h4>Pension</h4><div class="result-row">${medal(POKEMON[r.oeuf].t)}<span>Un œuf a éclos : ${POKEMON[r.oeuf].n} rejoint votre Box !</span><b>🥚</b></div></div>`
       : ''
   );
 }

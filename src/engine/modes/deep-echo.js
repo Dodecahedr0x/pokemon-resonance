@@ -1,6 +1,6 @@
 // Deep Echo (Camp › Écho profond, added in v4.31): 8-floor branching expedition, HP carried over,
 // a single life, relics, merchant and events.
-import { BY, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCEN } from '../pokemon/pokemon.js';
 import { PROFILE } from '../state/game-state.js';
 import { toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
@@ -52,7 +52,7 @@ function echoMap(seed) {
 }
 
 function echoLeave() {
-  const team = squad.slice(0, 4).filter(id => BY[id]);
+  const team = squad.slice(0, 4).filter(id => POKEMON[id]);
   if (team.length < 2) {
     return toast('Il faut au moins 2 Pokémon dans l’équipe.');
   }
@@ -173,7 +173,7 @@ export function echoAfter(S, rew, win) {
     if (!t) {
       return;
     }
-    t[0] = BY[u.id] ? u.id : t[0]; // an evolution in battle stays in effect during the expedition
+    t[0] = POKEMON[u.id] ? u.id : t[0]; // an evolution in battle stays in effect during the expedition
     t[1] = u.ko ? 0 : Math.max(0.01, u.hp / u.mhp);
   });
   rew.echo431 = { type, f: R.f + 1, win };
@@ -274,7 +274,7 @@ function echoChoice(k) {
     } else if (a === 'rappel') {
       const t = R.team.find(y => y[1] <= 0);
       t[1] = 0.3;
-      toast(`${BY[t[0]].n} revient à 30 % de PV.`);
+      toast(`${POKEMON[t[0]].n} revient à 30 % de PV.`);
     }
     queueSave();
     return renderCampPage();

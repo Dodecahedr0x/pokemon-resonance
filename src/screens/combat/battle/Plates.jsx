@@ -1,5 +1,5 @@
 import { Html } from '../../../lib/html.jsx';
-import { MV } from '../../../engine/data/moves.js';
+import { MOVES } from '../../../engine/data/moves.js';
 import { veiled } from '../../../engine/modes/gyms.js';
 import { medal } from '../../../engine/core/utils.js';
 import { EMAX, awakeningInfo, foeEvo, hasNx } from '../../../engine/combat/engine.js';
@@ -76,7 +76,7 @@ function state(u, fe, nx) {
     ) : u.intent && veiled(B) ? (
       'Intention voilée'
     ) : u.intent ? (
-      `→ ${MV[u.intent.mv].n}`
+      `→ ${MOVES[u.intent.mv].n}`
     ) : u.badge ? (
       'Neutralisé'
     ) : u.done ? (

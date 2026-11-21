@@ -1,6 +1,6 @@
 /* Daily challenge: a seeded battle with one forbidden type, streaks and fossils (added in v4.71). */
 
-import { BY, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCEN } from '../pokemon/pokemon.js';
 import { HOOKS } from '../core/hooks.js';
 import { squad } from '../team/team.js';
 import { OBST } from '../combat/synergies-obstacles.js';
@@ -58,7 +58,7 @@ export const dqMake = () => {
 /** The first team member of the forbidden type, or null. */
 export const dqViol = () => {
   const D = SCEN.dq470 && SCEN.dq470.dq470;
-  return D ? squad.slice(0, teamSize()).find(id => BY[id] && BY[id].t.includes(D)) : null;
+  return D ? squad.slice(0, teamSize()).find(id => POKEMON[id] && POKEMON[id].t.includes(D)) : null;
 };
 
 function onProgress(S, rew, win) {
@@ -104,7 +104,7 @@ export function init() {
 
   HOOKS.launchRefusal.push(() => {
     const v = scSel === 'dq470' && dqViol();
-    return v ? BY[v].n + ' est de type ' + SCEN.dq470.dq470 + ' : retirez-le de l’équipe.' : null;
+    return v ? POKEMON[v].n + ' est de type ' + SCEN.dq470.dq470 + ' : retirez-le de l’équipe.' : null;
   });
 
   /* ---- victory: once a day, streak, a fossil, Pokédollars and Shards ---- */

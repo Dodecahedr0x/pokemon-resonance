@@ -1,4 +1,4 @@
-import { BY } from '../../../engine/pokemon/pokemon.js';
+import { POKEMON } from '../../../engine/pokemon/pokemon.js';
 import { DIFFS, PROFILE } from '../../../engine/state/game-state.js';
 import { ART } from '../../../engine/assets/item-icons.js';
 
@@ -23,8 +23,8 @@ export default function Pantheon() {
               <div className="camp-pantheon-members">
                 {x.t.map((id, j) => (
                   <span key={j} className="camp-pantheon-member">
-                    <img src={ART(BY[id].no)} alt="" loading="lazy" />
-                    <em>{BY[id].n}</em>
+                    <img src={ART(POKEMON[id].no)} alt="" loading="lazy" />
+                    <em>{POKEMON[id].n}</em>
                   </span>
                 ))}
               </div>

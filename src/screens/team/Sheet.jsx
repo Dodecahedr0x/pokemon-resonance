@@ -3,10 +3,10 @@ import { Html } from '../../lib/html.jsx';
 import { strength } from '../../lib/power.js';
 import { useEngineReady } from '../../engineReady.js';
 import { useRoster } from './teamStore.js';
-import { EL, MK, MX, RX, dexNo } from '../../engine/data/game-data.js';
-import { MV, SHAPE, TAL } from '../../engine/data/moves.js';
+import { ELEMENT_TYPES, MARKS, MARK_REACTIONS, REACTIONS, dexNo } from '../../engine/data/game-data.js';
+import { MOVES, SHAPE, ABILITIES } from '../../engine/data/moves.js';
 import { REGION_NAMES } from '../../engine/data/hoenn.js';
-import { BY, NOTES, familyOf } from '../../engine/pokemon/pokemon.js';
+import { POKEMON, NOTES, familyOf } from '../../engine/pokemon/pokemon.js';
 import { ARR } from '../../engine/pokemon/evolution.js';
 import { ITEMS2, LINK_N, LINK_T, PROFILE, inBox, isCamp, lvlOfPts, ownedItems } from '../../engine/state/game-state.js';
 import { RC, ROLEFX, rIco } from '../../engine/pokemon/roles-synergies.js';
@@ -38,7 +38,7 @@ export default function Sheet() {
         role="dialog"
         aria-modal="true"
         aria-labelledby="shName"
-        style={ready && id ? { '--c': typeColor(BY[id].t[0]) } : undefined}
+        style={ready && id ? { '--c': typeColor(POKEMON[id].t[0]) } : undefined}
       >
         {content}
       </div>
@@ -49,21 +49,21 @@ export default function Sheet() {
 const T = s => <Html html={s} />;
 
 function Content({ id }) {
-  const m = BY[id],
-    base = BY[m.base];
+  const m = POKEMON[id],
+    base = POKEMON[m.base];
   const prep = [],
     trig = [];
   monMarks(m).forEach(k =>
-    MX[k].forEach(r => {
+    MARK_REACTIONS[k].forEach(r => {
       if (r && r !== 'ren' && !prep.includes(r)) {
         prep.push(r);
       }
     })
   );
   monEls(m).forEach(e => {
-    const i = EL.indexOf(e);
-    MK.forEach(k => {
-      const r = MX[k.id][i];
+    const i = ELEMENT_TYPES.indexOf(e);
+    MARKS.forEach(k => {
+      const r = MARK_REACTIONS[k.id][i];
       if (r && r !== 'ren' && !trig.includes(r)) {
         trig.push(r);
       }
@@ -71,12 +71,12 @@ function Content({ id }) {
   });
   const rl = arr =>
     arr.map(r => (
-      <button key={r} type="button" className={`chip cat-${RX[r].k}`} data-rx={r}>
+      <button key={r} type="button" className={`chip cat-${REACTIONS[r].k}`} data-rx={r}>
         <i />
-        {RX[r].n}
+        {REACTIONS[r].n}
       </button>
     ));
-  const tl = TAL[m.ability],
+  const tl = ABILITIES[m.ability],
     family = familyOf(id),
     nx = nextOf(m),
     rg = rankId(m.id);
@@ -150,7 +150,7 @@ function Content({ id }) {
         ) : (
           <>
             <p className="team-sheet-hint">
-              S’obtient en combat par l’Éveil de <b>{BY[m.prev].n}</b>
+              S’obtient en combat par l’Éveil de <b>{POKEMON[m.prev].n}</b>
               {pn ? ' (' + pn + ')' : ''}.{' '}
               {inBox(id)
                 ? `Recrue confirmée : se recrute aussi directement pour ${RC(id)} PC, sans Arrivée ni soin d’Éveil.`
@@ -192,7 +192,7 @@ function Content({ id }) {
                 ? BRANCHES[m.id]
                     .map(
                       b =>
-                        `${BY[b.id].n} : ${/^PV/.test(b.why) ? b.why : b.why[0].toLowerCase() + b.why.slice(1)}${b.def ? ' (voie par défaut)' : ''}`
+                        `${POKEMON[b.id].n} : ${/^PV/.test(b.why) ? b.why : b.why[0].toLowerCase() + b.why.slice(1)}${b.def ? ' (voie par défaut)' : ''}`
                     )
                     .join(' · ') + '. Une seule sera prise.'
                 : Array.isArray(m.nx)
@@ -247,7 +247,7 @@ function Content({ id }) {
 
 // Recruit, replace or remove this stage.
 function Action({ m, base, id }) {
-  const cur = squad.find(x => BY[x].base === base.id),
+  const cur = squad.find(x => POKEMON[x].base === base.id),
     onM = cur === id,
     ok = inBox(id);
   return (
@@ -255,7 +255,7 @@ function Action({ m, base, id }) {
       {onM
         ? `Retirer ${m.n} de l’équipe`
         : ok
-          ? `${cur ? 'Remplacer ' + BY[cur].n + ' par ' : 'Recruter '}${m.n} · ${RC(id)} PC`
+          ? `${cur ? 'Remplacer ' + POKEMON[cur].n + ' par ' : 'Recruter '}${m.n} · ${RC(id)} PC`
           : m.st > 1 && isCamp() && inBox(base.id)
             ? `${m.n} : à éveiller en combat d’abord`
             : `${base.n} : à capturer${captureSite(base.id) ? ' · ' + captureSite(base.id) : ''}`}
@@ -265,7 +265,7 @@ function Action({ m, base, id }) {
 
 // Move card (old mvCard).
 function MvCard({ id }) {
-  const m = MV[id];
+  const m = MOVES[id];
   const sp = [strength(m), SHAPE[m.sh] + (m.r ? ' ' + m.r : ''), m.mk ? markOf(m.mk).n : null]
     .filter(Boolean)
     .join(' · ');
@@ -284,7 +284,7 @@ function MvCard({ id }) {
 // What an Awakening changes (old diffHtml). `from`: the Awakening that led to this stage, as an inset.
 function Evd({ a, b, from }) {
   const D = evoDiff(a, b),
-    B2 = BY[b],
+    B2 = POKEMON[b],
     note = branchNote(a, b);
   const Tag = from ? 'div' : 'button';
   return (
@@ -302,13 +302,13 @@ function Evd({ a, b, from }) {
         {D.gain.length ? (
           <li className="is-gain">
             <span>Gagne</span>
-            {D.gain.map(x => MV[x].n).join(', ')}
+            {D.gain.map(x => MOVES[x].n).join(', ')}
           </li>
         ) : null}
         {D.lose.length ? (
           <li className="is-lose">
             <span>Perd</span>
-            {D.lose.map(x => MV[x].n).join(', ')}
+            {D.lose.map(x => MOVES[x].n).join(', ')}
           </li>
         ) : null}
         {D.tg.length || D.tl.length ? (
@@ -321,7 +321,7 @@ function Evd({ a, b, from }) {
         {D.ability ? (
           <li>
             <span>Talent</span>
-            {TAL[D.ability][0]}
+            {ABILITIES[D.ability][0]}
           </li>
         ) : null}
         {D.role ? (
@@ -399,7 +399,7 @@ function Extras({ base }) {
                       <b>{ITEMS2[k].n}</b>
                       <em>
                         {T(ITEMS2[k].d)}
-                        {holder ? ` · tenu par ${BY[holder].n}` : ''}
+                        {holder ? ` · tenu par ${POKEMON[holder].n}` : ''}
                       </em>
                     </span>
                   </button>
@@ -432,9 +432,9 @@ function Extras({ base }) {
               D = duoTechnique(k);
             return (
               <div key={k} className="team-sheet-link">
-                <Html html={medal(BY[o].t, 'is-small')} />
+                <Html html={medal(POKEMON[o].t, 'is-small')} />
                 <span>
-                  <b>{BY[o].n}</b>
+                  <b>{POKEMON[o].n}</b>
                   <em>
                     {l ? LINK_N[l] : 'Pas encore de palier'} · {v} point{v > 1 ? 's' : ''}
                     {D ? ` · duo : ${D.n}${l >= 3 ? '' : ' (palier Duo)'}` : ''}

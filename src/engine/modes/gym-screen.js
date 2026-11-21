@@ -1,4 +1,4 @@
-import { BY, MON, PRESETS } from '../pokemon/pokemon.js';
+import { POKEMON, POKEMON_LIST, PRESETS } from '../pokemon/pokemon.js';
 import { BUDGET } from '../pokemon/evolution.js';
 import { inBox } from '../state/game-state.js';
 import { RC, synOf } from '../pokemon/roles-synergies.js';
@@ -81,7 +81,7 @@ export function drawObstacles() {
 // battle synergies (#bSyn): rendered by React (src/screens/combat/battle/TopBar.jsx)
 
 function randomTeam() {
-  const pool = MON.filter(m => inBox(m.id) && RC(m.id) <= BUDGET);
+  const pool = POKEMON_LIST.filter(m => inBox(m.id) && RC(m.id) <= BUDGET);
   let best = null;
   for (let n = 0; n < 60; n++) {
     const sh = [...pool].sort(() => Math.random() - 0.5),
@@ -91,7 +91,7 @@ function randomTeam() {
       if (t.length >= TEAM_MAX) {
         break;
       }
-      if (t.some(x => BY[x].base === m.base)) {
+      if (t.some(x => POKEMON[x].base === m.base)) {
         continue;
       }
       const left = TEAM_MAX - t.length - 1;
@@ -104,7 +104,7 @@ function randomTeam() {
     if (!t.length) {
       continue;
     }
-    const rs = new Set(t.map(id => BY[id].r)),
+    const rs = new Set(t.map(id => POKEMON[id].r)),
       sc = synOf(t).length * 3 + rs.size + (rs.has('Rempart') ? 2 : 0) + (rs.has('Frappeur') ? 1 : 0) + Math.random();
     if (!best || sc > best.sc) {
       best = { t, sc };
@@ -142,7 +142,7 @@ function teamAct(a) {
     save();
     renderSquad();
     const s = synOf(t);
-    toast(`Tirage : ${t.map(id => BY[id].n).join(', ')}${s.length ? ' · ' + s.map(x => x.n).join(', ') : ''}.`);
+    toast(`Tirage : ${t.map(id => POKEMON[id].n).join(', ')}${s.length ? ' · ' + s.map(x => x.n).join(', ') : ''}.`);
   }
   if (!B) {
     renderPrep();
@@ -168,7 +168,7 @@ function loadPreset(k) {
   renderSquad();
   toast(
     miss.length
-      ? `Équipe « ${P.n} » chargée sans ${miss.map(id => BY[id].n).join(', ')} : à capturer d’abord.`
+      ? `Équipe « ${P.n} » chargée sans ${miss.map(id => POKEMON[id].n).join(', ')} : à capturer d’abord.`
       : `Équipe « ${P.n} » chargée.`
   );
 }

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Html } from '../../lib/html.jsx';
-import { BY, PRESETS } from '../../engine/pokemon/pokemon.js';
+import { POKEMON, PRESETS } from '../../engine/pokemon/pokemon.js';
 import { PROFILE, inBox } from '../../engine/state/game-state.js';
 import { RC } from '../../engine/pokemon/roles-synergies.js';
 import { medal } from '../../engine/core/utils.js';
@@ -28,7 +28,7 @@ export default function DexCall({ v }) {
         </span>
         <div className="team-recruits-list">
           {STARS.map(id => {
-            const m = BY[id],
+            const m = POKEMON[id],
               sel = squad.includes(id);
             return (
               <button
@@ -82,7 +82,7 @@ function Legends() {
       </span>
       <div className="team-recruits-list">
         {L.map(x => {
-          const m = BY[x.id],
+          const m = POKEMON[x.id],
             sel = squad.includes(x.id);
           return (
             <button
@@ -118,7 +118,7 @@ function SavedSquads() {
               size="small"
               data-team-save="charger"
               data-i={i}
-              title={t.ids.map(id => (BY[id] ? BY[id].n : id)).join(', ')}
+              title={t.ids.map(id => (POKEMON[id] ? POKEMON[id].n : id)).join(', ')}
             >
               {t.n}
             </Button>

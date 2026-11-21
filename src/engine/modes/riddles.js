@@ -1,6 +1,6 @@
 // Tactical riddles (Camp › Énigmes, added in v4.31): frozen positions, KO every opponent in one round.
 // Each riddle was built and verified with the game engine.
-import { BY, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCEN } from '../pokemon/pokemon.js';
 import { PROFILE } from '../state/game-state.js';
 import { HOOKS } from '../core/hooks.js';
 import { EMAX } from '../combat/engine.js';
@@ -27,7 +27,7 @@ function puzzleScen(puzzle) {
     hb: 0,
     pb: 0,
     lv: 30,
-    at: BY[puzzle.f[0][0]].t[0],
+    at: POKEMON[puzzle.f[0][0]].t[0],
     foes: puzzle.f.map(([id, c, r]) => [id, [c, r]]),
     catch: false,
     enigme431: puzzle.id,
@@ -132,7 +132,7 @@ function puzzleHint() {
   if (!x) {
     return '';
   }
-  return `Indice : commencez par ${BY[puzzle.a[x[3]][0]].n}.`;
+  return `Indice : commencez par ${POKEMON[puzzle.a[x[3]][0]].n}.`;
 }
 
 /** Riddle: bottom bar text (read by src/screens/combat/battle/Foot.jsx). */

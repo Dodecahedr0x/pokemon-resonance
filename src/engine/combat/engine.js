@@ -1,7 +1,7 @@
 import { MT } from './turn-core.js';
-import { EL, MK, MX } from '../data/game-data.js';
-import { MV } from '../data/moves.js';
-import { BY, DEPLOY, EEVEE, FAMT, MKT, PKT, SCEN, TCH, WXN } from '../pokemon/pokemon.js';
+import { ELEMENT_TYPES, MARKS, MARK_REACTIONS } from '../data/game-data.js';
+import { MOVES } from '../data/moves.js';
+import { POKEMON, DEPLOY, EEVEE, FAMT, MARK_TYPE, PKT, SCEN, TYPE_CHART, WEATHER_NAME } from '../pokemon/pokemon.js';
 import { ARR } from '../pokemon/evolution.js';
 import { ITEMS2, pairKey } from '../state/game-state.js';
 import { HOOKS } from '../core/hooks.js';
@@ -99,7 +99,7 @@ export function neighbors(p) {
 }
 
 export function teff(at, def) {
-  const e = TCH[at];
+  const e = TYPE_CHART[at];
   if (!e) {
     return 1;
   }
@@ -117,7 +117,7 @@ export function teff(at, def) {
 }
 
 function specOf(id) {
-  const m = BY[id];
+  const m = POKEMON[id];
   return { id, n: m.n, t: m.t, s: m.s, mv: m.mv, ability: m.ability };
 }
 
@@ -128,7 +128,7 @@ export function mkUnit(id, side, pos, uid, D) {
   const u = {
     uid,
     // allies keep their family identity (Bonds, items, fatigue, duos) even when recruited already evolved
-    sp: side === 'a' && BY[id] ? BY[id].base : id,
+    sp: side === 'a' && POKEMON[id] ? POKEMON[id].base : id,
     id,
     side,
     n: sp.n,
@@ -235,7 +235,7 @@ export function newBattle(sc, team, bonus, opt) {
   }
   team.slice(0, 4).forEach((id, i) => {
     const u = mkUnit(id, 'a', DEPLOY[i], 'a' + i, D);
-    if (BY[id] && isShinyOwned(BY[id].base)) {
+    if (POKEMON[id] && isShinyOwned(POKEMON[id].base)) {
       u.shiny = true;
     } // your shinies stay shiny in battle (v4.15)
     S.units.push(u);
@@ -379,7 +379,7 @@ export function mvType(S, u, m) {
   if (u.ability === 'adaptabilite' && m.t === 'Normal') {
     const k = markAt(S, unitKey(u));
     if (k) {
-      return MKT[k];
+      return MARK_TYPE[k];
     }
   }
   return m.t;
@@ -411,7 +411,10 @@ function canSee(S, u, k) {
 }
 
 export function targets(S, u, m) {
-  if (m && ((m.xp && !canXP(S, u, m)) || (u.item === 'mouchoir' && u.choice && MV[u.choice] && MV[u.choice] !== m))) {
+  if (
+    m &&
+    ((m.xp && !canXP(S, u, m)) || (u.item === 'mouchoir' && u.choice && MOVES[u.choice] && MOVES[u.choice] !== m))
+  ) {
     return [];
   } // v4.14
   const R = effR(u, m, S);
@@ -1182,7 +1185,7 @@ function announceMove(S, u, m, k, typ, ev) {
 // Weather move: sets the weather and its duration.
 function applyWeatherMove(S, u, m, ev) {
   S.wx = { k: m.wx, n: u.item === 'rochemeteo' ? 8 : 5 }; // Weather Rock (v4.14)
-  pushMessage(ev, `Météo ${WXN[m.wx]} pendant ${S.wx.n} manches.`);
+  pushMessage(ev, `Météo ${WEATHER_NAME[m.wx]} pendant ${S.wx.n} manches.`);
 }
 
 // Self-targeted move: guard, protect, boost, heals, rest, reflect or a registered self effect.
@@ -1279,7 +1282,7 @@ function tileReaction(S, m, family, t, x, mk, ev) {
     mult = 1,
     ren = false;
   if (family && mk && (m.p || m.fix || m.mk)) {
-    rx = MX[mk][EL.indexOf(family)] || null;
+    rx = MARK_REACTIONS[mk][ELEMENT_TYPES.indexOf(family)] || null;
   }
   if (rx === 'ren') {
     ren = true;
@@ -1288,7 +1291,7 @@ function tileReaction(S, m, family, t, x, mk, ev) {
       t.mark.d += 1;
       t.mark.lv = 2;
     }
-    pushMessage(ev, `Renfort : la marque ${MK.find(z => z.id === mk).n} s’intensifie.`);
+    pushMessage(ev, `Renfort : la marque ${MARKS.find(z => z.id === mk).n} s’intensifie.`);
   } else if (rx) {
     if (t.mark && t.mark.lv === 2) {
       mult *= 1.25;
@@ -1528,7 +1531,7 @@ export function pAct(S, u, mi, k) {
   if (S.phase !== 'player' || u.acted || u.ko) {
     return null;
   }
-  const m = MV[u.mv[mi]];
+  const m = MOVES[u.mv[mi]];
   if (!m || !targets(S, u, m).includes(k)) {
     return null;
   }
@@ -1587,7 +1590,7 @@ export function rewardIn(S, u, n, ev) {
 }
 
 export function evoOpts(S, u) {
-  const m = BY[u.id];
+  const m = POKEMON[u.id];
   if (!m || !m.nx) {
     return [];
   }
@@ -1633,7 +1636,7 @@ export function nextId(S, u) {
   if (BRANCHES[u.id]) {
     return o[0];
   }
-  if (Array.isArray(BY[u.id].nx)) {
+  if (Array.isArray(POKEMON[u.id].nx)) {
     return S.wx && S.wx.k === 'pluie' ? o[1] : o[0];
   }
   return o[0];
@@ -1641,7 +1644,7 @@ export function nextId(S, u) {
 
 export function awakeningInfo(S, u) {
   const id = nextId(S, u);
-  return id ? BY[id] : null;
+  return id ? POKEMON[id] : null;
 }
 
 export function canAwaken(S, u) {
@@ -1676,7 +1679,7 @@ function arrive(S, u, ev) {
       nbrK(unitKey(u)).forEach(x => setMark(S, x, f.mk, u.uid));
     } else if (f.k === 'wx') {
       S.wx = { k: f.w, n: u.item === 'rochemeteo' ? 8 : 5 }; // Weather Rock (v4.14)
-      pushMessage(ev, `Météo ${WXN[f.w]} pendant 5 manches.`);
+      pushMessage(ev, `Météo ${WEATHER_NAME[f.w]} pendant 5 manches.`);
     } else if (f.k === 'roar') {
       foes(1).forEach(o => shove(S, o, u.pos, f.v, ev, false));
     } else if (f.k === 'heal') {
@@ -1719,7 +1722,7 @@ function arrive(S, u, ev) {
 }
 
 export function transform(S, u, id, ev) {
-  const E = BY[id],
+  const E = POKEMON[id],
     old = u.n,
     om = u.mhp,
     oid = u.id,
@@ -1774,7 +1777,7 @@ export function pAwaken(S, u, id) {
   const ev = [],
     previous = REPLAYS.has(S) ? JSON.stringify(S) : null, // replay (v4.11)
     displayName = u.n,
-    inHarmony = BY[u.id].nx === 'eevee' && eeveeHarmony(S, u).includes(id); // Eevee in harmony (v4.34)
+    inHarmony = POKEMON[u.id].nx === 'eevee' && eeveeHarmony(S, u).includes(id); // Eevee in harmony (v4.34)
   S.lastAtk = u.uid;
   S.voice -= 1;
   S.stats.voice += 1;
@@ -1987,7 +1990,7 @@ function chooseAction(S, e, ev, inPlace) {
         (hostileTrap(S, e, pk) ? 7 : 0) -
         (pk === here ? 0.5 : 0);
     e.mv.forEach(mid => {
-      const m = MV[mid];
+      const m = MOVES[mid];
       if (m.wx || !(m.p || m.fix) || m.sh === 'self' || m.sh === 'ally' || !canXP(S, e, m)) {
         return;
       }
@@ -2089,7 +2092,7 @@ export function threatZone(S, e) {
     for (const pk in opts) {
       const sim = Object.assign({}, e, { pos: P(pk) });
       e.mv.forEach(mid => {
-        const m = MV[mid];
+        const m = MOVES[mid];
         if (!m || m.wx || !(m.p || m.fix) || m.sh === 'self' || m.sh === 'ally' || !canXP(S, e, m)) {
           return;
         }
@@ -2147,7 +2150,7 @@ export function execFoe(S, uid) {
     }
     return ev;
   }
-  const m = MV[e.intent.mv],
+  const m = MOVES[e.intent.mv],
     k = e.intent.k;
   e.intent = null;
   let r = ev;
@@ -2264,7 +2267,7 @@ function roundEffects(S) {
   if (S.wx) {
     S.wx.n--;
     if (S.wx.n <= 0) {
-      pushMessage(ev, `La météo ${WXN[S.wx.k]} se dissipe.`);
+      pushMessage(ev, `La météo ${WEATHER_NAME[S.wx.k]} se dissipe.`);
       S.wx = null;
     }
   }
@@ -2363,7 +2366,7 @@ function previewCore(S, uid, mi, k) {
   return {
     diff,
     rxs: ev.filter(e => e.e === 'rx').map(e => e.rx),
-    aff: affected(S, su, MV[su.mv[mi]], k),
+    aff: affected(S, su, MOVES[su.mv[mi]], k),
     over: C.over,
     wx: ev.some(e => e.e === 'msg' && e.s.startsWith('Météo')),
     notes: NOTE,
@@ -2427,7 +2430,7 @@ const RXM = { fon: 1.5, bri: 2, sur: 1.3 };
 
 export const EMAX = 3;
 
-export const hasNx = u => !!(BY[u.id] && BY[u.id].nx);
+export const hasNx = u => !!(POKEMON[u.id] && POKEMON[u.id].nx);
 
 /* v4.13 · Branching Awakenings: each path has its own condition; the "default" path always stays open */
 const onContact = (S, u, camp) =>

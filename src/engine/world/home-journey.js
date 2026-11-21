@@ -1,5 +1,5 @@
 import { GYMS } from '../data/game-data.js';
-import { BY, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCEN } from '../pokemon/pokemon.js';
 import { CAMP_START, PROFILE, defProfile, isCamp } from '../state/game-state.js';
 import { ARENAS, BADGES, TERR } from '../modes/gyms.js';
 import { $, RM, writeLS, typeGlyphPath, medal, typeColor, toast } from '../core/utils.js';
@@ -113,7 +113,7 @@ export function emblem(k, cls = '') {
     L = leaderOf(k),
     legendInfo = s.hoennLegend || s.captureHoennLegend || s.legend || s.colossus || s.roam;
   if (legendInfo) {
-    return `<span class="journey-emblem is-legend ${cls}" style="--ac:${typeColor(s.at)}">${medal(BY[legendInfo].t, 'is-large')}</span>`;
+    return `<span class="journey-emblem is-legend ${cls}" style="--ac:${typeColor(s.at)}">${medal(POKEMON[legendInfo].t, 'is-large')}</span>`;
   }
   if (s.johto != null) {
     return `<span class="journey-emblem is-badge ${cls}" style="--ac:${typeColor(s.at)}">${badgeSvg(s.johto, s.at, 'ej' + cls + s.johto)}</span>`;

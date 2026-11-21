@@ -1,5 +1,5 @@
 /* ===================== MOVES v0.7 ===================== */
-export const MV = {
+export const MOVES = {
   trempette: { n: 'Trempette', t: 'Eau', p: 0, r: 1, sh: 'cone', mk: 'trempe', d: 'Trempe 3 cases en cône.' },
   charge: { n: 'Charge', t: 'Normal', p: 5, r: 1, sh: 'one', d: 'Au contact.' },
   griffe: { n: 'Griffe', t: 'Normal', p: 5, r: 1, sh: 'one', d: 'Au contact.' },
@@ -299,7 +299,7 @@ export const SHAPE = {
   ally: 'Allié',
 };
 
-export const TAL = {
+export const ABILITIES = {
   glissade: ['Glissade', '+2 Mouvement en partant d’une case Trempée.'],
   ecranpoudre: ['Écran Poudre', 'Insensible aux dégâts de réaction en zone.'],
   cran: ['Cran', 'Dégâts ×1,5 sous un statut.'],
@@ -334,5 +334,5 @@ export const TAL = {
 
 // Statements run at startup, in the original order (see index.js).
 export function init() {
-  delete MV.trempe0;
+  delete MOVES.trempe0;
 }

@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Html } from '../../../lib/html.jsx';
 import { GYMS } from '../../../engine/data/game-data.js';
-import { MV } from '../../../engine/data/moves.js';
-import { SCEN, WXN, WXT } from '../../../engine/pokemon/pokemon.js';
+import { MOVES } from '../../../engine/data/moves.js';
+import { SCEN, WEATHER_NAME, WEATHER_TYPE } from '../../../engine/pokemon/pokemon.js';
 import { SYN } from '../../../engine/pokemon/roles-synergies.js';
 import { ARENAS, arenaNext } from '../../../engine/modes/gyms.js';
 import { medal, typeColor } from '../../../engine/core/utils.js';
@@ -122,8 +122,8 @@ function Chips() {
     <>
       {B.wx && (
         <span className="chip">
-          <i style={{ background: typeColor(WXT[B.wx.k]) }} />
-          {WXN[B.wx.k]} · {B.wx.n}
+          <i style={{ background: typeColor(WEATHER_TYPE[B.wx.k]) }} />
+          {WEATHER_NAME[B.wx.k]} · {B.wx.n}
         </span>
       )}
       <Html html={chipTime(B) + chipWind(B) + chipMut(B) + chipChord(B) + fieldEffectChips(B)} />
@@ -228,7 +228,7 @@ export function Timeline() {
         return;
       }
       const doneFlag = i < B.queueIndex || u.ko,
-        prio = u.side === 'e' && u.intent && MV[u.intent.mv].prio;
+        prio = u.side === 'e' && u.intent && MOVES[u.intent.mv].prio;
       rows.push({
         i,
         cls: `battle-order-unit ${u.side === 'a' ? 'is-ally' : 'is-enemy'}${u === now ? ' is-current' : ''}${doneFlag ? ' is-done' : ''}${u.ko ? ' is-ko' : ''}`,

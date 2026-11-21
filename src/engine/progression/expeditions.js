@@ -1,4 +1,4 @@
-import { BY, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCEN } from '../pokemon/pokemon.js';
 import { PROFILE, inBox } from '../state/game-state.js';
 import { $, toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
@@ -26,9 +26,9 @@ export { placesExp }; // read by the base Camp (src/screens/camp)
 // or at the Daycare (v4.16)
 export function expRefusal(id) {
   if (isInDaycare(id)) {
-    return `${BY[BY[id].base].n} est à la Pension : reprenez le couple au Camp pour le faire combattre.`;
+    return `${POKEMON[POKEMON[id].base].n} est à la Pension : reprenez le couple au Camp pour le faire combattre.`;
   } // v4.16
-  return onExpedition(id) ? `${BY[BY[id].base].n} est en expédition : il reviendra bientôt.` : null;
+  return onExpedition(id) ? `${POKEMON[POKEMON[id].base].n} est en expédition : il reviendra bientôt.` : null;
 }
 
 export function send(id, dest) {
@@ -41,7 +41,7 @@ export function send(id, dest) {
   }
   const r = () => Math.random(),
     between = ([a, b]) => Math.round((a + r() * (b - a)) / 10) * 10,
-    bon = BY[id].t.some(t => D.types.includes(t)),
+    bon = POKEMON[id].t.some(t => D.types.includes(t)),
     x = bon ? 2 : 1,
     obj = D.obj.filter(o => SHOP[o]);
   const payout = {
@@ -51,9 +51,9 @@ export function send(id, dest) {
     q: x,
   };
   PROFILE.exp.push({ id, destinationId: dest, fin: PROFILE.battles + D.duration, gain: payout, ideal: bon });
-  __set_squad(squad.filter(s => BY[s].base !== BY[id].base));
+  __set_squad(squad.filter(s => POKEMON[s].base !== POKEMON[id].base));
   toast(
-    `${BY[id].n} part pour ${D.n}${bon ? ' : un terrain qui lui convient' : ''}. Retour dans ${D.duration} combats.`
+    `${POKEMON[id].n} part pour ${D.n}${bon ? ' : un terrain qui lui convient' : ''}. Retour dans ${D.duration} combats.`
   );
   save();
   queueSave();
@@ -78,7 +78,7 @@ export function retrieve(i) {
   PROFILE.exp.splice(i, 1);
   sfx('ui');
   toast(
-    `${BY[x.id].n} revient de ${DESTINATIONS[x.destinationId].n} : ${formatNumber(x.gain.m)} ₽${x.gain.g ? `, ${x.gain.g} Éclats` : ''}${x.gain.o ? `, ${x.gain.q} × ${SHOP[x.gain.o].n}` : ''}.`
+    `${POKEMON[x.id].n} revient de ${DESTINATIONS[x.destinationId].n} : ${formatNumber(x.gain.m)} ₽${x.gain.g ? `, ${x.gain.g} Éclats` : ''}${x.gain.o ? `, ${x.gain.q} × ${SHOP[x.gain.o].n}` : ''}.`
   );
   queueSave();
   renderWallet();
@@ -93,7 +93,7 @@ export function retrieve(i) {
 /* expedition window: rendered by React (src/screens/overlays/ExpBox.jsx) */
 export function renderExpBox() {
   const available = PROFILE.box.filter(
-    id => BY[id] && !squad.some(s => BY[s].base === id) && !onExpedition(id) && !isFallen(id)
+    id => POKEMON[id] && !squad.some(s => POKEMON[s].base === id) && !onExpedition(id) && !isFallen(id)
   );
   paintOverlay('exp', { destinationId: EXP_DEST, available });
 }
@@ -134,7 +134,8 @@ export const DESTINATIONS = {
 };
 
 export const onExpedition = id =>
-  !!(campOpen() && PROFILE.exp && BY[id] && PROFILE.exp.some(x => BY[x.id].base === BY[id].base)) || isInDaycare(id);
+  !!(campOpen() && PROFILE.exp && POKEMON[id] && PROFILE.exp.some(x => POKEMON[x.id].base === POKEMON[id].base)) ||
+  isInDaycare(id);
 
 const placesExp = () => level('guet');
 

@@ -3,8 +3,8 @@
    an egg of their family, with an inherited move and a better chance
    of being shiny.
    ===================================================================== */
-import { MV } from '../data/moves.js';
-import { BY, MON } from '../pokemon/pokemon.js';
+import { MOVES } from '../data/moves.js';
+import { POKEMON, POKEMON_LIST } from '../pokemon/pokemon.js';
 import { PROFILE } from '../state/game-state.js';
 import { paintOverlay } from '../../screens/overlays/dialogsStore.js';
 import { $, medal, toast } from '../core/utils.js';
@@ -26,16 +26,16 @@ export { daycarePair, daycareParents, inheritableMoves }; // read by the Camp's 
 
 const daycarePair = () => (campOpen() ? (PROFILE.pair || []).filter(id => PROFILE.box.includes(id)) : []);
 
-export const isInDaycare = id => !!(campOpen() && BY[id] && daycarePair().includes(BY[id].base));
+export const isInDaycare = id => !!(campOpen() && POKEMON[id] && daycarePair().includes(POKEMON[id].base));
 
 function breedCompatibleList(a, b) {
-  if (!BY[a] || !BY[b] || a === b) {
+  if (!POKEMON[a] || !POKEMON[b] || a === b) {
     return false;
   }
   if (a === 'metamorph' || b === 'metamorph') {
     return a !== b;
   }
-  return BY[a].t.some(t => BY[b].t.includes(t));
+  return POKEMON[a].t.some(t => POKEMON[b].t.includes(t));
 }
 
 /** The mother gives the family; with Ditto, it is the other parent. */
@@ -50,7 +50,7 @@ function daycareParents() {
 }
 
 function movesetRows(b) {
-  return MON.filter(m => m.base === b);
+  return POKEMON_LIST.filter(m => m.base === b);
 }
 
 function inheritableMoves(motherRef, father) {
@@ -59,7 +59,7 @@ function inheritableMoves(motherRef, father) {
   }
   const already = new Set(movesetRows(motherRef).flatMap(m => m.mv));
   return [...new Set(movesetRows(father).flatMap(m => m.mv))].filter(
-    k => MV[k] && MV[k].p > 0 && !MV[k].sig && !MV[k].xp && !already.has(k)
+    k => MOVES[k] && MOVES[k].p > 0 && !MOVES[k].sig && !MOVES[k].xp && !already.has(k)
   );
 }
 
@@ -91,10 +91,10 @@ export function hatchDaycareEgg(rew) {
 
 export function inheritedMoveHtml(b) {
   const k = b && PROFILE.inherited && PROFILE.inherited[b];
-  if (!k || !MV[k]) {
+  if (!k || !MOVES[k]) {
     return '';
   }
-  return `<div class="mvc tm-move inherited-move"><div class="t"><b>${MV[k].n}</b><span class="chip">Héritée</span></div><p>${MV[k].t} · ${MV[k].p ? 'Puissance ' + MV[k].p + ' · ' : ''}${MV[k].d || ''} Capacité transmise à la Pension.</p></div>`;
+  return `<div class="mvc tm-move inherited-move"><div class="t"><b>${MOVES[k].n}</b><span class="chip">Héritée</span></div><p>${MOVES[k].t} · ${MOVES[k].p ? 'Puissance ' + MOVES[k].p + ' · ' : ''}${MOVES[k].d || ''} Capacité transmise à la Pension.</p></div>`;
 }
 
 // the base Camp's Daycare is rendered by React: src/screens/camp/CampBase.jsx
@@ -102,7 +102,7 @@ export function inheritedMoveHtml(b) {
 /* Daycare pair selection: rendered by React (src/screens/overlays/DaycareBox.jsx) */
 function renderDaycareBox() {
   const available = PROFILE.box.filter(
-    id => BY[id] && !squad.some(s => BY[s].base === id) && !onExpedition(id) && !isFallen(id)
+    id => POKEMON[id] && !squad.some(s => POKEMON[s].base === id) && !onExpedition(id) && !isFallen(id)
   );
   const ok = PENS_SEL.length === 2 && breedCompatibleList(PENS_SEL[0], PENS_SEL[1]);
   paintOverlay('pens', {
@@ -131,9 +131,9 @@ function onDaycareClick(e) {
       renderCampBase();
     } else if (k === 'ok' && PENS_SEL.length === 2 && breedCompatibleList(PENS_SEL[0], PENS_SEL[1])) {
       PROFILE.pair = [...PENS_SEL];
-      __set_squad(squad.filter(s => !PENS_SEL.includes(BY[s].base)));
+      __set_squad(squad.filter(s => !PENS_SEL.includes(POKEMON[s].base)));
       $('#pensBox').hidden = true;
-      toast(`${BY[PENS_SEL[0]].n} et ${BY[PENS_SEL[1]].n} s’installent à la Pension.`);
+      toast(`${POKEMON[PENS_SEL[0]].n} et ${POKEMON[PENS_SEL[1]].n} s’installent à la Pension.`);
       save();
       queueSave();
       renderCampBase();
@@ -187,7 +187,7 @@ export function init() {
         return;
       }
       const k = (PROFILE.inherited || {})[u.sp];
-      if (k && MV[k]) {
+      if (k && MOVES[k]) {
         u.hm = k;
         if (!u.mv.includes(k)) {
           u.mv.push(k);
@@ -202,7 +202,7 @@ export function init() {
       return '';
     }
     const x = r.daycareEgg;
-    return `<div class="result-list"><h4>Pension</h4><div class="result-row${x.sh ? ' is-shiny' : ''}"${x.sh ? ` style="${shinyStyle(x.id)}"` : ''}>${medal(BY[x.id].t)}<span>Un œuf a éclos : un ${BY[x.id].n}${x.sh ? ' <b>chromatique</b>' : ''} !${x.mv ? ` Il hérite de <b>${MV[x.mv].n}</b> grâce à ${BY[x.father].n}.` : ''}</span><b><img class="res-egg" src="${ITM('oeuf')}" alt=""></b></div></div>`;
+    return `<div class="result-list"><h4>Pension</h4><div class="result-row${x.sh ? ' is-shiny' : ''}"${x.sh ? ` style="${shinyStyle(x.id)}"` : ''}>${medal(POKEMON[x.id].t)}<span>Un œuf a éclos : un ${POKEMON[x.id].n}${x.sh ? ' <b>chromatique</b>' : ''} !${x.mv ? ` Il hérite de <b>${MOVES[x.mv].n}</b> grâce à ${POKEMON[x.father].n}.` : ''}</span><b><img class="res-egg" src="${ITM('oeuf')}" alt=""></b></div></div>`;
   });
 
   /* ---------- achievements ---------- */

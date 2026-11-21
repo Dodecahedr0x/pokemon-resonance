@@ -1,6 +1,6 @@
 /* Calendar events (device date, works offline): Night of Specters, December Frost, Spring Bloom, Summer Heatwave and the Shiny Weekend (added in v4.11). */
 
-import { BY } from '../pokemon/pokemon.js';
+import { POKEMON } from '../pokemon/pokemon.js';
 import { PROFILE } from '../state/game-state.js';
 import { toast } from '../core/utils.js';
 import { refreshHome, setRoute } from '../../screens/home/homeStore.js';
@@ -169,7 +169,7 @@ export function init() {
   HOOKS.progress.push((S, rew) => {
     const s = season();
     if (s && s.types.length && rew.caught && rew.caught.length) {
-      const n = rew.caught.filter(c => BY[c.id] && BY[c.id].t.some(t => s.types.includes(t))).length;
+      const n = rew.caught.filter(c => POKEMON[c.id] && POKEMON[c.id].t.some(t => s.types.includes(t))).length;
       if (n) {
         rew.season = n;
         return [0, n];

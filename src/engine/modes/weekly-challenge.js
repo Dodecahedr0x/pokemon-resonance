@@ -1,4 +1,4 @@
-import { BY, SCEN, familyOf } from '../pokemon/pokemon.js';
+import { POKEMON, SCEN, familyOf } from '../pokemon/pokemon.js';
 import { RECRUIT } from '../pokemon/evolution.js';
 import { PROFILE } from '../state/game-state.js';
 import { mulberry32 } from '../core/utils.js';
@@ -54,7 +54,7 @@ export function buildWeeklyChallenge() {
     ),
     bk = pick(bases),
     family = RECRUIT.map(m => familyOf(m.id)).filter(f => f.length),
-    endStep = f => f.filter(x => !x.nx || !BY[x.nx]).sort((a, b) => b.st - a.st)[0] || f[f.length - 1],
+    endStep = f => f.filter(x => !x.nx || !POKEMON[x.nx]).sort((a, b) => b.st - a.st)[0] || f[f.length - 1],
     shuffleList = L0 => {
       const a = [...L0];
       for (let i = a.length - 1; i > 0; i--) {

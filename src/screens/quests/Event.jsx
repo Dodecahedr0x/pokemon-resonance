@@ -1,4 +1,4 @@
-import { BY, SCEN } from '../../engine/pokemon/pokemon.js';
+import { POKEMON, SCEN } from '../../engine/pokemon/pokemon.js';
 import { PROFILE } from '../../engine/state/game-state.js';
 import { ART } from '../../engine/assets/item-icons.js';
 import { dailyDone, dailyKey, dailyLeft } from '../../engine/modes/daily-battle.js';
@@ -27,9 +27,9 @@ function Weekly() {
       {NL}
       <div className="weekly-challenge-team">
         {H.team.map((id, i) => (
-          <span key={i} className="weekly-challenge-member" data-species-sheet={id} title={BY[id].n}>
-            <img src={ART(BY[id].no)} alt="" loading="lazy" />
-            <em>{BY[id].n}</em>
+          <span key={i} className="weekly-challenge-member" data-species-sheet={id} title={POKEMON[id].n}>
+            <img src={ART(POKEMON[id].no)} alt="" loading="lazy" />
+            <em>{POKEMON[id].n}</em>
           </span>
         ))}
       </div>

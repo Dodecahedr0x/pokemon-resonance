@@ -1,8 +1,8 @@
 import { Html } from '../../lib/html.jsx';
 import { strength } from '../../lib/power.js';
-import { MV, SHAPE, TAL } from '../../engine/data/moves.js';
+import { MOVES, SHAPE, ABILITIES } from '../../engine/data/moves.js';
 import { REGION_NAMES } from '../../engine/data/hoenn.js';
-import { BY, NOTES, familyOf } from '../../engine/pokemon/pokemon.js';
+import { POKEMON, NOTES, familyOf } from '../../engine/pokemon/pokemon.js';
 import { RC, ROLEFX } from '../../engine/pokemon/roles-synergies.js';
 import { typeBadge, typeColor } from '../../engine/core/utils.js';
 import { STLN, squad } from '../../engine/team/team.js';
@@ -24,12 +24,12 @@ const no3 = n => String(n).padStart(3, '0');
 // Sheet of the selected Pokémon (#dex4Card). The transient classes scanSweep / dexNew
 // (sweep, first discovery) are still set by the engine (v4.48).
 export default function DexCard() {
-  const m = BY[V4.dexSel] || DEXS[0];
+  const m = POKEMON[V4.dexSel] || DEXS[0];
   const dm = DEXM[m.no] || [0, 0, ''],
     own = ownedFam(m.id),
     sh = isShinyOwned(m.id),
     family = familyOf(m.id),
-    tl = TAL[m.ability],
+    tl = ABILITIES[m.ability],
     i = DEXS.indexOf(m),
     prev = DEXS[(i - 1 + DEXS.length) % DEXS.length],
     next = DEXS[(i + 1) % DEXS.length],
@@ -136,7 +136,7 @@ export default function DexCard() {
           <h3>Capacités</h3>
           <div className="dex-moves">
             {m.mv.map((id, k) => {
-              const v = MV[id];
+              const v = MOVES[id];
               return (
                 <div className="dex-move" key={k}>
                   <Html html={typeBadge(v.t)} />
@@ -207,7 +207,7 @@ export default function DexCard() {
       <div className="dex-actions">
         <Button data-v4sheet={m.id}>Fiche tactique complète</Button>
         <Button variant="primary" data-go="pokedex">
-          {squad.some(id => BY[id].base === m.base) ? 'Dans l’équipe · voir' : 'Recruter dans l’équipe'}
+          {squad.some(id => POKEMON[id].base === m.base) ? 'Dans l’équipe · voir' : 'Recruter dans l’équipe'}
           <svg>
             <use href="#i-arrow" />
           </svg>

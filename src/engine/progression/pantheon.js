@@ -1,4 +1,4 @@
-import { BY } from '../pokemon/pokemon.js';
+import { POKEMON } from '../pokemon/pokemon.js';
 import { PROFILE, isCamp } from '../state/game-state.js';
 import { HOOKS } from '../core/hooks.js';
 import { today } from '../state/economy.js';
@@ -14,7 +14,7 @@ export function pantheonEngrave(k, n, team, S) {
     d: today(),
     k,
     n,
-    t: team.filter(id => BY[id]).slice(0, 4),
+    t: team.filter(id => POKEMON[id]).slice(0, 4),
     r: (S && S.round) || 0,
     rk: (S && S.rank) || '',
     df: (S && S.diff) || PROFILE.diff || 'normal',

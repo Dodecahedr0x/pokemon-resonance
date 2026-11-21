@@ -1,4 +1,4 @@
-import { BY } from '../pokemon/pokemon.js';
+import { POKEMON } from '../pokemon/pokemon.js';
 import { ECO0, ecoClean } from './economy.js';
 import { APLUS0, aplusClean } from '../modes/adventure-profile.js';
 import { TM0, tmClean } from '../moves/tms.js';
@@ -126,7 +126,7 @@ export const DIFFS = { facile: 'Facile', normal: 'Normal', expert: 'Expert' };
 export const isCamp = () => PROFILE.mode === 'campagne';
 
 export const inBox = id => {
-  const m = BY[id];
+  const m = POKEMON[id];
   if (!m) {
     return false;
   }

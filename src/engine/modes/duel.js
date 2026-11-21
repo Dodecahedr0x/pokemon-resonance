@@ -5,7 +5,7 @@
    round chord and Resonant Form; burns, durations and Vigilance follow the turn
    of their owner, so that neither is advantaged.
    DUEL_TUTORIAL_0 / duelTutorialClean also sanitize the saved tutorial progress (ui/tutorial-chapters.js). */
-import { BY, DEPLOY, MON, SCEN, familyOf } from '../pokemon/pokemon.js';
+import { POKEMON, DEPLOY, POKEMON_LIST, SCEN, familyOf } from '../pokemon/pokemon.js';
 import { PROFILE } from '../state/game-state.js';
 import { synOf } from '../pokemon/roles-synergies.js';
 import { $, RM, medal } from '../core/utils.js';
@@ -86,7 +86,7 @@ export function duelTutorialClean(p) {
           r: Math.max(0, Math.min(30, Math.floor(+x.r || 0))),
           w: x.w === 'temps' || x.w === 'forfait' ? x.w : 'ko',
           t: x.t.map(team =>
-            (Array.isArray(team) ? team : []).filter(id => typeof id === 'string' && BY[id]).slice(0, 4)
+            (Array.isArray(team) ? team : []).filter(id => typeof id === 'string' && POKEMON[id]).slice(0, 4)
           ),
         }));
     }
@@ -144,7 +144,9 @@ function shuffleArray(list) {
 
 /** The draw: entirely different families, in base or final form. */
 function duelDraw(C) {
-  const bases = MON.filter(m => m.base === m.id && !m.leg && BY[m.id] && !BY[m.id].isEnemy).map(m => m.id),
+  const bases = POKEMON_LIST.filter(m => m.base === m.id && !m.leg && POKEMON[m.id] && !POKEMON[m.id].isEnemy).map(
+      m => m.id
+    ),
     n = C.sizeValue * 2 + 4;
   C.pool = shuffleArray(bases)
     .slice(0, n)
@@ -152,7 +154,7 @@ function duelDraw(C) {
       if (C.mode !== 'final') {
         return b;
       }
-      const endsList = familyOf(b).filter(x => !x.nx && BY[x.id]);
+      const endsList = familyOf(b).filter(x => !x.nx && POKEMON[x.id]);
       return endsList.length ? endsList[Math.floor(Math.random() * endsList.length)].id : b;
     });
   C.e = 'draft';
@@ -228,7 +230,7 @@ function duelScene(C) {
       hb: 0,
       pb: 0,
       lv: 50,
-      at: BY[t2[0]] ? BY[t2[0]].t[0] : 'Normal',
+      at: POKEMON[t2[0]] ? POKEMON[t2[0]].t[0] : 'Normal',
       catch: false,
       noProgress: 1,
       duel433: 1,
@@ -810,7 +812,7 @@ export function init() {
             i
           ]
             .map(x => {
-              const m = BY[x.id];
+              const m = POKEMON[x.id];
               return `<div class="duel-report-rl${x.ko ? ' ko' : ''}">${medal(m.t, 'is-tiny')}<span>${m.n}</span><i style="--w:${Math.round((x.d / mx) * 100)}%"></i><small>${x.d}${x.k ? ` · ${x.k} K.O.` : ''}</small></div>`;
             })
             .join('')}</div>`
@@ -856,7 +858,7 @@ export function init() {
   STAT_MAX = 5;
 
   try {
-    STAT_MAX = Math.max(5, ...MON.map(m => Math.max(...m.s)));
+    STAT_MAX = Math.max(5, ...POKEMON_LIST.map(m => Math.max(...m.s)));
   } catch {
     /* Best effort: failure here is non-fatal. */
   }
@@ -897,7 +899,7 @@ export function init() {
       C.picks = [
         ['salameche', 'carapuce', 'bulbizarre', 'pichu'],
         ['germignon', 'hericendre', 'kaiminus', 'wattouat'],
-      ].map(team => team.filter(id => BY[id]));
+      ].map(team => team.filter(id => POKEMON[id]));
       const X = duelScene(C);
       SCEN.duel433 = X.D;
       OBST.duel433 = X.O;

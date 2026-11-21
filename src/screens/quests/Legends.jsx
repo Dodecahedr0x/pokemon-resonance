@@ -1,4 +1,4 @@
-import { BY } from '../../engine/pokemon/pokemon.js';
+import { POKEMON } from '../../engine/pokemon/pokemon.js';
 import { PROFILE } from '../../engine/state/game-state.js';
 import { typeColor } from '../../engine/core/utils.js';
 import { ART } from '../../engine/assets/item-icons.js';
@@ -10,7 +10,7 @@ import { HOENN_LEGEND_DEFS, hoennLegendSteps, isInBox } from '../../engine/world
 import Button from '../../components/Button.jsx';
 // Card of a legend: steps of its quest, then capture (data-v4fight lc… / hc…).
 function Legend({ L, et, isTaken: takenSet, fight, condition: cond }) {
-  const m = BY[L.id],
+  const m = POKEMON[L.id],
     isReady = !takenSet && et.every(x => x.ok);
   return (
     <article

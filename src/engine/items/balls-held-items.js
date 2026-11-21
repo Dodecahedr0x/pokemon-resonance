@@ -1,6 +1,6 @@
 /* Balls, healing, battle items, held items and extra TMs (added in v4.56). */
 
-import { MV } from '../data/moves.js';
+import { MOVES } from '../data/moves.js';
 import { SCEN } from '../pokemon/pokemon.js';
 import { ITEMS2 } from '../state/game-state.js';
 import { HOOKS } from '../core/hooks.js';
@@ -442,11 +442,11 @@ export function init() {
     ['ct58', { num: 'CT58', mv: 'danselames', p: 3500, forAll: true }],
     ['ct60', { num: 'CT60', mv: 'grele', p: 3000, types: ['Glace', 'Eau', 'Vol', 'Roche', 'Dragon'] }],
   ].forEach(([k, M]) => {
-    if (MACHINES[k] || !MV[M.mv]) {
+    if (MACHINES[k] || !MOVES[M.mv]) {
       return;
     }
     MACHINES[k] = M;
-    const m = MV[M.mv];
+    const m = MOVES[M.mv];
     SHOP[k] = {
       n: `${M.num} · ${m.n}`,
       sn: M.num,

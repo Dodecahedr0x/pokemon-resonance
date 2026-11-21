@@ -1,5 +1,5 @@
 import { GYMS } from '../data/game-data.js';
-import { BY, EEVEE, MON, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, EEVEE, POKEMON_LIST, SCEN } from '../pokemon/pokemon.js';
 import { ITEMS2, PROFILE } from '../state/game-state.js';
 import { paintOverlay } from '../../screens/overlays/dialogsStore.js';
 import { $, mulberry32 } from '../core/utils.js';
@@ -37,7 +37,7 @@ const TOWER_OBST = [
 
 export const towerRun = () => (PROFILE.tdr && PROFILE.tdr.run) || null;
 
-const towerPool = () => MON.filter(m => !m.leg && m.id !== 'eevee');
+const towerPool = () => POKEMON_LIST.filter(m => !m.leg && m.id !== 'eevee');
 
 /* Tower window: team choice and rewards (#tdrBox rendered by React, src/screens/overlays/TdrBox.jsx) */
 
@@ -103,7 +103,7 @@ function towerBuild(run) {
     if (f % 3 === 0) {
       rule = pickOf(r, TOWER_RULES);
     }
-    at = BY[foes[0][0]].t[0];
+    at = POKEMON[foes[0][0]].t[0];
   }
   OBST.tdr = pickOf(r, TOWER_OBST);
   SCEN.tdr = {
@@ -123,7 +123,7 @@ function towerBuild(run) {
     tower: true,
     at,
     mut: mutOfTurn(run, f), // one mutator per floor (v4.9)
-    d: `${mutOfTurn(run, f) ? `Mutateur · ${mutInfo(mutOfTurn(run, f))[0]} : ${mutInfo(mutOfTurn(run, f))[1]} ` : ''}${boss ? `Étage de légende : ${BY[foes[0][0]].n} garde le passage.` : `${foes.length} adversaires.`}${rule ? ` Règle du plateau : ${GYMS[TOWER_RULES.indexOf(rule)].r}` : ''} Votre équipe : ${run.team.map(id => BY[id].n).join(', ')}${run.voice ? ` · +${run.voice} Voix` : ''}.`,
+    d: `${mutOfTurn(run, f) ? `Mutateur · ${mutInfo(mutOfTurn(run, f))[0]} : ${mutInfo(mutOfTurn(run, f))[1]} ` : ''}${boss ? `Étage de légende : ${POKEMON[foes[0][0]].n} garde le passage.` : `${foes.length} adversaires.`}${rule ? ` Règle du plateau : ${GYMS[TOWER_RULES.indexOf(rule)].r}` : ''} Votre équipe : ${run.team.map(id => POKEMON[id].n).join(', ')}${run.voice ? ` · +${run.voice} Voix` : ''}.`,
     foes,
   };
   return SCEN.tdr;
@@ -142,7 +142,7 @@ export function towerTeam() {
   }
   const items = {};
   run.team.forEach(id => {
-    const b = BY[id].base;
+    const b = POKEMON[id].base;
     if (run.items[id]) {
       items[b] = run.items[id];
     }
@@ -197,23 +197,36 @@ function towerOffer(run) {
   if (free.length) {
     const id = pickOf(r, free),
       it = pickOf(r, Object.keys(ITEMS2));
-    o.push({ k: 'item', id, it, t: `${ITEMS2[it].n} pour ${BY[id].n}`, d: ITEMS2[it].d });
+    o.push({ k: 'item', id, it, t: `${ITEMS2[it].n} pour ${POKEMON[id].n}`, d: ITEMS2[it].d });
   }
-  const evo = run.team.filter(id => BY[id].nx);
+  const evo = run.team.filter(id => POKEMON[id].nx);
   if (evo.length) {
     const id = pickOf(r, evo),
-      nx = BY[id].nx === 'eevee' ? Object.values(EEVEE) : Array.isArray(BY[id].nx) ? BY[id].nx : [BY[id].nx],
+      nx =
+        POKEMON[id].nx === 'eevee'
+          ? Object.values(EEVEE)
+          : Array.isArray(POKEMON[id].nx)
+            ? POKEMON[id].nx
+            : [POKEMON[id].nx],
       to = pickOf(r, nx);
-    o.push({ k: 'evo', id, to, t: `${BY[id].n} devient ${BY[to].n}`, d: 'Éveil définitif pour toute l’ascension.' });
+    o.push({
+      k: 'evo',
+      id,
+      to,
+      t: `${POKEMON[id].n} devient ${POKEMON[to].n}`,
+      d: 'Éveil définitif pour toute l’ascension.',
+    });
   } else {
-    const pool = towerPool().filter(m => m.st >= 2 && !m.isEnemy && !run.team.some(x => BY[x].base === m.base)),
+    const pool = towerPool().filter(m => m.st >= 2 && !m.isEnemy && !run.team.some(x => POKEMON[x].base === m.base)),
       nw = pickOf(r, pool),
-      out = run.team.reduce((a, b) => (BY[a].s.reduce((x, y) => x + y) <= BY[b].s.reduce((x, y) => x + y) ? a : b));
+      out = run.team.reduce((a, b) =>
+        POKEMON[a].s.reduce((x, y) => x + y) <= POKEMON[b].s.reduce((x, y) => x + y) ? a : b
+      );
     o.push({
       k: 'swap',
       id: out,
       to: nw.id,
-      t: `${BY[nw.id].n} remplace ${BY[out].n}`,
+      t: `${POKEMON[nw.id].n} remplace ${POKEMON[out].n}`,
       d: 'Une recrue confirmée rejoint l’ascension.',
     });
   }

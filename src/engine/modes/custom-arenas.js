@@ -1,6 +1,6 @@
 // Custom arenas (Camp › Arènes, added in v4.31): create a battle, share it through an ARN-… code.
 import { GYMS } from '../data/game-data.js';
-import { BY, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCEN } from '../pokemon/pokemon.js';
 import { PROFILE } from '../state/game-state.js';
 import { ARENAS, TERR } from './gyms.js';
 import { toast } from '../core/utils.js';
@@ -22,7 +22,9 @@ export function gymClean(a) {
   if (!a || typeof a !== 'object') {
     return null;
   }
-  const f = Array.isArray(a.f) ? a.f.filter(id => typeof id === 'string' && BY[id] && !BY[id].leg).slice(0, 5) : [];
+  const f = Array.isArray(a.f)
+    ? a.f.filter(id => typeof id === 'string' && POKEMON[id] && !POKEMON[id].leg).slice(0, 5)
+    : [];
   if (!f.length || !SCEN[a.t] || !SCEN[a.t].foes) {
     return null;
   }
@@ -68,7 +70,7 @@ export function gymScene(a) {
     hb: a.hb,
     pb: 3,
     lv: 50,
-    at: BY[a.f[0]].t[0],
+    at: POKEMON[a.f[0]].t[0],
     foes: a.f.map((id, i) => [id, RIVAL_POS[i]]),
     catch: false,
     perso431: a.id,

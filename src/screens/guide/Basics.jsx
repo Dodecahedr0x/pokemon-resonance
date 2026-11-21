@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
-import { MV } from '../../engine/data/moves.js';
-import { BY, SYS3 } from '../../engine/pokemon/pokemon.js';
+import { MOVES } from '../../engine/data/moves.js';
+import { POKEMON, SYS3 } from '../../engine/pokemon/pokemon.js';
 import { ARR } from '../../engine/pokemon/evolution.js';
 import { RM, medal } from '../../engine/core/utils.js';
 import { Html } from '../../lib/html.jsx';
@@ -25,7 +25,7 @@ function Stadium({ mon, lost = [] }) {
       <div className="guide-anatomy-moves">
         {mon.mv.map(id => (
           <span key={id} className={lost.includes(id) ? 'guide-anatomy-move is-lost' : 'guide-anatomy-move'}>
-            {MV[id].n}
+            {MOVES[id].n}
           </span>
         ))}
       </div>
@@ -35,10 +35,10 @@ function Stadium({ mon, lost = [] }) {
 
 // Anatomy of an Awakening: five cards, from Caterpie to Butterfree.
 export function Anatomy() {
-  const C = BY.chenipan,
-    Y = BY.chrysacier,
-    Pp = BY.papilusion,
-    T = BY.tetarte;
+  const C = POKEMON.chenipan,
+    Y = POKEMON.chrysacier,
+    Pp = POKEMON.papilusion,
+    T = POKEMON.tetarte;
   return (
     <>
       <article className="guide-anatomy-card orn">
@@ -72,11 +72,11 @@ export function Anatomy() {
           </span>
           <span className="guide-anatomy-options">
             <span>
-              <Html html={medal(BY.tartard.t, 'is-small')} />
+              <Html html={medal(POKEMON.tartard.t, 'is-small')} />
               Tartard
             </span>
             <span>
-              <Html html={medal(BY.tarpaud.t, 'is-small')} />
+              <Html html={medal(POKEMON.tarpaud.t, 'is-small')} />
               Tarpaud
             </span>
           </span>

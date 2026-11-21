@@ -1,4 +1,4 @@
-import { BY } from '../../../engine/pokemon/pokemon.js';
+import { POKEMON } from '../../../engine/pokemon/pokemon.js';
 import { PROFILE } from '../../../engine/state/game-state.js';
 import { medal } from '../../../engine/core/utils.js';
 import { formatNumber } from '../../../engine/state/economy.js';
@@ -9,7 +9,7 @@ import Button from '../../../components/Button.jsx';
 import CardHeader from '../../../components/CardHeader.jsx';
 // A family: progression, then the choice between two masteries (data-mastery-track).
 function Family({ b, x }) {
-  const m = BY[b],
+  const m = POKEMON[b],
     [c1, c2] = masteryChoice(b),
     isReady = x.n >= MASTERY_THRESHOLD,
     bt = k => (
@@ -53,7 +53,7 @@ function Family({ b, x }) {
 // Camp › Mastery (v4.31): a permanent bonus per family after enough battles.
 export default function Mastery() {
   const M = PROFILE.masteryTrack || {},
-    L = [...new Set(PROFILE.box.map(id => (BY[id] ? BY[id].base : null)).filter(Boolean))]
+    L = [...new Set(PROFILE.box.map(id => (POKEMON[id] ? POKEMON[id].base : null)).filter(Boolean))]
       .map(b => ({ b, x: M[b] || { n: 0, p: '' } }))
       .sort((a, c) => !!c.x.p - !!a.x.p || c.x.n - a.x.n);
   const priceAmount = 500;

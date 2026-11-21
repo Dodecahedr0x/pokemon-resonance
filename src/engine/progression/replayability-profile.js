@@ -1,7 +1,7 @@
 /* Profile section of achievements, titles and campaign challenges: defaults and save cleanup (added in v4.9). */
 
 import { TYPES } from '../data/game-data.js';
-import { BY } from '../pokemon/pokemon.js';
+import { POKEMON } from '../pokemon/pokemon.js';
 
 /* declared functions: called as soon as the game loads */
 export function REPLAY0() {
@@ -44,7 +44,7 @@ export function replayClean(p) {
     ['trio', 'sansEveil', 'nuzlocke'].forEach(k => (o.challenges[k] = !!d[k]));
   }
   if (Array.isArray(p.graves)) {
-    o.graves = [...new Set(p.graves.filter(id => BY[id] && BY[id].base === id))];
+    o.graves = [...new Set(p.graves.filter(id => POKEMON[id] && POKEMON[id].base === id))];
   }
   return o;
 }

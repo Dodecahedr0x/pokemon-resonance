@@ -1,5 +1,5 @@
 // Family mastery (Camp › Maîtrise, added in v4.31): after 10 battles, a permanent bonus of your choice out of two.
-import { BY, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCEN } from '../pokemon/pokemon.js';
 import { PROFILE } from '../state/game-state.js';
 import { toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
@@ -74,7 +74,7 @@ export function init() {
     const M = (PROFILE.masteryTrack = PROFILE.masteryTrack || {}),
       readyList = [];
     S.units
-      .filter(u => u.side === 'a' && BY[u.sp])
+      .filter(u => u.side === 'a' && POKEMON[u.sp])
       .forEach(u => {
         const x = (M[u.sp] = M[u.sp] || { n: 0, p: '' });
         x.n++;
@@ -90,7 +90,7 @@ export function init() {
 
   HOOKS.battleResult.push(r =>
     r.masteryTrack
-      ? `<div class="result-list"><h4>Maîtrise</h4><div class="result-row"><span>${r.masteryTrack.map(b => BY[b].n).join(', ')} : un bonus de maîtrise est à choisir (Camp › Maîtrise).</span><b>★</b></div></div>`
+      ? `<div class="result-list"><h4>Maîtrise</h4><div class="result-row"><span>${r.masteryTrack.map(b => POKEMON[b].n).join(', ')} : un bonus de maîtrise est à choisir (Camp › Maîtrise).</span><b>★</b></div></div>`
       : ''
   );
 
@@ -135,7 +135,7 @@ export function init() {
       PROFILE.money -= 500;
     }
     x.p = k;
-    toast(`${BY[base].n} : ${MASTERY_DEFS[k][0]}.`);
+    toast(`${POKEMON[base].n} : ${MASTERY_DEFS[k][0]}.`);
     queueSave();
     renderWallet();
     renderCampPage();

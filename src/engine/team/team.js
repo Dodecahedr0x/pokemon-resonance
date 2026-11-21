@@ -1,6 +1,6 @@
-import { CHAINS, EL, MX, ROLES } from '../data/game-data.js';
-import { MV } from '../data/moves.js';
-import { BY, EEVEE, FAMT, MKT, PRESETS, familyOf } from '../pokemon/pokemon.js';
+import { CHAINS, ELEMENT_TYPES, MARK_REACTIONS, ROLES } from '../data/game-data.js';
+import { MOVES } from '../data/moves.js';
+import { POKEMON, EEVEE, FAMT, MARK_TYPE, PRESETS, familyOf } from '../pokemon/pokemon.js';
 import { BUDGET, RECRUIT } from '../pokemon/evolution.js';
 import { ITEMS2, PROFILE, inBox, ownedItems } from '../state/game-state.js';
 import { RC } from '../pokemon/roles-synergies.js';
@@ -33,14 +33,14 @@ export function save() {
 }
 
 export function monMarks(m) {
-  return [...new Set(m.mv.map(id => MV[id].mk).filter(Boolean))];
+  return [...new Set(m.mv.map(id => MOVES[id].mk).filter(Boolean))];
 }
 
 export function monEls(m) {
   return [
     ...new Set(
       m.mv
-        .map(id => MV[id])
+        .map(id => MOVES[id])
         .filter(x => x.p || x.fix || x.mk)
         .map(x => FAMT[x.t])
         .filter(Boolean)
@@ -53,8 +53,8 @@ export function nextOf(m) {
 }
 
 export function evoDiff(a, b) {
-  const A = BY[a],
-    B2 = BY[b],
+  const A = POKEMON[a],
+    B2 = POKEMON[b],
     payout = B2.mv.filter(x => !A.mv.includes(x)),
     lose = A.mv.filter(x => !B2.mv.includes(x));
   const tg = B2.t.filter(t => !A.t.includes(t)),
@@ -84,12 +84,12 @@ function rxOf(ms) {
     monEls(m).forEach(e => add(els, e, m.n));
   });
   if (ms.some(m => m.ability === 'adaptabilite')) {
-    [...marks.keys()].forEach(k => add(els, MKT[k], 'Évoli'));
+    [...marks.keys()].forEach(k => add(els, MARK_TYPE[k], 'Évoli'));
   }
   const rx = new Map();
   marks.forEach((by, k) =>
-    EL.forEach((e, i) => {
-      const id = MX[k][i];
+    ELEMENT_TYPES.forEach((e, i) => {
+      const id = MARK_REACTIONS[k][i];
       if (!id || id === 'ren' || !els.has(e) || rx.has(id)) {
         return;
       }
@@ -101,7 +101,7 @@ function rxOf(ms) {
 }
 
 export function analyze() {
-  const ms = squad.map(id => BY[id]),
+  const ms = squad.map(id => POKEMON[id]),
     all = ms.flatMap(m => familyOf(m.id));
   const rx = rxOf(ms),
     rxp = rxOf(all);
@@ -117,7 +117,7 @@ export function analyze() {
     bonus = vBonus(),
     covered = roles.filter(v => v > 0).length;
   const flips = all.filter(m =>
-    m.mv.some(id => ['turn', 'confuse', 'taunt', 'swap', 'sleep', 'root', 'web'].includes(MV[id].fx))
+    m.mv.some(id => ['turn', 'confuse', 'taunt', 'swap', 'sleep', 'root', 'web'].includes(MOVES[id].fx))
   ).length;
   const evo = ms.filter(m => m.nx).length,
     stages = ms.reduce((a, m) => a + Math.max(...familyOf(m.id).map(x => x.st)) - 1, 0);
@@ -154,7 +154,7 @@ export function analyze() {
     }
     const lost = ms.filter(m =>
       nextOf(m).some(n =>
-        evoDiff(m.id, n).lose.some(id => ['web', 'root', 'sleep', 'confuse', 'turn', 'taunt'].includes(MV[id].fx))
+        evoDiff(m.id, n).lose.some(id => ['web', 'root', 'sleep', 'confuse', 'turn', 'taunt'].includes(MOVES[id].fx))
       )
     );
     if (lost.length) {
@@ -201,7 +201,7 @@ export function visible() {
       (filt === 'Tous' || f.some(x => x.r === filt || x.r2 === filt)) &&
       (gen === 'all' || String(m.gen) === gen) &&
       (!ftype || f.some(x => x.t.includes(ftype))) &&
-      (!qq || f.some(x => norm(x.n).includes(qq) || x.mv.some(id => norm(MV[id].n).includes(qq))))
+      (!qq || f.some(x => norm(x.n).includes(qq) || x.mv.some(id => norm(MOVES[id].n).includes(qq))))
     );
   });
 }
@@ -240,21 +240,21 @@ export function renderSquad() {
 }
 
 export function toggle(id, card) {
-  const m = BY[id];
+  const m = POKEMON[id];
   if (!m) {
     return;
   }
-  const same = squad.find(x => BY[x].base === m.base);
+  const same = squad.find(x => POKEMON[x].base === m.base);
   if (same && (same === id || card)) {
     squad.splice(squad.indexOf(same), 1);
-    toast(`${BY[same].n} quitte l’équipe.`);
+    toast(`${POKEMON[same].n} quitte l’équipe.`);
     save();
     renderSquad();
     return;
   }
   if (!inBox(id)) {
     toast(
-      `${BY[m.base].n} n’est pas dans votre Box : ${captureSite(id) ? `capturez-en un sur la ${captureSite(id)} (${FAMILY_REGION_NAMES[familyRegion(id)]})` : 'capturez-en un dans les hautes herbes'}.`
+      `${POKEMON[m.base].n} n’est pas dans votre Box : ${captureSite(id) ? `capturez-en un sur la ${captureSite(id)} (${FAMILY_REGION_NAMES[familyRegion(id)]})` : 'capturez-en un dans les hautes herbes'}.`
     );
     return;
   }
@@ -274,7 +274,7 @@ export function toggle(id, card) {
   }
   if (same) {
     squad[squad.indexOf(same)] = id;
-    toast(`${m.n} remplace ${BY[same].n}.`);
+    toast(`${m.n} remplace ${POKEMON[same].n}.`);
   } else {
     squad.push(id);
     toast(`${m.n} rejoint l’équipe${m.st > 1 ? ' en recrue confirmée' : ''}.`);
@@ -301,7 +301,7 @@ export function crestSmall(m) {
 }
 
 export function branchNote(a, b) {
-  const A = BY[a];
+  const A = POKEMON[a];
   if (A.nx === 'eevee') {
     const k = Object.keys(EEVEE).find(x => EEVEE[x] === b);
     return 'au choix · harmonie : ' + (k === 'jour' ? 'le jour' : k === 'nuit' ? 'la nuit' : `case ${markOf(k).n}`); // v4.34
@@ -365,7 +365,7 @@ function equip(id, it) {
   }
   save();
   renderSquad();
-  toast(it ? `${BY[id].n} tient ${ITEMS2[it].n}.` : `${BY[id].n} ne tient plus d’objet.`);
+  toast(it ? `${POKEMON[id].n} tient ${ITEMS2[it].n}.` : `${POKEMON[id].n} ne tient plus d’objet.`);
 }
 
 /* ===================== POKÉDEX & TEAM v0.8: family cards ===================== */
@@ -376,8 +376,8 @@ export const TEAM_MAX = 4;
 export const validSquad = s =>
   Array.isArray(s) &&
   s.length <= TEAM_MAX &&
-  s.every(id => BY[id]) &&
-  new Set(s.map(id => BY[id].base)).size === s.length &&
+  s.every(id => POKEMON[id]) &&
+  new Set(s.map(id => POKEMON[id].base)).size === s.length &&
   s.reduce((a, id) => a + RC(id), 0) <= BUDGET;
 
 export const cost = () => squad.reduce((a, id) => a + RC(id), 0);
@@ -508,7 +508,7 @@ export function init() {
         p.dataset.p === 'clear'
           ? 'Équipe vidée.'
           : miss.length
-            ? `Équipe « ${PRESETS[p.dataset.p].n} » chargée sans ${miss.map(id => BY[id].n).join(', ')} : à capturer d’abord.`
+            ? `Équipe « ${PRESETS[p.dataset.p].n} » chargée sans ${miss.map(id => POKEMON[id].n).join(', ')} : à capturer d’abord.`
             : `Équipe « ${PRESETS[p.dataset.p].n} » chargée.`
       );
       return;

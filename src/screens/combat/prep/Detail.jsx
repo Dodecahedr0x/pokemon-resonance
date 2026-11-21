@@ -1,6 +1,6 @@
 import { Html } from '../../../lib/html.jsx';
 import { GYMS } from '../../../engine/data/game-data.js';
-import { BY, SCEN } from '../../../engine/pokemon/pokemon.js';
+import { POKEMON, SCEN } from '../../../engine/pokemon/pokemon.js';
 import { PROFILE } from '../../../engine/state/game-state.js';
 import { ARENAS } from '../../../engine/modes/gyms.js';
 import { medal, typeColor } from '../../../engine/core/utils.js';
@@ -97,9 +97,9 @@ export default function Detail({ k }) {
     <div key="f" className="prep-card-foes">
       {s.foes.map(([f], i) => (
         <span key={i} className="prep-card-foe">
-          <Html html={medal(BY[f].t, 'is-small')} />
+          <Html html={medal(POKEMON[f].t, 'is-small')} />
           <em>
-            <Html html={BY[f].n} />
+            <Html html={POKEMON[f].n} />
           </em>
         </span>
       ))}

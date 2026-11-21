@@ -1,5 +1,5 @@
-import { RX, TYPES } from '../data/game-data.js';
-import { BY, PRESETS, SCEN } from '../pokemon/pokemon.js';
+import { REACTIONS, TYPES } from '../data/game-data.js';
+import { POKEMON, PRESETS, SCEN } from '../pokemon/pokemon.js';
 import { BUDGET } from '../pokemon/evolution.js';
 import {
   CAMP_START,
@@ -78,7 +78,7 @@ function ensureScen(b) {
   try {
     if (b && b.sc === 'sauvage' && !SCEN.sauvage && b.state) {
       const f = b.state.units.find(u => u.side === 'e');
-      if (f && BY[f.sp]) {
+      if (f && POKEMON[f.sp]) {
         wildScen(f.sp, b.state.time, !!f.shiny, !!f.dom);
       }
     }
@@ -104,7 +104,7 @@ export function validBattle(b) {
       b.state.sc === b.sc &&
       Array.isArray(b.state.units) &&
       b.state.units.length &&
-      b.state.units.every(u => BY[u.id] && BY[u.sp] && Array.isArray(u.pos)) &&
+      b.state.units.every(u => POKEMON[u.id] && POKEMON[u.sp] && Array.isArray(u.pos)) &&
       b.state.tiles &&
       Object.keys(b.state.tiles).length === BW * BH &&
       b.state.phase === 'player' &&
@@ -147,10 +147,10 @@ export function cleanProfile(p) {
   if (DIFFS[p.diff]) {
     o.diff = p.diff;
   }
-  const ids = a => (Array.isArray(a) ? [...new Set(a.filter(id => BY[id] && BY[id].st === 1))] : []);
+  const ids = a => (Array.isArray(a) ? [...new Set(a.filter(id => POKEMON[id] && POKEMON[id].st === 1))] : []);
   o.box = ids(p.box);
   o.dex = ids(p.dex);
-  o.forms = Array.isArray(p.forms) ? [...new Set(p.forms.filter(id => BY[id] && BY[id].st > 1))] : [];
+  o.forms = Array.isArray(p.forms) ? [...new Set(p.forms.filter(id => POKEMON[id] && POKEMON[id].st > 1))] : [];
   o.ranks = {};
   if (p.ranks && typeof p.ranks === 'object') {
     for (const [k, v] of Object.entries(p.ranks)) {
@@ -162,14 +162,14 @@ export function cleanProfile(p) {
   o.items = Array.isArray(p.items) ? [...new Set(p.items.filter(k => ITEMS2[k]))] : [];
   if (p.equipment && typeof p.equipment === 'object') {
     for (const k in p.equipment) {
-      if (BY[k] && ITEMS2[p.equipment[k]]) {
+      if (POKEMON[k] && ITEMS2[p.equipment[k]]) {
         o.equipment[k] = p.equipment[k];
       }
     }
   }
   if (p.fatigue && typeof p.fatigue === 'object') {
     for (const k in p.fatigue) {
-      if (BY[k] && Number.isFinite(p.fatigue[k])) {
+      if (POKEMON[k] && Number.isFinite(p.fatigue[k])) {
         o.fatigue[k] = Math.max(0, Math.min(100, Math.round(p.fatigue[k])));
       }
     }
@@ -177,7 +177,7 @@ export function cleanProfile(p) {
   if (p.links && typeof p.links === 'object') {
     for (const k in p.links) {
       const [a, b] = k.split('|');
-      if (BY[a] && BY[b] && Number.isFinite(p.links[k]) && p.links[k] > 0) {
+      if (POKEMON[a] && POKEMON[b] && Number.isFinite(p.links[k]) && p.links[k] > 0) {
         o.links[k] = Math.min(999, Math.floor(p.links[k]));
       }
     }
@@ -189,7 +189,7 @@ export function cleanProfile(p) {
       .map(h => ({
         atk: Array.isArray(h.atk) ? h.atk.filter(t => TYPES[t]) : [],
         def: Array.isArray(h.def) ? h.def.filter(t => TYPES[t]) : [],
-        rx: Object.fromEntries(Object.entries(h.rx || {}).filter(([k, v]) => RX[k] && Number.isFinite(v))),
+        rx: Object.fromEntries(Object.entries(h.rx || {}).filter(([k, v]) => REACTIONS[k] && Number.isFinite(v))),
       }));
   }
   if (Number.isFinite(p.elite)) {
@@ -325,7 +325,7 @@ export function applySave(s, opt) {
   __set_squad(s.squad.filter(id => inBox(id)));
   if (!squad.length) {
     __set_squad(
-      PROFILE.box.slice(0, 4).filter((id, i, a) => a.slice(0, i + 1).reduce((t, x) => t + BY[x].c, 0) <= BUDGET)
+      PROFILE.box.slice(0, 4).filter((id, i, a) => a.slice(0, i + 1).reduce((t, x) => t + POKEMON[x].c, 0) <= BUDGET)
     );
   }
   save();
@@ -589,10 +589,10 @@ function normSave(s) {
     seen = new Set();
   let cost = 0;
   (Array.isArray(o.squad) ? o.squad : []).forEach(id => {
-    if (!BY[id] || keep.length >= TEAM_MAX || seen.has(BY[id].base) || cost + RC(id) > BUDGET) {
+    if (!POKEMON[id] || keep.length >= TEAM_MAX || seen.has(POKEMON[id].base) || cost + RC(id) > BUDGET) {
       return;
     }
-    seen.add(BY[id].base);
+    seen.add(POKEMON[id].base);
     cost += RC(id);
     keep.push(id);
   });

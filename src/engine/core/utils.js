@@ -1,5 +1,5 @@
-import { MK, RX, TYPES } from '../data/game-data.js';
-import { BY, PKT, PK_ART } from '../pokemon/pokemon.js';
+import { MARKS, REACTIONS, TYPES } from '../data/game-data.js';
+import { POKEMON, PKT, PK_ART } from '../pokemon/pokemon.js';
 import { showToast } from '../../screens/overlays/shellOverlays.js';
 
 export let RM;
@@ -17,14 +17,14 @@ export function medal(types, cls = '') {
   const h = `<span class="medal ${cls}" style="background:${bg};--glow:${a}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="${typeGlyphPath(types[0])}" fill="${INK}" fill-rule="evenodd"/></svg></span>`;
   // the Pokémon's artwork in its type medallion
   const id = PKT.get(types);
-  if (!id || !BY[id]) {
+  if (!id || !POKEMON[id]) {
     return h;
   }
   return h
     .replace('<span class="medal ', '<span class="medal has-art ')
     .replace(
       '<svg viewBox',
-      `<img class="medal-art" src="${PK_ART(BY[id].no)}" alt="" loading="lazy" decoding="async" draggable="false" onerror="this.parentNode&&this.parentNode.classList.remove('has-art');this.remove()"><svg viewBox`
+      `<img class="medal-art" src="${PK_ART(POKEMON[id].no)}" alt="" loading="lazy" decoding="async" draggable="false" onerror="this.parentNode&&this.parentNode.classList.remove('has-art');this.remove()"><svg viewBox`
     );
 }
 
@@ -157,9 +157,9 @@ export const typeGlyphPath = t => (TYPES[t] || TYPES.Normal)[1];
 
 export const INK = 'rgba(8,10,14,.82)';
 
-export const markOf = id => MK.find(m => m.id === id);
+export const markOf = id => MARKS.find(m => m.id === id);
 
-export const rxCat = id => (RX[id] ? RX[id].k : 'ter');
+export const rxCat = id => (REACTIONS[id] ? REACTIONS[id].k : 'ter');
 
 // Statements run at startup, in the original order (see index.js).
 export function init() {

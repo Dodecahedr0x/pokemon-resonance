@@ -1,4 +1,4 @@
-import { BY } from './pokemon.js';
+import { POKEMON } from './pokemon.js';
 import { PROFILE } from '../state/game-state.js';
 
 /* Shiny Pokémon to collect: rate, per-species hue and sparkle icon (added in v4.4, Adventure+). */
@@ -11,7 +11,7 @@ export function __set_wildShiny(v) {
 export const SHINY_RATE = 1 / 25;
 
 /* hue specific to each species: a given shiny Pokémon always has the same color */
-export const shinyHue = id => 40 + ((((BY[id] && BY[id].no) || 0) * 53) % 260);
+export const shinyHue = id => 40 + ((((POKEMON[id] && POKEMON[id].no) || 0) * 53) % 260);
 
 export const shinyStyle = id => `--sh:${shinyHue(id)}deg`;
 

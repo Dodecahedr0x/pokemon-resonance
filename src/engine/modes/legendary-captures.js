@@ -1,4 +1,4 @@
-import { BY, SCEN } from '../pokemon/pokemon.js';
+import { POKEMON, SCEN } from '../pokemon/pokemon.js';
 import { PROFILE, isCamp } from '../state/game-state.js';
 import { goTo } from '../core/navigation.js';
 import { OBST } from '../combat/synergies-obstacles.js';
@@ -12,7 +12,7 @@ import { LEGS, legKey } from './legendaries.js';
 
 /** Displayed Box: captured legends don't count in "Box x / 151". */
 export function boxCount() {
-  return PROFILE.box.filter(id => !(BY[id] && BY[id].leg)).length;
+  return PROFILE.box.filter(id => !(POKEMON[id] && POKEMON[id].leg)).length;
 }
 
 function legendRegion(id) {
@@ -38,7 +38,7 @@ export function lockLegendaryCapture(k) {
     return null;
   }
   if (PROFILE.box.includes(D.captureLegend)) {
-    return `${BY[D.captureLegend].n} est déjà dans votre Box.`;
+    return `${POKEMON[D.captureLegend].n} est déjà dans votre Box.`;
   }
   const e = legendSteps(LEGS.find(leg => leg.id === D.captureLegend)).find(x => !x.ok);
   return e ? `Quête légendaire : ${e.t.replace(/ \(.*\)$/, '')} d’abord.` : null;
@@ -51,7 +51,7 @@ export function lockLegendaryCapture(k) {
 // Statements run at startup, in the original order (see index.js).
 export function init() {
   LEGS.forEach(leg => {
-    BY[leg.id].c = 8; // a legend on the team costs 8 PC
+    POKEMON[leg.id].c = 8; // a legend on the team costs 8 PC
     const lk = legKey(leg.id);
     if (SCEN[lk]) {
       SCEN[lk].d = SCEN[lk].d.replace(

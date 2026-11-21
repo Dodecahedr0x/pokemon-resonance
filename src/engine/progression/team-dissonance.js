@@ -1,7 +1,7 @@
 /* Team Dissonance: 4 story battles in the Campaign after badges 1, 3, 5 and 7 (Grunts, Admin Vesper, Admin Cobalt, then their leader Orphée Valcourt), each with its own rule (added in v4.11). */
 
-import { MV } from '../data/moves.js';
-import { BY, SCEN } from '../pokemon/pokemon.js';
+import { MOVES } from '../data/moves.js';
+import { POKEMON, SCEN } from '../pokemon/pokemon.js';
 import { PROFILE, isCamp } from '../state/game-state.js';
 import { HOOKS } from '../core/hooks.js';
 import { OBST } from '../combat/synergies-obstacles.js';
@@ -125,12 +125,12 @@ const DISSONANCE = [
     l: 'Tu vois ? Sans Résonance, il ne reste que le silence.',
     d: 'Le QG de la Dissonance. Orphée a réglé l’arène en « Canons de verre » : chaque coup compte double… pour tout le monde.',
   },
-].filter(T => T.foes.every(([id]) => BY[id]));
+].filter(T => T.foes.every(([id]) => POKEMON[id]));
 
 // Statements run at startup, in the original order (see index.js).
 export function init() {
   DISSONANCE.forEach((T, i) => {
-    T.foes.forEach(([, , x]) => x && x.mv && (x.mv = x.mv.filter(m => MV[m])));
+    T.foes.forEach(([, , x]) => x && x.mv && (x.mv = x.mv.filter(m => MOVES[m])));
     SCEN[T.k] = {
       n: T.n,
       lvl: `Team Dissonance · combat ${i + 1} sur 4`,
