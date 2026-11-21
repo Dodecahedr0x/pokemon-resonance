@@ -40,7 +40,7 @@ export function avatar(name, type, cls = '') {
     .slice(0, 2)
     .join('');
   const c = type ? tc(type) : '#E3350D';
-  return `<span class="av ${cls}" style="--c:${c}" aria-hidden="true"><b>${ini}</b>${type ? `<i><svg viewBox="0 0 24 24"><path d="${gp(type)}" fill="currentColor" fill-rule="evenodd"/></svg></i>` : ''}</span>`;
+  return `<span class="initials-avatar ${cls}" style="--c:${c}" aria-hidden="true"><b>${ini}</b>${type ? `<i><svg viewBox="0 0 24 24"><path d="${gp(type)}" fill="currentColor" fill-rule="evenodd"/></svg></i>` : ''}</span>`;
 }
 
 /* --- next step --- */
@@ -113,22 +113,22 @@ export function emblem(k, cls = '') {
     L = leaderOf(k),
     legendInfo = s.hoennLegend || s.captureHoennLegend || s.legend || s.colossus || s.roam;
   if (legendInfo) {
-    return `<span class="emb lgd ${cls}" style="--ac:${tc(s.at)}">${medal(BY[legendInfo].t, 'is-large')}</span>`;
+    return `<span class="journey-emblem is-legend ${cls}" style="--ac:${tc(s.at)}">${medal(BY[legendInfo].t, 'is-large')}</span>`;
   }
   if (s.johto != null) {
-    return `<span class="emb bdg ${cls}" style="--ac:${tc(s.at)}">${badgeSvg(s.johto, s.at, 'ej' + cls + s.johto)}</span>`;
+    return `<span class="journey-emblem is-badge ${cls}" style="--ac:${tc(s.at)}">${badgeSvg(s.johto, s.at, 'ej' + cls + s.johto)}</span>`;
   } // v4.15
   if (s.hoenn != null) {
-    return `<span class="emb bdg ${cls}" style="--ac:${tc(s.at)}">${badgeSvg(s.hoenn, s.at, 'eh' + cls + s.hoenn)}</span>`;
+    return `<span class="journey-emblem is-badge ${cls}" style="--ac:${tc(s.at)}">${badgeSvg(s.hoenn, s.at, 'eh' + cls + s.hoenn)}</span>`;
   } // v4.19
   if (gi >= 0) {
-    return `<span class="emb bdg ${cls}" style="--ac:${tc(s.at)}">${badgeSvg(gi, s.at, 'em' + cls + gi)}</span>`;
+    return `<span class="journey-emblem is-badge ${cls}" style="--ac:${tc(s.at)}">${badgeSvg(gi, s.at, 'em' + cls + gi)}</span>`;
   }
   if (L) {
     return avatar(L.n, s.at || 'Dragon', cls);
   }
   const T = { gue: 'Eau', roche: 'Roche', tour: 'Spectre', ligue: 'Combat', arene: 'Normal' }[s.bio] || 'Normal';
-  return `<span class="emb ter bio-${s.bio || 'gue'} ${cls}" aria-hidden="true"><svg viewBox="0 0 24 24">${s.tuto ? '<use href="#i-book"/>' : `<path d="${gp(T)}" fill="currentColor" fill-rule="evenodd"/>`}</svg></span>`;
+  return `<span class="journey-emblem is-place biome-${s.bio || 'gue'} ${cls}" aria-hidden="true"><svg viewBox="0 0 24 24">${s.tuto ? '<use href="#i-book"/>' : `<path d="${gp(T)}" fill="currentColor" fill-rule="evenodd"/>`}</svg></span>`;
 }
 
 export function professorMsg() {

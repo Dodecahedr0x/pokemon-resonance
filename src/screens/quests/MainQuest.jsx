@@ -23,7 +23,7 @@ function Chapter({ k, gk }) {
   return (
     <article className={`quests-chapter ${STATE_CLASS[st]}`}>
       <span className="quests-chapter-emblem">
-        <Html html={emblem(k, 'sm')} />
+        <Html html={emblem(k, 'is-small')} />
       </span>
       <div className="quests-chapter-text">
         <small>

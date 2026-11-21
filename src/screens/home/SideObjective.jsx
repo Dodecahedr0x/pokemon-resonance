@@ -29,7 +29,7 @@ function Content() {
         data-go={squad.length ? undefined : 'pokedex'}
         style={{ '--ac': g.type ? tc(g.type) : '#FFCB05' }}
       >
-        <Html html={emblem(g.k, 'xs')} />
+        <Html html={emblem(g.k, 'is-tiny')} />
         <span>
           <b>{g.k === 'tuto' ? 'Combat guidé' : g.k === 'champ' ? 'Finale' : S2n(g)}</b>
           <em>{squad.length ? (g.L ? g.L.n : 'Touchez pour y aller') : 'Choisir mon équipe'}</em>

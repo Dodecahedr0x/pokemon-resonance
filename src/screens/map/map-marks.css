@@ -70,7 +70,7 @@
     0 8px 20px rgba(0, 0, 0, 0.55),
     0 0 0 5px rgba(124, 232, 238, 0.1);
 }
-.map-mark-icon :is(.emb, .av) {
+.map-mark-icon :is(.journey-emblem, .initials-avatar) {
   width: 30px;
   height: 30px;
 }
@@ -78,7 +78,7 @@
   width: 32px;
   height: 32px;
 }
-.map-mark.is-small .map-mark-icon .emb {
+.map-mark.is-small .map-mark-icon .journey-emblem {
   width: 24px;
   height: 24px;
 }

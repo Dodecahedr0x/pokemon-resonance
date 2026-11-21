@@ -17,10 +17,3 @@ html body .dom-cr {
 }
 
 /* legend medallion in a small emblem (map markers, place list, location sheet) */
-html body .emb.lgd.xs .medal {
-  width: 100% !important;
-  height: 100% !important;
-}
-html body .emb.lgd.xs {
-  overflow: visible;
-}

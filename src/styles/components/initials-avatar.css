@@ -1,0 +1,110 @@
+/* Initials avatar (avatar() in engine/world/home-journey.js): initials on a round plate with a type corner badge.
+   Sizes: is-large, is-small, is-tiny; hex-avatar for the hexagonal profile avatar. */
+.initials-avatar {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1.5px solid transparent;
+  background:
+    radial-gradient(circle at 50% 30%, color-mix(in srgb, var(--c, #d4af6a) 38%, #14151a), #08090b 74%) padding-box,
+    var(--border-brass) border-box;
+  box-shadow:
+    0 0 0 4px rgba(10, 10, 12, 0.92),
+    0 0 0 5px rgba(212, 175, 106, 0.2),
+    0 16px 30px -14px #000,
+    0 0 30px -10px color-mix(in srgb, var(--c, #d4af6a) 70%, transparent);
+}
+.initials-avatar::after {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  border: 1px solid rgba(242, 221, 168, 0.22);
+  pointer-events: none;
+}
+.initials-avatar b {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: 0.08em;
+  color: var(--color-accent-soft);
+  text-shadow:
+    0 1px 0 #000,
+    0 0 14px color-mix(in srgb, var(--c, #d4af6a) 60%, transparent);
+}
+.initials-avatar i {
+  position: absolute;
+  right: -5px;
+  bottom: -5px;
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid transparent;
+  color: #fff;
+  background:
+    radial-gradient(circle at 35% 30%, color-mix(in srgb, var(--c, #5b9bff) 60%, #fff), var(--c, #5b9bff) 70%)
+      padding-box,
+    var(--border-brass) border-box;
+  box-shadow: 0 0 0 2px #0a0a0c;
+}
+.initials-avatar i svg {
+  width: 12px;
+  height: 12px;
+}
+.initials-avatar i svg path {
+  fill: #fff;
+}
+.initials-avatar.is-large {
+  width: 76px;
+  height: 76px;
+}
+.initials-avatar.is-large b {
+  font-size: 26px;
+}
+.initials-avatar.is-large i {
+  width: 26px;
+  height: 26px;
+}
+.initials-avatar.is-small {
+  width: 38px;
+  height: 38px;
+}
+.initials-avatar.is-small b {
+  font-size: 13px;
+}
+.initials-avatar.is-small i {
+  width: 16px;
+  height: 16px;
+  right: -4px;
+  bottom: -4px;
+}
+.initials-avatar.is-tiny {
+  width: 30px;
+  height: 30px;
+  box-shadow:
+    0 0 0 3px rgba(10, 10, 12, 0.9),
+    0 0 0 4px rgba(212, 175, 106, 0.18);
+}
+.initials-avatar.is-tiny b {
+  font-size: 11px;
+}
+.initials-avatar.is-tiny i {
+  display: none;
+}
+.initials-avatar.is-large i svg {
+  width: 15px;
+  height: 15px;
+}
+.initials-avatar.is-small i svg {
+  width: 10px;
+  height: 10px;
+}
+.initials-avatar.hex-avatar {
+  border-radius: 30%;
+}

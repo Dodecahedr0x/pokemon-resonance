@@ -101,7 +101,7 @@ html.a11y-rm .route-event::after {
   gap: var(--space-sm);
   margin-bottom: var(--space-sm);
 }
-.map-info-header :is(.emb, .av) {
+.map-info-header :is(.journey-emblem, .initials-avatar) {
   flex: none;
   width: 46px;
   height: 46px;
@@ -111,13 +111,13 @@ html.a11y-rm .route-event::after {
   flex: 1;
   min-width: 0;
 }
-.map-info-header > span:not(.emb, .av) > small {
+.map-info-header > span:not(.journey-emblem, .initials-avatar) > small {
   color: #ffd75e;
   font: 800 11px/1.2 var(--font-display);
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
-.map-info-header > span:not(.emb, .av) > b {
+.map-info-header > span:not(.journey-emblem, .initials-avatar) > b {
   font: 850 19px/1.15 var(--font-display);
 }
 .map-info-leader {
@@ -235,10 +235,10 @@ html.a11y-rm .route-event::after {
   flex: 1;
   min-width: 0;
 }
-.map-elite-member > span:not(.av) b {
+.map-elite-member > span:not(.initials-avatar) b {
   font: 800 14px/1.2 var(--font-display);
 }
-.map-elite-member > span:not(.av) em {
+.map-elite-member > span:not(.initials-avatar) em {
   color: var(--color-text-soft);
   font-size: 12px;
   font-style: normal;
@@ -284,23 +284,23 @@ html.a11y-rm .route-event::after {
   border-color: var(--color-selected);
   background: rgba(255, 215, 94, 0.08);
 }
-.map-place :is(.emb, .av) {
+.map-place :is(.journey-emblem, .initials-avatar) {
   flex: none;
   width: 32px;
   height: 32px;
 }
-.map-place > span:not(.emb, .av) {
+.map-place > span:not(.journey-emblem, .initials-avatar) {
   display: grid;
   flex: 1;
   min-width: 0;
 }
-.map-place > span:not(.emb, .av) b {
+.map-place > span:not(.journey-emblem, .initials-avatar) b {
   overflow: hidden;
   font: 800 13.5px/1.2 var(--font-display);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.map-place > span:not(.emb, .av) em {
+.map-place > span:not(.journey-emblem, .initials-avatar) em {
   overflow: hidden;
   color: var(--color-text-soft);
   font-size: 12px;
@@ -310,15 +310,15 @@ html.a11y-rm .route-event::after {
 }
 
 /* the letter inside an emblem keeps the weight and line height of the row's title, at the emblem's size */
-.map-place :is(.emb, .av) b,
-.map-elite-member .av b {
+.map-place :is(.journey-emblem, .initials-avatar) b,
+.map-elite-member .initials-avatar b {
   font: 800 11px/1.2 var(--font-display);
 }
-.map-place :is(.emb, .av) b {
+.map-place :is(.journey-emblem, .initials-avatar) b {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.map-info-header :is(.emb, .av) b {
+.map-info-header :is(.journey-emblem, .initials-avatar) b {
   font: 850 11px/1.15 var(--font-display);
 }

@@ -72,7 +72,7 @@ function npcScene(who, k) {
     return { n: 'Prof. Sorbier', av: PROF_AV };
   }
   if (who === 'orphee') {
-    return { n: 'Orphée Valcourt', av: avatar('Orphée Valcourt', 'Ténèbres', 'sm') };
+    return { n: 'Orphée Valcourt', av: avatar('Orphée Valcourt', 'Ténèbres', 'is-small') };
   }
   const storyNpc = npcProfile(who); // Kael, Sirène, Vesper (v4.29)
   if (storyNpc) {
@@ -80,7 +80,7 @@ function npcScene(who, k) {
   }
   const L = leaderOf(who) || leaderOf(k);
   const S = SCEN[who] || SCEN[k] || {};
-  return L ? { n: L.n, av: avatar(L.n, S.at || 'Normal', 'sm') } : { n: '…', av: PROF_AV };
+  return L ? { n: L.n, av: avatar(L.n, S.at || 'Normal', 'is-small') } : { n: '…', av: PROF_AV };
 }
 
 export function storyScene(k, force) {

@@ -1,0 +1,114 @@
+/* Journey emblem (emblem() in engine/world/home-journey.js): the mark of a journey step. is-legend wraps a medal,
+   is-badge a gym badge (is-dim when not won yet), is-place a biome disc (biome-<id>). Sizes as on the initials avatar. */
+.journey-emblem.is-badge {
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-2xs) var(--space-md);
+  border: 1px solid transparent;
+  background: radial-gradient(closest-side, rgba(0, 0, 0, 0.4), transparent);
+  cursor: pointer;
+  transition:
+    border-color 0.3s,
+    background 0.3s,
+    transform 0.3s var(--ease);
+  border-radius: 6px;
+  position: relative;
+}
+.journey-emblem.is-badge:hover {
+  transform: translateY(-3px);
+}
+.journey-emblem.is-badge svg {
+  transition:
+    filter 0.4s,
+    transform 0.4s var(--ease);
+  display: block;
+  opacity: 0.45;
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.7));
+}
+.journey-emblem.is-badge svg {
+  width: 100%;
+  height: auto;
+}
+.journey-emblem {
+  display: grid;
+  place-items: center;
+  flex: none;
+}
+.journey-emblem.is-badge.is-dim svg {
+  filter: grayscale(0.85) brightness(0.7) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.6));
+}
+.journey-emblem.is-place {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1.5px solid transparent;
+  color: var(--color-accent-soft);
+  background:
+    radial-gradient(circle at 50% 30%, var(--tc, #2a3a2e), #08090b 76%) padding-box,
+    var(--border-brass) border-box;
+  box-shadow:
+    0 0 0 3px rgba(10, 10, 12, 0.9),
+    0 10px 20px -10px #000;
+}
+.journey-emblem.is-badge.is-large {
+  width: 74px;
+}
+.journey-emblem.is-badge.is-small {
+  width: 38px;
+}
+.journey-emblem.is-badge.is-tiny {
+  width: 30px;
+}
+.journey-emblem.is-place svg {
+  width: 20px;
+  height: 20px;
+}
+.journey-emblem.is-place.is-large {
+  width: 74px;
+  height: 74px;
+}
+.journey-emblem.is-place.is-large svg {
+  width: 32px;
+  height: 32px;
+}
+.journey-emblem.is-place.is-small {
+  width: 38px;
+  height: 38px;
+}
+.journey-emblem.is-place.is-small svg {
+  width: 18px;
+  height: 18px;
+}
+.journey-emblem.is-place.is-tiny {
+  width: 30px;
+  height: 30px;
+}
+.journey-emblem.is-place.is-tiny svg {
+  width: 14px;
+  height: 14px;
+}
+.journey-emblem.is-place.biome-gue {
+  --tc: #1e4a5c;
+}
+.journey-emblem.is-place.biome-roche {
+  --tc: #5a4524;
+}
+.journey-emblem.is-place.biome-tour {
+  --tc: #3b2e63;
+}
+.journey-emblem.is-place.biome-ligue {
+  --tc: #1e3866;
+}
+.journey-emblem.is-place.biome-arene {
+  --tc: #5c2b1a;
+}
+.journey-emblem.is-legend {
+  filter: drop-shadow(0 0 6px rgba(255, 215, 94, 0.55));
+}
+.journey-emblem.is-legend.is-tiny .medal {
+  width: 100%;
+  height: 100%;
+}
+.journey-emblem.is-legend.is-tiny {
+  overflow: visible;
+}

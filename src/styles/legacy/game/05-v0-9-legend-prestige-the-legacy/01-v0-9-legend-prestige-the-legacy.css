@@ -115,8 +115,7 @@ body {
   text-shadow: none;
 }
 
-.caption,
-.bdg span {
+.caption {
   font-family: var(--f-m);
   letter-spacing: 0.24em;
 }

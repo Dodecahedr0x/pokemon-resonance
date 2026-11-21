@@ -26,7 +26,7 @@ function typeAvatar(cls) {
 
 /** Trainer emblem on the "VS" screen (HTML), or null if no avatar is chosen. */
 export function versusAvatar() {
-  return TRAINER_AVATAR() ? typeAvatar('sm') : null;
+  return TRAINER_AVATAR() ? typeAvatar('is-small') : null;
 }
 
 export function rareInfo(id) {

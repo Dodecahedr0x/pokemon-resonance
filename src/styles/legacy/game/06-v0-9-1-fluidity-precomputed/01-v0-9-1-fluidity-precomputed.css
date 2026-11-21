@@ -20,19 +20,6 @@
 #bSvg * {
   filter: none !important;
 }
-.medal:not(.is-large):not(.is-huge)::before {
-  display: none;
-}
-.bdg svg {
-  filter: none;
-}
-.bdg:not(.won) svg {
-  opacity: 0.45;
-}
-.bdg.won svg,
-.bdg.on svg {
-  opacity: 1;
-}
 /* ---------- battle on phone ---------- */
 @media (max-width: 700px) {
   .battle {

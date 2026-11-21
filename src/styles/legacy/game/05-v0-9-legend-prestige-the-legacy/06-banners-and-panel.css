@@ -1,41 +1,6 @@
 /* banners and panel */
 /* evolution choice, cutscene, result */
 /* ---------- League: badge box ---------- */
-.bdg {
-  border-radius: 6px;
-  position: relative;
-}
-.bdg svg {
-  filter: grayscale(0.75) brightness(0.55) drop-shadow(0 10px 14px rgba(0, 0, 0, 0.6));
-  transition:
-    filter 0.4s,
-    transform 0.4s var(--ease);
-}
-.bdg.won svg {
-  filter: drop-shadow(0 0 14px rgba(242, 221, 168, 0.45)) drop-shadow(0 10px 14px rgba(0, 0, 0, 0.6));
-}
-.bdg.on svg {
-  filter: drop-shadow(0 10px 14px rgba(0, 0, 0, 0.6));
-  transform: scale(1.06);
-}
-.bdg.won.on svg {
-  filter: drop-shadow(0 0 16px rgba(242, 221, 168, 0.6));
-}
-.bdg em {
-  font-style: normal;
-  font-family: var(--f-m);
-  font-size: 9px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--fnt);
-}
-.bdg.won em {
-  color: var(--gold);
-}
-.bdg.on {
-  background: linear-gradient(180deg, rgba(212, 175, 106, 0.1), transparent);
-  border-color: rgba(212, 175, 106, 0.4);
-}
 /* ---------- miscellaneous ---------- */
 .wx {
   border-radius: var(--r);

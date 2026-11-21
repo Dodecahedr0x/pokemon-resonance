@@ -145,8 +145,4 @@
     padding: var(--space-md);
     min-height: 198px;
   }
-  .dex .medal {
-    width: 40px;
-    height: 40px;
-  }
 }

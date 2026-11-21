@@ -74,51 +74,5 @@ body {
 /* embossed buttons */
 
 /* medals with metallic rims */
-.medal {
-  box-shadow:
-    0 0 0 1.5px #090b10,
-    0 0 0 3px rgba(227, 192, 122, 0.42),
-    inset 0 1px 0 rgba(255, 255, 255, 0.5),
-    inset 0 -6px 14px rgba(0, 0, 0, 0.32),
-    0 8px 22px -10px var(--glow, rgba(0, 0, 0, 0.6));
-}
-.medal.is-tiny {
-  width: 18px;
-  height: 18px;
-  box-shadow:
-    0 0 0 1px #090b10,
-    0 0 0 2px rgba(227, 192, 122, 0.35);
-}
-.medal.is-small {
-  width: 28px;
-  height: 28px;
-}
-.medal.is-plate {
-  width: 34px;
-  height: 34px;
-}
-.medal.is-large {
-  width: 66px;
-  height: 66px;
-}
-.medal.is-huge {
-  width: 104px;
-  height: 104px;
-  box-shadow:
-    0 0 0 3px #090b10,
-    0 0 0 6px #d9b470,
-    0 0 0 7px #6b4f22,
-    inset 0 2px 0 rgba(255, 255, 255, 0.55),
-    inset 0 -14px 28px rgba(0, 0, 0, 0.35),
-    0 20px 50px -16px var(--glow);
-}
-.medal::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  background: radial-gradient(60% 34% at 40% 22%, rgba(255, 255, 255, 0.35), transparent 70%);
-  pointer-events: none;
-}
 /* segmented HP bars */
 /* Awakening energy */

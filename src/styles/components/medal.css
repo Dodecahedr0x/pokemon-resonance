@@ -1,0 +1,139 @@
+/* Type medal (medal() in engine/core/utils.js): a round plate in the Pokémon's type colours with its type glyph,
+   or its illustration when it has one (has-art, .medal-art). Sizes: is-tiny, is-small, is-plate, is-large, is-huge. */
+.medal {
+  position: relative;
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  box-shadow:
+    0 0 0 1.5px #08080a,
+    0 0 0 2.5px rgba(212, 175, 106, 0.55),
+    0 0 0 4px #08080a,
+    inset 0 1px 0 rgba(255, 255, 255, 0.45),
+    inset 0 -7px 14px rgba(0, 0, 0, 0.4),
+    0 8px 22px -10px var(--glow, rgba(0, 0, 0, 0.6));
+}
+.medal svg {
+  width: 46%;
+  height: 46%;
+}
+@media (max-width: 540px) {
+  .dex :where(.medal) {
+    width: 40px;
+    height: 40px;
+  }
+}
+.medal.is-tiny {
+  width: 18px;
+  height: 18px;
+  box-shadow:
+    0 0 0 1px #08080a,
+    0 0 0 1.8px rgba(212, 175, 106, 0.5);
+}
+.medal.is-small {
+  width: 28px;
+  height: 28px;
+  box-shadow:
+    0 0 0 1px #08080a,
+    0 0 0 2px rgba(212, 175, 106, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+.medal.is-plate {
+  width: 34px;
+  height: 34px;
+}
+.medal.is-large {
+  width: 66px;
+  height: 66px;
+}
+.medal.is-huge {
+  width: 104px;
+  height: 104px;
+  box-shadow:
+    0 0 0 3px #08080a,
+    0 0 0 5px #d4af6a,
+    0 0 0 6px #5e4418,
+    0 0 0 9px #08080a,
+    0 0 0 10px rgba(201, 206, 214, 0.35),
+    inset 0 2px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -14px 28px rgba(0, 0, 0, 0.4),
+    0 20px 60px -14px var(--glow);
+}
+.medal::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(60% 34% at 40% 22%, rgba(255, 255, 255, 0.35), transparent 70%);
+  pointer-events: none;
+}
+.se:not(.on) .medal {
+  filter: saturate(0.75) brightness(0.85);
+}
+.medal:not(.is-tiny):not(.is-small)::before {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  inset: -8px;
+  pointer-events: none;
+  background: repeating-conic-gradient(from 0deg, rgba(212, 175, 106, 0.55) 0 1.4deg, transparent 1.4deg 10deg);
+  -webkit-mask: radial-gradient(
+    circle,
+    transparent calc(50% - 3px),
+    #000 calc(50% - 2.5px),
+    #000 calc(50% - 0.5px),
+    transparent 50%
+  );
+  mask: radial-gradient(
+    circle,
+    transparent calc(50% - 3px),
+    #000 calc(50% - 2.5px),
+    #000 calc(50% - 0.5px),
+    transparent 50%
+  );
+}
+.medal.is-huge::before {
+  inset: -18px;
+}
+.medal:not(.is-large):not(.is-huge)::before {
+  display: none;
+}
+.medal.has-art {
+  overflow: visible;
+}
+.medal.has-art > svg {
+  opacity: 0;
+}
+.medal.has-art::after {
+  z-index: 1;
+}
+.medal .medal-art {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 122%;
+  height: 122%;
+  transform: translate(-50%, -55%);
+  object-fit: contain;
+  z-index: 2;
+  pointer-events: none;
+  filter: drop-shadow(0 1px 1.5px rgba(0, 0, 0, 0.6));
+  -webkit-user-drag: none;
+}
+.medal.is-tiny .medal-art {
+  width: 130%;
+  height: 130%;
+}
+.medal.is-large .medal-art {
+  width: 112%;
+  height: 112%;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.55));
+}
+.medal.is-huge .medal-art {
+  width: 112%;
+  height: 112%;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.55));
+}

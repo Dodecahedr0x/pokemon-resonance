@@ -27,6 +27,9 @@
 @import './components/item-row.css' layer(components);
 @import './components/energy-pips.css' layer(components);
 @import './components/hp-bar.css' layer(components);
+@import './components/medal.css' layer(components);
+@import './components/initials-avatar.css' layer(components);
+@import './components/journey-emblem.css' layer(components);
 @import './components/synergy.css' layer(components);
 @import './components/tabs.css' layer(components);
 @import './components/state-pill.css' layer(components);

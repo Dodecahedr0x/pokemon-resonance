@@ -66,7 +66,7 @@ function Row({ k, gk }) {
       aria-selected={scSel === k}
       style={{ '--ac': s.at ? tc(s.at) : '#E3350D' }}
     >
-      <Html html={emblem(k, 'sm' + (gi >= 0 && !won ? ' dim' : ''))} />
+      <Html html={emblem(k, 'is-small' + (gi >= 0 && !won ? ' is-dim' : ''))} />
       <span className="prep-row-text">
         <b>
           <Html html={k === 'champ' ? FINALE_N : s.n} />

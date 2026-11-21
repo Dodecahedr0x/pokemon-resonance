@@ -364,6 +364,13 @@ Each step is one commit (or a few), on its own, playable at every point.
   motion layer) and `energy-pips.css`. `.hp-bar` (`.is-segmented`, trail `.hp-bar-trail`), fill states `.is-half` /
   `.is-low` (`hpc()` returns them). Keyframes `hp-bar-trail-shrink`, `hp-bar-sheen`. Snapshots identical at both
   widths apart from keyframe names.
+- Medal, initials avatar, journey emblem: done. `src/styles/components/medal.css`, `initials-avatar.css`,
+  `journey-emblem.css`. `.av` → `.initials-avatar`, `.emb` → `.journey-emblem` with `.is-legend` / `.is-badge` /
+  `.is-place` (+ `biome-<id>`) and sizes `.is-large` / `.is-small` / `.is-tiny` / `.is-dim` (callers of `avatar()` and
+  `emblem()` pass these instead of `lg` / `sm` / `xs` / `dim`). The league `.bdg` rules were dead except on badge
+  emblems; their effect is folded into `.journey-emblem.is-badge`. The legend rule `.lg` no longer leaks its muted
+  colour onto large avatars and emblems (inherited only, nothing visible). The board's `bio-<id>` classes still need
+  the same `biome-<id>` rename.
   A third pass that ignores one- to three-letter prefixes (a template such as `s${…}` no longer keeps every class
   starting with « s » alive) removed 142 more parts: the old scenario cards (`.scn`), the splash screen (`.sp-*`,
   `.splash`), the old Pokédex sheet (`.st-*`), `.seg`, `.frise`… and one more file.

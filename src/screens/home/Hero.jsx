@@ -72,7 +72,7 @@ export default function Hero({ on }) {
       <div className="home-hero-body">
         <p className="home-hero-kicker">
           <span className="home-hero-emblem">
-            <Html html={emblem(g.k, 'xs')} />
+            <Html html={emblem(g.k, 'is-tiny')} />
           </span>
           Prochaine étape{C ? ' · ' + C.c : ''}
         </p>

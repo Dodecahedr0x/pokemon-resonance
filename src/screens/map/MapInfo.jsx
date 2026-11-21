@@ -139,7 +139,7 @@ export default function MapInfo() {
                 disabled={!!lk}
                 key={k}
               >
-                <Html html={avatar(L.n, SCEN[k].at || 'Dragon', 'xs')} />
+                <Html html={avatar(L.n, SCEN[k].at || 'Dragon', 'is-tiny')} />
                 <span>
                   <b>
                     <Html html={L.n} />

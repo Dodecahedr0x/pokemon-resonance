@@ -1,41 +1,4 @@
 /* ---------- league ---------- */
-.bdg {
-  display: grid;
-  justify-items: center;
-  gap: var(--space-sm);
-  padding: var(--space-md) var(--space-2xs) var(--space-md);
-  border-radius: 18px;
-  border: 1px solid transparent;
-  background: radial-gradient(closest-side, rgba(0, 0, 0, 0.4), transparent);
-  cursor: pointer;
-  transition:
-    border-color 0.3s,
-    background 0.3s,
-    transform 0.3s var(--ease);
-}
-.bdg:hover {
-  transform: translateY(-3px);
-}
-.bdg.on {
-  border-color: rgba(227, 192, 122, 0.45);
-  background: rgba(227, 192, 122, 0.06);
-}
-.bdg svg {
-  width: min(64px, 100%);
-  height: auto;
-  filter: drop-shadow(0 10px 14px rgba(0, 0, 0, 0.6));
-}
-.bdg span {
-  font-family: var(--f-m);
-  font-size: 9.5px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--mut);
-  text-align: center;
-}
-.bdg.on span {
-  color: var(--gold);
-}
 
 .cap {
   list-style: none;

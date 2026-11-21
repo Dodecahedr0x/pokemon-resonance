@@ -46,7 +46,7 @@ export default function Detail({ k }) {
     st = styleOf(k);
   const blocks = [
     <div key="h" className="prep-card-head" style={{ '--ac': s.at ? tc(s.at) : '#E3350D' }}>
-      <Html html={emblem(k, 'lg')} />
+      <Html html={emblem(k, 'is-large')} />
       <div>
         <p className="kicker">
           <Html

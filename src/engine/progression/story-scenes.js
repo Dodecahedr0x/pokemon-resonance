@@ -36,13 +36,13 @@ const POST_BATTLE_DIALOGUE = {
 export function npcProfile(who) {
   if (who === 'kael') {
     const ace = BY[rivalAce()];
-    return { n: 'Kael Ferrand', av: avatar('Kael Ferrand', ace ? ace.t[0] : 'Normal', 'sm') };
+    return { n: 'Kael Ferrand', av: avatar('Kael Ferrand', ace ? ace.t[0] : 'Normal', 'is-small') };
   }
   if (who === 'sirene') {
-    return { n: 'Sirène', av: avatar('Sirène', 'Ténèbres', 'sm') };
+    return { n: 'Sirène', av: avatar('Sirène', 'Ténèbres', 'is-small') };
   }
   if (who === 'vesper') {
-    return { n: 'Vesper', av: avatar('Vesper', 'Spectre', 'sm') };
+    return { n: 'Vesper', av: avatar('Vesper', 'Spectre', 'is-small') };
   }
   return null;
 }

@@ -828,6 +828,10 @@ export const RENAMED_CLASSES = {
   hp: 'hp-bar',
   hseg: 'hp-bar.is-segmented',
   lag: 'hp-bar-trail',
+  av: 'initials-avatar',
+  emb: 'journey-emblem',
+  lgd: 'journey-emblem.is-legend',
+  bdg: 'journey-emblem.is-badge',
 };
 
 const OLD_CLASS = new RegExp(

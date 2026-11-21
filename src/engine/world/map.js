@@ -84,15 +84,19 @@ export function placeState(p) {
 
 export function placeIcon(p) {
   if (p.id === 'safari') {
-    return `<span class="emb ter bio-roche xs"><svg viewBox="0 0 24 24"><use href="#i-grass"/></svg></span>`;
+    return `<span class="journey-emblem is-place biome-roche is-tiny"><svg viewBox="0 0 24 24"><use href="#i-grass"/></svg></span>`;
   } // v4.18
   if (p.id === 'wild' || p.id === 'jwild' || p.id === 'hwild') {
-    return `<span class="emb ter bio-gue xs"><svg viewBox="0 0 24 24"><use href="#i-grass"/></svg></span>`;
+    return `<span class="journey-emblem is-place biome-gue is-tiny"><svg viewBox="0 0 24 24"><use href="#i-grass"/></svg></span>`;
   }
   if (p.id === 'elite') {
-    return avatar(ELITE_L[Math.min(3, PROFILE.elite)].n, SCEN[ELITE[Math.min(3, PROFILE.elite)]].at || 'Dragon', 'xs');
+    return avatar(
+      ELITE_L[Math.min(3, PROFILE.elite)].n,
+      SCEN[ELITE[Math.min(3, PROFILE.elite)]].at || 'Dragon',
+      'is-tiny'
+    );
   }
-  return emblem(p.id, 'xs');
+  return emblem(p.id, 'is-tiny');
 }
 
 export function curvePath(a, b, i) {

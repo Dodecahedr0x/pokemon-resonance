@@ -50,7 +50,7 @@
   text-transform: uppercase;
   text-shadow: 0 1px 8px rgba(0, 12, 24, 0.95);
 }
-.home-hero-emblem :is(.emb, .av) {
+.home-hero-emblem :is(.journey-emblem, .initials-avatar) {
   width: 28px;
   height: 28px;
 }

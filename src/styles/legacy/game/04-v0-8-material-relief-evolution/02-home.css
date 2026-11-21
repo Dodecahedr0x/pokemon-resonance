@@ -19,9 +19,6 @@
   color: var(--tx);
   font-weight: 600;
 }
-.se:not(.on) .medal {
-  filter: saturate(0.75) brightness(0.85);
-}
 
 /* route 29 */
 /* kpis */

@@ -1,38 +1,6 @@
 /* =====================================================================
    v4.1 — Pokémon illustrations everywhere, items as images
    ===================================================================== */
-html body .medal.has-art {
-  overflow: visible !important;
-}
-html body .medal.has-art > svg {
-  opacity: 0 !important;
-}
-html body .medal.has-art::after {
-  z-index: 1;
-}
-html body .medal .medal-art {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 122%;
-  height: 122%;
-  transform: translate(-50%, -55%);
-  object-fit: contain;
-  z-index: 2;
-  pointer-events: none;
-  filter: drop-shadow(0 1px 1.5px rgba(0, 0, 0, 0.6));
-  -webkit-user-drag: none;
-}
-html body .medal.is-tiny .medal-art {
-  width: 130%;
-  height: 130%;
-}
-html body .medal.is-large .medal-art,
-html body .medal.is-huge .medal-art {
-  width: 112%;
-  height: 112%;
-  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.55));
-}
 html body .crest-pk {
   position: relative;
   display: block;
@@ -98,9 +66,6 @@ html body img.img-off.img-off.img-off {
 }
 
 /* --- legendary boss: golden edging on its token --- */
-.emb.lgd {
-  filter: drop-shadow(0 0 6px rgba(255, 215, 94, 0.55));
-}
 
 /* --- Resonance Tower --- */
 

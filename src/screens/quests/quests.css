@@ -178,7 +178,7 @@ html.a11y-rm .quests-badge.is-earned::after {
 .quests-chapter.is-done .quests-chapter-emblem {
   filter: saturate(0.7);
 }
-.quests-chapter-emblem :is(.emb, .av) {
+.quests-chapter-emblem :is(.journey-emblem, .initials-avatar) {
   width: 48px;
   height: 48px;
 }
