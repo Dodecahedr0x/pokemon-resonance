@@ -72,7 +72,6 @@ html body #bSvg .col-lien {
    ===================================================================== */
 html body .chip-mut {
   white-space: nowrap;
-  border-color: rgba(240, 164, 58, 0.55);
 }
 /* --- Settings: challenges --- */
 html body .form-field select {

@@ -48,7 +48,4 @@ p.note {
   html body .page :is(.button-small, .button.button-small) {
     min-height: 40px;
   }
-  html body .page .caption {
-    font-size: var(--t-xs);
-  }
 }

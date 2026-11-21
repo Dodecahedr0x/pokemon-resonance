@@ -1,14 +1,5 @@
 /* ===================== v0.6: playable battle & finishing touches ===================== */
 
-.caption {
-  font-family: var(--f-m);
-  font-size: 10.5px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--mut);
-  margin-bottom: var(--space-md);
-}
-
 /* preparation */
 .prep {
   display: grid;

@@ -1,0 +1,9 @@
+/* .caption: the small gold uppercase label above a block (« Votre équipe », « Prochaine étape »). */
+.caption {
+  margin-bottom: var(--space-md);
+  color: #ffdf68;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}

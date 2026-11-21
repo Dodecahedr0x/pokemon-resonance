@@ -1,0 +1,13 @@
+/* .pill: a tiny uppercase tag (« Prochaine étape » in the battle list, states on cards); screens colour it. */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  height: 22px;
+  padding: 0 var(--space-sm);
+  border-radius: 2px;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}

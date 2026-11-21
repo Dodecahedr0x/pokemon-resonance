@@ -19,14 +19,6 @@
   background: radial-gradient(circle at 100% 100%, rgba(212, 175, 106, 0.9) 0 1.6px, transparent 2.2px);
 }
 
-.chip {
-  border-radius: 3px;
-  background: #0f1014;
-  border-color: var(--line2);
-  font-family: var(--f-m);
-  font-size: 10.5px;
-  letter-spacing: 0.08em;
-}
 .chip i {
   border-radius: 1px;
   transform: rotate(45deg);

@@ -12,7 +12,6 @@ html body .chip-acc {
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
-  border-color: rgba(255, 215, 94, 0.4);
 }
 html body .chip-acc i {
   margin-right: var(--space-3xs);
