@@ -3,7 +3,6 @@
 /* ===== resonance-ranks-shop layer ===== */
 /* v4.14: ranks, Expert attacks, Resonance notes, shop */
 .rank-tag {
-  display: inline-block;
   font-size: 0.72em;
   letter-spacing: -0.02em;
   line-height: 1;

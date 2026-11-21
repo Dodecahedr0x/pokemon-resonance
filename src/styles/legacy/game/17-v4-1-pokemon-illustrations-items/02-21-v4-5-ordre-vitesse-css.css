@@ -13,9 +13,6 @@
 /* =====================================================================
    v4.7: Living board (time-of-day tint, badge, grass about to burn)
    ===================================================================== */
-html body .chip-heure {
-  white-space: nowrap;
-}
 
 /* ==== 24-v4.8-tactique.css ==== */
 /* =====================================================================
@@ -43,11 +40,8 @@ html body #bSvg .trap.web circle {
 }
 /* --- charged attacks: targeted cells, in dotted gold --- */
 /* --- wind --- */
-html body .chip-vent {
-  white-space: nowrap;
-}
+
 html body .chip-vent .vent-fl {
-  display: inline-block;
   width: 14px;
   height: 14px;
   margin-right: var(--space-2xs);

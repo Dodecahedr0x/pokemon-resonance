@@ -37,13 +37,11 @@
   top: 8px;
   left: 8px;
   border-width: 1.5px 0 0 1.5px;
-  border-top-left-radius: 5px;
 }
 .orn::after {
   bottom: 8px;
   right: 8px;
   border-width: 0 1.5px 1.5px 0;
-  border-bottom-right-radius: 5px;
 }
 /* embossed buttons */
 

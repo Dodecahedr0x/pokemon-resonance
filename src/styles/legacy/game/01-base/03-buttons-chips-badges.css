@@ -8,16 +8,12 @@
 }
 button.chip {
   cursor: pointer;
-  transition:
-    border-color 0.2s,
-    color 0.2s;
 }
 button.chip:hover {
   border-color: var(--line3);
   color: var(--tx);
 }
 .code-link {
-  font-family: var(--f-m);
   color: var(--gold);
 }
 .cat-deg {

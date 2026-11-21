@@ -14,7 +14,6 @@
   --enemy: #ff6767;
   --river: #132b4a;
   --wet: #244a8a;
-  --tint: #6390f0;
   --f-d: 'Archivo', 'Arial Black', 'Helvetica Neue', Arial, sans-serif;
   --f-b: 'Geist', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --f-m: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
@@ -25,15 +24,11 @@
   transition: --tint 1.1s var(--ease);
 }
 body::before {
-  content: '';
-  position: fixed;
-  inset: 0 0 auto;
   height: env(safe-area-inset-top, 0px);
   z-index: 60;
   background: var(--bg);
 }
 ::selection {
-  background: var(--gold);
   color: #16120a;
 }
 /* .button buttons keep their own radius when focused */

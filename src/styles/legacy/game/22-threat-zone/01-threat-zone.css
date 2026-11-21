@@ -27,9 +27,6 @@
   --pr-shadow: 0 18px 48px rgba(0, 0, 0, 0.34);
   --pr-ease: cubic-bezier(0.2, 0.75, 0.25, 1);
 }
-html body .page {
-  isolation: isolate;
-}
 
 html body button:focus-visible,
 html body a:focus-visible {
@@ -39,6 +36,3 @@ html body a:focus-visible {
 /* Exploration: deeper scene, the game's SVG illustration stays intact */
 /* Gyms: each environment keeps its own colors and rules */
 /* Battle board: scene, floor and depth without touching the tactical SVG */
-html body #bSvg image {
-  filter: drop-shadow(0 5px 8px rgba(0, 0, 0, 0.36));
-}

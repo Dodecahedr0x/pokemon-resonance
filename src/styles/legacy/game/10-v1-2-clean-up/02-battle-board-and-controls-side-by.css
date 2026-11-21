@@ -1,6 +1,3 @@
 /* Battle: board and controls side by side */
 /* panel: role in a single badge, details on demand */
 /* pages keep no transform: fixed elements stay fixed */
-.page.on {
-  animation-fill-mode: backwards;
-}
