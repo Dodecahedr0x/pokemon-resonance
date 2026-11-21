@@ -1,0 +1,24 @@
+/* Reduced motion: the system setting and the « Réduire les animations » option (html.a11y-rm) stop every animation,
+   transition and smooth scroll. In the last layer, so it wins over every screen whatever its specificity. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none;
+    transition: none;
+    scroll-behavior: auto;
+  }
+}
+html.a11y-rm *,
+html.a11y-rm *::before,
+html.a11y-rm *::after {
+  animation: none;
+  transition: none;
+  scroll-behavior: auto;
+}
+
+/* Pokémon skin animations off (html.pk-calme): the page header glows keep still */
+html.pk-calme .page-header::before,
+html.pk-calme .kicker::before {
+  animation: none;
+}

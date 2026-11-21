@@ -1,0 +1,17 @@
+/* High contrast (html.a11y-hc, with the palette values in theme/palette.css): brighter borders and secondary text, a
+   thick gold focus ring. */
+html.a11y-hc .card,
+html.a11y-hc .v4-ps,
+html.a11y-hc .button {
+  border-color: rgba(255, 255, 255, 0.45);
+}
+html.a11y-hc em,
+html.a11y-hc small,
+html.a11y-hc .v4-ps-n,
+html.a11y-hc .lead,
+html.a11y-hc .d {
+  color: #e4eaf1;
+}
+html.a11y-hc :focus-visible {
+  outline: 3px solid #ffd45b;
+}

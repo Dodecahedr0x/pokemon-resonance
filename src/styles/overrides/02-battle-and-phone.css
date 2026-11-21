@@ -1,16 +1,4 @@
 /* Continued from 01-art-direction.css (same order). */
-/* from legacy/game/22-threat-zone/02-pokedex-collection-gallery-artwork.css */
-@media (prefers-reduced-motion: reduce) {
-  html body *,
-  html body *:before,
-  html body *:after {
-    animation-duration: 0.01ms;
-    animation-iteration-count: 1;
-    scroll-behavior: auto;
-    transition-duration: 0.01ms;
-  }
-}
-
 /* from legacy/game/23-per-screen-art-director-cut/02-battle-tactical-room-staged-board.css */
 #combat .sel {
   border: 1px solid rgba(130, 213, 225, 0.23);
@@ -45,17 +33,6 @@ a:focus-visible {
 @media (max-width: 760px) {
   #combat .battle {
     grid-template-columns: minmax(0, 1fr);
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .page.on {
-    animation: none;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  * {
-    scroll-behavior: auto;
-    transition-duration: 0.01ms;
   }
 }
 
@@ -98,19 +75,6 @@ a:focus-visible {
     grid-template-columns: minmax(0, 1fr);
   }
 }
-@media (prefers-reduced-motion: reduce) {
-  .page.on {
-    animation: none;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *:before,
-  *:after {
-    scroll-behavior: auto;
-    transition-duration: 0.01ms;
-  }
-}
 
 /* from legacy/game/25-post-init-selector-repair/02-battle-both-states-preparation.css */
 #combat .sel {
@@ -135,40 +99,9 @@ a:focus-visible {
 }
 
 /* from legacy/game/27-regional-diplomas/05-deep-echo.css */
-html.a11y-hc .card,
-html.a11y-hc .v4-ps,
-html.a11y-hc .button {
-  border-color: rgba(255, 255, 255, 0.45);
-}
-html.a11y-hc em,
-html.a11y-hc small,
-html.a11y-hc .v4-ps-n,
-html.a11y-hc .lead,
-html.a11y-hc .d {
-  color: #e4eaf1;
-}
-html.a11y-hc :focus-visible {
-  outline: 3px solid #ffd45b;
-}
-html.a11y-rm *,
-html.a11y-rm *::before,
-html.a11y-rm *::after {
-  animation: none;
-  transition: none;
-  scroll-behavior: auto;
-}
 .ability-card .chip {
   background: rgba(79, 195, 255, 0.18);
   color: #bfe9ff;
-}
-
-/* from legacy/game/27-regional-diplomas/12-journal-2.css */
-@media (prefers-reduced-motion: reduce) {
-  .burst-particle,
-  .screen-shake,
-  .shake-big {
-    animation: none;
-  }
 }
 
 /* from legacy/game/27-regional-diplomas/15-v4-53-cont-2.css */
@@ -189,22 +122,6 @@ html body.compact-battle #combat.page.on {
 .pk-fade {
   animation: pkFondu 0.45s ease-out both;
   animation-delay: calc(var(--pk-i, 0) * 50ms);
-}
-
-/* from legacy/skin/04-calm-reduce-animations-or-animated.css */
-html.pk-calme .page-header::before,
-html.pk-calme .kicker::before {
-  animation: none;
-}
-html.a11y-rm .page-header::before {
-  animation: none;
-}
-
-/* from legacy/pokemon-combat/02-8-evolution-the-pokemon-s-real.css */
-@media (prefers-reduced-motion: reduce) {
-  #cbBattle .hp-bar i.pk-dr {
-    animation: none;
-  }
 }
 
 /* from legacy/painted-graphics.css */

@@ -12,9 +12,10 @@
    - motion:     calm motion, « reduce animations » and the system's reduced motion switching animations off; they
                  win over every screen state (a selected or shiny token keeps still)
    - overrides:  the declarations the legacy files marked !important, waiting to be folded into their screens
+   - accessibility: reduced motion and high contrast, which win over everything
    Caveat: for !important declarations the order is reversed (an earlier layer wins), which is one more reason
    new code does not use them. The Workshop's user CSS is unlayered, so it overrides every normal rule. */
-@layer theme, base, components, legacy, screens, skin, motion, overrides;
+@layer theme, base, components, legacy, screens, skin, motion, overrides, accessibility;
 
 @import './theme/spacing.css' layer(theme);
 @import './theme/palette.css' layer(theme);
@@ -161,3 +162,5 @@
 @import './components/hp-bar-motion.css' layer(motion);
 
 @import './overrides/index.css' layer(overrides);
+@import './accessibility/reduced-motion.css' layer(accessibility);
+@import './accessibility/high-contrast.css' layer(accessibility);

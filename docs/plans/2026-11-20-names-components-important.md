@@ -391,3 +391,7 @@ Each step is one commit (or a few), on its own, playable at every point.
   code textareas' inline style, now the shared `.code-field` class), and running animations can override them (none
   showed in the snapshots). The Workshop brief no longer tells players' AI to add `!important`. Next: fold each
   overrides block into its screen or component file and delete the folder, then delete `legacy/`.
+- Accessibility layer: done. Reduced motion (system setting and `html.a11y-rm`), calm mode and high contrast are in
+  `src/styles/accessibility/`, a last `accessibility` layer after `overrides`. The six duplicated reduced-motion
+  blocks became one; being in the last layer it now also stops the animations whose specificity used to beat the `*`
+  rule (page entry `.page.on`, `.pk-rise` / `.pk-fade`).
