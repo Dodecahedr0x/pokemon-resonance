@@ -33,31 +33,6 @@
   margin-top: var(--space-md);
 }
 
-.mvc {
-  display: grid;
-  gap: var(--space-xs);
-  padding: var(--space-md) var(--space-lg);
-  border-radius: 14px;
-  background: var(--s2);
-  border: 1px solid var(--line);
-}
-.mvc .t {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: var(--space-sm);
-}
-.mvc b {
-  font-family: var(--f-d);
-  font-stretch: 112%;
-  font-weight: 750;
-  font-size: 16px;
-  text-transform: uppercase;
-}
-.mvc p {
-  font-size: 14px;
-  color: var(--tx2);
-}
 .evo {
   display: flex;
   align-items: center;

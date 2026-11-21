@@ -50,7 +50,7 @@ export function disobeys(S, u) {
 export function characterHtml(id) {
   const k = characterOf(id);
   return (
-    `<div class="mvc car-mvc"><div class="t"><b>${CHARACTERS[k][0]}</b><span class="chip">Nature</span></div><p>${CHARACTERS[k][1]}</p></div>` +
+    `<div class="move-card trait-card"><div class="move-card-head"><b>${CHARACTERS[k][0]}</b><span class="chip">Nature</span></div><p>${CHARACTERS[k][1]}</p></div>` +
     individualHtml(id)
   ); // ability (v4.32)
 }

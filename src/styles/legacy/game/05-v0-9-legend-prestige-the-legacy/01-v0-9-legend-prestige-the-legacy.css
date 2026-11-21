@@ -53,7 +53,6 @@
 .section-title,
 .card-title,
 .sh-name,
-.mvc b,
 .al b,
 .log b {
   font-family: var(--f-d);
@@ -85,18 +84,3 @@
 }
 
 /* ---------- surfaces: runic slabs ---------- */
-.mvc {
-  border: 1px solid transparent;
-  background:
-    var(--veins) padding-box,
-    var(--slab) padding-box,
-    var(--edge) border-box;
-  background-size:
-    560px 560px,
-    auto,
-    auto;
-  box-shadow: var(--engrave);
-}
-.mvc {
-  border-radius: var(--r);
-}

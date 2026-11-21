@@ -2,6 +2,9 @@
 // target the old names, so its selectors are translated before it is applied. Add an entry for each renamed shared
 // class a player is likely to have styled.
 export const RENAMED_CLASSES = {
+  mvc: 'move-card',
+  mvs: 'move-card-stats',
+  'car-mvc': 'trait-card',
   'chip-412': 'chip-field-effect',
   'sg-k': 'side-goal-label',
   'sg-b': 'side-goal-link',

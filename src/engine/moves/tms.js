@@ -120,7 +120,7 @@ export function moveLearned(id) {
   } // inherited move (v4.16)
   const M = Object.values(MACHINES).find(x => x.mv === a);
   return (
-    `<div class="mvc tm-move"><div class="t"><b>${MOVES[a].n}</b><span class="chip">${M ? M.num : 'Apprise'}</span></div><p>${MOVES[a].d}</p><button type="button" class="button button-small button-ghost" data-ctoubli="${b}">Oublier</button></div>` +
+    `<div class="move-card tm-move"><div class="move-card-head"><b>${MOVES[a].n}</b><span class="chip">${M ? M.num : 'Apprise'}</span></div><p>${MOVES[a].d}</p><button type="button" class="button button-small button-ghost" data-ctoubli="${b}">Oublier</button></div>` +
     inheritedMoveHtml(b)
   );
 }

@@ -166,7 +166,7 @@ export function individualHtml(id) {
     return '';
   }
   const T = ABILITY_DEFS[I.ability];
-  return `<div class="mvc car-mvc ability-card"><div class="t"><b>${T[0]}</b><span class="chip">Talent perso</span></div><p>${T[1]}</p></div>`;
+  return `<div class="move-card trait-card ability-card"><div class="move-card-head"><b>${T[0]}</b><span class="chip">Talent perso</span></div><p>${T[1]}</p></div>`;
 }
 
 /* ---------- 1. individual nature and ability ---------- */

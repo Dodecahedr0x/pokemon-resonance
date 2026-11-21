@@ -189,8 +189,8 @@ function Content({ id }) {
         {T(moveLearned(id))}
         {T(characterHtml(id))}
         {tl ? (
-          <div className="mvc tal">
-            <div className="t">
+          <div className="move-card is-talent">
+            <div className="move-card-head">
               <b>{tl[0]}</b>
               <span className="chip">Talent</span>
             </div>
@@ -288,12 +288,12 @@ function MvCard({ id }) {
     .filter(Boolean)
     .join(' · ');
   return (
-    <div className="mvc">
-      <div className="t">
+    <div className="move-card">
+      <div className="move-card-head">
         <b>{m.n}</b>
         {T(typeBadge(m.t))}
       </div>
-      <span className="mvs">{sp}</span>
+      <span className="move-card-stats">{sp}</span>
       <p>{T(m.d)}</p>
     </div>
   );

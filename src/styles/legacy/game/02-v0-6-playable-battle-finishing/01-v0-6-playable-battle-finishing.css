@@ -4,16 +4,6 @@
   font-weight: 720;
 }
 
-.mvc .mvs {
-  font-family: var(--f-m);
-  font-size: 10.5px;
-  color: var(--mut);
-  letter-spacing: 0.02em;
-}
-.mvc.tal {
-  background: transparent;
-  border-style: dashed;
-}
 .caption {
   font-family: var(--f-m);
   font-size: 10.5px;

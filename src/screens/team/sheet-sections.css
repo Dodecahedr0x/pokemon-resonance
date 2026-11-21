@@ -1,5 +1,5 @@
 /* Pokémon detail sheet, section contents (Sheet.jsx): stage tabs, held items, links, Awakening cards,
-   stats, tactical note and reaction chips. Move cards (.mvc), chips and type badges are shared classes. */
+   stats, tactical note and reaction chips. Move cards (.move-card), chips and type badges are shared classes. */
 
 /* ---------- Stage tabs: one pill per stage of the family ---------- */
 .team-sheet-stages {

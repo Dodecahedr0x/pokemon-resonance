@@ -12,13 +12,6 @@
 .section-title {
   text-shadow: 0 3px 22px rgba(0, 0, 0, 0.38);
 }
-.mvc {
-  background: linear-gradient(145deg, rgba(13, 43, 65, 0.96), rgba(5, 22, 37, 0.97));
-  border-color: rgba(98, 207, 241, 0.24);
-  box-shadow:
-    0 18px 38px rgba(0, 0, 0, 0.24),
-    inset 0 1px 0 rgba(255, 255, 255, 0.055);
-}
 
 /* from legacy/game/14-deep-art-direction-v2/02-team-selection-true-collector.css */
 input:not(:where(.dex-search input, .team-search input, .intro-card input)),

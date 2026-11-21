@@ -180,7 +180,7 @@
 .team-sheet-section h4 span {
   color: var(--color-text);
 }
-.team-sheet-section .mvc + .mvc {
+.team-sheet-section .move-card + .move-card {
   margin-top: 0;
 }
 /* how this stage is obtained; is-ok when it can be recruited directly */
