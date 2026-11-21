@@ -44,7 +44,7 @@ export function show(t, scroll) {
   hook('page', previous);
 }
 
-export function go(t) {
+export function goTo(t) {
   show(t, true);
   try {
     history.replaceState(null, '', '#' + (t === 'ligue' ? 'combat' : t));
@@ -91,7 +91,7 @@ export function init() {
     const a = e.target.closest('[data-t],[data-go]');
     if (a) {
       e.preventDefault();
-      go(a.dataset.t || a.dataset.go);
+      goTo(a.dataset.t || a.dataset.go);
       return;
     }
     const b = e.target.closest('.code-link');

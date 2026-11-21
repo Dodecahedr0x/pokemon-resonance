@@ -4,10 +4,10 @@ import { clearOverlay, paintOverlay } from '../../screens/overlays/dialogsStore.
 import { GYMS } from '../data/game-data.js';
 import { SCEN } from '../pokemon/pokemon.js';
 import { ARENAS, BADGES } from '../modes/gyms.js';
-import { $, RM, el } from '../core/utils.js';
+import { $, RM, svgElement } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { badgeSvg } from '../modes/league.js';
-import { uk } from './engine.js';
+import { unitKey } from './engine.js';
 import { B, HC, L } from './ui.js';
 import { PREF, calmMotion } from '../ui/preferences.js';
 import { noise, tone, vibe } from '../audio/sound-effects.js';
@@ -152,14 +152,14 @@ const send = b => {
     const T = L.u[u.uid];
     let x, y;
     try {
-      [x, y] = HC(uk(u));
+      [x, y] = HC(unitKey(u));
     } catch (e) {
       tokCl(T, 'is-waiting', false);
       return;
     }
     const d = i * stepSize,
       wildMon = wild && u.side === 'e';
-    const w = el('g', { transform: `translate(${x.toFixed(1)},${y.toFixed(1)})` }, g);
+    const w = svgElement('g', { transform: `translate(${x.toFixed(1)},${y.toFixed(1)})` }, g);
     w.style.setProperty('--d', d.toFixed(2) + 's');
     w.innerHTML = wildMon
       ? `<circle class="pk-wl-r" r="15"/>${sparks(6, 'pk-lf')}`
@@ -181,13 +181,13 @@ const recall = u => {
   }
   let x, y;
   try {
-    [x, y] = HC(uk(u));
+    [x, y] = HC(unitKey(u));
   } catch (e) {
     return;
   }
   const D = (B && SCEN[B.sc]) || {},
     wildMon = !!D.wild && u.side === 'e';
-  const w = el('g', { transform: `translate(${x.toFixed(1)},${y.toFixed(1)})` }, g);
+  const w = svgElement('g', { transform: `translate(${x.toFixed(1)},${y.toFixed(1)})` }, g);
   if (wildMon) {
     w.innerHTML = '<circle class="pk-poof" r="14"/>';
   } else {

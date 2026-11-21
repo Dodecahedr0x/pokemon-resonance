@@ -10,7 +10,7 @@ import { startVoice } from '../../../engine/combat/engine.js';
 import { scenLock } from '../../../engine/combat/items-bonds-ai.js';
 import { scSel } from '../../../engine/combat/ui.js';
 import { teamBtns } from '../../../engine/modes/gym-screen.js';
-import { k2n } from '../../../engine/world/home-journey.js';
+import { scenarioName } from '../../../engine/world/home-journey.js';
 import { DOCTRINE_DEFS } from '../../../engine/combat/doctrines.js';
 
 import Button from '../../../components/Button.jsx';
@@ -189,7 +189,7 @@ export default function Team({ v }) {
           {on && (
             <Fragment key={v}>
               <b>
-                <Html html={k2n(scSel)} />
+                <Html html={scenarioName(scSel)} />
               </b>
               <span>{squad.length ? `${startVoice(vBonus())} Voix · ${DIFFS[PROFILE.diff]}` : 'Équipe vide'}</span>
             </Fragment>

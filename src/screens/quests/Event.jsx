@@ -2,7 +2,7 @@ import { BY, SCEN } from '../../engine/pokemon/pokemon.js';
 import { PROFILE } from '../../engine/state/game-state.js';
 import { ART } from '../../engine/assets/item-icons.js';
 import { dailyDone, dailyKey, dailyLeft } from '../../engine/modes/daily-battle.js';
-import { fmt } from '../../engine/state/economy.js';
+import { formatNumber } from '../../engine/state/economy.js';
 import { buildWeeklyChallenge } from '../../engine/modes/weekly-challenge.js';
 import Rewards from './Rewards.jsx';
 
@@ -36,7 +36,7 @@ function Weekly() {
       {NL}
       <div className="weekly-challenge-facts">
         <span>
-          Record <b>{h ? fmt(h.best) : '—'}</b>
+          Record <b>{h ? formatNumber(h.best) : '—'}</b>
         </span>
         <span>
           Essais <b>{h ? h.n : 0}</b>
@@ -57,7 +57,7 @@ function Weekly() {
                 <td>{i + 1}</td>
                 <td>{x.n}</td>
                 <td>
-                  <b>{fmt(x.s)}</b>
+                  <b>{formatNumber(x.s)}</b>
                 </td>
               </tr>
             ))}

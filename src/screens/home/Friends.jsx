@@ -2,7 +2,7 @@ import { Html, parseStyle } from '../../lib/html.jsx';
 import { BY } from '../../engine/pokemon/pokemon.js';
 import { PROFILE } from '../../engine/state/game-state.js';
 import { medal } from '../../engine/core/utils.js';
-import { fmt } from '../../engine/state/economy.js';
+import { formatNumber } from '../../engine/state/economy.js';
 import { shinyStyle } from '../../engine/pokemon/shiny.js';
 import { friendsPanelData } from '../../engine/modes/friend-challenges.js';
 import { tournamentPanelHtml } from '../../engine/modes/friends-tournament.js';
@@ -99,7 +99,7 @@ function Content() {
                 <td>{i + 1}</td>
                 <td>{a.me ? (PROFILE.name ? PROFILE.name + ' (vous)' : 'Vous') : a.n}</td>
                 <td>
-                  <b>{fmt(a.sc)}</b>
+                  <b>{formatNumber(a.sc)}</b>
                 </td>
                 <td>
                   {a.s.b}

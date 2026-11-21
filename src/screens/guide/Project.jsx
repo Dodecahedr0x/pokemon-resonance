@@ -2,7 +2,7 @@ import { MV } from '../../engine/data/moves.js';
 import { RX } from '../../engine/data/game-data.js';
 import { FAMS30, MON, NEWS } from '../../engine/pokemon/pokemon.js';
 import { ARR } from '../../engine/pokemon/evolution.js';
-import { ico } from '../../engine/core/utils.js';
+import { strokeIcon } from '../../engine/core/utils.js';
 import { Html } from '../../lib/html.jsx';
 import { space } from '../../lib/theme.js';
 
@@ -11,7 +11,7 @@ export function Pillars() {
   return NEWS.map(o => (
     <article key={o.n} className="guide-pillar" style={{ '--c': o.c }}>
       <span className="guide-pillar-icon">
-        <Html html={ico(o.i)} />
+        <Html html={strokeIcon(o.i)} />
       </span>
       <span className="guide-pillar-tag">{o.tg}</span>
       <h3 className="card-title">{o.n}</h3>

@@ -1,5 +1,5 @@
 import { $ } from '../core/utils.js';
-import { go } from '../core/navigation.js';
+import { goTo } from '../core/navigation.js';
 import { __set_filt, renderFilters, renderGrid } from '../team/team.js';
 import { B, renderPanel, scSel } from '../combat/ui.js';
 import { PREF, savePref } from './preferences.js';
@@ -12,7 +12,7 @@ export function setGuide(k) {
 }
 
 export function openGuide(k) {
-  go('types');
+  goTo('types');
   setGuideTab(k);
 }
 

@@ -2,7 +2,7 @@ import { MV } from '../../engine/data/moves.js';
 import { BY } from '../../engine/pokemon/pokemon.js';
 import { ITEMS2, PROFILE, ownedItems } from '../../engine/state/game-state.js';
 import { typeColor } from '../../engine/core/utils.js';
-import { HELD_IMG, SHOP, bagN, fmt } from '../../engine/state/economy.js';
+import { HELD_IMG, SHOP, bagN, formatNumber } from '../../engine/state/economy.js';
 import { ITM } from '../../engine/assets/item-icons.js';
 import { V4 } from '../../engine/ui/screen-state.js';
 import { costOf } from '../../engine/progression/base-camp.js';
@@ -71,7 +71,7 @@ export function Article({ k, mode }) {
                 {price}
               </>
             ) : (
-              `${fmt(price)} ₽`
+              `${formatNumber(price)} ₽`
             )}
           </Button>
         </div>

@@ -2,7 +2,7 @@ import { RECRUIT } from '../pokemon/evolution.js';
 import { PROFILE } from '../state/game-state.js';
 import { __set_BADGES } from '../modes/gyms.js';
 import { toast } from '../core/utils.js';
-import { go } from '../core/navigation.js';
+import { goTo } from '../core/navigation.js';
 import { renderSquad, save } from '../team/team.js';
 import { B, finish } from '../combat/ui.js';
 import { PREF, savePref } from '../ui/preferences.js';
@@ -106,7 +106,7 @@ function applyCheat(k) {
       });
     B.over = 'win';
     B.deployPhase = 0;
-    go('combat');
+    goTo('combat');
     finish();
     return;
   } else if (k === 'off') {

@@ -18,12 +18,12 @@ import {
   markAt,
   nbrK,
   retarget,
-  say,
+  pushMessage,
   setMark,
   shove,
   stun,
   teff,
-  uk,
+  unitKey,
 } from '../combat/engine.js';
 import { DAMAGE_PROVIDERS, ROLE_PROVIDERS } from '../combat/tactical-engine.js';
 import { hourOf } from '../combat/living-board.js';
@@ -48,7 +48,7 @@ export function afterHitSignatures(S, u, m, v, x, mk, typ, ev) {
       }
     }
     if (n > 1) {
-      say(ev, `Triple Pied : ${n} coups !`);
+      pushMessage(ev, `Triple Pied : ${n} coups !`);
     }
   }
   if (v.ability === 'corpsmaudit' && v.side !== u.side && !u.ko && hdist(u.pos, v.pos) === 1) {
@@ -56,7 +56,7 @@ export function afterHitSignatures(S, u, m, v, x, mk, typ, ev) {
       return;
     }
     u.web = Math.max(u.web, 2);
-    say(ev, `Corps Maudit : ${u.n} est ralenti.`);
+    pushMessage(ev, `Corps Maudit : ${u.n} est ralenti.`);
   }
 }
 
@@ -74,7 +74,7 @@ export function afterMoveSignatures(S, u, m, k, v0, v1, dealt, ev) {
   }
   if (m.fx === 'gboost' && dealt > 0 && !u.ko) {
     u.boost = Math.max(u.boost, 2);
-    say(ev, `${u.n} est Renforcé.`);
+    pushMessage(ev, `${u.n} est Renforcé.`);
   }
   if (m.fx === 'elecanon') {
     if (v1 && v1.side !== u.side) {
@@ -83,7 +83,7 @@ export function afterMoveSignatures(S, u, m, k, v0, v1, dealt, ev) {
     if (!u.ko) {
       u.skip = 1;
       u.badge = 'REC';
-      say(ev, `${u.n} doit recharger.`);
+      pushMessage(ev, `${u.n} doit recharger.`);
     }
   }
   if (m.fx === 'changeeclair' && !u.ko) {
@@ -97,12 +97,12 @@ export function afterMoveSignatures(S, u, m, k, v0, v1, dealt, ev) {
       u.pos = a.pos;
       a.pos = pa;
       ev.push({ e: 'mv', u: u.uid }, { e: 'mv', u: a.uid });
-      say(ev, `Change Éclair : ${u.n} échange sa place avec ${a.n}.`);
+      pushMessage(ev, `Change Éclair : ${u.n} échange sa place avec ${a.n}.`);
       landed(S, a, ev);
     }
   }
   if (m.fx === 'voltige' && !v0 && !u.ko) {
-    say(ev, `${u.n} frappe le vide et s’écrase !`);
+    pushMessage(ev, `${u.n} frappe le vide et s’écrase !`);
     damage(S, u, Math.max(1, Math.round(u.mhp * 0.25)), ev, { ind: true, reflect: true });
   }
   if (m.fx === 'escalade') {
@@ -119,7 +119,7 @@ export function afterMoveSignatures(S, u, m, k, v0, v1, dealt, ev) {
       o.root = 0;
     });
     let n = 0;
-    [uk(u), ...nbrK(uk(u))].forEach(x => {
+    [unitKey(u), ...nbrK(unitKey(u))].forEach(x => {
       const t = S.tiles[x];
       if (t && t.trap && t.trap.side !== u.side) {
         t.trap = null;
@@ -127,7 +127,7 @@ export function afterMoveSignatures(S, u, m, k, v0, v1, dealt, ev) {
         ev.push({ e: 'terrain', k: x });
       }
     });
-    say(
+    pushMessage(
       ev,
       `Tour Rapide : ${u.n} se libère${lib.length > 1 ? ' avec ses voisins' : ''}${n ? ` et détruit ${n} piège${n > 1 ? 's' : ''}` : ''}.`
     );
@@ -137,7 +137,7 @@ export function afterMoveSignatures(S, u, m, k, v0, v1, dealt, ev) {
     u.ko = true;
     u.intent = null;
     ev.push({ e: 'ko', u: u.uid });
-    say(ev, `${u.n} est K.O. après son Explosion.`);
+    pushMessage(ev, `${u.n} est K.O. après son Explosion.`);
     if (u.side === 'e') {
       S.stats.ko++;
     } else {
@@ -158,12 +158,12 @@ export function reflectEffects(S, v, real, ev) {
   }
   const d = hdist(a.pos, v.pos);
   if (!v.ko && ((v.riposte > 0 && d === 1) || (v.miroir > 0 && d >= 2))) {
-    say(ev, `${v.riposte > 0 && d === 1 ? 'Riposte' : 'Voile Miroir'} : ${v.n} renvoie le coup à ${a.n} !`);
+    pushMessage(ev, `${v.riposte > 0 && d === 1 ? 'Riposte' : 'Voile Miroir'} : ${v.n} renvoie le coup à ${a.n} !`);
     damage(S, a, Math.max(1, Math.round(real * 2)), ev, { reflect: true });
   }
   if (v.ko && v.destin > 0) {
     v.destin = 0;
-    say(ev, `Prélèvem. Destin : ${a.n} paie le prix !`);
+    pushMessage(ev, `Prélèvem. Destin : ${a.n} paie le prix !`);
     damage(S, a, Math.max(1, Math.round(a.mhp * 0.5)), ev, { ind: true, reflect: true });
   }
 }
@@ -177,7 +177,7 @@ export function statusMoveBonus(S, u) {
   if (u.agile > 0) {
     b += 1;
   }
-  if (u.ability === 'surfcaudal' && markAt(S, uk(u)) === 'charge') {
+  if (u.ability === 'surfcaudal' && markAt(S, unitKey(u)) === 'charge') {
     b += 2;
   }
   if (S.units.some(o => !o.ko && o.side !== u.side && o.ability === 'marqueombre' && hdist(o.pos, u.pos) === 1)) {
@@ -199,10 +199,10 @@ export function tickTechnicalEffects(S, ev) {
       heal(S, u, 4, ev);
     }
     if (u.ability === 'forcesoleil' && S.wx && S.wx.k === 'soleil') {
-      say(ev, `Force Soleil : ${u.n} brûle sous le soleil.`);
+      pushMessage(ev, `Force Soleil : ${u.n} brûle sous le soleil.`);
       damage(S, u, 2, ev, { ind: true });
     }
-    if (!u.ko && S.champ && S.champ[u.side] > 0 && markAt(S, uk(u)) === 'enracine' && u.hp < u.mhp) {
+    if (!u.ko && S.champ && S.champ[u.side] > 0 && markAt(S, unitKey(u)) === 'enracine' && u.hp < u.mhp) {
       heal(S, u, 4, ev);
     }
     if (!u.ko && u.ringTurns > 0) {
@@ -210,12 +210,12 @@ export function tickTechnicalEffects(S, ev) {
       u.ringTurns--;
     }
     if (!u.ko && u.maudit > 0) {
-      say(ev, `${u.n} souffre de la malédiction.`);
+      pushMessage(ev, `${u.n} souffre de la malédiction.`);
       damage(S, u, Math.max(1, Math.round(u.mhp * 0.12)), ev, { ind: true });
       u.maudit--;
     }
     if (!u.ko && u.requiem > 0 && --u.requiem === 0) {
-      say(ev, `Requiem : le chant s’achève pour ${u.n} !`);
+      pushMessage(ev, `Requiem : le chant s’achève pour ${u.n} !`);
       damage(S, u, Math.max(1, Math.round(u.mhp * 0.4)), ev, { ind: true });
     }
     ['weakened', 'agile', 'cogno'].forEach(f => {
@@ -231,14 +231,14 @@ export function tickTechnicalEffects(S, ev) {
   if (S.champ) {
     for (const c in S.champ) {
       if (S.champ[c] > 0 && --S.champ[c] === 0) {
-        say(ev, 'Le Champ Herbu se dissipe.');
+        pushMessage(ev, 'Le Champ Herbu se dissipe.');
       }
     }
   }
   if (S.rune) {
     for (const c in S.rune) {
       if (S.rune[c] > 0 && --S.rune[c] === 0) {
-        say(ev, 'Rune Protect se dissipe.');
+        pushMessage(ev, 'Rune Protect se dissipe.');
       }
     }
   }
@@ -246,7 +246,7 @@ export function tickTechnicalEffects(S, ev) {
     if (S.mut !== 'gravite') {
       S.units.forEach(o => (o.pinned = false));
     }
-    say(ev, 'La Gravité se dissipe.');
+    pushMessage(ev, 'La Gravité se dissipe.');
   }
 }
 
@@ -293,7 +293,7 @@ export function aiSupportMove(S, e, opts, al, here) {
     for (const pk in opts) {
       const sim = Object.assign({}, e, { pos: P(pk) });
       al.forEach(a => {
-        if (!inReach(S, sim, m, uk(a)) || a.colossus || a.seg) {
+        if (!inReach(S, sim, m, unitKey(a)) || a.colossus || a.seg) {
           return;
         }
         if (m.fx === 'feufollet' && (a.burn > 0 || a.t.includes('Feu') || a.ability === 'torche')) {
@@ -302,7 +302,7 @@ export function aiSupportMove(S, e, opts, al, here) {
         if (m.fx === 'malediction' && (a.maudit > 0 || hp < 0.4)) {
           return;
         }
-        prend((m.fx === 'morphing' ? 8 + a.s[1] : 5) - (pk === here ? 0 : 0.5), pk, mid, uk(a));
+        prend((m.fx === 'morphing' ? 8 + a.s[1] : 5) - (pk === here ? 0 : 0.5), pk, mid, unitKey(a));
       });
     }
   });
@@ -325,35 +325,35 @@ export const PRE_MOVE_EFFECTS = {
       return;
     }
     v.maudit = 4;
-    say(ev, `Malédiction : ${v.n} est maudit et s’affaiblira pendant 4 manches.`);
+    pushMessage(ev, `Malédiction : ${v.n} est maudit et s’affaiblira pendant 4 manches.`);
   },
   feufollet(S, u, m, v, ev) {
     if (v.side === u.side) {
       return;
     }
     if (v.t.includes('Feu') || v.ability === 'torche') {
-      say(ev, `${v.n} ne craint pas les flammes.`);
+      pushMessage(ev, `${v.n} ne craint pas les flammes.`);
       return;
     }
     if (hasRune(S, v)) {
-      say(ev, `Rune Protect : ${v.n} est protégé.`);
+      pushMessage(ev, `Rune Protect : ${v.n} est protégé.`);
       return;
     }
     v.burn = Math.max(v.burn, 3);
     v.weakened = 3;
     ev.push({ e: 'st', u: v.uid, s: 'BRÛ' });
-    say(ev, `${v.n} est brûlé : il frappera moins fort.`);
+    pushMessage(ev, `${v.n} est brûlé : il frappera moins fort.`);
   },
   vantardise(S, u, m, v, ev) {
     if (v.side !== u.side) {
       retarget(S, v, u, 'confuse', ev);
     }
     v.boost = Math.max(v.boost, 2);
-    say(ev, `${v.n} se gonfle d’orgueil : Renforcé pendant 2 manches.`);
+    pushMessage(ev, `${v.n} se gonfle d’orgueil : Renforcé pendant 2 manches.`);
   },
   morphing(S, u, m, v, ev) {
     if (v === u || v.colossus || v.seg) {
-      say(ev, 'Morphing échoue.');
+      pushMessage(ev, 'Morphing échoue.');
       return;
     }
     u.t = [...v.t];
@@ -366,55 +366,55 @@ export const PRE_MOVE_EFFECTS = {
     u.morph = v.id;
     PKT.set(u.t, v.id); // it also takes on its appearance
     ev.push({ e: 'st', u: u.uid, s: 'MORPH' });
-    say(ev, `Morphing : ${u.n} prend l’apparence de ${v.n} !`);
+    pushMessage(ev, `Morphing : ${u.n} prend l’apparence de ${v.n} !`);
   },
 };
 
 const ROSTER_SELF_EFFECTS = {
   champherbu(S, u, ev) {
-    nbrK(uk(u)).forEach(x => setMark(S, x, 'enracine', u.uid));
+    nbrK(unitKey(u)).forEach(x => setMark(S, x, 'enracine', u.uid));
     S.champ = Object.assign({}, S.champ, { [u.side]: 3 });
-    say(ev, 'Champ Herbu : les cases Enracinées soignent votre équipe pendant 3 manches.');
+    pushMessage(ev, 'Champ Herbu : les cases Enracinées soignent votre équipe pendant 3 manches.');
   },
   gravite(S, u, ev) {
     S.gravite = 4;
     S.units.forEach(o => (o.pinned = true));
-    say(ev, 'Gravité : plus personne ne vole ni ne lévite pendant 4 manches, et chacun perd 1 Mouvement.');
+    pushMessage(ev, 'Gravité : plus personne ne vole ni ne lévite pendant 4 manches, et chacun perd 1 Mouvement.');
   },
   dansedraco(S, u, ev) {
     u.boost = Math.max(u.boost, 2);
     u.agile = 2;
-    say(ev, `${u.n} danse : Renforcé et +1 Mouvement pendant 2 manches.`);
+    pushMessage(ev, `${u.n} danse : Renforcé et +1 Mouvement pendant 2 manches.`);
   },
   anneauhydro(S, u, ev) {
-    nbrK(uk(u)).forEach(x => setMark(S, x, 'trempe', u.uid));
+    nbrK(unitKey(u)).forEach(x => setMark(S, x, 'trempe', u.uid));
     u.ringTurns = 4;
-    say(ev, `${u.n} s’entoure d’un anneau d’eau.`);
+    pushMessage(ev, `${u.n} s’entoure d’un anneau d’eau.`);
   },
   runeprotect(S, u, ev) {
     S.rune = Object.assign({}, S.rune, { [u.side]: 3 });
-    say(ev, 'Rune Protect : votre équipe est protégée des statuts et des entraves pendant 3 manches.');
+    pushMessage(ev, 'Rune Protect : votre équipe est protégée des statuts et des entraves pendant 3 manches.');
   },
   clairdelune(S, u, ev) {
     heal(S, u, Math.round(u.mhp * (hourOf(S) === 'nuit' ? 0.5 : 0.3)), ev);
     u.guard = 2;
-    say(ev, `${u.n} se baigne de clair de lune : +2 Garde.`);
+    pushMessage(ev, `${u.n} se baigne de clair de lune : +2 Garde.`);
   },
   cognobidon(S, u, ev) {
     const c = Math.floor(u.hp / 2);
     if (c < 1) {
-      say(ev, `${u.n} est trop faible pour Cognobidon.`);
+      pushMessage(ev, `${u.n} est trop faible pour Cognobidon.`);
       return;
     }
     u.hp -= c;
     ev.push({ e: 'dmg', u: u.uid, v: c });
     u.cogno = 3;
-    say(ev, `Cognobidon : ${u.n} sacrifie ${c} PV, ses attaques font ×2 pendant 3 manches.`);
+    pushMessage(ev, `Cognobidon : ${u.n} sacrifie ${c} PV, ses attaques font ×2 pendant 3 manches.`);
   },
   requiem(S, u, ev) {
     const t = S.units.filter(o => !o.ko && o.side !== u.side && hdist(o.pos, u.pos) <= 2 && !(o.requiem > 0));
     t.forEach(o => (o.requiem = 3));
-    say(
+    pushMessage(
       ev,
       t.length
         ? `Requiem : ${t.map(o => o.n).join(', ')} ${t.length > 1 ? 'entendent' : 'entend'} le chant. Dans 3 manches…`
@@ -424,18 +424,18 @@ const ROSTER_SELF_EFFECTS = {
   paresse(S, u, ev) {
     heal(S, u, Math.round(u.mhp * 0.5), ev);
     u.guard = 2;
-    say(ev, `${u.n} paresse : +2 Garde.`);
+    pushMessage(ev, `${u.n} paresse : +2 Garde.`);
   },
   conversion(S, u, ev) {
-    const mk = markAt(S, uk(u)),
+    const mk = markAt(S, unitKey(u)),
       t = mk ? MKT[mk] : 'Normal';
     u.t = [t];
     PKT.set(u.t, u.id);
-    say(ev, `Conversion : ${u.n} devient de type ${t}.`);
+    pushMessage(ev, `Conversion : ${u.n} devient de type ${t}.`);
   },
   conversion2(S, u, ev) {
     if (!u.dtype) {
-      say(ev, `${u.n} n’a encore reçu aucune attaque : Conversion 2 échoue.`);
+      pushMessage(ev, `${u.n} n’a encore reçu aucune attaque : Conversion 2 échoue.`);
       return;
     }
     let best = null,
@@ -448,24 +448,24 @@ const ROSTER_SELF_EFFECTS = {
       }
     });
     if (!best || bv >= 1) {
-      say(ev, 'Conversion 2 échoue.');
+      pushMessage(ev, 'Conversion 2 échoue.');
       return;
     }
     u.t = [best];
     PKT.set(u.t, u.id);
-    say(ev, `Conversion 2 : ${u.n} devient de type ${best} et résiste au type ${u.dtype}.`);
+    pushMessage(ev, `Conversion 2 : ${u.n} devient de type ${best} et résiste au type ${u.dtype}.`);
   },
   riposte(S, u, ev) {
     u.riposte = 1;
-    say(ev, `${u.n} se prépare à riposter au contact.`);
+    pushMessage(ev, `${u.n} se prépare à riposter au contact.`);
   },
   miroir(S, u, ev) {
     u.miroir = 1;
-    say(ev, `${u.n} dresse un Voile Miroir contre les attaques à distance.`);
+    pushMessage(ev, `${u.n} dresse un Voile Miroir contre les attaques à distance.`);
   },
   destin(S, u, ev) {
     u.destin = 1;
-    say(ev, `${u.n} lie son destin à celui de son prochain agresseur.`);
+    pushMessage(ev, `${u.n} lie son destin à celui de son prochain agresseur.`);
   },
 };
 

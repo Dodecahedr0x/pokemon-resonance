@@ -1,7 +1,7 @@
 /* Potions in battle: healing in exchange for the Pokémon's action (Battle Bag, v4.14). */
 
 import { PROFILE } from '../state/game-state.js';
-import { byUid, endStep, heal, say } from '../combat/engine.js';
+import { byUid, endStep, heal, pushMessage } from '../combat/engine.js';
 import { B, finish, renderAll, ui } from '../combat/ui.js';
 import { playEv } from '../combat/move-effects.js';
 import { renderWallet } from '../ui/wallet.js';
@@ -27,7 +27,7 @@ function pUse(S, u, k) {
   }
   const ev = [];
   heal(S, u, Math.ceil(u.mhp * it.heal), ev);
-  say(ev, `${it.n} : ${u.n} reprend des forces.`);
+  pushMessage(ev, `${it.n} : ${u.n} reprend des forces.`);
   u.acted = true;
   u.moved = true;
   S.itemsUsed = (S.itemsUsed || 0) + 1; // Battle Bag (v4.14)

@@ -8,7 +8,7 @@ import { HOOKS } from '../core/hooks.js';
 import { squad } from '../team/team.js';
 import { heal } from '../combat/engine.js';
 import { B, backToPrep, goFight, launch } from '../combat/ui.js';
-import { esc } from '../state/saves.js';
+import { escapeHtml } from '../state/saves.js';
 import { sfx, vibe } from '../audio/sound-effects.js';
 import { overlay } from '../progression/prestige.js';
 import { shut } from '../../screens/overlays/tempStore.js';
@@ -326,7 +326,7 @@ export function init() {
     if (t.fin) {
       return `<div class="result-list"><h4>Boss Rush</h4><div class="result-row"><span>Le run s’arrête au boss ${t.i + 1} sur ${t.n}. Record : ${bossRushState().best}.</span></div></div>`;
     }
-    return `<div class="result-list"><h4>Boss Rush</h4><div class="result-row"><span>Boss ${t.i} sur ${t.n}. Prochain : ${esc(t.displayName)}. Vos PV ne se régénèrent pas.</span><button type="button" class="button button-small button-primary" data-boss-rush="suite">Étape suivante</button></div></div>`;
+    return `<div class="result-list"><h4>Boss Rush</h4><div class="result-row"><span>Boss ${t.i} sur ${t.n}. Prochain : ${escapeHtml(t.displayName)}. Vos PV ne se régénèrent pas.</span><button type="button" class="button button-small button-primary" data-boss-rush="suite">Étape suivante</button></div></div>`;
   });
 
   document.addEventListener('click', onBossRushClick, true);

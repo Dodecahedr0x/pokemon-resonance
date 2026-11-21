@@ -15,7 +15,7 @@ import { BADGES, __set_BADGES } from '../modes/gyms.js';
 import { RC } from '../pokemon/roles-synergies.js';
 import { $, wait, writeLS, toast } from '../core/utils.js';
 import { setSaveIndicator } from '../../components/shellStore.js';
-import { cur, go } from '../core/navigation.js';
+import { cur, goTo } from '../core/navigation.js';
 import { renderLeague } from '../modes/league.js';
 import { TEAM_MAX, __set_squad, renderSquad, save, squad, validSquad } from '../team/team.js';
 import { BH, BW } from '../combat/engine.js';
@@ -30,7 +30,7 @@ import {
   autoSel,
   buildBoard,
   launch,
-  log,
+  addLog,
   renderAll,
   ui,
 } from '../combat/ui.js';
@@ -396,13 +396,13 @@ function resumeBattle() {
     act: null,
     cutscene: false,
   });
-  go('combat');
+  goTo('combat');
   $('#cbPrep').hidden = true;
   $('#cbBattle').hidden = false;
   $('#cbResult').hidden = true;
   $('#evoPick').hidden = true;
   buildBoard();
-  log(`Combat repris à la manche ${B.round}.`, 'sys');
+  addLog(`Combat repris à la manche ${B.round}.`, 'sys');
   autoSel();
   renderAll();
   window.scrollTo({ top: 0 });
@@ -502,7 +502,7 @@ export function newGame() {
   );
   closeSaves();
   autoSave(true);
-  go('accueil');
+  goTo('accueil');
   toast('Nouvelle partie : équipe de départ et boîte à badges vide.');
 }
 
@@ -677,7 +677,7 @@ export const fmtD = iso => {
   }
 };
 
-export const esc = t =>
+export const escapeHtml = t =>
   String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
 
 /* text save: can be copied and pasted anywhere, even where you can neither download nor pick a file */
@@ -823,7 +823,7 @@ function onSavesOverlayClick(e) {
   if (a === 'tuto') {
     closeSaves();
     __set_scSel('tuto');
-    go('combat');
+    goTo('combat');
     renderPrep();
     if (squad.length) {
       launch();

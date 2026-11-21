@@ -8,7 +8,7 @@ import { medal } from '../core/utils.js';
 import { renderLeague } from '../modes/league.js';
 import { renderSquad } from '../team/team.js';
 import { renderHome } from '../world/home.js';
-import { fmt, today } from '../state/economy.js';
+import { formatNumber, today } from '../state/economy.js';
 import { dailyDone, dailyKey } from '../modes/daily-battle.js';
 import { renderWallet } from '../ui/wallet.js';
 import { itemize } from '../assets/illustrations.js';
@@ -202,7 +202,7 @@ export function rewHtml(r) {
   let h = o.join('') + aplusRewHtml(r);
   if (r.money != null) {
     h =
-      `<div class="result-list is-gains"><h4>Gains</h4><div class="result-row"><span class="coin-icon" aria-hidden="true">₽</span><span>${r.daily ? 'Défi du jour relevé : gains doublés' : 'Prime de combat'}</span><b>+${fmt(r.money)} ₽</b></div>${r.gems ? `<div class="result-row"><span class="gem-icon" aria-hidden="true"><svg><use href="#i-gem"/></svg></span><span>Éclats de Résonance</span><b>+${r.gems}</b></div>` : ''}</div>` +
+      `<div class="result-list is-gains"><h4>Gains</h4><div class="result-row"><span class="coin-icon" aria-hidden="true">₽</span><span>${r.daily ? 'Défi du jour relevé : gains doublés' : 'Prime de combat'}</span><b>+${formatNumber(r.money)} ₽</b></div>${r.gems ? `<div class="result-row"><span class="gem-icon" aria-hidden="true"><svg><use href="#i-gem"/></svg></span><span>Éclats de Résonance</span><b>+${r.gems}</b></div>` : ''}</div>` +
       h;
   } // end-of-battle gains
   return itemize(h); // illustrated items

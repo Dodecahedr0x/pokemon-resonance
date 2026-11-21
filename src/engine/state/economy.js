@@ -51,7 +51,7 @@ export function savePurse() {
   }
 }
 
-export const fmt = n => Math.round(n).toLocaleString('fr-FR');
+export const formatNumber = n => Math.round(n).toLocaleString('fr-FR');
 
 export const clampI = (v, a, b) => Math.max(a, Math.min(b, Math.floor(v)));
 

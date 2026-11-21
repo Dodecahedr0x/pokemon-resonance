@@ -4,8 +4,8 @@ import { SCEN } from '../pokemon/pokemon.js';
 import { PROFILE } from '../state/game-state.js';
 import { writeLS, toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
-import { heal, say } from '../combat/engine.js';
-import { esc, queueSave } from '../state/saves.js';
+import { heal, pushMessage } from '../combat/engine.js';
+import { escapeHtml, queueSave } from '../state/saves.js';
 import { sfx, vibe } from '../audio/sound-effects.js';
 import { bagN } from '../state/economy.js';
 import { tLevel } from './trainer-stats.js';
@@ -154,7 +154,7 @@ export function init() {
         if (u.hp / u.mhp < 0.3 && !S.talentTree.used[u.uid]) {
           S.talentTree.used[u.uid] = 1;
           heal(S, u, Math.max(1, Math.round((u.mhp * s3 * 10) / 100)), ev);
-          say(ev, `Second souffle : ${u.n} se relève.`);
+          pushMessage(ev, `Second souffle : ${u.n} se relève.`);
         }
       });
     }
@@ -202,7 +202,7 @@ export function init() {
   });
   HOOKS.battleResult.unshift(r =>
     r.talentTree
-      ? `<div class="result-list"><h4>Talents</h4><div class="result-row"><span>Bonus de talents : ${esc(r.talentTree.join(', '))}</span></div></div>`
+      ? `<div class="result-list"><h4>Talents</h4><div class="result-row"><span>Bonus de talents : ${escapeHtml(r.talentTree.join(', '))}</span></div></div>`
       : ''
   );
   document.addEventListener('click', onTalentTreeClick, true);

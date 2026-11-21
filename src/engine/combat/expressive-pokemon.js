@@ -1,7 +1,7 @@
 import { bdClass, tokCl, tokHas } from '../../screens/combat/board/boardStore.js';
 
 import { RM, after2images } from '../core/utils.js';
-import { byUid, uk } from './engine.js';
+import { byUid, unitKey } from './engine.js';
 import { B, HC, L, ui } from './ui.js';
 import { PREF } from '../ui/preferences.js';
 import { vibe } from '../audio/sound-effects.js';
@@ -48,7 +48,7 @@ function bondHop(uid, k) {
   if (!animEnabled() || !T || !T.b || !u || u.ko) {
     return;
   }
-  const [x0, y0] = HC(uk(u)),
+  const [x0, y0] = HC(unitKey(u)),
     [x1, y1] = HC(k);
   let dx = x1 - x0,
     dy = y1 - y0;

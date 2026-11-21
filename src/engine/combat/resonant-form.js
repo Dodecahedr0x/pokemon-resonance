@@ -7,7 +7,7 @@
 import { BY, SCEN } from '../pokemon/pokemon.js';
 import { toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
-import { EMAX, byUid, endStep, hasNx, heal, say } from './engine.js';
+import { EMAX, byUid, endStep, hasNx, heal, pushMessage } from './engine.js';
 import { B, cinematic, clearAim, enPips, finish, renderAll, ui } from './ui.js';
 import { playEv } from './move-effects.js';
 import { DAMAGE_PROVIDERS } from './tactical-engine.js';
@@ -46,7 +46,7 @@ function startResonantForm(S, u, ev, strongSpot) {
   u.web = 0;
   u.root = 0;
   ev.push({ e: 'resonanceBurst', u: u.uid });
-  say(ev, `${u.n} entre en Forme Résonante !`);
+  pushMessage(ev, `${u.n} entre en Forme Résonante !`);
 }
 
 /** The player triggers the Resonant Form: 1 Voice and the whole gauge; the action stays free. */
@@ -153,13 +153,13 @@ export function init() {
         u.burn = 0;
         u.web = 0;
         u.root = 0;
-        say(ev, `La résonance de ${u.n} dissipe ses entraves.`);
+        pushMessage(ev, `La résonance de ${u.n} dissipe ses entraves.`);
       }
       u.resonant--;
       if (u.resonant <= 0) {
         u.pb = Math.max(0, (u.pb || 0) - (u.resonancePb || 0));
         u.resonancePb = 0;
-        say(ev, `La Forme Résonante de ${u.n} s’estompe.`);
+        pushMessage(ev, `La Forme Résonante de ${u.n} s’estompe.`);
       }
     });
     opponentResonance(S, ev);

@@ -3,7 +3,7 @@
 import { BY, SCEN } from '../pokemon/pokemon.js';
 import { PROFILE } from '../state/game-state.js';
 import { HOOKS } from '../core/hooks.js';
-import { go } from '../core/navigation.js';
+import { goTo } from '../core/navigation.js';
 import { battleOpts, scSel } from '../combat/ui.js';
 import { queueSave } from '../state/saves.js';
 import { V4 } from '../ui/screen-state.js';
@@ -210,6 +210,6 @@ export function init() {
     }
     e.stopPropagation();
     V4.campTab = 'enigmes';
-    go('camp');
+    goTo('camp');
   });
 }

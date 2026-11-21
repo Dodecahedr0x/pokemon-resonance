@@ -4,7 +4,7 @@ import { BY, SCEN } from '../pokemon/pokemon.js';
 import { ARENAS } from './gyms.js';
 import { writeLS, toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
-import { esc } from '../state/saves.js';
+import { escapeHtml } from '../state/saves.js';
 import { sfx, vibe } from '../audio/sound-effects.js';
 import { overlay } from '../progression/prestige.js';
 import { shut } from '../../screens/overlays/tempStore.js';
@@ -172,7 +172,7 @@ export function init() {
 
   HOOKS.battleResult.unshift(r =>
     r.seasonEvent
-      ? `<div class="result-list"><h4>${esc(eventSeason().n)}</h4><div class="result-row"><span>Points de saison : +${r.seasonEvent.n}</span><b>${r.seasonEvent.tot}</b></div></div>`
+      ? `<div class="result-list"><h4>${escapeHtml(eventSeason().n)}</h4><div class="result-row"><span>Points de saison : +${r.seasonEvent.n}</span><b>${r.seasonEvent.tot}</b></div></div>`
       : ''
   );
 

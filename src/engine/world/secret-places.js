@@ -1,7 +1,7 @@
 /* Phased bosses, secret places, wandering NPCs (added in v4.60). */
 
 import { TOD } from './home-route.js';
-import { say } from '../combat/engine.js';
+import { pushMessage } from '../combat/engine.js';
 import { B } from '../combat/ui.js';
 import { writeLS, readLS, mulberry32 } from '../core/utils.js';
 import { sfx, vibe } from '../audio/sound-effects.js';
@@ -23,7 +23,7 @@ export function bossEnrage(S, ev) {
     b.enraged = 1;
     b.boost = Math.max(b.boost || 0, 1);
     b.guard = Math.max(b.guard || 0, 1);
-    say(ev, `${b.n} se déchaîne : dernière ligne droite ! ${bossLine(b, 0)}`);
+    pushMessage(ev, `${b.n} se déchaîne : dernière ligne droite ! ${bossLine(b, 0)}`);
     ev.push({ e: 'arena', r: 'phase2' });
   }
 }

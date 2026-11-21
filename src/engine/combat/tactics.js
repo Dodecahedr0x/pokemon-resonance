@@ -13,17 +13,17 @@ import {
   flies,
   fromCube,
   hdist,
-  inB,
+  inBoard,
   landed,
   mkUnit,
   nbrK,
-  say,
+  pushMessage,
   stun,
   targets,
   teff,
   toCube,
-  uAt,
-  uk,
+  unitAt,
+  unitKey,
 } from './engine.js';
 import { OBST, resolve, roleOf } from './synergies-obstacles.js';
 import { HC, poly, scSel } from './ui.js';
@@ -84,12 +84,12 @@ export function tacClean(p) {
 
 export function placeTrap(S, u, m, k, ev) {
   const t = S.tiles[k];
-  if (!t || t.rock || t.w || uAt(S, k)) {
-    say(ev, 'Le piège ne tient pas ici.');
+  if (!t || t.rock || t.w || unitAt(S, k)) {
+    pushMessage(ev, 'Le piège ne tient pas ici.');
     return;
   }
   t.trap = { k: m.piege, side: u.side, by: u.uid, d: TRAP_DURATION };
-  say(ev, `${u.n} pose ${TRAPS[m.piege].n}.`);
+  pushMessage(ev, `${u.n} pose ${TRAPS[m.piege].n}.`);
   ev.push({ e: 'terrain', k });
 }
 
@@ -98,7 +98,7 @@ export function trapArrival(S, v, ev) {
   if (!v || v.ko || v.seg) {
     return;
   }
-  const k = uk(v),
+  const k = unitKey(v),
     t = S.tiles[k],
     p = t && t.trap;
   if (!p || p.side === v.side) {
@@ -106,19 +106,19 @@ export function trapArrival(S, v, ev) {
   }
   const n = TRAPS[p.k].n;
   if (p.k === 'roc') {
-    say(ev, `${n} : des pierres s’abattent sur ${v.n}.`);
+    pushMessage(ev, `${n} : des pierres s’abattent sur ${v.n}.`);
     damage(S, v, Math.max(1, Math.round(4 * teff('Roche', v.t))), ev, { ind: true });
   } else if (flies(v)) {
-    say(ev, `${v.n} survole ${n}.`);
+    pushMessage(ev, `${v.n} survole ${n}.`);
     return; // the trap stays
   } else if (p.k === 'picots') {
-    say(ev, `${n} : ${v.n} marche sur les pointes.`);
+    pushMessage(ev, `${n} : ${v.n} marche sur les pointes.`);
     damage(S, v, 5, ev, { ind: true });
   } else if (v.ability === 'regardvif' || hasRune(S, v)) {
-    say(ev, `${v.n} ignore la toile.`);
+    pushMessage(ev, `${v.n} ignore la toile.`);
   } else {
     v.web = Math.max(v.web, 2);
-    say(ev, `${n} : ${v.n} est englué.`);
+    pushMessage(ev, `${n} : ${v.n} est englué.`);
   }
   if (p.side === 'a') {
     S.stats.pieges = (S.stats.pieges || 0) + 1;
@@ -164,9 +164,12 @@ export function launchCharge(S, u, mi, k) {
   u.chg = { mv: u.mv[mi], k };
   if (m.charge === 'vol') {
     u.vole = 1;
-    say(ev, `${u.n} s’envole ! Il fondra sur sa cible en fin de manche, après les adversaires.`);
+    pushMessage(ev, `${u.n} s’envole ! Il fondra sur sa cible en fin de manche, après les adversaires.`);
   } else {
-    say(ev, `${u.n} concentre son énergie : ${m.n} partira en fin de manche (×1,3), s’il n’est pas interrompu.`);
+    pushMessage(
+      ev,
+      `${u.n} concentre son énergie : ${m.n} partira en fin de manche (×1,3), s’il n’est pas interrompu.`
+    );
   }
   ev.push({ e: 'chg', u: u.uid });
   return ev;
@@ -176,7 +179,7 @@ export function launchCharge(S, u, mi, k) {
 export function outOfReach(S, v, u, ev) {
   if (v && v.vole && v.side !== u.side) {
     if (ev) {
-      say(ev, `${v.n} est dans les airs : l’attaque passe sous lui.`);
+      pushMessage(ev, `${v.n} est dans les airs : l’attaque passe sous lui.`);
     }
     return null;
   }
@@ -196,19 +199,19 @@ export function unloadCharges(S, ev) {
         return;
       }
       if (['SOM', 'GEL', 'PAR'].includes(u.badge) || u.skip > 0) {
-        say(ev, `${u.n} est interrompu : ${m.n} échoue.`);
+        pushMessage(ev, `${u.n} est interrompu : ${m.n} échoue.`);
         return;
       }
       if (flying) {
         // it dives onto its target and lands on a free neighboring cell, the closest to where it started
         const freeOnes = nbrK(c.k)
-          .filter(x => S.tiles[x] && !S.tiles[x].rock && (!uAt(S, x) || uAt(S, x) === u))
+          .filter(x => S.tiles[x] && !S.tiles[x].rock && (!unitAt(S, x) || unitAt(S, x) === u))
           .sort((a, b) => hdist(P(a), u.pos) - hdist(P(b), u.pos));
-        if (freeOnes.length && freeOnes[0] !== uk(u)) {
+        if (freeOnes.length && freeOnes[0] !== unitKey(u)) {
           u.pos = P(freeOnes[0]);
           ev.push({ e: 'mv', u: u.uid });
         }
-        say(ev, `${u.n} fond sur sa cible !`);
+        pushMessage(ev, `${u.n} fond sur sa cible !`);
         resolve(S, u, m, c.k).forEach(x => ev.push(x));
         S.stats.vols = (S.stats.vols || 0) + 1; // achievement (v4.9)
         landed(S, u, ev);
@@ -239,7 +242,7 @@ export function noWind(k, d) {
     c = toCube(p[0], p[1]),
     D = CDIR[d],
     q = fromCube(c[0] + D[0], c[1] + D[1], c[2] + D[2]);
-  return inB(q[0], q[1]) ? K(q[0], q[1]) : null;
+  return inBoard(q[0], q[1]) ? K(q[0], q[1]) : null;
 }
 
 /** The direction (0 to 5) that gets closest from a to b. */
@@ -279,10 +282,10 @@ export function chipWind(S) {
 function makeColossus(S, u, x, D) {
   u.colossus = true;
   u.boss = true;
-  let cur = uk(u);
+  let cur = unitKey(u);
   x.parts.forEach((displayName, i) => {
     const k = nbrK(cur)
-      .filter(n => S.tiles[n] && !S.tiles[n].rock && !uAt(S, n))
+      .filter(n => S.tiles[n] && !S.tiles[n].rock && !unitAt(S, n))
       .sort((a, b) => P(b)[0] - P(a)[0] || Math.abs(P(a)[1] - u.pos[1]) - Math.abs(P(b)[1] - u.pos[1]))[0];
     if (!k) {
       return;
@@ -297,7 +300,7 @@ function makeColossus(S, u, x, D) {
     Object.assign(s, {
       seg: true,
       of: u.uid,
-      n: `${displayName} ${de(u.n)}`,
+      n: `${displayName} ${withDe(u.n)}`,
       mv: ['coupdequeue'],
       ability: null,
       sturdy: false,
@@ -315,7 +318,7 @@ export function colossusKO(S, v, ev) {
     if (!b || b.ko) {
       return;
     }
-    say(ev, `${v.n} est brisé ! ${b.n} vacille.`);
+    pushMessage(ev, `${v.n} est brisé ! ${b.n} vacille.`);
     S.stats.parts = (S.stats.parts || 0) + 1; // achievement (v4.9)
     damage(S, b, Math.round(b.mhp * 0.12), ev, { ind: true });
     if (!b.ko) {
@@ -362,8 +365,8 @@ export function linksColossi(S) {
     }
     const i = +s.uid.split('s').pop(),
       prev = i > 0 ? byUid(S, s.of + 's' + (i - 1)) : byUid(S, s.of),
-      a = prev && !prev.ko ? HC(uk(prev)) : null,
-      b = HC(uk(s));
+      a = prev && !prev.ko ? HC(unitKey(prev)) : null,
+      b = HC(unitKey(s));
     if (a) {
       h += `<line class="col-lien" x1="${a[0].toFixed(1)}" y1="${a[1].toFixed(1)}" x2="${b[0].toFixed(1)}" y2="${b[1].toFixed(1)}"/>`;
     }
@@ -405,7 +408,7 @@ export const hostileTrap = (S, u, k) => {
 };
 
 /* ---------- 5. Colossi ---------- */
-export const de = n => (/^[AEIOUYÉÈÊ]/i.test(n) ? 'd’' : 'de ') + n;
+export const withDe = n => (/^[AEIOUYÉÈÊ]/i.test(n) ? 'd’' : 'de ') + n;
 
 const colossusOf = k => COLOSSI.find(C => C.k === k) || null;
 

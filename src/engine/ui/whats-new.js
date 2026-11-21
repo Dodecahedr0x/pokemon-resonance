@@ -1,7 +1,7 @@
 /* Home: the « Nouveau » (New) card presenting the latest additions, once per device (added in v4.16.1). */
 
 import { $, RM } from '../core/utils.js';
-import { go } from '../core/navigation.js';
+import { goTo } from '../core/navigation.js';
 import { PREF, savePref } from './preferences.js';
 import { V4 } from './screen-state.js';
 import { renderMap } from '../world/map.js';
@@ -73,12 +73,12 @@ function onWhatsNewClick(e) {
   if (k === 'johto') {
     V4.region = 'johto';
     V4.mapSel = null;
-    go('carte');
+    goTo('carte');
     renderMap();
     return;
   }
   if (k === 'herbes') {
-    go('carte');
+    goTo('carte');
     const r = $('#route');
     if (r && r.scrollIntoView) {
       r.scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'center' });
@@ -88,12 +88,12 @@ function onWhatsNewClick(e) {
   if (k === 'safari') {
     V4.region = 'kanto';
     V4.mapSel = 'safari';
-    go('carte');
+    goTo('carte');
     renderMap();
     return;
   }
   if (k === 'comp') {
-    go('pokedex');
+    goTo('pokedex');
     const c = document.getElementById('v4Comp');
     if (c && c.scrollIntoView) {
       c.scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'start' });

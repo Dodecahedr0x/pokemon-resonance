@@ -3,10 +3,10 @@ import { bdClass, tokCl } from '../../screens/combat/board/boardStore.js';
 import { SCEN } from '../pokemon/pokemon.js';
 import { $, toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
-import { P, hdist, uAt, uk } from './engine.js';
+import { P, hdist, unitAt, unitKey } from './engine.js';
 import { B, L, scSel, ui } from './ui.js';
 import { PREF } from '../ui/preferences.js';
-import { fmt } from '../state/economy.js';
+import { formatNumber } from '../state/economy.js';
 import { hourOf, seesAtNight } from './living-board.js';
 
 export function chosenFog() {
@@ -37,7 +37,7 @@ export function fogHidden(S, e, vu) {
   if (!S.fogOfWar || e.side !== 'e' || e.ko) {
     return false;
   }
-  const k = uk(e);
+  const k = unitKey(e);
   if (!vu.has(k)) {
     return true;
   }
@@ -101,7 +101,7 @@ export function init() {
       if (!p) {
         return;
       }
-      const u = uAt(B, p.dataset.k);
+      const u = unitAt(B, p.dataset.k);
       if (u && fogHidden(B, u, fogVision(B))) {
         e.stopPropagation();
         toast('Brouillard : rien en vue ici.');
@@ -125,7 +125,7 @@ export function init() {
 
   HOOKS.battleResult.push(r =>
     r.fogOfWar
-      ? `<div class="result-list"><h4>Brouillard de guerre</h4><div class="result-row"><span>${r.fogReward ? 'Victoire à l’aveugle' : 'Combat dans le brouillard'}</span><b>${r.fogReward ? '+' + fmt(r.fogReward) + ' ₽' : ''}</b></div></div>`
+      ? `<div class="result-list"><h4>Brouillard de guerre</h4><div class="result-row"><span>${r.fogReward ? 'Victoire à l’aveugle' : 'Combat dans le brouillard'}</span><b>${r.fogReward ? '+' + formatNumber(r.fogReward) + ' ₽' : ''}</b></div></div>`
       : ''
   );
 }

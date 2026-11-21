@@ -1,4 +1,4 @@
-import { go } from '../core/navigation.js';
+import { goTo } from '../core/navigation.js';
 import { SWIPE_TABS } from '../ui/touch-gestures.js';
 
 /* =====================================================================
@@ -29,6 +29,6 @@ export function init() {
       return;
     }
     e.stopPropagation();
-    go('camp');
+    goTo('camp');
   });
 }

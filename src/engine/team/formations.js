@@ -3,7 +3,7 @@
 import { BY, SCEN } from '../pokemon/pokemon.js';
 import { HOOKS } from '../core/hooks.js';
 import { renderSquad, squad } from './team.js';
-import { heal, say } from '../combat/engine.js';
+import { heal, pushMessage } from '../combat/engine.js';
 import { PREF, savePref } from '../ui/preferences.js';
 import { sfx, vibe } from '../audio/sound-effects.js';
 import { DAMAGE_PROVIDERS } from '../combat/tactical-engine.js';
@@ -99,7 +99,7 @@ export function init() {
       const b = al.filter(u => u.hp < u.mhp).sort((a, b2) => a.hp / a.mhp - b2.hp / b2.mhp)[0];
       if (b) {
         heal(S, b, Math.max(1, Math.round(b.mhp * 0.08)), ev);
-        say(ev, `Formation Soutien : ${b.n} récupère des forces.`);
+        pushMessage(ev, `Formation Soutien : ${b.n} récupère des forces.`);
       }
     }
   });

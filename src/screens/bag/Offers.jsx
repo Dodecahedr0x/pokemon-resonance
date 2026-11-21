@@ -1,5 +1,5 @@
 import { ITEMS2 } from '../../engine/state/game-state.js';
-import { HELD_IMG, SHOP, fmt } from '../../engine/state/economy.js';
+import { HELD_IMG, SHOP, formatNumber } from '../../engine/state/economy.js';
 import { ITM } from '../../engine/assets/item-icons.js';
 import { costOf0 } from '../../engine/progression/base-camp.js';
 import { HELD_SHOP, dailyOffers, dailyDiscount } from '../../engine/combat/resonance.js';
@@ -25,8 +25,8 @@ export default function Offers() {
               {!h && it.mv ? <Disc it={it} /> : <img src={ITM(h ? HELD_IMG[k] : it.img)} alt="" loading="lazy" />}
               <b>{it.n}</b>
               <span>
-                <s>{fmt(p0)} ₽</s>
-                {fmt(dailyDiscount(k, p0))} ₽
+                <s>{formatNumber(p0)} ₽</s>
+                {formatNumber(dailyDiscount(k, p0))} ₽
               </span>
             </button>
           );

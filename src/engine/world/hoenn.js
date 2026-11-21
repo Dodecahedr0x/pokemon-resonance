@@ -2,11 +2,11 @@ import { BY, SCEN } from '../pokemon/pokemon.js';
 import { PROFILE, isCamp } from '../state/game-state.js';
 import { medal } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
-import { go } from '../core/navigation.js';
+import { goTo } from '../core/navigation.js';
 import { badgeSvg } from '../modes/league.js';
-import { nbrK, say, setMark, uk } from '../combat/engine.js';
+import { nbrK, pushMessage, setMark, unitKey } from '../combat/engine.js';
 import { V4 } from '../ui/screen-state.js';
-import { fmt } from '../state/economy.js';
+import { formatNumber } from '../state/economy.js';
 import { PL, renderMap } from './map.js';
 import { DAMAGE_PROVIDERS } from '../combat/tactical-engine.js';
 import { ACHIEVEMENTS } from '../progression/achievements.js';
@@ -104,7 +104,7 @@ export function hoennChapter(k) {
 export function hoennRewardLine(k) {
   const D = SCEN[k];
   const g = D.hfinal ? 20 : HREW[D.hoenn];
-  return `<div class="reward-line"><span class="reward-badge">${D.hfinal ? medal(['Dragon']) + 'Titre de Maître de Hoenn' : badgeSvg(D.hoenn, HGYMS[D.hoenn], 'mh' + D.hoenn) + 'Badge ' + HGYMS[D.hoenn]}</span><span><span class="coin-icon" aria-hidden="true">₽</span>+${fmt(D.hfinal ? 8000 : 3500 + 300 * D.hoenn)}</span><span><span class="gem-icon"><svg><use href="#i-gem"/></svg></span>+${g}</span></div>`;
+  return `<div class="reward-line"><span class="reward-badge">${D.hfinal ? medal(['Dragon']) + 'Titre de Maître de Hoenn' : badgeSvg(D.hoenn, HGYMS[D.hoenn], 'mh' + D.hoenn) + 'Badge ' + HGYMS[D.hoenn]}</span><span><span class="coin-icon" aria-hidden="true">₽</span>+${formatNumber(D.hfinal ? 8000 : 3500 + 300 * D.hoenn)}</span><span><span class="gem-icon"><svg><use href="#i-gem"/></svg></span>+${g}</span></div>`;
 }
 
 export function hoennProfessor(g) {
@@ -120,37 +120,37 @@ export function hoennSetup(S, r, ev) {
   }
   if (r === 'jh1') {
     S.wx = { k: 'sable', n: 99 };
-    say(ev, 'Arène Roche : une tempête de sable souffle sans fin.');
+    pushMessage(ev, 'Arène Roche : une tempête de sable souffle sans fin.');
   }
   if (r === 'jh2') {
-    say(ev, 'Arène Combat : au contact +25 %, à distance −25 %.');
+    pushMessage(ev, 'Arène Combat : au contact +25 %, à distance −25 %.');
   }
   if (r === 'jh3') {
-    say(ev, 'Arène Électrik : le plateau se charge à chaque fin de manche.');
+    pushMessage(ev, 'Arène Électrik : le plateau se charge à chaque fin de manche.');
   }
   if (r === 'jh4') {
     S.wx = { k: 'soleil', n: 99 };
     S.units
       .filter(u => u.side === 'e')
       .forEach(e =>
-        nbrK(uk(e)).forEach(x => S.tiles[x] && !S.tiles[x].rock && !S.tiles[x].w && setMark(S, x, 'brulant', null))
+        nbrK(unitKey(e)).forEach(x => S.tiles[x] && !S.tiles[x].rock && !S.tiles[x].w && setMark(S, x, 'brulant', null))
       );
-    say(ev, 'Arène Feu : grand soleil, et le sol brûle autour des adversaires.');
+    pushMessage(ev, 'Arène Feu : grand soleil, et le sol brûle autour des adversaires.');
   }
   if (r === 'jh5') {
-    say(ev, 'Arène Normal : les adversaires s’acharnent sur vos Pokémon blessés (+30 %).');
+    pushMessage(ev, 'Arène Normal : les adversaires s’acharnent sur vos Pokémon blessés (+30 %).');
   }
   if (r === 'jh6') {
     S.arriere = Object.assign(S.arriere || {}, { e: 99 });
-    say(ev, 'Arène Vol : vent arrière permanent pour les adversaires (+2 Mouvement).');
+    pushMessage(ev, 'Arène Vol : vent arrière permanent pour les adversaires (+2 Mouvement).');
   }
   if (r === 'jh7') {
     S.distorsion = 99;
-    say(ev, 'Arène Psy : la Distorsion ne se dissipe jamais.');
+    pushMessage(ev, 'Arène Psy : la Distorsion ne se dissipe jamais.');
   }
   if (r === 'jh8') {
     S.wx = { k: 'pluie', n: 99 };
-    say(ev, 'Arène Eau : le déluge tombe sur tout le plateau.');
+    pushMessage(ev, 'Arène Eau : le déluge tombe sur tout le plateau.');
   }
 }
 
@@ -167,7 +167,7 @@ export function hoennTick(S, r, ev) {
     n++;
   }
   if (n) {
-    say(ev, `Arène Électrik : ${n} cases se chargent.`);
+    pushMessage(ev, `Arène Électrik : ${n} cases se chargent.`);
     ev.push({ e: 'arena', r });
   }
 }
@@ -562,7 +562,7 @@ export function init() {
     }
     V4.region = 'hoenn';
     V4.mapSel = null;
-    go('carte');
+    goTo('carte');
     renderMap();
   });
   PLACES_H.forEach(p => (PL[p.id] = p));

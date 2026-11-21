@@ -2,7 +2,7 @@ import { Html } from '../../lib/html.jsx';
 import { BY } from '../../engine/pokemon/pokemon.js';
 import { PROFILE } from '../../engine/state/game-state.js';
 import { medal } from '../../engine/core/utils.js';
-import { fmt } from '../../engine/state/economy.js';
+import { formatNumber } from '../../engine/state/economy.js';
 import { CATEGORY_NAMES, log0430 } from '../../engine/progression/tactical-journal.js';
 
 const NL = '\n  ';
@@ -34,7 +34,7 @@ export default function Journal() {
         <Tile v={pct(J.w, J.n)} t="Victoires" />
         <Tile v={J.runStreak} t="Série en cours" />
         <Tile v={J.best} t="Meilleure série" />
-        <Tile v={fmt(J.dealt)} t="Dégâts infligés" />
+        <Tile v={formatNumber(J.dealt)} t="Dégâts infligés" />
         <Tile v={J.ko} t="K.O. infligés" />
       </div>
       {NL}

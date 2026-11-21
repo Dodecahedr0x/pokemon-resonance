@@ -4,14 +4,14 @@ import { BY, SCEN } from '../pokemon/pokemon.js';
 import { PROFILE } from '../state/game-state.js';
 import { toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
-import { go } from '../core/navigation.js';
+import { goTo } from '../core/navigation.js';
 import { squad } from '../team/team.js';
 import { EMAX } from '../combat/engine.js';
 import { OBST } from '../combat/synergies-obstacles.js';
 import { B, __set_scSel, backToPrep, chooseBattle, launch } from '../combat/ui.js';
 import { queueSave } from '../state/saves.js';
 import { V4 } from '../ui/screen-state.js';
-import { fmt } from '../state/economy.js';
+import { formatNumber } from '../state/economy.js';
 import { renderWallet } from '../ui/wallet.js';
 import { PROGRESS_KEYS, fingerprintRandom } from './weekly-challenge.js';
 import { PANTHEON_STORE, pantheonEngrave } from '../progression/pantheon.js';
@@ -404,7 +404,7 @@ function onDeepEchoClick(e) {
     const [m, g, f] = echoEnd(R, false);
     PROFILE.money = Math.min(999999, (PROFILE.money || 0) + m);
     PROFILE.gems = Math.min(99999, (PROFILE.gems || 0) + g);
-    toast(`Expédition abandonnée à l’étage ${f + 1} : ${fmt(m)} ₽ · ${g} Éclats.`);
+    toast(`Expédition abandonnée à l’étage ${f + 1} : ${formatNumber(m)} ₽ · ${g} Éclats.`);
     queueSave();
     renderWallet();
     renderCampPage();
@@ -425,7 +425,7 @@ export function init() {
       return '';
     }
     if (e.fin) {
-      return `<div class="result-list"><h4>Écho profond</h4><div class="result-row"><span>${e.fin.gagne ? 'Le gardien est vaincu : expédition réussie !' : `Expédition terminée à l’étage ${e.fin.f + (e.fin.gagne ? 0 : 1)}.`} Récompense : ${fmt(e.fin.m)} ₽ · ${e.fin.g} Éclats.</span><b>${e.fin.gagne ? '★' : ''}</b></div></div>`;
+      return `<div class="result-list"><h4>Écho profond</h4><div class="result-row"><span>${e.fin.gagne ? 'Le gardien est vaincu : expédition réussie !' : `Expédition terminée à l’étage ${e.fin.f + (e.fin.gagne ? 0 : 1)}.`} Récompense : ${formatNumber(e.fin.m)} ₽ · ${e.fin.g} Éclats.</span><b>${e.fin.gagne ? '★' : ''}</b></div></div>`;
     }
     return `<div class="result-list"><h4>Écho profond</h4><div class="result-row"><span>Étage ${e.f} franchi${e.echoes ? ` · +${e.echoes} Échos` : ''}${e.type === 'elite' ? ' · une relique vous attend au Camp' : ''}. Vos PV sont conservés.</span><b>${e.f} / 8</b></div></div>`;
   });
@@ -443,7 +443,7 @@ export function init() {
       backToPrep();
       __set_scSel('gue');
       V4.campTab = 'echo';
-      go('camp');
+      goTo('camp');
     },
     true
   );

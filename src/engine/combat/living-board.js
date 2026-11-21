@@ -1,7 +1,7 @@
 import { getHost, hostSet } from '../../screens/combat/board/boardStore.js';
 
 import { SCEN } from '../pokemon/pokemon.js';
-import { flies, mDur, nbrK, say, uAt } from './engine.js';
+import { flies, mDur, nbrK, pushMessage, unitAt } from './engine.js';
 import { scSel } from './ui.js';
 import { PREF } from '../ui/preferences.js';
 import { DAMAGE_PROVIDERS } from './tactical-engine.js';
@@ -70,7 +70,7 @@ export function aliveRound(S, ev) {
       }
     }
     if (n) {
-      say(ev, `La pluie éteint les flammes (${n} case${n > 1 ? 's' : ''}).`);
+      pushMessage(ev, `La pluie éteint les flammes (${n} case${n > 1 ? 's' : ''}).`);
       rebuild = true;
     }
   }
@@ -84,7 +84,7 @@ export function aliveRound(S, ev) {
       }
     }
     if (n) {
-      say(ev, `La grêle gèle les flaques (${n} case${n > 1 ? 's' : ''}).`);
+      pushMessage(ev, `La grêle gèle les flaques (${n} case${n > 1 ? 's' : ''}).`);
       rebuild = true;
     }
   }
@@ -124,15 +124,15 @@ export function aliveRound(S, ev) {
       edges.push([de, k, 1]);
     });
     ev.push({ e: 'chain', edges, c: 'fire' });
-    say(ev, `Le feu court dans les hautes herbes (${hasWon.length} case${hasWon.length > 1 ? 's' : ''}).`);
+    pushMessage(ev, `Le feu court dans les hautes herbes (${hasWon.length} case${hasWon.length > 1 ? 's' : ''}).`);
     S.stats.feu = (S.stats.feu || 0) + hasWon.length; // Pyromane (Pyromaniac) achievement (v4.9)
     hasWon.forEach(([k]) => {
-      const w = uAt(S, k);
+      const w = unitAt(S, k);
       if (!w || flies(w) || w.t.includes('Feu') || w.ability === 'torche') {
         return;
       }
       w.burn = Math.max(w.burn, 2);
-      say(ev, `${w.n} est pris dans l’incendie !`);
+      pushMessage(ev, `${w.n} est pris dans l’incendie !`);
     });
     rebuild = true;
   }
@@ -155,7 +155,7 @@ export function aliveRound(S, ev) {
       for (const k in S.tiles) {
         S.tiles[k].fog = nf[k] || 0;
       }
-      say(ev, 'Le vent pousse le brouillard.');
+      pushMessage(ev, 'Le vent pousse le brouillard.');
       rebuild = true;
     }
   }
@@ -168,11 +168,11 @@ export function aliveRound(S, ev) {
   } // Eternal Night: time does not pass (v4.9)
   if (S.cycle.n >= LIVING_STEP) {
     S.cycle = { ph: LIVING_ORDER[(LIVING_ORDER.indexOf(S.cycle.ph) + 1) % LIVING_ORDER.length], n: 0 };
-    say(ev, LIVING_ANNOUNCE[S.cycle.ph]);
+    pushMessage(ev, LIVING_ANNOUNCE[S.cycle.ph]);
     ev.push({ e: 'heure', ph: S.cycle.ph });
     if (S.vent) {
       S.vent.d = (S.vent.d + 1) % 6; // the wind turns with the time
-      say(ev, 'Le vent tourne.');
+      pushMessage(ev, 'Le vent tourne.');
     }
   }
 }

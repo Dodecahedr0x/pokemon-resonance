@@ -38,7 +38,7 @@ export function typeBadge(t) {
   return `<span class="type-badge" style="--c:${c};--fg:${fg}"><i class="type-badge-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="${typeGlyphPath(t)}" fill="${fg}" fill-rule="evenodd"/></svg></i>${t}</span>`;
 }
 
-export function ico(d) {
+export function strokeIcon(d) {
   return `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="${d}" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 }
 
@@ -48,7 +48,7 @@ export function toast(msg) {
   showToast(msg);
 }
 
-export function el(tag, attrs = {}, parent) {
+export function svgElement(tag, attrs = {}, parent) {
   const e = document.createElementNS(NS, tag);
   for (const k in attrs) {
     e.setAttribute(k, attrs[k]);
@@ -59,12 +59,12 @@ export function el(tag, attrs = {}, parent) {
   return e;
 }
 
-export function hc(c, r, s, ox, oy) {
+export function hexCenter(c, r, s, ox, oy) {
   const w = Math.sqrt(3) * s;
   return [ox + w * (c + 0.5 * (r & 1)) + w / 2, oy + 1.5 * s * r + s];
 }
 
-export function hp(x, y, s) {
+export function hexPoints(x, y, s) {
   const p = [];
   for (let i = 0; i < 6; i++) {
     const a = (Math.PI / 180) * (60 * i - 30);
@@ -73,7 +73,7 @@ export function hp(x, y, s) {
   return p.join(' ');
 }
 
-export function zig(x1, y1, x2, y2, n = 6, amp = 5) {
+export function zigzagPoints(x1, y1, x2, y2, n = 6, amp = 5) {
   const pts = [[x1, y1]],
     dx = x2 - x1,
     dy = y2 - y1,
@@ -136,7 +136,7 @@ export function hash2(x, y, s) {
 }
 
 /** 32-bit FNV-1a fingerprint of a string (unsigned integer). */
-export function fnv(s) {
+export function fnvHash(s) {
   let h = 2166136261;
   for (let i = 0; i < s.length; i++) {
     h = Math.imul(h ^ s.charCodeAt(i), 16777619);

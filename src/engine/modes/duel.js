@@ -11,7 +11,7 @@ import { synOf } from '../pokemon/roles-synergies.js';
 import { $, RM, medal } from '../core/utils.js';
 import { tokCl } from '../../screens/combat/board/boardStore.js';
 import { HOOKS } from '../core/hooks.js';
-import { go } from '../core/navigation.js';
+import { goTo } from '../core/navigation.js';
 import {
   BH,
   BW,
@@ -24,8 +24,8 @@ import {
   rewardIn,
   hasNx,
   mkUnit,
-  say,
-  uk,
+  pushMessage,
+  unitKey,
 } from '../combat/engine.js';
 import { OBST, resolve } from '../combat/synergies-obstacles.js';
 import {
@@ -39,12 +39,12 @@ import {
   endOfRound,
   finish,
   launch,
-  log,
+  addLog,
   renderAll,
   scSel,
   ui,
 } from '../combat/ui.js';
-import { esc, queueSave } from '../state/saves.js';
+import { escapeHtml, queueSave } from '../state/saves.js';
 import { PREF } from '../ui/preferences.js';
 import { playEv } from '../combat/move-effects.js';
 import { AUTO, overlay, turnBanner } from '../progression/prestige.js';
@@ -256,7 +256,7 @@ function launchDuel(C) {
     launchDuel.prev = scSel;
   }
   __set_scSel('duel433');
-  go('combat');
+  goTo('combat');
   launch();
 }
 
@@ -267,7 +267,7 @@ function leaveDuel() {
   __set_scSel(hp && SCEN[hp] && !SCEN[hp].noProgress ? hp : 'gue');
   backToPrep();
   V4.campTab = 'duel';
-  go('camp');
+  goTo('camp');
 }
 
 /** Changes the active player: their Pokémon move to the "ally" side. */
@@ -316,7 +316,7 @@ function duelTurnStart(S, j, ev) {
     if (S.syn && S.syn.includes('toxines')) {
       S.units.forEach(e => {
         if (!e.ko && e.side === 'e' && (e.root > 0 || e.web > 0 || e.badge === 'SOM')) {
-          say(ev, `Toxines : ${e.n} s’affaiblit.`);
+          pushMessage(ev, `Toxines : ${e.n} s’affaiblit.`);
           damage(S, e, 3, ev, { ind: true });
         }
       });
@@ -343,7 +343,7 @@ function duelTurnStart(S, j, ev) {
     const st = STUN_BADGES.includes(u.badge) && !u.stunBadgeSeen;
     if (u.skip > 0 || st || u.isLost) {
       if (st || u.isLost) {
-        say(ev, `${u.n} ne peut pas agir ce tour.`);
+        pushMessage(ev, `${u.n} ne peut pas agir ce tour.`);
       }
       u.skip = 0;
       u.isLost = 0;
@@ -358,7 +358,7 @@ function duelTurnStart(S, j, ev) {
       u.stunBadgeSeen = 0;
       if (u.force) {
         u.moved = true;
-        say(ev, `${u.n} est troublé : il ne peut pas se déplacer ce tour.`);
+        pushMessage(ev, `${u.n} est troublé : il ne peut pas se déplacer ce tour.`);
       }
     }
     u.force = null;
@@ -377,7 +377,7 @@ export function duelVigilance(S, e, ev) {
   if (!e || e.ko || S.over || e.side !== 'a') {
     return;
   }
-  const k = uk(e);
+  const k = unitKey(e);
   for (const u of S.units) {
     if (u.side !== 'e' || u.ko || !u.vigilance || STUN_BADGES.includes(u.badge)) {
       continue;
@@ -388,7 +388,7 @@ export function duelVigilance(S, e, ev) {
     }
     u.vigilance = 0;
     S.stats.vigilance = (S.stats.vigilance || 0) + 1;
-    say(ev, `Vigilance : ${u.n} intercepte ${e.n} avec ${m.n} !`);
+    pushMessage(ev, `Vigilance : ${u.n} intercepte ${e.n} avec ${m.n} !`);
     ev.push({ e: 'vigil-strike', u: u.uid, t: e.uid });
     resolve(S, u, m, k).forEach(x => ev.push(x));
     if (e.ko || S.over) {
@@ -411,7 +411,7 @@ export function duelPassTurn() {
   clearAim();
   if (D.j === 1) {
     const ev = [];
-    log(`${D.names[0]} termine son tour.`, 'sys');
+    addLog(`${D.names[0]} termine son tour.`, 'sys');
     D.discard = 2;
     unloadCharges(S, ev); // Player 2's charged attacks fire after Player 1's turn
     endStep(S, ev);
@@ -431,7 +431,7 @@ export function duelPassTurn() {
     handoff(2);
     return true;
   }
-  log(`${D.names[1]} termine son tour.`, 'sys');
+  addLog(`${D.names[1]} termine son tour.`, 'sys');
   toggleSide(S, 1);
   D.discard = 1;
   ui.busy = true;
@@ -559,13 +559,13 @@ export function duelUnder(S) {
     return '';
   }
   if (D.w === 'forfait') {
-    return `${esc(D.names[(S.forfeit || 1) - 1])} a déclaré forfait.`;
+    return `${escapeHtml(D.names[(S.forfeit || 1) - 1])} a déclaré forfait.`;
   }
   if (D.w === 'temps') {
-    return `Temps écoulé : ${esc(D.names[0])} garde ${duelHp(S, 1)} % de ses PV, ${esc(D.names[1])} ${duelHp(S, 2)} %.`;
+    return `Temps écoulé : ${escapeHtml(D.names[0])} garde ${duelHp(S, 1)} % de ses PV, ${escapeHtml(D.names[1])} ${duelHp(S, 2)} %.`;
   }
   return D.g
-    ? `Toute l’équipe de ${esc(D.names[2 - D.g])} est K.O. en ${S.round} manche${S.round > 1 ? 's' : ''}.`
+    ? `Toute l’équipe de ${escapeHtml(D.names[2 - D.g])} est K.O. en ${S.round} manche${S.round > 1 ? 's' : ''}.`
     : 'Les deux équipes tombent ensemble.';
 }
 
@@ -628,7 +628,7 @@ export const duelCanCharge = (S, u) => !S.duel433 || u.duelPlayer === S.duel433.
 
 export const duelTitle = S => {
   const D = S.duel433;
-  return D && D.g ? `Victoire de ${esc(D.names[D.g - 1])}` : 'Match nul';
+  return D && D.g ? `Victoire de ${escapeHtml(D.names[D.g - 1])}` : 'Match nul';
 };
 
 function onCombat(S, opt, D0) {
@@ -771,7 +771,7 @@ export function init() {
       shut('duel433r');
       B.forfeit = B.duel433.j;
       B.over = 'win';
-      log(`${B.duel433.names[B.duel433.j - 1]} déclare forfait.`, 'sys');
+      addLog(`${B.duel433.names[B.duel433.j - 1]} déclare forfait.`, 'sys');
       finish();
     }
   });
@@ -806,7 +806,7 @@ export function init() {
     return `<div class="result-list duel-report-r"><h4>Rapport du duel</h4><div class="duel-report-rg">${[0, 1]
       .map(
         i =>
-          `<div class="duel-report-rc dj${i + 1}${X.g === i + 1 ? ' g' : ''}"><b>${esc(X.names[i])}</b><em>${X.pv[i]} % PV restants</em>${X.rows[
+          `<div class="duel-report-rc dj${i + 1}${X.g === i + 1 ? ' g' : ''}"><b>${escapeHtml(X.names[i])}</b><em>${X.pv[i]} % PV restants</em>${X.rows[
             i
           ]
             .map(x => {
@@ -849,7 +849,7 @@ export function init() {
     }
     e.stopPropagation();
     V4.campTab = 'duel';
-    go('camp');
+    goTo('camp');
   });
 
   /* ---------- duel: the Camp screen ---------- */

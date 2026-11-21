@@ -1,7 +1,7 @@
 import { bdClass, bdReplay, getHost, hostSet } from '../../screens/combat/board/boardStore.js';
 
 import { $, RM } from '../core/utils.js';
-import { byUid, uk } from './engine.js';
+import { byUid, unitKey } from './engine.js';
 import { B, HC, TILT, VB, VERT, buildBoard, playLog, renderAll, tiltS, ui } from './ui.js';
 import { PREF } from '../ui/preferences.js';
 import { impactWords } from '../progression/prestige.js';
@@ -1025,7 +1025,7 @@ const IMPACTS = {
 
 function fxGuard(e, dur) {
   const guardianRef = byUid(B, e.u);
-  return withDepth(guardianRef ? uk(guardianRef) : null, () => fxGuardPlat(e, dur));
+  return withDepth(guardianRef ? unitKey(guardianRef) : null, () => fxGuardPlat(e, dur));
 }
 
 function fxGuardPlat(e, dur) {
@@ -1034,8 +1034,8 @@ function fxGuardPlat(e, dur) {
   if (!g || !v) {
     return;
   }
-  const G = fxP(uk(g)),
-    V = fxP(uk(v)),
+  const G = fxP(unitKey(g)),
+    V = fxP(unitKey(v)),
     z = FXS.s * (FXS.zk || 1);
   fxAdd(dur * 0.7, (c, p) => {
     c.globalCompositeOperation = 'lighter';

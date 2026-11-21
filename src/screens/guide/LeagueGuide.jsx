@@ -10,7 +10,7 @@ import {
   lvlOfPts,
   ownedItems,
 } from '../../engine/state/game-state.js';
-import { ico, medal, typeColor } from '../../engine/core/utils.js';
+import { strokeIcon, medal, typeColor } from '../../engine/core/utils.js';
 import { listDuos } from '../../engine/combat/duo-techniques.js';
 import { Html } from '../../lib/html.jsx';
 import { useGuide } from './guideStore.js';
@@ -30,7 +30,7 @@ export function Items() {
     return (
       <div key={k} className={`guide-item${has ? '' : ' is-missing'}`}>
         <span className="guide-item-icon">
-          <Html html={ico(it.i)} />
+          <Html html={strokeIcon(it.i)} />
         </span>
         <span>
           <b>{it.n}</b>

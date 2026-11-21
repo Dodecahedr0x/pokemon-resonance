@@ -6,7 +6,7 @@ import { B, backToPrep, goFight } from '../combat/ui.js';
 import { overlay } from '../progression/prestige.js';
 import { shut } from '../../screens/overlays/tempStore.js';
 import { today } from '../state/economy.js';
-import { ok } from './challenge-scenes.js';
+import { existingSpecies } from './challenge-scenes.js';
 import { dqDef, dqMake, dqViol } from './daily-challenge.js';
 import { adjustPrestige, preOk } from './challenge-prestige.js';
 import { freeSpecimens, reviveSpecimen } from './ancient-specimens.js';
@@ -132,6 +132,6 @@ export function init() {
     hub: openChallengesHub,
     makeDailyChallenge: dqMake,
     dailyViolation: dqViol,
-    ok,
+    ok: existingSpecies,
   };
 }

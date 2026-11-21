@@ -1,6 +1,6 @@
 import { BY, SCEN } from '../pokemon/pokemon.js';
 import { PROFILE, isCamp } from '../state/game-state.js';
-import { go } from '../core/navigation.js';
+import { goTo } from '../core/navigation.js';
 import { OBST } from '../combat/synergies-obstacles.js';
 import { V4 } from '../ui/screen-state.js';
 import { renderQuests } from '../progression/quests-shop.js';
@@ -83,7 +83,7 @@ export function init() {
     }
     e.stopPropagation();
     V4.questTab = 'leg';
-    go('quetes');
+    goTo('quetes');
     renderQuests();
   });
 }

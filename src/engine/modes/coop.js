@@ -1,7 +1,7 @@
 /* 2-player co-op (Settings): Player 1 controls the first 2 Pokémon, Player 2 the others (added in v4.18). */
 
 import { HOOKS } from '../core/hooks.js';
-import { B, clearAim, log, renderAll, ui } from '../combat/ui.js';
+import { B, clearAim, addLog, renderAll, ui } from '../combat/ui.js';
 import { toast } from '../core/utils.js';
 import { PREF } from '../ui/preferences.js';
 import { vibe } from '../audio/sound-effects.js';
@@ -18,7 +18,7 @@ export function coopPassTurn() {
   clearAim();
   const nx = B.units.find(x => x.side === 'a' && !x.ko && !x.acted && coopPlayer(x) === 2);
   ui.sel = nx ? nx.uid : null;
-  log('Au tour du Joueur 2.', 'sys');
+  addLog('Au tour du Joueur 2.', 'sys');
   toast('Au tour du Joueur 2 !');
   vibe(30);
   renderAll();

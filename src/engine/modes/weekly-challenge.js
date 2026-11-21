@@ -3,11 +3,11 @@ import { RECRUIT } from '../pokemon/evolution.js';
 import { PROFILE } from '../state/game-state.js';
 import { mulberry32 } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
-import { go } from '../core/navigation.js';
+import { goTo } from '../core/navigation.js';
 import { OBST } from '../combat/synergies-obstacles.js';
 import { battleOpts, scSel } from '../combat/ui.js';
 import { V4 } from '../ui/screen-state.js';
-import { fmt } from '../state/economy.js';
+import { formatNumber } from '../state/economy.js';
 import { renderQuests } from '../progression/quests-shop.js';
 
 /* Challenge of the week: same rule and same rental team for everyone, best score kept,
@@ -212,7 +212,7 @@ export function init() {
 
   HOOKS.battleResult.push(r =>
     r.hebdo429
-      ? `<div class="result-list"><h4>Défi de la semaine</h4><div class="result-row"><span>Score ${fmt(r.hebdo429.sc)}${r.hebdo429.record ? ' · nouveau record !' : ` · record ${fmt(r.hebdo429.best)}`}${r.hebdo429.prime ? ' · première victoire de la semaine : +2 500 ₽ · +25 Éclats' : ''}</span><b>${r.hebdo429.record ? '★' : ''}</b></div><p class="note">Partagez votre carte de dresseur (Amis) : vos amis verront ce score.</p></div>`
+      ? `<div class="result-list"><h4>Défi de la semaine</h4><div class="result-row"><span>Score ${formatNumber(r.hebdo429.sc)}${r.hebdo429.record ? ' · nouveau record !' : ` · record ${formatNumber(r.hebdo429.best)}`}${r.hebdo429.prime ? ' · première victoire de la semaine : +2 500 ₽ · +25 Éclats' : ''}</span><b>${r.hebdo429.record ? '★' : ''}</b></div><p class="note">Partagez votre carte de dresseur (Amis) : vos amis verront ce score.</p></div>`
       : ''
   );
 
@@ -222,7 +222,7 @@ export function init() {
     }
     e.stopPropagation();
     V4.questTab = 'event';
-    go('quetes');
+    goTo('quetes');
     renderQuests();
   });
 }

@@ -5,7 +5,7 @@ import { BY, SCEN } from '../pokemon/pokemon.js';
 import { CAMP_START, PROFILE, defProfile, isCamp } from '../state/game-state.js';
 import { ARENAS, BADGES } from '../modes/gyms.js';
 import { $, toast } from '../core/utils.js';
-import { go } from '../core/navigation.js';
+import { goTo } from '../core/navigation.js';
 import { hideStarter, openStarterBox, refreshStarter } from '../../screens/overlays/shellOverlays.js';
 import { squad } from '../team/team.js';
 import { ELITE } from '../combat/items-bonds-ai.js';
@@ -98,7 +98,7 @@ function onStarterClick(e) {
   );
   closeSaves();
   autoSave(true);
-  go('accueil');
+  goTo('accueil');
   renderHome();
   toast(`Campagne lancée avec ${BY[id].n}. Commencez par le combat guidé ou la Route 29.`);
 }
@@ -110,7 +110,7 @@ export function init() {
     if (g) {
       const k = g.dataset.goal;
       __set_scSel(k);
-      go('combat');
+      goTo('combat');
       renderPrep();
       if (k === 'tuto' && squad.length) {
         launch();

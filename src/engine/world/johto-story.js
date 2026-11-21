@@ -8,9 +8,9 @@
 import { BY, SCEN } from '../pokemon/pokemon.js';
 import { ITEMS2, PROFILE } from '../state/game-state.js';
 import { HOOKS } from '../core/hooks.js';
-import { P, hasNx, nextId, say, setMark, transform } from '../combat/engine.js';
+import { P, hasNx, nextId, pushMessage, setMark, transform } from '../combat/engine.js';
 import { OBST } from '../combat/synergies-obstacles.js';
-import { HELD_IMG, fmt } from '../state/economy.js';
+import { HELD_IMG, formatNumber } from '../state/economy.js';
 import { ITM } from '../assets/item-icons.js';
 import { PL } from './map.js';
 import { ACHIEVEMENTS } from '../progression/achievements.js';
@@ -92,7 +92,7 @@ export function johtoExtraLine(k) {
     if ((PROFILE.jdis || 0) >= D.jdis) {
       return '';
     } // already defeated: no second bounty
-    return `<div class="reward-line"><span><span class="coin-icon" aria-hidden="true">₽</span>+${fmt(T.rew[0])}</span><span><span class="gem-icon"><svg><use href="#i-gem"/></svg></span>+${T.rew[1]}</span></div>`;
+    return `<div class="reward-line"><span><span class="coin-icon" aria-hidden="true">₽</span>+${formatNumber(T.rew[0])}</span><span><span class="gem-icon"><svg><use href="#i-gem"/></svg></span>+${T.rew[1]}</span></div>`;
   }
   if (D.roam) {
     const r = getRoamState(D.roam),
@@ -119,16 +119,16 @@ export function johtoLead(sc) {
 /* ---------- story battle rules ---------- */
 export function johtoSetup(S, r, ev) {
   if (r === 'jbrouille') {
-    say(ev, 'Brouilleur : en fin de manche, votre Pokémon le plus chargé perd 1 losange.');
+    pushMessage(ev, 'Brouilleur : en fin de manche, votre Pokémon le plus chargé perd 1 losange.');
   }
   if (r === 'jcendre') {
-    say(ev, 'Tour Cendrée : chaque manche, deux cases prennent feu.');
+    pushMessage(ev, 'Tour Cendrée : chaque manche, deux cases prennent feu.');
   }
   if (r === 'jonde') {
-    say(ev, 'Antenne Rouge : à la fin des manches 1 et 3, les Pokémon de Cobalt évoluent de force.');
+    pushMessage(ev, 'Antenne Rouge : à la fin des manches 1 et 3, les Pokémon de Cobalt évoluent de force.');
   }
   if (r === 'jmauvaise') {
-    say(ev, 'Relais de Mauvaise Onde : les notes de Résonance s’effacent en fin de manche.');
+    pushMessage(ev, 'Relais de Mauvaise Onde : les notes de Résonance s’effacent en fin de manche.');
   }
   if (r === 'jroam') {
     setupRoaming(S, ev);
@@ -150,7 +150,7 @@ export function johtoTick(S, r, ev) {
     const u = al.filter(a => (a.en || 0) > 0).sort((a, b) => b.en - a.en)[0];
     if (u) {
       u.en = Math.max(0, u.en - 1);
-      say(ev, `Brouilleur : ${u.n} perd 1 losange.`);
+      pushMessage(ev, `Brouilleur : ${u.n} perd 1 losange.`);
     }
   }
   if (r === 'jcendre') {
@@ -166,7 +166,7 @@ export function johtoTick(S, r, ev) {
       n++;
     }
     if (n) {
-      say(ev, `Tour Cendrée : ${n} case${n > 1 ? 's prennent' : ' prend'} feu.`);
+      pushMessage(ev, `Tour Cendrée : ${n} case${n > 1 ? 's prennent' : ' prend'} feu.`);
       ev.push({ e: 'arena', r });
     }
   }
@@ -183,7 +183,7 @@ export function johtoTick(S, r, ev) {
       transform(S, e, id, ev);
       n++;
     });
-    say(
+    pushMessage(
       ev,
       n ? `Antenne Rouge : ${n} Pokémon de Cobalt évoluent de force !` : 'Antenne Rouge : plus rien à faire évoluer.'
     );
@@ -192,7 +192,7 @@ export function johtoTick(S, r, ev) {
     const n = es.filter(e => e.notes).length;
     es.forEach(e => (e.notes = null));
     if (n) {
-      say(ev, `Mauvaise Onde : ${n} note${n > 1 ? 's' : ''} de Résonance effacée${n > 1 ? 's' : ''}.`);
+      pushMessage(ev, `Mauvaise Onde : ${n} note${n > 1 ? 's' : ''} de Résonance effacée${n > 1 ? 's' : ''}.`);
     }
   }
   if (r === 'jdom') {

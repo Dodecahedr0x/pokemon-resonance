@@ -7,13 +7,13 @@ import { BY, SCEN } from '../pokemon/pokemon.js';
 import { ITEMS2, PROFILE, isCamp, ownedItems } from '../state/game-state.js';
 import { BADGES } from './gyms.js';
 import { paintOverlay } from '../../screens/overlays/dialogsStore.js';
-import { $, fnv, toast } from '../core/utils.js';
+import { $, fnvHash, toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { squad } from '../team/team.js';
 import { hasNx } from '../combat/engine.js';
 import { OBST } from '../combat/synergies-obstacles.js';
 import { B, backToPrep, goFight } from '../combat/ui.js';
-import { esc, queueSave } from '../state/saves.js';
+import { escapeHtml, queueSave } from '../state/saves.js';
 import { familyOwned } from '../progression/trainer-stats.js';
 import { today } from '../state/economy.js';
 import { isShinyOwned } from '../pokemon/shiny.js';
@@ -93,7 +93,7 @@ function playerStandings() {
 }
 
 export function codeChecksum(s) {
-  return fnv(s).toString(36).slice(-4).padStart(4, '0');
+  return fnvHash(s).toString(36).slice(-4).padStart(4, '0');
 }
 
 function exportSquadCode() {
@@ -431,7 +431,7 @@ export function init() {
     if (!r.ami) {
       return '';
     }
-    return `<div class="result-list"><h4>Défi entre amis</h4><div class="result-row"><span>${r.ami.win ? 'Victoire' : 'Défaite'} contre l’équipe de ${esc(r.ami.n)} · ${r.ami.w} victoire${r.ami.w > 1 ? 's' : ''}, ${r.ami.l} défaite${r.ami.l > 1 ? 's' : ''}${r.ami.prem ? ' · première victoire du jour : +3 Éclats' : ''}.</span><b>${r.ami.w}–${r.ami.l}</b></div></div>`;
+    return `<div class="result-list"><h4>Défi entre amis</h4><div class="result-row"><span>${r.ami.win ? 'Victoire' : 'Défaite'} contre l’équipe de ${escapeHtml(r.ami.n)} · ${r.ami.w} victoire${r.ami.w > 1 ? 's' : ''}, ${r.ami.l} défaite${r.ami.l > 1 ? 's' : ''}${r.ami.prem ? ' · première victoire du jour : +3 Éclats' : ''}.</span><b>${r.ami.w}–${r.ami.l}</b></div></div>`;
   });
 
   /* ---------- achievements ---------- */

@@ -3,7 +3,7 @@ import { useEngineReady } from '../../engineReady.js';
 import { useHomeVersion } from './homeStore.js';
 import { typeColor } from '../../engine/core/utils.js';
 import { squad } from '../../engine/team/team.js';
-import { S2n, emblem, goalInfo } from '../../engine/world/home-journey.js';
+import { goalName, emblem, goalInfo } from '../../engine/world/home-journey.js';
 
 // "Prochaine étape" (Next step) in the sidebar (#sideGoal, formerly renderSideGoal): mirrors
 // the Home objective. The click (data-goal / data-go) is still handled by the engine.
@@ -31,7 +31,7 @@ function Content() {
       >
         <Html html={emblem(g.k, 'is-tiny')} />
         <span>
-          <b>{g.k === 'tuto' ? 'Combat guidé' : g.k === 'champ' ? 'Finale' : S2n(g)}</b>
+          <b>{g.k === 'tuto' ? 'Combat guidé' : g.k === 'champ' ? 'Finale' : goalName(g)}</b>
           <em>{squad.length ? (g.L ? g.L.n : 'Touchez pour y aller') : 'Choisir mon équipe'}</em>
         </span>
       </button>

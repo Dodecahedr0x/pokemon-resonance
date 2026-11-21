@@ -5,7 +5,7 @@ import { HOOKS } from '../core/hooks.js';
 import { TOD, setTod } from './home-route.js';
 import { setRoute } from '../../screens/home/homeStore.js';
 import { badgeSvg } from '../modes/league.js';
-import { EMAX, P, hdist, heal, nbrK, say, setMark, shove, uAt, uk } from '../combat/engine.js';
+import { EMAX, P, hdist, heal, nbrK, pushMessage, setMark, shove, unitAt, unitKey } from '../combat/engine.js';
 import { scenLock } from '../combat/items-bonds-ai.js';
 import { wonOf } from './home-journey.js';
 import { HELD_IMG, SHOP } from '../state/economy.js';
@@ -119,42 +119,42 @@ export function johtoGymSetup(S, r, ev) {
   }
   const es = S.units.filter(u => u.side === 'e');
   if (r === 'jvol') {
-    say(ev, 'Arène Vol : des rafales balaient le plateau une manche sur deux.');
+    pushMessage(ev, 'Arène Vol : des rafales balaient le plateau une manche sur deux.');
   }
   if (r === 'jinsecte') {
     ['3,1', '3,2', '3,3', '3,4', '4,2', '4,4'].forEach(k => {
       const t = S.tiles[k];
-      if (t && !t.rock && !uAt(S, k)) {
+      if (t && !t.rock && !unitAt(S, k)) {
         t.trap = { k: 'toile', side: 'e', by: null, d: 99 };
       }
     });
-    say(ev, 'Arène Insecte : des Toiles Gluantes couvrent le centre.');
+    pushMessage(ev, 'Arène Insecte : des Toiles Gluantes couvrent le centre.');
   }
   if (r === 'jnormal') {
-    say(ev, 'Arène Normal : le troupeau récupère 6 % de ses PV en fin de manche.');
+    pushMessage(ev, 'Arène Normal : le troupeau récupère 6 % de ses PV en fin de manche.');
   }
   if (r === 'jspectre') {
     S.cycle = { ph: 'nuit', n: 0, frozen: true };
-    say(ev, 'Arène Spectre : nuit éternelle. Le premier adversaire vaincu reviendra.');
+    pushMessage(ev, 'Arène Spectre : nuit éternelle. Le premier adversaire vaincu reviendra.');
   }
   if (r === 'jcombat') {
-    say(ev, 'Arène Combat : au contact, les adversaires deviennent Renforcés.');
+    pushMessage(ev, 'Arène Combat : au contact, les adversaires deviennent Renforcés.');
   }
   if (r === 'jacier') {
     es.forEach(e => (e.guard = Math.max(e.guard, 2)));
-    say(ev, 'Arène Acier : les adversaires sont blindés (+2 Garde).');
+    pushMessage(ev, 'Arène Acier : les adversaires sont blindés (+2 Garde).');
   }
   if (r === 'jglace') {
     S.wx = { k: 'grele', n: 99 };
     for (const k in S.tiles) {
-      if (P(k)[0] >= 6 && !S.tiles[k].rock && !uAt(S, k)) {
+      if (P(k)[0] >= 6 && !S.tiles[k].rock && !unitAt(S, k)) {
         setMark(S, k, 'givre', null);
       }
     }
-    say(ev, 'Arène Glace : la Grêle tombe, le fond du camp adverse est Givré.');
+    pushMessage(ev, 'Arène Glace : la Grêle tombe, le fond du camp adverse est Givré.');
   }
   if (r === 'jdragon') {
-    say(ev, 'Arène Dragon : le souffle ancestral nourrit la Résonance adverse.');
+    pushMessage(ev, 'Arène Dragon : le souffle ancestral nourrit la Résonance adverse.');
   }
   johtoSetup(S, r, ev); // story, beasts, Dominants (v4.16)
 }
@@ -173,13 +173,13 @@ export function johtoGymTick(S, r, ev) {
         return;
       }
       const [c, rw] = u.pos,
-        p0 = uk(u);
+        p0 = unitKey(u);
       shove(S, u, [c + 1, rw], 1, ev, false);
-      if (uk(u) !== p0) {
+      if (unitKey(u) !== p0) {
         n++;
       }
     });
-    say(
+    pushMessage(
       ev,
       n ? `Arène Vol : une rafale repousse ${n} de vos Pokémon.` : 'Arène Vol : la rafale passe sans emporter personne.'
     );
@@ -197,7 +197,9 @@ export function johtoGymTick(S, r, ev) {
       if (!e.ko || S.revenant || e.caught || e.seg) {
         return;
       } // only one revenant per battle
-      const x = uAt(S, uk(e)) ? nbrK(uk(e)).find(y => S.tiles[y] && !S.tiles[y].rock && !uAt(S, y)) : uk(e);
+      const x = unitAt(S, unitKey(e))
+        ? nbrK(unitKey(e)).find(y => S.tiles[y] && !S.tiles[y].rock && !unitAt(S, y))
+        : unitKey(e);
       if (!x) {
         return;
       }
@@ -213,7 +215,7 @@ export function johtoGymTick(S, r, ev) {
         intent: null,
       });
       ev.push({ e: 'mv', u: e.uid }, { e: 'heal', u: e.uid, v: e.hp });
-      say(ev, `Arène Spectre : ${e.n} revient d’entre les ombres !`);
+      pushMessage(ev, `Arène Spectre : ${e.n} revient d’entre les ombres !`);
     });
   }
   if (r === 'jcombat') {
@@ -229,7 +231,7 @@ export function johtoGymTick(S, r, ev) {
         e.guard = Math.max(e.guard, 2);
       }
     });
-    say(ev, 'Arène Acier : le blindage se referme (+2 Garde).');
+    pushMessage(ev, 'Arène Acier : le blindage se referme (+2 Garde).');
   }
   if (r === 'jdragon') {
     es.forEach(e => {
@@ -564,11 +566,11 @@ export function init() {
         return;
       }
       v.web = Math.max(v.web, 2);
-      say(ev, `${v.n} est englué.`);
+      pushMessage(ev, `${v.n} est englué.`);
     },
     affaiblit(S, u, v, x, mk, ev) {
       v.weakened = Math.max(v.weakened || 0, 2);
-      say(ev, `${v.n} est intimidé : −3 dégâts pendant 2 manches.`);
+      pushMessage(ev, `${v.n} est intimidé : −3 dégâts pendant 2 manches.`);
     },
     bourbier(S, u, v, _x, _mk, _ev) {
       if (v.ability === 'regardvif' || hasRune(S, v)) {
@@ -580,12 +582,12 @@ export function init() {
   Object.assign(SELF_MOVE_EFFECTS, {
     carapace(S, u, ev) {
       u.guard = Math.max(u.guard, 3);
-      nbrK(uk(u)).forEach(x => {
+      nbrK(unitKey(u)).forEach(x => {
         if (S.tiles[x] && !S.tiles[x].rock) {
           setMark(S, x, 'brulant', u.uid);
         }
       });
-      say(ev, `${u.n} durcit sa carapace : +2 Garde, cases voisines Brûlantes.`);
+      pushMessage(ev, `${u.n} durcit sa carapace : +2 Garde, cases voisines Brûlantes.`);
     },
   });
   DAMAGE_PROVIDERS.push(

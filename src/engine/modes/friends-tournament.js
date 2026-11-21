@@ -11,7 +11,7 @@ import { HOOKS } from '../core/hooks.js';
 import { squad, vBonus } from '../team/team.js';
 import { armedBossRush, isBossRushBoss } from './boss-rush.js';
 import { B, backToPrep, battleOpts, goFight, scSel } from '../combat/ui.js';
-import { esc, queueSave } from '../state/saves.js';
+import { escapeHtml, queueSave } from '../state/saves.js';
 import { ACHIEVEMENTS } from '../progression/achievements.js';
 import { teamSize } from '../progression/campaign-challenges.js';
 import { refreshHome } from '../../screens/home/homeStore.js';
@@ -87,7 +87,7 @@ export function tournamentPanelHtml() {
   }
   if (run) {
     const A = L.find(a => a.id === run.order[run.i]);
-    return `<div class="home-tournament is-running"><span><b>Tournoi en cours · ${run.i} / ${run.order.length}</b><em>Prochain : ${A ? esc(A.n) : '?'} · votre équipe : ${run.team.map(id => BY[id].n).join(', ')}</em></span><span class="home-friends-buttons"><button type="button" class="button button-small button-primary" data-tournoi="suite">Continuer</button><button type="button" class="button button-small button-ghost" data-tournoi="abandon">Abandonner</button></span></div>`;
+    return `<div class="home-tournament is-running"><span><b>Tournoi en cours · ${run.i} / ${run.order.length}</b><em>Prochain : ${A ? escapeHtml(A.n) : '?'} · votre équipe : ${run.team.map(id => BY[id].n).join(', ')}</em></span><span class="home-friends-buttons"><button type="button" class="button button-small button-primary" data-tournoi="suite">Continuer</button><button type="button" class="button button-small button-ghost" data-tournoi="abandon">Abandonner</button></span></div>`;
   }
   return `<div class="home-tournament"><span><b>Tournoi entre amis</b><em>${Math.min(5, L.length)} équipes à la suite, sans soin entre les combats. Record : ${T.best || 0}${T.winCount ? ` · remporté ${T.winCount} fois` : ''}.</em></span><button type="button" class="button button-small button-primary" data-tournoi="lancer">Lancer</button></div>`;
 }
@@ -154,7 +154,7 @@ export function init() {
     if (t.fin) {
       return `<div class="result-list"><h4>Tournoi entre amis</h4><div class="result-row"><span>Le tournoi s’arrête au combat ${t.i + 1} sur ${t.n}. Record : ${PROFILE.tournoi.best} victoire${PROFILE.tournoi.best > 1 ? 's' : ''}.</span><b>${t.i} / ${t.n}</b></div></div>`;
     }
-    return `<div class="result-list"><h4>Tournoi entre amis</h4><div class="result-row"><span>Victoire ${t.i} sur ${t.n}. Prochain adversaire : ${esc(t.displayName)}. Vos PV restent tels quels.</span><button type="button" class="button button-small button-primary" data-tournoi="suite">Combat suivant</button></div></div>`;
+    return `<div class="result-list"><h4>Tournoi entre amis</h4><div class="result-row"><span>Victoire ${t.i} sur ${t.n}. Prochain adversaire : ${escapeHtml(t.displayName)}. Vos PV restent tels quels.</span><button type="button" class="button button-small button-primary" data-tournoi="suite">Combat suivant</button></div></div>`;
   });
 
   document.addEventListener('click', e => {

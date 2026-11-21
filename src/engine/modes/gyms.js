@@ -1,7 +1,7 @@
 import { GYMS } from '../data/game-data.js';
 import { SCEN } from '../pokemon/pokemon.js';
 import { writeLS } from '../core/utils.js';
-import { BH, BW, K, P, say, setMark, uAt } from '../combat/engine.js';
+import { BH, BW, K, P, pushMessage, setMark, unitAt } from '../combat/engine.js';
 import { LEAD } from '../progression/prestige.js';
 import { johtoGymSetup, johtoGymTick } from '../world/johto.js';
 
@@ -36,11 +36,11 @@ export function arenaSetup(S) {
         S.tiles[k].mark = { k: 'fissure', d: 99, lv: 1, by: null };
       }
     }
-    say(ev, 'Arène Roche : tout le plateau est Fissuré.');
+    pushMessage(ev, 'Arène Roche : tout le plateau est Fissuré.');
   }
   if (r === 'elec') {
     S.ar.runners.forEach(([c, rw]) => setMark(S, K(c, rw), 'charge', null));
-    say(ev, 'Arène Électrik : deux fronts de Charge se mettent en marche.');
+    pushMessage(ev, 'Arène Électrik : deux fronts de Charge se mettent en marche.');
   }
   if (r === 'poison') {
     S.ar.thr = 3;
@@ -49,13 +49,13 @@ export function arenaSetup(S) {
         S.tiles[k].fog = 9;
       }
     }
-    say(ev, 'Arène Poison : une brume toxique couvre le camp adverse.');
+    pushMessage(ev, 'Arène Poison : une brume toxique couvre le camp adverse.');
   }
   if (r === 'plante') {
     rootWall(S, ev, true);
   }
   if (r === 'psy') {
-    say(ev, 'Arène Psy : une manche sur deux, un Écran Psy protège les adversaires (+2 Garde).');
+    pushMessage(ev, 'Arène Psy : une manche sur deux, un Écran Psy protège les adversaires (+2 Garde).');
   }
   johtoGymSetup(S, r, ev); // Johto gyms (v4.15)
   return ev;
@@ -79,7 +79,7 @@ function rootWall(S, ev, quiet) {
     }
   }
   if (!quiet) {
-    say(ev, `Arène Plante : les racines se déplacent en colonne ${'ABCDEFGH'[c]}.`);
+    pushMessage(ev, `Arène Plante : les racines se déplacent en colonne ${'ABCDEFGH'[c]}.`);
   }
 }
 
@@ -99,7 +99,7 @@ export function arenaTick(S) {
           t.w = true;
         }
       }
-      say(ev, `Arène Eau : la marée submerge la rangée ${row + 1}.`);
+      pushMessage(ev, `Arène Eau : la marée submerge la rangée ${row + 1}.`);
       ev.push({ e: 'arena', r });
     }
   }
@@ -115,7 +115,7 @@ export function arenaTick(S) {
       setMark(S, K(n, rw), 'charge', null);
       return [n, rw];
     });
-    say(ev, 'Arène Électrik : les fronts de Charge avancent.');
+    pushMessage(ev, 'Arène Électrik : les fronts de Charge avancent.');
     ev.push({ e: 'arena', r });
   }
   if (r === 'plante') {
@@ -133,7 +133,7 @@ export function arenaTick(S) {
         t.fog = 0;
       }
     }
-    say(
+    pushMessage(
       ev,
       S.ar.thr < BW
         ? `Arène Poison : la brume recule jusqu’à la colonne ${'ABCDEFGH'[S.ar.thr]}.`
@@ -149,7 +149,7 @@ export function arenaTick(S) {
         } // lasts until the end of the round
       });
     }
-    say(
+    pushMessage(
       ev,
       S.jit
         ? R % 2 === 0
@@ -172,7 +172,7 @@ export function arenaTick(S) {
         t.mark = null;
       }
     });
-    say(ev, 'Arène Feu : des Coulées de lave jaillissent.');
+    pushMessage(ev, 'Arène Feu : des Coulées de lave jaillissent.');
     ev.push({ e: 'arena', r });
   }
   if (r === 'sol') {
@@ -182,7 +182,7 @@ export function arenaTick(S) {
       const [c, rw] = P(k),
         nk = K(c, (rw + 1) % BH),
         t = S.tiles[nk];
-      if (t.rock || t.w || uAt(S, nk)) {
+      if (t.rock || t.w || unitAt(S, nk)) {
         return;
       }
       S.tiles[k].rock = false;
@@ -191,7 +191,7 @@ export function arenaTick(S) {
       S.tiles[k].mark = { k: 'fissure', d: 2, lv: 1, by: null };
       moved++;
     });
-    say(
+    pushMessage(
       ev,
       moved
         ? `Arène Sol : un séisme fait glisser ${moved} rocher${moved > 1 ? 's' : ''}.`

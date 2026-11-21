@@ -2,8 +2,8 @@ import { SCEN } from '../pokemon/pokemon.js';
 import { $, toast } from '../core/utils.js';
 import { bdClass, tokCl } from '../../screens/combat/board/boardStore.js';
 import { HOOKS } from '../core/hooks.js';
-import { BH, K, P, byUid, uAt } from './engine.js';
-import { B, L, log, renderAll, ui } from './ui.js';
+import { BH, K, P, byUid, unitAt } from './engine.js';
+import { B, L, addLog, renderAll, ui } from './ui.js';
 import { PREF, savePref } from '../ui/preferences.js';
 import { sfx } from '../audio/sound-effects.js';
 import { AUTO } from '../progression/prestige.js';
@@ -48,7 +48,7 @@ function deployZone(S) {
       if (!t || t.rock || t.lava > 0) {
         continue;
       }
-      const u = uAt(S, k);
+      const u = unitAt(S, k);
       if (u && u.side !== 'a') {
         continue;
       }
@@ -63,7 +63,7 @@ function deployTap(k) {
     return;
   }
   const z = deployZone(B),
-    u = uAt(B, k),
+    u = unitAt(B, k),
     sel = ui.deploySel && byUid(B, ui.deploySel);
   if (u && u.side === 'a' && (!sel || sel === u)) {
     ui.deploySel = sel === u ? null : u.uid;
@@ -86,7 +86,7 @@ function endDeployment() {
   }
   B.deployPhase = 0;
   ui.deploySel = null;
-  log('Déploiement terminé : à vous de jouer.', 'sys');
+  addLog('Déploiement terminé : à vous de jouer.', 'sys');
   sfx('ui');
   renderAll();
 }

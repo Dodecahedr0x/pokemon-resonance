@@ -13,13 +13,13 @@ import {
   heal,
   landed,
   mvType,
-  nbr,
+  neighbors,
   reach,
   resolveMove,
-  say,
+  pushMessage,
   toCube,
-  uAt,
-  uk,
+  unitAt,
+  unitKey,
 } from './engine.js';
 import { ROLE_PROVIDERS } from './tactical-engine.js';
 
@@ -37,7 +37,7 @@ export function applyObst(S) {
   if (O) {
     (O.pil || []).forEach(k => {
       const t = S.tiles[k];
-      if (t && !uAt(S, k)) {
+      if (t && !unitAt(S, k)) {
         t.rock = true;
         t.pil = true;
         t.w = false;
@@ -102,7 +102,7 @@ export function coverOf(S, a, b) {
     return null;
   }
   const d = hdist(a, b);
-  for (const q of nbr(b)) {
+  for (const q of neighbors(b)) {
     const k = K(q[0], q[1]),
       t = S.tiles[k];
     if (t && t.rock && hdist(a, q) === d - 1) {
@@ -121,7 +121,7 @@ export function ricoTgt(S, u, k) {
   const c = S.units
     .filter(o => !o.ko && o.side !== u.side && hdist(o.pos, R) <= 2 && !losBlocked(S, R, o.pos))
     .sort((a, b) => hdist(a.pos, R) - hdist(b.pos, R) || a.hp - b.hp || (a.uid < b.uid ? -1 : 1));
-  return c.length ? uk(c[0]) : null;
+  return c.length ? unitKey(c[0]) : null;
 }
 
 /* --- damage: roles, synergies, cover, ricochet, sand --- */
@@ -157,16 +157,16 @@ export function resolve(S, u, m, k) {
   const typ = mvType(S, u, m),
     t0 = S.tiles[k],
     rico = !!(t0 && t0.rock && !t0.pil && m.sh === 'one'),
-    from = uk(u);
+    from = unitKey(u);
   let gd = null;
   if (m.sh === 'one' && (m.p || m.fix) && !rico) {
-    const v = uAt(S, k);
+    const v = unitAt(S, k);
     if (v && v.side !== u.side && !(v.prot > 0)) {
       const g = guardOf(S, v);
       if (g) {
         g.gdu = 1;
         gd = { g, v };
-        k = uk(g);
+        k = unitKey(g);
         noteAdd(`Gardiennage : ${g.n} encaisse à la place de ${v.n} (−25 %)`);
       }
     }
@@ -208,7 +208,7 @@ export function resolve(S, u, m, k) {
       }
     });
     if (b) {
-      say(ev, `Les hautes herbes s’embrasent${b > 1 ? ' (' + b + ' cases)' : ''} !`);
+      pushMessage(ev, `Les hautes herbes s’embrasent${b > 1 ? ' (' + b + ' cases)' : ''} !`);
     }
   }
   const big =
@@ -247,7 +247,7 @@ export function foeRetreat(S, e, ev) {
   }
   const R = reach(S, e),
     sc = k => Math.min(...al.map(a => hdist(a.pos, P(k)))) - (S.tiles[k].lava > 0 ? 5 : 0);
-  let best = uk(e),
+  let best = unitKey(e),
     bs = sc(best);
   for (const k in R) {
     const s = sc(k);
@@ -256,10 +256,10 @@ export function foeRetreat(S, e, ev) {
       best = k;
     }
   }
-  if (best !== uk(e)) {
+  if (best !== unitKey(e)) {
     e.pos = P(best);
     ev.push({ e: 'mv', u: e.uid });
-    say(ev, `${e.n} se replie après son attaque.`);
+    pushMessage(ev, `${e.n} se replie après son attaque.`);
     landed(S, e, ev);
   }
 }
@@ -274,14 +274,14 @@ export function roundSupport(S) {
       }
       const m = S.units.filter(o => o !== u && !o.ko && o.side === u.side && hdist(o.pos, u.pos) === 1 && o.hp < o.mhp);
       if (m.length) {
-        say(pre, `Soutien : ${u.n} soigne ${m.map(o => o.n).join(', ')}.`);
+        pushMessage(pre, `Soutien : ${u.n} soigne ${m.map(o => o.n).join(', ')}.`);
         m.forEach(o => heal(S, o, 3, pre));
       }
     });
     if (S.syn && S.syn.includes('toxines')) {
       S.units.forEach(e => {
         if (!e.ko && e.side === 'e' && (e.root > 0 || e.web > 0 || e.badge === 'SOM')) {
-          say(pre, `Toxines : ${e.n} s’affaiblit.`);
+          pushMessage(pre, `Toxines : ${e.n} s’affaiblit.`);
           damage(S, e, 3, pre, { ind: true });
         }
       });

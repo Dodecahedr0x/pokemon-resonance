@@ -2,9 +2,9 @@ import { MT } from './turn-core.js';
 import { MV, TAL } from '../data/moves.js';
 import { SCEN } from '../pokemon/pokemon.js';
 import { toast } from '../core/utils.js';
-import { byUid, execFoe, flies, hdist, markAt, uk } from './engine.js';
+import { byUid, execFoe, flies, hdist, markAt, unitKey } from './engine.js';
 import { ACT, STATUSED, coverOf, ignObst, noteAdd, roleOf } from './synergies-obstacles.js';
-import { B, autoSel, clearAim, endOfRound, finish, log, placeEnemy, renderAll, scSel, ui } from './ui.js';
+import { B, autoSel, clearAim, endOfRound, finish, addLog, placeEnemy, renderAll, scSel, ui } from './ui.js';
 import { PREF } from '../ui/preferences.js';
 import { playEv } from './move-effects.js';
 import { coopPlayer } from '../modes/coop.js';
@@ -179,7 +179,7 @@ export function unrollSpeed() {
       ui.act = null;
       autoSel();
       renderAll();
-      log(`À ${u.n} de jouer.`, 'sys');
+      addLog(`À ${u.n} de jouer.`, 'sys');
       return;
     }
     ui.act = u.uid;
@@ -241,20 +241,20 @@ export const SPEED_PROVIDERS = [
   {
     id: 'boue',
     provide: (c, { S, u }) =>
-      S.tiles[uk(u)].mud > 0 &&
+      S.tiles[unitKey(u)].mud > 0 &&
       solid(u) &&
       !u.t.some(t => t === 'Sol' || t === 'Eau') && { mul: 0.5, labelText: 'Boue' },
   },
   {
     id: 'givre',
     provide: (c, { S, u }) =>
-      markAt(S, uk(u)) === 'givre' && solid(u) && { mul: u.t.includes('Glace') ? 1.25 : 0.75, labelText: 'Givre' },
+      markAt(S, unitKey(u)) === 'givre' && solid(u) && { mul: u.t.includes('Glace') ? 1.25 : 0.75, labelText: 'Givre' },
   },
   {
     id: 'glissade',
     provide: (c, { S, u }) =>
       u.ability === 'glissade' &&
-      ((S.wx && S.wx.k === 'pluie') || markAt(S, uk(u)) === 'trempe') && { mul: 2, labelText: 'Glissade' },
+      ((S.wx && S.wx.k === 'pluie') || markAt(S, unitKey(u)) === 'trempe') && { mul: 2, labelText: 'Glissade' },
   },
   {
     id: 'chlorophylle',
@@ -355,7 +355,7 @@ export const ROLE_PROVIDERS = [
       if (s.includes('forge') && (typ === 'Feu' || typ === 'Roche')) {
         out.push({ add: 2, labelText: 'Forge' });
       }
-      if (s.includes('tempete') && typ === 'Électrik' && markAt(S, uk(t)) === 'trempe') {
+      if (s.includes('tempete') && typ === 'Électrik' && markAt(S, unitKey(t)) === 'trempe') {
         out.push({ mul: 1.25, labelText: 'Tempête' });
       }
       if (s.includes('dojo') && hdist(u.pos, t.pos) === 1) {
@@ -381,7 +381,7 @@ export const ROLE_PROVIDERS = [
   {
     id: 'sable',
     provide: (c, { S, t }) => {
-      const tt = S.tiles[uk(t)];
+      const tt = S.tiles[unitKey(t)];
       return (
         tt &&
         tt.sand &&

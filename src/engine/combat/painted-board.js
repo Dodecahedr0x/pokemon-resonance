@@ -3,7 +3,7 @@
 import { SCEN } from '../pokemon/pokemon.js';
 import { $, RM, toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
-import { BH, BW, K, byUid, uk } from './engine.js';
+import { BH, BW, K, byUid, unitKey } from './engine.js';
 import {
   B,
   BG,
@@ -333,7 +333,7 @@ const skip = (T, x, y, s) => {
 
 /* shockwave lying on the ground under the hit Pokémon, stronger dust on a KO */
 const footPos = u => {
-  const [x, y] = HC(uk(u)),
+  const [x, y] = HC(unitKey(u)),
     s = Math.max(0.6, Math.min(1.4, tiltS(x, y)));
   return [FXS.ox + x * FXS.s, FXS.oy + (y + 9 * s) * FXS.s, s * FXS.s];
 };
@@ -651,7 +651,7 @@ export function init() {
   HOOKS.token.push(u => {
     const T = TILT.on && L.u[u.uid];
     if (T) {
-      const k = uk(u),
+      const k = unitKey(u),
         [x, y] = HC(k),
         s = Math.max(0.6, Math.min(1.4, tiltS(x, y)));
       T.tr = `translate(${x}px,${y}px) scale(${s.toFixed(3)})`; // token: Units.jsx (sliding: CSS transition)

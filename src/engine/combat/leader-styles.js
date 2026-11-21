@@ -1,7 +1,7 @@
 import { SCEN } from '../pokemon/pokemon.js';
 import { PROFILE } from '../state/game-state.js';
 import { ARENAS } from '../modes/gyms.js';
-import { EMAX, affected, dmgOf, hasNx, markAt, mvType, uAt, uk } from './engine.js';
+import { EMAX, affected, dmgOf, hasNx, markAt, mvType, unitAt, unitKey } from './engine.js';
 
 /* Leader play styles: each gym leader, the rival and legendary bosses steer the AI their own way (added in v4.4). */
 
@@ -32,7 +32,7 @@ export function aiStyleBonus(S, e, m, k, sim) {
     return 0;
   }
   const hit = affected(S, sim, m, k)
-    .map(x => uAt(S, x))
+    .map(x => unitAt(S, x))
     .filter(v => v && v.side === 'a' && v !== e);
   if (!hit.length) {
     return 0;
@@ -54,7 +54,7 @@ export function aiStyleBonus(S, e, m, k, sim) {
     }
   } else if (sty === 'chaine') {
     hit.forEach(v => {
-      const mk = markAt(S, uk(v));
+      const mk = markAt(S, unitKey(v));
       if (mk === 'trempe' || mk === 'charge') {
         b += m.t === 'Électrik' ? 9 : 3;
       }

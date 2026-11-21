@@ -1,7 +1,7 @@
 import { useShell } from './shellStore.js';
 import { PROFILE, isCamp } from '../engine/state/game-state.js';
 import { typeGlyphPath, typeColor } from '../engine/core/utils.js';
-import { fmt } from '../engine/state/economy.js';
+import { formatNumber } from '../engine/state/economy.js';
 import { tLevel } from '../engine/progression/trainer-stats.js';
 import { displayedTitle } from '../engine/progression/achievements.js';
 import { TRAINER_AVATAR } from '../engine/world/rare-encounters.js';
@@ -87,7 +87,7 @@ export function TopTrainer() {
         <span className="coin-icon" aria-hidden="true">
           ₽
         </span>
-        <b id="v4Money">{on ? fmt(PROFILE.money || 0) : '0'}</b>
+        <b id="v4Money">{on ? formatNumber(PROFILE.money || 0) : '0'}</b>
       </a>
       <a className="topbar-wallet is-gems" data-t="sac" href="#sac" aria-label="Éclats de Résonance">
         <span className="gem-icon" aria-hidden="true">
@@ -95,7 +95,7 @@ export function TopTrainer() {
             <use href="#i-gem" />
           </svg>
         </span>
-        <b id="v4Gems">{on ? fmt(PROFILE.gems || 0) : '0'}</b>
+        <b id="v4Gems">{on ? formatNumber(PROFILE.gems || 0) : '0'}</b>
       </a>
       <a className="topbar-settings" data-t="params" href="#params" aria-label="Paramètres">
         <svg>

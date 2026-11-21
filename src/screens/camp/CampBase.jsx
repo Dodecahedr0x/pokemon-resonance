@@ -2,7 +2,7 @@ import { BY } from '../../engine/pokemon/pokemon.js';
 import { PROFILE } from '../../engine/state/game-state.js';
 import { medal } from '../../engine/core/utils.js';
 import { ITM } from '../../engine/assets/item-icons.js';
-import { fmt, today } from '../../engine/state/economy.js';
+import { formatNumber, today } from '../../engine/state/economy.js';
 import { BUILDINGS, buildingBlocked, level } from '../../engine/progression/base-camp.js';
 import { DESTINATIONS, placesExp } from '../../engine/progression/expeditions.js';
 import { daycarePair, inheritableMoves, daycareParents } from '../../engine/progression/daycare.js';
@@ -38,7 +38,7 @@ function Building({ k }) {
           variant="primary"
           data-camp-b={k}
           disabled={!(PROFILE.money >= c[0] && PROFILE.gems >= c[1])}
-        >{`${n ? 'Améliorer' : 'Construire'} · ${fmt(c[0])} ₽${c[1] ? ` + ${c[1]} Éclats` : ''}`}</Button>
+        >{`${n ? 'Améliorer' : 'Construire'} · ${formatNumber(c[0])} ₽${c[1] ? ` + ${c[1]} Éclats` : ''}`}</Button>
       )}
     </article>
   );
@@ -128,7 +128,7 @@ function Plot({ x, i }) {
       <div className="camp-plot is-choosing">
         {Object.entries(POTAGER).map(([g, G]) => (
           <Button key={g} size="small" data-pot-g={g} disabled={!(PROFILE.money >= G.p)}>
-            {`${G.n} · ${fmt(G.p)} ₽`}
+            {`${G.n} · ${formatNumber(G.p)} ₽`}
             <em>{`${G.duration} combats : ${G.d}`}</em>
           </Button>
         ))}

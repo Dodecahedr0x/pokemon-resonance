@@ -1,6 +1,6 @@
 import { ITEMS2, PROFILE } from '../../engine/state/game-state.js';
 import { ITM } from '../../engine/assets/item-icons.js';
-import { SHOP, bagN, fmt } from '../../engine/state/economy.js';
+import { SHOP, bagN, formatNumber } from '../../engine/state/economy.js';
 import { costOf0 } from '../../engine/progression/base-camp.js';
 import { heldItemCost } from '../../engine/combat/resonance.js';
 import { todaysPeddler } from '../../engine/world/route-events.js';
@@ -43,7 +43,7 @@ export default function Peddler() {
             data-wanderer={k}
             disabled={left <= 0 || PROFILE.money < px || bagN(k) >= 99}
           >
-            {fmt(px)} ₽
+            {formatNumber(px)} ₽
           </button>
         </div>
       </article>
@@ -72,7 +72,7 @@ export default function Peddler() {
             data-wanderer={'h:' + A.th}
             disabled={!!takenSet || PROFILE.money < px}
           >
-            {fmt(px)} ₽
+            {formatNumber(px)} ₽
           </button>
         </div>
       </article>

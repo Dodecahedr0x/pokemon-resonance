@@ -4,10 +4,10 @@ import { $, RM, toast } from '../core/utils.js';
 import { hook } from '../core/hooks.js';
 import { hideEnc, showEnc } from '../../screens/overlays/shellOverlays.js';
 import { setRoute } from '../../screens/home/homeStore.js';
-import { go } from '../core/navigation.js';
+import { goTo } from '../core/navigation.js';
 import { nextOf, openSheet, squad, toggle } from '../team/team.js';
 import { wildScen } from '../combat/items-bonds-ai.js';
-import { B, __set_scSel, launch, log } from '../combat/ui.js';
+import { B, __set_scSel, launch, addLog } from '../combat/ui.js';
 import { renderPrep } from '../combat/battle-prep.js';
 import { SHINY_RATE, __set_wildShiny, wildShiny } from '../pokemon/shiny.js';
 import { multChroma, seasonWeight } from './seasons.js';
@@ -186,7 +186,7 @@ function onEncounterClick(e) {
   if (a === 'fight' && wildId) {
     wildScen(wildId, TOD, wildShiny, wildDominant);
     __set_scSel('sauvage');
-    go('combat');
+    goTo('combat');
     if (!squad.length) {
       renderPrep();
       toast('Recrutez au moins un Pokémon avant de combattre.');
@@ -194,14 +194,14 @@ function onEncounterClick(e) {
     }
     launch();
     if (B && !B.noCatch) {
-      log(
+      addLog(
         `Capture : touchez ${BY[wildId].n} pour voir les conditions (PV bas, immobilisé, un allié au contact, 2 Voix, une Ball).`,
         'sys'
       );
     }
   }
   if (a === 'dex' && wildId) {
-    go('pokedex');
+    goTo('pokedex');
     openSheet(wildId);
   }
   if (a === 'run') {

@@ -1,8 +1,8 @@
 import { BY, familyOf } from '../pokemon/pokemon.js';
 import { DIFFS, ITEMS2, PROFILE } from '../state/game-state.js';
-import { fnv } from '../core/utils.js';
+import { fnvHash } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
-import { EMAX, say } from '../combat/engine.js';
+import { EMAX, pushMessage } from '../combat/engine.js';
 import { queueSave } from '../state/saves.js';
 import { CHARACTERS } from './characters.js';
 
@@ -74,10 +74,10 @@ export function individualsComfortClean(p) {
 /** A family's three possible abilities: those of its types, from the base form to the last evolution. */
 function familyTalents(b) {
   const types = new Set(familyOf(b).flatMap(m => m.t)),
-    h = fnv(b),
+    h = fnvHash(b),
     L = Object.keys(ABILITY_DEFS)
       .filter(k => ABILITY_DEFS[k][2].some(t => types.has(t)))
-      .sort((x, y) => ((fnv(x + b) ^ h) >>> 0) - ((fnv(y + b) ^ h) >>> 0));
+      .sort((x, y) => ((fnvHash(x + b) ^ h) >>> 0) - ((fnvHash(y + b) ^ h) >>> 0));
   ['robuste', 'elan', 'focus'].forEach(k => L.length < 3 && !L.includes(k) && L.push(k));
   return L.slice(0, 3);
 }
@@ -120,7 +120,7 @@ export function individualOf(id) {
     // families already present keep their pre-v4.32 character
     PROFILE.box.forEach(x => {
       if (!I[x] && BY[x]) {
-        I[x] = { temperament: characterHash(x), ability: familyTalents(x)[fnv(x) % 3] };
+        I[x] = { temperament: characterHash(x), ability: familyTalents(x)[fnvHash(x) % 3] };
       }
     });
     PROFILE.traitsInit = 1;
@@ -235,7 +235,7 @@ export function init() {
       const g = Math.max(1, Math.round(u.mhp * 0.08));
       u.hp = Math.min(u.mhp, u.hp + g);
       if (Array.isArray(ev)) {
-        say(ev, `Régénération : ${u.n} récupère ${g} PV.`);
+        pushMessage(ev, `Régénération : ${u.n} récupère ${g} PV.`);
       }
     });
   });

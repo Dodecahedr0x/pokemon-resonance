@@ -1,5 +1,5 @@
 import { $, RM } from '../core/utils.js';
-import { go } from '../core/navigation.js';
+import { goTo } from '../core/navigation.js';
 import { encounter } from './home-route.js';
 import { goFight } from '../combat/ui.js';
 import { renderWallet } from '../ui/wallet.js';
@@ -29,7 +29,7 @@ export function init() {
     }
     const w = e.target.closest('[data-v4wild]');
     if (w) {
-      go('carte');
+      goTo('carte');
       const r = $('#route');
       if (r && r.scrollIntoView) {
         r.scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'center' });

@@ -2,9 +2,23 @@ import { MV } from '../data/moves.js';
 import { SCEN } from '../pokemon/pokemon.js';
 import { toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
-import { EMAX, P, byUid, damage, endStep, hdist, heal, inReach, nbrK, say, setMark, uAt, uk } from './engine.js';
+import {
+  EMAX,
+  P,
+  byUid,
+  damage,
+  endStep,
+  hdist,
+  heal,
+  inReach,
+  nbrK,
+  pushMessage,
+  setMark,
+  unitAt,
+  unitKey,
+} from './engine.js';
 import { resolve } from './synergies-obstacles.js';
-import { B, autoSel, clearAim, log, renderAll, ui } from './ui.js';
+import { B, autoSel, clearAim, addLog, renderAll, ui } from './ui.js';
 import { DAMAGE_PROVIDERS } from './tactical-engine.js';
 import { ACHIEVEMENTS } from '../progression/achievements.js';
 import { hasXp, bossScene } from './resonance.js';
@@ -41,7 +55,7 @@ function playerVigil(S, u) {
   const ev = [];
   u.vigilance = 1;
   u.acted = true;
-  say(ev, `${u.n} se met en vigilance : il frappera le premier adversaire qui arrive à sa portée.`);
+  pushMessage(ev, `${u.n} se met en vigilance : il frappera le premier adversaire qui arrive à sa portée.`);
   return ev;
 }
 
@@ -50,7 +64,7 @@ export function vigilanceStrike(S, e, ev) {
   if (!e || e.ko || S.over || e.side !== 'e') {
     return;
   }
-  const k = uk(e);
+  const k = unitKey(e);
   for (const u of S.units) {
     if (u.side !== 'a' || u.ko || !u.vigilance || u.sn) {
       continue;
@@ -61,7 +75,7 @@ export function vigilanceStrike(S, e, ev) {
     }
     u.vigilance = 0;
     S.stats.vigilance = (S.stats.vigilance || 0) + 1;
-    say(ev, `Vigilance : ${u.n} intercepte ${e.n} avec ${m.n} !`);
+    pushMessage(ev, `Vigilance : ${u.n} intercepte ${e.n} avec ${m.n} !`);
     ev.push({ e: 'vigil-strike', u: u.uid, t: e.uid });
     resolve(S, u, m, k).forEach(x => ev.push(x));
     if (e.ko || S.over) {
@@ -104,7 +118,7 @@ function checkBossPhase(S, ev) {
   bossEnrage(S, ev);
   changeBossPhase(S, ev);
   if (b && hasBossPhases(S) && (b.bossPhase || 1) > previous && !b.ko) {
-    say(ev, bossLine(b, b.bossPhase === 3 ? 1 : 0));
+    pushMessage(ev, bossLine(b, b.bossPhase === 3 ? 1 : 0));
   } // boss line (v4.60)
 }
 
@@ -127,9 +141,9 @@ function changeBossPhase(S, ev) {
     if (t) {
       S.wx = { k: WEATHER_BY_TYPE[t], n: 4 };
     } else if (mk) {
-      nbrK(uk(b)).forEach(x => S.tiles[x] && !S.tiles[x].rock && setMark(S, x, mk, b.uid));
+      nbrK(unitKey(b)).forEach(x => S.tiles[x] && !S.tiles[x].rock && setMark(S, x, mk, b.uid));
     }
-    say(
+    pushMessage(
       ev,
       `${b.n} entre en phase 2 : la rage ! Renforcé, blindé${t ? ', et la météo change' : mk ? ', et le terrain se transforme' : ''}.`
     );
@@ -141,7 +155,7 @@ function changeBossPhase(S, ev) {
     const ko = S.units.filter(x => x.side === 'e' && x.ko && !x.seg && !x.colossus && !x.caught && x !== b)[0];
     let x = null;
     if (ko) {
-      x = [uk(b), ...nbrK(uk(b))].find(y => S.tiles[y] && !S.tiles[y].rock && !uAt(S, y));
+      x = [unitKey(b), ...nbrK(unitKey(b))].find(y => S.tiles[y] && !S.tiles[y].rock && !unitAt(S, y));
     }
     if (ko && x) {
       Object.assign(ko, {
@@ -154,10 +168,10 @@ function changeBossPhase(S, ev) {
         intent: null,
       });
       ev.push({ e: 'mv', u: ko.uid }, { e: 'heal', u: ko.uid, v: ko.hp });
-      say(ev, `${b.n} entre en phase 3 : dernier souffle ! ${ko.n} revient au combat.`);
+      pushMessage(ev, `${b.n} entre en phase 3 : dernier souffle ! ${ko.n} revient au combat.`);
     } else {
       heal(S, b, Math.max(1, Math.round(b.mhp * 0.15)), ev);
-      say(ev, `${b.n} entre en phase 3 : dernier souffle ! Il reprend des forces.`);
+      pushMessage(ev, `${b.n} entre en phase 3 : dernier souffle ! Il reprend des forces.`);
     }
     S.units.forEach(e2 => {
       if (e2.side === 'e' && !e2.ko && hasXp(e2)) {
@@ -200,7 +214,7 @@ function runDangerTurn(S, ev) {
     const T = DANGERS[Z.t];
     let n = 0;
     Z.k.forEach(k => {
-      const u = uAt(S, k);
+      const u = unitAt(S, k);
       if (u && !u.ko && !(Z.t === 'foudre' && u.t.includes('Sol'))) {
         damage(S, u, T.d, ev, { ind: true });
         n++;
@@ -209,7 +223,7 @@ function runDangerTurn(S, ev) {
         setMark(S, k, T.mk, null);
       }
     });
-    say(ev, `${T.n} ! ${n ? `${n} Pokémon touché${n > 1 ? 's' : ''}.` : 'Personne n’était dans la zone.'}`);
+    pushMessage(ev, `${T.n} ! ${n ? `${n} Pokémon touché${n > 1 ? 's' : ''}.` : 'Personne n’était dans la zone.'}`);
     ev.push({ e: 'arena', r: 'danger' });
     S.dangerZone = null;
     endStep(S, ev);
@@ -220,14 +234,14 @@ function runDangerTurn(S, ev) {
     if (!al.length) {
       return;
     }
-    const c = uk(al[Math.floor(Math.random() * al.length)]),
+    const c = unitKey(al[Math.floor(Math.random() * al.length)]),
       v = nbrK(c).filter(k => S.tiles[k] && !S.tiles[k].rock),
       k = [c];
     while (k.length < 3 && v.length) {
       k.push(v.splice(Math.floor(Math.random() * v.length), 1)[0]);
     }
     S.dangerZone = { k, t: pickTypeDanger(S), r: S.round + 1 };
-    say(
+    pushMessage(
       ev,
       `Danger : ${DANGERS[S.dangerZone.t].n} annoncé sur ${k.length} cases pour la fin de la prochaine manche. Sortez de la zone rouge !`
     );
@@ -315,7 +329,7 @@ export function init() {
     }
     ui.undo = null;
     clearAim();
-    log(
+    addLog(
       ev
         .filter(x => x.e === 'msg')
         .map(x => x.s)

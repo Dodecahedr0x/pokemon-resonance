@@ -5,8 +5,8 @@ import { MV } from '../data/moves.js';
 import { arenaNext, veiled } from '../modes/gyms.js';
 import { rxCat, toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
-import { P, affected, byUid, markAt, reach, targets, uAt } from './engine.js';
-import { B, STC, clearAim, hpc, renderAll, ui } from './ui.js';
+import { P, affected, byUid, markAt, reach, targets, unitAt } from './engine.js';
+import { B, STC, clearAim, hpClass, renderAll, ui } from './ui.js';
 import { PREF, savePref } from '../ui/preferences.js';
 import { tileTip } from './battle-panel.js';
 import { renderParams } from '../ui/settings.js';
@@ -184,7 +184,7 @@ function unitInfo(v) {
   return {
     e: v.side === 'e',
     n: v.n,
-    hpc: hpc(v),
+    hpc: hpClass(v),
     pv: hp,
     ko: !!v.ko,
     hp: v.hp,
@@ -255,7 +255,7 @@ function tileSheet() {
     return;
   }
   const t = B.tiles[k],
-    v = uAt(B, k),
+    v = unitAt(B, k),
     tip = tileTip(k),
     seg = tip === 'Case libre' ? ['Rien de particulier : déplacement normal, pas de couverture.'] : tip.split(' · ');
   let rx = [];

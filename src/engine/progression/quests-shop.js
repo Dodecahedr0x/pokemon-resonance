@@ -67,7 +67,7 @@ export function renderBag() {
   refreshBag(shop);
 }
 
-export function buy(k) {
+export function buyShopItem(k) {
   const it = SHOP[k],
     q = V4.qty[k] || 1;
   if (!it) {
@@ -201,7 +201,7 @@ export function init() {
     }
     const b = e.target.closest('[data-buy]');
     if (b) {
-      buy(b.dataset.buy);
+      buyShopItem(b.dataset.buy);
     }
   });
 }

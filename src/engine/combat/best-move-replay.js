@@ -3,7 +3,7 @@
 import { $, RM, wait } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { byUid } from './engine.js';
-import { B, __set_B, buildBoard, log, renderAll, ui } from './ui.js';
+import { B, __set_B, buildBoard, addLog, renderAll, ui } from './ui.js';
 import { playEv } from './move-effects.js';
 import { AUTO } from '../progression/prestige.js';
 
@@ -80,7 +80,7 @@ async function rebroadcast() {
     ui.busy = true;
     buildBoard();
     renderAll();
-    log(`Rediffusion : ${R.best.label}`, 'arn');
+    addLog(`Rediffusion : ${R.best.label}`, 'arn');
     await wait(900 * isSlow);
     __set_B(Object.assign(JSON.parse(R.best.apres), { over: null }));
     renderAll();

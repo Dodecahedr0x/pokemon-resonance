@@ -19,7 +19,7 @@ import {
   hasNx,
   mvType,
   targets,
-  uAt,
+  unitAt,
 } from '../../../engine/combat/engine.js';
 import { roleOf } from '../../../engine/combat/synergies-obstacles.js';
 import { B, enPips, segHp, ui } from '../../../engine/combat/ui.js';
@@ -162,7 +162,7 @@ function OpponentTurn() {
         {foes.map(u => {
           const st = u === cur ? 'acting' : u.done ? 'done' : '';
           const m = u.intent && !veil ? MV[u.intent.mv] : null,
-            v = m && uAt(B, u.intent.k);
+            v = m && unitAt(B, u.intent.k);
           return (
             <li key={u.uid} className={st && 'is-' + st}>
               <Html html={medal(u.t, 'is-small')} />
@@ -261,7 +261,7 @@ function Intention({ e }) {
   }
   if (e.intent) {
     const m = MV[e.intent.mv],
-      v = uAt(B, e.intent.k);
+      v = unitAt(B, e.intent.k);
     const est = v ? dmgOf(B, e, m, v, mvType(B, e, m), 1) : 0;
     return (
       <p className="battle-intent">

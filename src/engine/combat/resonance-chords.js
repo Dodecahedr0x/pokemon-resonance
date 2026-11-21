@@ -9,11 +9,11 @@ import {
   markAt,
   mvType,
   nbrK,
-  say,
+  pushMessage,
   setMark,
   stun,
-  uAt,
-  uk,
+  unitAt,
+  unitKey,
 } from './engine.js';
 
 /* =====================================================================
@@ -46,7 +46,7 @@ export function chordAfter(S, u, m, ev) {
   S.acc.fait = A.id;
   S.stats.accords = (S.stats.accords || 0) + 1;
   ev.push({ e: 'arena' });
-  say(ev, `Accord de Résonance · ${A.n} ! ${A.d}`);
+  pushMessage(ev, `Accord de Résonance · ${A.n} ! ${A.d}`);
   playChord(S, A.id, u, ev);
   ev.push({ e: 'terrain' });
   endStep(S, ev);
@@ -58,7 +58,7 @@ function playChord(S, id, u, ev) {
     onGround = o => !flies(o);
   if (id === 'orage') {
     foes.forEach(o => {
-      if (markAt(S, uk(o)) !== 'trempe') {
+      if (markAt(S, unitKey(o)) !== 'trempe') {
         return;
       }
       damage(S, o, 6, ev, { ind: true });
@@ -69,14 +69,14 @@ function playChord(S, id, u, ev) {
   } else if (id === 'forge') {
     mates.forEach(o => (o.guard = 2));
     foes.forEach(o => {
-      if ([uk(o), ...nbrK(uk(o))].some(k => S.tiles[k].mark && S.tiles[k].mark.k === 'brulant')) {
+      if ([unitKey(o), ...nbrK(unitKey(o))].some(k => S.tiles[k].mark && S.tiles[k].mark.k === 'brulant')) {
         damage(S, o, 5, ev, { ind: true });
       }
     });
   } else if (id === 'seisme') {
     foes.filter(onGround).forEach(o => {
       damage(S, o, 6, ev, { ind: true });
-      setMark(S, uk(o), 'fissure', u.uid);
+      setMark(S, unitKey(o), 'fissure', u.uid);
     });
   } else if (id === 'floraison') {
     mates.forEach(o => {
@@ -94,7 +94,7 @@ function playChord(S, id, u, ev) {
       if (t.mark && t.mark.k === 'trempe') {
         t.mark = { k: 'givre', d: mDur(S, 'givre'), lv: 1, by: u.uid };
       }
-      const o = uAt(S, k);
+      const o = unitAt(S, k);
       if (o && o.side === 'e' && !o.t.includes('Glace')) {
         stun(S, o, 'GEL', ev, true);
       }
@@ -109,7 +109,7 @@ function playChord(S, id, u, ev) {
         if (S.jit) {
           o.isLost = 1;
         }
-        say(
+        pushMessage(
           ev,
           S.jit
             ? `${o.n} se perd dans l’ombre : il ne jouera pas cette manche.`
@@ -124,7 +124,7 @@ function playChord(S, id, u, ev) {
       }
       t.grass = false;
       t.mark = { k: 'brulant', d: mDur(S, 'brulant'), lv: 1, by: u.uid };
-      const o = uAt(S, k);
+      const o = unitAt(S, k);
       if (o && o.side === 'e' && onGround(o) && !o.t.includes('Feu')) {
         o.burn = Math.max(o.burn, 2);
       }

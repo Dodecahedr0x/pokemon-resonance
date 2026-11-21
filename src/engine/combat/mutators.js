@@ -3,7 +3,7 @@
 import { SCEN } from '../pokemon/pokemon.js';
 import { typeColor } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
-import { P, hasNx, uAt } from './engine.js';
+import { P, hasNx, unitAt } from './engine.js';
 import { scSel } from './ui.js';
 import { PREF } from '../ui/preferences.js';
 import { ROLE_PROVIDERS } from './tactical-engine.js';
@@ -122,7 +122,7 @@ function applyMutator(S, id) {
     const freeOnes = Object.keys(S.tiles).filter(k => {
       const t = S.tiles[k],
         c = P(k)[0];
-      return c >= 2 && c <= 5 && !t.rock && !t.w && !uAt(S, k) && !t.trap;
+      return c >= 2 && c <= 5 && !t.rock && !t.w && !unitAt(S, k) && !t.trap;
     });
     const kinds = ['picots', 'picots', 'roc', 'toile'];
     for (let i = 0; i < 6 && freeOnes.length; i++) {

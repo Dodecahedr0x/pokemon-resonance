@@ -7,7 +7,7 @@ import { ARENAS } from '../modes/gyms.js';
 import { $, RM, typeColor } from '../core/utils.js';
 import { hook } from '../core/hooks.js';
 import { cur } from '../core/navigation.js';
-import { byUid, uk } from '../combat/engine.js';
+import { byUid, unitKey } from '../combat/engine.js';
 import { ELITE } from '../combat/items-bonds-ai.js';
 import { B, __set_scSel, backToPrep, clearAim, floatAt, renderAll, ui } from '../combat/ui.js';
 import { PREF } from '../ui/preferences.js';
@@ -212,7 +212,7 @@ export function impactWords(ev) {
         }
         const u = byUid(B, id);
         if (u) {
-          floatAt(uk(u), t, c);
+          floatAt(unitKey(u), t, c);
         }
       },
       (ev.some(x => x.e === 'fx') && fxOn() ? 320 : 60) + j * 120

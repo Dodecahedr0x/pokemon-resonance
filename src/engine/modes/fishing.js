@@ -5,7 +5,7 @@ import { RECRUIT } from '../pokemon/evolution.js';
 import { PROFILE } from '../state/game-state.js';
 import { paintOverlay } from '../../screens/overlays/dialogsStore.js';
 import { $, toast } from '../core/utils.js';
-import { go } from '../core/navigation.js';
+import { goTo } from '../core/navigation.js';
 import { TOD, __set_wildId } from '../world/home-route.js';
 import { squad, toggle } from '../team/team.js';
 import { wildScen } from '../combat/items-bonds-ai.js';
@@ -121,7 +121,7 @@ function startFishingBattle() {
   D.foes = D.foes.map(f => [f[0], f[0] === P2.id ? [6, 2] : [7, 4], f[2]]);
   FISHING = null;
   __set_scSel('sauvage');
-  go('combat');
+  goTo('combat');
   if (!squad.length) {
     renderPrep();
     return void toast('Recrutez au moins un Pokémon avant de combattre.');

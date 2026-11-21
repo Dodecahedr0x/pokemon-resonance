@@ -16,13 +16,13 @@ import {
   heal,
   nbrK,
   retarget,
-  say,
+  pushMessage,
   setMark,
   shove,
   stun,
   teff,
-  uAt,
-  uk,
+  unitAt,
+  unitKey,
 } from './engine.js';
 import { noteAdd } from './synergies-obstacles.js';
 import { B, enPips } from './ui.js';
@@ -35,7 +35,7 @@ import { renderWallet } from '../ui/wallet.js';
 import { renderBag } from '../progression/quests-shop.js';
 import { LEGS } from '../modes/legendaries.js';
 import { DAMAGE_PROVIDERS } from './tactical-engine.js';
-import { de } from './tactics.js';
+import { withDe } from './tactics.js';
 import { applyPoison } from '../moves/epic-tms.js';
 import { hasRune } from '../moves/technical-roster.js';
 import { isSurrounded } from './intensity.js';
@@ -136,7 +136,7 @@ function resonanceEcho(S, u, v, typ, x, ev) {
       ev.push({ e: 'st', u: v.uid, s: 'BRÛ' });
       return `${v.n} est brûlé`;
     case 'Eau':
-      setMark(S, uk(v), 'trempe', u.uid);
+      setMark(S, unitKey(v), 'trempe', u.uid);
       return 'sa case est Trempée';
     case 'Électrik':
       if (v.t.includes('Sol')) {
@@ -157,7 +157,7 @@ function resonanceEcho(S, u, v, typ, x, ev) {
       stun(S, v, 'GEL', ev, true);
       return v.badge === 'GEL' ? `${v.n} est gelé` : '';
     case 'Sol':
-      setMark(S, uk(v), 'fissure', u.uid);
+      setMark(S, unitKey(v), 'fissure', u.uid);
       return 'sa case se fissure';
     case 'Roche':
     case 'Insecte':
@@ -168,9 +168,9 @@ function resonanceEcho(S, u, v, typ, x, ev) {
       return `${v.n} est ralenti`;
     case 'Combat':
     case 'Vol': {
-      const p0 = uk(v);
+      const p0 = unitKey(v);
       shove(S, v, u.pos, typ === 'Vol' ? 2 : 1, ev, false);
-      return uk(v) !== p0 ? `${v.n} est repoussé` : '';
+      return unitKey(v) !== p0 ? `${v.n} est repoussé` : '';
     }
     case 'Psy':
       if (prot) {
@@ -246,13 +246,13 @@ export function afterHitResonance(S, u, m, v, x, typ, ev) {
   ev.push({ e: 'reso', u: v.uid });
   noteAdd(`Résonance sur ${v.n} : ×${u.item === 'ceinturepro' ? '1,8' : '1,5'} et écho ${typ}`);
   const r = v.ko ? '' : resonanceEcho(S, u, v, typ, x, ev);
-  say(ev, `Résonance ! ${v.n} vibre sous le coup ${de(u.n)}${r ? ` : ${r}` : ''}.`);
+  pushMessage(ev, `Résonance ! ${v.n} vibre sous le coup ${withDe(u.n)}${r ? ` : ${r}` : ''}.`);
 }
 
 /* end of ability: Life Orb */
 export function afterMoveHeldItems(S, u, m, dealt, ev) {
   if (u.item === 'orbevie' && dealt > 0 && !u.ko) {
-    say(ev, `Orbe Vie : ${u.n} paie sa puissance.`);
+    pushMessage(ev, `Orbe Vie : ${u.n} paie sa puissance.`);
     damage(S, u, Math.max(1, Math.round(u.mhp * 0.1)), ev, { ind: true, reflect: true });
   }
 }
@@ -262,13 +262,13 @@ export function afterDamageItems(S, v, real, o, ev) {
   if (!o.ind && !o.reflect && v.item === 'casquebrut') {
     const a = S.lastAtk && byUid(S, S.lastAtk);
     if (a && a !== v && !a.ko && a.side !== v.side && hdist(a.pos, v.pos) === 1) {
-      say(ev, `Casque Brut : ${a.n} se blesse sur ${v.n}.`);
+      pushMessage(ev, `Casque Brut : ${a.n} se blesse sur ${v.n}.`);
       damage(S, a, Math.max(1, Math.round(a.mhp * 0.1)), ev, { ind: true, reflect: true });
     }
   }
   if (v.item === 'sitrus' && !v.sitrus && !v.ko && v.hp <= v.mhp / 2) {
     v.sitrus = 1;
-    say(ev, `Baie Sitrus : ${v.n} reprend des forces.`);
+    pushMessage(ev, `Baie Sitrus : ${v.n} reprend des forces.`);
     heal(S, v, Math.round(v.mhp * 0.25), ev);
   }
 }
@@ -351,22 +351,22 @@ export function useCombatItem(S, u, k) {
   const ev = [];
   if (k === 'baieoran') {
     heal(S, u, 12, ev);
-    say(ev, `Baie Oran : ${u.n} reprend des forces.`);
+    pushMessage(ev, `Baie Oran : ${u.n} reprend des forces.`);
   } else if (k === 'totalsoin') {
     Object.assign(u, { badge: null, skip: 0, burn: 0, poisoned: 0, web: 0, root: 0, maudit: 0, weakened: 0 });
-    say(ev, `Total Soin : ${u.n} est libéré de ses statuts.`);
+    pushMessage(ev, `Total Soin : ${u.n} est libéré de ses statuts.`);
   } else if (k === 'attaqueplus') {
     u.boost = Math.max(u.boost, 2);
-    say(ev, `Attaque + : ${u.n} est Renforcé pendant 2 manches.`);
+    pushMessage(ev, `Attaque + : ${u.n} est Renforcé pendant 2 manches.`);
   } else if (k === 'defenseplus') {
     u.guard = Math.max(u.guard, 2);
-    say(ev, `Défense + : ${u.n} gagne +2 Garde.`);
+    pushMessage(ev, `Défense + : ${u.n} gagne +2 Garde.`);
   } else if (k === 'vitesseplus') {
     u.agile = Math.max(u.agile || 0, 2);
-    say(ev, `Vitesse + : ${u.n} gagne +1 Mouvement pendant 2 manches.`);
+    pushMessage(ev, `Vitesse + : ${u.n} gagne +1 Mouvement pendant 2 manches.`);
   } else if (k === 'cristal') {
     rewardIn(S, u, 1, ev);
-    say(ev, `Cristal Résonant : ${u.n} gagne 1 losange.`);
+    pushMessage(ev, `Cristal Résonant : ${u.n} gagne 1 losange.`);
   } else if (ITEM_USE_EFFECTS[k]) {
     ITEM_USE_EFFECTS[k](S, u, ev);
   } else if (k === 'rappel') {
@@ -393,7 +393,7 @@ export function useCombatItem(S, u, k) {
       notes: null,
     });
     ev.push({ e: 'mv', u: o.uid }, { e: 'heal', u: o.uid, v: o.hp });
-    say(ev, `Rappel : ${o.n} revient au combat avec ${o.hp} PV. Il jouera à la prochaine manche.`);
+    pushMessage(ev, `Rappel : ${o.n} revient au combat avec ${o.hp} PV. Il jouera à la prochaine manche.`);
   }
   if (it.voice) {
     S.voice -= it.voice;
@@ -563,7 +563,7 @@ export const koAllyOf = S =>
   S.units.filter(o => o.side === 'a' && o.ko && !o.seg).sort((a, b) => RC(b.id) - RC(a.id) || b.mhp - a.mhp)[0];
 
 export const freeTileFor = (S, u) =>
-  nbrK(uk(u)).find(x => S.tiles[x] && !S.tiles[x].rock && !uAt(S, x) && !(S.tiles[x].lava > 0));
+  nbrK(unitKey(u)).find(x => S.tiles[x] && !S.tiles[x].rock && !unitAt(S, x) && !(S.tiles[x].lava > 0));
 
 export const isDailyOffer = k => dailyOffers().includes(k);
 

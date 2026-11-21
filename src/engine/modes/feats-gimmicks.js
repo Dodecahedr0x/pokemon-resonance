@@ -3,8 +3,8 @@
 import { SCEN } from '../pokemon/pokemon.js';
 import { writeLS } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
-import { byUid, setMark, uAt } from '../combat/engine.js';
-import { esc } from '../state/saves.js';
+import { byUid, setMark, unitAt } from '../combat/engine.js';
+import { escapeHtml } from '../state/saves.js';
 import { PREF, savePref } from '../ui/preferences.js';
 import { sfx } from '../audio/sound-effects.js';
 import { today } from '../state/economy.js';
@@ -57,7 +57,9 @@ function gimmickPlace(S, n, _ev) {
   if (!g) {
     return;
   }
-  const freeOnes = Object.keys(S.tiles).filter(k => S.tiles[k] && !S.tiles[k].rock && !S.tiles[k].mark && !uAt(S, k));
+  const freeOnes = Object.keys(S.tiles).filter(
+    k => S.tiles[k] && !S.tiles[k].rock && !S.tiles[k].mark && !unitAt(S, k)
+  );
   for (let i = 0; i < n && freeOnes.length; i++) {
     const k = freeOnes.splice(Math.floor(Math.random() * freeOnes.length), 1)[0];
     setMark(S, k, g.mk);
@@ -154,15 +156,19 @@ export function init() {
     }
     const l = [];
     if (b.mvp) {
-      l.push(`Pokémon du combat : <b>${esc(b.mvp.n)}</b> (${b.mvp.d} dégâts${b.mvp.k ? `, ${b.mvp.k} KO` : ''})`);
+      l.push(
+        `Pokémon du combat : <b>${escapeHtml(b.mvp.n)}</b> (${b.mvp.d} dégâts${b.mvp.k ? `, ${b.mvp.k} KO` : ''})`
+      );
     }
     if (b.best) {
-      l.push(`Meilleur coup : ${b.best.d} dégâts (${esc(b.best.by)} sur ${esc(b.best.on)}, manche ${b.best.r})`);
+      l.push(
+        `Meilleur coup : ${b.best.d} dégâts (${escapeHtml(b.best.by)} sur ${escapeHtml(b.best.on)}, manche ${b.best.r})`
+      );
     }
     l.push(
       `${b.rounds} manche${b.rounds > 1 ? 's' : ''}${b.kos ? `, ${b.kos} Pokémon tombé${b.kos > 1 ? 's' : ''}` : ''}`
     );
-    return `<div class="result-list"><h4>Journal des exploits</h4><div class="result-row"><span>${l.join('<br>')}${b.ex.length ? `<br><em class="feats-journal-e">${b.ex.map(esc).join(' · ')}</em>` : ''}</span></div></div>`;
+    return `<div class="result-list"><h4>Journal des exploits</h4><div class="result-row"><span>${l.join('<br>')}${b.ex.length ? `<br><em class="feats-journal-e">${b.ex.map(escapeHtml).join(' · ')}</em>` : ''}</span></div></div>`;
   });
 
   HOOKS.combat.push(S => {

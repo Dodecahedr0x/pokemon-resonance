@@ -2,7 +2,7 @@
 
 import { ITEMS2, PROFILE } from '../state/game-state.js';
 import { HOOKS } from '../core/hooks.js';
-import { esc } from '../state/saves.js';
+import { escapeHtml } from '../state/saves.js';
 import { HELD_IMG, SHOP, bagN, today } from '../state/economy.js';
 import { ITEM_ICONS } from '../assets/item-icons.js';
 import { DAMAGE_PROVIDERS } from '../combat/tactical-engine.js';
@@ -100,7 +100,7 @@ export function init() {
 
   HOOKS.battleResult.unshift(r =>
     r.tmReward
-      ? `<div class="result-list"><h4>Récompense de rang S</h4><div class="result-row"><span>${esc(SHOP[r.tmReward].n)} ajoutée au Sac</span><b>CT</b></div></div>`
+      ? `<div class="result-list"><h4>Récompense de rang S</h4><div class="result-row"><span>${escapeHtml(SHOP[r.tmReward].n)} ajoutée au Sac</span><b>CT</b></div></div>`
       : ''
   );
 

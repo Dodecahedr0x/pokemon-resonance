@@ -1,9 +1,9 @@
 import { MV } from '../data/moves.js';
 import { BY, MON } from '../pokemon/pokemon.js';
 import { RM, toast } from '../core/utils.js';
-import { go } from '../core/navigation.js';
+import { goTo } from '../core/navigation.js';
 import { openSheet } from '../team/team.js';
-import { byUid, uAt } from '../combat/engine.js';
+import { byUid, unitAt } from '../combat/engine.js';
 import { B, L } from '../combat/ui.js';
 import { PREF } from './preferences.js';
 import { vibe } from '../audio/sound-effects.js';
@@ -27,7 +27,7 @@ function longPressAction(t) {
   }
   const hx = t.closest('#bSvg [data-k]');
   if (hx && B) {
-    const u = uAt(B, hx.dataset.k);
+    const u = unitAt(B, hx.dataset.k);
     return u ? () => openSpeciesSheet(u.sp) : null;
   }
   const tok = t.closest('#bSvg .token');
@@ -186,7 +186,7 @@ export function init() {
       if (i < 0 || j < 0 || j >= SWIPE_TABS.length) {
         return;
       }
-      go(SWIPE_TABS[j]);
+      goTo(SWIPE_TABS[j]);
       try {
         window.scrollTo(0, 0);
       } catch {

@@ -2,7 +2,7 @@ import { MV } from '../../../engine/data/moves.js';
 import { MKT } from '../../../engine/pokemon/pokemon.js';
 import { arenaNext, veiled } from '../../../engine/modes/gyms.js';
 import { INK, typeGlyphPath, typeColor } from '../../../engine/core/utils.js';
-import { affected, byUid, nbrK, reach, targets, uAt, uk, threatZone } from '../../../engine/combat/engine.js';
+import { affected, byUid, nbrK, reach, targets, unitAt, unitKey, threatZone } from '../../../engine/combat/engine.js';
 import { duoTargets } from '../../../engine/combat/items-bonds-ai.js';
 import { coverOf, ricoTgt } from '../../../engine/combat/synergies-obstacles.js';
 import { B, BG, HC, HP, TILT, tiltS, ui } from '../../../engine/combat/ui.js';
@@ -208,7 +208,7 @@ function extras() {
   if (u && !u.ko && B.phase === 'player' && !ui.busy && !B.over) {
     B.units.forEach(e => {
       if (e.side === 'e' && !e.ko && coverOf(B, u.pos, e.pos)) {
-        ex.push(<Shield key={'ce' + e.uid} k={uk(e)} cls="is-enemy" />);
+        ex.push(<Shield key={'ce' + e.uid} k={unitKey(e)} cls="is-enemy" />);
       }
     });
     if (ui.mode === 'target') {
@@ -222,7 +222,7 @@ function extras() {
           if (!r) {
             return;
           }
-          const A = HC(uk(u)),
+          const A = HC(unitKey(u)),
             R = HC(k),
             T = HC(r);
           ex.push(
@@ -250,7 +250,7 @@ function extras() {
         return;
       }
       affected(B, e, m, e.intent.k).forEach(k => {
-        const v = uAt(B, k);
+        const v = unitAt(B, k);
         if (v && v.side === 'a' && coverOf(B, e.pos, v.pos)) {
           ex.push(<Shield key={'ca' + e.uid + k} k={k} cls="is-ally" />);
         }
@@ -295,7 +295,7 @@ export function Highlights() {
       } else if (ui.mode === 'dodge') {
         hl.push(
           ...polys(
-            nbrK(uk(u)).filter(k => !B.tiles[k].rock && !uAt(B, k)),
+            nbrK(unitKey(u)).filter(k => !B.tiles[k].rock && !unitAt(B, k)),
             'highlight-dodge'
           )
         );
@@ -322,7 +322,7 @@ export function Intentions() {
       if (e.side !== 'e' || e.ko || !e.intent) {
         return;
       }
-      const a = HC(uk(e)),
+      const a = HC(unitKey(e)),
         b = HC(e.intent.k),
         dx = b[0] - a[0],
         dy = b[1] - a[1],

@@ -1,5 +1,5 @@
 import { ITM } from '../../engine/assets/item-icons.js';
-import { SHOP, fmt } from '../../engine/state/economy.js';
+import { SHOP, formatNumber } from '../../engine/state/economy.js';
 
 // Rewards of a quest: Pokédollars, Shards, items (formerly rewTxt).
 export default function Rewards({ r }) {
@@ -10,7 +10,7 @@ export default function Rewards({ r }) {
         <span className="coin-icon" aria-hidden="true">
           ₽
         </span>
-        {fmt(r.money)}
+        {formatNumber(r.money)}
       </span>
     );
   }

@@ -1,7 +1,7 @@
 /* Living board (overhaul of the battlefield) (added in v4.71). */
 
 import { SCEN } from '../pokemon/pokemon.js';
-import { fnv, hash2, mulberry32 } from '../core/utils.js';
+import { fnvHash, hash2, mulberry32 } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { nbrK } from './engine.js';
 import { B, BG, HC, HP, L, VB, VERT } from './ui.js';
@@ -1200,7 +1200,7 @@ const paintCell = (bd, k) => {
   const { c, K, C, S, seed } = bd;
   const t = B.tiles[k],
     [x, y] = C[k],
-    r2 = mulberry32((seed + fnv(k)) | 0);
+    r2 = mulberry32((seed + fnvHash(k)) | 0);
   if (t.w) {
     return;
   }
@@ -1322,7 +1322,7 @@ const paintWaterSurfaces = (bd, water, W) => {
   const { C, seed } = bd;
   water.forEach(k => {
     const [x, y] = C[k],
-      r3 = mulberry32((seed + fnv(k) * 3) | 0);
+      r3 = mulberry32((seed + fnvHash(k) * 3) | 0);
     paintWaterRipples(bd, W, x, y, r3);
     // foam along the banks
     paintWaterBanks(bd, W, k, x, y);
@@ -1346,7 +1346,7 @@ const paintLighting = (c, VW, VH) => {
 const paint = sig => {
   const kind = kindOf(),
     K = KIND[kind],
-    seed = fnv(sig) % 100000;
+    seed = fnvHash(sig) % 100000;
   const [VW, VH] = VB();
   const S = BG.S;
   const can = mk(VW * RS, VH * RS),

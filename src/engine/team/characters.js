@@ -1,7 +1,7 @@
 import { BY, SCEN } from '../pokemon/pokemon.js';
 import { isCamp } from '../state/game-state.js';
 import { HOOKS } from '../core/hooks.js';
-import { hasNx, say } from '../combat/engine.js';
+import { hasNx, pushMessage } from '../combat/engine.js';
 import { scSel } from '../combat/ui.js';
 import { PREF } from '../ui/preferences.js';
 import { ROLE_PROVIDERS } from '../combat/tactical-engine.js';
@@ -39,7 +39,7 @@ export function disobeys(S, u) {
     return null;
   }
   const ev = [];
-  say(
+  pushMessage(
     ev,
     `${u.n} fait la sourde oreille${u.fat ? ' : il est épuisé' : u.temperament === 'tetu' ? ' : il est têtu' : ''}.`
   );

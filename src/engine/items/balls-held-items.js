@@ -5,7 +5,7 @@ import { SCEN } from '../pokemon/pokemon.js';
 import { ITEMS2 } from '../state/game-state.js';
 import { HOOKS } from '../core/hooks.js';
 import { TOD } from '../world/home-route.js';
-import { EMAX, P, rewardIn, hasNx, heal, say, teff } from '../combat/engine.js';
+import { EMAX, P, rewardIn, hasNx, heal, pushMessage, teff } from '../combat/engine.js';
 import { immobilize } from '../combat/items-bonds-ai.js';
 import { BALLS } from './ball-choice.js';
 import { HEALS } from './battle-potions.js';
@@ -136,19 +136,19 @@ export const ITEM_CAN_USE = {
 export const ITEM_USE_EFFECTS = {
   antigel: (S, u, ev) => {
     Object.assign(u, { badge: null, skip: 0 });
-    say(ev, `Antigel : ${u.n} retrouve ses moyens.`);
+    pushMessage(ev, `Antigel : ${u.n} retrouve ses moyens.`);
   },
   antidote: (S, u, ev) => {
     Object.assign(u, { burn: 0, poisoned: 0 });
-    say(ev, `Antidote : ${u.n} est soigné.`);
+    pushMessage(ev, `Antidote : ${u.n} est soigné.`);
   },
   baiemepo: (S, u, ev) => {
     heal(S, u, Math.ceil(u.mhp * 0.3), ev);
-    say(ev, `Baie Mepo : ${u.n} reprend des forces.`);
+    pushMessage(ev, `Baie Mepo : ${u.n} reprend des forces.`);
   },
   gelee: (S, u, ev) => {
     rewardIn(S, u, 2, ev);
-    say(ev, `Gelée Résonante : ${u.n} gagne 2 losanges.`);
+    pushMessage(ev, `Gelée Résonante : ${u.n} gagne 2 losanges.`);
   },
   rappelmax: (S, u, ev) => {
     const o = koAllyOf(S),
@@ -174,7 +174,7 @@ export const ITEM_USE_EFFECTS = {
       notes: null,
     });
     ev.push({ e: 'mv', u: o.uid }, { e: 'heal', u: o.uid, v: o.hp });
-    say(ev, `Rappel Max : ${o.n} revient au combat avec ${o.hp} PV. Il jouera à la prochaine manche.`);
+    pushMessage(ev, `Rappel Max : ${o.n} revient au combat avec ${o.hp} PV. Il jouera à la prochaine manche.`);
   },
 };
 

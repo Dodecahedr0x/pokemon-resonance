@@ -1,7 +1,7 @@
 import { BY } from '../../../engine/pokemon/pokemon.js';
 import { PROFILE } from '../../../engine/state/game-state.js';
 import { medal } from '../../../engine/core/utils.js';
-import { fmt } from '../../../engine/state/economy.js';
+import { formatNumber } from '../../../engine/state/economy.js';
 import { MASTERY_DEFS, MASTERY_THRESHOLD, masteryChoice } from '../../../engine/progression/family-mastery.js';
 import { Html } from '../../../lib/html.jsx';
 
@@ -60,7 +60,7 @@ export default function Mastery() {
   return (
     <section className="card camp-mastery">
       <CardHeader icon="star" title="Maîtrise des familles" count={`${L.filter(y => y.x.p).length} / ${L.length}`} />
-      <p className="v4-ps-n">{`Après ${MASTERY_THRESHOLD} combats dans l’équipe, une famille débloque un bonus permanent, à choisir entre deux. Vous pouvez en changer pour ${fmt(priceAmount)} ₽.`}</p>
+      <p className="v4-ps-n">{`Après ${MASTERY_THRESHOLD} combats dans l’équipe, une famille débloque un bonus permanent, à choisir entre deux. Vous pouvez en changer pour ${formatNumber(priceAmount)} ₽.`}</p>
       <div className="camp-mastery-list">
         {L.length ? (
           L.map(({ b, x }) => <Family key={b} b={b} x={x} />)

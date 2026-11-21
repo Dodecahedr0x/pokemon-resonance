@@ -5,7 +5,7 @@ import { BY, PKT, SCEN } from '../pokemon/pokemon.js';
 import { PROFILE, isCamp } from '../state/game-state.js';
 import { medal } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
-import { uk } from '../combat/engine.js';
+import { unitKey } from '../combat/engine.js';
 import { OBST } from '../combat/synergies-obstacles.js';
 import { CAP_K } from '../items/ball-choice.js';
 import { hoennOpen } from './hoenn.js';
@@ -71,7 +71,7 @@ const ballOk = (...k) => k.includes(CAP_K);
 const escortKO = (S, L) => S.units.filter(x => x.side === 'e' && x.sp !== L.id).every(x => x.ko);
 
 const onMarkedTile = (S, e, mk) => {
-  const t = S.tiles && S.tiles[uk(e)];
+  const t = S.tiles && S.tiles[unitKey(e)];
   return !!(t && t.mark && t.mark.k === mk);
 };
 

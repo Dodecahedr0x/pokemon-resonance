@@ -4,7 +4,7 @@ import { HOOKS } from '../core/hooks.js';
 import { EMAX } from './engine.js';
 import { scSel } from './ui.js';
 import { queueSave } from '../state/saves.js';
-import { fmt } from '../state/economy.js';
+import { formatNumber } from '../state/economy.js';
 import { refreshPrep } from '../../screens/combat/prep/prepStore.js';
 
 /* =====================================================================
@@ -104,7 +104,7 @@ export function init() {
 
   HOOKS.battleResult.push(r =>
     r.doctrineChoice && DOCTRINE_DEFS[r.doctrineChoice]
-      ? `<div class="result-list"><h4>Doctrine</h4><div class="result-row"><span>${DOCTRINE_DEFS[r.doctrineChoice].n}${r.loot ? ' : butin de la victoire' : ''}</span><b>${r.loot ? '+' + fmt(r.loot) + ' ₽' : ''}</b></div></div>`
+      ? `<div class="result-list"><h4>Doctrine</h4><div class="result-row"><span>${DOCTRINE_DEFS[r.doctrineChoice].n}${r.loot ? ' : butin de la victoire' : ''}</span><b>${r.loot ? '+' + formatNumber(r.loot) + ' ₽' : ''}</b></div></div>`
       : ''
   );
 

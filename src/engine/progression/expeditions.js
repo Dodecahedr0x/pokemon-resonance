@@ -5,7 +5,7 @@ import { HOOKS } from '../core/hooks.js';
 import { __set_squad, renderSquad, save, squad } from '../team/team.js';
 import { queueSave } from '../state/saves.js';
 import { sfx } from '../audio/sound-effects.js';
-import { SHOP, bagN, fmt } from '../state/economy.js';
+import { SHOP, bagN, formatNumber } from '../state/economy.js';
 import { renderWallet } from '../ui/wallet.js';
 import { isFallen } from './campaign-challenges.js';
 import { isInDaycare } from './daycare.js';
@@ -78,7 +78,7 @@ export function retrieve(i) {
   PROFILE.exp.splice(i, 1);
   sfx('ui');
   toast(
-    `${BY[x.id].n} revient de ${DESTINATIONS[x.destinationId].n} : ${fmt(x.gain.m)} ₽${x.gain.g ? `, ${x.gain.g} Éclats` : ''}${x.gain.o ? `, ${x.gain.q} × ${SHOP[x.gain.o].n}` : ''}.`
+    `${BY[x.id].n} revient de ${DESTINATIONS[x.destinationId].n} : ${formatNumber(x.gain.m)} ₽${x.gain.g ? `, ${x.gain.g} Éclats` : ''}${x.gain.o ? `, ${x.gain.q} × ${SHOP[x.gain.o].n}` : ''}.`
   );
   queueSave();
   renderWallet();

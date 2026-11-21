@@ -6,7 +6,7 @@ import { BY, MON, SCEN } from '../pokemon/pokemon.js';
 import { PROFILE, isCamp } from '../state/game-state.js';
 import { $, medal, toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
-import { hasNx, say } from '../combat/engine.js';
+import { hasNx, pushMessage } from '../combat/engine.js';
 import { queueSave } from '../state/saves.js';
 import { sfx, vibe } from '../audio/sound-effects.js';
 import { today } from '../state/economy.js';
@@ -174,7 +174,7 @@ export function init() {
       u.burn = 0;
       u.web = 0;
       u.root = 0;
-      say(ev, `${u.n} se secoue pour vous : statuts dissipés.`);
+      pushMessage(ev, `${u.n} se secoue pour vous : statuts dissipés.`);
     });
   });
 

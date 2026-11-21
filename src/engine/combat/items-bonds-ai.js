@@ -3,7 +3,21 @@ import { MV } from '../data/moves.js';
 import { BY, MON, SCEN } from '../pokemon/pokemon.js';
 import { PROFILE, isCamp, lvlOfPts, pairKey } from '../state/game-state.js';
 import { BADGES } from '../modes/gyms.js';
-import { P, byUid, dmgOf, effR, endStep, hasNx, hdist, movPts, mvType, say, targets, teff, uk } from './engine.js';
+import {
+  P,
+  byUid,
+  dmgOf,
+  effR,
+  endStep,
+  hasNx,
+  hdist,
+  movPts,
+  mvType,
+  pushMessage,
+  targets,
+  teff,
+  unitKey,
+} from './engine.js';
 import { resolve } from './synergies-obstacles.js';
 import { B } from './ui.js';
 import { CHAMP_L, ELITE_L } from '../progression/prestige.js';
@@ -42,7 +56,7 @@ export function dmgItemsLinks(S, u, t, d, mult) {
     }
   }
   if (mult > 1 && u.side === 'a' && t.side === 'e' && S.links) {
-    const tl = S.tiles[uk(t)],
+    const tl = S.tiles[unitKey(t)],
       mk = tl && tl.mark;
     if (mk && mk.by && mk.by !== u.uid) {
       const p = byUid(S, mk.by);
@@ -122,7 +136,7 @@ export function pCapture(S, u, e) {
   u.acted = true;
   u.moved = true;
   ev.push({ e: 'catch', u: e.uid, by: u.uid });
-  say(ev, `${e.n} est capturé !`);
+  pushMessage(ev, `${e.n} est capturé !`);
   endStep(S, ev);
   if (S === B) {
     // a Ball from the Bag is consumed
@@ -200,7 +214,7 @@ export function pDuo(S, u, p, k) {
   S.voice -= 2;
   S.stats.voice += 2;
   S.stats.duo++;
-  say(ev, `Technique combinée : ${D.n} !`);
+  pushMessage(ev, `Technique combinée : ${D.n} !`);
   ev.push({ e: 'duo', a: A.uid, b: Bu.uid });
   resolve(S, A, D.a, k).forEach(x => ev.push(x));
   if (!S.over && !Bu.ko) {

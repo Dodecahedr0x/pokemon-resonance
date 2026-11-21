@@ -3,7 +3,7 @@
 import { BY } from '../pokemon/pokemon.js';
 
 /** Keeps only the species that exist. */
-export const ok = ids => ids.filter(i => BY[i]);
+export const existingSpecies = ids => ids.filter(i => BY[i]);
 
 const POS = [
   [6, 1],
@@ -14,7 +14,7 @@ const POS = [
 ];
 
 /** Opponents placed on the right side of the board. */
-export const mkFoes = ids => ok(ids).map((id, i) => [id, POS[i % POS.length]]);
+export const mkFoes = ids => existingSpecies(ids).map((id, i) => [id, POS[i % POS.length]]);
 
 /** Night ford arena used by the Shadows battles and the daily challenge. */
 export const baseScene = (n, lvl, d, lv, hb, foes) => ({

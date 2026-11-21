@@ -1,7 +1,7 @@
 import { useEngineReady } from '../../engineReady.js';
 import { useBagVersion } from './bagStore.js';
 import { ITEMS2, PROFILE } from '../../engine/state/game-state.js';
-import { SHOP, bagN, fmt } from '../../engine/state/economy.js';
+import { SHOP, bagN, formatNumber } from '../../engine/state/economy.js';
 import { V4 } from '../../engine/ui/screen-state.js';
 import { dailyTm } from '../../engine/items/extra-held-items.js';
 import { Article, HeldItem } from './Items.jsx';
@@ -94,7 +94,7 @@ function Content() {
           </span>
           <span>
             <small>Pokédollars</small>
-            <b data-wallet="money">{fmt(PROFILE.money)}</b>
+            <b data-wallet="money">{formatNumber(PROFILE.money)}</b>
           </span>
         </div>
         <div>
@@ -105,7 +105,7 @@ function Content() {
           </span>
           <span>
             <small>Éclats de Résonance</small>
-            <b data-wallet="gems">{fmt(PROFILE.gems)}</b>
+            <b data-wallet="gems">{formatNumber(PROFILE.gems)}</b>
           </span>
         </div>
       </div>

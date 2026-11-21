@@ -8,7 +8,7 @@ import { scSel } from '../combat/ui.js';
 import { today } from '../state/economy.js';
 import { DEXS } from '../progression/pokedex.js';
 import { teamSize } from '../progression/campaign-challenges.js';
-import { baseScene, mkFoes, ok } from './challenge-scenes.js';
+import { baseScene, mkFoes, existingSpecies } from './challenge-scenes.js';
 import { readChallengeState, writeChallengeState } from './challenges-hub.js';
 
 const TYPES = ['Feu', 'Eau', 'Plante', 'Électrik', 'Psy', 'Combat', 'Insecte', 'Sol'];
@@ -22,7 +22,7 @@ const seedValue = sel => {
 
 /** Today's challenge: opponents, forbidden type, Bonus HP and level. */
 export const dqDef = () => {
-  const pool = ok(DEXS.map(m => m.id));
+  const pool = existingSpecies(DEXS.map(m => m.id));
   const nb = 3 + (seedValue('n') % 2);
   const ids = [];
   for (let i = 0; i < nb; i++) {

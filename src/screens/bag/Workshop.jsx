@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 import { ITEMS2, PROFILE } from '../../engine/state/game-state.js';
 import { typeColor } from '../../engine/core/utils.js';
 import { MV } from '../../engine/data/moves.js';
-import { SHOP, fmt, today } from '../../engine/state/economy.js';
+import { SHOP, formatNumber, today } from '../../engine/state/economy.js';
 import { tLevel } from '../../engine/progression/trainer-stats.js';
 import { canAfford, rewardText } from '../../engine/world/route-events.js';
 import {
@@ -77,7 +77,7 @@ function Workshop() {
           <b>{ingredientsText(r.out)}</b>
           <p>
             Avec : {ingredientsText(r.in)}
-            {r.m ? ` + ${fmt(r.m)} ₽` : ''}
+            {r.m ? ` + ${formatNumber(r.m)} ₽` : ''}
           </p>
         </Line>
       ))}
@@ -149,8 +149,8 @@ function Draw() {
     <>
       <h3 className="card-title">Tirage du colporteur</h3>
       <p className="note">
-        Un tirage gratuit par jour. Ensuite, {fmt(FUSION_COST)} ₽ le tirage (4 par jour au maximum). Le résultat est
-        fixé à l’avance : inutile de recharger la page.
+        Un tirage gratuit par jour. Ensuite, {formatNumber(FUSION_COST)} ₽ le tirage (4 par jour au maximum). Le
+        résultat est fixé à l’avance : inutile de recharger la page.
       </p>
       {st.last ? (
         <p className="note workshop-draw-last">
@@ -164,7 +164,11 @@ function Draw() {
           data-craft-bench="spin"
           disabled={!(remainder > 0 && (freeOfCharge || PROFILE.money >= FUSION_COST))}
         >
-          {remainder <= 0 ? 'Revenez demain' : freeOfCharge ? 'Tirage gratuit' : `Tirer · ${fmt(FUSION_COST)} ₽`}
+          {remainder <= 0
+            ? 'Revenez demain'
+            : freeOfCharge
+              ? 'Tirage gratuit'
+              : `Tirer · ${formatNumber(FUSION_COST)} ₽`}
         </button>
         <small>Tirages restants aujourd’hui : {remainder}</small>
       </div>

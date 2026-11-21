@@ -1,6 +1,6 @@
 // Full tutorial chapters (Guide › Tutorial, added in v4.33): one chapter per mechanic, from the basics to the duel,
 // with a button to try it and progress saved. Rendered by the React Guide (Tutorial.jsx).
-import { go } from '../core/navigation.js';
+import { goTo } from '../core/navigation.js';
 import { openGuide } from './guide.js';
 import { V4 } from './screen-state.js';
 import { DOCTRINE_DEFS } from '../combat/doctrines.js';
@@ -229,12 +229,12 @@ export function init() {
     const a = b.dataset.tryIt;
     if (a.startsWith('camp:')) {
       V4.campTab = a.slice(5);
-      go('camp');
+      goTo('camp');
     } else if (a === 'journal') {
       V4.questTab = 'journal';
-      go('quetes');
+      goTo('quetes');
     } else {
-      go(a);
+      goTo(a);
     }
   });
   document.addEventListener('click', e => {

@@ -6,7 +6,7 @@ import { HOOKS, hook } from '../core/hooks.js';
 import { sfx, vibe } from '../audio/sound-effects.js';
 import { overlay } from '../progression/prestige.js';
 import { shut, updateTemp } from '../../screens/overlays/tempStore.js';
-import { SHOP, bagN, fmt, savePurse, today } from '../state/economy.js';
+import { SHOP, bagN, formatNumber, savePurse, today } from '../state/economy.js';
 import { ownedFam } from '../progression/trainer-stats.js';
 import { refreshMap } from '../../screens/map/mapStore.js';
 import { DEXS } from '../progression/pokedex.js';
@@ -208,7 +208,7 @@ export const rewardText = o => {
   }
   const a = [];
   if (o.m) {
-    a.push(`${o.m > 0 ? '+' : '−'}${fmt(Math.abs(o.m))} ₽`);
+    a.push(`${o.m > 0 ? '+' : '−'}${formatNumber(Math.abs(o.m))} ₽`);
   }
   if (o.g) {
     a.push(`${o.g > 0 ? '+' : '−'}${Math.abs(o.g)} Éclat${Math.abs(o.g) > 1 ? 's' : ''}`);

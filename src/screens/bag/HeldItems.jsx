@@ -1,6 +1,6 @@
 import { ITEMS2, PROFILE, isCamp, ownedItems } from '../../engine/state/game-state.js';
 import { BADGES } from '../../engine/modes/gyms.js';
-import { HELD_IMG, SHOP, fmt } from '../../engine/state/economy.js';
+import { HELD_IMG, SHOP, formatNumber } from '../../engine/state/economy.js';
 import { ITM } from '../../engine/assets/item-icons.js';
 import { HELD_SHOP, heldItemCost } from '../../engine/combat/resonance.js';
 import { Article, Shards } from './Items.jsx';
@@ -38,7 +38,7 @@ function OutfitForSale({ k }) {
                 {price}
               </>
             ) : (
-              `${fmt(price)} ₽`
+              `${formatNumber(price)} ₽`
             )}
           </Button>
         )}

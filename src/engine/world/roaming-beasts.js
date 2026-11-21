@@ -9,7 +9,7 @@ import { SCEN } from '../pokemon/pokemon.js';
 import { ITEMS2, PROFILE, isCamp } from '../state/game-state.js';
 import { medal } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
-import { heal, say } from '../combat/engine.js';
+import { heal, pushMessage } from '../combat/engine.js';
 import { OBST } from '../combat/synergies-obstacles.js';
 import { HELD_IMG } from '../state/economy.js';
 import { ITEM_ICONS } from '../assets/item-icons.js';
@@ -104,10 +104,10 @@ export function setupRoaming(S, ev) {
   }
   const r = getRoamState(D.roam);
   if (r.ok) {
-    return void say(ev, `${u.n} accepte un combat amical. Il s’enfuira au bout de ${S.lim} manches.`);
+    return void pushMessage(ev, `${u.n} accepte un combat amical. Il s’enfuira au bout de ${S.lim} manches.`);
   } // already calmed: a rematch, no bounty
   u.hp = Math.max(1, Math.round(u.mhp * (r.hp || 1)));
-  say(
+  pushMessage(
     ev,
     r.hp < 1
       ? `${u.n} porte encore les traces de votre dernière rencontre (${Math.round(r.hp * 100)} % de ses PV).`

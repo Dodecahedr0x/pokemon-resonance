@@ -2,13 +2,13 @@
 
 import { EEVEE } from './pokemon.js';
 import { markOf } from '../core/utils.js';
-import { markAt, uk } from '../combat/engine.js';
+import { markAt, unitKey } from '../combat/engine.js';
 import { hourOf } from '../combat/living-board.js';
 
 /** The Eevee evolutions in harmony with the situation: mark of its cell, time of day. */
 export function eeveeHarmony(S, u) {
   const o = [],
-    mk = markAt(S, uk(u));
+    mk = markAt(S, unitKey(u));
   if (mk && EEVEE[mk]) {
     o.push(EEVEE[mk]);
   }

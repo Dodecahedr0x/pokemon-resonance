@@ -3,7 +3,7 @@
    What remains here is the entry point used by the rest of the game: opening a specific reaction. */
 
 import { MK, MX } from './game-data.js';
-import { go } from '../core/navigation.js';
+import { goTo } from '../core/navigation.js';
 import { selectReaction, setGuideTab } from '../../screens/guide/guideStore.js';
 
 export function openRx(id) {
@@ -14,6 +14,6 @@ export function openRx(id) {
       break;
     }
   }
-  go('types');
+  goTo('types');
   setGuideTab('reactions');
 }

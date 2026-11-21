@@ -8,9 +8,9 @@ import { ITEMS2, PROFILE, isCamp } from '../state/game-state.js';
 import { BADGES } from '../modes/gyms.js';
 import { HOOKS } from '../core/hooks.js';
 import { TOD } from './home-route.js';
-import { say } from '../combat/engine.js';
+import { pushMessage } from '../combat/engine.js';
 import { wildScen } from '../combat/items-bonds-ai.js';
-import { SHOP, bagN, fmt } from '../state/economy.js';
+import { SHOP, bagN, formatNumber } from '../state/economy.js';
 import { MACHINES } from '../moves/tms.js';
 import { ACHIEVEMENTS } from '../progression/achievements.js';
 import { HELD_SHOP } from '../combat/resonance.js';
@@ -62,7 +62,7 @@ export function dominantSetup(S, ev) {
   }
   u.dom = true;
   u.guard = Math.max(u.guard, 2);
-  say(ev, `Aura du Dominant : ${u.n} est blindé (+2 Garde).`);
+  pushMessage(ev, `Aura du Dominant : ${u.n} est blindé (+2 Garde).`);
 }
 
 export function dominantTick(S, ev) {
@@ -72,7 +72,7 @@ export function dominantTick(S, ev) {
   }
   u.guard = Math.max(u.guard, 2);
   u.boost = Math.max(u.boost || 0, 1);
-  say(ev, `Aura du Dominant : ${u.n} se blinde et se renforce.`);
+  pushMessage(ev, `Aura du Dominant : ${u.n} se blinde et se renforce.`);
 }
 
 function dominantReward(rew) {
@@ -130,7 +130,7 @@ export function init() {
         ? `${SHOP[x.ct].n} rejoint votre Sac`
         : x.item
           ? `${ITEMS2[x.item].n} rejoint votre Sac (objet tenu)`
-          : `${fmt(x.m || 0)} ₽ et des Éclats`
+          : `${formatNumber(x.m || 0)} ₽ et des Éclats`
     }</span><b>${DOMINANT_CROWN_SVG}</b></div></div>`;
   });
 

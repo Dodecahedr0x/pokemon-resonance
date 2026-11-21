@@ -3,13 +3,13 @@ import { BY, SCEN } from '../pokemon/pokemon.js';
 import { CAMP_START, PROFILE, defProfile, isCamp } from '../state/game-state.js';
 import { ARENAS, BADGES, TERR } from '../modes/gyms.js';
 import { $, RM, writeLS, typeGlyphPath, medal, typeColor, toast } from '../core/utils.js';
-import { go } from '../core/navigation.js';
+import { goTo } from '../core/navigation.js';
 import { encounter } from './home-route.js';
 import { badgeSvg } from '../modes/league.js';
 import { save, squad } from '../team/team.js';
 import { ELITE, scenLock } from '../combat/items-bonds-ai.js';
 import { __set_scSel, launch, openBattle, scSel } from '../combat/ui.js';
-import { SAVE_V, applySave, autoSave, esc } from '../state/saves.js';
+import { SAVE_V, applySave, autoSave, escapeHtml } from '../state/saves.js';
 import { TUTORIAL_STEPS } from '../progression/tutorial.js';
 import { __set_PREPG, renderPrep } from '../combat/battle-prep.js';
 import { nextGoal } from '../progression/campaign.js';
@@ -133,7 +133,7 @@ export function emblem(k, cls = '') {
 
 export function professorMsg() {
   const g = goalInfo(),
-    nm = PROFILE.name ? esc(PROFILE.name) : '';
+    nm = PROFILE.name ? escapeHtml(PROFILE.name) : '';
   if (!squad.length) {
     return `Votre équipe est vide${nm ? ', ' + nm : ''}. Choisissez quatre Pokémon dans l’onglet <b>Équipe</b>, puis revenez me voir.`;
   }
@@ -345,7 +345,7 @@ export function showIntro(force) {
         save();
       }
       closeIntro();
-      go('accueil');
+      goTo('accueil');
       renderHome();
     }
   });
@@ -381,7 +381,7 @@ function startCampaign(id, name, diff) {
 
 export const PROF_AV = `<span class="professor-avatar" aria-hidden="true"><b>MS</b><i><svg viewBox="0 0 24 24"><path d="M2.5 12.5h4l2.2-5.2 3.4 10.4 3.2-10.4 2.2 5.2h4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></i></span>`;
 
-export const S2n = g => (g.gi >= 0 ? `Arène ${g.gi + 1} · ${GYMS[g.gi].t}` : g.S.n || g.n);
+export const goalName = g => (g.gi >= 0 ? `Arène ${g.gi + 1} · ${GYMS[g.gi].t}` : g.S.n || g.n);
 
 /* --- Battles: a single frame (tab → list → sheet) --- */
 // SELG and k2n: read by the battle selection (React)
@@ -392,7 +392,7 @@ export const SELG = [
   ['apres', 'Après-jeu', 'i-trophy'],
 ];
 
-export const k2n = k => (k === 'champ' ? 'Finale' : k === 'tuto' ? 'Combat guidé' : (SCEN[k] || {}).n || '');
+export const scenarioName = k => (k === 'champ' ? 'Finale' : k === 'tuto' ? 'Combat guidé' : (SCEN[k] || {}).n || '');
 
 /* --- first visit to a screen: a tip from the Professor --- */
 // read by src/components/Tip.jsx
@@ -419,7 +419,7 @@ export function init() {
     }
     const k = b.dataset.hm;
     if (k === 'wild') {
-      go('accueil');
+      goTo('accueil');
       const r = $('#route');
       if (r && r.scrollIntoView) {
         r.scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'center' });

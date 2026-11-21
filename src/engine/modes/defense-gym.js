@@ -6,7 +6,7 @@ import { BADGES } from './gyms.js';
 import { writeLS, toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { squad } from '../team/team.js';
-import { K, mkUnit, plan, say, uAt } from '../combat/engine.js';
+import { K, mkUnit, plan, pushMessage, unitAt } from '../combat/engine.js';
 import { OBST } from '../combat/synergies-obstacles.js';
 import { B, backToPrep, goFight } from '../combat/ui.js';
 import { overlay } from '../progression/prestige.js';
@@ -28,7 +28,7 @@ function defenseWave(S, ev) {
   for (let i = 0; i < nb; i++) {
     const freeOnes = [];
     for (let y = 0; y < 6; y++) {
-      [7, 6].forEach(x => S.tiles[K(x, y)] && !S.tiles[K(x, y)].rock && !uAt(S, K(x, y)) && freeOnes.push([x, y]));
+      [7, 6].forEach(x => S.tiles[K(x, y)] && !S.tiles[K(x, y)].rock && !unitAt(S, K(x, y)) && freeOnes.push([x, y]));
     }
     if (!freeOnes.length || !pool.length) {
       break;
@@ -40,7 +40,10 @@ function defenseWave(S, ev) {
     made++;
   }
   if (made) {
-    say(ev, `Vague ${D.w} sur ${DEF_WAVES} : ${made} adversaire${made > 1 ? 's' : ''} arrive${made > 1 ? 'nt' : ''} !`);
+    pushMessage(
+      ev,
+      `Vague ${D.w} sur ${DEF_WAVES} : ${made} adversaire${made > 1 ? 's' : ''} arrive${made > 1 ? 'nt' : ''} !`
+    );
     ev.push({ e: 'terrain' });
     try {
       plan(S, ev);
@@ -126,7 +129,7 @@ export function init() {
         u.ko = true;
         u.hp = 0;
         D.lives--;
-        say(
+        pushMessage(
           ev,
           `Brèche ! ${u.n} a atteint la ligne de défense. Vies restantes : ${Math.max(0, D.lives)} / ${DEF_LIVES}.`
         );

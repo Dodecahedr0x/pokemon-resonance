@@ -3,9 +3,20 @@ import { MV } from '../data/moves.js';
 import { BY, SCEN, WXN } from '../pokemon/pokemon.js';
 import { ITEMS2, PROFILE, isCamp, ownedItems } from '../state/game-state.js';
 import { arenaSetup, arenaTick } from '../modes/gyms.js';
-import { $, RM, wait, el, typeGlyphPath, hc, hp, typeColor, toast, zig } from '../core/utils.js';
+import {
+  $,
+  RM,
+  wait,
+  svgElement,
+  typeGlyphPath,
+  hexCenter,
+  hexPoints,
+  typeColor,
+  toast,
+  zigzagPoints,
+} from '../core/utils.js';
 import { HOOKS, hook } from '../core/hooks.js';
-import { go } from '../core/navigation.js';
+import { goTo } from '../core/navigation.js';
 import { renderLeague } from '../modes/league.js';
 import { squad, vBonus } from '../team/team.js';
 import {
@@ -30,8 +41,8 @@ import {
   reach,
   startEnemy,
   targets,
-  uAt,
-  uk,
+  unitAt,
+  unitKey,
 } from './engine.js';
 import { champBuild, duoParts, duoTargets, pCapture, pDuo, previewRun, scenLock } from './items-bonds-ai.js';
 import { SV, autoSave, queueSave, renderSummary } from '../state/saves.js';
@@ -152,7 +163,7 @@ function hpf(x, y, s) {
 export function chooseBattle(k) {
   scSel = k;
   __set_PREPG(null);
-  go('combat');
+  goTo('combat');
 }
 
 /** The player requests battle k: Battles screen on that scenario, at the scenario's tab. Does not start the battle. */
@@ -283,49 +294,49 @@ function launchCore() {
   $('#evoPick').hidden = true;
   const aev = [...arenaSetup(B), ...announceGimmick(B)];
   buildBoard();
-  log(`${SCEN[scSel].n} : à vous de jouer. Touchez un adversaire pour voir sa portée.`, 'sys');
+  addLog(`${SCEN[scSel].n} : à vous de jouer. Touchez un adversaire pour voir sa portée.`, 'sys');
   aev.forEach(x => {
     if (x.e === 'msg') {
-      log(x.s, 'arn');
+      addLog(x.s, 'arn');
     }
   });
   B.units.forEach(u => {
     if (u.side === 'a' && u.fat) {
-      log(`${u.n} est fatigué : −1 Mouvement (un Éveil efface la fatigue).`, 'sys');
+      addLog(`${u.n} est fatigué : −1 Mouvement (un Éveil efface la fatigue).`, 'sys');
     }
     if (u.side === 'a' && u.item) {
-      log(`${u.n} tient ${ITEMS2[u.item].n}.`, 'sys');
+      addLog(`${u.n} tient ${ITEMS2[u.item].n}.`, 'sys');
     }
   });
   if (B.harmonie) {
-    log('Harmonie : trois rangs différents dans l’équipe, chaque Pokémon commence avec 1 losange.', 'sys');
+    addLog('Harmonie : trois rangs différents dans l’équipe, chaque Pokémon commence avec 1 losange.', 'sys');
   } // v4.14
   if (bossScene(B)) {
-    log('Combat de prestige : vos adversaires accumulent eux aussi la Résonance (notes, attaques Expertes).', 'arn');
+    addLog('Combat de prestige : vos adversaires accumulent eux aussi la Résonance (notes, attaques Expertes).', 'arn');
   }
   if (B.wx) {
-    log(`Météo ${WXN[B.wx.k]} dès le début du combat.`, 'sys');
+    addLog(`Météo ${WXN[B.wx.k]} dès le début du combat.`, 'sys');
   }
   if (B.disobedience) {
-    log('Désobéissance : un Pokémon épuisé ou têtu peut ignorer un ordre.', 'sys');
+    addLog('Désobéissance : un Pokémon épuisé ou têtu peut ignorer un ordre.', 'sys');
   }
   if (B.mut) {
-    log(`Mutateur · ${mutInfo(B.mut)[0]} : ${mutInfo(B.mut)[1]}`, 'arn');
+    addLog(`Mutateur · ${mutInfo(B.mut)[0]} : ${mutInfo(B.mut)[1]}`, 'arn');
   }
   if (B.sansEveil) {
-    log('Défi Sans Éveil : vos Pokémon ne s’éveilleront pas.', 'sys');
+    addLog('Défi Sans Éveil : vos Pokémon ne s’éveilleront pas.', 'sys');
   }
   if (B.tac) {
-    log(
+    addLog(
       'Tactique avancée : entrer au contact d’un adversaire arrête le déplacement (sauf volants, Spectre, Éclaireurs). Lance-Soleil et Vol partent en fin de manche.',
       'sys'
     );
   }
   if (B.units.some(u => u.colossus)) {
-    log('Colosse : brisez ses parties pour faire tomber sa carapace. Chacune le fait vaciller.', 'sys');
+    addLog('Colosse : brisez ses parties pour faire tomber sa carapace. Chacune le fait vaciller.', 'sys');
   }
   if (B.livingBoard) {
-    log(
+    addLog(
       `Plateau vivant : ${LIVING_STATE[B.cycle.ph]} (${LIVING_DESC[B.cycle.ph]}) Le feu court dans les hautes herbes ; la pluie l’éteint.`,
       'sys'
     );
@@ -428,7 +439,7 @@ function updTokCore(u) {
   if (!T) {
     return;
   }
-  const [x, y] = HC(uk(u));
+  const [x, y] = HC(unitKey(u));
   T.tr = `translate(${x}px,${y}px)`;
   const c = typeColor(u.t[0]);
   T.rs = c;
@@ -460,7 +471,7 @@ function updTokCore(u) {
   cl('is-encircled', isSurrounded(B, u));
   cl('is-phase-2', u.bossPhase === 2 && !u.ko);
   cl('is-phase-3', u.bossPhase === 3 && !u.ko);
-  cl('is-in-danger', !u.ko && !!(B.dangerZone && B.dangerZone.k.includes(uk(u)))); // inside an announced zone
+  cl('is-in-danger', !u.ko && !!(B.dangerZone && B.dangerZone.k.includes(unitKey(u)))); // inside an announced zone
   cl('can-evolve', foeEvo(B, u));
   cl('is-evolved', !!u.evo);
   const nN = notesOf(B, u); // Resonance notes (v4.14)
@@ -511,7 +522,7 @@ export function segHp(u) {
 }
 
 function segHpBase(u) {
-  const h = `<span class="hp-bar is-segmented"><i class="${hpc(u)}" style="width:${((u.hp / u.mhp) * 100).toFixed(0)}%"></i></span>`;
+  const h = `<span class="hp-bar is-segmented"><i class="${hpClass(u)}" style="width:${((u.hp / u.mhp) * 100).toFixed(0)}%"></i></span>`;
   // trail of recent damage
   if (!B) {
     return h;
@@ -577,7 +588,7 @@ function openEvoPick(u) {
 export function cinematic(fromN, fromT, toN, toT, side, uid) {
   const o = {}; // #evoFx (React): the effect starts from the evolving Pokémon
   if (uid && L.u[uid]) {
-    const [x, y] = HC(uk(byUid(B, uid)));
+    const [x, y] = HC(unitKey(byUid(B, uid)));
     o.ox = ((x / VB()[0]) * 100).toFixed(1) + '%';
     o.oy = ((y / VB()[1]) * 100).toFixed(1) + '%';
   }
@@ -595,7 +606,7 @@ export function cinematic(fromN, fromT, toN, toT, side, uid) {
 }
 
 /* log */
-export function log(s, c) {
+export function addLog(s, c) {
   LOG.unshift({ s, c: c || '', r: B ? B.round : 1 });
   if (LOG.length > 70) {
     LOG.length = 70;
@@ -634,7 +645,7 @@ function renderAllCore() {
 // floating text over a cell; cls is its kind (is-damage, is-heal, is-reaction, is-ready…)
 export function floatAt(k, txt, cls) {
   const [x, y] = HC(k);
-  const t = el('text', { class: 'float-text ' + cls, x: x.toFixed(1), y: (y - 16).toFixed(1) }, L.fl);
+  const t = svgElement('text', { class: 'float-text ' + cls, x: x.toFixed(1), y: (y - 16).toFixed(1) }, L.fl);
   t.textContent = txt;
   setTimeout(() => t.remove(), 1500);
 }
@@ -643,14 +654,14 @@ export function floatAt(k, txt, cls) {
 const CHAIN_CLASS = { el: 'is-electric', fire: 'is-fire', ice: 'is-ice' };
 
 function drawChain(e) {
-  const g = el('g', {}, L.fx);
+  const g = svgElement('g', {}, L.fx);
   e.edges.forEach(([a, b, d]) => {
     const A = HC(a),
       C = HC(b),
-      pts = zig(A[0], A[1], C[0], C[1], 4, 3.5),
+      pts = zigzagPoints(A[0], A[1], C[0], C[1], 4, 3.5),
       dl = 0.05 + d * 0.12 + 's';
-    el('polyline', { class: 'chain-glow ' + CHAIN_CLASS[e.c], points: pts, style: `--d:${dl}` }, g);
-    el('polyline', { class: 'chain-segment ' + CHAIN_CLASS[e.c], points: pts, style: `--d:${dl}` }, g);
+    svgElement('polyline', { class: 'chain-glow ' + CHAIN_CLASS[e.c], points: pts, style: `--d:${dl}` }, g);
+    svgElement('polyline', { class: 'chain-segment ' + CHAIN_CLASS[e.c], points: pts, style: `--d:${dl}` }, g);
   });
   setTimeout(() => g.remove(), 1800);
 }
@@ -661,9 +672,9 @@ function beam(a, b, typ) {
   }
   const A = HC(a),
     C = HC(b);
-  const l = el(
+  const l = svgElement(
     'polyline',
-    { class: 'attack-beam', points: zig(A[0], A[1], C[0], C[1], 5, 2.5), style: `stroke:${typeColor(typ)}` },
+    { class: 'attack-beam', points: zigzagPoints(A[0], A[1], C[0], C[1], 5, 2.5), style: `stroke:${typeColor(typ)}` },
     L.fx
   );
   setTimeout(() => l.remove(), 700);
@@ -674,8 +685,8 @@ function burst(uid) {
   if (!u) {
     return;
   }
-  const [x, y] = HC(uk(u));
-  const c = el('circle', { class: 'unit-burst', cx: x, cy: y, r: 10 }, L.fx);
+  const [x, y] = HC(unitKey(u));
+  const c = svgElement('circle', { class: 'unit-burst', cx: x, cy: y, r: 10 }, L.fx);
   setTimeout(() => c.remove(), 1100);
 }
 
@@ -684,10 +695,10 @@ function arrFx(uid) {
   if (!u) {
     return;
   }
-  const [x, y] = HC(uk(u)),
-    g = el('g', { class: 'arrival-effect', style: `--c:${typeColor(u.t[0])}` }, L.fx);
+  const [x, y] = HC(unitKey(u)),
+    g = svgElement('g', { class: 'arrival-effect', style: `--c:${typeColor(u.t[0])}` }, L.fx);
   [0, 1].forEach(i =>
-    el(
+    svgElement(
       'polygon',
       { points: HP(x, y, BG.S * 1.9), style: `animation-delay:${i * 0.22}s`, transform: `rotate(30 ${x} ${y})` },
       g
@@ -713,17 +724,17 @@ function hit(uid) {
 export function playLog(ev) {
   ev.forEach(e => {
     if (e.e === 'msg') {
-      log(e.s, /^Arène /.test(e.s) ? 'arn' : /^(Arrivée|.* évolue en|.* puise)/.test(e.s) ? 'evo' : '');
+      addLog(e.s, /^Arène /.test(e.s) ? 'arn' : /^(Arrivée|.* évolue en|.* puise)/.test(e.s) ? 'evo' : '');
     } else if (e.e === 'dmg') {
       const u = byUid(B, e.u);
       if (u) {
-        floatAt(uk(u), '−' + e.v, 'is-damage');
+        floatAt(unitKey(u), '−' + e.v, 'is-damage');
         hit(e.u);
       }
     } else if (e.e === 'heal') {
       const u = byUid(B, e.u);
       if (u) {
-        floatAt(uk(u), '+' + e.v, 'is-heal');
+        floatAt(unitKey(u), '+' + e.v, 'is-heal');
       }
     } else if (e.e === 'rx') {
       floatAt(e.k, RX[e.rx].n, 'is-reaction');
@@ -739,17 +750,17 @@ export function playLog(ev) {
     } else if (e.e === 'ready') {
       const u = byUid(B, e.u);
       if (u && !u.ko) {
-        setTimeout(() => floatAt(uk(u), 'Éveil prêt', 'is-ready'), 380);
+        setTimeout(() => floatAt(unitKey(u), 'Éveil prêt', 'is-ready'), 380);
       }
     } else if (e.e === 'use') {
       const u = byUid(B, e.u);
       if (u && e.k) {
-        beam(uk(u), e.k, u.t[0]);
+        beam(unitKey(u), e.k, u.t[0]);
       }
     } else if (e.e === 'catch') {
       const u = byUid(B, e.u);
       if (u) {
-        floatAt(uk(u), 'Capturé !', 'is-ready');
+        floatAt(unitKey(u), 'Capturé !', 'is-ready');
         burst(e.u);
       }
     } else if (e.e === 'duo') {
@@ -757,12 +768,12 @@ export function playLog(ev) {
     } else if (e.e === 'note') {
       const u = byUid(B, e.u); // Resonance notes (v4.14)
       if (u && !u.ko) {
-        floatAt(uk(u), '♪'.repeat(e.n), 'is-note');
+        floatAt(unitKey(u), '♪'.repeat(e.n), 'is-note');
       }
     } else if (e.e === 'reso') {
       const u = byUid(B, e.u);
       if (u) {
-        setTimeout(() => floatAt(uk(u), 'Résonance !', 'is-resonance'), 260);
+        setTimeout(() => floatAt(unitKey(u), 'Résonance !', 'is-resonance'), 260);
         burst(e.u);
       }
     }
@@ -841,7 +852,7 @@ function confirmActCore() {
 
 function tapTile(k) {
   const u = ui.sel && byUid(B, ui.sel),
-    v = uAt(B, k);
+    v = unitAt(B, k);
   if (u && u.hr && u.acted && !u.moved && !ui.mode && !v && reach(B, u)[k] !== undefined) {
     // Scout: after striking, a blue tile is used to fall back
     const ev = pMove(B, u, k);
@@ -950,7 +961,7 @@ function endTurn() {
   ui.tile = null;
   clearAim();
   ui.selE = null;
-  log(`Fin de la manche ${B.round} : les adversaires passent à l’action.`, 'sys');
+  addLog(`Fin de la manche ${B.round} : les adversaires passent à l’action.`, 'sys');
   const order = startEnemy(B),
     S0 = B;
   renderAll();
@@ -1024,7 +1035,7 @@ export async function endOfRound(S0) {
     finish();
     return false;
   }
-  log(`Manche ${B.round} : à vous de jouer.`, 'sys');
+  addLog(`Manche ${B.round} : à vous de jouer.`, 'sys');
   autoSel();
   renderAll();
   return true;
@@ -1106,13 +1117,13 @@ export const TILT = { on: false };
 
 export const HC0 = k => {
   const p = P(k),
-    q = hc(p[0], p[1], BG.S, BG.OX, BG.OY);
+    q = hexCenter(p[0], p[1], BG.S, BG.OX, BG.OY);
   return VERT ? [q[1], 430 - q[0]] : q;
 };
 
 export const HC = k => (TILT.on ? tiltP(...HC0(k)) : HC0(k));
 
-export const HP = (x, y, s) => (TILT.on ? tiltHP(x, y, s) : VERT ? hpf(x, y, s) : hp(x, y, s));
+export const HP = (x, y, s) => (TILT.on ? tiltHP(x, y, s) : VERT ? hpf(x, y, s) : hexPoints(x, y, s));
 
 export const ui = {
   sel: null,
@@ -1128,7 +1139,7 @@ export const ui = {
 
 export const L = {};
 
-export const hpc = u => {
+export const hpClass = u => {
   const r = u.hp / u.mhp;
   return r > 0.5 ? '' : r > 0.2 ? 'is-half' : 'is-low';
 };
@@ -1275,7 +1286,7 @@ function onBattlePanelClick(e) {
       ui.pv = null;
       const m = MV[u.mv[i]];
       if (m.sh === 'self' || m.sh === 'ring') {
-        ui.pk = uk(u);
+        ui.pk = unitKey(u);
         ui.pv = preview(B, u.uid, i, ui.pk);
       }
     }
@@ -1398,7 +1409,7 @@ export function init() {
       launch();
     } else if (b.dataset.res === 'ligue') {
       backToPrep();
-      go('ligue');
+      goTo('ligue');
     } else {
       backToPrep();
     }

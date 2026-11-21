@@ -5,10 +5,10 @@ import { PROFILE } from '../state/game-state.js';
 import { toast } from '../core/utils.js';
 import { save } from '../team/team.js';
 import { sfx } from '../audio/sound-effects.js';
-import { ok } from './challenge-scenes.js';
+import { existingSpecies } from './challenge-scenes.js';
 import { writeChallengeState } from './challenges-hub.js';
 
-const REV = () => ok(['tenefix', 'malosse', 'demolosse', 'tyranocif']);
+const REV = () => existingSpecies(['tenefix', 'malosse', 'demolosse', 'tyranocif']);
 
 /** Specimens not yet in the Box nor the Pokédex. */
 export const freeSpecimens = () => REV().filter(id => !PROFILE.box.includes(id) && !(PROFILE.dex || []).includes(id));

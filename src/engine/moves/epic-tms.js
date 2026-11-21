@@ -1,11 +1,11 @@
 import { MV } from '../data/moves.js';
 import { HOOKS } from '../core/hooks.js';
-import { byUid, damage, endStep, hdist, heal, nbrK, net, say, stun, teff, uAt } from '../combat/engine.js';
+import { byUid, damage, endStep, hdist, heal, nbrK, net, pushMessage, stun, teff, unitAt } from '../combat/engine.js';
 import { poly } from '../combat/ui.js';
 import { SHOP } from '../state/economy.js';
 import { DAMAGE_PROVIDERS, SPEED_PROVIDERS } from '../combat/tactical-engine.js';
 import { MACHINES } from './tms.js';
-import { de } from '../combat/tactics.js';
+import { withDe } from '../combat/tactics.js';
 import { statusMoveBonus, tickTechnicalEffects, hasRune } from './technical-roster.js';
 import { heldMoveBonus } from '../combat/resonance.js';
 
@@ -15,15 +15,15 @@ export function applyPoison(S, v, ev) {
     return false;
   }
   if (v.t.includes('Poison') || v.t.includes('Acier')) {
-    say(ev, `${v.n} ne craint pas le poison.`);
+    pushMessage(ev, `${v.n} ne craint pas le poison.`);
     return false;
   }
   if (hasRune(S, v)) {
-    say(ev, `Rune Protect : ${v.n} est protégé.`);
+    pushMessage(ev, `Rune Protect : ${v.n} est protégé.`);
     return false;
   }
   v.poisoned = 3;
-  say(ev, `${v.n} est empoisonné.`);
+  pushMessage(ev, `${v.n} est empoisonné.`);
   return true;
 }
 
@@ -43,12 +43,12 @@ export function tickFieldEffects(S, ev) {
   if (S.arriere) {
     for (const c in S.arriere) {
       if (S.arriere[c] > 0 && --S.arriere[c] === 0) {
-        say(ev, `Le Vent Arrière ${c === 'a' ? 'de votre équipe' : 'adverse'} retombe.`);
+        pushMessage(ev, `Le Vent Arrière ${c === 'a' ? 'de votre équipe' : 'adverse'} retombe.`);
       }
     }
   }
   if (S.distorsion > 0 && --S.distorsion === 0) {
-    say(ev, 'La Distorsion se dissipe.');
+    pushMessage(ev, 'La Distorsion se dissipe.');
   }
   tickTechnicalEffects(S, ev);
 }
@@ -57,26 +57,29 @@ export function tickFieldEffects(S, ev) {
 export function placeForesight(S, u, m, k, ev) {
   S.presc = S.presc || [];
   S.presc.push({ k, by: u.uid, side: u.side, at: S.round + 1, p: m.pp || 14 });
-  say(ev, `${u.n} prévoit l’avenir : une onde Psy frappera cette zone à la fin de la manche suivante.`);
+  pushMessage(ev, `${u.n} prévoit l’avenir : une onde Psy frappera cette zone à la fin de la manche suivante.`);
   ev.push({ e: 'terrain', k });
 }
 
 function strikePrescience(S, P0, ev) {
   const u = byUid(S, P0.by),
     zone = [P0.k, ...nbrK(P0.k)].filter(x => S.tiles[x] && !S.tiles[x].rock),
-    keys = zone.map(x => uAt(S, x)).filter(v => v && !v.ko && v.side !== P0.side);
-  say(ev, `Prescience : l’onde Psy ${u ? de(u.n) + ' ' : ''}s’abat${keys.length ? '' : ' sur une zone vide'} !`);
+    keys = zone.map(x => unitAt(S, x)).filter(v => v && !v.ko && v.side !== P0.side);
+  pushMessage(
+    ev,
+    `Prescience : l’onde Psy ${u ? withDe(u.n) + ' ' : ''}s’abat${keys.length ? '' : ' sur une zone vide'} !`
+  );
   keys.forEach(v => {
     const e = teff('Psy', v.t);
     if (!e) {
-      say(ev, `Ça n’affecte pas ${v.n}.`);
+      pushMessage(ev, `Ça n’affecte pas ${v.n}.`);
       return;
     }
     const atk = u ? u.s[1] : 3,
       stab = u && u.t.includes('Psy') ? 1.2 : 1;
     damage(S, v, Math.max(1, Math.round((P0.p + atk * 2) * e * stab)), ev, {});
     if (e > 1) {
-      say(ev, 'C’est super efficace !');
+      pushMessage(ev, 'C’est super efficace !');
     }
   });
 }
@@ -133,14 +136,14 @@ export function fieldEffectChips(S) {
 export const SELF_MOVE_EFFECTS = {
   arriere(S, u, ev) {
     S.arriere = Object.assign({}, S.arriere, { [u.side]: 3 });
-    say(
+    pushMessage(
       ev,
       `Vent Arrière : ${u.side === 'a' ? 'votre équipe' : 'l’équipe adverse'} gagne +2 Mouvement pendant 3 manches.`
     );
   },
   distorsion(S, u, ev) {
     S.distorsion = 4;
-    say(ev, 'Distorsion : pendant 4 manches, les Pokémon lents frappent ×1,3 et gagnent +1 Mouvement.');
+    pushMessage(ev, 'Distorsion : pendant 4 manches, les Pokémon lents frappent ×1,3 et gagnent +1 Mouvement.');
   },
   glas(S, u, ev) {
     const healed = S.units.filter(o => !o.ko && o.side === u.side && hdist(o.pos, u.pos) <= 2);
@@ -162,17 +165,20 @@ export const SELF_MOVE_EFFECTS = {
         ev.push({ e: 'st', u: o.uid, s: 'SOIN' });
       }
     });
-    say(ev, `Glas de Soin : ${healed.map(o => o.n).join(', ')} ${healed.length > 1 ? 'sont guéris' : 'est guéri'}.`);
+    pushMessage(
+      ev,
+      `Glas de Soin : ${healed.map(o => o.n).join(', ')} ${healed.length > 1 ? 'sont guéris' : 'est guéri'}.`
+    );
   },
 };
 
 export const TARGET_MOVE_EFFECTS = {
   ventglace(S, u, v, k, mk, ev) {
     if (v.ability === 'regardvif' || hasRune(S, v)) {
-      say(ev, `${v.n} ignore l’entrave.`);
+      pushMessage(ev, `${v.n} ignore l’entrave.`);
     } else {
       v.web = Math.max(v.web, 2);
-      say(ev, `${v.n} est ralenti par le froid.`);
+      pushMessage(ev, `${v.n} est ralenti par le froid.`);
     }
   },
   dracosouffle(S, u, v, k, mk, ev) {
@@ -187,11 +193,11 @@ export const TARGET_MOVE_EFFECTS = {
     }
     const N = net(S, k, 'trempe');
     const others = Object.keys(N.seen)
-      .map(x => uAt(S, x))
+      .map(x => unitAt(S, x))
       .filter(o => o && o !== v && !o.ko && o.side !== u.side && !(o.poisoned > 0));
     if (others.length) {
       ev.push({ e: 'chain', edges: N.edges, c: 'tox' });
-      say(ev, `Contamination : le poison court dans l’eau reliée.`);
+      pushMessage(ev, `Contamination : le poison court dans l’eau reliée.`);
       others.forEach(o => applyPoison(S, o, ev));
     }
   },
