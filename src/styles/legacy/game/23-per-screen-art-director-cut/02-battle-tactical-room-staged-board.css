@@ -3,11 +3,6 @@
   max-width: 900px;
 }
 
-#combat #bLaunch {
-  border: 1px solid #ffe9b1;
-  box-shadow: 0 9px 25px rgba(214, 164, 79, 0.24);
-}
-
 /* GUIDE & LEAGUE — strategy atlas and badge room */
 /* Global consistency, focus and mobile adaptation (.button buttons: src/styles/components/button.css) */
 button:not(:where(.button, .tabs > button)),

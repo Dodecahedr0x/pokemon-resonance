@@ -91,6 +91,12 @@
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
   touch-action: pan-y;
+  border: 1px solid rgba(242, 198, 109, 0.38);
+  border-radius: 22px;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(242, 198, 109, 0.13), transparent 65%),
+    linear-gradient(145deg, #172e3a, #091923);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
 }
 @media (max-width: 999px) {
   .modal.battle-result {

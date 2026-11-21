@@ -1,17 +1,5 @@
 /* Continued from 01-art-direction.css (same order). */
 /* from legacy/game/23-per-screen-art-director-cut/02-battle-tactical-room-staged-board.css */
-#combat #bLaunch {
-  background: linear-gradient(135deg, #f6d889, #b98538);
-  color: #18212a;
-}
-#combat .modal {
-  border: 1px solid rgba(242, 198, 109, 0.38);
-  border-radius: 22px;
-  background:
-    radial-gradient(ellipse at 50% 0%, rgba(242, 198, 109, 0.13), transparent 65%),
-    linear-gradient(145deg, #172e3a, #091923);
-  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
-}
 button:focus-visible,
 a:focus-visible {
   outline: 2px solid var(--r22-cyan);
@@ -24,11 +12,6 @@ a:focus-visible {
 }
 
 /* from legacy/game/24-fullscreen-art-full-art-direction/02-map-actual-dynamic-carte-page.css */
-#combat #bLaunch {
-  min-height: 48px;
-  background: linear-gradient(135deg, #ffe6a0, #c38a3b);
-  color: #1a2025;
-}
 
 /* from legacy/game/25-post-init-selector-repair/02-battle-both-states-preparation.css */
 

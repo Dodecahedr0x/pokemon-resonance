@@ -245,6 +245,15 @@
   padding-top: var(--space-md);
   border-top: 1px solid rgba(212, 175, 106, 0.12);
 }
+/* "Lancer le combat" (#bLaunch): a brighter gold than the other primary buttons */
+.prep-launch > .button-primary {
+  min-height: 48px;
+  border: 1px solid #ffe9b1;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #ffe6a0, #c38a3b);
+  color: #1a2025;
+  box-shadow: 0 10px 28px rgba(225, 172, 78, 0.22);
+}
 .prep-launch-summary {
   display: grid;
   gap: var(--space-3xs);
