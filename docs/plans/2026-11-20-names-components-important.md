@@ -395,3 +395,18 @@ Each step is one commit (or a few), on its own, playable at every point.
   `src/styles/accessibility/`, a last `accessibility` layer after `overrides`. The six duplicated reduced-motion
   blocks became one; being in the last layer it now also stops the animations whose specificity used to beat the `*`
   rule (page entry `.page.on`, `.pk-rise` / `.pk-fade`).
+- Folding the overrides: in progress (overrides is down to ~60 lines from ~390, legacy to ~3,800 lines). Done so far:
+  the battle frame (`battle-layout.css`), board tools (`board-tools.css`), the saved-battle card (`.resume` →
+  `.battle-summary`, its own `battle-summary.css`), the battle log frame, the launch button, the result modal, the
+  sidebar goal (`sg-k` / `sg-b` → `side-goal-label` / `side-goal-link`), the prep goal chips (`hh-chips` →
+  `prep-card-chips`), link buttons (`lnk` → `.text-link`), battle levels (`srw-lv` → `.scenario-level`), field-effect
+  chips (`chip-412` → `chip-field-effect`, `en` → `is-foe`), painted terrain, and the move cards (`mvc` / `t` / `mvs`
+  / `tal` / `car-mvc` → `move-card` / `move-card-head` / `move-card-stats` / `is-talent` / `trait-card`, in
+  `team/move-card.css`). Rules for classes no code produces (`.sel`, `.pt`, `.items`, `.dex`…) were deleted.
+- Utilities layer: done. What must win over every screen lives in `src/styles/utilities/` (layer `utilities`, after
+  `overrides`, before `accessibility`): global states (`[hidden]`, `.vh`, `img.img-off`, the coach highlight
+  `.coach-hl`), the focus ring of buttons and links (`--color-focus`), the shared entrance animations (`.page.on`,
+  `.pk-rise`, `.pk-fade`, with their keyframes) and the performance switches (no backdrop blur, no board SVG filters).
+  Left in overrides: `.d`, `.section-title`, the form element colours (`input`, `select`, `textarea`, `summary`, `hr`,
+  `.form-field input`) and the phone font sizes of `.caption`, `.pill`, `dt`, `.chip`. These are shared by many
+  screens, so each needs the snapshots on every screen at both widths.
