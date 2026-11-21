@@ -29,7 +29,7 @@ export default function Universe() {
     <>
       <div className="guide-intro">
         <h2 className="section-title">L’univers de Résonance</h2>
-        <p className="d">
+        <p className="description">
           Une Ligue, un règlement, des maîtres d’arène qui ont chacun leur façon de vous mettre à l’épreuve.
         </p>
       </div>

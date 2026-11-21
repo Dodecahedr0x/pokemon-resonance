@@ -43,7 +43,7 @@ export default function Tutorial() {
     <>
       <div className="guide-intro">
         <h2 className="section-title">Tutoriel complet</h2>
-        <p className="d">
+        <p className="description">
           Toutes les mécaniques du jeu, chapitre par chapitre. Ouvrez un chapitre pour le lire, puis essayez-le.
         </p>
       </div>

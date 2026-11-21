@@ -37,7 +37,7 @@ function MyCard({ displayName: displayName, code, teamNames: team, canShare: sha
       </label>
       {code ? (
         <>
-          <p className="d">
+          <p className="description">
             Votre équipe actuelle ({team.join(', ')}) et vos progrès tiennent dans ce code. Envoyez-le à vos amis : ils
             le collent dans « Ajouter un ami ».
           </p>
@@ -53,7 +53,7 @@ function MyCard({ displayName: displayName, code, teamNames: team, canShare: sha
           </p>
         </>
       ) : (
-        <p className="d">Composez d’abord une équipe : c’est elle que vos amis affronteront.</p>
+        <p className="description">Composez d’abord une équipe : c’est elle que vos amis affronteront.</p>
       )}
     </Dialogue>
   );
@@ -66,7 +66,7 @@ function Addition() {
       <h2 className="section-title" id="amiT">
         Ajouter un ami
       </h2>
-      <p className="d">
+      <p className="description">
         Collez ici le code que votre ami vous a envoyé (il commence par « RES- »). Si vous l’avez déjà, sa carte est
         mise à jour.
       </p>

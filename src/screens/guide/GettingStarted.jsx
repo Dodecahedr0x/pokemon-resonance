@@ -5,7 +5,9 @@ export default function GettingStarted() {
     <>
       <div className="guide-intro">
         <h2 className="section-title">Débuter en 5 étapes</h2>
-        <p className="d">Tout ce qu’il faut savoir pour gagner votre premier combat. Le reste se découvre en jouant.</p>
+        <p className="description">
+          Tout ce qu’il faut savoir pour gagner votre premier combat. Le reste se découvre en jouant.
+        </p>
       </div>
       <ol className="guide-steps">
         <li style={{ '--c': '#E3350D' }}>

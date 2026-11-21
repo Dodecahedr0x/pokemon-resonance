@@ -94,7 +94,7 @@ export default function League() {
           <div>
             <p className="kicker">Entre les combats</p>
             <h2 className="section-title">Liens, capture, fatigue, objets</h2>
-            <p className="d">
+            <p className="description">
               Quatre systèmes de campagne qui obligent à faire tourner tout le Box, petits Pokémon compris.
             </p>
           </div>
@@ -194,7 +194,7 @@ export default function League() {
           <div>
             <p className="kicker">Palier 3</p>
             <h2 className="section-title">Techniques combinées</h2>
-            <p className="d">
+            <p className="description">
               Propres à un duo précis, débloquées au palier Duo (9 points de Lien). En combat : les deux Pokémon à 2
               cases au plus, aucun n’a encore agi, 2 Voix. Ils frappent l’un après l’autre.
             </p>

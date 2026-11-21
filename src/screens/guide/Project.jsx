@@ -64,7 +64,7 @@ export default function Project() {
           <div>
             <p className="kicker">Studio</p>
             <h2 className="section-title">Du papier au prototype</h2>
-            <p className="d">
+            <p className="description">
               Le cœur du jeu est déterministe : il se teste d’abord sur papier, avec des jetons et un plateau imprimé.
             </p>
           </div>

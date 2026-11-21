@@ -3,8 +3,7 @@
    its screen or component file (see docs/plans/2026-11-20-style-cleanup.md); add nothing new here. */
 
 /* from legacy/game/13-art-direction-2026-integrated/01-art-direction-2026-integrated.css */
-.d,
-.page-header .d {
+.description {
   color: #c3d8e5;
 }
 

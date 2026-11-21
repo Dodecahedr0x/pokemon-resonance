@@ -28,7 +28,7 @@ function Choice({ cands, pick }) {
       <h2 className="section-title" id="tdrT">
         Tour de Résonance
       </h2>
-      <p className="d">
+      <p className="description">
         Choisissez 4 Pokémon pour cette ascension. Pas de budget ici : à vous de trouver les bonnes synergies.
       </p>
       <div className="starter-grid tower-grid">
@@ -89,7 +89,7 @@ function Reward({ floor, offer }) {
           </button>
         ))}
       </div>
-      <p className="d">
+      <p className="description">
         Ensuite : étage {floor}
         {floor % 5 === 0 ? ', gardé par une légende' : ''}.
       </p>

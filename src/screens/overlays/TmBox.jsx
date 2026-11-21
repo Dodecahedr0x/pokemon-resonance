@@ -17,11 +17,11 @@ function Card({ M, m, families: families }) {
       <h2 className="section-title" id="ctT">
         {M.num} · {m.n}
       </h2>
-      <p className="d">
+      <p className="description">
         <Html html={typeBadge(m.t)} /> {m.p ? `Puissance ${m.p} · ` : ''}
         <Html html={m.d} />
       </p>
-      <p className="d">
+      <p className="description">
         À qui l’apprendre ? Elle devient sa 3e capacité, à tous les stades de sa famille.{' '}
         {M.cs ? 'La CS reste dans le Sac.' : 'La CT disparaît une fois utilisée.'}
       </p>

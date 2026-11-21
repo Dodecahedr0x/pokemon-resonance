@@ -232,7 +232,7 @@ export default function Reactions() {
     <>
       <div className="guide-intro">
         <h2 className="section-title">Les types se répondent</h2>
-        <p className="d">
+        <p className="description">
           La table des types classique s’applique toujours. Une marque reste deux manches sur une case ; un autre
           élément la consomme et déclenche une réaction. Ligne : marque posée. Colonne : élément qui arrive.
         </p>
@@ -270,7 +270,7 @@ export default function Reactions() {
           <div>
             <p className="kicker">Table des types</p>
             <h2 className="section-title">Les repères restent intacts</h2>
-            <p className="d">
+            <p className="description">
               Les multiplicateurs ×2, ×½ et ×0 s’appliquent avant toute réaction. Un joueur de la série retrouve ses
               réflexes dès le premier combat.
             </p>
@@ -285,7 +285,7 @@ export default function Reactions() {
           <div>
             <p className="kicker">Exemple de chaîne</p>
             <h2 className="section-title">Deux Pokémon, une capture d’eau</h2>
-            <p className="d">
+            <p className="description">
               Magnéti charge, attire l’ennemi dans la rivière, Pikachu frappe l’eau. Chaque case parcourue retire 15 %
               de puissance.
             </p>
@@ -300,7 +300,7 @@ export default function Reactions() {
           <div>
             <p className="kicker">Nouveau · Météo</p>
             <h2 className="section-title">Le ciel change les marques</h2>
-            <p className="d">
+            <p className="description">
               Une capacité de météo dure 5 manches et modifie la durée des marques sur tout le plateau.
             </p>
           </div>
@@ -314,7 +314,7 @@ export default function Reactions() {
           <div>
             <p className="kicker">Les 18 types</p>
             <h2 className="section-title">Marquer ou déplacer</h2>
-            <p className="d">
+            <p className="description">
               Six familles posent des marques. Les neuf autres types agissent sur les positions : les 18 ont un rôle sur
               le plateau.
             </p>

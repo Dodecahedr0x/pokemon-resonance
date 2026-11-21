@@ -15,7 +15,7 @@ function Card({ L, cur, bonus }) {
       <h2 className="section-title" id="compT">
         Qui vous accompagne ?
       </h2>
-      <p className="d">
+      <p className="description">
         Son affection grandit quand il combat avec vous (+2, +1 de plus en cas de victoire) et quand vous le câlinez
         (une fois par jour). En changer remet l’affection à zéro.
       </p>

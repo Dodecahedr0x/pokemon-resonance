@@ -88,7 +88,7 @@ export function Chords() {
   return (
     <section className="guide-chords" aria-label="Accords de Résonance">
       <h3 className="card-title">Accords de Résonance</h3>
-      <p className="d">
+      <p className="description">
         Avec la Tactique avancée : dans une même manche, trois attaques de vos Pokémon dont les types forment un accord
         déclenchent un effet d’équipe. Un accord par manche.
       </p>
@@ -116,7 +116,7 @@ export function ResonanceInBattle() {
   return (
     <section className="guide-chords is-resonance" aria-label="La Résonance en combat">
       <h3 className="card-title">La Résonance en combat</h3>
-      <p className="d">
+      <p className="description">
         Chaque Pokémon a un rang, selon son coût en PC : Faible (1), Moyen (2 et 3), Fort (4 et 5), Expert (6 et plus,
         et les légendaires). Un Éveil le fait monter de rang. Chaque rang a son rôle : avec trois rangs différents,
         l’équipe est en <b>Harmonie</b> et chaque Pokémon commence le combat avec 1 losange.
@@ -136,13 +136,13 @@ export function ResonanceInBattle() {
           </span>
         </div>
       ))}
-      <p className="d">
+      <p className="description">
         <b>Attaques classées.</b> Faibles (Puissance 6 ou moins), Moyennes (7 à 9), Fortes (10 et plus). Les capacités
         signature offensives et celles des légendaires sont <b>Expertes</b> : elles coûtent 2 losanges de Résonance (1
         pour un Pokémon Expert). Un Pokémon au stade final remplit ses losanges pour elles, comme les autres pour
         l’Éveil.
       </p>
-      <p className="d">
+      <p className="description">
         <b>Notes de Résonance.</b> Chaque Pokémon différent qui frappe une même cible dans la manche y pose une note
         (deux pour un Pokémon Moyen). À la troisième : « Résonance ! » Ce coup fait ×1,5 et déclenche l’écho de son
         type, sauf si une réaction du terrain vient d’avoir lieu sur cette case. Les notes s’effacent en fin de manche.
@@ -160,7 +160,7 @@ export function ResonanceInBattle() {
           </span>
         </div>
       ))}
-      <p className="d">
+      <p className="description">
         Maîtres d’arène, rival, Conseil 4, Maître de la Ligue, légendaires et colosses se servent aussi des notes et des
         attaques Expertes. Sur les terrains et dans la Tour de Résonance, les adversaires ne les utilisent pas.
       </p>
@@ -173,7 +173,7 @@ export default function Tactics() {
     <>
       <div className="guide-intro">
         <h2 className="section-title">Rôles, synergies, obstacles</h2>
-        <p className="d">
+        <p className="description">
           Chaque rôle a sa mécanique, deux types complémentaires ouvrent une synergie, et le terrain change la portée
           des tirs.
         </p>

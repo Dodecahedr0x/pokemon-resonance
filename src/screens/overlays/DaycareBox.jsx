@@ -17,7 +17,7 @@ function Card({ L, ok }) {
       <h2 className="section-title" id="pensT">
         Choisissez un couple
       </h2>
-      <p className="d">
+      <p className="description">
         Deux Pokémon qui partagent un type, ou Métamorph avec n’importe qui. Le premier choisi donne la famille de
         l’œuf, le second lui transmet une attaque. Les membres de l’équipe restent au camp.
       </p>

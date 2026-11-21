@@ -21,7 +21,7 @@ function Body({ status: state, id, sh, dom, known: known }) {
         <div className="fishing-water">
           <span className="fishing-float" />
         </div>
-        <p className="d">La ligne est à l’eau… Attendez que ça morde, puis ferrez vite !</p>
+        <p className="description">La ligne est à l’eau… Attendez que ça morde, puis ferrez vite !</p>
         <Button size="large" disabled>
           Ça ne mord pas encore…
         </Button>
@@ -45,7 +45,7 @@ function Body({ status: state, id, sh, dom, known: known }) {
     return (
       <>
         <div className="fishing-water" />
-        <p className="d">Trop tard : il s’est échappé.</p>
+        <p className="description">Trop tard : il s’est échappé.</p>
         <Button variant="primary" data-fishing-panel="lancer">
           Relancer la ligne
         </Button>

@@ -38,7 +38,7 @@ function Card({ destinationId: dest, available: available }) {
         </div>
       ) : (
         <>
-          <p className="d">
+          <p className="description">
             Qui part ? Les Pokémon dont un type convient au lieu rapportent le double. Les membres de l’équipe ne
             peuvent pas partir.
           </p>
