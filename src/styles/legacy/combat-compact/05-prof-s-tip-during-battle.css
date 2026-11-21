@@ -3,14 +3,3 @@
    and stretched the page with a big empty gap. It stays floating, at the top, above the board. */
 
 /* ================= phone: decluttered HUD and drawer ================= */
-@media (max-width: 700px) {
-  /* HUD on two clean lines: phase · opponent · Voices / round · conditions · settings */
-  /* sun and time are already on the board (sky badge) */
-
-  /* drawer footer on two rows: quick actions (or the phase hint) get the full width,
-     board tools and the end/launch button share the second row. */
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .battle-side .battle-footer .board-tools.in-foot {
-    order: 2;
-    flex: none;
-  }
-}

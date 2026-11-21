@@ -121,6 +121,7 @@
 @import '../screens/combat/board/token-status.css' layer(screens);
 @import '../screens/combat/board/token-tilted.css' layer(screens);
 @import '../screens/combat/board/board-effects.css' layer(screens);
+@import '../screens/combat/board/board-tools.css' layer(screens);
 @import '../screens/home/home-hero.css' layer(screens);
 @import '../screens/home/home-hero-backdrop.css' layer(screens);
 @import '../screens/home/home.css' layer(screens);

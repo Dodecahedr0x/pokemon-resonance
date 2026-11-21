@@ -114,30 +114,7 @@ html body.compact-battle #combat.page.on {
     display: none;
   }
 }
-@media (min-width: 1121px) {
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bBoard > .board-tools {
-    top: 66px;
-    left: 12px;
-  }
-}
 
 /* from legacy/combat-compact/02-phone.css */
 
 /* from legacy/combat-compact/05-prof-s-tip-during-battle.css */
-@media (max-width: 700px) {
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .battle-side .battle-footer .board-tools.in-foot {
-    gap: var(--space-2xs);
-  }
-}
-@media (max-width: 700px) {
-  html:not(#cc)
-    body:not(#cc):has(#cbBattle:not([hidden]))
-    #cbBattle
-    .battle-side
-    .battle-footer
-    .board-tools.in-foot
-    button {
-    width: 44px;
-    height: 44px;
-  }
-}

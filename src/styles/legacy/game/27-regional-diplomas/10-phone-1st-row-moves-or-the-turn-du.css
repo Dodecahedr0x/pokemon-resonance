@@ -1,9 +1,4 @@
 /* phone: 1st row = moves (or the turn state), 2nd row = tools + "Fin du tour" (End turn) */
-.board-tools button.on {
-  background: linear-gradient(180deg, #ffe28a, #d6a82d);
-  border-color: transparent;
-  color: #1d1406;
-}
 
 /* full screen: in battle on phone, the bottom navigation disappears */
 html body.fullscreen-mode.compact-battle {
