@@ -78,9 +78,5 @@ html body .chip-mut {
 html body .form-field select {
   min-height: 44px;
   padding: 0 var(--space-md);
-  border-radius: 10px;
-  border: 1px solid rgba(120, 200, 255, 0.25);
-  background: rgba(0, 0, 0, 0.3);
-  color: inherit;
   font: 600 15px var(--f-b, system-ui, sans-serif);
 }

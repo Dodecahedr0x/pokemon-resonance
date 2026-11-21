@@ -21,10 +21,6 @@
 .camp-duel .camp-duel-name input {
   width: 100%;
   height: 38px;
-  border-radius: 10px;
-  border: 1px solid var(--dj);
-  background: rgba(0, 0, 0, 0.3);
-  color: inherit;
   padding: 0 var(--space-sm);
   font: inherit;
   font-size: 15px;

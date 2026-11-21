@@ -15,8 +15,7 @@
 .guide-figure {
   padding: var(--space-xl) var(--space-xl) var(--space-lg);
 }
-.guide-figure:last-child {
-}
+
 .guide-figure b {
   display: block;
   line-height: 1;

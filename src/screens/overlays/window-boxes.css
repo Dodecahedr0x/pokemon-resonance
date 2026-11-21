@@ -128,10 +128,6 @@
   font: inherit;
   font-size: 16px;
   padding: var(--space-sm) var(--space-md);
-  border-radius: 10px;
-  border: 1px solid rgba(120, 200, 255, 0.3);
-  background: rgba(0, 0, 0, 0.3);
-  color: inherit;
 }
 .friend-code {
   width: 100%;

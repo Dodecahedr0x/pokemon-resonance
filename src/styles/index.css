@@ -1,7 +1,7 @@
 /* Stylesheet entry point. Cascade layers, lowest first: a rule in a later layer wins over any rule in an earlier
    one, whatever its specificity, so new code never needs !important or id chains to beat legacy rules.
    - theme:      tokens only (custom properties)
-   - base:       fonts, element defaults
+   - base:       fonts, element defaults, form fields
    - components: shared pieces (src/styles/components/), styled once
    - legacy:     the old per-release files, being emptied (see docs/plans/2026-11-20-style-cleanup.md); it still
                  holds screen-specific overrides of components, so it sits above them
@@ -11,13 +11,12 @@
                  dark text); it wins over the screens' own colours for those boxes
    - motion:     calm motion, « reduce animations » and the system's reduced motion switching animations off; they
                  win over every screen state (a selected or shiny token keeps still)
-   - overrides:  the declarations the legacy files marked !important, waiting to be folded into their screens
    - utilities:  what wins over every screen (src/styles/utilities/): global states ([hidden], .vh, the coach
                  highlight), the focus ring, the shared entrance animations and the performance switches
    - accessibility: reduced motion and high contrast, which win over everything
    Caveat: for !important declarations the order is reversed (an earlier layer wins), which is one more reason
    new code does not use them. The Workshop's user CSS is unlayered, so it overrides every normal rule. */
-@layer theme, base, components, legacy, screens, skin, motion, overrides, utilities, accessibility;
+@layer theme, base, components, legacy, screens, skin, motion, utilities, accessibility;
 
 @import './theme/spacing.css' layer(theme);
 @import './theme/palette.css' layer(theme);
@@ -26,6 +25,7 @@
 @import './legacy/index.css' layer(legacy);
 @import './base/fonts.css' layer(base);
 @import './base/elements.css' layer(base);
+@import './base/forms.css' layer(base);
 @import './components/button.css' layer(components);
 @import './components/page-header.css' layer(components);
 @import './components/card.css' layer(components);
@@ -170,7 +170,6 @@
 @import '../screens/combat/board/board-effects-motion.css' layer(motion);
 @import './components/hp-bar-motion.css' layer(motion);
 
-@import './overrides/index.css' layer(overrides);
 @import './utilities/states.css' layer(utilities);
 @import './utilities/performance.css' layer(utilities);
 @import './utilities/focus.css' layer(utilities);

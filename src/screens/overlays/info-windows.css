@@ -57,7 +57,6 @@
 .info-window-body summary {
   cursor: pointer;
   font-size: 13.5px;
-  color: #9fd8ff;
 }
 .info-window-body details p {
   padding-left: var(--space-2xs);

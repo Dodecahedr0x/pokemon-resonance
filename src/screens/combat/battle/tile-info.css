@@ -196,7 +196,6 @@
   font: 600 11px/1 var(--font-mono);
   letter-spacing: 0.07em;
   text-transform: uppercase;
-  color: #d8c08a;
   padding: var(--space-xs) 0;
   list-style: none;
 }

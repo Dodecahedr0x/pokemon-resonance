@@ -97,7 +97,6 @@
 /* ranking */
 .home-friends-ranking summary {
   padding: var(--space-2xs) 0;
-  color: var(--color-text-soft);
   font: 800 13px/1.2 var(--font-display);
   letter-spacing: 0.06em;
   text-transform: uppercase;
