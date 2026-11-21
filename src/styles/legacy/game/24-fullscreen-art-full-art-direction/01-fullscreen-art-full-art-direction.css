@@ -19,8 +19,8 @@ body {
   background:
     radial-gradient(ellipse at 14% 4%, rgba(33, 133, 157, 0.22), transparent 32%),
     radial-gradient(ellipse at 92% 22%, rgba(173, 120, 55, 0.12), transparent 30%),
-    linear-gradient(180deg, #071827 0%, #07111c 48%, #050b13 100%) !important;
-  color: var(--rx-text) !important;
+    linear-gradient(180deg, #071827 0%, #07111c 48%, #050b13 100%);
+  color: var(--rx-text);
 }
 body:before {
   content: '';

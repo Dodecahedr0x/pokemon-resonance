@@ -76,6 +76,6 @@ html body .page.on {
 /* ---------- 8. Battles on phone: the footer goes above the fixed bar ---------- */
 @media (max-width: 999px) {
   html body #combat.page.on {
-    padding-bottom: 84px !important;
+    padding-bottom: 84px;
   }
 }

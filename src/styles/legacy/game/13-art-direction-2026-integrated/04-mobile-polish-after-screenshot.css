@@ -7,14 +7,14 @@
 /* ===== resonance-art-direction-final layer ===== */
 /* === POKÉMON RÉSONANCE — INTEGRATED CINEMATIC ART DIRECTION === */
 body {
-  background: radial-gradient(ellipse at 50% -15%, rgba(23, 107, 150, 0.24), transparent 55%), #030b14 !important;
-  color: #f3f8ff !important;
+  background: radial-gradient(ellipse at 50% -15%, rgba(23, 107, 150, 0.24), transparent 55%), #030b14;
+  color: #f3f8ff;
 }
 .caption {
-  color: #ffdf68 !important;
+  color: #ffdf68;
 }
 .section-title {
-  letter-spacing: -0.025em !important;
+  letter-spacing: -0.025em;
   text-shadow: 0 3px 22px rgba(0, 0, 0, 0.38) !important;
 }
 .lnk {

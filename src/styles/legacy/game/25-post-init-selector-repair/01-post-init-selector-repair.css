@@ -16,14 +16,14 @@
 }
 html,
 body {
-  background-color: #050d16 !important;
+  background-color: #050d16;
 }
 body {
   background:
     radial-gradient(ellipse at 12% 2%, rgba(39, 157, 174, 0.2), transparent 34%),
     radial-gradient(ellipse at 88% 18%, rgba(218, 159, 71, 0.13), transparent 27%),
-    linear-gradient(180deg, #071a29 0%, #07111d 58%, #040a12 100%) !important;
-  color: var(--r24-white) !important;
+    linear-gradient(180deg, #071a29 0%, #07111d 58%, #040a12 100%);
+  color: var(--r24-white);
 }
 
 /* HOME — real container after JS move: .home-hero */

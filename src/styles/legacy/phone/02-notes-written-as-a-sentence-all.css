@@ -51,6 +51,6 @@ p.note {
     min-height: 40px;
   }
   html body .page .caption {
-    font-size: var(--t-xs) !important;
+    font-size: var(--t-xs);
   }
 }
