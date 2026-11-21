@@ -29,7 +29,7 @@
   animation: qUp 0.45s var(--rise) both;
 }
 .prep-card > *,
-.prep-card .hh-chips {
+.prep-card .prep-card-chips {
   min-width: 0;
   max-width: 100%;
 }
@@ -152,5 +152,34 @@
 @media (prefers-reduced-motion: reduce) {
   .prep-card {
     animation: none;
+  }
+}
+
+/* the goal chips (« Capture possible »…) under the battle description */
+.prep-card-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  letter-spacing: 0.14em;
+}
+.prep-card-chips span {
+  padding: var(--space-2xs) var(--space-sm);
+  border: 1px solid rgba(122, 218, 255, 0.35);
+  border-radius: 6px;
+  background: rgba(5, 26, 41, 0.78);
+  color: #e7f7ff;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+@media (max-width: 999px) {
+  .prep-card-chips span {
+    font-size: 11px;
+  }
+}
+@media (max-width: 720px) {
+  .prep-card-chips {
+    justify-content: center;
   }
 }

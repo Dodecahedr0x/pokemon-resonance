@@ -53,7 +53,7 @@ export default function Tutorial() {
         </span>
         <i style={{ '--w': Math.round((n / TUTORIAL_LIST.length) * 100) + '%' }} />
         {n > 0 && (
-          <button type="button" className="lnk" onClick={resetToZero}>
+          <button type="button" className="text-link" onClick={resetToZero}>
             Tout remettre à zéro
           </button>
         )}

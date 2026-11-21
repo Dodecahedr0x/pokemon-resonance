@@ -160,7 +160,7 @@ export default function Team({ v }) {
         <b id="ptCount" className="prep-team-count">
           {on ? `${squad.length} / 4 · ${squadCost()} / ${BUDGET} PC` : '0 / 4'}
         </b>
-        <button className="lnk" type="button" data-go="pokedex">
+        <button className="text-link" type="button" data-go="pokedex">
           Modifier
         </button>
       </div>

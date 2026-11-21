@@ -55,7 +55,7 @@ function Row({ k, gk }) {
       <use href="#i-check" />
     </svg>
   ) : (
-    <span className="srw-lv">N.{s.lv}</span>
+    <span className="scenario-level">N.{s.lv}</span>
   );
   return (
     <button

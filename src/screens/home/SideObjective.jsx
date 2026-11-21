@@ -21,10 +21,10 @@ function Content() {
   const g = goalInfo();
   return (
     <>
-      <span className="sg-k">Prochaine étape</span>
+      <span className="side-goal-label">Prochaine étape</span>
       <button
         type="button"
-        className="sg-b"
+        className="side-goal-link"
         data-goal={squad.length ? g.k : undefined}
         data-go={squad.length ? undefined : 'pokedex'}
         style={{ '--ac': g.type ? typeColor(g.type) : '#FFCB05' }}

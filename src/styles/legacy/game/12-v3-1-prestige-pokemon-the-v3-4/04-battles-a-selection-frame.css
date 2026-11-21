@@ -1,10 +1,4 @@
 /* ---------- Battles: a selection frame ---------- */
-.srw-lv {
-  font-family: var(--f-m);
-  font-size: 10.5px;
-  letter-spacing: 0.06em;
-  color: var(--mut);
-}
 .pill {
   display: inline-flex;
   align-items: center;

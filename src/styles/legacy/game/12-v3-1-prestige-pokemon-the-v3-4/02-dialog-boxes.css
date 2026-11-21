@@ -1,26 +1,3 @@
 /* ---------- dialog boxes ---------- */
 /* first-visit tips */
 /* ---------- Adventure: chapter screen ---------- */
-
-.hh-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-xs);
-}
-.hh-chips span {
-  padding: var(--space-2xs) var(--space-sm);
-  border-radius: 2px;
-  border: 1px solid rgba(212, 175, 106, 0.22);
-  background: rgba(10, 10, 12, 0.5);
-  font-family: var(--f-m);
-  font-size: 10.5px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--tx2);
-}
-
-@media (max-width: 720px) {
-  .hh-chips {
-    justify-content: center;
-  }
-}

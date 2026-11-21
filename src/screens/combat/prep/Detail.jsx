@@ -90,7 +90,7 @@ export default function Detail({ k }) {
     <p key="d" className="prep-card-text">
       <Html html={s.d} />
     </p>,
-    <div key="c" className="hh-chips">
+    <div key="c" className="prep-card-chips">
       <Html html={goalChips(s)} />
       {s.catch ? <span>Capture possible</span> : null}
     </div>,

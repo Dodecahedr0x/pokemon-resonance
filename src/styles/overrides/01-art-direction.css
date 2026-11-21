@@ -27,15 +27,6 @@
 }
 
 /* from legacy/game/13-art-direction-2026-integrated/01-art-direction-2026-integrated.css */
-.side-goal {
-  border: 1px solid rgba(255, 207, 88, 0.28);
-  border-radius: 18px;
-  background: linear-gradient(145deg, rgba(27, 67, 80, 0.78), rgba(5, 22, 34, 0.92));
-}
-.sg-k,
-.hh-chips {
-  letter-spacing: 0.14em;
-}
 .d,
 .page-header .d {
   color: #c3d8e5;
@@ -47,12 +38,6 @@
 .section-title {
   text-shadow: 0 3px 22px rgba(0, 0, 0, 0.38);
 }
-.lnk {
-  transition:
-    transform 0.2s,
-    box-shadow 0.2s,
-    background 0.2s;
-}
 .mvc {
   background: linear-gradient(145deg, rgba(13, 43, 65, 0.96), rgba(5, 22, 37, 0.97));
   border-color: rgba(98, 207, 241, 0.24);
@@ -62,21 +47,8 @@
 }
 
 /* from legacy/game/14-deep-art-direction-v2/01-deep-art-direction-v2.css */
-.side-goal {
-  background: linear-gradient(145deg, rgba(12, 49, 68, 0.95), rgba(4, 22, 36, 0.97));
-  border: 1px solid rgba(94, 206, 255, 0.23);
-  border-radius: 15px;
-}
 .page.on {
   animation: resPageIn 0.35s ease-out both;
-}
-.hh-chips span {
-  background: rgba(5, 26, 41, 0.78);
-  border: 1px solid rgba(122, 218, 255, 0.35);
-  border-radius: 6px;
-  color: #e7f7ff;
-  padding: var(--space-2xs) var(--space-sm);
-  font-size: 10px;
 }
 
 /* from legacy/game/14-deep-art-direction-v2/02-team-selection-true-collector.css */
@@ -99,13 +71,8 @@ hr {
 }
 
 /* from legacy/game/15-v32-readability/01-v32-readability.css */
-html body .hh-chips span {
-  font-size: 10px;
-}
 @media (max-width: 999px) {
   html body .caption,
-  html body .hh-chips span,
-  html body .srw-lv,
   html body .pill:not(.prep-row .pill),
   html body dt,
   html body .chip {

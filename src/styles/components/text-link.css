@@ -1,0 +1,20 @@
+/* .text-link: a button that reads as an underlined gold link (« Modifier », « Tout remettre à zéro »). */
+.text-link {
+  display: inline;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: var(--color-accent-soft);
+  text-decoration: underline;
+  text-decoration-color: rgba(212, 175, 106, 0.45);
+  text-underline-offset: 3px;
+  cursor: pointer;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s,
+    background 0.2s;
+}
+.text-link:hover {
+  color: #fff0c8;
+}

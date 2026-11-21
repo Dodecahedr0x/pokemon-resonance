@@ -2,6 +2,11 @@
 // target the old names, so its selectors are translated before it is applied. Add an entry for each renamed shared
 // class a player is likely to have styled.
 export const RENAMED_CLASSES = {
+  'sg-k': 'side-goal-label',
+  'sg-b': 'side-goal-link',
+  'hh-chips': 'prep-card-chips',
+  lnk: 'text-link',
+  'srw-lv': 'scenario-level',
   resume: 'battle-summary',
   'rs-ic': 'battle-summary-icon',
   'rs-tx': 'battle-summary-text',

@@ -1,0 +1,12 @@
+/* .scenario-level: the « N.12 » level of a battle in the battle list and on the map. */
+.scenario-level {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+}
+@media (max-width: 999px) {
+  .scenario-level {
+    font-size: 11px;
+  }
+}

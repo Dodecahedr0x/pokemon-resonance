@@ -157,7 +157,7 @@ export default function MapInfo() {
                     <use href="#i-lock" />
                   </svg>
                 ) : (
-                  <span className="srw-lv">{`N.${SCENARIOS[k].lv}`}</span>
+                  <span className="scenario-level">{`N.${SCENARIOS[k].lv}`}</span>
                 )}
               </button>
             );

@@ -45,6 +45,8 @@
 @import './components/landscape-scene.css' layer(components);
 @import './components/best-rank.css' layer(components);
 @import './components/code-field.css' layer(components);
+@import './components/text-link.css' layer(components);
+@import './components/scenario-level.css' layer(components);
 
 @import './shell/app-layout.css' layer(screens);
 @import './shell/sidebar.css' layer(screens);
