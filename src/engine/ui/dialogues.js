@@ -6,7 +6,7 @@ import { HOOKS } from '../core/hooks.js';
 import { currentScreen } from '../core/navigation.js';
 import { PREFERENCES, savePref } from './preferences.js';
 import { noise, playTone } from '../audio/sound-effects.js';
-import { AUTO } from '../progression/prestige.js';
+import { isAutomatedRun } from '../progression/prestige.js';
 import { renderBag } from '../progression/quests-shop.js';
 import { markPurchase } from '../../screens/bag/bagStore.js';
 import { renderParams } from './settings.js';
@@ -18,7 +18,7 @@ const on = k => PREFERENCES[k] !== 0;
 
 const directText = () => {
   try {
-    return !!reducedMotion || H.classList.contains('a11y-rm') || !on('pokeStyleT') || !!AUTO;
+    return !!reducedMotion || H.classList.contains('a11y-rm') || !on('pokeStyleT') || !!isAutomatedRun;
   } catch (e) {
     return true;
   }

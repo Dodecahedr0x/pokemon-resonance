@@ -6,7 +6,7 @@ import { PROFILE } from '../state/game-state.js';
 import { $ } from '../core/utils.js';
 import { launch } from '../combat/ui.js';
 import { queueSave } from '../state/saves.js';
-import { AUTO, leaderOf } from './prestige.js';
+import { isAutomatedRun, leaderOf } from './prestige.js';
 import { PROF_AV, avatar } from '../world/home-journey.js';
 import { npcProfile } from './story-scenes.js';
 import { paintOverlay } from '../../screens/overlays/dialogsStore.js';
@@ -86,7 +86,7 @@ function npcScene(who, k) {
 export function storyScene(k, force) {
   const c = sceneKeyOf(k),
     L = SCENES[c];
-  if (!L || (PROFILE.scenes && PROFILE.scenes[c]) || (!force && AUTO)) {
+  if (!L || (PROFILE.scenes && PROFILE.scenes[c]) || (!force && isAutomatedRun)) {
     return false;
   } // no scene during automated tests
   currentScene = { k, c, i: 0, L };

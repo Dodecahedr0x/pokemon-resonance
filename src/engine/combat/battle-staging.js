@@ -11,10 +11,10 @@ import { unitKey } from './engine.js';
 import { battle, cellCenter, BOARD_LAYERS } from './ui.js';
 import { PREFERENCES, calmMotion } from '../ui/preferences.js';
 import { noise, playTone, vibrate } from '../audio/sound-effects.js';
-import { AUTO, leaderOf } from '../progression/prestige.js';
+import { isAutomatedRun, leaderOf } from '../progression/prestige.js';
 import { boardSet, getBoard, tokCl, tokHas, unitsBatch } from '../../screens/combat/board/boardStore.js';
 
-const auto = () => !!AUTO;
+const auto = () => !!isAutomatedRun;
 
 const isFast = () => {
   try {

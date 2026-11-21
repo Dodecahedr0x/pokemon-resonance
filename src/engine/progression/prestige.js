@@ -23,7 +23,7 @@ import { versusTip } from '../audio/immersion.js';
 import { versusAvatar } from '../world/rare-encounters.js';
 import { shut, updateTemp, openOverlay } from '../../screens/overlays/tempStore.js';
 
-export let AUTO;
+export let isAutomatedRun;
 let LASTPH;
 
 export function leaderOf(sc) {
@@ -603,7 +603,7 @@ export function init() {
   /* --- League, Council, journey: the League's faces (gym line: src/screens/league/Arena.jsx) --- */
 
   /* --- Overlay: opening (once per session), battle presentation, banners --- */
-  AUTO = !!navigator.webdriver || /jsdom/i.test(navigator.userAgent || '');
+  isAutomatedRun = !!navigator.webdriver || /jsdom/i.test(navigator.userAgent || '');
 
   LASTPH = null;
 

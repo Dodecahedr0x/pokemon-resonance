@@ -1,8 +1,8 @@
-import { AUTO } from '../progression/prestige.js';
+import { isAutomatedRun } from '../progression/prestige.js';
 
 // no. → true (loaded) / false (unavailable)
 export function applyShinyArt(img, no) {
-  if (!img || !no || AUTO) {
+  if (!img || !no || isAutomatedRun) {
     return;
   }
   const applyIt = () => {

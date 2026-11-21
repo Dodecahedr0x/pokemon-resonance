@@ -47,7 +47,7 @@ import {
 import { escapeHtml, queueSave } from '../state/saves.js';
 import { PREFERENCES } from '../ui/preferences.js';
 import { playEv } from '../combat/move-effects.js';
-import { AUTO, overlay, turnBanner } from '../progression/prestige.js';
+import { isAutomatedRun, overlay, turnBanner } from '../progression/prestige.js';
 import { shut } from '../../screens/overlays/tempStore.js';
 import { SCREEN_STATE } from '../ui/screen-state.js';
 import { unloadCharges } from '../combat/tactics.js';
@@ -460,7 +460,7 @@ function handoff(j, force) {
   if (!D) {
     return;
   }
-  if ((AUTO && !force) || PREFERENCES.handoff === false) {
+  if ((isAutomatedRun && !force) || PREFERENCES.handoff === false) {
     turnBanner('Manche ' + battle.round, D.names[j - 1]);
     return;
   }

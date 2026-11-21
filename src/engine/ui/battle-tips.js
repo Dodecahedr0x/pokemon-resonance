@@ -5,7 +5,7 @@ import { MAX_ENERGY, canAwaken } from '../combat/engine.js';
 import { battle, ui } from '../combat/ui.js';
 import { queueSave } from '../state/saves.js';
 import { PREFERENCES, savePref } from './preferences.js';
-import { AUTO } from '../progression/prestige.js';
+import { isAutomatedRun } from '../progression/prestige.js';
 import { hideTooltip, showTooltip } from '../../screens/overlays/shellOverlays.js';
 import { notesOf } from '../combat/resonance.js';
 import { resonanceCandidate } from '../combat/resonant-form.js';
@@ -56,7 +56,7 @@ export function seenTips(force) {
     ui.busy ||
     ui.cutscene ||
     battle.phase !== 'player' ||
-    (AUTO && !force) ||
+    (isAutomatedRun && !force) ||
     PREFERENCES.seenTips === false
   ) {
     return;

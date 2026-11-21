@@ -6,7 +6,7 @@ import { BOARD_ROWS, cellKey, parseCellKey, byUid, unitAt } from './engine.js';
 import { battle, BOARD_LAYERS, addLog, renderAll, ui } from './ui.js';
 import { PREFERENCES, savePref } from '../ui/preferences.js';
 import { sfx } from '../audio/sound-effects.js';
-import { AUTO } from '../progression/prestige.js';
+import { isAutomatedRun } from '../progression/prestige.js';
 import { renderParams } from '../ui/settings.js';
 
 /* =====================================================================
@@ -122,7 +122,7 @@ export function init() {
     if (pr === 'grands' && !isLargeBattle(D0)) {
       return;
     }
-    if (AUTO && !window.__skipDeploy) {
+    if (isAutomatedRun && !window.__skipDeploy) {
       return;
     }
     S.deployPhase = 1;

@@ -2,7 +2,7 @@ import { POKEMON } from '../pokemon/pokemon.js';
 import { PROFILE, isCamp } from '../state/game-state.js';
 import { $ } from '../core/utils.js';
 import { battle } from '../combat/ui.js';
-import { AUTO } from './prestige.js';
+import { isAutomatedRun } from './prestige.js';
 import { avatar } from '../world/home-journey.js';
 import { SCENES, currentScene, __set_currentScene, renderStoryScene } from './story-dialogues.js';
 import { rivalAce } from '../modes/rival.js';
@@ -54,7 +54,7 @@ export function afterBattleScene(sc, win, force) {
   if (
     !win ||
     !Lg ||
-    (AUTO && !force) ||
+    (isAutomatedRun && !force) ||
     (PROFILE.scenes && PROFILE.scenes[c]) ||
     (currentScene && currentScene.c === c)
   ) {

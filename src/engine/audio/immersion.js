@@ -9,7 +9,7 @@ import { byUid } from '../combat/engine.js';
 import { battle, cellCenter, BOARD_LAYERS } from '../combat/ui.js';
 import { PREFERENCES, savePref } from '../ui/preferences.js';
 import { SOUND_EFFECTS, noise, playTone, vibrate } from './sound-effects.js';
-import { AUTO } from '../progression/prestige.js';
+import { isAutomatedRun } from '../progression/prestige.js';
 import { SCREEN_STATE } from '../ui/screen-state.js';
 import { ownedFam } from '../progression/trainer-stats.js';
 import { renderParams } from '../ui/settings.js';
@@ -390,7 +390,7 @@ export function init() {
 
   tipIndex = Math.floor(Math.random() * IMMERSION_TIPS.length);
   HOOKS.launch.push(() => {
-    if (battle && !AUTO) {
+    if (battle && !isAutomatedRun) {
       showTransition();
     }
   });

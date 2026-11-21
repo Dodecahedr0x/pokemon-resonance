@@ -54,7 +54,15 @@ import { sfx, sfxEv, vibrate } from '../audio/sound-effects.js';
 import { drawObstacles } from '../modes/gym-screen.js';
 import { fxReset, playEv } from './move-effects.js';
 import { panelRoleInfo } from '../ui/guide.js';
-import { AUTO, HP_BAR_MOTION, RANKS, rankOf, turnBanner, turnBanners, vsIntro } from '../progression/prestige.js';
+import {
+  isAutomatedRun,
+  HP_BAR_MOTION,
+  RANKS,
+  rankOf,
+  turnBanner,
+  turnBanners,
+  vsIntro,
+} from '../progression/prestige.js';
 import { renderWallet } from '../ui/wallet.js';
 import { tagUnits, tokenArt } from '../assets/illustrations.js';
 import { RIVAL_CHALLENGES, rivalBuild, rivalIdx } from '../modes/rival.js';
@@ -229,7 +237,7 @@ export function launch() {
   if (!storyScene(selectedScenario)) {
     __set_tutorialI(SCENARIOS[selectedScenario] && SCENARIOS[selectedScenario].tuto ? 0 : -1);
     launchCore();
-    if (battle && !AUTO) {
+    if (battle && !isAutomatedRun) {
       vsIntro();
     } // opponent introduction
     else if (battle) {
@@ -237,7 +245,7 @@ export function launch() {
     }
     // Speed order: if an opponent is faster, it opens the round (after the introduction)
     if (battle && battle.order === 'vitesse') {
-      setTimeout(unrollSpeed, AUTO || reducedMotion ? 950 : PREFERENCES.fast ? 1500 : 2400);
+      setTimeout(unrollSpeed, isAutomatedRun || reducedMotion ? 950 : PREFERENCES.fast ? 1500 : 2400);
     }
   }
   hook('launch', !!battle && battle !== previous);

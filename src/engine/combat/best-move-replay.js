@@ -5,7 +5,7 @@ import { HOOKS } from '../core/hooks.js';
 import { byUid } from './engine.js';
 import { battle, __set_battle, buildBoard, addLog, renderAll, ui } from './ui.js';
 import { playEv } from './move-effects.js';
-import { AUTO } from '../progression/prestige.js';
+import { isAutomatedRun } from '../progression/prestige.js';
 
 export let REPLAYS;
 let REPLAY_IN_PROGRESS;
@@ -73,7 +73,7 @@ async function rebroadcast() {
   REPLAY_IN_PROGRESS = true;
   const endStep = battle,
     res = $('#cbResult'),
-    isSlow = reducedMotion || AUTO ? 0.2 : 1;
+    isSlow = reducedMotion || isAutomatedRun ? 0.2 : 1;
   try {
     res.hidden = true;
     __set_battle(Object.assign(JSON.parse(R.best.before), { over: null }));

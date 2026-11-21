@@ -13,7 +13,7 @@ import { SAVE_V, applySave, autoSave, escapeHtml } from '../state/saves.js';
 import { TUTORIAL_STEPS } from '../progression/tutorial.js';
 import { __set_PREPG, renderPrep } from '../combat/battle-prep.js';
 import { nextGoal } from '../progression/campaign.js';
-import { AUTO, chapterOf, leaderOf } from '../progression/prestige.js';
+import { isAutomatedRun, chapterOf, leaderOf } from '../progression/prestige.js';
 import { renderHome } from './home.js';
 import { LEGENDARIES, legKey, legOf } from '../modes/legendaries.js';
 import { RIVAL, RIVAL_KEYS, rivalIdx } from '../modes/rival.js';
@@ -280,7 +280,7 @@ export function showIntro(force) {
     } catch {
       /* Best effort: failure here is non-fatal. */
     }
-    if (AUTO || PROFILE.battles > 0 || PROFILE.name || isCamp()) {
+    if (isAutomatedRun || PROFILE.battles > 0 || PROFILE.name || isCamp()) {
       return;
     }
   }

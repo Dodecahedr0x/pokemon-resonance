@@ -9,7 +9,7 @@ import { canCapture } from './items-bonds-ai.js';
 import { battle, BOARD_LAYERS, renderAll, ui } from './ui.js';
 import { PREFERENCES, savePref } from '../ui/preferences.js';
 import { sfx, vibrate } from '../audio/sound-effects.js';
-import { AUTO } from '../progression/prestige.js';
+import { isAutomatedRun } from '../progression/prestige.js';
 import { CAP_K } from '../items/ball-choice.js';
 import { bagCount } from '../state/economy.js';
 import { renderWallet } from '../ui/wallet.js';
@@ -101,7 +101,7 @@ export function startCatchTiming(cb) {
   o.querySelector('.timed-catch-throw').focus();
 }
 
-const CATCH_TIMING_ON = () => PREFERENCES.catchTimingEnabled !== 0 && !reducedMotion && !AUTO;
+const CATCH_TIMING_ON = () => PREFERENCES.catchTimingEnabled !== 0 && !reducedMotion && !isAutomatedRun;
 
 function onTimedCatchClick(e) {
   const b = e.target.closest && e.target.closest('[data-cap]');
