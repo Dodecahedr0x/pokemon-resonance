@@ -107,14 +107,3 @@ html body.compact-battle #combat.page.on {
 #bBoard.painted-tilt #bSvg image.paintedterrain {
   display: none;
 }
-
-/* from legacy/combat-compact/01-foundation.css */
-@media (min-width: 1121px) {
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) :is(.topbar, .app-main > .app-footer) {
-    display: none;
-  }
-}
-
-/* from legacy/combat-compact/02-phone.css */
-
-/* from legacy/combat-compact/05-prof-s-tip-during-battle.css */

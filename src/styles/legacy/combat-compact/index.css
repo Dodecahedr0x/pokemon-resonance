@@ -1,5 +1,0 @@
-/* combat-compact.css split into ordered parts: the import order is the cascade order. */
-@import './01-foundation.css';
-@import './02-phone.css';
-@import './04-round-banner.css';
-@import './05-prof-s-tip-during-battle.css';

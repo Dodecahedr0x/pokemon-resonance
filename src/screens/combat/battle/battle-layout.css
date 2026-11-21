@@ -36,6 +36,8 @@
 }
 @media (max-width: 700px) {
   .battle {
+    /* height of the command drawer at the bottom of the screen */
+    --battle-drawer-height: 36dvh;
     display: block;
     overflow: visible;
     border: 0;
@@ -140,7 +142,7 @@
 @media (max-width: 700px) {
   :where(.battle) .battle-main {
     flex-direction: column;
-    height: calc(100dvh - var(--dock));
+    height: calc(100dvh - var(--battle-drawer-height));
     box-sizing: border-box;
     gap: var(--space-xs);
     display: flex;
@@ -163,8 +165,8 @@
   }
   :where(.battle) .battle-side {
     z-index: 40;
-    max-height: var(--dock);
-    height: var(--dock);
+    max-height: var(--battle-drawer-height);
+    height: var(--battle-drawer-height);
     flex-direction: column;
     border-radius: 22px 22px 0 0;
     border: 1px solid transparent;

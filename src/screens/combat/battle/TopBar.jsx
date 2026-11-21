@@ -68,7 +68,7 @@ export function BtTop() {
 }
 
 // Phase chip (compact view): Placement, Your turn, Opponent turn, Awakening. It follows the bottom bar
-// ("foot" version, rewritten on every turn change); its data-ph tints the scene (combat-compact.css).
+// ("foot" version, rewritten on every turn change); its data-ph tints the scene (battle-topbar.css).
 export function phaseOf(B0) {
   if (!B0 || B0.over) {
     return null;

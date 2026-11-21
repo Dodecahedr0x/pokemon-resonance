@@ -115,6 +115,12 @@
     padding-bottom: calc(var(--bn) + var(--space-2xl) + env(safe-area-inset-bottom, 0px));
   }
 }
+/* a battle on a wide screen takes the whole height: no top bar, no footer */
+@media (min-width: 1121px) {
+  body:has(#cbBattle:not([hidden])) :is(.topbar, .app-main > .app-footer) {
+    display: none;
+  }
+}
 .app-logo-icon {
   background: linear-gradient(145deg, #ffe77b, #e9a923);
   color: #071b2b;

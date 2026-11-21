@@ -92,9 +92,14 @@
   background: rgba(99, 164, 255, 0.1);
   color: #8fbfff;
 }
+@keyframes battle-phase-blink {
+  50% {
+    opacity: 0.35;
+  }
+}
 @media (prefers-reduced-motion: no-preference) {
   .battle-phase[data-ph='enemy'] i {
-    animation: btPh 1.2s ease-in-out infinite;
+    animation: battle-phase-blink 1.2s ease-in-out infinite;
   }
 }
 /* the phase also tints the board and the command panel */
