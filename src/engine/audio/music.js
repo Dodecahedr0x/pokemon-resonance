@@ -5,16 +5,16 @@ import { cur } from '../core/navigation.js';
 import { B } from '../combat/ui.js';
 import { PREF } from '../ui/preferences.js';
 import { MUS, musPadLevel, musPadStop, musStartCore } from '../progression/prestige.js';
-import { V4 } from '../ui/screen-state.js';
+import { SCREEN_STATE } from '../ui/screen-state.js';
 import { IMMERSION_ON } from './immersion.js';
 import { OFFLINE_STATE } from '../progression/chronicles.js';
 
 function bgmOk() {
-  return !/jsdom/i.test(navigator.userAgent || '') && typeof Audio !== 'undefined' && BGM.failed < 2;
+  return !/jsdom/i.test(navigator.userAgent || '') && typeof Audio !== 'undefined' && MUSIC.failed < 2;
 }
 
 function bgmEl(k) {
-  let a = BGM.el[k];
+  let a = MUSIC.el[k];
   if (a) {
     return a;
   }
@@ -25,10 +25,10 @@ function bgmEl(k) {
     a.volume = 0;
     a.setAttribute('playsinline', '');
     a.addEventListener('error', () => {
-      BGM.failed++;
-      if (BGM.failed >= 2 && BGM.on) {
+      MUSIC.failed++;
+      if (MUSIC.failed >= 2 && MUSIC.on) {
         // tracks not found: back to the ambient pad
-        BGM.on = false;
+        MUSIC.on = false;
         try {
           MUS.on = false;
           musStartCore();
@@ -37,8 +37,8 @@ function bgmEl(k) {
         }
       }
     });
-    a.src = OFFLINE_STATE.urls[k] || BGM.src[k];
-    BGM.el[k] = a;
+    a.src = OFFLINE_STATE.urls[k] || MUSIC.src[k];
+    MUSIC.el[k] = a;
   } catch (e) {
     a = null;
   }
@@ -128,14 +128,14 @@ function bgmScene() {
   if (cur === 'types') {
     return 'guide';
   } // Prof. Chen's Laboratory
-  if (cur === 'sac' && V4.bagView === 'boutique') {
+  if (cur === 'sac' && SCREEN_STATE.bagView === 'boutique') {
     return 'boutique';
   }
   if (cur === 'pokedex' || cur === 'dex') {
     return 'centre';
   }
   if (cur === 'camp') {
-    const t = V4.campTab;
+    const t = SCREEN_STATE.campTab;
     if (t === 'enigmes' || t === 'echo') {
       return 'ruines';
     }
@@ -153,27 +153,27 @@ function bgmScene() {
 }
 
 function bgmSync() {
-  if (!BGM.on || !PREF.music) {
+  if (!MUSIC.on || !PREF.music) {
     return;
   }
   const sc = bgmScene();
   if (!BGM_COMBAT.includes(sc) || !(B && !$('#cbBattle').hidden)) {
-    BGM.silent = false;
+    MUSIC.silent = false;
   }
-  if (BGM.jingle) {
+  if (MUSIC.jingle) {
     return;
   }
-  const want = BGM.silent || !BGM.vis ? '' : sc;
-  if (want === BGM.scene && (!want || !BGM.el[want] || !BGM.el[want].paused)) {
+  const want = MUSIC.silent || !MUSIC.vis ? '' : sc;
+  if (want === MUSIC.scene && (!want || !MUSIC.el[want] || !MUSIC.el[want].paused)) {
     if (want) {
-      bgmFade(BGM.el[want], bgmVol(), 200);
+      bgmFade(MUSIC.el[want], bgmVol(), 200);
     }
     return;
   }
-  const old = BGM.el[BGM.scene];
+  const old = MUSIC.el[MUSIC.scene];
   if (old) {
     bgmFade(old, 0, 900, () => {
-      if (BGM.scene !== old._k) {
+      if (MUSIC.scene !== old._k) {
         try {
           old.pause();
         } catch {
@@ -182,7 +182,7 @@ function bgmSync() {
       }
     });
   }
-  BGM.scene = want;
+  MUSIC.scene = want;
   if (!want) {
     return;
   }
@@ -203,23 +203,23 @@ export function musStart() {
     musStartCore();
     return;
   }
-  if (BGM.on) {
+  if (MUSIC.on) {
     bgmSync();
     return;
   }
-  BGM.on = true;
+  MUSIC.on = true;
   MUS.on = true; // keeps the pad from also starting
-  clearInterval(BGM.tmr);
-  BGM.tmr = setInterval(bgmSync, 800);
+  clearInterval(MUSIC.tmr);
+  MUSIC.tmr = setInterval(bgmSync, 800);
   bgmSync();
 }
 
 function bgmStop() {
-  BGM.on = false;
+  MUSIC.on = false;
   MUS.on = false;
-  clearInterval(BGM.tmr);
-  Object.keys(BGM.el).forEach(k => {
-    const a = BGM.el[k];
+  clearInterval(MUSIC.tmr);
+  Object.keys(MUSIC.el).forEach(k => {
+    const a = MUSIC.el[k];
     bgmFade(a, 0, 600, () => {
       try {
         a.pause();
@@ -228,8 +228,8 @@ function bgmStop() {
       }
     });
   });
-  BGM.scene = '';
-  BGM.jingle = false;
+  MUSIC.scene = '';
+  MUSIC.jingle = false;
   try {
     musPadStop();
   } catch {
@@ -240,15 +240,15 @@ function bgmStop() {
 /* jingle (victory, badge, evolution) over the current music. max = duration in seconds (0 = in full), suite = chained jingle */
 function playJingle(max, k, next) {
   k = k || 'victoire';
-  if (!PREF.music || !BGM.on || !bgmOk() || BGM.jingle) {
+  if (!PREF.music || !MUSIC.on || !bgmOk() || MUSIC.jingle) {
     return;
   }
   const j = bgmEl(k);
   if (!j) {
     return;
   }
-  BGM.jingle = true;
-  const cur0 = BGM.el[BGM.scene];
+  MUSIC.jingle = true;
+  const cur0 = MUSIC.el[MUSIC.scene];
   if (cur0) {
     bgmFade(cur0, 0, 400, () => {
       try {
@@ -265,7 +265,7 @@ function playJingle(max, k, next) {
   }
   bgmPlay(j);
   bgmFade(j, bgmVol(), 250);
-  BGM.jk = k;
+  MUSIC.jk = k;
   const endStep = () => {
     j.removeEventListener('ended', endStep);
     clearTimeout(j._t);
@@ -276,17 +276,17 @@ function playJingle(max, k, next) {
         /* Best effort: failure here is non-fatal. */
       }
     });
-    BGM.jingle = false;
-    BGM.scene = '';
+    MUSIC.jingle = false;
+    MUSIC.scene = '';
     if (next) {
       playJingle(0, next);
-      if (BGM.jingle) {
+      if (MUSIC.jingle) {
         return;
       }
     }
     if (k === 'victoire' || k === 'badge') {
       if (BGM_COMBAT.includes(bgmScene()) && B && B.over) {
-        BGM.silent = true;
+        MUSIC.silent = true;
       } // the result stays calm
     }
     setTimeout(bgmSync, 600);
@@ -299,7 +299,7 @@ function playJingle(max, k, next) {
 
 /* The Music switch, volume slider and resume-on-touch go through these three functions. */
 export function musStop() {
-  if (BGM.on) {
+  if (MUSIC.on) {
     bgmStop();
   } else {
     musPadStop();
@@ -307,8 +307,8 @@ export function musStop() {
 }
 
 export function musLevel() {
-  if (BGM.on) {
-    const a = BGM.el[BGM.jingle ? BGM.jk : BGM.scene];
+  if (MUSIC.on) {
+    const a = MUSIC.el[MUSIC.jingle ? MUSIC.jk : MUSIC.scene];
     if (a) {
       bgmFade(a, bgmVol(), 150);
     }
@@ -332,7 +332,7 @@ let r;
 
 /* Home: S1 theme · Camp, garden and the rest: Route 201 · Battle: wild battle · Shop: Pokémart · Victory: RSE jingle.
    The tracks are files next to the page (audio/…). If they cannot be found (offline file), the ambient pad is still used. */
-export const BGM = {
+export const MUSIC = {
   src: Object.fromEntries(
     [
       'accueil',
@@ -386,20 +386,20 @@ export function init() {
     }).observe(r, { attributes: true, attributeFilter: ['hidden'], childList: true });
   }
   document.addEventListener('visibilitychange', () => {
-    BGM.vis = !document.hidden;
-    if (!BGM.on) {
+    MUSIC.vis = !document.hidden;
+    if (!MUSIC.on) {
       return;
     }
     if (document.hidden) {
-      Object.keys(BGM.el).forEach(k => {
+      Object.keys(MUSIC.el).forEach(k => {
         try {
-          BGM.el[k].pause();
+          MUSIC.el[k].pause();
         } catch {
           /* Best effort: failure here is non-fatal. */
         }
       });
     } else {
-      BGM.scene = '';
+      MUSIC.scene = '';
       bgmSync();
     }
   });

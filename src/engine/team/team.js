@@ -4,7 +4,7 @@ import { POKEMON, EEVEE, FAMT, MARK_TYPE, PRESETS, familyOf } from '../pokemon/p
 import { BUDGET, RECRUIT } from '../pokemon/evolution.js';
 import { ITEMS2, PROFILE, inBox, ownedItems } from '../state/game-state.js';
 import { RC } from '../pokemon/roles-synergies.js';
-import { $, INK, RM, writeLS, typeGlyphPath, markOf, typeColor, toast } from '../core/utils.js';
+import { $, GLYPH_INK, reducedMotion, writeLS, typeGlyphPath, markOf, typeColor, toast } from '../core/utils.js';
 import { cur } from '../core/navigation.js';
 import { openRx } from '../data/types.js';
 import { BRANCHES } from '../combat/engine.js';
@@ -296,7 +296,7 @@ export function crestSmall(m) {
   }
   const svg = `<svg viewBox="0 0 200 200" aria-hidden="true"><defs><radialGradient id="${gid}" cx="38%" cy="30%" r="75%"><stop offset="0" style="stop-color:color-mix(in srgb,${a} 45%,#fff)"/><stop offset=".3" stop-color="${a}"/><stop offset="1" style="stop-color:color-mix(in srgb,${a} 50%,#000)"/></radialGradient><linearGradient id="${gid}r" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F7E1AC"/><stop offset=".4" stop-color="#B68D48"/><stop offset=".65" stop-color="#F0D59C"/><stop offset="1" stop-color="#6B4F22"/></linearGradient></defs>
   <g class="cr-spin" style="transform-origin:100px 100px">${ticks}</g><circle class="cr-costbg" cx="100" cy="100" r="84"/><circle class="cr-cost" cx="100" cy="100" r="84" transform="rotate(-90 100 100)" stroke-dasharray="${((Lc * m.c) / 4 - 5).toFixed(1)} ${Lc.toFixed(1)}"/>
-  <circle cx="100" cy="100" r="69" fill="url(#${gid}r)"/><circle cx="100" cy="100" r="65" fill="#0B0D12"/><circle cx="100" cy="100" r="62" fill="url(#${gid})"/><circle cx="100" cy="100" r="62" fill="none" stroke="rgba(255,255,255,.28)"/><path d="${typeGlyphPath(m.t[0])}" transform="translate(70 70) scale(2.5)" fill="${INK}" fill-rule="evenodd"/><ellipse cx="86" cy="72" rx="30" ry="13" transform="rotate(-24 86 72)" fill="rgba(255,255,255,.22)"/></svg>`;
+  <circle cx="100" cy="100" r="69" fill="url(#${gid}r)"/><circle cx="100" cy="100" r="65" fill="#0B0D12"/><circle cx="100" cy="100" r="62" fill="url(#${gid})"/><circle cx="100" cy="100" r="62" fill="none" stroke="rgba(255,255,255,.28)"/><path d="${typeGlyphPath(m.t[0])}" transform="translate(70 70) scale(2.5)" fill="${GLYPH_INK}" fill-rule="evenodd"/><ellipse cx="86" cy="72" rx="30" ry="13" transform="rotate(-24 86 72)" fill="rgba(255,255,255,.22)"/></svg>`;
   return `<span class="crest-pk pk">${svg}${artTag(m, 'crest-a')}</span>`; // the illustration at the center of the crest
 }
 
@@ -454,7 +454,7 @@ export function init() {
   });
 
   /* holographic shine that follows the pointer (--hx / --hy, read by Grid's foil and glare) */
-  if (!RM && window.matchMedia && matchMedia('(hover:hover)').matches) {
+  if (!reducedMotion && window.matchMedia && matchMedia('(hover:hover)').matches) {
     $('#dexGrid').addEventListener('pointermove', e => {
       const c = e.target.closest('.team-card');
       if (!c) {

@@ -1,7 +1,7 @@
 import { Html } from '../../../lib/html.jsx';
 import { MOVES, ABILITIES } from '../../../engine/data/moves.js';
 import { POKEMON } from '../../../engine/pokemon/pokemon.js';
-import { ARR } from '../../../engine/pokemon/evolution.js';
+import { ARRIVAL_EFFECTS } from '../../../engine/pokemon/evolution.js';
 import { medal, typeBadge, typeColor } from '../../../engine/core/utils.js';
 import { BRANCHES, branchWhy, evoOpts, mhpOf } from '../../../engine/combat/engine.js';
 import { B } from '../../../engine/combat/ui.js';
@@ -89,10 +89,10 @@ function Path({ u, A, id }) {
             <span>PV max</span>
             {u.mhp} → {nm}
           </li>
-          {ARR[id] ? (
+          {ARRIVAL_EFFECTS[id] ? (
             <li className="is-arrival">
               <span>Arrivée</span>
-              <Html html={ARR[id][1]} />
+              <Html html={ARRIVAL_EFFECTS[id][1]} />
             </li>
           ) : null}
         </ul>

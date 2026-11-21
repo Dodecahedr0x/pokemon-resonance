@@ -14,12 +14,12 @@ let TM_K;
 
 /* ---------- game state ---------- */
 /** family (base form) → learned move. Declared function: defProfile calls it as soon as it loads. */
-export function TM0() {
+export function emptyTmState() {
   return { learnedTms: {} };
 }
 
 export function tmClean(p) {
-  const o = TM0(),
+  const o = emptyTmState(),
     a = p && p.learnedTms;
   if (a && typeof a === 'object') {
     for (const b in a) {

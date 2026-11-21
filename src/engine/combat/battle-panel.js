@@ -5,7 +5,7 @@ import { POKEMON } from '../pokemon/pokemon.js';
 import { ITEMS2, LINK_N } from '../state/game-state.js';
 import { ROLEFX, rIco } from '../pokemon/roles-synergies.js';
 import { markOf, medal, rxCat } from '../core/utils.js';
-import { P, byUid, hdist, markAt } from './engine.js';
+import { parseCellKey, byUid, hdist, markAt } from './engine.js';
 import { canCapture, canDuo, captureReq, duoOf, linkLvl } from './items-bonds-ai.js';
 import { roleOf } from './synergies-obstacles.js';
 import { B, ui } from './ui.js';
@@ -64,7 +64,7 @@ export function tileCard() {
   if (!t) {
     return '';
   }
-  const [c, r] = P(k),
+  const [c, r] = parseCellKey(k),
     mk = t.mark ? markAt(B, k) : t.w ? 'trempe' : null;
   let rx = '';
   if (mk) {

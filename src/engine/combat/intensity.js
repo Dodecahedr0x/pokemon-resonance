@@ -4,7 +4,7 @@ import { toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import {
   EMAX,
-  P,
+  parseCellKey,
   byUid,
   damage,
   endStep,
@@ -161,7 +161,7 @@ function changeBossPhase(S, ev) {
       Object.assign(ko, {
         ko: false,
         hp: Math.max(1, Math.round(ko.mhp * 0.4)),
-        pos: P(x),
+        pos: parseCellKey(x),
         badge: null,
         skip: 0,
         notes: null,

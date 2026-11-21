@@ -1,5 +1,5 @@
 import { ROLES } from '../../engine/data/game-data.js';
-import { ROLEFX, SYN, rIco, synOf } from '../../engine/pokemon/roles-synergies.js';
+import { ROLEFX, SYNERGIES, rIco, synOf } from '../../engine/pokemon/roles-synergies.js';
 import { typeColor } from '../../engine/core/utils.js';
 import { squad } from '../../engine/team/team.js';
 import { CHORDS } from '../../engine/combat/resonance-chords.js';
@@ -51,7 +51,7 @@ export function Codex() {
             {act.length} active{act.length > 1 ? 's' : ''}
           </span>
         </h4>
-        {SYN.map(s => (
+        {SYNERGIES.map(s => (
           <div key={s.k} className={`guide-codex-row is-synergy${act.includes(s.k) ? ' is-active' : ''}`}>
             <span className="synergy-types">
               {s.t.map(t => (

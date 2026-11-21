@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 import { useKeyed } from '../../../lib/useKeyed.js';
-import { BH, BW, K, P } from '../../../engine/combat/engine.js';
-import { B, BG, HC, HP, L, VERT, tiltS } from '../../../engine/combat/ui.js';
+import { BOARD_ROWS, BOARD_COLS, cellKey, parseCellKey } from '../../../engine/combat/engine.js';
+import { B, BOARD_GEOMETRY, cellCenter, cellPoints, L, VERT, tiltS } from '../../../engine/combat/ui.js';
 import { tileTip } from '../../../engine/combat/battle-panel.js';
 import { fieldSvg } from '../../../engine/modes/gym-screen.js';
 import { useBoard } from './boardStore.js';
@@ -74,7 +74,7 @@ export function Pedestals() {
 // class of a cell (renderBoard), with obstacles (drawObstacles: pillar, grass, sand)
 function tileClass(k) {
   const t = B.tiles[k],
-    pp = P(k);
+    pp = parseCellKey(k);
   let c = 'cell' + ((pp[0] + pp[1]) % 2 ? ' is-alternate' : '');
   if (t.rock) {
     c += ' rock';
@@ -104,9 +104,15 @@ export function Cells() {
     <g ref={lref('tiles')}>
       {B &&
         Object.keys(B.tiles).map(k => {
-          const [x, y] = HC(k);
+          const [x, y] = cellCenter(k);
           return (
-            <polygon key={k} ref={tRef(k)} points={HP(x, y, BG.S - 1)} data-k={k} className={tileClass(k)}>
+            <polygon
+              key={k}
+              ref={tRef(k)}
+              points={cellPoints(x, y, BOARD_GEOMETRY.S - 1)}
+              data-k={k}
+              className={tileClass(k)}
+            >
               <title>{tileTip(k)}</title>
             </polygon>
           );
@@ -132,12 +138,17 @@ export function Textures() {
     <g style={PE} className={S.pv ? 'texture-layer' : undefined} ref={lref('tex')}>
       {B &&
         Object.keys(B.tiles).map(k => {
-          const [x, y] = HC(k);
+          const [x, y] = cellCenter(k);
           return (
             <Fragment key={k}>
-              <polygon ref={txRef(k)} points={HP(x, y, BG.S - 1.5)} className="cell-texture" fill={texFill(k)} />
-              <polygon points={HP(x, y, BG.S - 2.2)} className="cell-bevel" />
-              <polygon points={HP(x, y, BG.S - 7)} className="cell-gloss" />
+              <polygon
+                ref={txRef(k)}
+                points={cellPoints(x, y, BOARD_GEOMETRY.S - 1.5)}
+                className="cell-texture"
+                fill={texFill(k)}
+              />
+              <polygon points={cellPoints(x, y, BOARD_GEOMETRY.S - 2.2)} className="cell-bevel" />
+              <polygon points={cellPoints(x, y, BOARD_GEOMETRY.S - 7)} className="cell-gloss" />
             </Fragment>
           );
         })}
@@ -166,8 +177,8 @@ export function Decor() {
     }
     for (const k in B.tiles) {
       const t = B.tiles[k],
-        [c, r] = P(k),
-        [x, y] = HC(k);
+        [c, r] = parseCellKey(k),
+        [x, y] = cellCenter(k);
       if (t.rock || t.w || (c * 7 + r * 13) % 5) {
         continue;
       }
@@ -220,13 +231,13 @@ export function Water() {
     dy = W * 0.06;
   const gl = [];
   E.keyList.forEach(k => {
-    const [x, y] = HC(k),
+    const [x, y] = cellCenter(k),
       s = tiltS(x, y),
       n = parseInt(k.replace(/\D/g, ''), 10) || 0;
     for (let i = 0; i < 2; i++) {
       const r = j => (((Math.sin(n * 91.3 + i * 47.7 + j * 13.1) * 43758.5453) % 1) + 1) % 1,
-        gx = x + (r(1) - 0.5) * BG.S * 1.1 * s,
-        gy = y + (r(2) - 0.5) * BG.S * 0.6 * s,
+        gx = x + (r(1) - 0.5) * BOARD_GEOMETRY.S * 1.1 * s,
+        gy = y + (r(2) - 0.5) * BOARD_GEOMETRY.S * 0.6 * s,
         rx = (3.6 + r(3) * 2.4) * s;
       gl.push(
         <ellipse
@@ -288,18 +299,18 @@ export function Landmarks() {
   const base = useKeyed(() => {
     const o = [];
     if (VERT) {
-      for (let r = 0; r < BH; r++) {
-        o.push([r + 1, HC(K(0, r))[0], 8]);
+      for (let r = 0; r < BOARD_ROWS; r++) {
+        o.push([r + 1, cellCenter(cellKey(0, r))[0], 8]);
       }
-      for (let c = 0; c < BW; c++) {
-        o.push(['ABCDEFGH'[c], 7, HC(K(c, 0))[1] + 2.5]);
+      for (let c = 0; c < BOARD_COLS; c++) {
+        o.push(['ABCDEFGH'[c], 7, cellCenter(cellKey(c, 0))[1] + 2.5]);
       }
     } else {
-      for (let r = 0; r < BH; r++) {
-        o.push([r + 1, 8, HC(K(0, r))[1] + 2.5]);
+      for (let r = 0; r < BOARD_ROWS; r++) {
+        o.push([r + 1, 8, cellCenter(cellKey(0, r))[1] + 2.5]);
       }
-      for (let c = 0; c < BW; c++) {
-        o.push(['ABCDEFGH'[c], HC(K(c, 0))[0], 10]);
+      for (let c = 0; c < BOARD_COLS; c++) {
+        o.push(['ABCDEFGH'[c], cellCenter(cellKey(c, 0))[0], 10]);
       }
     }
     return o;

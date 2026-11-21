@@ -1,6 +1,6 @@
 import { POKEMON } from '../pokemon/pokemon.js';
 import { PROFILE, isCamp } from '../state/game-state.js';
-import { $, RM, toast } from '../core/utils.js';
+import { $, reducedMotion, toast } from '../core/utils.js';
 import { hook } from '../core/hooks.js';
 import { hideEnc, showEnc } from '../../screens/overlays/shellOverlays.js';
 import { setRoute } from '../../screens/home/homeStore.js';
@@ -53,7 +53,7 @@ function typeDlg(s) {
     return;
   }
   clearInterval(dlgT);
-  if (RM) {
+  if (reducedMotion) {
     p.textContent = s;
     return;
   }
@@ -129,7 +129,7 @@ export function encounter() {
         f.focus();
       }
     },
-    RM ? 0 : 520
+    reducedMotion ? 0 : 520
   );
 }
 

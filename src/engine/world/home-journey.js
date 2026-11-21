@@ -2,7 +2,7 @@ import { GYMS } from '../data/game-data.js';
 import { POKEMON, SCEN } from '../pokemon/pokemon.js';
 import { CAMP_START, PROFILE, defProfile, isCamp } from '../state/game-state.js';
 import { ARENAS, BADGES, TERR } from '../modes/gyms.js';
-import { $, RM, writeLS, typeGlyphPath, medal, typeColor, toast } from '../core/utils.js';
+import { $, reducedMotion, writeLS, typeGlyphPath, medal, typeColor, toast } from '../core/utils.js';
 import { goTo } from '../core/navigation.js';
 import { encounter } from './home-route.js';
 import { badgeSvg } from '../modes/league.js';
@@ -422,9 +422,9 @@ export function init() {
       goTo('accueil');
       const r = $('#route');
       if (r && r.scrollIntoView) {
-        r.scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'center' });
+        r.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'center' });
       }
-      setTimeout(() => encounter(), RM ? 0 : 450);
+      setTimeout(() => encounter(), reducedMotion ? 0 : 450);
     } else if (k === 'tuto') {
       openBattle('tuto');
       if (squad.length) {

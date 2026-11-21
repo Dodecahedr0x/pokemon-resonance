@@ -1,5 +1,5 @@
 import { Html } from '../../lib/html.jsx';
-import { PKA } from '../../engine/assets/images.js';
+import { pokemonArtUrl } from '../../engine/assets/images.js';
 import { dexNo } from '../../engine/data/game-data.js';
 import { MOVES } from '../../engine/data/moves.js';
 import { REGION_NAMES } from '../../engine/data/hoenn.js';
@@ -71,7 +71,7 @@ function FamCard({ m }) {
           <span className="team-card-rays" aria-hidden="true" />
           <img
             className="team-card-sprite"
-            src={PKA(m.no)}
+            src={pokemonArtUrl(m.no)}
             alt={m.n}
             loading="lazy"
             decoding="async"

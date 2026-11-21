@@ -4,7 +4,7 @@ import { SCEN } from '../pokemon/pokemon.js';
 import { fnvHash, hash2, mulberry32 } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { nbrK } from './engine.js';
-import { B, BG, HC, HP, L, VB, VERT } from './ui.js';
+import { B, BOARD_GEOMETRY, cellCenter, cellPoints, L, boardViewBox, VERT } from './ui.js';
 import { bdClass, boardSet, getBoard, getHost, hostSet } from '../../screens/combat/board/boardStore.js';
 
 const RS = 3;
@@ -707,7 +707,7 @@ const WATER = {
 
 /* ---------- geometry ---------- */
 const hexPoints = (x, y, s) =>
-  HP(x, y, s)
+  cellPoints(x, y, s)
     .split(' ')
     .map(p => p.split(',').map(Number));
 
@@ -1347,8 +1347,8 @@ const paint = sig => {
   const kind = kindOf(),
     K = KIND[kind],
     seed = fnvHash(sig) % 100000;
-  const [VW, VH] = VB();
-  const S = BG.S;
+  const [VW, VH] = boardViewBox();
+  const S = BOARD_GEOMETRY.S;
   const can = mk(VW * RS, VH * RS),
     c = can.getContext('2d');
   c.scale(RS, RS);
@@ -1360,7 +1360,7 @@ const paint = sig => {
   paintBorderGround(c, K, pats.PA, VW, VH);
   const keys = Object.keys(B.tiles);
   const C = {};
-  keys.forEach(k => (C[k] = HC(k)));
+  keys.forEach(k => (C[k] = cellCenter(k)));
   const bd = { c, K, C, S, keys, seed, VW, VH, pats };
   // drop shadow of the board onto its border
   paintBoardShadow(bd);

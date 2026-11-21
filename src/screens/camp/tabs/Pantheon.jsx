@@ -1,6 +1,6 @@
 import { POKEMON } from '../../../engine/pokemon/pokemon.js';
 import { DIFFS, PROFILE } from '../../../engine/state/game-state.js';
-import { ART } from '../../../engine/assets/item-icons.js';
+import { pokemonArtUrl } from '../../../engine/assets/images.js';
 
 import CardHeader from '../../../components/CardHeader.jsx';
 // Camp › Pantheon (v4.32): teams engraved after a Champion, a Master or the Echo guardian.
@@ -23,7 +23,7 @@ export default function Pantheon() {
               <div className="camp-pantheon-members">
                 {x.t.map((id, j) => (
                   <span key={j} className="camp-pantheon-member">
-                    <img src={ART(POKEMON[id].no)} alt="" loading="lazy" />
+                    <img src={pokemonArtUrl(POKEMON[id].no)} alt="" loading="lazy" />
                     <em>{POKEMON[id].n}</em>
                   </span>
                 ))}

@@ -1,7 +1,7 @@
 import { MOVES } from '../../engine/data/moves.js';
 import { REACTIONS } from '../../engine/data/game-data.js';
 import { FAMS30, POKEMON_LIST, NEWS } from '../../engine/pokemon/pokemon.js';
-import { ARR } from '../../engine/pokemon/evolution.js';
+import { ARRIVAL_EFFECTS } from '../../engine/pokemon/evolution.js';
 import { strokeIcon } from '../../engine/core/utils.js';
 import { Html } from '../../lib/html.jsx';
 import { space } from '../../lib/theme.js';
@@ -26,7 +26,7 @@ export function Digits() {
   return [
     [FAMS30.length, 'Familles à recruter'],
     [POKEMON_LIST.filter(m => !m.isEnemy).length, 'Pokémon en combat'],
-    [Object.keys(ARR).length, 'Arrivées uniques'],
+    [Object.keys(ARRIVAL_EFFECTS).length, 'Arrivées uniques'],
     [Object.keys(MOVES).length, 'Capacités'],
     [Object.keys(REACTIONS).length - 1, 'Réactions'],
     ['0 %', 'De hasard'],

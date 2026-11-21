@@ -2,7 +2,7 @@ import { MT } from './turn-core.js';
 import { ELEMENT_TYPES, MARKS, MARK_REACTIONS } from '../data/game-data.js';
 import { MOVES } from '../data/moves.js';
 import { POKEMON, DEPLOY, EEVEE, FAMT, MARK_TYPE, PKT, SCEN, TYPE_CHART, WEATHER_NAME } from '../pokemon/pokemon.js';
-import { ARR } from '../pokemon/evolution.js';
+import { ARRIVAL_EFFECTS } from '../pokemon/evolution.js';
 import { ITEMS2, pairKey } from '../state/game-state.js';
 import { HOOKS } from '../core/hooks.js';
 import { DIFF, aiFallback, dmgItemsLinks, threatAt } from './items-bonds-ai.js';
@@ -76,7 +76,7 @@ import { talentDamage, talentMove } from '../team/individuals.js';
 import { duelAiPlan, duelVigilance } from '../modes/duel.js';
 import { eeveeHarmony } from '../pokemon/eevee.js';
 
-export let BW, BH;
+export let BOARD_COLS, BOARD_ROWS;
 
 export function toCube(c, r) {
   const x = c - (r - (r & 1)) / 2;
@@ -218,16 +218,16 @@ export function newBattle(sc, team, bonus, opt) {
       rxg: {},
       jit: true, // v4.12: hidden intentions, opponents decide on their own turn
     };
-  for (let r = 0; r < BH; r++) {
-    for (let c = 0; c < BW; c++) {
-      S.tiles[K(c, r)] = { w: false, rock: false, mark: null, mud: 0, lava: 0, fog: 0 };
+  for (let r = 0; r < BOARD_ROWS; r++) {
+    for (let c = 0; c < BOARD_COLS; c++) {
+      S.tiles[cellKey(c, r)] = { w: false, rock: false, mark: null, mud: 0, lava: 0, fog: 0 };
     }
   }
   D.water.forEach(k => (S.tiles[k].w = true));
   D.rock.forEach(k => (S.tiles[k].rock = true));
   if (D.fiss) {
     for (const k in S.tiles) {
-      const c = P(k)[0];
+      const c = parseCellKey(k)[0];
       if (c >= 3 && c <= 6 && !S.tiles[k].rock) {
         S.tiles[k].mark = { k: 'fissure', d: 99, lv: 1, by: null };
       }
@@ -393,7 +393,7 @@ function lineK(from, d, n) {
     if (!inBoard(p[0], p[1])) {
       break;
     }
-    o.push(K(p[0], p[1]));
+    o.push(cellKey(p[0], p[1]));
   }
   return o;
 }
@@ -403,7 +403,7 @@ function canSee(S, u, k) {
   if (!v || u.ability === 'echolocation') {
     return true;
   }
-  const d = hdist(u.pos, P(k));
+  const d = hdist(u.pos, parseCellKey(k));
   if (S.tiles[k].fog > 0 && d > 1) {
     return false;
   } // fog
@@ -441,7 +441,7 @@ export function targets(S, u, m) {
     if (S.tiles[k].rock) {
       continue;
     }
-    const d = hdist(u.pos, P(k));
+    const d = hdist(u.pos, parseCellKey(k));
     if (d < 1 || d > R) {
       continue;
     }
@@ -469,7 +469,7 @@ export function targets(S, u, m) {
   if (m.sh === 'one') {
     // a pillar blocks ranged shots
     if (!ign) {
-      o = o.filter(k => hdist(u.pos, P(k)) < 2 || !losBlocked(S, u.pos, P(k)));
+      o = o.filter(k => hdist(u.pos, parseCellKey(k)) < 2 || !losBlocked(S, u.pos, parseCellKey(k)));
     }
     // ricochet: aim at a rock to hit the nearest enemy behind it
     if (m.p && R >= 2 && u.side === 'a') {
@@ -478,11 +478,11 @@ export function targets(S, u, m) {
         if (!t.rock || t.pil) {
           continue;
         }
-        const d = hdist(u.pos, P(k));
+        const d = hdist(u.pos, parseCellKey(k));
         if (d < 1 || d > R) {
           continue;
         }
-        if (!ign && d >= 2 && losBlocked(S, u.pos, P(k))) {
+        if (!ign && d >= 2 && losBlocked(S, u.pos, parseCellKey(k))) {
           continue;
         }
         if (ricoTgt(S, u, k)) {
@@ -547,7 +547,7 @@ export function inReach(S, u, m, k) {
   }
   const R = effR(u, m, S),
     ign = ignObst(S, u, mvType(S, u, m)),
-    d = hdist(u.pos, P(k));
+    d = hdist(u.pos, parseCellKey(k));
   if (m.sh === 'line') {
     const L = CDIR.map(dd => lineK(u.pos, dd, R)).find(line => line.includes(k));
     if (!L) {
@@ -560,7 +560,7 @@ export function inReach(S, u, m, k) {
     if (d < 1 || d > R) {
       return false;
     }
-    if (!ign && m.sh === 'one' && d >= 2 && losBlocked(S, u.pos, P(k))) {
+    if (!ign && m.sh === 'one' && d >= 2 && losBlocked(S, u.pos, parseCellKey(k))) {
       return false;
     } // pillar in between
   }
@@ -833,7 +833,7 @@ export function net(S, k, mk) {
 }
 
 function moist(S, k) {
-  return S.units.some(o => !o.ko && o.ability === 'moiteur' && hdist(o.pos, P(k)) <= 2);
+  return S.units.some(o => !o.ko && o.ability === 'moiteur' && hdist(o.pos, parseCellKey(k)) <= 2);
 }
 
 function linkRef(S, a, b) {
@@ -889,7 +889,7 @@ export function shove(S, v, from, n, ev, pull) {
     }
     const c = toCube(v.pos[0], v.pos[1]),
       np = fromCube(c[0] + dir[0], c[1] + dir[1], c[2] + dir[2]),
-      nk = K(np[0], np[1]);
+      nk = cellKey(np[0], np[1]);
     if (!inBoard(np[0], np[1]) || S.tiles[nk].rock) {
       pushMessage(ev, `${v.n} heurte un obstacle.`);
       damage(S, v, 3, ev, { ind: true });
@@ -1507,7 +1507,7 @@ export function pMove(S, u, k) {
       return null;
     }
     ev = [];
-    u.pos = P(k);
+    u.pos = parseCellKey(k);
     u.moved = true;
     ev.push({ e: 'mv', u: u.uid });
     landed(S, u, ev);
@@ -1666,7 +1666,7 @@ export function foeEvo(S, e) {
 }
 
 function arrive(S, u, ev) {
-  const A = ARR[u.id];
+  const A = ARRIVAL_EFFECTS[u.id];
   if (!A) {
     return;
   }
@@ -1805,7 +1805,7 @@ export function pDodge(S, u, k) {
     return null;
   }
   const ev = [];
-  u.pos = P(k);
+  u.pos = parseCellKey(k);
   S.voice--;
   S.stats.voice++;
   ev.push({ e: 'mv', u: u.uid });
@@ -1962,7 +1962,7 @@ function approach(S, e, opts, F, here) {
   let bk = here,
     bd = hdist(e.pos, F.pos);
   for (const pk in opts) {
-    const d = hdist(P(pk), F.pos);
+    const d = hdist(parseCellKey(pk), F.pos);
     if (d < bd) {
       bd = d;
       bk = pk;
@@ -1982,7 +1982,7 @@ function chooseAction(S, e, ev, inPlace) {
     opts = Object.assign({ [here]: 0 }, inPlace ? {} : reach(S, e));
   let best = null;
   for (const pk in opts) {
-    const pos = P(pk),
+    const pos = parseCellKey(pk),
       sim = Object.assign({}, e, { pos }),
       pen =
         (markAt(S, pk) === 'trempe' && !e.t.includes('Sol') ? 1.5 : 0) +
@@ -2031,7 +2031,7 @@ function chooseAction(S, e, ev, inPlace) {
     e.intent = pg;
   } else if (best) {
     if (best.pk !== here) {
-      e.pos = P(best.pk);
+      e.pos = parseCellKey(best.pk);
       e.mvR = S.round; // Pursuit (v4.13)
       ev.push({ e: 'mv', u: e.uid });
       trapArrival(S, e, ev);
@@ -2044,7 +2044,7 @@ function chooseAction(S, e, ev, inPlace) {
   } else if (!e.seg) {
     const [bk, lab] = F ? approach(S, e, opts, F, here) : aiFallback(S, e, opts, al, here);
     if (bk !== here) {
-      e.pos = P(bk);
+      e.pos = parseCellKey(bk);
       e.mvR = S.round; // Pursuit (v4.13)
       ev.push({ e: 'mv', u: e.uid });
       trapArrival(S, e, ev);
@@ -2090,7 +2090,7 @@ export function threatZone(S, e) {
     opts = Object.assign({ [unitKey(e)]: 0 }, e.badge || e.isLost ? {} : reach(S, e));
   if (!(e.badge || e.isLost)) {
     for (const pk in opts) {
-      const sim = Object.assign({}, e, { pos: P(pk) });
+      const sim = Object.assign({}, e, { pos: parseCellKey(pk) });
       e.mv.forEach(mid => {
         const m = MOVES[mid];
         if (!m || m.wx || !(m.p || m.fix) || m.sh === 'self' || m.sh === 'ally' || !canXP(S, e, m)) {
@@ -2374,11 +2374,11 @@ function previewCore(S, uid, mi, k) {
 }
 
 /* ===================== BATTLE ENGINE v0.8 ===================== */
-export const K = (c, r) => c + ',' + r;
+export const cellKey = (c, r) => c + ',' + r;
 
-export const P = k => k.split(',').map(Number);
+export const parseCellKey = k => k.split(',').map(Number);
 
-export const inBoard = (c, r) => c >= 0 && c < BW && r >= 0 && r < BH;
+export const inBoard = (c, r) => c >= 0 && c < BOARD_COLS && r >= 0 && r < BOARD_ROWS;
 
 export const CDIR = [
   [1, -1, 0],
@@ -2389,11 +2389,11 @@ export const CDIR = [
   [0, -1, 1],
 ];
 
-export const nbrK = k => neighbors(P(k)).map(q => K(q[0], q[1]));
+export const nbrK = k => neighbors(parseCellKey(k)).map(q => cellKey(q[0], q[1]));
 
 export const mhpOf = s => 20 + s[0] * 8;
 
-export const unitKey = u => K(u.pos[0], u.pos[1]);
+export const unitKey = u => cellKey(u.pos[0], u.pos[1]);
 
 export const unitAt = (S, k) => S.units.find(u => !u.ko && unitKey(u) === k);
 
@@ -2463,5 +2463,5 @@ export const BRANCHES = {
 
 // Instructions run at startup, in the original order (see index.js).
 export function init() {
-  ((BW = 8), (BH = 6));
+  ((BOARD_COLS = 8), (BOARD_ROWS = 6));
 }

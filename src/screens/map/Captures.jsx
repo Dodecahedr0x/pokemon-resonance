@@ -1,5 +1,5 @@
 import { PROFILE } from '../../engine/state/game-state.js';
-import { PIX } from '../../engine/assets/item-icons.js';
+import { pokemonArtUrl } from '../../engine/assets/images.js';
 import { FAMILY_REGION_NAMES, ROUTE_NAMES, regionIndex } from '../../engine/world/catch-anywhere.js';
 import { DIPLOMA_REWARDS, familyCaptureStats } from '../../engine/progression/regional-dex.js';
 
@@ -35,7 +35,7 @@ export default function Captures() {
               aria-label={own ? m.n + ', capturé' : 'Pokémon pas encore capturé'}
               key={m.id}
             >
-              <img src={PIX(m.no)} alt="" loading="lazy" decoding="async" />
+              <img src={pokemonArtUrl(m.no)} alt="" loading="lazy" decoding="async" />
             </button>
           );
         })}

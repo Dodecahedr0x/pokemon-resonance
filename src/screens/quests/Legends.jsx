@@ -1,7 +1,7 @@
 import { POKEMON } from '../../engine/pokemon/pokemon.js';
 import { PROFILE } from '../../engine/state/game-state.js';
 import { typeColor } from '../../engine/core/utils.js';
-import { ART } from '../../engine/assets/item-icons.js';
+import { pokemonArtUrl } from '../../engine/assets/images.js';
 import { LEGS } from '../../engine/modes/legendaries.js';
 import { hoennOpen } from '../../engine/world/hoenn.js';
 import { legendSteps } from '../../engine/modes/legendary-captures.js';
@@ -17,7 +17,7 @@ function Legend({ L, et, isTaken: takenSet, fight, condition: cond }) {
       className={'legend-quest card' + (takenSet ? ' is-caught' : isReady ? ' is-ready' : '')}
       style={{ '--type-color': typeColor(m.t[0]) }}
     >
-      <img src={ART(m.no)} alt="" loading="lazy" />
+      <img src={pokemonArtUrl(m.no)} alt="" loading="lazy" />
       <div className="legend-quest-text">
         <small>{L.title}</small>
         <b>{m.n}</b>

@@ -7,7 +7,7 @@ import { queueSave } from '../state/saves.js';
 import { PREF, savePref } from './preferences.js';
 import { sfx, vibe } from '../audio/sound-effects.js';
 import { musLevel } from '../audio/music.js';
-import { V4 } from './screen-state.js';
+import { SCREEN_STATE } from './screen-state.js';
 import { renderWallet } from './wallet.js';
 import { centerMap, renderMap } from '../world/map.js';
 import { renderDex } from '../progression/pokedex.js';
@@ -90,8 +90,8 @@ export function init() {
       if (v.dataset.vol === 'musVol') {
         musLevel();
       }
-      clearTimeout(V4.volT);
-      V4.volT = setTimeout(() => {
+      clearTimeout(SCREEN_STATE.volT);
+      SCREEN_STATE.volT = setTimeout(() => {
         savePref();
         if (v.dataset.vol === 'sfxVol') {
           sfx('ui');

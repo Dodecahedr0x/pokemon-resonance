@@ -5,8 +5,8 @@ import { RC, synOf } from '../pokemon/roles-synergies.js';
 import { hexCenter, toast } from '../core/utils.js';
 import { tokCl } from '../../screens/combat/board/boardStore.js';
 import { TEAM_MAX, __set_squad, renderSquad, save, squad, toggle } from '../team/team.js';
-import { BH, BW, unitKey } from '../combat/engine.js';
-import { B, BG, L, VERT } from '../combat/ui.js';
+import { BOARD_ROWS, BOARD_COLS, unitKey } from '../combat/engine.js';
+import { B, BOARD_GEOMETRY, L, VERT } from '../combat/ui.js';
 import { TUTORIAL_STEPS } from '../progression/tutorial.js';
 import { renderPrep } from '../combat/battle-prep.js';
 
@@ -16,11 +16,11 @@ export function __set_TEAM_BAK(v) {
 }
 
 export function fieldSvg() {
-  const S = BG.S,
+  const S = BOARD_GEOMETRY.S,
     w = Math.sqrt(3) * S,
-    c0 = hexCenter(0, 0, S, BG.OX, BG.OY),
-    c1 = hexCenter(BW - 1, 1, S, BG.OX, BG.OY),
-    cl = hexCenter(0, BH - 1, S, BG.OX, BG.OY);
+    c0 = hexCenter(0, 0, S, BOARD_GEOMETRY.OX, BOARD_GEOMETRY.OY),
+    c1 = hexCenter(BOARD_COLS - 1, 1, S, BOARD_GEOMETRY.OX, BOARD_GEOMETRY.OY),
+    cl = hexCenter(0, BOARD_ROWS - 1, S, BOARD_GEOMETRY.OX, BOARD_GEOMETRY.OY);
   const x0 = c0[0] - w / 2 + 1,
     x1 = c1[0] + w / 2 - 1,
     y0 = c0[1] - S + 2,
@@ -42,8 +42,8 @@ export function fieldSvg() {
       [c, d],
       [a, d],
     ]);
-  const z1 = hexCenter(1, 0, S, BG.OX, BG.OY)[0] + w * 0.75,
-    z2 = hexCenter(BW - 2, 0, S, BG.OX, BG.OY)[0] - w * 0.25;
+  const z1 = hexCenter(1, 0, S, BOARD_GEOMETRY.OX, BOARD_GEOMETRY.OY)[0] + w * 0.75,
+    z2 = hexCenter(BOARD_COLS - 2, 0, S, BOARD_GEOMETRY.OX, BOARD_GEOMETRY.OY)[0] - w * 0.25;
   const [cx, cy] = MPT(mx, my);
   return `<polygon class="fd-out" points="${rect(x0, y0, x1, y1)}"/><polygon class="fd-in" points="${rect(x0 + 5, y0 + 5, x1 - 5, y1 - 5)}"/>
   <polygon class="fd-zone al" points="${rect(x0 + 5, y0 + 5, z1, y1 - 5)}"/><polygon class="fd-zone en" points="${rect(z2, y0 + 5, x1 - 5, y1 - 5)}"/>

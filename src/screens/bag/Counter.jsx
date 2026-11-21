@@ -1,4 +1,4 @@
-import { V4 } from '../../engine/ui/screen-state.js';
+import { SCREEN_STATE } from '../../engine/ui/screen-state.js';
 import { thanksShown } from './bagStore.js';
 
 // "Pokémon world" skin (v4.73): counter with its vendor in the Shop, pocketed bag
@@ -60,10 +60,10 @@ const LINES_BY_ROLE = {
 
 // `n`: number of items displayed in the pocket (Bag).
 export default function Counter({ n }) {
-  if (V4.bagView !== 'sac') {
+  if (SCREEN_STATE.bagView !== 'sac') {
     const rowLine = thanksShown()
       ? 'Merci pour votre achat ! Autre chose ?'
-      : LINES_BY_ROLE[V4.bagCategory] || 'Bienvenue ! Que puis-je pour vous ?';
+      : LINES_BY_ROLE[SCREEN_STATE.bagCategory] || 'Bienvenue ! Que puis-je pour vous ?';
     return (
       <section className="bag-counter" aria-label="Comptoir de la Boutique">
         <div className="bag-counter-scene" aria-hidden="true">
@@ -84,7 +84,7 @@ export default function Counter({ n }) {
       </section>
     );
   }
-  const pocket = POCKETS[V4.bagCategory] || 'Objets';
+  const pocket = POCKETS[SCREEN_STATE.bagCategory] || 'Objets';
   return (
     <section className="bag-pocket" aria-label="Sac">
       <Backpack />

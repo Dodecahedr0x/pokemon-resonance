@@ -6,7 +6,7 @@ import { toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import {
   EMAX,
-  P,
+  parseCellKey,
   byUid,
   damage,
   endStep,
@@ -30,7 +30,7 @@ import { queueSave } from '../state/saves.js';
 import { sfx, vibe } from '../audio/sound-effects.js';
 import { HEALS } from '../items/battle-potions.js';
 import { HELD_IMG, SHOP, bagN, today } from '../state/economy.js';
-import { V4 } from '../ui/screen-state.js';
+import { SCREEN_STATE } from '../ui/screen-state.js';
 import { renderWallet } from '../ui/wallet.js';
 import { renderBag } from '../progression/quests-shop.js';
 import { LEGS } from '../modes/legendaries.js';
@@ -375,7 +375,7 @@ export function useCombatItem(S, u, k) {
     Object.assign(o, {
       ko: false,
       hp: Math.max(1, Math.round(o.mhp * 0.4)),
-      pos: P(x),
+      pos: parseCellKey(x),
       acted: true,
       moved: true,
       sn: false,
@@ -809,8 +809,8 @@ export function init() {
     }
     const o = e.target.closest('[data-offre]');
     if (o) {
-      V4.bagView = 'boutique';
-      V4.bagCategory = o.dataset.offre;
+      SCREEN_STATE.bagView = 'boutique';
+      SCREEN_STATE.bagCategory = o.dataset.offre;
       renderBag();
     }
   });

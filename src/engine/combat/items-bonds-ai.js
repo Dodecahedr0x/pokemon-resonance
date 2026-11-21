@@ -4,7 +4,7 @@ import { POKEMON, POKEMON_LIST, SCEN } from '../pokemon/pokemon.js';
 import { PROFILE, isCamp, lvlOfPts, pairKey } from '../state/game-state.js';
 import { BADGES } from '../modes/gyms.js';
 import {
-  P,
+  parseCellKey,
   byUid,
   dmgOf,
   effR,
@@ -197,7 +197,7 @@ export function duoTargets(S, u, p) {
     if (S.tiles[k].rock) {
       continue;
     }
-    const d = hdist(A.pos, P(k));
+    const d = hdist(A.pos, parseCellKey(k));
     if (d >= 1 && d <= D.r) {
       o.push(k);
     }
@@ -286,7 +286,7 @@ export function aiFallback(S, e, opts, al, here) {
     let bk = here,
       bt = threatAt(S, e, e.pos);
     for (const pk in opts) {
-      const t = threatAt(S, e, P(pk)) + (S.tiles[pk].lava > 0 ? 6 : 0);
+      const t = threatAt(S, e, parseCellKey(pk)) + (S.tiles[pk].lava > 0 ? 6 : 0);
       if (t < bt) {
         bt = t;
         bk = pk;
@@ -297,7 +297,7 @@ export function aiFallback(S, e, opts, al, here) {
   let bk = here,
     bd = 1e9;
   for (const pk in opts) {
-    const d = Math.min(...al.map(a => hdist(P(pk), a.pos)));
+    const d = Math.min(...al.map(a => hdist(parseCellKey(pk), a.pos)));
     if (d < bd) {
       bd = d;
       bk = pk;

@@ -4,7 +4,7 @@ import { Dialogue } from './Window.jsx';
 import { POKEMON } from '../../engine/pokemon/pokemon.js';
 import { medal, typeColor } from '../../engine/core/utils.js';
 import { HELD_IMG } from '../../engine/state/economy.js';
-import { ITM } from '../../engine/assets/item-icons.js';
+import { itemIcon } from '../../engine/assets/item-icons.js';
 
 import Button from '../../components/Button.jsx';
 // Resonance Tower (#tdrBox): team choice, then reward between two floors.
@@ -77,7 +77,7 @@ function Reward({ floor, offer }) {
               <span className="tower-reward-icon">+1</span>
             ) : x.k === 'item' ? (
               <span className="tower-reward-icon">
-                <img src={ITM(HELD_IMG[x.it])} alt="" />
+                <img src={itemIcon(HELD_IMG[x.it])} alt="" />
               </span>
             ) : (
               <Html html={medal(POKEMON[x.to].t, 'is-small')} />

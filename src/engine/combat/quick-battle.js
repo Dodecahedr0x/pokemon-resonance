@@ -1,6 +1,6 @@
 /* Quick battle: ×2 button in battle, and « Passer » (Skip) during the opponent turn, which plays sped up with the same rules (added in v4.28). */
 
-import { RM, toast } from '../core/utils.js';
+import { reducedMotion, toast } from '../core/utils.js';
 import { byUid } from './engine.js';
 import { B, renderAll, ui } from './ui.js';
 import { PREF, savePref } from '../ui/preferences.js';
@@ -17,7 +17,7 @@ export function endSkipSpeedup() {
   refreshBattle('fast'); // #bFast (aria-pressed): rendered by React (TopBar.jsx)
 }
 
-export const battleDelay = (rm, fast, slow) => (RM || ui.skipSpeedup ? rm : PREF.fast ? fast : slow);
+export const battleDelay = (rm, fast, slow) => (reducedMotion || ui.skipSpeedup ? rm : PREF.fast ? fast : slow);
 
 export const isEnemyTurn = () =>
   !!(

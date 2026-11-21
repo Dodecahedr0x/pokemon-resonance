@@ -6,7 +6,7 @@ import { HOOKS } from '../core/hooks.js';
 import { goTo } from '../core/navigation.js';
 import { battleOpts, scSel } from '../combat/ui.js';
 import { queueSave } from '../state/saves.js';
-import { V4 } from '../ui/screen-state.js';
+import { SCREEN_STATE } from '../ui/screen-state.js';
 import { duelEnd, duelOpts } from './duel.js';
 import { refreshCampPage } from '../../screens/camp/campStore.js';
 import { PUZZLES, PUZZLE_CURRENT, puzzleAfter, puzzleDef, puzzleOpts, puzzlePrepare } from './riddles.js';
@@ -155,8 +155,8 @@ export function fixedTeam() {
 // The Camp page is rendered by React (src/screens/camp): sub-tabs, Base camp,
 // open tab. Here, we validate the tab then rebuild the page.
 export function renderCampPage() {
-  const t = CAMP_TABS.some(x => x[0] === V4.campTab) ? V4.campTab : 'base';
-  V4.campTab = t;
+  const t = CAMP_TABS.some(x => x[0] === SCREEN_STATE.campTab) ? SCREEN_STATE.campTab : 'base';
+  SCREEN_STATE.campTab = t;
   refreshCampPage();
 }
 
@@ -198,7 +198,7 @@ export function init() {
     if (!b) {
       return;
     }
-    V4.campTab = b.dataset.campTab;
+    SCREEN_STATE.campTab = b.dataset.campTab;
     renderCampPage();
   });
 
@@ -209,7 +209,7 @@ export function init() {
       return;
     }
     e.stopPropagation();
-    V4.campTab = 'enigmes';
+    SCREEN_STATE.campTab = 'enigmes';
     goTo('camp');
   });
 }

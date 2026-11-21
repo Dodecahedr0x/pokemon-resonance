@@ -3,7 +3,7 @@ import { MOVES } from '../../../engine/data/moves.js';
 import { veiled } from '../../../engine/modes/gyms.js';
 import { medal } from '../../../engine/core/utils.js';
 import { EMAX, awakeningInfo, foeEvo, hasNx } from '../../../engine/combat/engine.js';
-import { B, STC, enPips, segHp, ui } from '../../../engine/combat/ui.js';
+import { B, STATUS_CLASS, enPips, segHp, ui } from '../../../engine/combat/ui.js';
 import { hasXp, bossScene, plateRankHtml } from '../../../engine/combat/resonance.js';
 import { fogHidden, fogVision } from '../../../engine/combat/fog-of-war.js';
 import { useBattleVersion } from './battleStore.js';
@@ -120,7 +120,7 @@ function Plate({ u, fog }) {
         <span className="battle-plate-status">
           <span>{u.ko ? 'K.O.' : u.hp + ' / ' + u.mhp}</span>
           {u.badge && !u.ko ? (
-            <span className={`status-badge status-${STC[u.badge] || 'other'}`}>{u.badge}</span>
+            <span className={`status-badge status-${STATUS_CLASS[u.badge] || 'other'}`}>{u.badge}</span>
           ) : (
             <span className="battle-plate-state">{state(u, fe, nx)}</span>
           )}

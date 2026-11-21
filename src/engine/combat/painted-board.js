@@ -1,19 +1,19 @@
 /* Painted graphics (backgrounds and textures from the img/ folder, tilted board in perspective) (added in v4.77). */
 
 import { SCEN } from '../pokemon/pokemon.js';
-import { $, RM, toast } from '../core/utils.js';
+import { $, reducedMotion, toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
-import { BH, BW, K, byUid, unitKey } from './engine.js';
+import { BOARD_ROWS, BOARD_COLS, cellKey, byUid, unitKey } from './engine.js';
 import {
   B,
-  BG,
-  HC,
-  HC0,
-  HP,
+  BOARD_GEOMETRY,
+  cellCenter,
+  flatCellCenter,
+  cellPoints,
   L,
   MQV,
   TILT,
-  VB,
+  boardViewBox,
   VERT,
   __set_GREEN,
   buildBoard,
@@ -26,7 +26,7 @@ import {
 import { PREF, savePref } from '../ui/preferences.js';
 import { TUTORIAL_STEPS } from '../progression/tutorial.js';
 import { sfx } from '../audio/sound-effects.js';
-import { FXS, fxAdd, fxOn, fxPrep } from './move-effects.js';
+import { EFFECTS_CANVAS, fxAdd, fxOn, fxPrep } from './move-effects.js';
 import { renderParams } from '../ui/settings.js';
 import { currentActor } from './tactical-engine.js';
 import { hourOf } from './living-board.js';
@@ -96,12 +96,12 @@ const tune = () => {
     return;
   }
   __set_GREEN(!!(MQV && MQV.matches));
-  const [W, H] = VB(),
-    S = BG.S,
+  const [W, H] = boardViewBox(),
+    S = BOARD_GEOMETRY.S,
     a = ((VERT ? 30 : 40) * Math.PI) / 180,
     pts = [];
   for (const k in B.tiles) {
-    const [x, y] = HC0(k);
+    const [x, y] = flatCellCenter(k);
     for (let i = 0; i < 6; i++) {
       pts.push([x + S * Math.cos((Math.PI / 3) * i), y + S * Math.sin((Math.PI / 3) * i)]);
     }
@@ -217,9 +217,9 @@ const dress = () => {
   // earth slab: each cell sits on a darker pedestal, visible on the player's side
   const lip = [];
   for (const k in B.tiles) {
-    const [x, y] = HC(k),
+    const [x, y] = cellCenter(k),
       s = tiltS(x, y);
-    lip.push(HP(x, y + LIP * s, BG.S - 1));
+    lip.push(cellPoints(x, y + LIP * s, BOARD_GEOMETRY.S - 1));
   }
   // the opaque texture covers the cell: its states (mud, lava, fog…) go over the texture
   const copyText = k => {
@@ -244,30 +244,30 @@ const dress = () => {
   // A–H / 1–6 landmarks re-aligned to the edge of the tilted board
   const ax = [],
     lab = (txt, x, y) => ax.push([txt, x.toFixed(1), y.toFixed(1)]);
-  for (let r = 0; r < BH; r++) {
+  for (let r = 0; r < BOARD_ROWS; r++) {
     // in portrait, rows are read at the far end of the board (above the last column)
-    const [x, y] = HC(K(VERT ? BW - 1 : 0, r)),
+    const [x, y] = cellCenter(cellKey(VERT ? BOARD_COLS - 1 : 0, r)),
       s = tiltS(x, y);
     if (VERT) {
-      lab(r + 1, x, y - BG.S * s - 3);
+      lab(r + 1, x, y - BOARD_GEOMETRY.S * s - 3);
     } else {
-      lab(r + 1, x - BG.S * s - 5, y + 2.5);
+      lab(r + 1, x - BOARD_GEOMETRY.S * s - 5, y + 2.5);
     }
   }
-  for (let c = 0; c < BW; c++) {
-    const [x, y] = HC(K(c, 0)),
+  for (let c = 0; c < BOARD_COLS; c++) {
+    const [x, y] = cellCenter(cellKey(c, 0)),
       s = tiltS(x, y);
     if (VERT) {
-      lab('ABCDEFGH'[c], x - BG.S * s - 5, y + 2.5);
+      lab('ABCDEFGH'[c], x - BOARD_GEOMETRY.S * s - 5, y + 2.5);
     } else {
-      lab('ABCDEFGH'[c], x, y - BG.S * s - 3);
+      lab('ABCDEFGH'[c], x, y - BOARD_GEOMETRY.S * s - 3);
     }
   }
   // overall light: haze toward the horizon, moon tint at night (fixed layers, nothing moves)
   // #lipClip clip: pedestals and cells; everything is drawn by the board's React layers
-  const H = VB()[1],
+  const H = boardViewBox()[1],
     isNight = hourOf(B) === 'nuit',
-    backgroundY = HC(VERT ? K(BW - 1, 0) : K(0, 0))[1] - BG.S;
+    backgroundY = cellCenter(VERT ? cellKey(BOARD_COLS - 1, 0) : cellKey(0, 0))[1] - BOARD_GEOMETRY.S;
   boardSet(
     {
       paintedTextures,
@@ -303,9 +303,9 @@ const skip = (T, x, y, s) => {
   if (!fxOn() || !fxPrep()) {
     return;
   }
-  const px = FXS.ox + x * FXS.s,
-    py = FXS.oy + (y + 9 * s) * FXS.s,
-    R = 15 * s * FXS.s;
+  const px = EFFECTS_CANVAS.ox + x * EFFECTS_CANVAS.s,
+    py = EFFECTS_CANVAS.oy + (y + 9 * s) * EFFECTS_CANVAS.s,
+    R = 15 * s * EFFECTS_CANVAS.s;
   fxAdd(
     420,
     (c, p) => {
@@ -333,9 +333,13 @@ const skip = (T, x, y, s) => {
 
 /* shockwave lying on the ground under the hit Pokémon, stronger dust on a KO */
 const footPos = u => {
-  const [x, y] = HC(unitKey(u)),
+  const [x, y] = cellCenter(unitKey(u)),
     s = Math.max(0.6, Math.min(1.4, tiltS(x, y)));
-  return [FXS.ox + x * FXS.s, FXS.oy + (y + 9 * s) * FXS.s, s * FXS.s];
+  return [
+    EFFECTS_CANVAS.ox + x * EFFECTS_CANVAS.s,
+    EFFECTS_CANVAS.oy + (y + 9 * s) * EFFECTS_CANVAS.s,
+    s * EFFECTS_CANVAS.s,
+  ];
 };
 
 const ripple = (u, col) => {
@@ -397,7 +401,7 @@ const fall = u => {
 /* cloud shadows drifting across the board by day (separate layer: only the graphics card works) */
 // .cloudShade: rendered by React (Board.jsx)
 const cloudList = () => {
-  const on = !(!TILT.on || RM || hourOf(B) === 'nuit');
+  const on = !(!TILT.on || reducedMotion || hourOf(B) === 'nuit');
   if (getHost().cloudShade !== on) {
     hostSet({ cloudShade: on });
   }
@@ -652,7 +656,7 @@ export function init() {
     const T = TILT.on && L.u[u.uid];
     if (T) {
       const k = unitKey(u),
-        [x, y] = HC(k),
+        [x, y] = cellCenter(k),
         s = Math.max(0.6, Math.min(1.4, tiltS(x, y)));
       T.tr = `translate(${x}px,${y}px) scale(${s.toFixed(3)})`; // token: Units.jsx (sliding: CSS transition)
       unitsDirty();

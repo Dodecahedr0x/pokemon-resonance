@@ -1,9 +1,9 @@
 /* Home: the « Nouveau » (New) card presenting the latest additions, once per device (added in v4.16.1). */
 
-import { $, RM } from '../core/utils.js';
+import { $, reducedMotion } from '../core/utils.js';
 import { goTo } from '../core/navigation.js';
 import { PREF, savePref } from './preferences.js';
-import { V4 } from './screen-state.js';
+import { SCREEN_STATE } from './screen-state.js';
 import { renderMap } from '../world/map.js';
 import { refreshHome } from '../../screens/home/homeStore.js';
 
@@ -71,8 +71,8 @@ function onWhatsNewClick(e) {
     return;
   }
   if (k === 'johto') {
-    V4.region = 'johto';
-    V4.mapSel = null;
+    SCREEN_STATE.region = 'johto';
+    SCREEN_STATE.mapSel = null;
     goTo('carte');
     renderMap();
     return;
@@ -81,13 +81,13 @@ function onWhatsNewClick(e) {
     goTo('carte');
     const r = $('#route');
     if (r && r.scrollIntoView) {
-      r.scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'center' });
+      r.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'center' });
     }
     return;
   }
   if (k === 'safari') {
-    V4.region = 'kanto';
-    V4.mapSel = 'safari';
+    SCREEN_STATE.region = 'kanto';
+    SCREEN_STATE.mapSel = 'safari';
     goTo('carte');
     renderMap();
     return;
@@ -96,14 +96,14 @@ function onWhatsNewClick(e) {
     goTo('pokedex');
     const c = document.getElementById('v4Comp');
     if (c && c.scrollIntoView) {
-      c.scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'start' });
+      c.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' });
     }
     return;
   }
   if (k === 'amis') {
     const a = document.getElementById('v4Amis');
     if (a && a.scrollIntoView) {
-      a.scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'start' });
+      a.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' });
     }
   }
 }

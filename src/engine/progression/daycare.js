@@ -11,7 +11,7 @@ import { $, medal, toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { __set_squad, renderSquad, save, squad } from '../team/team.js';
 import { queueSave } from '../state/saves.js';
-import { ITEM_ICONS, ITM } from '../assets/item-icons.js';
+import { ITEM_ICONS, itemIcon } from '../assets/item-icons.js';
 import { shinyStyle } from '../pokemon/shiny.js';
 import { ACHIEVEMENTS } from './achievements.js';
 import { isFallen } from './campaign-challenges.js';
@@ -202,7 +202,7 @@ export function init() {
       return '';
     }
     const x = r.daycareEgg;
-    return `<div class="result-list"><h4>Pension</h4><div class="result-row${x.sh ? ' is-shiny' : ''}"${x.sh ? ` style="${shinyStyle(x.id)}"` : ''}>${medal(POKEMON[x.id].t)}<span>Un œuf a éclos : un ${POKEMON[x.id].n}${x.sh ? ' <b>chromatique</b>' : ''} !${x.mv ? ` Il hérite de <b>${MOVES[x.mv].n}</b> grâce à ${POKEMON[x.father].n}.` : ''}</span><b><img class="res-egg" src="${ITM('oeuf')}" alt=""></b></div></div>`;
+    return `<div class="result-list"><h4>Pension</h4><div class="result-row${x.sh ? ' is-shiny' : ''}"${x.sh ? ` style="${shinyStyle(x.id)}"` : ''}>${medal(POKEMON[x.id].t)}<span>Un œuf a éclos : un ${POKEMON[x.id].n}${x.sh ? ' <b>chromatique</b>' : ''} !${x.mv ? ` Il hérite de <b>${MOVES[x.mv].n}</b> grâce à ${POKEMON[x.father].n}.` : ''}</span><b><img class="res-egg" src="${itemIcon('oeuf')}" alt=""></b></div></div>`;
   });
 
   /* ---------- achievements ---------- */

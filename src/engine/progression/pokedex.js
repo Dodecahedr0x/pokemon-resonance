@@ -1,7 +1,7 @@
 import { POKEMON, POKEMON_LIST } from '../pokemon/pokemon.js';
-import { $, $$, RM } from '../core/utils.js';
+import { $, $$, reducedMotion } from '../core/utils.js';
 import { norm, openSheet, squad } from '../team/team.js';
-import { V4 } from '../ui/screen-state.js';
+import { SCREEN_STATE } from '../ui/screen-state.js';
 import { isShinyOwned } from '../pokemon/shiny.js';
 import { applyShinyArt } from '../assets/art-direction.js';
 import { scanPokedex } from '../audio/immersion.js';
@@ -13,16 +13,16 @@ export let dexBuilt;
 
 // v4.13
 export function dexList() {
-  const q = norm(V4.dexQ || '');
+  const q = norm(SCREEN_STATE.dexQ || '');
   let L = DEXS.filter(
     m =>
-      (V4.dexGen === 'all' || String(m.gen) === V4.dexGen) &&
+      (SCREEN_STATE.dexGen === 'all' || String(m.gen) === SCREEN_STATE.dexGen) &&
       (!q || norm(m.n).includes(q) || String(m.no).includes(q) || m.t.some(t => norm(t).includes(q)))
   );
-  if (V4.dexSort === 'nom') {
+  if (SCREEN_STATE.dexSort === 'nom') {
     L = [...L].sort((a, b) => a.n.localeCompare(b.n, 'fr'));
   }
-  if (V4.dexSort === 'type') {
+  if (SCREEN_STATE.dexSort === 'type') {
     L = [...L].sort((a, b) => a.t[0].localeCompare(b.t[0], 'fr') || a.no - b.no);
   }
   return L;
@@ -41,8 +41,8 @@ function renderDexList() {
 
 export function renderDexCard() {
   if (dexBuilt) {
-    const m = POKEMON[V4.dexSel] || DEXS[0];
-    V4.dexSel = m.id;
+    const m = POKEMON[SCREEN_STATE.dexSel] || DEXS[0];
+    SCREEN_STATE.dexSel = m.id;
     refreshDex();
     setTimeout(() => isShinyOwned(m.id) && applyShinyArt($('#dex4Card .dex-art img'), m.no), 0); // v4.25
   }
@@ -53,8 +53,8 @@ export function renderDex() {
   if ($('#dex')) {
     dexBuilt = true;
   }
-  if (!V4.dexSel) {
-    V4.dexSel = (squad[0] && POKEMON[squad[0]].id) || 'bulbizarre';
+  if (!SCREEN_STATE.dexSel) {
+    SCREEN_STATE.dexSel = (squad[0] && POKEMON[squad[0]].id) || 'bulbizarre';
   }
   renderDexCard();
   renderDexList();
@@ -70,12 +70,12 @@ export function init() {
   document.addEventListener('click', e => {
     const d = e.target.closest('[data-dex]');
     if (d && $('#dex') && $('#dex').contains(d)) {
-      V4.dexSel = d.dataset.dex;
+      SCREEN_STATE.dexSel = d.dataset.dex;
       renderDexCard(); // also redraws the list (selected item)
       if (d.closest('#dex4List') && innerWidth < 1000) {
         const c = $('#dex4Card');
         if (c) {
-          c.scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'start' });
+          c.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' });
         }
       }
       return;
@@ -91,15 +91,15 @@ export function init() {
     if (e.target.id !== 'dex4Q') {
       return;
     }
-    V4.dexQ = e.target.value;
+    SCREEN_STATE.dexQ = e.target.value;
     renderDexList();
   });
   document.addEventListener('change', e => {
     const t = e.target;
     if (t.id === 'dex4Gen') {
-      V4.dexGen = t.value;
+      SCREEN_STATE.dexGen = t.value;
     } else if (t.id === 'dex4Sort') {
-      V4.dexSort = t.value;
+      SCREEN_STATE.dexSort = t.value;
     } else {
       return;
     }

@@ -6,8 +6,8 @@ import { POKEMON, NOTES, familyOf } from '../../engine/pokemon/pokemon.js';
 import { RC, ROLEFX } from '../../engine/pokemon/roles-synergies.js';
 import { typeBadge, typeColor } from '../../engine/core/utils.js';
 import { STLN, squad } from '../../engine/team/team.js';
-import { ART, PIX } from '../../engine/assets/item-icons.js';
-import { V4 } from '../../engine/ui/screen-state.js';
+import { pokemonArtUrl } from '../../engine/assets/images.js';
+import { SCREEN_STATE } from '../../engine/ui/screen-state.js';
 import { ownedFam } from '../../engine/progression/trainer-stats.js';
 import { DEXM } from '../../engine/data/pokedex.js';
 import { LORE } from '../../engine/data/pokedex-texts.js';
@@ -24,7 +24,7 @@ const no3 = n => String(n).padStart(3, '0');
 // Sheet of the selected Pokémon (#dex4Card). The transient classes scanSweep / dexNew
 // (sweep, first discovery) are still set by the engine (v4.48).
 export default function DexCard() {
-  const m = POKEMON[V4.dexSel] || DEXS[0];
+  const m = POKEMON[SCREEN_STATE.dexSel] || DEXS[0];
   const dm = DEXM[m.no] || [0, 0, ''],
     own = ownedFam(m.id),
     sh = isShinyOwned(m.id),
@@ -54,7 +54,7 @@ export default function DexCard() {
           {/* one image per Pokémon: the shiny illustration (v4.25) is set by the engine */}
           <img
             key={m.id}
-            src={ART(m.no)}
+            src={pokemonArtUrl(m.no)}
             alt={m.n}
             decoding="async"
             className={fr ? 'is-regional-form' : undefined}
@@ -185,7 +185,7 @@ export default function DexCard() {
               style={{ '--c': typeColor(x.t[0]) }}
               key={x.id}
             >
-              <img src={PIX(x.no)} alt="" loading="lazy" width="56" height="56" />
+              <img src={pokemonArtUrl(x.no)} alt="" loading="lazy" width="56" height="56" />
               <b>{x.n}</b>
               <em>{`Stade ${x.st}`}</em>
             </button>,

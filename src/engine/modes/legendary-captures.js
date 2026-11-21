@@ -2,7 +2,7 @@ import { POKEMON, SCEN } from '../pokemon/pokemon.js';
 import { PROFILE, isCamp } from '../state/game-state.js';
 import { goTo } from '../core/navigation.js';
 import { OBST } from '../combat/synergies-obstacles.js';
-import { V4 } from '../ui/screen-state.js';
+import { SCREEN_STATE } from '../ui/screen-state.js';
 import { renderQuests } from '../progression/quests-shop.js';
 import { FAMILY_REGION_NAMES } from '../world/catch-anywhere.js';
 import { familyCaptureStats } from '../progression/regional-dex.js';
@@ -82,7 +82,7 @@ export function init() {
       return;
     }
     e.stopPropagation();
-    V4.questTab = 'leg';
+    SCREEN_STATE.questTab = 'leg';
     goTo('quetes');
     renderQuests();
   });

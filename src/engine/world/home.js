@@ -1,4 +1,4 @@
-import { $, RM } from '../core/utils.js';
+import { $, reducedMotion } from '../core/utils.js';
 import { goTo } from '../core/navigation.js';
 import { encounter } from './home-route.js';
 import { goFight } from '../combat/ui.js';
@@ -32,9 +32,9 @@ export function init() {
       goTo('carte');
       const r = $('#route');
       if (r && r.scrollIntoView) {
-        r.scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'center' });
+        r.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'center' });
       }
-      setTimeout(() => encounter(), RM ? 0 : 450);
+      setTimeout(() => encounter(), reducedMotion ? 0 : 450);
     }
   });
 }

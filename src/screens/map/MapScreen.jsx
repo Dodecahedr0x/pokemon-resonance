@@ -5,7 +5,7 @@ import MapList from './MapList.jsx';
 import EvBar from './EvBar.jsx';
 import Captures from './Captures.jsx';
 import Route from './Route.jsx';
-import { V4 } from '../../engine/ui/screen-state.js';
+import { SCREEN_STATE } from '../../engine/ui/screen-state.js';
 import { routeName } from '../../engine/world/johto.js';
 
 import PageHeader from '../../components/PageHeader.jsx';
@@ -15,7 +15,8 @@ const REGIONS = [
   ['hoenn', 'Hoenn'],
 ];
 
-export const regionMap = () => (V4.region === 'hoenn' ? 'hoenn' : V4.region === 'johto' ? 'johto' : 'kanto');
+export const regionMap = () =>
+  SCREEN_STATE.region === 'hoenn' ? 'hoenn' : SCREEN_STATE.region === 'johto' ? 'johto' : 'kanto';
 
 // "Map" page (#carte). Nothing before buildMap() (engine startup); content that depends
 // on the game (routes, markers, panels…) after the first renderMap(), like the old DOM.

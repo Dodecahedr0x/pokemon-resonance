@@ -2,7 +2,7 @@ import { GYMS } from '../data/game-data.js';
 import { SCEN } from '../pokemon/pokemon.js';
 import { BADGE_REWARD, ITEMS2, PROFILE } from '../state/game-state.js';
 import { ARENAS } from '../modes/gyms.js';
-import { $, RM } from '../core/utils.js';
+import { $, reducedMotion } from '../core/utils.js';
 import { hook } from '../core/hooks.js';
 import { badgeSvg } from '../modes/league.js';
 import { ELITE, scenLock } from '../combat/items-bonds-ai.js';
@@ -10,8 +10,8 @@ import { nextGoal } from '../progression/campaign.js';
 import { ELITE_L, leaderOf } from '../progression/prestige.js';
 import { avatar, emblem, wonOf } from './home-journey.js';
 import { HELD_IMG } from '../state/economy.js';
-import { ITM } from '../assets/item-icons.js';
-import { V4 } from '../ui/screen-state.js';
+import { itemIcon } from '../assets/item-icons.js';
+import { SCREEN_STATE } from '../ui/screen-state.js';
 import { johtoRewardLine, placeStateJ, placesR, updateRouteSign } from './johto.js';
 import { safariLocked } from '../modes/safari.js';
 import { updateScrollArrows } from './map-scroll.js';
@@ -119,15 +119,15 @@ export function buildMap() {
 }
 
 export function renderMap() {
-  if (!V4.region) {
-    V4.region = /^h/.test(nextGoal()[0]) ? 'hoenn' : /^j/.test(nextGoal()[0]) ? 'johto' : 'kanto';
+  if (!SCREEN_STATE.region) {
+    SCREEN_STATE.region = /^h/.test(nextGoal()[0]) ? 'hoenn' : /^j/.test(nextGoal()[0]) ? 'johto' : 'kanto';
   } // v4.15, v4.19
   buildMap();
   if (mapBuilt) {
     // markers were drawn before the default place was chosen: we keep the old selection for them
-    const marksSel = V4.mapSel;
-    if (!V4.mapSel || !placesR().some(p => p.id === V4.mapSel)) {
-      V4.mapSel = (placesR().find(p => placeState(p) === 'next') || placesR()[0]).id;
+    const marksSel = SCREEN_STATE.mapSel;
+    if (!SCREEN_STATE.mapSel || !placesR().some(p => p.id === SCREEN_STATE.mapSel)) {
+      SCREEN_STATE.mapSel = (placesR().find(p => placeState(p) === 'next') || placesR()[0]).id;
     }
     updateRouteSign(); // v4.15
     refreshMap({ marksSel });
@@ -141,12 +141,12 @@ export function rewardLine(k) {
     return johtoRewardLine(k);
   } // Johto (v4.15)
   const R = BADGE_REWARD[gi];
-  return `<div class="reward-line"><span class="reward-badge">${badgeSvg(gi, GYMS[gi].t, 'mi' + gi)}Badge ${GYMS[gi].t}</span>${R.item ? `<span><img src="${ITM(HELD_IMG[R.item])}" alt="" loading="lazy">${ITEMS2[R.item].n}</span>` : ''}<span><span class="coin-icon" aria-hidden="true">₽</span>+500</span><span><span class="gem-icon"><svg><use href="#i-gem"/></svg></span>+10</span></div>`;
+  return `<div class="reward-line"><span class="reward-badge">${badgeSvg(gi, GYMS[gi].t, 'mi' + gi)}Badge ${GYMS[gi].t}</span>${R.item ? `<span><img src="${itemIcon(HELD_IMG[R.item])}" alt="" loading="lazy">${ITEMS2[R.item].n}</span>` : ''}<span><span class="coin-icon" aria-hidden="true">₽</span>+500</span><span><span class="gem-icon"><svg><use href="#i-gem"/></svg></span>+10</span></div>`;
 }
 
 export function centerMap() {
   const sc = $('#mapSc'),
-    mk = $(`#mapMarks [data-place="${V4.mapSel}"]`);
+    mk = $(`#mapMarks [data-place="${SCREEN_STATE.mapSel}"]`);
   if (sc && mk && sc.scrollWidth > sc.clientWidth) {
     sc.scrollLeft = Math.max(0, mk.offsetLeft - sc.clientWidth / 2);
   }
@@ -207,7 +207,7 @@ const ISLE =
 
 const ISLE2 = 'M120 640C110 620 150 612 170 622C186 630 170 640 120 640Z';
 
-export const PL = Object.fromEntries(PLACES.map(p => [p.id, p]));
+export const PLACE_BY_ID = Object.fromEntries(PLACES.map(p => [p.id, p]));
 
 // Instructions run at startup, in the original order (see index.js).
 export function init() {
@@ -252,19 +252,19 @@ export function init() {
     if (!b) {
       return;
     }
-    V4.mapSel = b.dataset.place;
+    SCREEN_STATE.mapSel = b.dataset.place;
     renderMap();
     if (b.closest('#mapList')) {
-      const mk = $(`#mapMarks [data-place="${V4.mapSel}"]`),
+      const mk = $(`#mapMarks [data-place="${SCREEN_STATE.mapSel}"]`),
         sc = $('#mapSc');
       if (mk && sc && sc.scrollWidth > sc.clientWidth) {
-        sc.scrollTo({ left: mk.offsetLeft - sc.clientWidth / 2, behavior: RM ? 'auto' : 'smooth' });
+        sc.scrollTo({ left: mk.offsetLeft - sc.clientWidth / 2, behavior: reducedMotion ? 'auto' : 'smooth' });
       }
     }
     if (innerWidth < 1000) {
       const i = $('#mapInfo');
       if (i && b.closest('#mapMarks')) {
-        i.scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'nearest' });
+        i.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'nearest' });
       }
     }
   });

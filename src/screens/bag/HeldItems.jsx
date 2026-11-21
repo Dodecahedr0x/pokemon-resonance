@@ -1,7 +1,7 @@
 import { ITEMS2, PROFILE, isCamp, ownedItems } from '../../engine/state/game-state.js';
 import { BADGES } from '../../engine/modes/gyms.js';
 import { HELD_IMG, SHOP, formatNumber } from '../../engine/state/economy.js';
-import { ITM } from '../../engine/assets/item-icons.js';
+import { itemIcon } from '../../engine/assets/item-icons.js';
 import { HELD_SHOP, heldItemCost } from '../../engine/combat/resonance.js';
 import { Article, Shards } from './Items.jsx';
 
@@ -16,7 +16,7 @@ function OutfitForSale({ k }) {
   return (
     <article className={'item-row' + (own ? ' is-owned' : '')}>
       <span className="item-row-icon">
-        <img src={ITM(HELD_IMG[k])} alt="" loading="lazy" />
+        <img src={itemIcon(HELD_IMG[k])} alt="" loading="lazy" />
       </span>
       <div className="item-row-text">
         <b>{it.n}</b>

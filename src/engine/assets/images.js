@@ -22,12 +22,12 @@ function b64url(k, b) {
   return (IMGU[k] = u);
 }
 
-export const PKA = no =>
+export const pokemonArtUrl = no =>
   PKIMG[no]
     ? b64url('p' + no, PKIMG[no])
     : 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/' + no + '.png';
 
-export const ITA = k =>
+export const itemArtUrl = k =>
   ITIMG[k]
     ? b64url('i' + k, ITIMG[k])
     : 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/dream-world/' + k + '.png';

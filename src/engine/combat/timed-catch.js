@@ -1,7 +1,7 @@
 /* Timed capture · visible statuses · reacting Pokémon (added in v4.53). */
 
 import { PROFILE } from '../state/game-state.js';
-import { RM, toast } from '../core/utils.js';
+import { reducedMotion, toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { tokCl, unitsDirty } from '../../screens/combat/board/boardStore.js';
 import { byUid } from './engine.js';
@@ -101,7 +101,7 @@ export function startCatchTiming(cb) {
   o.querySelector('.timed-catch-throw').focus();
 }
 
-const CATCH_TIMING_ON = () => PREF.catchTimingEnabled !== 0 && !RM && !AUTO;
+const CATCH_TIMING_ON = () => PREF.catchTimingEnabled !== 0 && !reducedMotion && !AUTO;
 
 function onTimedCatchClick(e) {
   const b = e.target.closest && e.target.closest('[data-cap]');

@@ -5,7 +5,7 @@ import { SCEN } from '../pokemon/pokemon.js';
 import { ARENAS } from '../modes/gyms.js';
 import { hash2, mulberry32, typeColor } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
-import { V4 } from '../ui/screen-state.js';
+import { SCREEN_STATE } from '../ui/screen-state.js';
 import { CHAIN, MAP_SVG, curvePath, placeState } from './map.js';
 import { JCHAIN, JMAP_SVG, placesR } from './johto.js';
 import { HCHAIN, HMAP_SVG } from './hoenn.js';
@@ -390,9 +390,9 @@ const typeCol = t => {
 };
 
 const placesOf = reg => {
-  const old = V4.region;
+  const old = SCREEN_STATE.region;
   try {
-    V4.region = reg;
+    SCREEN_STATE.region = reg;
     return placesR().map(p => {
       const S = SCEN[p.id] || {};
       let t = S.at || '';
@@ -407,7 +407,7 @@ const placesOf = reg => {
       return { id: p.id, x: p.x, y: p.y, grp: p.grp, t };
     });
   } finally {
-    V4.region = old;
+    SCREEN_STATE.region = old;
   }
 };
 
@@ -2187,13 +2187,13 @@ const fxHtml = F => {
 const fogSvg = reg => {
   let puffs = '';
   try {
-    const old = V4.region;
-    V4.region = reg;
+    const old = SCREEN_STATE.region;
+    SCREEN_STATE.region = reg;
     let L = [];
     try {
       L = placesR().filter(p => placeState(p) === 'lock');
     } finally {
-      V4.region = old;
+      SCREEN_STATE.region = old;
     }
     L.forEach(p => {
       const r = mulberry32((p.x * 97 + p.y * 13) | 0);
@@ -2309,7 +2309,7 @@ export function init() {
   LIVING_MAP = { PAINT, REG, fxSvg, fxHtml, fogSvg };
   HOOKS.mapRendered.push(() => {
     if (document.getElementById('mapSt')) {
-      ensure(V4.region === 'hoenn' ? 'hoenn' : V4.region === 'johto' ? 'johto' : 'kanto');
+      ensure(SCREEN_STATE.region === 'hoenn' ? 'hoenn' : SCREEN_STATE.region === 'johto' ? 'johto' : 'kanto');
     }
   });
   HOOKS.timeOfDay.push(t => {

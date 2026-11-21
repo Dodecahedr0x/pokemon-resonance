@@ -1,8 +1,8 @@
 import { bdClass, tokCl, tokHas } from '../../screens/combat/board/boardStore.js';
 
-import { RM, after2images } from '../core/utils.js';
+import { reducedMotion, after2images } from '../core/utils.js';
 import { byUid, unitKey } from './engine.js';
-import { B, HC, L, ui } from './ui.js';
+import { B, cellCenter, L, ui } from './ui.js';
 import { PREF } from '../ui/preferences.js';
 import { vibe } from '../audio/sound-effects.js';
 import { endTooltip, seenTips } from '../ui/battle-tips.js';
@@ -11,7 +11,7 @@ import { endTooltip, seenTips } from '../ui/battle-tips.js';
    ("Pokémon animés" setting, added in v4.29). */
 
 export function animEnabled() {
-  return !RM && PREF.animEnabled !== false;
+  return !reducedMotion && PREF.animEnabled !== false;
 }
 
 /** All the token's parts sit in an inner .token-body group (Units.jsx): it moves without
@@ -48,8 +48,8 @@ function bondHop(uid, k) {
   if (!animEnabled() || !T || !T.b || !u || u.ko) {
     return;
   }
-  const [x0, y0] = HC(unitKey(u)),
-    [x1, y1] = HC(k);
+  const [x0, y0] = cellCenter(unitKey(u)),
+    [x1, y1] = cellCenter(k);
   let dx = x1 - x0,
     dy = y1 - y0;
   const d = Math.hypot(dx, dy);

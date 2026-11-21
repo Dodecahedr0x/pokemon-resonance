@@ -1,4 +1,4 @@
-import { RM } from '../core/utils.js';
+import { reducedMotion } from '../core/utils.js';
 import { cur } from '../core/navigation.js';
 
 /* =====================================================================
@@ -31,8 +31,8 @@ export function init() {
     if (!sc) {
       return;
     }
-    sc.scrollBy({ left: +b.dataset.mapScroll * sc.clientWidth * 0.7, behavior: RM ? 'auto' : 'smooth' });
-    setTimeout(updateScrollArrows, RM ? 30 : 420);
+    sc.scrollBy({ left: +b.dataset.mapScroll * sc.clientWidth * 0.7, behavior: reducedMotion ? 'auto' : 'smooth' });
+    setTimeout(updateScrollArrows, reducedMotion ? 30 : 420);
   });
 
   document.addEventListener(

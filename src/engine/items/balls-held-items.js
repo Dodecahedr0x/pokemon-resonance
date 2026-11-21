@@ -5,7 +5,7 @@ import { SCEN } from '../pokemon/pokemon.js';
 import { ITEMS2 } from '../state/game-state.js';
 import { HOOKS } from '../core/hooks.js';
 import { TOD } from '../world/home-route.js';
-import { EMAX, P, rewardIn, hasNx, heal, pushMessage, teff } from '../combat/engine.js';
+import { EMAX, parseCellKey, rewardIn, hasNx, heal, pushMessage, teff } from '../combat/engine.js';
 import { immobilize } from '../combat/items-bonds-ai.js';
 import { BALLS } from './ball-choice.js';
 import { HEALS } from './battle-potions.js';
@@ -156,7 +156,7 @@ export const ITEM_USE_EFFECTS = {
     Object.assign(o, {
       ko: false,
       hp: Math.max(1, Math.round(o.mhp * 0.8)),
-      pos: P(x),
+      pos: parseCellKey(x),
       acted: true,
       moved: true,
       sn: false,

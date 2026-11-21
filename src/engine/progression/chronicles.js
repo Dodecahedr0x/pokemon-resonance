@@ -5,7 +5,7 @@ import { PREF, savePref } from '../ui/preferences.js';
 import { savePurse } from '../state/economy.js';
 import { renderParams } from '../ui/settings.js';
 import { SCENES, __set_SCN, renderStoryScene } from './story-dialogues.js';
-import { BGM } from '../audio/music.js';
+import { MUSIC } from '../audio/music.js';
 import { applyReward } from '../world/route-events.js';
 import { badgeTotal } from './item-quests.js';
 
@@ -59,8 +59,8 @@ async function offlineLoad() {
     }
     OFFLINE_STATE.n = n;
     OFFLINE_STATE.status = n ? 'prêt' : '';
-    Object.keys(BGM.el).forEach(k => {
-      const a = BGM.el[k];
+    Object.keys(MUSIC.el).forEach(k => {
+      const a = MUSIC.el[k];
       if (a && OFFLINE_STATE.urls[k] && a.paused && a.src !== OFFLINE_STATE.urls[k]) {
         a.src = OFFLINE_STATE.urls[k];
       }
@@ -303,7 +303,7 @@ export const offlineSupported = () => {
   }
 };
 
-export const chapterTracks = () => Object.entries(BGM.src);
+export const chapterTracks = () => Object.entries(MUSIC.src);
 
 // Startup statements, run in their original order (see index.js).
 export function init() {

@@ -3,7 +3,7 @@ import { Html } from '../../../lib/html.jsx';
 import { GYMS } from '../../../engine/data/game-data.js';
 import { MOVES } from '../../../engine/data/moves.js';
 import { SCEN, WEATHER_NAME, WEATHER_TYPE } from '../../../engine/pokemon/pokemon.js';
-import { SYN } from '../../../engine/pokemon/roles-synergies.js';
+import { SYNERGIES } from '../../../engine/pokemon/roles-synergies.js';
 import { ARENAS, arenaNext } from '../../../engine/modes/gyms.js';
 import { medal, typeColor } from '../../../engine/core/utils.js';
 import { badgeSvg } from '../../../engine/modes/league.js';
@@ -151,7 +151,7 @@ export function Synergies() {
   if (!v) {
     return null;
   }
-  const L2 = B ? (B.syn || []).map(k => SYN.find(x => x.k === k)).filter(Boolean) : [];
+  const L2 = B ? (B.syn || []).map(k => SYNERGIES.find(x => x.k === k)).filter(Boolean) : [];
   return (
     <div className="battle-synergies" id="bSyn" hidden={!L2.length}>
       {L2.length > 0 && (

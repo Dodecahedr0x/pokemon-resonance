@@ -8,15 +8,15 @@
 import { POKEMON, DEPLOY, POKEMON_LIST, SCEN, familyOf } from '../pokemon/pokemon.js';
 import { PROFILE } from '../state/game-state.js';
 import { synOf } from '../pokemon/roles-synergies.js';
-import { $, RM, medal } from '../core/utils.js';
+import { $, reducedMotion, medal } from '../core/utils.js';
 import { tokCl } from '../../screens/combat/board/boardStore.js';
 import { HOOKS } from '../core/hooks.js';
 import { goTo } from '../core/navigation.js';
 import {
-  BH,
-  BW,
-  K,
-  P,
+  BOARD_ROWS,
+  BOARD_COLS,
+  cellKey,
+  parseCellKey,
   byUid,
   damage,
   unitRoundEffects,
@@ -49,7 +49,7 @@ import { PREF } from '../ui/preferences.js';
 import { playEv } from '../combat/move-effects.js';
 import { AUTO, overlay, turnBanner } from '../progression/prestige.js';
 import { shut } from '../../screens/overlays/tempStore.js';
-import { V4 } from '../ui/screen-state.js';
+import { SCREEN_STATE } from '../ui/screen-state.js';
 import { unloadCharges } from '../combat/tactics.js';
 import { hasXp, rankOfValue } from '../combat/resonance.js';
 import { vigilStrike } from '../combat/intensity.js';
@@ -268,7 +268,7 @@ function leaveDuel() {
   __set_B(null);
   __set_scSel(hp && SCEN[hp] && !SCEN[hp].noProgress ? hp : 'gue');
   backToPrep();
-  V4.campTab = 'duel';
+  SCREEN_STATE.campTab = 'duel';
   goTo('camp');
 }
 
@@ -591,7 +591,7 @@ export function afterRenderDuel() {
 // the Camp › Duel tab (settings, draw, teams, history) is rendered by React: src/screens/camp/tabs/Duel.jsx
 
 function duelRender() {
-  if (V4.campTab === 'duel') {
+  if (SCREEN_STATE.campTab === 'duel') {
     renderCampPage();
   }
 }
@@ -614,13 +614,13 @@ const DUEL_TERRAINS = {
 };
 
 const mirrorKey = k => {
-  const [c, r] = P(k);
-  return K(BW - 1 - c, BH - 1 - r);
+  const [c, r] = parseCellKey(k);
+  return cellKey(BOARD_COLS - 1 - c, BOARD_ROWS - 1 - r);
 };
 
 const withMirror = keys => [...new Set([...(keys || []), ...(keys || []).map(mirrorKey)])];
 
-const posJ2433 = i => [BW - 1 - DEPLOY[i][0], BH - 1 - DEPLOY[i][1]];
+const posJ2433 = i => [BOARD_COLS - 1 - DEPLOY[i][0], BOARD_ROWS - 1 - DEPLOY[i][1]];
 
 const SWAPPED_FIELDS = ['syn', 'harmonie', 'resonantUnit', 'acc', 'retrigger', 'lastAtk'];
 
@@ -719,7 +719,7 @@ function onDuelClick(e) {
   if (box) {
     window.scrollTo({
       top: Math.max(0, box.getBoundingClientRect().top + window.scrollY - 160),
-      behavior: RM ? 'auto' : 'smooth',
+      behavior: reducedMotion ? 'auto' : 'smooth',
     });
   }
 }
@@ -850,7 +850,7 @@ export function init() {
       return;
     }
     e.stopPropagation();
-    V4.campTab = 'duel';
+    SCREEN_STATE.campTab = 'duel';
     goTo('camp');
   });
 

@@ -2,8 +2,8 @@ import { Html } from '../../lib/html.jsx';
 import Marks from './Marks.jsx';
 import { regionMap } from './MapScreen.jsx';
 import { TOD } from '../../engine/world/home-route.js';
-import { V4 } from '../../engine/ui/screen-state.js';
-import { CHAIN, MAP_SVG, PL, curvePath, placeState } from '../../engine/world/map.js';
+import { SCREEN_STATE } from '../../engine/ui/screen-state.js';
+import { CHAIN, MAP_SVG, PLACE_BY_ID, curvePath, placeState } from '../../engine/world/map.js';
 import { JCHAIN, JMAP_SVG } from '../../engine/world/johto.js';
 import { todayWeather } from '../../engine/world/pokegear.js';
 import { HCHAIN, HMAP_SVG } from '../../engine/world/hoenn.js';
@@ -94,9 +94,9 @@ function Title({ drawn, rg }) {
 
 // Routes between places (main path, then branches).
 function Routes() {
-  const J = V4.region === 'johto', // v4.15: two regions
-    H = V4.region === 'hoenn'; // v4.19: three
-  const pts = (H ? HCHAIN : J ? JCHAIN : CHAIN).map(id => PL[id]);
+  const J = SCREEN_STATE.region === 'johto', // v4.15: two regions
+    H = SCREEN_STATE.region === 'hoenn'; // v4.19: three
+  const pts = (H ? HCHAIN : J ? JCHAIN : CHAIN).map(id => PLACE_BY_ID[id]);
   const side = H
     ? []
     : J
@@ -120,8 +120,8 @@ function Routes() {
         ))}
         {side.map(([a, b], i) => (
           <path
-            d={curvePath(PL[a], PL[b], i + 1)}
-            className={'map-route is-branch' + (placeState(PL[b]) === 'lock' ? ' is-locked' : '')}
+            d={curvePath(PLACE_BY_ID[a], PLACE_BY_ID[b], i + 1)}
+            className={'map-route is-branch' + (placeState(PLACE_BY_ID[b]) === 'lock' ? ' is-locked' : '')}
             key={'s' + i}
           />
         ))}

@@ -3,7 +3,7 @@ import { PROFILE } from '../state/game-state.js';
 import { HOOKS } from '../core/hooks.js';
 import { OBST } from '../combat/synergies-obstacles.js';
 import { formatNumber } from '../state/economy.js';
-import { PL } from '../world/map.js';
+import { PLACE_BY_ID } from '../world/map.js';
 import { PLACES_J } from '../world/johto.js';
 import { PLACES_H } from '../world/hoenn.js';
 import { SCENES } from '../progression/story-dialogues.js';
@@ -287,7 +287,7 @@ export function init() {
     j: 1,
   });
 
-  [...PLACES_J, ...PLACES_H].forEach(p => (PL[p.id] = p));
+  [...PLACES_J, ...PLACES_H].forEach(p => (PLACE_BY_ID[p.id] = p));
 
   HOOKS.progress.push((S, rew, win) => {
     const D = SCEN[S.sc] || {};

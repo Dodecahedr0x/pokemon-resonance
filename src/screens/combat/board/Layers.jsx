@@ -1,11 +1,11 @@
 import { MOVES } from '../../../engine/data/moves.js';
 import { MARK_TYPE } from '../../../engine/pokemon/pokemon.js';
 import { arenaNext, veiled } from '../../../engine/modes/gyms.js';
-import { INK, typeGlyphPath, typeColor } from '../../../engine/core/utils.js';
+import { GLYPH_INK, typeGlyphPath, typeColor } from '../../../engine/core/utils.js';
 import { affected, byUid, nbrK, reach, targets, unitAt, unitKey, threatZone } from '../../../engine/combat/engine.js';
 import { duoTargets } from '../../../engine/combat/items-bonds-ai.js';
 import { coverOf, ricoTgt } from '../../../engine/combat/synergies-obstacles.js';
-import { B, BG, HC, HP, TILT, tiltS, ui } from '../../../engine/combat/ui.js';
+import { B, BOARD_GEOMETRY, cellCenter, cellPoints, TILT, tiltS, ui } from '../../../engine/combat/ui.js';
 import { fireHazard } from '../../../engine/combat/living-board.js';
 import { chargesOnBoard, tacticalDrawing, linksColossi } from '../../../engine/combat/tactics.js';
 import { foresightOnBoard } from '../../../engine/moves/epic-tms.js';
@@ -21,8 +21,8 @@ const f1 = v => v.toFixed(1);
 
 /** The engine's poly(k, c): thick outline then colored tile. */
 export function Poly({ k, c }) {
-  const [x, y] = HC(k),
-    pt = HP(x, y, BG.S - 3);
+  const [x, y] = cellCenter(k),
+    pt = cellPoints(x, y, BOARD_GEOMETRY.S - 3);
   return (
     <>
       <polygon points={pt} className={c + ' highlight-glow'} />
@@ -41,7 +41,7 @@ export function Markers() {
   if (B) {
     for (const k in B.tiles) {
       const t = B.tiles[k],
-        [x, y] = HC(k);
+        [x, y] = cellCenter(k);
       if (t.mark) {
         const tt = MARK_TYPE[t.mark.k],
           col = typeColor(tt);
@@ -50,7 +50,7 @@ export function Markers() {
           mz = TILT.on ? 0.37 * ms : 0.46,
           mx = TILT.on ? x + 11.5 * ms - 12 * mz : x + 11,
           my = TILT.on ? y - 6 * ms - 12 * mz : y - 21,
-          pt = HP(x, y, BG.S - 5);
+          pt = cellPoints(x, y, BOARD_GEOMETRY.S - 5);
         o.push(
           <polygon key={k + 'mf'} points={pt} className="mark-fill" style={{ fill: col }} />,
           <polygon key={k + 'me'} points={pt} className="mark-edge" style={{ stroke: col }} />,
@@ -60,7 +60,7 @@ export function Markers() {
             transform={`translate(${mx.toFixed(1)},${my.toFixed(1)}) scale(${mz.toFixed(3)})`}
           >
             <circle cx="12" cy="12" r="12" fill={col} stroke="#0B0D12" strokeWidth="2" />
-            <path d={typeGlyphPath(tt)} fill={INK} fillRule="evenodd" transform="translate(4.8 4.8) scale(.6)" />
+            <path d={typeGlyphPath(tt)} fill={GLYPH_INK} fillRule="evenodd" transform="translate(4.8 4.8) scale(.6)" />
           </g>
         );
         if (t.mark.lv === 2) {
@@ -95,14 +95,14 @@ export function Markers() {
         o.push(
           <polygon
             key={k + 'fg'}
-            points={HP(x, y, BG.S - 1)}
+            points={cellPoints(x, y, BOARD_GEOMETRY.S - 1)}
             className={'fog-cloud' + (t.fog > 2 ? ' is-toxic' : '')}
           />
         );
       }
       o.push(<SvgHtml key={k + 'dt'} html={tacticalDrawing(B, k, x, y)} />); // traps (v4.8)
       if (B.livingBoard && fireHazard(B, k)) {
-        o.push(<polygon key={k + 'fr'} points={HP(x, y, BG.S - 4)} className="fire-risk" />);
+        o.push(<polygon key={k + 'fr'} points={cellPoints(x, y, BOARD_GEOMETRY.S - 4)} className="fire-risk" />);
       } // the grass about to burn (v4.7-01)
     }
   }
@@ -173,7 +173,7 @@ export function Obstacles({ front }) {
       if (!t.pil && !(t.grass && !t.rock)) {
         continue;
       }
-      const [x, y] = HC(k);
+      const [x, y] = cellCenter(k);
       if (front) {
         if (!t.pil) {
           o.push(<FrontGrass key={k} x={x} y={y} />);
@@ -192,7 +192,7 @@ export function Obstacles({ front }) {
 
 // cover behind a rock or a pillar (drawObstacles)
 function Shield({ k, cls }) {
-  const [x, y] = HC(k);
+  const [x, y] = cellCenter(k);
   return (
     <g className={'cover-shield ' + cls} transform={`translate(${f1(x - 18)},${f1(y - 15)})`}>
       <path d="M0 -5.5 5 -3.4V1c0 3.4-2.2 5.4-5 6.6C-2.8 6.4-5 4.4-5 1V-3.4Z" />
@@ -222,9 +222,9 @@ function extras() {
           if (!r) {
             return;
           }
-          const A = HC(unitKey(u)),
-            R = HC(k),
-            T = HC(r);
+          const A = cellCenter(unitKey(u)),
+            R = cellCenter(k),
+            T = cellCenter(r);
           ex.push(
             <polyline
               key={'ri' + k}
@@ -322,8 +322,8 @@ export function Intentions() {
       if (e.side !== 'e' || e.ko || !e.intent) {
         return;
       }
-      const a = HC(unitKey(e)),
-        b = HC(e.intent.k),
+      const a = cellCenter(unitKey(e)),
+        b = cellCenter(e.intent.k),
         dx = b[0] - a[0],
         dy = b[1] - a[1],
         Ln = Math.hypot(dx, dy) || 1,

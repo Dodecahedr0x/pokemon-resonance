@@ -8,11 +8,11 @@
 import { POKEMON, SCEN } from '../pokemon/pokemon.js';
 import { ITEMS2, PROFILE } from '../state/game-state.js';
 import { HOOKS } from '../core/hooks.js';
-import { P, hasNx, nextId, pushMessage, setMark, transform } from '../combat/engine.js';
+import { parseCellKey, hasNx, nextId, pushMessage, setMark, transform } from '../combat/engine.js';
 import { OBST } from '../combat/synergies-obstacles.js';
 import { HELD_IMG, formatNumber } from '../state/economy.js';
-import { ITM } from '../assets/item-icons.js';
-import { PL } from './map.js';
+import { itemIcon } from '../assets/item-icons.js';
+import { PLACE_BY_ID } from './map.js';
 import { ACHIEVEMENTS } from '../progression/achievements.js';
 import { JCHAIN, JGYMS, PLACES_J } from './johto.js';
 import { hoennSetup, hoennTick } from './hoenn.js';
@@ -97,7 +97,7 @@ export function johtoExtraLine(k) {
   if (D.roam) {
     const r = getRoamState(D.roam),
       it = TALIS[D.roam];
-    return `<div class="reward-line"><span class="reward-badge reward-hp"><i style="width:${Math.round((r.hp || 1) * 100)}%"></i>PV ${Math.round((r.hp || 1) * 100)} %${r.seenFlags ? ` · vu ${r.seenFlags} fois` : ''}</span><span><img src="${ITM(HELD_IMG[it])}" alt="" loading="lazy">${ITEMS2[it].n}</span><span><span class="gem-icon"><svg><use href="#i-gem"/></svg></span>+12</span></div>`;
+    return `<div class="reward-line"><span class="reward-badge reward-hp"><i style="width:${Math.round((r.hp || 1) * 100)}%"></i>PV ${Math.round((r.hp || 1) * 100)} %${r.seenFlags ? ` · vu ${r.seenFlags} fois` : ''}</span><span><img src="${itemIcon(HELD_IMG[it])}" alt="" loading="lazy">${ITEMS2[it].n}</span><span><span class="gem-icon"><svg><use href="#i-gem"/></svg></span>+12</span></div>`;
   }
   return '';
 }
@@ -156,7 +156,7 @@ export function johtoTick(S, r, ev) {
   if (r === 'jcendre') {
     const freeOnes = Object.keys(S.tiles).filter(k => {
       const t = S.tiles[k],
-        c = P(k)[0];
+        c = parseCellKey(k)[0];
       return c >= 2 && c <= 5 && !t.rock && !t.w && !(t.mark && t.mark.k === 'brulant');
     });
     let n = 0;
@@ -357,7 +357,7 @@ export function init() {
   JCHAIN.splice(JCHAIN.indexOf('j5'), 0, 'jd2');
   JCHAIN.splice(JCHAIN.indexOf('j7'), 0, 'jd3');
   JCHAIN.splice(JCHAIN.indexOf('jchamp'), 0, 'jd4');
-  PLACES_J.forEach(p => (PL[p.id] = p));
+  PLACES_J.forEach(p => (PLACE_BY_ID[p.id] = p));
   /* ---------- hooks: after the battle ---------- */
   HOOKS.progress.push((S, rew, win) => {
     const D = SCEN[S.sc] || {},

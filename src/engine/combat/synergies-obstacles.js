@@ -2,8 +2,8 @@ import { MT } from './turn-core.js';
 import { POKEMON } from '../pokemon/pokemon.js';
 import { synOf } from '../pokemon/roles-synergies.js';
 import {
-  K,
-  P,
+  cellKey,
+  parseCellKey,
   affected,
   byUid,
   damage,
@@ -87,7 +87,7 @@ function hexLine(a, b, e) {
     const t = i / n,
       c = cubeRound(A[0] + (C[0] - A[0]) * t + e, A[1] + (C[1] - A[1]) * t + e, A[2] + (C[2] - A[2]) * t - 2 * e),
       p = fromCube(c[0], c[1], c[2]);
-    o.push(K(p[0], p[1]));
+    o.push(cellKey(p[0], p[1]));
   }
   return o;
 }
@@ -103,7 +103,7 @@ export function coverOf(S, a, b) {
   }
   const d = hdist(a, b);
   for (const q of neighbors(b)) {
-    const k = K(q[0], q[1]),
+    const k = cellKey(q[0], q[1]),
       t = S.tiles[k];
     if (t && t.rock && hdist(a, q) === d - 1) {
       return k;
@@ -117,7 +117,7 @@ export function ricoTgt(S, u, k) {
   if (!t || !t.rock || t.pil) {
     return null;
   }
-  const R = P(k);
+  const R = parseCellKey(k);
   const c = S.units
     .filter(o => !o.ko && o.side !== u.side && hdist(o.pos, R) <= 2 && !losBlocked(S, R, o.pos))
     .sort((a, b) => hdist(a.pos, R) - hdist(b.pos, R) || a.hp - b.hp || (a.uid < b.uid ? -1 : 1));
@@ -246,7 +246,7 @@ export function foeRetreat(S, e, ev) {
     return;
   }
   const R = reach(S, e),
-    sc = k => Math.min(...al.map(a => hdist(a.pos, P(k)))) - (S.tiles[k].lava > 0 ? 5 : 0);
+    sc = k => Math.min(...al.map(a => hdist(a.pos, parseCellKey(k)))) - (S.tiles[k].lava > 0 ? 5 : 0);
   let best = unitKey(e),
     bs = sc(best);
   for (const k in R) {
@@ -257,7 +257,7 @@ export function foeRetreat(S, e, ev) {
     }
   }
   if (best !== unitKey(e)) {
-    e.pos = P(best);
+    e.pos = parseCellKey(best);
     ev.push({ e: 'mv', u: e.uid });
     pushMessage(ev, `${e.n} se replie après son attaque.`);
     landed(S, e, ev);

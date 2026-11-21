@@ -1,7 +1,7 @@
 import { POKEMON } from '../pokemon/pokemon.js';
 import { ECO0, ecoClean } from './economy.js';
 import { APLUS0, aplusClean } from '../modes/adventure-profile.js';
-import { TM0, tmClean } from '../moves/tms.js';
+import { emptyTmState, tmClean } from '../moves/tms.js';
 import { TAC0, tacClean } from '../combat/tactics.js';
 import { REPLAY0, replayClean } from '../progression/replayability-profile.js';
 import { IDP0, idpClean } from '../progression/base-camp.js';
@@ -30,7 +30,7 @@ export function __set_PROFILE(v) {
 export const PROFILE_SECTIONS = [
   [ECO0, ecoClean], // wallet, Bag, quests
   [APLUS0, aplusClean], // shinies, rival, legends, Tower (v4.4)
-  [TM0, tmClean], // moves learned through TM and HM (v4.6)
+  [emptyTmState, tmClean], // moves learned through TM and HM (v4.6)
   [TAC0, tacClean], // colossi defeated (v4.8)
   [REPLAY0, replayClean], // achievements, title, challenges (v4.9)
   [IDP0, idpClean], // camp and expeditions (v4.10)

@@ -5,8 +5,8 @@ import { MOVES } from '../data/moves.js';
 import { arenaNext, veiled } from '../modes/gyms.js';
 import { rxCat, toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
-import { P, affected, byUid, markAt, reach, targets, unitAt } from './engine.js';
-import { B, STC, clearAim, hpClass, renderAll, ui } from './ui.js';
+import { parseCellKey, affected, byUid, markAt, reach, targets, unitAt } from './engine.js';
+import { B, STATUS_CLASS, clearAim, hpClass, renderAll, ui } from './ui.js';
 import { PREF, savePref } from '../ui/preferences.js';
 import { tileTip } from './battle-panel.js';
 import { renderParams } from '../ui/settings.js';
@@ -99,7 +99,7 @@ function applyContrast() {
 }
 
 function tileLabel(k) {
-  const [c, r] = P(k);
+  const [c, r] = parseCellKey(k);
   return 'ABCDEFGH'[c] + (r + 1);
 }
 
@@ -191,7 +191,7 @@ function unitInfo(v) {
     mhp: v.mhp,
     t: v.t || [],
     badge: v.badge && !v.ko ? v.badge : null,
-    stc: STC[v.badge] || 'other',
+    stc: STATUS_CLASS[v.badge] || 'other',
     it,
     canAct: canDo,
     uid: v.uid,

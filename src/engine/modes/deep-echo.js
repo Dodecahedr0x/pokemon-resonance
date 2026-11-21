@@ -10,7 +10,7 @@ import { EMAX } from '../combat/engine.js';
 import { OBST } from '../combat/synergies-obstacles.js';
 import { B, __set_scSel, backToPrep, chooseBattle, launch } from '../combat/ui.js';
 import { queueSave } from '../state/saves.js';
-import { V4 } from '../ui/screen-state.js';
+import { SCREEN_STATE } from '../ui/screen-state.js';
 import { formatNumber } from '../state/economy.js';
 import { renderWallet } from '../ui/wallet.js';
 import { PROGRESS_KEYS, fingerprintRandom } from './weekly-challenge.js';
@@ -442,7 +442,7 @@ export function init() {
       e.stopPropagation();
       backToPrep();
       __set_scSel('gue');
-      V4.campTab = 'echo';
+      SCREEN_STATE.campTab = 'echo';
       goTo('camp');
     },
     true

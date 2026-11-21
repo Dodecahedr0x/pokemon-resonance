@@ -9,7 +9,7 @@ import { $, toast } from '../core/utils.js';
 import { queueSave } from '../state/saves.js';
 import { sfx, vibe } from '../audio/sound-effects.js';
 import { renderWallet } from '../ui/wallet.js';
-import { PL, PLACES } from '../world/map.js';
+import { PLACE_BY_ID, PLACES } from '../world/map.js';
 import { refreshMap } from '../../screens/map/mapStore.js';
 import { SHINY_RATE, SPARK } from '../pokemon/shiny.js';
 import { multChroma } from '../world/seasons.js';
@@ -263,7 +263,7 @@ export function init() {
     grp: 'entrainement',
   });
 
-  PL.safari = PLACES[PLACES.length - 1];
+  PLACE_BY_ID.safari = PLACES[PLACES.length - 1];
 
   SAF_MSG = '';
 

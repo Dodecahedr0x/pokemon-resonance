@@ -18,7 +18,7 @@ import { setSaveIndicator } from '../../components/shellStore.js';
 import { cur, goTo } from '../core/navigation.js';
 import { renderLeague } from '../modes/league.js';
 import { TEAM_MAX, __set_squad, renderSquad, save, squad, validSquad } from '../team/team.js';
-import { BH, BW } from '../combat/engine.js';
+import { BOARD_ROWS, BOARD_COLS } from '../combat/engine.js';
 import { wildScen } from '../combat/items-bonds-ai.js';
 import { OBST } from '../combat/synergies-obstacles.js';
 import {
@@ -106,7 +106,7 @@ export function validBattle(b) {
       b.state.units.length &&
       b.state.units.every(u => POKEMON[u.id] && POKEMON[u.sp] && Array.isArray(u.pos)) &&
       b.state.tiles &&
-      Object.keys(b.state.tiles).length === BW * BH &&
+      Object.keys(b.state.tiles).length === BOARD_COLS * BOARD_ROWS &&
       b.state.phase === 'player' &&
       !b.state.over
     );

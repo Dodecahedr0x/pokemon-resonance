@@ -6,7 +6,7 @@
 import { POKEMON } from '../pokemon/pokemon.js';
 import { HOOKS } from '../core/hooks.js';
 import { today } from '../state/economy.js';
-import { PL, placeName } from './map.js';
+import { PLACE_BY_ID, placeName } from './map.js';
 import { isJohtoRegion, routeName } from './johto.js';
 import { ROAM, isRoamingActive, getRoamState, findRoamLegend, roamerCaught } from './roaming-beasts.js';
 import { isHoennRegion } from './hoenn.js';
@@ -70,7 +70,7 @@ export function radioLines() {
     w = todayWeather();
   if (isRoamingActive()) {
     const b = ROAM.filter(id => !roamerCaught(id)).map(
-      id => `${findRoamLegend(id).n} près ${placeWithArticle(placeName(PL[getRoamState(id).at]))}`
+      id => `${findRoamLegend(id).n} près ${placeWithArticle(placeName(PLACE_BY_ID[getRoamState(id).at]))}`
     );
     if (b.length) {
       L.push(['Bêtes errantes', `Aperçus ce matin : ${b.join(', ')}.`, 'johto']);

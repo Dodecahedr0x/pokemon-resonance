@@ -1,6 +1,6 @@
 import { parseStyle } from '../../lib/html.jsx';
 import { typeColor } from '../../engine/core/utils.js';
-import { ART } from '../../engine/assets/item-icons.js';
+import { pokemonArtUrl } from '../../engine/assets/images.js';
 import { shinyStyle } from '../../engine/pokemon/shiny.js';
 import { companionPanelData } from '../../engine/progression/companion-pokemon.js';
 import { buddyData } from '../../engine/progression/companion-eggs.js';
@@ -55,7 +55,7 @@ function Sheet({ d }) {
         className={'team-companion-art' + (sh ? ' is-shiny' : '')}
         style={sh ? parseStyle(shinyStyle(m.base)) : undefined}
       >
-        <img src={ART(m.no)} alt="" loading="lazy" />
+        <img src={pokemonArtUrl(m.no)} alt="" loading="lazy" />
       </div>
       <div className="team-companion-text">
         <small>Compagnon</small>

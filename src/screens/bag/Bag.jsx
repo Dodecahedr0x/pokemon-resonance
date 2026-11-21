@@ -2,7 +2,7 @@ import { useEngineReady } from '../../engineReady.js';
 import { useBagVersion } from './bagStore.js';
 import { ITEMS2, PROFILE } from '../../engine/state/game-state.js';
 import { SHOP, bagN, formatNumber } from '../../engine/state/economy.js';
-import { V4 } from '../../engine/ui/screen-state.js';
+import { SCREEN_STATE } from '../../engine/ui/screen-state.js';
 import { dailyTm } from '../../engine/items/extra-held-items.js';
 import { Article, HeldItem } from './Items.jsx';
 import Offers from './Offers.jsx';
@@ -17,7 +17,7 @@ const WORKSHOP = ['ate', 'jeux', 'quetes', 'trophees', 'oeufs', 'talents'];
 
 // List of the chosen category (V4.sacC), in the Shop or the Bag.
 function List({ v, keys }) {
-  const c = V4.bagCategory;
+  const c = SCREEN_STATE.bagCategory;
   if (v === 'boutique' && c === 'ambu') {
     return <Peddler />;
   } // v4.54
@@ -52,7 +52,7 @@ function TmVendor() {
 }
 
 function Content() {
-  const v = V4.bagView;
+  const v = SCREEN_STATE.bagView;
   const cats = [
     ['balls', 'Poké Balls', 'i-fight'],
     ['soins', 'Soins', 'i-heal'],
@@ -73,11 +73,11 @@ function Content() {
       : []),
   ]; // v4.14: battle items, held items for sale, rare merchant
   const keys =
-    V4.bagCategory === 'held'
+    SCREEN_STATE.bagCategory === 'held'
       ? Object.keys(ITEMS2)
-      : Object.keys(SHOP).filter(k => SHOP[k].category === V4.bagCategory);
+      : Object.keys(SHOP).filter(k => SHOP[k].category === SCREEN_STATE.bagCategory);
   // items of the open pocket, for the Bag banner
-  const n = v === 'sac' ? (V4.bagCategory === 'held' ? keys.length : keys.filter(k => bagN(k)).length) : 0;
+  const n = v === 'sac' ? (SCREEN_STATE.bagCategory === 'held' ? keys.length : keys.filter(k => bagN(k)).length) : 0;
   return (
     <>
       <PageHeader
@@ -129,10 +129,10 @@ function Content() {
       {v === 'boutique' ? <Offers /> : null}
       {NL}
       <div className="bag-shelf">
-        {v === 'boutique' && V4.bagCategory === 'machines' ? <TmVendor /> : null}
+        {v === 'boutique' && SCREEN_STATE.bagCategory === 'machines' ? <TmVendor /> : null}
         <nav className="bag-categories" aria-label="Catégories">
           {cats.map(([k, displayName, i]) => (
-            <button key={k} type="button" data-sacc={k} aria-pressed={V4.bagCategory === k}>
+            <button key={k} type="button" data-sacc={k} aria-pressed={SCREEN_STATE.bagCategory === k}>
               <svg>
                 <use href={'#' + i} />
               </svg>

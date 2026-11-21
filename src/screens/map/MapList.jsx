@@ -1,6 +1,6 @@
 import { Fragment } from 'react';
 import { Html } from '../../lib/html.jsx';
-import { V4 } from '../../engine/ui/screen-state.js';
+import { SCREEN_STATE } from '../../engine/ui/screen-state.js';
 import StatePill from '../../components/StatePill.jsx';
 import { STATE_N, placeIcon, placeName, placeState, placeSub } from '../../engine/world/map.js';
 import { placesR } from '../../engine/world/johto.js';
@@ -30,7 +30,7 @@ export default function MapList() {
             return (
               <button
                 type="button"
-                className={'map-place' + (V4.mapSel === p.id ? ' is-selected' : '')}
+                className={'map-place' + (SCREEN_STATE.mapSel === p.id ? ' is-selected' : '')}
                 data-place={p.id}
                 key={p.id}
               >

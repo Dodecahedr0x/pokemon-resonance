@@ -1,6 +1,6 @@
 import { POKEMON } from '../../../engine/pokemon/pokemon.js';
 import { PROFILE } from '../../../engine/state/game-state.js';
-import { PIX } from '../../../engine/assets/item-icons.js';
+import { pokemonArtUrl } from '../../../engine/assets/images.js';
 import { ownedFam } from '../../../engine/progression/trainer-stats.js';
 import { DEXS } from '../../../engine/progression/pokedex.js';
 import { readJournal } from '../../../engine/audio/immersion.js';
@@ -37,7 +37,7 @@ export default function TrainerJournal() {
       </div>
       {fm && (
         <p className="trainer-journal-summary">
-          <img src={PIX(fm.no)} alt="" width="40" height="40" />
+          <img src={pokemonArtUrl(fm.no)} alt="" width="40" height="40" />
           <span>
             Pokémon le plus engagé<b>{fm.n}</b>
             <em>

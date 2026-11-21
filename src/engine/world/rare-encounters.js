@@ -9,7 +9,7 @@ import { queueSave } from '../state/saves.js';
 import { PREF, savePref } from '../ui/preferences.js';
 import { sfx, vibe } from '../audio/sound-effects.js';
 import { avatar } from './home-journey.js';
-import { V4 } from '../ui/screen-state.js';
+import { SCREEN_STATE } from '../ui/screen-state.js';
 import { today } from '../state/economy.js';
 import { renderWallet } from '../ui/wallet.js';
 import { renderMap } from './map.js';
@@ -87,7 +87,7 @@ function treasureTheme() {
 }
 
 export function treasureSpots() {
-  const reg = V4.region || 'kanto',
+  const reg = SCREEN_STATE.region || 'kanto',
     th = treasureTheme(),
     n = th === 'jour' ? 2 : 3,
     pl = placesR(),

@@ -13,7 +13,7 @@ import { heal, pushMessage } from '../combat/engine.js';
 import { OBST } from '../combat/synergies-obstacles.js';
 import { HELD_IMG } from '../state/economy.js';
 import { ITEM_ICONS } from '../assets/item-icons.js';
-import { PL, placeName } from './map.js';
+import { PLACE_BY_ID, placeName } from './map.js';
 import { LEGS } from '../modes/legendaries.js';
 import { DAMAGE_PROVIDERS } from '../combat/tactical-engine.js';
 import { ACHIEVEMENTS } from '../progression/achievements.js';
@@ -76,7 +76,7 @@ export function roamingPlaces() {
   }
   const takenSet = [];
   return ROAM.filter(id => !roamerCaught(id)).map(id => {
-    const h = PL[getRoamState(id).at] || PL.j1,
+    const h = PLACE_BY_ID[getRoamState(id).at] || PLACE_BY_ID.j1,
       L = findRoamLegend(id),
       [x, y] = pickRoamSpot(h, takenSet), // v4.16.1: the clearest spot
       p = {
@@ -89,7 +89,7 @@ export function roamingPlaces() {
         j: 1,
         roam: id,
       };
-    PL[p.id] = p;
+    PLACE_BY_ID[p.id] = p;
     takenSet.push(p);
     return p;
   });

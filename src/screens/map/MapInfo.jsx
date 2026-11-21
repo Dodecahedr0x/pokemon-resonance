@@ -7,11 +7,11 @@ import { TOD } from '../../engine/world/home-route.js';
 import { ELITE, scenLock } from '../../engine/combat/items-bonds-ai.js';
 import { CHAP, ELITE_L, leaderOf } from '../../engine/progression/prestige.js';
 import { avatar, goalChips } from '../../engine/world/home-journey.js';
-import { ITM } from '../../engine/assets/item-icons.js';
-import { V4 } from '../../engine/ui/screen-state.js';
+import { itemIcon } from '../../engine/assets/item-icons.js';
+import { SCREEN_STATE } from '../../engine/ui/screen-state.js';
 import { bagN } from '../../engine/state/economy.js';
 import { dailyKey } from '../../engine/modes/daily-battle.js';
-import { PL, placeIcon, placeName, placeState, rewardLine } from '../../engine/world/map.js';
+import { PLACE_BY_ID, placeIcon, placeName, placeState, rewardLine } from '../../engine/world/map.js';
 import { johtoOpen, routeName } from '../../engine/world/johto.js';
 import { SAFARI_BALLS, SAFARI_STEPS, SAFARI_PRICE, safariLocked } from '../../engine/modes/safari.js';
 import { hoennOpen } from '../../engine/world/hoenn.js';
@@ -37,7 +37,7 @@ const Arrow = () => (
 
 // Panel of the selected location (#mapInfo).
 export default function MapInfo() {
-  const p = PL[V4.mapSel] || PL.tuto,
+  const p = PLACE_BY_ID[SCREEN_STATE.mapSel] || PLACE_BY_ID.tuto,
     st = placeState(p);
   if (p.id === 'safari') {
     return <SafariInfo p={p} />;
@@ -96,7 +96,7 @@ export default function MapInfo() {
         </p>
         <div className="map-info-stats">
           <span>
-            <img src={ITM('poke-ball')} alt="" />
+            <img src={itemIcon('poke-ball')} alt="" />
             {`${balls} Poké Ball${balls > 1 ? 's' : ''}`}
           </span>
           <span>{`${family.n} / ${family.t} familles`}</span>

@@ -1,5 +1,5 @@
 import { ITEMS2, PROFILE } from '../../engine/state/game-state.js';
-import { ITM } from '../../engine/assets/item-icons.js';
+import { itemIcon } from '../../engine/assets/item-icons.js';
 import { SHOP, bagN, formatNumber } from '../../engine/state/economy.js';
 import { costOf0 } from '../../engine/progression/base-camp.js';
 import { heldItemCost } from '../../engine/combat/resonance.js';
@@ -26,7 +26,7 @@ export default function Peddler() {
           <Disc it={it} />
         ) : (
           <span className="item-row-icon">
-            <img src={ITM(it.img)} alt="" loading="lazy" />
+            <img src={itemIcon(it.img)} alt="" loading="lazy" />
           </span>
         )}
         <div className="item-row-text">

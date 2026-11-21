@@ -2,7 +2,7 @@ import { Html } from '../../lib/html.jsx';
 import { ROLES, REACTIONS } from '../../engine/data/game-data.js';
 import { POKEMON, PRESETS } from '../../engine/pokemon/pokemon.js';
 import { LINK_N, LINK_T, PROFILE, lvlOfPts, pairKey } from '../../engine/state/game-state.js';
-import { SYN, synOf } from '../../engine/pokemon/roles-synergies.js';
+import { SYNERGIES, synOf } from '../../engine/pokemon/roles-synergies.js';
 import { medal, typeColor } from '../../engine/core/utils.js';
 import { squad } from '../../engine/team/team.js';
 import { startVoice } from '../../engine/combat/engine.js';
@@ -301,7 +301,7 @@ function Synergies() {
         </ul>
       ) : null}
       <div className="team-analysis-synergies">
-        {SYN.map(s => (
+        {SYNERGIES.map(s => (
           <div key={s.k} className={`team-analysis-synergy${act.includes(s.k) ? ' is-active' : ''}`}>
             <span className="synergy-types">
               {s.t.map((t, i) => (

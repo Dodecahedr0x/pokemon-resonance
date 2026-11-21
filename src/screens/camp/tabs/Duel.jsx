@@ -3,7 +3,7 @@ import { POKEMON, familyOf } from '../../../engine/pokemon/pokemon.js';
 import { PROFILE } from '../../../engine/state/game-state.js';
 import { typeColor } from '../../../engine/core/utils.js';
 import { STLN } from '../../../engine/team/team.js';
-import { ART } from '../../../engine/assets/item-icons.js';
+import { pokemonArtUrl } from '../../../engine/assets/images.js';
 import {
   DUEL_STATE,
   STAT_MAX,
@@ -131,7 +131,7 @@ function Card({ C, id }) {
       disabled={!!(ban || pk)}
       aria-pressed={C.sel === id}
     >
-      <img src={ART(m.no)} alt="" loading="lazy" />
+      <img src={pokemonArtUrl(m.no)} alt="" loading="lazy" />
       <b>{m.n}</b>
       <span className="camp-duel-types">
         <Types T={m.t} />
@@ -205,7 +205,7 @@ function Team({ C, j }) {
         {Array.from({ length: C.sizeValue }, (_, i) =>
           L[i] ? (
             <span key={i} title={POKEMON[L[i]].n}>
-              <img src={ART(POKEMON[L[i]].no)} alt={POKEMON[L[i]].n} />
+              <img src={pokemonArtUrl(POKEMON[L[i]].no)} alt={POKEMON[L[i]].n} />
             </span>
           ) : (
             <span key={i} className="is-empty" />

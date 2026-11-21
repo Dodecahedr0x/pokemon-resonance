@@ -7,7 +7,7 @@ import { writeLS, readLS, mulberry32 } from '../core/utils.js';
 import { sfx, vibe } from '../audio/sound-effects.js';
 import { leaderOf, overlay } from '../progression/prestige.js';
 import { shut, updateTemp } from '../../screens/overlays/tempStore.js';
-import { V4 } from '../ui/screen-state.js';
+import { SCREEN_STATE } from '../ui/screen-state.js';
 import { savePurse, today } from '../state/economy.js';
 import { renderMap } from './map.js';
 import { placesR } from './johto.js';
@@ -65,7 +65,7 @@ function pickPosition(seed, taken) {
 }
 
 export function secretPositions() {
-  const reg = V4.region || 'kanto',
+  const reg = SCREEN_STATE.region || 'kanto',
     out = {},
     taken = [];
   SECRET_PLACES.forEach(s => {
@@ -107,7 +107,7 @@ function secretOpen(id) {
 
 export function npcState() {
   const d = today(),
-    reg = V4.region || 'kanto',
+    reg = SCREEN_STATE.region || 'kanto',
     all = readLS('res-passerby', {});
   const k = reg;
   let s = all[k];
@@ -123,7 +123,7 @@ export function npcState() {
 
 export function npcPositions() {
   const d = today(),
-    reg = V4.region || 'kanto',
+    reg = SCREEN_STATE.region || 'kanto',
     sc = Object.values(secretPositions());
   return pickPosition('pnp' + d + reg, sc);
 }

@@ -7,14 +7,14 @@ import { ELEMENT_TYPES, MARKS, MARK_REACTIONS, REACTIONS, dexNo } from '../../en
 import { MOVES, SHAPE, ABILITIES } from '../../engine/data/moves.js';
 import { REGION_NAMES } from '../../engine/data/hoenn.js';
 import { POKEMON, NOTES, familyOf } from '../../engine/pokemon/pokemon.js';
-import { ARR } from '../../engine/pokemon/evolution.js';
+import { ARRIVAL_EFFECTS } from '../../engine/pokemon/evolution.js';
 import { ITEMS2, LINK_N, LINK_T, PROFILE, inBox, isCamp, lvlOfPts, ownedItems } from '../../engine/state/game-state.js';
 import { RC, ROLEFX, rIco } from '../../engine/pokemon/roles-synergies.js';
 import { markOf, medal, typeBadge, typeColor } from '../../engine/core/utils.js';
 import { BRANCHES, mhpOf } from '../../engine/combat/engine.js';
 import { STLN, branchNote, crestSmall, evoDiff, monEls, monMarks, nextOf, squad } from '../../engine/team/team.js';
 import { HELD_IMG } from '../../engine/state/economy.js';
-import { ITM } from '../../engine/assets/item-icons.js';
+import { itemIcon } from '../../engine/assets/item-icons.js';
 import { moveLearned } from '../../engine/moves/tms.js';
 import { characterHtml } from '../../engine/team/characters.js';
 import { RANKS, stars, rankId } from '../../engine/combat/resonance.js';
@@ -335,10 +335,10 @@ function Evd({ a, b, from }) {
           {D.hp >= 0 ? '+' : ''}
           {D.hp}
         </li>
-        {ARR[b] ? (
+        {ARRIVAL_EFFECTS[b] ? (
           <li className="is-arrival">
             <span>Arrivée</span>
-            {T(ARR[b][1])}
+            {T(ARRIVAL_EFFECTS[b][1])}
           </li>
         ) : null}
       </ul>
@@ -352,7 +352,7 @@ function ItemImg({ k }) {
   return (
     <img
       className="it-img"
-      src={ITM(HELD_IMG[k2])}
+      src={itemIcon(HELD_IMG[k2])}
       alt=""
       loading="lazy"
       onError={e => (e.currentTarget.style.display = 'none')}

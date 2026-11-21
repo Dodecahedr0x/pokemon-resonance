@@ -1,7 +1,7 @@
 import { GYMS } from '../data/game-data.js';
 import { SCEN } from '../pokemon/pokemon.js';
 import { writeLS } from '../core/utils.js';
-import { BH, BW, K, P, pushMessage, setMark, unitAt } from '../combat/engine.js';
+import { BOARD_ROWS, BOARD_COLS, cellKey, parseCellKey, pushMessage, setMark, unitAt } from '../combat/engine.js';
 import { LEAD } from '../progression/prestige.js';
 import { johtoGymSetup, johtoGymTick } from '../world/johto.js';
 
@@ -15,7 +15,7 @@ function arenaOf(S) {
 }
 
 function tideRow(S) {
-  return BH - 1 - Math.floor((S.round - 1) / 2);
+  return BOARD_ROWS - 1 - Math.floor((S.round - 1) / 2);
 }
 
 export function arenaSetup(S) {
@@ -39,13 +39,13 @@ export function arenaSetup(S) {
     pushMessage(ev, 'Arène Roche : tout le plateau est Fissuré.');
   }
   if (r === 'elec') {
-    S.ar.runners.forEach(([c, rw]) => setMark(S, K(c, rw), 'charge', null));
+    S.ar.runners.forEach(([c, rw]) => setMark(S, cellKey(c, rw), 'charge', null));
     pushMessage(ev, 'Arène Électrik : deux fronts de Charge se mettent en marche.');
   }
   if (r === 'poison') {
     S.ar.thr = 3;
     for (const k in S.tiles) {
-      if (P(k)[0] >= 3) {
+      if (parseCellKey(k)[0] >= 3) {
         S.tiles[k].fog = 9;
       }
     }
@@ -67,8 +67,8 @@ function rootCol(S) {
 
 function rootWall(S, ev, quiet) {
   const c = rootCol(S);
-  for (let rw = 0; rw < BH; rw++) {
-    const k = K(c, rw),
+  for (let rw = 0; rw < BOARD_ROWS; rw++) {
+    const k = cellKey(c, rw),
       t = S.tiles[k];
     if (t.rock || (rw + S.round) % 3 === 0) {
       continue;
@@ -92,9 +92,9 @@ export function arenaTick(S) {
   const R = S.round;
   if (r === 'eau' && R % 2 === 1 && R > 1) {
     const row = tideRow(S) + 1;
-    if (row <= BH - 1 && row >= BH - 3) {
-      for (let c = 0; c < BW; c++) {
-        const t = S.tiles[K(c, row)];
+    if (row <= BOARD_ROWS - 1 && row >= BOARD_ROWS - 3) {
+      for (let c = 0; c < BOARD_COLS; c++) {
+        const t = S.tiles[cellKey(c, row)];
         if (!t.rock) {
           t.w = true;
         }
@@ -107,12 +107,12 @@ export function arenaTick(S) {
     S.ar.runners = S.ar.runners.map(([c, rw]) => {
       let n = c - 1;
       if (n < 0) {
-        n = BW - 1;
+        n = BOARD_COLS - 1;
       }
-      if (S.tiles[K(n, rw)].rock) {
-        n = n - 1 < 0 ? BW - 1 : n - 1;
+      if (S.tiles[cellKey(n, rw)].rock) {
+        n = n - 1 < 0 ? BOARD_COLS - 1 : n - 1;
       }
-      setMark(S, K(n, rw), 'charge', null);
+      setMark(S, cellKey(n, rw), 'charge', null);
       return [n, rw];
     });
     pushMessage(ev, 'Arène Électrik : les fronts de Charge avancent.');
@@ -122,10 +122,10 @@ export function arenaTick(S) {
     rootWall(S, ev, false);
     ev.push({ e: 'arena', r });
   }
-  if (r === 'poison' && S.ar.thr < BW) {
+  if (r === 'poison' && S.ar.thr < BOARD_COLS) {
     S.ar.thr++;
     for (const k in S.tiles) {
-      const c = P(k)[0],
+      const c = parseCellKey(k)[0],
         t = S.tiles[k];
       if (c >= S.ar.thr) {
         t.fog = Math.max(t.fog, 9);
@@ -135,7 +135,7 @@ export function arenaTick(S) {
     }
     pushMessage(
       ev,
-      S.ar.thr < BW
+      S.ar.thr < BOARD_COLS
         ? `Arène Poison : la brume recule jusqu’à la colonne ${'ABCDEFGH'[S.ar.thr]}.`
         : 'Arène Poison : la brume se dissipe.'
     );
@@ -179,8 +179,8 @@ export function arenaTick(S) {
     const rocks = Object.keys(S.tiles).filter(k => S.tiles[k].rock);
     let moved = 0;
     rocks.forEach(k => {
-      const [c, rw] = P(k),
-        nk = K(c, (rw + 1) % BH),
+      const [c, rw] = parseCellKey(k),
+        nk = cellKey(c, (rw + 1) % BOARD_ROWS),
         t = S.tiles[nk];
       if (t.rock || t.w || unitAt(S, nk)) {
         return;
@@ -212,9 +212,11 @@ export function arenaNext(S) {
   const R = S.round;
   if (r === 'eau' && R % 2 === 0) {
     const row = tideRow(S);
-    if (row >= BH - 3 && row < BH) {
+    if (row >= BOARD_ROWS - 3 && row < BOARD_ROWS) {
       return {
-        tiles: Array.from({ length: BW }, (_, c) => K(c, row)).filter(k => !S.tiles[k].rock && !S.tiles[k].w),
+        tiles: Array.from({ length: BOARD_COLS }, (_, c) => cellKey(c, row)).filter(
+          k => !S.tiles[k].rock && !S.tiles[k].w
+        ),
         txt: `La marée monte en fin de manche (rangée ${row + 1}).`,
       };
     }
@@ -228,12 +230,12 @@ export function arenaNext(S) {
       tiles: S.ar.runners.map(([c, rw]) => {
         let n = c - 1;
         if (n < 0) {
-          n = BW - 1;
+          n = BOARD_COLS - 1;
         }
-        if (S.tiles[K(n, rw)].rock) {
-          n = n - 1 < 0 ? BW - 1 : n - 1;
+        if (S.tiles[cellKey(n, rw)].rock) {
+          n = n - 1 < 0 ? BOARD_COLS - 1 : n - 1;
         }
-        return K(n, rw);
+        return cellKey(n, rw);
       }),
       txt: 'Les fronts de Charge avanceront sur les cases allumées.',
     };
@@ -243,8 +245,8 @@ export function arenaNext(S) {
       tiles: Object.keys(S.tiles)
         .filter(k => S.tiles[k].rock)
         .map(k => {
-          const [c, rw] = P(k);
-          return K(c, (rw + 1) % BH);
+          const [c, rw] = parseCellKey(k);
+          return cellKey(c, (rw + 1) % BOARD_ROWS);
         })
         .filter(k => !S.tiles[k].rock && !S.tiles[k].w),
       txt: 'Séisme en fin de manche : les rochers glisseront vers les cases allumées.',
@@ -253,7 +255,7 @@ export function arenaNext(S) {
   if (r === 'plante') {
     const c = (R + 1) % 2 ? 3 : 4;
     return {
-      tiles: Array.from({ length: BH }, (_, rw) => K(c, rw)).filter(
+      tiles: Array.from({ length: BOARD_ROWS }, (_, rw) => cellKey(c, rw)).filter(
         (k, rw) => !S.tiles[k].rock && (rw + R + 1) % 3 !== 0
       ),
       txt: `Les racines se déplaceront en colonne ${'ABCDEFGH'[c]}.`,
@@ -275,7 +277,7 @@ export function arenaNext(S) {
     return {
       tiles: [],
       txt:
-        S.ar.thr < BW
+        S.ar.thr < BOARD_COLS
           ? 'Brume toxique : les Pokémon dans la brume ne peuvent être visés que de près.'
           : 'La brume s’est dissipée.',
     };

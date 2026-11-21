@@ -1,13 +1,13 @@
 import { MOVES } from '../data/moves.js';
 import { POKEMON, POKEMON_LIST } from '../pokemon/pokemon.js';
-import { RM, toast } from '../core/utils.js';
+import { reducedMotion, toast } from '../core/utils.js';
 import { goTo } from '../core/navigation.js';
 import { openSheet } from '../team/team.js';
 import { byUid, unitAt } from '../combat/engine.js';
 import { B, L } from '../combat/ui.js';
 import { PREF } from './preferences.js';
 import { vibe } from '../audio/sound-effects.js';
-import { V4 } from './screen-state.js';
+import { SCREEN_STATE } from './screen-state.js';
 import { renderMap } from '../world/map.js';
 
 /* Touch gestures: long press on a Pokémon opens its sheet, swipe changes tab (added in v4.29). */
@@ -43,11 +43,11 @@ function longPressAction(t) {
   const mk = t.closest('#mapMarks [data-place]');
   if (mk) {
     return () => {
-      V4.mapSel = mk.dataset.place;
+      SCREEN_STATE.mapSel = mk.dataset.place;
       renderMap();
       const i = document.getElementById('mapInfo');
       if (i && i.scrollIntoView) {
-        i.scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'center' });
+        i.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'center' });
       }
     };
   }

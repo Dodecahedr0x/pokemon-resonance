@@ -1,7 +1,7 @@
 /* Pokémon world (dialogues, silhouettes, maps, badge case, Shop, Bag, sounds) (added in v4.73). */
 
 import { PROFILE } from '../state/game-state.js';
-import { RM } from '../core/utils.js';
+import { reducedMotion } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { cur } from '../core/navigation.js';
 import { PREF, savePref } from './preferences.js';
@@ -18,7 +18,7 @@ const on = k => PREF[k] !== 0;
 
 const directText = () => {
   try {
-    return !!RM || H.classList.contains('a11y-rm') || !on('pokeStyleT') || !!AUTO;
+    return !!reducedMotion || H.classList.contains('a11y-rm') || !on('pokeStyleT') || !!AUTO;
   } catch (e) {
     return true;
   }
@@ -44,7 +44,7 @@ const SOUNDS = {
 
 const playSound = k => {
   try {
-    if (!PREF.sound || RM || !on('pokeStyleS')) {
+    if (!PREF.sound || reducedMotion || !on('pokeStyleS')) {
       return;
     }
     SOUNDS[k] && SOUNDS[k]();

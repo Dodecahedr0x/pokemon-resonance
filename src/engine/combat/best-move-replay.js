@@ -1,6 +1,6 @@
 /* Best-move replay: each action of your Pokémon is scored (damage, KOs, reactions, chords, Awakenings) and the result screen offers to rewatch the best one (added in v4.11). */
 
-import { $, RM, wait } from '../core/utils.js';
+import { $, reducedMotion, wait } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { byUid } from './engine.js';
 import { B, __set_B, buildBoard, addLog, renderAll, ui } from './ui.js';
@@ -73,7 +73,7 @@ async function rebroadcast() {
   REPLAY_IN_PROGRESS = true;
   const endStep = B,
     res = $('#cbResult'),
-    isSlow = RM || AUTO ? 0.2 : 1;
+    isSlow = reducedMotion || AUTO ? 0.2 : 1;
   try {
     res.hidden = true;
     __set_B(Object.assign(JSON.parse(R.best.before), { over: null }));

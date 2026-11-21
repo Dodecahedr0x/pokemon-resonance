@@ -4,11 +4,11 @@ import { clearOverlay, paintOverlay } from '../../screens/overlays/dialogsStore.
 import { GYMS } from '../data/game-data.js';
 import { SCEN } from '../pokemon/pokemon.js';
 import { ARENAS, BADGES } from '../modes/gyms.js';
-import { $, RM, svgElement } from '../core/utils.js';
+import { $, reducedMotion, svgElement } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { badgeSvg } from '../modes/league.js';
 import { unitKey } from './engine.js';
-import { B, HC, L } from './ui.js';
+import { B, cellCenter, L } from './ui.js';
 import { PREF, calmMotion } from '../ui/preferences.js';
 import { noise, tone, vibe } from '../audio/sound-effects.js';
 import { AUTO, leaderOf } from '../progression/prestige.js';
@@ -36,7 +36,7 @@ const SOUNDS = {
 
 const playSound = k => {
   try {
-    if (!PREF.sound || RM || PREF.pokeStyleS === 0) {
+    if (!PREF.sound || reducedMotion || PREF.pokeStyleS === 0) {
       return;
     }
     SOUNDS[k] && SOUNDS[k]();
@@ -152,7 +152,7 @@ const send = b => {
     const T = L.u[u.uid];
     let x, y;
     try {
-      [x, y] = HC(unitKey(u));
+      [x, y] = cellCenter(unitKey(u));
     } catch (e) {
       tokCl(T, 'is-waiting', false);
       return;
@@ -181,7 +181,7 @@ const recall = u => {
   }
   let x, y;
   try {
-    [x, y] = HC(unitKey(u));
+    [x, y] = cellCenter(unitKey(u));
   } catch (e) {
     return;
   }

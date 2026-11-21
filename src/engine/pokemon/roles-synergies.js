@@ -2,7 +2,7 @@ import { POKEMON, PRESETS } from './pokemon.js';
 
 export function synOf(ids) {
   const T = ids.filter(id => POKEMON[id]).map(id => POKEMON[id].t);
-  return SYN.filter(s => T.some((a, i) => a.includes(s.t[0]) && T.some((b, j) => j !== i && b.includes(s.t[1]))));
+  return SYNERGIES.filter(s => T.some((a, i) => a.includes(s.t[0]) && T.some((b, j) => j !== i && b.includes(s.t[1]))));
 }
 
 /* ===================== v1.1: confirmed recruits, roles, synergies ===================== */
@@ -29,7 +29,7 @@ export const ROLEFX = {
   Relais: { k: 'Soutien', d: 'En fin de manche, soigne 3 PV à chaque allié au contact.' },
 };
 
-export const SYN = [
+export const SYNERGIES = [
   { k: 'forge', n: 'Forge', t: ['Feu', 'Roche'], d: 'Attaques Feu et Roche : +2 dégâts.' },
   { k: 'acier', n: 'Acier trempé', t: ['Ténèbres', 'Acier'], d: 'Pokémon Ténèbres et Acier : −2 dégâts subis.' },
   { k: 'tempete', n: 'Tempête', t: ['Eau', 'Électrik'], d: 'Attaques Électrik : +25 % sur les cibles Trempées.' },

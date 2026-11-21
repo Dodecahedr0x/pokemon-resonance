@@ -1,8 +1,8 @@
 import { bdClass, bdReplay, getHost, hostSet } from '../../screens/combat/board/boardStore.js';
 
-import { $, RM } from '../core/utils.js';
+import { $, reducedMotion } from '../core/utils.js';
 import { byUid, unitKey } from './engine.js';
-import { B, HC, TILT, VB, VERT, buildBoard, playLog, renderAll, tiltS, ui } from './ui.js';
+import { B, cellCenter, TILT, boardViewBox, VERT, buildBoard, playLog, renderAll, tiltS, ui } from './ui.js';
 import { PREF } from '../ui/preferences.js';
 import { impactWords } from '../progression/prestige.js';
 import { liveEvent } from './expressive-pokemon.js';
@@ -10,28 +10,28 @@ import { liveEvent } from './expressive-pokemon.js';
 let R0, cl01, eo;
 
 export function fxOn() {
-  if (RM || /jsdom/i.test(navigator.userAgent || '')) {
+  if (reducedMotion || /jsdom/i.test(navigator.userAgent || '')) {
     return false;
   }
-  if (FXS.on === null) {
+  if (EFFECTS_CANVAS.on === null) {
     try {
       const c = document.createElement('canvas');
-      FXS.on = !!(c.getContext && c.getContext('2d'));
+      EFFECTS_CANVAS.on = !!(c.getContext && c.getContext('2d'));
     } catch (e) {
-      FXS.on = false;
+      EFFECTS_CANVAS.on = false;
     }
   }
-  return FXS.on;
+  return EFFECTS_CANVAS.on;
 }
 
 export function fxReset() {
-  FXS.items = [];
-  if (FXS.raf) {
-    cancelAnimationFrame(FXS.raf);
+  EFFECTS_CANVAS.items = [];
+  if (EFFECTS_CANVAS.raf) {
+    cancelAnimationFrame(EFFECTS_CANVAS.raf);
   }
-  FXS.raf = 0;
-  if (FXS.ctx && FXS.cv) {
-    FXS.ctx.clearRect(0, 0, FXS.cv.width, FXS.cv.height);
+  EFFECTS_CANVAS.raf = 0;
+  if (EFFECTS_CANVAS.ctx && EFFECTS_CANVAS.cv) {
+    EFFECTS_CANVAS.ctx.clearRect(0, 0, EFFECTS_CANVAS.cv.width, EFFECTS_CANVAS.cv.height);
   }
 }
 
@@ -67,25 +67,25 @@ export function fxPrep() {
   if (cv.height !== H) {
     cv.height = H;
   }
-  const [vw, vh] = VB(),
+  const [vw, vh] = boardViewBox(),
     s = Math.min(r.width / vw, r.height / vh);
-  FXS.s = s * dpr;
-  FXS.ox = ((r.width - vw * s) / 2) * dpr;
-  FXS.oy = ((r.height - vh * s) / 2) * dpr;
-  FXS.cv = cv;
-  FXS.ctx = cv.getContext('2d');
-  return !!FXS.ctx;
+  EFFECTS_CANVAS.s = s * dpr;
+  EFFECTS_CANVAS.ox = ((r.width - vw * s) / 2) * dpr;
+  EFFECTS_CANVAS.oy = ((r.height - vh * s) / 2) * dpr;
+  EFFECTS_CANVAS.cv = cv;
+  EFFECTS_CANVAS.ctx = cv.getContext('2d');
+  return !!EFFECTS_CANVAS.ctx;
 }
 
 function fxLoop(now) {
-  const c = FXS.ctx,
-    cv = FXS.cv;
+  const c = EFFECTS_CANVAS.ctx,
+    cv = EFFECTS_CANVAS.cv;
   if (!c) {
-    FXS.raf = 0;
+    EFFECTS_CANVAS.raf = 0;
     return;
   }
   c.clearRect(0, 0, cv.width, cv.height);
-  FXS.items = FXS.items.filter(it => {
+  EFFECTS_CANVAS.items = EFFECTS_CANVAS.items.filter(it => {
     const p = (now - it.t0) / it.d;
     if (p < 0) {
       return true;
@@ -102,18 +102,18 @@ function fxLoop(now) {
     c.restore();
     return true;
   });
-  if (FXS.items.length) {
-    FXS.raf = requestAnimationFrame(fxLoop);
+  if (EFFECTS_CANVAS.items.length) {
+    EFFECTS_CANVAS.raf = requestAnimationFrame(fxLoop);
   } else {
-    FXS.raf = 0;
+    EFFECTS_CANVAS.raf = 0;
     c.clearRect(0, 0, cv.width, cv.height);
   }
 }
 
 export function fxAdd(d, f, delay) {
-  FXS.items.push({ t0: performance.now() + (delay || 0), d, f });
-  if (!FXS.raf) {
-    FXS.raf = requestAnimationFrame(fxLoop);
+  EFFECTS_CANVAS.items.push({ t0: performance.now() + (delay || 0), d, f });
+  if (!EFFECTS_CANVAS.raf) {
+    EFFECTS_CANVAS.raf = requestAnimationFrame(fxLoop);
   }
 }
 
@@ -241,22 +241,22 @@ function depth(k) {
   if (!TILT.on || k == null) {
     return 1;
   }
-  const [x, y] = HC(k);
+  const [x, y] = cellCenter(k);
   return Math.max(0.6, Math.min(1.4, tiltS(x, y)));
 }
 
 function withDepth(k, f, topEdge) {
-  const oy = FXS.oy;
-  FXS.zk = depth(k);
+  const oy = EFFECTS_CANVAS.oy;
+  EFFECTS_CANVAS.zk = depth(k);
   // shots leave from the standing Pokémon's body, not from the ground ring (positions frozen at call time)
   if (TILT.on && topEdge) {
-    FXS.oy = oy - 10 * FXS.zk * FXS.s;
+    EFFECTS_CANVAS.oy = oy - 10 * EFFECTS_CANVAS.zk * EFFECTS_CANVAS.s;
   }
   try {
     return f();
   } finally {
-    FXS.zk = 1;
-    FXS.oy = oy;
+    EFFECTS_CANVAS.zk = 1;
+    EFFECTS_CANVAS.oy = oy;
   }
 }
 
@@ -292,7 +292,7 @@ function fxAttackPlat(e, dur) {
 
 // Gathers the state shared by every part of one attack effect (scale, palette, kind, source, targets, ricochet point).
 function attackContext(e, dur) {
-  const z = FXS.s * (FXS.zk || 1),
+  const z = EFFECTS_CANVAS.s * (EFFECTS_CANVAS.zk || 1),
     pal = FXC[e.t] || FXC.Normal,
     kind0 = FXK[e.t] || 'impact',
     A = fxP(e.from);
@@ -987,7 +987,7 @@ function drawImpactFlash(c, p) {
   c.globalCompositeOperation = 'lighter';
   c.globalAlpha = (1 - p) * 0.22;
   c.fillStyle = '#FFF1D0';
-  c.fillRect(0, 0, FXS.cv.width, FXS.cv.height);
+  c.fillRect(0, 0, EFFECTS_CANVAS.cv.width, EFFECTS_CANVAS.cv.height);
 }
 
 // Replays the board impact animation and toggles the shake class, if the board is still shown.
@@ -1036,7 +1036,7 @@ function fxGuardPlat(e, dur) {
   }
   const G = fxP(unitKey(g)),
     V = fxP(unitKey(v)),
-    z = FXS.s * (FXS.zk || 1);
+    z = EFFECTS_CANVAS.s * (EFFECTS_CANVAS.zk || 1);
   fxAdd(dur * 0.7, (c, p) => {
     c.globalCompositeOperation = 'lighter';
     const q = eo(p);
@@ -1086,7 +1086,7 @@ export function playEv(ev) {
 }
 
 /* ===================== v1.1: per-type attack effects (ephemeral canvas layer, no idle loop) ===================== */
-export const FXS = { cv: null, ctx: null, items: [], raf: 0, s: 1, ox: 0, oy: 0, on: null };
+export const EFFECTS_CANVAS = { cv: null, ctx: null, items: [], raf: 0, s: 1, ox: 0, oy: 0, on: null };
 
 const FXC = {
   Feu: ['#FFF3B0', '#FFB23E', '#FF5A1F', '#B3200E'],
@@ -1131,8 +1131,8 @@ const FXK = {
 };
 
 const fxP = k => {
-  const [x, y] = HC(k);
-  return [FXS.ox + x * FXS.s, FXS.oy + y * FXS.s];
+  const [x, y] = cellCenter(k);
+  return [EFFECTS_CANVAS.ox + x * EFFECTS_CANVAS.s, EFFECTS_CANVAS.oy + y * EFFECTS_CANVAS.s];
 };
 
 const lp = (a, b, t) => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];

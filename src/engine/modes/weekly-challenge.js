@@ -6,7 +6,7 @@ import { HOOKS } from '../core/hooks.js';
 import { goTo } from '../core/navigation.js';
 import { OBST } from '../combat/synergies-obstacles.js';
 import { battleOpts, scSel } from '../combat/ui.js';
-import { V4 } from '../ui/screen-state.js';
+import { SCREEN_STATE } from '../ui/screen-state.js';
 import { formatNumber } from '../state/economy.js';
 import { renderQuests } from '../progression/quests-shop.js';
 
@@ -221,7 +221,7 @@ export function init() {
       return;
     }
     e.stopPropagation();
-    V4.questTab = 'event';
+    SCREEN_STATE.questTab = 'event';
     goTo('quetes');
     renderQuests();
   });

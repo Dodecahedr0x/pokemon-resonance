@@ -5,7 +5,7 @@ import { GYMS } from '../../engine/data/game-data.js';
 import { PROFILE } from '../../engine/state/game-state.js';
 import { BADGES } from '../../engine/modes/gyms.js';
 import { badgeSvg } from '../../engine/modes/league.js';
-import { V4 } from '../../engine/ui/screen-state.js';
+import { SCREEN_STATE } from '../../engine/ui/screen-state.js';
 import { trophies } from '../../engine/progression/trainer-stats.js';
 import { SQ } from '../../engine/progression/quests-shop.js';
 import MainQuest from './MainQuest.jsx';
@@ -20,19 +20,19 @@ const NL = '\n ';
 
 // Content of the chosen tab (V4.qTab); any other value shows the Event tab.
 function Tab() {
-  if (V4.questTab === 'main') {
+  if (SCREEN_STATE.questTab === 'main') {
     return <MainQuest />;
   }
-  if (V4.questTab === 'side') {
+  if (SCREEN_STATE.questTab === 'side') {
     return <SideQuests />;
   }
-  if (V4.questTab === 'succes') {
+  if (SCREEN_STATE.questTab === 'succes') {
     return <Achievements />;
   } // achievements and titles (v4.9)
-  if (V4.questTab === 'leg') {
+  if (SCREEN_STATE.questTab === 'leg') {
     return <Legends />;
   } // v4.29
-  if (V4.questTab === 'journal') {
+  if (SCREEN_STATE.questTab === 'journal') {
     return <Journal />;
   } // v4.30
   return <Event />;
@@ -99,7 +99,7 @@ function Content() {
       {NL}
       <div className="tabs page-tabs" role="tablist">
         {tabs.map(([k, n]) => (
-          <button key={k} type="button" role="tab" data-qtab={k} aria-selected={V4.questTab === k}>
+          <button key={k} type="button" role="tab" data-qtab={k} aria-selected={SCREEN_STATE.questTab === k}>
             {n}
           </button>
         ))}

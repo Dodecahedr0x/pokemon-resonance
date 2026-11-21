@@ -5,7 +5,7 @@ import { HOOKS } from '../core/hooks.js';
 import {
   HOSTILE,
   NEEDU,
-  P,
+  parseCellKey,
   byUid,
   damage,
   dmgOf,
@@ -68,7 +68,7 @@ export function afterMoveSignatures(S, u, m, k, v0, v1, dealt, ev) {
     L.forEach(o => {
       const w = byUid(S, o.uid);
       if (w && !w.ko) {
-        shove(S, w, o.x === k ? u.pos : P(k), 1, ev, false);
+        shove(S, w, o.x === k ? u.pos : parseCellKey(k), 1, ev, false);
       } // from the center of the wave
     });
   }
@@ -291,7 +291,7 @@ export function aiSupportMove(S, e, opts, al, here) {
       return;
     }
     for (const pk in opts) {
-      const sim = Object.assign({}, e, { pos: P(pk) });
+      const sim = Object.assign({}, e, { pos: parseCellKey(pk) });
       al.forEach(a => {
         if (!inReach(S, sim, m, unitKey(a)) || a.colossus || a.seg) {
           return;

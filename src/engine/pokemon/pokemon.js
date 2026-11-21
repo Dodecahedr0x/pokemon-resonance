@@ -1,4 +1,4 @@
-import { PKA } from '../assets/images.js';
+import { pokemonArtUrl } from '../assets/images.js';
 
 export let PKT;
 
@@ -104,7 +104,7 @@ const OPPONENT_ONLY_FAMILIES = [
 
 export const EEVEE = { trempe: 'aquali', charge: 'voltali', brulant: 'pyroli', jour: 'mentali', nuit: 'noctali' };
 
-export const PK_ART = no => PKA(no);
+export const PK_ART = no => pokemonArtUrl(no);
 
 export const NOTES = {
   // v4.19

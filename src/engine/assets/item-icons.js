@@ -1,12 +1,8 @@
-/* Item icons drawn for the new items (added in v4.14), plus Pokémon art and item image shortcuts. */
+/* Item icons drawn for the new items (added in v4.14), plus the item image shortcut. */
 
-import { ITA, PKA } from './images.js';
+import { itemArtUrl } from './images.js';
 
-export const ART = no => PKA(no);
-
-export const PIX = no => PKA(no);
-
-export const ITM = k => ITEM_ICONS[k] || ITA(k);
+export const itemIcon = k => ITEM_ICONS[k] || itemArtUrl(k);
 
 const g = (id, a, b) =>
   `<radialGradient id="${id}" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></radialGradient>`;

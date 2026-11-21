@@ -5,7 +5,7 @@ import { ITEMS2, PROFILE, isCamp, ownedItems } from '../state/game-state.js';
 import { arenaSetup, arenaTick } from '../modes/gyms.js';
 import {
   $,
-  RM,
+  reducedMotion,
   wait,
   svgElement,
   typeGlyphPath,
@@ -21,7 +21,7 @@ import { renderLeague } from '../modes/league.js';
 import { squad, vBonus } from '../team/team.js';
 import {
   EMAX,
-  P,
+  parseCellKey,
   affected,
   byUid,
   canAwaken,
@@ -54,7 +54,7 @@ import { sfx, sfxEv, vibe } from '../audio/sound-effects.js';
 import { drawObstacles } from '../modes/gym-screen.js';
 import { fxReset, playEv } from './move-effects.js';
 import { panelRoleInfo } from '../ui/guide.js';
-import { AUTO, HPM, RK, rankOf, turnBanner, turnBanners, vsIntro } from '../progression/prestige.js';
+import { AUTO, HPM, RANKS, rankOf, turnBanner, turnBanners, vsIntro } from '../progression/prestige.js';
 import { renderWallet } from '../ui/wallet.js';
 import { tagUnits, tokenArt } from '../assets/illustrations.js';
 import { RIVAL_CHALLENGES, rivalBuild, rivalIdx } from '../modes/rival.js';
@@ -237,7 +237,7 @@ export function launch() {
     }
     // Speed order: if an opponent is faster, it opens the round (after the introduction)
     if (B && B.order === 'vitesse') {
-      setTimeout(unrollSpeed, AUTO || RM ? 950 : PREF.fast ? 1500 : 2400);
+      setTimeout(unrollSpeed, AUTO || reducedMotion ? 950 : PREF.fast ? 1500 : 2400);
     }
   }
   hook('launch', !!B && B !== previous);
@@ -385,7 +385,7 @@ export function buildBoard() {
     L.u[u.uid] = mkTok(u);
     L.uo.push(u.uid);
   });
-  boardBuild({ vb: VB(), bio, stadium: st, tilt: TILT.on }); // the tokens (Units.jsx) are mounted with the board
+  boardBuild({ vb: boardViewBox(), bio, stadium: st, tilt: TILT.on }); // the tokens (Units.jsx) are mounted with the board
   bdClass('stadium', st);
   fxReset();
   hook('boardBuilt');
@@ -439,7 +439,7 @@ function updTokCore(u) {
   if (!T) {
     return;
   }
-  const [x, y] = HC(unitKey(u));
+  const [x, y] = cellCenter(unitKey(u));
   T.tr = `translate(${x}px,${y}px)`;
   const c = typeColor(u.t[0]);
   T.rs = c;
@@ -502,7 +502,7 @@ function updTokCore(u) {
                       : u.cogno > 0
                         ? 'x2'
                         : null);
-  T.statusClass = 'token-status-tag' + (b && !u.ko ? ' is-shown status-' + (STC[b] || 'other') : '');
+  T.statusClass = 'token-status-tag' + (b && !u.ko ? ' is-shown status-' + (STATUS_CLASS[b] || 'other') : '');
   T.statusText = b || '';
   unitsDirty();
 }
@@ -588,9 +588,9 @@ function openEvoPick(u) {
 export function cinematic(fromN, fromT, toN, toT, side, uid) {
   const o = {}; // #evoFx (React): the effect starts from the evolving Pokémon
   if (uid && L.u[uid]) {
-    const [x, y] = HC(unitKey(byUid(B, uid)));
-    o.ox = ((x / VB()[0]) * 100).toFixed(1) + '%';
-    o.oy = ((y / VB()[1]) * 100).toFixed(1) + '%';
+    const [x, y] = cellCenter(unitKey(byUid(B, uid)));
+    o.ox = ((x / boardViewBox()[0]) * 100).toFixed(1) + '%';
+    o.oy = ((y / boardViewBox()[1]) * 100).toFixed(1) + '%';
   }
   evoSet({ ...o, on: true, fx: { fromN, fromT, toN, toT, side }, fast: !!(PREF.fast || ui.skipSpeedup) });
   ui.cutscene = true;
@@ -644,7 +644,7 @@ function renderAllCore() {
 /* effects */
 // floating text over a cell; cls is its kind (is-damage, is-heal, is-reaction, is-ready…)
 export function floatAt(k, txt, cls) {
-  const [x, y] = HC(k);
+  const [x, y] = cellCenter(k);
   const t = svgElement('text', { class: 'float-text ' + cls, x: x.toFixed(1), y: (y - 16).toFixed(1) }, L.fl);
   t.textContent = txt;
   setTimeout(() => t.remove(), 1500);
@@ -656,8 +656,8 @@ const CHAIN_CLASS = { el: 'is-electric', fire: 'is-fire', ice: 'is-ice' };
 function drawChain(e) {
   const g = svgElement('g', {}, L.fx);
   e.edges.forEach(([a, b, d]) => {
-    const A = HC(a),
-      C = HC(b),
+    const A = cellCenter(a),
+      C = cellCenter(b),
       pts = zigzagPoints(A[0], A[1], C[0], C[1], 4, 3.5),
       dl = 0.05 + d * 0.12 + 's';
     svgElement('polyline', { class: 'chain-glow ' + CHAIN_CLASS[e.c], points: pts, style: `--d:${dl}` }, g);
@@ -670,8 +670,8 @@ function beam(a, b, typ) {
   if (a === b) {
     return;
   }
-  const A = HC(a),
-    C = HC(b);
+  const A = cellCenter(a),
+    C = cellCenter(b);
   const l = svgElement(
     'polyline',
     { class: 'attack-beam', points: zigzagPoints(A[0], A[1], C[0], C[1], 5, 2.5), style: `stroke:${typeColor(typ)}` },
@@ -685,7 +685,7 @@ function burst(uid) {
   if (!u) {
     return;
   }
-  const [x, y] = HC(unitKey(u));
+  const [x, y] = cellCenter(unitKey(u));
   const c = svgElement('circle', { class: 'unit-burst', cx: x, cy: y, r: 10 }, L.fx);
   setTimeout(() => c.remove(), 1100);
 }
@@ -695,12 +695,16 @@ function arrFx(uid) {
   if (!u) {
     return;
   }
-  const [x, y] = HC(unitKey(u)),
+  const [x, y] = cellCenter(unitKey(u)),
     g = svgElement('g', { class: 'arrival-effect', style: `--c:${typeColor(u.t[0])}` }, L.fx);
   [0, 1].forEach(i =>
     svgElement(
       'polygon',
-      { points: HP(x, y, BG.S * 1.9), style: `animation-delay:${i * 0.22}s`, transform: `rotate(30 ${x} ${y})` },
+      {
+        points: cellPoints(x, y, BOARD_GEOMETRY.S * 1.9),
+        style: `animation-delay:${i * 0.22}s`,
+        transform: `rotate(30 ${x} ${y})`,
+      },
       g
     )
   );
@@ -1051,7 +1055,7 @@ export function finish() {
     if (r && SCEN[B.sc] && B.sc !== 'sauvage' && !SCEN[B.sc].noProgress) {
       PROFILE.ranks = PROFILE.ranks || {};
       const o = PROFILE.ranks[B.sc];
-      B.rankNew = !o || RK.indexOf(r) > RK.indexOf(o);
+      B.rankNew = !o || RANKS.indexOf(r) > RANKS.indexOf(o);
       if (B.rankNew) {
         PROFILE.ranks[B.sc] = r;
       }
@@ -1100,30 +1104,30 @@ export function finish() {
         f.focus();
       }
     },
-    RM ? 0 : 900
+    reducedMotion ? 0 : 900
   );
-  setTimeout(() => autoSave(true), RM ? 50 : 1200);
+  setTimeout(() => autoSave(true), reducedMotion ? 50 : 1200);
   hook('battleEnd');
 }
 
 /* ===================== BATTLE INTERFACE v0.8 ===================== */
-export const BG = { S: 27, OX: 20, OY: 22 };
+export const BOARD_GEOMETRY = { S: 27, OX: 20, OY: 22 };
 
-export const VB = () => (VERT ? [286, 430] : [430, 286]);
+export const boardViewBox = () => (VERT ? [286, 430] : [430, 286]);
 
 /* v4.77 · tilted board: HC and HP return perspective-view points when TILT.on.
    Ground = original viewBox coordinates; screen = ground tilted by TILT.a then reframed. */
 export const TILT = { on: false };
 
-export const HC0 = k => {
-  const p = P(k),
-    q = hexCenter(p[0], p[1], BG.S, BG.OX, BG.OY);
+export const flatCellCenter = k => {
+  const p = parseCellKey(k),
+    q = hexCenter(p[0], p[1], BOARD_GEOMETRY.S, BOARD_GEOMETRY.OX, BOARD_GEOMETRY.OY);
   return VERT ? [q[1], 430 - q[0]] : q;
 };
 
-export const HC = k => (TILT.on ? tiltP(...HC0(k)) : HC0(k));
+export const cellCenter = k => (TILT.on ? tiltP(...flatCellCenter(k)) : flatCellCenter(k));
 
-export const HP = (x, y, s) => (TILT.on ? tiltHP(x, y, s) : VERT ? hpf(x, y, s) : hexPoints(x, y, s));
+export const cellPoints = (x, y, s) => (TILT.on ? tiltHP(x, y, s) : VERT ? hpf(x, y, s) : hexPoints(x, y, s));
 
 export const ui = {
   sel: null,
@@ -1144,9 +1148,9 @@ export const hpClass = u => {
   return r > 0.5 ? '' : r > 0.2 ? 'is-half' : 'is-low';
 };
 
-export const DIA = 'M0 -3.4 2.5 0 0 3.4 -2.5 0Z';
+export const DIAMOND_PATH = 'M0 -3.4 2.5 0 0 3.4 -2.5 0Z';
 
-export const STC = {
+export const STATUS_CLASS = {
   PAR: 'paralysis',
   GEL: 'frozen',
   SOM: 'asleep',
@@ -1169,8 +1173,8 @@ export const enPips = (n, cls = '') =>
   `<span class="energy-pips ${cls}" aria-label="Énergie d’Éveil ${n} sur 3">${[0, 1, 2].map(i => `<i class="${i < n ? 'is-filled' : ''}"></i>`).join('')}</span>`;
 
 export const poly = (k, c) => {
-  const [x, y] = HC(k),
-    pt = HP(x, y, BG.S - 3);
+  const [x, y] = cellCenter(k),
+    pt = cellPoints(x, y, BOARD_GEOMETRY.S - 3);
   return `<polygon points="${pt}" class="${c} highlight-glow"/><polygon points="${pt}" class="${c}"/>`;
 };
 

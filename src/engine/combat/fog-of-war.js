@@ -3,7 +3,7 @@ import { bdClass, tokCl } from '../../screens/combat/board/boardStore.js';
 import { SCEN } from '../pokemon/pokemon.js';
 import { $, toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
-import { P, hdist, unitAt, unitKey } from './engine.js';
+import { parseCellKey, hdist, unitAt, unitKey } from './engine.js';
 import { B, L, scSel, ui } from './ui.js';
 import { PREF } from '../ui/preferences.js';
 import { formatNumber } from '../state/economy.js';
@@ -25,7 +25,7 @@ export function fogVision(S) {
         2 + (a.t.includes('Vol') || a.t.includes('Psy') ? 1 : 0) - (isNight && !seesAtNight(a) ? 1 : 0)
       );
       for (const k in S.tiles) {
-        if (hdist(a.pos, P(k)) <= r) {
+        if (hdist(a.pos, parseCellKey(k)) <= r) {
           vu.add(k);
         }
       }

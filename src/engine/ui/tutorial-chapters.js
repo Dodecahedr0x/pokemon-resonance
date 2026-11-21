@@ -2,7 +2,7 @@
 // with a button to try it and progress saved. Rendered by the React Guide (Tutorial.jsx).
 import { goTo } from '../core/navigation.js';
 import { openGuide } from './guide.js';
-import { V4 } from './screen-state.js';
+import { SCREEN_STATE } from './screen-state.js';
 import { DOCTRINE_DEFS } from '../combat/doctrines.js';
 import { PUZZLES } from '../modes/riddles.js';
 import { MASTERY_THRESHOLD } from '../progression/family-mastery.js';
@@ -228,10 +228,10 @@ export function init() {
     }
     const a = b.dataset.tryIt;
     if (a.startsWith('camp:')) {
-      V4.campTab = a.slice(5);
+      SCREEN_STATE.campTab = a.slice(5);
       goTo('camp');
     } else if (a === 'journal') {
-      V4.questTab = 'journal';
+      SCREEN_STATE.questTab = 'journal';
       goTo('quetes');
     } else {
       goTo(a);

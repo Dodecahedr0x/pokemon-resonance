@@ -2,7 +2,7 @@ import { Html, parseStyle } from '../../lib/html.jsx';
 import { typeColor } from '../../engine/core/utils.js';
 import { squad } from '../../engine/team/team.js';
 import { PROF_AV, emblem, goalChips, goalInfo, professorMsg } from '../../engine/world/home-journey.js';
-import { ART } from '../../engine/assets/item-icons.js';
+import { pokemonArtUrl } from '../../engine/assets/images.js';
 import { shinyStyle } from '../../engine/pokemon/shiny.js';
 import { heroView } from '../../engine/world/living-home.js';
 import { homeSkyInfo } from '../../engine/world/home-weather.js';
@@ -63,7 +63,7 @@ export default function Hero({ on }) {
           style={V.sh ? parseStyle(shinyStyle(m.base)) : undefined}
         >
           <span className="home-hero-companion-shadow" />
-          <img src={ART(m.no)} alt="" decoding="async" />
+          <img src={pokemonArtUrl(m.no)} alt="" decoding="async" />
           <span className="home-hero-companion-name">
             {V.comp ? `${m.n} ${'♥'.repeat(Math.max(1, V.hearts))}` : 'Un compagnon ?'}
           </span>

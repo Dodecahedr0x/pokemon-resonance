@@ -2,7 +2,7 @@ import { MARKS, REACTIONS, TYPES } from '../data/game-data.js';
 import { POKEMON, PKT, PK_ART } from '../pokemon/pokemon.js';
 import { showToast } from '../../screens/overlays/shellOverlays.js';
 
-export let RM;
+export let reducedMotion;
 
 function lum(h) {
   const n = parseInt(h.slice(1), 16);
@@ -14,7 +14,7 @@ export function medal(types, cls = '') {
     b = typeColor(types[1] || types[0]);
   const shine = 'radial-gradient(circle at 34% 26%,rgba(255,255,255,.42),rgba(255,255,255,0) 52%)';
   const bg = types[1] ? `${shine},conic-gradient(from 225deg,${a} 0 50%,${b} 50% 100%)` : `${shine},${a}`;
-  const h = `<span class="medal ${cls}" style="background:${bg};--glow:${a}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="${typeGlyphPath(types[0])}" fill="${INK}" fill-rule="evenodd"/></svg></span>`;
+  const h = `<span class="medal ${cls}" style="background:${bg};--glow:${a}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="${typeGlyphPath(types[0])}" fill="${GLYPH_INK}" fill-rule="evenodd"/></svg></span>`;
   // the Pokémon's artwork in its type medallion
   const id = PKT.get(types);
   if (!id || !POKEMON[id]) {
@@ -29,7 +29,7 @@ export function medal(types, cls = '') {
 }
 
 export function typeIcon(t) {
-  return `<span class="type-icon" style="background:${typeColor(t)}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="${typeGlyphPath(t)}" fill="${INK}" fill-rule="evenodd"/></svg></span>`;
+  return `<span class="type-icon" style="background:${typeColor(t)}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="${typeGlyphPath(t)}" fill="${GLYPH_INK}" fill-rule="evenodd"/></svg></span>`;
 }
 
 export function typeBadge(t) {
@@ -49,7 +49,7 @@ export function toast(msg) {
 }
 
 export function svgElement(tag, attrs = {}, parent) {
-  const e = document.createElementNS(NS, tag);
+  const e = document.createElementNS(SVG_NS, tag);
   for (const k in attrs) {
     e.setAttribute(k, attrs[k]);
   }
@@ -149,13 +149,13 @@ export const $ = (s, r = document) => r.querySelector(s);
 
 export const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 
-export const NS = 'http://www.w3.org/2000/svg';
+export const SVG_NS = 'http://www.w3.org/2000/svg';
 
 export const typeColor = t => (TYPES[t] || TYPES.Normal)[0];
 
 export const typeGlyphPath = t => (TYPES[t] || TYPES.Normal)[1];
 
-export const INK = 'rgba(8,10,14,.82)';
+export const GLYPH_INK = 'rgba(8,10,14,.82)';
 
 export const markOf = id => MARKS.find(m => m.id === id);
 
@@ -163,5 +163,5 @@ export const rxCat = id => (REACTIONS[id] ? REACTIONS[id].k : 'ter');
 
 // Statements run at startup, in the original order (see index.js).
 export function init() {
-  RM = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+  reducedMotion = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
 }

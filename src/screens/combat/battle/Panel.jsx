@@ -3,7 +3,7 @@ import { strength } from '../../../lib/power.js';
 import { REACTIONS } from '../../../engine/data/game-data.js';
 import { MOVES, SHAPE, ABILITIES } from '../../../engine/data/moves.js';
 import { POKEMON, SCEN } from '../../../engine/pokemon/pokemon.js';
-import { ARR } from '../../../engine/pokemon/evolution.js';
+import { ARRIVAL_EFFECTS } from '../../../engine/pokemon/evolution.js';
 import { ROLEFX, rIco } from '../../../engine/pokemon/roles-synergies.js';
 import { veiled } from '../../../engine/modes/gyms.js';
 import { markOf, medal, rxCat, typeBadge, typeColor } from '../../../engine/core/utils.js';
@@ -26,7 +26,7 @@ import { B, enPips, segHp, ui } from '../../../engine/combat/ui.js';
 import { PREF } from '../../../engine/ui/preferences.js';
 import { catchBlock, duoBlock, tileCard, unitExtras } from '../../../engine/combat/battle-panel.js';
 import { HEALS } from '../../../engine/items/battle-potions.js';
-import { ITM } from '../../../engine/assets/item-icons.js';
+import { itemIcon } from '../../../engine/assets/item-icons.js';
 import { SHOP, bagN } from '../../../engine/state/economy.js';
 import {
   COMBAT_ITEMS,
@@ -314,7 +314,7 @@ function OpponentSheet({ e }) {
             ) : (
               <>
                 Sous 50 % de PV, {e.n} deviendra <b>{nx.n}</b> en fin de manche.{' '}
-                {ARR[nx.id] ? <Html html={'Arrivée : ' + ARR[nx.id][1]} /> : null}
+                {ARRIVAL_EFFECTS[nx.id] ? <Html html={'Arrivée : ' + ARRIVAL_EFFECTS[nx.id][1]} /> : null}
               </>
             )}
           </p>
@@ -611,7 +611,7 @@ function Bag({ u }) {
             title={it.d}
             disabled={!canUseBagItem(B, u, k)}
           >
-            <img src={ITM(it.img)} alt="" loading="lazy" />
+            <img src={itemIcon(it.img)} alt="" loading="lazy" />
             <b>{it.sn || it.n}</b>
             <span>
               {info} · ×{bagN(k)}

@@ -1,4 +1,4 @@
-import { ITM } from '../../engine/assets/item-icons.js';
+import { itemIcon } from '../../engine/assets/item-icons.js';
 import { SHOP, formatNumber } from '../../engine/state/economy.js';
 
 // Rewards of a quest: Pokédollars, Shards, items (formerly rewTxt).
@@ -30,7 +30,7 @@ export default function Rewards({ r }) {
     for (const k in r.bag) {
       o.push(
         <span key={'b' + k}>
-          <img src={ITM(SHOP[k].img)} alt="" loading="lazy" />
+          <img src={itemIcon(SHOP[k].img)} alt="" loading="lazy" />
           {r.bag[k]} × {SHOP[k].n}
         </span>
       );

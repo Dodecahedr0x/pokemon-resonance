@@ -2,7 +2,8 @@ import { POKEMON, PKT } from '../pokemon/pokemon.js';
 import { ITEMS2 } from '../state/game-state.js';
 import { tokCl, unitsDirty } from '../../screens/combat/board/boardStore.js';
 import { L } from '../combat/ui.js';
-import { ART, ITM } from './item-icons.js';
+import { pokemonArtUrl } from './images.js';
+import { itemIcon } from './item-icons.js';
 import { HELD_IMG } from '../state/economy.js';
 
 let ITEM_SVG;
@@ -15,7 +16,7 @@ export function itemize(h) {
     if (h.includes(ITEM_SVG[k])) {
       h = h
         .split(ITEM_SVG[k])
-        .join(`<img class="it-img" src="${ITM(HELD_IMG[k])}" alt="" loading="lazy" onerror="this.remove()">`);
+        .join(`<img class="it-img" src="${itemIcon(HELD_IMG[k])}" alt="" loading="lazy" onerror="this.remove()">`);
     }
   }
   return h;
@@ -36,7 +37,7 @@ export function tokenArt(u) {
   if (T.imOn && T.imId !== u.id && POKEMON[u.id]) {
     T.imId = u.id;
     tokCl(T, 'has-image', false);
-    T.href = ART(POKEMON[u.id].no);
+    T.href = pokemonArtUrl(POKEMON[u.id].no);
     unitsDirty();
   }
 }
@@ -67,7 +68,7 @@ export function preload(ids) {
     pre.add(m.no);
     const i = new Image();
     i.decoding = 'async';
-    i.src = ART(m.no);
+    i.src = pokemonArtUrl(m.no);
   });
 }
 
@@ -91,7 +92,7 @@ export const tagUnits = S => {
 const IMG_ERR = "this.parentNode&&this.parentNode.classList.remove('pk');this.remove()";
 
 export const artTag = (m, cls) =>
-  `<img class="${cls}" src="${ART(m.no)}" alt="" loading="lazy" decoding="async" draggable="false" onerror="${IMG_ERR}">`;
+  `<img class="${cls}" src="${pokemonArtUrl(m.no)}" alt="" loading="lazy" decoding="async" draggable="false" onerror="${IMG_ERR}">`;
 
 /* discreet preloading of the illustrations of the team and of the chosen battle's opponents */
 const pre = new Set();

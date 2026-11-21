@@ -8,7 +8,7 @@ import { hook } from '../core/hooks.js';
 import { queueSave } from '../state/saves.js';
 import { sfx, vibe } from '../audio/sound-effects.js';
 import { SHOP, bagN, clampI } from '../state/economy.js';
-import { V4 } from '../ui/screen-state.js';
+import { SCREEN_STATE } from '../ui/screen-state.js';
 import { countS, familyOwned, maxLink } from './trainer-stats.js';
 import { renderWallet } from '../ui/wallet.js';
 import { costOf } from './base-camp.js';
@@ -57,11 +57,11 @@ export function renderBag() {
   if (!pg) {
     return;
   }
-  if (V4.bagView === 'sac' && V4.bagCategory === 'rares') {
-    V4.bagCategory = 'held';
+  if (SCREEN_STATE.bagView === 'sac' && SCREEN_STATE.bagCategory === 'rares') {
+    SCREEN_STATE.bagCategory = 'held';
   }
   // Shop or Bag styling (v4.73): classes of the section, which stays mounted
-  const shop = V4.bagView !== 'sac';
+  const shop = SCREEN_STATE.bagView !== 'sac';
   pg.classList.toggle('is-shop', shop);
   pg.classList.toggle('is-bag', !shop);
   refreshBag(shop);
@@ -69,7 +69,7 @@ export function renderBag() {
 
 export function buyShopItem(k) {
   const it = SHOP[k],
-    q = V4.qty[k] || 1;
+    q = SCREEN_STATE.qty[k] || 1;
   if (!it) {
     return;
   }
@@ -90,7 +90,7 @@ export function buyShopItem(k) {
     PROFILE.money -= price;
   }
   PROFILE.bag[k] = bagN(k) + q;
-  V4.qty[k] = 1;
+  SCREEN_STATE.qty[k] = 1;
   sfx('ui');
   vibe(15);
   toast(`Acheté : ${q} × ${it.n}`);
@@ -169,7 +169,7 @@ export function init() {
   document.addEventListener('click', e => {
     const t = e.target.closest('[data-qtab]');
     if (t) {
-      V4.questTab = t.dataset.qtab;
+      SCREEN_STATE.questTab = t.dataset.qtab;
       renderQuests();
       return;
     }
@@ -182,20 +182,20 @@ export function init() {
   document.addEventListener('click', e => {
     const a = e.target.closest('[data-sacv]');
     if (a) {
-      V4.bagView = a.dataset.sacv;
+      SCREEN_STATE.bagView = a.dataset.sacv;
       renderBag();
       return;
     }
     const c = e.target.closest('[data-sacc]');
     if (c) {
-      V4.bagCategory = c.dataset.sacc;
+      SCREEN_STATE.bagCategory = c.dataset.sacc;
       renderBag();
       return;
     }
     const q = e.target.closest('[data-qk]');
     if (q) {
       const k = q.dataset.qk;
-      V4.qty[k] = clampI((V4.qty[k] || 1) + +q.dataset.qd, 1, 10);
+      SCREEN_STATE.qty[k] = clampI((SCREEN_STATE.qty[k] || 1) + +q.dataset.qd, 1, 10);
       renderBag();
       return;
     }

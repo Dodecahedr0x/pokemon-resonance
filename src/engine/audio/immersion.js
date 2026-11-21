@@ -3,38 +3,38 @@
 import { clearOverlay, paintOverlay } from '../../screens/overlays/dialogsStore.js';
 import { bdClass, getHost, hostSet } from '../../screens/combat/board/boardStore.js';
 import { POKEMON, SCEN } from '../pokemon/pokemon.js';
-import { $, RM, after2images, writeLS, svgElement, typeColor } from '../core/utils.js';
+import { $, reducedMotion, after2images, writeLS, svgElement, typeColor } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { byUid } from '../combat/engine.js';
-import { B, HC, L } from '../combat/ui.js';
+import { B, cellCenter, L } from '../combat/ui.js';
 import { PREF, savePref } from '../ui/preferences.js';
-import { SFX, noise, tone, vibe } from './sound-effects.js';
+import { SOUND_EFFECTS, noise, tone, vibe } from './sound-effects.js';
 import { AUTO } from '../progression/prestige.js';
-import { V4 } from '../ui/screen-state.js';
+import { SCREEN_STATE } from '../ui/screen-state.js';
 import { ownedFam } from '../progression/trainer-stats.js';
 import { renderParams } from '../ui/settings.js';
-import { BGM } from './music.js';
+import { MUSIC } from './music.js';
 
 let tipIndex, lastTiltAt;
 
 /** Immersion on and animations not reduced (same test as IMMERSION_ON() && !RM, hoisted for 082 and 083). */
 export function effectsEnabled() {
-  return PREF.immersionOn !== 0 && !RM;
+  return PREF.immersionOn !== 0 && !reducedMotion;
 }
 
 function playTypeSfx(ty) {
-  if (!PREF.sound || RM || !IMMERSION_ON()) {
+  if (!PREF.sound || reducedMotion || !IMMERSION_ON()) {
     return;
   }
   try {
-    (TYPE_SOUNDS[ty] || SFX.hit)();
+    (TYPE_SOUNDS[ty] || SOUND_EFFECTS.hit)();
   } catch {
     /* Best effort: failure here is non-fatal. */
   }
 }
 
 function playStep() {
-  if (!PREF.sound || RM || !IMMERSION_ON()) {
+  if (!PREF.sound || reducedMotion || !IMMERSION_ON()) {
     return;
   }
   try {
@@ -46,7 +46,7 @@ function playStep() {
 
 /** Synthesized cry: the pitch depends on the national number, so each species has its own. */
 function playCry(u, ko) {
-  if (!PREF.sound || RM || !IMMERSION_ON() || !u) {
+  if (!PREF.sound || reducedMotion || !IMMERSION_ON() || !u) {
     return;
   }
   try {
@@ -66,7 +66,7 @@ function playCry(u, ko) {
 }
 
 function lowHpAlarm() {
-  if (!PREF.sound || RM || !IMMERSION_ON()) {
+  if (!PREF.sound || reducedMotion || !IMMERSION_ON()) {
     return;
   }
   try {
@@ -79,8 +79,8 @@ function lowHpAlarm() {
 /* ---------- 2. battle music: livelier when an ally is nearly KO ---------- */
 function adaptMusicTempo() {
   try {
-    Object.keys(BGM.el).forEach(k => {
-      const a = BGM.el[k];
+    Object.keys(MUSIC.el).forEach(k => {
+      const a = MUSIC.el[k];
       if (!a) {
         return;
       }
@@ -99,7 +99,7 @@ function spawnParticles(k, ty) {
   if (!effectsEnabled() || !L.fx) {
     return;
   }
-  const [x, y] = HC(k),
+  const [x, y] = cellCenter(k),
     c = typeColor(ty || 'Normal'),
     n = 9;
   for (let i = 0; i < n; i++) {
@@ -221,15 +221,15 @@ export function scanPokedex() {
     if (!card) {
       return;
     }
-    const own = !!ownedFam(V4.dexSel);
+    const own = !!ownedFam(SCREEN_STATE.dexSel);
     card.classList.remove('scan-sweep');
     void card.offsetWidth;
-    if (IMMERSION_ON() && !RM) {
+    if (IMMERSION_ON() && !reducedMotion) {
       card.classList.add('scan-sweep');
     }
-    if (own && IMMERSION_ON() && !RM) {
+    if (own && IMMERSION_ON() && !reducedMotion) {
       const s = dexSeen(),
-        id = V4.dexSel;
+        id = SCREEN_STATE.dexSel;
       if (!s[id]) {
         s[id] = 1;
         writeLS('res-dex-seen', s);
@@ -400,7 +400,7 @@ export function init() {
   document.addEventListener(
     'pointermove',
     e => {
-      if (e.pointerType === 'touch' || RM) {
+      if (e.pointerType === 'touch' || reducedMotion) {
         return;
       }
       const a = e.target.closest && e.target.closest('.dex-art');
@@ -415,7 +415,7 @@ export function init() {
   addEventListener(
     'deviceorientation',
     e => {
-      if (RM || !IMMERSION_ON() || e.gamma == null) {
+      if (reducedMotion || !IMMERSION_ON() || e.gamma == null) {
         return;
       }
       const t = Date.now();

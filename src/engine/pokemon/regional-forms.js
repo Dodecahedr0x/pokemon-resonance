@@ -2,7 +2,7 @@
 
 import { POKEMON, SCEN } from './pokemon.js';
 import { HOOKS } from '../core/hooks.js';
-import { V4 } from '../ui/screen-state.js';
+import { SCREEN_STATE } from '../ui/screen-state.js';
 import { renderDexCard } from '../progression/pokedex.js';
 
 // Regional forms: read by the Pokédex sheet (src/screens/dex/DexCard.jsx).
@@ -55,6 +55,6 @@ export function init() {
   });
   window.__regionalForms = REGIONAL_FORMS;
   window.__regionalForms.regionOf = regionOf;
-  window.__regionalForms.V4 = () => V4;
+  window.__regionalForms.V4 = () => SCREEN_STATE;
   window.__regionalForms.renderCard = () => renderDexCard();
 }

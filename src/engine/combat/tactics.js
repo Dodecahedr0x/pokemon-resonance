@@ -5,8 +5,8 @@ import { medal } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import {
   CDIR,
-  K,
-  P,
+  cellKey,
+  parseCellKey,
   affected,
   byUid,
   damage,
@@ -26,7 +26,7 @@ import {
   unitKey,
 } from './engine.js';
 import { OBST, resolve, roleOf } from './synergies-obstacles.js';
-import { HC, poly, scSel } from './ui.js';
+import { cellCenter, poly, scSel } from './ui.js';
 import { PREF } from '../ui/preferences.js';
 import { SHOP } from '../state/economy.js';
 import { DAMAGE_PROVIDERS, ROLE_PROVIDERS } from './tactical-engine.js';
@@ -137,11 +137,11 @@ export function trapPlan(S, e, best, al) {
   let bk = null,
     bs = -1e9;
   targets(S, e, m).forEach(k => {
-    const d = Math.min(...al.map(a => hdist(a.pos, P(k))));
+    const d = Math.min(...al.map(a => hdist(a.pos, parseCellKey(k))));
     if (d < 1) {
       return;
     }
-    const s = -d * 3 - hdist(e.pos, P(k)) * 0.5;
+    const s = -d * 3 - hdist(e.pos, parseCellKey(k)) * 0.5;
     if (s > bs) {
       bs = s;
       bk = k;
@@ -206,9 +206,9 @@ export function unloadCharges(S, ev) {
         // it dives onto its target and lands on a free neighboring cell, the closest to where it started
         const freeOnes = nbrK(c.k)
           .filter(x => S.tiles[x] && !S.tiles[x].rock && (!unitAt(S, x) || unitAt(S, x) === u))
-          .sort((a, b) => hdist(P(a), u.pos) - hdist(P(b), u.pos));
+          .sort((a, b) => hdist(parseCellKey(a), u.pos) - hdist(parseCellKey(b), u.pos));
         if (freeOnes.length && freeOnes[0] !== unitKey(u)) {
-          u.pos = P(freeOnes[0]);
+          u.pos = parseCellKey(freeOnes[0]);
           ev.push({ e: 'mv', u: u.uid });
         }
         pushMessage(ev, `${u.n} fond sur sa cible !`);
@@ -226,7 +226,7 @@ function controlZone(S, u, k) {
   if (!S.tac || flies(u) || u.t.includes('Spectre') || roleOf(u) === 'Éclaireur' || u.colossus || u.seg) {
     return false;
   }
-  const p = P(k);
+  const p = parseCellKey(k);
   return S.units.some(o => !o.ko && o.side !== u.side && hdist(o.pos, p) === 1);
 }
 
@@ -238,11 +238,11 @@ export function forceStop(S, u, k) {
 /* ---------- 4. Wind: tools (its effect on the board is in v4.7-01) ---------- */
 /** The neighboring cell in a direction (0 to 5), or null at the edge. */
 export function noWind(k, d) {
-  const p = P(k),
+  const p = parseCellKey(k),
     c = toCube(p[0], p[1]),
     D = CDIR[d],
     q = fromCube(c[0] + D[0], c[1] + D[1], c[2] + D[2]);
-  return inBoard(q[0], q[1]) ? K(q[0], q[1]) : null;
+  return inBoard(q[0], q[1]) ? cellKey(q[0], q[1]) : null;
 }
 
 /** The direction (0 to 5) that gets closest from a to b. */
@@ -272,8 +272,8 @@ export function chipWind(S) {
   if (!S.vent) {
     return '<span class="chip chip-vent" title="Pas de vent.">Vent calme</span>';
   }
-  const a = HC('3,2'),
-    b = HC(noWind('3,2', S.vent.d) || '3,2'),
+  const a = cellCenter('3,2'),
+    b = cellCenter(noWind('3,2', S.vent.d) || '3,2'),
     ang = Math.round((Math.atan2(b[1] - a[1], b[0] - a[0]) * 180) / Math.PI);
   return `<span class="chip chip-vent" title="Attaques Vol ×1,2 dans le sens du vent, ×0,85 contre. Le brouillard dérive ; le feu court 2 cases sous le vent."><svg class="vent-fl" viewBox="0 0 16 16" aria-hidden="true" style="transform:rotate(${ang}deg)"><path d="M2 8h11M9 4l4 4-4 4"/></svg>Vent</span>`;
 }
@@ -286,14 +286,18 @@ function makeColossus(S, u, x, D) {
   x.parts.forEach((displayName, i) => {
     const k = nbrK(cur)
       .filter(n => S.tiles[n] && !S.tiles[n].rock && !unitAt(S, n))
-      .sort((a, b) => P(b)[0] - P(a)[0] || Math.abs(P(a)[1] - u.pos[1]) - Math.abs(P(b)[1] - u.pos[1]))[0];
+      .sort(
+        (a, b) =>
+          parseCellKey(b)[0] - parseCellKey(a)[0] ||
+          Math.abs(parseCellKey(a)[1] - u.pos[1]) - Math.abs(parseCellKey(b)[1] - u.pos[1])
+      )[0];
     if (!k) {
       return;
     }
     const s = mkUnit(
       u.id,
       'e',
-      P(k),
+      parseCellKey(k),
       u.uid + 's' + i,
       Object.assign({}, D, { hb: x.shb, pb: Math.max(0, (x.pb || 0) - 2) })
     );
@@ -365,8 +369,8 @@ export function linksColossi(S) {
     }
     const i = +s.uid.split('s').pop(),
       prev = i > 0 ? byUid(S, s.of + 's' + (i - 1)) : byUid(S, s.of),
-      a = prev && !prev.ko ? HC(unitKey(prev)) : null,
-      b = HC(unitKey(s));
+      a = prev && !prev.ko ? cellCenter(unitKey(prev)) : null,
+      b = cellCenter(unitKey(s));
     if (a) {
       h += `<line class="col-lien" x1="${a[0].toFixed(1)}" y1="${a[1].toFixed(1)}" x2="${b[0].toFixed(1)}" y2="${b[1].toFixed(1)}"/>`;
     }

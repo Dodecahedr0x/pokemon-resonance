@@ -2,7 +2,7 @@ import { SCEN } from '../pokemon/pokemon.js';
 import { $, toast } from '../core/utils.js';
 import { bdClass, tokCl } from '../../screens/combat/board/boardStore.js';
 import { HOOKS } from '../core/hooks.js';
-import { BH, K, P, byUid, unitAt } from './engine.js';
+import { BOARD_ROWS, cellKey, parseCellKey, byUid, unitAt } from './engine.js';
 import { B, L, addLog, renderAll, ui } from './ui.js';
 import { PREF, savePref } from '../ui/preferences.js';
 import { sfx } from '../audio/sound-effects.js';
@@ -41,9 +41,9 @@ function isLargeBattle(D) {
 
 function deployZone(S) {
   const z = [];
-  for (let r = 0; r < BH; r++) {
+  for (let r = 0; r < BOARD_ROWS; r++) {
     for (let c = 0; c <= 1; c++) {
-      const k = K(c, r),
+      const k = cellKey(c, r),
         t = S.tiles[k];
       if (!t || t.rock || t.lava > 0) {
         continue;
@@ -71,7 +71,7 @@ function deployTap(k) {
     if (u && u.side === 'a') {
       u.pos = [...sel.pos];
     } // swap places
-    sel.pos = P(k);
+    sel.pos = parseCellKey(k);
     ui.deploySel = null;
     sfx('ui');
   } else if (u && u.side === 'a') {

@@ -1,5 +1,5 @@
 import { useEngineReady } from '../../engineReady.js';
-import { V4 } from '../../engine/ui/screen-state.js';
+import { SCREEN_STATE } from '../../engine/ui/screen-state.js';
 import { CAMP_TABS } from '../../engine/modes/camp-challenges.js';
 import { echoRun } from '../../engine/modes/deep-echo.js';
 import { useCampBase, useCampPage } from './campStore.js';
@@ -36,7 +36,7 @@ function CampBaseHost() {
 
 // #campNews: before the first renderCampPage(), only the Base camp.
 function Content({ page }) {
-  const t = V4.campTab; // already validated by renderCampPage()
+  const t = SCREEN_STATE.campTab; // already validated by renderCampPage()
   const Tab = page > 0 && t !== 'base' ? TAB_LIST[t] : null;
   const cache = page > 0 ? t !== 'base' : undefined;
   return (

@@ -1,6 +1,6 @@
 /* Shared UI state of the "Aventure" screens (added in v4.0): Pokédex, Bag and Shop, Quests, Map, menu. */
 
-export const V4 = {
+export const SCREEN_STATE = {
   dexSel: null,
   dexQ: '',
   dexGen: 'all',

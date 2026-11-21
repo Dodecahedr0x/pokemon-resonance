@@ -4,7 +4,7 @@ import { GYMS } from '../data/game-data.js';
 import { SCEN } from '../pokemon/pokemon.js';
 import { PROFILE } from '../state/game-state.js';
 import { ARENAS } from '../modes/gyms.js';
-import { $, RM, typeColor } from '../core/utils.js';
+import { $, reducedMotion, typeColor } from '../core/utils.js';
 import { hook } from '../core/hooks.js';
 import { cur } from '../core/navigation.js';
 import { byUid, unitKey } from '../combat/engine.js';
@@ -100,10 +100,10 @@ export function vsIntro() {
                     ? 'Duel local'
                     : 'Terrain d’entraînement';
   const ri = i >= 0 ? i : ARENAS.findIndex(a => a.rule === D.rule); // board rule carried over (legends, Tower)
-  const dur = RM ? 900 : PREF.fast ? 1400 : 2300;
+  const dur = reducedMotion ? 900 : PREF.fast ? 1400 : 2300;
   // rendered: src/screens/overlays/transients/Vs.jsx
   const o = overlay('vs', {
-    cls: (RM ? ' is-calm' : '') + (PREF.fast ? ' is-fast' : ''),
+    cls: (reducedMotion ? ' is-calm' : '') + (PREF.fast ? ' is-fast' : ''),
     dur,
     k1: B.duel433 ? 'Joueur 1' : 'Votre équipe',
     al: al.map(u => u.t),
@@ -134,7 +134,7 @@ export function vsIntro() {
         shut(o);
         turnBanner();
       },
-      RM ? 0 : 350
+      reducedMotion ? 0 : 350
     );
   };
   o.addEventListener('click', close);
@@ -143,7 +143,7 @@ export function vsIntro() {
 
 export function turnBanner(txt, sub) {
   hook('beforeBanner');
-  if (!B || RM) {
+  if (!B || reducedMotion) {
     return;
   }
   const bd = $('#bBoard');
@@ -189,7 +189,7 @@ export function turnBanners() {
 
 /* --- Impact words: super effective, K.O. --- */
 export function impactWords(ev) {
-  if (!B || RM) {
+  if (!B || reducedMotion) {
     return;
   }
   let last = null;
@@ -502,7 +502,7 @@ export const CHAP = k => {
 export const HPM = {};
 
 /* --- End-of-battle rank and best rank per terrain --- */
-export const RK = ['B', 'A', 'S'];
+export const RANKS = ['B', 'A', 'S'];
 
 /* --- Generative ambient music ("Musique" option) --- */
 export const MUS = { ac: null, out: null, on: false, timer: 0, step: 0 };

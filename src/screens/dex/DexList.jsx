@@ -1,8 +1,8 @@
 import { Html } from '../../lib/html.jsx';
 import { PROFILE } from '../../engine/state/game-state.js';
 import { typeColor } from '../../engine/core/utils.js';
-import { PIX } from '../../engine/assets/item-icons.js';
-import { V4 } from '../../engine/ui/screen-state.js';
+import { pokemonArtUrl } from '../../engine/assets/images.js';
+import { SCREEN_STATE } from '../../engine/ui/screen-state.js';
 import { ownedFam } from '../../engine/progression/trainer-stats.js';
 import { DEXS, dexList } from '../../engine/progression/pokedex.js';
 import { SPARK, isShinyOwned, shinyHue } from '../../engine/pokemon/shiny.js';
@@ -49,7 +49,7 @@ export function DexList() {
         L.map(m => {
           const own = ownedFam(m.id),
             sh = isShinyOwned(m.id),
-            on = V4.dexSel === m.id;
+            on = SCREEN_STATE.dexSel === m.id;
           const style = { '--c': typeColor(m.t[0]) };
           if (sh) {
             style['--sh'] = shinyHue(m.id) + 'deg';
@@ -65,7 +65,7 @@ export function DexList() {
               key={m.id}
             >
               {sh ? <Html html={SPARK} /> : null}
-              <img src={PIX(m.no)} alt="" loading="lazy" width="48" height="48" />
+              <img src={pokemonArtUrl(m.no)} alt="" loading="lazy" width="48" height="48" />
               <span className="dex-row-number">{String(m.no).padStart(3, '0')}</span>
               <b>{m.n}</b>
               {own ? null : (

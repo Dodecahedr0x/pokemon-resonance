@@ -1,5 +1,5 @@
 import { useLayoutEffect, useRef } from 'react';
-import { DIA, L } from '../../../engine/combat/ui.js';
+import { DIAMOND_PATH, L } from '../../../engine/combat/ui.js';
 import { tokArtErr, tokArtOk } from '../../../engine/assets/illustrations.js';
 import { useBoard } from './boardStore.js';
 import { PE, lref } from './shared.js';
@@ -118,7 +118,7 @@ function Token({ T }) {
         <ellipse className="token-gloss" cx="-3.5" cy="-6" rx="6" ry="3.2" />
         <g className="token-energy">
           {T.pc.map((c, i) => (
-            <path key={i} d={DIA} transform={`translate(-21,${-8 + i * 8})`} className={cls(c)} />
+            <path key={i} d={DIAMOND_PATH} transform={`translate(-21,${-8 + i * 8})`} className={cls(c)} />
           ))}
         </g>
         <g className="token-evolution-mark" transform="translate(18,-14)">

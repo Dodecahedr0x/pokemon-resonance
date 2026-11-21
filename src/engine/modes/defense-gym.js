@@ -6,7 +6,7 @@ import { BADGES } from './gyms.js';
 import { writeLS, toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { squad } from '../team/team.js';
-import { K, mkUnit, plan, pushMessage, unitAt } from '../combat/engine.js';
+import { cellKey, mkUnit, plan, pushMessage, unitAt } from '../combat/engine.js';
 import { OBST } from '../combat/synergies-obstacles.js';
 import { B, backToPrep, goFight } from '../combat/ui.js';
 import { overlay } from '../progression/prestige.js';
@@ -28,7 +28,10 @@ function defenseWave(S, ev) {
   for (let i = 0; i < nb; i++) {
     const freeOnes = [];
     for (let y = 0; y < 6; y++) {
-      [7, 6].forEach(x => S.tiles[K(x, y)] && !S.tiles[K(x, y)].rock && !unitAt(S, K(x, y)) && freeOnes.push([x, y]));
+      [7, 6].forEach(
+        x =>
+          S.tiles[cellKey(x, y)] && !S.tiles[cellKey(x, y)].rock && !unitAt(S, cellKey(x, y)) && freeOnes.push([x, y])
+      );
     }
     if (!freeOnes.length || !pool.length) {
       break;

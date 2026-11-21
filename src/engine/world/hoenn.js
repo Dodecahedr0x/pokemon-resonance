@@ -5,9 +5,9 @@ import { HOOKS } from '../core/hooks.js';
 import { goTo } from '../core/navigation.js';
 import { badgeSvg } from '../modes/league.js';
 import { nbrK, pushMessage, setMark, unitKey } from '../combat/engine.js';
-import { V4 } from '../ui/screen-state.js';
+import { SCREEN_STATE } from '../ui/screen-state.js';
 import { formatNumber } from '../state/economy.js';
-import { PL, renderMap } from './map.js';
+import { PLACE_BY_ID, renderMap } from './map.js';
 import { DAMAGE_PROVIDERS } from '../combat/tactical-engine.js';
 import { ACHIEVEMENTS } from '../progression/achievements.js';
 import { SCENES } from '../progression/story-dialogues.js';
@@ -39,7 +39,7 @@ export function hoennRegionClean(p) {
 // v4.46: Free mode included
 export function isHoennRegion() {
   try {
-    return V4.region === 'hoenn' && hoennOpen();
+    return SCREEN_STATE.region === 'hoenn' && hoennOpen();
   } catch (e) {
     return false;
   }
@@ -560,10 +560,10 @@ export function init() {
     if (!b) {
       return;
     }
-    V4.region = 'hoenn';
-    V4.mapSel = null;
+    SCREEN_STATE.region = 'hoenn';
+    SCREEN_STATE.mapSel = null;
     goTo('carte');
     renderMap();
   });
-  PLACES_H.forEach(p => (PL[p.id] = p));
+  PLACES_H.forEach(p => (PLACE_BY_ID[p.id] = p));
 }

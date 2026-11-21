@@ -1,6 +1,6 @@
 /* Synthesized sound effects (no files) and vibrations (added in v1.0). */
 
-import { RM } from '../core/utils.js';
+import { reducedMotion } from '../core/utils.js';
 import { byUid } from '../combat/engine.js';
 import { B } from '../combat/ui.js';
 import { sfxJingle } from './music.js';
@@ -79,9 +79,9 @@ export function noise(t0, dur, flying, lp) {
 }
 
 export function sfx(n) {
-  if (PREF.sound && !RM) {
+  if (PREF.sound && !reducedMotion) {
     try {
-      SFX[n] && SFX[n]();
+      SOUND_EFFECTS[n] && SOUND_EFFECTS[n]();
     } catch {
       /* Best effort: failure here is non-fatal. */
     }
@@ -144,7 +144,7 @@ export function sfxEv(ev) {
   }
 }
 
-export const SFX = {
+export const SOUND_EFFECTS = {
   ui: () => tone(880, 0, 0.06, 'triangle', 0.04),
   hit: () => {
     noise(0, 0.14, 0.14, 700);

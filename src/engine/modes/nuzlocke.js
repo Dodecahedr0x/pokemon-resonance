@@ -9,7 +9,7 @@ import { __set_squad, squad } from '../team/team.js';
 import { B } from '../combat/ui.js';
 import { queueSave } from '../state/saves.js';
 import { PREF, savePref } from '../ui/preferences.js';
-import { V4 } from '../ui/screen-state.js';
+import { SCREEN_STATE } from '../ui/screen-state.js';
 import { today } from '../state/economy.js';
 import { renderParams } from '../ui/settings.js';
 
@@ -39,7 +39,7 @@ export function nuzlockeEncounter() {
     return true;
   }
   const s = nuzlockeState(),
-    r = V4.region || 'kanto';
+    r = SCREEN_STATE.region || 'kanto';
   if (s.enc.r[r]) {
     toast('Nuzlocke : une seule rencontre par région et par jour. Revenez demain.');
     return false;

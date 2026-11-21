@@ -2,11 +2,11 @@
 
 import { $ } from '../core/utils.js';
 import { openSaves } from '../state/saves.js';
-import { V4 } from './screen-state.js';
+import { SCREEN_STATE } from './screen-state.js';
 import { setMenuOpen } from '../../components/shellStore.js';
 
 function menu(open) {
-  V4.menu = open;
+  SCREEN_STATE.menu = open;
   setMenuOpen(open); // #v4Menu and #bnMenu (aria-expanded): src/components/Nav.jsx
   if (open) {
     const f = $('#v4Menu .menu-item');
@@ -26,14 +26,14 @@ function menu(open) {
 export function init() {
   document.addEventListener('click', e => {
     if (e.target.closest('#bnMenu')) {
-      menu(!V4.menu);
+      menu(!SCREEN_STATE.menu);
       return;
     }
     if (e.target.closest('[data-menux]')) {
       menu(false);
       return;
     }
-    if (V4.menu && e.target.closest('#v4Menu [data-t]')) {
+    if (SCREEN_STATE.menu && e.target.closest('#v4Menu [data-t]')) {
       menu(false);
     }
     if (e.target.closest('[data-v4saves]')) {
@@ -43,7 +43,7 @@ export function init() {
   });
 
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && V4.menu) {
+    if (e.key === 'Escape' && SCREEN_STATE.menu) {
       menu(false);
     }
   });

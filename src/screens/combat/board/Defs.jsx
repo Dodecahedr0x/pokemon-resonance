@@ -1,4 +1,4 @@
-import { B, BG, HC, HP } from '../../../engine/combat/ui.js';
+import { B, BOARD_GEOMETRY, cellCenter, cellPoints } from '../../../engine/combat/ui.js';
 import { useBoard } from './boardStore.js';
 
 // board <defs>: terrain patterns (texDefs), gradients, intent arrow;
@@ -62,8 +62,8 @@ function WaterDefs({ E, vb }) {
       </linearGradient>
       <clipPath id="lake-c">
         {E.keyList.map(k => {
-          const [x, y] = HC(k);
-          return <polygon key={k} points={HP(x, y, BG.S - 1)} />;
+          const [x, y] = cellCenter(k);
+          return <polygon key={k} points={cellPoints(x, y, BOARD_GEOMETRY.S - 1)} />;
         })}
       </clipPath>
     </>
@@ -156,8 +156,8 @@ export default function Defs() {
             <polygon key={'l' + i} points={p} />
           ))}
           {Object.keys(B.tiles).map(k => {
-            const [x, y] = HC(k);
-            return <polygon key={k} points={HP(x, y, BG.S - 1)} />;
+            const [x, y] = cellCenter(k);
+            return <polygon key={k} points={cellPoints(x, y, BOARD_GEOMETRY.S - 1)} />;
           })}
         </clipPath>
       )}

@@ -1,7 +1,7 @@
 import { POKEMON } from '../../engine/pokemon/pokemon.js';
 import { PROFILE } from '../../engine/state/game-state.js';
 import { medal } from '../../engine/core/utils.js';
-import { ITM } from '../../engine/assets/item-icons.js';
+import { itemIcon } from '../../engine/assets/item-icons.js';
 import { formatNumber, today } from '../../engine/state/economy.js';
 import { BUILDINGS, buildingBlocked, level } from '../../engine/progression/base-camp.js';
 import { DESTINATIONS, placesExp } from '../../engine/progression/expeditions.js';
@@ -102,7 +102,7 @@ function Daycare() {
     <>
       <h3 className="camp-subtitle">Pension · couple</h3>
       <div className="camp-daycare-pair">
-        <img className="camp-daycare-egg" src={ITM('oeuf')} alt="" loading="lazy" />
+        <img className="camp-daycare-egg" src={itemIcon('oeuf')} alt="" loading="lazy" />
         {slot(c[0])}
         <span className="camp-daycare-plus">+</span>
         {slot(c[1])}

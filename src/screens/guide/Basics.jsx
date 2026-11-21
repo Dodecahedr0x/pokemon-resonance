@@ -1,8 +1,8 @@
 import { useEffect, useRef } from 'react';
 import { MOVES } from '../../engine/data/moves.js';
 import { POKEMON, SYS3 } from '../../engine/pokemon/pokemon.js';
-import { ARR } from '../../engine/pokemon/evolution.js';
-import { RM, medal } from '../../engine/core/utils.js';
+import { ARRIVAL_EFFECTS } from '../../engine/pokemon/evolution.js';
+import { reducedMotion, medal } from '../../engine/core/utils.js';
 import { Html } from '../../lib/html.jsx';
 import { setRuleOpen, useGuide } from './guideStore.js';
 
@@ -95,7 +95,8 @@ export function Anatomy() {
           <span className="guide-anatomy-ring is-delayed" />
         </div>
         <p>
-          <b>Papilusion :</b> <Html html={ARR.papilusion[1]} /> <b>Léviator :</b> <Html html={ARR.leviator[1]} />
+          <b>Papilusion :</b> <Html html={ARRIVAL_EFFECTS.papilusion[1]} /> <b>Léviator :</b>{' '}
+          <Html html={ARRIVAL_EFFECTS.leviator[1]} />
         </p>
       </article>
       <article className="guide-anatomy-card orn is-wide">
@@ -139,7 +140,7 @@ export function Rules() {
     if (!focusRule) {
       return;
     }
-    refs.current[focusRule.code]?.scrollIntoView?.({ behavior: RM ? 'auto' : 'smooth', block: 'center' });
+    refs.current[focusRule.code]?.scrollIntoView?.({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'center' });
   }, [focusRule]);
   return SYS3.map(s => (
     <details

@@ -63,7 +63,7 @@ const BASECOST = {
   draby: 2,
 };
 
-export const ARR = {
+export const ARRIVAL_EFFECTS = {
   // v4.19
   massko: [[{ k: 'ring', mk: 'enracine' }], 'des lianes jaillissent autour de lui.'],
   jungko: [[{ k: 'ring', mk: 'enracine' }, { k: 'boost' }], 'la forêt l’accueille : il est Renforcé.'],

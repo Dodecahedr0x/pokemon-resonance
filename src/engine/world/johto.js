@@ -5,13 +5,24 @@ import { HOOKS } from '../core/hooks.js';
 import { TOD, setTod } from './home-route.js';
 import { setRoute } from '../../screens/home/homeStore.js';
 import { badgeSvg } from '../modes/league.js';
-import { EMAX, P, hdist, heal, nbrK, pushMessage, setMark, shove, unitAt, unitKey } from '../combat/engine.js';
+import {
+  EMAX,
+  parseCellKey,
+  hdist,
+  heal,
+  nbrK,
+  pushMessage,
+  setMark,
+  shove,
+  unitAt,
+  unitKey,
+} from '../combat/engine.js';
 import { scenLock } from '../combat/items-bonds-ai.js';
 import { wonOf } from './home-journey.js';
 import { HELD_IMG, SHOP } from '../state/economy.js';
-import { ITEM_ICONS, ITM } from '../assets/item-icons.js';
-import { V4 } from '../ui/screen-state.js';
-import { PL, PLACES, renderMap } from './map.js';
+import { ITEM_ICONS, itemIcon } from '../assets/item-icons.js';
+import { SCREEN_STATE } from '../ui/screen-state.js';
+import { PLACE_BY_ID, PLACES, renderMap } from './map.js';
 import { DAMAGE_PROVIDERS } from '../combat/tactical-engine.js';
 import { hourOf } from '../combat/living-board.js';
 import { TARGET_MOVE_EFFECTS, SELF_MOVE_EFFECTS, applyPoison } from '../moves/epic-tms.js';
@@ -26,7 +37,7 @@ export let JMAP_SVG;
 // v4.46: Free mode included
 export function isJohtoRegion() {
   try {
-    return V4.region === 'johto' && johtoOpen();
+    return SCREEN_STATE.region === 'johto' && johtoOpen();
   } catch (e) {
     return false;
   }
@@ -109,7 +120,7 @@ export function johtoRewardLine(k) {
   const R = D.jfinal ? { item: 'metronome', g: 15 } : JREW[D.johto],
     gi = D.johto,
     it = R.item && ITEMS2[R.item];
-  return `<div class="reward-line"><span class="reward-badge">${D.jfinal ? medal(['Dragon']) + 'Titre de Maître' : badgeSvg(gi, JGYMS[gi], 'mj' + gi) + 'Badge ' + JGYMS[gi]}</span>${it ? `<span><img src="${ITM(HELD_IMG[R.item])}" alt="" loading="lazy">${it.n}</span>` : ''}<span><span class="gem-icon"><svg><use href="#i-gem"/></svg></span>${R.g}</span></div>`;
+  return `<div class="reward-line"><span class="reward-badge">${D.jfinal ? medal(['Dragon']) + 'Titre de Maître' : badgeSvg(gi, JGYMS[gi], 'mj' + gi) + 'Badge ' + JGYMS[gi]}</span>${it ? `<span><img src="${itemIcon(HELD_IMG[R.item])}" alt="" loading="lazy">${it.n}</span>` : ''}<span><span class="gem-icon"><svg><use href="#i-gem"/></svg></span>${R.g}</span></div>`;
 }
 
 /* ---------- Johto gym rules ---------- */
@@ -147,7 +158,7 @@ export function johtoGymSetup(S, r, ev) {
   if (r === 'jglace') {
     S.wx = { k: 'grele', n: 99 };
     for (const k in S.tiles) {
-      if (P(k)[0] >= 6 && !S.tiles[k].rock && !unitAt(S, k)) {
+      if (parseCellKey(k)[0] >= 6 && !S.tiles[k].rock && !unitAt(S, k)) {
         setMark(S, k, 'givre', null);
       }
     }
@@ -208,7 +219,7 @@ export function johtoGymTick(S, r, ev) {
       Object.assign(e, {
         ko: false,
         hp: Math.max(1, Math.round(e.mhp * 0.3)),
-        pos: P(x),
+        pos: parseCellKey(x),
         badge: null,
         skip: 0,
         notes: null,
@@ -512,7 +523,11 @@ export const johtoOpen = () => PROFILE.elite >= 5;
 export const JCHAIN = ['jwild', 'j1', 'j2', 'j3', 'j4', 'j5', 'j6', 'j7', 'j8', 'jchamp'];
 
 export const placesR = () =>
-  V4.region === 'hoenn' ? PLACES_H : V4.region === 'johto' ? [...PLACES_J, ...roamingPlaces()] : PLACES;
+  SCREEN_STATE.region === 'hoenn'
+    ? PLACES_H
+    : SCREEN_STATE.region === 'johto'
+      ? [...PLACES_J, ...roamingPlaces()]
+      : PLACES;
 
 const tree = (x, y, s = 1) =>
   `<g transform="translate(${x} ${y}) scale(${s})"><circle r="9" cy="-4" fill="#1d5a3a"/><circle r="7" cx="-6" cy="2" fill="#246b42"/><circle r="7" cx="6" cy="2" fill="#20623d"/><circle r="4" cx="-2" cy="-8" fill="#3f9458" opacity=".8"/></g>`;
@@ -712,14 +727,14 @@ export function init() {
       ? `<div class="result-list"><h4>Johto</h4><div class="result-row"><span>Vous êtes Maître de Johto${it}.</span><b>★</b></div></div>`
       : `<div class="result-list"><h4>Johto</h4><div class="result-row"><span>Badge ${JGYMS[j.i]} de Johto obtenu${it}.</span><b>${(PROFILE.johto || []).length} / 8</b></div></div>`;
   });
-  PLACES_J.forEach(p => (PL[p.id] = p));
+  PLACES_J.forEach(p => (PLACE_BY_ID[p.id] = p));
   document.addEventListener('click', e => {
     const b = e.target.closest('.map-regions [data-reg]');
     if (!b) {
       return;
     }
-    V4.region = b.dataset.reg;
-    V4.mapSel = null;
+    SCREEN_STATE.region = b.dataset.reg;
+    SCREEN_STATE.mapSel = null;
     renderMap();
     setTod(TOD);
   });
