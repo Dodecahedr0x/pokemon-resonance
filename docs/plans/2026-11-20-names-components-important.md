@@ -410,3 +410,10 @@ Each step is one commit (or a few), on its own, playable at every point.
   Left in overrides: `.d`, `.section-title`, the form element colours (`input`, `select`, `textarea`, `summary`, `hr`,
   `.form-field input`) and the phone font sizes of `.caption`, `.pill`, `dt`, `.chip`. These are shared by many
   screens, so each needs the snapshots on every screen at both widths.
+- Overrides layer: gone. The last blocks went to their homes: `.section-title`, `.description` (the former `.d`)
+  as components, the form field colours as `base/forms.css`, and the phone 11 px floor for captions, pills, chips
+  and `dt` as `utilities/readability.css`. Screen declarations that these rules always beat (and so never showed)
+  were deleted rather than left to take over. There is no `!important` left in the code. Next: the shared `.chip`,
+  `.caption` and `.pill` still have their base rules in legacy; moving them below legacy lets older legacy rules on
+  the same elements win where `.chip` used to beat them by order (the wind chip, the Guide's code links, the Pokédex
+  grid), so each such rule must be checked and trimmed first.

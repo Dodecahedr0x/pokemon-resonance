@@ -79,6 +79,6 @@ Each step is its own branch and merge, playable at every point.
 ## Rules going forward
 
 - New styles go in the screen's own file or a component file, never in `legacy/`.
-- No `!important` outside `legacy/` (exception: `prefers-reduced-motion` / calm mode overrides).
+- No `!important` anywhere: a rule that must win goes in a later layer (`utilities`, `accessibility`).
 - Colours, radii, shadows and type sizes come from tokens; raw values only for one-off art (painted gradients).
 - Files stay ≤ ~400 lines; a screen that needs more splits by block (`team/team-card.css`).
