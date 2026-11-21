@@ -19,9 +19,6 @@ body::before {
   mask-image: linear-gradient(180deg, #000, transparent 82%);
 }
 .side-goal {
-  border: 1px solid rgba(255, 207, 88, 0.28) !important;
-  border-radius: 18px !important;
-  background: linear-gradient(145deg, rgba(27, 67, 80, 0.78), rgba(5, 22, 34, 0.92)) !important;
   box-shadow: 0 18px 35px rgba(0, 0, 0, 0.18);
 }
 .page {
@@ -37,10 +34,7 @@ body::before {
     transform: none;
   }
 }
-.sg-k,
-.hh-chips {
-  letter-spacing: 0.14em !important;
-}
+
 .section-title {
   text-shadow: 0 2px 18px rgba(0, 0, 0, 0.4);
 }
@@ -48,21 +42,7 @@ body::before {
 .section-title:not(.guide-section .section-title) {
   color: #f8fbff;
 }
-.d,
-.page-header .d {
-  color: #c3d8e5 !important;
-}
-.resume,
-.panel,
-.pt,
-.items {
-  background: linear-gradient(145deg, rgba(12, 42, 57, 0.92), rgba(5, 22, 34, 0.94)) !important;
-  border: 1px solid rgba(112, 211, 255, 0.2) !important;
-  box-shadow:
-    0 20px 48px rgba(0, 0, 0, 0.18),
-    inset 0 1px rgba(255, 255, 255, 0.035) !important;
-  border-radius: 20px !important;
-}
+
 /* .button buttons have their own transition (src/styles/components/button.css) */
 button:not(.sidebar-link):not(.bottom-nav-link):not(.route-alert):not(.route-time button):not(.tabs > button):not(
     :where(.button)

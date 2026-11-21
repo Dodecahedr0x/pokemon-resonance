@@ -3,34 +3,14 @@
   max-width: 900px;
 }
 #combat .sel {
-  border: 1px solid rgba(130, 213, 225, 0.23) !important;
-  border-radius: 24px !important;
-  background: linear-gradient(145deg, rgba(16, 43, 59, 0.96), rgba(7, 19, 29, 0.98)) !important;
-  box-shadow: 0 28px 65px rgba(0, 0, 0, 0.34) !important;
   overflow: hidden;
 }
-#combat .pt {
-  border: 1px solid rgba(130, 213, 225, 0.18) !important;
-  border-radius: 18px !important;
-  background: linear-gradient(155deg, rgba(21, 53, 69, 0.9), rgba(6, 21, 31, 0.95)) !important;
-}
+
 #combat #bLaunch {
-  background: linear-gradient(135deg, #f6d889, #b98538) !important;
-  color: #18212a !important;
   border: 1px solid #ffe9b1;
   box-shadow: 0 9px 25px rgba(214, 164, 79, 0.24);
 }
-#combat .battle {
-  gap: var(--space-lg) !important;
-}
-#combat .modal {
-  border: 1px solid rgba(242, 198, 109, 0.38) !important;
-  border-radius: 22px !important;
-  background:
-    radial-gradient(ellipse at 50% 0%, rgba(242, 198, 109, 0.13), transparent 65%),
-    linear-gradient(145deg, #172e3a, #091923) !important;
-  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5) !important;
-}
+
 /* GUIDE & LEAGUE — strategy atlas and badge room */
 /* Global consistency, focus and mobile adaptation (.button buttons: src/styles/components/button.css) */
 button:not(:where(.button, .tabs > button)),
@@ -40,20 +20,5 @@ a:not(:where(.button)),
 }
 button:focus-visible,
 a:focus-visible {
-  outline: 2px solid var(--r22-cyan) !important;
   outline-offset: 3px;
-}
-@media (max-width: 760px) {
-  #combat .battle {
-    grid-template-columns: minmax(0, 1fr) !important;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .page.on {
-    animation: none !important;
-  }
-  * {
-    scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
-  }
 }

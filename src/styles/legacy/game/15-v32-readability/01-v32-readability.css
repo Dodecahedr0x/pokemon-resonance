@@ -23,53 +23,21 @@
 /* team cards: "À capturer" (To capture) no longer slides under the quick button */
 
 /* ---------- 3. Desktop: no more text under 10 px ---------- */
-html body .hh-chips span {
-  font-size: 10px !important;
-}
 
 /* ---------- 4. Phone and tablet: minimum text size ---------- */
-@media (max-width: 999px) {
-  /* spaced capital labels */
-  html body .caption,
-  html body .hh-chips span,
-  html body .srw-lv,
-  html body .pill:not(.prep-row .pill),
-  html body dt,
-  html body .chip {
-    font-size: 11px !important;
-  }
-  /* informational text */
-  /* bottom navigation bar */
-  /* team cards: dense, we gain a point without breaking the grid */
-}
 
 /* ---------- 5. Home on phone: no more overlap ---------- */
-@media (max-width: 640px) {
-  /* the label centers at the top, in short form */
-  /* the medallion goes above the title instead of covering it */
-
-  /* Route 29: the label no longer hides the Morning / Day / Night buttons */
-  /* Battles: "Prochaine étape" (Next step) becomes a tab placed on the card,
-     the battle name gets the whole line back */
-  /* board: readable Pokémon names and markers */
-}
 
 /* ---------- 6. Performance: same effects, without looping repaints ---------- */
 /* the launch screen: "launchDrift" is overridden by
    transform:scale(1.005)!important, the landscape does not move
    (0 pixels) but the animation cost ~93 % of the CPU on phone. */
-@media (prefers-reduced-motion: no-preference) {
-  /* the dialog cursor still blinks, but on its own layer */
-}
 
 /* ---------- 6 bis. Fixed bars on phone ----------
    The "resPageIn" page entry kept a transform afterwards
    (fill mode "both"): the "Commencer" (Start) and "Fin du tour" (End turn) bars
    scrolled with the page instead of staying at the bottom of the screen.
    Same entry motion, but nothing is kept at the end. */
-html body .page.on {
-  animation-fill-mode: backwards !important;
-}
 
 /* ---------- 7. Launch screen: once per session ---------- */
 

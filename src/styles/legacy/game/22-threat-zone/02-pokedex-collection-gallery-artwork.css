@@ -32,13 +32,3 @@ html body .card-count {
 html body .shn-ic {
   animation: prGlow 2.8s ease-in-out infinite;
 }
-@media (prefers-reduced-motion: reduce) {
-  html body *,
-  html body *:before,
-  html body *:after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
-  }
-}

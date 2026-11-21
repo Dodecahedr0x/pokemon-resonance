@@ -7,9 +7,7 @@ p.note {
 
 @media (max-width: 700px) {
   /* ---------- Title screen: the frame no longer grows wider than the screen ---------- */
-  html body #resonance-launch {
-    grid-template-columns: minmax(0, 1fr) !important;
-  }
+
   /* the play disc keeps its round shape; the label gives way first */
   /* the vertical tagline ran over the artwork */
 

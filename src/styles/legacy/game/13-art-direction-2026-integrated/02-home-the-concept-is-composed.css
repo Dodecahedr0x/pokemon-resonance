@@ -11,40 +11,8 @@
 }
 
 /* Pokémon selection: card scale, actual sprite focus, readable controls */
-.dex {
-  min-height: 280px !important;
-  padding: var(--space-xl) !important;
-  border-radius: 22px !important;
-  background: linear-gradient(
-    155deg,
-    color-mix(in srgb, var(--c) 18%, rgba(10, 39, 55, 0.98)),
-    rgba(4, 20, 32, 0.97)
-  ) !important;
-  border: 1px solid rgba(132, 219, 255, 0.22) !important;
-  box-shadow:
-    0 15px 30px rgba(0, 0, 0, 0.17),
-    inset 0 1px rgba(255, 255, 255, 0.05) !important;
-}
-.dex:hover {
-  transform: translateY(-5px) !important;
-  border-color: color-mix(in srgb, var(--c) 62%, #6fe2ff) !important;
-  box-shadow:
-    0 22px 45px rgba(0, 0, 0, 0.28),
-    0 0 26px color-mix(in srgb, var(--c) 16%, transparent) !important;
-}
 
-.dex button {
-  min-height: 42px !important;
-  font-weight: 850 !important;
-}
 /* Battles: immersive arena frame, clear tactical hierarchy */
-#combat .pt,
-#combat .resume {
-  background: linear-gradient(145deg, rgba(10, 39, 55, 0.95), rgba(3, 18, 30, 0.97)) !important;
-  border-color: rgba(112, 211, 255, 0.24) !important;
-}
-#combat .pt button {
-  min-height: 44px !important;
-}
+
 /* Guide, type encyclopedia, league, settings — consistent premium materials */
 /* Existing first-run guide is retained functionally, but brought into the same art direction */

@@ -45,17 +45,9 @@ body:before {
 }
 button:focus-visible,
 a:focus-visible {
-  outline: 2px solid var(--rx-cyan) !important;
   outline-offset: 3px;
 }
-.panel,
-.resume,
-.sel {
-  border-color: var(--rx-edge) !important;
-  box-shadow:
-    var(--rx-shadow),
-    inset 0 1px rgba(255, 255, 255, 0.055) !important;
-}
+
 /* HOME: dramatic expedition command centre */
 
 /* TEAM: make the roster feel like a collector's battle dossier */

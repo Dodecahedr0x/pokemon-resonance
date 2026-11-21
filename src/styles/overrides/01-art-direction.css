@@ -1,0 +1,299 @@
+/* The declarations the legacy files marked !important, moved here unchanged and in their original order. This
+   layer comes last, so they still win over every normal rule without the flag. Each block is to be folded into
+   its screen or component file (see docs/plans/2026-11-20-style-cleanup.md); add nothing new here. */
+/* from legacy/game/01-base/11-studio.css */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none;
+    transition: none;
+    scroll-behavior: auto;
+  }
+}
+
+/* from legacy/game/06-v0-9-1-fluidity-precomputed/01-v0-9-1-fluidity-precomputed.css */
+*:not(.topbar, .bottom-nav),
+*::before,
+*::after {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+.cr-spin {
+  animation: none;
+}
+#bSvg * {
+  filter: none;
+}
+
+/* from legacy/game/08-v1-0-campaign-systems-comfort/03-battle.css */
+.coach-hl {
+  outline: 2px solid rgba(242, 221, 168, 0.85);
+  box-shadow: 0 0 0 6px rgba(212, 175, 106, 0.18);
+}
+
+/* from legacy/game/12-v3-1-prestige-pokemon-the-v3-4/01-v3-1-prestige-pokemon-the-v3-4.css */
+.vh {
+  position: absolute;
+}
+
+/* from legacy/game/13-art-direction-2026-integrated/01-art-direction-2026-integrated.css */
+.side-goal {
+  border: 1px solid rgba(255, 207, 88, 0.28);
+  border-radius: 18px;
+  background: linear-gradient(145deg, rgba(27, 67, 80, 0.78), rgba(5, 22, 34, 0.92));
+}
+.sg-k,
+.hh-chips {
+  letter-spacing: 0.14em;
+}
+.d,
+.page-header .d {
+  color: #c3d8e5;
+}
+.resume,
+.panel,
+.pt,
+.items {
+  background: linear-gradient(145deg, rgba(12, 42, 57, 0.92), rgba(5, 22, 34, 0.94));
+  border: 1px solid rgba(112, 211, 255, 0.2);
+  box-shadow:
+    0 20px 48px rgba(0, 0, 0, 0.18),
+    inset 0 1px rgba(255, 255, 255, 0.035);
+  border-radius: 20px;
+}
+
+/* from legacy/game/13-art-direction-2026-integrated/02-home-the-concept-is-composed.css */
+.dex {
+  min-height: 280px;
+  padding: var(--space-xl);
+  border-radius: 22px;
+  background: linear-gradient(155deg, color-mix(in srgb, var(--c) 18%, rgba(10, 39, 55, 0.98)), rgba(4, 20, 32, 0.97));
+  border: 1px solid rgba(132, 219, 255, 0.22);
+  box-shadow:
+    0 15px 30px rgba(0, 0, 0, 0.17),
+    inset 0 1px rgba(255, 255, 255, 0.05);
+}
+.dex:hover {
+  transform: translateY(-5px);
+  border-color: color-mix(in srgb, var(--c) 62%, #6fe2ff);
+  box-shadow:
+    0 22px 45px rgba(0, 0, 0, 0.28),
+    0 0 26px color-mix(in srgb, var(--c) 16%, transparent);
+}
+.dex button {
+  min-height: 42px;
+  font-weight: 850;
+}
+#combat .pt,
+#combat .resume {
+  background: linear-gradient(145deg, rgba(10, 39, 55, 0.95), rgba(3, 18, 30, 0.97));
+  border-color: rgba(112, 211, 255, 0.24);
+}
+#combat .pt button {
+  min-height: 44px;
+}
+
+/* from legacy/game/13-art-direction-2026-integrated/03-cinematic-launch-a-dedicated-first.css */
+#resonance-launch {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  display: grid;
+  place-items: stretch;
+  overflow: hidden;
+  background: #041321;
+  color: #f6fbff;
+  isolation: isolate;
+}
+@media (max-width: 560px) {
+  .dex {
+    padding: var(--space-md);
+    min-height: 240px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto;
+    transition-duration: 0.01ms;
+  }
+}
+
+/* from legacy/game/13-art-direction-2026-integrated/04-mobile-polish-after-screenshot.css */
+.section-title {
+  text-shadow: 0 3px 22px rgba(0, 0, 0, 0.38);
+}
+.lnk {
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s,
+    background 0.2s;
+}
+.panel,
+.rule,
+.mvc,
+.duo,
+.wx,
+.it,
+.pt,
+.battle,
+.dex {
+  background: linear-gradient(145deg, rgba(13, 43, 65, 0.96), rgba(5, 22, 37, 0.97));
+  border-color: rgba(98, 207, 241, 0.24);
+  box-shadow:
+    0 18px 38px rgba(0, 0, 0, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.055);
+}
+
+/* from legacy/game/13-art-direction-2026-integrated/05-battle-immersive-board-consistent.css */
+#combat .sel {
+  border-radius: 22px;
+  overflow: hidden;
+  border: 1px solid rgba(104, 216, 248, 0.25);
+  background: linear-gradient(145deg, rgba(9, 35, 55, 0.98), rgba(4, 18, 31, 0.99));
+  box-shadow: 0 22px 48px rgba(0, 0, 0, 0.28);
+}
+#combat .battle {
+  border: 1px solid rgba(104, 216, 248, 0.3);
+  border-radius: 22px;
+  overflow: hidden;
+  background: linear-gradient(145deg, rgba(8, 32, 51, 0.98), rgba(3, 16, 28, 0.99));
+  box-shadow: 0 28px 60px rgba(0, 0, 0, 0.34);
+}
+#combat .pt {
+  border: 1px solid rgba(108, 216, 248, 0.24);
+  border-radius: 18px;
+}
+
+/* from legacy/game/14-deep-art-direction-v2/01-deep-art-direction-v2.css */
+.side-goal {
+  background: linear-gradient(145deg, rgba(12, 49, 68, 0.95), rgba(4, 22, 36, 0.97));
+  border: 1px solid rgba(94, 206, 255, 0.23);
+  border-radius: 15px;
+}
+.page.on {
+  animation: resPageIn 0.35s ease-out both;
+}
+.resume,
+.panel,
+.pt,
+.items,
+.sel {
+  background: linear-gradient(145deg, rgba(10, 39, 56, 0.96), rgba(4, 20, 34, 0.98));
+  border: 1px solid rgba(100, 210, 255, 0.24);
+  box-shadow:
+    0 16px 38px rgba(0, 0, 0, 0.23),
+    inset 0 1px rgba(255, 255, 255, 0.04);
+  border-radius: 17px;
+}
+.hh-chips span {
+  background: rgba(5, 26, 41, 0.78);
+  border: 1px solid rgba(122, 218, 255, 0.35);
+  border-radius: 6px;
+  color: #e7f7ff;
+  padding: var(--space-2xs) var(--space-sm);
+  font-size: 10px;
+}
+
+/* from legacy/game/14-deep-art-direction-v2/02-team-selection-true-collector.css */
+#combat .sel {
+  overflow: hidden;
+  border-radius: 19px;
+}
+input:not(:where(.dex-search input, .team-search input, .intro-card input)),
+select:not(:where(.dex-toolbar select, .team-toolbar select, .intro-card select)),
+textarea {
+  background: rgba(3, 22, 36, 0.9);
+  border: 1px solid rgba(105, 212, 255, 0.26);
+  border-radius: 9px;
+  color: #f2f9ff;
+}
+summary {
+  color: #f2f9ff;
+}
+hr {
+  border-color: rgba(104, 214, 255, 0.16);
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms;
+    animation-iteration-count: 1;
+    scroll-behavior: auto;
+    transition-duration: 0.01ms;
+  }
+}
+[hidden] {
+  display: none;
+}
+
+/* from legacy/game/15-v32-readability/01-v32-readability.css */
+html body .hh-chips span {
+  font-size: 10px;
+}
+@media (max-width: 999px) {
+  html body .caption,
+  html body .hh-chips span,
+  html body .srw-lv,
+  html body .pill:not(.prep-row .pill),
+  html body dt,
+  html body .chip {
+    font-size: 11px;
+  }
+}
+html body .page.on {
+  animation-fill-mode: backwards;
+}
+
+/* from legacy/game/16-v4-adventure/01-v4-adventure.css */
+html body .section-title {
+  letter-spacing: -0.01em;
+}
+
+/* from legacy/game/16-v4-adventure/08-bag-and-shop.css */
+html body .form-field input {
+  border-radius: 10px;
+}
+
+/* from legacy/game/16-v4-adventure/09-battle.css */
+html body #combat .sel,
+html body #combat .battle,
+html body #combat .pt {
+  background: linear-gradient(180deg, var(--v4-p1), var(--v4-p2));
+  border-color: var(--v4-ln);
+}
+
+/* from legacy/game/17-v4-1-pokemon-illustrations-items/01-v4-1-pokemon-illustrations-items.css */
+html body img.img-off.img-off.img-off {
+  display: none;
+}
+
+/* from legacy/game/22-threat-zone/01-threat-zone.css */
+.chip-412 {
+  border-color: rgba(255, 215, 94, 0.45);
+  color: #ffe9a8;
+}
+.chip-412.en {
+  border-color: rgba(255, 107, 111, 0.5);
+  color: #ffb3b5;
+}
+html body .section-title {
+  letter-spacing: -0.045em;
+}
+html body .resume,
+html body .sel,
+html body .ana {
+  border-color: var(--pr-line);
+}
+html body .sel,
+html body .resume {
+  background: linear-gradient(145deg, rgba(19, 48, 68, 0.94), rgba(7, 22, 35, 0.96));
+}
+html body button:focus-visible,
+html body a:focus-visible {
+  outline: 2px solid var(--pr-cyan);
+  box-shadow: 0 0 0 5px rgba(115, 217, 244, 0.15);
+}

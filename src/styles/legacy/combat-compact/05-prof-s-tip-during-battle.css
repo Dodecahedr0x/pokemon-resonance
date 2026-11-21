@@ -12,16 +12,5 @@
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .battle-side .battle-footer .board-tools.in-foot {
     order: 2;
     flex: none;
-    gap: var(--space-2xs) !important;
-  }
-  html:not(#cc)
-    body:not(#cc):has(#cbBattle:not([hidden]))
-    #cbBattle
-    .battle-side
-    .battle-footer
-    .board-tools.in-foot
-    button {
-    width: 44px !important;
-    height: 44px !important;
   }
 }

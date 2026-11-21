@@ -6,14 +6,7 @@
       keeps its buttons visible and its medallion adapts to the
       screen height (before: buttons cut off, impossible to scroll down).
    ===================================================================== */
-.chip-412 {
-  border-color: rgba(255, 215, 94, 0.45) !important;
-  color: #ffe9a8 !important;
-}
-.chip-412.en {
-  border-color: rgba(255, 107, 111, 0.5) !important;
-  color: #ffb3b5 !important;
-}
+
 /* ===== resonance-startup layer ===== */
 /* Reload within the same session: no title screen, and the home page only appears
    once built (otherwise the old layout was visible for a moment). */
@@ -38,26 +31,19 @@ html body .page {
   isolation: isolate;
 }
 html body .section-title {
-  letter-spacing: -0.045em !important;
   text-shadow: 0 5px 24px rgba(0, 0, 0, 0.38);
 }
 html body .resume,
 html body .sel,
 html body .ana {
-  border-color: var(--pr-line) !important;
   box-shadow:
     var(--pr-shadow),
     inset 0 1px 0 rgba(255, 255, 255, 0.055);
 }
-html body .sel,
-html body .resume {
-  background: linear-gradient(145deg, rgba(19, 48, 68, 0.94), rgba(7, 22, 35, 0.96)) !important;
-}
+
 html body button:focus-visible,
 html body a:focus-visible {
-  outline: 2px solid var(--pr-cyan) !important;
   outline-offset: 3px;
-  box-shadow: 0 0 0 5px rgba(115, 217, 244, 0.15) !important;
 }
 /* Home: adventure dashboard feel */
 /* Exploration: deeper scene, the game's SVG illustration stays intact */

@@ -59,9 +59,3 @@
     opacity: 0;
   }
 }
-
-@media (prefers-reduced-motion: reduce) {
-  #cbBattle .hp-bar i.pk-dr {
-    animation: none !important;
-  }
-}

@@ -41,9 +41,6 @@ html body .it-ic .it-img {
 }
 /* toasts: at the top on phone, so they no longer pass under the "Fin du tour" (End turn) bar */
 /* battle intro in v4 colors */
-html body img.img-off.img-off.img-off {
-  display: none !important;
-}
 
 /* ==== 20-v4.4-aventure-plus.css ==== */
 /* =====================================================================
@@ -70,6 +67,3 @@ html body img.img-off.img-off.img-off {
 /* --- Resonance Tower --- */
 
 /* --- battle choice tabs: a fourth, "Après-jeu" (Postgame) --- */
-@media (max-width: 560px) {
-  /* two rows of two on phone: labels stay readable */
-}

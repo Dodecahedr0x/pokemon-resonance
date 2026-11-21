@@ -11,29 +11,8 @@
 }
 .section-title {
   letter-spacing: -0.025em;
-  text-shadow: 0 3px 22px rgba(0, 0, 0, 0.38) !important;
 }
-.lnk {
-  transition:
-    transform 0.2s,
-    box-shadow 0.2s,
-    background 0.2s !important;
-}
-.panel,
-.rule,
-.mvc,
-.duo,
-.wx,
-.it,
-.pt,
-.battle,
-.dex {
-  background: linear-gradient(145deg, rgba(13, 43, 65, 0.96), rgba(5, 22, 37, 0.97)) !important;
-  border-color: rgba(98, 207, 241, 0.24) !important;
-  box-shadow:
-    0 18px 38px rgba(0, 0, 0, 0.24),
-    inset 0 1px 0 rgba(255, 255, 255, 0.055) !important;
-}
+
 /* Home: integrated panoramic scene, widgets aligned like a real game hub */
 
 /* Pokémon selection: illustrated showcases, glowing outlines and readable active states */

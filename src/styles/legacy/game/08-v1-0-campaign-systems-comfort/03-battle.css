@@ -1,9 +1,7 @@
 /* battle */
 /* tutorial */
 .coach-hl {
-  outline: 2px solid rgba(242, 221, 168, 0.85) !important;
   outline-offset: 3px;
-  box-shadow: 0 0 0 6px rgba(212, 175, 106, 0.18) !important;
 }
 
 .it-ic svg {

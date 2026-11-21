@@ -1,36 +1,7 @@
 /* Team selection: true collector cards with large artwork, rarity/status and tactile states */
 /* Combat: arena is the visual anchor; commands are a clean tactical panel */
-#combat .sel {
-  overflow: hidden !important;
-  border-radius: 19px !important;
-}
+
 /* Pokédex / type guide / league: visual hierarchy and rich panels */
 /* all dialogs and controls use the same tactile glass language (the Pokédex and team toolbars draw their own) */
-input:not(:where(.dex-search input, .team-search input, .intro-card input)),
-select:not(:where(.dex-toolbar select, .team-toolbar select, .intro-card select)),
-textarea {
-  background: rgba(3, 22, 36, 0.9) !important;
-  border: 1px solid rgba(105, 212, 255, 0.26) !important;
-  border-radius: 9px !important;
-  color: #f2f9ff !important;
-}
-summary {
-  color: #f2f9ff !important;
-}
-hr {
-  border-color: rgba(104, 214, 255, 0.16) !important;
-}
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
-  }
-}
+
 /* Final QA correction: hidden panels must never reserve layout space. */
-[hidden] {
-  display: none !important;
-}

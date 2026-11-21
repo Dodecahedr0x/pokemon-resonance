@@ -1,0 +1,9 @@
+/* A monospace box for codes and CSS (save codes, the Design Workshop). Its colours and border come from the shared
+   form-field rule. */
+.code-field {
+  width: 100%;
+  box-sizing: border-box;
+  padding: var(--space-sm);
+  font: 12px/1.4 monospace;
+  resize: vertical;
+}

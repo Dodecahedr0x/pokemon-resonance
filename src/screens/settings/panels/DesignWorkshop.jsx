@@ -1,19 +1,7 @@
 import { customCss } from '../../../engine/tools/design-workshop.js';
-import { space } from '../../../lib/theme.js';
 
 import Button from '../../../components/Button.jsx';
 // Settings › Design workshop (v4.42): buttons #designActionA/r/b handled by the engine (engine/tools/design-workshop.js).
-const BOX = {
-  width: '100%',
-  boxSizing: 'border-box',
-  font: '12px/1.4 monospace',
-  padding: space.sm,
-  borderRadius: '10px',
-  border: '1px solid rgba(255,255,255,.25)',
-  background: 'rgba(0,0,0,.35)',
-  color: 'inherit',
-};
-
 export default function DesignWorkshop() {
   return (
     <section className="card" id="design-action">
@@ -28,7 +16,7 @@ export default function DesignWorkshop() {
         spellCheck="false"
         autoComplete="off"
         placeholder=":root{ --… } …"
-        style={{ ...BOX, resize: 'vertical' }}
+        className="code-field"
         defaultValue={customCss()}
       />
       <div className="button-row">
@@ -42,7 +30,7 @@ export default function DesignWorkshop() {
           Brief pour ChatGPT
         </Button>
       </div>
-      <textarea id="design-action-k" rows="8" readOnly hidden className="settings-output" style={BOX} defaultValue="" />
+      <textarea id="design-action-k" rows="8" readOnly hidden className="code-field settings-output" defaultValue="" />
     </section>
   );
 }

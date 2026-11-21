@@ -150,17 +150,7 @@ function Code() {
         readOnly={copy}
         placeholder={copy ? undefined : 'RES1…'}
         defaultValue={copy ? CLOUD_SAVE.code.text : ''}
-        style={{
-          width: '100%',
-          boxSizing: 'border-box',
-          font: '12px/1.4 monospace',
-          padding: space.sm,
-          borderRadius: '10px',
-          border: '1px solid rgba(255,255,255,.25)',
-          background: 'rgba(0,0,0,.35)',
-          color: 'inherit',
-          resize: 'vertical',
-        }}
+        className="code-field"
       />
       <span style={{ display: 'flex', gap: space.sm, flexWrap: 'wrap' }}>
         {!copy && (

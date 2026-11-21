@@ -1,0 +1,279 @@
+/* Continued from 01-art-direction.css (same order). */
+/* from legacy/game/22-threat-zone/02-pokedex-collection-gallery-artwork.css */
+@media (prefers-reduced-motion: reduce) {
+  html body *,
+  html body *:before,
+  html body *:after {
+    animation-duration: 0.01ms;
+    animation-iteration-count: 1;
+    scroll-behavior: auto;
+    transition-duration: 0.01ms;
+  }
+}
+
+/* from legacy/game/23-per-screen-art-director-cut/02-battle-tactical-room-staged-board.css */
+#combat .sel {
+  border: 1px solid rgba(130, 213, 225, 0.23);
+  border-radius: 24px;
+  background: linear-gradient(145deg, rgba(16, 43, 59, 0.96), rgba(7, 19, 29, 0.98));
+  box-shadow: 0 28px 65px rgba(0, 0, 0, 0.34);
+}
+#combat .pt {
+  border: 1px solid rgba(130, 213, 225, 0.18);
+  border-radius: 18px;
+  background: linear-gradient(155deg, rgba(21, 53, 69, 0.9), rgba(6, 21, 31, 0.95));
+}
+#combat #bLaunch {
+  background: linear-gradient(135deg, #f6d889, #b98538);
+  color: #18212a;
+}
+#combat .battle {
+  gap: var(--space-lg);
+}
+#combat .modal {
+  border: 1px solid rgba(242, 198, 109, 0.38);
+  border-radius: 22px;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(242, 198, 109, 0.13), transparent 65%),
+    linear-gradient(145deg, #172e3a, #091923);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+}
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--r22-cyan);
+}
+@media (max-width: 760px) {
+  #combat .battle {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .page.on {
+    animation: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  * {
+    scroll-behavior: auto;
+    transition-duration: 0.01ms;
+  }
+}
+
+/* from legacy/game/24-fullscreen-art-full-art-direction/01-fullscreen-art-full-art-direction.css */
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--rx-cyan);
+}
+.panel,
+.resume,
+.sel {
+  border-color: var(--rx-edge);
+  box-shadow:
+    var(--rx-shadow),
+    inset 0 1px rgba(255, 255, 255, 0.055);
+}
+
+/* from legacy/game/24-fullscreen-art-full-art-direction/02-map-actual-dynamic-carte-page.css */
+#combat .sel {
+  border: 1px solid rgba(124, 220, 230, 0.3);
+  border-radius: 26px;
+  background: linear-gradient(145deg, #15384a, #081a27);
+  box-shadow: 0 32px 78px rgba(0, 0, 0, 0.43);
+}
+#combat .pt {
+  border: 1px solid rgba(124, 220, 230, 0.22);
+  border-radius: 20px;
+  background: linear-gradient(155deg, #17394a, #081a27);
+}
+#combat .battle {
+  gap: var(--space-xl);
+}
+#combat #bLaunch {
+  min-height: 48px;
+  background: linear-gradient(135deg, #ffe6a0, #c38a3b);
+  color: #1a2025;
+}
+@media (max-width: 850px) {
+  #combat .battle {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .page.on {
+    animation: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *:before,
+  *:after {
+    scroll-behavior: auto;
+    transition-duration: 0.01ms;
+  }
+}
+
+/* from legacy/game/25-post-init-selector-repair/02-battle-both-states-preparation.css */
+#combat .sel {
+  border: 1px solid rgba(131, 226, 232, 0.4);
+  border-radius: 27px;
+  background:
+    radial-gradient(ellipse at 10% 0%, rgba(67, 157, 177, 0.15), transparent 50%),
+    linear-gradient(145deg, #173b4e, #071722);
+  box-shadow:
+    0 32px 78px rgba(0, 0, 0, 0.48),
+    inset 0 1px rgba(255, 255, 255, 0.1);
+}
+#combat .battle-side .panel {
+  border: 1px solid rgba(131, 221, 230, 0.24);
+  border-radius: 19px;
+  background: linear-gradient(150deg, #143346, #081925);
+}
+@media (max-width: 850px) {
+  #combat .battle {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* from legacy/game/27-regional-diplomas/05-deep-echo.css */
+html.a11y-hc .card,
+html.a11y-hc .v4-ps,
+html.a11y-hc .button {
+  border-color: rgba(255, 255, 255, 0.45);
+}
+html.a11y-hc em,
+html.a11y-hc small,
+html.a11y-hc .v4-ps-n,
+html.a11y-hc .lead,
+html.a11y-hc .d {
+  color: #e4eaf1;
+}
+html.a11y-hc :focus-visible {
+  outline: 3px solid #ffd45b;
+}
+html.a11y-rm *,
+html.a11y-rm *::before,
+html.a11y-rm *::after {
+  animation: none;
+  transition: none;
+  scroll-behavior: auto;
+}
+.ability-card .chip {
+  background: rgba(79, 195, 255, 0.18);
+  color: #bfe9ff;
+}
+
+/* from legacy/game/27-regional-diplomas/12-journal-2.css */
+@media (prefers-reduced-motion: reduce) {
+  .burst-particle,
+  .screen-shake,
+  .shake-big {
+    animation: none;
+  }
+}
+
+/* from legacy/game/27-regional-diplomas/15-v4-53-cont-2.css */
+html body.compact-battle #combat.page.on {
+  padding-bottom: 0;
+}
+
+/* from legacy/game/27-regional-diplomas/16-v4-78-guided-turn-flow.css */
+.page-header:has(+ .professor-tip) .lead {
+  display: none;
+}
+
+/* from legacy/skin/02-battles-large-module-cells.css */
+.pk-rise {
+  animation: pkMonte 0.55s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+  animation-delay: calc(var(--pk-i, 0) * 60ms);
+}
+.pk-fade {
+  animation: pkFondu 0.45s ease-out both;
+  animation-delay: calc(var(--pk-i, 0) * 50ms);
+}
+
+/* from legacy/skin/04-calm-reduce-animations-or-animated.css */
+html.pk-calme .page-header::before,
+html.pk-calme .kicker::before {
+  animation: none;
+}
+html.a11y-rm .page-header::before {
+  animation: none;
+}
+
+/* from legacy/pokemon-combat/02-8-evolution-the-pokemon-s-real.css */
+@media (prefers-reduced-motion: reduce) {
+  #cbBattle .hp-bar i.pk-dr {
+    animation: none;
+  }
+}
+
+/* from legacy/painted-graphics.css */
+#bBoard.painted-tilt #bSvg image.paintedterrain {
+  display: none;
+}
+
+/* from legacy/combat-compact/01-foundation.css */
+@media (min-width: 1121px) {
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) :is(.topbar, .app-main > .app-footer) {
+    display: none;
+  }
+}
+@media (min-width: 1121px) {
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .battle {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 336px;
+    gap: var(--space-md);
+    align-items: stretch;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    overflow: visible;
+  }
+}
+@media (min-width: 1121px) {
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bBoard > .board-tools {
+    top: 66px;
+    left: 12px;
+  }
+}
+
+/* from legacy/combat-compact/02-phone.css */
+@media (max-width: 700px) {
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .battle {
+    display: block;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    overflow: visible;
+  }
+}
+
+/* from legacy/combat-compact/05-prof-s-tip-during-battle.css */
+@media (max-width: 700px) {
+  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .battle-side .battle-footer .board-tools.in-foot {
+    gap: var(--space-2xs);
+  }
+}
+@media (max-width: 700px) {
+  html:not(#cc)
+    body:not(#cc):has(#cbBattle:not([hidden]))
+    #cbBattle
+    .battle-side
+    .battle-footer
+    .board-tools.in-foot
+    button {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+/* from legacy/phone/02-notes-written-as-a-sentence-all.css */
+@media (max-width: 700px) {
+  html body #resonance-launch {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

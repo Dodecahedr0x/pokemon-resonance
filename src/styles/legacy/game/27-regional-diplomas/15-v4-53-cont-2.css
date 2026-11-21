@@ -29,9 +29,7 @@
 html body.compact-battle {
   --bn: 0px;
 }
-html body.compact-battle #combat.page.on {
-  padding-bottom: 0 !important;
-}
+
 html body.compact-battle #cbBattle .battle-footer .board-tools.in-foot {
   gap: var(--space-2xs);
 }

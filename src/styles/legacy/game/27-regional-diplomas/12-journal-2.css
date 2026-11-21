@@ -1,11 +1,4 @@
 /* journal */
-@media (prefers-reduced-motion: reduce) {
-  .burst-particle,
-  .screen-shake,
-  .shake-big {
-    animation: none !important;
-  }
-}
 
 /* <style id="resonance-hidden-finds"> */
 /* v4.50 */

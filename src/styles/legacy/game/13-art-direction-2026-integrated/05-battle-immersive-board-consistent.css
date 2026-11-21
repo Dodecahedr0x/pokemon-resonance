@@ -1,22 +1,5 @@
 /* Battle: immersive board, consistent arena and panels */
-#combat .sel {
-  border-radius: 22px !important;
-  overflow: hidden !important;
-  border: 1px solid rgba(104, 216, 248, 0.25) !important;
-  background: linear-gradient(145deg, rgba(9, 35, 55, 0.98), rgba(4, 18, 31, 0.99)) !important;
-  box-shadow: 0 22px 48px rgba(0, 0, 0, 0.28) !important;
-}
-#combat .battle {
-  border: 1px solid rgba(104, 216, 248, 0.3) !important;
-  border-radius: 22px !important;
-  overflow: hidden !important;
-  background: linear-gradient(145deg, rgba(8, 32, 51, 0.98), rgba(3, 16, 28, 0.99)) !important;
-  box-shadow: 0 28px 60px rgba(0, 0, 0, 0.34) !important;
-}
-#combat .pt {
-  border: 1px solid rgba(108, 216, 248, 0.24) !important;
-  border-radius: 18px !important;
-}
+
 /* Guide, types and league: same graphic universe on all screens */
 /* Soft motion: no interaction changes function */
 

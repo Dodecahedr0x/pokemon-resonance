@@ -1,41 +1,11 @@
 /* MAP — actual dynamic #carte page */
 /* BATTLE: tactical command chamber */
-#combat .sel {
-  border: 1px solid rgba(124, 220, 230, 0.3) !important;
-  border-radius: 26px !important;
-  background: linear-gradient(145deg, #15384a, #081a27) !important;
-  box-shadow: 0 32px 78px rgba(0, 0, 0, 0.43) !important;
-}
-#combat .pt {
-  border: 1px solid rgba(124, 220, 230, 0.22) !important;
-  border-radius: 20px !important;
-  background: linear-gradient(155deg, #17394a, #081a27) !important;
-}
+
 #combat .battle {
-  gap: var(--space-xl) !important;
   align-items: start;
 }
 #combat #bLaunch {
   border-radius: 14px;
-  min-height: 48px !important;
-  background: linear-gradient(135deg, #ffe6a0, #c38a3b) !important;
-  color: #1a2025 !important;
   box-shadow: 0 10px 28px rgba(225, 172, 78, 0.22);
 }
 /* Other systems: coherent premium panels, not generic flat boxes */
-@media (max-width: 850px) {
-  #combat .battle {
-    grid-template-columns: minmax(0, 1fr) !important;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .page.on {
-    animation: none !important;
-  }
-  *,
-  *:before,
-  *:after {
-    scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
-  }
-}

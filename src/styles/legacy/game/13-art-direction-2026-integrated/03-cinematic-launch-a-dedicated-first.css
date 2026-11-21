@@ -1,14 +1,5 @@
 /* Cinematic launch: a dedicated first screen; image stays fully inside the scene */
 #resonance-launch {
-  position: fixed !important;
-  inset: 0 !important;
-  z-index: 999999 !important;
-  display: grid !important;
-  place-items: stretch !important;
-  overflow: hidden !important;
-  background: #041321 !important;
-  color: #f6fbff !important;
-  isolation: isolate !important;
   opacity: 1;
   visibility: visible;
   transition:
@@ -29,19 +20,5 @@
   }
 }
 /* Responsive: preserve the composition instead of shrinking the desktop layout */
-@media (max-width: 560px) {
-  .dex {
-    padding: var(--space-md) !important;
-    min-height: 240px !important;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
-  }
-}
 
 /* Final visual QA fixes: launch logo layout and real creature art */

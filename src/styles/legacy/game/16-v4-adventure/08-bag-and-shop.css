@@ -18,7 +18,6 @@
 html body .form-field input {
   min-height: 44px;
   padding: 0 var(--space-md);
-  border-radius: 10px !important;
   font: 600 15px var(--f-b);
 }
 .v4-ps-n {

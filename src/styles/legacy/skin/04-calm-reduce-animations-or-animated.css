@@ -1,8 +1,1 @@
 /* ---------- calm: Reduce animations or animated effects turned off ---------- */
-html.pk-calme .page-header::before,
-html.pk-calme .kicker::before {
-  animation: none !important;
-}
-html.a11y-rm .page-header::before {
-  animation: none !important;
-}

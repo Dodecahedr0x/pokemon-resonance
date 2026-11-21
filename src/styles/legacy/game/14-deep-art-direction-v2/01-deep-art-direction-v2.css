@@ -1,13 +1,6 @@
 /* ===== resonance-deep-art-direction-v2 layer ===== */
 /* FINAL PASS — integrated cinematic Pokémon UI, not a static mockup */
-.side-goal {
-  background: linear-gradient(145deg, rgba(12, 49, 68, 0.95), rgba(4, 22, 36, 0.97)) !important;
-  border: 1px solid rgba(94, 206, 255, 0.23) !important;
-  border-radius: 15px !important;
-}
-.page.on {
-  animation: resPageIn 0.35s ease-out both !important;
-}
+
 @keyframes resPageIn {
   from {
     opacity: 0;
@@ -21,24 +14,5 @@
 .section-title {
   font-size: clamp(20px, 2vw, 28px);
 }
-.resume,
-.panel,
-.pt,
-.items,
-.sel {
-  background: linear-gradient(145deg, rgba(10, 39, 56, 0.96), rgba(4, 20, 34, 0.98)) !important;
-  border: 1px solid rgba(100, 210, 255, 0.24) !important;
-  box-shadow:
-    0 16px 38px rgba(0, 0, 0, 0.23),
-    inset 0 1px rgba(255, 255, 255, 0.04) !important;
-  border-radius: 17px !important;
-}
+
 /* HOME: cinematic banner + actual progress/party column + illustrated action cards */
-.hh-chips span {
-  background: rgba(5, 26, 41, 0.78) !important;
-  border: 1px solid rgba(122, 218, 255, 0.35) !important;
-  border-radius: 6px !important;
-  color: #e7f7ff !important;
-  padding: var(--space-2xs) var(--space-sm) !important;
-  font-size: 10px !important;
-}

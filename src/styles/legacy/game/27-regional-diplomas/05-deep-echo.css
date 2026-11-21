@@ -10,32 +10,9 @@ html.a11y-t1 #sheet {
 html.a11y-t2 #sheet {
   zoom: 1.22;
 }
-html.a11y-hc .card,
-html.a11y-hc .v4-ps,
-html.a11y-hc .button {
-  border-color: rgba(255, 255, 255, 0.45) !important;
-}
-html.a11y-hc em,
-html.a11y-hc small,
-html.a11y-hc .v4-ps-n,
-html.a11y-hc .lead,
-html.a11y-hc .d {
-  color: #e4eaf1 !important;
-}
+
 html.a11y-hc :focus-visible {
-  outline: 3px solid #ffd45b !important;
   outline-offset: 2px;
-}
-html.a11y-rm *,
-html.a11y-rm *::before,
-html.a11y-rm *::after {
-  animation: none !important;
-  transition: none !important;
-  scroll-behavior: auto !important;
 }
 
 /* nature and ability */
-.ability-card .chip {
-  background: rgba(79, 195, 255, 0.18) !important;
-  color: #bfe9ff !important;
-}

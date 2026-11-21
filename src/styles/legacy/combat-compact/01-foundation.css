@@ -17,34 +17,17 @@
 /* ================= desktop ================= */
 @media (min-width: 1121px) {
   /* navigation collapsed into an icon rail */
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) :is(.topbar, .app-main > .app-footer) {
-    display: none !important;
-  }
 
   /* two screen-height columns: scene, panel */
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .battle {
-    display: grid !important;
-    grid-template-columns: minmax(0, 1fr) 336px !important;
-    gap: var(--space-md) !important;
     height: calc(100dvh - 24px);
     min-height: 600px;
-    align-items: stretch !important;
-    padding: 0 !important;
-    border: 0 !important;
-    border-radius: 0 !important;
-    background: none !important;
-    box-shadow: none !important;
-    overflow: visible !important;
   }
 
   /* game column: one-line HUD, then the scene taking the full height */
 
   /* the scene: full-frame board, plates as cards placed at the top and bottom */
   /* board tools and time badge: just below the opponent cards */
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bBoard > .board-tools {
-    top: 66px !important;
-    left: 12px !important;
-  }
 
   /* command panel: it fills the column, only its content scrolls if needed */
 }
