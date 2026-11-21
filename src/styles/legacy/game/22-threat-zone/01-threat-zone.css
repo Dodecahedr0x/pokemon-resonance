@@ -33,9 +33,7 @@ html body .page {
 html body .section-title {
   text-shadow: 0 5px 24px rgba(0, 0, 0, 0.38);
 }
-html body .resume,
-html body .sel,
-html body .ana {
+html body .resume {
   box-shadow:
     var(--pr-shadow),
     inset 0 1px 0 rgba(255, 255, 255, 0.055);

@@ -1,16 +1,5 @@
 /* Continued from 01-art-direction.css (same order). */
 /* from legacy/game/23-per-screen-art-director-cut/02-battle-tactical-room-staged-board.css */
-#combat .sel {
-  border: 1px solid rgba(130, 213, 225, 0.23);
-  border-radius: 24px;
-  background: linear-gradient(145deg, rgba(16, 43, 59, 0.96), rgba(7, 19, 29, 0.98));
-  box-shadow: 0 28px 65px rgba(0, 0, 0, 0.34);
-}
-#combat .pt {
-  border: 1px solid rgba(130, 213, 225, 0.18);
-  border-radius: 18px;
-  background: linear-gradient(155deg, rgba(21, 53, 69, 0.9), rgba(6, 21, 31, 0.95));
-}
 #combat #bLaunch {
   background: linear-gradient(135deg, #f6d889, #b98538);
   color: #18212a;
@@ -34,8 +23,7 @@ a:focus-visible {
   outline: 2px solid var(--rx-cyan);
 }
 .panel,
-.resume,
-.sel {
+.resume {
   border-color: var(--rx-edge);
   box-shadow:
     var(--rx-shadow),
@@ -43,17 +31,6 @@ a:focus-visible {
 }
 
 /* from legacy/game/24-fullscreen-art-full-art-direction/02-map-actual-dynamic-carte-page.css */
-#combat .sel {
-  border: 1px solid rgba(124, 220, 230, 0.3);
-  border-radius: 26px;
-  background: linear-gradient(145deg, #15384a, #081a27);
-  box-shadow: 0 32px 78px rgba(0, 0, 0, 0.43);
-}
-#combat .pt {
-  border: 1px solid rgba(124, 220, 230, 0.22);
-  border-radius: 20px;
-  background: linear-gradient(155deg, #17394a, #081a27);
-}
 #combat #bLaunch {
   min-height: 48px;
   background: linear-gradient(135deg, #ffe6a0, #c38a3b);
@@ -61,16 +38,6 @@ a:focus-visible {
 }
 
 /* from legacy/game/25-post-init-selector-repair/02-battle-both-states-preparation.css */
-#combat .sel {
-  border: 1px solid rgba(131, 226, 232, 0.4);
-  border-radius: 27px;
-  background:
-    radial-gradient(ellipse at 10% 0%, rgba(67, 157, 177, 0.15), transparent 50%),
-    linear-gradient(145deg, #173b4e, #071722);
-  box-shadow:
-    0 32px 78px rgba(0, 0, 0, 0.48),
-    inset 0 1px rgba(255, 255, 255, 0.1);
-}
 #combat .battle-side .panel {
   border: 1px solid rgba(131, 221, 230, 0.24);
   border-radius: 19px;

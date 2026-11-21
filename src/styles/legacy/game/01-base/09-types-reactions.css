@@ -29,32 +29,3 @@
     grid-template-columns: 1fr;
   }
 }
-.wx {
-  --c: #888;
-  position: relative;
-  display: grid;
-  gap: var(--space-sm);
-  align-content: start;
-  padding: var(--space-xl);
-  border-radius: var(--r);
-  border: 1px solid var(--line);
-  overflow: hidden;
-  background:
-    radial-gradient(120% 80% at 0% 0%, color-mix(in srgb, var(--c) 20%, transparent), transparent 60%), var(--s1);
-}
-.wx .mv {
-  font-family: var(--f-m);
-  font-size: 10.5px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--mut);
-}
-.wx p {
-  font-size: 14px;
-  color: var(--tx2);
-}
-.wx .dur {
-  font-family: var(--f-m);
-  font-size: 11px;
-  color: var(--c);
-}

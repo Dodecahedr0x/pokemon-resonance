@@ -2,9 +2,6 @@
 #combat .page-header-wide {
   max-width: 900px;
 }
-#combat .sel {
-  overflow: hidden;
-}
 
 #combat #bLaunch {
   border: 1px solid #ffe9b1;

@@ -12,17 +12,8 @@
   stroke-linecap: round;
 }
 /* League: items, duos */
-.items .it.off {
-  opacity: 0.6;
-}
 .duos {
   grid-template-columns: repeat(4, minmax(0, 1fr));
-}
-.duo {
-  padding: var(--space-xl);
-}
-.duo h3 {
-  font-size: 21px;
 }
 @media (max-width: 1200px) {
   .duos {

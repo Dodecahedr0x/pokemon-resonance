@@ -1,19 +1,4 @@
 /* ---------- Battles: a selection frame ---------- */
-.sel {
-  position: relative;
-  overflow: hidden;
-  border-radius: var(--rl);
-  border: 1px solid transparent;
-  background:
-    var(--veins) padding-box,
-    var(--slab) padding-box,
-    var(--brass) border-box;
-  background-size:
-    560px 560px,
-    auto,
-    auto;
-  box-shadow: 0 40px 80px -44px #000;
-}
 .srw-lv {
   font-family: var(--f-m);
   font-size: 10.5px;
@@ -36,7 +21,4 @@
   color: #1a1205;
   background: linear-gradient(135deg, #f6e6bc, #c9a15e 60%, #9c7735);
   box-shadow: 0 0 14px -4px rgba(212, 175, 106, 0.7);
-}
-.sel .best-rank {
-  position: static;
 }

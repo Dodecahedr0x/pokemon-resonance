@@ -46,24 +46,6 @@
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
-.items {
-  display: grid;
-  gap: var(--space-sm);
-}
-.it {
-  display: grid;
-  grid-template-columns: 30px minmax(0, 1fr);
-  gap: var(--space-sm);
-  align-items: start;
-  font-size: 13px;
-  color: var(--tx2);
-}
-.it b {
-  display: block;
-  color: var(--tx);
-  font-weight: 600;
-  font-size: 13.5px;
-}
 .duos {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -73,33 +55,4 @@
   .duos {
     grid-template-columns: 1fr;
   }
-}
-.duo {
-  position: relative;
-  display: grid;
-  gap: var(--space-md);
-  align-content: start;
-  padding: var(--space-2xl);
-  border-radius: var(--rl);
-  border: 1px solid var(--line);
-  overflow: hidden;
-  background:
-    radial-gradient(90% 80% at 0% 0%, color-mix(in srgb, var(--a) 22%, transparent), transparent 60%),
-    radial-gradient(90% 80% at 100% 100%, color-mix(in srgb, var(--b) 18%, transparent), transparent 60%), var(--s1);
-}
-.duo .pair {
-  font-size: 12px;
-  color: var(--mut);
-}
-.duo h3 {
-  font-family: var(--f-d);
-  font-stretch: 125%;
-  font-weight: 850;
-  text-transform: uppercase;
-  font-size: 26px;
-  line-height: 0.95;
-}
-.duo p {
-  font-size: 14px;
-  color: var(--tx2);
 }

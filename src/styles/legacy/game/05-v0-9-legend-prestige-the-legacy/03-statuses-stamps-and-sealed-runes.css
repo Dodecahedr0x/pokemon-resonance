@@ -42,7 +42,6 @@
   stroke: rgba(242, 221, 168, 0.6);
 }
 
-.rule summary .cd,
 .cd {
   font-family: var(--f-m);
   letter-spacing: 0.14em;

@@ -21,7 +21,6 @@
 }
 /* beveled surfaces */
 .panel,
-.rule,
 .mvc {
   border: 1px solid transparent;
   background:
@@ -32,13 +31,6 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.05),
     inset 0 -1px 0 rgba(0, 0, 0, 0.5),
     0 22px 44px -30px rgba(0, 0, 0, 0.95);
-}
-.rule[open] {
-  background:
-    var(--hatch) padding-box,
-    linear-gradient(180deg, #1a1f29, #11141b) padding-box,
-    linear-gradient(165deg, rgba(227, 192, 122, 0.45), rgba(255, 255, 255, 0.04) 40%, rgba(227, 192, 122, 0.25))
-      border-box;
 }
 /* corner ornaments */
 .orn {

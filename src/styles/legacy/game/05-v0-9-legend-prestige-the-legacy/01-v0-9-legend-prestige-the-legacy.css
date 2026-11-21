@@ -86,11 +86,7 @@
 
 /* ---------- surfaces: runic slabs ---------- */
 .panel,
-.rule,
-.mvc,
-.duo,
-.wx,
-.it {
+.mvc {
   border: 1px solid transparent;
   background:
     var(--veins) padding-box,
@@ -102,19 +98,9 @@
     auto;
   box-shadow: var(--engrave);
 }
-.panel,
-.rule,
-.duo {
+.panel {
   border-radius: var(--rl);
 }
-.mvc,
-.wx,
-.it {
+.mvc {
   border-radius: var(--r);
-}
-.rule[open] {
-  background:
-    linear-gradient(180deg, rgba(212, 175, 106, 0.12), rgba(212, 175, 106, 0.02)) padding-box,
-    var(--slab) padding-box,
-    var(--brass) border-box;
 }
