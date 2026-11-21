@@ -1,0 +1,118 @@
+/* Battle › end-of-battle sheet › the two reports added through the battleResult hook: the tactical report
+   (.battle-report, engine/progression/tactical-journal.js), one row per Pokémon with its damage bar, and the local duel
+   report (.duel-result, engine/modes/duel.js), one column per player in that player's colour (.duel-player-1/-2). */
+
+.battle-report-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) 64px auto;
+  gap: var(--space-sm);
+  align-items: center;
+  padding: var(--space-2xs) 0;
+}
+.battle-report-row.ko {
+  opacity: 0.62;
+}
+.battle-report-name {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+}
+.battle-report-name b {
+  max-width: 100%;
+  overflow: hidden;
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.battle-report-name em {
+  padding: 0 var(--space-xs);
+  border-radius: 6px;
+  background: #ffd45b;
+  color: #2a1a00;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 800;
+}
+.battle-report-bar {
+  height: 6px;
+  overflow: hidden;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.08);
+}
+.battle-report-bar i {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #4fc3ff, #ffd45b);
+}
+.battle-report-value {
+  font-size: 12.5px;
+  white-space: nowrap;
+}
+.battle-report-value small {
+  color: #9fb3c2;
+}
+.battle-report-legend {
+  margin: var(--space-xs) 0 0;
+  color: #9fb3c2;
+  font-size: 11.5px;
+}
+
+.duel-result-sides {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-sm);
+}
+.duel-result-side {
+  min-width: 0;
+  padding: var(--space-sm);
+  border: 1px solid var(--duel-player-color);
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.2);
+}
+.duel-result-side.is-winner {
+  box-shadow: 0 0 18px -6px var(--duel-player-color);
+}
+.duel-result-side > b {
+  display: block;
+  overflow: hidden;
+  color: var(--duel-player-color);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.duel-result-side > em {
+  display: block;
+  margin-bottom: var(--space-2xs);
+  color: var(--color-text-muted);
+  font-size: 11px;
+  font-style: normal;
+}
+.duel-result-row {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-3xs) var(--space-2xs);
+  align-items: center;
+  margin-top: var(--space-2xs);
+  font-size: 12px;
+}
+.duel-result-row span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.duel-result-row.ko span {
+  opacity: 0.6;
+  text-decoration: line-through;
+}
+.duel-result-row i {
+  display: block;
+  grid-column: 1/-1;
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--duel-player-color) var(--w), rgba(255, 255, 255, 0.1) var(--w));
+}
+.duel-result-row small {
+  grid-column: 1/-1;
+  color: var(--color-text-muted);
+  font-size: 10.5px;
+}

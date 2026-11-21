@@ -805,19 +805,19 @@ export function init() {
       return '';
     }
     const mx = Math.max(1, ...X.rows.flat().map(x => x.d));
-    return `<div class="result-list duel-report-r"><h4>Rapport du duel</h4><div class="duel-report-rg">${[0, 1]
+    return `<div class="result-list duel-result"><h4>Rapport du duel</h4><div class="duel-result-sides">${[0, 1]
       .map(
         i =>
-          `<div class="duel-report-rc dj${i + 1}${X.g === i + 1 ? ' g' : ''}"><b>${escapeHtml(X.names[i])}</b><em>${X.pv[i]} % PV restants</em>${X.rows[
+          `<div class="duel-result-side duel-player-${i + 1}${X.g === i + 1 ? ' is-winner' : ''}"><b>${escapeHtml(X.names[i])}</b><em>${X.pv[i]} % PV restants</em>${X.rows[
             i
           ]
             .map(x => {
               const m = POKEMON[x.id];
-              return `<div class="duel-report-rl${x.ko ? ' ko' : ''}">${medal(m.t, 'is-tiny')}<span>${m.n}</span><i style="--w:${Math.round((x.d / mx) * 100)}%"></i><small>${x.d}${x.k ? ` · ${x.k} K.O.` : ''}</small></div>`;
+              return `<div class="duel-result-row${x.ko ? ' ko' : ''}">${medal(m.t, 'is-tiny')}<span>${m.n}</span><i style="--w:${Math.round((x.d / mx) * 100)}%"></i><small>${x.d}${x.k ? ` · ${x.k} K.O.` : ''}</small></div>`;
             })
             .join('')}</div>`
       )
-      .join('')}</div><p class="battle-report-l">Dégâts infligés et K.O. par Pokémon.</p></div>`;
+      .join('')}</div><p class="battle-report-legend">Dégâts infligés et K.O. par Pokémon.</p></div>`;
   });
 
   // Play again → rematch (the other player starts); Change team → new duel

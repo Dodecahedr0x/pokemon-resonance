@@ -49,11 +49,11 @@ function Preferences({ C }) {
   return (
     <div className="camp-duel-settings">
       <div className="camp-duel-fields">
-        <label className="form-field camp-duel-name dj1">
+        <label className="form-field camp-duel-name duel-player-1">
           <span>Joueur 1 · commence</span>
           <input type="text" data-duel-report-n="0" maxLength={14} defaultValue={C.names[0]} autoComplete="off" />
         </label>
-        <label className="form-field camp-duel-name dj2">
+        <label className="form-field camp-duel-name duel-player-2">
           <span>Joueur 2</span>
           <input type="text" data-duel-report-n="1" maxLength={14} defaultValue={C.names[1]} autoComplete="off" />
         </label>

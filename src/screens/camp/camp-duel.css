@@ -1,6 +1,6 @@
 /* Camp › Duel (tabs/Duel.jsx): two players on one phone. Settings, then the draw order (bans, then a snake pick),
    both teams, the pool of drawn Pokémon and the chosen one's sheet, and the past duels. Each player's colour is
-   --dj, set by .dj1 / .dj2 (still in legacy, shared with the battle's duel report). */
+   --duel-player-color, set by .duel-player-1 / .duel-player-2 (components/duel-player.css). */
 
 /* the choices wrap on narrow cards */
 .camp-duel .segmented-control {
@@ -16,7 +16,7 @@
   gap: var(--space-sm);
 }
 .camp-duel .camp-duel-name span {
-  color: var(--dj);
+  color: var(--duel-player-color);
 }
 .camp-duel .camp-duel-name input {
   width: 100%;
@@ -56,8 +56,8 @@
   border-radius: 999px;
   font-size: 11px;
   font-weight: 700;
-  border: 1px solid var(--dj);
-  color: var(--dj);
+  border: 1px solid var(--duel-player-color);
+  color: var(--duel-player-color);
   opacity: 0.55;
 }
 .camp-duel-order span.is-ban {
@@ -69,9 +69,9 @@
 }
 .camp-duel-order span.is-current {
   opacity: 1;
-  background: var(--dj);
+  background: var(--duel-player-color);
   color: #0b1220;
-  box-shadow: 0 0 12px -2px var(--dj);
+  box-shadow: 0 0 12px -2px var(--duel-player-color);
 }
 .camp-duel-step {
   margin: 0 0 var(--space-sm);
@@ -89,13 +89,13 @@
 .camp-duel-team {
   padding: var(--space-sm);
   border-radius: 12px;
-  border: 1px solid var(--dj);
+  border: 1px solid var(--duel-player-color);
   background: rgba(0, 0, 0, 0.22);
   min-width: 0;
 }
 .camp-duel-team > b {
   display: block;
-  color: var(--dj);
+  color: var(--duel-player-color);
   font-size: 13px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -222,7 +222,7 @@
   filter: grayscale(1);
 }
 .camp-duel-pick.is-picked {
-  border-color: var(--dj);
+  border-color: var(--duel-player-color);
   background: rgba(0, 0, 0, 0.25);
   opacity: 0.75;
 }
@@ -238,7 +238,7 @@
   padding: 1px var(--space-2xs);
   border-radius: 999px;
   background: rgba(0, 0, 0, 0.6);
-  color: var(--dj, #ff7a7a);
+  color: var(--duel-player-color, #ff7a7a);
 }
 .camp-duel-pick.is-banned .camp-duel-pick-tag {
   color: #ff7a7a;

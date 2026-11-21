@@ -18,6 +18,10 @@
   font-size: 11px;
   letter-spacing: 0.06em;
 }
+/* in a local duel, the name of the player whose turn it is */
+.phase > b:is(.duel-player-1, .duel-player-2) {
+  font-weight: 800;
+}
 :where(.battle-footer) .end-turn-count {
   font-family: var(--font-mono);
   font-size: 10.5px;

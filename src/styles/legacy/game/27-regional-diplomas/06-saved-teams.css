@@ -2,27 +2,6 @@
 
 /* Pantheon */
 
-/* <style id="resonance-duel-tutorial"> */
-/* v4.33 · local duel */
-:root {
-  --dj1: #5fb8ff;
-  --dj2: #ff9a5f;
-}
-.dj1 {
-  --dj: var(--dj1);
-}
-.dj2 {
-  --dj: var(--dj2);
-}
-b.dj1,
-b.dj2 {
-  color: var(--dj);
-}
-#bPhase b.dj1,
-#bPhase b.dj2 {
-  font-weight: 800;
-}
-
 /* handover screen */
 @keyframes forfeit-dialog-in {
   from {

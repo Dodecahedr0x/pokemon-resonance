@@ -53,6 +53,7 @@
 @import './components/chip.css' layer(components);
 @import './components/caption.css' layer(components);
 @import './components/pill.css' layer(components);
+@import './components/duel-player.css' layer(components);
 @import './components/scenario-level.css' layer(components);
 
 @import './shell/app-layout.css' layer(screens);
@@ -108,6 +109,7 @@
 @import '../screens/combat/battle/battle-capture.css' layer(screens);
 @import '../screens/combat/battle/result.css' layer(screens);
 @import '../screens/combat/battle/result-lists.css' layer(screens);
+@import '../screens/combat/battle/result-reports.css' layer(screens);
 @import '../screens/combat/battle/result-effects.css' layer(screens);
 @import '../screens/combat/battle/evolution-choice.css' layer(screens);
 @import '../screens/combat/battle/battle-layout.css' layer(screens);

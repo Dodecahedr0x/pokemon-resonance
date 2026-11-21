@@ -104,7 +104,7 @@ function bar() {
           ) : null}
         </>
       );
-      playerRef = <b className={'dj' + D.j}>{D.names[D.j - 1]}</b>;
+      playerRef = <b className={'duel-player-' + D.j}>{D.names[D.j - 1]}</b>;
       phase = phase.replace('À vous : ', '').replace('Tous vos Pokémon', 'Tous ses Pokémon');
     }
   }

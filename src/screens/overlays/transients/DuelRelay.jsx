@@ -31,7 +31,7 @@ export default function DuelRelay({ d }) {
           <p className="lead">{d.sub}</p>
           <div className="duel-relay-scores">
             {d.s.map(x => (
-              <span key={x.j} className={'dj' + x.j}>
+              <span key={x.j} className={'duel-player-' + x.j}>
                 <b>{x.displayName}</b>
                 {x.pv} % PV · {x.n} Pokémon
               </span>

@@ -32,7 +32,7 @@ export function BtTop() {
       <b id="bScen" className="battle-topbar-name">
         {!on ? null : D && !battle.over ? (
           <>
-            Duel · <b className={'dj' + D.j}>{D.names[D.j - 1]}</b>
+            Duel · <b className={'duel-player-' + D.j}>{D.names[D.j - 1]}</b>
           </>
         ) : (
           SCENARIOS[battle.sc].n

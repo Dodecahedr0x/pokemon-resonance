@@ -1,0 +1,11 @@
+/* The two players of a local duel (camp › Duel, battle top bar and footer, hand-over screen, duel report):
+   .duel-player-1 / .duel-player-2 set --duel-player-color for everything inside, and colour a player's name in <b>. */
+.duel-player-1 {
+  --duel-player-color: var(--color-duel-player-1);
+}
+.duel-player-2 {
+  --duel-player-color: var(--color-duel-player-2);
+}
+b:is(.duel-player-1, .duel-player-2) {
+  color: var(--duel-player-color);
+}

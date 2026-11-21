@@ -48,8 +48,8 @@
   --color-cell: var(--tile);
   --color-cell-river: var(--river);
   --color-cell-wet: var(--wet);
-  --color-duel-player-1: var(--dj1);
-  --color-duel-player-2: var(--dj2);
+  --color-duel-player-1: #5fb8ff;
+  --color-duel-player-2: #ff9a5f;
   /* faint gold veins tiled over dark plates (560px tile) */
   --texture-veins: var(--veins);
   --ease-out: var(--ease);
