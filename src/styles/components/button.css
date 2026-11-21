@@ -1,7 +1,7 @@
 /* Button: <button class="button"> or <a class="button"> (the Button component in JSX).
    Variants: .button-primary (main action), .button-small / .button-large (sizes), .button-ghost (currently drawn
    like the base button).
-   Screen-specific tweaks still live in legacy (e.g. #combat .button-primary) and win over these rules.
+   Screen files tweak them (e.g. #combat .button-primary in prep.css) and win over these rules.
    Values were read from what the old per-release rules resolved to, so the look is unchanged. */
 
 .button {
@@ -121,4 +121,30 @@
   outline: 2px solid var(--pr-cyan);
   outline-offset: 3px;
   box-shadow: 0 0 0 5px rgba(115, 217, 244, 0.15);
+}
+
+/* the ripple a gold button leaves where it was touched (.pk-onde, engine/ui/pokemon-skin.js), and taller small buttons on phones */
+.pk-onde {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  margin: calc(var(--space-xs) * -1) 0 0 calc(var(--space-xs) * -1);
+  border-radius: 50%;
+  pointer-events: none;
+  border: 2px solid rgba(255, 255, 255, 0.95);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+  animation: pkOnde 0.6s ease-out forwards;
+  z-index: 3;
+}
+@media (max-width: 700px) {
+  .page :is(.button-small, .button.button-small) {
+    min-height: 40px;
+  }
+}
+
+@keyframes pkOnde {
+  to {
+    transform: scale(13);
+    opacity: 0;
+  }
 }

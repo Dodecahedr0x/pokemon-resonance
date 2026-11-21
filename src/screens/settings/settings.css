@@ -1,5 +1,5 @@
-/* Settings page (#params). Shared pieces it uses (.card, .card-header, .v4-ps, .note, .button, .button-row)
-   are still styled in legacy and move to src/styles/components/ later. */
+/* Settings page (#params). Shared pieces it uses (.card, .card-header, .note, .button, .button-row, .form-field)
+   are in src/styles/components/; the side panels' pickers in settings-pickers.css. */
 
 /* ---------- Page grid: two columns of panels, one below 1000px ---------- */
 .settings-grid {
@@ -164,6 +164,17 @@
 }
 
 /* ---------- Panels ---------- */
+/* a settings panel (.v4-ps) and its explanatory line (.v4-ps-n) */
+.v4-ps {
+  padding: var(--space-md);
+  display: grid;
+  gap: var(--space-sm);
+  align-content: start;
+}
+.v4-ps-n {
+  font-size: 13px;
+  color: var(--v4-tx2);
+}
 .accessibility-panel .segmented-control button {
   min-width: 0;
 }

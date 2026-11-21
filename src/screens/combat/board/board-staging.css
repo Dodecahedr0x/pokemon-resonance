@@ -1,6 +1,17 @@
-/* ---------- 1. battle entry: screen shatters into strips ---------- */
-
-/* ---------- 2. Poké Balls: sent out at the start, returned on K.O. ---------- */
+/* Board › battle staging (engine/combat/battle-staging.js, engine/audio/immersion.js): the Poké Ball thrown at the start (.pk-so: halves .pokeball-top / -bottom open, flash .pk-so-fl, sparks .pk-spk), the healing ring and leaves (.pk-wl-r, .pk-lf), the K.O. (.pk-ko-r ring, .pk-ko-bm beam, .pk-ko-b ball, .pk-poof smoke), the particles of a hit (.burst-particle) and the board shakes (.screen-shake, .shake-big). */
+.burst-particle {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: burst-particle 0.75s cubic-bezier(0.15, 0.7, 0.3, 1) forwards;
+  pointer-events: none;
+}
+.screen-shake {
+  animation: shake-short 0.34s linear;
+}
+.shake-big {
+  animation: shake-big-anim 0.5s linear;
+}
 #bSvg .pk-so {
   opacity: 0;
   animation: pkSoIn 0.3s cubic-bezier(0.5, 0, 0.8, 0.6) var(--d, 0s) forwards;
@@ -10,7 +21,9 @@
   transform-origin: 100% 100%;
   animation: pkSoT 0.26s ease-out calc(var(--d, 0s) + 0.3s) forwards;
 }
-#bSvg .pk-so .pokeball-bottom,
+#bSvg .pk-so .pokeball-bottom {
+  animation: pkSoB 0.26s ease-out calc(var(--d, 0s) + 0.3s) forwards;
+}
 #bSvg .pk-so .pokeball-button {
   animation: pkSoB 0.26s ease-out calc(var(--d, 0s) + 0.3s) forwards;
 }
@@ -59,19 +72,16 @@
   animation: pkSoFl 0.6s ease-out forwards;
 }
 
-/* ---------- 3. HP bars as in the games ---------- */
-html:not(#pkz) body:not(#pkz) #cbBattle .hp-bar i.pk-dr {
-  animation: pkDrain 0.8s cubic-bezier(0.35, 0.1, 0.3, 1) both;
-}
-/* fix: "Évolue en fin de manche" (Evolves at end of round) no longer overflows the plate */
-
-@keyframes pkDrain {
-  0%,
-  22% {
-    width: var(--pa);
+@keyframes burst-particle {
+  0% {
+    opacity: 0.95;
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--dx), var(--dy)) scale(0.2);
   }
 }
-
 @keyframes pkKoB {
   0% {
     opacity: 0;
@@ -96,7 +106,6 @@ html:not(#pkz) body:not(#pkz) #cbBattle .hp-bar i.pk-dr {
     transform: translate(0, -6px);
   }
 }
-
 @keyframes pkKoBm {
   0% {
     transform: scaleY(0);
@@ -111,7 +120,6 @@ html:not(#pkz) body:not(#pkz) #cbBattle .hp-bar i.pk-dr {
     opacity: 0;
   }
 }
-
 @keyframes pkKoR {
   0% {
     opacity: 1;
@@ -122,14 +130,12 @@ html:not(#pkz) body:not(#pkz) #cbBattle .hp-bar i.pk-dr {
     transform: scale(0.1);
   }
 }
-
 @keyframes pkSoB {
   to {
     transform: translate(0, 5px);
     opacity: 0;
   }
 }
-
 @keyframes pkSoFl {
   0% {
     opacity: 0.95;
@@ -140,7 +146,6 @@ html:not(#pkz) body:not(#pkz) #cbBattle .hp-bar i.pk-dr {
     transform: scale(1.8);
   }
 }
-
 @keyframes pkSoIn {
   0% {
     opacity: 0;
@@ -154,14 +159,12 @@ html:not(#pkz) body:not(#pkz) #cbBattle .hp-bar i.pk-dr {
     transform: none;
   }
 }
-
 @keyframes pkSoT {
   to {
     transform: translate(-2px, -6px) rotate(-60deg);
     opacity: 0;
   }
 }
-
 @keyframes pkSpk {
   0% {
     opacity: 1;
@@ -170,5 +173,47 @@ html:not(#pkz) body:not(#pkz) #cbBattle .hp-bar i.pk-dr {
   100% {
     opacity: 0;
     transform: rotate(var(--a)) translate(0, -26px);
+  }
+}
+@keyframes shake-big-anim {
+  0%,
+  100% {
+    transform: none;
+  }
+  10% {
+    transform: translate(-5px, 2px);
+  }
+  25% {
+    transform: translate(5px, -3px);
+  }
+  40% {
+    transform: translate(-4px, -2px);
+  }
+  55% {
+    transform: translate(4px, 3px);
+  }
+  70% {
+    transform: translate(-2px, 1px);
+  }
+  85% {
+    transform: translate(2px, -1px);
+  }
+}
+@keyframes shake-short {
+  0%,
+  100% {
+    transform: none;
+  }
+  20% {
+    transform: translate(-2px, 1px);
+  }
+  40% {
+    transform: translate(2px, -1px);
+  }
+  60% {
+    transform: translate(-1px, -1px);
+  }
+  80% {
+    transform: translate(1px, 1px);
   }
 }

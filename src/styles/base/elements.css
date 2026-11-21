@@ -1,4 +1,4 @@
-/* Element defaults. They sit below components and legacy, so any class rule overrides them. */
+/* Element defaults. They sit below components, so any class rule overrides them. */
 * {
   box-sizing: border-box;
 }

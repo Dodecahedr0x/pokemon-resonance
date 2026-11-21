@@ -1,0 +1,19 @@
+/* Form field (.form-field): a label (> span) above its input or select. */
+.form-field {
+  display: grid;
+  gap: var(--space-xs);
+}
+.form-field > span {
+  font: 700 12.5px/1 var(--f-d);
+  color: var(--v4-tx2);
+}
+.form-field input {
+  min-height: 44px;
+  padding: 0 var(--space-md);
+  font: 600 15px var(--f-b);
+}
+.form-field select {
+  min-height: 44px;
+  padding: 0 var(--space-md);
+  font: 600 15px var(--f-b, system-ui, sans-serif);
+}

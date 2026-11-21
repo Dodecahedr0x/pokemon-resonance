@@ -1,0 +1,68 @@
+/* Settings › the pickers of the side panels: trainer avatar by type (.type-avatar-b, Avatar.jsx), board themes (.board-theme-b, BoardThemes.jsx), secret places (.secret-places-r, SecretPlaces.jsx) and the feats journal (.feats-journal-r, FeatsJournal.jsx; .feats-journal-e from engine/modes/feats-gimmicks.js). The selected one has .on. */
+.type-avatar-b {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  color: #fff;
+  cursor: pointer;
+  background: radial-gradient(
+    circle at 35% 30%,
+    color-mix(in srgb, var(--c) 55%, #fff),
+    var(--c) 62%,
+    color-mix(in srgb, var(--c) 45%, #000)
+  );
+}
+.type-avatar-b.on {
+  border-color: #ffd45b;
+  box-shadow: 0 0 0 3px rgba(255, 212, 91, 0.35);
+}
+.board-theme-b {
+  display: grid;
+  gap: var(--space-3xs);
+  justify-items: center;
+  padding: var(--space-sm) var(--space-xs);
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.05);
+  color: #eaf2f8;
+  cursor: pointer;
+}
+.board-theme-b.on {
+  border-color: #ffd45b;
+  box-shadow: 0 0 0 2px rgba(255, 212, 91, 0.35);
+}
+.board-theme-b b {
+  font-size: 13px;
+}
+.board-theme-b small {
+  font-size: 11px;
+  color: #b8cddb;
+}
+.secret-places-r {
+  display: grid;
+  gap: 1px;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+.secret-places-r.on {
+  border-color: rgba(120, 220, 255, 0.5);
+}
+.secret-places-r small {
+  color: #b8cddb;
+  font-size: 12px;
+}
+.feats-journal-e {
+  color: #ffd45b;
+  font-style: normal;
+  font-size: 12px;
+}
+.feats-journal-r small {
+  color: #b8cddb;
+}
+.feats-journal-r.lose {
+  opacity: 0.75;
+}

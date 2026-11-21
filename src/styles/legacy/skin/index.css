@@ -1,5 +1,0 @@
-/* skin.css split into ordered parts: the import order is the cascade order. */
-@import './01-foundation.css';
-@import './02-battles-large-module-cells.css';
-@import './03-result-screen-holographic-trainer.css';
-@import './04-calm-reduce-animations-or-animated.css';

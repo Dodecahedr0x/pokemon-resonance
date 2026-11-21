@@ -1,6 +1,6 @@
 /* League screen (#ligue, League.jsx): the badge case (header, the eight badges of Badges.jsx, the chosen gym's sheet
-   of Arena.jsx) and the Elite Four case (EliteCell.jsx). The cases' corner brackets and scan sweep are shared skin
-   effects, still in legacy with .card and .home-hero. */
+   of Arena.jsx) and the Elite Four case (EliteCell.jsx). The cases' corner brackets and scan sweep are shared
+   with .card and .home-hero (components/card.css). */
 
 /* ---------- cases ---------- */
 .league-case {

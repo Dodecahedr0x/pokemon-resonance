@@ -275,3 +275,14 @@ html.pk-calme .prep-tabs > button::before {
     justify-items: start;
   }
 }
+
+/* the combat page header is wider, and its primary buttons glow gold (except the end-turn button); defaults that
+   every other combat rule overrides */
+:where(#combat .page-header-wide) {
+  max-width: 900px;
+}
+:where(#combat .button-primary:not(.end-turn-button)) {
+  box-shadow:
+    0 10px 28px rgba(224, 172, 80, 0.26),
+    inset 0 1px rgba(255, 255, 255, 0.25);
+}

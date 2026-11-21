@@ -216,3 +216,11 @@
     text-align: left;
   }
 }
+
+/* a stat change shown as a loss (.neg) or a gain (.pos) */
+.neg {
+  color: #ff8a8a;
+}
+.pos {
+  color: var(--ok);
+}

@@ -46,3 +46,15 @@
 :is(.battle-plate, .battle-panel-hp) .hp-bar.is-segmented .hp-bar-trail {
   border-radius: 5px;
 }
+
+/* the bar drains from its previous width (--pa) after a hit (.pk-dr, engine/combat/ui.js) */
+#cbBattle .hp-bar i.pk-dr {
+  animation: pkDrain 0.8s cubic-bezier(0.35, 0.1, 0.3, 1) both;
+}
+
+@keyframes pkDrain {
+  0%,
+  22% {
+    width: var(--pa);
+  }
+}

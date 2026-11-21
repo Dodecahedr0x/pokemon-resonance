@@ -1,8 +1,0 @@
-/* phone: 1st row = moves (or the turn state), 2nd row = tools + "Fin du tour" (End turn) */
-
-/* full screen: in battle on phone, the bottom navigation disappears */
-html body.fullscreen-mode.compact-battle {
-  --bn: 0px;
-}
-
-/* contrasted board */

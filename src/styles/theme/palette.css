@@ -1,4 +1,4 @@
-/* Base palette (the short legacy names that colors.css maps to semantic tokens): the final art-direction values,
+/* Base palette (the short names that colors.css maps to semantic tokens): the final art-direction values,
    and the high-contrast and colour-blind overrides. Edit the semantic tokens in colors.css rather than these. */
 :root {
   --bg: #04101d;

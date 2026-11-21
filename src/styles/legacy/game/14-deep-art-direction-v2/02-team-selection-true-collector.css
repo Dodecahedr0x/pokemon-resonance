@@ -1,7 +1,0 @@
-/* Team selection: true collector cards with large artwork, rarity/status and tactile states */
-/* Combat: arena is the visual anchor; commands are a clean tactical panel */
-
-/* Pokédex / type guide / league: visual hierarchy and rich panels */
-/* all dialogs and controls use the same tactile glass language (the Pokédex and team toolbars draw their own) */
-
-/* Final QA correction: hidden panels must never reserve layout space. */

@@ -162,3 +162,15 @@
     flex: 1;
   }
 }
+
+/* the companion's hearts (.cp-h, engine/progression/companion-pokemon.js) */
+.cp-h {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: var(--space-lg);
+  flex-wrap: wrap;
+}
+b.cp-h {
+  color: #ff7aa8;
+}

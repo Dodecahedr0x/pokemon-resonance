@@ -3,7 +3,7 @@
    (src/components/PageHeader.jsx renders it).
    .kicker (small uppercase label with a red LED and a gold diamond), .title (title) and .lead (lead paragraph) are
    also used on their own, in panels and dialogs; inside a page (.page) and inside its header (.page-header) they change
-   colour and size. Screen-specific tweaks still live in legacy (e.g. #pokedex .page-header) and win over these rules.
+   colour and size. Screen files tweak them (e.g. #combat .page-header-wide in prep.css) and win over these rules.
    Values were read from what the old per-release rules resolved to, so the look is unchanged. */
 
 /* Header block: a faint Poké Ball behind the text and a short glowing rule under it. */

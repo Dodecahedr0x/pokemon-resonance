@@ -107,3 +107,59 @@
 :where(.board.paintedterrain) .boulder-highlight {
   display: none;
 }
+
+/* traps set on a cell (.trap, .trap.web for Sticky Web; colour of the side that set it in --c), the body linking a colossus's parts (.col-lien) and the cells an Intensity attack is about to hit (.danger-zone, its warning sign path and cross .dg-x) */
+#bSvg .trap path {
+  stroke: var(--c);
+  stroke-width: 1.8;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  pointer-events: none;
+  fill: color-mix(in srgb, var(--c) 30%, transparent);
+}
+#bSvg .trap circle {
+  fill: none;
+  stroke: var(--c);
+  stroke-width: 1.8;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  pointer-events: none;
+}
+#bSvg .trap.web path {
+  fill: none;
+  stroke-width: 1.1;
+}
+#bSvg .trap.web circle {
+  stroke-width: 1;
+}
+#bSvg .col-lien {
+  stroke: rgba(201, 163, 90, 0.75);
+  stroke-width: 11;
+  stroke-linecap: round;
+  pointer-events: none;
+}
+#bSvg .danger-zone circle {
+  fill: rgba(239, 68, 68, 0.22);
+  stroke: #ef4444;
+  stroke-width: 2;
+  stroke-dasharray: 4 3;
+  animation: intensity-dg 1.2s ease-in-out infinite;
+}
+#bSvg .danger-zone path {
+  fill: rgba(255, 220, 120, 0.95);
+  stroke: #7a1d12;
+  stroke-width: 1.2;
+  stroke-linejoin: round;
+  transform: scale(0.55);
+}
+#bSvg .danger-zone .dg-x {
+  fill: none;
+  stroke: #7a1d12;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+}
+@media (prefers-reduced-motion: reduce) {
+  #bSvg .danger-zone circle {
+    animation: none;
+  }
+}

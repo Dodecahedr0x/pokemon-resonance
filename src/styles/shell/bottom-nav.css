@@ -1,6 +1,6 @@
 /* Phone bottom bar (Nav.jsx BottomNav): five pages and the Menu button. */
 
-/* its height, for what sits above it; read on body, where battle and full screen set the legacy --bn to 0 */
+/* its height, for what sits above it; read on body, where battle and full screen set --bn to 0 (end of this file) */
 body {
   --bottom-nav-height: var(--bn);
 }
@@ -136,4 +136,12 @@ body.fullscreen-mode.compact-battle .bottom-nav {
   body:has(#cbBattle:not([hidden])) .bottom-nav {
     display: none;
   }
+}
+
+/* the compact battle layout hides the bottom bar, so nothing reserves its height */
+body.fullscreen-mode.compact-battle {
+  --bn: 0px;
+}
+body.compact-battle {
+  --bn: 0px;
 }

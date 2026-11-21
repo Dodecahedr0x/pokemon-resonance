@@ -1,9 +1,4 @@
-.neg {
-  color: #ff8a8a;
-}
-.pos {
-  color: var(--ok);
-}
+/* Spinner (.spin): a small turning ring while something loads (battle panel, Design Workshop). */
 .spin {
   width: 16px;
   height: 16px;

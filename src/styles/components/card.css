@@ -1,10 +1,8 @@
 /* Card: the dark blue panel most page sections sit in.
      <section class="card"><header class="card-header"><svg>…</svg><b>Titre</b><span class="card-count">3</span></header>…</section>
    (src/components/CardHeader.jsx renders the header).
-   Corner brackets (cyan top-left, gold bottom-right) are drawn by ::before. Add .pk-scan for the scan-line
-   entry effect (still in legacy, shared with .home-hero and .league-case).
-   Screen-specific panels (#accueil, #carte, #quetes, #sac) still live in legacy and win over these rules.
-   Values were read from what the old per-release rules resolved to, so the look is unchanged. */
+   Corner brackets (cyan top-left, gold bottom-right) are drawn by ::before, also on the home hero and the league
+   case. Add .pk-scan for the scan-line entry effect. */
 
 .card {
   position: relative;
@@ -16,7 +14,7 @@
     inset 0 1px rgba(255, 255, 255, 0.055);
   transition-timing-function: cubic-bezier(0.2, 0.75, 0.2, 1);
 }
-.card::before {
+:is(.card, .home-hero, .league-case)::before {
   content: '';
   position: absolute;
   inset: -1px;
@@ -33,4 +31,38 @@
   mask:
     radial-gradient(circle at 0 0, #000 0 18px, transparent 46px),
     radial-gradient(circle at 100% 100%, #000 0 18px, transparent 46px);
+}
+
+/* the scan line sweeping a card, the home hero or the league case as it appears (.pk-scan, engine/ui/pokemon-skin.js) */
+:is(.card, .home-hero, .league-case).pk-scan::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 2;
+  background: linear-gradient(
+      180deg,
+      transparent 0 42%,
+      rgba(111, 220, 255, 0.07) 47%,
+      rgba(111, 220, 255, 0.38) 50%,
+      transparent 51%
+    )
+    0 100%/100% 300% no-repeat;
+  animation: pkScan 1.05s ease-out both;
+  animation-delay: calc(var(--pk-i, 0) * 60ms + 0.12s);
+}
+
+@keyframes pkScan {
+  0% {
+    background-position: 0 100%;
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    background-position: 0 0;
+    opacity: 0;
+  }
 }

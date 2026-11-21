@@ -224,3 +224,11 @@
     top: 16px;
   }
 }
+
+/* the larger text sizes (Settings › Accessibility) zoom the detail sheet */
+html.a11y-t1 #sheet {
+  zoom: 1.1;
+}
+html.a11y-t2 #sheet {
+  zoom: 1.22;
+}
