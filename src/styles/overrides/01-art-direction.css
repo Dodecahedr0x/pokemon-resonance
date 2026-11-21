@@ -2,11 +2,6 @@
    layer comes last, so they still win over every normal rule without the flag. Each block is to be folded into
    its screen or component file (see docs/plans/2026-11-20-style-cleanup.md); add nothing new here. */
 
-/* from legacy/game/13-art-direction-2026-integrated/01-art-direction-2026-integrated.css */
-.description {
-  color: #c3d8e5;
-}
-
 /* from legacy/game/13-art-direction-2026-integrated/04-mobile-polish-after-screenshot.css */
 
 /* from legacy/game/14-deep-art-direction-v2/02-team-selection-true-collector.css */

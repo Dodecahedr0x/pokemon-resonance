@@ -29,7 +29,6 @@
   max-width: 640px;
 }
 .guide-section-header p.description {
-  color: var(--color-text-muted);
   font-size: 14.5px;
   max-width: 60ch;
 }
@@ -99,7 +98,6 @@
 }
 .guide-intro .description {
   max-width: 720px;
-  color: var(--color-text-secondary);
   margin-top: var(--space-xs);
 }
 .guide-section h2:not(:where(.title, .section-title)) {

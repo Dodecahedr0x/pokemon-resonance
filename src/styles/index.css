@@ -49,6 +49,7 @@
 @import './components/code-field.css' layer(components);
 @import './components/text-link.css' layer(components);
 @import './components/section-title.css' layer(components);
+@import './components/description.css' layer(components);
 @import './components/scenario-level.css' layer(components);
 
 @import './shell/app-layout.css' layer(screens);
