@@ -11,8 +11,3 @@
 /* no more filters in the board: halos drawn with a wide stroke */
 
 /* ---------- battle on phone ---------- */
-@media (max-width: 700px) {
-  .battle {
-    gap: var(--space-sm);
-  }
-}

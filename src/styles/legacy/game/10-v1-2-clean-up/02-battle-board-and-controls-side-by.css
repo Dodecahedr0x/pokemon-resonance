@@ -1,15 +1,4 @@
 /* Battle: board and controls side by side */
-.battle {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: var(--space-md);
-  align-items: start;
-}
-@media (min-width: 1000px) {
-  .battle {
-    grid-template-columns: minmax(0, 1fr) minmax(330px, 370px);
-  }
-}
 /* panel: role in a single badge, details on demand */
 /* pages keep no transform: fixed elements stay fixed */
 .page.on {

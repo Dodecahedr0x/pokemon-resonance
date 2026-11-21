@@ -2,6 +2,48 @@
    (.battle-stage), and the side column (.battle-side) with the panel, footer and log; phone layout under
    body.compact-battle. */
 
+/* the frame around both columns: a bordered card; on a wide screen the two columns fill the screen height without a
+   frame, and on phone it is a plain block (the panel becomes a drawer) */
+.battle {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-xl);
+  align-items: start;
+  overflow: hidden;
+  border: 1px solid rgba(88, 186, 255, 0.34);
+  border-radius: 22px;
+  background: var(--surface-card);
+  box-shadow: 0 28px 60px rgba(0, 0, 0, 0.34);
+}
+@media (min-width: 1000px) {
+  .battle {
+    grid-template-columns: minmax(0, 1fr) minmax(330px, 370px);
+  }
+}
+@media (min-width: 1121px) {
+  .battle {
+    height: calc(100dvh - 24px);
+    min-height: 600px;
+    grid-template-columns: minmax(0, 1fr) 336px;
+    gap: var(--space-md);
+    align-items: stretch;
+    overflow: visible;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+  }
+}
+@media (max-width: 700px) {
+  .battle {
+    display: block;
+    overflow: visible;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+  }
+}
 .battle-main {
   overflow: hidden;
   min-width: 0;

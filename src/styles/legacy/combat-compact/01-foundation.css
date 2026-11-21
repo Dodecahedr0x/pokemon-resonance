@@ -15,19 +15,3 @@
 /* scene tint according to the phase */
 
 /* ================= desktop ================= */
-@media (min-width: 1121px) {
-  /* navigation collapsed into an icon rail */
-
-  /* two screen-height columns: scene, panel */
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .battle {
-    height: calc(100dvh - 24px);
-    min-height: 600px;
-  }
-
-  /* game column: one-line HUD, then the scene taking the full height */
-
-  /* the scene: full-frame board, plates as cards placed at the top and bottom */
-  /* board tools and time badge: just below the opponent cards */
-
-  /* command panel: it fills the column, only its content scrolls if needed */
-}

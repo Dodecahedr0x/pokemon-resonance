@@ -1,9 +1,4 @@
 /* battle */
-@media (min-width: 1121px) {
-  .battle {
-    grid-template-columns: minmax(0, 1fr) 320px;
-  }
-}
 
 @keyframes lava {
   50% {

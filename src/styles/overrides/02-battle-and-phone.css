@@ -15,9 +15,6 @@
   background: linear-gradient(135deg, #f6d889, #b98538);
   color: #18212a;
 }
-#combat .battle {
-  gap: var(--space-lg);
-}
 #combat .modal {
   border: 1px solid rgba(242, 198, 109, 0.38);
   border-radius: 22px;
@@ -29,11 +26,6 @@
 button:focus-visible,
 a:focus-visible {
   outline: 2px solid var(--r22-cyan);
-}
-@media (max-width: 760px) {
-  #combat .battle {
-    grid-template-columns: minmax(0, 1fr);
-  }
 }
 
 /* from legacy/game/24-fullscreen-art-full-art-direction/01-fullscreen-art-full-art-direction.css */
@@ -62,18 +54,10 @@ a:focus-visible {
   border-radius: 20px;
   background: linear-gradient(155deg, #17394a, #081a27);
 }
-#combat .battle {
-  gap: var(--space-xl);
-}
 #combat #bLaunch {
   min-height: 48px;
   background: linear-gradient(135deg, #ffe6a0, #c38a3b);
   color: #1a2025;
-}
-@media (max-width: 850px) {
-  #combat .battle {
-    grid-template-columns: minmax(0, 1fr);
-  }
 }
 
 /* from legacy/game/25-post-init-selector-repair/02-battle-both-states-preparation.css */
@@ -91,11 +75,6 @@ a:focus-visible {
   border: 1px solid rgba(131, 221, 230, 0.24);
   border-radius: 19px;
   background: linear-gradient(150deg, #143346, #081925);
-}
-@media (max-width: 850px) {
-  #combat .battle {
-    grid-template-columns: minmax(0, 1fr);
-  }
 }
 
 /* from legacy/game/27-regional-diplomas/05-deep-echo.css */
@@ -136,20 +115,6 @@ html body.compact-battle #combat.page.on {
   }
 }
 @media (min-width: 1121px) {
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .battle {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 336px;
-    gap: var(--space-md);
-    align-items: stretch;
-    padding: 0;
-    border: 0;
-    border-radius: 0;
-    background: none;
-    box-shadow: none;
-    overflow: visible;
-  }
-}
-@media (min-width: 1121px) {
   html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle #bBoard > .board-tools {
     top: 66px;
     left: 12px;
@@ -157,17 +122,6 @@ html body.compact-battle #combat.page.on {
 }
 
 /* from legacy/combat-compact/02-phone.css */
-@media (max-width: 700px) {
-  html:not(#cc) body:not(#cc):has(#cbBattle:not([hidden])) #cbBattle .battle {
-    display: block;
-    padding: 0;
-    border: 0;
-    border-radius: 0;
-    background: none;
-    box-shadow: none;
-    overflow: visible;
-  }
-}
 
 /* from legacy/combat-compact/05-prof-s-tip-during-battle.css */
 @media (max-width: 700px) {

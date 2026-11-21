@@ -1,9 +1,6 @@
 /* MAP — actual dynamic #carte page */
 /* BATTLE: tactical command chamber */
 
-#combat .battle {
-  align-items: start;
-}
 #combat #bLaunch {
   border-radius: 14px;
   box-shadow: 0 10px 28px rgba(225, 172, 78, 0.22);

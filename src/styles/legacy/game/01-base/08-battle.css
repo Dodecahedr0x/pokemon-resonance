@@ -1,15 +1,4 @@
 /* ---------- battle ---------- */
-.battle {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 340px;
-  gap: var(--space-lg);
-  align-items: start;
-}
-@media (max-width: 1120px) {
-  .battle {
-    grid-template-columns: 1fr;
-  }
-}
 .status-badge {
   font-family: var(--f-d);
   font-stretch: 112%;
