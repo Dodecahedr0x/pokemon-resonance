@@ -20,3 +20,25 @@ h4,
 p {
   margin: 0;
 }
+
+/* The page: dark night background, body text and font. */
+html {
+  -webkit-text-size-adjust: 100%;
+  margin: 0;
+  scroll-behavior: smooth;
+  background: #050d16;
+}
+body {
+  margin: 0;
+  overflow-x: hidden;
+  font-family: var(--f-b);
+  font-size: 15.5px;
+  line-height: 1.55;
+  font-feature-settings: 'ss01', 'cv11';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: var(--color-text-page);
+  background:
+    radial-gradient(ellipse at 50% -15%, rgba(40, 111, 145, 0.23), transparent 48%),
+    radial-gradient(ellipse at 100% 55%, rgba(35, 84, 119, 0.13), transparent 42%), var(--bg, #06111b);
+}

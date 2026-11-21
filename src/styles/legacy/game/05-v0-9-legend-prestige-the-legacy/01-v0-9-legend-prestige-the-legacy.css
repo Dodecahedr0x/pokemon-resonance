@@ -44,19 +44,6 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.05), inset 0 0 0 1px rgba(0, 0, 0, 0.55),
     inset 0 0 0 2px rgba(212, 175, 106, 0.05), 0 26px 50px -32px rgba(0, 0, 0, 1);
 }
-html,
-body {
-  background-color: #0a0a0c;
-}
-body {
-  background-image:
-    var(--veins),
-    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='27.71' height='48' viewBox='0 0 27.71 48'><path d='M13.86 0 27.71 8V24L13.86 32 0 24V8ZM13.86 32V48' fill='none' stroke='%23D4AF6A' stroke-opacity='.035' stroke-width='.8'/></svg>");
-  background-size:
-    560px 560px,
-    27.71px 48px;
-  color: var(--tx);
-}
 ::selection {
   background: var(--gold);
   color: #140f06;

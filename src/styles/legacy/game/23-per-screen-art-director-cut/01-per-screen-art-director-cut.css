@@ -9,12 +9,6 @@
   --r22-gold: #f3c66d;
   --r22-white: #f2f7fa;
 }
-body {
-  background:
-    radial-gradient(ellipse at 50% -18%, rgba(47, 112, 145, 0.22), transparent 55%),
-    linear-gradient(180deg, #07131f 0%, #080e18 55%, #060b12 100%);
-  color: var(--r22-white);
-}
 .page {
   position: relative;
 }

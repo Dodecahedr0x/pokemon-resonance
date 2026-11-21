@@ -5,6 +5,8 @@
    palettes become aliases, in the token step of docs/plans/2026-11-20-style-cleanup.md. */
 :root {
   --color-text: var(--tx);
+  /* body text, inherited by everything that sets no colour */
+  --color-text-page: var(--v4-tx);
   --color-text-soft: var(--v4-tx2);
   --color-text-muted: var(--mut);
   --color-text-dim: var(--v4-mut);

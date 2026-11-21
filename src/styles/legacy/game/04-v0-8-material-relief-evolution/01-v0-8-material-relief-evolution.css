@@ -11,11 +11,6 @@
   --hatch: repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.014) 0 1px, transparent 1px 6px);
   --surf: linear-gradient(180deg, #171b24, #0f1219);
 }
-body {
-  background-color: var(--bg);
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='27.71' height='48' viewBox='0 0 27.71 48'><path d='M13.86 0 27.71 8V24L13.86 32 0 24V8ZM13.86 32V48' fill='none' stroke='white' stroke-opacity='.028' stroke-width='1'/></svg>");
-  background-size: 27.71px 48px;
-}
 /* engraved titles */
 .section-title,
 .sh-name {

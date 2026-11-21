@@ -26,7 +26,3 @@
     gap: var(--space-sm);
   }
 }
-html,
-body {
-  margin: 0;
-}

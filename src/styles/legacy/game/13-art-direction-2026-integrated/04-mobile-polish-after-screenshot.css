@@ -6,10 +6,6 @@
 /* Readability polish for the route scene */
 /* ===== resonance-art-direction-final layer ===== */
 /* === POKÉMON RÉSONANCE — INTEGRATED CINEMATIC ART DIRECTION === */
-body {
-  background: radial-gradient(ellipse at 50% -15%, rgba(23, 107, 150, 0.24), transparent 55%), #030b14;
-  color: #f3f8ff;
-}
 .caption {
   color: #ffdf68;
 }

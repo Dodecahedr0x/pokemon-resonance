@@ -7,16 +7,6 @@
   --cyan: #6fe2ff;
   --r: 18px;
 }
-html {
-  background: #04111c;
-  scroll-behavior: smooth;
-}
-body {
-  background:
-    radial-gradient(ellipse at 70% -10%, rgba(39, 133, 174, 0.24), transparent 48%),
-    linear-gradient(180deg, #061624, #04101b 70%, #020a11);
-  color: var(--tx);
-}
 body::before {
   content: '';
   position: fixed;

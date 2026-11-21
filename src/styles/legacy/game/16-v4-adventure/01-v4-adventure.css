@@ -25,13 +25,6 @@
   --v4-red: #ff5f57;
   --v4-r: 14px;
 }
-html body {
-  background:
-    radial-gradient(1200px 700px at 78% -12%, rgba(46, 140, 230, 0.28), transparent 60%),
-    radial-gradient(900px 600px at -10% 105%, rgba(255, 196, 64, 0.08), transparent 65%),
-    linear-gradient(180deg, #071a33, #061327 45%, #050f20) !important;
-  color: var(--v4-tx) !important;
-}
 html body .section-title {
   font-family: var(--f-d);
   font-weight: 800;
