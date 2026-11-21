@@ -4,15 +4,8 @@
   --ink2: #0a2030;
   --panel: rgba(7, 25, 39, 0.82);
   --panel2: rgba(10, 37, 53, 0.86);
-  --line: rgba(112, 211, 255, 0.26);
-  --gold: #ffd45c;
-  --gold2: #f4a927;
-  --tx: #f3f8ff;
-  --mut: #b7cbd9;
   --cyan: #6fe2ff;
-  --rl: 26px;
   --r: 18px;
-  --brass: linear-gradient(135deg, #fff0a6, #bd852a 24%, #ffe9a0 48%, #8b5d1d 72%, #fce8a5);
 }
 html {
   background: #04111c;

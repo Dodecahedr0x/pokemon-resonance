@@ -16,6 +16,7 @@
 @layer theme, base, components, legacy, screens, skin, motion;
 
 @import './theme/spacing.css' layer(theme);
+@import './theme/palette.css' layer(theme);
 @import './theme/colors.css' layer(theme);
 @import './theme/surfaces.css' layer(theme);
 @import './legacy/index.css' layer(legacy);

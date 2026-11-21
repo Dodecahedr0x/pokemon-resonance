@@ -1,0 +1,30 @@
+/* Base palette (the short legacy names that colors.css maps to semantic tokens): the final art-direction values,
+   and the high-contrast overrides. Edit the semantic tokens in colors.css rather than these. */
+:root {
+  --bg: #04101d;
+  --s0: #071827;
+  --s1: #0a2033;
+  --s2: #0e2b43;
+  --s3: #133750;
+  --s4: #1d4962;
+  --line: rgba(120, 220, 255, 0.16);
+  --line2: rgba(120, 220, 255, 0.27);
+  --line3: rgba(153, 228, 255, 0.42);
+  --tx: #f3f8ff;
+  --tx2: #b7cddd;
+  --mut: #8ca8bc;
+  --gold: #ffd75e;
+  --gold2: #d6a82d;
+  --gold-s: rgba(255, 215, 94, 0.14);
+  --gold-l: #fff0a8;
+  --tile: #0b2438;
+  --tile-l: rgba(119, 222, 255, 0.12);
+  --brass: linear-gradient(135deg, #4b9dbb, #f9d86a 48%, #4d8fa9);
+  --sh: 0 24px 65px rgba(0, 0, 0, 0.36);
+  --rl: 20px;
+}
+html.a11y-hc {
+  --tx2: #eef2f7;
+  --mut: #d3d9e2;
+  --line2: rgba(255, 255, 255, 0.32);
+}

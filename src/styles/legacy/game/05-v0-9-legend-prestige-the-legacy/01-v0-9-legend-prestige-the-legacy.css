@@ -9,23 +9,7 @@
   initial-value: #4f8cff;
 }
 :root {
-  --bg: #0a0a0c;
-  --s0: #0c0c0f;
-  --s1: #101115;
-  --s2: #15161b;
-  --s3: #1b1d23;
-  --s4: #2a2c33;
-  --line: rgba(212, 175, 106, 0.09);
-  --line2: rgba(212, 175, 106, 0.17);
-  --line3: rgba(212, 175, 106, 0.32);
-  --tx: #eee8dc;
-  --tx2: #beb7a8;
-  --mut: #8c8679;
   --fnt: #5f5a50;
-  --gold: #d4af6a;
-  --gold2: #9c7a3c;
-  --gold-s: rgba(212, 175, 106, 0.1);
-  --gold-l: #f2dda8;
   --silver: #c9ced6;
   --sapph: #5b9bff;
   --sapph-l: #9cc4ff;
@@ -38,10 +22,8 @@
   --bad: #ff7a3d;
   --f-d: 'Cinzel', 'Trajan Pro', Georgia, 'Times New Roman', serif;
   --f-n: 'Archivo', 'Arial Narrow', Arial, sans-serif;
-  --rl: 12px;
   --r: 9px;
   --rs: 6px;
-  --brass: linear-gradient(135deg, #f4e2b2 0%, #c9a35e 24%, #8e6a2c 46%, #e8cf92 62%, #9c7a3c 82%, #f2dda8 100%);
   --steel: linear-gradient(135deg, #e8ecf2 0%, #8d939c 26%, #4a4f58 48%, #c9ced6 66%, #6e737c 84%, #dde2ea 100%);
   --brush: repeating-linear-gradient(
     90deg,
@@ -61,7 +43,6 @@
   --engrave:
     inset 0 1px 0 rgba(255, 255, 255, 0.05), inset 0 0 0 1px rgba(0, 0, 0, 0.55),
     inset 0 0 0 2px rgba(212, 175, 106, 0.05), 0 26px 50px -32px rgba(0, 0, 0, 1);
-  --sh: var(--engrave);
 }
 html,
 body {

@@ -6,29 +6,6 @@
 /* Readability polish for the route scene */
 /* ===== resonance-art-direction-final layer ===== */
 /* === POKÉMON RÉSONANCE — INTEGRATED CINEMATIC ART DIRECTION === */
-:root {
-  --bg: #04101d !important;
-  --s0: #071827 !important;
-  --s1: #0a2033 !important;
-  --s2: #0e2b43 !important;
-  --s3: #133750 !important;
-  --s4: #1d4962 !important;
-  --line: rgba(120, 220, 255, 0.16) !important;
-  --line2: rgba(120, 220, 255, 0.27) !important;
-  --line3: rgba(153, 228, 255, 0.42) !important;
-  --tx: #f3f8ff !important;
-  --tx2: #b7cddd !important;
-  --mut: #8ca8bc !important;
-  --gold: #ffd75e !important;
-  --gold2: #d6a82d !important;
-  --gold-s: rgba(255, 215, 94, 0.14) !important;
-  --gold-l: #fff0a8 !important;
-  --tile: #0b2438 !important;
-  --tile-l: rgba(119, 222, 255, 0.12) !important;
-  --brass: linear-gradient(135deg, #4b9dbb, #f9d86a 48%, #4d8fa9) !important;
-  --sh: 0 24px 65px rgba(0, 0, 0, 0.36) !important;
-  --rl: 20px !important;
-}
 body {
   background: radial-gradient(ellipse at 50% -15%, rgba(23, 107, 150, 0.24), transparent 55%), #030b14 !important;
   color: #f3f8ff !important;

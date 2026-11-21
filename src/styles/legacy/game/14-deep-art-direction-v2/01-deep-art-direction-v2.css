@@ -1,19 +1,5 @@
 /* ===== resonance-deep-art-direction-v2 layer ===== */
 /* FINAL PASS — integrated cinematic Pokémon UI, not a static mockup */
-:root {
-  --bg: #06111b;
-  --s0: #081722;
-  --s1: #0a2030;
-  --s2: #0d2b40;
-  --s3: #12384f;
-  --gold: #ffd45b;
-  --gold2: #f2ad32;
-  --tx: #f3f8ff;
-  --tx2: #bdd4e2;
-  --mut: #85a5b8;
-  --line: rgba(113, 218, 255, 0.19);
-  --line2: rgba(113, 218, 255, 0.32);
-}
 body {
   background:
     radial-gradient(ellipse at 70% -12%, rgba(24, 108, 151, 0.28), transparent 50%),
