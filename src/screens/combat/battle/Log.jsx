@@ -1,5 +1,5 @@
 import { Html } from '../../../lib/html.jsx';
-import { LOG } from '../../../engine/combat/ui.js';
+import { battleLog } from '../../../engine/combat/ui.js';
 import { useBattleVersion } from './battleStore.js';
 
 // line kind given to log() (kept in the battle state) → class
@@ -9,7 +9,7 @@ const LINE_CLASS = { sys: 'is-system', arn: 'is-arena', evo: 'is-evolution' };
 // The open/closed state of the <details> stays the player's (React does not touch it).
 export default function Log() {
   const v = useBattleVersion('log');
-  const L = v && LOG ? LOG : [];
+  const L = v && battleLog ? battleLog : [];
   return (
     <details className="panel battle-log" id="bLogD">
       <summary>

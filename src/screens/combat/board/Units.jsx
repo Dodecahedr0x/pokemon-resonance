@@ -1,5 +1,5 @@
 import { useLayoutEffect, useRef } from 'react';
-import { DIAMOND_PATH, L } from '../../../engine/combat/ui.js';
+import { DIAMOND_PATH, BOARD_LAYERS } from '../../../engine/combat/ui.js';
 import { tokArtErr, tokArtOk } from '../../../engine/assets/illustrations.js';
 import { useBoard } from './boardStore.js';
 import { PE, lref } from './shared.js';
@@ -152,7 +152,7 @@ function Token({ T }) {
   );
 }
 
-const ordering = () => (L.uo || []).map(id => L.u && L.u[id]).filter(Boolean);
+const ordering = () => (BOARD_LAYERS.uo || []).map(id => BOARD_LAYERS.u && BOARD_LAYERS.u[id]).filter(Boolean);
 
 export function Units() {
   useBoard('units');

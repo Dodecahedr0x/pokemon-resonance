@@ -4,13 +4,13 @@ import { SCENARIOS } from '../pokemon/pokemon.js';
 import { $, toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { parseCellKey, hdist, unitAt, unitKey } from './engine.js';
-import { B, L, scSel, ui } from './ui.js';
+import { battle, BOARD_LAYERS, selectedScenario, ui } from './ui.js';
 import { PREFERENCES } from '../ui/preferences.js';
 import { formatNumber } from '../state/economy.js';
 import { hourOf, seesAtNight } from './living-board.js';
 
 export function chosenFog() {
-  const D = SCENARIOS[scSel] || {};
+  const D = SCENARIOS[selectedScenario] || {};
   return !!PREFERENCES.fogOfWar && !D.tuto && !D.hebdo429 && D.enigme431 == null && !D.rentalTeam;
 }
 
@@ -46,23 +46,23 @@ export function fogHidden(S, e, vu) {
 }
 
 function fogRender() {
-  const on = !!(B && B.fogOfWar && !B.over),
-    vu = on ? fogVision(B) : null;
+  const on = !!(battle && battle.fogOfWar && !battle.over),
+    vu = on ? fogVision(battle) : null;
   bdClass('fog-of-war', on); // class of #bBoard, rendered by React
-  if (L.t) {
-    for (const k in L.t) {
-      L.t[k].classList.toggle('is-fogged', on && !vu.has(k));
+  if (BOARD_LAYERS.t) {
+    for (const k in BOARD_LAYERS.t) {
+      BOARD_LAYERS.t[k].classList.toggle('is-fogged', on && !vu.has(k));
     }
   }
-  if (!B) {
+  if (!battle) {
     return;
   }
   // the veiled plates (#bPlE): rendered by React (Plates.jsx)
-  B.units
+  battle.units
     .filter(u => u.side === 'e')
     .forEach(u => {
-      const c = on && fogHidden(B, u, vu),
-        T = L.u && L.u[u.uid];
+      const c = on && fogHidden(battle, u, vu),
+        T = BOARD_LAYERS.u && BOARD_LAYERS.u[u.uid];
       if (T) {
         tokCl(T, 'is-fogged', c);
       } // token classes: Units.jsx
@@ -71,7 +71,7 @@ function fogRender() {
 
 /* ---------- after each battle render ---------- */
 export function afterRenderFog() {
-  if (!B) {
+  if (!battle) {
     return;
   }
   try {
@@ -94,15 +94,15 @@ export function init() {
   $('#bSvg').addEventListener(
     'click',
     e => {
-      if (!B || !B.fogOfWar || B.over || B.deployPhase || ui.mode) {
+      if (!battle || !battle.fogOfWar || battle.over || battle.deployPhase || ui.mode) {
         return;
       }
       const p = e.target.closest('[data-k]');
       if (!p) {
         return;
       }
-      const u = unitAt(B, p.dataset.k);
-      if (u && fogHidden(B, u, fogVision(B))) {
+      const u = unitAt(battle, p.dataset.k);
+      if (u && fogHidden(battle, u, fogVision(battle))) {
         e.stopPropagation();
         toast('Brouillard : rien en vue ici.');
       }

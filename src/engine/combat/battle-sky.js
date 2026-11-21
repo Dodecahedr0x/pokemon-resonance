@@ -1,7 +1,7 @@
 import { WEATHER } from '../data/game-data.js';
 import { WEATHER_NAME } from '../pokemon/pokemon.js';
 import { getHost, hostSet } from '../../screens/combat/board/boardStore.js';
-import { B, ui } from './ui.js';
+import { battle, ui } from './ui.js';
 import { PREFERENCES } from '../ui/preferences.js';
 import { LIVING_DESC, LIVING_STATE, LIVING_NAME } from './living-board.js';
 import { deployRender } from './deployment.js';
@@ -21,10 +21,10 @@ function weatherInfo(k) {
 
 function renderSky() {
   const bd = document.getElementById('bBoard');
-  if (!bd || !B) {
+  if (!bd || !battle) {
     return;
   }
-  const E = skyState(B);
+  const E = skyState(battle);
   // #skyBanner: rendered by React (Board.jsx)
   const [ic, co] = SKY_STYLES[E.ph] || SKY_STYLES.jour,
     w = E.wx && SKY_STYLES[E.wx];
@@ -33,23 +33,23 @@ function renderSky() {
     co,
     ti: LIVING_NAME[E.ph] || '',
     w: w ? [w[0], w[1], WEATHER_NAME[E.wx]] : null,
-    displayName: (LIVING_NAME[E.ph] || 'Jour') + (w ? ' · ' + WEATHER_NAME[E.wx] + ' ' + B.wx.n : ''),
-    vent: !!B.vent,
+    displayName: (LIVING_NAME[E.ph] || 'Jour') + (w ? ' · ' + WEATHER_NAME[E.wx] + ' ' + battle.wx.n : ''),
+    vent: !!battle.vent,
   };
   if (JSON.stringify(sky) !== JSON.stringify(getHost().ciel)) {
     hostSet({ ciel: sky });
   }
   // announcement when the time or weather changes
-  const prevSky = B.skyBanner;
-  B.skyBanner = E;
-  if (!prevSky || B.over) {
+  const prevSky = battle.skyBanner;
+  battle.skyBanner = E;
+  if (!prevSky || battle.over) {
     return;
   }
   if (prevSky.ph !== E.ph) {
     announceSky(SKY_STYLES[E.ph], LIVING_STATE[E.ph] || LIVING_NAME[E.ph], LIVING_DESC[E.ph] || '');
   } else if (prevSky.wx !== E.wx) {
     E.wx
-      ? announceSky(SKY_STYLES[E.wx], `${WEATHER_NAME[E.wx]} · ${B.wx.n} manches`, weatherInfo(E.wx))
+      ? announceSky(SKY_STYLES[E.wx], `${WEATHER_NAME[E.wx]} · ${battle.wx.n} manches`, weatherInfo(E.wx))
       : announceSky(['i-sol', '#cfe6ff'], 'Le ciel se dégage', 'La météo est terminée.');
   }
 }
@@ -78,7 +78,7 @@ export function announceSky(ic, heading, text) {
 
 /* ---------- after each battle render: sky, then deployment ---------- */
 export function afterRenderTactics() {
-  if (!B) {
+  if (!battle) {
     return;
   }
   try {

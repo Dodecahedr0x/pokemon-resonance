@@ -7,7 +7,7 @@ import { RECRUIT } from '../pokemon/evolution.js';
 import { ITEMS2, PROFILE, isCamp } from '../state/game-state.js';
 import { BADGES } from '../modes/gyms.js';
 import { HOOKS } from '../core/hooks.js';
-import { TOD } from './home-route.js';
+import { timeOfDay } from './home-route.js';
 import { pushMessage } from '../combat/engine.js';
 import { wildScen } from '../combat/items-bonds-ai.js';
 import { SHOP, bagCount, formatNumber } from '../state/economy.js';
@@ -30,7 +30,7 @@ export function rollDominant(id) {
   if (isCamp() && BADGES.length < 2 && !isJohtoRegion()) {
     return false;
   }
-  return Math.random() < (TOD === 'nuit' ? 0.1 : 0.07) * (id && id === dailyDominant() ? 3 : 1); // Dominant flagged (v4.17)
+  return Math.random() < (timeOfDay === 'nuit' ? 0.1 : 0.07) * (id && id === dailyDominant() ? 3 : 1); // Dominant flagged (v4.17)
 }
 
 export function makeDominantScenario(D, id, shiny) {

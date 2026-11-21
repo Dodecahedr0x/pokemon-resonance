@@ -1,5 +1,5 @@
 import { useEngineReady } from '../../engineReady.js';
-import { DEXS, dexBuilt } from '../../engine/progression/pokedex.js';
+import { DEX_SPECIES, dexBuilt } from '../../engine/progression/pokedex.js';
 import { useDexVersion } from './dexStore.js';
 import DexCard from './DexCard.jsx';
 import { DexCount, DexList } from './DexList.jsx';
@@ -21,7 +21,7 @@ export default function Pokedex() {
             kicker="Kanto, Johto et Hoenn"
             title="Pokédex"
             titleId="h-dex4"
-            lead={`Les ${DEXS.length} Pokémon du jeu, leurs mesures, leur rôle et leurs capacités.`}
+            lead={`Les ${DEX_SPECIES.length} Pokémon du jeu, leurs mesures, leur rôle et leurs capacités.`}
           />
           {'\n '}
           <Missions />

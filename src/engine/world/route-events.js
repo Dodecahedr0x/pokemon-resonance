@@ -9,7 +9,7 @@ import { shut, updateTemp } from '../../screens/overlays/tempStore.js';
 import { SHOP, bagCount, formatNumber, savePurse, today } from '../state/economy.js';
 import { ownedFam } from '../progression/trainer-stats.js';
 import { refreshMap } from '../../screens/map/mapStore.js';
-import { DEXS } from '../progression/pokedex.js';
+import { DEX_SPECIES } from '../progression/pokedex.js';
 import { refreshDex } from '../../screens/dex/dexStore.js';
 import { renderBag } from '../progression/quests-shop.js';
 import { costOf0 } from '../progression/base-camp.js';
@@ -130,7 +130,7 @@ export function missionState() {
 
 export function typeProgress() {
   const cnt = {};
-  DEXS.forEach(m => {
+  DEX_SPECIES.forEach(m => {
     (m.t || []).forEach(t => {
       cnt[t] = cnt[t] || { tot: 0, own: 0 };
       cnt[t].tot++;
@@ -409,7 +409,7 @@ function onDexMissionClick(e) {
     [k, v] = b.dataset.dexMission.split(':');
   if (k === 'p') {
     const p = MISSION_TIERS.find(x => x[0] === +v);
-    if (!p || S.pal[v] || DEXS.filter(m => ownedFam(m.id)).length < p[0]) {
+    if (!p || S.pal[v] || DEX_SPECIES.filter(m => ownedFam(m.id)).length < p[0]) {
       return;
     }
     S.pal[v] = 1;

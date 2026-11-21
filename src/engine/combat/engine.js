@@ -7,7 +7,7 @@ import {
   EEVEE,
   FAMT,
   MARK_TYPE,
-  PKT,
+  SPECIES_BY_TYPES,
   SCENARIOS,
   TYPE_CHART,
   WEATHER_NAME,
@@ -17,9 +17,9 @@ import { ITEMS2, pairKey } from '../state/game-state.js';
 import { HOOKS } from '../core/hooks.js';
 import { DIFFICULTY, aiFallback, dmgItemsLinks, threatAt } from './items-bonds-ai.js';
 import {
-  NOTE,
+  battleNotes,
   SANDOK,
-  __set_NOTE,
+  __set_battleNotes,
   applyObst,
   dmgRolesField,
   foeRetreat,
@@ -172,7 +172,7 @@ export function mkUnit(id, side, pos, uid, D) {
     en: 0,
     ko: false,
   };
-  PKT.set(u.t, u.id); // types → species: the medallion shows the right illustration
+  SPECIES_BY_TYPES.set(u.t, u.id); // types → species: the medallion shows the right illustration
   return u;
 }
 
@@ -1768,9 +1768,9 @@ export function transform(S, u, id, ev) {
     pushMessage(ev, `L’Éveil efface la fatigue de ${u.n}.`);
   }
   // types → species, for the evolution illustrations
-  PKT.set(u.t, u.id);
-  PKT.set(ot, oid);
-  PKT.set(tt, id);
+  SPECIES_BY_TYPES.set(u.t, u.id);
+  SPECIES_BY_TYPES.set(ot, oid);
+  SPECIES_BY_TYPES.set(tt, id);
 }
 
 export function pAwaken(S, u, id) {
@@ -2342,11 +2342,11 @@ function roundEffects(S) {
 }
 
 export function preview(S, uid, mi, k) {
-  __set_NOTE([]); // coverage, ricochet and guarding notes
+  __set_battleNotes([]); // coverage, ricochet and guarding notes
   try {
     return previewCore(S, uid, mi, k);
   } finally {
-    __set_NOTE(null);
+    __set_battleNotes(null);
   }
 }
 
@@ -2379,7 +2379,7 @@ function previewCore(S, uid, mi, k) {
     aff: affected(S, su, MOVES[su.mv[mi]], k),
     over: C.over,
     wx: ev.some(e => e.e === 'msg' && e.s.startsWith('Météo')),
-    notes: NOTE,
+    notes: battleNotes,
   };
 }
 

@@ -2,7 +2,7 @@
 
 import { POKEMON } from '../pokemon/pokemon.js';
 import { PROFILE, isCamp } from '../state/game-state.js';
-import { RC } from '../pokemon/roles-synergies.js';
+import { rosterCost } from '../pokemon/roles-synergies.js';
 import { BADGES } from './gyms.js';
 import { paintOverlay } from '../../screens/overlays/dialogsStore.js';
 import { $, toast } from '../core/utils.js';
@@ -83,7 +83,7 @@ function safariPool() {
 
 function rollSafariEncounter() {
   const L = safariPool(),
-    w = L.map(m => (1 + RC(m.id)) * (!PROFILE.box.includes(m.id) ? 2 : 1)),
+    w = L.map(m => (1 + rosterCost(m.id)) * (!PROFILE.box.includes(m.id) ? 2 : 1)),
     m = drawWeightedMon(L, w);
   return { id: m.id, sh: Math.random() < SHINY_RATE * multChroma() * 2, bait: 0, caillou: 0 };
 }
@@ -205,7 +205,7 @@ function renderSafariPanel() {
 export const safariLocked = () => (isCamp() && BADGES.length < 2 ? 'Le Parc Safari ouvre après votre 2e badge.' : null);
 
 const catchChance = x => {
-  const base = Math.max(0.08, Math.min(0.45, 0.5 - 0.06 * RC(x.id)));
+  const base = Math.max(0.08, Math.min(0.45, 0.5 - 0.06 * rosterCost(x.id)));
   return Math.min(0.9, base * (x.caillou ? 1.6 : 1) * (x.bait ? 0.8 : 1));
 };
 

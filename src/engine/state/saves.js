@@ -12,7 +12,7 @@ import {
   inBox,
 } from './game-state.js';
 import { BADGES, __set_BADGES } from '../modes/gyms.js';
-import { RC } from '../pokemon/roles-synergies.js';
+import { rosterCost } from '../pokemon/roles-synergies.js';
 import { $, wait, writeLS, toast } from '../core/utils.js';
 import { setSaveIndicator } from '../../components/shellStore.js';
 import { currentScreen, goTo } from '../core/navigation.js';
@@ -22,11 +22,11 @@ import { BOARD_ROWS, BOARD_COLS } from '../combat/engine.js';
 import { wildScen } from '../combat/items-bonds-ai.js';
 import { OBSTACLES } from '../combat/synergies-obstacles.js';
 import {
-  B,
-  LOG,
-  __set_B,
-  __set_LOG,
-  __set_scSel,
+  battle,
+  battleLog,
+  __set_battle,
+  __set_battleLog,
+  __set_selectedScenario,
   autoSel,
   buildBoard,
   launch,
@@ -205,13 +205,13 @@ export function cleanProfile(p) {
 }
 
 function battleNow() {
-  if (B && !B.over) {
-    if (B.phase === 'player' && !ui.busy) {
-      CLOUD_SAVE.lastBattle = { sc: B.sc, state: JSON.parse(JSON.stringify(B)), log: LOG.slice(0, 40) };
+  if (battle && !battle.over) {
+    if (battle.phase === 'player' && !ui.busy) {
+      CLOUD_SAVE.lastBattle = { sc: battle.sc, state: JSON.parse(JSON.stringify(battle)), log: battleLog.slice(0, 40) };
     }
     return CLOUD_SAVE.lastBattle;
   }
-  if (B && B.over) {
+  if (battle && battle.over) {
     CLOUD_SAVE.lastBattle = null;
   }
   return CLOUD_SAVE.lastBattle;
@@ -343,8 +343,8 @@ export function applySave(s, opt) {
   renderHome();
   if (opt.resume && CLOUD_SAVE.lastBattle) {
     resumeBattle();
-  } else if (opt.leaveBattle && B) {
-    __set_B(null);
+  } else if (opt.leaveBattle && battle) {
+    __set_battle(null);
     $('#cbBattle').hidden = true;
     $('#cbResult').hidden = true;
     $('#evoPick').hidden = true;
@@ -362,16 +362,16 @@ function resumeBattle() {
   if (!validBattle(b)) {
     return;
   }
-  __set_B(JSON.parse(JSON.stringify(b.state)));
-  B.stats.caught = B.stats.caught || [];
-  B.stats.rxk = B.stats.rxk || {};
-  B.stats.duo = B.stats.duo || 0;
-  B.links = B.links || {};
-  B.diff = B.diff || 'normal';
-  if (!B.jit) {
+  __set_battle(JSON.parse(JSON.stringify(b.state)));
+  battle.stats.caught = battle.stats.caught || [];
+  battle.stats.rxk = battle.stats.rxk || {};
+  battle.stats.duo = battle.stats.duo || 0;
+  battle.links = battle.links || {};
+  battle.diff = battle.diff || 'normal';
+  if (!battle.jit) {
     // battle started before v4.12: switch to hidden intentions
-    B.jit = true;
-    B.units.forEach(u => {
+    battle.jit = true;
+    battle.units.forEach(u => {
       if (u.side === 'e') {
         u.intent = null;
         u.prep = false;
@@ -380,11 +380,11 @@ function resumeBattle() {
       }
     });
   }
-  if (B.noCatch === undefined) {
-    B.noCatch = !SCENARIOS[B.sc].catch;
+  if (battle.noCatch === undefined) {
+    battle.noCatch = !SCENARIOS[battle.sc].catch;
   }
-  __set_LOG(Array.isArray(b.log) ? b.log.filter(x => x && typeof x.s === 'string').slice(0, 70) : []);
-  __set_scSel(b.sc);
+  __set_battleLog(Array.isArray(b.log) ? b.log.filter(x => x && typeof x.s === 'string').slice(0, 70) : []);
+  __set_selectedScenario(b.sc);
   Object.assign(ui, {
     sel: null,
     selE: null,
@@ -402,11 +402,11 @@ function resumeBattle() {
   $('#cbResult').hidden = true;
   $('#evoPick').hidden = true;
   buildBoard();
-  addLog(`Combat repris à la manche ${B.round}.`, 'sys');
+  addLog(`Combat repris à la manche ${battle.round}.`, 'sys');
   autoSel();
   renderAll();
   window.scrollTo({ top: 0 });
-  if (B.order === 'vitesse') {
+  if (battle.order === 'vitesse') {
     unrollSpeed();
   } // speed order: the queue resumes where it was
 }
@@ -589,11 +589,11 @@ function normSave(s) {
     seen = new Set();
   let cost = 0;
   (Array.isArray(o.squad) ? o.squad : []).forEach(id => {
-    if (!POKEMON[id] || keep.length >= TEAM_MAX || seen.has(POKEMON[id].base) || cost + RC(id) > BUDGET) {
+    if (!POKEMON[id] || keep.length >= TEAM_MAX || seen.has(POKEMON[id].base) || cost + rosterCost(id) > BUDGET) {
       return;
     }
     seen.add(POKEMON[id].base);
-    cost += RC(id);
+    cost += rosterCost(id);
     keep.push(id);
   });
   o.squad = keep.length ? keep : [...PRESETS.orage.ids];
@@ -824,7 +824,7 @@ function onSavesOverlayClick(e) {
   }
   if (a === 'tuto') {
     closeSaves();
-    __set_scSel('tuto');
+    __set_selectedScenario('tuto');
     goTo('combat');
     renderPrep();
     if (squad.length) {
@@ -1000,7 +1000,7 @@ export function init() {
     CLOUD_SAVE.cloud = true;
     const r = CLOUD_SAVE.remote.auto,
       l = CLOUD_SAVE.local.auto;
-    if (r && (!l || r.savedAt > l.savedAt) && !CLOUD_SAVE.acted && !B) {
+    if (r && (!l || r.savedAt > l.savedAt) && !CLOUD_SAVE.acted && !battle) {
       applySave(r);
       CLOUD_SAVE.local.auto = r;
       lsSet('auto', r);

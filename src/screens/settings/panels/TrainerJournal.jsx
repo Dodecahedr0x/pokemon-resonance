@@ -2,7 +2,7 @@ import { POKEMON } from '../../../engine/pokemon/pokemon.js';
 import { PROFILE } from '../../../engine/state/game-state.js';
 import { pokemonArtUrl } from '../../../engine/assets/images.js';
 import { ownedFam } from '../../../engine/progression/trainer-stats.js';
-import { DEXS } from '../../../engine/progression/pokedex.js';
+import { DEX_SPECIES } from '../../../engine/progression/pokedex.js';
 import { readJournal } from '../../../engine/audio/immersion.js';
 
 // Settings › Trainer Journal (v4.48): statistics recorded on this device.
@@ -19,7 +19,7 @@ export default function TrainerJournal() {
     fav = Object.entries(j.use).sort((a, b) => b[1] - a[1])[0],
     fm = fav && POKEMON[fav[0]],
     rate = P.battles ? Math.round((100 * P.wins) / P.battles) : 0,
-    own = DEXS.filter(m => ownedFam(m.id)).length;
+    own = DEX_SPECIES.filter(m => ownedFam(m.id)).length;
   return (
     <section className="card" id="trainer-journal-panel">
       <h3 className="card-title">Journal de dresseur</h3>
@@ -33,7 +33,7 @@ export default function TrainerJournal() {
         <Cell n={P.caught} l="Captures" />
         <Cell n={P.awakenings} l="Éveils" />
         <Cell n={P.rx} l="Réactions" />
-        <Cell n={own + ' / ' + DEXS.length} l="Pokédex" />
+        <Cell n={own + ' / ' + DEX_SPECIES.length} l="Pokédex" />
       </div>
       {fm && (
         <p className="trainer-journal-summary">

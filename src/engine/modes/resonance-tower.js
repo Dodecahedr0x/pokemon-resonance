@@ -4,7 +4,7 @@ import { ITEMS2, PROFILE } from '../state/game-state.js';
 import { paintOverlay } from '../../screens/overlays/dialogsStore.js';
 import { $, mulberry32 } from '../core/utils.js';
 import { OBSTACLES } from '../combat/synergies-obstacles.js';
-import { B, __set_scSel, backToPrep, chooseBattle, launch } from '../combat/ui.js';
+import { battle, __set_selectedScenario, backToPrep, chooseBattle, launch } from '../combat/ui.js';
 import { queueSave } from '../state/saves.js';
 import { __set_PREPG, renderPrep } from '../combat/battle-prep.js';
 import { chosenOrder } from '../combat/tactical-engine.js';
@@ -255,7 +255,7 @@ function towerClimb() {
   }
   towerBuild(run);
   queueSave();
-  if (B) {
+  if (battle) {
     backToPrep();
   }
   chooseBattle('tdr');
@@ -336,7 +336,7 @@ export function init() {
       }
       e.stopPropagation();
       backToPrep();
-      __set_scSel('tdr');
+      __set_selectedScenario('tdr');
       __set_PREPG({ g: 'apres', sc: 'tdr' });
       renderPrep();
       if (b.dataset.tdrn === 'reward') {

@@ -19,7 +19,7 @@ import {
   unitKey,
 } from './engine.js';
 import { resolve } from './synergies-obstacles.js';
-import { B } from './ui.js';
+import { battle } from './ui.js';
 import { CHAMP_L, ELITE_L } from '../progression/prestige.js';
 import { CAP_K, __set_BALL_SEL } from '../items/ball-choice.js';
 import { SHOP, bagCount } from '../state/economy.js';
@@ -138,7 +138,7 @@ export function pCapture(S, u, e) {
   ev.push({ e: 'catch', u: e.uid, by: u.uid });
   pushMessage(ev, `${e.n} est capturé !`);
   endStep(S, ev);
-  if (S === B) {
+  if (S === battle) {
     // a Ball from the Bag is consumed
     PROFILE.bag[k] = Math.max(0, bagCount(k) - 1);
     if (!PROFILE.bag[k]) {

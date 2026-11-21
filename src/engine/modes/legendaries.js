@@ -1,5 +1,5 @@
 import { MOVES } from '../data/moves.js';
-import { POKEMON, PKT, SCENARIOS } from '../pokemon/pokemon.js';
+import { POKEMON, SPECIES_BY_TYPES, SCENARIOS } from '../pokemon/pokemon.js';
 import { OBSTACLES } from '../combat/synergies-obstacles.js';
 
 /* Legendary bosses: six post-game boss battles, their signature moves and species (added in v4.4). */
@@ -171,7 +171,7 @@ export function init() {
       leg: true,
     };
     POKEMON[L.id] = m;
-    PKT.set(m.t, m.id);
+    SPECIES_BY_TYPES.set(m.t, m.id);
   });
 
   LEGENDARIES.forEach(L => {

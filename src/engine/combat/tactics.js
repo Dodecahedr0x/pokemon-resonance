@@ -26,7 +26,7 @@ import {
   unitKey,
 } from './engine.js';
 import { OBSTACLES, resolve, roleOf } from './synergies-obstacles.js';
-import { cellCenter, cellPolygon, scSel } from './ui.js';
+import { cellCenter, cellPolygon, selectedScenario } from './ui.js';
 import { PREFERENCES } from '../ui/preferences.js';
 import { SHOP } from '../state/economy.js';
 import { DAMAGE_PROVIDERS, ROLE_PROVIDERS } from './tactical-engine.js';
@@ -66,7 +66,7 @@ import { duelCanCharge } from '../modes/duel.js';
 
 /** "Tactique avancée" setting (Settings). The guided prologue battle stays classic. */
 export function chosenTactic() {
-  return PREFERENCES.tactics !== false && !(SCENARIOS[scSel] && SCENARIOS[scSel].tuto);
+  return PREFERENCES.tactics !== false && !(SCENARIOS[selectedScenario] && SCENARIOS[selectedScenario].tuto);
 }
 
 /** Profile: defeated colossi. Declared functions: called as soon as the game loads. */

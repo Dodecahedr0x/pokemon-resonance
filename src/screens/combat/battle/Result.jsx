@@ -7,7 +7,7 @@ import { isCamp } from '../../../engine/state/game-state.js';
 import { ARENAS, BADGES } from '../../../engine/modes/gyms.js';
 import { medal } from '../../../engine/core/utils.js';
 import { badgeSvg } from '../../../engine/modes/league.js';
-import { B } from '../../../engine/combat/ui.js';
+import { battle } from '../../../engine/combat/ui.js';
 import { calmMotion } from '../../../engine/ui/preferences.js';
 import { nextGoal } from '../../../engine/progression/campaign.js';
 import { rewHtml } from '../../../engine/progression/battle-rewards.js';
@@ -23,7 +23,7 @@ const NL = '\n  ';
 // End-of-battle sheet (#cbResult), shown by finish() via the hidden attribute.
 export default function Result() {
   const v = useBattleVersion('result');
-  const S = useKeyed(() => B, [v]); // the finished battle, frozen for this sheet
+  const S = useKeyed(() => battle, [v]); // the finished battle, frozen for this sheet
   const card = useRef(null);
   // holographic edge, seal and confetti: applied on the next frame, once the sheet is visible
   const [deco, setDeco] = useState(null);

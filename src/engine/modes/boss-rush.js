@@ -7,7 +7,7 @@ import { $, writeLS, readLS, toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { squad } from '../team/team.js';
 import { heal } from '../combat/engine.js';
-import { B, backToPrep, goFight, launch } from '../combat/ui.js';
+import { battle, backToPrep, goFight, launch } from '../combat/ui.js';
 import { escapeHtml } from '../state/saves.js';
 import { sfx, vibrate } from '../audio/sound-effects.js';
 import { overlay } from '../progression/prestige.js';
@@ -82,7 +82,7 @@ function bossRushGo() {
   BOSS_RUSH.armed = true;
   shut('boss-rush-o');
   $('#cbResult').hidden = true;
-  if (B) {
+  if (battle) {
     backToPrep();
   }
   goFight(run.boss[run.i]);

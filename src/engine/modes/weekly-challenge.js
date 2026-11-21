@@ -5,7 +5,7 @@ import { mulberry32 } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { goTo } from '../core/navigation.js';
 import { OBSTACLES } from '../combat/synergies-obstacles.js';
-import { battleOpts, scSel } from '../combat/ui.js';
+import { battleOpts, selectedScenario } from '../combat/ui.js';
 import { SCREEN_STATE } from '../ui/screen-state.js';
 import { formatNumber } from '../state/economy.js';
 import { renderQuests } from '../progression/quests-shop.js';
@@ -103,8 +103,8 @@ export function buildWeeklyChallenge() {
 
 /** The challenge's rental team, with identical settings for everyone. */
 export function weeklyTeam() {
-  const D = SCENARIOS[scSel];
-  if (scSel !== 'hebdo429' || !D || !D.rentalTeam) {
+  const D = SCENARIOS[selectedScenario];
+  if (selectedScenario !== 'hebdo429' || !D || !D.rentalTeam) {
     return null;
   }
   return {

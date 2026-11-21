@@ -1,8 +1,8 @@
 /* Phased bosses, secret places, wandering NPCs (added in v4.60). */
 
-import { TOD } from './home-route.js';
+import { timeOfDay } from './home-route.js';
 import { pushMessage } from '../combat/engine.js';
-import { B } from '../combat/ui.js';
+import { battle } from '../combat/ui.js';
 import { writeLS, readLS, mulberry32 } from '../core/utils.js';
 import { sfx, vibrate } from '../audio/sound-effects.js';
 import { leaderOf, overlay } from '../progression/prestige.js';
@@ -30,14 +30,14 @@ export function bossEnrage(S, ev) {
 
 /** Row of the opponent sheet: boss phase, or the Champion's rage. */
 export function bossResonanceHtml(e) {
-  if (!B || e.ko || e !== getBoss(B)) {
+  if (!battle || e.ko || e !== getBoss(battle)) {
     return '';
   }
-  if (hasBossPhases(B)) {
+  if (hasBossPhases(battle)) {
     const ph = e.bossPhase || 1;
     return `<p class="battle-resonance-note">${ph >= 3 ? 'Phase 3 : dernier souffle.' : ph === 2 ? 'Phase 2 : renforcé. La phase 3 arrive sous 33 % de PV.' : 'Phase 1. La phase 2 arrive sous 66 % de PV.'}</p>`;
   }
-  if (leaderOf(B.sc)) {
+  if (leaderOf(battle.sc)) {
     return `<p class="battle-resonance-note">${e.enraged ? 'Il se déchaîne : renforcé.' : 'Il se déchaînera sous 50 % de PV.'}</p>`;
   }
   return '';
@@ -308,7 +308,7 @@ export const SECRET_PLACES = [
     n: 'Source de la Lune',
     ind: 'Se révèle la nuit.',
     min: 0,
-    ok: () => TOD === 'nuit',
+    ok: () => timeOfDay === 'nuit',
     lore: 'Une eau claire coule sous les étoiles. Les anciens disaient que les premières notes de la Résonance y ont été entendues.',
     rew: { g: 3 },
   },
@@ -317,7 +317,7 @@ export const SECRET_PLACES = [
     n: 'Clairière du Matin',
     ind: 'Se révèle le matin.',
     min: 0,
-    ok: () => TOD === 'matin',
+    ok: () => timeOfDay === 'matin',
     lore: 'La rosée perle sur les baies. Quelqu’un a laissé là un panier, comme une offrande pour les dresseurs de passage.',
     rew: { b: { baiemepo: 2 } },
   },
@@ -353,7 +353,7 @@ export const SECRET_PLACES = [
     n: 'Ruine de la Résonance',
     ind: 'Se révèle en journée, après le 4e badge.',
     min: 4,
-    ok: () => TOD === 'jour',
+    ok: () => timeOfDay === 'jour',
     lore: 'Les murs gravés racontent la Dissonance, ce silence qui efface les notes. Au centre, un éclat de Résonance pur vibre encore.',
     rew: { g: 6 },
   },

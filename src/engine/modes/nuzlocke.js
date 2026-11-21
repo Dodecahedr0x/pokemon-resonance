@@ -6,7 +6,7 @@ import { PROFILE } from '../state/game-state.js';
 import { writeLS, toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { __set_squad, squad } from '../team/team.js';
-import { B } from '../combat/ui.js';
+import { battle } from '../combat/ui.js';
 import { queueSave } from '../state/saves.js';
 import { PREFERENCES, savePref } from '../ui/preferences.js';
 import { SCREEN_STATE } from '../ui/screen-state.js';
@@ -52,16 +52,16 @@ export function nuzlockeEncounter() {
 export const NUZLOCKE_ON = () => !!PREFERENCES.nuzlockeOn;
 
 function onBattleEnd() {
-  if (!NUZLOCKE_ON() || !B || !B.over || B._nuzlockeDone) {
+  if (!NUZLOCKE_ON() || !battle || !battle.over || battle._nuzlockeDone) {
     return;
   }
-  B._nuzlockeDone = 1;
-  const D = SCENARIOS[B.sc] || {};
-  if (D.noProgress || B.duel433 || D.tuto || D.duel433 || SCENARIOS.ami === D) {
+  battle._nuzlockeDone = 1;
+  const D = SCENARIOS[battle.sc] || {};
+  if (D.noProgress || battle.duel433 || D.tuto || D.duel433 || SCENARIOS.ami === D) {
     return;
   }
   const bases = [];
-  B.units
+  battle.units
     .filter(u => u.side === 'a' && u.ko)
     .forEach(u => {
       const b = (POKEMON[u.id] && POKEMON[u.id].base) || u.sp;
@@ -83,11 +83,11 @@ function onBattleEnd() {
     PROFILE.forms = (PROFILE.forms || []).filter(x => !POKEMON[x] || POKEMON[x].base !== b);
     __set_squad(squad.filter(x => !POKEMON[x] || POKEMON[x].base !== b));
     displayNames.push(POKEMON[b].n);
-    s.fallen.push({ id: b, n: POKEMON[b].n, d: today(), sc: B.sc });
+    s.fallen.push({ id: b, n: POKEMON[b].n, d: today(), sc: battle.sc });
   });
   s.fallen = s.fallen.slice(-60);
   saveNuzlocke(s);
-  B._nuzlockeDeaths = { names: displayNames, spared: spared ? POKEMON[spared].n : '' };
+  battle._nuzlockeDeaths = { names: displayNames, spared: spared ? POKEMON[spared].n : '' };
   if (!squad.length) {
     __set_squad(
       PROFILE.box.filter((id, i, a) => a.slice(0, i + 1).reduce((t, x) => t + POKEMON[x].c, 0) <= BUDGET).slice(0, 4)

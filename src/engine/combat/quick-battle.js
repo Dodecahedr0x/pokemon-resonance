@@ -2,13 +2,13 @@
 
 import { reducedMotion, toast } from '../core/utils.js';
 import { byUid } from './engine.js';
-import { B, renderAll, ui } from './ui.js';
+import { battle, renderAll, ui } from './ui.js';
 import { PREFERENCES, savePref } from '../ui/preferences.js';
 import { evoSet } from '../../screens/combat/board/boardStore.js';
 import { refreshBattle } from '../../screens/combat/battle/battleStore.js';
 
 export function endSkipSpeedup() {
-  if (!B) {
+  if (!battle) {
     return;
   }
   if (!ui.busy) {
@@ -21,11 +21,11 @@ export const battleDelay = (rm, fast, slow) => (reducedMotion || ui.skipSpeedup 
 
 export const isEnemyTurn = () =>
   !!(
-    B &&
-    !B.over &&
+    battle &&
+    !battle.over &&
     ui.busy &&
     !ui.cutscene &&
-    (B.phase === 'enemy' || (B.order === 'vitesse' && ui.act && (byUid(B, ui.act) || {}).side === 'e'))
+    (battle.phase === 'enemy' || (battle.order === 'vitesse' && ui.act && (byUid(battle, ui.act) || {}).side === 'e'))
   );
 
 // Statements run at startup, in the original order (see index.js).

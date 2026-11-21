@@ -5,12 +5,12 @@
 import { POKEMON, SCENARIOS } from '../pokemon/pokemon.js';
 import { BUDGET } from '../pokemon/evolution.js';
 import { PROFILE } from '../state/game-state.js';
-import { RC } from '../pokemon/roles-synergies.js';
+import { rosterCost } from '../pokemon/roles-synergies.js';
 import { $, toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { squad, vBonus } from '../team/team.js';
 import { armedBossRush, isBossRushBoss } from './boss-rush.js';
-import { B, backToPrep, battleOpts, goFight, scSel } from '../combat/ui.js';
+import { battle, backToPrep, battleOpts, goFight, selectedScenario } from '../combat/ui.js';
 import { escapeHtml, queueSave } from '../state/saves.js';
 import { ACHIEVEMENTS } from '../progression/achievements.js';
 import { teamSize } from '../progression/campaign-challenges.js';
@@ -58,7 +58,7 @@ function startTournamentBattle() {
   SCENARIOS.ami.d =
     `Combat ${run.i + 1} sur ${run.order.length}. Vos Pokémon gardent leurs PV d’un combat à l’autre, et ceux qui tombent ne reviennent pas. ` +
     SCENARIOS.ami.d;
-  if (B) {
+  if (battle) {
     backToPrep();
   }
   goFight('ami');
@@ -66,15 +66,15 @@ function startTournamentBattle() {
 
 /** The frozen tournament team (read when battles are launched). */
 export function tournamentTeam() {
-  if (isBossRushBoss(scSel)) {
+  if (isBossRushBoss(selectedScenario)) {
     return { team: armedBossRush().team, voice: vBonus(), opts: battleOpts() };
   } // Boss Rush: frozen team
   const run = getTournamentRun(),
     D = SCENARIOS.ami || {};
-  if (scSel !== 'ami' || !run || D.tournoi !== run.order[run.i]) {
+  if (selectedScenario !== 'ami' || !run || D.tournoi !== run.order[run.i]) {
     return null;
   }
-  const c = run.team.reduce((t, id) => t + RC(id), 0);
+  const c = run.team.reduce((t, id) => t + rosterCost(id), 0);
   return { team: run.team, voice: Math.min(2, Math.floor((BUDGET - c) / 4)), opts: battleOpts() };
 }
 

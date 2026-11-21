@@ -7,7 +7,7 @@ import { POKEMON } from '../../engine/pokemon/pokemon.js';
 import { DIFFS, PROFILE, isCamp } from '../../engine/state/game-state.js';
 import { BADGES } from '../../engine/modes/gyms.js';
 import { medal } from '../../engine/core/utils.js';
-import { B } from '../../engine/combat/ui.js';
+import { battle } from '../../engine/combat/ui.js';
 import {
   SLOTS,
   CLOUD_SAVE,
@@ -289,7 +289,7 @@ function Card({ xRef }) {
           <em>{a.savedAt ? formatDate(a.savedAt) : ''}</em>
         </header>
         <Summary s={a} />
-        {validBattle(a.battle) && !B && (
+        {validBattle(a.battle) && !battle && (
           <div className="saves-slot-actions">
             <Button size="small" variant="primary" data-resume="1">
               Reprendre le combat

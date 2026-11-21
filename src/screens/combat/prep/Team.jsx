@@ -3,12 +3,12 @@ import { Html } from '../../../lib/html.jsx';
 import { POKEMON, SCENARIOS } from '../../../engine/pokemon/pokemon.js';
 import { BUDGET } from '../../../engine/pokemon/evolution.js';
 import { DIFFS, PROFILE } from '../../../engine/state/game-state.js';
-import { RC, synOf } from '../../../engine/pokemon/roles-synergies.js';
+import { rosterCost, synOf } from '../../../engine/pokemon/roles-synergies.js';
 import { medal, typeColor } from '../../../engine/core/utils.js';
 import { squadCost, squad, vBonus } from '../../../engine/team/team.js';
 import { startVoice } from '../../../engine/combat/engine.js';
 import { scenLock } from '../../../engine/combat/items-bonds-ai.js';
-import { scSel } from '../../../engine/combat/ui.js';
+import { selectedScenario } from '../../../engine/combat/ui.js';
 import { teamBtns } from '../../../engine/modes/gym-screen.js';
 import { scenarioName } from '../../../engine/world/home-journey.js';
 import { DOCTRINE_DEFS } from '../../../engine/combat/doctrines.js';
@@ -44,7 +44,7 @@ function Places() {
                 <Html html={m.n} />
               </b>
               <em>
-                {RC(id)} PC{m.st > 1 ? ' · confirmé' : ''}
+                {rosterCost(id)} PC{m.st > 1 ? ' · confirmé' : ''}
               </em>
             </div>
           );
@@ -68,7 +68,7 @@ function Places() {
 
 // Doctrine (v4.30): #doctrineChoice, before the Start button.
 const doctrineHidden = () => {
-  const D = SCENARIOS[scSel] || {};
+  const D = SCENARIOS[selectedScenario] || {};
   return !!(D.tuto || D.hebdo429 || D.enigme431);
 };
 
@@ -140,8 +140,8 @@ function Squads() {
 // Team box (#ptBox). v = 0: starting template, before the first renderPrep().
 export default function Team({ v }) {
   const on = v > 0;
-  const lk = on && scenLock(scSel);
-  const champ = on && scSel === 'champ';
+  const lk = on && scenLock(selectedScenario);
+  const champ = on && selectedScenario === 'champ';
   // As with the old innerHTML, a hidden block keeps its last content.
   const [champWhy, setChampWhy] = useState(null);
   const why = champ ? SCENARIOS.champ.why : null;
@@ -189,7 +189,7 @@ export default function Team({ v }) {
           {on && (
             <Fragment key={v}>
               <b>
-                <Html html={scenarioName(scSel)} />
+                <Html html={scenarioName(selectedScenario)} />
               </b>
               <span>{squad.length ? `${startVoice(vBonus())} Voix · ${DIFFS[PROFILE.diff]}` : 'Équipe vide'}</span>
             </Fragment>
@@ -202,7 +202,7 @@ export default function Team({ v }) {
             'Équipe vide'
           ) : (
             <>
-              {on && scSel === 'tuto' ? 'Commencer' : 'Lancer le combat'}
+              {on && selectedScenario === 'tuto' ? 'Commencer' : 'Lancer le combat'}
               <svg>
                 <use href="#i-arrow" />
               </svg>

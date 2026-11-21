@@ -8,7 +8,7 @@ import { POKEMON, SCENARIOS } from '../pokemon/pokemon.js';
 import { toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { MAX_ENERGY, byUid, endStep, hasNx, heal, pushMessage } from './engine.js';
-import { B, cinematic, clearAim, enPips, finish, renderAll, ui } from './ui.js';
+import { battle, cinematic, clearAim, enPips, finish, renderAll, ui } from './ui.js';
 import { playEv } from './move-effects.js';
 import { DAMAGE_PROVIDERS } from './tactical-engine.js';
 import { ACHIEVEMENTS } from '../progression/achievements.js';
@@ -82,22 +82,22 @@ function opponentResonance(S, ev) {
 
 /** The battle panel block. */
 export function resonanceBlockHtml(u, gauge) {
-  if (!B || u.side !== 'a' || hasNx(u)) {
+  if (!battle || u.side !== 'a' || hasNx(u)) {
     return '';
   }
   if (u.resonant > 0) {
     return `<div class="battle-energy is-resonant is-full"><div class="battle-energy-head"><span class="caption">Forme Résonante</span><b class="battle-energy-turns">${u.resonant} manche${u.resonant > 1 ? 's' : ''}</b></div><p class="battle-hint">+2 Puissance, +1 Mouvement, +20 % de dégâts, entraves dissipées en fin de manche.</p></div>`;
   }
-  if (!resonanceCandidate(B, u)) {
+  if (!resonanceCandidate(battle, u)) {
     return '';
   }
-  const ok = canTriggerResonance(B, u),
+  const ok = canTriggerResonance(battle, u),
     why =
       u.en < MAX_ENERGY
         ? `Encore ${MAX_ENERGY - u.en} losange${MAX_ENERGY - u.en > 1 ? 's' : ''}`
         : u.sn
           ? 'Immobilisé cette manche'
-          : B.voice < 1
+          : battle.voice < 1
             ? 'Plus de Voix'
             : 'Prêt · une fois par combat';
   return `${gauge ? `<div class="battle-energy${u.en >= MAX_ENERGY ? ' is-full' : ''}"><div class="battle-energy-head"><span class="caption">Résonance</span>${enPips(u.en, 'lg')}</div></div>` : ''}<button type="button" class="battle-awaken is-resonant" data-resonance-burst ${ok ? '' : 'disabled'}><span class="battle-awaken-medals"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.6 6.4L21 9l-5 4.4 1.6 6.6L12 16.6 6.4 20 8 13.4 3 9l6.4-.6Z" fill="currentColor"/></svg></span><span><b>Forme Résonante</b><em>${why}</em></span><span class="battle-awaken-cost">1 Voix<br>+ jauge</span></button>`;
@@ -105,11 +105,11 @@ export function resonanceBlockHtml(u, gauge) {
 
 async function onResonantFormClick(e) {
   const b = e.target.closest('[data-resonance-burst]');
-  if (!b || !B) {
+  if (!b || !battle) {
     return;
   }
-  const u = ui.sel && byUid(B, ui.sel);
-  if (!u || !canTriggerResonance(B, u)) {
+  const u = ui.sel && byUid(battle, ui.sel);
+  if (!u || !canTriggerResonance(battle, u)) {
     return;
   }
   ui.undo = null;
@@ -121,14 +121,14 @@ async function onResonantFormClick(e) {
   } catch {
     /* Best effort: failure here is non-fatal. */
   }
-  const ev = playerResonance(B, u);
+  const ev = playerResonance(battle, u);
   ui.busy = false;
   renderAll();
   if (!ev) {
     return;
   }
   playEv(ev);
-  if (B.over) {
+  if (battle.over) {
     return void finish();
   }
   toast(`${u.n} résonne pour ${RESO_TURNS} manches : son action reste libre.`);

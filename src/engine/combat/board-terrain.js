@@ -4,7 +4,7 @@ import { SCENARIOS } from '../pokemon/pokemon.js';
 import { fnvHash, hash2, mulberry32 } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { neighborKeys } from './engine.js';
-import { B, BOARD_GEOMETRY, cellCenter, cellPoints, L, boardViewBox, VERT } from './ui.js';
+import { battle, BOARD_GEOMETRY, cellCenter, cellPoints, BOARD_LAYERS, boardViewBox, isVerticalBoard } from './ui.js';
 import { bdClass, boardSet, getBoard, getHost, hostSet } from '../../screens/combat/board/boardStore.js';
 
 const RS = 3;
@@ -383,7 +383,7 @@ const kindOf = () => {
   } catch {
     /* Best effort: failure here is non-fatal. */
   }
-  const D = (B && SCENARIOS[B.sc]) || {};
+  const D = (battle && SCENARIOS[battle.sc]) || {};
   if (D.bio === 'gue') {
     return 'prairie';
   }
@@ -1042,9 +1042,9 @@ const AROUND = {
 
 /* ---------- board painting ---------- */
 const terrainSig = () => {
-  let s = kindOf() + '|' + (VERT ? 1 : 0) + '|' + B.sc + '|';
-  for (const k in B.tiles) {
-    const t = B.tiles[k];
+  let s = kindOf() + '|' + (isVerticalBoard ? 1 : 0) + '|' + battle.sc + '|';
+  for (const k in battle.tiles) {
+    const t = battle.tiles[k];
     s += (t.w ? 'w' : '') + (t.rock ? 'r' : '') + (t.pil ? 'p' : '') + (t.grass ? 'g' : '') + (t.sand ? 's' : '') + ',';
   }
   return s;
@@ -1198,7 +1198,7 @@ const paintCellTop = (bd, t, x, y, top, r2) => {
 // One land cell: slab thickness, top face, bright top edge and rocks (water cells are skipped).
 const paintCell = (bd, k) => {
   const { c, K, C, S, seed } = bd;
-  const t = B.tiles[k],
+  const t = battle.tiles[k],
     [x, y] = C[k],
     r2 = mulberry32((seed + fnvHash(k)) | 0);
   if (t.w) {
@@ -1215,7 +1215,7 @@ const paintCell = (bd, k) => {
   c.strokeStyle = 'rgba(255,255,240,.28)';
   c.beginPath();
   const tp = top;
-  const hi = VERT ? [3, 4, 5, 0] : [3, 4, 5];
+  const hi = isVerticalBoard ? [3, 4, 5, 0] : [3, 4, 5];
   hi.forEach((i, j) => (j ? c.lineTo(tp[i][0], tp[i][1]) : c.moveTo(tp[i][0], tp[i][1])));
   c.stroke();
   if (t.rock) {
@@ -1299,7 +1299,7 @@ const paintWaterBanks = (bd, W, k, x, y) => {
       const q = C[n];
       return q && Math.abs(q[0] - ox) < 6 && Math.abs(q[1] - oy) < 6;
     });
-    if (vk && B.tiles[vk].w) {
+    if (vk && battle.tiles[vk].w) {
       continue;
     }
     c.strokeStyle = W.foam;
@@ -1358,7 +1358,7 @@ const paint = sig => {
   const r = mulberry32(seed | 0);
   // 1. the border
   paintBorderGround(c, K, pats.PA, VW, VH);
-  const keys = Object.keys(B.tiles);
+  const keys = Object.keys(battle.tiles);
   const C = {};
   keys.forEach(k => (C[k] = cellCenter(k)));
   const bd = { c, K, C, S, keys, seed, VW, VH, pats };
@@ -1373,7 +1373,7 @@ const paint = sig => {
   const W = WATER[K.water] || WATER.riviere;
   order.forEach(k => paintCell(bd, k));
   // 4. the water, carved into the board
-  const water = order.filter(k => B.tiles[k].w);
+  const water = order.filter(k => battle.tiles[k].w);
   paintWaterHoles(bd, water);
   paintWaterBeds(bd, water, W);
   paintWaterSurfaces(bd, water, W);
@@ -1394,7 +1394,7 @@ const board = () => document.getElementById('bBoard');
 // painted image, waves, textureLayer/paintscape classes: rendered by the board's React layers
 const ensureLayers = () => {
   const svg = document.getElementById('bSvg');
-  if (!svg || !L.tiles) {
+  if (!svg || !BOARD_LAYERS.tiles) {
     return null;
   }
   if (!getBoard().pv) {
@@ -1462,7 +1462,7 @@ const particles = kind => {
 };
 
 const doApply = (sig, res) => {
-  if (!B || terrainSig() !== sig) {
+  if (!battle || terrainSig() !== sig) {
     return;
   }
   const im = ensureLayers();
@@ -1481,7 +1481,7 @@ const doApply = (sig, res) => {
 };
 
 const launchMove = () => {
-  if (!B || !L.tiles) {
+  if (!battle || !BOARD_LAYERS.tiles) {
     return;
   }
   let sig;
@@ -1501,7 +1501,7 @@ const launchMove = () => {
   }
   const id = ++busy;
   setTimeout(() => {
-    if (id !== busy || !B) {
+    if (id !== busy || !battle) {
       return;
     }
     let out;

@@ -4,7 +4,7 @@ import { $, writeLS, readLS, toast } from '../core/utils.js';
 import { PREFERENCES, savePref } from '../ui/preferences.js';
 import { savePurse } from '../state/economy.js';
 import { renderParams } from '../ui/settings.js';
-import { SCENES, __set_SCN, renderStoryScene } from './story-dialogues.js';
+import { SCENES, __set_currentScene, renderStoryScene } from './story-dialogues.js';
 import { MUSIC } from '../audio/music.js';
 import { applyReward } from '../world/route-events.js';
 import { badgeTotal } from './item-quests.js';
@@ -13,7 +13,7 @@ import { badgeTotal } from './item-quests.js';
 export const OFFLINE_STATE = { cache: 'res-audio-462', urls: {}, status: '', n: 0 };
 
 function chapterPlay(L, c) {
-  __set_SCN({ k: c, c, i: 0, L, apres: true });
+  __set_currentScene({ k: c, c, i: 0, L, apres: true });
   renderStoryScene();
   $('#story-scene').hidden = false;
 }

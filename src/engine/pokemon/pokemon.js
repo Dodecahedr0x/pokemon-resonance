@@ -1,6 +1,6 @@
 import { pokemonArtUrl } from '../assets/images.js';
 
-export let PKT;
+export let SPECIES_BY_TYPES;
 
 export function familyOf(id) {
   const b = POKEMON[id].base;
@@ -377,7 +377,7 @@ export const NEWS = [
   },
 ];
 
-export const SYS3 = [
+export const SYSTEM_RULES = [
   {
     c: 'S-01',
     n: 'Budget de commandement',
@@ -2316,6 +2316,6 @@ export function init() {
   });
   // v4.13: playable families
   /* v4.1 · Pokémon illustrations in the medallions, from the first display */
-  PKT = new WeakMap();
-  POKEMON_LIST.forEach(m => PKT.set(m.t, m.id));
+  SPECIES_BY_TYPES = new WeakMap();
+  POKEMON_LIST.forEach(m => SPECIES_BY_TYPES.set(m.t, m.id));
 }

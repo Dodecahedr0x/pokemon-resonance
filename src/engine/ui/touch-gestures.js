@@ -4,7 +4,7 @@ import { reducedMotion, toast } from '../core/utils.js';
 import { goTo } from '../core/navigation.js';
 import { openSheet } from '../team/team.js';
 import { byUid, unitAt } from '../combat/engine.js';
-import { B, L } from '../combat/ui.js';
+import { battle, BOARD_LAYERS } from '../combat/ui.js';
 import { PREFERENCES } from './preferences.js';
 import { vibrate } from '../audio/sound-effects.js';
 import { SCREEN_STATE } from './screen-state.js';
@@ -26,15 +26,15 @@ function longPressAction(t) {
     return null;
   }
   const hx = t.closest('#bSvg [data-k]');
-  if (hx && B) {
-    const u = unitAt(B, hx.dataset.k);
+  if (hx && battle) {
+    const u = unitAt(battle, hx.dataset.k);
     return u ? () => openSpeciesSheet(u.sp) : null;
   }
   const tok = t.closest('#bSvg .token');
-  if (tok && B && L.u) {
-    for (const id in L.u) {
-      if (L.u[id].g === tok) {
-        const u = byUid(B, id);
+  if (tok && battle && BOARD_LAYERS.u) {
+    for (const id in BOARD_LAYERS.u) {
+      if (BOARD_LAYERS.u[id].g === tok) {
+        const u = byUid(battle, id);
         return u ? () => openSpeciesSheet(u.sp) : null;
       }
     }
@@ -81,7 +81,7 @@ function canSwipeHere(t) {
   if (t.closest('input,textarea,select,#bBoard,.board,.map-panel,#mapMarks,.route-scene,.tabs,[role="dialog"]')) {
     return false;
   }
-  if (B && !B.over && document.querySelector('#cbBattle:not([hidden])')) {
+  if (battle && !battle.over && document.querySelector('#cbBattle:not([hidden])')) {
     return false;
   }
   if ([...document.querySelectorAll('[role="dialog"],.sheet,.modal')].some(d => !d.hidden && d.offsetParent !== null)) {

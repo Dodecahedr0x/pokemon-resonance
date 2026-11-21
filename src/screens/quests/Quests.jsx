@@ -7,7 +7,7 @@ import { BADGES } from '../../engine/modes/gyms.js';
 import { badgeSvg } from '../../engine/modes/league.js';
 import { SCREEN_STATE } from '../../engine/ui/screen-state.js';
 import { trophies } from '../../engine/progression/trainer-stats.js';
-import { SQ } from '../../engine/progression/quests-shop.js';
+import { SIDE_QUESTS } from '../../engine/progression/quests-shop.js';
 import MainQuest from './MainQuest.jsx';
 import SideQuests from './SideQuests.jsx';
 import Event from './Event.jsx';
@@ -39,7 +39,7 @@ function Tab() {
 }
 
 function Content() {
-  const ready = SQ.filter(q => !PROFILE.qc[q.id] && q.v() >= q.n).length;
+  const ready = SIDE_QUESTS.filter(q => !PROFILE.qc[q.id] && q.v() >= q.n).length;
   const tabs = [
     ['main', 'Principale'],
     [
@@ -87,8 +87,8 @@ function Content() {
             <span>Trophées / 31</span>
           </div>
           <div>
-            <b>{SQ.filter(q => PROFILE.qc[q.id]).length}</b>
-            <span>Secondaires / {SQ.length}</span>
+            <b>{SIDE_QUESTS.filter(q => PROFILE.qc[q.id]).length}</b>
+            <span>Secondaires / {SIDE_QUESTS.length}</span>
           </div>
           <div>
             <b>{PROFILE.wins}</b>

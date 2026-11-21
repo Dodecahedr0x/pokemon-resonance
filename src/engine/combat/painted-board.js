@@ -5,16 +5,16 @@ import { $, reducedMotion, toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { BOARD_ROWS, BOARD_COLS, cellKey, byUid, unitKey } from './engine.js';
 import {
-  B,
+  battle,
   BOARD_GEOMETRY,
   cellCenter,
   flatCellCenter,
   cellPoints,
-  L,
-  MQV,
-  TILT,
+  BOARD_LAYERS,
+  phoneQuery,
+  BOARD_TILT,
   boardViewBox,
-  VERT,
+  isVerticalBoard,
   __set_GREEN,
   buildBoard,
   clearAim,
@@ -26,7 +26,7 @@ import {
 import { PREFERENCES, savePref } from '../ui/preferences.js';
 import { TUTORIAL_STEPS } from '../progression/tutorial.js';
 import { sfx } from '../audio/sound-effects.js';
-import { EFFECTS_CANVAS, fxAdd, fxOn, fxPrep } from './move-effects.js';
+import { EFFECTS_CANVAS, fxAdd, effectsEnabled, fxPrep } from './move-effects.js';
 import { renderParams } from '../ui/settings.js';
 import { currentActor } from './tactical-engine.js';
 import { hourOf } from './living-board.js';
@@ -62,7 +62,7 @@ let artOk;
 
 const richText = () => artOk && PREFERENCES.graphicsMode !== 'leger';
 
-const inBattle = () => B && L.tiles && !$('#cbBattle').hidden;
+const inBattle = () => battle && BOARD_LAYERS.tiles && !$('#cbBattle').hidden;
 
 const rebuildAll = () => {
   if (inBattle()) {
@@ -91,23 +91,23 @@ const LIP = 7;
 
 // thickness of the earth slab under the cells (viewBox units, at the front row)
 const tune = () => {
-  TILT.on = false;
-  if (!richText() || !B) {
+  BOARD_TILT.on = false;
+  if (!richText() || !battle) {
     return;
   }
-  __set_GREEN(!!(MQV && MQV.matches));
+  __set_GREEN(!!(phoneQuery && phoneQuery.matches));
   const [W, H] = boardViewBox(),
     S = BOARD_GEOMETRY.S,
-    a = ((VERT ? 30 : 40) * Math.PI) / 180,
+    a = ((isVerticalBoard ? 30 : 40) * Math.PI) / 180,
     pts = [];
-  for (const k in B.tiles) {
+  for (const k in battle.tiles) {
     const [x, y] = flatCellCenter(k);
     for (let i = 0; i < 6; i++) {
       pts.push([x + S * Math.cos((Math.PI / 3) * i), y + S * Math.sin((Math.PI / 3) * i)]);
     }
   }
-  Object.assign(TILT, {
-    f: VERT ? 950 : 780,
+  Object.assign(BOARD_TILT, {
+    f: isVerticalBoard ? 950 : 780,
     sn: Math.sin(a),
     cs: Math.cos(a),
     Hb: Math.max(...pts.map(p => p[1])),
@@ -125,12 +125,12 @@ const tune = () => {
     y1 = Math.max(...ys),
     m = 12, // side margin: A–H landmarks
     bottomEdge = 26, // below the front row: pedestal + Pokémon names
-    sky = H * (VERT ? 0.1 : 0.14); // strip of backdrop left visible above the board
+    sky = H * (isVerticalBoard ? 0.1 : 0.14); // strip of backdrop left visible above the board
   const k = Math.min((W - 2 * m) / (x1 - x0), (H - sky - bottomEdge) / (y1 - y0));
-  TILT.k = k;
-  TILT.ox = (W - (x1 - x0) * k) / 2 - x0 * k;
-  TILT.oy = H - bottomEdge - y1 * k;
-  TILT.on = true;
+  BOARD_TILT.k = k;
+  BOARD_TILT.ox = (W - (x1 - x0) * k) / 2 - x0 * k;
+  BOARD_TILT.oy = H - bottomEdge - y1 * k;
+  BOARD_TILT.on = true;
 };
 
 /* ---------- dressing of the built board ---------- */
@@ -148,13 +148,13 @@ const AT = {
 };
 
 const placeLabel = () => {
-  const D = SCENARIOS[B.sc];
+  const D = SCENARIOS[battle.sc];
   return D.bio === 'arene' ? AT[D.at] || 'ligue' : D.bio;
 };
 
 const bgFill = () => {
   const bio = placeLabel(),
-    h = hourOf(B);
+    h = hourOf(battle);
   // Full URLs: in a CSS variable, a relative url() resolves against the
   // stylesheet that reads the variable (assets/ once the game is built), not against the page.
   const img = f => `url(${new URL('img/' + f, document.baseURI).href})`;
@@ -168,8 +168,8 @@ const tint = isNight => boardSet({ night: isNight }, 'defs', 'tilt');
 // night falls (or day breaks) during the battle: the painted backdrop cross-fades, the light follows
 const changeTime = () => {
   const bd = $('#bBoard'),
-    h = hourOf(B);
-  L.hourOfDay = h;
+    h = hourOf(battle);
+  BOARD_LAYERS.hourOfDay = h;
   const previous = getComputedStyle(bd).backgroundImage;
   hostSet({ boardBg: bgFill() });
   // .bgFade (old backdrop fading out): rendered by React (Board.jsx)
@@ -199,16 +199,16 @@ const changeTime = () => {
 
 const dress = () => {
   // classes, --boardBg, clouds and dust of #bBoard: rendered by React (« host » state of boardStore.js)
-  bdClass('painted-tilt', TILT.on);
-  if (!TILT.on) {
+  bdClass('painted-tilt', BOARD_TILT.on);
+  if (!BOARD_TILT.on) {
     hostSet({ boardBg: undefined, cloudShade: false, ambience: null });
     return;
   }
   hostSet({ boardBg: bgFill() });
-  if (SCENARIOS[B.sc].bio === 'arene') {
+  if (SCENARIOS[battle.sc].bio === 'arene') {
     const t = { roche: 'stone', tour: 'rune', ligue: 'marble' }[placeLabel()];
     if (OK.has(t)) {
-      L.txId = 'tx-' + t;
+      BOARD_LAYERS.txId = 'tx-' + t;
     } // renderBoard applies this pattern to each cell
   }
   // painted textures inside the existing patterns (renderBoard already picks them per cell)
@@ -216,39 +216,43 @@ const dress = () => {
   const paintedTextures = TEX.filter(t => OK.has(t)); // patterns replaced by the image (React <defs> layer)
   // earth slab: each cell sits on a darker pedestal, visible on the player's side
   const lip = [];
-  for (const k in B.tiles) {
+  for (const k in battle.tiles) {
     const [x, y] = cellCenter(k),
       s = tiltS(x, y);
     lip.push(cellPoints(x, y + LIP * s, BOARD_GEOMETRY.S - 1));
   }
   // the opaque texture covers the cell: its states (mud, lava, fog…) go over the texture
   const copyText = k => {
-    const c = STATES.filter(e => L.t[k].classList.contains(e)).join(' '),
+    const c = STATES.filter(e => BOARD_LAYERS.t[k].classList.contains(e)).join(' '),
       v = c ? 'cell-texture ' + c : 'cell-texture';
-    if (L.tx[k].getAttribute('class') !== v) {
-      L.tx[k].setAttribute('class', v);
+    if (BOARD_LAYERS.tx[k].getAttribute('class') !== v) {
+      BOARD_LAYERS.tx[k].setAttribute('class', v);
     }
   };
-  for (const k in L.t) {
+  for (const k in BOARD_LAYERS.t) {
     copyText(k);
   }
   if (window.MutationObserver) {
-    if (L.mutationObserver) {
-      L.mutationObserver.disconnect();
+    if (BOARD_LAYERS.mutationObserver) {
+      BOARD_LAYERS.mutationObserver.disconnect();
     }
-    L.mutationObserver = new MutationObserver(ms =>
-      ms.forEach(m => m.target.dataset.k && L.tx[m.target.dataset.k] && copyText(m.target.dataset.k))
+    BOARD_LAYERS.mutationObserver = new MutationObserver(ms =>
+      ms.forEach(m => m.target.dataset.k && BOARD_LAYERS.tx[m.target.dataset.k] && copyText(m.target.dataset.k))
     );
-    L.mutationObserver.observe(L.tiles, { subtree: true, attributes: true, attributeFilter: ['class'] });
+    BOARD_LAYERS.mutationObserver.observe(BOARD_LAYERS.tiles, {
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['class'],
+    });
   }
   // A–H / 1–6 landmarks re-aligned to the edge of the tilted board
   const ax = [],
     lab = (txt, x, y) => ax.push([txt, x.toFixed(1), y.toFixed(1)]);
   for (let r = 0; r < BOARD_ROWS; r++) {
     // in portrait, rows are read at the far end of the board (above the last column)
-    const [x, y] = cellCenter(cellKey(VERT ? BOARD_COLS - 1 : 0, r)),
+    const [x, y] = cellCenter(cellKey(isVerticalBoard ? BOARD_COLS - 1 : 0, r)),
       s = tiltS(x, y);
-    if (VERT) {
+    if (isVerticalBoard) {
       lab(r + 1, x, y - BOARD_GEOMETRY.S * s - 3);
     } else {
       lab(r + 1, x - BOARD_GEOMETRY.S * s - 5, y + 2.5);
@@ -257,7 +261,7 @@ const dress = () => {
   for (let c = 0; c < BOARD_COLS; c++) {
     const [x, y] = cellCenter(cellKey(c, 0)),
       s = tiltS(x, y);
-    if (VERT) {
+    if (isVerticalBoard) {
       lab('ABCDEFGH'[c], x - BOARD_GEOMETRY.S * s - 5, y + 2.5);
     } else {
       lab('ABCDEFGH'[c], x, y - BOARD_GEOMETRY.S * s - 3);
@@ -266,8 +270,8 @@ const dress = () => {
   // overall light: haze toward the horizon, moon tint at night (fixed layers, nothing moves)
   // #lipClip clip: pedestals and cells; everything is drawn by the board's React layers
   const H = boardViewBox()[1],
-    isNight = hourOf(B) === 'nuit',
-    backgroundY = cellCenter(VERT ? cellKey(BOARD_COLS - 1, 0) : cellKey(0, 0))[1] - BOARD_GEOMETRY.S;
+    isNight = hourOf(battle) === 'nuit',
+    backgroundY = cellCenter(isVerticalBoard ? cellKey(BOARD_COLS - 1, 0) : cellKey(0, 0))[1] - BOARD_GEOMETRY.S;
   boardSet(
     {
       paintedTextures,
@@ -279,7 +283,7 @@ const dress = () => {
     'defs',
     'tilt'
   );
-  L.hourOfDay = hourOf(B);
+  BOARD_LAYERS.hourOfDay = hourOf(battle);
   cloudList();
   ambiance();
   water();
@@ -300,7 +304,7 @@ const skip = (T, x, y, s) => {
   }
   const ms = 850 * tempo();
   replayAnimation(T, 'hop', ms);
-  if (!fxOn() || !fxPrep()) {
+  if (!effectsEnabled() || !fxPrep()) {
     return;
   }
   const px = EFFECTS_CANVAS.ox + x * EFFECTS_CANVAS.s,
@@ -343,7 +347,7 @@ const footPos = u => {
 };
 
 const ripple = (u, col) => {
-  if (!TILT.on || !animEnabled() || !fxOn() || !fxPrep()) {
+  if (!BOARD_TILT.on || !animEnabled() || !effectsEnabled() || !fxPrep()) {
     return;
   }
   const [px, py, k] = footPos(u);
@@ -365,7 +369,7 @@ const ripple = (u, col) => {
 };
 
 const fall = u => {
-  if (!TILT.on || !animEnabled() || !fxOn() || !fxPrep()) {
+  if (!BOARD_TILT.on || !animEnabled() || !effectsEnabled() || !fxPrep()) {
     return;
   }
   const [px, py, k] = footPos(u),
@@ -401,7 +405,7 @@ const fall = u => {
 /* cloud shadows drifting across the board by day (separate layer: only the graphics card works) */
 // .cloudShade: rendered by React (Board.jsx)
 const cloudList = () => {
-  const on = !(!TILT.on || reducedMotion || hourOf(B) === 'nuit');
+  const on = !(!BOARD_TILT.on || reducedMotion || hourOf(battle) === 'nuit');
   if (getHost().cloudShade !== on) {
     hostSet({ cloudShade: on });
   }
@@ -416,10 +420,10 @@ const AMB = {
 // .ambience: rendered by React (Board.jsx), recreated when the time or place changes (key)
 const ambiance = () => {
   const n = getHost().ambience;
-  const h = hourOf(B),
+  const h = hourOf(battle),
     l = placeLabel(),
     key = h + '-' + l;
-  if (!TILT.on || !animEnabled()) {
+  if (!BOARD_TILT.on || !animEnabled()) {
     if (n) {
       hostSet({ ambience: null });
     }
@@ -452,11 +456,11 @@ const ambiance = () => {
 // .lake layer, #lakeG gradient and #lakeC clip: drawn by React (« eau » (water) state);
 // color (moon or sun) and animation fixed at creation, recreated when the time changes (fresh)
 const water = freshNode => {
-  if (!TILT.on || !L.tiles || !B) {
+  if (!BOARD_TILT.on || !BOARD_LAYERS.tiles || !battle) {
     return;
   }
   const E = getBoard().eau,
-    keys = Object.keys(B.tiles).filter(k => B.tiles[k].w && !B.tiles[k].rock),
+    keys = Object.keys(battle.tiles).filter(k => battle.tiles[k].w && !battle.tiles[k].rock),
     id = keys.join(',');
   if (E && !freshNode) {
     if (E.id !== id) {
@@ -464,22 +468,22 @@ const water = freshNode => {
     }
     return;
   }
-  boardSet({ eau: { id, keyList: keys, nuit: hourOf(B) === 'nuit', fixed: !animEnabled() } }, 'defs', 'eau');
+  boardSet({ eau: { id, keyList: keys, nuit: hourOf(battle) === 'nuit', fixed: !animEnabled() } }, 'defs', 'eau');
 };
 
 /* background Pokémon pass behind the ones in front */
 // token order: L.uo, rendered by Units.jsx (sorted tokens go to the end, like appendChild)
 function sort() {
-  if (!TILT.on || !L.units || !L.uo) {
+  if (!BOARD_TILT.on || !BOARD_LAYERS.units || !BOARD_LAYERS.uo) {
     return;
   }
-  const y = id => L.u[id] && L.u[id].sortY,
-    toks = L.uo.filter(id => y(id) != null),
+  const y = id => BOARD_LAYERS.u[id] && BOARD_LAYERS.u[id].sortY,
+    toks = BOARD_LAYERS.uo.filter(id => y(id) != null),
     tri = toks.slice().sort((a, b) => y(a) - y(b));
   if (tri.every((n, i) => n === toks[i])) {
     return;
   }
-  L.uo = L.uo.filter(id => y(id) == null).concat(tri);
+  BOARD_LAYERS.uo = BOARD_LAYERS.uo.filter(id => y(id) == null).concat(tri);
   unitsDirty();
 }
 
@@ -487,7 +491,7 @@ function sort() {
 const topName = T => {
   // .namesHigh layer (React): the name goes into its .nameWrap wrapper, which follows the classes and
   // the token's position (NamesHigh, Units.jsx); nmO: draw order
-  if (!L.fl || !L.nameTags || !L.nameTags.isConnected) {
+  if (!BOARD_LAYERS.fl || !BOARD_LAYERS.nameTags || !BOARD_LAYERS.nameTags.isConnected) {
     return;
   }
   if (!T.nmO) {
@@ -499,10 +503,10 @@ const topName = T => {
 /* larger illustration, feet resting on the ring on the ground (attributes: the transform is already used for the mirror and the bounce) */
 const GEO = { plat: ['-17', '-22', '34'], debout: ['-23', '-35', '46'] };
 
-const active = () => !!(B && !B.over && B.phase === 'player' && !B.deployPhase && !ui.cutscene);
+const active = () => !!(battle && !battle.over && battle.phase === 'player' && !battle.deployPhase && !ui.cutscene);
 
 // riddle: « Fin du tour » (End turn) stays visible, it is the button to give up
-const guide = () => active() && !ui.busy && B.sc !== 'enigme431';
+const guide = () => active() && !ui.busy && battle.sc !== 'enigme431';
 
 /** The Pokémon the active player is currently commanding. */
 function toPlay(S) {
@@ -539,20 +543,20 @@ function followMover() {
   if (ui.selE || ui.mode) {
     return;
   }
-  const u = ui.sel && byUid(B, ui.sel),
-    rest = remaining(B);
+  const u = ui.sel && byUid(battle, ui.sel),
+    rest = remaining(battle);
   if (!rest.length) {
     return;
   }
-  if (!u || u.ko || (step(B, u) === 'fini' && ui.turnGuide === u.uid)) {
-    const order = toPlay(B),
+  if (!u || u.ko || (step(battle, u) === 'fini' && ui.turnGuide === u.uid)) {
+    const order = toPlay(battle),
       i = u ? order.indexOf(u) : -1;
     const nx = rest.find(x => order.indexOf(x) > i) || rest[0];
     ui.sel = nx.uid;
     clearAim();
   }
-  const s = ui.sel && byUid(B, ui.sel);
-  if (s && step(B, s) !== 'fini') {
+  const s = ui.sel && byUid(battle, ui.sel);
+  if (s && step(battle, s) !== 'fini') {
     ui.turnGuide = s.uid;
   }
 }
@@ -561,12 +565,12 @@ function followMover() {
 let autoEndTimer;
 
 const flowKey = () =>
-  B
+  battle
     ? [
-        B.round,
-        B.coop || 0,
-        B.duel433 ? B.duel433.j : 0,
-        B.order === 'vitesse' ? (currentActor(B) || {}).uid : '',
+        battle.round,
+        battle.coop || 0,
+        battle.duel433 ? battle.duel433.j : 0,
+        battle.order === 'vitesse' ? (currentActor(battle) || {}).uid : '',
       ].join(':')
     : '';
 
@@ -574,23 +578,23 @@ const isFlowReady = () =>
   active() &&
   !ui.busy &&
   !ui.mode &&
-  !remaining(B).length &&
+  !remaining(battle).length &&
   $('#evoPick').hidden &&
-  (B.order !== 'vitesse' || (currentActor(B) || {}).side === 'a');
+  (battle.order !== 'vitesse' || (currentActor(battle) || {}).side === 'a');
 
 function scheduleAutoEnd() {
   if (autoEndTimer || !isFlowReady()) {
     return;
   }
-  const S = B,
+  const S = battle,
     k = flowKey();
   autoEndTimer = setTimeout(
     () => {
       autoEndTimer = 0;
-      if (B !== S || flowKey() !== k || !isFlowReady()) {
+      if (battle !== S || flowKey() !== k || !isFlowReady()) {
         return;
       }
-      if (!B.coop && !B.duel433 && B.order !== 'vitesse' && B.sc !== 'enigme431') {
+      if (!battle.coop && !battle.duel433 && battle.order !== 'vitesse' && battle.sc !== 'enigme431') {
         toast('Manche terminée : au tour des adversaires.');
       }
       // via the button: modes that intercept it (riddle…) keep their own rule. Click without
@@ -622,15 +626,15 @@ export function init() {
     try {
       tune();
     } catch (e) {
-      TILT.on = false;
+      BOARD_TILT.on = false;
     }
   });
   lastFight = null;
   endEntry = 0;
   HOOKS.boardBuilt.push(() => {
-    if (B !== lastFight) {
-      lastFight = B;
-      if (TILT.on && animEnabled()) {
+    if (battle !== lastFight) {
+      lastFight = battle;
+      if (BOARD_TILT.on && animEnabled()) {
         bdReplay('entrance-fx');
         bdClass('entrance-fx', true);
         clearTimeout(endEntry);
@@ -640,20 +644,20 @@ export function init() {
   });
   HOOKS.boardBuilt.push(dress);
   HOOKS.hit.push(uid => {
-    const u = byUid(B, uid);
+    const u = byUid(battle, uid);
     if (u) {
       ripple(u, u.side === 'e' ? '#ff6a5a' : '#7cc0ff');
     }
   });
   HOOKS.boardRendered.push(() => {
-    if (TILT.on && L.hourOfDay && L.hourOfDay !== hourOf(B)) {
+    if (BOARD_TILT.on && BOARD_LAYERS.hourOfDay && BOARD_LAYERS.hourOfDay !== hourOf(battle)) {
       changeTime();
     }
     water();
   });
   /* ---------- tokens: standing, smaller toward the back ---------- */
   HOOKS.token.push(u => {
-    const T = TILT.on && L.u[u.uid];
+    const T = BOARD_TILT.on && BOARD_LAYERS.u[u.uid];
     if (T) {
       const k = unitKey(u),
         [x, y] = cellCenter(k),
@@ -674,13 +678,13 @@ export function init() {
     }
   });
   HOOKS.token.push(u => {
-    const T = TILT.on && L.u[u.uid];
+    const T = BOARD_TILT.on && BOARD_LAYERS.u[u.uid];
     if (T) {
       topName(T);
     }
   });
   HOOKS.illustration.push(u => {
-    const T = L.u && L.u[u.uid];
+    const T = BOARD_LAYERS.u && BOARD_LAYERS.u[u.uid];
     // token template, rendered by Units.jsx
     if (T && T.imOn && !T.artGrouped && T.b) {
       // only the illustration breathes and jumps (.token-stand group): the ring stays on the ground
@@ -688,7 +692,7 @@ export function init() {
       unitsDirty();
     }
     if (T && T.imOn) {
-      const g = GEO[TILT.on ? 'debout' : 'plat'];
+      const g = GEO[BOARD_TILT.on ? 'debout' : 'plat'];
       if (T.geo[1] !== g[1]) {
         T.geo = g;
         unitsDirty();
@@ -706,7 +710,7 @@ export function init() {
     renderParams();
     rebuildAll();
   });
-  window.__paintedGfx = { TILT, OK, riche: richText, rebuild: rebuildAll };
+  window.__paintedGfx = { TILT: BOARD_TILT, OK, riche: richText, rebuild: rebuildAll };
   /* ==== v4.78: guided turn flow ====
    Each Pokémon follows Move → Act → End. Each step is skipped with an
    explicit tap (« Rester ici » (Stay here), « Passer l'action » (Skip action), « Terminer » (Finish)); the round ends
@@ -717,17 +721,17 @@ export function init() {
   /* ---------- « Rester ici », « Passer l'action », « Terminer » buttons ---------- */
   $('#bPanel').addEventListener('click', e => {
     const b = e.target.closest('[data-vx="stay-put"],[data-vx="skip-action"],[data-vx="finished-round"]');
-    if (!b || !B || ui.busy || B.over) {
+    if (!b || !battle || ui.busy || battle.over) {
       return;
     }
-    const u = ui.sel && byUid(B, ui.sel);
+    const u = ui.sel && byUid(battle, ui.sel);
     if (!u || u.ko) {
       return;
     }
     if (b.dataset.vx === 'stay-put') {
-      u.restartedRound = B.round;
+      u.restartedRound = battle.round;
     } else {
-      u.finishedRound = B.round;
+      u.finishedRound = battle.round;
       ui.undo = null; // the choice is made: no going back on the move
     }
     clearAim();
@@ -737,8 +741,8 @@ export function init() {
   });
   /* ---------- after an attack: stay on the Pokémon if it has a bonus left ---------- */
   HOOKS.action.push(id => {
-    const u = B && byUid(B, id);
-    if (u && active() && !ui.busy && B.order !== 'vitesse' && step(B, u) === 'extra' && ui.sel !== id) {
+    const u = battle && byUid(battle, id);
+    if (u && active() && !ui.busy && battle.order !== 'vitesse' && step(battle, u) === 'extra' && ui.sel !== id) {
       ui.sel = id;
       renderAll();
     }
@@ -748,7 +752,7 @@ export function init() {
   window.addEventListener(
     'keydown',
     e => {
-      if ((e.key !== ' ' && e.key !== 'e' && e.key !== 'E') || !B || !guide()) {
+      if ((e.key !== ' ' && e.key !== 'e' && e.key !== 'E') || !battle || !guide()) {
         return;
       }
       const cb = document.getElementById('cbBattle'),
@@ -771,12 +775,12 @@ export function init() {
     true
   );
   HOOKS.beforeRender.push(() => {
-    if (B) {
+    if (battle) {
       followMover();
     }
   });
   HOOKS.rendered.push(() => {
-    if (B) {
+    if (battle) {
       refreshFootPos();
       scheduleAutoEnd();
     }
@@ -809,5 +813,5 @@ export function init() {
   } catch {
     /* Best effort: failure here is non-fatal. */
   }
-  window.__turnFlowDebug = { stepOf: step, remaining, toPlay, jeu: () => ({ B, ui }) };
+  window.__turnFlowDebug = { stepOf: step, remaining, toPlay, jeu: () => ({ B: battle, ui }) };
 }

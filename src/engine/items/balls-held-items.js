@@ -4,7 +4,7 @@ import { MOVES } from '../data/moves.js';
 import { SCENARIOS } from '../pokemon/pokemon.js';
 import { ITEMS2 } from '../state/game-state.js';
 import { HOOKS } from '../core/hooks.js';
-import { TOD } from '../world/home-route.js';
+import { timeOfDay } from '../world/home-route.js';
 import { MAX_ENERGY, parseCellKey, rewardIn, hasNx, heal, pushMessage, typeEffectiveness } from '../combat/engine.js';
 import { immobilize } from '../combat/items-bonds-ai.js';
 import { BALLS } from './ball-choice.js';
@@ -35,7 +35,7 @@ export const wrapSvg = s =>
   encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">${s}</svg>`);
 
 /* ---------- Balls ---------- */
-const isNightTime = S => ((SCENARIOS[S.sc] || {}).time || TOD) === 'nuit';
+const isNightTime = S => ((SCENARIOS[S.sc] || {}).time || timeOfDay) === 'nuit';
 
 const isWaterOrBug = e => e.t.includes('Eau') || e.t.includes('Insecte');
 

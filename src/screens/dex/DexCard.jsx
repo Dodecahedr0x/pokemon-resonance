@@ -3,15 +3,15 @@ import { strength } from '../../lib/power.js';
 import { MOVES, SHAPE, ABILITIES } from '../../engine/data/moves.js';
 import { REGION_NAMES } from '../../engine/data/hoenn.js';
 import { POKEMON, NOTES, familyOf } from '../../engine/pokemon/pokemon.js';
-import { RC, ROLEFX } from '../../engine/pokemon/roles-synergies.js';
+import { rosterCost, ROLEFX } from '../../engine/pokemon/roles-synergies.js';
 import { typeBadge, typeColor } from '../../engine/core/utils.js';
 import { STAT_NAMES, squad } from '../../engine/team/team.js';
 import { pokemonArtUrl } from '../../engine/assets/images.js';
 import { SCREEN_STATE } from '../../engine/ui/screen-state.js';
 import { ownedFam } from '../../engine/progression/trainer-stats.js';
-import { DEXM } from '../../engine/data/pokedex.js';
+import { DEX_MEASUREMENTS } from '../../engine/data/pokedex.js';
 import { LORE } from '../../engine/data/pokedex-texts.js';
-import { DEXS } from '../../engine/progression/pokedex.js';
+import { DEX_SPECIES } from '../../engine/progression/pokedex.js';
 import { SPARK, isShinyOwned, shinyHue } from '../../engine/pokemon/shiny.js';
 import { roleBadgeHtml } from '../../engine/combat/resonance.js';
 import { captureSite } from '../../engine/world/catch-anywhere.js';
@@ -24,15 +24,15 @@ const no3 = n => String(n).padStart(3, '0');
 // Sheet of the selected Pokémon (#dex4Card). The transient classes scanSweep / dexNew
 // (sweep, first discovery) are still set by the engine (v4.48).
 export default function DexCard() {
-  const m = POKEMON[SCREEN_STATE.dexSel] || DEXS[0];
-  const dm = DEXM[m.no] || [0, 0, ''],
+  const m = POKEMON[SCREEN_STATE.dexSel] || DEX_SPECIES[0];
+  const dm = DEX_MEASUREMENTS[m.no] || [0, 0, ''],
     own = ownedFam(m.id),
     sh = isShinyOwned(m.id),
     family = familyOf(m.id),
     tl = ABILITIES[m.ability],
-    i = DEXS.indexOf(m),
-    prev = DEXS[(i - 1 + DEXS.length) % DEXS.length],
-    next = DEXS[(i + 1) % DEXS.length],
+    i = DEX_SPECIES.indexOf(m),
+    prev = DEX_SPECIES[(i - 1 + DEX_SPECIES.length) % DEX_SPECIES.length],
+    next = DEX_SPECIES[(i + 1) % DEX_SPECIES.length],
     note = NOTES[m.id],
     placeLabel = captureSite(m.id),
     fr = REGIONAL_FORM_LIST.find(x => x.id === m.id); // regional form (v4.70)
@@ -92,7 +92,7 @@ export default function DexCard() {
             </div>
             <div>
               <dt>Recrutement</dt>
-              <dd>{`${RC(m.id)} PC`}</dd>
+              <dd>{`${rosterCost(m.id)} PC`}</dd>
             </div>
             <div>
               <dt>Stade</dt>

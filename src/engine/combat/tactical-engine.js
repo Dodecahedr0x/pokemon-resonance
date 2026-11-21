@@ -3,8 +3,19 @@ import { MOVES, ABILITIES } from '../data/moves.js';
 import { SCENARIOS } from '../pokemon/pokemon.js';
 import { toast } from '../core/utils.js';
 import { byUid, execFoe, flies, hdist, markAt, unitKey } from './engine.js';
-import { ACT, STATUSED, coverOf, ignObst, noteAdd, roleOf } from './synergies-obstacles.js';
-import { B, autoSel, clearAim, endOfRound, finish, addLog, placeEnemy, renderAll, scSel, ui } from './ui.js';
+import { currentAction, STATUSED, coverOf, ignObst, noteAdd, roleOf } from './synergies-obstacles.js';
+import {
+  battle,
+  autoSel,
+  clearAim,
+  endOfRound,
+  finish,
+  addLog,
+  placeEnemy,
+  renderAll,
+  selectedScenario,
+  ui,
+} from './ui.js';
 import { PREFERENCES } from '../ui/preferences.js';
 import { playEv } from './move-effects.js';
 import { coopPlayer } from '../modes/coop.js';
@@ -142,7 +153,9 @@ function endAllyTurn(S) {
 /* ---------- 5. Speed mode interface ---------- */
 /** The player's setting (Settings). The prologue's guided battle always stays classic. */
 export function chosenOrder() {
-  return PREFERENCES.vitesse && !(SCENARIOS[scSel] && SCENARIOS[scSel].tuto) ? 'vitesse' : 'equipe';
+  return PREFERENCES.vitesse && !(SCENARIOS[selectedScenario] && SCENARIOS[selectedScenario].tuto)
+    ? 'vitesse'
+    : 'equipe';
 }
 
 // The timeline (#bOrdre): who plays, in what order, this round. Rendered by React
@@ -150,23 +163,23 @@ export function chosenOrder() {
 
 /** Makes the opponents play until the next ally's turn (or until the end of the round). */
 export function unrollSpeed() {
-  if (!B || B.order !== 'vitesse' || B.over) {
+  if (!battle || battle.order !== 'vitesse' || battle.over) {
     return;
   }
-  const S0 = B;
+  const S0 = battle;
   ui.busy = true;
   ui.skipSpeedup = false;
   renderAll();
   const step = async () => {
-    if (!B || B !== S0) {
+    if (!battle || battle !== S0) {
       return;
     }
-    if (B.over) {
+    if (battle.over) {
       ui.busy = false;
       finish();
       return;
     }
-    const u = currentActor(B);
+    const u = currentActor(battle);
     if (!u) {
       // end of the round, then chain on: a faster opponent can open the next round
       if (await endOfRound(S0)) {
@@ -186,7 +199,7 @@ export function unrollSpeed() {
     if (await placeEnemy(S0, u.uid)) {
       return;
     } // v4.12: it positions itself first, in front of you
-    const ev = playCurrentEnemy(B);
+    const ev = playCurrentEnemy(battle);
     renderAll();
     playEv(ev);
     setTimeout(step, battleDelay(200, 380, 900));
@@ -196,12 +209,12 @@ export function unrollSpeed() {
 
 /** Order by Speed: only the ally whose turn it is can be commanded. */
 export function canSelect(u) {
-  if (B && B.coop && u.side === 'a' && coopPlayer(u) !== B.coop) {
-    toast(`C’est au Joueur ${B.coop} de jouer.`); // co-op (v4.18)
+  if (battle && battle.coop && u.side === 'a' && coopPlayer(u) !== battle.coop) {
+    toast(`C’est au Joueur ${battle.coop} de jouer.`); // co-op (v4.18)
     return false;
   }
-  const cur = B && currentActor(B);
-  if (!cur || u === cur || B.order !== 'vitesse') {
+  const cur = battle && currentActor(battle);
+  if (!cur || u === cur || battle.order !== 'vitesse') {
     return true;
   }
   toast(cur.side === 'a' ? `C’est au tour de ${cur.n}.` : 'Les adversaires jouent.');
@@ -210,14 +223,14 @@ export function canSelect(u) {
 
 /** "Next": the current ally is done, the queue advances. */
 export function endTurnSpeed() {
-  if (!B || ui.busy || B.over || B.phase !== 'player' || B.order !== 'vitesse') {
+  if (!battle || ui.busy || battle.over || battle.phase !== 'player' || battle.order !== 'vitesse') {
     return;
   }
   ui.undo = null;
   ui.tile = null;
   clearAim();
   ui.selE = null;
-  endAllyTurn(B);
+  endAllyTurn(battle);
   unrollSpeed();
 }
 
@@ -392,17 +405,18 @@ export const ROLE_PROVIDERS = [
   },
   {
     id: 'garde',
-    provide: (c, { u }) => ACT && ACT.guard && ACT.u.uid === u.uid && { mul: 0.75, labelText: 'Interception' },
+    provide: (c, { u }) =>
+      currentAction && currentAction.guard && currentAction.u.uid === u.uid && { mul: 0.75, labelText: 'Interception' },
   },
   {
     id: 'couvert',
     provide: (c, { S, u, m, t, typ }) => {
-      if (ACT && ACT.rico && ACT.u.uid === u.uid) {
+      if (currentAction && currentAction.rico && currentAction.u.uid === u.uid) {
         noteAdd(`Ricochet sur ${t.n} : −25 %`);
         return { mul: 0.75, labelText: 'Ricochet' };
       }
       if (
-        !(ACT && ACT.guard) &&
+        !(currentAction && currentAction.guard) &&
         (m.sh === 'one' || m.sh === 'line') &&
         !ignObst(S, u, typ) &&
         coverOf(S, u.pos, t.pos)

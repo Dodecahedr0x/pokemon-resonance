@@ -9,10 +9,10 @@ import { hook } from '../core/hooks.js';
 import { currentScreen } from '../core/navigation.js';
 import { byUid, unitKey } from '../combat/engine.js';
 import { ELITE } from '../combat/items-bonds-ai.js';
-import { B, __set_scSel, backToPrep, clearAim, floatAt, renderAll, ui } from '../combat/ui.js';
+import { battle, __set_selectedScenario, backToPrep, clearAim, floatAt, renderAll, ui } from '../combat/ui.js';
 import { PREFERENCES } from '../ui/preferences.js';
 import { __set_PREPG, renderPrep } from '../combat/battle-prep.js';
-import { fxOn } from '../combat/move-effects.js';
+import { effectsEnabled } from '../combat/move-effects.js';
 import { musStart } from '../audio/music.js';
 import { RIVAL, RIVAL_STEPS, rivalIdx, scenarioLeader } from '../modes/rival.js';
 import { legOf } from '../modes/legendaries.js';
@@ -71,14 +71,14 @@ export function overlay(id, data) {
 
 export function vsIntro() {
   hook('beforePresentation');
-  if (!B) {
+  if (!battle) {
     return;
   }
-  const D = SCENARIOS[B.sc],
-    L = leaderOf(B.sc),
-    i = ARENAS.findIndex(a => a.k === B.sc),
-    al = B.units.filter(u => u.side === 'a'),
-    fo = B.units.filter(u => u.side === 'e');
+  const D = SCENARIOS[battle.sc],
+    L = leaderOf(battle.sc),
+    i = ARENAS.findIndex(a => a.k === battle.sc),
+    al = battle.units.filter(u => u.side === 'a'),
+    fo = battle.units.filter(u => u.side === 'e');
   const kick =
     i >= 0
       ? `Arène ${i + 1} · Badge ${GYMS[i].t}`
@@ -89,7 +89,7 @@ export function vsIntro() {
           : D.tower
             ? D.lvl
             : L
-              ? B.sc === 'champ'
+              ? battle.sc === 'champ'
                 ? 'Ligue · Finale'
                 : 'Ligue · Conseil 4'
               : D.wild
@@ -105,19 +105,19 @@ export function vsIntro() {
   const o = overlay('vs', {
     cls: (reducedMotion ? ' is-calm' : '') + (PREFERENCES.fast ? ' is-fast' : ''),
     dur,
-    k1: B.duel433 ? 'Joueur 1' : 'Votre équipe',
+    k1: battle.duel433 ? 'Joueur 1' : 'Votre équipe',
     al: al.map(u => u.t),
     av: versusAvatar(), // trainer emblem (v4.50)
-    name1: B.duel433 ? B.duel433.names[0] : PROFILE.name || 'Dresseur',
+    name1: battle.duel433 ? battle.duel433.names[0] : PROFILE.name || 'Dresseur',
     em1: al.map(u => u.n).join(' · '),
     ac: D.at ? typeColor(D.at) : 'var(--gold)',
     kick,
     badge: i >= 0 ? i : null,
     foes: fo.slice(0, 5).map(u => u.t),
-    name2: B.duel433 ? B.duel433.names[1] : L ? L.n : D.n,
-    em2: B.duel433 ? 'Joueur 2' : L ? L.t : D.lvl || '',
+    name2: battle.duel433 ? battle.duel433.names[1] : L ? L.n : D.n,
+    em2: battle.duel433 ? 'Joueur 2' : L ? L.t : D.lvl || '',
     q: L ? L.q : null,
-    rule: `${D.rule && GYMS[ri] ? GYMS[ri].r : D.n}${styleOf(B.sc) ? ` · Style : ${styleOf(B.sc).n}` : ''} · ${B.lim} manches`,
+    rule: `${D.rule && GYMS[ri] ? GYMS[ri].r : D.n}${styleOf(battle.sc) ? ` · Style : ${styleOf(battle.sc).n}` : ''} · ${battle.lim} manches`,
     tip: versusTip(), // tip under the presentation (v4.48)
   });
   let done = false;
@@ -143,7 +143,7 @@ export function vsIntro() {
 
 export function turnBanner(txt, sub) {
   hook('beforeBanner');
-  if (!B || reducedMotion) {
+  if (!battle || reducedMotion) {
     return;
   }
   const bd = $('#bBoard');
@@ -155,10 +155,16 @@ export function turnBanner(txt, sub) {
   hostSet({
     roundBanner: {
       n,
-      isEnemy: B.phase === 'enemy',
+      isEnemy: battle.phase === 'enemy',
       fast: !!PREFERENCES.fast,
-      title: txt || 'Manche ' + B.round,
-      sub: sub || (B.duel433 ? B.duel433.names[B.duel433.j - 1] : B.phase === 'enemy' ? 'Tour adverse' : 'À vous'),
+      title: txt || 'Manche ' + battle.round,
+      sub:
+        sub ||
+        (battle.duel433
+          ? battle.duel433.names[battle.duel433.j - 1]
+          : battle.phase === 'enemy'
+            ? 'Tour adverse'
+            : 'À vous'),
     },
   });
   setTimeout(
@@ -173,13 +179,13 @@ export function turnBanner(txt, sub) {
 }
 
 export function turnBanners() {
-  if (!B) {
+  if (!battle) {
     return;
   }
-  const k = B.sc + '|' + B.round + '|' + B.phase;
-  if (LASTPH && LASTPH !== k && !B.over && !document.getElementById('vs')) {
-    if (B.phase === 'enemy') {
-      turnBanner('Manche ' + B.round, 'Tour adverse');
+  const k = battle.sc + '|' + battle.round + '|' + battle.phase;
+  if (LASTPH && LASTPH !== k && !battle.over && !document.getElementById('vs')) {
+    if (battle.phase === 'enemy') {
+      turnBanner('Manche ' + battle.round, 'Tour adverse');
     } else {
       turnBanner();
     }
@@ -189,7 +195,7 @@ export function turnBanners() {
 
 /* --- Impact words: super effective, K.O. --- */
 export function impactWords(ev) {
-  if (!B || reducedMotion) {
+  if (!battle || reducedMotion) {
     return;
   }
   let last = null;
@@ -203,19 +209,19 @@ export function impactWords(ev) {
       later.push(['K.O.', 'is-knockout', e.u]);
     }
   });
-  const S0 = B;
+  const S0 = battle;
   later.forEach(([t, c, id], j) =>
     setTimeout(
       () => {
-        if (B !== S0) {
+        if (battle !== S0) {
           return;
         }
-        const u = byUid(B, id);
+        const u = byUid(battle, id);
         if (u) {
           floatAt(unitKey(u), t, c);
         }
       },
-      (ev.some(x => x.e === 'fx') && fxOn() ? 320 : 60) + j * 120
+      (ev.some(x => x.e === 'fx') && effectsEnabled() ? 320 : 60) + j * 120
     )
   );
 }
@@ -242,7 +248,7 @@ function musNote(m) {
 }
 
 function musVoice(f, t, d, type, flying) {
-  const ac = MUS.ac,
+  const ac = MUSIC_STATE.ac,
     o = ac.createOscillator(),
     g = ac.createGain();
   o.type = type;
@@ -251,18 +257,18 @@ function musVoice(f, t, d, type, flying) {
   g.gain.linearRampToValueAtTime(flying, t + Math.min(1.6, d * 0.3));
   g.gain.linearRampToValueAtTime(0, t + d);
   o.connect(g);
-  g.connect(MUS.out);
+  g.connect(MUSIC_STATE.out);
   o.start(t);
   o.stop(t + d + 0.05);
 }
 
 function musTick() {
-  if (!MUS.on || !MUS.ac) {
+  if (!MUSIC_STATE.on || !MUSIC_STATE.ac) {
     return;
   }
-  const t = MUS.ac.currentTime + 0.08,
-    ch = MPROG[MUS.step % 4],
-    bat = !!B && currentScreen === 'combat' && !B.over;
+  const t = MUSIC_STATE.ac.currentTime + 0.08,
+    ch = MPROG[MUSIC_STATE.step % 4],
+    bat = !!battle && currentScreen === 'combat' && !battle.over;
   ch.forEach((n, i) => {
     musVoice(musNote(n - 12), t, 7.8, 'triangle', i ? 0.05 : 0.07);
     musVoice(musNote(n - 12) * 1.003, t, 7.8, 'sine', 0.03);
@@ -271,13 +277,13 @@ function musTick() {
   const arp = bat ? [0, 2, 1, 3, 2, 1, 3, 0, 0, 2, 1, 3, 2, 3, 1, 2] : [0, 2, 1, 3];
   const step = bat ? 0.5 : 2;
   arp.forEach((j, i) => musVoice(musNote(ch[j] + 12), t + i * step, 0.9, 'sine', bat ? 0.035 : 0.025));
-  MUS.step++;
-  MUS.timer = setTimeout(musTick, 8000);
+  MUSIC_STATE.step++;
+  MUSIC_STATE.timer = setTimeout(musTick, 8000);
 }
 
 /* Synthesized ambient pad: fallback of the track player (070) when the audio files are missing. */
 export function musStartCore() {
-  if (MUS.on) {
+  if (MUSIC_STATE.on) {
     return;
   }
   try {
@@ -285,20 +291,20 @@ export function musStartCore() {
     if (!C) {
       return;
     }
-    MUS.ac = MUS.ac || new C();
-    if (MUS.ac.state === 'suspended') {
-      MUS.ac.resume();
+    MUSIC_STATE.ac = MUSIC_STATE.ac || new C();
+    if (MUSIC_STATE.ac.state === 'suspended') {
+      MUSIC_STATE.ac.resume();
     }
-    MUS.out = MUS.ac.createGain();
-    const lp = MUS.ac.createBiquadFilter();
+    MUSIC_STATE.out = MUSIC_STATE.ac.createGain();
+    const lp = MUSIC_STATE.ac.createBiquadFilter();
     lp.type = 'lowpass';
     lp.frequency.value = 2200;
-    MUS.out.connect(lp);
-    lp.connect(MUS.ac.destination);
-    MUS.out.gain.setValueAtTime(0, MUS.ac.currentTime);
-    MUS.out.gain.linearRampToValueAtTime(0.55, MUS.ac.currentTime + 3);
-    MUS.on = true;
-    MUS.step = 0;
+    MUSIC_STATE.out.connect(lp);
+    lp.connect(MUSIC_STATE.ac.destination);
+    MUSIC_STATE.out.gain.setValueAtTime(0, MUSIC_STATE.ac.currentTime);
+    MUSIC_STATE.out.gain.linearRampToValueAtTime(0.55, MUSIC_STATE.ac.currentTime + 3);
+    MUSIC_STATE.on = true;
+    MUSIC_STATE.step = 0;
     musTick();
   } catch {
     /* Best effort: failure here is non-fatal. */
@@ -306,13 +312,13 @@ export function musStartCore() {
 }
 
 export function musPadStop() {
-  if (!MUS.ac || !MUS.out) {
+  if (!MUSIC_STATE.ac || !MUSIC_STATE.out) {
     return;
   }
-  clearTimeout(MUS.timer);
+  clearTimeout(MUSIC_STATE.timer);
   try {
-    const o = MUS.out,
-      t = MUS.ac.currentTime;
+    const o = MUSIC_STATE.out,
+      t = MUSIC_STATE.ac.currentTime;
     o.gain.cancelScheduledValues(t);
     o.gain.setValueAtTime(o.gain.value, t);
     o.gain.linearRampToValueAtTime(0, t + 1.2);
@@ -330,9 +336,9 @@ export function musPadStop() {
 
 export function musPadLevel() {
   try {
-    if (MUS.on && MUS.out && MUS.ac) {
-      const t = MUS.ac.currentTime,
-        g = MUS.out.gain;
+    if (MUSIC_STATE.on && MUSIC_STATE.out && MUSIC_STATE.ac) {
+      const t = MUSIC_STATE.ac.currentTime,
+        g = MUSIC_STATE.out.gain;
       g.cancelScheduledValues(t);
       g.setValueAtTime(g.value, t);
       g.linearRampToValueAtTime(0.55 * PREFERENCES.musVol, t + 0.4);
@@ -499,13 +505,13 @@ export const chapterOf = k => {
 };
 
 /* --- Health bars: the loss stays visible for a moment --- */
-export const HPM = {};
+export const HP_BAR_MOTION = {};
 
 /* --- End-of-battle rank and best rank per terrain --- */
 export const RANKS = ['B', 'A', 'S'];
 
 /* --- Generative ambient music ("Musique" option) --- */
-export const MUS = { ac: null, out: null, on: false, timer: 0, step: 0 };
+export const MUSIC_STATE = { ac: null, out: null, on: false, timer: 0, step: 0 };
 
 const MPROG = [
   [57, 64, 69, 72],
@@ -515,7 +521,7 @@ const MPROG = [
 ];
 
 function onBattleShortcutKeydown(e) {
-  if (currentScreen !== 'combat' || !B || B.over || ui.busy || e.altKey || e.ctrlKey || e.metaKey) {
+  if (currentScreen !== 'combat' || !battle || battle.over || ui.busy || e.altKey || e.ctrlKey || e.metaKey) {
     return;
   }
   const tg = e.target;
@@ -559,7 +565,7 @@ function onBattleShortcutKeydown(e) {
     return;
   }
   if (k === 'ArrowRight' || k === 'ArrowLeft') {
-    const al = B.units.filter(u => u.side === 'a' && !u.ko);
+    const al = battle.units.filter(u => u.side === 'a' && !u.ko);
     if (!al.length) {
       return;
     }
@@ -611,7 +617,7 @@ export function init() {
       e.stopPropagation();
       backToPrep();
       __set_PREPG(null);
-      __set_scSel(b.dataset.next);
+      __set_selectedScenario(b.dataset.next);
       renderPrep();
     },
     true
@@ -623,7 +629,7 @@ export function init() {
   document.addEventListener(
     'pointerdown',
     () => {
-      if (PREFERENCES.music && !MUS.on) {
+      if (PREFERENCES.music && !MUSIC_STATE.on) {
         musStart();
       }
     },

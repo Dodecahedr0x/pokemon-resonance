@@ -6,7 +6,7 @@ import { HOOKS } from '../core/hooks.js';
 import { tokCl, unitsDirty } from '../../screens/combat/board/boardStore.js';
 import { byUid } from './engine.js';
 import { canCapture } from './items-bonds-ai.js';
-import { B, L, renderAll, ui } from './ui.js';
+import { battle, BOARD_LAYERS, renderAll, ui } from './ui.js';
 import { PREFERENCES, savePref } from '../ui/preferences.js';
 import { sfx, vibrate } from '../audio/sound-effects.js';
 import { AUTO } from '../progression/prestige.js';
@@ -105,12 +105,12 @@ const CATCH_TIMING_ON = () => PREFERENCES.catchTimingEnabled !== 0 && !reducedMo
 
 function onTimedCatchClick(e) {
   const b = e.target.closest && e.target.closest('[data-cap]');
-  if (!b || CATCH_TIMED_OK || !CATCH_TIMING_ON() || !B || document.getElementById('timed-catch')) {
+  if (!b || CATCH_TIMED_OK || !CATCH_TIMING_ON() || !battle || document.getElementById('timed-catch')) {
     return;
   }
-  const al = byUid(B, ui.sel),
-    en = byUid(B, b.dataset.cap);
-  if (!canCapture(B, al, en)) {
+  const al = byUid(battle, ui.sel),
+    en = byUid(battle, b.dataset.cap);
+  if (!canCapture(battle, al, en)) {
     return;
   } // the usual rules apply first
   e.preventDefault();
@@ -148,7 +148,7 @@ function onTimedCatchClick(e) {
 // Instructions run at startup, in the original order (see index.js).
 export function init() {
   HOOKS.token.push(u => {
-    const T = L.u[u.uid];
+    const T = BOARD_LAYERS.u[u.uid];
     if (!T) {
       return;
     }

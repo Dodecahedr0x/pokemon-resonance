@@ -6,7 +6,7 @@ import { POKEMON, SCENARIOS } from '../pokemon/pokemon.js';
 import { $, reducedMotion, after2images, writeLS, svgElement, typeColor } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { byUid } from '../combat/engine.js';
-import { B, cellCenter, L } from '../combat/ui.js';
+import { battle, cellCenter, BOARD_LAYERS } from '../combat/ui.js';
 import { PREFERENCES, savePref } from '../ui/preferences.js';
 import { SOUND_EFFECTS, noise, playTone, vibrate } from './sound-effects.js';
 import { AUTO } from '../progression/prestige.js';
@@ -96,7 +96,7 @@ function adaptMusicTempo() {
 
 /* ---------- 3. board effects: particles, shake, vibrations ---------- */
 function spawnParticles(k, ty) {
-  if (!effectsEnabled() || !L.fx) {
+  if (!effectsEnabled() || !BOARD_LAYERS.fx) {
     return;
   }
   const [x, y] = cellCenter(k),
@@ -114,7 +114,7 @@ function spawnParticles(k, ty) {
         r: (1.6 + Math.random() * 1.8).toFixed(1),
         style: `--dx:${(Math.cos(a) * d).toFixed(1)}px;--dy:${(Math.sin(a) * d).toFixed(1)}px;fill:${c}`,
       },
-      L.fx
+      BOARD_LAYERS.fx
     );
     setTimeout(() => p.remove(), 800);
   }
@@ -144,7 +144,7 @@ function screenShake(big) {
 }
 
 function showTransition() {
-  if (!effectsEnabled() || !B) {
+  if (!effectsEnabled() || !battle) {
     return;
   }
   // #battleTransition: rendered by React (src/screens/overlays/Effects.jsx) for the duration of the transition
@@ -158,14 +158,14 @@ function showTransition() {
   vibrate([40, 40, 60]);
   clearTimeout(showTransition.t);
   showTransition.t = setTimeout(() => clearOverlay('battle-transition'), 1250);
-  const fo = B.units.find(u => u.side === 'e');
+  const fo = battle.units.find(u => u.side === 'e');
   setTimeout(() => playCry(fo, false), 900);
 }
 
 /* ---------- 6. animated weather on the board ---------- */
 function boardWeather() {
   // #boardWeather: rendered by React (Board.jsx)
-  const k = effectsEnabled() && B && !B.over && B.wx && B.wx.k ? B.wx.k : null;
+  const k = effectsEnabled() && battle && !battle.over && battle.wx && battle.wx.k ? battle.wx.k : null;
   if (getHost().boardWeather !== k) {
     hostSet({ boardWeather: k });
   }
@@ -342,7 +342,7 @@ function onJournal(ev) {
         playStep();
       }
     } else if (e.e === 'dmg') {
-      const u = byUid(B, e.u);
+      const u = byUid(battle, e.u);
       if (u && u.side === 'a' && !u.ko && u.hp / u.mhp <= 0.25 && !u._lowHpAlerted) {
         u._lowHpAlerted = 1;
         low = true;
@@ -352,7 +352,7 @@ function onJournal(ev) {
       }
     } else if (e.e === 'ko') {
       kos++;
-      playCry(byUid(B, e.u), true);
+      playCry(byUid(battle, e.u), true);
       boom = true;
     } else if (e.e === 'msg' && /super efficace/.test(e.s || '')) {
       boom = true;
@@ -377,7 +377,7 @@ function onJournal(ev) {
 export function init() {
   setInterval(() => {
     try {
-      if (!B || B.over || $('#cbBattle').hidden) {
+      if (!battle || battle.over || $('#cbBattle').hidden) {
         adaptMusicTempo();
       }
     } catch {
@@ -390,7 +390,7 @@ export function init() {
 
   tipIndex = Math.floor(Math.random() * IMMERSION_TIPS.length);
   HOOKS.launch.push(() => {
-    if (B && !AUTO) {
+    if (battle && !AUTO) {
       showTransition();
     }
   });
@@ -441,10 +441,10 @@ export function init() {
   new MutationObserver(() => {
     const r = $('#cbResult'),
       c = r && r.querySelector('.result-card.is-celebrating');
-    if (!r || r.hidden || !c || !B || B._resultFxDone) {
+    if (!r || r.hidden || !c || !battle || battle._resultFxDone) {
       return;
     }
-    B._resultFxDone = 1;
+    battle._resultFxDone = 1;
     vibrate([60, 40, 60, 40, 140]);
     try {
       if (c.querySelector('.result-badge')) {
@@ -455,13 +455,13 @@ export function init() {
     }
   }).observe($('#cbResult'), { childList: true, attributes: true, attributeFilter: ['hidden'] });
   HOOKS.battleEnd.push(() => {
-    if (B && B.over && !B._journalDone && !(SCENARIOS[B.sc] || {}).noProgress) {
-      B._journalDone = 1;
+    if (battle && battle.over && !battle._journalDone && !(SCENARIOS[battle.sc] || {}).noProgress) {
+      battle._journalDone = 1;
       const j = readJournal(),
-        win = B.over === 'win';
+        win = battle.over === 'win';
       j.streak = win ? j.streak + 1 : 0;
       j.best = Math.max(j.best, j.streak);
-      B.units
+      battle.units
         .filter(u => u.side === 'a')
         .forEach(u => {
           const b = POKEMON[u.id] ? POKEMON[u.id].base : u.id;

@@ -1,7 +1,15 @@
 import { Fragment } from 'react';
 import { useKeyed } from '../../../lib/useKeyed.js';
 import { BOARD_ROWS, BOARD_COLS, cellKey, parseCellKey } from '../../../engine/combat/engine.js';
-import { B, BOARD_GEOMETRY, cellCenter, cellPoints, L, VERT, tiltS } from '../../../engine/combat/ui.js';
+import {
+  battle,
+  BOARD_GEOMETRY,
+  cellCenter,
+  cellPoints,
+  BOARD_LAYERS,
+  isVerticalBoard,
+  tiltS,
+} from '../../../engine/combat/ui.js';
 import { tileTip } from '../../../engine/combat/battle-panel.js';
 import { fieldSvg } from '../../../engine/modes/gym-screen.js';
 import { useBoard } from './boardStore.js';
@@ -14,8 +22,8 @@ import { PE, lref } from './shared.js';
 // cell references kept by the engine (L.t[k], L.tx[k]): stable functions
 const tRefs = {},
   txRefs = {};
-const tRef = k => tRefs[k] || (tRefs[k] = n => n && (L.t[k] = n));
-const txRef = k => txRefs[k] || (txRefs[k] = n => n && (L.tx[k] = n));
+const tRef = k => tRefs[k] || (tRefs[k] = n => n && (BOARD_LAYERS.t[k] = n));
+const txRef = k => txRefs[k] || (txRefs[k] = n => n && (BOARD_LAYERS.tx[k] = n));
 
 /* v4.71: painted terrain image and waves (before the cells) */
 export function Painting() {
@@ -73,7 +81,7 @@ export function Pedestals() {
 
 // class of a cell (renderBoard), with obstacles (drawObstacles: pillar, grass, sand)
 function tileClass(k) {
-  const t = B.tiles[k],
+  const t = battle.tiles[k],
     pp = parseCellKey(k);
   let c = 'cell' + ((pp[0] + pp[1]) % 2 ? ' is-alternate' : '');
   if (t.rock) {
@@ -102,8 +110,8 @@ export function Cells() {
   useBoard('tiles');
   return (
     <g ref={lref('tiles')}>
-      {B &&
-        Object.keys(B.tiles).map(k => {
+      {battle &&
+        Object.keys(battle.tiles).map(k => {
           const [x, y] = cellCenter(k);
           return (
             <polygon
@@ -123,11 +131,11 @@ export function Cells() {
 
 // texture of a cell: water, sand (drawObstacles) or the location's terrain
 function texFill(k) {
-  const t = B.tiles[k];
+  const t = battle.tiles[k];
   if (t.sand && !t.w && !t.rock) {
     return 'url(#tx-sand)';
   }
-  return `url(#${t.w ? 'tx-water' : L.txId})`;
+  return `url(#${t.w ? 'tx-water' : BOARD_LAYERS.txId})`;
 }
 
 /* textures (the cell-texture class is copied from the cell's states by the engine, v4.77) */
@@ -136,8 +144,8 @@ export function Textures() {
   const S = useBoard('pv');
   return (
     <g style={PE} className={S.pv ? 'texture-layer' : undefined} ref={lref('tex')}>
-      {B &&
-        Object.keys(B.tiles).map(k => {
+      {battle &&
+        Object.keys(battle.tiles).map(k => {
           const [x, y] = cellCenter(k);
           return (
             <Fragment key={k}>
@@ -172,11 +180,11 @@ export function Decor() {
   const S = useBoard('pv');
   const items = useKeyed(() => {
     const o = [];
-    if (!B) {
+    if (!battle) {
       return o;
     }
-    for (const k in B.tiles) {
-      const t = B.tiles[k],
+    for (const k in battle.tiles) {
+      const t = battle.tiles[k],
         [c, r] = parseCellKey(k),
         [x, y] = cellCenter(k);
       if (t.rock || t.w || (c * 7 + r * 13) % 5) {
@@ -298,7 +306,7 @@ export function Landmarks() {
   const S = useBoard('tilt');
   const base = useKeyed(() => {
     const o = [];
-    if (VERT) {
+    if (isVerticalBoard) {
       for (let r = 0; r < BOARD_ROWS; r++) {
         o.push([r + 1, cellCenter(cellKey(0, r))[0], 8]);
       }

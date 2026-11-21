@@ -1,7 +1,7 @@
-import { POKEMON, PKT } from '../pokemon/pokemon.js';
+import { POKEMON, SPECIES_BY_TYPES } from '../pokemon/pokemon.js';
 import { ITEMS2 } from '../state/game-state.js';
 import { tokCl, unitsDirty } from '../../screens/combat/board/boardStore.js';
-import { L } from '../combat/ui.js';
+import { BOARD_LAYERS } from '../combat/ui.js';
 import { pokemonArtUrl } from './images.js';
 import { itemIcon } from './item-icons.js';
 import { HELD_IMG } from '../state/economy.js';
@@ -25,7 +25,7 @@ export function itemize(h) {
 // Token illustration (.token-image image before the badge, in the v4.29 animated group): rendered by
 // Units.jsx from the token template (imOn, geo, href).
 export function tokenArt(u) {
-  const T = L.u && L.u[u.uid];
+  const T = BOARD_LAYERS.u && BOARD_LAYERS.u[u.uid];
   if (!T) {
     return;
   }
@@ -83,7 +83,7 @@ export const tagUnits = S => {
   if (S && Array.isArray(S.units)) {
     S.units.forEach(u => {
       if (u && Array.isArray(u.t) && POKEMON[u.id]) {
-        PKT.set(u.t, u.id);
+        SPECIES_BY_TYPES.set(u.t, u.id);
       } // types → species
     });
   }

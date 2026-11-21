@@ -2,7 +2,7 @@ import { SCENARIOS } from '../pokemon/pokemon.js';
 import { PROFILE } from '../state/game-state.js';
 import { toast } from '../core/utils.js';
 import { MAX_ENERGY, canAwaken } from '../combat/engine.js';
-import { B, ui } from '../combat/ui.js';
+import { battle, ui } from '../combat/ui.js';
 import { queueSave } from '../state/saves.js';
 import { PREFERENCES, savePref } from './preferences.js';
 import { AUTO } from '../progression/prestige.js';
@@ -51,45 +51,45 @@ const TIP_TEXTS = {
 
 export function seenTips(force) {
   if (
-    !B ||
-    B.over ||
+    !battle ||
+    battle.over ||
     ui.busy ||
     ui.cutscene ||
-    B.phase !== 'player' ||
+    battle.phase !== 'player' ||
     (AUTO && !force) ||
     PREFERENCES.seenTips === false
   ) {
     return;
   }
-  if ((SCENARIOS[B.sc] || {}).tuto || document.getElementById('tip-card')) {
+  if ((SCENARIOS[battle.sc] || {}).tuto || document.getElementById('tip-card')) {
     return;
   }
   const seenSet = (PROFILE.seenTips = PROFILE.seenTips || {}),
-    al = B.units.filter(u => u.side === 'a' && !u.ko),
-    en = B.units.filter(u => u.side === 'e' && !u.ko),
+    al = battle.units.filter(u => u.side === 'a' && !u.ko),
+    en = battle.units.filter(u => u.side === 'e' && !u.ko),
     c = [];
-  if (!B.noCatch) {
+  if (!battle.noCatch) {
     c.push('capture');
   }
-  if (al.some(u => canAwaken(B, u))) {
+  if (al.some(u => canAwaken(battle, u))) {
     c.push('eveil');
   }
-  if (en.some(u => notesOf(B, u) > 0)) {
+  if (en.some(u => notesOf(battle, u) > 0)) {
     c.push('reso');
   }
-  if (al.some(u => u.en >= MAX_ENERGY && resonanceCandidate(B, u))) {
+  if (al.some(u => u.en >= MAX_ENERGY && resonanceCandidate(battle, u))) {
     c.push('forme');
   }
-  if (al.some(u => isSurrounded(B, u))) {
+  if (al.some(u => isSurrounded(battle, u))) {
     c.push('encercle');
   }
-  if (hasBossPhases(B)) {
+  if (hasBossPhases(battle)) {
     c.push('phase');
   }
-  if (B.dangerZone) {
+  if (battle.dangerZone) {
     c.push('danger');
   }
-  if ((PROFILE.battles || 0) >= 2 && B.round >= 2) {
+  if ((PROFILE.battles || 0) >= 2 && battle.round >= 2) {
     c.push('vigil');
   }
   const k = c.find(x => !seenSet[x]);
@@ -103,7 +103,7 @@ export function seenTips(force) {
 }
 
 export function endTooltip() {
-  if (!B || B.over) {
+  if (!battle || battle.over) {
     hideTooltip();
   }
 }
@@ -121,7 +121,7 @@ export function init() {
       toast('Astuces désactivées. Réactivez-les dans les Paramètres.');
     }
     hideTooltip();
-    if (B) {
+    if (battle) {
       setTimeout(seenTips, 400);
     }
   });

@@ -3,7 +3,7 @@ import { GYMS } from '../../engine/data/game-data.js';
 import { SCENARIOS } from '../../engine/pokemon/pokemon.js';
 import { PROFILE } from '../../engine/state/game-state.js';
 import { ARENAS } from '../../engine/modes/gyms.js';
-import { TOD } from '../../engine/world/home-route.js';
+import { timeOfDay } from '../../engine/world/home-route.js';
 import { ELITE, scenLock } from '../../engine/combat/items-bonds-ai.js';
 import { chapterOf, ELITE_L, leaderOf } from '../../engine/progression/prestige.js';
 import { avatar, goalChips } from '../../engine/world/home-journey.js';
@@ -86,7 +86,7 @@ export default function MapInfo() {
         <header className="map-info-header">
           <Html html={placeIcon(p)} />
           <span>
-            <small>{`${routeName()} · ${TOD === 'nuit' ? 'nuit' : TOD === 'matin' ? 'matin' : 'jour'}`}</small>
+            <small>{`${routeName()} · ${timeOfDay === 'nuit' ? 'nuit' : timeOfDay === 'matin' ? 'matin' : 'jour'}`}</small>
             <b>Hautes herbes</b>
           </span>
         </header>

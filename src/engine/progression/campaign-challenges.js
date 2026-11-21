@@ -5,7 +5,7 @@ import { PROFILE, isCamp } from '../state/game-state.js';
 import { medal, toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { __set_squad, renderSquad, save, squad } from '../team/team.js';
-import { scSel } from '../combat/ui.js';
+import { selectedScenario } from '../combat/ui.js';
 import { armedBossRush } from '../modes/boss-rush.js';
 import { queueSave } from '../state/saves.js';
 import { renderWallet } from '../ui/wallet.js';
@@ -67,7 +67,7 @@ export function challengeLaunch() {
   if (armedBossRush()) {
     return null;
   }
-  const D = SCENARIOS[scSel];
+  const D = SCENARIOS[selectedScenario];
   if (!isCamp() || !D || D.tuto || D.tower) {
     return null;
   }

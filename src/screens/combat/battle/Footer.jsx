@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { byUid, canAwaken, foeEvo } from '../../../engine/combat/engine.js';
-import { B, ui } from '../../../engine/combat/ui.js';
+import { battle, ui } from '../../../engine/combat/ui.js';
 import { currentActor } from '../../../engine/combat/tactical-engine.js';
 import { isCoopPlayerAlive } from '../../../engine/modes/coop.js';
 import { isEnemyTurn } from '../../../engine/combat/quick-battle.js';
@@ -15,11 +15,11 @@ import Button from '../../../components/Button.jsx';
 // End-of-turn button, phase and step: renderTop, then the versions that rewrote them
 // (deployment v4.30, riddle v4.31, duel v4.33, guided tour v4.78), in the same order.
 function bar() {
-  const foes = B.units.filter(u => u.side === 'e'),
-    al = B.units.filter(u => u.side === 'a');
+  const foes = battle.units.filter(u => u.side === 'e'),
+    al = battle.units.filter(u => u.side === 'a');
   const ready = al.filter(u => !u.ko && !u.acted).length,
-    cur = B.order === 'vitesse' ? currentActor(B) : null;
-  let disabled = (ui.busy && !isEnemyTurn()) || !!B.over || !!ui.skipSpeedup;
+    cur = battle.order === 'vitesse' ? currentActor(battle) : null;
+  let disabled = (ui.busy && !isEnemyTurn()) || !!battle.over || !!ui.skipSpeedup;
   let button = ui.cutscene ? (
     'Éveil…'
   ) : ui.busy ? (
@@ -38,10 +38,10 @@ function bar() {
     <>
       Terminer <span className="end-turn-count">{cur.n}</span>
     </>
-  ) : B.coop ? (
+  ) : battle.coop ? (
     <>
-      {B.coop === 1 && isCoopPlayerAlive(B, 2) ? 'Passer au J2' : 'Fin du tour'}{' '}
-      <span className="end-turn-count">J{B.coop}</span>
+      {battle.coop === 1 && isCoopPlayerAlive(battle, 2) ? 'Passer au J2' : 'Fin du tour'}{' '}
+      <span className="end-turn-count">J{battle.coop}</span>
     </>
   ) : (
     <>
@@ -56,8 +56,8 @@ function bar() {
       ) : null}
     </>
   );
-  const rdy = al.filter(u => !u.ko && canAwaken(B, u)).length,
-    warn = foes.filter(u => foeEvo(B, u)).length;
+  const rdy = al.filter(u => !u.ko && canAwaken(battle, u)).length,
+    warn = foes.filter(u => foeEvo(battle, u)).length;
   let phase = ui.cutscene
     ? 'Un Pokémon évolue.'
     : ui.busy
@@ -69,28 +69,28 @@ function bar() {
           : ready
             ? 'À vous : déplacez, puis agissez.'
             : 'Tous vos Pokémon ont joué.';
-  if (B.coop && !ui.busy && !ui.cutscene) {
-    phase = `Joueur ${B.coop} · ` + phase;
+  if (battle.coop && !ui.busy && !ui.cutscene) {
+    phase = `Joueur ${battle.coop} · ` + phase;
   } // co-op (v4.18)
   let playerRef = null;
   // deployment (v4.30)
-  if (B.deployPhase && !B.over) {
+  if (battle.deployPhase && !battle.over) {
     disabled = false;
     button = 'Lancer le combat';
     phase = ui.deploySel ? 'Touchez une case bleue.' : 'Placez vos Pokémon sur les cases bleues.';
   }
   // riddle (v4.31)
-  if (B.sc === 'enigme431' && !B.over && !B.deployPhase) {
+  if (battle.sc === 'enigme431' && !battle.over && !battle.deployPhase) {
     button = 'Abandonner l’énigme';
     phase = riddlePhase();
   }
   // local duel (v4.33)
-  const D = B.duel433;
-  if (D && !B.over && !ui.cutscene) {
+  const D = battle.duel433;
+  if (D && !battle.over && !ui.cutscene) {
     if (ui.busy) {
       button = 'Fin de manche…';
     } else {
-      const r = B.units.filter(u => u.side === 'a' && !u.ko && !u.acted).length;
+      const r = battle.units.filter(u => u.side === 'a' && !u.ko && !u.acted).length;
       button = (
         <>
           {D.j === 1 ? `Passer à ${D.names[1]}` : 'Fin de la manche'}
@@ -112,20 +112,20 @@ function bar() {
   const g = turnFlow.guide();
   let step = null;
   if (g) {
-    const n = turnFlow.remaining(B).length,
+    const n = turnFlow.remaining(battle).length,
       t =
-        B.order === 'vitesse'
+        battle.order === 'vitesse'
           ? 'À vous : déplacez, puis agissez.'
           : n
             ? `Encore ${n} Pokémon à jouer.`
             : 'Manche terminée.';
     phase = phase.replace(/(À vous : )?déplacez, puis agissez\./, t).replace(/Tous (vos|ses) Pokémon ont joué\./, t);
-    const u = ui.sel && byUid(B, ui.sel);
+    const u = ui.sel && byUid(battle, ui.sel);
     if (u && u.side === 'a' && !ui.selE) {
       step = (
         <>
-          <b>{STEP[turnFlow.stepOf(B, u)]}</b> {u.n}
-          {B.order !== 'vitesse' && n ? ` · encore ${n}` : ''}
+          <b>{STEP[turnFlow.stepOf(battle, u)]}</b> {u.n}
+          {battle.order !== 'vitesse' && n ? ` · encore ${n}` : ''}
         </>
       );
     }
@@ -136,7 +136,7 @@ function bar() {
 export default function Footer() {
   const v = useBattleVersion('foot');
   const [lastStep, setLastStep] = useState(null);
-  const x = v && B ? bar() : null;
+  const x = v && battle ? bar() : null;
   // the hidden step keeps its last text, like the old DOM
   // (keyed by version: the step element is rebuilt on every render)
   if (x && x.stepOf && (!lastStep || lastStep.v !== v)) {

@@ -4,7 +4,7 @@ import { __set_BADGES } from '../modes/gyms.js';
 import { toast } from '../core/utils.js';
 import { goTo } from '../core/navigation.js';
 import { renderSquad, save } from '../team/team.js';
-import { B, finish } from '../combat/ui.js';
+import { battle, finish } from '../combat/ui.js';
 import { PREFERENCES, savePref } from '../ui/preferences.js';
 import { SHOP } from '../state/economy.js';
 import { renderWallet } from '../ui/wallet.js';
@@ -94,18 +94,18 @@ function applyCheat(k) {
     PROFILE.fatigue = {};
     m = 'Fatigue effacée.';
   } else if (k === 'gagner') {
-    if (!B || B.over) {
+    if (!battle || battle.over) {
       return toast('Aucun combat en cours.');
     }
-    B.units
+    battle.units
       .filter(u => u.side === 'e')
       .forEach(u => {
         u.ko = true;
         u.hp = 0;
         u.intent = null;
       });
-    B.over = 'win';
-    B.deployPhase = 0;
+    battle.over = 'win';
+    battle.deployPhase = 0;
     goTo('combat');
     finish();
     return;

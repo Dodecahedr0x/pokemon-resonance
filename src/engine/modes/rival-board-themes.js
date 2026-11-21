@@ -6,11 +6,11 @@ import { toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { squad } from '../team/team.js';
 import { typeEffectiveness } from '../combat/engine.js';
-import { B } from '../combat/ui.js';
+import { battle } from '../combat/ui.js';
 import { PREFERENCES, savePref } from '../ui/preferences.js';
 import { sfx } from '../audio/sound-effects.js';
 import { savePurse } from '../state/economy.js';
-import { DEXS } from '../progression/pokedex.js';
+import { DEX_SPECIES } from '../progression/pokedex.js';
 import { renderParams } from '../ui/settings.js';
 import { RIVAL_CHALLENGES, RIVAL_KEYS, rivalIdx } from './rival.js';
 
@@ -44,7 +44,7 @@ function pickCounter(T, rem, used) {
     target = pw(rem);
   let best = null,
     bs = -1;
-  DEXS.forEach(m => {
+  DEX_SPECIES.forEach(m => {
     if (m.c !== POKEMON[rem].c || used.includes(m.id) || !POKEMON[m.id] || m.id === rem) {
       return;
     }
@@ -117,10 +117,16 @@ export const isThemeUnlocked = k => !BOARD_THEMES[k].p || (PREFERENCES.unlockedT
 // Instructions run at startup, in the original order (see index.js).
 export function init() {
   HOOKS.battleEnd.push(() => {
-    if (B && B.over && !B._rivalDone && SCENARIOS[B.sc] && (rivalIdx(B.sc) >= 0 || SCENARIOS[B.sc].rivalFight)) {
-      B._rivalDone = 1;
+    if (
+      battle &&
+      battle.over &&
+      !battle._rivalDone &&
+      SCENARIOS[battle.sc] &&
+      (rivalIdx(battle.sc) >= 0 || SCENARIOS[battle.sc].rivalFight)
+    ) {
+      battle._rivalDone = 1;
       const s = rivalState();
-      if (B.over === 'win') {
+      if (battle.over === 'win') {
         s.w++;
       } else {
         s.l++;

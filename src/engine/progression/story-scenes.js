@@ -1,10 +1,10 @@
 import { POKEMON } from '../pokemon/pokemon.js';
 import { PROFILE, isCamp } from '../state/game-state.js';
 import { $ } from '../core/utils.js';
-import { B } from '../combat/ui.js';
+import { battle } from '../combat/ui.js';
 import { AUTO } from './prestige.js';
 import { avatar } from '../world/home-journey.js';
-import { SCENES, SCN, __set_SCN, renderStoryScene } from './story-dialogues.js';
+import { SCENES, currentScene, __set_currentScene, renderStoryScene } from './story-dialogues.js';
 import { rivalAce } from '../modes/rival.js';
 
 /* Story scenes around the big battles: speakers, post-battle dialogue, Hoenn arrival and finale (added in v4.29). */
@@ -51,7 +51,13 @@ export function npcProfile(who) {
 export function afterBattleScene(sc, win, force) {
   const c = 'apres-' + sc,
     Lg = POST_BATTLE_DIALOGUE[sc];
-  if (!win || !Lg || (AUTO && !force) || (PROFILE.scenes && PROFILE.scenes[c]) || (SCN && SCN.c === c)) {
+  if (
+    !win ||
+    !Lg ||
+    (AUTO && !force) ||
+    (PROFILE.scenes && PROFILE.scenes[c]) ||
+    (currentScene && currentScene.c === c)
+  ) {
     return;
   }
   if (sc === 'champ' && !isCamp()) {
@@ -63,10 +69,10 @@ export function afterBattleScene(sc, win, force) {
   }
   afterBattleScene.seenFlags[c] = 1;
   setTimeout(() => {
-    if ((B && !B.over) || SCN) {
+    if ((battle && !battle.over) || currentScene) {
       return;
     }
-    __set_SCN({ k: sc, c, i: 0, L: Lg, apres: true });
+    __set_currentScene({ k: sc, c, i: 0, L: Lg, apres: true });
     renderStoryScene();
     $('#story-scene').hidden = false;
   }, 700);

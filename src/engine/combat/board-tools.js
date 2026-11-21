@@ -6,7 +6,7 @@ import { arenaNext, veiled } from '../modes/gyms.js';
 import { rxCat, toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { parseCellKey, affected, byUid, markAt, reach, targets, unitAt } from './engine.js';
-import { B, STATUS_CLASS, clearAim, hpClass, renderAll, ui } from './ui.js';
+import { battle, STATUS_CLASS, clearAim, hpClass, renderAll, ui } from './ui.js';
 import { PREFERENCES, savePref } from '../ui/preferences.js';
 import { tileTip } from './battle-panel.js';
 import { renderParams } from '../ui/settings.js';
@@ -111,26 +111,26 @@ function terrainName(t) {
 function tileDangers(k) {
   const o = [];
   try {
-    if (veiled(B)) {
-      if (B.units.some(e => e.side === 'e' && !e.ko && e.intent)) {
+    if (veiled(battle)) {
+      if (battle.units.some(e => e.side === 'e' && !e.ko && e.intent)) {
         o.push('Intentions adverses voilées : impossible de savoir qui vise cette case.');
       }
     } else {
-      B.units.forEach(e => {
+      battle.units.forEach(e => {
         if (e.side !== 'e' || e.ko || !e.intent) {
           return;
         }
         const m = MOVES[e.intent.mv];
-        if (m && affected(B, e, m, e.intent.k).includes(k)) {
+        if (m && affected(battle, e, m, e.intent.k).includes(k)) {
           o.push(`${e.n} vise cette case avec ${m.n}.`);
         }
       });
     }
-    const an = arenaNext(B);
+    const an = arenaNext(battle);
     if (an && an.tiles.includes(k)) {
       o.push(an.txt);
     }
-    if (B.livingBoard && fireHazard(B, k)) {
+    if (battle.livingBoard && fireHazard(battle, k)) {
       o.push('L’herbe peut s’embraser ici.');
     }
   } catch {
@@ -142,17 +142,17 @@ function tileDangers(k) {
 function tileContext(k) {
   const o = [];
   try {
-    const u = ui.sel && byUid(B, ui.sel);
-    if (!u || u.side !== 'a' || u.ko || B.phase !== 'player') {
+    const u = ui.sel && byUid(battle, ui.sel);
+    if (!u || u.side !== 'a' || u.ko || battle.phase !== 'player') {
       return o;
     }
     if (ui.mode === 'target') {
       const m = MOVES[u.mv[ui.mi]];
-      if (m && targets(B, u, m).includes(k)) {
+      if (m && targets(battle, u, m).includes(k)) {
         o.push(`À portée de ${m.n} (${u.n}).`);
       }
     } else if (!u.moved && !u.acted) {
-      const c = reach(B, u)[k];
+      const c = reach(battle, u)[k];
       if (c !== undefined) {
         o.push(`${u.n} peut y aller : ${c} Mouvement${c > 1 ? 's' : ''}.`);
       }
@@ -169,7 +169,7 @@ function unitInfo(v) {
     v.side === 'e'
       ? v.ko
         ? 'K.O.'
-        : v.intent && !veiled(B) && MOVES[v.intent.mv]
+        : v.intent && !veiled(battle) && MOVES[v.intent.mv]
           ? `Prépare ${MOVES[v.intent.mv].n}`
           : v.intent
             ? 'Intention voilée'
@@ -180,7 +180,8 @@ function unitInfo(v) {
           ? 'A joué'
           : 'Prêt';
   const hp = Math.max(0, Math.round((v.hp / v.mhp) * 100));
-  const canDo = !v.ko && B.phase === 'player' && !B.over && !B.deployPhase && (v.side === 'e' || canSelect(v));
+  const canDo =
+    !v.ko && battle.phase === 'player' && !battle.over && !battle.deployPhase && (v.side === 'e' || canSelect(v));
   return {
     e: v.side === 'e',
     n: v.n,
@@ -200,12 +201,12 @@ function unitInfo(v) {
 
 // legend of this battle's terrains: [color, name, rule]
 function terrainLegend() {
-  const seenSet = TERRAINS.filter(x => Object.keys(B.tiles).some(k => x[3](B.tiles[k])));
+  const seenSet = TERRAINS.filter(x => Object.keys(battle.tiles).some(k => x[3](battle.tiles[k])));
   if (!seenSet.length) {
     return null;
   }
   const ruleDef = x => {
-    const k = Object.keys(B.tiles).find(kk => x[3](B.tiles[kk]));
+    const k = Object.keys(battle.tiles).find(kk => x[3](battle.tiles[kk]));
     const seg = tileTip(k).split(' · ');
     const pre = {
       pil: 'Pilier',
@@ -217,7 +218,7 @@ function terrainLegend() {
       sand: 'Sable',
       fog: 'Br',
     }[x[0]];
-    const s = pre ? seg.find(z => z.startsWith(pre)) : x[0] === 'trap' ? trapTip(B.tiles[k].trap) : null;
+    const s = pre ? seg.find(z => z.startsWith(pre)) : x[0] === 'trap' ? trapTip(battle.tiles[k].trap) : null;
     return s
       ? s.replace(/^[^:]*:\s*/, '')
       : x[0] === 'mark'
@@ -228,13 +229,13 @@ function terrainLegend() {
 }
 
 function inspectedTile() {
-  if (!B || B.over) {
+  if (!battle || battle.over) {
     return null;
   }
-  if (INSPECTED_TILE != null && B.tiles[INSPECTED_TILE]) {
+  if (INSPECTED_TILE != null && battle.tiles[INSPECTED_TILE]) {
     return INSPECTED_TILE;
   }
-  if (document.body.classList.contains('compact-battle') && ui.tile != null && B.tiles[ui.tile]) {
+  if (document.body.classList.contains('compact-battle') && ui.tile != null && battle.tiles[ui.tile]) {
     return ui.tile;
   } // touched cell: its sheet was all the way at the bottom
   return null;
@@ -254,13 +255,13 @@ function tileSheet() {
     markInspectedTile(null);
     return;
   }
-  const t = B.tiles[k],
-    v = unitAt(B, k),
+  const t = battle.tiles[k],
+    v = unitAt(battle, k),
     tip = tileTip(k),
     seg = tip === 'Case libre' ? ['Rien de particulier : déplacement normal, pas de couverture.'] : tip.split(' · ');
   let rx = [];
   try {
-    const mk = t.mark ? markAt(B, k) : t.w ? 'trempe' : null;
+    const mk = t.mark ? markAt(battle, k) : t.w ? 'trempe' : null;
     if (mk && MARK_REACTIONS[mk]) {
       const row = MARK_REACTIONS[mk];
       rx = ELEMENT_TYPES.map((e, i) =>
@@ -335,11 +336,11 @@ function markInspectedTile(k) {
 
 function dismissTileSheet() {
   INSPECTED_TILE = null;
-  if (B) {
+  if (battle) {
     ui.tile = null;
   }
   tileSheet();
-  if (B) {
+  if (battle) {
     renderAll();
   }
 }
@@ -433,13 +434,13 @@ export function init() {
   document.addEventListener('click', onBoardToolsClick);
   document.addEventListener('click', e => {
     const b = e.target.closest('[data-tile-info]');
-    if (!b || !B) {
+    if (!b || !battle) {
       return;
     }
     if (b.dataset.tileInfo === 'x') {
       dismissTileSheet();
     } else if (b.dataset.tileInfo === 'u') {
-      const v = byUid(B, b.dataset.uid);
+      const v = byUid(battle, b.dataset.uid);
       if (!v || ui.busy) {
         return;
       }
@@ -476,7 +477,7 @@ export function init() {
     };
     svg.addEventListener('pointerdown', e => {
       const p = e.target.closest && e.target.closest('[data-k]');
-      if (!p || !B || (e.pointerType === 'mouse' && e.button !== 0)) {
+      if (!p || !battle || (e.pointerType === 'mouse' && e.button !== 0)) {
         return;
       }
       kk = p.dataset.k;
@@ -485,7 +486,7 @@ export function init() {
       stop();
       tm = setTimeout(() => {
         tm = 0;
-        if (!B) {
+        if (!battle) {
           return;
         }
         INSPECTED_TILE = kk;
@@ -516,7 +517,7 @@ export function init() {
       'click',
       e => {
         const p = e.target.closest && e.target.closest('[data-k]');
-        if (!p || !B) {
+        if (!p || !battle) {
           return;
         }
         if (Date.now() - LONG_PRESS_AT < 800) {

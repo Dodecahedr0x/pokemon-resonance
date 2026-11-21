@@ -2,14 +2,14 @@ import { getHost, hostSet } from '../../screens/combat/board/boardStore.js';
 
 import { SCENARIOS } from '../pokemon/pokemon.js';
 import { flies, markDuration, neighborKeys, pushMessage, unitAt } from './engine.js';
-import { scSel } from './ui.js';
+import { selectedScenario } from './ui.js';
 import { PREFERENCES } from '../ui/preferences.js';
 import { DAMAGE_PROVIDERS } from './tactical-engine.js';
 import { noWind } from './tactics.js';
 
 /** The player's setting. The guided prologue battle always stays classic. */
 export function chosenAlive() {
-  return PREFERENCES.livingBoard !== false && !(SCENARIOS[scSel] && SCENARIOS[scSel].tuto);
+  return PREFERENCES.livingBoard !== false && !(SCENARIOS[selectedScenario] && SCENARIOS[selectedScenario].tuto);
 }
 
 /** At the start of a battle: the scenario's time becomes the first time of the cycle. */

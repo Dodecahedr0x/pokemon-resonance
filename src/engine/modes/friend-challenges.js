@@ -12,7 +12,7 @@ import { HOOKS } from '../core/hooks.js';
 import { squad } from '../team/team.js';
 import { hasNx } from '../combat/engine.js';
 import { OBSTACLES } from '../combat/synergies-obstacles.js';
-import { B, backToPrep, goFight } from '../combat/ui.js';
+import { battle, backToPrep, goFight } from '../combat/ui.js';
 import { escapeHtml, queueSave } from '../state/saves.js';
 import { familyOwned } from '../progression/trainer-stats.js';
 import { today } from '../state/economy.js';
@@ -209,7 +209,7 @@ function fightFriend(i) {
   if (!buildFriendTeam(i)) {
     return;
   }
-  if (B) {
+  if (battle) {
     backToPrep();
   }
   goFight('ami');

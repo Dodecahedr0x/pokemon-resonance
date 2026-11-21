@@ -2,7 +2,7 @@ import { bdClass, tokCl, tokHas } from '../../screens/combat/board/boardStore.js
 
 import { reducedMotion, after2images } from '../core/utils.js';
 import { byUid, unitKey } from './engine.js';
-import { B, cellCenter, L, ui } from './ui.js';
+import { battle, cellCenter, BOARD_LAYERS, ui } from './ui.js';
 import { PREFERENCES } from '../ui/preferences.js';
 import { vibrate } from '../audio/sound-effects.js';
 import { endTooltip, seenTips } from '../ui/battle-tips.js';
@@ -43,8 +43,8 @@ export function replayAnimation(T, cl, ms) {
 }
 
 function bondHop(uid, k) {
-  const T = L.u && L.u[uid],
-    u = B && byUid(B, uid);
+  const T = BOARD_LAYERS.u && BOARD_LAYERS.u[uid],
+    u = battle && byUid(battle, uid);
   if (!animEnabled() || !T || !T.b || !u || u.ko) {
     return;
   }
@@ -66,14 +66,14 @@ function bondHop(uid, k) {
 }
 
 export function hurtFlash(uid) {
-  const T = L.u && L.u[uid];
+  const T = BOARD_LAYERS.u && BOARD_LAYERS.u[uid];
   if (animEnabled() && T && T.b) {
     replayAnimation(T, 'hurt-flash', 480);
   }
 }
 
 export function liveEvent(ev) {
-  if (!B || !ev || !ev.length) {
+  if (!battle || !ev || !ev.length) {
     return;
   }
   const sv = document.getElementById('bSvg');
@@ -91,7 +91,7 @@ export function liveEvent(ev) {
       if (x.e !== 'dmg') {
         return false;
       }
-      const v = byUid(B, x.u);
+      const v = byUid(battle, x.u);
       return v && v.side === 'a' && x.v >= v.mhp * 0.3;
     });
   if (ko || strongSpot) {
@@ -108,7 +108,7 @@ export function liveRender() {
   applyCalmMode();
   endTooltip();
   clearTimeout(liveRender.t);
-  if (B && !B.over) {
+  if (battle && !battle.over) {
     liveRender.t = setTimeout(seenTips, 650);
   }
 }

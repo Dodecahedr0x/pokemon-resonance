@@ -4,7 +4,7 @@ import { TYPES } from '../data/game-data.js';
 import { ITEMS2, PROFILE } from '../state/game-state.js';
 import { writeLS, toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
-import { TOD } from './home-route.js';
+import { timeOfDay } from './home-route.js';
 import { queueSave } from '../state/saves.js';
 import { PREFERENCES, savePref } from '../ui/preferences.js';
 import { sfx, vibrate } from '../audio/sound-effects.js';
@@ -50,7 +50,7 @@ function refreshRares() {
   // #routeRates banner at the top of #route (Route.jsx)
   setRoute({
     rr: {
-      head: `${TOD === 'nuit' ? 'Nuit' : TOD === 'matin' ? 'Matin' : 'Jour'} · ${sky}`,
+      head: `${timeOfDay === 'nuit' ? 'Nuit' : timeOfDay === 'matin' ? 'Matin' : 'Jour'} · ${sky}`,
       list: pool.length
         ? pool
             .slice(0, 4)
@@ -83,7 +83,7 @@ function treasureTheme() {
   if (wx) {
     return wx;
   }
-  return TOD === 'nuit' ? 'nuit' : TOD === 'matin' ? 'matin' : 'jour';
+  return timeOfDay === 'nuit' ? 'nuit' : timeOfDay === 'matin' ? 'matin' : 'jour';
 }
 
 export function treasureSpots() {
@@ -175,12 +175,17 @@ export const TREASURE_NAMES = {
 /* ---------- 2. rare encounters by time and weather ---------- */
 const RARE_LIST = [
   {
-    c: () => TOD === 'nuit',
+    c: () => timeOfDay === 'nuit',
     m: 4,
     w: 'nuit',
     ids: ['nosferapti', 'fantominus', 'hoothoot', 'absol', 'tenefix', 'malosse', 'abra'],
   },
-  { c: () => TOD === 'matin', m: 3, w: 'matin', ids: ['natu', 'tarsal', 'melo', 'granivol', 'mimigal', 'chenipan'] },
+  {
+    c: () => timeOfDay === 'matin',
+    m: 3,
+    w: 'matin',
+    ids: ['natu', 'tarsal', 'melo', 'granivol', 'mimigal', 'chenipan'],
+  },
   {
     c: () => todayWeather() === 'pluie',
     m: 5,

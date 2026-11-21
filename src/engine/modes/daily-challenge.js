@@ -4,9 +4,9 @@ import { POKEMON, SCENARIOS } from '../pokemon/pokemon.js';
 import { HOOKS } from '../core/hooks.js';
 import { squad } from '../team/team.js';
 import { OBSTACLES } from '../combat/synergies-obstacles.js';
-import { scSel } from '../combat/ui.js';
+import { selectedScenario } from '../combat/ui.js';
 import { today } from '../state/economy.js';
-import { DEXS } from '../progression/pokedex.js';
+import { DEX_SPECIES } from '../progression/pokedex.js';
 import { teamSize } from '../progression/campaign-challenges.js';
 import { baseScene, mkFoes, existingSpecies } from './challenge-scenes.js';
 import { readChallengeState, writeChallengeState } from './challenges-hub.js';
@@ -22,7 +22,7 @@ const seedValue = sel => {
 
 /** Today's challenge: opponents, forbidden type, Bonus HP and level. */
 export const dqDef = () => {
-  const pool = existingSpecies(DEXS.map(m => m.id));
+  const pool = existingSpecies(DEX_SPECIES.map(m => m.id));
   const nb = 3 + (seedValue('n') % 2);
   const ids = [];
   for (let i = 0; i < nb; i++) {
@@ -103,7 +103,7 @@ export function init() {
   dqMake();
 
   HOOKS.launchRefusal.push(() => {
-    const v = scSel === 'dq470' && dqViol();
+    const v = selectedScenario === 'dq470' && dqViol();
     return v ? POKEMON[v].n + ' est de type ' + SCENARIOS.dq470.dq470 + ' : retirez-le de l’équipe.' : null;
   });
 

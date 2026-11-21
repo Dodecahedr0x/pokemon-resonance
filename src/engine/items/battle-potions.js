@@ -2,7 +2,7 @@
 
 import { PROFILE } from '../state/game-state.js';
 import { byUid, endStep, heal, pushMessage } from '../combat/engine.js';
-import { B, finish, renderAll, ui } from '../combat/ui.js';
+import { battle, finish, renderAll, ui } from '../combat/ui.js';
 import { playEv } from '../combat/move-effects.js';
 import { renderWallet } from '../ui/wallet.js';
 import { BAG_MAX, useCombatItem } from '../combat/resonance.js';
@@ -45,27 +45,27 @@ export const HEALS = ['potion', 'superpotion'];
 // Instructions run at startup, in the original order (see index.js).
 export function init() {
   document.addEventListener('click', e => {
-    if (e.target.closest('[data-ball]') && B) {
+    if (e.target.closest('[data-ball]') && battle) {
       return; // handled by the Ball choice (items/ball-choice.js)
     }
     const us = e.target.closest('[data-use]');
-    if (us && B) {
-      const u = byUid(B, ui.sel);
+    if (us && battle) {
+      const u = byUid(battle, ui.sel);
       const ev =
         (SHOP[us.dataset.use] || {}).category === 'combat'
-          ? useCombatItem(B, u, us.dataset.use)
-          : pUse(B, u, us.dataset.use); // v4.14
+          ? useCombatItem(battle, u, us.dataset.use)
+          : pUse(battle, u, us.dataset.use); // v4.14
       if (!ev) {
         return;
       }
       ui.undo = null;
       renderAll();
       playEv(ev);
-      if (B.over) {
+      if (battle.over) {
         finish();
         return;
       }
-      const nx = u && !u.ko && !u.acted ? u : B.units.find(x => x.side === 'a' && !x.ko && !x.acted); // it keeps its turn if it has not acted
+      const nx = u && !u.ko && !u.acted ? u : battle.units.find(x => x.side === 'a' && !x.ko && !x.acted); // it keeps its turn if it has not acted
       if (nx) {
         ui.sel = nx.uid;
       }

@@ -2,7 +2,7 @@ import { SCENARIOS } from '../pokemon/pokemon.js';
 import { PROFILE } from '../state/game-state.js';
 import { HOOKS } from '../core/hooks.js';
 import { MAX_ENERGY } from './engine.js';
-import { scSel } from './ui.js';
+import { selectedScenario } from './ui.js';
 import { queueSave } from '../state/saves.js';
 import { formatNumber } from '../state/economy.js';
 import { refreshPrep } from '../../screens/combat/prep/prepStore.js';
@@ -12,7 +12,7 @@ import { refreshPrep } from '../../screens/combat/prep/prepStore.js';
    the battle.
    ===================================================================== */
 export function chosenDoctrine() {
-  const D = SCENARIOS[scSel] || {};
+  const D = SCENARIOS[selectedScenario] || {};
   if (D.tuto || D.hebdo429 || D.enigme431) {
     return '';
   }

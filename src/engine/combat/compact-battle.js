@@ -1,7 +1,7 @@
 /* Battle on phone: the top banner collapses, both teams show at once and the board fills the space above the « Fin du tour » (End turn) bar. */
 
 import { currentScreen } from '../core/navigation.js';
-import { B } from './ui.js';
+import { battle } from './ui.js';
 
 let COMPACT_MQ;
 
@@ -9,7 +9,7 @@ let COMPACT_MQ;
 // frame (styles in board-host-layout.css).
 export function fitPhoneBattle() {
   const cb = document.getElementById('cbBattle');
-  const on = !!(COMPACT_MQ && COMPACT_MQ.matches && B && currentScreen === 'combat' && cb && !cb.hidden);
+  const on = !!(COMPACT_MQ && COMPACT_MQ.matches && battle && currentScreen === 'combat' && cb && !cb.hidden);
   document.body.classList.toggle('compact-battle', on);
 }
 

@@ -1,4 +1,4 @@
-import { B, BOARD_GEOMETRY, cellCenter, cellPoints } from '../../../engine/combat/ui.js';
+import { battle, BOARD_GEOMETRY, cellCenter, cellPoints } from '../../../engine/combat/ui.js';
 import { useBoard } from './boardStore.js';
 
 // board <defs>: terrain patterns (texDefs), gradients, intent arrow;
@@ -150,12 +150,12 @@ export default function Defs() {
           <stop offset="1" stopColor={`rgba(${hzc},0)`} />
         </linearGradient>
       )}
-      {S.lip && B && (
+      {S.lip && battle && (
         <clipPath id="lip-clip">
           {S.lip.map((p, i) => (
             <polygon key={'l' + i} points={p} />
           ))}
-          {Object.keys(B.tiles).map(k => {
+          {Object.keys(battle.tiles).map(k => {
             const [x, y] = cellCenter(k);
             return <polygon key={k} points={cellPoints(x, y, BOARD_GEOMETRY.S - 1)} />;
           })}

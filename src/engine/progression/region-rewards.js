@@ -6,7 +6,7 @@ import { HOOKS } from '../core/hooks.js';
 import { save } from '../team/team.js';
 import { renderAll } from '../combat/ui.js';
 import { ownedFam } from './trainer-stats.js';
-import { DEXS } from './pokedex.js';
+import { DEX_SPECIES } from './pokedex.js';
 import { announceSky } from '../combat/battle-sky.js';
 
 const KEY = 'res-dex-reward';
@@ -31,7 +31,7 @@ const REGION_REWARDS = [
 ];
 
 const regionComplete = g => {
-  const ms = DEXS.filter(m => m.gen === g);
+  const ms = DEX_SPECIES.filter(m => m.gen === g);
   return ms.length > 0 && ms.every(m => ownedFam(m.id));
 };
 
@@ -65,7 +65,7 @@ export function init() {
     verify: verifyRewards,
     readValue: readClaimed,
     P: () => PROFILE,
-    dex: () => DEXS,
+    dex: () => DEX_SPECIES,
     ownedFam,
     renderAll,
   };

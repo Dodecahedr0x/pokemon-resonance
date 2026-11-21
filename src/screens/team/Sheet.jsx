@@ -9,7 +9,7 @@ import { REGION_NAMES } from '../../engine/data/hoenn.js';
 import { POKEMON, NOTES, familyOf } from '../../engine/pokemon/pokemon.js';
 import { ARRIVAL_EFFECTS } from '../../engine/pokemon/evolution.js';
 import { ITEMS2, LINK_N, LINK_T, PROFILE, inBox, isCamp, lvlOfPts, ownedItems } from '../../engine/state/game-state.js';
-import { RC, ROLEFX, roleIcon } from '../../engine/pokemon/roles-synergies.js';
+import { rosterCost, ROLEFX, roleIcon } from '../../engine/pokemon/roles-synergies.js';
 import { markOf, medal, typeBadge, typeColor } from '../../engine/core/utils.js';
 import { BRANCHES, mhpOf } from '../../engine/combat/engine.js';
 import {
@@ -162,8 +162,8 @@ function Content({ id }) {
               S’obtient en combat par l’Éveil de <b>{POKEMON[m.prev].n}</b>
               {pn ? ' (' + pn + ')' : ''}.{' '}
               {inBox(id)
-                ? `Recrue confirmée : se recrute aussi directement pour ${RC(id)} PC, sans Arrivée ni soin d’Éveil.`
-                : `Se recrute directement (${RC(id)} PC) une fois ${base.n} capturé.`}
+                ? `Recrue confirmée : se recrute aussi directement pour ${rosterCost(id)} PC, sans Arrivée ni soin d’Éveil.`
+                : `Se recrute directement (${rosterCost(id)} PC) une fois ${base.n} capturé.`}
             </p>
             <Evd a={m.prev} b={id} from />
           </>
@@ -264,7 +264,7 @@ function Action({ m, base, id }) {
       {onM
         ? `Retirer ${m.n} de l’équipe`
         : ok
-          ? `${cur ? 'Remplacer ' + POKEMON[cur].n + ' par ' : 'Recruter '}${m.n} · ${RC(id)} PC`
+          ? `${cur ? 'Remplacer ' + POKEMON[cur].n + ' par ' : 'Recruter '}${m.n} · ${rosterCost(id)} PC`
           : m.st > 1 && isCamp() && inBox(base.id)
             ? `${m.n} : à éveiller en combat d’abord`
             : `${base.n} : à capturer${captureSite(base.id) ? ' · ' + captureSite(base.id) : ''}`}

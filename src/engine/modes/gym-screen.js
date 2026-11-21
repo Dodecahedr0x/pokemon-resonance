@@ -1,12 +1,12 @@
 import { POKEMON, POKEMON_LIST, PRESETS } from '../pokemon/pokemon.js';
 import { BUDGET } from '../pokemon/evolution.js';
 import { inBox } from '../state/game-state.js';
-import { RC, synOf } from '../pokemon/roles-synergies.js';
+import { rosterCost, synOf } from '../pokemon/roles-synergies.js';
 import { hexCenter, toast } from '../core/utils.js';
 import { tokCl } from '../../screens/combat/board/boardStore.js';
 import { TEAM_MAX, __set_squad, renderSquad, save, squad, toggle } from '../team/team.js';
 import { BOARD_ROWS, BOARD_COLS, unitKey } from '../combat/engine.js';
-import { B, BOARD_GEOMETRY, L, VERT } from '../combat/ui.js';
+import { battle, BOARD_GEOMETRY, BOARD_LAYERS, isVerticalBoard } from '../combat/ui.js';
 import { TUTORIAL_STEPS } from '../progression/tutorial.js';
 import { renderPrep } from '../combat/battle-prep.js';
 
@@ -67,13 +67,13 @@ export function fieldSvg() {
 /** Pillars, tall grass, sand, covers and ricochets are drawn by the React layers
     (src/screens/combat/board/); what remains here is the Pokémon hidden in the tall grass (engine token). */
 export function drawObstacles() {
-  if (!L.units || !B) {
+  if (!BOARD_LAYERS.units || !battle) {
     return;
   }
-  B.units.forEach(u => {
-    const T = L.u[u.uid];
+  battle.units.forEach(u => {
+    const T = BOARD_LAYERS.u[u.uid];
     if (T) {
-      tokCl(T, 'is-in-grass', !u.ko && !!B.tiles[unitKey(u)].grass);
+      tokCl(T, 'is-in-grass', !u.ko && !!battle.tiles[unitKey(u)].grass);
     }
   });
 }
@@ -81,7 +81,7 @@ export function drawObstacles() {
 // battle synergies (#bSyn): rendered by React (src/screens/combat/battle/TopBar.jsx)
 
 function randomTeam() {
-  const pool = POKEMON_LIST.filter(m => inBox(m.id) && RC(m.id) <= BUDGET);
+  const pool = POKEMON_LIST.filter(m => inBox(m.id) && rosterCost(m.id) <= BUDGET);
   let best = null;
   for (let n = 0; n < 60; n++) {
     const sh = [...pool].sort(() => Math.random() - 0.5),
@@ -95,11 +95,11 @@ function randomTeam() {
         continue;
       }
       const left = TEAM_MAX - t.length - 1;
-      if (c + RC(m.id) + left > BUDGET) {
+      if (c + rosterCost(m.id) + left > BUDGET) {
         continue;
       }
       t.push(m.id);
-      c += RC(m.id);
+      c += rosterCost(m.id);
     }
     if (!t.length) {
       continue;
@@ -144,7 +144,7 @@ function teamAct(a) {
     const s = synOf(t);
     toast(`Tirage : ${t.map(id => POKEMON[id].n).join(', ')}${s.length ? ' · ' + s.map(x => x.n).join(', ') : ''}.`);
   }
-  if (!B) {
+  if (!battle) {
     renderPrep();
   }
 }
@@ -175,7 +175,7 @@ function loadPreset(k) {
 
 /* ===================== v1.1: gym, obstacles, roles and synergies on screen ===================== */
 /* --- board: gym lines and obstacles --- */
-const MPT = (x, y) => (VERT ? [y, 430 - x] : [x, y]);
+const MPT = (x, y) => (isVerticalBoard ? [y, 430 - x] : [x, y]);
 
 export const teamBtns = () =>
   `<div class="team-actions"><button type="button" class="button button-small" data-team="reset" ${squad.length ? '' : 'disabled'}>Réinitialiser l’équipe</button>${TEAM_BAK ? '<button type="button" class="button button-small" data-team="undo">Rétablir</button>' : ''}<button type="button" class="button button-small" data-team="rand">Tirage synergique</button></div>`;

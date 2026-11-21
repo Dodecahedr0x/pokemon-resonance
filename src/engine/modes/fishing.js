@@ -6,10 +6,10 @@ import { PROFILE } from '../state/game-state.js';
 import { paintOverlay } from '../../screens/overlays/dialogsStore.js';
 import { $, toast } from '../core/utils.js';
 import { goTo } from '../core/navigation.js';
-import { TOD, __set_wildId } from '../world/home-route.js';
+import { timeOfDay, __set_wildId } from '../world/home-route.js';
 import { squad, toggle } from '../team/team.js';
 import { wildScen } from '../combat/items-bonds-ai.js';
-import { __set_scSel, launch } from '../combat/ui.js';
+import { __set_selectedScenario, launch } from '../combat/ui.js';
 import { queueSave } from '../state/saves.js';
 import { PREFERENCES } from '../ui/preferences.js';
 import { renderPrep } from '../combat/battle-prep.js';
@@ -113,14 +113,14 @@ function startFishingBattle() {
   }
   $('#fishing-panel').hidden = true;
   __set_wildId(P2.id);
-  const D = wildScen(P2.id, TOD, P2.sh, P2.dom);
+  const D = wildScen(P2.id, timeOfDay, P2.sh, P2.dom);
   Object.assign(D, {
     water: ['4,0', '5,0', '6,0', '5,1', '6,1', '7,1', '6,3', '7,3', '5,4', '6,4', '7,5'],
     lvl: D.lvl.replace(/rencontre|Dominant/, P2.dom ? 'pêche · Dominant' : 'pêche'),
   });
   D.foes = D.foes.map(f => [f[0], f[0] === P2.id ? [6, 2] : [7, 4], f[2]]);
   FISHING = null;
-  __set_scSel('sauvage');
+  __set_selectedScenario('sauvage');
   goTo('combat');
   if (!squad.length) {
     renderPrep();

@@ -6,7 +6,7 @@ import { SelList, SelTabs } from './Selection.jsx';
 import Detail from './Detail.jsx';
 import Team from './Team.jsx';
 import { SCENARIOS } from '../../../engine/pokemon/pokemon.js';
-import { scSel } from '../../../engine/combat/ui.js';
+import { selectedScenario } from '../../../engine/combat/ui.js';
 import { PREPG } from '../../../engine/combat/battle-prep.js';
 import { nextGoal } from '../../../engine/progression/campaign.js';
 import { groupOf } from '../../../engine/world/home-journey.js';
@@ -19,8 +19,8 @@ import PageHeader from '../../../components/PageHeader.jsx';
 // (key = version), like the old innerHTML.
 function BattlePrep() {
   const v = usePrepVersion();
-  const on = v > 0 && !!SCENARIOS[scSel];
-  const G = on ? (PREPG && PREPG.sc === scSel ? PREPG.g : groupOf(scSel)) : null;
+  const on = v > 0 && !!SCENARIOS[selectedScenario];
+  const G = on ? (PREPG && PREPG.sc === selectedScenario ? PREPG.g : groupOf(selectedScenario)) : null;
   return (
     <div id="cbPrep" className="prep-page">
       <PageHeader
@@ -42,7 +42,7 @@ function BattlePrep() {
           </div>
           <div className="prep-side">
             <div className="prep-card" id="selDet" aria-live="polite">
-              {on && <Detail key={v} k={scSel} />}
+              {on && <Detail key={v} k={selectedScenario} />}
             </div>
             <Team v={on ? v : 0} />
           </div>

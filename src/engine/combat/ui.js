@@ -54,7 +54,7 @@ import { sfx, sfxEv, vibrate } from '../audio/sound-effects.js';
 import { drawObstacles } from '../modes/gym-screen.js';
 import { fxReset, playEv } from './move-effects.js';
 import { panelRoleInfo } from '../ui/guide.js';
-import { AUTO, HPM, RANKS, rankOf, turnBanner, turnBanners, vsIntro } from '../progression/prestige.js';
+import { AUTO, HP_BAR_MOTION, RANKS, rankOf, turnBanner, turnBanners, vsIntro } from '../progression/prestige.js';
 import { renderWallet } from '../ui/wallet.js';
 import { tagUnits, tokenArt } from '../assets/illustrations.js';
 import { RIVAL_CHALLENGES, rivalBuild, rivalIdx } from '../modes/rival.js';
@@ -101,29 +101,29 @@ import { afterRenderDuel, duelPassTurn } from '../modes/duel.js';
 import { fitPhoneBattle } from './compact-battle.js';
 import { announceGimmick } from '../modes/feats-gimmicks.js';
 
-export let VERT, MQV, B, LOG, scSel;
+export let isVerticalBoard, phoneQuery, battle, battleLog, selectedScenario;
 export function __set_GREEN(v) {
-  return (VERT = v);
+  return (isVerticalBoard = v);
 }
-export function __set_B(v) {
-  return (B = v);
+export function __set_battle(v) {
+  return (battle = v);
 }
-export function __set_LOG(v) {
-  return (LOG = v);
+export function __set_battleLog(v) {
+  return (battleLog = v);
 }
-export function __set_scSel(v) {
-  return (scSel = v);
+export function __set_selectedScenario(v) {
+  return (selectedScenario = v);
 }
 
 export function tiltP(x, y) {
-  const T = TILT,
+  const T = BOARD_TILT,
     d = T.Hb - y,
     s = T.f / (T.f + d * T.sn);
   return [T.ox + (T.cx + (x - T.cx) * s) * T.k, T.oy + (T.Hb - d * T.cs * s) * T.k];
 }
 
 function tiltU(X, Y) {
-  const T = TILT,
+  const T = BOARD_TILT,
     q = T.Hb - (Y - T.oy) / T.k,
     d = (q * T.f) / (T.f * T.cs - q * T.sn),
     s = T.f / (T.f + d * T.sn);
@@ -133,14 +133,14 @@ function tiltU(X, Y) {
 /** apparent size (1 = flat tile) at screen point X,Y */
 export function tiltS(X, Y) {
   const g = tiltU(X, Y);
-  return (TILT.f / (TILT.f + (TILT.Hb - g[1]) * TILT.sn)) * TILT.k;
+  return (BOARD_TILT.f / (BOARD_TILT.f + (BOARD_TILT.Hb - g[1]) * BOARD_TILT.sn)) * BOARD_TILT.k;
 }
 
 function tiltHP(X, Y, s) {
   const [x, y] = tiltU(X, Y),
     o = [];
   for (let i = 0; i < 6; i++) {
-    const a = (Math.PI / 180) * (60 * i - (VERT ? 0 : 30)),
+    const a = (Math.PI / 180) * (60 * i - (isVerticalBoard ? 0 : 30)),
       q = tiltP(x + s * Math.cos(a), y + s * Math.sin(a));
     o.push(q[0].toFixed(1) + ',' + q[1].toFixed(1));
   }
@@ -161,7 +161,7 @@ function hpf(x, y, s) {
  *  Wild encounters, the duel and the Home objective keep the manually chosen tab:
  *  they set scSel themselves. */
 export function chooseBattle(k) {
-  scSel = k;
+  selectedScenario = k;
   __set_PREPG(null);
   goTo('combat');
 }
@@ -224,57 +224,57 @@ export function launch() {
     }
   }
   hook('beforeLaunch');
-  const previous = B;
+  const previous = battle;
   // story scenes (v4.17): the scene replaces the battle
-  if (!storyScene(scSel)) {
-    __set_tutorialI(SCENARIOS[scSel] && SCENARIOS[scSel].tuto ? 0 : -1);
+  if (!storyScene(selectedScenario)) {
+    __set_tutorialI(SCENARIOS[selectedScenario] && SCENARIOS[selectedScenario].tuto ? 0 : -1);
     launchCore();
-    if (B && !AUTO) {
+    if (battle && !AUTO) {
       vsIntro();
     } // opponent introduction
-    else if (B) {
+    else if (battle) {
       turnBanner();
     }
     // Speed order: if an opponent is faster, it opens the round (after the introduction)
-    if (B && B.order === 'vitesse') {
+    if (battle && battle.order === 'vitesse') {
       setTimeout(unrollSpeed, AUTO || reducedMotion ? 950 : PREFERENCES.fast ? 1500 : 2400);
     }
   }
-  hook('launch', !!B && B !== previous);
+  hook('launch', !!battle && battle !== previous);
 }
 
 function launchCore() {
   if (!squad.length && !fixedTeam()) {
     return;
   }
-  if (scSel === 'hebdo429') {
+  if (selectedScenario === 'hebdo429') {
     buildWeeklyChallenge();
   } // the week may have changed (v4.29)
   const lk =
-    scenLock(scSel) ||
-    lockLegendaryCapture(scSel) ||
-    (scSel === 'hebdo429' || (SCENARIOS[scSel] || {}).noProgress ? null : challengeLaunch()); // campaign challenges (v4.9-01), legendary quests (v4.29)
+    scenLock(selectedScenario) ||
+    lockLegendaryCapture(selectedScenario) ||
+    (selectedScenario === 'hebdo429' || (SCENARIOS[selectedScenario] || {}).noProgress ? null : challengeLaunch()); // campaign challenges (v4.9-01), legendary quests (v4.29)
   if (lk) {
     toast(lk);
     renderPrep();
     return;
   }
-  if (scSel === 'champ') {
+  if (selectedScenario === 'champ') {
     champBuild();
   }
-  if (rivalIdx(scSel) >= 0 || RIVAL_CHALLENGES[scSel]) {
+  if (rivalIdx(selectedScenario) >= 0 || RIVAL_CHALLENGES[selectedScenario]) {
     rivalBuild();
   }
-  if (scSel === 'tdr' && !towerRun()) {
+  if (selectedScenario === 'tdr' && !towerRun()) {
     towerDraft(); // no ascent yet: choose your team first
     return;
   }
-  const T = scSel === 'tdr' ? towerTeam() : weeklyTeam() || fixedTeam() || tournamentTeam(); // weekly challenge (v4.29), riddle and Deep Echo (v4.31) // Resonance Tower, tournament between friends (v4.17): the team is frozen
-  B = T
-    ? newBattle(scSel, T.team, T.voice, T.opts) // the Tower ignores the budget: only the Voices earned count
-    : newBattle(scSel, squad.slice(0, teamSize()), vBonus(), battleOpts()); // Team of 3 (v4.9-01)
-  REPLAYS.set(B, { best: null }); // best-move replay (v4.11-01)
-  LOG = [];
+  const T = selectedScenario === 'tdr' ? towerTeam() : weeklyTeam() || fixedTeam() || tournamentTeam(); // weekly challenge (v4.29), riddle and Deep Echo (v4.31) // Resonance Tower, tournament between friends (v4.17): the team is frozen
+  battle = T
+    ? newBattle(selectedScenario, T.team, T.voice, T.opts) // the Tower ignores the budget: only the Voices earned count
+    : newBattle(selectedScenario, squad.slice(0, teamSize()), vBonus(), battleOpts()); // Team of 3 (v4.9-01)
+  REPLAYS.set(battle, { best: null }); // best-move replay (v4.11-01)
+  battleLog = [];
   Object.assign(ui, {
     sel: null,
     selE: null,
@@ -292,15 +292,15 @@ function launchCore() {
   $('#cbBattle').hidden = false;
   $('#cbResult').hidden = true;
   $('#evoPick').hidden = true;
-  const aev = [...arenaSetup(B), ...announceGimmick(B)];
+  const aev = [...arenaSetup(battle), ...announceGimmick(battle)];
   buildBoard();
-  addLog(`${SCENARIOS[scSel].n} : à vous de jouer. Touchez un adversaire pour voir sa portée.`, 'sys');
+  addLog(`${SCENARIOS[selectedScenario].n} : à vous de jouer. Touchez un adversaire pour voir sa portée.`, 'sys');
   aev.forEach(x => {
     if (x.e === 'msg') {
       addLog(x.s, 'arn');
     }
   });
-  B.units.forEach(u => {
+  battle.units.forEach(u => {
     if (u.side === 'a' && u.fat) {
       addLog(`${u.n} est fatigué : −1 Mouvement (un Éveil efface la fatigue).`, 'sys');
     }
@@ -308,36 +308,36 @@ function launchCore() {
       addLog(`${u.n} tient ${ITEMS2[u.item].n}.`, 'sys');
     }
   });
-  if (B.harmonie) {
+  if (battle.harmonie) {
     addLog('Harmonie : trois rangs différents dans l’équipe, chaque Pokémon commence avec 1 losange.', 'sys');
   } // v4.14
-  if (bossScene(B)) {
+  if (bossScene(battle)) {
     addLog('Combat de prestige : vos adversaires accumulent eux aussi la Résonance (notes, attaques Expertes).', 'arn');
   }
-  if (B.wx) {
-    addLog(`Météo ${WEATHER_NAME[B.wx.k]} dès le début du combat.`, 'sys');
+  if (battle.wx) {
+    addLog(`Météo ${WEATHER_NAME[battle.wx.k]} dès le début du combat.`, 'sys');
   }
-  if (B.disobedience) {
+  if (battle.disobedience) {
     addLog('Désobéissance : un Pokémon épuisé ou têtu peut ignorer un ordre.', 'sys');
   }
-  if (B.mut) {
-    addLog(`Mutateur · ${mutInfo(B.mut)[0]} : ${mutInfo(B.mut)[1]}`, 'arn');
+  if (battle.mut) {
+    addLog(`Mutateur · ${mutInfo(battle.mut)[0]} : ${mutInfo(battle.mut)[1]}`, 'arn');
   }
-  if (B.sansEveil) {
+  if (battle.sansEveil) {
     addLog('Défi Sans Éveil : vos Pokémon ne s’éveilleront pas.', 'sys');
   }
-  if (B.tac) {
+  if (battle.tac) {
     addLog(
       'Tactique avancée : entrer au contact d’un adversaire arrête le déplacement (sauf volants, Spectre, Éclaireurs). Lance-Soleil et Vol partent en fin de manche.',
       'sys'
     );
   }
-  if (B.units.some(u => u.colossus)) {
+  if (battle.units.some(u => u.colossus)) {
     addLog('Colosse : brisez ses parties pour faire tomber sa carapace. Chacune le fait vaciller.', 'sys');
   }
-  if (B.livingBoard) {
+  if (battle.livingBoard) {
     addLog(
-      `Plateau vivant : ${LIVING_STATE[B.cycle.ph]} (${LIVING_DESC[B.cycle.ph]}) Le feu court dans les hautes herbes ; la pluie l’éteint.`,
+      `Plateau vivant : ${LIVING_STATE[battle.cycle.ph]} (${LIVING_DESC[battle.cycle.ph]}) Le feu court dans les hautes herbes ; la pluie l’éteint.`,
       'sys'
     );
   }
@@ -347,10 +347,10 @@ function launchCore() {
 }
 
 export function backToPrep() {
-  if (scSel === 'sauvage') {
-    scSel = 'gue';
+  if (selectedScenario === 'sauvage') {
+    selectedScenario = 'gue';
   } // a wild encounter cannot be relaunched from the list
-  B = null;
+  battle = null;
   $('#cbBattle').hidden = true;
   $('#cbResult').hidden = true;
   $('#evoPick').hidden = true;
@@ -368,24 +368,24 @@ export function backToPrep() {
 // L.tiles, L.t[k], L.tx[k], L.units, L.fx, L.fl… are references set by the render.
 export function buildBoard() {
   hook('beforeBoard');
-  VERT = !!(MQV && MQV.matches);
-  const D = SCENARIOS[B.sc],
+  isVerticalBoard = !!(phoneQuery && phoneQuery.matches);
+  const D = SCENARIOS[battle.sc],
     bio = D.bio,
     st = ['arene', 'ligue', 'roche'].includes(D.bio) || D.gym != null || !!D.elite || !!D.champ; // stadium terrain (v1.1)
   // container classes: reset here, then toggled by later versions
   // (#bBoard is rendered by React: classes and variables live in the « host » state of boardStore.js)
-  bdReset(['board', 'biome-' + bio, ...(VERT ? ['is-vertical'] : [])]);
+  bdReset(['board', 'biome-' + bio, ...(isVerticalBoard ? ['is-vertical'] : [])]);
   hostSet({ ac: D.at ? typeColor(D.at) : '' });
-  L.t = {};
-  L.tx = {};
-  L.u = {};
-  L.uo = []; // token order in the layer (the tilted board's sort() changes it)
-  L.txId = { gue: 'tx-grass', roche: 'tx-stone', tour: 'tx-ash', ligue: 'tx-marble', arene: 'tx-rune' }[bio]; // tile pattern
-  B.units.forEach(u => {
-    L.u[u.uid] = mkTok(u);
-    L.uo.push(u.uid);
+  BOARD_LAYERS.t = {};
+  BOARD_LAYERS.tx = {};
+  BOARD_LAYERS.u = {};
+  BOARD_LAYERS.uo = []; // token order in the layer (the tilted board's sort() changes it)
+  BOARD_LAYERS.txId = { gue: 'tx-grass', roche: 'tx-stone', tour: 'tx-ash', ligue: 'tx-marble', arene: 'tx-rune' }[bio]; // tile pattern
+  battle.units.forEach(u => {
+    BOARD_LAYERS.u[u.uid] = mkTok(u);
+    BOARD_LAYERS.uo.push(u.uid);
   });
-  boardBuild({ vb: boardViewBox(), bio, stadium: st, tilt: TILT.on }); // the tokens (Units.jsx) are mounted with the board
+  boardBuild({ vb: boardViewBox(), bio, stadium: st, tilt: BOARD_TILT.on }); // the tokens (Units.jsx) are mounted with the board
   bdClass('stadium', st);
   fxReset();
   hook('boardBuilt');
@@ -435,7 +435,7 @@ export function updTok(u) {
 }
 
 function updTokCore(u) {
-  const T = L.u[u.uid];
+  const T = BOARD_LAYERS.u[u.uid];
   if (!T) {
     return;
   }
@@ -456,25 +456,28 @@ function updTokCore(u) {
   const cl = (k, v) => tokCl(T, k, v);
   cl('is-ko', u.ko);
   cl('is-selected', ui.sel === u.uid || ui.selE === u.uid);
-  cl('is-done', u.side === 'a' && u.acted && !u.ko && B.phase === 'player');
+  cl('is-done', u.side === 'a' && u.acted && !u.ko && battle.phase === 'player');
   cl('is-acting', ui.act === u.uid);
   cl(
     'has-energy',
-    !u.ko && (u.side === 'a' || B.duel433 ? nx || hasXp(u) || resonanceCandidate(B, u) : bossScene(B) && hasXp(u))
+    !u.ko &&
+      (u.side === 'a' || battle.duel433
+        ? nx || hasXp(u) || resonanceCandidate(battle, u)
+        : bossScene(battle) && hasXp(u))
   ); // v4.14: diamonds of Expert attacks
-  cl('is-ready', u.side === 'a' && (nx || resonanceCandidate(B, u)) && u.en >= MAX_ENERGY && !u.ko);
+  cl('is-ready', u.side === 'a' && (nx || resonanceCandidate(battle, u)) && u.en >= MAX_ENERGY && !u.ko);
   cl('is-resonant', u.resonant > 0 && !u.ko); // Resonant Form (v4.17)
-  cl('is-coop-player-1', !!B.coop && u.side === 'a' && coopPlayer(u) === 1); // co-op (v4.18)
-  cl('is-coop-player-2', !!B.coop && u.side === 'a' && coopPlayer(u) === 2);
-  cl('is-coop-waiting', !!B.coop && u.side === 'a' && coopPlayer(u) !== B.coop && B.phase === 'player');
+  cl('is-coop-player-1', !!battle.coop && u.side === 'a' && coopPlayer(u) === 1); // co-op (v4.18)
+  cl('is-coop-player-2', !!battle.coop && u.side === 'a' && coopPlayer(u) === 2);
+  cl('is-coop-waiting', !!battle.coop && u.side === 'a' && coopPlayer(u) !== battle.coop && battle.phase === 'player');
   cl('is-vigilant', !!u.vigilance && !u.ko); // v4.20
-  cl('is-encircled', isSurrounded(B, u));
+  cl('is-encircled', isSurrounded(battle, u));
   cl('is-phase-2', u.bossPhase === 2 && !u.ko);
   cl('is-phase-3', u.bossPhase === 3 && !u.ko);
-  cl('is-in-danger', !u.ko && !!(B.dangerZone && B.dangerZone.k.includes(unitKey(u)))); // inside an announced zone
-  cl('can-evolve', foeEvo(B, u));
+  cl('is-in-danger', !u.ko && !!(battle.dangerZone && battle.dangerZone.k.includes(unitKey(u)))); // inside an announced zone
+  cl('can-evolve', foeEvo(battle, u));
   cl('is-evolved', !!u.evo);
-  const nN = notesOf(B, u); // Resonance notes (v4.14)
+  const nN = notesOf(battle, u); // Resonance notes (v4.14)
   T.nc = T.nc.map((p, i) => on1(p, i < nN));
   cl('has-notes', nN > 0 && !u.ko);
   cl('is-resonating', nN >= 3 && !u.ko);
@@ -510,7 +513,7 @@ function updTokCore(u) {
 export function renderBoard() {
   boardRender(); // tiles, marks, highlights, intents, obstacles (React layers)
   unitsBatch(() => {
-    B.units.forEach(updTok); // tokens (Units.jsx): redrawn once at the end of the batch
+    battle.units.forEach(updTok); // tokens (Units.jsx): redrawn once at the end of the batch
     drawObstacles();
   });
   hook('boardRendered');
@@ -524,15 +527,15 @@ export function segHp(u) {
 function segHpBase(u) {
   const h = `<span class="hp-bar is-segmented"><i class="${hpClass(u)}" style="width:${((u.hp / u.mhp) * 100).toFixed(0)}%"></i></span>`;
   // trail of recent damage
-  if (!B) {
+  if (!battle) {
     return h;
   }
   const r = Math.max(0, (u.hp / u.mhp) * 100),
     now = performance.now(),
     key = u.uid;
-  const m = HPM[key];
-  if (!m || m.s !== B) {
-    HPM[key] = { r, s: B, t0: 0, a: r, b: r };
+  const m = HP_BAR_MOTION[key];
+  if (!m || m.s !== battle) {
+    HP_BAR_MOTION[key] = { r, s: battle, t0: 0, a: r, b: r };
     return h;
   }
   if (r < m.r - 0.01) {
@@ -555,7 +558,7 @@ function segHpBase(u) {
 // Banner, synergies, arena rule, timeline, plates, bottom bar: rendered by React
 // (src/screens/combat/battle). Here, the render's side effects, then the update.
 function renderTop() {
-  hourTint(B);
+  hourTint(battle);
   endSkipSpeedup(); // « Passer » (Skip) during the opponent's turn (v4.28): the speed-up ends outside the opponent's turn
   liveRender(); // animations, tips (v4.29)
   refreshBattle('top', 'foot');
@@ -572,7 +575,7 @@ export function renderPanel() {
 
 /* evolution choice: rendered by React (EvoPick.jsx) */
 function openEvoPick(u) {
-  if (!evoOpts(B, u).length) {
+  if (!evoOpts(battle, u).length) {
     return;
   }
   evoState.u = u;
@@ -587,14 +590,14 @@ function openEvoPick(u) {
 /* evolution cutscene */
 export function cinematic(fromN, fromT, toN, toT, side, uid) {
   const o = {}; // #evoFx (React): the effect starts from the evolving Pokémon
-  if (uid && L.u[uid]) {
-    const [x, y] = cellCenter(unitKey(byUid(B, uid)));
+  if (uid && BOARD_LAYERS.u[uid]) {
+    const [x, y] = cellCenter(unitKey(byUid(battle, uid)));
     o.ox = ((x / boardViewBox()[0]) * 100).toFixed(1) + '%';
     o.oy = ((y / boardViewBox()[1]) * 100).toFixed(1) + '%';
   }
   evoSet({ ...o, on: true, fx: { fromN, fromT, toN, toT, side }, fast: !!(PREFERENCES.fast || ui.skipSpeedup) });
   ui.cutscene = true;
-  if (B) {
+  if (battle) {
     renderAll();
   }
   sfx('evo');
@@ -607,9 +610,9 @@ export function cinematic(fromN, fromT, toN, toT, side, uid) {
 
 /* log */
 export function addLog(s, c) {
-  LOG.unshift({ s, c: c || '', r: B ? B.round : 1 });
-  if (LOG.length > 70) {
-    LOG.length = 70;
+  battleLog.unshift({ s, c: c || '', r: battle ? battle.round : 1 });
+  if (battleLog.length > 70) {
+    battleLog.length = 70;
   }
   renderLog();
 }
@@ -621,7 +624,7 @@ function renderLog() {
 
 export function renderAll() {
   hook('beforeRender');
-  tagUnits(B); // types → species, for the illustrations
+  tagUnits(battle); // types → species, for the illustrations
   renderAllCore();
   queueSave();
   renderCoach();
@@ -633,7 +636,7 @@ export function renderAll() {
 }
 
 function renderAllCore() {
-  if (!B) {
+  if (!battle) {
     return;
   }
   renderTop(); // with the Speed-order timeline (v4.5-01)
@@ -645,7 +648,11 @@ function renderAllCore() {
 // floating text over a cell; cls is its kind (is-damage, is-heal, is-reaction, is-ready…)
 export function floatAt(k, txt, cls) {
   const [x, y] = cellCenter(k);
-  const t = svgElement('text', { class: 'float-text ' + cls, x: x.toFixed(1), y: (y - 16).toFixed(1) }, L.fl);
+  const t = svgElement(
+    'text',
+    { class: 'float-text ' + cls, x: x.toFixed(1), y: (y - 16).toFixed(1) },
+    BOARD_LAYERS.fl
+  );
   t.textContent = txt;
   setTimeout(() => t.remove(), 1500);
 }
@@ -654,7 +661,7 @@ export function floatAt(k, txt, cls) {
 const CHAIN_CLASS = { el: 'is-electric', fire: 'is-fire', ice: 'is-ice' };
 
 function drawChain(e) {
-  const g = svgElement('g', {}, L.fx);
+  const g = svgElement('g', {}, BOARD_LAYERS.fx);
   e.edges.forEach(([a, b, d]) => {
     const A = cellCenter(a),
       C = cellCenter(b),
@@ -675,28 +682,28 @@ function beam(a, b, typ) {
   const l = svgElement(
     'polyline',
     { class: 'attack-beam', points: zigzagPoints(A[0], A[1], C[0], C[1], 5, 2.5), style: `stroke:${typeColor(typ)}` },
-    L.fx
+    BOARD_LAYERS.fx
   );
   setTimeout(() => l.remove(), 700);
 }
 
 function burst(uid) {
-  const u = byUid(B, uid);
+  const u = byUid(battle, uid);
   if (!u) {
     return;
   }
   const [x, y] = cellCenter(unitKey(u));
-  const c = svgElement('circle', { class: 'unit-burst', cx: x, cy: y, r: 10 }, L.fx);
+  const c = svgElement('circle', { class: 'unit-burst', cx: x, cy: y, r: 10 }, BOARD_LAYERS.fx);
   setTimeout(() => c.remove(), 1100);
 }
 
 function arrFx(uid) {
-  const u = byUid(B, uid);
+  const u = byUid(battle, uid);
   if (!u) {
     return;
   }
   const [x, y] = cellCenter(unitKey(u)),
-    g = svgElement('g', { class: 'arrival-effect', style: `--c:${typeColor(u.t[0])}` }, L.fx);
+    g = svgElement('g', { class: 'arrival-effect', style: `--c:${typeColor(u.t[0])}` }, BOARD_LAYERS.fx);
   [0, 1].forEach(i =>
     svgElement(
       'polygon',
@@ -712,7 +719,7 @@ function arrFx(uid) {
 }
 
 function hit(uid) {
-  const T = L.u[uid];
+  const T = BOARD_LAYERS.u[uid];
   if (T) {
     T.hit = true; // blinking ring (« hit » class of .token-ring, Units.jsx)
     unitsDirty();
@@ -730,13 +737,13 @@ export function playLog(ev) {
     if (e.e === 'msg') {
       addLog(e.s, /^Arène /.test(e.s) ? 'arn' : /^(Arrivée|.* évolue en|.* puise)/.test(e.s) ? 'evo' : '');
     } else if (e.e === 'dmg') {
-      const u = byUid(B, e.u);
+      const u = byUid(battle, e.u);
       if (u) {
         floatAt(unitKey(u), '−' + e.v, 'is-damage');
         hit(e.u);
       }
     } else if (e.e === 'heal') {
-      const u = byUid(B, e.u);
+      const u = byUid(battle, e.u);
       if (u) {
         floatAt(unitKey(u), '+' + e.v, 'is-heal');
       }
@@ -752,17 +759,17 @@ export function playLog(ev) {
     } else if (e.e === 'arr') {
       arrFx(e.u);
     } else if (e.e === 'ready') {
-      const u = byUid(B, e.u);
+      const u = byUid(battle, e.u);
       if (u && !u.ko) {
         setTimeout(() => floatAt(unitKey(u), 'Éveil prêt', 'is-ready'), 380);
       }
     } else if (e.e === 'use') {
-      const u = byUid(B, e.u);
+      const u = byUid(battle, e.u);
       if (u && e.k) {
         beam(unitKey(u), e.k, u.t[0]);
       }
     } else if (e.e === 'catch') {
-      const u = byUid(B, e.u);
+      const u = byUid(battle, e.u);
       if (u) {
         floatAt(unitKey(u), 'Capturé !', 'is-ready');
         burst(e.u);
@@ -770,12 +777,12 @@ export function playLog(ev) {
     } else if (e.e === 'duo') {
       [e.a, e.b].forEach(arrFx);
     } else if (e.e === 'note') {
-      const u = byUid(B, e.u); // Resonance notes (v4.14)
+      const u = byUid(battle, e.u); // Resonance notes (v4.14)
       if (u && !u.ko) {
         floatAt(unitKey(u), '♪'.repeat(e.n), 'is-note');
       }
     } else if (e.e === 'reso') {
-      const u = byUid(B, e.u);
+      const u = byUid(battle, e.u);
       if (u) {
         setTimeout(() => floatAt(unitKey(u), 'Résonance !', 'is-resonance'), 260);
         burst(e.u);
@@ -788,13 +795,15 @@ export function playLog(ev) {
 
 /* interactions */
 export function autoSel() {
-  const cur = B.order === 'vitesse' ? currentActor(B) : null, // Speed order: the ally whose turn it is
+  const cur = battle.order === 'vitesse' ? currentActor(battle) : null, // Speed order: the ally whose turn it is
     nx =
-      B.order === 'vitesse'
+      battle.order === 'vitesse'
         ? cur && cur.side === 'a'
           ? cur
           : null
-        : B.units.find(x => x.side === 'a' && !x.ko && !x.acted && (!B.coop || coopPlayer(x) === B.coop));
+        : battle.units.find(
+            x => x.side === 'a' && !x.ko && !x.acted && (!battle.coop || coopPlayer(x) === battle.coop)
+          );
   ui.sel = nx ? nx.uid : null;
   ui.selE = null;
   ui.mode = null;
@@ -812,8 +821,8 @@ export function clearAim() {
 export function confirmAct() {
   const id = ui.sel;
   confirmActCore();
-  const u = B && byUid(B, id);
-  if (u && u.hr && !u.ko && !B.over) {
+  const u = battle && byUid(battle, id);
+  if (u && u.hr && !u.ko && !battle.over) {
     // the Scout stays selected: it can still fall back
     ui.sel = id;
     renderAll();
@@ -822,13 +831,14 @@ export function confirmAct() {
 }
 
 function confirmActCore() {
-  const u = byUid(B, ui.sel);
+  const u = byUid(battle, ui.sel);
   if (!u || ui.pk == null) {
     return;
   }
   ui.undo = null;
   ui.tile = null;
-  const ev = ui.mode === 'duo' ? playDuo(B, u, byUid(B, ui.duo), ui.pk) : playerAction(B, u, ui.mi, ui.pk);
+  const ev =
+    ui.mode === 'duo' ? playDuo(battle, u, byUid(battle, ui.duo), ui.pk) : playerAction(battle, u, ui.mi, ui.pk);
   clearAim();
   if (!ev) {
     renderAll();
@@ -836,17 +846,17 @@ function confirmActCore() {
   }
   renderAll();
   playEv(ev);
-  if (B.over) {
+  if (battle.over) {
     finish();
     return;
   }
-  if (B.order === 'vitesse') {
+  if (battle.order === 'vitesse') {
     // Speed order: the ally keeps control (Reroll, Dodge, Scout fallback) until « Terminer » (End)
     renderAll();
     return;
   }
   if (u.acted || u.ko) {
-    const nx = B.units.find(x => x.side === 'a' && !x.ko && !x.acted);
+    const nx = battle.units.find(x => x.side === 'a' && !x.ko && !x.acted);
     if (nx) {
       ui.sel = nx.uid;
     }
@@ -855,11 +865,11 @@ function confirmActCore() {
 }
 
 function tapTile(k) {
-  const u = ui.sel && byUid(B, ui.sel),
-    v = unitAt(B, k);
-  if (u && u.hr && u.acted && !u.moved && !ui.mode && !v && reach(B, u)[k] !== undefined) {
+  const u = ui.sel && byUid(battle, ui.sel),
+    v = unitAt(battle, k);
+  if (u && u.hr && u.acted && !u.moved && !ui.mode && !v && reach(battle, u)[k] !== undefined) {
     // Scout: after striking, a blue tile is used to fall back
-    const ev = pMove(B, u, k);
+    const ev = pMove(battle, u, k);
     clearAim();
     ui.tile = null;
     renderAll();
@@ -874,16 +884,16 @@ function tapTile(k) {
   }
   ui.tile = null;
   if (u && ui.mode === 'duo' && ui.duo) {
-    const p = byUid(B, ui.duo);
-    if (duoTargets(B, u, p).includes(k)) {
+    const p = byUid(battle, ui.duo);
+    if (duoTargets(battle, u, p).includes(k)) {
       if (ui.pk === k) {
         confirmAct();
         return;
       }
       ui.pk = k;
-      const X = duoParts(B, u, p);
-      ui.pv = previewRun(B, C => playDuo(C, byUid(C, u.uid), byUid(C, p.uid), k), [
-        ...new Set([...affected(B, X.A, X.D.a, k), ...affected(B, X.Bu, X.D.b, k)]),
+      const X = duoParts(battle, u, p);
+      ui.pv = previewRun(battle, C => playDuo(C, byUid(C, u.uid), byUid(C, p.uid), k), [
+        ...new Set([...affected(battle, X.A, X.D.a, k), ...affected(battle, X.Bu, X.D.b, k)]),
       ]);
       renderAll();
       return;
@@ -891,19 +901,19 @@ function tapTile(k) {
   }
   if (u && ui.mode === 'target') {
     const m = MOVES[u.mv[ui.mi]];
-    if (targets(B, u, m).includes(k)) {
+    if (targets(battle, u, m).includes(k)) {
       if (ui.pk === k) {
         confirmAct();
         return;
       }
       ui.pk = k;
-      ui.pv = preview(B, u.uid, ui.mi, k);
+      ui.pv = preview(battle, u.uid, ui.mi, k);
       renderAll();
       return;
     }
   }
   if (u && ui.mode === 'dodge') {
-    const ev = pDodge(B, u, k);
+    const ev = pDodge(battle, u, k);
     if (ev) {
       ui.undo = null;
       clearAim();
@@ -926,9 +936,9 @@ function tapTile(k) {
     renderAll();
     return;
   }
-  if (u && !u.moved && !u.acted && reach(B, u)[k] !== undefined) {
-    ui.undo = { uid: u.uid, snap: JSON.stringify(B), log: LOG.length };
-    const ev = pMove(B, u, k);
+  if (u && !u.moved && !u.acted && reach(battle, u)[k] !== undefined) {
+    ui.undo = { uid: u.uid, snap: JSON.stringify(battle), log: battleLog.length };
+    const ev = pMove(battle, u, k);
     clearAim();
     renderAll();
     if (ev) {
@@ -947,10 +957,10 @@ function tapTile(k) {
 }
 
 function endTurn() {
-  if (B && B.order === 'vitesse') {
+  if (battle && battle.order === 'vitesse') {
     return endTurnSpeed();
   } // Speed order: only the current ally has finished (v4.5-01)
-  if (!B || ui.busy || B.over || B.phase !== 'player') {
+  if (!battle || ui.busy || battle.over || battle.phase !== 'player') {
     return;
   }
   if (coopPassTurn()) {
@@ -965,16 +975,16 @@ function endTurn() {
   ui.tile = null;
   clearAim();
   ui.selE = null;
-  addLog(`Fin de la manche ${B.round} : les adversaires passent à l’action.`, 'sys');
-  const order = startEnemy(B),
-    S0 = B;
+  addLog(`Fin de la manche ${battle.round} : les adversaires passent à l’action.`, 'sys');
+  const order = startEnemy(battle),
+    S0 = battle;
   renderAll();
   let i = 0;
   const step = async () => {
-    if (!B || B !== S0) {
+    if (!battle || battle !== S0) {
       return;
     }
-    if (B.over) {
+    if (battle.over) {
       finish();
       return;
     }
@@ -983,7 +993,7 @@ function endTurn() {
       return;
     }
     const uid = order[i++],
-      e = byUid(B, uid);
+      e = byUid(battle, uid);
     if (!e || e.ko) {
       step();
       return;
@@ -992,7 +1002,7 @@ function endTurn() {
     if (await placeEnemy(S0, uid)) {
       return;
     } // v4.12: it positions itself first, before your eyes
-    const ev = execFoe(B, uid);
+    const ev = execFoe(battle, uid);
     renderAll();
     playEv(ev);
     setTimeout(step, battleDelay(200, 380, 900));
@@ -1002,10 +1012,10 @@ function endTurn() {
 
 /** v4.12: opponent's move before its attack. Returns true if the battle changed in the meantime. */
 export async function placeEnemy(S0, uid) {
-  if (!B || !B.jit) {
+  if (!battle || !battle.jit) {
     return false;
   }
-  const pre = prepareEnemy(B, uid);
+  const pre = prepareEnemy(battle, uid);
   if (!pre.length) {
     return false;
   }
@@ -1014,32 +1024,32 @@ export async function placeEnemy(S0, uid) {
   if (pre.some(x => x.e === 'mv')) {
     await new Promise(r => setTimeout(r, battleDelay(60, 240, 460)));
   }
-  return !B || B !== S0;
+  return !battle || battle !== S0;
 }
 
 /** End of round (both modes): round effects, arena rule, opponent evolutions, new announcements.
     Returns true if the battle continues. */
 export async function endOfRound(S0) {
   ui.act = null;
-  const ev = endRound(B);
-  if (!B.over) {
-    arenaTick(B).forEach(x => ev.push(x));
+  const ev = endRound(battle);
+  if (!battle.over) {
+    arenaTick(battle).forEach(x => ev.push(x));
   }
   for (const x of ev.filter(evt => evt.e === 'evo')) {
     renderAll();
     await cinematic(x.from, x.ft, x.to, x.tt, x.side, x.u);
-    if (B !== S0) {
+    if (battle !== S0) {
       return false;
     }
   }
   ui.busy = false;
   renderAll();
   playEv(ev);
-  if (B.over) {
+  if (battle.over) {
     finish();
     return false;
   }
-  addLog(`Manche ${B.round} : à vous de jouer.`, 'sys');
+  addLog(`Manche ${battle.round} : à vous de jouer.`, 'sys');
   autoSel();
   renderAll();
   return true;
@@ -1048,39 +1058,39 @@ export async function endOfRound(S0) {
 export function finish() {
   hook('beforeBattleEnd');
   // battle rank
-  if (B && B.over && !B._rk) {
-    B._rk = 1;
-    const r = rankOf(B);
-    B.rank = r;
-    if (r && SCENARIOS[B.sc] && B.sc !== 'sauvage' && !SCENARIOS[B.sc].noProgress) {
+  if (battle && battle.over && !battle._rk) {
+    battle._rk = 1;
+    const r = rankOf(battle);
+    battle.rank = r;
+    if (r && SCENARIOS[battle.sc] && battle.sc !== 'sauvage' && !SCENARIOS[battle.sc].noProgress) {
       PROFILE.ranks = PROFILE.ranks || {};
-      const o = PROFILE.ranks[B.sc];
-      B.rankNew = !o || RANKS.indexOf(r) > RANKS.indexOf(o);
-      if (B.rankNew) {
-        PROFILE.ranks[B.sc] = r;
+      const o = PROFILE.ranks[battle.sc];
+      battle.rankNew = !o || RANKS.indexOf(r) > RANKS.indexOf(o);
+      if (battle.rankNew) {
+        PROFILE.ranks[battle.sc] = r;
       }
       queueSave();
     }
   }
   // statistics and progression
-  if (B && B.over && !B._counted) {
-    B._counted = true;
-    if ((SCENARIOS[B.sc] || {}).noProgress) {
+  if (battle && battle.over && !battle._counted) {
+    battle._counted = true;
+    if ((SCENARIOS[battle.sc] || {}).noProgress) {
       // riddle, custom arena, Deep Echo: neither counters nor ordinary progression (v4.31)
       CLOUD_SAVE.lastBattle = null;
-      B.rew = noProgressResult(B);
+      battle.rew = noProgressResult(battle);
     } else {
       PROFILE.battles++;
-      if (B.over === 'win') {
+      if (battle.over === 'win') {
         PROFILE.wins++;
-      } else if (!B.fled) {
+      } else if (!battle.fled) {
         PROFILE.losses++;
       } // a beast that runs away is not a defeat (v4.16)
-      PROFILE.awakenings += B.stats.evo || 0;
-      PROFILE.rx += B.stats.rx || 0;
-      PROFILE.kos += B.stats.ko || 0;
+      PROFILE.awakenings += battle.stats.evo || 0;
+      PROFILE.rx += battle.stats.rx || 0;
+      PROFILE.kos += battle.stats.ko || 0;
       CLOUD_SAVE.lastBattle = null;
-      B.rew = applyProgress(B);
+      battle.rew = applyProgress(battle);
     }
   }
   ui.busy = false;
@@ -1088,17 +1098,17 @@ export function finish() {
   renderAll();
   setTimeout(
     () => {
-      if (!B) {
+      if (!battle) {
         return;
       }
-      const win = B.over === 'win';
-      if (SCENARIOS[B.sc].gym != null) {
+      const win = battle.over === 'win';
+      if (SCENARIOS[battle.sc].gym != null) {
         renderLeague();
       }
       sfx(win ? 'win' : 'lose');
       refreshBattle('result'); // result sheet, rank and quote (v2.4), Nuzlocke, victory: Result.jsx
       $('#cbResult').hidden = false;
-      afterBattleScene(B.sc, win); // post-battle scene (v4.29)
+      afterBattleScene(battle.sc, win); // post-battle scene (v4.29)
       const f = $('#cbResult [data-res="again"]');
       if (f) {
         f.focus();
@@ -1113,21 +1123,22 @@ export function finish() {
 /* ===================== BATTLE INTERFACE v0.8 ===================== */
 export const BOARD_GEOMETRY = { S: 27, OX: 20, OY: 22 };
 
-export const boardViewBox = () => (VERT ? [286, 430] : [430, 286]);
+export const boardViewBox = () => (isVerticalBoard ? [286, 430] : [430, 286]);
 
 /* v4.77 · tilted board: HC and HP return perspective-view points when TILT.on.
    Ground = original viewBox coordinates; screen = ground tilted by TILT.a then reframed. */
-export const TILT = { on: false };
+export const BOARD_TILT = { on: false };
 
 export const flatCellCenter = k => {
   const p = parseCellKey(k),
     q = hexCenter(p[0], p[1], BOARD_GEOMETRY.S, BOARD_GEOMETRY.OX, BOARD_GEOMETRY.OY);
-  return VERT ? [q[1], 430 - q[0]] : q;
+  return isVerticalBoard ? [q[1], 430 - q[0]] : q;
 };
 
-export const cellCenter = k => (TILT.on ? tiltP(...flatCellCenter(k)) : flatCellCenter(k));
+export const cellCenter = k => (BOARD_TILT.on ? tiltP(...flatCellCenter(k)) : flatCellCenter(k));
 
-export const cellPoints = (x, y, s) => (TILT.on ? tiltHP(x, y, s) : VERT ? hpf(x, y, s) : hexPoints(x, y, s));
+export const cellPoints = (x, y, s) =>
+  BOARD_TILT.on ? tiltHP(x, y, s) : isVerticalBoard ? hpf(x, y, s) : hexPoints(x, y, s);
 
 export const ui = {
   sel: null,
@@ -1141,7 +1152,7 @@ export const ui = {
   cutscene: false,
 };
 
-export const L = {};
+export const BOARD_LAYERS = {};
 
 export const hpClass = u => {
   const r = u.hp / u.mhp;
@@ -1188,8 +1199,8 @@ async function onEvoPickClick(e) {
   }
   $('#evoPick').hidden = true;
   const id = b.dataset.pick,
-    u = ui.sel && byUid(B, ui.sel);
-  if (!id || !u || !canAwaken(B, u)) {
+    u = ui.sel && byUid(battle, ui.sel);
+  if (!id || !u || !canAwaken(battle, u)) {
     return;
   }
   ui.undo = null;
@@ -1198,7 +1209,7 @@ async function onEvoPickClick(e) {
   clearAim();
   renderAll();
   await cinematic(u.n, u.t, E.n, E.t, 'a', u.uid);
-  const ev = pAwaken(B, u, id);
+  const ev = pAwaken(battle, u, id);
   ui.busy = false;
   if (!ev) {
     renderAll();
@@ -1206,22 +1217,22 @@ async function onEvoPickClick(e) {
   }
   renderAll();
   playEv(ev);
-  if (B.over) {
+  if (battle.over) {
     finish();
     return;
   }
   toast(
-    `${E.n} entre en jeu. ${B.voice >= 2 && !B.retrigger ? 'Relance (2 Voix) pour utiliser ses capacités tout de suite.' : ''}`
+    `${E.n} entre en jeu. ${battle.voice >= 2 && !battle.retrigger ? 'Relance (2 Voix) pour utiliser ses capacités tout de suite.' : ''}`
   );
   renderAll();
 }
 
 function onBattlePanelClick(e) {
   const b = e.target.closest('button');
-  if (!b || !B || ui.busy || B.over) {
+  if (!b || !battle || ui.busy || battle.over) {
     return;
   }
-  const u = ui.sel && byUid(B, ui.sel);
+  const u = ui.sel && byUid(battle, ui.sel);
   if (b.dataset.fc) {
     ui.selE = null;
     renderAll();
@@ -1235,8 +1246,8 @@ function onBattlePanelClick(e) {
   if (b.dataset.undo && ui.undo) {
     const U = ui.undo;
     ui.undo = null;
-    B = JSON.parse(U.snap);
-    LOG.splice(0, Math.max(0, LOG.length - U.log));
+    battle = JSON.parse(U.snap);
+    battleLog.splice(0, Math.max(0, battleLog.length - U.log));
     renderLog();
     clearAim();
     ui.sel = U.uid;
@@ -1245,15 +1256,15 @@ function onBattlePanelClick(e) {
     return;
   }
   if (b.dataset.cap) {
-    const al = byUid(B, ui.sel),
-      target = byUid(B, b.dataset.cap);
-    const ev = pCapture(B, al, target);
+    const al = byUid(battle, ui.sel),
+      target = byUid(battle, b.dataset.cap);
+    const ev = pCapture(battle, al, target);
     if (ev) {
       ui.undo = null;
       ui.selE = null;
       renderAll();
       playEv(ev);
-      if (B.over) {
+      if (battle.over) {
         finish();
         return;
       }
@@ -1274,7 +1285,7 @@ function onBattlePanelClick(e) {
     return;
   }
   if (b.dataset.evo === 'open' && u) {
-    if (canAwaken(B, u)) {
+    if (canAwaken(battle, u)) {
       openEvoPick(u);
     }
     return;
@@ -1291,7 +1302,7 @@ function onBattlePanelClick(e) {
       const m = MOVES[u.mv[i]];
       if (m.sh === 'self' || m.sh === 'ring') {
         ui.pk = unitKey(u);
-        ui.pv = preview(B, u.uid, i, ui.pk);
+        ui.pv = preview(battle, u.uid, i, ui.pk);
       }
     }
     renderAll();
@@ -1314,7 +1325,7 @@ function onBattlePanelClick(e) {
     return;
   }
   if (b.dataset.vx === 'relance' && u) {
-    const ev = pReroll(B, u);
+    const ev = pReroll(battle, u);
     if (ev) {
       ui.undo = null;
       renderAll();
@@ -1325,28 +1336,28 @@ function onBattlePanelClick(e) {
 
 // Statements run at startup, in the original order (see index.js).
 export function init() {
-  VERT = false;
+  isVerticalBoard = false;
 
-  MQV = window.matchMedia ? matchMedia('(max-width: 700px)') : null;
+  phoneQuery = window.matchMedia ? matchMedia('(max-width: 700px)') : null;
 
-  if (MQV) {
+  if (phoneQuery) {
     const onMQ = () => {
-      if (B && !$('#cbBattle').hidden && VERT !== MQV.matches) {
+      if (battle && !$('#cbBattle').hidden && isVerticalBoard !== phoneQuery.matches) {
         buildBoard();
         renderAll();
       }
     };
-    MQV.addEventListener ? MQV.addEventListener('change', onMQ) : MQV.addListener(onMQ);
+    phoneQuery.addEventListener ? phoneQuery.addEventListener('change', onMQ) : phoneQuery.addListener(onMQ);
   }
 
-  ((B = null), (LOG = []), (scSel = 'gue'));
+  ((battle = null), (battleLog = []), (selectedScenario = 'gue'));
 
   $('#scenList').addEventListener('click', e => {
     const b = e.target.closest('[data-sc]');
     if (!b) {
       return;
     }
-    scSel = b.dataset.sc;
+    selectedScenario = b.dataset.sc;
     renderPrep();
   });
 
@@ -1362,7 +1373,7 @@ export function init() {
 
   $('#bSvg').addEventListener('click', e => {
     const p = e.target.closest('[data-k]');
-    if (!p || !B || ui.busy || B.over || B.phase !== 'player') {
+    if (!p || !battle || ui.busy || battle.over || battle.phase !== 'player') {
       return;
     }
     tapTile(p.dataset.k);
@@ -1373,10 +1384,10 @@ export function init() {
   ['#bPlE', '#bPlA'].forEach(s =>
     $(s).addEventListener('click', e => {
       const b = e.target.closest('[data-u]');
-      if (!b || !B || ui.busy || B.over) {
+      if (!b || !battle || ui.busy || battle.over) {
         return;
       }
-      const u = byUid(B, b.dataset.u);
+      const u = byUid(battle, b.dataset.u);
       if (!u || u.ko) {
         return;
       }

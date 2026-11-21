@@ -1,7 +1,7 @@
 /* Ball choice: the chosen Ball sets the capture conditions; Ball chips in the capture panel. */
 
 import { immobilize } from '../combat/items-bonds-ai.js';
-import { B, renderAll } from '../combat/ui.js';
+import { battle, renderAll } from '../combat/ui.js';
 import { SHOP, bagCount } from '../state/economy.js';
 import { itemIcon } from '../assets/item-icons.js';
 import { BALL_CAPTURE_CHECKS } from './balls-held-items.js';
@@ -26,7 +26,7 @@ export function ballFor(e) {
 const ballReqOk = (k, e) => {
   const h = e.hp / e.mhp;
   if (BALL_CAPTURE_CHECKS[k]) {
-    return BALL_CAPTURE_CHECKS[k](B, e);
+    return BALL_CAPTURE_CHECKS[k](battle, e);
   }
   if (k === 'master') {
     return true;
@@ -52,7 +52,7 @@ export function init() {
   ((CAP_K = 'poke'), (BALL_SEL = null));
   document.addEventListener('click', e => {
     const bl = e.target.closest('[data-ball]');
-    if (bl && B) {
+    if (bl && battle) {
       BALL_SEL = bl.dataset.ball;
       renderAll();
     }

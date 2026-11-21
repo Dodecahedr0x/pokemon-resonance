@@ -3,7 +3,7 @@
 import { $, reducedMotion, wait } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { byUid } from './engine.js';
-import { B, __set_B, buildBoard, addLog, renderAll, ui } from './ui.js';
+import { battle, __set_battle, buildBoard, addLog, renderAll, ui } from './ui.js';
 import { playEv } from './move-effects.js';
 import { AUTO } from '../progression/prestige.js';
 
@@ -66,28 +66,28 @@ export function noteMoment(S, u, displayName, ev, previous, heading) {
 }
 
 async function rebroadcast() {
-  const R = B && REPLAYS.get(B);
+  const R = battle && REPLAYS.get(battle);
   if (!R || !R.best || REPLAY_IN_PROGRESS) {
     return;
   }
   REPLAY_IN_PROGRESS = true;
-  const endStep = B,
+  const endStep = battle,
     res = $('#cbResult'),
     isSlow = reducedMotion || AUTO ? 0.2 : 1;
   try {
     res.hidden = true;
-    __set_B(Object.assign(JSON.parse(R.best.before), { over: null }));
+    __set_battle(Object.assign(JSON.parse(R.best.before), { over: null }));
     ui.busy = true;
     buildBoard();
     renderAll();
     addLog(`Rediffusion : ${R.best.label}`, 'arn');
     await wait(900 * isSlow);
-    __set_B(Object.assign(JSON.parse(R.best.apres), { over: null }));
+    __set_battle(Object.assign(JSON.parse(R.best.apres), { over: null }));
     renderAll();
     playEv(R.best.ev);
     await wait(3200 * isSlow);
   } finally {
-    __set_B(endStep);
+    __set_battle(endStep);
     ui.busy = false;
     buildBoard();
     renderAll();
@@ -109,7 +109,7 @@ export function init() {
   });
 
   HOOKS.battleResult.push(() => {
-    const R = B && REPLAYS.get(B);
+    const R = battle && REPLAYS.get(battle);
     return R && R.best
       ? `<div class="result-list"><h4>Meilleur coup</h4><div class="result-row is-replay"><span><b>${R.best.label}</b>${R.best.det ? ` · ${R.best.det}` : ''}</span><button type="button" class="button button-small" data-rediff>Revoir</button></div></div>`
       : '';

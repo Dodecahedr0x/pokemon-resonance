@@ -11,9 +11,9 @@ import { PROF_AV, avatar } from '../world/home-journey.js';
 import { npcProfile } from './story-scenes.js';
 import { paintOverlay } from '../../screens/overlays/dialogsStore.js';
 
-export let SCN;
-export function __set_SCN(v) {
-  return (SCN = v);
+export let currentScene;
+export function __set_currentScene(v) {
+  return (currentScene = v);
 }
 
 export const SCENES = {
@@ -89,38 +89,38 @@ export function storyScene(k, force) {
   if (!L || (PROFILE.scenes && PROFILE.scenes[c]) || (!force && AUTO)) {
     return false;
   } // no scene during automated tests
-  SCN = { k, c, i: 0, L };
+  currentScene = { k, c, i: 0, L };
   renderStoryScene();
   $('#story-scene').hidden = false;
   return true;
 }
 
 export function renderStoryScene() {
-  if (!SCN) {
+  if (!currentScene) {
     return;
   }
-  const [who, txt] = SCN.L[SCN.i],
-    q = npcScene(who, SCN.k),
-    last = SCN.i === SCN.L.length - 1;
+  const [who, txt] = currentScene.L[currentScene.i],
+    q = npcScene(who, currentScene.k),
+    last = currentScene.i === currentScene.L.length - 1;
   // rendered by src/screens/overlays/StoryScene.jsx
   paintOverlay('scene', {
     av: q.av,
     n: q.n,
     txt,
-    i: SCN.i,
-    nb: SCN.L.length,
-    suite: last ? (SCN.apres ? 'Continuer' : 'Au combat !') : 'Suite',
+    i: currentScene.i,
+    nb: currentScene.L.length,
+    suite: last ? (currentScene.apres ? 'Continuer' : 'Au combat !') : 'Suite',
   });
 }
 
 function closeStoryScene() {
-  if (!SCN) {
+  if (!currentScene) {
     return;
   }
   PROFILE.scenes = PROFILE.scenes || {};
-  PROFILE.scenes[SCN.c] = 1;
-  const ap = SCN.apres;
-  SCN = null;
+  PROFILE.scenes[currentScene.c] = 1;
+  const ap = currentScene.apres;
+  currentScene = null;
   $('#story-scene').hidden = true;
   queueSave();
   if (!ap) {
@@ -132,21 +132,21 @@ function closeStoryScene() {
 export function init() {
   // #storyScene: rendered by React (src/screens/overlays/StoryScene.jsx)
 
-  SCN = null;
+  currentScene = null;
 
   document.addEventListener('click', e => {
     const b = e.target.closest('[data-scene]');
     if (!b && e.target.id !== 'story-scene') {
       return;
     }
-    if (!SCN) {
+    if (!currentScene) {
       return;
     }
     if (b && b.dataset.scene === 'passer') {
       return closeStoryScene();
     }
-    if (SCN.i < SCN.L.length - 1) {
-      SCN.i++;
+    if (currentScene.i < currentScene.L.length - 1) {
+      currentScene.i++;
       renderStoryScene();
     } else {
       closeStoryScene();

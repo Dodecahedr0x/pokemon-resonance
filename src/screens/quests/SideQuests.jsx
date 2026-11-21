@@ -1,5 +1,5 @@
 import { PROFILE } from '../../engine/state/game-state.js';
-import { SQ } from '../../engine/progression/quests-shop.js';
+import { SIDE_QUESTS } from '../../engine/progression/quests-shop.js';
 import Rewards from './Rewards.jsx';
 
 import Button from '../../components/Button.jsx';
@@ -38,5 +38,5 @@ function Quest({ q }) {
 }
 
 export default function SideQuests() {
-  return SQ.map(q => <Quest key={q.id} q={q} />);
+  return SIDE_QUESTS.map(q => <Quest key={q.id} q={q} />);
 }

@@ -23,9 +23,9 @@ import {
 } from './engine.js';
 import { ROLE_PROVIDERS } from './tactical-engine.js';
 
-export let ACT, NOTE;
-export function __set_NOTE(v) {
-  return (NOTE = v);
+export let currentAction, battleNotes;
+export function __set_battleNotes(v) {
+  return (battleNotes = v);
 }
 
 export function applyObst(S) {
@@ -177,14 +177,14 @@ export function resolve(S, u, m, k) {
   } catch {
     /* Best effort: failure here is non-fatal. */
   }
-  const prev = ACT;
-  ACT = { u, m, typ, rico, k, guard: !!gd };
+  const prev = currentAction;
+  currentAction = { u, m, typ, rico, k, guard: !!gd };
   let ev;
   try {
     ev = resolveMove(S, u, m, k);
     u.touche = false; // it has acted: Mitra-Poing recharges (v4.13)
   } finally {
-    ACT = prev;
+    currentAction = prev;
   }
   if (gd) {
     const j = ev.findIndex(e => e.e === 'use');
@@ -325,8 +325,8 @@ export const STATUSED = t => ['PAR', 'GEL', 'SOM'].includes(t.badge) || t.root >
 export const SANDOK = u => flies(u) || u.t.some(t => t === 'Sol' || t === 'Roche' || t === 'Acier');
 
 export const noteAdd = s => {
-  if (NOTE && !NOTE.includes(s)) {
-    NOTE.push(s);
+  if (battleNotes && !battleNotes.includes(s)) {
+    battleNotes.push(s);
   }
 };
 
@@ -336,5 +336,5 @@ export const ignObst = (S, u, typ) => hasSyn(S, u, 'esprit') && (typ === 'Psy' |
 
 // Instructions run at startup, in the original order (see index.js).
 export function init() {
-  ((ACT = null), (NOTE = null));
+  ((currentAction = null), (battleNotes = null));
 }

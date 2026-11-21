@@ -4,7 +4,7 @@ import { typeColor } from '../../engine/core/utils.js';
 import { pokemonArtUrl } from '../../engine/assets/images.js';
 import { SCREEN_STATE } from '../../engine/ui/screen-state.js';
 import { ownedFam } from '../../engine/progression/trainer-stats.js';
-import { DEXS, dexList } from '../../engine/progression/pokedex.js';
+import { DEX_SPECIES, dexList } from '../../engine/progression/pokedex.js';
 import { SPARK, isShinyOwned, shinyHue } from '../../engine/pokemon/shiny.js';
 import { FAMILY_REGION_NAMES } from '../../engine/world/catch-anywhere.js';
 import { familyCaptureStats } from '../../engine/progression/regional-dex.js';
@@ -14,8 +14,8 @@ export function DexCount() {
   const n = PROFILE.shiny.length;
   return (
     <span className="dex-count" id="dex4Cnt">
-      <b>{DEXS.filter(m => ownedFam(m.id)).length}</b>
-      {` / ${DEXS.length} obtenus`}
+      <b>{DEX_SPECIES.filter(m => ownedFam(m.id)).length}</b>
+      {` / ${DEX_SPECIES.length} obtenus`}
       {n ? ' · ' : null}
       {n ? (
         <span className="dex-count-shiny">

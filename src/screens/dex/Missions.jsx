@@ -1,12 +1,12 @@
 import { ownedFam } from '../../engine/progression/trainer-stats.js';
-import { DEXS } from '../../engine/progression/pokedex.js';
+import { DEX_SPECIES } from '../../engine/progression/pokedex.js';
 import { MISSION_TIERS, missionState, weekKey, rewardText, typeProgress } from '../../engine/world/route-events.js';
 
 // Pokédex missions (#dexMission, v4.54): species tiers and specialists of the week.
 // Claiming (data-dex-mission) is still handled by the engine.
 export default function Missions() {
   const S = missionState(),
-    n = DEXS.filter(m => ownedFam(m.id)).length;
+    n = DEX_SPECIES.filter(m => ownedFam(m.id)).length;
   const pals = MISSION_TIERS.filter(p => !S.pal[p[0]]).slice(0, 2);
   const w = weekKey();
   return (

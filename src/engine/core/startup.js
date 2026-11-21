@@ -7,7 +7,7 @@ import { NAV_TABS, show } from './navigation.js';
 import { renderLeague } from '../modes/league.js';
 import { __set_squad, renderFilters, renderSquad, save, squad } from '../team/team.js';
 import { champBuild } from '../combat/items-bonds-ai.js';
-import { B, __set_scSel } from '../combat/ui.js';
+import { battle, __set_selectedScenario } from '../combat/ui.js';
 import { CLOUD_SAVE, bootSaves, queueSave } from '../state/saves.js';
 import { __set_PREPG, renderPrep } from '../combat/battle-prep.js';
 import { nextGoal } from '../progression/campaign.js';
@@ -110,8 +110,8 @@ export function init() {
   bootStep('Ligue', renderLeague);
 
   bootStep('prochain combat', () => {
-    if (!B) {
-      __set_scSel(nextGoal()[0]);
+    if (!battle) {
+      __set_selectedScenario(nextGoal()[0]);
       __set_PREPG(null);
     }
   });

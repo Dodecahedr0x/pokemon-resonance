@@ -8,7 +8,7 @@ import { $, reducedMotion, svgElement } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { badgeSvg } from '../modes/league.js';
 import { unitKey } from './engine.js';
-import { B, cellCenter, L } from './ui.js';
+import { battle, cellCenter, BOARD_LAYERS } from './ui.js';
 import { PREFERENCES, calmMotion } from '../ui/preferences.js';
 import { noise, playTone, vibrate } from '../audio/sound-effects.js';
 import { AUTO, leaderOf } from '../progression/prestige.js';
@@ -105,27 +105,27 @@ const layer = () => {
   if (!getBoard().pk) {
     boardSet({ pk: true }, 'pk');
   }
-  return L.pk73 && L.pk73.isConnected ? L.pk73 : null;
+  return BOARD_LAYERS.pk73 && BOARD_LAYERS.pk73.isConnected ? BOARD_LAYERS.pk73 : null;
 };
 
 const showIt = _b => {
   try {
-    if (!L || !L.u) {
+    if (!BOARD_LAYERS || !BOARD_LAYERS.u) {
       return;
     }
-    unitsBatch(() => Object.values(L.u).forEach(T => tokCl(T, 'is-waiting', false))); // token classes: Units.jsx
+    unitsBatch(() => Object.values(BOARD_LAYERS.u).forEach(T => tokCl(T, 'is-waiting', false))); // token classes: Units.jsx
   } catch {
     /* Best effort: failure here is non-fatal. */
   }
 };
 
 const prepare = b => {
-  if (!b || calmMotion() || auto() || !L || !L.u) {
+  if (!b || calmMotion() || auto() || !BOARD_LAYERS || !BOARD_LAYERS.u) {
     return;
   }
   ENTRANCES.set(b, 1);
   b.units.forEach(u => {
-    const T = L.u[u.uid];
+    const T = BOARD_LAYERS.u[u.uid];
     if (T && !u.ko) {
       tokCl(T, 'is-waiting', true);
     }
@@ -145,11 +145,11 @@ const send = b => {
   }
   const D = SCENARIOS[b.sc] || {},
     wild = !!D.wild;
-  const listItems = b.units.filter(u => !u.ko && L.u[u.uid]);
+  const listItems = b.units.filter(u => !u.ko && BOARD_LAYERS.u[u.uid]);
   listItems.sort((x, y) => (x.side === 'e' ? 0 : 1) - (y.side === 'e' ? 0 : 1));
   const stepSize = isFast() ? 0.04 : 0.11;
   listItems.forEach((u, i) => {
-    const T = L.u[u.uid];
+    const T = BOARD_LAYERS.u[u.uid];
     let x, y;
     try {
       [x, y] = cellCenter(unitKey(u));
@@ -175,7 +175,7 @@ const send = b => {
 
 const recall = u => {
   const g = layer(),
-    T = L.u && L.u[u.uid];
+    T = BOARD_LAYERS.u && BOARD_LAYERS.u[u.uid];
   if (!g || !T) {
     return;
   }
@@ -185,7 +185,7 @@ const recall = u => {
   } catch (e) {
     return;
   }
-  const D = (B && SCENARIOS[B.sc]) || {},
+  const D = (battle && SCENARIOS[battle.sc]) || {},
     wildMon = !!D.wild && u.side === 'e';
   const w = svgElement('g', { transform: `translate(${x.toFixed(1)},${y.toFixed(1)})` }, g);
   if (wildMon) {
@@ -224,21 +224,21 @@ const closeBadge = () => {
 };
 
 const celebrateBadge = () => {
-  if (!B || !B.rew || !B.rew.badgeNew || CELEBRATED.has(B) || calmMotion() || auto()) {
+  if (!battle || !battle.rew || !battle.rew.badgeNew || CELEBRATED.has(battle) || calmMotion() || auto()) {
     return;
   }
-  const D = SCENARIOS[B.sc] || {};
+  const D = SCENARIOS[battle.sc] || {};
   let i = typeof D.gym === 'number' ? D.gym : -1;
   if (i < 0) {
-    i = ARENAS.findIndex(a => a.k === B.sc);
+    i = ARENAS.findIndex(a => a.k === battle.sc);
   }
   if (i < 0) {
     return;
   }
-  CELEBRATED.add(B);
+  CELEBRATED.add(battle);
   let leader = '';
   try {
-    const Lc = leaderOf(B.sc);
+    const Lc = leaderOf(battle.sc);
     if (Lc && Lc.n) {
       leader = Lc.n;
     }
@@ -271,25 +271,25 @@ export function init() {
   tBtr = 0;
   ENTRANCES = new WeakMap();
   HOOKS.beforePresentation.push(() => {
-    if (B && !B.over) {
-      prepare(B);
-      transition(B);
+    if (battle && !battle.over) {
+      prepare(battle);
+      transition(battle);
     }
   });
   HOOKS.beforeBanner.push(() => {
     try {
-      if (B && ENTRANCES.get(B) === 1) {
-        ENTRANCES.set(B, 2);
-        send(B);
+      if (battle && ENTRANCES.get(battle) === 1) {
+        ENTRANCES.set(battle, 2);
+        send(battle);
       }
     } catch (e) {
-      showIt(B);
+      showIt(battle);
     }
   });
   wasKo = null;
   HOOKS.beforeToken.push(u => {
     wasKo = null;
-    const T = L.u && L.u[u.uid];
+    const T = BOARD_LAYERS.u && BOARD_LAYERS.u[u.uid];
     wasKo = T ? tokHas(T, 'is-ko') : null;
   });
   HOOKS.afterToken.push(u => {

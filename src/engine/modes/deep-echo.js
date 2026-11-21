@@ -8,7 +8,7 @@ import { goTo } from '../core/navigation.js';
 import { squad } from '../team/team.js';
 import { MAX_ENERGY } from '../combat/engine.js';
 import { OBSTACLES } from '../combat/synergies-obstacles.js';
-import { B, __set_scSel, backToPrep, chooseBattle, launch } from '../combat/ui.js';
+import { battle, __set_selectedScenario, backToPrep, chooseBattle, launch } from '../combat/ui.js';
 import { queueSave } from '../state/saves.js';
 import { SCREEN_STATE } from '../ui/screen-state.js';
 import { formatNumber } from '../state/economy.js';
@@ -435,13 +435,13 @@ export function init() {
     'click',
     e => {
       const b = e.target.closest('#cbResult [data-res]');
-      if (!b || !B || B.sc !== 'echo431') {
+      if (!b || !battle || battle.sc !== 'echo431') {
         return;
       }
       e.preventDefault();
       e.stopPropagation();
       backToPrep();
-      __set_scSel('gue');
+      __set_selectedScenario('gue');
       SCREEN_STATE.campTab = 'echo';
       goTo('camp');
     },

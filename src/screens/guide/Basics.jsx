@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { MOVES } from '../../engine/data/moves.js';
-import { POKEMON, SYS3 } from '../../engine/pokemon/pokemon.js';
+import { POKEMON, SYSTEM_RULES } from '../../engine/pokemon/pokemon.js';
 import { ARRIVAL_EFFECTS } from '../../engine/pokemon/evolution.js';
 import { reducedMotion, medal } from '../../engine/core/utils.js';
 import { Html } from '../../lib/html.jsx';
@@ -142,7 +142,7 @@ export function Rules() {
     }
     refs.current[focusRule.code]?.scrollIntoView?.({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'center' });
   }, [focusRule]);
-  return SYS3.map(s => (
+  return SYSTEM_RULES.map(s => (
     <details
       key={s.c}
       className="guide-rule"

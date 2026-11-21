@@ -8,7 +8,7 @@ import { encounter } from './home-route.js';
 import { badgeSvg } from '../modes/league.js';
 import { save, squad } from '../team/team.js';
 import { ELITE, scenLock } from '../combat/items-bonds-ai.js';
-import { __set_scSel, launch, openBattle, scSel } from '../combat/ui.js';
+import { __set_selectedScenario, launch, openBattle, selectedScenario } from '../combat/ui.js';
 import { SAVE_V, applySave, autoSave, escapeHtml } from '../state/saves.js';
 import { TUTORIAL_STEPS } from '../progression/tutorial.js';
 import { __set_PREPG, renderPrep } from '../combat/battle-prep.js';
@@ -220,7 +220,7 @@ function pickIn(g) {
 /* selection frame: tabs, list, battle sheet, team, doctrine (v4.30) and
    saved teams (v4.32): rendered by React (src/screens/combat/prep) */
 export function renderSelection() {
-  if (!$('#scenList') || !SCENARIOS[scSel]) {
+  if (!$('#scenList') || !SCENARIOS[selectedScenario]) {
     return;
   }
   refreshPrep();
@@ -448,10 +448,10 @@ export function init() {
       return;
     }
     const g = t.dataset.pg;
-    if (groupOf(scSel) !== g) {
-      __set_scSel(pickIn(g));
+    if (groupOf(selectedScenario) !== g) {
+      __set_selectedScenario(pickIn(g));
     }
-    __set_PREPG({ g, sc: scSel });
+    __set_PREPG({ g, sc: selectedScenario });
     renderPrep();
   });
 

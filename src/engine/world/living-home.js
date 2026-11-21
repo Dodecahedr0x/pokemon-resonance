@@ -4,7 +4,7 @@ import { POKEMON, SCENARIOS } from '../pokemon/pokemon.js';
 import { PROFILE, isCamp } from '../state/game-state.js';
 import { $, toast } from '../core/utils.js';
 import { currentScreen } from '../core/navigation.js';
-import { TOD } from './home-route.js';
+import { timeOfDay } from './home-route.js';
 import { squad } from '../team/team.js';
 import { queueSave } from '../state/saves.js';
 import { sfx, vibrate } from '../audio/sound-effects.js';
@@ -45,8 +45,8 @@ export function heroView(g) {
     comp = !!activeCompanionId();
   return {
     reg: ['', 'kanto', 'johto', 'hoenn'][r],
-    tod: TOD,
-    tag: `${FAMILY_REGION_NAMES[r]} · ${TIME_OF_DAY_NAMES[TOD] || 'Jour'}`,
+    tod: timeOfDay,
+    tag: `${FAMILY_REGION_NAMES[r]} · ${TIME_OF_DAY_NAMES[timeOfDay] || 'Jour'}`,
     m,
     comp,
     sh: comp && isShinyOwned(m.base),

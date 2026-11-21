@@ -1,5 +1,5 @@
 import { MARKS, REACTIONS, TYPES } from '../data/game-data.js';
-import { POKEMON, PKT, PK_ART } from '../pokemon/pokemon.js';
+import { POKEMON, SPECIES_BY_TYPES, PK_ART } from '../pokemon/pokemon.js';
 import { showToast } from '../../screens/overlays/shellOverlays.js';
 
 export let reducedMotion;
@@ -16,7 +16,7 @@ export function medal(types, cls = '') {
   const bg = types[1] ? `${shine},conic-gradient(from 225deg,${a} 0 50%,${b} 50% 100%)` : `${shine},${a}`;
   const h = `<span class="medal ${cls}" style="background:${bg};--glow:${a}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="${typeGlyphPath(types[0])}" fill="${GLYPH_INK}" fill-rule="evenodd"/></svg></span>`;
   // the Pokémon's artwork in its type medallion
-  const id = PKT.get(types);
+  const id = SPECIES_BY_TYPES.get(types);
   if (!id || !POKEMON[id]) {
     return h;
   }

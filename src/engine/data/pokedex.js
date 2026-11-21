@@ -1,4 +1,4 @@
-export const DEXM = {
+export const DEX_MEASUREMENTS = {
   // v4.19
   252: [0.5, 5, 'Bois Gecko'],
   253: [0.9, 21.6, 'Bois Gecko'],

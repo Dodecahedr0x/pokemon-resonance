@@ -3,7 +3,7 @@ import { MOVES } from '../../../engine/data/moves.js';
 import { veiled } from '../../../engine/modes/gyms.js';
 import { medal } from '../../../engine/core/utils.js';
 import { MAX_ENERGY, awakeningInfo, foeEvo, hasNx } from '../../../engine/combat/engine.js';
-import { B, STATUS_CLASS, enPips, segHp, ui } from '../../../engine/combat/ui.js';
+import { battle, STATUS_CLASS, enPips, segHp, ui } from '../../../engine/combat/ui.js';
 import { hasXp, bossScene, plateRankHtml } from '../../../engine/combat/resonance.js';
 import { fogHidden, fogVision } from '../../../engine/combat/fog-of-war.js';
 import { useBattleVersion } from './battleStore.js';
@@ -11,14 +11,14 @@ import { useBattleVersion } from './battleStore.js';
 // The plates of the two teams, above (#bPlE) and below (#bPlA) the board.
 export function PlatesE() {
   const v = useBattleVersion('top');
-  if (!v || !B) {
+  if (!v || !battle) {
     return <div className="battle-plates is-enemy" id="bPlE" />;
   }
-  const foes = B.units.filter(u => u.side === 'e'),
-    D = B.duel433;
+  const foes = battle.units.filter(u => u.side === 'e'),
+    D = battle.duel433;
   // fog (v4.31): opponents out of sight are veiled
-  const fog = !!(B.fogOfWar && !B.over),
-    vu = fog ? fogVision(B) : null;
+  const fog = !!(battle.fogOfWar && !battle.over),
+    vu = fog ? fogVision(battle) : null;
   return (
     <div
       className={'battle-plates is-enemy' + (foes.length >= 5 ? ' is-many' : '')}
@@ -27,7 +27,7 @@ export function PlatesE() {
       data-duel-player={D ? 3 - D.j : undefined}
     >
       {foes.map(u => (
-        <Plate key={u.uid} u={u} fog={fog && fogHidden(B, u, vu)} />
+        <Plate key={u.uid} u={u} fog={fog && fogHidden(battle, u, vu)} />
       ))}
     </div>
   );
@@ -35,11 +35,11 @@ export function PlatesE() {
 
 export function PlatesA() {
   const v = useBattleVersion('top');
-  if (!v || !B) {
+  if (!v || !battle) {
     return <div className="battle-plates is-ally" id="bPlA" />;
   }
-  const al = B.units.filter(u => u.side === 'a'),
-    D = B.duel433;
+  const al = battle.units.filter(u => u.side === 'a'),
+    D = battle.duel433;
   return (
     <div
       className="battle-plates is-ally"
@@ -63,7 +63,7 @@ function state(u, fe, nx) {
       ''
     ) : fe ? (
       <span className="battle-plate-evolves">Évolue en fin de manche</span>
-    ) : B.jit ? (
+    ) : battle.jit ? (
       u.done ? (
         'A agi'
       ) : u.badge || u.isLost ? (
@@ -73,7 +73,7 @@ function state(u, fe, nx) {
       ) : (
         'En garde'
       )
-    ) : u.intent && veiled(B) ? (
+    ) : u.intent && veiled(battle) ? (
       'Intention voilée'
     ) : u.intent ? (
       `→ ${MOVES[u.intent.mv].n}`
@@ -101,12 +101,12 @@ function state(u, fe, nx) {
 }
 
 function Plate({ u, fog }) {
-  const fe = foeEvo(B, u),
-    nx = hasNx(u) ? awakeningInfo(B, u) : null;
+  const fe = foeEvo(battle, u),
+    nx = hasNx(u) ? awakeningInfo(battle, u) : null;
   const cls =
     `battle-plate ${u.side === 'e' ? 'is-enemy' : 'is-ally'}${u.ko ? ' is-ko' : ''}${ui.sel === u.uid || ui.selE === u.uid ? ' is-selected' : ''}` +
     `${ui.act === u.uid ? ' is-current' : ''}${fe ? ' is-evolving' : ''}${u.side === 'a' && u.en >= MAX_ENERGY && nx && !u.ko ? ' is-ready' : ''}${fog ? ' is-veiled' : ''}`;
-  const pips = u.side === 'a' ? hasNx(u) || hasXp(u) : bossScene(B) && hasXp(u);
+  const pips = u.side === 'a' ? hasNx(u) || hasXp(u) : bossScene(battle) && hasXp(u);
   return (
     <button type="button" className={cls} data-u={u.uid}>
       <Html html={medal(u.t, 'is-plate')} />

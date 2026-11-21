@@ -2,14 +2,25 @@ import { bdClass, bdReplay, getHost, hostSet } from '../../screens/combat/board/
 
 import { $, reducedMotion } from '../core/utils.js';
 import { byUid, unitKey } from './engine.js';
-import { B, cellCenter, TILT, boardViewBox, VERT, buildBoard, playLog, renderAll, tiltS, ui } from './ui.js';
+import {
+  battle,
+  cellCenter,
+  BOARD_TILT,
+  boardViewBox,
+  isVerticalBoard,
+  buildBoard,
+  playLog,
+  renderAll,
+  tiltS,
+  ui,
+} from './ui.js';
 import { PREFERENCES } from '../ui/preferences.js';
 import { impactWords } from '../progression/prestige.js';
 import { liveEvent } from './expressive-pokemon.js';
 
 let R0, cl01, eo;
 
-export function fxOn() {
+export function effectsEnabled() {
   if (reducedMotion || /jsdom/i.test(navigator.userAgent || '')) {
     return false;
   }
@@ -164,7 +175,7 @@ function hexAt(c, x, y, r, col, a, lw) {
   c.lineWidth = lw;
   c.beginPath();
   for (let i = 0; i < 6; i++) {
-    const an = (Math.PI / 3) * i + (VERT ? 0 : Math.PI / 6);
+    const an = (Math.PI / 3) * i + (isVerticalBoard ? 0 : Math.PI / 6);
     const px = x + r * Math.cos(an),
       py = y + r * Math.sin(an);
     i ? c.lineTo(px, py) : c.moveTo(px, py);
@@ -238,7 +249,7 @@ function shape(c, kind, x, y, s, rot, col, a) {
 /* a complete attack effect: trajectory, impact, shards */
 /* Effects scaled to the depth of the tilted board (target at the back = smaller effect). */
 function depth(k) {
-  if (!TILT.on || k == null) {
+  if (!BOARD_TILT.on || k == null) {
     return 1;
   }
   const [x, y] = cellCenter(k);
@@ -249,7 +260,7 @@ function withDepth(k, f, topEdge) {
   const oy = EFFECTS_CANVAS.oy;
   EFFECTS_CANVAS.zk = depth(k);
   // shots leave from the standing Pokémon's body, not from the ground ring (positions frozen at call time)
-  if (TILT.on && topEdge) {
+  if (BOARD_TILT.on && topEdge) {
     EFFECTS_CANVAS.oy = oy - 10 * EFFECTS_CANVAS.zk * EFFECTS_CANVAS.s;
   }
   try {
@@ -1024,13 +1035,13 @@ const IMPACTS = {
 };
 
 function fxGuard(e, dur) {
-  const guardianRef = byUid(B, e.u);
+  const guardianRef = byUid(battle, e.u);
   return withDepth(guardianRef ? unitKey(guardianRef) : null, () => fxGuardPlat(e, dur));
 }
 
 function fxGuardPlat(e, dur) {
-  const g = byUid(B, e.u),
-    v = byUid(B, e.v);
+  const g = byUid(battle, e.u),
+    v = byUid(battle, e.v);
   if (!g || !v) {
     return;
   }
@@ -1054,7 +1065,7 @@ export function playEv(ev) {
   if (ev.some(x => x.e === 'terrain')) {
     setTimeout(
       () => {
-        if (B) {
+        if (battle) {
           buildBoard();
           renderAll();
         }
@@ -1063,7 +1074,7 @@ export function playEv(ev) {
     );
   }
   const fx = ev.filter(x => x.e === 'fx');
-  if (!fx.length || !B || !fxOn() || !fxPrep()) {
+  if (!fx.length || !battle || !effectsEnabled() || !fxPrep()) {
     playLog(ev.filter(x => x.e !== 'fx'));
     impactWords(ev);
     return;
@@ -1073,10 +1084,10 @@ export function playEv(ev) {
   fx.forEach((x, i) => {
     hit = Math.max(hit, fxAttack(x, dur) + i * 90);
   });
-  const S0 = B,
+  const S0 = battle,
     rest = ev.filter(x => x.e !== 'fx' && x.e !== 'use');
   setTimeout(() => {
-    if (!B || B !== S0) {
+    if (!battle || battle !== S0) {
       return;
     }
     playLog(rest);

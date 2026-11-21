@@ -5,7 +5,7 @@ import { writeLS, toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { squad } from '../team/team.js';
 import { OBSTACLES } from '../combat/synergies-obstacles.js';
-import { B, backToPrep, goFight } from '../combat/ui.js';
+import { battle, backToPrep, goFight } from '../combat/ui.js';
 import { shut } from '../../screens/overlays/tempStore.js';
 import { routeEvent } from '../world/route-events.js';
 import { baseScene, mkFoes } from './challenge-scenes.js';
@@ -90,7 +90,7 @@ export function init() {
           return true;
         }
         shut('event-choice');
-        if (B) {
+        if (battle) {
           backToPrep();
         }
         goFight(k);

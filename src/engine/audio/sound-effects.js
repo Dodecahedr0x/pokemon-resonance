@@ -2,7 +2,7 @@
 
 import { reducedMotion } from '../core/utils.js';
 import { byUid } from '../combat/engine.js';
-import { B } from '../combat/ui.js';
+import { battle } from '../combat/ui.js';
 import { sfxJingle } from './music.js';
 import { PREFERENCES } from '../ui/preferences.js';
 
@@ -112,7 +112,7 @@ export function sfxEv(ev) {
   ev.forEach(e => {
     if (e.e === 'dmg') {
       h++;
-      const u = B && byUid(B, e.u);
+      const u = battle && byUid(battle, e.u);
       if (u && u.side === 'a') {
         al = true;
       }

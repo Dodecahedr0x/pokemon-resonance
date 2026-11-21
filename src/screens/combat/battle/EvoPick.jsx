@@ -4,7 +4,7 @@ import { POKEMON } from '../../../engine/pokemon/pokemon.js';
 import { ARRIVAL_EFFECTS } from '../../../engine/pokemon/evolution.js';
 import { medal, typeBadge, typeColor } from '../../../engine/core/utils.js';
 import { BRANCHES, branchWhy, evoOpts, mhpOf } from '../../../engine/combat/engine.js';
-import { B } from '../../../engine/combat/ui.js';
+import { battle } from '../../../engine/combat/ui.js';
 import { eeveeWhy } from '../../../engine/pokemon/eevee.js';
 import { evoState, useBattleVersion } from './battleStore.js';
 
@@ -16,7 +16,7 @@ export default function EvoPick() {
   const u = evoState.u;
   return (
     <div className="evolution-choice" id="evoPick" hidden>
-      {v && u && B ? <Card u={u} /> : null}
+      {v && u && battle ? <Card u={u} /> : null}
     </div>
   );
 }
@@ -28,9 +28,9 @@ function Path({ u, A, id }) {
     tg = E.t.filter(t => !u.t.includes(t)),
     nm = mhpOf(E.s) + (u.hb || 0),
     why = BRANCHES[A.id]
-      ? branchWhy(B, u, id)
+      ? branchWhy(battle, u, id)
       : A.nx === 'eevee'
-        ? eeveeWhy(B, u, id)
+        ? eeveeWhy(battle, u, id)
         : Array.isArray(A.nx)
           ? id === A.nx[1]
             ? 'Appelle la pluie'
@@ -103,7 +103,7 @@ function Path({ u, A, id }) {
 }
 
 function Card({ u }) {
-  const o = evoOpts(B, u);
+  const o = evoOpts(battle, u);
   if (!o.length) {
     return null;
   }

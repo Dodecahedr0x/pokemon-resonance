@@ -6,7 +6,7 @@ export function synOf(ids) {
 }
 
 /* ===================== v1.1: confirmed recruits, roles, synergies ===================== */
-export const RC = id => {
+export const rosterCost = id => {
   const m = POKEMON[id];
   return m.st === 1 ? m.c : m.c + m.st - 1;
 };

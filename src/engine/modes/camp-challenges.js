@@ -4,7 +4,7 @@ import { POKEMON, SCENARIOS } from '../pokemon/pokemon.js';
 import { PROFILE } from '../state/game-state.js';
 import { HOOKS } from '../core/hooks.js';
 import { goTo } from '../core/navigation.js';
-import { battleOpts, scSel } from '../combat/ui.js';
+import { battleOpts, selectedScenario } from '../combat/ui.js';
 import { queueSave } from '../state/saves.js';
 import { SCREEN_STATE } from '../ui/screen-state.js';
 import { duelEnd, duelOpts } from './duel.js';
@@ -128,13 +128,13 @@ export function noProgressResult(S) {
 
 /** Imposed team: riddle (the riddle's team) or Deep Echo (the expedition's team). */
 export function fixedTeam() {
-  if (scSel === 'duel433' && SCENARIOS.duel433 && SCENARIOS.duel433.t1) {
+  if (selectedScenario === 'duel433' && SCENARIOS.duel433 && SCENARIOS.duel433.t1) {
     return { team: SCENARIOS.duel433.t1.slice(), voice: 0, opts: duelOpts() };
   } // local duel (v4.33)
-  if (scSel === 'enigme431' && PUZZLE_CURRENT) {
+  if (selectedScenario === 'enigme431' && PUZZLE_CURRENT) {
     return { team: PUZZLE_CURRENT.a.map(x => x[0]), voice: 0, opts: puzzleOpts() };
   }
-  if (scSel === 'echo431') {
+  if (selectedScenario === 'echo431') {
     const R = echoRun();
     if (!R) {
       return null;

@@ -2,9 +2,9 @@
 
 import { $ } from '../core/utils.js';
 import { currentScreen } from '../core/navigation.js';
-import { B } from '../combat/ui.js';
+import { battle } from '../combat/ui.js';
 import { PREFERENCES } from '../ui/preferences.js';
-import { MUS, musPadLevel, musPadStop, musStartCore } from '../progression/prestige.js';
+import { MUSIC_STATE, musPadLevel, musPadStop, musStartCore } from '../progression/prestige.js';
 import { SCREEN_STATE } from '../ui/screen-state.js';
 import { IMMERSION_ON } from './immersion.js';
 import { OFFLINE_STATE } from '../progression/chronicles.js';
@@ -30,7 +30,7 @@ function bgmEl(k) {
         // tracks not found: back to the ambient pad
         MUSIC.on = false;
         try {
-          MUS.on = false;
+          MUSIC_STATE.on = false;
           musStartCore();
         } catch {
           /* Best effort: failure here is non-fatal. */
@@ -102,19 +102,19 @@ function bgmCombat(sc) {
 }
 
 function bgmScene() {
-  if (B && !$('#cbBattle').hidden) {
-    const c = bgmCombat(B.sc);
-    if (c === 'rouge' || c === 'champion' || B.over) {
+  if (battle && !$('#cbBattle').hidden) {
+    const c = bgmCombat(battle.sc);
+    if (c === 'rouge' || c === 'champion' || battle.over) {
       return c;
     }
     // v4.49: an almost K.O.'d ally (≤ 25%) switches to the "low HP" track; returns when all go back above 35%
-    const al = B.units.filter(u => u.side === 'a' && !u.ko);
+    const al = battle.units.filter(u => u.side === 'a' && !u.ko);
     if (al.some(u => u.hp / u.mhp <= 0.25)) {
-      B._lowHpPlayed = 1;
+      battle._lowHpPlayed = 1;
     } else if (!al.some(u => u.hp / u.mhp <= 0.35)) {
-      B._lowHpPlayed = 0;
+      battle._lowHpPlayed = 0;
     }
-    return B._lowHpPlayed && IMMERSION_ON() ? 'pvbas' : c;
+    return battle._lowHpPlayed && IMMERSION_ON() ? 'pvbas' : c;
   }
   if (currentScreen === 'accueil') {
     return 'accueil';
@@ -157,7 +157,7 @@ function bgmSync() {
     return;
   }
   const sc = bgmScene();
-  if (!BGM_COMBAT.includes(sc) || !(B && !$('#cbBattle').hidden)) {
+  if (!BGM_COMBAT.includes(sc) || !(battle && !$('#cbBattle').hidden)) {
     MUSIC.silent = false;
   }
   if (MUSIC.jingle) {
@@ -208,7 +208,7 @@ export function musStart() {
     return;
   }
   MUSIC.on = true;
-  MUS.on = true; // keeps the pad from also starting
+  MUSIC_STATE.on = true; // keeps the pad from also starting
   clearInterval(MUSIC.tmr);
   MUSIC.tmr = setInterval(bgmSync, 800);
   bgmSync();
@@ -216,7 +216,7 @@ export function musStart() {
 
 function bgmStop() {
   MUSIC.on = false;
-  MUS.on = false;
+  MUSIC_STATE.on = false;
   clearInterval(MUSIC.tmr);
   Object.keys(MUSIC.el).forEach(k => {
     const a = MUSIC.el[k];
@@ -285,7 +285,7 @@ function playJingle(max, k, next) {
       }
     }
     if (k === 'victoire' || k === 'badge') {
-      if (BGM_COMBAT.includes(bgmScene()) && B && B.over) {
+      if (BGM_COMBAT.includes(bgmScene()) && battle && battle.over) {
         MUSIC.silent = true;
       } // the result stays calm
     }
@@ -319,7 +319,7 @@ export function musLevel() {
 
 /* jingle associated with a sound effect (called by sfx) */
 export function sfxJingle(n) {
-  if (n === 'win' && !(B && B.over)) {
+  if (n === 'win' && !(battle && battle.over)) {
     playJingle(7);
   } else if (n === 'evo') {
     playJingle(10, 'evolution');
@@ -378,7 +378,7 @@ export function init() {
       if (!r.hidden && r.querySelector('.result-card.is-win')) {
         if (!r._jinglePlayed) {
           r._jinglePlayed = true;
-          playJingle(0, 'victoire', B && B.rew && B.rew.badgeNew ? 'badge' : '');
+          playJingle(0, 'victoire', battle && battle.rew && battle.rew.badgeNew ? 'badge' : '');
         }
       } else {
         r._jinglePlayed = false;

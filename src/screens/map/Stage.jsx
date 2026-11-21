@@ -1,7 +1,7 @@
 import { Html } from '../../lib/html.jsx';
 import Marks from './Marks.jsx';
 import { regionMap } from './MapScreen.jsx';
-import { TOD } from '../../engine/world/home-route.js';
+import { timeOfDay } from '../../engine/world/home-route.js';
 import { SCREEN_STATE } from '../../engine/ui/screen-state.js';
 import { CHAIN, MAP_SVG, PLACE_BY_ID, curvePath, placeState } from '../../engine/world/map.js';
 import { JCHAIN, JMAP_SVG } from '../../engine/world/johto.js';
@@ -28,7 +28,7 @@ export default function Stage({ drawn, marksSel }) {
       className={'map-stage' + (ok ? ' has-painting' : '')}
       id="mapSt"
       data-reg={drawn ? rg : undefined}
-      data-tod={drawn ? TOD : undefined}
+      data-tod={drawn ? timeOfDay : undefined}
       data-wx={wx}
     >
       <Html html={MAP_SVG} />

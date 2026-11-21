@@ -3,7 +3,7 @@
 import { SCENARIOS } from '../pokemon/pokemon.js';
 import { squad } from '../team/team.js';
 import { champBuild } from './items-bonds-ai.js';
-import { __set_scSel, challenge, scSel } from './ui.js';
+import { __set_selectedScenario, challenge, selectedScenario } from './ui.js';
 import { renderSummary } from '../state/saves.js';
 import { renderSelection } from '../world/home-journey.js';
 import { preload } from '../assets/illustrations.js';
@@ -18,17 +18,17 @@ export function __set_PREPG(v) {
 // Battles: the selection is rendered by React (src/screens/combat/prep), via renderSelection().
 export function renderPrep() {
   rivalBuild();
-  if (scSel === 'sauvage' && !SCENARIOS.sauvage) {
-    __set_scSel(nextGoal()[0]);
+  if (selectedScenario === 'sauvage' && !SCENARIOS.sauvage) {
+    __set_selectedScenario(nextGoal()[0]);
   }
-  if (scSel === 'champ') {
+  if (selectedScenario === 'champ') {
     champBuild();
   }
   renderSummary();
   renderSelection();
   try {
     // team and opponent illustrations preloaded
-    const S = SCENARIOS[scSel];
+    const S = SCENARIOS[selectedScenario];
     preload([...squad, ...(S && S.foes ? S.foes.map(f => f[0]) : [])]);
   } catch {
     /* Best effort: failure here is non-fatal. */

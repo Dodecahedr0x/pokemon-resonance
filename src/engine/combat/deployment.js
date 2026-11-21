@@ -3,7 +3,7 @@ import { $, toast } from '../core/utils.js';
 import { bdClass, tokCl } from '../../screens/combat/board/boardStore.js';
 import { HOOKS } from '../core/hooks.js';
 import { BOARD_ROWS, cellKey, parseCellKey, byUid, unitAt } from './engine.js';
-import { B, L, addLog, renderAll, ui } from './ui.js';
+import { battle, BOARD_LAYERS, addLog, renderAll, ui } from './ui.js';
 import { PREFERENCES, savePref } from '../ui/preferences.js';
 import { sfx } from '../audio/sound-effects.js';
 import { AUTO } from '../progression/prestige.js';
@@ -59,12 +59,12 @@ function deployZone(S) {
 }
 
 function deployTap(k) {
-  if (!B || !B.deployPhase) {
+  if (!battle || !battle.deployPhase) {
     return;
   }
-  const z = deployZone(B),
-    u = unitAt(B, k),
-    sel = ui.deploySel && byUid(B, ui.deploySel);
+  const z = deployZone(battle),
+    u = unitAt(battle, k),
+    sel = ui.deploySel && byUid(battle, ui.deploySel);
   if (u && u.side === 'a' && (!sel || sel === u)) {
     ui.deploySel = sel === u ? null : u.uid;
   } else if (sel && z.includes(k)) {
@@ -81,10 +81,10 @@ function deployTap(k) {
 }
 
 function endDeployment() {
-  if (!B || !B.deployPhase) {
+  if (!battle || !battle.deployPhase) {
     return;
   }
-  B.deployPhase = 0;
+  battle.deployPhase = 0;
   ui.deploySel = null;
   addLog('Déploiement terminé : à vous de jouer.', 'sys');
   sfx('ui');
@@ -92,16 +92,16 @@ function endDeployment() {
 }
 
 export function deployRender() {
-  const on = !!(B && B.deployPhase && !B.over),
-    z = on ? deployZone(B) : [];
-  if (L.t) {
-    for (const k in L.t) {
-      L.t[k].classList.toggle('is-deploy-zone', on && z.includes(k));
+  const on = !!(battle && battle.deployPhase && !battle.over),
+    z = on ? deployZone(battle) : [];
+  if (BOARD_LAYERS.t) {
+    for (const k in BOARD_LAYERS.t) {
+      BOARD_LAYERS.t[k].classList.toggle('is-deploy-zone', on && z.includes(k));
     }
   }
-  if (L.u) {
-    for (const id in L.u) {
-      const T = L.u[id];
+  if (BOARD_LAYERS.u) {
+    for (const id in BOARD_LAYERS.u) {
+      const T = BOARD_LAYERS.u[id];
       if (T) {
         tokCl(T, 'is-deploy-selected', on && ui.deploySel === id);
       } // token classes: Units.jsx
@@ -141,7 +141,7 @@ export function init() {
   $('#bSvg').addEventListener(
     'click',
     e => {
-      if (!B || !B.deployPhase || B.over) {
+      if (!battle || !battle.deployPhase || battle.over) {
         return;
       }
       e.stopPropagation();
@@ -156,7 +156,7 @@ export function init() {
   document.addEventListener(
     'click',
     e => {
-      if (!B || !B.deployPhase || B.over) {
+      if (!battle || !battle.deployPhase || battle.over) {
         return;
       }
       if (e.target.closest('#bEnd')) {

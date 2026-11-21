@@ -4,7 +4,7 @@ import { SCENARIOS } from '../pokemon/pokemon.js';
 import { typeColor } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { parseCellKey, hasNx, unitAt } from './engine.js';
-import { scSel } from './ui.js';
+import { selectedScenario } from './ui.js';
 import { PREFERENCES } from '../ui/preferences.js';
 import { ROLE_PROVIDERS } from './tactical-engine.js';
 
@@ -68,7 +68,7 @@ export function mutOfTurn(run, f) {
 
 /** Optional: a random mutator for Training battles. */
 export function mutTraining() {
-  const D = SCENARIOS[scSel];
+  const D = SCENARIOS[selectedScenario];
   if (
     !PREFERENCES.trainingMutators ||
     !D ||

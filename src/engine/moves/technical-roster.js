@@ -1,6 +1,6 @@
 import { TYPES } from '../data/game-data.js';
 import { MOVES } from '../data/moves.js';
-import { MARK_TYPE, PKT } from '../pokemon/pokemon.js';
+import { MARK_TYPE, SPECIES_BY_TYPES } from '../pokemon/pokemon.js';
 import { HOOKS } from '../core/hooks.js';
 import {
   HOSTILE,
@@ -364,7 +364,7 @@ export const PRE_MOVE_EFFECTS = {
     }
     u.ability = v.ability;
     u.morph = v.id;
-    PKT.set(u.t, v.id); // it also takes on its appearance
+    SPECIES_BY_TYPES.set(u.t, v.id); // it also takes on its appearance
     ev.push({ e: 'st', u: u.uid, s: 'MORPH' });
     pushMessage(ev, `Morphing : ${u.n} prend l’apparence de ${v.n} !`);
   },
@@ -430,7 +430,7 @@ const ROSTER_SELF_EFFECTS = {
     const mk = markAt(S, unitKey(u)),
       t = mk ? MARK_TYPE[mk] : 'Normal';
     u.t = [t];
-    PKT.set(u.t, u.id);
+    SPECIES_BY_TYPES.set(u.t, u.id);
     pushMessage(ev, `Conversion : ${u.n} devient de type ${t}.`);
   },
   conversion2(S, u, ev) {
@@ -452,7 +452,7 @@ const ROSTER_SELF_EFFECTS = {
       return;
     }
     u.t = [best];
-    PKT.set(u.t, u.id);
+    SPECIES_BY_TYPES.set(u.t, u.id);
     pushMessage(ev, `Conversion 2 : ${u.n} devient de type ${best} et résiste au type ${u.dtype}.`);
   },
   riposte(S, u, ev) {

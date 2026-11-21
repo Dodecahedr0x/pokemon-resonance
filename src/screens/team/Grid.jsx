@@ -5,7 +5,7 @@ import { MOVES } from '../../engine/data/moves.js';
 import { REGION_NAMES } from '../../engine/data/hoenn.js';
 import { POKEMON, familyOf } from '../../engine/pokemon/pokemon.js';
 import { ITEMS2, PROFILE, inBox, isCamp, ownedItems } from '../../engine/state/game-state.js';
-import { RC, ROLEFX } from '../../engine/pokemon/roles-synergies.js';
+import { rosterCost, ROLEFX } from '../../engine/pokemon/roles-synergies.js';
 import { medal, typeBadge, typeColor } from '../../engine/core/utils.js';
 import { squad } from '../../engine/team/team.js';
 import { RANKS, stars, rankId } from '../../engine/combat/resonance.js';
@@ -105,7 +105,7 @@ function FamCard({ m }) {
         </div>
         {inS && inS !== m.id && (
           <span className="team-card-squad">
-            En équipe : {POKEMON[inS].n} · {RC(inS)} PC
+            En équipe : {POKEMON[inS].n} · {rosterCost(inS)} PC
           </span>
         )}
         <div className="team-card-types">
@@ -143,11 +143,11 @@ function FamCard({ m }) {
                 data-stg={x.id}
                 aria-pressed={sel}
                 disabled={!inBox(x.id)}
-                title={`${x.n} · ${RC(x.id)} PC${x.st > 1 ? ' · recrue confirmée' : ''}`}
+                title={`${x.n} · ${rosterCost(x.id)} PC${x.st > 1 ? ' · recrue confirmée' : ''}`}
               >
                 <Html html={medal(x.t, 'is-tiny')} />
                 <b>{x.n}</b>
-                <em>{RC(x.id)} PC</em>
+                <em>{rosterCost(x.id)} PC</em>
               </button>
             );
           })}

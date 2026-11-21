@@ -1,7 +1,7 @@
 import { $ } from '../core/utils.js';
 import { goTo } from '../core/navigation.js';
 import { __set_filt, renderFilters, renderGrid } from '../team/team.js';
-import { B, renderPanel, scSel } from '../combat/ui.js';
+import { battle, renderPanel, selectedScenario } from '../combat/ui.js';
 import { PREFERENCES, savePref } from './preferences.js';
 import { __set_PREPG, renderPrep } from '../combat/battle-prep.js';
 import { openRule, setGuideTab } from '../../screens/guide/guideStore.js';
@@ -16,7 +16,7 @@ export function openGuide(k) {
   setGuideTab(k);
 }
 
-export function jump(c) {
+export function openGuideRule(c) {
   openGuide('bases');
   openRule(c);
 }
@@ -28,7 +28,7 @@ export function jump(c) {
 // the role line and the « Détails » (Details) button are rendered by React (src/screens/combat/battle/Panel.jsx).
 export function panelRoleInfo() {
   const p = $('#bPanel');
-  if (!p || !B) {
+  if (!p || !battle) {
     return;
   }
   p.classList.toggle('is-info-off', !PREFERENCES.info);
@@ -58,7 +58,7 @@ export function init() {
     if (!t) {
       return;
     }
-    __set_PREPG({ g: t.dataset.pg, sc: scSel });
+    __set_PREPG({ g: t.dataset.pg, sc: selectedScenario });
     renderPrep();
   });
 

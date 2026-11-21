@@ -8,7 +8,7 @@ import { ARENAS, arenaNext } from '../../../engine/modes/gyms.js';
 import { medal, typeColor } from '../../../engine/core/utils.js';
 import { badgeSvg } from '../../../engine/modes/league.js';
 import { byUid } from '../../../engine/combat/engine.js';
-import { B, ui } from '../../../engine/combat/ui.js';
+import { battle, ui } from '../../../engine/combat/ui.js';
 import { isEnemyTurn } from '../../../engine/combat/quick-battle.js';
 import { currentActor } from '../../../engine/combat/tactical-engine.js';
 import { chipTime } from '../../../engine/combat/living-board.js';
@@ -25,23 +25,23 @@ import Button from '../../../components/Button.jsx';
 // Top banner: battle name, round, chips (weather, time, wind…), Voice, ×2, Abandon.
 export function BtTop() {
   const v = useBattleVersion('top');
-  const on = v > 0 && B;
-  const D = B && B.duel433;
+  const on = v > 0 && battle;
+  const D = battle && battle.duel433;
   return (
     <div className="battle-topbar">
       <b id="bScen" className="battle-topbar-name">
-        {!on ? null : D && !B.over ? (
+        {!on ? null : D && !battle.over ? (
           <>
             Duel · <b className={'dj' + D.j}>{D.names[D.j - 1]}</b>
           </>
         ) : (
-          SCENARIOS[B.sc].n
+          SCENARIOS[battle.sc].n
         )}
       </b>
       <span id="bRound" className="battle-topbar-round">
         {on && (
           <>
-            Manche <b>{B.round}</b> / {B.lim}
+            Manche <b>{battle.round}</b> / {battle.lim}
           </>
         )}
       </span>
@@ -53,8 +53,8 @@ export function BtTop() {
         {on && (
           <>
             <span>Voix</span>
-            {Array.from({ length: B.vmax }, (_, i) => (
-              <i key={i} className={i < B.voice ? 'is-on' : ''} />
+            {Array.from({ length: battle.vmax }, (_, i) => (
+              <i key={i} className={i < battle.voice ? 'is-on' : ''} />
             ))}
           </>
         )}
@@ -88,11 +88,11 @@ const PHASE_T = { deploy: 'Placement', own: 'À vous', enemy: 'Tour adverse', ev
 function Phase() {
   useBattleVersion('foot');
   useBattleVersion('top');
-  const ph = phaseOf(B);
+  const ph = phaseOf(battle);
   return (
     <span className="battle-phase" data-ph={ph || 'none'} hidden={!ph}>
       <i aria-hidden="true" />
-      {ph ? (B.duel433 && ph === 'own' ? B.duel433.names[B.duel433.j - 1] : PHASE_T[ph]) : null}
+      {ph ? (battle.duel433 && ph === 'own' ? battle.duel433.names[battle.duel433.j - 1] : PHASE_T[ph]) : null}
     </span>
   );
 }
@@ -117,16 +117,18 @@ function Quick() {
 // Chips: weather, time, wind, mutator, chord, TM (engine functions), then doctrine (v4.30),
 // relics and fog (v4.31).
 function Chips() {
-  const doc = B.doctrineChoice && DOCTRINE_DEFS[B.doctrineChoice];
+  const doc = battle.doctrineChoice && DOCTRINE_DEFS[battle.doctrineChoice];
   return (
     <>
-      {B.wx && (
+      {battle.wx && (
         <span className="chip">
-          <i style={{ background: typeColor(WEATHER_TYPE[B.wx.k]) }} />
-          {WEATHER_NAME[B.wx.k]} · {B.wx.n}
+          <i style={{ background: typeColor(WEATHER_TYPE[battle.wx.k]) }} />
+          {WEATHER_NAME[battle.wx.k]} · {battle.wx.n}
         </span>
       )}
-      <Html html={chipTime(B) + chipWind(B) + chipMut(B) + chipChord(B) + fieldEffectChips(B)} />
+      <Html
+        html={chipTime(battle) + chipWind(battle) + chipMut(battle) + chipChord(battle) + fieldEffectChips(battle)}
+      />
       {doc && (
         <span className="chip chip-doctrine-choice" title={`${doc.d} ${doc.c}`}>
           <svg>
@@ -135,12 +137,12 @@ function Chips() {
           {doc.n}
         </span>
       )}
-      {B.sc === 'echo431' && B.relicBag && B.relicBag.length > 0 && (
-        <span className="chip chip-relic-chip" title={B.relicBag.map(k => RELIC_DEFS[k][0]).join(', ')}>
-          {B.relicBag.length} relique{B.relicBag.length > 1 ? 's' : ''}
+      {battle.sc === 'echo431' && battle.relicBag && battle.relicBag.length > 0 && (
+        <span className="chip chip-relic-chip" title={battle.relicBag.map(k => RELIC_DEFS[k][0]).join(', ')}>
+          {battle.relicBag.length} relique{battle.relicBag.length > 1 ? 's' : ''}
         </span>
       )}
-      {B.fogOfWar && <span className="chip chip-fog-of-war">Brouillard</span>}
+      {battle.fogOfWar && <span className="chip chip-fog-of-war">Brouillard</span>}
     </>
   );
 }
@@ -151,7 +153,7 @@ export function Synergies() {
   if (!v) {
     return null;
   }
-  const L2 = B ? (B.syn || []).map(k => SYNERGIES.find(x => x.k === k)).filter(Boolean) : [];
+  const L2 = battle ? (battle.syn || []).map(k => SYNERGIES.find(x => x.k === k)).filter(Boolean) : [];
   return (
     <div className="battle-synergies" id="bSyn" hidden={!L2.length}>
       {L2.length > 0 && (
@@ -177,9 +179,9 @@ export function Rule() {
   const v = useBattleVersion('top');
   const [last, setLast] = useState(null);
   let cur = null;
-  if (v && B) {
-    const D = SCENARIOS[B.sc],
-      an = arenaNext(B),
+  if (v && battle) {
+    const D = SCENARIOS[battle.sc],
+      an = arenaNext(battle),
       gi = D.gym != null ? D.gym : ARENAS.findIndex(a => a.rule === D.rule);
     if (D.rule && gi >= 0) {
       cur = { gi, next: an ? an.txt : null };
@@ -216,29 +218,29 @@ export function Rule() {
 // Hidden, it keeps its last content, like the old DOM.
 export function Timeline() {
   const v = useBattleVersion('top');
-  const vis = !!(v && B && B.order === 'vitesse' && B.turnQueue && !B.over);
+  const vis = !!(v && battle && battle.order === 'vitesse' && battle.turnQueue && !battle.over);
   const [last, setLast] = useState(null);
   let cur = null;
   if (vis) {
-    const now = currentActor(B);
+    const now = currentActor(battle);
     const rows = [];
-    B.turnQueue.forEach((id, i) => {
-      const u = byUid(B, id);
+    battle.turnQueue.forEach((id, i) => {
+      const u = byUid(battle, id);
       if (!u) {
         return;
       }
-      const doneFlag = i < B.queueIndex || u.ko,
+      const doneFlag = i < battle.queueIndex || u.ko,
         prio = u.side === 'e' && u.intent && MOVES[u.intent.mv].prio;
       rows.push({
         i,
         cls: `battle-order-unit ${u.side === 'a' ? 'is-ally' : 'is-enemy'}${u === now ? ' is-current' : ''}${doneFlag ? ' is-done' : ''}${u.ko ? ' is-ko' : ''}`,
-        title: 'Vitesse ' + String(B.queueSpeeds[i]).replace('.', ','),
+        title: 'Vitesse ' + String(battle.queueSpeeds[i]).replace('.', ','),
         t: u.t,
         n: u.n,
         prio: prio || 0,
       });
     });
-    cur = { round: B.round, rows };
+    cur = { round: battle.round, rows };
   }
   if (cur && JSON.stringify(cur) !== JSON.stringify(last)) {
     setLast(cur);

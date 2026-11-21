@@ -14,7 +14,7 @@ import {
 } from '../../../engine/combat/engine.js';
 import { duoTargets } from '../../../engine/combat/items-bonds-ai.js';
 import { coverOf, ricoTgt } from '../../../engine/combat/synergies-obstacles.js';
-import { B, BOARD_GEOMETRY, cellCenter, cellPoints, TILT, tiltS, ui } from '../../../engine/combat/ui.js';
+import { battle, BOARD_GEOMETRY, cellCenter, cellPoints, BOARD_TILT, tiltS, ui } from '../../../engine/combat/ui.js';
 import { fireHazard } from '../../../engine/combat/living-board.js';
 import { chargesOnBoard, tacticalDrawing, linksColossi } from '../../../engine/combat/tactics.js';
 import { foresightOnBoard } from '../../../engine/moves/epic-tms.js';
@@ -47,18 +47,18 @@ const toPolys = (l, p) => l.map(([k, c], i) => <Poly key={p + i} k={k} c={c} />)
 export function Markers() {
   useBoard('marks');
   const o = [];
-  if (B) {
-    for (const k in B.tiles) {
-      const t = B.tiles[k],
+  if (battle) {
+    for (const k in battle.tiles) {
+      const t = battle.tiles[k],
         [x, y] = cellCenter(k);
       if (t.mark) {
         const tt = MARK_TYPE[t.mark.k],
           col = typeColor(tt);
         // tilted board (v4.77): the badge shrinks toward the back and stays within its tile, instead of biting into the tile behind
-        const ms = TILT.on ? tiltS(x, y) : 0,
-          mz = TILT.on ? 0.37 * ms : 0.46,
-          mx = TILT.on ? x + 11.5 * ms - 12 * mz : x + 11,
-          my = TILT.on ? y - 6 * ms - 12 * mz : y - 21,
+        const ms = BOARD_TILT.on ? tiltS(x, y) : 0,
+          mz = BOARD_TILT.on ? 0.37 * ms : 0.46,
+          mx = BOARD_TILT.on ? x + 11.5 * ms - 12 * mz : x + 11,
+          my = BOARD_TILT.on ? y - 6 * ms - 12 * mz : y - 21,
           pt = cellPoints(x, y, BOARD_GEOMETRY.S - 5);
         o.push(
           <polygon key={k + 'mf'} points={pt} className="mark-fill" style={{ fill: col }} />,
@@ -77,8 +77,8 @@ export function Markers() {
             <text
               key={k + 'ml'}
               className="mark-level"
-              x={(TILT.on ? x - 14 * ms : x - 15).toFixed(1)}
-              y={(TILT.on ? y - 3 * ms : y - 11).toFixed(1)}
+              x={(BOARD_TILT.on ? x - 14 * ms : x - 15).toFixed(1)}
+              y={(BOARD_TILT.on ? y - 3 * ms : y - 11).toFixed(1)}
             >
               ×2
             </text>
@@ -109,15 +109,15 @@ export function Markers() {
           />
         );
       }
-      o.push(<SvgHtml key={k + 'dt'} html={tacticalDrawing(B, k, x, y)} />); // traps (v4.8)
-      if (B.livingBoard && fireHazard(B, k)) {
+      o.push(<SvgHtml key={k + 'dt'} html={tacticalDrawing(battle, k, x, y)} />); // traps (v4.8)
+      if (battle.livingBoard && fireHazard(battle, k)) {
         o.push(<polygon key={k + 'fr'} points={cellPoints(x, y, BOARD_GEOMETRY.S - 4)} className="fire-risk" />);
       } // the grass about to burn (v4.7-01)
     }
   }
   return (
     <g style={PE} ref={lref('marks')}>
-      {B && <SvgHtml html={linksColossi(B)} />}
+      {battle && <SvgHtml html={linksColossi(battle)} />}
       {o}
     </g>
   );
@@ -176,9 +176,9 @@ function FrontGrass({ x, y }) {
 export function Obstacles({ front }) {
   useBoard('obs');
   const o = [];
-  if (B) {
-    for (const k in B.tiles) {
-      const t = B.tiles[k];
+  if (battle) {
+    for (const k in battle.tiles) {
+      const t = battle.tiles[k];
       if (!t.pil && !(t.grass && !t.rock)) {
         continue;
       }
@@ -212,22 +212,22 @@ function Shield({ k, cls }) {
 // covers, ricochets, post-hit movement reminder (drawObstacles)
 function extras() {
   const ex = [];
-  const u = ui.sel && byUid(B, ui.sel),
-    vl = veiled(B);
-  if (u && !u.ko && B.phase === 'player' && !ui.busy && !B.over) {
-    B.units.forEach(e => {
-      if (e.side === 'e' && !e.ko && coverOf(B, u.pos, e.pos)) {
+  const u = ui.sel && byUid(battle, ui.sel),
+    vl = veiled(battle);
+  if (u && !u.ko && battle.phase === 'player' && !ui.busy && !battle.over) {
+    battle.units.forEach(e => {
+      if (e.side === 'e' && !e.ko && coverOf(battle, u.pos, e.pos)) {
         ex.push(<Shield key={'ce' + e.uid} k={unitKey(e)} cls="is-enemy" />);
       }
     });
     if (ui.mode === 'target') {
       const m = MOVES[u.mv[ui.mi]];
       if (m.sh === 'one') {
-        targets(B, u, m).forEach(k => {
-          if (!B.tiles[k].rock) {
+        targets(battle, u, m).forEach(k => {
+          if (!battle.tiles[k].rock) {
             return;
           }
-          const r = ricoTgt(B, u, k);
+          const r = ricoTgt(battle, u, k);
           if (!r) {
             return;
           }
@@ -246,11 +246,11 @@ function extras() {
       }
     }
     if (u.hr && u.acted && !u.moved && !ui.mode) {
-      ex.push(...toPolys(polys(Object.keys(reach(B, u)), 'highlight-reach'), 'hr'));
+      ex.push(...toPolys(polys(Object.keys(reach(battle, u)), 'highlight-reach'), 'hr'));
     }
   }
   if (!vl) {
-    B.units.forEach(e => {
+    battle.units.forEach(e => {
       if (e.side !== 'e' || e.ko || !e.intent) {
         return;
       }
@@ -258,9 +258,9 @@ function extras() {
       if (m.sh !== 'one' && m.sh !== 'line') {
         return;
       }
-      affected(B, e, m, e.intent.k).forEach(k => {
-        const v = unitAt(B, k);
-        if (v && v.side === 'a' && coverOf(B, e.pos, v.pos)) {
+      affected(battle, e, m, e.intent.k).forEach(k => {
+        const v = unitAt(battle, k);
+        if (v && v.side === 'a' && coverOf(battle, e.pos, v.pos)) {
           ex.push(<Shield key={'ca' + e.uid + k} k={k} cls="is-ally" />);
         }
       });
@@ -273,51 +273,51 @@ function extras() {
 export function Highlights() {
   useBoard('hl');
   const hl = [];
-  if (B) {
-    const u = ui.sel && byUid(B, ui.sel),
-      vl = veiled(B),
-      an = arenaNext(B);
+  if (battle) {
+    const u = ui.sel && byUid(battle, ui.sel),
+      vl = veiled(battle),
+      an = arenaNext(battle);
     if (an) {
       hl.push(...polys(an.tiles, 'highlight-arena'));
     }
-    B.units.forEach(e => {
+    battle.units.forEach(e => {
       if (!vl && e.side === 'e' && !e.ko && e.intent) {
-        hl.push(...polys(affected(B, e, MOVES[e.intent.mv], e.intent.k), 'highlight-danger'));
+        hl.push(...polys(affected(battle, e, MOVES[e.intent.mv], e.intent.k), 'highlight-danger'));
       }
     });
     // v4.12: the hit opponent shows its threat zone (everything it can strike after moving)
-    const eSel = B.jit && ui.selE && byUid(B, ui.selE);
-    if (eSel && !eSel.ko && eSel.side === 'e' && !eSel.done && !B.over) {
-      hl.push(...polys(threatZone(B, eSel), 'highlight-threat'));
+    const eSel = battle.jit && ui.selE && byUid(battle, ui.selE);
+    if (eSel && !eSel.ko && eSel.side === 'e' && !eSel.done && !battle.over) {
+      hl.push(...polys(threatZone(battle, eSel), 'highlight-threat'));
     }
-    if (u && !u.ko && B.phase === 'player' && !ui.busy && !B.over) {
+    if (u && !u.ko && battle.phase === 'player' && !ui.busy && !battle.over) {
       if (ui.mode === 'duo' && ui.duo) {
-        hl.push(...polys(duoTargets(B, u, byUid(B, ui.duo)), 'highlight-target', true));
+        hl.push(...polys(duoTargets(battle, u, byUid(battle, ui.duo)), 'highlight-target', true));
         if (ui.pv) {
           hl.push(...polys(ui.pv.aff, 'highlight-affected'));
         }
       } else if (ui.mode === 'target') {
-        hl.push(...polys(targets(B, u, MOVES[u.mv[ui.mi]]), 'highlight-target', true));
+        hl.push(...polys(targets(battle, u, MOVES[u.mv[ui.mi]]), 'highlight-target', true));
         if (ui.pv) {
           hl.push(...polys(ui.pv.aff, 'highlight-affected'));
         }
       } else if (ui.mode === 'dodge') {
         hl.push(
           ...polys(
-            neighborKeys(unitKey(u)).filter(k => !B.tiles[k].rock && !unitAt(B, k)),
+            neighborKeys(unitKey(u)).filter(k => !battle.tiles[k].rock && !unitAt(battle, k)),
             'highlight-dodge'
           )
         );
       } else if (!u.moved && !u.acted) {
-        hl.push(...polys(Object.keys(reach(B, u)), 'highlight-reach'));
+        hl.push(...polys(Object.keys(reach(battle, u)), 'highlight-reach'));
       }
     }
   }
   return (
     <g style={PE} ref={lref('hl')}>
       {toPolys(hl, 'h')}
-      {B && <SvgHtml html={chargesOnBoard(B) + foresightOnBoard(B)} />}
-      {B && extras()}
+      {battle && <SvgHtml html={chargesOnBoard(battle) + foresightOnBoard(battle)} />}
+      {battle && extras()}
     </g>
   );
 }
@@ -326,8 +326,8 @@ export function Highlights() {
 export function Intentions() {
   useBoard('hl');
   const o = [];
-  if (B && !veiled(B)) {
-    B.units.forEach(e => {
+  if (battle && !veiled(battle)) {
+    battle.units.forEach(e => {
       if (e.side !== 'e' || e.ko || !e.intent) {
         return;
       }
@@ -369,7 +369,7 @@ export function Magnifier() {
   }
   return (
     <g id="inspect-tile" style={PE}>
-      {S.insp != null && B && <Poly k={S.insp} c="highlight-inspected" />}
+      {S.insp != null && battle && <Poly k={S.insp} c="highlight-inspected" />}
     </g>
   );
 }

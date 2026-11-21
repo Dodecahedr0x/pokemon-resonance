@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Html } from '../../lib/html.jsx';
 import { POKEMON, PRESETS } from '../../engine/pokemon/pokemon.js';
 import { PROFILE, inBox } from '../../engine/state/game-state.js';
-import { RC } from '../../engine/pokemon/roles-synergies.js';
+import { rosterCost } from '../../engine/pokemon/roles-synergies.js';
 import { medal } from '../../engine/core/utils.js';
 import { squad } from '../../engine/team/team.js';
 import { STARS } from '../../engine/modes/gym-screen.js';
@@ -38,11 +38,11 @@ export default function DexCall({ v }) {
                 data-stg={id}
                 aria-pressed={sel}
                 disabled={!inBox(id)}
-                title={`${m.n} · ${m.r} · ${RC(id)} PC`}
+                title={`${m.n} · ${m.r} · ${rosterCost(id)} PC`}
               >
                 <Html html={medal(m.t, 'is-tiny')} />
                 <b>{m.n}</b>
-                <em>{RC(id)}</em>
+                <em>{rosterCost(id)}</em>
               </button>
             );
           })}
@@ -92,11 +92,11 @@ function Legends() {
               data-stg={x.id}
               data-species-sheet={x.id}
               aria-pressed={sel}
-              title={`${m.n} · ${RC(x.id)} PC`}
+              title={`${m.n} · ${rosterCost(x.id)} PC`}
             >
               <Html html={medal(m.t, 'is-tiny')} />
               <b>{m.n}</b>
-              <em>{RC(x.id)}</em>
+              <em>{rosterCost(x.id)}</em>
             </button>
           );
         })}

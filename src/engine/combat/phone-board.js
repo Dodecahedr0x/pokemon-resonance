@@ -4,13 +4,13 @@ import { MOVES } from '../data/moves.js';
 import { typeColor } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import { byUid, mvType } from './engine.js';
-import { B, ui } from './ui.js';
+import { battle, ui } from './ui.js';
 import { footCls, footPos, refreshBattle } from '../../screens/combat/battle/battleStore.js';
 
 /** Aligns the page: the bottom of the board (your side) just above "Fin du tour" (End turn), without cutting off its top. */
 export function alignBoardFrame() {
   try {
-    if (!document.body.classList.contains('compact-battle') || !B || B.over) {
+    if (!document.body.classList.contains('compact-battle') || !battle || battle.over) {
       return;
     }
     const bd = document.getElementById('bBoard'),
@@ -38,7 +38,7 @@ function thumbActionLabel(b, u) {
   }
   if (d.mi != null) {
     const m = u && MOVES[u.mv[+d.mi]],
-      ty = m ? mvType(B, u, m) : null,
+      ty = m ? mvType(battle, u, m) : null,
       nb = b.querySelector('b');
     return { t: m ? m.n : nb ? nb.firstChild && nb.firstChild.textContent : 'Capacité', col: ty ? typeColor(ty) : '' };
   }
@@ -49,7 +49,7 @@ function thumbActionLabel(b, u) {
     return { t: '↶ Annuler', c: 'is-cancel' };
   }
   if (d.duo) {
-    const p = byUid(B, d.duo);
+    const p = byUid(battle, d.duo);
     return { t: 'Duo' + (p ? ' · ' + p.n : ''), c: 'is-duo' };
   }
   if (d.vx) {
@@ -71,13 +71,13 @@ function thumbReach() {
     if (!ft || !P) {
       return;
     }
-    const u = B && ui.sel && byUid(B, ui.sel);
+    const u = battle && ui.sel && byUid(battle, ui.sel);
     const on = !!(
       document.body.classList.contains('compact-battle') &&
-      B &&
-      !B.over &&
-      !B.deployPhase &&
-      B.phase === 'player' &&
+      battle &&
+      !battle.over &&
+      !battle.deployPhase &&
+      battle.phase === 'player' &&
       !ui.busy &&
       u &&
       u.side === 'a' &&
@@ -132,7 +132,7 @@ export function init() {
 
   /* ---------- 1. board ---------- */
   HOOKS.launch.push(isNew => {
-    if (isNew && !B.over) {
+    if (isNew && !battle.over) {
       setTimeout(alignBoardFrame, 80);
     }
   });

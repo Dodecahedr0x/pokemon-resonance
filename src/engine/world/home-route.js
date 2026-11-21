@@ -7,7 +7,7 @@ import { setRoute } from '../../screens/home/homeStore.js';
 import { goTo } from '../core/navigation.js';
 import { nextOf, openSheet, squad, toggle } from '../team/team.js';
 import { wildScen } from '../combat/items-bonds-ai.js';
-import { B, __set_scSel, launch, addLog } from '../combat/ui.js';
+import { battle, __set_selectedScenario, launch, addLog } from '../combat/ui.js';
 import { renderPrep } from '../combat/battle-prep.js';
 import { SHINY_RATE, __set_wildShiny, wildShiny } from '../pokemon/shiny.js';
 import { multChroma, seasonWeight } from './seasons.js';
@@ -19,7 +19,7 @@ import { applyShinyArt } from '../assets/art-direction.js';
 import { rareWeight } from './rare-encounters.js';
 import { nuzlockeEncounter } from '../modes/nuzlocke.js';
 
-export let TOD;
+export let timeOfDay;
 let dlgT, wildId;
 export function __set_wildId(v) {
   return (wildId = v);
@@ -69,7 +69,7 @@ function typeDlg(s) {
 }
 
 export function setTod(t) {
-  TOD = t;
+  timeOfDay = t;
   setRoute({ tod: t, pressed: true }); // data-time of #route, pressed button (Route.jsx)
   typeDlg(TODTXT[t].replace('Route 29', routeName()));
   hook('timeOfDay', t);
@@ -82,7 +82,7 @@ export function encounter() {
   const pool = regionPool(); // each family in its region: Route 29, Route 32, Route 104 (v4.21)
   const w = pool.map(
     m =>
-      (m.t.some(t => WILDW[TOD].includes(t)) ? 4 : 1) *
+      (m.t.some(t => WILDW[timeOfDay].includes(t)) ? 4 : 1) *
       (!PROFILE.box.includes(m.id) ? 3 : 1) *
       seasonWeight(m) *
       rareWeight(m) * // v4.50: rare encounters (time, weather)
@@ -116,7 +116,7 @@ export function encounter() {
         shiny: wildShiny,
         dom: wildDominant,
         route: routeName(),
-        tod: TOD,
+        tod: timeOfDay,
         inBox: PROFILE.box.includes(pick.id),
         camp: isCamp(),
         path,
@@ -184,8 +184,8 @@ function onEncounterClick(e) {
     toggle(wildId);
   }
   if (a === 'fight' && wildId) {
-    wildScen(wildId, TOD, wildShiny, wildDominant);
-    __set_scSel('sauvage');
+    wildScen(wildId, timeOfDay, wildShiny, wildDominant);
+    __set_selectedScenario('sauvage');
     goTo('combat');
     if (!squad.length) {
       renderPrep();
@@ -193,7 +193,7 @@ function onEncounterClick(e) {
       return;
     }
     launch();
-    if (B && !B.noCatch) {
+    if (battle && !battle.noCatch) {
       addLog(
         `Capture : touchez ${POKEMON[wildId].n} pour voir les conditions (PV bas, immobilisé, un allié au contact, 2 Voix, une Ball).`,
         'sys'
@@ -211,7 +211,7 @@ function onEncounterClick(e) {
 
 // Startup statements, run in their original order (see index.js).
 export function init() {
-  TOD = nowTod();
+  timeOfDay = nowTod();
 
   dlgT = null;
 
@@ -223,7 +223,7 @@ export function init() {
     }
   });
 
-  setTod(TOD);
+  setTod(timeOfDay);
 
   wildId = null;
 

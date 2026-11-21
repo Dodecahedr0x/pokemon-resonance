@@ -3,7 +3,7 @@
 import { POKEMON, SCENARIOS } from '../pokemon/pokemon.js';
 import { HOOKS } from '../core/hooks.js';
 import { OBSTACLES } from '../combat/synergies-obstacles.js';
-import { DEXS } from '../progression/pokedex.js';
+import { DEX_SPECIES } from '../progression/pokedex.js';
 import { mkFoes, existingSpecies } from './challenge-scenes.js';
 import { readMoreChallenges, writeMoreChallenges } from './more-challenges.js';
 
@@ -19,7 +19,7 @@ const hash = s => {
 export const weekKey = () => 'S' + Math.floor(Date.now() / (7 * 864e5));
 
 const NAMES = ['Léa Ferrand', 'Marc Dalbert', 'Inès Montarbre', 'Tom Lacrête', 'Sana Verdier', 'Hugo Brisemare'];
-const pool = () => existingSpecies(DEXS.map(m => m.id)).filter(id => POKEMON[id] && !POKEMON[id].isEnemy);
+const pool = () => existingSpecies(DEX_SPECIES.map(m => m.id)).filter(id => POKEMON[id] && !POKEMON[id].isEnemy);
 
 /** This week's trainer: name, team and level. */
 export const weekDef = () => {

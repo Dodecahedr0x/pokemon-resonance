@@ -2,7 +2,7 @@
 
 import { writeLS, toast } from '../core/utils.js';
 import { squad } from '../team/team.js';
-import { B, backToPrep, goFight } from '../combat/ui.js';
+import { battle, backToPrep, goFight } from '../combat/ui.js';
 import { overlay } from '../progression/prestige.js';
 import { shut } from '../../screens/overlays/tempStore.js';
 import { today } from '../state/economy.js';
@@ -98,7 +98,7 @@ function onChallengesHubClick(e) {
       return toast(squad.length ? 'Épisode verrouillé.' : 'Composez d’abord une équipe.');
     }
     shut('daily-challenges-o');
-    if (B) {
+    if (battle) {
       backToPrep();
     }
     return goFight('omb470_' + (O.readValue().stepOf + 1));
@@ -109,7 +109,7 @@ function onChallengesHubClick(e) {
     }
     dqMake();
     shut('daily-challenges-o');
-    if (B) {
+    if (battle) {
       backToPrep();
     }
     return goFight('dq470');

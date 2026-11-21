@@ -1,7 +1,7 @@
 import { MOVES } from '../data/moves.js';
 import { POKEMON, SCENARIOS } from '../pokemon/pokemon.js';
 import { ITEMS2, PROFILE, isCamp } from '../state/game-state.js';
-import { RC } from '../pokemon/roles-synergies.js';
+import { rosterCost } from '../pokemon/roles-synergies.js';
 import { toast } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
 import {
@@ -25,7 +25,7 @@ import {
   unitKey,
 } from './engine.js';
 import { noteAdd } from './synergies-obstacles.js';
-import { B, enPips } from './ui.js';
+import { battle, enPips } from './ui.js';
 import { queueSave } from '../state/saves.js';
 import { sfx, vibrate } from '../audio/sound-effects.js';
 import { HEALS } from '../items/battle-potions.js';
@@ -53,7 +53,7 @@ export function rankId(id) {
   if (LEGENDARY_IDS.has(id)) {
     return 'expert';
   }
-  const c = RC(id);
+  const c = rosterCost(id);
   return c <= 1 ? 'faible' : c <= 3 ? 'moyen' : c <= 5 ? 'fort' : 'expert';
 }
 
@@ -275,12 +275,12 @@ export function afterDamageItems(S, v, real, o, ev) {
 
 /* ---------- display ---------- */
 export function plateRankHtml(u) {
-  const n = notesOf(B, u);
+  const n = notesOf(battle, u);
   return `<span class="pl-rg rank-${rankOfValue(u)}">${stars(rankOfValue(u))}</span>${n && !u.ko ? `<span class="pl-nt" title="${n} note${n > 1 ? 's' : ''} de Résonance">${'♪'.repeat(n)}</span>` : ''}`;
 }
 
 export function foeResonanceNotes(e) {
-  const n = notesOf(B, e),
+  const n = notesOf(battle, e),
     o = [];
   if (n && !e.ko) {
     o.push(
@@ -289,7 +289,7 @@ export function foeResonanceNotes(e) {
         : `Résonance : ${n} note${n > 1 ? 's' : ''} sur 3. Encore ${3 - n} pour la déclencher.`
     );
   }
-  if (bossScene(B) && hasXp(e)) {
+  if (bossScene(battle) && hasXp(e)) {
     o.push(`Il accumule la Résonance : ${e.en || 0} / ${MAX_ENERGY} losanges, ${xpCost(e)} pour son attaque Experte.`);
   }
   return (o.length ? `<p class="battle-resonance-note">${o.join(' ')}</p>` : '') + bossResonanceHtml(e);
@@ -560,7 +560,9 @@ export const HELD_SHOP = {
 };
 
 export const koAllyOf = S =>
-  S.units.filter(o => o.side === 'a' && o.ko && !o.seg).sort((a, b) => RC(b.id) - RC(a.id) || b.mhp - a.mhp)[0];
+  S.units
+    .filter(o => o.side === 'a' && o.ko && !o.seg)
+    .sort((a, b) => rosterCost(b.id) - rosterCost(a.id) || b.mhp - a.mhp)[0];
 
 export const freeTileFor = (S, u) =>
   neighborKeys(unitKey(u)).find(x => S.tiles[x] && !S.tiles[x].rock && !unitAt(S, x) && !(S.tiles[x].lava > 0));

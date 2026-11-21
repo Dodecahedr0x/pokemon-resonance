@@ -14,10 +14,10 @@ import { renderWallet } from '../ui/wallet.js';
 import { costOf } from './base-camp.js';
 
 // Quests page: src/screens/quests; Bag and Shop page: src/screens/bag.
-export let SQ;
+export let SIDE_QUESTS;
 
 function claim(id) {
-  const q = SQ.find(x => x.id === id);
+  const q = SIDE_QUESTS.find(x => x.id === id);
   if (!q || PROFILE.qc[id] || q.v() < q.n) {
     return;
   }
@@ -107,7 +107,7 @@ export const MAINQ = () => ['tuto', ...ARENAS.map(a => a.k), ...ELITE, 'champ'];
 // Statements run at startup, in the original order (see index.js).
 export function init() {
   /* ---------- Quests: main, side, event ---------- */
-  SQ = [
+  SIDE_QUESTS = [
     { id: 'win3', t: 'Premiers pas', d: 'Gagnez 3 combats.', v: () => PROFILE.wins, n: 3, r: { money: 400 } },
     {
       id: 'cap1',

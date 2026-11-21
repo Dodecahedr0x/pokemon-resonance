@@ -9,7 +9,7 @@ import { goTo } from '../core/navigation.js';
 import { hideStarter, openStarterBox, refreshStarter } from '../../screens/overlays/shellOverlays.js';
 import { squad } from '../team/team.js';
 import { ELITE } from '../combat/items-bonds-ai.js';
-import { __set_scSel, launch } from '../combat/ui.js';
+import { __set_selectedScenario, launch } from '../combat/ui.js';
 import { SAVE_V, applySave, autoSave, closeSaves } from '../state/saves.js';
 import { renderHome } from '../world/home.js';
 import { RIVAL, RIVAL_KEYS } from '../modes/rival.js';
@@ -109,7 +109,7 @@ export function init() {
     const g = e.target.closest('[data-goal]');
     if (g) {
       const k = g.dataset.goal;
-      __set_scSel(k);
+      __set_selectedScenario(k);
       goTo('combat');
       renderPrep();
       if (k === 'tuto' && squad.length) {

@@ -6,7 +6,7 @@ import { SCENARIOS } from '../pokemon/pokemon.js';
 import { PROFILE } from '../state/game-state.js';
 import { $, $$ } from '../core/utils.js';
 import { getCoach, hideCoach, showCoach } from '../../screens/overlays/shellOverlays.js';
-import { B } from '../combat/ui.js';
+import { battle } from '../combat/ui.js';
 import { queueSave } from '../state/saves.js';
 
 let tutorialI;
@@ -15,7 +15,9 @@ export function __set_tutorialI(v) {
 }
 
 function tutorialOn() {
-  return B && SCENARIOS[B.sc] && SCENARIOS[B.sc].tuto && tutorialI >= 0 && tutorialI < TUTORIAL_STEPS.length;
+  return (
+    battle && SCENARIOS[battle.sc] && SCENARIOS[battle.sc].tuto && tutorialI >= 0 && tutorialI < TUTORIAL_STEPS.length
+  );
 }
 
 // Guided-battle coach: #coach is rendered by React (src/screens/overlays/Coach.jsx,
@@ -27,7 +29,7 @@ function withoutHl() {
 }
 
 export function renderCoach() {
-  if (!B || B.over) {
+  if (!battle || battle.over) {
     // the coach disappears at the end of the battle or on abandon
     hideCoach();
     withoutHl();
@@ -74,13 +76,13 @@ export const TUTORIAL_STEPS = [
     t: 'Déplacez-vous',
     d: 'Touchez un de vos Pokémon, puis une case bleue. Approchez pour frapper, ou reculez hors de la zone rouge.',
     sel: '#bBoard',
-    done: () => B.units.some(u => u.side === 'a' && u.moved),
+    done: () => battle.units.some(u => u.side === 'a' && u.moved),
   },
   {
     t: 'Attaquez',
     d: 'Choisissez une capacité, touchez une case dorée : l’aperçu donne le résultat exact. Touchez « Confirmer ».',
     sel: '#bPanel',
-    done: () => B.units.some(u => u.side === 'a' && u.acted && !u.sn),
+    done: () => battle.units.some(u => u.side === 'a' && u.acted && !u.sn),
   },
   {
     t: 'Énergie d’Éveil',
@@ -92,7 +94,7 @@ export const TUTORIAL_STEPS = [
     t: 'Terminez la manche',
     d: 'Quand vos Pokémon ont joué, touchez « Fin du tour » : les adversaires se déplacent, puis attaquent.',
     sel: '#bEnd',
-    done: () => B.round > 1,
+    done: () => battle.round > 1,
   },
   {
     t: 'Les Voix et la capture',

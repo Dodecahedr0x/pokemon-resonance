@@ -7,14 +7,14 @@ import { applyShinyArt } from '../assets/art-direction.js';
 import { scanPokedex } from '../audio/immersion.js';
 import { refreshDex } from '../../screens/dex/dexStore.js';
 
-export let DEXS;
+export let DEX_SPECIES;
 // true from the page's first display: before that, #dex stays empty (old buildDex)
 export let dexBuilt;
 
 // v4.13
 export function dexList() {
   const q = normalizeText(SCREEN_STATE.dexQ || '');
-  let L = DEXS.filter(
+  let L = DEX_SPECIES.filter(
     m =>
       (SCREEN_STATE.dexGen === 'all' || String(m.gen) === SCREEN_STATE.dexGen) &&
       (!q || normalizeText(m.n).includes(q) || String(m.no).includes(q) || m.t.some(t => normalizeText(t).includes(q)))
@@ -41,7 +41,7 @@ function renderDexList() {
 
 export function renderDexCard() {
   if (dexBuilt) {
-    const m = POKEMON[SCREEN_STATE.dexSel] || DEXS[0];
+    const m = POKEMON[SCREEN_STATE.dexSel] || DEX_SPECIES[0];
     SCREEN_STATE.dexSel = m.id;
     refreshDex();
     setTimeout(() => isShinyOwned(m.id) && applyShinyArt($('#dex4Card .dex-art img'), m.no), 0); // v4.25
@@ -63,7 +63,7 @@ export function renderDex() {
 // Statements executed at startup, in the original order (see index.js).
 export function init() {
   /* ---------- Detailed Pokédex ---------- */
-  DEXS = POKEMON_LIST.filter(m => !m.isEnemy).sort((a, b) => a.no - b.no);
+  DEX_SPECIES = POKEMON_LIST.filter(m => !m.isEnemy).sort((a, b) => a.no - b.no);
 
   dexBuilt = false;
 

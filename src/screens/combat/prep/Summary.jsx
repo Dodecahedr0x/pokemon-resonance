@@ -4,7 +4,7 @@ import { useResumeVersion } from './prepStore.js';
 import { SCENARIOS } from '../../../engine/pokemon/pokemon.js';
 import { medal } from '../../../engine/core/utils.js';
 import { badgeSvg } from '../../../engine/modes/league.js';
-import { B } from '../../../engine/combat/ui.js';
+import { battle } from '../../../engine/combat/ui.js';
 import { CLOUD_SAVE, battleLine, validBattle } from '../../../engine/state/saves.js';
 
 import Button from '../../../components/Button.jsx';
@@ -38,7 +38,7 @@ export function SummaryCard({ id, c }) {
 // <SummaryBox id="resumePrep" />: the container and its card, redrawn on every renderSummary().
 export default function SummaryBox({ id }) {
   const v = useResumeVersion();
-  const b = v && !B && validBattle(CLOUD_SAVE.lastBattle) ? CLOUD_SAVE.lastBattle : null;
+  const b = v && !battle && validBattle(CLOUD_SAVE.lastBattle) ? CLOUD_SAVE.lastBattle : null;
   // As with the old innerHTML, a hidden card keeps its last content.
   const [last, setLast] = useState(null);
   let cur = null;

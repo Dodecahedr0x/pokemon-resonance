@@ -8,14 +8,14 @@ import { markOf, medal, rxCat } from '../core/utils.js';
 import { parseCellKey, byUid, hdist, markAt } from './engine.js';
 import { canCapture, canDuo, captureReq, duoOf, linkLvl } from './items-bonds-ai.js';
 import { roleOf } from './synergies-obstacles.js';
-import { B, ui } from './ui.js';
+import { battle, ui } from './ui.js';
 import { SHOP } from '../state/economy.js';
 import { CAP_K, __set_CAP_K, ballChips, ballFor } from '../items/ball-choice.js';
 import { trapTip } from './tactics.js';
 
 /* ---- cell info, items, fatigue, Bonds, capture, duos in the panel ---- */
 export function tileTip(k) {
-  const t = B.tiles[k],
+  const t = battle.tiles[k],
     o = [];
   if (t.pil) {
     return 'Pilier : infranchissable, bloque les tirs directs (cible unique et ligne). Couverture −40 % pour qui se tient derrière.';
@@ -56,16 +56,16 @@ export function tileTip(k) {
 }
 
 export function tileCard() {
-  if (!B || ui.tile == null) {
+  if (!battle || ui.tile == null) {
     return '';
   }
   const k = ui.tile,
-    t = B.tiles[k];
+    t = battle.tiles[k];
   if (!t) {
     return '';
   }
   const [c, r] = parseCellKey(k),
-    mk = t.mark ? markAt(B, k) : t.w ? 'trempe' : null;
+    mk = t.mark ? markAt(battle, k) : t.w ? 'trempe' : null;
   let rx = '';
   if (mk) {
     const row = MARK_REACTIONS[mk];
@@ -91,9 +91,9 @@ export function unitExtras(u) {
   if (u.fat) {
     o.push(`<span class="battle-unit-tag is-tired">Fatigué · −1 Mouvement</span>`);
   }
-  const mates = B.units.filter(x => x !== u && !x.ko && x.side === 'a' && linkLvl(B, u.sp, x.sp) > 0);
+  const mates = battle.units.filter(x => x !== u && !x.ko && x.side === 'a' && linkLvl(battle, u.sp, x.sp) > 0);
   mates.forEach(x => {
-    const l = linkLvl(B, u.sp, x.sp),
+    const l = linkLvl(battle, u.sp, x.sp),
       adj = hdist(x.pos, u.pos) === 1;
     o.push(
       `<span class="battle-unit-tag is-link${adj && l >= 1 ? ' is-active' : ''}" title="Soutien : −1 dégât côte à côte. Synchro : +25 % sur les réactions préparées l’un pour l’autre. Duo : technique combinée.">Lien ${LINK_N[l]} · ${POKEMON[x.sp].n}${adj ? ' · côte à côte' : ''}</span>`
@@ -112,21 +112,21 @@ export function unitExtras(u) {
 }
 
 export function duoBlock(u) {
-  if (!B || u.acted) {
+  if (!battle || u.acted) {
     return '';
   }
-  const L2 = B.units.filter(p => p !== u && p.side === 'a' && !p.ko && duoOf(B, u, p));
+  const L2 = battle.units.filter(p => p !== u && p.side === 'a' && !p.ko && duoOf(battle, u, p));
   if (!L2.length) {
     return '';
   }
   return `<div class="battle-duos">${L2.map(p => {
-    const D = duoOf(B, u, p),
-      ok = canDuo(B, u, p),
+    const D = duoOf(battle, u, p),
+      ok = canDuo(battle, u, p),
       why = p.acted
         ? `${p.n} a déjà agi`
         : hdist(u.pos, p.pos) > 2
           ? `${p.n} est trop loin (2 cases max)`
-          : B.voice < 2
+          : battle.voice < 2
             ? 'il faut 2 Voix'
             : '';
     return `<button type="button" class="battle-duo${ui.mode === 'duo' && ui.duo === p.uid ? ' is-selected' : ''}" data-duo="${p.uid}" ${ok ? '' : 'disabled'}><span class="battle-duo-medals">${medal(u.t, 'is-small')}${medal(p.t, 'is-small')}</span><span><b>${D.n}</b><em>${ok ? D.d + ' 2 Voix, les deux agissent.' : why}</em></span></button>`;
@@ -134,17 +134,17 @@ export function duoBlock(u) {
 }
 
 export function catchBlock(e) {
-  if (B.noCatch) {
+  if (battle.noCatch) {
     return '';
   }
   __set_CAP_K(ballFor(e)); // the Ball offered by default
-  const al = ui.sel && byUid(B, ui.sel),
-    req = captureReq(B, al, e),
-    ok = al && canCapture(B, al, e);
+  const al = ui.sel && byUid(battle, ui.sel),
+    req = captureReq(battle, al, e),
+    ok = al && canCapture(battle, al, e);
   return `<div class="battle-capture"><div class="battle-capture-head"><b>Capture</b><span>${al ? `avec ${al.n}` : 'sélectionnez un allié'}</span></div>${ballChips()}<ul>${req
     .slice(1)
     .map(r => `<li class="${r.ok ? 'is-met' : ''}">${r.t}</li>`)
     .join(
       ''
-    )}</ul><button type="button" class="button button-small ${ok ? 'button-primary' : ''}" data-cap="${e.uid}" ${ok ? '' : 'disabled'}>${SHOP[CAP_K].n} sur ${e.n}</button>${B.stats.caught.length ? '' : '<p class="battle-hint">Un Pokémon K.O. ne peut plus être capturé.</p>'}</div>`;
+    )}</ul><button type="button" class="button button-small ${ok ? 'button-primary' : ''}" data-cap="${e.uid}" ${ok ? '' : 'disabled'}>${SHOP[CAP_K].n} sur ${e.n}</button>${battle.stats.caught.length ? '' : '<p class="battle-hint">Un Pokémon K.O. ne peut plus être capturé.</p>'}</div>`;
 }

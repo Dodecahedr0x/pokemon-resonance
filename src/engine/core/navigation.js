@@ -2,9 +2,9 @@ import { guideShown } from '../../screens/guide/guideStore.js';
 import { setShellPage } from '../../components/shellStore.js';
 import { $$ } from './utils.js';
 import { hook } from './hooks.js';
-import { B, scSel } from '../combat/ui.js';
+import { battle, selectedScenario } from '../combat/ui.js';
 import { __set_PREPG, renderPrep } from '../combat/battle-prep.js';
-import { jump } from '../ui/guide.js';
+import { openGuideRule } from '../ui/guide.js';
 import { afterShow } from '../world/home-journey.js';
 import { v4After } from '../ui/settings.js';
 import { fitPhoneBattle } from '../combat/compact-battle.js';
@@ -15,7 +15,7 @@ export function show(t, scroll) {
   const previous = currentScreen;
   if (t === 'ligue') {
     // the League is integrated into Battles (Gyms and League tabs)
-    __set_PREPG({ g: 'arenes', sc: scSel });
+    __set_PREPG({ g: 'arenes', sc: selectedScenario });
     t = 'combat';
   }
   if (!NAV_TABS.includes(t)) {
@@ -32,7 +32,7 @@ export function show(t, scroll) {
   } catch {
     /* Best effort: failure here is non-fatal. */
   }
-  if (t === 'combat' && !B) {
+  if (t === 'combat' && !battle) {
     renderPrep();
   }
   if (t === 'types') {
@@ -98,7 +98,7 @@ export function init() {
     if (b) {
       e.preventDefault();
       e.stopPropagation();
-      jump(b.dataset.code);
+      openGuideRule(b.dataset.code);
     }
   });
 

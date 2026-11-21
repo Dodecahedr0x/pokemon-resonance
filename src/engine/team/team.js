@@ -3,12 +3,12 @@ import { MOVES } from '../data/moves.js';
 import { POKEMON, EEVEE, FAMT, MARK_TYPE, PRESETS, familyOf } from '../pokemon/pokemon.js';
 import { BUDGET, RECRUIT } from '../pokemon/evolution.js';
 import { ITEMS2, PROFILE, inBox, ownedItems } from '../state/game-state.js';
-import { RC } from '../pokemon/roles-synergies.js';
+import { rosterCost } from '../pokemon/roles-synergies.js';
 import { $, GLYPH_INK, reducedMotion, writeLS, typeGlyphPath, markOf, typeColor, toast } from '../core/utils.js';
 import { currentScreen } from '../core/navigation.js';
 import { openRx } from '../data/types.js';
 import { BRANCHES } from '../combat/engine.js';
-import { B } from '../combat/ui.js';
+import { battle } from '../combat/ui.js';
 import { queueSave } from '../state/saves.js';
 import { renderPrep } from '../combat/battle-prep.js';
 import { renderHome } from '../world/home.js';
@@ -231,7 +231,7 @@ export function renderSquad() {
   if (openId) {
     openSheet(openId, true);
   }
-  if (currentScreen === 'combat' && !B) {
+  if (currentScreen === 'combat' && !battle) {
     renderPrep();
   }
   if (currentScreen === 'accueil') {
@@ -263,13 +263,13 @@ export function toggle(id, card) {
     toast(dr);
     return;
   }
-  const rest = same ? squadCost() - RC(same) : squadCost();
+  const rest = same ? squadCost() - rosterCost(same) : squadCost();
   if (!same && squad.length >= TEAM_MAX) {
     toast(`Équipe complète : ${TEAM_MAX} Pokémon par combat. Retirez-en un d’abord.`);
     return;
   }
-  if (rest + RC(id) > BUDGET) {
-    toast(`Budget dépassé : il reste ${BUDGET - rest} PC, ${m.n} en coûte ${RC(id)}.`);
+  if (rest + rosterCost(id) > BUDGET) {
+    toast(`Budget dépassé : il reste ${BUDGET - rest} PC, ${m.n} en coûte ${rosterCost(id)}.`);
     return;
   }
   if (same) {
@@ -378,9 +378,9 @@ export const validSquad = s =>
   s.length <= TEAM_MAX &&
   s.every(id => POKEMON[id]) &&
   new Set(s.map(id => POKEMON[id].base)).size === s.length &&
-  s.reduce((a, id) => a + RC(id), 0) <= BUDGET;
+  s.reduce((a, id) => a + rosterCost(id), 0) <= BUDGET;
 
-export const squadCost = () => squad.reduce((a, id) => a + RC(id), 0);
+export const squadCost = () => squad.reduce((a, id) => a + rosterCost(id), 0);
 
 export const vBonus = () => Math.min(2, Math.floor((BUDGET - squadCost()) / 4));
 

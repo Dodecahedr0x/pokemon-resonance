@@ -22,7 +22,7 @@ import {
   unitAt,
 } from '../../../engine/combat/engine.js';
 import { roleOf } from '../../../engine/combat/synergies-obstacles.js';
-import { B, enPips, segHp, ui } from '../../../engine/combat/ui.js';
+import { battle, enPips, segHp, ui } from '../../../engine/combat/ui.js';
 import { PREFERENCES } from '../../../engine/ui/preferences.js';
 import { catchBlock, duoBlock, tileCard, unitExtras } from '../../../engine/combat/battle-panel.js';
 import { HEALS } from '../../../engine/items/battle-potions.js';
@@ -60,19 +60,19 @@ export default function Panel() {
   const v = useBattleVersion('panel');
   return (
     <div className="battle-panel" id="bPanel" aria-live="polite">
-      {v && B ? <Content /> : null}
+      {v && battle ? <Content /> : null}
     </div>
   );
 }
 
 function Content() {
-  if (B.over) {
+  if (battle.over) {
     return null;
   }
-  if (B.deployPhase) {
+  if (battle.deployPhase) {
     return <Placement />;
   }
-  if (ui.busy && !ui.cutscene && (B.phase === 'enemy' || isEnemyTurn())) {
+  if (ui.busy && !ui.cutscene && (battle.phase === 'enemy' || isEnemyTurn())) {
     return <OpponentTurn />;
   }
   if (ui.busy) {
@@ -83,11 +83,11 @@ function Content() {
       </div>
     );
   }
-  const e = ui.selE && byUid(B, ui.selE);
+  const e = ui.selE && byUid(battle, ui.selE);
   if (e && !e.ko) {
     return <OpponentSheet e={e} />;
   }
-  const u = ui.sel && byUid(B, ui.sel);
+  const u = ui.sel && byUid(battle, ui.sel);
   if (!u || u.ko) {
     return (
       <>
@@ -106,8 +106,8 @@ const tileOf = u => 'ABCDEFGH'[u.pos[0]] + (u.pos[1] + 1);
 /* ---------- placement before the battle (v4.30): who is where, who is chosen ---------- */
 // Panel clicks are blocked by the engine during deployment: the list is read-only, you play on the board.
 function Placement() {
-  const al = B.units.filter(u => u.side === 'a' && !u.ko),
-    sel = ui.deploySel && byUid(B, ui.deploySel);
+  const al = battle.units.filter(u => u.side === 'a' && !u.ko),
+    sel = ui.deploySel && byUid(battle, ui.deploySel);
   return (
     <div className="battle-placement">
       <div className="battle-placement-head">
@@ -144,11 +144,12 @@ function Placement() {
 function OpponentTurn() {
   useBattleVersion('top');
   useBattleVersion('foot');
-  const file = B.order === 'vitesse' && B.turnQueue ? B.turnQueue.map(id => byUid(B, id)) : B.units;
+  const file =
+    battle.order === 'vitesse' && battle.turnQueue ? battle.turnQueue.map(id => byUid(battle, id)) : battle.units;
   const foes = file.filter(u => u && u.side === 'e' && !u.ko && !u.caught),
-    cur = ui.act && byUid(B, ui.act),
+    cur = ui.act && byUid(battle, ui.act),
     doneFlag = foes.filter(u => u.done && u !== cur).length,
-    veil = veiled(B);
+    veil = veiled(battle);
   return (
     <div className="battle-foe-turn">
       <div className="battle-foe-turn-head">
@@ -162,7 +163,7 @@ function OpponentTurn() {
         {foes.map(u => {
           const st = u === cur ? 'acting' : u.done ? 'done' : '';
           const m = u.intent && !veil ? MOVES[u.intent.mv] : null,
-            v = m && unitAt(B, u.intent.k);
+            v = m && unitAt(battle, u.intent.k);
           return (
             <li key={u.uid} className={st && 'is-' + st}>
               <Html html={medal(u.t, 'is-small')} />
@@ -170,7 +171,7 @@ function OpponentTurn() {
                 <b>{u.n}</b>
                 {m
                   ? ` · ${m.n} → ${v ? v.n : 'case vide'}`
-                  : B.jit
+                  : battle.jit
                     ? ' · choisit sa cible'
                     : veil && u.intent
                       ? ' · intention voilée'
@@ -188,7 +189,7 @@ function OpponentTurn() {
 
 // Role and « Détails » (Details) button under the header (v1.2).
 function Role() {
-  const u = (ui.selE && byUid(B, ui.selE)) || (ui.sel && byUid(B, ui.sel));
+  const u = (ui.selE && byUid(battle, ui.selE)) || (ui.sel && byUid(battle, ui.sel));
   if (!u || u.ko) {
     return null;
   }
@@ -233,8 +234,8 @@ const powerLabel = m => strength(m, 'Puiss.');
 
 /* ---------- opponent ---------- */
 function Intention({ e }) {
-  if (B.jit) {
-    const F = e.force && forcedTarget(B, e);
+  if (battle.jit) {
+    const F = e.force && forcedTarget(battle, e);
     return e.done ? (
       <p className="battle-hint">Il a déjà joué cette manche.</p>
     ) : e.badge || e.isLost ? (
@@ -252,7 +253,7 @@ function Intention({ e }) {
       </p>
     );
   }
-  if (e.intent && veiled(B)) {
+  if (e.intent && veiled(battle)) {
     return (
       <p className="battle-intent">
         Intention voilée par l’Arène Psy. Elle reste fixée : lisez sa position et sa portée.
@@ -261,8 +262,8 @@ function Intention({ e }) {
   }
   if (e.intent) {
     const m = MOVES[e.intent.mv],
-      v = unitAt(B, e.intent.k);
-    const est = v ? dmgOf(B, e, m, v, mvType(B, e, m), 1) : 0;
+      v = unitAt(battle, e.intent.k);
+    const est = v ? dmgOf(battle, e, m, v, mvType(battle, e, m), 1) : 0;
     return (
       <p className="battle-intent">
         Vise <b>{v ? v.n : 'une case vide'}</b> avec <b>{m.n}</b>
@@ -281,8 +282,8 @@ function Intention({ e }) {
 
 function OpponentSheet({ e }) {
   const tl = ABILITIES[e.ability],
-    nx = hasNx(e) ? awakeningInfo(B, e) : null,
-    fe = foeEvo(B, e);
+    nx = hasNx(e) ? awakeningInfo(battle, e) : null,
+    fe = foeEvo(battle, e);
   const role = roleOf(e),
     RF = ROLEFX[role];
   return (
@@ -472,8 +473,8 @@ function Awakening({ u, s }) {
       </p>
     );
   }
-  const o = evoOpts(B, u),
-    ce = canAwaken(B, u),
+  const o = evoOpts(battle, u),
+    ce = canAwaken(battle, u),
     full = u.en >= MAX_ENERGY;
   const why = !full
     ? `Encore ${MAX_ENERGY - u.en} : fin de manche, réaction, coup encaissé, allié K.O.`
@@ -481,7 +482,7 @@ function Awakening({ u, s }) {
       ? 'Immobilisé cette manche.'
       : u.acted
         ? 'Action déjà utilisée : Relance pour éveiller.'
-        : B.voice < 1
+        : battle.voice < 1
           ? 'Plus de Voix cette manche.'
           : 'Prêt. Choix irréversible.';
   return (
@@ -512,7 +513,7 @@ function Awakening({ u, s }) {
 
 /* ---------- guided walkthrough (v4.78): the current step and its skip button ---------- */
 function Step({ u, st }) {
-  const n = turnFlow.remaining(B).length,
+  const n = turnFlow.remaining(battle).length,
     cur = { deplacer: 0, agir: 1, extra: 2, fini: 3 }[st];
   let txt = '',
     bt = null;
@@ -524,10 +525,10 @@ function Step({ u, st }) {
       </Button>
     );
   } else if (st === 'agir') {
-    const target = u.mv.some(id => targets(B, u, MOVES[id]).length);
+    const target = u.mv.some(id => targets(battle, u, MOVES[id]).length);
     txt = target
-      ? `Choisissez une capacité${canAwaken(B, u) ? ', ou éveillez-le' : ''}.`
-      : `Aucune cible à portée${canAwaken(B, u) ? ' : éveillez-le, ou passez' : ''}.`;
+      ? `Choisissez une capacité${canAwaken(battle, u) ? ', ou éveillez-le' : ''}.`
+      : `Aucune cible à portée${canAwaken(battle, u) ? ' : éveillez-le, ou passez' : ''}.`;
     bt = (
       <Button size="small" data-vx="skip-action">
         <b>Passer l’action</b>
@@ -536,17 +537,17 @@ function Step({ u, st }) {
   } else if (st === 'extra') {
     txt = [
       turnFlow.repli(u) ? 'Touchez une case bleue pour vous replier.' : '',
-      turnFlow.retrigger(B) ? 'Relance (2 Voix) : il rejoue tout de suite.' : '',
+      turnFlow.retrigger(battle) ? 'Relance (2 Voix) : il rejoue tout de suite.' : '',
     ]
       .filter(Boolean)
       .join(' ');
-    const next = turnFlow.remaining(B).find(x => x !== u);
+    const next = turnFlow.remaining(battle).find(x => x !== u);
     bt = (
       <>
         <Button size="small" variant="primary" data-vx="finished-round">
           <b>Terminer {u.n}</b>
         </Button>
-        {B.order !== 'vitesse' ? (
+        {battle.order !== 'vitesse' ? (
           <span className="turn-guide-suite">{next ? `Ensuite : ${next.n}` : 'Dernier Pokémon de la manche'}</span>
         ) : null}
       </>
@@ -574,7 +575,7 @@ function Step({ u, st }) {
           ])}
         </ol>
         <span className="turn-guide-count">
-          {B.order === 'vitesse' ? 'Ordre par Vitesse' : n ? `Encore ${n} à jouer` : 'Manche terminée'}
+          {battle.order === 'vitesse' ? 'Ordre par Vitesse' : n ? `Encore ${n} à jouer` : 'Manche terminée'}
         </span>
       </div>
       <div className="turn-guide-row">
@@ -587,7 +588,7 @@ function Step({ u, st }) {
 
 /* ---------- Bag: items usable in battle (v4.0, v4.14) ---------- */
 function Bag({ u }) {
-  if ((SCENARIOS[B.sc] || {}).tuto || B.duel433 || ui.selE || u.side !== 'a') {
+  if ((SCENARIOS[battle.sc] || {}).tuto || battle.duel433 || ui.selE || u.side !== 'a') {
     return null;
   }
   const own = [...HEALS, ...COMBAT_ITEMS].filter(k => bagCount(k));
@@ -597,7 +598,7 @@ function Bag({ u }) {
   return (
     <div className="battle-bag">
       <span className="caption">
-        Sac · {B.itemsUsed || 0} / {BAG_MAX}
+        Sac · {battle.itemsUsed || 0} / {BAG_MAX}
       </span>
       {own.map(k => {
         const it = SHOP[k],
@@ -609,7 +610,7 @@ function Bag({ u }) {
             className="battle-bag-item"
             data-use={k}
             title={it.d}
-            disabled={!canUseBagItem(B, u, k)}
+            disabled={!canUseBagItem(battle, u, k)}
           >
             <img src={itemIcon(it.img)} alt="" loading="lazy" />
             <b>{it.sn || it.n}</b>
@@ -628,8 +629,8 @@ function AllySheet({ u }) {
   const tl = ABILITIES[u.ability];
   // guided walkthrough: the step replaces the tips when no mode is active
   const F = turnFlow,
-    guide = F.active() && !ui.busy && !ui.selE && u.side === 'a' && F.toPlay(B).includes(u),
-    st = guide ? F.stepOf(B, u) : null,
+    guide = F.active() && !ui.busy && !ui.selE && u.side === 'a' && F.toPlay(battle).includes(u),
+    st = guide ? F.stepOf(battle, u) : null,
     without = guide && !ui.mode,
     s = h => (without ? withoutTip(h) : h);
   let hint = null;
@@ -662,7 +663,7 @@ function AllySheet({ u }) {
   } else {
     hint = <p className="battle-hint">{u.n} a joué. Esquive et Relance restent possibles.</p>;
   }
-  const relHi = st === 'extra' && F.retrigger(B);
+  const relHi = st === 'extra' && F.retrigger(battle);
   return (
     <>
       <Header u={u} underText={`${u.t.join(' / ')}${tl ? ' · ' + tl[0] : ''}${u.evo ? ` · éveillé ×${u.evo}` : ''}`} />
@@ -682,8 +683,8 @@ function AllySheet({ u }) {
       <div className="battle-moves">
         {u.mv.map((id, i) => {
           const m = MOVES[id],
-            typ = mvType(B, u, m),
-            n = targets(B, u, m).length;
+            typ = mvType(battle, u, m),
+            n = targets(battle, u, m).length;
           return (
             <button
               key={i}
@@ -704,7 +705,7 @@ function AllySheet({ u }) {
                 {m.mk ? ' · ' + markOf(m.mk).n : ''}
               </span>
               <em>
-                <Html html={n ? m.d : moveBlockedMessage(B, u, m) || 'Aucune cible à portée.'} />
+                <Html html={n ? m.d : moveBlockedMessage(battle, u, m) || 'Aucune cible à portée.'} />
               </em>
             </button>
           );
@@ -718,7 +719,7 @@ function AllySheet({ u }) {
           type="button"
           className={'battle-voice-action' + (ui.mode === 'dodge' ? ' is-active' : '')}
           data-vx="dodge"
-          disabled={!!(B.voice < 1 || u.sn)}
+          disabled={!!(battle.voice < 1 || u.sn)}
         >
           <b>Esquive</b>
           <span>1 Voix · un pas</span>
@@ -727,7 +728,7 @@ function AllySheet({ u }) {
           type="button"
           className={'battle-voice-action' + (relHi ? ' turn-guide-hi' : '')}
           data-vx="relance"
-          disabled={!!(!u.acted || u.sn || B.retrigger || B.voice < 2)}
+          disabled={!!(!u.acted || u.sn || battle.retrigger || battle.voice < 2)}
         >
           <b>Relance</b>
           <span>2 Voix · rejouer</span>

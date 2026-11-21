@@ -2,7 +2,7 @@ import { refreshSettings } from '../../screens/settings/settingsStore.js';
 import { DIFFS, PROFILE } from '../state/game-state.js';
 import { toast } from '../core/utils.js';
 import { placeAlert } from '../world/home-route.js';
-import { B, renderAll } from '../combat/ui.js';
+import { battle, renderAll } from '../combat/ui.js';
 import { queueSave } from '../state/saves.js';
 import { PREFERENCES, savePref } from './preferences.js';
 import { sfx, vibrate } from '../audio/sound-effects.js';
@@ -70,7 +70,7 @@ export function init() {
     if (p.dataset.pref === 'sound' && p.checked) {
       setTimeout(() => sfx('ui'), 30);
     }
-    if (B) {
+    if (battle) {
       try {
         renderAll();
       } catch {

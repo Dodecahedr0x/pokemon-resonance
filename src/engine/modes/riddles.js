@@ -5,7 +5,7 @@ import { PROFILE } from '../state/game-state.js';
 import { HOOKS } from '../core/hooks.js';
 import { MAX_ENERGY } from '../combat/engine.js';
 import { OBSTACLES } from '../combat/synergies-obstacles.js';
-import { B, chooseBattle, finish, launch, ui } from '../combat/ui.js';
+import { battle, chooseBattle, finish, launch, ui } from '../combat/ui.js';
 import { today } from '../state/economy.js';
 import { fingerprintRandom } from './weekly-challenge.js';
 
@@ -982,13 +982,13 @@ export function init() {
   document.addEventListener(
     'click',
     e => {
-      if (!B || B.over || B.sc !== 'enigme431' || !e.target.closest('#bEnd') || ui.busy) {
+      if (!battle || battle.over || battle.sc !== 'enigme431' || !e.target.closest('#bEnd') || ui.busy) {
         return;
       }
       e.preventDefault();
       e.stopPropagation();
-      B.over = 'lose';
-      B.timeout = true;
+      battle.over = 'lose';
+      battle.timeout = true;
       finish();
     },
     true

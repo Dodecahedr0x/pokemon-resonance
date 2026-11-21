@@ -2,7 +2,7 @@ import { SCENARIOS } from '../pokemon/pokemon.js';
 import { ITEMS2, PROFILE, isCamp } from '../state/game-state.js';
 import { medal } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
-import { TOD, setTod } from './home-route.js';
+import { timeOfDay, setTod } from './home-route.js';
 import { setRoute } from '../../screens/home/homeStore.js';
 import { badgeSvg } from '../modes/league.js';
 import {
@@ -736,7 +736,7 @@ export function init() {
     SCREEN_STATE.region = b.dataset.reg;
     SCREEN_STATE.mapSel = null;
     renderMap();
-    setTod(TOD);
+    setTod(timeOfDay);
   });
   JMAP_SVG = `<svg class="map-svg is-johto" viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
  <defs>

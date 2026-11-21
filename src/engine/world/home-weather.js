@@ -5,7 +5,7 @@ import { ABILITIES } from '../data/moves.js';
 import { POKEMON, WEATHER_NAME } from '../pokemon/pokemon.js';
 import { ROLEFX } from '../pokemon/roles-synergies.js';
 import { byUid } from '../combat/engine.js';
-import { B, ui } from '../combat/ui.js';
+import { battle, ui } from '../combat/ui.js';
 import { tileTip } from '../combat/battle-panel.js';
 import { overlay } from '../progression/prestige.js';
 import { shut } from '../../screens/overlays/tempStore.js';
@@ -31,7 +31,7 @@ export function homeSkyInfo() {
 /* ---------- 2. contextual help in battle ---------- */
 // help data (rendering: src/screens/overlays/transients/Windows.jsx, BattleHelp)
 function battleHelpData() {
-  const u = ui.sel != null ? byUid(B, ui.sel) : null,
+  const u = ui.sel != null ? byUid(battle, ui.sel) : null,
     out = { sel: null, terrainList: [], wx: null, rx: [] };
   if (u && POKEMON[u.id]) {
     const m = POKEMON[u.id],
@@ -44,8 +44,8 @@ function battleHelpData() {
     };
   }
   const seen = [];
-  Object.keys(B.tiles || {}).forEach(k => {
-    const t = B.tiles[k];
+  Object.keys(battle.tiles || {}).forEach(k => {
+    const t = battle.tiles[k];
     const kind = t.pil
       ? 'pil'
       : t.rock
@@ -84,10 +84,12 @@ function battleHelpData() {
     mark: 'Marque',
   };
   out.terrainList = seen.map(([kd, k]) => [displayName[kd], tileTip(k)]);
-  if (B.wx && B.wx.k) {
-    const W = WEATHER.find(x => (WEATHER_NAME[B.wx.k] || '').toLowerCase().startsWith(x.n.toLowerCase().slice(0, 4)));
+  if (battle.wx && battle.wx.k) {
+    const W = WEATHER.find(x =>
+      (WEATHER_NAME[battle.wx.k] || '').toLowerCase().startsWith(x.n.toLowerCase().slice(0, 4))
+    );
     if (W) {
-      out.wx = { n: W.n, roundCount: B.wx.n, d: W.d };
+      out.wx = { n: W.n, roundCount: battle.wx.n, d: W.d };
     }
   }
   out.rx = Object.keys(REACTIONS).map(k => [REACTIONS[k].n, REACTIONS[k].d]);
@@ -95,7 +97,7 @@ function battleHelpData() {
 }
 
 function openBattleHelp() {
-  if (!B) {
+  if (!battle) {
     return;
   }
   const o = overlay('battle-help', battleHelpData());

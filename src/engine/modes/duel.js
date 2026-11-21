@@ -29,10 +29,10 @@ import {
 } from '../combat/engine.js';
 import { OBSTACLES, resolve } from '../combat/synergies-obstacles.js';
 import {
-  B,
-  L,
-  __set_B,
-  __set_scSel,
+  battle,
+  BOARD_LAYERS,
+  __set_battle,
+  __set_selectedScenario,
   autoSel,
   backToPrep,
   clearAim,
@@ -41,7 +41,7 @@ import {
   launch,
   addLog,
   renderAll,
-  scSel,
+  selectedScenario,
   ui,
 } from '../combat/ui.js';
 import { escapeHtml, queueSave } from '../state/saves.js';
@@ -254,10 +254,10 @@ function launchDuel(C) {
   const P0 = (PROFILE.duel433 = PROFILE.duel433 || DUEL_TUTORIAL_0().duel433);
   P0.names = C.names.map(duelName);
   queueSave();
-  if (scSel !== 'duel433') {
-    launchDuel.prev = scSel;
+  if (selectedScenario !== 'duel433') {
+    launchDuel.prev = selectedScenario;
   }
-  __set_scSel('duel433');
+  __set_selectedScenario('duel433');
   goTo('combat');
   launch();
 }
@@ -265,8 +265,8 @@ function launchDuel(C) {
 /** Outside a duel: go back to the battle list, on the previous choice. */
 function leaveDuel() {
   const hp = launchDuel.prev;
-  __set_B(null);
-  __set_scSel(hp && SCENARIOS[hp] && !SCENARIOS[hp].noProgress ? hp : 'gue');
+  __set_battle(null);
+  __set_selectedScenario(hp && SCENARIOS[hp] && !SCENARIOS[hp].noProgress ? hp : 'gue');
   backToPrep();
   SCREEN_STATE.campTab = 'duel';
   goTo('camp');
@@ -401,13 +401,13 @@ export function duelVigilance(S, e, ev) {
 
 /** "End of turn" in a duel: Player 1 hands over, Player 2 closes the round. */
 export function duelPassTurn() {
-  if (!B || !B.duel433) {
+  if (!battle || !battle.duel433) {
     return false;
   }
-  if (ui.busy || B.over || B.phase !== 'player') {
+  if (ui.busy || battle.over || battle.phase !== 'player') {
     return true;
   }
-  const S = B,
+  const S = battle,
     D = S.duel433;
   Object.assign(ui, { undo: null, tile: null, selE: null, sel: null, mode: null, mi: null, pk: null, pv: null });
   clearAim();
@@ -440,11 +440,11 @@ export function duelPassTurn() {
   renderAll();
   setTimeout(
     () => {
-      if (B !== S) {
+      if (battle !== S) {
         return;
       }
       endOfRound(S).then(ok => {
-        if (ok && B === S && !S.over) {
+        if (ok && battle === S && !S.over) {
           handoff(1);
         }
       });
@@ -456,30 +456,30 @@ export function duelPassTurn() {
 
 /** Pass-over screen: the phone changes hands. */
 function handoff(j, force) {
-  const D = B && B.duel433;
+  const D = battle && battle.duel433;
   if (!D) {
     return;
   }
   if ((AUTO && !force) || PREFERENCES.handoff === false) {
-    turnBanner('Manche ' + B.round, D.names[j - 1]);
+    turnBanner('Manche ' + battle.round, D.names[j - 1]);
     return;
   }
   // rendered: src/screens/overlays/transients/DuelRelay.jsx
   const o = overlay('duel433r', {
     mode: 'relais',
     j,
-    round: B.round,
-    lim: B.lim,
+    round: battle.round,
+    lim: battle.lim,
     displayName: D.names[j - 1],
     sub:
-      B.round === 1
+      battle.round === 1
         ? `Passez le téléphone. Vos Pokémon sont cerclés ${j === 1 ? 'de bleu' : 'd’orange'}.`
         : 'Passez le téléphone, puis touchez le bouton.',
     s: [1, 2].map(x => ({
       j: x,
       displayName: D.names[x - 1],
-      pv: duelHp(B, x),
-      n: B.units.filter(u => u.duelPlayer === x && !u.ko).length,
+      pv: duelHp(battle, x),
+      n: battle.units.filter(u => u.duelPlayer === x && !u.ko).length,
     })),
   });
   const b = o.querySelector('[data-forfeit-dialog="go"]');
@@ -573,12 +573,12 @@ export function duelUnder(S) {
 
 /* rendering: player colors, end-of-turn button, phase */
 export function afterRenderDuel() {
-  if (!B || !B.duel433) {
+  if (!battle || !battle.duel433) {
     return;
   }
-  for (const id in L.u) {
-    const T = L.u[id],
-      u = byUid(B, id);
+  for (const id in BOARD_LAYERS.u) {
+    const T = BOARD_LAYERS.u[id],
+      u = byUid(battle, id);
     if (!T || !u) {
       continue;
     }
@@ -759,8 +759,8 @@ export function init() {
     }
     if (b.dataset.forfeitDialog === 'go') {
       shut('duel433r');
-      if (B && B.duel433) {
-        turnBanner('Manche ' + B.round, B.duel433.names[B.duel433.j - 1]);
+      if (battle && battle.duel433) {
+        turnBanner('Manche ' + battle.round, battle.duel433.names[battle.duel433.j - 1]);
         renderAll();
       }
       return;
@@ -769,11 +769,11 @@ export function init() {
       shut('duel433r');
       return;
     }
-    if (b.dataset.forfeitDialog === 'forfait' && B && B.duel433 && !B.over) {
+    if (b.dataset.forfeitDialog === 'forfait' && battle && battle.duel433 && !battle.over) {
       shut('duel433r');
-      B.forfeit = B.duel433.j;
-      B.over = 'win';
-      addLog(`${B.duel433.names[B.duel433.j - 1]} déclare forfait.`, 'sys');
+      battle.forfeit = battle.duel433.j;
+      battle.over = 'win';
+      addLog(`${battle.duel433.names[battle.duel433.j - 1]} déclare forfait.`, 'sys');
       finish();
     }
   });
@@ -782,17 +782,17 @@ export function init() {
   document.addEventListener(
     'click',
     e => {
-      if (!e.target.closest('#bQuit') || !B || !B.duel433) {
+      if (!e.target.closest('#bQuit') || !battle || !battle.duel433) {
         return;
       }
       e.stopPropagation();
       if (ui.busy) {
         return;
       }
-      if (B.over) {
+      if (battle.over) {
         return leaveDuel();
       }
-      const D = B.duel433,
+      const D = battle.duel433,
         j = D.j;
       overlay('duel433r', { mode: 'abandon', j, displayName: D.names[j - 1], other: D.names[2 - j] });
     },
@@ -825,7 +825,7 @@ export function init() {
     'click',
     e => {
       const b = e.target.closest('#cbResult [data-res]');
-      if (!b || !B || !B.duel433) {
+      if (!b || !battle || !battle.duel433) {
         return;
       }
       e.stopPropagation();

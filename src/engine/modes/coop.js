@@ -1,22 +1,30 @@
 /* 2-player co-op (Settings): Player 1 controls the first 2 Pokémon, Player 2 the others (added in v4.18). */
 
 import { HOOKS } from '../core/hooks.js';
-import { B, clearAim, addLog, renderAll, ui } from '../combat/ui.js';
+import { battle, clearAim, addLog, renderAll, ui } from '../combat/ui.js';
 import { toast } from '../core/utils.js';
 import { PREFERENCES } from '../ui/preferences.js';
 import { vibrate } from '../audio/sound-effects.js';
 
 /** End of the co-op turn: Player 1 hands over to Player 2. Returns true if control was handed over. */
 export function coopPassTurn() {
-  if (!B || !B.coop || B.coop !== 1 || ui.busy || B.over || B.phase !== 'player' || !isCoopPlayerAlive(B, 2)) {
+  if (
+    !battle ||
+    !battle.coop ||
+    battle.coop !== 1 ||
+    ui.busy ||
+    battle.over ||
+    battle.phase !== 'player' ||
+    !isCoopPlayerAlive(battle, 2)
+  ) {
     return false;
   }
-  B.coop = 2;
+  battle.coop = 2;
   ui.sel = null;
   ui.selE = null;
   ui.mode = null;
   clearAim();
-  const nx = B.units.find(x => x.side === 'a' && !x.ko && !x.acted && coopPlayer(x) === 2);
+  const nx = battle.units.find(x => x.side === 'a' && !x.ko && !x.acted && coopPlayer(x) === 2);
   ui.sel = nx ? nx.uid : null;
   addLog('Au tour du Joueur 2.', 'sys');
   toast('Au tour du Joueur 2 !');

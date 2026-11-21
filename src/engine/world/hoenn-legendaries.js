@@ -1,7 +1,7 @@
 /* The Hoenn legendaries (added in v4.38). */
 
 import { PKIMG } from '../assets/images.js';
-import { POKEMON, PKT, SCENARIOS } from '../pokemon/pokemon.js';
+import { POKEMON, SPECIES_BY_TYPES, SCENARIOS } from '../pokemon/pokemon.js';
 import { PROFILE, isCamp } from '../state/game-state.js';
 import { medal } from '../core/utils.js';
 import { HOOKS } from '../core/hooks.js';
@@ -298,7 +298,7 @@ export function init() {
       gen: 3,
       leg: true,
     };
-    PKT.set(POKEMON[L.id].t, L.id);
+    SPECIES_BY_TYPES.set(POKEMON[L.id].t, L.id);
     const k = 'hl' + L.id;
     SCENARIOS[k] = {
       n: L.n,

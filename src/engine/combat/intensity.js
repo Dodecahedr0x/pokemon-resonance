@@ -18,7 +18,7 @@ import {
   unitKey,
 } from './engine.js';
 import { resolve } from './synergies-obstacles.js';
-import { B, autoSel, clearAim, addLog, renderAll, ui } from './ui.js';
+import { battle, autoSel, clearAim, addLog, renderAll, ui } from './ui.js';
 import { DAMAGE_PROVIDERS } from './tactical-engine.js';
 import { ACHIEVEMENTS } from '../progression/achievements.js';
 import { hasXp, bossScene } from './resonance.js';
@@ -258,22 +258,22 @@ export function dangerZoneSvg(S, k, x, y) {
 
 /* ---------- panel help ---------- */
 export function vigilButtonHtml(u) {
-  if (!B || u.side !== 'a') {
+  if (!battle || u.side !== 'a') {
     return '';
   }
-  const ok = canUseVigil(B, u);
+  const ok = canUseVigil(battle, u);
   return `<button type="button" class="battle-voice-action${u.vigilance ? ' is-active' : ''}" data-vigil-strike ${ok ? '' : 'disabled'}><b>Vigilance</b><span>${u.vigilance ? 'en garde' : 'action · surveille'}</span></button>`;
 }
 
 export function battleStatesHtml(u) {
-  if (!B) {
+  if (!battle) {
     return '';
   }
   const o = [];
   if (u.vigilance) {
     o.push('<span class="battle-unit-tag is-vigilant">Vigilance : frappe le premier adversaire à sa portée</span>');
   }
-  if (isSurrounded(B, u)) {
+  if (isSurrounded(battle, u)) {
     o.push('<span class="battle-unit-tag is-encircled">Encerclé : −1 Mouvement, +20 % de dégâts reçus</span>');
   }
   if (u.bossPhase > 1) {
@@ -319,11 +319,11 @@ export function init() {
   // duel: P2's Vigilance holds during P1's turn (v4.33)
   document.addEventListener('click', e => {
     const b = e.target.closest('[data-vigil-strike]');
-    if (!b || !B || ui.busy) {
+    if (!b || !battle || ui.busy) {
       return;
     }
-    const u = ui.sel && byUid(B, ui.sel);
-    const ev = u && playerVigil(B, u);
+    const u = ui.sel && byUid(battle, ui.sel);
+    const ev = u && playerVigil(battle, u);
     if (!ev) {
       return;
     }

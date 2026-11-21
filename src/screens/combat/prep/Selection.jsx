@@ -4,7 +4,7 @@ import { SCENARIOS } from '../../../engine/pokemon/pokemon.js';
 import { ARENAS, BADGES } from '../../../engine/modes/gyms.js';
 import { typeColor } from '../../../engine/core/utils.js';
 import { scenLock } from '../../../engine/combat/items-bonds-ai.js';
-import { scSel } from '../../../engine/combat/ui.js';
+import { selectedScenario } from '../../../engine/combat/ui.js';
 import { leaderOf } from '../../../engine/progression/prestige.js';
 import { BATTLE_GROUPS, emblem, selItems, wonOf } from '../../../engine/world/home-journey.js';
 import { FINALE_N } from '../../../engine/world/map.js';
@@ -61,9 +61,9 @@ function Row({ k, gk }) {
     <button
       type="button"
       role="option"
-      className={`prep-row${scSel === k ? ' is-selected' : ''}${lk ? ' is-locked' : ''}${won ? ' is-won' : ''}`}
+      className={`prep-row${selectedScenario === k ? ' is-selected' : ''}${lk ? ' is-locked' : ''}${won ? ' is-won' : ''}`}
       data-sc={k}
-      aria-selected={scSel === k}
+      aria-selected={selectedScenario === k}
       style={{ '--ac': s.at ? typeColor(s.at) : '#E3350D' }}
     >
       <Html html={emblem(k, 'is-small' + (gi >= 0 && !won ? ' is-dim' : ''))} />

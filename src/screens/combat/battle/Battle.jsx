@@ -1,4 +1,4 @@
-import { B } from '../../../engine/combat/ui.js';
+import { battle } from '../../../engine/combat/ui.js';
 import { DEF_WAVES, DEF_LIVES } from '../../../engine/modes/defense-gym.js';
 import { useBattleVersion } from './battleStore.js';
 import { BtTop, Timeline, Rule, Synergies } from './TopBar.jsx';
@@ -44,7 +44,7 @@ export default function Battle({ children }) {
 // Defense arena (v4.68): waves and lives, just above the board.
 function Defense() {
   useBattleVersion('top');
-  const D = B && B.def468;
+  const D = battle && battle.def468;
   if (!D) {
     return null;
   }

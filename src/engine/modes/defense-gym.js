@@ -8,7 +8,7 @@ import { HOOKS } from '../core/hooks.js';
 import { squad } from '../team/team.js';
 import { cellKey, mkUnit, plan, pushMessage, unitAt } from '../combat/engine.js';
 import { OBSTACLES } from '../combat/synergies-obstacles.js';
-import { B, backToPrep, goFight } from '../combat/ui.js';
+import { battle, backToPrep, goFight } from '../combat/ui.js';
 import { overlay } from '../progression/prestige.js';
 import { shut } from '../../screens/overlays/tempStore.js';
 
@@ -211,7 +211,7 @@ export function init() {
         if (!defenseUnlocked() || !squad.length) {
           return toast(squad.length ? 'Débloquée avec 3 badges.' : 'Composez d’abord une équipe.');
         }
-        if (B) {
+        if (battle) {
           backToPrep();
         }
         goFight('def468');
